@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "01_Repository/Glide/tests/integration/test_aufraeumen330.py", line 87, in <module>
+    assert eintraege == ["Neue Liste …", "Neue Seite", "Neue Notiz …", "Neue Pinnwand …", "Neue Zeichnung",
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ['Neue Liste …', 'Neue Seite', 'Neue Notiz …', 'Neue Pinnwand …', 'Neue Galerie', 'Neue Zeichnung', 'Neuer Ordner …', 'Neues Buch …', 'Neues Notizbuch …', 'Listen importieren …']

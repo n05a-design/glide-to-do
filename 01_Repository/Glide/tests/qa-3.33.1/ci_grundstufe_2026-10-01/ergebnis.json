@@ -1,0 +1,68 @@
+{
+ "version": "3.33.1",
+ "zeitpunkt": "2026-10-01T17:08:36",
+ "status": "abgeschlossen",
+ "art": "CI-Grundstufe (D09): Workflow und Prüfwerkzeug; Anwendung und Lieferordner unverändert",
+ "anlass": "GitHub Actions „Python application“ (pytest über das ganze Repository) endete mit Exitcode 2: 99 Fehler beim Einsammeln",
+ "ursachen": [
+  "Archivkopien mit Punkten im Dateinamen sind keine importierbaren Module",
+  "Integrationssuiten öffnen beim Import tk.Tk(); ohne DISPLAY Abbruch",
+  "Altstände in 50_Ablage verweisen auf fehlende Pfade und kollidieren in Modulnamen"
+ ],
+ "reproduktion_lokal": "pytest --collect-only über das Repository, Python 3.12, ohne DISPLAY: Abbruch mit 61 Fehlern beim Einsammeln",
+ "geaendert": [
+  ".github/workflows/python-app.yml",
+  "01_Repository/Glide/tests/tools/README.md",
+  "01_Repository/Glide/tests/README.md",
+  "01_Repository/Glide/CHANGELOG.md",
+  "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+  "00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md"
+ ],
+ "neu": [
+  "01_Repository/Glide/tests/tools/ci_grundstufe.py",
+  "tests/qa-3.33.1/ci_grundstufe_2026-10-01/"
+ ],
+ "grundstufe": {
+  "python": "3.14.0rc2",
+  "exitcode": 0,
+  "schritte": {
+   "Syntax": "ausgeführt",
+   "Versionskonsistenz": "ausgeführt",
+   "Dokumentation": "ausgeführt",
+   "Fixtures": "ausgeführt",
+   "Werkzeugtests": "ausgeführt",
+   "Fachlogik-Unit-Tests": "ausgeführt",
+   "analyse_statisch": "ausgeführt",
+   "analyse_erreichbarkeit": "ausgeführt",
+   "standpruefung": "ausgeführt",
+   "attributpruefung": "ausgeführt",
+   "dublettenpruefung": "ausgeführt",
+   "Tk-Voraussetzung": "ausgeführt",
+   "Startprobe": "ausgeführt",
+   "Lieferstand": "Hinweis"
+  }
+ },
+ "integrationssuiten_linux": {
+  "python": "3.12.3",
+  "exitcode": 1,
+  "suiten_bestanden": 50,
+  "suiten_nicht_bestanden": 10,
+  "nicht_bestanden": [
+   "test_glide",
+   "audit_app",
+   "test_features329",
+   "test_mindestgroesse330",
+   "test_rueckmeldung330",
+   "test_aufraeumen330",
+   "test_kompression330",
+   "test_speicherlast330",
+   "test_befunde330",
+   "test_tempo330"
+  ],
+  "standpruefung": "Zwischenstand dieser Bearbeitung (Link auf noch nicht angelegten Nachweis); im abschließenden Grundstufenlauf grün"
+ },
+ "anwendung_unveraendert": {
+  "src/glide/app.pyw": "44faf3a29da84d54a42d7af69b47d3bf0157c98e04fabe44f2b4ed7972dca77d"
+ },
+ "grenzen": "Linux/Tk 8.6, künstliche Daten; Vollprüfung auf dem Referenz-Mac bleibt maßgeblich. Erster Lauf in GitHub Actions mit dem Pull Request."
+}

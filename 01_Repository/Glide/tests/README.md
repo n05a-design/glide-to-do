@@ -8,6 +8,8 @@ Der Prüfstand setzt `TZ=Europe/Berlin`, wenn der Aufrufer keine Zone vorgibt, u
 
 **Unter Windows wird `TZ` nicht gesetzt.** Die dortige Laufzeit kennt kein `time.tzset()` und liest aus `Europe/Berlin` keine benannte Zone, sondern eine erfundene ohne Sommerzeitregel – im ersten Windows-Lauf meldete sie sich als „ope“ mit +01:00, während in Berlin +02:00 galt. Jede Umrechnung in Ortszeit lag damit eine Stunde daneben. Maßgeblich ist dort die Systemzeitzone; wer eine andere Zone nachstellen will, stellt sie um. Misst der Schritt „Zeitzone“ einen Versatz von null – oder findet er unter Windows ein gesetztes `TZ` –, endet der Lauf mit Exitcode 2: unvollständig, nicht bestanden. Mitgemessen wird, ob die Zone eine Sommerzeitregel kennt; ohne sie lässt sich die Fehlerklasse um Serienenden nicht zeigen.
 
+**Automatische Prüfung im Repository (D09, seit 01.10.2026):** `.github/workflows/python-app.yml` führt bei jedem Push und Pull Request auf `main` die CI-Grundstufe aus (`tests/tools/ci_grundstufe.py`, Linux, Python 3.14, Tk 8.6, rund 3 Minuten). Die Integrationssuiten laufen dort nur auf ausdrücklichen Start („Run workflow“, Option „integrationssuiten“) und informativ: Sie sind auf den Referenz-Mac abgestimmt, unter Linux weichen Schriftmetrik und Layout ab. Maßgeblich bleibt der Vollmodus auf dem Mac. Kein `pytest`: Die Suiten sind ausführbare Skripte, die beim Import ein Tk-Fenster öffnen.
+
 ## Was der Vollmodus umfasst
 
 | Gruppe | Inhalt |

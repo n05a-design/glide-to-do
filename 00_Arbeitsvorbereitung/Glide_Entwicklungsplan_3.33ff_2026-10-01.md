@@ -104,7 +104,7 @@ Aufwand in **Arbeitstagen (AT) im bisherigen Arbeitsmodus**: KI-gestützte Umset
 
 | ID | Arbeit | Quelle | Aufwand | Stufe |
 |---|---|---|---|---|
-| CI | Git-Arbeitsweise und schnelle CI-Stufe (Linux/Xvfb: Standprüfung, Syntax, Startprobe, Tk-freie Tests, SHA-Abgleich `src/glide` ↔ 07) | D09, T4 | M | 0 |
+| CI | Git-Arbeitsweise und schnelle CI-Stufe (Linux/Xvfb: Standprüfung, Syntax, Startprobe, Tk-freie Tests, SHA-Abgleich `src/glide` ↔ 07) – **Grundstufe eingerichtet 01.10.2026** (`tests/tools/ci_grundstufe.py`); offen: Integrationssuiten unter Linux kalibrieren (10 von 60 Suiten weichen ab) | D09, T4 | M | 0 |
 | UX1 | **Weniger Oberfläche:** U01 Befehlspalette (N03), U02 Hinweise bei Bedarf, U03, U05-Standard, U07 Eingang (N02), U10 Kopfzeile, U13 Bibliothek, U14 Menü, U16 Begriffe, U19, U22, U24 Symbole, N01/U17 Automatisch hell/dunkel + Signaturdesign | UX, D11, D12 | 5–8 AT | 1 |
 | G05 | Fokusansicht an vorhandener Zeiterfassung | G05, B-02 | M | 1 |
 | D14 | Heute/Demnächst | U06 | M | 1 |
@@ -349,7 +349,7 @@ Verbindlich ist die Messung auf dem Referenz-Mac mit Aufwärmen, Median und p95 
    - Künftig den Projektordner in die Repository-Wurzel hochladen.
 2. **3.33.0 – erster beauftragter Schnitt, abgeschlossen:** T2 und P09a (W1), Vollprüfung und beide Startfassungen grün. Baseline und Nachmessung mit `messung_speicherweg.py` und `pruefaufrufe_probe.py`, Vorsicherungstest je Formatstufe, Spaltenbreiten der Liste unverändert, Vollprüfung, Abgleich.
 3. **Beauftragte Performance-Fortsetzung:** Rest P03 Startseite, dann P04 und P06r gemäß ARBEITSRICHTUNG; danach P08a mit Differenztest.
-4. **D09 B:** Log-Ausnahme in `Glide/.gitignore` erledigt. Danach CI-Grundstufe aus den Proben in `tests/qa-3.32.3/analyse_planung_2026-10-01/werkzeuge`, mit eigenem Auftrag.
+4. **D09 B:** Log-Ausnahme in `Glide/.gitignore` und CI-Grundstufe erledigt (01.10.2026). Offen: Integrationssuiten unter Linux kalibrieren, damit sie verpflichtend in die CI können.
 5. **Nächsten Oberflächenschnitt vorbereiten:** Aktionskennungen von Menübeschriftungen entkoppeln (R2), dann UX1 in der Reihenfolge U07, U03, U24, U10, U19, U22, U13, U14, N01, U02, U05, U01, U16.
 
 ## 11. Pflege dieses Plans
