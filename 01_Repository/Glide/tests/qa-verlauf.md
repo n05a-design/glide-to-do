@@ -6,6 +6,11 @@ Stand 01.10.2026 · Glide 3.32.3 · Datenformat 20 · Zeilen in zeitlicher Folge
 
 **Dokumentations-/Prüfwerkzeugnachlauf 01.10.2026, App 3.32.3:** [Separater Nachweis](qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json). Regeln/Einstiege aktualisiert und gezielte Werkzeugregression ergänzt; App, Integrationssuiten und Pakete unverändert. Der 73-Schritte-Volllauf unten beschreibt den vorherigen eingefrorenen Prüfstand.
 
+**Analyse-/Planungsnachlauf 01.10.2026, App 3.32.3:** [Nachweis](qa-3.32.3/analyse_planung_2026-10-01/ergebnis.json).
+- **Proben (Linux, Xvfb):** Start- und Ansichtsprobe sowie Speicherweg-Messung mit 1.000/5.000/10.000 Punkten (Python 3.12 und 3.14), Rohwerte mit Median/p95.
+- **Standprüfung nach Ablagekorrektur:** 4 Befunde (fehlende `.log`, eine Archivsicherung).
+- **Grenzen:** Keine Vollprüfung; die bestehende 3.32.3-Vollprüfung bleibt der Laufzeitnachweis.
+
 
 | Datum | Stand | Ergebnis | Nachweis |
 |---|---|---|---|

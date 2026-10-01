@@ -1,0 +1,350 @@
+{
+  "version": "3.32.3",
+  "zeitpunkt": "2026-10-01T11:10:23",
+  "status": "abgeschlossen",
+  "art": "Analyse-, Planungs-, Dokumentations- und Ablagenachlauf; keine neue Produktionsversion, Anwendung unverändert",
+  "umgebung": "Linux-Container, Xvfb, Python 3.12.3/Tk 8.6.14 (Ubuntu) und 3.14.0rc2/Tk 8.6.14 (python-build-standalone); künstliche Daten, temporärer GLIDE_DATA_DIR",
+  "pruefungen": [
+    {
+      "pruefung": "test_standpruefung.py",
+      "exitcode": 0,
+      "protokoll": "test_standpruefung.txt"
+    },
+    {
+      "pruefung": "standpruefung.py",
+      "exitcode": 1,
+      "protokoll": "standpruefung.txt",
+      "ergebnis": "4 Befunde nach diesem Nachlauf (vor Ablagekorrektur 290): drei .log-Dateien (Glide/.gitignore), eine fehlende Archivsicherung glide_beispieldaten_3.32.3_vor_Showcase_2026-10-01.glidebackup; beide nur in der lokalen Ablage vorhanden"
+    },
+    {
+      "pruefung": "syntax",
+      "bestanden": true,
+      "ergebnis": "112 aktive Python-Dateien (src, tests/tools, tests/integration, scripts, packaging, 07, Nachweiswerkzeuge) gelesen, keine Fehler"
+    },
+    {
+      "pruefung": "startprobe",
+      "bestanden": true,
+      "ergebnis": "src/glide/app.pyw startet unter Python 3.12/Tk 8.6 ohne Callbackfehler; Pixelify Sans über Fontconfig registriert"
+    },
+    {
+      "pruefung": "messung_speicherweg.py",
+      "bestanden": true,
+      "ergebnis": "Rohwerte unter messung_speicherweg/; keine Callbackfehler"
+    },
+    {
+      "pruefung": "abgleich src/glide ↔ 07_Python-Versionen",
+      "bestanden": true,
+      "ergebnis": "158 von 159 gemeinsamen Dateien bytegleich (einschließlich vendor und wiederhergestellter .so); abweichend nur README.md (verschiedene Dateien)"
+    }
+  ],
+  "ablage": {
+    "struktur": "01_Repository/* (außer Glide) in die Repository-Wurzel verschoben; 01_Repository/Glide unverändert",
+    "so_wiederhergestellt": 44,
+    "so_quelle": "07_Python-Versionen.zip (Übergabe); SHA-256 identisch mit Archiv/Glide_3.32.3_Claude_Code_2026-10-01/…/SHA256SUMS.txt und abgleich.json",
+    "crlf_wiederhergestellt": 123,
+    "crlf_regel": "01_Repository/Glide/.gitattributes: **/vendor/** -text, **/resources/fonts/** -text",
+    "showcase_glidebackup_wiederhergestellt": "01_Repository/Glide/tests/fixtures/showcase/Glide-Showcase.glidebackup (SHA-256 laut manifest.json)",
+    "ds_store_entfernt": 27,
+    "index_pfadkorrekturen_gross_klein": 37,
+    "so_dateien": [
+      {
+        "datei": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+        "sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486"
+      },
+      {
+        "datei": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9"
+      },
+      {
+        "datei": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+        "sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8"
+      },
+      {
+        "datei": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be"
+      },
+      {
+        "datei": "01_Repository/Glide/tests/qa-3.32.2/drag_performance_2026-09-30/vorher/archiv/3.32.1/quellstand/vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+        "sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486"
+      },
+      {
+        "datei": "01_Repository/Glide/tests/qa-3.32.2/drag_performance_2026-09-30/vorher/archiv/3.32.1/quellstand/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9"
+      },
+      {
+        "datei": "01_Repository/Glide/tests/qa-3.32.2/drag_performance_2026-09-30/vorher/archiv/3.32.1/quellstand/vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+        "sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8"
+      },
+      {
+        "datei": "01_Repository/Glide/tests/qa-3.32.2/drag_performance_2026-09-30/vorher/archiv/3.32.1/quellstand/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be"
+      },
+      {
+        "datei": "01_Repository/Glide/tests/qa-3.32.3/karten_performance_2026-10-01/vorher/archiv/3.32.2/quellstand/vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+        "sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486"
+      },
+      {
+        "datei": "01_Repository/Glide/tests/qa-3.32.3/karten_performance_2026-10-01/vorher/archiv/3.32.2/quellstand/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9"
+      },
+      {
+        "datei": "01_Repository/Glide/tests/qa-3.32.3/karten_performance_2026-10-01/vorher/archiv/3.32.2/quellstand/vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+        "sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8"
+      },
+      {
+        "datei": "01_Repository/Glide/tests/qa-3.32.3/karten_performance_2026-10-01/vorher/archiv/3.32.2/quellstand/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be"
+      },
+      {
+        "datei": "07_Python-Versionen/Archiv/Glide_v3.32.0_vor_Klappkontrolle_2026-09-30/vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+        "sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486"
+      },
+      {
+        "datei": "07_Python-Versionen/Archiv/Glide_v3.32.0_vor_Klappkontrolle_2026-09-30/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9"
+      },
+      {
+        "datei": "07_Python-Versionen/Archiv/Glide_v3.32.0_vor_Klappkontrolle_2026-09-30/vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+        "sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8"
+      },
+      {
+        "datei": "07_Python-Versionen/Archiv/Glide_v3.32.0_vor_Klappkontrolle_2026-09-30/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be"
+      },
+      {
+        "datei": "07_Python-Versionen/Archiv/Glide_v3.32.1_vor_Drag_Performance_2026-09-30/vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+        "sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486"
+      },
+      {
+        "datei": "07_Python-Versionen/Archiv/Glide_v3.32.1_vor_Drag_Performance_2026-09-30/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9"
+      },
+      {
+        "datei": "07_Python-Versionen/Archiv/Glide_v3.32.1_vor_Drag_Performance_2026-09-30/vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+        "sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8"
+      },
+      {
+        "datei": "07_Python-Versionen/Archiv/Glide_v3.32.1_vor_Drag_Performance_2026-09-30/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be"
+      },
+      {
+        "datei": "07_Python-Versionen/Archiv/Glide_v3.32.2_vor_Karten_Performance_2026-10-01/vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+        "sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486"
+      },
+      {
+        "datei": "07_Python-Versionen/Archiv/Glide_v3.32.2_vor_Karten_Performance_2026-10-01/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9"
+      },
+      {
+        "datei": "07_Python-Versionen/Archiv/Glide_v3.32.2_vor_Karten_Performance_2026-10-01/vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+        "sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8"
+      },
+      {
+        "datei": "07_Python-Versionen/Archiv/Glide_v3.32.2_vor_Karten_Performance_2026-10-01/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be"
+      },
+      {
+        "datei": "07_Python-Versionen/vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+        "sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486"
+      },
+      {
+        "datei": "07_Python-Versionen/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9"
+      },
+      {
+        "datei": "07_Python-Versionen/vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+        "sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8"
+      },
+      {
+        "datei": "07_Python-Versionen/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be"
+      },
+      {
+        "datei": "93_Zwischenstände/Glide_3.32.3_Zwischenstand_2026-10-01/01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+        "sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486"
+      },
+      {
+        "datei": "93_Zwischenstände/Glide_3.32.3_Zwischenstand_2026-10-01/01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9"
+      },
+      {
+        "datei": "93_Zwischenstände/Glide_3.32.3_Zwischenstand_2026-10-01/01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+        "sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8"
+      },
+      {
+        "datei": "93_Zwischenstände/Glide_3.32.3_Zwischenstand_2026-10-01/01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be"
+      },
+      {
+        "datei": "93_Zwischenstände/Glide_3.32.3_Zwischenstand_2026-10-01/01_Repository/Glide/tests/qa-3.32.3/karten_performance_2026-10-01/vorher/archiv/3.32.2/quellstand/vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+        "sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486"
+      },
+      {
+        "datei": "93_Zwischenstände/Glide_3.32.3_Zwischenstand_2026-10-01/01_Repository/Glide/tests/qa-3.32.3/karten_performance_2026-10-01/vorher/archiv/3.32.2/quellstand/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9"
+      },
+      {
+        "datei": "93_Zwischenstände/Glide_3.32.3_Zwischenstand_2026-10-01/01_Repository/Glide/tests/qa-3.32.3/karten_performance_2026-10-01/vorher/archiv/3.32.2/quellstand/vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+        "sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8"
+      },
+      {
+        "datei": "93_Zwischenstände/Glide_3.32.3_Zwischenstand_2026-10-01/01_Repository/Glide/tests/qa-3.32.3/karten_performance_2026-10-01/vorher/archiv/3.32.2/quellstand/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be"
+      },
+      {
+        "datei": "93_Zwischenstände/Glide_3.32.3_Zwischenstand_2026-10-01/07_Python-Versionen/vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+        "sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486"
+      },
+      {
+        "datei": "93_Zwischenstände/Glide_3.32.3_Zwischenstand_2026-10-01/07_Python-Versionen/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9"
+      },
+      {
+        "datei": "93_Zwischenstände/Glide_3.32.3_Zwischenstand_2026-10-01/07_Python-Versionen/vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+        "sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8"
+      },
+      {
+        "datei": "93_Zwischenstände/Glide_3.32.3_Zwischenstand_2026-10-01/07_Python-Versionen/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be"
+      },
+      {
+        "datei": "Archiv/Glide_3.32.3_Claude_Code_2026-10-01/Glide_3.32.3_Python_Codebasis/vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+        "sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486"
+      },
+      {
+        "datei": "Archiv/Glide_3.32.3_Claude_Code_2026-10-01/Glide_3.32.3_Python_Codebasis/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9"
+      },
+      {
+        "datei": "Archiv/Glide_3.32.3_Claude_Code_2026-10-01/Glide_3.32.3_Python_Codebasis/vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+        "sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8"
+      },
+      {
+        "datei": "Archiv/Glide_3.32.3_Claude_Code_2026-10-01/Glide_3.32.3_Python_Codebasis/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+        "sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be"
+      }
+    ]
+  },
+  "geaenderte_dateien": [
+    {
+      "datei": "00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md",
+      "sha256_vorher": "e889d54a1dc9934864a84c147c84b429f882e3a56fae67d8bcb633aa9cd5d9d5",
+      "sha256_nachher": "778c901682f553de53fae9556728421ce5eedc5681b4157f472b0f9651fa5b86",
+      "geaendert": true,
+      "archiv": "00_Arbeitsvorbereitung/Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Analyse_2026-10-01.md",
+      "archiv_bytegleich": true
+    },
+    {
+      "datei": "00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md",
+      "sha256_vorher": "c637ccbe1ca4c0ed1a44b34d8e24585acfcce103e5cfd7fc68ffeadc18a1226d",
+      "sha256_nachher": "cb1b607d1f0eababa6b47685e9061eacf6633311b2201f2a3bea0f00da6f2c09",
+      "geaendert": true,
+      "archiv": "00_Arbeitsvorbereitung/Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Analyse_2026-10-01.md",
+      "archiv_bytegleich": true
+    },
+    {
+      "datei": "00_Arbeitsvorbereitung/Glide_Konkurrenzuebersicht_und_persoenliche_Vorlieben_2026-10-01.md",
+      "sha256_vorher": "787f32adc41295a5dca9790fe6b258e903d7fd1c874f7ca4a6851399f070be0b",
+      "sha256_nachher": "f80cff19feea3933ff9f58d4d4978e7b54d43fa0e3b126130a711c920c45d778",
+      "geaendert": true,
+      "archiv": "00_Arbeitsvorbereitung/Archiv/Glide_Konkurrenzuebersicht_und_persoenliche_Vorlieben_2026-10-01_3.32.3_vor_Analyse_2026-10-01.md",
+      "archiv_bytegleich": true
+    },
+    {
+      "datei": "00_Arbeitsvorbereitung/README.md",
+      "sha256_vorher": "3c08ca3c4569d039614c4d524ba2e5a492b2df376b106cea429b0916df697d4c",
+      "sha256_nachher": "46239c9b3e3c0deffa614b29f0c90345a5027bdc2dc6f702ca8daba027823080",
+      "geaendert": true,
+      "archiv": "00_Arbeitsvorbereitung/Archiv/README_3.32.3_vor_Analyse_2026-10-01.md",
+      "archiv_bytegleich": true
+    },
+    {
+      "datei": "README.md",
+      "sha256_vorher": "899872dca732e28d465e6d58ab984ba90479a3775dfe028a2eaab24f18549dce",
+      "sha256_nachher": "16c443b1c85f00ae14e29589cf732c9efbf7413aba8179878fb2142bcb8a6c01",
+      "geaendert": true,
+      "archiv": "Archiv/README_3.32.3_vor_Analyse_2026-10-01.md",
+      "archiv_bytegleich": true
+    },
+    {
+      "datei": "01_Repository/Glide/docs/00_INDEX.md",
+      "sha256_vorher": "27b5fdbca8d467c307d0d30d2a328b8756652f260edcea1997aac8281fd9a7d8",
+      "sha256_nachher": "6bccc098d6d5417e14a1edf6755c9695d273abcd8e912a1fb5fd0345488dd8dc",
+      "geaendert": true,
+      "archiv": "01_Repository/Glide/docs/archiv/00_INDEX_3.32.3_vor_Analyse_2026-10-01.md",
+      "archiv_bytegleich": true
+    },
+    {
+      "datei": "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+      "sha256_vorher": "1203d86ddf9b04eb6569f88102e375be346a21e31d7e138969f2cda8967618c2",
+      "sha256_nachher": "cdbc9acf6c9a74a26e146397c126f8065b39f32bb26eec9dd49b2061464d0ad2",
+      "geaendert": true,
+      "archiv": "01_Repository/Glide/docs/archiv/01_PRODUCT_CONSTRAINTS_3.32.3_vor_Analyse_2026-10-01.md",
+      "archiv_bytegleich": true
+    },
+    {
+      "datei": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "sha256_vorher": "c46145c674a0ebcce8fc1976695a0435563a99e0e05ec7abe60f6b6e8151b72e",
+      "sha256_nachher": "d2fc64b7af885b83b4d5f5f92e8c56aa3c3e3fc024aa5547aeab569ae9ef64e5",
+      "geaendert": true,
+      "archiv": "01_Repository/Glide/docs/archiv/07_QA_BERICHT_3.32.3_vor_Analyse_2026-10-01.md",
+      "archiv_bytegleich": true
+    },
+    {
+      "datei": "01_Repository/Glide/docs/09_PROJECT_HANDOFF.md",
+      "sha256_vorher": "5d06853338626af3d928da07403285d695288cdfc6ea7ad235951432df7eb067",
+      "sha256_nachher": "693dd96478657348326f6ae9699e7e471536b472950fd869927e0d9dff5becf1",
+      "geaendert": true,
+      "archiv": "01_Repository/Glide/docs/archiv/09_PROJECT_HANDOFF_3.32.3_vor_Analyse_2026-10-01.md",
+      "archiv_bytegleich": true
+    },
+    {
+      "datei": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+      "sha256_vorher": "20f41782794312fc300d327d835d3017be5b5905107334e759c128af3932156b",
+      "sha256_nachher": "564662c9cd72246387ba5b6619f120b904d5ab821badd2ae5d9fbfdf3709427d",
+      "geaendert": true,
+      "archiv": "01_Repository/Glide/docs/archiv/ARBEITSRICHTUNG_3.32.3_vor_Analyse_2026-10-01.md",
+      "archiv_bytegleich": true
+    },
+    {
+      "datei": "01_Repository/Glide/tests/qa-verlauf.md",
+      "sha256_vorher": "db0bcf8e533da2db3426c9b5599991746fdbf963d3f8790f166ce16e11880f7b",
+      "sha256_nachher": "615ff04838ea7d5c46ced72a9957e9458a8409ec7cb2bea4c49f108c1f9ab247",
+      "geaendert": true,
+      "archiv": "01_Repository/Glide/tests/archiv/qa-verlauf_3.32.3_vor_Analyse_2026-10-01.md",
+      "archiv_bytegleich": true
+    },
+    {
+      "datei": "01_Repository/Glide/scripts/pflege/README.md",
+      "sha256_vorher": "53ba8e70122e93544eb31d51d6f4e5fc4b76dd4dd5bc7fa1ddbbaee42fb0c4ef",
+      "sha256_nachher": "60f6854a27a521b53da1442ff4aefdb13600e093086f0c43588dff6461e7b8a7",
+      "geaendert": true,
+      "archiv": "01_Repository/Glide/scripts/pflege/archiv/README_3.32.3_vor_Analyse_2026-10-01.md",
+      "archiv_bytegleich": true
+    },
+    {
+      "datei": "01_Repository/Glide/CHANGELOG.md",
+      "sha256_vorher": "1724e68b1f087d91d2a40e10bded38fa6adcc89c78b71491ecd118ebcbcac687",
+      "sha256_nachher": "8858026eb0fecd1b8a81780d0ef959e37044db6e5d2b1295c2bbafafee7d030d",
+      "geaendert": true,
+      "archiv": "01_Repository/Glide/archiv/CHANGELOG_3.32.3_vor_Analyse_2026-10-01.md",
+      "archiv_bytegleich": true
+    }
+  ],
+  "vorsicherungen_bytegleich": 13,
+  "neue_dateien": [
+    "00_Arbeitsvorbereitung/Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md",
+    "00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md",
+    "00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md",
+    "00_Arbeitsvorbereitung/Glide_Konkurrenz_und_Featurematrix_2026-10-01.md",
+    "00_Arbeitsvorbereitung/Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01.md",
+    "01_Repository/Glide/scripts/pflege/messung_speicherweg.py",
+    "CLAUDE.md",
+    "01_Repository/Glide/tests/qa-3.32.3/analyse_planung_2026-10-01/ (Nachweise)"
+  ],
+  "anwendung_unveraendert": {
+    "src/glide/app.pyw": "24b21a71791dd6eff387dc889d099a7a7d3afc261d7243c9ff51994ba6cca1bb",
+    "07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.32.3.pyw": "24b21a71791dd6eff387dc889d099a7a7d3afc261d7243c9ff51994ba6cca1bb"
+  },
+  "grenzen": "Keine Vollprüfung der 58 Suiten in dieser Umgebung; macOS/Tk 9, Windows, physische Bedienung, DPI und Screenreader offen. Linux-Messwerte sind Trends."
+}

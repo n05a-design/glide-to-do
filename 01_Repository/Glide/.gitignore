@@ -18,4 +18,6 @@ dist/
 *.glidebackup
 # Generierte Referenz-/Arbeitsbestände gehören mit ihrem Erzeuger ins Repository.
 !tests/fixtures/beispiele/*.glidebackup
+!tests/fixtures/beispiele/archiv/*.glidebackup
+!tests/fixtures/showcase/*.glidebackup
 release-artifacts/

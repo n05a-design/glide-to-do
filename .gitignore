@@ -216,3 +216,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- Glide-Projektablage ------------------------------------------------------
+# Wurzel dieses Repositorys = Projektordner (00_Arbeitsvorbereitung,
+# 01_Repository/Glide, 07_Python-Versionen …). Eigene Regeln des Quellbaums
+# stehen zusätzlich in 01_Repository/Glide/.gitignore.
+.DS_Store
+# Mitgelieferte tkdnd-Bibliotheken gehören zum Laufzeitstand (SHA-256-Abgleich).
+!**/vendor/tkinterdnd2/**/*.so
+# Nutzerdaten und persönliche Fehlerprotokolle nie einchecken.
+fehlerprotokoll.txt
+glide.lock

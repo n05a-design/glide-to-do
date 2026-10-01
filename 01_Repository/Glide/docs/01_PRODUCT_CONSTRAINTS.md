@@ -61,9 +61,12 @@ Seit dem 26.09.2026 gelten außerdem:
   haben höchstens 40 Zeichen.
 - **Galerie (27.09.2026):** Eine Sammlung von Bildern ist eine Galerie. Die
   Bilder sind Anhänge und bleiben lokal.
-  - Eine Bildbibliothek (etwa Pillow) ist keine Laufzeitabhängigkeit. JPEG
-    und HEIC zeigt Glide deshalb nur unter macOS über das Systemwerkzeug
-    `sips` als Vorschau.
+  - Eine Bildbibliothek (etwa Pillow) ist keine Laufzeitabhängigkeit. JPEG,
+    HEIC, WebP, TIFF und BMP zeigt Glide deshalb über das System: unter macOS
+    über Tk 9 `nsimage` bzw. `sips`, unter Windows über die
+    Windows-Bildkomponenten (WIC; HEIC/WebP nur mit den Store-Erweiterungen).
+    Unter Linux bleiben es PNG, GIF und SVG (`image_preview.py`; korrigiert
+    01.10.2026).
 - **Form folgt Funktion (26.09.2026):** Jede Fläche hat eine eigene Aufgabe.
   - Keine Seitenleistenzeile ist ein zweiter Weg zu denselben Punkten:
     „In Bearbeitung“ steht in „Mein Tag“, der Verlauf ist ein Knopf.
@@ -71,8 +74,18 @@ Seit dem 26.09.2026 gelten außerdem:
     „Neu anlegen“, ✎ nur „Bearbeiten“.
   - Knöpfe erscheinen dort, wo sie wirken: die Auswahlleiste nur mit
     Auswahl; unter dem Listenbaum steht kein zweiter Weg zum „+“.
-  - Farbe trägt Bedeutung: Grün bestätigt, Rot löscht, sonst neutral grau.
+  - Farbe trägt Bedeutung: Grün bestätigt, Rot löscht, Lila fügt hinzu (seit 29.09.2026, `BUTTON_ROLE_RULES`), sonst neutral grau.
   - Bedienelemente ohne Wirkung in einer Ansicht werden dort ausgeblendet.
+- **Produktprinzipien (Auftrag des Inhabers vom 01.10.2026):** Die
+  Weiterentwicklung richtet sich nach sechs Grundsätzen. Sie ergänzen „Form folgt
+  Funktion“; prüfbare Kriterien und die Prüfvorlage für neue Funktionen stehen
+  in der [UX-Prüfung](../../../00_Arbeitsvorbereitung/Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01.md).
+  - Apple-like: Es funktioniert möglichst selbstverständlich.
+  - Form follows function: Gestaltung unterstützt die Funktion, nicht umgekehrt.
+  - Keine Funktion doppelt.
+  - Kein Platz wird unnötig verschwendet.
+  - Nur das Wesentliche anzeigen, dieses klar und wirkungsvoll.
+  - Möglichst geringe Komplexität für den Nutzer trotz umfangreicher Funktionen.
 - **Kennungen:** `de.shaye.glide` und `Shaye.Glide` sind festgelegt und
   ändern sich nie mehr. Ein macOS-Entwicklungsbundle ist ein
   Hilfsmittel für den Eigengebrauch, kein Release.
@@ -85,7 +98,7 @@ Bearbeitungstag und geschätzter Aufwand sind seit 3.14 freiwillige Aufgabenfeld
 
 3.20 ergänzt die Kalenderausgabe als ICS-Datei: eine Ausgabe, keine Anbindung. Keine Synchronisierung und kein Rückweg aus dem Kalender, kein Konto, kein Netzzugriff, keine automatische Neuausgabe; keine VTODO-Ausgabe, keine Teilnehmer, Orte oder Ausnahmetermine, keine mitgelieferte Zeitzonentabelle. Punkte ohne Fälligkeit können mit Bearbeitungstag und eingeschalteter Planungsoption als Planungstermin erscheinen; die Ausgabe enthält höchstens 2000 Termine. [Bedienung 3.20](archiv/44_KALENDERAUSGABE_3.20.0.md).
 
-3.19 ergänzt den dauerhaften Änderungsverlauf und hebt das Aufgabenformat auf 15. Protokolliert wird der Aufgabenbestand – nicht Einstellungen, Vorlagen, Reiter, Pinnwände oder gespeicherte Filter. Kein Wiederherstellen alter Werte aus dem Protokoll, keine alten Feldinhalte, keine Verlaufsansicht am einzelnen Punkt, kein Benutzer- oder Gerätebezug, keine Synchronisierung; Obergrenze 4000 Einträge, abschaltbar. [Bedienung 3.19](archiv/43_AENDERUNGSVERLAUF_3.19.0.md).
+3.19 ergänzt den dauerhaften Änderungsverlauf und hebt das Aufgabenformat auf 15. Protokolliert wird der Aufgabenbestand – nicht Einstellungen, Vorlagen, Reiter, Pinnwände oder gespeicherte Filter. Kein Wiederherstellen alter Werte aus dem Protokoll, keine alten Feldinhalte, keine Verlaufsansicht am einzelnen Punkt, kein Benutzer- oder Gerätebezug, keine Synchronisierung; abschaltbar. Obergrenze seit 3.26.0 höchstens 15 Einträge und 15 Tage (`MAX_HISTORY_ENTRIES`, `HISTORY_RETENTION_DAYS`; ursprünglich 4000 Einträge, korrigiert 01.10.2026). [Bedienung 3.19](archiv/43_AENDERUNGSVERLAUF_3.19.0.md).
 
 3.18 ergänzt den CSV-Import mit Spaltenzuordnung: Trennzeichen und Kodierung werden erkannt und sind umstellbar, jede Spalte wird einem Glide-Feld zugeordnet, eine Vorschau zeigt das Ergebnis vor der Übernahme. Kein XLSX, keine Anhänge, keine Wiederholungen oder Erinnerungen aus einer Spalte, kein Abgleich mit vorhandenen Punkten, kein gespeichertes Zuordnungsprofil; Grenzen sind 5000 Zeilen, 64 Spalten und 12 MB je Datei. [Bedienung 3.18](archiv/42_CSV_IMPORT_3.18.0.md).
 
