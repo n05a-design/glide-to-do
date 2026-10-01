@@ -1,7 +1,6 @@
 # Glide – lokale Aufgaben, Notizen und Pinnwände
 
 [![Glide-Prüfung](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml)
-[![CodeQL](https://github.com/n05a-design/glide-to-do/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/n05a-design/glide-to-do/actions/workflows/codeql.yml)
 
 Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Seiten, Notizbücher, Pinnwände und Pixelzeichnungen. Sie läuft lokal mit Python und Tk, braucht weder Konto noch Cloud und hält alle Nutzerdaten außerhalb des Programmordners.
 
@@ -48,7 +47,7 @@ Vollständige Übersicht: [Was Glide bereits kann](01_Repository/Glide/README.md
 | [20_Grafik_Master](20_Grafik_Master/README.md) | Logo, App-Symbol und Fav-Icon als SVG und PNG, Stilvorlagen |
 | [40_Store_Material](40_Store_Material/README.md) | Entwürfe für die Veröffentlichung |
 | [50_Ablage](50_Ablage/README.md) | Historische Prüfungen, Screenshots und Rückfallstände |
-| `.github` | Prüf- und Sicherheits-Workflows (Glide-Prüfung, CodeQL), Dependabot |
+| `.github` | Prüf-Workflow (Glide-Prüfung), Dependabot; CodeQL-Workflow deaktiviert |
 
 ## Arbeitsweise mit dem Repository
 
@@ -61,7 +60,7 @@ Vollständige Übersicht: [Was Glide bereits kann](01_Repository/Glide/README.md
 ## Qualität und Sicherheit
 
 - **Glide-Prüfung** (`.github/workflows/python-app.yml`): CI-Grundstufe unter Linux. Die Integrationssuiten unter Linux lassen sich zusätzlich von Hand starten; maßgeblich bleibt die Vollprüfung auf dem Mac.
-- **CodeQL** (`.github/workflows/codeql.yml`): statische Sicherheitsanalyse für Python und die Workflows; Funde unter *Security → Code scanning*.
+- **CodeQL:** `.github/workflows/codeql.yml` liegt bereit, ist aber seit 01.10.2026 vom Inhaber deaktiviert. Wieder einschalten unter *Actions → CodeQL → Enable workflow*, nie zusammen mit der CodeQL-Standardeinrichtung.
 - **Dependabot:** schlägt wöchentlich Aktualisierungen der verwendeten GitHub Actions vor.
 - **Secret Scanning:** aktiv; Schlüssel, Zertifikate und Signing-Secrets gehören nie ins Repository.
 - **Schwachstellen melden:** vertraulich über *Security → Report a vulnerability*, nicht über öffentliche Issues ([Sicherheitsrichtlinie](SECURITY.md)). Technische Regeln der Anwendung: [SECURITY.md](01_Repository/Glide/SECURITY.md).

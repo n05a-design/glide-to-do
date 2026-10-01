@@ -35,4 +35,4 @@ Sicherheitsfunde vertraulich über GitHub melden: Reiter *Security* → *Report 
 
 - Rohprotokolle (`*.log`) bleiben lokal (`.gitignore`); veröffentlichte Prüfergebnisse enthalten keine Benutzerpfade. Vor dem Hochladen `python3 -B scripts/pflege/pfade_bereinigen.py <Ordner>` ausführen.
 - Die CI-Grundstufe prüft bei jedem Push, dass keine versionierte Textdatei einen Benutzerpfad enthält, und vergleicht den Fremdcode unter `src/glide/vendor` Datei für Datei mit dem in `provenance.json` festgehaltenen Originalpaket.
-- CodeQL analysiert Python-Code und Workflows; Dependabot hält die GitHub Actions aktuell.
+- Dependabot hält die GitHub Actions aktuell. Der CodeQL-Workflow ist seit 01.10.2026 vom Inhaber deaktiviert.
