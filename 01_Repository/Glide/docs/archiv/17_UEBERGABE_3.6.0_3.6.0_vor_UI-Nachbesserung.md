@@ -1,6 +1,6 @@
 # Übergabe Glide 3.6.0
 
-Stand: 06.09.2026 · Repository: `C:\Users\Timvo\OneDrive\Glide ToDo\01_Repository\Glide`
+Stand: 06.09.2026 · Repository: `%USERPROFILE%\OneDrive\Glide ToDo\01_Repository\Glide`
 
 ## Aktueller Arbeitsstand
 

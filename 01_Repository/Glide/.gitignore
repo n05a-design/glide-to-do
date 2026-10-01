@@ -2,8 +2,9 @@ __pycache__/
 *.py[cod]
 *.tmp
 *.log
-# Prüfprotokolle sind Belege und gehören ins Repository (D09, 01.10.2026).
-!tests/qa-*/**/*.log
+# Rohprotokolle (*.log) bleiben lokal: Entscheidung des Inhabers vom 01.10.2026
+# (öffentliches Repository). Veröffentlicht werden Zusammenfassungen wie ergebnis.json
+# und README; sie dürfen keine Benutzerpfade enthalten (CI-Grundstufe, Schritt Datenschutz).
 .pytest_cache/
 .mypy_cache/
 .venv/

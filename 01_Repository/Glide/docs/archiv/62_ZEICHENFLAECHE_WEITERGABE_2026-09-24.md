@@ -285,7 +285,7 @@ Beide Dateien wurden mit dem implementierten Importer gelesen:
 - keine Reparatur und keine Importwarnung;
 - JSON bereits kanonisch.
 
-Die Dateien lagen während der Prüfung unter `/Users/shaye/Downloads/`. Sie
+Die Dateien lagen während der Prüfung unter `~/Downloads/`. Sie
 sind Benutzeraustauschdateien und wurden nicht in den Repository-Bestand
 kopiert.
 

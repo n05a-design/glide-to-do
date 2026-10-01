@@ -81,7 +81,10 @@ Kurzantwort genügt, z. B. „D09 B, D10 A, D11 B …“.
 **Beschluss 01.10.2026: B.** Das Repository ist die maßgebliche Ablage.
 - **Sofort umgesetzt:**
   - „Git vertagt“ in Arbeitsrichtung und Übergabe ersetzt.
-  - `Glide/.gitignore` gibt Prüfprotokolle `tests/qa-*/**/*.log` frei. Die drei bisher fehlenden Protokolle werden beim nächsten Upload mitgeliefert.
+  - `Glide/.gitignore` gab Prüfprotokolle `tests/qa-*/**/*.log` frei.
+- **Änderung durch den Inhaber (01.10.2026, abends):** Weil das Repository öffentlich ist, werden Rohprotokolle nicht mehr veröffentlicht.
+  - `.gitignore` schließt `*.log` wieder vollständig aus; die 263 versionierten Protokolle sind aus dem aktuellen Stand genommen und bleiben in der Git-Historie.
+  - Veröffentlichte Zusammenfassungen (`ergebnis.json`, README) enthalten keine Benutzerpfade; die CI prüft das.
 - **Beim Inhaber:** den lokalen Projektordner als Git-Arbeitskopie dieses Repositorys einrichten, z. B. mit GitHub Desktop. Bis dahin gilt die Upload-Regel.
 - **Neue Zwischenstände** werden als Git-Tags geführt; `93_Zwischenstände` bleibt als Beleg erhalten.
 - **CI-Grundstufe (T4)** in Stufe 0; sie braucht einen eigenen Auftrag.

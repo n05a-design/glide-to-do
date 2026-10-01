@@ -1,0 +1,21 @@
+# Glide verwendet zur Laufzeit nur die Python-Standardbibliothek; Abhängigkeiten
+# mit Versionsstand sind allein die GitHub Actions der Workflows. Dependabot
+# schlägt deren Aktualisierungen wöchentlich als ein gebündelter Pull Request vor.
+# Der mitgelieferte Fremdcode (src/glide/vendor) wird nicht automatisch
+# aktualisiert: Eine neue Fassung braucht eine Entscheidung und eine geprüfte
+# Prüfsumme in vendor/provenance.json (CI-Schritt „Fremdcode“).
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Berlin"
+    commit-message:
+      prefix: "CI"
+    groups:
+      github-actions:
+        patterns:
+          - "*"

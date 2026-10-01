@@ -17,7 +17,7 @@ Die separate [Vorschlagsdatei](Glide_Funktionsvorschlaege_2026-09-11.md) enthäl
 
 ## Arbeitsorte
 
-Workspace: `/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Glide ToDo`
+Workspace: `~/Library/CloudStorage/OneDrive-Persönlich/Glide ToDo`
 
 Relative Pfade ab Workspace:
 

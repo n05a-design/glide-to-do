@@ -17,6 +17,12 @@ duplizieren:
 5. Lieferstand: `src/glide` gegen `07_Python-Versionen` per SHA-256. Zwischen
    Prüfkandidat und Auslieferung nur ein Hinweis; mit `--lieferstand-streng`
    ein Fehler.
+6. Fremdcode: Jede Datei unter `src/glide/vendor` muss bytegleich zum
+   Originalpaket sein, dessen Quelle und SHA-256 `vendor/provenance.json`
+   festhält. Das Paket wird von PyPI geladen; ohne Netz nur ein Hinweis.
+7. Datenschutz: Keine versionierte Textdatei enthält einen Benutzerpfad
+   (`/Users/<Name>/`, `C:\\Users\\<Name>`, `/home/<Name>/`). Das Repository ist
+   öffentlich; Rohprotokolle bleiben deshalb seit 01.10.2026 lokal.
 
 Die Integrationssuiten sind auf den Referenz-Mac abgestimmt und gehören nicht
 dazu; unter Linux laufen sie über `pruefen.py --modus schnell` (in GitHub
@@ -31,10 +37,15 @@ from __future__ import annotations
 import argparse
 from datetime import datetime
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
+import re
+import subprocess
 import sys
+import urllib.request
+import zipfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import pruefen  # noqa: E402
@@ -106,6 +117,88 @@ def lieferstand_abweichungen():
     return abweichungen
 
 
+# Benutzerpfade verraten Konten- und Personennamen. Platzhalter und die
+# Konten der CI-Umgebungen sind erlaubt.
+BENUTZERPFAD = re.compile(
+    r"/Users/([A-Za-z0-9._-]+)/|[A-Za-z]:(?:\\\\|\\)Users(?:\\\\|\\)([A-Za-z0-9._-]+)|/home/([a-z][a-z0-9._-]*)/")
+ERLAUBTE_KONTEN = {"shared", "public", "name", "username", "user", "benutzer", "nutzer", "example", "runner"}
+BINAERFORMATE = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".heic", ".icns", ".ico", ".pdf", ".zip", ".whl",
+                 ".glidebackup", ".glideapp", ".lib", ".avif", ".so", ".dll", ".dylib", ".ttf", ".otf", ".docx",
+                 ".xlsx", ".afdesign", ".dmg", ".gz"}
+
+
+def benutzerpfade():
+    """Versionierte Textdateien mit Benutzerpfad: Liste von (Datei, Fundstelle)."""
+    try:
+        dateien = subprocess.run(["git", "ls-files", "-z"], cwd=ABLAGE, capture_output=True,
+                                 check=True).stdout.split(b"\0")
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    funde = []
+    for roh in filter(None, dateien):
+        pfad = ABLAGE / roh.decode("utf-8", "surrogateescape")
+        if pfad.suffix.lower() in BINAERFORMATE:
+            continue
+        try:
+            inhalt = pfad.read_bytes()
+        except OSError:
+            continue
+        if b"\0" in inhalt[:8192]:
+            continue
+        text = inhalt.decode("utf-8", "replace")
+        for treffer in BENUTZERPFAD.finditer(text):
+            konto = next(gruppe for gruppe in treffer.groups() if gruppe)
+            if konto.lower() not in ERLAUBTE_KONTEN:
+                funde.append((roh.decode("utf-8", "replace"), treffer.group(0)))
+                break
+    return funde
+
+
+def fremdcode_pruefen():
+    """Vendor-Dateien gegen das in provenance.json festgehaltene Originalpaket.
+
+    Liefert (Status, Text). Netzfehler sind ein Hinweis, Abweichungen ein Fehler.
+    """
+    vendor = REPO / "src/glide/vendor"
+    herkunft = json.loads((vendor / "provenance.json").read_text(encoding="utf-8"))
+    berichte = []
+    for paket, angaben in herkunft.items():
+        try:
+            info = json.load(urllib.request.urlopen(
+                f"https://pypi.org/pypi/{paket}/{angaben['version']}/json", timeout=60))
+            datei = next(eintrag for eintrag in info["urls"] if eintrag["filename"] == angaben["file"])
+            daten = urllib.request.urlopen(datei["url"], timeout=120).read()
+        except (OSError, ValueError, KeyError, StopIteration) as exc:
+            return "Hinweis", f"{paket}: Originalpaket nicht abrufbar ({exc}); Prüfung ohne Netz nicht möglich"
+        summe = hashlib.sha256(daten).hexdigest()
+        if summe != angaben["sha256"] or summe != datei["digests"]["sha256"]:
+            return "fehlgeschlagen", f"{paket}: SHA-256 des Pakets weicht von provenance.json bzw. PyPI ab"
+        archiv = zipfile.ZipFile(io.BytesIO(daten))
+        namen = archiv.namelist()
+        lokal = vendor / paket
+        abweichend, fehlend = [], []
+        for eintrag in namen:
+            if eintrag.startswith(f"{paket}/") and not eintrag.endswith("/"):
+                ziel = lokal / eintrag[len(paket) + 1:]
+                if not ziel.is_file():
+                    fehlend.append(eintrag)
+                elif ziel.read_bytes() != archiv.read(eintrag):
+                    abweichend.append(eintrag)
+        for datei_lokal in sorted(lokal.rglob("*")):
+            if not datei_lokal.is_file() or "__pycache__" in datei_lokal.parts:
+                continue
+            relativ = datei_lokal.relative_to(lokal).as_posix()
+            quellen = [f"{paket}/{relativ}"] + [n for n in namen if ".dist-info/" in n and n.endswith("/" + relativ)]
+            if not any(n in namen and archiv.read(n) == datei_lokal.read_bytes() for n in quellen):
+                abweichend.append(f"vendor/{paket}/{relativ}")
+        if abweichend or fehlend:
+            return "fehlgeschlagen", (f"{paket}: {len(abweichend)} abweichend, {len(fehlend)} fehlend – "
+                                      + ", ".join((abweichend + fehlend)[:6]))
+        anzahl = sum(1 for d in lokal.rglob("*") if d.is_file() and "__pycache__" not in d.parts)
+        berichte.append(f"{paket} {angaben['version']}: {anzahl} Dateien bytegleich zum Originalpaket (SHA-256 {summe[:12]}…)")
+    return "ausgeführt", "; ".join(berichte)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--protokoll", type=Path, help="Ordner für Logs und ergebnis.json")
@@ -145,6 +238,22 @@ def main():
                         text + " – zulässig zwischen Prüfkandidat und Auslieferung (abgleich_07.py)")
             if os.environ.get("GITHUB_ACTIONS"):
                 print(f"::warning title=Lieferstand::{text}", flush=True)
+
+    status, text = fremdcode_pruefen()
+    run.meldung("Fremdcode", status, text)
+    if status == "Hinweis" and os.environ.get("GITHUB_ACTIONS"):
+        print(f"::warning title=Fremdcode::{text}", flush=True)
+
+    funde = benutzerpfade()
+    if funde is None:
+        run.meldung("Datenschutz", "Hinweis", "kein Git-Arbeitsstand; versionierte Dateien nicht ermittelbar")
+    elif funde:
+        run.meldung("Datenschutz", "fehlgeschlagen",
+                    f"{len(funde)} versionierte Dateien mit Benutzerpfad: "
+                    + ", ".join(f"{datei} ({stelle})" for datei, stelle in funde[:5])
+                    + ". Pfade durch ~ bzw. %USERPROFILE% ersetzen; Rohprotokolle nicht versionieren")
+    else:
+        run.meldung("Datenschutz", "ausgeführt", "keine Benutzerpfade in versionierten Textdateien")
 
     fehlgeschlagen = [zeile["schritt"] for zeile in run.results if zeile["status"] == "fehlgeschlagen"]
     exitcode = 1 if fehlgeschlagen else 0

@@ -17,7 +17,7 @@ Der letzte Auftrag war, diese Weitergabe und eine separate [Vorschlagsdatei](Gli
 
 ## Arbeitsorte
 
-Workspace: `/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Glide ToDo`
+Workspace: `~/Library/CloudStorage/OneDrive-Persönlich/Glide ToDo`
 
 Relative Pfade ab Workspace:
 

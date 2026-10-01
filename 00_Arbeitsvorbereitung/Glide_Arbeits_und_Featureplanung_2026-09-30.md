@@ -20,7 +20,7 @@ Stand 01.10.2026 · Glide 3.33.1 · Basisanalyse 3.32.0, Klappkorrektur 3.32.1 �
   - D17 B: Tk-freie Module statt Großumbau.
 - Neuer Messbefund T8/P09: wiederholte Prüfungen je Bedienschritt; die Schriftart wird bereits nur einmal geprüft ([Bestandsaufnahme T8](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md#t8--wiederholte-prüfungen-und-messungen-je-bedienschritt-neu-gemessen)).
 - Die Zeilenangaben in Abschnitt 3 sind Stand 3.32.0 (aktuelle Lage: [Bestandsaufnahme](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md), AB02).
-- Die in Abschnitt 5 verlinkten `.log`-Dateien fehlen im Repository, weil `Glide/.gitignore` sie beim Upload ausschloss. Seit D09 sind Prüfprotokolle freigegeben; beim nächsten Upload mitliefern.
+- Rohprotokolle (`.log`) bleiben seit 01.10.2026 lokal, weil das Repository öffentlich ist; im Repository stehen die Zusammenfassungen.
 - Vorfassungen: [vor der Analyse](Glide_Arbeits_und_Featureplanung_2026-09-30.md), [vor den Beschlüssen](Glide_Arbeits_und_Featureplanung_2026-09-30.md).
 
 

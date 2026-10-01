@@ -4,8 +4,8 @@
   "datenformat": 12,
   "python": "3.12.7 (tags/v3.12.7:0b05ead, Oct  1 2024, 03:06:41) [MSC v.1941 64 bit (AMD64)]",
   "tk": "8.6.13",
-  "quelltext": "C:\\Users\\Timvo\\OneDrive\\Glide ToDo\\01_Repository\\Glide\\src\\glide\\app.pyw",
-  "startbare_kopie": "C:\\Users\\Timvo\\OneDrive\\Glide ToDo\\07_Python-Versionen\\Glide-Aufgaben-und-Listen_v3.7.0.pyw",
+  "quelltext": "%USERPROFILE%\\OneDrive\\Glide ToDo\\01_Repository\\Glide\\src\\glide\\app.pyw",
+  "startbare_kopie": "%USERPROFILE%\\OneDrive\\Glide ToDo\\07_Python-Versionen\\Glide-Aufgaben-und-Listen_v3.7.0.pyw",
   "sha256": "04e62c272df1095c82ad4160c977bb80995570f483f79779cbad906e9d1c07b2",
   "quelltext_und_kopie_identisch": true,
   "startkopie_mit_isolierter_ablage_geprueft": true,
@@ -37,11 +37,11 @@
   ],
   "backups": [
     {
-      "datei": "C:\\Users\\Timvo\\OneDrive\\Glide ToDo\\05_Probelisten_Testdaten\\Glide-Funktionsvorschau_3.7.0.glidebackup",
+      "datei": "%USERPROFILE%\\OneDrive\\Glide ToDo\\05_Probelisten_Testdaten\\Glide-Funktionsvorschau_3.7.0.glidebackup",
       "sha256": "c8c241e235f488559c028744c59fefe9a203be26d740ee6a75c86b806ab0c823"
     },
     {
-      "datei": "C:\\Users\\Timvo\\OneDrive\\Glide ToDo\\05_Probelisten_Testdaten\\Glide-Releaseplanung_3.7.0.glidebackup",
+      "datei": "%USERPROFILE%\\OneDrive\\Glide ToDo\\05_Probelisten_Testdaten\\Glide-Releaseplanung_3.7.0.glidebackup",
       "sha256": "61e13ba6534639164c87ab2e7b8215f9a792b02a30aea971a12e48cc3a1c9166"
     }
   ],

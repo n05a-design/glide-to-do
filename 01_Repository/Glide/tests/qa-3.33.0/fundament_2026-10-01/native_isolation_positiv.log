@@ -1,4 +1,0 @@
-root [True]
-dialog [True, True]
-tooltip [True, True, True]
-Tk, eigene native Fenster und synthetische Bedienbindungen: ok

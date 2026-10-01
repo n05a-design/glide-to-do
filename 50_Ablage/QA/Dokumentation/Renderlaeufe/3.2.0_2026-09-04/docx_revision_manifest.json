@@ -1,7 +1,7 @@
 {
-  "reference": "C:\\Users\\vontrostorff\\OneDrive\\Glide ToDo\\10_Dokumentation\\Archiv\\2.6.0 – Glide_Arbeitsvorbereitung_Codex_Build_Release_Plan.docx",
+  "reference": "%USERPROFILE%\\OneDrive\\Glide ToDo\\10_Dokumentation\\Archiv\\2.6.0 – Glide_Arbeitsvorbereitung_Codex_Build_Release_Plan.docx",
   "reference_sha256": "9d436d134e9e52f9e6628c81e139ad7b3aaa5c8b20e4582ce1cf0c4cd7155cca",
-  "output": "C:\\Users\\vontrostorff\\OneDrive\\Glide ToDo\\10_Dokumentation\\3.2.0 – Glide_Arbeitsvorbereitung_Codex_Build_Release_Plan.docx",
+  "output": "%USERPROFILE%\\OneDrive\\Glide ToDo\\10_Dokumentation\\3.2.0 – Glide_Arbeitsvorbereitung_Codex_Build_Release_Plan.docx",
   "output_sha256": "2bde905eef23f6332b2966de4043d07832e56b01979f4df5915d35f8cb742403",
   "changed_parts": [
     "word/document.xml",

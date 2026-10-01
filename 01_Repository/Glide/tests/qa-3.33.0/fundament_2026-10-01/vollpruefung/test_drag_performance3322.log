@@ -1,6 +1,0 @@
-OK Schrift: Stile, Größenwechsel und getrennte Tk-Interpreter
-OK Formatleisten: Umbruch, kompakte Auswahl, Beschriftung, Fokus und Lebenszyklus
-OK Zeichenleiste: reservierte Höhe bleibt bei Werkzeug- und Breitenwechsel stabil
-OK Seiten/Notizen/Listen: native Drag-Bindungen, Reihenfolge, Ordner, Undo, Datum und Inhalte
-OK Bereiche übergreifend: Koordinaten, Bibliothek/Notizbuch, Zyklenabwehr und Rückgängig
-OK Klapppfeil ohne Umbau, Speichern/Laden und keine Tk-Callbackfehler

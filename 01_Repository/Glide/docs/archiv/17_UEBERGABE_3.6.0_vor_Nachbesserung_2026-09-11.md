@@ -2,7 +2,7 @@
 
 Neuerer Stand vom 07.09.2026: [Kachelübersicht, Vorlagenlayout und Jahresanzeige](23_KACHELUEBERSICHT_UND_JAHRESANZEIGE_3.6.0.md). Die folgenden Prüfstände bleiben als Nachweis ihrer jeweiligen Fassung erhalten.
 
-Stand: 06.09.2026 · Repository: `C:\Users\Timvo\OneDrive\Glide ToDo\01_Repository\Glide`
+Stand: 06.09.2026 · Repository: `%USERPROFILE%\OneDrive\Glide ToDo\01_Repository\Glide`
 
 ## Aktuellster Nachtrag: 14 UI-Rückmeldungen
 

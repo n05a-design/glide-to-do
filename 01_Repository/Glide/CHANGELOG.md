@@ -2,6 +2,12 @@
 
 ## 3.33.1 – Vier Bereiche und Fensterbedienung (01.10.2026)
 
+- **Sicherheit und öffentliches Repository (App unverändert):**
+  - GitHub-Sicherheitsrichtlinie (`.github/SECURITY.md`) mit vertraulichem Meldeweg, CodeQL für Python und Workflows, Dependabot für GitHub Actions; Checkout ohne gespeichertes Token.
+  - CI-Grundstufe prüft zusätzlich die Herkunft des Fremdcodes (alle 116 Dateien unter `vendor/tkinterdnd2` bytegleich zum PyPI-Paket aus `provenance.json`) und verhindert Benutzerpfade in versionierten Dateien.
+  - Rohprotokolle bleiben lokal: `*.log` wieder ausgeschlossen, 263 Protokolle aus dem Stand genommen; 110 Benutzerpfade in 27 Dateien ersetzt; neues Werkzeug `scripts/pflege/pfade_bereinigen.py`.
+  - README der Ablage als GitHub-Einstieg neu gegliedert, README des Quellbaums ergänzt. [Nachweis](tests/qa-3.33.1/sicherheit_2026-10-01/README.md).
+
 - Seiten, Listen, Notizen und Zeichnungen als getrennte Bereiche. Seiten/Notizen/Zeichnungen lassen sich in den Einstellungen ausblenden; alle Daten bleiben über Listen erreichbar.
 - Einheitliche Inhaltsgrenzen für Anlegen, Vorlagen, Kontextmenüs und Verschieben; Listen erlaubt alle Arten. Gemischte bestehende Ordner bleiben vollständig unter Listen. Kein neuer Inhaltstyp und keine Datenmigration.
 - Root-Zuordnung als Anzeigeeinstellung, einschließlich Rückgängig; Zeichnungsübersicht, vier Klappbereiche und begrenzte Baumhöhen bei kleiner Fensterhöhe.

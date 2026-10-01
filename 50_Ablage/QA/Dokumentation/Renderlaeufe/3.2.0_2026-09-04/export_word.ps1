@@ -1,6 +1,6 @@
 param([string]$Revision='final1')
 $ErrorActionPreference='Stop'
-$workspacePath = 'C:\Users\vontrostorff\OneDrive\Glide ToDo'
+$workspacePath = '%USERPROFILE%\OneDrive\Glide ToDo'
 $docPath = Join-Path $workspacePath '10_Dokumentation\3.2.0 – Glide_Arbeitsvorbereitung_Codex_Build_Release_Plan.docx'
 $qaPath = $PSScriptRoot
 $pdfPath = Join-Path $qaPath ($Revision + '.pdf')

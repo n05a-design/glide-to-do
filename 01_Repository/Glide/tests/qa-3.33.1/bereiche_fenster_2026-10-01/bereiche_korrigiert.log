@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_bereiche3331.py", line 81, in <module>
-    arrow.focus_set();arrow.event_generate('<Return>');idle();assert a.sidebar_section_open(section)
-                                                                     ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
-AssertionError

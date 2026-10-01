@@ -1,0 +1,73 @@
+# Statische Sicherheitsanalyse mit CodeQL (erweiterte Einrichtung).
+#
+# Nicht zusätzlich die „Standardeinrichtung“ unter Settings → Code security
+# einschalten: Beide zusammen schließen sich aus.
+#
+# Python: Der CodeQL-Extraktor liest nur .py-Dateien. Die Hauptdatei app.pyw
+# und drawing_prototype.pyw werden deshalb vor der Analyse als *_pyw.py
+# daneben kopiert; Zeilennummern in Funden gelten unverändert für die .pyw.
+# Archive, Altstände und die Lieferkopie (bytegleich zu src/glide) bleiben
+# außen vor, damit jeder Fund genau einmal erscheint.
+#
+# actions: prüft die Workflows selbst, etwa auf Skriptinjektion und zu weite
+# Berechtigungen.
+
+name: CodeQL
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    - cron: "27 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyse:
+    name: CodeQL (${{ matrix.language }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ["python", "actions"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: .pyw für den Python-Extraktor spiegeln
+        if: matrix.language == 'python'
+        run: |
+          for datei in 01_Repository/Glide/src/glide/*.pyw; do
+            cp "$datei" "${datei%.pyw}_pyw.py"
+          done
+
+      - uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
+          config: |
+            paths-ignore:
+              - 07_Python-Versionen
+              - 50_Ablage
+              - Archiv
+              - "**/archiv/**"
+              - "**/Archiv/**"
+              - "01_Repository/Glide/tests/qa-*/**"
+
+      - uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{ matrix.language }}"

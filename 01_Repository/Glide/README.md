@@ -115,6 +115,14 @@ bleiben persönliche Daten vom Prüfbestand getrennt. Details stehen im
 [Daten-, Backup- und Migrationsvertrag](docs/06_DATA_BACKUP_MIGRATION.md) und
 in den [Sicherheitshinweisen](SECURITY.md).
 
+Das Repository ist öffentlich. Rohprotokolle (`*.log`) bleiben deshalb lokal,
+und veröffentlichte Prüfergebnisse dürfen keine Benutzerpfade enthalten. Vor
+dem Hochladen neuer Ergebnisse
+`python3 -B scripts/pflege/pfade_bereinigen.py tests/qa-<Version>/<Lauf>`
+ausführen; die CI prüft das im Schritt „Datenschutz“. Sicherheitsfunde
+vertraulich über GitHub melden: *Security → Report a vulnerability*
+([Sicherheitsrichtlinie](../../.github/SECURITY.md)).
+
 ## Zeichnungsseiten
 
 Seit 3.29.0 ist die Zeichnung eine eigene Listenart im Glide-Bestand
@@ -144,6 +152,19 @@ Eine schnelle Prüfung von Versions- und Dokumentationsständen:
 ```bash
 python3 tests/tools/standpruefung.py
 ```
+
+Dieselbe Grundstufe, die GitHub bei jedem Push und Pull Request auf `main`
+ausführt (Workflow „Glide-Prüfung“), läuft lokal mit:
+
+```bash
+python3 -B tests/tools/ci_grundstufe.py
+```
+
+Sie umfasst Vorprüfungen, Unit-Tests, die fünf Analysen, eine Startprobe,
+den Lieferstand gegenüber `07_Python-Versionen`, die Herkunft des
+mitgelieferten Fremdcodes und den Datenschutz-Wächter. Zusätzlich analysiert
+CodeQL den Code auf Sicherheitsfehler. Beides ersetzt nicht die Vollprüfung auf
+dem Referenz-Mac.
 
 Ein nicht vollständig grüner Lauf darf nicht als Releasefreigabe ausgelegt
 werden. Umfang, Plattformgrenzen und bekannte Blockaden stehen im

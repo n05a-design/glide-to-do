@@ -8,7 +8,7 @@ import shutil
 import sys
 from pathlib import Path
 
-skill = Path(r'C:\Users\vontrostorff\.codex\plugins\cache\openai-primary-runtime\documents\26.903.11726\skills\documents')
+skill = Path(r'%USERPROFILE%\.codex\plugins\cache\openai-primary-runtime\documents\26.903.11726\skills\documents')
 spec = importlib.util.spec_from_file_location('canonical_render_docx', skill / 'render_docx.py')
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)

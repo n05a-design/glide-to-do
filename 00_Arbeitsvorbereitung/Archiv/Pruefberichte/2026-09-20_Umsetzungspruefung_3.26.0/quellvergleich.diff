@@ -1,6 +1,6 @@
---- C:\Users\Timvo\OneDrive\Glide ToDo\01_Repository\Glide\src\glide\archiv\app_3.25.0_vor_3.26.0.pyw
+--- %USERPROFILE%\OneDrive\Glide ToDo\01_Repository\Glide\src\glide\archiv\app_3.25.0_vor_3.26.0.pyw
 
-+++ C:\Users\Timvo\OneDrive\Glide ToDo\01_Repository\Glide\src\glide\app.pyw
++++ %USERPROFILE%\OneDrive\Glide ToDo\01_Repository\Glide\src\glide\app.pyw
 
 @@ -59,7 +59,7 @@
 
