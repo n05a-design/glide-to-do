@@ -216,3 +216,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- Glide -----------------------------------------------------------------
+# Die mitgelieferten tkdnd-Bibliotheken gehören zum Laufzeitstand und müssen
+# bytegleich im Repository liegen (Abgleich per SHA-256).
+!07_Python-Versionen/vendor/**/*.so
+# Nutzerdaten, Fehlerprotokolle und lokale Messdaten nie einchecken.
+liste_speicher.json
+fehlerprotokoll.txt
+glide.lock
