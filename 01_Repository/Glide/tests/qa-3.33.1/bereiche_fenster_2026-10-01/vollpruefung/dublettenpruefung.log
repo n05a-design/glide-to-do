@@ -1,0 +1,11 @@
+DUBLETTEN  Fenster 10 Zeilen  ·  8 Fundstellen  ·  12 vermeidbare Wiederholungen
+  6× 10 Zeilen  →  app.pyw:12780-12789, app.pyw:12792-12801, app.pyw:12817-12826, app.pyw:12831-12840, app.pyw:12855-12864, app.pyw:12872-12881
+  2× 10 Zeilen  →  app.pyw:12779-12788, app.pyw:12816-12825
+  2× 10 Zeilen  →  app.pyw:12790-12799, app.pyw:12829-12838
+  2× 10 Zeilen  →  app.pyw:26434-26446, app.pyw:26475-26484
+  2× 10 Zeilen  →  app.pyw:30054-30063, app.pyw:40025-40034
+  2× 10 Zeilen  →  app.pyw:33923-33932, app.pyw:34112-34121
+  2× 10 Zeilen  →  app.pyw:44776-44785, app.pyw:52022-52031
+  2× 10 Zeilen  →  app.pyw:49323-49332, app.pyw:51123-51132
+
+Eine Wiederholung ist ein Hinweis, kein Befund. Ob daraus ein gemeinsamer Baustein wird, entscheidet der Inhalt.

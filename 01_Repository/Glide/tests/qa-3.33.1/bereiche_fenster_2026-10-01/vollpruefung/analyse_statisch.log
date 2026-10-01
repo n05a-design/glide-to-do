@@ -1,0 +1,123 @@
+QUELLE  src/glide/app.pyw  (54420 Zeilen)
+        2096 Funktionen/Methoden, 564 Konstanten
+
+NIE GENANNT  29 Funktionen, 8 Konstanten
+   fn  AppOptionMenu._outside_click
+   fn  DrawingEditor.replace_model
+   fn  ItemWorkspace.group_caption
+   fn  LabelDropdown._hover
+   fn  LabelDropdown._hover_group
+   fn  LabelDropdown._on_popup_click
+   fn  ListApp.backdrop_needs_halo
+   fn  ListApp.count_today_plan
+   fn  ListApp.data_folder_path
+   fn  ListApp.header_note_text
+   fn  ListApp.ics_date_stamp
+   fn  ListApp.ics_local_stamp
+   fn  ListApp.is_notes_sidebar_entry
+   fn  ListApp.is_notes_sidebar_folder
+   fn  ListApp.is_pages_sidebar_entry
+   fn  ListApp.is_pages_sidebar_folder
+   fn  ListApp.note_group_section_state
+   fn  ListApp.on_label_view_drag_motion
+   fn  ListApp.on_pages_select
+   fn  ListApp.reset_history_baseline
+   fn  ListApp.save_theme_setting
+   fn  ListApp.template_from_current_list
+   fn  ListApp.theme_is_dark
+   fn  ListApp.today_plan_entries
+   fn  ListApp.toggle_table_view
+   fn  ListApp.undo_toast_valid
+   fn  ListApp.update_reminder_badge
+   fn  ListApp.wait_for_backdrop
+   fn  RoundedButton.state_colors
+   c   ListApp.ACTION_DENSITY_MIN_WIDTH
+   c   ListApp.COLOR_MODE_CHOICES
+   c   ListApp.CONTENT_SECTION_GAP
+   c   ListApp.CVD_PALETTE
+   c   ListApp.GROUP_FIELD_KEYS
+   c   ListApp.SIDEBAR_SECTION_FONT
+   c   ListApp.SIDEBAR_TITLE_MIN_CHARS
+   c   ListApp.YEAR_HEATMAP_WEEKS
+
+NUR EINMAL BENUTZT  642 Funktionen (Definition + ein Aufruf)
+   fn  AppOptionMenu._choose_index
+   fn  AppOptionMenu._choose_mouse
+   fn  AppOptionMenu._type_ahead
+   fn  BoardPreview._fitted
+   fn  BoardPreview.set_content
+   fn  DrawingEditor._auto_fit
+   fn  DrawingEditor._begin_select
+   fn  DrawingEditor._begin_stroke
+   fn  DrawingEditor._build_preview
+   fn  DrawingEditor._cancel_stroke
+   fn  DrawingEditor._cell_color
+   fn  DrawingEditor._clear_flow
+   fn  DrawingEditor._continue_stroke
+   fn  DrawingEditor._destroyed
+   fn  DrawingEditor._escape
+   fn  DrawingEditor._keep_point_at
+   fn  DrawingEditor._motion
+   fn  DrawingEditor._pan_end
+   fn  DrawingEditor._pan_move
+   fn  DrawingEditor._pan_start
+   fn  DrawingEditor._render_preview
+   fn  DrawingEditor._schedule_context_rows
+   fn  DrawingEditor._scroll_to_cursor
+   fn  DrawingEditor._shape_kind
+   fn  DrawingEditor._strip_hover
+   … und 617 weitere
+
+LANG  90 Funktionen über 80 Zeilen
+     825 Z.  Zeile  21053  ListApp._refresh_home
+     725 Z.  Zeile  25521  ListApp.item_form_dialog
+     681 Z.  Zeile  33707  ListApp.create_ui
+     521 Z.  Zeile  23151  ListApp.show_settings_dialog
+     416 Z.  Zeile  26573  ListApp.open_calendar_view
+     306 Z.  Zeile  34897  ListApp.apply_theme
+     305 Z.  Zeile  18409  ListApp.render_detail_pane
+     294 Z.  Zeile  16513  ListApp.normalize_personal_settings
+     278 Z.  Zeile  32253  ListApp.create_container_dialog
+     276 Z.  Zeile  22204  ListApp.refresh_library_page
+     250 Z.  Zeile  42503  ListApp.refresh_task_overview
+     245 Z.  Zeile  33229  ListApp.validate_backup_schema
+     232 Z.  Zeile  14616  ListApp.__init__
+     220 Z.  Zeile  51595  ListApp.import_full_backup
+     220 Z.  Zeile  29359  ListApp._update_sidebar_list
+   … und 75 weitere
+
+TIEF VERSCHACHTELT  (Ebenen aus if/for/while/with/try)
+      12     Zeile  29287  ListApp._refresh_sidebar_row_texts
+      10     Zeile  35499  ListApp.update_entry_mode
+      10     Zeile  28377  ListApp.table_column_values
+      10     Zeile  30416  ListApp.on_system_select
+       9     Zeile  42503  ListApp.refresh_task_overview
+       9     Zeile  37121  ListApp.parse_repeat_text
+       9     Zeile  43695  ListApp.insert_tree_items
+       8     Zeile  22988  ListApp.create_list_from_template
+
+DOPPELTE BLÖCKE  130 Stellen mit mindestens 6 gleichen Zeilen
+   5× ab Zeilen 10440, 19641, 31265, 46208, 46274
+   5× ab Zeilen 10441, 19642, 31266, 46209, 46275
+   4× ab Zeilen 19643, 31267, 46210, 46276
+   4× ab Zeilen 28360, 28575, 28698, 42443
+   4× ab Zeilen 42505, 42817, 43000, 43116
+   3× ab Zeilen 23160, 49328, 51128
+   3× ab Zeilen 23161, 49329, 51129
+   3× ab Zeilen 35781, 40689, 41452
+   3× ab Zeilen 36534, 49703, 50119
+   3× ab Zeilen 47240, 47260, 47276
+   2× ab Zeilen 104, 40954
+   2× ab Zeilen 750, 1156
+
+MUSTER
+       0  bare except
+      46  except Exception (breit)
+     251  pass als einziger Rumpf
+       0  TODO/FIXME/HACK
+       2  auskommentierter Code
+       0  print im Quelltext
+       1  doppelte Leerzeilen (3+)
+
+ALTDATEN  3 Zeilen prüfen auf Formatversionen, 35 Nennungen von Migration/Legacy
+   Zeilen: 33256, 33492, 48640
