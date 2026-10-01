@@ -1,6 +1,6 @@
 # Glide – Produktprinzipien und UX-Prüfung
 
-Stand **01.10.2026** · Glide 3.32.3 · Teil 3 von 4 der Analyse vom 01.10.2026 · D11–D14 am selben Tag beschlossen ([Beschlüsse](Glide_Entscheidungsvorlage_2026-10-01.md#beschlüsse-vom-01102026))
+Stand **01.10.2026** · Glide 3.32.3 · Teil 3 von 4 der Analyse vom 01.10.2026
 
 Prüft Bestand und geplante Funktionen gegen die sechs Produktprinzipien. Grundlage:
 - Code 3.32.3,
@@ -95,7 +95,6 @@ Aufwand: S < 1 Tag, M 1–3 Tage, L > 3 Tage (inkl. Tests).
   - Standard „Ruhig“: **Heute** (Tagesziel + eingeplant + nächste Aufgabe in *einer* Kachel), **Gismo** (wie gewünscht), **Woche**, **Zuletzt bearbeitet**, **Angeheftet**.
   - Alle übrigen Kacheln bleiben wählbar.
   - Gismo-Kachel kompakter (Pflegeknöpfe erst beim Überfahren) (D12).
-  - **Beschluss D12 (01.10.2026):** „Ruhig“ mit **sieben** Kacheln einschließlich Gismo. Zu den fünf oben kommen nach Planungsannahme Uhr/Datum/nächster Termin und Pinnwand-Vorschau; Bestätigung vor 3.33.0.
 - **Prio/Aufwand:** **A** (Standardauswahl) / S · B (Kachelzusammenlegung) / M
 
 **U06 – Überlappende Ansichten:** Mein Tag, In Bearbeitung („alle Aufgaben mit Fälligkeit“), Verspätet, Nächste Aufgabe, Tagesbeginn, Startseite-„Heute“

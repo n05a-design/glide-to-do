@@ -2,12 +2,6 @@
 
 ## 3.32.3 – 01.10.2026
 
-- **Beschlüsse D09–D17 und Prüfaufrufe (App unverändert):**
-  - Richtungsentscheidungen D09–D17 in Entscheidungsvorlage, Arbeitsrichtung, Plan und Übergaben eingetragen (D12 mit sieben Startseitenkacheln).
-  - `.gitignore` gibt Prüfprotokolle `tests/qa-*/**/*.log` frei (D09).
-  - Messbefund T8/P09: Die Schriftart wird bereits einmal geprüft; die Tabellenansicht misst nach jedem Aufbau jede Zeile ohne Nutzen. Neue Proben `pruefaufrufe_probe.py` und `pixelschrift_probe.py`.
-  - [Nachweis](tests/qa-3.32.3/pruefaufrufe_2026-10-01/README.md).
-
 - **Analyse-/Planungsnachlauf (App unverändert):** Bestandsaufnahme Code/Doku, Konkurrenz- und Featurematrix, Produktprinzipien mit UX-Prüfung, Entwicklungsplan ab 3.33 und Entscheidungsvorlage D09–D17 in `00_Arbeitsvorbereitung`. Produktgrenzen korrigiert (Verlaufsgrenze 15/15, Bildvorschau Windows, Lila = Hinzufügen) und um die sechs Produktprinzipien ergänzt. Neues Pflegewerkzeug `scripts/pflege/messung_speicherweg.py`. Repository-Ablage auf die Projektstruktur ausgerichtet; tkdnd-Linux-Bibliotheken, CRLF-Drittdateien und Showcase-Sicherung wiederhergestellt. [Nachweis](tests/qa-3.32.3/analyse_planung_2026-10-01/README.md).
 
 - **Aktiver Showcase:** Zehn zusammenhängende Projektdokumente, sechs Originalmotive, drei eingebettete Seitenbilder, vollständige Anhänge, Projektpinnwände, Tagesplanung, Tagebuch und zwei Zusatzvorlagen. Separater Starter erhält Demo-Bearbeitungen. Funktionsvorschau mit frischen Terminen; Import-/Neustartprüfung jetzt verpflichtend. Daten-/Werkzeugnachlauf zur unveränderten App. [Umfang und Abnahme](docs/72_SHOWCASE_3.32.3.md).

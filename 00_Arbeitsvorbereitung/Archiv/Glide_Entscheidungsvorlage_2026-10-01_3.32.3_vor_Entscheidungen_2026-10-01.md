@@ -1,28 +1,6 @@
 # Glide – Entscheidungsvorlage nach der Analyse vom 01.10.2026
 
-Stand **01.10.2026** · Glide 3.32.3 · **D09–D17 beschlossen am 01.10.2026** · Begleitdokument zum [Entwicklungsplan](Glide_Entwicklungsplan_3.33ff_2026-10-01.md)
-
-## Beschlüsse vom 01.10.2026
-
-Der Inhaber hat alle neun Fragen beantwortet. Acht folgen der Empfehlung, D12 mit einer Abweichung: sieben statt fünf Kacheln. Die Beschlüsse sind verbindlich und stehen zusätzlich in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md#verbindliche-entscheidungen). Die Umsetzung folgt dem [Entwicklungsplan](Glide_Entwicklungsplan_3.33ff_2026-10-01.md); jeder Schnitt braucht weiterhin einen ausdrücklichen Auftrag.
-
-| Nr. | Beschluss | Wortlaut der Antwort | Wirkt ab |
-|---|---|---|---|
-| D09 | **B** | „Das Repository wird die maßgebliche Ablage“ | sofort (Ablageregeln); CI in Stufe 0 |
-| D10 | **B** | „einheitliche Bedeutung“ | 3.33.1 (G01) |
-| D11 | **B** | „Hinweise nur bei Bedarf“ | 3.33.0 (U02) |
-| D12 | **B, abgewandelt** | „‚Ruhig‘ mit 7 Kacheln inkl. Gismo“ | 3.33.0 (U05) |
-| D13 | **B** | „als Gruppierung im Board“ | 3.33.2 (G02) |
-| D14 | **B** | „zwei Hauptansichten“ | 3.33.2 |
-| D15 | **B** | „Paket mit eigenem Python und Tk 9“ | Stufe 4 (G26/H-03) |
-| D16 | **A** | „bestehendes JSON-Speichern beschleunigen“ | Stufe 0 (T2, P08) |
-| D17 | **B** | „schrittweise in eigene Module je Funktion zerlegen“ | ab sofort für jede neue oder angefasste Fachlogik |
-
-Weiterhin offen: D07 (Animationsexport) und die Punkte unter [„Weiterhin offen“](#weiterhin-offen-ohne-neue-empfehlung). Die Auswahl A–H bleibt eine eigene Entscheidung; der Entwicklungsplan ordnet sie den Stufen zu.
-
-## Ausgangsvorlage
-
-Die folgende Vorlage bleibt als Begründung der Beschlüsse unverändert stehen; je Frage ist der Beschluss ergänzt.
+Stand **01.10.2026** · Glide 3.32.3 · Begleitdokument zum [Entwicklungsplan](Glide_Entwicklungsplan_3.33ff_2026-10-01.md)
 
 Diese Vorlage sammelt die Richtungsentscheidungen, die aus der Analyse folgen. Jede Frage hat Optionen mit Vor- und Nachteilen und **eine** Empfehlung. Die Empfehlung ist kein Beschluss.
 
@@ -39,17 +17,17 @@ Kurzantwort genügt, z. B. „D09 B, D10 A, D11 B …“.
 
 ## Übersicht
 
-| Nr. | Frage | Empfehlung | Beschluss 01.10.2026 | Blockiert |
-|---|---|---|---|---|
-| D09 | Rolle des GitHub-Repositorys, Git, Ablageregeln | **B** Repository wird Quelle der Wahrheit | **B** | CI, G27, Doku-Pflege |
-| D10 | `/morgen` = Fälligkeit, „morgen“ = Bearbeitungstag? | **B** Einheitliche Semantik | **B** | G01 |
-| D11 | Gilt D06 auch für die Hinweiszeilen der Ansichten? | **B** Hinweise bei Bedarf | **B** | U02 |
-| D12 | Standard der Startseite | **B** „Ruhig“ mit 5 Kacheln inkl. Gismo | **B mit 7 Kacheln** inkl. Gismo | U05 |
-| D13 | Form der Eisenhower-Matrix (G02) | **B** Board-Gruppierung | **B** | G02 |
-| D14 | Ansichtenmodell Heute/Demnächst | **B** Zwei Hauptansichten | **B** | U06 |
-| D15 | Verteilung und Plattformen (G26/H-03) | **B** Paket mit eingebettetem Python + Tk 9 | **B** | Linux/Windows, Tk 9.1 |
-| D16 | Speicherarchitektur bei großen Beständen | **A** JSON-Pfad optimieren (P08) | **A** | P08 |
-| D17 | Umgang mit dem Monolithen (G27) | **B** Tk-freie Module je Feature | **B** | T3 |
+| Nr. | Frage | Empfehlung | Blockiert |
+|---|---|---|---|
+| D09 | Rolle des GitHub-Repositorys, Git, Ablageregeln | **B** Repository wird Quelle der Wahrheit | CI, G27, Doku-Pflege |
+| D10 | `/morgen` = Fälligkeit, „morgen“ = Bearbeitungstag? | **B** Einheitliche Semantik | G01 |
+| D11 | Gilt D06 auch für die Hinweiszeilen der Ansichten? | **B** Hinweise bei Bedarf | U02 |
+| D12 | Standard der Startseite | **B** „Ruhig“ mit 5 Kacheln inkl. Gismo | U05 |
+| D13 | Form der Eisenhower-Matrix (G02) | **B** Board-Gruppierung | G02 |
+| D14 | Ansichtenmodell Heute/Demnächst | **B** Zwei Hauptansichten | U06 |
+| D15 | Verteilung und Plattformen (G26/H-03) | **B** Paket mit eingebettetem Python + Tk 9 | Linux/Windows, Tk 9.1 |
+| D16 | Speicherarchitektur bei großen Beständen | **A** JSON-Pfad optimieren (P08) | P08 |
+| D17 | Umgang mit dem Monolithen (G27) | **B** Tk-freie Module je Feature | T3 |
 
 ## D09 – Repository, Git und Ablageregeln
 
@@ -76,14 +54,6 @@ Kurzantwort genügt, z. B. „D09 B, D10 A, D11 B …“.
 - CI-Grundstufe (T4).
 - Upload-Regel: Projektordner in die Repository-Wurzel, nie in einen Unterordner.
 
-**Beschluss 01.10.2026: B.** Das Repository ist die maßgebliche Ablage.
-- **Sofort umgesetzt:**
-  - „Git vertagt“ in Arbeitsrichtung und Übergabe ersetzt.
-  - `Glide/.gitignore` gibt Prüfprotokolle `tests/qa-*/**/*.log` frei. Die drei bisher fehlenden Protokolle werden beim nächsten Upload mitgeliefert.
-- **Beim Inhaber:** den lokalen Projektordner als Git-Arbeitskopie dieses Repositorys einrichten, z. B. mit GitHub Desktop. Bis dahin gilt die Upload-Regel.
-- **Neue Zwischenstände** werden als Git-Tags geführt; `93_Zwischenstände` bleibt als Beleg erhalten.
-- **CI-Grundstufe (T4)** in Stufe 0; sie braucht einen eigenen Auftrag.
-
 ## D10 – Bedeutung von „morgen“ in Eingabe und `/`-Befehlen
 
 **Ausgangslage:**
@@ -99,13 +69,6 @@ Kurzantwort genügt, z. B. „D09 B, D10 A, D11 B …“.
 
 **Empfehlung B.** Sie ergänzt D01 um eine Ausnahme und braucht deshalb eine ausdrückliche Bestätigung. Feldchips zeigen in allen Fällen vor dem Speichern, was gesetzt wird.
 
-**Beschluss 01.10.2026: B – einheitliche Bedeutung.**
-- Ein Datum ohne Zusatz setzt den Bearbeitungstag, auch in `/morgen`.
-- Die Fälligkeit setzt nur „fällig“ oder „bis“, z. B. `/bis morgen`.
-- D01 gilt damit ohne die bisherige Slash-Ausnahme.
-- Bis zur Umsetzung in 3.33.1 (G01) setzt `/morgen` im Code weiter die Fälligkeit (AB10).
-- Gespeicherte Daten bleiben unverändert.
-
 ## D11 – Gilt D06 auch für die Hinweiszeilen?
 
 **Ausgangslage:**
@@ -120,11 +83,6 @@ Kurzantwort genügt, z. B. „D09 B, D10 A, D11 B …“.
 
 **Empfehlung B.**
 
-**Beschluss 01.10.2026: B – Hinweise nur bei Bedarf.**
-- D06 betrifft nur den Hinweisblock in Seiten.
-- Die Hinweiszeilen von Liste, Mein Tag, Tabelle, Pinnwand und Seite werden über „?“ ein- und ausgeklappt; der Zustand bleibt gespeichert.
-- Umsetzung mit U02 in 3.33.0.
-
 ## D12 – Standard der Startseite
 
 **Ausgangslage:**
@@ -138,20 +96,6 @@ Kurzantwort genügt, z. B. „D09 B, D10 A, D11 B …“.
 | **C** Kacheln entfernen (Mondphase, Impuls …) | Weniger Code | Persönliche Note geht verloren |
 
 **Empfehlung B.**
-
-**Beschluss 01.10.2026: B, abgewandelt – „Ruhig“ mit sieben Kacheln einschließlich Gismo.**
-- **Fest:** die fünf Kacheln aus Option B:
-  - Heute (Tagesziel, eingeplant und nächste Aufgabe zusammengeführt),
-  - Gismo,
-  - Woche,
-  - Zuletzt bearbeitet,
-  - Angeheftet.
-- **Planungsannahme für die zwei weiteren**, vor 3.33.0 vom Inhaber zu bestätigen:
-  - **Uhr, Datum und nächster Termin** als schmale Kopfkachel,
-  - **Pinnwand-Vorschau**.
-  - Begründung: Beide sind schon heute Standard und beantworten eigene Fragen („wann“, „was sehe ich an“). Sie doppeln „Heute“ nicht.
-- Alle übrigen Kacheln bleiben wählbar. Der Standard gilt für neue oder zurückgesetzte Startseiten; eine bestehende eigene Auswahl bleibt erhalten.
-- Zielwert in Stufe 1: sieben statt zwölf Kacheln im Standard.
 
 ## D13 – Form der Eisenhower-Matrix (G02)
 
@@ -169,8 +113,6 @@ Abbildung bei Option B:
 
 **Empfehlung B.**
 
-**Beschluss 01.10.2026: B – Gruppierung im Board.** Keine eigene Ansicht. Quadrantenregel und Wirkung beim Ziehen wie oben; Umsetzung in 3.33.2.
-
 ## D14 – Ansichtenmodell
 
 **Ausgangslage:**
@@ -184,12 +126,6 @@ Abbildung bei Option B:
 | **C** Things-Modell vollständig (Heute, Demnächst, Jederzeit, Irgendwann, Logbuch) | Bewährt | Neue Begriffe/Felder |
 
 **Empfehlung B.**
-
-**Beschluss 01.10.2026: B – zwei Hauptansichten.**
-- **Heute** umfasst Mein Tag, Verspätet, Heute fällig und oben die nächste Aufgabe.
-- **Demnächst** ersetzt „In Bearbeitung“ und zeigt chronologisch.
-- Tagesbeginn und -abschluss werden Modi von Heute.
-- Interne Kennungen bleiben; Umsetzung in 3.33.2.
 
 ## D15 – Verteilung und Plattformen (G26/H-03)
 
@@ -206,11 +142,6 @@ Abbildung bei Option B:
 
 **Empfehlung B** nach Stufe 1.
 
-**Beschluss 01.10.2026: B – Paket mit eigenem Python und Tk 9.**
-- Ein Paket je Plattform; das bestehende macOS-Bundle dient als Vorlage.
-- Umsetzung in Stufe 4 (G26/H-03), nach Stufe 1.
-- Das Bauwerkzeug ist eine eigene Abhängigkeitsentscheidung, die bei Beginn von Stufe 4 vorgelegt wird.
-
 ## D16 – Speicherarchitektur bei großen Beständen
 
 **Ausgangslage:** Jede Aktion kostet linear mit dem Bestand: Abhaken 56 ms bei 1.000 und 446 ms bei 10.000 Punkten (T1).
@@ -223,11 +154,6 @@ Abbildung bei Option B:
 
 **Empfehlung A.** B nur neu bewerten, wenn reale Bestände dauerhaft über 20.000 Punkte liegen. SQLite bleibt für den Suchindex (G14) als ersetzbarer Cache vorgesehen.
 
-**Beschluss 01.10.2026: A – bestehendes JSON-Speichern beschleunigen.**
-- Format, Sicherungen und Lesbarkeit bleiben.
-- Reihenfolge in Stufe 0: T2, P08a, P08b; dazu P09 für wiederholte Prüfungen und Messungen.
-- SQLite nur als Suchindex-Cache (G14).
-
 ## D17 – Umgang mit dem Monolithen (G27)
 
 **Ausgangslage:** G27 „Aufteilen von `app.pyw`“ (L) wartet auf die Versionsverwaltung (D09).
@@ -239,11 +165,6 @@ Abbildung bei Option B:
 | **C** G27 als großer Umbau | Saubere Architektur | Hohes Regressionsrisiko ohne schnelle Tests |
 
 **Empfehlung B.** Sie bestätigt die bestehende Linie („neue Parser-/Suchlogik möglichst als Modul ohne Tk-Abhängigkeit“) und macht sie verbindlich.
-
-**Beschluss 01.10.2026: B – schrittweise in eigene Module je Funktion zerlegen.**
-- Jede neue oder angefasste Fachlogik entsteht als Tk-freies Modul neben `drawing.py`, mit eigenen Unit-Tests; `ListApp` ruft sie auf.
-- Reihenfolge: Datumsparser (G01), Wiederholung, Verlaufs-Diff (P08), Suchindex (G14), Referenzschicht (G08/G30).
-- Kein eigener Großumbau. G27 gilt mit den Modulen als schrittweise erledigt.
 
 ## Weiterhin offen ohne neue Empfehlung
 

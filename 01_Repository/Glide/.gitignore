@@ -2,6 +2,8 @@ __pycache__/
 *.py[cod]
 *.tmp
 *.log
+# Prüfprotokolle sind Belege und gehören ins Repository (D09, 01.10.2026).
+!tests/qa-*/**/*.log
 .pytest_cache/
 .mypy_cache/
 .venv/

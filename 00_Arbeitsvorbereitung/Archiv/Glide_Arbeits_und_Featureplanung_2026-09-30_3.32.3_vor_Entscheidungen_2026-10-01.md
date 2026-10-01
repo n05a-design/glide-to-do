@@ -9,15 +9,10 @@ Stand 01.10.2026 · Glide 3.32.3 · Basisanalyse 3.32.0, Klappkorrektur 3.32.1 �
   - UX-Befunde U01–U24,
   - Vorschläge N01–N20.
 - Bereits entschiedene Punkte (Q3, G07, Einstieg für neue Nutzer, Stufe C) bleiben ausgeschlossen.
-- Die Richtungsfragen D09–D17 sind am 01.10.2026 beschlossen ([Entscheidungsvorlage mit Beschlüssen](Glide_Entscheidungsvorlage_2026-10-01.md#beschlüsse-vom-01102026), verbindlich in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md#verbindliche-entscheidungen)).
-  - D10 B: Ein Datum ohne Zusatz setzt den Bearbeitungstag, auch in `/morgen`. Die bisherige Slash-Ausnahme von D01 entfällt mit G01.
-  - D12: Startseite „Ruhig“ mit sieben Kacheln einschließlich Gismo.
-  - D16 A: JSON-Speicherweg beschleunigen.
-  - D17 B: Tk-freie Module statt Großumbau.
-- Neuer Messbefund T8/P09: wiederholte Prüfungen je Bedienschritt; die Schriftart wird bereits nur einmal geprüft ([Bestandsaufnahme T8](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md#t8--wiederholte-prüfungen-und-messungen-je-bedienschritt-neu-gemessen)).
+- Neue Richtungsfragen D09–D17 stehen in der [Entscheidungsvorlage](Glide_Entscheidungsvorlage_2026-10-01.md). D10 betrifft die Abgrenzung von D01 zur bestehenden Slash-Semantik (`/morgen` setzt heute die Fälligkeit).
 - Die Zeilenangaben in Abschnitt 3 sind Stand 3.32.0 (aktuelle Lage: [Bestandsaufnahme](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md), AB02).
-- Die in Abschnitt 5 verlinkten `.log`-Dateien fehlen im Repository, weil `Glide/.gitignore` sie beim Upload ausschloss. Seit D09 sind Prüfprotokolle freigegeben; beim nächsten Upload mitliefern.
-- Vorfassungen: [vor der Analyse](Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Analyse_2026-10-01.md), [vor den Beschlüssen](Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Entscheidungen_2026-10-01.md).
+- Die in Abschnitt 5 verlinkten `.log`-Dateien schließt `Glide/.gitignore` vom Repository aus; sie liegen nur in der lokalen Ablage (D09).
+- Vorfassung: [Archiv](Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Analyse_2026-10-01.md).
 
 
 **Nachlauf Showcase, 01.10.2026:** [Arbeitsbeispiel und Abdeckung](../01_Repository/Glide/docs/72_SHOWCASE_3.32.3.md) ergänzt die Abnahmegrundlage für Planen → Wissen → Pixel → Austausch. Bei jeder neuen Funktion ein realistisches Dokumentbeispiel und eine passende Prüfung ergänzen. `showcase.py` erzeugt Basisdaten; `showcase_abgleich.py` prüft vor dem Ausliefern und erhält den bearbeiteten Arbeitsstand. P03/P04/P06 werden weiter gemessen; neue Richtungen bleiben zur Auswahl offen.
