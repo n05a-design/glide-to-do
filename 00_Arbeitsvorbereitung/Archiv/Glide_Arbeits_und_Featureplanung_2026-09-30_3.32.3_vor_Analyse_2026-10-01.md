@@ -2,17 +2,6 @@
 
 Stand 01.10.2026 · Glide 3.32.3 · Basisanalyse 3.32.0, Klappkorrektur 3.32.1 · Aufgabenformat 20
 
-**Nachtrag Analyse 01.10.2026:**
-- Der [Entwicklungsplan ab 3.33](Glide_Entwicklungsplan_3.33ff_2026-10-01.md) ordnet alle G-, P- und A–H-Kennungen in Stufen 0–5 ein und ergänzt:
-  - P08 (Speicherweg skaliert mit dem Gesamtbestand),
-  - T2 (neunfaches Parsen beim ersten Speichern),
-  - UX-Befunde U01–U23,
-  - neue Vorschläge N01–N20.
-- Neue Richtungsfragen stehen als E01–E10 in der [Entscheidungsvorlage](Glide_Entscheidungsvorlage_2026-10-01.md). E02 betrifft die Abgrenzung von D01 zur bestehenden Slash-Semantik (`/morgen` setzt heute die Fälligkeit).
-- Dieses Dokument bleibt Beleg für D01–D08; die Zeilenangaben in Abschnitt 3 sind Stand 3.32.0 (aktuelle Lage in der [Bestandsaufnahme](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md), A3).
-- Vorfassung: [Archiv](Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Analyse_2026-10-01.md).
-
-
 **Nachlauf Showcase, 01.10.2026:** [Arbeitsbeispiel und Abdeckung](../01_Repository/Glide/docs/72_SHOWCASE_3.32.3.md) ergänzt die Abnahmegrundlage für Planen → Wissen → Pixel → Austausch. Bei jeder neuen Funktion ein realistisches Dokumentbeispiel und eine passende Prüfung ergänzen. `showcase.py` erzeugt Basisdaten; `showcase_abgleich.py` prüft vor dem Ausliefern und erhält den bearbeiteten Arbeitsstand. P03/P04/P06 werden weiter gemessen; neue Richtungen bleiben zur Auswahl offen.
 
 **Fortlaufende Richtung 01.10.2026:** [Arbeitsrichtung und Abnahme](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) hält die bestätigten Vorgaben und den Prüfablauf fest. A-01/Bibliothekskarten abgeschlossen; Rest P03, P04/A-02 und Rest P06/A-03 sind die beauftragte Performance-Fortsetzung. Zusätzliche A–H-Featureauswahl bleibt offen. [Separater Dokumentationsnachweis](../01_Repository/Glide/tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json).

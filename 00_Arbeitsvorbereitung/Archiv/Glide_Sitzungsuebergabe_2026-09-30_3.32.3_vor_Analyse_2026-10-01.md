@@ -2,19 +2,6 @@
 
 Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · für den nächsten Chat oder Bearbeiter
 
-**Nachtrag Analyse und Planung, 01.10.2026 (App unverändert 3.32.3):**
-- Das GitHub-Repository `glide-to-do` enthält jetzt den Laufzeitstand 3.32.3 (`07_Python-Versionen`, bytegleich) und diese Arbeitsvorbereitung.
-- Neue Einstiege:
-  - [Bestandsaufnahme Code/Doku](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md)
-  - [Konkurrenz- und Featurematrix](Glide_Konkurrenz_und_Featurematrix_2026-10-01.md)
-  - [Produktprinzipien und UX-Prüfung](Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01.md)
-  - [Entwicklungsplan ab 3.33](Glide_Entwicklungsplan_3.33ff_2026-10-01.md)
-  - [Entscheidungsvorlage E01–E10](Glide_Entscheidungsvorlage_2026-10-01.md)
-- Neu gemessen (Linux, künstliche Daten): Jede Aktion kostet linear mit dem Bestand (Abhaken 56 ms bei 1.000, 458 ms bei 10.000 Punkten); erstes Speichern parst die Datei neunmal. Vorschlag P08/T2.
-- D01–D08 und der beauftragte Performance-Anschluss bleiben unverändert gültig.
-- Vorfassung: [Archiv](Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Analyse_2026-10-01.md).
-
-
 **Aktiver Showcase:** [Vertrag und Prüfgrenzen](../01_Repository/Glide/docs/72_SHOWCASE_3.32.3.md), [Nutzeranleitung](../05_Probelisten_Testdaten/Showcase/README.md). Eigenständiger, dauerhaft bearbeitbarer Arbeitsstand mit allen fünf Dokumentarten und den Bildern aus `20_Grafik_Master/06_Beispielbilder`; normale Glide-Nutzerdaten bleiben getrennt. Die Funktionsvorschau wurde auf den 01.10.2026 aktualisiert. Showcase-Prüfung ist zusätzlich zu 58 Suiten verpflichtend. Bestehende Feature-/Performancefolge und offene Auswahl bleiben gültig.
 
 **Fortlaufende Arbeitsgrundlage:** [Arbeitsrichtung und Abnahme](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) ist in AGENTS.md verankert. Der [Dokumentations-/Prüfwerkzeugnachlauf](../01_Repository/Glide/tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json) aktualisiert lokale Regeln und Einstiege bei unveränderter App 3.32.3.

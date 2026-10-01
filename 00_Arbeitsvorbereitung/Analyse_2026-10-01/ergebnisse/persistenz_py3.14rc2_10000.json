@@ -1,0 +1,37 @@
+{
+ "punkte": 10000,
+ "datei_kb": 10306,
+ "umgebung": {
+  "python": "3.14.0rc2",
+  "tk": "8.6.14",
+  "fenstersystem": "x11",
+  "plattform": "Linux-6.18.44-fc-v50-x86_64-with-glibc2.39",
+  "schriftfamilien": 8,
+  "tk_version": 8.6
+ },
+ "erstes_speichern_ms": 1017.5,
+ "snapshot_undo": {
+  "median_ms": 82.8,
+  "max_ms": 89.4
+ },
+ "save_items": {
+  "median_ms": 356.5,
+  "max_ms": 383.9
+ },
+ "json_dumps_indent4": {
+  "median_ms": 29.2,
+  "max_ms": 34.6
+ },
+ "json_dumps_kompakt": {
+  "median_ms": 26.5,
+  "max_ms": 31.5
+ },
+ "history_snapshot": {
+  "median_ms": 78.0,
+  "max_ms": 86.5
+ },
+ "abhaken_item_change": {
+  "median_ms": 457.6,
+  "max_ms": 466.9
+ }
+}
