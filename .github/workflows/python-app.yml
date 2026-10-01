@@ -10,6 +10,10 @@
 # Syntax, Versionen, Dokumentationsindex, Fixtures, Werkzeug- und Unit-Tests,
 # fünf Analysen, Startprobe unter Xvfb, Lieferstand als Hinweis.
 #
+# Sicherheit: Checkout ohne gespeichertes Token, nur Leserechte, keine
+# Geheimnisse. Der Schritt „Fremdcode“ lädt das in vendor/provenance.json
+# genannte Originalpaket von PyPI und vergleicht jede Datei.
+#
 # Integrationssuiten (nur manuell über „Run workflow“): pruefen.py unter
 # Linux/Tk 8.6. Die Suiten sind auf den Referenz-Mac abgestimmt; Abweichungen
 # bei Schriftmetrik und Layout sind dort erwartbar. Der Job ist informativ und
@@ -50,6 +54,8 @@ jobs:
         working-directory: 01_Repository/Glide
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-python@v5
         with:
@@ -81,6 +87,8 @@ jobs:
         working-directory: 01_Repository/Glide
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-python@v5
         with:

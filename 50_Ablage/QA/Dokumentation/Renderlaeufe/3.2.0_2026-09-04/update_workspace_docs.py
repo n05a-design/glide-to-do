@@ -5,7 +5,7 @@ import json
 import re
 import shutil
 
-ROOT = Path(r'C:\Users\vontrostorff\OneDrive\Glide ToDo').resolve()
+ROOT = Path(r'%USERPROFILE%\OneDrive\Glide ToDo').resolve()
 QA = Path(__file__).resolve().parent
 ledger_path = QA / 'external_archive_manifest.json'
 ledger = json.loads(ledger_path.read_text(encoding='utf-8')) if ledger_path.exists() else []

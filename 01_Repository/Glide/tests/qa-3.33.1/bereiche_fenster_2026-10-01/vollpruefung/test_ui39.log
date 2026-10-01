@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_ui39.py", line 76, in <module>
-    assert field._popup is None and value.get() == 'Erste Option'
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError

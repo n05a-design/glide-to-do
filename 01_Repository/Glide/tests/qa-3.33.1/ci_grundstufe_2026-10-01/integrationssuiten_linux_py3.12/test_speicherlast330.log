@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "01_Repository/Glide/tests/integration/test_speicherlast330.py", line 482, in <module>
-    assert app.save_items(show_error=False) is False
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError

@@ -32,6 +32,6 @@ Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf 
 - **Git-Regeln der Ablage:**
   - `vendor/**` und `resources/fonts/**` werden unverändert gespeichert (`-text`).
   - tkdnd-`.so` sind ausdrücklich erlaubt.
-  - `*.log` und `*.glidebackup` schließt `01_Repository/Glide/.gitignore` weitgehend aus; Prüfprotokolle unter `tests/qa-*/` sind seit D09 freigegeben.
+  - Das Repository ist öffentlich: `*.log` bleibt ausgeschlossen (Rohprotokolle lokal), `*.glidebackup` bis auf Fixtures. Keine Benutzerpfade in versionierten Dateien – vor Uploads `scripts/pflege/pfade_bereinigen.py`; die CI prüft das.
 
 Lokaler Start 3.33.0: T2/P09a zuerst. Aktiver Projektpfad `Github/glide-to-do`. D12 jetzt vollständig: Zeichnungen und Pinnwand-Vorschau. [Fundament-Vertrag](01_Repository/Glide/docs/73_FUNDAMENT_3.33.0.md).

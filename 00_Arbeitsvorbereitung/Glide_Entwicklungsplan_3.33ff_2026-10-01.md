@@ -344,7 +344,7 @@ Verbindlich ist die Messung auf dem Referenz-Mac mit Aufwärmen, Median und p95 
 1. **Inhaber:**
    - ~~D09–D17 beantworten~~ – erledigt am 01.10.2026.
    - D12 vollständig beschlossen: Zeichnungen und Pinnwand-Vorschau sind die zwei zusätzlichen Standardkacheln.
-   - Die lokale Git-Arbeitskopie ist eingerichtet (`Github/glide-to-do`, HEAD 569020e). Die drei Prüfprotokolle aus `tests/qa-3.32.0/recherche_planung_2026-09-30/` hochladen.
+   - Die lokale Git-Arbeitskopie ist eingerichtet (`Github/glide-to-do`, HEAD 569020e). Rohprotokolle bleiben seit 01.10.2026 lokal (öffentliches Repository); ein Upload der drei alten Recherchelogs entfällt.
    - Die fehlende Archivsicherung der Core-Fixture wurde bytegleich aus dem Zwischenstandsabbild wiederhergestellt. Nur drei alte Recherchelogs fehlen weiterhin.
    - Künftig den Projektordner in die Repository-Wurzel hochladen.
 2. **3.33.0 – erster beauftragter Schnitt, abgeschlossen:** T2 und P09a (W1), Vollprüfung und beide Startfassungen grün. Baseline und Nachmessung mit `messung_speicherweg.py` und `pruefaufrufe_probe.py`, Vorsicherungstest je Formatstufe, Spaltenbreiten der Liste unverändert, Vollprüfung, Abgleich.

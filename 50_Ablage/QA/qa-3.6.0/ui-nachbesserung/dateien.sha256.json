@@ -1,10 +1,10 @@
 {
   "zeitpunkt": "2026-09-07T09:08:45",
   "version": "3.6.0",
-  "quelle": "C:\\Users\\Timvo\\OneDrive\\Glide ToDo\\01_Repository\\Glide\\src\\glide\\app.pyw",
-  "startbare_kopie": "C:\\Users\\Timvo\\OneDrive\\Glide ToDo\\07_Python-Versionen\\Glide-Aufgaben-und-Listen_v3.6.0.pyw",
+  "quelle": "%USERPROFILE%\\OneDrive\\Glide ToDo\\01_Repository\\Glide\\src\\glide\\app.pyw",
+  "startbare_kopie": "%USERPROFILE%\\OneDrive\\Glide ToDo\\07_Python-Versionen\\Glide-Aufgaben-und-Listen_v3.6.0.pyw",
   "sha256": "5dfe82ac75131a14b89a84af2fb6c0339d84630ffe018d3d4e1398255078bf00",
-  "ausgang_archiv": "C:\\Users\\Timvo\\OneDrive\\Glide ToDo\\07_Python-Versionen\\Archiv\\Glide-Aufgaben-und-Listen_v3.6.0_vor_UI-Nachbesserung_2026-09-07.pyw",
+  "ausgang_archiv": "%USERPROFILE%\\OneDrive\\Glide ToDo\\07_Python-Versionen\\Archiv\\Glide-Aufgaben-und-Listen_v3.6.0_vor_UI-Nachbesserung_2026-09-07.pyw",
   "ausgang_sha256": "78fd3f3233c27a76d59bd287767bf24a76b0073f0318326c4572b1dde19abc5c",
   "fonts": [
     {

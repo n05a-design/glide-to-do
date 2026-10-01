@@ -11,7 +11,7 @@ import json
 import shutil
 from lxml import etree as ET
 
-ROOT = Path(r'C:\Users\vontrostorff\OneDrive\Glide ToDo').resolve()
+ROOT = Path(r'%USERPROFILE%\OneDrive\Glide ToDo').resolve()
 QA = Path(__file__).resolve().parent
 original = ROOT / '10_Dokumentation/2.6.0 – Glide_Arbeitsvorbereitung_Codex_Build_Release_Plan.docx'
 reference = original.parent / 'Archiv' / original.name

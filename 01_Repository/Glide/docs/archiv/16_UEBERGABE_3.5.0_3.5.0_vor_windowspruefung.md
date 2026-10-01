@@ -61,7 +61,7 @@ Store-Einreichung und keine mechanische Ersetzung.
 Alle Prüfungen liefen bislang nur unter Linux. Die maßgebliche Abnahme:
 
 ```
-Set-Location -LiteralPath 'C:\Users\Timvo\OneDrive\Glide ToDo\01_Repository\Glide'
+Set-Location -LiteralPath '%USERPROFILE%\OneDrive\Glide ToDo\01_Repository\Glide'
 & 'C:\Python312\python.exe' tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.5.0/abschluss
 ```
 

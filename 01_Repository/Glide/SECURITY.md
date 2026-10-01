@@ -29,4 +29,10 @@ Seit 3.2.0 sucht Glide beim Start nicht mehr in Ordnern früherer Programmnamen 
 
 ## Meldung
 
-Ein öffentlicher Sicherheitskontakt ist noch nicht festgelegt. Bis dahin dürfen Sicherheitsfunde nicht über öffentliche Issues mit echten Nutzerdaten oder Anhängen geteilt werden.
+Sicherheitsfunde vertraulich über GitHub melden: Reiter *Security* → *Report a vulnerability*. Ablauf und Umfang stehen in der [Sicherheitsrichtlinie](../../.github/SECURITY.md). Keine öffentlichen Issues und keine echten Nutzerdaten, Sicherungen oder Anhänge mitschicken.
+
+## Öffentliches Repository
+
+- Rohprotokolle (`*.log`) bleiben lokal (`.gitignore`); veröffentlichte Prüfergebnisse enthalten keine Benutzerpfade. Vor dem Hochladen `python3 -B scripts/pflege/pfade_bereinigen.py <Ordner>` ausführen.
+- Die CI-Grundstufe prüft bei jedem Push, dass keine versionierte Textdatei einen Benutzerpfad enthält, und vergleicht den Fremdcode unter `src/glide/vendor` Datei für Datei mit dem in `provenance.json` festgehaltenen Originalpaket.
+- CodeQL analysiert Python-Code und Workflows; Dependabot hält die GitHub Actions aktuell.

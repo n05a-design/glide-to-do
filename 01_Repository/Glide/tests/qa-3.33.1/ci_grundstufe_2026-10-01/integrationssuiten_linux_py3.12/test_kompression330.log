@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "01_Repository/Glide/tests/integration/test_kompression330.py", line 85, in <module>
-    assert any(text.endswith("Kurz und klar") for text in texte), texte
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError: ['14 offen', '·  2 erledigt', '·  1 überfällig', '·  nächste Fälligkeit morgen', '·  5 Labels', '·  Kurz…']

@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_bereiche3331.py", line 96, in <module>
-    assert a.drawings_title_row.winfo_rooty()+a.drawings_title_row.winfo_height() <= a.sidebar_frame.winfo_rooty()+a.sidebar_frame.winfo_height()+2
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError
