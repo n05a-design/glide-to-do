@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "01_Repository/Glide/tests/integration/test_befunde330.py", line 224, in <module>
+    svg = app.reference_png_path(str(LOGO / "glide-logo.svg"))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "01_Repository/Glide/src/glide/app.pyw", line 40815, in reference_png_path
+    raise glide_drawing.DrawingFormatError("SVG braucht Tk 9 (Python 3.14).")
+drawing.DrawingFormatError: SVG braucht Tk 9 (Python 3.14).

@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "01_Repository/Glide/tests/integration/test_tempo330.py", line 87, in <module>
+    werte["Liste"] = bildzeit(app.tree, schritt=-48)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "01_Repository/Glide/tests/integration/test_tempo330.py", line 58, in bildzeit
+    widget.event_generate("<TouchpadScroll>", delta=richtung & 0xffff, x=x, y=y)
+  File "/usr/lib/python3.12/tkinter/__init__.py", line 1933, in event_generate
+    self.tk.call(args)
+_tkinter.TclError: bad event type or keysym "TouchpadScroll"

@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "01_Repository/Glide/tests/integration/test_mindestgroesse330.py", line 172, in <module>
+    assert not liste, (design, stufe, breite, hoehe, name, liste[:6])
+           ^^^^^^^^^
+AssertionError: (None, 'mittel', 860, 700, 'Liste', ['TEXT ABGESCHNITTEN „Exposé-Produktion“ 316px < 362px'])
