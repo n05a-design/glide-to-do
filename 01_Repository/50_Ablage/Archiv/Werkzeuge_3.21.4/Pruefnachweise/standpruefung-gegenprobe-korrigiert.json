@@ -1,0 +1,23 @@
+[
+  {
+    "fall": "gültige getrennte Formatstufen",
+    "befunde": [],
+    "ok": true
+  },
+  {
+    "fall": "falsche Aufgabenformatstufe",
+    "befunde": [
+      "README.md:3: Standangabe nennt Format 14, aktuell ist 15 (R6)"
+    ],
+    "ok": true
+  },
+  {
+    "fall": "falscher Formatbereich und Tabellenwerte",
+    "befunde": [
+      "README.md:4: Formatbereich 4 bis 12; lesbar sind 4 bis 15 (R7)",
+      "README.md:5: Tabellenzeile nennt Format 13, aktuell ist 15 (R8)",
+      "README.md:6: Tabellenzeile App-Version nennt 3.14.0, aktuell ist 3.21.4 (R8)"
+    ],
+    "ok": true
+  }
+]

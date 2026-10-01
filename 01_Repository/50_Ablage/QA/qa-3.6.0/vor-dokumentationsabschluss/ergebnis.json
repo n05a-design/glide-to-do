@@ -1,0 +1,109 @@
+{
+  "zeitpunkt": "2026-09-06T14:55:36",
+  "modus": "voll",
+  "python": "3.12.7 (tags/v3.12.7:0b05ead, Oct  1 2024, 03:06:41) [MSC v.1941 64 bit (AMD64)]",
+  "plattform": "win32",
+  "exitcode": 1,
+  "schritte": [
+    {
+      "schritt": "Syntax",
+      "status": "ausgeführt",
+      "grund": "17 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+    },
+    {
+      "schritt": "Versionskonsistenz",
+      "status": "ausgeführt",
+      "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.6.0; Datenformat 11"
+    },
+    {
+      "schritt": "Dokumentation",
+      "status": "fehlgeschlagen",
+      "grund": "Im Dokumentationsindex fehlt: archiv/00_INDEX_vor_3.6_Abschluss_2026-09-06.md; Im Dokumentationsindex fehlt: archiv/01_PRODUCT_CONSTRAINTS_vor_3.6_Abschluss_2026-09-06.md; Im Dokumentationsindex fehlt: archiv/02_ARCHITECTURE_vor_3.6_Abschluss_2026-09-06.md; Im Dokumentationsindex fehlt: archiv/03_STARTKONTEXT_vor_3.6_Abschluss_2026-09-06.md; Im Dokumentationsindex fehlt: archiv/05_QA_TESTPLAN_vor_3.6_Abschluss_2026-09-06.md; Im Dokumentationsindex fehlt: archiv/06_DATA_BACKUP_MIGRATION_vor_3.6_Abschluss_2026-09-06.md; Im Dokumentationsindex fehlt: archiv/07_QA_BERICHT_vor_3.6_Abschluss_2026-09-06.md; Im Dokumentationsindex fehlt: archiv/09_PROJECT_HANDOFF_vor_3.6_Abschluss_2026-09-06.md; Im Dokumentationsindex fehlt: archiv/10_RELEASE_CHECKLIST_vor_3.6_Abschluss_2026-09-06.md; Im Dokumentationsindex fehlt: archiv/17_UEBERGABE_3.6.0_vor_3.6_Abschluss_2026-09-06.md; Im Dokumentationsindex fehlt: archiv/18_QA_3.6.0_vor_3.6_Abschluss_2026-09-06.md; Im Dokumentationsindex fehlt: archiv/19_GLASS_SURFACE_3.6.0_vor_3.6_Abschluss_2026-09-06.md"
+    },
+    {
+      "schritt": "Fixtures",
+      "status": "ausgeführt",
+      "grund": "3 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite"
+    },
+    {
+      "schritt": "Tk-Voraussetzung",
+      "status": "ausgeführt",
+      "grund": "Tk-Fenster im gewählten Python gestartet und geschlossen"
+    },
+    {
+      "schritt": "test_glide",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_datenintegritaet",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "audit_app",
+      "status": "fehlgeschlagen",
+      "grund": "Exitcode 4294967295"
+    },
+    {
+      "schritt": "test_dialog_theme",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_ui_updates",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_glide_36",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_release36",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "analyse_statisch",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "analyse_erreichbarkeit",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Beispieldaten-erzeugen",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Beispieldaten-Abgleich",
+      "status": "ausgeführt",
+      "grund": "Inhalt, Verknüpfungen und relative Fristen gleich; IDs und Erzeugungszeit sind ausgenommen"
+    },
+    {
+      "schritt": "Release-erzeugen",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Release-Abgleich",
+      "status": "ausgeführt",
+      "grund": "Inhalt, Fristen und Verknüpfungen zum Planungsstichtag 2026-09-06 gleich"
+    },
+    {
+      "schritt": "Screenshots",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Sichtprüfung",
+      "status": "übersprungen",
+      "grund": "Bilder müssen von einer Person angesehen werden; native Plattformprüfung bleibt offen"
+    }
+  ]
+}

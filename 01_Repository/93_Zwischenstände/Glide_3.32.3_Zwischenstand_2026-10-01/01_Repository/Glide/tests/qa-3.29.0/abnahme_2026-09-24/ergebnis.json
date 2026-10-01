@@ -1,0 +1,269 @@
+{
+  "zeitpunkt": "2026-09-24T22:25:25",
+  "modus": "voll",
+  "python": "3.14.5 (v3.14.5:5607950ef23, May 10 2026, 07:38:09) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "plattform": "darwin",
+  "exitcode": 1,
+  "schritte": [
+    {
+      "schritt": "Syntax",
+      "status": "ausgeführt",
+      "grund": "97 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+    },
+    {
+      "schritt": "Versionskonsistenz",
+      "status": "ausgeführt",
+      "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.29.0; Datenformat 19"
+    },
+    {
+      "schritt": "Dokumentation",
+      "status": "ausgeführt",
+      "grund": "Alle Dokumente einschließlich Archiv im Index; 854 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+    },
+    {
+      "schritt": "Fixtures",
+      "status": "ausgeführt",
+      "grund": "29 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite"
+    },
+    {
+      "schritt": "Tk-Voraussetzung",
+      "status": "ausgeführt",
+      "grund": "Tk-Fenster im gewählten Python gestartet und geschlossen"
+    },
+    {
+      "schritt": "Zeitzone",
+      "status": "ausgeführt",
+      "grund": "CEST, Versatz +02:00, mit Sommerzeitregel; Zeitzonenfehler bleiben sichtbar"
+    },
+    {
+      "schritt": "test_glide",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_datenintegritaet",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_drawing",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_drawing_prototype",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "audit_app",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_dialog_theme",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_ui_updates",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_glide_36",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_release36",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_ui_polish36",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_ui_followup36",
+      "status": "fehlgeschlagen",
+      "grund": "Exitcode 1"
+    },
+    {
+      "schritt": "test_release37",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_template_workflows",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_reminders",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_ui39",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_workspace310",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features311",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features312",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features313",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features314",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features315",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features316",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features317",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features318",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features319",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features320",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features321",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features322",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features323",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features324",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features325",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features326",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features328",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_features329",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_vollpruefung325",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "analyse_statisch",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "analyse_erreichbarkeit",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "standpruefung",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "attributpruefung",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "dublettenpruefung",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Beispieldaten-erzeugen",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Beispieldaten-Abgleich",
+      "status": "ausgeführt",
+      "grund": "Inhalt, Verknüpfungen und relative Fristen gleich; IDs und Erzeugungszeit sind ausgenommen"
+    },
+    {
+      "schritt": "Release-erzeugen",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Release-Abgleich",
+      "status": "ausgeführt",
+      "grund": "Inhalt, Fristen und Verknüpfungen zum Planungsstichtag 2026-09-24 gleich"
+    },
+    {
+      "schritt": "Screenshots",
+      "status": "übersprungen",
+      "grund": "screenshots.py unterstützt nur Linux/X11; releasedaten.py zusätzlich Windows"
+    },
+    {
+      "schritt": "Sichtprüfung",
+      "status": "übersprungen",
+      "grund": "Bilder müssen von einer Person angesehen werden; native Plattformprüfung bleibt offen"
+    }
+  ]
+}

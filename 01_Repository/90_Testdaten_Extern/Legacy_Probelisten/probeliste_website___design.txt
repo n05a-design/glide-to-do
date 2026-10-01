@@ -1,0 +1,15 @@
+Website & Design
+==============================
+
+1. ⚑ Hero-Bereich der Objektseite überarbeiten
+   1.1. ⚐ Bildkomposition prüfen
+   1.2. ⚑ Mobile Darstellung testen
+2. ⚑ Vorher-/Nachher-Slider optimieren
+3. ⚐ ✓ DSGVO-Kartenhinweis prüfen
+4. ⚑ CSS-Spacing und Button-Zustände angleichen
+   4.1. ⚐ ✓ Hover
+   4.2. ⚑ Focus-State
+   4.3. ⚑ Touch-Zielgrößen
+5. 🚩 Performance-Check: Bilder und Lazy Loading
+
+Exportiert am: 28.05.2026 um 07:49 Uhr

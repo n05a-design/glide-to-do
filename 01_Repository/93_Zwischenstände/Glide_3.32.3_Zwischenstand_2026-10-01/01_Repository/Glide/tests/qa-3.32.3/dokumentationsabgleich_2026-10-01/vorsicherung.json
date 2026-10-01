@@ -1,0 +1,134 @@
+{
+  "version": "3.32.3",
+  "datum": "2026-10-01T10:11:14.445222",
+  "art": "Dokumentations- und Prüfwerkzeugnachlauf; keine Laufzeitänderung",
+  "vorher": {
+    "aktive_dokumente": 95,
+    "fortgeschrieben": 37,
+    "festgeschrieben": 54,
+    "ohne_stand": 4,
+    "befunde": []
+  },
+  "archive": [
+    {
+      "datei": "01_Repository/Glide/AGENTS.md",
+      "archiv": "01_Repository/Glide/archiv/AGENTS_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "660f46d1de6f1903826d84be7f22f00359176b445dbb1787b747647849fedefa"
+    },
+    {
+      "datei": "01_Repository/Glide/README.md",
+      "archiv": "01_Repository/Glide/archiv/README_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "128c5d27259ec0b0b9c960193ac072b536894f90d4ea57e873095a9be4c991ea"
+    },
+    {
+      "datei": "01_Repository/Glide/CHANGELOG.md",
+      "archiv": "01_Repository/Glide/archiv/CHANGELOG_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "184576157b7bb77d4e811b42f595b4754b20a10996bbcb1deb962e40911b2fa7"
+    },
+    {
+      "datei": "01_Repository/Glide/docs/00_INDEX.md",
+      "archiv": "01_Repository/Glide/docs/archiv/00_INDEX_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "5eb675aa50bd40d1c8b707d7b6dc8d5898ce03bc0226eededabd83f9f924f93d"
+    },
+    {
+      "datei": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+      "archiv": "01_Repository/Glide/docs/archiv/02_ARCHITECTURE_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "80350c033966fcb8a53985c563e1375965fc58206578694c1bfa97b85df9887a"
+    },
+    {
+      "datei": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+      "archiv": "01_Repository/Glide/docs/archiv/05_QA_TESTPLAN_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "7f827397eaa7f0bdbb231e67bffe62c981766640fd09d8332c4f42b7976db8eb"
+    },
+    {
+      "datei": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+      "archiv": "01_Repository/Glide/docs/archiv/06_DATA_BACKUP_MIGRATION_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "71adf7997fce861cf98b5168b79ed8d4f37b43b2be57456d079ce95e6753dbf0"
+    },
+    {
+      "datei": "01_Repository/Glide/docs/DEV_NOTES.md",
+      "archiv": "01_Repository/Glide/docs/archiv/DEV_NOTES_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "673fcbabf643ba5332bdd4fb5d60fe62369ff0be374627188120143ed3ee7176"
+    },
+    {
+      "datei": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+      "archiv": "01_Repository/Glide/docs/archiv/DOKUMENTENPFLEGE_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "f7f92230e6424ef19365cbedb545fb7f39a52c2ecd4ca261c0360e131d5d278b"
+    },
+    {
+      "datei": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "archiv": "01_Repository/Glide/docs/archiv/07_QA_BERICHT_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "a3fa1a3a951f5e3fbd64b43acd7dd0dd976d088157bea28479162c6394428667"
+    },
+    {
+      "datei": "01_Repository/Glide/docs/09_PROJECT_HANDOFF.md",
+      "archiv": "01_Repository/Glide/docs/archiv/09_PROJECT_HANDOFF_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "5035df9b6d31f8897ccad4fb3576242380f74a3db7e83ee8736d0e48fe127a76"
+    },
+    {
+      "datei": "01_Repository/Glide/docs/10_RELEASE_CHECKLIST.md",
+      "archiv": "01_Repository/Glide/docs/archiv/10_RELEASE_CHECKLIST_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "d47360d42eed9552bdbd7f463869e2f50b17f5326b73417af07823641f6c080f"
+    },
+    {
+      "datei": "01_Repository/Glide/scripts/pflege/README.md",
+      "archiv": "01_Repository/Glide/scripts/pflege/archiv/README_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "ad79e29467897b722d3026c266354f074c8c6e335f81cfbc517448c4605958ed"
+    },
+    {
+      "datei": "01_Repository/Glide/tests/tools/README.md",
+      "archiv": "01_Repository/Glide/tests/tools/archiv/README_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "98e0361376bfd14567fd442c46ff487de809a4345eb58ecf03419d971b2d4bf1"
+    },
+    {
+      "datei": "01_Repository/Glide/tests/tools/standpruefung.py",
+      "archiv": "01_Repository/Glide/tests/tools/archiv/standpruefung_3.32.3_vor_Richtungsabgleich_2026-10-01.py",
+      "sha256": "243607be08332fa2cba64719928cdd333bbce32d857714c9f73ab43924107ed3"
+    },
+    {
+      "datei": "01_Repository/Glide/tests/qa-verlauf.md",
+      "archiv": "01_Repository/Glide/tests/archiv/qa-verlauf_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "36e8f4549a912755153cffb48c5abd6069bcb854b3e39ae5aa67b13c22784ec8"
+    },
+    {
+      "datei": "00_Arbeitsvorbereitung/README.md",
+      "archiv": "00_Arbeitsvorbereitung/archiv/README_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "0e081cd4e0431caad490eef2be28860abc85b089502b9cbbb21696fff807acc3"
+    },
+    {
+      "datei": "00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md",
+      "archiv": "00_Arbeitsvorbereitung/archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "b33bcfd05a5a6238985d86503eb9389180b39448e9eda30ce8b15d96599d756c"
+    },
+    {
+      "datei": "00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md",
+      "archiv": "00_Arbeitsvorbereitung/archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "20a03a02ccb3efe17486a95c2945a752c850766176bb5d7291aaff4ba1fda7c9"
+    },
+    {
+      "datei": "00_Arbeitsvorbereitung/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md",
+      "archiv": "00_Arbeitsvorbereitung/archiv/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "f2ec7564b305584a9781c9be9715f137f2ee72a9f1e690d05a1e7ee21d2c5ff7"
+    },
+    {
+      "datei": "00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md",
+      "archiv": "00_Arbeitsvorbereitung/Checklisten/archiv/Manuelle_Pruefung_3.30.0_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "6928e5879a76338c46d4774861da25736b9293e5b95db1f69116c8794bf6b8e8"
+    },
+    {
+      "datei": "00_Arbeitsvorbereitung/Checklisten/Windows_Pruefung_3.30.0.md",
+      "archiv": "00_Arbeitsvorbereitung/Checklisten/archiv/Windows_Pruefung_3.30.0_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "c9dac5253a580970fcf93a24d994efd6b3bde4b7393f2bf0bb664c822bef0d78"
+    },
+    {
+      "datei": "01_Repository/Glide/tests/README.md",
+      "archiv": "01_Repository/Glide/tests/archiv/README_3.32.3_vor_Richtungsabgleich_2026-10-01.md",
+      "sha256": "04cf45745ca4e3d3837e72ffcf37b679d688326fc579b11ee791f0660f4ac397"
+    }
+  ],
+  "unveraenderte_startkopien": {
+    "python": 139,
+    "bundle": 53
+  },
+  "quellstand_sha256": "24b21a71791dd6eff387dc889d099a7a7d3afc261d7243c9ff51994ba6cca1bb"
+}

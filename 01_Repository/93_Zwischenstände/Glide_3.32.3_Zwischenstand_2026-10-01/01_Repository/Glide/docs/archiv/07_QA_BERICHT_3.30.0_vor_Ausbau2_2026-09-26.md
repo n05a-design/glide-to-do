@@ -1,0 +1,284 @@
+# QA-Bericht – Glide 3.30.0
+
+Stand 26.09.2026 · App 3.30.0 · Datenformat 20 · macOS, Python 3.14.5, Tk 9.0.3
+
+## Ergebnis 3.30.0
+
+3.30.0 setzt die Modernisierung mit Aufgabenformat 20 um
+([Vertrag 3.30](66_MODERNISIERUNG_3.30.0.md)). Geprüft wurde auf dem
+Entwicklungs-Mac mit isoliertem `GLIDE_DATA_DIR`.
+
+### Ausbau vom 25./26.09.2026 – maßgeblicher Endstand
+
+Umfang:
+
+- Zeitblöcke ziehen;
+- Folien als PDF;
+- Karten-Rückgängig;
+- vollständiger Detailbereich;
+- Gismo in Leerzuständen;
+- Pixelschrift.
+
+Dazu kommen die beim Ausbau gefundenen Schutzmaßnahmen für unlesbare und
+neuere Speicherdateien sowie der Fix für doppeltes Beenden
+([Vertrag, Abschnitt 9](66_MODERNISIERUNG_3.30.0.md#9-mitbehobene-befunde)).
+
+- **Erster Vollmodus nach dem Ausbau**
+  ([Protokoll](../tests/qa-3.30.0/ausbau_2026-09-25/ergebnis.json), bis
+  00:01 Uhr): Exitcode 1, 49 von 52 Schritten bestanden.
+  - `test_release37` und `test_reminders` legten wie ein Altbestand eine
+    ältere Datei in einen Ordner, in dem schon Format 20 geschrieben war. Die
+    neue Rückfallwarnung meldete sich zu Recht.
+  - Korrektur in der App: Die Markierung `data_format_written` entsteht erst
+    mit echtem Inhalt, und der Text nennt auch das Hineinkopieren einer
+    älteren Datei. Beide Suiten liefen danach einzeln grün, ohne
+    Teständerung.
+  - Der **Release-Abgleich** scheiterte, weil der Lauf über Mitternacht ging:
+    Er verglich das Momentdatum der Listen absolut, obwohl es ein Anlagetag
+    ist. `pruefen.py` vergleicht es jetzt relativ zum Exporttag. Das war ein
+    Fehler des Prüfwerkzeugs, der an jedem Tag nach der Erzeugung
+    aufgetreten wäre.
+- **Nachprüfung**
+  ([Protokoll](../tests/qa-3.30.0/ausbau_nachpruefung_2026-09-26/ergebnis.json),
+  00:02–00:18 Uhr): Exitcode 1, 51 von 52 Schritten bestanden. Übrig blieb
+  `test_ui_followup36`: Eine frisch gescrollte Übersichtskarte meldete
+  „Liste öffnen“ noch nicht als eingeblendet.
+  - Zwei Einzelwiederholungen und zwei weitere Läufe einer Kopie mit
+    Unterschiedsausgabe; drei davon ohne parallele Last – alle drei grün, die
+    Kopien ohne jeden Datenunterschied.
+  - Eine Wiederholung lief parallel zur Nachprüfung, also unter doppelter
+    Last. Sie scheiterte stattdessen am Datenvergleich nach Speichern und
+    Laden (Zeile 352). Nachstellen ließ sich das nicht; es bleibt als offene
+    Beobachtung notiert.
+  - Die Sichtbarkeitsprüfung wartet jetzt im selben Durchlauf auf den stabilen
+    Endzustand wie seit 3.29 die Abstandsmessung (bis zu sechs Durchläufe).
+    Die Anforderung selbst ist unverändert.
+- **Abschlusslauf**
+  ([Protokoll](../tests/qa-3.30.0/ausbau_abschluss_2026-09-26/ergebnis.json),
+  00:28–00:46 Uhr): **Exitcode 0** – alle 52 automatisierten Schritte
+  bestanden:
+  - Syntax (107 Quelldateien), Versionskonsistenz, Dokumentationsindex mit
+    916 Links, Fixtures, Tk, Zeitzone;
+  - 37 Suiten einschließlich der erweiterten `test_features330.py`;
+  - fünf Analysen;
+  - Erzeugung und Abgleich von Beispieldaten und Releaseplanung.
+
+  Die 45 Protokolle enthalten keinen Traceback und keinen Tk-Fehler.
+  **Maßgeblicher automatisierter Nachweis des Endstands 3.30.0.**
+- **Echtdatenprobe** (mit Zustimmung, nur mit einer Kopie in einem
+  temporären Ordner):
+  - Umstellung von 6 Seiten und 138 Punkten ohne Inhaltsänderung;
+  - Vorsicherung bytegleich, keine Meldung, kein Tk-Fehler;
+  - Original vorher und nachher per SHA-256 gleich.
+
+  Die Probe fand, dass Glide 3.29 den umgestellten Bestand bei der ersten
+  Eingabe überschreibt. Daraus entstanden die Schutzmaßnahmen und die Warnung
+  in allen Übergabedokumenten.
+- **Startbare Kopie:** `07_Python-Versionen` ist nach dem Ausbau erneut per
+  SHA-256 bytegleich zum Quellstand, einschließlich der neuen Schriftdateien.
+  - Beide Fassungen starteten mit isoliertem Datenordner ohne Fehler: der
+    aktuelle Stand mit Pixelify Sans im Pixel-Titel und der Stand vor dem
+    Ausbau unter `Archiv/Glide-Aufgaben-und-Listen_v3.30.0_vor_Ausbau_2026-09-25/`.
+
+### Erster Abschluss am 25.09.2026 (vor dem Ausbau)
+
+- **Während der Umsetzung:** Nach jedem Paket liefen die neuen Suiten
+  `test_drawing330.py` und `test_features330.py`, dazu die betroffenen älteren
+  Suiten einzeln. Dabei gefundene Fehler sind behoben. Die schon in 3.29
+  vorhandenen stehen im
+  [Vertrag, Abschnitt 9](66_MODERNISIERUNG_3.30.0.md#9-mitbehobene-befunde).
+- **Abschlusslauf im Vollmodus**
+  ([Protokoll](../tests/qa-3.30.0/abschluss_2026-09-25/ergebnis.json)):
+  **Exitcode 0** – alle 52 automatisierten Schritte bestanden:
+  - Vorprüfungen: Syntax (107 Quelldateien), Versionskonsistenz (3.30.0,
+    Format 20), Dokumentationsindex mit 898 Links, Fixtures (30 Backups und
+    alle historischen Referenzformate), Tk, Zeitzone (CEST, +02:00);
+  - alle 37 Suiten einschließlich `audit_app` und der neuen Suiten
+    `test_drawing330.py` und `test_features330.py`.
+    `test_vollpruefung325.py` durchläuft jetzt zehn Designs einschließlich
+    „Pixel“ in drei Breiten und zwölf Ansichten;
+  - die fünf Analysen (statisch, Erreichbarkeit, Standprüfung, Attribute,
+    Dubletten);
+  - Erzeugung und Abgleich der Beispieldaten und der Releaseplanung
+    (Planungsstichtag 25.09.2026).
+
+  Der Lauf dauerte rund 13 Minuten bei einer Grenze von 900 Sekunden je
+  Suite. Die 45 Protokolle enthalten keinen Traceback und keinen Tk-Fehler.
+- **Startbare Kopie:** `07_Python-Versionen` enthält
+  `Glide-Aufgaben-und-Listen_v3.30.0.pyw`, beide Module und den
+  Vorlagenkatalog. Alle Dateien sind per SHA-256 bytegleich zum Quellstand;
+  ebenso die Nutzerkopie der Praxisvorlagen in `05_Probelisten_Testdaten`.
+  3.29.0 liegt startfähig samt Modulen unter
+  `Archiv/Glide-Aufgaben-und-Listen_v3.29.0/`.
+
+Übersprungen bleiben plattformgebunden die Bildaufnahmen (nur Linux/X11 bzw.
+Windows) und die Sichtprüfung. Bildschirmaufnahmen waren in der
+Agentenumgebung nicht möglich. Die Darstellung wurde über Widgetgeometrie und
+Zustandsprüfungen getestet, nicht mit dem Auge.
+
+### Offen und nur manuell prüfbar
+
+Die [Prüfliste 3.30](../../../00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md)
+führt die Punkte einzeln auf. Zusammengefasst:
+
+- Migration eines echten Bestands: mit einer Kopie automatisch geprüft;
+  offen bleibt nur die Sichtkontrolle. **3.29 nach der Umstellung nicht mehr
+  starten** – es überschreibt den Bestand;
+- die Neuerungen des Ausbaus mit echter Bedienung: Zeitblöcke ziehen,
+  Folien-PDF im Browser, Detailbereich mit Trackpad, Pixelschrift unter
+  macOS und Windows;
+- Bedienung mit echter Maus, Trackpad und Tastatur, vor allem Zeichnen und
+  Ziehen im Board;
+- Bildschirmleser (NVDA, VoiceOver);
+- DPI-Skalierung mit 100, 150 und 200 % sowie zwei Monitore;
+- ein Gesamtlauf unter Windows (fehlt seit 3.29);
+- Druck und PDF mit und ohne Pinnwandhintergrund;
+- flüssige Bedienung mit 500 Karten.
+
+**Nicht durch Agenten prüfbar:**
+
+- Signatur, Notarisierung und Installer;
+- Markenprüfung;
+- Store-Freigabe.
+
+Die Prüflisten [3.29](../../../00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.29.0.md)
+und [3.28](../../../00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.28.0.md)
+sind ebenfalls noch offen.
+
+## Ergebnis 3.29.0 (historisch)
+
+3.29.0 integriert die Zeichnungsseite (Aufgabenformat 19). Geprüft wurde auf
+dem Entwicklungs-Mac mit Python 3.14.5 und isoliertem `GLIDE_DATA_DIR`.
+
+- **Ausgangslauf vor Beginn** (Schnellmodus,
+  [Protokoll](../tests/qa-3.28.0/vor_zeichnungsintegration_2026-09-24/ergebnis.json)):
+  dieselben fünf bekannten Altbefunde wie seit 3.28 (Fixture 3.26.0,
+  Vorlagenreproduktion, `test_features313`, `test_features322`,
+  `test_features328`).
+- **Erster Vollmodus nach der Integration**
+  ([Protokoll](../tests/qa-3.29.0/zeichnungsseite_2026-09-24/ergebnis.json)):
+  Syntax, Versionskonsistenz, Dokumentationsindex (842 Links), Fixtures, Tk,
+  Zeitzone, **alle 35 Suiten** einschließlich der neuen `test_features329.py`
+  und **alle fünf Analysen** bestanden. Die fünf Altbefunde sind behoben. Rot
+  blieben nur die erstmals seit 3.26 wieder ausgeführten Reproduktionsabgleiche
+  von Beispiel- und Releasedaten: Der Vergleich behandelte die seit 3.26
+  vorhandenen Listenzeitpunkte `created_at`/`updated_at` noch als Inhalt.
+  Korrektur in `pruefen.py`: Diese Erzeugungszeitpunkte sind wie `exported_at`
+  ausgenommen; das Tagebuch-Momentdatum wird relativ zum Exporttag verglichen.
+- **Nachprüfung im Vollmodus**
+  ([Protokoll](../tests/qa-3.29.0/zeichnungsseite_nachpruefung_2026-09-24/ergebnis.json)):
+  **Exitcode 0** – alle 50 automatisierten Schritte bestanden: Vorprüfungen,
+  35 Suiten, fünf Analysen sowie Erzeugung und Abgleich von Beispiel- und
+  Releasedaten. Das ist der erste vollständig grüne Gesamtlauf seit 3.26.0;
+  er ersetzt keine manuelle Plattformabnahme.
+- **Abnahmelauf nach Rückmeldung** (Farbspektrum, Scrollbereich, zusätzliche
+  Abnahmetests; [Protokoll](../tests/qa-3.29.0/abnahme_2026-09-24/ergebnis.json)):
+  49 Schritte bestanden, **ein Befund** in `test_ui_followup36`: Innenabstand
+  einer Bestandskarte nach Schriftwechsel und Resize (rechts 109 statt 16 px).
+  Drei Einzelwiederholungen waren grün; der Bereich wurde in 3.29 nicht
+  geändert. Ursache ist eine Layoutmessung vor dem letzten Tk-Durchlauf unter
+  Last. Die Prüfung misst jetzt bis zu sechsmal den stabilen Endzustand; die
+  Abstandsanforderung selbst ist unverändert.
+- **Abnahme-Nachprüfung**
+  ([Protokoll](../tests/qa-3.29.0/abnahme_nachpruefung_2026-09-24/ergebnis.json)):
+  **Exitcode 0** – alle 50 automatisierten Schritte bestanden (Vorprüfungen,
+  35 Suiten, fünf Analysen, Reproduktion von Beispiel- und Releasedaten).
+  Maßgeblicher automatisierter Nachweis des Endstands 3.29.0.
+
+Die einzelnen Abnahmekriterien der Etappe mit Nachweis stehen im
+[Vertrag 3.29, Abschnitt 11](65_ZEICHNUNGSSEITE_3.29.0.md).
+
+Übersprungen bleiben plattformgebunden die Bildaufnahmen (nur Linux/X11 bzw.
+Windows) und die Sichtprüfung. Bildschirmaufnahmen waren in der
+Agentenumgebung nicht erlaubt; die Einbettung der Zeichenfläche wurde über
+Widgetgeometrie geprüft (1280 × 860: Fläche 922 × 616 Pixel; 860 × 700:
+502 × 420 Pixel). Offen und manuell: [Prüfliste 3.29](../../../00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.29.0.md)
+mit Maus/Trackpad, Tastatur und Screenreader, DPI, Mehrmonitor, Windows,
+Designs und dem Illustrator-/Affinity-Rundlauf. Ein Windows-Gesamtlauf für
+3.29.0 fehlt.
+
+## Ergebnis 3.28.0 (historisch)
+
+Der Funktionsstand 3.28 ist gezielt geprüft, aber **noch nicht als vollständiger
+Release-Gesamtlauf freigegeben**. Der
+[Schnelllauf](../tests/qa-3.28.0/abschluss_2026-09-23/ergebnis.json) bestätigt
+Versionskonsistenz, Tk, Zeitzone, den Haupttest und den überwiegenden Teil der
+Integrationssuiten. Sein Gesamtergebnis bleibt Exitcode 1, weil mehrere ältere
+OneDrive-Platzhalter lokal nicht lesbar sind und zwei lang laufende UI-/
+Gesamtprüfungen die bewusst gesetzte Grenze von 60 Sekunden überschritten.
+
+Nach diesem Lauf wurden die veralteten Erwartungen der Vorlagenprüfung an die
+vier neuen Tagebuchvorlagen angepasst. Die Vorlagenerzeugung verwendet nun
+stabile Erstellungszeitpunkte. Anschließend bestanden einzeln:
+
+- Syntaxprüfung des Quellstands und der startbaren 3.28-Kopie;
+- `test_glide.py` einschließlich Kern-, Backup-, UI-, Ordner-, Papierkorb- und
+  Migrationstests;
+- `test_features328.py` für Format 18, Tagebuchdaten, Sicherung, Vorlagen,
+  Menügestaltung, Aktionsfarben und verdichtete Notizwerkzeuge;
+- `test_template_workflows.py` für 16 vollständige Projekt-/Listenvorlagen plus
+  vier Tagebuchvorlagen, Reproduzierbarkeit, Migration und Dialoge;
+- `test_features315.py` mit der seit 3.27 gültigen Tabellenfilter-Logik;
+- im Schnelllauf unter anderem `test_datenintegritaet`, `audit_app`,
+  `test_dialog_theme`, `test_ui_updates`, `test_glide_36`, `test_release36`,
+  `test_ui_polish36`, `test_release37`, `test_reminders`, `test_ui39`,
+  `test_workspace310` sowie die lesbaren Suiten 3.12 und 3.14 bis 3.26;
+- Erreichbarkeits-, Attribut- und Dublettenprüfung. Die statische Analyse lief
+  anschließend mit Exitcode 0 durch; ihre Größen- und Duplikathinweise sind
+  Wartungshinweise, keine fehlgeschlagenen Funktionsprüfungen.
+
+Nach der Meldung eines weißen Neuaufbaus beim Füttern von Gismo wurde der
+Pflegepfad zusätzlich korrigiert und erneut geprüft. Der 3.28-Test läuft dafür
+im Dopamin-Design, löst `Füttern` aus und weist nach, dass die vorhandenen
+Pflegebalken aktualisiert werden, bestehen bleiben und kein `refresh_home()`
+mehr aufgerufen wird. Syntax, Hauptsuite, Vorlagenworkflow und
+Tagesplanungstest bestanden danach erneut. Die tatsächliche Sichtprüfung mit
+echter Maus bleibt in `Manuelle_Pruefung_3.28.0.md` offen.
+Der maschinenlesbare Nachweis liegt unter
+[`tests/qa-3.28.0/nachpruefung_flackern_2026-09-23/ergebnis.json`](../tests/qa-3.28.0/nachpruefung_flackern_2026-09-23/ergebnis.json).
+
+Quelle und startbare Version sowie deren jeweiliger Vorlagenkatalog wurden nach
+der letzten Korrektur erneut kopiert und per SHA-256 auf Bytegleichheit geprüft.
+Alle App- und Integrationstests arbeiten mit temporären `GLIDE_DATA_DIR`-
+Verzeichnissen; die Nutzerdaten wurden nicht als Testbestand geöffnet.
+
+### Damalige Prüfblockaden (seit 3.29 aufgelöst)
+
+Seit dem Vollmodus 3.29.0 sind alle hier genannten Dateien lokal lesbar. Am
+25.09.2026 wurde das erneut geprüft:
+
+- Die vier Dateien im Repository hat der Abschlusslauf 3.30.0 gelesen.
+- `38_DOKUMENTATIONSABGLEICH_2026-09-13.md` liegt inzwischen unter
+  `docs/archiv/`.
+- Die Prüfliste 3.21.4 liegt unter
+  `00_Arbeitsvorbereitung/Archiv/Arbeitsstaende_bis_3.26/Checklisten/`.
+
+Die Zeitüberschreitungen von `test_ui_followup36.py` und
+`test_vollpruefung325.py` traten mit der Grenze von 900 Sekunden je Suite
+nicht mehr auf.
+
+Damaliger Wortlaut: Folgende Dateien trugen auf diesem Rechner den
+OneDrive-Platzhalterstatus und lieferten
+`PermissionError: [Errno 13] Permission denied`:
+
+- `tests/integration/test_features311.py` und `test_features313.py`;
+- `tests/fixtures/current_v15/reference_v15.json` innerhalb von
+  `test_features322.py`;
+- ältere Beispiel-Fixtures, zuerst
+  `tests/fixtures/beispiele/glide_releaseplanung_3.10.0.glidebackup`;
+- `docs/38_DOKUMENTATIONSABGLEICH_2026-09-13.md`;
+- außerhalb des Repositorys
+  `00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.21.4.md`, wodurch die
+  Standprüfung vor der inhaltlichen Auswertung abbrach.
+
+`test_ui_followup36.py` überschritt wie bereits im 3.27-Ausgangsstand die
+60-Sekunden-Grenze in der Fenstergrößen-/Ereignisverarbeitung. Der ältere
+Sammeltest `test_vollpruefung325.py` überschritt dieselbe Grenze.
+
+### Damalige manuelle Grenzen
+
+Eine neue menschliche Sichtprüfung von 3.28 wurde nicht durchgeführt. Die vom
+Nutzer gelieferten Bildschirmbilder dienten als Problembeleg, ersetzen aber
+keinen abschließenden Bedienungstest. Ebenfalls offen blieben macOS, native
+Druckdialoge, DPI-/Mehrmonitor-Sonderfälle, Screenreader, Installer,
+Signierung/Notarisierung und reale Verteilung.

@@ -1,0 +1,26 @@
+{
+  "app.pyw": {
+    "pfad": "01_Repository/Glide/src/glide/app.pyw",
+    "sha256": "36c4f702ebf5950847f38b4ff95a0429fee2970436325c565eec6c9581bf049a"
+  },
+  "startbare_kopie": {
+    "pfad": "07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.21.4.pyw",
+    "sha256": "36c4f702ebf5950847f38b4ff95a0429fee2970436325c565eec6c9581bf049a"
+  },
+  "vorlagen": {
+    "pfad": "05_Probelisten_Testdaten/Glide-Praxisvorlagen_3.21.4.glidetemplates",
+    "sha256": "2381e99a73693d563f3e551e8266310a8072fc2df7328191eb0ae2880bc77df5"
+  },
+  "beispiele": {
+    "pfad": "05_Probelisten_Testdaten/Glide-Funktionsvorschau_3.21.4.glidebackup",
+    "sha256": "72f004175dca0c66e6af1927ec42e80f75a64571bb01dd712e28c5efdab92516"
+  },
+  "release": {
+    "pfad": "05_Probelisten_Testdaten/Glide-Releaseplanung_3.21.4.glidebackup",
+    "sha256": "880b429d3c40f0ce421892511acf88a3dec8fcd6d2c5ebdedee0d17a93e11371"
+  },
+  "paket": {
+    "pfad": "50_Ablage/Archiv/Uebertragungspakete/glide-3.21.4-ablagepaket.zip",
+    "sha256": "1382a1ab2d4dbf9c3dc890ba0817763ce8361abc7071873d1ce605e7be56ab31"
+  }
+}

@@ -1,0 +1,285 @@
+class RichNoteEditor(tk.Frame):
+    """Lokaler Rich-Text-Editor; Undo umfasst Text UND Formatierung."""
+
+    FORMATS = ('bold', 'italic', 'underline', 'strike', 'h1', 'h2', 'h3',
+               'bullet', 'number', 'quote', 'code', 'codeblock', 'highlight')
+    MAX_TEXT = 1_000_000
+    MAX_SPANS = 10000
+
+    @classmethod
+    def normalize(cls, value):
+        if value is None:
+            return {'text': '', 'spans': [], 'links': {}}
+        if not isinstance(value, dict) or not isinstance(value.get('text', ''), str):
+            raise ValueError('Ungültiges Notizdokument.')
+        text = value.get('text', '')
+        if len(text) > cls.MAX_TEXT:
+            raise ValueError('Eine Notiz darf höchstens 1.000.000 Zeichen enthalten.')
+        raw = value.get('spans', [])
+        if not isinstance(raw, list) or len(raw) > cls.MAX_SPANS:
+            raise ValueError('Zu viele oder ungültige Notizformatierungen.')
+        links = value.get('links', {})
+        if not isinstance(links, dict):
+            raise ValueError('Ungültige Notizlinks.')
+        links = {key: url for key, url in links.items()
+                 if isinstance(key, str) and key.startswith('link:') and len(key) <= 80
+                 and isinstance(url, str) and len(url) <= 2048
+                 and re.match(r'^(https?://|mailto:)[^\s]+$', url)}
+        spans = []
+        for span in raw:
+            if not isinstance(span, dict):
+                raise ValueError('Ungültiger Formatierungsbereich.')
+            tag, start, end = span.get('tag'), span.get('start'), span.get('end')
+            if tag not in cls.FORMATS and tag not in links:
+                continue
+            if type(start) is not int or type(end) is not int or not 0 <= start < end <= len(text):
+                raise ValueError('Formatierungsbereich liegt außerhalb des Notiztextes.')
+            spans.append({'tag': tag, 'start': start, 'end': end})
+        used = {span['tag'] for span in spans}
+        return {'text': text, 'spans': sorted(spans, key=lambda s: (s['start'], s['end'], s['tag'])),
+                'links': {key: url for key, url in links.items() if key in used}}
+
+    def __init__(self, master, app, document=None, on_change=None):
+        super().__init__(master, bg=app.theme['card'])
+        self.app = app
+        self.on_change = on_change
+        self._job = None
+        self._loading = False
+        self._undo, self._redo = [], []
+        self.links = {}
+        self._fonts = {}
+        toolbar = ButtonFlow(self, bg=app.theme['card'])
+        toolbar.pack(fill='x', pady=(0, 5))
+        specs = [('B', 'bold'), ('I', 'italic'), ('U', 'underline'), ('S', 'strike'),
+                 ('H1', 'h1'), ('H2', 'h2'), ('H3', 'h3'), ('Liste', 'bullet'),
+                 ('1. Liste', 'number'), ('Zitat', 'quote'), ('Code', 'code'),
+                 ('Codeblock', 'codeblock'), ('Markieren', 'highlight')]
+        for label, tag in specs:
+            button = app._make_dialog_button(toolbar, label, lambda t=tag: self.format(t), 'muted', width=42, height=30)
+            toolbar.add(button)
+        for label, command in [('Link', self.insert_link), ('Zeitstempel', self.timestamp),
+                               ('Tagesabschnitt', lambda: self.timestamp(section=True)),
+                               ('Rückgängig', self.undo), ('Wiederholen', self.redo)]:
+            toolbar.add(app._make_dialog_button(toolbar, label, command, 'muted', width=80, height=30))
+        self.status = tk.Label(self, text='Notiz', bg=app.theme['card'], fg=app.theme['muted'],
+                               font=app_font(9), anchor='w')
+        self.status.pack(side='bottom', fill='x')
+        area = tk.Frame(self, bg=app.theme['input'])
+        area.pack(fill='both', expand=True)
+        self.text = tk.Text(area, name='rich_note_text', wrap='word', undo=False,
+                            bg=app.theme['input'], fg=app.theme['text'],
+                            insertbackground=app.theme['text'], selectbackground=app.theme['selection'],
+                            selectforeground=app.theme['selection_text'], relief='flat', bd=0,
+                            padx=12, pady=10, height=10, font=app_font(11))
+        app._attach_field_scrollbar(area, self.text)
+        self.text.pack(fill='both', expand=True)
+        self.text.tag_configure('underline', underline=True)
+        self.text.tag_configure('strike', overstrike=True)
+        self.text.tag_configure('quote', lmargin1=20, lmargin2=20, foreground=app.theme['muted'])
+        self.text.tag_configure('bullet', lmargin1=8, lmargin2=24)
+        self.text.tag_configure('number', lmargin1=8, lmargin2=28)
+        self.text.tag_configure('highlight', background=app.theme['selection'], foreground=app.theme['selection_text'])
+        for tag in ('code', 'codeblock'):
+            self.text.tag_configure(tag, background=app.theme['card'])
+        for tag in ('h1', 'h2', 'h3', 'codeblock'):
+            self.text.tag_configure(tag, spacing1=6, spacing3=6)
+        self.load(document)
+        self._last = self.document()
+        self.text.bind('<<Modified>>', self.modified)
+        for modifier in ('Control', 'Command') if IS_MACOS else ('Control',):
+            for key, tag in (('b','bold'), ('i','italic'), ('u','underline')):
+                self.text.bind(f'<{modifier}-{key}>', lambda e, t=tag: self.format(t))
+            self.text.bind(f'<{modifier}-k>', lambda e: self.insert_link())
+            self.text.bind(f'<{modifier}-z>', self.undo)
+            self.text.bind(f'<{modifier}-y>', self.redo)
+            self.text.bind(f'<{modifier}-Shift-Z>', self.redo)
+        self.text.bind('<Control-Button-1>', self.open_link)
+        self.text.bind('<FocusOut>', lambda e: self.flush())
+        self.bind('<Destroy>', self.destroyed, add='+')
+
+    def destroyed(self, event):
+        if event.widget is self and self._job is not None:
+            self.after_cancel(self._job)
+            self._job = None
+
+    def offset(self, index):
+        return len(self.text.get('1.0', index))
+
+    def document(self):
+        spans = []
+        for tag in (*self.FORMATS, *self.links):
+            positions = self.text.tag_ranges(tag)
+            for start, end in zip(positions[::2], positions[1::2]):
+                a, b = self.offset(start), self.offset(end)
+                if a < b:
+                    spans.append({'tag': tag, 'start': a, 'end': b})
+        return self.normalize({'text': self.text.get('1.0', 'end-1c'), 'spans': spans, 'links': self.links})
+
+    def load(self, document):
+        value = self.normalize(document)
+        self._loading = True
+        try:
+            self.text.delete('1.0', 'end')
+            for tag in self.text.tag_names():
+                if str(tag).startswith(('link:', 'font:')):
+                    self.text.tag_delete(tag)
+            self.links = value['links']
+            self.text.insert('1.0', value['text'])
+            # Tk counts non-BMP characters differently across Tk versions.
+            # Build native indices by line/column from actual inserted text.
+            def index(offset):
+                prefix = value['text'][:offset]
+                line = prefix.count('\n') + 1
+                tail = prefix.rsplit('\n', 1)[-1]
+                column = int(self.text.tk.call('string', 'length', tail))
+                return f'{line}.{column}'
+            for span in value['spans']:
+                self.text.tag_add(span['tag'], index(span['start']), index(span['end']))
+            for tag in self.links:
+                self.text.tag_configure(tag, foreground=self.app.theme['ui_accent'], underline=True)
+            self.refresh_fonts()
+            self.text.edit_modified(False)
+        finally:
+            self._loading = False
+
+    def refresh_fonts(self):
+        for tag in self.text.tag_names():
+            if str(tag).startswith('font:'):
+                self.text.tag_remove(tag, '1.0', 'end')
+        boundaries = {'1.0', self.text.index('end-1c')}
+        font_tags = ('bold','italic','h1','h2','h3','code','codeblock')
+        for tag in font_tags:
+            boundaries.update(str(i) for i in self.text.tag_ranges(tag))
+        ordered = sorted(boundaries, key=lambda i: tuple(map(int, i.split('.'))))
+        for start, end in zip(ordered, ordered[1:]):
+            active = set(self.text.tag_names(start))
+            size = 20 if 'h1' in active else 16 if 'h2' in active else 13 if 'h3' in active else 11
+            bold = 'bold' in active or bool(active & {'h1','h2','h3'})
+            italic = 'italic' in active
+            mono = bool(active & {'code','codeblock'})
+            key = f'font:{size}:{int(bold)}:{int(italic)}:{int(mono)}'
+            if key not in self._fonts:
+                font = tkfont.Font(font=app_font(size, 'bold' if bold else 'normal'))
+                font.configure(slant='italic' if italic else 'roman')
+                if mono:
+                    font.configure(family='Courier New')
+                self._fonts[key] = font
+            self.text.tag_configure(key, font=self._fonts[key])
+            self.text.tag_add(key, start, end)
+
+    def modified(self, event=None):
+        if self._loading or not self.text.edit_modified():
+            return
+        self.text.edit_modified(False)
+        if self._job is not None:
+            self.after_cancel(self._job)
+        self._job = self.after(400, self.flush)
+
+    def flush(self):
+        if self._job is not None:
+            self.after_cancel(self._job)
+            self._job = None
+        if self._loading:
+            return
+        self.refresh_fonts()
+        value = self.document()
+        if value != self._last:
+            self._undo.append(copy.deepcopy(self._last))
+            self._undo = self._undo[-100:]
+            self._redo.clear()
+            self._last = copy.deepcopy(value)
+            self.changed(value)
+
+    def changed(self, value):
+        ok = self.on_change(value) if self.on_change else True
+        self.status.configure(text='Gespeichert' if ok is not False else 'Nicht gespeichert – erneut versuchen')
+        return ok
+
+    def undo(self, event=None):
+        self.flush()
+        if self._undo:
+            self._redo.append(copy.deepcopy(self._last))
+            self._last = self._undo.pop()
+            self.load(self._last)
+            self.changed(self._last)
+        return 'break'
+
+    def redo(self, event=None):
+        self.flush()
+        if self._redo:
+            self._undo.append(copy.deepcopy(self._last))
+            self._last = self._redo.pop()
+            self.load(self._last)
+            self.changed(self._last)
+        return 'break'
+
+    def format(self, tag):
+        self.flush()
+        selection = self.text.tag_ranges('sel')
+        if not selection:
+            self.status.configure(text='Zuerst Text zum Formatieren markieren.')
+            self.text.focus_set()
+            return 'break'
+        start, end = map(str, selection)
+        if tag in ('h1','h2','h3','bullet','number','quote','codeblock'):
+            start = self.text.index(start+' linestart')
+            end = self.text.index(end+' -1c lineend')
+        enabled = tag in self.text.tag_names(start)
+        if tag in ('bullet','number') and not enabled:
+            first, last = int(start.split('.')[0]), int(end.split('.')[0])
+            for line in range(last, first-1, -1):
+                prefix = '• ' if tag == 'bullet' else f'{line-first+1}. '
+                self.text.insert(f'{line}.0', prefix)
+            end = self.text.index(f'{last}.end')
+        if enabled:
+            self.text.tag_remove(tag, start, end)
+        else:
+            if tag in ('h1','h2','h3'):
+                for other in ('h1','h2','h3'):
+                    self.text.tag_remove(other, start, end)
+            self.text.tag_add(tag, start, end)
+        self.flush()
+        self.text.focus_set()
+        return 'break'
+
+    def insert_link(self):
+        selection = self.text.tag_ranges('sel')
+        if not selection:
+            self.status.configure(text='Zuerst den Linktext markieren.')
+            return 'break'
+        self.flush()
+        self.text.mark_set('link_start', selection[0])
+        self.text.mark_set('link_end', selection[1])
+        url = self.app.themed_input_dialog('Link', 'https://, http:// oder mailto:', ok_text='Übernehmen')
+        if url is None:
+            return 'break'
+        url = url.strip()
+        if not re.match(r'^(https?://|mailto:)[^\s]+$', url) or len(url) > 2048:
+            self.app.show_warning('Link', 'Bitte eine gültige Web- oder E-Mail-Adresse eingeben.')
+            return 'break'
+        tag = 'link:' + uuid.uuid4().hex
+        self.links[tag] = url
+        self.text.tag_configure(tag, foreground=self.app.theme['ui_accent'], underline=True)
+        self.text.tag_add(tag, 'link_start', 'link_end')
+        self.flush()
+        return 'break'
+
+    def open_link(self, event):
+        for tag in self.text.tag_names(f'@{event.x},{event.y}'):
+            if tag in self.links:
+                import webbrowser
+                webbrowser.open(self.links[tag])
+                return 'break'
+
+    def timestamp(self, section=False):
+        self.flush()
+        start = self.text.index('insert')
+        value = datetime.now().strftime('%d.%m.%Y' if section else '%d.%m.%Y %H:%M')
+        self.text.insert('insert', ('\n' + value + '\n────────────\n') if section else value)
+        if section:
+            self.text.tag_add('h2', start+' +1c', start+f' +{len(value)+1}c')
+        self.flush()
+        self.text.focus_set()
+        return 'break'
+
+

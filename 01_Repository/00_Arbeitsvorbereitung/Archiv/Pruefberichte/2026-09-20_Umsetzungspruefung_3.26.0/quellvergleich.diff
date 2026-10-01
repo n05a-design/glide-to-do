@@ -1,0 +1,110 @@
+--- C:\Users\Timvo\OneDrive\Glide ToDo\01_Repository\Glide\src\glide\archiv\app_3.25.0_vor_3.26.0.pyw
+
++++ C:\Users\Timvo\OneDrive\Glide ToDo\01_Repository\Glide\src\glide\app.pyw
+
+@@ -59,7 +59,7 @@
+
+ APP_NAME = "Glide"
+ APP_TAGLINE = "Aufgaben und Listen"
+ APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
+-APP_VERSION = "3.25.0"
++APP_VERSION = "3.26.0"
+ IS_MACOS = sys.platform == "darwin"
+ IS_WINDOWS = os.name == "nt"
+ 
+@@ -3902,7 +3902,7 @@
+
+         zusatz = f" ({auswahl} Karten)" if auswahl > 1 else ""
+         return {
+             "Inhalt": [
+-                ("Punkte anheften …", self.choose_cards),
++                ("Anheften", self.choose_cards),
+                 ("Alle Punkte anheften", self.pin_all),
+                 ("Neue Aufgabe", lambda: self.create_card_item(24, 24)),
+                 ("Neue Notiz", lambda: self.create_card_item(24, 24, app.ITEM_KIND_LONG)),
+@@ -3910,8 +3910,8 @@
+
+             "Ausgewählte Karte": [
+                 ("Bearbeiten" + zusatz.replace(f" ({auswahl} Karten)", ""), self.edit),
+                 ("Erledigt umschalten" + zusatz, self.toggle),
+-                ("Verbinden …" + zusatz, self.start_connect_mode),
+-                ("Kartengröße …" + zusatz, self.show_card_scale_menu),
++                ("Verbinden" + zusatz, self.start_connect_mode),
++                ("Kartengröße" + zusatz, self.show_card_scale_menu),
+                 ("Als Reiter öffnen", self.open_tab),
+                 ("In Liste zeigen", self.open_source),
+                 ("Von Pinnwand entfernen" + zusatz, self.unpin),
+@@ -3963,9 +3963,9 @@
+
+                          command=lambda: self.create_card_item(*stelle))
+         menu.add_command(label="   Neue Notiz hier",
+                          command=lambda: self.create_card_item(*stelle, app.ITEM_KIND_LONG))
+-        menu.add_command(label="   Punkte anheften …", command=self.choose_cards)
++        menu.add_command(label="   Anheften", command=self.choose_cards)
+         menu.add_separator()
+-        menu.add_command(label="   Alle Aktionen …", command=self.show_board_actions_menu)
++        menu.add_command(label="   Aktionen", command=self.show_board_actions_menu)
+         try:
+             if event is not None:
+                 menu.tk_popup(event.x_root, event.y_root)
+@@ -4258,7 +4258,7 @@
+
+         self.bar.pack(fill="x", before=self.body if self.visible else app.list_frame)
+         line = tk.Frame(self.bar, bg=app.theme["card"])
+         line.pack(fill="x")
+-        overview = app._make_dialog_button(line, "Reiter …", self.tab_overview, "muted", width=100, height=34)
++        overview = app._make_dialog_button(line, "Reiter", self.tab_overview, "muted", width=100, height=34)
+         overview.pack(side="right", padx=(8, 0))
+         # Punkt 2 (3.25.0): Die globale Pinnwand gehört zu keiner Liste und
+         # hatte deshalb auch keinen Reiter, der zurückführt. Escape brachte
+@@ -4369,17 +4369,17 @@
+
+ 
+     def tab_overview(self):
+         choices = []
+-        ids = {}
++
+         for index, tab in enumerate(self.app.settings["open_tabs"], 1):
+             found = self.app.find_item_in_lists(tab["item_id"])
+             if found:
+                 label = f"{index}. {found[3].get('title', '')} · {self.app.item_display_text(found[0])}"
+-                choices.append(label); ids[label] = tab["item_id"]
++                choices.append((tab["item_id"], label))
+         if not choices:
+             return self.app.show_info("Reiter", "Noch keine Punktreiter geöffnet. Einen Punkt auswählen und „Als Reiter öffnen“ benutzen.")
+         chosen = self.app.themed_choice_dialog("Offene Reiter", "Reiter auswählen", choices)
+-        if chosen in ids:
+-            self.open_tab(ids[chosen])
++        if chosen:
++            self.open_tab(chosen)
+ 
+     def focus_active_tab(self):
+         target = self.tab_buttons.get(self.mode)
+@@ -4533,11 +4533,11 @@
+
+         # Arbeiten anfasst; alles Übrige steht unter „Weitere Aktionen …“ in
+         # benannten Gruppen: Inhalt, Karte, Fläche. Die Trennung ist keine
+         # Optik, sondern die Frage, worauf eine Aktion wirkt.
+-        self.action_row(self.body, [("Punkte anheften …", self.choose_cards, "confirm"),
++        self.action_row(self.body, [("Anheften", self.choose_cards, "confirm"),
+                                    ("Neue Aufgabe", lambda: self.create_card_item(24, 24), "confirm"),
+                                    ("Bearbeiten", self.edit, "accent"),
+-                                   ("Verbinden …", self.start_connect_mode, "due_action"),
+-                                   ("Weitere Aktionen …", self.show_board_actions_menu, "muted")])
++                                   ("Verbinden", self.start_connect_mode, "due_action"),
++                                   ("Aktionen", self.show_board_actions_menu, "muted")])
+         options = tk.Frame(self.body, bg=app.theme["card"])
+         options.pack(fill="x", pady=(0, 4))
+         layout = tk.StringVar(value="Frei anordnen" if board["layout"] == "free" else "Geordnete Karten")
+@@ -6268,8 +6268,8 @@
+
+              "Datei › Importieren bzw. Exportieren"),
+             ("Kalenderdatei (ICS)", "Fälligkeiten als Termine ausgeben oder Termine einlesen.",
+              "Datei › Importieren bzw. Exportieren"),
+-            ("Drucken und PDF", "Druckansicht erzeugen und im Standardprogramm öffnen.",
+-             "Datei › Exportieren › Drucken und PDF · Strg+P"),
++            ("Drucken und PDF …", "Druckansicht erzeugen und im Standardprogramm öffnen.",
++             "Datei › Exportieren › Drucken und PDF … · Strg+P"),
+             ("Austausch mit einer KI", "Bestand in ein beschriebenes Format ausgeben und "
+                                        "das Ergebnis kontrolliert zurücklesen.",
+              "Datei › Datenaustausch"),

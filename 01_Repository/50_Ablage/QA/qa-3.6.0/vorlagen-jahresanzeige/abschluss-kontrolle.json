@@ -1,0 +1,9 @@
+{
+  "syntax_pruefen": "19 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt",
+  "versionen_pruefen": "VERSION, App, Hauptsuite und CHANGELOG: 3.6.0; Datenformat 11",
+  "dokumentation_pruefen": "Alle Dokumente einschließlich Archiv im Index; 192 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell.",
+  "zeitpunkt": "2026-09-07T15:38:20",
+  "quelle_sha256": "b22ffdc12eb61f588cf844c0168fb2f40c900911dc1650ac96ae697151e95003",
+  "startkopie_bytegleich": true,
+  "abschluss_test_exitcode": 0
+}

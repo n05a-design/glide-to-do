@@ -1,0 +1,66 @@
+{
+  "version": 4,
+  "active_list_id": "fixture-list-project",
+  "active_folder_id": null,
+  "folders": [
+    {
+      "id": "fixture-folder-work",
+      "title": "Arbeit",
+      "color": "accent",
+      "note": "Referenzordner für automatisierte Tests."
+    }
+  ],
+  "lists": [
+    {
+      "id": "fixture-list-inbox",
+      "title": "Eingang",
+      "folder_id": null,
+      "color": "due_action",
+      "note": "",
+      "system_role": "inbox",
+      "items": [
+        {
+          "id": "fixture-item-inbox",
+          "text": "Unsortierter Eingangspunkt",
+          "done": false,
+          "importance": 0,
+          "due": null,
+          "description": "",
+          "attachments": [],
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "fixture-list-project",
+      "title": "Projekt",
+      "folder_id": "fixture-folder-work",
+      "color": null,
+      "note": "Eine freie Seitennotiz.",
+      "system_role": null,
+      "items": [
+        {
+          "id": "fixture-item-project",
+          "text": "Referenzaufgabe",
+          "done": false,
+          "importance": 2,
+          "due": "2026-09-15",
+          "description": "Mehrzeilige Beschreibung\nmit zweiter Zeile.",
+          "attachments": [],
+          "children": [
+            {
+              "id": "fixture-item-child",
+              "text": "Unterpunkt",
+              "done": true,
+              "importance": 1,
+              "due": null,
+              "description": "",
+              "attachments": [],
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

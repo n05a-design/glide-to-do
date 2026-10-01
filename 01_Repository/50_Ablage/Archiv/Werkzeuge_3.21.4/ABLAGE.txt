@@ -1,0 +1,5 @@
+Originalpaket: ../Uebertragungspakete/glide-3.21.4-ablagepaket.zip
+Originalwerkzeuge und quellstand/ bleiben als Eingangsstand unverändert.
+Die ausgeführten Nacharbeiten und Prüfergebnisse liegen unter Pruefnachweise/.
+Maßgeblich ist der eingeordnete Repository-Stand, einschließlich der Korrektur in standpruefung.py.
+Die Original-Ablageskripte sind historische Werkzeuge; ein erneuter Lauf würde spätere Korrekturen überschreiben.

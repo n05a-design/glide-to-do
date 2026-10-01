@@ -1,0 +1,47 @@
+{
+  "version": "3.13.0",
+  "copies": [
+    {
+      "source": "01_Repository/Glide/src/glide/app.pyw",
+      "copy": "07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.13.0.pyw",
+      "sha256": "836ff0d04a28ce89d26d3be3a5e54de7ce2200e4e3690b0ae2ff0e4eebf3174c"
+    },
+    {
+      "source": "01_Repository/Glide/src/glide/resources/templates/glide_vorlagen.glidetemplates",
+      "copy": "07_Python-Versionen/resources/templates/glide_vorlagen.glidetemplates",
+      "sha256": "3f89af73406402a2ddb3d8fe8e63fdcd95c01de0b97307d9c7e45997fdac63f8"
+    },
+    {
+      "source": "01_Repository/Glide/src/glide/resources/fonts/provenance.json",
+      "copy": "07_Python-Versionen/resources/fonts/provenance.json",
+      "sha256": "7dcd704767dc72764f2a4ed0735b2c7904f228b37ff56b0159f2d5ac98fc328a"
+    },
+    {
+      "source": "01_Repository/Glide/src/glide/resources/fonts/LICENSE",
+      "copy": "07_Python-Versionen/resources/fonts/LICENSE",
+      "sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93"
+    },
+    {
+      "source": "01_Repository/Glide/src/glide/resources/fonts/DejaVuSans-Bold.ttf",
+      "copy": "07_Python-Versionen/resources/fonts/DejaVuSans-Bold.ttf",
+      "sha256": "e6476c1b80502924294eed40894c5b18e06c181444ca953e5334262df9c27724"
+    },
+    {
+      "source": "01_Repository/Glide/src/glide/resources/fonts/DejaVuSans-BoldOblique.ttf",
+      "copy": "07_Python-Versionen/resources/fonts/DejaVuSans-BoldOblique.ttf",
+      "sha256": "eb436dca0c2594b73d8b603b892e374fdfd8d885d25ffb4f18df4c4c0b49e50f"
+    },
+    {
+      "source": "01_Repository/Glide/src/glide/resources/fonts/DejaVuSans-Oblique.ttf",
+      "copy": "07_Python-Versionen/resources/fonts/DejaVuSans-Oblique.ttf",
+      "sha256": "4af75fa16ee6d3ad43e1ecec41862c24954af26a55c6bb1ebb27bd486a50f5f4"
+    },
+    {
+      "source": "01_Repository/Glide/src/glide/resources/fonts/DejaVuSans.ttf",
+      "copy": "07_Python-Versionen/resources/fonts/DejaVuSans.ttf",
+      "sha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954"
+    }
+  ],
+  "status": "geprueft",
+  "qa_result": "tests/qa-3.13.0/abschluss/ergebnis.json"
+}

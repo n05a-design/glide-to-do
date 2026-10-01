@@ -1,0 +1,85 @@
+{
+  "version": "3.32.2",
+  "sha256": "c51b811fdd0d804834f727f4a55ce2b16e770654adfb597245f4503d61b1c7e6",
+  "data_schema": 20,
+  "data_isolation": "Temporary GLIDE_DATA_DIR before import; no real user data accessed",
+  "baseline": "3.32.1: fold suite passed; before/after measurements use identical generated fixtures",
+  "source_snapshot": "vorher/archiv/3.32.1/quellstand",
+  "python_snapshot": "07_Python-Versionen/Archiv/Glide_v3.32.1_vor_Drag_Performance_2026-09-30",
+  "bundle_snapshot": "build/macos/archiv/Glide_v3.32.1_vor_Drag_Performance_2026-09-30_Z.app",
+  "changes": [
+    {
+      "function": "app_font",
+      "line": 206,
+      "end_line": 221
+    },
+    {
+      "function": "bind_theme_hover",
+      "line": 224,
+      "end_line": 229
+    },
+    {
+      "function": "ButtonFlow",
+      "line": 1426,
+      "end_line": 1498
+    },
+    {
+      "function": "apply_ui_font",
+      "line": 23701,
+      "end_line": 23708
+    },
+    {
+      "function": "bind_sidebar_drag",
+      "line": 32571,
+      "end_line": 32575
+    },
+    {
+      "function": "on_sidebar_drag_start",
+      "line": 32582,
+      "end_line": 32607
+    },
+    {
+      "function": "on_sidebar_drag_motion",
+      "line": 32609,
+      "end_line": 32630
+    },
+    {
+      "function": "on_sidebar_drag_end",
+      "line": 32632,
+      "end_line": 32692
+    },
+    {
+      "function": "drop_sidebar_list",
+      "line": 32694,
+      "end_line": 32719
+    },
+    {
+      "function": "drop_sidebar_folder",
+      "line": 32721,
+      "end_line": 32772
+    },
+    {
+      "function": "clear_sidebar_drop_target_tags",
+      "line": 32798,
+      "end_line": 32811
+    },
+    {
+      "function": "identify_sidebar_drop_row",
+      "line": 46998,
+      "end_line": 47018
+    },
+    {
+      "function": "build_context_row",
+      "line": 11275,
+      "end_line": 11340
+    }
+  ],
+  "qa_fixture_adjustment": "audit_app drop simulation now sets correct screen coordinates; native-event suite passed; app unchanged",
+  "test_sha256": {
+    "tests/integration/test_drag_performance3322.py": "321a823cb82098c312b2b5d4d84428d295b72a864fdc06426484af0ca8c26e7b",
+    "tests/integration/audit_app.py": "0b0ed04799ddc3592fd6f0ff6ded166872357f06493abb39e2a6e852a5d1449e",
+    "tests/tools/pruefen.py": "c6b7d743cd09ca58c2462712b165ff60b59acffac6bd7971d25f55bfd2508eb1"
+  },
+  "measurement_source_sha256_before_drawing_sync": "60bade41d24966ecfb15261a92ab57a4ffe9b3ad47ab5e3a72301f11c17c62fb",
+  "drawing_layout_correction": "build_context_row finishes synchronous reflow before reservation; new UI regression verifies canvas height across 1450/860/1200 widths"
+}

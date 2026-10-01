@@ -1,0 +1,22 @@
+{
+  "stand": "2026-09-23",
+  "version": "3.28.0",
+  "datenformat": 18,
+  "archiviert": {
+    "01_Repository\\Glide\\docs\\07_QA_BERICHT.md": "01_Repository\\Glide\\docs\\archiv\\07_QA_BERICHT_3.26.0_vor_3.28.0.md",
+    "01_Repository\\Glide\\docs\\09_PROJECT_HANDOFF.md": "01_Repository\\Glide\\docs\\archiv\\09_PROJECT_HANDOFF_3.26.0_vor_3.28.0.md",
+    "01_Repository\\Glide\\docs\\10_RELEASE_CHECKLIST.md": "01_Repository\\Glide\\docs\\archiv\\10_RELEASE_CHECKLIST_3.26.0_vor_3.28.0.md",
+    "01_Repository\\Glide\\README.md": "01_Repository\\Glide\\docs\\archiv\\README_root_3.26.0_vor_3.28.0.md",
+    "07_Python-Versionen\\Glide-Aufgaben-und-Listen_v3.27.0.pyw": "07_Python-Versionen\\Archiv\\Glide-Aufgaben-und-Listen_v3.27.0.pyw",
+    "07_Python-Versionen\\resources\\templates\\glide_vorlagen.glidetemplates": "07_Python-Versionen\\resources\\templates\\archiv\\glide_vorlagen_3.26.0_vor_3.28.0.glidetemplates",
+    "01_Repository\\Glide\\tests\\fixtures\\beispiele\\glide_beispieldaten.glidebackup": "01_Repository\\Glide\\tests\\fixtures\\beispiele\\archiv\\glide_beispieldaten_3.26.0_vor_3.28.0.glidebackup"
+  },
+  "neu": [
+    "01_Repository\\Glide\\docs\\59_TAGEBUCH_UND_UI_3.28.0.md",
+    "01_Repository\\Glide\\tests\\integration\\test_features328.py",
+    "01_Repository\\Glide\\tests\\fixtures\\current_v18\\reference_v18.json",
+    "01_Repository\\Glide\\tests\\fixtures\\beispiele\\glide_releaseplanung_3.28.0.glidebackup",
+    "07_Python-Versionen\\Glide-Aufgaben-und-Listen_v3.28.0.pyw"
+  ],
+  "pruefhinweis": "Der gezielte 3.28-Pruefstand ist dokumentiert. Der Gesamtlauf bleibt wegen nicht lokal verfuegbarer OneDrive-Platzhalter und Zeitueberschreitungen offen; siehe docs/07_QA_BERICHT.md."
+}

@@ -1,0 +1,712 @@
+{
+    "version": 6,
+    "active_list_id": "06b93e012cff4e6b87e9b829ca5f7e81",
+    "active_folder_id": null,
+    "folders": [
+        {
+            "id": "aa39194e0c504b6d903f5ad7dcc5074a",
+            "title": "Projekt Parkallee",
+            "color": "accent",
+            "note": "Neubau mit 24 Einheiten. Vermarktungsstart Q4/2026.\nAnsprechpartner Bauträger: Frau Wagner."
+        },
+        {
+            "id": "b3426725f9714bf2ab71fc67221c7d31",
+            "title": "Intern",
+            "color": "clear",
+            "note": "Alles, was nicht zu einem konkreten Projekt gehört."
+        }
+    ],
+    "lists": [
+        {
+            "id": "7e577f69bd424964b187c16c1f9116e4",
+            "title": "Eingang",
+            "folder_id": null,
+            "color": "due_action",
+            "note": "",
+            "system_role": "inbox",
+            "items": [
+                {
+                    "id": "6e9a55a0cb594a4b93a96fe5ae59da71",
+                    "text": "Rückruf Hausverwaltung Meyer",
+                    "done": false,
+                    "importance": 2,
+                    "due": "2026-09-03",
+                    "description": "",
+                    "attachments": [],
+                    "color": null,
+                    "kind": "task",
+                    "children": []
+                },
+                {
+                    "id": "7789e192427146db8f459cbb19b2a24d",
+                    "text": "Angebot Drohnenaufnahmen sichten",
+                    "done": false,
+                    "importance": 0,
+                    "due": null,
+                    "description": "Zwei Anbieter, Budget bis 1.200 €.",
+                    "attachments": [],
+                    "color": null,
+                    "kind": "task",
+                    "children": []
+                },
+                {
+                    "id": "56a904fabf16470191e62ed493199d59",
+                    "text": "Notiz aus Baustellentermin abtippen",
+                    "done": false,
+                    "importance": 0,
+                    "due": null,
+                    "description": "",
+                    "attachments": [],
+                    "color": null,
+                    "kind": "task",
+                    "children": []
+                }
+            ]
+        },
+        {
+            "id": "06b93e012cff4e6b87e9b829ca5f7e81",
+            "title": "Vermarktung",
+            "folder_id": "aa39194e0c504b6d903f5ad7dcc5074a",
+            "color": "accent",
+            "note": "Vermarktungsfahrplan Parkallee.\nGruppen entsprechen den Projektphasen; die Fortschrittsanzeige zählt nur die Aufgaben darin.",
+            "system_role": null,
+            "items": [
+                {
+                    "id": "6757aff7973b4e3ca86d43c14e7e1327",
+                    "text": "Phase 1 – Grundlagen",
+                    "done": false,
+                    "importance": 0,
+                    "due": null,
+                    "description": "Abgeschlossen bis auf die Positionierung.",
+                    "attachments": [],
+                    "color": "export",
+                    "kind": "group",
+                    "children": [
+                        {
+                            "id": "49bc1a2ba79c45e1955e593e4593408d",
+                            "text": "Zielgruppen schärfen",
+                            "done": true,
+                            "importance": 0,
+                            "due": null,
+                            "description": "Erstbezieher, Kapitalanleger, Downsizer.",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "348b4cf7a2dc4de080f6907839ac410c",
+                            "text": "Wettbewerbsobjekte erfassen",
+                            "done": true,
+                            "importance": 0,
+                            "due": null,
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "49c15df7a4a84aa69e245e6e789f5bee",
+                            "text": "Positionierung abstimmen",
+                            "done": false,
+                            "importance": 3,
+                            "due": "2026-09-08",
+                            "description": "Termin mit Bauträger.\nEntwurf liegt in der Ablage.",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "a761a92d91dc4d67ab0df519b2168320",
+                    "text": "Phase 2 – Material",
+                    "done": false,
+                    "importance": 0,
+                    "due": null,
+                    "description": "",
+                    "attachments": [],
+                    "color": "flag",
+                    "kind": "group",
+                    "children": [
+                        {
+                            "id": "19f5b593046944f8969d76b61303b38c",
+                            "text": "Exposé Layout",
+                            "done": false,
+                            "importance": 2,
+                            "due": "2026-09-18",
+                            "description": "",
+                            "attachments": [
+                                {
+                                    "id": "f4bd96c3ea5e4b488c580fbf47157711",
+                                    "name": "_anhang_beispiel.txt",
+                                    "storage": "attachments/f4bd96c3ea5e4b488c580fbf47157711__anhang_beispiel.txt",
+                                    "size": 79,
+                                    "mime": "text/plain",
+                                    "added_at": "2026-09-02T04:59:35"
+                                }
+                            ],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "fa6bf022a7774fd9b6a9b947d3cda08d",
+                            "text": "Grundrisse aufbereiten",
+                            "done": false,
+                            "importance": 0,
+                            "due": "2026-09-22",
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "222498e4c98c4bdc9f12f347c60f0822",
+                            "text": "Fotografie",
+                            "done": false,
+                            "importance": 0,
+                            "due": null,
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "group",
+                            "children": [
+                                {
+                                    "id": "2e2d8e900cc946899d10938138060eaf",
+                                    "text": "Fotograf beauftragen",
+                                    "done": false,
+                                    "importance": 3,
+                                    "due": "2026-09-10",
+                                    "description": "",
+                                    "attachments": [],
+                                    "color": null,
+                                    "kind": "task",
+                                    "children": []
+                                },
+                                {
+                                    "id": "2d84cd1c96c24be2b06adad9dd64129b",
+                                    "text": "Shootingtermin abstimmen",
+                                    "done": false,
+                                    "importance": 0,
+                                    "due": null,
+                                    "description": "",
+                                    "attachments": [],
+                                    "color": null,
+                                    "kind": "task",
+                                    "children": []
+                                },
+                                {
+                                    "id": "e089e425df82488d8d28f3653bc62544",
+                                    "text": "Bildauswahl freigeben",
+                                    "done": false,
+                                    "importance": 0,
+                                    "due": "2026-10-02",
+                                    "description": "",
+                                    "attachments": [],
+                                    "color": null,
+                                    "kind": "task",
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "id": "44336aa3480e46518ff4df2112ebc929",
+                            "text": "Texte Korrektur lesen",
+                            "done": false,
+                            "importance": 0,
+                            "due": "2026-10-06",
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "22137454a6d84e42897370421560ece5",
+                    "text": "Phase 3 – Ausspielung",
+                    "done": false,
+                    "importance": 0,
+                    "due": null,
+                    "description": "",
+                    "attachments": [],
+                    "color": "due_action",
+                    "kind": "group",
+                    "children": [
+                        {
+                            "id": "c92f8456791c45678bb74f8d1f1097f8",
+                            "text": "Portale einbuchen",
+                            "done": false,
+                            "importance": 2,
+                            "due": "2026-10-15",
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "6ba7fe8425ac4e2c81eb75d9bc9628d0",
+                            "text": "Landingpage veröffentlichen",
+                            "done": false,
+                            "importance": 0,
+                            "due": "2026-10-15",
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "db062e6f38cc4db5a98a7fcb048174b4",
+                            "text": "Anzeigenkampagne starten",
+                            "done": false,
+                            "importance": 0,
+                            "due": "2026-10-20",
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "84fc2074727d4c399778781541dd1004",
+                    "text": "Wöchentliches Reporting einrichten",
+                    "done": false,
+                    "importance": 1,
+                    "due": null,
+                    "description": "",
+                    "attachments": [],
+                    "color": null,
+                    "kind": "task",
+                    "children": []
+                }
+            ]
+        },
+        {
+            "id": "c20f46a0fa614c17ac6bf19520ea616c",
+            "title": "Baustelle und Termine",
+            "folder_id": "aa39194e0c504b6d903f5ad7dcc5074a",
+            "color": "import",
+            "note": "",
+            "system_role": null,
+            "items": [
+                {
+                    "id": "f8a1514ac4e44151b3e12bcf9916a1d9",
+                    "text": "Richtfest planen",
+                    "done": false,
+                    "importance": 3,
+                    "due": "2026-09-26",
+                    "description": "",
+                    "attachments": [],
+                    "color": "delete",
+                    "kind": "task",
+                    "children": []
+                },
+                {
+                    "id": "6c764e906a534fd5bf310d3f2f8d0a14",
+                    "text": "Wiederkehrende Termine",
+                    "done": false,
+                    "importance": 0,
+                    "due": null,
+                    "description": "",
+                    "attachments": [],
+                    "color": null,
+                    "kind": "group",
+                    "children": [
+                        {
+                            "id": "7bfed34fb55d4622a3b29d9982d626ba",
+                            "text": "Jour fixe Bauleitung",
+                            "done": false,
+                            "importance": 0,
+                            "due": "2026-09-04",
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "260d9cc3ed534ec98cf04a3f59a69631",
+                            "text": "Begehung Musterwohnung",
+                            "done": false,
+                            "importance": 0,
+                            "due": "2026-09-11",
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "1fbea29f26b64822b13a377aaf81f328",
+                    "text": "Bautagebuch nachtragen",
+                    "done": true,
+                    "importance": 0,
+                    "due": null,
+                    "description": "",
+                    "attachments": [],
+                    "color": null,
+                    "kind": "task",
+                    "children": []
+                }
+            ]
+        },
+        {
+            "id": "04decf308ec34455b212daf1f9f0dc58",
+            "title": "WEG-Verwaltung",
+            "folder_id": "b3426725f9714bf2ab71fc67221c7d31",
+            "color": "due_action",
+            "note": "",
+            "system_role": null,
+            "items": [
+                {
+                    "id": "b45a08e6685b40fc954b0090c986d69c",
+                    "text": "Eigentümerversammlung",
+                    "done": false,
+                    "importance": 0,
+                    "due": null,
+                    "description": "Frist: Einladung 3 Wochen vorher.",
+                    "attachments": [],
+                    "color": null,
+                    "kind": "group",
+                    "children": [
+                        {
+                            "id": "441f0a6cad9e43308b5005842ef30ae8",
+                            "text": "Einladung versenden",
+                            "done": false,
+                            "importance": 3,
+                            "due": "2026-09-05",
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "2ec7379df84246999029f794a9c3b110",
+                            "text": "Tagesordnung finalisieren",
+                            "done": false,
+                            "importance": 2,
+                            "due": "2026-09-02",
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "d5dc7ca232514d25a721258311352d67",
+                            "text": "Beschlussvorlagen prüfen",
+                            "done": false,
+                            "importance": 0,
+                            "due": null,
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "fc54b6dbbc9f4746bef04395921f0528",
+                            "text": "Protokollführung klären",
+                            "done": true,
+                            "importance": 0,
+                            "due": null,
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "22edaed405f242b18b147c5830e916af",
+                    "text": "Abrechnung",
+                    "done": false,
+                    "importance": 0,
+                    "due": null,
+                    "description": "",
+                    "attachments": [],
+                    "color": null,
+                    "kind": "group",
+                    "children": [
+                        {
+                            "id": "32f6a83f10cd429294f6fa5cfac94611",
+                            "text": "Heizkostenabrechnung anfordern",
+                            "done": false,
+                            "importance": 0,
+                            "due": "2026-09-30",
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "277ada0d49e64776a6d725753ad996ea",
+                            "text": "Belege sortieren",
+                            "done": true,
+                            "importance": 0,
+                            "due": null,
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "d3b69d19dbb842f8864d2fc99423a108",
+                            "text": "Rückfragen Beirat beantworten",
+                            "done": false,
+                            "importance": 1,
+                            "due": null,
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "a05952ed421147d0b0f7c0ee58213f5f",
+                    "text": "Hausordnung aktualisieren",
+                    "done": false,
+                    "importance": 0,
+                    "due": null,
+                    "description": "",
+                    "attachments": [],
+                    "color": "clear",
+                    "kind": "task",
+                    "children": []
+                }
+            ]
+        },
+        {
+            "id": "6bd4cf22129044b4893f209f9fb9645a",
+            "title": "Tagesgeschäft",
+            "folder_id": null,
+            "color": "flag",
+            "note": "Der Klassiker ohne Projektbezug. Zwei Gruppen als Zeithorizont.",
+            "system_role": null,
+            "items": [
+                {
+                    "id": "9a42c9824b1d421bafa0053f73170361",
+                    "text": "Heute",
+                    "done": false,
+                    "importance": 0,
+                    "due": null,
+                    "description": "",
+                    "attachments": [],
+                    "color": null,
+                    "kind": "group",
+                    "children": [
+                        {
+                            "id": "02fecef194534503b5b3bd527852a16a",
+                            "text": "Rückrufe priorisieren",
+                            "done": false,
+                            "importance": 2,
+                            "due": null,
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "15e7a27566eb407a993c9b8713e05613",
+                            "text": "Posteingang sortieren",
+                            "done": false,
+                            "importance": 1,
+                            "due": null,
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "0fd53a23bf8c4aa3b40f8390800464e8",
+                            "text": "Drei wichtigste Aufgaben festlegen",
+                            "done": false,
+                            "importance": 3,
+                            "due": "2026-09-02",
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "87fe7f5174604819b5d4c2b01388bfb3",
+                    "text": "Diese Woche",
+                    "done": false,
+                    "importance": 0,
+                    "due": null,
+                    "description": "",
+                    "attachments": [],
+                    "color": null,
+                    "kind": "group",
+                    "children": [
+                        {
+                            "id": "fb02a03518314883b0f7e1da3218570b",
+                            "text": "Offene Angebote nachfassen",
+                            "done": false,
+                            "importance": 2,
+                            "due": "2026-09-05",
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "4daa09a3356247438c13b762b5d2bd45",
+                            "text": "Kurznotizen ins CRM übertragen",
+                            "done": true,
+                            "importance": 0,
+                            "due": null,
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "20ada249b37840a69ab9ef8a083e18d3",
+                            "text": "Ablage aufräumen",
+                            "done": false,
+                            "importance": 1,
+                            "due": null,
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "2313bbecd5324cd5a057516ab276b157",
+                    "text": "Urlaubsplanung abstimmen",
+                    "done": false,
+                    "importance": 0,
+                    "due": "2026-11-02",
+                    "description": "",
+                    "attachments": [],
+                    "color": null,
+                    "kind": "task",
+                    "children": []
+                }
+            ]
+        },
+        {
+            "id": "107e90565bfd4a1e8f2c6bb6aab987b4",
+            "title": "Website und Design",
+            "folder_id": null,
+            "color": "export",
+            "note": "",
+            "system_role": null,
+            "items": [
+                {
+                    "id": "9bdbf817de664816b5914c0911559aec",
+                    "text": "Relaunch",
+                    "done": false,
+                    "importance": 0,
+                    "due": null,
+                    "description": "",
+                    "attachments": [],
+                    "color": "accent",
+                    "kind": "group",
+                    "children": [
+                        {
+                            "id": "d93e7b58ae414993874f27ba6c3231a2",
+                            "text": "Struktur festlegen",
+                            "done": true,
+                            "importance": 0,
+                            "due": null,
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "ddea6376a71f44a0960a56beddd5e8c9",
+                            "text": "Wireframes",
+                            "done": false,
+                            "importance": 2,
+                            "due": "2026-09-12",
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "d2cf1297eedd49acafd5dea42b7c1025",
+                            "text": "Designsystem aufsetzen",
+                            "done": false,
+                            "importance": 3,
+                            "due": "2026-09-25",
+                            "description": "Farben, Typografie, Komponenten.\nAls Grundlage für alle künftigen Projekte.",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        },
+                        {
+                            "id": "3d9bf5752737423a94fdf5239a055094",
+                            "text": "Barrierefreiheit prüfen",
+                            "done": false,
+                            "importance": 0,
+                            "due": "2026-10-10",
+                            "description": "",
+                            "attachments": [],
+                            "color": null,
+                            "kind": "task",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "2dde749bfdeb4f94bb73721b6a1f2794",
+                    "text": "Alte Unterseiten weiterleiten",
+                    "done": false,
+                    "importance": 1,
+                    "due": null,
+                    "description": "",
+                    "attachments": [],
+                    "color": null,
+                    "kind": "task",
+                    "children": []
+                },
+                {
+                    "id": "fb796c28280f4aa7b7e2a46da1dbe094",
+                    "text": "Analytics-Alternative ohne Tracking prüfen",
+                    "done": false,
+                    "importance": 0,
+                    "due": null,
+                    "description": "Datenschutzkonform, keine Cookies.",
+                    "attachments": [],
+                    "color": null,
+                    "kind": "task",
+                    "children": []
+                }
+            ]
+        }
+    ]
+}

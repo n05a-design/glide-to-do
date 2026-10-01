@@ -1,0 +1,152 @@
+[
+  {
+    "suite": "test_glide.py",
+    "exitcode": 1,
+    "seconds": 1.04
+  },
+  {
+    "suite": "test_datenintegritaet.py",
+    "exitcode": 0,
+    "seconds": 18.65
+  },
+  {
+    "suite": "audit_app.py",
+    "exitcode": 1,
+    "seconds": 4.47
+  },
+  {
+    "suite": "test_dialog_theme.py",
+    "exitcode": 1,
+    "seconds": 5.13
+  },
+  {
+    "suite": "test_ui_updates.py",
+    "exitcode": 1,
+    "seconds": 7.75
+  },
+  {
+    "suite": "test_glide_36.py",
+    "exitcode": 0,
+    "seconds": 1.23
+  },
+  {
+    "suite": "test_release36.py",
+    "exitcode": 0,
+    "seconds": 16.24
+  },
+  {
+    "suite": "test_ui_polish36.py",
+    "exitcode": 1,
+    "seconds": 26.44
+  },
+  {
+    "suite": "test_ui_followup36.py",
+    "exitcode": "timeout",
+    "seconds": 150.24
+  },
+  {
+    "suite": "test_release37.py",
+    "exitcode": 1,
+    "seconds": 4.58
+  },
+  {
+    "suite": "test_template_workflows.py",
+    "exitcode": 1,
+    "seconds": 3.89
+  },
+  {
+    "suite": "test_reminders.py",
+    "exitcode": 0,
+    "seconds": 12.03
+  },
+  {
+    "suite": "test_ui39.py",
+    "exitcode": 0,
+    "seconds": 37.97
+  },
+  {
+    "suite": "test_workspace310.py",
+    "exitcode": 0,
+    "seconds": 25.51
+  },
+  {
+    "suite": "test_features311.py",
+    "exitcode": 0,
+    "seconds": 1.8
+  },
+  {
+    "suite": "test_features312.py",
+    "exitcode": 0,
+    "seconds": 3.39
+  },
+  {
+    "suite": "test_features313.py",
+    "exitcode": 0,
+    "seconds": 1.69
+  },
+  {
+    "suite": "test_features314.py",
+    "exitcode": 0,
+    "seconds": 7.15
+  },
+  {
+    "suite": "test_features315.py",
+    "exitcode": 0,
+    "seconds": 13.38
+  },
+  {
+    "suite": "test_features316.py",
+    "exitcode": 1,
+    "seconds": 3.55
+  },
+  {
+    "suite": "test_features317.py",
+    "exitcode": 0,
+    "seconds": 5.2
+  },
+  {
+    "suite": "test_features318.py",
+    "exitcode": 0,
+    "seconds": 7.91
+  },
+  {
+    "suite": "test_features319.py",
+    "exitcode": 0,
+    "seconds": 6.84
+  },
+  {
+    "suite": "test_features320.py",
+    "exitcode": 0,
+    "seconds": 6.26
+  },
+  {
+    "suite": "test_features321.py",
+    "exitcode": 0,
+    "seconds": 5.96
+  },
+  {
+    "suite": "test_features322.py",
+    "exitcode": 1,
+    "seconds": 3.73
+  },
+  {
+    "suite": "test_features323.py",
+    "exitcode": 1,
+    "seconds": 1.81
+  },
+  {
+    "suite": "test_features324.py",
+    "exitcode": 1,
+    "seconds": 3.22
+  },
+  {
+    "suite": "test_features325.py",
+    "exitcode": 0,
+    "seconds": 7.15
+  },
+  {
+    "suite": "test_features326.py",
+    "exitcode": 0,
+    "seconds": 5.66
+  }
+]

@@ -1,0 +1,52 @@
+{
+  "version": "3.32.1",
+  "sha256": "dead78042997fa71c1d110724aaed9bfd10f3cedcfdf3a10eddf187799a3be0b",
+  "baseline": "3.32.0: test_features325 passed; real label arrow test failed as expected",
+  "snapshot": "07_Python-Versionen/Archiv/Glide_v3.32.0_vor_Klappkontrolle_2026-09-30",
+  "data_isolation": "Every new UI test sets temporary GLIDE_DATA_DIR before import; no real data read",
+  "fold_suite": "tests/integration/test_klappmechanismen3321.py",
+  "changes": [
+    {
+      "function": "see_unless_folded",
+      "line": 17922,
+      "end_line": 17937
+    },
+    {
+      "function": "refresh_label_overview",
+      "line": 42484,
+      "end_line": 42555
+    },
+    {
+      "function": "on_label_view_drag_start",
+      "line": 42616,
+      "end_line": 42632
+    },
+    {
+      "function": "refresh_folder_overview",
+      "line": 42783,
+      "end_line": 42931
+    },
+    {
+      "function": "note_overview_section_state",
+      "line": 43213,
+      "end_line": 43227
+    },
+    {
+      "function": "remember_tree_open_states",
+      "line": 43229,
+      "end_line": 43253
+    },
+    {
+      "function": "toggle_tree_row_open",
+      "line": 43255,
+      "end_line": 43262
+    },
+    {
+      "function": "set_tree_open_state",
+      "line": 44523,
+      "end_line": 44533
+    }
+  ],
+  "bundle_before_snapshot": "build/macos/archiv/Glide_v3.32.0_vor_Klappkontrolle_2026-09-30_Z.app",
+  "bundle_snapshot_files": 62
+}

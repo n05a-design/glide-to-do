@@ -1,0 +1,77 @@
+[
+  {
+    "paket": "app.pyw",
+    "ziel": "01_Repository/Glide/src/glide/app.pyw",
+    "paketidentisch": true
+  },
+  {
+    "paket": "VERSION",
+    "ziel": "01_Repository/Glide/VERSION",
+    "paketidentisch": true
+  },
+  {
+    "paket": "pruefen.py",
+    "ziel": "01_Repository/Glide/tests/tools/pruefen.py",
+    "paketidentisch": false
+  },
+  {
+    "paket": "standpruefung.py",
+    "ziel": "01_Repository/Glide/tests/tools/standpruefung.py",
+    "paketidentisch": false
+  },
+  {
+    "paket": "beispieldaten.py",
+    "ziel": "01_Repository/Glide/tests/tools/beispieldaten.py",
+    "paketidentisch": true
+  },
+  {
+    "paket": "releasedaten.py",
+    "ziel": "01_Repository/Glide/tests/tools/releasedaten.py",
+    "paketidentisch": true
+  },
+  {
+    "paket": "test_glide.py",
+    "ziel": "01_Repository/Glide/tests/integration/test_glide.py",
+    "paketidentisch": true
+  },
+  {
+    "paket": "test_glide_36.py",
+    "ziel": "01_Repository/Glide/tests/integration/test_glide_36.py",
+    "paketidentisch": true
+  },
+  {
+    "paket": "tests_README.md",
+    "ziel": "01_Repository/Glide/tests/README.md",
+    "paketidentisch": true
+  },
+  {
+    "paket": "fixtures_README.md",
+    "ziel": "01_Repository/Glide/tests/fixtures/README.md",
+    "paketidentisch": true
+  },
+  {
+    "paket": "tests_tools_README.md",
+    "ziel": "01_Repository/Glide/tests/tools/README.md",
+    "paketidentisch": true
+  },
+  {
+    "paket": "src_glide_README.md",
+    "ziel": "01_Repository/Glide/src/glide/README.md",
+    "paketidentisch": true
+  },
+  {
+    "paket": "glide_vorlagen.glidetemplates",
+    "ziel": "01_Repository/Glide/src/glide/resources/templates/glide_vorlagen.glidetemplates",
+    "paketidentisch": true
+  },
+  {
+    "paket": "glide_beispieldaten.glidebackup",
+    "ziel": "01_Repository/Glide/tests/fixtures/beispiele/glide_beispieldaten.glidebackup",
+    "paketidentisch": true
+  },
+  {
+    "paket": "glide_releaseplanung_3.21.4.glidebackup",
+    "ziel": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.21.4.glidebackup",
+    "paketidentisch": true
+  }
+]

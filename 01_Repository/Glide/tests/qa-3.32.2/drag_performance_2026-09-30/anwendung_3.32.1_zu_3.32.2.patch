@@ -1,0 +1,445 @@
+--- Glide 3.32.1/app.pyw
++++ Glide 3.32.2/app.pyw
+@@ -27,6 +27,7 @@
+ import traceback
+ import types
+ import uuid
++import weakref
+ import zipfile
+ import zlib
+ from tkinter import messagebox, filedialog
+@@ -149,7 +150,7 @@
+ APP_NAME = "Glide"
+ APP_TAGLINE = "Aufgaben und Listen"
+ APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
+-APP_VERSION = "3.32.1"
++APP_VERSION = "3.32.2"
+ # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
+ # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
+ # Einstellungen des Betriebssystems hängen daran.
+@@ -199,15 +200,33 @@
+         return None
+ 
+ 
+-def app_font(size=11, *styles):
++_APP_FONT_CACHE = weakref.WeakKeyDictionary()
++
++
++def app_font(size=11, *styles, root=None):
+     """Konkrete Familie statt des als Arial interpretierten Tupelnamens TkDefaultFont."""
++    root = root or getattr(tk, "_default_root", None)
++    if root is None:
++        return ("TkDefaultFont", size, *styles)
++    root = root._root()
+     try:
+-        named = tkfont.nametofont("TkDefaultFont")
+-        family = named.actual("family")
+-        delta = max(-1, min(1, named.actual("size") - 11))
++        family_delta = _APP_FONT_CACHE.get(root)
++        if family_delta is None:
++            named = tkfont.nametofont("TkDefaultFont", root=root)
++            family_delta = (named.actual("family"), max(-1, min(1, named.actual("size") - 11)))
++            _APP_FONT_CACHE[root] = family_delta
++        family, delta = family_delta
+         return (family, int(size) + delta, *styles)
+     except (tk.TclError, RuntimeError):
+         return ("TkDefaultFont", size, *styles)
++
++
++def bind_theme_hover(widget, theme_getter, base_bg, fg_hover=None):
++    """Datums- und Labelauswahl verwenden denselben Hover mit aktuellem Theme."""
++    base_fg = widget.cget("fg")
++    widget.bind("<Enter>", lambda _e: widget.configure(
++        bg=theme_getter()["hover"], fg=fg_hover or base_fg), add="+")
++    widget.bind("<Leave>", lambda _e: widget.configure(bg=base_bg, fg=base_fg), add="+")
+ 
+ 
+ class NewerDataError(ValueError):
+@@ -1414,46 +1433,69 @@
+         self.compact_keys = None
+         self.compact_below = 0
+         self._rows = []
+-        bind_resize(self, self.reflow)
++        self._reflow_pending = None
++        self._layout_signature = None
++        bind_resize(self, self.schedule_reflow)
++        self.bind("<Destroy>", self.cancel_reflow, add="+")
+ 
+     def add(self, button, key=None):
+         self.entries.append((button, key))
+-        self.reflow()
++        self.schedule_reflow()
+         return button
+ 
++    def schedule_reflow(self, _event=None):
++        """Mehrere neue Knöpfe und Größenmeldungen ergeben einen Layoutdurchlauf."""
++        if self._reflow_pending is None:
++            self._reflow_pending = self.after_idle(self.reflow)
++
++    def cancel_reflow(self, event=None):
++        if event is not None and event.widget is not self:
++            return
++        if self._reflow_pending is not None:
++            self.after_cancel(self._reflow_pending)
++            self._reflow_pending = None
++
+     def reflow(self, _event=None):
++        self.cancel_reflow()
+         width = max(1, self.winfo_width())
+         compact = self.compact_keys is not None and width < self.compact_below
+-        row, column, used = 0, 0, 0
+-        for frame in self._rows:
+-            frame.grid_remove()
++        bg = self.cget("bg")
++        visible, hidden = [], []
+         for button, key in self.entries:
+             try:
+-                if not button.winfo_exists() or not self.winfo_exists():
++                if not button.winfo_exists():
+                     continue
+             except tk.TclError:
+                 continue
+             if compact and key not in self.compact_keys:
+-                try:
+-                    button.grid_remove()
+-                except tk.TclError:
+-                    pass
++                hidden.append(button)
+                 continue
+-            needed = button.winfo_reqwidth() + self.gap
++            visible.append((button, button.winfo_reqwidth() + self.gap))
++        signature = (width, bg, self.gap, tuple(visible), tuple(hidden))
++        if signature == self._layout_signature:
++            return
++        self._layout_signature = signature
++        for button in hidden:
++            button.grid_remove()
++        row, column, used = 0, 0, 0
++        for button, needed in visible:
+             if used and used + needed > width:
+                 row, column, used = row + 1, 0, 0
+             try:
+                 while len(self._rows) <= row:
+-                    self._rows.append(tk.Frame(self, bg=self.cget("bg")))
++                    self._rows.append(tk.Frame(self, bg=bg))
+                 frame = self._rows[row]
+-                frame.configure(bg=self.cget("bg"))
+-                frame.grid(row=row, column=0, sticky="w")
++                if column == 0:
++                    frame.configure(bg=bg)
++                    frame.grid(row=row, column=0, sticky="w")
+                 button.grid(in_=frame, row=0, column=column, sticky="w", padx=(0, self.gap), pady=(3, 3))
+                 button.tk.call("raise", button._w)
+             except tk.TclError:
+                 continue
+             used += needed
+             column += 1
++        for frame in self._rows[row + 1 if visible else 0:]:
++            frame.grid_remove()
+ 
+ 
+ class ResponsiveColumns(tk.Frame):
+@@ -2642,10 +2684,7 @@
+         return self.app._make_dialog_button(parent, label, command, "import", width=width, height=34)
+ 
+     def _add_hover(self, widget, base_bg, fg_hover=None):
+-        base_fg = widget.cget("fg")
+-        widget.bind("<Enter>", lambda _e: widget.configure(
+-            bg=self.theme["hover"], fg=fg_hover or base_fg), add="+")
+-        widget.bind("<Leave>", lambda _e: widget.configure(bg=base_bg, fg=base_fg), add="+")
++        bind_theme_hover(widget, lambda: self.theme, base_bg, fg_hover)
+ 
+     # --- Darstellung ----------------------------------------------------
+     def _selected_date(self):
+@@ -3405,10 +3444,7 @@
+ 
+     # --- Optik ----------------------------------------------------------
+     def _hover(self, widget, base_bg, fg_hover=None):
+-        base_fg = widget.cget("fg")
+-        widget.bind("<Enter>", lambda _e: widget.configure(
+-            bg=self.theme["hover"], fg=fg_hover or base_fg), add="+")
+-        widget.bind("<Leave>", lambda _e: widget.configure(bg=base_bg, fg=base_fg), add="+")
++        bind_theme_hover(widget, lambda: self.theme, base_bg, fg_hover)
+ 
+     def _hover_group(self, widgets):
+         """Zeile, Haken und Chip wechseln gemeinsam die Fläche."""
+@@ -11298,6 +11334,9 @@
+             option("deselect", "Aufheben", self.deselect, width=86, tooltip="Esc – oder neben die Auswahl klicken")
+             label("In der Auswahl ziehen verschiebt den Inhalt · Klick daneben hebt sie auf")
+         self.sync_controls()
++        # Die Reservierung liest Grid-Zeilen sofort; hier das gebündelte
++        # Layout abschließen, damit Werkzeugwechsel die Fläche nicht verschieben.
++        row.reflow()
+         self.reserve_context_rows()
+ 
+     # Die Kontextleiste hat je Werkzeug eine andere Länge und bricht bei
+@@ -14608,6 +14647,9 @@
+         # Zeile der Labelansicht -> Labelgruppe, in der sie steht.
+         self.label_view_row_groups = {}
+         self.sidebar_drag_start_iid = None
++        self.sidebar_drag_tree = None
++        self.sidebar_drag_start_x_root = 0
++        self.sidebar_drag_start_y_root = 0
+         self.sidebar_drag_start_y = 0
+         self.sidebar_drag_has_moved = False
+         self.active_list_id = None
+@@ -23661,8 +23703,9 @@
+ 
+     def apply_ui_font(self):
+         """Setzt die benannte Tk-Standardschrift für neu erzeugte Widgets."""
++        _APP_FONT_CACHE.pop(self.root, None)
+         try:
+-            named = tkfont.nametofont("TkDefaultFont")
++            named = tkfont.nametofont("TkDefaultFont", root=self.root)
+             named.configure(family=self.ui_font_family(), size=self.ui_font_size())
+         except (tk.TclError, RuntimeError):
+             pass
+@@ -28874,9 +28917,7 @@
+         self.sidebar_listbox.bind("<Tab>", self.toggle_sidebar_indent)
+         self.sidebar_listbox.bind("<Shift-Tab>", self.outdent_selected_sidebar_list)
+         self.bind_optional(self.sidebar_listbox, "<ISO_Left_Tab>", self.outdent_selected_sidebar_list)
+-        self.sidebar_listbox.bind("<ButtonPress-1>", self.on_sidebar_drag_start)
+-        self.sidebar_listbox.bind("<B1-Motion>", self.on_sidebar_drag_motion)
+-        self.sidebar_listbox.bind("<ButtonRelease-1>", self.on_sidebar_drag_end)
++        self.bind_sidebar_drag(self.sidebar_listbox)
+         self.sidebar_listbox.bind("<ButtonRelease-1>", self.on_sidebar_release_for_rename, add="+")
+         self.sidebar_listbox.bind("<F2>", lambda event: self.begin_sidebar_rename())
+         self.sidebar_listbox.bind("<Button-3>", self.show_sidebar_context_menu)
+@@ -29510,6 +29551,7 @@
+             baum.bind("<BackSpace>", self.delete_selected_sidebar_entry)
+         self.bind_context_menu_modifier(baum, self.show_sidebar_context_menu)
+         baum.bind("<Delete>", self.delete_selected_sidebar_entry)
++        self.bind_sidebar_drag(baum)
+         baum.bind("<Configure>", self.refresh_sidebar_row_texts, add="+")
+         baum.bind("<<TreeviewOpen>>", lambda _event: self.root.after_idle(self.sync_pages_sidebar_height), add="+")
+         baum.bind("<<TreeviewClose>>", lambda _event: self.root.after_idle(self.sync_pages_sidebar_height), add="+")
+@@ -32529,16 +32571,33 @@
+             self.update_sidebar_list()
+         return "break"
+ 
++    def bind_sidebar_drag(self, tree):
++        """Gleiche Ziehbedienung für die drei vorhandenen Inhaltsbereiche."""
++        tree.bind("<ButtonPress-1>", self.on_sidebar_drag_start)
++        tree.bind("<B1-Motion>", self.on_sidebar_drag_motion)
++        tree.bind("<ButtonRelease-1>", self.on_sidebar_drag_end)
++
++    def sidebar_event_y(self, event, tree):
++        """Beim Ziehen bleibt event.widget der Quellbaum, auch über einem anderen Baum."""
++        y_root = getattr(event, "y_root", None)
++        return y_root - tree.winfo_rooty() if y_root is not None and tree is not None else event.y
++
+     def on_sidebar_drag_start(self, event):
+-        self.sidebar_listbox.focus_set()
+-        iid = self.sidebar_listbox.identify_row(event.y)
++        tree = getattr(event, "widget", self.sidebar_listbox)
++        if tree not in self.sidebar_trees():
++            return
++        tree.focus_set()
++        iid = tree.identify_row(event.y)
+         # Vor dem Setzen der Auswahl festhalten, was vorher ausgewählt war: Ein
+         # Klick auf eine bereits ausgewählte Zeile benennt um – wie im
+         # Dateimanager. Danach ist diese Auskunft nicht mehr zu bekommen.
+-        self._sidebar_preselected = tuple(self.sidebar_listbox.selection())
++        self._sidebar_preselected = tuple(tree.selection())
+         self.cancel_sidebar_rename()
++        self.sidebar_drag_tree = tree
+         self.sidebar_drag_start_iid = iid if iid else None
+         self.sidebar_drag_start_y = event.y
++        self.sidebar_drag_start_x_root = getattr(event, "x_root", 0)
++        self.sidebar_drag_start_y_root = getattr(event, "y_root", event.y)
+         self.sidebar_drag_has_moved = False
+         if not iid:
+             return
+@@ -32546,42 +32605,65 @@
+         # ihr beginnt. Shift und Strg sollen weiterhin die Auswahl erweitern.
+         if event.state & 0x0005:  # Shift oder Control
+             return
+-        if iid not in self.sidebar_listbox.selection():
+-            self.sidebar_listbox.selection_set(iid)
+-        self.sidebar_listbox.focus(iid)
++        if iid not in tree.selection():
++            tree.selection_set(iid)
++        tree.focus(iid)
+ 
+     def on_sidebar_drag_motion(self, event):
+         if not self.sidebar_drag_start_iid:
+             return
+-        if abs(event.y - self.sidebar_drag_start_y) > 5:
++        distance = (abs(getattr(event, "x_root", self.sidebar_drag_start_x_root) - self.sidebar_drag_start_x_root)
++                    + abs(getattr(event, "y_root", event.y) - self.sidebar_drag_start_y_root))
++        if distance > 6:
+             self.sidebar_drag_has_moved = True
++        if not self.sidebar_drag_has_moved:
++            return
+         target_iid, _target_row = self.identify_sidebar_drop_row(event)
+         self.clear_sidebar_drop_target_tags()
+         if target_iid and target_iid != self.sidebar_drag_start_iid:
+             try:
+                 target_tree = self.get_sidebar_tree_for_iid(target_iid)
+                 if target_tree is None:
+-                    return
++                    return "break"
+                 tags = set(target_tree.item(target_iid, "tags"))
+                 tags.add("drop_target")
+                 target_tree.item(target_iid, tags=tuple(tags))
+             except tk.TclError:
+                 pass
++        return "break"
+ 
+     def on_sidebar_drag_end(self, event):
+         source_iid = self.sidebar_drag_start_iid
+         target_iid, target_row = self.identify_sidebar_drop_row(event)
+-        pointer_inside_sidebar = self.pointer_is_over_widget(self.sidebar_listbox, event)
++        target_tree = (self.get_sidebar_tree_for_iid(target_iid) if target_iid else
++                       next((tree for tree in self.sidebar_trees()
++                             if self.pointer_is_over_widget(tree, event)), None))
++        pointer_inside_sidebar = target_tree in self.sidebar_trees() and self.pointer_is_over_widget(target_tree, event)
+         moved = self.sidebar_drag_has_moved
+         self._sidebar_release_moved = moved
+         self.sidebar_drag_start_iid = None
++        self.sidebar_drag_tree = None
+         self.sidebar_drag_has_moved = False
+         self.clear_sidebar_drop_target_tags()
+-        if not source_iid or not moved or not pointer_inside_sidebar:
++        if not source_iid or not moved:
+             return
++        if not pointer_inside_sidebar:
++            return "break"
+         source_row = self.sidebar_iid_to_row.get(source_iid)
+         if not source_row:
+-            return
++            return "break"
++        # Eine freie Fläche gehört zur vorhandenen Art. Ziehen in einen
++        # anderen Bereich darf eine Seite nicht in eine Notiz umwandeln.
++        if not target_row:
++            source = (next((entry for entry in self.lists if entry.get("id") == source_row[1]), None) if source_row[0] == "list"
++                      else self.get_folder(source_row[1]))
++            if source is None:
++                return "break"
++            top_level = dict(source, folder_id=None, parent_id=None)
++            expected_tree = (self.sidebar_tree_for_entry(top_level) if source_row[0] == "list"
++                             else self.sidebar_tree_for_folder(top_level))
++            if target_tree is not expected_tree:
++                return "break"
+ 
+         # Mehrfachauswahl: alle markierten Listen gleiten gemeinsam in den Ordner.
+         selected_list_ids = self.get_selected_sidebar_list_ids()
+@@ -32592,16 +32674,16 @@
+             and target_row
+             and target_row[0] == "folder"
+         ):
+-            with self.sidebar_change() as change:
++            with self.guarded_structural_change("Seitenleiste verschieben"), self.sidebar_change() as change:
+                 for list_id in selected_list_ids:
+                     if self.move_sidebar_list_into_folder(list_id, target_row[1]):
+                         change.mark()
+                 if change.changed:
+                     self.sidebar_folder_open_states[target_row[1]] = True
+-            return
++            return "break"
+ 
+         blocked = False
+-        with self.sidebar_change() as change:
++        with self.guarded_structural_change("Seitenleiste verschieben"), self.sidebar_change() as change:
+             if source_row[0] == "list":
+                 self.drop_sidebar_list(source_row[1], target_iid, target_row, event, change)
+             elif source_row[0] == "folder":
+@@ -32610,6 +32692,7 @@
+                 )
+         if blocked:
+             self.report_blocked_folder_move()
++        return "break"
+ 
+     def drop_sidebar_list(self, list_id, target_iid, target_row, event, change):
+         """Legt eine gezogene Liste ab: in einen Ordner, neben eine Liste oder nach unten."""
+@@ -32618,12 +32701,18 @@
+                 change.mark()
+             return
+         if target_row and target_row[0] == "list" and target_row[1] != list_id:
++            source = next((entry for entry in self.lists if entry.get("id") == list_id), None)
++            target = next((entry for entry in self.lists if entry.get("id") == target_row[1]), None)
++            if (source and target and not target.get("folder_id")
++                    and self.sidebar_tree_for_entry(dict(source, folder_id=None)) is not self.get_sidebar_tree_for_iid(target_iid)):
++                return
+             place = "after"
+             try:
+-                bbox = self.sidebar_listbox.bbox(target_iid)
++                tree = self.get_sidebar_tree_for_iid(target_iid)
++                bbox = tree.bbox(target_iid) if tree is not None else None
+                 if bbox:
+                     _x, y, _w, h = bbox
+-                    place = "before" if event.y < y + h / 2 else "after"
++                    place = "before" if self.sidebar_event_y(event, tree) < y + h / 2 else "after"
+             except tk.TclError:
+                 pass
+             if self.move_sidebar_list_relative(list_id, target_row[1], place=place):
+@@ -32644,8 +32733,13 @@
+             # Oberes und unteres Viertel sortieren, die Mitte legt hinein. Ohne
+             # diese Zonen wäre entweder das Umsortieren oder das Verschachteln
+             # per Maus nicht erreichbar.
+-            zone = self.sidebar_drop_zone(target_iid, event.y)
++            tree = self.get_sidebar_tree_for_iid(target_iid)
++            zone = self.sidebar_drop_zone(target_iid, self.sidebar_event_y(event, tree))
+             if zone != "into":
++                source, target = self.get_folder(folder_id), self.get_folder(target_row[1])
++                if (source and target and not target.get("parent_id")
++                        and self.sidebar_tree_for_folder(dict(source, parent_id=None)) is not tree):
++                    return False
+                 if self.move_sidebar_folder_relative(folder_id, target_row[1], place=zone):
+                     change.mark()
+                 return False
+@@ -32662,6 +32756,10 @@
+                 (entry for entry in self.lists if entry.get("id") == target_row[1]), None
+             )
+             target_parent = list_entry.get("folder_id") if list_entry else None
++            source = self.get_folder(folder_id)
++            if (source and not target_parent
++                    and self.sidebar_tree_for_folder(dict(source, parent_id=None)) is not self.get_sidebar_tree_for_iid(target_iid)):
++                return False
+             if not self.can_move_folder_into(folder_id, target_parent):
+                 return True
+             moved = (
+@@ -32684,7 +32782,8 @@
+         das ist die Absicht, die beim Ziehen auf einen Ordner überwiegt.
+         """
+         try:
+-            bbox = self.sidebar_listbox.bbox(target_iid)
++            tree = self.get_sidebar_tree_for_iid(target_iid)
++            bbox = tree.bbox(target_iid) if tree is not None else None
+         except tk.TclError:
+             bbox = None
+         if not bbox:
+@@ -32700,8 +32799,7 @@
+         return "into"
+ 
+     def clear_sidebar_drop_target_tags(self):
+-        for tree_name in ("system_listbox", "sidebar_listbox"):
+-            tree = getattr(self, tree_name, None)
++        for tree in [getattr(self, "system_listbox", None), *self.sidebar_trees()]:
+             if tree is None:
+                 continue
+             stack = list(tree.get_children(""))
+@@ -32709,8 +32807,9 @@
+                 iid = stack.pop()
+                 stack.extend(tree.get_children(iid))
+                 try:
+-                    tags = tuple(tag for tag in tree.item(iid, "tags") if tag != "drop_target")
+-                    tree.item(iid, tags=tags)
++                    tags = tree.item(iid, "tags")
++                    if "drop_target" in tags:
++                        tree.item(iid, tags=tuple(tag for tag in tags if tag != "drop_target"))
+                 except tk.TclError:
+                     pass
+ 
+@@ -46908,9 +47007,8 @@
+             if pointer_x is None or pointer_y is None:
+                 pointer_x = self.root.winfo_pointerx()
+                 pointer_y = self.root.winfo_pointery()
+-            for tree_name in ("system_listbox", "sidebar_listbox"):
+-                tree = getattr(self, tree_name, None)
+-                if tree is None:
++            for tree in [getattr(self, "system_listbox", None), *self.sidebar_trees()]:
++                if tree is None or not tree.winfo_ismapped():
+                     continue
+                 local_x = pointer_x - tree.winfo_rootx()
+                 local_y = pointer_y - tree.winfo_rooty()

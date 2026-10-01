@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "faelle": [
+    "Paket gegen Neuerzeugung",
+    "Sommerzeitwechsel",
+    "abweichende Uhrzeit",
+    "abweichender Tagesabstand",
+    "absolute Release-Zeitpunkte"
+  ]
+}

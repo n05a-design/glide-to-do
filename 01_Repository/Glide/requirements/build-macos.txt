@@ -1,0 +1,1 @@
+# PyInstaller-Version vor dem ersten reproduzierbaren macOS-Build festlegen und pinnen.

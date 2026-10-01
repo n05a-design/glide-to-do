@@ -1,0 +1,21 @@
+Tagesgeschäft
+==============================
+
+[Seitennotiz]
+Der Klassiker ohne Projektbezug. Zwei Gruppen als Zeithorizont.
+[/Seitennotiz]
+
+1. 📁 Heute
+   1.1. ⚑ Rückrufe priorisieren
+   1.2. ⚐ Posteingang sortieren
+   1.3. 🚩 Drei wichtigste Aufgaben festlegen
+      Fällig: 02.09.2026
+2. 📁 Diese Woche
+   2.1. ⚑ Offene Angebote nachfassen
+      Fällig: 05.09.2026
+   2.2. ✓ Kurznotizen ins CRM übertragen
+   2.3. ⚐ Ablage aufräumen
+3. Urlaubsplanung abstimmen
+   Fällig: 02.11.2026
+
+Exportiert am: 01.09.2026 um 23:55 Uhr

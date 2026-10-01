@@ -1,0 +1,116 @@
+{
+  "archiv": "C:\\Users\\Timvo\\OneDrive\\Glide ToDo\\50_Ablage\\Archiv\\Glide_3.5.0_vor_Bereinigung_2026-09-05.zip",
+  "sha256": "9ACB3851131D76CA47169E776A117F1C42339B329FC2932290AFA376E4FABB51",
+  "dateien": [
+    {
+      "datei": "Claude outputs/16_UEBERGABE_3.5.0.md",
+      "sha256": "C88370D46608845F879D273A9A3D7007A92F42C27999046B0EB0485EFA8CB437",
+      "bytes": 13818
+    },
+    {
+      "datei": "Claude outputs/f1_startseite.png",
+      "sha256": "F95E1B4B8497565E7F1FC070EFC0D6CA59F86C61B085CD64B342BF877A7475C9",
+      "bytes": 87333
+    },
+    {
+      "datei": "Claude outputs/f2_liste.png",
+      "sha256": "6979FCB0615151C179CC47EB5235F411F3939A2367AF292AE62A9EB70221256D",
+      "bytes": 114509
+    },
+    {
+      "datei": "Claude outputs/h3_einstellungen.png",
+      "sha256": "F4AD4330AD92BBA1F99159903FE30BF489029FE0C4B2466AE8D66FF67510920F",
+      "bytes": 103567
+    },
+    {
+      "datei": "Claude outputs/s1_oben.png",
+      "sha256": "E3C44DF1142C25A0B7383A11A3A71CE73FB406585430DDA178DC7A7CE476165D",
+      "bytes": 97933
+    },
+    {
+      "datei": "Claude outputs/s2_unten.png",
+      "sha256": "FC1E5EB9AAD86F511844A086A8382C27776F2D717FC45FF85B463284458A1F81",
+      "bytes": 92188
+    },
+    {
+      "datei": "Claude outputs/w1_maske.png",
+      "sha256": "BC8D9EEF1A1DA32279AA3C81A0CEAD3F932A8D9661623856AA670B8369BEC179",
+      "bytes": 100158
+    },
+    {
+      "datei": "01_Repository/Glide/tests/qa-3.5.0/linux-vorpruefung/screenshots/eingabemaske-wiederholung-dark.png",
+      "sha256": "B587F30BB11318C189FDF56514773614E38AF5C29C472DB78BF64E00F0B74490",
+      "bytes": 105928
+    },
+    {
+      "datei": "01_Repository/Glide/tests/qa-3.5.0/linux-vorpruefung/screenshots/einstellungen-dark.png",
+      "sha256": "AE272AA39B087C0B36EE91A82F8EF63B21EB1ADB8CBD86BA6CBA46E6BF14FFF8",
+      "bytes": 109337
+    },
+    {
+      "datei": "01_Repository/Glide/tests/qa-3.5.0/linux-vorpruefung/screenshots/LIESMICH.md",
+      "sha256": "73CB0682DBA6D2EA465D75C26FDC866D3E03A829220A49CCF68904D5508DA9C1",
+      "bytes": 1523
+    },
+    {
+      "datei": "01_Repository/Glide/tests/qa-3.5.0/linux-vorpruefung/screenshots/liste-faelligkeit-dark.png",
+      "sha256": "B3DC97C7E098048C39394BA2B2FF4ED1F748B47EAF9C362DFA5F1CEC7698681A",
+      "bytes": 120279
+    },
+    {
+      "datei": "01_Repository/Glide/tests/qa-3.5.0/linux-vorpruefung/screenshots/liste-schmal-860-dark.png",
+      "sha256": "4BC9CAE3129A37BDED77DF25C1920C9BE01C164C3A466A8C5C241F49A2F3C9CE",
+      "bytes": 86491
+    },
+    {
+      "datei": "01_Repository/Glide/tests/qa-3.5.0/linux-vorpruefung/screenshots/startseite-oben-dark.png",
+      "sha256": "B869A63D1C91D448AA4C4C0F9D64F799E01AFA235CB41254DC0ED36557F4B9D1",
+      "bytes": 103703
+    },
+    {
+      "datei": "01_Repository/Glide/tests/qa-3.5.0/linux-vorpruefung/screenshots/startseite-oben-light.png",
+      "sha256": "345C2DEBDE83D78B70686D1A57531D3B05CAE6324997CBA66CF78EDC9ABAF6E5",
+      "bytes": 106675
+    },
+    {
+      "datei": "01_Repository/Glide/tests/qa-3.5.0/linux-vorpruefung/screenshots/startseite-unten-dark.png",
+      "sha256": "188724D83F73B1E3A438FEA63F5B9044DB100AD6D71B6B98C3956C3BBA4FAAEF",
+      "bytes": 97958
+    },
+    {
+      "datei": "01_Repository/Glide/tests/qa-3.5.0/linux-vorpruefung/screenshots/startseite-unten-light.png",
+      "sha256": "AA1B06CCCD4821BF22028E91ADDA11F60C79F11E120347BA429A69180BDDA100",
+      "bytes": 98221
+    },
+    {
+      "datei": "01_Repository/Glide/tests/qa-3.5.0/linux-vorpruefung/XX_LIESMICH_verwaiste_kopien.md",
+      "sha256": "F22E9E969F4C41240E896394CF69465B99C9A9B1EBA2E765819894A53768B895",
+      "bytes": 447
+    },
+    {
+      "datei": "01_Repository/Glide/tests/fixtures/beispiele/glide_beispieldaten.glidebackup",
+      "sha256": "06FB40BC493FF0061F66BD3BB87C56FC7B30FCA1BE593ED59E5145E1D556B366",
+      "bytes": 14146
+    },
+    {
+      "datei": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.2.0.glidebackup",
+      "sha256": "2F25FD5CFCFA1930AEB2444141106900F7F7FA44409BB5934CE35CEC02F3B11B",
+      "bytes": 19932
+    },
+    {
+      "datei": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.3.0.glidebackup",
+      "sha256": "0C26FF1060288DFBEDB92DE05C02556DFCD147070E762F23E0F496A3ECF5212F",
+      "bytes": 20262
+    },
+    {
+      "datei": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.4.0.glidebackup",
+      "sha256": "8F655473B91D88924C1955A72ABFFEB965BFDB0B73E927F88A4F1BB768290373",
+      "bytes": 20801
+    },
+    {
+      "datei": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.5.0.glidebackup",
+      "sha256": "E0CF8B30643DC37B7EDA53F7C118129C99AF46C1E8443FECF01BEC00B7DC45DB",
+      "bytes": 21210
+    }
+  ]
+}

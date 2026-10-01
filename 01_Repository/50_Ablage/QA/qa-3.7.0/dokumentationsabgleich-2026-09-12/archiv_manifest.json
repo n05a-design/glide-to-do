@@ -1,0 +1,182 @@
+[
+  {
+    "quelle": "01_Repository/Glide/docs/25_FEATURE_ABGLEICH_3.7.0.md",
+    "archiv": "01_Repository/Glide/docs/archiv/25_FEATURE_ABGLEICH_3.7.0_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "21c26430bbe3dfb8f9346d8f9aae497e67d6df5b3525a4d5a1814e26302c69d8"
+  },
+  {
+    "quelle": "01_Repository/Glide/docs/09_PROJECT_HANDOFF.md",
+    "archiv": "01_Repository/Glide/docs/archiv/09_PROJECT_HANDOFF_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "39af64a36fc3332fd71f2f92672bc32985cc790722416785533a647702844159"
+  },
+  {
+    "quelle": "01_Repository/Glide/docs/03_STARTKONTEXT.md",
+    "archiv": "01_Repository/Glide/docs/archiv/03_STARTKONTEXT_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "1fe657cafe3f7595da6145c45c9138560128c5b0abeed20162a6b73b4516b2ed"
+  },
+  {
+    "quelle": "01_Repository/Glide/docs/12_ABSCHLUSSBERICHT.md",
+    "archiv": "01_Repository/Glide/docs/archiv/12_ABSCHLUSSBERICHT_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "244f7862f28be5ca21f82c61a4f450234a56607bf546c073ddc55ee070bae039"
+  },
+  {
+    "quelle": "01_Repository/Glide/docs/24_VERSION_3.7.0.md",
+    "archiv": "01_Repository/Glide/docs/archiv/24_VERSION_3.7.0_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "d41d3634cdc5ee21b32173d8694da64366b165aed243c6658ea00792acde8135"
+  },
+  {
+    "quelle": "01_Repository/Glide/docs/08_CODE_BEFUND.md",
+    "archiv": "01_Repository/Glide/docs/archiv/08_CODE_BEFUND_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "f474edbe82ce4582dd646d95894895a4990b333a66557a220fe87ac7842a9175"
+  },
+  {
+    "quelle": "01_Repository/Glide/docs/11_BESTANDSANALYSE.md",
+    "archiv": "01_Repository/Glide/docs/archiv/11_BESTANDSANALYSE_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "a92fdd9f8ae2fb03a3fb93770429dfbbdf5d7cf0a41499e4eca43620cc71fcaf"
+  },
+  {
+    "quelle": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+    "archiv": "01_Repository/Glide/docs/archiv/02_ARCHITECTURE_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "f065eded2f86dae5f0b5a48f2c32ab93db80d5f6c3faca4369c703ad1c370f79"
+  },
+  {
+    "quelle": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+    "archiv": "01_Repository/Glide/docs/archiv/05_QA_TESTPLAN_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "1de2e002d60f6ccc294437597e07d19fc5df16d489bdc631dd28ce024b0ae3dc"
+  },
+  {
+    "quelle": "01_Repository/Glide/docs/10_RELEASE_CHECKLIST.md",
+    "archiv": "01_Repository/Glide/docs/archiv/10_RELEASE_CHECKLIST_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "c5c19860d39a4bf7e55fe38db43856b6dccf1514a9b25f686622b2ff8afb2cd6"
+  },
+  {
+    "quelle": "README.md",
+    "archiv": "Archiv/README_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "64010ead7e9d523dee5b01d4217389f8c2b88d67d7fe2e84584549c67c54bd53"
+  },
+  {
+    "quelle": "00_Arbeitsvorbereitung/README.md",
+    "archiv": "00_Arbeitsvorbereitung/Archiv/README_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "4fd5eed39e9925f8fe2f9500635a1a5ac68bd282fd141af6485614ba6de37023"
+  },
+  {
+    "quelle": "10_Dokumentation/README.md",
+    "archiv": "10_Dokumentation/Archiv/README_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "c49dae29b13094dc7fb3b2c89209d33d546fbd1185a554d3643f7e65d5075e23"
+  },
+  {
+    "quelle": "07_Python-Versionen/README.md",
+    "archiv": "07_Python-Versionen/Archiv/README_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "6bf0dc4289a3b92bb46ac3f5172546d23b9491ae96cf7b1d5f19d003fcfd5e5c"
+  },
+  {
+    "quelle": "01_Repository/Glide/README.md",
+    "archiv": "01_Repository/Glide/archiv/README_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "bc255e8036815894955ab9aad697dd7b4a3a8f6f14ce801ae25f1cb5a8e465de"
+  },
+  {
+    "quelle": "40_Store_Material/Produktdatenblatt_3.7.0.md",
+    "archiv": "40_Store_Material/Archiv/Produktdatenblatt_3.7.0_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "de0f5a0fecc429bb8ede5783449afb3e1414f84b97a9236162f3eb8ca50fd6fc"
+  },
+  {
+    "quelle": "00_Arbeitsvorbereitung/Notizen/Technische_Fakten_3.7.0.md",
+    "archiv": "00_Arbeitsvorbereitung/Notizen/Archiv/Technische_Fakten_3.7.0_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "ac2eb0df875971b04c670a34517064c7b7d42177494c00904a23cb5e81ed11bc"
+  },
+  {
+    "quelle": "00_Arbeitsvorbereitung/Notizen/Technische_Fakten_3.2.0.md",
+    "archiv": "00_Arbeitsvorbereitung/Notizen/Archiv/Technische_Fakten_3.2.0_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "verschoben",
+    "sha256": "f445cef1ecad7c788f5685e763785be08ae208f9419edec86aa3d09a3182ad5b"
+  },
+  {
+    "quelle": "00_Arbeitsvorbereitung/Notizen/Technische_Fakten_3.3.0.md",
+    "archiv": "00_Arbeitsvorbereitung/Notizen/Archiv/Technische_Fakten_3.3.0_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "verschoben",
+    "sha256": "865da08381ea761b6dffd05ee9028bed556c909dc97636cbb315a9ea1b133e00"
+  },
+  {
+    "quelle": "00_Arbeitsvorbereitung/Notizen/Technische_Fakten_3.6.0.md",
+    "archiv": "00_Arbeitsvorbereitung/Notizen/Archiv/Technische_Fakten_3.6.0_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "verschoben",
+    "sha256": "6aafc76404d060f1e21fa407e797f054636a25255438cea7f2c311ac5ba74ac6"
+  },
+  {
+    "quelle": "10_Dokumentation/Windows_Pruefstand_3.7.0.md",
+    "archiv": "10_Dokumentation/Archiv/Windows_Pruefstand_3.7.0_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "verschoben",
+    "sha256": "ddf5ba414b8047d63585f5814680d88f5477f8b2a7cceacb8c96000932d1c50f"
+  },
+  {
+    "quelle": "00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.7.0.md",
+    "archiv": "00_Arbeitsvorbereitung/Checklisten/Archiv/Manuelle_Pruefung_3.7.0_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "feef5bf38e18090ebc3e1fbde920a2f5e3be94bff01a502ac3319e555d2d1767"
+  },
+  {
+    "quelle": "00_Arbeitsvorbereitung/Glide_Weitergabe_neuer_Chat_2026-09-11.md",
+    "archiv": "00_Arbeitsvorbereitung/Archiv/Glide_Weitergabe_neuer_Chat_2026-09-11_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "cae2fad924e7d7f7b6dd272e4a2b336c9da3a65a5fa2c8cf4ec4658267a318ce"
+  },
+  {
+    "quelle": "01_Repository/Glide/CHANGELOG.md",
+    "archiv": "01_Repository/Glide/archiv/CHANGELOG_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "a1867fe62d6e89ef67ae12bf433a8ad633a84ead91b45258bb2c7ff90a15e95d"
+  },
+  {
+    "quelle": "01_Repository/Glide/docs/00_INDEX.md",
+    "archiv": "01_Repository/Glide/docs/archiv/00_INDEX_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "2825ac5a074c930ca0a54075911a461efdb5b2d130a3510c2490b51f3ed9f9ae"
+  },
+  {
+    "quelle": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "archiv": "01_Repository/Glide/docs/archiv/07_QA_BERICHT_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "72dce7e0abd2422b3eb6385bf5f33947755bea143704878eaff7a08ff80fc10c"
+  },
+  {
+    "quelle": "01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md",
+    "archiv": "01_Repository/Glide/docs/archiv/27_VORLAGEN_PRAXISANLEITUNG_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "23e1e279a853a9ea0efab9bfcab964ae0449ac94f17c2a9061892e61b6b557b0"
+  },
+  {
+    "quelle": "10_Dokumentation/Vorlagen_Praxisanleitung_3.7.0.md",
+    "archiv": "10_Dokumentation/Archiv/Vorlagen_Praxisanleitung_3.7.0_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "82285e5788976f0fa2ef22a8fcdee21fed331e87ad4598563579c06d0da7417c"
+  },
+  {
+    "quelle": "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+    "archiv": "01_Repository/Glide/docs/archiv/01_PRODUCT_CONSTRAINTS_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "2bed6bf5bada3bc0ffc5516e7da90b8bc80db739ca77ecadd2e40544524b124f"
+  },
+  {
+    "quelle": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+    "archiv": "01_Repository/Glide/docs/archiv/06_DATA_BACKUP_MIGRATION_vor_Dokuabgleich_3.7.0_2026-09-12.md",
+    "aktion": "gesichert",
+    "sha256": "9c3c2c655505f1b023baad8bfb6c13e0a70dea145a7b4ac417fad36e236c1e79"
+  }
+]

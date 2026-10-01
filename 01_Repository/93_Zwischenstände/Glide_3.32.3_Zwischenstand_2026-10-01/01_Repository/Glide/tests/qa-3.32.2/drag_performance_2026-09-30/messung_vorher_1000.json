@@ -1,0 +1,123 @@
+{
+  "version": "3.32.1",
+  "source_sha256": "dead78042997fa71c1d110724aaed9bfd10f3cedcfdf3a10eddf187799a3be0b",
+  "python": "3.14.5",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "tk": "9.0.3",
+  "profiling": false,
+  "fixture": {
+    "tasks": 1000,
+    "lists": 12,
+    "page_paragraphs": 50,
+    "page_images": 2,
+    "notes": 1,
+    "window": "1400x950",
+    "idle_rounds": 3
+  },
+  "warm_rounds": 6,
+  "views": {
+    "Startseite": {
+      "median_ms": 962.486,
+      "p95_ms": 980.631,
+      "stichproben_ms": [
+        964.365,
+        960.606,
+        960.151,
+        954.032,
+        970.5,
+        980.631
+      ],
+      "first_ms": 1564.282
+    },
+    "Bibliothek": {
+      "median_ms": 1409.311,
+      "p95_ms": 1439.051,
+      "stichproben_ms": [
+        1416.273,
+        1410.366,
+        1439.051,
+        1395.277,
+        1388.185,
+        1408.255
+      ],
+      "first_ms": 1385.911
+    },
+    "Liste": {
+      "median_ms": 154.059,
+      "p95_ms": 190.796,
+      "stichproben_ms": [
+        167.975,
+        146.831,
+        151.568,
+        190.796,
+        146.821,
+        156.55
+      ],
+      "first_ms": 154.96
+    },
+    "Tabelle": {
+      "median_ms": 127.677,
+      "p95_ms": 131.152,
+      "stichproben_ms": [
+        123.045,
+        126.57,
+        131.152,
+        128.784,
+        121.45,
+        129.143
+      ],
+      "first_ms": 123.732
+    },
+    "Seite mit zwei Bildern": {
+      "median_ms": 369.121,
+      "p95_ms": 376.316,
+      "stichproben_ms": [
+        364.667,
+        367.587,
+        371.718,
+        376.316,
+        367.259,
+        370.655
+      ],
+      "first_ms": 370.57
+    },
+    "Notiz": {
+      "median_ms": 375.068,
+      "p95_ms": 384.761,
+      "stichproben_ms": [
+        373.466,
+        369.761,
+        375.997,
+        383.723,
+        384.761,
+        374.14
+      ],
+      "first_ms": 340.569
+    }
+  },
+  "font_3000_calls": {
+    "median_ms": 25.062,
+    "p95_ms": 25.276,
+    "stichproben_ms": [
+      24.972,
+      25.276,
+      24.784,
+      25.22,
+      24.859,
+      25.153
+    ]
+  },
+  "toolbar_30_buttons": {
+    "median_ms": 410.647,
+    "p95_ms": 414.466,
+    "stichproben_ms": [
+      414.466,
+      410.549,
+      403.469,
+      401.824,
+      412.391,
+      410.745
+    ]
+  },
+  "callback_errors": []
+}

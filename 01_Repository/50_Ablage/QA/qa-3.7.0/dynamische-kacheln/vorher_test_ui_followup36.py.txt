@@ -1,0 +1,269 @@
+"""Vorlagenbreite, Jahreswerte und die Bestandsübersicht mit isolierten Daten."""
+import argparse
+import copy
+import importlib.machinery
+import importlib.util
+import json
+import os
+from pathlib import Path
+import sys
+import tempfile
+from datetime import date, timedelta
+
+ROOT = Path(__file__).resolve().parents[2]
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--screenshots', type=Path)
+args = parser.parse_args()
+
+
+def descendants(widget):
+    for child in widget.winfo_children():
+        yield child
+        yield from descendants(child)
+
+
+with tempfile.TemporaryDirectory(prefix='glide-ui-followup36-') as tmp:
+    os.environ['GLIDE_DATA_DIR'] = tmp
+    loader = importlib.machinery.SourceFileLoader('glide_followup', str(ROOT/'src/glide/app.pyw'))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    mod = importlib.util.module_from_spec(spec)
+    loader.exec_module(mod)
+    root = mod.tk.Tk()
+    root.withdraw()
+    if os.name == 'nt':
+        root.attributes('-alpha', 0.0)  # Eigene Testfenster stören die laufende Arbeit nicht.
+        root.attributes('-toolwindow', True)
+    errors = []
+    root.report_callback_exception = lambda *error: errors.append(error)
+    app = mod.ListApp(root)
+    app.show_info = lambda *a, **kw: None
+    root.geometry('1280x960+10+10')
+    root.deiconify()
+    root.update()
+
+    def settle():
+        # Windows liefert Mapping und Größenänderungen asynchron. Erst den
+        # stabilen Canvas-Inhalt prüfen, nicht eine gerade umgepackte Leiste.
+        if root.state() != 'normal':
+            root.deiconify()
+        for _ in range(4):
+            root.update()
+            root.after(80, root.quit)
+            root.mainloop()
+        root.update()
+        root.update_idletasks()
+
+    def capture(name):
+        if args.screenshots and os.name == 'nt':
+            sys.path.insert(0, str(ROOT/'tests/tools'))
+            from releasedaten import save_windows_screenshot
+            save_windows_screenshot(root, args.screenshots.resolve()/f'{name}.png')
+
+    def resize(width):
+        for _ in range(5):
+            root.deiconify()
+            root.update()
+            root.geometry(f'{width}x960+10+10')
+            settle()
+            if (root.state() == 'normal' and root.winfo_width() == width
+                    and app.home_content.winfo_width() == app.home_canvas.winfo_width()
+                    and bool(app.home_scrollbar.winfo_manager()) == bool(app.home_scrollbar.winfo_ismapped())):
+                return
+        raise AssertionError(('Fenstergröße nicht stabil', width, root.geometry(), root.state()))
+
+    def button_text_fits(scope):
+        for button in descendants(scope):
+            if isinstance(button, mod.RoundedButton) and button.winfo_ismapped():
+                for item in button.find_all():
+                    if button.type(item) == 'text':
+                        box = button.bbox(item)
+                        assert 2 <= box[0] and box[2] <= button.winfo_width()-2, (button.text, box, button.winfo_width())
+
+    try:
+        # Alte Erledigungen verschwanden nach der ersten neuen Bearbeitung.
+        today = date.today()
+        older = (today-timedelta(days=2)).isoformat()
+        yesterday = (today-timedelta(days=1)).isoformat()
+        histories = {'completion_history': {older: 2, yesterday: 1}, 'activity_history': {today.isoformat(): 4}}
+        app.settings.update(copy.deepcopy(histories))
+        assert app.yearly_activity_history() == {older: 2, yesterday: 1, today.isoformat(): 4}
+        assert mod.YearHeatmap.statistics(app.yearly_activity_history())['total'] == 7
+        app.settings['activity_history'][yesterday] = 3
+        assert app.yearly_activity_history()[yesterday] == 3  # keine Addition derselben Erledigung
+        app.settings['completion_history'][yesterday] = 5
+        assert app.yearly_activity_history()[yesterday] == 5  # ältere Mindestzahl bleibt erhalten
+        app.settings.update(copy.deepcopy(histories))
+        app.save_settings()
+        app.settings = app.load_settings()
+        assert all(app.settings[key] == values for key, values in histories.items())
+        assert app.yearly_activity_history()[older] == 2
+
+        for theme in ('dark', 'light'):
+            app.theme_name = theme
+            app.apply_theme()
+            for editing in (False, True):
+                app._templates_editing = editing
+                app.set_template_view()
+                for width in (860, 1280, 1660):
+                    resize(width)
+                    assert root.state() == 'normal', root.state()
+                    assert root.winfo_width() == width, (root.geometry(), width)
+                    assert app.home_frame.winfo_width() == app.content_frame.winfo_width()
+                    assert not any(isinstance(w, mod.tk.Label) for w in app.home_content.winfo_children())
+                    if not app.home_scrollbar.winfo_manager():
+                        assert app.template_cards[0].winfo_width() == app.content_frame.winfo_width(), (theme, editing, width, app.template_cards[0].winfo_width(), app.content_frame.winfo_width(), app.home_canvas.winfo_width(), app.home_canvas.yview(), app.home_scrollbar.winfo_manager())
+                    for card, row in zip(app.template_cards, app.template_rows):
+                        assert isinstance(card, mod.RoundedContainer) and card.radius == app.HOME_CARD_RADIUS
+                        panel, title, note, actions = row
+                        assert actions.winfo_x()+actions.winfo_width() <= panel.winfo_width()
+                        if int(note.grid_info()['row']) == 0:
+                            assert note.winfo_x() < 290, note.winfo_x()
+                            assert 0 <= note.winfo_x() - title.winfo_x() - title.winfo_width() <= 20
+                    assert len(app.template_action_groups) == 2
+                    for group in app.template_action_groups:
+                        assert isinstance(group, mod.RoundedContainer)
+                        assert group.fill_color == app.theme['card'] and group.radius == 16
+                        assert len([w for w in group.inner.winfo_children() if isinstance(w, mod.RoundedButton)]) == 2
+                        assert group.winfo_rootx()+group.winfo_width() <= app.content_frame.winfo_rootx()+app.content_frame.winfo_width(), (theme, editing, width, root.geometry(), group.winfo_x(), group.winfo_width(), app.content_frame.winfo_width(), root.state())
+                    button_text_fits(app.home_content)
+                    button_text_fits(app.template_actions)
+                    capture(f'vorlagen-{theme}-{width}-' + ('bearbeiten' if editing else 'ansehen'))
+
+            app.set_home_view()
+            for width in (860, 1280, 1660):
+                resize(width)
+                app.home_canvas.yview_moveto(1)
+                root.update()
+                heatmap = next(w for w in descendants(app.home_content) if isinstance(w, mod.YearHeatmap))
+                chart = next(w for w in descendants(app.home_content) if isinstance(w, mod.CompletionChart))
+                assert heatmap.winfo_width() == chart.winfo_width()
+                cells = heatmap.find_withtag('day')
+                line = next(item for item in chart.find_all() if chart.type(item) == 'line')
+                plot = chart.coords(line)
+                assert abs(min(heatmap.coords(item)[0] for item in cells)-plot[0]) <= 1
+                assert abs(max(heatmap.coords(item)[2] for item in cells)-plot[2]) <= 1
+                for item in heatmap.find_all():
+                    if heatmap.type(item) != 'text':
+                        continue
+                    weekday = {'Mo': 0, 'Do': 3, 'So': 6}[heatmap.itemcget(item, 'text')]
+                    matching = next(cell for cell in cells if date.fromisoformat(heatmap.gettags(cell)[1]).weekday() == weekday)
+                    box = heatmap.coords(matching)
+                    assert abs(heatmap.coords(item)[1]-(box[1]+box[3])/2) <= 1
+                assert heatmap.bbox('all')[3] < heatmap.winfo_height()
+                for day in (older, yesterday, today.isoformat()):
+                    assert heatmap.find_withtag(day)
+                    assert heatmap.itemcget(heatmap.find_withtag(day)[0], 'fill') != heatmap.empty_color
+                capture(f'jahresanzeige-{theme}-{width}')
+
+        # Grenzfall: Die Scrollleiste macht das Raster schmaler und damit
+        # niedriger. Ein Pixel Überlauf darf kein endloses Umräumen auslösen.
+        app.set_home_view()
+        resize(1280)
+        for widget in app.home_content.winfo_children():
+            widget.destroy()
+        spacer = mod.tk.Frame(app.home_content, height=1)
+        spacer.pack(fill='x')
+        boundary_heatmap = mod.YearHeatmap(app.home_content, {})
+        boundary_heatmap.pack(fill='x')
+        settle()
+        changes = []
+        def observe_resize(event):
+            changes.append(event.width)
+            if len(changes) > 20:
+                spacer.configure(height=1)  # Test bricht eine Regression kontrolliert ab.
+        binding = app.home_canvas.bind('<Configure>', observe_resize, add='+')
+        spacer.configure(height=app.home_canvas.winfo_height()-boundary_heatmap.winfo_reqheight()+1)
+        settle()
+        app.home_canvas.unbind('<Configure>', binding)
+        assert len(changes) <= 20, ('Scrollleiste pendelt zwischen zwei Breiten', changes)
+        app.refresh_home()
+
+        # Ein gemeinsamer Bestand mit Wurzellisten, verschachtelten und leeren Ordnern.
+        folder = app.new_folder_object('Projekte', color='clear')
+        nested = app.new_folder_object('Redesign und Branding', color='accent', parent_id=folder['id'])
+        empty = app.new_folder_object('Ideen für später', color='import')
+        app.folders.extend((folder, nested, empty))
+        titles = ('Planung', 'Recherche', 'Gestaltung', 'Freigabe', 'Veröffentlichung', 'Rückblick',
+                  'Haushalt', 'Einkauf', 'Reiseplanung', 'Wochenplanung')
+        for index, title in enumerate(titles):
+            tasks = [app.new_item('Nächste Schritte festlegen'), app.new_item('Informationen zusammenstellen'),
+                     app.new_item('Erstes Ergebnis prüfen', done=True)]
+            app.lists.append(app.new_list_object(title, tasks,
+                folder_id=nested['id'] if index < 3 else folder['id'] if index < 6 else None,
+                color=app.LIST_COLOR_KEYS[index % len(app.LIST_COLOR_KEYS)],
+                note='Ein gemeinsamer Platz für Aufgaben, Notizen und nächste Schritte.'))
+        app.save_items()
+        expected = {('folder', entry['id']) for entry in app.folders}
+        expected |= {('list', entry['id']) for entry in app.lists if not app.is_inbox_list(entry)}
+        data_before = copy.deepcopy((app.lists, app.folders))
+        for theme in ('dark', 'light'):
+            app.theme_name = theme
+            app.apply_theme()
+            app.sidebar_title.event_generate('<Button-1>')
+            root.update()
+            assert app.view_mode == app.LIBRARY_VIEW
+            assert app.get_active_page() is None
+            assert not app.require_list_view(message=False)
+            assert not app.system_listbox.selection() and not app.sidebar_listbox.selection()
+            assert app.sidebar_heading_icon.cget('text') == app.ICONS['list']
+            assert app.sidebar_title.cget('bg') == app.theme['selection']
+            assert set(app.library_open_buttons) == expected
+            assert len(app.library_cards) == len(expected)
+            assert ('folder', nested['id']) in [(kind, entry['id']) for kind, entry in app.library_entries()]
+            for width, expected_columns in ((860, 1), (1280, 2), (1660, 3)):
+                resize(width)
+                columns = {int(card.grid_info()['column']) for card in app.library_cards}
+                assert len(columns) == expected_columns, (width, columns, root.winfo_width(), app.content_frame.winfo_width(), app.home_canvas.winfo_width(), app.home_content.winfo_width(), app.library_cards[0].master.winfo_width(), errors)
+                for card in app.library_cards:
+                    assert card.winfo_x()+card.winfo_width() <= card.master.winfo_width()
+                button_text_fits(app.home_content)
+                button_text_fits(app.template_actions)
+                capture(f'listen-ordner-{theme}-{width}')
+                app.home_canvas.yview_moveto(1)
+                root.update()
+                assert app.home_canvas.yview()[0] > 0
+                assert app.template_actions.winfo_ismapped()
+                assert app.template_actions.winfo_rooty()+app.template_actions.winfo_height() < root.winfo_rooty()+root.winfo_height()
+                app.home_canvas.yview_moveto(0)
+            assert (app.lists, app.folders) == data_before
+
+        # Kachelziele und Rückkehr wechseln nur die Ansicht, nie den Bestand.
+        for kind, entry in app.library_entries():
+            app.set_library_view()
+            app.library_open_buttons[(kind, entry['id'])].command()
+            root.update()
+            assert app.view_mode == kind
+            assert (app.active_folder_id if kind == 'folder' else app.active_list_id) == entry['id']
+        app.set_active_folder(folder['id'])
+        app.save_items()  # Aufgabenablage merkt den Ordner, Einstellungen danach die Übersicht.
+        app.set_library_view()
+        app.settings['startup_view'] = 'last'
+        app.save_settings()
+        app.load_items()
+        root.update()
+        assert app.view_mode == app.LIBRARY_VIEW
+        assert (app.lists, app.folders) == data_before
+        app.cancel_pending_callbacks()
+        app.release_data_lock()
+        root.destroy()
+        root = mod.tk.Tk()
+        root.withdraw()
+        if os.name == 'nt':
+            root.attributes('-alpha', 0.0)
+            root.attributes('-toolwindow', True)
+        root.report_callback_exception = lambda *error: errors.append(error)
+        app = mod.ListApp(root)
+        root.deiconify()
+        settle()
+        assert app.view_mode == app.LIBRARY_VIEW
+        assert set(app.library_open_buttons) == expected
+        assert (app.lists, app.folders) == data_before
+        assert not errors, errors
+        print('UI-Nachtrag: OK; Vorlagen in 2 Modi/2 Themes/3 Breiten; Tageshistorien erhalten, keine Doppelzählung; Diagrammachsen und Breiten; alle Ordner/Listen, Kachelziele, Scrollen, Rückkehr, Daten unverändert.')
+    finally:
+        if errors:
+            print('Tk-Fehler:', errors)
+        app.cancel_pending_callbacks()
+        app.release_data_lock()
+        if root.winfo_exists():
+            root.destroy()

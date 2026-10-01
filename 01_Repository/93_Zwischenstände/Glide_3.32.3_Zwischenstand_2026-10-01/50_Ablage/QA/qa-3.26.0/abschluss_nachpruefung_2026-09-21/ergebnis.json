@@ -1,0 +1,50 @@
+{
+  "zeitpunkt": "2026-09-21T19:05:14.064246",
+  "exitcode": 0,
+  "original_vollpruefung": "tests\\qa-3.26.0\\abschluss_2026-09-21\\ergebnis.json",
+  "original_exitcode": 1,
+  "hinweis": "Original bleibt erhalten. Ein archivierter Referenzpfad im Mondphasentest wurde durch eine dauerhafte Fixture ersetzt; die betroffene Suite wird vollständig wiederholt.",
+  "programm_sha256": "91159d104e1ac4f769fe9eec38e5f3c9a571cfb999e2e79daed36ff84fc37158",
+  "schritte": [
+    {
+      "schritt": "test_ui_polish36",
+      "exitcode": 0
+    },
+    {
+      "schritt": "test_ui39",
+      "exitcode": 0
+    },
+    {
+      "schritt": "test_features326",
+      "exitcode": 0
+    },
+    {
+      "schritt": "sichtprobe326",
+      "exitcode": 0
+    },
+    {
+      "schritt": "standpruefung",
+      "exitcode": 0
+    },
+    {
+      "schritt": "Syntax",
+      "exitcode": 0,
+      "detail": "85 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+    },
+    {
+      "schritt": "Dokumentation",
+      "exitcode": 0,
+      "detail": "Alle Dokumente einschließlich Archiv im Index; 814 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+    },
+    {
+      "schritt": "Startkopie",
+      "exitcode": 0,
+      "sha256": "91159d104e1ac4f769fe9eec38e5f3c9a571cfb999e2e79daed36ff84fc37158"
+    },
+    {
+      "schritt": "Aktive Ressourcen",
+      "exitcode": 0,
+      "abweichungen": []
+    }
+  ]
+}
