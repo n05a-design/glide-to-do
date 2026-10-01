@@ -37,7 +37,6 @@ Nicht im Umfang: Schwachstellen in Python, Tk oder im Betriebssystem selbst; die
 | Maßnahme | Wo |
 |---|---|
 | CI-Grundstufe bei jedem Push und Pull Request: Prüfungen, Startprobe, Lieferstand, **Herkunft des Fremdcodes** gegen das Originalpaket, **keine Benutzerpfade** in versionierten Dateien | `.github/workflows/python-app.yml`, `01_Repository/Glide/tests/tools/ci_grundstufe.py` |
-| Statische Sicherheitsanalyse (CodeQL) für Python und die Workflows | `.github/workflows/codeql.yml` |
 | Wöchentliche Aktualisierung der verwendeten GitHub Actions | `.github/dependabot.yml` |
 | Keine Schlüssel, Zertifikate oder Signing-Secrets im Repository; Secret Scanning ist aktiv | `01_Repository/Glide/.gitignore` |
 | Rohprotokolle (`*.log`) bleiben lokal; veröffentlichte Prüfergebnisse enthalten keine Benutzerpfade | `scripts/pflege/pfade_bereinigen.py` |
