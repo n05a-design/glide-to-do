@@ -1,0 +1,2 @@
+ins Archiv (Endung _Z): Glide-Aufgaben-und-Listen_v3.33.0_Z.pyw
+11 Code-Dateien und 131 Ressourcen abgeglichen; Abweichungen: keine

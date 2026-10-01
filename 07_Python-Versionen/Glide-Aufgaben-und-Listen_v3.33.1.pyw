@@ -24214,6 +24214,7 @@ class ListApp:
             x, y = 200, 150
         dialog.geometry(f"{width}x{height}+{x}+{y}")
         dialog._glide_layout_measured = True
+        dialog.deiconify()
 
     def _make_field(self, master, inner="input"):
         """Einheitlicher Feldrahmen für alle Dialoge.
@@ -42161,15 +42162,18 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     leinwand.pack_forget()
                     self.update_header_title()
                 return
-            if leinwand.winfo_manager():
-                leinwand.pack_configure(pady=(self.header_logo_top_inset(), 0))
+            inset = self.header_logo_top_inset()
+            if leinwand.winfo_manager() and inset != getattr(self, "_header_logo_inset", None):
+                self._header_logo_inset = inset
+                leinwand.pack_configure(pady=(inset, 0))
             hoehe = self.header_logo_height()
             farbe = self.header_logo_color()
             if (hoehe, farbe) != getattr(self, "_header_logo_key", None):
                 self._header_logo_key = (hoehe, farbe)
                 self.draw_logo(leinwand, hoehe, farbe)
             if not leinwand.winfo_manager():
-                leinwand.pack(side="left", anchor="nw", padx=(0, self.HEADER_LOGO_GAP), pady=(self.header_logo_top_inset(), 0), before=self.title_block)
+                leinwand.pack(side="left", anchor="nw", padx=(0, self.HEADER_LOGO_GAP), pady=(inset, 0), before=self.title_block)
+                self._header_logo_inset = inset
                 self.update_header_title()
         except (tk.TclError, ValueError, OSError, AttributeError):
             return

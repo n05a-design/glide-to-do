@@ -825,7 +825,6 @@ Archivkopien vor Versionswechsel und Entscheidungs-/Klappkontrolle:
 - [README_3.32.2_vor_3.32.3.md](../../../50_Ablage/QA/Dokumentation/Archiv/README_3.32.2_vor_3.32.3.md)
 - [README_3.32.2_vor_3.32.3.md](../../../50_Ablage/QA/Dokumentation/Renderlaeufe/Archiv/README_3.32.2_vor_3.32.3.md)
 - [README_3.32.2_vor_3.32.3.md](../../../50_Ablage/Screenshots/archiv/README_3.32.2_vor_3.32.3.md)
-- [README_3.32.2_vor_3.32.3.md](../../../90_Testdaten_Extern/README.md)
 - [README_3.32.2_vor_3.32.3.md](../../../Archiv/README_3.32.2_vor_3.32.3.md)
 
 ## Vorfassungen vor Abschluss 3.32.3
