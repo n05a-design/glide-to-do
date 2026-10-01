@@ -129,7 +129,6 @@ Erinnerungen, Labels, lokale Anhänge, Kalender, Suche, Rückgängig, Papierkorb
 | [20_Grafik_Master](20_Grafik_Master/README.md) | Logo, App-Symbol und Fav-Icon als SVG und PNG, Affinity-Quelle, Stilvorlagen |
 | [40_Store_Material](40_Store_Material/README.md) | Entwürfe für die Veröffentlichung |
 | [50_Ablage](50_Ablage/README.md) | Historische QA, Screenshots und Rückfallstände |
-| [90_Testdaten_Extern](90_Testdaten_Extern/README.md) | Bewusst erhaltene ältere Importbeispiele |
 
 **Dokumentationspflege:** Seit dem ausdrücklichen Auftrag vom 01.10.2026 werden doppelte und überholte Dokumente nach Wissensabgleich gelöscht. Aktuelle Quellen bleiben fortgeschrieben; gültige Funktionsverträge und Prüfbelege bleiben erhalten. [Wissenseinstieg und Bereinigungsnachweis](01_Repository/Glide/docs/75_DOKUMENTATIONSREDUKTION_UND_LOGOS_3.33.1.md).
 

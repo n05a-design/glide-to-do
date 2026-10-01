@@ -104,7 +104,7 @@ Aufwand in **Arbeitstagen (AT) im bisherigen Arbeitsmodus**: KI-gestützte Umset
 
 | ID | Arbeit | Quelle | Aufwand | Stufe |
 |---|---|---|---|---|
-| CI | Git-Arbeitsweise und schnelle CI-Stufe (Linux/Xvfb: Standprüfung, Syntax, Startprobe, Tk-freie Tests, SHA-Abgleich `src/glide` ↔ 07) – **Grundstufe eingerichtet 01.10.2026** (`tests/tools/ci_grundstufe.py`); offen: Integrationssuiten unter Linux kalibrieren (10 von 60 Suiten weichen ab) | D09, T4 | M | 0 |
+| CI | Git-Arbeitsweise und schnelle CI-Stufe (Linux/Xvfb: Standprüfung, Syntax, Startprobe, Tk-freie Tests, SHA-Abgleich `src/glide` ↔ 07) – **Grundstufe eingerichtet 01.10.2026** (`tests/tools/ci_grundstufe.py`); offen: vier reine Linux-Abweichungen der Integrationssuiten kalibrieren | D09, T4 | M | 0 |
 | UX1 | **Weniger Oberfläche:** U01 Befehlspalette (N03), U02 Hinweise bei Bedarf, U03, U05-Standard, U07 Eingang (N02), U10 Kopfzeile, U13 Bibliothek, U14 Menü, U16 Begriffe, U19, U22, U24 Symbole, N01/U17 Automatisch hell/dunkel + Signaturdesign | UX, D11, D12 | 5–8 AT | 1 |
 | G05 | Fokusansicht an vorhandener Zeiterfassung | G05, B-02 | M | 1 |
 | D14 | Heute/Demnächst | U06 | M | 1 |

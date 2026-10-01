@@ -7,7 +7,7 @@
 - Root-Zuordnung als Anzeigeeinstellung, einschließlich Rückgängig; Zeichnungsübersicht, vier Klappbereiche und begrenzte Baumhöhen bei kleiner Fensterhöhe.
 - Logo beginnt auf Höhe der Titeloberkante. Dialoge werden erst fertig positioniert eingeblendet; doppelte Leerlaufabfragen und unveränderte Breitenmessungen vermieden.
 - Showcase zeigt die vorhandene Pixelskizze im neuen Zeichnungsbereich. Neue Pflichtsuite für die tatsächlichen Bereichs-, Formular-, Drag-, Settings- und Neustartwege.
-- **CI-Grundstufe (D09, App unverändert):** Die GitHub-Vorlage „Python application“ brach mit Exitcode 2 ab, weil `pytest` das ganze Repository einsammelte (Archivkopien, Altstände, Tk-Suiten ohne Bildschirm). Der Workflow führt jetzt `tests/tools/ci_grundstufe.py` aus: Vorprüfungen, Werkzeug- und Unit-Tests, Analysen, Startprobe unter Xvfb, Lieferstand als Hinweis. Integrationssuiten unter Linux nur manuell und informativ. [Nachweis](tests/qa-3.33.1/ci_grundstufe_2026-10-01/README.md).
+- **CI-Grundstufe (D09, App unverändert):** Die GitHub-Vorlage „Python application“ brach mit Exitcode 2 ab, weil `pytest` das ganze Repository einsammelte (Archivkopien, Altstände, Tk-Suiten ohne Bildschirm). Der Workflow führt jetzt `tests/tools/ci_grundstufe.py` aus: Vorprüfungen, Werkzeug- und Unit-Tests, Analysen, Startprobe unter Xvfb, Lieferstand als Hinweis. Integrationssuiten unter Linux nur manuell und informativ. `07_Python-Versionen` mit `abgleich_07.py` auf den Prüfkandidaten 3.33.1 gebracht; `app.pyw.fetch` (Zwischenfassung) und die PyPI-Vorlage entfernt; zwei Verweise auf das entfernte `90_Testdaten_Extern` gelöscht. [Nachweis](tests/qa-3.33.1/ci_grundstufe_2026-10-01/README.md).
 
 ## 3.33.0 – Fundament für die geplanten Ausbauten (01.10.2026)
 
