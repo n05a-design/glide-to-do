@@ -1,0 +1,106 @@
+{
+  "werkzeug": "messung_speicherweg.py",
+  "app": "01_Repository/Glide/src/glide/app.pyw",
+  "app_version": "3.32.3",
+  "punkte": 5000,
+  "datei_kb": 5150,
+  "runden_warm": 9,
+  "umgebung": {
+    "python": "3.14.0rc2",
+    "tk": "8.6.14",
+    "plattform": "Linux-6.18.44-fc-v50-x86_64-with-glibc2.39",
+    "prozessor": "x86_64"
+  },
+  "erstes_speichern_ms": 384.005,
+  "snapshot_undo": {
+    "median_ms": 38.131,
+    "p95_ms": 39.947,
+    "stichproben_ms": [
+      38.131,
+      37.305,
+      37.483,
+      38.567,
+      37.707,
+      37.394,
+      39.947,
+      38.353,
+      38.445
+    ]
+  },
+  "save_items": {
+    "median_ms": 160.821,
+    "p95_ms": 199.225,
+    "stichproben_ms": [
+      149.874,
+      157.179,
+      163.451,
+      160.821,
+      148.439,
+      158.197,
+      199.225,
+      179.073,
+      192.937
+    ]
+  },
+  "history_snapshot": {
+    "median_ms": 36.077,
+    "p95_ms": 67.688,
+    "stichproben_ms": [
+      64.55,
+      57.827,
+      34.397,
+      36.077,
+      38.348,
+      29.485,
+      28.903,
+      35.032,
+      67.688
+    ]
+  },
+  "json_eingerueckt": {
+    "median_ms": 14.053,
+    "p95_ms": 16.144,
+    "stichproben_ms": [
+      14.972,
+      13.598,
+      13.511,
+      13.332,
+      14.286,
+      16.144,
+      15.339,
+      13.491,
+      14.053
+    ]
+  },
+  "json_kompakt": {
+    "median_ms": 13.137,
+    "p95_ms": 21.491,
+    "stichproben_ms": [
+      20.627,
+      21.491,
+      20.022,
+      13.137,
+      12.176,
+      12.446,
+      11.784,
+      11.719,
+      13.559
+    ]
+  },
+  "abhaken_item_change": {
+    "median_ms": 217.632,
+    "p95_ms": 257.096,
+    "stichproben_ms": [
+      217.632,
+      231.513,
+      232.562,
+      215.144,
+      257.096,
+      204.169,
+      202.572,
+      229.674,
+      207.459
+    ]
+  },
+  "callbackfehler": []
+}

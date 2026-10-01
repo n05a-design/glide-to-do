@@ -1,0 +1,26 @@
+         5079180 function calls (4869064 primitive calls) in 2.943 seconds
+
+   Ordered by: cumulative time
+   List reduced from 508 to 18 due to restriction <'save_items|write_json_atomic|update_history|history_snapshot|history_events|record_recent_list_edits|list_edit_signatures|update_sidebar_list|refresh_reminder_status|refresh_tree|snapshot_undo|write_backup_copy|fsync'>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        3    0.001    0.000    2.542    0.847 01_Repository/Glide/src/glide/app.pyw:37456(save_items)
+        3    0.000    0.000    1.350    0.450 01_Repository/Glide/src/glide/app.pyw:38011(update_history)
+        3    0.001    0.000    0.904    0.301 01_Repository/Glide/src/glide/app.pyw:37753(history_snapshot)
+        3    0.065    0.022    0.646    0.215 01_Repository/Glide/src/glide/app.pyw:16977(record_recent_list_edits)
+        3    0.230    0.077    0.386    0.129 01_Repository/Glide/src/glide/app.pyw:37820(history_events)
+        3    0.000    0.000    0.251    0.084 01_Repository/Glide/src/glide/app.pyw:44280(snapshot_undo)
+       17    0.001    0.000    0.224    0.013 01_Repository/Glide/src/glide/app.pyw:37432(write_json_atomic)
+        3    0.000    0.000    0.201    0.067 01_Repository/Glide/src/glide/app.pyw:29312(update_sidebar_list)
+        3    0.001    0.000    0.201    0.067 01_Repository/Glide/src/glide/app.pyw:29316(_update_sidebar_list)
+        3    0.001    0.000    0.150    0.050 01_Repository/Glide/src/glide/app.pyw:16968(list_edit_signatures)
+        3    0.000    0.000    0.142    0.047 01_Repository/Glide/src/glide/app.pyw:39517(refresh_tree)
+        3    0.000    0.000    0.142    0.047 01_Repository/Glide/src/glide/app.pyw:41716(_refresh_tree)
+        3    0.000    0.000    0.131    0.044 01_Repository/Glide/src/glide/app.pyw:38675(refresh_reminder_status)
+       17    0.042    0.002    0.042    0.002 {built-in method posix.fsync}
+        3    0.000    0.000    0.013    0.004 01_Repository/Glide/src/glide/app.pyw:42101(_refresh_tree_contents)
+        3    0.000    0.000    0.001    0.000 01_Repository/Glide/src/glide/app.pyw:37968(record_history_events)
+        3    0.000    0.000    0.000    0.000 01_Repository/Glide/src/glide/app.pyw:38131(write_backup_copy)
+        3    0.000    0.000    0.000    0.000 01_Repository/Glide/src/glide/app.pyw:37936(group_history_events)
+
+

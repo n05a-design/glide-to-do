@@ -2,27 +2,6 @@
 
 Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · für den nächsten Chat oder Bearbeiter
 
-**Analyse und Planung 01.10.2026 (App unverändert 3.32.3):**
-- **Neue Einstiege:**
-  - [Entwicklungsplan ab 3.33](Glide_Entwicklungsplan_3.33ff_2026-10-01.md) mit Stufen 0–5 und Abgleich mit dem Auftrag
-  - [Entscheidungsvorlage D09–D17](Glide_Entscheidungsvorlage_2026-10-01.md) (offen)
-  - [Bestandsaufnahme Code/Doku](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md)
-  - [Konkurrenz- und Featurematrix](Glide_Konkurrenz_und_Featurematrix_2026-10-01.md)
-  - [Produktprinzipien und UX-Prüfung](Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01.md)
-  - Nachweise: [analyse_planung_2026-10-01](../01_Repository/Glide/tests/qa-3.32.3/analyse_planung_2026-10-01/README.md)
-- **Neu gemessen** (Linux, künstliche Daten, [`messung_speicherweg.py`](../01_Repository/Glide/scripts/pflege/messung_speicherweg.py)):
-  - Jede Aktion kostet linear mit dem Bestand (Abhaken 56 ms bei 1.000, 446 ms bei 10.000 Punkten).
-  - Das erste Speichern parst die Datei neunmal.
-  - Vorschläge: P08 und T2; T2 ist der kleinste nächste Schnitt.
-- **Repository `n05a-design/glide-to-do`:**
-  - Enthält seit 01.10.2026 die Projektablage. Die Wurzel des Repositorys ist der Projektordner; `01_Repository/Glide` ist der Quellbaum.
-  - Uploads immer in diese Struktur. Ein Upload in einen Unterordner bricht alle Querverweise.
-  - Ob Git die Arbeitsgrundlage wird, entscheidet D09.
-- **Hinweis zur Claude-Übergabe:** Für Claude Code ist das Paket `Glide_3.32.3_Python_Codebasis.zip` vorgesehen (`Archiv/Glide_3.32.3_Claude_Code_2026-10-01`); in der Sitzung vom 01.10. wurde stattdessen `07_Python-Versionen` übergeben (Laufzeit bytegleich).
-- **Weiterhin gültig:** D01–D08 und der beauftragte Performance-Anschluss.
-- **Vorfassung:** [Archiv](Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Analyse_2026-10-01.md).
-
-
 **Aktiver Showcase:** [Vertrag und Prüfgrenzen](../01_Repository/Glide/docs/72_SHOWCASE_3.32.3.md), [Nutzeranleitung](../05_Probelisten_Testdaten/Showcase/README.md). Eigenständiger, dauerhaft bearbeitbarer Arbeitsstand mit allen fünf Dokumentarten und den Bildern aus `20_Grafik_Master/06_Beispielbilder`; normale Glide-Nutzerdaten bleiben getrennt. Die Funktionsvorschau wurde auf den 01.10.2026 aktualisiert. Showcase-Prüfung ist zusätzlich zu 58 Suiten verpflichtend. Bestehende Feature-/Performancefolge und offene Auswahl bleiben gültig.
 
 **Fortlaufende Arbeitsgrundlage:** [Arbeitsrichtung und Abnahme](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) ist in AGENTS.md verankert. Der [Dokumentations-/Prüfwerkzeugnachlauf](../01_Repository/Glide/tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json) aktualisiert lokale Regeln und Einstiege bei unveränderter App 3.32.3.

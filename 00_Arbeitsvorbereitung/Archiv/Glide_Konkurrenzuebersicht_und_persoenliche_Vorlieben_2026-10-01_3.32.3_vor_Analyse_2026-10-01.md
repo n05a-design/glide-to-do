@@ -2,16 +2,6 @@
 
 Stand und Online-Abruf: **01.10.2026** · Bezug: eigene Glide-Desktop-App 3.32.3 · Recherche und Einordnung
 
-**Nachtrag Analyse 01.10.2026:**
-- Die [Konkurrenz- und Featurematrix](Glide_Konkurrenz_und_Featurematrix_2026-10-01.md) ergänzt:
-  - AFFiNE, AppFlowy und Apple Erinnerungen/Notizen (iOS/macOS 27),
-  - den Stand 2026 (u. a. Notion 3.x, Todoist Ramble/MCP, Things 3.23/3.24, TickTick 8, Logseq 2.0, Tk 9.1),
-  - eine Feature-für-Feature-Matrix mit Glides Codestand.
-- Die Positionierung in Abschnitt 8.4 wird dort geschärft: Die Kombination aus Seiten, Aufgaben, Leinwand und lokalen Daten bieten inzwischen auch AFFiNE und AppFlowy; Glides Abgrenzung liegt in der Tagesführung.
-- Die belegten persönlichen Vorlieben in diesem Dokument bleiben maßgeblich.
-- Vorfassung: [Archiv](Archiv/Glide_Konkurrenzuebersicht_und_persoenliche_Vorlieben_2026-10-01_3.32.3_vor_Analyse_2026-10-01.md).
-
-
 ## 1. Ergebnis
 
 **Notion ist dein am deutlichsten belegtes persönliches Vorbild.** Deine Aussage vom 26.09.2026 lautet: „Ich will allgemein mehr werden wie Notion, die App gefällt mir sehr gut.“ Besonders wichtig sind dir ein angenehmer Schreib- und Lesefluss, eine nach unten wachsende Seite, gut erreichbare Formatierung und eine übersichtliche Ablage. Das ist im [Konzept „Seiten wie Notion“](Glide_Konzept_Seiten_wie_Notion_2026-09-26.md) dokumentiert.

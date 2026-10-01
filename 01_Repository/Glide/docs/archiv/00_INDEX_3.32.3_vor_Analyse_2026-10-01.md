@@ -23,8 +23,6 @@ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorl
 
 ## Aktueller Einstieg
 
-- [Entwicklungsplan ab 3.33 (Analyse 01.10.2026): Backlog notwendig/sinnvoll/Zukunft, Stufen 0–5, Abhängigkeiten, Risiken, Zielwerte](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md)
-- [Entscheidungsvorlage D09–D17 vom 01.10.2026: offene Richtungsfragen mit Optionen und Empfehlung](../../../00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md)
 - [Weitere Aufgaben und Richtungsauswahl nach 3.32.2: 24 Aufgaben, acht Richtungen, Codebezüge und offene Priorisierung](../../../00_Arbeitsvorbereitung/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md)
 - [Arbeits- und Featureplanung 30.09.2026: Quellen, Versionen, Codebefunde, Bildschirmfotos, Entscheidungen D01–D07 und Performance-Abschlussaufgabe](../../../00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md)
 
@@ -1461,10 +1459,10 @@ Archivkopien vor Versionswechsel und Entscheidungs-/Klappkontrolle:
 - [README_3.32.0_vor_3.32.1](../archiv/README_3.32.0_vor_3.32.1.md)
 - [README_3.32.0_vor_3.32.1](../tests/archiv/README_3.32.0_vor_3.32.1.md)
 - [qa-verlauf_3.32.0_vor_3.32.1](../tests/archiv/qa-verlauf_3.32.0_vor_3.32.1.md)
-- [Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.0_vor_Entscheidungen_Klappkontrolle_2026-09-30](../../../00_Arbeitsvorbereitung/Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.0_vor_Entscheidungen_Klappkontrolle_2026-09-30.md)
-- [Glide_Funktionsrecherche_Ausbau_2026-09-30_3.32.0_vor_Entscheidungen_Klappkontrolle_2026-09-30](../../../00_Arbeitsvorbereitung/Archiv/Glide_Funktionsrecherche_Ausbau_2026-09-30_3.32.0_vor_Entscheidungen_Klappkontrolle_2026-09-30.md)
-- [Glide_Sitzungsuebergabe_2026-09-30_3.32.0_vor_3.32.1](../../../00_Arbeitsvorbereitung/Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.0_vor_3.32.1.md)
-- [README_3.32.0_vor_3.32.1](../../../00_Arbeitsvorbereitung/Archiv/README_3.32.0_vor_3.32.1.md)
+- [Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.0_vor_Entscheidungen_Klappkontrolle_2026-09-30](../../../00_Arbeitsvorbereitung/archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.0_vor_Entscheidungen_Klappkontrolle_2026-09-30.md)
+- [Glide_Funktionsrecherche_Ausbau_2026-09-30_3.32.0_vor_Entscheidungen_Klappkontrolle_2026-09-30](../../../00_Arbeitsvorbereitung/archiv/Glide_Funktionsrecherche_Ausbau_2026-09-30_3.32.0_vor_Entscheidungen_Klappkontrolle_2026-09-30.md)
+- [Glide_Sitzungsuebergabe_2026-09-30_3.32.0_vor_3.32.1](../../../00_Arbeitsvorbereitung/archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.0_vor_3.32.1.md)
+- [README_3.32.0_vor_3.32.1](../../../00_Arbeitsvorbereitung/archiv/README_3.32.0_vor_3.32.1.md)
 - [Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.0_vor_Entscheidungen_Klappkontrolle_2026-09-30](../../../00_Arbeitsvorbereitung/Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.0_vor_Entscheidungen_Klappkontrolle_2026-09-30.md)
 - [Glide_Funktionsrecherche_Ausbau_2026-09-30_3.32.0_vor_Entscheidungen_Klappkontrolle_2026-09-30](../../../00_Arbeitsvorbereitung/Archiv/Glide_Funktionsrecherche_Ausbau_2026-09-30_3.32.0_vor_Entscheidungen_Klappkontrolle_2026-09-30.md)
 - [Glide_Sitzungsuebergabe_2026-09-30_3.32.0_vor_3.32.1](../../../00_Arbeitsvorbereitung/Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.0_vor_3.32.1.md)
@@ -1474,7 +1472,7 @@ Archivkopien vor Versionswechsel und Entscheidungs-/Klappkontrolle:
 - [GRUPPE_ORDNER_UEBERSCHRIFT_3.32.0_vor_3.32.1](decisions/archiv/GRUPPE_ORDNER_UEBERSCHRIFT_3.32.0_vor_3.32.1.md)
 - [PRODUCT_IDENTITY_3.32.0_vor_3.32.1](decisions/archiv/PRODUCT_IDENTITY_3.32.0_vor_3.32.1.md)
 - [SYSTEMBENACHRICHTIGUNGEN_3.32.0_vor_3.32.1](decisions/archiv/SYSTEMBENACHRICHTIGUNGEN_3.32.0_vor_3.32.1.md)
-- [Startanleitung vor Versions-/Linkkorrektur](../../../07_Python-Versionen/Archiv/README_3.32.0_vor_3.32.1.md)
+- [Startanleitung vor Versions-/Linkkorrektur](../../../07_Python-Versionen/archiv/README_3.32.0_vor_3.32.1.md)
 
 ## Drag und Performance 3.32.2
 
@@ -1503,25 +1501,25 @@ Archivkopien vor Versionswechsel und Entscheidungs-/Klappkontrolle:
 - [GRUPPE_ORDNER_UEBERSCHRIFT_3.32.1_vor_3.32.2.md](decisions/archiv/GRUPPE_ORDNER_UEBERSCHRIFT_3.32.1_vor_3.32.2.md)
 - [PRODUCT_IDENTITY_3.32.1_vor_3.32.2.md](decisions/archiv/PRODUCT_IDENTITY_3.32.1_vor_3.32.2.md)
 - [SYSTEMBENACHRICHTIGUNGEN_3.32.1_vor_3.32.2.md](decisions/archiv/SYSTEMBENACHRICHTIGUNGEN_3.32.1_vor_3.32.2.md)
-- [Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.1_vor_3.32.2.md](../../../00_Arbeitsvorbereitung/Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.1_vor_3.32.2.md)
-- [Glide_Funktionsrecherche_Ausbau_2026-09-30_3.32.1_vor_3.32.2.md](../../../00_Arbeitsvorbereitung/Archiv/Glide_Funktionsrecherche_Ausbau_2026-09-30_3.32.1_vor_3.32.2.md)
-- [Glide_Sitzungsuebergabe_2026-09-30_3.32.1_vor_3.32.2.md](../../../00_Arbeitsvorbereitung/Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.1_vor_3.32.2.md)
-- [README_3.32.1_vor_3.32.2.md](../../../00_Arbeitsvorbereitung/Archiv/README_3.32.1_vor_3.32.2.md)
+- [Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.1_vor_3.32.2.md](../../../00_Arbeitsvorbereitung/archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.1_vor_3.32.2.md)
+- [Glide_Funktionsrecherche_Ausbau_2026-09-30_3.32.1_vor_3.32.2.md](../../../00_Arbeitsvorbereitung/archiv/Glide_Funktionsrecherche_Ausbau_2026-09-30_3.32.1_vor_3.32.2.md)
+- [Glide_Sitzungsuebergabe_2026-09-30_3.32.1_vor_3.32.2.md](../../../00_Arbeitsvorbereitung/archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.1_vor_3.32.2.md)
+- [README_3.32.1_vor_3.32.2.md](../../../00_Arbeitsvorbereitung/archiv/README_3.32.1_vor_3.32.2.md)
 - [Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.1_vor_3.32.2.md](../../../00_Arbeitsvorbereitung/Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.1_vor_3.32.2.md)
 - [Glide_Funktionsrecherche_Ausbau_2026-09-30_3.32.1_vor_3.32.2.md](../../../00_Arbeitsvorbereitung/Archiv/Glide_Funktionsrecherche_Ausbau_2026-09-30_3.32.1_vor_3.32.2.md)
 - [Glide_Sitzungsuebergabe_2026-09-30_3.32.1_vor_3.32.2.md](../../../00_Arbeitsvorbereitung/Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.1_vor_3.32.2.md)
 - [README_3.32.1_vor_3.32.2.md](../../../00_Arbeitsvorbereitung/Archiv/README_3.32.1_vor_3.32.2.md)
 - [README_3.32.1_vor_3.32.2.md](../scripts/pflege/archiv/README_3.32.1_vor_3.32.2.md)
-- [README_3.32.1_vor_3.32.2.md](../scripts/pflege/archiv/README_3.32.1_vor_3.32.2.md)
+- [README_3.32.1_vor_3.32.2.md](../scripts/pflege/Archiv/README_3.32.1_vor_3.32.2.md)
 - [README_3.32.1_vor_3.32.2.md](../tests/archiv/README_3.32.1_vor_3.32.2.md)
 - [qa-verlauf_3.32.1_vor_3.32.2.md](../tests/archiv/qa-verlauf_3.32.1_vor_3.32.2.md)
-- [README_3.32.1_vor_3.32.2.md](../tests/archiv/README_3.32.1_vor_3.32.2.md)
-- [qa-verlauf_3.32.1_vor_3.32.2.md](../tests/archiv/qa-verlauf_3.32.1_vor_3.32.2.md)
+- [README_3.32.1_vor_3.32.2.md](../tests/Archiv/README_3.32.1_vor_3.32.2.md)
+- [qa-verlauf_3.32.1_vor_3.32.2.md](../tests/Archiv/qa-verlauf_3.32.1_vor_3.32.2.md)
 - [CHANGELOG_3.32.1_vor_3.32.2.md](../archiv/CHANGELOG_3.32.1_vor_3.32.2.md)
 - [README_3.32.1_vor_3.32.2.md](../archiv/README_3.32.1_vor_3.32.2.md)
-- [CHANGELOG_3.32.1_vor_3.32.2.md](../archiv/CHANGELOG_3.32.1_vor_3.32.2.md)
-- [README_3.32.1_vor_3.32.2.md](../archiv/README_3.32.1_vor_3.32.2.md)
-- [README_3.32.1_vor_3.32.2.md](../../../07_Python-Versionen/Archiv/README_3.32.1_vor_3.32.2.md)
+- [CHANGELOG_3.32.1_vor_3.32.2.md](../Archiv/CHANGELOG_3.32.1_vor_3.32.2.md)
+- [README_3.32.1_vor_3.32.2.md](../Archiv/README_3.32.1_vor_3.32.2.md)
+- [README_3.32.1_vor_3.32.2.md](../../../07_Python-Versionen/archiv/README_3.32.1_vor_3.32.2.md)
 - [README_3.32.1_vor_3.32.2.md](../../../07_Python-Versionen/Archiv/README_3.32.1_vor_3.32.2.md)
 
 - [70_DRAG_UND_PERFORMANCE_3.32.2_3.32.2_vor_Kontextleistenkorrektur_2026-09-30.md](archiv/70_DRAG_UND_PERFORMANCE_3.32.2_3.32.2_vor_Kontextleistenkorrektur_2026-09-30.md)
@@ -1534,16 +1532,16 @@ Archivkopien vor Versionswechsel und Entscheidungs-/Klappkontrolle:
 - [10_RELEASE_CHECKLIST_3.32.2_vor_Abschluss_2026-09-30.md](archiv/10_RELEASE_CHECKLIST_3.32.2_vor_Abschluss_2026-09-30.md)
 - [70_DRAG_UND_PERFORMANCE_3.32.2_3.32.2_vor_Abschluss_2026-09-30.md](archiv/70_DRAG_UND_PERFORMANCE_3.32.2_3.32.2_vor_Abschluss_2026-09-30.md)
 - [qa-verlauf_3.32.2_vor_Abschluss_2026-09-30.md](../tests/archiv/qa-verlauf_3.32.2_vor_Abschluss_2026-09-30.md)
-- [README_3.32.2_vor_Abschluss_2026-09-30.md](../../../07_Python-Versionen/Archiv/README_3.32.2_vor_Abschluss_2026-09-30.md)
-- [Glide_Sitzungsuebergabe_2026-09-30_3.32.2_vor_Abschluss_2026-09-30.md](../../../00_Arbeitsvorbereitung/Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.2_vor_Abschluss_2026-09-30.md)
-- [Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.2_vor_Abschluss_2026-09-30.md](../../../00_Arbeitsvorbereitung/Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.2_vor_Abschluss_2026-09-30.md)
+- [README_3.32.2_vor_Abschluss_2026-09-30.md](../../../07_Python-Versionen/archiv/README_3.32.2_vor_Abschluss_2026-09-30.md)
+- [Glide_Sitzungsuebergabe_2026-09-30_3.32.2_vor_Abschluss_2026-09-30.md](../../../00_Arbeitsvorbereitung/archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.2_vor_Abschluss_2026-09-30.md)
+- [Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.2_vor_Abschluss_2026-09-30.md](../../../00_Arbeitsvorbereitung/archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.2_vor_Abschluss_2026-09-30.md)
 
 ### Archive vor Richtungsauswahl 30.09.2026
 
 - [00_INDEX_3.32.2_vor_Aufgabenauswahl_2026-09-30.md](archiv/00_INDEX_3.32.2_vor_Aufgabenauswahl_2026-09-30.md)
-- [README_3.32.2_vor_Aufgabenauswahl_2026-09-30.md](../../../00_Arbeitsvorbereitung/Archiv/README_3.32.2_vor_Aufgabenauswahl_2026-09-30.md)
-- [Glide_Sitzungsuebergabe_2026-09-30_3.32.2_vor_Aufgabenauswahl_2026-09-30.md](../../../00_Arbeitsvorbereitung/Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.2_vor_Aufgabenauswahl_2026-09-30.md)
-- [Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.2_vor_Aufgabenauswahl_2026-09-30.md](../../../00_Arbeitsvorbereitung/Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.2_vor_Aufgabenauswahl_2026-09-30.md)
+- [README_3.32.2_vor_Aufgabenauswahl_2026-09-30.md](../../../00_Arbeitsvorbereitung/archiv/README_3.32.2_vor_Aufgabenauswahl_2026-09-30.md)
+- [Glide_Sitzungsuebergabe_2026-09-30_3.32.2_vor_Aufgabenauswahl_2026-09-30.md](../../../00_Arbeitsvorbereitung/archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.2_vor_Aufgabenauswahl_2026-09-30.md)
+- [Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.2_vor_Aufgabenauswahl_2026-09-30.md](../../../00_Arbeitsvorbereitung/archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.2_vor_Aufgabenauswahl_2026-09-30.md)
 
 ## Bibliothekskarten 3.32.3
 
@@ -1612,11 +1610,11 @@ Archivkopien vor Versionswechsel und Entscheidungs-/Klappkontrolle:
 - [10_RELEASE_CHECKLIST_3.32.3_vor_Abschluss_2026-10-01.md](archiv/10_RELEASE_CHECKLIST_3.32.3_vor_Abschluss_2026-10-01.md)
 - [71_KARTEN_PERFORMANCE_3.32.3_3.32.3_vor_Abschluss_2026-10-01.md](archiv/71_KARTEN_PERFORMANCE_3.32.3_3.32.3_vor_Abschluss_2026-10-01.md)
 - [qa-verlauf_3.32.3_vor_Abschluss_2026-10-01.md](../tests/archiv/qa-verlauf_3.32.3_vor_Abschluss_2026-10-01.md)
-- [Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Abschluss_2026-10-01.md](../../../00_Arbeitsvorbereitung/Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Abschluss_2026-10-01.md)
-- [Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Abschluss_2026-10-01.md](../../../00_Arbeitsvorbereitung/Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Abschluss_2026-10-01.md)
-- [Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30_3.32.3_vor_Abschluss_2026-10-01.md](../../../00_Arbeitsvorbereitung/Archiv/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30_3.32.3_vor_Abschluss_2026-10-01.md)
-- [README_3.32.3_vor_Abschluss_2026-10-01.md](../../../00_Arbeitsvorbereitung/Archiv/README_3.32.3_vor_Abschluss_2026-10-01.md)
-- [README_3.32.3_vor_Abschluss_2026-10-01.md](../../../07_Python-Versionen/Archiv/README_3.32.3_vor_Abschluss_2026-10-01.md)
+- [Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Abschluss_2026-10-01.md](../../../00_Arbeitsvorbereitung/archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Abschluss_2026-10-01.md)
+- [Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Abschluss_2026-10-01.md](../../../00_Arbeitsvorbereitung/archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Abschluss_2026-10-01.md)
+- [Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30_3.32.3_vor_Abschluss_2026-10-01.md](../../../00_Arbeitsvorbereitung/archiv/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30_3.32.3_vor_Abschluss_2026-10-01.md)
+- [README_3.32.3_vor_Abschluss_2026-10-01.md](../../../00_Arbeitsvorbereitung/archiv/README_3.32.3_vor_Abschluss_2026-10-01.md)
+- [README_3.32.3_vor_Abschluss_2026-10-01.md](../../../07_Python-Versionen/archiv/README_3.32.3_vor_Abschluss_2026-10-01.md)
 
 ## Fortlaufende Arbeitsrichtung und Richtungsabgleich 01.10.2026
 
@@ -1642,12 +1640,12 @@ Vorsicherungen vor dieser Fortschreibung (alte Inhalte bleiben als Belege erhalt
 - [01_Repository/Glide/tests/tools/README.md](<../tests/tools/archiv/README_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
 - [01_Repository/Glide/tests/tools/standpruefung.py](<../tests/tools/archiv/standpruefung_3.32.3_vor_Richtungsabgleich_2026-10-01.py>)
 - [01_Repository/Glide/tests/qa-verlauf.md](<../tests/archiv/qa-verlauf_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/README.md](<../../../00_Arbeitsvorbereitung/Archiv/README_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md](<../../../00_Arbeitsvorbereitung/Checklisten/Archiv/Manuelle_Pruefung_3.30.0_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Checklisten/Windows_Pruefung_3.30.0.md](<../../../00_Arbeitsvorbereitung/Checklisten/Archiv/Windows_Pruefung_3.30.0_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
+- [00_Arbeitsvorbereitung/README.md](<../../../00_Arbeitsvorbereitung/archiv/README_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
+- [00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md](<../../../00_Arbeitsvorbereitung/archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
+- [00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md](<../../../00_Arbeitsvorbereitung/archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
+- [00_Arbeitsvorbereitung/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md](<../../../00_Arbeitsvorbereitung/archiv/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
+- [00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md](<../../../00_Arbeitsvorbereitung/Checklisten/archiv/Manuelle_Pruefung_3.30.0_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
+- [00_Arbeitsvorbereitung/Checklisten/Windows_Pruefung_3.30.0.md](<../../../00_Arbeitsvorbereitung/Checklisten/archiv/Windows_Pruefung_3.30.0_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
 - [tests/README.md](<../tests/archiv/README_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
 
 ## Showcase-Nachlauf 01.10.2026
@@ -1659,7 +1657,7 @@ Vorsicherungen vor dieser Fortschreibung (alte Inhalte bleiben als Belege erhalt
 Vorsicherungen vor diesem Daten-/Werkzeugnachlauf:
 
 - [01_Repository/Glide/tests/fixtures/beispiele/glide_beispieldaten.glidebackup](<../tests/fixtures/beispiele/archiv/glide_beispieldaten_3.32.3_vor_Showcase_2026-10-01.glidebackup>)
-- [05_Probelisten_Testdaten/Glide-Funktionsvorschau_3.30.0.glidebackup](<../../../05_Probelisten_Testdaten/Archiv/Glide-Funktionsvorschau_3.30.0_3.32.3_vor_Showcase_2026-10-01.glidebackup>)
+- [05_Probelisten_Testdaten/Glide-Funktionsvorschau_3.30.0.glidebackup](<../../../05_Probelisten_Testdaten/archiv/Glide-Funktionsvorschau_3.30.0_3.32.3_vor_Showcase_2026-10-01.glidebackup>)
 - [01_Repository/Glide/docs/00_INDEX.md](<archiv/00_INDEX_3.32.3_vor_Showcase_2026-10-01.md>)
 - [01_Repository/Glide/docs/07_QA_BERICHT.md](<archiv/07_QA_BERICHT_3.32.3_vor_Showcase_2026-10-01.md>)
 - [01_Repository/Glide/docs/09_PROJECT_HANDOFF.md](<archiv/09_PROJECT_HANDOFF_3.32.3_vor_Showcase_2026-10-01.md>)
@@ -1670,35 +1668,7 @@ Vorsicherungen vor diesem Daten-/Werkzeugnachlauf:
 - [01_Repository/Glide/scripts/pflege/versionswechsel.py](<../scripts/pflege/archiv/versionswechsel_3.32.3_vor_Showcase_2026-10-01.py>)
 - [01_Repository/Glide/scripts/pflege/README.md](<../scripts/pflege/archiv/README_3.32.3_vor_Showcase_2026-10-01.md>)
 - [01_Repository/Glide/tests/tools/pruefen.py](<../tests/tools/archiv/pruefen_3.32.3_vor_Showcase_2026-10-01.py>)
-- [00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Showcase_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Showcase_2026-10-01.md>)
-- [05_Probelisten_Testdaten/README.md](<../../../05_Probelisten_Testdaten/Archiv/README_3.32.3_vor_Showcase_2026-10-01.md>)
-- [20_Grafik_Master/README.md](<../../../20_Grafik_Master/Archiv/README_3.32.3_vor_Showcase_2026-10-01.md>)
-
-## Analyse und Planung 01.10.2026
-
-Dokumentations-, Analyse- und Werkzeugnachlauf zu 3.32.3; keine Produktionsversion, Anwendung unverändert.
-
-- [Bestandsaufnahme Code und Dokumentation: Inventar, Ablage, Abweichungen AB01–AB17, Befunde T1–T7](../../../00_Arbeitsvorbereitung/Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md)
-- [Konkurrenz- und Featurematrix: Stand 2026, zehn Produkte, Lücken N01–N20](../../../00_Arbeitsvorbereitung/Glide_Konkurrenz_und_Featurematrix_2026-10-01.md)
-- [Produktprinzipien und UX-Prüfung: sechs Prinzipien, Befunde U01–U24, Prinzipien-Check](../../../00_Arbeitsvorbereitung/Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01.md)
-- [Entwicklungsplan ab 3.33](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md)
-- [Entscheidungsvorlage D09–D17](../../../00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md)
-- [Nachweise: Linux-Proben, Speicherweg-Messung, Bilder, Ablageabgleich](../tests/qa-3.32.3/analyse_planung_2026-10-01/README.md)
-- [Messwerkzeug Speicherweg](../scripts/pflege/messung_speicherweg.py)
-
-Vorsicherungen vor diesem Nachlauf:
-
-- [01_Repository/Glide/docs/00_INDEX.md](<archiv/00_INDEX_3.32.3_vor_Analyse_2026-10-01.md>)
-- [01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md](<archiv/01_PRODUCT_CONSTRAINTS_3.32.3_vor_Analyse_2026-10-01.md>)
-- [01_Repository/Glide/docs/07_QA_BERICHT.md](<archiv/07_QA_BERICHT_3.32.3_vor_Analyse_2026-10-01.md>)
-- [01_Repository/Glide/docs/09_PROJECT_HANDOFF.md](<archiv/09_PROJECT_HANDOFF_3.32.3_vor_Analyse_2026-10-01.md>)
-- [01_Repository/Glide/docs/ARBEITSRICHTUNG.md](<archiv/ARBEITSRICHTUNG_3.32.3_vor_Analyse_2026-10-01.md>)
-- [01_Repository/Glide/CHANGELOG.md](<../archiv/CHANGELOG_3.32.3_vor_Analyse_2026-10-01.md>)
-- [01_Repository/Glide/tests/qa-verlauf.md](<../tests/archiv/qa-verlauf_3.32.3_vor_Analyse_2026-10-01.md>)
-- [01_Repository/Glide/scripts/pflege/README.md](<../scripts/pflege/archiv/README_3.32.3_vor_Analyse_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/README.md](<../../../00_Arbeitsvorbereitung/Archiv/README_3.32.3_vor_Analyse_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Analyse_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Analyse_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Glide_Konkurrenzuebersicht_und_persoenliche_Vorlieben_2026-10-01.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Konkurrenzuebersicht_und_persoenliche_Vorlieben_2026-10-01_3.32.3_vor_Analyse_2026-10-01.md>)
-- [README.md der Ablage](<../../../Archiv/README_3.32.3_vor_Analyse_2026-10-01.md>)
+- [00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md](<../../../00_Arbeitsvorbereitung/archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Showcase_2026-10-01.md>)
+- [00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md](<../../../00_Arbeitsvorbereitung/archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Showcase_2026-10-01.md>)
+- [05_Probelisten_Testdaten/README.md](<../../../05_Probelisten_Testdaten/archiv/README_3.32.3_vor_Showcase_2026-10-01.md>)
+- [20_Grafik_Master/README.md](<../../../20_Grafik_Master/archiv/README_3.32.3_vor_Showcase_2026-10-01.md>)

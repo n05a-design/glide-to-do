@@ -6,11 +6,6 @@ Stand 01.10.2026 · App 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorlag
 
 **Dokumentations-/Prüfwerkzeugnachlauf 01.10.2026:** [Arbeitsrichtung](ARBEITSRICHTUNG.md) verbindet die bestätigten Entscheidungen und die verbleibende Performance-Arbeit. Aktive Einstiege/Checklisten und Kontrollregeln nachgeführt; [separater Nachweis](../tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json). App, Integrationssuiten und beide Startfassungen bleiben beim geprüften 3.32.3-Stand. Der frühere Volllauf wurde mit den damaligen Prüfwerkzeugen ausgeführt.
 
-**Analyse und Planung 01.10.2026:**
-- **Entwicklungsplan:** [ab 3.33](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md) mit Stufen 0–5; offene Richtungsfragen D09–D17 in der [Entscheidungsvorlage](../../../00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md).
-- **Repository:** Wurzel = Projektordner, Quellbaum `01_Repository/Glide`; keine Uploads in Unterordner.
-- **Kleinster nächster Schnitt:** T2 (eine Schema-Sicherungsprüfung statt neun) mit `scripts/pflege/messung_speicherweg.py` als Baseline.
-
 
 **Aktuelle Planung und Entscheidungen:**
 [Arbeitsplanung vom 30.09.2026](../../../00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md)

@@ -1,7 +1,5 @@
 # Glide – Einstieg in die Arbeitsablage
 
-**Repository und Planung (01.10.2026):** Diese Ablage liegt im GitHub-Repository `n05a-design/glide-to-do`. Die Wurzel ist der Projektordner, der Quellbaum liegt in `01_Repository/Glide`. Uploads immer in diese Struktur, nie in einen Unterordner; sonst brechen die Querverweise. Arbeitsregeln für Claude Code: [CLAUDE.md](CLAUDE.md). Analyse und nächste Schritte: [Entwicklungsplan ab 3.33](00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md) und [offene Entscheidungen D09–D17](00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md).
-
 **Neu am 29.09.2026:**
 
 - das **Logo** aus den neuen Mastern in `20_Grafik_Master`: links neben dem

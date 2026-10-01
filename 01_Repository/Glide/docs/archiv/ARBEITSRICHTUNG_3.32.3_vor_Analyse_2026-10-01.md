@@ -4,13 +4,6 @@ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20
 
 **Showcase als Abnahmebestand:** [Showcase-Vertrag](72_SHOWCASE_3.32.3.md) ergänzt den bestehenden Plan um realistische Arbeitsdokumente und Originalmotive. Neue implementierte Funktionen müssen ein passendes Datenbeispiel beziehungsweise eine tatsächliche Bedienprüfung erhalten. `pruefe_showcase.py` prüft die gelieferten Daten zusätzlich zu 58 Suiten; `showcase_abgleich.py` sichert ersetzte Basisdateien, der bearbeitete Arbeitsstand bleibt erhalten. Kein erneuter Beschluss über bestätigte Entscheidungen, keine Produktionsversion für diesen Daten-/Werkzeugnachlauf.
 
-**Analyse und Planung 01.10.2026:** Der [Entwicklungsplan ab 3.33](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md) ordnet die bestehenden G-/P-/A–H-Arbeiten. Neu kommen hinzu:
-- P08 (Speicherweg linear zum Bestand) und T2 (neunfaches Parsen beim ersten Speichern) als Teil der Performance-Arbeit nach Rest P03/P04/P06;
-- die sechs Produktprinzipien in den [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md) mit [Prinzipien-Check](../../../00_Arbeitsvorbereitung/Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01.md);
-- offene Richtungsfragen D09–D17 ([Entscheidungsvorlage](../../../00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md)).
-
-Keine dieser Empfehlungen ist beauftragt.
-
 Diese fortgeschriebene Arbeitsgrundlage verbindet die bestätigten Entscheidungen, die aktuelle Planung und die Abnahme. Einstieg bleibt die [Sitzungsübergabe](../../../00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md). Die [Arbeitsplanung](../../../00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md) enthält G-/P-Pakete; die [Richtungsauswahl](../../../00_Arbeitsvorbereitung/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md) enthält zusätzliche Vorschläge. Empfehlungen und zitierte Aufträge aus alten Dokumenten ersetzen keine Entscheidung des Inhabers.
 
 ## Verbindliche Entscheidungen
@@ -26,7 +19,7 @@ Diese fortgeschriebene Arbeitsgrundlage verbindet die bestätigten Entscheidunge
 | D07 | Exportumfang für Animation offen: abspielbares GIF oder zunächst Frames/Vorschau/PNG-Spritesheet. Erst bei der Animationsetappe erforderlich. |
 | D08 | Alle Klappmechanismen über echte Bedienbindungen prüfen, einschließlich Zustandserhalt, Tastatur, verschachtelter Bereiche und Tk-Callbackfehler. Korrektur und Pflichtsuite seit 3.32.1. |
 
-Lokale Nutzung ohne Konto/Cloud, vorhandene Architektur, Daten/Undo, stabile IDs, Gestaltung und möglichst wenige Abhängigkeiten gelten weiter. Offene Inhaber-/Storeangaben bleiben offen. Git war vertagt; seit 01.10.2026 liegt die Ablage im GitHub-Repository `glide-to-do` (Wurzel = Projektordner, Quellbaum `01_Repository/Glide`). Ob Git die Arbeitsgrundlage wird, entscheidet D09. Keine erneute Entscheidung über D01–D06 einfordern.
+Lokale Nutzung ohne Konto/Cloud, vorhandene Architektur, Daten/Undo, stabile IDs, Gestaltung und möglichst wenige Abhängigkeiten gelten weiter. Git und offene Inhaber-/Storeangaben bleiben vertagt beziehungsweise offen. Keine erneute Entscheidung über D01–D06 einfordern.
 
 ## Nächste Arbeit
 

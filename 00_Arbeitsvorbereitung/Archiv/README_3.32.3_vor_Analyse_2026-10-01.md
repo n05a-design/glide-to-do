@@ -7,10 +7,6 @@ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorl
 
 ## Für neue Arbeiten zuerst lesen
 
-- **Analyse und Planung 01.10.2026:**
-  - [Entwicklungsplan ab 3.33](Glide_Entwicklungsplan_3.33ff_2026-10-01.md) – Strategie, Backlog notwendig/sinnvoll/Zukunft/bewusst nicht, Stufen 0–5, Abhängigkeiten, Risiken, Abgleich mit dem Auftrag
-  - [Entscheidungsvorlage D09–D17](Glide_Entscheidungsvorlage_2026-10-01.md) – offene Richtungsfragen mit Optionen und Empfehlung
-  - Grundlagen: [Bestandsaufnahme Code und Dokumentation](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md) und [Produktprinzipien und UX-Prüfung](Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01.md)
 - **Neue Richtung auswählen:** [Weitere Aufgaben und Richtungsauswahl nach 3.32.2](Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md) – 24 Aufgaben in acht Richtungen, Codebasis und Quellen geprüft; Priorität und Bearbeitungstiefe noch offen
 - **Einstieg für jede neue Sitzung:** [Übergabe vom 30.09.2026](Glide_Sitzungsuebergabe_2026-09-30.md) – Stand 3.32.3, Regeln, Orte, Werkzeuge, nächste Schritte, offene Entscheidungen
 - **Aktuelle Arbeits- und Featureplanung:** [Recherche und Codeabgleich 30.09.2026](Glide_Arbeits_und_Featureplanung_2026-09-30.md) – Versionsvergleich, Bildschirmfotos, gemessene Kostenstellen, bereinigtes Backlog, Antworten D01–D06, Exportfrage D07, Klappkorrektur D08 und die ausdrückliche Performance-Abschlussaufgabe
@@ -29,7 +25,6 @@ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorl
 
 Recherchen (Befunde gültig, Ist-Angaben zu Glide beschreiben ihren Datumsstand):
 
-- [Konkurrenz- und Featurematrix 01.10.2026](Glide_Konkurrenz_und_Featurematrix_2026-10-01.md) – Stand 2026, Matrix über zehn Produkte mit Glides Codestand, Vergleich in acht Dimensionen, Lücken N01–N20
 - [Konkurrenzübersicht und persönliche Vorlieben 01.10.2026](Glide_Konkurrenzuebersicht_und_persoenliche_Vorlieben_2026-10-01.md) – zusammengeführte historische Fundstellen, belegte persönliche Vorlieben und aktuelle Herstellerrecherche zu 25 Produkten; ältere Wettbewerbsbehauptungen eingeordnet
 - [Wettbewerbsrecherche 25.09.2026](Glide_Wettbewerbsrecherche_Modernisierung_2026-09-25.md)
 - [Konzept „Seiten wie Notion“ 26.09.2026](Glide_Konzept_Seiten_wie_Notion_2026-09-26.md) – entschieden; umgesetzt sind Stufe 1, Seitenbereich und Galerie. Seit dem 29.09.2026 gibt es keine Unterseiten: Eine Seite ist ein einziges Blatt.

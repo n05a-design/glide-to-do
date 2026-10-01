@@ -2,8 +2,6 @@
 
 ## 3.32.3 – 01.10.2026
 
-- **Analyse-/Planungsnachlauf (App unverändert):** Bestandsaufnahme Code/Doku, Konkurrenz- und Featurematrix, Produktprinzipien mit UX-Prüfung, Entwicklungsplan ab 3.33 und Entscheidungsvorlage D09–D17 in `00_Arbeitsvorbereitung`. Produktgrenzen korrigiert (Verlaufsgrenze 15/15, Bildvorschau Windows, Lila = Hinzufügen) und um die sechs Produktprinzipien ergänzt. Neues Pflegewerkzeug `scripts/pflege/messung_speicherweg.py`. Repository-Ablage auf die Projektstruktur ausgerichtet; tkdnd-Linux-Bibliotheken, CRLF-Drittdateien und Showcase-Sicherung wiederhergestellt. [Nachweis](tests/qa-3.32.3/analyse_planung_2026-10-01/README.md).
-
 - **Aktiver Showcase:** Zehn zusammenhängende Projektdokumente, sechs Originalmotive, drei eingebettete Seitenbilder, vollständige Anhänge, Projektpinnwände, Tagesplanung, Tagebuch und zwei Zusatzvorlagen. Separater Starter erhält Demo-Bearbeitungen. Funktionsvorschau mit frischen Terminen; Import-/Neustartprüfung jetzt verpflichtend. Daten-/Werkzeugnachlauf zur unveränderten App. [Umfang und Abnahme](docs/72_SHOWCASE_3.32.3.md).
 
 - **Dokumentations-/Prüfwerkzeugnachlauf:** Fortlaufende Arbeitsrichtung mit D01–D08 und Abnahme verankert; aktive Übergaben, Pläne, Checklisten und technische Regeln inhaltlich abgeglichen. Standprüfung erfasst gepflegte datierte Einstiege, aktuelle Titel und erste Vollprüfungsaufrufe; gezielte Werkzeugregression. Laufzeit und Startfassungen unverändert.

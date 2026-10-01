@@ -6,14 +6,6 @@ Stand 01.10.2026 (Bibliothekskarten, Performance) · App 3.32.3 · Datenformat 2
 
 **Dokumentations-/Prüfwerkzeugnachlauf 01.10.2026:** [Arbeitsrichtung](ARBEITSRICHTUNG.md) verbindet die bestätigten Entscheidungen und die verbleibende Performance-Arbeit. Aktive Einstiege/Checklisten und Kontrollregeln nachgeführt; [separater Nachweis](../tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json). App, Integrationssuiten und beide Startfassungen bleiben beim geprüften 3.32.3-Stand. Der frühere Volllauf wurde mit den damaligen Prüfwerkzeugen ausgeführt.
 
-**Analyse-/Planungsnachlauf 01.10.2026 (App unverändert 3.32.3):** [Nachweis](../tests/qa-3.32.3/analyse_planung_2026-10-01/ergebnis.json).
-- **Linux, Xvfb, künstliche Daten:** Startprobe mit Python 3.12/Tk 8.6 (Ubuntu) ohne Callbackfehler. Pixelify Sans über Fontconfig registriert und in Tk sichtbar.
-- **Speicherweg:** gemessen mit dem neuen Werkzeug `scripts/pflege/messung_speicherweg.py`. Abhaken im Median 56 ms bei 1.000 und 446 ms bei 10.000 Punkten (Python 3.14).
-- **Ablage:** Repository-Struktur und Upload-Verluste korrigiert (tkdnd-`.so`, CRLF-Drittdateien, Showcase-Sicherung). `src/glide` = `07_Python-Versionen` bis auf README.
-- **Standprüfung:** Befunde 290 → 4 (fehlende `.log`-Dateien, eine fehlende Archivsicherung).
-- **Grenzen:** Keine Vollprüfung der 58 Suiten in dieser Umgebung; macOS/Windows, physische Bedienung, DPI und Screenreader bleiben offen.
-- **Planung:** [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md).
-
 
 ## Version 3.32.3 – geprüfter und ausgelieferter Endstand, 01.10.2026
 
