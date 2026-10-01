@@ -20,6 +20,8 @@ Der Inhaber hat alle neun Fragen beantwortet. Acht folgen der Empfehlung, D12 mi
 
 Weiterhin offen: D07 (Animationsexport) und die Punkte unter [„Weiterhin offen“](#weiterhin-offen-ohne-neue-empfehlung). Die Auswahl A–H bleibt eine eigene Entscheidung; der Entwicklungsplan ordnet sie den Stufen zu.
 
+**Fortschreibung 3.33.0:** Der neue Auftrag beginnt mit T2/P09a. Nummern unter „Wirkt ab“ dokumentieren die ursprünglichen Reservierungen; die aktuelle Schnittfolge steht im Entwicklungsplan. D12 ist durch die zusätzliche Auswahl Zeichnungen/Pinnwand-Vorschau vollständig beantwortet.
+
 ## Ausgangsvorlage
 
 Die folgende Vorlage bleibt als Begründung der Beschlüsse unverändert stehen; je Frage ist der Beschluss ergänzt.
@@ -146,10 +148,10 @@ Kurzantwort genügt, z. B. „D09 B, D10 A, D11 B …“.
   - Woche,
   - Zuletzt bearbeitet,
   - Angeheftet.
-- **Planungsannahme für die zwei weiteren**, vor 3.33.0 vom Inhaber zu bestätigen:
-  - **Uhr, Datum und nächster Termin** als schmale Kopfkachel,
-  - **Pinnwand-Vorschau**.
-  - Begründung: Beide sind schon heute Standard und beantworten eigene Fragen („wann“, „was sehe ich an“). Sie doppeln „Heute“ nicht.
+- **Ergänzungsbeschluss des Inhabers am 01.10.2026 im lokalen Codex-Chat:**
+  - Zeichnungen,
+  - Pinnwand-Vorschau.
+  - Uhr/Datum/nächster Termin bleibt wählbar, gehört nicht zu den sieben Standardkacheln.
 - Alle übrigen Kacheln bleiben wählbar. Der Standard gilt für neue oder zurückgesetzte Startseiten; eine bestehende eigene Auswahl bleibt erhalten.
 - Zielwert in Stufe 1: sieben statt zwölf Kacheln im Standard.
 

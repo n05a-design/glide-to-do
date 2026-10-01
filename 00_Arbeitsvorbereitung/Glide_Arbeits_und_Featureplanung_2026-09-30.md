@@ -1,6 +1,10 @@
 # Glide – Arbeits- und Featureplanung nach Recherche und Codeabgleich
 
-Stand 01.10.2026 · Glide 3.32.3 · Basisanalyse 3.32.0, Klappkorrektur 3.32.1 · Aufgabenformat 20
+
+**Ergänzungsauftrag 01.10.2026, 3.33.1:** Vier Seitenleistenbereiche in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen. Nur Listen bleibt verpflichtend sichtbar. Seiten erlaubt Bücher (bestehende Art `library`), Ordner und Seiten; Notizen Notizbücher, Ordner und Notizen; Zeichnungen Ordner und Zeichnungen; Listen alle Arten. Sichtbarkeit und Root-Zuordnung sind lokale Anzeigeeinstellungen, keine Löschaktion. Gemischte Altordner werden vollständig in Listen angezeigt. Einheitliche Anlege-/Verschieberegeln und Prüfung aller Fenster gehören zur Abnahme. [Vertrag](../01_Repository/Glide/docs/74_BEREICHE_UND_FENSTER_3.33.1.md).
+Stand 01.10.2026 · Glide 3.33.1 · Basisanalyse 3.32.0, Klappkorrektur 3.32.1 · Aufgabenformat 20
+
+**3.33.0 – erster Umsetzungsschnitt:** T2/P09a umgesetzt und ausgeliefert. 76 automatische Schritte, 59 Integrationssuiten, acht Unit-Tests, Showcase und fünf Analysen grün; 140 Python-/54 Bundle-Dateien bytegleich, Signatur gültig, getrennter Showcase-Starter bei Erststart und Neustart geprüft. [Vertrag](../01_Repository/Glide/docs/73_FUNDAMENT_3.33.0.md) mit Ablageabgleich und Anschlussplan. D12 ist vollständig entschieden: zusätzliche Standardkacheln Zeichnungen und Pinnwand-Vorschau. Der Oberflächenumbau folgt nach diesem Fundament.
 
 **Analyse und Planung 01.10.2026:**
 - Der [Entwicklungsplan ab 3.33](Glide_Entwicklungsplan_3.33ff_2026-10-01.md) ordnet alle G-, P- und A–H-Kennungen in Stufen 0–5 ein und ergänzt:
@@ -17,7 +21,7 @@ Stand 01.10.2026 · Glide 3.32.3 · Basisanalyse 3.32.0, Klappkorrektur 3.32.1 �
 - Neuer Messbefund T8/P09: wiederholte Prüfungen je Bedienschritt; die Schriftart wird bereits nur einmal geprüft ([Bestandsaufnahme T8](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md#t8--wiederholte-prüfungen-und-messungen-je-bedienschritt-neu-gemessen)).
 - Die Zeilenangaben in Abschnitt 3 sind Stand 3.32.0 (aktuelle Lage: [Bestandsaufnahme](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md), AB02).
 - Die in Abschnitt 5 verlinkten `.log`-Dateien fehlen im Repository, weil `Glide/.gitignore` sie beim Upload ausschloss. Seit D09 sind Prüfprotokolle freigegeben; beim nächsten Upload mitliefern.
-- Vorfassungen: [vor der Analyse](Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Analyse_2026-10-01.md), [vor den Beschlüssen](Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Entscheidungen_2026-10-01.md).
+- Vorfassungen: [vor der Analyse](Glide_Arbeits_und_Featureplanung_2026-09-30.md), [vor den Beschlüssen](Glide_Arbeits_und_Featureplanung_2026-09-30.md).
 
 
 **Nachlauf Showcase, 01.10.2026:** [Arbeitsbeispiel und Abdeckung](../01_Repository/Glide/docs/72_SHOWCASE_3.32.3.md) ergänzt die Abnahmegrundlage für Planen → Wissen → Pixel → Austausch. Bei jeder neuen Funktion ein realistisches Dokumentbeispiel und eine passende Prüfung ergänzen. `showcase.py` erzeugt Basisdaten; `showcase_abgleich.py` prüft vor dem Ausliefern und erhält den bearbeiteten Arbeitsstand. P03/P04/P06 werden weiter gemessen; neue Richtungen bleiben zur Auswahl offen.
@@ -30,7 +34,7 @@ Ansichtsaufbauten optimieren. Danach die bereits gewählte Reihenfolge
 **Planen → Wissen → Pixel → Austausch** fortsetzen. Vorhandene Funktionen
 werden erweitert; sie stehen nicht erneut als Neuentwicklung im Backlog.
 
-Die ursprüngliche Recherche und die Messungen beziehen sich auf 3.32.0; aktuelle Ergänzungen sind ausdrücklich mit 3.32.1–3.32.3 bezeichnet.
+Die ursprüngliche Recherche und die Messungen beziehen sich auf 3.32.0; aktuelle Ergänzungen sind ausdrücklich mit 3.32.1–3.33.0 bezeichnet.
 Die Antworten des Inhabers D01–D06 sind jetzt verbindlich eingetragen;
 D07 ist nach Begriffserklärung noch offen. D08 beauftragt die Kontrolle
 aller Klappmechanismen und bessere Prüfungen. Die Korrektur wird als 3.32.1
@@ -164,9 +168,9 @@ Echte Nutzdaten und das persönliche Fehlerprotokoll wurden nicht geöffnet.
 
 Nachweise und Prüfschritte:
 [Ergebnis mit SHA-256](../01_Repository/Glide/tests/qa-3.32.0/recherche_planung_2026-09-30/ergebnis.json),
-[Scrolltest](../01_Repository/Glide/tests/qa-3.32.0/recherche_planung_2026-09-30/test_tempo330.log),
-[Ansichtswechsel mit Profil](../01_Repository/Glide/tests/qa-3.32.0/recherche_planung_2026-09-30/messung_ansichtswechsel.log),
-[statische Analyse](../01_Repository/Glide/tests/qa-3.32.0/recherche_planung_2026-09-30/analyse_codebasis.log).
+Scrolltest (`test_tempo330.log` beim GitHub-Upload verloren; Originalnachweis fehlt),
+Ansichtswechsel mit Profil (`messung_ansichtswechsel.log` beim GitHub-Upload verloren; Originalnachweis fehlt),
+statische Analyse (`analyse_codebasis.log` beim GitHub-Upload verloren; Originalnachweis fehlt).
 
 Umgebung: macOS, Python 3.14.5; die letzte Vollprüfung nennt Tk 9.0.3.
 Tests/Messung verwenden temporäre Datenordner und künstliche Beispieldaten.
@@ -223,10 +227,10 @@ keinen dauerhaften Kennzahlen-Cache ohne vollständige Invalidierung ergänzen.
 Neue Parser-/Suchlogik möglichst als Modul ohne Tk-Abhängigkeit hinzufügen.
 
 **Professionelle Langfristlösung:** Daten- und Fachlogik schrittweise von
-der Oberfläche trennen, Versionsverwaltung und Plattformprüfung vorbereiten,
-danach gegebenenfalls Toolkit-Probe G25. Die bestehende Entscheidung
-„Git vorerst nicht“ wird hier nicht aufgehoben. Ohne diesen neuen Beschluss
-bleibt eine große Monolith-Aufteilung zurückgestellt.
+der Oberfläche trennen und Plattformprüfung vorbereiten. Seit D09 ist das
+Repository maßgeblich, seit D17 erfolgt die Auslagerung über Tk-freie Module
+mit Unit-Tests. Ein Großumbau bleibt zurückgestellt; Mobile und Toolkit-Probe
+G25 bleiben nach D03 außerhalb der aktuellen Arbeit.
 
 ### Toolkit-Probe ist eine Entscheidung, keine Sofortmaßnahme
 
@@ -291,7 +295,7 @@ geplant werden.
 Konten, Markenprüfung und Windows-/Linux-Abnahme. Einzelheiten stehen in der
 [Übersicht vom 29.09.](Glide_Uebersicht_und_Entscheidungen_2026-09-29.md)
 und im [Produktregister](../01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md).
-Git bleibt nach bestehendem Beschluss vertagt. F11 ist durch D05 beantwortet,
+Seit Beschluss D09 ist das Repository die maßgebliche Git-Arbeitskopie. F11 ist durch D05 beantwortet,
 Hinweisvarianten durch D06 und die aktuelle Toolkit-Frage durch D03.
 
 ## 7. Umsetzungsplan mit Abhängigkeiten und Abnahme
@@ -386,12 +390,13 @@ Auf neuen Wunsch des Inhabers sammelt [Weitere Aufgaben und Richtungsauswahl nac
 
 ## 9. Abschlussaufgabe – ausdrücklich aufnehmen
 
-> Ich habe Performance Probleme mit Glide, hilf mir die Code-Basis zu optimieren, mit Variabeln für die gleichen Funktionen, Streamlinen und optimieren.
-
-**Status:** 3.32.3 ergänzt erhaltene Bibliothekskarten, gemeinsame Aktionsleisten und einmaliges Archiv-Zurückholen (73 Schritte/58 Suiten bestanden; beide Startfassungen abgeglichen). Erster Schnitt in 3.32.2 umgesetzt und gemessen: Schriftcache, gebündelte Formatleistenlayouts und gemeinsamer Hover. P01/P03/P05 sind teilweise, P02 ist umgesetzt. Offen bleiben Verlauf-/Speichermessung, Startseitenkarten und Aktualisierung einzelner Elemente geänderter Karten, Bildlayout, gemeinsame UI-Texte sowie P06/P07. Die bestehenden Bild-/Formatierungsprüfungen sind erneut grün; die Originalfotos beweisen weiterhin keinen konkreten Fehlerablauf. P02/P05 bündeln gleiche Funktionen und Werte;
+**Status:** 3.33.0 ergänzt T2 (gemeinsame Formatsicherung) und P09a (keine ungenutzte Tabellenmessung); Prüfabschluss wird oben nachgeführt. 3.32.3 ergänzt erhaltene Bibliothekskarten, gemeinsame Aktionsleisten und einmaliges Archiv-Zurückholen (73 Schritte/58 Suiten bestanden; beide Startfassungen abgeglichen). Erster Schnitt in 3.32.2 umgesetzt und gemessen: Schriftcache, gebündelte Formatleistenlayouts und gemeinsamer Hover. P01/P03/P05 sind teilweise, P02 ist umgesetzt. Offen bleiben Verlauf-/Speichermessung, Startseitenkarten und Aktualisierung einzelner Elemente geänderter Karten, Bildlayout, gemeinsame UI-Texte sowie P06/P07. Die bestehenden Bild-/Formatierungsprüfungen sind erneut grün; die Originalfotos beweisen weiterhin keinen konkreten Fehlerablauf. P02/P05 bündeln gleiche Funktionen und Werte;
 P03/P04/P06 reduzieren den tatsächlichen Aufbau-, Layout- und Schreibaufwand.
 Ergebnis: wartbare gemeinsame Helfer, belegte Vorher-/Nachher-Messungen,
 grüne passende Tests, keine verlorenen Daten oder Bedienfunktionen und
 abgeglichene startbare Fassungen. Ein Toolkit-Wechsel ist gemäß D03
 zurückgestellt; die Optimierung betrifft zunächst Tk. Eine spätere
 Neubewertung gehört zu einem gesonderten Auftrag.
+
+
+> Ich habe Performance Probleme mit Glide, hilf mir die Code-Basis zu optimieren, mit Variabeln für die gleichen Funktionen, Streamlinen und optimieren.

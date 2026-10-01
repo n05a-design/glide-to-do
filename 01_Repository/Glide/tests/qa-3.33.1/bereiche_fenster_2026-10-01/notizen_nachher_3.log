@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_notizbereich330.py", line 219, in <module>
+    assert labels == ["Neue Notiz", "Aus Vorlage", "Neues Notizbuch …"], labels
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ['Neue Notiz', 'Aus Vorlage', 'Neuer Ordner …', 'Neues Notizbuch …']

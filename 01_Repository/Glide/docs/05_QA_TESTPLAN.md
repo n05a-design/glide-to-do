@@ -1,6 +1,6 @@
 # Prüfplan – Glide
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
 
 **Showcase-Pflichtprüfung:** `tests/tools/pruefe_showcase.py` gehört zusätzlich zu den 58 Integrationssuiten in beide Prüfmodi. Sie prüft die gelieferten ZIPs und SHA-256, Teil-/App-Import, Anhangdateien, Remapping von Aufgaben/Bildankern/Boardkarten, alle Dokument-/Ordnerarten, echte Bildvorschauen unter macOS, Klappzustand, Aufgaben-Undo, selbstfüllende Vorlagen und Neustart in einem separaten Prozess. Keine echten Nutzerdaten. [Showcase-Vertrag](72_SHOWCASE_3.32.3.md).
 
@@ -15,7 +15,7 @@ Vor dem finalen Volllauf App-/Modul-/Prüfstand einfrieren und danach per SHA-25
 Die folgenden Suitebeschreibungen behalten ihre Einführungsstände; diese Nummern begrenzen nicht die aktuelle Prüfung.
 
 
-Vollständiger Lauf: `python tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.32.3/abschluss`; er umfasst alle Suiten, Syntax-, Versions-, Dokument- und Fixtureprüfung, Zeitzonenmessung, fünf Analysen, reproduzierte Beispiel-/Releasedaten und Screenshots. Die Zahl der Schritte steht im Quelltext. `test_features328.py` ergänzt Tagebuch, Format 18, konturlose Menüs, neutrale Aktionen und die verdichtete Notizwerkzeugleiste. `test_features329.py` prüft die Zeichnungsseite: Format-19-Vorsicherung, Ablehnung unbekannter Listenarten, eingebettete Fläche ohne Extrafenster, Pinselvorschau je Zoom, gebündeltes Autosave und Schreibfehler, Referenz-PNG, Nachzeichnung mit Vorher-Snapshot, Rückgängig-Semantik, Duplizieren, Papierkorb, Voll- und additiver Import, Teilbackup, Austausch, Vorlagen, JSON-/SVG-Datei-Rundlauf und Tagebuchübersicht. Manuell bleiben Maus- und Trackpadbedienung, DPI, Mehrmonitor, Screenreader und der Illustrator-/Affinity-Rundlauf.
+Vollständiger Lauf: `python tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.1/abschluss`; er umfasst alle Suiten, Syntax-, Versions-, Dokument- und Fixtureprüfung, Zeitzonenmessung, fünf Analysen, reproduzierte Beispiel-/Releasedaten und Screenshots. Die Zahl der Schritte steht im Quelltext. `test_features328.py` ergänzt Tagebuch, Format 18, konturlose Menüs, neutrale Aktionen und die verdichtete Notizwerkzeugleiste. `test_features329.py` prüft die Zeichnungsseite: Format-19-Vorsicherung, Ablehnung unbekannter Listenarten, eingebettete Fläche ohne Extrafenster, Pinselvorschau je Zoom, gebündeltes Autosave und Schreibfehler, Referenz-PNG, Nachzeichnung mit Vorher-Snapshot, Rückgängig-Semantik, Duplizieren, Papierkorb, Voll- und additiver Import, Teilbackup, Austausch, Vorlagen, JSON-/SVG-Datei-Rundlauf und Tagebuchübersicht. Manuell bleiben Maus- und Trackpadbedienung, DPI, Mehrmonitor, Screenreader und der Illustrator-/Affinity-Rundlauf.
 
 Seit 3.30.0 kommen zwei Suiten dazu.
 
@@ -279,4 +279,8 @@ Unprofilierte Zeitmessung separat mit `scripts/pflege/messung_performance.py --i
 
 Pflichtsuite `test_library_performance3323.py`: unveränderte Widgets/Öffnen-Buttons, aktuelle Vorschaudaten, Status/Undo/Tageswechsel, Labelnamen, Ordnerpfade, Zeichnung/Symbol, stabile IDs nach neuen Python-Objekten, Reihenfolge/Neu/Entfernt, Archiv-Zurückholen genau einmal, leere Hinweise, Breiten-/Schrift-/Designwechsel und Cachefreigabe beim Ansichtswechsel. Native Knopfereignisse und Tk-Callbackfehler werden geprüft. Gemeinsame Aktionsleiste: gleicher Text mit neuem Befehl, Höhenfilter und konstante Tcl-Rückrufzahl.
 
-Messmodus derselben Suite: `--app <gesicherte app.pyw> --items 1000 --rounds 8 --measure <JSON>`. Ein Aufwärmdurchlauf je Aktion, acht Rohwerte/Median/p95 und Neuerzeugungen. Erneutes Rendern in derselben Bibliotheksansicht; keine Messung atomarer Speichervorgänge oder allgemeiner Ansichtswechsel. [Vertrag 71](71_KARTEN_PERFORMANCE_3.32.3.md) erklärt Umfang und offene manuelle Fokus-/Plattformprobe. Vollmodus enthält jetzt 58 Suiten.
+Messmodus derselben Suite: `--app <gesicherte app.pyw> --items 1000 --rounds 8 --measure <JSON>`. Ein Aufwärmdurchlauf je Aktion, acht Rohwerte/Median/p95 und Neuerzeugungen. Erneutes Rendern in derselben Bibliotheksansicht; keine Messung atomarer Speichervorgänge oder allgemeiner Ansichtswechsel. [Vertrag 71](71_KARTEN_PERFORMANCE_3.32.3.md) erklärt Umfang und offene manuelle Fokus-/Plattformprobe. Der damalige Vollmodus 3.32.3 enthielt 58 Suiten; der aktuelle Pflichtstand steht im folgenden Abschnitt.
+
+## Fachlogik und Formatsicherung seit 3.33.0
+
+Der aktuelle Pflichtstand umfasst 60 Integrationssuiten sowie 24 Tk-freie Unit-Tests. Die Bereichssuite 3.33.1 ergänzt Formular-/Menüregeln, Drag/Undo, Bereichssichtbarkeit, Logo und Reload. `test_fundament333.py` prüft Save-/Reload, Sicherungsfehler/Retry und unveränderte Listenbreiten. `pruefe_tk.py` prüft unter macOS die native Mausisolierung von Hauptfenster, Dialog und Tooltip; synthetische Ereignisse bleiben möglich. Dies ersetzt keine physische OS-Bedienung.

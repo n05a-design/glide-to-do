@@ -1,5 +1,0 @@
-{
-  "status": "abgebrochen",
-  "reason": "Real regression: drawing context reservation measured the deferred toolbar before it was laid out. Synchronous reflow at this measurement site restores fixed canvas height. Full run restarted after focused regression.",
-  "source_changed": true
-}

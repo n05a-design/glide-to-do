@@ -1366,6 +1366,9 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         # ================================================================
         tagebuch = app.new_folder_object("Reisetagebuch", folder_kind="journal")
         app.folders.append(tagebuch)
+        # Alle Dokumentarten bleiben im Listenbereich möglich, auch in einem Notizbuch.
+        # Der reine Notizbereich erlaubt nach dem Ergänzungsauftrag nur Notizen.
+        app.locate_sidebar_root("folder", tagebuch["id"], "lists")
         app.save_items()
         app.update_sidebar_list()
 
@@ -1523,15 +1526,15 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert {iid: app.sidebar_listbox.bbox(iid) for iid in app.sidebar_listbox.get_children("")} == vorher
         schnell = app.folder_quick_add_menu(eltern["id"])
         eintraege = [schnell.entrycget(index, "label") for index in range(schnell.index("end") + 1)]
-        assert eintraege == ["Neue Liste …", "Neue Seite", "Neue Notiz …", "Neue Pinnwand …", "Neue Zeichnung",
-                             "Neue Galerie", "Neuer Unterordner …"]
+        assert eintraege == ["Neue Liste …", "Neue Seite", "Seite aus Vorlage", "Neue Notiz …",
+                             "Neue Pinnwand …", "Neue Galerie", "Neue Zeichnung",
+                             "Neuer Unterordner …", "Neues Buch …", "Neues Notizbuch …"], eintraege
         # Jede Schnellaktion steht auch im Kontextmenü des Ordners (Tastatur).
         ordnermenue = app.build_folder_menu(eltern["id"])
-        beschriftungen = [ordnermenue.entrycget(index, "label") for index in range(ordnermenue.index("end") + 1)
-                          if ordnermenue.type(index) == "command"]
-        for erwartet in ("Neue Liste in diesem Ordner …", "Neue Notiz in diesem Ordner …",
-                         "Neue Pinnwand in diesem Ordner …", "Neue Zeichnung in diesem Ordner", "Neuer Unterordner …"):
-            assert erwartet in beschriftungen, erwartet
+        neu_index = next(index for index in range(ordnermenue.index("end") + 1)
+                         if ordnermenue.type(index) == "cascade" and ordnermenue.entrycget(index, "label") == "Neu anlegen")
+        neu_menu = root.nametowidget(ordnermenue.entrycget(neu_index, "menu"))
+        assert [neu_menu.entrycget(index, "label") for index in range(neu_menu.index("end") + 1)] == eintraege
         listen_iid = next(iid for iid, row in app.sidebar_iid_to_row.items() if row[0] == "list"
                           and app.sidebar_listbox.exists(iid) and app.sidebar_listbox.bbox(iid))
         lbox = app.sidebar_listbox.bbox(listen_iid)

@@ -9,7 +9,7 @@ Stand und Online-Abruf: **01.10.2026** · Bezug: eigene Glide-Desktop-App 3.32.3
   - eine Feature-für-Feature-Matrix mit Glides Codestand.
 - Die Positionierung in Abschnitt 8.4 wird dort geschärft: Die Kombination aus Seiten, Aufgaben, Leinwand und lokalen Daten bieten inzwischen auch AFFiNE und AppFlowy; Glides Abgrenzung liegt in der Tagesführung.
 - Die belegten persönlichen Vorlieben in diesem Dokument bleiben maßgeblich.
-- Vorfassung: [Archiv](Archiv/Glide_Konkurrenzuebersicht_und_persoenliche_Vorlieben_2026-10-01_3.32.3_vor_Analyse_2026-10-01.md).
+- Vorfassung: [Archiv](Glide_Konkurrenzuebersicht_und_persoenliche_Vorlieben_2026-10-01.md).
 
 
 ## 1. Ergebnis

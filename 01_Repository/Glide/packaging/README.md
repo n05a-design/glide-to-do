@@ -1,6 +1,6 @@
 # Paketierung Glide
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 Der aktuelle Stand ist eine geprüfte Python-Anwendung mit Ressourcen.
 Ein Installer, eine Signatur oder eine Store-Abnahme wird hier nicht behauptet.
@@ -46,7 +46,7 @@ Python mit Tk und ist nicht zur Weitergabe gedacht.
 
 **Programmsymbole – [`baue_symbole.py`](baue_symbole.py)** (29.09.2026): Aus
 dem App-Symbol (`src/glide/resources/logo/glide-app-icon.svg`, Kopie von
-`20_Grafik_Master/02_App-Icon/App-Icon-weiß.svg`) entstehen mit Tk 9 unter
+`20_Grafik_Master/03_Fav-Icon/App-Icon-transparent-02.svg`) entstehen mit Tk 9 unter
 `assets/icons/`:
 
 - `glide.ico` für Windows (16 bis 256 px);
@@ -71,3 +71,9 @@ Der Release-Build mit eingebettetem Python, Developer-ID-Signatur,
 Notarisierung und Installer bleibt offen (PyInstaller laut `requirements/`).
 Geprüft wird die Vorstufe von `tests/integration/test_paketierung330.py`.
 
+
+`schema_backups.py` bündelt die Tk-freie Formatsicherung mit Dateistandprüfung; seit 3.33.0 in beiden Lieferwegen enthalten.
+
+`sidebar_policy.py` führt Zuordnung, Inhaltsgrenzen, Vorlagenprüfung und Geschwisterreihenfolge der vier Bereiche ohne Tk (3.33.1).
+
+`svg_geometry.py` führt SVG-Pfade einschließlich verkürzter kubischer Kurven, CSS-/Attributfarben und transparente Innenkonturen ohne Tk (3.33.1).

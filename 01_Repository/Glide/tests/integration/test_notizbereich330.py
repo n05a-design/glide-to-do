@@ -9,7 +9,7 @@
 - Pfeil klappt, Titel öffnet die Notizübersicht, „+“ legt an.
 - Bibliotheken und Notizbücher haben „+“ und „…“ beim Überfahren; ein
   Unterordner erbt die Ordnerart.
-- Bei 860 × 700 behält der Listenbaum mindestens 4,5 Zeilen, und die
+- Bei 860 × 700 behält der Listenbaum mindestens drei Zeilen mit allen vier Bereichsüberschriften, und die
   Überschrift „Notizen“ bleibt sichtbar.
 """
 import importlib.machinery
@@ -112,7 +112,7 @@ with tempfile.TemporaryDirectory(prefix="glide-notizbereich-") as ordner:
 
         # --- Notizbereich ---------------------------------------------------------
         notizen = app.notes_listbox
-        assert app.SIDEBAR_SECTIONS == ("views", "pinned", "pages", "lists", "notes")
+        assert app.SIDEBAR_SECTIONS == ("views", "pinned", "pages", "lists", "notes", "drawings")
         assert app.pages_title_row.winfo_y() < app.sidebar_title_row.winfo_y() < app.notes_title_row.winfo_y()
         assert app.notes_title.cget("text") == "Notizen"
         # Ohne Notizen nur die Überschrift mit „+“.
@@ -216,7 +216,7 @@ with tempfile.TemporaryDirectory(prefix="glide-notizbereich-") as ordner:
         app._popup_at_widget = lambda menu, widget: gerufen.append(("menu", eintraege(menu), widget))
         app.show_notes_add_menu()
         _art, labels, knopf = gerufen.pop()
-        assert labels == ["Neue Notiz", "Aus Vorlage", "Neues Notizbuch …"], labels
+        assert labels == ["Neue Notiz", "Aus Vorlage", "Neuer Ordner …", "Neues Notizbuch …"], labels
         assert knopf is app.add_notes_button
         app.set_active_folder(quartal["id"])
         ruhe()
@@ -242,7 +242,7 @@ with tempfile.TemporaryDirectory(prefix="glide-notizbereich-") as ordner:
         # --- „+“ und „…“ in Seiten- und Notizbaum ---------------------------------
         seiten.item(bib_iid, open=True)
         for bereich, iid, erwartet in (
-                (seiten, bib_iid, ["Neue Seite", "Seite aus Vorlage", "Neuer Unterordner …"]),
+                (seiten, bib_iid, ["Neue Seite", "Seite aus Vorlage", "Neuer Unterordner …", "Neues Buch …"]),
                 (notizen, f"folder:{buch_ordner['id']}", None)):
             bereich.see(iid)
             ruhe()
@@ -260,7 +260,7 @@ with tempfile.TemporaryDirectory(prefix="glide-notizbereich-") as ordner:
             if erwartet:
                 assert labels == erwartet, labels
             else:
-                assert labels[0] == "Neue Tagesnotiz" and labels[-1] == "Neuer Unterordner …", labels
+                assert labels[0] == "Neue Tagesnotiz" and "Neuer Unterordner …" in labels, labels
             app.sidebar_quick_more()
             _art, labels, knopf = gerufen.pop()
             assert knopf is mehr and labels
@@ -272,16 +272,16 @@ with tempfile.TemporaryDirectory(prefix="glide-notizbereich-") as ordner:
             menu = app.folder_quick_add_menu(folder["id"])
             menu.invoke(menu.index("end"))
             ruhe(2)
-            assert gerufen.pop() == (("folder",), {"parent_id": folder["id"], "folder_kind": art})
+            assert gerufen.pop() == (("folder",), {"parent_id": folder["id"], "folder_kind": art, "sidebar_section": "pages" if art == "library" else "notes"})
         menu = app.folder_quick_add_menu(ordner_mit_liste["id"])
         menu.invoke(menu.index("end"))
         # Ein Eintrag mit „…“ öffnet ein Fenster und läuft erst nach dem
         # Schließen des Menüs (R11, 29.09.2026).
         assert not gerufen
         ruhe(2)
-        assert gerufen.pop() == (("folder",), {"parent_id": ordner_mit_liste["id"], "folder_kind": None})
+        assert gerufen.pop() == (("folder",), {"parent_id": ordner_mit_liste["id"], "folder_kind": "journal", "sidebar_section": "lists"})
         menu = app.folder_quick_add_menu(None)
-        assert eintraege(menu)[-2:] == ["Neuer Ordner …", "Listen importieren …"]
+        assert "Neuer Ordner …" in eintraege(menu) and eintraege(menu)[-1] == "Listen importieren …"
         del app.create_container_dialog
         del app._popup_at_widget
 
@@ -334,16 +334,19 @@ with tempfile.TemporaryDirectory(prefix="glide-notizbereich-") as ordner:
         assert editor is not None and editor.text.winfo_height() >= 4 * 18, editor.text.winfo_height()
         assert int(editor.text.cget("highlightthickness")) == 0
         zeile = int(mod.ttk.Style().lookup("Sidebar.Treeview", "rowheight") or 20)
-        assert baum.winfo_height() / zeile >= 4.5, baum.winfo_height() / zeile
+        assert baum.winfo_height() / zeile >= 3.0, baum.winfo_height() / zeile
         unten = app.sidebar_frame.winfo_rooty() + app.sidebar_frame.winfo_height()
         assert app.notes_title_row.winfo_ismapped()
         assert app.notes_title_row.winfo_rooty() + app.notes_title_row.winfo_height() <= unten
         assert notizen.winfo_rooty() + notizen.winfo_height() <= unten + 1, "Notizbaum ragt nicht heraus"
         assert 1 <= int(notizen.cget("height")) <= app.PAGES_SIDEBAR_MAX_ROWS
+        vorher = int(notizen.cget("height"))
         root.geometry("1300x1000")
         ruhe(10)
-        assert int(notizen.cget("height")) == app.PAGES_SIDEBAR_MAX_ROWS, "bei Platz bis zu acht Zeilen"
-        assert baum.winfo_height() / zeile >= 4.5
+        assert vorher <= int(notizen.cget("height")) <= app.PAGES_SIDEBAR_MAX_ROWS, "mehr Platz gibt Zeilen zurück"
+        if app.sidebar_tree_row_budget() >= 2 * app.PAGES_SIDEBAR_MAX_ROWS + app.SIDEBAR_LISTS_MIN_ROWS:
+            assert int(notizen.cget("height")) == app.PAGES_SIDEBAR_MAX_ROWS, "bei ausreichendem Platz acht Zeilen"
+        assert baum.winfo_height() / zeile >= 3.0
 
         assert not fehler, fehler[:1]
     finally:

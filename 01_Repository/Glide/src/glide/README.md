@@ -1,6 +1,6 @@
 # Anwendungskern
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 `app.pyw` ist die kanonische Anwendung. Seit 3.29.0 gehören `drawing.py`
 (UI-unabhängiger Zellvertrag, JSON und Glide-SVG) und `drawing_image.py`
@@ -83,3 +83,9 @@ das Systemwerkzeug `sips` in Vorschauen im Cache.
   Systems ab (macOS `~/Library/Caches/Glide/bytecode`).
 - Ab dem zweiten Start lädt Glide dadurch rund eine halbe Sekunde schneller.
 - `python3 src/glide/glide_start.py` startet Glide wie `app.pyw`.
+
+`schema_backups.py` bündelt die Tk-freie Formatsicherung mit Dateistandprüfung; seit 3.33.0 in beiden Lieferwegen enthalten.
+
+`sidebar_policy.py` führt Zuordnung, Inhaltsgrenzen, Vorlagenprüfung und Geschwisterreihenfolge der vier Bereiche ohne Tk (3.33.1).
+
+`svg_geometry.py` führt SVG-Pfade einschließlich verkürzter kubischer Kurven, CSS-/Attributfarben und transparente Innenkonturen ohne Tk (3.33.1).

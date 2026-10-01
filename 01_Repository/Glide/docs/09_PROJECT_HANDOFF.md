@@ -1,15 +1,19 @@
-# Projektübergabe – Glide 3.32.3
+# Projektübergabe – Glide 3.33.1
 
-Stand 01.10.2026 · App 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
-**Aktiver Showcase (01.10.2026):** [Showcase-Vertrag](72_SHOWCASE_3.32.3.md); zehn Projektdokumente, sechs Originalmotive aus `20_Grafik_Master/06_Beispielbilder`, drei Seitenbilder, Aufgaben-/Listen-/Ordneranhänge und zwei Projektpinnwände. Getrennter Starter unter `05_Probelisten_Testdaten/Showcase`, Funktionsvorschau auf den 01.10.2026 erneuert. Die zusätzliche Pflichtprüfung kontrolliert tatsächlichen Import, IDs, Editor, Undo, Vorlagen und Neustart. App und Startfassungen bleiben 3.32.3; Daten-/Werkzeugnachlauf, keine neue Featureentscheidung.
+**Ergänzungsauftrag 01.10.2026, 3.33.1:** Vier Seitenleistenbereiche in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen. Nur Listen bleibt verpflichtend sichtbar. Seiten erlaubt Bücher (bestehende Art `library`), Ordner und Seiten; Notizen Notizbücher, Ordner und Notizen; Zeichnungen Ordner und Zeichnungen; Listen alle Arten. Sichtbarkeit und Root-Zuordnung sind lokale Anzeigeeinstellungen, keine Löschaktion. Gemischte Altordner werden vollständig in Listen angezeigt. Einheitliche Anlege-/Verschieberegeln und Prüfung aller Fenster gehören zur Abnahme. [Vertrag](74_BEREICHE_UND_FENSTER_3.33.1.md).
+Stand 01.10.2026 · App 3.33.1 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+
+**3.33.0 – erster Umsetzungsschnitt:** T2/P09a umgesetzt und ausgeliefert. 76 automatische Schritte, 59 Integrationssuiten, acht Unit-Tests, Showcase und fünf Analysen grün; 140 Python-/54 Bundle-Dateien bytegleich, Signatur gültig, getrennter Showcase-Starter bei Erststart und Neustart geprüft. [Vertrag](73_FUNDAMENT_3.33.0.md) mit Ablageabgleich und Anschlussplan. D12 ist vollständig entschieden: zusätzliche Standardkacheln Zeichnungen und Pinnwand-Vorschau. Der Oberflächenumbau folgt nach diesem Fundament.
+
+**Aktiver Showcase (01.10.2026):** [Showcase-Vertrag](72_SHOWCASE_3.32.3.md); zehn Projektdokumente, sechs Originalmotive aus `20_Grafik_Master/06_Beispielbilder`, drei Seitenbilder, Aufgaben-/Listen-/Ordneranhänge und zwei Projektpinnwände. Getrennter Starter unter `05_Probelisten_Testdaten/Showcase`, Funktionsvorschau auf den 01.10.2026 erneuert. Die zusätzliche Pflichtprüfung kontrolliert tatsächlichen Import, IDs, Editor, Undo, Vorlagen und Neustart. Der ursprüngliche Datennachlauf gehörte zu 3.32.3; die aktuellen Basisdateien und Startfassungen sind mit 3.33.0 abgeglichen.
 
 **Dokumentations-/Prüfwerkzeugnachlauf 01.10.2026:** [Arbeitsrichtung](ARBEITSRICHTUNG.md) verbindet die bestätigten Entscheidungen und die verbleibende Performance-Arbeit. Aktive Einstiege/Checklisten und Kontrollregeln nachgeführt; [separater Nachweis](../tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json). App, Integrationssuiten und beide Startfassungen bleiben beim geprüften 3.32.3-Stand. Der frühere Volllauf wurde mit den damaligen Prüfwerkzeugen ausgeführt.
 
 **Analyse und Planung 01.10.2026:**
 - **Entwicklungsplan:** [ab 3.33](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md) mit Stufen 0–5. Die Richtungsfragen D09–D17 sind am 01.10.2026 beschlossen ([Beschlüsse](../../../00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md#beschlüsse-vom-01102026), verbindlich in der [Arbeitsrichtung](ARBEITSRICHTUNG.md#verbindliche-entscheidungen)); D12 mit sieben Startseitenkacheln.
 - **Repository:** Wurzel = Projektordner, Quellbaum `01_Repository/Glide`; keine Uploads in Unterordner.
-- **Kleinster nächster Schnitt:** T2 (eine Schema-Sicherungsprüfung statt neun) und P09a (keine Zeilenmessung in der Tabellenansicht, [T8](../../../00_Arbeitsvorbereitung/Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md#t8--wiederholte-prüfungen-und-messungen-je-bedienschritt-neu-gemessen)). Baselines: `scripts/pflege/messung_speicherweg.py` und `tests/qa-3.32.3/pruefaufrufe_2026-10-01/werkzeuge/pruefaufrufe_probe.py`.
+- **Erster Schnitt 3.33.0:** T2 (gemeinsame Formatsicherung) und P09a (keine Zeilenmessung in der Tabellenansicht, [T8](../../../00_Arbeitsvorbereitung/Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md#t8--wiederholte-prüfungen-und-messungen-je-bedienschritt-neu-gemessen)). Baselines: `scripts/pflege/messung_speicherweg.py` und `tests/qa-3.32.3/pruefaufrufe_2026-10-01/werkzeuge/pruefaufrufe_probe.py`.
 
 
 **Aktuelle Planung und Entscheidungen:**
@@ -18,17 +22,17 @@ führt D01–D06 verbindlich und erklärt die offene Exportfrage D07. D08 ist di
 [Klappkorrektur 3.32.1](69_KLAPPKONTROLLE_3.32.1.md): echter Label-Pfeilklick,
 Zustandserhalt, native Ereignisreihenfolge, globale Aktionen, Tastatur der
 Bereichspfeile und verschachtelte Bibliothek. Neue Pflichtsuite prüft echte
-Bedienbindungen und sämtliche Tk-Callbackfehler. D04 ist in 3.32.2 umgesetzt; [Drag-and-drop und Performance 3.32.2](70_DRAG_UND_PERFORMANCE_3.32.2.md) dokumentiert gemeinsame Drag-Bindungen, Schriftcache, gebündelte Layouts, Hoverhelfer und Messwerte. Aufgaben im Notiztext folgen in 3.33. Mobile/Toolkit-Probe ist zurückgestellt, Hinweise bleiben unverändert. P01 ist um unprofilierte Serien ergänzt, P02 umgesetzt, P03/P05 teilweise; Bibliothekskarten werden mit 3.32.3 innerhalb derselben Ansicht erhalten; Startseitenkarten, Bildlayout und übrige Speicherkonsolidierung bleiben offen.
+Bedienbindungen und sämtliche Tk-Callbackfehler. D04 ist in 3.32.2 umgesetzt; [Drag-and-drop und Performance 3.32.2](70_DRAG_UND_PERFORMANCE_3.32.2.md) dokumentiert gemeinsame Drag-Bindungen, Schriftcache, gebündelte Layouts, Hoverhelfer und Messwerte. Aufgaben im Notiztext folgen in 3.33. Mobile/Toolkit-Probe ist zurückgestellt, Hinweisblöcke bleiben unverändert; Hinweiszeilen werden nach D11 im späteren Oberflächenschnitt einklappbar. P01 ist um unprofilierte Serien ergänzt, P02 umgesetzt, P03/P05 teilweise; Bibliothekskarten werden mit 3.32.3 innerhalb derselben Ansicht erhalten; Startseitenkarten, Bildlayout und übrige Speicherkonsolidierung bleiben offen.
 
 ## Code und startbare Kopie
 
-- **Kanonisch:** `src/glide/app.pyw` mit den Modulen `drawing.py`, `drawing_image.py`, `backdrop.py`, `page_markdown.py`, `image_preview.py`, `logo.py` (seit 29.09.2026) und `glide_start.py`,
+- **Kanonisch:** `src/glide/app.pyw` mit den Modulen `drawing.py`, `drawing_image.py`, `backdrop.py`, `page_markdown.py`, `image_preview.py`, `logo.py`, `schema_backups.py`, `sidebar_policy.py`, `svg_geometry.py` und `glide_start.py`,
   dazu `resources` (Schriften, Vorlagen, seit 29.09.2026 `logo`) und `vendor` (tkinterdnd2, seit 27.09.2026).
-- **Startbare Kopie:** `07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.32.3.pyw`
+- **Startbare Kopie:** `07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.33.1.pyw`
   samt denselben Modulen (`glide_start.py` heißt dort `Schnellstart.pyw`),
   `resources` und `vendor`. 3.29.0 und alle Zwischenstände von 3.30 liegen im
   Unterordner `Archiv`.
-- Der äußere Projektordner ist kein Git-Checkout.
+- Der äußere Projektordner `Github/glide-to-do` ist seit D09 der maßgebliche Git-Checkout.
 
 ## 3.30.0 (25.09.2026)
 
@@ -355,13 +359,13 @@ Weitere ältere Stände:
   [Flackern und Ablageprüfung 3.28](60_FLACKERN_UND_ABLAGEPRUEFUNG_3.28.0.md).
 
 Der Übergabetext zu 3.29 liegt im Archiv:
-[Projektübergabe vor 3.30.0](archiv/09_PROJECT_HANDOFF_3.29.0_vor_3.30.0.md).
+[Projektübergabe vor 3.30.0](archiv/09_PROJECT_HANDOFF_3.2.0.md).
 
 ## Weiterarbeit und Prüfung
 
 **Zuerst lesen:**
 
-- [Sitzungsübergabe vom 30.09.2026](../../../00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md) – Stand 3.32.3, Regeln, nächste Schritte;
+- [Sitzungsübergabe vom 30.09.2026](../../../00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md) – Stand 3.33.1, Regeln, nächste Schritte;
 - [Pflegewerkzeuge](../scripts/pflege/README.md) – Versionswechsel, Abgleich nach `07`, Messung;
 - [Sitzungsprotokoll 24.–26.09.2026](67_SITZUNGSPROTOKOLL_2026-09-24_BIS_2026-09-26.md) – Aufträge,
   Entscheidungen, Lehren und Prüfläufe der letzten Sitzung;
@@ -381,7 +385,7 @@ Stand.
 
 **Vollaufruf:**
 
-`python tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.32.3/<neuer-Ordner> --timeout 900`
+`python tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.1/<neuer-Ordner> --timeout 900`
 
 **Einzelsuiten der Neuerungen:**
 
@@ -444,4 +448,10 @@ Damals geplanter Anschluss: Bibliothekskarten/Startseiten-Neuerzeugung mit Fokus
 
 ## Bibliothekskarten und Aktionen seit 3.32.3
 
-[Vertrag 71](71_KARTEN_PERFORMANCE_3.32.3.md): frische Anzeigedaten, Widgets über `(Art, ID)` erhalten, Kontextinvalidierung und Freigabe beim zerstörten Host. Keine dauerhaften Datenzähler und kein Umparenten. Aktionsleisten prüfen den Callable; ersetzte Configure-Bindungen werden abgemeldet. „Zurückholen“ verwendet eine zentrale Aktualisierung. Die neue Pflichtsuite ist im Vollmodus aufgenommen (58 Suiten). Vollprüfung und Abgleich abgeschlossen: 73 Schritte/58 Suiten/fünf Analysen grün; 139 Python-/53 Bundle-Dateien bytegleich, Signatur gültig. Aktueller lieferbarer Entwicklungsstand 3.32.3. Anschluss: verbleibendes P03, P04/P06, danach bestehende Featureetappe; zusätzliche Richtungsauswahl offen.
+[Vertrag 71](71_KARTEN_PERFORMANCE_3.32.3.md): frische Anzeigedaten, Widgets über `(Art, ID)` erhalten, Kontextinvalidierung und Freigabe beim zerstörten Host. Keine dauerhaften Datenzähler und kein Umparenten. Aktionsleisten prüfen den Callable; ersetzte Configure-Bindungen werden abgemeldet. „Zurückholen“ verwendet eine zentrale Aktualisierung. Die neue Pflichtsuite ist im Vollmodus aufgenommen (58 Suiten). Vollprüfung und Abgleich abgeschlossen: 73 Schritte/58 Suiten/fünf Analysen grün; 139 Python-/53 Bundle-Dateien bytegleich, Signatur gültig. Damals ausgelieferter Entwicklungsstand 3.32.3. Der neue Schnitt 3.33.0 steht am Dokumentanfang; Anschluss: verbleibendes P03, P04/P06, danach bestehende Featureetappe; zusätzliche Richtungsauswahl offen.
+
+`schema_backups.py` bündelt die Tk-freie Formatsicherung mit Dateistandprüfung; seit 3.33.0 in beiden Lieferwegen enthalten.
+
+`sidebar_policy.py` führt Zuordnung, Inhaltsgrenzen, Vorlagenprüfung und Geschwisterreihenfolge der vier Bereiche ohne Tk (3.33.1).
+
+`svg_geometry.py` führt SVG-Pfade einschließlich verkürzter kubischer Kurven, CSS-/Attributfarben und transparente Innenkonturen ohne Tk (3.33.1).

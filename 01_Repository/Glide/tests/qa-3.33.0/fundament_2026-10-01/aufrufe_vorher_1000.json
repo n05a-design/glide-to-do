@@ -1,0 +1,158 @@
+{
+ "werkzeug": "pruefaufrufe_probe.py",
+ "variante": "basis",
+ "punkte": 1000,
+ "runden_warm": 5,
+ "umgebung": {
+  "python": "3.14.5",
+  "tk": "9.0.3",
+  "fenstersystem": "aqua",
+  "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "schriftfamilien": 222,
+  "tk_version": 9.0
+ },
+ "app_version": "3.32.3",
+ "start_aufrufe": {
+  "font.py:families": 1,
+  "font.py:measure": 41,
+  "app.pyw:contrast_ratio": 441,
+  "app.pyw:available_font_families": 2,
+  "app.pyw:has_active_filter": 3,
+  "app.pyw:mix_hex_colors": 130,
+  "app.pyw:ui_font_family": 94,
+  "app.pyw:pixel_heading_family": 2,
+  "font.py:metrics": 32,
+  "font.py:__init__": 45,
+  "_strptime.py:_strptime": 2,
+  "app.pyw:page_chips": 13,
+  "app.pyw:content_column_widths": 3,
+  "app.pyw:hint_line_height": 19
+ },
+ "schritte": {
+  "liste": {
+   "median_ms": 186.8,
+   "max_ms": 189.9,
+   "roh_ms": [
+    185.0,
+    186.7,
+    186.8,
+    187.1,
+    189.9
+   ],
+   "aufrufe": {
+    "font.py:measure": 13,
+    "app.pyw:contrast_ratio": 7,
+    "app.pyw:has_active_filter": 1000,
+    "app.pyw:ui_font_family": 31,
+    "font.py:metrics": 12,
+    "font.py:__init__": 13,
+    "_strptime.py:_strptime": 2004,
+    "app.pyw:page_chips": 4,
+    "app.pyw:content_column_widths": 1,
+    "app.pyw:due_status": 5000,
+    "app.pyw:hint_line_height": 8
+   }
+  },
+  "startseite": {
+   "median_ms": 682.5,
+   "max_ms": 710.1,
+   "roh_ms": [
+    676.8,
+    678.9,
+    682.5,
+    695.0,
+    710.1
+   ],
+   "aufrufe": {
+    "font.py:measure": 43,
+    "app.pyw:contrast_ratio": 68,
+    "app.pyw:mix_hex_colors": 456,
+    "app.pyw:ui_font_family": 85,
+    "font.py:metrics": 4,
+    "font.py:__init__": 40,
+    "_strptime.py:_strptime": 336,
+    "app.pyw:page_chips": 3,
+    "app.pyw:due_status": 334
+   }
+  },
+  "mein_tag": {
+   "median_ms": 134.3,
+   "max_ms": 147.0,
+   "roh_ms": [
+    132.7,
+    132.7,
+    134.3,
+    142.4,
+    147.0
+   ],
+   "aufrufe": {
+    "font.py:measure": 76,
+    "app.pyw:contrast_ratio": 7,
+    "app.pyw:ui_font_family": 26,
+    "font.py:metrics": 12,
+    "font.py:__init__": 19,
+    "_strptime.py:_strptime": 350,
+    "app.pyw:page_chips": 3,
+    "app.pyw:content_column_widths": 1,
+    "app.pyw:due_status": 400,
+    "app.pyw:hint_line_height": 8
+   }
+  },
+  "tabelle": {
+   "median_ms": 193.6,
+   "max_ms": 194.5,
+   "roh_ms": [
+    190.3,
+    192.2,
+    193.6,
+    194.4,
+    194.5
+   ],
+   "aufrufe": {
+    "font.py:measure": 1017,
+    "app.pyw:contrast_ratio": 7,
+    "app.pyw:ui_font_family": 31,
+    "font.py:metrics": 12,
+    "font.py:__init__": 19,
+    "_strptime.py:_strptime": 1202,
+    "app.pyw:page_chips": 3,
+    "app.pyw:content_column_widths": 1,
+    "app.pyw:due_status": 2000,
+    "app.pyw:hint_line_height": 8
+   }
+  },
+  "liste_abhaken": {
+   "median_ms": 349.5,
+   "max_ms": 1096.7,
+   "roh_ms": [
+    343.6,
+    346.4,
+    349.5,
+    1079.9,
+    1096.7
+   ],
+   "aufrufe": {
+    "font.py:measure": 24,
+    "app.pyw:contrast_ratio": 17,
+    "app.pyw:has_active_filter": 2000,
+    "app.pyw:mix_hex_colors": 14,
+    "app.pyw:ui_font_family": 127,
+    "font.py:metrics": 19,
+    "font.py:__init__": 21,
+    "_strptime.py:_strptime": 3338,
+    "app.pyw:page_chips": 6,
+    "app.pyw:content_column_widths": 2,
+    "app.pyw:due_status": 7998,
+    "app.pyw:hint_line_height": 11
+   }
+  }
+ },
+ "kennzahlen_liste": [
+  "999 offen",
+  "1 erledigt",
+  "111 überfällig",
+  "nächste Fälligkeit morgen"
+ ],
+ "callbackfehler": [],
+ "fehlerprotokoll": ""
+}

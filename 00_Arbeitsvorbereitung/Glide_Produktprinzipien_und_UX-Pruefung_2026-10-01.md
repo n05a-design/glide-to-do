@@ -95,7 +95,7 @@ Aufwand: S < 1 Tag, M 1–3 Tage, L > 3 Tage (inkl. Tests).
   - Standard „Ruhig“: **Heute** (Tagesziel + eingeplant + nächste Aufgabe in *einer* Kachel), **Gismo** (wie gewünscht), **Woche**, **Zuletzt bearbeitet**, **Angeheftet**.
   - Alle übrigen Kacheln bleiben wählbar.
   - Gismo-Kachel kompakter (Pflegeknöpfe erst beim Überfahren) (D12).
-  - **Beschluss D12 (01.10.2026):** „Ruhig“ mit **sieben** Kacheln einschließlich Gismo. Zu den fünf oben kommen nach Planungsannahme Uhr/Datum/nächster Termin und Pinnwand-Vorschau; Bestätigung vor 3.33.0.
+  - **Beschluss D12 (01.10.2026):** „Ruhig“ mit **sieben** Kacheln einschließlich Gismo. Zu den fünf oben kommen nach ausdrücklicher Ergänzung des Inhabers Zeichnungen und Pinnwand-Vorschau.
 - **Prio/Aufwand:** **A** (Standardauswahl) / S · B (Kachelzusammenlegung) / M
 
 **U06 – Überlappende Ansichten:** Mein Tag, In Bearbeitung („alle Aufgaben mit Fälligkeit“), Verspätet, Nächste Aufgabe, Tagesbeginn, Startseite-„Heute“

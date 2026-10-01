@@ -1,0 +1,94 @@
+{
+  "werkzeug": "messung_speicherweg.py",
+  "app": "01_Repository/Glide/tests/qa-3.33.0/fundament_2026-10-01/vorher/quellstand/app.pyw",
+  "app_version": "3.32.3",
+  "punkte": 5000,
+  "datei_kb": 5150,
+  "runden_warm": 7,
+  "umgebung": {
+    "python": "3.14.5",
+    "tk": "9.0.3",
+    "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "prozessor": "arm"
+  },
+  "erstes_speichern_ms": 654.348,
+  "snapshot_undo": {
+    "median_ms": 39.815,
+    "p95_ms": 45.162,
+    "stichproben_ms": [
+      45.162,
+      43.947,
+      35.069,
+      37.283,
+      37.585,
+      41.644,
+      39.815
+    ]
+  },
+  "save_items": {
+    "median_ms": 267.84,
+    "p95_ms": 276.993,
+    "stichproben_ms": [
+      267.257,
+      276.993,
+      258.028,
+      267.84,
+      270.464,
+      256.892,
+      271.17
+    ]
+  },
+  "history_snapshot": {
+    "median_ms": 51.83,
+    "p95_ms": 101.47,
+    "stichproben_ms": [
+      50.331,
+      57.264,
+      49.97,
+      56.094,
+      51.387,
+      51.83,
+      101.47
+    ]
+  },
+  "json_eingerueckt": {
+    "median_ms": 25.957,
+    "p95_ms": 29.307,
+    "stichproben_ms": [
+      25.957,
+      29.307,
+      24.77,
+      27.846,
+      25.454,
+      24.85,
+      28.613
+    ]
+  },
+  "json_kompakt": {
+    "median_ms": 25.395,
+    "p95_ms": 28.061,
+    "stichproben_ms": [
+      25.395,
+      23.949,
+      25.004,
+      28.061,
+      26.681,
+      26.172,
+      25.311
+    ]
+  },
+  "abhaken_item_change": {
+    "median_ms": 335.809,
+    "p95_ms": 350.091,
+    "stichproben_ms": [
+      340.458,
+      335.809,
+      335.427,
+      340.995,
+      350.091,
+      328.9,
+      323.652
+    ]
+  },
+  "callbackfehler": []
+}

@@ -1,6 +1,6 @@
 # Grafik-Master
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 Hier liegen die Quellen des Glide-Logos und alle freigegebenen Exporte. Glide
 selbst und die Paketierung arbeiten mit **Kopien** daraus (siehe unten). Wer
@@ -10,9 +10,9 @@ einen Master ändert, erneuert danach die Kopien.
 
 | Ordner | Inhalt | Verwendung |
 |---|---|---|
-| `01_Logo` | `Glide-Logo.svg` und `.png`: das Zeichen allein, eine Fläche in Glide-Blau | Kopfzeile, „Über Glide“ und Startfenster, dort in der Akzentfarbe der Oberfläche |
-| `02_App-Icon` | `App-Icon-weiß`: blaue Fläche mit weißem Zeichen; `App-Icon-transparent`: blaue Fläche, Zeichen ausgestanzt | `App-Icon-weiß` ist das Programmsymbol (Fenster, Dock, Taskleiste, Infobereich, Installer). `App-Icon-transparent` ist noch ohne Verwendung. |
-| `03_Fav-Icon` | dieselben Motive als Vollfläche ohne Rundung | noch ohne Verwendung; gedacht für die Website `shaye.de/glide` |
+| `01_Logo` | `Glide-Logo-01.svg` und `Glide-Logo.png`: das Zeichen allein, eine Fläche in Glide-Blau | Kopfzeile, „Über Glide“ und Startfenster, dort in der Akzentfarbe der Oberfläche |
+| `02_App-Icon` | derzeit leer; aktuelle Exporte stehen in `03_Fav-Icon` | frühere weiße Variante wird nicht mehr verwendet |
+| `03_Fav-Icon` | `App-Icon-transparent-02.svg` und `App-Icon-transparent.png`: blaue Fläche mit ausgespartem Zeichen | aktuelles Programmsymbol, Basis für Dock, Taskleiste, Installer und Website |
 | `04_Affinity` | `Glide-Logo.af`: die Arbeitsdatei aller Exporte | Quelle |
 | `05_Inspiration` | Stilvorlagen und Skizzen, darunter `Glide-Logo-Position.png` (Skizze der Logoposition vom 29.09.2026) und `Inspiration für Glide.png` | Belege, keine Programmdateien |
 | `Archiv` | überholte Stände dieses Ordners | nur bei historischer Frage öffnen |
@@ -23,13 +23,13 @@ Glide-Blau ist `rgb(1,133,225)` = `#0185E1`.
 
 - **Laufzeit:** `01_Repository/Glide/src/glide/resources/logo/` enthält
   unveränderte Kopien:
-  - `glide-logo.svg` und `.png` aus `01_Logo`;
-  - `glide-app-icon.svg` und `.png` aus `02_App-Icon/App-Icon-weiß`.
+  - `glide-logo.svg` aus `01_Logo/Glide-Logo-01.svg`, PNG aus `01_Logo/Glide-Logo.png`;
+  - `glide-app-icon.svg` aus `03_Fav-Icon/App-Icon-transparent-02.svg`, PNG aus `03_Fav-Icon/App-Icon-transparent.png`.
 
   Das Modul `logo.py` liest sie ein.
 - **Warum SVG:** Tk 9 rechnet SVG in jeder Größe scharf. Für die Akzentfarbe
-  ersetzt Glide im SVG-Text nur den Füllwert `rgb(1,133,225)`, bevor das Bild
-  entsteht. Das ist zuverlässig und kostet unter einer Millisekunde. Unter
+  ersetzt Glide die Füllfarbe `#0185e1` (auch ältere RGB-Schreibweise möglich), bevor das Bild
+  entsteht. Die gewählte Variante verwendet direkte Attribute; CSS-Exporte werden ebenfalls verarbeitet. Unter
   Tk 8.6 (ohne SVG) zeichnet Glide dasselbe Zeichen als Fläche. Die PNGs
   dienen dort als Programmsymbol.
 - **Paketierung:** `packaging/baue_symbole.py` erzeugt aus dem App-Icon unter
@@ -46,9 +46,7 @@ Glide-Blau ist `rgb(1,133,225)` = `#0185E1`.
    exportieren. Beim Logo muss es bei **einer** Füllfarbe `rgb(1,133,225)`
    bleiben. Sonst lässt sich die Akzentfarbe nicht mehr einsetzen, und
    `test_logo330` meldet es.
-2. PNGs am besten mit 1024 × 1024 oder 1080 × 1080 Pixeln exportieren. Die
-   Exporte vom 29.09.2026 sind 1081 × 1080 groß; das ist harmlos, aber
-   unsauber.
+2. PNGs quadratisch exportieren. Die aktuellen PNG-Master vom 01.10.2026 haben 3509 × 3508 Pixel; die SVG-ViewBox ist quadratisch. Die Paketierung leitet ihre Zielgrößen aus SVG ab.
 3. Die geänderte Datei nach `src/glide/resources/logo/` kopieren (Namen siehe
    oben) und `python3 packaging/baue_symbole.py` im Ordner
    `01_Repository/Glide` ausführen.

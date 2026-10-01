@@ -1,0 +1,38 @@
+[
+  {
+    "source": "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.30.0_Z.pyw",
+    "sha256": "833a47233dbdb983aa548e684d730074d94874e311f261b45dd187511460f3db",
+    "bytes": 2663598,
+    "identical_retained": "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.30.0_vor_Rueckmeldung_Abend_2026-09-29/Glide-Aufgaben-und-Listen_v3.30.0.pyw"
+  },
+  {
+    "source": "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.32.1_Z.pyw",
+    "sha256": "dead78042997fa71c1d110724aaed9bfd10f3cedcfdf3a10eddf187799a3be0b",
+    "bytes": 2721669,
+    "identical_retained": "07_Python-Versionen/Archiv/Glide_v3.32.1_vor_Drag_Performance_2026-09-30/Glide-Aufgaben-und-Listen_v3.32.1.pyw"
+  },
+  {
+    "source": "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.31.0_Z.pyw",
+    "sha256": "c793a88bfae6d1b69ed6198aeef848d5770b038e5e2a83acdc97f3459aa54a4d",
+    "bytes": 2706152,
+    "identical_retained": "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.31.0_Endstand_2026-09-30/Glide-Aufgaben-und-Listen_v3.31.0.pyw"
+  },
+  {
+    "source": "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.32.3_Z.pyw",
+    "sha256": "24b21a71791dd6eff387dc889d099a7a7d3afc261d7243c9ff51994ba6cca1bb",
+    "bytes": 2731059,
+    "identical_retained": null
+  },
+  {
+    "source": "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.32.2_Z.pyw",
+    "sha256": "c51b811fdd0d804834f727f4a55ce2b16e770654adfb597245f4503d61b1c7e6",
+    "bytes": 2726850,
+    "identical_retained": "07_Python-Versionen/Archiv/Glide_v3.32.2_vor_Karten_Performance_2026-10-01/Glide-Aufgaben-und-Listen_v3.32.2.pyw"
+  },
+  {
+    "source": "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.32.0_Z.pyw",
+    "sha256": "c55bf9e552d5ddda9f95652c6299d649e8d7d25d8997001f6ba89d59e2a691fb",
+    "bytes": 2719643,
+    "identical_retained": "07_Python-Versionen/Archiv/Glide_v3.32.0_vor_Klappkontrolle_2026-09-30/Glide-Aufgaben-und-Listen_v3.32.0.pyw"
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "starter_sha256": "8273249a7f885b52f873da25490dc46c384fa09dedfb2166ec3fa3b1235be319",
+  "runtime": "07_Python-Versionen",
+  "pruefungen": [
+    {
+      "erststart": true,
+      "exitcode": 0,
+      "dokumente": 11
+    },
+    {
+      "erststart": false,
+      "exitcode": 0,
+      "dokumente": 11
+    }
+  ],
+  "persoenliche_daten_unberuehrt": true
+}

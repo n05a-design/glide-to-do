@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/tools/pruefe_showcase.py", line 266, in <module>
+    main()
+    ~~~~^^
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/tools/pruefe_showcase.py", line 262, in main
+    check(args.fixture.resolve(),args.bilder,args.neustart)
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/tools/pruefe_showcase.py", line 149, in check
+    assert len(app.lists) == before_count+10
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

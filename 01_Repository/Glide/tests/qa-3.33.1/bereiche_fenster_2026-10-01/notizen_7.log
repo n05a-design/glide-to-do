@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_notizbereich330.py", line 345, in <module>
+    assert int(notizen.cget("height")) == app.PAGES_SIDEBAR_MAX_ROWS, "bei Platz bis zu acht Zeilen"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: bei Platz bis zu acht Zeilen

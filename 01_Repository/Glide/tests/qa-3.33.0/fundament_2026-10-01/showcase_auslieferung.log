@@ -1,0 +1,13 @@
+Neustart: ok
+Showcase: Import, ID-Verweise, 5 Dokumentarten, 3 Ordnertypen, 6 Originalmotive, 3 Seitenbilder, 2 Pinnwände, Klappblock, Termine, Erinnerungen, Undo, Vorlagen, Export und Neustart: ok
+{
+  "ziel": "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/05_Probelisten_Testdaten/Showcase",
+  "sha256": {
+    "Glide-Showcase.glidebackup": "bcaf482c0bdb28441754d746c7a6ccb5fbdbfdc13fc44a101d9881f0c66615b3",
+    "Glide-Showcase_App.glideapp": "70a85be4f8c500bddad7b0717eec0dc20c4c172f1babde14dc46a89546f0d35d",
+    "Glide-Showcase.glidetemplates": "8ecd7c768999e23f4a96dfd6c9f32de433100a11f6ac0c29eec6a58368c77809",
+    "manifest.json": "2f2dabbd07cb26af4443490d6b38be66f907658898835d79f82d0df6bb055c6d",
+    "Showcase_starten.pyw": "8273249a7f885b52f873da25490dc46c384fa09dedfb2166ec3fa3b1235be319",
+    "README.md": "09e78284c43c3b4b45be86085f3224dede5502bb0ee39546c102709b8f82f298"
+  }
+}

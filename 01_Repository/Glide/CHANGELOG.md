@@ -1,5 +1,21 @@
 # Änderungsverlauf
 
+## 3.33.1 – Vier Bereiche und Fensterbedienung (01.10.2026)
+
+- Seiten, Listen, Notizen und Zeichnungen als getrennte Bereiche. Seiten/Notizen/Zeichnungen lassen sich in den Einstellungen ausblenden; alle Daten bleiben über Listen erreichbar.
+- Einheitliche Inhaltsgrenzen für Anlegen, Vorlagen, Kontextmenüs und Verschieben; Listen erlaubt alle Arten. Gemischte bestehende Ordner bleiben vollständig unter Listen. Kein neuer Inhaltstyp und keine Datenmigration.
+- Root-Zuordnung als Anzeigeeinstellung, einschließlich Rückgängig; Zeichnungsübersicht, vier Klappbereiche und begrenzte Baumhöhen bei kleiner Fensterhöhe.
+- Logo beginnt auf Höhe der Titeloberkante. Dialoge werden erst fertig positioniert eingeblendet; doppelte Leerlaufabfragen und unveränderte Breitenmessungen vermieden.
+- Showcase zeigt die vorhandene Pixelskizze im neuen Zeichnungsbereich. Neue Pflichtsuite für die tatsächlichen Bereichs-, Formular-, Drag-, Settings- und Neustartwege.
+
+## 3.33.0 – Fundament für die geplanten Ausbauten (01.10.2026)
+
+- T2: gemeinsame Formatsicherung in `schema_backups.py`; beim Laden vorhandene Formatinformation nutzen, sonst einmal je Dateistand lesen. Bytegenaue Rückfallkopien, Fehlerabbruch und bestehende Migrationseinstiege erhalten.
+- P09a/W1: Tabellen- und Bibliotheksansicht vermessen keine ungenutzten Listenspalten mehr; Listenspalten unverändert.
+- Acht Tk-freie Unit-Tests und eine neue Integration für alle Formatstufen, Austausch, Fehler/Retry, Reload und Spaltenbreiten; eigener QA-Fenster-Mausschutz geprüft.
+- GitHub-Stand und umgezogene Ablage abgeglichen; ursprüngliche Claude-Übergabe bleibt historisch. D12 ergänzt: Zeichnungen und Pinnwand-Vorschau.
+- Oberflächenumbau folgt nach dem Fundament; Datenformat 20 und bestehende Dokumentarten bleiben erhalten.
+
 ## 3.32.3 – 01.10.2026
 
 - **Beschlüsse D09–D17 und Prüfaufrufe (App unverändert):**
@@ -853,7 +869,7 @@ Die Nachbesserung des zuvor unvollständigen Standes ergänzt die folgenden Funk
 - Handbuch als HTML speichern/drucken; Import-, Export- und Backup-Ereignisse im Verlauf; ergänzte Aktionsrückmeldungen.
 - Dokumentarchivierung, Schema-17-Referenzdaten und reproduzierbare Vorlagen; Lizenzentwurf und Signierungs-/Vertriebsvorbereitung.
 
-Prüfstand und offene Anforderungen: [Entscheidungen und Umsetzungsstand](docs/decisions/archiv/Entscheidungen_3.26.0.md).
+Prüfstand und offene Anforderungen: [Entscheidungen und Umsetzungsstand](docs/75_DOKUMENTATIONSREDUKTION_UND_LOGOS_3.33.1.md).
 
 ## 3.25.0 – 19.09.2026
 

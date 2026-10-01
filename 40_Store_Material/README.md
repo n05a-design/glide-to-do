@@ -1,6 +1,6 @@
 # Store-Material
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 Aktuell ist der [Entwurf des Produktdatenblatts 3.30](Produktdatenblatt_3.30.0_Entwurf.md)
 mit Store-Textentwürfen (Kurzbeschreibung, Beschreibung, Features). Er ist

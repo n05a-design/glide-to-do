@@ -1,18 +1,22 @@
 # Fortlaufende Arbeitsrichtung und Abnahme
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20
 
-**Showcase als Abnahmebestand:** [Showcase-Vertrag](72_SHOWCASE_3.32.3.md) ergänzt den bestehenden Plan um realistische Arbeitsdokumente und Originalmotive. Neue implementierte Funktionen müssen ein passendes Datenbeispiel beziehungsweise eine tatsächliche Bedienprüfung erhalten. `pruefe_showcase.py` prüft die gelieferten Daten zusätzlich zu 58 Suiten; `showcase_abgleich.py` sichert ersetzte Basisdateien, der bearbeitete Arbeitsstand bleibt erhalten. Kein erneuter Beschluss über bestätigte Entscheidungen, keine Produktionsversion für diesen Daten-/Werkzeugnachlauf.
+**Ergänzungsauftrag 01.10.2026, 3.33.1:** Vier Seitenleistenbereiche in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen. Nur Listen bleibt verpflichtend sichtbar. Seiten erlaubt Bücher (bestehende Art `library`), Ordner und Seiten; Notizen Notizbücher, Ordner und Notizen; Zeichnungen Ordner und Zeichnungen; Listen alle Arten. Sichtbarkeit und Root-Zuordnung sind lokale Anzeigeeinstellungen, keine Löschaktion. Gemischte Altordner werden vollständig in Listen angezeigt. Einheitliche Anlege-/Verschieberegeln und Prüfung aller Fenster gehören zur Abnahme. [Vertrag](74_BEREICHE_UND_FENSTER_3.33.1.md).
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20
+
+**Showcase als Abnahmebestand:** [Showcase-Vertrag](72_SHOWCASE_3.32.3.md) ergänzt den bestehenden Plan um realistische Arbeitsdokumente und Originalmotive. Neue implementierte Funktionen müssen ein passendes Datenbeispiel beziehungsweise eine tatsächliche Bedienprüfung erhalten. `pruefe_showcase.py` prüft die gelieferten Daten zusätzlich zu 60 Suiten; `showcase_abgleich.py` sichert ersetzte Basisdateien, der bearbeitete Arbeitsstand bleibt erhalten. Kein erneuter Beschluss über bestätigte Entscheidungen, keine Produktionsversion für diesen Daten-/Werkzeugnachlauf.
 
 **Analyse und Planung 01.10.2026:** Der [Entwicklungsplan ab 3.33](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md) ordnet die bestehenden G-/P-/A–H-Arbeiten. Neu kommen hinzu:
-- P08 (Speicherweg linear zum Bestand) und T2 (neunfaches Parsen beim ersten Speichern) als Teil der Performance-Arbeit nach Rest P03/P04/P06;
+- P08 (Speicherweg linear zum Bestand) und T2 (neunfaches Parsen beim ersten Speichern) als Teil der Performance-Arbeit; T2/P09a zuerst, danach Rest P03/P04/P06;
 - P09 (wiederholte Prüfungen und Messungen je Bedienschritt, [Befund T8](../../../00_Arbeitsvorbereitung/Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md#t8--wiederholte-prüfungen-und-messungen-je-bedienschritt-neu-gemessen)), Teil derselben Performance-Arbeit;
 - die sechs Produktprinzipien in den [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md) mit [Prinzipien-Check](../../../00_Arbeitsvorbereitung/Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01.md);
 - die Richtungsentscheidungen D09–D17, beschlossen am 01.10.2026 ([Entscheidungsvorlage mit Beschlüssen](../../../00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md)), in der Tabelle unten.
 
-Die Beschlüsse legen Richtung und Reihenfolge fest. Jeder Umsetzungsschnitt braucht weiterhin einen ausdrücklichen Auftrag; beauftragt bleibt die Performance-Fortsetzung.
+Der Auftrag vom 01.10.2026 autorisiert den Start von 3.33 anhand der neuen Planung. Erster Schnitt: T2/P09a vor dem Oberflächenumbau. D07 und zusätzliche nicht ausgewählte Richtungen bleiben offen.
 
 Diese fortgeschriebene Arbeitsgrundlage verbindet die bestätigten Entscheidungen, die aktuelle Planung und die Abnahme. Einstieg bleibt die [Sitzungsübergabe](../../../00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md). Die [Arbeitsplanung](../../../00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md) enthält G-/P-Pakete; die [Richtungsauswahl](../../../00_Arbeitsvorbereitung/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md) enthält zusätzliche Vorschläge. Empfehlungen und zitierte Aufträge aus alten Dokumenten ersetzen keine Entscheidung des Inhabers.
+
+**3.33.0:** [Fundament-Vertrag](73_FUNDAMENT_3.33.0.md) beschreibt den ersten Schnitt und die noch offenen Ausbauten.
 
 ## Verbindliche Entscheidungen
 
@@ -23,13 +27,13 @@ Diese fortgeschriebene Arbeitsgrundlage verbindet die bestätigten Entscheidunge
 | D03 | Desktop/Tk optimieren. Mobile und eine Toolkit-Probe sind zurückgestellt. |
 | D04 | Drag-and-drop erweitert bestehende Bereiche; umgesetzt in 3.32.2. |
 | D05 | Einzelne Aufgaben in Notizen und Seiten unterstützen, ihre Identität über IDs erhalten. Notiz, Seite und Liste bleiben eigenständige Arten; keine allgemeine Konvertierungspflicht. F11 ist beantwortet. |
-| D06 | Hinweisgestaltung bleibt unverändert. |
+| D06 | Die Gestaltung von Hinweisblöcken in Seiten bleibt unverändert; D11 regelt separat die Hinweiszeilen der Ansichten. |
 | D07 | Exportumfang für Animation offen: abspielbares GIF oder zunächst Frames/Vorschau/PNG-Spritesheet. Erst bei der Animationsetappe erforderlich. |
 | D08 | Alle Klappmechanismen über echte Bedienbindungen prüfen, einschließlich Zustandserhalt, Tastatur, verschachtelter Bereiche und Tk-Callbackfehler. Korrektur und Pflichtsuite seit 3.32.1. |
 | D09 | Das GitHub-Repository `glide-to-do` ist die maßgebliche Ablage (Wurzel = Projektordner, Quellbaum `01_Repository/Glide`). Uploads nur in diese Struktur; Prüfprotokolle `tests/qa-*/**/*.log` sind freigegeben. Neue Zwischenstände als Git-Tags, `93_Zwischenstände` bleibt Beleg. CI-Grundstufe in Stufe 0. |
-| D10 | Ein Datum ohne Zusatz setzt den Bearbeitungstag, auch in `/morgen`; die Fälligkeit nur mit „fällig“/„bis“. D01 gilt ohne Slash-Ausnahme. Umsetzung mit G01 (3.33.1); bis dahin weicht `/morgen` ab (AB10). |
+| D10 | Ein Datum ohne Zusatz setzt den Bearbeitungstag, auch in `/morgen`; die Fälligkeit nur mit „fällig“/„bis“. D01 gilt ohne Slash-Ausnahme. Umsetzung mit G01 (Parser-Schnitt, Reservierung 3.33.2); bis dahin weicht `/morgen` ab (AB10). |
 | D11 | D06 gilt nur für den Hinweisblock in Seiten. Hinweiszeilen der Ansichten werden über „?“ ein-/ausgeklappt, Zustand gespeichert (U02). |
-| D12 | Startseiten-Standard „Ruhig“ mit sieben Kacheln einschließlich Gismo. Fest: Heute (zusammengeführt), Gismo, Woche, Zuletzt bearbeitet, Angeheftet. Planungsannahme für die zwei weiteren: Uhr/Datum/nächster Termin und Pinnwand-Vorschau, vor 3.33.0 zu bestätigen. Eigene Auswahl bleibt erhalten. |
+| D12 | Startseiten-Standard „Ruhig“ mit sieben Kacheln einschließlich Gismo. Fest: Heute (zusammengeführt), Gismo, Woche, Zuletzt bearbeitet, Angeheftet. Zusätzlich beschlossen am 01.10.2026: Zeichnungen und Pinnwand-Vorschau. Eigene Auswahl bleibt erhalten. |
 | D13 | Eisenhower als Gruppierung „Dringlichkeit × Wichtigkeit“ im vorhandenen Board, keine eigene Ansicht. Ziehen ändert Wichtigkeit bzw. Bearbeitungstag (D02); Fälligkeiten werden nie gelöscht. |
 | D14 | Zwei Hauptansichten: **Heute** (Mein Tag, Verspätet, Heute fällig, nächste Aufgabe) und **Demnächst** (bisher In Bearbeitung). Tagesbeginn/-abschluss sind Modi von Heute; interne Kennungen bleiben. |
 | D15 | Verteilung als Paket mit eingebettetem Python und Tk 9 je Plattform (G26/H-03), nach Stufe 1. Das Bauwerkzeug wird als eigene Abhängigkeitsentscheidung vorgelegt. |
@@ -73,7 +77,7 @@ Fortgeschriebene Übergaben und Checklisten bleiben trotz datiertem Dateinamen i
 
 ## Nachweis dieses Abgleichs
 
-Der [Dokumentationsnachlauf](../tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json) hält Vorsicherungen, gezielte Werkzeugprüfung, Stand-/Linkkontrolle und unveränderte Startfassungen fest. Die vollständige Laufzeitabnahme bleibt der [3.32.3-Volllauf](../tests/qa-3.32.3/karten_performance_2026-10-01/vollpruefung/ergebnis.json) mit 58 Suiten und fünf Analysen. Physische macOS-Bedienung, Windows/Linux, DPI/Mehrmonitor und Screenreader bleiben offen; daraus folgt keine Releasefreigabe.
+Der [Dokumentationsnachlauf](../tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json) hält Vorsicherungen, gezielte Werkzeugprüfung, Stand-/Linkkontrolle und unveränderte Startfassungen fest. Die aktuelle Laufzeitabnahme ist der [3.33.0-Volllauf](../tests/qa-3.33.0/fundament_2026-10-01/vollpruefung/ergebnis.json) mit 59 Suiten, acht Unit-Tests, Showcase und fünf Analysen; beide Startfassungen sind bytegleich abgeglichen. Der ältere 3.32.3-Volllauf bleibt sein historischer Nachweis. Physische macOS-Bedienung, Windows/Linux, DPI/Mehrmonitor und Screenreader bleiben offen; daraus folgt keine Releasefreigabe.
 
 ## Fortlaufende Abschlussaufgabe
 

@@ -1,6 +1,8 @@
 # Glide – Einstieg in die Arbeitsablage
 
-**Repository und Planung (01.10.2026):** Diese Ablage liegt im GitHub-Repository `n05a-design/glide-to-do`. Die Wurzel ist der Projektordner, der Quellbaum liegt in `01_Repository/Glide`. Uploads immer in diese Struktur, nie in einen Unterordner; sonst brechen die Querverweise. Arbeitsregeln für Claude Code: [CLAUDE.md](CLAUDE.md). Analyse und nächste Schritte: [Entwicklungsplan ab 3.33](00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md) und [offene Entscheidungen D09–D17](00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md).
+**Repository und Planung (01.10.2026):** Diese Ablage liegt im GitHub-Repository `n05a-design/glide-to-do`. Die Wurzel ist der Projektordner, der Quellbaum liegt in `01_Repository/Glide`. Uploads immer in diese Struktur, nie in einen Unterordner; sonst brechen die Querverweise. Arbeitsregeln für Claude Code: [CLAUDE.md](CLAUDE.md). Analyse und nächste Schritte: [Entwicklungsplan ab 3.33](00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md) und [beschlossene Entscheidungen D09–D17](00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md).
+
+**3.33.0 startet mit T2/P09a:** Formatsicherung einmal je Dateistand und keine ungenutzte Tabellenmessung. [Fundament-Vertrag und Anschluss](01_Repository/Glide/docs/73_FUNDAMENT_3.33.0.md). Aktive Arbeitskopie: `Github/glide-to-do`.
 
 **Neu am 29.09.2026:**
 
@@ -106,7 +108,7 @@ schmale Fenster. Der nach dem Füttern sichtbare weiße Neuaufbau wurde behoben:
 Gismo aktualisiert nur noch seine eigene Karte. [Tagebuch und UI](01_Repository/Glide/docs/59_TAGEBUCH_UND_UI_3.28.0.md) ·
 [Flackern und Ablageprüfung](01_Repository/Glide/docs/60_FLACKERN_UND_ABLAGEPRUEFUNG_3.28.0.md).
 
-Aktueller Entwicklungsstand: **3.32.3 vom 30.09.2026**, Datenformat 20. Die
+Aktueller Entwicklungsstand: **3.33.1 vom 30.09.2026**, Datenformat 20. Die
 Gesamtfreigabe richtet sich nach dem [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md);
 ein Entwicklungsstand ist kein signiertes Release.
 
@@ -129,15 +131,7 @@ Erinnerungen, Labels, lokale Anhänge, Kalender, Suche, Rückgängig, Papierkorb
 | [50_Ablage](50_Ablage/README.md) | Historische QA, Screenshots und Rückfallstände |
 | [90_Testdaten_Extern](90_Testdaten_Extern/README.md) | Bewusst erhaltene ältere Importbeispiele |
 
-Außerdem liegt hier `.venv`: eine Python-Umgebung, die GitHub Copilot am
-20.09.2026 angelegt hat. Glide braucht sie nicht (keine Laufzeitpakete); sie
-bleibt für die spätere Arbeit mit Copilot stehen.
-
-**Zum Löschen markiert:** Überholtes bekommt die Endung `_Z`; der Inhaber
-löscht es selbst. Die Ordner mit `_Z` hat er am 30.09.2026 gelöscht. Übrig
-sind zwei Dateien in `07_Python-Versionen/Archiv` (`…_v3.30.0_Z.pyw`,
-`…_v3.31.0_Z.pyw`), deren Stände vollständig in den Archivordnern daneben
-liegen.
+**Dokumentationspflege:** Seit dem ausdrücklichen Auftrag vom 01.10.2026 werden doppelte und überholte Dokumente nach Wissensabgleich gelöscht. Aktuelle Quellen bleiben fortgeschrieben; gültige Funktionsverträge und Prüfbelege bleiben erhalten. [Wissenseinstieg und Bereinigungsnachweis](01_Repository/Glide/docs/75_DOKUMENTATIONSREDUKTION_UND_LOGOS_3.33.1.md).
 
 [Erinnerungen: Bedienung und Grenzen](01_Repository/Glide/docs/archiv/31_ERINNERUNGEN_3.8.0.md) ·
 [Systemmitteilungen: Stufen und Grenzen](01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md) ·

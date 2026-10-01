@@ -4,7 +4,7 @@ Die Master liegen in `20_Grafik_Master`; Kopien stehen unverändert unter
 `resources/logo/`:
 
 - `glide-logo.svg` – das Zeichen, eine Fläche in einer Farbe;
-- `glide-app-icon.svg` – das App-Symbol: Fläche mit weißem Zeichen;
+- `glide-app-icon.svg` – das App-Symbol: blaue Fläche mit ausgespartem Zeichen;
 - `glide-logo.png`, `glide-app-icon.png` – dieselben Motive als PNG für Tk 8.6.
 
 **Warum SVG:** Tk 9 liest SVG selbst (nanosvg) und rechnet es für jede Größe
@@ -12,7 +12,7 @@ scharf. Die Farbe steht im SVG als Füllwert. Für die Akzentfarbe wird genau
 dieser Wert ersetzt, bevor Tk das Bild rechnet – eine Textersetzung an einer
 bekannten Stelle, kein Nachfärben von Pixeln. Das Motiv selbst bleibt
 unangetastet; ein neu exportierter Master braucht keine Codeänderung, solange
-er bei einer Füllfarbe bleibt (`test_logo330` prüft das).
+er die freigegebene Füllfarbe in CSS oder Inline-Stil trägt (`test_logo330` prüft das).
 
 **Tk 8.6** kennt kein SVG. Dann zeichnet Glide das Zeichen als Fläche auf eine
 Canvas: Der Pfad besteht nur aus Geraden und kubischen Bézierkurven, die hier
@@ -27,17 +27,17 @@ import os
 import re
 import sys
 import tkinter as tk
-import xml.etree.ElementTree as ElementTree
+import svg_geometry
 
 # Füllfarbe der Master (Glide-Blau). Genau dieser Wert wird ersetzt.
-MASTER_FILL = "rgb(1,133,225)"
+MASTER_FILL = "#0185e1"
 BRAND_BLUE = "#0185E1"
 LOGO_FILE = "glide-logo.svg"
 ICON_FILE = "glide-app-icon.svg"
 LOGO_PNG = "glide-logo.png"
 ICON_PNG = "glide-app-icon.png"
 # Luft um das Zeichen, damit geglättete Kanten nicht angeschnitten werden –
-# in Einheiten der Master (1080 × 1080).
+# in Einheiten der Master (841,89 × 841,89).
 BOX_MARGIN = 4.0
 # macOS zeichnet Programmsymbole mit Rand: Die Fläche füllt 824 von 1024
 # Pixeln (Apple-Raster seit macOS 11). Windows und Linux nutzen die volle
@@ -59,146 +59,21 @@ def read_svg(name=LOGO_FILE):
         return datei.read()
 
 
-def tinted(svg, farbe):
-    """Ersetzt die Masterfarbe durch `farbe` (#RRGGBB). Fehlt sie, ist der Master nicht einfarbig."""
-    if MASTER_FILL not in svg:
-        raise ValueError("Der Logo-Master trägt nicht die erwartete Füllfarbe " + MASTER_FILL)
-    if not re.fullmatch(r"#[0-9A-Fa-f]{6}", str(farbe or "")):
-        raise ValueError(f"Keine Farbe im Format #RRGGBB: {farbe!r}")
-    return svg.replace(MASTER_FILL, farbe)
+tinted = svg_geometry.tinted
 
 
 # --- Geometrie ---------------------------------------------------------------
-def _matrix(transform):
-    """Eine Transformationsliste als Matrix (a, b, c, d, e, f); kennt matrix, translate, scale."""
-    ergebnis = (1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
-    for art, werte in re.findall(r"(matrix|translate|scale)\s*\(([^)]*)\)", transform or ""):
-        zahlen = [float(wert) for wert in re.split(r"[\s,]+", werte.strip()) if wert]
-        if art == "matrix" and len(zahlen) == 6:
-            schritt = tuple(zahlen)
-        elif art == "translate":
-            schritt = (1.0, 0.0, 0.0, 1.0, zahlen[0], zahlen[1] if len(zahlen) > 1 else 0.0)
-        elif art == "scale":
-            schritt = (zahlen[0], 0.0, 0.0, zahlen[1] if len(zahlen) > 1 else zahlen[0], 0.0, 0.0)
-        else:
-            raise ValueError(f"Unbekannte Transformation: {art}({werte})")
-        ergebnis = _multiply(ergebnis, schritt)
-    return ergebnis
-
-
-def _multiply(m, n):
-    a, b, c, d, e, f = m
-    a2, b2, c2, d2, e2, f2 = n
-    return (a * a2 + c * b2, b * a2 + d * b2, a * c2 + c * d2, b * c2 + d * d2,
-            a * e2 + c * f2 + e, b * e2 + d * f2 + f)
-
-
-def _apply(m, x, y):
-    a, b, c, d, e, f = m
-    return a * x + c * y + e, b * x + d * y + f
-
-
-def _tokens(pfad):
-    return re.findall(r"[MLHVCZmlhvcz]|-?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?", pfad)
-
-
-def subpaths(pfad, schritte=10):
-    """Zerlegt einen SVG-Pfad (M, L, H, V, C, Z – absolut und relativ) in Polygonzüge."""
-    teile, aktuell = [], []
-    zeichen = _tokens(pfad)
-    i, befehl = 0, None
-    x = y = start_x = start_y = 0.0
-
-    def zahl():
-        nonlocal i
-        wert = float(zeichen[i])
-        i += 1
-        return wert
-
-    while i < len(zeichen):
-        if re.fullmatch(r"[A-Za-z]", zeichen[i]):
-            befehl = zeichen[i]
-            i += 1
-            if befehl in "Zz":
-                if aktuell:
-                    teile.append(aktuell)
-                aktuell = []
-                x, y = start_x, start_y
-                continue
-        if befehl is None:
-            raise ValueError("Pfad beginnt ohne Befehl")
-        relativ = befehl.islower()
-        art = befehl.upper()
-        if art == "M":
-            if aktuell:
-                teile.append(aktuell)
-            nx, ny = zahl(), zahl()
-            x, y = (x + nx, y + ny) if relativ else (nx, ny)
-            start_x, start_y = x, y
-            aktuell = [(x, y)]
-            befehl = "l" if relativ else "L"
-        elif art == "L":
-            nx, ny = zahl(), zahl()
-            x, y = (x + nx, y + ny) if relativ else (nx, ny)
-            aktuell.append((x, y))
-        elif art == "H":
-            nx = zahl()
-            x = x + nx if relativ else nx
-            aktuell.append((x, y))
-        elif art == "V":
-            ny = zahl()
-            y = y + ny if relativ else ny
-            aktuell.append((x, y))
-        elif art == "C":
-            werte = [zahl() for _ in range(6)]
-            if relativ:
-                werte = [wert + (x if index % 2 == 0 else y) for index, wert in enumerate(werte)]
-            x1, y1, x2, y2, x3, y3 = werte
-            for schritt in range(1, schritte + 1):
-                t = schritt / schritte
-                u = 1 - t
-                aktuell.append((u ** 3 * x + 3 * u * u * t * x1 + 3 * u * t * t * x2 + t ** 3 * x3,
-                                u ** 3 * y + 3 * u * u * t * y1 + 3 * u * t * t * y2 + t ** 3 * y3))
-            x, y = x3, y3
-        else:
-            raise ValueError(f"Pfadbefehl {befehl} wird nicht unterstützt")
-    if aktuell:
-        teile.append(aktuell)
-    return teile
+# Keep existing geometry entry points while the implementation remains Tk-free.
+_matrix = svg_geometry._matrix
+_multiply = svg_geometry._multiply
+_apply = svg_geometry._apply
+_tokens = svg_geometry._tokens
+subpaths = svg_geometry.subpaths
 
 
 @functools.lru_cache(maxsize=8)
 def outline(name=LOGO_FILE):
-    """Polygonzüge aller Flächen im Koordinatensystem des Masters (viewBox).
-
-    Gelesen werden nur die mitgelieferten Master aus `resources/logo`, nie
-    Dateien des Nutzers. Entitäten lehnt die Funktion trotzdem ab: Ein Master
-    braucht keine, und so kann auch ein versehentlich getauschter keine
-    Entitätenexpansion auslösen. Externe Verweise (die DTD im Kopf) lädt
-    ElementTree ohnehin nicht.
-    """
-    text = read_svg(name)
-    if "<!ENTITY" in text:
-        raise ValueError(f"{name} enthält Entitätsdefinitionen")
-    wurzel = ElementTree.fromstring(text)
-    ergebnis = []
-
-    def laufen(knoten, matrix):
-        matrix = _multiply(matrix, _matrix(knoten.get("transform")))
-        if knoten.tag == _SVG_NS + "clipPath":
-            return
-        if knoten.tag == _SVG_NS + "path":
-            stil = (knoten.get("style") or "") + " " + (knoten.get("fill") or "")
-            if "fill:none" not in stil.replace(" ", ""):
-                for teil in subpaths(knoten.get("d") or ""):
-                    ergebnis.append([_apply(matrix, px, py) for px, py in teil])
-        for kind in knoten:
-            laufen(kind, matrix)
-
-    laufen(wurzel, (1.0, 0.0, 0.0, 1.0, 0.0, 0.0))
-    if not ergebnis:
-        raise ValueError(f"{name} enthält keine Fläche")
-    return tuple(tuple(teil) for teil in ergebnis)
+    return svg_geometry.outline(read_svg(name))
 
 
 def bounding_box(name=LOGO_FILE):
@@ -254,7 +129,7 @@ def logo_photo(master, hoehe, farbe=BRAND_BLUE, name=LOGO_FILE):
 
 def icon_svg(rand=0.0):
     """App-Symbol als SVG-Text, mit `rand` (Anteil je Seite) Luft um die Fläche."""
-    svg = read_svg(ICON_FILE)
+    svg = svg_geometry.inline_styles(read_svg(ICON_FILE))
     x, y, breite, hoehe = bounding_box(ICON_FILE)
     seite = max(breite, hoehe)
     zusatz = seite * rand / max(1e-6, 1 - 2 * rand)
@@ -306,7 +181,7 @@ def draw_logo_polygons(canvas, x, y, hoehe, farbe, tag="logo", name=LOGO_FILE):
     """Zeichnet das Zeichen als Fläche auf `canvas` (Rückfall ohne SVG)."""
     bx, by, _breite, bhoehe = bounding_box(name)
     faktor = hoehe / bhoehe
-    for teil in outline(name):
+    for teil in svg_geometry.canvas_polygons(outline(name)):
         punkte = []
         for px, py in teil:
             punkte.extend((x + (px - bx) * faktor, y + (py - by) * faktor))

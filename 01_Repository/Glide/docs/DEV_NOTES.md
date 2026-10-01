@@ -1,6 +1,6 @@
 # Entwicklungsnotizen – fortlaufende Invarianten
 
-Stand 01.10.2026 · Glide 3.32.3 · Datenformat 20
+Stand 01.10.2026 · Glide 3.33.1 · Datenformat 20
 
 ## Regeln aus 3.32.1–3.32.3
 

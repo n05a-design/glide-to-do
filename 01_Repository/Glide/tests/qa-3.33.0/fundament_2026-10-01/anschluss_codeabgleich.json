@@ -1,0 +1,61 @@
+{
+  "version": "3.33.0",
+  "grenze": "Codeeinstiege und notwendige Abnahmekriterien; Reihenfolge gemäß Entwicklungsplan, keine zusätzliche Featurewahl",
+  "naechste_schnitte": [
+    {
+      "id": "P03/P09b",
+      "folge": 1,
+      "einstiege": {
+        "refresh_home": 21041,
+        "page_chips": 34495,
+        "hint_line_height": 41687,
+        "due_status": 37030
+      },
+      "abnahme": [
+        "reale Kartenzahl skalieren",
+        "gleiche Kennzahlen alt/neu",
+        "Status/Datum/Schrift/Design invalidieren",
+        "Fokus/Scroll/Undo erhalten"
+      ]
+    },
+    {
+      "id": "P04",
+      "folge": 2,
+      "einstiege": "PageEditor.fit_read_width/layout_images/place_images",
+      "abnahme": [
+        "unveränderte effektive Geometrie überspringen",
+        "Textanker/Faltungen/Schrift/Anhänge invalidieren",
+        "kein verschachteltes update"
+      ]
+    },
+    {
+      "id": "P06/P08",
+      "folge": 3,
+      "einstiege": {
+        "save_items": 37462,
+        "update_history": 37942,
+        "record_recent_list_edits": 16978
+      },
+      "abnahme": [
+        "dynamisch Aufrufe zählen",
+        "Save-Fehler/Dirty/Warnung/Undo",
+        "Verlauf-Differenztest alt/neu"
+      ]
+    },
+    {
+      "id": "UX1",
+      "folge": 4,
+      "entschieden": [
+        "D11 Hinweise nur bei Bedarf",
+        "D12 sieben Standardkacheln inkl. Zeichnungen/Pinnwand"
+      ],
+      "vorher": "stabile Aktionskennungen, keine Menüumbenennung über Textschlüssel"
+    },
+    {
+      "id": "G01",
+      "folge": 5,
+      "entschieden": "D10: auch /morgen = Bearbeitungstag; nur bis/fällig = Fälligkeit",
+      "vorher": "Parser als Tk-freies Modul; erkennbar/rücknehmbar; gespeicherte Werte unverändert"
+    }
+  ]
+}

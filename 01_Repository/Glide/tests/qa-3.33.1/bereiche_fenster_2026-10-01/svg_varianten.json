@@ -1,0 +1,89 @@
+[
+  {
+    "source": "20_Grafik_Master/01_Logo/Glide-Logo-01.svg",
+    "sha256": "1a36b52bd4d3f77f34ed2c985a097bfb283924bf098f57c1cc5174067bcbc42f",
+    "css_classes": 0,
+    "bytes": 1318,
+    "selected": true,
+    "bbox": [
+      227.52,
+      108.77,
+      628.4063599999998,
+      720.3699999999999
+    ],
+    "contours": 2,
+    "hole_transparent": true
+  },
+  {
+    "source": "20_Grafik_Master/01_Logo/Glide-Logo-02.svg",
+    "sha256": "d1ce256055fe3fb089301a272d92137bedaf7e13c3c2a9694ffdd25735945737",
+    "css_classes": 0,
+    "bytes": 1486,
+    "selected": false,
+    "bbox": [
+      227.52,
+      108.77,
+      628.4063599999998,
+      720.3699999999999
+    ],
+    "contours": 2,
+    "hole_transparent": true
+  },
+  {
+    "source": "20_Grafik_Master/01_Logo/Glide-Logo.svg",
+    "sha256": "0335b68f84b99cb7d7e135e46591cabd7daa14598be57d051926b513b55770a5",
+    "css_classes": 1,
+    "bytes": 1406,
+    "selected": false,
+    "bbox": [
+      227.52,
+      108.77,
+      628.4063599999998,
+      720.3699999999999
+    ],
+    "contours": 2,
+    "hole_transparent": true
+  },
+  {
+    "source": "20_Grafik_Master/03_Fav-Icon/App-Icon-transparent-01.svg",
+    "sha256": "6967e678fc7798f66d8651899b486a93315fe1033d338b8be8d5724887a4f4fc",
+    "css_classes": 0,
+    "bytes": 1676,
+    "selected": false
+  },
+  {
+    "source": "20_Grafik_Master/03_Fav-Icon/App-Icon-transparent-02.svg",
+    "sha256": "cf2856661c58ac735ce112fb39a4a976932a74581ef34f1a96a616a49a8c2416",
+    "css_classes": 0,
+    "bytes": 1671,
+    "selected": true
+  },
+  {
+    "source": "20_Grafik_Master/03_Fav-Icon/App-Icon-transparent.svg",
+    "sha256": "809e4eaa180edd02340e3050e9b8b602ed3066f009827a31258acbb9535deb60",
+    "css_classes": 3,
+    "bytes": 1764,
+    "selected": false
+  },
+  {
+    "source": "20_Grafik_Master/03_Fav-Icon/Fav-Icon-transparent-03.svg",
+    "sha256": "a4db0ad1b662b077db6e06c90e5a32ee8f68349d5f910680f8f212d92991454b",
+    "css_classes": 0,
+    "bytes": 1507,
+    "selected": false
+  },
+  {
+    "source": "20_Grafik_Master/03_Fav-Icon/Icon-rund-01.svg",
+    "sha256": "96cc56b14ee30ebc43b320bfd2975f61421a75b69d93cfc7fc293b206b896dfb",
+    "css_classes": 0,
+    "bytes": 1391,
+    "selected": false
+  },
+  {
+    "source": "20_Grafik_Master/03_Fav-Icon/Icon-rund.svg",
+    "sha256": "96f2745740523f45e0677af1106a36e2a7e844c68d22c40e8f0eaec3426070e8",
+    "css_classes": 0,
+    "bytes": 1220,
+    "selected": false
+  }
+]

@@ -1,6 +1,6 @@
 # 50_Ablage
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 Dieser Bereich nimmt projektbegleitende Arbeits- und Prüfarbeitsstände auf, die
 weder produktiver Source noch dauerhaft eingefrorenes Archivmaterial sind.

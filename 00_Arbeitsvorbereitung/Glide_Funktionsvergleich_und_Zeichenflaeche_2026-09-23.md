@@ -98,7 +98,7 @@ Notizinfrastruktur.
 
 Lokale Belege: [Datenvertrag](../01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md),
 [Tagebuchvertrag 3.28](../01_Repository/Glide/docs/59_TAGEBUCH_UND_UI_3.28.0.md),
-[Entscheidungen 3.26](../01_Repository/Glide/docs/decisions/archiv/Entscheidungen_3.26.0.md).
+[Entscheidungen 3.26](../01_Repository/Glide/docs/75_DOKUMENTATIONSREDUKTION_UND_LOGOS_3.33.1.md).
 
 ### 2.3 Pinnwand – dokumentiert vorhanden, freie Zeichnung nicht belegt
 
@@ -567,7 +567,7 @@ Freigabepunkte bleiben **geplant, nicht umgesetzt**.
 - [Pinnwand als Arbeitsfläche 3.23](../01_Repository/Glide/docs/53_PINNWAND_ARBEITSFLAECHE_3.23.0.md)
 - [Navigation und Pinnwand 3.24](../01_Repository/Glide/docs/55_NAVIGATION_UND_PINNWAND_3.24.0.md)
 - [Tagebuch und UI 3.28](../01_Repository/Glide/docs/59_TAGEBUCH_UND_UI_3.28.0.md)
-- [Entscheidungen und Umsetzungsstand 3.26](../01_Repository/Glide/docs/decisions/archiv/Entscheidungen_3.26.0.md)
+- [Entscheidungen und Umsetzungsstand 3.26](../01_Repository/Glide/docs/75_DOKUMENTATIONSREDUKTION_UND_LOGOS_3.33.1.md)
 - [SVG- und Zeichnungsdaten-Untersuchung](Glide_SVG_und_Zeichnungsdaten_Untersuchung_2026-09-23.md)
 - [Historische Konkurrenzanalyse 17.09.2026](Archiv/Glide_Konkurrenzanalyse_2026-09-17.md)
 - [Historische Feature-Gap-Analyse 18.09.2026](Archiv/Glide_Feature_Gap_Analyse_2026-09-18.md)

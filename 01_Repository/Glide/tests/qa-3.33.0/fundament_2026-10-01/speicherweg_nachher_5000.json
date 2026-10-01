@@ -1,0 +1,94 @@
+{
+  "werkzeug": "messung_speicherweg.py",
+  "app": "01_Repository/Glide/src/glide/app.pyw",
+  "app_version": "3.32.3",
+  "punkte": 5000,
+  "datei_kb": 5150,
+  "runden_warm": 7,
+  "umgebung": {
+    "python": "3.14.5",
+    "tk": "9.0.3",
+    "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "prozessor": "arm"
+  },
+  "erstes_speichern_ms": 330.499,
+  "snapshot_undo": {
+    "median_ms": 37.607,
+    "p95_ms": 40.647,
+    "stichproben_ms": [
+      37.607,
+      37.254,
+      38.045,
+      37.175,
+      36.983,
+      39.21,
+      40.647
+    ]
+  },
+  "save_items": {
+    "median_ms": 272.029,
+    "p95_ms": 284.027,
+    "stichproben_ms": [
+      281.684,
+      277.389,
+      270.336,
+      284.027,
+      264.747,
+      270.334,
+      272.029
+    ]
+  },
+  "history_snapshot": {
+    "median_ms": 50.809,
+    "p95_ms": 57.08,
+    "stichproben_ms": [
+      55.664,
+      49.635,
+      55.858,
+      50.495,
+      50.597,
+      57.08,
+      50.809
+    ]
+  },
+  "json_eingerueckt": {
+    "median_ms": 24.303,
+    "p95_ms": 24.748,
+    "stichproben_ms": [
+      24.748,
+      24.303,
+      24.082,
+      24.243,
+      24.159,
+      24.365,
+      24.317
+    ]
+  },
+  "json_kompakt": {
+    "median_ms": 22.82,
+    "p95_ms": 23.404,
+    "stichproben_ms": [
+      23.404,
+      23.351,
+      22.74,
+      22.803,
+      22.82,
+      22.704,
+      22.843
+    ]
+  },
+  "abhaken_item_change": {
+    "median_ms": 346.554,
+    "p95_ms": 462.932,
+    "stichproben_ms": [
+      346.554,
+      378.564,
+      344.443,
+      341.878,
+      335.294,
+      462.932,
+      347.088
+    ]
+  },
+  "callbackfehler": []
+}

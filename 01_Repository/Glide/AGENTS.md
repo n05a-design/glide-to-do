@@ -7,7 +7,7 @@ Glide ist eine lokale Desktop-Anwendung. Kernfunktionen müssen ohne Internet, B
 ## Verbindliche Quellen
 
 - Einstieg für jede neue Sitzung: `../../00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md` (Stand, Regeln, nächste Schritte)
-- Fortlaufende Arbeitsrichtung und Abnahme: `docs/ARBEITSRICHTUNG.md` (D01–D08, Performance-Fortsetzung, offene Richtungsauswahl, Lebensdauer/Invalidierung und Nachläufe)
+- Fortlaufende Arbeitsrichtung und Abnahme: `docs/ARBEITSRICHTUNG.md` (D01–D17, Performance-Fortsetzung, offene Richtungsauswahl, Lebensdauer/Invalidierung und Nachläufe)
 - Pflegewerkzeuge für Versionswechsel und Abgleich nach `07_Python-Versionen`: `scripts/pflege/`
 - Produkt und Grenzen: `docs/01_PRODUCT_CONSTRAINTS.md`
 - Architektur: `docs/02_ARCHITECTURE.md`
@@ -32,10 +32,12 @@ Glide ist eine lokale Desktop-Anwendung. Kernfunktionen müssen ohne Internet, B
 7. Signing-Secrets, Zertifikate, Schlüssel, Tokens und Recovery-Codes niemals einchecken.
 8. Änderungen an Punkten laufen durch `item_change`, an Listen und Ordnern durch `sidebar_change`; Umbauaktionen zusätzlich unter `guarded_structural_change`. Modale Dialoge ausschließlich über `run_modal`.
 9. Oberflächensymbole ausschließlich als Textzeichen aus der Tabelle `ICONS`. Der Integrationstest erzwingt das. Einzige Ausnahme ist das Logo als Bild aus `resources/logo` (`logo.py`, seit 29.09.2026).
-10. Überholte Dokumente werden nicht überschrieben, sondern zuerst in den `archiv/`-Unterordner desselben Ordners kopiert – benannt nach der Version, die sie beschreiben.
+10. Aktuelle Dokumente an ihrer verbindlichen Quelle fortschreiben. Seit dem ausdrücklichen Nutzerauftrag vom 01.10.2026 dürfen überholte und doppelte Dokumentationsdateien nach Wissensabgleich gelöscht werden; Verweise nachführen und Löschgrund/erhaltene Quelle dokumentieren. Keine neue Versionskopie bei jeder Dokumentpflege. Gültige Funktionsverträge, Importfixtures und tatsächliche Prüfbelege bewahren. Siehe `docs/DOKUMENTENPFLEGE.md`.
 
 11. Aufgabenstatus, nächste Schritte, Entscheidungen und Prüfgrenzen in Planung, Auswahl und Übergaben inhaltlich abgleichen. Aktuelle Versionszeilen allein reichen nicht.
 12. Caches nach stabilen IDs und Host-Lebensdauer führen, vollständig invalidieren; Undo kann Objekte ersetzen. Ersetzte Bindungen/after-Aufträge freigeben. Keine verschachtelten `update()`/`update_idletasks()` in selbstauslösenden Rückrufen. Details und Abnahme in `docs/ARBEITSRICHTUNG.md`.
+
+13. Nach D17 entsteht neue oder angefasste Fachlogik als Tk-freies Modul mit eigenen Unit-Tests; bestehende UI- und Mutationseinstiege bleiben erhalten. Seit D09 ist die Git-Arbeitskopie des gesamten Projektordners maßgeblich.
 
 ## Abschlusskriterium
 

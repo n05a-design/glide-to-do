@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_logo330.py", line 122, in <module>
+    assert nahe(logo_farbe(app.header_logo), app.header_logo_color()), (logo_farbe(app.header_logo),
+           ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('#000000', '#9948C2')

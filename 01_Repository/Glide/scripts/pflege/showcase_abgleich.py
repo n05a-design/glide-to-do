@@ -28,7 +28,7 @@ def main():
     for name in names:
         source, target = SOURCE/name, TARGET/name
         assert source.is_file(), source
-        if target.exists() and target.read_bytes() != source.read_bytes():
+        if target.exists() and target.suffix != ".md" and target.read_bytes() != source.read_bytes():
             archive = TARGET/"archiv"
             archive.mkdir(exist_ok=True)
             snapshot = archive/(target.stem+"_vor_Abgleich_"+datetime.now().strftime("%Y-%m-%d_%H-%M-%S_%f")+target.suffix)

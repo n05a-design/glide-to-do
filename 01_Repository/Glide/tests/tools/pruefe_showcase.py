@@ -77,9 +77,28 @@ def entries(app):
 
 
 def integrity(app, expected_lists, expected_boards=3):
+    assert len(app.sidebar_trees()) == 4
+    assert all(app.sidebar_section_visible(key) for key in ("pages", "lists", "notes", "drawings"))
     assert len(app.lists) == expected_lists
     assert {e["list_kind"] for e in app.lists} == {"tasks", "note", "page", "drawing", "gallery"}
     assert {f["folder_kind"] for f in app.folders} == {"standard", "library", "journal"}
+    for kind, objects in (("folder", app.folders), ("list", app.lists)):
+        for obj in objects:
+            if obj.get("archived") or (kind == "list" and app.is_inbox_list(obj)):
+                continue
+            iid = kind + ":" + obj["id"]
+            matches = [tree for tree in app.sidebar_trees() if tree.exists(iid)]
+            assert len(matches) == 1, (obj["title"], "fehlend oder doppelt")
+            tree = matches[0]
+            assert app.sidebar_section_for_tree(tree) == app.sidebar_section_for(kind, obj["id"])
+            parent = obj.get("folder_id" if kind == "list" else "parent_id")
+            assert tree.parent(iid) == ("folder:" + parent if parent else ""), obj["title"]
+    for title, section in (("Wissen und Bildmaterial", "pages"), ("Projekttagebuch", "notes"),
+                           ("Quartier · Pixelskizze", "drawings")):
+        kind = "list" if section == "drawings" else "folder"
+        objects = app.lists if kind == "list" else app.folders
+        matches = [obj for obj in objects if obj["title"] == title]
+        assert matches and all(app.sidebar_section_for(kind, obj["id"]) == section for obj in matches)
     ids = app.data_item_ids()
     for entry in app.lists:
         for item in app.walk_items(entry.get("items", [])):

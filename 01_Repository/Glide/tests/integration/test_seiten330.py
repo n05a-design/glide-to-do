@@ -190,14 +190,14 @@ with tempfile.TemporaryDirectory(prefix="glide-seiten-") as ordner:
         assert bereinigt["page_favorites"] == ["a"] and bereinigt["page_recent"] == []
         assert bereinigt["page_full_width"] is False
         # --- Ordnertypen -------------------------------------------------------
-        assert [info["label"] for info in app.FOLDER_KINDS.values()] == ["Ordner", "Bibliothek", "Notizbuch"]
+        assert [info["label"] for info in app.FOLDER_KINDS.values()] == ["Ordner", "Buch", "Notizbuch"]
         assert app.new_folder_object("x", folder_kind="gibtsnicht")["folder_kind"] == "standard"
         bibliothek = app.new_folder_object("Bücher", folder_kind="library")
         app.folders.append(bibliothek)
         app.update_sidebar_list()
         app.set_active_folder(bibliothek["id"])
         ruhe()
-        assert app.entry_placeholder_text == "Neue Seite in dieser Bibliothek"
+        assert app.entry_placeholder_text == "Neue Seite in diesem Buch"
         app.entry.delete(0, "end")
         app.entry_placeholder_active = False
         app.entry.insert(0, "Der Hobbit")

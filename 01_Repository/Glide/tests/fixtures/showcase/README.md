@@ -1,6 +1,6 @@
 # Glide · aktiver Showcase
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20
 
 Das fiktive Projekt **Parkquartier** zeigt fertige, bearbeitbare Arbeitsdokumente: Briefing, Abstimmungsnotiz, Aufgabenliste, Bildgalerie, Pixelskizze, Routinen und Projekttagebuch. Die sechs Originalmotive stammen unverändert aus `20_Grafik_Master/06_Beispielbilder`. Sie illustrieren Themen; sie zeigen kein reales Verkaufsobjekt. Personen und Projektangaben sind fiktiv.
 
@@ -30,7 +30,7 @@ Die Wiederherstellung eines App-Backups ersetzt den gewählten Bestand und seine
 5. **Projektpinnwand:** den obersten Showcase-Ordner öffnen. Fünf Karten, zwei beschriftete Verbindungen und ein benannter Bereich; die Pixelskizze ist als Dokumentverweis angeheftet.
 6. **Mein Tag:** Steckbrief um 09:00 und Bildauswahl um 10:30. Die Fälligkeit ist gesondert gesetzt. Ziehen in einen bezeichneten Terminkontext wirkt auf dessen Feld.
 7. **Notiz und Tagebuch:** Aufgaben stehen oberhalb des Protokolls. Tagebuchnotizen tragen Datum, Stimmung, Ort und Favorit. Die archivierte Vorbereitung ist über die Archivansicht zurückholbar.
-8. **Pixel-Werkstatt:** 32 × 32 Zeichnung mit PNG-Referenz, 16 × 16 Symbol und ICO-Anhang. GPL-/HEX-Paletten, CSV-Steckbrief und TXT-Übergabe liegen an der Umsetzungsliste.
+8. **Pixel-Werkstatt:** In „Zeichnungen“ die Pixelskizze öffnen. Bücher/Seiten, Notizbuch und Zeichnung haben jetzt eigene Bereiche; die gemischte Projektarbeit bleibt in Listen. In den Einstellungen Bereiche ausblenden und ihre vollständigen Zweige weiter in Listen öffnen. 32 × 32 Zeichnung mit PNG-Referenz, 16 × 16 Symbol und ICO-Anhang. GPL-/HEX-Paletten, CSV-Steckbrief und TXT-Übergabe liegen an der Umsetzungsliste.
 9. **Vorlagen:** `{{Wochentag}}` und `{{KW}}` werden automatisch gefüllt; nur `{{Projekt}}` wird abgefragt. Die Notizvorlage enthält Aufgaben und einen Bildanhang.
 10. **Tagesabschluss:** offene Tagesaufgaben umplanen und den Rückblick in die Tagesnotiz übernehmen. Die Wochenstart-Checkliste öffnet sich nach vollständigem Abhaken wieder.
 

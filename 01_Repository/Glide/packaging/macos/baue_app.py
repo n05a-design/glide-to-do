@@ -43,7 +43,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 QUELLE = REPO / "src" / "glide"
 DATEIEN = ("app.pyw", "drawing.py", "drawing_image.py", "backdrop.py", "page_markdown.py", "image_preview.py",
-           "logo.py", "glide_start.py")
+           "logo.py", "glide_start.py", "schema_backups.py", "sidebar_policy.py", "svg_geometry.py")
 SYMBOL = REPO / "assets" / "icons" / "glide_macos_1024.png"
 
 

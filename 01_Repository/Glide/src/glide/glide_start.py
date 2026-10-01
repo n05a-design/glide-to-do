@@ -1,7 +1,7 @@
 """Schnellstart für Glide: lädt die App als Modul und nutzt den Bytecode-Cache.
 
 Python übersetzt ein direkt gestartetes Skript bei jedem Start neu – bei Glide
-rund 48.000 Zeilen und etwa eine halbe Sekunde (Messung 26.09.2026). Als Modul
+mehr als 50.000 Zeilen und etwa eine halbe Sekunde (Messung 26.09.2026). Als Modul
 geladen, legt Python den übersetzten Stand einmal ab und liest ihn danach in
 wenigen Millisekunden.
 

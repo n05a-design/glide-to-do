@@ -1,6 +1,8 @@
 # Glide – Entwicklungsplan ab 3.33
 
-Stand **01.10.2026** · Glide 3.32.3 (Aufgabenformat 20) · Teil 4 von 4 der Analyse vom 01.10.2026 · nachgeführt nach den Beschlüssen D09–D17 und Befund T8
+
+**Ergänzungsauftrag 01.10.2026, 3.33.1:** Vier Seitenleistenbereiche in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen. Nur Listen bleibt verpflichtend sichtbar. Seiten erlaubt Bücher (bestehende Art `library`), Ordner und Seiten; Notizen Notizbücher, Ordner und Notizen; Zeichnungen Ordner und Zeichnungen; Listen alle Arten. Sichtbarkeit und Root-Zuordnung sind lokale Anzeigeeinstellungen, keine Löschaktion. Gemischte Altordner werden vollständig in Listen angezeigt. Einheitliche Anlege-/Verschieberegeln und Prüfung aller Fenster gehören zur Abnahme. [Vertrag](../01_Repository/Glide/docs/74_BEREICHE_UND_FENSTER_3.33.1.md).
+Stand **01.10.2026** · Glide 3.33.0 (Aufgabenformat 20) · Teil 4 von 4 der Analyse vom 01.10.2026 · nachgeführt nach den Beschlüssen D09–D17 und Befund T8
 
 Grundlagen:
 - [Bestandsaufnahme Code und Dokumentation](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md): Abweichungen AB01–AB17, technische Befunde T1–T8, Ablage
@@ -22,7 +24,7 @@ Grundlagen:
   - die Regeln aus AGENTS.md und ARBEITSRICHTUNG,
   - der beauftragte Performance-Anschluss (Rest P03, P04/A-02, Rest P06/A-03).
 - **Dieser Plan ist eine Empfehlung.** Er ordnet bestehende und neue Arbeiten, schätzt Aufwand und benennt Risiken. Die Richtung ist mit D09–D17 entschieden; die offene Auswahl A–H und D07 entscheidet der Inhaber. Jeder Umsetzungsschnitt außerhalb der beauftragten Performance-Arbeit braucht einen ausdrücklichen Auftrag.
-- Zielversionen sind Planungsreservierungen, keine Liefertermine.
+- Zielversionen sind Planungsreservierungen, keine Liefertermine. Der neue Auftrag startet mit dem notwendigen Fundament als 3.33.0; UX1 folgt im nächsten begrenzten Schnitt. Die folgenden 3.33-Reservierungen werden dadurch um einen Schnitt weitergeführt; ursprüngliche Nummern in historischen Beschlüssen sind keine Implementierungsnachweise. Die 3.32.3-Analysewerte bleiben historische Ausgangswerte.
 
 ## 1. Ausgangslage in acht Sätzen
 
@@ -89,8 +91,8 @@ Aufwand in **Arbeitstagen (AT) im bisherigen Arbeitsmodus**: KI-gestützte Umset
 | P03r | Rest P03: Startseitenkarten, einzelne Kartenelemente, viele Karten | beauftragt | Startseite teuerste Ansicht | M–L | mittel (Fokus/Scroll) | 0 |
 | P04 | Bildlayout nur bei geänderter Geometrie | beauftragt, A-02 | Gemessen nötig vor Optimierung | M | mittel | 0 |
 | P06r | Doppelte Refresh-/Schreibanforderungen | beauftragt, A-03 | Bestätigte Doppelarbeit | M | mittel (Fehlerpfade) | 0 |
-| T2 | Eine Schema-Sicherungsprüfung statt neun | T2 | +0,5 s beim ersten Speichern (10 MB); 9 doppelte Methoden | S | gering | 0 |
-| P09a | W1: Tabellenansicht misst keine Zeilen mehr für Listenspalten | T8 | Tabellenaufbau 558 → 69 ms (1.000) bzw. 2.671 → 292 ms (5.000), Linux | XS | gering | 0 |
+| T2 | **umgesetzt in 3.33.0:** gemeinsame Formatsicherung | T2 | +0,5 s beim ersten Speichern (10 MB); 9 doppelte Methoden | S | gering | 0 |
+| P09a | **umgesetzt in 3.33.0:** Tabelle misst keine Listenspalten | T8 | Tabellenaufbau 558 → 69 ms (1.000) bzw. 2.671 → 292 ms (5.000), Linux | XS | gering | 0 |
 | P09b | W2–W5: Kennzahlen einmal je Aktualisierung, Datum über Zwischenspeicher, Schriftobjekte und Zeilenhöhen je Schrift merken | T8 | Listenaufbau −38 % bei 5.000 Punkten | S | gering–mittel | 0 |
 | P08a | Ein Vergleichsdurchlauf für Verlauf, „zuletzt bearbeitet“, Aktivität | T1 | ≈ 78 % von `save_items` bei 10.000 Punkten | M | mittel | 0 |
 | P08b | Nur geänderte Listen vergleichen, Vollvergleich im Autosave | T1 | Kosten pro Aktion unabhängig vom Bestand | M–L | mittel–hoch | 0 |
@@ -136,7 +138,7 @@ Aufwand in **Arbeitstagen (AT) im bisherigen Arbeitsmodus**: KI-gestützte Umset
 
 | ID | Thema | Klasse | Grund / Auslöser für Neubewertung |
 |---|---|---|---|
-| N12 | Screenreader über Tk 9.1 `tk accessible`, Canvas-Bedienelemente beschriften (U23) | Z | Stabile Tk-9.1-Freigabe + G26 |
+| N12 | Screenreader über Tk 9.1 `tk accessible`, Canvas-Bedienelemente beschriften (U23) | Z | Tk-9.1-Veröffentlichung laut Primärquelle 29.09.2026 erfolgt; G26 und eigene Abnahme bleiben Voraussetzung |
 | N13 | Seitenversionen wiederherstellen | Z | Nach F-03 |
 | – | SQLite als Hauptspeicher | Z | Reale Bestände > 20.000 Punkte (D16) |
 | G25, Mobile | Toolkit-Probe, Mobile | Z | D03 aufheben |
@@ -167,7 +169,7 @@ Aufwand in **Arbeitstagen (AT) im bisherigen Arbeitsmodus**: KI-gestützte Umset
 
 ## 5. Ausbaustufen
 
-### Stufe 0 – Fundament (3.32.4 ff.) · ≈ 10–15 AT (inkl. P09)
+### Stufe 0 – Fundament (Start mit 3.33.0) · ≈ 10–15 AT (inkl. P09)
 
 - **Ziel:** Jede Aktion bleibt bei wachsendem Bestand schnell; Repository und Dokumentation sind verlässliche Grundlage.
 - **Inhalt:**
@@ -194,10 +196,11 @@ Aufwand in **Arbeitstagen (AT) im bisherigen Arbeitsmodus**: KI-gestützte Umset
 
 | Schnitt | Inhalt | Aufwand | Voraussetzung |
 |---|---|---|---|
-| 3.33.0 | UX1 „Weniger Oberfläche“ inkl. N01, U24 | 5–8 AT | D11, D12; R2 beachten |
-| 3.33.1 | G01 Parsermodul + Feldchips (U04), N08 | 3–4 AT | D10 |
-| 3.33.2 | D14 Heute/Demnächst, G05 Fokus, G02 als Board-Gruppierung, H-02 | 4–7 AT | D13, D14 |
-| 3.33.3 | G29, G31, G32; N07 | 4–7 AT | Referenz- und Löschregeln (Abschnitt 6) |
+| 3.33.1 (Ergänzungsauftrag) | Vier Bereiche, Inhaltsgrenzen, Logo, Fensterreaktion und Ablagekontrolle | umgesetzt; Abnahme folgt | Vertrag 74 |
+| UX1 (neue Reservierung offen) | UX1 „Weniger Oberfläche“ inkl. N01, U24 | 5–8 AT | D11, D12; R2 beachten |
+| 3.33.2 (Reservierung) | G01 Parsermodul + Feldchips (U04), N08 | 3–4 AT | D10 |
+| 3.33.3 (Reservierung) | D14 Heute/Demnächst, G05 Fokus, G02 als Board-Gruppierung, H-02 | 4–7 AT | D13, D14 |
+| 3.33.4 (Reservierung) | G29, G31, G32; N07 | 4–7 AT | Referenz- und Löschregeln (Abschnitt 6) |
 
 - **Fertig, wenn:**
   - Kopfzeile ≤ 4 Symbolknöpfe;
@@ -258,13 +261,13 @@ flowchart LR
   D09 --> G27[G27 schrittweise über D17]
   P0[Rest P03 · P04 · P06r] --> UX1
   T2[T2 Schema-Sicherung] --> P08a[P08a ein Vergleichslauf] --> P08b[P08b nur geänderte Listen]
-  D11[D11 Hinweise] --> UX1[3.33.0 Weniger Oberfläche]
+  D11[D11 Hinweise] --> UX1[Nächster 3.33-Schnitt: Weniger Oberfläche]
   D12[D12 Startseite] --> UX1
   UX1 --> PAL[Befehlspalette U01]
-  D10[D10 Datumssemantik] --> G01[3.33.1 Parser + Chips]
-  D13[D13 Eisenhower] --> S2[3.33.2 Heute/Demnächst · Fokus · Eisenhower]
+  D10[D10 Datumssemantik] --> G01[3.33.2 Parser + Chips]
+  D13[D13 Eisenhower] --> S2[3.33.3 Heute/Demnächst · Fokus · Eisenhower]
   D14[D14 Ansichtenmodell] --> S2
-  REF[Referenz- und Löschregeln] --> G29[3.33.3 G29 · G31 · G32]
+  REF[Referenz- und Löschregeln] --> G29[3.33.4 G29 · G31 · G32]
   G29 --> G28
   PAL --> G14[G14 Volltextsuche]
   N05[N05 Inspektor] --> G0830
@@ -291,7 +294,7 @@ flowchart LR
 | R3 | Neue Dokumentinhalte gehen in älteren Fassungen verloren | mittel | hoch | Datenformat-Tor 21: Vorsicherung, Migration, Altleser schreibgeschützt |
 | R4 | P08b übersieht einen Änderungsweg | mittel | mittel | Vollvergleich im Autosave; Differenztest alt/neu |
 | R5 | Windows/Linux ungetestet | hoch | mittel | Linux-CI; Windows-Checkliste; D15 |
-| R6 | Tk 9.1 verzögert sich oder ändert Verhalten | mittel | gering | Barrierefreiheit nicht zusagen; auf 9.0 weiterentwickeln |
+| R6 | Tk 9.1 ist veröffentlicht; Integration ändert möglicherweise Verhalten | mittel | gering | Barrierefreiheit nicht zusagen; auf 9.0 weiterentwickeln |
 | R7 | Umfang wächst (24 offene Aufgaben + neue Ideen) | hoch | mittel | Klassifizierung, Prinzipien-Check mit Vorgeschichte (UX-Prüfung §4) |
 | R8 | Arbeit läuft parallel lokal und im Repository auseinander | mittel | hoch | D09 B; Standprüfung in CI |
 | R9 | Gewohnheitsbruch (D10, D12, D14) | mittel | gering | Bestandseinstellungen bleiben; „Neu in …“ (N07) |
@@ -340,14 +343,14 @@ Verbindlich ist die Messung auf dem Referenz-Mac mit Aufwärmen, Median und p95 
 
 1. **Inhaber:**
    - ~~D09–D17 beantworten~~ – erledigt am 01.10.2026.
-   - Die zwei zusätzlichen Startseitenkacheln bestätigen (D12; Planungsannahme: Uhr/Datum/nächster Termin, Pinnwand-Vorschau).
-   - Den lokalen Projektordner als Git-Arbeitskopie einrichten (D09) und die drei Prüfprotokolle aus `tests/qa-3.32.0/recherche_planung_2026-09-30/` hochladen.
-   - Die fehlende Archivsicherung `tests/fixtures/beispiele/archiv/glide_beispieldaten_3.32.3_vor_Showcase_2026-10-01.glidebackup` nachliefern.
+   - D12 vollständig beschlossen: Zeichnungen und Pinnwand-Vorschau sind die zwei zusätzlichen Standardkacheln.
+   - Die lokale Git-Arbeitskopie ist eingerichtet (`Github/glide-to-do`, HEAD 569020e). Die drei Prüfprotokolle aus `tests/qa-3.32.0/recherche_planung_2026-09-30/` hochladen.
+   - Die fehlende Archivsicherung der Core-Fixture wurde bytegleich aus dem Zwischenstandsabbild wiederhergestellt. Nur drei alte Recherchelogs fehlen weiterhin.
    - Künftig den Projektordner in die Repository-Wurzel hochladen.
-2. **3.32.4 – kleinster belegbarer Schnitt:** T2 und P09a (W1). Baseline und Nachmessung mit `messung_speicherweg.py` und `pruefaufrufe_probe.py`, Vorsicherungstest je Formatstufe, Spaltenbreiten der Liste unverändert, Vollprüfung, Abgleich.
+2. **3.33.0 – erster beauftragter Schnitt, abgeschlossen:** T2 und P09a (W1), Vollprüfung und beide Startfassungen grün. Baseline und Nachmessung mit `messung_speicherweg.py` und `pruefaufrufe_probe.py`, Vorsicherungstest je Formatstufe, Spaltenbreiten der Liste unverändert, Vollprüfung, Abgleich.
 3. **Beauftragte Performance-Fortsetzung:** Rest P03 Startseite, dann P04 und P06r gemäß ARBEITSRICHTUNG; danach P08a mit Differenztest.
 4. **D09 B:** Log-Ausnahme in `Glide/.gitignore` erledigt. Danach CI-Grundstufe aus den Proben in `tests/qa-3.32.3/analyse_planung_2026-10-01/werkzeuge`, mit eigenem Auftrag.
-5. **3.33.0 vorbereiten:** Aktionskennungen von Menübeschriftungen entkoppeln (R2), dann UX1 in der Reihenfolge U07, U03, U24, U10, U19, U22, U13, U14, N01, U02, U05, U01, U16.
+5. **Nächsten Oberflächenschnitt vorbereiten:** Aktionskennungen von Menübeschriftungen entkoppeln (R2), dann UX1 in der Reihenfolge U07, U03, U24, U10, U19, U22, U13, U14, N01, U02, U05, U01, U16.
 
 ## 11. Pflege dieses Plans
 

@@ -2,7 +2,7 @@
 
 Stand 29.09.2026 · Glide 3.30.0 · entschieden; Stufe 1, Ordnertypen, Seitenbereich, Galerie, Felder als Bibliothekstabelle, Notizbuch und Bilder in Seiten sind umgesetzt; keine Unterseiten (29.09.2026)
 (Vertrag 66, Abschnitt 2.11). Der Entwurf vor der Entscheidung liegt in
-[Archiv](Archiv/Glide_Konzept_Seiten_wie_Notion_2026-09-26_Entwurf_vor_Entscheidung.md).
+[Archiv](Glide_Konzept_Seiten_wie_Notion_2026-09-26.md).
 
 ## 0. Entscheidungen des Nutzers am 26.09.2026
 

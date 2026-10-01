@@ -56,7 +56,8 @@ with tempfile.TemporaryDirectory(prefix="glide-workspace310-") as folder:
         app.labels.append(label)
         items = [app.new_item(f"Punkt {index}: " + "Langer Titel " * 12,
                              description="Vollständige Beschreibung\nmit eigener zweiter Zeile", labels=[label["id"]]) for index in range(14)]
-        repeat = app.new_item("Täglich prüfen", due="2026-10-01", due_time="10:00",
+        repeat_date = (mod.date.today() + mod.timedelta(days=2)).isoformat()
+        repeat = app.new_item("Täglich prüfen", due=repeat_date, due_time="10:00",
                              repeat={"art": app.REPEAT_DAILY}, reminder={"mode": "relative", "minutes": 60})
         child = app.new_item("Unterpunkt", description="Kindbeschreibung")
         group = app.new_item("Projektgruppe", kind=app.ITEM_KIND_GROUP, children=[child])
@@ -117,7 +118,7 @@ with tempfile.TemporaryDirectory(prefix="glide-workspace310-") as folder:
         assert not group["done"]
         w.open_tab(repeat["id"]); root.update()
         w.toggle(); root.update()
-        assert repeat["due"] == "2026-10-02" and not repeat["done"]
+        assert repeat["due"] == (mod.date.fromisoformat(repeat_date) + mod.timedelta(days=1)).isoformat() and not repeat["done"]
         assert w.mode == repeat["id"]
 
         # Editieren verwendet den gemeinsamen Details-Dialog und bewahrt die Identität.

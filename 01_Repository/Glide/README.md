@@ -5,7 +5,7 @@ Listen, Notizen, Tagebücher und visuelle Pinnwände. Die Anwendung läuft lokal
 mit Python 3.14 und Tk 9 (Tk 8.6 geht auch), benötigt weder Konto noch
 Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
-> **Projektstatus:** interner Entwicklungsstand **3.32.3** · Datenformat 20 ·
+> **Projektstatus:** interner Entwicklungsstand **3.33.1** · Datenformat 20 ·
 > keine veröffentlichte oder signierte Releasefassung. Der aktuelle
 > [QA-Bericht](docs/07_QA_BERICHT.md) nennt bestandene Prüfungen und offene
 > Plattformtests.
@@ -136,7 +136,7 @@ Der Anwendungskern liegt in `src/glide/app.pyw`; der Zeichenkern in
 Datenordnern. Der vollständige Prüflauf wird aus dem Repository-Stamm gestartet:
 
 ```bash
-python3 tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.32.3/lokaler_lauf --timeout 900
+python3 tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.1/lokaler_lauf --timeout 900
 ```
 
 Eine schnelle Prüfung von Versions- und Dokumentationsständen:

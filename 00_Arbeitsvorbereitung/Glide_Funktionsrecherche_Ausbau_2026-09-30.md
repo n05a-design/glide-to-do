@@ -197,7 +197,7 @@ arbeiten möchte, Mac, Linux, Windows und später mal iPhone/iPad.“
 | Q2 | keine plattformeigenen Abhängigkeiten | G07 entfällt |
 | Q3 | Austausch über Dokumente statt Schnittstelle | G24 neu gefasst |
 | Q4 | Rückfrage: Was wird gewechselt? | beantwortet in Abschnitt 13 |
-| Q5 | „Ja“ (30.09.2026) – verstanden als Variante a): Aufgabenzeilen im Notiztext, die Liste darüber zeigt genau diese Punkte | G29 wird mit Etappe 2 (3.33.0) umgesetzt |
+| Q5 | „Ja“ (30.09.2026) – verstanden als Variante a): Aufgabenzeilen im Notiztext, die Liste darüber zeigt genau diese Punkte | G29 bleibt in Etappe 2 offen; 3.33.0 lieferte das Fundament, 3.33.1 die Bereichsergänzung. Aktuelle Reservierungen im Entwicklungsplan vom 01.10.2026 |
 | Reihenfolge | Etappen 1–4 wie Abschnitt 9; Austausch (Etappe 5) danach | – |
 
 ## 13. Rückfragen vom 30.09.2026

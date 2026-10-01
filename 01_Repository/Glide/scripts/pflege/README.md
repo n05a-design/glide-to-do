@@ -1,6 +1,6 @@
 # Pflegewerkzeuge
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20
 
 Werkzeuge für jede Arbeitsrunde und für Messungen. Sie löschen nichts; jede
 überschriebene Datei liegt vorher im benachbarten Archiv.

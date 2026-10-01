@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_notizbereich330.py", line 337, in <module>
+    assert baum.winfo_height() / zeile >= 4.5, baum.winfo_height() / zeile
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 3.235294117647059

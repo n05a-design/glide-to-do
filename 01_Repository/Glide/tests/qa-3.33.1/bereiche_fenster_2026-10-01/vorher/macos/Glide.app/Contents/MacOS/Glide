@@ -1,0 +1,6 @@
+#!/bin/sh
+# Startet Glide mit dem Python im Bundle. Daten liegen wie immer unter
+# ~/Library/Application Support/Glide (oder dem gewählten Datenordner).
+# glide_start.py nutzt den Bytecode-Cache in ~/Library/Caches/Glide.
+HIER="$(cd "$(dirname "$0")" && pwd)"
+exec "$HIER/glide-python" "$HIER/../Resources/glide/glide_start.py" "$@"

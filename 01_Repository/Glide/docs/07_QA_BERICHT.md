@@ -1,8 +1,10 @@
-# QA-Bericht – Glide 3.32.3
+# QA-Bericht – Glide 3.33.1
 
-Stand 01.10.2026 (Bibliothekskarten, Performance) · App 3.32.3 · Datenformat 20 · macOS, Python 3.14.5, Tk 9.0.3
+Stand 01.10.2026 (Formatsicherung, Tabellenmessung, Ablageabgleich) · App 3.33.1 · Datenformat 20 · macOS, Python 3.14.5, Tk 9.0.3
 
-**Showcase-Nachlauf:** [Showcase-Vertrag](72_SHOWCASE_3.32.3.md) und [gezielte Abnahme](../tests/qa-3.32.3/showcase_2026-10-01/einzelpruefung.json). Bilder, Anhänge, Import und Neustart erfolgreich; acht eigene Fensteraufnahmen erstellt. Die vollständige Regression zum erweiterten Prüfwerkzeug wird gesondert protokolliert. App und Startfassungen unverändert.
+**3.33.0 – erster Umsetzungsschnitt:** T2/P09a umgesetzt und ausgeliefert. 76 automatische Schritte, 59 Integrationssuiten, acht Unit-Tests, Showcase und fünf Analysen grün; 140 Python-/54 Bundle-Dateien bytegleich, Signatur gültig, getrennter Showcase-Starter bei Erststart und Neustart geprüft. [Vertrag](73_FUNDAMENT_3.33.0.md) mit Ablageabgleich und Anschlussplan. D12 ist vollständig entschieden: zusätzliche Standardkacheln Zeichnungen und Pinnwand-Vorschau. Der Oberflächenumbau folgt nach diesem Fundament.
+
+**Showcase-Nachlauf:** [Showcase-Vertrag](72_SHOWCASE_3.32.3.md) und [gezielte Abnahme](../tests/qa-3.32.3/showcase_2026-10-01/einzelpruefung.json). Bilder, Anhänge, Import und Neustart erfolgreich; acht eigene Fensteraufnahmen erstellt. Der historische Nachlauf wurde separat geführt; die aktuelle Regression und Auslieferung sind im folgenden 3.33.0-Abschnitt dokumentiert.
 
 **Dokumentations-/Prüfwerkzeugnachlauf 01.10.2026:** [Arbeitsrichtung](ARBEITSRICHTUNG.md) verbindet die bestätigten Entscheidungen und die verbleibende Performance-Arbeit. Aktive Einstiege/Checklisten und Kontrollregeln nachgeführt; [separater Nachweis](../tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json). App, Integrationssuiten und beide Startfassungen bleiben beim geprüften 3.32.3-Stand. Der frühere Volllauf wurde mit den damaligen Prüfwerkzeugen ausgeführt.
 
@@ -14,6 +16,19 @@ Stand 01.10.2026 (Bibliothekskarten, Performance) · App 3.32.3 · Datenformat 2
 - **Grenzen:** Keine Vollprüfung der 58 Suiten in dieser Umgebung; macOS/Windows, physische Bedienung, DPI und Screenreader bleiben offen.
 - **Planung:** [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md).
 
+
+## Version 3.33.0 – geprüft und lokal ausgeliefert, 01.10.2026
+
+[Vertrag 73](73_FUNDAMENT_3.33.0.md), [Vollprotokoll](../tests/qa-3.33.0/fundament_2026-10-01/vollpruefung/ergebnis.json), [Quellstand](../tests/qa-3.33.0/fundament_2026-10-01/quellstand.json), [Lieferabgleich](../tests/qa-3.33.0/fundament_2026-10-01/auslieferung.json), [Starterprobe](../tests/qa-3.33.0/fundament_2026-10-01/launcher_probe.json).
+
+- **Exitcode 0:** 76 automatische Schritte, 59 Integrationssuiten, acht Unit-Tests, Showcase und fünf Analysen grün; 140 Python-/54 Bundle-Dateien bytegleich, Signatur gültig, getrennter Showcase-Starter bei Erststart und Neustart geprüft.
+- **Unverändert während der Abnahme:** 311 ausführbare Dateien, Ressourcen und aktive Fixtures im eingefrorenen Manifest. Stand-/Linkprüfung zusätzlich nach Dokumentabschluss ausgeführt. 41 eigene Prüffensteraufnahmen erzeugt, keine menschliche Sichtfreigabe daraus abgeleitet.
+- **Umfang:** T2 in einem Tk-freien Modul, alle Formate 4–20 und Fehler/Retry geprüft. P09a entfernt ungenutzte Spaltenmessung; Listenbreiten erhalten. Keine neue Datenformatstufe oder Laufzeitabhängigkeit.
+- **Funktionskosten:** alternierende zwölf Runden, 5.000 Aufgaben im selben Prozess: Formatsicherung 161,406 → 17,896 ms kalt, 0,064 ms nach Laden; neun → eine/null JSON-Lesungen. Ungenutzte Tabellenmessung 77,117 → 0,001 ms. Rohwerte/p95 und Grenzen im Vertrag; keine Aussage über die gesamte Aktionslatenz.
+- **Qualitätskontrolle:** alter QA-Hintergrund scheitert absichtlich am nativen Mausisolierungstest (Exitcode 1); neuer Hintergrund besteht (Exitcode 0). [Nachweis](../tests/qa-3.33.0/fundament_2026-10-01/native_isolation.json). Der Sammeltest und die Klapp-/Drag-Suiten prüfen tatsächliche Tk-Bindungen und Callbackfehler.
+- **Lieferung:** Python-Fassung 3.33.0 und macOS-Bundle bytegleich zur geprüften Quelle, Bundle-ID `de.shaye.glide`, `codesign --verify --deep --strict` bestanden. Showcase, Core-Fixture und Rundgang ebenfalls abgeglichen; bearbeiteter Demo-Arbeitsstand bleibt erhalten.
+- **Vorsicherung:** Quellbaum (141 Dateien), Python-Vollstand (140 Dateien einschließlich README) und aus unveränderter 3.32.3-Quelle rekonstruierter Bundle-Rückfallstand (62 Dateien). 148 vorhandene Dokument-/Werkzeugvorsicherungen gegen den Eingangsstand bytegleich kontrolliert. Original-Core-Fixture aus dem Zwischenstand per SHA-256 wiedergefunden.
+- **Grenzen:** drei historische Recherchelogs fehlen weiter. Physische OS-Fokus-/Maus-/Trackpadbedienung, Windows/Linux, Mehrmonitor/DPI und Screenreader offen. Entwicklungsbundle mit Ad-hoc-Signatur, benötigt installiertes Python; keine öffentliche Releasefreigabe.
 
 ## Version 3.32.3 – geprüfter und ausgelieferter Endstand, 01.10.2026
 
@@ -793,8 +808,8 @@ führt die Punkte einzeln auf. Zusammengefasst:
 - Markenprüfung;
 - Store-Freigabe.
 
-Die Prüflisten [3.29](../../../00_Arbeitsvorbereitung/Checklisten/Archiv/Manuelle_Pruefung_3.29.0_vor_Verdichtung_2026-09-29.md)
-und [3.28](../../../00_Arbeitsvorbereitung/Checklisten/Archiv/Manuelle_Pruefung_3.28.0_vor_Verdichtung_2026-09-29.md)
+Die Prüflisten [3.29](../../../00_Arbeitsvorbereitung/Checklisten/Archiv/Manuelle_Pruefung_3.14.0.md)
+und [3.28](../../../00_Arbeitsvorbereitung/Checklisten/Archiv/Manuelle_Pruefung_3.14.0.md)
 sind ebenfalls noch offen.
 
 ## Ergebnis 3.29.0 (historisch)
@@ -844,7 +859,7 @@ Die einzelnen Abnahmekriterien der Etappe mit Nachweis stehen im
 Windows) und die Sichtprüfung. Bildschirmaufnahmen waren in der
 Agentenumgebung nicht erlaubt; die Einbettung der Zeichenfläche wurde über
 Widgetgeometrie geprüft (1280 × 860: Fläche 922 × 616 Pixel; 860 × 700:
-502 × 420 Pixel). Offen und manuell: [Prüfliste 3.29](../../../00_Arbeitsvorbereitung/Checklisten/Archiv/Manuelle_Pruefung_3.29.0_vor_Verdichtung_2026-09-29.md)
+502 × 420 Pixel). Offen und manuell: [Prüfliste 3.29](../../../00_Arbeitsvorbereitung/Checklisten/Archiv/Manuelle_Pruefung_3.14.0.md)
 mit Maus/Trackpad, Tastatur und Screenreader, DPI, Mehrmonitor, Windows,
 Designs und dem Illustrator-/Affinity-Rundlauf. Ein Windows-Gesamtlauf für
 3.29.0 fehlt.

@@ -146,8 +146,8 @@ def build(app, mod, root, anchor):
         generated_attachments.append(app.store_attachment(str(path)))
     project = app.new_folder_object("Showcase · Parkquartier", color="accent", icon=icon_doc,
                                     note="Fiktives Arbeitsprojekt: Briefing, Umsetzung, Bilder und Rückblick.")
-    library = app.new_folder_object("Wissen und Bildmaterial", parent_id=project["id"], folder_kind="library")
-    journal = app.new_folder_object("Projekttagebuch", parent_id=project["id"], folder_kind="journal")
+    library = app.new_folder_object("Wissen und Bildmaterial", parent_id=None, folder_kind="library")
+    journal = app.new_folder_object("Projekttagebuch", parent_id=None, folder_kind="journal")
     archive = app.new_folder_object("Abgeschlossene Vorbereitung", parent_id=project["id"], archived=True,
                                     archived_at=tag(-7)+"T16:00:00+02:00")
     app.folders.extend([project, library, journal, archive])
@@ -194,10 +194,10 @@ def build(app, mod, root, anchor):
         task("Gemeinsame Rückmeldung bündeln", planned_date=tag(1), estimated_minutes=30)],
         folder_id=project["id"], list_kind="note", rich_note=mod.glide_page_markdown.markdown_to_page(MEETING),
         labels=[labels["Parkquartier"]], attachments=[copy.deepcopy(stored[PHOTOS[2][0]])])
-    gallery = app.new_list_object("Bildwelt · Auswahl mit Kommentaren", [], folder_id=library["id"],
+    gallery = app.new_list_object("Bildwelt · Auswahl mit Kommentaren", [], folder_id=project["id"],
         list_kind="gallery", attachments=[copy.deepcopy(stored[name]) for name, _, _ in PHOTOS],
         note="Sechs Motive aus der Beispielablage: Originale, Bildunterschriften und Kontext.")
-    drawing = app.new_list_object("Quartier · Pixelskizze", [], folder_id=library["id"], list_kind="drawing",
+    drawing = app.new_list_object("Quartier · Pixelskizze", [], folder_id=None, list_kind="drawing",
         drawing=zeichnung(mod), icon=icon_doc, attachments=generated_attachments[:2],
         drawing_reference={"attachment_id":generated_attachments[0]["id"], "mode":"fit", "zoom_percent":100},
         note="Bearbeitbare 32 × 32 Zeichnung mit passendem 16 × 16 Symbol, PNG-Referenz und ICO-Export.")
@@ -280,6 +280,8 @@ def build(app, mod, root, anchor):
     folder_scope = "folder:"+project["id"]
     list_scope = "list:"+main["id"]
     settings.update(profile_name="Atelier Nord · Showcase", start_on_home=True, show_home_stats=True,
+        sidebar_sections_visible={"pages":True,"lists":True,"notes":True,"drawings":True},
+        sidebar_locations={},
         mascot_name="Gismo", mascot_playful=False, system_notifications=False,
         pinned_pages=[{"kind":"list", "id":briefing["id"]}, {"kind":"folder", "id":library["id"]}],
         recent_lists=[{"id":entry["id"], "edited_at":tag(0)+"T10:00:00+02:00"} for entry in [briefing,note,drawing]],
@@ -302,7 +304,7 @@ def build(app, mod, root, anchor):
     app.set_active_list(briefing["id"])
     app.sync_all_item_kind_labels()
     app.save_items()
-    payload = app.partial_backup_payload([], [project["id"]])
+    payload = app.partial_backup_payload([drawing["id"]], [project["id"], library["id"], journal["id"]])
     payload["pinboards"] = {scope:board for scope, board in app.exportable_pinboards().items()
                            if scope != mod.ItemWorkspace.GLOBAL_SCOPE}
     return payload, [meeting_template, routine_template]

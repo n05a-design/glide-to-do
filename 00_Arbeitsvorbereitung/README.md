@@ -1,9 +1,11 @@
 # Arbeitsvorbereitung
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 **Dauerhafte Richtung:** [Arbeitsrichtung und Abnahme](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) verbindet Regeln, D01–D17 (D09–D17 beschlossen am 01.10.2026), Performance-Fortsetzung, QA und Dokumentenpflege. Die datierten Einstiegspfade werden weiter gepflegt und maschinell auf Aktualität geprüft.
 
+
+**Erster Schnitt 3.33.0:** [Fundament-Vertrag](../01_Repository/Glide/docs/73_FUNDAMENT_3.33.0.md). D12 zusätzlich bestätigt: Zeichnungen und Pinnwand-Vorschau.
 
 ## Für neue Arbeiten zuerst lesen
 
@@ -12,7 +14,7 @@ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorl
   - [Entscheidungsvorlage D09–D17](Glide_Entscheidungsvorlage_2026-10-01.md) – Richtungsfragen mit Optionen, Empfehlung und Beschluss vom 01.10.2026
   - Grundlagen: [Bestandsaufnahme Code und Dokumentation](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md) und [Produktprinzipien und UX-Prüfung](Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01.md)
 - **Neue Richtung auswählen:** [Weitere Aufgaben und Richtungsauswahl nach 3.32.2](Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md) – 24 Aufgaben in acht Richtungen, Codebasis und Quellen geprüft; Priorität und Bearbeitungstiefe noch offen
-- **Einstieg für jede neue Sitzung:** [Übergabe vom 30.09.2026](Glide_Sitzungsuebergabe_2026-09-30.md) – Stand 3.32.3, Regeln, Orte, Werkzeuge, nächste Schritte, offene Entscheidungen
+- **Einstieg für jede neue Sitzung:** [Übergabe vom 30.09.2026](Glide_Sitzungsuebergabe_2026-09-30.md) – Stand 3.33.0, Regeln, Orte, Werkzeuge, nächste Schritte, offene Entscheidungen
 - **Aktuelle Arbeits- und Featureplanung:** [Recherche und Codeabgleich 30.09.2026](Glide_Arbeits_und_Featureplanung_2026-09-30.md) – Versionsvergleich, Bildschirmfotos, gemessene Kostenstellen, bereinigtes Backlog, Antworten D01–D06, Exportfrage D07, Klappkorrektur D08 und die ausdrückliche Performance-Abschlussaufgabe
 - **Funktionsumfang und bestehende Antworten:** [Funktionsrecherche 30.09.2026](Glide_Funktionsrecherche_Ausbau_2026-09-30.md) – Reihenfolge und Q5/G29 beantwortet, Etappe 1 in 3.32.0 umgesetzt; G25/Mobile ist gemäß D03 zurückgestellt. Für den aktuellen Iststand gilt der Codeabgleich in Abschnitt 15
 - **Zuletzt beantwortet und umgesetzt:** [Rückmeldung vom 29.09.2026 (R1–R11, Q1–Q3)](Glide_Rueckmeldung_und_Entscheidungen_2026-09-29.md) – alle Empfehlungen umgesetzt (Vertrag 66, Abschnitt 2.17); für frühere offene Punkte gelten jetzt D01–D06 in der aktuellen Arbeitsplanung; Hinweise unverändert, F11 beantwortet

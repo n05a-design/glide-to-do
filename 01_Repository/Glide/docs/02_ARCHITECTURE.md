@@ -1,6 +1,8 @@
 # Architektur – Glide
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20
+
+**3.33.0:** `schema_backups.py` führt die Formatprüfung ohne Tk. `load_items` liefert die Formatnummer aus dem bereits gelesenen Bestand; Dateisignaturen invalidieren den Zwischenspeicher bei Austausch/Änderung. Bestehende Migrationseinstiege delegieren, erfolgreiche Sicherungen bestätigen ihre bisherigen Flags. [Vertrag](73_FUNDAMENT_3.33.0.md).
 
 ## Aktuelle Optimierungsverträge
 
@@ -260,3 +262,5 @@ Die direkten Abhängigkeiten sind: item_change -> Speichern/Verlauf/Statistik un
 Damit sind TaskChanged, ListChanged und StructureChanged mögliche spätere Signale an den Mutationsgrenzen; SelectionChanged/BoardChanged bleiben lokal; ThemeChanged/SettingsChanged gehören an die zentralen Einstellungswege; HistoryChanged an den Verlaufsschreibpunkt; DataReloaded erst hinter die vollständige Normalisierung. 3.26 führt keine zweite Benachrichtigungsschicht neben diesen Aufrufen ein: Das würde sonst doppelte Refreshes und unklare Reihenfolge riskieren. Eine spätere Migration muss pro Grenze den direkten Aufruf ersetzen und Reentranz testen.
 
 Live-Suchänderungen werden mit after_idle je Ereigniszyklus zusammengefasst; ein expliziter Refresh verwirft den geplanten Doppelaufruf. Rich-Text-Autosave wartet 400 ms, Flushing vor Seitenwechsel und Datenausgabe schließt ausstehende Änderungen ab. Resize-, Scrollbar- und Canvas-Aktualisierungen verwenden ihre vorhandenen Scheduler weiter.
+
+`svg_geometry.py` führt SVG-Pfade einschließlich verkürzter kubischer Kurven, CSS-/Attributfarben und transparente Innenkonturen ohne Tk (3.33.1).

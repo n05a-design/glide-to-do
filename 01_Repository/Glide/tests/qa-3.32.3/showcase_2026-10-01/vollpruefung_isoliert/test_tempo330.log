@@ -1,0 +1,7 @@
+Reines Tk: 53.4 ms je Bild
+Liste: 78.3 ms je Bild (1.5× reines Tk)
+Tabelle: 26.7 ms je Bild (0.5× reines Tk)
+Seite: 81.5 ms je Bild (1.5× reines Tk)
+Startseite mit Verlauf: 78.2 ms je Bild (1.5× reines Tk)
+Listen und Ordner mit Verlauf: 71.1 ms je Bild (1.3× reines Tk)
+OK: Scrolltempo gegen reines Tk gemessen.

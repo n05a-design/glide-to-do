@@ -1,6 +1,6 @@
 # Windows-Prüfung – Glide (fortgeschriebene Prüfliste)
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · noch nicht ausgeführt
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · noch nicht ausgeführt
 
 Dateiname und Linkziel bleiben stabil. Maßgeblich ist `VERSION`, aus der das Startskript den QA-Ordner bildet. Neu enthalten sind Klapp-, Drag-/Performance- und Bibliothekskartenkontrolle. [Arbeitsrichtung](../../01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 

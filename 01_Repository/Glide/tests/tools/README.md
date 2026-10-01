@@ -1,6 +1,6 @@
 # Prüfwerkzeuge für Glide
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 **Hintergrund (macOS, seit 30.09.2026):** `pruefen.py` startet die Suiten mit
 `hintergrund/sitecustomize.py`. Prüffenster nehmen dann weder Fokus noch

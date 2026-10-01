@@ -1,13 +1,17 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · für den nächsten Chat oder Bearbeiter
+
+**Ergänzungsauftrag 01.10.2026, 3.33.1:** Vier Seitenleistenbereiche in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen. Nur Listen bleibt verpflichtend sichtbar. Seiten erlaubt Bücher (bestehende Art `library`), Ordner und Seiten; Notizen Notizbücher, Ordner und Notizen; Zeichnungen Ordner und Zeichnungen; Listen alle Arten. Sichtbarkeit und Root-Zuordnung sind lokale Anzeigeeinstellungen, keine Löschaktion. Gemischte Altordner werden vollständig in Listen angezeigt. Einheitliche Anlege-/Verschieberegeln und Prüfung aller Fenster gehören zur Abnahme. [Vertrag](../01_Repository/Glide/docs/74_BEREICHE_UND_FENSTER_3.33.1.md).
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · für den nächsten Chat oder Bearbeiter
+
+**3.33.0 – erster Umsetzungsschnitt:** T2/P09a umgesetzt und ausgeliefert. 76 automatische Schritte, 59 Integrationssuiten, acht Unit-Tests, Showcase und fünf Analysen grün; 140 Python-/54 Bundle-Dateien bytegleich, Signatur gültig, getrennter Showcase-Starter bei Erststart und Neustart geprüft. [Vertrag](../01_Repository/Glide/docs/73_FUNDAMENT_3.33.0.md) mit Ablageabgleich und Anschlussplan. D12 ist vollständig entschieden: zusätzliche Standardkacheln Zeichnungen und Pinnwand-Vorschau. Der Oberflächenumbau folgt nach diesem Fundament.
 
 **Beschlüsse D09–D17 (01.10.2026):** Alle neun Richtungsfragen sind beantwortet – acht wie empfohlen, D12 mit sieben statt fünf Startseitenkacheln. Sie stehen verbindlich in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md#verbindliche-entscheidungen) und mit Begründung in der [Entscheidungsvorlage](Glide_Entscheidungsvorlage_2026-10-01.md#beschlüsse-vom-01102026).
 - **Repository:** Das Repository ist die maßgebliche Ablage (D09). Prüfprotokolle `tests/qa-*/**/*.log` sind freigegeben.
 - **Umsetzung:** Kein Großumbau; neue oder angefasste Fachlogik entsteht als Tk-freies Modul (D17).
 - **Neu gemessen (T8):** Die Schriftart wird bereits nur einmal geprüft. Die Tabellenansicht misst dagegen nach jedem Aufbau jede Zeile und verwirft das Ergebnis; ohne diese Messung 558 → 69 ms bei 1.000 Punkten (Linux).
-- **Kleinster nächster Schnitt:** T2 + P09a ([Nachweis](../01_Repository/Glide/tests/qa-3.32.3/pruefaufrufe_2026-10-01/README.md)).
-- **Vorfassung:** [Archiv](Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Entscheidungen_2026-10-01.md).
+- **Erster Schnitt 3.33.0:** T2 + P09a ([Nachweis](../01_Repository/Glide/tests/qa-3.32.3/pruefaufrufe_2026-10-01/README.md)).
+- **Vorfassung:** [Archiv](Glide_Sitzungsuebergabe_2026-09-30.md).
 
 **Analyse und Planung 01.10.2026 (App unverändert 3.32.3):**
 - **Neue Einstiege:**
@@ -20,14 +24,14 @@ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · für den nächsten Chat
 - **Neu gemessen** (Linux, künstliche Daten, [`messung_speicherweg.py`](../01_Repository/Glide/scripts/pflege/messung_speicherweg.py)):
   - Jede Aktion kostet linear mit dem Bestand (Abhaken 56 ms bei 1.000, 446 ms bei 10.000 Punkten).
   - Das erste Speichern parst die Datei neunmal.
-  - Vorschläge: P08 und T2; T2 ist der kleinste nächste Schnitt.
+  - T2/P09a sind in 3.33.0 umgesetzt; P08 bleibt nach der Performance-Fortsetzung offen.
 - **Repository `n05a-design/glide-to-do`:**
   - Enthält seit 01.10.2026 die Projektablage. Die Wurzel des Repositorys ist der Projektordner; `01_Repository/Glide` ist der Quellbaum.
   - Uploads immer in diese Struktur. Ein Upload in einen Unterordner bricht alle Querverweise.
   - Seit D09 ist es die maßgebliche Ablage.
 - **Hinweis zur Claude-Übergabe:** Für Claude Code ist das Paket `Glide_3.32.3_Python_Codebasis.zip` vorgesehen (`Archiv/Glide_3.32.3_Claude_Code_2026-10-01`); in der Sitzung vom 01.10. wurde stattdessen `07_Python-Versionen` übergeben (Laufzeit bytegleich).
 - **Weiterhin gültig:** D01–D08, die Beschlüsse D09–D17 und der beauftragte Performance-Anschluss.
-- **Vorfassung:** [Archiv](Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Analyse_2026-10-01.md).
+- **Vorfassung:** [Archiv](Glide_Sitzungsuebergabe_2026-09-30.md).
 
 
 **Aktiver Showcase:** [Vertrag und Prüfgrenzen](../01_Repository/Glide/docs/72_SHOWCASE_3.32.3.md), [Nutzeranleitung](../05_Probelisten_Testdaten/Showcase/README.md). Eigenständiger, dauerhaft bearbeitbarer Arbeitsstand mit allen fünf Dokumentarten und den Bildern aus `20_Grafik_Master/06_Beispielbilder`; normale Glide-Nutzerdaten bleiben getrennt. Die Funktionsvorschau wurde auf den 01.10.2026 aktualisiert. Showcase-Prüfung ist zusätzlich zu 58 Suiten verpflichtend. Bestehende Feature-/Performancefolge und offene Auswahl bleiben gültig.
@@ -50,7 +54,7 @@ um Ziehen erweitern: D04 ist jetzt 3.32.2. [Drag-/Performance-Vertrag 3.32.2](..
 
 - Glide ist eine lokale Aufgaben-, Notiz- und Seiten-App in Python mit Tk 9
   (eine Datei `src/glide/app.pyw` mit rund 54.000 Zeilen, dazu sieben Module).
-- Der aktuelle Stand ist **3.32.3**:
+- Der aktuelle Stand ist **3.33.1**:
   - Etappe 1 der Funktionsrecherche: Symbol-Export, Paletten, Platzhalter,
     Tagesabschluss;
   - zwei behobene Hänger: Menüleiste und Seite mit Bildern;
@@ -77,18 +81,16 @@ um Ziehen erweitern: D04 ist jetzt 3.32.2. [Drag-/Performance-Vertrag 3.32.2](..
 | Verträge | `docs/66_MODERNISIERUNG_3.30.0.md` (3.30, 3.31: Abschnitte 2.17, 2.18), `docs/68_AUSBAU_3.32.0.md` (ab 3.32) |
 | Entscheidungen | `00_Arbeitsvorbereitung/Glide_Funktionsrecherche_Ausbau_2026-09-30.md` (G01–G32, Q1–Q5), `Glide_Rueckmeldung_und_Entscheidungen_2026-09-29.md` (R1–R11), `Glide_Uebersicht_und_Entscheidungen_2026-09-29.md` (B, E, F, I) |
 | Prüfstand | `docs/07_QA_BERICHT.md`, `tests/qa-verlauf.md`, Protokolle unter `tests/qa-<Version>/` |
-| Manuelle Prüfliste | `00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md` (gilt auch für 3.32.3; zusätzliche Bedienproben in Verträgen 69/70/71) |
+| Manuelle Prüfliste | `00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md` (gilt auch für 3.33.1; zusätzliche Bedienproben in Verträgen 69/70/71/73/74) |
 | Projektübergabe (technisch) | `docs/09_PROJECT_HANDOFF.md`, Entwicklungsnotizen `docs/DEV_NOTES.md` |
 | Pflegewerkzeuge | `scripts/pflege/` (Versionswechsel, Abgleich nach 07, Messung, Codeanalyse; siehe README dort) |
 | Fehlerprotokoll des Inhabers | `~/Library/Application Support/Glide/fehlerprotokoll.txt` – nur mit Erlaubnis lesen, nur Fehlereinträge |
 
 ## 3. Regeln, die immer gelten
 
-- **Nichts löschen.**
-  - Überholtes bekommt die Endung `_Z`; der Inhaber löscht selbst.
-  - Vor jeder Änderung eines bestehenden Dokuments eine Kopie im
-    benachbarten `archiv/` anlegen (`<Name>_<Version>_vor_<Anlass>.md`) und im
-    Index `docs/00_INDEX.md` nachweisen.
+- **Dokumentation reduzieren (ausdrücklicher Auftrag 01.10.2026).**
+  - Doppelte/überholte Dokumente nach Wissensabgleich löschen; gültige Verträge bewahren und relevante Informationen zusammenführen.
+  - Aktuelle Quellen fortschreiben, keine neue Markdown-Versionskopie bei jeder Pflege. Löschgrund, vorherigen Hash, erhaltene Quelle und Verweise dokumentieren; Git trägt die Historie.
 - **Echte Daten nur als Kopie und nur mit Erlaubnis.**
   - Tests und Messungen immer mit temporärem `GLIDE_DATA_DIR`.
   - Originale nie verändern.
@@ -139,7 +141,7 @@ um Ziehen erweitern: D04 ist jetzt 3.32.2. [Drag-/Performance-Vertrag 3.32.2](..
 ## 5. Prüfen
 
 - **Vollprüfung:**
-  `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.32.3/<Name> --timeout 900`
+  `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.1/<Name> --timeout 900`
   - 58 Suiten einschließlich Klapp-, Drag-/Performance- und Bibliothekskarten-Kontrolle, bisher rund 25 Minuten.
   - Unter macOS laufen die Fenster im Hintergrund und nehmen weder Fokus noch
     Tastatur; `--vordergrund` schaltet das ab.
@@ -174,8 +176,8 @@ D01–D06 sind gemäß Abschnitt 7 verbindliche Umsetzungsvorgaben.
    - Die Bild-/Formatierungssuiten sind erneut grün. Originalfoto-Ablauf
      nicht exakt reproduziert; keine pauschale Erledigtbehauptung.
    - Rest P05: gleiche UI-Texte nur nach gleicher Bedeutung zentralisieren.
-     Große Monolith-Aufteilung bleibt mit vertagtem Git zurückgestellt.
-2. **Etappe 2 „Planen“ → 3.33.0:**
+     Seit D17 wird Fachlogik schrittweise in Tk-freie Module ausgelagert; ein Großumbau bleibt zurückgestellt.
+2. **Etappe 2 „Planen“ – nach Fundament, Bereichsergänzung und UX1:**
    - G01 Alltagssprache: allgemeines Datum setzt Bearbeitungstag (D01);
    - G02 Eisenhower-Matrix mit erwartbarer Wirkung im sichtbaren Zielkontext
      (D02); Bearbeitungstag und Fälligkeit bleiben getrennte Felder;
@@ -209,7 +211,7 @@ Korrekturen und Nachweise stehen in Vertrag 69.
   oder reichen Frames, Vorschau und Spritesheet? GIF ist eine abspielbare
   Bildfolge; Spritesheet ist eine PNG-Datei mit Frames nebeneinander.
 - **Inhaber-/Store-/Plattformangaben:** I1–I6 gemäß Übersicht vom 29.09.;
-  Git bleibt nach bestehendem Beschluss vertagt. Keine erneute Anfrage zu
+  Git ist seit D09 maßgeblich. Keine erneute Anfrage zu
   D01–D06 oder Hinweisvarianten/Mobile.
 - **Store-Material:** Produktdatenblatt beschreibt noch 3.30.0; erst bei
   konkretem Bedarf archivieren und nachführen.
@@ -235,7 +237,7 @@ Korrekturen und Nachweise stehen in Vertrag 69.
 - Neu nach 3.32.2: `Glide-Aufgaben-und-Listen_v3.32.1_Z.pyw`; vollständige
   Python-/Bundle-Vorsicherungen stehen in Abschnitt 11.
 - Neu nach 3.32.3: `Glide-Aufgaben-und-Listen_v3.32.2_Z.pyw` und vollständige Vorsicherungen gemäß Abschnitt 12.
-- Neues Überholtes weiter mit `_Z` markieren, nie selbst löschen.
+- Die frühere Regel zur `_Z`-Vormerkung wurde am 01.10.2026 für Dokumentationsdateien durch die ausdrückliche Löschfreigabe ersetzt. Aktueller [Wissens- und Bereinigungsnachweis](../01_Repository/Glide/docs/75_DOKUMENTATIONSREDUKTION_UND_LOGOS_3.33.1.md).
 
 ## 10. Abschlussaufgabe für die nächste Implementierungsrunde
 

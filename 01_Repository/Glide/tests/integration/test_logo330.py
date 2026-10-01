@@ -35,7 +35,8 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
         assert Path(logo.resource_dir(), name).is_file(), name
     svg = logo.read_svg()
     assert logo.MASTER_FILL in svg, "Der Logo-Master ist einfarbig in Glide-Blau"
-    assert logo.tinted(svg, "#123456").count("#123456") == svg.count(logo.MASTER_FILL)
+    tinted_svg = logo.tinted(svg, "#123456")
+    assert logo.MASTER_FILL not in tinted_svg and ('fill="#123456"' in tinted_svg or "fill: #123456" in tinted_svg)
     for falsch in ("rot", "#12345", "", None):
         try:
             logo.tinted(svg, falsch)
@@ -44,7 +45,7 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
         else:
             raise AssertionError(f"ungültige Farbe angenommen: {falsch!r}")
     x, y, breite, hoehe = logo.bounding_box()
-    assert 250 < x < 320 and 100 < y < 160 and 480 < breite < 540 and 760 < hoehe < 820, (x, y, breite, hoehe)
+    assert 220 < x < 240 and 100 < y < 120 and 390 < breite < 420 and 600 < hoehe < 630, (x, y, breite, hoehe)
     assert 0.6 < logo.aspect() < 0.7
     assert 'viewBox="' in logo.cropped_svg(svg, (x, y, breite, hoehe))
     assert logo.icon_margin("darwin") > 0 and logo.icon_margin("win32") == 0 and logo.icon_margin("linux") == 0
@@ -102,6 +103,11 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
     try:
         ruhe()
         svg_da = logo.has_svg(root)
+        if svg_da:
+            rendered = logo.logo_photo(root, 80, "#123456")
+            # The new g has a transparent inner opening; its center must stay empty.
+            bx, by, _bw, bh = logo.bounding_box()
+            assert rendered.transparency_get(round((410 - bx) * 80 / bh), round((280 - by) * 80 / bh))
         # --- Programmsymbol ---------------------------------------------------
         assert getattr(root, "_glide_icons", None), "Fenster trägt das App-Symbol"
         assert [bild.width() for bild in root._glide_icons] == [256, 64, 32, 16] or not svg_da

@@ -1,6 +1,6 @@
 # Arbeitsregeln für Claude Code – Glide
 
-Stand 01.10.2026 · Glide 3.32.3
+Stand 01.10.2026 · Glide 3.33.1
 
 Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf die verbindlichen Projektregeln und ergänzt, was für Claude-Code-Sitzungen im Repository gilt. Regeln nicht hier doppeln, sondern an der Quelle pflegen.
 
@@ -18,7 +18,7 @@ Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf 
 1. [01_Repository/Glide/AGENTS.md](01_Repository/Glide/AGENTS.md) – verbindliche Arbeitsregeln und Abschlusskriterium
 2. [Sitzungsübergabe](00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md) und [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) – Stand, verbindliche Entscheidungen D01–D17, beauftragte Arbeit, Abnahme
 3. [Entwicklungsplan ab 3.33](00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md) und [Beschlüsse D09–D17 vom 01.10.2026](00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md#beschlüsse-vom-01102026)
-4. [Dokumentenpflege](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md) vor jeder Dokumentänderung
+4. Dokumentationskopien seit ausdrücklichem Auftrag vom 01.10.2026 nach Wissensabgleich löschen, aktuelle Quellen fortschreiben; [Dokumentenpflege](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md) vor jeder Dokumentänderung
 5. Erst dann die betroffene Codestelle **und ihre Aufrufer** (Funktionsnamen suchen, nicht Zeilennummern)
 
 ## Ergänzungen für diese Umgebung
@@ -33,3 +33,5 @@ Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf 
   - `vendor/**` und `resources/fonts/**` werden unverändert gespeichert (`-text`).
   - tkdnd-`.so` sind ausdrücklich erlaubt.
   - `*.log` und `*.glidebackup` schließt `01_Repository/Glide/.gitignore` weitgehend aus; Prüfprotokolle unter `tests/qa-*/` sind seit D09 freigegeben.
+
+Lokaler Start 3.33.0: T2/P09a zuerst. Aktiver Projektpfad `Github/glide-to-do`. D12 jetzt vollständig: Zeichnungen und Pinnwand-Vorschau. [Fundament-Vertrag](01_Repository/Glide/docs/73_FUNDAMENT_3.33.0.md).

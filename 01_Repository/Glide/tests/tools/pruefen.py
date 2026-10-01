@@ -26,7 +26,7 @@ REPO = Path(__file__).resolve().parents[2]
 APP = REPO / "src/glide/app.pyw"
 SUITEN = ("test_glide.py", "test_datenintegritaet.py", "test_drawing.py", "test_drawing_prototype.py", "audit_app.py",
           "test_dialog_theme.py", "test_ui_updates.py", "test_glide_36.py", "test_release36.py", "test_ui_polish36.py",
-          "test_ui_followup36.py", "test_release37.py", "test_template_workflows.py", "test_reminders.py", "test_ui39.py", "test_workspace310.py", "test_features311.py", "test_features312.py", "test_features313.py", "test_features314.py", "test_features315.py", "test_features316.py", "test_features317.py", "test_features318.py", "test_features319.py", "test_features320.py", "test_features321.py", "test_features322.py", "test_features323.py", "test_features324.py", "test_features325.py", "test_features326.py", "test_features328.py", "test_features329.py", "test_drawing330.py", "test_features330.py", "test_mindestgroesse330.py", "test_kontrast330.py", "test_paketierung330.py", "test_hintergrund330.py", "test_rueckmeldung330.py", "test_seiten330.py", "test_aufraeumen330.py", "test_kompression330.py", "test_bilder330.py", "test_festlayout330.py", "test_logo330.py", "test_kartenfuss330.py", "test_speicherlast330.py", "test_notizbereich330.py", "test_befunde330.py", "test_fenster330.py", "test_tempo330.py", "test_etappe1_332.py", "test_klappmechanismen3321.py", "test_drag_performance3322.py", "test_library_performance3323.py", "test_vollpruefung325.py")
+          "test_ui_followup36.py", "test_release37.py", "test_template_workflows.py", "test_reminders.py", "test_ui39.py", "test_workspace310.py", "test_features311.py", "test_features312.py", "test_features313.py", "test_features314.py", "test_features315.py", "test_features316.py", "test_features317.py", "test_features318.py", "test_features319.py", "test_features320.py", "test_features321.py", "test_features322.py", "test_features323.py", "test_features324.py", "test_features325.py", "test_features326.py", "test_features328.py", "test_features329.py", "test_drawing330.py", "test_features330.py", "test_mindestgroesse330.py", "test_kontrast330.py", "test_paketierung330.py", "test_hintergrund330.py", "test_rueckmeldung330.py", "test_seiten330.py", "test_aufraeumen330.py", "test_kompression330.py", "test_bilder330.py", "test_festlayout330.py", "test_logo330.py", "test_kartenfuss330.py", "test_speicherlast330.py", "test_notizbereich330.py", "test_befunde330.py", "test_fenster330.py", "test_tempo330.py", "test_etappe1_332.py", "test_klappmechanismen3321.py", "test_drag_performance3322.py", "test_library_performance3323.py", "test_fundament333.py", "test_bereiche3331.py", "test_vollpruefung325.py")
 # standpruefung.py ist seit 3.21.3 dabei: Sieben Dokumente standen zwei
 # Versionssprünge lang auf 3.21.0, weil nichts die Standzeilen gegen VERSION
 # geprüft hat. Index- und Linkprüfung finden das nicht – ein Dokument kann
@@ -352,8 +352,7 @@ class Prueflauf:
                 self.gui_problem = "Kein DISPLAY und xvfb-run nicht vorhanden"
         if not self.gui_problem:
             try:
-                result = subprocess.run(self.gui_prefix + [sys.executable, "-c",
-                    "import tkinter as tk; r=tk.Tk(); r.withdraw(); r.update(); print(r.tk.call('info','patchlevel')); r.destroy()"],
+                result = subprocess.run(self.gui_prefix + [sys.executable, "-B", str(REPO / "tests/tools/pruefe_tk.py")],
                     env=self.env, capture_output=True, text=True, encoding="utf-8",
                     errors="replace", timeout=30)
                 if result.returncode:
@@ -461,6 +460,7 @@ def main():
     run.funktion("Versionskonsistenz", versionen_pruefen)
     run.funktion("Dokumentation", dokumentation_pruefen)
     run.funktion("Fixtures", fixtures_pruefen)
+    run.prozess("Fachlogik-Unit-Tests", [sys.executable, "-B", "-m", "unittest", "discover", "-s", str(REPO / "tests/unit")])
     run.gui_pruefen()
     run.zone_pruefen()
     for name in SUITEN:

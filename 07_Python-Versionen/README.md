@@ -1,14 +1,14 @@
 # Aktuelle startbare Python-Fassung
 
-Glide 3.32.3 · Entwicklungsstand 01.10.2026 · Aufgabenformat 20 · Vorlagenformat 2
+Glide 3.33.1 · Entwicklungsstand 01.10.2026 · Aufgabenformat 20 · Vorlagenformat 2
 
-[Glide-Aufgaben-und-Listen_v3.32.3.pyw](Glide-Aufgaben-und-Listen_v3.32.3.pyw)
+`Glide-Aufgaben-und-Listen_v3.33.1.pyw` (Prüfkandidat; Auslieferung nach dem Volllauf)
 ist die bytegleiche Arbeitskopie des kanonischen Codes
 (`01_Repository/Glide/src/glide/app.pyw`). Daneben gehören, ebenfalls
 bytegleich, in denselben Ordner:
 
 - die Module `drawing.py`, `drawing_image.py`, `backdrop.py`,
-  `page_markdown.py`, `image_preview.py` und `logo.py` – ohne sie startet
+  `page_markdown.py`, `image_preview.py`, `logo.py` und `schema_backups.py`, `sidebar_policy.py`, `svg_geometry.py` – ohne sie startet
   Glide nicht;
 - `Schnellstart.pyw` (im Repository `glide_start.py`);
 - die Ordner `resources` (Schriften, Vorlagen, seit 29.09.2026 das Logo) und
@@ -34,7 +34,11 @@ vorher; ab dem zweiten Start öffnet Glide damit rund eine halbe Sekunde
 schneller. Der frühere Ordner `__pycache___Z` stammt aus direkten Starts vor
 dieser Änderung und ist zum Löschen markiert.
 
-## Neu in 3.30 (Auszug)
+## Neu in 3.33.0
+
+Gemeinsame Formatsicherung und keine ungenutzte Tabellenmessung. [Vertrag](../01_Repository/Glide/docs/73_FUNDAMENT_3.33.0.md). Vollprüfung mit 59 Integrationssuiten und acht Unit-Tests bestanden; diese Fassung (140 Dateien) und Bundle (54 Quell-/Ressourcendateien) per SHA-256 abgeglichen.
+
+## Frühere Modernisierung 3.30 (Auszug)
 
 - **29.09.2026:** Logo in der Akzentfarbe links neben dem Titel, in „Über
   Glide“ und als Programmsymbol; Lupe ⌕ für die Suche; Startseite ohne
@@ -104,3 +108,5 @@ Benachrichtigungen funktionieren weiterhin nur bei laufender App.
 [Dokumentationsindex](../01_Repository/Glide/docs/00_INDEX.md)
 
 **Neu in 3.32.3:** Unveränderte Bibliothekskarten/Aktionen erhalten, frische Vorschaudaten, Archiv-Zurückholen einmal. Vollprüfung mit 58 Suiten bestanden; diese Fassung und macOS-Bundle per SHA-256 abgeglichen. [Vertrag und Messwerte](../01_Repository/Glide/docs/71_KARTEN_PERFORMANCE_3.32.3.md). Eine laufende ältere Instanz neu starten.
+
+`schema_backups.py` bündelt die Tk-freie Formatsicherung mit Dateistandprüfung; seit 3.33.0 in beiden Lieferwegen enthalten.

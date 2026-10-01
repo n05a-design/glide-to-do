@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_logo330.py", line 38, in <module>
+    assert logo.MASTER_FILL not in logo.tinted(svg, "#123456") and "fill: #123456" in logo.tinted(svg, "#123456")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

@@ -1,8 +1,8 @@
 # Prüfungen für Glide
 
-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · 58 Suiten aus `pruefen.py` und fünf Analysen. Alle App-Tests setzen vor dem App-Import einen temporären `GLIDE_DATA_DIR`; echte Nutzerdaten sind ausgeschlossen. Die isolierten Zeichentests importieren `ListApp` nicht und berühren keinen Datenordner; `test_features329.py` prüft die produktive Zeichnungsseite, `test_drawing330.py` den erweiterten Zeichenkern und `test_features330.py` alle Pakete aus 3.30, jeweils mit eigenem temporärem Datenordner.
+Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · 60 Suiten aus `pruefen.py` und fünf Analysen. Alle App-Tests setzen vor dem App-Import einen temporären `GLIDE_DATA_DIR`; echte Nutzerdaten sind ausgeschlossen. Die isolierten Zeichentests importieren `ListApp` nicht und berühren keinen Datenordner; `test_features329.py` prüft die produktive Zeichnungsseite, `test_drawing330.py` den erweiterten Zeichenkern und `test_features330.py` alle Pakete aus 3.30, jeweils mit eigenem temporärem Datenordner.
 
-Vollständiger Lauf aus dem Repository-Stamm `01_Repository/Glide`: `python3 tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.32.3/abschluss --timeout 900`. Unter Windows startet `tests/tools/windows_vollpruefung.cmd` denselben Lauf. Unter Windows heißt der Aufruf `python`; das Zeitlimit von 300 Sekunden je Suite ist dort mit Virenschutz und synchronisiertem Ordner knapp, `--timeout 900` ist realistischer.
+Vollständiger Lauf aus dem Repository-Stamm `01_Repository/Glide`: `python3 tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.1/abschluss --timeout 900`. Unter Windows startet `tests/tools/windows_vollpruefung.cmd` denselben Lauf. Unter Windows heißt der Aufruf `python`; das Zeitlimit von 300 Sekunden je Suite ist dort mit Virenschutz und synchronisiertem Ordner knapp, `--timeout 900` ist realistischer.
 
 Der Prüfstand setzt `TZ=Europe/Berlin`, wenn der Aufrufer keine Zone vorgibt, und **misst seit 3.23.0 nach, was davon tatsächlich gilt**. In einer Zone ohne Versatz ist jeder Zeitzonenfehler unsichtbar: Der `UNTIL`-Fehler aus 3.21.0 war in einer UTC-Vorabumgebung grün und fiel erst im macOS-Lauf auf.
 
@@ -92,3 +92,5 @@ Termine in Suiten liegen bewusst in der Zukunft. Ein Punkt mit Fälligkeit „he
 [Aktueller QA-Bericht](../docs/07_QA_BERICHT.md) · [Prüfplan und manuelle Grenzen](../docs/05_QA_TESTPLAN.md).
 
 Seit 3.32.1–3.32.3 gehören die nativen Klapp-, Drag-/Performance- und Bibliothekskartenprüfungen zur Pflichtliste. Die Werkzeugregression `python3 -B tests/tools/test_standpruefung.py` prüft gepflegte datierte Einstiege, aktuelle Titel, erste Vollprüfungsaufrufe und die Abgrenzung datierter Ablageabbilder. [Arbeitsrichtung](../docs/ARBEITSRICHTUNG.md).
+
+Tk-freie Fachlogik: `python3 -B -m unittest discover -s tests/unit -v`; Pflichtschritt im zentralen Prüfstand. Formatsicherung und Tabellenmessung zusätzlich in `test_fundament333.py`.

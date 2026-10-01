@@ -1,6 +1,6 @@
 # Langfristiger Prüfverlauf
 
-Stand 01.10.2026 · Glide 3.32.3 · Datenformat 20 · Zeilen in zeitlicher Folge
+Stand 01.10.2026 · Glide 3.33.1 · Datenformat 20 · Zeilen in zeitlicher Folge
 
 **Showcase-Nachlauf 01.10.2026:** [Gezielte Abnahme](qa-3.32.3/showcase_2026-10-01/einzelpruefung.json), tatsächlicher Import/Neustart grün; neue Pflichtprüfung zusätzlich zu 58 Suiten. Daten-/Werkzeugänderung zur unveränderten App 3.32.3. Die abschließende Vollregression wird separat geführt.
 
@@ -17,6 +17,8 @@ Stand 01.10.2026 · Glide 3.32.3 · Datenformat 20 · Zeilen in zeitlicher Folge
 - **Dokumente:** D09–D17 als Beschlüsse eingetragen; `Glide/.gitignore` gibt Prüfprotokolle frei.
 - **Grenzen:** Keine Vollprüfung, Anwendung unverändert.
 
+
+**Fundament 3.33.0, 01.10.2026:** 76 automatische Schritte, 59 Integrationssuiten, acht Unit-Tests, Showcase und fünf Analysen grün; 140 Python-/54 Bundle-Dateien bytegleich, Signatur gültig, getrennter Showcase-Starter bei Erststart und Neustart geprüft. [Vollprotokoll](qa-3.33.0/fundament_2026-10-01/vollpruefung/ergebnis.json).
 
 | Datum | Stand | Ergebnis | Nachweis |
 |---|---|---|---|

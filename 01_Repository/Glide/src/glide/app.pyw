@@ -118,6 +118,8 @@ import backdrop as glide_backdrop  # noqa: E402
 import page_markdown as glide_page_markdown  # noqa: E402
 import image_preview as glide_image_preview  # noqa: E402
 import logo as glide_logo  # noqa: E402
+import sidebar_policy as glide_sidebar  # noqa: E402
+from schema_backups import SchemaBackups  # noqa: E402
 
 
 def _ensure_streams():
@@ -150,7 +152,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.32.3"
+APP_VERSION = "3.33.1"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
 # Einstellungen des Betriebssystems hängen daran.
@@ -4929,7 +4931,7 @@ class ItemWorkspace:
         bibliothek = app.is_library_view()
         if app.view_mode != app.TABLE_VIEW and not bibliothek and (
                 self.mode == "list" or not scope) and app.view_mode not in (
-                app.HOME_VIEW, app.HISTORY_VIEW, app.PAGES_VIEW, app.NOTES_VIEW, app.TEMPLATE_VIEW, app.LIBRARY_VIEW, "trash"):
+                app.HOME_VIEW, app.HISTORY_VIEW, app.PAGES_VIEW, app.NOTES_VIEW, app.DRAWINGS_VIEW, app.TEMPLATE_VIEW, app.LIBRARY_VIEW, "trash"):
             app.pack_relative(app.detail_button, app.search_row_anchor(), side="right", padx=(8, 0))
         ordner = app.get_folder(app.active_folder_id) if app.view_mode == "folder" else None
         if journal_button is not None and ordner is not None and ordner.get("folder_kind") == "journal" \
@@ -13001,6 +13003,7 @@ class ListApp:
     # Notizübersicht (29.09.2026): zuletzt bearbeitete Notizen, Notizbücher
     # und alle Notizen – das Gegenstück zur Seitenübersicht.
     NOTES_VIEW = "notes"
+    DRAWINGS_VIEW = "drawings"
     # Die globale Pinnwand gehört zu keiner Liste und zu
     # keinem Ordner. Sie ist deshalb eine eigene Ansicht – dieselbe
     # Arbeitsfläche wie überall, nur mit dem gesamten Bestand als Bereich.
@@ -13195,17 +13198,17 @@ class ListApp:
              "Rechtsklick: Umfluss, Spaltenbreite, halbe Breite, Originalgröße, Entfernen. Entf löscht das "
              "markierte Bild; Rückgängig holt es zurück. Bilder sind Anhänge der Seite.",
              "Seite › Bild · Werkzeugleiste über der Fläche"),
-            ("Seitenbereich", "Seiten und Bibliotheken haben in der Seitenleiste einen eigenen Bereich "
+            ("Seitenbereich", "Seiten und Bücher haben in der Seitenleiste einen eigenen Bereich "
              "„Seiten +“ zwischen Papierkorb und „Listen +“. Seiten in gewöhnlichen Ordnern bleiben bei ihrem "
-             "Ordner. Die Überschrift „Seiten“ öffnet die Übersicht. Über einer Bibliothek erscheinen „+“ "
+             "Ordner. Die Überschrift „Seiten“ öffnet die Übersicht. Über einem Buch erscheinen „+“ "
              "(Seite, Vorlage, Unterordner) und „…“.", "Seitenleiste › Seiten"),
             ("Seite anlegen", "„+“ neben „Seiten“, Datei › Neu anlegen › Neue Seite oder „Neue Seite“ in der "
-             "Übersicht. In einer Bibliothek entsteht jeder neue Eintrag als Seite.",
+             "Übersicht. In einem Buch entsteht jeder neue Eintrag als Seite.",
              "Seitenleiste › Seiten + · Datei › Neu anlegen"),
             ("Seitenvorlagen", "Bericht, Besprechung und Projektseite sind mitgeliefert; jede eigene Seite lässt sich "
              "als Vorlage speichern. Aufgaben der Vorlage werden in der neuen Seite zu neuen Punkten.",
              "Seiten + › Aus Vorlage"),
-            ("Glide-Seiten austauschen", "Eine Seite oder Bibliothek als .glidepage speichern: Text, Aufgaben, Labels "
+            ("Glide-Seiten austauschen", "Eine Seite oder ein Buch als .glidepage speichern: Text, Aufgaben, Labels "
              "und Anhänge reisen mit. Beim Import kommen die Seiten hinzu, Labels werden zusammengeführt. "
              "Eine Datei mit gewöhnlichen Listen weist der Seitenimport ab.",
              "Seite › Mehr › Als Glide-Seite exportieren · Seiten + › Glide-Seiten importieren …"),
@@ -13253,9 +13256,9 @@ class ListApp:
         )),
         ("Ordnertypen", (
             ("Ordner", "Nimmt alles auf: Aufgaben, Notizen, Zeichnungen, Seiten.", "Neuer Ordner › Ordnerart"),
-            ("Bibliothek", "Eine Sammlung von Seiten – etwa Bücher oder Berichte. Neue Einträge sind Seiten. "
-             "Bibliotheken stehen im Bereich „Seiten“; ein Unterordner ist wieder eine Bibliothek.",
-             "Seiten + › Neue Bibliothek … · Neuer Ordner › Ordnerart"),
+            ("Buch", "Eine Sammlung von Seiten – etwa Berichte oder Projektunterlagen. Neue Einträge sind Seiten. "
+             "Bücher stehen im Bereich „Seiten“; gewöhnliche Unterordner sind ebenfalls möglich.",
+             "Seiten + › Neues Buch … · Neuer Ordner › Ordnerart"),
             ("Notizbuch", "Früher „Tagebuch“: Einträge tragen ein Momentdatum. Notizbücher stehen im Bereich "
              "„Notizen“; ein Unterordner ist wieder ein Notizbuch.",
              "Notizen + › Neues Notizbuch … · Neuer Ordner › Ordnerart"),
@@ -13748,7 +13751,7 @@ class ListApp:
     LIST_KIND_DRAWING = "drawing"
     # Seitenart „Seite“ (26.09.2026): Lesen und Schreiben wie in Notion, für
     # KI-Berichte gedacht; Aufgaben darin sind echte Punkte der Seite. Format 20
-    # ist noch unveröffentlicht und nimmt die Art additiv auf.
+    # unterstützt die Art seit Glide 3.30 additiv.
     LIST_KIND_PAGE = "page"
     # Galerie (27.09.2026): eine Sammlung von Bildern. Die Bilder sind Anhänge
     # der Liste; Punkte nimmt sie nicht auf.
@@ -13766,7 +13769,7 @@ class ListApp:
     # ist das bisherige Tagebuch. Die gespeicherten Kennungen bleiben.
     FOLDER_KINDS = {
         "standard": {"label": "Ordner", "list_kind": None},
-        "library": {"label": "Bibliothek", "list_kind": "page"},
+        "library": {"label": "Buch", "list_kind": "page"},
         "journal": {"label": "Notizbuch", "list_kind": None},
     }
     FOLDER_KIND_BY_LABEL = {info["label"]: key for key, info in FOLDER_KINDS.items()}
@@ -14153,7 +14156,7 @@ class ListApp:
         "today_plan", "today_plan_migrated", "table_column_widths", "table_sort",
         "home_tile_order", "home_tiles_hidden", "home_columns",
         "saved_filters", "active_saved_filter", "open_tabs",
-        "active_tab", "pinboards", "table_columns", "recent_lists",
+        "active_tab", "pinboards", "table_columns", "recent_lists", "sidebar_locations",
     )
     # Tageshistorien sind Messwerte dieses Geräts und werden getrennt
     # zugeschaltet: Ein Blick in ein fremdes Backup soll die eigene
@@ -14723,7 +14726,7 @@ class ListApp:
         saved_view_mode = self.settings.get("view_mode")
         if self.active_folder_id:
             self.view_mode = "folder"
-        elif saved_view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW, self.TABLE_VIEW, self.GLOBAL_BOARD_VIEW):
+        elif saved_view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW, self.TABLE_VIEW, self.GLOBAL_BOARD_VIEW):
             self.view_mode = saved_view_mode
         else:
             self.view_mode = "list"
@@ -16878,6 +16881,8 @@ class ListApp:
             if len(pinned) >= cls.MAX_PINNED_PAGES:
                 break
         result["pinned_pages"] = pinned
+        result["sidebar_sections_visible"] = glide_sidebar.normalize_visibility(result.get("sidebar_sections_visible"))
+        result["sidebar_locations"] = glide_sidebar.normalize_locations(result.get("sidebar_locations"))
         zu = result.get("sidebar_sections_closed")
         result["sidebar_sections_closed"] = list(dict.fromkeys(
             value for value in (zu if isinstance(zu, list) else []) if value in cls.SIDEBAR_SECTIONS))
@@ -19284,7 +19289,7 @@ class ListApp:
     # „pages“ und „lists“ (27.09.2026): Seiten- und Listenbereich klappen mit
     # einem Pfeil vor ihrer Überschrift ein, wie Ordner im Baum. „notes“
     # (29.09.2026) ist der Notizbereich unter den Listen.
-    SIDEBAR_SECTIONS = ("views", "pinned", "pages", "lists", "notes")
+    SIDEBAR_SECTIONS = ("views", "pinned", "pages", "lists", "notes", "drawings")
     SIDEBAR_SECTION_ARROWS = {True: "▽", False: "▷"}
     # Abstand zwischen Seiten- und Listenbereich – enger als zum Systembereich.
     SIDEBAR_LISTS_GAP = 10
@@ -19314,6 +19319,7 @@ class ListApp:
         titelzeile = getattr(self, "sidebar_title_row", None)
         if system is None or titelzeile is None:
             return
+        self.apply_sidebar_visibility()
         theme = self.theme
         kopf = getattr(self, "views_collapsed_header", None)
         if kopf is None:
@@ -19325,7 +19331,7 @@ class ListApp:
         kopf.configure(text=f"{self.ICONS['group']}  Ansichten ({len(system.get_children(''))})",
                        bg=theme["card"], fg=theme["muted"])
         naechstes = self.pinned_sidebar_frame if getattr(self, "pinned_sidebar_frame", None) is not None \
-            and self.pinned_sidebar_frame.winfo_manager() else getattr(self, "pages_title_row", None) or titelzeile
+            and self.pinned_sidebar_frame.winfo_manager() else (getattr(self, "pages_title_row", None) if self.sidebar_section_visible("pages") else None) or titelzeile
         if self.sidebar_section_open("views"):
             if kopf.winfo_manager():
                 kopf.pack_forget()
@@ -19346,7 +19352,8 @@ class ListApp:
             self.repaint_sidebar()
         for pfeil, schluessel in ((getattr(self, "sidebar_heading_icon", None), "lists"),
                                   (getattr(self, "pages_heading_icon", None), "pages"),
-                                  (getattr(self, "notes_heading_icon", None), "notes")):
+                                  (getattr(self, "notes_heading_icon", None), "notes"),
+                                  (getattr(self, "drawings_heading_icon", None), "drawings")):
             if pfeil is not None:
                 pfeil.configure(text=self.SIDEBAR_SECTION_ARROWS[self.sidebar_section_open(schluessel)])
         self.sync_pages_sidebar_height()
@@ -19467,28 +19474,30 @@ class ListApp:
         Notizbuch zuerst die Tagesnotiz; ein Unterordner erbt die Ordnerart.
         """
         menu = self._new_themed_popup_menu()
-        ordnerart = (self.get_folder(folder_id) or {}).get("folder_kind") if folder_id else None
-        if ordnerart == "library":
-            menu.add_command(label="Neue Seite", command=lambda: self.create_new_page(folder_id))
-            menu.add_cascade(label="Seite aus Vorlage", menu=self.page_template_menu(menu, folder_id))
-            menu.add_command(label="Neuer Unterordner …", command=lambda: self.create_container_dialog(
-                "folder", parent_id=folder_id, folder_kind="library"))
-            return menu
-        if ordnerart == "journal":
-            menu.add_command(label="Neue Tagesnotiz", command=lambda: self.create_journal_entry(folder_id))
-            menu.add_separator()
-        menu.add_command(label="Neue Liste …", command=lambda: self.create_container_dialog("list", parent_id=folder_id))
-        menu.add_command(label="Neue Seite", command=lambda: self.create_new_page(folder_id))
-        menu.add_command(label="Neue Notiz …", command=lambda: self.create_container_dialog(
-            "list", parent_id=folder_id, list_kind=self.LIST_KIND_NOTE))
-        menu.add_command(label="Neue Pinnwand …", command=lambda: self.create_container_dialog(
-            "list", parent_id=folder_id, list_kind="board"))
-        menu.add_command(label="Neue Zeichnung", command=lambda: self.create_new_drawing(folder_id))
-        menu.add_command(label="Neue Galerie", command=lambda: self.create_new_gallery(folder_id))
-        menu.add_command(label="Neuer Unterordner …" if folder_id else "Neuer Ordner …",
-                         command=lambda: self.create_container_dialog(
-                             "folder", parent_id=folder_id,
-                             folder_kind="journal" if ordnerart == "journal" else None))
+        section = self.sidebar_section_for("folder", folder_id) if folder_id else "lists"
+        ordnerart = (self.get_folder(folder_id) or {}).get("folder_kind")
+        if section == "lists":
+            menu.add_command(label="Neue Liste …", command=lambda: self.create_container_dialog("list", parent_id=folder_id))
+        if section in ("pages", "lists"):
+            menu.add_command(label="Neue Seite", command=lambda: self.create_in_sidebar_section("page", folder_id, section))
+            menu.add_cascade(label="Seite aus Vorlage", menu=self.page_template_menu(menu, folder_id, section))
+        if section in ("notes", "lists"):
+            if ordnerart == "journal":
+                menu.add_command(label="Neue Tagesnotiz", command=lambda: self.create_journal_entry(folder_id))
+            menu.add_command(label="Neue Notiz …", command=lambda: self.create_container_dialog(
+                "list", parent_id=folder_id, list_kind=self.LIST_KIND_NOTE, sidebar_section=section))
+        if section == "lists":
+            menu.add_command(label="Neue Pinnwand …", command=lambda: self.create_container_dialog(
+                "list", parent_id=folder_id, list_kind="board"))
+            menu.add_command(label="Neue Galerie", command=lambda: self.create_new_gallery(folder_id))
+        if section in ("drawings", "lists"):
+            menu.add_command(label="Neue Zeichnung", command=lambda: self.create_in_sidebar_section("drawing", folder_id, section))
+        for key, info in self.FOLDER_KINDS.items():
+            if glide_sidebar.accepts(section, "folder", key):
+                menu.add_command(label=("Neuer Unterordner …" if folder_id else "Neuer Ordner …") if key == "standard"
+                                 else "Neues Buch …" if key == "library" else "Neues Notizbuch …",
+                                 command=lambda k=key: self.create_container_dialog(
+                                     "folder", parent_id=folder_id, folder_kind=k, sidebar_section=section))
         if folder_id is None:
             menu.add_separator()
             menu.add_command(label="Listen importieren …", command=self.import_txt_as_new_lists)
@@ -19496,7 +19505,7 @@ class ListApp:
 
     def show_sidebar_add_menu(self, event=None):
         """„+“ neben „Listen“: im geöffneten Ordner anlegen, sonst oben."""
-        ordner = self.active_folder_id if self.view_mode == "folder" and self.get_folder(self.active_folder_id) else None
+        ordner = self.active_folder_id if self.view_mode == "folder" and self.get_folder(self.active_folder_id) and self.sidebar_section_for("folder", self.active_folder_id) == "lists" else None
         self._popup_at_widget(self.folder_quick_add_menu(ordner), self.add_list_button)
         return "break"
 
@@ -20395,7 +20404,7 @@ class ListApp:
         self.template_actions.pack_forget()
         self.home_scrollbar.place_forget()
         self.update_sidebar_heading()
-        if self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+        if self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
             if not self._home_saved_pack:
                 self._home_saved_pack = [(widget, widget.pack_info())
                                          for widget in self.content_frame.pack_slaves()
@@ -20456,7 +20465,7 @@ class ListApp:
 
     def _sync_home_scrollbar(self, first, last):
         self.home_scrollbar.set(first, last)
-        visible = (self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW)
+        visible = (self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW)
                    and float(last) - float(first) < ThemedAutoScrollbar.FULLY_VISIBLE_RATIO)
         if not visible:
             self.home_scrollbar.place_forget()
@@ -23190,6 +23199,8 @@ class ListApp:
         systemhinweis = tk.BooleanVar(value=self.settings.get("system_notifications", False))
         verlauf = tk.BooleanVar(value=self.settings.get("history_enabled", True))
         animationen = tk.BooleanVar(value=self.settings.get("animations_enabled", True))
+        sidebar_visibility = {key: tk.BooleanVar(value=self.sidebar_section_visible(key))
+                              for key in ("pages", "notes", "drawings")}
         rueckmeldung_namen = dict(self.ACTION_FEEDBACK_CHOICES)
         rueckmeldung_schluessel = {name: key for key, name in self.ACTION_FEEDBACK_CHOICES}
         rueckmeldung = tk.StringVar(value=rueckmeldung_namen[
@@ -23325,6 +23336,16 @@ class ListApp:
                            fg=self.theme["text"],
                            activebackground=self.theme["bg"], activeforeground=self.theme["text"],
                            selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=5)
+        tk.Label(appearance, text="Bereiche der Seitenleiste", bg=self.theme["bg"], fg=self.theme["muted"],
+                 font=app_font(10), anchor="w").pack(fill="x", pady=(8, 4))
+        for key, variable in sidebar_visibility.items():
+            tk.Checkbutton(appearance, text=glide_sidebar.TITLES[key], variable=variable,
+                           name=f"setting_sidebar_{key}", bg=self.theme["bg"], fg=self.theme["text"],
+                           activebackground=self.theme["bg"], activeforeground=self.theme["text"],
+                           selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=3)
+        tk.Label(appearance, text="Listen bleibt immer sichtbar. Ausgeblendete Inhalte findest du dort weiterhin.",
+                 bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9), wraplength=300,
+                 justify="left", anchor="w").pack(fill="x", pady=(0, 8))
         tk.Label(personal, text="Ansicht beim Öffnen", bg=self.theme["bg"], fg=self.theme["muted"],
                  font=app_font(10), anchor="w").pack(fill="x", pady=(8, 5))
         startup_farben = {
@@ -23588,7 +23609,8 @@ class ListApp:
             if startup_value == "list" and not startliste_value:
                 # Ohne Liste wäre „Eine feste Liste" eine Angabe ohne Ziel.
                 startup_value = "home"
-            self.settings.update(profile_name=name.get(), profile_logo=clean_logo,
+            self.settings.update(sidebar_sections_visible={"lists": True, **{key: value.get() for key, value in sidebar_visibility.items()}},
+                                 profile_name=name.get(), profile_logo=clean_logo,
                                  daily_goal=int(rohziel),
                                  daily_capacity_minutes=int(rohkapazitaet),
                                  daily_capacity_by_weekday=wochenprofil,
@@ -23619,6 +23641,8 @@ class ListApp:
             dialog.destroy()
             self._ui_font_family = None
             self._font_families = None
+            self._header_cap_font = None
+            self._header_subtitle_font = None
             self._sidebar_row_font = None
             self._system_row_font = None
             self._task_row_font = None
@@ -23626,6 +23650,7 @@ class ListApp:
             self._due_column_width = None
             self.apply_ui_font()
             self.apply_theme()
+            self.update_sidebar_list()
             self.update_header_title()
             self.refresh_tree()
             return "break"
@@ -23638,7 +23663,8 @@ class ListApp:
             for widget in panel.winfo_children():
                 if isinstance(widget, (tk.Label, tk.Checkbutton)):
                     widget.configure(justify="left", anchor="w")
-                    widget.bind("<Configure>", lambda event, target=widget: target.configure(wraplength=max(160, event.width - 8)))
+                    widget.bind("<Configure>", lambda event, target=widget: target.configure(wraplength=max(160, event.width - 8))
+                                if int(float(target.cget("wraplength"))) != max(160, event.width - 8) else None)
         self._center_dialog(dialog, min_width=1080, min_height=760)
         self._schedule_windows_chrome_theme(dialog)
         fields[0].focus_set()
@@ -23661,6 +23687,8 @@ class ListApp:
             return "Änderungsverlauf"
         if self.view_mode == self.PAGES_VIEW:
             return "Seiten"
+        if self.view_mode == self.DRAWINGS_VIEW:
+            return "Zeichnungen"
         if self.view_mode == self.NOTES_VIEW:
             return "Notizen"
         if self.view_mode == "saved_filter":
@@ -23691,7 +23719,7 @@ class ListApp:
         return self.app_title
 
     def get_active_page(self):
-        if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.TEMPLATE_VIEW,
+        if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW,
                                                         self.LIBRARY_VIEW, self.GLOBAL_BOARD_VIEW):
             return None
         if self.view_mode == "folder" and self.active_folder_id:
@@ -23771,6 +23799,8 @@ class ListApp:
 
     def apply_ui_font(self):
         """Setzt die benannte Tk-Standardschrift für neu erzeugte Widgets."""
+        self._header_cap_font = None
+        self._header_subtitle_font = None
         _APP_FONT_CACHE.pop(self.root, None)
         try:
             named = tkfont.nametofont("TkDefaultFont", root=self.root)
@@ -24149,6 +24179,7 @@ class ListApp:
         vollständige Eingabemaske ist absichtlich lang und bringt für diesen
         Fall eine eigene Bildlaufleiste mit.
         """
+        dialog.withdraw()
         dialog.update_idletasks()
         width = max(dialog.winfo_reqwidth(), min_width)
         height = max(dialog.winfo_reqheight(), min_height)
@@ -24182,6 +24213,8 @@ class ListApp:
         except tk.TclError:
             x, y = 200, 150
         dialog.geometry(f"{width}x{height}+{x}+{y}")
+        dialog._glide_layout_measured = True
+        dialog.deiconify()
 
     def _make_field(self, master, inner="input"):
         """Einheitlicher Feldrahmen für alle Dialoge.
@@ -24307,7 +24340,8 @@ class ListApp:
         und wurde gequetscht, sobald man den Dialog kleiner zog.
         """
         try:
-            dialog.update_idletasks()
+            if not getattr(dialog, "_glide_layout_measured", False):
+                dialog.update_idletasks()
             breite, hoehe = dialog.minsize()
             bedarf = dialog.winfo_reqwidth()
             grenze = int(dialog.winfo_screenwidth() * self.DIALOG_MAX_SCREEN_SHARE)
@@ -27480,6 +27514,8 @@ class ListApp:
             return False
         if self.folder_is_descendant(target_id, folder_id):
             return False
+        if not self.sidebar_accepts("folder", folder_id, self.sidebar_section_for("folder", target_id)):
+            return False
         new_depth = self.folder_depth(target_id) + 1 + self.folder_subtree_height(folder_id)
         return new_depth < self.MAX_FOLDER_DEPTH
 
@@ -29020,6 +29056,7 @@ class ListApp:
         self.build_sidebar_quick_actions()
         # Notizen unter den Listen (29.09.2026): Seiten, Listen, Notizen.
         self.create_notes_sidebar()
+        self.create_drawings_sidebar()
         self.sidebar_frame.bind("<Configure>", self.schedule_sidebar_heights, add="+")
 
     def _capture_sidebar_folder_open_states(self):
@@ -29045,7 +29082,7 @@ class ListApp:
     def sidebar_trees(self):
         """Die Bäume der Seitenleiste mit Listen und Ordnern: Seiten, Listen, Notizen."""
         return [baum for baum in (getattr(self, "pages_listbox", None), getattr(self, "sidebar_listbox", None),
-                                  getattr(self, "notes_listbox", None)) if baum is not None]
+                                  getattr(self, "notes_listbox", None), getattr(self, "drawings_listbox", None)) if baum is not None]
 
     def reveal_sidebar_row(self, baum, iid):
         """Scrollt die geöffnete Zeile in Sicht – aufgeklappt wird nur beim Wechsel.
@@ -29238,6 +29275,12 @@ class ListApp:
         return str(title or "").strip()
 
     def refresh_sidebar_row_texts(self, event=None):
+        if event is not None:
+            signature = tuple((str(tree), tree.winfo_width(), tree.column("#0", "width"))
+                              for tree in [self.system_listbox] + self.sidebar_trees())
+            if signature == getattr(self, "_sidebar_width_signature", None):
+                return
+            self._sidebar_width_signature = signature
         with self.render_pass():
             return self._refresh_sidebar_row_texts(event=event)
 
@@ -29344,7 +29387,8 @@ class ListApp:
                 self.sidebar_listbox.delete(row_id)
             seitenbaum = getattr(self, "pages_listbox", None)
             notizbaum = getattr(self, "notes_listbox", None)
-            for bereich in (seitenbaum, notizbaum):
+            zeichnungsbaum = getattr(self, "drawings_listbox", None)
+            for bereich in (seitenbaum, notizbaum, zeichnungsbaum):
                 if bereich is not None:
                     for row_id in bereich.get_children(""):
                         bereich.delete(row_id)
@@ -29447,11 +29491,11 @@ class ListApp:
 
             # Seitenbereich: Seiten ohne Ordner, dann Bibliotheken mit Inhalt.
             # Notizbereich (29.09.2026): Notizen ohne Ordner, dann Notizbücher.
-            for bereich in (seitenbaum, notizbaum):
+            for bereich in (seitenbaum, notizbaum, zeichnungsbaum):
                 if bereich is None:
                     continue
                 for entry in self.lists:
-                    if entry.get("archived") or self.sidebar_tree_for_entry(entry) is not bereich:
+                    if entry.get("archived") or entry.get("folder_id") in assigned_folder_ids or self.sidebar_tree_for_entry(entry) is not bereich:
                         continue
                     self._insert_sidebar_list_row(entry, parent="", tree=bereich, depth=0)
                 self._insert_sidebar_folder_rows(None, "", 0, tree=bereich)
@@ -29484,7 +29528,7 @@ class ListApp:
             # zurück, deren Auswahl in der Seitenleiste die Ansicht sofort
             # wieder verlassen würde.
             if self.view_mode in self.DERIVED_ITEM_VIEWS + (
-                    "trash", self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW,
+                    "trash", self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW,
                     self.GLOBAL_BOARD_VIEW):
                 active_row = ("view", self.view_mode)
             elif self.view_mode == "folder" and self.active_folder_id:
@@ -29528,6 +29572,7 @@ class ListApp:
         self.sync_pages_sidebar_height()
         self.update_pages_heading()
         self.update_notes_heading()
+        self.update_drawings_heading()
         self.refresh_sidebar_row_texts()
         self.render_pinned_sidebar()
         self.apply_sidebar_sections()
@@ -29548,7 +29593,7 @@ class ListApp:
         (self.pages_title_row, self.pages_heading_frame, self.pages_heading_icon, self.pages_title,
          self.add_pages_button, self.pages_listbox) = self.build_sidebar_section(
             "pages", "Seiten", self.set_pages_view, "Alle Seiten mit Favoriten und Zuletzt geöffnet",
-            self.show_pages_add_menu, "Neue Seite, Bibliothek oder Import", self.SIDEBAR_SECTION_GAP)
+            self.show_pages_add_menu, "Neue Seite, Buch oder Import", self.SIDEBAR_SECTION_GAP)
 
     def create_notes_sidebar(self):
         """„Notizen +“ unter den Listen (29.09.2026), gebaut wie „Seiten +“.
@@ -29561,6 +29606,84 @@ class ListApp:
          self.add_notes_button, self.notes_listbox) = self.build_sidebar_section(
             "notes", "Notizen", self.set_notes_view, "Alle Notizen und Notizbücher",
             self.show_notes_add_menu, "Neue Notiz, Vorlage oder Notizbuch", self.SIDEBAR_LISTS_GAP)
+
+    def create_drawings_sidebar(self):
+        (self.drawings_title_row, self.drawings_heading_frame, self.drawings_heading_icon, self.drawings_title,
+         self.add_drawings_button, self.drawings_listbox) = self.build_sidebar_section(
+            "drawings", "Zeichnungen", self.set_drawings_view, "Alle Zeichnungen",
+            self.show_drawings_add_menu, "Neue Zeichnung oder Ordner", self.SIDEBAR_LISTS_GAP)
+
+    def sidebar_policy(self):
+        return self.render_cached("sidebar_policy", lambda: glide_sidebar.SidebarPolicy(
+            self.lists, self.folders, self.settings.get("sidebar_locations"),
+            self.settings.get("sidebar_sections_visible")))
+
+    def sidebar_section_for(self, kind, identifier):
+        return self.sidebar_policy().section(kind, identifier)
+
+    def sidebar_section_for_tree(self, tree):
+        return next((key for key, name in (("pages", "pages_listbox"), ("notes", "notes_listbox"),
+                     ("drawings", "drawings_listbox")) if tree is getattr(self, name, None)), "lists")
+
+    def locate_sidebar_root(self, kind, identifier, section):
+        if section in glide_sidebar.SECTIONS:
+            self.settings.setdefault("sidebar_locations", {})[f"{kind}:{identifier}"] = section
+            self.clear_render_cache()
+
+    def sidebar_accepts(self, kind, identifier, section):
+        policy = self.sidebar_policy()
+        if kind == "folder":
+            return policy.subtree_accepts(identifier, section)
+        entry = policy.entries.get(identifier)
+        return bool(entry and glide_sidebar.accepts(section, kind, entry.get("list_kind", "tasks")))
+
+    def sidebar_section_visible(self, key):
+        return glide_sidebar.normalize_visibility(self.settings.get("sidebar_sections_visible")).get(key, True)
+
+    def apply_sidebar_visibility(self):
+        # Hide only navigation. Documents remain reachable through Lists and search.
+        for key in ("pages", "notes", "drawings"):
+            row = getattr(self, f"{key}_title_row", None)
+            if row is None:
+                continue
+            if not self.sidebar_section_visible(key):
+                row.pack_forget()
+            elif not row.winfo_manager():
+                before = next((getattr(self, f"{later}_title_row", None) for later in glide_sidebar.SECTIONS[
+                    glide_sidebar.SECTIONS.index(key)+1:] if getattr(self, f"{later}_title_row", None) is not None
+                    and getattr(self, f"{later}_title_row").winfo_manager()), None)
+                if key == "pages":
+                    before = self.sidebar_title_row
+                row.pack(fill="x", pady=(self.SIDEBAR_SECTION_GAP if key == "pages" else self.SIDEBAR_LISTS_GAP, 8),
+                         **({"before": before} if before else {}))
+
+    def show_drawings_add_menu(self, event=None):
+        menu = self._new_themed_popup_menu()
+        menu.add_command(label="Neue Zeichnung", command=lambda: self.create_in_sidebar_section("drawing", None, "drawings"))
+        menu.add_command(label="Neuer Ordner …", command=lambda: self.create_container_dialog(
+            "folder", sidebar_section="drawings"))
+        self._popup_at_widget(menu, self.add_drawings_button)
+        return "break"
+
+    def set_drawings_view(self, refresh=True):
+        self._activate_system_view(self.DRAWINGS_VIEW, refresh=refresh)
+        return "break"
+
+    def render_drawings_page(self):
+        for widget in self.home_content.winfo_children():
+            widget.destroy()
+        card = self.make_rounded_container(self.home_content, fill_key="card", outline_key="line",
+                                          radius=18, padding=10, register=False, auto_height=True)
+        card.pack(fill="x")
+        body = tk.Frame(card.inner, bg=self.theme["card"])
+        body.pack(fill="both", expand=True, padx=14, pady=12)
+        self._make_dialog_button(body, "Neue Zeichnung", lambda: self.create_in_sidebar_section("drawing", None, "drawings"), "confirm").pack(anchor="w", pady=(0, 12))
+        entries = sorted((e for e in self.lists if self.is_drawing_list(e) and not self.is_archived_entry(e)),
+                         key=lambda e: str(e.get("title", "")).casefold())
+        rows = [(None, e.get("title") or "Zeichnung", lambda lid=e["id"]: self.set_active_list(lid),
+                 self.drawing_summary(e)) for e in entries]
+        self.render_overview_sections(body, [("Alle Zeichnungen", rows, "Noch keine Zeichnungen. „Neue Zeichnung“ legt eine an.")])
+        self._bind_home_wheel(card)
 
     def build_sidebar_section(self, key, titel, oeffnen, titel_hinweis, plus_befehl, plus_hinweis, abstand):
         """Überschrift mit Klapppfeil, Titel und „+“, darunter ein eigener Baum.
@@ -29648,30 +29771,23 @@ class ListApp:
                     and folder.get("folder_kind") == "journal")
 
     def sidebar_tree_for_entry(self, entry):
-        """Der Baum, in dem eine Liste ohne Ordner steht: Seiten, Notizen oder Listen."""
-        if self.is_pages_sidebar_entry(entry) and getattr(self, "pages_listbox", None) is not None:
-            return self.pages_listbox
-        if self.is_notes_sidebar_entry(entry) and getattr(self, "notes_listbox", None) is not None:
-            return self.notes_listbox
-        return getattr(self, "sidebar_listbox", None)
+        key = self.sidebar_section_for("list", entry.get("id"))
+        return getattr(self, {"pages": "pages_listbox", "notes": "notes_listbox", "drawings": "drawings_listbox"}.get(
+            key, "sidebar_listbox"), getattr(self, "sidebar_listbox", None))
 
     def sidebar_tree_for_folder(self, folder):
-        """Der Baum, in dem ein Ordner der obersten Ebene mit seinem Inhalt steht."""
-        if self.is_pages_sidebar_folder(folder) and getattr(self, "pages_listbox", None) is not None:
-            return self.pages_listbox
-        if self.is_notes_sidebar_folder(folder) and getattr(self, "notes_listbox", None) is not None:
-            return self.notes_listbox
-        return getattr(self, "sidebar_listbox", None)
+        key = self.sidebar_section_for("folder", folder.get("id"))
+        return getattr(self, {"pages": "pages_listbox", "notes": "notes_listbox", "drawings": "drawings_listbox"}.get(
+            key, "sidebar_listbox"), getattr(self, "sidebar_listbox", None))
 
-    # Der Listenbaum behält bei knapper Höhe mindestens so viele Zeilen; Seiten
-    # und Notizen geben dafür Zeilen ab (29.09.2026).
     SIDEBAR_LISTS_MIN_ROWS = 5
 
     def sidebar_section_trees(self):
         """Bereiche mit eigener Überschrift und begrenzter Höhe: Seiten und Notizen."""
         return [(schluessel, baum, zeile) for schluessel, baum, zeile in (
             ("pages", getattr(self, "pages_listbox", None), getattr(self, "pages_title_row", None)),
-            ("notes", getattr(self, "notes_listbox", None), getattr(self, "notes_title_row", None)))
+            ("notes", getattr(self, "notes_listbox", None), getattr(self, "notes_title_row", None)),
+            ("drawings", getattr(self, "drawings_listbox", None), getattr(self, "drawings_title_row", None)))
             if baum is not None and zeile is not None]
 
     @staticmethod
@@ -29718,7 +29834,7 @@ class ListApp:
         bereiche = self.sidebar_section_trees()
         if not bereiche:
             return
-        bedarf = {schluessel: (self.visible_tree_rows(baum) if self.sidebar_section_open(schluessel) else 0)
+        bedarf = {schluessel: (self.visible_tree_rows(baum) if self.sidebar_section_open(schluessel) and self.sidebar_section_visible(schluessel) else 0)
                   for schluessel, baum, _zeile in bereiche}
         zeilen = {schluessel: min(self.PAGES_SIDEBAR_MAX_ROWS, anzahl) for schluessel, anzahl in bedarf.items()}
         budget = self.sidebar_tree_row_budget()
@@ -29727,7 +29843,10 @@ class ListApp:
             reserve = 0
             try:
                 if listen is not None and listen.winfo_manager():
-                    reserve = int(listen.cget("height"))
+                    reserve = min(self.SIDEBAR_LISTS_MIN_ROWS,
+                                  max(1, budget - sum(1 for count in bedarf.values() if count)))
+                    if int(listen.cget("height")) != reserve:
+                        listen.configure(height=reserve)
             except (tk.TclError, ValueError):
                 reserve = self.SIDEBAR_LISTS_MIN_ROWS
             while sum(zeilen.values()) > max(0, budget - reserve):
@@ -29783,12 +29902,17 @@ class ListApp:
             self._sidebar_heights_pending = False
 
     def update_section_heading(self, key, hover=False):
+        if key == "drawings":
+            return self.update_drawings_heading(hover=hover)
         if key == "notes":
             return self.update_notes_heading(hover=hover)
         return self.update_pages_heading(hover=hover)
 
     def update_pages_heading(self, hover=False):
         self._paint_section_heading("pages", self.view_mode == self.PAGES_VIEW, hover)
+
+    def update_drawings_heading(self, hover=False):
+        self._paint_section_heading("drawings", self.view_mode == self.DRAWINGS_VIEW, hover)
 
     def update_notes_heading(self, hover=False):
         self._paint_section_heading("notes", self.view_mode == self.NOTES_VIEW, hover)
@@ -29808,12 +29932,13 @@ class ListApp:
     def show_pages_add_menu(self, event=None):
         """„+“ neben „Seiten“: neue Seite, Bibliothek oder Import."""
         aktiv = self.get_folder(self.active_folder_id) if self.view_mode == "folder" else None
-        ordner = aktiv.get("id") if aktiv and aktiv.get("folder_kind") == "library" else None
+        ordner = aktiv.get("id") if aktiv and self.sidebar_section_for("folder", aktiv["id"]) == "pages" else None
         menu = self._new_themed_popup_menu()
-        menu.add_command(label="Neue Seite", command=lambda: self.create_new_page(ordner))
+        menu.add_command(label="Neue Seite", command=lambda: self.create_in_sidebar_section("page", ordner, "pages"))
         menu.add_cascade(label="Aus Vorlage", menu=self.page_template_menu(menu, ordner))
-        menu.add_command(label="Neue Bibliothek …", command=lambda: self.create_container_dialog(
-            "folder", parent_id=None, folder_kind="library"))
+        menu.add_command(label="Neuer Ordner …", command=lambda: self.create_container_dialog("folder", sidebar_section="pages"))
+        menu.add_command(label="Neues Buch …", command=lambda: self.create_container_dialog(
+            "folder", parent_id=None, folder_kind="library", sidebar_section="pages"))
         menu.add_separator()
         menu.add_command(label="Seite aus Zwischenablage", command=self.new_page_from_clipboard)
         menu.add_command(label="Markdown als Seite …", command=self.import_markdown_page)
@@ -29821,17 +29946,18 @@ class ListApp:
         self._popup_at_widget(menu, self.add_pages_button)
         return "break"
 
-    def page_template_menu(self, menu, ordner=None):
+    def page_template_menu(self, menu, ordner=None, sidebar_section=None):
         """Untermenü „Aus Vorlage“ für Seiten: mitgelieferte und eigene Vorlagen."""
+        section = sidebar_section or (self.sidebar_section_for("folder", ordner) if ordner else "pages")
         vorlagen = self._new_themed_popup_menu(menu)
         for schluessel, titel, _markdown in self.PAGE_TEMPLATES:
-            vorlagen.add_command(label=titel, command=lambda key=schluessel: self.create_page_from_template(key, ordner))
+            vorlagen.add_command(label=titel, command=lambda key=schluessel: self.run_sidebar_creation(lambda: self.create_page_from_template(key, ordner), section))
         eigene = self.page_templates()
         if eigene:
             vorlagen.add_separator()
             for vorlage in eigene:
                 vorlagen.add_command(label=str(vorlage.get("title") or "Vorlage"),
-                                     command=lambda key=vorlage["id"]: self.create_list_from_template(key))
+                                     command=lambda key=vorlage["id"]: self.create_template_in_section(key, ordner, section))
         vorlagen.add_separator()
         vorlagen.add_command(label="Geöffnete Seite als Vorlage speichern",
                              command=self.save_list_as_template,
@@ -29874,8 +30000,9 @@ class ListApp:
             vorlagen.add_command(label=str(jahresordner.get("title") or "Notizbuch – Jahresordner"),
                                  command=lambda: self.create_list_from_template("journal-folder"))
         menu.add_cascade(label="Aus Vorlage", menu=vorlagen)
+        menu.add_command(label="Neuer Ordner …", command=lambda: self.create_container_dialog("folder", sidebar_section="notes"))
         menu.add_command(label="Neues Notizbuch …", command=lambda: self.create_container_dialog(
-            "folder", parent_id=None, folder_kind="journal"))
+            "folder", parent_id=None, folder_kind="journal", sidebar_section="notes"))
         self._popup_at_widget(menu, self.add_notes_button)
         return "break"
 
@@ -29884,6 +30011,9 @@ class ListApp:
 
         In einem Notizbuch entsteht wie bisher ein datierter Eintrag.
         """
+        if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "note"):
+            self.show_info("Anlegen", "Diese Dokumentart gehört nicht in diesen Bereich.")
+            return "break"
         self.flush_rich_note()
         ordner = self.get_folder(folder_id) if folder_id else None
         if ordner is not None and ordner.get("folder_kind") == "journal":
@@ -30003,11 +30133,7 @@ class ListApp:
         # {{Wochentag}}, {{KW}} usw. füllen sich auch in Seitenvorlagen (G11).
         markdown = self.TEMPLATE_FIELD_PATTERN.sub(
             lambda match: self.template_auto_value(match.group(1)) or match.group(0), markdown)
-        seite = self.new_page_from_markdown(markdown.replace("{Datum}", date.today().strftime("%d.%m.%Y")))
-        if seite is not None and folder_id and self.get_folder(folder_id) is not None:
-            seite["folder_id"] = folder_id
-            self.save_items()
-            self.update_sidebar_list()
+        seite = self.new_page_from_markdown(markdown.replace("{Datum}", date.today().strftime("%d.%m.%Y")), folder_id=folder_id)
         return seite
 
     # Eigenes Austauschformat für Seiten (27.09.2026): dieselbe Zip-Struktur
@@ -30028,7 +30154,7 @@ class ListApp:
         bibliotheken = [self.get_folder(value) for value in folder_ids]
         if (not seiten and not bibliotheken) or any(not self.is_page_list(entry) for entry in seiten) \
                 or any(folder is None or folder.get("folder_kind") != "library" for folder in bibliotheken):
-            self.show_info("Seite exportieren", "Wähle zuerst eine Seite oder eine Bibliothek aus.")
+            self.show_info("Seite exportieren", "Wähle zuerst eine Seite oder ein Buch aus.")
             return "break"
         titel = (seiten[0] if seiten else bibliotheken[0]).get("title") or "Seite"
         path = filedialog.asksaveasfilename(
@@ -30060,7 +30186,7 @@ class ListApp:
                              "„Listen/Ordner hinzufügen …“.")
         if any(not self.is_page_list(entry) for entry in daten.get("lists") or []) or any(
                 (folder or {}).get("folder_kind") != "library" for folder in daten.get("folders") or []):
-            raise ValueError("Die Seitendatei enthält etwas anderes als Seiten und Bibliotheken.")
+            raise ValueError("Die Seitendatei enthält etwas anderes als Seiten und Bücher.")
         return daten
 
     def import_glide_pages(self, path=None):
@@ -30210,7 +30336,8 @@ class ListApp:
             if system_selection:
                 row = self.sidebar_iid_to_row.get(system_selection[0])
                 return [row] if row else []
-        for bereich in (getattr(self, "pages_listbox", None), getattr(self, "notes_listbox", None)):
+        for bereich in (getattr(self, "pages_listbox", None), getattr(self, "notes_listbox", None),
+                        getattr(self, "drawings_listbox", None)):
             if bereich is not None and bereich.selection():
                 row = self.sidebar_iid_to_row.get(bereich.selection()[0])
                 return [row] if row else []
@@ -30277,7 +30404,7 @@ class ListApp:
     def get_sidebar_tree_for_iid(self, iid):
         if not iid:
             return None
-        for tree_name in ("system_listbox", "pages_listbox", "notes_listbox", "sidebar_listbox"):
+        for tree_name in ("system_listbox", "pages_listbox", "notes_listbox", "drawings_listbox", "sidebar_listbox"):
             tree = getattr(self, tree_name, None)
             try:
                 if tree is not None and tree.exists(iid):
@@ -30797,10 +30924,15 @@ class ListApp:
             menu.add_command(label="Alle Punkte wieder öffnen", command=lambda: self.reset_checklist(list_id))
         menu.add_separator()
 
-        create_menu = self._new_themed_popup_menu(menu)
-        create_menu.add_command(label="Neue Liste …", command=self.create_new_list)
-        create_menu.add_command(label="Neue Zeichnung", command=lambda: self.create_new_drawing(entry.get("folder_id")))
-        create_menu.add_command(label="Neuer Ordner …", command=self.create_new_folder)
+        create_menu = self.folder_quick_add_menu(entry.get("folder_id")) if entry.get("folder_id") else self._new_themed_popup_menu(menu)
+        if not entry.get("folder_id"):
+            section = self.sidebar_section_for("list", list_id)
+            for key, info in self.LIST_KINDS.items():
+                if glide_sidebar.accepts(section, "list", key):
+                    create_menu.add_command(label=f"Neue {info['label']} …", command=lambda k=key: self.create_container_dialog(
+                        "list", list_kind=k, sidebar_section=section))
+            create_menu.add_command(label="Neuer Ordner …", command=lambda: self.create_container_dialog(
+                "folder", sidebar_section=section))
         menu.add_cascade(label="Neu anlegen", menu=create_menu)
 
         move_menu = self._new_themed_popup_menu(menu)
@@ -30905,26 +31037,7 @@ class ListApp:
         self._add_color_menu(menu, "Ordnerfarbe", folder.get("color"), self.set_folder_color, folder_id)
         self._add_page_label_menu(menu, folder, "folder")
         menu.add_separator()
-        menu.add_command(
-            label="Neue Liste in diesem Ordner …",
-            command=lambda: self.create_list_in_folder(folder_id),
-        )
-        if folder.get("folder_kind") == "journal":
-            menu.add_command(label="Neuer Notizbucheintrag (Notiz von heute)",
-                             command=lambda: self.create_journal_entry(folder_id))
-        menu.add_command(label="Neue Notiz in diesem Ordner …", command=lambda: self.create_container_dialog(
-            "list", parent_id=folder_id, list_kind=self.LIST_KIND_NOTE))
-        menu.add_command(label="Neue Pinnwand in diesem Ordner …", command=lambda: self.create_container_dialog(
-            "list", parent_id=folder_id, list_kind="board"))
-        menu.add_command(
-            label="Neue Zeichnung in diesem Ordner",
-            command=lambda: self.create_new_drawing(folder_id),
-        )
-        menu.add_command(
-            label="Neuer Unterordner …",
-            command=lambda: self.create_new_folder(parent_id=folder_id),
-        )
-        menu.add_command(label="Neuer Ordner (oberste Ebene) …", command=self.create_new_folder)
+        menu.add_cascade(label="Neu anlegen", menu=self.folder_quick_add_menu(folder_id))
         menu.add_separator()
 
         # Ordner in Ordner verschieben – derselbe Weg wie bei Listen.
@@ -31233,11 +31346,56 @@ class ListApp:
             title_label="Ordnertitel", page=folder)
         return self._apply_page_details(folder, details)
 
+    def sidebar_template_allowed(self, template, section):
+        return glide_sidebar.template_allowed(template, section)
+
+    def run_sidebar_creation(self, callback, section):
+        previous = getattr(self, "_creating_sidebar_section", None)
+        self._creating_sidebar_section = section
+        try:
+            return callback()
+        finally:
+            self._creating_sidebar_section = previous
+
+    def create_template_in_section(self, key, folder_id, section):
+        template = self.template_by_id(key)
+        if template is None or not self.sidebar_template_allowed(template, section):
+            return None
+        before = {e["id"] for e in self.lists}
+        result = self.run_sidebar_creation(lambda: self.create_list_from_template(key), section)
+        if result is None:
+            return None
+        for entry in self.lists:
+            if entry["id"] not in before and not entry.get("folder_id"):
+                if folder_id:
+                    entry["folder_id"] = folder_id
+                else:
+                    self.locate_sidebar_root("list", entry["id"], section)
+        self.save_items()
+        self.save_settings()
+        self.update_sidebar_list()
+        return result
+
+    def create_in_sidebar_section(self, list_kind, folder_id, section):
+        previous = getattr(self, "_creating_sidebar_section", None)
+        self._creating_sidebar_section = section
+        try:
+            method = self.create_new_drawing if list_kind == "drawing" else self.create_new_page
+            return method(folder_id)
+        finally:
+            self._creating_sidebar_section = previous
+
     def create_new_drawing(self, folder_id=None, event=None, size=glide_drawing.WIDTH):
         """Legt direkt eine leere Zeichnungsseite an und öffnet sie."""
+        if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "drawing"):
+            self.show_info("Anlegen", "Diese Dokumentart gehört nicht in diesen Bereich.")
+            return "break"
         self.flush_rich_note()
-        if folder_id is None and self.view_mode == "folder" and self.get_folder(self.active_folder_id):
+        if folder_id is None and not getattr(self, "_creating_sidebar_section", None) and self.view_mode == "folder" and self.get_folder(self.active_folder_id):
             folder_id = self.active_folder_id
+        if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "drawing"):
+            self.show_info("Anlegen", "Zeichnungen gehören in Zeichnungen oder Listen.")
+            return "break"
         folder = self.get_folder(folder_id) if folder_id else None
         journal = bool(folder and folder.get("folder_kind") == "journal")
         today = date.today()
@@ -31254,6 +31412,8 @@ class ListApp:
             drawing=glide_drawing.DrawingModel.blank(size).to_document(),
         )
         with self.sidebar_change(refresh_tree=True) as change:
+            if not entry.get("folder_id") and getattr(self, "_creating_sidebar_section", None):
+                self.locate_sidebar_root("list", entry["id"], self._creating_sidebar_section)
             self.lists.append(entry)
             self.set_active_list(entry["id"], refresh=False)
             change.mark()
@@ -31309,6 +31469,7 @@ class ListApp:
             (folder.get("id"), str(folder.get("title") or "Ordner").strip() or "Ordner")
             for folder in self.folders
             if folder.get("id") != entry.get("folder_id")
+            and self.sidebar_accepts("list", list_id, self.sidebar_section_for("folder", folder["id"]))
         ]
         if not choices:
             self.show_info("Verschieben", "Es gibt keinen anderen Ordner als Ziel.")
@@ -31977,12 +32138,19 @@ class ListApp:
             return "break"
         target_folder_id = None
         if into_folder:
+            list_kinds = [self.trash_entry_payload(entry).get("list_kind", "tasks")
+                          for trash_id in trash_ids
+                          if (entry := self.get_trash_entry(trash_id))
+                          and entry.get("kind") == self.TRASH_KIND_LIST
+                          and isinstance(self.trash_entry_payload(entry), dict)]
             choices = [
                 (folder.get("id"), str(folder.get("title") or "Ordner").strip() or "Ordner")
                 for folder in self.folders
+                if all(glide_sidebar.accepts(self.sidebar_section_for("folder", folder["id"]), "list", kind)
+                       for kind in list_kinds)
             ]
             if not choices:
-                self.show_info("Wiederherstellen", "Es gibt noch keinen Ordner als Ziel.")
+                self.show_info("Wiederherstellen", "Es gibt keinen passenden Ordner für diese Dokumentarten.")
                 return "break"
             target_folder_id = self.themed_choice_dialog(
                 "In Ordner wiederherstellen", "In welchen Ordner sollen die Listen zurück?", choices
@@ -32082,9 +32250,12 @@ class ListApp:
     # Aufgabenliste an, die als Fläche startet. Liste ↔ Pinnwand bleibt Ansicht.
     BOARD_KIND_LABEL = "Pinnwand"
 
-    def create_container_dialog(self, kind="list", parent_id=None, list_kind=None, folder_kind=None):
+    def create_container_dialog(self, kind="list", parent_id=None, list_kind=None, folder_kind=None, sidebar_section=None):
         is_list = kind == "list"
+        section = sidebar_section or (self.sidebar_section_for("folder", parent_id) if parent_id else "lists")
         eltern = self.get_folder(parent_id) if parent_id else None
+        if is_list and list_kind is None and section != "lists":
+            list_kind = {"pages": "page", "notes": "note", "drawings": "drawing"}[section]
         if is_list and list_kind is None and eltern is not None:
             # In einer Bibliothek entsteht standardmäßig eine Seite.
             list_kind = self.FOLDER_KINDS.get(eltern.get("folder_kind"), {}).get("list_kind")
@@ -32126,7 +32297,8 @@ class ListApp:
         if is_list:
             label("Listenart")
             kind_frame, _ = self._make_option_menu(
-                primary, list_kind_var, [info["label"] for info in self.LIST_KINDS.values()] + [self.BOARD_KIND_LABEL])
+                primary, list_kind_var, [info["label"] for key, info in self.LIST_KINDS.items() if glide_sidebar.accepts(section, "list", key)]
+                + ([self.BOARD_KIND_LABEL] if section == "lists" else []))
             kind_frame.pack(fill="x")
             kind_hint = tk.Label(primary, text="Die Art bleibt nach dem Anlegen fest. „Pinnwand“ ist eine "
                                                "Aufgabenliste, die als Fläche startet.",
@@ -32154,7 +32326,7 @@ class ListApp:
         else:
             label("Ordnerart")
             kind_frame, _ = self._make_option_menu(primary, folder_kind_var,
-                                                   [info["label"] for info in self.FOLDER_KINDS.values()])
+                                                   [info["label"] for key, info in self.FOLDER_KINDS.items() if glide_sidebar.accepts(section, "folder", key)])
             kind_frame.pack(fill="x")
         title_var, color_var = tk.StringVar(), tk.StringVar(value="Keine Farbe")
         folder_var, template_var = tk.StringVar(value="Kein Ordner"), tk.StringVar(value="Ohne Vorlage")
@@ -32210,7 +32382,7 @@ class ListApp:
         show_moment()
         template_map = {"Ohne Vorlage": None}
         for index, template in enumerate(self.templates, 1):
-            if template["kind"] == kind:
+            if template["kind"] == kind and self.sidebar_template_allowed(template, section):
                 name = template["title"]
                 if name in template_map:
                     name += f" ({index})"
@@ -32247,6 +32419,16 @@ class ListApp:
             journal_parent = bool(parent_folder and parent_folder.get("folder_kind") == "journal")
             als_pinnwand = is_list and list_kind_var.get() == self.BOARD_KIND_LABEL
             chosen_kind = self.LIST_KIND_BY_LABEL.get(list_kind_var.get(), self.LIST_KIND_TASKS)
+            chosen_folder_kind = self.FOLDER_KIND_BY_LABEL.get(folder_kind_var.get(), "standard")
+            target_section = self.sidebar_section_for("folder", parent) if parent else section
+            candidate_kind = chosen_kind if is_list else chosen_folder_kind
+            if template_id:
+                template = self.template_by_id(template_id) or {}
+                candidate_kind = template.get("list_kind", "tasks") if is_list else template.get("folder_kind", "standard")
+            if not glide_sidebar.accepts(target_section, kind, candidate_kind) or (
+                    template_id and not self.sidebar_template_allowed(template, target_section)):
+                error.configure(text=f"Diese Art gehört nicht in den Bereich {glide_sidebar.TITLES[target_section]}.")
+                return
             # Seit 3.30 (ZF-120) nimmt ein Tagebuch jede Inhaltsart auf; der
             # frühere Notizzwang für Aufgabenlisten entfällt.
             moment_date = date.today().isoformat()
@@ -32297,6 +32479,8 @@ class ListApp:
                     if not template_id:
                         holder["folder_kind"] = self.FOLDER_KIND_BY_LABEL.get(folder_kind_var.get(), "standard")
                 holder["folder_id" if is_list else "parent_id"] = parent
+                if not parent:
+                    self.locate_sidebar_root(kind, holder["id"], section)
                 if label_ids or not template_id:
                     holder["labels"] = label_ids
                 if is_list and journal_parent:
@@ -32448,16 +32632,14 @@ class ListApp:
                     continue
                 else:
                     continue
-                index = next((i for i, entry in enumerate(collection) if entry.get("id") == row_id), None)
-                if index is None:
+                siblings = glide_sidebar.sibling_ids(self.sidebar_policy(), "list", row_id)
+                if row_id not in siblings:
                     continue
-                target = index + offset
-                if target < 0 or target >= len(collection):
+                position = siblings.index(row_id) + offset
+                if position < 0 or position >= len(siblings):
                     continue
-                if self.is_inbox_list(collection[target]):
-                    continue
-                # Beim Tausch bleibt die Ordnerzugehörigkeit der Zielposition erhalten.
-                collection[index]["folder_id"] = collection[target].get("folder_id")
+                index = next(i for i, entry in enumerate(collection) if entry["id"] == row_id)
+                target = next(i for i, entry in enumerate(collection) if entry["id"] == siblings[position])
                 collection[index], collection[target] = collection[target], collection[index]
                 change.mark()
         return "break"
@@ -32467,7 +32649,8 @@ class ListApp:
         folder = self.get_folder(folder_id)
         if folder is None:
             return False
-        siblings = self.get_child_folders(folder.get("parent_id"))
+        identifiers = glide_sidebar.sibling_ids(self.sidebar_policy(), "folder", folder_id)
+        siblings = [self.get_folder(identifier) for identifier in identifiers]
         position = next(
             (index for index, entry in enumerate(siblings) if entry.get("id") == folder_id), None
         )
@@ -32519,15 +32702,16 @@ class ListApp:
         self.refresh_tree()
         return "break"
 
-    def get_sidebar_visible_iids(self):
+    def get_sidebar_visible_iids(self, tree=None):
         if not hasattr(self, "sidebar_listbox"):
             return []
+        tree = tree or self.sidebar_listbox
         result = []
         def collect(parent=""):
-            for iid in self.sidebar_listbox.get_children(parent):
+            for iid in tree.get_children(parent):
                 result.append(iid)
                 try:
-                    if self.sidebar_listbox.item(iid, "open"):
+                    if tree.item(iid, "open"):
                         collect(iid)
                 except tk.TclError:
                     continue
@@ -32547,14 +32731,15 @@ class ListApp:
             self.show_info("Eingang", "Der Eingang bleibt fest oberhalb aller Ordner und Listen.")
             return "break"
         if list_entry.get("folder_id"):
-            self.snapshot_undo()
-            list_entry["folder_id"] = None
-            self.save_items()
-            self.update_sidebar_list()
+            with self.sidebar_change() as change:
+                section = self.sidebar_section_for("list", list_entry["id"])
+                list_entry["folder_id"] = None
+                self.locate_sidebar_root("list", list_entry["id"], section)
+                change.mark()
             return "break"
 
         selected_iid = f"list:{row[1]}"
-        visible = self.get_sidebar_visible_iids()
+        visible = self.get_sidebar_visible_iids(self.get_sidebar_tree_for_iid(selected_iid))
         target_folder_id = None
         if selected_iid in visible:
             selected_index = visible.index(selected_iid)
@@ -32565,6 +32750,8 @@ class ListApp:
                     break
         if not target_folder_id:
             self.show_info("Hinweis", "Zum Einrücken muss oberhalb ein Ordner vorhanden sein. Lege zuerst über „+“ neben „Listen“ einen Ordner an.")
+            return "break"
+        if not self.sidebar_accepts("list", list_entry["id"], self.sidebar_section_for("folder", target_folder_id)):
             return "break"
         if not self.ensure_journal_moment(list_entry, target_folder_id):
             return "break"
@@ -32583,8 +32770,8 @@ class ListApp:
         folder = self.get_folder(folder_id)
         if folder is None:
             return "break"
-        visible = self.get_sidebar_visible_iids()
         selected_iid = f"folder:{folder_id}"
+        visible = self.get_sidebar_visible_iids(self.get_sidebar_tree_for_iid(selected_iid))
         target_folder_id = None
         if selected_iid in visible:
             for iid in reversed(visible[: visible.index(selected_iid)]):
@@ -32614,6 +32801,8 @@ class ListApp:
             return "break"
         grandparent = self.folder_parent_id(folder.get("parent_id"))
         with self.sidebar_change() as change:
+            if not grandparent:
+                self.locate_sidebar_root("folder", folder_id, self.sidebar_section_for("folder", folder_id))
             moved = (
                 self.move_sidebar_folder_into_folder(folder_id, grandparent)
                 if grandparent
@@ -32633,14 +32822,15 @@ class ListApp:
         if list_entry and not self.is_inbox_list(list_entry):
             if not list_entry.get("folder_id"):
                 return "break"
-            self.snapshot_undo()
-            list_entry["folder_id"] = None
-            self.save_items()
-            self.update_sidebar_list()
+            with self.sidebar_change() as change:
+                section = self.sidebar_section_for("list", list_entry["id"])
+                list_entry["folder_id"] = None
+                self.locate_sidebar_root("list", list_entry["id"], section)
+                change.mark()
         return "break"
 
     def bind_sidebar_drag(self, tree):
-        """Gleiche Ziehbedienung für die drei vorhandenen Inhaltsbereiche."""
+        """Gleiche Ziehbedienung für alle vier Inhaltsbereiche."""
         tree.bind("<ButtonPress-1>", self.on_sidebar_drag_start)
         tree.bind("<B1-Motion>", self.on_sidebar_drag_motion)
         tree.bind("<ButtonRelease-1>", self.on_sidebar_drag_end)
@@ -32706,7 +32896,13 @@ class ListApp:
         target_tree = (self.get_sidebar_tree_for_iid(target_iid) if target_iid else
                        next((tree for tree in self.sidebar_trees()
                              if self.pointer_is_over_widget(tree, event)), None))
-        pointer_inside_sidebar = target_tree in self.sidebar_trees() and self.pointer_is_over_widget(target_tree, event)
+        heading_tree = next((getattr(self, name, None) for key, name in (
+            ("pages", "pages_listbox"), ("lists", "sidebar_listbox"), ("notes", "notes_listbox"),
+            ("drawings", "drawings_listbox")) if getattr(self, "sidebar_title_row" if key == "lists" else f"{key}_title_row", None) is not None
+            and self.pointer_is_over_widget(getattr(self, "sidebar_title_row" if key == "lists" else f"{key}_title_row"), event)), None)
+        if heading_tree is not None:
+            target_tree, target_iid, target_row = heading_tree, None, None
+        pointer_inside_sidebar = target_tree in self.sidebar_trees() and (heading_tree is not None or self.pointer_is_over_widget(target_tree, event))
         moved = self.sidebar_drag_has_moved
         self._sidebar_release_moved = moved
         self.sidebar_drag_start_iid = None
@@ -32720,18 +32916,9 @@ class ListApp:
         source_row = self.sidebar_iid_to_row.get(source_iid)
         if not source_row:
             return "break"
-        # Eine freie Fläche gehört zur vorhandenen Art. Ziehen in einen
-        # anderen Bereich darf eine Seite nicht in eine Notiz umwandeln.
-        if not target_row:
-            source = (next((entry for entry in self.lists if entry.get("id") == source_row[1]), None) if source_row[0] == "list"
-                      else self.get_folder(source_row[1]))
-            if source is None:
-                return "break"
-            top_level = dict(source, folder_id=None, parent_id=None)
-            expected_tree = (self.sidebar_tree_for_entry(top_level) if source_row[0] == "list"
-                             else self.sidebar_tree_for_folder(top_level))
-            if target_tree is not expected_tree:
-                return "break"
+        target_section = self.sidebar_section_for_tree(target_tree)
+        if not target_row and not self.sidebar_accepts(source_row[0], source_row[1], target_section):
+            return "break"
 
         # Mehrfachauswahl: alle markierten Listen gleiten gemeinsam in den Ordner.
         selected_list_ids = self.get_selected_sidebar_list_ids()
@@ -32752,6 +32939,8 @@ class ListApp:
 
         blocked = False
         with self.guarded_structural_change("Seitenleiste verschieben"), self.sidebar_change() as change:
+            if not target_row:
+                self.locate_sidebar_root(source_row[0], source_row[1], target_section)
             if source_row[0] == "list":
                 self.drop_sidebar_list(source_row[1], target_iid, target_row, event, change)
             elif source_row[0] == "folder":
@@ -32772,7 +32961,7 @@ class ListApp:
             source = next((entry for entry in self.lists if entry.get("id") == list_id), None)
             target = next((entry for entry in self.lists if entry.get("id") == target_row[1]), None)
             if (source and target and not target.get("folder_id")
-                    and self.sidebar_tree_for_entry(dict(source, folder_id=None)) is not self.get_sidebar_tree_for_iid(target_iid)):
+                    and not self.sidebar_accepts("list", list_id, self.sidebar_section_for_tree(self.get_sidebar_tree_for_iid(target_iid)))):
                 return
             place = "after"
             try:
@@ -32806,7 +32995,7 @@ class ListApp:
             if zone != "into":
                 source, target = self.get_folder(folder_id), self.get_folder(target_row[1])
                 if (source and target and not target.get("parent_id")
-                        and self.sidebar_tree_for_folder(dict(source, parent_id=None)) is not tree):
+                        and not self.sidebar_accepts("folder", folder_id, self.sidebar_section_for_tree(tree))):
                     return False
                 if self.move_sidebar_folder_relative(folder_id, target_row[1], place=zone):
                     change.mark()
@@ -32905,6 +33094,8 @@ class ListApp:
         list_entry = next((entry for entry in self.lists if entry.get("id") == list_id), None)
         if not list_entry or self.is_inbox_list(list_entry) or not any(folder.get("id") == folder_id for folder in self.folders):
             return False
+        if not self.sidebar_accepts("list", list_id, self.sidebar_section_for("folder", folder_id)):
+            return False
         if not self.ensure_journal_moment(list_entry, folder_id):
             return False
         list_entry["folder_id"] = folder_id
@@ -32920,6 +33111,11 @@ class ListApp:
         target = next((entry for entry in self.lists if entry.get("id") == target_id), None)
         if not source or not target or self.is_inbox_list(source):
             return False
+        target_section = self.sidebar_section_for("list", target_id)
+        if not self.sidebar_accepts("list", source_id, target_section):
+            return False
+        if not target.get("folder_id"):
+            self.locate_sidebar_root("list", source_id, target_section)
         if not self.ensure_journal_moment(source, target.get("folder_id")):
             return False
         self.lists = [entry for entry in self.lists if entry.get("id") != source_id]
@@ -32951,6 +33147,11 @@ class ListApp:
         if self.folder_is_descendant(target_id, source_id):
             return False
         new_parent = target.get("parent_id")
+        target_section = self.sidebar_section_for("folder", target_id)
+        if not self.sidebar_accepts("folder", source_id, target_section):
+            return False
+        if not new_parent:
+            self.locate_sidebar_root("folder", source_id, target_section)
         if not self.can_move_folder_into(source_id, new_parent):
             return False
         self.folders = [entry for entry in self.folders if entry.get("id") != source_id]
@@ -34715,6 +34916,7 @@ class ListApp:
         # gilt für „Notizen“.
         self.update_pages_heading()
         self.update_notes_heading()
+        self.update_drawings_heading()
         # Der Seitentitel wechselt mit dem Design die Schrift (Pixelschrift, 3.30).
         titel = getattr(self, "title_label", None)
         if titel is not None:
@@ -34824,7 +35026,7 @@ class ListApp:
                 )
             except tk.TclError:
                 pass
-            for sidebar_tree_name in ("system_listbox", "sidebar_listbox", "pages_listbox", "notes_listbox"):
+            for sidebar_tree_name in ("system_listbox", "sidebar_listbox", "pages_listbox", "notes_listbox", "drawings_listbox"):
                 sidebar_tree = getattr(self, sidebar_tree_name, None)
                 if sidebar_tree is None:
                     continue
@@ -35131,7 +35333,7 @@ class ListApp:
         # Seiten-, Notiz- und Verlaufsübersicht haben keinen Datensatz, dessen
         # Titel sich ändern ließe. Bis 29.09.2026 öffnete ein Doppelklick dort
         # den Dialog der zuletzt geöffneten Liste.
-        if self.view_mode in (self.TEMPLATE_VIEW, self.LIBRARY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW,
+        if self.view_mode in (self.TEMPLATE_VIEW, self.LIBRARY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW,
                               self.HISTORY_VIEW):
             return "break"
         if self.view_mode in self.DERIVED_ITEM_VIEWS:
@@ -35205,6 +35407,9 @@ class ListApp:
             return
         if self.view_mode == self.PAGES_VIEW:
             self.set_note_preview(text="Favoriten, zuletzt geöffnete und alle Seiten · Markdown wird zur Seite")
+            return
+        if self.view_mode == self.DRAWINGS_VIEW:
+            self.set_note_preview(text="Deine Zeichnungen · Zeile anklicken zum Öffnen")
             return
         if self.view_mode == self.NOTES_VIEW:
             self.set_note_preview(text="Deine Notizen und Notizbücher · Zeile anklicken zum Öffnen")
@@ -35294,7 +35499,7 @@ class ListApp:
     def update_entry_mode(self):
         if not hasattr(self, "entry"):
             return
-        if self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+        if self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
             self.update_home_visibility()
             return
         self.update_home_visibility()
@@ -35302,7 +35507,7 @@ class ListApp:
             new_placeholder = "Gespeicherter Filter – neue Aufgaben über die Schnellerfassung anlegen"
         elif self.view_mode == "folder":
             ordner = self.get_folder(self.active_folder_id) if self.active_folder_id else None
-            new_placeholder = ("Neue Seite in dieser Bibliothek"
+            new_placeholder = ("Neue Seite in diesem Buch"
                                if (ordner or {}).get("folder_kind") == "library" else "Neue Liste in diesem Ordner")
         elif self.view_mode == self.GLOBAL_BOARD_VIEW:
             new_placeholder = "Globale Pinnwand – neue Punkte entstehen im Eingang oder in einer Liste"
@@ -35366,7 +35571,7 @@ class ListApp:
                 )
             elif self.is_library_view():
                 self.hint_label.configure(
-                    text="Doppelklick oder Enter: Seite öffnen · Eingabefeld: neue Seite in dieser Bibliothek · "
+                    text="Doppelklick oder Enter: Seite öffnen · Eingabefeld: neue Seite in diesem Buch · "
                     "Spaltenüberschrift anklicken: sortieren · Rechtsklick: alle Aktionen der Seite"
                 )
             elif self.view_mode == "folder":
@@ -36498,6 +36703,8 @@ class ListApp:
         deshalb der tatsächliche Zelleninhalt; die Musterwerte bleiben die
         Obergrenze, damit nie abgeschnitten wird.
         """
+        if self.view_mode == self.TABLE_VIEW or self.is_library_view():
+            return None
         tree = getattr(self, "tree", None)
         if tree is None:
             return None
@@ -37134,6 +37341,8 @@ class ListApp:
         return normalized
 
     def load_items(self):
+        self._schema_backup_guard = SchemaBackups()
+        self._schema12_backup_checked = False
         self._schema13_backup_checked = False
         self._schema14_backup_checked = False
         self._schema15_backup_checked = False
@@ -37152,6 +37361,7 @@ class ListApp:
         try:
             with open(SAVE_FILE, "r", encoding="utf-8") as file:
                 data = json.load(file)
+                self._schema_backup_guard.observe(SAVE_FILE, data, os.fstat(file.fileno()))
             self.lists, active_id_from_file = self.normalize_lists_data(data)
             self.back_up_before_title_clipping()
             self.history = list(getattr(self, "_loaded_history", []) or [])
@@ -37161,7 +37371,7 @@ class ListApp:
             inbox_repaired = bool(getattr(self, "_last_inbox_repair", False))
             requested_system_view = (
                 self.view_mode
-                if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW, self.TABLE_VIEW)
+                if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW, self.TABLE_VIEW)
                 else None
             )
             requested_folder_id = self.active_folder_id
@@ -37437,7 +37647,7 @@ class ListApp:
         fd, temp_file = tempfile.mkstemp(prefix=".glide-json-", suffix=".tmp", dir=directory)
         try:
             # `dumps` in einem Stück statt `dump` in Häppchen: dieselben Bytes,
-            # aber der C-Kodierer statt der Python-Schleife – bei 2.000 Punkten
+            # ab Python 3.14 der C-Kodierer statt der Python-Schleife – bei 2.000 Punkten
             # rund 110 statt 25 ms je Datei (Messung 27.09.2026).
             inhalt = json.dumps(payload, ensure_ascii=False, indent=4)
             with os.fdopen(fd, "w", encoding="utf-8") as file:
@@ -37511,97 +37721,43 @@ class ListApp:
             )
         return True
 
+    def ensure_schema_backup(self, target):
+        flag = f"_schema{target}_backup_checked"
+        if getattr(self, flag, False):
+            return
+        guard = getattr(self, "_schema_backup_guard", None)
+        if guard is None:
+            guard = self._schema_backup_guard = SchemaBackups()
+        guard.ensure(SAVE_FILE, BACKUP_DIR, target)
+        setattr(self, flag, True)
+
     def ensure_schema12_backup(self):
         """Vor dem ersten Überschreiben alter Daten eine unrotierte Rückfallkopie."""
-        if getattr(self, "_schema12_backup_checked", False):
-            return
-        if os.path.isfile(SAVE_FILE):
-            with open(SAVE_FILE, "r", encoding="utf-8") as source:
-                try:
-                    previous = json.load(source)
-                except (ValueError, UnicodeError):
-                    previous = None
-            version = previous.get("version", 0) if isinstance(previous, dict) else 0
-            if not isinstance(version, int) or version < 12:
-                os.makedirs(BACKUP_DIR, exist_ok=True)
-                stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-                shutil.copy2(SAVE_FILE, os.path.join(BACKUP_DIR, f"liste_vor_format12_{stamp}.json"))
-        self._schema12_backup_checked = True
+        self.ensure_schema_backup(12)
 
     def ensure_schema13_backup(self):
         """Die letzte Datei ohne Benachrichtigungsfelder unverändert und unrotiert sichern."""
-        if getattr(self, "_schema13_backup_checked", False):
-            return
-        if os.path.isfile(SAVE_FILE):
-            with open(SAVE_FILE, "r", encoding="utf-8") as source:
-                previous = json.load(source)
-            version = previous.get("version", 0) if isinstance(previous, dict) else 0
-            if type(version) is not int or version < 13:
-                stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-                os.makedirs(BACKUP_DIR, exist_ok=True)
-                shutil.copy2(SAVE_FILE, os.path.join(BACKUP_DIR, f"liste_vor_format13_{stamp}.json"))
-        self._schema13_backup_checked = True
+        self.ensure_schema_backup(13)
 
     def ensure_schema15_backup(self):
         """Vor dem ersten Format-15-Speichern die Originaldatei unverändert sichern."""
-        if getattr(self, "_schema15_backup_checked", False):
-            return
-        if os.path.isfile(SAVE_FILE):
-            with open(SAVE_FILE, "r", encoding="utf-8") as source:
-                previous = json.load(source)
-            version = previous.get("version", 0) if isinstance(previous, dict) else 0
-            if type(version) is not int or version < 15:
-                stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-                os.makedirs(BACKUP_DIR, exist_ok=True)
-                shutil.copy2(SAVE_FILE, os.path.join(BACKUP_DIR, f"liste_vor_format15_{stamp}.json"))
-        self._schema15_backup_checked = True
+        self.ensure_schema_backup(15)
 
     def ensure_schema17_backup(self):
         """Vor dem ersten Format-17-Speichern die Originaldatei unverändert sichern."""
-        if getattr(self, "_schema17_backup_checked", False):
-            return
-        if os.path.isfile(SAVE_FILE):
-            with open(SAVE_FILE, "r", encoding="utf-8") as source:
-                previous = json.load(source)
-            version = previous.get("version", 0) if isinstance(previous, dict) else 0
-            if type(version) is not int or version < 17:
-                stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-                os.makedirs(BACKUP_DIR, exist_ok=True)
-                shutil.copy2(SAVE_FILE, os.path.join(BACKUP_DIR, f"liste_vor_format17_{stamp}.json"))
-        self._schema17_backup_checked = True
+        self.ensure_schema_backup(17)
 
     def ensure_schema18_backup(self):
         """Vor dem ersten Format-18-Speichern die Originaldatei unverändert sichern."""
-        if getattr(self, "_schema18_backup_checked", False):
-            return
-        if os.path.isfile(SAVE_FILE):
-            with open(SAVE_FILE, "r", encoding="utf-8") as source:
-                previous = json.load(source)
-            version = previous.get("version", 0) if isinstance(previous, dict) else 0
-            if type(version) is not int or version < 18:
-                stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-                os.makedirs(BACKUP_DIR, exist_ok=True)
-                shutil.copy2(SAVE_FILE, os.path.join(BACKUP_DIR, f"liste_vor_format18_{stamp}.json"))
-        self._schema18_backup_checked = True
+        self.ensure_schema_backup(18)
 
 
     def ensure_schema19_backup(self):
         """Vor dem ersten Format-19-Speichern die Originaldatei unverändert sichern.
 
-        Scheitert die Sicherung, bricht `save_items` ab und die alte Datei
-        bleibt unverändert. Glide 3.28 und älter können Format 19 nicht lesen.
-        """
-        if getattr(self, "_schema19_backup_checked", False):
-            return
-        if os.path.isfile(SAVE_FILE):
-            with open(SAVE_FILE, "r", encoding="utf-8") as source:
-                previous = json.load(source)
-            version = previous.get("version", 0) if isinstance(previous, dict) else 0
-            if type(version) is not int or version < 19:
-                stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-                os.makedirs(BACKUP_DIR, exist_ok=True)
-                shutil.copy2(SAVE_FILE, os.path.join(BACKUP_DIR, f"liste_vor_format19_{stamp}.json"))
-        self._schema19_backup_checked = True
+Scheitert die Sicherung, bricht `save_items` ab und die alte Datei
+bleibt unverändert. Glide 3.28 und älter können Format 19 nicht lesen."""
+        self.ensure_schema_backup(19)
 
     def back_up_before_title_clipping(self):
         """Zu lange Titel wurden beim Laden gekürzt: Original sichern, speichern, melden.
@@ -37647,34 +37803,13 @@ class ListApp:
     def ensure_schema20_backup(self):
         """Vor dem ersten Format-20-Speichern die Originaldatei unverändert sichern.
 
-        Scheitert die Sicherung, bricht `save_items` ab und die alte Datei
-        bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen.
-        """
-        if getattr(self, "_schema20_backup_checked", False):
-            return
-        if os.path.isfile(SAVE_FILE):
-            with open(SAVE_FILE, "r", encoding="utf-8") as source:
-                previous = json.load(source)
-            version = previous.get("version", 0) if isinstance(previous, dict) else 0
-            if type(version) is not int or version < 20:
-                stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-                os.makedirs(BACKUP_DIR, exist_ok=True)
-                shutil.copy2(SAVE_FILE, os.path.join(BACKUP_DIR, f"liste_vor_format20_{stamp}.json"))
-        self._schema20_backup_checked = True
+Scheitert die Sicherung, bricht `save_items` ab und die alte Datei
+bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
+        self.ensure_schema_backup(20)
 
     def ensure_schema16_backup(self):
         """Vor dem ersten Format-16-Speichern die Originaldatei unverändert sichern."""
-        if getattr(self, "_schema16_backup_checked", False):
-            return
-        if os.path.isfile(SAVE_FILE):
-            with open(SAVE_FILE, "r", encoding="utf-8") as source:
-                previous = json.load(source)
-            version = previous.get("version", 0) if isinstance(previous, dict) else 0
-            if type(version) is not int or version < 16:
-                stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-                os.makedirs(BACKUP_DIR, exist_ok=True)
-                shutil.copy2(SAVE_FILE, os.path.join(BACKUP_DIR, f"liste_vor_format16_{stamp}.json"))
-        self._schema16_backup_checked = True
+        self.ensure_schema_backup(16)
 
     # --- Änderungsverlauf ---------------------------------------------------
 
@@ -38116,17 +38251,7 @@ class ListApp:
 
     def ensure_schema14_backup(self):
         """Vor dem ersten Format-14-Speichern die Originaldatei unverändert sichern."""
-        if getattr(self, "_schema14_backup_checked", False):
-            return
-        if os.path.isfile(SAVE_FILE):
-            with open(SAVE_FILE, "r", encoding="utf-8") as source:
-                previous = json.load(source)
-            version = previous.get("version", 0) if isinstance(previous, dict) else 0
-            if type(version) is not int or version < 14:
-                stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-                os.makedirs(BACKUP_DIR, exist_ok=True)
-                shutil.copy2(SAVE_FILE, os.path.join(BACKUP_DIR, f"liste_vor_format14_{stamp}.json"))
-        self._schema14_backup_checked = True
+        self.ensure_schema_backup(14)
 
     def write_backup_copy(self, force=False):
         """Legt eine automatische Sicherung des zuletzt gespeicherten Standes an.
@@ -39270,7 +39395,7 @@ class ListApp:
         return "break"
 
     def focus_entry(self, event=None):
-        if self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+        if self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
             self.set_active_list(self.ensure_inbox_list()["id"])
         if hasattr(self, "entry"):
             self.entry.focus_set()
@@ -39380,6 +39505,10 @@ class ListApp:
         if self.view_mode == self.PAGES_VIEW:
             count = len(self.page_entries())
             self._set_stats_text("1 Seite" if count == 1 else f"{count} Seiten")
+            return
+        if self.view_mode == self.DRAWINGS_VIEW:
+            count = sum(1 for entry in self.lists if self.is_drawing_list(entry) and not self.is_archived_entry(entry))
+            self._set_stats_text("1 Zeichnung" if count == 1 else f"{count} Zeichnungen")
             return
         if self.view_mode == self.NOTES_VIEW:
             count = len(self.note_entries())
@@ -39740,6 +39869,8 @@ class ListApp:
 
     def new_page_from_markdown(self, markdown, title=None, folder_id=None):
         """Neue Seite aus Markdown – der Weg für KI-Berichte (Zwischenablage oder Datei)."""
+        if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "page"):
+            return None
         markdown = str(markdown or "")
         if not markdown.strip():
             self.show_warning("Seite aus Markdown", "Es gibt keinen Text, aus dem eine Seite werden kann.")
@@ -39753,6 +39884,8 @@ class ListApp:
                 markdown = markdown.split(erste, 1)[1]
         entry = self.new_list_object(title, [], folder_id=folder_id, list_kind=self.LIST_KIND_PAGE)
         with self.sidebar_change(refresh_tree=True) as change:
+            if not folder_id and getattr(self, "_creating_sidebar_section", None):
+                self.locate_sidebar_root("list", entry["id"], self._creating_sidebar_section)
             self.lists.append(entry)
             entry["rich_note"] = self.page_document_from_markdown(markdown, entry["id"])
             change.mark()
@@ -39812,9 +39945,15 @@ class ListApp:
 
     def create_new_gallery(self, folder_id=None, event=None):
         """Neue, leere Galerie – direkt geöffnet; „Bilder hinzufügen …“ füllt sie."""
+        if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "gallery"):
+            self.show_info("Anlegen", "Diese Dokumentart gehört nicht in diesen Bereich.")
+            return "break"
         self.flush_rich_note()
-        if folder_id is None and self.view_mode == "folder" and self.get_folder(self.active_folder_id):
+        if folder_id is None and not getattr(self, "_creating_sidebar_section", None) and self.view_mode == "folder" and self.get_folder(self.active_folder_id):
             folder_id = self.active_folder_id
+        if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "gallery"):
+            self.show_info("Anlegen", "Diese Dokumentart gehört nicht in diesen Bereich.")
+            return "break"
         entry = self.new_list_object("Neue Galerie", [], folder_id=folder_id, list_kind=self.LIST_KIND_GALLERY)
         with self.sidebar_change(refresh_tree=True) as change:
             self.lists.append(entry)
@@ -39824,11 +39963,19 @@ class ListApp:
 
     def create_new_page(self, folder_id=None, event=None):
         """Neue, leere Seite – direkt geöffnet, Schreibmarke im Text."""
+        if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "page"):
+            self.show_info("Anlegen", "Diese Dokumentart gehört nicht in diesen Bereich.")
+            return "break"
         self.flush_rich_note()
-        if folder_id is None and self.view_mode == "folder" and self.get_folder(self.active_folder_id):
+        if folder_id is None and not getattr(self, "_creating_sidebar_section", None) and self.view_mode == "folder" and self.get_folder(self.active_folder_id):
             folder_id = self.active_folder_id
+        if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "page"):
+            self.show_info("Anlegen", "Diese Dokumentart gehört nicht in diesen Bereich.")
+            return "break"
         entry = self.new_list_object("Neue Seite", [], folder_id=folder_id, list_kind=self.LIST_KIND_PAGE)
         with self.sidebar_change(refresh_tree=True) as change:
+            if not entry.get("folder_id") and getattr(self, "_creating_sidebar_section", None):
+                self.locate_sidebar_root("list", entry["id"], self._creating_sidebar_section)
             self.lists.append(entry)
             change.mark()
         self.set_active_list(entry["id"])
@@ -41814,7 +41961,7 @@ class ListApp:
         if werk is not None and getattr(werk, "visible", False):
             # Pinnwand und Reiter haben ihre eigenen Leisten.
             return None
-        if self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.TEMPLATE_VIEW,
+        if self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW,
                               self.LIBRARY_VIEW, self.GLOBAL_BOARD_VIEW):
             return None
         if self.view_mode == "list" and self.lists:
@@ -41992,10 +42139,17 @@ class ListApp:
         return legible_on(farbe, [self.theme.get("bg")], minimum=3.0).upper()
 
     def header_logo_height(self):
-        """So hoch wie Titel und Unterzeile zusammen."""
-        schrift = tkfont.Font(root=self.root, font=app_font(9, "bold"))
-        chipzeile = max(self.page_chip_row.winfo_reqheight(), schrift.metrics("linespace") + 6)
-        return max(24, self.title_row.winfo_reqheight() + chipzeile)
+        font = self.cached_font("_header_subtitle_font", app_font(9, "bold"))
+        line = font.metrics("linespace") if font is not None else 18
+        return max(24, self.title_row.winfo_reqheight() + max(self.page_chip_row.winfo_reqheight(), line + 6)
+                   - self.header_logo_top_inset())
+
+    def header_logo_top_inset(self):
+        font = self.cached_font("_header_cap_font", self.header_title_font())
+        if font is None:
+            return 4
+        pixels = abs(font.actual("size")) * float(self.root.tk.call("tk", "scaling"))
+        return max(2, round(font.metrics("ascent") - pixels * 0.72) + CanvasLabel.LABEL_INSET_Y + 1)
 
     def sync_header_logo(self):
         """Zeigt das Logo ab der ersten Breitenstufe und zeichnet es in Akzentfarbe und Höhe neu."""
@@ -42008,13 +42162,18 @@ class ListApp:
                     leinwand.pack_forget()
                     self.update_header_title()
                 return
+            inset = self.header_logo_top_inset()
+            if leinwand.winfo_manager() and inset != getattr(self, "_header_logo_inset", None):
+                self._header_logo_inset = inset
+                leinwand.pack_configure(pady=(inset, 0))
             hoehe = self.header_logo_height()
             farbe = self.header_logo_color()
             if (hoehe, farbe) != getattr(self, "_header_logo_key", None):
                 self._header_logo_key = (hoehe, farbe)
                 self.draw_logo(leinwand, hoehe, farbe)
             if not leinwand.winfo_manager():
-                leinwand.pack(side="left", anchor="nw", padx=(0, self.HEADER_LOGO_GAP), before=self.title_block)
+                leinwand.pack(side="left", anchor="nw", padx=(0, self.HEADER_LOGO_GAP), pady=(inset, 0), before=self.title_block)
+                self._header_logo_inset = inset
                 self.update_header_title()
         except (tk.TclError, ValueError, OSError, AttributeError):
             return
@@ -42114,6 +42273,11 @@ class ListApp:
             self.update_stats_label()
             self.tree.selection_remove(self.tree.selection())
             self.render_pages_page()
+            return
+        if self.view_mode == self.DRAWINGS_VIEW:
+            self.update_stats_label()
+            self.tree.selection_remove(self.tree.selection())
+            self.render_drawings_page()
             return
         if self.view_mode == self.NOTES_VIEW:
             self.update_stats_label()
@@ -43161,7 +43325,7 @@ class ListApp:
         zeilen.sort(key=schluessel, reverse=absteigend)
         if not zeilen and not sub_folders:
             self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, tags=("empty",),
-                             text="Noch keine Seiten in dieser Bibliothek. Oben entsteht mit Enter eine neue Seite.")
+                             text="Noch keine Seiten in diesem Buch. Oben entsteht mit Enter eine neue Seite.")
         for entry, werte in zeilen:
             farbe = entry.get("color") if entry.get("color") in self.LIST_COLOR_KEYS else None
             self.tree.insert("", "end", iid=f"folder-list:{entry.get('id')}", text=werte["title"],
@@ -44268,6 +44432,7 @@ class ListApp:
             return
         self.trim_undo_stack()
         change.saved = self.save_items()
+        self.save_settings()
         if change.saved and feedback:
             self.feedback_for_changes(feedback_before)
         self.update_sidebar_list()
@@ -44293,6 +44458,7 @@ class ListApp:
             self.sync_current_list_reference()
         self.undo_stack.append(
             {
+                "sidebar_locations": copy.deepcopy(self.settings.get("sidebar_locations", {})),
                 "lists": PackedState(self.lists),
                 "folders": PackedState(self.folders),
                 "labels": PackedState(self.labels),
@@ -44316,6 +44482,8 @@ class ListApp:
         Gemeinsame Grundlage von „Rückgängig“ und vom Bestandswächter: beide
         müssen denselben Weg zurückgehen, sonst driften sie auseinander.
         """
+        self.settings["sidebar_locations"] = copy.deepcopy(snapshot.get("sidebar_locations", {}))
+        self.save_settings()
         self.lists = unpack_state(snapshot.get("lists"))
         self.folders = unpack_state(snapshot.get("folders"))
         self.labels = unpack_state(snapshot.get("labels"))
@@ -44332,7 +44500,7 @@ class ListApp:
         self.set_active_list(desired_list_id, refresh=False)
         if desired_folder_id and self.get_folder(desired_folder_id):
             self.set_active_folder(desired_folder_id, refresh=False)
-        elif desired_view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW, self.TABLE_VIEW):
+        elif desired_view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW, self.TABLE_VIEW):
             # Vorher standen hier nur „In Bearbeitung“ und der Papierkorb: Wer in
             # „Verspätet“ etwas zurücknahm, landete danach in der zuletzt
             # geöffneten Liste. Eine abgeleitete Ansicht bleibt jetzt stehen.
@@ -44771,7 +44939,7 @@ class ListApp:
         return "break"
 
     def add_item(self):
-        if self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+        if self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
             self.focus_entry()
             return
         if self.view_mode in self.DERIVED_ITEM_VIEWS:

@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_notizbereich330.py", line 44, in <module>
+    app = mod.ListApp(root)
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/src/glide/app.pyw", line 14753, in __init__
+    self.create_ui()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/src/glide/app.pyw", line 33826, in create_ui
+    self.create_list_sidebar()
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/src/glide/app.pyw", line 29004, in create_list_sidebar
+    height=self.SIDEBAR_LISTS_MIN_ROWS,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ListApp' object has no attribute 'SIDEBAR_LISTS_MIN_ROWS'

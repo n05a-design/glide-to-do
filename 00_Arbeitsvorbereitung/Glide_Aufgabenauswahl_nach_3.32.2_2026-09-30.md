@@ -1,6 +1,6 @@
 # Glide – weitere Aufgaben und Richtungsauswahl
 
-Stand 01.10.2026 · Glide 3.32.3 · ursprüngliche Grundlage 3.32.2 · Aufgabenformat 20 · zusätzliche Auswahl noch offen
+Stand 01.10.2026 · Glide 3.33.1 · ursprüngliche Grundlage 3.32.2 · Aufgabenformat 20 · zusätzliche Auswahl noch offen
 
 [Fortlaufende Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md): Bestehende Performance ist beauftragt; A-01 erledigt, A-03 teilweise. Vorschläge, Empfehlung und neue Featureauswahl bleiben getrennt.
 
@@ -144,7 +144,7 @@ Kurzer Quellencheck am 30.09.2026; keine vollständige Marktstudie oder neue Pre
 | F-02: erste Importquelle | erst bei Auswahl: Notion-Markdown/ZIP oder Todoist-CSV |
 | Neue Zusatzaufgaben | B-03, D-03, E-03, F-03, G-03, H-01/H-02 als Vorschläge, nicht automatisch beauftragt |
 
-D01–D06 bleiben entschieden. Mobile/Toolkit-Wechsel, Cloud/Mehrbenutzerbetrieb, allgemeine Formatkonvertierung und Gestaltungsänderungen an Hinweisen werden durch diese Auswahl nicht wieder eröffnet. Keine neuen Laufzeitabhängigkeiten ohne dokumentierte Entscheidung; Git bleibt vertagt.
+D01–D06 bleiben entschieden. Mobile/Toolkit-Wechsel, Cloud/Mehrbenutzerbetrieb, allgemeine Formatkonvertierung und Gestaltungsänderungen an Hinweisblöcken werden durch diese Auswahl nicht wieder eröffnet; einklappbare Hinweiszeilen sind mit D11 beschlossen. Keine neuen Laufzeitabhängigkeiten ohne dokumentierte Entscheidung; Nach D09 ist das GitHub-Repository die maßgebliche Ablage; D17 fordert Tk-freie Fachmodule.
 
 Nach der Auswahl: ein kleines Ergebnis definieren → notwendige Recherche/Modellprobe → Code- und Datenvertrag → konkrete Aufgaben mit Abnahme → passende Baseline und Implementierung → gezielte und erforderliche vollständige QA → dokumentierter Versions-/Auslieferungsabgleich. Bei reiner Recherche endet der Schnitt mit Befunden und einer konkreten Entscheidungsvorlage. Bestehende grüne Tests werden nicht als Abnahme noch nicht implementierter Features ausgegeben.
 

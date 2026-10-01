@@ -90,7 +90,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     app = mod.ListApp(root)
     root.update_idletasks()
 
-    assert mod.APP_VERSION == "3.32.3"
+    assert mod.APP_VERSION == "3.33.1"
     assert (REPOSITORY_ROOT / "VERSION").read_text(encoding="utf-8").strip() == mod.APP_VERSION
     assert len([entry for entry in app.lists if entry.get("system_role") == "inbox"]) == 1
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
@@ -1267,11 +1267,16 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
         "Öffnen",
         "Bearbeiten (Titel, Beschreibungstext) …",
         "Ordnerfarbe",
-        "Neue Liste in diesem Ordner …",
+        "Neu anlegen",
         "Ordner auflösen (Listen bleiben)",
         "Ordner mit Listen in den Papierkorb",
     ):
         assert expected in folder_labels, (expected, folder_labels)
+    folder_menu = app.build_sidebar_context_menu(("folder", menu_folder["id"]))
+    creation_index = next(i for i in range(folder_menu.index("end") + 1)
+                          if folder_menu.type(i) == "cascade" and folder_menu.entrycget(i, "label") == "Neu anlegen")
+    creation_menu = root.nametowidget(folder_menu.entrycget(creation_index, "menu"))
+    assert "Neue Liste …" in menu_labels(creation_menu)
     # Der geschuetzte Eingang bleibt loeschgeschuetzt.
     protected_inbox = next(entry for entry in app.lists if app.is_inbox_list(entry))
     inbox_menu = app.build_sidebar_context_menu(("list", protected_inbox["id"]))
@@ -2797,7 +2802,10 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     # Das Ordnermenü bietet das Verschieben an; die Ordnerübersicht zeigt Unterordner.
     folder_menu_labels = menu_labels(app.build_sidebar_context_menu(("folder", nest_top["id"])))
     assert "Ordner verschieben" in folder_menu_labels, folder_menu_labels
-    assert "Neuer Unterordner …" in folder_menu_labels, folder_menu_labels
+    nested_menu = app.build_sidebar_context_menu(("folder", nest_top["id"]))
+    nested_index = next(i for i in range(nested_menu.index("end") + 1)
+                        if nested_menu.type(i) == "cascade" and nested_menu.entrycget(i, "label") == "Neu anlegen")
+    assert "Neuer Unterordner …" in menu_labels(root.nametowidget(nested_menu.entrycget(nested_index, "menu")))
     app.set_active_folder(nest_top["id"])
     overview_rows = app.tree.get_children("")
     assert any(str(iid).startswith("folder-folder:") for iid in overview_rows), overview_rows

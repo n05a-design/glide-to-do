@@ -1,5 +1,0 @@
-{
-  "status": "abgebrochen",
-  "reason": "audit_app FakeEvent used local y as y_root; corrected the test simulation to real screen coordinates. Application source unchanged. Full run restarted after targeted audit passes.",
-  "source_changed": false
-}

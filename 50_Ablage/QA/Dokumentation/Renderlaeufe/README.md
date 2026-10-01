@@ -1,6 +1,6 @@
 # Renderläufe der Dokumentation
 
-Stand der Ablagebeschreibung 01.10.2026 · Glide 3.32.3 · Datenformat 20
+Stand der Ablagebeschreibung 01.10.2026 · Glide 3.33.1 · Datenformat 20
 
 Historischer Lauf vom 04.09.2026 · Dokumentversion 3.2.0 · Datenformat 10. Der aktuelle Glide-Stand steht im QA-Bericht des Repositorys; dieser Ordner wird bewusst nicht nachgezogen.
 

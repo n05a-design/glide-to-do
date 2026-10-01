@@ -1,0 +1,200 @@
+QUELLE  src/glide/app.pyw  (1989 Methoden)
+ERREICHBAR vom Start aus: 1849
+
+NICHT ERREICHBAR, aber in Tests benutzt: 5
+   t   add_task_with_due
+   t   calendar_target_list
+   t   collect_due_tasks_by_date
+   t   count_label_usage
+   t   home_focus_candidate
+
+NICHT ERREICHBAR und nicht in Tests: 132
+   ?   ListApp._apply_windows_chrome_theme  (Zeile 35033)
+   ?   <modul>._ensure_streams  (Zeile 124)
+   ?   LabelDropdown._hover  (Zeile 3447)
+   ?   LabelDropdown._hover_group  (Zeile 3450)
+   ?   LabelDropdown._on_popup_click  (Zeile 3425)
+   ?   AppOptionMenu._outside_click  (Zeile 3136)
+   ?   ListApp._store_backdrop_cache  (Zeile 14997)
+   ?   ListApp.add_detail_pane_step  (Zeile 18877)
+   ?   ListApp.app_action_group  (Zeile 52120)
+   ?   ListApp.app_icon_photo  (Zeile 38509)
+   ?   ListApp.apply_exchange_payload  (Zeile 48597)
+   ?   ListApp.backdrop_needs_halo  (Zeile 15578)
+   ?   ListApp.bring_to_front  (Zeile 38525)
+   ?   ListApp.build_exchange_payload  (Zeile 48273)
+   ?   ListApp.build_ics_document  (Zeile 50197)
+   ?   ListApp.build_note_slides_html  (Zeile 19110)
+   ?   ListApp.build_print_html  (Zeile 49758)
+   ?   <modul>.bytecode_cache_dir  (Zeile 95)
+   ?   <modul>.calendar_moon_phases  (Zeile 475)
+   ?   ListApp.care_for_mascot  (Zeile 20733)
+   ?   ListApp.change_reminder  (Zeile 38630)
+   ?   ListApp.clear_history  (Zeile 38037)
+   ?   ListApp.completion_chart  (Zeile 17087)
+   ?   ListApp.completions_today  (Zeile 17084)
+   ?   ListApp.compute_backdrop  (Zeile 14922)
+   ?   ListApp.count_today_plan  (Zeile 28516)
+   ?   ListApp.csv_import_summary  (Zeile 48114)
+   ?   ListApp.csv_kind_words  (Zeile 47829)
+   ?   ListApp.csv_labels_from_cell  (Zeile 47889)
+   ?   ListApp.csv_preview_text  (Zeile 48033)
+   ?   ListApp.csv_rows_to_items  (Zeile 47907)
+   ?   ListApp.data_folder_path  (Zeile 16346)
+   ?   <modul>.defer_window_menu_commands  (Zeile 45)
+   ?   ListApp.drawing_trace_preview_dialog  (Zeile 41431)
+   ?   ListApp.end_note_presentation  (Zeile 19205)
+   ?   ListApp.escape_ics_text  (Zeile 49971)
+   ?   ListApp.escape_print_text  (Zeile 49655)
+   ?   ListApp.exchange_item_from_payload  (Zeile 48558)
+   ?   ListApp.exchange_item_payload  (Zeile 48238)
+   ?   ListApp.exchange_minutes  (Zeile 48546)
+   ?   ListApp.filtered_history  (Zeile 38010)
+   ?   ListApp.flatten_print_items  (Zeile 49719)
+   ?   ListApp.fold_ics_line  (Zeile 49979)
+   ?   ListApp.format_history_time  (Zeile 38004)
+   ?   <modul>.get_app_data_dir  (Zeile 296)
+   ?   ListApp.global_board_preview  (Zeile 20815)
+   ?   ItemWorkspace.group_caption  (Zeile 5015)
+   ?   ListApp.header_note_text  (Zeile 35269)
+   ?   ListApp.history_entry_line  (Zeile 37990)
+   ?   ListApp.home_calendar_days  (Zeile 20593)
+   ?   ListApp.home_greeting  (Zeile 20335)
+   ?   ListApp.home_impulse  (Zeile 20914)
+   ?   ListApp.home_label_overview  (Zeile 20897)
+   ?   ListApp.home_more_actions  (Zeile 20781)
+   ?   ListApp.home_next_events  (Zeile 20611)
+   ?   ListApp.home_overdue_entries  (Zeile 20625)
+   ?   ListApp.home_primary_actions  (Zeile 20772)
+   ?   ListApp.home_prompt  (Zeile 20351)
+   ?   ListApp.home_row_limit  (Zeile 20590)
+   ?   ListApp.home_template_keys  (Zeile 20356)
+   ?   ListApp.home_week_overview  (Zeile 20884)
+   ?   YearHeatmap.hover_text_at  (Zeile 994)
+   ?   ListApp.ics_alarm_lines  (Zeile 50148)
+   ?   ListApp.ics_date_stamp  (Zeile 50027)
+   ?   ListApp.ics_event_lines  (Zeile 50077)
+   ?   ListApp.ics_events_to_items  (Zeile 50627)
+   ?   ListApp.ics_import_summary  (Zeile 50845)
+   ?   ListApp.ics_importance_from_priority  (Zeile 50570)
+   ?   ListApp.ics_local_stamp  (Zeile 50018)
+   ?   ListApp.ics_preview_text  (Zeile 50779)
+   ?   ListApp.ics_property  (Zeile 50453)
+   ?   ListApp.ics_repeat_from_rule  (Zeile 50507)
+   ?   ListApp.ics_repeat_rule  (Zeile 50032)
+   ?   ListApp.ics_sources  (Zeile 50172)
+   ?   ListApp.ics_summary  (Zeile 50255)
+   ?   ListApp.ics_utc_stamp  (Zeile 50005)
+   ?   ListApp.import_csv_table  (Zeile 48070)
+   ?   ListApp.import_ics_events  (Zeile 50804)
+   ?   ListApp.known_glide_item_ids  (Zeile 50621)
+   ?   ListApp.manual_entries  (Zeile 53451)
+   ?   ListApp.mascot_state  (Zeile 20705)
+   ?   ListApp.move_home_tile_to  (Zeile 19795)
+   ?   ListApp.next_scheduled_item  (Zeile 17109)
+   ?   ListApp.note_group_section_state  (Zeile 18092)
+   ?   ListApp.note_presentation_step  (Zeile 19199)
+   ?   ListApp.note_slides  (Zeile 19070)
+   ?   ListApp.on_label_view_drag_motion  (Zeile 42722)
+   ?   ListApp.on_pages_select  (Zeile 30089)
+   ?   ListApp.overview_section_open  (Zeile 43284)
+   ?   ListApp.parse_csv_flag  (Zeile 47810)
+   ?   ListApp.parse_csv_importance  (Zeile 47822)
+   ?   ListApp.parse_csv_kind  (Zeile 47846)
+   ?   ListApp.parse_csv_level  (Zeile 47873)
+   ?   ListApp.parse_csv_minutes  (Zeile 47853)
+   ?   ListApp.parse_ics_duration  (Zeile 50495)
+   ?   ListApp.parse_ics_moment  (Zeile 50460)
+   ?   ListApp.parse_ics_until  (Zeile 50550)
+   ?   ListApp.pin_home_filter  (Zeile 19662)
+   ?   <modul>.principal_moon_phase_utc  (Zeile 438)
+   ?   ListApp.print_document_sections  (Zeile 49666)
+   ?   ListApp.print_item_details  (Zeile 49729)
+   ?   ListApp.print_note_presentation  (Zeile 19139)
+   ?   MascotCanvas.react  (Zeile 1745)
+   ?   ListApp.read_drawing_snapshot  (Zeile 40291)
+   ?   ListApp.refresh_scrollbar_state  (Zeile 38945)
+   ?   ListApp.rename_mascot  (Zeile 20759)
+   ?   DrawingEditor.replace_model  (Zeile 12575)
+   ?   ListApp.reset_history_baseline  (Zeile 37980)
+   ?   ListApp.reset_table_columns  (Zeile 28242)
+   ?   ListApp.save_theme_setting  (Zeile 23648)
+   ?   BoardPreview.set_content  (Zeile 1598)
+   ?   ListApp.set_gallery_caption  (Zeile 40903)
+   ?   ProgressBar.set_value  (Zeile 850)
+   ?   ListApp.show_filter_pin_menu  (Zeile 19642)
+   ?   ListApp.show_home_more_menu  (Zeile 20800)
+   ?   SavedFilters.show_manager  (Zeile 3774)
+   ?   ListApp.show_note_slide  (Zeile 19186)
+   ?   ListApp.start_note_presentation  (Zeile 19153)
+   ?   RoundedButton.state_colors  (Zeile 1296)
+   ?   YearHeatmap.statistics  (Zeile 980)
+   ?   ListApp.template_from_current_list  (Zeile 22719)
+   ?   ListApp.theme_button_text  (Zeile 35093)
+   ?   ListApp.theme_is_dark  (Zeile 52660)
+   ?   ListApp.today_plan_entries  (Zeile 28512)
+   ?   ListApp.toggle_table_view  (Zeile 28031)
+   ?   ExchangeReport.total_items  (Zeile 48351)
+   ?   ListApp.undo_toast_valid  (Zeile 15987)
+   ?   ListApp.update_reminder_badge  (Zeile 38626)
+   ?   ListApp.wait_for_backdrop  (Zeile 14985)
+   ?   ListApp.write_ics_document  (Zeile 50232)
+   ?   ListApp.write_print_document  (Zeile 49857)
+   ?   ListApp.yearly_activity_history  (Zeile 17097)
+
+STRUKTURELL GLEICH  1 Gruppen von Methoden mit identischem Aufbau
+   ListApp.create_pages_sidebar (Z. 29540, 13 Z.), ListApp.create_notes_sidebar (Z. 29554, 11 Z.)
+
+ATTRIBUTE  gesetzt, nie gelesen: 222
+   w   self.ACTION_DENSITY_MIN_WIDTH
+   w   self.ACTION_GROUPS
+   w   self.ACTION_GROUP_FALLBACK
+   w   self.ACTION_GROUP_PREFIXES
+   w   self.BACKDROP_ZONE_FADE
+   w   self.BOARD_BACKGROUND_KEYS
+   w   self.BUTTON_ROLE_RULES
+   w   self.COLOR_MODE_CHOICES
+   w   self.COMPLETION_HISTORY_DAYS
+   w   self.CONNECTION_COLOR_KEYS
+   w   self.CONTENT_SECTION_GAP
+   w   self.CONVERTIBLE
+   w   self.CSV_FALSE_WORDS
+   w   self.CSV_FIELD_SYNONYMS
+   w   self.CSV_IMPORTANCE_WORDS
+   w   self.CSV_TRUE_WORDS
+   w   self.CVD_PALETTE
+   w   self.DEFAULT_LABEL_COLOR
+   w   self.DRAWING_OPACITY_DEFAULT
+   w   self.DRAWING_REFERENCE_MODES
+   w   self.FIRST_DRAWING_SCHEMA_VERSION
+   w   self.GROUP_FIELDS
+   w   self.GROUP_FIELD_KEYS
+   w   self.HISTORY_KINDS
+   w   self.HISTORY_RETENTION_DAYS
+
+ATTRIBUTE  gelesen, nie gesetzt: 86  (meist Tk-Eigenschaften, aber Fehler möglich)
+   r   self.ExchangeReport
+   r   self._active_dropdown
+   r   self._backdrop_bound
+   r   self._backdrop_labels
+   r   self._backdrop_photos
+   r   self._backdrop_sig
+   r   self._default_root
+   r   self._empty_text_bound
+   r   self._fit_sig
+   r   self._frost
+   r   self._frost_base_style
+   r   self._glide_aufgeschoben
+   r   self._glide_defers_windows
+   r   self._glide_icons
+   r   self._glide_scroll_job
+   r   self._glide_scroll_pending
+   r   self._glide_tooltip
+   r   self._glide_wheel_remainder
+   r   self._glide_wheel_rest_x
+   r   self._header_note
+   r   self._is_backdrop
+   r   self._is_page_task
+   r   self._item_id
+   r   self._no_backdrop
+   r   self._page_action_layout_binding

@@ -1,6 +1,6 @@
 # Release-Checkliste
 
-Stand 01.10.2026 · Glide 3.32.3 · interner Entwicklungsstand · Aufgabenformat 20
+Stand 01.10.2026 · Glide 3.33.1 · interner Entwicklungsstand · Aufgabenformat 20
 
 ## Quellstand 3.32.3
 

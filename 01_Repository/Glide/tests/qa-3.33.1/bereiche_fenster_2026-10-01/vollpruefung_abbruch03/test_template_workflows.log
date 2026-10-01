@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_template_workflows.py", line 231, in <module>
+    updated = draft.edit()
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/src/glide/app.pyw", line 54112, in edit
+    self._owner.run_modal(dialog)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/Users/shaye/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_template_workflows.py", line 198, in main
+    assert sum(columns) <= tree.winfo_width() + 2, (size, columns, tree.winfo_width())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('800x640', [420, 200, 200, 200], 1)
