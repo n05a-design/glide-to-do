@@ -29,7 +29,7 @@ Seit 3.2.0 sucht Glide beim Start nicht mehr in Ordnern früherer Programmnamen 
 
 ## Meldung
 
-Sicherheitsfunde vertraulich über GitHub melden: Reiter *Security* → *Report a vulnerability*. Ablauf und Umfang stehen in der [Sicherheitsrichtlinie](../../.github/SECURITY.md). Keine öffentlichen Issues und keine echten Nutzerdaten, Sicherungen oder Anhänge mitschicken.
+Sicherheitsfunde vertraulich über GitHub melden: Reiter *Security* → *Report a vulnerability*. Ablauf und Umfang stehen in der [Sicherheitsrichtlinie](../../SECURITY.md). Keine öffentlichen Issues und keine echten Nutzerdaten, Sicherungen oder Anhänge mitschicken.
 
 ## Öffentliches Repository
 
