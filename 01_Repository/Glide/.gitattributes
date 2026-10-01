@@ -7,3 +7,7 @@
 *.ico binary
 *.icns binary
 *.docx binary
+# Mitgelieferte Drittdateien unverändert speichern: Ihr SHA-256 wird gegen
+# 07_Python-Versionen und das Bundle abgeglichen (CRLF in tkdnd/Windows, Lizenztexte).
+**/vendor/** -text
+**/resources/fonts/** -text

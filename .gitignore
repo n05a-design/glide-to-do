@@ -217,11 +217,13 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# --- Glide -----------------------------------------------------------------
-# Die mitgelieferten tkdnd-Bibliotheken gehören zum Laufzeitstand und müssen
-# bytegleich im Repository liegen (Abgleich per SHA-256).
-!07_Python-Versionen/vendor/**/*.so
-# Nutzerdaten, Fehlerprotokolle und lokale Messdaten nie einchecken.
-liste_speicher.json
+# --- Glide-Projektablage ------------------------------------------------------
+# Wurzel dieses Repositorys = Projektordner (00_Arbeitsvorbereitung,
+# 01_Repository/Glide, 07_Python-Versionen …). Eigene Regeln des Quellbaums
+# stehen zusätzlich in 01_Repository/Glide/.gitignore.
+.DS_Store
+# Mitgelieferte tkdnd-Bibliotheken gehören zum Laufzeitstand (SHA-256-Abgleich).
+!**/vendor/tkinterdnd2/**/*.so
+# Nutzerdaten und persönliche Fehlerprotokolle nie einchecken.
 fehlerprotokoll.txt
 glide.lock
