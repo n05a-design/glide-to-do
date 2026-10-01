@@ -1,0 +1,35 @@
+{
+  "zeitpunkt": "2026-09-07T09:08:45",
+  "version": "3.6.0",
+  "quelle": "C:\\Users\\Timvo\\OneDrive\\Glide ToDo\\01_Repository\\Glide\\src\\glide\\app.pyw",
+  "startbare_kopie": "C:\\Users\\Timvo\\OneDrive\\Glide ToDo\\07_Python-Versionen\\Glide-Aufgaben-und-Listen_v3.6.0.pyw",
+  "sha256": "5dfe82ac75131a14b89a84af2fb6c0339d84630ffe018d3d4e1398255078bf00",
+  "ausgang_archiv": "C:\\Users\\Timvo\\OneDrive\\Glide ToDo\\07_Python-Versionen\\Archiv\\Glide-Aufgaben-und-Listen_v3.6.0_vor_UI-Nachbesserung_2026-09-07.pyw",
+  "ausgang_sha256": "78fd3f3233c27a76d59bd287767bf24a76b0073f0318326c4572b1dde19abc5c",
+  "fonts": [
+    {
+      "datei": "DejaVuSans-Bold.ttf",
+      "sha256": "e6476c1b80502924294eed40894c5b18e06c181444ca953e5334262df9c27724"
+    },
+    {
+      "datei": "DejaVuSans-BoldOblique.ttf",
+      "sha256": "eb436dca0c2594b73d8b603b892e374fdfd8d885d25ffb4f18df4c4c0b49e50f"
+    },
+    {
+      "datei": "DejaVuSans-Oblique.ttf",
+      "sha256": "4af75fa16ee6d3ad43e1ecec41862c24954af26a55c6bb1ebb27bd486a50f5f4"
+    },
+    {
+      "datei": "DejaVuSans.ttf",
+      "sha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954"
+    },
+    {
+      "datei": "LICENSE",
+      "sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93"
+    },
+    {
+      "datei": "provenance.json",
+      "sha256": "7dcd704767dc72764f2a4ed0735b2c7904f228b37ff56b0159f2d5ac98fc328a"
+    }
+  ]
+}

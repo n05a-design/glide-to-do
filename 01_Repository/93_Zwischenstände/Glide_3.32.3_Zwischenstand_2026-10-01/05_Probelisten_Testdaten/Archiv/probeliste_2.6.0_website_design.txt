@@ -1,0 +1,18 @@
+Website und Design
+==============================
+
+1. 📁 Relaunch
+   1.1. ✓ Struktur festlegen
+   1.2. ⚑ Wireframes
+      Fällig: 12.09.2026
+   1.3. 🚩 Designsystem aufsetzen
+      Beschreibung: Farben, Typografie, Komponenten.
+      Beschreibung: Als Grundlage für alle künftigen Projekte.
+      Fällig: 25.09.2026
+   1.4. Barrierefreiheit prüfen
+      Fällig: 10.10.2026
+2. ⚐ Alte Unterseiten weiterleiten
+3. Analytics-Alternative ohne Tracking prüfen
+   Beschreibung: Datenschutzkonform, keine Cookies.
+
+Exportiert am: 01.09.2026 um 23:55 Uhr

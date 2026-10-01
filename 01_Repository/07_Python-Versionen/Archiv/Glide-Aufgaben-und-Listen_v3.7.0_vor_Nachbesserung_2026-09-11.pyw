@@ -1,0 +1,19328 @@
+import base64
+import calendar
+import contextlib
+import copy
+import csv
+import ctypes
+import hashlib
+import json
+import math
+import mimetypes
+import os
+import random
+import re
+import shutil
+import stat
+import subprocess
+import sys
+import tempfile
+import time
+import tkinter as tk
+import tkinter.font as tkfont
+import tkinter.ttk as ttk
+import uuid
+import zipfile
+from tkinter import messagebox, filedialog
+from datetime import datetime, date, timedelta, timezone
+
+# --- Produkt-Branding -------------------------------------------------------
+APP_NAME = "Glide"
+APP_TAGLINE = "Aufgaben und Listen"
+APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
+APP_VERSION = "3.7.0"
+IS_MACOS = sys.platform == "darwin"
+IS_WINDOWS = os.name == "nt"
+
+
+def app_font(size=11, *styles):
+    """Konkrete Familie statt des als Arial interpretierten Tupelnamens TkDefaultFont."""
+    try:
+        named = tkfont.nametofont("TkDefaultFont")
+        family = named.actual("family")
+        delta = max(-1, min(1, named.actual("size") - 11))
+        return (family, int(size) + delta, *styles)
+    except (tk.TclError, RuntimeError):
+        return ("TkDefaultFont", size, *styles)
+
+
+class DataIntegrityError(RuntimeError):
+    """Eine Umbauaktion hätte Punkte verloren und bricht deshalb ab.
+
+    Wird ausschließlich innerhalb von `guarded_structural_change` geworfen und
+    dort behandelt: Der vorherige Stand wird wiederhergestellt, der Vorgang
+    gemeldet. Sie steht damit für einen abgewehrten, nicht für einen
+    eingetretenen Datenverlust.
+    """
+
+
+class ChangeRecord:
+    """Zustand einer laufenden Änderung – der Kern beider Änderungsrahmen.
+
+    `ListApp.item_change` (Punkte) und `ListApp.sidebar_change` (Listen und
+    Ordner) liefern dieses Objekt. Wer wirklich etwas geändert hat, meldet es
+    mit `mark()`. Bleibt die Meldung aus, gilt die Aktion als wirkungslos: Der
+    Rückgängig-Punkt entfällt, gespeichert und neu gezeichnet wird nicht. Genau
+    diese Unterscheidung stand vorher in jeder Änderungsoperation einzeln – und
+    wer sie vergaß, hinterließ einen Rückgängig-Schritt, der nichts zurücknimmt.
+
+    `focus_id` und `selection` betreffen allein den Aufgabenbaum; im
+    Seitenleisten-Rahmen bleiben sie ungenutzt.
+    """
+
+    __slots__ = ("changed", "focus_id", "selection")
+
+    def __init__(self, selection):
+        self.changed = False
+        self.focus_id = None
+        self.selection = list(selection)
+
+    def mark(self, focus_id=None):
+        """Meldet eine tatsächliche Änderung, optional mit neuem Zielpunkt."""
+        self.changed = True
+        if focus_id is not None:
+            self.focus_id = focus_id
+
+
+def _default_app_data_dir():
+    """Lokaler Standardordner, ohne einen eventuell gewählten Datenpfad."""
+    if sys.platform == "darwin":
+        base = os.path.join(os.path.expanduser("~"), "Library", "Application Support")
+        path = os.path.join(base, APP_NAME)
+    elif os.name == "nt":
+        base = os.environ.get("APPDATA") or os.path.expanduser("~")
+        path = os.path.join(base, APP_NAME)
+    else:
+        base = os.environ.get("XDG_DATA_HOME") or os.path.join(os.path.expanduser("~"), ".local", "share")
+        path = os.path.join(base, APP_NAME)
+    os.makedirs(path, exist_ok=True)
+    return path
+
+
+def get_app_data_dir():
+    """Plattformgerechter, beschreibbarer Speicherort ohne externe Bibliotheken.
+
+    GLIDE_DATA_DIR überschreibt den Pfad vollständig. Das ist der einzige
+    plattformunabhängige Weg, Tests zu isolieren: %APPDATA% wirkt nur unter
+    Windows, unter macOS und Linux würde ein Test sonst die echten Nutzerdaten
+    in ~/Library/Application Support/Glide bzw. ~/.local/share/Glide benutzen.
+    """
+    override = os.environ.get("GLIDE_DATA_DIR")
+    if override:
+        path = os.path.abspath(os.path.expanduser(override))
+        os.makedirs(path, exist_ok=True)
+        return path
+    default = _default_app_data_dir()
+    pointer = os.path.join(default, "datenordner.json")
+    # Tests setzen GLIDE_DATA_DIR absichtlich vor dem Import. In diesem Modus
+    # darf kein echter Benutzerzeiger gelesen oder verändert werden.
+    if not os.environ.get("GLIDE_DATA_DIR") and os.path.isfile(pointer):
+        try:
+            with open(pointer, "r", encoding="utf-8") as file:
+                selected = json.load(file).get("path")
+            if isinstance(selected, str) and selected.strip():
+                path = os.path.abspath(os.path.expanduser(selected))
+                os.makedirs(path, exist_ok=True)
+                return path
+        except (OSError, ValueError, TypeError):
+            pass
+    path = default
+    return path
+
+
+BASE_DIR = get_app_data_dir()
+SAVE_FILE = os.path.join(BASE_DIR, "liste_speicher.json")
+SETTINGS_FILE = os.path.join(BASE_DIR, "settings.json")
+BACKUP_DIR = os.path.join(BASE_DIR, "backups")
+ATTACHMENTS_DIR = os.path.join(BASE_DIR, "attachments")
+TEMPLATES_FILE = os.path.join(BASE_DIR, "vorlagen.json")
+DATA_POINTER_FILE = os.path.join(_default_app_data_dir(), "datenordner.json")
+LOCK_FILE = os.path.join(BASE_DIR, "glide.lock")
+os.makedirs(BACKUP_DIR, exist_ok=True)
+os.makedirs(ATTACHMENTS_DIR, exist_ok=True)
+
+
+def register_private_fonts(font_dir=None):
+    """Registriert optionale TTF-Schriften nur für den laufenden Prozess.
+
+    Die Anwendung bleibt ohne Font-Datei vollständig funktionsfähig. Unter
+    Windows wird ``FR_PRIVATE`` verwendet; macOS erhält denselben
+    Prozessumfang über CoreText. Andere Plattformen greifen auf Tk-Systemfonts
+    zurück. Die Funktion liefert die registrierten Familiennamen zurück.
+    """
+    font_dir = font_dir or os.path.join(os.path.dirname(__file__), "resources", "fonts")
+    if not os.path.isdir(font_dir):
+        return []
+    registered = []
+    for path in sorted(os.listdir(font_dir)):
+        if not path.lower().endswith((".ttf", ".otf")):
+            continue
+        full_path = os.path.join(font_dir, path)
+        try:
+            if IS_WINDOWS:
+                add_font = ctypes.windll.gdi32.AddFontResourceExW
+                add_font.argtypes = [ctypes.c_wchar_p, ctypes.c_uint, ctypes.c_void_p]
+                if add_font(full_path, 0x10, 0):
+                    registered.append(full_path)
+            elif IS_MACOS:
+                core_text = ctypes.CDLL("/System/Library/Frameworks/CoreText.framework/CoreText")
+                foundation = ctypes.CDLL("/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation")
+                foundation.CFURLCreateFromFileSystemRepresentation.argtypes = [
+                    ctypes.c_void_p, ctypes.c_char_p, ctypes.c_long, ctypes.c_bool,
+                ]
+                foundation.CFURLCreateFromFileSystemRepresentation.restype = ctypes.c_void_p
+                foundation.CFRelease.argtypes = [ctypes.c_void_p]
+                core_text.CTFontManagerRegisterFontsForURL.argtypes = [
+                    ctypes.c_void_p, ctypes.c_uint, ctypes.POINTER(ctypes.c_void_p),
+                ]
+                core_text.CTFontManagerRegisterFontsForURL.restype = ctypes.c_bool
+                encoded = os.fsencode(full_path)
+                url = foundation.CFURLCreateFromFileSystemRepresentation(
+                    None, encoded, len(encoded), False,
+                )
+                if url:
+                    try:
+                        if core_text.CTFontManagerRegisterFontsForURL(url, 1, None):
+                            registered.append(full_path)
+                    finally:
+                        foundation.CFRelease(url)
+        except (AttributeError, OSError, TypeError):
+            continue
+    return registered
+
+
+def moon_phase_info(day=None):
+    """Liefert Phasenname, Beleuchtungsanteil und Zyklusanteil für einen Tag."""
+    day = day or date.today()
+    if isinstance(day, datetime):
+        day = day.date()
+    epoch = date(2000, 1, 6)
+    cycle = 29.530588853
+    age = ((day - epoch).days % cycle)
+    fraction = age / cycle
+    illumination = (1.0 - math.cos(2.0 * math.pi * fraction)) / 2.0
+    names = (
+        (0.0625, "Neumond"), (0.1875, "Zunehmende Sichel"),
+        (0.3125, "Erstes Viertel"), (0.4375, "Zunehmender Dreiviertelmond"),
+        (0.5625, "Vollmond"), (0.6875, "Abnehmender Dreiviertelmond"),
+        (0.8125, "Letztes Viertel"), (0.9375, "Abnehmende Sichel"),
+    )
+    name = next((label for upper, label in names if fraction < upper), "Neumond")
+    return {"name": name, "illumination": round(illumination, 4), "percent": round(illumination * 100), "age": round(age, 2), "fraction": fraction}
+
+
+def principal_moon_phase_utc(lunation, quarter):
+    """Hauptphase als UTC-Näherung, nach John Walkers gemeinfreiem Moontool.
+
+    Quelle: https://www.fourmilab.ch/moontool/moontool.shar.gz, truephase.
+    Zyklus mit periodischen Korrekturen statt bloßem mittleren Mondalter.
+    Für Kalenderdaten gedacht; keine astronomische Präzisionszeitangabe.
+    """
+    if quarter not in (0, 1, 2, 3):
+        raise ValueError("Mondphase muss zwischen 0 und 3 liegen.")
+    k = lunation + quarter / 4
+    t = k / 1236.85
+    def sin(angle):
+        return math.sin(math.radians(angle % 360))
+    def cos(angle):
+        return math.cos(math.radians(angle % 360))
+    jde = (2415020.75933 + 29.53058868 * k + .0001178 * t**2 - .000000155 * t**3
+           + .00033 * sin(166.56 + 132.87 * t - .009173 * t**2))
+    m = 359.2242 + 29.10535608 * k - .0000333 * t**2 - .00000347 * t**3
+    mp = 306.0253 + 385.81691806 * k + .0107306 * t**2 + .00001236 * t**3
+    f = 21.2964 + 390.67050646 * k - .0016528 * t**2 - .00000239 * t**3
+    if quarter in (0, 2):
+        correction = ((.1734 - .000393 * t) * sin(m) + .0021 * sin(2*m)
+            - .4068 * sin(mp) + .0161 * sin(2*mp) - .0004 * sin(3*mp)
+            + .0104 * sin(2*f) - .0051 * sin(m+mp) - .0074 * sin(m-mp)
+            + .0004 * sin(2*f+m) - .0004 * sin(2*f-m) - .0006 * sin(2*f+mp)
+            + .0010 * sin(2*f-mp) + .0005 * sin(m+2*mp))
+    else:
+        correction = ((.1721 - .0004 * t) * sin(m) + .0021 * sin(2*m)
+            - .6280 * sin(mp) + .0089 * sin(2*mp) - .0004 * sin(3*mp)
+            + .0079 * sin(2*f) - .0119 * sin(m+mp) - .0047 * sin(m-mp)
+            + .0003 * sin(2*f+m) - .0004 * sin(2*f-m) - .0006 * sin(2*f+mp)
+            + .0021 * sin(2*f-mp) + .0003 * sin(m+2*mp) + .0004 * sin(m-2*mp)
+            - .0003 * sin(2*m+mp))
+        correction += (1 if quarter == 1 else -1) * (.0028 - .0004*cos(m) + .0003*cos(mp))
+    return datetime(2000, 1, 1, 12, tzinfo=timezone.utc) + timedelta(days=jde + correction - 2451545)
+
+
+def calendar_moon_phases(first_day, last_day, tz=None):
+    """Vier Hauptphasen, jeweils am lokalen Kalendertag; ohne Netzwerkzugriff."""
+    phases = (("Neumond", "moon_new"), ("Erstes Viertel", "moon_first"),
+              ("Vollmond", "moon_full"), ("Letztes Viertel", "moon_last"))
+    first_k = math.floor((first_day.year + (first_day.month - 1) / 12 - 1900) * 12.3685) - 1
+    cycles = math.ceil((last_day - first_day).days / 29.53058868) + 4
+    result = {}
+    for lunation in range(first_k, first_k + cycles):
+        for quarter, (name, icon) in enumerate(phases):
+            instant = principal_moon_phase_utc(lunation, quarter)
+            local = instant.astimezone(tz)
+            if first_day <= local.date() <= last_day:
+                result[local.date()] = {"name": name, "icon": icon, "utc": instant, "local": local}
+    return result
+
+
+def mix_hex_colors(first, second, ratio):
+    """Mischt zwei Hex-Farben; ratio 0 liefert first, ratio 1 liefert second."""
+    def parse(value):
+        text = str(value or "#000000").strip()
+        if text.startswith("#"):
+            text = text[1:]
+        if len(text) == 3:
+            text = "".join(char * 2 for char in text)
+        if len(text) != 6:
+            return (0, 0, 0)
+        try:
+            return tuple(int(text[index:index + 2], 16) for index in (0, 2, 4))
+        except ValueError:
+            return (0, 0, 0)
+
+    left = parse(first)
+    right = parse(second)
+    weight = max(0.0, min(1.0, float(ratio)))
+    blended = tuple(
+        int(round(left[index] + (right[index] - left[index]) * weight))
+        for index in range(3)
+    )
+    return "#%02X%02X%02X" % blended
+
+
+def relative_luminance(hex_color):
+    """Relative Helligkeit nach WCAG – Grundlage jeder Kontrastrechnung."""
+    text = str(hex_color or "#000000").lstrip("#")
+    if len(text) == 3:
+        text = "".join(char * 2 for char in text)
+    if len(text) != 6:
+        return 0.0
+    channels = []
+    for index in (0, 2, 4):
+        try:
+            value = int(text[index:index + 2], 16) / 255.0
+        except ValueError:
+            value = 0.0
+        channels.append(value / 12.92 if value <= 0.04045 else ((value + 0.055) / 1.055) ** 2.4)
+    return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
+
+
+def mix_to_luminance(base, towards, target_luminance, steps=24):
+    """Mischt base Richtung towards, bis die Zielhelligkeit erreicht ist.
+
+    Ein fester Mischanteil taugt hier nicht: Gelb ist von Haus aus dreimal so
+    hell wie Lila. Mit demselben Anteil Weiß verschwindet der eine Chip im
+    Hintergrund, während der andere noch kräftig ist. Gesucht wird deshalb nicht
+    ein Anteil, sondern eine Helligkeit – dann sitzen alle Farben gleich.
+    """
+    low, high = 0.0, 1.0
+    base_luminance = relative_luminance(base)
+    towards_luminance = relative_luminance(towards)
+    if towards_luminance == base_luminance:
+        return mix_hex_colors(base, towards, 0.5)
+    rising = towards_luminance > base_luminance
+    result = mix_hex_colors(base, towards, 1.0 if rising else 0.0)
+    for _step in range(steps):
+        middle = (low + high) / 2
+        candidate = mix_hex_colors(base, towards, middle)
+        luminance = relative_luminance(candidate)
+        result = candidate
+        if (luminance < target_luminance) == rising:
+            low = middle
+        else:
+            high = middle
+    return result
+
+
+class LabelChip(tk.Canvas):
+    """Label als abgerundete Fläche mit dunklem Text auf der Labelfarbe.
+
+    Ein farbiger Punkt oder reiner farbiger Text sagt nur „irgendwas ist hier
+    markiert“. Eine Fläche mit lesbarem Text sagt, welches Label es ist – das
+    ist der eigentliche Zweck. Tk kann eine Treeview-Zelle nicht einfärben,
+    deshalb steht dieser Chip überall dort, wo ein echtes Widget möglich ist.
+    """
+
+    RADIUS = 9
+    PAD_X = 9
+    PAD_TOP = 2
+    PAD_BOTTOM = 4
+
+    @classmethod
+    def measure(cls, text, font):
+        """Breite und Höhe, die ein Chip mit diesem Text einnehmen würde."""
+        try:
+            measure_font = tkfont.Font(font=font)
+            text_width = measure_font.measure(str(text or ""))
+            text_height = measure_font.metrics("linespace")
+        except tk.TclError:
+            text_width = 8 * max(1, len(str(text or "")))
+            text_height = 14
+        return text_width + 2 * cls.PAD_X, text_height + cls.PAD_TOP + cls.PAD_BOTTOM
+
+    def __init__(self, master, text, fill, text_color, bg_color,
+                 font=app_font(9, "bold"), outline=None):
+        self.chip_text = str(text or "")
+        self.fill = fill
+        self.text_color = text_color
+        self.bg_color = bg_color
+        self.chip_font = font
+        self.outline = outline
+        width, height = self.measure(self.chip_text, font)
+        super().__init__(
+            master,
+            width=width,
+            height=height,
+            bg=bg_color,
+            highlightthickness=0,
+            bd=0,
+        )
+        self.chip_width = width
+        self.chip_height = height
+        self._draw()
+
+    def set_colors(self, fill=None, text_color=None, bg_color=None, outline=None):
+        if fill is not None:
+            self.fill = fill
+        if text_color is not None:
+            self.text_color = text_color
+        if bg_color is not None:
+            self.bg_color = bg_color
+            self.configure(bg=bg_color)
+        self.outline = outline
+        self._draw()
+
+    def _draw(self):
+        self.delete("all")
+        # Die Fläche rechnet in Pixelkoordinaten, also bis Breite-1 und Höhe-1:
+        # Eine Form, die exakt auf chip_width endet, liegt mit ihrer letzten
+        # Spalte außerhalb der Zeichenfläche und wurde an der Kante beschnitten.
+        right = max(0, self.chip_width - 1)
+        bottom = max(0, self.chip_height - 1)
+        radius = max(0, min(self.RADIUS, bottom // 2, right // 2))
+        size = 2 * radius
+        # Vier Kreisviertel und zwei Rechtecke statt eines geglätteten Polygons:
+        # Bei der geringen Chiphöhe zog die Spline die Ecken beinahe gerade, und
+        # ihre Außenkante fiel mit der Schnittkante der Fläche zusammen.
+        if radius:
+            for x, y, start in (
+                (0, 0, 90),
+                (right - size, 0, 0),
+                (0, bottom - size, 180),
+                (right - size, bottom - size, 270),
+            ):
+                self.create_arc(
+                    x, y, x + size, y + size,
+                    start=start, extent=90, style="pieslice",
+                    fill=self.fill, outline=self.fill,
+                )
+        self.create_rectangle(
+            radius, 0, right - radius, bottom, fill=self.fill, outline=self.fill,
+        )
+        self.create_rectangle(
+            0, radius, right, bottom - radius, fill=self.fill, outline=self.fill,
+        )
+        if self.outline:
+            # Auswahlrahmen: dieselbe Kontur als Linie, damit die Markierung in
+            # der Labelauswahl sichtbar bleibt.
+            if radius:
+                for x, y, start in (
+                    (0, 0, 90),
+                    (right - size, 0, 0),
+                    (0, bottom - size, 180),
+                    (right - size, bottom - size, 270),
+                ):
+                    self.create_arc(
+                        x, y, x + size, y + size,
+                        start=start, extent=90, style="arc", outline=self.outline,
+                    )
+            self.create_line(radius, 0, right - radius, 0, fill=self.outline)
+            self.create_line(radius, bottom, right - radius, bottom, fill=self.outline)
+            self.create_line(0, radius, 0, bottom - radius, fill=self.outline)
+            self.create_line(right, radius, right, bottom - radius, fill=self.outline)
+        # Der Text sitzt oben zwei Pixel enger als unten: Großbuchstaben tragen
+        # oben mehr Luft mit sich, optisch steht er damit mittig.
+        self.create_text(
+            self.PAD_X,
+            self.PAD_TOP,
+            text=self.chip_text,
+            anchor="nw",
+            fill=self.text_color,
+            font=self.chip_font,
+        )
+
+
+class ProgressBar(tk.Canvas):
+    """Schmaler Fortschrittsbalken mit abgerundeten Enden."""
+
+    def __init__(self, master, value, maximum, bg_color, track_color, fill_color, height=10):
+        super().__init__(master, height=height, bg=bg_color, highlightthickness=0, bd=0)
+        self.value = max(0, value)
+        self.maximum = max(1, maximum)
+        self.bg_color = bg_color
+        self.track_color = track_color
+        self.fill_color = fill_color
+        self.bar_height = height
+        self.bind("<Configure>", lambda _event: self._draw())
+
+    def _kapsel(self, x1, x2, farbe):
+        # Unter einer Kapselbreite bliebe von der Rundung nur ein Klecks; dann
+        # ist ein Rechteck ehrlicher als ein verzerrter Kreis.
+        r = self.bar_height / 2
+        if x2 - x1 < self.bar_height:
+            if x2 > x1:
+                self.create_rectangle(x1, 0, x2, self.bar_height, fill=farbe, outline=farbe)
+            return
+        self.create_oval(x1, 0, x1 + 2 * r, self.bar_height, fill=farbe, outline=farbe)
+        self.create_oval(x2 - 2 * r, 0, x2, self.bar_height, fill=farbe, outline=farbe)
+        self.create_rectangle(x1 + r, 0, x2 - r, self.bar_height, fill=farbe, outline=farbe)
+
+    def _draw(self):
+        self.delete("all")
+        breite = max(1, self.winfo_width())
+        self._kapsel(0, breite, self.track_color)
+        self._kapsel(0, breite * min(1.0, self.value / self.maximum), self.fill_color)
+
+
+class CompletionChart(tk.Canvas):
+    """Erledigte Aufgaben je Tag als stehende Balken.
+
+    Bewusst ohne Achsen und Gitter: Sieben Werte brauchen keine Skala, sondern
+    einen Vergleich untereinander. Unter jedem Balken steht der Wochentag, über
+    dem Balken die Zahl – damit ist die Grafik auch ohne Achse eindeutig.
+    """
+
+    WEEKDAYS = ("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So")
+
+    def __init__(self, master, days, bg_color, bar_color, track_color, text_color,
+                 today_color, height=96):
+        super().__init__(master, height=height, bg=bg_color, highlightthickness=0, bd=0)
+        self.days = list(days)
+        self.bg_color = bg_color
+        self.bar_color = bar_color
+        self.track_color = track_color
+        self.text_color = text_color
+        self.today_color = today_color
+        self.chart_height = height
+        self.bind("<Configure>", lambda _event: self._draw())
+
+    def _draw(self):
+        self.delete("all")
+        if not self.days:
+            return
+        breite = max(1, self.winfo_width())
+        beschriftung = 16
+        grundlinie = self.chart_height - beschriftung
+        # Gleiche Zeichenbreite wie das Jahresraster, einschließlich Platz
+        # für dessen Wochentage am linken Rand.
+        links, rechts = 20, breite - 2
+        spalte = max(1, rechts - links) / len(self.days)
+        balken = max(10, min(44, spalte * 0.55))
+        hoechster = max((anzahl for _tag, anzahl in self.days), default=0)
+        heute = date.today()
+        # Eine durchgehende Grundlinie statt einer Spur je Balken: Die Spur sah
+        # aus wie ein zweiter, hellerer Balken und verdoppelte jeden Wert
+        # optisch. Die Linie trägt dieselbe Aussage – hier ist die Null.
+        self.create_line(links, grundlinie, rechts, grundlinie, fill=self.track_color, width=1)
+        for index, (tag, anzahl) in enumerate(self.days):
+            mitte = links + spalte * (index + 0.5)
+            x1, x2 = mitte - balken / 2, mitte + balken / 2
+            ist_heute = tag == heute
+            hoehe = 0 if hoechster == 0 else (anzahl / hoechster) * (grundlinie - 16)
+            if anzahl:
+                farbe = self.today_color if ist_heute else self.bar_color
+                self.create_rectangle(x1, grundlinie - hoehe, x2, grundlinie,
+                                      fill=farbe, outline=farbe)
+            else:
+                # Ein Tag ohne Erledigtes bekommt einen flachen Stummel: Sonst
+                # bliebe die Spalte leer und wäre von „kein Tag" nicht zu
+                # unterscheiden.
+                self.create_rectangle(x1, grundlinie - 2, x2, grundlinie,
+                                      fill=self.track_color, outline=self.track_color)
+            self.create_text(mitte, grundlinie - hoehe - 8, text=str(anzahl),
+                             fill=self.today_color if ist_heute else self.text_color,
+                             font=("TkDefaultFont", 8, "bold" if ist_heute else "normal"))
+            self.create_text(mitte, grundlinie + beschriftung / 2,
+                             text=self.WEEKDAYS[tag.weekday()],
+                             fill=self.today_color if ist_heute else self.text_color,
+                             font=("TkDefaultFont", 8, "bold" if ist_heute else "normal"))
+
+
+class MoonPhase(tk.Canvas):
+    """Kleine Mondphasenanzeige aus Tk-Grundformen."""
+
+    def __init__(self, master, info=None, size=46, bg_color="#FFFFFF", light_color="#F4D35E",
+                 dark_color="#4B4B63", outline_color="#888888"):
+        super().__init__(master, width=size, height=size, bg=bg_color,
+                         highlightthickness=0, bd=0)
+        self.info = info or moon_phase_info()
+        self.size = size
+        self.bg_color = bg_color
+        self.light_color = light_color
+        self.dark_color = dark_color
+        self.outline_color = outline_color
+        self.bind("<Configure>", lambda _event: self._draw())
+        self._draw()
+
+    def _draw(self):
+        self.delete("all")
+        radius = max(4, self.size * 0.38)
+        cx = cy = self.size / 2
+        self.create_oval(cx - radius, cy - radius, cx + radius, cy + radius,
+                         fill=self.dark_color, outline=self.outline_color, width=1)
+        fraction = float(self.info.get("fraction", 0.0)) % 1.0
+        waxing = fraction <= 0.5
+        terminator = math.cos(2 * math.pi * fraction)
+        # Beide Konturen liegen in derselben Kreisscheibe; die helle Fläche
+        # kann deshalb weder seitlich herausragen noch eine volle Ellipse vortäuschen.
+        ys = [-radius + 2 * radius * index / 64 for index in range(65)]
+        side = 1 if waxing else -1
+        contour = []
+        for y in ys:
+            contour.extend((cx + side * math.sqrt(max(0, radius * radius - y * y)), cy + y))
+        for y in reversed(ys):
+            contour.extend((cx + side * terminator * math.sqrt(max(0, radius * radius - y * y)), cy + y))
+        if float(self.info.get("illumination", 0)) > 0.005:
+            self.create_polygon(contour, fill=self.light_color, outline="")
+        self.create_oval(cx-radius, cy-radius, cx+radius, cy+radius, outline=self.outline_color)
+
+
+
+class YearHeatmap(tk.Canvas):
+    """Jahresanzeige im Stil eines ruhigen Aktivitätskalenders."""
+
+    def __init__(self, master, history, today=None, bg_color="#FFFFFF", empty_color="#E5E5EA",
+                 accent_color="#7B61FF", text_color="#777777", width=640, height=132):
+        super().__init__(master, height=height, bg=bg_color, highlightthickness=0, bd=0)
+        self.history = dict(history or {})
+        self.today = today or date.today()
+        self.bg_color = bg_color
+        self.empty_color = empty_color
+        self.accent_color = accent_color
+        self.text_color = text_color
+        self.heatmap_width = width
+        self.heatmap_height = height
+        self.bind("<Configure>", lambda _event: self._draw())
+
+    @staticmethod
+    def statistics(history, today=None):
+        today = today or date.today()
+        values = {str(key): int(value) for key, value in (history or {}).items()
+                  if isinstance(value, int) and not isinstance(value, bool) and value > 0}
+        active = len(values)
+        total = sum(values.values())
+        best = max(values.values(), default=0)
+        streak = 0
+        cursor = today
+        while values.get(cursor.isoformat(), 0):
+            streak += 1
+            cursor -= timedelta(days=1)
+        return {"active_days": active, "total": total, "best_day": best, "streak": streak}
+
+    def hover_text_at(self, x, y):
+        for item in self.find_overlapping(x, y, x, y):
+            tags = self.gettags(item)
+            if "day" in tags:
+                day = date.fromisoformat(tags[1])
+                weekday = ("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag")[day.weekday()]
+                count = int(self.history.get(day.isoformat(), 0))
+                return f"{weekday}, {day:%d.%m.%Y} · {count} Bearbeitungen"
+        return ""
+
+    def _draw(self):
+        self.delete("all")
+        width = max(260, self.winfo_width() or self.heatmap_width)
+        gap = 2
+        cell = max(2, (width - 22 - 52 * gap) / 53)
+        top = 4
+        needed_height = math.ceil(top + 7 * cell + 6 * gap + 8)
+        if int(self.cget("height")) != needed_height:
+            self.configure(height=needed_height)
+        start = self.today - timedelta(days=364 + self.today.weekday())
+        values = [int(self.history.get((start + timedelta(days=i)).isoformat(), 0))
+                  for i in range(371 + start.weekday())]
+        maximum = max(values, default=0)
+        for index in range(53 * 7):
+            day = start + timedelta(days=index // 7 * 7 + index % 7)
+            x = 20 + (index // 7) * (cell + gap)
+            y = top + (index % 7) * (cell + gap)
+            count = int(self.history.get(day.isoformat(), 0))
+            ratio = count / maximum if maximum else 0
+            if day > self.today:
+                continue
+            fill = self.empty_color if not count else mix_hex_colors(self.empty_color, self.accent_color, 0.25 + ratio * 0.75)
+            self.create_rectangle(x, y, x + cell, y + cell, fill=fill, outline=fill,
+                                  tags=("day", day.isoformat()))
+        for row, name in ((0, "Mo"), (3, "Do"), (6, "So")):
+            self.create_text(1, top + row * (cell + gap) + cell / 2,
+                             text=name, anchor="w", fill=self.text_color, font=app_font(7))
+
+
+class AnalogClock(tk.Canvas):
+    """Analoge Uhr aus Tk-Grundformen – kein Bild, keine zusätzliche Bibliothek.
+
+    Zifferblatt und Zeiger sind getrennt: Der Sekundentakt zeichnet nur die
+    Zeiger neu. Der Zeitgeber hängt am Widget selbst und endet mit ihm; die
+    Startseite baut ihre Kacheln bei jedem Aufbau neu, ein weiterlaufender
+    Zeitgeber würde sonst auf ein zerstörtes Widget zeichnen.
+    """
+
+    def __init__(self, master, size=64, bg_color="#FFFFFF", face_color="#FFFFFF",
+                 rim_color="#888888", mark_color="#888888", hand_color="#000000",
+                 second_color="#CC0000"):
+        super().__init__(master, width=size, height=size, bg=bg_color,
+                         highlightthickness=0, bd=0)
+        self.size = size
+        self.bg_color = bg_color
+        self.face_color = face_color
+        self.rim_color = rim_color
+        self.mark_color = mark_color
+        self.hand_color = hand_color
+        self.second_color = second_color
+        self._tick_id = None
+        self.bind("<Destroy>", self._on_destroy, add="+")
+        self._draw_face()
+        self._tick()
+
+    def set_colors(self, bg_color=None, face_color=None, rim_color=None,
+                   mark_color=None, hand_color=None, second_color=None):
+        for name, value in (("bg_color", bg_color), ("face_color", face_color),
+                            ("rim_color", rim_color), ("mark_color", mark_color),
+                            ("hand_color", hand_color), ("second_color", second_color)):
+            if value is not None:
+                setattr(self, name, value)
+        self.configure(bg=self.bg_color)
+        self._draw_face()
+        self._draw_hands()
+
+    def _on_destroy(self, event):
+        if event.widget is not self:
+            return
+        if self._tick_id is not None:
+            try:
+                self.after_cancel(self._tick_id)
+            except tk.TclError:
+                pass
+            self._tick_id = None
+
+    def _draw_face(self):
+        self.delete("face")
+        rand = 2
+        self.create_oval(rand, rand, self.size - rand, self.size - rand,
+                         outline=self.rim_color, fill=self.face_color, width=1, tags=("face",))
+        mitte = self.size / 2
+        radius = mitte - rand
+        for stunde in range(12):
+            winkel = math.radians(stunde * 30)
+            lang = stunde % 3 == 0
+            aussen = radius - 3
+            innen = aussen - (5 if lang else 3)
+            self.create_line(
+                mitte + innen * math.sin(winkel), mitte - innen * math.cos(winkel),
+                mitte + aussen * math.sin(winkel), mitte - aussen * math.cos(winkel),
+                fill=self.mark_color, width=2 if lang else 1, tags=("face",),
+            )
+
+    def _draw_hands(self, jetzt=None):
+        self.delete("hands")
+        jetzt = jetzt or datetime.now()
+        mitte = self.size / 2
+        radius = mitte - 2
+        stunde = (jetzt.hour % 12 + jetzt.minute / 60) * 30
+        minute = (jetzt.minute + jetzt.second / 60) * 6
+        sekunde = jetzt.second * 6
+
+        def zeiger(grad, laenge, farbe, breite):
+            winkel = math.radians(grad)
+            self.create_line(
+                mitte, mitte,
+                mitte + laenge * math.sin(winkel), mitte - laenge * math.cos(winkel),
+                fill=farbe, width=breite, capstyle="round", tags=("hands",),
+            )
+
+        zeiger(stunde, radius * 0.50, self.hand_color, 3)
+        zeiger(minute, radius * 0.72, self.hand_color, 2)
+        zeiger(sekunde, radius * 0.78, self.second_color, 1)
+        self.create_oval(mitte - 2, mitte - 2, mitte + 2, mitte + 2,
+                         fill=self.hand_color, outline=self.hand_color, tags=("hands",))
+
+    def _tick(self):
+        try:
+            if not self.winfo_exists():
+                return
+            self._draw_hands()
+            self._tick_id = self.after(1000, self._tick)
+        except tk.TclError:
+            self._tick_id = None
+
+
+class MonogramTile(tk.Canvas):
+    """Das persönliche Textlogo als farbige Fläche – dieselbe Anmutung wie ein Label.
+
+    Ein Label ist eine aufgehellte Fläche mit sehr dunklem Text derselben
+    Farbfamilie; genau diese Rechnung benutzt auch das Monogramm. Vorher war es
+    farbiger Text ohne Fläche und stand damit als einziges Element der Oberfläche
+    außerhalb dieser Systematik.
+    """
+
+    def __init__(self, master, text, fill, text_color, bg_color, size=64,
+                 radius=16, font=app_font(22, "bold")):
+        super().__init__(master, width=size, height=size, bg=bg_color,
+                         highlightthickness=0, bd=0)
+        self.tile_text = str(text or "G")
+        self.fill = fill
+        self.text_color = text_color
+        self.bg_color = bg_color
+        self.size = size
+        self.radius = radius
+        self.tile_font = app_font(font[1], *font[2:])
+        self.bind("<Configure>", lambda _event: self._draw())
+        self._draw()
+
+    def set_colors(self, fill=None, text_color=None, bg_color=None):
+        if fill is not None:
+            self.fill = fill
+        if text_color is not None:
+            self.text_color = text_color
+        if bg_color is not None:
+            self.bg_color = bg_color
+            self.configure(bg=bg_color)
+        self._draw()
+
+    def set_text(self, text):
+        self.tile_text = str(text or "G")
+        self._draw()
+
+    def _draw(self):
+        self.delete("all")
+        # Wie beim Labelchip in Pixelkoordinaten rechnen: Eine Form, die exakt
+        # auf size endet, läge mit ihrer letzten Spalte außerhalb der Fläche.
+        end = max(0, self.size - 1)
+        r = min(self.radius, self.size // 2)
+        punkte = [
+            r, 0, end - r, 0, end, 0, end, r, end, end - r, end, end,
+            end - r, end, r, end, 0, end, 0, end - r, 0, r, 0, 0,
+        ]
+        self.create_polygon(punkte, smooth=True, splinesteps=24,
+                            fill=self.fill, outline=self.fill)
+        # Die Schriftgröße folgt der Kachel und der Zeichenzahl: Drei Zeichen
+        # in der Größe eines einzelnen liefen sonst über den Rand hinaus.
+        familie, groesse, stil = self.tile_font
+        passend = max(9, int(self.size * (0.46 if len(self.tile_text) <= 1 else
+                                          0.34 if len(self.tile_text) == 2 else 0.26)))
+        metrics = tkfont.Font(self, font=(familie, min(groesse, passend), stil))
+        width = self.winfo_width() if self.winfo_width() > 1 else self.size
+        height = self.winfo_height() if self.winfo_height() > 1 else self.size
+        self.create_text(width / 2, height / 2 - 2,
+                         text=self.tile_text, fill=self.text_color, font=metrics)
+
+
+class RoundedButton(tk.Canvas):
+    """Nativer Tkinter-Button mit abgerundeter Outline und Hover-Fill."""
+
+    def __init__(
+        self,
+        master,
+        text,
+        command,
+        border_color,
+        hover_fill,
+        text_color,
+        hover_text_color="#FFFFFF",
+        bg_color="#FFFFFF",
+        height=42,
+        radius=18,
+        width=132,
+        font=app_font(10, "bold"),
+    ):
+        super().__init__(
+            master,
+            height=height,
+            width=width,
+            bg=bg_color,
+            highlightthickness=0,
+            bd=0,
+            cursor="hand2",
+            takefocus=1,
+        )
+        self.text = text
+        self.command = command
+        self.border_color = border_color
+        self.hover_fill = hover_fill
+        self.text_color = text_color
+        self.hover_text_color = hover_text_color
+        self.bg_color = bg_color
+        self.height = height
+        self.radius = radius
+        self.font = app_font(font[1], *font[2:])
+        self.is_hovered = False
+        self.is_pressed = False
+        # Dauerhafte Füllung für Schaltflächen, die einen aktiven Zustand
+        # anzeigen – etwa der gewählte Kalendermodus. None bedeutet: nur beim
+        # Überfahren gefüllt, wie bisher.
+        self.active_fill = None
+        self.active_text_color = None
+        self.text_anchor = "center"
+        self.wrap_text = False
+
+        self.bind("<Configure>", lambda event: self._draw())
+        self.bind("<Enter>", self._on_enter)
+        self.bind("<Leave>", self._on_leave)
+        self.bind("<ButtonPress-1>", self._on_press)
+        self.bind("<ButtonRelease-1>", self._on_release)
+        self.bind("<space>", self._on_keyboard_activate)
+        self.bind("<Return>", self._on_keyboard_activate)
+        self.bind("<FocusIn>", lambda _event: self._draw())
+        self.bind("<FocusOut>", lambda _event: self._draw())
+
+        self._draw()
+
+    def set_theme(self, bg_color, text_color, border_color=None, hover_fill=None, hover_text_color=None):
+        self.bg_color = bg_color
+        self.text_color = text_color
+        if border_color is not None:
+            self.border_color = border_color
+        if hover_fill is not None:
+            self.hover_fill = hover_fill
+        if hover_text_color is not None:
+            self.hover_text_color = hover_text_color
+        self.configure(bg=bg_color)
+        self._draw()
+
+    def set_active(self, fill=None, text_color=None):
+        """Markiert die Schaltfläche dauerhaft als aktiv (oder hebt das auf)."""
+        self.active_fill = fill
+        self.active_text_color = text_color
+        self._draw()
+
+    def set_text(self, text):
+        self.text = text
+        self._draw()
+
+    def _rounded_rect(self, x1, y1, x2, y2, radius, fill, outline, width=1):
+        points = [
+            x1 + radius, y1,
+            x2 - radius, y1,
+            x2, y1,
+            x2, y1 + radius,
+            x2, y2 - radius,
+            x2, y2,
+            x2 - radius, y2,
+            x1 + radius, y2,
+            x1, y2,
+            x1, y2 - radius,
+            x1, y1 + radius,
+            x1, y1,
+        ]
+        return self.create_polygon(
+            points,
+            smooth=True,
+            splinesteps=24,
+            fill=fill,
+            outline=outline,
+            width=width,
+        )
+
+    def _draw(self):
+        self.delete("all")
+        w = max(self.winfo_width(), 30)
+        h = self.winfo_height() if self.winfo_height() > 1 else self.height
+        pad = 2
+
+        if self.is_hovered:
+            fill = self.hover_fill
+            text_color = self.hover_text_color
+        elif self.active_fill:
+            fill = self.active_fill
+            text_color = self.active_text_color or self.hover_text_color
+        else:
+            fill = self.bg_color
+            text_color = self.border_color
+        border_width = 2 if self.focus_get() is self else 1.4
+
+        if self.is_pressed and self.is_hovered:
+            pad = 3
+            border_width = 1.8
+
+        self._rounded_rect(
+            pad,
+            pad,
+            w - pad,
+            h - pad,
+            self.radius,
+            fill=fill,
+            outline=self.border_color,
+            width=border_width,
+        )
+        text_id = self.create_text(
+            14 if self.text_anchor == "w" else w / 2,
+            h / 2,
+            text=self.text,
+            fill=text_color,
+            font=self.font,
+            anchor=self.text_anchor,
+            justify="left" if self.text_anchor == "w" else "center",
+            width=max(20, w - 28) if self.wrap_text else 0,
+        )
+        if self.wrap_text and self.winfo_width() > 1:
+            bounds = self.bbox(text_id)
+            needed = max(self.height, bounds[3] - bounds[1] + 16)
+            if int(self.cget("height")) != needed:
+                self.configure(height=needed)
+
+    def _on_enter(self, _event):
+        self.is_hovered = True
+        self._draw()
+
+    def _on_leave(self, _event):
+        self.is_hovered = False
+        self.is_pressed = False
+        self._draw()
+
+    def _on_press(self, _event):
+        self.is_pressed = True
+        self._draw()
+
+    def _on_keyboard_activate(self, _event):
+        if callable(self.command):
+            self.command()
+        return "break"
+
+    def _on_release(self, event):
+        was_pressed = self.is_pressed
+        self.is_pressed = False
+        inside = 0 <= event.x <= self.winfo_width() and 0 <= event.y <= self.winfo_height()
+        self._draw()
+        if was_pressed and inside and callable(self.command):
+            self.command()
+
+
+class ButtonFlow(tk.Frame):
+    """Behält lesbare Buttonbreiten und bricht bei Bedarf in neue Zeilen um."""
+
+    def __init__(self, master, bg, gap=8):
+        super().__init__(master, bg=bg)
+        self.gap = gap
+        self.entries = []
+        self.compact_keys = None
+        self.compact_below = 0
+        self.bind("<Configure>", self.reflow)
+
+    def add(self, button, key=None):
+        self.entries.append((button, key))
+        self.reflow()
+        return button
+
+    def reflow(self, _event=None):
+        width = max(1, self.winfo_width())
+        compact = self.compact_keys is not None and width < self.compact_below
+        row, column, used = 0, 0, 0
+        for button, key in self.entries:
+            if compact and key not in self.compact_keys:
+                button.grid_remove()
+                continue
+            needed = button.winfo_reqwidth() + self.gap
+            if used and used + needed > width:
+                row, column, used = row + 1, 0, 0
+            button.grid(row=row, column=column, sticky="w", padx=(0, self.gap), pady=(3, 3))
+            used += needed
+            column += 1
+
+
+class RoundedContainer(tk.Canvas):
+    """Runde, themebare Box mit innenliegendem Frame für normale Tkinter-Widgets.
+
+    Hinweis: Normale Tkinter-Widgets sind rechteckig. Damit sie die gerundeten Ecken
+    nicht optisch überdecken, kann der innenliegende Frame zusätzlich eingerückt werden.
+    """
+
+    def __init__(self, master, bg_color, fill_color, outline_color=None, radius=18, padding=1, width=None, height=None, inner_pad_x=None, inner_pad_y=None, auto_height=False):
+        kwargs = {
+            "bg": bg_color,
+            "highlightthickness": 0,
+            "bd": 0,
+        }
+        if width is not None:
+            kwargs["width"] = width
+        if height is not None:
+            kwargs["height"] = height
+        super().__init__(master, **kwargs)
+        self.bg_color = bg_color
+        self.fill_color = fill_color
+        self.outline_color = outline_color or fill_color
+        self.radius = radius
+        self.padding = padding
+        self.inner_pad_x = padding if inner_pad_x is None else inner_pad_x
+        self.inner_pad_y = padding if inner_pad_y is None else inner_pad_y
+        self.auto_height = auto_height
+        self.glass_mode = False
+        self.glass_highlight = outline_color or fill_color
+        self.glass_shadow = bg_color
+        self._auto_height_value = None
+        self.inner = tk.Frame(self, bg=fill_color, bd=0, highlightthickness=0)
+        self._window_id = self.create_window(
+            self.inner_pad_x,
+            self.inner_pad_y,
+            anchor="nw",
+            window=self.inner,
+        )
+        self.bind("<Configure>", self._on_configure)
+        if auto_height:
+            self.inner.bind("<Configure>", self._sync_auto_height)
+        self._draw()
+
+    def _sync_auto_height(self, _event=None):
+        """Lässt die Box in der Höhe ihrem Inhalt folgen.
+
+        Eine Canvas hat keine automatische Größe – ohne diesen Abgleich bliebe
+        eine Kachel auf der Standardhöhe stehen und schnitte ihren Inhalt ab.
+        Der zwischengespeicherte Wert beendet die Kette: Das Setzen der Höhe
+        löst selbst wieder ein <Configure> aus.
+        """
+        if not self.auto_height:
+            return
+        try:
+            needed = max(1, self.inner.winfo_reqheight() + self.inner_pad_y * 2)
+        except tk.TclError:
+            return
+        if needed == self._auto_height_value:
+            return
+        self._auto_height_value = needed
+        try:
+            self.configure(height=needed)
+        except tk.TclError:
+            pass
+
+    def set_theme(self, bg_color, fill_color, outline_color=None,
+                  glass_mode=None, glass_highlight=None, glass_shadow=None):
+        self.bg_color = bg_color
+        self.fill_color = fill_color
+        self.outline_color = outline_color or fill_color
+        if glass_mode is not None:
+            self.glass_mode = bool(glass_mode)
+        if glass_highlight is not None:
+            self.glass_highlight = glass_highlight
+        if glass_shadow is not None:
+            self.glass_shadow = glass_shadow
+        self.configure(bg=bg_color)
+        self.inner.configure(bg=fill_color)
+        self._draw()
+
+    def _rounded_rect(self, x1, y1, x2, y2, radius, fill, outline, width=1):
+        points = [
+            x1 + radius, y1,
+            x2 - radius, y1,
+            x2, y1,
+            x2, y1 + radius,
+            x2, y2 - radius,
+            x2, y2,
+            x2 - radius, y2,
+            x1 + radius, y2,
+            x1, y2,
+            x1, y2 - radius,
+            x1, y1 + radius,
+            x1, y1,
+        ]
+        self.create_polygon(points, smooth=True, splinesteps=24, fill=fill, outline=outline, width=width, tags=("surface",))
+
+    def _on_configure(self, _event=None):
+        pad_x = self.inner_pad_x
+        pad_y = self.inner_pad_y
+        w = max(self.winfo_width(), pad_x * 2 + 2)
+        h = max(self.winfo_height(), pad_y * 2 + 2)
+        self.coords(self._window_id, pad_x, pad_y)
+        if self.auto_height:
+            # Höhe 0 heißt in Tk: Der eingebettete Frame bestimmt sie selbst.
+            self.itemconfigure(self._window_id, width=max(1, w - pad_x * 2), height=0)
+            self._sync_auto_height()
+        else:
+            self.itemconfigure(
+                self._window_id,
+                width=max(1, w - pad_x * 2),
+                height=max(1, h - pad_y * 2),
+            )
+        self._draw()
+
+    def _draw(self):
+        self.delete("surface")
+        w = max(self.winfo_width(), 4)
+        h = max(self.winfo_height(), 4)
+        pad = 1
+        if self.glass_mode:
+            # Eine zweite, dunkle Außenkante und eine helle Innenkante geben
+            # der Fläche Tiefe, ohne einen plattformabhängigen Bildfilter zu
+            # benötigen. Der Effekt bleibt auch im soliden Fallback lesbar.
+            self._rounded_rect(
+                pad, pad + 1, w - pad, h - pad + 1, self.radius,
+                fill="", outline=self.glass_shadow, width=2,
+            )
+        self._rounded_rect(
+            pad,
+            pad,
+            w - pad,
+            h - pad,
+            self.radius,
+            fill=self.fill_color,
+            outline=self.outline_color,
+            width=1,
+        )
+        if self.glass_mode:
+            self._rounded_rect(
+                pad + 1, pad + 1, w - pad - 1, h - pad - 1,
+                max(1, self.radius - 1), fill="", outline=self.glass_highlight, width=1,
+            )
+        self.tag_lower("surface")
+
+
+class ThemedAutoScrollbar(tk.Canvas):
+    """Themebare Canvas-Scrollbar ohne native weiße Windows-/Tk-Hintergründe.
+
+    „Auto“ heißt seit 3.0 auch: Sie zeigt sich nur, wenn es etwas zu scrollen
+    gibt. Vorher zeichnete sie bei vollständig sichtbarem Inhalt einen Regler
+    über die ganze Höhe – optisch eine Leiste, die nichts tat.
+    """
+
+    # Ab diesem sichtbaren Anteil gilt der Inhalt als vollständig sichtbar.
+    # Knapp unter 1, weil Tk gerundete Gleitkommawerte liefert.
+    FULLY_VISIBLE_RATIO = 0.999
+
+    def __init__(
+        self,
+        master,
+        bg_color,
+        track_color,
+        thumb_color,
+        active_thumb_color,
+        width=14,
+        radius=7,
+    ):
+        super().__init__(
+            master,
+            width=width,
+            bg=bg_color,
+            highlightthickness=0,
+            bd=0,
+            cursor="hand2",
+        )
+        self.bg_color = bg_color
+        self.track_color = track_color
+        self.thumb_color = thumb_color
+        self.active_thumb_color = active_thumb_color
+        self.bar_width = width
+        self.radius = radius
+        self.command = None
+        self.first = 0.0
+        self.last = 1.0
+        self.dragging = False
+        self.drag_offset = 0
+        self.is_hovered = False
+
+        self.bind("<Configure>", lambda _event: self._draw())
+        self.bind("<Enter>", self._on_enter)
+        self.bind("<Leave>", self._on_leave)
+        self.bind("<ButtonPress-1>", self._on_press)
+        self.bind("<B1-Motion>", self._on_motion)
+        self.bind("<ButtonRelease-1>", self._on_release)
+
+    def set_command(self, command):
+        self.command = command
+
+    def set_theme(self, bg_color, track_color, thumb_color, active_thumb_color):
+        self.bg_color = bg_color
+        self.track_color = track_color
+        self.thumb_color = thumb_color
+        self.active_thumb_color = active_thumb_color
+        self.configure(bg=bg_color)
+        self._draw()
+
+    def set(self, first, last):
+        try:
+            self.first = max(0.0, min(1.0, float(first)))
+            self.last = max(0.0, min(1.0, float(last)))
+        except (TypeError, ValueError):
+            self.first = 0.0
+            self.last = 1.0
+        self._draw()
+
+    def _rounded_rect(self, x1, y1, x2, y2, radius, fill):
+        points = [
+            x1 + radius, y1,
+            x2 - radius, y1,
+            x2, y1,
+            x2, y1 + radius,
+            x2, y2 - radius,
+            x2, y2,
+            x2 - radius, y2,
+            x1 + radius, y2,
+            x1, y2,
+            x1, y2 - radius,
+            x1, y1 + radius,
+            x1, y1,
+        ]
+        self.create_polygon(points, smooth=True, splinesteps=18, fill=fill, outline="")
+
+    def _metrics(self):
+        w = max(self.winfo_width(), self.bar_width)
+        h = max(self.winfo_height(), 30)
+        track_pad_x = max(3, int(w * 0.28))
+        track_pad_y = 4
+        track_x1 = track_pad_x
+        track_x2 = w - track_pad_x
+        track_y1 = track_pad_y
+        track_y2 = h - track_pad_y
+        track_h = max(1, track_y2 - track_y1)
+        visible_ratio = max(0.05, min(1.0, self.last - self.first))
+        thumb_h = max(28, int(track_h * visible_ratio))
+        thumb_h = min(thumb_h, track_h)
+        max_y = max(track_y1, track_y2 - thumb_h)
+        thumb_y1 = track_y1 + int((track_h - thumb_h) * self.first / max(0.0001, 1.0 - visible_ratio)) if visible_ratio < 1 else track_y1
+        thumb_y1 = max(track_y1, min(max_y, thumb_y1))
+        thumb_y2 = thumb_y1 + thumb_h
+        return track_x1, track_y1, track_x2, track_y2, thumb_y1, thumb_y2
+
+    def is_scrollable(self):
+        """Gibt es überhaupt etwas zu scrollen?
+
+        Tk meldet über set() den sichtbaren Anteil. Deckt er den ganzen Inhalt
+        ab, gibt es nichts zu bewegen – dann bleibt die Leiste leer.
+        """
+        return (self.last - self.first) < self.FULLY_VISIBLE_RATIO
+
+    def _draw(self):
+        self.delete("all")
+        # Nichts zu scrollen: nur die Fläche, keine Leiste. Der Platz bleibt
+        # reserviert, damit der Inhalt daneben nicht springt, sobald er wächst.
+        if not self.is_scrollable():
+            return
+        track_x1, track_y1, track_x2, track_y2, thumb_y1, thumb_y2 = self._metrics()
+        track_radius = max(2, (track_x2 - track_x1) / 2)
+        self._rounded_rect(track_x1, track_y1, track_x2, track_y2, track_radius, self.track_color)
+        thumb_color = self.active_thumb_color if self.is_hovered or self.dragging else self.thumb_color
+        self._rounded_rect(track_x1, thumb_y1, track_x2, thumb_y2, track_radius, thumb_color)
+
+    def _on_enter(self, _event):
+        if not self.is_scrollable():
+            return
+        self.is_hovered = True
+        self._draw()
+
+    def _on_leave(self, _event):
+        self.is_hovered = False
+        if not self.dragging:
+            self._draw()
+
+    def _on_press(self, event):
+        if not self.is_scrollable():
+            return
+        _tx1, track_y1, _tx2, track_y2, thumb_y1, thumb_y2 = self._metrics()
+        if thumb_y1 <= event.y <= thumb_y2:
+            self.dragging = True
+            self.drag_offset = event.y - thumb_y1
+        else:
+            thumb_h = thumb_y2 - thumb_y1
+            self._moveto_from_thumb_y(event.y - thumb_h / 2, track_y1, track_y2, thumb_h)
+        self._draw()
+
+    def _on_motion(self, event):
+        if not self.dragging:
+            return
+        _tx1, track_y1, _tx2, track_y2, thumb_y1, thumb_y2 = self._metrics()
+        thumb_h = thumb_y2 - thumb_y1
+        self._moveto_from_thumb_y(event.y - self.drag_offset, track_y1, track_y2, thumb_h)
+
+    def _on_release(self, _event):
+        self.dragging = False
+        self._draw()
+
+    def _moveto_from_thumb_y(self, proposed_y, track_y1, track_y2, thumb_h):
+        available = max(1, (track_y2 - track_y1) - thumb_h)
+        fraction = (proposed_y - track_y1) / available
+        fraction = max(0.0, min(1.0, fraction))
+        if callable(self.command):
+            self.command("moveto", fraction)
+
+
+class DueField(tk.Frame):
+    """Fälligkeit als eine Einheit: Datum, Uhrzeit und Zugang zum Kalender.
+
+    Ein Datum lässt sich tippen oder anklicken – beide Wege schreiben in
+    dasselbe Feld, sodass immer eine einzige Wahrheit gilt. Die Uhrzeit ist
+    freiwillig und hängt am Datum: Ohne Tag gibt es keine Uhrzeit.
+
+    Zwei Ausprägungen, eine Klasse:
+
+    - kompakt (``compact=True``): Datum, Uhrzeit und ein Kalenderknopf. Der
+      Monatskalender öffnet sich als eigenes Fenster. So sieht die Eingabemaske
+      aus, in der neben der Frist auch Titel, Art, Farbe, Labels, Beschreibung
+      und Anhänge Platz finden müssen.
+    - vollständig: zusätzlich der eingebettete Monatskalender. So sieht das
+      Kalenderfenster selbst aus, in dem der Kalender der Zweck ist.
+
+    Bewusst eine eigene Klasse statt Code in jedem Dialog: Anlegen, Bearbeiten
+    und jede spätere Stelle sollen sich hier gleich verhalten, und eine Änderung
+    an der Fälligkeit soll nur an einer Stelle nötig sein.
+    """
+
+    def __init__(self, parent, app, due=None, due_time=None, on_change=None,
+                 compact=False, dialog_parent=None):
+        super().__init__(parent, bg=app.theme["bg"])
+        self.app = app
+        # Monats- und Wochentagsnamen kommen aus der App: Der Kalender im
+        # Dialog und der große Kalender sollen dieselben Bezeichnungen zeigen.
+        self.WEEKDAYS = tuple(app.WEEKDAYS_DE[-1:] + app.WEEKDAYS_DE[:-1] if app.settings.get("week_start") == "sunday" else app.WEEKDAYS_DE)
+        self.MONTHS = tuple(app.MONTHS_DE)
+        self.theme = app.theme
+        self.on_change = on_change
+        self.compact = bool(compact)
+        # Fenster, das den Grab zurückbekommt, wenn der Kalender sich schließt.
+        self.dialog_parent = dialog_parent
+        # Im kompakten Zustand gibt es keine Kalenderflächen. Die Attribute
+        # bleiben trotzdem gesetzt, damit _render_month eine Bedingung prüft
+        # statt jeder Aufrufer eine.
+        self.month_label = None
+        self.grid_frame = None
+        self.calendar_button = None
+        self._day_cells = []
+        self._selected = app.normalize_due(due)
+        reference = self._selected_date() or date.today()
+        self._year, self._month = reference.year, reference.month
+
+        self._build_inputs(app.normalize_due_time(due_time))
+        if not self.compact:
+            self._build_calendar()
+            self._render_month()
+
+    # --- Aufbau ---------------------------------------------------------
+    def _build_inputs(self, time_value):
+        row = tk.Frame(self, bg=self.theme["bg"])
+        row.pack(fill="x")
+
+        date_block = tk.Frame(row, bg=self.theme["bg"])
+        date_block.pack(side="left", fill="x", expand=True)
+        self.app._make_field_label(date_block, "Datum (TT.MM.JJJJ)").pack(
+            anchor="w", pady=(0, self.app.FIELD_LABEL_GAP)
+        )
+        date_border, date_field = self.app._make_field(date_block)
+        date_border.pack(fill="x")
+        date_field.pack(fill="x", padx=self.app.FIELD_BORDER_WIDTH, pady=self.app.FIELD_BORDER_WIDTH)
+        self.date_entry = self._entry(date_field)
+        self.date_entry.pack(fill="x", padx=self.app.FIELD_PAD_X, pady=self.app.FIELD_PAD_Y)
+        if self._selected:
+            self.date_entry.insert(0, self.app.format_due_display(self._selected))
+
+        if self.compact:
+            # Der Knopf sitzt zwischen Datum und Uhrzeit, weil er das Datum
+            # setzt. Die leere Beschriftung darüber hält ihn auf einer Linie
+            # mit den beiden Feldern.
+            picker_block = tk.Frame(row, bg=self.theme["bg"])
+            picker_block.pack(side="left", padx=(8, 0))
+            self.app._make_field_label(picker_block, " ").pack(
+                anchor="w", pady=(0, self.app.FIELD_LABEL_GAP)
+            )
+            self.calendar_button = self._build_calendar_button(picker_block)
+            self.calendar_button.pack()
+
+        time_block = tk.Frame(row, bg=self.theme["bg"], width=110)
+        time_block.pack(side="left", padx=(10, 0))
+        self.app._make_field_label(time_block, "Uhrzeit (optional)").pack(
+            anchor="w", pady=(0, self.app.FIELD_LABEL_GAP)
+        )
+        time_border, time_field = self.app._make_field(time_block)
+        time_border.pack(fill="x")
+        time_field.pack(fill="x", padx=self.app.FIELD_BORDER_WIDTH, pady=self.app.FIELD_BORDER_WIDTH)
+        self.time_entry = self._entry(time_field, width=8)
+        self.time_entry.pack(fill="x", padx=self.app.FIELD_PAD_X, pady=self.app.FIELD_PAD_Y)
+        if time_value:
+            self.time_entry.insert(0, time_value)
+
+        # Eine Eingabe von Hand springt im Kalender auf den passenden Monat.
+        self.date_entry.bind("<KeyRelease>", self._on_typed_date)
+        self.date_entry.bind("<FocusOut>", self._on_typed_date)
+
+    def _entry(self, field, width=None):
+        entry = tk.Entry(
+            field,
+            bg=self.theme["input"], fg=self.theme["text"],
+            insertbackground=self.theme["text"],
+            selectbackground=self.theme["selection"], selectforeground=self.theme["selection_text"],
+            relief="flat", bd=0, highlightthickness=0, font=app_font(11),
+        )
+        if width:
+            entry.configure(width=width)
+        return entry
+
+    def _build_calendar_button(self, parent):
+        return self.app._make_dialog_button(parent, self.app.ICONS["calendar"],
+                                             self.open_calendar_dialog, "import", width=44, height=40)
+
+    def open_calendar_dialog(self):
+        """Öffnet den Monatskalender als eigenes Fenster und übernimmt das Ergebnis.
+
+        Was gerade in den Feldern steht, ist der Ausgangswert – auch dann, wenn
+        es von Hand getippt und noch nicht übernommen wurde.
+        """
+        typed_due = self.app.parse_due_input(self.date_entry.get())
+        start_due = self._selected if typed_due is None else (typed_due or None)
+        typed_time = self.app.parse_due_time_input(self.time_entry.get())
+        start_time = (typed_time or None) if typed_time is not None else None
+        chosen = self.app.themed_due_dialog(
+            start_due, start_time,
+            parent=self.dialog_parent or self.winfo_toplevel(),
+        )
+        if chosen is None:
+            return
+        due_value, time_value = chosen
+        self.set_due(due_value)
+        self.time_entry.delete(0, tk.END)
+        if due_value and time_value:
+            self.time_entry.insert(0, time_value)
+
+    def _build_calendar(self):
+        border, frame = self.app._make_calendar_surface(self)
+        border.pack(fill="x", pady=(10, 0))
+        frame.pack(fill="both", expand=True,
+                   padx=self.app.FIELD_BORDER_WIDTH, pady=self.app.FIELD_BORDER_WIDTH)
+
+        header = tk.Frame(frame, bg=self.theme["card"])
+        header.pack(fill="x", padx=8, pady=(8, 4))
+        self._nav_button(header, "‹", -1).pack(side="left")
+        self.month_label = tk.Label(
+            header, text="", bg=self.theme["card"], fg=self.theme["text"],
+            font=app_font(11, "bold"),
+        )
+        self.month_label.pack(side="left", expand=True)
+        self._nav_button(header, "›", 1).pack(side="right")
+
+        weekday_row = tk.Frame(frame, bg=self.theme["card"])
+        weekday_row.pack(fill="x", padx=8)
+        for index, name in enumerate(self.WEEKDAYS):
+            weekday_row.columnconfigure(index, weight=1, uniform="due_days")
+            tk.Label(
+                weekday_row, text=name, bg=self.theme["card"], fg=self.theme["muted"],
+                font=app_font(8, "bold"),
+            ).grid(row=0, column=index, sticky="ew", pady=(0, 2))
+
+        self.grid_frame = tk.Frame(frame, bg=self.theme["card"])
+        self.grid_frame.pack(fill="x", padx=8, pady=(0, 4))
+        for index in range(7):
+            self.grid_frame.columnconfigure(index, weight=1, uniform="due_days")
+
+        actions = tk.Frame(frame, bg=self.theme["card"])
+        actions.pack(fill="x", padx=8, pady=(0, 8))
+        self._text_button(actions, "Heute", lambda: self.set_due(date.today().isoformat())).pack(side="left")
+        self._text_button(actions, "Morgen", lambda: self.set_due((date.today() + timedelta(days=1)).isoformat())).pack(
+            side="left", padx=(8, 0)
+        )
+        self._text_button(actions, "Keine Fälligkeit", lambda: self.set_due(None)).pack(side="right")
+
+    def _nav_button(self, parent, label, delta):
+        return self.app._make_dialog_button(parent, label, lambda: self._shift_month(delta),
+                                             "muted", width=34, height=32)
+
+    def _text_button(self, parent, label, command):
+        width = tkfont.Font(font=app_font(10, "bold")).measure(label) + 26
+        return self.app._make_dialog_button(parent, label, command, "import", width=width, height=34)
+
+    def _add_hover(self, widget, base_bg, fg_hover=None):
+        base_fg = widget.cget("fg")
+        widget.bind("<Enter>", lambda _e: widget.configure(
+            bg=self.theme["hover"], fg=fg_hover or base_fg), add="+")
+        widget.bind("<Leave>", lambda _e: widget.configure(bg=base_bg, fg=base_fg), add="+")
+
+    # --- Darstellung ----------------------------------------------------
+    def _selected_date(self):
+        if not self._selected:
+            return None
+        try:
+            return datetime.strptime(self._selected, "%Y-%m-%d").date()
+        except ValueError:
+            return None
+
+    def _shift_month(self, delta):
+        self._year, self._month = self.app.shift_month(self._year, self._month, delta)
+        self._render_month()
+
+    def _render_month(self):
+        # Im kompakten Zustand gibt es keinen eingebetteten Kalender. Der Guard
+        # sitzt hier, damit set_due und _on_typed_date beide Ausprägungen
+        # unverändert bedienen können.
+        if self.month_label is None or self.grid_frame is None:
+            return
+        self.month_label.configure(text=f"{self.MONTHS[self._month - 1]} {self._year}")
+        for cell in self._day_cells:
+            cell.destroy()
+        self._day_cells = []
+        first_day, _last_day = self.app.calendar_month_grid(self._year, self._month)
+        today = date.today()
+        selected = self._selected_date()
+        for offset in range(42):
+            day = first_day + timedelta(days=offset)
+            if offset >= 35 and day.month != self._month:
+                break
+            in_month = day.month == self._month
+            if day == selected:
+                bg, fg = self.theme["selection"], self.theme["selection_text"]
+            elif day == today:
+                bg, fg = self.theme["card"], self.theme["ui_accent"]
+            else:
+                bg = self.theme["card"]
+                fg = self.theme["text"] if in_month else self.theme["placeholder"]
+            if day == selected:
+                cell = LabelChip(self.grid_frame, str(day.day), bg, fg, self.theme["card"],
+                                 font=app_font(10, "bold" if day == today else "normal"))
+                cell.configure(cursor="hand2")
+            else:
+                cell = tk.Label(
+                    self.grid_frame, text=str(day.day), bg=bg, fg=fg,
+                    font=app_font(10, "bold" if day == today else "normal"),
+                    padx=2, pady=3, cursor="hand2",
+                )
+            cell.grid(row=offset // 7, column=offset % 7, sticky="ew", padx=1, pady=1)
+            cell.bind("<Button-1>", lambda _event, chosen=day: self.set_due(chosen.isoformat()))
+            if day != selected:
+                self._add_hover(cell, bg)
+            self._day_cells.append(cell)
+
+    # --- Schnittstelle --------------------------------------------------
+    def _on_typed_date(self, _event=None):
+        parsed = self.app.parse_due_input(self.date_entry.get())
+        if not parsed:
+            return
+        self._selected = parsed
+        typed = self._selected_date()
+        if typed:
+            self._year, self._month = typed.year, typed.month
+        self._render_month()
+
+    def set_due(self, iso_value):
+        """Setzt das Datum aus dem Kalender heraus und hält das Feld gleich."""
+        self._selected = self.app.normalize_due(iso_value)
+        self.date_entry.delete(0, tk.END)
+        if self._selected:
+            self.date_entry.insert(0, self.app.format_due_display(self._selected))
+            chosen = self._selected_date()
+            self._year, self._month = chosen.year, chosen.month
+        else:
+            # Ohne Datum ergibt eine Uhrzeit keinen Sinn.
+            self.time_entry.delete(0, tk.END)
+        self._render_month()
+        if callable(self.on_change):
+            self.on_change(self._selected)
+
+    def read(self):
+        """Liefert (due, due_time) oder None, wenn eine Eingabe unlesbar ist.
+
+        Die Prüfung sitzt hier und nicht im Dialog, damit jede Verwendung
+        dieselbe Fehlermeldung und dieselben zulässigen Schreibweisen bekommt.
+        """
+        parsed_due = self.app.parse_due_input(self.date_entry.get())
+        if parsed_due is None:
+            return None, "Bitte ein Datum im Format TT.MM.JJJJ eingeben."
+        parsed_time = self.app.parse_due_time_input(self.time_entry.get())
+        if parsed_time is None:
+            return None, "Bitte eine Uhrzeit im Format HH:MM eingeben."
+        if not parsed_due:
+            return (None, None), None
+        return (parsed_due, parsed_time or None), None
+
+
+class LabelDropdown(tk.Frame):
+    """Labelauswahl als Aufklappfeld mit Mehrfachauswahl.
+
+    Vorher lag die Auswahl als Chipfläche in der Maske und belegte gut 130
+    Pixel – auch dann, wenn gar kein Label vergeben wurde. Geschlossen ist es
+    jetzt eine Zeile wie jedes andere Feld; die Liste klappt darunter auf und
+    bleibt für mehrere Klicks offen, weil ein Punkt selten genau ein Label
+    bekommt.
+
+    Die Farben gehen dabei nicht verloren: In der aufgeklappten Liste steht
+    neben jedem Haken der echte Chip. Geschlossen zeigt das Feld die Namen im
+    Klartext, weil dort eine Zeile Höhe zur Verfügung steht und nicht mehr.
+    """
+
+    VISIBLE_ROWS = 7
+    ROW_HEIGHT = 30
+    SUMMARY_MAX_NAMES = 3
+    MIN_POPUP_WIDTH = 240
+
+    def __init__(self, parent, app, labels, selected_ids=None,
+                 empty_text="Keine Labels ausgewählt", dialog_parent=None,
+                 allow_create=False, on_change=None):
+        super().__init__(parent, bg=app.theme["bg"])
+        self.app = app
+        self.theme = app.theme
+        self.labels = list(labels)
+        known_ids = {label.get("id") for label in self.labels}
+        # Nur bekannte Labels übernehmen: Ein Punkt kann eine Zuordnung tragen,
+        # deren Label inzwischen gelöscht wurde.
+        self.selected_ids = [
+            label_id for label_id in (selected_ids or []) if label_id in known_ids
+        ]
+        self.empty_text = empty_text
+        self.dialog_parent = dialog_parent
+        self.allow_create = bool(allow_create)
+        self.on_change = on_change
+        self._rows = {}
+        self._popup = None
+        self._owner_had_grab = False
+        self._build()
+        self.bind("<Destroy>", self._on_destroy, add="+")
+
+    # --- Aufbau ---------------------------------------------------------
+    def _build(self):
+        border, field = self.app._make_field(self)
+        border.pack(fill="x")
+        field.pack(fill="x", padx=self.app.FIELD_BORDER_WIDTH, pady=self.app.FIELD_BORDER_WIDTH)
+        inner = tk.Frame(field, bg=self.theme["input"])
+        inner.pack(fill="x", padx=self.app.FIELD_PAD_X, pady=self.app.FIELD_PAD_Y - 1)
+
+        self.summary_label = tk.Label(
+            inner, text="", bg=self.theme["input"], fg=self.theme["text"],
+            font=app_font(11), anchor="w", justify="left",
+        )
+        self.summary_label.pack(side="left", fill="x", expand=True)
+        self.arrow_label = tk.Label(
+            inner, text="▾", bg=self.theme["input"], fg=self.theme["muted"],
+            font=app_font(11),
+        )
+        self.arrow_label.pack(side="right")
+
+        for widget in (field, inner, self.summary_label, self.arrow_label):
+            widget.configure(cursor="hand2")
+            widget.bind("<Button-1>", self._toggle_popup)
+        self._update_summary()
+
+    def _update_summary(self):
+        names = [
+            str(label.get("name", ""))
+            for label in self.labels
+            if label.get("id") in self.selected_ids
+        ]
+        if not names:
+            self.summary_label.configure(text=self.empty_text, fg=self.theme["placeholder"])
+            return
+        if len(names) > self.SUMMARY_MAX_NAMES:
+            shown = names[: self.SUMMARY_MAX_NAMES]
+            text = ", ".join(shown) + f"  +{len(names) - len(shown)}"
+        else:
+            text = ", ".join(names)
+        self.summary_label.configure(text=text, fg=self.theme["text"])
+
+    # --- Aufklappen -----------------------------------------------------
+    def _toggle_popup(self, _event=None):
+        if self._popup is not None:
+            self._close_popup()
+        else:
+            self._open_popup()
+        return "break"
+
+    def _open_popup(self):
+        # Auch ohne vorhandene Labels aufklappbar – sonst wäre „Neues Label“
+        # nicht erreichbar, solange noch keines angelegt ist.
+        if self._popup is not None or not (self.labels or self.allow_create):
+            return
+        owner = self.dialog_parent or self.winfo_toplevel()
+        try:
+            self._owner_had_grab = bool(owner.grab_status())
+        except tk.TclError:
+            self._owner_had_grab = False
+
+        popup = tk.Toplevel(self)
+        self._popup = popup
+        popup.withdraw()
+        popup.overrideredirect(True)
+        popup.configure(bg=self.theme["input_border"])
+
+        surface = tk.Frame(popup, bg=self.theme["input"])
+        surface.pack(fill="both", expand=True, padx=1, pady=1)
+
+        # Die Bestätigung bekommt zuerst ihren festen Platz am unteren Rand.
+        footer = tk.Frame(surface, bg=self.theme["input"])
+        footer.pack(side="bottom", fill="x", padx=8, pady=8)
+        done = self.app._make_dialog_button(footer, "Fertig", self._close_popup, "confirm", width=96, height=36)
+        done.pack(side="right")
+        if self.allow_create:
+            create = self.app._make_dialog_button(footer, "+ Neues Label", self._create_label, "accent", width=150, height=36)
+            create.pack(side="left", padx=(0, 8))
+        list_area = tk.Frame(surface, bg=self.theme["input"])
+        list_area.pack(fill="both", expand=True)
+
+        scrolled = len(self.labels) > self.VISIBLE_ROWS
+        if scrolled:
+            self._labels_canvas, rows_frame = self.app._make_scroll_area(
+                list_area, height=self.VISIBLE_ROWS * self.ROW_HEIGHT
+            )
+            self.app._bind_canvas_wheel(rows_frame, self._labels_canvas)
+        else:
+            self._labels_canvas = None
+            rows_frame = tk.Frame(list_area, bg=self.theme["input"])
+            rows_frame.pack(fill="both", expand=True, padx=6, pady=6)
+
+        self._rows = {}
+        for label in self.labels:
+            self._build_row(rows_frame, label)
+
+        popup.bind("<Escape>", lambda _event: self._close_popup())
+        popup.bind("<Button-1>", self._on_popup_click, add="+")
+
+        self._place_popup(popup)
+        popup.deiconify()
+        try:
+            popup.grab_set()
+        except tk.TclError:
+            pass
+        self.arrow_label.configure(text="▴")
+
+    def _build_row(self, parent, label):
+        row = tk.Frame(parent, bg=self.theme["input"], cursor="hand2")
+        row.pack(fill="x", pady=1)
+        chip = self.app.make_label_chip(row, label, bg_key="input")
+        chip.pack(side="left", padx=(6, 10), pady=3)
+        # Die Auswahlfläche beginnt hinter dem Chip. Dessen eigene Farbe und
+        # runde Kante bleiben bei Auswahl und Hover unverändert sichtbar.
+        mark = LabelChip(row, "✓", self.theme["input"], self.theme["input"], self.theme["input"],
+                         font=app_font(10, "bold"))
+        mark.pack(side="left", padx=5)
+        label_id = label.get("id")
+        self._rows[label_id] = {"frame": row, "chip": chip, "mark": mark}
+        self._paint_row(label_id)
+
+        def toggle(_event=None):
+            self.toggle_label(label_id)
+            return "break"
+
+        parts = (row, mark, chip)
+        for widget in parts:
+            if self._labels_canvas is not None:
+                self.app._bind_canvas_wheel(widget, self._labels_canvas)
+            widget.bind("<Button-1>", toggle)
+            widget.bind("<Enter>", lambda _e, key=label_id: self._paint_row(key, hover=True), add="+")
+            widget.bind("<Leave>", lambda _e, key=label_id: self._paint_row(key), add="+")
+
+    def _paint_row(self, label_id, hover=False):
+        row = self._rows.get(label_id)
+        if row is None:
+            return
+        selected = label_id in self.selected_ids
+        try:
+            surface = self.theme["hover"] if hover else self.theme["input"]
+            row["frame"].configure(bg=surface)
+            row["chip"].set_colors(bg_color=surface)
+            row["mark"].set_colors(
+                fill=self.theme["selection"] if selected else surface,
+                text_color=self.theme["selection_text"] if selected else surface,
+                outline=self.theme["selection"] if selected else surface,
+                bg_color=surface,
+            )
+        except tk.TclError:
+            pass
+
+    def set_selected_ids(self, selected_ids):
+        known = {label.get("id") for label in self.labels}
+        self.selected_ids = list(dict.fromkeys(value for value in selected_ids if value in known))
+        self._update_summary()
+        for label_id in self._rows:
+            self._paint_row(label_id)
+
+    def toggle_label(self, label_id):
+        label = next((value for value in self.labels if value.get("id") == label_id), None)
+        if label is None:
+            return False
+        selected = label_id not in self.selected_ids
+        chosen = [value for value in self.selected_ids if value != label_id]
+        if selected:
+            if self.app.is_system_label(label):
+                # Die beiden Artlabels schließen sich gegenseitig aus.
+                system_ids = {value.get("id") for value in self.labels if self.app.is_system_label(value)}
+                chosen = [value for value in chosen if value not in system_ids]
+            chosen.append(label_id)
+        if len(chosen) > self.app.MAX_LABELS_PER_ITEM:
+            self.app.show_warning(
+                "Labels", f"Ein Punkt kann höchstens {self.app.MAX_LABELS_PER_ITEM} Labels tragen. "
+                "Bitte zuerst ein anderes Label abwählen.", parent=self.dialog_parent or self.winfo_toplevel(),
+            )
+            return False
+        self.set_selected_ids(chosen)
+        if self.on_change is not None:
+            self.on_change(label_id, selected)
+        return True
+
+    def _place_popup(self, popup):
+        self.update_idletasks()
+        popup.update_idletasks()
+        width = max(self.winfo_width(), self.MIN_POPUP_WIDTH)
+        height = popup.winfo_reqheight()
+        x = self.winfo_rootx()
+        y = self.winfo_rooty() + self.winfo_height() + 2
+        # Unten kein Platz mehr: dann klappt die Liste nach oben auf, statt aus
+        # dem Bild zu laufen.
+        if y + height > self.winfo_screenheight() - 20:
+            above = self.winfo_rooty() - height - 2
+            y = above if above > 10 else max(10, self.winfo_screenheight() - height - 20)
+        popup.geometry(f"{width}x{height}+{x}+{y}")
+
+    def _on_popup_click(self, event):
+        popup = self._popup
+        if popup is None:
+            return
+        try:
+            left, top = popup.winfo_rootx(), popup.winfo_rooty()
+            inside_x = left <= event.x_root < left + popup.winfo_width()
+            inside_y = top <= event.y_root < top + popup.winfo_height()
+        except tk.TclError:
+            return
+        if not (inside_x and inside_y):
+            self._close_popup()
+
+    def _close_popup(self, _event=None, restore_grab=True):
+        popup, self._popup = self._popup, None
+        if popup is None:
+            return
+        for step in (popup.grab_release, popup.destroy):
+            try:
+                step()
+            except tk.TclError:
+                pass
+        # Der aufrufende Dialog ist modal. Ohne Rückgabe des Grabs nähme er
+        # nach dem Zuklappen keine Eingabe mehr an. Wird er allerdings gerade
+        # selbst abgebaut, darf der Grab nicht zurückgesetzt werden – er bliebe
+        # sonst an einem verschwundenen Fenster hängen, und die Anwendung nähme
+        # überhaupt keine Eingabe mehr an.
+        if restore_grab and self._owner_had_grab:
+            owner = self.dialog_parent or self.winfo_toplevel()
+            try:
+                if owner.winfo_exists():
+                    owner.grab_set()
+            except tk.TclError:
+                pass
+        try:
+            self.arrow_label.configure(text="▾")
+        except tk.TclError:
+            pass
+
+    def _on_destroy(self, event=None):
+        if event is not None and event.widget is not self:
+            return
+        self._close_popup(restore_grab=False)
+
+    # --- Optik ----------------------------------------------------------
+    def _hover(self, widget, base_bg, fg_hover=None):
+        base_fg = widget.cget("fg")
+        widget.bind("<Enter>", lambda _e: widget.configure(
+            bg=self.theme["hover"], fg=fg_hover or base_fg), add="+")
+        widget.bind("<Leave>", lambda _e: widget.configure(bg=base_bg, fg=base_fg), add="+")
+
+    def _hover_group(self, widgets):
+        """Zeile, Haken und Chip wechseln gemeinsam die Fläche."""
+        def enter(_event=None):
+            for widget in widgets:
+                try:
+                    widget.configure(bg=self.theme["hover"])
+                except tk.TclError:
+                    pass
+
+        def leave(_event=None):
+            for widget in widgets:
+                try:
+                    widget.configure(bg=self.theme["input"])
+                except tk.TclError:
+                    pass
+
+        for widget in widgets:
+            widget.bind("<Enter>", enter, add="+")
+            widget.bind("<Leave>", leave, add="+")
+
+    def _create_label(self):
+        """Legt ein Label an und wählt es gleich aus.
+
+        Das Aufklappfeld schließt vorher: Zwei ineinander verschachtelte Griffe
+        – hier die Liste, dort die Namensabfrage – enden sonst damit, dass
+        keiner von beiden die Eingabe bekommt.
+        """
+        self._close_popup()
+        label = self.app.create_label_interactively(
+            parent=self.dialog_parent or self.winfo_toplevel()
+        )
+        if label is None:
+            return
+        self.labels.append(label)
+        self.toggle_label(label.get("id"))
+
+    # --- Schnittstelle --------------------------------------------------
+    def read(self):
+        """Gewählte Label-IDs in der Reihenfolge der Labelverwaltung."""
+        chosen = set(self.selected_ids)
+        return [label["id"] for label in self.labels if label.get("id") in chosen]
+
+
+class SystemNavigation(ttk.Treeview):
+    """Native Navigation mit separat um zwei Pixel angehobenen Textsymbolen."""
+
+    ICON_RISE = 2
+
+    def __init__(self, master, app, **kwargs):
+        super().__init__(master, **kwargs)
+        self.app = app
+        self._icon_job = None
+        self.icon_canvas = tk.Canvas(self, width=28, bd=0, highlightthickness=0,
+                                     bg=app.theme["card"], takefocus=0)
+        self.icon_canvas.place(x=0, y=0, width=28, relheight=1)
+        for sequence in ("<Configure>", "<Expose>", "<<TreeviewSelect>>", "<Motion>", "<Leave>"):
+            self.bind(sequence, self.schedule_icons, add="+")
+        for sequence in ("<ButtonPress-1>", "<ButtonRelease-1>", "<ButtonPress-2>", "<ButtonPress-3>", "<Motion>"):
+            self.icon_canvas.bind(sequence, lambda event, seq=sequence: self.event_generate(
+                seq, x=event.x, y=event.y, state=event.state))
+        self.icon_canvas.bind("<Leave>", lambda event: self.app.set_hover_rows(self, ()))
+        self.bind("<Destroy>", self._stop_icons, add="+")
+
+    def _stop_icons(self, event):
+        if event.widget is self and self._icon_job is not None:
+            self.after_cancel(self._icon_job)
+            self._icon_job = None
+
+    def schedule_icons(self, _event=None):
+        if self._icon_job is None:
+            self._icon_job = self.after_idle(self.draw_icons)
+
+    def item(self, item, option=None, **kwargs):
+        result = super().item(item, option, **kwargs)
+        if kwargs and hasattr(self, "icon_canvas"):
+            self.schedule_icons()
+        return result
+
+    def draw_icons(self):
+        self._icon_job = None
+        canvas = self.icon_canvas
+        theme = self.app.theme
+        canvas.configure(bg=theme["card"])
+        canvas.delete("all")
+        selected = self.selection()
+        for iid in self.get_children():
+            bounds = self.bbox(iid, "icon")
+            if not bounds:
+                continue
+            x, y, width, height = bounds
+            tags = self.item(iid, "tags")
+            fill = theme["selection"] if iid in selected else theme["hover"] if "hover" in tags else theme["card"]
+            foreground = theme["selection_text"] if iid in selected else theme["text"]
+            canvas.create_rectangle(0, y, width, y + height, fill=fill, outline=fill)
+            canvas.create_text(width / 2, y + height / 2 - self.ICON_RISE,
+                               text=self.set(iid, "icon"), fill=foreground,
+                               font=self.app.sidebar_section_font())
+
+
+class ListApp:
+    # Im Hellmodus ist die dunkelste Farbe seit 3.0 kein Schwarz mehr, sondern
+    # #15243C: Sie trägt dort Text und Themenschalter. Der Dunkelmodus bleibt
+    # bewusst grau – ein blauer Grundton würde dort als Farbstich wirken, wo
+    # die Fläche selbst dunkel ist, statt als ruhiger Kontrast zum Weiß.
+    # Ein Farbwert pro Ton. Themes ordnen diesen Tönen semantische Rollen
+    # zu; Eingaben, Listen und Labels verwenden ausschließlich die Rollen.
+    PALETTE = {
+        "off_white": "#F5F5F7",
+        "white": "#FFFFFF",
+        "light_border": "#D8D8DE",
+        "navy": "#15243C",
+        "gray": "#6E6E73",
+        "light_placeholder": "#A7A7AD",
+        "purple": "#AF52DE",
+        "red": "#FF3B30",
+        "green": "#34C759",
+        "brown": "#8B5E34",
+        "blue": "#0A84FF",
+        "orange": "#FF9500",
+        "soft_gray": "#8E8E93",
+        "light_line": "#E5E5EA",
+        "cyan": "#30B0C7",
+        "light_calendar_hover": "#7FB4F7",
+        "light_hover": "#D8E9FE",
+        "dark_canvas": "#111113",
+        "dark_card": "#1C1C1E",
+        "dark_field": "#2C2C2E",
+        "dark_border": "#3A3A3C",
+        "dark_muted": "#A1A1A6",
+        "dark_placeholder": "#6F6F75",
+        "dark_purple": "#BF5AF2",
+        "dark_red": "#FF453A",
+        "dark_green": "#30D158",
+        "dark_brown": "#D0A46F",
+        "dark_orange": "#FF9F0A",
+        "dark_cyan": "#40C8E0",
+        "dark_calendar_hover": "#5AA2F0",
+        "dark_hover": "#243A55",
+    }
+
+    THEMES = {
+        "light": {
+            "bg": PALETTE["off_white"],
+            "card": PALETTE["white"],
+            "input": PALETTE["white"],
+            "input_border": PALETTE["light_border"],
+            "text": PALETTE["navy"],
+            "muted": PALETTE["gray"],
+            "placeholder": PALETTE["light_placeholder"],
+            "accent": PALETTE["purple"],
+            "theme_toggle": PALETTE["navy"],
+            "theme_toggle_hover_text": PALETTE["white"],
+            "delete": PALETTE["red"],
+            "export": PALETTE["green"],
+            "import": PALETTE["brown"],
+            "clear": PALETTE["blue"],
+            "flag": PALETTE["orange"],
+            "priority_low": PALETTE["soft_gray"],
+            "priority_medium": PALETTE["orange"],
+            "priority_high": PALETTE["red"],
+            "line": PALETTE["light_line"],
+            "selection_text": PALETTE["white"],
+            "selection": PALETTE["purple"],
+            "overdue": PALETTE["red"],
+            "due_today": PALETTE["orange"],
+            "due_action": PALETTE["cyan"],
+            "confirm": PALETTE["green"],
+            # Umrandung eines Kalendertags unter dem Mauszeiger.
+            "calendar_hover": PALETTE["light_calendar_hover"],
+            # Zeile unter dem Mauszeiger. Lila markiert die Auswahl, Hellblau
+            # zeigt, worauf ein Klick wirken würde – überall außer auf Buttons.
+            "hover": PALETTE["light_hover"],
+        },
+        "dark": {
+            "bg": PALETTE["dark_canvas"],
+            "card": PALETTE["dark_card"],
+            "input": PALETTE["dark_field"],
+            "input_border": PALETTE["dark_border"],
+            "text": PALETTE["off_white"],
+            "muted": PALETTE["dark_muted"],
+            "placeholder": PALETTE["dark_placeholder"],
+            "accent": PALETTE["dark_purple"],
+            "theme_toggle": PALETTE["soft_gray"],
+            "theme_toggle_hover_text": PALETTE["dark_canvas"],
+            "delete": PALETTE["dark_red"],
+            "export": PALETTE["dark_green"],
+            "import": PALETTE["dark_brown"],
+            "clear": PALETTE["blue"],
+            "flag": PALETTE["dark_orange"],
+            "priority_low": PALETTE["dark_muted"],
+            "priority_medium": PALETTE["dark_orange"],
+            "priority_high": PALETTE["dark_red"],
+            "line": PALETTE["dark_field"],
+            "selection_text": PALETTE["white"],
+            "selection": PALETTE["dark_purple"],
+            "overdue": PALETTE["dark_red"],
+            "due_today": PALETTE["dark_orange"],
+            "due_action": PALETTE["dark_cyan"],
+            "confirm": PALETTE["dark_green"],
+            "calendar_hover": PALETTE["dark_calendar_hover"],
+            "hover": PALETTE["dark_hover"],
+        },
+    }
+
+    EMPTY_ROW_ID = "__empty__"
+    HOME_VIEW = "home"
+    TEMPLATE_VIEW = "templates"
+    LIBRARY_VIEW = "library"
+    HOME_ROW_ID = "smart:home"
+    TEMPLATE_ROW_ID = "smart:templates"
+    SETTINGS_VERSION = 2
+    MAX_RECENT_LISTS = 12
+    # Auf der Startseite gezeigte zuletzt bearbeitete Listen. Gespeichert
+    # werden mehr (MAX_RECENT_LISTS), damit eine gelöschte Liste nicht sofort
+    # eine Lücke hinterlässt.
+    HOME_RECENT_VISIBLE = 3
+    # Tagesziel: erledigte Aufgaben pro Tag. 0 schaltet die Herausforderung ab.
+    DAILY_GOAL_DEFAULT = 5
+    DAILY_GOAL_MAX = 99
+    # Länge der lokalen Erledigungshistorie. Sie liegt in settings.json, ist
+    # damit gerätespezifisch und ausdrücklich nicht Teil eines Aufgabenbackups.
+    # Sieben Tage zeigt die Startseite; gespeichert wird mehr, damit ein Blick
+    # zurück über einen Wochenwechsel hinaus nicht abreißt.
+    COMPLETION_HISTORY_DAYS = 371
+    COMPLETION_CHART_DAYS = 7
+    # Gleichzeitig auf der Startseite angebotene Vorlagen. Weniger als alle,
+    # damit die Kachel nicht zur Liste wird – welche es sind, wechselt.
+    HOME_TEMPLATE_VISIBLE = 3
+    PREFERRED_UI_FONTS = ("Glide Sans", "DejaVu Sans", "Noto Sans", "Segoe UI", "TkDefaultFont")
+    UI_FONT_SIZE_CHOICES = {"klein": 10, "mittel": 11, "gross": 12}
+    TEMPLATE_FORMAT_VERSION = 1
+    LOCK_MAX_AGE_HOURS = 8
+    DATA_POINTER_VERSION = 1
+    YEAR_HEATMAP_WEEKS = 53
+    LIST_TEMPLATES = {
+        "daily": ("Tagesplanung", "Den Tag mit einem überschaubaren Plan beginnen.", (
+            "Wichtigstes Ziel für heute festlegen", "Anstehende Aufgaben sammeln",
+            "Zeit für konzentriertes Arbeiten einplanen", "Am Tagesende kurz zurückblicken",
+        )),
+        "project": ("Projektstart", "Vom ersten Ziel bis zum nächsten konkreten Schritt.", (
+            "Ziel und Ergebnis beschreiben", "Anforderungen sammeln", "Arbeitsschritte planen",
+            "Nächsten Schritt festlegen", "Ergebnis prüfen und abschließen",
+        )),
+        "shopping": ("Einkauf", "Eine einfache Einkaufsliste zum Ergänzen und Abhaken.", (
+            "Obst und Gemüse", "Brot und Getreide", "Getränke", "Haushalt und Sonstiges",
+        )),
+        "week": ("Wochenplanung", "Die Woche einmal überblicken statt täglich neu suchen.", (
+            "Rückblick: was ist offen geblieben?", "Drei Schwerpunkte für die Woche festlegen",
+            "Termine und Fristen eintragen", "Puffer für Unvorhergesehenes einplanen",
+            "Freitag: Woche abschließen und aufräumen",
+        )),
+        "meeting": ("Besprechung", "Vorbereiten, protokollieren, nachhalten.", (
+            "Ziel der Besprechung in einem Satz", "Teilnehmende und Einladung klären",
+            "Tagesordnung schreiben", "Unterlagen vorab verteilen",
+            "Ergebnisse und Entscheidungen festhalten", "Aufgaben mit Namen und Frist verteilen",
+        )),
+        "trip": ("Reise", "Von der Buchung bis zum gepackten Koffer.", (
+            "Reisedaten und Route festlegen", "Unterkunft buchen", "An- und Abreise buchen",
+            "Dokumente prüfen", "Packliste schreiben", "Wohnung für die Abwesenheit vorbereiten",
+        )),
+        "onboarding": ("Einarbeitung", "Jemanden neu aufnehmen, ohne etwas zu vergessen.", (
+            "Arbeitsplatz und Zugänge vorbereiten", "Ansprechperson benennen",
+            "Erste Woche grob planen", "Wichtige Abläufe zeigen",
+            "Nach zwei Wochen Rückmeldung einholen",
+        )),
+        "content": ("Veröffentlichung", "Ein Text oder Beitrag von der Idee bis online.", (
+            "Thema und Zielgruppe festlegen", "Gliederung schreiben", "Rohfassung schreiben",
+            "Bildmaterial klären und Rechte prüfen", "Korrektur lesen lassen",
+            "Veröffentlichen und verteilen",
+        )),
+        "household": ("Haushalt", "Was regelmäßig ansteht, an einem Ort.", (
+            "Wäsche", "Einkauf", "Küche und Bad", "Böden", "Müll und Altpapier",
+            "Post und Unterlagen sortieren",
+        )),
+        "review": ("Rückblick", "Kurz innehalten, bevor der nächste Abschnitt beginnt.", (
+            "Was ist gut gelaufen?", "Was hat gebremst?", "Was lasse ich künftig weg?",
+            "Was nehme ich mir konkret vor?",
+        )),
+    }
+    IN_PROGRESS_ROW_ID = "smart:in-progress"
+    OVERDUE_ROW_ID = "smart:overdue"
+    LABELS_ROW_ID = "smart:labels"
+    # Zeilenkennungen der Labelansicht. Ein Punkt kann in mehreren Gruppen
+    # stehen, deshalb trägt jede Zeile das Label, unter dem sie erscheint.
+    LABEL_GROUP_ROW_PREFIX = "labelgroup:"
+    LABEL_ITEM_ROW_PREFIX = "labelitem:"
+    UNLABELLED_GROUP_KEY = "__ohne_label__"
+    TRASH_ROW_ID = "smart:trash"
+    # Beide Aufgabenübersichten teilen Aufbau, Zeilenformat und Navigation und
+    # unterscheiden sich nur im Filter. Wo im Code diese Menge auftaucht, ist
+    # genau das gemeint: eine abgeleitete, listenübergreifende Aufgabenansicht.
+    TASK_OVERVIEW_VIEWS = ("in_progress", "overdue")
+    # Die Labelansicht sammelt denselben Bestand nach Labels statt nach
+    # Fälligkeit. Sie verhält sich wie die beiden Übersichten – abgeleitet,
+    # nicht direkt befüllbar – nimmt aber zusätzlich Punkte per Ziehen auf.
+    LABELS_VIEW = "labels"
+    DERIVED_ITEM_VIEWS = TASK_OVERVIEW_VIEWS + (LABELS_VIEW,)
+    # --- Automatische Sicherungen -------------------------------------------
+    # Obergrenze, Mindestbestand und Höchstalter greifen gemeinsam: erst wird
+    # der Mindestbestand reserviert, dann werden ältere Sicherungen nach Alter
+    # entfernt, zuletzt begrenzt die Obergrenze den Rest. Dadurch bleibt immer
+    # eine verlässliche Rückfallebene erhalten, ohne dass der Ordner wächst.
+    MAX_BACKUPS = 40
+    MIN_BACKUPS = 10
+    BACKUP_MAX_AGE_MINUTES = 30
+    # Frühestens nach dieser Zeit legt ein gewöhnliches Speichern eine neue
+    # Sicherung an. Ohne diese Sperre entstünde bei jedem Tastendruck eine Datei.
+    BACKUP_MIN_INTERVAL_SECONDS = 120
+    # Zeitgesteuertes Speichern und garantierter Sicherungspunkt.
+    AUTOSAVE_INTERVAL_MINUTES = 5
+    # Format 10 ergänzt den Papierkorb um einzelne Punkte. Die Ergänzung ist
+    # additiv – ältere Bestände laden unverändert –, aber die Zählung steigt
+    # trotzdem: Eine ältere Glide-Version würde einen Papierkorbeintrag der Art
+    # "item" beim Laden stillschweigend verwerfen. Mit der höheren Zahl weist
+    # sie die Datei stattdessen sichtbar ab.
+    DATA_SCHEMA_VERSION = 12
+    # --- Wiederholungen (Format 11) ------------------------------------------
+    # Eine Wiederholung ist eine Rechenregel, kein Terminplaner: Glide erzeugt
+    # nichts im Voraus und meldet sich nicht von selbst. Beim Abhaken entsteht
+    # genau die eine nächste Fälligkeit an derselben Stelle. Das ist bewusst
+    # so schmal gehalten – Erinnerungen mit Benachrichtigung bleiben ein
+    # Nicht-Ziel, weil sie einen Hintergrunddienst bräuchten.
+    #
+    # Gespeichert wird ein Wörterbuch am Punkt:
+    #     {"art": "taeglich"|"tage"|"wochentage"|"woechentlich"
+    #             |"monatlich"|"jaehrlich",
+    #      "abstand": int   – nur bei "tage": jeden N-ten Tag
+    #      "tage": [int]    – nur bei "wochentage": 0 = Montag … 6 = Sonntag
+    #      "ende": "JJJJ-MM-TT"|None – letzter zulässiger Termin}
+    # Fehlt das Feld, wiederholt sich der Punkt nicht; Format-10-Daten bleiben
+    # damit unverändert gültig und brauchen keine Umschreibung.
+    REPEAT_NONE = ""
+    REPEAT_DAILY = "taeglich"
+    REPEAT_EVERY_N_DAYS = "tage"
+    REPEAT_WEEKDAYS = "wochentage"
+    REPEAT_WEEKLY = "woechentlich"
+    REPEAT_MONTHLY = "monatlich"
+    REPEAT_YEARLY = "jaehrlich"
+    REPEAT_KINDS = (
+        REPEAT_DAILY, REPEAT_EVERY_N_DAYS, REPEAT_WEEKDAYS,
+        REPEAT_WEEKLY, REPEAT_MONTHLY, REPEAT_YEARLY,
+    )
+    # Auswahl der Eingabemaske. Reihenfolge: von der dichtesten zur weitesten
+    # Wiederholung, damit die Liste einer erwartbaren Logik folgt.
+    REPEAT_CHOICES = (
+        ("keine Wiederholung", REPEAT_NONE),
+        ("täglich", REPEAT_DAILY),
+        ("alle N Tage", REPEAT_EVERY_N_DAYS),
+        ("an bestimmten Wochentagen", REPEAT_WEEKDAYS),
+        ("wöchentlich", REPEAT_WEEKLY),
+        ("monatlich", REPEAT_MONTHLY),
+        ("jährlich", REPEAT_YEARLY),
+    )
+    # Obergrenze für „alle N Tage". 365 deckt alles bis zum Jahresabstand ab;
+    # darüber ist „jährlich" die richtige Wahl.
+    REPEAT_MAX_INTERVAL = 365
+    # Sicherung gegen eine Regel, die nie einen Termin trifft – etwa
+    # Wochentage, aus denen jeder Tag herausfällt. Nach so vielen Versuchen
+    # gilt die Reihe als beendet, statt endlos zu rechnen.
+    REPEAT_MAX_LOOKAHEAD_DAYS = 800
+    REPEAT_WEEKDAY_NAMES = ("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So")
+    MIN_PORTABLE_BACKUP_SCHEMA_VERSION = 4
+    # Format 6 ergänzt die Art eines Punkts. Fehlt das Feld – also in allen
+    # Beständen bis Format 5 – gilt der Punkt als gewöhnliche Aufgabe.
+    ITEM_KIND_TASK = "task"
+    ITEM_KIND_GROUP = "group"
+    # Format 8 ergänzt zwei weitere Arten. Beide bleiben gewöhnliche Punkte im
+    # Datenmodell; nur Darstellung und Nummerierung unterscheiden sich.
+    #   long    – mehrzeiliger Aufgabentext, in der Liste vollständig sichtbar
+    #   heading – Zwischenüberschrift, nummeriert darunter wieder ab 1
+    ITEM_KIND_LONG = "long"
+    ITEM_KIND_HEADING = "heading"
+    ITEM_KINDS = (ITEM_KIND_TASK, ITEM_KIND_GROUP, ITEM_KIND_LONG, ITEM_KIND_HEADING)
+    # Klartext einer Art – für Papierkorb, Meldungen und Auswahlfelder.
+    ITEM_KIND_LABELS = {
+        ITEM_KIND_TASK: "Aufgabe",
+        ITEM_KIND_GROUP: "Gruppe",
+        ITEM_KIND_LONG: "Long-Task",
+        ITEM_KIND_HEADING: "Zwischenüberschrift",
+    }
+    LEGACY_GROUP_MARKER = "\U0001F4C1 "  # Alte TXT-Dateien bleiben lesbar.
+    HEADING_MARKER = "\u00A7 "  # Zwischenüberschrift in TXT-Exporten
+    # Long-Task in TXT-Exporten. Ohne eigenen Marker verlöre ein einzeiliger
+    # Long-Task beim Rundlauf seine Art – die Fortsetzungszeilen allein reichen
+    # als Merkmal nicht, weil es sie dort gar nicht gibt.
+    LONG_MARKER = "\u00BB "
+    ITEM_KIND_NAMES = {
+        "task": "Aufgabe",
+        "group": "Gruppe",
+        "long": "Long-Task",
+        "heading": "Überschrift",
+    }
+    # Eine ttk.Treeview besitzt eine feste, für alle Zeilen gleiche Zeilenhöhe.
+    # Ein mehrzeiliger Punkt entsteht deshalb aus einer Kopfzeile mit Nummer und
+    # Symbolen plus Fortsetzungszeilen, die dieselbe Auswahl und dasselbe
+    # Kontextmenü bedienen. Diese Zeilen tragen ein eigenes IID-Suffix.
+    LONG_TASK_MAX_LINES = 5
+    # Wie viele eigene Zeilen ein Long-Task höchstens speichern darf. Angezeigt
+    # werden davon LONG_TASK_MAX_LINES; der Rest bleibt im Detailfenster lesbar.
+    MAX_LONG_TASK_TEXT_LINES = 40
+    LONG_TASK_MIN_LINE_WIDTH = 160
+    CONTINUATION_IID_MARKER = "::line"
+    SPACER_IID_MARKER = "::gap"
+    # Zwischenüberschriften bekommen Luft nach oben. Die Zeilenhöhe ist fest,
+    # deshalb ist eine Leerzeile der kleinstmögliche Abstand.
+    HEADING_GAP_ROWS = 1
+    MAX_BACKUP_MEMBERS = 4096
+    MAX_BACKUP_DATA_BYTES = 32 * 1024 * 1024
+    MAX_BACKUP_ATTACHMENT_BYTES = 512 * 1024 * 1024
+    MAX_BACKUP_TOTAL_BYTES = 2 * 1024 * 1024 * 1024
+    MAX_BACKUP_COMPRESSION_RATIO = 500
+    BACKUP_COPY_CHUNK = 1024 * 1024
+    MAX_ITEM_DEPTH = 100
+    MAX_BACKUP_ITEMS = 200000
+    IMPORTANCE_NAMES = {0: "keine", 1: "niedrig", 2: "mittel", 3: "hoch"}
+    # Symbole an einer Stelle: Wer eines austauschen will, ändert hier ein
+    # Zeichen statt ein Dutzend Stellen im Quelltext.
+    #
+    # Durchgängig Textzeichen und keine Emoji. Sie stammen aus Unicode-Blöcken,
+    # die von Systemschriften als Text gezeichnet werden. Glyphen und Breiten
+    # hängen vom Betriebssystem ab; sie werden mit der tatsächlichen Schrift gemessen.
+    # Farb-Emoji kämen dagegen aus einer eigenen Schrift (Segoe UI Emoji,
+    # Apple Color Emoji), ignorierten die Textfarbe und sähen je nach System
+    # anders aus.
+    # Ein Zeichensatz, eine Anmutung: Die Symbole der Seitenleiste und der
+    # Listenspalten stammen seit diesem Nachtrag durchgehend aus dem Unicode-Block
+    # „Geometrische Formen“ (U+25A0–U+25FF). Dessen Zeichen sind gefüllt, sitzen
+    # in derselben optischen Box und haben dieselbe Strichstärke – anders als
+    # Satzzeichen (‼) oder Umriss-Sonderzeichen (⌂), die daneben dünn und klein
+    # wirken. Ausgenommen bleiben bewusst der Papierkorb, der Themenschalter und
+    # die Wichtigkeitsfähnchen; dafür trägt keine geometrische Form die
+    # Bedeutung. Die Tabelle mit Alternativen steht im Oberflächendokument.
+    ICONS = {
+        # 3.4.0 zeigte hier ⌂. Das Häuschen ist eine feine Umrisslinie, damit
+        # kleiner und leichter als ▼ oder ◐ in derselben Spalte. ▣ steht für
+        # die gerahmte Übersicht und hat das Gewicht der übrigen Zeichen.
+        "home": "▣",
+        "templates": "▤",
+        "inbox": "▼",
+        "in_progress": "◐",
+        # 3.4.0 zeigte hier ‼. Das doppelte Ausrufezeichen ist ein Satzzeichen
+        # aus einer anderen Familie: zwei dünne Striche neben gefüllten Formen.
+        # ▲ ist das gelesene Warnzeichen und exakt so schwer wie ▼.
+        "overdue": "▲",
+        # U+1F5D1 hat standardmäßig Textdarstellung. Tk 8.6 unter Windows
+        # reserviert für den sonst unsichtbaren VS15 zusätzlichen Leerraum.
+        "trash": "\U0001F5D1",
+        # Der Themenschalter zeigt, wohin er führt, nicht wo man steht.
+        "theme_to_dark": "☾",
+        "theme_to_light": "☀",
+        "labels": "◈",
+        "calendar": "▦",
+        # Anhänge. Seit 3.2.0 ein Textzeichen wie alle übrigen: Das vorherige
+        # Büroklammer-Emoji kam aus einer Ersatzschrift des Systems, ignorierte
+        # die Textfarbe und war unter Windows und macOS verschieden breit.
+        "attachment": "⊕",
+        # Wiederholung. Der Kreispfeil ist das eingeführte Zeichen dafür und
+        # steht als Suffix hinter dem Aufgabentext, nicht in der Symbolspalte.
+        "repeat": "↻",
+        "group": "▸",
+        # Ordner und vorhandene Notizen bleiben ebenfalls bei Textzeichen;
+        # dadurch hängt die Übersicht nicht von einer Emoji-Ersatzschrift ab.
+        "folder": "▰",
+        "list": "☷",
+        "edit": "✎",
+        "moon_new": "●",
+        "moon_first": "◐",
+        "moon_full": "○",
+        "moon_last": "◑",
+        "description": "≡",
+        "priority_low": "⚐",
+        "priority_medium": "⚑",
+        "priority_high": "⚑⚑",
+    }
+    # Begrüßungen der Startseite. `{name}` steht für „, Tim“ und bleibt leer,
+    # solange kein Name eingetragen ist – deshalb gehört das Komma in den
+    # Platzhalter und nicht in den Satz. Gewechselt wird beim Zurückkehren zur
+    # Startseite, nicht bei jedem Neuaufbau: Sonst spränge der Satz schon beim
+    # Abhaken einer Aufgabe.
+    HOME_GREETINGS = (
+        "Schön, dass du da bist{name}.",
+        "Willkommen zurück{name}.",
+        "Hallo{name} – schön, dich zu sehen.",
+        "Da bist du ja{name}.",
+        "Guten Tag{name}.",
+        "Alles bereit{name}.",
+        "Auf ein Neues{name}.",
+    )
+    # Zweite Zeile der Begrüßung: die Aufforderung darunter. Sie wechselt
+    # zusammen mit dem Gruß, wird aber getrennt gezogen – so entstehen aus
+    # sieben Grüßen und sieben Aufforderungen viele Kombinationen statt sieben.
+    HOME_PROMPTS = (
+        "Dein Tag, deine Listen. Was möchtest du als Nächstes angehen?",
+        "Was steht heute an? Fang mit dem an, was dir am meisten bringt.",
+        "Ein Punkt nach dem anderen. Womit fängst du an?",
+        "Alles an seinem Platz. Was nimmst du dir als Erstes vor?",
+        "Sortiert, geplant, bereit. Was möchtest du jetzt erledigen?",
+        "Nimm dir einen Punkt vor – der Rest wartet geduldig.",
+        "Kein Konto, keine Cloud, nur deine Listen. Leg los.",
+    )
+    # Deutsche Namen statt Systemgebietsschema: Die Oberfläche ist einsprachig
+    # deutsch, und locale.setlocale wirkt je nach System unterschiedlich.
+    WEEKDAY_NAMES = ("Montag", "Dienstag", "Mittwoch", "Donnerstag",
+                     "Freitag", "Samstag", "Sonntag")
+    MONTH_NAMES = ("Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
+                   "August", "September", "Oktober", "November", "Dezember")
+    GROUP_MARKER = ICONS["group"] + " "
+    IMPORTANCE_MARKERS = {
+        0: "", 1: ICONS["priority_low"] + " ",
+        2: ICONS["priority_medium"] + " ", 3: ICONS["priority_high"] + " ",
+    }
+    IMPORTANCE_PARSE_MARKERS = (
+        (IMPORTANCE_MARKERS[3], 3), (IMPORTANCE_MARKERS[2], 2),
+        (IMPORTANCE_MARKERS[1], 1), ("\U0001F6A9 ", 3),
+    )
+    # Tiefe des Rückgängig-Speichers. Jeder Schritt hält eine vollständige Kopie
+    # aller Listen, Ordner, Labels und des Papierkorbs – deshalb eine feste
+    # Grenze statt unbegrenzter Aufzeichnung.
+    MAX_UNDO_STEPS = 20
+    SIDEBAR_SECTION_FONT = app_font(12, "bold")
+    # Verzögerung zwischen Klick auf eine ausgewählte Zeile und Umbenennen.
+    # Lang genug, dass ein Doppelklick zuerst kommt.
+    SIDEBAR_RENAME_DELAY_MS = 550
+    SIDEBAR_RENAME_MIN_WIDTH = 80
+    # Senkrechter Ausgleich der Überschrift „Listen“ zum Knopf daneben.
+    SIDEBAR_TITLE_BASELINE_SHIFT = 3
+    # Senkrechter Abstand zwischen den Abschnitten des rechten Bereichs.
+    # Derselbe Wert wie der Abstand zur Seitenleiste, damit die Listenbox
+    # ringsum gleich viel Luft hat – auch dann, wenn die Hinweiszeile bei
+    # schmalem Fenster verschwindet.
+    CONTENT_SECTION_GAP = 18
+    # Luft der Startseite nach oben und unten. Derselbe Wert wie der Abstand
+    # zwischen Seitenleiste und Inhaltsbereich, damit die Kacheln auf allen
+    # Seiten gleich viel Rand haben.
+    HOME_EDGE_GAP = 18
+    # Abstand zwischen zwei Kacheln und Rundung ihrer Ecken. Der Radius ist
+    # derselbe wie bei Seitenleiste und Listenrahmen.
+    HOME_CARD_GAP = 12
+    HOME_CARD_RADIUS = 18
+    HOME_CARD_PAD_X = 18
+    HOME_CARD_PAD_Y = 15
+    # Anteil der Zeilenhöhe am oberen und unteren Rand einer Gruppe, in dem ein
+    # Drop daneben einsortiert statt hineinlegt. Die Mitte dazwischen nimmt auf.
+    GROUP_DROP_EDGE_SHARE = 0.28
+    # Breite, die der Schnelleingabe mindestens bleiben soll. Darunter ist sie
+    # kein Eingabefeld mehr, sondern ein Schlitz.
+    ENTRY_MIN_WIDTH = 300
+    # Abstand zwischen Eingabefeld und Knöpfen in der Eingabezeile.
+    INPUT_ROW_GAP = 10
+    # Untergrenze, falls sich die Knopfbreiten nicht messen lassen.
+    ADVANCED_BUTTON_MIN_WIDTH = 520
+    SIDEBAR_TITLE_MAX_CHARS = 20
+    SIDEBAR_ITEM_LEFT_PADDING = 8
+    SIDEBAR_INDENT = 12
+    SIDEBAR_COUNT_MIN_WIDTH = 36
+    SYSTEM_ITEM_LEFT_PADDING = 10
+    # Trennung zwischen Systembereich und Listenbereich: ausschließlich Abstand.
+    # Weder Linie noch Band – die Ruhe zwischen den Blöcken trägt die Trennung.
+    SIDEBAR_SECTION_GAP = 30
+    # Sicherheitsbereich rechts in der Seitenleiste: der Zähler einer Zeile darf
+    # die Kante nicht berühren. Der Titel wird notfalls weiter gekürzt.
+    SIDEBAR_ROW_RIGHT_PADDING = 8
+    SIDEBAR_TITLE_MIN_CHARS = 6
+    DUE_COLUMN_WIDTH = 132
+    DUE_RIGHT_PADDING_WIDTH = 4
+    TASK_METADATA_GAP = 24
+    # Beide Spaltensymbole kommen aus ICONS – sie stehen im Aufgabenbaum
+    # unmittelbar nebeneinander und müssen aus derselben Zeichenfamilie sein.
+    DUE_COLUMN_ICON = ICONS["calendar"]
+    # Luft für Zellenrand und Symbol. Textzeichen misst Tk zuverlässig, aber
+    # der Zellenrand des Treeview kommt in der Messung nicht vor.
+    DUE_COLUMN_TEXT_PADDING = 12
+    # Zusätzliche Reserve, gemessen in Ziffernbreiten der Listenschrift.
+    # Grund: Tk misst mit der eingestellten Schrift, gezeichnet wird ein
+    # Symbolzeichen wie ▦ oder ◈ unter Windows aber häufig aus einer
+    # Ersatzschrift, die breiter ausfällt. Zusammen mit dem inneren Rand der
+    # Treeview-Zelle fehlte dadurch rund ein Zeichen, und die Fälligkeit war
+    # am Ende angeschnitten. In Ziffernbreiten statt in festen Pixeln, damit
+    # die Reserve bei jeder Anzeigeskalierung stimmt.
+    TREE_CELL_RESERVE_CHARS = 2
+    # Schrift der Aufgabenliste. Als Konstante, weil die Spaltenbreite der
+    # Fälligkeit mit genau dieser Schrift gemessen werden muss – mit der
+    # Standardgröße gerechnet, fiele die Spalte zu schmal aus.
+    TREE_FONT = app_font(12)
+    TASK_TREE_EDGE_PADDING = 2
+    # Unterhalb dieser Baumbreiten weichen Label- und Fälligkeitsspalte, damit
+    # der Aufgabentext die volle Breite bekommt. Beide Werte beziehen sich auf
+    # die Breite der Treeview, nicht auf die Fensterbreite.
+    # Ab dieser Baumbreite bleiben Labelspalte und Hinweiszeile stehen. Der Wert
+    # entspricht rund 960 Pixeln Fensterbreite – der halben Breite eines
+    # 1920er Bildschirms. Wer das Fenster auf eine Bildschirmhälfte zieht, will
+    # dort den Aufgabentext sehen und nicht die Zugaben.
+    LABEL_COLUMN_MIN_TREE_WIDTH = 636
+    # Die Fälligkeit weicht als Letztes. Der frühere Wert 470 lag unterhalb der
+    # Baumbreite, die bei der Fenstermindestgröße 860 × 700 überhaupt entsteht –
+    # die Spalte verschwand deshalb nie, und im schmalsten Fenster blieb für den
+    # Aufgabentext kaum Platz. 520 greift genau dort: ganz schmal zeigt die
+    # Liste nur noch den Text.
+    DUE_COLUMN_MIN_TREE_WIDTH = 520
+    # Einheitliche Innenabstände aller Eingabeflächen (Entry, Text, Listbox).
+    # Zusammen mit der 1 px starken Feldlinie ergibt sich in jedem Dialog
+    # derselbe sichtbare Textanfang; Beschriftungen stehen bündig am Rand.
+    DIALOG_PAD_X = 24
+    # Abstand der Bildlaufleiste zum Fensterrand in Dialogen. Derselbe Wert
+    # hält links den Ausgleich frei, damit der Inhalt mittig steht.
+    DIALOG_SCROLLBAR_PAD = 6
+    DIALOG_PAD_Y = 22
+    FIELD_BORDER_WIDTH = 1
+    FIELD_PAD_X = 12
+    FIELD_PAD_Y = 9
+    FIELD_LABEL_GAP = 5
+    HEADER_TITLE_MIN_WIDTH = 140
+    # Schriftfamilie der Hauptüberschrift. None bedeutet: Systemschrift der
+    # Oberfläche verwenden. Für eine eigene Hausschrift genügt es, hier den
+    # Familiennamen einzutragen – der Rest der Logik bleibt unverändert.
+    HEADER_FONT_FAMILY = None
+    HEADER_FONT_SIZE = 24
+    # Schnitte, die schwerer als der reguläre Fettschnitt sind – absteigend
+    # nach Strichstärke. Tk kennt für 'weight' nur normal und bold; alles
+    # darüber liegt als eigene Schriftfamilie vor ("Segoe UI Black").
+    # Semibold und Demibold stehen bewusst NICHT in dieser Liste: sie sind
+    # leichter als Bold und würden den Titel dünner statt fetter machen.
+    FONT_WEIGHT_SUFFIXES = (
+        "Black",
+        "Heavy",
+        "ExtraBlack",
+        "Extra Black",
+        "UltraBlack",
+        "Ultra Black",
+        "ExtraBold",
+        "Extra Bold",
+        "UltraBold",
+        "Ultra Bold",
+    )
+    # Diese Marker bleiben absichtlich stabil, damit TXT-Dateien auch von
+    # älteren Glide-Versionen gelesen werden können. In der UI heißt der
+    # Inhalt ab 2.5.4 einheitlich "Beschreibungstext".
+    # Fortsetzungszeile eines mehrzeiligen Aufgabentexts im TXT-Export.
+    TXT_TEXT_CONTINUATION = "Text:"
+    TXT_NOTE_BLOCK_START = "[Seitennotiz]"
+    TXT_NOTE_BLOCK_END = "[/Seitennotiz]"
+
+    # Listen lassen sich einfärben – ausschließlich mit Farben, die ohnehin schon
+    # im Einsatz sind (Theme-Schlüssel, damit die Farbe in Hell und Dunkel passt).
+    LIST_COLOR_CHOICES = [
+        ("Lila", "accent"),
+        ("Blau", "clear"),
+        ("Türkis", "due_action"),
+        ("Grün", "export"),
+        ("Gelb", "flag"),
+        ("Rot", "delete"),
+        ("Braun", "import"),
+    ]
+    LIST_COLOR_KEYS = [key for _label, key in LIST_COLOR_CHOICES]
+    ITEM_COLOR_CHOICES = LIST_COLOR_CHOICES
+    ITEM_COLOR_KEYS = LIST_COLOR_KEYS
+
+    # --- Labels --------------------------------------------------------------
+    # Labels nutzen dieselbe Palette wie Listen- und Aufgabenfarben; jeder Wert
+    # ist ein Theme-Schlüssel und damit in Hell und Dunkel definiert. Die
+    # Labelfarbe bleibt trotzdem eine eigene Eigenschaft: sie wird getrennt von
+    # der Aufgabenfarbe gespeichert und gesetzt.
+    #
+    # Eine ttk.Treeview kann eine einzelne Zelle nicht einfärben, deshalb steht
+    # in der Labelspalte reiner Text. Farbig – und damit eindeutig – ist ein
+    # Label überall dort, wo Tk es zulässt: in der Labelverwaltung, im
+    # Farbauswahldialog, in den Kontextmenüs und in der Kopfzeile einer Liste
+    # oder eines Ordners.
+    LABEL_COLOR_CHOICES = LIST_COLOR_CHOICES
+    LABEL_COLOR_KEYS = LIST_COLOR_KEYS
+    LABEL_COLOR_NAMES = {key: name for name, key in LABEL_COLOR_CHOICES}
+    DEFAULT_LABEL_COLOR = "accent"
+    # Zwei Labels gehören fest zum Programm: sie tragen die Art eines Punkts.
+    # Sie lassen sich nicht entfernen und nicht umbenennen; die Farbe darf der
+    # Nutzer ändern. Erkennungsmerkmal ist das Feld "system", nicht der Name –
+    # so bleibt die Zuordnung auch nach einer Umbenennung von Hand eindeutig.
+    SYSTEM_LABEL_LONG = "long"
+    SYSTEM_LABEL_HEADING = "heading"
+    SYSTEM_LABEL_DEFINITIONS = (
+        (SYSTEM_LABEL_LONG, "Long-Task", "clear", ITEM_KIND_LONG),
+        (SYSTEM_LABEL_HEADING, "Überschrift", "accent", ITEM_KIND_HEADING),
+    )
+    SYSTEM_LABEL_KIND = {role: kind for role, _name, _color, kind in SYSTEM_LABEL_DEFINITIONS}
+    # Darstellung eines Labels als Chip: helle Fläche, dunkler Text, 6 Pixel
+    # Radius. Die Mischanteile sind so gewählt, dass alle sieben Palettenfarben
+    # in Hell und Dunkel denselben Kontrastabstand halten.
+    LABEL_CHIP_FONT = app_font(9, "bold")
+    # Zielhelligkeiten statt fester Mischanteile: nur so sitzen Gelb und Lila
+    # auf demselben Kontrastniveau. Die Werte sind so gewählt, dass Text zu
+    # Fläche über 4,5:1 liegt und die Fläche sich sichtbar vom Fenster abhebt.
+    LABEL_CHIP_LIGHT_FILL_LUMINANCE = 0.62
+    LABEL_CHIP_LIGHT_TEXT_LUMINANCE = 0.035
+    LABEL_CHIP_DARK_FILL_LUMINANCE = 0.085
+    LABEL_CHIP_DARK_TEXT_LUMINANCE = 0.62
+    LABEL_CHIP_GAP = 6
+    # Breite, die für den Zähler „+n“ am Zeilenende reserviert wird.
+    LABEL_OVERFLOW_WIDTH = 34
+    # Sichtbare Höhe der Labelauswahl in den Dialogen: rund fünf Chipzeilen.
+    # Vorher waren es zwei – ab einer Handvoll Labels war das Feld ständig zu
+    # scrollen, obwohl daneben Platz frei war.
+    # Ein Dialog belegt höchstens diesen Anteil des Bildschirms; alles darüber
+    # wird zur Bildlaufleiste, nicht zu einem abgeschnittenen Fenster.
+    DIALOG_MAX_SCREEN_SHARE = 0.88
+    # Labelzeile im Kopfbereich: eine Zeile, feste Höhe, damit der Kopf nicht
+    # springt, wenn eine Liste Labels trägt und die nächste nicht. Die Höhe
+    # wird aus der echten Chiphöhe berechnet – eine feste Zahl würde sich von
+    # der Schriftgröße lösen und die Zeile doch wieder springen lassen.
+    # Kein zusätzlicher Abstand um die Chips: Statuszeile und Labelzeile
+    # zusammen sollen exakt so hoch sein wie der Themenschalter daneben, damit
+    # der Kopfbereich oben und unten auf einer Linie abschließt.
+    HEADER_LABEL_ROW_PAD = 0
+    HEADER_LABEL_MAX_WIDTH = 320
+    # Ab dieser Breite des rechten Bereichs bleibt die Filterbox stehen.
+    FILTER_VISIBILITY_MIN_WIDTH = 620
+    MAX_LABELS = 80
+    # Speichergrenze für einen Labelnamen. Sie bleibt bei 40 Zeichen: Ein
+    # niedrigerer Wert würde bereits vergebene Namen beim Laden kürzen, und
+    # eine Anzeigefrage darf keine gespeicherten Daten beschneiden.
+    MAX_LABEL_NAME_LENGTH = 40
+    # Eingabegrenze für neue und umbenannte Labels. Sie ist bewusst kürzer als
+    # die Speichergrenze und gleich LABEL_COLUMN_NAME_MAX_CHARS: Genau so viel
+    # zeigt die Labelspalte, alles darüber endete dort als „…". Ein Name, der
+    # in der Liste ohnehin abgeschnitten wird, sollte gar nicht erst entstehen.
+    # Maßstab ist „Freigabe nötig". Bereits vorhandene längere Namen bleiben
+    # unangetastet – nur neu eingegebene müssen sich daran halten.
+    LABEL_NAME_INPUT_LIMIT = 14
+    # Anzeigegrenzen der Listenansicht: ein Label je Zeile, der Rest als
+    # Zähler. Mehr Labels nebeneinander verdrängten den Aufgabentext.
+    # Mindestbreite; die tatsächliche Breite misst label_column_width().
+    LABEL_COLUMN_WIDTH = 150
+    LABEL_COLUMN_MAX_VISIBLE = 1
+    LABEL_COLUMN_NAME_MAX_CHARS = 14
+    # Symbol vor dem Label in der Liste – wie das Kalendersymbol vor dem Datum.
+    # Bewusst ein Textzeichen: Es nimmt die Labelfarbe an und passt in die
+    # feste Zeilenhöhe, was für ein Farb-Emoji nicht garantiert ist.
+    LABEL_COLUMN_ICON = ICONS["labels"]
+    LABEL_SEPARATOR = "  ·  "
+    MAX_LABELS_PER_ITEM = 20
+
+    # --- Papierkorb ----------------------------------------------------------
+    # Gelöschte Listen und Ordner wandern vollständig in den Papierkorb und
+    # bleiben wiederherstellbar. Die Obergrenze verhindert, dass die
+    # Speicherdatei unbegrenzt wächst; sie ist bewusst hoch angesetzt.
+    # Ordner dürfen ineinander liegen. Die Tiefe ist begrenzt, damit die
+    # Seitenleiste lesbar bleibt und keine Einrückung ins Leere läuft.
+    MAX_FOLDER_DEPTH = 5
+    MAX_TRASH_ENTRIES = 200
+    TRASH_KIND_LIST = "list"
+    TRASH_KIND_FOLDER = "folder"
+    # Auch ein einzelner Punkt geht in den Papierkorb. Vorher war das Löschen
+    # eines Punkts endgültig – nach einem Neustart war er nicht mehr zu holen.
+    TRASH_KIND_ITEM = "item"
+
+    # --- Kalender ------------------------------------------------------------
+    CALENDAR_MODE_WEEK = "week"
+    CALENDAR_MODE_MONTH = "month"
+    CALENDAR_MODES = (CALENDAR_MODE_WEEK, CALENDAR_MODE_MONTH)
+    # In der Monatsansicht ist eine Zelle flach, in der Wochenansicht steht die
+    # volle Fensterhöhe für einen einzigen Tag zur Verfügung.
+    CALENDAR_MAX_TASKS_PER_DAY = 3
+    CALENDAR_MAX_TASKS_PER_WEEK_DAY = 14
+    # In der flachen Monatszelle wird gekürzt, in der hohen Wochenzelle umgebrochen.
+    CALENDAR_MONTH_TEXT_MAX_CHARS = 22
+
+    WINDOWS_CHROME_RETRY_DELAYS_MS = (0, 40, 120, 300)
+
+    def __init__(self, root):
+        self.root = root
+        self.root.title(APP_PRODUCT_NAME)
+        # Standardgröße für einen 1920er Bildschirm. Bei 1000 Pixeln lag das
+        # Fenster unter der Schwelle, ab der Labels und Hinweiszeile stehen
+        # bleiben – sie wären beim ersten Start unsichtbar gewesen.
+        self.root.geometry("1280x860")
+        self.root.minsize(860, 700)
+
+        self.items = []
+        self.lists = []
+        self.folders = []
+        self.labels = []
+        self.trash = []
+        self._last_backup_monotonic = None
+        self._autosave_id = None
+        # Hellblauer Hover je Baum und gesammelter Neuumbruch der Long-Tasks.
+        self._hover_rows = {}
+        self._long_reflow_id = None
+        self._long_reflow_width = None
+        self.sidebar_rows = []
+        self.sidebar_iid_to_row = {}
+        self.sidebar_folder_open_states = {}
+        self.in_progress_item_sources = {}
+        # Zeile der Labelansicht -> Labelgruppe, in der sie steht.
+        self.label_view_row_groups = {}
+        self.sidebar_drag_start_iid = None
+        self.sidebar_drag_start_y = 0
+        self.sidebar_drag_has_moved = False
+        self.active_list_id = None
+        self.active_folder_id = None
+        self.view_mode = "list"
+        self.undo_stack = []
+        self.dirty = False
+        self._after_ids = set()
+        self._scrollbar_refresh_id = None
+
+        self.settings = self.load_settings()
+        self._registered_fonts = register_private_fonts()
+        self.templates = self.load_templates()
+        self.lock_info = self.acquire_data_lock()
+        if self.lock_info and not os.environ.get("GLIDE_TEST_MODE"):
+            # Die Warnung wird erst nach dem Aufbau der Oberfläche angezeigt,
+            # damit sie auch unter Windows thematisch als Glide-Dialog erscheint.
+            try:
+                if self.root.state() != "withdrawn":
+                    self.root.after(250, self.show_data_lock_warning)
+            except tk.TclError:
+                pass
+        self._list_edit_signatures = None
+        self._home_day = date.today()
+        self._home_tick_id = None
+        self._home_saved_pack = []
+        # Zufälliger Startpunkt, danach reihum: So beginnt auch nicht jeder
+        # Programmstart mit demselben Satz, und trotzdem wiederholt sich keine
+        # Begrüßung, bevor alle anderen an der Reihe waren.
+        self._home_greeting_index = random.randrange(len(self.HOME_GREETINGS))
+        self._home_prompt_index = random.randrange(len(self.HOME_PROMPTS))
+        self._home_template_offset = random.randrange(len(self.LIST_TEMPLATES) or 1)
+        self.search_var = tk.StringVar()
+        initial_filter_mode = self.settings.get("filter_mode")
+        # "done" gab es bis 2.11.0 als eigener Filter „Nur erledigte Punkte“.
+        # Eine gespeicherte Einstellung aus dieser Zeit fällt hier auf „alle“
+        # zurück, statt einen Zustand zu erzeugen, den nichts mehr abschaltet.
+        if initial_filter_mode not in ("all", "open"):
+            initial_filter_mode = "open" if bool(self.settings.get("hide_done", False)) else "all"
+        self.hide_done_var = tk.BooleanVar(value=initial_filter_mode == "open")
+        self.entry_placeholder_text = "Listenpunkt eingeben"
+        self.search_placeholder_text = "Suchwort eingeben"
+        self.entry_placeholder_active = False
+        self.search_placeholder_active = False
+        self.filters_visible = True
+        self._advanced_button_visible = True
+        self._hint_visible = True
+        self.selection_anchor_id = None
+        self.drag_start_id = None
+        self.drag_start_x = 0
+        self.drag_start_y = 0
+        self.drag_has_moved = False
+        self.drag_item_ids = []
+        self.expanded_ids = set()
+        self.collapsed_item_ids = set()
+        self._item_context_menu = None
+        self._sidebar_context_menu = None
+
+        self.theme_name = self.settings.get("theme", "light")
+        if self.theme_name not in self.THEMES:
+            self.theme_name = "light"
+        self.active_list_id = self.settings.get("active_list_id") if isinstance(self.settings.get("active_list_id"), str) else None
+        saved_folder_id = self.settings.get("active_folder_id")
+        self.active_folder_id = saved_folder_id if isinstance(saved_folder_id, str) and saved_folder_id else None
+        saved_view_mode = self.settings.get("view_mode")
+        if self.active_folder_id:
+            self.view_mode = "folder"
+        elif saved_view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+            self.view_mode = saved_view_mode
+        else:
+            self.view_mode = "list"
+        self.app_title = self.settings.get("title", "Meine Liste").strip() or "Meine Liste"
+        self.theme = self.active_theme()
+        self.theme_widgets = []
+        self.rounded_containers = []
+        self.buttons = []
+
+        if IS_WINDOWS:
+            # Der native Wrapper-HWND existiert beim ersten apply_theme-Aufruf
+            # häufig noch nicht. Nach jedem echten Mapping erneut anwenden.
+            self.root.bind("<Map>", self._on_windows_window_map, add="+")
+
+        self.style = ttk.Style()
+        try:
+            self.style.theme_use("clam")
+        except tk.TclError:
+            pass
+
+        self.update_window_title()
+        self.root.configure(bg=self.theme["bg"])
+        self.apply_ui_font()
+        self.create_ui()
+        self.apply_theme()
+        self.load_items()
+        if not os.path.isfile(TEMPLATES_FILE):
+            self.save_templates()
+        self._list_edit_signatures = self.list_edit_signatures()
+        startup_view = self.settings.get("startup_view", "last")
+        if startup_view == "home":
+            self.set_home_view()
+        elif startup_view == "templates":
+            self.set_template_view()
+        self.schedule_home_day_check()
+        self.restore_window_position()
+        self.schedule_autosave()
+
+        # Tastaturkürzel
+        # Enter wird direkt im Eingabefeld behandelt, damit add_item nicht doppelt ausgelöst wird.
+        self.root.bind("<Delete>", self.delete_item)
+        self.root.bind("<Control-e>", lambda e: self.export_as_txt())
+        self.root.bind("<Control-i>", lambda e: self.import_from_txt())
+        self.root.bind("<Control-s>", lambda e: self.save_items())
+        self.root.bind("<Control-q>", lambda e: self.on_close())
+        self.root.bind("<Control-z>", self.undo_last_change)
+        self.root.bind("<Control-c>", self.copy_selected_to_clipboard)
+        self.root.bind("<Control-v>", self.paste_items_from_clipboard)
+        self.root.bind("<Control-a>", self.select_all_items)
+        # Command ist nur unter macOS Meta/Cmd. Unter Windows ordnet Tk diesen
+        # Modifikator Num-Lock zu; dadurch wurden normale Buchstaben wie a/f
+        # fälschlich als Tastenkürzel behandelt und der Fokus sprang zur Suche.
+        if IS_MACOS:
+            self.root.bind("<Command-c>", self.copy_selected_to_clipboard)
+            self.root.bind("<Command-v>", self.paste_items_from_clipboard)
+            self.root.bind("<Command-a>", self.select_all_items)
+            self.root.bind("<Command-z>", self.undo_last_change)
+            self.root.bind("<Command-f>", self.focus_search)
+            self.root.bind("<Command-F>", self.handle_control_f)
+            self.root.bind("<Command-t>", self.set_due_date_selected)
+            self.root.bind("<Command-s>", lambda e: self.save_items())
+            self.root.bind("<Command-e>", lambda e: self.export_as_txt())
+            self.root.bind("<Command-i>", lambda e: self.import_from_txt())
+            self.root.bind("<Command-d>", lambda e: self.toggle_theme())
+            self.root.bind("<Command-g>", lambda e: self.group_selected_items())
+            self.root.bind("<Command-n>", self.handle_control_n)
+            self.root.bind("<Command-N>", self.handle_control_n)
+            # Mac-Tastaturen besitzen meist keine Entf-Taste; Rückschritt löscht
+            # den ausgewählten Punkt. In Text- und Suchfeldern bleibt sie normal.
+            self.root.bind("<BackSpace>", self.delete_item)
+            self.root.bind("<Command-BackSpace>", self.delete_item)
+            # Cmd+Q wird von macOS abgefangen und würde WM_DELETE_WINDOW und
+            # damit die Speicherabfrage überspringen.
+            try:
+                self.root.createcommand("::tk::mac::Quit", self.on_close)
+            except tk.TclError:
+                pass
+        self.root.bind("<Control-n>", self.handle_control_n)
+        self.root.bind("<Control-N>", self.handle_control_n)
+        self.root.bind("<Control-w>", self.delete_current_list)
+        self.root.bind("<Control-f>", self.handle_control_f)
+        self.root.bind("<Control-F>", self.handle_control_f)
+        self.root.bind("<Alt-p>", self.cycle_importance_selected)
+        self.root.bind("<Control-g>", lambda e: self.group_selected_items())
+        self.root.bind("<Escape>", self.handle_escape)
+        self.root.bind("<F2>", lambda e: self.edit_item())
+        self.root.bind("<F3>", lambda e: self.edit_title())
+        self.root.bind("<Control-d>", lambda e: self.toggle_theme())
+        self.root.bind("<Control-t>", self.set_due_date_selected)
+        self.root.bind("<Control-m>", self.edit_page_note)
+        self.root.bind("<Control-l>", self.open_label_manager)
+        self.root.bind("<Control-k>", self.open_calendar_view)
+        if IS_MACOS:
+            self.root.bind("<Command-l>", self.open_label_manager)
+            self.root.bind("<Command-k>", self.open_calendar_view)
+
+    # -----------------------------
+    # Einstellungen / Basis
+    # -----------------------------
+    def active_theme(self):
+        """Liefert die aktuell gewählte Oberfläche einschließlich Glasmaterial.
+
+        Tk zeichnet keine echten, pro Widget weichgezeichneten Flächen. Der
+        Glasmodus nutzt deshalb eine ruhige, lichtdurchlässige Anmutung aus
+        gemischten Oberflächenfarben und einer hellen Innenkante. Unter
+        Windows ergänzt Glide diese Ebene, wenn möglich, um den nativen DWM-
+        SystemBackdrop. Fällt die Plattform zurück, bleibt die Oberfläche als
+        lesbare Farbvariante vollständig funktionsfähig.
+        """
+        base = dict(self.THEMES.get(self.theme_name, self.THEMES["light"]))
+        accent_key = self.settings.get("accent_color", "accent")
+        base["ui_accent"] = base.get(accent_key, base["accent"])
+        base["selection"] = base["ui_accent"]
+        base["selection_text"] = "#FFFFFF" if relative_luminance(base["selection"]) < 0.4 else "#15171C"
+        if not bool(getattr(self, "settings", {}).get("glass_mode", True)):
+            return base
+        dark = self.theme_name == "dark"
+        if dark:
+            base.update({
+                "bg": mix_hex_colors(base["bg"], "#202A3A", 0.22),
+                "card": mix_hex_colors(base["card"], "#34435A", 0.24),
+                "input": mix_hex_colors(base["input"], "#3B465A", 0.16),
+                "input_border": mix_hex_colors(base["input_border"], "#A8B6CE", 0.18),
+                "line": mix_hex_colors(base["line"], "#A8B6CE", 0.16),
+                "hover": mix_hex_colors(base["hover"], "#6D8FC2", 0.18),
+            })
+            base["glass_highlight"] = "#3D4553"
+            base["glass_shadow"] = "#0A0B0E"
+        else:
+            base.update({
+                "bg": mix_hex_colors(base["bg"], "#D9E6F5", 0.24),
+                "card": mix_hex_colors(base["card"], "#E9F2FF", 0.32),
+                "input": mix_hex_colors(base["input"], "#F7FAFF", 0.18),
+                "input_border": mix_hex_colors(base["input_border"], "#98A9C2", 0.22),
+                "line": mix_hex_colors(base["line"], "#AABBD1", 0.20),
+                "hover": mix_hex_colors(base["hover"], "#AFC9EC", 0.24),
+            })
+            base["glass_highlight"] = "#FFFFFF"
+            base["glass_shadow"] = "#B7C5D8"
+        return base
+
+    @staticmethod
+    def default_template_records():
+        records = []
+        for key, (title, note, tasks) in ListApp.LIST_TEMPLATES.items():
+            records.append({"id": key, "kind": "list", "title": title, "note": note,
+                            "color": None, "labels": [], "items": list(tasks)})
+        records.extend([
+            {"id": "folder-project", "kind": "folder", "title": "Projekt", "note": "Projektordner mit einer Startliste.",
+             "color": "accent", "labels": [], "items": ["Nächste Schritte" ]},
+            {"id": "folder-event", "kind": "folder", "title": "Veranstaltung", "note": "Planung für eine Veranstaltung.",
+             "color": "due_action", "labels": [], "items": ["Vorbereitung", "Durchführung", "Nachbereitung"]},
+        ])
+        return records
+
+    @classmethod
+    def normalize_template_records(cls, data):
+        if isinstance(data, dict) and data.get("format_version", cls.TEMPLATE_FORMAT_VERSION) != cls.TEMPLATE_FORMAT_VERSION:
+            raise ValueError("Diese Vorlagendatei verwendet eine unbekannte Formatversion.")
+        source = data.get("templates") if isinstance(data, dict) else data
+        if not isinstance(source, list):
+            raise ValueError("In der Datei fehlt die Vorlagenliste.")
+        result, seen = [], set()
+        for raw in source:
+            if not isinstance(raw, dict):
+                continue
+            template_id = str(raw.get("id") or uuid.uuid4().hex)
+            if template_id in seen:
+                template_id = uuid.uuid4().hex
+            kind = raw.get("kind") if raw.get("kind") in ("list", "folder") else "list"
+            title = " ".join(str(raw.get("title") or "Vorlage").split())[:120] or "Vorlage"
+            note = str(raw.get("note") or "")[:4000]
+            color = raw.get("color") if raw.get("color") in cls.LIST_COLOR_KEYS else None
+            labels = [value for value in (raw.get("labels") or []) if isinstance(value, str)][:cls.MAX_LABELS_PER_ITEM]
+            items = [str(value).strip() for value in (raw.get("items") or []) if isinstance(value, str) and value.strip()][:200]
+            result.append({"id": template_id, "kind": kind, "title": title, "note": note,
+                           "color": color, "labels": labels, "items": items})
+            if isinstance(raw.get("payload"), dict):
+                result[-1]["payload"] = copy.deepcopy(raw["payload"])
+                result[-1]["files"] = dict(raw.get("files") or {})
+            seen.add(template_id)
+        if not result and not isinstance(source, list):
+            result = cls.default_template_records()
+        return result
+
+    def load_templates(self):
+        try:
+            if os.path.isfile(TEMPLATES_FILE):
+                with open(TEMPLATES_FILE, "r", encoding="utf-8") as file:
+                    return self.normalize_template_records(json.load(file))
+        except (OSError, ValueError, TypeError):
+            pass
+        return self.default_template_records()
+
+    def save_templates(self):
+        if getattr(self, "_data_read_only", False):
+            return False
+        payload = {"format_version": self.TEMPLATE_FORMAT_VERSION,
+                   "templates": self.normalize_template_records(getattr(self, "templates", []))}
+        self.templates = payload["templates"]
+        try:
+            self.write_json_atomic(TEMPLATES_FILE, payload)
+            return True
+        except OSError:
+            return False
+
+    def template_by_id(self, template_id):
+        return next((item for item in getattr(self, "templates", []) if item.get("id") == template_id), None)
+
+    def read_foreign_lock(self, path=None):
+        """Lokale Prozesse ohne Signale prüfen; fremde Rechner per Heartbeat."""
+        try:
+            with open(path or LOCK_FILE, "r", encoding="utf-8") as file:
+                previous = json.load(file)
+            stamp = datetime.fromisoformat(str(previous.get("refreshed_at") or previous.get("started_at")))
+            if stamp.tzinfo is None:
+                stamp = stamp.astimezone()
+            if (datetime.now().astimezone() - stamp).total_seconds() > self.LOCK_MAX_AGE_HOURS * 3600:
+                return None
+            host = os.environ.get("COMPUTERNAME") or os.environ.get("HOSTNAME") or "unbekannt"
+            if previous.get("host") != host:
+                return previous
+            pid = int(previous.get("pid", 0))
+            if pid <= 0:
+                return None
+            if pid == os.getpid():
+                return None
+            if IS_WINDOWS:
+                kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+                kernel.OpenProcess.argtypes = [ctypes.c_ulong, ctypes.c_bool, ctypes.c_ulong]
+                kernel.OpenProcess.restype = ctypes.c_void_p
+                kernel.GetExitCodeProcess.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_ulong)]
+                kernel.CloseHandle.argtypes = [ctypes.c_void_p]
+                handle = kernel.OpenProcess(0x1000, False, pid)
+                if not handle:
+                    return previous if ctypes.get_last_error() == 5 else None
+                try:
+                    code = ctypes.c_ulong()
+                    if kernel.GetExitCodeProcess(handle, ctypes.byref(code)) and code.value != 259:
+                        return None
+                finally:
+                    kernel.CloseHandle(handle)
+            else:
+                try:
+                    os.kill(pid, 0)
+                except ProcessLookupError:
+                    return None
+                except PermissionError:
+                    pass
+            return previous
+        except (OSError, ValueError, TypeError, AttributeError):
+            return None
+
+    def acquire_data_lock(self):
+        foreign = self.read_foreign_lock()
+        self._data_read_only = bool(foreign)
+        self._lock_token = {}
+        if foreign:
+            return foreign
+        now = datetime.now().astimezone().isoformat(timespec="seconds")
+        current = {"host": os.environ.get("COMPUTERNAME") or os.environ.get("HOSTNAME") or "unbekannt",
+                   "pid": os.getpid(), "token": uuid.uuid4().hex, "started_at": now, "refreshed_at": now}
+        try:
+            self.write_json_atomic(LOCK_FILE, current)
+            self._lock_token = current
+        except OSError:
+            self._data_read_only = True
+        return None
+
+    def show_data_lock_warning(self):
+        info = getattr(self, "lock_info", None)
+        if not info or not self.root.winfo_exists():
+            return
+        self.show_warning("Datenordner bereits geöffnet",
+                          f"Der Datenordner ist seit {info.get('started_at', 'unbekannt')} auf "
+                          f"{info.get('host', 'anderer Rechner')} geöffnet.\n\n"
+                          "Dieser Start speichert keine Änderungen. Schließe Glide auf dem anderen "
+                          "Rechner, warte auf den vollständigen Ordnerabgleich und starte Glide hier erneut.")
+
+    def release_data_lock(self):
+        token = getattr(self, "_lock_token", {})
+        if not token:
+            return
+        try:
+            with open(LOCK_FILE, "r", encoding="utf-8") as file:
+                current = json.load(file)
+            if current.get("token") == token.get("token"):
+                os.remove(LOCK_FILE)
+        except (OSError, ValueError, TypeError):
+            pass
+        self._lock_token = {}
+
+    def refresh_data_lock(self):
+        token = getattr(self, "_lock_token", {})
+        if not token or getattr(self, "_data_read_only", False):
+            return
+        try:
+            with open(LOCK_FILE, "r", encoding="utf-8") as file:
+                existing = json.load(file)
+            if existing.get("token") != token.get("token"):
+                self._data_read_only = True
+                self.lock_info = existing
+                return
+            token = dict(token, refreshed_at=datetime.now().astimezone().isoformat(timespec="seconds"))
+            self.write_json_atomic(LOCK_FILE, token)
+            self._lock_token = token
+        except (OSError, ValueError, TypeError):
+            pass
+
+    def data_folder_path(self):
+        return BASE_DIR
+
+    def change_data_folder(self, path, move_existing=False):
+        """Öffnet vorhandene Daten oder kopiert in eine leere Ablage."""
+        global BASE_DIR, SAVE_FILE, SETTINGS_FILE, BACKUP_DIR, ATTACHMENTS_DIR, TEMPLATES_FILE, LOCK_FILE
+        if not str(path or "").strip():
+            raise ValueError("Bitte einen Datenordner auswählen.")
+        target = os.path.realpath(os.path.abspath(os.path.expanduser(str(path))))
+        source = os.path.realpath(BASE_DIR)
+        if os.path.normcase(target) == os.path.normcase(source):
+            return True
+        if self.read_foreign_lock(os.path.join(target, "glide.lock")):
+            raise ValueError("Der Zielordner ist auf einem anderen Arbeitsplatz geöffnet.")
+        os.makedirs(target, exist_ok=True)
+        if move_existing and os.listdir(target):
+            raise ValueError("Zum Kopieren muss der Zielordner leer sein. Vorhandene Daten können stattdessen geöffnet werden.")
+        if move_existing:
+            try:
+                nested = os.path.commonpath([source, target]) in (source, target)
+            except ValueError:
+                nested = False
+            if nested:
+                raise ValueError("Quell- und Zielordner dürfen nicht ineinander liegen.")
+        target_data = os.path.join(target, "liste_speicher.json")
+        if not move_existing and os.path.isfile(target_data):
+            with open(target_data, "r", encoding="utf-8") as file:
+                self.validate_backup_schema(json.load(file))
+        if not self.save_items():
+            raise OSError("Der aktuelle Bestand konnte nicht gespeichert werden.")
+        self.save_settings()
+        self.save_templates()
+        if move_existing:
+            for name in os.listdir(source):
+                if name == "glide.lock":
+                    continue
+                src, dst = os.path.join(source, name), os.path.join(target, name)
+                if os.path.isdir(src):
+                    shutil.copytree(src, dst)
+                else:
+                    shutil.copy2(src, dst)
+        if not os.environ.get("GLIDE_DATA_DIR"):
+            self.write_json_atomic(DATA_POINTER_FILE, {"version": self.DATA_POINTER_VERSION, "path": target})
+        self.release_data_lock()
+        BASE_DIR = target
+        SAVE_FILE = target_data
+        SETTINGS_FILE = os.path.join(target, "settings.json")
+        BACKUP_DIR = os.path.join(target, "backups")
+        ATTACHMENTS_DIR = os.path.join(target, "attachments")
+        TEMPLATES_FILE = os.path.join(target, "vorlagen.json")
+        LOCK_FILE = os.path.join(target, "glide.lock")
+        self._schema12_backup_checked = False
+        self._last_backup_monotonic = None
+        os.makedirs(BACKUP_DIR, exist_ok=True)
+        os.makedirs(ATTACHMENTS_DIR, exist_ok=True)
+        self.lock_info = self.acquire_data_lock()
+        self.settings = self.load_settings()
+        self.theme_name = self.settings.get("theme", self.theme_name)
+        if self.theme_name not in self.THEMES:
+            self.theme_name = "dark"
+        self._ui_font_family = None
+        self.apply_ui_font()
+        self.templates = self.load_templates()
+        self._templates_editing = False
+        self.load_items()
+        self.undo_stack.clear()
+        self.update_sidebar_list()
+        self.apply_theme()
+        return True
+
+    def show_data_folder_dialog(self):
+        choice = filedialog.askdirectory(title="Datenordner auswählen", initialdir=BASE_DIR)
+        if not choice or os.path.abspath(choice) == os.path.abspath(BASE_DIR):
+            return
+        try:
+            populated = bool(os.listdir(choice))
+            question = ("Vorhandene Daten aus diesem Ordner öffnen? Der bisherige Bestand bleibt erhalten."
+                        if populated else "Den aktuellen Bestand in diesen leeren Ordner kopieren?")
+            if self.ask_yes_no("Datenordner wechseln", question):
+                self.change_data_folder(choice, move_existing=not populated)
+                self.show_info("Datenordner geändert", f"Glide arbeitet jetzt in:\n{BASE_DIR}")
+        except (OSError, ValueError) as exc:
+            self.show_error("Datenordner wechseln", str(exc))
+
+    def use_default_data_folder(self):
+        if os.environ.get("GLIDE_DATA_DIR"):
+            self.show_info("Datenordner", "GLIDE_DATA_DIR ist für diesen Start gesetzt und hat Vorrang.")
+            return
+        target = _default_app_data_dir()
+        if os.path.abspath(target) == os.path.abspath(BASE_DIR):
+            self.show_info("Datenordner", f"Der Standardordner ist bereits aktiv:\n{target}")
+            return
+        if not self.ask_yes_no("Standardordner benutzen",
+                              "Den Standardordner öffnen? Vorhandene Daten dort bleiben erhalten. "
+                              "Ist er leer, wird der aktuelle Bestand dorthin kopiert."):
+            return
+        try:
+            populated = os.path.isdir(target) and bool(os.listdir(target))
+            self.change_data_folder(target, move_existing=not populated)
+            if os.path.isfile(DATA_POINTER_FILE):
+                os.remove(DATA_POINTER_FILE)
+            self.show_info("Datenordner geändert", "Der Standardordner ist wieder aktiv.")
+        except (OSError, ValueError) as exc:
+            self.show_error("Datenordner", str(exc))
+
+    def load_settings(self):
+        try:
+            if os.path.exists(SETTINGS_FILE):
+                with open(SETTINGS_FILE, "r", encoding="utf-8") as file:
+                    data = json.load(file)
+                if isinstance(data, dict):
+                    return self.normalize_personal_settings(data)
+        except Exception:
+            pass
+        return self.normalize_personal_settings({})
+
+    def save_settings(self, *, show_error=False):
+        if getattr(self, "_data_read_only", False):
+            return False
+        # Atomar wie die Nutzdaten: ein Absturz während des Schreibens darf die
+        # bestehenden Einstellungen nicht als Rumpfdatei zurücklassen.
+        try:
+            payload = self.normalize_personal_settings(getattr(self, "settings", {}))
+            payload.update({
+                    "theme": self.theme_name,
+                    "title": self.app_title,
+                    "hide_done": bool(self.hide_done_var.get()) if hasattr(self, "hide_done_var") else False,
+                    "filter_mode": self.get_filter_mode() if hasattr(self, "hide_done_var") else "all",
+                    "active_list_id": self.active_list_id,
+                    "active_folder_id": self.active_folder_id if self.view_mode == "folder" else None,
+                    "view_mode": self.view_mode,
+                })
+            migration_backup = os.path.join(BASE_DIR, "settings.before-v1.json")
+            if os.path.isfile(SETTINGS_FILE) and not os.path.exists(migration_backup):
+                with open(SETTINGS_FILE, "rb") as existing_file:
+                    existing_bytes = existing_file.read()
+                try:
+                    existing = json.loads(existing_bytes)
+                except (ValueError, UnicodeError):
+                    existing = None
+                if not isinstance(existing, dict) or existing.get("settings_version") != self.SETTINGS_VERSION:
+                    fd, migration_temp = tempfile.mkstemp(prefix=".glide-settings-", dir=BASE_DIR)
+                    try:
+                        with os.fdopen(fd, "wb") as backup_file:
+                            backup_file.write(existing_bytes)
+                            backup_file.flush()
+                            os.fsync(backup_file.fileno())
+                        os.replace(migration_temp, migration_backup)
+                    finally:
+                        if os.path.exists(migration_temp):
+                            os.remove(migration_temp)
+            self.write_json_atomic(SETTINGS_FILE, payload)
+            self.settings = payload
+            return True
+        except Exception as exc:
+            if show_error:
+                self.show_error("Einstellungen nicht gespeichert", str(exc))
+            return False
+
+    @classmethod
+    def normalize_personal_settings(cls, data):
+        """Additive Einstellungsmigration; das Aufgabendatenformat bleibt unverändert."""
+        result = dict(data) if isinstance(data, dict) else {}
+        result["settings_version"] = cls.SETTINGS_VERSION
+        name = result.get("profile_name", "")
+        result["profile_name"] = " ".join(name.split())[:60] if isinstance(name, str) else ""
+        logo = result.get("profile_logo", "G")
+        # Ein Monogramm bleibt auch bei anderer Systemschrift ein Textlogo.
+        result["profile_logo"] = "".join(
+            char for char in logo if char.isalnum()
+        )[:3] if isinstance(logo, str) else "G"
+        result["profile_logo"] = result["profile_logo"] or "G"
+        # Das Monogramm trägt eine Farbe aus derselben Palette wie Listen,
+        # Aufgaben und Labels – ein Themeschlüssel, damit es in Hell und Dunkel
+        # stimmt. Ein unbekannter Wert fällt auf die Akzentfarbe zurück.
+        logo_color = result.get("profile_logo_color", "accent")
+        result["profile_logo_color"] = (
+            logo_color if logo_color in cls.LIST_COLOR_KEYS else "accent"
+        )
+        for key, default in (("start_on_home", False), ("show_home_stats", True)):
+            value = result.get(key, default)
+            result[key] = value if isinstance(value, bool) else default
+        startup_view = result.get("startup_view", "home" if result.get("start_on_home") else "last")
+        result["startup_view"] = startup_view if startup_view in ("last", "home", "templates") else "last"
+        for key, default in (("show_moon_phase", True), ("show_yearly_stats", True),
+                             ("show_seconds", True)):
+            value = result.get(key, default)
+            result[key] = value if isinstance(value, bool) else default
+        week_start = result.get("week_start", "monday")
+        result["week_start"] = week_start if week_start in ("monday", "sunday") else "monday"
+        font_size = result.get("ui_font_size", "mittel")
+        result["ui_font_size"] = font_size if font_size in cls.UI_FONT_SIZE_CHOICES else "mittel"
+        family = result.get("ui_font_family", "")
+        result["ui_font_family"] = str(family).strip()[:120] if isinstance(family, str) else ""
+        accent = result.get("accent_color", "accent")
+        result["accent_color"] = accent if accent in cls.LIST_COLOR_KEYS else "accent"
+        glass = result.get("glass_mode", True)
+        result["glass_mode"] = glass if isinstance(glass, bool) else True
+        # Tagesziel: 0 heißt „keine Herausforderung", nicht „Ziel sofort erreicht".
+        goal = result.get("daily_goal", cls.DAILY_GOAL_DEFAULT)
+        if isinstance(goal, bool) or not isinstance(goal, int):
+            goal = cls.DAILY_GOAL_DEFAULT
+        result["daily_goal"] = max(0, min(cls.DAILY_GOAL_MAX, goal))
+        # Erledigungshistorie: {"JJJJ-MM-TT": Anzahl}. Ältere Tage als
+        # COMPLETION_HISTORY_DAYS fallen beim Normalisieren heraus, damit die
+        # Datei nicht unbegrenzt wächst.
+        for history_key in ("completion_history", "activity_history"):
+            cleaned = {}
+            history = result.get(history_key)
+            if isinstance(history, dict):
+                limit = date.today() - timedelta(days=cls.COMPLETION_HISTORY_DAYS)
+                for day, count in history.items():
+                    try:
+                        valid_day = date.fromisoformat(day)
+                    except (ValueError, TypeError):
+                        continue
+                    if limit <= valid_day <= date.today() and isinstance(count, int) and not isinstance(count, bool) and count > 0:
+                        cleaned[day] = min(count, 10 ** 6)
+            result[history_key] = dict(sorted(cleaned.items()))
+        recent = []
+        seen = set()
+        for value in result.get("recent_lists", []) if isinstance(result.get("recent_lists"), list) else []:
+            if not isinstance(value, dict):
+                continue
+            list_id, edited = value.get("id"), value.get("edited_at")
+            if not isinstance(list_id, str) or not list_id or list_id in seen or not isinstance(edited, str):
+                continue
+            try:
+                datetime.fromisoformat(edited)
+            except ValueError:
+                continue
+            recent.append({"id": list_id, "edited_at": edited})
+            seen.add(list_id)
+            if len(recent) >= cls.MAX_RECENT_LISTS:
+                break
+        result["recent_lists"] = recent
+        return result
+
+    def list_edit_signatures(self):
+        """Vergleicht Inhalte nur im Arbeitsspeicher, ohne die Listen zu erweitern."""
+        return {
+            entry["id"]: hashlib.sha256(json.dumps(
+                entry, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+            ).encode("utf-8")).digest()
+            for entry in self.lists
+        }
+
+    def record_recent_list_edits(self):
+        """Erfasst tatsächliche, erfolgreich gespeicherte Änderungen, keine Aufrufe."""
+        current = self.list_edit_signatures()
+        item_signatures = {item["id"]: hashlib.sha256(json.dumps(item, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
+                           for entry in self.lists for item in self.walk_items(entry.get("items", []))
+                           if self.is_schedulable_item(item)}
+        previous_items = getattr(self, "_activity_item_signatures", None)
+        self._activity_item_signatures = item_signatures
+        if previous_items is not None:
+            events = sum(previous_items.get(key) != value for key, value in item_signatures.items())
+            events += len(set(previous_items) - set(item_signatures))
+            if events:
+                history = self.settings.setdefault("activity_history", {})
+                day = date.today().isoformat()
+                history[day] = history.get(day, 0) + events
+                self.save_settings()
+        previous = getattr(self, "_list_edit_signatures", None)
+        self._list_edit_signatures = current
+        if previous is None:
+            return
+        changed = [list_id for list_id, signature in current.items() if previous.get(list_id) != signature]
+        recent = [entry for entry in self.settings.get("recent_lists", [])
+                  if entry["id"] in current and entry["id"] not in changed]
+        timestamp = datetime.now().isoformat(timespec="seconds")
+        recent = ([{"id": list_id, "edited_at": timestamp} for list_id in changed] + recent)[:self.MAX_RECENT_LISTS]
+        if recent != self.settings.get("recent_lists", []):
+            self.settings["recent_lists"] = recent
+            self.save_settings()
+
+    def done_item_ids(self, item_ids):
+        """IDs aus `item_ids`, die gerade als erledigt gelten."""
+        result = set()
+        for item_id in item_ids or ():
+            found = self.find_item(item_id)
+            if found and found[0].get("done"):
+                result.add(item_id)
+        return result
+
+    def record_completions(self, done_before, item_ids):
+        """Bucht neu abgehakte Punkte auf den heutigen Tag.
+
+        Gezählt wird ausschließlich der Übergang offen → erledigt. Ein Punkt,
+        der wieder geöffnet wird, zieht nichts ab: Die Zahl beantwortet
+        „wie viel habe ich an diesem Tag geschafft", nicht „wie viele Punkte
+        stehen jetzt auf erledigt".
+
+        Die Historie beginnt mit dieser Version und liegt in `settings.json` –
+        gerätespezifisch und nicht Bestandteil eines Aufgabenbackups. Import,
+        Rückgängig und das Wiederherstellen aus dem Papierkorb laufen nicht
+        über diesen Weg und verändern die Tageszahl deshalb nicht.
+        """
+        neu = 0
+        for item_id in item_ids or ():
+            if item_id in done_before:
+                continue
+            found = self.find_item(item_id)
+            if found and found[0].get("done") and self.is_schedulable_item(found[0]):
+                neu += 1
+        self.book_completions(neu)
+
+    def book_completions(self, anzahl):
+        """Schreibt erledigte Punkte auf den heutigen Tag.
+
+        Eigene Methode, weil sie zwei Aufrufer hat: die Zählung in
+        `item_change` und das Vorrücken einer Wiederholung. Ein vorgerückter
+        Punkt steht am Ende wieder auf offen und würde von der Zählung sonst
+        übersehen – geschafft hat man ihn trotzdem.
+        """
+        if not anzahl:
+            return
+        heute = date.today().isoformat()
+        history = dict(self.settings.get("completion_history", {}))
+        history[heute] = history.get(heute, 0) + anzahl
+        self.settings["completion_history"] = history
+        self.save_settings()
+
+    def completions_today(self):
+        return int(self.settings.get("completion_history", {}).get(date.today().isoformat(), 0))
+
+    def completion_chart(self, today=None):
+        """Die letzten Tage als (Datum, Anzahl) – ältester Tag zuerst."""
+        today = today or date.today()
+        history = self.settings.get("completion_history", {})
+        tage = []
+        for zurueck in range(self.COMPLETION_CHART_DAYS - 1, -1, -1):
+            tag = today - timedelta(days=zurueck)
+            tage.append((tag, int(history.get(tag.isoformat(), 0))))
+        return tage
+
+    def yearly_activity_history(self):
+        """Bewahrt ältere Erledigungen neben den neueren Bearbeitungszahlen.
+
+        Erledigungen sind zugleich Bearbeitungen. Deshalb gilt je Tag der
+        größere Zähler; Addieren würde dieselbe Aktion doppelt zählen. Beide
+        gespeicherten Historien bleiben unverändert und getrennt nutzbar.
+        """
+        history = dict(self.settings.get("completion_history", {}))
+        for day, count in self.settings.get("activity_history", {}).items():
+            history[day] = max(history.get(day, 0), count)
+        return history
+
+    def next_scheduled_item(self, today=None):
+        """Der nächste anstehende Punkt mit Fälligkeit – für die Kopfzeile.
+
+        „Anstehend" heißt: offen, ab heute, frühestes Datum zuerst und bei
+        gleichem Tag die frühere Uhrzeit. Überfälliges bleibt außen vor; dafür
+        gibt es die eigene Ansicht „Verspätet", und die Kopfzeile beantwortet
+        die Frage nach dem Kommenden, nicht nach dem Liegengebliebenen.
+        """
+        today_iso = (today or date.today()).isoformat()
+        bester = None
+        for entry in self.lists:
+            for item in self.walk_items(entry.get("items", [])):
+                if item.get("done") or not self.is_schedulable_item(item):
+                    continue
+                faellig = self.normalize_due(item.get("due"))
+                if not faellig or faellig < today_iso:
+                    continue
+                schluessel = (faellig, self.normalize_due_time(item.get("due_time")) or "99:99")
+                if bester is None or schluessel < bester[0]:
+                    bester = (schluessel, item, entry)
+        return (bester[1], bester[2]) if bester else (None, None)
+
+    def daily_goal(self):
+        goal = self.settings.get("daily_goal", self.DAILY_GOAL_DEFAULT)
+        return goal if isinstance(goal, int) and not isinstance(goal, bool) else self.DAILY_GOAL_DEFAULT
+
+    def home_summary(self, today=None):
+        """Lokale Bestandszahlen; erledigte und gelöschte Daten zählen nicht als fällig."""
+        today = today or date.today()
+        today_iso = today.isoformat()
+        total = done = overdue = due_today = 0
+        due_lists = []
+        for entry in self.lists:
+            matching = 0
+            for item in self.walk_items(entry.get("items", [])):
+                if not self.is_schedulable_item(item):
+                    continue
+                total += 1
+                if item.get("done"):
+                    done += 1
+                    continue
+                due = self.normalize_due(item.get("due"))
+                if due == today_iso:
+                    due_today += 1
+                    matching += 1
+                elif due and due < today_iso:
+                    overdue += 1
+            if matching:
+                due_lists.append((entry, matching))
+        lookup = {entry["id"]: entry for entry in self.lists}
+        recent = [(lookup[value["id"]], value["edited_at"])
+                  for value in self.settings.get("recent_lists", []) if value["id"] in lookup]
+        return {"total": total, "done": done, "open": total - done, "overdue": overdue,
+                "due_today": due_today, "lists": len(self.lists), "due_lists": due_lists, "recent": recent}
+
+    def set_home_view(self, refresh=True):
+        self._activate_system_view(self.HOME_VIEW, refresh=refresh)
+
+    def set_template_view(self, refresh=True):
+        self._activate_system_view(self.TEMPLATE_VIEW, refresh=refresh)
+
+    def set_library_view(self, refresh=True):
+        self._activate_system_view(self.LIBRARY_VIEW, refresh=refresh)
+
+    def home_greeting(self):
+        """Aktuelle Begrüßung der Startseite, mit Namen, wenn einer gesetzt ist."""
+        name = str(self.settings.get("profile_name", "") or "").strip()
+        greetings = self.HOME_GREETINGS
+        index = getattr(self, "_home_greeting_index", 0) % len(greetings)
+        return greetings[index].format(name=f", {name}" if name else "")
+
+    def advance_home_greeting(self):
+        """Rückt eine Begrüßung weiter – beim Betreten der Startseite."""
+        self._home_greeting_index = (
+            getattr(self, "_home_greeting_index", 0) + 1
+        ) % len(self.HOME_GREETINGS)
+        # Aufforderung und Vorlagenauswahl wechseln mit, aber in eigenem Takt.
+        self._home_prompt_index = random.randrange(len(self.HOME_PROMPTS))
+        self._home_template_offset = random.randrange(len(self.LIST_TEMPLATES) or 1)
+
+    def home_prompt(self):
+        """Aufforderung unter der Begrüßung."""
+        prompts = self.HOME_PROMPTS
+        return prompts[getattr(self, "_home_prompt_index", 0) % len(prompts)]
+
+    def home_template_keys(self):
+        """Vorlagen, die gerade auf der Startseite stehen.
+
+        Es sind mehr Vorlagen vorhanden als Platz in der Kachel ist. Welche
+        angeboten werden, wechselt beim Zurückkehren zur Startseite – sonst
+        sähe man dauerhaft dieselben drei und die übrigen nie.
+        """
+        keys = [item.get("id") for item in getattr(self, "templates", []) if item.get("kind") == "list"]
+        if not hasattr(self, "templates"):
+            keys = list(self.LIST_TEMPLATES)
+        if len(keys) <= self.HOME_TEMPLATE_VISIBLE:
+            return keys
+        start = getattr(self, "_home_template_offset", 0) % len(keys)
+        gedreht = keys[start:] + keys[:start]
+        return gedreht[:self.HOME_TEMPLATE_VISIBLE]
+
+    def schedule_home_day_check(self):
+        """Auch ein über Mitternacht offenes Fenster zeigt den aktuellen Tag."""
+        try:
+            self._home_tick_id = self._register_after(self.root.after(30000, self.home_day_tick))
+        except tk.TclError:
+            self._home_tick_id = None
+
+    def home_day_tick(self):
+        self._after_ids.discard(self._home_tick_id)
+        self._home_tick_id = None
+        today = date.today()
+        if today != self._home_day:
+            self._home_day = today
+            self.update_sidebar_list()
+            self.refresh_tree()
+        self.schedule_home_day_check()
+
+    def update_home_visibility(self):
+        """Bewahrt Reihenfolge und Abstände der vorhandenen Listenoberfläche."""
+        if not hasattr(self, "home_frame"):
+            return
+        self.template_actions.pack_forget()
+        self.home_scrollbar.place_forget()
+        self.update_sidebar_heading()
+        if self.view_mode in (self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+            if not self._home_saved_pack:
+                self._home_saved_pack = [(widget, widget.pack_info())
+                                         for widget in self.content_frame.pack_slaves()
+                                         if widget not in (self.home_frame, self.template_actions)]
+                for widget, _info in self._home_saved_pack:
+                    widget.pack_forget()
+            if self.view_mode in (self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+                self.template_actions.pack(side="bottom", fill="x", pady=(8, 14))
+            self.home_frame.pack(fill="both", expand=True,
+                                 pady=(self.HOME_EDGE_GAP, self.HOME_EDGE_GAP))
+        elif self._home_saved_pack:
+            self.home_frame.pack_forget()
+            for widget, info in self._home_saved_pack:
+                widget.pack(**info)
+            self._home_saved_pack = []
+
+    def create_home_panel(self):
+        self.template_actions = tk.Frame(self.content_frame, bg=self.theme["bg"])
+        self.home_frame = tk.Frame(self.content_frame, bg=self.theme["bg"])
+        self.home_canvas = tk.Canvas(self.home_frame, bg=self.theme["bg"], bd=0,
+                                     highlightthickness=0, yscrollincrement=24)
+        self.home_canvas.pack(side="left", fill="both", expand=True)
+        self.home_scrollbar = ThemedAutoScrollbar(
+            self.root, bg_color=self.theme["bg"], track_color=self.theme["bg"],
+            thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"], width=14,
+        )
+        self.home_scrollbar.set_command(self.home_canvas.yview)
+        self.home_canvas.configure(yscrollcommand=self._sync_home_scrollbar)
+        self.home_content = tk.Frame(self.home_canvas, bg=self.theme["bg"])
+        self._home_window = self.home_canvas.create_window((0, 0), window=self.home_content, anchor="nw")
+        self.home_content.bind("<Configure>", self._layout_home_canvas)
+        self.home_canvas.bind("<Configure>", self._layout_home_canvas)
+        self._bind_home_wheel(self.home_canvas)
+
+    def _layout_home_canvas(self, _event=None):
+        width, height = self.home_canvas.winfo_width(), self.home_canvas.winfo_height()
+        self.home_canvas.itemconfigure(self._home_window, width=max(1, width))
+        content_height = self.home_content.winfo_reqheight()
+        self.home_canvas.configure(scrollregion=(0, 0, width, max(height, content_height)))
+        if content_height <= height:
+            self.home_canvas.yview_moveto(0)
+        self._sync_home_scrollbar(*self.home_canvas.yview())
+
+    def _sync_home_scrollbar(self, first, last):
+        self.home_scrollbar.set(first, last)
+        visible = (self.view_mode in (self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW)
+                   and float(last) - float(first) < ThemedAutoScrollbar.FULLY_VISIBLE_RATIO)
+        if not visible:
+            self.home_scrollbar.place_forget()
+            return
+        # Im äußeren Fensterrand: Ein-/Ausblenden ändert keine Kachelbreite
+        # und damit auch keine Texthöhe oder Rastergeometrie mehr.
+        self.home_scrollbar.place(
+            x=self.home_canvas.winfo_rootx()-self.root.winfo_rootx()+self.home_canvas.winfo_width()+6,
+            y=self.home_canvas.winfo_rooty()-self.root.winfo_rooty(),
+            width=14, height=self.home_canvas.winfo_height())
+
+    def _bind_home_wheel(self, widget):
+        self._bind_canvas_wheel(widget, self.home_canvas)
+        for child in widget.winfo_children():
+            self._bind_home_wheel(child)
+
+    def _bind_canvas_wheel(self, widget, canvas):
+        def scroll(event):
+            if getattr(event, "num", None) in (4, 5):
+                steps = -1 if event.num == 4 else 1
+            else:
+                delta = getattr(event, "delta", 0)
+                steps = (-1 if delta > 0 else 1) if delta else 0
+            first, last = canvas.yview()
+            if last - first < ThemedAutoScrollbar.FULLY_VISIBLE_RATIO:
+                canvas.yview_scroll(steps, "units")
+            return "break"
+        for sequence in ("<MouseWheel>", "<Button-4>", "<Button-5>"):
+            self.bind_optional(widget, sequence, scroll)
+
+    def refresh_home(self):
+        if not hasattr(self, "home_content"):
+            return
+        scroll_position = self.home_canvas.yview()[0] if getattr(self, "_home_rendered_view", None) == self.HOME_VIEW else 0
+        self._home_rendered_view = self.HOME_VIEW
+        theme = self.theme
+        for widget in self.home_content.winfo_children():
+            widget.destroy()
+        for widget in (self.home_frame, self.home_canvas, self.home_content):
+            widget.configure(bg=theme["bg"])
+        self.home_scrollbar.set_theme(theme["bg"], theme["bg"], theme["input_border"], theme["muted"])
+        summary = self.home_summary()
+        self._home_summary = summary
+        self._set_stats_text(date.today().strftime("%d.%m.%Y"))
+        cards = []
+
+        def label(parent, text, size=11, bold=False, color="text", surface="card",
+                  pady=(0, 6), anchor="w", wrap=True):
+            widget = tk.Label(parent, text=text, bg=theme[surface], fg=theme[color],
+                              font=app_font(size, "bold" if bold else "normal"),
+                              justify="left", anchor=anchor)
+            widget.pack(fill="x", pady=pady)
+            if wrap:
+                widget.bind("<Configure>", lambda event, target=widget: target.configure(
+                    wraplength=max(100, event.width - 4)))
+            self._bind_home_wheel(widget)
+            return widget
+
+        def card(title=None, pad_y=None):
+            container = self.make_rounded_container(
+                self.home_content,
+                fill_key="card",
+                outline_key="line",
+                radius=self.HOME_CARD_RADIUS,
+                inner_pad_x=self.HOME_CARD_PAD_X,
+                inner_pad_y=self.HOME_CARD_PAD_Y if pad_y is None else pad_y,
+                auto_height=True,
+                register=False,
+            )
+            container.pack(fill="x", pady=(0, self.HOME_CARD_GAP))
+            cards.append(container)
+            if title:
+                label(container.inner, title, 13, True)
+            self._bind_home_wheel(container)
+            self._bind_home_wheel(container.inner)
+            return container.inner
+
+        def action(parent, text, command, color="accent", side=None, pady=3):
+            width = tkfont.Font(font=app_font(10, "bold")).measure(text) + 30
+            button = self._make_dialog_button(parent, text, command, theme[color],
+                                               width=width, height=40)
+            if isinstance(parent, ButtonFlow):
+                parent.add(button)
+            elif side:
+                button.pack(side=side, padx=(0, 6), pady=pady)
+            else:
+                button.text_anchor = "w"
+                button.wrap_text = True
+                button.pack(fill="x", pady=pady)
+            self._bind_home_wheel(button)
+            return button
+
+        def flow(parent, pady=(0, 0)):
+            row = ButtonFlow(parent, bg=theme["card"])
+            row.pack(fill="x", pady=pady)
+            self._bind_home_wheel(row)
+            return row
+
+        def list_color(entry):
+            """Themeschlüssel der Farbe einer Liste – sonst die des Ordners."""
+            if not isinstance(entry, dict):
+                return "accent"
+            eigen = entry.get("color")
+            if eigen in self.LIST_COLOR_KEYS:
+                return eigen
+            folder = self.get_folder(entry.get("folder_id"))
+            while isinstance(folder, dict):
+                geerbt = folder.get("color")
+                if geerbt in self.LIST_COLOR_KEYS:
+                    return geerbt
+                folder = self.get_folder(folder.get("parent_id"))
+            return "accent"
+
+        # --- Kopfzeile: Uhr, Datum, Kalender, nächster Termin ----------------
+        # Flach und breit: Sie beantwortet „welcher Tag, welche Zeit, was als
+        # Nächstes" auf einen Blick und nimmt der Willkommenskachel nichts weg.
+        kopf = card(pad_y=12)
+        kopf_zeile = tk.Frame(kopf, bg=theme["card"])
+        kopf_zeile.pack(fill="x")
+        self._bind_home_wheel(kopf_zeile)
+        uhr = AnalogClock(
+            kopf_zeile, size=62, bg_color=theme["card"], face_color=theme["card"],
+            rim_color=theme["line"], mark_color=theme["muted"],
+            hand_color=theme["text"], second_color=theme["ui_accent"] if self.settings.get("show_seconds", True) else theme["card"],
+        )
+        uhr.pack(side="left", padx=(0, 14))
+        self._bind_home_wheel(uhr)
+        if self.settings.get("show_moon_phase", True):
+            mond = tk.Frame(kopf_zeile, bg=theme["card"])
+            mond.pack(side="right", padx=(10, 0))
+            mond_icon = MoonPhase(mond, moon_phase_info(), size=44,
+                                  bg_color=theme["card"], light_color=theme["flag"],
+                                  dark_color=theme["input"], outline_color=theme["line"])
+            mond_icon.pack(side="left", padx=(0, 6))
+            moon = moon_phase_info()
+            tk.Label(mond, text=f"{moon['name']}\n{moon['percent']} % beleuchtet",
+                     bg=theme["card"], fg=theme["muted"], justify="left",
+                     font=app_font(8), anchor="w").pack(side="left")
+            self._bind_home_wheel(mond)
+
+        kopf_text = tk.Frame(kopf_zeile, bg=theme["card"])
+        kopf_text.pack(side="left", fill="both", expand=True)
+        self._bind_home_wheel(kopf_text)
+        heute = date.today()
+        label(kopf_text, heute.strftime("%A, %d. %B %Y").replace(
+            heute.strftime("%A"), self.WEEKDAY_NAMES[heute.weekday()]).replace(
+            heute.strftime("%B"), self.MONTH_NAMES[heute.month - 1]),
+            14, True, pady=(0, 2), surface="card")
+        naechster, naechste_liste = self.next_scheduled_item()
+        if naechster is not None:
+            wann = self.format_due_full(naechster.get("due"), naechster.get("due_time"))
+            titel = str(naechster.get("text") or "").splitlines()[0]
+            label(kopf_text, f"Als Nächstes: {wann} \u00b7 {titel}",
+                  10, color=list_color(naechste_liste), pady=(0, 0), surface="card")
+        else:
+            label(kopf_text, "Nichts Terminiertes in Sicht.", 10, color="muted",
+                  pady=(0, 0), surface="card")
+
+        # --- Willkommen: Logo links, Begrüßung rechts ------------------------
+        welcome = card()
+        gruss_zeile = tk.Frame(welcome, bg=theme["card"])
+        gruss_zeile.pack(fill="x", pady=(0, 10))
+        self._bind_home_wheel(gruss_zeile)
+        flaeche, schrift = self.monogram_colors()
+        monogramm = MonogramTile(
+            gruss_zeile, self.settings.get("profile_logo", "G"), flaeche, schrift,
+            bg_color=theme["card"], size=66, radius=17,
+        )
+        monogramm.pack(side="left", padx=(0, 14))
+        self._bind_home_wheel(monogramm)
+        gruss_text = tk.Frame(gruss_zeile, bg=theme["card"])
+        gruss_text.pack(side="left", fill="both", expand=True)
+        self._bind_home_wheel(gruss_text)
+        label(gruss_text, self.home_greeting(), 15, True, pady=(2, 4), surface="card")
+        label(gruss_text, self.home_prompt(), color="muted", pady=(0, 0), surface="card")
+
+        # Tägliche Herausforderung. Ohne Ziel bleibt die Zeile weg – eine
+        # Herausforderung, die niemand gestellt hat, gehört nicht auf die Seite.
+        ziel = self.daily_goal()
+        if ziel:
+            geschafft = self.completions_today()
+            erreicht = geschafft >= ziel
+            label(welcome,
+                  f"Heute geschafft: {geschafft} von {ziel}"
+                  + ("  \u2013 Ziel erreicht." if erreicht else ""),
+                  11, True, "confirm" if erreicht else "text", pady=(0, 5))
+            ProgressBar(
+                welcome, value=geschafft, maximum=ziel, bg_color=theme["card"],
+                track_color=theme["input"],
+                fill_color=theme["confirm"] if erreicht else theme["ui_accent"],
+            ).pack(fill="x", pady=(0, 10))
+
+        schnell = flow(welcome)
+        schnell.compact_keys = {"inbox", "templates", "settings"}
+        schnell.compact_below = 760
+        self.home_quick_actions = schnell
+        for key, text, befehl, farbe in (
+            ("inbox", f"{self.ICONS['inbox']}  Eingang", lambda: self.set_active_list(self.ensure_inbox_list()["id"]), "ui_accent"),
+            ("progress", f"{self.ICONS['in_progress']}  In Bearbeitung", self.set_in_progress_view, "due_action"),
+            ("overdue", f"{self.ICONS['overdue']}  Verspätet", self.set_overdue_view, "overdue"),
+            ("calendar", f"{self.ICONS['calendar']}  Kalender", self.open_calendar_view, "import"),
+            ("templates", f"{self.ICONS['templates']}  Vorlagen", self.set_template_view, "confirm"),
+            ("new", "+  Neue Liste", self.create_new_list, "clear"),
+            ("settings", "Einstellungen", self.show_settings_dialog, "muted"),
+        ):
+            button = action(schnell, text, befehl, farbe)
+            schnell.entries[-1] = (button, key)
+        schnell.reflow()
+
+        # --- Heute fällig ----------------------------------------------------
+        due = card("Heute fällig")
+        if summary["due_lists"]:
+            for entry, count in summary["due_lists"]:
+                action(due, f"{self.list_path_title(entry)}  \u00b7  {count} offen",
+                       lambda lid=entry["id"]: self.set_active_list(lid), list_color(entry))
+        else:
+            label(due, "Für heute sind keine offenen Aufgaben fällig.", color="muted")
+
+        # --- Zuletzt bearbeitet ---------------------------------------------
+        recent = card("Zuletzt bearbeitet")
+        if summary["recent"]:
+            for entry, edited in summary["recent"][:self.HOME_RECENT_VISIBLE]:
+                when = datetime.fromisoformat(edited).strftime("%d.%m.%Y, %H:%M")
+                action(recent, f"{self.list_path_title(entry)}  \u00b7  {when}",
+                       lambda lid=entry["id"]: self.set_active_list(lid), list_color(entry))
+        else:
+            label(recent, "Sobald du eine Liste bearbeitest, findest du sie hier wieder.", color="muted")
+
+        # --- Vorlagen --------------------------------------------------------
+        templates = card("Mit einer Vorlage starten")
+        label(templates, "Jede Vorlage legt eine neue, frei bearbeitbare Liste an.", color="muted")
+        for key in self.home_template_keys():
+            record = self.template_by_id(key)
+            if record is not None:
+                titel, beschreibung = record.get("title", "Vorlage"), record.get("note", "")
+            else:
+                titel, beschreibung, _tasks = self.LIST_TEMPLATES[key]
+            action(templates, f"{titel} \u2013 {beschreibung}",
+                   lambda value=key: self.create_list_from_template(value), "confirm")
+
+        # --- Bestand ganz unten ---------------------------------------------
+        # Der Bestand ist Rückblick, keine Handlungsaufforderung: Er steht am
+        # Ende der Seite, nicht an ihrem Anfang.
+        if self.settings.get("show_home_stats", True):
+            stats = card("Dein aktueller Bestand")
+            # Jede Kennzahl in ihrer eigenen Farbe. Ein Tk-Label trägt genau
+            # eine Vordergrundfarbe, deshalb steht jede Angabe in einem eigenen
+            # Label und die Trennpunkte dazwischen in der gedämpften Farbe.
+            kennzahlen = tk.Frame(stats, bg=theme["card"])
+            kennzahlen.pack(fill="x", pady=(0, 6))
+            self._bind_home_wheel(kennzahlen)
+            for index, (text, farbe) in enumerate((
+                (f"{summary['done']} erledigt", "confirm"),
+                (f"{summary['open']} offen", "flag"),
+                (f"{summary['lists']} Listen", "clear"),
+            )):
+                if index:
+                    trenner = tk.Label(kennzahlen, text="\u00b7", bg=theme["card"], fg=theme["muted"],
+                                       font=app_font(12))
+                    trenner.pack(side="left", padx=8)
+                    self._bind_home_wheel(trenner)
+                zahl = tk.Label(kennzahlen, text=text, bg=theme["card"], fg=theme[farbe],
+                                font=app_font(12, "bold"))
+                zahl.pack(side="left")
+                self._bind_home_wheel(zahl)
+            label(stats, f"{summary['due_today']} heute fällig  \u00b7  {summary['overdue']} überfällig", color="muted")
+            bestand_zeile = flow(stats, pady=(4, 8))
+            action(bestand_zeile, f"{self.ICONS['in_progress']}  In Bearbeitung öffnen",
+                   self.set_in_progress_view, "due_action", side="left")
+            if summary["overdue"]:
+                action(bestand_zeile, f"{self.ICONS['overdue']}  Verspätet öffnen",
+                       self.set_overdue_view, "overdue", side="left")
+            label(stats, f"Erledigt in den letzten {self.COMPLETION_CHART_DAYS} Tagen",
+                  10, True, pady=(6, 6))
+            CompletionChart(
+                stats, self.completion_chart(), bg_color=theme["card"],
+                bar_color=theme["ui_accent"], track_color=theme["input"],
+                text_color=theme["muted"], today_color=theme["confirm"],
+            ).pack(fill="x", pady=(0, 8))
+            if self.settings.get("show_yearly_stats", True):
+                label(stats, "Jahresanzeige · Aufgaben bearbeitet", 10, True, pady=(8, 4))
+                yearly_history = self.yearly_activity_history()
+                heatmap = YearHeatmap(
+                    stats, yearly_history, bg_color=theme["card"],
+                    empty_color=theme["input"], accent_color=theme["ui_accent"],
+                    text_color=theme["muted"],
+                )
+                heatmap.pack(fill="x", pady=(0, 4))
+                self.add_tooltip(heatmap, lambda: heatmap.hover_text_at(
+                    heatmap.winfo_pointerx()-heatmap.winfo_rootx(),
+                    heatmap.winfo_pointery()-heatmap.winfo_rooty()))
+                year_stats = YearHeatmap.statistics(yearly_history)
+                label(stats, f"{year_stats['active_days']} aktive Tage  ·  {year_stats['total']} Bearbeitungen  ·  "
+                      f"bester Tag {year_stats['best_day']}  ·  Serie {year_stats['streak']}",
+                      9, color="muted", pady=(0, 6))
+            label(stats, "Der Bestand zählt vorhandene Aufgaben. Erfasste Tageswerte bleiben auch nach dem Löschen erhalten. "
+                  "Gruppen und Überschriften zählen nicht mit.", 9, color="muted")
+
+        # Der Zwischenraum gehört zwischen die Kacheln, nicht hinter die letzte:
+        # Sonst stünde unten mehr Luft als oben.
+        if cards:
+            cards[-1].pack_configure(pady=(0, 0))
+        for widget in (self.home_canvas, self.home_content):
+            self._bind_home_wheel(widget)
+        self.home_content.update_idletasks()
+        self.home_canvas.yview_moveto(scroll_position)
+
+    def refresh_template_page(self):
+        """Linksbündige Spalten und feste Aktionen außerhalb des Scrollbereichs."""
+        if not hasattr(self, "home_content"):
+            return
+        scroll_position = self.home_canvas.yview()[0] if getattr(self, "_home_rendered_view", None) == self.TEMPLATE_VIEW else 0
+        self._home_rendered_view = self.TEMPLATE_VIEW
+        self._set_stats_text(f"{len(self.templates)} Vorlagen")
+        for widget in self.home_content.winfo_children():
+            widget.destroy()
+        theme = self.theme
+        for widget in (self.home_frame, self.home_canvas, self.home_content):
+            widget.configure(bg=theme["bg"])
+        self.home_scrollbar.set_theme(theme["bg"], theme["bg"], theme["input_border"], theme["muted"])
+        editing = bool(getattr(self, "_templates_editing", False))
+        self.template_rows = []
+        self.template_cards = []
+        title_font = tkfont.Font(root=self.root, font=app_font(11, "bold"))
+        # Gemeinsame Namensspalte nach Textmaß statt 40 % der Fensterbreite.
+        title_width = min(230, max((title_font.measure(t.get("title", "Vorlage"))
+                                   for t in self.templates), default=100) + 8)
+        for template in getattr(self, "templates", []):
+            surface = self.make_rounded_container(
+                self.home_content, radius=self.HOME_CARD_RADIUS, inner_pad_x=10,
+                inner_pad_y=6, auto_height=True, register=False,
+            )
+            surface.pack(fill="x", pady=(0, 8))
+            self.template_cards.append(surface)
+            card = surface.inner
+            card.columnconfigure(1, minsize=title_width + 12)
+            card.columnconfigure(2, weight=1)
+            symbol = self.ICONS["folder" if template.get("kind") == "folder" else "list"]
+            kind = tk.Label(card, text=symbol, bg=theme["card"], fg=theme["muted"], font=app_font(13))
+            kind.grid(row=0, column=0, padx=(0, 4), pady=6, sticky="n")
+            self.add_tooltip(kind, "Ordner" if template.get("kind") == "folder" else "Liste")
+            title = tk.Label(card, text=template.get("title", "Vorlage"), bg=theme["card"],
+                             fg=theme["text"], font=app_font(11, "bold"), anchor="w", justify="left")
+            title.grid(row=0, column=1, sticky="new", padx=6, pady=8)
+            note = tk.Label(card, text=template.get("note", ""), bg=theme["card"], fg=theme["muted"],
+                            font=app_font(9), anchor="w", justify="left")
+            note.grid(row=0, column=2, sticky="new", padx=(6, 12), pady=8)
+            actions = tk.Frame(card, bg=theme["card"])
+            actions.grid(row=0, column=3, sticky="ne")
+            if editing:
+                for icon, label, command, color in (
+                    ("trash", "Vorlage löschen", self.delete_template, "delete"),
+                    ("edit", "Vorlage bearbeiten", self.edit_template, "accent"),
+                ):
+                    button = self._make_dialog_button(actions, self.ICONS[icon],
+                                lambda value=template["id"], fn=command: fn(value), color, width=38, height=38)
+                    button.pack(side="left", padx=(0, 4))
+                    self.add_tooltip(button, label)
+            use = self._make_dialog_button(actions, "Verwenden",
+                        lambda value=template["id"]: self.create_list_from_template(value), "confirm", width=118, height=38)
+            use.pack(side="left")
+
+            def layout(event, panel=card, heading=title, description=note, buttons=actions):
+                width = panel.winfo_width()
+                compact = width < 730
+                if compact:
+                    panel.columnconfigure(2, weight=0)
+                    panel.columnconfigure(1, weight=1, minsize=0)
+                    description.grid_configure(row=1, column=1, columnspan=3, padx=(6, 0), pady=(4, 4))
+                else:
+                    panel.columnconfigure(1, weight=0, minsize=title_width + 12)
+                    panel.columnconfigure(2, weight=1)
+                    description.grid_configure(row=0, column=2, columnspan=1, padx=(6, 12), pady=8)
+                text_space = max(75, width - buttons.winfo_reqwidth() - 50)
+                heading.configure(wraplength=text_space if compact else title_width)
+                description.configure(wraplength=max(100, width - 50 if compact else
+                                                       text_space - title_width - 30))
+            card.bind("<Configure>", layout, add="+")
+            self.template_rows.append((card, title, note, actions))
+            for widget in (surface, card, title, note, kind):
+                self._bind_home_wheel(widget)
+        if not self.templates:
+            tk.Label(self.home_content, text="Noch keine Vorlagen. Unten kannst du Vorlagen hinzufügen.",
+                     bg=theme["bg"], fg=theme["muted"], anchor="w").pack(fill="x", pady=20)
+        self.refresh_template_actions()
+        self.home_content.update_idletasks()
+        self._layout_home_canvas()
+        self.home_canvas.yview_moveto(scroll_position)
+
+    def library_entries(self):
+        """Alle normalen Listen und Ordner in der Reihenfolge der Seitenleiste."""
+        entries = [("list", entry) for entry in self.lists
+                   if not entry.get("folder_id") and not self.is_inbox_list(entry)]
+
+        def visit(parent_id):
+            for folder in self.get_child_folders(parent_id):
+                entries.append(("folder", folder))
+                visit(folder["id"])
+                entries.extend(("list", entry) for entry in self.get_folder_lists(folder["id"])
+                               if not self.is_inbox_list(entry))
+
+        visit(None)
+        return entries
+
+    def refresh_library_page(self):
+        """Scrollbare Kachelübersicht des Bestands; verändert keine Inhalte."""
+        scroll_position = self.home_canvas.yview()[0] if getattr(self, "_home_rendered_view", None) == self.LIBRARY_VIEW else 0
+        self._home_rendered_view = self.LIBRARY_VIEW
+        for widget in self.home_content.winfo_children():
+            widget.destroy()
+        theme = self.theme
+        for widget in (self.home_frame, self.home_canvas, self.home_content):
+            widget.configure(bg=theme["bg"])
+        self.home_scrollbar.set_theme(theme["bg"], theme["bg"], theme["input_border"], theme["muted"])
+        entries = self.library_entries()
+        list_count = sum(kind == "list" for kind, _entry in entries)
+        self._set_stats_text(f"{list_count} Listen · {len(entries) - list_count} Ordner")
+        grid = tk.Frame(self.home_content, bg=theme["bg"])
+        grid.pack(fill="x")
+        self.library_cards = []
+        self.library_open_buttons = {}
+        for kind, entry in entries:
+            color = entry.get("color") or ("import" if kind == "folder" else "ui_accent")
+            surface = self.make_rounded_container(grid, radius=self.HOME_CARD_RADIUS,
+                inner_pad_x=12, inner_pad_y=9, auto_height=True, register=False)
+            panel = surface.inner
+            self.library_cards.append(surface)
+
+            def label(text, size=10, bold=False, foreground="muted", pady=(0, 4)):
+                widget = tk.Label(panel, text=text, anchor="w", justify="left",
+                    bg=theme["card"], fg=theme[foreground], font=app_font(size, "bold" if bold else "normal"))
+                widget.pack(fill="x", pady=pady)
+                widget.bind("<Configure>", lambda event, target=widget: target.configure(wraplength=max(80, event.width - 4)))
+                return widget
+
+            label(f"{self.ICONS[kind]}  {entry.get('title') or ('Ordner' if kind == 'folder' else 'Liste')}",
+                  11, True, color)
+            parent_id = entry.get("parent_id" if kind == "folder" else "folder_id")
+            if parent_id:
+                label(" › ".join(self.folder_path_titles(parent_id)), 9)
+            if kind == "folder":
+                nested = {folder["id"] for folder in self.iter_folder_subtree(entry["id"])}
+                lists = [value for value in self.lists if value.get("folder_id") in nested]
+                items = [item for value in lists for item in value.get("items", [])]
+                children = [("folder", value) for value in self.get_child_folders(entry["id"])]
+                children += [("list", value) for value in self.get_folder_lists(entry["id"])]
+                preview = "\n".join(f"{self.ICONS[child_kind]}  {str(value.get('title') or '').strip()}"
+                                    for child_kind, value in children[:2]) or "Noch keine Listen oder Unterordner."
+                summary = f"{len(lists)} Listen · {len(nested) - 1} Unterordner"
+                command = lambda value=entry["id"]: self.set_active_folder(value)
+            else:
+                items = entry.get("items", [])
+                tasks = [item for item in self.walk_items(items) if self.is_schedulable_item(item)]
+                pending = [item for item in tasks if not item.get("done")]
+                preview = "\n".join(str(item.get("text") or "")[:90] for item in (pending or tasks)[:2])
+                if not preview:
+                    preview = "Noch keine Aufgaben."
+                summary = ""
+                command = lambda value=entry["id"]: self.set_active_list(value)
+            total, done, _overdue = self.compute_stats(items)
+            label((summary + " · " if summary else "") + f"{total - done} offen · {done} erledigt", 9)
+            note = " ".join(str(entry.get("note") or "").split())
+            if note:
+                label(note[:100] + ("…" if len(note) > 100 else ""), 9)
+            label(preview, 9, foreground="text", pady=(0, 7))
+            actions = tk.Frame(panel, bg=theme["card"])
+            actions.pack(fill="x")
+            button = self._make_dialog_button(actions, "Ordner öffnen" if kind == "folder" else "Liste öffnen",
+                                              command, color, width=142, height=34)
+            button.pack(side="left")
+            edit = self._make_dialog_button(actions, "Bearbeiten",
+                lambda value=entry["id"], is_folder=kind == "folder":
+                    self.edit_folder_details(value) if is_folder else self.edit_list_details(value),
+                "accent", width=112, height=34)
+            edit.pack(side="left", padx=(6, 0))
+            self.library_open_buttons[(kind, entry["id"])] = button
+            # Die ganze Vorschau öffnet den Inhalt; der explizite Button ist
+            # zusätzlich per Tab und Enter erreichbar.
+            for widget in (surface, panel, *panel.winfo_children()):
+                self._bind_home_wheel(widget)
+                if widget is not actions:
+                    widget.configure(cursor="hand2")
+                    widget.bind("<Button-1>", lambda _event, open_page=command: open_page())
+
+        def layout(event):
+            columns = max(1, min(3, (grid.winfo_width() + 12) // 352))
+            for column in range(3):
+                grid.columnconfigure(column, weight=1 if column < columns else 0,
+                                     uniform="library" if column < columns else "")
+            for index, surface in enumerate(self.library_cards):
+                surface.grid(row=index // columns, column=index % columns, sticky="new",
+                             padx=(0, 12) if index % columns < columns - 1 else 0, pady=(0, 12))
+
+        grid.bind("<Configure>", layout)
+        # Erst einhängen, damit der erste Configure-Aufruf die echte Breite erhält.
+        for index, surface in enumerate(self.library_cards):
+            surface.grid(row=index, column=0, sticky="ew", pady=(0, 12))
+        if not entries:
+            tk.Label(grid, text="Noch keine Listen oder Ordner. Lege unten deine erste Liste an.",
+                     bg=theme["bg"], fg=theme["muted"], anchor="w", justify="left",
+                     wraplength=380).grid(row=0, column=0, sticky="ew", pady=16)
+        self.refresh_page_actions((
+            ("Neue Liste", self.create_new_list, "accent", 148),
+            ("Neuer Ordner", self.create_new_folder, "import", 166),
+            ("Liste importieren", self.import_txt_as_new_lists, "import", 222),
+            ("Listen/Ordner hinzufügen …", self.import_partial_backup, "clear", 252),
+        ))
+        self._bind_home_wheel(grid)
+        self._bind_home_wheel(self.home_canvas)
+        self.home_content.update_idletasks()
+        self._layout_home_canvas()
+        self.home_canvas.yview_moveto(scroll_position)
+
+    def refresh_template_actions(self):
+        editing = bool(getattr(self, "_templates_editing", False))
+        specs = (
+            ("Vorlagen speichern" if editing else "Bearbeiten", self.toggle_template_editing, "accent", 186 if editing else 128),
+            ("Vorlagen exportieren …", self.export_templates_file, "export", 222),
+            ("Vorlagen hinzufügen …", self.import_templates_file, "import", 222),
+            ("Listen/Ordner hinzufügen …", self.import_partial_backup, "clear", 252),
+        )
+        self.refresh_page_actions(specs)
+
+    def refresh_page_actions(self, specs):
+        """Zwei Aktionspaare auf denselben Zwischenflächen wie in den Listen."""
+        for widget in self.template_actions.winfo_children():
+            widget.destroy()
+        self.template_actions.configure(bg=self.theme["bg"])
+        self.template_action_groups = []
+        for pair in (specs[:2], specs[2:]):
+            required = sum(spec[3] for spec in pair) + 5
+            group = self.make_rounded_container(
+                self.template_actions, radius=16, padding=7, width=required + 14,
+                auto_height=True, register=False,
+            )
+            buttons = [self._make_dialog_button(group.inner, text, command, color, width=width, height=38)
+                       for text, command, color, width in pair]
+
+            def layout_pair(width, panel=group.inner, pair_buttons=buttons, needed=required):
+                stacked = width < needed
+                panel.columnconfigure(0, weight=1)
+                panel.columnconfigure(1, weight=0 if stacked else 1)
+                for index, button in enumerate(pair_buttons):
+                    button.grid(row=index if stacked else 0, column=0 if stacked else index,
+                                sticky="ew", padx=(0, 5) if not stacked and index == 0 else 0,
+                                pady=(0, 6) if stacked and index == 0 else 0)
+
+            group.inner.bind("<Configure>", lambda event, arrange=layout_pair, panel=group.inner: arrange(panel.winfo_width()), add="+")
+            layout_pair(required)
+            self.template_action_groups.append(group)
+
+        required_width = sum(int(group.cget("width")) for group in self.template_action_groups) + 12
+
+        def layout_groups(width):
+            stacked = width < required_width
+            self.template_actions.columnconfigure(0, weight=1)
+            self.template_actions.columnconfigure(1, weight=0 if stacked else 1)
+            for index, group in enumerate(self.template_action_groups):
+                group.grid(row=index if stacked else 0, column=0 if stacked else index,
+                           sticky="ew", padx=(0, 12) if not stacked and index == 0 else 0,
+                           pady=(0, 8) if stacked and index == 0 else 0)
+
+        self.template_actions.bind("<Configure>", lambda event: layout_groups(self.template_actions.winfo_width()))
+        layout_groups(self.template_actions.winfo_width())
+
+    def add_tooltip(self, widget, text):
+        """Erklärt kompakte Textsymbole auch beim Tastaturfokus."""
+        state = {"after": None, "window": None, "text": ""}
+        def hide(_event=None):
+            if state["after"] is not None:
+                widget.after_cancel(state["after"])
+                state["after"] = None
+            if state["window"] is not None:
+                state["window"].destroy()
+                state["window"] = None
+        def show():
+            state["after"] = None
+            value = text() if callable(text) else text
+            if not value:
+                return
+            state["text"] = value
+            tip = tk.Toplevel(widget)
+            state["window"] = tip
+            tip.overrideredirect(True)
+            tk.Label(tip, text=value, bg=self.theme["card"], fg=self.theme["text"],
+                     relief="solid", bd=1, padx=8, pady=5, font=app_font(9)).pack()
+            tip.update_idletasks()
+            x = widget.winfo_pointerx()+14 if callable(text) else widget.winfo_rootx()
+            y = widget.winfo_pointery()+18 if callable(text) else widget.winfo_rooty()+widget.winfo_height()+3
+            tip.geometry(f"+{min(x, widget.winfo_screenwidth()-tip.winfo_reqwidth()-8)}+{min(y, widget.winfo_screenheight()-tip.winfo_reqheight()-8)}")
+        def schedule(_event=None):
+            hide()
+            state["after"] = widget.after(500, show)
+        for event in ("<Enter>", "<FocusIn>"):
+            widget.bind(event, schedule, add="+")
+        if callable(text):
+            widget.bind("<Motion>", lambda _event: schedule() if text() != state["text"] else None, add="+")
+        for event in ("<Leave>", "<FocusOut>", "<ButtonPress-1>", "<Destroy>"):
+            widget.bind(event, hide, add="+")
+
+    def toggle_template_editing(self):
+        if getattr(self, "_templates_editing", False):
+            if not self.save_templates():
+                self.show_error("Vorlagen speichern", "Die Vorlagen konnten nicht gespeichert werden.")
+                return
+            self._templates_editing = False
+        else:
+            self._templates_before_edit = copy.deepcopy(self.templates)
+            self._templates_editing = True
+        self.refresh_tree()
+
+    def edit_template(self, template_id):
+        if not getattr(self, "_templates_editing", False):
+            return
+        template = self.template_by_id(template_id)
+        if not template:
+            return
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Vorlage bearbeiten")
+        dialog.transient(self.root)
+        body = tk.Frame(dialog, bg=self.theme["bg"])
+        body.pack(fill="both", expand=True, padx=24, pady=20)
+        title = tk.StringVar(value=template["title"])
+        tk.Label(body, text="Titel", bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w")
+        title_entry = tk.Entry(body, textvariable=title, font=(self.ui_font_family(), 12))
+        title_entry.pack(fill="x", ipady=6, pady=(4, 12))
+        tk.Label(body, text="Beschreibung", bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w")
+        note = tk.Text(body, height=4, wrap="word", font=(self.ui_font_family(), 11))
+        note.insert("1.0", template.get("note", ""))
+        note.pack(fill="x", pady=(4, 12))
+        tk.Label(body, text="Inhalt: eine Aufgabe bzw. Liste pro Zeile. Unterpunkte bleiben erhalten.",
+                 bg=self.theme["bg"], fg=self.theme["muted"]).pack(anchor="w")
+        content = tk.Text(body, height=10, wrap="word", font=(self.ui_font_family(), 11))
+        payload = template.get("payload")
+        objects = (payload.get("lists", []) if template["kind"] == "folder" else
+                   payload.get("lists", [{}])[0].get("items", [])) if payload else []
+        key = "title" if template["kind"] == "folder" else "text"
+        lines = [str(obj.get(key, "")).replace("\n", " ") for obj in objects] if payload else template["items"]
+        content.insert("1.0", "\n".join(lines))
+        content.pack(fill="both", expand=True, pady=(4, 12))
+        def submit():
+            text = title.get().strip()
+            if not text:
+                return
+            template["title"] = text[:120]
+            template["note"] = note.get("1.0", "end-1c")
+            values = [line.strip() for line in content.get("1.0", "end-1c").splitlines() if line.strip()]
+            template["items"] = values
+            if payload:
+                updated = []
+                for index, value in enumerate(values):
+                    obj = copy.deepcopy(objects[index]) if index < len(objects) else (
+                        self.new_list_object(value, []) if key == "title" else self.new_item(value))
+                    # Mehrzeilige Long-Tasks bleiben erhalten, solange der Titel nicht geändert wird.
+                    if index >= len(lines) or value != lines[index]:
+                        obj[key] = value
+                    updated.append(obj)
+                if key == "title":
+                    payload["lists"] = updated
+                else:
+                    payload["lists"][0]["items"] = updated
+            dialog.destroy()
+            self.refresh_tree()
+        row = tk.Frame(body, bg=self.theme["bg"])
+        row.pack(fill="x")
+        self._make_dialog_button(row, "Übernehmen", submit, "confirm").pack(side="right")
+        self._make_dialog_button(row, "Abbrechen", dialog.destroy, "muted").pack(side="right", padx=8)
+        for field in (title_entry, note, content):
+            field.configure(bg=self.theme["input"], fg=self.theme["text"], insertbackground=self.theme["text"], relief="flat")
+        self._schedule_windows_chrome_theme(dialog)
+        self._center_dialog(dialog, min_width=620, min_height=530)
+        self.run_modal(dialog)
+
+    def delete_template(self, template_id):
+        if not getattr(self, "_templates_editing", False):
+            return
+        if self.ask_yes_no("Vorlage löschen", "Diese Vorlage wirklich löschen?"):
+            self.templates = [item for item in self.templates if item["id"] != template_id]
+            self.refresh_tree()
+
+    def capture_template(self, list_id=None, folder_id=None):
+        holder = self.get_folder(folder_id) if folder_id else next(
+            (entry for entry in self.lists if entry["id"] == list_id), None)
+        if holder is None:
+            return None
+        payload = self.partial_backup_payload([list_id] if list_id else [], [folder_id] if folder_id else [])
+        files = {}
+        for storage, path in self.collect_attachment_sources(payload["lists"], folders=payload.get("folders")).items():
+            with open(path, "rb") as file:
+                raw = file.read(self.MAX_BACKUP_ATTACHMENT_BYTES + 1)
+            if len(raw) > self.MAX_BACKUP_ATTACHMENT_BYTES:
+                raise ValueError("Ein Anhang ist für die Vorlage zu groß.")
+            files[storage] = base64.b64encode(raw).decode("ascii")
+        template = {"id": uuid.uuid4().hex, "kind": "folder" if folder_id else "list",
+                    "title": holder.get("title") or "Vorlage", "note": holder.get("note") or "",
+                    "color": holder.get("color"), "labels": list(holder.get("labels", [])),
+                    "items": [], "payload": payload, "files": files}
+        self.templates.append(template)
+        if not getattr(self, "_templates_editing", False) and not self.save_templates():
+            self.templates.remove(template)
+            raise OSError("Die Vorlage konnte nicht gespeichert werden.")
+        return template
+
+    def template_from_current_list(self):
+        return self.capture_template(list_id=self.active_list_id)
+
+    def save_list_as_template(self, list_id=None):
+        try:
+            template = self.capture_template(list_id=list_id or self.active_list_id)
+            if template:
+                self.show_info("Vorlage gespeichert", f"„{template['title']}“ steht jetzt unter Vorlagen bereit.")
+            return template
+        except (OSError, ValueError) as exc:
+            self.show_error("Vorlage", str(exc))
+
+    def save_folder_as_template(self, folder_id):
+        try:
+            template = self.capture_template(folder_id=folder_id)
+            if template:
+                self.show_info("Vorlage gespeichert", f"„{template['title']}“ steht jetzt unter Vorlagen bereit.")
+            return template
+        except (OSError, ValueError) as exc:
+            self.show_error("Vorlage", str(exc))
+
+    def export_templates_file(self):
+        path = filedialog.asksaveasfilename(title="Vorlagen exportieren", defaultextension=".glidetemplates",
+                                            initialfile="glide_vorlagen.glidetemplates",
+                                            filetypes=[("Glide-Vorlagen", "*.glidetemplates"), ("Alle Dateien", "*.*")])
+        if not path:
+            return
+        payload = {"format_version": self.TEMPLATE_FORMAT_VERSION, "templates": self.templates}
+        try:
+            self.write_json_atomic(path, payload)
+            self.show_info("Vorlagen exportiert", f"{len(self.templates)} Vorlage(n) gespeichert.")
+        except OSError as exc:
+            self.show_error("Vorlagenexport", str(exc))
+
+    def validate_template_payload(self, template):
+        referenced = self.validate_backup_schema(template["payload"], portable=True)
+        files = template.get("files", {})
+        if not isinstance(files, dict):
+            raise ValueError("Die Anhänge der Vorlage sind ungültig.")
+        total = 0
+        for storage in referenced:
+            encoded = files.get(storage)
+            if not isinstance(encoded, str) or len(encoded) > (self.MAX_BACKUP_ATTACHMENT_BYTES + 2) // 3 * 4:
+                raise ValueError("Ein Vorlagenanhang fehlt oder ist zu groß.")
+            try:
+                raw = base64.b64decode(encoded, validate=True)
+            except (ValueError, UnicodeEncodeError) as exc:
+                raise ValueError("Ein Vorlagenanhang ist beschädigt.") from exc
+            total += len(raw)
+            if len(raw) > self.MAX_BACKUP_ATTACHMENT_BYTES or total > self.MAX_BACKUP_TOTAL_BYTES:
+                raise ValueError("Die Vorlagenanhänge überschreiten die zulässige Größe.")
+        return referenced
+
+    def import_templates_file(self):
+        path = filedialog.askopenfilename(title="Vorlagen hinzufügen", filetypes=[("Glide-Vorlagen", "*.glidetemplates"), ("JSON", "*.json"), ("Alle Dateien", "*.*")])
+        if not path:
+            return
+        try:
+            if os.path.getsize(path) > self.MAX_BACKUP_TOTAL_BYTES * 2:
+                raise ValueError("Die Vorlagendatei ist zu groß.")
+            with open(path, "r", encoding="utf-8-sig") as file:
+                incoming = self.normalize_template_records(json.load(file))
+            for record in incoming:
+                if "payload" in record:
+                    self.validate_template_payload(record)
+            existing = {item.get("id") for item in self.templates}
+            for item in incoming:
+                if item["id"] in existing:
+                    item["id"] = uuid.uuid4().hex
+                self.templates.append(item)
+                existing.add(item["id"])
+            if not getattr(self, "_templates_editing", False) and not self.save_templates():
+                self.templates = self.templates[:-len(incoming)] if incoming else self.templates
+                raise OSError("Die Vorlagen konnten nicht gespeichert werden.")
+            self.update_sidebar_list()
+            self.refresh_tree()
+            self.show_info("Vorlagen hinzugefügt", f"{len(incoming)} Vorlage(n) ergänzt.")
+        except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
+            self.show_error("Vorlagenimport", str(exc))
+
+    def create_list_from_template(self, template_key):
+        template = self.template_by_id(template_key)
+        if template and "payload" in template:
+            try:
+                referenced = self.validate_template_payload(template)
+                payload = copy.deepcopy(template["payload"])
+                roots = payload["folders"] if template["kind"] == "folder" else payload["lists"]
+                if roots:
+                    roots[0].update(title=template["title"], note=template.get("note", ""))
+                for entry in payload["lists"]:
+                    for item in self.walk_items(entry.get("items", [])):
+                        item["done"] = False
+                previous = {entry["id"] for entry in (self.folders if template["kind"] == "folder" else self.lists)}
+                with tempfile.TemporaryDirectory(prefix="glide-template-") as temporary:
+                    path = os.path.join(temporary, "vorlage.glidebackup")
+                    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as archive:
+                        archive.writestr("data.json", json.dumps(payload, ensure_ascii=False))
+                        for storage in referenced:
+                            archive.writestr(storage, base64.b64decode(template["files"][storage], validate=True))
+                    if not self.import_full_backup(additive=True, path=path):
+                        return None
+                records = self.folders if template["kind"] == "folder" else self.lists
+                created = [entry for entry in records if entry["id"] not in previous]
+                if template["kind"] == "folder":
+                    created = [entry for entry in created if not entry.get("parent_id")]
+                    if created:
+                        self.set_active_folder(created[0]["id"])
+                return created[0] if created else None
+            except (OSError, ValueError, TypeError, KeyError) as exc:
+                self.show_error("Vorlage verwenden", str(exc))
+                return None
+        if template is not None:
+            title = template.get("title") or "Neue Liste"
+            note = template.get("note") or ""
+            task_texts = template.get("items", [])
+            template_color = template.get("color")
+            template_labels = template.get("labels", [])
+            kind = template.get("kind", "list")
+        else:
+            template = self.LIST_TEMPLATES.get(template_key)
+            if template is None:
+                return None
+            title, note, task_texts = template
+            template_color = None
+            template_labels = []
+            kind = "list"
+        if kind == "folder":
+            folder = self.new_folder_object(title, color=template_color, note=note, labels=template_labels)
+            with self.sidebar_change(refresh_tree=True) as change:
+                self.folders.append(folder)
+                for text in task_texts or ["Neue Liste"]:
+                    entry = self.new_list_object(str(text), [], folder_id=folder["id"], color=template_color, note=note)
+                    self.lists.append(entry)
+                self.set_active_folder(folder["id"], refresh=False)
+                change.mark()
+            return folder
+        if template_key == "daily":
+            title += date.today().strftime(" %d.%m.%Y")
+        existing_titles = {entry.get("title") for entry in self.lists}
+        candidate, number = title, 2
+        while candidate in existing_titles:
+            candidate = f"{title} ({number})"
+            number += 1
+        tasks = [self.new_item(text, due=date.today().isoformat() if template_key == "daily" else None)
+                 for text in task_texts]
+        entry = self.new_list_object(candidate, tasks, note=note, color=template_color, labels=template_labels)
+        with self.sidebar_change(refresh_tree=True) as change:
+            self.lists.append(entry)
+            self.set_active_list(entry["id"], refresh=False)
+            change.mark()
+        self.save_settings()
+        return entry
+
+    def show_settings_dialog(self):
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Einstellungen")
+        dialog.configure(bg=self.theme["bg"])
+        dialog.transient(self.root)
+        dialog.resizable(True, True)
+        dialog.minsize(720, 580)
+        buttons = tk.Frame(dialog, bg=self.theme["bg"])
+        buttons.pack(side="bottom", fill="x", padx=24, pady=12)
+        canvas = tk.Canvas(dialog, bg=self.theme["bg"], highlightthickness=0)
+        scroll = ttk.Scrollbar(dialog, orient="vertical", command=canvas.yview)
+        scroll.pack(side="right", fill="y")
+        canvas.pack(side="top", fill="both", expand=True)
+        canvas.configure(yscrollcommand=scroll.set)
+        body = tk.Frame(canvas, bg=self.theme["bg"], padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+        window = canvas.create_window(0, 0, window=body, anchor="nw")
+        body.bind("<Configure>", lambda event: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.bind("<Configure>", lambda event: canvas.itemconfigure(window, width=event.width))
+        dialog.bind("<MouseWheel>", lambda event: canvas.yview_scroll(-int(event.delta / 120), "units"), add="+")
+        tk.Label(body, text="Glide persönlich machen", font=app_font(16, "bold"),
+                 bg=self.theme["bg"], fg=self.theme["text"], anchor="w").pack(fill="x", pady=(0, 16))
+        columns = tk.Frame(body, bg=self.theme["bg"])
+        columns.pack(fill="both", expand=True)
+        columns.columnconfigure((0, 1), weight=1, uniform="settings")
+        personal = tk.Frame(columns, bg=self.theme["bg"])
+        personal.grid(row=0, column=0, sticky="new", padx=(0, 18))
+        appearance = tk.Frame(columns, bg=self.theme["bg"])
+        appearance.grid(row=0, column=1, sticky="new", padx=(18, 0))
+        for panel, title in ((personal, "Profil und Startseite"), (appearance, "Darstellung und Bedienung")):
+            tk.Label(panel, text=title, bg=self.theme["bg"], fg=self.theme["text"],
+                     font=app_font(11, "bold"), anchor="w").pack(fill="x", pady=(0, 8))
+        name = tk.StringVar(value=self.settings.get("profile_name", ""))
+        logo = tk.StringVar(value=self.settings.get("profile_logo", "G"))
+        start = tk.BooleanVar(value=self.settings.get("start_on_home", False))
+        startup_labels = {"last": "Letzte Ansicht", "home": "Startseite", "templates": "Vorlagen"}
+        startup = tk.StringVar(value=startup_labels.get(self.settings.get("startup_view", "last"), "Letzte Ansicht"))
+        stats = tk.BooleanVar(value=self.settings.get("show_home_stats", True))
+        moon = tk.BooleanVar(value=self.settings.get("show_moon_phase", True))
+        yearly = tk.BooleanVar(value=self.settings.get("show_yearly_stats", True))
+        seconds = tk.BooleanVar(value=self.settings.get("show_seconds", True))
+        glass = tk.BooleanVar(value=self.settings.get("glass_mode", True))
+        week_start = tk.StringVar(value="Sonntag" if self.settings.get("week_start") == "sunday" else "Montag")
+        font_size = tk.StringVar(value=self.settings.get("ui_font_size", "mittel"))
+        font_family = tk.StringVar(value=self.settings.get("ui_font_family", ""))
+        accent = tk.StringVar(value=self.LABEL_COLOR_NAMES.get(self.settings.get("accent_color", "accent"), "Lila"))
+        farbnamen = {key: label for label, key in self.LIST_COLOR_CHOICES}
+        farbe = tk.StringVar(value=farbnamen.get(
+            self.settings.get("profile_logo_color", "accent"), "Lila"))
+        ziel = tk.StringVar(value=str(self.daily_goal()))
+        fields = []
+        for title, variable in (("Dein Name für die Begrüßung", name), ("Dein Textlogo (1–3 Buchstaben oder Ziffern)", logo)):
+            tk.Label(personal, text=title, bg=self.theme["bg"], fg=self.theme["muted"],
+                     font=app_font(10), anchor="w").pack(fill="x", pady=(8, 5))
+            entry = tk.Entry(personal, textvariable=variable, width=24, bg=self.theme["input"],
+                             fg=self.theme["text"], insertbackground=self.theme["text"],
+                             relief="flat", highlightthickness=1, highlightbackground=self.theme["input_border"],
+                             highlightcolor=self.theme["ui_accent"], font=app_font(12))
+            entry.pack(fill="x", ipady=7, pady=(0, 7))
+            entry.configure(borderwidth=7)
+            fields.append(entry)
+
+        # Farbe und Vorschau stehen nebeneinander: Die Wirkung der Auswahl ist
+        # unmittelbar daneben zu sehen, statt erst nach dem Speichern.
+        tk.Label(personal, text="Farbe deines Textlogos", bg=self.theme["bg"], fg=self.theme["muted"],
+                 font=app_font(10), anchor="w").pack(fill="x", pady=(8, 5))
+        logo_zeile = tk.Frame(personal, bg=self.theme["bg"])
+        logo_zeile.pack(fill="x", pady=(0, 7))
+        vorschau = MonogramTile(
+            logo_zeile, logo.get() or "G", *self.monogram_colors(),
+            bg_color=self.theme["bg"], size=56, radius=14,
+        )
+        vorschau.pack(side="left", padx=(0, 12))
+        farb_rahmen, _farb_knopf = self._make_option_menu(
+            logo_zeile, farbe, [label for label, _key in self.LIST_COLOR_CHOICES],
+            option_colors={label: key for label, key in self.LIST_COLOR_CHOICES},
+        )
+        farb_rahmen.pack(side="left", fill="x", expand=True)
+
+        def vorschau_aktualisieren(*_args):
+            schluessel = next((key for label, key in self.LIST_COLOR_CHOICES
+                               if label == farbe.get()), "accent")
+            grund = self.theme.get(schluessel, self.theme["accent"])
+            if self.theme_name == "dark":
+                flaeche = mix_to_luminance(grund, "#000000", self.LABEL_CHIP_DARK_FILL_LUMINANCE)
+                schrift = mix_to_luminance(grund, "#FFFFFF", self.LABEL_CHIP_DARK_TEXT_LUMINANCE)
+            else:
+                flaeche = mix_to_luminance(grund, "#FFFFFF", self.LABEL_CHIP_LIGHT_FILL_LUMINANCE)
+                schrift = mix_to_luminance(grund, "#000000", self.LABEL_CHIP_LIGHT_TEXT_LUMINANCE)
+            vorschau.set_colors(fill=flaeche, text_color=schrift)
+            sauber = "".join(zeichen for zeichen in logo.get() if zeichen.isalnum())[:3]
+            vorschau.set_text(sauber or "G")
+
+        for variable in (farbe, logo):
+            spur = variable.trace_add("write", vorschau_aktualisieren)
+
+            def loesen(event, ziel_widget=vorschau, v=variable, s=spur):
+                if event.widget is ziel_widget:
+                    try:
+                        v.trace_remove("write", s)
+                    except tk.TclError:
+                        pass
+            vorschau.bind("<Destroy>", loesen, add="+")
+        vorschau_aktualisieren()
+
+        tk.Label(personal, text="Tagesziel · erledigte Aufgaben (0 = aus)",
+                 bg=self.theme["bg"], fg=self.theme["muted"],
+                 font=app_font(10), anchor="w").pack(fill="x", pady=(8, 5))
+        ziel_feld = tk.Entry(personal, textvariable=ziel, width=24, bg=self.theme["input"],
+                             fg=self.theme["text"], insertbackground=self.theme["text"],
+                             relief="flat", highlightthickness=1, highlightbackground=self.theme["input_border"],
+                             highlightcolor=self.theme["ui_accent"], font=app_font(12))
+        ziel_feld.pack(fill="x", ipady=7, pady=(0, 7))
+        ziel_feld.configure(borderwidth=7)
+        fields.append(ziel_feld)
+
+        for title, variable in (("Bestandsstatistiken auf der Startseite anzeigen", stats),):
+            tk.Checkbutton(personal, text=title, variable=variable, bg=self.theme["bg"], fg=self.theme["text"],
+                           activebackground=self.theme["bg"], activeforeground=self.theme["text"],
+                           selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=5)
+        tk.Label(personal, text="Ansicht beim Öffnen", bg=self.theme["bg"], fg=self.theme["muted"],
+                 font=app_font(10), anchor="w").pack(fill="x", pady=(8, 5))
+        startup_frame, _startup_button = self._make_option_menu(
+            personal, startup, list(startup_labels.values()),
+            option_colors={"Letzte Ansicht": "muted", "Startseite": "accent", "Vorlagen": "confirm"},
+        )
+        startup_frame.pack(fill="x", pady=(0, 7))
+        for title, variable in (("Mondphase in der Kopfzeile anzeigen", moon),
+                                ("Jahresanzeige unter dem Bestand anzeigen", yearly),
+                                ("Sekundenzeiger der Uhr anzeigen", seconds),
+                                ("Materialoptik mit Glaskanten verwenden", glass)):
+            tk.Checkbutton(appearance, text=title, variable=variable, bg=self.theme["bg"], fg=self.theme["text"],
+                           activebackground=self.theme["bg"], activeforeground=self.theme["text"],
+                           selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=5)
+        tk.Label(appearance, text="Akzentfarbe der Oberfläche", bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w").pack(fill="x", pady=(8, 5))
+        accent_frame, _accent_button = self._make_option_menu(
+            appearance, accent, [label for label, key in self.LIST_COLOR_CHOICES],
+            option_colors={label: key for label, key in self.LIST_COLOR_CHOICES})
+        accent_frame.pack(fill="x", pady=(0, 7))
+        tk.Label(appearance, text="Wochenbeginn", bg=self.theme["bg"], fg=self.theme["muted"],
+                 font=app_font(10), anchor="w").pack(fill="x", pady=(8, 5))
+        _week_frame, _week_button = self._make_option_menu(
+            appearance, week_start, ["Montag", "Sonntag"], option_colors={"Montag": "accent", "Sonntag": "due_action"})
+        _week_frame.pack(fill="x", pady=(0, 7))
+        tk.Label(appearance, text="Schriftgröße", bg=self.theme["bg"], fg=self.theme["muted"],
+                 font=app_font(10), anchor="w").pack(fill="x", pady=(8, 5))
+        _font_frame, _font_button = self._make_option_menu(
+            appearance, font_size, ["klein", "mittel", "gross"], option_colors={"klein": "muted", "mittel": "accent", "gross": "confirm"})
+        _font_frame.pack(fill="x", pady=(0, 7))
+        tk.Label(appearance, text="Schriftfamilie (leer = mitgelieferte Schrift)",
+                 bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w").pack(fill="x", pady=(8, 5))
+        font_entry = tk.Entry(appearance, textvariable=font_family, width=24, bg=self.theme["input"],
+                              fg=self.theme["text"], insertbackground=self.theme["text"], relief="flat",
+                              highlightthickness=1, highlightbackground=self.theme["input_border"],
+                              highlightcolor=self.theme["ui_accent"], font=app_font(12))
+        font_entry.pack(fill="x", ipady=7, pady=(0, 7))
+        font_entry.configure(borderwidth=7)
+        fields.append(font_entry)
+        self._make_dialog_button(appearance, "Datenordner wechseln …", self.show_data_folder_dialog,
+                                 "import", width=250).pack(fill="x", pady=(8, 4))
+        tk.Label(personal, text="Das Tagesziel zählt erledigte Aufgaben. Persönliche Einstellungen und Tageszahlen liegen in der gewählten Datenablage; sie sind nicht Teil eines Aufgabenbackups.",
+                 bg=self.theme["bg"], fg=self.theme["muted"], wraplength=380,
+                 justify="left", anchor="w", font=app_font(9)).pack(fill="x", pady=(13, 5))
+        error = tk.Label(body, text="", bg=self.theme["bg"], fg=self.theme["delete"],
+                         wraplength=470, justify="left", font=app_font(10))
+        error.pack(fill="x")
+        def submit(_event=None):
+            clean_logo = logo.get().strip()
+            if not 1 <= len(clean_logo) <= 3 or not clean_logo.isalnum():
+                error.configure(text="Bitte 1 bis 3 Buchstaben oder Ziffern für dein Textlogo eingeben.")
+                fields[1].focus_set()
+                return "break"
+            if len(name.get().strip()) > 60:
+                error.configure(text="Bitte den Namen auf höchstens 60 Zeichen kürzen.")
+                fields[0].focus_set()
+                return "break"
+            rohziel = ziel.get().strip() or "0"
+            if not rohziel.isdigit() or int(rohziel) > self.DAILY_GOAL_MAX:
+                error.configure(
+                    text=f"Bitte für die tägliche Herausforderung eine Zahl von 0 bis {self.DAILY_GOAL_MAX} eingeben."
+                )
+                fields[2].focus_set()
+                return "break"
+            farbschluessel = next((key for label, key in self.LIST_COLOR_CHOICES
+                                   if label == farbe.get()), "accent")
+            previous = dict(self.settings)
+            week_value = "sunday" if week_start.get() == "Sonntag" else "monday"
+            startup_value = next((key for key, label in startup_labels.items() if label == startup.get()), "last")
+            self.settings.update(profile_name=name.get(), profile_logo=clean_logo,
+                                 profile_logo_color=farbschluessel, daily_goal=int(rohziel),
+                                 start_on_home=startup_value == "home", startup_view=startup_value, show_home_stats=stats.get(),
+                                 accent_color=next((key for label, key in self.LIST_COLOR_CHOICES if label == accent.get()), "accent"),
+                                 show_moon_phase=moon.get(), show_yearly_stats=yearly.get(),
+                                 show_seconds=seconds.get(), week_start=week_value,
+                                 ui_font_size=font_size.get(), ui_font_family=font_family.get().strip(),
+                                 glass_mode=glass.get())
+            if not self.save_settings(show_error=True):
+                self.settings = previous
+                return "break"
+            dialog.destroy()
+            self._ui_font_family = None
+            self._font_families = None
+            self._sidebar_row_font = None
+            self._system_row_font = None
+            self._task_row_font = None
+            self._label_column_width = None
+            self._due_column_width = None
+            self.apply_ui_font()
+            self.apply_theme()
+            self.update_header_title()
+            self.refresh_tree()
+            return "break"
+
+        self._make_dialog_button(buttons, "Speichern", submit, "confirm").pack(side="right")
+        self._make_dialog_button(buttons, "Abbrechen", dialog.destroy, "muted").pack(side="right", padx=(0, 10))
+        dialog.bind("<Return>", submit)
+        dialog.bind("<Escape>", lambda _event: dialog.destroy())
+        for panel in (personal, appearance):
+            for widget in panel.winfo_children():
+                if isinstance(widget, (tk.Label, tk.Checkbutton)):
+                    widget.configure(justify="left", anchor="w")
+                    widget.bind("<Configure>", lambda event, target=widget: target.configure(wraplength=max(160, event.width - 8)))
+        self._center_dialog(dialog, min_width=1080, min_height=760)
+        self._schedule_windows_chrome_theme(dialog)
+        fields[0].focus_set()
+        self.run_modal(dialog)
+
+    def save_theme_setting(self):
+        self.save_settings()
+
+    def update_window_title(self):
+        self.root.title(f"{self.get_display_title()} \u00b7 {APP_NAME}")
+
+    def get_folder(self, folder_id):
+        return next((folder for folder in self.folders if folder.get("id") == folder_id), None)
+
+    def get_folder_lists(self, folder_id):
+        return [entry for entry in self.lists if entry.get("folder_id") == folder_id]
+
+    def get_display_title(self):
+        if self.view_mode == self.HOME_VIEW:
+            return "Startseite"
+        if self.view_mode == self.TEMPLATE_VIEW:
+            return "Vorlagen"
+        if self.view_mode == self.LIBRARY_VIEW:
+            return "Listen und Ordner"
+        if self.view_mode == "in_progress":
+            return "In Bearbeitung"
+        if self.view_mode == self.LABELS_VIEW:
+            return "Labels"
+        if self.view_mode == "overdue":
+            return "Verspätet"
+        if self.view_mode == "trash":
+            return "Papierkorb"
+        if self.view_mode == "folder" and self.active_folder_id:
+            folder = self.get_folder(self.active_folder_id)
+            if folder:
+                return str(folder.get("title") or "Ordner").strip() or "Ordner"
+        return self.app_title
+
+    def get_active_page(self):
+        if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+            return None
+        if self.view_mode == "folder" and self.active_folder_id:
+            return self.get_folder(self.active_folder_id)
+        return self.current_list() if self.lists else None
+
+    def require_list_view(self, message=True):
+        """Verhindert, dass Aktionen unsichtbar die zuletzt geöffnete Liste ändern."""
+        if self.view_mode == "list":
+            return True
+        if message:
+            if self.view_mode == self.HOME_VIEW:
+                self.show_info("Startseite", "Öffne zuerst eine Liste oder wähle eine Vorlage aus.")
+            elif self.view_mode == self.TEMPLATE_VIEW:
+                self.show_info("Vorlagen", "Wähle zuerst eine Vorlage aus oder öffne eine Liste.")
+            elif self.view_mode == self.LIBRARY_VIEW:
+                self.show_info("Listen und Ordner", "Öffne zuerst eine Liste aus der Übersicht.")
+            elif self.view_mode in self.DERIVED_ITEM_VIEWS:
+                self.show_info(
+                    self.get_display_title(),
+                    "Öffne die Aufgabe per Doppelklick in ihrer Quellliste.",
+                )
+            elif self.view_mode == "trash":
+                self.show_info(
+                    "Papierkorb",
+                    "Im Papierkorb lassen sich Einträge nur wiederherstellen oder endgültig entfernen.",
+                )
+            else:
+                self.show_info("Ordnerübersicht", "Öffne zuerst eine Liste in diesem Ordner.")
+        return False
+
+    def kind_color_key(self, kind):
+        role = {self.ITEM_KIND_LONG: self.SYSTEM_LABEL_LONG, self.ITEM_KIND_HEADING: self.SYSTEM_LABEL_HEADING}.get(kind)
+        label = self.get_system_label(role) if role else None
+        return (label or {}).get("color") or ("confirm" if kind == self.ITEM_KIND_TASK else "import")
+
+    def ui_font_family(self):
+        """Tatsächlich verwendete Familie der Oberflächenschrift."""
+        family = getattr(self, "_ui_font_family", None)
+        if family:
+            return family
+        requested = str(getattr(self, "settings", {}).get("ui_font_family", "") or "").strip()
+        family = "TkDefaultFont"
+        try:
+            available = self.available_font_families()
+            if requested and requested in available:
+                family = requested
+            else:
+                preferred = next((candidate for candidate in self.PREFERRED_UI_FONTS if candidate in available), None)
+                actual = tkfont.nametofont("TkDefaultFont", root=self.root).actual("family")
+                family = preferred or actual or family
+        except (tk.TclError, RuntimeError):
+            pass
+        self._ui_font_family = family
+        return family
+
+    def ui_font_size(self, adjustment=0):
+        """Aktive Grundgröße der Oberfläche mit optionalem Überschriftenaufschlag."""
+        base = self.UI_FONT_SIZE_CHOICES.get(self.settings.get("ui_font_size", "mittel"), 11)
+        return max(8, int(base) + int(adjustment))
+
+    def sidebar_section_font(self):
+        return (self.ui_font_family(), self.ui_font_size(1), "bold")
+
+    def tree_font(self):
+        return (self.ui_font_family(), self.ui_font_size(1))
+
+    def apply_ui_font(self):
+        """Setzt die benannte Tk-Standardschrift für neu erzeugte Widgets."""
+        try:
+            named = tkfont.nametofont("TkDefaultFont")
+            named.configure(family=self.ui_font_family(), size=self.ui_font_size())
+        except (tk.TclError, RuntimeError):
+            pass
+
+    def available_font_families(self):
+        families = getattr(self, "_font_families", None)
+        if families is None:
+            try:
+                families = {name.strip() for name in tkfont.families(root=self.root)}
+            except (tk.TclError, RuntimeError):
+                families = set()
+            self._font_families = families
+        return families
+
+    def heaviest_font(self, size, family=None):
+        """Schwerster verfügbarer Schnitt der gewählten Schriftfamilie.
+
+        Tk kennt für 'weight' nur normal und bold. Alles darüber – Semibold,
+        Black, Heavy – liegt als eigene Schriftfamilie vor. Existiert eine
+        solche Familie, wird sie direkt benannt und ohne zusätzliches Bold
+        gesetzt, damit Tk den Schnitt nicht künstlich verdoppelt. Andernfalls
+        bleibt es beim regulären Fettschnitt.
+        """
+        base = family or self.HEADER_FONT_FAMILY or self.ui_font_family()
+        cache_key = (base, size)
+        cache = getattr(self, "_heaviest_font_cache", None)
+        if cache is None:
+            cache = {}
+            self._heaviest_font_cache = cache
+        if cache_key in cache:
+            return cache[cache_key]
+
+        # Benennt HEADER_FONT_FAMILY bereits einen schweren Schnitt – etwa
+        # "Inter ExtraBold" –, wird er unverändert übernommen. Ein zusätzliches
+        # Bold würde Tk sonst zu einem künstlich verdoppelten Schnitt zwingen.
+        base_folded = base.casefold()
+        if any(base_folded.endswith(f" {suffix}".casefold()) for suffix in self.FONT_WEIGHT_SUFFIXES):
+            resolved = (base, size, "normal")
+            cache[cache_key] = resolved
+            return resolved
+
+        resolved = (base, size, "bold")
+        families = self.available_font_families()
+        if families:
+            lookup = {name.casefold(): name for name in families}
+            for suffix in self.FONT_WEIGHT_SUFFIXES:
+                candidate = lookup.get(f"{base} {suffix}".casefold())
+                if candidate:
+                    # Eigene schwere Familie: ohne zusätzliches Bold setzen,
+                    # sonst verdoppelt Tk den Schnitt künstlich.
+                    resolved = (candidate, size, "normal")
+                    break
+        cache[cache_key] = resolved
+        return resolved
+
+    def header_title_font(self):
+        return self.heaviest_font(self.HEADER_FONT_SIZE)
+
+    def group_row_font(self):
+        """Gruppen im Aufgabenbaum heben sich durch den Fettschnitt ab."""
+        return (self.ui_font_family(), self.ui_font_size(1), "bold")
+
+    def heading_row_font(self):
+        """Zwischenüberschriften tragen dasselbe Schriftbild wie „Eingang“ und „Listen“."""
+        return self.sidebar_section_font()
+
+    # --- Hellblauer Hover ---------------------------------------------------
+    def bind_hover_highlight(self, tree):
+        """Zeigt die Zeile unter dem Mauszeiger hellblau an.
+
+        Lila bleibt der Auswahl vorbehalten: eine ausgewählte Zeile behält ihre
+        Farbe, weil der Auswahlzustand einer ttk.Treeview stärker wirkt als eine
+        Hintergrundfarbe aus einem Tag.
+        """
+        tree.bind("<Motion>", lambda event, widget=tree: self.on_tree_hover(widget, event), add="+")
+        tree.bind("<Leave>", lambda event, widget=tree: self.set_hover_rows(widget, ()), add="+")
+
+    def hover_row_ids(self, tree, row_id):
+        """Alle Zeilen, die zu einer Zeile unter dem Mauszeiger gehören."""
+        if not row_id or row_id == self.EMPTY_ROW_ID:
+            return ()
+        if tree is not getattr(self, "tree", None):
+            return (row_id,)
+        if self.is_synthetic_row(row_id):
+            if self.SPACER_IID_MARKER in row_id:
+                # Der Abstand über einer Überschrift ist keine Zeile zum Anfassen.
+                return ()
+            row_id = self.owner_row_id(row_id)
+        try:
+            if not tree.exists(row_id):
+                return ()
+            # Ein Long-Task leuchtet über alle seine Zeilen hinweg auf.
+            prefix = f"{row_id}{self.CONTINUATION_IID_MARKER}"
+            related = [row_id]
+            for container in (tree.parent(row_id), row_id):
+                for candidate in tree.get_children(container):
+                    if candidate.startswith(prefix):
+                        related.append(candidate)
+        except tk.TclError:
+            return ()
+        return tuple(related)
+
+    def on_tree_hover(self, tree, event):
+        # Während eines Ziehvorgangs zeigt der Baum das Ziel an, nicht den Hover.
+        if getattr(self, "drag_start_id", None) or getattr(self, "sidebar_drag_start_iid", None):
+            self.set_hover_rows(tree, ())
+            return
+        try:
+            row_id = tree.identify_row(event.y)
+        except tk.TclError:
+            return
+        self.set_hover_rows(tree, self.hover_row_ids(tree, row_id))
+
+    def set_hover_rows(self, tree, row_ids):
+        row_ids = tuple(row_ids)
+        key = str(tree)
+        state = getattr(self, "_hover_rows", None)
+        if state is None:
+            state = {}
+            self._hover_rows = state
+        if state.get(key) == row_ids:
+            return
+        for iid in state.get(key, ()):
+            self._tree_tag_remove(tree, "hover", iid)
+        for iid in row_ids:
+            self._tree_tag_add(tree, "hover", iid)
+        state[key] = row_ids
+        if isinstance(tree, SystemNavigation):
+            tree.schedule_icons()
+
+    @staticmethod
+    def _tree_tag_add(tree, tag, iid):
+        try:
+            tree.tk.call(str(tree), "tag", "add", tag, iid)
+        except tk.TclError:
+            pass
+
+    @staticmethod
+    def _tree_tag_remove(tree, tag, iid):
+        try:
+            tree.tk.call(str(tree), "tag", "remove", tag, iid)
+        except tk.TclError:
+            pass
+
+    def register_theme_widget(self, widget, bg_key="bg", fg_key=None):
+        self.theme_widgets.append((widget, bg_key, fg_key))
+        return widget
+
+    @staticmethod
+    def bind_optional(widget, sequence, callback):
+        """Bindet plattformspezifische Tk-Sequenzen ohne den App-Start zu blockieren."""
+        try:
+            widget.bind(sequence, callback)
+            return True
+        except tk.TclError:
+            return False
+
+    def make_rounded_container(self, master, fill_key="card", outline_key="line", radius=18, padding=1, width=None, height=None, inner_pad_x=None, inner_pad_y=None, auto_height=False, register=True):
+        container = RoundedContainer(
+            master,
+            bg_color=self.theme["bg"],
+            fill_color=self.theme[fill_key],
+            outline_color=self.theme[outline_key],
+            radius=radius,
+            padding=padding,
+            width=width,
+            height=height,
+            inner_pad_x=inner_pad_x,
+            inner_pad_y=inner_pad_y,
+            auto_height=auto_height,
+        )
+        container.fill_key = fill_key
+        container.outline_key = outline_key
+        container.glass_mode = bool(self.settings.get("glass_mode", True))
+        container.glass_highlight = self.theme.get("glass_highlight", self.theme[outline_key])
+        container.glass_shadow = self.theme.get("glass_shadow", self.theme["bg"])
+        if register:
+            # Kurzlebige Boxen tragen sich nicht ein: Die Startseite wird bei
+            # jedem Themenwechsel ohnehin neu aufgebaut, und eine Liste, die
+            # bei jedem Aufbau wächst, hielte zerstörte Widgets fest.
+            self.rounded_containers = [
+                existing for existing in self.rounded_containers if existing.winfo_exists()
+            ]
+            self.rounded_containers.append(container)
+        return container
+
+    def make_button(
+        self,
+        master,
+        text,
+        command,
+        color_key="accent",
+        width=132,
+        height=42,
+        radius=18,
+        font=app_font(10, "bold"),
+        bg_key="bg",
+    ):
+        color_key = "ui_accent" if color_key == "accent" else color_key
+        button = RoundedButton(
+            master,
+            text=text,
+            command=command,
+            border_color=self.theme[color_key],
+            hover_fill=self.theme[color_key],
+            text_color=self.theme[color_key],
+            bg_color=self.theme[bg_key],
+            width=width,
+            height=height,
+            radius=radius,
+            font=font,
+        )
+        button.color_key = color_key
+        button.bg_key = bg_key
+        self.buttons.append(button)
+        return button
+
+    # -----------------------------
+    # Themenkonforme Eingabe-Dialoge
+    # -----------------------------
+    def _center_dialog(self, dialog, min_width=420, min_height=0):
+        """Setzt Größe und Position eines Dialogs zentriert über dem Hauptfenster.
+
+        Ein Dialog darf nie höher werden als der Bildschirm: Sonst stünden die
+        Schaltflächen unter dem sichtbaren Rand und wären nicht erreichbar. Die
+        vollständige Eingabemaske ist absichtlich lang und bringt für diesen
+        Fall eine eigene Bildlaufleiste mit.
+        """
+        dialog.update_idletasks()
+        width = max(dialog.winfo_reqwidth(), min_width)
+        height = max(dialog.winfo_reqheight(), min_height)
+        try:
+            usable_height = int(dialog.winfo_screenheight() * self.DIALOG_MAX_SCREEN_SHARE)
+            height = min(height, max(360, usable_height))
+            usable_width = int(dialog.winfo_screenwidth() * self.DIALOG_MAX_SCREEN_SHARE)
+            width = min(width, max(360, usable_width))
+        except tk.TclError:
+            pass
+        try:
+            parent_w = self.root.winfo_width()
+            parent_h = self.root.winfo_height()
+            parent_x = self.root.winfo_rootx()
+            parent_y = self.root.winfo_rooty()
+            x = parent_x + max((parent_w - width) // 2, 0)
+            y = parent_y + max((parent_h - height) // 3, 0)
+            # Ein Dialog darf nicht aus dem sichtbaren Bereich rutschen. Die
+            # Grenzen umfassen deshalb den Hauptbildschirm UND das Hauptfenster:
+            # winfo_screenwidth meldet unter Windows nur den Hauptmonitor. Ein
+            # Fenster auf dem zweiten Monitor wurde vorher auf den ersten
+            # zurückgeklemmt – der Dialog erschien auf dem falschen Bildschirm.
+            screen_w = dialog.winfo_screenwidth()
+            screen_h = dialog.winfo_screenheight()
+            left = min(0, parent_x)
+            top = min(0, parent_y)
+            right = max(screen_w, parent_x + parent_w)
+            bottom = max(screen_h, parent_y + parent_h)
+            x = max(left, min(x, max(left, right - width)))
+            y = max(top, min(y, max(top, bottom - height)))
+        except tk.TclError:
+            x, y = 200, 150
+        dialog.geometry(f"{width}x{height}+{x}+{y}")
+
+    def _make_field(self, master, inner="input"):
+        """Einheitlicher Feldrahmen für alle Dialoge.
+
+        Liefert (border, field): eine 1 px starke Außenlinie in `input_border`
+        und eine Innenfläche in der Farbe `inner`. Das eigentliche
+        Eingabewidget wird in `field` mit FIELD_PAD_X/FIELD_PAD_Y gepackt, damit
+        Entry, Text und Listbox app-weit denselben sichtbaren Textabstand
+        besitzen. Der Aufrufer packt die Außenlinie, gefüllt wird innen.
+        """
+        border = tk.Frame(master, bg=self.theme["input_border"])
+        field = tk.Frame(border, bg=self.theme[inner])
+        return border, field
+
+    def _make_calendar_surface(self, master):
+        """Fläche für den Kalender in einem Dialog.
+
+        Dieselbe Außenlinie wie ein Eingabefeld, innen aber die Kartenfarbe:
+        Der Kalender ist eine Anzeige mit anklickbaren Tagen, kein Textfeld.
+        """
+        return self._make_field(master, inner="card")
+
+    def _make_field_label(self, master, text):
+        """Feldbeschriftung – bündig mit der linken Feldkante."""
+        return tk.Label(
+            master,
+            text=text,
+            bg=self.theme["bg"],
+            fg=self.theme["muted"],
+            font=app_font(9, "bold"),
+            anchor="w",
+            justify="left",
+        )
+
+    def _make_dialog_button(self, master, text, command, color_key, width=124, height=40):
+        """RoundedButton für Dialoge – bewusst NICHT in self.buttons, da der Dialog kurzlebig ist."""
+        color_key = "ui_accent" if color_key == "accent" else color_key
+        color = self.theme.get(color_key, color_key)
+        return RoundedButton(
+            master,
+            text=text,
+            command=command,
+            border_color=color,
+            hover_fill=color,
+            text_color=color,
+            bg_color=master.cget("bg"),
+            width=width,
+            height=height,
+            radius=16,
+            font=app_font(10, "bold"),
+        )
+
+    @contextlib.contextmanager
+    def modal_over(self, parent=None):
+        """Gibt den Tastatur- und Mausgriff nach einem Unterdialog zurück.
+
+        Ein modaler Dialog nimmt den Griff an sich. Schließt er sich, fällt der
+        Griff nicht von allein an das Fenster zurück, aus dem er geöffnet wurde –
+        dieses nähme dann keine Eingabe mehr an und wirkte eingefroren. Genau
+        das passiert, wenn aus einer modalen Maske heraus ein weiterer Dialog
+        geöffnet wird: Kalender, Farbauswahl, Namensabfrage.
+
+        Ohne `parent` fragt Tk selbst, wer den Griff gerade hält. Das ist der
+        zuverlässigere Weg, weil kein Aufrufer sein Fenster durchreichen muss –
+        und weil er auch dann greift, wenn zwischen Maske und Unterdialog noch
+        ein drittes Fenster liegt.
+
+        Wird das aufrufende Fenster in der Zwischenzeit geschlossen, bleibt der
+        Griff aus: Ihn an ein verschwundenes Fenster zu binden wäre schlimmer
+        als gar keiner.
+        """
+        owner = parent if isinstance(parent, (tk.Toplevel, tk.Tk)) else None
+        if owner is None:
+            try:
+                current = self.root.grab_current()
+            except tk.TclError:
+                current = None
+            owner = current if isinstance(current, (tk.Toplevel, tk.Tk)) else None
+        had_grab = False
+        if owner is not None and owner is not self.root:
+            try:
+                had_grab = bool(owner.grab_status())
+            except tk.TclError:
+                had_grab = False
+        try:
+            yield
+        finally:
+            if had_grab:
+                try:
+                    if owner.winfo_exists():
+                        owner.grab_set()
+                except tk.TclError:
+                    pass
+
+    def run_modal(self, dialog, parent=None):
+        """Führt einen modalen Dialog aus und stellt den vorherigen Griff wieder her.
+
+        Der eine Weg, auf dem jeder Dialog dieser Anwendung wartet. Vorher
+        stand `grab_set` + `wait_window` an sieben Stellen einzeln da, und nur
+        eine davon gab den Griff zurück – die übrigen hinterließen eine Maske,
+        die noch zu sehen war, aber keine Eingabe mehr annahm.
+        """
+        with self.modal_over(parent):
+            dialog.grab_set()
+            self.root.wait_window(dialog)
+
+    def create_label_interactively(self, parent=None):
+        """Legt ein Label über Namens- und Farbabfrage an.
+
+        Eine Stelle für beide Wege – die Labelverwaltung und das Aufklappfeld in
+        der Eingabemaske. Rückgabe ist das neue Label oder None bei Abbruch.
+        """
+        owner = parent if isinstance(parent, (tk.Toplevel, tk.Tk)) else self.root
+        if len(self.labels) >= self.MAX_LABELS:
+            self.show_info(
+                "Labels", f"Es sind höchstens {self.MAX_LABELS} Labels möglich.", parent=owner
+            )
+            return None
+        with self.modal_over(parent):
+            name = self.themed_input_dialog("Neues Label", "Name des Labels:", ok_text="Anlegen")
+        if name is None:
+            return None
+        name = name.strip()
+        if len(name) > self.LABEL_NAME_INPUT_LIMIT:
+            self.show_warning(
+                "Hinweis",
+                f"Labelnamen dürfen höchstens {self.LABEL_NAME_INPUT_LIMIT} Zeichen lang sein "
+                "– so viel zeigt die Labelspalte einer Liste.",
+                parent=owner,
+            )
+            return None
+        if not name:
+            self.show_warning("Hinweis", "Bitte einen Namen eingeben.", parent=owner)
+            return None
+        if self.get_label_by_name(name):
+            self.show_warning(
+                "Hinweis", "Es gibt bereits ein Label mit diesem Namen.", parent=owner
+            )
+            return None
+        with self.modal_over(parent):
+            color = self.choose_label_color(preview_name=name)
+        self.snapshot_undo()
+        label = self.new_label_object(name, None, color)
+        self.labels.append(label)
+        self.save_items()
+        self.refresh_tree()
+        return label
+
+    def themed_input_dialog(self, title, prompt="", initial="", ok_text="OK", accent_key="confirm"):
+        """Modaler, an Hell-/Dunkelmodus angepasster Texteingabe-Dialog.
+
+        Verhält sich wie simpledialog.askstring: liefert den eingegebenen Text
+        oder None bei Abbruch (Escape / Abbrechen / Fenster schließen).
+        """
+        result = {"value": None}
+
+        dialog = tk.Toplevel(self.root)
+        dialog.title(title)
+        dialog.configure(bg=self.theme["bg"])
+        dialog.transient(self.root)
+        dialog.resizable(False, False)
+
+        container = tk.Frame(dialog, bg=self.theme["bg"])
+        container.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+
+        heading = tk.Label(
+            container,
+            text=title,
+            bg=self.theme["bg"],
+            fg=self.theme["text"],
+            font=app_font(15, "bold"),
+            anchor="w",
+            justify="left",
+        )
+        heading.pack(anchor="w", pady=(0, 6))
+
+        if prompt:
+            prompt_label = tk.Label(
+                container,
+                text=prompt,
+                bg=self.theme["bg"],
+                fg=self.theme["muted"],
+                font=app_font(10),
+                anchor="w",
+                justify="left",
+            )
+            prompt_label.pack(anchor="w", pady=(0, 14))
+
+        # Eingabefeld mit dünnem, themenkonformem Rahmen und Innenabstand.
+        border, field = self._make_field(container)
+        border.pack(fill="x")
+        field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
+        entry = tk.Entry(
+            field,
+            bg=self.theme["input"],
+            fg=self.theme["text"],
+            insertbackground=self.theme["text"],
+            selectbackground=self.theme["selection"],
+            selectforeground=self.theme["selection_text"],
+            relief="flat",
+            bd=0,
+            highlightthickness=0,
+            font=app_font(12),
+        )
+        entry.pack(fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+        entry.insert(0, initial or "")
+        entry.select_range(0, "end")
+
+        button_row = tk.Frame(container, bg=self.theme["bg"])
+        button_row.pack(fill="x", pady=(20, 0))
+
+        def submit(event=None):
+            result["value"] = entry.get()
+            dialog.destroy()
+            return "break"
+
+        def cancel(event=None):
+            result["value"] = None
+            dialog.destroy()
+            return "break"
+
+        ok_button = self._make_dialog_button(button_row, ok_text, submit, accent_key)
+        cancel_button = self._make_dialog_button(button_row, "Abbrechen", cancel, "muted")
+        ok_button.pack(side="right")
+        cancel_button.pack(side="right", padx=(0, 10))
+
+        dialog.bind("<Return>", submit)
+        dialog.bind("<Escape>", cancel)
+        dialog.protocol("WM_DELETE_WINDOW", cancel)
+
+        self._center_dialog(dialog)
+        self._schedule_windows_chrome_theme(dialog)
+        entry.focus_set()
+        self.run_modal(dialog)
+        return result["value"]
+
+    def _make_attachment_editor(self, inner, dialog, attachments):
+        attachment_border, attachment_field = self._make_field(inner)
+        attachment_border.pack(fill="x")
+        attachment_field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
+        attachment_list = tk.Listbox(
+            attachment_field, height=4,
+            bg=self.theme["input"], fg=self.theme["text"],
+            selectbackground=self.theme["selection"], selectforeground=self.theme["selection_text"],
+            activestyle="none", relief="flat", bd=0, highlightthickness=0,
+            font=app_font(9),
+        )
+        self._attach_field_scrollbar(attachment_field, attachment_list)
+        attachment_list.pack(fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+
+        def attachment_path(entry):
+            if entry.get("pending_path"):
+                return entry.get("pending_path")
+            return self.resolve_attachment_path(entry)
+
+        def render_attachments(select_index=None):
+            attachment_list.delete(0, tk.END)
+            for attachment in attachments:
+                path = attachment_path(attachment)
+                exists = bool(path and os.path.isfile(path))
+                if exists:
+                    try:
+                        size = os.path.getsize(path)
+                    except OSError:
+                        size = attachment.get("size", 0)
+                else:
+                    size = attachment.get("size", 0)
+                state = "" if exists else "  ·  nicht gefunden"
+                attachment_list.insert(
+                    tk.END,
+                    f"{self.ICONS['attachment']}  {attachment.get('name', 'Anhang')}"
+                    f"  ·  {self.format_file_size(size)}{state}",
+                )
+            if attachments:
+                index = min(select_index if select_index is not None else 0, len(attachments) - 1)
+                attachment_list.selection_set(index)
+                attachment_list.activate(index)
+
+        def add_attachments():
+            # Der Grab wird für den nativen Dateidialog kurz freigegeben. Unter
+            # macOS bleibt ein modaler Toplevel-Grab sonst gelegentlich stehen.
+            try:
+                dialog.grab_release()
+            except tk.TclError:
+                pass
+            try:
+                paths = filedialog.askopenfilenames(title="Dateien oder Bilder anhängen", parent=dialog)
+            finally:
+                try:
+                    dialog.grab_set()
+                except tk.TclError:
+                    pass
+            known = {os.path.normcase(os.path.abspath(attachment_path(a) or "")) for a in attachments}
+            for path in paths:
+                normalized = os.path.normcase(os.path.abspath(path))
+                if normalized in known:
+                    continue
+                attachments.append({"name": os.path.basename(path), "pending_path": path})
+                known.add(normalized)
+            render_attachments(len(attachments) - 1)
+
+        def selected_attachment_index():
+            selection = attachment_list.curselection()
+            return int(selection[0]) if selection else None
+
+        def open_attachment(event=None):
+            index = selected_attachment_index()
+            if index is not None:
+                self.open_external_path(attachment_path(attachments[index]))
+            return "break"
+
+        def remove_attachment():
+            index = selected_attachment_index()
+            if index is None:
+                return
+            # Die physische Kopie bleibt für Rückgängig/ältere Backups erhalten.
+            attachments.pop(index)
+            render_attachments(max(0, index - 1))
+
+        action_row = tk.Frame(inner, bg=self.theme["bg"])
+        action_row.pack(fill="x", pady=(9, 0))
+        self._make_dialog_button(action_row, "+ Datei", add_attachments, "due_action", width=104, height=36).pack(side="left")
+        self._make_dialog_button(action_row, "Öffnen", open_attachment, "export", width=104, height=36).pack(side="left", padx=(8, 0))
+        self._make_dialog_button(action_row, "Entfernen", remove_attachment, "delete", width=104, height=36).pack(side="left", padx=(8, 0))
+        attachment_list.bind("<Double-Button-1>", open_attachment)
+        render_attachments()
+
+        return attachment_list
+
+    def themed_page_details_dialog(self, heading, title_value, note_value, title_label="Titel",
+                                   title_editable=True, page=None):
+        """Seitendetails; Änderungen und Dateikopien erst beim Speichern übernehmen."""
+        result = {"value": None}
+        dialog = tk.Toplevel(self.root)
+        dialog.title(heading)
+        dialog.configure(bg=self.theme["bg"])
+        dialog.transient(self.root)
+        dialog.minsize(900 if page is not None else 600, 490)
+        container = tk.Frame(dialog, bg=self.theme["bg"])
+        container.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+        tk.Label(container, text=heading, bg=self.theme["bg"], fg=self.theme["text"],
+                 font=app_font(16, "bold"), anchor="w").pack(fill="x", pady=(0, 16))
+        footer = tk.Frame(container, bg=self.theme["bg"])
+        footer.pack(side="bottom", fill="x", pady=(16, 0))
+        body = tk.Frame(container, bg=self.theme["bg"])
+        body.pack(fill="both", expand=True)
+        body.columnconfigure(0, weight=3)
+        body.rowconfigure(0, weight=1)
+        left = tk.Frame(body, bg=self.theme["bg"])
+        left.grid(row=0, column=0, sticky="nsew")
+        self._make_field_label(left, title_label).pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+        title_border, title_field = self._make_field(left)
+        title_border.pack(fill="x", pady=(0, 14))
+        title_field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
+        title_entry = tk.Entry(title_field, bg=self.theme["input"], fg=self.theme["text"],
+                              insertbackground=self.theme["text"], selectbackground=self.theme["selection"],
+                              selectforeground=self.theme["selection_text"], relief="flat", bd=0,
+                              highlightthickness=0, font=app_font(12))
+        title_entry.pack(fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+        title_entry.insert(0, str(title_value or ""))
+        if not title_editable:
+            title_entry.configure(state="readonly", readonlybackground=self.theme["input"])
+        self._make_field_label(left, "Beschreibungstext").pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+        note_border, note_field = self._make_field(left)
+        note_border.pack(fill="both", expand=True)
+        note_field.pack(fill="both", expand=True, padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
+        note_text = tk.Text(note_field, height=10, width=36, wrap="word", undo=True,
+                            bg=self.theme["input"], fg=self.theme["text"], insertbackground=self.theme["text"],
+                            selectbackground=self.theme["selection"], selectforeground=self.theme["selection_text"],
+                            relief="flat", bd=0, highlightthickness=0, font=app_font(11),
+                            padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+        self._attach_field_scrollbar(note_field, note_text, pad_y=0)
+        note_text.pack(fill="both", expand=True)
+        note_text.insert("1.0", str(note_value or ""))
+        attachments = copy.deepcopy(page.get("attachments", [])) if page is not None else []
+        if page is not None:
+            body.columnconfigure(1, weight=2, minsize=360)
+            right = tk.Frame(body, bg=self.theme["bg"])
+            right.grid(row=0, column=1, sticky="nsew", padx=(20, 0))
+            self._make_field_label(right, "Farbe").pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+            color_names = {"Keine Farbe": None, **dict(self.LIST_COLOR_CHOICES)}
+            color_var = tk.StringVar(value=next((name for name, key in color_names.items()
+                                               if key == page.get("color")), "Keine Farbe"))
+            color_frame, _ = self._make_option_menu(right, color_var, list(color_names),
+                                                   option_colors={name: key or "text" for name, key in color_names.items()})
+            color_frame.pack(fill="x")
+            self._make_field_label(right, "Labels (Mehrfachauswahl)").pack(anchor="w", pady=(14, self.FIELD_LABEL_GAP))
+            label_dropdown = LabelDropdown(right, self, self.labels, selected_ids=page.get("labels", []),
+                                           dialog_parent=dialog, allow_create=True)
+            label_dropdown.pack(fill="x")
+            self._make_field_label(right, "Anhänge").pack(anchor="w", pady=(14, self.FIELD_LABEL_GAP))
+            self._make_attachment_editor(right, dialog, attachments)
+            tk.Label(right, text="Dateien werden beim Speichern als lokale Kopie angehängt.",
+                     bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(8),
+                     wraplength=330, justify="left", anchor="w").pack(fill="x", pady=(8, 0))
+        def submit(event=None):
+            title = title_entry.get().strip() if title_editable else str(title_value or "")
+            if title_editable and not title:
+                self.show_warning("Hinweis", "Bitte einen Titel eingeben.", parent=dialog)
+                title_entry.focus_set()
+                return "break"
+            details = {"title": title, "note": note_text.get("1.0", "end-1c")}
+            if page is not None:
+                stored = self._store_pending_attachments(attachments, dialog)
+                if stored is None:
+                    return "break"
+                details.update(color=color_names[color_var.get()], labels=list(label_dropdown.selected_ids),
+                               attachments=stored)
+            result["value"] = details
+            dialog.destroy()
+            return "break"
+        def cancel(event=None):
+            dialog.destroy()
+            return "break"
+        self._make_dialog_button(footer, "Speichern", submit, "confirm").pack(side="right")
+        self._make_dialog_button(footer, "Abbrechen", cancel, "muted").pack(side="right", padx=(0, 10))
+        dialog.bind("<Control-Return>", submit)
+        if IS_MACOS:
+            dialog.bind("<Command-Return>", submit)
+        dialog.bind("<Escape>", cancel)
+        dialog.protocol("WM_DELETE_WINDOW", cancel)
+        self._center_dialog(dialog, min_width=940 if page is not None else 640)
+        self._schedule_windows_chrome_theme(dialog)
+        title_entry.focus_set() if title_editable else note_text.focus_set()
+        if title_editable:
+            title_entry.select_range(0, tk.END)
+        self.run_modal(dialog)
+        return result["value"]
+
+    @staticmethod
+    def format_file_size(size):
+        try:
+            value = float(size)
+        except (TypeError, ValueError):
+            value = 0.0
+        units = ("B", "KB", "MB", "GB")
+        unit = units[0]
+        for candidate in units:
+            unit = candidate
+            if value < 1024 or candidate == units[-1]:
+                break
+            value /= 1024
+        return f"{int(value)} {unit}" if unit == "B" else f"{value:.1f} {unit}"
+
+    def themed_choice_dialog(self, title, prompt, choices, item_colors=None):
+        """Kleine modale Auswahl; choices enthält (Wert, sichtbarer Text).
+
+        ``item_colors`` färbt jede Zeile einzeln ein – eine ``tk.Listbox`` kann
+        das im Gegensatz zu einer ``ttk.Treeview``-Zelle. So zeigt die
+        Farbauswahl jede Farbe tatsächlich in ihrer Farbe.
+        """
+        if not choices:
+            return None
+        result = {"value": None}
+        dialog = tk.Toplevel(self.root)
+        dialog.title(title)
+        dialog.configure(bg=self.theme["bg"])
+        dialog.transient(self.root)
+        dialog.resizable(False, False)
+        container = tk.Frame(dialog, bg=self.theme["bg"])
+        container.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+        tk.Label(
+            container, text=title, bg=self.theme["bg"], fg=self.theme["text"],
+            font=app_font(15, "bold"), anchor="w",
+        ).pack(anchor="w", pady=(0, 6))
+        tk.Label(
+            container, text=prompt, bg=self.theme["bg"], fg=self.theme["muted"],
+            font=app_font(10), anchor="w", justify="left",
+        ).pack(anchor="w", pady=(0, 12))
+        list_border, list_field = self._make_field(container)
+        list_border.pack(fill="both", expand=True)
+        list_field.pack(fill="both", expand=True, padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
+        listbox = tk.Listbox(
+            list_field,
+            height=min(9, max(3, len(choices))), width=48,
+            bg=self.theme["input"], fg=self.theme["text"],
+            selectbackground=self.theme["selection"], selectforeground=self.theme["selection_text"],
+            activestyle="none", relief="flat", bd=0, highlightthickness=0,
+            font=app_font(10),
+        )
+        self._attach_field_scrollbar(list_field, listbox)
+        listbox.pack(fill="both", expand=True, padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+        for index, (_value, label) in enumerate(choices):
+            listbox.insert(tk.END, label)
+            if item_colors:
+                color_key = item_colors[index] if index < len(item_colors) else None
+                if color_key:
+                    try:
+                        listbox.itemconfig(
+                            index,
+                            foreground=self.theme.get(color_key, color_key),
+                            selectforeground=self.theme.get(color_key, color_key),
+                            selectbackground=self.theme["hover"],
+                        )
+                    except tk.TclError:
+                        pass
+        listbox.selection_set(0)
+        listbox.activate(0)
+
+        footer = tk.Frame(container, bg=self.theme["bg"])
+        footer.pack(fill="x", pady=(16, 0))
+
+        def submit(event=None):
+            selection = listbox.curselection()
+            if selection:
+                result["value"] = choices[int(selection[0])][0]
+            dialog.destroy()
+            return "break"
+
+        def cancel(event=None):
+            dialog.destroy()
+            return "break"
+
+        self._make_dialog_button(footer, "Auswählen", submit, "confirm").pack(side="right")
+        self._make_dialog_button(footer, "Abbrechen", cancel, "muted").pack(side="right", padx=(0, 10))
+        listbox.bind("<Double-Button-1>", submit)
+        dialog.bind("<Return>", submit)
+        dialog.bind("<Escape>", cancel)
+        dialog.protocol("WM_DELETE_WINDOW", cancel)
+        self._center_dialog(dialog, min_width=520)
+        self._schedule_windows_chrome_theme(dialog)
+        listbox.focus_set()
+        self.run_modal(dialog)
+        return result["value"]
+
+    # -----------------------------
+    # Labelverwaltung
+    # -----------------------------
+    def open_label_manager(self, event=None):
+        """Zentrale Verwaltung: Labels anlegen, umbenennen, einfärben, entfernen."""
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Labels")
+        dialog.configure(bg=self.theme["bg"])
+        dialog.transient(self.root)
+        dialog.minsize(560, 480)
+
+        container = tk.Frame(dialog, bg=self.theme["bg"])
+        container.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+        tk.Label(
+            container, text="Labels", bg=self.theme["bg"], fg=self.theme["text"],
+            font=app_font(16, "bold"), anchor="w",
+        ).pack(anchor="w", pady=(0, 6))
+        tk.Label(
+            container,
+            text=(
+                "Labels sind unabhängig von der Aufgabenfarbe. Sie werden im Rechtsklickmenü eines Punkts "
+                "zugewiesen und stehen in der Liste rechts neben der Fälligkeit. "
+                "„Long-Task“ und „Überschrift“ gehören fest zum Programm: Sie tragen die Art eines Punkts, "
+                "lassen sich nicht entfernen oder umbenennen – die Farbe ist frei wählbar."
+            ),
+            bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10),
+            anchor="w", justify="left", wraplength=520,
+        ).pack(anchor="w", pady=(0, 14))
+
+        list_border, list_field = self._make_field(container)
+        list_border.pack(fill="both", expand=True)
+        list_field.pack(fill="both", expand=True, padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
+        _list_canvas, list_inner = self._make_scroll_area(list_field, height=250)
+        state = {"index": 0, "rows": []}
+
+        def select_row(index):
+            state["index"] = index
+            for row_index, row in enumerate(state["rows"]):
+                active = row_index == index
+                background = self.theme["card"] if active else self.theme["input"]
+                try:
+                    row["meta"].configure(bg=background)
+                except tk.TclError:
+                    continue
+
+        def render(select_index=None):
+            for row in state["rows"]:
+                try:
+                    row["frame"].destroy()
+                except tk.TclError:
+                    pass
+            state["rows"] = []
+            for index, label in enumerate(self.labels):
+                usage = self.count_label_usage(label.get("id"))
+                color_name = self.LABEL_COLOR_NAMES.get(self.label_color_key(label), "")
+                fixed_suffix = "   ·   fest" if self.is_system_label(label) else ""
+                row_frame = tk.Frame(list_inner, bg=self.theme["input"])
+                row_frame.pack(fill="x", pady=(0, 4))
+                chip = self.make_label_chip(row_frame, label, bg_key="input")
+                chip.pack(side="left", padx=(6, 10), pady=2)
+                meta = tk.Label(
+                    row_frame,
+                    text=f"{color_name}   ·   {usage}\u00d7 verwendet{fixed_suffix}",
+                    bg=self.theme["input"], fg=self.theme[self.label_color_key(label)],
+                    font=app_font(9), anchor="w",
+                )
+                meta.pack(side="left", fill="x", expand=True)
+                row = {"frame": row_frame, "chip": chip, "meta": meta}
+                state["rows"].append(row)
+                for widget in (row_frame, chip, meta):
+                    widget.bind("<Button-1>", lambda _event, i=index: select_row(i))
+                    widget.bind("<Double-Button-1>", lambda _event, i=index: (select_row(i), rename_label()))
+            if self.labels:
+                select_row(min(
+                    select_index if select_index is not None else state["index"],
+                    len(self.labels) - 1,
+                ))
+
+        def selected_index():
+            if not self.labels:
+                return None
+            return min(state["index"], len(self.labels) - 1)
+
+        def add_label():
+            if self.create_label_interactively(parent=dialog) is not None:
+                render(len(self.labels) - 1)
+
+        def rename_label():
+            index = selected_index()
+            if index is None:
+                return
+            label = self.labels[index]
+            if self.is_system_label(label):
+                self.show_info(
+                    "Festes Label",
+                    f"„{label.get('name', '')}“ gehört fest zum Programm und trägt die Art eines Punkts. "
+                    "Der Name lässt sich deshalb nicht ändern – die Farbe schon.",
+                    parent=dialog,
+                )
+                return
+            name = self.themed_input_dialog(
+                "Label umbenennen", "Neuer Name:", initial=label.get("name", ""), ok_text="Speichern"
+            )
+            if name is None:
+                return
+            name = name.strip()
+            if len(name) > self.LABEL_NAME_INPUT_LIMIT:
+                self.show_warning(
+                    "Hinweis",
+                    f"Labelnamen dürfen höchstens {self.LABEL_NAME_INPUT_LIMIT} Zeichen lang sein "
+                    "– so viel zeigt die Labelspalte einer Liste.",
+                    parent=dialog,
+                )
+                return
+            if not name:
+                self.show_warning("Hinweis", "Bitte einen Namen eingeben.", parent=dialog)
+                return
+            existing = self.get_label_by_name(name)
+            if existing is not None and existing is not label:
+                self.show_warning("Hinweis", "Es gibt bereits ein Label mit diesem Namen.", parent=dialog)
+                return
+            if name == label.get("name"):
+                return
+            self.snapshot_undo()
+            label["name"] = name
+            self.save_items()
+            self.refresh_tree()
+            render(index)
+
+        def recolor_label():
+            index = selected_index()
+            if index is None:
+                return
+            label = self.labels[index]
+            color = self.choose_label_color(
+                self.label_color_key(label), preview_name=str(label.get("name") or "Label")
+            )
+            if color is None or color == self.label_color_key(label):
+                return
+            self.snapshot_undo()
+            label["color"] = color
+            self.save_items()
+            self.refresh_tree()
+            render(index)
+
+        def remove_label():
+            index = selected_index()
+            if index is None:
+                return
+            label = self.labels[index]
+            if self.is_system_label(label):
+                self.show_info(
+                    "Festes Label",
+                    f"„{label.get('name', '')}“ gehört fest zum Programm und lässt sich nicht entfernen. "
+                    "Nimm das Label einem Punkt ab, um ihn wieder in eine gewöhnliche Aufgabe zu wandeln.",
+                    parent=dialog,
+                )
+                return
+            usage = self.count_label_usage(label.get("id"))
+            if not self.ask_yes_no(
+                "Label entfernen",
+                f"Label '{label.get('name', '')}' entfernen?\n\n"
+                f"Es wird von {usage} Punkt(en) gelöst; die Punkte selbst bleiben unverändert.",
+                parent=dialog,
+            ):
+                return
+            self.snapshot_undo()
+            self.labels = [entry for entry in self.labels if entry.get("id") != label.get("id")]
+            self.prune_unknown_item_labels()
+            self.save_items()
+            self.refresh_tree()
+            render(max(0, index - 1))
+
+        action_row = tk.Frame(container, bg=self.theme["bg"])
+        action_row.pack(fill="x", pady=(10, 0))
+        self._make_dialog_button(action_row, "+ Label", add_label, "confirm", width=104, height=36).pack(side="left")
+        self._make_dialog_button(action_row, "Umbenennen", rename_label, "accent", width=112, height=36).pack(side="left", padx=(8, 0))
+        self._make_dialog_button(action_row, "Farbe", recolor_label, "due_action", width=96, height=36).pack(side="left", padx=(8, 0))
+        self._make_dialog_button(action_row, "Entfernen", remove_label, "delete", width=104, height=36).pack(side="left", padx=(8, 0))
+        render()
+
+        footer = tk.Frame(container, bg=self.theme["bg"])
+        footer.pack(fill="x", pady=(16, 0))
+
+        def close(event=None):
+            dialog.destroy()
+            return "break"
+
+        self._make_dialog_button(footer, "Schließen", close, "muted").pack(side="right")
+        dialog.bind("<Escape>", close)
+        dialog.protocol("WM_DELETE_WINDOW", close)
+        self._center_dialog(dialog, min_width=620)
+        self._schedule_windows_chrome_theme(dialog)
+        self.run_modal(dialog)
+        return "break"
+
+    def choose_label_color(self, current=None, preview_name="Label"):
+        """Farbauswahl eines Labels; None bedeutet Abbruch.
+
+        Jede Zeile zeigt den Namen in der jeweiligen Farbe – so ist die Wirkung
+        vor der Auswahl sichtbar, nicht erst danach.
+        """
+        choices = [
+            (key, ("\u2713  " if key == current else "     ") + f"{name}   ·   {preview_name}")
+            for name, key in self.LABEL_COLOR_CHOICES
+        ]
+        return self.themed_choice_dialog(
+            "Labelfarbe",
+            "Welche Farbe soll das Label tragen?",
+            choices,
+            item_colors=[key for _name, key in self.LABEL_COLOR_CHOICES],
+        )
+
+    def toggle_label_on_selected_items(self, label_id):
+        """Setzt oder entfernt ein Label für die aktuelle Auswahl im Aufgabenbaum."""
+        label = self.get_label(label_id)
+        if label is None:
+            return "break"
+        item_ids = self.selected_items_for_change()
+        if item_ids is None:
+            return "break"
+        items = [self.find_item(item_id)[0] for item_id in item_ids if self.find_item(item_id)]
+        # Trägt bereits jeder ausgewählte Punkt das Label, wird es entfernt.
+        should_add = not all(label_id in (item.get("labels") or []) for item in items)
+        role = self.system_label_role(label)
+        with self.item_change(item_ids) as change:
+            if role is not None:
+                # „Long-Task“ und „Überschrift“ sind die Art des Punkts. Das
+                # Label zu vergeben ist deshalb dasselbe wie die Umwandlung im
+                # Kontextmenü – und es umgekehrt zu nehmen dasselbe wie die
+                # Rückwandlung in eine gewöhnliche Aufgabe.
+                target_kind = self.SYSTEM_LABEL_KIND[role] if should_add else self.ITEM_KIND_TASK
+                for item in items:
+                    if self.set_item_kind(item, target_kind):
+                        change.mark()
+            else:
+                for item in items:
+                    assigned = list(item.get("labels") or [])
+                    if should_add and label_id not in assigned:
+                        if len(assigned) >= self.MAX_LABELS_PER_ITEM:
+                            continue
+                        assigned.append(label_id)
+                        change.mark()
+                    elif not should_add and label_id in assigned:
+                        assigned = [value for value in assigned if value != label_id]
+                        change.mark()
+                    item["labels"] = assigned
+        return "break"
+
+    def clear_labels_on_selected_items(self):
+        item_ids = self.selected_items_for_change(warn=False)
+        if item_ids is None:
+            return "break"
+        with self.item_change(item_ids) as change:
+            for item_id in item_ids:
+                found = self.find_item(item_id)
+                if not found:
+                    continue
+                item = found[0]
+                # Ein Long-Task oder eine Überschrift verliert mit dem festen
+                # Label auch seine Art; sonst blieben Darstellung und Label
+                # auseinander.
+                if self.item_kind(item) in self.SYSTEM_LABEL_KIND.values():
+                    self.set_item_kind(item, self.ITEM_KIND_TASK)
+                    change.mark()
+                if item.get("labels"):
+                    item["labels"] = []
+                    change.mark()
+        return "break"
+
+    def open_external_path(self, path):
+        try:
+            if not path or not os.path.exists(path):
+                self.show_warning("Datei öffnen", "Die Datei ist nicht mehr vorhanden.")
+                return False
+            if IS_WINDOWS:
+                os.startfile(path)  # type: ignore[attr-defined]
+            elif IS_MACOS:
+                subprocess.Popen(["open", path])
+            else:
+                subprocess.Popen(["xdg-open", path])
+            return True
+        except Exception as exc:
+            self.show_error("Datei öffnen", f"Die Datei konnte nicht geöffnet werden:\n{exc}")
+            return False
+
+    def _make_option_menu(self, master, variable, options, option_colors=None):
+        """Auswahlliste mit optionaler Textfarbe je Wert, auch nach der Auswahl."""
+        border, field = self._make_field(master)
+        menu_button = tk.OptionMenu(field, variable, *options)
+        menu_button.configure(
+            bg=self.theme["input"],
+            fg=self.theme["text"],
+            activebackground=self.theme["input"],
+            activeforeground=self.theme["text"],
+            highlightthickness=0,
+            relief="flat",
+            bd=0,
+            anchor="w",
+            font=app_font(11),
+            indicatoron=True,
+        )
+        try:
+            popup = menu_button["menu"]
+            popup.configure(
+                bg=self.theme["card"],
+                fg=self.theme["text"],
+                activebackground=self.theme["selection"],
+                activeforeground=self.theme["selection_text"],
+                bd=0,
+                relief="flat",
+                font=app_font(10),
+                # Ohne diese beiden zeichnet Tk um die aufgeklappte Liste einen
+                # harten Rahmen und um den Eintrag unter dem Zeiger einen
+                # zweiten – beide passen zu nichts anderem in der Oberfläche.
+                borderwidth=0,
+                activeborderwidth=0,
+            )
+            for index, option in enumerate(options):
+                color_key = (option_colors or {}).get(option)
+                if color_key:
+                    foreground = self.theme.get(color_key, color_key)
+                    popup.entryconfigure(
+                        index, foreground=foreground, activeforeground=foreground,
+                        activebackground=self.theme["hover"],
+                    )
+        except tk.TclError:
+            pass
+        def update_color(*_args):
+            color_key = (option_colors or {}).get(variable.get(), "text")
+            foreground = self.theme.get(color_key, color_key)
+            menu_button.configure(fg=foreground, activeforeground=foreground)
+
+        trace_id = variable.trace_add("write", update_color)
+        def forget_trace(event):
+            if event.widget is menu_button:
+                try:
+                    variable.trace_remove("write", trace_id)
+                except tk.TclError:
+                    pass
+        menu_button.bind("<Destroy>", forget_trace, add="+")
+        update_color()
+        menu_button.pack(fill="x", padx=self.FIELD_PAD_X - 6, pady=self.FIELD_PAD_Y - 4)
+        field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
+        return border, menu_button
+
+    def importance_choice_text(self, value):
+        return f"{self.IMPORTANCE_MARKERS.get(value, '')}{self.IMPORTANCE_NAMES.get(value, 'keine')}"
+
+    @staticmethod
+    def importance_color_key(value):
+        return {0: "text", 1: "priority_low", 2: "priority_medium", 3: "priority_high"}.get(value, "text")
+
+    def item_form_dialog(
+        self,
+        mode="create",
+        item=None,
+        title=None,
+        prompt="",
+        kind=None,
+        allow_list_choice=False,
+        default_list_id=None,
+        default_due=None,
+        default_due_time=None,
+        initial_text="",
+        ok_text=None,
+    ):
+        """Ein Fenster für alles, was ein Punkt tragen kann.
+
+        Anlegen und Bearbeiten benutzen dieselbe Maske. Vorher waren es zwei
+        Fenster mit unterschiedlichem Funktionsumfang: Der Anlage-Dialog kannte
+        keine Beschreibung und keine Anhänge, das Detailfenster keine Art,
+        Wichtigkeit, Farbe, Fälligkeit und Labels. Wer einen Punkt anlegte,
+        musste ihn danach noch einmal öffnen.
+
+        `mode` steuert nur Beschriftung und Vorbelegung, nicht den Umfang:
+
+        - "create" – leere Maske, Rückgabe beschreibt einen neuen Punkt
+        - "edit"   – Maske mit den Werten von `item`
+
+        Rückgabe ist ein Wörterbuch mit allen Feldern oder None bei Abbruch.
+        Nur der Titel ist Pflicht.
+        """
+        editing = mode == "edit" and isinstance(item, dict)
+        source = item if editing else {}
+        current_kind = self.item_kind(source) if editing else (kind if kind in self.ITEM_KINDS else None)
+        is_long = current_kind == self.ITEM_KIND_LONG
+        # Gliederung trägt keine Frist und keinen Zustand – die Felder dafür
+        # bleiben dann weg, statt wirkungslos dazustehen.
+        schedulable = current_kind not in (self.ITEM_KIND_GROUP, self.ITEM_KIND_HEADING)
+
+        if title is None:
+            if editing:
+                title = "Punktdetails (Long-Task)" if is_long else "Punktdetails"
+            else:
+                title = "Neuer Punkt"
+        if ok_text is None:
+            ok_text = "Speichern" if editing else "Anlegen"
+
+        result = {"value": None}
+        attachments = copy.deepcopy(source.get("attachments", []) or [])
+
+        dialog = tk.Toplevel(self.root)
+        dialog.title(title)
+        dialog.configure(bg=self.theme["bg"])
+        dialog.transient(self.root)
+        # Bewusst niedrig: Auf kleinen Bildschirmen scrollt die Maske,
+        # statt unten aus dem Bild zu laufen.
+        dialog.minsize(760, 620)
+
+        footer = tk.Frame(dialog, bg=self.theme["bg"])
+        footer.pack(side="bottom", fill="x", padx=self.DIALOG_PAD_X, pady=(12, self.DIALOG_PAD_Y))
+        outer = tk.Frame(dialog, bg=self.theme["bg"])
+        outer.pack(fill="both", expand=True)
+        # Die Maske ist hoch. Auf kleinen Bildschirmen muss sie deshalb
+        # scrollen können, statt unten abgeschnitten zu werden.
+        canvas = tk.Canvas(outer, bg=self.theme["bg"], highlightthickness=0, bd=0)
+        scrollbar = ThemedAutoScrollbar(
+            outer,
+            bg_color=self.theme["bg"], track_color=self.theme["bg"],
+            thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"],
+            width=10, radius=5,
+        )
+        scrollbar.configure(height=1)
+        scrollbar.pack(side="right", fill="y", padx=(0, self.DIALOG_SCROLLBAR_PAD), pady=10)
+        canvas.pack(side="left", fill="both", expand=True)
+        # Die Leiste nimmt rechts Platz weg. Der Innenabstand des Inhalts wird
+        # rechts um genau diesen Betrag verringert, damit der sichtbare Rand
+        # links und rechts gleich breit ist – und die Feldkante links dort
+        # bleibt, wo sie app-weit liegt.
+        scroll_reserve = scrollbar.bar_width + self.DIALOG_SCROLLBAR_PAD
+        scrollbar.set_command(canvas.yview)
+        canvas.configure(yscrollcommand=scrollbar.set)
+        container = tk.Frame(canvas, bg=self.theme["bg"])
+        window_id = canvas.create_window((0, 0), window=container, anchor="nw")
+
+        def sync_scroll(_event=None):
+            try:
+                canvas.configure(scrollregion=canvas.bbox("all"))
+                canvas.itemconfigure(window_id, width=canvas.winfo_width())
+            except tk.TclError:
+                pass
+
+        container.bind("<Configure>", sync_scroll)
+        canvas.bind("<Configure>", sync_scroll)
+        self.bind_mousewheel(canvas)
+
+        inner = tk.Frame(container, bg=self.theme["bg"])
+        inner.pack(
+            fill="both", expand=True,
+            padx=(self.DIALOG_PAD_X, max(0, self.DIALOG_PAD_X - scroll_reserve)),
+            pady=self.DIALOG_PAD_Y,
+        )
+
+        tk.Label(
+            inner, text=title, bg=self.theme["bg"], fg=self.theme["text"],
+            font=app_font(16, "bold"), anchor="w",
+        ).pack(anchor="w", pady=(0, 6))
+        if is_long:
+            hint = (
+                f"Der Titel darf mehrere Zeilen haben – Enter setzt eine neue Zeile. "
+                f"In der Liste erscheinen die ersten {self.LONG_TASK_MAX_LINES} Zeilen. "
+                f"Speichern: {self.accel('↵')}."
+            )
+        else:
+            hint = prompt or "Titel eingeben. Alle weiteren Angaben sind freiwillig und später änderbar."
+        hint_label = tk.Label(
+            inner, text=hint, bg=self.theme["bg"], fg=self.theme["muted"],
+            font=app_font(10), anchor="w", justify="left", wraplength=640,
+        )
+        hint_label.pack(anchor="w", pady=(0, 14))
+
+        # --- Titel ---
+        self._make_field_label(inner, "Titel").pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+        title_border, title_field = self._make_field(inner)
+        title_border.pack(fill="x", pady=(0, 14))
+        title_field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
+        title_entry = tk.Entry(
+            title_field, name="title_entry",
+            bg=self.theme["input"], fg=self.theme["text"], insertbackground=self.theme["text"],
+            selectbackground=self.theme["selection"], selectforeground=self.theme["selection_text"],
+            relief="flat", bd=0, highlightthickness=0, font=app_font(12),
+        )
+        title_long_frame = tk.Frame(title_field, bg=self.theme["input"])
+        title_text = tk.Text(
+            title_long_frame, name="title_text", height=5, wrap="word", undo=True,
+            bg=self.theme["input"], fg=self.theme["text"], insertbackground=self.theme["text"],
+            selectbackground=self.theme["selection"], selectforeground=self.theme["selection_text"],
+            relief="flat", bd=0, highlightthickness=0, font=app_font(12),
+            padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y,
+        )
+        self._attach_field_scrollbar(title_long_frame, title_text, pad_y=self.FIELD_PAD_Y)
+        title_text.pack(fill="x")
+        initial_title = source.get("text", "") or initial_text
+        title_text.insert("1.0", initial_title)
+        title_entry.insert(0, self.normalize_item_text(initial_title, self.ITEM_KIND_TASK))
+        title_draft = {"collapsed_long": self.normalize_item_text(initial_title, self.ITEM_KIND_TASK)}
+        title_widget = title_text if is_long else title_entry
+        if is_long:
+            title_long_frame.pack(fill="x")
+        else:
+            title_entry.pack(fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+
+        def read_title():
+            if is_long:
+                return self.normalize_item_text(title_widget.get("1.0", "end-1c"), self.ITEM_KIND_LONG)
+            return title_widget.get().strip()
+
+        # --- Art, Wichtigkeit, Farbe ---
+        grid = tk.Frame(inner, bg=self.theme["bg"])
+        grid.pack(fill="x")
+        grid.columnconfigure((0, 1), weight=1, uniform="item_form_fields")
+
+        kind_names = [self.ITEM_KIND_NAMES[value] for value in self.ITEM_KINDS]
+        kind_by_name = {self.ITEM_KIND_NAMES[value]: value for value in self.ITEM_KINDS}
+        kind_var = tk.StringVar(value=self.ITEM_KIND_NAMES[current_kind or self.ITEM_KIND_TASK])
+        importance_names = [self.importance_choice_text(value) for value in (0, 1, 2, 3)]
+        importance_by_name = {self.importance_choice_text(value): value for value in (0, 1, 2, 3)}
+        importance_colors = {self.importance_choice_text(value): self.importance_color_key(value) for value in (0, 1, 2, 3)}
+        importance_var = tk.StringVar(
+            value=self.importance_choice_text(self.clamp_importance(source.get("importance", 0)))
+        )
+        color_names = ["Keine Farbe"] + [name for name, _key in self.ITEM_COLOR_CHOICES]
+        color_by_name = {name: key for name, key in self.ITEM_COLOR_CHOICES}
+        current_color = source.get("color") if source.get("color") in self.ITEM_COLOR_KEYS else None
+        color_var = tk.StringVar(value=next(
+            (name for name, key in self.ITEM_COLOR_CHOICES if key == current_color), "Keine Farbe"
+        ))
+
+        left = tk.Frame(grid, bg=self.theme["bg"])
+        left.grid(row=0, column=0, sticky="ew", padx=(0, 8))
+        right = tk.Frame(grid, bg=self.theme["bg"])
+        right.grid(row=0, column=1, sticky="ew")
+
+        self._make_field_label(left, "Art").pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+        kind_border, kind_button = self._make_option_menu(left, kind_var, kind_names,
+            option_colors={name: self.kind_color_key(kind) for name, kind in kind_by_name.items()})
+        kind_border.pack(fill="x")
+
+        self._make_field_label(right, "Wichtigkeit").pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+        importance_border, _importance_button = self._make_option_menu(
+            right, importance_var, importance_names, option_colors=importance_colors,
+        )
+        importance_border.pack(fill="x")
+
+        left_low = tk.Frame(grid, bg=self.theme["bg"])
+        left_low.grid(row=1, column=0, sticky="ew", padx=(0, 8), pady=(12, 0))
+        self._make_field_label(left_low, "Farbe des Listenpunkts").pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+        color_border, _color_button = self._make_option_menu(left_low, color_var, color_names, option_colors=color_by_name)
+        color_border.pack(fill="x")
+
+        # --- Zielliste ---
+        list_choices = []
+        list_var = tk.StringVar()
+        if allow_list_choice and self.lists:
+            for entry in self.lists:
+                list_choices.append((entry.get("id"), self.list_path_title(entry)))
+            names = [name for _list_id, name in list_choices]
+            preferred = next((name for list_id, name in list_choices if list_id == default_list_id), names[0])
+            list_var.set(preferred)
+            right_low = tk.Frame(grid, bg=self.theme["bg"])
+            right_low.grid(row=1, column=1, sticky="ew", pady=(12, 0))
+            self._make_field_label(right_low, "Zugehörige Liste").pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+            list_border, _list_button = self._make_option_menu(right_low, list_var, names,
+                option_colors={self.list_path_title(entry): self.inherited_list_color(entry) or "text" for entry in self.lists})
+            list_border.pack(fill="x")
+
+        # --- Fälligkeit mit Kalender und Uhrzeit ---
+        due_block = tk.Frame(inner, bg=self.theme["bg"])
+        due_block.pack(fill="x", pady=(14, 0))
+        self._make_field_label(due_block, "Fälligkeit").pack(anchor="w", pady=(0, self.FIELD_LABEL_GAP))
+        due_field = DueField(
+            due_block, self,
+            due=source.get("due") if editing else default_due,
+            due_time=source.get("due_time") if editing else default_due_time,
+            compact=True, dialog_parent=dialog,
+        )
+        due_field.pack(fill="x")
+
+        # --- Wiederholung ---
+        # Steht unmittelbar unter der Fälligkeit: Eine Wiederholung ohne Datum
+        # gibt es nicht, und die Maske soll das durch ihre Anordnung sagen.
+        repeat_block = tk.Frame(inner, bg=self.theme["bg"])
+        repeat_block.pack(fill="x", pady=(14, 0))
+        self._make_field_label(repeat_block, "Wiederholung").pack(
+            anchor="w", pady=(0, self.FIELD_LABEL_GAP)
+        )
+        vorhandene_regel = self.normalize_repeat(source.get("repeat")) if editing else None
+        repeat_names = {key: label for label, key in self.REPEAT_CHOICES}
+        repeat_by_name = {label: key for label, key in self.REPEAT_CHOICES}
+        repeat_var = tk.StringVar(value=repeat_names.get(
+            (vorhandene_regel or {}).get("art", self.REPEAT_NONE), repeat_names[self.REPEAT_NONE]
+        ))
+        repeat_border, _repeat_button = self._make_option_menu(
+            repeat_block, repeat_var, [label for label, _key in self.REPEAT_CHOICES]
+        )
+        repeat_border.pack(fill="x")
+
+        # Zusatzangaben: Abstand für „alle N Tage", Wochentage für die
+        # Wochentagsauswahl. Sichtbar ist immer nur, was zur Art gehört –
+        # Felder, die gerade nichts bedeuten, sind eine Fehlerquelle.
+        repeat_detail = tk.Frame(repeat_block, bg=self.theme["bg"])
+
+        # Zusatzangaben in derselben Feldsystematik wie der Rest der Maske:
+        # Beschriftung oben, Feld darunter über die volle Breite, linke Kante
+        # bündig. Ein eingerücktes Feld in einer Textzeile säße daneben – der
+        # Integrationstest misst genau das.
+        interval_row = tk.Frame(repeat_detail, bg=self.theme["bg"])
+        self._make_field_label(interval_row, f"Abstand in Tagen (1 bis {self.REPEAT_MAX_INTERVAL})").pack(
+            anchor="w", pady=(0, self.FIELD_LABEL_GAP)
+        )
+        interval_var = tk.StringVar(value=str((vorhandene_regel or {}).get("abstand", 2)))
+        interval_border, interval_field = self._make_field(interval_row)
+        interval_entry = tk.Entry(interval_field, textvariable=interval_var,
+                                  bg=self.theme["input"], fg=self.theme["text"],
+                                  insertbackground=self.theme["text"], relief="flat",
+                                  highlightthickness=0, bd=0, font=app_font(11))
+        interval_entry.pack(fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+        interval_field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
+        interval_border.pack(fill="x")
+
+        weekday_row = tk.Frame(repeat_detail, bg=self.theme["bg"])
+        self._make_field_label(weekday_row, "Wochentage").pack(
+            anchor="w", pady=(0, self.FIELD_LABEL_GAP)
+        )
+        weekday_boxes = tk.Frame(weekday_row, bg=self.theme["bg"])
+        weekday_boxes.pack(anchor="w")
+        gewaehlte_tage = set((vorhandene_regel or {}).get("tage", []))
+        weekday_vars = []
+        for index, name in enumerate(self.REPEAT_WEEKDAY_NAMES):
+            var = tk.BooleanVar(value=index in gewaehlte_tage)
+            weekday_vars.append(var)
+            tk.Checkbutton(weekday_boxes, text=name, variable=var, bg=self.theme["bg"],
+                           fg=self.theme["text"], activebackground=self.theme["bg"],
+                           activeforeground=self.theme["text"], selectcolor=self.theme["input"],
+                           font=app_font(10)).pack(side="left", padx=(0, 8))
+
+        end_row = tk.Frame(repeat_detail, bg=self.theme["bg"])
+        self._make_field_label(end_row, "Endet am (leer lassen für kein Ende)").pack(
+            anchor="w", pady=(0, self.FIELD_LABEL_GAP)
+        )
+        end_var = tk.StringVar(value=self.format_due_display((vorhandene_regel or {}).get("ende") or ""))
+        end_border, end_field = self._make_field(end_row)
+        end_entry = tk.Entry(end_field, textvariable=end_var, bg=self.theme["input"],
+                             fg=self.theme["text"], insertbackground=self.theme["text"],
+                             relief="flat", highlightthickness=0, bd=0,
+                             font=app_font(11))
+        end_entry.pack(fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+        end_field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
+        end_border.pack(fill="x")
+
+        def repeat_detail_sichtbarkeit(*_args):
+            art = repeat_by_name.get(repeat_var.get(), self.REPEAT_NONE)
+            for zeile in (interval_row, weekday_row, end_row):
+                zeile.pack_forget()
+            if art == self.REPEAT_NONE:
+                repeat_detail.pack_forget()
+                return
+            repeat_detail.pack(fill="x", pady=(8, 0))
+            if art == self.REPEAT_EVERY_N_DAYS:
+                interval_row.pack(fill="x", pady=(0, 10))
+            elif art == self.REPEAT_WEEKDAYS:
+                weekday_row.pack(fill="x", pady=(0, 10))
+            end_row.pack(fill="x")
+
+        repeat_spur = repeat_var.trace_add("write", repeat_detail_sichtbarkeit)
+
+        def repeat_spur_loesen(event, w=repeat_block):
+            if event.widget is w:
+                try:
+                    repeat_var.trace_remove("write", repeat_spur)
+                except tk.TclError:
+                    pass
+        repeat_block.bind("<Destroy>", repeat_spur_loesen, add="+")
+        repeat_detail_sichtbarkeit()
+
+        def gelesene_wiederholung():
+            """Liest die Regel aus der Maske; (Regel, Fehlertext)."""
+            art = repeat_by_name.get(repeat_var.get(), self.REPEAT_NONE)
+            if art == self.REPEAT_NONE:
+                return None, None
+            regel = {"art": art}
+            if art == self.REPEAT_EVERY_N_DAYS:
+                roh = interval_var.get().strip()
+                if not roh.isdigit() or not 1 <= int(roh) <= self.REPEAT_MAX_INTERVAL:
+                    return None, ("Bitte für „alle N Tage\" eine Zahl von 1 bis "
+                                  f"{self.REPEAT_MAX_INTERVAL} eingeben.")
+                regel["abstand"] = int(roh)
+            elif art == self.REPEAT_WEEKDAYS:
+                tage = [index for index, var in enumerate(weekday_vars) if var.get()]
+                if not tage:
+                    return None, "Bitte mindestens einen Wochentag auswählen."
+                regel["tage"] = tage
+            rohes_ende = end_var.get().strip()
+            if rohes_ende:
+                geparst = self.parse_due_input(rohes_ende)
+                if not geparst:
+                    return None, "Bitte für das Enddatum ein gültiges Datum eingeben, etwa 31.12.2026."
+                regel["ende"] = geparst
+            return regel, None
+
+        # --- Labels ---
+        # Art und feste Labels sind zwei Zugänge zur selben Auswahl.
+        selectable_labels = list(self.labels)
+        selected_label_ids = [
+            label_id for label_id in (source.get("labels") or [])
+            if any(label["id"] == label_id for label in selectable_labels)
+        ]
+        label_block = tk.Frame(inner, bg=self.theme["bg"])
+        label_block.pack(fill="x", pady=(14, 0))
+        self._make_field_label(label_block, "Labels (Mehrfachauswahl)").pack(
+            anchor="w", pady=(0, self.FIELD_LABEL_GAP)
+        )
+        label_dropdown = LabelDropdown(
+            label_block, self, selectable_labels,
+            selected_ids=selected_label_ids, dialog_parent=dialog,
+            allow_create=True,
+        )
+        label_dropdown.pack(fill="x")
+
+        form_state = {"kind": current_kind or self.ITEM_KIND_TASK, "syncing": False}
+
+        def sync_kind(*_args):
+            nonlocal is_long, title_widget, schedulable
+            if form_state["syncing"]:
+                return
+            chosen_kind = kind_by_name.get(kind_var.get(), self.ITEM_KIND_TASK)
+            regular_ids = [
+                label_id for label_id in label_dropdown.read()
+                if not self.is_system_label(self.get_label(label_id))
+            ]
+            matching = next((
+                label for label in selectable_labels
+                if self.SYSTEM_LABEL_KIND.get(self.system_label_role(label)) == chosen_kind
+            ), None)
+            assigned = regular_ids + ([matching["id"]] if matching else [])
+            if len(assigned) > self.MAX_LABELS_PER_ITEM:
+                form_state["syncing"] = True
+                kind_var.set(self.ITEM_KIND_NAMES[form_state["kind"]])
+                form_state["syncing"] = False
+                self.show_warning(
+                    "Labels", f"Das Artlabel benötigt einen freien Platz unter den {self.MAX_LABELS_PER_ITEM} Labels. "
+                    "Bitte zuerst ein anderes Label abwählen.", parent=dialog,
+                )
+                return
+            label_dropdown.set_selected_ids(assigned)
+            next_long = chosen_kind == self.ITEM_KIND_LONG
+            if next_long != is_long:
+                if next_long:
+                    current_text = title_entry.get()
+                    # Beim Wechsel hin und zurück bleiben eigene Zeilenumbrüche
+                    # erhalten, solange der einzeilige Entwurf nicht geändert wurde.
+                    if current_text != title_draft["collapsed_long"]:
+                        title_text.delete("1.0", tk.END)
+                        title_text.insert("1.0", current_text)
+                    title_entry.pack_forget()
+                    title_long_frame.pack(fill="x")
+                    title_widget = title_text
+                else:
+                    collapsed = self.normalize_item_text(title_text.get("1.0", "end-1c"), self.ITEM_KIND_TASK)
+                    title_draft["collapsed_long"] = collapsed
+                    title_entry.delete(0, tk.END)
+                    title_entry.insert(0, collapsed)
+                    title_long_frame.pack_forget()
+                    title_entry.pack(fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+                    title_widget = title_entry
+                is_long = next_long
+            schedulable = chosen_kind in (self.ITEM_KIND_TASK, self.ITEM_KIND_LONG)
+            if schedulable:
+                right.grid()
+                # Beide Blöcke gemeinsam und in dieser Reihenfolge: Die
+                # Wiederholung hängt an der Fälligkeit und gehört unmittelbar
+                # darunter. Ohne das ausdrückliche Umpacken stünde sie darüber,
+                # weil nur die Fälligkeit neu einsortiert wird.
+                due_block.pack(fill="x", pady=(14, 0), before=label_block)
+                repeat_block.pack(fill="x", pady=(14, 0), before=label_block)
+            else:
+                # Eine Überschrift trägt weder Fälligkeit noch Wiederholung.
+                right.grid_remove()
+                due_block.pack_forget()
+                repeat_block.pack_forget()
+            hint_label.configure(text=(
+                f"Der Titel darf mehrere Zeilen haben – Enter setzt eine neue Zeile. "
+                f"In der Liste erscheinen die ersten {self.LONG_TASK_MAX_LINES} Zeilen. "
+                f"Speichern: {self.accel('↵')}."
+                if is_long else prompt or "Titel eingeben. Alle weiteren Angaben sind freiwillig und später änderbar."
+            ))
+            form_state["kind"] = chosen_kind
+            if label_dropdown._popup is not None:
+                label_dropdown._place_popup(label_dropdown._popup)
+            sync_scroll()
+
+        def labels_changed(label_id, selected):
+            role = self.system_label_role(self.get_label(label_id))
+            if role is None:
+                return
+            chosen_kind = self.SYSTEM_LABEL_KIND[role] if selected else self.ITEM_KIND_TASK
+            kind_var.set(self.ITEM_KIND_NAMES[chosen_kind])
+
+        label_dropdown.on_change = labels_changed
+        kind_trace = kind_var.trace_add("write", sync_kind)
+        def forget_kind_trace(event):
+            if event.widget is dialog:
+                try:
+                    kind_var.trace_remove("write", kind_trace)
+                except tk.TclError:
+                    pass
+        dialog.bind("<Destroy>", forget_kind_trace, add="+")
+        sync_kind()
+
+        # --- Beschreibung ---
+        self._make_field_label(inner, "Beschreibung").pack(anchor="w", pady=(14, self.FIELD_LABEL_GAP))
+        description_border, description_field = self._make_field(inner)
+        description_border.pack(fill="x")
+        description_field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
+        description_text = tk.Text(
+            description_field, height=5, wrap="word", undo=True,
+            bg=self.theme["input"], fg=self.theme["text"], insertbackground=self.theme["text"],
+            selectbackground=self.theme["selection"], selectforeground=self.theme["selection_text"],
+            relief="flat", bd=0, highlightthickness=0, font=app_font(10),
+            padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y,
+        )
+        self._attach_field_scrollbar(description_field, description_text, pad_y=0)
+        description_text.pack(fill="x")
+        description_text.insert("1.0", source.get("description", ""))
+
+        # --- Anhänge ---
+        attachment_heading = tk.Frame(inner, bg=self.theme["bg"])
+        attachment_heading.pack(fill="x", pady=(14, self.FIELD_LABEL_GAP))
+        self._make_field_label(attachment_heading, "Anhänge").pack(side="left")
+        tk.Label(
+            attachment_heading,
+            text="Bilder und andere Dateien werden als lokale Kopie gespeichert.",
+            bg=self.theme["bg"], fg=self.theme["placeholder"], font=app_font(8), anchor="e",
+        ).pack(side="right")
+
+        self._make_attachment_editor(inner, dialog, attachments)
+
+        def submit(event=None):
+            text = read_title()
+            if not text:
+                self.show_warning("Hinweis", "Bitte einen Titel eingeben.", parent=dialog)
+                title_widget.focus_set()
+                return "break"
+
+            due_value = due_time_value = None
+            if schedulable:
+                parsed, error = due_field.read()
+                if error:
+                    self.show_warning("Fälligkeit", error, parent=dialog)
+                    return "break"
+                due_value, due_time_value = parsed
+
+            wiederholung, wiederholungsfehler = gelesene_wiederholung()
+            if wiederholungsfehler:
+                self.show_warning("Hinweis", wiederholungsfehler, parent=dialog)
+                return "break"
+            if wiederholung and not due_value:
+                self.show_warning(
+                    "Hinweis",
+                    "Eine Wiederholung braucht ein Fälligkeitsdatum – sonst gibt es "
+                    "keinen Termin, von dem aus gerechnet werden könnte.",
+                    parent=dialog,
+                )
+                return "break"
+            stored_attachments = self._store_pending_attachments(attachments, dialog)
+            if stored_attachments is None:
+                return "break"
+
+            chosen_kind = kind_by_name.get(kind_var.get(), self.ITEM_KIND_TASK)
+            target_list_id = None
+            if list_choices:
+                target_list_id = next(
+                    (list_id for list_id, name in list_choices if name == list_var.get()),
+                    list_choices[0][0],
+                )
+            result["value"] = {
+                "text": text,
+                "kind": chosen_kind,
+                "importance": importance_by_name.get(importance_var.get(), 0) if schedulable else 0,
+                "color": color_by_name.get(color_var.get()),
+                "due": due_value,
+                "due_time": due_time_value,
+                "repeat": wiederholung if schedulable else None,
+                "labels": label_dropdown.read(),
+                "description": description_text.get("1.0", "end-1c"),
+                "attachments": stored_attachments,
+                "list_id": target_list_id,
+            }
+            dialog.destroy()
+            return "break"
+
+        def cancel(event=None):
+            result["value"] = None
+            dialog.destroy()
+            return "break"
+
+        self._make_dialog_button(footer, ok_text, submit, "confirm").pack(side="right")
+        self._make_dialog_button(footer, "Abbrechen", cancel, "muted").pack(side="right", padx=(0, 10))
+        # Enter im einzeiligen Titelfeld schließt ab; im mehrzeiligen Titel und
+        # in der Beschreibung setzt Enter eine Zeile, deshalb dort Strg+Enter.
+        dialog.bind("<Control-Return>", submit)
+        if IS_MACOS:
+            dialog.bind("<Command-Return>", submit)
+        title_entry.bind("<Return>", submit)
+        dialog.bind("<Escape>", cancel)
+        dialog.protocol("WM_DELETE_WINDOW", cancel)
+        # Die Maske liegt in einem Bildlaufbereich; dessen angeforderte Höhe
+        # sagt nichts über den Inhalt aus. Ohne diese Messung öffnete das
+        # Fenster in Mindestgröße, und die Maske musste jedes Mal von Hand
+        # größer gezogen werden.
+        dialog.update_idletasks()
+        content_height = container.winfo_reqheight() + footer.winfo_reqheight() + 2 * self.DIALOG_PAD_Y
+        self._center_dialog(dialog, min_width=760, min_height=content_height)
+        self._schedule_windows_chrome_theme(dialog)
+        title_widget.focus_set()
+        if editing:
+            if is_long:
+                title_widget.tag_add("sel", "1.0", "end-1c")
+                title_widget.mark_set("insert", "end-1c")
+            else:
+                title_widget.select_range(0, tk.END)
+        sync_scroll()
+        self.run_modal(dialog)
+        return result["value"]
+
+    def _store_pending_attachments(self, attachments, parent_dialog=None):
+        """Legt neu ausgewählte Dateien als lokale Kopie ab.
+
+        Rückgabe: die fertige Anhangsliste oder None, wenn eine Datei nicht
+        gespeichert werden konnte. Im Fehlerfall werden die in diesem Durchlauf
+        bereits erzeugten Kopien wieder entfernt, damit keine verwaisten Dateien
+        zurückbleiben.
+        """
+        stored_attachments = []
+        newly_stored_paths = []
+        for attachment in attachments:
+            if attachment.get("pending_path"):
+                try:
+                    stored = self.store_attachment(attachment["pending_path"])
+                except Exception as exc:
+                    for stored_path in newly_stored_paths:
+                        try:
+                            os.remove(stored_path)
+                        except OSError:
+                            pass
+                    self.show_error(
+                        "Anhang speichern",
+                        f"'{attachment.get('name', 'Datei')}' konnte nicht gespeichert werden:\n{exc}",
+                        parent=parent_dialog,
+                    )
+                    return None
+                stored_path = self.resolve_attachment_path(stored)
+                if stored_path:
+                    newly_stored_paths.append(stored_path)
+                stored_attachments.append(stored)
+                continue
+            stored = copy.deepcopy(attachment)
+            stored_path = self.resolve_attachment_path(stored)
+            if stored_path and os.path.isfile(stored_path):
+                try:
+                    stored["size"] = os.path.getsize(stored_path)
+                except OSError:
+                    pass
+            stored_attachments.append(stored)
+        return stored_attachments
+
+    def new_item_dialog(
+        self,
+        title="Neuer Punkt",
+        prompt="",
+        kind=None,
+        allow_list_choice=False,
+        default_list_id=None,
+        default_due=None,
+        initial_text="",
+        ok_text="Anlegen",
+    ):
+        """Erweiterte Eingabe für einen neuen Punkt – dieselbe Maske wie beim Bearbeiten."""
+        return self.item_form_dialog(
+            mode="create",
+            title=title,
+            prompt=prompt,
+            kind=kind,
+            allow_list_choice=allow_list_choice,
+            default_list_id=default_list_id,
+            default_due=default_due,
+            initial_text=initial_text,
+            ok_text=ok_text,
+        )
+
+    def themed_item_details_dialog(self, item):
+        """Punktdetails – dieselbe Maske wie beim Anlegen, gefüllt mit dem Punkt.
+
+        Ein Long-Task bekommt dasselbe Fenster mit einem mehrzeiligen Titelfeld:
+        Sein Text ist die Aufgabe selbst und darf – anders als bei jeder anderen
+        Art – eigene Zeilenumbrüche enthalten.
+        """
+        return self.item_form_dialog(mode="edit", item=item)
+
+    def apply_item_details(self, item, details):
+        """Überträgt das Ergebnis der Maske auf einen bestehenden Punkt.
+
+        Eine Stelle für alle Aufrufer, damit „Bearbeiten“ aus der Liste und aus
+        „In Bearbeitung“ denselben Umfang haben. Rückgabe: True, wenn sich etwas
+        geändert hat.
+        """
+        if not isinstance(details, dict):
+            return False
+        changed = False
+        if details.get("kind") and details["kind"] != self.item_kind(item):
+            changed = self.set_item_kind(item, details["kind"]) or changed
+        schedulable = self.is_schedulable_item(item)
+        planned = {
+            "text": self.normalize_item_text(details.get("text", ""), self.item_kind(item)),
+            "description": details.get("description", ""),
+            "attachments": details.get("attachments", []),
+            "labels": self.normalize_item_labels(details.get("labels")),
+            "color": details.get("color") if details.get("color") in self.ITEM_COLOR_KEYS else None,
+            "importance": self.clamp_importance(details.get("importance", 0)) if schedulable else 0,
+            "due": self.normalize_due(details.get("due")) if schedulable else None,
+        }
+        planned["due_time"] = (
+            self.normalize_due_time(details.get("due_time")) if planned["due"] else None
+        )
+        # Ohne Fälligkeit keine Wiederholung: Nimmt jemand beim Bearbeiten das
+        # Datum heraus, verliert der Punkt auch seine Regel – sonst bliebe eine
+        # Regel zurück, die auf nichts mehr rechnen kann.
+        planned["repeat"] = (
+            self.normalize_repeat(details.get("repeat"), default_start=planned["due"])
+            if planned["due"] else None
+        )
+        for key, value in planned.items():
+            if item.get(key) != value:
+                item[key] = value
+                changed = True
+        # Art und festes Label bleiben deckungsgleich – auch nach dem Bearbeiten.
+        if self.sync_item_kind_label(item):
+            changed = True
+        return changed
+
+
+    def build_item_from_dialog(self, details):
+        """Erzeugt aus dem Ergebnis der Eingabemaske einen fertigen Punkt.
+
+        Beschreibung und Anhänge wandern mit: Seit die Maske sie auch beim
+        Anlegen anbietet, dürfen sie hier nicht mehr verworfen werden.
+        """
+        if not isinstance(details, dict):
+            return None
+        return self.new_item(
+            details.get("text", ""),
+            False,
+            None,
+            None,
+            details.get("importance", 0),
+            details.get("due"),
+            details.get("description", ""),
+            details.get("attachments"),
+            details.get("color"),
+            details.get("kind", self.ITEM_KIND_TASK),
+            details.get("labels"),
+            details.get("due_time"),
+            details.get("repeat"),
+        )
+
+    # -----------------------------
+    def _attach_field_scrollbar(self, field, widget, pad_y=None):
+        """Hängt eine themenkonforme Bildlaufleiste rechts an ein Dialogfeld.
+
+        Ohne sie ist längerer Inhalt zwar mit Rad und Tastatur erreichbar, aber
+        nicht als solcher erkennbar. Der Balken wird vor dem Widget gepackt,
+        damit er seine Breite behält, wenn der Text die Fläche füllt.
+        """
+        bar = ThemedAutoScrollbar(
+            field,
+            bg_color=self.theme["input"],
+            track_color=self.theme["input"],
+            thumb_color=self.theme["input_border"],
+            active_thumb_color=self.theme["muted"],
+            width=10,
+            radius=5,
+        )
+        # Eine tk.Canvas fordert ohne Angabe rund 260 Pixel Höhe an und würde
+        # das Feld auseinanderziehen. Sie soll die Höhe des Textfelds
+        # übernehmen, nicht bestimmen.
+        bar.configure(height=1)
+        bar.pack(
+            side="right",
+            fill="y",
+            padx=(0, 6),
+            pady=self.FIELD_PAD_Y if pad_y is None else pad_y,
+        )
+        bar.set_command(widget.yview)
+        try:
+            widget.configure(yscrollcommand=bar.set)
+        except tk.TclError:
+            pass
+        self.bind_mousewheel(widget)
+        return bar
+
+    def _make_scroll_area(self, field, height=200):
+        """Scrollbare Fläche für Chip-Listen innerhalb eines Dialogfelds.
+
+        Liefert (canvas, inner): in `inner` werden Zeilen gepackt, der Canvas
+        übernimmt Bildlauf und Mausrad. Eine reine `tk.Listbox` käme hier nicht
+        infrage – sie kann nur Text darstellen, keine eingefärbten Flächen.
+        """
+        canvas = tk.Canvas(
+            field,
+            bg=self.theme["input"],
+            highlightthickness=0,
+            bd=0,
+            height=height,
+        )
+        bar = ThemedAutoScrollbar(
+            field,
+            bg_color=self.theme["input"],
+            track_color=self.theme["input"],
+            thumb_color=self.theme["input_border"],
+            active_thumb_color=self.theme["muted"],
+            width=10,
+            radius=5,
+        )
+        bar.configure(height=1)
+        bar.pack(side="right", fill="y", padx=(0, 6), pady=self.FIELD_PAD_Y)
+        canvas.pack(side="left", fill="both", expand=True, padx=(self.FIELD_PAD_X, 0),
+                    pady=self.FIELD_PAD_Y)
+        bar.set_command(canvas.yview)
+        canvas.configure(yscrollcommand=bar.set)
+        inner = tk.Frame(canvas, bg=self.theme["input"])
+        window = canvas.create_window((0, 0), window=inner, anchor="nw")
+
+        def sync(_event=None):
+            try:
+                canvas.configure(scrollregion=canvas.bbox("all"))
+                canvas.itemconfigure(window, width=canvas.winfo_width())
+            except tk.TclError:
+                pass
+
+        inner.bind("<Configure>", sync)
+        canvas.bind("<Configure>", sync)
+        self.bind_mousewheel(canvas)
+        return canvas, inner
+
+
+    MONTHS_DE = ["Januar", "Februar", "März", "April", "Mai", "Juni",
+                 "Juli", "August", "September", "Oktober", "November", "Dezember"]
+    WEEKDAYS_DE = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
+
+    # `themed_date_picker` ist mit 2.11.0 entfallen. Datum und Uhrzeit
+    # setzt jetzt `DueField`, damit Anlegen, Bearbeiten und das Menü
+    # „Fälligkeit“ dieselbe Auswahl zeigen – siehe `themed_due_dialog`.
+
+    # -----------------------------
+    # Kalenderansicht
+    # -----------------------------
+    def calendar_week_start(self, reference=None):
+        """Montag der Woche, in der das Referenzdatum liegt."""
+        day = reference or date.today()
+        first = 6 if self.settings.get("week_start") == "sunday" else 0
+        return day - timedelta(days=(day.weekday() - first) % 7)
+
+    def calendar_month_grid(self, year, month):
+        """Erster und letzter Tag des montagsausgerichteten Rasters eines Monats.
+
+        Das Raster beginnt am Montag der Woche, in der der Monatserste liegt,
+        und endet am Sonntag der Woche des Monatsletzten. Für September 2026
+        ergibt das genau fünf Wochen vom 31.08. bis zum 04.10.
+        """
+        first_of_month = date(year, month, 1)
+        last_day_number = calendar.monthrange(year, month)[1]
+        last_of_month = date(year, month, last_day_number)
+        first_day = self.calendar_week_start(first_of_month)
+        last_day = self.calendar_week_start(last_of_month) + timedelta(days=6)
+        return first_day, last_day
+
+    @staticmethod
+    def shift_month(year, month, delta):
+        index = (year * 12 + month - 1) + delta
+        return index // 12, index % 12 + 1
+
+    def collect_due_tasks_by_date(self, first_day, last_day):
+        """Alle Aufgaben mit Fälligkeit im Zeitraum, gruppiert nach Tag.
+
+        Rückgabe: {date: [(Aufgabe, Quellliste), …]} – sortiert nach Wichtigkeit
+        (absteigend) und Titel, damit die Tageszelle stabil bleibt.
+        """
+        buckets = {}
+        for entry in self.lists:
+            for item in self.walk_items(entry.get("items", [])):
+                if not self.is_schedulable_item(item):
+                    continue
+                iso_value = self.normalize_due(item.get("due"))
+                if not iso_value:
+                    continue
+                try:
+                    due_date = date.fromisoformat(iso_value)
+                except ValueError:
+                    continue
+                if due_date < first_day or due_date > last_day:
+                    continue
+                buckets.setdefault(due_date, []).append((item, entry))
+        for tasks in buckets.values():
+            tasks.sort(
+                key=lambda pair: (
+                    1 if pair[0].get("done") else 0,
+                    -self.clamp_importance(pair[0].get("importance", 0)),
+                    str(pair[0].get("text", "")).lower(),
+                )
+            )
+        return buckets
+
+    def open_calendar_view(self, event=None):
+        """Kalender mit umschaltbarer Wochen- und Monatsansicht.
+
+        Monatsansicht: das montagsausgerichtete Raster des Referenzmonats,
+        Navigation in ganzen Monaten, Tage benachbarter Monate ausgegraut.
+        Wochenansicht: genau eine Woche von Montag bis Sonntag über die volle
+        Höhe, damit auch viele Aufgaben an einem Tag Platz finden.
+        """
+        today = date.today()
+        state = {
+            "mode": self.CALENDAR_MODE_MONTH,
+            "year": today.year,
+            "month": today.month,
+            "week_start": self.calendar_week_start(today),
+        }
+        jump_target = {"list_id": None, "item_id": None}
+
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Kalender")
+        dialog.configure(bg=self.theme["bg"])
+        dialog.transient(self.root)
+        dialog.minsize(980, 660)
+
+        container = tk.Frame(dialog, bg=self.theme["bg"])
+        container.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+
+        header = tk.Frame(container, bg=self.theme["bg"])
+        header.pack(fill="x", pady=(0, 4))
+        # Statt des festen Worts "Kalender" steht hier der dargestellte Monat.
+        title_label = tk.Label(
+            header, text="", bg=self.theme["bg"], fg=self.theme["text"],
+            font=app_font(16, "bold"), anchor="w",
+        )
+        title_label.pack(side="left")
+        range_label = tk.Label(
+            header, text="", bg=self.theme["bg"], fg=self.theme["muted"],
+            font=app_font(10), anchor="e",
+        )
+        range_label.pack(side="right")
+
+        nav = tk.Frame(container, bg=self.theme["bg"])
+        nav.pack(fill="x", pady=(0, 12))
+
+        grid_wrap = tk.Frame(container, bg=self.theme["bg"])
+        grid_wrap.pack(fill="both", expand=True)
+        cells = {"frame": None}
+        mode_buttons = {}
+        cell_bindings = []
+        moon_events = {}
+
+        def restore_grab():
+            """Der Kalender bleibt nach einem eingeblendeten Dialog modal."""
+            try:
+                dialog.grab_set()
+            except tk.TclError:
+                pass
+
+        def add_task_on_day(day):
+            """Doppelklick auf einen Tag: neue Aufgabe mit genau dieser Fälligkeit."""
+            if self.add_task_with_due(day, parent_dialog=dialog, restore_grab=restore_grab):
+                render()
+
+        def open_task(item, source_list):
+            jump_target["list_id"] = source_list.get("id")
+            jump_target["item_id"] = item.get("id")
+            dialog.destroy()
+
+        def show_day(day, tasks):
+            if not tasks:
+                return
+            choices = [
+                (
+                    item.get("id"),
+                    f"{self.IMPORTANCE_MARKERS.get(self.clamp_importance(item.get('importance', 0)), '')}"
+                    f"{'✓ ' if item.get('done') else ''}{self.item_display_text(item)}"
+                    f"   ·   {str(source.get('title') or 'Liste')}",
+                )
+                for item, source in tasks
+            ]
+            try:
+                dialog.grab_release()
+            except tk.TclError:
+                pass
+            try:
+                chosen = self.themed_choice_dialog(
+                    day.strftime("%d.%m.%Y"), "Welche Aufgabe soll geöffnet werden?", choices
+                )
+            finally:
+                restore_grab()
+            if not chosen:
+                return
+            for item, source in tasks:
+                if item.get("id") == chosen:
+                    open_task(item, source)
+                    return
+
+        def current_range():
+            """Zeitraum und Referenzmonat der aktuellen Ansicht."""
+            if state["mode"] == self.CALENDAR_MODE_WEEK:
+                first_day = state["week_start"]
+                last_day = first_day + timedelta(days=6)
+                # Der Donnerstag entscheidet, zu welchem Monat eine Woche zählt.
+                reference = first_day + timedelta(days=3)
+                return first_day, last_day, reference.year, reference.month
+            first_day, last_day = self.calendar_month_grid(state["year"], state["month"])
+            return first_day, last_day, state["year"], state["month"]
+
+        def task_foreground(item, day, is_today, in_month):
+            color_key = item.get("color") if item.get("color") in self.ITEM_COLOR_KEYS else None
+            if item.get("done"):
+                return self.theme["muted"]
+            if color_key:
+                return self.theme[color_key]
+            if day < today:
+                return self.theme["overdue"]
+            if is_today:
+                return self.theme["due_today"]
+            return self.theme["text"] if in_month else self.theme["placeholder"]
+
+        def build_day_cell(parent, day, tasks, reference_month, max_tasks, task_font_size):
+            is_today = day == today
+            in_month = day.month == reference_month
+            # Tage benachbarter Monate bleiben sichtbar, treten aber zurück.
+            surface = self.theme["card"] if in_month else self.theme["bg"]
+            base_outline = self.theme["ui_accent"] if is_today else self.theme["line"]
+            cell = tk.Frame(
+                parent,
+                bg=surface,
+                highlightthickness=2 if is_today else 1,
+                highlightbackground=base_outline,
+                highlightcolor=base_outline,
+            )
+
+            def set_outline(color):
+                try:
+                    cell.configure(highlightbackground=color, highlightcolor=color)
+                except tk.TclError:
+                    pass
+
+            def pointer_inside():
+                try:
+                    pointer_x = cell.winfo_pointerx() - cell.winfo_rootx()
+                    pointer_y = cell.winfo_pointery() - cell.winfo_rooty()
+                except tk.TclError:
+                    return False
+                return 0 <= pointer_x < cell.winfo_width() and 0 <= pointer_y < cell.winfo_height()
+
+            def on_enter(_event=None):
+                set_outline(self.theme["calendar_hover"])
+
+            def on_leave(_event=None):
+                # Der Zeiger wechselt beim Überfahren zwischen Zelle und
+                # Beschriftungen; ohne diese Prüfung würde die Umrandung dabei
+                # flackern.
+                if not pointer_inside():
+                    set_outline(base_outline)
+
+            def on_double_click(_event=None):
+                add_task_on_day(day)
+                return "break"
+
+            def bind_cell_events(widget):
+                widget.bind("<Enter>", on_enter, add="+")
+                widget.bind("<Leave>", on_leave, add="+")
+                widget.bind("<Double-Button-1>", on_double_click, add="+")
+
+            bind_cell_events(cell)
+            cell_bindings.append(bind_cell_events)
+            # Platz zuerst reservieren: Aufgaben dürfen das Phasensymbol unten
+            # rechts nicht überdecken, auch in einer vollen Monatszelle.
+            moon_event = moon_events.get(day)
+            if moon_event:
+                marker = tk.Label(cell, text=self.ICONS[moon_event["icon"]], bg=surface,
+                                  fg=self.theme["muted"], font=app_font(12), anchor="e")
+                marker.pack(side="bottom", anchor="e", padx=6, pady=(0, 3))
+                marker.moon_day = day
+                marker.moon_name = moon_event["name"]
+                self.add_tooltip(marker, moon_event["name"] + " · berechneter lokaler Kalendertag")
+                bind_cell_events(marker)
+            day_row = tk.Frame(cell, bg=surface)
+            day_row.pack(fill="x", padx=6, pady=(5, 2))
+            bind_cell_events(day_row)
+            if is_today:
+                day_fg = self.theme["ui_accent"]
+            elif in_month:
+                day_fg = self.theme["text"]
+            else:
+                day_fg = self.theme["placeholder"]
+            day_number = tk.Label(
+                day_row, text=str(day.day), bg=surface, fg=day_fg,
+                font=app_font(11, "bold"),
+            )
+            day_number.pack(side="left")
+            bind_cell_events(day_number)
+            if day.day == 1 or not in_month:
+                month_hint = tk.Label(
+                    day_row, text=self.MONTHS_DE[day.month - 1][:3],
+                    bg=surface, fg=self.theme["placeholder"], font=app_font(8),
+                )
+                month_hint.pack(side="right")
+                bind_cell_events(month_hint)
+
+            wrapping = state["mode"] == self.CALENDAR_MODE_WEEK
+            task_labels = []
+            for item, source in tasks[:max_tasks]:
+                prefix = "✓ " if item.get("done") else self.IMPORTANCE_MARKERS.get(
+                    self.clamp_importance(item.get("importance", 0)), ""
+                )
+                text = f"{prefix}{self.item_display_text(item)}"
+                if not wrapping and len(text) > self.CALENDAR_MONTH_TEXT_MAX_CHARS:
+                    text = text[: self.CALENDAR_MONTH_TEXT_MAX_CHARS - 1].rstrip() + "…"
+                task_label = tk.Label(
+                    cell,
+                    text=text,
+                    bg=surface, fg=task_foreground(item, day, is_today, in_month),
+                    font=("TkDefaultFont", task_font_size), anchor="w", justify="left", cursor="hand2",
+                )
+                task_label.pack(fill="x", padx=6, pady=(0, 2))
+                task_label.bind("<Button-1>", lambda _e, i=item, s=source: open_task(i, s))
+                # Hover gilt für die ganze Zelle; der Doppelklick auf eine
+                # Aufgabe legt bewusst keinen neuen Punkt an.
+                task_label.bind("<Enter>", on_enter, add="+")
+                task_label.bind("<Leave>", on_leave, add="+")
+                task_labels.append(task_label)
+            if wrapping and task_labels:
+                # In der hohen Wochenzelle ist Platz für mehrere Zeilen; der
+                # Umbruch richtet sich nach der tatsächlichen Zellenbreite.
+                def rewrap(event, widgets=task_labels):
+                    width = max(60, event.width - 16)
+                    for widget in widgets:
+                        try:
+                            widget.configure(wraplength=width)
+                        except tk.TclError:
+                            pass
+                cell.bind("<Configure>", rewrap, add="+")
+            if len(tasks) > max_tasks:
+                more = tk.Label(
+                    cell, text=f"+{len(tasks) - max_tasks} weitere",
+                    bg=surface, fg=self.theme["muted"],
+                    font=("TkDefaultFont", task_font_size, "bold"), anchor="w", cursor="hand2",
+                )
+                more.pack(fill="x", padx=6)
+                more.bind("<Button-1>", lambda _e, d=day, t=tasks: show_day(d, t))
+                more.bind("<Enter>", on_enter, add="+")
+                more.bind("<Leave>", on_leave, add="+")
+            return cell
+
+        def render():
+            first_day, last_day, reference_year, reference_month = current_range()
+            moon_events.clear()
+            moon_events.update(calendar_moon_phases(first_day, last_day))
+            buckets = self.collect_due_tasks_by_date(first_day, last_day)
+            total = sum(len(tasks) for tasks in buckets.values())
+            title_label.configure(text=f"{self.MONTHS_DE[reference_month - 1]} {reference_year}")
+            range_label.configure(
+                text=f"{first_day.strftime('%d.%m.%Y')} – {last_day.strftime('%d.%m.%Y')}   ·   "
+                     f"{total} Aufgabe(n) mit Fälligkeit"
+            )
+            for mode, button in mode_buttons.items():
+                active = mode == state["mode"]
+                button.set_active(self.theme["ui_accent"] if active else None, self.theme["selection_text"])
+            if cells["frame"] is not None:
+                cells["frame"].destroy()
+            frame = tk.Frame(grid_wrap, bg=self.theme["bg"])
+            frame.pack(fill="both", expand=True)
+            cells["frame"] = frame
+            for column in range(7):
+                frame.columnconfigure(column, weight=1, uniform="calendar")
+
+            weekdays = self.WEEKDAYS_DE[-1:] + self.WEEKDAYS_DE[:-1] if self.settings.get("week_start") == "sunday" else self.WEEKDAYS_DE
+            for column, name in enumerate(weekdays):
+                tk.Label(
+                    frame, text=name, bg=self.theme["bg"], fg=self.theme["muted"],
+                    font=app_font(9, "bold"),
+                ).grid(row=0, column=column, padx=2, pady=(0, 6), sticky="ew")
+
+            week_count = ((last_day - first_day).days + 1) // 7
+            for row in range(1, week_count + 1):
+                frame.rowconfigure(row, weight=1, uniform="calendar_rows")
+            if state["mode"] == self.CALENDAR_MODE_WEEK:
+                max_tasks, task_font_size = self.CALENDAR_MAX_TASKS_PER_WEEK_DAY, 9
+            else:
+                max_tasks, task_font_size = self.CALENDAR_MAX_TASKS_PER_DAY, 8
+
+            for week in range(week_count):
+                for weekday in range(7):
+                    day = first_day + timedelta(days=week * 7 + weekday)
+                    cell = build_day_cell(
+                        frame, day, buckets.get(day, []), reference_month, max_tasks, task_font_size
+                    )
+                    cell.grid(row=week + 1, column=weekday, padx=3, pady=3, sticky="nsew")
+                    cell.grid_propagate(False)
+
+        def shift(delta):
+            if state["mode"] == self.CALENDAR_MODE_WEEK:
+                state["week_start"] = state["week_start"] + timedelta(weeks=delta)
+            else:
+                state["year"], state["month"] = self.shift_month(state["year"], state["month"], delta)
+            render()
+
+        def set_mode(mode):
+            if mode not in self.CALENDAR_MODES:
+                return
+            if mode == state["mode"]:
+                # Erneuter Klick springt zurück auf den heutigen Zeitraum.
+                jump_to_today()
+                return
+            if mode == self.CALENDAR_MODE_WEEK:
+                # Beim Wechsel die Woche im gerade gezeigten Monat behalten.
+                first_day, _last, _y, _m = current_range()
+                anchor = today if first_day <= today <= first_day + timedelta(days=41) else date(
+                    state["year"], state["month"], 1
+                )
+                state["week_start"] = self.calendar_week_start(anchor)
+            else:
+                anchor = state["week_start"] + timedelta(days=3)
+                state["year"], state["month"] = anchor.year, anchor.month
+            state["mode"] = mode
+            render()
+
+        def jump_to_today():
+            state["year"], state["month"] = today.year, today.month
+            state["week_start"] = self.calendar_week_start(today)
+            render()
+
+        self._make_dialog_button(nav, "\u2039", lambda: shift(-1), "muted", width=52, height=36).pack(side="left")
+        self._make_dialog_button(nav, "\u203a", lambda: shift(1), "muted", width=52, height=36).pack(side="left", padx=(8, 0))
+        mode_buttons[self.CALENDAR_MODE_WEEK] = self._make_dialog_button(
+            nav, "Diese Woche", lambda: set_mode(self.CALENDAR_MODE_WEEK), "accent", width=124, height=36
+        )
+        mode_buttons[self.CALENDAR_MODE_WEEK].pack(side="left", padx=(16, 0))
+        mode_buttons[self.CALENDAR_MODE_MONTH] = self._make_dialog_button(
+            nav, "Dieser Monat", lambda: set_mode(self.CALENDAR_MODE_MONTH), "accent", width=124, height=36
+        )
+        mode_buttons[self.CALENDAR_MODE_MONTH].pack(side="left", padx=(8, 0))
+        self._make_dialog_button(nav, "Heute", jump_to_today, "confirm", width=92, height=36).pack(side="left", padx=(16, 0))
+        tk.Label(
+            nav,
+            text="Klick auf eine Aufgabe öffnet sie in ihrer Liste · Doppelklick auf einen Tag legt dort eine Aufgabe an",
+            bg=self.theme["bg"], fg=self.theme["placeholder"], font=app_font(8),
+        ).pack(side="right")
+
+        render()
+
+        footer = tk.Frame(container, bg=self.theme["bg"])
+        footer.pack(fill="x", pady=(14, 0))
+
+        def close(event=None):
+            dialog.destroy()
+            return "break"
+
+        self._make_dialog_button(footer, "Schließen", close, "muted").pack(side="right")
+        dialog.bind("<Escape>", close)
+        dialog.bind("<Left>", lambda _e: shift(-1))
+        dialog.bind("<Right>", lambda _e: shift(1))
+        dialog.protocol("WM_DELETE_WINDOW", close)
+        self._center_dialog(dialog, min_width=1000)
+        self._schedule_windows_chrome_theme(dialog)
+        self.run_modal(dialog)
+
+        if jump_target["list_id"]:
+            self.open_task_in_source_list(jump_target["list_id"], jump_target["item_id"])
+        return "break"
+
+    def add_task_with_due(self, day, parent_dialog=None, restore_grab=None):
+        """Legt eine Aufgabe mit fester Fälligkeit an; Rückgabe: wurde etwas angelegt.
+
+        Wird vom Kalender genutzt und ist bewusst eine eigene Methode, damit der
+        Weg unabhängig vom Dialog geprüft werden kann.
+        """
+        target = self.calendar_target_list()
+        if target is None:
+            self.show_info(
+                "Neue Aufgabe",
+                "Es gibt noch keine Liste, in der die Aufgabe angelegt werden könnte.",
+            )
+            return False
+        if parent_dialog is not None:
+            try:
+                parent_dialog.grab_release()
+            except tk.TclError:
+                pass
+        try:
+            details = self.new_item_dialog(
+                f"Neue Aufgabe am {day.strftime('%d.%m.%Y')}",
+                "Die Fälligkeit ist bereits eingetragen. Zielliste, Wichtigkeit, "
+                "Farbe und Labels lassen sich hier gleich mitgeben.",
+                allow_list_choice=True,
+                default_list_id=target.get("id"),
+                default_due=day.isoformat(),
+            )
+        finally:
+            if callable(restore_grab):
+                restore_grab()
+        if details is None:
+            return False
+        chosen_id = details.get("list_id") or target.get("id")
+        target = next(
+            (entry for entry in self.lists if entry.get("id") == chosen_id), target
+        )
+        self.snapshot_undo()
+        if not details.get("due"):
+            details["due"] = day.isoformat()
+        new_entry = self.build_item_from_dialog(details)
+        target.setdefault("items", []).append(new_entry)
+        if target.get("id") == self.active_list_id:
+            self.items = target["items"]
+        self.save_items()
+        self.update_sidebar_list()
+        self.refresh_tree()
+        return True
+
+    def calendar_target_list(self):
+        """Liste, in der eine im Kalender angelegte Aufgabe entsteht.
+
+        Das ist die geöffnete Liste; steht gerade eine Ordnerübersicht, „In
+        Bearbeitung“ oder der Papierkorb im Hauptbereich, übernimmt der Eingang.
+        """
+        if self.view_mode == "list":
+            current = next((entry for entry in self.lists if entry.get("id") == self.active_list_id), None)
+            if current is not None:
+                return current
+        inbox = next((entry for entry in self.lists if self.is_inbox_list(entry)), None)
+        if inbox is not None:
+            return inbox
+        return self.lists[0] if self.lists else None
+
+    def open_task_in_source_list(self, list_id, item_id):
+        """Öffnet eine Aufgabe in ihrer Quellliste und klappt den Pfad dorthin auf."""
+        if not any(entry.get("id") == list_id for entry in self.lists):
+            return False
+        self.set_active_list(list_id, refresh=False)
+        self.update_sidebar_list()
+        self.refresh_tree(selected_id=item_id)
+        try:
+            if item_id and self.tree.exists(item_id):
+                parent_id = self.tree.parent(item_id)
+                while parent_id:
+                    self.tree.item(parent_id, open=True)
+                    self.expanded_ids.add(parent_id)
+                    self.collapsed_item_ids.discard(parent_id)
+                    parent_id = self.tree.parent(parent_id)
+                self.tree.selection_set(item_id)
+                self.tree.focus(item_id)
+                self.tree.see(item_id)
+        except tk.TclError:
+            pass
+        self.save_settings()
+        return True
+
+    # -----------------------------
+    # Mehrere Listen / Seitenregister
+    # -----------------------------
+    def new_list_object(
+        self,
+        title=None,
+        items=None,
+        list_id=None,
+        folder_id=None,
+        color=None,
+        note="",
+        system_role=None,
+        labels=None,
+        attachments=None,
+    ):
+        title = (title or "Neue Liste").strip() or "Neue Liste"
+        return {
+            "id": list_id or uuid.uuid4().hex,
+            "title": title,
+            "folder_id": folder_id if isinstance(folder_id, str) and folder_id else None,
+            "color": color if color in self.LIST_COLOR_KEYS else None,
+            "note": str(note or ""),
+            "system_role": "inbox" if system_role == "inbox" else None,
+            # Auch Listen und Ordner tragen Labels. Angezeigt werden sie nur in
+            # der großen Darstellung im Hauptbereich, nicht in der Seitenleiste.
+            "labels": self.normalize_item_labels(labels),
+            "attachments": self.normalize_attachments(attachments),
+            "items": items if isinstance(items, list) else [],
+        }
+
+    def new_folder_object(self, title=None, folder_id=None, color=None, note="", labels=None,
+                          parent_id=None, attachments=None):
+        title = (title or "Neuer Ordner").strip() or "Neuer Ordner"
+        return {
+            "id": folder_id or uuid.uuid4().hex,
+            "title": title,
+            "color": color if color in self.LIST_COLOR_KEYS else None,
+            "note": str(note or ""),
+            "labels": self.normalize_item_labels(labels),
+            "attachments": self.normalize_attachments(attachments),
+            # Format 9: Ordner können ineinander liegen. Fehlt das Feld oder
+            # zeigt es ins Leere, steht der Ordner auf oberster Ebene.
+            "parent_id": parent_id if isinstance(parent_id, str) and parent_id else None,
+        }
+
+    # --- Verschachtelte Ordner ----------------------------------------------
+    def folder_path_titles(self, folder_id):
+        """Ordnernamen von oben nach unten – die Herkunft eines Ordners."""
+        titles = []
+        for ancestor in reversed(self.folder_ancestor_ids(folder_id)):
+            folder = self.get_folder(ancestor)
+            if folder:
+                titles.append(str(folder.get("title") or "Ordner").strip() or "Ordner")
+        folder = self.get_folder(folder_id)
+        if folder:
+            titles.append(str(folder.get("title") or "Ordner").strip() or "Ordner")
+        return titles
+
+    def list_path_title(self, entry, ellipsize=False):
+        """Vollständiger Pfad einer Liste: „Ordner › Unterordner › Liste“.
+
+        Ohne den Pfad wären zwei gleichnamige Listen in verschiedenen
+        Unterordnern nicht auseinanderzuhalten – seit Ordner ineinander liegen
+        dürfen, ist das kein Randfall mehr.
+        """
+        if not isinstance(entry, dict):
+            return ""
+        title = str(entry.get("title") or "Liste").strip() or "Liste"
+        parts = self.folder_path_titles(entry.get("folder_id")) + [title]
+        if ellipsize:
+            parts = [self.ellipsize_sidebar_title(part) for part in parts]
+        return " \u203a ".join(parts)
+
+    def get_child_folders(self, parent_id=None):
+        """Direkte Unterordner in der gespeicherten Reihenfolge."""
+        return [
+            folder
+            for folder in self.folders
+            if isinstance(folder, dict) and folder.get("parent_id") == (parent_id or None)
+        ]
+
+    def folder_parent_id(self, folder_id):
+        folder = self.get_folder(folder_id)
+        return folder.get("parent_id") if folder else None
+
+    def folder_ancestor_ids(self, folder_id):
+        """Alle Ordner oberhalb, vom direkten Elternteil aufwärts."""
+        result = []
+        seen = {folder_id}
+        current = self.folder_parent_id(folder_id)
+        while current and current not in seen:
+            seen.add(current)
+            result.append(current)
+            current = self.folder_parent_id(current)
+        return result
+
+    def folder_depth(self, folder_id):
+        return len(self.folder_ancestor_ids(folder_id))
+
+    def folder_is_descendant(self, candidate_id, ancestor_id):
+        """Liegt candidate innerhalb von ancestor – auf beliebiger Ebene?"""
+        if not candidate_id or not ancestor_id:
+            return False
+        return ancestor_id in self.folder_ancestor_ids(candidate_id)
+
+    def iter_folder_subtree(self, folder_id):
+        """Der Ordner selbst und alle darunter, von oben nach unten."""
+        result = []
+        stack = [folder_id]
+        seen = set()
+        while stack:
+            current = stack.pop(0)
+            if not current or current in seen:
+                continue
+            seen.add(current)
+            folder = self.get_folder(current)
+            if folder is None:
+                continue
+            result.append(folder)
+            stack.extend(child.get("id") for child in self.get_child_folders(current))
+        return result
+
+    def folder_subtree_height(self, folder_id):
+        """Wie viele Ebenen hängen unter einem Ordner? Ein Blatt liefert 0."""
+        children = self.get_child_folders(folder_id)
+        if not children:
+            return 0
+        return 1 + max(self.folder_subtree_height(child.get("id")) for child in children)
+
+    def get_folder_lists_recursive(self, folder_id):
+        """Alle Listen im Ordner und in sämtlichen Unterordnern."""
+        ids = {folder.get("id") for folder in self.iter_folder_subtree(folder_id)}
+        return [entry for entry in self.lists if entry.get("folder_id") in ids]
+
+    def can_move_folder_into(self, folder_id, target_id):
+        """Darf ein Ordner in einen anderen verschoben werden?
+
+        Verboten sind: der Ordner selbst, jeder eigene Nachfahre – sonst
+        entstünde ein Kreis, der die Seitenleiste unendlich tief machte – und
+        jede Verschiebung, die die zulässige Tiefe überschreiten würde.
+        """
+        if not folder_id or self.get_folder(folder_id) is None:
+            return False
+        if target_id is None:
+            return True
+        if target_id == folder_id or self.get_folder(target_id) is None:
+            return False
+        if self.folder_is_descendant(target_id, folder_id):
+            return False
+        new_depth = self.folder_depth(target_id) + 1 + self.folder_subtree_height(folder_id)
+        return new_depth < self.MAX_FOLDER_DEPTH
+
+    def normalize_folder_parents(self):
+        """Räumt unbekannte Elternverweise, Kreise und zu große Tiefen auf.
+
+        Läuft nach jedem Laden. Ohne diesen Schritt könnte eine von Hand
+        bearbeitete Datei einen Ordner erzeugen, der sein eigener Vorfahre ist –
+        der Aufbau der Seitenleiste liefe dann endlos.
+        """
+        known = {folder.get("id") for folder in self.folders if isinstance(folder, dict)}
+        changed = False
+        for folder in self.folders:
+            parent = folder.get("parent_id")
+            if parent is not None and parent not in known:
+                folder["parent_id"] = None
+                changed = True
+        # Kreise auflösen: wer sich selbst erreicht, wandert auf die oberste Ebene.
+        for folder in self.folders:
+            seen = {folder.get("id")}
+            current = folder.get("parent_id")
+            while current:
+                if current in seen:
+                    folder["parent_id"] = None
+                    changed = True
+                    break
+                seen.add(current)
+                current = self.folder_parent_id(current)
+        # Zu tiefe Ordner rücken so weit heraus, bis die Grenze eingehalten ist.
+        for folder in self.folders:
+            guard = 0
+            while self.folder_depth(folder.get("id")) >= self.MAX_FOLDER_DEPTH and guard < 64:
+                folder["parent_id"] = self.folder_parent_id(folder.get("parent_id"))
+                changed = True
+                guard += 1
+        return changed
+
+    # -----------------------------
+    # Labels
+    # -----------------------------
+    def new_label_object(self, name=None, label_id=None, color=None, system=None):
+        clean_name = str(name or "Label").strip()[: self.MAX_LABEL_NAME_LENGTH] or "Label"
+        label = {
+            "id": label_id or uuid.uuid4().hex,
+            "name": clean_name,
+            "color": self.resolve_label_color(color),
+        }
+        if system in self.SYSTEM_LABEL_KIND:
+            label["system"] = system
+        return label
+
+    @classmethod
+    def system_label_role(cls, label):
+        """Rolle eines festen Labels oder None bei einem gewöhnlichen Label."""
+        if not isinstance(label, dict):
+            return None
+        role = label.get("system")
+        return role if role in cls.SYSTEM_LABEL_KIND else None
+
+    @classmethod
+    def is_system_label(cls, label):
+        return cls.system_label_role(label) is not None
+
+    def get_system_label(self, role):
+        return next((label for label in self.labels if self.system_label_role(label) == role), None)
+
+    def ensure_system_labels(self):
+        """Legt die festen Labels an, korrigiert ihre Namen und stellt sie voran.
+
+        Sie tragen die Art eines Punkts und dürfen deshalb weder fehlen noch
+        einen abweichenden Namen haben. Die Farbe bleibt frei wählbar.
+        """
+        changed = False
+        for role, name, color, _kind in self.SYSTEM_LABEL_DEFINITIONS:
+            label = self.get_system_label(role)
+            if label is None:
+                # Ein von Hand angelegtes Label mit demselben Namen wird
+                # übernommen, statt ein zweites daneben zu stellen.
+                candidate = self.get_label_by_name(name)
+                if candidate is not None and not self.is_system_label(candidate):
+                    candidate["system"] = role
+                    label = candidate
+                    changed = True
+                else:
+                    label = self.new_label_object(name, None, color, system=role)
+                    self.labels.append(label)
+                    changed = True
+            if label.get("name") != name:
+                label["name"] = name
+                changed = True
+            if self.resolve_label_color(label.get("color")) != label.get("color"):
+                label["color"] = self.resolve_label_color(label.get("color"))
+                changed = True
+        # Feste Labels stehen immer oben, damit die Liste vorhersehbar bleibt.
+        ordered = [label for label in self.labels if self.is_system_label(label)]
+        ordered.sort(key=lambda label: [role for role, *_ in self.SYSTEM_LABEL_DEFINITIONS].index(
+            self.system_label_role(label)
+        ))
+        rest = [label for label in self.labels if not self.is_system_label(label)]
+        if self.labels != ordered + rest:
+            self.labels = ordered + rest
+            changed = True
+        return changed
+
+    def sync_all_item_kind_labels(self, extra_lists=None):
+        """Gleicht Art und festes Label in allen Punkten ab.
+
+        Erfasst den aktiven Bestand und die Kopien im Papierkorb. `extra_lists`
+        nimmt Listen entgegen, die noch nicht in `self.lists` stehen – so
+        durchläuft ein frisch geladener Bestand denselben Abgleich wie ein
+        bereits geöffneter.
+        """
+        changed = False
+        collections = list(self.iter_all_list_objects())
+        if extra_lists:
+            collections = list(extra_lists) + collections
+        for entry in collections:
+            for item in self.walk_items(entry.get("items", [])):
+                if self.sync_item_kind_label(item):
+                    changed = True
+        return changed
+
+    @classmethod
+    def resolve_label_color(cls, color):
+        """Gültiger Labelfarbschlüssel; alles Unbekannte fällt auf die Vorgabe zurück."""
+        if color in cls.LABEL_COLOR_KEYS:
+            return color
+        return cls.DEFAULT_LABEL_COLOR
+
+    def get_label(self, label_id):
+        if not isinstance(label_id, str) or not label_id:
+            return None
+        return next((label for label in self.labels if label.get("id") == label_id), None)
+
+    def get_label_by_name(self, name):
+        needle = str(name or "").strip().casefold()
+        if not needle:
+            return None
+        return next(
+            (label for label in self.labels if str(label.get("name") or "").strip().casefold() == needle),
+            None,
+        )
+
+    def label_color_key(self, label):
+        return self.resolve_label_color((label or {}).get("color"))
+
+    def label_color(self, label):
+        """Tatsächliche Farbe des Labels im aktuellen Theme."""
+        return self.theme[self.label_color_key(label)]
+
+    def label_chip_colors(self, label):
+        """Flächen- und Textfarbe eines Labelchips.
+
+        Die Labelfarbe bleibt die Leitfarbe, wird aber nicht direkt als Fläche
+        benutzt: die sieben Palettenfarben sind kräftig, dunkler Text darauf
+        wäre bei Rot und Lila kaum lesbar. Stattdessen eine stark aufgehellte
+        Fläche mit sehr dunklem Text derselben Farbfamilie – im dunklen Modus
+        spiegelbildlich, sonst leuchtete der Chip aus der Oberfläche heraus.
+        """
+        base = self.label_color(label)
+        if self.theme_name == "dark":
+            fill = mix_to_luminance(base, "#000000", self.LABEL_CHIP_DARK_FILL_LUMINANCE)
+            text = mix_to_luminance(base, "#FFFFFF", self.LABEL_CHIP_DARK_TEXT_LUMINANCE)
+        else:
+            fill = mix_to_luminance(base, "#FFFFFF", self.LABEL_CHIP_LIGHT_FILL_LUMINANCE)
+            text = mix_to_luminance(base, "#000000", self.LABEL_CHIP_LIGHT_TEXT_LUMINANCE)
+        return fill, text
+
+    def monogram_colors(self):
+        """Flächen- und Textfarbe des Textlogos – dieselbe Rechnung wie beim Labelchip."""
+        base = self.theme.get(self.settings.get("profile_logo_color", "accent"),
+                              self.theme["accent"])
+        if self.theme_name == "dark":
+            return (mix_to_luminance(base, "#000000", self.LABEL_CHIP_DARK_FILL_LUMINANCE),
+                    mix_to_luminance(base, "#FFFFFF", self.LABEL_CHIP_DARK_TEXT_LUMINANCE))
+        return (mix_to_luminance(base, "#FFFFFF", self.LABEL_CHIP_LIGHT_FILL_LUMINANCE),
+                mix_to_luminance(base, "#000000", self.LABEL_CHIP_LIGHT_TEXT_LUMINANCE))
+
+    def pack_label_chips(self, container, labels, bg_key="bg", max_width=600, on_click=None,
+                         selected_ids=(), max_rows=None, anchor="w", chip_pady=2):
+        """Legt Chips zeilenweise ab und bricht um, statt seitlich auszulaufen.
+
+        Tk kennt kein Flow-Layout. Die Chips messen ihre Breite selbst, deshalb
+        lässt sich der Umbruch beim Aufbau ausrechnen – ohne das gäbe es bei
+        vielen Labels eine Reihe, die rechts einfach abgeschnitten wäre.
+
+        `max_rows` begrenzt die Zeilenzahl; was nicht mehr passt, wird als
+        Zähler angehängt. Das braucht der Kopfbereich, dessen Labelzeile eine
+        feste Höhe hat. `anchor` richtet die Reihen aus – im Kopf rechts, sonst
+        links.
+        """
+        chips = []
+        row = None
+        used = 0
+        rows_used = 0
+        overflow = 0
+        total = len(labels)
+        for index, label in enumerate(labels):
+            width, _height = LabelChip.measure(label.get("name", ""), self.LABEL_CHIP_FONT)
+            width += self.LABEL_CHIP_GAP
+            # Platz für den Zähler freihalten, solange noch Labels folgen.
+            reserve = self.LABEL_OVERFLOW_WIDTH if (max_rows is not None and index < total - 1) else 0
+            needs_row = row is None or (used + width + reserve > max_width and used > 0)
+            if needs_row and max_rows is not None and rows_used >= max_rows:
+                overflow = total - index
+                break
+            if needs_row:
+                row = tk.Frame(container, bg=self.theme[bg_key])
+                row.pack(fill="x" if anchor == "w" else "none", anchor=anchor)
+                rows_used += 1
+                used = 0
+            chip = self.make_label_chip(
+                row, label, bg_key=bg_key,
+                selected=label.get("id") in tuple(selected_ids),
+            )
+            # Der letzte Chip einer Reihe bekommt rechts keinen Abstand: Sonst
+            # endete die Reihe um diesen Betrag vor der Kante, an der die
+            # Statuszeile darüber abschließt.
+            gap = 0 if index == total - 1 else self.LABEL_CHIP_GAP
+            chip.pack(side="left", padx=(0, gap), pady=chip_pady)
+            if callable(on_click):
+                chip.bind("<Button-1>", lambda event, chosen=label, widget=chip: on_click(chosen, widget))
+            chips.append(chip)
+            used += width
+        if overflow and row is not None:
+            tk.Label(
+                row, text=f"+{overflow}", bg=self.theme[bg_key], fg=self.theme["muted"],
+                font=self.LABEL_CHIP_FONT,
+            ).pack(side="left", pady=chip_pady)
+        return chips
+
+    def make_label_chip(self, master, label, bg_key="bg", font=None, selected=False):
+        """Erzeugt einen Labelchip auf einer Fläche des angegebenen Hintergrunds."""
+        fill, text = self.label_chip_colors(label)
+        return LabelChip(
+            master,
+            str(label.get("name", "")),
+            fill,
+            text,
+            self.theme[bg_key],
+            font=font or self.LABEL_CHIP_FONT,
+            outline=self.theme["selection"] if selected else None,
+        )
+
+    def item_labels(self, item):
+        """Bekannte Labelobjekte eines Punkts in der Reihenfolge der Labelverwaltung.
+
+        Funktioniert gleichermaßen für Aufgaben, Listen und Ordner, weil alle
+        drei ihre Zuordnung im Feld ``labels`` führen.
+        """
+        assigned = item.get("labels") if isinstance(item, dict) else None
+        if not isinstance(assigned, list) or not assigned:
+            return []
+        assigned_ids = {value for value in assigned if isinstance(value, str)}
+        return [label for label in self.labels if label.get("id") in assigned_ids]
+
+    def column_labels(self, item):
+        """Labels, die in der Listenansicht erscheinen.
+
+        Die beiden festen Labels bleiben draußen: „Long-Task“ und „Überschrift“
+        beschreiben die Art des Punkts, und die sieht man der Zeile ohnehin an –
+        an der mehrzeiligen Darstellung beziehungsweise am Überschriftensatz.
+        Ausgeschrieben belegten sie nur den Platz, den ein echtes Label braucht.
+        Gespeichert bleiben sie, denn sie tragen die Art.
+        """
+        return [
+            label for label in self.item_labels(item)
+            if not self.is_system_label(label)
+        ]
+
+    def shorten_label_name(self, name):
+        """Kürzt einen Labelnamen auf die in der Liste zulässige Länge.
+
+        Die Grenze ist so gewählt, dass der gekürzte Name samt Symbol und
+        Zähler vollständig in die Spalte passt – abgeschnitten wird in der
+        Liste nichts mehr.
+        """
+        clean = str(name or "")
+        if len(clean) <= self.LABEL_COLUMN_NAME_MAX_CHARS:
+            return clean
+        return clean[: self.LABEL_COLUMN_NAME_MAX_CHARS - 1].rstrip() + "…"
+
+    def format_item_labels(self, item, exclude_id=None):
+        """Anzeigetext der Labelspalte.
+
+        Die Spalte hat eine feste Breite. Deshalb wird höchstens
+        LABEL_COLUMN_MAX_VISIBLE Label ausgeschrieben, der Rest als Zähler
+        angehängt und lange Namen gekürzt. Der gespeicherte Name und alle
+        Exporte bleiben davon unberührt.
+
+        `exclude_id` lässt ein Label weg. Die Labelansicht nutzt das für das
+        Label der Gruppe: Es steht bereits in der Gruppenzeile, und in der
+        Spalte verdrängte es genau die Angabe, die dort neu ist – die übrigen
+        Labels des Punkts.
+        """
+        labels = [
+            label for label in self.column_labels(item)
+            if not exclude_id or label.get("id") != exclude_id
+        ]
+        if not labels:
+            return ""
+        visible = labels[: self.LABEL_COLUMN_MAX_VISIBLE]
+        text = self.LABEL_SEPARATOR.join(
+            self.shorten_label_name(label.get("name", "")) for label in visible
+        )
+        remaining = len(labels) - len(visible)
+        if remaining:
+            text = f"{text}  +{remaining}"
+        return f"{self.LABEL_COLUMN_ICON} {text}"
+
+    def format_item_label_names(self, item):
+        """Reine Namen für Export und Zwischenablage."""
+        return ", ".join(str(label.get("name", "")) for label in self.item_labels(item))
+
+    def normalize_labels_data(self, data):
+        """Bereinigt die Labelverwaltung: eindeutige IDs, gültige Farben, feste Obergrenze."""
+        labels = []
+        seen_ids = set()
+        seen_names = set()
+        if not isinstance(data, list):
+            return labels
+        for entry in data:
+            if not isinstance(entry, dict):
+                continue
+            name = str(entry.get("name") or "").strip()[: self.MAX_LABEL_NAME_LENGTH]
+            if not name:
+                continue
+            folded = name.casefold()
+            if folded in seen_names:
+                continue
+            label_id = entry.get("id") if isinstance(entry.get("id"), str) and entry.get("id") else None
+            while not label_id or label_id in seen_ids:
+                label_id = uuid.uuid4().hex
+            seen_ids.add(label_id)
+            seen_names.add(folded)
+            role = self.system_label_role(entry)
+            if role is not None and any(
+                self.system_label_role(existing) == role for existing in labels
+            ):
+                # Zwei Labels derselben Rolle wären mehrdeutig; das zweite wird
+                # zu einem gewöhnlichen Label.
+                role = None
+            labels.append(self.new_label_object(name, label_id, entry.get("color"), system=role))
+            if len(labels) >= self.MAX_LABELS:
+                break
+        return labels
+
+    def normalize_item_labels(self, data, known_label_ids=None):
+        """Hält nur bekannte Label-IDs, ohne Dubletten und in stabiler Reihenfolge."""
+        if not isinstance(data, list):
+            return []
+        result = []
+        for value in data:
+            if not isinstance(value, str) or not value:
+                continue
+            if known_label_ids is not None and value not in known_label_ids:
+                continue
+            if value in result:
+                continue
+            result.append(value)
+            if len(result) >= self.MAX_LABELS_PER_ITEM:
+                break
+        return result
+
+    def prune_unknown_item_labels(self):
+        """Entfernt Verweise auf gelöschte Labels überall im Bestand.
+
+        Erfasst Aufgaben, Listen und Ordner – auch die Kopien im Papierkorb.
+        """
+        known = {label.get("id") for label in self.labels}
+        changed = False
+
+        def clean(holder):
+            nonlocal changed
+            assigned = holder.get("labels")
+            if not isinstance(assigned, list):
+                if assigned is not None:
+                    holder["labels"] = []
+                    changed = True
+                return
+            kept = [value for value in assigned if value in known]
+            if kept != assigned:
+                holder["labels"] = kept
+                changed = True
+
+        for holder in self.iter_label_holders():
+            clean(holder)
+        return changed
+
+    def iter_live_and_trashed(self, live, trash_key):
+        """Erst die aktiven Einträge, dann die im Papierkorb liegenden Kopien.
+
+        Der Papierkorb hält vollständige Originale. Wer den Gesamtbestand
+        prüfen will – etwa die Label-Verwendung –, muss sie mitzählen, sonst
+        gälte ein Label als unbenutzt, obwohl ein wiederhergestellter Eintrag es
+        wieder tragen würde.
+        """
+        yield from live
+        for trash_entry in self.trash:
+            payload = trash_entry.get(trash_key)
+            if isinstance(payload, dict):
+                yield payload
+
+    def iter_all_list_objects(self):
+        """Alle Listen inklusive der im Papierkorb liegenden Kopien."""
+        return self.iter_live_and_trashed(self.lists, "list")
+
+    def iter_all_folder_objects(self):
+        """Alle Ordner inklusive der im Papierkorb liegenden Kopien."""
+        return self.iter_live_and_trashed(self.folders, "folder")
+
+    def iter_label_holders(self):
+        """Jeder Datensatz, der Labels tragen kann: Ordner, Listen und Punkte."""
+        for folder in self.iter_all_folder_objects():
+            yield folder
+        for entry in self.iter_all_list_objects():
+            yield entry
+            for item in self.walk_items(entry.get("items", [])):
+                yield item
+
+    def count_label_usage(self, label_id):
+        """Wie oft ein Label vergeben ist – über Ordner, Listen und Punkte."""
+        total = 0
+        for holder in self.iter_label_holders():
+            assigned = holder.get("labels")
+            if isinstance(assigned, list) and label_id in assigned:
+                total += 1
+        return total
+
+    def is_inbox_list(self, entry_or_id):
+        if isinstance(entry_or_id, dict):
+            entry = entry_or_id
+        else:
+            entry = next((item for item in self.lists if item.get("id") == entry_or_id), None)
+        return bool(entry and entry.get("system_role") == "inbox")
+
+    def ensure_inbox_list(self):
+        """Stellt genau einen geschützten, immer oben angeordneten Eingang sicher."""
+        before = [
+            (entry.get("id"), entry.get("title"), entry.get("folder_id"), entry.get("system_role"))
+            for entry in self.lists
+        ]
+        inboxes = [entry for entry in self.lists if self.is_inbox_list(entry)]
+        if inboxes:
+            inbox = inboxes[0]
+            for duplicate in inboxes[1:]:
+                duplicate["system_role"] = None
+        else:
+            inbox = self.new_list_object("Eingang", [], system_role="inbox", color="due_action")
+            self.lists.insert(0, inbox)
+        inbox["title"] = "Eingang"
+        inbox["folder_id"] = None
+        self.lists = [inbox] + [entry for entry in self.lists if entry is not inbox]
+        after = [
+            (entry.get("id"), entry.get("title"), entry.get("folder_id"), entry.get("system_role"))
+            for entry in self.lists
+        ]
+        self._last_inbox_repair = before != after
+        return inbox
+
+    def current_list(self):
+        if not self.lists:
+            self.lists = [self.new_list_object(self.app_title, self.items)]
+            self.active_list_id = self.lists[0]["id"]
+        for entry in self.lists:
+            if entry.get("id") == self.active_list_id:
+                return entry
+        self.active_list_id = self.lists[0]["id"]
+        return self.lists[0]
+
+    def sync_current_list_reference(self):
+        current = self.current_list()
+        current["items"] = self.items
+        # In der Ordnerübersicht zeigt der Kopf den Ordnertitel. Der Titel der
+        # zuletzt aktiven Liste darf dadurch beim Speichern nicht überschrieben werden.
+        if self.view_mode == "list":
+            current["title"] = self.app_title
+
+    def set_active_list(self, list_id, refresh=True):
+        if not list_id:
+            return
+        target = None
+        for entry in self.lists:
+            if entry.get("id") == list_id:
+                target = entry
+                break
+        if target is None:
+            return
+
+        if self.active_list_id and self.lists:
+            self.sync_current_list_reference()
+
+        self.view_mode = "list"
+        self.active_folder_id = None
+        self.active_list_id = target["id"]
+        self.items = target.setdefault("items", [])
+        self.app_title = target.get("title", "Meine Liste").strip() or "Meine Liste"
+        self.expanded_ids = set()
+        self.collapsed_item_ids = set()
+        self.selection_anchor_id = None
+        self.update_window_title()
+        self.update_header_title()
+        self.update_page_note_preview()
+        self.update_page_labels()
+        self.update_entry_mode()
+        if refresh:
+            self.update_sidebar_list()
+            self.refresh_tree()
+            self.save_settings()
+
+    def set_active_folder(self, folder_id, refresh=True):
+        folder = self.get_folder(folder_id)
+        if not folder:
+            return
+        if self.active_list_id and self.lists:
+            self.sync_current_list_reference()
+        self.view_mode = "folder"
+        self.active_folder_id = folder_id
+        self.expanded_ids = set()
+        self.collapsed_item_ids = set()
+        self.selection_anchor_id = None
+        self.update_window_title()
+        self.update_header_title()
+        self.update_page_note_preview()
+        self.update_page_labels()
+        self.update_entry_mode()
+        if refresh:
+            self.update_sidebar_list()
+            self.refresh_tree()
+            self.save_settings()
+
+    def set_in_progress_view(self, refresh=True):
+        """Öffnet die abgeleitete, datenformatfreie Ansicht aller fälligen Aufgaben."""
+        self._activate_system_view("in_progress", refresh=refresh)
+
+    def set_overdue_view(self, refresh=True):
+        """Öffnet die Ansicht aller überfälligen, noch offenen Aufgaben."""
+        self._activate_system_view("overdue", refresh=refresh)
+
+    def set_labels_view(self, refresh=True):
+        """Öffnet die nach Labels gruppierte Ansicht des gesamten Bestands."""
+        self._activate_system_view(self.LABELS_VIEW, refresh=refresh)
+
+    def count_labelled_items(self):
+        """Punkte mit mindestens einem eigenen Label – Zähler der Seitenleiste."""
+        return sum(
+            1
+            for entry in self.lists
+            for item in self.walk_items(entry.get("items", []))
+            if self.column_labels(item)
+        )
+
+    def count_due_tasks(self):
+        """Anzahl aller Punkte mit Fälligkeit – Grundlage für „In Bearbeitung“."""
+        return sum(
+            1
+            for entry in self.lists
+            for item in self.walk_items(entry.get("items", []))
+            if self.is_schedulable_item(item) and self.normalize_due(item.get("due"))
+        )
+
+    def set_trash_view(self, refresh=True):
+        """Öffnet den Papierkorb mit allen gelöschten Listen und Ordnern."""
+        self._activate_system_view("trash", refresh=refresh)
+
+    def _activate_system_view(self, mode, refresh=True):
+        if self.active_list_id and self.lists:
+            self.sync_current_list_reference()
+        # Nur beim Wechsel von woanders auf die Startseite: Ein Neuaufbau
+        # derselben Ansicht behält seinen Begrüßungssatz.
+        if mode == self.HOME_VIEW and self.view_mode != self.HOME_VIEW:
+            self.advance_home_greeting()
+        self.view_mode = mode
+        self.active_folder_id = None
+        self.expanded_ids = set()
+        self.collapsed_item_ids = set()
+        self.selection_anchor_id = None
+        self.update_window_title()
+        self.update_header_title()
+        self.update_page_note_preview()
+        self.update_page_labels()
+        self.update_entry_mode()
+        if refresh:
+            self.update_sidebar_list()
+            self.refresh_tree()
+            self.save_settings()
+
+    def create_list_sidebar(self):
+        # Systembereich: Eingang, "In Bearbeitung", "Verspätet" und Papierkorb
+        # sind bewusst kein Bestandteil des normalen Listenbaums. Getrennt
+        # werden beide Bereiche seit 2.8.0 allein durch Abstand – kein Band,
+        # kein Rahmen, keine Linie.
+        self.system_listbox = SystemNavigation(
+            self.sidebar_frame,
+            app=self,
+            columns=("icon", "count", "title"),
+            displaycolumns=("icon", "title", "count"),
+            show="headings",
+            selectmode="browse",
+            style="System.Treeview",
+            takefocus=True,
+            height=7,
+        )
+        self.system_listbox.pack(fill="x", pady=(4, 0))
+        self.system_listbox.heading("#0", text="")
+        self.system_listbox.heading("icon", text="")
+        self.system_listbox.column("icon", anchor="center", stretch=False, width=28, minwidth=28)
+        self.system_listbox.column("#0", width=0, minwidth=0, stretch=False)
+        self.system_listbox.column("title", anchor="w", stretch=True, width=192, minwidth=30)
+        self.style.layout("System.Treeview.Heading", [])
+        self.system_listbox.column("count", anchor="e", stretch=False,
+                                   width=self.SIDEBAR_COUNT_MIN_WIDTH, minwidth=0)
+        self.system_listbox.bind("<<TreeviewSelect>>", self.on_system_select)
+        self.system_listbox.bind("<Button-3>", self.show_sidebar_context_menu)
+        self.system_listbox.bind("<Button-2>", self.show_sidebar_context_menu)
+        self.bind_context_menu_modifier(self.system_listbox, self.show_sidebar_context_menu)
+        self.system_listbox.bind("<Delete>", self.delete_selected_sidebar_entry)
+        self.system_listbox.bind("<Configure>", self.refresh_sidebar_row_texts, add="+")
+        self.bind_hover_highlight(self.system_listbox)
+        self.bind_mousewheel(self.system_listbox)
+
+        # Systembereich und Listenbereich trennt ausschließlich Abstand.
+        title_row = self.register_theme_widget(tk.Frame(self.sidebar_frame, bg=self.theme["card"]), "card")
+        title_row.pack(fill="x", pady=(self.SIDEBAR_SECTION_GAP, 8))
+
+        self.sidebar_heading_frame = tk.Frame(title_row, bg=self.theme["card"], cursor="hand2")
+        self.sidebar_heading_frame.pack(side="left", fill="both", expand=True, padx=(0, 6))
+        icon_slot = tk.Frame(self.sidebar_heading_frame, width=28, bg=self.theme["card"])
+        icon_slot.pack(side="left", fill="y")
+        icon_slot.pack_propagate(False)
+        self.sidebar_heading_icon = tk.Label(icon_slot, text=self.ICONS["list"],
+            font=self.sidebar_section_font(), bg=self.theme["card"], fg=self.theme["text"], cursor="hand2")
+        self.sidebar_heading_icon.pack(fill="both", expand=True, pady=(4, 0))
+        self.sidebar_title = self.register_theme_widget(
+            tk.Label(
+                self.sidebar_heading_frame,
+                text="Listen",
+                font=self.sidebar_section_font(),
+                bg=self.theme["card"],
+                fg=self.theme["text"],
+                anchor="w",
+                cursor="hand2",
+                takefocus=True,
+            ),
+            "card",
+            "text",
+        )
+        # Der Knopf daneben ist höher als die Zeile; ohne den kleinen Versatz
+        # sitzt die Schrift optisch über seiner Mitte.
+        self.sidebar_title.pack(
+            side="left", fill="x", expand=True,
+            padx=(5, 0), pady=(self.SIDEBAR_TITLE_BASELINE_SHIFT, 0),
+        )
+        for widget in (self.sidebar_heading_frame, icon_slot, self.sidebar_heading_icon, self.sidebar_title):
+            widget.bind("<Button-1>", lambda _event: self.set_library_view())
+            widget.bind("<Enter>", lambda _event: self.update_sidebar_heading(hover=True))
+            widget.bind("<Leave>", lambda _event: self.update_sidebar_heading(hover=False))
+        for sequence in ("<Return>", "<space>"):
+            self.sidebar_title.bind(sequence, lambda _event: self.set_library_view())
+        self.sidebar_title.bind("<FocusIn>", lambda _event: self.update_sidebar_heading(hover=True))
+        self.sidebar_title.bind("<FocusOut>", lambda _event: self.update_sidebar_heading(hover=False))
+        self.add_tooltip(self.sidebar_title, "Alle Listen und Ordner als Kacheln anzeigen")
+
+        self.add_list_button = self.make_button(
+            title_row,
+            text="+",
+            command=self.create_new_list,
+            color_key="accent",
+            width=42,
+            height=32,
+            radius=14,
+            bg_key="card",
+            font=app_font(13, "bold"),
+        )
+        self.add_list_button.pack(side="right")
+
+        # "extended" erlaubt Shift- und Strg-Mehrfachauswahl. Alle Aktionen der
+        # Seitenleiste arbeiten deshalb auf einer Auswahlmenge; bei genau einer
+        # markierten Zeile bleibt das Verhalten identisch zu früheren Versionen.
+        self.sidebar_listbox = ttk.Treeview(
+            self.sidebar_frame,
+            columns=("icon", "count"),
+            displaycolumns=("count",),
+            show="tree",
+            selectmode="extended",
+            style="Sidebar.Treeview",
+            takefocus=True,
+        )
+        self.sidebar_listbox.heading("#0", text="")
+        self.sidebar_listbox.heading("icon", text="")
+        self.sidebar_listbox.column("icon", anchor="center", stretch=False, width=28, minwidth=28)
+        self.sidebar_listbox.column("#0", anchor="w", stretch=True, width=192)
+        self.sidebar_listbox.column("count", anchor="e", stretch=False,
+                                    width=self.SIDEBAR_COUNT_MIN_WIDTH, minwidth=0)
+        self.sidebar_listbox.bind("<<TreeviewSelect>>", self.on_sidebar_select)
+        self.sidebar_listbox.bind("<Double-Button-1>", self.edit_selected_sidebar_title)
+        self.sidebar_listbox.bind("<Tab>", self.toggle_sidebar_indent)
+        self.sidebar_listbox.bind("<Shift-Tab>", self.outdent_selected_sidebar_list)
+        self.bind_optional(self.sidebar_listbox, "<ISO_Left_Tab>", self.outdent_selected_sidebar_list)
+        self.sidebar_listbox.bind("<ButtonPress-1>", self.on_sidebar_drag_start)
+        self.sidebar_listbox.bind("<B1-Motion>", self.on_sidebar_drag_motion)
+        self.sidebar_listbox.bind("<ButtonRelease-1>", self.on_sidebar_drag_end)
+        self.sidebar_listbox.bind("<ButtonRelease-1>", self.on_sidebar_release_for_rename, add="+")
+        self.sidebar_listbox.bind("<F2>", lambda event: self.begin_sidebar_rename())
+        self.sidebar_listbox.bind("<Button-3>", self.show_sidebar_context_menu)
+        self.sidebar_listbox.bind("<Button-2>", self.show_sidebar_context_menu)
+        self.bind_context_menu_modifier(self.sidebar_listbox, self.show_sidebar_context_menu)
+        # Gleiten statt greifen: die Auswahl lässt sich auch ohne Maus bewegen.
+        self.sidebar_listbox.bind("<Alt-Up>", lambda event: self.move_sidebar_selection(-1))
+        self.sidebar_listbox.bind("<Alt-Down>", lambda event: self.move_sidebar_selection(1))
+        self.sidebar_listbox.bind("<Alt-Right>", self.toggle_sidebar_indent)
+        self.sidebar_listbox.bind("<Alt-Left>", self.outdent_selected_sidebar_list)
+        self.sidebar_listbox.bind("<Control-a>", self.select_all_sidebar_lists)
+        # Entf löscht die Auswahl der Seitenleiste, nicht die des Aufgabenbaums.
+        self.sidebar_listbox.bind("<Delete>", self.delete_selected_sidebar_entry)
+        if IS_MACOS:
+            self.sidebar_listbox.bind("<BackSpace>", self.delete_selected_sidebar_entry)
+            self.system_listbox.bind("<BackSpace>", self.delete_selected_sidebar_entry)
+        if IS_MACOS:
+            self.bind_optional(self.sidebar_listbox, "<Command-a>", self.select_all_sidebar_lists)
+        self.sidebar_listbox.bind("<Configure>", self.refresh_sidebar_row_texts, add="+")
+        self.bind_hover_highlight(self.sidebar_listbox)
+        self.bind_mousewheel(self.sidebar_listbox)
+
+        # Untere Seitenleisten-Aktionen in einem gemeinsamen Grid.
+        # Dadurch liegen die unteren Kanten sauber auf einer Linie und die Abstände bleiben stabil.
+        sidebar_actions = self.register_theme_widget(tk.Frame(self.sidebar_frame, bg=self.theme["card"]), "card")
+        sidebar_actions.pack(side="bottom", fill="x", pady=(10, 0))
+        sidebar_actions.columnconfigure((0, 1), weight=1, uniform="sidebar_actions")
+
+        self.import_list_button = self.make_button(
+            sidebar_actions,
+            text="Liste importieren",
+            command=self.import_txt_as_new_lists,
+            color_key="import",
+            width=150,
+            height=38,
+            radius=16,
+            bg_key="card",
+            font=app_font(8, "bold"),
+        )
+        self.import_list_button.grid(row=0, column=0, columnspan=2, sticky="ew", pady=(0, 8))
+
+        self.add_folder_button = self.make_button(
+            sidebar_actions,
+            text="+ Neuer Ordner",
+            command=self.create_new_folder,
+            color_key="accent",
+            width=150,
+            height=38,
+            radius=16,
+            bg_key="card",
+            font=app_font(8, "bold"),
+        )
+        self.add_folder_button.grid(row=1, column=0, columnspan=2, sticky="ew", pady=(0, 8))
+
+        self.rename_list_button = self.make_button(
+            sidebar_actions,
+            text="Bearbeiten",
+            command=self.edit_selected_sidebar_title,
+            color_key="accent",
+            width=76,
+            height=38,
+            radius=16,
+            bg_key="card",
+            font=app_font(8, "bold"),
+        )
+        self.rename_list_button.grid(row=2, column=0, sticky="ew", padx=(0, 6))
+
+        self.delete_list_button = self.make_button(
+            sidebar_actions,
+            text="–",
+            command=self.delete_selected_sidebar_entry,
+            color_key="delete",
+            width=46,
+            height=38,
+            radius=16,
+            bg_key="card",
+            font=app_font(13, "bold"),
+        )
+        self.delete_list_button.grid(row=2, column=1, sticky="ew")
+
+        # Der flexible Listenbaum wird bewusst erst nach den unteren Aktionen
+        # gepackt. So reserviert der Packer bei 1000x800 und selbst bei der
+        # Mindesthöhe zuerst den vollständigen Aktionsbereich, statt ihn unten
+        # abzuschneiden.
+        self.sidebar_listbox.pack(fill="both", expand=True)
+
+    def _capture_sidebar_folder_open_states(self):
+        """Merkt die Klappzustände, bevor der Seitenleistenbaum neu aufgebaut wird."""
+        tree = getattr(self, "sidebar_listbox", None)
+        if tree is None:
+            return
+        for folder in self.folders:
+            folder_id = folder.get("id") if isinstance(folder, dict) else None
+            iid = f"folder:{folder_id}" if folder_id else None
+            try:
+                if iid and tree.exists(iid):
+                    self.sidebar_folder_open_states[folder_id] = bool(tree.item(iid, "open"))
+            except tk.TclError:
+                continue
+
+    @classmethod
+    def ellipsize_sidebar_title(cls, title):
+        """Kürzt nur die Anzeige; der gespeicherte Titel bleibt vollständig erhalten."""
+        clean_title = str(title or "").strip()
+        if len(clean_title) <= cls.SIDEBAR_TITLE_MAX_CHARS:
+            return clean_title
+        return clean_title[: cls.SIDEBAR_TITLE_MAX_CHARS].rstrip() + "..."
+
+    @classmethod
+    def format_sidebar_preview(cls, title, item_count):
+        """Zeilentext ohne Kenntnis der tatsächlichen Breite (Rückfallebene)."""
+        return f"{cls.ellipsize_sidebar_title(title)}  ({item_count})"
+
+    def cached_font(self, cache_name, spec):
+        """Ein Schriftobjekt je Verwendungszweck – einmal erzeugt, dann behalten.
+
+        Schriftmessung braucht ein `tkfont.Font`; es bei jeder Zeile neu zu
+        bauen wäre teuer und würde Tk-Objekte anhäufen. Ohne laufendes Tk
+        liefert die Messung `None`, und die Aufrufer rechnen dann mit ihren
+        Ersatzwerten weiter.
+        """
+        font = getattr(self, cache_name, None)
+        if font is None:
+            try:
+                font = tkfont.Font(font=spec)
+            except tk.TclError:
+                return None
+            setattr(self, cache_name, font)
+        return font
+
+    def sidebar_row_font(self):
+        """Schrift der Seitenleistenzeilen."""
+        return self.cached_font("_sidebar_row_font", (self.ui_font_family(), self.ui_font_size()))
+
+    def sidebar_available_text_width(self, tree, depth=0):
+        """Platz im Titel: Zähler und Einrückung besitzen eigene feste Breiten."""
+        if tree is None:
+            return None
+        try:
+            width = int(tree.column("#0", "width"))
+            if tree.winfo_width() <= 1:
+                return None
+        except tk.TclError:
+            return None
+        if tree is getattr(self, "system_listbox", None):
+            left, indent = self.SYSTEM_ITEM_LEFT_PADDING, 0
+        else:
+            left = self.SYSTEM_ITEM_LEFT_PADDING
+            indent = self.SIDEBAR_INDENT * depth
+        return max(0, width - left - indent - self.SIDEBAR_ROW_RIGHT_PADDING)
+
+    def sidebar_row_text(self, title, item_count, tree=None, depth=0):
+        """Links steht nur der Titel; rechts steht der unabhängige Zähler."""
+        clean = str(title or "").strip()
+        if tree is None:
+            return self.format_sidebar_preview(clean, item_count)
+        available = self.sidebar_available_text_width(tree, depth)
+        font = (self.cached_font("_system_row_font", self.sidebar_section_font())
+                if tree is getattr(self, "system_listbox", None) else self.sidebar_row_font())
+        if available is None or font is None:
+            return clean
+        if font.measure(clean) <= available:
+            return clean
+        while clean and font.measure(clean + "…") > available:
+            clean = clean[:-1]
+        return clean.rstrip() + "…" if clean else ""
+
+    def folder_task_count(self, folder_id):
+        return sum(self.count_items(entry.get("items", []))
+                   for entry in self.get_folder_lists_recursive(folder_id))
+
+    def sync_sidebar_count_columns(self):
+        """Zählerbreite nach Inhalt und Schriftgröße; alle Ebenen fluchten rechts."""
+        for tree in (self.system_listbox, self.sidebar_listbox):
+            font = (self.cached_font("_system_row_font", self.sidebar_section_font())
+                    if tree is self.system_listbox else self.sidebar_row_font())
+            width = self.SIDEBAR_COUNT_MIN_WIDTH
+            pending = list(tree.get_children(""))
+            while pending:
+                iid = pending.pop()
+                pending.extend(tree.get_children(iid))
+                value = tree.set(iid, "count")
+                if font and value:
+                    width = max(width, font.measure(value) + self.SIDEBAR_ROW_RIGHT_PADDING)
+            tree.column("count", width=width, minwidth=width)
+            if tree.winfo_width() > 1:
+                tree.column("#0", width=max(50, tree.winfo_width() - width), minwidth=50)
+
+    def sidebar_row_icon(self, row):
+        """Symbol einer Seitenleistenzeile.
+
+        Die Systemansichten tragen eines, unter den Listen nur der Eingang.
+        Gewöhnliche Listen und Ordner bleiben ohne: Ein Symbol, das jede Zeile
+        trägt, unterscheidet nichts mehr.
+        """
+        if not row:
+            return ""
+        row_type, row_id = row
+        if row_type == "view":
+            return self.ICONS.get(row_id, "")
+        if row_type == "list":
+            entry = next((item for item in self.lists if item.get("id") == row_id), None)
+            return self.ICONS["inbox"] if entry is not None and self.is_inbox_list(entry) else ""
+        return ""
+
+    def sidebar_display_title(self, row, title):
+        """Titel einer Seitenleistenzeile samt Symbol.
+
+        Eine Stelle für beide Wege – den vollständigen Neuaufbau und die
+        Textanpassung bei geänderter Breite. Trüge nur der Neuaufbau die
+        Symbole, verschwänden sie beim ersten Ziehen am Fensterrand.
+
+        Das Symbol steht ausschließlich in der Anzeige, nie im gespeicherten
+        Titel: Exporte, Fenstertitel und Suche sollen es nicht mitschleppen.
+        """
+        return str(title or "").strip()
+
+    def refresh_sidebar_row_texts(self, event=None):
+        """Passt nur die Zeilentexte an eine geänderte Seitenleistenbreite an.
+
+        Ein vollständiger Neuaufbau wäre beim Ziehen des Fensterrands sichtbar
+        und würde die Auswahl anfassen; hier ändert sich ausschließlich Text.
+        """
+        if getattr(self, "_updating_sidebar", False):
+            return
+        system_tree = getattr(self, "system_listbox", None)
+        sidebar_tree = getattr(self, "sidebar_listbox", None)
+        if system_tree is None or sidebar_tree is None:
+            return
+        self.sync_sidebar_count_columns()
+        for iid, row in list(self.sidebar_iid_to_row.items()):
+            tree = self.get_sidebar_tree_for_iid(iid)
+            if tree is None:
+                continue
+            row_type, row_id = row
+            depth = 0
+            if row_type == "list":
+                entry = next((value for value in self.lists if value.get("id") == row_id), None)
+                if entry is None:
+                    continue
+                title = str(entry.get("title") or "Meine Liste").strip() or "Meine Liste"
+                count = self.count_items(entry.get("items", []))
+                if tree is sidebar_tree and entry.get("folder_id"):
+                    depth = self.folder_depth(entry.get("folder_id")) + 1
+            elif row_type == "folder":
+                folder = self.get_folder(row_id)
+                if folder is None:
+                    continue
+                title = str(folder.get("title") or "Ordner").strip() or "Ordner"
+                count = self.folder_task_count(row_id)
+                depth = self.folder_depth(row_id)
+            elif row == ("view", "in_progress"):
+                title, count = "In Bearbeitung", self.count_due_tasks()
+            elif row == ("view", "overdue"):
+                title, count = "Verspätet", len(self.get_overdue_items(apply_filters=False))
+            elif row == ("view", self.HOME_VIEW):
+                title, count = "Startseite", None
+            elif row == ("view", self.TEMPLATE_VIEW):
+                title, count = "Vorlagen", len(getattr(self, "templates", []))
+            elif row == ("view", self.LABELS_VIEW):
+                title, count = "Labels", self.count_labelled_items()
+            elif row == ("view", "trash"):
+                title, count = "Papierkorb", len(self.trash)
+            else:
+                continue
+            try:
+                tree.item(
+                    iid,
+                    text=self.sidebar_row_text(
+                        self.sidebar_display_title(row, title), count, tree=tree, depth=depth
+                    ),
+                    values=(self.sidebar_row_icon(row), f"({count})" if count is not None else ""),
+                )
+                if tree is system_tree:
+                    tree.set(iid, "title", tree.item(iid, "text"))
+            except tk.TclError:
+                continue
+
+    def update_sidebar_list(self):
+        if not hasattr(self, "sidebar_listbox") or not hasattr(self, "system_listbox"):
+            return
+        self._capture_sidebar_folder_open_states()
+        current_folder_ids = {
+            folder.get("id")
+            for folder in self.folders
+            if isinstance(folder, dict) and folder.get("id")
+        }
+        self.sidebar_folder_open_states = {
+            folder_id: self.sidebar_folder_open_states.get(folder_id, True)
+            for folder_id in current_folder_ids
+        }
+        self._updating_sidebar = True
+        try:
+            self.sidebar_rows = []
+            self.sidebar_iid_to_row = {}
+            for row_id in self.system_listbox.get_children(""):
+                self.system_listbox.delete(row_id)
+            for row_id in self.sidebar_listbox.get_children(""):
+                self.sidebar_listbox.delete(row_id)
+
+            assigned_folder_ids = {folder.get("id") for folder in self.folders if isinstance(folder, dict)}
+
+            self.system_listbox.insert("", "end", iid=self.HOME_ROW_ID,
+                text=self.sidebar_display_title(("view", self.HOME_VIEW), "Startseite"),
+                values=(self.sidebar_row_icon(("view", self.HOME_VIEW)), ""), tags=("system",))
+            self.sidebar_rows.append(("view", self.HOME_VIEW))
+            self.sidebar_iid_to_row[self.HOME_ROW_ID] = ("view", self.HOME_VIEW)
+
+            self.system_listbox.insert(
+                "", "end", iid=self.TEMPLATE_ROW_ID,
+                values=(self.sidebar_row_icon(("view", self.TEMPLATE_VIEW)), f"({len(getattr(self, 'templates', []))})"),
+                text=self.sidebar_row_text(
+                    self.sidebar_display_title(("view", self.TEMPLATE_VIEW), "Vorlagen"),
+                    len(getattr(self, "templates", [])), tree=self.system_listbox,
+                ), tags=("system",),
+            )
+            self.sidebar_rows.append(("view", self.TEMPLATE_VIEW))
+            self.sidebar_iid_to_row[self.TEMPLATE_ROW_ID] = ("view", self.TEMPLATE_VIEW)
+
+            # Der feste Eingang steht nach der Startseite.
+            inbox = next((entry for entry in self.lists if self.is_inbox_list(entry)), None)
+            if inbox:
+                self._insert_sidebar_list_row(inbox, parent="", tree=self.system_listbox)
+            self.system_listbox.insert(
+                "",
+                "end",
+                iid=self.IN_PROGRESS_ROW_ID,
+                values=(self.sidebar_row_icon(("view", "in_progress")), f"({self.count_due_tasks()})"),                text=self.sidebar_row_text(
+                    self.sidebar_display_title(("view", "in_progress"), "In Bearbeitung"),
+                    self.count_due_tasks(),
+                    tree=self.system_listbox,
+                ),
+                tags=("system",),
+            )
+            self.sidebar_rows.append(("view", "in_progress"))
+            self.sidebar_iid_to_row[self.IN_PROGRESS_ROW_ID] = ("view", "in_progress")
+
+            # „Labels“ steht zwischen den beiden Fälligkeitsansichten: Es ist
+            # dieselbe Menge an Punkten, nur nach einem anderen Merkmal
+            # sortiert. Gezählt werden Punkte mit mindestens einem eigenen
+            # Label – ein Punkt mit drei Labels bleibt ein Punkt.
+            self.system_listbox.insert(
+                "",
+                "end",
+                iid=self.LABELS_ROW_ID,
+                values=(self.sidebar_row_icon(("view", self.LABELS_VIEW)), f"({self.count_labelled_items()})"),                text=self.sidebar_row_text(
+                    self.sidebar_display_title(("view", self.LABELS_VIEW), "Labels"),
+                    self.count_labelled_items(),
+                    tree=self.system_listbox,
+                ),
+                tags=("system",),
+            )
+            self.sidebar_rows.append(("view", self.LABELS_VIEW))
+            self.sidebar_iid_to_row[self.LABELS_ROW_ID] = ("view", self.LABELS_VIEW)
+
+            # "Verspätet" ist eine Teilmenge von "In Bearbeitung": alles, dessen
+            # Fälligkeit vergangen ist und was noch offen steht.
+            self.system_listbox.insert(
+                "",
+                "end",
+                iid=self.OVERDUE_ROW_ID,
+                values=(self.sidebar_row_icon(("view", "overdue")), f"({len(self.get_overdue_items(apply_filters=False))})"),                text=self.sidebar_row_text(
+                    self.sidebar_display_title(("view", "overdue"), "Verspätet"),
+                    len(self.get_overdue_items(apply_filters=False)),
+                    tree=self.system_listbox,
+                ),
+                tags=("system",),
+            )
+            self.sidebar_rows.append(("view", "overdue"))
+            self.sidebar_iid_to_row[self.OVERDUE_ROW_ID] = ("view", "overdue")
+
+            self.system_listbox.insert(
+                "",
+                "end",
+                iid=self.TRASH_ROW_ID,
+                values=(self.sidebar_row_icon(("view", "trash")), f"({len(self.trash)})"),                text=self.sidebar_row_text(
+                    self.sidebar_display_title(("view", "trash"), "Papierkorb"),
+                    len(self.trash),
+                    tree=self.system_listbox,
+                ),
+                tags=("system",),
+            )
+            self.sidebar_rows.append(("view", "trash"))
+            self.sidebar_iid_to_row[self.TRASH_ROW_ID] = ("view", "trash")
+
+            # Danach alle übrigen Listen ohne Ordner anzeigen.
+            for entry in self.lists:
+                if self.is_inbox_list(entry):
+                    continue
+                folder_id = entry.get("folder_id")
+                if folder_id in assigned_folder_ids:
+                    continue
+                self._insert_sidebar_list_row(entry, parent="")
+
+            # Danach Ordner mit ihren Unterordnern und Listen. Ordner dürfen
+            # seit 2.9.0 ineinander liegen; der Aufbau ist deshalb rekursiv.
+            self._insert_sidebar_folder_rows(None, "", 0)
+
+            inbox_selection = self.system_listbox.selection()
+            if inbox_selection:
+                self.system_listbox.selection_remove(*inbox_selection)
+            sidebar_selection = self.sidebar_listbox.selection()
+            if sidebar_selection:
+                self.sidebar_listbox.selection_remove(*sidebar_selection)
+            # Welche Zeile die geöffnete Seite ist, entscheidet dieselbe
+            # Zuordnung, die auch Kontextmenü und Drag & Drop benutzen.
+            if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+                active_row = ("view", self.view_mode)
+            elif self.view_mode == "folder" and self.active_folder_id:
+                active_row = ("folder", self.active_folder_id)
+            elif self.active_list_id:
+                active_row = ("list", self.active_list_id)
+            else:
+                active_row = None
+            active_iid = self.get_sidebar_iid_for_row(active_row)
+            if active_iid and self.system_listbox.exists(active_iid):
+                self.system_listbox.selection_set(active_iid)
+                self.system_listbox.focus(active_iid)
+            elif active_iid and self.sidebar_listbox.exists(active_iid):
+                self.sidebar_listbox.selection_set(active_iid)
+                self.sidebar_listbox.focus(active_iid)
+                self.sidebar_listbox.see(active_iid)
+            elif self.view_mode == self.LIBRARY_VIEW:
+                pass  # Die Listenüberschrift ist die aktive Navigation.
+            elif self.system_listbox.get_children(""):
+                first = self.system_listbox.get_children("")[0]
+                self.system_listbox.selection_set(first)
+                self.system_listbox.focus(first)
+            elif self.sidebar_listbox.get_children(""):
+                first = self.sidebar_listbox.get_children("")[0]
+                self.sidebar_listbox.selection_set(first)
+                self.sidebar_listbox.focus(first)
+        finally:
+            self._updating_sidebar = False
+        self.refresh_sidebar_row_texts()
+
+    def update_sidebar_heading(self, hover=False):
+        if not hasattr(self, "sidebar_heading_frame"):
+            return
+        selected = self.view_mode == self.LIBRARY_VIEW
+        bg = self.theme["selection" if selected else "hover" if hover else "card"]
+        fg = self.theme["selection_text" if selected else "text"]
+        self.sidebar_heading_frame.configure(bg=bg)
+        self.sidebar_heading_icon.master.configure(bg=bg)
+        for widget in (self.sidebar_heading_icon, self.sidebar_title):
+            widget.configure(bg=bg, fg=fg)
+
+    def _insert_sidebar_folder_rows(self, parent_folder_id, parent_iid, depth):
+        """Zeichnet einen Ordnerzweig mit Unterordnern und Listen.
+
+        Die Rekursion ist durch MAX_FOLDER_DEPTH und durch die Kreisbereinigung
+        in normalize_folder_parents doppelt abgesichert.
+        """
+        if depth > self.MAX_FOLDER_DEPTH:
+            return
+        for folder in self.get_child_folders(parent_folder_id):
+            folder_id = folder.get("id")
+            if not folder_id:
+                continue
+            folder_title = str(folder.get("title") or "Ordner").strip() or "Ordner"
+            # Der Zähler nennt Aufgaben aller enthaltenen Listen und Unterordner.
+            child_count = self.folder_task_count(folder_id)
+            iid = f"folder:{folder_id}"
+            preview = self.sidebar_row_text(
+                folder_title, child_count, tree=self.sidebar_listbox, depth=depth
+            )
+            folder_color = folder.get("color") if folder.get("color") in self.LIST_COLOR_KEYS else None
+            folder_tags = (f"listcolor_{folder_color}",) if folder_color else ("folder",)
+            self.sidebar_listbox.insert(
+                parent_iid,
+                "end",
+                iid=iid,
+                text=preview,
+                values=(self.sidebar_row_icon(("folder", folder_id)), f"({child_count})"),
+                open=self.sidebar_folder_open_states.get(folder_id, True),
+                tags=folder_tags,
+            )
+            self.sidebar_rows.append(("folder", folder_id))
+            self.sidebar_iid_to_row[iid] = ("folder", folder_id)
+            # Erst die Unterordner, dann die eigenen Listen – so bleibt die
+            # Struktur oben und der Inhalt darunter.
+            self._insert_sidebar_folder_rows(folder_id, iid, depth + 1)
+            for entry in self.lists:
+                if entry.get("folder_id") == folder_id and not self.is_inbox_list(entry):
+                    self._insert_sidebar_list_row(entry, parent=iid, depth=depth + 1)
+
+    def _insert_sidebar_list_row(self, entry, parent="", tree=None, depth=None):
+        target_tree = tree or self.sidebar_listbox
+        title = entry.get("title", "Meine Liste").strip() or "Meine Liste"
+        item_count = self.count_items(entry.get("items", []))
+        item_id = entry.get("id")
+        if not item_id:
+            item_id = uuid.uuid4().hex
+            entry["id"] = item_id
+        is_inbox = self.is_inbox_list(entry)
+        if depth is None:
+            depth = 1 if parent else 0
+        row_title = self.sidebar_display_title(("list", item_id), title)
+        preview = self.sidebar_row_text(row_title, item_count, tree=target_tree, depth=depth)
+        iid = f"list:{item_id}"
+        if is_inbox:
+            tags = ("system",)
+        else:
+            color_key = entry.get("color") if entry.get("color") in self.LIST_COLOR_KEYS else None
+            tags = (f"listcolor_{color_key}",) if color_key else ("list",)
+        target_tree.insert(parent, "end", iid=iid, text=preview,
+                           values=(self.sidebar_row_icon(("list", item_id)), f"({item_count})"), tags=tags)
+        self.sidebar_rows.append(("list", item_id))
+        self.sidebar_iid_to_row[iid] = ("list", item_id)
+
+    def get_selected_sidebar_row(self):
+        rows = self.get_selected_sidebar_rows()
+        return rows[0] if rows else None
+
+    def get_selected_sidebar_rows(self):
+        """Alle markierten Seitenleistenzeilen in Anzeigereihenfolge.
+
+        Der Systembereich kennt nur Einfachauswahl; der Listenbaum erlaubt seit
+        2.7.0 Shift- und Strg-Mehrfachauswahl.
+        """
+        if not hasattr(self, "sidebar_listbox"):
+            return []
+        if hasattr(self, "system_listbox"):
+            system_selection = self.system_listbox.selection()
+            if system_selection:
+                row = self.sidebar_iid_to_row.get(system_selection[0])
+                return [row] if row else []
+        selection = set(self.sidebar_listbox.selection())
+        if not selection:
+            return []
+        rows = []
+        for iid in self.get_sidebar_visible_iids():
+            if iid in selection:
+                row = self.sidebar_iid_to_row.get(iid)
+                if row:
+                    rows.append(row)
+        if rows:
+            return rows
+        # Rückfallebene, falls eine markierte Zeile gerade zugeklappt ist.
+        return [row for row in (self.sidebar_iid_to_row.get(iid) for iid in selection) if row]
+
+    def get_selected_sidebar_list_ids(self, include_inbox=False):
+        """IDs aller markierten Listen; Ordner und Systemzeilen bleiben außen vor."""
+        ids = []
+        for row_type, row_id in self.get_selected_sidebar_rows():
+            if row_type != "list":
+                continue
+            if not include_inbox and self.is_inbox_list(row_id):
+                continue
+            if row_id not in ids:
+                ids.append(row_id)
+        return ids
+
+    def select_all_sidebar_lists(self, event=None):
+        """Markiert alle sichtbaren Zeilen des Listenbaums."""
+        tree = getattr(self, "sidebar_listbox", None)
+        if tree is None:
+            return "break"
+        visible = self.get_sidebar_visible_iids()
+        if not visible:
+            return "break"
+        tree.selection_set(visible)
+        return "break"
+
+    # Zuordnung Zeilenart -> IID der Systemzeile. Eine Tabelle statt einer
+    # if-Kette, damit eine neue Systemansicht an genau einer Stelle entsteht.
+    SYSTEM_VIEW_ROW_IDS = {
+        "home": "smart:home",
+        "templates": "smart:templates",
+        "in_progress": IN_PROGRESS_ROW_ID,
+        LABELS_VIEW: LABELS_ROW_ID,
+        "overdue": OVERDUE_ROW_ID,
+        "trash": TRASH_ROW_ID,
+    }
+
+    def get_sidebar_iid_for_row(self, row):
+        """IID der Seitenleistenzeile zu einer Zeilenart."""
+        if not row:
+            return None
+        row_type, row_id = row
+        if row_type == "view":
+            return self.SYSTEM_VIEW_ROW_IDS.get(row_id)
+        return f"{row_type}:{row_id}"
+
+    def get_sidebar_tree_for_iid(self, iid):
+        if not iid:
+            return None
+        for tree_name in ("system_listbox", "sidebar_listbox"):
+            tree = getattr(self, tree_name, None)
+            try:
+                if tree is not None and tree.exists(iid):
+                    return tree
+            except tk.TclError:
+                continue
+        return None
+
+    def on_system_select(self, event=None):
+        if getattr(self, "_updating_sidebar", False):
+            return
+        selection = self.system_listbox.selection()
+        if not selection:
+            return
+        sidebar_selection = self.sidebar_listbox.selection()
+        if sidebar_selection:
+            self.sidebar_listbox.selection_remove(*sidebar_selection)
+        row = self.sidebar_iid_to_row.get(selection[0])
+        if row == ("view", self.HOME_VIEW) and self.view_mode != self.HOME_VIEW:
+            self.set_home_view()
+        elif row == ("view", self.TEMPLATE_VIEW) and self.view_mode != self.TEMPLATE_VIEW:
+            self.set_template_view()
+        elif row and row[0] == "list" and (row[1] != self.active_list_id or self.view_mode != "list"):
+            self.set_active_list(row[1])
+        elif row == ("view", "in_progress") and self.view_mode != "in_progress":
+            self.set_in_progress_view()
+        elif row == ("view", self.LABELS_VIEW) and self.view_mode != self.LABELS_VIEW:
+            self.set_labels_view()
+        elif row == ("view", "overdue") and self.view_mode != "overdue":
+            self.set_overdue_view()
+        elif row == ("view", "trash") and self.view_mode != "trash":
+            self.set_trash_view()
+
+    def on_sidebar_select(self, event=None):
+        if getattr(self, "_updating_sidebar", False):
+            return
+        selection = self.sidebar_listbox.selection()
+        if selection and hasattr(self, "system_listbox"):
+            system_selection = self.system_listbox.selection()
+            if system_selection:
+                self.system_listbox.selection_remove(*system_selection)
+        # Bei Mehrfachauswahl bleibt die geöffnete Seite unverändert; sonst
+        # würde jede Bereichsauswahl ungewollt die Ansicht umschalten.
+        if len(selection) > 1:
+            return
+        row = self.get_selected_sidebar_row()
+        if not row:
+            return
+        row_type, row_id = row
+        if row_type == "list":
+            if row_id != self.active_list_id or self.view_mode != "list":
+                self.set_active_list(row_id)
+        elif row_type == "folder":
+            if row_id != self.active_folder_id or self.view_mode != "folder":
+                self.set_active_folder(row_id)
+
+    def edit_selected_sidebar_title(self, event=None):
+        """Doppelklick und Titel-Schaltfläche öffnen den gemeinsamen Bearbeiten-Dialog."""
+        # Der Doppelklick gewinnt gegen das Umbenennen an Ort und Stelle.
+        self.cancel_sidebar_rename()
+        row = self.get_selected_sidebar_row()
+        if row and row[0] == "folder":
+            return self.edit_folder_details(row[1])
+        if row and row[0] == "list":
+            return self.edit_list_details(row[1])
+        return self.edit_title()
+
+    # -----------------------------
+    # Umbenennen an Ort und Stelle
+    # -----------------------------
+    def sidebar_rename_row(self, iid):
+        """Liste oder Ordner hinter einer Zeile – oder None, wenn nicht umbenennbar."""
+        row = self.sidebar_iid_to_row.get(iid)
+        if not row:
+            return None
+        row_type, row_id = row
+        if row_type == "folder":
+            return row if self.get_folder(row_id) is not None else None
+        if row_type == "list":
+            entry = next((item for item in self.lists if item.get("id") == row_id), None)
+            # Der Eingang trägt einen festen Systemnamen und bleibt außen vor.
+            if entry is None or self.is_inbox_list(entry):
+                return None
+            return row
+        return None
+
+    def sidebar_row_title(self, row):
+        row_type, row_id = row
+        if row_type == "folder":
+            folder = self.get_folder(row_id)
+            return str((folder or {}).get("title") or "Ordner")
+        entry = next((item for item in self.lists if item.get("id") == row_id), None)
+        return str((entry or {}).get("title") or "Liste")
+
+    def find_sidebar_iid(self, row):
+        """Zeilen-ID zu einer (Art, ID)-Zuordnung."""
+        for iid, mapped in self.sidebar_iid_to_row.items():
+            if mapped == tuple(row):
+                return iid
+        return None
+
+    def cancel_item_rename(self):
+        timer = getattr(self, "_item_rename_timer", None)
+        if timer:
+            self.root.after_cancel(timer)
+            self._item_rename_timer = None
+        editor = getattr(self, "_item_rename_entry", None)
+        self._item_rename_entry = None
+        if editor and editor.winfo_exists():
+            editor.destroy()
+
+    def begin_item_rename(self, item_id):
+        self._item_rename_timer = None
+        found = self.find_item(item_id)
+        if self.view_mode != "list" or not found or self.is_long_item(found[0]):
+            return
+        if tuple(self.tree.selection()) != (item_id,):
+            return
+        box = self.tree.bbox(item_id, "#0")
+        if not box:
+            return
+        item = found[0]
+        x, y, width, height = box
+        editor = tk.Entry(self.tree, font=self.tree_font(), bg=self.theme["input"],
+                          fg=self.theme["text"], insertbackground=self.theme["text"])
+        editor.insert(0, item.get("text", ""))
+        editor.place(x=x + 24, y=y, width=max(80, width - 24), height=height)
+        self._item_rename_entry = editor
+        def finish(commit=True):
+            value = editor.get().strip() if editor.winfo_exists() else ""
+            self.cancel_item_rename()
+            if commit and value and value != item.get("text"):
+                with self.item_change([item_id]) as change:
+                    item["text"] = self.normalize_item_text(value, self.item_kind(item))
+                    change.mark(item_id)
+        editor.bind("<Return>", lambda event: finish())
+        editor.bind("<FocusOut>", lambda event: finish())
+        editor.bind("<Escape>", lambda event: finish(False))
+        editor.focus_set()
+        editor.select_range(0, "end")
+
+    def begin_sidebar_rename(self, iid=None, event=None):
+        """Legt ein Eingabefeld über die Zeile, statt einen Dialog zu öffnen.
+
+        Der Bearbeiten-Dialog bleibt für Titel und Beschreibungstext zuständig;
+        wer nur den Namen ändern will, soll dafür kein Fenster brauchen.
+        """
+        self.cancel_sidebar_rename()
+        tree = getattr(self, "sidebar_listbox", None)
+        if tree is None:
+            return "break"
+        if iid is None:
+            selection = tree.selection()
+            iid = selection[0] if selection else None
+        if not iid:
+            return "break"
+        row = self.sidebar_rename_row(iid)
+        if row is None:
+            return "break"
+        try:
+            tree.see(iid)
+            tree.update_idletasks()
+            bbox = tree.bbox(iid, "#0")
+        except tk.TclError:
+            bbox = None
+        # Ein nicht gemapptes Fenster (z. B. im Kopf eines automatisierten
+        # Tests) liefert für Treeview.bbox() eine leere Antwort. Das darf die
+        # eigentliche Umbenennungslogik nicht aushebeln: Das Eingabefeld wird
+        # beim nächsten Mapping an derselben Zeile sichtbar und erhält bis
+        # dahin eine sichere Fallback-Geometrie.
+        if not bbox:
+            try:
+                width = max(self.SIDEBAR_RENAME_MIN_WIDTH, int(tree.column("#0", "width")))
+            except (tk.TclError, ValueError):
+                width = self.SIDEBAR_RENAME_MIN_WIDTH
+            x, y, height = self.SIDEBAR_ITEM_LEFT_PADDING, 0, 24
+        else:
+            x, y, width, height = bbox
+        entry = tk.Entry(
+            tree,
+            bg=self.theme["input"], fg=self.theme["text"],
+            insertbackground=self.theme["text"],
+            selectbackground=self.theme["selection"], selectforeground=self.theme["selection_text"],
+            relief="flat", bd=0,
+            highlightthickness=1,
+            highlightbackground=self.theme["ui_accent"], highlightcolor=self.theme["ui_accent"],
+            font=app_font(10),
+        )
+        entry.insert(0, self.sidebar_row_title(row))
+        entry.select_range(0, tk.END)
+        entry.place(x=x, y=y, width=max(self.SIDEBAR_RENAME_MIN_WIDTH, width), height=height)
+        entry.focus_set()
+        entry.bind("<Return>", lambda _event: self.finish_sidebar_rename(commit=True))
+        entry.bind("<Escape>", lambda _event: self.finish_sidebar_rename(commit=False))
+        entry.bind("<FocusOut>", lambda _event: self.finish_sidebar_rename(commit=True))
+        self._sidebar_rename = {"entry": entry, "row": row}
+        return "break"
+
+    def finish_sidebar_rename(self, commit=True):
+        """Schließt das Eingabefeld und übernimmt den Namen, sofern gewollt."""
+        state = getattr(self, "_sidebar_rename", None)
+        self._sidebar_rename = None
+        if not state:
+            return "break"
+        entry = state["entry"]
+        try:
+            new_title = entry.get().strip()
+        except tk.TclError:
+            new_title = ""
+        try:
+            entry.destroy()
+        except tk.TclError:
+            pass
+        # Ein leerer Name wird verworfen: Eine Liste ohne Titel wäre in der
+        # Seitenleiste nicht mehr auffindbar.
+        if commit and new_title:
+            self.apply_sidebar_rename(state["row"], new_title)
+        return "break"
+
+    def cancel_sidebar_rename(self, event=None):
+        self._cancel_sidebar_rename_timer()
+        if getattr(self, "_sidebar_rename", None):
+            self.finish_sidebar_rename(commit=False)
+        return None
+
+    def apply_sidebar_rename(self, row, new_title):
+        """Übernimmt einen neuen Titel für eine Liste oder einen Ordner."""
+        row_type, row_id = tuple(row)
+        holder = (
+            self.get_folder(row_id) if row_type == "folder"
+            else next((item for item in self.lists if item.get("id") == row_id), None)
+        )
+        if holder is None:
+            return
+        if str(holder.get("title") or "") == new_title:
+            return
+        self.snapshot_undo()
+        holder["title"] = new_title
+        open_list = row_type == "list" and row_id == self.active_list_id and self.view_mode == "list"
+        open_folder = row_type == "folder" and row_id == self.active_folder_id and self.view_mode == "folder"
+        if open_list:
+            self.app_title = new_title
+        if open_list or open_folder:
+            self.update_header_title()
+            self.update_window_title()
+        self.save_items()
+        self.update_sidebar_list()
+        self.refresh_tree()
+
+    def _cancel_sidebar_rename_timer(self):
+        timer = getattr(self, "_sidebar_rename_timer", None)
+        self._sidebar_rename_timer = None
+        if timer is None:
+            return
+        try:
+            self.root.after_cancel(timer)
+        except (tk.TclError, ValueError):
+            pass
+
+    def on_sidebar_release_for_rename(self, event):
+        """Klick auf eine bereits ausgewählte Zeile startet das Umbenennen.
+
+        Bewusst verzögert: Ein Doppelklick öffnet weiterhin den Bearbeiten-Dialog
+        und bricht diesen Zeitgeber ab. Nach einem Zug passiert nichts.
+        """
+        self._cancel_sidebar_rename_timer()
+        tree = getattr(self, "sidebar_listbox", None)
+        if tree is None or event.widget is not tree:
+            return
+        if getattr(self, "_sidebar_release_moved", False):
+            return
+        if event.state & 0x0005:  # Shift oder Strg erweitern die Auswahl
+            return
+        iid = tree.identify_row(event.y)
+        if not iid or iid not in getattr(self, "_sidebar_preselected", ()):
+            return
+        # Ein Klick auf das Klappdreieck eines Ordners öffnet und schließt ihn –
+        # und tut sonst nichts. Wer auf- und zuklappt, will nicht umbenennen.
+        try:
+            element = str(tree.identify_element(event.x, event.y))
+        except tk.TclError:
+            element = ""
+        if "indicator" in element:
+            return
+        if len(tree.selection()) != 1:
+            return
+        if self.sidebar_rename_row(iid) is None:
+            return
+        self._sidebar_rename_timer = self.root.after(
+            self.SIDEBAR_RENAME_DELAY_MS, lambda: self.begin_sidebar_rename(iid)
+        )
+
+    def _add_color_menu(self, menu, heading, current, setter, target_id):
+        """Farbauswahl als Untermenü – identisch für Listen und Ordner."""
+        color_menu = self._new_themed_popup_menu(menu)
+        for label, color_key in self.LIST_COLOR_CHOICES:
+            prefix = "\u2713 " if current == color_key else "      "
+            color_menu.add_command(
+                label=f"{prefix}{label}",
+                foreground=self.theme[color_key],
+                command=lambda c=color_key: setter(target_id, c),
+            )
+        color_menu.add_separator()
+        prefix = "\u2713 " if not current else "      "
+        color_menu.add_command(label=f"{prefix}Keine Farbe", command=lambda: setter(target_id, None))
+        menu.add_cascade(label=heading, menu=color_menu)
+        return color_menu
+
+    def _add_page_label_menu(self, menu, holder, kind):
+        """Labels einer Liste oder eines Ordners zuweisen und lösen."""
+        label_menu = self._new_themed_popup_menu(menu)
+        assigned = list((holder or {}).get("labels") or [])
+        holder_id = (holder or {}).get("id")
+        # Die festen Labels tragen die Art eines Punkts und stehen deshalb bei
+        # Listen und Ordnern nicht zur Auswahl.
+        available = [label for label in self.labels if not self.is_system_label(label)]
+        if not available:
+            label_menu.add_command(label="Noch keine Labels angelegt", state="disabled")
+        else:
+            for label in available:
+                label_id = label.get("id")
+                prefix = "\u2713 " if label_id in assigned else "     "
+                label_menu.add_command(
+                    label=f"{prefix}{label.get('name', '')}",
+                    foreground=self.label_color(label),
+                    command=lambda selected=label_id: self.toggle_page_label(kind, holder_id, selected),
+                )
+            label_menu.add_separator()
+            label_menu.add_command(
+                label="Alle Labels entfernen",
+                command=lambda: self.clear_page_labels(kind, holder_id),
+            )
+        label_menu.add_separator()
+        label_menu.add_command(label="Labels verwalten …", command=self.open_label_manager)
+        menu.add_cascade(label="Labels", menu=label_menu)
+        return label_menu
+
+    def find_label_holder(self, kind, holder_id):
+        collection = self.lists if kind == "list" else self.folders
+        return next((entry for entry in collection if entry.get("id") == holder_id), None)
+
+    def toggle_page_label(self, kind, holder_id, label_id):
+        holder = self.find_label_holder(kind, holder_id)
+        label = self.get_label(label_id)
+        if holder is None or label is None:
+            return "break"
+        if self.is_system_label(label):
+            # Die festen Labels beschreiben die Art eines Punkts. Auf einer
+            # Liste oder einem Ordner hätten sie keine Bedeutung.
+            self.show_info(
+                "Festes Label",
+                f"„{label.get('name', '')}“ gilt nur für Punkte innerhalb einer Liste.",
+            )
+            return "break"
+        assigned = list(holder.get("labels") or [])
+        if label_id in assigned:
+            assigned = [value for value in assigned if value != label_id]
+        elif len(assigned) < self.MAX_LABELS_PER_ITEM:
+            assigned.append(label_id)
+        else:
+            return "break"
+        self.snapshot_undo()
+        holder["labels"] = assigned
+        self.save_items()
+        self.update_page_labels()
+        self.refresh_tree()
+        return "break"
+
+    def clear_page_labels(self, kind, holder_id):
+        holder = self.find_label_holder(kind, holder_id)
+        if holder is None or not holder.get("labels"):
+            return "break"
+        self.snapshot_undo()
+        holder["labels"] = []
+        self.save_items()
+        self.update_page_labels()
+        self.refresh_tree()
+        return "break"
+
+    def build_sidebar_context_menu(self, row, rows=None):
+        """Vollständiges Kontextmenü für eine Liste, einen Ordner oder eine Systemzeile."""
+        if rows and len(rows) > 1:
+            return self.build_sidebar_multi_menu(rows)
+        if not row:
+            return None
+        row_type, row_id = row
+        if row_type == "view":
+            return self.build_smart_view_menu(row_id)
+        if row_type == "folder":
+            return self.build_folder_menu(row_id)
+        if row_type == "list":
+            return self.build_list_menu(row_id)
+        return None
+
+    def build_sidebar_multi_menu(self, rows):
+        """Kontextmenü für eine Mehrfachauswahl aus Listen und Ordnern."""
+        list_ids = [row_id for row_type, row_id in rows if row_type == "list" and not self.is_inbox_list(row_id)]
+        folder_ids = [row_id for row_type, row_id in rows if row_type == "folder"]
+        menu = self._new_themed_popup_menu()
+        menu.add_command(label=f"Auswahl: {len(list_ids)} Liste(n), {len(folder_ids)} Ordner", state="disabled")
+        menu.add_separator()
+
+        move_menu = self._new_themed_popup_menu(menu)
+        for folder in self.folders:
+            folder_id = folder.get("id")
+            indent = "   " * self.folder_depth(folder_id)
+            move_menu.add_command(
+                label=f"{indent}{str(folder.get('title') or 'Ordner').strip() or 'Ordner'}",
+                command=lambda target=folder_id: self.move_selected_lists_to_folder(target),
+            )
+        if not self.folders:
+            move_menu.add_command(label="Kein Ordner vorhanden", state="disabled")
+        menu.add_cascade(
+            label="Listen in Ordner verschieben",
+            menu=move_menu,
+            state="normal" if list_ids and self.folders else "disabled",
+        )
+        menu.add_command(
+            label="Listen aus Ordner herauslösen",
+            command=lambda: self.move_selected_lists_to_folder(None),
+            state="normal" if list_ids else "disabled",
+        )
+
+        # Ordner lassen sich genauso verschieben wie Listen – auch mehrere auf
+        # einmal. Unzulässige Ziele bleiben sichtbar, aber gesperrt.
+        folder_move_menu = self._new_themed_popup_menu(menu)
+        folder_move_menu.add_command(
+            label="Oberste Ebene",
+            command=lambda: self.move_selected_folders_to_folder(None),
+        )
+        candidates = [
+            folder for folder in self.folders if folder.get("id") not in set(folder_ids)
+        ]
+        if candidates:
+            folder_move_menu.add_separator()
+        for folder in candidates:
+            target_id = folder.get("id")
+            indent = "   " * self.folder_depth(target_id)
+            allowed = any(
+                self.can_move_folder_into(folder_id, target_id) for folder_id in folder_ids
+            )
+            folder_move_menu.add_command(
+                label=f"{indent}{str(folder.get('title') or 'Ordner').strip() or 'Ordner'}",
+                command=lambda target=target_id: self.move_selected_folders_to_folder(target),
+                state="normal" if allowed else "disabled",
+            )
+        menu.add_cascade(
+            label="Ordner verschieben",
+            menu=folder_move_menu,
+            state="normal" if folder_ids else "disabled",
+        )
+        menu.add_separator()
+
+        color_menu = self._new_themed_popup_menu(menu)
+        for label, color_key in self.LIST_COLOR_CHOICES:
+            color_menu.add_command(
+                label=label,
+                foreground=self.theme[color_key],
+                command=lambda selected=color_key: self.set_selected_sidebar_color(selected),
+            )
+        color_menu.add_separator()
+        color_menu.add_command(label="Keine Farbe", command=lambda: self.set_selected_sidebar_color(None))
+        menu.add_cascade(label="Farbe der Auswahl", menu=color_menu)
+        menu.add_separator()
+        menu.add_command(
+            label="In den Papierkorb",
+            command=self.trash_selected_sidebar_entries,
+            foreground=self.theme["delete"],
+            state="normal" if (list_ids or folder_ids) else "disabled",
+        )
+        return menu
+
+    def build_list_menu(self, list_id):
+        entry = next((item for item in self.lists if item.get("id") == list_id), None)
+        if entry is None:
+            return None
+        is_inbox = self.is_inbox_list(entry)
+        title = str(entry.get("title") or "Liste").strip() or "Liste"
+        in_folder = bool(entry.get("folder_id"))
+
+        menu = self._new_themed_popup_menu()
+        menu.add_command(label=self.ellipsize_sidebar_title(title), state="disabled")
+        menu.add_separator()
+        menu.add_command(label="Öffnen", command=lambda: self.set_active_list(list_id))
+        menu.add_command(
+            label="Umbenennen",
+            command=lambda: self.begin_sidebar_rename(self.find_sidebar_iid(("list", list_id))),
+            state="disabled" if is_inbox else "normal",
+        )
+        menu.add_command(
+            label="Bearbeiten (Titel, Beschreibungstext) …",
+            command=lambda: self.edit_list_details(list_id),
+        )
+        self._add_color_menu(menu, "Listenfarbe", entry.get("color"), self.set_list_color, list_id)
+        self._add_page_label_menu(menu, entry, "list")
+        menu.add_separator()
+
+        create_menu = self._new_themed_popup_menu(menu)
+        create_menu.add_command(label="Neue Liste …", command=self.create_new_list)
+        create_menu.add_command(label="Neuer Ordner …", command=self.create_new_folder)
+        menu.add_cascade(label="Neu anlegen", menu=create_menu)
+
+        move_menu = self._new_themed_popup_menu(menu)
+        move_menu.add_command(
+            label="In Ordner verschieben …",
+            command=lambda: self.move_list_to_folder_dialog(list_id),
+            state="disabled" if is_inbox or not self.folders else "normal",
+        )
+        move_menu.add_command(
+            label="Aus Ordner herauslösen",
+            command=lambda: self.detach_list_from_folder(list_id),
+            state="normal" if in_folder and not is_inbox else "disabled",
+        )
+        menu.add_cascade(label="Verschieben", menu=move_menu, state="disabled" if is_inbox else "normal")
+
+        menu.add_command(
+            label="Duplizieren",
+            command=lambda: self.duplicate_list(list_id),
+            state="disabled" if is_inbox else "normal",
+        )
+
+        export_menu = self._new_themed_popup_menu(menu)
+        export_menu.add_command(label="Als TXT …", command=lambda: self.export_list_as(list_id, "txt"))
+        export_menu.add_command(label="Als Markdown …", command=lambda: self.export_list_as(list_id, "md"))
+        export_menu.add_command(label="Als CSV …", command=lambda: self.export_list_as(list_id, "csv"))
+        export_menu.add_command(label="Als Glide-Teilbackup …", command=lambda: self.export_partial_backup([list_id], []))
+        menu.add_cascade(label="Exportieren", menu=export_menu)
+
+        menu.add_separator()
+        menu.add_command(
+            label="Erledigte Punkte entfernen",
+            command=lambda: self.remove_done_items(list_id),
+        )
+        menu.add_command(
+            label="Liste leeren",
+            command=lambda: self.clear_list_by_id(list_id),
+            foreground=self.theme["delete"],
+        )
+        menu.add_command(
+            label="In den Papierkorb",
+            command=lambda: self.delete_list_by_id(list_id),
+            foreground=self.theme["delete"],
+            state="disabled" if is_inbox else "normal",
+        )
+        return menu
+
+    def build_folder_menu(self, folder_id):
+        folder = self.get_folder(folder_id)
+        if folder is None:
+            return None
+        title = str(folder.get("title") or "Ordner").strip() or "Ordner"
+        child_count = self.folder_task_count(folder_id)
+        sub_count = len(self.get_child_folders(folder_id))
+
+        menu = self._new_themed_popup_menu()
+        header = f"{self.ellipsize_sidebar_title(title)}  ({child_count})"
+        if sub_count:
+            header += f"  ·  {sub_count} Unterordner"
+        menu.add_command(label=header, state="disabled")
+        menu.add_separator()
+        menu.add_command(label="Öffnen", command=lambda: self.set_active_folder(folder_id))
+        menu.add_command(
+            label="Umbenennen",
+            command=lambda: self.begin_sidebar_rename(self.find_sidebar_iid(("folder", folder_id))),
+        )
+        menu.add_command(
+            label="Bearbeiten (Titel, Beschreibungstext) …",
+            command=lambda: self.edit_folder_details(folder_id),
+        )
+        self._add_color_menu(menu, "Ordnerfarbe", folder.get("color"), self.set_folder_color, folder_id)
+        self._add_page_label_menu(menu, folder, "folder")
+        menu.add_separator()
+        menu.add_command(
+            label="Neue Liste in diesem Ordner …",
+            command=lambda: self.create_list_in_folder(folder_id),
+        )
+        menu.add_command(
+            label="Neuer Unterordner …",
+            command=lambda: self.create_new_folder(parent_id=folder_id),
+        )
+        menu.add_command(label="Neuer Ordner (oberste Ebene) …", command=self.create_new_folder)
+        menu.add_separator()
+
+        # Ordner in Ordner verschieben – derselbe Weg wie bei Listen.
+        self._add_folder_move_menu(menu, folder_id)
+        menu.add_separator()
+        menu.add_command(label="Alle Listen aufklappen", command=lambda: self.set_folder_open(folder_id, True))
+        menu.add_command(label="Ordner zuklappen", command=lambda: self.set_folder_open(folder_id, False))
+        folder_export_menu = self._new_themed_popup_menu(menu)
+        folder_export_menu.add_command(label="Als TXT …", command=lambda: self.export_folder_as(folder_id, "txt"))
+        folder_export_menu.add_command(label="Als Markdown …", command=lambda: self.export_folder_as(folder_id, "md"))
+        folder_export_menu.add_command(label="Als Glide-Teilbackup …", command=lambda: self.export_partial_backup([], [folder_id]))
+        menu.add_cascade(label="Exportieren", menu=folder_export_menu)
+        menu.add_command(label="Als Vorlage speichern", command=lambda: self.save_folder_as_template(folder_id))
+        menu.add_separator()
+        menu.add_command(
+            label="Ordner auflösen (Listen bleiben)",
+            command=lambda: self.delete_folder(folder_id),
+            foreground=self.theme["delete"],
+        )
+        menu.add_command(
+            label="Ordner mit Listen in den Papierkorb",
+            command=lambda: self.trash_folder(folder_id),
+            foreground=self.theme["delete"],
+        )
+        return menu
+
+    def _add_folder_move_menu(self, menu, folder_id):
+        """Untermenü „Ordner verschieben“ mit allen zulässigen Zielen.
+
+        Unzulässige Ziele – der Ordner selbst, seine Nachfahren und alles, was
+        die Tiefengrenze sprengen würde – erscheinen gesperrt statt zu fehlen.
+        So bleibt die Menüform stabil und der Grund sichtbar.
+        """
+        move_menu = self._new_themed_popup_menu(menu)
+        current_parent = self.folder_parent_id(folder_id)
+        move_menu.add_command(
+            label=("\u2713 " if current_parent is None else "     ") + "Oberste Ebene",
+            command=lambda: self.move_selected_folders_to_folder(None),
+            state="disabled" if current_parent is None else "normal",
+        )
+        candidates = [entry for entry in self.folders if entry.get("id") != folder_id]
+        if candidates:
+            move_menu.add_separator()
+        for entry in candidates:
+            target_id = entry.get("id")
+            depth = self.folder_depth(target_id)
+            prefix = "\u2713 " if current_parent == target_id else "     "
+            indent = "   " * depth
+            allowed = self.can_move_folder_into(folder_id, target_id) and current_parent != target_id
+            move_menu.add_command(
+                label=f"{prefix}{indent}{self.ellipsize_sidebar_title(str(entry.get('title') or 'Ordner'))}",
+                command=lambda target=target_id: self.move_selected_folders_to_folder(target),
+                state="normal" if allowed else "disabled",
+            )
+        if not candidates:
+            move_menu.add_command(label="Kein weiterer Ordner vorhanden", state="disabled")
+        menu.add_cascade(label="Ordner verschieben", menu=move_menu)
+        return move_menu
+
+    def build_smart_view_menu(self, view_id="in_progress"):
+        """Kontextmenü der Systemzeilen „In Bearbeitung“, „Verspätet“ und „Papierkorb“."""
+        menu = self._new_themed_popup_menu()
+        if view_id == "overdue":
+            overdue_count = len(self.get_overdue_items(apply_filters=False))
+            menu.add_command(label=f"Verspätet ({overdue_count})", state="disabled")
+            menu.add_separator()
+            menu.add_command(label="Öffnen", command=self.set_overdue_view)
+            menu.add_command(label="Kalender öffnen …", command=self.open_calendar_view)
+            menu.add_separator()
+            menu.add_command(
+                label="Überfällig und noch nicht erledigt",
+                state="disabled",
+            )
+            return menu
+        if view_id == "trash":
+            menu.add_command(label=f"Papierkorb ({len(self.trash)})", state="disabled")
+            menu.add_separator()
+            menu.add_command(label="Öffnen", command=self.set_trash_view)
+            menu.add_separator()
+            menu.add_command(
+                label="Papierkorb leeren",
+                command=self.empty_trash,
+                foreground=self.theme["delete"],
+                state="normal" if self.trash else "disabled",
+            )
+            return menu
+        menu.add_command(label="In Bearbeitung", state="disabled")
+        menu.add_separator()
+        menu.add_command(label="Öffnen", command=self.set_in_progress_view)
+        menu.add_command(label="Kalender öffnen …", command=self.open_calendar_view)
+        menu.add_separator()
+        menu.add_command(
+            label="Automatisch aus allen Listen erzeugt",
+            state="disabled",
+        )
+        return menu
+
+    def build_folder_overview_menu(self):
+        """Kontextmenü für den leeren Bereich der Ordnerübersicht."""
+        menu = self._new_themed_popup_menu()
+        folder = self.get_folder(self.active_folder_id)
+        title = str((folder or {}).get("title") or "Ordner").strip() or "Ordner"
+        menu.add_command(label=self.ellipsize_sidebar_title(title), state="disabled")
+        menu.add_separator()
+        menu.add_command(
+            label="Neue Liste in diesem Ordner …",
+            command=lambda: self.create_list_in_folder(self.active_folder_id),
+        )
+        menu.add_command(
+            label="Bearbeiten (Titel, Beschreibungstext) …",
+            command=lambda: self.edit_folder_details(self.active_folder_id),
+        )
+        if folder:
+            self._add_color_menu(
+                menu, "Ordnerfarbe", folder.get("color"), self.set_folder_color, self.active_folder_id
+            )
+            self._add_page_label_menu(menu, folder, "folder")
+        menu.add_separator()
+        folder_export_menu = self._new_themed_popup_menu(menu)
+        folder_export_menu.add_command(label="Als TXT …", command=lambda: self.export_folder_as(self.active_folder_id, "txt"))
+        folder_export_menu.add_command(label="Als Markdown …", command=lambda: self.export_folder_as(self.active_folder_id, "md"))
+        folder_export_menu.add_command(label="Als Glide-Teilbackup …", command=lambda: self.export_partial_backup([], [self.active_folder_id]))
+        menu.add_cascade(label="Exportieren", menu=folder_export_menu, state="normal" if folder else "disabled")
+        menu.add_separator()
+        menu.add_command(
+            label="Ordner auflösen (Listen bleiben)",
+            command=lambda: self.delete_folder(self.active_folder_id),
+            foreground=self.theme["delete"],
+        )
+        menu.add_command(
+            label="Ordner mit Listen in den Papierkorb",
+            command=lambda: self.trash_folder(self.active_folder_id),
+            foreground=self.theme["delete"],
+        )
+        return menu
+
+    # -----------------------------
+    # Maus: Kontextmenü und Mehrfachauswahl
+    # -----------------------------
+    def bind_context_menu_modifier(self, widget, handler):
+        """Bindet den Tastenzusatz für das Kontextmenü plattformgerecht.
+
+        Unter macOS ist Strg+Klick der übliche Ersatz für die rechte Maustaste –
+        dort bleibt er das Kontextmenü. Unter Windows und Linux ist Strg+Klick
+        dagegen die übliche Mehrfachauswahl. Weil Tk die spezifischere Bindung
+        bevorzugt, verdeckte <Control-Button-1> dort bisher <Button-1>
+        vollständig: Das Menü ging auf, und mehrere Punkte ließen sich gar nicht
+        auswählen. Auf diesen Systemen wird der Zusatz deshalb nicht belegt.
+        """
+        if IS_MACOS:
+            widget.bind("<Control-Button-1>", handler)
+
+    @staticmethod
+    def selection_modifier_name():
+        """Anzeigename der Taste für „zur Auswahl hinzufügen“."""
+        return "Cmd" if IS_MACOS else "Strg"
+
+    @staticmethod
+    def selection_modifier_pressed(event):
+        """Ist die Taste für „zur Auswahl hinzufügen“ gedrückt?
+
+        Windows und Linux: Strg. macOS: Command – dort ist Strg für das
+        Kontextmenü belegt.
+        """
+        state = getattr(event, "state", 0) or 0
+        return bool(state & (0x0008 if IS_MACOS else 0x0004))
+
+    def show_sidebar_context_menu(self, event):
+        """Rechtsklick auf Liste/Ordner: Bearbeiten, Farbe, Verschieben, Papierkorb."""
+        tree = event.widget if event.widget in (getattr(self, "system_listbox", None), self.sidebar_listbox) else self.sidebar_listbox
+        iid = tree.identify_row(event.y)
+        if not iid:
+            return "break"
+        if tree is self.system_listbox:
+            sidebar_selection = self.sidebar_listbox.selection()
+            if sidebar_selection:
+                self.sidebar_listbox.selection_remove(*sidebar_selection)
+            tree.selection_set(iid)
+        else:
+            system_selection = self.system_listbox.selection()
+            if system_selection:
+                self.system_listbox.selection_remove(*system_selection)
+            # Eine bestehende Mehrfachauswahl bleibt erhalten, wenn der
+            # Rechtsklick eine ihrer Zeilen trifft.
+            if iid not in tree.selection():
+                tree.selection_set(iid)
+        tree.focus(iid)
+        row = self.sidebar_iid_to_row.get(iid)
+        if not row:
+            return "break"
+        self._destroy_sidebar_context_menu()
+        menu = self.build_sidebar_context_menu(row, rows=self.get_selected_sidebar_rows())
+        if menu is None:
+            return "break"
+        self._sidebar_context_menu = menu
+        try:
+            menu.tk_popup(event.x_root, event.y_root)
+        finally:
+            try:
+                menu.grab_release()
+            except tk.TclError:
+                pass
+        return "break"
+
+    def _destroy_sidebar_context_menu(self):
+        menu = getattr(self, "_sidebar_context_menu", None)
+        self._sidebar_context_menu = None
+        if menu is None:
+            return
+        try:
+            menu.destroy()
+        except (AttributeError, tk.TclError):
+            pass
+
+    def set_list_color(self, list_id, color_key):
+        """Setzt oder entfernt die Farbe einer Liste und speichert die Änderung."""
+        self._apply_entry_color(self.lists, list_id, color_key)
+
+    def set_folder_color(self, folder_id, color_key):
+        """Setzt oder entfernt die Farbe eines Ordners und speichert die Änderung."""
+        self._apply_entry_color(self.folders, folder_id, color_key)
+
+    def _apply_entry_color(self, entries, entry_id, color_key):
+        entry = next((e for e in entries if e.get("id") == entry_id), None)
+        if not entry:
+            return
+        new_color = color_key if color_key in self.LIST_COLOR_KEYS else None
+        if entry.get("color") == new_color:
+            return
+        self.snapshot_undo()
+        entry["color"] = new_color
+        self.save_items()  # aktualisiert auch die Seitenleiste
+
+    def _apply_page_details(self, page, details):
+        if details is None:
+            return "break"
+        values = {key: details.get(key, page.get(key))
+                  for key in ("title", "note", "color", "labels", "attachments")}
+        if self.is_inbox_list(page):
+            values["title"] = "Eingang"
+        if all(page.get(key) == value for key, value in values.items()):
+            return "break"
+        with self.sidebar_change(refresh_tree=True) as change:
+            page.update(values)
+            if page.get("id") == self.active_list_id:
+                self.app_title = page["title"]
+            change.mark()
+        self.update_header_title()
+        self.update_window_title()
+        self.update_page_note_preview()
+        self.update_page_labels()
+        return "break"
+
+    def edit_list_details(self, list_id):
+        entry = next((item for item in self.lists if item.get("id") == list_id), None)
+        if entry is None:
+            return "break"
+        inbox = self.is_inbox_list(entry)
+        details = self.themed_page_details_dialog(
+            "Liste bearbeiten", entry.get("title", "Liste"), entry.get("note", ""),
+            title_label="Listentitel (fester Systemname)" if inbox else "Listentitel",
+            title_editable=not inbox, page=entry)
+        return self._apply_page_details(entry, details)
+
+    def edit_folder_details(self, folder_id):
+        folder = self.get_folder(folder_id)
+        if folder is None:
+            return "break"
+        details = self.themed_page_details_dialog(
+            "Ordner bearbeiten", folder.get("title", "Ordner"), folder.get("note", ""),
+            title_label="Ordnertitel", page=folder)
+        return self._apply_page_details(folder, details)
+
+    def create_list_in_folder(self, folder_id):
+        """Legt eine neue Liste direkt im gewählten Ordner an."""
+        if not self.get_folder(folder_id):
+            return "break"
+        return self.create_container_dialog("list", parent_id=folder_id)
+
+    def move_list_to_folder_dialog(self, list_id):
+        """Verschiebt eine Liste über einen Auswahldialog in einen Ordner."""
+        entry = next((item for item in self.lists if item.get("id") == list_id), None)
+        if entry is None or self.is_inbox_list(entry):
+            return "break"
+        choices = [
+            (folder.get("id"), str(folder.get("title") or "Ordner").strip() or "Ordner")
+            for folder in self.folders
+            if folder.get("id") != entry.get("folder_id")
+        ]
+        if not choices:
+            self.show_info("Verschieben", "Es gibt keinen anderen Ordner als Ziel.")
+            return "break"
+        folder_id = self.themed_choice_dialog(
+            "In Ordner verschieben", "In welchen Ordner soll die Liste?", choices
+        )
+        if not folder_id:
+            return "break"
+        with self.sidebar_change() as change:
+            if self.move_sidebar_list_into_folder(list_id, folder_id):
+                self.sidebar_folder_open_states[folder_id] = True
+                change.mark()
+        return "break"
+
+    def detach_list_from_folder(self, list_id):
+        """Hebt eine Liste aus ihrem Ordner auf die Hauptebene."""
+        entry = next((item for item in self.lists if item.get("id") == list_id), None)
+        if entry is None or self.is_inbox_list(entry) or not entry.get("folder_id"):
+            return "break"
+        with self.sidebar_change() as change:
+            entry["folder_id"] = None
+            change.mark()
+        return "break"
+
+    def duplicate_list(self, list_id):
+        """Legt eine unabhängige Kopie einer Liste an."""
+        entry = next((item for item in self.lists if item.get("id") == list_id), None)
+        if entry is None:
+            return "break"
+        self.snapshot_undo()
+        self.sync_current_list_reference()
+        copy_items = self.copy_items_with_new_ids(entry.get("items", []))
+        new_entry = self.new_list_object(
+            f"{str(entry.get('title') or 'Liste').strip()} (Kopie)",
+            copy_items,
+            folder_id=entry.get("folder_id"),
+            color=entry.get("color"),
+            note=str(entry.get("note") or ""),
+            labels=list(entry.get("labels") or []),
+            attachments=copy.deepcopy(entry.get("attachments", [])),
+        )
+        index = next((i for i, item in enumerate(self.lists) if item.get("id") == list_id), len(self.lists) - 1)
+        self.lists.insert(index + 1, new_entry)
+        self.set_active_list(new_entry["id"])
+        self.save_items()
+        return "break"
+
+    def export_list_as(self, list_id, fmt):
+        """Exportiert eine beliebige Liste, ohne die Ansicht dauerhaft zu wechseln."""
+        entry = next((item for item in self.lists if item.get("id") == list_id), None)
+        if entry is None:
+            return "break"
+        previous_list_id = self.active_list_id
+        previous_mode = self.view_mode
+        previous_folder_id = self.active_folder_id
+        try:
+            self.set_active_list(list_id, refresh=False)
+            if fmt == "md":
+                self.export_as_markdown()
+            elif fmt == "csv":
+                self.export_as_csv()
+            else:
+                self.export_as_txt()
+        finally:
+            if previous_mode == "folder" and previous_folder_id:
+                self.set_active_list(previous_list_id, refresh=False)
+                self.set_active_folder(previous_folder_id, refresh=False)
+            elif previous_mode == "in_progress":
+                self.set_active_list(previous_list_id, refresh=False)
+                self.set_in_progress_view(refresh=False)
+            elif previous_list_id:
+                self.set_active_list(previous_list_id, refresh=False)
+            self.update_sidebar_list()
+            self.refresh_tree()
+        return "break"
+
+    def export_folder_as(self, folder_id, fmt="txt"):
+        """Exportiert einen Ordner samt enthaltenen Listen als TXT oder Markdown."""
+        folder = self.get_folder(folder_id)
+        if folder is None:
+            return "break"
+        lists = self.get_folder_lists_recursive(folder_id)
+        if not lists:
+            self.show_warning("Ordnerexport", "Der Ordner enthält keine Listen.")
+            return "break"
+        extension = "md" if fmt == "md" else "txt"
+        title = str(folder.get("title") or "Ordner").strip() or "Ordner"
+        default = f"{self.safe_filename(title)}_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.{extension}"
+        path = filedialog.asksaveasfilename(
+            title="Ordner exportieren", defaultextension=f".{extension}", initialfile=default,
+            filetypes=[("Markdown", "*.md"), ("Textdatei", "*.txt"), ("Alle Dateien", "*.*")],
+        )
+        if not path:
+            return "break"
+        note = str(folder.get("note") or "").strip()
+        try:
+            with open(path, "w", encoding="utf-8") as file:
+                if fmt == "md":
+                    file.write(f"# {title}\n\n")
+                    if note:
+                        file.write(note + "\n\n")
+                    for entry in lists:
+                        list_title = str(entry.get("title") or "Liste").strip() or "Liste"
+                        file.write(f"## {list_title}\n\n")
+                        if entry.get("note"):
+                            file.write(str(entry.get("note")).strip() + "\n\n")
+                        self.write_items_to_markdown(file, entry.get("items", []), 0)
+                        file.write("\n")
+                    file.write(f"_Exportiert am {datetime.now().strftime('%d.%m.%Y um %H:%M Uhr')}_\n")
+                else:
+                    file.write(f"{title}\n{'=' * max(12, len(title))}\n\n")
+                    if note:
+                        file.write(self.TXT_NOTE_BLOCK_START + "\n" + note + "\n" + self.TXT_NOTE_BLOCK_END + "\n\n")
+                    for entry in lists:
+                        list_title = str(entry.get("title") or "Liste").strip() or "Liste"
+                        file.write(f"\n{list_title}\n{'-' * max(12, len(list_title))}\n")
+                        if entry.get("note"):
+                            file.write(self.TXT_NOTE_BLOCK_START + "\n" + str(entry.get("note")).strip() + "\n" + self.TXT_NOTE_BLOCK_END + "\n")
+                        self.write_items_to_txt(file, entry.get("items", []), [])
+                    file.write(f"\nExportiert am: {datetime.now().strftime('%d.%m.%Y um %H:%M Uhr')}\n")
+            self.show_info("Export erfolgreich", f"Ordner exportiert nach:\n{path}")
+        except OSError as exc:
+            self.show_error("Ordnerexport", str(exc))
+        return "break"
+
+    def partial_backup_payload(self, list_ids=None, folder_ids=None):
+        """Verlustfreies Teilbackup: Zweige einschließlich leerer Unterordner."""
+        self.sync_current_list_reference()
+        chosen_folders = set(folder_ids or [])
+        folder_set = {folder["id"] for fid in chosen_folders for folder in self.iter_folder_subtree(fid)}
+        chosen_lists = set(list_ids or [])
+        selected = [copy.deepcopy(entry) for entry in self.lists
+                    if entry["id"] in chosen_lists or entry.get("folder_id") in folder_set]
+        folders = [copy.deepcopy(folder) for folder in self.folders if folder["id"] in folder_set]
+        for folder in folders:
+            if folder.get("parent_id") not in folder_set:
+                folder["parent_id"] = None
+        for entry in selected:
+            if entry.get("folder_id") not in folder_set:
+                entry["folder_id"] = None
+        used_labels = {label_id for obj in folders + selected +
+                       list(self.walk_items([item for entry in selected for item in entry.get("items", [])]))
+                       for label_id in obj.get("labels", [])}
+        labels = [copy.deepcopy(label) for label in self.labels
+                  if label["id"] in used_labels or self.is_system_label(label)]
+        return {"version": self.DATA_SCHEMA_VERSION, "app": APP_NAME, "app_version": APP_VERSION,
+                "exported_at": datetime.now().isoformat(timespec="seconds"),
+                "active_list_id": selected[0]["id"] if selected else None,
+                "active_folder_id": next(iter(chosen_folders), None),
+                "folders": folders, "labels": labels, "lists": selected, "trash": []}
+
+    def export_partial_backup(self, list_ids=None, folder_ids=None):
+        """Speichert Listen/Ordner als eigenständiges ``.glidebackup``."""
+        if list_ids is None and folder_ids is None:
+            folder_ids = [self.active_folder_id] if self.view_mode == "folder" and self.active_folder_id else []
+            list_ids = [] if folder_ids else ([self.active_list_id] if self.active_list_id else [])
+        list_ids, folder_ids = list(list_ids or []), list(folder_ids or [])
+        if not list_ids and not folder_ids:
+            self.show_info("Teilbackup", "Wähle zuerst eine Liste oder einen Ordner aus.")
+            return "break"
+        path = filedialog.asksaveasfilename(title="Listen/Ordner exportieren", defaultextension=".glidebackup",
+                                            initialfile="glide_teilbackup.glidebackup",
+                                            filetypes=[("Glide-Teilbackup", "*.glidebackup"), ("Alle Dateien", "*.*")])
+        if not path:
+            return "break"
+        try:
+            payload = self.partial_backup_payload(list_ids, folder_ids)
+            self.write_complete_backup(path, payload)
+            self.show_info("Export erfolgreich", f"{len(payload['lists'])} Liste(n) und {len(payload['folders'])} Ordner exportiert.")
+        except Exception as exc:
+            self.show_error("Teilbackup", str(exc))
+        return "break"
+
+    def import_partial_backup(self):
+        return self.import_full_backup(additive=True)
+
+    def prepare_additive_import(self, lists, folders, labels):
+        """Neue IDs und vollständige Labelzuordnung ohne Änderung des Altbestands."""
+        id_map = {obj["id"]: uuid.uuid4().hex for obj in folders + lists}
+        label_map, merged_labels = {}, copy.deepcopy(self.labels)
+        names = {label["name"].casefold() for label in merged_labels}
+        for label in labels:
+            role = self.system_label_role(label)
+            match = next((current for current in merged_labels
+                          if (role and self.system_label_role(current) == role) or
+                          (not role and current.get("name") == label.get("name") and
+                           current.get("color") == label.get("color"))), None)
+            if match:
+                label_map[label["id"]] = match["id"]
+                continue
+            fresh = copy.deepcopy(label)
+            fresh["id"] = uuid.uuid4().hex
+            original, number = fresh["name"], 2
+            while fresh["name"].casefold() in names:
+                suffix = f" ({number})"
+                fresh["name"] = original[:self.MAX_LABEL_NAME_LENGTH-len(suffix)] + suffix
+                number += 1
+            names.add(fresh["name"].casefold())
+            merged_labels.append(fresh)
+            label_map[label["id"]] = fresh["id"]
+        if len(merged_labels) > self.MAX_LABELS:
+            raise ValueError("Der Import würde die maximale Anzahl der Labels überschreiten.")
+        for folder in folders:
+            folder["id"] = id_map[folder["id"]]
+            folder["parent_id"] = id_map.get(folder.get("parent_id"))
+        for entry in lists:
+            entry["id"] = id_map[entry["id"]]
+            entry["folder_id"] = id_map.get(entry.get("folder_id"))
+            entry["system_role"] = None
+            entry["items"] = self.copy_items_with_new_ids(entry.get("items", []))
+        holders = folders + lists + [item for entry in lists for item in self.walk_items(entry.get("items", []))]
+        for holder in holders:
+            holder["labels"] = [label_map[value] for value in holder.get("labels", []) if value in label_map]
+        return lists, folders, merged_labels
+
+    def remove_done_items(self, list_id):
+        """Entfernt alle erledigten Aufgaben einer Liste; Gruppen bleiben erhalten."""
+        entry = next((item for item in self.lists if item.get("id") == list_id), None)
+        if entry is None:
+            return "break"
+        if entry.get("id") == self.active_list_id:
+            self.sync_current_list_reference()
+
+        def prune(items):
+            kept = []
+            removed = 0
+            for item in items:
+                child_kept, child_removed = prune(item.get("children", []))
+                removed += child_removed
+                if self.is_schedulable_item(item) and item.get("done") and not child_kept:
+                    removed += 1
+                    continue
+                item["children"] = child_kept
+                kept.append(item)
+            return kept, removed
+
+        pruned, removed = prune(entry.get("items", []))
+        if not removed:
+            self.show_info("Erledigte entfernen", "In dieser Liste ist nichts als erledigt markiert.")
+            return "break"
+        title = str(entry.get("title") or "Liste").strip() or "Liste"
+        if not self.ask_yes_no(
+            "Erledigte entfernen",
+            f"{removed} erledigte Aufgabe(n) aus '{title}' entfernen?\n\n"
+            "Erledigte Punkte mit noch offenen Unterpunkten bleiben erhalten.",
+        ):
+            return "break"
+        self.snapshot_undo()
+        entry["items"] = pruned
+        if entry.get("id") == self.active_list_id:
+            self.items = entry["items"]
+        self.save_items()
+        self.refresh_tree()
+        return "break"
+
+    def clear_list_by_id(self, list_id):
+        """Leert eine beliebige Liste, auch wenn sie gerade nicht geöffnet ist."""
+        entry = next((item for item in self.lists if item.get("id") == list_id), None)
+        if entry is None:
+            return "break"
+        if entry.get("id") == self.active_list_id:
+            self.sync_current_list_reference()
+        if not entry.get("items"):
+            self.show_info("Liste leeren", "Diese Liste ist bereits leer.")
+            return "break"
+        title = str(entry.get("title") or "Liste").strip() or "Liste"
+        if not self.ask_yes_no("Liste leeren", f"Alle Punkte aus '{title}' wirklich löschen?"):
+            return "break"
+        self.snapshot_undo()
+        entry["items"] = []
+        if entry.get("id") == self.active_list_id:
+            self.items = entry["items"]
+        self.save_items()
+        self.refresh_tree()
+        return "break"
+
+    def delete_list_by_id(self, list_id):
+        """Verschiebt eine beliebige Liste in den Papierkorb."""
+        entry = next((item for item in self.lists if item.get("id") == list_id), None)
+        if entry is None:
+            return "break"
+        if self.is_inbox_list(entry):
+            self.show_info("Eingang", "Der fest integrierte Eingang kann nicht gelöscht werden.")
+            return "break"
+        if len(self.lists) <= 1:
+            self.show_info("Liste löschen", "Die letzte Liste kann nicht gelöscht werden.")
+            return "break"
+        title = str(entry.get("title") or "Liste").strip() or "Liste"
+        if not self.ask_yes_no(
+            "In den Papierkorb",
+            f"Liste '{title}' in den Papierkorb verschieben?\n\n"
+            "Die Liste bleibt dort vollständig erhalten und kann wiederhergestellt werden.",
+        ):
+            return "break"
+        with self.sidebar_change(refresh_tree=True) as change:
+            if self._move_lists_to_trash([list_id]):
+                change.mark()
+        return "break"
+
+    # -----------------------------
+    # Papierkorb
+    # -----------------------------
+    def new_trash_entry(self, kind, payload, origin_folder_id=None, origin_folder_title="", origin=None):
+        """Ein Papierkorbeintrag hält das vollständige Original plus Herkunft.
+
+        `origin` beschreibt bei einem einzelnen Punkt, wohin er zurückgehört:
+        Liste, übergeordneter Punkt und Position. Fehlt das Ziel beim
+        Wiederherstellen, landet der Punkt am Ende seiner Liste – zurück kommt
+        er in jedem Fall.
+        """
+        if kind == self.TRASH_KIND_FOLDER:
+            resolved_kind = self.TRASH_KIND_FOLDER
+        elif kind == self.TRASH_KIND_ITEM:
+            resolved_kind = self.TRASH_KIND_ITEM
+        else:
+            resolved_kind = self.TRASH_KIND_LIST
+        entry = {
+            "id": uuid.uuid4().hex,
+            "kind": resolved_kind,
+            "deleted_at": datetime.now().isoformat(timespec="seconds"),
+            "origin_folder_id": origin_folder_id if isinstance(origin_folder_id, str) and origin_folder_id else None,
+            "origin_folder_title": str(origin_folder_title or ""),
+            "list": None,
+            "folder": None,
+            "item": None,
+            "origin": dict(origin) if isinstance(origin, dict) else None,
+        }
+        entry[resolved_kind] = payload
+        return entry
+
+    def get_trash_entry(self, trash_id):
+        return next((entry for entry in self.trash if entry.get("id") == trash_id), None)
+
+    def trash_entry_payload(self, trash_entry):
+        if not isinstance(trash_entry, dict):
+            return None
+        kind = trash_entry.get("kind")
+        if kind == self.TRASH_KIND_FOLDER:
+            return trash_entry.get("folder")
+        if kind == self.TRASH_KIND_ITEM:
+            return trash_entry.get("item")
+        return trash_entry.get("list")
+
+    def trash_entry_title(self, trash_entry):
+        payload = self.trash_entry_payload(trash_entry) or {}
+        kind = trash_entry.get("kind") if isinstance(trash_entry, dict) else None
+        if kind == self.TRASH_KIND_ITEM:
+            # Ein Punkt trägt seinen Text, keine Überschrift.
+            return str(payload.get("text") or "Punkt").strip() or "Punkt"
+        fallback = "Ordner" if kind == self.TRASH_KIND_FOLDER else "Liste"
+        return str(payload.get("title") or fallback).strip() or fallback
+
+    def push_trash_entry(self, entry):
+        """Neueste Einträge stehen oben; die Obergrenze schützt die Speicherdatei."""
+        self.trash.insert(0, entry)
+        if len(self.trash) > self.MAX_TRASH_ENTRIES:
+            del self.trash[self.MAX_TRASH_ENTRIES:]
+
+    def _move_lists_to_trash(self, list_ids):
+        """Verschiebt Listen samt Inhalt in den Papierkorb. Der Eingang bleibt geschützt."""
+        moved = 0
+        for list_id in list_ids:
+            entry = next((item for item in self.lists if item.get("id") == list_id), None)
+            if entry is None or self.is_inbox_list(entry):
+                continue
+            if len(self.lists) <= 1:
+                break
+            if entry.get("id") == self.active_list_id:
+                self.sync_current_list_reference()
+            folder = self.get_folder(entry.get("folder_id"))
+            self.lists = [item for item in self.lists if item.get("id") != list_id]
+            self.push_trash_entry(
+                self.new_trash_entry(
+                    self.TRASH_KIND_LIST,
+                    copy.deepcopy(entry),
+                    origin_folder_id=entry.get("folder_id"),
+                    origin_folder_title=str((folder or {}).get("title") or ""),
+                )
+            )
+            moved += 1
+            if entry.get("id") == self.active_list_id:
+                self.active_list_id = None
+                fallback = next((item.get("id") for item in self.lists if not self.is_inbox_list(item)), None)
+                fallback = fallback or self.lists[0].get("id")
+                self.set_active_list(fallback, refresh=False)
+        return moved
+
+    def trash_folder(self, folder_id):
+        """Verschiebt einen Ordner gemeinsam mit seinen Listen in den Papierkorb."""
+        folder = self.get_folder(folder_id)
+        if not folder:
+            return "break"
+        title = str(folder.get("title") or "Ordner").strip() or "Ordner"
+        child_lists = self.get_folder_lists_recursive(folder_id)
+        sub_folders = len(self.iter_folder_subtree(folder_id)) - 1
+        detail = f"{len(child_lists)} Liste(n)"
+        if sub_folders:
+            detail += f" und {sub_folders} Unterordner"
+        if not self.ask_yes_no(
+            "In den Papierkorb",
+            f"Ordner '{title}' mit {detail} in den Papierkorb verschieben?\n\n"
+            "Ordner und Listen bleiben dort vollständig erhalten und lassen sich gemeinsam wiederherstellen.",
+        ):
+            return "break"
+        self.snapshot_undo()
+        self._move_folder_to_trash(folder_id)
+        self.save_items()
+        self.update_sidebar_list()
+        self.refresh_tree()
+        return "break"
+
+    def _move_folder_to_trash(self, folder_id):
+        """Legt einen Ordner mit allem, was darin liegt, in den Papierkorb.
+
+        Unterordner wandern als eigene Einträge mit; ihre Herkunft bleibt über
+        origin_folder_id erhalten, sodass sie beim Wiederherstellen gemeinsam
+        und an derselben Stelle zurückkehren. Die Reihenfolge ist von innen nach
+        außen, damit ein Elternteil erst nach seinen Kindern verschwindet.
+        """
+        folder = self.get_folder(folder_id)
+        if not folder:
+            return False
+        subtree = self.iter_folder_subtree(folder_id)
+        was_active = self.view_mode == "folder" and self.active_folder_id in {
+            entry.get("id") for entry in subtree
+        }
+        for entry in reversed(subtree):
+            current_id = entry.get("id")
+            child_ids = [item.get("id") for item in self.get_folder_lists(current_id)]
+            self._move_lists_to_trash(child_ids)
+            self.folders = [item for item in self.folders if item.get("id") != current_id]
+            self.push_trash_entry(
+                self.new_trash_entry(self.TRASH_KIND_FOLDER, copy.deepcopy(entry))
+            )
+        if was_active:
+            inbox = self.ensure_inbox_list()
+            self.active_folder_id = None
+            self.set_active_list(inbox.get("id"), refresh=False)
+        return True
+
+    def trash_selected_sidebar_entries(self):
+        """Papierkorb-Aktion der Mehrfachauswahl: Listen zuerst, danach Ordner."""
+        rows = self.get_selected_sidebar_rows()
+        list_ids = [row_id for row_type, row_id in rows if row_type == "list" and not self.is_inbox_list(row_id)]
+        folder_ids = [row_id for row_type, row_id in rows if row_type == "folder"]
+        if not list_ids and not folder_ids:
+            self.show_info("Papierkorb", "In der Auswahl steht nichts, das gelöscht werden könnte.")
+            return "break"
+        if not self.ask_yes_no(
+            "In den Papierkorb",
+            f"{len(list_ids)} Liste(n) und {len(folder_ids)} Ordner in den Papierkorb verschieben?\n\n"
+            "Alles bleibt dort vollständig erhalten und kann wiederhergestellt werden.",
+        ):
+            return "break"
+        with self.sidebar_change(refresh_tree=True) as change:
+            if self._move_lists_to_trash(list_ids):
+                change.mark()
+            for folder_id in folder_ids:
+                if self._move_folder_to_trash(folder_id):
+                    change.mark()
+        return "break"
+
+    def restore_item_from_trash(self, restored, origin):
+        """Setzt einen Punkt an seinen alten Platz zurück.
+
+        Reihenfolge der Ziele: die ursprüngliche Stelle unter demselben
+        Elternpunkt, sonst das Ende der Herkunftsliste, sonst das Ende der
+        aktuellen Liste. Ein Punkt darf nie deshalb verloren gehen, weil sein
+        alter Platz nicht mehr existiert.
+        """
+        if not isinstance(restored, dict):
+            return False
+        origin = origin if isinstance(origin, dict) else {}
+        # Doppelte IDs würden im Baum kollidieren: Der alte Platz kann längst
+        # von einem wiederhergestellten Duplikat belegt sein.
+        if self.find_item_in_lists(restored.get("id")):
+            restored = self.copy_items_with_new_ids([restored])[0]
+
+        target_list = next(
+            (entry for entry in self.lists if entry.get("id") == origin.get("list_id")),
+            None,
+        )
+        if target_list is None:
+            target_list = self.current_list()
+        if target_list is None:
+            return False
+
+        was_active = target_list.get("id") == self.active_list_id
+        siblings = target_list.setdefault("items", [])
+        parent_item_id = origin.get("parent_item_id")
+        if parent_item_id:
+            parent_found = self.find_item(parent_item_id, items=siblings)
+            if parent_found:
+                siblings = parent_found[0].setdefault("children", [])
+
+        index = origin.get("index")
+        if not isinstance(index, int) or index < 0 or index > len(siblings):
+            index = len(siblings)
+        siblings.insert(index, restored)
+        if was_active:
+            # self.items zeigt auf dieselbe Liste; die Ansicht ist damit aktuell.
+            self.expanded_ids.add(restored.get("id"))
+            self.collapsed_item_ids.discard(restored.get("id"))
+        return True
+
+    def restore_trash_entry(self, trash_id, target_folder_id=None, cascade=True, save=True):
+        """Holt einen Eintrag aus dem Papierkorb zurück.
+
+        Ein Ordner nimmt seine ehemaligen Listen automatisch mit; eine Liste
+        landet in ihrem Herkunftsordner, sofern dieser noch existiert.
+        """
+        trash_entry = self.get_trash_entry(trash_id)
+        if not trash_entry:
+            return False
+        payload = self.trash_entry_payload(trash_entry)
+        if not isinstance(payload, dict):
+            self.trash = [entry for entry in self.trash if entry.get("id") != trash_id]
+            return False
+
+        restored = copy.deepcopy(payload)
+        if trash_entry.get("kind") == self.TRASH_KIND_ITEM:
+            placed = self.restore_item_from_trash(restored, trash_entry.get("origin"))
+            self.trash = [entry for entry in self.trash if entry.get("id") != trash_id]
+            if save:
+                self.save_items()
+                self.update_sidebar_list()
+                self.refresh_tree()
+            return placed
+        if trash_entry.get("kind") == self.TRASH_KIND_FOLDER:
+            folder_id = restored.get("id")
+            if not folder_id or self.get_folder(folder_id):
+                folder_id = uuid.uuid4().hex
+                restored["id"] = folder_id
+            # Ein Ordner kehrt in seinen Elternordner zurück, sofern es den noch
+            # gibt; sonst auf die oberste Ebene.
+            parent_id = target_folder_id if target_folder_id is not None else restored.get("parent_id")
+            if parent_id and not self.get_folder(parent_id):
+                parent_id = None
+            if parent_id and self.folder_depth(parent_id) + 1 >= self.MAX_FOLDER_DEPTH:
+                parent_id = None
+            self.folders.append(self.new_folder_object(
+                restored.get("title"), folder_id, restored.get("color"), restored.get("note"),
+                restored.get("labels"), parent_id,
+                restored.get("attachments"),
+            ))
+            self.trash = [entry for entry in self.trash if entry.get("id") != trash_id]
+            if cascade:
+                # Listen und Unterordner wurden gemeinsam gelöscht und kehren
+                # gemeinsam zurück. Sie tragen die alte Ordner-ID als Herkunft.
+                original_id = payload.get("id")
+                related_lists = [
+                    entry.get("id")
+                    for entry in list(self.trash)
+                    if entry.get("kind") == self.TRASH_KIND_LIST and entry.get("origin_folder_id") == original_id
+                ]
+                for related_id in related_lists:
+                    self.restore_trash_entry(related_id, target_folder_id=folder_id, cascade=False, save=False)
+                related_folders = [
+                    entry.get("id")
+                    for entry in list(self.trash)
+                    if entry.get("kind") == self.TRASH_KIND_FOLDER
+                    and isinstance(self.trash_entry_payload(entry), dict)
+                    and self.trash_entry_payload(entry).get("parent_id") == original_id
+                ]
+                for related_id in related_folders:
+                    self.restore_trash_entry(related_id, target_folder_id=folder_id, save=False)
+        else:
+            list_id = restored.get("id")
+            if not list_id or any(entry.get("id") == list_id for entry in self.lists):
+                list_id = uuid.uuid4().hex
+            folder_id = target_folder_id if target_folder_id is not None else trash_entry.get("origin_folder_id")
+            if folder_id and not self.get_folder(folder_id):
+                folder_id = None
+            restored_list = self.new_list_object(
+                restored.get("title"),
+                self.normalize_items(restored.get("items", []), self.collect_existing_item_ids()),
+                list_id,
+                folder_id,
+                restored.get("color"),
+                restored.get("note"),
+                None,  # ein wiederhergestellter Eintrag wird nie zum Systemeingang
+                restored.get("labels"),
+                restored.get("attachments"),
+            )
+            self.lists.append(restored_list)
+            self.trash = [entry for entry in self.trash if entry.get("id") != trash_id]
+
+        self.prune_unknown_item_labels()
+        if save:
+            self.save_items()
+            self.update_sidebar_list()
+            self.refresh_tree()
+        return True
+
+    def collect_existing_item_ids(self):
+        """Alle bereits vergebenen Punkt-IDs – hält Wiederherstellungen kollisionsfrei."""
+        seen = set()
+        for entry in self.lists:
+            for item in self.walk_items(entry.get("items", [])):
+                item_id = item.get("id")
+                if isinstance(item_id, str) and item_id:
+                    seen.add(item_id)
+        return seen
+
+    def restore_selected_trash_entries(self, into_folder=False):
+        trash_ids = self.get_selected_trash_ids()
+        if not trash_ids:
+            self.show_info("Papierkorb", "Zuerst einen Eintrag auswählen.")
+            return "break"
+        target_folder_id = None
+        if into_folder:
+            choices = [
+                (folder.get("id"), str(folder.get("title") or "Ordner").strip() or "Ordner")
+                for folder in self.folders
+            ]
+            if not choices:
+                self.show_info("Wiederherstellen", "Es gibt noch keinen Ordner als Ziel.")
+                return "break"
+            target_folder_id = self.themed_choice_dialog(
+                "In Ordner wiederherstellen", "In welchen Ordner sollen die Listen zurück?", choices
+            )
+            if not target_folder_id:
+                return "break"
+        with self.sidebar_change(refresh_tree=True) as change:
+            for trash_id in trash_ids:
+                entry = self.get_trash_entry(trash_id)
+                if entry is None:
+                    continue
+                folder_target = target_folder_id if entry.get("kind") == self.TRASH_KIND_LIST else None
+                try:
+                    if self.restore_trash_entry(trash_id, target_folder_id=folder_target, save=False):
+                        change.mark()
+                except (ValueError, RecursionError) as exc:
+                    # Ein manipulierter oder überdimensionierter Eintrag darf den
+                    # restlichen Papierkorb nicht mitreißen; er bleibt liegen.
+                    self.show_error(
+                        "Wiederherstellen",
+                        f"„{self.trash_entry_title(entry)}“ konnte nicht wiederhergestellt werden:\n{exc}",
+                    )
+        return "break"
+
+    def purge_selected_trash_entries(self):
+        trash_ids = self.get_selected_trash_ids()
+        if not trash_ids:
+            self.show_info("Papierkorb", "Zuerst einen Eintrag auswählen.")
+            return "break"
+        if not self.ask_yes_no(
+            "Endgültig entfernen",
+            f"{len(trash_ids)} Eintrag/Einträge endgültig entfernen?\n\n"
+            f"Nur {self.accel('Z')} innerhalb dieser Sitzung kann den Schritt noch zurücknehmen.",
+        ):
+            return "break"
+        with self.sidebar_change(refresh_tree=True) as change:
+            removed = set(trash_ids)
+            self.trash = [entry for entry in self.trash if entry.get("id") not in removed]
+            change.mark()
+        return "break"
+
+    def empty_trash(self):
+        if not self.trash:
+            self.show_info("Papierkorb", "Der Papierkorb ist bereits leer.")
+            return "break"
+        if not self.ask_yes_no(
+            "Papierkorb leeren",
+            f"Alle {len(self.trash)} Einträge endgültig entfernen?\n\n"
+            f"Nur {self.accel('Z')} innerhalb dieser Sitzung kann den Schritt noch zurücknehmen.",
+        ):
+            return "break"
+        self.snapshot_undo()
+        self.trash = []
+        self.save_items()
+        self.update_sidebar_list()
+        self.refresh_tree()
+        return "break"
+
+    @staticmethod
+    def trash_id_from_iid(row_id):
+        prefix = "trash:"
+        if row_id and str(row_id).startswith(prefix):
+            return str(row_id)[len(prefix):]
+        return None
+
+    def get_selected_trash_ids(self):
+        if self.view_mode != "trash" or not hasattr(self, "tree"):
+            return []
+        ids = []
+        for row_id in self.tree.selection():
+            trash_id = self.trash_id_from_iid(row_id)
+            if trash_id and self.get_trash_entry(trash_id):
+                ids.append(trash_id)
+        return ids
+
+    def set_folder_open(self, folder_id, is_open):
+        """Klappt einen Seitenleistenordner gezielt auf oder zu."""
+        if not self.get_folder(folder_id):
+            return "break"
+        self.sidebar_folder_open_states[folder_id] = bool(is_open)
+        tree = getattr(self, "sidebar_listbox", None)
+        iid = f"folder:{folder_id}"
+        try:
+            if tree is not None and tree.exists(iid):
+                tree.item(iid, open=bool(is_open))
+        except tk.TclError:
+            pass
+        return "break"
+
+    def create_container_dialog(self, kind="list", parent_id=None):
+        is_list = kind == "list"
+        title_text = "Neue Liste" if is_list else "Neuer Ordner"
+        dialog = tk.Toplevel(self.root)
+        dialog.title(title_text)
+        dialog.transient(self.root)
+        dialog.configure(bg=self.theme["bg"])
+        actions = tk.Frame(dialog, bg=self.theme["bg"])
+        actions.pack(side="bottom", fill="x", padx=24, pady=12)
+        canvas = tk.Canvas(dialog, bg=self.theme["bg"], highlightthickness=0)
+        scroll = ttk.Scrollbar(dialog, command=canvas.yview)
+        scroll.pack(side="right", fill="y")
+        canvas.pack(fill="both", expand=True)
+        canvas.configure(yscrollcommand=scroll.set)
+        body = tk.Frame(canvas, bg=self.theme["bg"], padx=24, pady=18)
+        window = canvas.create_window(0, 0, window=body, anchor="nw")
+        body.bind("<Configure>", lambda event: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.bind("<Configure>", lambda event: canvas.itemconfigure(window, width=event.width))
+        dialog.bind("<MouseWheel>", lambda event: canvas.yview_scroll(-int(event.delta / 120), "units"), add="+")
+        tk.Label(body, text=title_text, font=app_font(16, "bold"), bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w", pady=(0, 12))
+        def label(text):
+            tk.Label(body, text=text, bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10)).pack(anchor="w", pady=(8, 4))
+        title_var, color_var = tk.StringVar(), tk.StringVar(value="Keine Farbe")
+        folder_var, template_var = tk.StringVar(value="Kein Ordner"), tk.StringVar(value="Ohne Vorlage")
+        label("Titel")
+        title_entry = tk.Entry(body, textvariable=title_var, font=app_font(12), relief="flat",
+                               bg=self.theme["input"], fg=self.theme["text"], insertbackground=self.theme["text"])
+        title_entry.pack(fill="x", ipady=7)
+        label("Farbe")
+        color_frame, _ = self._make_option_menu(body, color_var, ["Keine Farbe"] + [name for name, key in self.LIST_COLOR_CHOICES],
+                                               option_colors={name: key for name, key in self.LIST_COLOR_CHOICES})
+        color_frame.pack(fill="x")
+        folders = [folder for folder in self.folders if is_list or self.folder_depth(folder["id"]) + 1 < self.MAX_FOLDER_DEPTH]
+        folder_map = {"Kein Ordner": None}
+        colors = {}
+        for index, folder in enumerate(folders, 1):
+            name = " › ".join(self.folder_path_titles(folder["id"]))
+            if name in folder_map:
+                name += f" ({index})"
+            folder_map[name] = folder["id"]
+            colors[name] = folder.get("color") or "text"
+            if folder["id"] == parent_id:
+                folder_var.set(name)
+        label("Zugehöriger Ordner")
+        folder_frame, _ = self._make_option_menu(body, folder_var, list(folder_map), option_colors=colors)
+        folder_frame.pack(fill="x")
+        template_map = {"Ohne Vorlage": None}
+        for index, template in enumerate(self.templates, 1):
+            if template["kind"] == kind:
+                name = template["title"]
+                if name in template_map:
+                    name += f" ({index})"
+                template_map[name] = template["id"]
+        label("Inhalt aus Vorlage")
+        template_frame, _ = self._make_option_menu(body, template_var, list(template_map))
+        template_frame.pack(fill="x")
+        label("Labels")
+        labels_var = tk.StringVar()
+        labels_entry = tk.Entry(body, textvariable=labels_var, font=app_font(11), relief="flat",
+                                bg=self.theme["input"], fg=self.theme["text"], insertbackground=self.theme["text"])
+        labels_entry.pack(fill="x", ipady=7)
+        tk.Label(body, text="Vorhandene oder neue Namen, durch Komma getrennt.", bg=self.theme["bg"],
+                 fg=self.theme["muted"], font=app_font(9)).pack(anchor="w")
+        label("Beschreibung")
+        note = tk.Text(body, height=4, wrap="word", font=app_font(11), relief="flat", padx=8, pady=8,
+                       bg=self.theme["input"], fg=self.theme["text"], insertbackground=self.theme["text"])
+        note.pack(fill="x")
+        error = tk.Label(body, text="", bg=self.theme["bg"], fg=self.theme["delete"], wraplength=480)
+        error.pack(fill="x")
+        def submit():
+            title = title_var.get().strip()
+            if not title:
+                error.configure(text="Bitte einen Titel eingeben.")
+                return
+            names = list(dict.fromkeys(value.strip() for value in labels_var.get().split(",") if value.strip()))
+            if len(names) > self.MAX_LABELS_PER_ITEM or any(len(value) > self.LABEL_NAME_INPUT_LIMIT for value in names):
+                error.configure(text=f"Höchstens {self.MAX_LABELS_PER_ITEM} Labels mit je {self.LABEL_NAME_INPUT_LIMIT} Zeichen.")
+                return
+            color = next((key for name, key in self.LIST_COLOR_CHOICES if name == color_var.get()), None)
+            parent = folder_map[folder_var.get()]
+            template_id = template_map[template_var.get()]
+            if template_id:
+                before = {entry["id"] for entry in self.lists}
+                old_folders = {folder["id"] for folder in self.folders}
+                self.create_list_from_template(template_id)
+                created = [entry for entry in self.lists if entry["id"] not in before] if is_list else [
+                    folder for folder in self.folders if folder["id"] not in old_folders and not folder.get("parent_id")]
+                if not created:
+                    return
+                holder = created[0]
+            else:
+                holder = self.new_list_object(title, []) if is_list else self.new_folder_object(title)
+            with self.sidebar_change(refresh_tree=True) as change:
+                if not template_id:
+                    (self.lists if is_list else self.folders).append(holder)
+                holder.update(title=title, note=note.get("1.0", "end-1c"), color=color)
+                holder["folder_id" if is_list else "parent_id"] = parent
+                ids = []
+                for name in names:
+                    found = self.ensure_label_by_name(name)
+                    if found and not self.is_system_label(found):
+                        ids.append(found["id"])
+                if names or not template_id:
+                    holder["labels"] = ids
+                if is_list:
+                    self.set_active_list(holder["id"], refresh=False)
+                else:
+                    self.set_active_folder(holder["id"], refresh=False)
+                change.mark()
+            dialog.destroy()
+        self._make_dialog_button(actions, "Anlegen", submit, "confirm").pack(side="right")
+        self._make_dialog_button(actions, "Abbrechen", dialog.destroy, "muted").pack(side="right", padx=8)
+        title_entry.bind("<Return>", lambda event: submit())
+        dialog.bind("<Escape>", lambda event: dialog.destroy())
+        self._center_dialog(dialog, min_width=620, min_height=620)
+        self._schedule_windows_chrome_theme(dialog)
+        title_entry.focus_set()
+        self.run_modal(dialog)
+        return "break"
+
+    def create_new_folder(self, event=None, parent_id=None):
+        # Aus einer geöffneten Ordnerübersicht heraus entsteht ein Unterordner,
+        # genau wie eine dort angelegte Liste im Ordner landet.
+        if parent_id is None and self.view_mode == "folder" and self.active_folder_id:
+            parent_id = self.active_folder_id
+        if parent_id is not None and self.get_folder(parent_id) is None:
+            parent_id = None
+        if parent_id is not None and self.folder_depth(parent_id) + 1 >= self.MAX_FOLDER_DEPTH:
+            self.show_info(
+                "Neuer Ordner",
+                f"Die Verschachtelung endet bei {self.MAX_FOLDER_DEPTH} Ebenen. "
+                "Der Ordner entsteht deshalb eine Ebene höher.",
+            )
+            parent_id = self.folder_parent_id(parent_id)
+        return self.create_container_dialog("folder", parent_id=parent_id)
+
+    def delete_selected_sidebar_entry(self, event=None):
+        """Entf-Taste und die Minus-Schaltfläche der Seitenleiste.
+
+        Wirkt immer auf die Auswahl der Seitenleiste, nie auf den Aufgabenbaum.
+        Der Rückgabewert „break" verhindert, dass zusätzlich die globale
+        Entf-Bindung des Aufgabenbaums auslöst.
+        """
+        rows = self.get_selected_sidebar_rows()
+        if len(rows) > 1:
+            self.trash_selected_sidebar_entries()
+            return "break"
+        row = rows[0] if rows else None
+        if row and row[0] == "view":
+            self.show_info(
+                "Systemansicht",
+                "Eingang, „In Bearbeitung“ und Papierkorb gehören fest zur Anwendung.",
+            )
+            return "break"
+        if row and row[0] == "folder":
+            self.trash_folder(row[1])
+            return "break"
+        if row and row[0] == "list" and self.is_inbox_list(row[1]):
+            self.show_info("Eingang", "Der fest integrierte Eingang kann nicht gelöscht werden.")
+            return "break"
+        if row and row[0] == "list":
+            self.delete_list_by_id(row[1])
+            return "break"
+        self.delete_current_list(event)
+        return "break"
+
+    def move_selected_lists_to_folder(self, folder_id):
+        """Verschiebt alle markierten Listen gemeinsam in einen Ordner oder heraus."""
+        list_ids = self.get_selected_sidebar_list_ids()
+        if not list_ids:
+            self.show_info("Verschieben", "In der Auswahl steht keine verschiebbare Liste.")
+            return "break"
+        if folder_id is not None and not self.get_folder(folder_id):
+            return "break"
+        with self.sidebar_change() as change:
+            for list_id in list_ids:
+                if folder_id is None:
+                    entry = next((item for item in self.lists if item.get("id") == list_id), None)
+                    if entry is not None and entry.get("folder_id"):
+                        entry["folder_id"] = None
+                        change.mark()
+                elif self.move_sidebar_list_into_folder(list_id, folder_id):
+                    change.mark()
+            if change.changed and folder_id:
+                self.sidebar_folder_open_states[folder_id] = True
+        return "break"
+
+    def set_selected_sidebar_color(self, color_key):
+        """Färbt alle markierten Listen und Ordner in einem Schritt."""
+        rows = self.get_selected_sidebar_rows()
+        if not rows:
+            return "break"
+        new_color = color_key if color_key in self.LIST_COLOR_KEYS else None
+        with self.sidebar_change() as change:
+            for row_type, row_id in rows:
+                entries = self.lists if row_type == "list" else self.folders if row_type == "folder" else None
+                if entries is None:
+                    continue
+                entry = next((item for item in entries if item.get("id") == row_id), None)
+                if entry is not None and entry.get("color") != new_color:
+                    entry["color"] = new_color
+                    change.mark()
+        return "break"
+
+    def move_sidebar_selection(self, offset):
+        """Verschiebt markierte Listen oder Ordner um eine Position nach oben/unten."""
+        rows = self.get_selected_sidebar_rows()
+        if not rows:
+            return "break"
+        with self.sidebar_change() as change:
+            for row_type, row_id in (rows if offset < 0 else list(reversed(rows))):
+                if row_type == "list":
+                    collection = self.lists
+                    if self.is_inbox_list(row_id):
+                        continue
+                elif row_type == "folder":
+                    # Ein Ordner bewegt sich innerhalb seiner Geschwister; sonst
+                    # spränge er unvermittelt in einen fremden Ordner.
+                    if self.swap_folder_with_sibling(row_id, offset):
+                        change.mark()
+                    continue
+                else:
+                    continue
+                index = next((i for i, entry in enumerate(collection) if entry.get("id") == row_id), None)
+                if index is None:
+                    continue
+                target = index + offset
+                if target < 0 or target >= len(collection):
+                    continue
+                if self.is_inbox_list(collection[target]):
+                    continue
+                # Beim Tausch bleibt die Ordnerzugehörigkeit der Zielposition erhalten.
+                collection[index]["folder_id"] = collection[target].get("folder_id")
+                collection[index], collection[target] = collection[target], collection[index]
+                change.mark()
+        return "break"
+
+    def swap_folder_with_sibling(self, folder_id, offset):
+        """Tauscht einen Ordner mit dem nächsten Geschwisterordner."""
+        folder = self.get_folder(folder_id)
+        if folder is None:
+            return False
+        siblings = self.get_child_folders(folder.get("parent_id"))
+        position = next(
+            (index for index, entry in enumerate(siblings) if entry.get("id") == folder_id), None
+        )
+        if position is None:
+            return False
+        target_position = position + offset
+        if target_position < 0 or target_position >= len(siblings):
+            return False
+        target = siblings[target_position]
+        source_index = self.folders.index(folder)
+        target_index = self.folders.index(target)
+        self.folders[source_index], self.folders[target_index] = (
+            self.folders[target_index],
+            self.folders[source_index],
+        )
+        return True
+
+    def delete_folder(self, folder_id):
+        """Löst einen Ordner auf: die enthaltenen Listen bleiben auf der Hauptebene."""
+        folder = next((entry for entry in self.folders if entry.get("id") == folder_id), None)
+        if not folder:
+            return "break"
+        title = folder.get("title", "Ordner")
+        if not self.ask_yes_no(
+            "Ordner auflösen",
+            f"Ordner '{title}' auflösen?\n\n"
+            "Die enthaltenen Listen und Unterordner bleiben erhalten und rücken eine Ebene "
+            "nach oben. Der leere Ordner wandert in den Papierkorb.",
+        ):
+            return "break"
+        self.snapshot_undo()
+        # Inhalt rückt eine Ebene nach oben: Listen und Unterordner behalten
+        # ihre Reihenfolge und landen dort, wo der aufgelöste Ordner lag.
+        parent_id = folder.get("parent_id")
+        for entry in self.lists:
+            if entry.get("folder_id") == folder_id:
+                entry["folder_id"] = parent_id
+        for entry in self.folders:
+            if entry.get("parent_id") == folder_id:
+                entry["parent_id"] = parent_id
+        self.folders = [entry for entry in self.folders if entry.get("id") != folder_id]
+        self.push_trash_entry(self.new_trash_entry(self.TRASH_KIND_FOLDER, copy.deepcopy(folder)))
+        if self.view_mode == "folder" and self.active_folder_id == folder_id:
+            inbox = self.ensure_inbox_list()
+            self.active_folder_id = None
+            self.set_active_list(inbox.get("id"), refresh=False)
+        self.save_items()
+        self.update_sidebar_list()
+        self.refresh_tree()
+        return "break"
+
+    def get_sidebar_visible_iids(self):
+        if not hasattr(self, "sidebar_listbox"):
+            return []
+        result = []
+        def collect(parent=""):
+            for iid in self.sidebar_listbox.get_children(parent):
+                result.append(iid)
+                try:
+                    if self.sidebar_listbox.item(iid, "open"):
+                        collect(iid)
+                except tk.TclError:
+                    continue
+        collect("")
+        return result
+
+    def toggle_sidebar_indent(self, event=None):
+        row = self.get_selected_sidebar_row()
+        if row and row[0] == "folder":
+            return self.indent_selected_sidebar_folder(row[1])
+        if not row or row[0] != "list":
+            return "break"
+        list_entry = next((entry for entry in self.lists if entry.get("id") == row[1]), None)
+        if not list_entry:
+            return "break"
+        if self.is_inbox_list(list_entry):
+            self.show_info("Eingang", "Der Eingang bleibt fest oberhalb aller Ordner und Listen.")
+            return "break"
+        if list_entry.get("folder_id"):
+            self.snapshot_undo()
+            list_entry["folder_id"] = None
+            self.save_items()
+            self.update_sidebar_list()
+            return "break"
+
+        selected_iid = f"list:{row[1]}"
+        visible = self.get_sidebar_visible_iids()
+        target_folder_id = None
+        if selected_iid in visible:
+            selected_index = visible.index(selected_iid)
+            for iid in reversed(visible[:selected_index]):
+                row_type, row_id = self.sidebar_iid_to_row.get(iid, (None, None))
+                if row_type == "folder":
+                    target_folder_id = row_id
+                    break
+        if not target_folder_id:
+            self.show_info("Hinweis", "Zum Einrücken muss oberhalb ein Ordner vorhanden sein. Lege zuerst über '+ Neuer Ordner' einen Ordner an.")
+            return "break"
+        self.snapshot_undo()
+        list_entry["folder_id"] = target_folder_id
+        self.save_items()
+        self.update_sidebar_list()
+        return "break"
+
+    def indent_selected_sidebar_folder(self, folder_id):
+        """Rückt einen Ordner in den nächsten Ordner oberhalb ein.
+
+        Genau wie bei einer Liste: gesucht wird die nächste Ordnerzeile über der
+        Auswahl, die kein eigener Nachfahre ist.
+        """
+        folder = self.get_folder(folder_id)
+        if folder is None:
+            return "break"
+        visible = self.get_sidebar_visible_iids()
+        selected_iid = f"folder:{folder_id}"
+        target_folder_id = None
+        if selected_iid in visible:
+            for iid in reversed(visible[: visible.index(selected_iid)]):
+                row_type, row_id = self.sidebar_iid_to_row.get(iid, (None, None))
+                if row_type == "folder" and row_id != folder_id:
+                    if self.can_move_folder_into(folder_id, row_id):
+                        target_folder_id = row_id
+                    break
+        if not target_folder_id:
+            self.show_info(
+                "Ordner einrücken",
+                "Oberhalb steht kein Ordner, in den dieser Ordner passt. Ein Ordner "
+                "lässt sich nicht in einen seiner eigenen Unterordner legen, und die "
+                f"Verschachtelung endet bei {self.MAX_FOLDER_DEPTH} Ebenen.",
+            )
+            return "break"
+        with self.sidebar_change() as change:
+            if self.move_sidebar_folder_into_folder(folder_id, target_folder_id):
+                self.sidebar_folder_open_states[target_folder_id] = True
+                change.mark()
+        return "break"
+
+    def outdent_selected_sidebar_folder(self, folder_id):
+        """Hebt einen Ordner eine Ebene nach oben, zum Elternteil seines Elternteils."""
+        folder = self.get_folder(folder_id)
+        if folder is None or folder.get("parent_id") is None:
+            return "break"
+        grandparent = self.folder_parent_id(folder.get("parent_id"))
+        with self.sidebar_change() as change:
+            moved = (
+                self.move_sidebar_folder_into_folder(folder_id, grandparent)
+                if grandparent
+                else self.move_sidebar_folder_to_end(folder_id)
+            )
+            if moved:
+                change.mark()
+        return "break"
+
+    def outdent_selected_sidebar_list(self, event=None):
+        row = self.get_selected_sidebar_row()
+        if row and row[0] == "folder":
+            return self.outdent_selected_sidebar_folder(row[1])
+        if not row or row[0] != "list":
+            return "break"
+        list_entry = next((entry for entry in self.lists if entry.get("id") == row[1]), None)
+        if list_entry and not self.is_inbox_list(list_entry):
+            if not list_entry.get("folder_id"):
+                return "break"
+            self.snapshot_undo()
+            list_entry["folder_id"] = None
+            self.save_items()
+            self.update_sidebar_list()
+        return "break"
+
+    def on_sidebar_drag_start(self, event):
+        self.sidebar_listbox.focus_set()
+        iid = self.sidebar_listbox.identify_row(event.y)
+        # Vor dem Setzen der Auswahl festhalten, was vorher ausgewählt war: Ein
+        # Klick auf eine bereits ausgewählte Zeile benennt um – wie im
+        # Dateimanager. Danach ist diese Auskunft nicht mehr zu bekommen.
+        self._sidebar_preselected = tuple(self.sidebar_listbox.selection())
+        self.cancel_sidebar_rename()
+        self.sidebar_drag_start_iid = iid if iid else None
+        self.sidebar_drag_start_y = event.y
+        self.sidebar_drag_has_moved = False
+        if not iid:
+            return
+        # Eine bestehende Mehrfachauswahl bleibt erhalten, solange der Zug in
+        # ihr beginnt. Shift und Strg sollen weiterhin die Auswahl erweitern.
+        if event.state & 0x0005:  # Shift oder Control
+            return
+        if iid not in self.sidebar_listbox.selection():
+            self.sidebar_listbox.selection_set(iid)
+        self.sidebar_listbox.focus(iid)
+
+    def on_sidebar_drag_motion(self, event):
+        if not self.sidebar_drag_start_iid:
+            return
+        if abs(event.y - self.sidebar_drag_start_y) > 5:
+            self.sidebar_drag_has_moved = True
+        target_iid, _target_row = self.identify_sidebar_drop_row(event)
+        self.clear_sidebar_drop_target_tags()
+        if target_iid and target_iid != self.sidebar_drag_start_iid:
+            try:
+                target_tree = self.get_sidebar_tree_for_iid(target_iid)
+                if target_tree is None:
+                    return
+                tags = set(target_tree.item(target_iid, "tags"))
+                tags.add("drop_target")
+                target_tree.item(target_iid, tags=tuple(tags))
+            except tk.TclError:
+                pass
+
+    def on_sidebar_drag_end(self, event):
+        source_iid = self.sidebar_drag_start_iid
+        target_iid, target_row = self.identify_sidebar_drop_row(event)
+        pointer_inside_sidebar = self.pointer_is_over_widget(self.sidebar_listbox, event)
+        moved = self.sidebar_drag_has_moved
+        self._sidebar_release_moved = moved
+        self.sidebar_drag_start_iid = None
+        self.sidebar_drag_has_moved = False
+        self.clear_sidebar_drop_target_tags()
+        if not source_iid or not moved or not pointer_inside_sidebar:
+            return
+        source_row = self.sidebar_iid_to_row.get(source_iid)
+        if not source_row:
+            return
+
+        # Mehrfachauswahl: alle markierten Listen gleiten gemeinsam in den Ordner.
+        selected_list_ids = self.get_selected_sidebar_list_ids()
+        if (
+            len(selected_list_ids) > 1
+            and source_row[0] == "list"
+            and source_row[1] in selected_list_ids
+            and target_row
+            and target_row[0] == "folder"
+        ):
+            with self.sidebar_change() as change:
+                for list_id in selected_list_ids:
+                    if self.move_sidebar_list_into_folder(list_id, target_row[1]):
+                        change.mark()
+                if change.changed:
+                    self.sidebar_folder_open_states[target_row[1]] = True
+            return
+
+        blocked = False
+        with self.sidebar_change() as change:
+            if source_row[0] == "list":
+                self.drop_sidebar_list(source_row[1], target_iid, target_row, event, change)
+            elif source_row[0] == "folder":
+                blocked = self.drop_sidebar_folder(
+                    source_row[1], target_iid, target_row, event, change
+                )
+        if blocked:
+            self.report_blocked_folder_move()
+
+    def drop_sidebar_list(self, list_id, target_iid, target_row, event, change):
+        """Legt eine gezogene Liste ab: in einen Ordner, neben eine Liste oder nach unten."""
+        if target_row and target_row[0] == "folder":
+            if self.move_sidebar_list_into_folder(list_id, target_row[1]):
+                change.mark()
+            return
+        if target_row and target_row[0] == "list" and target_row[1] != list_id:
+            place = "after"
+            try:
+                bbox = self.sidebar_listbox.bbox(target_iid)
+                if bbox:
+                    _x, y, _w, h = bbox
+                    place = "before" if event.y < y + h / 2 else "after"
+            except tk.TclError:
+                pass
+            if self.move_sidebar_list_relative(list_id, target_row[1], place=place):
+                change.mark()
+            return
+        if not target_row and self.move_sidebar_list_to_top_level_end(list_id):
+            change.mark()
+
+    def drop_sidebar_folder(self, folder_id, target_iid, target_row, event, change):
+        """Legt einen gezogenen Ordner ab. Gibt True zurück, wenn das Ziel unzulässig war.
+
+        Unzulässig heißt: Der Ordner sollte in einen seiner eigenen Unterordner
+        oder über die erlaubte Verschachtelung hinaus. Gemeldet wird das erst
+        nach dem Rahmen, damit der wirkungslose Rückgängig-Schritt vorher
+        verschwindet.
+        """
+        if target_row and target_row[0] == "folder" and target_row[1] != folder_id:
+            # Oberes und unteres Viertel sortieren, die Mitte legt hinein. Ohne
+            # diese Zonen wäre entweder das Umsortieren oder das Verschachteln
+            # per Maus nicht erreichbar.
+            zone = self.sidebar_drop_zone(target_iid, event.y)
+            if zone != "into":
+                if self.move_sidebar_folder_relative(folder_id, target_row[1], place=zone):
+                    change.mark()
+                return False
+            if not self.can_move_folder_into(folder_id, target_row[1]):
+                return True
+            if self.move_sidebar_folder_into_folder(folder_id, target_row[1]):
+                self.sidebar_folder_open_states[target_row[1]] = True
+                change.mark()
+            return False
+        if target_row and target_row[0] == "list":
+            # Auf eine Liste gezogen: der Ordner landet dort, wo die Liste liegt –
+            # im selben Ordner oder auf oberster Ebene.
+            list_entry = next(
+                (entry for entry in self.lists if entry.get("id") == target_row[1]), None
+            )
+            target_parent = list_entry.get("folder_id") if list_entry else None
+            if not self.can_move_folder_into(folder_id, target_parent):
+                return True
+            moved = (
+                self.move_sidebar_folder_into_folder(folder_id, target_parent)
+                if target_parent
+                else self.move_sidebar_folder_to_end(folder_id)
+            )
+            if moved:
+                change.mark()
+            return False
+        if not target_row and self.move_sidebar_folder_to_end(folder_id):
+            change.mark()
+        return False
+
+    def sidebar_drop_zone(self, target_iid, y):
+        """Wohin zeigt ein Ablegen auf einer Zeile: davor, hinein oder danach?
+
+        Das obere und das untere Viertel sortieren, die mittlere Hälfte legt in
+        den Ordner hinein. Ist die Zeilenhöhe nicht ermittelbar, gilt „hinein“ –
+        das ist die Absicht, die beim Ziehen auf einen Ordner überwiegt.
+        """
+        try:
+            bbox = self.sidebar_listbox.bbox(target_iid)
+        except tk.TclError:
+            bbox = None
+        if not bbox:
+            return "into"
+        _x, top, _w, height = bbox
+        if height <= 0:
+            return "into"
+        offset = (y - top) / height
+        if offset < 0.25:
+            return "before"
+        if offset > 0.75:
+            return "after"
+        return "into"
+
+    def clear_sidebar_drop_target_tags(self):
+        for tree_name in ("system_listbox", "sidebar_listbox"):
+            tree = getattr(self, tree_name, None)
+            if tree is None:
+                continue
+            stack = list(tree.get_children(""))
+            while stack:
+                iid = stack.pop()
+                stack.extend(tree.get_children(iid))
+                try:
+                    tags = tuple(tag for tag in tree.item(iid, "tags") if tag != "drop_target")
+                    tree.item(iid, tags=tags)
+                except tk.TclError:
+                    pass
+
+    def move_sidebar_list_into_folder(self, list_id, folder_id):
+        list_entry = next((entry for entry in self.lists if entry.get("id") == list_id), None)
+        if not list_entry or self.is_inbox_list(list_entry) or not any(folder.get("id") == folder_id for folder in self.folders):
+            return False
+        list_entry["folder_id"] = folder_id
+        # In der internen Reihenfolge ans Ende setzen, damit die Sortierung innerhalb des Ordners nachvollziehbar ist.
+        self.lists = [entry for entry in self.lists if entry.get("id") != list_id]
+        self.lists.append(list_entry)
+        return True
+
+    def move_sidebar_list_relative(self, source_id, target_id, place="after"):
+        if source_id == target_id:
+            return False
+        source = next((entry for entry in self.lists if entry.get("id") == source_id), None)
+        target = next((entry for entry in self.lists if entry.get("id") == target_id), None)
+        if not source or not target or self.is_inbox_list(source):
+            return False
+        self.lists = [entry for entry in self.lists if entry.get("id") != source_id]
+        target_index = next((idx for idx, entry in enumerate(self.lists) if entry.get("id") == target_id), len(self.lists))
+        source["folder_id"] = target.get("folder_id")
+        insert_index = target_index if place == "before" else target_index + 1
+        self.lists.insert(insert_index, source)
+        return True
+
+    def move_sidebar_list_to_top_level_end(self, list_id):
+        source = next((entry for entry in self.lists if entry.get("id") == list_id), None)
+        if not source or self.is_inbox_list(source):
+            return False
+        self.lists = [entry for entry in self.lists if entry.get("id") != list_id]
+        source["folder_id"] = None
+        self.lists.append(source)
+        return True
+
+    def move_sidebar_folder_relative(self, source_id, target_id, place="after"):
+        """Setzt einen Ordner neben einen anderen – auf dessen Ebene."""
+        if source_id == target_id:
+            return False
+        source = self.get_folder(source_id)
+        target = self.get_folder(target_id)
+        if not source or not target:
+            return False
+        # Ein Ordner darf nicht neben einen eigenen Nachfahren rutschen: er wäre
+        # danach sein eigener Vorfahre.
+        if self.folder_is_descendant(target_id, source_id):
+            return False
+        new_parent = target.get("parent_id")
+        if not self.can_move_folder_into(source_id, new_parent):
+            return False
+        self.folders = [entry for entry in self.folders if entry.get("id") != source_id]
+        target_index = next((idx for idx, entry in enumerate(self.folders) if entry.get("id") == target_id), len(self.folders))
+        insert_index = target_index if place == "before" else target_index + 1
+        source["parent_id"] = new_parent
+        self.folders.insert(insert_index, source)
+        return True
+
+    def move_sidebar_folder_into_folder(self, folder_id, target_id):
+        """Verschiebt einen Ordner in einen anderen – mit allem, was darin liegt."""
+        source = self.get_folder(folder_id)
+        if not source or not self.can_move_folder_into(folder_id, target_id):
+            return False
+        if source.get("parent_id") == (target_id or None):
+            return False
+        source["parent_id"] = target_id or None
+        # Innerhalb der gespeicherten Reihenfolge ans Ende, damit ein frisch
+        # verschobener Ordner unten im Ziel erscheint.
+        self.folders = [entry for entry in self.folders if entry.get("id") != folder_id]
+        self.folders.append(source)
+        return True
+
+    def move_sidebar_folder_to_end(self, folder_id):
+        """Hebt einen Ordner auf die oberste Ebene und ans Ende."""
+        source = self.get_folder(folder_id)
+        if not source:
+            return False
+        self.folders = [entry for entry in self.folders if entry.get("id") != folder_id]
+        source["parent_id"] = None
+        self.folders.append(source)
+        return True
+
+    def move_selected_folders_to_folder(self, target_folder_id):
+        """Kontextmenü-Weg: markierte Ordner in einen Ordner (oder nach oben)."""
+        rows = self.get_selected_sidebar_rows()
+        folder_ids = [row_id for row_type, row_id in rows if row_type == "folder"]
+        if not folder_ids:
+            return "break"
+        blocked = [
+            folder_id for folder_id in folder_ids
+            if not self.can_move_folder_into(folder_id, target_folder_id)
+        ]
+        with self.sidebar_change(refresh_tree=True) as change:
+            for folder_id in folder_ids:
+                if folder_id in blocked:
+                    continue
+                if target_folder_id is None:
+                    if self.folder_parent_id(folder_id) is not None and self.move_sidebar_folder_to_end(folder_id):
+                        change.mark()
+                elif self.move_sidebar_folder_into_folder(folder_id, target_folder_id):
+                    change.mark()
+            if change.changed and target_folder_id:
+                self.sidebar_folder_open_states[target_folder_id] = True
+        if blocked:
+            self.report_blocked_folder_move(len(blocked))
+        return "break"
+
+    def report_blocked_folder_move(self, count=1):
+        self.show_info(
+            "Ordner verschieben",
+            f"{count} Ordner konnte(n) nicht verschoben werden.\n\n"
+            "Ein Ordner lässt sich nicht in sich selbst oder in einen seiner eigenen "
+            f"Unterordner legen, und die Verschachtelung endet bei {self.MAX_FOLDER_DEPTH} Ebenen.",
+        )
+
+    def create_new_list(self, event=None):
+        return self.create_container_dialog("list", parent_id=self.active_folder_id if self.view_mode == "folder" else None)
+
+    def delete_current_list(self, event=None):
+        if not self.require_list_view():
+            return "break"
+        return self.delete_list_by_id(self.current_list().get("id"))
+
+    def validate_backup_schema(self, data, *, portable=False):
+        """Prüft ein Backup strikt, ohne den aktuellen App-Zustand zu ändern.
+
+        Alte reine JSON-Aufgabenlisten bleiben für die Migration zulässig. Ein
+        portables .glidebackup muss einem ausdrücklich unterstützten Glide-
+        Datenformat entsprechen; die Formate 4 bis 6 werden additiv gehoben.
+
+        Die Prüfung erfasst zusätzlich Labels und Papierkorb: Anhänge in
+        gelöschten, aber noch wiederherstellbaren Listen zählen als referenziert
+        und werden deshalb mitgesichert.
+        """
+        trash_item_roots = []
+        if isinstance(data, list):
+            if portable:
+                raise ValueError("Ein Komplettbackup benötigt das aktuelle Glide-Schema.")
+            raw_folders = []
+            raw_lists = [{"items": data}]
+        elif isinstance(data, dict):
+            version = data.get("version")
+            if portable:
+                if (
+                    data.get("app") != APP_NAME
+                    or not isinstance(version, int)
+                    or not self.MIN_PORTABLE_BACKUP_SCHEMA_VERSION <= version <= self.DATA_SCHEMA_VERSION
+                ):
+                    raise ValueError("Das Komplettbackup stammt nicht aus einer unterstützten Glide-Version.")
+            elif version is not None and (
+                not isinstance(version, int) or version < 1 or version > self.DATA_SCHEMA_VERSION
+            ):
+                raise ValueError(f"Die Datenformat-Version {version!r} wird nicht unterstützt.")
+            raw_folders = data.get("folders", [])
+            raw_lists = data.get("lists")
+            if not isinstance(raw_folders, list) or not isinstance(raw_lists, list):
+                raise ValueError("Das Backup enthält keine gültigen Ordner- und Listenfelder.")
+            raw_labels = data.get("labels", [])
+            raw_trash = data.get("trash", [])
+            if not isinstance(raw_labels, list) or not isinstance(raw_trash, list):
+                raise ValueError("Die Felder 'labels' und 'trash' müssen Listen sein.")
+            label_ids = set()
+            for label in raw_labels:
+                if not isinstance(label, dict):
+                    raise ValueError("Ein Label im Backup ist ungültig.")
+                label_id = label.get("id")
+                if portable and (not isinstance(label_id, str) or not label_id):
+                    raise ValueError("Ein Label im Komplettbackup besitzt keine ID.")
+                if isinstance(label_id, str) and label_id:
+                    if label_id in label_ids:
+                        raise ValueError("Das Backup enthält doppelte Label-IDs.")
+                    label_ids.add(label_id)
+                if portable and label.get("color") is not None and label.get("color") not in self.LABEL_COLOR_KEYS:
+                    raise ValueError("Ein Label im Komplettbackup besitzt eine unbekannte Farbe.")
+            # Gelöschte Listen bleiben vollwertige Daten: ihre Aufgaben werden
+            # zusätzlich geprüft, damit auch deren Anhänge im Backup landen.
+            for trash_entry in raw_trash:
+                if not isinstance(trash_entry, dict):
+                    raise ValueError("Ein Papierkorbeintrag im Backup ist ungültig.")
+                if trash_entry.get("kind") not in (
+                    None,
+                    self.TRASH_KIND_LIST,
+                    self.TRASH_KIND_FOLDER,
+                    self.TRASH_KIND_ITEM,
+                ):
+                    raise ValueError("Ein Papierkorbeintrag besitzt eine unbekannte Art.")
+                trashed_list = trash_entry.get("list")
+                if isinstance(trashed_list, dict):
+                    trashed_items = trashed_list.get("items", [])
+                    if not isinstance(trashed_items, list):
+                        raise ValueError("Das Aufgabenfeld einer gelöschten Liste ist ungültig.")
+                    trash_item_roots.append(trashed_items)
+                # Ein gelöschter Punkt ist vollwertige Aufgabe: Seine Anhänge
+                # müssen im Backup genauso mitwandern wie die einer Liste.
+                trashed_item = trash_entry.get("item")
+                if isinstance(trashed_item, dict):
+                    trash_item_roots.append([trashed_item])
+        else:
+            raise ValueError("Die ausgewählte Datei ist kein Glide-Backup.")
+
+        folder_ids = set()
+        for folder in raw_folders:
+            if not isinstance(folder, dict):
+                raise ValueError("Ein Ordner im Backup ist ungültig.")
+            folder_id = folder.get("id")
+            if portable and (not isinstance(folder_id, str) or not folder_id):
+                raise ValueError("Ein Ordner im Komplettbackup besitzt keine ID.")
+            if isinstance(folder_id, str) and folder_id:
+                if folder_id in folder_ids:
+                    raise ValueError("Das Backup enthält doppelte Ordner-IDs.")
+                folder_ids.add(folder_id)
+            if folder.get("labels") is not None and not isinstance(folder.get("labels"), list):
+                raise ValueError("Die Labels eines Ordners sind ungültig.")
+            parent_id = folder.get("parent_id")
+            if parent_id is not None and not isinstance(parent_id, str):
+                raise ValueError("Der Elternordner eines Ordners ist ungültig.")
+            if parent_id == folder_id and parent_id is not None:
+                raise ValueError("Ein Ordner kann nicht sein eigener Elternordner sein.")
+
+        # Format 9: Elternverweise dürfen nur auf bekannte Ordner zeigen und
+        # keinen Kreis bilden. Ein Kreis würde jeden rekursiven Durchlauf –
+        # Seitenleiste, Papierkorb, Export – endlos machen.
+        parent_map = {
+            folder.get("id"): folder.get("parent_id")
+            for folder in raw_folders
+            if isinstance(folder, dict) and isinstance(folder.get("id"), str)
+        }
+        for folder_id, parent_id in parent_map.items():
+            if parent_id is None:
+                continue
+            if parent_id not in folder_ids:
+                raise ValueError("Ein Ordner verweist auf einen unbekannten Elternordner.")
+            seen = {folder_id}
+            current = parent_id
+            while current is not None:
+                if current in seen:
+                    raise ValueError("Die Ordnerstruktur im Backup enthält einen Kreis.")
+                seen.add(current)
+                current = parent_map.get(current)
+
+        list_ids = set()
+        item_ids = set()
+        referenced_storages = set()
+        containers = list(raw_folders) + list(raw_lists)
+        for deleted in (data.get("trash", []) if isinstance(data, dict) else []):
+            containers.extend(deleted[key] for key in ("folder", "list")
+                              if isinstance(deleted.get(key), dict))
+        for container in containers:
+            if not isinstance(container, dict):
+                raise ValueError("Eine Liste oder ein Ordner im Backup ist ungültig.")
+            attachments = container.get("attachments", [])
+            if not isinstance(attachments, list):
+                raise ValueError("Die Anhänge einer Liste oder eines Ordners sind ungültig.")
+            for attachment in attachments:
+                if not isinstance(attachment, dict):
+                    raise ValueError("Ein Anhang im Backup ist ungültig.")
+                referenced_storages.add(self.validate_attachment_storage(attachment.get("storage")))
+        item_count = 0
+        for list_entry in raw_lists:
+            if not isinstance(list_entry, dict):
+                raise ValueError("Eine Liste im Backup ist ungültig.")
+            list_id = list_entry.get("id")
+            if portable and (not isinstance(list_id, str) or not list_id):
+                raise ValueError("Eine Liste im Komplettbackup besitzt keine ID.")
+            if isinstance(list_id, str) and list_id:
+                if list_id in list_ids:
+                    raise ValueError("Das Backup enthält doppelte Listen-IDs.")
+                list_ids.add(list_id)
+            folder_id = list_entry.get("folder_id")
+            if folder_id is not None and folder_id not in folder_ids:
+                raise ValueError("Eine Liste verweist auf einen unbekannten Ordner.")
+            if list_entry.get("labels") is not None and not isinstance(list_entry.get("labels"), list):
+                raise ValueError("Die Labels einer Liste sind ungültig.")
+            raw_items = list_entry.get("items", [])
+            if not isinstance(raw_items, list):
+                raise ValueError("Das Aufgabenfeld einer Liste ist ungültig.")
+            stack = [(entry, 0) for entry in reversed(raw_items)]
+            while stack:
+                item, depth = stack.pop()
+                item_count += 1
+                if item_count > self.MAX_BACKUP_ITEMS:
+                    raise ValueError("Das Backup enthält zu viele Aufgaben.")
+                if depth > self.MAX_ITEM_DEPTH:
+                    raise ValueError("Das Backup ist zu tief verschachtelt.")
+                if isinstance(item, str) and not portable:
+                    continue
+                if not isinstance(item, dict):
+                    raise ValueError("Ein Aufgabenpunkt im Backup ist ungültig.")
+                item_id = item.get("id")
+                if portable and (not isinstance(item_id, str) or not item_id):
+                    raise ValueError("Ein Aufgabenpunkt im Komplettbackup besitzt keine ID.")
+                if isinstance(item_id, str) and item_id:
+                    if item_id in item_ids:
+                        raise ValueError("Das Backup enthält doppelte Aufgaben-IDs.")
+                    item_ids.add(item_id)
+                if portable and (not isinstance(item.get("text"), str) or not item.get("text").strip()):
+                    raise ValueError("Ein Aufgabenpunkt im Komplettbackup besitzt keinen Text.")
+                item_color = item.get("color")
+                if portable and item_color is not None and item_color not in self.ITEM_COLOR_KEYS:
+                    raise ValueError("Ein Aufgabenpunkt im Komplettbackup besitzt eine ungültige Farbe.")
+                item_kind = item.get("kind")
+                if portable and item_kind is not None and item_kind not in self.ITEM_KINDS:
+                    raise ValueError("Ein Punkt im Komplettbackup besitzt eine unbekannte Art.")
+                children = item.get("children", [])
+                if not isinstance(children, list):
+                    raise ValueError("Die Unterpunkte einer Aufgabe sind ungültig.")
+                stack.extend((child, depth + 1) for child in reversed(children))
+                attachments = item.get("attachments", [])
+                if not isinstance(attachments, list):
+                    raise ValueError("Die Anhänge einer Aufgabe sind ungültig.")
+                for attachment in attachments:
+                    if not isinstance(attachment, dict):
+                        raise ValueError("Ein Anhang im Backup ist ungültig.")
+                    storage = self.validate_attachment_storage(attachment.get("storage"))
+                    referenced_storages.add(storage)
+                item_labels = item.get("labels")
+                if item_labels is not None and not isinstance(item_labels, list):
+                    raise ValueError("Die Labels einer Aufgabe sind ungültig.")
+
+        # Aufgaben aus dem Papierkorb durchlaufen dieselbe Prüfung. Ihre Anhänge
+        # gehören zwingend ins Backup, sonst wäre eine Wiederherstellung
+        # unvollständig.
+        for trashed_items in trash_item_roots:
+            stack = [(entry, 0) for entry in reversed(trashed_items)]
+            while stack:
+                item, depth = stack.pop()
+                item_count += 1
+                if item_count > self.MAX_BACKUP_ITEMS:
+                    raise ValueError("Das Backup enthält zu viele Aufgaben.")
+                if depth > self.MAX_ITEM_DEPTH:
+                    raise ValueError("Das Backup ist zu tief verschachtelt.")
+                if not isinstance(item, dict):
+                    if isinstance(item, str) and not portable:
+                        continue
+                    raise ValueError("Ein Aufgabenpunkt im Papierkorb ist ungültig.")
+                item_id = item.get("id")
+                if isinstance(item_id, str) and item_id:
+                    if item_id in item_ids:
+                        raise ValueError("Das Backup enthält doppelte Aufgaben-IDs.")
+                    item_ids.add(item_id)
+                children = item.get("children", [])
+                if not isinstance(children, list):
+                    raise ValueError("Die Unterpunkte einer gelöschten Aufgabe sind ungültig.")
+                stack.extend((child, depth + 1) for child in reversed(children))
+                attachments = item.get("attachments", [])
+                if not isinstance(attachments, list):
+                    raise ValueError("Die Anhänge einer gelöschten Aufgabe sind ungültig.")
+                for attachment in attachments:
+                    if not isinstance(attachment, dict):
+                        raise ValueError("Ein Anhang im Papierkorb ist ungültig.")
+                    referenced_storages.add(self.validate_attachment_storage(attachment.get("storage")))
+
+        if isinstance(data, dict):
+            active_list_id = data.get("active_list_id")
+            active_folder_id = data.get("active_folder_id")
+            if active_list_id is not None and active_list_id not in list_ids:
+                raise ValueError("Das Backup verweist auf eine unbekannte aktive Liste.")
+            if active_folder_id is not None and active_folder_id not in folder_ids:
+                raise ValueError("Das Backup verweist auf einen unbekannten aktiven Ordner.")
+        return referenced_storages
+
+    def normalize_lists_data(self, data):
+        """Wandelt gespeicherte Daten in den geprüften Laufzeitzustand.
+
+        Setzt neben dem Rückgabewert auch ``self.folders``, ``self.labels`` und
+        ``self.trash``; der Aufrufer sichert diese Felder bei Bedarf vorher.
+        """
+        self.folders = []
+        self.labels = []
+        self.trash = []
+        if isinstance(data, dict):
+            if not isinstance(data.get("lists"), list):
+                raise ValueError("Die Datei enthält kein gültiges Listen-Schema.")
+            version = data.get("version")
+            if version is not None and (not isinstance(version, int) or version < 1 or version > self.DATA_SCHEMA_VERSION):
+                raise ValueError(f"Die Datenformat-Version {version!r} wird nicht unterstützt.")
+            if not isinstance(data.get("folders", []), list):
+                raise ValueError("Das Feld 'folders' muss eine Liste sein.")
+            if not isinstance(data.get("labels", []), list):
+                raise ValueError("Das Feld 'labels' muss eine Liste sein.")
+            if not isinstance(data.get("trash", []), list):
+                raise ValueError("Das Feld 'trash' muss eine Liste sein.")
+            # Migration auf Format 7: fehlende Labels und ein fehlender
+            # Papierkorb bedeuten schlicht "leer"; kein destruktiver Schritt.
+            # Migration auf Format 8: die beiden festen Labels entstehen, falls
+            # sie fehlen – ebenfalls rein additiv.
+            self.labels = self.normalize_labels_data(data.get("labels", []))
+            self.ensure_system_labels()
+            known_label_ids = {label.get("id") for label in self.labels}
+            folder_ids = set()
+            raw_folders = data.get("folders", [])
+            for folder in raw_folders:
+                if not isinstance(folder, dict):
+                    continue
+                folder_id = folder.get("id") if isinstance(folder.get("id"), str) and folder.get("id") else None
+                while not folder_id or folder_id in folder_ids:
+                    folder_id = uuid.uuid4().hex
+                title = str(folder.get("title") or "Ordner").strip() or "Ordner"
+                color = folder.get("color") if folder.get("color") in self.LIST_COLOR_KEYS else None
+                note = str(folder.get("note") or "")
+                folder_labels = self.normalize_item_labels(folder.get("labels"), known_label_ids)
+                # Format 9: Elternverweis übernehmen. Ob er gültig ist, klärt
+                # anschließend normalize_folder_parents – zu diesem Zeitpunkt
+                # sind noch nicht alle Ordner bekannt.
+                raw_parent = folder.get("parent_id")
+                parent_id = raw_parent if isinstance(raw_parent, str) and raw_parent else None
+                self.folders.append(
+                    self.new_folder_object(title, folder_id, color, note, folder_labels, parent_id,
+                                           folder.get("attachments"))
+                )
+                folder_ids.add(folder_id)
+            # Unbekannte Eltern, Kreise und zu große Tiefen aufräumen, bevor
+            # irgendetwas die Ordnerstruktur durchläuft.
+            self.normalize_folder_parents()
+
+            lists = []
+            list_ids = set()
+            item_ids = set()
+            item_counter = [0]
+            for entry in data.get("lists", []):
+                if not isinstance(entry, dict):
+                    continue
+                title = str(entry.get("title") or "Meine Liste").strip() or "Meine Liste"
+                list_id = entry.get("id") if isinstance(entry.get("id"), str) and entry.get("id") else None
+                while not list_id or list_id in list_ids:
+                    list_id = uuid.uuid4().hex
+                list_ids.add(list_id)
+                folder_id = entry.get("folder_id") if entry.get("folder_id") in folder_ids else None
+                items = self.normalize_items(entry.get("items", []), item_ids, 0, item_counter, known_label_ids)
+                color = entry.get("color") if entry.get("color") in self.LIST_COLOR_KEYS else None
+                note = str(entry.get("note") or "")
+                system_role = "inbox" if entry.get("system_role") == "inbox" else None
+                list_labels = self.normalize_item_labels(entry.get("labels"), known_label_ids)
+                lists.append(
+                    self.new_list_object(title, items, list_id, folder_id, color, note, system_role,
+                                         list_labels, entry.get("attachments"))
+                )
+
+            self.trash = self.normalize_trash_data(
+                data.get("trash", []), item_ids, item_counter, known_label_ids
+            )
+            # Art und festes Label sind zwei Sichten auf dieselbe Eigenschaft.
+            # Nach dem Laden werden sie einmal vollständig abgeglichen – über
+            # denselben Weg, den auch spätere Änderungen nehmen.
+            self.sync_all_item_kind_labels(extra_lists=lists)
+            active_id = data.get("active_list_id") if isinstance(data.get("active_list_id"), str) else None
+            return lists, active_id
+
+        # Abwärtskompatibilität: alte Speicherdatei war direkt eine Item-Liste.
+        if not isinstance(data, list):
+            raise ValueError("Die Datei ist weder ein Glide-Dokument noch eine alte Aufgabenliste.")
+        title = self.settings.get("title", "Meine Liste") if isinstance(self.settings, dict) else "Meine Liste"
+        self.folders = []
+        return [self.new_list_object(str(title).strip() or "Meine Liste", self.normalize_items(data))], None
+
+    def normalize_trash_data(self, data, item_ids=None, item_counter=None, known_label_ids=None):
+        """Bereinigt den Papierkorb; unvollständige Einträge werden verworfen."""
+        entries = []
+        if not isinstance(data, list):
+            return entries
+        seen_ids = set()
+        for raw in data:
+            if not isinstance(raw, dict):
+                continue
+            kind = raw.get("kind")
+            if kind not in (self.TRASH_KIND_LIST, self.TRASH_KIND_FOLDER, self.TRASH_KIND_ITEM):
+                continue
+            payload = raw.get({
+                self.TRASH_KIND_FOLDER: "folder",
+                self.TRASH_KIND_ITEM: "item",
+            }.get(kind, "list"))
+            if not isinstance(payload, dict):
+                continue
+            entry_id = raw.get("id") if isinstance(raw.get("id"), str) and raw.get("id") else None
+            while not entry_id or entry_id in seen_ids:
+                entry_id = uuid.uuid4().hex
+            seen_ids.add(entry_id)
+            if kind == self.TRASH_KIND_ITEM:
+                # Ein Punkt durchläuft dieselbe Normalisierung wie in einer Liste;
+                # so gelten für ihn im Papierkorb genau dieselben Regeln.
+                normalized = self.normalize_items([payload], item_ids, 0, item_counter, known_label_ids)
+                if not normalized:
+                    continue
+                raw_origin = raw.get("origin") if isinstance(raw.get("origin"), dict) else {}
+                entries.append({
+                    "id": entry_id,
+                    "kind": kind,
+                    "deleted_at": str(raw.get("deleted_at") or ""),
+                    "origin_folder_id": None,
+                    "origin_folder_title": "",
+                    "list": None,
+                    "folder": None,
+                    "item": normalized[0],
+                    "origin": {
+                        "list_id": raw_origin.get("list_id") if isinstance(raw_origin.get("list_id"), str) else None,
+                        "list_title": str(raw_origin.get("list_title") or ""),
+                        "parent_item_id": raw_origin.get("parent_item_id")
+                        if isinstance(raw_origin.get("parent_item_id"), str)
+                        else None,
+                        "index": raw_origin.get("index") if isinstance(raw_origin.get("index"), int) else None,
+                    },
+                })
+                if len(entries) >= self.MAX_TRASH_ENTRIES:
+                    break
+                continue
+            title = str(payload.get("title") or ("Ordner" if kind == self.TRASH_KIND_FOLDER else "Liste")).strip()
+            color = payload.get("color") if payload.get("color") in self.LIST_COLOR_KEYS else None
+            note = str(payload.get("note") or "")
+            payload_labels = self.normalize_item_labels(payload.get("labels"), known_label_ids)
+            if kind == self.TRASH_KIND_FOLDER:
+                stored = self.new_folder_object(title, payload.get("id"), color, note, payload_labels,
+                                               parent_id=payload.get("parent_id"),
+                                               attachments=payload.get("attachments"))
+            else:
+                stored = self.new_list_object(
+                    title,
+                    self.normalize_items(payload.get("items", []), item_ids, 0, item_counter, known_label_ids),
+                    payload.get("id") if isinstance(payload.get("id"), str) else None,
+                    None,
+                    color,
+                    note,
+                    None,
+                    payload_labels,
+                    payload.get("attachments"),
+                )
+            trash_entry = {
+                "id": entry_id,
+                "kind": kind,
+                "deleted_at": str(raw.get("deleted_at") or ""),
+                "origin_folder_id": raw.get("origin_folder_id")
+                if isinstance(raw.get("origin_folder_id"), str) and raw.get("origin_folder_id")
+                else None,
+                "origin_folder_title": str(raw.get("origin_folder_title") or ""),
+                "list": stored if kind == self.TRASH_KIND_LIST else None,
+                "folder": stored if kind == self.TRASH_KIND_FOLDER else None,
+                "item": None,
+                "origin": None,
+            }
+            entries.append(trash_entry)
+            if len(entries) >= self.MAX_TRASH_ENTRIES:
+                break
+        return entries
+
+    # -----------------------------
+    # UI
+    # -----------------------------
+    def create_ui(self):
+        self.create_menubar()
+        self.shell = self.register_theme_widget(tk.Frame(self.root, bg=self.theme["bg"]), "bg")
+        self.shell.pack(fill="both", expand=True, padx=28, pady=(4, 14))
+
+        # Kopfbereich über die volle Fensterbreite: Titel wieder ganz links.
+        top_frame = self.register_theme_widget(tk.Frame(self.shell, bg=self.theme["bg"]), "bg")
+        top_frame.pack(fill="x")
+        self.header_frame = top_frame
+        top_frame.bind("<Configure>", self.update_header_title, add="+")
+
+        title_block = self.register_theme_widget(tk.Frame(top_frame, bg=self.theme["bg"]), "bg")
+        self.title_block = title_block
+        title_block.pack(side="left", fill="x", expand=True)
+
+        title_row = self.register_theme_widget(tk.Frame(title_block, bg=self.theme["bg"]), "bg")
+        title_row.pack(anchor="w", fill="x", pady=(0, 4))
+
+        self.title_label = self.register_theme_widget(
+            tk.Label(
+                title_row,
+                text=self.app_title,
+                font=self.header_title_font(),
+                bg=self.theme["bg"],
+                fg=self.theme["text"],
+                cursor="hand2",
+            ),
+            "bg",
+            "text",
+        )
+        self.title_label.pack(side="left", anchor="w")
+        self.title_label.bind("<Double-Button-1>", lambda event: self.edit_title())
+
+        self.note_preview_label = self.register_theme_widget(
+            tk.Label(
+                title_block,
+                text="Beschreibungstext hinzufügen …",
+                font=app_font(9, "italic"),
+                bg=self.theme["bg"],
+                fg=self.theme["muted"],
+                anchor="w",
+                justify="left",
+                cursor="hand2",
+            ),
+            "bg",
+            "muted",
+        )
+        self.note_preview_label.pack(anchor="w", fill="x")
+        self.note_preview_label.bind("<Button-1>", self.edit_page_note)
+
+        self.theme_button = self.make_button(
+            top_frame,
+            text=self.theme_button_text(),
+            command=self.toggle_theme,
+            color_key="theme_toggle",
+            width=122,
+        )
+        self.theme_button.pack(side="right", padx=(12, 0), pady=(0, 4))
+
+        # Rechte Kopfspalte: Fortschrittszeile oben, darunter die Labels der
+        # geöffneten Liste oder des geöffneten Ordners. Beide stehen hier und
+        # nicht im Titelblock, weil die Labelzeile sonst je nach Liste da wäre
+        # oder nicht – und alles darunter mitwandern würde. Die Zeile behält
+        # deshalb ihre Höhe, auch wenn sie leer ist.
+        self.header_meta = self.register_theme_widget(
+            tk.Frame(top_frame, bg=self.theme["bg"]), "bg"
+        )
+        self.header_meta.pack(side="right", padx=(0, 16), pady=(0, 4))
+
+        self.page_labels_frame = self.register_theme_widget(
+            tk.Frame(self.header_meta, bg=self.theme["bg"]), "bg"
+        )
+        self.page_label_widgets = []
+
+
+        # Unterhalb des Titels: links das Listenregister, rechts die aktive
+        # Liste. Eingabe- und Suchzeile liegen seit 3.0 beide im rechten
+        # Bereich – dadurch beginnt die Übersicht der Listen und Ordner ganz
+        # oben, auf Höhe der Eingabe.
+        self.main_area = self.register_theme_widget(tk.Frame(self.shell, bg=self.theme["bg"]), "bg")
+        self.main_area.pack(fill="both", expand=True, pady=(4, 0))
+
+        self.sidebar_shell = self.make_rounded_container(
+            self.main_area,
+            fill_key="card",
+            outline_key="line",
+            radius=18,
+            padding=10,
+            width=250,
+        )
+        # Oben bündig mit der Suchzeile des rechten Bereichs.
+        self.sidebar_shell.pack(side="left", fill="y", padx=(0, 18), pady=(0, 14))
+        self.sidebar_shell.pack_propagate(False)
+        self.sidebar_frame = self.register_theme_widget(tk.Frame(self.sidebar_shell.inner, bg=self.theme["card"]), "card")
+        self.sidebar_frame.pack(fill="both", expand=True)
+        self.create_list_sidebar()
+
+        self.content_frame = self.register_theme_widget(tk.Frame(self.main_area, bg=self.theme["bg"]), "bg")
+        self.content_frame.pack(side="left", fill="both", expand=True)
+
+        # Eingabezeile über der Liste. Sie stand bis 2.12.0 über die volle
+        # Fensterbreite und schob damit die Listenübersicht nach unten. Jetzt
+        # beginnt sie auf derselben Flucht wie das Suchfeld, und die
+        # Seitenleiste startet auf ihrer Höhe.
+        input_frame = self.register_theme_widget(
+            tk.Frame(self.content_frame, bg=self.theme["bg"]), "bg"
+        )
+        self.input_frame = input_frame
+        input_frame.pack(fill="x", pady=(0, 10))
+        input_frame.bind("<Configure>", self.update_advanced_button_visibility)
+
+        self.entry_border = self.make_rounded_container(
+            input_frame,
+            fill_key="input",
+            outline_key="input_border",
+            radius=16,
+            padding=1,
+            height=42,
+            inner_pad_x=10,
+            inner_pad_y=5,
+        )
+        self.entry_border.pack(side="left", fill="x", expand=True, padx=(0, 10))
+        self.entry_border.pack_propagate(False)
+        self.entry_inner = self.entry_border.inner
+
+        self.entry = tk.Entry(
+            self.entry_inner,
+            font=app_font(12),
+            bg=self.theme["input"],
+            fg=self.theme["text"],
+            insertbackground=self.theme["text"],
+            relief="flat",
+            bd=0,
+            borderwidth=0,
+            highlightthickness=0,
+            highlightbackground=self.theme["input"],
+            highlightcolor=self.theme["input"],
+            selectborderwidth=0,
+        )
+        self.entry.pack(fill="both", expand=True, ipady=0, padx=(2, 2), pady=0)
+        self.entry.bind("<Return>", self.on_entry_return)
+        self.entry.bind("<FocusIn>", self.clear_entry_placeholder)
+        self.entry.bind("<FocusOut>", self.set_entry_placeholder)
+
+        self.add_button = self.make_button(
+            input_frame,
+            text="Hinzufügen",
+            command=self.add_item,
+            color_key="export",
+            width=132,
+        )
+        self.add_button.pack(side="right")
+
+        # Die Schnelleingabe bleibt der kürzeste Weg: tippen, Enter, fertig.
+        # Daneben führt „Erweitert“ in dieselbe Maske wie das Bearbeiten – für
+        # den Fall, dass Fälligkeit, Labels oder ein Anhang gleich mit sollen.
+        self.advanced_add_button = self.make_button(
+            input_frame,
+            text="Erweitert",
+            command=self.add_item_advanced,
+            color_key="due_action",
+            width=112,
+        )
+        self.advanced_add_button.pack(side="right", padx=(0, 10))
+
+        # Suche und Filter über der Liste.
+        self.search_frame = self.register_theme_widget(
+            tk.Frame(self.content_frame, bg=self.theme["bg"]), "bg"
+        )
+        self.search_frame.pack(fill="x", pady=(0, 12))
+        self.search_frame.bind("<Configure>", self.update_responsive_filter_visibility)
+
+        self.clear_search_button = self.make_button(
+            self.search_frame,
+            text="Suche löschen",
+            command=self.clear_search,
+            color_key="flag",
+            width=126,
+            height=38,
+            radius=16,
+            font=app_font(9, "bold"),
+        )
+        self.clear_search_button.pack(side="right")
+
+        self.hide_done_box_border = self.make_rounded_container(
+            self.search_frame,
+            fill_key="input",
+            outline_key="input_border",
+            radius=16,
+            padding=1,
+            width=178,
+            height=42,
+            inner_pad_x=10,
+            inner_pad_y=5,
+        )
+        self.hide_done_box_border.pack(side="right", fill="y", padx=(10, 10))
+        self.hide_done_box_border.pack_propagate(False)
+        self.hide_done_box_inner = self.hide_done_box_border.inner
+
+        self.hide_done_check = tk.Checkbutton(
+            self.hide_done_box_inner,
+            text="Nur offene Punkte",
+            variable=self.hide_done_var,
+            command=self.on_open_only_changed,
+            bg=self.theme["input"],
+            fg=self.theme["text"],
+            activebackground=self.theme["input"],
+            activeforeground=self.theme["text"],
+            selectcolor=self.theme["input"],
+            relief="flat",
+            bd=0,
+            highlightthickness=0,
+            font=app_font(10),
+            cursor="hand2",
+            takefocus=1,
+            anchor="w",
+        )
+        self.hide_done_check.pack(fill="both", expand=True, ipady=0, padx=(2, 2), pady=0)
+
+        self.search_border = self.make_rounded_container(
+            self.search_frame,
+            fill_key="input",
+            outline_key="input_border",
+            radius=16,
+            padding=1,
+            height=42,
+            inner_pad_x=10,
+            inner_pad_y=5,
+        )
+        self.search_border.pack(side="left", fill="x", expand=True, padx=(0, 10))
+        self.search_border.pack_propagate(False)
+        self.search_inner = self.search_border.inner
+
+        self.search_entry = tk.Entry(
+            self.search_inner,
+            textvariable=self.search_var,
+            font=app_font(11),
+            bg=self.theme["input"],
+            fg=self.theme["text"],
+            insertbackground=self.theme["text"],
+            relief="flat",
+            bd=0,
+            borderwidth=0,
+            highlightthickness=0,
+            highlightbackground=self.theme["input"],
+            highlightcolor=self.theme["input"],
+            selectborderwidth=0,
+        )
+        self.search_entry.pack(fill="both", expand=True, ipady=0, padx=(2, 2), pady=0)
+        self.search_entry.bind("<FocusIn>", self.clear_search_placeholder)
+        self.search_entry.bind("<FocusOut>", self.set_search_placeholder)
+        self.search_var.trace_add("write", lambda *_: self.refresh_tree())
+        self.set_entry_placeholder()
+        self.set_search_placeholder()
+
+
+        # Listenbereich mit echter Hierarchie über Treeview
+        self.list_frame_outer = self.make_rounded_container(
+            self.content_frame,
+            fill_key="card",
+            outline_key="line",
+            radius=18,
+            padding=10,
+        )
+        self.list_frame_outer.pack(fill="both", expand=True, pady=(6, 0))
+        self.list_frame = self.register_theme_widget(tk.Frame(self.list_frame_outer.inner, bg=self.theme["card"]), "card")
+        self.list_frame.pack(fill="both", expand=True)
+
+        # Spaltenfolge: Text – Fälligkeit – Labels – rechter Innenabstand.
+        # Die Labelspalte steht damit ganz rechts neben der Fälligkeit und
+        # verschwindet vollständig, solange keine Labels angelegt sind.
+        self.tree = ttk.Treeview(
+            self.list_frame,
+            columns=("due", "labels", "due_padding", "text_gap"),
+            displaycolumns=("text_gap", "due", "labels", "due_padding"),
+            show="tree",
+            selectmode="extended",
+            style="App.Treeview",
+            takefocus=True,
+        )
+        self.tree.pack(side="left", fill="both", expand=True, padx=(14, 4), pady=14)
+        self.tree.column("text_gap", anchor="w", stretch=False, minwidth=0,
+                         width=self.TASK_METADATA_GAP)
+        self.tree.heading("#0", text="")
+        self.tree.column("#0", anchor="w", stretch=True, width=360, minwidth=180)
+        due_width = self.due_column_width()
+        # Linksbündig, nicht rechtsbündig: Rechtsbündig richtet sich die Zeile
+        # am rechten Zellenrand aus, und weil Datums- und Labeltexte
+        # unterschiedlich breit sind, stand das Symbol jeder Zeile an einer
+        # anderen Stelle – die Spalte wirkte von Zeile zu Zeile verschoben.
+        # Links ausgerichtet stehen Kalender- und Labelsymbol untereinander;
+        # die Spalte ist ohnehin genau so breit wie ihr längster Inhalt.
+        self.tree.column(
+            "due",
+            anchor="w",
+            stretch=False,
+            width=due_width,
+            minwidth=due_width,
+        )
+        self.tree.column(
+            "labels",
+            anchor="w",
+            stretch=False,
+            width=0,
+            minwidth=0,
+        )
+        self.tree.column(
+            "due_padding",
+            anchor="e",
+            stretch=False,
+            width=self.DUE_RIGHT_PADDING_WIDTH,
+            minwidth=self.DUE_RIGHT_PADDING_WIDTH,
+        )
+
+        self.scrollbar = ThemedAutoScrollbar(
+            self.list_frame,
+            bg_color=self.theme["card"],
+            track_color=self.theme["card"],
+            thumb_color=self.theme["input_border"],
+            active_thumb_color=self.theme["muted"],
+            width=14,
+        )
+        self.scrollbar_visible = False
+        self.tree.config(yscrollcommand=self.on_tree_scroll)
+        self.scrollbar.set_command(self.tree.yview)
+
+        # Drag & Drop: Ohne Shift wird nur die Reihenfolge geändert.
+        # Mit Shift + Drag auf einen Punkt wird ein Unterpunkt erstellt.
+        # Shift + Klick wird beim Loslassen als Bereichsauswahl ausgewertet.
+        # Shift + Drag bleibt dadurch weiterhin für "Unterpunkt erstellen" nutzbar.
+        self.tree.bind("<ButtonPress-1>", self.on_drag_start)
+        self.tree.bind("<B1-Motion>", self.on_drag_motion)
+        self.tree.bind("<ButtonRelease-1>", self.on_drag_end)
+        self.tree.bind("<Double-Button-1>", self.activate_tree_row)
+        self.tree.bind("<Return>", self.activate_tree_row)
+        self.tree.bind("<Button-3>", self.show_item_context_menu)
+        self.tree.bind("<Button-2>", self.show_item_context_menu)
+        self.bind_context_menu_modifier(self.tree, self.show_item_context_menu)
+        self.tree.bind("<Configure>", self.sync_task_tree_columns, add="+")
+        self.tree.bind("<Tab>", self.toggle_indent_selected)
+        self.tree.bind("<space>", self.toggle_done)
+        # Verschieben ohne Maus: dieselbe Belegung wie in der Seitenleiste.
+        self.tree.bind("<Alt-Up>", lambda event: self.move_selected_items(-1))
+        self.tree.bind("<Alt-Down>", lambda event: self.move_selected_items(1))
+        self.tree.bind("<Alt-Left>", self.outdent_selected)
+        self.tree.bind("<Alt-Right>", self.indent_selected)
+        # Fortsetzungs- und Abstandszeilen sind Darstellung, keine Punkte:
+        # die Pfeiltasten springen darüber hinweg.
+        self.tree.bind("<Up>", lambda event: self.move_tree_focus(-1, event))
+        self.tree.bind("<Down>", lambda event: self.move_tree_focus(1, event))
+        self.bind_hover_highlight(self.tree)
+        self.bind_mousewheel(self.tree)
+
+        self.hint_label = self.register_theme_widget(
+            tk.Label(
+                self.content_frame,
+                text=(
+                    "Drag & Drop: Reihenfolge ändern · Auf die Mitte einer Gruppe ziehen: hineinlegen · "
+                    "Shift + Drag: Unterpunkt · "
+                    f"Shift + Klick: Bereich auswählen · {self.selection_modifier_name()} + Klick: einzeln dazu · "
+                    "Tab: ein-/ausrücken · "
+                    "Rechtsklick: Details, Wichtigkeit, Fälligkeit, Farbe und Labels · F2: Bearbeiten"
+                ),
+                font=app_font(9),
+                bg=self.theme["bg"],
+                fg=self.theme["muted"],
+                wraplength=900,
+                justify="left",
+            ),
+            "bg",
+            "muted",
+        )
+        self.hint_label.pack(anchor="w", fill="x", pady=(self.CONTENT_SECTION_GAP, 0))
+        self.hint_label.bind("<Configure>", lambda event: self.hint_label.configure(wraplength=max(240, event.width)))
+
+        # Steuer-Buttons: Outline standardmäßig, gefüllt beim Hover
+        # Gemeinsamer Helfer: ein Paar zusammengehöriger Aktionen in einer sichtbaren Box.
+        def make_action_group(parent, column, padx, height):
+            group = self.make_rounded_container(
+                parent, fill_key="card", outline_key="line", radius=16, padding=7, height=height
+            )
+            group.grid(row=0, column=column, sticky="ew", padx=padx)
+            group.inner.columnconfigure((0, 1), weight=1, uniform="pair")
+            return group
+
+        top_opts = {"width": 104, "height": 42, "radius": 17, "font": app_font(9, "bold"), "bg_key": "card"}
+        util_opts = {"width": 100, "height": 38, "radius": 17, "font": app_font(8, "bold"), "bg_key": "card"}
+
+        # Erste Aktionsreihe – drei gruppierte Paare:
+        # Liste leeren & Löschen · Wichtigkeit & Fällig · Export & Import.
+        button_frame = self.register_theme_widget(tk.Frame(self.content_frame, bg=self.theme["bg"]), "bg")
+        # Als Attribut, damit die Hinweiszeile nach dem Ausblenden wieder
+        # oberhalb der Schaltflächen einsortiert werden kann.
+        self.button_frame = button_frame
+        button_frame.pack(fill="x", pady=(self.CONTENT_SECTION_GAP, 8))
+        button_frame.columnconfigure((0, 1, 2), weight=1, uniform="action_groups")
+
+        group_cleardel = make_action_group(button_frame, 0, (0, 12), 60)
+        self.clear_button = self.make_button(group_cleardel.inner, "Liste leeren", self.clear_list, "clear", **top_opts)
+        self.clear_button.grid(row=0, column=0, sticky="ew", padx=(0, 5))
+        self.delete_button = self.make_button(group_cleardel.inner, "Löschen", self.delete_item, "delete", **top_opts)
+        self.delete_button.grid(row=0, column=1, sticky="ew")
+
+        group_mark = make_action_group(button_frame, 1, (0, 12), 60)
+        self.flag_button = self.make_button(group_mark.inner, "Wichtigkeit", self.cycle_importance_selected, "flag", **top_opts)
+        self.flag_button.grid(row=0, column=0, sticky="ew", padx=(0, 5))
+        self.due_button = self.make_button(group_mark.inner, "Fällig", self.set_due_date_selected, "due_action", **top_opts)
+        self.due_button.grid(row=0, column=1, sticky="ew")
+
+        # Labels und Kalender ersetzen die früheren TXT-Schaltflächen. Import und
+        # Export bleiben vollständig erreichbar: im Menü „Datei“, im
+        # Kontextmenü einer Liste und über Strg+E beziehungsweise Strg+I.
+        group_io = make_action_group(button_frame, 2, (0, 0), 60)
+        # Die obere Reihe bleibt farblich gemischt: die beiden neuen Schaltflächen
+        # übernehmen die Farben ihrer Vorgänger an derselben Stelle.
+        self.labels_button = self.make_button(
+            group_io.inner, f"{self.ICONS['labels']}  Labels", self.open_label_manager, "export", **top_opts
+        )
+        self.labels_button.grid(row=0, column=0, sticky="ew", padx=(0, 5))
+        self.calendar_button = self.make_button(
+            group_io.inner, f"{self.ICONS['calendar']}  Kalender", self.open_calendar_view, "import", **top_opts
+        )
+        self.calendar_button.grid(row=0, column=1, sticky="ew")
+
+        # Zweite Aktionsreihe – drei gruppierte Paare:
+        # Bearbeiten & Rückgängig · Kopieren & Einfügen · Aufklappen & Zuklappen.
+        utility_frame = self.register_theme_widget(tk.Frame(self.content_frame, bg=self.theme["bg"]), "bg")
+        # 14 px unten spiegeln den unteren Außenabstand der Seitenleisten-Box.
+        # Dadurch enden linke und rechte Spalte exakt auf derselben Linie.
+        utility_frame.pack(fill="x", pady=(0, 14))
+        utility_frame.columnconfigure((0, 1, 2), weight=1, uniform="utility_groups")
+
+        group_edit = make_action_group(utility_frame, 0, (0, 12), 54)
+        self.edit_item_button = self.make_button(group_edit.inner, "Bearbeiten", self.edit_item, "accent", **util_opts)
+        self.edit_item_button.grid(row=0, column=0, sticky="ew", padx=(0, 5))
+        self.undo_button = self.make_button(group_edit.inner, "Rückgängig", self.undo_last_change, "accent", **util_opts)
+        self.undo_button.grid(row=0, column=1, sticky="ew")
+
+        group_clip = make_action_group(utility_frame, 1, (0, 12), 54)
+        self.copy_button = self.make_button(group_clip.inner, "Kopieren", self.copy_selected_to_clipboard, "accent", **util_opts)
+        self.copy_button.grid(row=0, column=0, sticky="ew", padx=(0, 5))
+        self.paste_button = self.make_button(group_clip.inner, "Einfügen", self.paste_items_from_clipboard, "accent", **util_opts)
+        self.paste_button.grid(row=0, column=1, sticky="ew")
+
+        group_fold = make_action_group(utility_frame, 2, (0, 0), 54)
+        self.expand_button = self.make_button(group_fold.inner, "Aufklappen", self.expand_all, "accent", **util_opts)
+        self.expand_button.grid(row=0, column=0, sticky="ew", padx=(0, 5))
+        self.collapse_button = self.make_button(group_fold.inner, "Zuklappen", self.collapse_all, "accent", **util_opts)
+        self.collapse_button.grid(row=0, column=1, sticky="ew")
+
+        # Fortschritts-/Statuszeile: oben rechts, direkt links neben dem
+        # Hell-/Dunkel-Umschalter. Die Labels der Seite stehen darunter.
+        self.stats_label = self.register_theme_widget(
+            tk.Label(
+                self.header_meta,
+                text="",
+                font=app_font(10),
+                bg=self.theme["bg"],
+                fg=self.theme["muted"],
+                anchor="e",
+                justify="right",
+            ),
+            "bg",
+            "muted",
+        )
+        self.stats_label.pack(anchor="e")
+
+        # Der Titelblock wird zuletzt neu gepackt. Pack vergibt den Platz in
+        # Packreihenfolge; dadurch behalten Fortschrittszeile und Design-Schalter
+        # ihre Breite auch dann, wenn ein Listentitel sehr lang ist.
+        self.title_block.pack_forget()
+        self.title_block.pack(side="left", fill="x", expand=True)
+        self.update_header_title()
+        self.create_home_panel()
+
+    def update_header_title(self, event=None):
+        """Zeigt den Seitentitel und kürzt ihn nur, wenn der Platz nicht reicht.
+
+        Gespeicherter Titel, Fenstertitel und alle Exporte bleiben vollständig.
+        """
+        label = getattr(self, "title_label", None)
+        header = getattr(self, "header_frame", None)
+        if label is None or header is None:
+            return
+        full_title = self.get_display_title()
+        try:
+            available = header.winfo_width()
+            if available <= 1:
+                label.configure(text=full_title)
+                return
+            for widget, gap in (
+                (getattr(self, "header_meta", None), 16),
+                (getattr(self, "theme_button", None), 12),
+            ):
+                if widget is not None:
+                    available -= widget.winfo_reqwidth() + gap
+            available = max(self.HEADER_TITLE_MIN_WIDTH, available)
+            font = getattr(self, "_header_title_measure_font", None)
+            if font is None:
+                font = tkfont.Font(root=self.root, font=label.cget("font"))
+                self._header_title_measure_font = font
+            text = full_title
+            if font.measure(text) > available:
+                ellipsis = "…"
+                while text and font.measure(text + ellipsis) > available:
+                    text = text[:-1]
+                text = (text.rstrip() + ellipsis) if text else ellipsis
+            if label.cget("text") != text:
+                label.configure(text=text)
+        except tk.TclError:
+            pass
+
+    def apply_theme(self):
+        self.theme = self.active_theme()
+        self.root.configure(bg=self.theme["bg"])
+
+        for widget, bg_key, fg_key in self.theme_widgets:
+            try:
+                config = {"bg": self.theme[bg_key]}
+                if fg_key is not None:
+                    config["fg"] = self.theme[fg_key]
+                widget.configure(**config)
+            except tk.TclError:
+                pass
+
+        self.entry.configure(
+            bg=self.theme["input"],
+            fg=self.theme["placeholder"] if getattr(self, "entry_placeholder_active", False) else self.theme["text"],
+            insertbackground=self.theme["text"],
+            highlightthickness=0,
+            highlightbackground=self.theme["input"],
+            highlightcolor=self.theme["input"],
+            relief="flat",
+            bd=0,
+            borderwidth=0,
+        )
+        if hasattr(self, "search_entry"):
+            self.search_entry.configure(
+                bg=self.theme["input"],
+                fg=self.theme["placeholder"] if getattr(self, "search_placeholder_active", False) else self.theme["text"],
+                insertbackground=self.theme["text"],
+                highlightthickness=0,
+                highlightbackground=self.theme["input"],
+                highlightcolor=self.theme["input"],
+                relief="flat",
+                bd=0,
+                borderwidth=0,
+            )
+        check = getattr(self, "hide_done_check", None)
+        if check is not None:
+            check.configure(
+                bg=self.theme["input"],
+                fg=self.theme["text"],
+                activebackground=self.theme["input"],
+                activeforeground=self.theme["text"],
+                selectcolor=self.theme["input"],
+            )
+        if hasattr(self, "scrollbar"):
+            self.scrollbar.set_theme(
+                bg_color=self.theme["card"],
+                track_color=self.theme["card"],
+                thumb_color=self.theme["input_border"],
+                active_thumb_color=self.theme["muted"],
+            )
+        if hasattr(self, "sidebar_listbox"):
+            for style_name, surface_key in (("Sidebar.Treeview", "card"), ("System.Treeview", "card")):
+                self.style.configure(
+                    style_name,
+                    background=self.theme[surface_key],
+                    fieldbackground=self.theme[surface_key],
+                    foreground=self.theme["text"],
+                    borderwidth=0,
+                    relief="flat",
+                    rowheight=34,
+                    font=self.sidebar_row_font(),
+                )
+                try:
+                    self.style.layout(style_name, [("Treeview.treearea", {"sticky": "nswe"})])
+                except tk.TclError:
+                    pass
+                self.style.map(
+                    style_name,
+                    background=[("selected", self.theme["selection"])],
+                    foreground=[("selected", self.theme["selection_text"])],
+                )
+            # Im Hauptbaum bleibt der native Klapppfeil erhalten, erhält aber
+            # Luft innerhalb des Auswahlbalkens. Der Eingang braucht keinen
+            # Klapppfeil und kann deshalb exakt an der 10-Pixel-Kante beginnen.
+            self.style.configure(
+                "Sidebar.Treeview.Item",
+                padding=(self.SIDEBAR_ITEM_LEFT_PADDING, 0, 0, 0),
+            )
+            self.style.configure("Sidebar.Treeview", indent=self.SIDEBAR_INDENT)
+            try:
+                self.style.layout(
+                    "System.Treeview.Item",
+                    [
+                        (
+                            "Treeitem.padding",
+                            {
+                                "sticky": "nswe",
+                                "children": [
+                                    ("Treeitem.image", {"side": "left", "sticky": ""}),
+                                    ("Treeitem.text", {"sticky": "nswe"}),
+                                ],
+                            },
+                        )
+                    ],
+                )
+                self.style.configure(
+                    "System.Treeview.Item",
+                    padding=(self.SYSTEM_ITEM_LEFT_PADDING, 0, 0, 0),
+                )
+            except tk.TclError:
+                pass
+            for sidebar_tree_name in ("system_listbox", "sidebar_listbox"):
+                sidebar_tree = getattr(self, sidebar_tree_name, None)
+                if sidebar_tree is None:
+                    continue
+                sidebar_tree.tag_configure("folder", foreground=self.theme["muted"])
+                sidebar_tree.tag_configure("list", foreground=self.theme["text"])
+                sidebar_tree.tag_configure(
+                    "system",
+                    foreground=self.theme["text"],
+                    font=self.sidebar_section_font(),
+                )
+                sidebar_tree.tag_configure("drop_target", background=self.theme["input_border"])
+                # Der Hover setzt ausschließlich den Hintergrund. Vordergrund-
+                # farben aus den Farbtags bleiben dadurch erhalten, und der
+                # Auswahlzustand hat weiterhin Vorrang.
+                sidebar_tree.tag_configure("hover", background=self.theme["hover"])
+                for color_key in self.LIST_COLOR_KEYS:
+                    sidebar_tree.tag_configure(f"listcolor_{color_key}", foreground=self.theme[color_key])
+
+        self.style.configure(
+            "App.Treeview",
+            background=self.theme["card"],
+            fieldbackground=self.theme["card"],
+            foreground=self.theme["text"],
+            borderwidth=0,
+            relief="flat",
+            rowheight=36,
+                    font=self.tree_font(),
+        )
+        self.style.configure(
+            "App.Treeview.Item",
+            padding=(self.SIDEBAR_ITEM_LEFT_PADDING, 0, 0, 0),
+        )
+        try:
+            # Entfernt die native Treeview-Rahmen-/Focus-Outline um den Listenbereich.
+            self.style.layout("App.Treeview", [("Treeview.treearea", {"sticky": "nswe"})])
+        except tk.TclError:
+            pass
+        self.style.map(
+            "App.Treeview",
+            background=[("selected", self.theme["selection"])],
+            foreground=[("selected", self.theme["selection_text"])],
+        )
+
+        if hasattr(self, "tree"):
+            self.tree.tag_configure("open", foreground=self.theme["text"])
+            self.tree.tag_configure("priority_low", foreground=self.theme["priority_low"])
+            self.tree.tag_configure("priority_medium", foreground=self.theme["priority_medium"])
+            self.tree.tag_configure("priority_high", foreground=self.theme["priority_high"])
+            self.tree.tag_configure("overdue", foreground=self.theme["overdue"])
+            self.tree.tag_configure("due_today", foreground=self.theme["due_today"])
+            self.tree.tag_configure("done", foreground=self.theme["muted"])
+            self.tree.tag_configure("empty", foreground=self.theme["muted"])
+            self.tree.tag_configure("folder_list", foreground=self.theme["text"])
+            self.tree.tag_configure(
+                "group_item",
+                foreground=self.theme["text"],
+                font=self.group_row_font(),
+            )
+            self.tree.tag_configure(
+                "heading_item",
+                foreground=self.theme["text"],
+                font=self.heading_row_font(),
+            )
+            # Die Abstandszeile über einer Überschrift bleibt leer und unsichtbar.
+            self.tree.tag_configure("spacer", foreground=self.theme["card"])
+            self.tree.tag_configure("drop_target", background=self.theme["input_border"])
+            self.tree.tag_configure("hover", background=self.theme["hover"])
+            for color_key in self.LIST_COLOR_KEYS:
+                self.tree.tag_configure(f"listcolor_{color_key}", foreground=self.theme[color_key])
+            for color_key in self.ITEM_COLOR_KEYS:
+                self.tree.tag_configure(f"itemcolor_{color_key}", foreground=self.theme[color_key])
+
+        for button in self.buttons:
+            color_key = getattr(button, "color_key", "accent")
+            bg_key = getattr(button, "bg_key", "bg")
+            hover_text_color = self.theme.get("theme_toggle_hover_text") if color_key == "theme_toggle" else "#FFFFFF"
+            button.set_theme(
+                bg_color=self.theme[bg_key],
+                text_color=self.theme[color_key],
+                border_color=self.theme[color_key],
+                hover_fill=self.theme[color_key],
+                hover_text_color=hover_text_color,
+            )
+
+        for container in getattr(self, "rounded_containers", []):
+            fill_key = getattr(container, "fill_key", "card")
+            outline_key = getattr(container, "outline_key", "line")
+            container.set_theme(
+                bg_color=self.theme["bg"],
+                fill_color=self.theme[fill_key],
+                outline_color=self.theme[outline_key],
+                glass_mode=self.settings.get("glass_mode", True),
+                glass_highlight=self.theme.get("glass_highlight", self.theme[outline_key]),
+                glass_shadow=self.theme.get("glass_shadow", self.theme["bg"]),
+            )
+
+        if hasattr(self, "theme_button"):
+            self.theme_button.set_text(self.theme_button_text())
+
+        for menu in getattr(self, "menus", []):
+            try:
+                menu.configure(
+                    bg=self.theme["card"],
+                    fg=self.theme["text"],
+                    activebackground=self.theme["selection"],
+                    activeforeground=self.theme["selection_text"],
+                    selectcolor=self.theme["ui_accent"],
+                    bd=0,
+                    relief="flat",
+                )
+            except tk.TclError:
+                pass
+        self.refresh_tree()
+        self._schedule_windows_chrome_theme(self.root)
+
+    def _on_windows_window_map(self, event=None):
+        if event is None or event.widget is self.root:
+            self._schedule_windows_chrome_theme(self.root)
+
+    def _schedule_windows_chrome_theme(self, window=None, attempt=0):
+        """Wendet DWM-Farben erst nach dem Mapping mit begrenzten Retries an."""
+        if not IS_WINDOWS or attempt >= len(self.WINDOWS_CHROME_RETRY_DELAYS_MS):
+            return
+        target = window or self.root
+
+        holder = {}
+
+        def apply_or_retry():
+            self._after_ids.discard(holder.get("id"))
+            try:
+                if not target.winfo_exists():
+                    return
+                if target.winfo_ismapped() and self._apply_windows_chrome_theme(target):
+                    return
+            except tk.TclError:
+                return
+            self._schedule_windows_chrome_theme(target, attempt + 1)
+
+        try:
+            holder["id"] = self._register_after(
+                target.after(self.WINDOWS_CHROME_RETRY_DELAYS_MS[attempt], apply_or_retry)
+            )
+        except tk.TclError:
+            pass
+
+    def _apply_windows_chrome_theme(self, window=None):
+        """Färbt unter Windows den nativen Fensterrahmen passend zum App-Theme."""
+        if not IS_WINDOWS:
+            return False
+        target = window or self.root
+        try:
+            target.update_idletasks()
+            user32 = ctypes.WinDLL("user32", use_last_error=True)
+            dwmapi = ctypes.WinDLL("dwmapi", use_last_error=True)
+            user32.GetParent.argtypes = [ctypes.c_void_p]
+            user32.GetParent.restype = ctypes.c_void_p
+            inner_hwnd = ctypes.c_void_p(target.winfo_id())
+            hwnd = user32.GetParent(inner_hwnd) or inner_hwnd.value
+            dark_value = ctypes.c_int(1 if self.theme_name == "dark" else 0)
+            dwmapi.DwmSetWindowAttribute.argtypes = [
+                ctypes.c_void_p,
+                ctypes.c_uint,
+                ctypes.c_void_p,
+                ctypes.c_uint,
+            ]
+            dwmapi.DwmSetWindowAttribute.restype = ctypes.c_long
+            user32.RedrawWindow.argtypes = [
+                ctypes.c_void_p,
+                ctypes.c_void_p,
+                ctypes.c_void_p,
+                ctypes.c_uint,
+            ]
+            user32.RedrawWindow.restype = ctypes.c_int
+            applied = False
+            for attribute in (20, 19):
+                result = dwmapi.DwmSetWindowAttribute(
+                    ctypes.c_void_p(hwnd),
+                    attribute,
+                    ctypes.byref(dark_value),
+                    ctypes.sizeof(dark_value),
+                )
+                if result == 0:
+                    applied = True
+                    break
+            # Windows 11 zeichnet bei aktivem Glasmodus ein natives Mica-
+            # Material hinter den Clientbereich. Der Wert 2 entspricht
+            # DWMSBT_MAINWINDOW; ältere Windows-Versionen ignorieren die
+            # Eigenschaft mit einem Fehler, den wir bewusst abfangen.
+            backdrop = ctypes.c_int(2 if self.settings.get("glass_mode", True) else 1)
+            backdrop_result = dwmapi.DwmSetWindowAttribute(
+                ctypes.c_void_p(hwnd), 38, ctypes.byref(backdrop), ctypes.sizeof(backdrop)
+            )
+            applied = applied or backdrop_result == 0
+            # Rahmen + Titelzeile neu zeichnen, ohne das Fenster flackern zu lassen.
+            user32.RedrawWindow(
+                ctypes.c_void_p(hwnd),
+                None,
+                None,
+                0x0001 | 0x0080 | 0x0400,
+            )
+            return applied
+        except Exception:
+            # Auf älteren Windows-Versionen bleibt lediglich die native Titelleiste hell.
+            return False
+
+    def theme_button_text(self):
+        """Der Schalter zeigt, wohin er führt – nicht, wo man gerade steht."""
+        if self.theme_name == "light":
+            return f"{self.ICONS['theme_to_dark']}  Dark Mode"
+        return f"{self.ICONS['theme_to_light']}  Light Mode"
+
+    def toggle_theme(self):
+        self.theme_name = "dark" if self.theme_name == "light" else "light"
+        self.save_theme_setting()
+        self.apply_theme()
+
+    # -----------------------------
+    # Titel / Fenster
+    # -----------------------------
+    def edit_title(self):
+        """Öffnet für die aktuelle Seite den gemeinsamen Bearbeiten-Dialog."""
+        if self.view_mode == self.HOME_VIEW:
+            return self.show_settings_dialog()
+        if self.view_mode in (self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+            return "break"
+        if self.view_mode in self.DERIVED_ITEM_VIEWS:
+            self.show_info(
+                self.get_display_title(), "Diese automatisch erzeugte Ansicht hat einen festen Namen."
+            )
+            return "break"
+        if self.view_mode == "trash":
+            self.show_info("Papierkorb", "Der Papierkorb hat einen festen Namen.")
+            return "break"
+        if self.view_mode == "folder" and self.active_folder_id:
+            return self.edit_folder_details(self.active_folder_id)
+        return self.edit_list_details(self.current_list().get("id"))
+
+    def update_page_labels(self):
+        """Zeigt die Labels der geöffneten Seite rechts unter der Fortschrittszeile.
+
+        Die Zeile behält ihre Höhe auch dann, wenn eine Liste keine Labels hat.
+        Vorher stand sie im Titelblock und wurde ausgeblendet – dadurch sprang
+        der gesamte Kopfbereich um eine Zeilenhöhe, sobald man zwischen einer
+        Liste mit und einer ohne Labels wechselte.
+
+        Es bleibt bei einer Zeile: Was nicht mehr hineinpasst, erscheint als
+        Zähler. Vollständig sind die Labels in der Listenbearbeitung zu sehen.
+        """
+        frame = getattr(self, "page_labels_frame", None)
+        if frame is None:
+            return
+        # Chips liegen seit 2.10.0 in Reihen-Frames; es genügt nicht, nur die
+        # Chips zu entfernen – sonst stapeln sich leere Reihen.
+        for widget in list(frame.winfo_children()):
+            try:
+                widget.destroy()
+            except tk.TclError:
+                pass
+        self.page_label_widgets = []
+        page = self.get_active_page()
+        labels = self.item_labels(page) if page else []
+        if labels:
+            self.page_label_widgets = self.pack_label_chips(
+                frame, labels, bg_key="bg",
+                max_width=self.HEADER_LABEL_MAX_WIDTH, max_rows=1, anchor="e",
+                chip_pady=self.HEADER_LABEL_ROW_PAD,
+            )
+        else:
+            # Platzhalter statt pack_forget: Die Höhe bleibt reserviert.
+            tk.Frame(
+                frame, bg=self.theme["bg"], width=1, height=self.header_label_row_height()
+            ).pack()
+        frame.pack(anchor="e")
+
+    def header_label_row_height(self):
+        """Höhe einer Chipreihe im Kopfbereich.
+
+        Der Platzhalter für „keine Labels“ muss sie exakt treffen, sonst
+        springt der Kopf beim Wechsel zwischen Listen mit und ohne Labels doch
+        wieder – nur um wenige Pixel statt um eine ganze Zeile.
+        """
+        cached = getattr(self, "_header_label_row_height", None)
+        if cached is None:
+            _width, height = LabelChip.measure("Ag", self.LABEL_CHIP_FONT)
+            cached = height + 2 * self.HEADER_LABEL_ROW_PAD
+            self._header_label_row_height = cached
+        return cached
+
+    def update_page_note_preview(self):
+        if not hasattr(self, "note_preview_label"):
+            return
+        if self.view_mode == self.LIBRARY_VIEW:
+            self.note_preview_label.configure(text="Deine Listen und Ordner · Kachel anklicken zum Öffnen")
+            return
+        if self.view_mode == self.TEMPLATE_VIEW:
+            self.note_preview_label.configure(text="Vorlagen für Listen und Ordner · Aktionen am unteren Rand")
+            return
+        if self.view_mode == self.HOME_VIEW:
+            self.note_preview_label.configure(text="Dein Überblick für heute · Persönlich, lokal und jederzeit bereit")
+            return
+        if self.view_mode == "in_progress":
+            self.note_preview_label.configure(text="Alle Aufgaben mit Fälligkeit · Doppelklick öffnet die Quellliste")
+            return
+        if self.view_mode == "overdue":
+            self.note_preview_label.configure(
+                text="Überfällig und noch offen · Doppelklick öffnet die Quellliste"
+            )
+            return
+        if self.view_mode == self.LABELS_VIEW:
+            self.note_preview_label.configure(
+                text="Alle Punkte nach Labels · Ziehen in eine andere Gruppe vergibt das Label"
+            )
+            return
+        if self.view_mode == "trash":
+            self.note_preview_label.configure(
+                text="Gelöschte Listen und Ordner · Doppelklick stellt einen Eintrag wieder her"
+            )
+            return
+        page = self.get_active_page()
+        note = str(page.get("note") or "") if page else ""
+        compact = " ".join(note.split())
+        if compact:
+            preview = compact if len(compact) <= 110 else compact[:107].rstrip() + "…"
+        else:
+            preview = "Beschreibungstext hinzufügen …"
+        self.note_preview_label.configure(text=preview)
+
+    def edit_page_note(self, event=None):
+        """Beschreibungstext der aktuellen Seite – seit 2.7.0 im gemeinsamen Dialog."""
+        if self.view_mode == "folder" and self.active_folder_id:
+            return self.edit_folder_details(self.active_folder_id)
+        page = self.get_active_page()
+        if not page:
+            return "break"
+        return self.edit_list_details(page.get("id"))
+
+    def update_entry_mode(self):
+        if not hasattr(self, "entry"):
+            return
+        if self.view_mode in (self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+            self.update_home_visibility()
+            return
+        self.update_home_visibility()
+        if self.view_mode == "folder":
+            new_placeholder = "Neue Liste in diesem Ordner"
+        elif self.view_mode == "in_progress":
+            new_placeholder = "Automatische Ansicht – Aufgabe in der Quellliste anlegen"
+        elif self.view_mode == "overdue":
+            new_placeholder = "Automatische Ansicht – überfällige Aufgaben in der Quellliste bearbeiten"
+        elif self.view_mode == self.LABELS_VIEW:
+            new_placeholder = "Automatische Ansicht – Punkte in ihrer Quellliste anlegen"
+        elif self.view_mode == "trash":
+            new_placeholder = "Papierkorb – Einträge wiederherstellen oder endgültig entfernen"
+        else:
+            new_placeholder = "Listenpunkt eingeben"
+        if self.entry_placeholder_active:
+            self.entry.delete(0, tk.END)
+            self.entry_placeholder_text = new_placeholder
+            self.entry.insert(0, new_placeholder)
+        else:
+            self.entry_placeholder_text = new_placeholder
+        if hasattr(self, "hint_label"):
+            if self.view_mode == "in_progress":
+                self.hint_label.configure(
+                    text="Chronologisch nach Fälligkeit · Doppelklick oder Enter: Aufgabe in der Quellliste öffnen · "
+                    f"{self.accel('K')}: Kalenderansicht · Suche und Offen-/Erledigt-Filter gelten auch hier"
+                )
+            elif self.view_mode == "overdue":
+                self.hint_label.configure(
+                    text="Fälligkeit in der Vergangenheit und noch nicht erledigt · Doppelklick oder Enter: "
+                    "Aufgabe in der Quellliste öffnen · erledigte Aufgaben verlassen diese Ansicht von selbst"
+                )
+            elif self.view_mode == self.LABELS_VIEW:
+                self.hint_label.configure(
+                    text="Alle Punkte des Bestands, gruppiert nach Label und in dessen Farbe · "
+                    "Drag & Drop in eine andere Gruppe: Label tauschen · aus „Ohne Label“ ziehen: Label vergeben · "
+                    "Doppelklick oder Enter: Punkt in der Quellliste öffnen · ein Punkt mit mehreren Labels "
+                    "steht in jeder zugehörigen Gruppe"
+                )
+            elif self.view_mode == "trash":
+                self.hint_label.configure(
+                    text="Doppelklick oder Enter: wiederherstellen · Rechtsklick: in Ordner wiederherstellen, "
+                    "endgültig entfernen, Papierkorb leeren · gelöschte Ordner nehmen ihre Listen mit"
+                )
+            elif self.view_mode == "folder":
+                self.hint_label.configure(
+                    text="Doppelklick oder Enter: Liste öffnen · Eingabefeld: neue Liste in diesem Ordner anlegen · "
+                    "Drag & Drop: Listen sortieren · Auf einen Ordner links ziehen: Liste verschieben · "
+                    "Labels einer Liste erscheinen rechts in dieser Übersicht"
+                )
+            else:
+                self.hint_label.configure(
+                    text="Rechtsklick → Art: Long-Task, Zwischenüberschrift, Gruppe · "
+                    "Rechtsklick: alle weiteren Aktionen inklusive Labels · Drag & Drop: Reihenfolge ändern · "
+                    "Auf eine Seitenleisten-Liste ziehen: dorthin verschieben · "
+                    "Auf die Mitte einer Gruppe ziehen: hineinlegen · Shift + Drag: Unterpunkt · "
+                    f"Shift + Klick: Bereich auswählen · {self.selection_modifier_name()} + Klick: einzeln dazu · "
+                    f"{self.accel('A')}: alle auswählen · "
+                    "Alt+↑/↓: verschieben · Alt+←/→: aus-/einrücken · "
+                    f"Tab: ein-/ausrücken · {self.accel('G')}: gruppieren · {self.accel('F')}: Suche · "
+                    f"{self.accel('T')}: Fälligkeit · {self.accel('Z')}: Rückgängig · F2: Details"
+                )
+
+    @staticmethod
+    def safe_filename(value):
+        cleaned = "".join(char if char.isalnum() or char in (" ", "-", "_") else "_" for char in value)
+        cleaned = "_".join(cleaned.strip().split())
+        return cleaned.lower() or "meine_liste"
+
+    def clamp_geometry(self, geom):
+        """Hält eine gespeicherte Fenstergeometrie auf dem sichtbaren Bildschirm.
+
+        Nach einem Monitorwechsel – etwa Notebook ohne angeschlossenes Dock –
+        zeigt eine gespeicherte Position sonst auf einen Bereich, den es nicht
+        mehr gibt; das Fenster wäre unsichtbar.
+        """
+        match = re.match(r"^(\d+)x(\d+)(?:([+-]\d+)([+-]\d+))?$", str(geom or "").strip())
+        if not match:
+            return None
+        width = int(match.group(1))
+        height = int(match.group(2))
+        if match.group(3) is None:
+            return f"{width}x{height}"
+        x = int(match.group(3))
+        y = int(match.group(4))
+        try:
+            screen_w = self.root.winfo_screenwidth()
+            screen_h = self.root.winfo_screenheight()
+        except tk.TclError:
+            return f"{width}x{height}"
+        # Mindestens ein sichtbarer Fensterstreifen muss auf dem Bildschirm liegen.
+        visible_margin = 120
+        x = max(-(width - visible_margin), min(x, screen_w - visible_margin))
+        y = max(0, min(y, screen_h - visible_margin))
+        return f"{width}x{height}+{x}+{y}"
+
+    def restore_window_position(self):
+        geom_file = os.path.join(BASE_DIR, "window.conf")
+        default_geometry = "980x740"
+        min_restore_width = 820
+        min_restore_height = 660
+        try:
+            if os.path.exists(geom_file):
+                with open(geom_file, "r", encoding="utf-8") as f:
+                    geom = f.read().strip()
+                match = re.match(r"^(\d+)x(\d+)", geom or "")
+                if match:
+                    width = int(match.group(1))
+                    height = int(match.group(2))
+                    safe_geometry = self.clamp_geometry(geom)
+                    if width >= min_restore_width and height >= min_restore_height and safe_geometry:
+                        self.root.geometry(safe_geometry)
+                    else:
+                        # Alte, zu kleine Fenstergrößen aus früheren Versionen würden die Aktionsleisten abschneiden.
+                        self.root.geometry(default_geometry)
+                else:
+                    self.root.geometry(default_geometry)
+        except Exception:
+            self.root.geometry(default_geometry)
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
+
+    def on_close(self):
+        if (getattr(self, "_templates_editing", False) and
+                self.templates != getattr(self, "_templates_before_edit", self.templates)):
+            answer = self.ask_yes_no_cancel("Vorlagen speichern", "Die bearbeiteten Vorlagen vor dem Schließen speichern?")
+            if answer is None:
+                return
+            if answer and not self.save_templates():
+                self.show_error("Vorlagen speichern", "Die Vorlagen konnten nicht gespeichert werden.")
+                return
+        if getattr(self, "dirty", False):
+            retry = self.ask_yes_no_cancel(
+                "Ungespeicherte Änderungen",
+                "Die letzten Änderungen konnten noch nicht gespeichert werden.\n\n"
+                "Jetzt erneut speichern?",
+            )
+            if retry is None:
+                return
+            if retry:
+                if not self.save_items():
+                    return
+            elif not self.ask_yes_no(
+                "Ohne Speichern schließen",
+                "Glide wirklich schließen? Die ungespeicherten Änderungen gehen verloren.",
+            ):
+                return
+        try:
+            if not getattr(self, "_data_read_only", False):
+                with open(os.path.join(BASE_DIR, "window.conf"), "w", encoding="utf-8") as f:
+                    f.write(self.root.geometry())
+        except Exception:
+            pass
+        self.cancel_pending_callbacks()
+        self.release_data_lock()
+        self.root.destroy()
+
+    def current_focus_widget(self):
+        """Fokus-Widget ohne Ausnahme.
+
+        focus_get() wirft KeyError, sobald der Fokus auf einem Fenster liegt,
+        das Tk selbst erzeugt hat (native Dialoge, gepostete Menüs).
+        """
+        try:
+            return self.root.focus_get()
+        except (KeyError, tk.TclError):
+            return None
+
+    def _register_after(self, after_id):
+        if after_id is not None:
+            self._after_ids.add(after_id)
+        return after_id
+
+    def schedule_scrollbar_refresh(self):
+        if not hasattr(self, "root"):
+            return
+        # Mehrfachaufrufe innerhalb eines Leerlaufzyklus werden zusammengefasst;
+        # ohne das sammelten sich pro Listenaufbau tote after-IDs an.
+        if getattr(self, "_scrollbar_refresh_id", None) is not None:
+            return
+
+        def run():
+            self._after_ids.discard(getattr(self, "_scrollbar_refresh_id", None))
+            self._scrollbar_refresh_id = None
+            self.refresh_scrollbar_state()
+
+        try:
+            self._scrollbar_refresh_id = self._register_after(self.root.after_idle(run))
+        except tk.TclError:
+            self._scrollbar_refresh_id = None
+
+    def active_label_column_width(self):
+        """Breite der Labelspalte.
+
+        Sie erscheint nur dort, wo Labels tatsächlich dargestellt werden – in
+        einer Liste, in „In Bearbeitung“ und in der Ordnerübersicht – und nur,
+        wenn überhaupt Labels angelegt sind. Der Papierkorb behält dadurch die
+        volle Textbreite.
+        """
+        if self.view_mode not in ("list", "folder") + self.DERIVED_ITEM_VIEWS:
+            return 0
+        if not self.has_visible_labels():
+            return 0
+        return self.fitted_column_width(self.label_column_width(), "_content_label_width")
+
+    def active_due_column_width(self):
+        """Breite der Fälligkeitsspalte für den aktuellen Inhalt."""
+        return self.fitted_column_width(self.due_column_width(), "_content_due_width")
+
+    def fitted_column_width(self, maximum, attribute):
+        """Deckelt eine Musterbreite auf das, was der angezeigte Inhalt braucht.
+
+        Ohne Messung gilt der Musterwert: Vor dem ersten Aufbau ist unbekannt,
+        was in der Spalte stehen wird, und eine zu schmale Spalte schnitte ab.
+        """
+        measured = getattr(self, attribute, None)
+        if measured is None:
+            return maximum
+        return min(maximum, max(0, int(measured)))
+
+    def has_visible_labels(self):
+        """Gibt es überhaupt etwas, das in der Labelspalte stehen könnte?
+
+        Seit 3.0 zählen dafür nur selbst angelegte Labels. Die beiden festen
+        Labels tragen die Art des Punkts und erscheinen in der Liste nicht mehr
+        – sie dürfen deshalb auch keine Spalte öffnen, die dann leer bliebe.
+        """
+        return any(not self.is_system_label(label) for label in self.labels)
+
+    def task_tree_column_widths(self, tree_width):
+        """Breiten von Text-, Fälligkeits- und Labelspalte für eine Baumbreite.
+
+        Wird das Fenster schmal, weichen zuerst die Labels und danach die
+        Fälligkeit. Der Aufgabentext bekommt die frei werdende Breite; die
+        Angaben bleiben in der großen Darstellung und im Kontextmenü erreichbar.
+        Reine Rechenmethode, damit die Schwellen ohne Fenster prüfbar sind.
+        """
+        try:
+            tree_width = int(tree_width)
+        except (TypeError, ValueError):
+            tree_width = 0
+        # Vor dem ersten Layout meldet Tk eine Breite von 1. Das ist keine
+        # schmale Ansicht, sondern eine fehlende Angabe – dann bleibt alles an.
+        measured = tree_width if tree_width > 50 else 0
+        label_width = self.active_label_column_width()
+        if measured and measured < self.LABEL_COLUMN_MIN_TREE_WIDTH:
+            label_width = 0
+        due_width = self.active_due_column_width()
+        if measured and measured < self.DUE_COLUMN_MIN_TREE_WIDTH:
+            due_width = 0
+        text_width = max(
+            180,
+            tree_width
+            - due_width
+            - label_width
+            - (self.TASK_METADATA_GAP if due_width or label_width else 0)
+            - self.DUE_RIGHT_PADDING_WIDTH
+            - self.TASK_TREE_EDGE_PADDING,
+        )
+        return text_width, due_width, label_width
+
+    def sync_task_tree_columns(self, event=None):
+        """Hält Fälligkeits- und Labelspalte bei jeder Treeview-Breite sichtbar rechts."""
+        if not hasattr(self, "tree"):
+            return
+        try:
+            tree_width = int(getattr(event, "width", 0) or self.tree.winfo_width())
+            text_width, due_width, label_width = self.task_tree_column_widths(tree_width)
+            self.tree.column("#0", width=text_width)
+            # Mindestbreite bleibt 0: Nur so kann die Spalte im schmalen
+            # Fenster vollständig weichen. Dass die Angabe vollständig in die
+            # Zeile passt, sichert die Messung in content_column_widths.
+            self.tree.column("due", width=due_width, minwidth=0)
+            self.tree.column("labels", width=label_width, minwidth=0)
+            self.tree.column("text_gap", minwidth=0,
+                             width=self.TASK_METADATA_GAP if due_width or label_width else 0)
+            self.tree.column(
+                "due_padding",
+                width=self.DUE_RIGHT_PADDING_WIDTH,
+                minwidth=self.DUE_RIGHT_PADDING_WIDTH,
+            )
+            self.update_hint_visibility(tree_width)
+        except (TypeError, ValueError, tk.TclError):
+            pass
+        # Der Umbruch eines Long-Tasks hängt an der Textbreite. Ändert sie sich,
+        # muss neu umbrochen werden – sonst bliebe der Text abgeschnitten oder
+        # stünde unnötig eng.
+        self.schedule_long_task_reflow()
+
+    def advanced_button_min_width(self):
+        """Breite, ab der Schnelleingabe und beide Knöpfe nebeneinander passen.
+
+        Gemessen statt geschätzt: Bei einer anderen Anzeigeskalierung sind die
+        Knöpfe breiter, und eine feste Zahl griffe dann zu spät – der Knopf
+        wäre schon gestaucht, bevor die Schwelle erreicht ist.
+        """
+        cached = getattr(self, "_advanced_min_width", None)
+        if cached is not None:
+            return cached
+        width = self.ADVANCED_BUTTON_MIN_WIDTH
+        try:
+            width = (
+                self.ENTRY_MIN_WIDTH
+                + self.add_button.winfo_reqwidth()
+                + self.advanced_add_button.winfo_reqwidth()
+                + 2 * self.INPUT_ROW_GAP
+            )
+        except (AttributeError, tk.TclError):
+            pass
+        self._advanced_min_width = max(width, self.ADVANCED_BUTTON_MIN_WIDTH)
+        return self._advanced_min_width
+
+    def update_advanced_button_visibility(self, event=None):
+        """Blendet „Erweitert“ aus, bevor der Knopf gestaucht würde.
+
+        Ein zusammengedrückter Knopf ist schlechter als keiner: Die
+        Beschriftung bricht ab, und die Schnelleingabe verliert den Platz, der
+        ihr eigentlich zusteht. Die vollständige Maske bleibt über das
+        Kontextmenü und über Bearbeiten erreichbar.
+        """
+        button = getattr(self, "advanced_add_button", None)
+        if button is None:
+            return
+        width = getattr(event, "width", 0) or 0
+        if not width:
+            try:
+                width = int(self.input_frame.winfo_width())
+            except (AttributeError, tk.TclError):
+                return
+        # Vor dem ersten Layout meldet Tk eine Breite von 1 – keine schmale
+        # Ansicht, sondern eine fehlende Angabe.
+        should_show = width <= 50 or width >= self.advanced_button_min_width()
+        if should_show == getattr(self, "_advanced_button_visible", True):
+            return
+        self._advanced_button_visible = should_show
+        try:
+            if should_show:
+                button.pack(side="right", padx=(0, 10), after=self.add_button)
+            else:
+                button.pack_forget()
+        except (AttributeError, tk.TclError):
+            pass
+
+    def update_hint_visibility(self, tree_width=None):
+        """Blendet die Hinweiszeile aus, sobald es eng wird.
+
+        Sie weicht bei derselben Breite wie die Labelspalte: Beides sind
+        Zugaben, die bei wenig Platz vor dem eigentlichen Inhalt zurückstehen.
+        Zwei verschiedene Schwellen ließen die Ansicht in zwei Stufen zerfallen.
+        """
+        label = getattr(self, "hint_label", None)
+        if label is None:
+            return
+        if tree_width is None:
+            try:
+                tree_width = int(self.tree.winfo_width())
+            except (AttributeError, tk.TclError):
+                return
+        # Vor dem ersten Layout meldet Tk eine Breite von 1 – das ist keine
+        # schmale Ansicht, sondern eine fehlende Angabe.
+        should_show = tree_width <= 50 or tree_width >= self.LABEL_COLUMN_MIN_TREE_WIDTH
+        if should_show == getattr(self, "_hint_visible", True):
+            return
+        self._hint_visible = should_show
+        try:
+            if should_show:
+                self.hint_label.pack(
+                    anchor="w", fill="x",
+                    pady=(self.CONTENT_SECTION_GAP, 0),
+                    before=self.button_frame,
+                )
+            else:
+                self.hint_label.pack_forget()
+        except (AttributeError, tk.TclError):
+            pass
+
+    def cancel_pending_callbacks(self):
+        if not hasattr(self, "root"):
+            return
+        self._destroy_item_context_menu()
+        self._destroy_sidebar_context_menu()
+        for after_id in list(getattr(self, "_after_ids", ()) or ()):
+            try:
+                self.root.after_cancel(after_id)
+            except tk.TclError:
+                pass
+        self._after_ids = set()
+        self._scrollbar_refresh_id = None
+        self._autosave_id = None
+
+    # -----------------------------
+    # Datenmodell / Migration
+    # -----------------------------
+    def clamp_importance(self, value):
+        try:
+            value = int(value)
+        except (TypeError, ValueError):
+            return 0
+        return max(0, min(3, value))
+
+    def new_item(
+        self,
+        text,
+        done=False,
+        children=None,
+        item_id=None,
+        importance=0,
+        due=None,
+        description="",
+        attachments=None,
+        color=None,
+        kind=ITEM_KIND_TASK,
+        labels=None,
+        due_time=None,
+        repeat=None,
+    ):
+        clean_kind = kind if kind in self.ITEM_KINDS else self.ITEM_KIND_TASK
+        # Gruppe und Überschrift sind reine Gliederung: kein Erledigt-Zustand,
+        # keine Fälligkeit, keine Wichtigkeit. So bleibt jede Auswertung
+        # eindeutig. Aufgabe und Long-Task verhalten sich identisch.
+        structural = clean_kind in (self.ITEM_KIND_GROUP, self.ITEM_KIND_HEADING)
+        normalized_due = None if structural else self.normalize_due(due)
+        item = {
+            "id": item_id or uuid.uuid4().hex,
+            # Zeilenumbrüche bleiben ausschließlich im Long-Task erhalten.
+            "text": self.normalize_item_text(text, clean_kind),
+            "done": False if structural else bool(done),
+            "importance": 0 if structural else self.clamp_importance(importance),
+            "due": normalized_due,
+            # Format 10: Die Uhrzeit ist freiwillig und hängt am Datum. Ohne
+            # Datum gibt es keine Uhrzeit – sonst entstünde eine Frist ohne Tag.
+            "due_time": self.normalize_due_time(due_time) if normalized_due else None,
+            "description": str(description or ""),
+            "attachments": self.normalize_attachments(attachments),
+            "color": color if color in self.ITEM_COLOR_KEYS else None,
+            "kind": clean_kind,
+            # Format 7: Labelzuordnung als Liste von Label-IDs. Fehlt das Feld,
+            # trägt der Punkt keine Labels; ältere Bestände bleiben gültig.
+            "labels": self.normalize_item_labels(labels),
+            # Format 11: Wiederholungsregel. Sie hängt an der Fälligkeit – ohne
+            # Datum gibt es nichts zu wiederholen, und Gruppen und
+            # Überschriften tragen ohnehin keine Fälligkeit.
+            "repeat": self.normalize_repeat(repeat, default_start=normalized_due) if normalized_due else None,
+            "children": children if isinstance(children, list) else [],
+        }
+        # Art und festes Label bleiben von Anfang an deckungsgleich.
+        self.sync_item_kind_label(item)
+        return item
+
+    @classmethod
+    def normalize_item_text(cls, value, kind=None):
+        """Bereitet den Text eines Punkts auf.
+
+        Einzeilig für jede Art außer dem Long-Task – dort sind eigene
+        Zeilenumbrüche ausdrücklich erlaubt, denn genau dafür ist er da.
+        Leerraum am Rand, doppelte Leerzeilen und Wagenrückläufe verschwinden
+        in jedem Fall, damit Darstellung und Export berechenbar bleiben.
+        """
+        raw = str(value or "").replace("\r\n", "\n").replace("\r", "\n")
+        if kind != cls.ITEM_KIND_LONG:
+            return " ".join(raw.split())
+        # Leerzeilen entfallen vollständig: der Aufgabentext zeigt in der Liste
+        # höchstens fünf Zeilen, eine gespeicherte Leerzeile wäre dort nicht
+        # sichtbar und Datenstand und Darstellung liefen auseinander.
+        lines = [" ".join(line.split()) for line in raw.split("\n")]
+        cleaned = [line for line in lines if line]
+        return "\n".join(cleaned[: cls.MAX_LONG_TASK_TEXT_LINES])
+
+    @staticmethod
+    def item_display_text(item):
+        """Einzeilige Fassung eines Punkttexts für schmale Darstellungen.
+
+        Ein Long-Task kann Zeilenumbrüche tragen; überall dort, wo genau eine
+        Zeile zur Verfügung steht – Kalender, Aufgabenübersichten, TXT-Kopfzeile –
+        werden sie zu Leerzeichen.
+        """
+        return " ".join(str((item or {}).get("text", "")).split())
+
+    @classmethod
+    def item_kind(cls, item):
+        """Liefert die Art eines Punkts; unbekannte Werte gelten als Aufgabe."""
+        if not isinstance(item, dict):
+            return cls.ITEM_KIND_TASK
+        kind = item.get("kind")
+        if kind in cls.ITEM_KINDS:
+            return kind
+        return cls.ITEM_KIND_TASK
+
+    @classmethod
+    def is_group_item(cls, item):
+        return cls.item_kind(item) == cls.ITEM_KIND_GROUP
+
+    @classmethod
+    def is_long_item(cls, item):
+        """Mehrzeiliger Punkt – inhaltlich eine gewöhnliche Aufgabe."""
+        return cls.item_kind(item) == cls.ITEM_KIND_LONG
+
+    @classmethod
+    def is_heading_item(cls, item):
+        """Zwischenüberschrift – gliedert, trägt aber selbst keine Aufgabe."""
+        return cls.item_kind(item) == cls.ITEM_KIND_HEADING
+
+    @classmethod
+    def is_structural_item(cls, item):
+        """Gruppe oder Überschrift: gliedernd, ohne eigenen Erledigt-Zustand."""
+        return cls.item_kind(item) in (cls.ITEM_KIND_GROUP, cls.ITEM_KIND_HEADING)
+
+    @classmethod
+    def is_schedulable_item(cls, item):
+        """Echte Aufgabe – einzeilig oder mehrzeilig. Zählt in jeder Auswertung."""
+        return cls.item_kind(item) in (cls.ITEM_KIND_TASK, cls.ITEM_KIND_LONG)
+
+    def set_item_kind(self, item, kind):
+        """Wandelt zwischen den vier Arten und räumt die Statusfelder auf."""
+        if not isinstance(item, dict):
+            return False
+        new_kind = kind if kind in self.ITEM_KINDS else self.ITEM_KIND_TASK
+        if self.item_kind(item) == new_kind:
+            return False
+        regular = [value for value in item.get("labels", []) if not self.is_system_label(self.get_label(value))]
+        if new_kind in (self.ITEM_KIND_LONG, self.ITEM_KIND_HEADING) and len(regular) >= self.MAX_LABELS_PER_ITEM:
+            self.show_warning("Labels", "Für das Artlabel muss zuerst ein anderes Label abgewählt werden.")
+            return False
+        item["kind"] = new_kind
+        # Nur ein Long-Task darf Zeilenumbrüche tragen. Beim Zurückwandeln
+        # werden sie zu Leerzeichen, statt still im Datensatz zu bleiben.
+        item["text"] = self.normalize_item_text(item.get("text", ""), new_kind)
+        if new_kind in (self.ITEM_KIND_GROUP, self.ITEM_KIND_HEADING):
+            item["done"] = False
+            item["due"] = None
+            item["due_time"] = None
+            item["importance"] = 0
+        if new_kind == self.ITEM_KIND_HEADING:
+            # Eine Überschrift steht für sich. Vorhandene Unterpunkte rücken
+            # deshalb auf ihre Ebene nach – sie gehen nicht verloren.
+            item["children"] = item.get("children") if isinstance(item.get("children"), list) else []
+        self.sync_item_kind_label(item)
+        return True
+
+    def sync_item_kind_label(self, item):
+        """Hält die festen Labels „Long-Task“ und „Überschrift“ deckungsgleich zur Art.
+
+        Label und Art sind zwei Sichten auf dieselbe Eigenschaft. Wer das Label
+        vergibt, wandelt den Punkt um – und umgekehrt. Diese Methode ist die
+        einzige Stelle, die beide Seiten aneinander angleicht.
+        """
+        if not isinstance(item, dict):
+            return False
+        kind = self.item_kind(item)
+        assigned = list(item.get("labels") or [])
+        changed = False
+        for role, _name, _color, role_kind in self.SYSTEM_LABEL_DEFINITIONS:
+            label = self.get_system_label(role)
+            if label is None:
+                continue
+            label_id = label.get("id")
+            should_have = kind == role_kind
+            if should_have and label_id not in assigned:
+                assigned.append(label_id)
+                changed = True
+            elif not should_have and label_id in assigned:
+                assigned = [value for value in assigned if value != label_id]
+                changed = True
+        if changed:
+            item["labels"] = assigned
+        return changed
+
+    @staticmethod
+    def validate_attachment_storage(storage):
+        """Erlaubt ausschließlich portable, flache Pfade unter attachments/."""
+        if not isinstance(storage, str):
+            raise ValueError("Ungültiger Anhangspfad.")
+        storage = storage.strip()
+        if not storage or "\\" in storage or "\x00" in storage:
+            raise ValueError("Ungültiger Anhangspfad.")
+        parts = storage.split("/")
+        if len(parts) != 2 or parts[0] != "attachments":
+            raise ValueError("Anhänge müssen direkt im Ordner attachments liegen.")
+        filename = parts[1]
+        if filename in ("", ".", "..") or filename.rstrip(" .") != filename:
+            raise ValueError("Ungültiger Anhangsname.")
+        if any(ord(char) < 32 or char in '<>:"/\\|?*' for char in filename):
+            raise ValueError("Der Anhangsname enthält unzulässige Zeichen.")
+        reserved = {"CON", "PRN", "AUX", "NUL"}
+        reserved.update({f"COM{number}" for number in range(1, 10)})
+        reserved.update({f"LPT{number}" for number in range(1, 10)})
+        if filename.split(".", 1)[0].upper() in reserved:
+            raise ValueError("Der Anhangsname ist unter Windows reserviert.")
+        return storage
+
+    def normalize_attachments(self, data):
+        if not isinstance(data, list):
+            return []
+        normalized = []
+        for entry in data:
+            if not isinstance(entry, dict):
+                continue
+            storage = entry.get("storage")
+            if not isinstance(storage, str):
+                continue
+            try:
+                storage = self.validate_attachment_storage(storage)
+            except ValueError:
+                continue
+            name = str(entry.get("name") or os.path.basename(storage)).strip() or "Anhang"
+            try:
+                size = max(0, int(entry.get("size", 0)))
+            except (TypeError, ValueError):
+                size = 0
+            normalized.append(
+                {
+                    "id": entry.get("id") if isinstance(entry.get("id"), str) and entry.get("id") else uuid.uuid4().hex,
+                    "name": name,
+                    "storage": storage,
+                    "size": size,
+                    "mime": str(entry.get("mime") or "application/octet-stream"),
+                    "added_at": str(entry.get("added_at") or ""),
+                }
+            )
+        return normalized
+
+    def resolve_attachment_path(self, attachment):
+        storage = attachment.get("storage") if isinstance(attachment, dict) else None
+        if not isinstance(storage, str) or not storage:
+            return None
+        try:
+            storage = self.validate_attachment_storage(storage)
+        except ValueError:
+            return None
+        attachments_root = os.path.normcase(os.path.realpath(ATTACHMENTS_DIR))
+        candidate = os.path.normcase(
+            os.path.realpath(os.path.join(BASE_DIR, storage.replace("/", os.sep)))
+        )
+        try:
+            if os.path.commonpath([candidate, attachments_root]) != attachments_root:
+                return None
+        except ValueError:
+            return None
+        return candidate
+
+    def store_attachment(self, source_path):
+        if not source_path or not os.path.isfile(source_path):
+            raise OSError("Die ausgewählte Datei ist nicht mehr vorhanden.")
+        source_size = os.path.getsize(source_path)
+        if source_size > self.MAX_BACKUP_ATTACHMENT_BYTES:
+            raise OSError(
+                "Die Datei ist größer als 512 MB und kann deshalb nicht in ein "
+                "vollständiges Glide-Backup aufgenommen werden."
+            )
+        original_name = os.path.basename(source_path)
+        attachment_id = uuid.uuid4().hex
+        # Gemeinsame, geprüfte Namensbildung mit dem Backup-Import. Der Pfad wird
+        # vor dem Kopieren validiert, damit keine unauffindbare Datei entsteht.
+        stored_name = self.safe_attachment_filename(original_name, attachment_id)
+        storage = f"attachments/{stored_name}"
+        self.validate_attachment_storage(storage)
+        destination = os.path.join(ATTACHMENTS_DIR, stored_name)
+        temp_path = None
+        try:
+            temp_handle, temp_path = tempfile.mkstemp(prefix=".attachment-", suffix=".tmp", dir=ATTACHMENTS_DIR)
+            os.close(temp_handle)
+            shutil.copy2(source_path, temp_path)
+            copied_size = os.path.getsize(temp_path)
+            if copied_size > self.MAX_BACKUP_ATTACHMENT_BYTES:
+                raise OSError(
+                    "Die Datei ist größer als 512 MB und kann deshalb nicht in ein "
+                    "vollständiges Glide-Backup aufgenommen werden."
+                )
+            os.replace(temp_path, destination)
+            temp_path = None
+        finally:
+            if temp_path:
+                try:
+                    os.remove(temp_path)
+                except OSError:
+                    pass
+        mime, _encoding = mimetypes.guess_type(original_name)
+        return {
+            "id": attachment_id,
+            "name": original_name,
+            "storage": storage,
+            "size": os.path.getsize(destination),
+            "mime": mime or "application/octet-stream",
+            "added_at": datetime.now().isoformat(timespec="seconds"),
+        }
+
+    @staticmethod
+    def normalize_due(value):
+        """Akzeptiert ein ISO-Datum (JJJJ-MM-TT) oder None und liefert ein sauberes ISO-Datum bzw. None."""
+        if not value or not isinstance(value, str):
+            return None
+        value = value.strip()
+        try:
+            return datetime.strptime(value, "%Y-%m-%d").strftime("%Y-%m-%d")
+        except ValueError:
+            return None
+
+    @staticmethod
+    def normalize_due_time(value):
+        """Akzeptiert eine Uhrzeit (HH:MM) oder None und liefert HH:MM bzw. None."""
+        if not value or not isinstance(value, str):
+            return None
+        value = value.strip()
+        for fmt in ("%H:%M", "%H.%M", "%H%M", "%H"):
+            try:
+                return datetime.strptime(value, fmt).strftime("%H:%M")
+            except ValueError:
+                continue
+        return None
+
+    @classmethod
+    def parse_due_time_input(cls, text):
+        """Wandelt eine Uhrzeit-Eingabe um.
+
+        Rückgaben: HH:MM bei Erfolg, '' wenn die Uhrzeit entfernt werden soll
+        (leere Eingabe), None bei ungültiger Eingabe. Dieselbe Aufteilung wie
+        bei `parse_due_input`, damit beide Felder gleich behandelt werden.
+        """
+        if text is None:
+            return None
+        text = text.strip()
+        if not text:
+            return ""
+        return cls.normalize_due_time(text)
+
+    @classmethod
+    def format_due_full(cls, iso_value, time_value=None):
+        """Fälligkeit als Klartext: „30.09.2026“ oder „30.09.2026, 14:30“."""
+        day = cls.format_due_display(iso_value)
+        if not day:
+            return ""
+        clean_time = cls.normalize_due_time(time_value)
+        return f"{day}, {clean_time}" if clean_time else day
+
+    @staticmethod
+    def parse_due_input(text):
+        """Wandelt Nutzereingaben in ein ISO-Datum um.
+
+        Rückgaben: ISO-String bei Erfolg, '' wenn das Datum entfernt werden soll
+        (leere Eingabe), oder None bei ungültiger Eingabe.
+        """
+        if text is None:
+            return None
+        text = text.strip()
+        if not text:
+            return ""
+        for fmt in ("%d.%m.%Y", "%d.%m.%y", "%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y"):
+            try:
+                return datetime.strptime(text, fmt).strftime("%Y-%m-%d")
+            except ValueError:
+                continue
+        return None
+
+    @staticmethod
+    def format_due_display(iso_value):
+        """Formatiert ein ISO-Datum als TT.MM.JJJJ für die Anzeige."""
+        if not iso_value:
+            return ""
+        try:
+            return datetime.strptime(iso_value, "%Y-%m-%d").strftime("%d.%m.%Y")
+        except ValueError:
+            return ""
+
+    @classmethod
+    def format_due_column(cls, iso_value, time_value=None):
+        """Fälligkeit für die Listenspalte: „15.09.26“ oder „15.09.26, 10:30“.
+
+        Zweistellig, damit Datum und Uhrzeit vollständig in die Spalte passen.
+        Ein abgeschnittenes Datum ist schlechter lesbar als ein kurzes Jahr –
+        und die Jahrhundertangabe trägt in einer Aufgabenliste nichts bei.
+        Klartext-Ausgaben (Dialoge, Export, Suche) benutzen weiter
+        format_due_full mit vierstelligem Jahr.
+        """
+        day = cls.format_due_display(iso_value)
+        if not day:
+            return ""
+        short_day = f"{day[:6]}{day[8:]}" if len(day) == 10 else day
+        clean_time = cls.normalize_due_time(time_value)
+        return f"{short_day}, {clean_time}" if clean_time else short_day
+
+    def label_column_width(self):
+        """Spaltenbreite, in die der längste Labeltext vollständig passt.
+
+        Gemessen wie bei der Fälligkeit: mit der Schrift der Liste, nicht mit
+        der Standardgröße. Der Musterwert ist der längste darstellbare Fall –
+        Symbol, ein auf LABEL_COLUMN_NAME_MAX_CHARS gekürzter Name und ein
+        zweistelliger Zähler.
+        """
+        cached = getattr(self, "_label_column_width", None)
+        if cached is not None:
+            return cached
+        sample = f"{self.LABEL_COLUMN_ICON} {'M' * self.LABEL_COLUMN_NAME_MAX_CHARS}  +99"
+        width = self.LABEL_COLUMN_WIDTH
+        try:
+            font = tkfont.Font(root=self.root, font=self.tree_font())
+            width = font.measure(sample) + self.tree_cell_padding(font)
+        except (tk.TclError, RuntimeError):
+            pass
+        self._label_column_width = width
+        return width
+
+    def tree_cell_padding(self, font):
+        """Gesamter Zuschlag zwischen gemessenem Text und Spaltenbreite.
+
+        Fester Anteil für den Zellenrand plus eine an der Schrift bemessene
+        Reserve für Symbolzeichen aus einer Ersatzschrift. Ohne diese Reserve
+        fiel die Spalte rund ein Zeichen zu schmal aus – sichtbar daran, dass
+        die letzte Ziffer der Fälligkeit fehlte.
+        """
+        try:
+            reserve = font.measure("0") * self.TREE_CELL_RESERVE_CHARS
+        except (tk.TclError, RuntimeError):
+            reserve = self.DUE_COLUMN_TEXT_PADDING
+        return self.DUE_COLUMN_TEXT_PADDING + reserve
+
+    def due_column_width(self):
+        """Spaltenbreite, in die der längste Fälligkeitstext vollständig passt.
+
+        Gemessen statt geschätzt: Schriftart und Skalierung unterscheiden sich
+        zwischen Windows, macOS und Linux, eine feste Zahl schneidet auf einem
+        der drei Systeme ab.
+        """
+        cached = getattr(self, "_due_column_width", None)
+        if cached is not None:
+            return cached
+        sample = f"{self.DUE_COLUMN_ICON} 30.12.26, 22:30"
+        width = self.DUE_COLUMN_WIDTH
+        try:
+            font = tkfont.Font(root=self.root, font=self.tree_font())
+            width = font.measure(sample) + self.tree_cell_padding(font)
+        except (tk.TclError, RuntimeError):
+            pass
+        width = max(width, self.DUE_COLUMN_WIDTH)
+        self._due_column_width = width
+        return width
+
+    def content_column_widths(self):
+        """Breite, die Fälligkeit und Labels im angezeigten Inhalt wirklich brauchen.
+
+        Die Musterwerte oben decken den längsten überhaupt möglichen Fall ab –
+        Datum mit Uhrzeit, ein voll ausgereizter Labelname mit Zähler. Stehen in
+        einer Ansicht nur kurze Angaben, bliebe daneben ein leerer Streifen, und
+        Fälligkeit und Labels rückten sichtbar auseinander. Gemessen wird
+        deshalb der tatsächliche Zelleninhalt; die Musterwerte bleiben die
+        Obergrenze, damit nie abgeschnitten wird.
+        """
+        tree = getattr(self, "tree", None)
+        if tree is None:
+            return None
+        try:
+            font = tkfont.Font(root=self.root, font=self.tree_font())
+        except (tk.TclError, RuntimeError):
+            return None
+        due_width = 0
+        label_width = 0
+        due_has_time = False
+        stack = list(tree.get_children(""))
+        while stack:
+            row_id = stack.pop()
+            try:
+                stack.extend(tree.get_children(row_id))
+                values = tree.item(row_id, "values")
+            except tk.TclError:
+                continue
+            if len(values) > 0 and values[0]:
+                due_text = str(values[0])
+                due_width = max(due_width, font.measure(due_text))
+                # Das Komma trennt Datum und Uhrzeit: „15.09.26, 10:30“.
+                if "," in due_text:
+                    due_has_time = True
+            if len(values) > 1 and values[1]:
+                label_width = max(label_width, font.measure(str(values[1])))
+        padding = self.tree_cell_padding(font)
+        due_total = due_width + padding if due_width else 0
+        if due_has_time:
+            # Sobald irgendwo eine Uhrzeit steht, muss die vollständige Angabe
+            # in die Zeile passen – Datum und Uhrzeit, nie nur das Datum. Die
+            # Musterbreite ist genau dafür bemessen und gilt hier als Untergrenze.
+            due_total = max(due_total, self.due_column_width())
+        return (
+            due_total,
+            label_width + padding if label_width else 0,
+        )
+
+    def fit_tree_columns_to_content(self):
+        """Richtet die beiden rechten Spalten am fertig gefüllten Baum aus.
+
+        Läuft nach jedem Aufbau. Ändert sich nichts an den gemessenen Breiten,
+        bleibt auch die Spaltenbreite unangetastet – sonst geriete der Baum über
+        den Umbruch der Long-Tasks in eine Schleife.
+        """
+        measured = self.content_column_widths()
+        if measured is None:
+            return
+        previous = (
+            getattr(self, "_content_due_width", None),
+            getattr(self, "_content_label_width", None),
+        )
+        if measured == previous:
+            return
+        self._content_due_width, self._content_label_width = measured
+        self.sync_task_tree_columns()
+
+    def finish_tree_refresh(self):
+        """Gemeinsamer Abschluss jedes Baumaufbaus.
+
+        Erst die Spalten an den neuen Inhalt anpassen, dann die Bildlaufleiste
+        prüfen: Die Spaltenbreite entscheidet mit, wie hoch die Zeilen umbrechen.
+        """
+        self.fit_tree_columns_to_content()
+        self.schedule_scrollbar_refresh()
+
+    # -----------------------------
+    # Wiederholungen (Format 11)
+    # -----------------------------
+    @classmethod
+    def normalize_repeat(cls, value, default_start=None):
+        """Prüft eine Wiederholungsregel und liefert sie in fester Form.
+
+        Alles Unbekannte fällt auf None zurück – ein Punkt ohne gültige Regel
+        wiederholt sich nicht. Das ist die sichere Richtung: Eine kaputte Regel
+        darf keine Termine erzeugen, die niemand gesetzt hat.
+
+        `default_start` setzt den Ursprungstermin, wenn die Regel noch keinen
+        trägt. Daran hängen Monats- und Jahresabstände: Ohne ihn rutschte eine
+        monatliche Aufgabe vom 31. über einen Februar dauerhaft auf den 28.
+        """
+        if not isinstance(value, dict):
+            return None
+        art = value.get("art")
+        if art not in cls.REPEAT_KINDS:
+            return None
+        regel = {"art": art}
+        if art == cls.REPEAT_EVERY_N_DAYS:
+            abstand = value.get("abstand")
+            if isinstance(abstand, bool) or not isinstance(abstand, int):
+                return None
+            if not 1 <= abstand <= cls.REPEAT_MAX_INTERVAL:
+                return None
+            regel["abstand"] = abstand
+        elif art == cls.REPEAT_WEEKDAYS:
+            roh = value.get("tage")
+            if not isinstance(roh, list):
+                return None
+            tage = sorted({
+                tag for tag in roh
+                if isinstance(tag, int) and not isinstance(tag, bool) and 0 <= tag <= 6
+            })
+            # Ohne einen einzigen Wochentag träfe die Regel nie zu.
+            if not tage:
+                return None
+            regel["tage"] = tage
+        for feld, ersatz in (("start", default_start), ("ende", None)):
+            roh = value.get(feld) or (ersatz if feld == "start" else None)
+            if isinstance(roh, str) and roh:
+                try:
+                    datetime.strptime(roh, "%Y-%m-%d")
+                except ValueError:
+                    if feld == "ende":
+                        return None
+                    roh = None
+                regel[feld] = roh
+            else:
+                regel[feld] = None
+        return regel
+
+    @classmethod
+    def add_months(cls, start, months):
+        """Verschiebt ein Datum um Monate und behält den Monatsletzten bei.
+
+        Der 31. Januar plus einen Monat ist der 28. oder 29. Februar – und im
+        Monat darauf wieder der 31. März, weil gerechnet und nicht fortgesetzt
+        wird. Ohne diese Regel wanderte eine monatliche Aufgabe vom 31. über
+        den 28. dauerhaft auf den 28.; deshalb rechnet die Reihe immer vom
+        ursprünglichen Tag aus.
+        """
+        monat_gesamt = (start.year * 12 + start.month - 1) + months
+        jahr, monat = divmod(monat_gesamt, 12)
+        monat += 1
+        letzter = calendar.monthrange(jahr, monat)[1]
+        return date(jahr, monat, min(start.day, letzter))
+
+    @classmethod
+    def next_repeat_date(cls, regel, letzter, anker=None):
+        """Nächster Termin einer Regel nach `letzter`.
+
+        `anker` ist der ursprüngliche Termin der Reihe; er hält Monats- und
+        Jahresabstände am gewünschten Tag fest. Liefert None, wenn die Reihe
+        endet – weil das Enddatum überschritten ist oder die Regel innerhalb
+        des Suchfensters keinen Tag mehr trifft.
+        """
+        regel = cls.normalize_repeat(regel)
+        if regel is None or letzter is None:
+            return None
+        anker = anker or letzter
+        art = regel["art"]
+
+        if art == cls.REPEAT_DAILY:
+            naechster = letzter + timedelta(days=1)
+        elif art == cls.REPEAT_EVERY_N_DAYS:
+            naechster = letzter + timedelta(days=regel["abstand"])
+        elif art == cls.REPEAT_WEEKLY:
+            naechster = letzter + timedelta(days=7)
+        elif art == cls.REPEAT_WEEKDAYS:
+            naechster = None
+            for schritt in range(1, 8):
+                kandidat = letzter + timedelta(days=schritt)
+                if kandidat.weekday() in regel["tage"]:
+                    naechster = kandidat
+                    break
+            if naechster is None:
+                return None
+        elif art == cls.REPEAT_MONTHLY:
+            # Vom Anker aus zählen, nicht vom letzten Termin: Sonst schrumpfte
+            # der 31. über einen Februar hinweg dauerhaft auf den 28.
+            schritte = max(1, (letzter.year - anker.year) * 12 + (letzter.month - anker.month))
+            naechster = cls.add_months(anker, schritte)
+            wache = 0
+            while naechster <= letzter and wache < 120:
+                schritte += 1
+                naechster = cls.add_months(anker, schritte)
+                wache += 1
+        elif art == cls.REPEAT_YEARLY:
+            schritte = max(1, letzter.year - anker.year)
+            naechster = cls.add_months(anker, schritte * 12)
+            wache = 0
+            while naechster <= letzter and wache < 20:
+                schritte += 1
+                naechster = cls.add_months(anker, schritte * 12)
+                wache += 1
+        else:
+            return None
+
+        if naechster is None or naechster <= letzter:
+            return None
+        if (naechster - letzter).days > cls.REPEAT_MAX_LOOKAHEAD_DAYS:
+            return None
+        ende = regel.get("ende")
+        if ende and naechster.isoformat() > ende:
+            return None
+        return naechster
+
+    @classmethod
+    def describe_repeat(cls, regel):
+        """Wiederholungsregel als Klartext – für Maske, Liste und Export."""
+        regel = cls.normalize_repeat(regel)
+        if regel is None:
+            return ""
+        art = regel["art"]
+        if art == cls.REPEAT_DAILY:
+            text = "täglich"
+        elif art == cls.REPEAT_EVERY_N_DAYS:
+            abstand = regel["abstand"]
+            text = "jeden zweiten Tag" if abstand == 2 else f"alle {abstand} Tage"
+        elif art == cls.REPEAT_WEEKDAYS:
+            namen = ", ".join(cls.REPEAT_WEEKDAY_NAMES[tag] for tag in regel["tage"])
+            text = f"jeden {namen}"
+        elif art == cls.REPEAT_WEEKLY:
+            text = "wöchentlich"
+        elif art == cls.REPEAT_MONTHLY:
+            text = "monatlich"
+        elif art == cls.REPEAT_YEARLY:
+            text = "jährlich"
+        else:
+            return ""
+        ende = regel.get("ende")
+        if ende:
+            text += f" bis {cls.format_due_display(ende)}"
+        return text
+
+    @classmethod
+    def parse_repeat_text(cls, text):
+        """Übersetzt den Klartext einer Wiederholung zurück in eine Regel.
+
+        Gegenstück zu `describe_repeat`, gebraucht beim TXT-Import. Erkennt nur,
+        was die eigene Ausgabe erzeugt; alles andere liefert None.
+        """
+        roh = " ".join(str(text or "").split())
+        if not roh:
+            return None
+        ende = None
+        if " bis " in roh:
+            roh, rohes_ende = roh.rsplit(" bis ", 1)
+            ende = cls.parse_due_input(rohes_ende.strip()) or None
+            roh = roh.strip()
+        regel = None
+        if roh == "täglich":
+            regel = {"art": cls.REPEAT_DAILY}
+        elif roh == "wöchentlich":
+            regel = {"art": cls.REPEAT_WEEKLY}
+        elif roh == "monatlich":
+            regel = {"art": cls.REPEAT_MONTHLY}
+        elif roh == "jährlich":
+            regel = {"art": cls.REPEAT_YEARLY}
+        elif roh == "jeden zweiten Tag":
+            regel = {"art": cls.REPEAT_EVERY_N_DAYS, "abstand": 2}
+        elif roh.startswith("alle ") and roh.endswith(" Tage"):
+            zahl = roh[5:-5].strip()
+            if zahl.isdigit():
+                regel = {"art": cls.REPEAT_EVERY_N_DAYS, "abstand": int(zahl)}
+        elif roh.startswith("jeden "):
+            tage = []
+            for kuerzel in roh[6:].split(","):
+                kuerzel = kuerzel.strip()
+                if kuerzel in cls.REPEAT_WEEKDAY_NAMES:
+                    tage.append(cls.REPEAT_WEEKDAY_NAMES.index(kuerzel))
+            if tage:
+                regel = {"art": cls.REPEAT_WEEKDAYS, "tage": tage}
+        if regel is None:
+            return None
+        if ende:
+            regel["ende"] = ende
+        return regel
+
+    def advance_repeating_items(self, item_ids):
+        """Rückt abgehakte Wiederholungen auf ihren nächsten Termin vor.
+
+        Der Punkt bleibt derselbe und steht danach wieder offen – er wandert
+        nur auf die nächste Fälligkeit. Eine zweite, erledigte Kopie stehen zu
+        lassen wäre die Alternative gewesen; eine tägliche Aufgabe hinterließe
+        so aber in einem Jahr 365 abgehakte Zeilen in derselben Liste. Was
+        geschafft wurde, hält stattdessen die Tageszahl fest, und der Verlauf
+        der letzten Tage steht auf der Startseite.
+
+        Endet die Reihe – Enddatum überschritten oder kein Termin mehr in
+        Sicht –, bleibt der Punkt erledigt und verliert seine Regel. Er ist
+        dann eine gewöhnliche, abgeschlossene Aufgabe.
+
+        Rückgabe: Anzahl der vorgerückten Punkte. Läuft innerhalb eines
+        `item_change`; der Aufrufer meldet die Änderung.
+        """
+        vorgerueckt = 0
+        for item_id in item_ids or ():
+            found = self.find_item(item_id)
+            if not found:
+                continue
+            item = found[0]
+            regel = self.normalize_repeat(item.get("repeat"))
+            if regel is None or not item.get("done") or not self.is_schedulable_item(item):
+                continue
+            aktuell = self.normalize_due(item.get("due"))
+            if not aktuell:
+                continue
+            try:
+                letzter = datetime.strptime(aktuell, "%Y-%m-%d").date()
+            except ValueError:
+                continue
+            anker = self.repeat_anchor_date(item) or letzter
+            naechster = self.next_repeat_date(regel, letzter, anker)
+            if naechster is None:
+                # Die Reihe ist zu Ende. Die Regel zu behalten hieße, den Punkt
+                # bei jedem erneuten Abhaken wieder zu prüfen, ohne dass je
+                # etwas geschieht.
+                item["repeat"] = None
+                continue
+            item["due"] = naechster.isoformat()
+            item["done"] = False
+            vorgerueckt += 1
+        return vorgerueckt
+
+    @classmethod
+    def repeat_anchor_date(cls, item):
+        """Ursprungstermin einer Reihe, an dem Monats- und Jahresabstände hängen.
+
+        Ohne Anker rutschte eine monatliche Aufgabe vom 31. über einen Februar
+        dauerhaft auf den 28. Der Anker wird beim ersten Vorrücken gesetzt und
+        danach nicht mehr verändert.
+        """
+        regel = item.get("repeat")
+        anker = regel.get("start") if isinstance(regel, dict) else None
+        if isinstance(anker, str) and anker:
+            try:
+                return datetime.strptime(anker, "%Y-%m-%d").date()
+            except ValueError:
+                return None
+        return None
+
+    def due_status(self, item):
+        """Liefert 'overdue', 'today', 'soon', 'future' oder '' (kein Datum)."""
+        iso_value = item.get("due")
+        if not iso_value:
+            return ""
+        try:
+            due_date = datetime.strptime(iso_value, "%Y-%m-%d").date()
+        except ValueError:
+            return ""
+        if item.get("done"):
+            return "future"
+        delta = (due_date - datetime.now().date()).days
+        if delta < 0:
+            return "overdue"
+        if delta == 0:
+            return "today"
+        if delta <= 2:
+            return "soon"
+        return "future"
+
+    def normalize_items(self, data, seen_ids=None, depth=0, counter=None, known_label_ids=None):
+        if not isinstance(data, list):
+            return []
+        if depth > self.MAX_ITEM_DEPTH:
+            raise ValueError("Die Aufgabenstruktur ist zu tief verschachtelt.")
+        if seen_ids is None:
+            seen_ids = set()
+        if counter is None:
+            counter = [0]
+
+        normalized = []
+        for entry in data:
+            counter[0] += 1
+            if counter[0] > self.MAX_BACKUP_ITEMS:
+                raise ValueError("Die Datei enthält zu viele Aufgaben.")
+            if isinstance(entry, str):
+                item_id = uuid.uuid4().hex
+                seen_ids.add(item_id)
+                normalized.append(self.new_item(entry, False, item_id=item_id))
+                continue
+
+            if isinstance(entry, dict):
+                # Nur ein Long-Task darf eigene Zeilenumbrüche tragen; jede
+                # andere Art bleibt einzeilig, damit Listen-, TXT- und
+                # Markdown-Darstellung zeilentreu bleiben.
+                entry_kind = (
+                    entry.get("kind") if entry.get("kind") in self.ITEM_KINDS else self.ITEM_KIND_TASK
+                )
+                text = self.normalize_item_text(entry.get("text", ""), entry_kind)
+                if not text:
+                    continue
+                item_id = entry.get("id") if isinstance(entry.get("id"), str) and entry.get("id") else None
+                while not item_id or item_id in seen_ids:
+                    item_id = uuid.uuid4().hex
+                seen_ids.add(item_id)
+                children = self.normalize_items(
+                    entry.get("children", []), seen_ids, depth + 1, counter, known_label_ids
+                )
+                importance = entry.get("importance", entry.get("priority", 0))
+                due = entry.get("due")
+                description = str(entry.get("description") or "")
+                attachments = self.normalize_attachments(entry.get("attachments", []))
+                color = entry.get("color") if entry.get("color") in self.ITEM_COLOR_KEYS else None
+                # Migration auf Format 6 und 8: ein fehlendes oder unbekanntes
+                # 'kind' bedeutet eine gewöhnliche Aufgabe. Bestehende Daten
+                # bleiben dadurch unverändert gültig.
+                kind = entry.get("kind") if entry.get("kind") in self.ITEM_KINDS else self.ITEM_KIND_TASK
+                # Migration auf Format 7: fehlende Labels bedeuten „keine Labels“.
+                # Unbekannte Label-IDs werden verworfen, damit keine Zeile auf ein
+                # gelöschtes Label verweist.
+                labels = self.normalize_item_labels(entry.get("labels"), known_label_ids)
+                normalized.append(
+                    self.new_item(
+                        text,
+                        entry.get("done", False),
+                        children,
+                        item_id,
+                        importance,
+                        due,
+                        description,
+                        attachments,
+                        color,
+                        kind,
+                        labels,
+                        # Migration auf Format 10: fehlende Uhrzeit heißt
+                        # „ganztägig“. Bestehende Fälligkeiten bleiben damit
+                        # unverändert gültig.
+                        entry.get("due_time"),
+                        # Migration auf Format 11: Ein fehlendes Feld heißt
+                        # „wiederholt sich nicht". Format-10-Daten bleiben
+                        # dadurch unverändert gültig.
+                        entry.get("repeat"),
+                    )
+                )
+        return normalized
+
+    def load_items(self):
+        if not os.path.exists(SAVE_FILE):
+            self.folders = []
+            self.labels = []
+            self.trash = []
+            self.ensure_system_labels()
+            default_list = self.new_list_object(self.app_title, [])
+            self.lists = [default_list]
+            self.ensure_inbox_list()
+            self.active_list_id = default_list["id"]
+            self.active_folder_id = None
+            self.view_mode = "list"
+            self.items = default_list["items"]
+            self.update_entry_mode()
+            self.update_page_note_preview()
+            self.update_page_labels()
+            self.update_sidebar_list()
+            self.refresh_tree()
+            self.save_items()
+            return
+        try:
+            with open(SAVE_FILE, "r", encoding="utf-8") as file:
+                data = json.load(file)
+            self.lists, active_id_from_file = self.normalize_lists_data(data)
+            if not self.lists:
+                self.lists = [self.new_list_object(self.app_title, [])]
+            self.ensure_inbox_list()
+            inbox_repaired = bool(getattr(self, "_last_inbox_repair", False))
+            requested_system_view = (
+                self.view_mode
+                if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW)
+                else None
+            )
+            requested_folder_id = self.active_folder_id
+            if not requested_folder_id and isinstance(data, dict):
+                saved_folder = data.get("active_folder_id")
+                requested_folder_id = saved_folder if isinstance(saved_folder, str) else None
+            preferred_active_id = self.active_list_id or active_id_from_file
+            if preferred_active_id not in [entry.get("id") for entry in self.lists]:
+                existing_ids = [entry.get("id") for entry in self.lists]
+                fallback = next((entry.get("id") for entry in self.lists if not self.is_inbox_list(entry)), self.lists[0]["id"])
+                preferred_active_id = active_id_from_file if active_id_from_file in existing_ids else fallback
+            self.active_list_id = None
+            self.active_folder_id = None
+            self.view_mode = "list"
+            self.set_active_list(preferred_active_id, refresh=False)
+            if requested_system_view:
+                self._activate_system_view(requested_system_view, refresh=False)
+            elif requested_folder_id and self.get_folder(requested_folder_id):
+                self.set_active_folder(requested_folder_id, refresh=False)
+            self.update_sidebar_list()
+            self.refresh_tree()
+            if inbox_repaired:
+                self.save_items()
+        except (json.JSONDecodeError, ValueError, RecursionError, tk.TclError) as e:
+            self.show_error("Fehler", f"Die Speicherdatei ist beschädigt oder ungültig:\n{e}")
+            self.folders = []
+            self.labels = []
+            self.trash = []
+            self.ensure_system_labels()
+            default_list = self.new_list_object(self.app_title, [])
+            self.lists = [default_list]
+            self.ensure_inbox_list()
+            self.active_list_id = default_list["id"]
+            self.active_folder_id = None
+            self.view_mode = "list"
+            self.items = default_list["items"]
+            self.update_entry_mode()
+            self.update_page_note_preview()
+            self.update_page_labels()
+            self.update_sidebar_list()
+            self.refresh_tree()
+        except OSError as e:
+            self.show_error("Fehler", f"Die Speicherdatei konnte nicht gelesen werden:\n{e}")
+            self.folders = []
+            self.labels = []
+            self.trash = []
+            self.ensure_system_labels()
+            default_list = self.new_list_object(self.app_title, [])
+            self.lists = [default_list]
+            self.ensure_inbox_list()
+            self.active_list_id = default_list["id"]
+            self.active_folder_id = None
+            self.view_mode = "list"
+            self.items = default_list["items"]
+            self.update_entry_mode()
+            self.update_page_note_preview()
+            self.update_page_labels()
+            self.update_sidebar_list()
+            self.refresh_tree()
+
+    def data_payload(self, lists=None, folders=None, active_list_id=None, active_folder_id=None,
+                     labels=None, trash=None):
+        return {
+            "version": self.DATA_SCHEMA_VERSION,
+            "active_list_id": self.active_list_id if active_list_id is None else active_list_id,
+            "active_folder_id": (
+                self.active_folder_id if self.view_mode == "folder" else None
+            ) if active_folder_id is None else active_folder_id,
+            "folders": self.folders if folders is None else folders,
+            "labels": self.labels if labels is None else labels,
+            "lists": self.lists if lists is None else lists,
+            "trash": self.trash if trash is None else trash,
+        }
+
+    @staticmethod
+    def write_json_atomic(path, payload):
+        """Schreibt JSON vollständig und ersetzt die Zieldatei erst am Ende."""
+        directory = os.path.dirname(os.path.abspath(path))
+        os.makedirs(directory, exist_ok=True)
+        fd, temp_file = tempfile.mkstemp(prefix=".glide-json-", suffix=".tmp", dir=directory)
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as file:
+                json.dump(payload, file, ensure_ascii=False, indent=4)
+                file.flush()
+                os.fsync(file.fileno())
+            os.replace(temp_file, path)
+            temp_file = None
+        finally:
+            if temp_file:
+                try:
+                    os.remove(temp_file)
+                except OSError:
+                    pass
+
+    def save_items(self, *, show_error=True, force_backup=False):
+        self.refresh_data_lock()
+        if getattr(self, "_data_read_only", False):
+            if show_error:
+                self.show_warning("Speichern gesperrt", "Der Datenordner ist anderweitig geöffnet. Bitte Glide nach dem Ordnerabgleich erneut starten.")
+            return False
+        self.dirty = True
+        backup_warning = None
+        try:
+            self.refresh_data_lock()
+            self.sync_current_list_reference()
+            self.ensure_schema12_backup()
+            backup_warning = self.write_backup_copy(force=force_backup)
+            self.write_json_atomic(SAVE_FILE, self.data_payload())
+            self.dirty = False
+        except Exception as e:
+            if show_error:
+                self.show_error("Fehler beim Speichern", str(e))
+            return False
+
+        self.record_recent_list_edits()
+        try:
+            self.update_sidebar_list()
+        except tk.TclError:
+            pass
+        if backup_warning and show_error:
+            self.show_warning(
+                "Sicherung nicht möglich",
+                "Die aktuellen Daten wurden gespeichert, aber die zusätzliche automatische Sicherung "
+                f"konnte nicht erstellt werden:\n{backup_warning}",
+            )
+        return True
+
+    def ensure_schema12_backup(self):
+        """Vor dem ersten Überschreiben alter Daten eine unrotierte Rückfallkopie."""
+        if getattr(self, "_schema12_backup_checked", False):
+            return
+        if os.path.isfile(SAVE_FILE):
+            with open(SAVE_FILE, "r", encoding="utf-8") as source:
+                try:
+                    previous = json.load(source)
+                except (ValueError, UnicodeError):
+                    previous = None
+            version = previous.get("version", 0) if isinstance(previous, dict) else 0
+            if not isinstance(version, int) or version < 12:
+                os.makedirs(BACKUP_DIR, exist_ok=True)
+                stamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+                shutil.copy2(SAVE_FILE, os.path.join(BACKUP_DIR, f"liste_vor_format12_{stamp}.json"))
+        self._schema12_backup_checked = True
+
+    def write_backup_copy(self, force=False):
+        """Legt eine automatische Sicherung des zuletzt gespeicherten Standes an.
+
+        Ohne ``force`` greift eine Zeitsperre: bei jedem Tastendruck eine eigene
+        Datei anzulegen würde den Ordner fluten und die tatsächlich nützlichen
+        Rückfallstände verdrängen. Der zeitgesteuerte Sicherungspunkt des
+        Autosave setzt die Sperre bewusst außer Kraft.
+
+        Rückgabe: Fehlertext, falls die Sicherung nicht möglich war, sonst None.
+        Ein defekter Backup-Ordner darf das Speichern der Nutzdaten nie
+        verhindern.
+        """
+        if not os.path.exists(SAVE_FILE):
+            return None
+        now = self.monotonic_seconds()
+        last = self._last_backup_monotonic
+        if not force and last is not None and (now - last) < self.BACKUP_MIN_INTERVAL_SECONDS:
+            return None
+        try:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+            backup_file = os.path.join(BACKUP_DIR, f"liste_backup_{timestamp}.json")
+            os.makedirs(BACKUP_DIR, exist_ok=True)
+            shutil.copy2(SAVE_FILE, backup_file)
+            self._last_backup_monotonic = now
+            self.prune_backups()
+            return None
+        except OSError as exc:
+            return str(exc)
+
+    @staticmethod
+    def monotonic_seconds():
+        """Monotone Zeitbasis – unabhängig von Zeitzonen- und Uhrzeitkorrekturen."""
+        return time.monotonic()
+
+    def prune_backups(self):
+        """Rotiert automatische Sicherungen nach Mindestbestand, Alter und Obergrenze.
+
+        Reihenfolge und Begründung:
+        1. Die neuesten MIN_BACKUPS Sicherungen bleiben immer erhalten – auch
+           wenn sie älter als das Höchstalter sind. Sonst stünde nach einer
+           längeren Pause keine Rückfallebene mehr bereit.
+        2. Aus dem Rest verschwinden alle, die älter als BACKUP_MAX_AGE_MINUTES
+           sind.
+        3. Zuletzt begrenzt MAX_BACKUPS die verbleibende Menge.
+
+        Portable Sicherungen (`vor_import_*.glidebackup`) fallen bewusst nicht
+        unter diese Rotation: sie sind die Rückfallebene eines Imports.
+        """
+        try:
+            backups = [
+                os.path.join(BACKUP_DIR, name)
+                for name in os.listdir(BACKUP_DIR)
+                if name.startswith("liste_backup_") and name.endswith(".json")
+            ]
+        except OSError:
+            return
+        if not backups:
+            return
+
+        def mtime(path):
+            try:
+                return os.path.getmtime(path)
+            except OSError:
+                return 0.0
+
+        backups.sort(key=mtime, reverse=True)  # neueste zuerst
+        protected = backups[: self.MIN_BACKUPS]
+        candidates = backups[self.MIN_BACKUPS:]
+        max_age_seconds = self.BACKUP_MAX_AGE_MINUTES * 60
+        now = datetime.now().timestamp()
+        survivors = []
+        for path in candidates:
+            if now - mtime(path) > max_age_seconds:
+                try:
+                    os.remove(path)
+                except OSError:
+                    survivors.append(path)
+                continue
+            survivors.append(path)
+        remaining = protected + survivors
+        if len(remaining) > self.MAX_BACKUPS:
+            for path in remaining[self.MAX_BACKUPS:]:
+                try:
+                    os.remove(path)
+                except OSError:
+                    pass
+
+    # -----------------------------
+    # Automatisches Speichern
+    # -----------------------------
+    def schedule_autosave(self):
+        """Startet den zeitgesteuerten Speicher- und Sicherungszyklus."""
+        if not hasattr(self, "root"):
+            return
+        interval_ms = max(1, int(self.AUTOSAVE_INTERVAL_MINUTES * 60 * 1000))
+        try:
+            self._autosave_id = self._register_after(self.root.after(interval_ms, self.autosave_tick))
+        except tk.TclError:
+            self._autosave_id = None
+
+    def autosave_tick(self):
+        """Sichert regelmäßig, ohne den Nutzer mit Dialogen zu unterbrechen.
+
+        Ein noch nicht gespeicherter Stand wird erneut geschrieben; andernfalls
+        entsteht ein garantierter Sicherungspunkt. Fehler bleiben still, weil
+        ein modaler Dialog im Hintergrund die Arbeit unterbrechen würde – der
+        nächste manuelle Speichervorgang meldet das Problem sichtbar.
+        """
+        self._after_ids.discard(self._autosave_id)
+        self._autosave_id = None
+        try:
+            self.refresh_data_lock()
+            if self.dirty:
+                self.save_items(show_error=False, force_backup=True)
+            else:
+                self.write_backup_copy(force=True)
+        except Exception:
+            pass
+        finally:
+            self.schedule_autosave()
+
+    def walk_items(self, items=None):
+        if items is None:
+            items = self.items
+        for item in items:
+            yield item
+            yield from self.walk_items(item.get("children", []))
+
+    def find_item(self, item_id, items=None, parent_list=None, parent_item=None):
+        if items is None:
+            items = self.items
+            parent_item = None
+
+        for index, item in enumerate(items):
+            if item.get("id") == item_id:
+                return item, items, index, parent_item
+            found = self.find_item(item_id, item.get("children", []), item.get("children", []), item)
+            if found:
+                return found
+        return None
+
+    def find_item_in_lists(self, item_id):
+        """Sucht einen Punkt über alle Listen hinweg.
+
+        Wird von der abgeleiteten Ansicht „In Bearbeitung“ benötigt, deren
+        Zeilen auf Aufgaben fremder Listen verweisen.
+        """
+        if not item_id:
+            return None
+        for entry in self.lists:
+            found = self.find_item(item_id, entry.get("items", []), entry.get("items", []), None)
+            if found:
+                return found[0], found[1], found[2], entry
+        return None
+
+    def update_in_progress_item(self, item_id, field, value):
+        """Ändert eine Aufgabe direkt aus der Ansicht „In Bearbeitung“ heraus."""
+        found = self.find_item_in_lists(item_id)
+        if not found:
+            return "break"
+        item = found[0]
+        if field == "due":
+            new_value = self.normalize_due(value) if value else None
+            if value and new_value is None:
+                self.show_warning("Fälligkeit", "Das Fälligkeitsdatum ist ungültig.")
+                return "break"
+        elif field == "importance":
+            new_value = self.clamp_importance(value)
+        elif field == "color":
+            new_value = value if value in self.ITEM_COLOR_KEYS else None
+        elif field == "done":
+            new_value = bool(value)
+        else:
+            return "break"
+        if item.get(field) == new_value:
+            return "break"
+        self.snapshot_undo()
+        item[field] = new_value
+        self.save_items()
+        self.refresh_tree()
+        return "break"
+
+    def edit_in_progress_item(self, item_id):
+        """Öffnet den Detaildialog für eine Aufgabe aus einer fremden Liste."""
+        found = self.find_item_in_lists(item_id)
+        if not found:
+            return "break"
+        item = found[0]
+        details = self.themed_item_details_dialog(item)
+        if details is None:
+            return "break"
+        # Der Punkt gehört einer fremden Liste: Es gibt hier keine Auswahl im
+        # Baum, die danach wiederhergestellt werden könnte.
+        with self.item_change((), restore=False) as change:
+            if self.apply_item_details(item, details):
+                change.mark()
+        return "break"
+
+    def item_contains_id(self, item, target_id):
+        for child in item.get("children", []):
+            if child.get("id") == target_id or self.item_contains_id(child, target_id):
+                return True
+        return False
+
+    def remove_item_by_id(self, item_id):
+        found = self.find_item(item_id)
+        if not found:
+            return None
+        item, siblings, index, _parent_item = found
+        return siblings.pop(index)
+
+    def is_mouse_event(self, event):
+        """True nur bei echten Maus-/Touchpad-Klicks, nicht bei Tastatur-Events."""
+        try:
+            return isinstance(getattr(event, "num", None), int) and getattr(event, "num", None) in (1, 2, 3)
+        except Exception:
+            return False
+
+    def get_item_number_path(self, item_id, items=None, prefix=None):
+        """Ermittelt die sichtunabhängige hierarchische Nummerierung eines Punkts."""
+        if items is None:
+            items = self.items
+        if prefix is None:
+            prefix = []
+        for index, item in enumerate(items, start=1):
+            current = prefix + [index]
+            if item.get("id") == item_id:
+                return current
+            child_result = self.get_item_number_path(item_id, item.get("children", []), current)
+            if child_result:
+                return child_result
+        return None
+
+    # -----------------------------
+    # Treeview Darstellung
+    # -----------------------------
+    def on_tree_scroll(self, first, last):
+        """Blendet die Scrollbar nur dann ein, wenn der Listeninhalt wirklich scrollbar ist."""
+        if not hasattr(self, "scrollbar"):
+            return
+        try:
+            first_f = float(first)
+            last_f = float(last)
+        except (TypeError, ValueError):
+            self.scrollbar.set(first, last)
+            return
+
+        self.scrollbar.set(first, last)
+        needs_scrollbar = not (first_f <= 0.0 and last_f >= 1.0)
+
+        if needs_scrollbar and not getattr(self, "scrollbar_visible", False):
+            self.scrollbar.pack(side="right", fill="y", padx=(0, 10), pady=14)
+            self.scrollbar_visible = True
+        elif not needs_scrollbar and getattr(self, "scrollbar_visible", False):
+            self.scrollbar.pack_forget()
+            self.scrollbar_visible = False
+
+    def refresh_scrollbar_state(self):
+        if hasattr(self, "tree"):
+            self.tree.yview_moveto(self.tree.yview()[0])
+
+    def remember_expanded_state(self):
+        if not hasattr(self, "tree"):
+            return
+        expanded = set(self.expanded_ids)
+        collapsed = set(self.collapsed_item_ids)
+        for item in self.walk_items():
+            item_id = item.get("id")
+            try:
+                if not item_id or not self.tree.exists(item_id) or not item.get("children"):
+                    continue
+                if self.tree.item(item_id, "open"):
+                    expanded.add(item_id)
+                    collapsed.discard(item_id)
+                else:
+                    collapsed.add(item_id)
+                    expanded.discard(item_id)
+            except tk.TclError:
+                pass
+        self.expanded_ids = expanded
+        self.collapsed_item_ids = collapsed
+
+    # -----------------------------
+    # Platzhalter / responsive Filterleiste
+    # -----------------------------
+    def set_entry_placeholder(self, event=None):
+        if not hasattr(self, "entry"):
+            return
+        if not self.entry.get().strip():
+            self.entry_placeholder_active = True
+            self.entry.configure(fg=self.theme["placeholder"])
+            self.entry.delete(0, tk.END)
+            self.entry.insert(0, self.entry_placeholder_text)
+
+    def clear_entry_placeholder(self, event=None):
+        if not hasattr(self, "entry"):
+            return
+        if self.entry_placeholder_active:
+            self.entry_placeholder_active = False
+            self.entry.configure(fg=self.theme["text"])
+            self.entry.delete(0, tk.END)
+
+    def get_entry_text(self):
+        if not hasattr(self, "entry"):
+            return ""
+        raw_text = self.entry.get().strip()
+        if getattr(self, "entry_placeholder_active", False):
+            if raw_text == self.entry_placeholder_text:
+                return ""
+            # Robuste Absicherung: Falls Text per Zwischenablage oder Skript eingefügt wurde,
+            # während der Platzhalterstatus noch aktiv war, wird der echte Text trotzdem übernommen.
+            self.entry_placeholder_active = False
+            self.entry.configure(fg=self.theme["text"])
+        return raw_text
+
+    def set_search_placeholder(self, event=None):
+        if not hasattr(self, "search_entry"):
+            return
+        if not self.search_var.get().strip():
+            self.search_placeholder_active = True
+            self.search_entry.configure(fg=self.theme["placeholder"])
+            self.search_var.set(self.search_placeholder_text)
+
+    def clear_search_placeholder(self, event=None):
+        if not hasattr(self, "search_entry"):
+            return
+        if self.search_placeholder_active:
+            self.search_placeholder_active = False
+            self.search_entry.configure(fg=self.theme["text"])
+            self.search_var.set("")
+
+    def update_responsive_filter_visibility(self, event=None):
+        """Blendet die Filterbox bei schmalen Fenstern aus, damit die Suche bedienbar bleibt.
+
+        Die Schwelle bezieht sich auf den rechten Bereich, nicht mehr auf das
+        ganze Fenster: Die Suchzeile steht seit 2.12.0 neben der Seitenleiste.
+        """
+        if not hasattr(self, "hide_done_box_border"):
+            return
+        width = event.width if event is not None else self.search_frame.winfo_width()
+        should_show = width >= self.FILTER_VISIBILITY_MIN_WIDTH
+        if should_show == getattr(self, "filters_visible", True):
+            return
+        self.filters_visible = should_show
+        if should_show:
+            self.hide_done_box_border.pack(
+                side="right", fill="y", padx=(10, 10), after=self.clear_search_button
+            )
+        else:
+            self.hide_done_box_border.pack_forget()
+
+    def current_search_query(self):
+        if not hasattr(self, "search_var"):
+            return ""
+        raw_text = self.search_var.get().strip()
+        if getattr(self, "search_placeholder_active", False):
+            if raw_text == self.search_placeholder_text:
+                return ""
+            # Robuste Absicherung: Falls Text per Zwischenablage oder Skript eingefügt wurde,
+            # während der Platzhalterstatus noch aktiv war, wird der echte Text trotzdem als Suche genutzt.
+            self.search_placeholder_active = False
+            if hasattr(self, "search_entry"):
+                self.search_entry.configure(fg=self.theme["text"])
+        return raw_text.lower()
+
+    def item_text_matches_query(self, item, query):
+        if not query:
+            return True
+        attachment_names = " ".join(
+            str(attachment.get("name", ""))
+            for attachment in item.get("attachments", [])
+            if isinstance(attachment, dict)
+        )
+        haystack = " ".join([
+            str(item.get("text", "")),
+            str(item.get("description", "")),
+            attachment_names,
+            self.IMPORTANCE_NAMES.get(self.clamp_importance(item.get("importance", 0)), ""),
+            "erledigt" if item.get("done") else "offen",
+            self.format_due_full(item.get("due"), item.get("due_time")),
+            self.describe_repeat(item.get("repeat")),
+        ]).lower()
+        return query in haystack
+
+    def get_filter_mode(self):
+        if getattr(self, "hide_done_var", None) is not None and self.hide_done_var.get():
+            return "open"
+        return "all"
+
+    def item_matches_status_filter(self, item):
+        mode = self.get_filter_mode()
+        if self.is_structural_item(item):
+            # Gruppe und Überschrift haben keinen eigenen Erledigt-Zustand. Bei
+            # aktivem Statusfilter bleiben sie nur sichtbar, wenn ein Unterpunkt
+            # passt – das übernimmt item_visible_by_filter.
+            return mode == "all"
+        if mode == "open":
+            return not item.get("done", False)
+        return True
+
+    def item_visible_by_filter(self, item):
+        query = self.current_search_query()
+        self_matches = self.item_text_matches_query(item, query) and self.item_matches_status_filter(item)
+        child_matches = any(self.item_visible_by_filter(child) for child in item.get("children", []))
+        return self_matches or child_matches
+
+    def has_active_filter(self):
+        return bool(self.current_search_query()) or self.get_filter_mode() != "all"
+
+    def on_open_only_changed(self):
+        self.on_filter_changed()
+
+    def on_filter_changed(self):
+        self.save_settings()
+        self.refresh_tree()
+
+    def clear_search(self):
+        self.search_placeholder_active = False
+        self.search_var.set("")
+        if hasattr(self, "search_entry"):
+            self.search_entry.configure(fg=self.theme["text"])
+            if self.current_focus_widget() != self.search_entry:
+                self.set_search_placeholder()
+
+    def focus_search(self, event=None):
+        if self.view_mode == self.HOME_VIEW:
+            self.set_active_list(self.ensure_inbox_list()["id"])
+        if hasattr(self, "search_entry"):
+            self.search_entry.focus_set()
+            self.clear_search_placeholder()
+            self.search_entry.select_range(0, tk.END)
+        return "break"
+
+    def focus_entry(self, event=None):
+        if self.view_mode in (self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+            self.set_active_list(self.ensure_inbox_list()["id"])
+        if hasattr(self, "entry"):
+            self.entry.focus_set()
+            self.clear_entry_placeholder()
+        return "break"
+
+    def handle_control_n(self, event=None):
+        """Unterscheidet Strg+N und Strg+Shift+N anhand der echten Shift-Taste.
+
+        Dadurch löst aktiviertes CapsLock nicht versehentlich „Neue Liste“ aus.
+        """
+        if event is not None and bool(event.state & 0x0001):
+            return self.create_new_list(event)
+        return self.focus_entry(event)
+
+    def handle_control_f(self, event=None):
+        """Unterscheidet Suche und Wichtigkeit ohne CapsLock-Nebenwirkung."""
+        if event is not None and bool(event.state & 0x0001):
+            return self.cycle_importance_selected(event)
+        return self.focus_search(event)
+
+    def handle_escape(self, event=None):
+        focus = self.current_focus_widget()
+        if focus == getattr(self, "search_entry", None) and self.search_var.get():
+            self.clear_search()
+        elif focus == getattr(self, "entry", None):
+            if not getattr(self, "entry_placeholder_active", False):
+                self.entry.delete(0, tk.END)
+        else:
+            self.clear_tree_selection()
+        return "break"
+
+    def compute_stats(self, items):
+        """Fortschritt über echte Aufgaben; Gruppen sind reine Behälter."""
+        total = 0
+        done = 0
+        overdue = 0
+        for item in self.walk_items(items):
+            if not self.is_schedulable_item(item):
+                continue
+            total += 1
+            if item.get("done"):
+                done += 1
+            elif self.due_status(item) == "overdue":
+                overdue += 1
+        return total, done, overdue
+
+    def _set_stats_text(self, text):
+        """Setzt die Fortschrittszeile und bewertet danach die Titelbreite neu."""
+        try:
+            self.stats_label.configure(text=text)
+        except tk.TclError:
+            return
+        self.update_header_title()
+
+    def update_stats_label(self):
+        if not hasattr(self, "stats_label"):
+            return
+        if self.view_mode == self.HOME_VIEW:
+            self._set_stats_text(date.today().strftime("%d.%m.%Y"))
+            return
+        if self.view_mode == "trash":
+            folders = sum(1 for entry in self.trash if entry.get("kind") == self.TRASH_KIND_FOLDER)
+            items = sum(1 for entry in self.trash if entry.get("kind") == self.TRASH_KIND_ITEM)
+            lists = len(self.trash) - folders - items
+            if not self.trash:
+                self._set_stats_text("Papierkorb ist leer")
+            else:
+                self._set_stats_text(
+                    f"{items} Punkt(e) · {lists} Liste(n) · {folders} Ordner im Papierkorb"
+                )
+            return
+        if self.view_mode == self.LABELS_VIEW:
+            gruppen = self.label_view_groups(apply_filters=False)
+            # Ein Punkt mit drei Labels steht in drei Gruppen, bleibt aber ein
+            # Punkt: gezählt wird über die Kennung, nicht über die Zeilen.
+            punkte = {}
+            for _key, _label, eintraege in gruppen:
+                for _source, item in eintraege:
+                    punkte[item.get("id")] = item
+            offen = sum(1 for item in punkte.values() if not item.get("done"))
+            benannte = [eintrag for eintrag in gruppen if eintrag[0] != self.UNLABELLED_GROUP_KEY]
+            text_teile = [f"{len(benannte)} Labelgruppen", f"{len(punkte)} Punkte"]
+            if punkte:
+                text_teile.append(f"{offen} offen")
+            self._set_stats_text(" · ".join(text_teile))
+            return
+        if self.view_mode in self.TASK_OVERVIEW_VIEWS:
+            due_entries = self.current_task_overview_items(apply_filters=False)
+            done = sum(1 for _due, _list_index, _item_index, _entry, item in due_entries if item.get("done"))
+            overdue = sum(1 for _due, _list_index, _item_index, _entry, item in due_entries if self.due_status(item) == "overdue")
+            text = (
+                f"{len(due_entries)} überfällige Aufgaben"
+                if self.view_mode == "overdue"
+                else f"{len(due_entries)} Aufgaben mit Fälligkeit"
+            )
+            if due_entries:
+                text += f" · {len(due_entries) - done} offen"
+            if overdue:
+                text += f" · {overdue} überfällig"
+            self._set_stats_text(text)
+            return
+        if self.view_mode == "folder" and self.active_folder_id:
+            folder_lists = self.get_folder_lists_recursive(self.active_folder_id)
+            total = done = overdue = 0
+            for entry in folder_lists:
+                list_total, list_done, list_overdue = self.compute_stats(entry.get("items", []))
+                total += list_total
+                done += list_done
+                overdue += list_overdue
+            list_word = "Liste" if len(folder_lists) == 1 else "Listen"
+            text = f"{len(folder_lists)} {list_word} · {total} Punkte"
+            if total:
+                text += f" · {total - done} offen"
+            if overdue:
+                text += f" · {overdue} überfällig"
+            self._set_stats_text(text)
+            return
+        total, done, overdue = self.compute_stats(self.items)
+        if total == 0:
+            text = "Noch keine Aufgaben in dieser Liste."
+        else:
+            percent = round(done / total * 100)
+            open_count = total - done
+            text = f"{done} von {total} erledigt \u00b7 {percent}\u00a0%"
+            if open_count:
+                text += f" \u00b7 {open_count} offen"
+            if overdue:
+                text += f" \u00b7 {overdue} \u00fcberf\u00e4llig"
+        self._set_stats_text(text)
+
+    def refresh_tree(self, selected_id=None):
+        if not hasattr(self, "tree"):
+            return
+
+        self.update_home_visibility()
+        if self.view_mode == self.LIBRARY_VIEW:
+            self.tree.selection_remove(self.tree.selection())
+            self.refresh_library_page()
+            return
+        if self.view_mode == self.HOME_VIEW:
+            self.tree.selection_remove(self.tree.selection())
+            self.refresh_home()
+            return
+        if self.view_mode == self.TEMPLATE_VIEW:
+            self.tree.selection_remove(self.tree.selection())
+            self.refresh_template_page()
+            return
+
+        # Die Labelspalte erscheint erst, sobald Labels existieren.
+        self.sync_task_tree_columns()
+
+        if self.view_mode in self.TASK_OVERVIEW_VIEWS:
+            self.refresh_task_overview(selected_id=selected_id)
+            return
+        if self.view_mode == self.LABELS_VIEW:
+            self.refresh_label_overview(selected_id=selected_id)
+            return
+        if self.view_mode == "trash":
+            self.refresh_trash_overview(selected_id=selected_id)
+            return
+        if self.view_mode == "folder":
+            self.refresh_folder_overview(selected_id=selected_id)
+            return
+
+        self.update_stats_label()
+
+        if selected_id is None:
+            selected_id = self.get_selected_item_id()
+        self.remember_expanded_state()
+
+        for row_id in self.tree.get_children(""):
+            self.tree.delete(row_id)
+
+        if not self.items:
+            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text="Noch keine Punkte vorhanden.", tags=("empty",))
+            self.finish_tree_refresh()
+            return
+
+        inserted = self.insert_tree_items("", self.items, [])
+        if inserted == 0:
+            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text="Keine Treffer für den aktuellen Filter.", tags=("empty",))
+            self.finish_tree_refresh()
+            return
+
+        if selected_id and self.tree.exists(selected_id):
+            self.tree.selection_set(selected_id)
+            self.tree.focus(selected_id)
+            self.tree.see(selected_id)
+
+        self.finish_tree_refresh()
+
+    def get_in_progress_items(self, apply_filters=True):
+        """Liefert fällige Aufgaben als abgeleitete Referenzen, ohne sie zu kopieren."""
+        results = []
+        query = self.current_search_query() if apply_filters else ""
+        for list_index, entry in enumerate(self.lists):
+            for item_index, item in enumerate(self.walk_items(entry.get("items", []))):
+                if not self.is_schedulable_item(item):
+                    continue
+                due_value = self.normalize_due(item.get("due"))
+                if not due_value:
+                    continue
+                if apply_filters and (
+                    not self.item_text_matches_query(item, query)
+                    or not self.item_matches_status_filter(item)
+                ):
+                    continue
+                results.append((due_value, list_index, item_index, entry, item))
+        results.sort(key=lambda value: (value[0], value[1], value[2]))
+        return results
+
+    def get_overdue_items(self, apply_filters=True):
+        """Überfällige, noch offene Aufgaben.
+
+        „Überfällig“ heißt: die Fälligkeit liegt vor dem heutigen Tag und der
+        Punkt ist nicht erledigt. due_status liefert für erledigte Punkte nie
+        „overdue“, deshalb genügt diese eine Bedingung.
+        """
+        return [
+            entry
+            for entry in self.get_in_progress_items(apply_filters=apply_filters)
+            if self.due_status(entry[4]) == "overdue"
+        ]
+
+    def current_task_overview_items(self, apply_filters=True):
+        """Datengrundlage der gerade geöffneten Aufgabenübersicht."""
+        if self.view_mode == "overdue":
+            return self.get_overdue_items(apply_filters=apply_filters)
+        return self.get_in_progress_items(apply_filters=apply_filters)
+
+    def inherited_list_color(self, entry):
+        """Farbschlüssel einer Liste – ersatzweise der ihres nächsten Ordners.
+
+        Hat weder die Liste noch einer ihrer Ordner eine Farbe, liefert die
+        Methode None: Dann bleibt es bei der bisherigen Zustandsfarbe, statt
+        eine Herkunft vorzutäuschen, die niemand vergeben hat.
+        """
+        if not isinstance(entry, dict):
+            return None
+        eigen = entry.get("color")
+        if eigen in self.LIST_COLOR_KEYS:
+            return eigen
+        folder = self.get_folder(entry.get("folder_id"))
+        gesehen = set()
+        while isinstance(folder, dict) and folder.get("id") not in gesehen:
+            gesehen.add(folder.get("id"))
+            geerbt = folder.get("color")
+            if geerbt in self.LIST_COLOR_KEYS:
+                return geerbt
+            folder = self.get_folder(folder.get("parent_id"))
+        return None
+
+    def refresh_task_overview(self, selected_id=None):
+        """Zeigt fällige bzw. überfällige Aufgaben chronologisch in einer flachen Ansicht."""
+        if not hasattr(self, "tree"):
+            return
+        self.update_stats_label()
+        current_selection = selected_id or self.tree.focus()
+        for row_id in self.tree.get_children(""):
+            self.tree.delete(row_id)
+        self.in_progress_item_sources = {}
+
+        entries = self.current_task_overview_items(apply_filters=True)
+        if not entries:
+            if self.view_mode == "overdue":
+                empty_text = (
+                    "Keine überfälligen Aufgaben passen zum aktuellen Filter."
+                    if self.has_active_filter()
+                    else "Nichts überfällig – alle Fälligkeiten liegen in der Zukunft."
+                )
+            else:
+                empty_text = (
+                    "Keine fälligen Aufgaben passen zum aktuellen Filter."
+                    if self.has_active_filter()
+                    else "Noch keine Aufgaben mit Fälligkeitsdatum vorhanden."
+                )
+            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=empty_text, tags=("empty",))
+            self.finish_tree_refresh()
+            return
+
+        for due_value, _list_index, _item_index, source_list, item in entries:
+            item_id = item.get("id") or uuid.uuid4().hex
+            item["id"] = item_id
+            list_id = source_list.get("id")
+            row_id = f"in-progress:{list_id}:{item_id}"
+            self.in_progress_item_sources[row_id] = (list_id, item_id)
+            importance = self.clamp_importance(item.get("importance", 0))
+            flag_prefix = self.IMPORTANCE_MARKERS.get(importance, "")
+            done_prefix = "✓ " if item.get("done") else ""
+            description_suffix = f"   {self.ICONS['description']}" if str(item.get("description") or "").strip() else ""
+            attachment_count = len(item.get("attachments", []))
+            attachment_suffix = (
+                f"   {self.ICONS['attachment']} {attachment_count}" if attachment_count else ""
+            )
+            # Die Herkunft nennt den vollständigen Ordnerpfad, gekürzt je Ebene,
+            # damit sie den Aufgabentext nicht aus der Zeile drängt.
+            source_title = self.list_path_title(source_list, ellipsize=True)
+            number_path = self.get_item_number_path(item_id, source_list.get("items", [])) or []
+            number_text = ".".join(str(part) for part in number_path)
+            task_prefix = f"{number_text}. " if number_text else ""
+            row_text = (
+                f"{source_title}   —   {task_prefix}{flag_prefix}{done_prefix}{self.item_display_text(item)}"
+                f"{description_suffix}{attachment_suffix}"
+            )
+            color_key = item.get("color") if item.get("color") in self.ITEM_COLOR_KEYS else None
+            due_state = self.due_status(item)
+            # Herkunftsfarbe: In einer Übersicht stehen Punkte aus vielen
+            # Listen untereinander; die Farbe ihrer Liste – ersatzweise die des
+            # Ordners – gliedert die Ansicht ohne zusätzliche Trennlinien.
+            # Eine ttk.Treeview färbt immer die ganze Zeile, deshalb ist es
+            # genau eine Farbe je Punkt und keine Mischung innerhalb der Zeile.
+            source_color = self.inherited_list_color(source_list)
+            # In „Verspätet" ist ausnahmslos alles überfällig – dort sagt Rot
+            # nichts mehr, und die Herkunft steht vorn. In „In Bearbeitung"
+            # mischen sich überfällig, heute und später: Da bleibt der
+            # Fälligkeitszustand die wichtigere Auskunft.
+            herkunft_zuerst = self.view_mode == "overdue"
+            if color_key:
+                tag = f"itemcolor_{color_key}"
+            elif item.get("done"):
+                tag = "done"
+            elif herkunft_zuerst and source_color:
+                tag = f"listcolor_{source_color}"
+            elif due_state == "overdue":
+                tag = "overdue"
+            elif due_state == "today":
+                tag = "due_today"
+            elif source_color:
+                tag = f"listcolor_{source_color}"
+            elif importance == 3:
+                tag = "priority_high"
+            elif importance == 2:
+                tag = "priority_medium"
+            elif importance == 1:
+                tag = "priority_low"
+            else:
+                tag = "open"
+            self.tree.insert(
+                "",
+                "end",
+                iid=row_id,
+                text=row_text,
+                values=(
+                    f"{self.DUE_COLUMN_ICON} {self.format_due_column(due_value, item.get('due_time'))}",
+                    self.format_item_labels(item),
+                    "",
+                ),
+                tags=(tag,),
+            )
+
+        if current_selection and self.tree.exists(current_selection):
+            self.tree.selection_set(current_selection)
+            self.tree.focus(current_selection)
+            self.tree.see(current_selection)
+        self.finish_tree_refresh()
+
+    def label_view_groups(self, apply_filters=True):
+        """Punkte des gesamten Bestands, gruppiert nach ihren eigenen Labels.
+
+        Die Reihenfolge folgt der Labelverwaltung; ein Punkt mit mehreren
+        Labels steht in jeder zugehörigen Gruppe. Die beiden festen Labels
+        bleiben außen vor: Sie tragen die Art eines Punkts, und ein Zug in eine
+        solche Gruppe würde den Punkt umwandeln statt ihn zu etikettieren.
+        Die Gruppe „Ohne Label“ sammelt nur echte Aufgaben – Gruppen und
+        Zwischenüberschriften sind Gliederung und ohne Label kein Rückstand.
+        """
+        query = self.current_search_query() if apply_filters else ""
+        gruppen = {}
+        for label in self.labels:
+            if self.is_system_label(label):
+                continue
+            gruppen[label.get("id")] = (label, [])
+        ohne = []
+        for entry in self.lists:
+            for item in self.walk_items(entry.get("items", [])):
+                if apply_filters and (
+                    not self.item_text_matches_query(item, query)
+                    or not self.item_matches_status_filter(item)
+                ):
+                    continue
+                eigene = self.column_labels(item)
+                if not eigene:
+                    if self.is_schedulable_item(item):
+                        ohne.append((entry, item))
+                    continue
+                for label in eigene:
+                    gruppe = gruppen.get(label.get("id"))
+                    if gruppe is not None:
+                        gruppe[1].append((entry, item))
+        ergebnis = [
+            (label.get("id"), label, eintraege)
+            for label, eintraege in gruppen.values()
+        ]
+        ergebnis.append((self.UNLABELLED_GROUP_KEY, None, ohne))
+        return ergebnis
+
+    def label_view_row_text(self, source_list, item):
+        """Zeilentext eines Punkts in der Labelansicht: Herkunft und Punkt."""
+        importance = self.clamp_importance(item.get("importance", 0))
+        flag_prefix = self.IMPORTANCE_MARKERS.get(importance, "")
+        done_prefix = "✓ " if item.get("done") else ""
+        number_path = self.get_item_number_path(item.get("id"), source_list.get("items", [])) or []
+        number_text = ".".join(str(part) for part in number_path)
+        task_prefix = f"{number_text}. " if number_text else ""
+        source_title = self.list_path_title(source_list, ellipsize=True)
+        attachment_count = len(item.get("attachments", []))
+        attachment_suffix = (
+            f"   {self.ICONS['attachment']} {attachment_count}" if attachment_count else ""
+        )
+        # Anders als in „In Bearbeitung“ steht hier der Punkt vorn und die
+        # Herkunft dahinter: Die Gruppe nennt bereits das Label, und wenn die
+        # Spalte eng wird, darf der Listenpfad weichen – nicht der Punkttext.
+        return (
+            f"{task_prefix}{flag_prefix}{done_prefix}{self.item_display_text(item)}"
+            f"{attachment_suffix}   —   {source_title}"
+        )
+
+    def refresh_label_overview(self, selected_id=None):
+        """Zeigt den gesamten Bestand nach Labels gruppiert, in Labelfarbe."""
+        if not hasattr(self, "tree"):
+            return
+        self.update_stats_label()
+        current_selection = selected_id or self.tree.focus()
+        for row_id in self.tree.get_children(""):
+            self.tree.delete(row_id)
+        self.in_progress_item_sources = {}
+        self.label_view_row_groups = {}
+
+        gruppen = self.label_view_groups(apply_filters=True)
+        sichtbar = [eintrag for eintrag in gruppen if eintrag[2] or eintrag[1] is not None]
+        if not any(eintraege for _key, _label, eintraege in gruppen):
+            empty_text = (
+                "Keine Punkte passen zum aktuellen Filter."
+                if self.has_active_filter()
+                else "Noch keine Labels vergeben. Labels entstehen im Rechtsklickmenü eines Punkts."
+            )
+            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=empty_text, tags=("empty",))
+            self.finish_tree_refresh()
+            return
+
+        for key, label, eintraege in sichtbar:
+            if label is None and not eintraege:
+                continue
+            color_key = self.resolve_label_color(label.get("color")) if label else None
+            group_row = f"{self.LABEL_GROUP_ROW_PREFIX}{key}"
+            # „Ohne Label“ trägt bewusst kein Symbol: Die Symboltabelle hat
+            # keines für „nichts vergeben“, und ein geliehenes führte in die Irre.
+            titel = f"{self.LABEL_COLUMN_ICON} {label.get('name', '')}" if label else "Ohne Label"
+            self.tree.insert(
+                "",
+                "end",
+                iid=group_row,
+                text=f"{titel}   ({len(eintraege)})",
+                open=True,
+                tags=(f"itemcolor_{color_key}",) if color_key else ("heading",),
+            )
+            for source_list, item in eintraege:
+                item_id = item.get("id")
+                if not item_id:
+                    continue
+                row_id = f"{self.LABEL_ITEM_ROW_PREFIX}{key}:{item_id}"
+                if self.tree.exists(row_id):
+                    continue
+                self.in_progress_item_sources[row_id] = (source_list.get("id"), item_id)
+                self.label_view_row_groups[row_id] = key
+                due_value = self.normalize_due(item.get("due"))
+                due_text = (
+                    f"{self.DUE_COLUMN_ICON} {self.format_due_column(due_value, item.get('due_time'))}"
+                    if due_value
+                    else ""
+                )
+                self.tree.insert(
+                    group_row,
+                    "end",
+                    iid=row_id,
+                    text=self.label_view_row_text(source_list, item),
+                    values=(
+                        due_text,
+                        self.format_item_labels(item, exclude_id=key if label else None),
+                        "",
+                    ),
+                    tags=(f"itemcolor_{color_key}",) if color_key else ("open",),
+                )
+
+        if current_selection and self.tree.exists(current_selection):
+            self.tree.selection_set(current_selection)
+            self.tree.focus(current_selection)
+            self.tree.see(current_selection)
+        self.finish_tree_refresh()
+
+    def label_group_key_from_iid(self, iid):
+        """Labelgruppe, zu der eine Zeile der Labelansicht gehört."""
+        if not isinstance(iid, str):
+            return None
+        if iid.startswith(self.LABEL_GROUP_ROW_PREFIX):
+            return iid[len(self.LABEL_GROUP_ROW_PREFIX):]
+        return self.label_view_row_groups.get(iid)
+
+    def move_item_to_label_group(self, row_id, target_key):
+        """Vergibt beim Ziehen das Label der Zielgruppe und nimmt das der Quelle.
+
+        Alle übrigen Labels des Punkts bleiben unangetastet: Wer einen Punkt von
+        „Kunde“ nach „Intern“ zieht, meint diesen einen Wechsel und nicht das
+        Löschen seiner anderen Labels. Das neue Label tritt an die Stelle des
+        alten, damit die Reihenfolge – und damit das in der Liste sichtbare
+        erste Label – erhalten bleibt.
+        """
+        source = self.in_progress_item_sources.get(row_id)
+        source_key = self.label_view_row_groups.get(row_id)
+        if not source or source_key is None or target_key is None or source_key == target_key:
+            return False
+        _list_id, item_id = source
+        found = self.find_item_in_lists(item_id)
+        if not found:
+            return False
+        item = found[0]
+        vorher = [value for value in (item.get("labels") or []) if isinstance(value, str)]
+        nachher = list(vorher)
+        ziel_neu = target_key != self.UNLABELLED_GROUP_KEY and target_key not in nachher
+        if source_key != self.UNLABELLED_GROUP_KEY and source_key in nachher:
+            position = nachher.index(source_key)
+            if ziel_neu:
+                nachher[position] = target_key
+            else:
+                nachher.pop(position)
+        elif ziel_neu:
+            # Grenze bewusst prüfen: Ein Zug darf keinen Punkt über das erlaubte
+            # Maß hinaus etikettieren, und bestehende Labels werden nicht
+            # stillschweigend abgeschnitten.
+            if len(nachher) >= self.MAX_LABELS_PER_ITEM:
+                self.show_info(
+                    "Labels",
+                    f"Dieser Punkt trägt bereits {self.MAX_LABELS_PER_ITEM} Labels. "
+                    "Entferne zuerst eines, bevor ein weiteres dazukommt.",
+                )
+                return False
+            nachher.append(target_key)
+        if nachher == vorher:
+            return False
+        with self.item_change((), restore=False) as change:
+            item["labels"] = nachher
+            change.mark()
+        neue_zeile = f"{self.LABEL_ITEM_ROW_PREFIX}{target_key}:{item_id}"
+        if self.tree.exists(neue_zeile):
+            self.tree.selection_set(neue_zeile)
+            self.tree.focus(neue_zeile)
+            self.tree.see(neue_zeile)
+        return True
+
+    def on_label_view_drag_start(self, event):
+        """Merkt den angefassten Punkt der Labelansicht."""
+        row_id = self.tree.identify_row(event.y)
+        self.drag_start_id = None
+        self.drag_item_ids = []
+        self.drag_has_moved = False
+        if not row_id or row_id not in self.in_progress_item_sources:
+            return "break"
+        self.drag_start_id = row_id
+        self.drag_start_x = event.x
+        self.drag_start_y = event.y
+        self.tree.selection_set(row_id)
+        self.tree.focus(row_id)
+        return "break"
+
+    def on_label_view_drag_motion(self, event):
+        """Hebt die Gruppe hervor, in die der Punkt fallen würde."""
+        if not self.drag_start_id:
+            return "break"
+        if abs(event.x - self.drag_start_x) + abs(event.y - self.drag_start_y) > 6:
+            self.drag_has_moved = True
+        self.clear_drop_target_tags()
+        target_key = self.label_group_key_from_iid(self.identify_tree_drop_row(event))
+        if target_key and target_key != self.label_view_row_groups.get(self.drag_start_id):
+            group_row = f"{self.LABEL_GROUP_ROW_PREFIX}{target_key}"
+            try:
+                tags = set(self.tree.item(group_row, "tags"))
+                tags.add("drop_target")
+                self.tree.item(group_row, tags=tuple(tags), open=True)
+            except tk.TclError:
+                pass
+        return "break"
+
+    def on_label_view_drag_end(self, event):
+        """Legt den Punkt in der Zielgruppe ab und tauscht dabei das Label."""
+        row_id = self.drag_start_id
+        moved = self.drag_has_moved
+        self.clear_drop_target_tags()
+        self.drag_start_id = None
+        self.drag_item_ids = []
+        if not row_id or not moved:
+            return "break"
+        target_key = self.label_group_key_from_iid(self.identify_tree_drop_row(event))
+        if target_key is None:
+            return "break"
+        self.move_item_to_label_group(row_id, target_key)
+        return "break"
+
+    def refresh_trash_overview(self, selected_id=None):
+        """Zeigt alle gelöschten Listen und Ordner mit Herkunft und Löschzeitpunkt."""
+        if not hasattr(self, "tree"):
+            return
+        self.update_stats_label()
+        current_selection = selected_id or self.tree.focus()
+        for row_id in self.tree.get_children(""):
+            self.tree.delete(row_id)
+
+        query = self.current_search_query()
+        entries = list(self.trash)
+        if query:
+            entries = [entry for entry in entries if query in self.trash_entry_title(entry).lower()]
+        if not entries:
+            empty_text = (
+                "Kein Eintrag im Papierkorb passt zur aktuellen Suche."
+                if query
+                else "Der Papierkorb ist leer. Gelöschte Punkte, Listen und Ordner landen hier und bleiben wiederherstellbar."
+            )
+            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=empty_text, tags=("empty",))
+            self.finish_tree_refresh()
+            return
+
+        for entry in entries:
+            payload = self.trash_entry_payload(entry) or {}
+            title = self.trash_entry_title(entry)
+            kind = entry.get("kind")
+            is_folder = kind == self.TRASH_KIND_FOLDER
+            is_item = kind == self.TRASH_KIND_ITEM
+            if is_folder:
+                detail = "Ordner"
+                related = sum(
+                    1
+                    for other in self.trash
+                    if other.get("kind") == self.TRASH_KIND_LIST
+                    and other.get("origin_folder_id") == payload.get("id")
+                )
+                if related:
+                    detail += f" · {related} Liste(n) im Papierkorb"
+            elif is_item:
+                detail = self.ITEM_KIND_LABELS.get(self.item_kind(payload), "Punkt")
+                children = self.count_items(payload.get("children", []))
+                if children:
+                    detail += f" · {children} Unterpunkt(e)"
+                origin_title = str((entry.get("origin") or {}).get("list_title") or "").strip()
+                if origin_title:
+                    detail += f" · aus „{origin_title}“"
+            else:
+                detail = f"Liste · {self.count_items(payload.get('items', []))} Punkte"
+                origin = str(entry.get("origin_folder_title") or "").strip()
+                if origin:
+                    detail += f" · aus „{origin}“"
+            marker = "\U0001F4C1" if is_folder else ("•" if is_item else "▸")
+            row_text = f"{marker}  {title}   —   {detail}"
+            color_key = payload.get("color") if payload.get("color") in self.LIST_COLOR_KEYS else None
+            tags = (f"listcolor_{color_key}",) if color_key else ("folder_list",)
+            self.tree.insert(
+                "",
+                "end",
+                iid=f"trash:{entry.get('id')}",
+                text=row_text,
+                values=(f"\U0001F5D1 {self.format_trash_timestamp(entry.get('deleted_at'))}", "", ""),
+                tags=tags,
+            )
+
+        if current_selection and self.tree.exists(current_selection):
+            self.tree.selection_set(current_selection)
+            self.tree.focus(current_selection)
+        self.finish_tree_refresh()
+
+    @staticmethod
+    def format_trash_timestamp(value, with_time=False):
+        try:
+            parsed = datetime.fromisoformat(str(value))
+        except (TypeError, ValueError):
+            return ""
+        return parsed.strftime("%d.%m.%Y %H:%M" if with_time else "%d.%m.%Y")
+
+    def build_trash_context_menu(self, row_id=None):
+        """Kontextmenü des Papierkorbs – für eine Zeile oder den leeren Bereich."""
+        trash_ids = self.get_selected_trash_ids()
+        menu = self._new_themed_popup_menu()
+        if trash_ids:
+            if len(trash_ids) == 1:
+                entry = self.get_trash_entry(trash_ids[0])
+                menu.add_command(label=self.ellipsize_sidebar_title(self.trash_entry_title(entry)), state="disabled")
+            else:
+                menu.add_command(label=f"{len(trash_ids)} Einträge ausgewählt", state="disabled")
+        else:
+            menu.add_command(label=f"Papierkorb ({len(self.trash)})", state="disabled")
+        menu.add_separator()
+        menu.add_command(
+            label="Wiederherstellen",
+            command=lambda: self.restore_selected_trash_entries(False),
+            state="normal" if trash_ids else "disabled",
+        )
+        menu.add_command(
+            label="In Ordner wiederherstellen …",
+            command=lambda: self.restore_selected_trash_entries(True),
+            state="normal" if trash_ids and self.folders else "disabled",
+        )
+        menu.add_separator()
+        menu.add_command(
+            label="Endgültig entfernen",
+            command=self.purge_selected_trash_entries,
+            foreground=self.theme["delete"],
+            state="normal" if trash_ids else "disabled",
+        )
+        menu.add_command(
+            label="Papierkorb leeren",
+            command=self.empty_trash,
+            foreground=self.theme["delete"],
+            state="normal" if self.trash else "disabled",
+        )
+        return menu
+
+    def refresh_folder_overview(self, selected_id=None):
+        """Zeigt die im ausgewählten Ordner enthaltenen Listen im Hauptbereich."""
+        if not hasattr(self, "tree"):
+            return
+        self.update_stats_label()
+        current_selection = selected_id or self.tree.focus()
+        for row_id in self.tree.get_children(""):
+            self.tree.delete(row_id)
+
+        folder_lists = self.get_folder_lists(self.active_folder_id)
+        sub_folders = self.get_child_folders(self.active_folder_id)
+        query = self.current_search_query()
+        if query:
+            filtered_lists = []
+            for entry in folder_lists:
+                page_text = f"{entry.get('title', '')} {entry.get('note', '')}".lower()
+                task_match = any(self.item_text_matches_query(item, query) for item in self.walk_items(entry.get("items", [])))
+                if query in page_text or task_match:
+                    filtered_lists.append(entry)
+            folder_lists = filtered_lists
+            sub_folders = [
+                entry
+                for entry in sub_folders
+                if query in f"{entry.get('title', '')} {entry.get('note', '')}".lower()
+                or any(
+                    query in f"{value.get('title', '')} {value.get('note', '')}".lower()
+                    for value in self.get_folder_lists_recursive(entry.get("id"))
+                )
+            ]
+
+        # Unterordner stehen über den Listen: erst die Struktur, dann der Inhalt.
+        for entry in sub_folders:
+            sub_id = entry.get("id")
+            contained = len(self.get_folder_lists_recursive(sub_id))
+            nested = len(self.get_child_folders(sub_id))
+            detail = f"{contained} Liste(n)"
+            if nested:
+                detail += f" · {nested} Unterordner"
+            note_marker = f"  {self.ICONS['description']}" if str(entry.get("note") or "").strip() else ""
+            row_text = f"{self.ICONS['folder']}  {entry.get('title', 'Ordner')}   —   {detail}{note_marker}"
+            color_key = entry.get("color") if entry.get("color") in self.LIST_COLOR_KEYS else None
+            tags = (f"listcolor_{color_key}",) if color_key else ("group_item",)
+            self.tree.insert(
+                "", "end", iid=f"folder-folder:{sub_id}", text=row_text,
+                values=("", self.format_item_labels(entry), ""),
+                tags=tags,
+            )
+
+        if not folder_lists and not sub_folders:
+            empty_text = (
+                "Keine Listen oder Inhalte passen zur aktuellen Suche."
+                if query
+                else "Noch keine Listen in diesem Ordner. Oben kann direkt eine neue Liste angelegt werden."
+            )
+            self.tree.insert(
+                "",
+                "end",
+                iid=self.EMPTY_ROW_ID,
+                text=empty_text,
+                tags=("empty",),
+            )
+            self.finish_tree_refresh()
+            return
+
+        for entry in folder_lists:
+            total, done, overdue = self.compute_stats(entry.get("items", []))
+            open_count = total - done
+            detail = f"{total} Punkte · {open_count} offen"
+            if total:
+                detail += f" · {round(done / total * 100)} % erledigt"
+            if overdue:
+                detail += f" · {overdue} überfällig"
+            note_marker = f"  {self.ICONS['description']}" if str(entry.get("note") or "").strip() else ""
+            row_text = f"▸  {entry.get('title', 'Liste')}   —   {detail}{note_marker}"
+            iid = f"folder-list:{entry.get('id')}"
+            color_key = entry.get("color") if entry.get("color") in self.LIST_COLOR_KEYS else None
+            tags = (f"listcolor_{color_key}",) if color_key else ("folder_list",)
+            # Labels einer Liste erscheinen ausschließlich in dieser großen
+            # Darstellung, nicht in der Seitenleiste.
+            self.tree.insert(
+                "", "end", iid=iid, text=row_text,
+                values=("", self.format_item_labels(entry), ""),
+                tags=tags,
+            )
+
+        if current_selection and self.tree.exists(current_selection):
+            self.tree.selection_set(current_selection)
+            self.tree.focus(current_selection)
+        self.finish_tree_refresh()
+
+    @staticmethod
+    def folder_list_id_from_iid(row_id):
+        prefix = "folder-list:"
+        if row_id and str(row_id).startswith(prefix):
+            return str(row_id)[len(prefix):]
+        return None
+
+    @staticmethod
+    def folder_folder_id_from_iid(row_id):
+        """ID eines Unterordners in der Ordnerübersicht."""
+        prefix = "folder-folder:"
+        if row_id and str(row_id).startswith(prefix):
+            return str(row_id)[len(prefix):]
+        return None
+
+    def get_selected_folder_list_id(self, event=None):
+        row_id = ""
+        if event is not None and self.is_mouse_event(event):
+            row_id = self.tree.identify_row(event.y)
+        if not row_id:
+            row_id = self.tree.focus()
+        return self.folder_list_id_from_iid(row_id)
+
+    def activate_tree_row(self, event=None):
+        self.cancel_item_rename()
+        if self.view_mode in self.DERIVED_ITEM_VIEWS:
+            return self.open_in_progress_source_item(event)
+        if self.view_mode == "trash":
+            return self.restore_selected_trash_entries(False)
+        if self.view_mode == "folder":
+            row_id = ""
+            if event is not None and self.is_mouse_event(event):
+                row_id = self.tree.identify_row(event.y)
+            if not row_id:
+                row_id = self.tree.focus()
+            sub_folder_id = self.folder_folder_id_from_iid(row_id)
+            if sub_folder_id and self.get_folder(sub_folder_id):
+                self.set_active_folder(sub_folder_id)
+                return "break"
+            list_id = self.get_selected_folder_list_id(event)
+            if list_id:
+                self.set_active_list(list_id)
+            return "break"
+        return self.toggle_done(event)
+
+    def open_in_progress_source_item(self, event=None):
+        """Öffnet die echte Quellliste einer Zeile aus „In Bearbeitung“."""
+        row_id = ""
+        if event is not None and self.is_mouse_event(event):
+            row_id = self.tree.identify_row(event.y)
+        if not row_id:
+            row_id = self.tree.focus()
+        source = self.in_progress_item_sources.get(row_id)
+        if not source:
+            return "break"
+        list_id, item_id = source
+        self.set_active_list(list_id, refresh=False)
+        self.update_sidebar_list()
+        self.refresh_tree(selected_id=item_id)
+        if self.tree.exists(item_id):
+            parent_id = self.tree.parent(item_id)
+            while parent_id:
+                self.tree.item(parent_id, open=True)
+                self.expanded_ids.add(parent_id)
+                self.collapsed_item_ids.discard(parent_id)
+                parent_id = self.tree.parent(parent_id)
+            self.tree.selection_set(item_id)
+            self.tree.focus(item_id)
+            self.tree.see(item_id)
+        self.save_settings()
+        return "break"
+
+    def insert_tree_items(self, parent_id, items, number_prefix):
+        inserted_count = 0
+        # Beide Zähler beginnen nach jeder Zwischenüberschrift wieder bei null:
+        # position_index nummeriert ohne Filter, visible_index mit Filter.
+        position_index = 0
+        visible_index = 0
+        query = self.current_search_query()
+
+        for item in items:
+            visible = self.item_visible_by_filter(item)
+
+            if self.is_heading_item(item):
+                if not visible:
+                    continue
+                item_id = item.get("id") or uuid.uuid4().hex
+                item["id"] = item_id
+                inserted_count += self.insert_heading_row(
+                    parent_id, item, first_row=(parent_id == "" and inserted_count == 0)
+                )
+                position_index = 0
+                visible_index = 0
+                if item.get("children"):
+                    inserted_count += self.insert_tree_items(
+                        item_id, item.get("children", []), number_prefix
+                    )
+                continue
+
+            position_index += 1
+            if not visible:
+                continue
+
+            visible_index += 1
+            # Ohne Filter bleibt die ursprüngliche Nummerierung erhalten. Mit Filter wird die sichtbare Ansicht sauber durchnummeriert.
+            display_index = visible_index if self.has_active_filter() else position_index
+            current_number = number_prefix + [display_index]
+            number_text = ".".join(str(part) for part in current_number)
+            is_group = self.is_group_item(item)
+            is_long = self.is_long_item(item)
+            importance = 0 if is_group else self.clamp_importance(item.get("importance", 0))
+            item["importance"] = importance
+            flag_prefix = self.IMPORTANCE_MARKERS.get(importance, "")
+            done_prefix = "✓ " if item.get("done") and not is_group else ""
+            due_state = "" if is_group else self.due_status(item)
+            due_text = "" if is_group else self.format_due_column(item.get("due"), item.get("due_time"))
+            due_value = f"{self.DUE_COLUMN_ICON} {due_text}" if due_text else ""
+            description_suffix = f"   {self.ICONS['description']}" if str(item.get("description") or "").strip() else ""
+            attachment_count = len(item.get("attachments", []))
+            attachment_suffix = (
+                f"   {self.ICONS['attachment']} {attachment_count}" if attachment_count else ""
+            )
+            repeat_suffix = (
+                f"   {self.ICONS['repeat']}" if self.normalize_repeat(item.get("repeat")) else ""
+            )
+            if is_group:
+                # Eine Gruppe zeigt statt eines Status die Zahl enthaltener Aufgaben.
+                contained = self.count_items(item.get("children", []))
+                # „(0)“ ließ offen, wofür die Zahl steht. Eine leere Gruppe sagt
+                # es besser mit einem Wort.
+                group_suffix = f"   ({contained})" if contained else "   (leer)"
+                row_text = (
+                    f"{number_text}. {self.GROUP_MARKER}{self.item_display_text(item)}"
+                    f"{group_suffix}{description_suffix}{attachment_suffix}{repeat_suffix}"
+                )
+            else:
+                row_text = (
+                    f"{number_text}. {flag_prefix}{done_prefix}{self.item_display_text(item)}"
+                    f"{description_suffix}{attachment_suffix}{repeat_suffix}"
+                )
+            item_id = item.get("id") or uuid.uuid4().hex
+            item["id"] = item_id
+            has_children = bool(item.get("children"))
+            # Offen ist der Normalfall: Ein Punkt bleibt zugeklappt, wenn der
+            # Nutzer ihn zugeklappt hat – nicht deshalb, weil er auf einer
+            # tieferen Ebene liegt. Vorher galt das nur für die oberste Ebene;
+            # dadurch verschwanden Unterpunkte aus der Ansicht, sobald ihr
+            # Elternpunkt in eine Gruppe wanderte, obwohl sie in den Daten
+            # standen.
+            should_open = (
+                bool(query)
+                or item_id in self.expanded_ids
+                or item_id not in self.collapsed_item_ids
+            )
+            color_key = item.get("color") if item.get("color") in self.ITEM_COLOR_KEYS else None
+            item["color"] = color_key
+            if color_key:
+                # Eine bewusst gewählte Aufgabenfarbe hat Vorrang. Status,
+                # Fälligkeit und Wichtigkeit bleiben über Marker/Text sichtbar.
+                tag = f"itemcolor_{color_key}"
+            elif is_group:
+                tag = "group_item"
+            elif item.get("done"):
+                tag = "done"
+            elif due_state == "overdue":
+                tag = "overdue"
+            elif due_state == "today":
+                tag = "due_today"
+            elif importance == 3:
+                tag = "priority_high"
+            elif importance == 2:
+                tag = "priority_medium"
+            elif importance == 1:
+                tag = "priority_low"
+            else:
+                tag = "open"
+
+            continuation_lines = []
+            if is_long:
+                # Der Long-Task zeigt seinen vollständigen Text. Zahl und
+                # Symbole stehen in der ersten Zeile, die übrigen Zeilen
+                # beginnen bündig darunter.
+                prefix = f"{number_text}. {flag_prefix}{done_prefix}"
+                lines = self.wrap_long_task_text(
+                    # Bewusst der ungekürzte Text: nur hier dürfen die eigenen
+                    # Zeilenumbrüche eines Long-Tasks wirken.
+                    f"{item.get('text', '')}{description_suffix}{attachment_suffix}{repeat_suffix}",
+                    prefix,
+                    self.task_text_available_width(len(current_number) - 1),
+                )
+                row_text = lines[0]
+                continuation_lines = lines[1:]
+
+            self.tree.insert(
+                parent_id,
+                "end",
+                iid=item_id,
+                text=row_text,
+                values=(due_value, self.format_item_labels(item), ""),
+                open=should_open,
+                tags=(tag,),
+            )
+            inserted_count += 1
+            if continuation_lines:
+                # Ohne Unterpunkte stehen die Folgezeilen als Geschwister direkt
+                # unter der Kopfzeile; mit Unterpunkten als deren erste Kinder,
+                # damit sie nicht hinter dem Unterbaum landen. Ein Klapppfeil
+                # entsteht dadurch nur dort, wo ohnehin schon einer wäre.
+                line_parent = item_id if has_children else parent_id
+                for line_index, line_text in enumerate(continuation_lines):
+                    self.tree.insert(
+                        line_parent,
+                        "end",
+                        iid=f"{item_id}{self.CONTINUATION_IID_MARKER}{line_index}",
+                        text=line_text,
+                        values=("", "", ""),
+                        tags=(tag, "continuation"),
+                    )
+            if has_children:
+                inserted_count += self.insert_tree_items(item_id, item.get("children", []), current_number)
+        return inserted_count
+
+    def insert_heading_row(self, parent_id, item, first_row=False):
+        """Zeichnet eine Zwischenüberschrift samt Abstand nach oben.
+
+        Eine ttk.Treeview hat eine feste Zeilenhöhe. Der Abstand entsteht
+        deshalb aus einer leeren Zeile über der Überschrift; das ist die
+        kleinste Einheit, die Tk hier zulässt.
+        """
+        item_id = item.get("id")
+        if not first_row:
+            for gap_index in range(self.HEADING_GAP_ROWS):
+                self.tree.insert(
+                    parent_id,
+                    "end",
+                    iid=f"{item_id}{self.SPACER_IID_MARKER}{gap_index}",
+                    text="",
+                    values=("", "", ""),
+                    tags=("spacer",),
+                )
+        self.tree.insert(
+            parent_id,
+            "end",
+            iid=item_id,
+            text=self.item_display_text(item),
+            values=("", self.format_item_labels(item), ""),
+            open=True,
+            tags=("heading_item",),
+        )
+        return 1
+
+    # --- Long-Task: Umbruch -------------------------------------------------
+    def task_row_font(self):
+        """Schrift des Aufgabenbaums – dieselbe, aus der die Spaltenbreiten folgen."""
+        return self.cached_font("_task_row_font", self.tree_font())
+
+    def task_text_available_width(self, depth=0):
+        """Nutzbare Pixelbreite der Textspalte auf der angegebenen Ebene."""
+        tree = getattr(self, "tree", None)
+        if tree is None:
+            return 0
+        try:
+            width = int(tree.column("#0", "width"))
+        except (tk.TclError, TypeError, ValueError):
+            return 0
+        # Einrückung je Ebene plus linker Innenabstand und Sicherheitsrand.
+        return max(
+            self.LONG_TASK_MIN_LINE_WIDTH,
+            width - 20 * (depth + 1) - self.SIDEBAR_ITEM_LEFT_PADDING - 12,
+        )
+
+    def wrap_long_task_text(self, text, prefix="", available_width=0, max_lines=None):
+        """Bricht den Text eines Long-Tasks auf höchstens fünf Zeilen um.
+
+        Die erste Zeile trägt Nummer und Symbole, jede Folgezeile beginnt
+        bündig unter dem Text. Eigene Zeilenumbrüche des Nutzers bleiben
+        erhalten: an einem Umbruch beginnt in jedem Fall eine neue Zeile.
+        Ohne messbare Schrift oder Breite greift eine zeichenbasierte
+        Rückfallebene, damit der Umbruch nie ausfällt.
+        """
+        limit = max(1, int(max_lines or self.LONG_TASK_MAX_LINES))
+        paragraphs = [
+            paragraph.split()
+            for paragraph in str(text or "").replace("\r", "").split("\n")
+        ]
+        paragraphs = [words for words in paragraphs if words] or [[]]
+        font = self.task_row_font()
+        if not any(paragraphs):
+            return [prefix.rstrip() or ""]
+        if font is None or available_width <= 0:
+            # Zeichenbasierte Rückfallebene: grobe, aber stabile Schätzung.
+            per_line = 60
+            lines = []
+            current = prefix
+            for paragraph_index, words in enumerate(paragraphs):
+                if paragraph_index:
+                    lines.append(current.rstrip())
+                    if len(lines) >= limit:
+                        return lines[:limit]
+                    current = "    "
+                for word in words:
+                    candidate = f"{current}{word} "
+                    if len(candidate) > per_line and current.strip():
+                        lines.append(current.rstrip())
+                        if len(lines) >= limit:
+                            return lines[:limit]
+                        current = f"    {word} "
+                    else:
+                        current = candidate
+            if current.strip() and len(lines) < limit:
+                lines.append(current.rstrip())
+            return lines[:limit] or [prefix.rstrip()]
+
+        space_width = max(1, font.measure(" "))
+        indent = " " * max(1, round(font.measure(prefix) / space_width))
+        lines = []
+        current = prefix
+        current_empty = True  # noch kein Wort in der laufenden Zeile
+        truncated = False
+        for paragraph_index, words in enumerate(paragraphs):
+            if truncated:
+                break
+            if paragraph_index:
+                # Ein eigener Zeilenumbruch beendet die laufende Zeile.
+                lines.append(current)
+                if len(lines) >= limit:
+                    truncated = True
+                    break
+                current = indent
+                current_empty = True
+            index = 0
+            while index < len(words):
+                word = words[index]
+                candidate = f"{current}{word}" if current_empty else f"{current} {word}"
+                if current_empty or font.measure(candidate) <= available_width:
+                    current = candidate
+                    current_empty = False
+                    index += 1
+                    continue
+                lines.append(current)
+                if len(lines) >= limit:
+                    truncated = True
+                    break
+                current = indent
+                current_empty = True
+            if truncated or index < len(words):
+                truncated = truncated or index < len(words)
+                break
+        if not truncated:
+            if not current_empty:
+                lines.append(current)
+            elif not lines:
+                lines.append(prefix.rstrip())
+        if len(lines) > limit:
+            lines = lines[:limit]
+        # Bleibt Text übrig, endet die letzte Zeile mit einem Auslassungszeichen.
+        if truncated and lines:
+            last = lines[-1]
+            while font.measure(f"{last} …") > available_width and len(last.split()) > 1:
+                last = last.rsplit(" ", 1)[0]
+            lines[-1] = f"{last} …"
+        return lines
+
+    def schedule_long_task_reflow(self):
+        """Bricht Long-Tasks nach einer Breitenänderung neu um – gesammelt."""
+        if not hasattr(self, "root") or getattr(self, "_long_reflow_id", None) is not None:
+            return
+        if self.view_mode != "list":
+            return
+        if not any(self.is_long_item(item) for item in self.walk_items()):
+            return
+
+        def run():
+            self._after_ids.discard(getattr(self, "_long_reflow_id", None))
+            self._long_reflow_id = None
+            width = self.task_text_available_width()
+            if width == getattr(self, "_long_reflow_width", None):
+                return
+            self._long_reflow_width = width
+            self.refresh_tree()
+
+        try:
+            self._long_reflow_id = self._register_after(self.root.after(120, run))
+        except tk.TclError:
+            self._long_reflow_id = None
+
+    # --- Synthetische Zeilen ------------------------------------------------
+    @classmethod
+    def is_synthetic_row(cls, iid):
+        """Fortsetzungs- und Abstandszeilen sind Darstellung, keine Daten."""
+        return isinstance(iid, str) and (
+            cls.CONTINUATION_IID_MARKER in iid or cls.SPACER_IID_MARKER in iid
+        )
+
+    @classmethod
+    def owner_row_id(cls, iid):
+        """Der Punkt, zu dem eine synthetische Zeile gehört."""
+        if not isinstance(iid, str):
+            return iid
+        for marker in (cls.CONTINUATION_IID_MARKER, cls.SPACER_IID_MARKER):
+            if marker in iid:
+                return iid.split(marker, 1)[0]
+        return iid
+
+    def get_visible_tree_iids(self, include_synthetic=False):
+        """Alle sichtbaren Zeilen des Aufgabenbaums in Anzeigereihenfolge."""
+        tree = getattr(self, "tree", None)
+        if tree is None:
+            return []
+        result = []
+
+        def collect(parent=""):
+            try:
+                children = tree.get_children(parent)
+            except tk.TclError:
+                return
+            for iid in children:
+                if iid == self.EMPTY_ROW_ID:
+                    continue
+                if include_synthetic or not self.is_synthetic_row(iid):
+                    result.append(iid)
+                try:
+                    if tree.item(iid, "open"):
+                        collect(iid)
+                except tk.TclError:
+                    continue
+
+        collect("")
+        return result
+
+    def move_tree_focus(self, direction, event=None):
+        """Pfeiltasten überspringen Fortsetzungs- und Abstandszeilen.
+
+        Ohne diese Bindung bliebe die Auswahl auf einer Zeile stehen, hinter der
+        kein Punkt steht – jede Folgeaktion liefe dann ins Leere.
+        """
+        tree = getattr(self, "tree", None)
+        if tree is None:
+            return None
+        rows = self.get_visible_tree_iids()
+        if not rows:
+            return "break"
+        current = self.owner_row_id(tree.focus() or "")
+        if current in rows:
+            index = rows.index(current) + direction
+            index = max(0, min(index, len(rows) - 1))
+        else:
+            index = 0 if direction > 0 else len(rows) - 1
+        target = rows[index]
+        tree.selection_set(target)
+        tree.focus(target)
+        tree.see(target)
+        self.selection_anchor_id = target
+        return "break"
+
+    def tree_row_at(self, y):
+        """Zeile unter einer Y-Koordinate – synthetische Zeilen zeigen auf ihren Punkt."""
+        tree = getattr(self, "tree", None)
+        if tree is None:
+            return ""
+        try:
+            row_id = tree.identify_row(y)
+        except tk.TclError:
+            return ""
+        if self.is_synthetic_row(row_id):
+            owner = self.owner_row_id(row_id)
+            try:
+                return owner if tree.exists(owner) else ""
+            except tk.TclError:
+                return ""
+        return row_id
+
+    def get_selected_item_ids(self):
+        if not hasattr(self, "tree"):
+            return []
+        selected = []
+        for item_id in self.tree.selection():
+            if item_id and item_id != self.EMPTY_ROW_ID and self.find_item(item_id):
+                selected.append(item_id)
+        return selected
+
+    def get_selected_item_id(self):
+        if not hasattr(self, "tree"):
+            return None
+        focus_id = self.tree.focus()
+        if focus_id and focus_id != self.EMPTY_ROW_ID and focus_id in self.tree.selection() and self.find_item(focus_id):
+            return focus_id
+        selected = self.get_selected_item_ids()
+        return selected[0] if selected else None
+
+    def iter_tree_ids(self, parent_id=""):
+        if not hasattr(self, "tree"):
+            return []
+        result = []
+        for child_id in self.tree.get_children(parent_id):
+            if child_id == self.EMPTY_ROW_ID or self.is_synthetic_row(child_id):
+                continue
+            result.append(child_id)
+            result.extend(self.iter_tree_ids(child_id))
+        return result
+
+    def select_all_items(self, event=None):
+        focused = self.current_focus_widget()
+        if focused is not None and focused in (getattr(self, "entry", None), getattr(self, "search_entry", None)):
+            try:
+                focused.selection_range(0, tk.END)
+            except tk.TclError:
+                pass
+            return "break"
+        ids = self.iter_tree_ids()
+        if ids:
+            self.tree.selection_set(ids)
+            self.tree.focus(ids[0])
+            self.selection_anchor_id = ids[0]
+        return "break"
+
+    def select_range_from_click(self, event=None):
+        if event is None or not hasattr(self, "tree"):
+            return "break"
+        target_id = self.tree_row_at(event.y)
+        if not target_id or target_id == self.EMPTY_ROW_ID:
+            return "break"
+        ids = self.iter_tree_ids()
+        if target_id not in ids:
+            return "break"
+        anchor_id = self.selection_anchor_id or self.get_selected_item_id() or target_id
+        if anchor_id not in ids:
+            anchor_id = target_id
+        start = ids.index(anchor_id)
+        end = ids.index(target_id)
+        if start > end:
+            start, end = end, start
+        selected_range = ids[start:end + 1]
+        self.tree.selection_set(selected_range)
+        self.tree.focus(target_id)
+        return "break"
+
+    def filter_top_level_selection(self, item_ids):
+        selected_set = set(item_ids)
+        top_level_ids = []
+        for item_id in item_ids:
+            found = self.find_item(item_id)
+            if not found:
+                continue
+            parent_item = found[3]
+            is_descendant = False
+            while parent_item:
+                parent_id = parent_item.get("id")
+                if parent_id in selected_set:
+                    is_descendant = True
+                    break
+                parent_found = self.find_item(parent_id)
+                parent_item = parent_found[3] if parent_found else None
+            if not is_descendant:
+                top_level_ids.append(item_id)
+        return top_level_ids
+
+    def clear_tree_selection(self):
+        if hasattr(self, "tree"):
+            self.tree.selection_remove(self.tree.selection())
+            self.selection_anchor_id = None
+
+    # -----------------------------
+    # Gemeinsamer Rahmen für Änderungen an der Auswahl
+    # -----------------------------
+    def selected_items_for_change(self, warn=True, top_level_only=False, view_message=True):
+        """Auswahl, an der eine Änderung ansetzen darf – sonst None.
+
+        Fasst die drei Vorbedingungen zusammen, die vor jeder Änderung an
+        Punkten gelten: Es muss eine Liste offen sein, es muss etwas ausgewählt
+        sein, und wer nichts ausgewählt hat, bekommt einen Hinweis.
+
+        `top_level_only` lässt verschachtelte Punkte weg, deren Elternteil
+        ebenfalls ausgewählt ist. Das brauchen Aktionen, die ganze Zweige
+        bewegen oder kopieren – sonst würde ein Unterpunkt zweimal behandelt.
+
+        `warn` und `view_message` steuern getrennte Hinweise: der eine gilt der
+        leeren Auswahl, der andere der falschen Ansicht. Tastenkürzel, die
+        beiläufig ins Leere greifen dürfen, schalten den ersten ab; nur
+        `toggle_done` schaltet beide ab, weil es auch bei einem Klick neben die
+        Liste auslöst.
+        """
+        if not self.require_list_view(message=view_message):
+            return None
+        item_ids = self.get_selected_item_ids()
+        if top_level_only:
+            selected = set(item_ids)
+            item_ids = self.filter_top_level_selection(
+                [item_id for item_id in self.iter_tree_ids() if item_id in selected]
+            )
+        if not item_ids:
+            if warn:
+                self.show_warning("Hinweis", "Zuerst einen Punkt auswählen.")
+            return None
+        return item_ids
+
+    @contextlib.contextmanager
+    def item_change(self, item_ids, focus="last", restore=True, update_sidebar=False):
+        """Rahmen um jede Änderung an vorhandenen Punkten.
+
+        Legt vorher den Rückgängig-Punkt an und schließt hinterher ab:
+        speichern, neu zeichnen, Auswahl wiederherstellen. Blieb die Änderung
+        wirkungslos, verschwindet der Rückgängig-Punkt wieder.
+
+            item_ids = self.selected_items_for_change()
+            if item_ids is None:
+                return "break"
+            with self.item_change(item_ids) as change:
+                for item_id in item_ids:
+                    …
+                    change.mark()
+
+        `focus` bestimmt, welcher Punkt nach dem Neuzeichnen im Blick ist:
+        „last" der letzte der Auswahl, „first" der erste. Meldet die Änderung
+        über `mark(id)` einen eigenen Punkt, gilt dieser.
+
+        `restore` stellt die Mehrfachauswahl wieder her; `update_sidebar`
+        zeichnet zusätzlich die Seitenleiste neu – nötig, wenn sich die Zahl
+        der Aufgaben einer Liste ändert.
+
+        Bricht die Änderung mit einem Fehler ab, bleibt der Rückgängig-Punkt
+        stehen: Ein halb ausgeführter Umbau muss rücknehmbar bleiben. Um den
+        Bestand kümmert sich darüber `guarded_structural_change`.
+        """
+        change = ChangeRecord(item_ids)
+        self.snapshot_undo(trim=False)
+        # Vorzustand für die Tageszählung. Sie hängt an dieser einen Stelle,
+        # weil jede Änderung an Punkten hier durchläuft – Klick, Tastatur und
+        # Kontextmenü zählen dadurch genau einmal und nicht dreimal.
+        done_before = self.done_item_ids(item_ids)
+        yield change
+        if not change.changed:
+            if self.undo_stack:
+                self.undo_stack.pop()
+            return
+        self.trim_undo_stack()
+        self.record_completions(done_before, item_ids)
+        self.save_items()
+        if update_sidebar:
+            self.update_sidebar_list()
+        focus_id = change.focus_id
+        if focus_id is None and change.selection:
+            focus_id = change.selection[-1] if focus == "last" else change.selection[0]
+        self.refresh_tree(selected_id=focus_id)
+        if restore:
+            self._restore_item_selection(change.selection)
+
+    @contextlib.contextmanager
+    def sidebar_change(self, refresh_tree=False):
+        """Derselbe Rahmen für Änderungen an Listen und Ordnern.
+
+        Die Seitenleiste hat keine Punktauswahl wiederherzustellen; abgeschlossen
+        wird deshalb mit Speichern und Neuzeichnen der Seitenleiste.
+        `refresh_tree` kommt dazu, wenn die Änderung auch den Inhalt der offenen
+        Liste betrifft – beim Papierkorb etwa, oder wenn eine ganze Liste den
+        Ordner wechselt.
+        """
+        change = ChangeRecord(())
+        self.snapshot_undo(trim=False)
+        yield change
+        if not change.changed:
+            if self.undo_stack:
+                self.undo_stack.pop()
+            return
+        self.trim_undo_stack()
+        self.save_items()
+        self.update_sidebar_list()
+        if refresh_tree:
+            self.refresh_tree()
+
+    # -----------------------------
+    # Undo / Komfortaktionen
+    # -----------------------------
+    def snapshot_undo(self, trim=True):
+        """Legt den aktuellen Stand auf den Rückgängig-Stapel.
+
+        `trim=False` lässt den Stapel vorerst über seine Grenze wachsen. Die
+        beiden Änderungsrahmen nutzen das: Sie wissen erst hinterher, ob die
+        Aktion überhaupt etwas bewirkt hat. Würde schon beim Anlegen gekürzt,
+        kostete eine wirkungslose Aktion den ältesten Schritt – ein Schritt, den
+        der Nutzer verlöre, ohne dass sich irgendetwas geändert hätte.
+        """
+        if self.active_list_id and self.lists:
+            self.sync_current_list_reference()
+        self.undo_stack.append(
+            {
+                "lists": copy.deepcopy(self.lists),
+                "folders": copy.deepcopy(self.folders),
+                "labels": copy.deepcopy(self.labels),
+                "trash": copy.deepcopy(self.trash),
+                "active_list_id": self.active_list_id,
+                "active_folder_id": self.active_folder_id if self.view_mode == "folder" else None,
+                "view_mode": self.view_mode,
+            }
+        )
+        if trim:
+            self.trim_undo_stack()
+
+    def trim_undo_stack(self):
+        """Hält den Rückgängig-Stapel auf seiner Höchstlänge."""
+        while len(self.undo_stack) > self.MAX_UNDO_STEPS:
+            self.undo_stack.pop(0)
+
+    def apply_snapshot(self, snapshot):
+        """Stellt einen Stand aus dem Rückgängig-Speicher vollständig her.
+
+        Gemeinsame Grundlage von „Rückgängig“ und vom Bestandswächter: beide
+        müssen denselben Weg zurückgehen, sonst driften sie auseinander.
+        """
+        self.lists = copy.deepcopy(snapshot.get("lists", []))
+        self.folders = copy.deepcopy(snapshot.get("folders", []))
+        self.labels = copy.deepcopy(snapshot.get("labels", []))
+        self.trash = copy.deepcopy(snapshot.get("trash", []))
+        self.ensure_inbox_list()
+        desired_list_id = snapshot.get("active_list_id")
+        if desired_list_id not in [entry.get("id") for entry in self.lists]:
+            desired_list_id = self.lists[0].get("id")
+        desired_folder_id = snapshot.get("active_folder_id")
+        desired_view_mode = snapshot.get("view_mode")
+        self.active_list_id = None
+        self.active_folder_id = None
+        self.view_mode = "list"
+        self.set_active_list(desired_list_id, refresh=False)
+        if desired_folder_id and self.get_folder(desired_folder_id):
+            self.set_active_folder(desired_folder_id, refresh=False)
+        elif desired_view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+            # Vorher standen hier nur „In Bearbeitung“ und der Papierkorb: Wer in
+            # „Verspätet“ etwas zurücknahm, landete danach in der zuletzt
+            # geöffneten Liste. Eine abgeleitete Ansicht bleibt jetzt stehen.
+            self._activate_system_view(desired_view_mode, refresh=False)
+        self.save_items()
+        self.update_sidebar_list()
+        self.refresh_tree()
+
+    def undo_last_change(self, event=None):
+        if event is not None and isinstance(self.current_focus_widget(), (tk.Entry, tk.Text, ttk.Entry)):
+            # In Textfeldern bleibt echtes Strg+Z eine lokale Texteingabe-Aktion.
+            return None
+        if not self.undo_stack:
+            self.show_info("Rückgängig", "Es gibt keine Änderung zum Rückgängigmachen.")
+            return "break"
+        self.apply_snapshot(self.undo_stack.pop())
+        return "break"
+
+    # -----------------------------
+    # Bestandswächter
+    # -----------------------------
+    @classmethod
+    def collect_item_ids(cls, items, into=None):
+        """Alle Punkt-IDs eines Zweigs, Unterpunkte eingeschlossen."""
+        found = set() if into is None else into
+        for item in items or []:
+            if not isinstance(item, dict):
+                continue
+            item_id = item.get("id")
+            if item_id:
+                found.add(item_id)
+            cls.collect_item_ids(item.get("children", []), found)
+        return found
+
+    def data_item_ids(self):
+        """Jede Punkt-ID in allen Listen und im Papierkorb.
+
+        Grundlage des Bestandswächters: Was hier vor einer Umbauaktion steht,
+        muss danach noch stehen – in einer Liste oder im Papierkorb.
+        """
+        if self.active_list_id and self.lists:
+            self.sync_current_list_reference()
+        found = set()
+        for entry in self.lists:
+            self.collect_item_ids(entry.get("items", []), found)
+        for entry in self.trash:
+            payload = entry.get("payload")
+            if isinstance(payload, dict):
+                self.collect_item_ids([payload], found)
+            elif isinstance(payload, list):
+                self.collect_item_ids(payload, found)
+            for key in ("items", "item"):
+                nested = entry.get(key)
+                if isinstance(nested, dict):
+                    self.collect_item_ids([nested], found)
+                elif isinstance(nested, list):
+                    self.collect_item_ids(nested, found)
+        return found
+
+    @contextlib.contextmanager
+    def guarded_structural_change(self, action_name, expected_removals=None):
+        """Sichert zu, dass eine Umbauaktion keinen Punkt verliert.
+
+        Gruppieren, Auflösen, Verschieben, Ein- und Ausrücken ordnen Punkte um.
+        Keine dieser Aktionen darf einen Punkt entfernen. Der Wächter vergleicht
+        den Bestand vor und nach der Aktion; fehlt danach ein Punkt, wird der
+        vorherige Stand wiederhergestellt und der Vorgang gemeldet, statt den
+        Verlust still zu speichern.
+
+        Absichtliches Löschen läuft nicht über diesen Weg, sondern über den
+        Papierkorb – und dessen Inhalt zählt hier mit.
+
+        `expected_removals` nennt die IDs, die planmäßig entfallen. Das betrifft
+        allein leere Hüllen wie den Gruppen-Container beim Auflösen: Die Gruppe
+        selbst verschwindet, ihre Punkte nicht. Alles, was nicht ausdrücklich
+        hier steht, muss die Aktion überleben.
+        """
+        allowed = set(expected_removals or ())
+        before = self.data_item_ids() - allowed
+        depth_before = len(self.undo_stack)
+        try:
+            yield
+        except DataIntegrityError:
+            # Eine Aktion hat selbst gemeldet, dass sie Punkte verlöre.
+            self.rollback_to_undo_depth(depth_before)
+            self.report_integrity_stop(action_name, len(before - self.data_item_ids()))
+            return
+        except Exception:
+            # Ein echter Fehler: erst den Bestand retten, dann durchreichen.
+            self.rollback_to_undo_depth(depth_before)
+            self.report_integrity_stop(action_name, 0, crashed=True)
+            raise
+        missing = before - self.data_item_ids()
+        if not missing:
+            return
+        self.rollback_to_undo_depth(depth_before)
+        self.report_integrity_stop(action_name, len(missing))
+
+    def rollback_to_undo_depth(self, depth):
+        """Nimmt alle Schritte zurück, die seit dieser Stapeltiefe entstanden sind."""
+        if len(self.undo_stack) <= depth:
+            return False
+        snapshot = self.undo_stack[depth]
+        del self.undo_stack[depth:]
+        self.apply_snapshot(snapshot)
+        return True
+
+    def report_integrity_stop(self, action_name, missing_count, crashed=False):
+        """Meldet einen abgewehrten Datenverlust – sichtbar, nicht im Log."""
+        if crashed:
+            detail = "Der Vorgang wurde abgebrochen."
+        else:
+            detail = f"Dabei wären {missing_count} Punkt(e) verloren gegangen."
+        self.show_error(
+            "Abgebrochen – keine Daten verloren",
+            f"„{action_name}“ wurde nicht ausgeführt.\n{detail}\n\n"
+            "Der vorherige Stand ist vollständig wiederhergestellt.",
+        )
+
+    def format_item_lines(self, item, number_prefix, level=0):
+        number_text = ".".join(str(part) for part in number_prefix)
+        indent = "   " * level
+        if self.is_heading_item(item):
+            flag_prefix, done_prefix = self.HEADING_MARKER, ""
+        elif self.is_group_item(item):
+            flag_prefix, done_prefix = self.GROUP_MARKER, ""
+        else:
+            flag_prefix = self.IMPORTANCE_MARKERS.get(self.clamp_importance(item.get("importance", 0)), "")
+            done_prefix = "✓ " if item.get("done") else ""
+        lines = [f"{indent}{number_text}. {flag_prefix}{done_prefix}{self.item_display_text(item)}"]
+        description = str(item.get("description") or "").strip()
+        if description:
+            lines.extend(f"{indent}   Beschreibung: {line}" for line in description.splitlines())
+        label_names = self.format_item_label_names(item)
+        if label_names:
+            lines.append(f"{indent}   Labels: {label_names}")
+        for attachment in item.get("attachments", []):
+            lines.append(f"{indent}   Anhang: {attachment.get('name', 'Datei')}")
+        for index, child in enumerate(item.get("children", []), start=1):
+            lines.extend(self.format_item_lines(child, number_prefix + [index], level + 1))
+        return lines
+
+    def copy_selected_to_clipboard(self, event=None):
+        if self.current_focus_widget() in (getattr(self, "entry", None), getattr(self, "search_entry", None)):
+            return None
+        if not self.require_list_view():
+            return "break"
+        selected_ids = self.get_selected_item_ids()
+        if not selected_ids:
+            self.show_warning("Hinweis", "Zuerst einen Punkt auswählen.")
+            return "break"
+
+        selected_ids = self.filter_top_level_selection(selected_ids)
+        blocks = []
+        for item_id in selected_ids:
+            found = self.find_item(item_id)
+            if not found:
+                continue
+            item, _siblings, _index, _parent_item = found
+            number_path = self.get_item_number_path(item_id) or [1]
+            blocks.extend(self.format_item_lines(item, number_path))
+        if not blocks:
+            return "break"
+        text = "\n".join(blocks)
+        self.root.clipboard_clear()
+        self.root.clipboard_append(text)
+        self.root.update()
+        return "break"
+
+    def paste_items_from_clipboard(self, event=None):
+        """Fügt Aufgaben aus der Zwischenablage als neue Punkte ein.
+
+        Unterstützt den eigenen Kopier-/TXT-Export-Stil mit Nummerierung sowie
+        einfache mehrzeilige Texte. Ist ein Listenpunkt ausgewählt, werden die
+        eingefügten Punkte direkt danach als gleichrangige Punkte eingefügt;
+        ohne Auswahl werden sie am Ende der Hauptliste ergänzt.
+        """
+        if self.current_focus_widget() in (getattr(self, "entry", None), getattr(self, "search_entry", None)):
+            # In Textfeldern soll Strg+V die normale System-Einfügefunktion behalten.
+            return None
+        if not self.require_list_view():
+            return "break"
+
+        try:
+            clipboard_text = self.root.clipboard_get()
+        except tk.TclError:
+            self.show_warning("Einfügen", "Die Zwischenablage enthält keinen Text.")
+            return "break"
+
+        clipboard_text = clipboard_text.strip()
+        if not clipboard_text:
+            self.show_warning("Einfügen", "Die Zwischenablage enthält keinen Text.")
+            return "break"
+
+        pasted_items = self.parse_clipboard_items(clipboard_text)
+        if not pasted_items:
+            self.show_warning("Einfügen", "Aus dem Inhalt der Zwischenablage konnten keine Punkte erstellt werden.")
+            return "break"
+
+        selected_id = self.get_selected_item_id()
+        self.snapshot_undo()
+        target_list = self.items
+        insert_index = len(target_list)
+
+        if selected_id:
+            found = self.find_item(selected_id)
+            if found:
+                _selected_item, siblings, index, _parent_item = found
+                target_list = siblings
+                insert_index = index + 1
+
+        for offset, item in enumerate(pasted_items):
+            target_list.insert(insert_index + offset, item)
+
+        self.save_items()
+        self.refresh_tree(selected_id=pasted_items[-1].get("id"))
+        return "break"
+
+    def parse_clipboard_items(self, clipboard_text):
+        lines = [line.rstrip() for line in clipboard_text.splitlines() if line.strip()]
+        if not lines:
+            return []
+
+        # Bei einem vollständigen TXT-Export steht häufig zuerst ein Titel und
+        # danach eine Linie aus Gleichheitszeichen. Diese Kopfzeile gehört nicht
+        # als Aufgabe in die Liste.
+        if len(lines) >= 2 and set(lines[1].strip()) == {"="}:
+            lines = lines[2:]
+
+        # Zuerst den vorhandenen TXT-Parser nutzen, aber nur wenn tatsächlich
+        # nummerierte Listenzeilen enthalten sind. Unnummerierte Clipboard-Texte
+        # werden im Fallback sauber als Bullet-/Checkbox-Zeilen interpretiert.
+        numbered_line_pattern = re.compile(r"^\d+(?:\.\d+)*\.\s+")
+        if any(numbered_line_pattern.match(line.strip()) for line in lines):
+            parsed = self.parse_txt_items(lines)
+            if parsed:
+                return parsed
+
+        # Fallback: Jede nicht leere Zeile wird als eigener Hauptpunkt eingefügt.
+        plain_items = []
+        bullet_pattern = re.compile(r"^[-*•–—]\s+")
+        checkbox_pattern = re.compile(r"^\[\s*([xX])?\s*\]\s+")
+
+        for raw_line in lines:
+            text = raw_line.strip()
+            done = False
+            importance = 0
+
+            checkbox_match = checkbox_pattern.match(text)
+            if checkbox_match:
+                done = bool(checkbox_match.group(1) and checkbox_match.group(1).lower() == "x")
+                text = checkbox_pattern.sub("", text, count=1).strip()
+
+            text = bullet_pattern.sub("", text, count=1).strip()
+
+            kind = self.ITEM_KIND_TASK
+            group_marker = next((marker.strip() for marker in
+                (self.GROUP_MARKER, self.LEGACY_GROUP_MARKER)
+                if text.startswith(marker.strip())), None)
+            if group_marker:
+                kind = self.ITEM_KIND_GROUP
+                text = text[len(group_marker):].strip()
+            elif text.startswith(self.HEADING_MARKER.strip()):
+                kind = self.ITEM_KIND_HEADING
+                text = text[len(self.HEADING_MARKER.strip()):].strip()
+            elif text.startswith(self.LONG_MARKER.strip()):
+                kind = self.ITEM_KIND_LONG
+                text = text[len(self.LONG_MARKER.strip()):].strip()
+
+            for marker, marker_importance in self.IMPORTANCE_PARSE_MARKERS:
+                if text.startswith(marker):
+                    importance = marker_importance
+                    text = text[len(marker):].strip()
+                    break
+
+            if text.startswith("✓ ") or text.startswith("✅ "):
+                done = True
+                text = text[2:].strip()
+
+            if text:
+                plain_items.append(self.new_item(text, done=done, importance=importance, kind=kind))
+
+        return plain_items
+
+    def expand_all(self, event=None):
+        self.set_tree_open_state(True)
+        return "break"
+
+    def collapse_all(self, event=None):
+        self.set_tree_open_state(False)
+        return "break"
+
+    def set_tree_open_state(self, is_open):
+        def apply(row_id):
+            try:
+                self.tree.item(row_id, open=is_open)
+                for child_id in self.tree.get_children(row_id):
+                    apply(child_id)
+            except tk.TclError:
+                pass
+        for row_id in self.tree.get_children(""):
+            apply(row_id)
+        self.remember_expanded_state()
+
+    # -----------------------------
+    # Listenaktionen
+    # -----------------------------
+    def on_entry_return(self, event=None):
+        self.add_item()
+        return "break"
+
+    def add_item(self):
+        if self.view_mode in (self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+            self.focus_entry()
+            return
+        if self.view_mode in self.DERIVED_ITEM_VIEWS:
+            self.show_info(
+                self.get_display_title(),
+                "Die Ansicht wird automatisch aus den Quelllisten erzeugt. Öffne dort eine Aufgabe oder Liste.",
+            )
+            return
+        if self.view_mode == "trash":
+            self.show_info(
+                "Papierkorb",
+                "Im Papierkorb lassen sich Einträge nur wiederherstellen oder endgültig entfernen.",
+            )
+            return
+        text = self.get_entry_text()
+        if not text:
+            noun = "Listentitel" if self.view_mode == "folder" else "Punkt"
+            self.show_warning("Hinweis", f"Bitte einen {noun} eingeben.")
+            return
+        if self.view_mode == "folder":
+            self.snapshot_undo()
+            new_entry = self.new_list_object(text, [], folder_id=self.active_folder_id)
+            self.lists.append(new_entry)
+            self.entry.delete(0, tk.END)
+            self.entry_placeholder_active = False
+            self.entry.configure(fg=self.theme["text"])
+            self.save_items()
+            self.refresh_folder_overview(selected_id=f"folder-list:{new_entry['id']}")
+            return
+        self.snapshot_undo()
+        self.items.append(self.new_item(text, False))
+        self.clear_entry_text()
+        self.save_items()
+        self.refresh_tree(selected_id=self.items[-1]["id"])
+
+    def clear_entry_text(self):
+        """Leert die Schnelleingabe und setzt den Platzhalterzustand zurück."""
+        self.entry.delete(0, tk.END)
+        self.entry_placeholder_active = False
+        self.entry.configure(fg=self.theme["text"])
+
+    def add_item_advanced(self, event=None):
+        """Öffnet die vollständige Eingabemaske für einen neuen Punkt.
+
+        Was bereits in der Schnelleingabe steht, wird übernommen – der Wechsel
+        in die erweiterte Eingabe kostet also nichts von dem, was schon getippt
+        wurde.
+        """
+        if not self.require_list_view():
+            return "break"
+        prefilled = self.get_entry_text()
+        details = self.new_item_dialog(
+            "Neuer Punkt",
+            "Alle Angaben außer dem Titel sind freiwillig und später änderbar.",
+            allow_list_choice=True,
+            default_list_id=self.active_list_id,
+            initial_text=prefilled,
+        )
+        if details is None:
+            return "break"
+        new_entry = self.build_item_from_dialog(details)
+        if new_entry is None:
+            return "break"
+        target_list_id = details.get("list_id") or self.active_list_id
+        self.snapshot_undo()
+        if target_list_id and target_list_id != self.active_list_id:
+            target = next((entry for entry in self.lists if entry.get("id") == target_list_id), None)
+            if target is not None:
+                target.setdefault("items", []).append(new_entry)
+                if prefilled:
+                    self.clear_entry_text()
+                self.save_items()
+                self.refresh_tree()
+                return "break"
+        self.items.append(new_entry)
+        if prefilled:
+            self.clear_entry_text()
+        self.save_items()
+        self.refresh_tree(selected_id=new_entry["id"])
+        return "break"
+
+    def delete_item(self, event=None):
+        # Bei Tastatur-Events soll Entf in Eingabe-/Suchfeldern normal Text löschen.
+        # Per Button darf Löschen unabhängig vom aktuellen Textfeld-Fokus funktionieren.
+        if event is not None and self.current_focus_widget() in (self.entry, getattr(self, "search_entry", None)):
+            return None
+        if not self.require_list_view():
+            return "break"
+
+        selected_ids = self.get_selected_item_ids()
+        if not selected_ids:
+            self.show_warning("Hinweis", "Zuerst einen Punkt auswählen.")
+            return
+
+        # Ganze Zweige wandern gemeinsam. Wäre ein Unterpunkt zusätzlich
+        # ausgewählt, entstünde sonst ein zweiter Papierkorbeintrag desselben
+        # Punkts – und beim Wiederherstellen eine Dublette.
+        selected_ids = self.filter_top_level_selection(
+            [item_id for item_id in self.iter_tree_ids() if item_id in set(selected_ids)]
+        ) or selected_ids
+        # Die gelöschten Punkte gibt es danach nicht mehr: kein Ziel für Blick
+        # oder Auswahl.
+        with self.item_change((), restore=False) as change:
+            for item_id in selected_ids:
+                if self.move_item_to_trash(item_id):
+                    change.mark()
+
+    def move_item_to_trash(self, item_id):
+        """Legt einen Punkt samt Unterpunkten in den Papierkorb.
+
+        Vorher entfernte „Löschen“ einen Punkt sofort und endgültig: Er stand
+        weder im Papierkorb noch sonst wo, und nach einem Neustart war auch
+        Rückgängig verbraucht. Jetzt bleibt er wiederherstellbar – mit seiner
+        Herkunft, sodass er an dieselbe Stelle zurückkehrt.
+        """
+        found = self.find_item(item_id)
+        if not found:
+            return False
+        item, siblings, index, parent_item = found
+        origin = {
+            "list_id": self.active_list_id,
+            "list_title": self.app_title,
+            "parent_item_id": parent_item.get("id") if parent_item else None,
+            "index": index,
+        }
+        removed = self.remove_item_by_id(item_id)
+        if not removed:
+            return False
+        self.push_trash_entry(
+            self.new_trash_entry(self.TRASH_KIND_ITEM, copy.deepcopy(removed), origin=origin)
+        )
+        return True
+
+    # -----------------------------
+    # Aktionen der erweiterten Kontextmenüs
+    # -----------------------------
+    def add_child_item(self, parent_id=None):
+        """Legt einen Unterpunkt unter dem gewählten Punkt an."""
+        if not self.require_list_view():
+            return "break"
+        parent_id = parent_id or self.get_selected_item_id()
+        if not parent_id:
+            return "break"
+        found = self.find_item(parent_id)
+        if not found:
+            return "break"
+        details = self.new_item_dialog(
+            "Neuer Unterpunkt",
+            "Der Punkt entsteht unterhalb des ausgewählten Punkts.",
+        )
+        if details is None:
+            return "break"
+        self.snapshot_undo()
+        child = self.build_item_from_dialog(details)
+        found[0].setdefault("children", []).append(child)
+        self.expanded_ids.add(parent_id)
+        self.collapsed_item_ids.discard(parent_id)
+        self.save_items()
+        self.refresh_tree(selected_id=child["id"])
+        return "break"
+
+    def add_sibling_item(self, kind=ITEM_KIND_TASK, reference_id=None):
+        """Legt einen Punkt oder eine Gruppe auf derselben Ebene an."""
+        if not self.require_list_view():
+            return "break"
+        is_group = kind == self.ITEM_KIND_GROUP
+        details = self.new_item_dialog(
+            "Neue Gruppe" if is_group else "Neuer Punkt",
+            (
+                "Eine Gruppe fasst Punkte zusammen und trägt selbst keinen Status."
+                if is_group
+                else "Titel eingeben. Alle weiteren Angaben sind freiwillig und später änderbar."
+            ),
+            kind=kind if is_group else None,
+            allow_list_choice=True,
+            default_list_id=self.active_list_id,
+        )
+        if details is None:
+            return "break"
+        reference_id = reference_id or self.get_selected_item_id()
+        target_list_id = details.get("list_id")
+        self.snapshot_undo()
+        new_entry = self.build_item_from_dialog(details)
+        # Eine abweichende Zielliste bekommt den Punkt am Ende; innerhalb der
+        # geöffneten Liste entsteht er direkt unter der Auswahl.
+        if target_list_id and target_list_id != self.active_list_id:
+            target_entry = next(
+                (entry for entry in self.lists if entry.get("id") == target_list_id), None
+            )
+            if target_entry is not None:
+                target_entry.setdefault("items", []).append(new_entry)
+                self.save_items()
+                self.update_sidebar_list()
+                self.refresh_tree()
+                return "break"
+        target_list = self.items
+        insert_index = len(target_list)
+        if reference_id:
+            found = self.find_item(reference_id)
+            if found:
+                _item, siblings, index, _parent = found
+                target_list = siblings
+                insert_index = index + 1
+        target_list.insert(insert_index, new_entry)
+        self.save_items()
+        self.update_sidebar_list()
+        self.refresh_tree(selected_id=new_entry["id"])
+        return "break"
+
+    def convert_selected_kind(self, kind):
+        """Wandelt die Auswahl zwischen Aufgabe und Gruppe um."""
+        item_ids = self.selected_items_for_change()
+        if item_ids is None:
+            return "break"
+        # Gruppen und Überschriften zählen nicht als Aufgabe: der Zähler in der
+        # Seitenleiste ändert sich mit der Art.
+        with self.item_change(item_ids, update_sidebar=True) as change:
+            for item_id in item_ids:
+                found = self.find_item(item_id)
+                if found and self.set_item_kind(found[0], kind):
+                    change.mark()
+        return "break"
+
+    def group_selected_items(self):
+        """Fasst die ausgewählten Punkte in einer neuen Gruppe zusammen."""
+        if not self.require_list_view():
+            return "break"
+        item_ids = self.filter_top_level_selection(
+            [item_id for item_id in self.iter_tree_ids() if item_id in set(self.get_selected_item_ids())]
+        )
+        if not item_ids:
+            self.show_warning("Hinweis", "Zuerst mindestens einen Punkt auswählen.")
+            return "break"
+        first_found = self.find_item(item_ids[0])
+        if not first_found:
+            return "break"
+        # Alle Punkte müssen dieselbe Ebene teilen, sonst wäre das Ergebnis nicht vorhersehbar.
+        target_siblings = first_found[1]
+        for item_id in item_ids[1:]:
+            found = self.find_item(item_id)
+            if not found or found[1] is not target_siblings:
+                self.show_info(
+                    "Gruppieren",
+                    "Nur Punkte derselben Ebene lassen sich gemeinsam gruppieren.",
+                )
+                return "break"
+        title = self.themed_input_dialog("Neue Gruppe", "Titel der Gruppe:", ok_text="Gruppieren")
+        if title is None:
+            return "break"
+        title = title.strip()
+        if not title:
+            self.show_warning("Hinweis", "Bitte einen Titel eingeben.")
+            return "break"
+        insert_index = first_found[2]
+        with self.guarded_structural_change("Gruppieren"):
+            self.snapshot_undo()
+            moved = []
+            for item_id in item_ids:
+                removed = self.remove_item_by_id(item_id)
+                if removed:
+                    moved.append(removed)
+            if len(moved) != len(item_ids):
+                # Ein Punkt ließ sich nicht entfernen. Lieber gar nicht
+                # gruppieren als einen Teil der Auswahl zurücklassen.
+                self.rollback_to_undo_depth(len(self.undo_stack) - 1)
+                self.show_warning(
+                    "Gruppieren",
+                    "Die Auswahl hat sich zwischenzeitlich verändert. Bitte erneut auswählen.",
+                )
+                return "break"
+            group = self.new_item(title, False, children=moved, kind=self.ITEM_KIND_GROUP)
+            insert_index = max(0, min(insert_index, len(target_siblings)))
+            target_siblings.insert(insert_index, group)
+            self.expanded_ids.add(group["id"])
+            self.collapsed_item_ids.discard(group["id"])
+            # Die Punkte liegen jetzt eine Ebene tiefer. Ohne diese Zeilen
+            # zeichnete der Baum sie zugeklappt, und ihre Unterpunkte
+            # verschwänden aus der Ansicht, obwohl sie in den Daten stehen.
+            self.keep_branch_expanded(moved)
+            self.save_items()
+            self.refresh_tree(selected_id=group["id"])
+        return "break"
+
+    def keep_branch_expanded(self, items):
+        """Hält einen ganzen Zweig aufgeklappt.
+
+        Ein Punkt auf oberster Ebene wird von sich aus offen gezeichnet. Wandert
+        er eine Ebene tiefer – etwa beim Gruppieren –, gilt das nicht mehr:
+        seine Unterpunkte wären ohne Zutun unsichtbar. Diese Methode überträgt
+        den offenen Zustand ausdrücklich, damit Darstellung und Daten beim
+        Umbauen deckungsgleich bleiben.
+        """
+        for item_id in self.collect_item_ids(items):
+            if item_id not in self.collapsed_item_ids:
+                self.expanded_ids.add(item_id)
+
+    def dissolve_selected_group(self):
+        """Löst eine Gruppe auf; die Unterpunkte rücken an ihre Stelle.
+
+        Zwingende Zusage: Diese Aktion darf niemals einen enthaltenen Punkt
+        entfernen. Der Bestandswächter prüft das nach jedem Aufruf.
+        """
+        if not self.require_list_view():
+            return "break"
+        item_id = self.get_selected_item_id()
+        found = self.find_item(item_id) if item_id else None
+        if not found or not self.is_group_item(found[0]):
+            return "break"
+        group, siblings, index, _parent = found
+        children = [child for child in group.get("children", []) if isinstance(child, dict)]
+        expected = self.collect_item_ids(children)
+        # Nur die Hülle der Gruppe darf verschwinden – kein enthaltener Punkt.
+        with self.guarded_structural_change("Gruppe auflösen", expected_removals={group.get("id")}):
+            self.snapshot_undo()
+            siblings.pop(index)
+            for offset, child in enumerate(children):
+                siblings.insert(index + offset, child)
+            # Doppelt geprüft: Jeder Punkt der Gruppe steht danach wieder in der
+            # Liste. Der Wächter fängt den allgemeinen Fall, diese Zeile den
+            # konkreten – Auflösen ist der Weg, den der Nutzer am häufigsten geht.
+            restored = self.collect_item_ids(self.items)
+            if expected - restored:
+                raise DataIntegrityError("Gruppe auflösen hätte Punkte entfernt")
+            self.keep_branch_expanded(children)
+            self.save_items()
+            self.refresh_tree(selected_id=children[0]["id"] if children else None)
+        return "break"
+
+    def copy_items_with_new_ids(self, items):
+        """Tiefe Kopie mit frischen IDs für jeden Punkt und Anhang.
+
+        Ohne neue IDs entstünden Dubletten: der Aufgabenbaum verweigert
+        doppelte Zeilen-IDs, und listenübergreifende Suchen träfen den falschen
+        Punkt. Anhänge behalten ihren Speicherpfad – die Datei wird geteilt,
+        nicht kopiert.
+        """
+        duplicated = copy.deepcopy(items if isinstance(items, list) else [])
+        stack = list(duplicated)
+        while stack:
+            item = stack.pop()
+            if not isinstance(item, dict):
+                continue
+            item["id"] = uuid.uuid4().hex
+            for attachment in item.get("attachments", []):
+                if isinstance(attachment, dict):
+                    attachment["id"] = uuid.uuid4().hex
+            children = item.get("children", [])
+            if isinstance(children, list):
+                stack.extend(children)
+        return duplicated
+
+    def duplicate_selected_items(self):
+        """Legt eine unabhängige Kopie der Auswahl direkt darunter an."""
+        item_ids = self.selected_items_for_change(top_level_only=True)
+        if item_ids is None:
+            return "break"
+        # Die Kopien sind neue Punkte: Nicht die Auswahl wird wiederhergestellt,
+        # sondern die zuletzt angelegte Kopie bekommt den Blick.
+        with self.item_change(item_ids, restore=False) as change:
+            for item_id in item_ids:
+                found = self.find_item(item_id)
+                if not found:
+                    continue
+                item, siblings, index, _parent = found
+                copy_item = self.copy_items_with_new_ids([item])
+                if not copy_item:
+                    continue
+                siblings.insert(index + 1, copy_item[0])
+                change.mark(copy_item[0]["id"])
+        return "break"
+
+    def move_selected_items(self, offset):
+        """Verschiebt die Auswahl innerhalb ihrer Ebene um eine Position."""
+        item_ids = self.selected_items_for_change(top_level_only=True)
+        if item_ids is None:
+            return "break"
+        # Nach oben zuerst den obersten Punkt bewegen, nach unten den untersten:
+        # sonst überholen sich die Punkte einer Mehrfachauswahl gegenseitig.
+        ordered = item_ids if offset < 0 else list(reversed(item_ids))
+        with self.item_change(item_ids, focus="first") as change:
+            for item_id in ordered:
+                found = self.find_item(item_id)
+                if not found:
+                    continue
+                item, siblings, index, _parent = found
+                target = index + offset
+                if 0 <= target < len(siblings):
+                    siblings.pop(index)
+                    siblings.insert(target, item)
+                    change.mark()
+        return "break"
+
+    def move_selected_to_list_dialog(self):
+        """Verschiebt die Auswahl in eine per Dialog gewählte Zielliste."""
+        item_ids = self.selected_items_for_change()
+        if item_ids is None:
+            return "break"
+        choices = []
+        for entry in self.lists:
+            if entry.get("id") == self.active_list_id:
+                continue
+            choices.append((entry.get("id"), self.list_path_title(entry)))
+        if not choices:
+            self.show_info("Verschieben", "Es gibt keine andere Liste als Ziel.")
+            return "break"
+        target_id = self.themed_choice_dialog(
+            "In Liste verschieben", "In welche Liste sollen die Punkte verschoben werden?", choices,
+            item_colors={entry["id"]: self.inherited_list_color(entry) or "text" for entry in self.lists}
+        )
+        if target_id:
+            self.move_items_to_list(item_ids, target_id)
+        return "break"
+
+    def clear_list(self):
+        if not self.require_list_view():
+            return
+        if self.ask_yes_no("Löschen", "Alle Punkte wirklich löschen?"):
+            self.snapshot_undo()
+            self.items.clear()
+            self.save_items()
+            self.refresh_tree()
+
+    def edit_item(self):
+        if not self.require_list_view():
+            return
+        item_id = self.get_selected_item_id()
+        if not item_id:
+            return
+        found = self.find_item(item_id)
+        if not found:
+            return
+        item, _siblings, _index, _parent_item = found
+        details = self.themed_item_details_dialog(item)
+        if details is None:
+            return
+
+        with self.item_change([item_id], restore=False) as change:
+            if self.apply_item_details(item, details):
+                change.mark()
+
+    def _new_themed_popup_menu(self, parent=None):
+        return tk.Menu(
+            parent or self.root,
+            tearoff=0,
+            bg=self.theme["card"],
+            fg=self.theme["text"],
+            activebackground=self.theme["selection"],
+            activeforeground=self.theme["selection_text"],
+            selectcolor=self.theme["ui_accent"],
+            bd=0,
+            relief="flat",
+            borderwidth=0,
+            activeborderwidth=0,
+        )
+
+    def _add_importance_cascade(self, menu, selected_items, enabled=True):
+        importance_menu = self._new_themed_popup_menu(menu)
+        importance_values = {self.clamp_importance(item.get("importance", 0)) for item in selected_items}
+        current_importance = next(iter(importance_values)) if len(importance_values) == 1 else None
+        for value, label in ((0, "Keine"), (1, "Niedrig"), (2, "Mittel"), (3, "Hoch")):
+            prefix = "✓ " if current_importance == value else "    "
+            importance_menu.add_command(
+                label=f"{prefix}{self.IMPORTANCE_MARKERS.get(value, '')}{label}",
+                foreground=self.theme[self.importance_color_key(value)],
+                activeforeground=self.theme[self.importance_color_key(value)],
+                activebackground=self.theme["hover"],
+                command=lambda selected=value: self.set_importance_selected(selected),
+            )
+        menu.add_cascade(
+            label="Wichtigkeit", menu=importance_menu, state="normal" if enabled else "disabled"
+        )
+        return importance_menu
+
+    def _add_due_cascade(self, menu, selected_items, enabled=True):
+        due_menu = self._new_themed_popup_menu(menu)
+        due_values = {item.get("due") for item in selected_items}
+        current_due = next(iter(due_values)) if len(due_values) == 1 else None
+        today_iso = date.today().isoformat()
+        tomorrow_iso = (date.today() + timedelta(days=1)).isoformat()
+        due_menu.add_command(label="Datum auswählen …", command=self.set_due_date_selected)
+        due_menu.add_separator()
+        due_menu.add_command(
+            label=f"{'✓ ' if current_due == today_iso else '    '}Heute",
+            command=lambda: self.set_due_value_selected(today_iso),
+        )
+        due_menu.add_command(
+            label=f"{'✓ ' if current_due == tomorrow_iso else '    '}Morgen",
+            command=lambda: self.set_due_value_selected(tomorrow_iso),
+        )
+        due_menu.add_command(
+            label=f"{'✓ ' if current_due is None and len(due_values) == 1 else '    '}Entfernen",
+            command=lambda: self.set_due_value_selected(None),
+        )
+        menu.add_cascade(label="Fälligkeit", menu=due_menu, state="normal" if enabled else "disabled")
+        return due_menu
+
+    def _add_color_cascade(self, menu, selected_items):
+        color_menu = self._new_themed_popup_menu(menu)
+        color_values = {item.get("color") for item in selected_items}
+        current_color = next(iter(color_values)) if len(color_values) == 1 else None
+        for label, color_key in self.ITEM_COLOR_CHOICES:
+            prefix = "✓ " if current_color == color_key else "    "
+            color_menu.add_command(
+                label=f"{prefix}{label}",
+                foreground=self.theme[color_key],
+                command=lambda selected=color_key: self.set_item_color_selected(selected),
+            )
+        color_menu.add_separator()
+        color_menu.add_command(
+            label=f"{'✓ ' if current_color is None and len(color_values) == 1 else '    '}Keine Farbe",
+            command=lambda: self.set_item_color_selected(None),
+        )
+        menu.add_cascade(label="Aufgabenfarbe", menu=color_menu)
+        return color_menu
+
+    def _add_label_cascade(self, menu, selected_items):
+        """Labels zuweisen oder lösen – Häkchen zeigt die Zuweisung der Auswahl."""
+        label_menu = self._new_themed_popup_menu(menu)
+        if not self.labels:
+            label_menu.add_command(label="Noch keine Labels angelegt", state="disabled")
+        else:
+            for label in self.labels:
+                label_id = label.get("id")
+                assigned_count = sum(1 for item in selected_items if label_id in (item.get("labels") or []))
+                if assigned_count == len(selected_items) and selected_items:
+                    prefix = "✓ "
+                elif assigned_count:
+                    prefix = "– "  # nur ein Teil der Auswahl trägt das Label
+                else:
+                    prefix = "    "
+                label_menu.add_command(
+                    label=f"{prefix}{label.get('name', '')}",
+                    foreground=self.theme[self.label_color_key(label)],
+                    command=lambda selected=label_id: self.toggle_label_on_selected_items(selected),
+                )
+            label_menu.add_separator()
+            label_menu.add_command(label="Alle Labels entfernen", command=self.clear_labels_on_selected_items)
+        label_menu.add_separator()
+        label_menu.add_command(label="Labels verwalten …", command=self.open_label_manager)
+        menu.add_cascade(label="Labels", menu=label_menu)
+        return label_menu
+
+    def build_item_context_menu(self):
+        """Vollständiges Kontextmenü für die aktuelle Aufgaben-/Mehrfachauswahl."""
+        item_ids = self.get_selected_item_ids()
+        if not item_ids:
+            return None
+        selected_items = [self.find_item(item_id)[0] for item_id in item_ids if self.find_item(item_id)]
+        if not selected_items:
+            return None
+
+        single = len(selected_items) == 1
+        groups = [item for item in selected_items if self.is_group_item(item)]
+        headings = [item for item in selected_items if self.is_heading_item(item)]
+        longs = [item for item in selected_items if self.is_long_item(item)]
+        tasks = [item for item in selected_items if self.is_schedulable_item(item)]
+        only_groups = bool(groups) and not tasks and not headings
+        has_tasks = bool(tasks)
+
+        menu = self._new_themed_popup_menu()
+        if single:
+            header = "Gruppenaktionen" if only_groups else "Punktaktionen"
+        else:
+            header = f"Aktionen für {len(selected_items)} Punkte"
+        menu.add_command(label=header, state="disabled")
+        menu.add_separator()
+
+        menu.add_command(
+            label=(
+                "Bearbeiten (Titel, Beschreibung, Anhänge) …"
+                if single
+                else "Bearbeiten … (nur einzeln)"
+            ),
+            command=self.edit_item,
+            state="normal" if single else "disabled",
+        )
+        menu.add_command(
+            label="Erledigt umschalten",
+            command=self.toggle_done,
+            state="normal" if has_tasks else "disabled",
+        )
+        menu.add_separator()
+
+        # --- Neu anlegen ---
+        create_menu = self._new_themed_popup_menu(menu)
+        create_menu.add_command(
+            label="Punkt darunter …",
+            command=lambda: self.add_sibling_item(self.ITEM_KIND_TASK),
+        )
+        create_menu.add_command(
+            label="Gruppe darunter …",
+            command=lambda: self.add_sibling_item(self.ITEM_KIND_GROUP),
+        )
+        create_menu.add_command(
+            label="Unterpunkt …",
+            command=self.add_child_item,
+            state="normal" if single else "disabled",
+        )
+        menu.add_cascade(label="Neu anlegen", menu=create_menu)
+
+        # --- Art des Punkts ---
+        # Aufgabe, Long-Task, Zwischenüberschrift und Gruppe sind vier Zustände
+        # derselben Eigenschaft; jeder Weg dorthin ist umkehrbar.
+        kind_menu = self._new_themed_popup_menu(menu)
+        kind_menu.add_command(
+            label="In Aufgabe zurückwandeln",
+            command=lambda: self.convert_selected_kind(self.ITEM_KIND_TASK),
+            state="normal" if (groups or headings or longs) else "disabled",
+        )
+        kind_menu.add_command(
+            label="In Long-Task umwandeln",
+            command=lambda: self.convert_selected_kind(self.ITEM_KIND_LONG),
+            state="normal" if len(longs) < len(selected_items) else "disabled",
+        )
+        kind_menu.add_command(
+            label="In Zwischenüberschrift umwandeln",
+            command=lambda: self.convert_selected_kind(self.ITEM_KIND_HEADING),
+            state="normal" if len(headings) < len(selected_items) else "disabled",
+        )
+        kind_menu.add_command(
+            # Deutlich anders benannt als „Auswahl gruppieren“: Dieser Weg macht
+            # aus jedem markierten Punkt eine eigene, leere Gruppe. Beides klang
+            # vorher gleich und tat Gegenteiliges.
+            label="Jeden Punkt zur leeren Gruppe machen",
+            command=lambda: self.convert_selected_kind(self.ITEM_KIND_GROUP),
+            state="normal" if len(groups) < len(selected_items) else "disabled",
+        )
+        for index, kind in enumerate((self.ITEM_KIND_TASK, self.ITEM_KIND_LONG, self.ITEM_KIND_HEADING, self.ITEM_KIND_GROUP)):
+            kind_menu.entryconfigure(index, foreground=self.theme[self.kind_color_key(kind)])
+        menu.add_cascade(label="Art", menu=kind_menu)
+
+        # Gruppieren steht auf der obersten Ebene: Es ist der Weg, den man
+        # sucht, wenn mehrere Punkte zusammengehören.
+        menu.add_command(
+            label="Auswahl gruppieren …",
+            accelerator=self.accel("G"),
+            command=self.group_selected_items,
+        )
+        menu.add_command(
+            label="Gruppe auflösen (Inhalt bleibt)",
+            command=self.dissolve_selected_group,
+            state="normal" if single and only_groups else "disabled",
+        )
+        menu.add_separator()
+
+        # Gruppen tragen bewusst keinen Status, keine Fälligkeit und keine Wichtigkeit.
+        self._add_importance_cascade(menu, tasks or selected_items, enabled=has_tasks)
+        self._add_due_cascade(menu, tasks or selected_items, enabled=has_tasks)
+        self._add_color_cascade(menu, selected_items)
+        self._add_label_cascade(menu, selected_items)
+        menu.add_separator()
+
+        # --- Struktur ---
+        structure_menu = self._new_themed_popup_menu(menu)
+        structure_menu.add_command(label="Einrücken", command=self.indent_selected)
+        structure_menu.add_command(label="Ausrücken", command=self.outdent_selected)
+        structure_menu.add_separator()
+        structure_menu.add_command(label="Nach oben", command=lambda: self.move_selected_items(-1))
+        structure_menu.add_command(label="Nach unten", command=lambda: self.move_selected_items(1))
+        structure_menu.add_separator()
+        structure_menu.add_command(label="In Liste verschieben …", command=self.move_selected_to_list_dialog)
+        menu.add_cascade(label="Struktur", menu=structure_menu)
+
+        # --- Zwischenablage ---
+        clipboard_menu = self._new_themed_popup_menu(menu)
+        clipboard_menu.add_command(label="Kopieren", command=self.copy_selected_to_clipboard)
+        clipboard_menu.add_command(label="Einfügen", command=self.paste_items_from_clipboard)
+        clipboard_menu.add_command(label="Duplizieren", command=self.duplicate_selected_items)
+        menu.add_cascade(label="Zwischenablage", menu=clipboard_menu)
+
+        menu.add_separator()
+        menu.add_command(label="Entfernen", command=self.delete_item, foreground=self.theme["delete"])
+        return menu
+
+    def build_tree_background_menu(self):
+        """Kontextmenü für den leeren Bereich der Aufgabenliste."""
+        menu = self._new_themed_popup_menu()
+        menu.add_command(label="Liste", state="disabled")
+        menu.add_separator()
+        menu.add_command(label="Neuer Punkt …", command=lambda: self.add_sibling_item(self.ITEM_KIND_TASK, None))
+        menu.add_command(label="Neue Gruppe …", command=lambda: self.add_sibling_item(self.ITEM_KIND_GROUP, None))
+        menu.add_command(label="Einfügen", command=self.paste_items_from_clipboard)
+        menu.add_separator()
+        menu.add_command(label="Alle auswählen", command=self.select_all_items)
+        menu.add_command(label="Aufklappen", command=self.expand_all)
+        menu.add_command(label="Zuklappen", command=self.collapse_all)
+        menu.add_separator()
+
+        sort_menu = self._new_themed_popup_menu(menu)
+        sort_menu.add_command(label="Nach Fälligkeit", command=lambda: self.sort_current_list("due"))
+        sort_menu.add_command(label="Nach Wichtigkeit", command=lambda: self.sort_current_list("importance"))
+        sort_menu.add_command(label="Alphabetisch", command=lambda: self.sort_current_list("alpha"))
+        menu.add_cascade(label="Sortieren", menu=sort_menu)
+
+        export_menu = self._new_themed_popup_menu(menu)
+        export_menu.add_command(label="Als TXT …", command=self.export_as_txt)
+        export_menu.add_command(label="Als Markdown …", command=self.export_as_markdown)
+        export_menu.add_command(label="Als CSV …", command=self.export_as_csv)
+        export_menu.add_command(label="Als Glide-Teilbackup …", command=self.export_partial_backup)
+        export_menu.add_command(label="Listen/Ordner hinzufügen …", command=self.import_partial_backup)
+        menu.add_cascade(label="Liste exportieren", menu=export_menu)
+
+        menu.add_separator()
+        menu.add_command(label="Beschreibungstext …", command=self.edit_page_note)
+        menu.add_command(label="Liste leeren", command=self.clear_list, foreground=self.theme["delete"])
+        return menu
+
+    def build_in_progress_context_menu(self, row_id):
+        """Kontextmenü einer Zeile der abgeleiteten Ansicht „In Bearbeitung“."""
+        source = self.in_progress_item_sources.get(row_id)
+        if not source:
+            return None
+        list_id, item_id = source
+        found = self.find_item_in_lists(item_id)
+        if not found:
+            return None
+        item = found[0]
+
+        menu = self._new_themed_popup_menu()
+        source_list = next((entry for entry in self.lists if entry.get("id") == list_id), None)
+        source_title = str((source_list or {}).get("title") or "Quellliste").strip() or "Quellliste"
+        menu.add_command(label=f"Aus: {self.ellipsize_sidebar_title(source_title)}", state="disabled")
+        menu.add_separator()
+        menu.add_command(label="In Quellliste öffnen", command=self.open_in_progress_source_item)
+        menu.add_command(
+            label="Bearbeiten (Titel, Beschreibung, Anhänge) …",
+            command=lambda: self.edit_in_progress_item(item_id),
+        )
+        menu.add_command(
+            label=("Als offen markieren" if item.get("done") else "Als erledigt markieren"),
+            command=lambda: self.update_in_progress_item(item_id, "done", not item.get("done")),
+        )
+        menu.add_separator()
+
+        importance_menu = self._new_themed_popup_menu(menu)
+        current_importance = self.clamp_importance(item.get("importance", 0))
+        for value, label in ((0, "Keine"), (1, "Niedrig"), (2, "Mittel"), (3, "Hoch")):
+            prefix = "✓ " if current_importance == value else "    "
+            importance_menu.add_command(
+                label=f"{prefix}{self.IMPORTANCE_MARKERS.get(value, '')}{label}",
+                foreground=self.theme[self.importance_color_key(value)],
+                activeforeground=self.theme[self.importance_color_key(value)],
+                activebackground=self.theme["hover"],
+                command=lambda selected=value: self.update_in_progress_item(item_id, "importance", selected),
+            )
+        menu.add_cascade(label="Wichtigkeit", menu=importance_menu)
+
+        due_menu = self._new_themed_popup_menu(menu)
+        today_iso = date.today().isoformat()
+        tomorrow_iso = (date.today() + timedelta(days=1)).isoformat()
+        current_due = item.get("due")
+        due_menu.add_command(
+            label=f"{'✓ ' if current_due == today_iso else '    '}Heute",
+            command=lambda: self.update_in_progress_item(item_id, "due", today_iso),
+        )
+        due_menu.add_command(
+            label=f"{'✓ ' if current_due == tomorrow_iso else '    '}Morgen",
+            command=lambda: self.update_in_progress_item(item_id, "due", tomorrow_iso),
+        )
+        due_menu.add_command(
+            label="Fälligkeit entfernen",
+            command=lambda: self.update_in_progress_item(item_id, "due", None),
+        )
+        menu.add_cascade(label="Fälligkeit", menu=due_menu)
+
+        color_menu = self._new_themed_popup_menu(menu)
+        current_color = item.get("color")
+        for label, color_key in self.ITEM_COLOR_CHOICES:
+            prefix = "✓ " if current_color == color_key else "    "
+            color_menu.add_command(
+                label=f"{prefix}{label}",
+                foreground=self.theme[color_key],
+                command=lambda selected=color_key: self.update_in_progress_item(item_id, "color", selected),
+            )
+        color_menu.add_separator()
+        color_menu.add_command(
+            label=f"{'✓ ' if current_color is None else '    '}Keine Farbe",
+            command=lambda: self.update_in_progress_item(item_id, "color", None),
+        )
+        menu.add_cascade(label="Aufgabenfarbe", menu=color_menu)
+
+        label_menu = self._new_themed_popup_menu(menu)
+        if not self.labels:
+            label_menu.add_command(label="Noch keine Labels angelegt", state="disabled")
+        else:
+            assigned = item.get("labels") or []
+            for label in self.labels:
+                label_id = label.get("id")
+                prefix = "✓ " if label_id in assigned else "    "
+                label_menu.add_command(
+                    label=f"{prefix}{label.get('name', '')}",
+                    foreground=self.theme[self.label_color_key(label)],
+                    command=lambda selected=label_id: self.toggle_in_progress_label(item_id, selected),
+                )
+        label_menu.add_separator()
+        label_menu.add_command(label="Labels verwalten …", command=self.open_label_manager)
+        menu.add_cascade(label="Labels", menu=label_menu)
+        return menu
+
+    def toggle_in_progress_label(self, item_id, label_id):
+        """Labelzuweisung direkt aus der Ansicht „In Bearbeitung“ heraus."""
+        found = self.find_item_in_lists(item_id)
+        if not found or self.get_label(label_id) is None:
+            return "break"
+        item = found[0]
+        assigned = list(item.get("labels") or [])
+        if label_id in assigned:
+            assigned = [value for value in assigned if value != label_id]
+        elif len(assigned) < self.MAX_LABELS_PER_ITEM:
+            assigned.append(label_id)
+        else:
+            return "break"
+        self.snapshot_undo()
+        item["labels"] = assigned
+        self.save_items()
+        self.refresh_tree()
+        return "break"
+
+    def _popup_item_menu(self, menu, event):
+        self._item_context_menu = menu
+        try:
+            menu.tk_popup(event.x_root, event.y_root)
+        finally:
+            try:
+                menu.grab_release()
+            except tk.TclError:
+                pass
+        return "break"
+
+    def show_item_context_menu(self, event):
+        if self.view_mode == "trash":
+            row_id = self.tree.identify_row(event.y)
+            if row_id and self.trash_id_from_iid(row_id) and row_id not in self.tree.selection():
+                self.tree.selection_set(row_id)
+                self.tree.focus(row_id)
+            self._destroy_item_context_menu()
+            return self._popup_item_menu(self.build_trash_context_menu(row_id), event)
+        if self.view_mode in self.DERIVED_ITEM_VIEWS:
+            row_id = self.tree.identify_row(event.y)
+            if row_id not in self.in_progress_item_sources:
+                return "break"
+            self.tree.selection_set(row_id)
+            self.tree.focus(row_id)
+            self._destroy_item_context_menu()
+            menu = self.build_in_progress_context_menu(row_id)
+            if menu is None:
+                return "break"
+            return self._popup_item_menu(menu, event)
+        if self.view_mode == "folder":
+            row_id = self.tree.identify_row(event.y)
+            list_id = self.folder_list_id_from_iid(row_id)
+            sub_folder_id = self.folder_folder_id_from_iid(row_id)
+            self._destroy_item_context_menu()
+            if list_id:
+                self.tree.selection_set(row_id)
+                self.tree.focus(row_id)
+                menu = self.build_sidebar_context_menu(("list", list_id))
+            elif sub_folder_id and self.get_folder(sub_folder_id):
+                # Ein Unterordner in der Übersicht bietet dasselbe Menü wie in
+                # der Seitenleiste – dieselben Aktionen an beiden Orten.
+                self.tree.selection_set(row_id)
+                self.tree.focus(row_id)
+                menu = self.build_sidebar_context_menu(("folder", sub_folder_id))
+            else:
+                menu = self.build_folder_overview_menu()
+            if menu is None:
+                return "break"
+            return self._popup_item_menu(menu, event)
+        if self.view_mode != "list":
+            return "break"
+        item_id = self.tree_row_at(event.y)
+        if not item_id or item_id == self.EMPTY_ROW_ID or not self.find_item(item_id):
+            # Rechtsklick in den leeren Bereich bietet die Listenaktionen an.
+            self._destroy_item_context_menu()
+            return self._popup_item_menu(self.build_tree_background_menu(), event)
+
+        current_selection = set(self.get_selected_item_ids())
+        if item_id not in current_selection:
+            self.tree.selection_set(item_id)
+        self.tree.focus(item_id)
+        self.selection_anchor_id = item_id
+        self._destroy_item_context_menu()
+        menu = self.build_item_context_menu()
+        if menu is None:
+            return "break"
+        self._item_context_menu = menu
+        try:
+            menu.tk_popup(event.x_root, event.y_root)
+        finally:
+            try:
+                menu.grab_release()
+            except tk.TclError:
+                pass
+        return "break"
+
+    def _destroy_item_context_menu(self):
+        """Räumt ein zuvor ausgeblendetes Aufgabenmenü vor dem nächsten Öffnen auf."""
+        menu = getattr(self, "_item_context_menu", None)
+        self._item_context_menu = None
+        if menu is None:
+            return
+        try:
+            menu.destroy()
+        except (AttributeError, tk.TclError):
+            pass
+
+    def _restore_item_selection(self, item_ids):
+        for item_id in item_ids:
+            if self.tree.exists(item_id):
+                self.tree.selection_add(item_id)
+
+    def set_item_color_selected(self, color_key):
+        item_ids = self.selected_items_for_change()
+        if item_ids is None:
+            return "break"
+        new_color = color_key if color_key in self.ITEM_COLOR_KEYS else None
+        with self.item_change(item_ids) as change:
+            for item_id in item_ids:
+                found = self.find_item(item_id)
+                if found and found[0].get("color") != new_color:
+                    found[0]["color"] = new_color
+                    change.mark()
+        return "break"
+
+    def is_tree_indicator_click(self, event, item_id):
+        """Erkennt Klicks auf den Ein-/Ausklapp-Pfeil, damit diese nicht als Erledigt-Klick zählen."""
+        if event is None or not item_id or item_id == self.EMPTY_ROW_ID:
+            return False
+
+        try:
+            element = self.tree.identify_element(event.x, event.y)
+            if element and "indicator" in element.lower():
+                return True
+        except tk.TclError:
+            pass
+
+        # Fallback für Tk-/Windows-Varianten, die den Indicator nicht eindeutig melden.
+        try:
+            if self.tree.get_children(item_id):
+                bbox = self.tree.bbox(item_id, "#0")
+                if bbox:
+                    x, _y, _w, _h = bbox
+                    return event.x <= x + 22
+        except tk.TclError:
+            pass
+
+        return False
+
+    def toggle_done(self, event=None):
+        if not self.require_list_view(message=False):
+            return "break"
+        item_ids = []
+        if event is not None and self.is_mouse_event(event):
+            item_id = self.tree_row_at(event.y)
+            if self.is_tree_indicator_click(event, item_id):
+                return "break"
+            if item_id and item_id != self.EMPTY_ROW_ID:
+                self.tree.selection_set(item_id)
+                self.tree.focus(item_id)
+                self.selection_anchor_id = item_id
+                item_ids = [item_id]
+
+        if not item_ids:
+            item_ids = self.get_selected_item_ids()
+        if not item_ids:
+            return "break"
+
+        first_found = self.find_item(item_ids[0])
+        if not first_found:
+            return "break"
+        if self.is_group_item(first_found[0]) and len(item_ids) == 1:
+            # Eine Gruppe kennt keinen Erledigt-Zustand. Der gleiche Handgriff
+            # klappt sie deshalb auf und zu, wie man es von einem Ordner erwartet.
+            group_id = item_ids[0]
+            try:
+                is_open = bool(self.tree.item(group_id, "open"))
+            except tk.TclError:
+                return "break"
+            self.tree.item(group_id, open=not is_open)
+            if is_open:
+                self.expanded_ids.discard(group_id)
+                self.collapsed_item_ids.add(group_id)
+            else:
+                self.expanded_ids.add(group_id)
+                self.collapsed_item_ids.discard(group_id)
+            return "break"
+        task_ids = [item_id for item_id in item_ids
+                    if (self.find_item(item_id) or (None,))[0] is not None
+                    and self.is_schedulable_item(self.find_item(item_id)[0])]
+        if not task_ids:
+            return "break"
+        item_ids = task_ids
+        first_found = self.find_item(item_ids[0])
+        new_state = not first_found[0].get("done", False)
+
+        with self.item_change(item_ids) as change:
+            for item_id in item_ids:
+                found = self.find_item(item_id)
+                if not found:
+                    continue
+                item, _siblings, _index, _parent_item = found
+                if item.get("done", False) != new_state:
+                    item["done"] = new_state
+                    change.mark()
+            if new_state:
+                # Wiederkehrende Punkte rücken auf ihren nächsten Termin vor.
+                # Sie stehen danach wieder offen und würden von der Zählung in
+                # item_change übersehen – geschafft hat man sie trotzdem,
+                # deshalb hier ausdrücklich buchen.
+                vorgerueckt = self.advance_repeating_items(item_ids)
+                if vorgerueckt:
+                    self.book_completions(vorgerueckt)
+                    change.mark()
+        return "break"
+
+    # -----------------------------
+    # Wichtigkeit / Flaggen
+    # -----------------------------
+    def set_importance_selected(self, value):
+        item_ids = self.selected_items_for_change()
+        if item_ids is None:
+            return "break"
+        new_value = self.clamp_importance(value)
+        with self.item_change(item_ids) as change:
+            for item_id in item_ids:
+                found = self.find_item(item_id)
+                if found and self.clamp_importance(found[0].get("importance", 0)) != new_value:
+                    found[0]["importance"] = new_value
+                    change.mark()
+        return "break"
+
+    def cycle_importance_selected(self, event=None):
+        item_ids = self.selected_items_for_change()
+        if item_ids is None:
+            return "break"
+        with self.item_change(item_ids) as change:
+            for item_id in item_ids:
+                found = self.find_item(item_id)
+                if not found:
+                    continue
+                item, _siblings, _index, _parent_item = found
+                item["importance"] = (self.clamp_importance(item.get("importance", 0)) + 1) % 4
+                change.mark()
+        return "break"
+
+    # -----------------------------
+    # Fälligkeitsdatum
+    # -----------------------------
+    def set_due_date_selected(self, event=None):
+        """Setzt oder entfernt das Fälligkeitsdatum der ausgewählten Punkte."""
+        if not self.require_list_view():
+            return "break"
+        if event is not None and self.current_focus_widget() in (
+            getattr(self, "entry", None),
+            getattr(self, "search_entry", None),
+        ):
+            return None
+
+        # Die Ansicht ist oben schon geprüft; hier fehlt nur noch die Auswahl.
+        item_ids = self.selected_items_for_change(view_message=False)
+        if item_ids is None:
+            return "break"
+
+        first_found = self.find_item(item_ids[0])
+        current_iso = first_found[0].get("due") if first_found else None
+        current_time = first_found[0].get("due_time") if first_found else None
+        answer = self.themed_due_dialog(current_iso, current_time)
+        if answer is None:
+            return "break"  # Abbruch
+        due_value, due_time = answer
+        return self.set_due_value_selected(due_value, due_time)
+
+    def themed_due_dialog(self, initial_iso=None, initial_time=None, parent=None):
+        """Fälligkeit wählen – Kalender und Uhrzeit in einem Fenster.
+
+        Nutzt dieselbe Komponente wie die Eingabemaske, damit ein Datum überall
+        gleich gesetzt wird. Rückgabe: (ISO-Datum oder None, Uhrzeit oder None)
+        oder None bei Abbruch.
+
+        `parent` ist das Fenster, das den Kalender geöffnet hat. Es bekommt am
+        Ende seinen Grab zurück – sonst nimmt eine modale Eingabemaske nach dem
+        Schließen des Kalenders keine Eingabe mehr an.
+        """
+        result = {"value": None}
+        owner = parent if isinstance(parent, (tk.Toplevel, tk.Tk)) else self.root
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Fälligkeit")
+        dialog.configure(bg=self.theme["bg"])
+        dialog.transient(owner)
+        dialog.resizable(False, False)
+
+        container = tk.Frame(dialog, bg=self.theme["bg"])
+        container.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+        tk.Label(
+            container, text="Fälligkeit", bg=self.theme["bg"], fg=self.theme["text"],
+            font=app_font(15, "bold"), anchor="w",
+        ).pack(anchor="w", pady=(0, 6))
+        tk.Label(
+            container,
+            text="Tag anklicken oder eintippen. Die Uhrzeit ist freiwillig.",
+            bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w",
+        ).pack(anchor="w", pady=(0, 14))
+
+        field = DueField(container, self, due=initial_iso, due_time=initial_time)
+        field.pack(fill="x")
+
+        footer = tk.Frame(container, bg=self.theme["bg"])
+        footer.pack(fill="x", pady=(18, 0))
+
+        def submit(event=None):
+            parsed, error = field.read()
+            if error:
+                self.show_warning("Fälligkeit", error, parent=dialog)
+                return "break"
+            result["value"] = parsed
+            dialog.destroy()
+            return "break"
+
+        def cancel(event=None):
+            result["value"] = None
+            dialog.destroy()
+            return "break"
+
+        self._make_dialog_button(footer, "Übernehmen", submit, "confirm").pack(side="right")
+        self._make_dialog_button(footer, "Abbrechen", cancel, "muted").pack(side="right", padx=(0, 10))
+        dialog.bind("<Return>", submit)
+        dialog.bind("<Escape>", cancel)
+        dialog.protocol("WM_DELETE_WINDOW", cancel)
+        self._center_dialog(dialog, min_width=460)
+        self._schedule_windows_chrome_theme(dialog)
+        field.date_entry.focus_set()
+        # Das aufrufende Fenster bekommt seinen Griff zurück – hier ausdrücklich,
+        # weil die Eingabemaske ihn kennt und nicht erst ermittelt werden muss.
+        self.run_modal(dialog, parent)
+        return result["value"]
+
+    def set_due_value_selected(self, due_value, due_time=None):
+        """Setzt ein bereits bestimmtes ISO-Datum oder entfernt die Fälligkeit.
+
+        Ohne Datum entfällt auch die Uhrzeit – eine Frist ohne Tag gibt es nicht.
+        """
+        item_ids = self.selected_items_for_change()
+        if item_ids is None:
+            return "break"
+        new_due = self.normalize_due(due_value) if due_value else None
+        if due_value and new_due is None:
+            self.show_warning("Fälligkeit", "Das Fälligkeitsdatum ist ungültig.")
+            return "break"
+        new_time = self.normalize_due_time(due_time) if new_due else None
+        with self.item_change(item_ids) as change:
+            for item_id in item_ids:
+                found = self.find_item(item_id)
+                if not found:
+                    continue
+                item = found[0]
+                if item.get("due") != new_due or item.get("due_time") != new_time:
+                    item["due"] = new_due
+                    item["due_time"] = new_time
+                    change.mark()
+        return "break"
+
+    # -----------------------------
+    # Hierarchie / Einrücken / Ausrücken
+    # -----------------------------
+    def make_subitem(self, source_id, target_id):
+        if not source_id or not target_id or source_id == target_id:
+            return False
+        if target_id == self.EMPTY_ROW_ID:
+            return False
+
+        source_found = self.find_item(source_id)
+        target_found = self.find_item(target_id)
+        if not source_found or not target_found:
+            return False
+
+        source_item, _source_siblings, _source_index, _source_parent = source_found
+        target_item, _target_siblings, _target_index, _target_parent = target_found
+
+        if self.item_contains_id(source_item, target_id):
+            self.show_warning("Nicht möglich", "Ein Punkt kann nicht unter einen eigenen Unterpunkt verschoben werden.")
+            return False
+
+        # Auch der tiefste Nachfahre muss nach dem Einrücken wieder ladbar sein.
+        stack = [(item, 0) for item in self.items]
+        target_depth = 0
+        while stack:
+            node, depth = stack.pop()
+            if node.get("id") == target_id:
+                target_depth = depth
+                break
+            stack.extend((child, depth + 1) for child in node.get("children", []))
+        subtree_height = 1
+        stack = [(source_item, 1)]
+        while stack:
+            node, height = stack.pop()
+            subtree_height = max(subtree_height, height)
+            stack.extend((child, height + 1) for child in node.get("children", []))
+        if target_depth + 1 + subtree_height > self.MAX_ITEM_DEPTH:
+            self.show_warning("Nicht möglich", "Die maximale Verschachtelungstiefe würde überschritten.")
+            return False
+        moved_item = self.remove_item_by_id(source_id)
+        if not moved_item:
+            return False
+
+        # Ziel nach dem Entfernen erneut suchen, weil sich die Struktur geändert haben kann.
+        target_found_after_remove = self.find_item(target_id)
+        if not target_found_after_remove:
+            # Fallback: der Punkt landet sicher auf oberster Ebene. Da sich die
+            # Daten damit geändert haben, gilt der Vorgang als erfolgreich –
+            # sonst bliebe die Änderung ungespeichert und nicht rückgängig machbar.
+            self.items.append(moved_item)
+            return True
+
+        target_item = target_found_after_remove[0]
+        target_item.setdefault("children", []).append(moved_item)
+        self.expanded_ids.add(target_id)
+        self.collapsed_item_ids.discard(target_id)
+        return True
+
+    def move_item_relative_to_target(self, source_id, target_id, place="after"):
+        if not source_id or not target_id or source_id == target_id:
+            return False
+        if target_id == self.EMPTY_ROW_ID:
+            return False
+
+        source_found = self.find_item(source_id)
+        target_found = self.find_item(target_id)
+        if not source_found or not target_found:
+            return False
+
+        source_item = source_found[0]
+        if self.item_contains_id(source_item, target_id):
+            self.show_warning("Nicht möglich", "Ein Punkt kann nicht in den eigenen Unterbereich verschoben werden.")
+            return False
+
+        moved_item = self.remove_item_by_id(source_id)
+        if not moved_item:
+            return False
+
+        target_found_after_remove = self.find_item(target_id)
+        if not target_found_after_remove:
+            # Siehe make_subitem: geänderte Daten müssen gespeichert werden.
+            self.items.append(moved_item)
+            return True
+
+        _target_item, target_siblings, target_index, _target_parent = target_found_after_remove
+        insert_index = target_index if place == "before" else target_index + 1
+        target_siblings.insert(insert_index, moved_item)
+        return True
+
+    def toggle_indent_selected(self, event=None):
+        """Tab schaltet einen Punkt zwischen Hauptpunkt und Unterpunkt um."""
+        if not self.require_list_view(message=False):
+            return "break"
+        source_id = self.get_selected_item_id()
+        if not source_id:
+            return "break"
+
+        found = self.find_item(source_id)
+        if not found:
+            return "break"
+
+        _source_item, _source_siblings, _source_index, parent_item = found
+
+        if parent_item:
+            with self.item_change([source_id], restore=False) as change:
+                self.lift_item_to_parent_level(source_id, parent_item.get("id"), change)
+            return "break"
+
+        previous_sibling_id = self.tree.prev(source_id)
+        if previous_sibling_id:
+            with self.item_change([source_id], restore=False) as change:
+                if self.make_subitem(source_id, previous_sibling_id):
+                    change.mark()
+        return "break"
+
+    def indent_selected(self, event=None):
+        if not self.require_list_view():
+            return "break"
+        source_id = self.get_selected_item_id()
+        if not source_id:
+            return "break"
+
+        previous_sibling_id = self.tree.prev(source_id)
+        if not previous_sibling_id:
+            self.show_info("Hinweis", "Der Punkt kann nur unter den vorherigen Punkt eingerückt werden.")
+            return "break"
+
+        with self.item_change([source_id], restore=False) as change:
+            if self.make_subitem(source_id, previous_sibling_id):
+                change.mark()
+        return "break"
+
+    def outdent_selected(self, event=None):
+        if not self.require_list_view():
+            return "break"
+        source_id = self.get_selected_item_id()
+        if not source_id:
+            return "break"
+
+        found = self.find_item(source_id)
+        if not found:
+            return "break"
+        _source_item, _source_siblings, _source_index, parent_item = found
+        if not parent_item:
+            self.show_info("Hinweis", "Der Punkt ist bereits ein Hauptpunkt.")
+            return "break"
+
+        with self.item_change([source_id], restore=False) as change:
+            self.lift_item_to_parent_level(source_id, parent_item.get("id"), change)
+        return "break"
+
+    def lift_item_to_parent_level(self, source_id, parent_id, change):
+        """Hebt einen Unterpunkt eine Ebene nach oben, direkt hinter sein Elternteil.
+
+        Gemeinsamer Kern von `outdent_selected` und `toggle_indent_selected`;
+        beide taten dasselbe in eigenem Wortlaut. Findet sich das Elternteil
+        nach dem Herausnehmen nicht mehr wieder, landet der Punkt am Ende der
+        Liste – er darf auf keinen Fall verschwinden.
+        """
+        moved_item = self.remove_item_by_id(source_id)
+        if not moved_item:
+            # Ohne echte Änderung darf kein wirkungsloser Undo-Schritt zurückbleiben.
+            return False
+        parent_found = self.find_item(parent_id)
+        if parent_found:
+            _parent_item, parent_siblings, parent_index, _grand_parent = parent_found
+            parent_siblings.insert(parent_index + 1, moved_item)
+        else:
+            self.items.append(moved_item)
+        change.mark(source_id)
+        return True
+
+    # -----------------------------
+    # Drag & Drop
+    # -----------------------------
+    def on_drag_start(self, event):
+        # Die eigene Drag-Auswahl beantwortet den Klick mit "break" und
+        # unterdrückt damit die native Class-Bindung – einschließlich der Zeile,
+        # die den Baum fokussiert. Ohne den folgenden Aufruf bliebe der Baum
+        # ohne Tastaturfokus, und die Pfeiltasten würden nichts bewirken.
+        self.cancel_item_rename()
+        clicked = self.tree.identify_row(event.y)
+        self._rename_candidate = clicked if (self.view_mode == "list" and
+            tuple(self.tree.selection()) == (clicked,) and not (event.state & 0x0005) and
+            self.tree.identify_column(event.x) == "#0" and
+            "text" in self.tree.identify_element(event.x, event.y)) else None
+        self.tree.focus_set()
+        if self.view_mode == "folder":
+            return self.on_folder_overview_drag_start(event)
+        if self.view_mode == self.LABELS_VIEW:
+            return self.on_label_view_drag_start(event)
+        if self.view_mode != "list":
+            self.drag_start_id = None
+            self.drag_item_ids = []
+            return
+        row_id = self.tree.identify_row(event.y)
+        # Ein Klick auf eine Fortsetzungs- oder Abstandszeile meint den Punkt,
+        # zu dem sie gehört. Darstellung und Daten bleiben so deckungsgleich.
+        if self.is_synthetic_row(row_id):
+            row_id = self.owner_row_id(row_id)
+            if not self.tree.exists(row_id):
+                self.drag_start_id = None
+                self.drag_item_ids = []
+                return "break"
+        try:
+            clicked_element = self.tree.identify_element(event.x, event.y)
+        except tk.TclError:
+            clicked_element = ""
+        if row_id and row_id != self.EMPTY_ROW_ID and "indicator" in str(clicked_element).lower():
+            # Die eigene Drag-Auswahl unterdrückt absichtlich die native Class-
+            # Bindung. Klapppfeile werden daher hier explizit und zustandsfest
+            # behandelt, statt den Klick als Drag-Start zu interpretieren.
+            has_children = bool(self.tree.get_children(row_id))
+            if has_children:
+                is_open = bool(self.tree.item(row_id, "open"))
+                self.tree.item(row_id, open=not is_open)
+                if is_open:
+                    self.expanded_ids.discard(row_id)
+                    self.collapsed_item_ids.add(row_id)
+                else:
+                    self.expanded_ids.add(row_id)
+                    self.collapsed_item_ids.discard(row_id)
+            self.drag_start_id = None
+            self.drag_item_ids = []
+            return "break"
+        self.drag_start_id = None if row_id == self.EMPTY_ROW_ID else row_id
+        self.drag_start_x = event.x
+        self.drag_start_y = event.y
+        self.drag_has_moved = False
+        if self.drag_start_id:
+            shift_pressed = bool(event.state & 0x0001)
+            ctrl_pressed = self.selection_modifier_pressed(event)
+            # Shift + Klick soll den bestehenden Anker für die Bereichsauswahl behalten.
+            # Shift + Drag nutzt dieselben Startdaten und erstellt beim Loslassen einen Unterpunkt.
+            if not shift_pressed:
+                if ctrl_pressed:
+                    current_selection = set(self.tree.selection())
+                    if self.drag_start_id in current_selection:
+                        self.tree.selection_remove(self.drag_start_id)
+                    else:
+                        self.tree.selection_add(self.drag_start_id)
+                    self.tree.focus(self.drag_start_id)
+                    self.selection_anchor_id = self.drag_start_id
+                else:
+                    # Eine bereits bestehende Mehrfachauswahl bleibt beim Ziehen erhalten.
+                    if self.drag_start_id not in self.tree.selection():
+                        self.tree.selection_set(self.drag_start_id)
+                    self.tree.focus(self.drag_start_id)
+                    self.selection_anchor_id = self.drag_start_id
+            selected = self.get_selected_item_ids()
+            ordered_ids = [item_id for item_id in self.iter_tree_ids() if item_id in set(selected)]
+            self.drag_item_ids = self.filter_top_level_selection(ordered_ids or [self.drag_start_id])
+        return "break"
+
+    def on_folder_overview_drag_start(self, event):
+        """Startet das Sortieren/Verschieben einer Liste aus der Ordnerübersicht."""
+        row_id = self.tree.identify_row(event.y)
+        list_id = self.folder_list_id_from_iid(row_id)
+        self.drag_start_id = None
+        self.drag_item_ids = []
+        self.drag_has_moved = False
+        if not list_id or self.current_search_query():
+            return "break"
+        self.drag_start_id = list_id
+        self.drag_start_x = event.x
+        self.drag_start_y = event.y
+        self.tree.selection_set(row_id)
+        self.tree.focus(row_id)
+        return "break"
+
+    def on_folder_overview_drag_motion(self, event):
+        if not self.drag_start_id:
+            return "break"
+        if abs(event.x - self.drag_start_x) + abs(event.y - self.drag_start_y) > 6:
+            self.drag_has_moved = True
+
+        self.clear_drop_target_tags()
+        self.clear_sidebar_drop_target_tags()
+        sidebar_iid, sidebar_row = self.identify_sidebar_drop_row(event)
+        if sidebar_iid and sidebar_row and sidebar_row[0] == "folder":
+            target_tree = self.get_sidebar_tree_for_iid(sidebar_iid)
+            if target_tree is not None:
+                try:
+                    tags = set(target_tree.item(sidebar_iid, "tags"))
+                    tags.add("drop_target")
+                    target_tree.item(sidebar_iid, tags=tuple(tags), open=True)
+                except tk.TclError:
+                    pass
+            return "break"
+
+        target_iid = self.identify_tree_drop_row(event)
+        target_list_id = self.folder_list_id_from_iid(target_iid)
+        if target_list_id and target_list_id != self.drag_start_id:
+            try:
+                tags = set(self.tree.item(target_iid, "tags"))
+                tags.add("drop_target")
+                self.tree.item(target_iid, tags=tuple(tags))
+            except tk.TclError:
+                pass
+        return "break"
+
+    def on_folder_overview_drag_end(self, event):
+        source_id = self.drag_start_id
+        sidebar_iid, sidebar_row = self.identify_sidebar_drop_row(event)
+        target_iid = self.identify_tree_drop_row(event)
+        target_list_id = self.folder_list_id_from_iid(target_iid)
+        was_drag = bool(source_id and self.drag_has_moved)
+
+        self.clear_drop_target_tags()
+        self.clear_sidebar_drop_target_tags()
+        self.drag_start_id = None
+        self.drag_item_ids = []
+        self.drag_has_moved = False
+        if not was_drag:
+            return "break"
+
+        mutation = None
+        if sidebar_iid and sidebar_row and sidebar_row[0] == "folder":
+            mutation = ("folder", sidebar_row[1], None)
+        elif target_list_id and target_list_id != source_id:
+            try:
+                _x, row_y, _width, row_height = self.tree.bbox(target_iid)
+                place = "before" if event.y < row_y + row_height / 2 else "after"
+            except (TypeError, ValueError, tk.TclError):
+                place = "after"
+            mutation = ("relative", target_list_id, place)
+        if mutation is None:
+            return "break"
+
+        with self.item_change((), restore=False) as change:
+            if mutation[0] == "folder":
+                moved = self.move_sidebar_list_into_folder(source_id, mutation[1])
+            else:
+                moved = self.move_sidebar_list_relative(source_id, mutation[1], place=mutation[2])
+            if moved:
+                change.mark(f"folder-list:{source_id}")
+        return "break"
+
+    def identify_sidebar_drop_row(self, event=None):
+        if not hasattr(self, "sidebar_listbox"):
+            return None, None
+        try:
+            pointer_x = getattr(event, "x_root", None)
+            pointer_y = getattr(event, "y_root", None)
+            if pointer_x is None or pointer_y is None:
+                pointer_x = self.root.winfo_pointerx()
+                pointer_y = self.root.winfo_pointery()
+            for tree_name in ("system_listbox", "sidebar_listbox"):
+                tree = getattr(self, tree_name, None)
+                if tree is None:
+                    continue
+                local_x = pointer_x - tree.winfo_rootx()
+                local_y = pointer_y - tree.winfo_rooty()
+                if not (0 <= local_x < tree.winfo_width() and 0 <= local_y < tree.winfo_height()):
+                    continue
+                iid = tree.identify_row(local_y)
+                return iid, self.sidebar_iid_to_row.get(iid)
+            return None, None
+        except tk.TclError:
+            return None, None
+
+    def pointer_is_over_widget(self, widget, event=None):
+        try:
+            pointer_x = getattr(event, "x_root", None)
+            pointer_y = getattr(event, "y_root", None)
+            if pointer_x is None or pointer_y is None:
+                pointer_x = self.root.winfo_pointerx()
+                pointer_y = self.root.winfo_pointery()
+            local_x = pointer_x - widget.winfo_rootx()
+            local_y = pointer_y - widget.winfo_rooty()
+            return 0 <= local_x < widget.winfo_width() and 0 <= local_y < widget.winfo_height()
+        except tk.TclError:
+            return False
+
+    def identify_tree_drop_row(self, event=None):
+        """Liefert nur dann eine Task-Zeile, wenn der Zeiger wirklich über dem Task-Baum liegt."""
+        if not hasattr(self, "tree"):
+            return None
+        try:
+            pointer_x = getattr(event, "x_root", None)
+            pointer_y = getattr(event, "y_root", None)
+            if pointer_x is None or pointer_y is None:
+                pointer_x = self.root.winfo_pointerx()
+                pointer_y = self.root.winfo_pointery()
+            local_x = pointer_x - self.tree.winfo_rootx()
+            local_y = pointer_y - self.tree.winfo_rooty()
+            if not (0 <= local_x < self.tree.winfo_width() and 0 <= local_y < self.tree.winfo_height()):
+                return None
+            return self.tree_row_at(local_y) or None
+        except tk.TclError:
+            return None
+
+    def resolve_task_drop_destination(self, sidebar_row):
+        if not sidebar_row:
+            return None
+        row_type, row_id = sidebar_row
+        if row_type == "list":
+            return row_id
+        if row_type != "folder":
+            return None
+        folder = self.get_folder(row_id)
+        choices = [
+            (entry.get("id"), self.list_path_title(entry))
+            for entry in self.get_folder_lists_recursive(row_id)
+            if entry.get("id") != self.active_list_id
+        ]
+        if not choices:
+            self.show_info(
+                "Kein anderes Ziel",
+                "Dieser Ordner enthält keine andere Zielliste. Lege zuerst eine weitere Liste darin an.",
+            )
+            return None
+        if len(choices) == 1:
+            return choices[0][0]
+        return self.themed_choice_dialog(
+            "Ziel im Ordner wählen",
+            f"In welche Liste von „{folder.get('title', 'Ordner')}“ soll der Punkt verschoben werden?",
+            choices,
+        )
+
+    def move_items_to_list(self, item_ids, target_list_id):
+        if not item_ids or not target_list_id or target_list_id == self.active_list_id:
+            return False
+        target = next((entry for entry in self.lists if entry.get("id") == target_list_id), None)
+        if not target:
+            return False
+        ordered_ids = [item_id for item_id in self.iter_tree_ids() if item_id in set(item_ids)]
+        ordered_ids = self.filter_top_level_selection(ordered_ids)
+        moved_items = []
+        # Die Punkte stehen danach in einer anderen Liste – hier bleibt nichts
+        # auszuwählen.
+        with self.item_change((), restore=False) as change:
+            for item_id in ordered_ids:
+                moved = self.remove_item_by_id(item_id)
+                if moved:
+                    moved_items.append(moved)
+            if moved_items:
+                target.setdefault("items", []).extend(moved_items)
+                change.mark()
+        return bool(moved_items)
+
+    def on_drag_motion(self, event):
+        if self.view_mode == "folder":
+            return self.on_folder_overview_drag_motion(event)
+        if not self.drag_start_id:
+            return
+        if abs(event.x - self.drag_start_x) + abs(event.y - self.drag_start_y) > 6:
+            self.drag_has_moved = True
+
+        sidebar_iid, sidebar_row = self.identify_sidebar_drop_row(event)
+        self.clear_drop_target_tags()
+        self.clear_sidebar_drop_target_tags()
+        if sidebar_iid and sidebar_row:
+            try:
+                target_tree = self.get_sidebar_tree_for_iid(sidebar_iid)
+                if target_tree is None:
+                    return
+                tags = set(target_tree.item(sidebar_iid, "tags"))
+                tags.add("drop_target")
+                target_tree.item(sidebar_iid, tags=tuple(tags))
+                if sidebar_row[0] == "folder":
+                    target_tree.item(sidebar_iid, open=True)
+            except tk.TclError:
+                pass
+            return
+
+        target_id = self.identify_tree_drop_row(event)
+        if target_id and target_id not in (self.EMPTY_ROW_ID, self.drag_start_id):
+            try:
+                current_tags = set(self.tree.item(target_id, "tags"))
+                current_tags.add("drop_target")
+                self.tree.item(target_id, tags=tuple(current_tags))
+            except tk.TclError:
+                pass
+
+    def on_drag_end(self, event):
+        if self.view_mode == "folder":
+            return self.on_folder_overview_drag_end(event)
+        if self.view_mode == self.LABELS_VIEW:
+            return self.on_label_view_drag_end(event)
+        source_id = self.drag_start_id
+        dragged_ids = list(self.drag_item_ids or ([source_id] if source_id else []))
+        _sidebar_iid, sidebar_row = self.identify_sidebar_drop_row(event)
+        target_id = self.identify_tree_drop_row(event)
+        shift_pressed = bool(event.state & 0x0001)
+
+        self.clear_drop_target_tags()
+        self.clear_sidebar_drop_target_tags()
+        self.drag_start_id = None
+        self.drag_item_ids = []
+
+        if source_id and self.drag_has_moved and sidebar_row:
+            destination_id = self.resolve_task_drop_destination(sidebar_row)
+            if destination_id:
+                self.drop_items_on_list(dragged_ids, destination_id)
+            return
+
+        if not source_id or not target_id or target_id == self.EMPTY_ROW_ID:
+            return
+
+        if not self.drag_has_moved:
+            if shift_pressed:
+                self.select_range_from_click(event)
+            elif getattr(self, "_rename_candidate", None) == source_id:
+                self._item_rename_timer = self.root.after(
+                    self.SIDEBAR_RENAME_DELAY_MS, lambda: self.begin_item_rename(source_id))
+            return
+
+        if target_id in dragged_ids:
+            return
+
+        # Gezogen wird die ganze Auswahl, nicht nur die angefasste Zeile.
+        # Vorher bewegte sich bei mehreren markierten Punkten nur einer –
+        # die übrigen blieben unbemerkt zurück.
+        ordered_ids = [item_id for item_id in dragged_ids if self.find_item(item_id)]
+        if not ordered_ids:
+            return
+
+        place = "after"
+        drop_into = False
+        if not shift_pressed:
+            # Ober-/Unterhälfte entscheidet vor/nach dem Zielpunkt. Bei einer
+            # Gruppe kommt ein dritter Fall dazu: Die Mitte der Zeile legt den
+            # Punkt hinein. Eine Gruppe ist dazu da, Punkte aufzunehmen – dieser
+            # Weg soll nicht an einer Zusatztaste hängen, die man kennen muss.
+            try:
+                bbox = self.tree.bbox(target_id)
+                if bbox:
+                    _x, y, _w, h = bbox
+                    found_target = self.find_item(target_id)
+                    if found_target and self.is_group_item(found_target[0]):
+                        edge = h * self.GROUP_DROP_EDGE_SHARE
+                        if y + edge <= event.y <= y + h - edge:
+                            drop_into = True
+                        else:
+                            place = "before" if event.y < y + h / 2 else "after"
+                    else:
+                        place = "before" if event.y < y + h / 2 else "after"
+            except tk.TclError:
+                pass
+
+        as_subitem = shift_pressed or drop_into
+        action_name = "Unterpunkt erstellen" if as_subitem else "Verschieben"
+        with self.guarded_structural_change(action_name):
+            with self.item_change(ordered_ids, focus="first") as change:
+                if as_subitem:
+                    # Shift + Drag, oder ein Drop mitten auf eine Gruppe: die
+                    # Auswahl wird zu Unterpunkten des Zielpunkts.
+                    for item_id in ordered_ids:
+                        if self.make_subitem(item_id, target_id):
+                            change.mark()
+                else:
+                    # Rückwärts einfügen hält die Reihenfolge der Auswahl bei
+                    # "vor dem Ziel"; vorwärts tut dasselbe bei "nach dem Ziel".
+                    sequence = ordered_ids if place == "before" else list(reversed(ordered_ids))
+                    anchor = target_id
+                    for item_id in sequence:
+                        if self.move_item_relative_to_target(item_id, anchor, place=place):
+                            change.mark()
+                            if place == "before":
+                                # Der nächste Punkt reiht sich hinter dem gerade
+                                # eingefügten ein, damit die Auswahlreihenfolge steht.
+                                anchor, place = item_id, "after"
+
+                if change.changed:
+                    self.keep_branch_expanded(
+                        [self.find_item(i)[0] for i in ordered_ids if self.find_item(i)]
+                    )
+
+    def drop_items_on_list(self, item_ids, destination_id):
+        """Verschiebt gezogene Punkte in eine andere Liste – mit Rückfrage.
+
+        Ein Drop auf die Seitenleiste passiert leicht versehentlich, wenn der
+        Zeiger beim Sortieren nach links abrutscht. Vorher wanderte die Auswahl
+        dann kommentarlos in eine andere Liste: Sie war weder im Papierkorb noch
+        an ihrem Platz, sondern schlicht woanders. Deshalb fragt Glide nach und
+        sagt anschließend, wohin die Punkte gegangen sind.
+        """
+        target = next((entry for entry in self.lists if entry.get("id") == destination_id), None)
+        if not target:
+            return False
+        movable = [item_id for item_id in item_ids if self.find_item(item_id)]
+        if not movable:
+            return False
+        target_name = self.list_path_title(target)
+        count = len(self.filter_top_level_selection(movable))
+        subject = "1 Punkt" if count == 1 else f"{count} Punkte"
+        if not self.ask_yes_no(
+            "In andere Liste verschieben",
+            f"{subject} nach „{target_name}“ verschieben?\n\n"
+            "Die Punkte verlassen damit diese Liste. Rückgängig machen: Strg+Z.",
+        ):
+            return False
+        with self.guarded_structural_change("In andere Liste verschieben"):
+            moved = self.move_items_to_list(movable, destination_id)
+        return moved
+
+    def clear_drop_target_tags(self):
+        if not hasattr(self, "tree"):
+            return
+        for item_id in self.tree.get_children(""):
+            self.clear_drop_target_tags_recursive(item_id)
+
+    def clear_drop_target_tags_recursive(self, item_id):
+        try:
+            tags = tuple(tag for tag in self.tree.item(item_id, "tags") if tag != "drop_target")
+            self.tree.item(item_id, tags=tags)
+            for child_id in self.tree.get_children(item_id):
+                self.clear_drop_target_tags_recursive(child_id)
+        except tk.TclError:
+            pass
+
+    # -----------------------------
+    # Export / Import
+    # -----------------------------
+    def import_txt_as_new_lists(self, event=None):
+        paths = filedialog.askopenfilenames(
+            title="Eine oder mehrere TXT-Dateien als neue Listen importieren",
+            filetypes=[("Textdateien", "*.txt"), ("Alle Dateien", "*.*")],
+        )
+        if not paths:
+            return "break"
+        self.sync_current_list_reference()
+        # Vor dem Auswerten sichern: beim Lesen der Labelzeilen können neue
+        # Labels entstehen. Scheitert der Import, wird der Labelbestand exakt
+        # zurückgesetzt und der wirkungslose Rückgängig-Schritt verworfen.
+        self.snapshot_undo()
+        labels_before_import = copy.deepcopy(self.labels)
+        created = []
+        target_folder_id = self.active_folder_id if self.view_mode == "folder" else None
+        for path in paths:
+            try:
+                with open(path, "r", encoding="utf-8") as file:
+                    lines = file.readlines()
+                imported = self.parse_txt_items(lines)
+                note = self.extract_txt_note(lines)
+                if not imported and not note:
+                    continue
+                title = self.extract_txt_list_title(lines, path)
+                created.append(self.new_list_object(title, imported, folder_id=target_folder_id, note=note))
+            except Exception as e:
+                self.labels = labels_before_import
+                if self.undo_stack:
+                    self.undo_stack.pop()
+                self.show_error("Fehler beim Listenimport", f"{os.path.basename(path)} konnte nicht importiert werden:\n{e}")
+                return "break"
+        if not created:
+            self.labels = labels_before_import
+            if self.undo_stack:
+                self.undo_stack.pop()
+            self.show_warning("Import", "In den ausgewählten Dateien wurden keine Aufgaben oder Beschreibungstexte gefunden.")
+            return "break"
+        self.lists.extend(created)
+        self.set_active_list(created[-1]["id"])
+        self.save_items()
+        self.show_info("Import erfolgreich", f"{len(created)} Liste(n) importiert.")
+        return "break"
+
+    def extract_txt_list_title(self, lines, path):
+        for raw_line in lines:
+            line = raw_line.strip()
+            if not line or line.startswith("===") or line.startswith("Exportiert am:"):
+                continue
+            if re.match(r"^\d+(?:\.\d+)*\.\s+", line):
+                break
+            return line[:80]
+        base = os.path.splitext(os.path.basename(path))[0]
+        base = base.replace("_", " ").replace("-", " ").strip()
+        return base.title() or "Importierte Liste"
+
+    @classmethod
+    def extract_txt_note(cls, lines):
+        note_lines = []
+        inside_note_block = False
+        for raw_line in lines:
+            stripped = raw_line.strip()
+            if stripped == cls.TXT_NOTE_BLOCK_START:
+                inside_note_block = True
+                continue
+            if stripped == cls.TXT_NOTE_BLOCK_END:
+                break
+            if inside_note_block:
+                note_lines.append(raw_line.rstrip("\r\n"))
+        return "\n".join(note_lines).strip()
+
+    def export_as_txt(self):
+        if not self.require_list_view():
+            return
+        note = str(self.current_list().get("note") or "").strip()
+        if not self.items and not note:
+            self.show_warning("Hinweis", "Keine Aufgaben und kein Beschreibungstext zum Exportieren.")
+            return
+        default_filename = f"{self.safe_filename(self.app_title)}_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.txt"
+        path = filedialog.asksaveasfilename(
+            title="Liste als TXT speichern",
+            defaultextension=".txt",
+            initialfile=default_filename,
+            filetypes=[("Textdatei", "*.txt"), ("Alle Dateien", "*.*")],
+        )
+        if not path:
+            return
+        try:
+            with open(path, "w", encoding="utf-8") as file:
+                file.write(f"{self.app_title}\n")
+                file.write("=" * 30 + "\n\n")
+                if note:
+                    file.write(self.TXT_NOTE_BLOCK_START + "\n")
+                    file.write(note + "\n")
+                    file.write(self.TXT_NOTE_BLOCK_END + "\n\n")
+                self.write_items_to_txt(file, self.items, [])
+                file.write(f"\nExportiert am: {datetime.now().strftime('%d.%m.%Y um %H:%M Uhr')}\n")
+            self.show_info("Export erfolgreich", f"Liste exportiert nach:\n{path}")
+        except Exception as e:
+            self.show_error("Fehler beim Export", str(e))
+
+    def write_items_to_txt(self, file, items, number_prefix):
+        for index, item in enumerate(items, start=1):
+            current_number = number_prefix + [index]
+            number_text = ".".join(str(part) for part in current_number)
+            indent = "   " * (len(current_number) - 1)
+            if self.is_heading_item(item):
+                # Eine Zwischenüberschrift trägt einen eigenen Marker an
+                # derselben Stelle und wird beim Import wieder erkannt.
+                file.write(f"{indent}{number_text}. {self.HEADING_MARKER}{item.get('text', '')}\n")
+                description = str(item.get("description") or "").strip()
+                for line in description.splitlines():
+                    file.write(f"{indent}   {line}\n")
+                self.write_items_to_txt(file, item.get("children", []), current_number)
+                continue
+            if self.is_group_item(item):
+                # Der Gruppenmarker steht an derselben Stelle wie die
+                # Wichtigkeitsmarker und wird beim Import wieder erkannt.
+                file.write(f"{indent}{number_text}. {self.GROUP_MARKER}{item.get('text', '')}\n")
+                description = str(item.get("description") or "").strip()
+                for line in description.splitlines():
+                    file.write(f"{indent}   Beschreibung: {line}\n")
+                label_names = self.format_item_label_names(item)
+                if label_names:
+                    file.write(f"{indent}   Labels: {label_names}\n")
+                for attachment in item.get("attachments", []):
+                    file.write(f"{indent}   Anhang: {attachment.get('name', 'Datei')}\n")
+                self.write_items_to_txt(file, item.get("children", []), current_number)
+                continue
+            flag_prefix = self.IMPORTANCE_MARKERS.get(self.clamp_importance(item.get("importance", 0)), "")
+            done_prefix = "✓ " if item.get("done") else ""
+            kind_prefix = self.LONG_MARKER if self.is_long_item(item) else ""
+            text_lines = str(item.get("text", "")).splitlines() or [""]
+            file.write(
+                f"{indent}{number_text}. {kind_prefix}{flag_prefix}{done_prefix}{text_lines[0]}\n"
+            )
+            # Ein Long-Task darf eigene Zeilenumbrüche tragen. Sie wandern als
+            # eigene Fortsetzungszeilen in die Datei und werden beim Import
+            # wieder zusammengesetzt – derselbe Weg wie beim Beschreibungstext.
+            for line in text_lines[1:]:
+                file.write(f"{indent}   {self.TXT_TEXT_CONTINUATION} {line}\n")
+            description = str(item.get("description") or "").strip()
+            for line in description.splitlines():
+                file.write(f"{indent}   Beschreibung: {line}\n")
+            due_text = self.format_due_full(item.get("due"), item.get("due_time"))
+            if due_text:
+                file.write(f"{indent}   Fällig: {due_text}\n")
+            wiederholung = self.describe_repeat(item.get("repeat"))
+            if wiederholung:
+                file.write(f"{indent}   Wiederholung: {wiederholung}\n")
+            label_names = self.format_item_label_names(item)
+            if label_names:
+                file.write(f"{indent}   Labels: {label_names}\n")
+            for attachment in item.get("attachments", []):
+                file.write(f"{indent}   Anhang: {attachment.get('name', 'Datei')}\n")
+            self.write_items_to_txt(file, item.get("children", []), current_number)
+
+    def export_as_markdown(self):
+        if not self.require_list_view():
+            return
+        note = str(self.current_list().get("note") or "").strip()
+        if not self.items and not note:
+            self.show_warning("Hinweis", "Keine Aufgaben und kein Beschreibungstext zum Exportieren.")
+            return
+        default_filename = f"{self.safe_filename(self.app_title)}_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.md"
+        path = filedialog.asksaveasfilename(
+            title="Liste als Markdown speichern",
+            defaultextension=".md",
+            initialfile=default_filename,
+            filetypes=[("Markdown", "*.md"), ("Alle Dateien", "*.*")],
+        )
+        if not path:
+            return
+        try:
+            with open(path, "w", encoding="utf-8") as file:
+                file.write(f"# {self.app_title}\n\n")
+                if note:
+                    file.write(note + "\n\n")
+                self.write_items_to_markdown(file, self.items, 0)
+                file.write(f"\n_Exportiert am {datetime.now().strftime('%d.%m.%Y um %H:%M Uhr')}_\n")
+            self.show_info("Export erfolgreich", f"Liste exportiert nach:\n{path}")
+        except Exception as e:
+            self.show_error("Fehler beim Export", str(e))
+
+    def write_items_to_markdown(self, file, items, level):
+        indent = "  " * level
+        for item in items:
+            if self.is_heading_item(item):
+                # Eine Zwischenüberschrift ist im Markdown eine echte Überschrift.
+                file.write(f"\n{indent}{'#' * min(6, level + 3)} {item.get('text', '')}\n\n")
+                description = str(item.get("description") or "").strip()
+                for line in description.splitlines():
+                    file.write(f"{indent}  {line}\n")
+                self.write_items_to_markdown(file, item.get("children", []), level + 1)
+                continue
+            if self.is_group_item(item):
+                # Gruppen sind Behälter, keine abhakbaren Aufgaben.
+                file.write(f"{indent}- **{item.get('text', '')}**\n")
+                description = str(item.get("description") or "").strip()
+                for line in description.splitlines():
+                    file.write(f"{indent}  > {line}\n")
+                for attachment in item.get("attachments", []):
+                    file.write(f"{indent}  - Anhang: `{attachment.get('name', 'Datei')}`\n")
+                self.write_items_to_markdown(file, item.get("children", []), level + 1)
+                continue
+            checkbox = "[x]" if item.get("done") else "[ ]"
+            flag = self.IMPORTANCE_MARKERS.get(self.clamp_importance(item.get("importance", 0)), "")
+            due_text = self.format_due_full(item.get("due"), item.get("due_time"))
+            due_suffix = f" (f\u00e4llig {due_text})" if due_text else ""
+            label_names = self.format_item_label_names(item)
+            label_suffix = f" `{label_names}`" if label_names else ""
+            markdown_lines = str(item.get("text", "")).splitlines() or [""]
+            file.write(f"{indent}- {checkbox} {flag}{markdown_lines[0]}{due_suffix}{label_suffix}\n")
+            # Weitere Zeilen eines Long-Tasks als eingerückte Fortsetzung – so
+            # bleiben sie im Markdown Teil desselben Listenpunkts.
+            for line in markdown_lines[1:]:
+                file.write(f"{indent}  {line}\n")
+            description = str(item.get("description") or "").strip()
+            for line in description.splitlines():
+                file.write(f"{indent}  > {line}\n")
+            for attachment in item.get("attachments", []):
+                file.write(f"{indent}  - Anhang: `{attachment.get('name', 'Datei')}`\n")
+            self.write_items_to_markdown(file, item.get("children", []), level + 1)
+
+    def export_as_csv(self):
+        if not self.require_list_view():
+            return
+        if not self.items:
+            self.show_warning("Hinweis", "Keine Punkte zum Exportieren.")
+            return
+        default_filename = f"{self.safe_filename(self.app_title)}_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.csv"
+        path = filedialog.asksaveasfilename(
+            title="Liste als CSV speichern",
+            defaultextension=".csv",
+            initialfile=default_filename,
+            filetypes=[("CSV", "*.csv"), ("Alle Dateien", "*.*")],
+        )
+        if not path:
+            return
+        try:
+            # utf-8-sig + Semikolon, damit Excel (DE) die Datei direkt korrekt öffnet.
+            with open(path, "w", encoding="utf-8-sig", newline="") as file:
+                writer = csv.writer(file, delimiter=";")
+                # Neue Spalten werden ausschließlich angehängt; die Position
+                # aller bisherigen Spalten bleibt dadurch stabil.
+                writer.writerow([
+                    "Nummer", "Ebene", "Aufgabe", "Beschreibung", "Anhänge",
+                    "Erledigt", "Wichtigkeit", "Fällig", "Art", "Labels", "Uhrzeit",
+                ])
+                self.write_items_to_csv(writer, self.items, [])
+            self.show_info("Export erfolgreich", f"Liste exportiert nach:\n{path}")
+        except Exception as e:
+            self.show_error("Fehler beim Export", str(e))
+
+    @staticmethod
+    def safe_csv_cell(value):
+        """Verhindert, dass Nutztexte beim Öffnen in Excel als Formel starten."""
+        text = str(value or "")
+        if text.lstrip().startswith(("=", "+", "-", "@")):
+            return "'" + text
+        return text
+
+    def write_items_to_csv(self, writer, items, number_prefix):
+        for index, item in enumerate(items, start=1):
+            current_number = number_prefix + [index]
+            number_text = ".".join(str(part) for part in current_number)
+            writer.writerow([
+                number_text,
+                len(current_number),
+                self.safe_csv_cell(item.get("text", "")),
+                self.safe_csv_cell(item.get("description", "")),
+                self.safe_csv_cell(
+                    " | ".join(str(attachment.get("name", "")) for attachment in item.get("attachments", []))
+                ),
+                "-" if not self.is_schedulable_item(item) else ("ja" if item.get("done") else "nein"),
+                "-" if not self.is_schedulable_item(item)
+                else self.IMPORTANCE_NAMES.get(self.clamp_importance(item.get("importance", 0)), "keine"),
+                self.format_due_display(item.get("due")),
+                self.ITEM_KIND_NAMES.get(self.item_kind(item), "Aufgabe"),
+                self.safe_csv_cell(self.format_item_label_names(item)),
+                self.normalize_due_time(item.get("due_time")) or "",
+            ])
+            self.write_items_to_csv(writer, item.get("children", []), current_number)
+
+    def complete_backup_payload(self):
+        payload = copy.deepcopy(self.data_payload())
+        payload.update(
+            {
+                "app": APP_NAME,
+                "app_version": APP_VERSION,
+                "exported_at": datetime.now().isoformat(timespec="seconds"),
+            }
+        )
+        return payload
+
+    def attachment_owners(self, lists, trash=None, folders=None):
+        """Container und Aufgaben, einschließlich wiederherstellbarer Einträge."""
+        yield from (folders or [])
+        for entry in lists:
+            yield entry
+            yield from self.walk_items(entry.get("items", []))
+        for deleted in (trash or []):
+            for key in ("folder", "list", "item"):
+                entry = deleted.get(key)
+                if not isinstance(entry, dict):
+                    continue
+                if key == "item":
+                    yield from self.walk_items([entry])
+                else:
+                    yield entry
+                    if key == "list":
+                        yield from self.walk_items(entry.get("items", []))
+
+    def collect_attachment_sources(self, lists, trash=None, folders=None):
+        """Alle Anhangsdateien, die ein Komplettbackup enthalten muss.
+
+        Gelöschte, aber noch wiederherstellbare Listen zählen mit: ohne ihre
+        Dateien wäre eine Wiederherstellung aus dem Backup unvollständig.
+        """
+        sources = {}
+        total_size = 0
+        for item in self.attachment_owners(lists, trash, folders):
+            for attachment in item.get("attachments", []):
+                storage = self.validate_attachment_storage(attachment.get("storage"))
+                source = self.resolve_attachment_path(attachment)
+                if not source or not os.path.isfile(source):
+                    raise FileNotFoundError(
+                        f"Der Anhang „{attachment.get('name', storage)}“ fehlt. "
+                        "Das Komplettbackup wurde nicht erstellt."
+                    )
+                size = os.path.getsize(source)
+                if size > self.MAX_BACKUP_ATTACHMENT_BYTES:
+                    raise ValueError(f"Der Anhang „{attachment.get('name', storage)}“ ist zu groß.")
+                if storage not in sources:
+                    sources[storage] = source
+                    total_size += size
+        if total_size > self.MAX_BACKUP_TOTAL_BYTES:
+            raise ValueError("Die Anhänge überschreiten die zulässige Gesamtgröße eines Backups.")
+        return sources
+
+    def validate_backup_target(self, path):
+        target = os.path.normcase(os.path.realpath(os.path.abspath(path)))
+        protected = {
+            os.path.normcase(os.path.realpath(SAVE_FILE)),
+            os.path.normcase(os.path.realpath(SETTINGS_FILE)),
+        }
+        if target in protected:
+            raise ValueError("Diese Glide-Systemdatei darf nicht als Backupziel überschrieben werden.")
+        attachments_root = os.path.normcase(os.path.realpath(ATTACHMENTS_DIR))
+        try:
+            if os.path.commonpath([target, attachments_root]) == attachments_root:
+                raise ValueError("Ein Komplettbackup darf nicht im internen Anhangsordner liegen.")
+        except ValueError as exc:
+            if "Anhangsordner" in str(exc):
+                raise
+        return target
+
+    def write_complete_backup(self, path, payload):
+        """Schreibt ein vollständiges Backup atomar; fehlende Anhänge brechen ab."""
+        target = self.validate_backup_target(path)
+        attachment_paths = self.collect_attachment_sources(
+            payload.get("lists", []), payload.get("trash", []), payload.get("folders", [])
+        )
+        data_bytes = json.dumps(payload, ensure_ascii=False, indent=4).encode("utf-8")
+        if len(data_bytes) > self.MAX_BACKUP_DATA_BYTES:
+            raise ValueError("Die Glide-Daten sind für ein einzelnes Backup zu groß.")
+        target_dir = os.path.dirname(target)
+        os.makedirs(target_dir, exist_ok=True)
+        fd, temp_path = tempfile.mkstemp(prefix=".glide-backup-", suffix=".tmp", dir=target_dir)
+        os.close(fd)
+        try:
+            with zipfile.ZipFile(temp_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+                archive.writestr("data.json", data_bytes)
+                for storage, source in sorted(attachment_paths.items()):
+                    archive.write(source, arcname=storage)
+            with zipfile.ZipFile(temp_path, "r") as check_archive:
+                damaged = check_archive.testzip()
+                if damaged:
+                    raise OSError(f"Das erzeugte Backup ist bei {damaged} beschädigt.")
+            with open(temp_path, "r+b") as file:
+                file.flush()
+                os.fsync(file.fileno())
+            os.replace(temp_path, target)
+            temp_path = None
+            return len(attachment_paths)
+        finally:
+            if temp_path:
+                try:
+                    os.remove(temp_path)
+                except OSError:
+                    pass
+
+    def inspect_backup_archive(self, archive):
+        infos = archive.infolist()
+        if len(infos) > self.MAX_BACKUP_MEMBERS:
+            raise ValueError("Das Backup enthält zu viele Dateien.")
+        seen_names = set()
+        attachment_infos = {}
+        data_info = None
+        total_size = 0
+        for info in infos:
+            name = info.filename
+            canonical_key = name.casefold()
+            if canonical_key in seen_names:
+                raise ValueError("Das Backup enthält doppelte Dateinamen.")
+            seen_names.add(canonical_key)
+            if info.flag_bits & 0x1:
+                raise ValueError("Verschlüsselte Backup-Einträge werden nicht unterstützt.")
+            unix_mode = (info.external_attr >> 16) & 0xFFFF
+            if unix_mode and stat.S_ISLNK(unix_mode):
+                raise ValueError("Symbolische Links sind in einem Backup nicht zulässig.")
+            if info.is_dir():
+                if name != "attachments/":
+                    raise ValueError(f"Unbekannter Ordner im Backup: {name}")
+                continue
+            if name == "data.json":
+                if info.file_size > self.MAX_BACKUP_DATA_BYTES:
+                    raise ValueError("data.json im Backup ist zu groß.")
+                data_info = info
+            else:
+                storage = self.validate_attachment_storage(name)
+                if storage != name:
+                    raise ValueError("Das Backup enthält einen nicht kanonischen Anhangspfad.")
+                if info.file_size > self.MAX_BACKUP_ATTACHMENT_BYTES:
+                    raise ValueError(f"Der Backup-Anhang {name} ist zu groß.")
+                attachment_infos[storage] = info
+            total_size += info.file_size
+            if total_size > self.MAX_BACKUP_TOTAL_BYTES:
+                raise ValueError("Das Backup überschreitet die zulässige Gesamtgröße.")
+            if (
+                info.file_size > self.BACKUP_COPY_CHUNK
+                and info.compress_size > 0
+                and info.file_size / info.compress_size > self.MAX_BACKUP_COMPRESSION_RATIO
+            ):
+                raise ValueError("Das Backup weist eine unplausibel hohe Kompressionsrate auf.")
+        if data_info is None:
+            raise ValueError("Im Glide-Backup fehlt data.json.")
+        return data_info, attachment_infos
+
+    def read_zip_member_limited(self, archive, info, limit):
+        chunks = []
+        total = 0
+        with archive.open(info, "r") as source:
+            while True:
+                chunk = source.read(self.BACKUP_COPY_CHUNK)
+                if not chunk:
+                    break
+                total += len(chunk)
+                if total > limit:
+                    raise ValueError("Ein Backup-Inhalt überschreitet die zulässige Größe.")
+                chunks.append(chunk)
+        if total != info.file_size:
+            raise ValueError("Eine Dateigröße im Backup ist inkonsistent.")
+        return b"".join(chunks)
+
+    def copy_zip_member_limited(self, archive, info, target_path, limit):
+        total = 0
+        with archive.open(info, "r") as source, open(target_path, "wb") as target:
+            while True:
+                chunk = source.read(self.BACKUP_COPY_CHUNK)
+                if not chunk:
+                    break
+                total += len(chunk)
+                if total > limit:
+                    raise ValueError("Ein Backup-Anhang überschreitet die zulässige Größe.")
+                target.write(chunk)
+            target.flush()
+            os.fsync(target.fileno())
+        if total != info.file_size:
+            raise ValueError("Eine Anhangsgröße im Backup ist inkonsistent.")
+        return total
+
+    @classmethod
+    def safe_attachment_filename(cls, original_name, attachment_id=None):
+        """Baut einen Speichernamen, der validate_attachment_storage immer besteht.
+
+        Kritisch sind Namen, die nach der Bereinigung auf Punkt oder Leerzeichen
+        enden – etwa "report." oder eine Endung außerhalb von A-Z/0-9 wie
+        ".☃". Solche Namen wären zwar schreibbar, aber nie wieder auflösbar:
+        die Datei verschwände beim nächsten Start und jedes Komplettbackup
+        würde daran scheitern.
+
+        `attachment_id` hält Datensatz-ID und Dateiname nachvollziehbar gekoppelt.
+        """
+        prefix = attachment_id if isinstance(attachment_id, str) and attachment_id else uuid.uuid4().hex
+        prefix = re.sub(r"[^A-Za-z0-9]", "", prefix)[:32] or uuid.uuid4().hex
+        stem, extension = os.path.splitext(os.path.basename(str(original_name or "datei")))
+        safe_stem = re.sub(r"[^\w .()-]+", "_", stem, flags=re.UNICODE).strip(" .")[:90] or "datei"
+        safe_extension = re.sub(r"[^A-Za-z0-9.]", "", extension)[:16].strip(". ")
+        suffix = f".{safe_extension}" if safe_extension else ""
+        candidate = f"{prefix}_{safe_stem}{suffix}".rstrip(" .")
+        try:
+            cls.validate_attachment_storage(f"attachments/{candidate}")
+        except ValueError:
+            # Letzte Rückfallebene: garantiert gültig; der Anzeigename bleibt im
+            # Datensatz vollständig erhalten.
+            candidate = f"{prefix}.dat"
+        return candidate
+
+    def remap_import_attachments(self, lists, trash=None, folders=None):
+        """Gibt eingehenden Dateien neue Namen, damit Restore nie Bytes überschreibt."""
+        storage_map = {}
+        used_destinations = set()
+        for item in self.attachment_owners(lists, trash, folders):
+            for attachment in item.get("attachments", []):
+                old_storage = self.validate_attachment_storage(attachment.get("storage"))
+                if old_storage not in storage_map:
+                    new_storage = None
+                    # Begrenzte Versuche: ohne Obergrenze könnte ein Backup mit
+                    # einem nicht normierbaren Anzeigenamen die App einfrieren.
+                    for attempt in range(64):
+                        candidate_name = (
+                            self.safe_attachment_filename(attachment.get("name"))
+                            if attempt < 32
+                            else f"{uuid.uuid4().hex}.dat"
+                        )
+                        candidate = f"attachments/{candidate_name}"
+                        final_path = self.resolve_attachment_path({"storage": candidate})
+                        if candidate not in used_destinations and final_path and not os.path.exists(final_path):
+                            new_storage = candidate
+                            break
+                    if new_storage is None:
+                        raise OSError(
+                            "Für einen Anhang aus dem Backup konnte kein freier Zielname "
+                            "erzeugt werden."
+                        )
+                    storage_map[old_storage] = new_storage
+                    used_destinations.add(new_storage)
+                attachment["storage"] = storage_map[old_storage]
+                attachment["id"] = uuid.uuid4().hex
+        return storage_map
+
+    def ensure_inbox_in_collection(self, lists):
+        inboxes = [entry for entry in lists if entry.get("system_role") == "inbox"]
+        if inboxes:
+            inbox = inboxes[0]
+            for duplicate in inboxes[1:]:
+                duplicate["system_role"] = None
+        else:
+            inbox = self.new_list_object("Eingang", [], system_role="inbox", color="due_action")
+            lists.insert(0, inbox)
+        inbox["title"] = "Eingang"
+        inbox["folder_id"] = None
+        return [inbox] + [entry for entry in lists if entry is not inbox]
+
+    def export_full_backup(self):
+        """Sichert Daten und alle referenzierten Anhänge gemeinsam und atomar."""
+        self.sync_current_list_reference()
+        default_filename = f"glide_backup_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.glidebackup"
+        path = filedialog.asksaveasfilename(
+            title="Komplettbackup speichern (alle Listen)",
+            defaultextension=".glidebackup",
+            initialfile=default_filename,
+            filetypes=[("Glide-Komplettbackup", "*.glidebackup"), ("Alle Dateien", "*.*")],
+        )
+        if not path:
+            return
+        try:
+            count = self.write_complete_backup(path, self.complete_backup_payload())
+            attachment_word = "Anhang" if count == 1 else "Anhängen"
+            self.show_info(
+                "Backup erstellt",
+                f"Komplettbackup mit {count} {attachment_word} gespeichert nach:\n{path}",
+            )
+        except Exception as e:
+            self.show_error("Fehler beim Backup", str(e))
+
+    def import_full_backup(self, additive=False, path=None):
+        """Ersetzt den Bestand erst nach vollständiger Prüfung und Sicherung."""
+        path = path or filedialog.askopenfilename(
+            title="Listen/Ordner hinzufügen" if additive else "Komplettbackup laden (ersetzt alle Listen)",
+            filetypes=[
+                ("Glide-Komplettbackup", "*.glidebackup"),
+                ("Frühere JSON-Backups", "*.json"),
+                ("Alle Dateien", "*.*"),
+            ],
+        )
+        if not path:
+            return
+        if not additive and not self.ask_yes_no(
+            "Backup importieren",
+            "Beim Import werden alle aktuell vorhandenen Listen ersetzt.\n\n"
+            "Vom aktuellen Stand wird vorher automatisch ein vollständiges Sicherungsbackup angelegt.\n\n"
+            "Fortfahren?",
+        ):
+            return
+
+        archive = None
+        staging_dir = None
+        created_paths = []
+        undo_size = len(self.undo_stack)
+        committed = False
+        try:
+            is_portable = zipfile.is_zipfile(path)
+            attachment_infos = {}
+            if is_portable:
+                archive = zipfile.ZipFile(path, "r")
+                data_info, attachment_infos = self.inspect_backup_archive(archive)
+                raw_json = self.read_zip_member_limited(archive, data_info, self.MAX_BACKUP_DATA_BYTES)
+                data = json.loads(raw_json.decode("utf-8"))
+            else:
+                if os.path.getsize(path) > self.MAX_BACKUP_DATA_BYTES:
+                    raise ValueError("Die JSON-Backupdatei ist zu groß.")
+                with open(path, "rb") as file:
+                    raw_json = file.read(self.MAX_BACKUP_DATA_BYTES + 1)
+                if len(raw_json) > self.MAX_BACKUP_DATA_BYTES:
+                    raise ValueError("Die JSON-Backupdatei ist zu groß.")
+                data = json.loads(raw_json.decode("utf-8-sig"))
+
+            referenced = self.validate_backup_schema(data, portable=is_portable)
+            if is_portable and set(attachment_infos) != referenced:
+                missing = sorted(referenced - set(attachment_infos))
+                extra = sorted(set(attachment_infos) - referenced)
+                details = []
+                if missing:
+                    details.append("fehlend: " + ", ".join(missing[:5]))
+                if extra:
+                    details.append("nicht referenziert: " + ", ".join(extra[:5]))
+                raise ValueError("Die Anhänge im Backup sind unvollständig oder unerwartet (" + "; ".join(details) + ").")
+
+            # normalize_lists_data setzt folders, labels und trash; der aktuelle
+            # Zustand wird bis zum erfolgreichen Commit unverändert bewahrt.
+            previous_folders = self.folders
+            previous_labels = self.labels
+            previous_trash = self.trash
+            try:
+                new_lists, active_from_file = self.normalize_lists_data(data)
+                new_folders = self.folders
+                new_labels = self.labels
+                new_trash = self.trash
+            finally:
+                self.folders = previous_folders
+                self.labels = previous_labels
+                self.trash = previous_trash
+            if not new_lists and not (additive and new_folders):
+                raise ValueError("In der Datei wurden keine Listen gefunden.")
+            if additive:
+                raw_ids = {entry.get("id") for entry in data.get("lists", [])}
+                new_lists = [entry for entry in new_lists if entry.get("id") in raw_ids]
+                new_lists, new_folders, new_labels = self.prepare_additive_import(new_lists, new_folders, new_labels)
+                new_trash = []
+                active_from_file = new_lists[0]["id"] if new_lists else self.active_list_id
+            else:
+                new_lists = self.ensure_inbox_in_collection(new_lists)
+
+            storage_map = {}
+            staged_files = {}
+            if is_portable:
+                storage_map = self.remap_import_attachments(new_lists, new_trash, new_folders)
+                staging_dir = tempfile.TemporaryDirectory(prefix=".glide-import-", dir=BASE_DIR)
+                total_written = 0
+                for old_storage, new_storage in storage_map.items():
+                    info = attachment_infos[old_storage]
+                    staged_path = os.path.join(staging_dir.name, os.path.basename(new_storage))
+                    written = self.copy_zip_member_limited(
+                        archive, info, staged_path, self.MAX_BACKUP_ATTACHMENT_BYTES
+                    )
+                    total_written += written
+                    if total_written > self.MAX_BACKUP_TOTAL_BYTES:
+                        raise ValueError("Die extrahierten Anhänge überschreiten die zulässige Gesamtgröße.")
+                    staged_files[new_storage] = staged_path
+            elif referenced:
+                missing_local = [
+                    storage
+                    for storage in referenced
+                    if not os.path.isfile(self.resolve_attachment_path({"storage": storage}) or "")
+                ]
+                if missing_local:
+                    raise ValueError(
+                        "Dieses JSON verweist auf Anhänge, enthält die Dateien aber nicht. "
+                        "Bitte stattdessen das zugehörige .glidebackup verwenden."
+                    )
+
+            # Der aktuelle Zustand muss speicherbar sein, bevor er als vollständige
+            # Rückfallebene gesichert und anschließend ersetzt wird.
+            if not self.save_items():
+                return
+            pre_import_path = os.path.join(
+                BACKUP_DIR,
+                f"vor_import_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.glidebackup",
+            )
+            self.write_complete_backup(pre_import_path, self.complete_backup_payload())
+            self.snapshot_undo()
+
+            for new_storage, staged_path in staged_files.items():
+                final_path = self.resolve_attachment_path({"storage": new_storage})
+                if not final_path or os.path.exists(final_path):
+                    raise OSError("Ein sicherer Zielpfad für einen importierten Anhang konnte nicht erstellt werden.")
+                os.replace(staged_path, final_path)
+                created_paths.append(final_path)
+
+            imported_count = len(new_lists)
+            if additive:
+                new_lists = self.lists + new_lists
+                new_folders = self.folders + new_folders
+                new_trash = self.trash
+            existing_ids = [entry.get("id") for entry in new_lists]
+            preferred = active_from_file if active_from_file in existing_ids else new_lists[0]["id"]
+            requested_folder_id = data.get("active_folder_id") if isinstance(data, dict) and not additive else None
+            folder_ids = {folder.get("id") for folder in new_folders}
+            requested_folder_id = requested_folder_id if requested_folder_id in folder_ids else None
+            imported_payload = {
+                "version": self.DATA_SCHEMA_VERSION,
+                "active_list_id": preferred,
+                "active_folder_id": requested_folder_id,
+                "folders": new_folders,
+                "labels": new_labels,
+                "lists": new_lists,
+                "trash": new_trash,
+            }
+            self.write_json_atomic(SAVE_FILE, imported_payload)
+            committed = True
+
+            self.lists = new_lists
+            self.folders = new_folders
+            self.labels = new_labels
+            self.trash = new_trash
+            self.active_list_id = None
+            self.active_folder_id = None
+            self.items = []
+            self.view_mode = "list"
+            self.set_active_list(preferred, refresh=False)
+            if requested_folder_id:
+                self.set_active_folder(requested_folder_id, refresh=False)
+            self.dirty = False
+            self.update_sidebar_list()
+            self.refresh_tree()
+            self.save_settings()
+            self.show_info(
+                "Import erfolgreich",
+                f"{imported_count} Liste(n) {'hinzugefügt' if additive else 'importiert'}.\n\n"
+                f"Sicherung des vorherigen Stands:\n{pre_import_path}",
+            )
+            return True
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            self.show_error("Fehler", "Die Datei ist kein gültiges Glide-Backup.")
+        except Exception as e:
+            if not committed:
+                for created_path in reversed(created_paths):
+                    try:
+                        os.remove(created_path)
+                    except OSError:
+                        pass
+                while len(self.undo_stack) > undo_size:
+                    self.undo_stack.pop()
+            self.show_error("Fehler beim Import", str(e))
+        finally:
+            if archive:
+                archive.close()
+            if staging_dir:
+                staging_dir.cleanup()
+
+    def sort_current_list(self, key="due"):
+        """Sortiert die aktive Liste rekursiv nach Fälligkeit, Wichtigkeit oder Alphabet."""
+        if not self.require_list_view():
+            return
+        if not self.items:
+            return
+        self.snapshot_undo()
+        self._sort_items_recursive(self.items, key)
+        self.save_items()
+        self.refresh_tree()
+
+    def _sort_items_recursive(self, items, key):
+        if key == "due":
+            def sort_key(it):
+                iso = it.get("due")
+                try:
+                    parsed_date = datetime.strptime(iso, "%Y-%m-%d").date() if iso else None
+                except ValueError:
+                    parsed_date = None
+                # Am selben Tag entscheidet die Uhrzeit. Ganztägige Punkte
+                # stehen vorn, weil sie den ganzen Tag über offen sind.
+                time_text = self.normalize_due_time(it.get("due_time")) or ""
+                return (
+                    1 if it.get("done") else 0,
+                    parsed_date is None,
+                    parsed_date or datetime.max.date(),
+                    time_text or "00:00",
+                )
+            items.sort(key=sort_key)
+        elif key == "importance":
+            items.sort(key=lambda it: (1 if it.get("done") else 0, -self.clamp_importance(it.get("importance", 0))))
+        elif key == "alpha":
+            items.sort(key=lambda it: str(it.get("text", "")).lower())
+        for it in items:
+            self._sort_items_recursive(it.get("children", []), key)
+
+    def import_from_txt(self):
+        if not self.require_list_view():
+            return
+        path = filedialog.askopenfilename(
+            title="Liste aus TXT laden",
+            filetypes=[("Textdatei", "*.txt"), ("Alle Dateien", "*.*")],
+        )
+        if not path:
+            return
+        try:
+            with open(path, "r", encoding="utf-8") as file:
+                lines = file.readlines()
+
+            # Der Schnappschuss entsteht vor dem Auswerten, weil beim Lesen der
+            # Labelzeilen bereits neue Labels angelegt werden können. Rückgängig
+            # nimmt dadurch auch diese Labels wieder zurück.
+            self.snapshot_undo()
+            labels_before_import = copy.deepcopy(self.labels)
+            imported = self.parse_txt_items(lines)
+            note = self.extract_txt_note(lines)
+            if imported or note:
+                self.items.extend(imported)
+                if note:
+                    current_note = str(self.current_list().get("note") or "").strip()
+                    self.current_list()["note"] = (
+                        f"{current_note}\n\n{note}" if current_note and note != current_note else note or current_note
+                    )
+                self.save_items()
+                self.update_page_note_preview()
+                self.update_page_labels()
+                self.refresh_tree(selected_id=imported[-1]["id"] if imported else None)
+                self.show_info(
+                    "Import erfolgreich",
+                    f"{self.count_items(imported)} Punkte und "
+                    f"{'ein Beschreibungstext' if note else 'kein Beschreibungstext'} importiert.",
+                )
+            else:
+                self.labels = labels_before_import
+                if self.undo_stack:
+                    self.undo_stack.pop()
+                self.show_warning(
+                    "Import",
+                    "Die Datei enthält weder erkennbare Aufgaben noch einen Beschreibungstext.",
+                )
+        except Exception as e:
+            self.show_error("Fehler beim Import", str(e))
+
+    def parse_txt_items(self, lines):
+        imported_root = []
+        level_stack = {-1: imported_root}
+        pattern = re.compile(r"^(?P<number>\d+(?:\.\d+)*)\.\s+(?P<text>.*)$")
+
+        # Eigene Exporte beginnen mit Titel + Trennlinie. Den Kopf robust überspringen,
+        # auch wenn der Listentitel vom aktuellen App-Titel abweicht.
+        nonempty = [(idx, line.strip()) for idx, line in enumerate(lines) if line.strip()]
+        skip_indices = set()
+        if len(nonempty) >= 2 and nonempty[1][1] and set(nonempty[1][1]) <= {"="}:
+            skip_indices.update({nonempty[0][0], nonempty[1][0]})
+
+        inside_note_block = False
+        last_item = None
+        for line_index, raw_line in enumerate(lines):
+            if line_index in skip_indices:
+                continue
+            stripped = raw_line.strip()
+            if stripped == self.TXT_NOTE_BLOCK_START:
+                inside_note_block = True
+                continue
+            if stripped == self.TXT_NOTE_BLOCK_END:
+                inside_note_block = False
+                continue
+            if inside_note_block:
+                continue
+            if stripped.startswith(self.TXT_TEXT_CONTINUATION):
+                # Fortsetzung eines mehrzeiligen Aufgabentexts: der Punkt wird
+                # dadurch zum Long-Task, denn nur der trägt Zeilenumbrüche.
+                if last_item is not None:
+                    text_line = stripped.split(":", 1)[1].lstrip()
+                    previous = str(last_item.get("text") or "")
+                    last_item["kind"] = self.ITEM_KIND_LONG
+                    last_item["text"] = self.normalize_item_text(
+                        f"{previous}\n{text_line}", self.ITEM_KIND_LONG
+                    )
+                    self.sync_item_kind_label(last_item)
+                continue
+            if stripped.startswith("Beschreibung:"):
+                if last_item is not None:
+                    description_line = stripped.split(":", 1)[1].lstrip()
+                    previous = str(last_item.get("description") or "")
+                    last_item["description"] = f"{previous}\n{description_line}".strip("\n")
+                continue
+            if stripped.startswith("Fällig:"):
+                if last_item is not None:
+                    # „30.09.2026“ oder „30.09.2026, 14:30“ – die Uhrzeit ist
+                    # freiwillig und steht hinter dem Komma.
+                    raw_due = stripped.split(":", 1)[1].strip()
+                    raw_time = ""
+                    if "," in raw_due:
+                        raw_due, raw_time = (part.strip() for part in raw_due.split(",", 1))
+                    parsed_due = self.parse_due_input(raw_due)
+                    if parsed_due:
+                        last_item["due"] = parsed_due
+                        last_item["due_time"] = self.normalize_due_time(raw_time)
+                continue
+            if stripped.startswith("Wiederholung:"):
+                # Der Klartext der Ausgabe wird wieder in eine Regel übersetzt.
+                # Was sich nicht zuordnen lässt, wird stillschweigend verworfen:
+                # Eine falsch geratene Regel erzeugte Termine, die niemand
+                # gesetzt hat – schlimmer als gar keine Wiederholung.
+                if last_item is not None and last_item.get("due"):
+                    regel = self.parse_repeat_text(stripped.split(":", 1)[1])
+                    if regel:
+                        last_item["repeat"] = self.normalize_repeat(
+                            regel, default_start=last_item.get("due")
+                        )
+                continue
+            if stripped.startswith("Labels:"):
+                # Labels werden über den Namen aufgelöst; unbekannte Namen legen
+                # ein neues Label an, solange die Obergrenze das zulässt.
+                if last_item is not None:
+                    for name in stripped.split(":", 1)[1].split(","):
+                        label = self.ensure_label_by_name(name)
+                        if label is None:
+                            continue
+                        assigned = last_item.setdefault("labels", [])
+                        if label["id"] not in assigned and len(assigned) < self.MAX_LABELS_PER_ITEM:
+                            assigned.append(label["id"])
+                continue
+            if stripped.startswith("Anhang:"):
+                # Textimporte transportieren nur den Namen, nicht die Binärdatei.
+                continue
+            if (
+                not stripped
+                or stripped == self.app_title
+                or stripped.startswith("Meine Liste")
+                or stripped.startswith("===")
+                or stripped.startswith("Exportiert am:")
+            ):
+                continue
+
+            done = False
+            importance = 0
+            kind = self.ITEM_KIND_TASK
+            level = 0
+            text = stripped
+            match = pattern.match(stripped)
+            if match:
+                number = match.group("number")
+                level = number.count(".")
+                text = match.group("text").strip()
+            elif ". " in stripped:
+                # Abwärtskompatibilität für einfache alte Exporte.
+                text = stripped.split(". ", 1)[1].strip()
+
+            group_marker = next((marker.strip() for marker in
+                (self.GROUP_MARKER, self.LEGACY_GROUP_MARKER)
+                if text.startswith(marker.strip())), None)
+            if group_marker:
+                kind = self.ITEM_KIND_GROUP
+                text = text[len(group_marker):].strip()
+            elif text.startswith(self.HEADING_MARKER.strip()):
+                kind = self.ITEM_KIND_HEADING
+                text = text[len(self.HEADING_MARKER.strip()):].strip()
+            elif text.startswith(self.LONG_MARKER.strip()):
+                kind = self.ITEM_KIND_LONG
+                text = text[len(self.LONG_MARKER.strip()):].strip()
+
+            for marker, marker_importance in self.IMPORTANCE_PARSE_MARKERS:
+                if text.startswith(marker):
+                    importance = marker_importance
+                    text = text[len(marker):].strip()
+                    break
+
+            if text.startswith("✓ "):
+                done = True
+                text = text[2:].strip()
+            if text.startswith("✅ "):
+                done = True
+                text = text[2:].strip()
+
+            if not text:
+                continue
+
+            new = self.new_item(text, done, importance=importance, kind=kind)
+            parent_level = level - 1
+            if parent_level not in level_stack:
+                level = 0
+                parent_level = -1
+
+            level_stack[parent_level].append(new)
+            level_stack[level] = new["children"]
+            last_item = new
+
+            # Tiefere Stack-Ebenen entfernen, damit folgende Zeilen sauber einsortiert werden.
+            for stack_level in list(level_stack.keys()):
+                if stack_level > level:
+                    del level_stack[stack_level]
+
+        return imported_root
+
+    def ensure_label_by_name(self, name):
+        """Vorhandenes Label mit diesem Namen oder ein neu angelegtes Label."""
+        clean = str(name or "").strip()[: self.MAX_LABEL_NAME_LENGTH]
+        if not clean:
+            return None
+        existing = self.get_label_by_name(clean)
+        if existing is not None:
+            return existing
+        if len(self.labels) >= self.MAX_LABELS:
+            return None
+        # Die Farbe rotiert über die Palette, damit importierte Labels
+        # unterscheidbar bleiben, ohne den Nutzer zu fragen.
+        color = self.LABEL_COLOR_KEYS[len(self.labels) % len(self.LABEL_COLOR_KEYS)]
+        label = self.new_label_object(clean, None, color)
+        self.labels.append(label)
+        return label
+
+    def count_items(self, items, include_groups=False):
+        """Zählt Punkte. Gruppen sind Behälter und zählen standardmäßig nicht mit."""
+        total = 0
+        for item in items:
+            if include_groups or self.is_schedulable_item(item):
+                total += 1
+            total += self.count_items(item.get("children", []), include_groups)
+        return total
+
+    # -----------------------------
+    # Mausrad / Menü / Dialoge
+    # -----------------------------
+    def bind_mousewheel(self, widget):
+        """Scrollrad-Unterstützung plattformübergreifend (Windows/macOS: MouseWheel, Linux: Button-4/5)."""
+        widget.bind("<MouseWheel>", lambda e: self._on_mousewheel(e, widget))
+        widget.bind("<Button-4>", lambda e: self._on_mousewheel(e, widget))
+        widget.bind("<Button-5>", lambda e: self._on_mousewheel(e, widget))
+
+    def _on_mousewheel(self, event, widget):
+        num = getattr(event, "num", None)
+        if num == 4:
+            delta = -1
+        elif num == 5:
+            delta = 1
+        else:
+            delta = -1 if getattr(event, "delta", 0) > 0 else 1
+        try:
+            widget.yview_scroll(delta, "units")
+        except tk.TclError:
+            pass
+        return "break"
+
+    @staticmethod
+    def accel(*keys):
+        """Plattformgerechte Beschriftung eines Tastenkürzels.
+
+        Unter macOS heißt der Modifikator Cmd; „Strg+E“ wäre dort schlicht falsch.
+        """
+        modifier = "Cmd" if IS_MACOS else "Strg"
+        return "+".join([modifier] + [str(key) for key in keys])
+
+    def create_menubar(self):
+        menubar = tk.Menu(self.root)
+
+        file_menu = tk.Menu(menubar, tearoff=0)
+        file_menu.add_command(label="Neue Liste", accelerator=self.accel("Shift", "N"), command=self.create_new_list)
+        file_menu.add_command(label="Neuer Ordner", command=self.create_new_folder)
+        file_menu.add_separator()
+        file_menu.add_command(label="TXT importieren …", accelerator=self.accel("I"), command=self.import_from_txt)
+        file_menu.add_command(label="TXT als neue Liste(n) …", command=self.import_txt_as_new_lists)
+        export_menu = tk.Menu(file_menu, tearoff=0)
+        export_menu.add_command(label="Als TXT …", accelerator=self.accel("E"), command=self.export_as_txt)
+        export_menu.add_command(label="Als Markdown …", command=self.export_as_markdown)
+        export_menu.add_command(label="Als CSV …", command=self.export_as_csv)
+        file_menu.add_cascade(label="Aktive Liste exportieren", menu=export_menu)
+        file_menu.add_separator()
+        file_menu.add_command(label="Komplettbackup speichern …", command=self.export_full_backup)
+        file_menu.add_command(label="Komplettbackup laden …", command=self.import_full_backup)
+        file_menu.add_command(label="Listen/Ordner hinzufügen …", command=self.import_partial_backup)
+        file_menu.add_separator()
+        file_menu.add_command(label="Vorlagen öffnen", command=self.set_template_view)
+        file_menu.add_command(label="Vorlagen exportieren …", command=self.export_templates_file)
+        file_menu.add_command(label="Vorlagen hinzufügen …", command=self.import_templates_file)
+        file_menu.add_separator()
+        file_menu.add_command(label="Wo liegen meine Daten?", command=lambda: self.show_info("Datenordner", f"Glide speichert den Bestand hier:\n{BASE_DIR}"))
+        file_menu.add_command(label="Datenordner wechseln …", command=self.show_data_folder_dialog)
+        file_menu.add_command(label="Standardordner benutzen", command=self.use_default_data_folder)
+        file_menu.add_command(label="Backup-Ordner öffnen", command=self.open_backup_folder)
+        file_menu.add_separator()
+        file_menu.add_command(label="Beenden", accelerator=self.accel("Q"), command=self.on_close)
+        menubar.add_cascade(label="Datei", menu=file_menu)
+
+        edit_menu = tk.Menu(menubar, tearoff=0)
+        edit_menu.add_command(label="Rückgängig", accelerator=self.accel("Z"), command=self.undo_last_change)
+        edit_menu.add_separator()
+        edit_menu.add_command(label="Kopieren", accelerator=self.accel("C"), command=self.copy_selected_to_clipboard)
+        edit_menu.add_command(label="Einfügen", accelerator=self.accel("V"), command=self.paste_items_from_clipboard)
+        edit_menu.add_command(label="Alle auswählen", accelerator=self.accel("A"), command=self.select_all_items)
+        edit_menu.add_separator()
+        edit_menu.add_command(label="Punktdetails …", accelerator="F2", command=self.edit_item)
+        edit_menu.add_command(
+            label="Auswahl gruppieren …", accelerator=self.accel("G"), command=self.group_selected_items
+        )
+        edit_menu.add_command(
+            label="In Gruppe umwandeln", command=lambda: self.convert_selected_kind(self.ITEM_KIND_GROUP)
+        )
+        edit_menu.add_command(
+            label="In Aufgabe zurückwandeln", command=lambda: self.convert_selected_kind(self.ITEM_KIND_TASK)
+        )
+        edit_menu.add_command(label="Gruppe auflösen", command=self.dissolve_selected_group)
+        edit_menu.add_separator()
+        edit_menu.add_command(label="Duplizieren", command=self.duplicate_selected_items)
+        edit_menu.add_command(label="In Liste verschieben …", command=self.move_selected_to_list_dialog)
+        edit_menu.add_command(
+            label="Titel und Beschreibungstext …", accelerator=self.accel("M"), command=self.edit_page_note
+        )
+        edit_menu.add_command(label="Labels verwalten …", accelerator=self.accel("L"), command=self.open_label_manager)
+        edit_menu.add_command(label="Wichtigkeit ändern", command=self.cycle_importance_selected)
+        edit_menu.add_command(label="Fälligkeitsdatum …", accelerator=self.accel("T"), command=self.set_due_date_selected)
+        edit_menu.add_command(label="Löschen", accelerator="Rückschritt" if IS_MACOS else "Entf", command=self.delete_item)
+        edit_menu.add_separator()
+        edit_menu.add_command(label="Einstellungen …", command=self.show_settings_dialog)
+        menubar.add_cascade(label="Bearbeiten", menu=edit_menu)
+
+        view_menu = tk.Menu(menubar, tearoff=0)
+        view_menu.add_command(label="Startseite", command=self.set_home_view)
+        view_menu.add_command(label="Vorlagen", command=self.set_template_view)
+        view_menu.add_command(label="Design wechseln (Hell/Dunkel)", accelerator=self.accel("D"), command=self.toggle_theme)
+        view_menu.add_separator()
+        view_menu.add_command(label="Kalender …", accelerator=self.accel("K"), command=self.open_calendar_view)
+        view_menu.add_command(label="In Bearbeitung", command=self.set_in_progress_view)
+        view_menu.add_command(label="Papierkorb", command=self.set_trash_view)
+        view_menu.add_command(label="Papierkorb leeren", command=self.empty_trash)
+        view_menu.add_separator()
+        view_menu.add_command(label="Aufklappen", command=self.expand_all)
+        view_menu.add_command(label="Zuklappen", command=self.collapse_all)
+        view_menu.add_separator()
+        sort_menu = tk.Menu(view_menu, tearoff=0)
+        sort_menu.add_command(label="Nach Fälligkeit", command=lambda: self.sort_current_list("due"))
+        sort_menu.add_command(label="Nach Wichtigkeit", command=lambda: self.sort_current_list("importance"))
+        sort_menu.add_command(label="Alphabetisch", command=lambda: self.sort_current_list("alpha"))
+        view_menu.add_cascade(label="Aktive Liste sortieren", menu=sort_menu)
+        menubar.add_cascade(label="Ansicht", menu=view_menu)
+
+        help_menu = tk.Menu(menubar, tearoff=0)
+        help_menu.add_command(label="Tastenkürzel anzeigen", command=self.show_shortcuts_dialog)
+        help_menu.add_command(label=f"Über {APP_NAME}", command=self.show_about_dialog)
+        menubar.add_cascade(label="Hilfe", menu=help_menu)
+
+        self.menus = [menubar, file_menu, export_menu, edit_menu, view_menu, sort_menu, help_menu]
+        self.custom_menu_buttons = []
+        if IS_WINDOWS:
+            # Eine native Tk-Menüzeile bleibt unter Windows häufig weiß. Die
+            # eigene schmale Menüzeile lässt sich zuverlässig mit dem Theme färben.
+            self.custom_menubar = self.register_theme_widget(
+                tk.Frame(self.root, bg=self.theme["bg"], height=30), "bg"
+            )
+            self.custom_menubar.pack(fill="x", side="top")
+            self.custom_menubar.pack_propagate(False)
+            menu_specs = [
+                ("Datei", file_menu, "d"),
+                ("Bearbeiten", edit_menu, "b"),
+                ("Ansicht", view_menu, "a"),
+                ("Hilfe", help_menu, "h"),
+            ]
+            for label, menu, mnemonic in menu_specs:
+                # Ein Menubutton darf nur ein untergeordnetes Menü automatisch
+                # posten. Unsere Menüs gehören aus Kompatibilitätsgründen zum
+                # zentralen Menübaum; ein normaler Button mit tk_popup ist hier
+                # deshalb unter Windows robuster.
+                width = tkfont.Font(font=app_font(9)).measure(label) + 24
+                button = self.make_button(self.custom_menubar, label, None, "muted", width=width,
+                                          height=28, radius=10, font=app_font(9))
+                button.command = lambda b=button, m=menu: self._post_custom_menu(b, m)
+                button.pack(side="left", fill="y", padx=(0, 4))
+                self.custom_menu_buttons.append(button)
+                self.root.bind(
+                    f"<Alt-{mnemonic}>",
+                    lambda event, b=button, m=menu: self._post_custom_menu(b, m),
+                )
+        else:
+            try:
+                self.root.config(menu=menubar)
+            except tk.TclError:
+                pass
+        self.menubar = menubar
+
+    def _post_custom_menu(self, button, menu):
+        previous_focus = self.current_focus_widget()
+        try:
+            button.focus_set()
+            menu.tk_popup(button.winfo_rootx(), button.winfo_rooty() + button.winfo_height())
+        finally:
+            try:
+                menu.grab_release()
+            except tk.TclError:
+                pass
+            try:
+                if previous_focus is not None and previous_focus.winfo_exists():
+                    previous_focus.focus_set()
+            except tk.TclError:
+                pass
+        return "break"
+
+    def open_backup_folder(self):
+        self.open_external_path(BACKUP_DIR)
+
+    def themed_message_dialog(self, title, message, kind="info", parent=None, default=None, detail=None):
+        """Hinweise und Rückfragen im App-Theme, mit den Rückgaben von messagebox.
+
+        Escape/Fenster schließen bedeutet bei Ja/Nein False, bei Ja/Nein/
+        Abbrechen None. Der vorige Dialog erhält anschließend Griff und Fokus
+        zurück. Auch lange Fehlertexte bleiben scrollbar und kopierbar.
+        """
+        if kind not in ("info", "warning", "error", "yesno", "yesnocancel"):
+            raise ValueError(f"Unbekannte Dialogart: {kind}")
+        previous_focus = self.current_focus_widget()
+        owner = parent if isinstance(parent, (tk.Toplevel, tk.Tk)) else None
+        if owner is None:
+            try:
+                current = self.root.grab_current()
+                owner = current.winfo_toplevel() if current is not None else self.root
+            except tk.TclError:
+                owner = self.root
+
+        dialog = tk.Toplevel(owner)
+        dialog.title(title)
+        dialog.configure(bg=self.theme["bg"])
+        dialog.transient(owner)
+        dialog.minsize(380, 220)
+        container = tk.Frame(dialog, bg=self.theme["bg"])
+        container.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+        heading_color = {"warning": "flag", "error": "delete"}.get(kind, "text")
+        heading = tk.Label(
+            container, text=title, bg=self.theme["bg"], fg=self.theme[heading_color],
+            font=app_font(15, "bold"), anchor="w", justify="left",
+        )
+        heading.pack(fill="x", pady=(0, 16))
+        container.bind("<Configure>", lambda event: heading.configure(wraplength=max(160, event.width)))
+
+        is_question = kind in ("yesno", "yesnocancel")
+        close_value = (None if kind == "yesnocancel" else False) if is_question else "ok"
+        result = {"value": close_value}
+
+        def finish(value):
+            result["value"] = value
+            dialog.destroy()
+            return "break"
+
+        button_row = tk.Frame(container, bg=self.theme["bg"])
+        button_row.pack(side="bottom", fill="x", pady=(18, 0))
+        buttons = {}
+        specs = [("ok", "OK", "ok", "confirm")]
+        if is_question:
+            specs = [("yes", "Ja", True, "confirm"), ("no", "Nein", False, "muted")]
+            if kind == "yesnocancel":
+                specs.append(("cancel", "Abbrechen", None, "muted"))
+        for index, (name, label, value, color) in enumerate(specs):
+            button = self._make_dialog_button(
+                button_row, label, lambda value=value: finish(value), color, width=104,
+            )
+            button.pack(side="right", padx=(10 if index < len(specs) - 1 else 0, 0))
+            buttons[name] = button
+        default_name = default if default in buttons else ("yes" if is_question else "ok")
+        default_value = next(value for name, _label, value, _color in specs if name == default_name)
+
+        message_area = tk.Frame(container, bg=self.theme["bg"])
+        message_area.pack(fill="both", expand=True)
+        content = str(message or "") + (f"\n\n{detail}" if detail else "")
+        text_font = tkfont.Font(root=self.root, family="TkDefaultFont", size=11)
+        line_count = sum(max(1, (text_font.measure(line) + 519) // 520) for line in content.split("\n"))
+        text = tk.Text(
+            message_area, wrap="word", font=text_font, width=62,
+            height=min(23, max(3, line_count + 1)), bg=self.theme["bg"], fg=self.theme["text"],
+            selectbackground=self.theme["selection"], selectforeground=self.theme["text"],
+            relief="flat", bd=0, highlightthickness=0, padx=0, pady=0, spacing3=4,
+        )
+        scrollbar = ThemedAutoScrollbar(
+            message_area, bg_color=self.theme["bg"], track_color=self.theme["bg"],
+            thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"],
+            width=10, radius=5,
+        )
+        scrollbar.configure(height=1)
+        scrollbar.pack(side="right", fill="y", padx=(10, 0))
+        scrollbar.set_command(text.yview)
+        text.configure(yscrollcommand=scrollbar.set)
+        text.pack(fill="both", expand=True)
+        text.insert("1.0", content)
+        text.configure(state="disabled")
+        self.bind_mousewheel(text)
+        dialog.bind("<Return>", lambda _event: finish(default_value))
+        dialog.bind("<Escape>", lambda _event: finish(close_value))
+        dialog.protocol("WM_DELETE_WINDOW", lambda: finish(close_value))
+        self._center_dialog(dialog, min_width=600)
+        self._schedule_windows_chrome_theme(dialog)
+        buttons[default_name].focus_set()
+        self.run_modal(dialog, parent=owner)
+        try:
+            if previous_focus is not None and previous_focus.winfo_exists():
+                previous_focus.focus_set()
+        except tk.TclError:
+            pass
+        return result["value"]
+
+    def show_info(self, title, message, **options):
+        return self.themed_message_dialog(title, message, kind="info", **options)
+
+    def show_warning(self, title, message, **options):
+        return self.themed_message_dialog(title, message, kind="warning", **options)
+
+    def show_error(self, title, message, **options):
+        return self.themed_message_dialog(title, message, kind="error", **options)
+
+    def ask_yes_no(self, title, message, **options):
+        return self.themed_message_dialog(title, message, kind="yesno", **options)
+
+    def ask_yes_no_cancel(self, title, message, **options):
+        return self.themed_message_dialog(title, message, kind="yesnocancel", **options)
+
+    def show_about_dialog(self):
+        return self.show_info(
+            f"Über {APP_NAME}",
+            f"{APP_PRODUCT_NAME}\nVersion {APP_VERSION}\n\n"
+            "Danke, dass du meine App benutzt.\n"
+            "Ich hoffe, Glide schenkt dir ein bisschen mehr Überblick und Ruhe. "
+            "Schön, dass es einen Platz in deinem Alltag gefunden hat.\n\n"
+            "Warum mir Glide wichtig ist\n"
+            "Ich wollte Gedanken festhalten können, bevor sie im Alltag untergehen.\n"
+            "Aufgaben und Projekte sollten ihren Platz finden, ohne selbst zur nächsten Aufgabe zu werden.\n"
+            "Deshalb ist Glide ein ruhiger, persönlicher Ort für das, was gerade zählt.\n\n"
+            "Shaye.de – mailme@shaye.de\n\n"
+            "Deine Listen und Einstellungen bleiben lokal auf diesem Gerät.\n"
+            f"Speicherort der Daten:\n{BASE_DIR}",
+        )
+
+    def show_shortcuts_dialog(self):
+        delete_key = "Rückschritt" if IS_MACOS else "Entf"
+        selection_key = self.selection_modifier_name()
+        sections = [
+            ("Punkte und Eingabe", [
+                ("Enter", "Punkt aus der schnellen Eingabe hinzufügen"),
+                ("Schaltfläche „Erweitert“", "Eingabemaske mit allen Angaben öffnen"),
+                ("Doppelklick / Leertaste", "Erledigt umschalten"),
+                (delete_key, "Ausgewählte Punkte in den Papierkorb verschieben"),
+                ("F2", "Punktdetails mit Beschreibung und Anhängen öffnen"),
+                ("F3", "Titel bearbeiten"),
+                (self.accel("M"), "Titel und Beschreibungstext öffnen"),
+                (self.accel("Shift", "F"), "Wichtigkeit durchschalten"),
+                (self.accel("T"), "Fälligkeitsdatum setzen oder entfernen"),
+                (self.accel("L"), "Labels verwalten"),
+                (self.accel("K"), "Kalender öffnen"),
+            ]),
+            ("Auswahl und Struktur", [
+                ("Shift + Klick", "Zusammenhängenden Bereich auswählen"),
+                (f"{selection_key} + Klick", "Einzelne Punkte zur Auswahl hinzufügen oder abwählen"),
+                (self.accel("A"), "Alle Punkte auswählen"),
+                (self.accel("G"), "Ausgewählte Punkte gruppieren"),
+                ("Alt + ↑ / ↓", "Ausgewählte Punkte nach oben / unten verschieben"),
+                ("Alt + ← / →", "Ausgewählte Punkte ausrücken / einrücken"),
+                ("Tab", "Einrücken / ausrücken"),
+                ("Drag & Drop", "Reihenfolge ändern"),
+                ("Shift + Drag", "Als Unterpunkt verschieben"),
+                ("Auf eine Liste ziehen", "Punkte in diese Liste verschieben"),
+                ("Auf einen Ordner ziehen", "Enthaltene Zielliste auswählen"),
+            ]),
+            ("Seitenleiste", [
+                ("Ordner anklicken", "Enthaltene Listen im Hauptbereich anzeigen"),
+                (f"Shift / {selection_key} + Klick", "Mehrere Listen oder Ordner auswählen"),
+                (delete_key, "Ausgewählte Listen oder Ordner in den Papierkorb verschieben"),
+                ("Alt + ↑ / ↓", "Listen und Ordner nach oben / unten verschieben"),
+                ("Alt + ← / →", "Aus einem Ordner / in einen Ordner verschieben"),
+                (self.accel("Shift", "N"), "Neue Liste anlegen"),
+            ] + ([] if IS_MACOS else [(self.accel("W"), "Aktive Liste löschen") ])),
+            ("Allgemein", [
+                (self.accel("Z"), "Letzte Änderung rückgängig machen"),
+                (self.accel("C"), "Ausgewählte Punkte kopieren"),
+                (self.accel("V"), "Punkte aus der Zwischenablage einfügen"),
+                (self.accel("F"), "Suche öffnen"),
+                (self.accel("E"), "Aktive Liste als TXT exportieren"),
+                (self.accel("I"), "TXT importieren"),
+                (self.accel("D"), "Zwischen hellem und dunklem Design wechseln"),
+                (self.accel("S"), "Speichern"),
+            ]),
+            ("Kontextmenüs", [
+                ("Rechtsklick auf einen Punkt", "Details, Art, Labels, Wichtigkeit, Fälligkeit, Farbe, Struktur und mehr"),
+                ("Rechtsklick in die freie Liste", "Neuen Punkt anlegen, gruppieren, sortieren und exportieren"),
+                ("Rechtsklick auf Liste / Ordner", "Bearbeiten, färben, verschieben und in den Papierkorb legen"),
+            ]),
+        ]
+        previous_focus = self.current_focus_widget()
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Tastenkürzel")
+        dialog.configure(bg=self.theme["bg"])
+        dialog.transient(self.root)
+        dialog.minsize(500, 360)
+        outer = tk.Frame(dialog, bg=self.theme["bg"])
+        outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+        tk.Label(
+            outer, text="Tastenkürzel", bg=self.theme["bg"], fg=self.theme["text"],
+            font=app_font(17, "bold"), anchor="w",
+        ).pack(fill="x", pady=(0, 6))
+        tk.Label(
+            outer, text="Schneller durch deinen Alltag mit Glide.", bg=self.theme["bg"],
+            fg=self.theme["muted"], font=app_font(10), anchor="w",
+        ).pack(fill="x", pady=(0, 16))
+        footer = tk.Frame(outer, bg=self.theme["bg"])
+        footer.pack(side="bottom", fill="x", pady=(16, 0))
+        close_button = self._make_dialog_button(footer, "Schließen", dialog.destroy, "muted")
+        close_button.pack(side="right")
+        scroll_area = tk.Frame(outer, bg=self.theme["bg"])
+        scroll_area.pack(fill="both", expand=True)
+        canvas = tk.Canvas(
+            scroll_area, width=760, height=540, bg=self.theme["bg"],
+            highlightthickness=0, bd=0, yscrollincrement=24, takefocus=True,
+        )
+        scrollbar = ThemedAutoScrollbar(
+            scroll_area, bg_color=self.theme["bg"], track_color=self.theme["bg"],
+            thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"],
+            width=10, radius=5,
+        )
+        scrollbar.configure(height=1)
+        scrollbar.pack(side="right", fill="y", padx=(12, 0))
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.set_command(canvas.yview)
+        canvas.configure(yscrollcommand=scrollbar.set)
+        table = tk.Frame(canvas, bg=self.theme["bg"])
+        window_id = canvas.create_window((0, 0), window=table, anchor="nw")
+        table.columnconfigure(0, weight=0)
+        table.columnconfigure(1, weight=1)
+        key_labels, meaning_labels = [], []
+        for column, text in enumerate(("Tasten / Aktion", "Wirkung")):
+            label = tk.Label(
+                table, text=text, bg=self.theme["bg"], fg=self.theme["muted"],
+                font=app_font(9, "bold"), anchor="w",
+            )
+            label.grid(row=0, column=column, sticky="ew", padx=(0, 20 if column == 0 else 0), pady=(0, 10))
+        row = 1
+        for section, entries in sections:
+            tk.Label(
+                table, text=section, bg=self.theme["bg"], fg=self.theme["accent"],
+                font=app_font(11, "bold"), anchor="w",
+            ).grid(row=row, column=0, columnspan=2, sticky="ew", pady=(14 if row > 1 else 0, 8))
+            row += 1
+            for keys, meaning in entries:
+                for column, (value, weight) in enumerate(((keys, "bold"), (meaning, "normal"))):
+                    label = tk.Label(
+                        table, text=value, bg=self.theme["bg"], fg=self.theme["text"],
+                        font=("TkDefaultFont", 10, weight), anchor="nw", justify="left",
+                    )
+                    label.grid(row=row, column=column, sticky="new", padx=(0, 20 if column == 0 else 0), pady=(0, 8))
+                    (key_labels if column == 0 else meaning_labels).append(label)
+                row += 1
+
+        def resize_table(event=None):
+            width = event.width if event is not None else canvas.winfo_width()
+            key_width = max(135, min(250, int(width * 0.36)))
+            canvas.itemconfigure(window_id, width=width)
+            table.columnconfigure(0, minsize=key_width + 20)
+            for label in key_labels:
+                label.configure(wraplength=key_width)
+            for label in meaning_labels:
+                label.configure(wraplength=max(150, width - key_width - 22))
+
+        canvas.bind("<Configure>", resize_table)
+        table.bind("<Configure>", lambda _event: canvas.configure(scrollregion=canvas.bbox("all")))
+        # Bindungen am Dialog erfassen auch das Rad über den Textlabels.
+        for sequence in ("<MouseWheel>", "<Button-4>", "<Button-5>"):
+            dialog.bind(sequence, lambda event: self._on_mousewheel(event, canvas))
+        for sequence, amount, unit in (("<Prior>", -1, "pages"), ("<Next>", 1, "pages"),
+                                        ("<Up>", -1, "units"), ("<Down>", 1, "units")):
+            dialog.bind(sequence, lambda _event, amount=amount, unit=unit: canvas.yview_scroll(amount, unit))
+        dialog.bind("<Home>", lambda _event: canvas.yview_moveto(0))
+        dialog.bind("<End>", lambda _event: canvas.yview_moveto(1))
+        dialog.bind("<Escape>", lambda _event: dialog.destroy())
+        dialog.bind("<Return>", lambda _event: dialog.destroy())
+        self._center_dialog(dialog, min_width=820, min_height=650)
+        self._schedule_windows_chrome_theme(dialog)
+        close_button.focus_set()
+        self.run_modal(dialog)
+        try:
+            if previous_focus is not None and previous_focus.winfo_exists():
+                previous_focus.focus_set()
+        except tk.TclError:
+            pass
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ListApp(root)
+    root.mainloop()
+
+
+
+

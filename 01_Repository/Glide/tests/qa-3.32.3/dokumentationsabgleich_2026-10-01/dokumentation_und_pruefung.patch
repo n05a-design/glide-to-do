@@ -1,0 +1,1135 @@
+--- vorher/01_Repository/Glide/AGENTS.md
++++ nachher/01_Repository/Glide/AGENTS.md
+@@ -7,6 +7,7 @@
+ ## Verbindliche Quellen
+ 
+ - Einstieg für jede neue Sitzung: `../../00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md` (Stand, Regeln, nächste Schritte)
++- Fortlaufende Arbeitsrichtung und Abnahme: `docs/ARBEITSRICHTUNG.md` (D01–D08, Performance-Fortsetzung, offene Richtungsauswahl, Lebensdauer/Invalidierung und Nachläufe)
+ - Pflegewerkzeuge für Versionswechsel und Abgleich nach `07_Python-Versionen`: `scripts/pflege/`
+ - Produkt und Grenzen: `docs/01_PRODUCT_CONSTRAINTS.md`
+ - Architektur: `docs/02_ARCHITECTURE.md`
+@@ -22,7 +23,7 @@
+ 
+ ## Entwicklungsregeln
+ 
+-1. Vor Änderungen den aktuellen Test ausführen und Nutzerdatenpfade prüfen.
++1. Vor Produktionsänderungen eine passende bestehende Baselineprüfung ausführen und Nutzerdatenpfade prüfen. Dokumentations-/Prüfwerkzeugnachläufe nach `docs/ARBEITSRICHTUNG.md` behandeln; unveränderte App-Version erhalten.
+ 2. Bestehende Funktionen, Nutzerdaten und Migrationen bewahren.
+ 3. Datenformatänderungen nur mit eigener Migration, Sicherung und Tests vornehmen. Eine neue Listen- oder Ordnerart ist eine Datenformatänderung und hebt `DATA_SCHEMA_VERSION` – nur so öffnet eine ältere Fassung den Bestand schreibgeschützt, statt ihn zu überschreiben (29.09.2026).
+ 4. Keine neue Laufzeitabhängigkeit ohne dokumentierte Entscheidung einführen.
+@@ -33,6 +34,9 @@
+ 9. Oberflächensymbole ausschließlich als Textzeichen aus der Tabelle `ICONS`. Der Integrationstest erzwingt das. Einzige Ausnahme ist das Logo als Bild aus `resources/logo` (`logo.py`, seit 29.09.2026).
+ 10. Überholte Dokumente werden nicht überschrieben, sondern zuerst in den `archiv/`-Unterordner desselben Ordners kopiert – benannt nach der Version, die sie beschreiben.
+ 
++11. Aufgabenstatus, nächste Schritte, Entscheidungen und Prüfgrenzen in Planung, Auswahl und Übergaben inhaltlich abgleichen. Aktuelle Versionszeilen allein reichen nicht.
++12. Caches nach stabilen IDs und Host-Lebensdauer führen, vollständig invalidieren; Undo kann Objekte ersetzen. Ersetzte Bindungen/after-Aufträge freigeben. Keine verschachtelten `update()`/`update_idletasks()` in selbstauslösenden Rückrufen. Details und Abnahme in `docs/ARBEITSRICHTUNG.md`.
++
+ ## Abschlusskriterium
+ 
+ Eine Änderung ist erst fertig, wenn Syntaxprüfung und passende automatisierte Tests grün sind, die Versionsangaben konsistent sind und verbleibende manuelle Prüfungen ausdrücklich genannt werden. Für den Inhaber ist sie erst angekommen, wenn `07_Python-Versionen` und `build/macos/Glide.app` den geprüften Stand tragen (`scripts/pflege/abgleich_07.py`, `packaging/macos/baue_app.py`, SHA-256; seit 30.09.2026).
+--- vorher/01_Repository/Glide/README.md
++++ nachher/01_Repository/Glide/README.md
+@@ -136,7 +136,7 @@
+ Datenordnern. Der vollständige Prüflauf wird aus dem Repository-Stamm gestartet:
+ 
+ ```bash
+-python3 tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.30.0/lokaler_lauf --timeout 900
++python3 tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.32.3/lokaler_lauf --timeout 900
+ ```
+ 
+ Eine schnelle Prüfung von Versions- und Dokumentationsständen:
+@@ -184,3 +184,5 @@
+ Für Glide ist noch keine öffentliche Softwarelizenz festgelegt. Der vorhandene
+ Quelltext räumt deshalb derzeit keine allgemeinen Nutzungs-, Änderungs- oder
+ Weiterverteilungsrechte ein. Maßgeblich ist der [Lizenzstatus](LICENSE.md).
++
++Weitere Entwicklung und Dokumentationsnachläufe folgen der [fortlaufenden Arbeitsrichtung](docs/ARBEITSRICHTUNG.md). Bestätigte Entscheidungen, Cache-Regeln und aktuelle Aufgaben werden dort mit Planung und Übergaben verbunden.
+--- vorher/01_Repository/Glide/CHANGELOG.md
++++ nachher/01_Repository/Glide/CHANGELOG.md
+@@ -1,6 +1,8 @@
+ # Änderungsverlauf
+ 
+ ## 3.32.3 – 01.10.2026
++
++- **Dokumentations-/Prüfwerkzeugnachlauf:** Fortlaufende Arbeitsrichtung mit D01–D08 und Abnahme verankert; aktive Übergaben, Pläne, Checklisten und technische Regeln inhaltlich abgeglichen. Standprüfung erfasst gepflegte datierte Einstiege, aktuelle Titel und erste Vollprüfungsaufrufe; gezielte Werkzeugregression. Laufzeit und Startfassungen unverändert.
+ 
+ - **Bibliothek:** Unveränderte Karten und Öffnen-Buttons in derselben Ansicht erhalten. Anzeigedaten frisch berechnen; nur betroffene Karten neu aufbauen. Reihenfolge, Ordnerpfade, Labels, Status/Termine, Symbole, Zeichnungen und Design-/Schriftwechsel berücksichtigen. Zerstörter Ansichtshost gibt den Cache frei.
+ - **Gemeinsame Aktionsleiste:** Unveränderte Aktionen erhalten; Befehle und Höhenstufe berücksichtigen. Ersetzte Configure-Bindung freigeben, damit wiederholte Änderungen keine Rückrufe ansammeln.
+--- vorher/01_Repository/Glide/docs/00_INDEX.md
++++ nachher/01_Repository/Glide/docs/00_INDEX.md
+@@ -1,6 +1,6 @@
+ # Dokumentationsindex
+ 
+-Aktueller Einstieg: [Projektübergabe](09_PROJECT_HANDOFF.md), [Ausbau ab 3.32](68_AUSBAU_3.32.0.md), [Modernisierung 3.30](66_MODERNISIERUNG_3.30.0.md), [Sitzungsprotokoll 24.–26.09.2026](67_SITZUNGSPROTOKOLL_2026-09-24_BIS_2026-09-26.md), [QA-Bericht](07_QA_BERICHT.md), [Zeichnungsseite 3.29](65_ZEICHNUNGSSEITE_3.29.0.md) und [isolierter Zeichenflächenkern](61_ZEICHENFLAECHE_ISOLIERTER_KERN_2026-09-24.md). Die Detaildokumente der vorherigen Versionen bleiben fachliche Nachweise für fortbestehende Funktionen; die Übergabe 62 und die Prüfberichte 63/64 vom 24.09.2026 sind seit dem 26.09.2026 archiviert.
++Aktueller Einstieg: [Arbeitsrichtung und Abnahme](ARBEITSRICHTUNG.md), [Projektübergabe](09_PROJECT_HANDOFF.md), [Ausbau ab 3.32](68_AUSBAU_3.32.0.md), [Modernisierung 3.30](66_MODERNISIERUNG_3.30.0.md), [Sitzungsprotokoll 24.–26.09.2026](67_SITZUNGSPROTOKOLL_2026-09-24_BIS_2026-09-26.md), [QA-Bericht](07_QA_BERICHT.md), [Zeichnungsseite 3.29](65_ZEICHNUNGSSEITE_3.29.0.md) und [isolierter Zeichenflächenkern](61_ZEICHENFLAECHE_ISOLIERTER_KERN_2026-09-24.md). Die Detaildokumente der vorherigen Versionen bleiben fachliche Nachweise für fortbestehende Funktionen; die Übergabe 62 und die Prüfberichte 63/64 vom 24.09.2026 sind seit dem 26.09.2026 archiviert.
+ 
+ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorlagenformat 2
+ 
+@@ -1615,3 +1615,35 @@
+ - [Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30_3.32.3_vor_Abschluss_2026-10-01.md](../../../00_Arbeitsvorbereitung/archiv/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30_3.32.3_vor_Abschluss_2026-10-01.md)
+ - [README_3.32.3_vor_Abschluss_2026-10-01.md](../../../00_Arbeitsvorbereitung/archiv/README_3.32.3_vor_Abschluss_2026-10-01.md)
+ - [README_3.32.3_vor_Abschluss_2026-10-01.md](../../../07_Python-Versionen/archiv/README_3.32.3_vor_Abschluss_2026-10-01.md)
++
++## Fortlaufende Arbeitsrichtung und Richtungsabgleich 01.10.2026
++
++- [Arbeitsrichtung, bestätigte Entscheidungen und Abnahme](ARBEITSRICHTUNG.md)
++- [Dokumentations-/Prüfwerkzeugnachlauf](../tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json)
++- [Bytegleiche Vorsicherungen](../tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/vorsicherung.json)
++
++Vorsicherungen vor dieser Fortschreibung (alte Inhalte bleiben als Belege erhalten):
++
++- [01_Repository/Glide/AGENTS.md](<../archiv/AGENTS_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [01_Repository/Glide/README.md](<../archiv/README_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [01_Repository/Glide/CHANGELOG.md](<../archiv/CHANGELOG_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [01_Repository/Glide/docs/00_INDEX.md](<archiv/00_INDEX_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [01_Repository/Glide/docs/02_ARCHITECTURE.md](<archiv/02_ARCHITECTURE_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [01_Repository/Glide/docs/05_QA_TESTPLAN.md](<archiv/05_QA_TESTPLAN_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md](<archiv/06_DATA_BACKUP_MIGRATION_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [01_Repository/Glide/docs/DEV_NOTES.md](<archiv/DEV_NOTES_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [01_Repository/Glide/docs/DOKUMENTENPFLEGE.md](<archiv/DOKUMENTENPFLEGE_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [01_Repository/Glide/docs/07_QA_BERICHT.md](<archiv/07_QA_BERICHT_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [01_Repository/Glide/docs/09_PROJECT_HANDOFF.md](<archiv/09_PROJECT_HANDOFF_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [01_Repository/Glide/docs/10_RELEASE_CHECKLIST.md](<archiv/10_RELEASE_CHECKLIST_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [01_Repository/Glide/scripts/pflege/README.md](<../scripts/pflege/archiv/README_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [01_Repository/Glide/tests/tools/README.md](<../tests/tools/archiv/README_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [01_Repository/Glide/tests/tools/standpruefung.py](<../tests/tools/archiv/standpruefung_3.32.3_vor_Richtungsabgleich_2026-10-01.py>)
++- [01_Repository/Glide/tests/qa-verlauf.md](<../tests/archiv/qa-verlauf_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [00_Arbeitsvorbereitung/README.md](<../../../00_Arbeitsvorbereitung/archiv/README_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md](<../../../00_Arbeitsvorbereitung/archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md](<../../../00_Arbeitsvorbereitung/archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [00_Arbeitsvorbereitung/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md](<../../../00_Arbeitsvorbereitung/archiv/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md](<../../../00_Arbeitsvorbereitung/Checklisten/archiv/Manuelle_Pruefung_3.30.0_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [00_Arbeitsvorbereitung/Checklisten/Windows_Pruefung_3.30.0.md](<../../../00_Arbeitsvorbereitung/Checklisten/archiv/Windows_Pruefung_3.30.0_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
++- [tests/README.md](<../tests/archiv/README_3.32.3_vor_Richtungsabgleich_2026-10-01.md>)
+--- vorher/01_Repository/Glide/docs/02_ARCHITECTURE.md
++++ nachher/01_Repository/Glide/docs/02_ARCHITECTURE.md
+@@ -1,6 +1,15 @@
+-# Architektur – Glide 3.30.0
++# Architektur – Glide
+ 
+ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20
++
++## Aktuelle Optimierungsverträge
++
++- [Klappkontrolle 3.32.1](69_KLAPPKONTROLLE_3.32.1.md): Zustand nach nativem Umschalten erfassen, geschlossene Vorfahren beim Refresh bewahren, Tastaturwege und verschachtelte Bibliothek prüfen.
++- [Drag/Performance 3.32.2](70_DRAG_UND_PERFORMANCE_3.32.2.md): gemeinsame Bindungen für bestehende Bereiche; Schriftcache je Interpreter mit Invalidierung, gebündelte ButtonFlow-Layouts und gemeinsamer Hover. Synchrone Höhenleser erhalten vorher ein fertiges Layout.
++- [Karten/Performance 3.32.3](71_KARTEN_PERFORMANCE_3.32.3.md): `library_card_preview` berechnet aktuelle Vorschauen; Widgets bleiben nur im selben lebenden Host über `(Art, ID)` erhalten. Signaturen erfassen Inhalte, Termine/Tageswechsel, Pfade/Labels und Darstellung. Zerstören des Hosts gibt den Cache frei.
++- `refresh_page_actions` erhält unveränderte sichtbare Aktionen samt Befehlen; geänderte Bindungen werden freigegeben. Archiv-Zurückholen nutzt den vorhandenen zentralen Refresh einmal.
++- [Arbeitsrichtung](ARBEITSRICHTUNG.md) legt den nächsten gemessenen Schnitt und die dauerhaft geltenden Invarianten fest. Die folgenden Abschnitte erklären weiterhin gültige Bausteine mit ihrem Einführungsstand.
++
+ 
+ **3.30** erweitert die vorhandenen Bausteine. Seit dem 27.09.2026 ist Python
+ 3.14 mit Tk 9 die Grundlage; als einzige mitgelieferte Bibliothek liegt
+--- vorher/01_Repository/Glide/docs/05_QA_TESTPLAN.md
++++ nachher/01_Repository/Glide/docs/05_QA_TESTPLAN.md
+@@ -1,8 +1,19 @@
+-# Prüfplan – Glide 3.30.0
++# Prüfplan – Glide
+ 
+ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
+ 
+-Vollständiger Lauf: `python tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.30.0/abschluss`; er umfasst alle Suiten, Syntax-, Versions-, Dokument- und Fixtureprüfung, Zeitzonenmessung, fünf Analysen, reproduzierte Beispiel-/Releasedaten und Screenshots. Die Zahl der Schritte steht im Quelltext. `test_features328.py` ergänzt Tagebuch, Format 18, konturlose Menüs, neutrale Aktionen und die verdichtete Notizwerkzeugleiste. `test_features329.py` prüft die Zeichnungsseite: Format-19-Vorsicherung, Ablehnung unbekannter Listenarten, eingebettete Fläche ohne Extrafenster, Pinselvorschau je Zoom, gebündeltes Autosave und Schreibfehler, Referenz-PNG, Nachzeichnung mit Vorher-Snapshot, Rückgängig-Semantik, Duplizieren, Papierkorb, Voll- und additiver Import, Teilbackup, Austausch, Vorlagen, JSON-/SVG-Datei-Rundlauf und Tagebuchübersicht. Manuell bleiben Maus- und Trackpadbedienung, DPI, Mehrmonitor, Screenreader und der Illustrator-/Affinity-Rundlauf.
++## Aktueller Prüfeinstieg
++
++Maßgeblich sind `SUITEN` und `ANALYSEN` in `tests/tools/pruefen.py`: derzeit 58 Integrationssuiten und fünf Analysen. Der abgeschlossene 3.32.3-Lauf hat 73 ausgeführte Schritte; generischer Screenshot-Erzeuger und menschliche Sichtprüfung sind gesondert übersprungen, 41 eigene Prüffensterfotos wurden erzeugt. [QA-Bericht](07_QA_BERICHT.md).
++
++Pflichtkontrollen: `test_klappmechanismen3321.py`, `test_drag_performance3322.py` und `test_library_performance3323.py`. Sie prüfen native Bedienbindungen und Callbackfehler, Zustandserhalt/Undo/Neustart, ID-/Host-Lebensdauer, Inhalts-/Datums-/Designinvalidierung und Rückrufwachstum. Details in Verträgen 69/70/71.
++
++Vor dem finalen Volllauf App-/Modul-/Prüfstand einfrieren und danach per SHA-256 abgleichen. Hintergrundprobe von Tk-Fokus ist kein Nachweis des physischen OS-Fokus. Dokumentations-/Prüfwerkzeugnachläufe separat datiert prüfen, ältere eingefrorene Ergebnisse erhalten; [Arbeitsrichtung](ARBEITSRICHTUNG.md). `python3 -B tests/tools/test_standpruefung.py` prüft veraltete gepflegte Checklisten, Titel und erste Vollprüfungsaufrufe.
++
++Die folgenden Suitebeschreibungen behalten ihre Einführungsstände; diese Nummern begrenzen nicht die aktuelle Prüfung.
++
++
++Vollständiger Lauf: `python tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.32.3/abschluss`; er umfasst alle Suiten, Syntax-, Versions-, Dokument- und Fixtureprüfung, Zeitzonenmessung, fünf Analysen, reproduzierte Beispiel-/Releasedaten und Screenshots. Die Zahl der Schritte steht im Quelltext. `test_features328.py` ergänzt Tagebuch, Format 18, konturlose Menüs, neutrale Aktionen und die verdichtete Notizwerkzeugleiste. `test_features329.py` prüft die Zeichnungsseite: Format-19-Vorsicherung, Ablehnung unbekannter Listenarten, eingebettete Fläche ohne Extrafenster, Pinselvorschau je Zoom, gebündeltes Autosave und Schreibfehler, Referenz-PNG, Nachzeichnung mit Vorher-Snapshot, Rückgängig-Semantik, Duplizieren, Papierkorb, Voll- und additiver Import, Teilbackup, Austausch, Vorlagen, JSON-/SVG-Datei-Rundlauf und Tagebuchübersicht. Manuell bleiben Maus- und Trackpadbedienung, DPI, Mehrmonitor, Screenreader und der Illustrator-/Affinity-Rundlauf.
+ 
+ Seit 3.30.0 kommen zwei Suiten dazu.
+ 
+--- vorher/01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md
++++ nachher/01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md
+@@ -1,4 +1,4 @@
+-# Daten, Backups und Migration – Glide 3.30.0
++# Daten, Backups und Migration – Glide
+ 
+ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20
+ 
+--- vorher/01_Repository/Glide/docs/DEV_NOTES.md
++++ nachher/01_Repository/Glide/docs/DEV_NOTES.md
+@@ -1,6 +1,13 @@
+-# Entwicklungsnotizen 3.28.0 bis 3.30.0
++# Entwicklungsnotizen – fortlaufende Invarianten
+ 
+ Stand 01.10.2026 · Glide 3.32.3 · Datenformat 20
++
++## Regeln aus 3.32.1–3.32.3
++
++[Arbeitsrichtung](ARBEITSRICHTUNG.md): Zustände nach nativen Ereignissen erfassen, IDs statt veralteter Objektverweise benutzen, Caches an den lebenden Host binden und vollständig invalidieren. Layouts bündeln und synchrone Höhenleser zuvor layouten. Beim Ersetzen von Configure-Bindungen die Tcl-Rückrufe freigeben. Sichtbare Aktionslisten vergleichen auch Befehle und Höhenfilter. Keine Reentranz über verschachtelte `update`-Aufrufe.
++
++Messwerte im Vertrag 71 betreffen erneutes Rendern derselben Bibliothek. Sie belegen weder Dateischreiben noch Ansichtswechsel noch viele Karten. Die nachfolgenden Muster behalten ihre Entstehungsdaten.
++
+ 
+ 
+ Standard-Tk bleibt die Laufzeitbasis. Der neue RichNoteEditor speichert Text und semantische Spannen statt HTML; die Positionen im Dateiformat sind Python-Zeichenindizes. Tk-Indizes werden beim Laden aus Zeilen und nativen Tcl-Spalten erzeugt. Ein lokaler Undo-Stapel umfasst Text und Formatierung gemeinsam.
+@@ -52,8 +59,10 @@
+   übergebenen Punkte aus. Wer die Auswahl dort lassen will, wo sie ist (etwa
+   der Detailbereich), übergibt `()` und ruft `change.mark()`.
+ - **Tastenereignisse in Tests:** `event_generate("<Return>")` erreicht ein
+-  Feld nur, wenn es den Tastaturfokus hat. `focus_force()` davor macht den
+-  Test unabhängig vom Vordergrundprogramm.
++  Feld nur mit Tk-Tastaturfokus. Hintergrundläufe ersetzen `focus_force()`
++  durch `focus_set()`; sie dürfen keinen OS-Fokus erzwingen. Den vorhandenen
++  Tk-Fokuszustand ausdrücklich prüfen. Die echte Tastatur-/App-Wechselprobe
++  bleibt eine manuelle Plattformprüfung.
+ - **Modale Dialoge in Tests:** Neue Dialoge auf bestehenden Wegen (etwa die
+   Importvorschau seit 3.30) lassen ältere Tests auf Eingaben warten.
+   `run_modal` durch `press(beschriftung)` ersetzen.
+@@ -113,8 +122,11 @@
+     ihre volle Fläche. Nur sichtbare Stücke zeichnen.
+   - `photo copy -from … -zoom f f` vergrößert beim Kopieren; ein
+     vorvergrößertes Vollbild braucht es nicht.
+-  - Ein direkt gestartetes Skript übersetzt Python bei jedem Start neu (bei
+-    Glide rund 0,5 s). Als Modul geladen nutzt es den Bytecode-Cache.
++  - Historischer Startbefund vom 26.09.2026: Das direkt gestartete
++    Hauptskript wird neu übersetzt; `glide_start.py` lädt es als Modul und
++    nutzt den Bytecode-Cache. Seit 29.09.2026 setzt auch `app.pyw` den
++    System-Cachepfad für importierte Module. Das macht das direkt gestartete
++    Hauptskript selbst noch nicht zu einem gecachten Modul.
+ - **Tk-Text und Formate beim Tippen:** Eingefügter Text erbt nur die
+   Formate, die beide Nachbarzeichen tragen. Zeilenformate schließen deshalb
+   den Zeilenumbruch ein, und `spread_line_tags` überträgt sie nach jedem
+@@ -198,9 +210,10 @@
+   Elternrahmens neu setzen erzwingt es (`repaint_sidebar`).
+ - **`<TouchpadScroll>`** (Tk 9, TIP 684): `delta` trägt X in den oberen und
+   Y in den unteren 16 Bit, jeweils mit Vorzeichen.
+-- **Tempo-Untergrenze:** Ein Bild der Oberfläche kostet in reinem Tk auf dem
+-  Prüfrechner rund 50 ms (Treeview, 85 Zeilen). Messungen immer dagegen
+-  setzen (`test_tempo330`).
++- **Historische Tk-Vergleichsmessung:** `test_tempo330` maß auf dem
++  Prüfrechner für Treeview/85 Zeilen rund 50 ms. Das ist eine
++  Vergleichsbedingung, keine allgemeine Tempo-Untergrenze. Aktuelle
++  Optimierungen mit identischer Fixture unprofiliert vergleichen.
+ - **Ausblenden im Textfeld:** Ein Format mit `elide=True` (`folded`) blendet
+   Zeilen aus, ohne den Text zu ändern. Es darf nie gespeichert werden; nach
+   dem Laden stellt `apply_folds` es aus `toggle_closed` her.
+--- vorher/01_Repository/Glide/docs/DOKUMENTENPFLEGE.md
++++ nachher/01_Repository/Glide/docs/DOKUMENTENPFLEGE.md
+@@ -6,7 +6,7 @@
+ 
+ - Vor Änderungen an bestehenden Dokumenten eine Kopie im benachbarten `archiv/` anlegen, mit der beschriebenen vorherigen Version im Namen.
+ - Historische Versionsdokumente älter als aktuelle Version minus fünf nach `docs/archiv/` verschieben. Für 3.28 betrifft dies Versionen vor 3.23, für 3.30 Versionen vor 3.25; die im Index unter „Aktueller Einstieg“ geführten Verträge 45 bis 56 bleiben als fortgeltende Funktionsverträge aktiv. Eine ausdrücklich im aktuellen Index als fortgeltender Funktionsvertrag geführte Datei bleibt aktiv, bis ein neuer kumulativer Vertrag sie ersetzt. Aktive Verweise werden auf den neuen Ort nachgeführt.
+-- Mehr als zehn Versionen alte historische Dokumente dürfen nur entfallen, wenn weder aktive Verweise noch weiterhin gültige Grundsatzinhalte vorhanden sind. Löschen ist optional; in dieser Nachbesserung bleiben Belege erhalten.
++- Überholte Dateien archivieren beziehungsweise mit `_Z` zur Löschung durch den Inhaber markieren. Die bestehende Vorgabe „nichts selbst löschen“ gilt auch für mehr als zehn Versionen alte Dateien; Alter allein erlaubt keine Löschung.
+ - Mindestens drei Versionen alte Prüfprotokolle gehören nach `50_Ablage/`. Originalergebnis, Datum und Exitcode bleiben unverändert.
+ - Für normale Änderungen zunächst die letzten drei Versionen lesen. Ältere Unterlagen bei konkretem Bedarf gezielt hinzunehmen.
+ - `PRODUCT_IDENTITY.md`, `ARBEITSBEGLEITER.md`, `09_PROJECT_HANDOFF.md`, `07_QA_BERICHT.md` und weiterhin gültige Entscheidungen werden nicht automatisch archiviert.
+@@ -14,3 +14,13 @@
+ - Neue Dokumente und Archive im Index aufnehmen. Stand- und Linkprüfung vor einer Freigabe ausführen.
+ 
+ Produktionskommentare erklären Invarianten, technische Gründe und Plattformbesonderheiten. Arbeitsauftragsnummern und Entwicklungserzählungen gehören in Changelog beziehungsweise Archiv. Eine reine Kommentarbereinigung muss den ausführbaren Syntaxbaum unverändert lassen.
++
++## Fortgeschriebene Einstiege trotz Datum im Namen
++
++Sitzungsübergabe, Arbeits-/Featureplanung, Richtungsauswahl und beide aktiven Checklisten werden weiter gepflegt. Ihre Dateinamen bleiben für bestehende Verweise stabil; sie sind in `GEPFLEGT` der Standprüfung registriert und müssen die laufende Version nennen. Fortgeschriebene Titel dürfen keinen älteren Stand behaupten; der erste ausführbare Vollprüfungsaufruf verwendet die laufende Version oder `<Version>`. Historische Befehle und versionsbenannte Detailverträge bleiben als Belege erlaubt.
++
++Versionstool und Standprüfung kontrollieren formale Angaben. Zusätzlich Aufgabenstatus, beantwortete Entscheidungen, nächste Schritte und tatsächliche Prüfgrenzen inhaltlich gegen Code und Ergebnisse abgleichen. Erledigte Teilpakete nicht als neue Aufgaben empfehlen. Archivkopien bytegleich prüfen und im Index verlinken. Reine Dokumentations-/Werkzeugnachläufe erhalten einen eigenen Nachweis; siehe [Arbeitsrichtung](ARBEITSRICHTUNG.md).
++
++Datierte vollständige Ablageabbilder `Glide_<Version>_Zwischenstand_<Datum>` bleiben unveränderte Belege und werden von der aktiven Standprüfung getrennt. Ein während der Arbeit kopierter Zwischenstand ist keine abgeschlossene Lieferung; fehlende Abschlussnachweise werden dort nicht nachträglich erfunden. Kanonischer Einstieg bleibt die ursprüngliche Ablage mit `01_Repository/Glide`.
++
++Die Suitezahl einer laufenden Standzeile wird direkt gegen `SUITEN` in `pruefen.py` geprüft (R14). Zahlen historischer Läufe bleiben unverändert; neue tatsächliche Prüfergebnisse und aktive Umfangsangaben sind davon zu unterscheiden.
+--- vorher/01_Repository/Glide/docs/07_QA_BERICHT.md
++++ nachher/01_Repository/Glide/docs/07_QA_BERICHT.md
+@@ -1,6 +1,9 @@
+ # QA-Bericht – Glide 3.32.3
+ 
+ Stand 01.10.2026 (Bibliothekskarten, Performance) · App 3.32.3 · Datenformat 20 · macOS, Python 3.14.5, Tk 9.0.3
++
++**Dokumentations-/Prüfwerkzeugnachlauf 01.10.2026:** [Arbeitsrichtung](ARBEITSRICHTUNG.md) verbindet die bestätigten Entscheidungen und die verbleibende Performance-Arbeit. Aktive Einstiege/Checklisten und Kontrollregeln nachgeführt; [separater Nachweis](../tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json). App, Integrationssuiten und beide Startfassungen bleiben beim geprüften 3.32.3-Stand. Der frühere Volllauf wurde mit den damaligen Prüfwerkzeugen ausgeführt.
++
+ 
+ ## Version 3.32.3 – geprüfter und ausgelieferter Endstand, 01.10.2026
+ 
+--- vorher/01_Repository/Glide/docs/09_PROJECT_HANDOFF.md
++++ nachher/01_Repository/Glide/docs/09_PROJECT_HANDOFF.md
+@@ -1,6 +1,9 @@
+ # Projektübergabe – Glide 3.32.3
+ 
+ Stand 01.10.2026 · App 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
++
++**Dokumentations-/Prüfwerkzeugnachlauf 01.10.2026:** [Arbeitsrichtung](ARBEITSRICHTUNG.md) verbindet die bestätigten Entscheidungen und die verbleibende Performance-Arbeit. Aktive Einstiege/Checklisten und Kontrollregeln nachgeführt; [separater Nachweis](../tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json). App, Integrationssuiten und beide Startfassungen bleiben beim geprüften 3.32.3-Stand. Der frühere Volllauf wurde mit den damaligen Prüfwerkzeugen ausgeführt.
++
+ 
+ **Aktuelle Planung und Entscheidungen:**
+ [Arbeitsplanung vom 30.09.2026](../../../00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md)
+@@ -371,7 +374,7 @@
+ 
+ **Vollaufruf:**
+ 
+-`python tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.30.0/<neuer-Ordner> --timeout 900`
++`python tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.32.3/<neuer-Ordner> --timeout 900`
+ 
+ **Einzelsuiten der Neuerungen:**
+ 
+@@ -389,7 +392,7 @@
+ **Ausbau ab 3.32:** Reihenfolge und Entscheidungen stehen in der
+ Funktionsrecherche vom 30.09.2026; je Etappe eine Version, ein Abschnitt in
+ Vertrag 68 und eine Suite `test_etappe<N>_<Version>.py`. Nichts nur für eine
+-Plattform (Mac, Linux, Windows, später iPhone/iPad).
++Plattform (Mac, Linux, Windows; Mobile/Toolkit nach D03 zurückgestellt).
+ 
+ **Jeder Menübefehl** (`add_command`, `insert_command`) läuft seit 3.32.0
+ automatisch nach dem Schließen des Menüs (`defer_window_menu_commands`; bis
+@@ -428,7 +431,7 @@
+ 
+ [Drag-and-drop und Performance 3.32.2](70_DRAG_UND_PERFORMANCE_3.32.2.md): drei vorhandene Bereiche, Root-/Zielkoordinaten, Typen/Termine, Undo/Bestandswächter und Pflichtsuite. `app_font` cached je Tk-Root; `apply_ui_font` invalidiert. `ButtonFlow.add` plant ein gebündeltes Leerlauflayout; explizites `reflow` bleibt synchron, Zerstören cancelt ausstehende Aufrufe. Keine verschachtelte Ereignisschleife hinzufügen.
+ 
+-Für den nächsten Schnitt P03 zuerst Bibliothekskarten/Startseiten-Neuerzeugung messen und unveränderte Widgets erhalten, mit Fokus-/Scroll-/Design-Invalidierung. P04/P06 anschließend; G01/G05/G29/G31/G32/G02 sind die nächste Featureetappe. D07 ist weiter offen.
++Damals geplanter Anschluss: Bibliothekskarten/Startseiten-Neuerzeugung mit Fokus-/Scroll-/Design-Invalidierung prüfen. Der Bibliotheksschnitt ist inzwischen 3.32.3; aktuelle Fortsetzung in der Arbeitsrichtung und im folgenden Abschnitt. P04/P06 anschließend; G01/G05/G29/G31/G32/G02 sind die nächste Featureetappe. D07 ist weiter offen.
+ 
+ **Abschluss 30.09.2026:** 72 automatisierte Schritte, 57 Suiten und fünf Analysen bestanden (Exitcode 0). Beide Startfassungen auf 3.32.2 per SHA-256 abgeglichen (139 Python-/53 Bundle-Dateien), Ad-hoc-Signatur geprüft. [Nachweise und manuelle Grenzen](07_QA_BERICHT.md). Die Zeichnungs-Kontextleiste layoutet vor ihrer Höhenreservierung ausdrücklich synchron; diese Ausnahme am synchronen Leser beibehalten.
+ 
+--- vorher/01_Repository/Glide/docs/10_RELEASE_CHECKLIST.md
++++ nachher/01_Repository/Glide/docs/10_RELEASE_CHECKLIST.md
+@@ -12,18 +12,14 @@
+ - [x] Python-Fassung (139 Dateien) und macOS-Bundle (53 Quell-/Ressourcendateien) nach Vollprüfung per SHA-256 bytegleich, Version 3.32.3 und Signatur geprüft; [Abgleich](../tests/qa-3.32.3/karten_performance_2026-10-01/abgleich.json).
+ - [x] Abschlussergebnis und manuelle Grenzen im [QA-Bericht](07_QA_BERICHT.md) nachgeführt.
+ 
+-## Abnahme 3.28 (weiterhin offen)
++## Aktuelle manuelle Abnahme
+ 
+-- [ ] Ordner und Notizbücher (bis 27.09.2026 „Standard“ und „Tagebuch“) anlegen, bearbeiten, verschachteln, sichern, importieren und aus dem Papierkorb wiederherstellen.
+-- [ ] Notizbucheintrag anlegen; Favorit, alle Stimmungen, Ort, Momentdatum, Schreibimpuls, Suche und Datumssortierung prüfen.
+-- [ ] Tagesnotiz, Dankbarkeit, Wochenrückblick und Jahresordner aus Vorlagen erzeugen.
+-- [ ] Notizwerkzeuge in breiter und minimaler Ansicht prüfen; seltene Werkzeuge sind unter `Mehr`, ohne Funktionsverlust.
+-- [ ] Mittlere Maustaste halten und Zeiger nach oben, unten, links und rechts bewegen; Totzone, Geschwindigkeit und sofortigen Stopp prüfen.
+-- [ ] Startseite: Gismo füttern/spielen/ruhen, Tagesabnahme nach Datumswechsel, Wertebereiche 0–100 und Speicherung prüfen.
+-- [ ] Pinnwandvorschau mit leerer, kleiner und großer Pinnwand prüfen; Vorschau darf keine erfundenen Inhalte enthalten.
+-- [ ] Mindestbreite: Such-/Eingabefelder, Tabellenfläche, rechte Flucht, Kopfaktionen, Pinnwandoptionen und untere Aktionen prüfen.
+-- [ ] Hell-/Dunkel- und weitere Designs: neutrale Nebenaktionen, semantische Farben, Kontrast und sichtbarer Tastaturfokus prüfen.
+-- [ ] Menüs ohne dekorative Outline sowie keine Schaltfläche mit sichtbarem `...` prüfen.
++Die ursprünglichen 3.28–3.30-Listen sind in der [fortgeschriebenen manuellen Prüfliste](../../../00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md) zusammengeführt. Ihr Anhang unterscheidet automatisch geprüfte Logik, offenes Handgefühl, überholte Punkte und beantwortete Entscheidungen; F11 ist durch D05 beantwortet. Die alten zehn Abnahmepunkte werden hier nicht als zusätzliche ungeprüfte Funktionen weitergeführt.
++
++- [ ] Physische macOS-Bedienung A1–A21 durchführen; insbesondere Klappmechanismen, Drag-Ziele und Fokus/Scrollen bei Kartenaktualisierung.
++- [ ] Windows/Linux, Tastatur/Screenreader, DPI/Mehrmonitor und Dauerbetrieb nach derselben Prüfliste durchführen und Befunde zuordnen.
++
++Automatische Abnahme und menschliche Geräteprüfung werden getrennt dokumentiert. [Arbeitsrichtung](ARBEITSRICHTUNG.md).
+ 
+ ## Migration und Datensicherheit
+ 
+@@ -34,9 +30,9 @@
+   zurück nur über die Vorsicherung in einer getrennten Ablage.
+ - [x] Glide 3.30 öffnet einen Bestand aus einer neueren Version schreibgeschützt, sichert eine unlesbare Datei als
+   `liste_unlesbar_*.json` und warnt über `data_format_written` (automatisch geprüft).
+-- [ ] Vollbackup und additive Übernahme mit Beziehungen, Zeiterfassung, Pixelsymbolen und Archiv vergleichen.
++- [x] Automatischer Voll-/Additivbackup-Rundlauf mit Beziehungen, Zeiterfassung, Pixelsymbolen und Archiv in der 3.32.3-Vollprüfung; reale Plattformbedienung bleibt in der manuellen Prüfliste offen.
+ - [ ] Zeichnungsseiten nach der [manuellen Prüfung 3.30](../../../00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md) prüfen (enthält seit 29.09.2026 die Punkte aus 3.29): Maus/Trackpad, Tastatur, Autosave und Neustart, Referenz-PNG, Nachzeichnung, SVG in Browser, Illustrator und Affinity.
+-- [ ] 3.30 nach [manueller Prüfung 3.30](../../../00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md) prüfen:
++- [ ] Aktuelle App nach [manueller Prüfliste](../../../00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md) prüfen:
+   - Pixel-Werkstatt mit Maus und Trackpad;
+   - Spaltenboard und Bereiche per Ziehen;
+   - Startseite anpassen, Detailbereich, Design „Pixel“ mit Pixelify Sans;
+@@ -44,9 +40,9 @@
+   - Bilder in Seiten, Ziehen aus Finder/Explorer, Systemmitteilungen,
+     feste Bestandteile beim Wechseln der Ansichten (27.09.2026);
+   - DPI, Mehrmonitor und Bildschirmleser.
+-- [ ] Paket enthält `drawing.py`, `drawing_image.py`, `backdrop.py`, `page_markdown.py`, `image_preview.py`, `logo.py` und `glide_start.py` und `resources` (Schriften mit Lizenztexten und
++- [x] macOS-Entwicklungspaket enthält `drawing.py`, `drawing_image.py`, `backdrop.py`, `page_markdown.py`, `image_preview.py`, `logo.py` und `glide_start.py` und `resources` (Schriften mit Lizenztexten und
+   `provenance.json`, Vorlagen) neben `app.pyw`, dazu `vendor/tkinterdnd2` mit Lizenz und nur den
+-  Bibliotheken der Zielplattform (das macOS-Entwicklungsbundle prüft `test_paketierung330`).
++  Bibliotheken der Zielplattform (automatische Prüfung und 53-Dateien-SHA-Abgleich für macOS 3.32.3). Die vollständige Python-Fassung enthält 139 Dateien; Windows-/Linux-Releasepakete bleiben offen.
+ - [ ] Die tkDnD-Bibliothek ist mit dem Release signiert und notarisiert
+   ([Entscheidung](decisions/ABHAENGIGKEIT_TKDND.md)).
+ - [ ] Inhaberangaben aus den [Vorschlägen](../../../40_Store_Material/Inhaberangaben_Vorschlaege_2026-09-27.md)
+--- vorher/01_Repository/Glide/scripts/pflege/README.md
++++ nachher/01_Repository/Glide/scripts/pflege/README.md
+@@ -13,7 +13,7 @@
+ | [messung_performance.py](messung_performance.py) | Unprofilierter Vorher-/Nachher-Vergleich mit festen Aufgaben-, Notiz- und Bildseiteninhalten; erste/warme Wechsel, Median/p95 und Rohwerte | `python3 -B scripts/pflege/messung_performance.py --items 1000 --json <Ausgabe>`; `--app` für gesicherten Vergleichsstand |
+ | [analyse_codebasis.py](analyse_codebasis.py) | Größte Klassen und Funktionen, wiederholte Texte, identische Funktionen, häufige Aufrufe | `python3 scripts/pflege/analyse_codebasis.py` |
+ 
+-**Reihenfolge einer Runde:**
++**Reihenfolge einer Produktionsrunde** (Dokumentations-/Werkzeugnachlauf nach [Arbeitsrichtung](../../docs/ARBEITSRICHTUNG.md)):
+ 
+ 1. Vor der Änderung den startbaren Stand als Ordner in
+    `07_Python-Versionen/Archiv` sichern.
+@@ -28,3 +28,5 @@
+ Erst nach Schritt 5 trägt die Glide-Fassung des Inhabers den Stand.
+ 
+ Seit 3.32.3 ergänzt die Pflichtsuite `tests/integration/test_library_performance3323.py --app <Quelle> --items 1000 --rounds 8 --measure <JSON>` die Messung um erneute Bibliotheksaktualisierungen innerhalb derselben Ansicht und neue Karten-/Aktionscontainer. Ein separater Aufwärmdurchlauf und Rohwerte bleiben im JSON; Dateischreiben und Ansichtswechsel sind andere Messgrößen. [Vertrag 71](../../docs/71_KARTEN_PERFORMANCE_3.32.3.md).
++
++`versionswechsel.py` pflegt Standzeilen und Fixtures, keine semantischen Aufgabenstatus. Titel, erste Prüfaufrufe, beantwortete Entscheidungen und nächste Schritte zusätzlich abgleichen. Für Werkzeugnachläufe `python3 -B tests/tools/test_standpruefung.py`, Syntax/Version/Stand/Index/Links und unveränderte App-/Paket-Hashes prüfen; den früheren Volllauf nicht überschreiben.
+--- vorher/01_Repository/Glide/tests/tools/README.md
++++ nachher/01_Repository/Glide/tests/tools/README.md
+@@ -18,7 +18,7 @@
+ | Werkzeug | Zweck |
+ |---|---|
+ | `pruefen.py --modus voll --protokoll PFAD` | Vollprüflauf: alle Suiten aus `SUITEN`, alle Analysen aus `ANALYSEN`, Vorprüfungen einschließlich Tk-Voraussetzung und gemessenem Zeitzonenversatz, Daten-Reproduktion und Bilder. Die Zahlen stehen im Quelltext, nicht hier. Exitcode 1 bei einem Fehlschlag, 2 wenn Tk oder die Zeitzone den Lauf unvollständig lassen. |
+-| `standpruefung.py` | Standangaben und Formatstufen aller aktiven Dokumente gegen `VERSION` und `DATA_SCHEMA_VERSION`; seit 29.09.2026 außerdem bekannte überholte Aussagen (R9), vollständige Modullisten (R10) und alle relativen Links aktiver Dokumente (R11); ohne Tk, Laufzeit Sekunden |
++| `standpruefung.py` | Standangaben und Formatstufen aller aktiven Dokumente gegen `VERSION` und `DATA_SCHEMA_VERSION`; seit 29.09.2026 außerdem bekannte überholte Aussagen (R9), vollständige Modullisten (R10) und alle relativen Links aktiver Dokumente (R11), aktuelle Titel (R12) und erster Vollprüfungsaufruf (R13), Suitezahl in laufenden Standzeilen gegen SUITEN (R14); gepflegte datierte Übergaben/Checklisten sind ausdrücklich registriert; ohne Tk, Laufzeit Sekunden |
+ | `analyse_statisch.py`, `analyse_erreichbarkeit.py` | Quelltextbefunde und Referenzen, keine Laufzeitgarantie |
+ | `beispieldaten.py --ziel DATEI` | Demonstrationsbestand im aktuellen Aufgabenformat erzeugen und importieren |
+ | `vorlagendaten.py` | Vorlagenkatalog `resources/templates/glide_vorlagen.glidetemplates` reproduzierbar erzeugen |
+@@ -45,3 +45,5 @@
+ automatisch die Webquellen. Ältere Quellenabrufe stehen in den Arbeitslisten.
+ [QA](../../docs/07_QA_BERICHT.md) · [Prüfungen und Umfang](../README.md) ·
+ [Historische Leistungsmessung 3.6](<../../docs/archiv/21_LEISTUNGSBERICHT_3.6.0_vor_Nachbesserung_2026-09-11.md>).
++
++`python3 -B tests/tools/test_standpruefung.py` prüft veraltete gepflegte Einstiege samt Historienausnahmen. Inhaltlicher Abgleich von Aufgabenstatus/Entscheidungen bleibt zusätzlich erforderlich; [Arbeitsrichtung](../../docs/ARBEITSRICHTUNG.md).
+--- vorher/01_Repository/Glide/tests/tools/standpruefung.py
++++ nachher/01_Repository/Glide/tests/tools/standpruefung.py
+@@ -11,7 +11,7 @@
+ bemerkt, weil er Dokumente nur auf Indexeintrag und erreichbare Links prüft,
+ nie auf Aktualität ihrer Aussage.
+ 
+-Geprüft wird mit acht Regeln. Grundlage ist die Unterscheidung zwischen
++Geprüft wird mit vierzehn Regeln. Grundlage ist die Unterscheidung zwischen
+ **fortgeschriebenen** und **festgeschriebenen** Dokumenten:
+ 
+ * Festgeschrieben ist ein Dokument, dessen Dateiname eine Version oder ein
+@@ -55,6 +55,13 @@
+     Modul ohne Fehlermeldung weggelassen.
+ R11 Jeder relative Link eines aktiven Dokuments führt zu einer vorhandenen
+     Datei. Anlass: das Aufräumen leerer Ordner am 29.09.2026.
++R12 Ein fortgeschriebener Titel behauptet keinen älteren Glide-Stand.
++R13 Der erste Vollprüfungsaufruf eines fortgeschriebenen Dokuments verwendet
++    in seinem Protokollpfad die aktuelle Version oder einen Platzhalter.
++    Spätere historische Beispielaufrufe bleiben erlaubt.
++R14 Nennt eine fortgeschriebene Standzeile die Zahl der Integrationssuiten,
++    stimmt sie mit SUITEN im Prüfstand überein. Historische Laufzahlen bleiben
++    als Belege erlaubt.
+ 
+ R6 bis R8 kamen mit 3.21.4 dazu, R9 bis R11 am 29.09.2026. Anlass: Fünf fortgeschriebene Dokumente
+ trugen eine überholte Formatstufe – `SECURITY.md` „Formate 4 bis 12",
+@@ -152,13 +159,21 @@
+ # Ordnernamen, die einen abgeschlossenen Stand tragen: tests/qa-3.6.0,
+ # Bestandsanalyse_3.2.0, Screenshots/3.5.0, Renderlaeufe/3.2.0_2026-09-04.
+ VERSIONSORDNER = re.compile(r"(^|[-_/])\d+\.\d+\.\d+([-_]|$)")
+-
+-# Fortgeschrieben, obwohl der Dateiname ein Datum trägt: Beide Dokumente sind
+-# ausdrücklich die je eine aktive Fassung und werden jede Version gepflegt.
++# Vollständige datierte Ablageabbilder sind keine zweite aktive Arbeitsgrundlage.
++# Ein Zwischenstand kann unvollständige Nachweise enthalten; nichts nachschreiben.
++ZWISCHENSTAND = re.compile(r"Glide_\d+\.\d+\.\d+_Zwischenstand_\d{4}-\d{2}-\d{2}")
++
++# Fortgeschrieben, obwohl der Dateiname ein Datum oder eine Version trägt:
++# Diese Dokumente sind ausdrücklich die aktive Fassung und werden gepflegt.
+ # Der Name stammt aus dem Tag ihrer Anlage und bleibt, damit Verweise halten.
+ GEPFLEGT = (
+     "00_Arbeitsvorbereitung/Glide_Weitergabe_neuer_Chat_2026-09-11.md",
+     "00_Arbeitsvorbereitung/Glide_Funktionsvorschlaege_2026-09-11.md",
++    "00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md",
++    "00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md",
++    "00_Arbeitsvorbereitung/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md",
++    "00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md",
++    "00_Arbeitsvorbereitung/Checklisten/Windows_Pruefung_3.30.0.md",
+ )
+ 
+ # Zusätzliche festgeschriebene Einzeldateien außerhalb klar datierter Pfade.
+@@ -250,6 +265,18 @@
+     return teile + (0,) * (3 - len(teile))
+ 
+ 
++def suite_anzahl() -> int:
++    """SUITEN statisch lesen; kein App-/Tk-Import und keine Nutzerdaten."""
++    pfad = REPO / "tests/tools/pruefen.py"
++    baum = ast.parse(pfad.read_text(encoding="utf-8-sig"), filename=str(pfad))
++    for knoten in baum.body:
++        if isinstance(knoten, ast.Assign) and any(
++                isinstance(ziel, ast.Name) and ziel.id == "SUITEN"
++                for ziel in knoten.targets):
++            return len(ast.literal_eval(knoten.value))
++    raise ValueError("SUITEN fehlt im Prüfstand")
++
++
+ def ablagewurzel(repo: Path) -> Path | None:
+     """Der Ordner „Glide ToDo", wenn das Repository darin liegt."""
+     for kandidat in repo.parents:
+@@ -262,6 +289,8 @@
+     for pfad in sorted(wurzel.rglob("*.md")):
+         teile = pfad.relative_to(wurzel).parts
+         if any(t.lower().startswith("archiv") for t in teile):
++            continue
++        if any(ZWISCHENSTAND.fullmatch(t) for t in teile[:-1]):
+             continue
+         # Mit „_Z“ markiert der Inhaber, was er selbst löschen will (29.09.2026):
+         # Ordner als `Name_Z`, Dateien als `Name_Z.md`.
+@@ -283,11 +312,13 @@
+ 
+ 
+ class Befund:
+-    def __init__(self, version: str, formate: dict[str, int] | None = None):
++    def __init__(self, version: str, formate: dict[str, int] | None = None,
++                 suiten: int | None = None):
+         self.version = version
+         formate = formate or {}
+         self.format_aktuell = formate.get("DATA_SCHEMA_VERSION")
+         self.format_niedrigst = formate.get("MIN_PORTABLE_BACKUP_SCHEMA_VERSION")
++        self.suiten = suiten
+         self.fehler: list[str] = []
+         self.fortgeschrieben = 0
+         self.festgeschrieben = 0
+@@ -379,6 +410,8 @@
+     if name in OHNE_STAND:
+         return
+ 
++    einstieg_pruefen(befund, kurz, titel, text)
++
+     # R1: mindestens eine Standzeile mit der aktuellen Version.
+     passend = [nr for nr, _z, werte in standzeilen
+                if any(als_tupel(w) == als_tupel(befund.version) for w in werte)]
+@@ -398,6 +431,38 @@
+         if fremd and not eigen:
+             befund.melden(kurz, nr, f"Standangabe nennt nur {', '.join(fremd)}, "
+                                     f"nicht {befund.version} (R2)")
++        if befund.suiten is not None:
++            for zahl in re.findall(r"\b(\d+)\s+(?:Integrations)?[Ss]uiten\b", zeile):
++                if int(zahl) != befund.suiten:
++                    befund.melden(kurz, nr, f"Standzeile nennt {zahl} Suiten, "
++                                            f"SUITEN enthält {befund.suiten} (R14)")
++
++
++def einstieg_pruefen(befund: Befund, kurz: str, titel: str, text: str) -> None:
++    """R12/R13: gepflegte Einstiege auch innerhalb von Codebeispielen prüfen.
++
++    Die erste Vollprüfungsanweisung ist der Einstieg; spätere Befehle dürfen
++    historische Vergleichsläufe beschreiben. Versionsplatzhalter bleiben frei.
++    Historische Dokumente rufen diese Funktion ausdrücklich nicht auf.
++    """
++    titelwerte = versionen(titel)
++    if not any(als_tupel(w) == als_tupel(befund.version) for w in titelwerte):
++        for wert in titelwerte:
++            if als_tupel(wert) < als_tupel(befund.version):
++                nr = text.splitlines().index(titel) + 1
++                befund.melden(kurz, nr, f"fortgeschriebener Titel nennt {wert}, "
++                                        f"aktuell ist {befund.version} (R12)")
++    # Raw-Text: Zitat-/Codespannenschutz wäre hier falsch, weil ausführbare
++    # Befehle gerade in Code stehen. Der Zeilenumbruch einer Anweisung zählt.
++    befehl = re.search(r"--modus\s+voll\s+--protokoll\s+([^\s`]+)", text)
++    if befehl:
++        version = re.search(r"(?:^|[/\\])qa-(\d+\.\d+\.\d+)(?=[/\\]|$)",
++                            befehl.group(1))
++        if version and als_tupel(version.group(1)) != als_tupel(befund.version):
++            nr = text.count("\n", 0, befehl.start()) + 1
++            befund.melden(kurz, nr, f"erster Vollprüfungsaufruf verwendet "
++                                    f"qa-{version.group(1)}, aktuell ist "
++                                    f"{befund.version} (R13)")
+ 
+ 
+ def formate_pruefen(befund: Befund, kurz: str, zeilen: list[str],
+@@ -495,7 +560,7 @@
+ 
+ 
+ def lauf(wurzeln: list[Path], version: str) -> Befund:
+-    befund = Befund(version, app_konstanten())
++    befund = Befund(version, app_konstanten(), suite_anzahl())
+     gesehen: set[Path] = set()
+     for wurzel in wurzeln:
+         for pfad in dokumente(wurzel):
+--- vorher/01_Repository/Glide/tests/qa-verlauf.md
++++ nachher/01_Repository/Glide/tests/qa-verlauf.md
+@@ -1,6 +1,8 @@
+ # Langfristiger Prüfverlauf
+ 
+ Stand 01.10.2026 · Glide 3.32.3 · Datenformat 20 · Zeilen in zeitlicher Folge
++
++**Dokumentations-/Prüfwerkzeugnachlauf 01.10.2026, App 3.32.3:** [Separater Nachweis](qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json). Regeln/Einstiege aktualisiert und gezielte Werkzeugregression ergänzt; App, Integrationssuiten und Pakete unverändert. Der 73-Schritte-Volllauf unten beschreibt den vorherigen eingefrorenen Prüfstand.
+ 
+ 
+ | Datum | Stand | Ergebnis | Nachweis |
+--- vorher/00_Arbeitsvorbereitung/README.md
++++ nachher/00_Arbeitsvorbereitung/README.md
+@@ -1,6 +1,9 @@
+ # Arbeitsvorbereitung
+ 
+ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
++
++**Dauerhafte Richtung:** [Arbeitsrichtung und Abnahme](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) verbindet Regeln, D01–D08, Performance-Fortsetzung, QA und Dokumentenpflege. Die datierten Einstiegspfade werden weiter gepflegt und maschinell auf Aktualität geprüft.
++
+ 
+ ## Für neue Arbeiten zuerst lesen
+ 
+@@ -14,7 +17,7 @@
+ 2. [Bestandsprüfung, offene Aufgaben und Entscheidungsvorlage 27.09.2026](Glide_Bestandspruefung_und_Entscheidungen_2026-09-27.md) – Vollständigkeit, Abgleich mit dem Code, Recherche (Tk 9), Entscheidungen E-01 bis E-13 samt Umsetzung (Abschnitt 6)
+ 3. [Sitzungsprotokoll und Lehren 24.–26.09.2026: was die Planung traf, was nicht, Empfehlungen](Glide_Sitzungsprotokoll_und_Lehren_2026-09-24_bis_26.md)
+ 4. [Vertrag Modernisierung 3.30: umgesetzter Umfang, Format 20, Abweichungen](../01_Repository/Glide/docs/66_MODERNISIERUNG_3.30.0.md) und [Projektübergabe](../01_Repository/Glide/docs/09_PROJECT_HANDOFF.md)
+-5. [Manuelle Prüfung 3.30](Checklisten/Manuelle_Pruefung_3.30.0.md) – offen vor jeder Freigabe, seit dem 29.09.2026 verdichtet auf fünf Sitzungen; dazu die [Windows-Vollprüfung 3.30](Checklisten/Windows_Pruefung_3.30.0.md) mit Python 3.14. Die früheren Listen 3.28 und 3.29 stecken darin (Originale im [Archiv](Checklisten/Archiv/))
++5. [Fortgeschriebene manuelle Prüfung](Checklisten/Manuelle_Pruefung_3.30.0.md) – offen vor jeder Freigabe, seit dem 29.09.2026 verdichtet auf fünf Sitzungen; dazu die [Fortgeschriebene Windows-Vollprüfung](Checklisten/Windows_Pruefung_3.30.0.md) mit Python 3.14. Die früheren Listen 3.28 und 3.29 stecken darin (Originale im [Archiv](Checklisten/Archiv/))
+ 6. [Aufgabenkatalog Modernisierung, Pinnwand-Board, Ordner und Pixel-Werkstatt](Glide_Aufgabenkatalog_Modernisierung_2026-09-25.md) – umgesetzt mit 3.30.0, Status je Paket
+ 7. [Arbeitsvorbereitung dazu: Rahmen, Datenstrategie, Entscheidungen vom 25.09.2026, Etappen](Glide_Arbeitsvorbereitung_Modernisierung_2026-09-25.md)
+ 8. [Umsetzbare Aufgabensammlung Zeichenfläche mit Status 3.30](Glide_Aufgabensammlung_Zeichenflaeche_2026-09-23.md) – offen nur der Vorrat ZF-200 (eigene Felder, nicht gewählt) und ZF-300
+--- vorher/00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md
++++ nachher/00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md
+@@ -1,6 +1,9 @@
+ # Glide – Übergabe an eine neue Sitzung
+ 
+ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · für den nächsten Chat oder Bearbeiter
++
++**Fortlaufende Arbeitsgrundlage:** [Arbeitsrichtung und Abnahme](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) ist in AGENTS.md verankert. Der [Dokumentations-/Prüfwerkzeugnachlauf](../01_Repository/Glide/tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json) aktualisiert lokale Regeln und Einstiege bei unveränderter App 3.32.3.
++
+ 
+ Dieses Dokument ist der Einstieg für jede neue Sitzung. Es ersetzt nicht die
+ Verträge; es sagt, wo was steht, was gilt und was als Nächstes ansteht.
+@@ -11,7 +14,7 @@
+ Klappkorrektur 3.32.1 mit neuer Pflichtsuite und
+ [Kontrollmatrix](../01_Repository/Glide/docs/69_KLAPPKONTROLLE_3.32.1.md).
+ Mobile/Toolkit-Probe zurückgestellt; Hinweise unverändert; bestehende Bereiche
+-um Ziehen erweitern: D04 ist jetzt 3.32.2. [Drag-/Performance-Vertrag 3.32.2](../01_Repository/Glide/docs/70_DRAG_UND_PERFORMANCE_3.32.2.md) enthält die gemeinsamen Drag-Bindungen, Schriftcache, gebündelte Layouts, Hoverhelfer und unprofilierte Messungen. Einzelaufgaben im Notiztext sowie verbleibende Performance-Pakete folgen. Originalfoto-Befunde sind ohne konkreten Ablauf weiterhin nicht pauschal als behoben markiert.
++um Ziehen erweitern: D04 ist jetzt 3.32.2. [Drag-/Performance-Vertrag 3.32.2](../01_Repository/Glide/docs/70_DRAG_UND_PERFORMANCE_3.32.2.md) enthält die gemeinsamen Drag-Bindungen, Schriftcache, gebündelte Layouts, Hoverhelfer und unprofilierte Messungen. 3.32.3 erhält Bibliothekskarten und gemeinsame Aktionsleisten im selben lebenden Host; Archiv-Zurückholen aktualisiert einmal. [Vertrag 71](../01_Repository/Glide/docs/71_KARTEN_PERFORMANCE_3.32.3.md). Einzelaufgaben im Notiztext sowie verbleibende Performance-Pakete folgen. Originalfoto-Befunde sind ohne konkreten Ablauf weiterhin nicht pauschal als behoben markiert.
+ 
+ ## 1. In fünf Sätzen
+ 
+@@ -25,7 +28,8 @@
+   - Pflichtsuite mit echten Bedienwegen und Callbackfehler-Erfassung;
+   - Prüfungen laufen im Hintergrund;
+   - Drag-and-drop in bestehenden Seiten-/Notizbereichen;
+-  - Schriftcache, gebündelte Formatleistenlayouts und gemeinsamer Hover, mit Vorher-/Nachher-Messungen.
++  - Schriftcache, gebündelte Formatleistenlayouts und gemeinsamer Hover, mit Vorher-/Nachher-Messungen;
++  - erhaltene Bibliothekskarten/Aktionsleisten im selben Host und einmaliges Archiv-Zurückholen.
+ - Der Inhaber startet Glide **nur** aus `07_Python-Versionen` oder aus
+   `01_Repository/Glide/build/macos/Glide.app`. Eine Änderung ist erst bei ihm,
+   wenn beide abgeglichen sind.
+@@ -60,7 +64,7 @@
+   - Originale nie verändern.
+ - **Fotos nur vom eigenen Glide-Fenster** (`screencapture -l <Fensternummer>`),
+   nie vom Bildschirm.
+-- **Plattformunabhängig:** Mac, Linux, Windows, später iPhone/iPad; keine
++- **Plattformunabhängig:** Mac, Linux, Windows. Mobile/iPhone/iPad und Toolkit-Probe sind nach D03 zurückgestellt; keine
+   Funktion nur für eine Plattform; keine neue Laufzeitabhängigkeit ohne
+   Entscheidung.
+ - **Form folgt Funktion:**
+@@ -73,7 +77,7 @@
+   - Rot nur Löschen, Grün nur Bestätigen, festes Lila für Hinzufügen und Neu,
+     Gelb für Hinweise, sonst neutral;
+   - die Regeln stehen in `BUTTON_ROLE_RULES`; Knöpfe nie von Hand einfärben.
+-- **Jede Runde bekommt eine Version** (Werkzeug `scripts/pflege/versionswechsel.py`).
++- **Jede Produktionsrunde bekommt eine Version** (Werkzeug `scripts/pflege/versionswechsel.py`). Reine Dokumentations-/Prüfwerkzeugnachläufe werden zur unveränderten App-Version datiert belegt; [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
+   **Erst nach Abgleich** (`abgleich_07.py`, `baue_app.py`, SHA-256) gilt etwas
+   als erledigt.
+ 
+@@ -96,7 +100,7 @@
+   - `place` im Textfeld zählt den Innenabstand (`place_at`, `place_origin`);
+   - `<TouchpadScroll>` packt X und Y in ein Wort;
+   - ausgepackte Rahmen malt macOS nicht immer neu (`repaint_sidebar`).
+-- **Tempo:** Die Vergleichsliste kostet im erneuten `test_tempo330` rund
++- **Historischer Tempobefund auf 3.32.0:** Die Vergleichsliste kostete im erneuten `test_tempo330` rund
+   50,7 ms je Scroll-/Zeichendurchlauf, die Glide-Tabelle 25,9 ms. Das ist
+   keine allgemeine Tk-Untergrenze. Der Bibliotheksaufbau und wiederholte
+   Layout-Aufrufe sind teure Pfade; zuerst messen und diese reduzieren.
+@@ -122,7 +126,7 @@
+ 
+ **Performance-Fortsetzung 01.10.2026:** Bibliothekskarten und gemeinsame Aktionen in 3.32.3 umgesetzt; gezielte Prüfung und Messserien grün. [Vertrag 71](../01_Repository/Glide/docs/71_KARTEN_PERFORMANCE_3.32.3.md) enthält Lebensdauer/Invalidierung und Messgrenzen. Vollprüfung und Abgleich abgeschlossen: 73 Schritte/58 Suiten und fünf Analysen, 139 Python-/53 Bundle-Dateien bytegleich, Signatur gültig. Beide Startfassungen tragen 3.32.3. Der Inhaber hat die bestehende Performance-Arbeit ausdrücklich fortgesetzt, die zusätzliche Auswahl neuer Features bleibt offen.
+ 
+-**Neue Auswahl auf Wunsch des Inhabers:** [Weitere Aufgaben und Richtungsauswahl nach 3.32.2](Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md) sammelt 24 Aufgaben. Erste Richtung und Bearbeitungstiefe sind noch offen; die Empfehlung A-01, danach C-01 oder B-01, ist kein neuer Beschluss. Die bisherige Folgeplanung unten bleibt Grundlage bis zur Auswahl.
++**Neue Auswahl auf Wunsch des Inhabers:** [Weitere Aufgaben und Richtungsauswahl nach 3.32.2](Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md) sammelt 24 Aufgaben. Erste Richtung und Bearbeitungstiefe sind noch offen; A-01 ist in 3.32.3 abgeschlossen. Rest P03 und A-02/A-03 folgen der beauftragten Performance-Arbeit; C-01 oder B-01 ist eine anschließende Empfehlung, kein neuer Beschluss. Die bisherige Folgeplanung unten bleibt Grundlage bis zur Auswahl.
+ 
+ In dieser Reihenfolge; D08 wurde als Stabilitätskorrektur 3.32.1 vorgezogen.
+ D01–D06 sind gemäß Abschnitt 7 verbindliche Umsetzungsvorgaben.
+@@ -182,10 +186,11 @@
+ 
+ ## 8. Manuell zu prüfen (nur der Inhaber)
+ 
+-- A17 und A18 der manuellen Prüfliste:
++- A17–A21 der fortgeschriebenen manuellen Prüfliste:
+   - Hänger über die echte Menüleiste;
+   - Tagesabschluss, Symbol-Export, Paletten, Platzhalter;
+-  - Rechtsklick und Formatleiste.
++  - Rechtsklick und Formatleiste;
++  - sämtliche Klappzustände, Drag-Ziele und Fokus/Scrollen bei Kartenaktualisierung.
+ - Die Windows-Vollprüfung (`Checklisten/Windows_Pruefung_3.30.0.md`).
+ 
+ ## 9. Zum Löschen markiert (`_Z`)
+@@ -199,6 +204,7 @@
+   in `build/macos/archiv/Glide_v3.32.0_vor_Klappkontrolle_2026-09-30_Z.app`.
+ - Neu nach 3.32.2: `Glide-Aufgaben-und-Listen_v3.32.1_Z.pyw`; vollständige
+   Python-/Bundle-Vorsicherungen stehen in Abschnitt 11.
++- Neu nach 3.32.3: `Glide-Aufgaben-und-Listen_v3.32.2_Z.pyw` und vollständige Vorsicherungen gemäß Abschnitt 12.
+ - Neues Überholtes weiter mit `_Z` markieren, nie selbst löschen.
+ 
+ ## 10. Abschlussaufgabe für die nächste Implementierungsrunde
+@@ -210,7 +216,7 @@
+ Abschnitte 5, 8 und 9. Gleiche Funktionen/Werte bündeln, UI-Aufrufe und
+ Neuaufbauten reduzieren, Gewinn messen, Daten-/Undo-/Fokusverhalten erhalten.
+ 
+-## 11. Vorsicherung dieser Runde
++## 11. Historischer Abschluss der Produktionsrunde 3.32.2
+ 
+ Python-Vollstand 3.32.1 in `07_Python-Versionen/Archiv/Glide_v3.32.1_vor_Drag_Performance_2026-09-30`, Bundle in `build/macos/archiv/Glide_v3.32.1_vor_Drag_Performance_2026-09-30_Z.app`. Quellstand/Messwerte und Hashes unter `tests/qa-3.32.2/drag_performance_2026-09-30`. Alte Hauptdatei ist als `Glide-Aufgaben-und-Listen_v3.32.1_Z.pyw` archiviert.
+ 
+--- vorher/00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md
++++ nachher/00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md
+@@ -1,13 +1,16 @@
+ # Glide – Arbeits- und Featureplanung nach Recherche und Codeabgleich
+ 
+ Stand 01.10.2026 · Glide 3.32.3 · Basisanalyse 3.32.0, Klappkorrektur 3.32.1 · Aufgabenformat 20
++
++**Fortlaufende Richtung 01.10.2026:** [Arbeitsrichtung und Abnahme](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) hält die bestätigten Vorgaben und den Prüfablauf fest. A-01/Bibliothekskarten abgeschlossen; Rest P03, P04/A-02 und Rest P06/A-03 sind die beauftragte Performance-Fortsetzung. Zusätzliche A–H-Featureauswahl bleibt offen. [Separater Dokumentationsnachweis](../01_Repository/Glide/tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json).
++
+ 
+ **Empfehlung:** Zuerst die sichtbaren Editorprobleme prüfen und die teuren
+ Ansichtsaufbauten optimieren. Danach die bereits gewählte Reihenfolge
+ **Planen → Wissen → Pixel → Austausch** fortsetzen. Vorhandene Funktionen
+ werden erweitert; sie stehen nicht erneut als Neuentwicklung im Backlog.
+ 
+-Die ursprüngliche Recherche und die Messungen beziehen sich auf 3.32.0.
++Die ursprüngliche Recherche und die Messungen beziehen sich auf 3.32.0; aktuelle Ergänzungen sind ausdrücklich mit 3.32.1–3.32.3 bezeichnet.
+ Die Antworten des Inhabers D01–D06 sind jetzt verbindlich eingetragen;
+ D07 ist nach Begriffserklärung noch offen. D08 beauftragt die Kontrolle
+ aller Klappmechanismen und bessere Prüfungen. Die Korrektur wird als 3.32.1
+@@ -74,7 +77,7 @@
+ Codebezug: [app.pyw](../01_Repository/Glide/src/glide/app.pyw),
+ [drawing.py](../01_Repository/Glide/src/glide/drawing.py),
+ [page_markdown.py](../01_Repository/Glide/src/glide/page_markdown.py).
+-Zeilenangaben beziehen sich auf den unveränderten Stand dieser Prüfung.
++Die historischen Zeilenangaben dieser Tabelle beziehen sich auf den Basisstand 3.32.0. Aktuelle Lebensdauer-/Invalidierungsverträge und Anschlussbefunde stehen in Vertrag 71 und Abschnitt 8; beim Bearbeiten die Funktion erneut im aktuellen Code suchen.
+ 
+ | Kennung | Tatsächlicher Stand | Verbleibender Umfang und Abnahme |
+ |---|---|---|
+@@ -334,12 +337,11 @@
+ sind gemäß Paketregeln per SHA-256 abgeglichen (139/53 Dateien).
+ [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) und
+ [Kontrollmatrix](../01_Repository/Glide/docs/69_KLAPPKONTROLLE_3.32.1.md)
+-halten Nachweise und die offene manuelle Plattformprüfung fest. D04/G29
+-und die folgenden Performance-Pakete bleiben geplante Folgeimplementierungen.
++halten Nachweise und die offene manuelle Plattformprüfung fest. Zum damaligen Abschluss waren D04/G29 und die folgenden Performance-Pakete noch geplant; D04 ist inzwischen in 3.32.2 umgesetzt, G29 bleibt offen.
+ 
+ **Fortsetzung 3.32.2:** D04 umgesetzt; P02 Schriftcache abgeschlossen; P01 um unprofilierte Serien mit 100/1.000/10.000 Aufgaben, Bildseite und Notiz ergänzt; P03 gebündelte Layouts und P05 gemeinsamer Hover umgesetzt, restliche Teile offen. [Drag-/Performance-Vertrag 3.32.2](../01_Repository/Glide/docs/70_DRAG_UND_PERFORMANCE_3.32.2.md) nennt Bedienproben und Messgrenzen. Nächster Schnitt: unveränderte Bibliotheks-/Startseitenkarten erhalten, dann Bildlayout und Speicherkonsolidierung; anschließend Featureetappe 3.33. D07 bleibt offen.
+ 
+-### Konkreter Anschluss nach 3.32.2
++### Historische Anschlussplanung nach 3.32.2 (Bibliotheksschnitt inzwischen umgesetzt)
+ 
+ 1. **P03 zuerst Bibliothek:** `refresh_library_page` löscht sämtliche Kinder von `home_content`; dieselbe Fläche wird für Startseite und weitere Ansichten genutzt. Vor dem Kartencache daher Ansichtshost/Lebensdauer festlegen. Bestehende Karten über `(Art, ID)` identifizieren, nur geänderte Vorschauen/Buttons aktualisieren. Keine Tk-Widgets umparenten. Anfangs gleiche Ansicht erneut aktualisieren; Wiederverwendung über Ansichtswechsel erst mit eigener Lebensdauerprobe.
+ 2. **Invalidierung vollständig:** Reihenfolge/Ordnerpfad, Titel/Farbe/Symbol, Vorschauaufgaben mit Status/Termin/Wichtigkeit, Archiv, Kartengröße, Schrift/Design und Bildinhalt berücksichtigen. Bei Tageswechsel hängen Fälligkeitszähler am neuen Datum. Der vorhandene `render_pass` bleibt ein Durchgangscache; daraus keinen unvollständig invalidierten dauerhaften Datenzähler machen.
+@@ -347,7 +349,7 @@
+ 4. **P04/P06 danach:** Bildgeometrie vs. Platzierung getrennt invalidieren. Bei Speichern zunächst Requests pro Aktion erfassen: `save_items` aktualisiert bereits die Seitenleiste, viele Aufrufer aktualisieren sie anschließend nochmals. Nur nachgewiesene Doppelarbeit entfernen; tatsächliches atomares Schreiben, `fsync`, Backup, Sperre und Fehlerpfade erhalten.
+ 5. **Featureetappe 3.33:** G01 Parser mit Bearbeitungstag/Fälligkeit-Vorschau, danach G05 Fokus an vorhandener Zeiterfassung. G29/G31/G32 zusammen mit ID- und Altleserprüfung; G02 mit klar bezeichnetem Feld-/Terminkontext. Keine neue Entscheidung zu D01–D06 erforderlich. D07 betrifft erst Animation.
+ 
+-**Abnahme 3.32.2:** [Vollprotokoll](../01_Repository/Glide/tests/qa-3.32.2/drag_performance_2026-09-30/vollpruefung/ergebnis.json): Exitcode 0, 72 automatisierte Schritte, 57 Suiten und fünf Analysen. [Auslieferungsabgleich](../01_Repository/Glide/tests/qa-3.32.2/drag_performance_2026-09-30/abgleich.json): 139 Python-/53 Bundle-Dateien bytegleich, Bundleversion 3.32.2 und gültige Ad-hoc-Signatur. Der abschließend geprüfte Quellstand blieb unverändert. Eine neu gefundene Zeichnungsleistenregression ist geschlossen und dauerhaft geprüft. Windows/Linux, physische Bedienung, DPI und Screenreader bleiben offen. Nächster Umfang folgt der konkreten Anschlussplanung oben; D07 bleibt für Animation offen.
++**Abnahme 3.32.2:** [Vollprotokoll](../01_Repository/Glide/tests/qa-3.32.2/drag_performance_2026-09-30/vollpruefung/ergebnis.json): Exitcode 0, 72 automatisierte Schritte, 57 Suiten und fünf Analysen. [Auslieferungsabgleich](../01_Repository/Glide/tests/qa-3.32.2/drag_performance_2026-09-30/abgleich.json): 139 Python-/53 Bundle-Dateien bytegleich, Bundleversion 3.32.2 und gültige Ad-hoc-Signatur. Der abschließend geprüfte Quellstand blieb unverändert. Eine neu gefundene Zeichnungsleistenregression ist geschlossen und dauerhaft geprüft. Windows/Linux, physische Bedienung, DPI und Screenreader bleiben offen. Die damalige Anschlussplanung oben ist teilweise umgesetzt; für weitere Arbeit gilt der konkrete Anschluss nach 3.32.3 unten. D07 bleibt für Animation offen.
+ 
+ ### Weitere Aufgaben und Richtungsauswahl
+ 
+--- vorher/00_Arbeitsvorbereitung/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md
++++ nachher/00_Arbeitsvorbereitung/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md
+@@ -1,12 +1,15 @@
+ # Glide – weitere Aufgaben und Richtungsauswahl
+ 
+-Stand 30.09.2026 · Grundlage Glide 3.32.2 · Aufgabenformat 20 · Auswahl noch offen
++Stand 01.10.2026 · Glide 3.32.3 · ursprüngliche Grundlage 3.32.2 · Aufgabenformat 20 · zusätzliche Auswahl noch offen
++
++[Fortlaufende Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md): Bestehende Performance ist beauftragt; A-01 erledigt, A-03 teilweise. Vorschläge, Empfehlung und neue Featureauswahl bleiben getrennt.
++
+ 
+ **Fortschreibung 01.10.2026:** Glide 3.32.3 führt auf ausdrücklichen Weiterarbeitsauftrag das schon geplante P03/A-01 fort: unveränderte Bibliothekskarten und gemeinsame Aktionen erhalten. Teil A-03: Archiv-Zurückholen aktualisiert einmal. [Vertrag 71](../01_Repository/Glide/docs/71_KARTEN_PERFORMANCE_3.32.3.md); Vollprüfung (73 Schritte/58 Suiten) und Lieferung abgeschlossen, beide Startfassungen bytegleich. Die 24 Aufgaben bleiben nachvollziehbar, A-01 ist im beschriebenen Desktop-Schnitt umgesetzt und A-03 nur teilweise. Physische Plattformabnahme bleibt offen. Neue Feature-Richtungen und Bearbeitungstiefe bleiben offen.
+ 
+ Auftrag: weitere Aufgaben sammeln und den Inhaber entscheiden lassen, welche Richtungen recherchiert und umgesetzt werden. Diese Vorlage enthält **24 konkrete Aufgaben in acht Richtungen**. Sie führt bestehendes Backlog und neue Vorschläge zusammen. Die Einträge sind keine Behauptung, dass diese Funktionen bereits fehlen, vollständig untersucht oder zur Umsetzung ausgewählt sind.
+ 
+-Grundlage sind [Arbeitsplanung](Glide_Arbeits_und_Featureplanung_2026-09-30.md), [Sitzungsübergabe](Glide_Sitzungsuebergabe_2026-09-30.md), [Funktionsrecherche](Glide_Funktionsrecherche_Ausbau_2026-09-30.md), die abgeschlossene [QA 3.32.2](../01_Repository/Glide/docs/07_QA_BERICHT.md) und ein erneuter gezielter Codeabgleich. **Neu** bezeichnet einen zusätzlichen Vorschlag; alle anderen Einträge konkretisieren offene Arbeiten aus G01–G32 bzw. P01–P07. Die Buchstaben A–H gelten nur für diese Auswahl und ersetzen keine bisherigen Paketkennungen.
++Grundlage sind [Arbeitsplanung](Glide_Arbeits_und_Featureplanung_2026-09-30.md), [Sitzungsübergabe](Glide_Sitzungsuebergabe_2026-09-30.md), [Funktionsrecherche](Glide_Funktionsrecherche_Ausbau_2026-09-30.md), die abgeschlossene [QA 3.32.3](../01_Repository/Glide/docs/07_QA_BERICHT.md) und ein erneuter gezielter Codeabgleich. **Neu** bezeichnet einen zusätzlichen Vorschlag; alle anderen Einträge konkretisieren offene Arbeiten aus G01–G32 bzw. P01–P07. Die Buchstaben A–H gelten nur für diese Auswahl und ersetzen keine bisherigen Paketkennungen.
+ 
+ ## 1. Schnell auswählen
+ 
+@@ -99,7 +102,7 @@
+ 
+ | Nr. / Bezug | Aufgabe und Nutzen | Aktuelle Grundlage | Recherche bzw. erster Schnitt | Abnahme |
+ |---|---|---|---|---|
+-| H-01 / D08 erweitert, **Neu** | Echte Bedienwege auch für Menüs, schwebende Werkzeuge und Drag-Aktionen systematisch absichern | 57 Suiten; Klapp- und Drag-Pflichtsuiten prüfen native Ereignisse/Callbackfehler | Kontrollmatrix aus Vertrag 69 auf kritische Aktionsfolgen erweitern; vorhandene Suiten wiederverwenden | Pro Aktion konkrete Vor-/Nachbedingung, Undo, Fokus/Scrollen, Neustart und Callbackfehler geprüft; keine bloßen Setter-Proben |
++| H-01 / D08 erweitert, **Neu** | Echte Bedienwege auch für Menüs, schwebende Werkzeuge und Drag-Aktionen systematisch absichern | 58 Suiten; Klapp- und Drag-Pflichtsuiten prüfen native Ereignisse/Callbackfehler | Kontrollmatrix aus Vertrag 69 auf kritische Aktionsfolgen erweitern; vorhandene Suiten wiederverwenden | Pro Aktion konkrete Vor-/Nachbedingung, Undo, Fokus/Scrollen, Neustart und Callbackfehler geprüft; keine bloßen Setter-Proben |
+ | H-02 / **Neu** | Zum Ziehen passende Tastaturwege mit sichtbarem Ziel herstellen | Verschiebemenüs, Tastaturbindungen und Zielauswahl vorhanden | Bedienparität je Aktion erfassen; nur nachgewiesene Lücken schließen, bestehende Dialoge verwenden | Seiten/Notizen/Ordner ohne Maus bewegen; zulässiges Ziel und erwartete Wirkung erkennbar, ein Undo-Schritt |
+ | H-03 / G26 | Desktop-Paket mit eingebettetem Python reproduzierbar vorbereiten | Entwicklungsbundle nutzt installiertes Python und Ad-hoc-Signatur | Build-Probe für gewählte Zielplattform, Tk-/tkDnD-Mitnahme und Clean-Machine-Prüfung; Signatur/Store separat | Nachweis auf Gerät ohne Entwicklungs-Python; feste Versionen/Lizenzen, Daten außerhalb des Pakets, aktueller SHA-Abgleich |
+ 
+--- vorher/00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md
++++ nachher/00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md
+@@ -1,10 +1,13 @@
+-# Manuelle Prüfung – Glide 3.30.0 (verdichtet)
+-
+-Stand 30.09.2026 · gilt für Glide 3.30.0 bis 3.32.0 (A17: 3.31.0, A18: 3.32.0) · Aufgabenformat 20 · ersetzt die bisherigen Listen 3.28, 3.29 und 3.30 · noch nicht ausgeführt
++# Manuelle Prüfung – Glide (fortgeschriebene Prüfliste)
++
++Stand 01.10.2026 · Glide 3.32.3 · Herkunft der Verdichtung 3.30.0; zusätzliche Bedienproben A19–A21 · Aufgabenformat 20 · ersetzt die bisherigen Listen 3.28, 3.29 und 3.30 · noch nicht ausgeführt
++
++Diese Datei behält ihren historischen Namen als stabiles Linkziel. [Arbeitsrichtung](../../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) und [QA-Bericht](../../01_Repository/Glide/docs/07_QA_BERICHT.md) unterscheiden automatische Logikprüfung und offene physische Abnahme. A19–A21 ergänzen 3.32.1–3.32.3.
++
+ 
+ ## Kurzantwort: Ist die manuelle Prüfung noch aktuell?
+ 
+-Nur zum kleineren Teil. Die drei alten Listen und der Auszug für Windows
++Die verbleibenden Geräteprüfungen sind aktuell; ihre Durchführung ist offen. Die drei alten Listen und der Auszug für Windows
+ hatten zusammen **201 offene Punkte**. Seitdem sind viele Suiten
+ dazugekommen:
+ 
+@@ -20,9 +23,9 @@
+ | automatisch geprüft | 119 | Eine Suite prüft Verhalten, Daten und Lage. |
+ | automatisch geprüft, Handgefühl offen | 34 | Die Logik prüft eine Suite; wie es sich mit Maus, Trackpad oder am Bildschirm anfühlt, steckt in Teil A oder B. |
+ | überholt | 6 | Die Funktion hat sich geändert oder ist entfallen. |
+-| durch den Inhaber beantwortet | 1 | „Beim Scrollen verschwinden keine Knöpfe“ (Antwort vom 29.09.2026). |
+-| Frage an den Inhaber | 1 | Fehlt der Wechsel Aufgaben ↔ Notiz im Alltag? (Übersicht vom 29.09.2026) |
+-| bleibt von Hand | 40 | Nur am echten Gerät, mit echter Hand oder mit fremden Programmen prüfbar – zusammengefasst in 32 Schritten unten; dazu kommt A16 für die Seitenleiste vom 29.09.2026. |
++| durch den Inhaber beantwortet | 2 | Kein Verschwinden der Knöpfe (29.09.2026); F11 durch D05: einzelne Aufgaben in Notiz/Seite, keine allgemeine Konvertierungspflicht. |
++| Frage an den Inhaber aus den alten 201 Punkten | 0 | F11 beantwortet; neue Featureauswahl und D07 werden in der Arbeitsplanung geführt. |
++| bleibt von Hand | 40 | Nur am echten Gerät, mit echter Hand oder mit fremden Programmen prüfbar – in den ursprünglichen 32 Schritten verdichtet; A16–A21 ergänzen inzwischen Seitenleiste, Ausbau und neue Kontrollen. Die 201er-Zuordnung bleibt eine historische Ausgangszählung. |
+ 
+ **Was übrig bleibt**, sind fünf Sitzungen:
+ 
+@@ -37,19 +40,20 @@
+ - Immer mit einer getrennten Ablage prüfen: `GLIDE_DATA_DIR` auf einen
+   Testordner setzen und den
+   [Rundgang](../../05_Probelisten_Testdaten/Glide-Rundgang_3.30.0.glidebackup)
+-  über Datei › Listen/Ordner hinzufügen … einlesen. Ausnahme ist B2, der
+-  erste Start mit dem echten Windows-Bestand.
++  über Datei › Listen/Ordner hinzufügen … einlesen. B2 nutzt eine unveränderte Kopie des eigenen Windows-Bestands;
++  keine Prüfung verändert das Original.
+ - Befunde am besten mit einem Bildschirmfoto nur des Glide-Fensters
+   festhalten.
+ 
+ ## A. Mac (etwa 40 Minuten)
+ 
+-- [ ] **A1 Programmsymbol:** Glide über `Schnellstart.pyw` starten. Im Dock
+-      steht das Glide-Symbol (blaue Fläche, weißes „g“), nicht die
+-      Python-Rakete. Danach `python3 packaging/macos/baue_app.py --ziel
+-      build/macos` im Repository ausführen und `build/macos/Glide.app`
+-      starten. Im Dock steht „Glide“ mit Symbol. **Achtung:** Das Bundle nutzt
+-      die echten Daten.
++- [ ] **A1 Programmsymbol:** Beide bereits abgeglichenen Startfassungen mit
++      geerbtem `GLIDE_DATA_DIR` auf einen Testordner starten: Python-Fassung
++      über `07_Python-Versionen/Schnellstart.pyw`, Bundle über
++      `build/macos/Glide.app/Contents/MacOS/Glide` direkt aus derselben
++      Terminalumgebung. Ein Finder-Start übernimmt diese Terminalvariable
++      nicht. Im Dock stehen Glide-Name und Glide-Symbol. Für diese Sichtprüfung
++      keinen ungeprüften Neubau über den ausgelieferten Stand schreiben.
+ - [ ] **A2 Logo:** Bei breitem Fenster steht das Logo links neben Titel und
+       Unterzeile, auf der Flucht der Seitenleiste. Fenster schmal ziehen: Das
+       Logo weicht, der Titel rückt an den Rand. Akzentfarbe wechseln
+@@ -73,7 +77,10 @@
+     ziehen;
+   - Bilder aus dem Finder in Seite und Galerie ziehen;
+   - Punkte auf „Mein Tag“ in der Seitenleiste ziehen;
+-  - den Detailbereich in der Breite ziehen.
++  - den Detailbereich in der Breite ziehen;
++  - bestehende Seiten-, Listen- und Notizbereiche umordnen und in passende
++    Ordner ziehen: korrekte Vorschau/Zielposition, Arten/IDs erhalten, Undo;
++    neutrales Umordnen verändert keine Termine.
+ - [ ] **A7 Gedrücktes Mausrad:** oben, unten, links und rechts außerhalb der
+       Totzone halten; die Fläche läuft selbst und stoppt beim Loslassen.
+ - [ ] **A8 Systemmitteilungen:**
+@@ -99,8 +106,11 @@
+     bleiben flüssig.
+   - Eine lange Seite scrollt endlos und ruhig.
+   - Schnell hintereinander abhaken und umbenennen: keine Verzögerung.
+-  - `Schnellstart.pyw` zweimal starten: Der zweite Start ist spürbar
+-    schneller.
++  - `Schnellstart.pyw` zweimal starten: kalten/warmen Start vergleichen;
++    keine allgemeine Zeitgarantie.
++  - Bibliothek unverändert aktualisieren, Status ändern und umordnen:
++    Verhalten mit Vertrag 71 vergleichen. Ansichtswechsel, Speichern und
++    viele tatsächlich dargestellte Karten separat beobachten.
+ - [ ] **A12 Zwangsbeenden:** Einen Punkt ändern und Glide sofort hart beenden
+       (Aktivitätsanzeige › Sofort beenden). Nach dem Neustart ist die
+       Änderung da.
+@@ -130,7 +140,7 @@
+ - [ ] **A17 Rückmeldung vom Abend** (29.09.2026, echte Maus und Trackpad):
+   - Notizbereich zuklappen: kein stehengebliebenes „Tagebuch“.
+   - Pinnwand mit zwei Fingern quer scrollen.
+-  - Jeden Menüeintrag mit „…“ der Menüleiste einmal wählen: Jedes Fenster
++  - Jeden Dialogbefehl der Menüleiste einmal wählen, auch ohne „…“: Jedes Fenster
+     erscheint vorn, auch „Referenzbild laden …“ und der Knopf „Referenz“ der
+     Zeichnungsseite (PNG, JPEG, HEIC, SVG).
+   - Seite und Notiz: Rechtsklick, Formatleiste über einer Markierung,
+@@ -158,13 +168,31 @@
+     anderen Liste und zurück wechseln, das Fenster größer und kleiner ziehen
+     und scrollen – kein Hänger, keine Fehlermeldung.
+ 
++- [ ] **A19 Klappmechanismen (D08):** einzelne Labels einschließlich „Ohne
++      Label“, Aufgaben-/Gruppenfächer, verschachtelte Bibliotheken, Seiten/Listen/
++      Notizen und Angeheftet per Pfeil und Tastatur auf/zu. Suche, Refresh,
++      Bearbeiten, Undo, Ansichtswechsel und Neustart: Zustände bleiben erhalten.
++      Globale Auf-/Zuklappaktion prüfen; keine versehentliche Navigation/Drag.
++- [ ] **A20 Drag-Ziele (D04/D02):** Bereichswechsel mit Maus/Trackpad bei
++      gescrollter Seitenleiste, gültigem/ungültigem Ziel und Abbruch. Vorschau
++      entspricht dem tatsächlichen Ziel; ein Undo-Schritt stellt den Bestand
++      wieder her. Neutrales Umordnen erhält Bearbeitungstag und Fälligkeit.
++- [ ] **A21 Karten/Aktionsleisten:** Tk-/OS-Fokus und Scrollposition beim
++      wiederholten Refresh mit physischer Tastatur prüfen; Status/Titel/Label/
++      Notiz/Bild ändern, Undo, Tageswechsel, Schrift/Design/Breite wechseln.
++      Öffnen wirkt auf das aktuelle Objekt; Entfernen/Archiv/Rückkehr zeigen
++      keine veralteten Vorschauen. Hintergrundtests belegen keinen OS-Fokus.
++
+ ## B. Windows-PC (nach der Vollprüfung)
+ 
+ - [ ] **B1 Vollprüfung:** nach der
+       [Windows-Anleitung](Windows_Pruefung_3.30.0.md) mit Python 3.14.
+       Vorher „Immer auf diesem Gerät behalten“ für den Ordner „Glide ToDo“.
+-- [ ] **B2 Echter Windows-Bestand (Format 17):** Glide 3.30 aus
+-      `07_Python-Versionen` starten.
++- [ ] **B2 Windows-Bestand (Format 17, Inhaberprobe):** Eine unveränderte
++      Kopie des eigenen Bestands in einer getrennten Testablage mit
++      `GLIDE_DATA_DIR` und aktueller Fassung aus `07_Python-Versionen` öffnen.
++      Original erhalten; die folgenden Umstellungshinweise gelten beim ersten
++      tatsächlichen Wechsel von Format 17 auf 20.
+   - Der Hinweis „Bestand umgestellt“ erscheint.
+   - Im Backup-Ordner liegen `liste_vor_format20_*.json`, gegebenenfalls
+     `liste_vor_titelkuerzung_*.json`, und die Meldung „Titel gekürzt“.
+@@ -418,7 +446,7 @@
+ | Austausch | SVG in Browser, Illustrator, Affinity | bleibt → A10 |
+ | Austausch | dort gespeichert wieder importieren | bleibt → A10 |
+ | Darstellung | alle Designs und Größen, DPI, zweiter Monitor | auto (Designs, Größen) + B4 |
+-| Bestand | Wechsel Aufgaben ↔ Notiz fehlt im Alltag? | **Frage an den Inhaber**, steht in der [Übersicht vom 29.09.2026](../Glide_Uebersicht_und_Entscheidungen_2026-09-29.md) |
++| Bestand | Wechsel Aufgaben ↔ Notiz fehlt im Alltag? | **beantwortet durch D05**: einzelne Aufgaben in Notizen/Seiten, keine allgemeine Konvertierungspflicht; ursprüngliche Frage in der [Übersicht vom 29.09.2026](../Glide_Uebersicht_und_Entscheidungen_2026-09-29.md) |
+ | (zwei Hinweise) | Vorsicherung Format 19 beim ersten Start | **überholt**: Format 20 ist umgestellt |
+ | (Rahmen) | keine Bildschirmaufnahmen möglich | **überholt**: seit 27.09. Aufnahmen des eigenen Fensters |
+ 
+--- vorher/00_Arbeitsvorbereitung/Checklisten/Windows_Pruefung_3.30.0.md
++++ nachher/00_Arbeitsvorbereitung/Checklisten/Windows_Pruefung_3.30.0.md
+@@ -1,8 +1,11 @@
+-# Windows-Prüfung – Glide 3.30.0
++# Windows-Prüfung – Glide (fortgeschriebene Prüfliste)
+ 
+-Stand 29.09.2026 · Glide 3.30.0 · Aufgabenformat 20 · noch nicht ausgeführt
++Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · noch nicht ausgeführt
+ 
+-Seit 3.29 fehlt ein Gesamtlauf unter Windows. Mit diesem Paket startest du die
++Dateiname und Linkziel bleiben stabil. Maßgeblich ist `VERSION`, aus der das Startskript den QA-Ordner bildet. Neu enthalten sind Klapp-, Drag-/Performance- und Bibliothekskartenkontrolle. [Arbeitsrichtung](../../01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
++
++
++Für den aktuellen Entwicklungsstand ist noch kein Windows-Gesamtlauf nachgewiesen. Mit diesem Paket startest du die
+ automatische Vollprüfung selbst. Es ist dieselbe Prüfung, die auf dem
+ Entwicklungs-Mac läuft. Die echten Daten unter `%APPDATA%\Glide` bleiben dabei
+ unberührt, weil jede Suite in einem eigenen temporären Datenordner arbeitet.
+@@ -11,8 +14,7 @@
+ 
+ 1. **Python 3.14** von [python.org](https://www.python.org/downloads/windows/)
+    installieren, mit der Option „tcl/tk and IDLE“ (Standard) und dem
+-   Python-Starter `py`. Python 3.14 bringt Tk 9 mit – die Grundlage von Glide
+-   3.30 (Entscheidung E-03). Am 28.09.2026 war auf dem PC nur Python 3.13 mit
++   Python-Starter `py`. Die verwendete Python-/Tk-Kombination ist vor Ort zu prüfen; Grundlage ist Python 3.14/Tk 9 (E-03). Am 28.09.2026 war auf dem PC nur Python 3.13 mit
+    Tk 8.6 installiert; damit prüft der Lauf nur den Rückfallweg (Logo als
+    Fläche, keine Systemmitteilung, keine SVG-Vorschau). Beide Fassungen
+    dürfen nebeneinander installiert sein; `py -3.14` wählt die neue.
+@@ -29,7 +31,7 @@
+ - **oder in PowerShell** aus `01_Repository\Glide`:
+   `powershell -NoProfile -ExecutionPolicy Bypass -File tests\tools\windows_vollpruefung.ps1`.
+ 
+-Der Lauf dauert etwa 15 bis 25 Minuten. Dabei öffnen und schließen sich
++Der Umfang ist derzeit 58 Suiten und fünf Analysen; die Dauer hängt vom PC ab. Dabei öffnen und schließen sich
+ Glide-Fenster. Während des Laufs bitte nicht mit der Maus eingreifen und keine
+ weiteren rechenintensiven Programme starten: Einige Oberflächentests messen
+ Layouts und reagieren auf Last.
+@@ -37,7 +39,7 @@
+ ## Ergebnis
+ 
+ - Am Ende stehen **Exitcode** und Protokollordner, zum Beispiel
+-  `tests\qa-3.30.0\windows_2026-09-27_1030`.
++  `tests\qa-3.32.3\windows_2026-10-01_1030`.
+   - `0` heißt: alle automatischen Schritte bestanden;
+   - `1` heißt: mindestens ein Schritt gescheitert – die Logdatei im Ordner
+     nennt ihn;
+@@ -53,8 +55,14 @@
+ ## Danach von Hand
+ 
+ Die Schritte nach dem Lauf stehen in Teil B der
+-[Prüfliste 3.30](Manuelle_Pruefung_3.30.0.md#b-windows-pc-nach-der-vollprüfung):
++[Fortgeschriebenen Prüfliste](Manuelle_Pruefung_3.30.0.md#b-windows-pc-nach-der-vollprüfung):
+ echter Windows-Bestand (B2), Design „Pixel“, Skalierung, Logo und Lupe,
+ Startmenü-Verknüpfung, Vorschauen, Ziehen aus dem Explorer,
+ Systemmitteilung, Druck und Beenden. Bis zum 29.09.2026 stand hier ein
+ Auszug davon – zwei Listen für dieselben Schritte.
++
++## Laufzeit vor Ort abgleichen
++
++`windows_vollpruefung.ps1` wählt `py -3`, sonst `python`; es kann deshalb bei mehreren Installationen eine andere Python-Version auswählen. Die Ausgabe unter „Tk“ liest derzeit die Tcl-Version, nicht `package present Tk`. Die tatsächliche Tk-Version separat prüfen, zum Beispiel mit `py -3.14 -c "import tkinter as t; r=t.Tk(); print(r.tk.call('package', 'present', 'Tk')); r.destroy()"`. Die Probe öffnet kurz ein natives Tk-Fenster und greift nicht auf Glide-Daten zu.
++
++Falls der Starter eine andere Laufzeit wählt, die Vollprüfung aus dem Repository ausdrücklich mit `py -3.14 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-<Version>/windows_manuell --timeout 900` starten (`<Version>` durch VERSION ersetzen). Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Windows-Nachweis wird aus dem Mac-Lauf abgeleitet.
+--- vorher/01_Repository/Glide/tests/README.md
++++ nachher/01_Repository/Glide/tests/README.md
+@@ -1,8 +1,8 @@
+ # Prüfungen für Glide
+ 
+-Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · 55 Suiten aus `pruefen.py` und fünf Analysen. Alle App-Tests setzen vor dem App-Import einen temporären `GLIDE_DATA_DIR`; echte Nutzerdaten sind ausgeschlossen. Die isolierten Zeichentests importieren `ListApp` nicht und berühren keinen Datenordner; `test_features329.py` prüft die produktive Zeichnungsseite, `test_drawing330.py` den erweiterten Zeichenkern und `test_features330.py` alle Pakete aus 3.30, jeweils mit eigenem temporärem Datenordner.
++Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · 58 Suiten aus `pruefen.py` und fünf Analysen. Alle App-Tests setzen vor dem App-Import einen temporären `GLIDE_DATA_DIR`; echte Nutzerdaten sind ausgeschlossen. Die isolierten Zeichentests importieren `ListApp` nicht und berühren keinen Datenordner; `test_features329.py` prüft die produktive Zeichnungsseite, `test_drawing330.py` den erweiterten Zeichenkern und `test_features330.py` alle Pakete aus 3.30, jeweils mit eigenem temporärem Datenordner.
+ 
+-Vollständiger Lauf aus dem Repository-Stamm `01_Repository/Glide`: `python3 tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.30.0/abschluss --timeout 900`. Unter Windows startet `tests/tools/windows_vollpruefung.cmd` denselben Lauf. Unter Windows heißt der Aufruf `python`; das Zeitlimit von 300 Sekunden je Suite ist dort mit Virenschutz und synchronisiertem Ordner knapp, `--timeout 900` ist realistischer.
++Vollständiger Lauf aus dem Repository-Stamm `01_Repository/Glide`: `python3 tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.32.3/abschluss --timeout 900`. Unter Windows startet `tests/tools/windows_vollpruefung.cmd` denselben Lauf. Unter Windows heißt der Aufruf `python`; das Zeitlimit von 300 Sekunden je Suite ist dort mit Virenschutz und synchronisiertem Ordner knapp, `--timeout 900` ist realistischer.
+ 
+ Der Prüfstand setzt `TZ=Europe/Berlin`, wenn der Aufrufer keine Zone vorgibt, und **misst seit 3.23.0 nach, was davon tatsächlich gilt**. In einer Zone ohne Versatz ist jeder Zeitzonenfehler unsichtbar: Der `UNTIL`-Fehler aus 3.21.0 war in einer UTC-Vorabumgebung grün und fiel erst im macOS-Lauf auf.
+ 
+@@ -13,7 +13,7 @@
+ | Gruppe | Inhalt |
+ |---|---|
+ | Vorprüfungen | Syntax, Versionskonsistenz (VERSION, `APP_VERSION`, Hauptsuite, CHANGELOG), Dokumentationsindex mit Linkzielen, Fixtures samt historischen Referenzformaten, Tk-Voraussetzung und seit 3.23 der gemessene Zeitzonenversatz |
+-| 55 Suiten | Kernfunktionen, Datenintegrität, isoliertes Zeichenmodell samt JSON-/SVG-Rundlauf, Bedienprobe mit Referenzrahmen, Zentrierung, erstem Strich und Farbeingabe, Audit, Themes, UI, Vorlagen, Backups, Migration, Benachrichtigungen, Reiter/Pinnwand, Schnellerfassung und Filter, „Mein Tag“, Tabellenansicht, Planung und Aufwand, Tagesplanung, App-Backup, Druck/PDF, CSV-Import, Änderungsverlauf, Kalenderausgabe, Kalenderimport, Checkliste seit 3.23 Designsystem, Anzeigemodi, Austauschformat und Pinnwandfläche, seit 3.24 Navigation, globale Pinnwand und Startansicht und seit 3.25 Übersichtlichkeit und Hierarchie (`test_features325.py`) sowie die Breitenprüfung (`test_vollpruefung325.py`) und seit 3.29 die Zeichnungsseite mit Format-19-Migration, Autosave, Schreibfehler, Referenz, Nachzeichnung, Rückgängig, Backups, Austausch, Vorlagen und Tagebuch (`test_features329.py`) und seit 3.30 Pixel-Werkstatt, Format 20, Startseite, Board, Tagebuch und Detailbereich (`test_drawing330.py`, `test_features330.py`), Mindestgröße aller Ansichten und Dialoge (`test_mindestgroesse330.py`), Kontrast nach WCAG AA in allen Designs (`test_kontrast330.py`) die Paketierungsvorstufe (`test_paketierung330.py`) die Hintergrundverläufe samt Milchglas und Startabsturz (`test_hintergrund330.py`) die Rückmeldungen vom 26.09.2026 (`test_rueckmeldung330.py`) die Seitenart samt Ordnertypen (`test_seiten330.py`) Aufräumen, Seitenbereich und Galerie (`test_aufraeumen330.py`) sowie Kompression, Bibliothekstabelle und Notizbuch (`test_kompression330.py`), Bilder in Seiten, Tk-9-Vorschauen, Systemmitteilung, „/“-Befehle und wiederkehrende Checklisten (`test_bilder330.py`) und feste Bestandteile (`test_festlayout330.py`), seit 29.09.2026 Logo, Lupe und Programmsymbol (`test_logo330.py`), Inhaltskarte bis unten und saubere Ansichtswechsel (`test_kartenfuss330.py`) sowie der Belastungstest für Speichern und Laden (`test_speicherlast330.py`) und die Seitenleiste mit Notizbereich, Einklappen und Ordnern in allen Bereichen (`test_notizbereich330.py`), die Befunde vom Abend samt neuer Blockarten und Gliederung (`test_befunde330.py`), alle Fenster über Menüs und Knöpfe (`test_fenster330.py`) und das Scrolltempo gegen reines Tk (`test_tempo330.py`), seit 3.32 Symbol-Export, Binärpaletten, Platzhalter und Tagesabschluss (`test_etappe1_332.py`) |
++| 58 Suiten | Kernfunktionen, Datenintegrität, isoliertes Zeichenmodell samt JSON-/SVG-Rundlauf, Bedienprobe mit Referenzrahmen, Zentrierung, erstem Strich und Farbeingabe, Audit, Themes, UI, Vorlagen, Backups, Migration, Benachrichtigungen, Reiter/Pinnwand, Schnellerfassung und Filter, „Mein Tag“, Tabellenansicht, Planung und Aufwand, Tagesplanung, App-Backup, Druck/PDF, CSV-Import, Änderungsverlauf, Kalenderausgabe, Kalenderimport, Checkliste seit 3.23 Designsystem, Anzeigemodi, Austauschformat und Pinnwandfläche, seit 3.24 Navigation, globale Pinnwand und Startansicht und seit 3.25 Übersichtlichkeit und Hierarchie (`test_features325.py`) sowie die Breitenprüfung (`test_vollpruefung325.py`) und seit 3.29 die Zeichnungsseite mit Format-19-Migration, Autosave, Schreibfehler, Referenz, Nachzeichnung, Rückgängig, Backups, Austausch, Vorlagen und Tagebuch (`test_features329.py`) und seit 3.30 Pixel-Werkstatt, Format 20, Startseite, Board, Tagebuch und Detailbereich (`test_drawing330.py`, `test_features330.py`), Mindestgröße aller Ansichten und Dialoge (`test_mindestgroesse330.py`), Kontrast nach WCAG AA in allen Designs (`test_kontrast330.py`) die Paketierungsvorstufe (`test_paketierung330.py`) die Hintergrundverläufe samt Milchglas und Startabsturz (`test_hintergrund330.py`) die Rückmeldungen vom 26.09.2026 (`test_rueckmeldung330.py`) die Seitenart samt Ordnertypen (`test_seiten330.py`) Aufräumen, Seitenbereich und Galerie (`test_aufraeumen330.py`) sowie Kompression, Bibliothekstabelle und Notizbuch (`test_kompression330.py`), Bilder in Seiten, Tk-9-Vorschauen, Systemmitteilung, „/“-Befehle und wiederkehrende Checklisten (`test_bilder330.py`) und feste Bestandteile (`test_festlayout330.py`), seit 29.09.2026 Logo, Lupe und Programmsymbol (`test_logo330.py`), Inhaltskarte bis unten und saubere Ansichtswechsel (`test_kartenfuss330.py`) sowie der Belastungstest für Speichern und Laden (`test_speicherlast330.py`) und die Seitenleiste mit Notizbereich, Einklappen und Ordnern in allen Bereichen (`test_notizbereich330.py`), die Befunde vom Abend samt neuer Blockarten und Gliederung (`test_befunde330.py`), alle Fenster über Menüs und Knöpfe (`test_fenster330.py`) und das Scrolltempo gegen reines Tk (`test_tempo330.py`), seit 3.32 Symbol-Export, Binärpaletten, Platzhalter und Tagesabschluss (`test_etappe1_332.py`) |
+ | Fünf Analysen | `analyse_statisch.py`, `analyse_erreichbarkeit.py`, seit 3.21.3 `standpruefung.py` (Standangaben und Formatstufen der Dokumente gegen VERSION und `DATA_SCHEMA_VERSION`), seit 3.23 `attributpruefung.py` (Aufrufe über `self` ohne Ziel in ihrer Klasse) und seit 3.25 `dublettenpruefung.py` (wiederholte Codeblöcke; meldet, bewertet aber nicht) |
+ | Reproduktion | Beispieldaten und Releasedaten neu erzeugen und mit den Fixtures vergleichen; Bilder nur auf geeigneten Plattformen |
+ 
+@@ -21,9 +21,10 @@
+ 
+ ## Gezielte Läufe
+ 
+-Einzelne Suiten mit `python3 -B …` starten. Sonst legt Python beim Laden von
+-`app.pyw` den Ordner `src/glide/__pycache__` an; der Vollmodus verhindert das
+-selbst (`PYTHONDONTWRITEBYTECODE`).
++Einzelne Suiten mit `python3 -B …` starten. Seit 29.09.2026 setzt auch
++`app.pyw` den Bytecodepfad für importierte Module auf den System-Cacheordner.
++Prüfläufe verhindern Bytecode-Schreiben zusätzlich mit `-B` bzw.
++`PYTHONDONTWRITEBYTECODE`; im synchronisierten Quellbaum entsteht kein Cache.
+ 
+ - `python3 tests/integration/test_ui39.py` – eingebettete Dropdowns, echte Außenklickereignisse, Tastatur, unveränderte modale Grabs, Dialoggrößen, Kopfzeile, Einstellungen, Seitenleiste und App-Aktionen.
+ - `python3 tests/integration/test_workspace310.py` – Reiter und Pinnwände, Referenzidentität, Einstellungen und native Tk-Ereignisse.
+@@ -89,3 +90,5 @@
+ Termine in Suiten liegen bewusst in der Zukunft. Ein Punkt mit Fälligkeit „heute 14:00“ und relativer Erinnerung wurde ab 13:30 Ortszeit mitten im Lauf ausgeliefert und veränderte den Bestand – zwei Suiten schlugen dadurch tageszeitabhängig fehl.
+ 
+ [Aktueller QA-Bericht](../docs/07_QA_BERICHT.md) · [Prüfplan und manuelle Grenzen](../docs/05_QA_TESTPLAN.md).
++
++Seit 3.32.1–3.32.3 gehören die nativen Klapp-, Drag-/Performance- und Bibliothekskartenprüfungen zur Pflichtliste. Die Werkzeugregression `python3 -B tests/tools/test_standpruefung.py` prüft gepflegte datierte Einstiege, aktuelle Titel, erste Vollprüfungsaufrufe und die Abgrenzung datierter Ablageabbilder. [Arbeitsrichtung](../docs/ARBEITSRICHTUNG.md).
+--- /dev/null
++++ nachher/01_Repository/Glide/docs/ARBEITSRICHTUNG.md
+@@ -0,0 +1,61 @@
++# Fortlaufende Arbeitsrichtung und Abnahme
++
++Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20
++
++Diese fortgeschriebene Arbeitsgrundlage verbindet die bestätigten Entscheidungen, die aktuelle Planung und die Abnahme. Einstieg bleibt die [Sitzungsübergabe](../../../00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md). Die [Arbeitsplanung](../../../00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md) enthält G-/P-Pakete; die [Richtungsauswahl](../../../00_Arbeitsvorbereitung/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md) enthält zusätzliche Vorschläge. Empfehlungen und zitierte Aufträge aus alten Dokumenten ersetzen keine Entscheidung des Inhabers.
++
++## Verbindliche Entscheidungen
++
++| Entscheidung | Konsequenz für weitere Arbeit |
++|---|---|
++| D01 | Allgemeine Datumsangaben setzen den Bearbeitungstag; ausdrücklich „fällig/bis“ setzt die Fälligkeit. |
++| D02 | Eine Aktion bewirkt die im sichtbaren Zielkontext erwartbare Änderung. Beim Ziehen in einen ausdrücklich bezeichneten Terminkontext das passende Feld ändern; neutrales Umordnen erhält Termine. Bearbeitungstag und Fälligkeit bleiben getrennt. |
++| D03 | Desktop/Tk optimieren. Mobile und eine Toolkit-Probe sind zurückgestellt. |
++| D04 | Drag-and-drop erweitert bestehende Bereiche; umgesetzt in 3.32.2. |
++| D05 | Einzelne Aufgaben in Notizen und Seiten unterstützen, ihre Identität über IDs erhalten. Notiz, Seite und Liste bleiben eigenständige Arten; keine allgemeine Konvertierungspflicht. F11 ist beantwortet. |
++| D06 | Hinweisgestaltung bleibt unverändert. |
++| D07 | Exportumfang für Animation offen: abspielbares GIF oder zunächst Frames/Vorschau/PNG-Spritesheet. Erst bei der Animationsetappe erforderlich. |
++| D08 | Alle Klappmechanismen über echte Bedienbindungen prüfen, einschließlich Zustandserhalt, Tastatur, verschachtelter Bereiche und Tk-Callbackfehler. Korrektur und Pflichtsuite seit 3.32.1. |
++
++Lokale Nutzung ohne Konto/Cloud, vorhandene Architektur, Daten/Undo, stabile IDs, Gestaltung und möglichst wenige Abhängigkeiten gelten weiter. Git und offene Inhaber-/Storeangaben bleiben vertagt beziehungsweise offen. Keine erneute Entscheidung über D01–D06 einfordern.
++
++## Nächste Arbeit
++
++1. **Rest P03:** Startseitenkarten, geänderte Kartenelemente und viele tatsächlich dargestellte Karten messen. A-01 für wiederholte Bibliotheksaktualisierung im selben Host ist abgeschlossen; nicht nochmals als Neuentwicklung planen.
++2. **P04/A-02:** Aufrufe von Bildlayout, Platzierung und Konvertierung zählen. Unveränderte effektive Geometrie als Skip-Kandidat prüfen; Text/Anker, Faltungen, Schrift, Bildmodus/-größe und fertig konvertierte Anhänge müssen weiterhin invalidieren.
++3. **Rest P06/A-03:** Mögliche doppelte Aktualisierungen dynamisch bestätigen. Archiv-Zurückholen ist bereits konsolidiert. Erfolgreiches und fehlgeschlagenes Speichern, Dirty-Zustand, Warnung und Undo gehören zur Abnahme, bevor ein Aufruf entfällt.
++4. **Bestehende Featurefolge:** Planen → Wissen → Pixel → Austausch nach Arbeitsplanung fortführen; D01–D06 anwenden. Die zusätzliche Auswahl A–H und ihre Bearbeitungstiefe bleiben eine Entscheidung des Inhabers.
++
++Die ausdrücklich fortgesetzte Performance-Arbeit ist beauftragt. Neue Vorschläge aus der Richtungsauswahl erhalten erst nach Auswahl einen Implementierungsumfang. Aufgabenstatus und nächste Schritte in Planung, Auswahl und beiden Übergaben zusammen nachführen.
++
++## Arbeitsablauf für eine Implementierung
++
++1. Aktuelle Übergabe, letzte drei Versionen und betroffene Verträge lesen. Vorhandene Funktion und alle aufrufenden Wege im Code prüfen; historische Lücken erneut abgleichen.
++2. Baseline mit passender bestehender Prüfung und isoliertem `GLIDE_DATA_DIR` festhalten. Quellstand und beide startbaren Vollstände vor Produktionsänderungen sichern; Dokumente vor Überschreiben im benachbarten `archiv/` sichern.
++3. Einen begrenzten Schnitt umsetzen. Gleiche Werte/Funktionen nur bei gleicher Bedeutung bündeln. `item_change`, `sidebar_change`, `guarded_structural_change` und `run_modal` verwenden; atomare Speicherung, Sicherungen und Sperren bewahren.
++4. Wirkung messen: gleiche Fixtures, Laufzeit und Messmethode, Aufwärmdurchlauf, kalte/warme Werte getrennt, Rohwerte und Median/p95. Profiling erklärt Ursachen; unprofilierte Messungen belegen den Gewinn. Viele Aufgaben bei gleicher Kartenzahl belegen keine Skalierung auf viele Karten.
++5. Bedienweg und Invarianten prüfen: native Ereignisse, Callbackfehler, Undo, Auswahl/Fokus/Scrollen, Größen-/Design-/Schriftwechsel, Datumswechsel, Neu/Löschen/Archiv und Neustart. Hintergrund-Tk-Fokus und echte OS-Fokusbedienung gesondert nachweisen.
++6. Version und relevante Inhalte nachführen; Quell-/Prüfdateien für den finalen Volllauf einfrieren und SHA-256 dokumentieren. Ändert sich ein betroffener ausführbarer Pfad oder eine Prüfsuite danach, die betroffenen Prüfungen und den abschließenden Volllauf erneut ausführen. Frühere Ergebnisdateien bleiben unverändert.
++7. Nach grüner Vollprüfung beide Startfassungen abgleichen, Ressourcen/Module per SHA-256 und Bundle-Signatur prüfen. QA-Bericht, Verlauf, Index, Planung und Übergaben schließen. Manuelle Plattformabnahme bleibt ausdrücklich offen, bis sie durchgeführt wurde.
++
++## Technische Regeln aus den Optimierungen
++
++- Cache nach stabiler `(Art, ID)` und Lebensdauer des Ansichtshosts; zerstörte Hosts dürfen keine Widgets/PhotoImages festhalten. Keine Wiederverwendung über Ansichtswechsel ohne eigene Prüfung. Befehle lesen aktuelle Objekte über IDs, weil Undo Objekte ersetzen kann.
++- Dauerhafte Anzeigecaches benötigen vollständige Invalidierung. Titel/Pfad/Labels, Status/Termine/Wichtigkeit, Notiz-/Bildinhalt, Archiv, Reihenfolge, Tageswechsel, Kartengröße, Schrift und Design berücksichtigen. Durchgangszähler nicht als dauerhafte Datenwahrheit verwenden.
++- Layoutanforderungen bündeln, unveränderte Geometrie nicht erneut schreiben. Synchrone Höhenleser brauchen zuvor ein fertiges Layout, etwa die Zeichnungs-Kontextleiste. Ersetzte Bindungen und `after`-Aufträge freigeben.
++- Keine verschachtelten `update()`/`update_idletasks()` in Rückrufen, die sich selbst erneut auslösen können. Tests dürfen die Ereignisschleife kontrolliert abarbeiten.
++- Gemeinsame Aktionsleisten vergleichen auch sichtbare Aktionen, Befehle und Höhenfilter. Gleicher Text allein bedeutet keine gleiche Aktion.
++
++## Dokumentations- und Prüfwerkzeugnachlauf
++
++Reine Dokumentation bekommt ein datiertes Nachlaufergebnis zur bestehenden App-Version. Keine künstliche Produktionsversion und kein Neubau unveränderter Startfassungen. Bei Werkzeugänderungen gezielte Regressionen sowie Syntax/Version/Stand/Links prüfen; Anwendung, Integrationssuiten und vorhandene Pakete gegen den vorherigen geprüften Hashstand abgleichen. Die alte Vollprüfung gilt für ihren eingefrorenen Stand; sie wird nicht als Lauf mit den neuen Werkzeugen ausgegeben.
++
++Fortgeschriebene Übergaben und Checklisten bleiben trotz datiertem Dateinamen in der Aktualitätsprüfung. Aktuelle Überschriften und der erste Vollprüfungsaufruf müssen zur Version passen. Der Versionswechsel aktualisiert Standzeilen, ersetzt aber keinen inhaltlichen Abgleich von Aufgabenstatus, Entscheidungen und Prüfgrenzen. Datierte vollständige Zwischenstandsabbilder bleiben separate unveränderte Belege, keine zweite aktive Arbeitsgrundlage. Archivierung und Erhalt der Detailverträge folgen der [Dokumentenpflege](DOKUMENTENPFLEGE.md); `_Z` kennzeichnet zur Löschung durch den Inhaber, es wird nichts selbst gelöscht.
++
++## Nachweis dieses Abgleichs
++
++Der [Dokumentationsnachlauf](../tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json) hält Vorsicherungen, gezielte Werkzeugprüfung, Stand-/Linkkontrolle und unveränderte Startfassungen fest. Die vollständige Laufzeitabnahme bleibt der [3.32.3-Volllauf](../tests/qa-3.32.3/karten_performance_2026-10-01/vollpruefung/ergebnis.json) mit 58 Suiten und fünf Analysen. Physische macOS-Bedienung, Windows/Linux, DPI/Mehrmonitor und Screenreader bleiben offen; daraus folgt keine Releasefreigabe.
++
++## Fortlaufende Abschlussaufgabe
++
++> Ich habe Performance Probleme mit Glide, hilf mir die Code-Basis zu optimieren, mit Variabeln für die gleichen Funktionen, Streamlinen und optimieren.
+--- /dev/null
++++ nachher/01_Repository/Glide/tests/tools/test_standpruefung.py
+@@ -0,0 +1,89 @@
++"""Regressionen für gepflegte Einstiege; kein App-Import, keine Nutzerdaten."""
++
++import unittest
++from pathlib import Path
++import tempfile
++
++import standpruefung as stand
++
++
++class Einstiegspruefung(unittest.TestCase):
++    def check(self, path, text):
++        result = stand.Befund("3.32.3", {"DATA_SCHEMA_VERSION": 20}, suiten=58)
++        stand.datei_pruefen(result, path, text)
++        return result
++
++    def test_all_live_dated_documents_require_current_version(self):
++        for path in stand.GEPFLEGT:
++            with self.subTest(path=path):
++                old = self.check(path, "# Arbeitsgrundlage\n\nStand 30.09.2026 · Glide 3.32.2\n")
++                self.assertTrue(old.fehler)
++                self.assertEqual(old.festgeschrieben, 0)
++                current = self.check(path, "# Arbeitsgrundlage\n\nStand 01.10.2026 · Glide 3.32.3\n")
++                self.assertEqual(current.fehler, [])
++
++    def test_dated_research_and_old_contract_remain_historical(self):
++        for path in ("Recherche_2026-09-30.md", "docs/70_DRAG_UND_PERFORMANCE_3.32.2.md"):
++            with self.subTest(path=path):
++                result = self.check(path, "# Vertrag 3.32.2\nStand 30.09.2026 · Glide 3.32.2\n"
++                                    "`python3 tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.32.2/a`\n")
++                self.assertEqual(result.fehler, [])
++                self.assertEqual(result.festgeschrieben, 1)
++
++    def test_current_banner_does_not_hide_stale_title(self):
++        result = self.check("docs/05_QA_TESTPLAN.md",
++                            "# Prüfplan – Glide 3.30.0\n\nStand 01.10.2026 · Glide 3.32.3\n")
++        self.assertTrue(any("(R12)" in f for f in result.fehler))
++
++    def test_old_first_command_inside_code_is_rejected(self):
++        result = self.check("README.md", "# Glide\nStand 01.10.2026 · Glide 3.32.3\n\n"
++                            "```sh\npython3 -B tests/tools/pruefen.py --modus voll --protokoll\n"
++                            "tests/qa-3.30.0/abschluss\n```\n")
++        self.assertTrue(any("(R13)" in f for f in result.fehler))
++
++    def test_current_first_command_allows_later_historical_example(self):
++        result = self.check("README.md", "# Glide\nStand 01.10.2026 · Glide 3.32.3\n"
++                            "`python3 tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.32.3/a`\n"
++                            "Historisch: `python3 tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.30.0/a`\n")
++        self.assertEqual(result.fehler, [])
++
++    def test_placeholders_and_windows_paths(self):
++        for path in ("tests/qa-<Version>/a", "tests\\qa-3.32.3\\a"):
++            with self.subTest(path=path):
++                result = self.check("README.md", "# Glide\nStand 01.10.2026 · Glide 3.32.3\n"
++                                    f"`python3 tests/tools/pruefen.py --modus voll --protokoll {path}`\n")
++                self.assertEqual(result.fehler, [])
++        old = self.check("README.md", "# Glide\nStand 01.10.2026 · Glide 3.32.3\n"
++                         "`python3 tests/tools/pruefen.py --modus voll --protokoll tests\\qa-3.30.0\\a`\n")
++        self.assertTrue(any("(R13)" in f for f in old.fehler))
++
++    def test_historical_banner_still_cannot_claim_current_old_version(self):
++        result = self.check("Recherche_2026-09-30.md",
++                            "# Recherche\nStand 30.09.2026 · Glide 3.32.2\n"
++                            "Aktueller Entwicklungsstand: Glide 3.32.2\n")
++        self.assertTrue(any("(R3)" in f for f in result.fehler))
++
++    def test_inventory_keeps_active_documents_and_excludes_dated_snapshots(self):
++        with tempfile.TemporaryDirectory(prefix="glide-standregeln-") as folder:
++            root = Path(folder)
++            active = root / "00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md"
++            snapshot = root / "Glide_3.32.3_Zwischenstand_2026-10-01/README.md"
++            archived = root / "docs/archiv/README.md"
++            for file in (active, snapshot, archived):
++                file.parent.mkdir(parents=True, exist_ok=True)
++                file.write_text("# Prüfdokument\n", encoding="utf-8")
++            self.assertEqual(list(stand.dokumente(root)), [active])
++
++    def test_current_stand_line_uses_actual_suite_count(self):
++        old = self.check("tests/README.md",
++                         "# Prüfungen\nStand 01.10.2026 · Glide 3.32.3 · 55 Suiten\n")
++        self.assertTrue(any("(R14)" in f for f in old.fehler))
++        current = self.check("tests/README.md",
++                             "# Prüfungen\nStand 01.10.2026 · Glide 3.32.3 · 58 Integrationssuiten\n"
++                             "Historischer Lauf 3.32.2: 57 Suiten.\n")
++        self.assertEqual(current.fehler, [])
++        self.assertGreater(stand.suite_anzahl(), 0)
++
++
++if __name__ == "__main__":
++    unittest.main()

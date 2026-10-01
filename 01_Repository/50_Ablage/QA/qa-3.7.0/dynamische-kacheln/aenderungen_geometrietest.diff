@@ -1,0 +1,165 @@
+--- vorher/tests/integration/test_ui_followup36.py
++++ tests/integration/test_ui_followup36.py
+@@ -13,6 +13,7 @@
+ ROOT = Path(__file__).resolve().parents[2]
+ parser = argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--screenshots', type=Path)
++parser.add_argument('--layout-report', type=Path)
+ args = parser.parse_args()
+ 
+ 
+@@ -78,6 +79,70 @@
+                     if button.type(item) == 'text':
+                         box = button.bbox(item)
+                         assert 2 <= box[0] and box[2] <= button.winfo_width()-2, (button.text, box, button.winfo_width())
++
++    layout_snapshots = []
++    def check_library_cards(expected_columns=None):
++        cards = app.library_cards
++        for card in cards:
++            # Tk aktualisiert eingebettete Frames erst beim Sichtbarwerden.
++            # Deshalb echte sichtbare Inhalte prüfen, auch nach einem Resize.
++            offset = card.winfo_rooty() - app.home_canvas.winfo_rooty() + app.home_canvas.canvasy(0)
++            app.home_canvas.yview_moveto(offset / max(1, app.home_content.winfo_reqheight()))
++            settle()
++            x, y = card.winfo_rootx(), card.winfo_rooty()
++            width, height = card.winfo_width(), card.winfo_height()
++            assert x >= app.home_content.winfo_rootx()
++            assert x + width <= app.home_content.winfo_rootx() + app.home_content.winfo_width()
++            inner = card.inner
++            insets = (inner.winfo_rootx() - x, inner.winfo_rooty() - y,
++                      x + width - inner.winfo_rootx() - inner.winfo_width(),
++                      y + height - inner.winfo_rooty() - inner.winfo_reqheight())
++            assert min(insets) >= 12 and max(insets) - min(insets) <= 2, ('Innenabstände', insets, (x, y, width, height))
++            labels = [w.cget('text') for w in descendants(card) if isinstance(w, mod.tk.Label)]
++            assert 'LISTE' not in labels and 'ORDNER' not in labels
++            buttons = [w for w in descendants(card) if isinstance(w, mod.RoundedButton)]
++            assert len(buttons) == 2
++            for button in buttons:
++                assert button.winfo_ismapped(), button.text
++                assert button.winfo_rootx() >= x + insets[0]
++                assert button.winfo_rootx()+button.winfo_width() <= x + width - insets[2]
++                assert button.winfo_rooty()+button.winfo_height() <= y + height - insets[3]
++            bottom = max(button.winfo_rooty()+button.winfo_height() for button in buttons)
++            assert abs(y + height - bottom - insets[0]) <= 2, ('CTA-Abstand unten', insets, y+height-bottom)
++            button_text_fits(card)
++        app.home_canvas.yview_moveto(0)
++        settle()
++        columns = {}
++        boxes = []
++        for card in cards:
++            x, y = card.winfo_rootx(), card.winfo_rooty()
++            columns.setdefault(x, []).append(card)
++            boxes.append((x, y, card.winfo_width(), card.winfo_height()))
++        if expected_columns is not None:
++            assert len(columns) == expected_columns, (root.winfo_width(), columns.keys())
++        assert len({box[3] for box in boxes}) > 1, 'Unterschiedliche Inhalte benötigen unterschiedliche Höhen'
++        for column in columns.values():
++            ordered = sorted(column, key=lambda card: card.winfo_rooty())
++            gaps = [after.winfo_rooty() - before.winfo_rooty() - before.winfo_height()
++                    for before, after in zip(ordered, ordered[1:])]
++            assert all(8 <= gap <= 20 for gap in gaps), ('Lücken in der Spalte', gaps)
++            assert not gaps or max(gaps) - min(gaps) <= 1, gaps
++        for index, (x, y, width, height) in enumerate(boxes):
++            for other_x, other_y, other_width, other_height in boxes[index+1:]:
++                assert (x+width <= other_x or other_x+other_width <= x
++                        or y+height <= other_y or other_y+other_height <= y), 'Kacheln überlappen'
++        # Auch ein per Tastatur erreichter CTA unterhalb des sichtbaren
++        # Bereichs muss vollständig in den Ausschnitt gescrollt werden.
++        last_card = max(cards, key=lambda card: card.winfo_rooty()+card.winfo_height())
++        last_button = [w for w in descendants(last_card) if isinstance(w, mod.RoundedButton)][-1]
++        last_button.event_generate('<FocusIn>')
++        settle()
++        assert last_button.winfo_rooty() >= app.home_canvas.winfo_rooty()
++        assert last_button.winfo_rooty()+last_button.winfo_height() <= app.home_canvas.winfo_rooty()+app.home_canvas.winfo_height()
++        app.home_canvas.yview_moveto(0)
++        settle()
++        layout_snapshots.append({'theme':app.theme_name, 'font':app.settings.get('ui_font_size'),
++                                 'window_width':root.winfo_width(), 'columns':len(columns), 'cards':boxes})
+ 
+     try:
+         # Alte Erledigungen verschwanden nach der ersten neuen Bearbeitung.
+@@ -178,6 +243,24 @@
+         assert len(changes) <= 20, ('Scrollleiste pendelt zwischen zwei Breiten', changes)
+         app.refresh_home()
+ 
++        # Ohne normale Listen/Ordner darf der Hinweis an den Spaltengrenzen
++        # weder beschnitten werden noch die unteren Aktionen verdecken.
++        saved_lists, saved_folders = app.lists, app.folders
++        app.lists = [entry for entry in app.lists if app.is_inbox_list(entry)]
++        app.folders = []
++        app.set_library_view()
++        for width in (860, 1050, 1280, 1660):
++            resize(width)
++            assert not app.library_cards
++            hint = next(w for w in descendants(app.home_content)
++                        if isinstance(w, mod.tk.Label) and w.cget('text').startswith('Noch keine Listen'))
++            assert hint.winfo_ismapped()
++            assert hint.winfo_reqheight() <= hint.winfo_height()
++            assert int(hint.cget('wraplength')) <= hint.winfo_width()
++            assert hint.winfo_rootx()+hint.winfo_width() <= app.home_content.winfo_rootx()+app.home_content.winfo_width()
++            assert app.template_actions.winfo_ismapped()
++        app.lists, app.folders = saved_lists, saved_folders
++
+         # Ein gemeinsamer Bestand mit Wurzellisten, verschachtelten und leeren Ordnern.
+         folder = app.new_folder_object('Projekte', color='clear')
+         nested = app.new_folder_object('Redesign und Branding', color='accent', parent_id=folder['id'])
+@@ -192,6 +275,17 @@
+                 folder_id=nested['id'] if index < 3 else folder['id'] if index < 6 else None,
+                 color=app.LIST_COLOR_KEYS[index % len(app.LIST_COLOR_KEYS)],
+                 note='Ein gemeinsamer Platz für Aufgaben, Notizen und nächste Schritte.'))
++        app.lists.append(app.new_list_object('Kurz', []))
++        long_label = app.new_label_object('Freigabe mit Eigentümer abstimmen', None, 'accent')
++        app.labels.append(long_label)
++        app.lists.append(app.new_list_object(
++            'Immobilienvermarktung – umfangreiche Unterlagen, Bildauswahl und Freigaben für mehrere Beteiligte',
++            [app.new_item('Vollständige Bildauswahl und Beschreibung mit dem Eigentümer abstimmen',
++                          due=(today+timedelta(days=3)).isoformat()),
++             app.new_item('Veröffentlichung auf den vereinbarten Kanälen vorbereiten'),
++             app.new_item('Ansprechpartner und nächste Schritte für Rückfragen dokumentieren')],
++            note='Alle benötigten Unterlagen zusammenstellen und vor der Veröffentlichung prüfen. ' * 3,
++            labels=[long_label['id']]))
+         app.save_items()
+         expected = {('folder', entry['id']) for entry in app.folders}
+         expected |= {('list', entry['id']) for entry in app.lists if not app.is_inbox_list(entry)}
+@@ -212,11 +306,7 @@
+             assert ('folder', nested['id']) in [(kind, entry['id']) for kind, entry in app.library_entries()]
+             for width, expected_columns in ((860, 1), (1280, 2), (1660, 3)):
+                 resize(width)
+-                columns = {int(card.grid_info()['column']) for card in app.library_cards}
+-                assert len(columns) == expected_columns, (width, columns, root.winfo_width(), app.content_frame.winfo_width(), app.home_canvas.winfo_width(), app.home_content.winfo_width(), app.library_cards[0].master.winfo_width(), errors)
+-                for card in app.library_cards:
+-                    assert card.winfo_x()+card.winfo_width() <= card.master.winfo_width()
+-                button_text_fits(app.home_content)
++                check_library_cards(expected_columns)
+                 button_text_fits(app.template_actions)
+                 capture(f'listen-ordner-{theme}-{width}')
+                 app.home_canvas.yview_moveto(1)
+@@ -225,6 +315,17 @@
+                 assert app.template_actions.winfo_ismapped()
+                 assert app.template_actions.winfo_rooty()+app.template_actions.winfo_height() < root.winfo_rooty()+root.winfo_height()
+                 app.home_canvas.yview_moveto(0)
++            old_font_size = app.settings.get('ui_font_size', 'mittel')
++            for font_size in ('klein', 'gross'):
++                app.settings['ui_font_size'] = font_size
++                app.apply_ui_font()
++                app.refresh_library_page()
++                for width in (860, 1380, 1660):
++                    resize(width)
++                    check_library_cards()
++            app.settings['ui_font_size'] = old_font_size
++            app.apply_ui_font()
++            app.refresh_library_page()
+             assert (app.lists, app.folders) == data_before
+ 
+         # Kachelziele und Rückkehr wechseln nur die Ansicht, nie den Bestand.
+@@ -259,6 +360,9 @@
+         assert set(app.library_open_buttons) == expected
+         assert (app.lists, app.folders) == data_before
+         assert not errors, errors
++        if args.layout_report:
++            args.layout_report.parent.mkdir(parents=True, exist_ok=True)
++            args.layout_report.write_text(json.dumps(layout_snapshots, ensure_ascii=False, indent=2)+'\n')
+         print('UI-Nachtrag: OK; Vorlagen in 2 Modi/2 Themes/3 Breiten; Tageshistorien erhalten, keine Doppelzählung; Diagrammachsen und Breiten; alle Ordner/Listen, Kachelziele, Scrollen, Rückkehr, Daten unverändert.')
+     finally:
+         if errors:

@@ -1,0 +1,17 @@
+{
+  "datum": "2026-10-01",
+  "app_version": "3.32.3",
+  "exitcode": 0,
+  "kommando": "GLIDE_QA_HINTERGRUND=1 PYTHONPATH=tests/tools/hintergrund python3 -B tests/tools/pruefe_showcase.py --bilder tests/qa-3.32.3/showcase_2026-10-01/ansichten",
+  "ergebnis": "Import, Referenzen, Bilder, Pinnwände, Klappblock, Undo, Vorlagen, Export und Neustart bestanden",
+  "ansichten": [
+    "01_Briefing.png",
+    "02_Galerie.png",
+    "03_Protokoll.png",
+    "04_Zeichnung.png",
+    "05_Projektpinnwand.png",
+    "06_Bearbeitungstage.png",
+    "07_Startseite.png",
+    "08_Tagesabschluss.png"
+  ]
+}

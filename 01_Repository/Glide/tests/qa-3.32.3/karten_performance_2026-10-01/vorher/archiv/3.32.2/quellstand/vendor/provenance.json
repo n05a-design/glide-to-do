@@ -1,0 +1,13 @@
+{
+  "tkinterdnd2": {
+    "version": "0.6.3",
+    "source": "https://pypi.org/project/tkinterdnd2/0.6.3/",
+    "file": "tkinterdnd2-0.6.3-py3-none-any.whl",
+    "sha256": "50c7386302104bfb30d8e15b4cc53c0581bc51a28186ff4d7ad3cb2cc820c936",
+    "license": "MIT (tkinterdnd2/LICENSE); tkdnd by Georgios Petasis, BSD-style",
+    "contains": "tkdnd 2.9.4 (Tk 8.6) and 2.10.2 (Tk 9) for macOS arm64/x64, Windows x64/x86/arm64, Linux x64/arm64",
+    "downloaded": "2026-09-27",
+    "decision": "Nutzer 27.09.2026: Ziehen aus Finder/Explorer jetzt einbauen, Paket ins Projekt legen",
+    "optional": "Glide startet ohne diesen Ordner; dann gibt es nur „Bilder hinzufügen …“."
+  }
+}

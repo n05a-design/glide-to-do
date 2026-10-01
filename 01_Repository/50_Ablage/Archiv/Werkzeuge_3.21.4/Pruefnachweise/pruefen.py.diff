@@ -1,0 +1,15 @@
+--- Paket/pruefen.py
++++ tests/tools/pruefen.py
+@@ -176,6 +176,12 @@
+ 
+     def clean(value, key=None):
+         if isinstance(value, dict):
++            if relative_fristen and key == "reminder" and value.get("mode") == "fixed":
++                # Beispieldaten setzen feste Erinnerungen relativ zum Erzeugungstag.
++                # Ortszeit erhält auch bei einem Sommerzeitwechsel den Abstand.
++                moment = datetime.fromisoformat(value["at"]).astimezone()
++                return {k: (((moment.date() - origin).days, moment.time().isoformat())
++                            if k == "at" else clean(v, k)) for k, v in value.items()}
+             return {k: (verlauf_bereinigen(v) if k == "history" else clean(v, k))
+                     for k, v in value.items()
+                     if k not in ("exported_at", "deleted_at", "added_at")}

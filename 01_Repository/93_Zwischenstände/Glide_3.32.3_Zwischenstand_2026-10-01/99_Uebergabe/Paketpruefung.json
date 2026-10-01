@@ -1,0 +1,89 @@
+{
+  "documentation_followup": {
+    "version": "3.32.3",
+    "status": "in Bearbeitung",
+    "umfang": "Dokumentations-/Prüfwerkzeugnachlauf; keine Laufzeitänderung"
+  },
+  "version": "3.32.3",
+  "created_at": "2026-10-01T10:25:52+02:00",
+  "purpose": "Weitergabe eines unveraenderten Entwicklungs-Zwischenstands",
+  "checks": {
+    "frozen_qa_files": {
+      "checked": 73,
+      "differences": [
+        "tests/tools/standpruefung.py"
+      ]
+    },
+    "python_delivery": {
+      "checked": 139,
+      "differences": []
+    },
+    "macos_delivery": {
+      "checked": 53,
+      "differences": []
+    },
+    "version": {
+      "repository": "3.32.3",
+      "bundle": "3.32.3",
+      "data_schema": 20
+    },
+    "syntax": {
+      "checked": 17,
+      "status": "passed",
+      "files": [
+        "01_Repository/Glide/src/glide/app.pyw",
+        "01_Repository/Glide/src/glide/glide_start.py",
+        "01_Repository/Glide/src/glide/page_markdown.py",
+        "01_Repository/Glide/src/glide/drawing_image.py",
+        "01_Repository/Glide/src/glide/backdrop.py",
+        "01_Repository/Glide/src/glide/drawing.py",
+        "01_Repository/Glide/src/glide/drawing_prototype.pyw",
+        "01_Repository/Glide/src/glide/logo.py",
+        "01_Repository/Glide/src/glide/image_preview.py",
+        "07_Python-Versionen/page_markdown.py",
+        "07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.32.3.pyw",
+        "07_Python-Versionen/drawing_image.py",
+        "07_Python-Versionen/backdrop.py",
+        "07_Python-Versionen/drawing.py",
+        "07_Python-Versionen/Schnellstart.pyw",
+        "07_Python-Versionen/logo.py",
+        "07_Python-Versionen/image_preview.py"
+      ]
+    },
+    "bundle_codesign": {
+      "exitcode": 0,
+      "stdout": "",
+      "stderr": "",
+      "type": "ad-hoc development signature; no Developer ID/notarization"
+    },
+    "standpruefung": {
+      "exitcode": 0,
+      "output": "Standprüfung gegen VERSION 3.32.3 · Ablage einschließlich Repository · 87 aktive Dokumente (41 fortgeschrieben, 42 festgeschrieben, 4 ohne Standaussage)\nAlle Standangaben passen zur Version; kein historisches Dokument behauptet einen aktuellen Stand.",
+      "stderr": ""
+    }
+  },
+  "copied_source_files": 1954,
+  "copied_source_bytes": 101690231,
+  "active_missing_source_links": [],
+  "historical_reference_policy": "Aktuelle Dateien plus erreichbare lokal verlinkte Dokumente/Belege; Archive sind keine weiteren freigegebenen Startfassungen.",
+  "excluded": [
+    ".venv",
+    ".git",
+    ".claude",
+    ".DS_Store",
+    "__pycache__",
+    "*.pyc",
+    "*.pyo",
+    "zur Loeschung markierte _Z-Dateien",
+    "nicht referenzierte alte Programm-/QA-Staende"
+  ],
+  "data_access": "Nur Projektdateien; keine privaten Glide-Nutzdaten oder persoenlichen Fehlerprotokolle gelesen.",
+  "application_full_qa": "Vorhandener eingefrorener 3.32.3-Lauf: 73 Schritte, 58 Integrationssuiten, 5 Analysen, Exitcode 0; nicht erneut ausgefuehrt.",
+  "manual_limits": [
+    "Windows/Linux",
+    "physische Bedienung/Fokus/Maus/Trackpad",
+    "DPI/Mehrmonitor",
+    "Screenreader",
+    "Developer-ID-Signierung/Notarisierung/Releasefreigabe"
+  ]
+}

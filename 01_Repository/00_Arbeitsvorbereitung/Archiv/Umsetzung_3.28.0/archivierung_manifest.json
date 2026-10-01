@@ -1,0 +1,74 @@
+{
+  "stand": "2026-09-23",
+  "version": "3.28.0",
+  "datenformat": 18,
+  "archiviert": {
+    "01_Repository\\Glide\\docs\\07_QA_BERICHT.md": "01_Repository\\Glide\\docs\\archiv\\07_QA_BERICHT_3.26.0_vor_3.28.0.md",
+    "01_Repository\\Glide\\docs\\09_PROJECT_HANDOFF.md": "01_Repository\\Glide\\docs\\archiv\\09_PROJECT_HANDOFF_3.26.0_vor_3.28.0.md",
+    "01_Repository\\Glide\\docs\\10_RELEASE_CHECKLIST.md": "01_Repository\\Glide\\docs\\archiv\\10_RELEASE_CHECKLIST_3.26.0_vor_3.28.0.md",
+    "01_Repository\\Glide\\README.md": "01_Repository\\Glide\\docs\\archiv\\README_root_3.26.0_vor_3.28.0.md",
+    "07_Python-Versionen\\Glide-Aufgaben-und-Listen_v3.27.0.pyw": "07_Python-Versionen\\Archiv\\Glide-Aufgaben-und-Listen_v3.27.0.pyw",
+    "07_Python-Versionen\\resources\\templates\\glide_vorlagen.glidetemplates": "07_Python-Versionen\\resources\\templates\\archiv\\glide_vorlagen_3.26.0_vor_3.28.0.glidetemplates",
+    "01_Repository\\Glide\\tests\\fixtures\\beispiele\\glide_beispieldaten.glidebackup": "01_Repository\\Glide\\tests\\fixtures\\beispiele\\archiv\\glide_beispieldaten_3.26.0_vor_3.28.0.glidebackup"
+  },
+  "archiviert_nachbesserung": {
+    "README.md": "Archiv\\README_3.26.0_vor_3.28.0.md",
+    "00_Arbeitsvorbereitung\\README.md": "00_Arbeitsvorbereitung\\Archiv\\README_3.26.0_vor_3.28.0.md",
+    "05_Probelisten_Testdaten\\README.md": "05_Probelisten_Testdaten\\Archiv\\README_3.26.0_vor_3.28.0.md",
+    "10_Dokumentation\\README.md": "10_Dokumentation\\Archiv\\README_3.26.0_vor_3.28.0.md",
+    "20_Grafik_Master\\README.md": "20_Grafik_Master\\Archiv\\README_3.26.0_vor_3.28.0.md",
+    "40_Store_Material\\README.md": "40_Store_Material\\Archiv\\README_3.26.0_vor_3.28.0.md",
+    "00_Arbeitsvorbereitung\\Glide_Weitergabe_neuer_Chat_2026-09-18.md": "00_Arbeitsvorbereitung\\Archiv\\Glide_Weitergabe_neuer_Chat_2026-09-18_3.23.0_vor_3.28.0.md",
+    "00_Arbeitsvorbereitung\\Glide_Weitergabe_neuer_Chat_2026-09-19.md": "00_Arbeitsvorbereitung\\Archiv\\Glide_Weitergabe_neuer_Chat_2026-09-19_3.25.0_vor_3.28.0.md",
+    "01_Repository\\Glide\\docs\\00_INDEX.md": "01_Repository\\Glide\\docs\\archiv\\00_INDEX_3.28.0_vor_Flackerkorrektur_2026-09-23.md",
+    "01_Repository\\Glide\\docs\\07_QA_BERICHT.md": "01_Repository\\Glide\\docs\\archiv\\07_QA_BERICHT_3.28.0_vor_Flackerkorrektur_2026-09-23.md",
+    "01_Repository\\Glide\\docs\\09_PROJECT_HANDOFF.md": "01_Repository\\Glide\\docs\\archiv\\09_PROJECT_HANDOFF_3.28.0_vor_Flackerkorrektur_2026-09-23.md",
+    "01_Repository\\Glide\\CHANGELOG.md": "01_Repository\\Glide\\docs\\archiv\\CHANGELOG_3.28.0_vor_Flackerkorrektur_2026-09-23.md",
+    "01_Repository\\Glide\\README.md": "01_Repository\\Glide\\docs\\archiv\\README_repo_3.28.0_vor_Flackerkorrektur_2026-09-23.md",
+    "07_Python-Versionen\\README.md": "07_Python-Versionen\\Archiv\\README_3.28.0_vor_Flackerkorrektur_2026-09-23.md",
+    "00_Arbeitsvorbereitung\\Fehlerprotokolle\\README.md": "00_Arbeitsvorbereitung\\Archiv\\Fehlerprotokolle_README_3.26.0_vor_3.28.0.md",
+    "01_Repository\\Glide\\assets\\README.md": "01_Repository\\Glide\\assets\\archiv\\README_3.26.0_vor_3.28.0.md",
+    "01_Repository\\Glide\\packaging\\README.md": "01_Repository\\Glide\\packaging\\archiv\\README_3.26.0_vor_3.28.0.md",
+    "01_Repository\\Glide\\src\\glide\\README.md": "01_Repository\\Glide\\src\\glide\\archiv\\README_3.26.0_vor_3.28.0.md",
+    "01_Repository\\Glide\\tests\\README.md": "01_Repository\\Glide\\tests\\archiv\\README_3.28.0_vor_Ablagepruefung_2026-09-23.md",
+    "30_Release_Exports\\README.md": "30_Release_Exports\\Archiv\\README_3.26.0_vor_3.28.0.md",
+    "50_Ablage\\README.md": "50_Ablage\\Archiv\\README_3.26.0_vor_3.28.0.md",
+    "50_Ablage\\QA\\Dokumentation\\README.md": "50_Ablage\\QA\\Dokumentation\\Archiv\\README_3.26.0_vor_3.28.0.md",
+    "50_Ablage\\QA\\Dokumentation\\Renderlaeufe\\README.md": "50_Ablage\\QA\\Dokumentation\\Renderlaeufe\\Archiv\\README_3.26.0_vor_3.28.0.md",
+    "50_Ablage\\Screenshots\\README.md": "50_Ablage\\Screenshots\\Archiv\\README_3.26.0_vor_3.28.0.md",
+    "90_Testdaten_Extern\\README.md": "90_Testdaten_Extern\\Archiv\\README_3.26.0_vor_3.28.0.md",
+    "40_Store_Material\\Microsoft\\Store_Angaben_Microsoft.md": "40_Store_Material\\Archiv\\Store_Angaben_Microsoft_3.26.0_vor_3.28.0.md",
+    "40_Store_Material\\Apple\\Store_Angaben_Apple.md": "40_Store_Material\\Archiv\\Store_Angaben_Apple_3.26.0_vor_3.28.0.md",
+    "05_Probelisten_Testdaten\\Glide-Funktionsvorschau_3.22.0.glidebackup": "05_Probelisten_Testdaten\\Archiv\\Glide-Funktionsvorschau_3.22.0.glidebackup",
+    "05_Probelisten_Testdaten\\Glide-Funktionsvorschau_3.23.0.glidebackup": "05_Probelisten_Testdaten\\Archiv\\Glide-Funktionsvorschau_3.23.0.glidebackup",
+    "05_Probelisten_Testdaten\\Glide-Praxisvorlagen_3.22.0.glidetemplates": "05_Probelisten_Testdaten\\Archiv\\Glide-Praxisvorlagen_3.22.0.glidetemplates",
+    "05_Probelisten_Testdaten\\Glide-Praxisvorlagen_3.23.0.glidetemplates": "05_Probelisten_Testdaten\\Archiv\\Glide-Praxisvorlagen_3.23.0.glidetemplates",
+    "05_Probelisten_Testdaten\\Glide-Releaseplanung_3.22.0.glidebackup": "05_Probelisten_Testdaten\\Archiv\\Glide-Releaseplanung_3.22.0.glidebackup",
+    "05_Probelisten_Testdaten\\Glide-Releaseplanung_3.23.0.glidebackup": "05_Probelisten_Testdaten\\Archiv\\Glide-Releaseplanung_3.23.0.glidebackup"
+  },
+  "neu": [
+    "01_Repository\\Glide\\docs\\59_TAGEBUCH_UND_UI_3.28.0.md",
+    "01_Repository\\Glide\\docs\\60_FLACKERN_UND_ABLAGEPRUEFUNG_3.28.0.md",
+    "01_Repository\\Glide\\tests\\integration\\test_features328.py",
+    "01_Repository\\Glide\\tests\\fixtures\\current_v18\\reference_v18.json",
+    "01_Repository\\Glide\\tests\\fixtures\\beispiele\\glide_releaseplanung_3.28.0.glidebackup",
+    "07_Python-Versionen\\Glide-Aufgaben-und-Listen_v3.28.0.pyw",
+    "00_Arbeitsvorbereitung\\Glide_Weitergabe_neuer_Chat_2026-09-23_V3.28.md",
+    "00_Arbeitsvorbereitung\\Checklisten\\Manuelle_Pruefung_3.28.0.md",
+    "05_Probelisten_Testdaten\\Glide-Praxisvorlagen_3.28.0.glidetemplates",
+    "05_Probelisten_Testdaten\\Glide-Funktionsvorschau_3.28.0.glidebackup",
+    "05_Probelisten_Testdaten\\Glide-Releaseplanung_3.28.0.glidebackup"
+    ,"01_Repository\\Glide\\tests\\qa-3.28.0\\nachpruefung_flackern_2026-09-23\\ergebnis.json"
+  ],
+  "nicht_archivierbar_ohne_onedrive_download": [
+    "00_Arbeitsvorbereitung\\Glide_Weitergabe_neuer_Chat_2026-09-16.md",
+    "05_Probelisten_Testdaten\\Glide-Funktionsvorschau_3.21.4.glidebackup",
+    "05_Probelisten_Testdaten\\Glide-Praxisvorlagen_3.21.4.glidetemplates",
+    "05_Probelisten_Testdaten\\Glide-Releaseplanung_3.21.4.glidebackup"
+  ],
+  "sha256": {
+    "quelltext_und_startkopie": "32037B74820E07600368EBF74D4991A4491A02860EDACA2F83D4AE7F5BBAC403",
+    "vorlagenkatalog": "62A9DCF8F04E57724FC1CA9B05B8EB9DD187E9F1E9738ACB542AB32E36B80455"
+  },
+  "pruefhinweis": "Der gezielte 3.28-Pruefstand ist dokumentiert. Der Gesamtlauf bleibt wegen nicht lokal verfuegbarer OneDrive-Platzhalter und Zeitueberschreitungen offen; siehe docs/07_QA_BERICHT.md."
+}

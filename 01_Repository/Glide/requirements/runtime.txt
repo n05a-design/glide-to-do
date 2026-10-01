@@ -1,0 +1,2 @@
+# Glide 3.28.0 verwendet ausschließlich die Python-Standardbibliothek.
+# Tk/Tcl muss Bestandteil der verwendeten Python-Installation sein.

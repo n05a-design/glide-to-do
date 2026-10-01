@@ -1,0 +1,292 @@
+--- 3.32.2/app.pyw
++++ 3.32.3/app.pyw
+@@ -150,7 +150,7 @@
+ APP_NAME = "Glide"
+ APP_TAGLINE = "Aufgaben und Listen"
+ APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
+-APP_VERSION = "3.32.2"
++APP_VERSION = "3.32.3"
+ # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
+ # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
+ # Einstellungen des Betriebssystems hängen daran.
+@@ -22163,12 +22163,39 @@
+         self.refresh_library_page()
+         return "break"
+ 
++    def library_card_preview(self, kind, entry, preview_rows):
++        """Frische Anzeigedaten; nur Widgets werden zwischen Aufrufen erhalten."""
++        if kind == "folder":
++            nested = {folder["id"] for folder in self.iter_folder_subtree(entry["id"])}
++            lists = [value for value in self.lists if value.get("folder_id") in nested]
++            items = [item for value in lists for item in value.get("items", [])]
++            children = [("folder", value) for value in self.get_child_folders(entry["id"])]
++            children += [("list", value) for value in self.get_folder_lists(entry["id"])]
++            previews = [(self.ICONS[child_kind], " ".join(str(value.get("title") or "").split()), "")
++                        for child_kind, value in children[:preview_rows]]
++            remaining = max(0, len(children) - len(previews))
++            summary = f"{len(lists)} Listen · {len(nested) - 1} Unterordner"
++        elif self.is_drawing_list(entry):
++            items, previews, remaining = [], [], 0
++            summary = self.drawing_summary(entry)
++        else:
++            items = entry.get("items", [])
++            tasks = [item for item in self.walk_items(items) if self.is_schedulable_item(item)]
++            pending = [item for item in tasks if not item.get("done")]
++            pending.sort(key=lambda item: (item.get("due") or "9999", -item.get("importance", 0)))
++            previews = []
++            for item in pending[:preview_rows]:
++                title_line = str(item.get("text") or "").splitlines()[0]
++                due = self.format_due_display(item.get("due")) if item.get("due") else ""
++                previews.append((self.ICONS["priority_high"] if item.get("importance", 0) >= 2 else self.ICONS["task_open"],
++                                 title_line, due))
++            remaining, summary = max(0, len(pending) - len(previews)), ""
++        return previews, remaining, summary, self.compute_stats(items)
++
+     def refresh_library_page(self):
+         """Inhaltshohe Kacheln in unabhängig gestapelten, responsiven Spalten."""
+         scroll_position = self.home_canvas.yview()[0] if getattr(self, "_home_rendered_view", None) == self.LIBRARY_VIEW else 0
+         self._home_rendered_view = self.LIBRARY_VIEW
+-        for widget in self.home_content.winfo_children():
+-            widget.destroy()
+         theme = self.theme
+         for widget in (self.home_frame, self.home_canvas, self.home_content):
+             widget.configure(bg=theme["bg"])
+@@ -22185,15 +22212,37 @@
+         column_width = {"small": 260, "medium": 352, "large": 480}.get(card_size, 352)
+         preview_rows = {"small": 2, "medium": 3, "large": 5}.get(card_size, 3)
+         thumbnail_edge = {"small": 64, "medium": 128, "large": 192}.get(card_size, 128)
+-        grid = tk.Frame(self.home_content, bg=theme["bg"])
+-        grid.pack(fill="x")
++        context = (tuple(sorted(theme.items())), app_font(10, "bold"), card_size, showing_archive, self.page_icon_scale(), self.design_name())
++        cache = getattr(self, "_library_card_cache", None)
++        if cache is not None and (cache["context"] != context or not cache["grid"].winfo_exists()):
++            cache = None
++        created_grid = cache is None
++        if created_grid:
++            for widget in self.home_content.winfo_children():
++                widget.destroy()
++            grid = tk.Frame(self.home_content, bg=theme["bg"])
++            grid.pack(fill="x")
++            column_frames = [tk.Frame(grid, bg=theme["bg"]) for _ in range(4)]
++            cache = {"context": context, "grid": grid, "columns": column_frames, "cards": {},
++                     "column_count": None, "empty_hint": None}
++            self._library_card_cache = cache
++
++            def release_cache(event, state=cache):
++                if event.widget is state["grid"] and getattr(self, "_library_card_cache", None) is state:
++                    self._library_card_cache = None
++                    self._library_images = []
++            grid.bind("<Destroy>", release_cache, add="+")
++        else:
++            grid, column_frames = cache["grid"], cache["columns"]
++        old_order = list(getattr(self, "library_cards", []))
+         card_gap = 12
+         card_padding = 16
+-        column_frames = [tk.Frame(grid, bg=theme["bg"]) for _ in range(4)]
+         self.library_cards = []
+         self.library_open_buttons = {}
+         self._library_images = []
+-        button_font = tkfont.Font(root=self.root, font=app_font(10, "bold"))
++        if created_grid:
++            cache["button_font"] = tkfont.Font(root=self.root, font=app_font(10, "bold"))
++        button_font = cache["button_font"]
+ 
+         def reveal_focused_button(event):
+             canvas = self.home_canvas
+@@ -22207,8 +22256,34 @@
+                 height = max(viewport_height, self.home_content.winfo_reqheight())
+                 canvas.yview_moveto(max(0, canvas.canvasy(0) + offset) / max(1, height))
+ 
++        keys = {(kind, entry["id"]) for kind, entry in entries}
++        for key in cache["cards"].keys() - keys:
++            cache["cards"].pop(key)[1].destroy()
+         for kind, entry in entries:
+             color = entry.get("color") or ("import" if kind == "folder" else "ui_accent")
++            parent_id = entry.get("parent_id" if kind == "folder" else "folder_id")
++            path = tuple(self.folder_path_titles(parent_id)) if parent_id else ()
++            previews, remaining, summary, stats = self.library_card_preview(kind, entry, preview_rows)
++            is_drawing = kind == "list" and self.is_drawing_list(entry)
++            rich_text = " ".join(str((entry.get("rich_note") or {}).get("text") or "").split()) if entry.get("list_kind") in (
++                self.LIST_KIND_NOTE, self.LIST_KIND_PAGE) else ""
++            assigned = [(self.get_label(value) or {}).get("name", "") for value in entry.get("labels", [])]
++            # Signatur enthält die sichtbaren Werte, keine dauerhaften Datenzähler.
++            signature = json.dumps((entry.get("title"), entry.get("list_kind"), color, path, entry.get("icon"), summary, stats,
++                rich_text[:40 * preview_rows], len(rich_text) > 40 * preview_rows,
++                " ".join(str(entry.get("note") or "").split())[:101], assigned, previews, remaining,
++                entry.get("drawing") if is_drawing else None), sort_keys=True, ensure_ascii=False)
++            key = (kind, entry["id"])
++            previous = cache["cards"].get(key)
++            if previous is not None and previous[0] == signature:
++                _signature, surface, button, images = previous
++                self.library_cards.append(surface)
++                self.library_open_buttons[key] = button
++                self._library_images.extend(images)
++                continue
++            if previous is not None:
++                previous[1].destroy()
++            image_start = len(self._library_images)
+             surface = self.make_rounded_container(grid, radius=self.HOME_CARD_RADIUS,
+                 width=1, inner_pad_x=card_padding, inner_pad_y=card_padding,
+                 auto_height=True, register=False)
+@@ -22233,24 +22308,9 @@
+             parent_id = entry.get("parent_id" if kind == "folder" else "folder_id")
+             if parent_id:
+                 label(" › ".join(self.folder_path_titles(parent_id)), 9)
+-            if kind == "folder":
+-                nested = {folder["id"] for folder in self.iter_folder_subtree(entry["id"])}
+-                lists = [value for value in self.lists if value.get("folder_id") in nested]
+-                items = [item for value in lists for item in value.get("items", [])]
+-                children = [("folder", value) for value in self.get_child_folders(entry["id"])]
+-                children += [("list", value) for value in self.get_folder_lists(entry["id"])]
+-                previews = [(self.ICONS[child_kind], " ".join(str(value.get("title") or "").split()), "")
+-                            for child_kind, value in children[:preview_rows]]
+-                remaining = max(0, len(children) - len(previews))
+-                summary = f"{len(lists)} Listen · {len(nested) - 1} Unterordner"
+-                command = lambda value=entry["id"]: self.set_active_folder(value)
+-            elif is_drawing:
+-                # Eine Zeichnung zeigt sich selbst, nicht eine Zahl.
+-                items = []
+-                previews = []
+-                remaining = 0
+-                summary = self.drawing_summary(entry)
+-                command = lambda value=entry["id"]: self.set_active_list(value)
++            command = (lambda value=entry["id"]: self.set_active_folder(value)) if kind == "folder" else (
++                lambda value=entry["id"]: self.set_active_list(value))
++            if is_drawing:
+                 try:
+                     model = glide_drawing.DrawingModel.from_document(entry.get("drawing"))
+                     image = glide_drawing_image.thumbnail_photo(model, thumbnail_edge, master=panel)
+@@ -22258,21 +22318,7 @@
+                     tk.Label(panel, image=image, **self.thumbnail_frame_options()).pack(anchor="w", pady=(4, 8))
+                 except (glide_drawing.DrawingFormatError, tk.TclError):
+                     pass
+-            else:
+-                items = entry.get("items", [])
+-                tasks = [item for item in self.walk_items(items) if self.is_schedulable_item(item)]
+-                pending = [item for item in tasks if not item.get("done")]
+-                pending.sort(key=lambda item: (item.get("due") or "9999", -item.get("importance", 0)))
+-                previews = []
+-                for item in pending[:preview_rows]:
+-                    title_line = str(item.get("text") or "").splitlines()[0]
+-                    due = self.format_due_display(item.get("due")) if item.get("due") else ""
+-                    previews.append((self.ICONS["priority_high"] if item.get("importance", 0) >= 2 else self.ICONS["task_open"],
+-                                     title_line, due))
+-                remaining = max(0, len(pending) - len(previews))
+-                summary = ""
+-                command = lambda value=entry["id"]: self.set_active_list(value)
+-            total, done, _overdue = self.compute_stats(items)
++            total, done, _overdue = stats
+             if summary:
+                 label(summary, 9)
+             if entry.get("list_kind") in (self.LIST_KIND_NOTE, self.LIST_KIND_PAGE):
+@@ -22319,8 +22365,8 @@
+             if showing_archive:
+                 edit_text = "Zurückholen"
+                 edit = self._make_dialog_button(
+-                    actions, edit_text, lambda value=entry["id"], value_kind=kind: (
+-                        self.set_archived(value_kind, value, False), self.refresh_library_page()),
++                    actions, edit_text, lambda value=entry["id"], value_kind=kind:
++                        self.set_archived(value_kind, value, False),
+                     "confirm", width=max(142, button_font.measure(edit_text) + 28), height=34)
+             else:
+                 edit = self._make_dialog_button(actions, edit_text,
+@@ -22351,14 +22397,13 @@
+                     widget.configure(cursor="hand2")
+                     widget.bind("<Button-1>", lambda _event, open_page=command: open_page())
+ 
+-        current_columns = None
+-
+-        def layout(_event=None):
+-            nonlocal current_columns
++            cache["cards"][key] = (signature, surface, button, self._library_images[image_start:])
++
++        def layout(_event=None, *, force=False):
+             columns = max(1, min(4 if card_size == "small" else 3, (grid.winfo_width() + card_gap) // column_width))
+-            if columns == current_columns:
++            if columns == cache["column_count"] and not force:
+                 return
+-            current_columns = columns
++            cache["column_count"] = columns
+             # Separate Abstandsspalten halten alle Karten gleich breit. Jeder
+             # Stapel folgt seiner eigenen Inhaltshöhe, ohne gemeinsame Rasterzeilen.
+             for position in range(7):
+@@ -22380,18 +22425,29 @@
+                 surface.pack(in_=column_frames[index % columns], fill="x",
+                     pady=(0, card_gap if index + columns < len(self.library_cards) else 0))
+ 
+-        grid.bind("<Configure>", layout)
+-        layout()
++        if created_grid:
++            cache["layout"] = layout
++            grid.bind("<Configure>", layout)
++        else:
++            layout = cache["layout"]
++        layout(force=old_order != self.library_cards)
++        if entries:
++            if cache["empty_hint"] is not None:
++                cache["empty_hint"].destroy()
++                cache["empty_hint"] = None
++            if not grid.winfo_manager():
++                grid.pack(fill="x")
+         if not entries:
+             grid.pack_forget()
+             empty_text = ("Das Archiv ist leer. Archivieren steht im Kontextmenü einer Liste oder eines Ordners."
+                           if showing_archive else "Noch keine Listen oder Ordner. Lege unten deine erste Liste an.")
+-            empty_hint = tk.Label(self.home_content, text=empty_text,
+-                     bg=theme["bg"], fg=theme["muted"], anchor="w", justify="left",
+-                     wraplength=380)
+-            empty_hint.pack(fill="x", pady=16)
+-            empty_hint.bind("<Configure>", lambda event: empty_hint.configure(wraplength=max(1, event.width)))
+-            self._bind_home_wheel(empty_hint)
++            empty_hint = cache["empty_hint"]
++            if empty_hint is None:
++                empty_hint = cache["empty_hint"] = tk.Label(self.home_content, text=empty_text,
++                         bg=theme["bg"], fg=theme["muted"], anchor="w", justify="left", wraplength=380)
++                empty_hint.pack(fill="x", pady=16)
++                empty_hint.bind("<Configure>", lambda event: empty_hint.configure(wraplength=max(1, event.width)))
++                self._bind_home_wheel(empty_hint)
+         size_names = {"small": "S", "medium": "M", "large": "L"}
+         self.refresh_page_actions((
+             ("Neue Liste", self.create_new_list, "accent", 148),
+@@ -22406,8 +22462,9 @@
+             ("Aktive zeigen" if showing_archive else f"Archiv ({archived_count})", self.toggle_library_archive,
+              "muted", 150),
+         ))
+-        self._bind_home_wheel(grid)
+-        self._bind_home_wheel(self.home_canvas)
++        if created_grid:
++            self._bind_home_wheel(grid)
++            self._bind_home_wheel(self.home_canvas)
+         self.home_content.update_idletasks()
+         self._layout_home_canvas()
+         self.home_canvas.yview_moveto(scroll_position)
+@@ -22429,7 +22486,13 @@
+             # „Datei“. Die ersten beiden Knöpfe bleiben immer.
+             specs = tuple(specs[:2]) + tuple(spec for spec in specs[2:] if spec[1] not in (
+                 self.import_txt_as_new_lists, self.import_partial_backup))
+-        for widget in self.template_actions.winfo_children():
++        signature = (tuple(specs), tuple(sorted(self.theme.items())), app_font(10, "bold"), self.design_name())
++        children = tuple(self.template_actions.winfo_children())
++        if signature == getattr(self, "_page_actions_signature", None) and children == getattr(
++                self, "_page_action_children", None):
++            return
++        self._page_actions_signature = signature
++        for widget in children:
+             widget.destroy()
+         self.template_actions.configure(bg=self.theme["bg"])
+         self.template_action_groups = []
+@@ -22483,8 +22546,13 @@
+                            sticky="ew", padx=(0, 12) if not stacked and index == 0 else 0,
+                            pady=(0, 8) if stacked and index == 0 else 0)
+ 
+-        self.template_actions.bind("<Configure>", lambda event: layout_groups(self.template_actions.winfo_width()))
++        previous_binding = getattr(self.template_actions, "_page_action_layout_binding", None)
++        if previous_binding:
++            self.template_actions.unbind("<Configure>", previous_binding)
++        self.template_actions._page_action_layout_binding = self.template_actions.bind(
++            "<Configure>", lambda event: layout_groups(self.template_actions.winfo_width()))
+         layout_groups(self.template_actions.winfo_width())
++        self._page_action_children = tuple(self.template_actions.winfo_children())
+ 
+     def add_tooltip(self, widget, text):
+         """Erklärt kompakte Textsymbole auch beim Tastaturfokus.

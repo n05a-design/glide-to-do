@@ -1,0 +1,644 @@
+--- vorher/app.pyw
++++ nachher/app.pyw
+@@ -511,16 +511,19 @@
+         breite = max(1, self.winfo_width())
+         beschriftung = 16
+         grundlinie = self.chart_height - beschriftung
+-        spalte = breite / len(self.days)
++        # Gleiche Zeichenbreite wie das Jahresraster, einschließlich Platz
++        # für dessen Wochentage am linken Rand.
++        links, rechts = 20, breite - 2
++        spalte = max(1, rechts - links) / len(self.days)
+         balken = max(10, min(44, spalte * 0.55))
+         hoechster = max((anzahl for _tag, anzahl in self.days), default=0)
+         heute = date.today()
+         # Eine durchgehende Grundlinie statt einer Spur je Balken: Die Spur sah
+         # aus wie ein zweiter, hellerer Balken und verdoppelte jeden Wert
+         # optisch. Die Linie trägt dieselbe Aussage – hier ist die Null.
+-        self.create_line(0, grundlinie, breite, grundlinie, fill=self.track_color, width=1)
++        self.create_line(links, grundlinie, rechts, grundlinie, fill=self.track_color, width=1)
+         for index, (tag, anzahl) in enumerate(self.days):
+-            mitte = spalte * (index + 0.5)
++            mitte = links + spalte * (index + 0.5)
+             x1, x2 = mitte - balken / 2, mitte + balken / 2
+             ist_heute = tag == heute
+             hoehe = 0 if hoechster == 0 else (anzahl / hoechster) * (grundlinie - 16)
+@@ -617,9 +620,10 @@
+     def _draw(self):
+         self.delete("all")
+         width = max(260, self.winfo_width() or self.heatmap_width)
+-        cell = max(2, min(13, (width - 22) / 53 - 2))
+         gap = 2
+-        needed_height = math.ceil(18 + 7 * (cell + gap) + 8)
++        cell = max(2, (width - 22 - 52 * gap) / 53)
++        top = 4
++        needed_height = math.ceil(top + 7 * cell + 6 * gap + 8)
+         if int(self.cget("height")) != needed_height:
+             self.configure(height=needed_height)
+         start = self.today - timedelta(days=364 + self.today.weekday())
+@@ -629,16 +633,17 @@
+         for index in range(53 * 7):
+             day = start + timedelta(days=index // 7 * 7 + index % 7)
+             x = 20 + (index // 7) * (cell + gap)
+-            y = 18 + (index % 7) * (cell + gap)
++            y = top + (index % 7) * (cell + gap)
+             count = int(self.history.get(day.isoformat(), 0))
+             ratio = count / maximum if maximum else 0
+             if day > self.today:
+                 continue
+             fill = self.empty_color if not count else mix_hex_colors(self.empty_color, self.accent_color, 0.25 + ratio * 0.75)
+-            self.create_rectangle(x, y, x + cell, y + cell, fill=fill, outline=fill)
+-        self.create_text(1, 5, text="Mo", anchor="nw", fill=self.text_color, font=app_font(7))
+-        self.create_text(1, 18 + 3 * (cell + gap), text="Do", anchor="nw", fill=self.text_color, font=app_font(7))
+-        self.create_text(1, 18 + 6 * (cell + gap), text="So", anchor="nw", fill=self.text_color, font=app_font(7))
++            self.create_rectangle(x, y, x + cell, y + cell, fill=fill, outline=fill,
++                                  tags=("day", day.isoformat()))
++        for row, name in ((0, "Mo"), (3, "Do"), (6, "So")):
++            self.create_text(1, top + row * (cell + gap) + cell / 2,
++                             text=name, anchor="w", fill=self.text_color, font=app_font(7))
+ 
+ 
+ class AnalogClock(tk.Canvas):
+@@ -2098,6 +2103,7 @@
+     EMPTY_ROW_ID = "__empty__"
+     HOME_VIEW = "home"
+     TEMPLATE_VIEW = "templates"
++    LIBRARY_VIEW = "library"
+     HOME_ROW_ID = "smart:home"
+     TEMPLATE_ROW_ID = "smart:templates"
+     SETTINGS_VERSION = 2
+@@ -2750,7 +2756,7 @@
+         saved_view_mode = self.settings.get("view_mode")
+         if self.active_folder_id:
+             self.view_mode = "folder"
+-        elif saved_view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW):
++        elif saved_view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+             self.view_mode = saved_view_mode
+         else:
+             self.view_mode = "list"
+@@ -3394,6 +3400,18 @@
+             tage.append((tag, int(history.get(tag.isoformat(), 0))))
+         return tage
+ 
++    def yearly_activity_history(self):
++        """Bewahrt ältere Erledigungen neben den neueren Bearbeitungszahlen.
++
++        Erledigungen sind zugleich Bearbeitungen. Deshalb gilt je Tag der
++        größere Zähler; Addieren würde dieselbe Aktion doppelt zählen. Beide
++        gespeicherten Historien bleiben unverändert und getrennt nutzbar.
++        """
++        history = dict(self.settings.get("completion_history", {}))
++        for day, count in self.settings.get("activity_history", {}).items():
++            history[day] = max(history.get(day, 0), count)
++        return history
++
+     def next_scheduled_item(self, today=None):
+         """Der nächste anstehende Punkt mit Fälligkeit – für die Kopfzeile.
+ 
+@@ -3455,6 +3473,9 @@
+     def set_template_view(self, refresh=True):
+         self._activate_system_view(self.TEMPLATE_VIEW, refresh=refresh)
+ 
++    def set_library_view(self, refresh=True):
++        self._activate_system_view(self.LIBRARY_VIEW, refresh=refresh)
++
+     def home_greeting(self):
+         """Aktuelle Begrüßung der Startseite, mit Namen, wenn einer gesetzt ist."""
+         name = str(self.settings.get("profile_name", "") or "").strip()
+@@ -3514,14 +3535,15 @@
+         if not hasattr(self, "home_frame"):
+             return
+         self.template_actions.pack_forget()
+-        if self.view_mode in (self.HOME_VIEW, self.TEMPLATE_VIEW):
++        self.update_sidebar_heading()
++        if self.view_mode in (self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+             if not self._home_saved_pack:
+                 self._home_saved_pack = [(widget, widget.pack_info())
+                                          for widget in self.content_frame.pack_slaves()
+                                          if widget not in (self.home_frame, self.template_actions)]
+                 for widget, _info in self._home_saved_pack:
+                     widget.pack_forget()
+-            if self.view_mode == self.TEMPLATE_VIEW:
++            if self.view_mode in (self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+                 self.template_actions.pack(side="bottom", fill="x", pady=(8, 14))
+             self.home_frame.pack(fill="both", expand=True,
+                                  pady=(self.HOME_EDGE_GAP, self.HOME_EDGE_GAP))
+@@ -3541,15 +3563,28 @@
+             self.home_frame, bg_color=self.theme["bg"], track_color=self.theme["bg"],
+             thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"], width=14,
+         )
+-        self.home_scrollbar.pack(side="right", fill="y", padx=(8, 0))
+         self.home_scrollbar.set_command(self.home_canvas.yview)
+-        self.home_canvas.configure(yscrollcommand=self.home_scrollbar.set)
++        self.home_canvas.configure(yscrollcommand=self._sync_home_scrollbar)
+         self.home_content = tk.Frame(self.home_canvas, bg=self.theme["bg"])
+         self._home_window = self.home_canvas.create_window((0, 0), window=self.home_content, anchor="nw")
+         self.home_content.bind("<Configure>", lambda _event: self.home_canvas.configure(
+             scrollregion=self.home_canvas.bbox("all")))
+         self.home_canvas.bind("<Configure>", lambda event: self.home_canvas.itemconfigure(
+-            self._home_window, width=event.width))
++            self._home_window, width=self.home_canvas.winfo_width()))
++
++    def _sync_home_scrollbar(self, first, last):
++        self.home_scrollbar.set(first, last)
++        if float(last) - float(first) >= ThemedAutoScrollbar.FULLY_VISIBLE_RATIO:
++            # Ohne Leiste wird das Jahresraster breiter und geringfügig höher.
++            # Eine kleine Höhenreserve verhindert ständiges Ein-/Ausblenden
++            # genau an dieser Grenze (und eine endlose Geometrieschleife).
++            content = getattr(self, "home_content", None)
++            spare = self.home_canvas.winfo_height() - content.winfo_reqheight() if content else 0
++            if spare >= 8:
++                self.home_scrollbar.pack_forget()
++        elif not self.home_scrollbar.winfo_manager():
++            # Eine unsichtbare Leiste soll keine leere Spalte reservieren.
++            self.home_scrollbar.pack(side="right", fill="y", padx=(8, 0), before=self.home_canvas)
+ 
+     def _bind_home_wheel(self, widget):
+         def scroll(event):
+@@ -3814,12 +3849,13 @@
+             ).pack(fill="x", pady=(0, 8))
+             if self.settings.get("show_yearly_stats", True):
+                 label(stats, "Jahresanzeige · Aufgaben bearbeitet", 10, True, pady=(8, 4))
++                yearly_history = self.yearly_activity_history()
+                 YearHeatmap(
+-                    stats, self.settings.get("activity_history", {}) or self.settings.get("completion_history", {}), bg_color=theme["card"],
++                    stats, yearly_history, bg_color=theme["card"],
+                     empty_color=theme["input"], accent_color=theme["ui_accent"],
+                     text_color=theme["muted"],
+                 ).pack(fill="x", pady=(0, 4))
+-                year_stats = YearHeatmap.statistics(self.settings.get("activity_history", {}) or self.settings.get("completion_history", {}))
++                year_stats = YearHeatmap.statistics(yearly_history)
+                 label(stats, f"{year_stats['active_days']} aktive Tage  ·  {year_stats['total']} Bearbeitungen  ·  "
+                       f"bester Tag {year_stats['best_day']}  ·  Serie {year_stats['streak']}",
+                       9, color="muted", pady=(0, 6))
+@@ -3849,32 +3885,34 @@
+             widget.configure(bg=theme["bg"])
+         self.home_scrollbar.set_theme(theme["bg"], theme["bg"], theme["input_border"], theme["muted"])
+         editing = bool(getattr(self, "_templates_editing", False))
+-        hint = tk.Label(self.home_content,
+-                        text="Wähle eine Vorlage. Zum Ändern unten „Bearbeiten“ aktivieren." if not editing else
+-                             "Bearbeitungsmodus · Änderungen anschließend unten speichern.",
+-                        bg=theme["bg"], fg=theme["muted"], font=app_font(10),
+-                        anchor="w", justify="left")
+-        hint.pack(fill="x", pady=(8, 12))
+-        hint.bind("<Configure>", lambda event: hint.configure(wraplength=max(100, event.width - 8)))
+         self.template_rows = []
++        self.template_cards = []
++        title_font = tkfont.Font(root=self.root, font=app_font(11, "bold"))
++        # Gemeinsame Namensspalte nach Textmaß statt 40 % der Fensterbreite.
++        title_width = min(230, max((title_font.measure(t.get("title", "Vorlage"))
++                                   for t in self.templates), default=100) + 8)
+         for template in getattr(self, "templates", []):
+-            card = tk.Frame(self.home_content, bg=theme["card"], highlightthickness=1,
+-                            highlightbackground=theme["line"])
+-            card.pack(fill="x", pady=(0, 8), padx=2)
+-            card.columnconfigure(1, weight=2, uniform="template_text")
+-            card.columnconfigure(2, weight=3, uniform="template_text")
++            surface = self.make_rounded_container(
++                self.home_content, radius=self.HOME_CARD_RADIUS, inner_pad_x=10,
++                inner_pad_y=6, auto_height=True, register=False,
++            )
++            surface.pack(fill="x", pady=(0, 8))
++            self.template_cards.append(surface)
++            card = surface.inner
++            card.columnconfigure(1, minsize=title_width + 12)
++            card.columnconfigure(2, weight=1)
+             symbol = self.ICONS["folder" if template.get("kind") == "folder" else "list"]
+             kind = tk.Label(card, text=symbol, bg=theme["card"], fg=theme["muted"], font=app_font(13))
+-            kind.grid(row=0, column=0, padx=(10, 4), pady=10, sticky="n")
++            kind.grid(row=0, column=0, padx=(0, 4), pady=6, sticky="n")
+             self.add_tooltip(kind, "Ordner" if template.get("kind") == "folder" else "Liste")
+             title = tk.Label(card, text=template.get("title", "Vorlage"), bg=theme["card"],
+                              fg=theme["text"], font=app_font(11, "bold"), anchor="w", justify="left")
+-            title.grid(row=0, column=1, sticky="new", padx=6, pady=12)
++            title.grid(row=0, column=1, sticky="new", padx=6, pady=8)
+             note = tk.Label(card, text=template.get("note", ""), bg=theme["card"], fg=theme["muted"],
+                             font=app_font(9), anchor="w", justify="left")
+-            note.grid(row=0, column=2, sticky="new", padx=10, pady=12)
++            note.grid(row=0, column=2, sticky="new", padx=(6, 12), pady=8)
+             actions = tk.Frame(card, bg=theme["card"])
+-            actions.grid(row=0, column=3, sticky="ne", padx=6, pady=6)
++            actions.grid(row=0, column=3, sticky="ne")
+             if editing:
+                 for icon, label, command, color in (
+                     ("trash", "Vorlage löschen", self.delete_template, "delete"),
+@@ -3888,24 +3926,24 @@
+                         lambda value=template["id"]: self.create_list_from_template(value), "confirm", width=118, height=38)
+             use.pack(side="left")
+ 
+-            def layout(event, panel=card, heading=title, description=note):
+-                compact = event.width < 730
++            def layout(event, panel=card, heading=title, description=note, buttons=actions):
++                width = panel.winfo_width()
++                compact = width < 730
+                 if compact:
+-                    panel.columnconfigure(2, weight=0, uniform="")
+-                    panel.columnconfigure(1, weight=1, uniform="")
+-                    description.grid_configure(row=1, column=1, columnspan=3, padx=(6, 12), pady=(0, 10))
++                    panel.columnconfigure(2, weight=0)
++                    panel.columnconfigure(1, weight=1, minsize=0)
++                    description.grid_configure(row=1, column=1, columnspan=3, padx=(6, 0), pady=(4, 4))
+                 else:
+-                    panel.columnconfigure(1, weight=2, uniform="template_text")
+-                    panel.columnconfigure(2, weight=3, uniform="template_text")
+-                    description.grid_configure(row=0, column=2, columnspan=1, padx=10, pady=12)
+-                # Vorgaben aus verfügbarer Breite berechnen: Labels dürfen ihre
+-                # Spalten nicht durch lange Beschreibungen auseinanderdrücken.
+-                text_space = max(80, event.width - 290)
+-                heading.configure(wraplength=max(75, text_space if compact else int(text_space * .4)))
+-                description.configure(wraplength=max(100, event.width - 65 if compact else int(text_space * .6)))
+-            card.bind("<Configure>", layout)
++                    panel.columnconfigure(1, weight=0, minsize=title_width + 12)
++                    panel.columnconfigure(2, weight=1)
++                    description.grid_configure(row=0, column=2, columnspan=1, padx=(6, 12), pady=8)
++                text_space = max(75, width - buttons.winfo_reqwidth() - 50)
++                heading.configure(wraplength=text_space if compact else title_width)
++                description.configure(wraplength=max(100, width - 50 if compact else
++                                                       text_space - title_width - 30))
++            card.bind("<Configure>", layout, add="+")
+             self.template_rows.append((card, title, note, actions))
+-            for widget in (card, title, note, kind):
++            for widget in (surface, card, title, note, kind):
+                 self._bind_home_wheel(widget)
+         if not self.templates:
+             tk.Label(self.home_content, text="Noch keine Vorlagen. Unten kannst du Vorlagen hinzufügen.",
+@@ -3915,20 +3953,173 @@
+         self.home_canvas.configure(scrollregion=self.home_canvas.bbox("all"))
+         self.home_canvas.yview_moveto(scroll_position)
+ 
++    def library_entries(self):
++        """Alle normalen Listen und Ordner in der Reihenfolge der Seitenleiste."""
++        entries = [("list", entry) for entry in self.lists
++                   if not entry.get("folder_id") and not self.is_inbox_list(entry)]
++
++        def visit(parent_id):
++            for folder in self.get_child_folders(parent_id):
++                entries.append(("folder", folder))
++                visit(folder["id"])
++                entries.extend(("list", entry) for entry in self.get_folder_lists(folder["id"])
++                               if not self.is_inbox_list(entry))
++
++        visit(None)
++        return entries
++
++    def refresh_library_page(self):
++        """Scrollbare Kachelübersicht des Bestands; verändert keine Inhalte."""
++        scroll_position = self.home_canvas.yview()[0] if getattr(self, "_home_rendered_view", None) == self.LIBRARY_VIEW else 0
++        self._home_rendered_view = self.LIBRARY_VIEW
++        for widget in self.home_content.winfo_children():
++            widget.destroy()
++        theme = self.theme
++        for widget in (self.home_frame, self.home_canvas, self.home_content):
++            widget.configure(bg=theme["bg"])
++        self.home_scrollbar.set_theme(theme["bg"], theme["bg"], theme["input_border"], theme["muted"])
++        entries = self.library_entries()
++        list_count = sum(kind == "list" for kind, _entry in entries)
++        self._set_stats_text(f"{list_count} Listen · {len(entries) - list_count} Ordner")
++        grid = tk.Frame(self.home_content, bg=theme["bg"])
++        grid.pack(fill="x")
++        self.library_cards = []
++        self.library_open_buttons = {}
++        for kind, entry in entries:
++            color = entry.get("color") or ("import" if kind == "folder" else "ui_accent")
++            surface = self.make_rounded_container(grid, radius=self.HOME_CARD_RADIUS,
++                inner_pad_x=14, inner_pad_y=12, auto_height=True, register=False)
++            panel = surface.inner
++            self.library_cards.append(surface)
++
++            def label(text, size=10, bold=False, foreground="muted", pady=(0, 8)):
++                widget = tk.Label(panel, text=text, anchor="w", justify="left",
++                    bg=theme["card"], fg=theme[foreground], font=app_font(size, "bold" if bold else "normal"))
++                widget.pack(fill="x", pady=pady)
++                widget.bind("<Configure>", lambda event, target=widget: target.configure(wraplength=max(80, event.width - 4)))
++                return widget
++
++            label(f"{self.ICONS[kind]}  {entry.get('title') or ('Ordner' if kind == 'folder' else 'Liste')}",
++                  12, True, color)
++            parent_id = entry.get("parent_id" if kind == "folder" else "folder_id")
++            label(" › ".join(self.folder_path_titles(parent_id)) or "Auf oberster Ebene", 9)
++            if kind == "folder":
++                nested = {folder["id"] for folder in self.iter_folder_subtree(entry["id"])}
++                lists = [value for value in self.lists if value.get("folder_id") in nested]
++                items = [item for value in lists for item in value.get("items", [])]
++                children = [("folder", value) for value in self.get_child_folders(entry["id"])]
++                children += [("list", value) for value in self.get_folder_lists(entry["id"])]
++                preview = "\n".join(f"{self.ICONS[child_kind]}  {str(value.get('title') or '').strip()}"
++                                    for child_kind, value in children[:3]) or "Noch keine Listen oder Unterordner."
++                summary = f"{len(lists)} Listen · {len(nested) - 1} Unterordner"
++                command = lambda value=entry["id"]: self.set_active_folder(value)
++            else:
++                items = entry.get("items", [])
++                tasks = [item for item in self.walk_items(items) if self.is_schedulable_item(item)]
++                pending = [item for item in tasks if not item.get("done")]
++                preview = "\n".join(str(item.get("text") or "")[:140] for item in (pending or tasks)[:3])
++                if not preview:
++                    preview = "Noch keine Aufgaben."
++                summary = ""
++                command = lambda value=entry["id"]: self.set_active_list(value)
++            total, done, _overdue = self.compute_stats(items)
++            label((summary + " · " if summary else "") + f"{total - done} offen · {done} erledigt", 9)
++            note = " ".join(str(entry.get("note") or "").split())
++            if note:
++                label(note[:180] + ("…" if len(note) > 180 else ""), 9)
++            label(preview, 10, foreground="text", pady=(0, 12))
++            button = self._make_dialog_button(panel, "Ordner öffnen" if kind == "folder" else "Liste öffnen",
++                                              command, color, width=146, height=38)
++            button.pack(anchor="w")
++            self.library_open_buttons[(kind, entry["id"])] = button
++            # Die ganze Vorschau öffnet den Inhalt; der explizite Button ist
++            # zusätzlich per Tab und Enter erreichbar.
++            for widget in (surface, panel, *panel.winfo_children()):
++                self._bind_home_wheel(widget)
++                if widget is not button:
++                    widget.configure(cursor="hand2")
++                    widget.bind("<Button-1>", lambda _event, open_page=command: open_page())
++
++        def layout(event):
++            columns = max(1, min(3, (grid.winfo_width() + 12) // 352))
++            for column in range(3):
++                grid.columnconfigure(column, weight=1 if column < columns else 0,
++                                     uniform="library" if column < columns else "")
++            for index, surface in enumerate(self.library_cards):
++                surface.grid(row=index // columns, column=index % columns, sticky="nsew",
++                             padx=(0, 12) if index % columns < columns - 1 else 0, pady=(0, 12))
++
++        grid.bind("<Configure>", layout)
++        # Erst einhängen, damit der erste Configure-Aufruf die echte Breite erhält.
++        for index, surface in enumerate(self.library_cards):
++            surface.grid(row=index, column=0, sticky="ew", pady=(0, 12))
++        if not entries:
++            tk.Label(grid, text="Noch keine Listen oder Ordner. Lege unten deine erste Liste an.",
++                     bg=theme["bg"], fg=theme["muted"], anchor="w", justify="left",
++                     wraplength=380).grid(row=0, column=0, sticky="ew", pady=16)
++        self.refresh_page_actions((
++            ("Neue Liste", self.create_new_list, "accent", 148),
++            ("Neuer Ordner", self.create_new_folder, "import", 166),
++            ("Liste importieren", self.import_txt_as_new_lists, "import", 222),
++            ("Listen/Ordner hinzufügen …", self.import_partial_backup, "clear", 252),
++        ))
++        self._bind_home_wheel(grid)
++        self._bind_home_wheel(self.home_canvas)
++        self.home_content.update_idletasks()
++        self.home_canvas.configure(scrollregion=self.home_canvas.bbox("all"))
++        self.home_canvas.yview_moveto(scroll_position)
++
+     def refresh_template_actions(self):
+-        for widget in self.template_actions.winfo_children():
+-            widget.destroy()
+-        self.template_actions.configure(bg=self.theme["bg"])
+-        row = ButtonFlow(self.template_actions, bg=self.theme["bg"])
+-        row.pack(fill="x")
+         editing = bool(getattr(self, "_templates_editing", False))
+-        for text, command, color, width in (
++        specs = (
+             ("Vorlagen speichern" if editing else "Bearbeiten", self.toggle_template_editing, "accent", 186 if editing else 128),
+             ("Vorlagen exportieren …", self.export_templates_file, "export", 222),
+             ("Vorlagen hinzufügen …", self.import_templates_file, "import", 222),
+             ("Listen/Ordner hinzufügen …", self.import_partial_backup, "clear", 252),
+-        ):
+-            row.add(self._make_dialog_button(row, text, command, color, width=width))
++        )
++        self.refresh_page_actions(specs)
++
++    def refresh_page_actions(self, specs):
++        """Zwei Aktionspaare auf denselben Zwischenflächen wie in den Listen."""
++        for widget in self.template_actions.winfo_children():
++            widget.destroy()
++        self.template_actions.configure(bg=self.theme["bg"])
++        self.template_action_groups = []
++        for pair in (specs[:2], specs[2:]):
++            required = sum(spec[3] for spec in pair) + 5
++            group = self.make_rounded_container(
++                self.template_actions, radius=16, padding=7, width=required + 14,
++                auto_height=True, register=False,
++            )
++            buttons = [self._make_dialog_button(group.inner, text, command, color, width=width, height=38)
++                       for text, command, color, width in pair]
++
++            def layout_pair(width, panel=group.inner, pair_buttons=buttons, needed=required):
++                stacked = width < needed
++                panel.columnconfigure(0, weight=1)
++                panel.columnconfigure(1, weight=0 if stacked else 1)
++                for index, button in enumerate(pair_buttons):
++                    button.grid(row=index if stacked else 0, column=0 if stacked else index,
++                                sticky="ew", padx=(0, 5) if not stacked and index == 0 else 0,
++                                pady=(0, 6) if stacked and index == 0 else 0)
++
++            group.inner.bind("<Configure>", lambda event, arrange=layout_pair, panel=group.inner: arrange(panel.winfo_width()), add="+")
++            layout_pair(required)
++            self.template_action_groups.append(group)
++
++        required_width = sum(int(group.cget("width")) for group in self.template_action_groups) + 12
++
++        def layout_groups(width):
++            stacked = width < required_width
++            self.template_actions.columnconfigure(0, weight=1)
++            self.template_actions.columnconfigure(1, weight=0 if stacked else 1)
++            for index, group in enumerate(self.template_action_groups):
++                group.grid(row=index if stacked else 0, column=0 if stacked else index,
++                           sticky="ew", padx=(0, 12) if not stacked and index == 0 else 0,
++                           pady=(0, 8) if stacked and index == 0 else 0)
++
++        self.template_actions.bind("<Configure>", lambda event: layout_groups(self.template_actions.winfo_width()))
++        layout_groups(self.template_actions.winfo_width())
+ 
+     def add_tooltip(self, widget, text):
+         """Erklärt kompakte Textsymbole auch beim Tastaturfokus."""
+@@ -4455,6 +4646,8 @@
+             return "Startseite"
+         if self.view_mode == self.TEMPLATE_VIEW:
+             return "Vorlagen"
++        if self.view_mode == self.LIBRARY_VIEW:
++            return "Listen und Ordner"
+         if self.view_mode == "in_progress":
+             return "In Bearbeitung"
+         if self.view_mode == self.LABELS_VIEW:
+@@ -4470,7 +4663,7 @@
+         return self.app_title
+ 
+     def get_active_page(self):
+-        if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW):
++        if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+             return None
+         if self.view_mode == "folder" and self.active_folder_id:
+             return self.get_folder(self.active_folder_id)
+@@ -4485,6 +4678,8 @@
+                 self.show_info("Startseite", "Öffne zuerst eine Liste oder wähle eine Vorlage aus.")
+             elif self.view_mode == self.TEMPLATE_VIEW:
+                 self.show_info("Vorlagen", "Wähle zuerst eine Vorlage aus oder öffne eine Liste.")
++            elif self.view_mode == self.LIBRARY_VIEW:
++                self.show_info("Listen und Ordner", "Öffne zuerst eine Liste aus der Übersicht.")
+             elif self.view_mode in self.DERIVED_ITEM_VIEWS:
+                 self.show_info(
+                     self.get_display_title(),
+@@ -7752,14 +7947,24 @@
+         title_row = self.register_theme_widget(tk.Frame(self.sidebar_frame, bg=self.theme["card"]), "card")
+         title_row.pack(fill="x", pady=(self.SIDEBAR_SECTION_GAP, 8))
+ 
++        self.sidebar_heading_frame = tk.Frame(title_row, bg=self.theme["card"], cursor="hand2")
++        self.sidebar_heading_frame.pack(side="left", fill="both", expand=True, padx=(0, 6))
++        icon_slot = tk.Frame(self.sidebar_heading_frame, width=28, bg=self.theme["card"])
++        icon_slot.pack(side="left", fill="y")
++        icon_slot.pack_propagate(False)
++        self.sidebar_heading_icon = tk.Label(icon_slot, text=self.ICONS["list"],
++            font=self.sidebar_section_font(), bg=self.theme["card"], fg=self.theme["text"], cursor="hand2")
++        self.sidebar_heading_icon.pack(fill="both", expand=True, pady=(0, 4))
+         self.sidebar_title = self.register_theme_widget(
+             tk.Label(
+-                title_row,
++                self.sidebar_heading_frame,
+                 text="Listen",
+                 font=self.sidebar_section_font(),
+                 bg=self.theme["card"],
+                 fg=self.theme["text"],
+                 anchor="w",
++                cursor="hand2",
++                takefocus=True,
+             ),
+             "card",
+             "text",
+@@ -7768,8 +7973,17 @@
+         # sitzt die Schrift optisch über seiner Mitte.
+         self.sidebar_title.pack(
+             side="left", fill="x", expand=True,
+-            padx=(33, 0), pady=(self.SIDEBAR_TITLE_BASELINE_SHIFT, 0),
+-        )
++            padx=(5, 0), pady=(self.SIDEBAR_TITLE_BASELINE_SHIFT, 0),
++        )
++        for widget in (self.sidebar_heading_frame, icon_slot, self.sidebar_heading_icon, self.sidebar_title):
++            widget.bind("<Button-1>", lambda _event: self.set_library_view())
++            widget.bind("<Enter>", lambda _event: self.update_sidebar_heading(hover=True))
++            widget.bind("<Leave>", lambda _event: self.update_sidebar_heading(hover=False))
++        for sequence in ("<Return>", "<space>"):
++            self.sidebar_title.bind(sequence, lambda _event: self.set_library_view())
++        self.sidebar_title.bind("<FocusIn>", lambda _event: self.update_sidebar_heading(hover=True))
++        self.sidebar_title.bind("<FocusOut>", lambda _event: self.update_sidebar_heading(hover=False))
++        self.add_tooltip(self.sidebar_title, "Alle Listen und Ordner als Kacheln anzeigen")
+ 
+         self.add_list_button = self.make_button(
+             title_row,
+@@ -8216,7 +8430,7 @@
+                 self.sidebar_listbox.selection_remove(*sidebar_selection)
+             # Welche Zeile die geöffnete Seite ist, entscheidet dieselbe
+             # Zuordnung, die auch Kontextmenü und Drag & Drop benutzen.
+-            if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW):
++            if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+                 active_row = ("view", self.view_mode)
+             elif self.view_mode == "folder" and self.active_folder_id:
+                 active_row = ("folder", self.active_folder_id)
+@@ -8232,6 +8446,8 @@
+                 self.sidebar_listbox.selection_set(active_iid)
+                 self.sidebar_listbox.focus(active_iid)
+                 self.sidebar_listbox.see(active_iid)
++            elif self.view_mode == self.LIBRARY_VIEW:
++                pass  # Die Listenüberschrift ist die aktive Navigation.
+             elif self.system_listbox.get_children(""):
+                 first = self.system_listbox.get_children("")[0]
+                 self.system_listbox.selection_set(first)
+@@ -8243,6 +8459,17 @@
+         finally:
+             self._updating_sidebar = False
+         self.refresh_sidebar_row_texts()
++
++    def update_sidebar_heading(self, hover=False):
++        if not hasattr(self, "sidebar_heading_frame"):
++            return
++        selected = self.view_mode == self.LIBRARY_VIEW
++        bg = self.theme["selection" if selected else "hover" if hover else "card"]
++        fg = self.theme["selection_text" if selected else "text"]
++        self.sidebar_heading_frame.configure(bg=bg)
++        self.sidebar_heading_icon.master.configure(bg=bg)
++        for widget in (self.sidebar_heading_icon, self.sidebar_title):
++            widget.configure(bg=bg, fg=fg)
+ 
+     def _insert_sidebar_folder_rows(self, parent_folder_id, parent_iid, depth):
+         """Zeichnet einen Ordnerzweig mit Unterordnern und Listen.
+@@ -11940,6 +12167,8 @@
+         """Öffnet für die aktuelle Seite den gemeinsamen Bearbeiten-Dialog."""
+         if self.view_mode == self.HOME_VIEW:
+             return self.show_settings_dialog()
++        if self.view_mode in (self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
++            return "break"
+         if self.view_mode in self.DERIVED_ITEM_VIEWS:
+             self.show_info(
+                 self.get_display_title(), "Diese automatisch erzeugte Ansicht hat einen festen Namen."
+@@ -12005,6 +12234,9 @@
+ 
+     def update_page_note_preview(self):
+         if not hasattr(self, "note_preview_label"):
++            return
++        if self.view_mode == self.LIBRARY_VIEW:
++            self.note_preview_label.configure(text="Deine Listen und Ordner · Kachel anklicken zum Öffnen")
+             return
+         if self.view_mode == self.TEMPLATE_VIEW:
+             self.note_preview_label.configure(text="Vorlagen für Listen und Ordner · Aktionen am unteren Rand")
+@@ -12051,7 +12283,7 @@
+     def update_entry_mode(self):
+         if not hasattr(self, "entry"):
+             return
+-        if self.view_mode == self.HOME_VIEW:
++        if self.view_mode in (self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+             self.update_home_visibility()
+             return
+         self.update_home_visibility()
+@@ -13354,7 +13586,7 @@
+             inbox_repaired = bool(getattr(self, "_last_inbox_repair", False))
+             requested_system_view = (
+                 self.view_mode
+-                if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW)
++                if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW)
+                 else None
+             )
+             requested_folder_id = self.active_folder_id
+@@ -13370,10 +13602,10 @@
+             self.active_folder_id = None
+             self.view_mode = "list"
+             self.set_active_list(preferred_active_id, refresh=False)
+-            if requested_folder_id and self.get_folder(requested_folder_id):
++            if requested_system_view:
++                self._activate_system_view(requested_system_view, refresh=False)
++            elif requested_folder_id and self.get_folder(requested_folder_id):
+                 self.set_active_folder(requested_folder_id, refresh=False)
+-            elif requested_system_view:
+-                self._activate_system_view(requested_system_view, refresh=False)
+             self.update_sidebar_list()
+             self.refresh_tree()
+             if inbox_repaired:
+@@ -13915,7 +14147,7 @@
+         return "break"
+ 
+     def focus_entry(self, event=None):
+-        if self.view_mode == self.HOME_VIEW:
++        if self.view_mode in (self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+             self.set_active_list(self.ensure_inbox_list()["id"])
+         if hasattr(self, "entry"):
+             self.entry.focus_set()
+@@ -14052,6 +14284,10 @@
+             return
+ 
+         self.update_home_visibility()
++        if self.view_mode == self.LIBRARY_VIEW:
++            self.tree.selection_remove(self.tree.selection())
++            self.refresh_library_page()
++            return
+         if self.view_mode == self.HOME_VIEW:
+             self.tree.selection_remove(self.tree.selection())
+             self.refresh_home()
+@@ -15441,7 +15677,7 @@
+         self.set_active_list(desired_list_id, refresh=False)
+         if desired_folder_id and self.get_folder(desired_folder_id):
+             self.set_active_folder(desired_folder_id, refresh=False)
+-        elif desired_view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW):
++        elif desired_view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+             # Vorher standen hier nur „In Bearbeitung“ und der Papierkorb: Wer in
+             # „Verspätet“ etwas zurücknahm, landete danach in der zuletzt
+             # geöffneten Liste. Eine abgeleitete Ansicht bleibt jetzt stehen.
+@@ -15754,7 +15990,7 @@
+         return "break"
+ 
+     def add_item(self):
+-        if self.view_mode == self.HOME_VIEW:
++        if self.view_mode in (self.HOME_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW):
+             self.focus_entry()
+             return
+         if self.view_mode in self.DERIVED_ITEM_VIEWS:

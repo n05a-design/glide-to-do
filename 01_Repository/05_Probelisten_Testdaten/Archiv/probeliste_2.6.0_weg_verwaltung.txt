@@ -1,0 +1,19 @@
+WEG-Verwaltung
+==============================
+
+1. 📁 Eigentümerversammlung
+   Beschreibung: Frist: Einladung 3 Wochen vorher.
+   1.1. 🚩 Einladung versenden
+      Fällig: 05.09.2026
+   1.2. ⚑ Tagesordnung finalisieren
+      Fällig: 02.09.2026
+   1.3. Beschlussvorlagen prüfen
+   1.4. ✓ Protokollführung klären
+2. 📁 Abrechnung
+   2.1. Heizkostenabrechnung anfordern
+      Fällig: 30.09.2026
+   2.2. ✓ Belege sortieren
+   2.3. ⚐ Rückfragen Beirat beantworten
+3. Hausordnung aktualisieren
+
+Exportiert am: 01.09.2026 um 23:55 Uhr

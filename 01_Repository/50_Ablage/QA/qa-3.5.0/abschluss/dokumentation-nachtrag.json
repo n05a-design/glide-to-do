@@ -1,0 +1,58 @@
+{
+  "status": "bestanden",
+  "checks": [
+    {
+      "schritt": "Syntax",
+      "status": "bestanden",
+      "detail": "14 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+    },
+    {
+      "schritt": "Versionen",
+      "status": "bestanden",
+      "detail": "VERSION, App, Hauptsuite und CHANGELOG: 3.5.0; Datenformat 11"
+    },
+    {
+      "schritt": "Dokumentation",
+      "status": "bestanden",
+      "detail": "Alle Dokumente einschließlich Archiv im Index; 112 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+    },
+    {
+      "schritt": "Fixtures",
+      "status": "bestanden",
+      "detail": "2 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite"
+    },
+    {
+      "schritt": "Geänderte Texte",
+      "status": "bestanden",
+      "detail": "152 lokale Links; CRLF ohne BOM"
+    },
+    {
+      "schritt": "Quellcode und Startkopie",
+      "status": "bestanden",
+      "sha256": "4D7DCA5F644672A2D37EB2D9A01A202025375DA61E5733A90A8C5A766002CF82",
+      "detail": "Bytegleich und seit Ausgangslauf unverändert"
+    },
+    {
+      "schritt": "Äußere Backupkopie",
+      "datei": "Glide-Funktionsvorschau_3.5.0.glidebackup",
+      "status": "bestanden",
+      "sha256": "06FB40BC493FF0061F66BD3BB87C56FC7B30FCA1BE593ED59E5145E1D556B366"
+    },
+    {
+      "schritt": "Äußere Backupkopie",
+      "datei": "Glide-Releaseplanung_3.5.0.glidebackup",
+      "status": "bestanden",
+      "sha256": "AF32A2EAA9DE1EDC42B9C2E3744F55D325DB8C327C0F99ACD31DFEFFB3CF17A1"
+    },
+    {
+      "schritt": "Bereinigung und Sicherungsarchiv",
+      "status": "bestanden",
+      "detail": "Drei historische Fixtures erhalten; Löschziele entfernt; alle 22 Archivdateien erneut verifiziert"
+    },
+    {
+      "schritt": "Sichtnachweise",
+      "status": "bestanden",
+      "detail": "24 PNG-Dateien vorhanden und angesehen; Begrenzungen im QA-Bericht"
+    }
+  ]
+}

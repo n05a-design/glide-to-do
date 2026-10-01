@@ -1,0 +1,8 @@
+{
+  "before_sha256": "dead78042997fa71c1d110724aaed9bfd10f3cedcfdf3a10eddf187799a3be0b",
+  "after_sha256": "c51b811fdd0d804834f727f4a55ce2b16e770654adfb597245f4503d61b1c7e6",
+  "added_lines": 154,
+  "removed_lines": 56,
+  "runtime_modules_added": 0,
+  "data_schema_changed": false
+}

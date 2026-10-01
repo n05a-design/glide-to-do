@@ -1,0 +1,572 @@
+{
+    "version": 2,
+    "active_list_id": "0c9f989afd674dc086a9a05741a58df5",
+    "lists": [
+        {
+            "id": "0c9f989afd674dc086a9a05741a58df5",
+            "title": "Projektmarketing Neubau",
+            "items": [
+                {
+                    "id": "8a98110279354adea8433ce782a74cf4",
+                    "text": "Projektstory und Kernbotschaften finalisieren",
+                    "done": false,
+                    "importance": 3,
+                    "children": [
+                        {
+                            "id": "25f859ba717b4095aedabaf7890d8241",
+                            "text": "Zielgruppen-Nutzen in 3 Claims verdichten",
+                            "done": false,
+                            "importance": 2,
+                            "children": []
+                        },
+                        {
+                            "id": "9af5b39f34e0425398ee6d5bcb358d46",
+                            "text": "Tonality: hochwertig, lokal, vertrauensbildend",
+                            "done": true,
+                            "importance": 1,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "4617290f3c0b4a28b65e4888465649a3",
+                    "text": "Exposé-Struktur prüfen",
+                    "done": false,
+                    "importance": 2,
+                    "children": [
+                        {
+                            "id": "2d55e38c7fcb4010a26e8b204cbba2b1",
+                            "text": "Titelseite, Lage, Ausstattung, Grundrisse",
+                            "done": false,
+                            "importance": 1,
+                            "children": []
+                        },
+                        {
+                            "id": "56a6b9fe9a384faea92366a1ab169e8c",
+                            "text": "Disclaimer für Visualisierungen ergänzen",
+                            "done": true,
+                            "importance": 2,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "6883b53c3fa347e3bde5abdff07d3da9",
+                    "text": "Landingpage vorbereiten",
+                    "done": false,
+                    "importance": 3,
+                    "children": [
+                        {
+                            "id": "05e8c695b3004cb1a0831ec6cd15f0e9",
+                            "text": "CTA-Varianten testen",
+                            "done": false,
+                            "importance": 2,
+                            "children": []
+                        },
+                        {
+                            "id": "beab68d2207440e3811667efea4ce51d",
+                            "text": "Kontaktformular mit Lead-Quelle prüfen",
+                            "done": false,
+                            "importance": 1,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "2242126eaae647408042decd5034e217",
+                    "text": "Bauzaunbanner und Bauschild abstimmen",
+                    "done": true,
+                    "importance": 1,
+                    "children": []
+                },
+                {
+                    "id": "f6cc7f148ec848528edb1b54dfcbaba8",
+                    "text": "Lokale Presse- und Social-Media-Planung erstellen",
+                    "done": false,
+                    "importance": 2,
+                    "children": []
+                }
+            ]
+        },
+        {
+            "id": "1d71aaa8baf7459b9d7a6612cee2bbc5",
+            "title": "WEG Verwaltung",
+            "items": [
+                {
+                    "id": "d4072547f08b468587a43ff48acf2aca",
+                    "text": "Eigentümerversammlung vorbereiten",
+                    "done": false,
+                    "importance": 3,
+                    "children": [
+                        {
+                            "id": "c715b7b0167b4eeda444902d3aa57e1c",
+                            "text": "TOP-Liste mit Beschlussvorlagen abstimmen",
+                            "done": false,
+                            "importance": 3,
+                            "children": []
+                        },
+                        {
+                            "id": "628d3290ea1e4aba9a9adb99bb9c8f26",
+                            "text": "Einladungsfrist prüfen",
+                            "done": true,
+                            "importance": 2,
+                            "children": []
+                        },
+                        {
+                            "id": "bb96ea3ea93c4a4aaac8b9550b7c79d2",
+                            "text": "Angebote den TOPs zuordnen",
+                            "done": false,
+                            "importance": 2,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "8439885d32eb451d9df99f30441105b3",
+                    "text": "Belegprüfung koordinieren",
+                    "done": false,
+                    "importance": 2,
+                    "children": [
+                        {
+                            "id": "94fed3bf2c0b46b1b850b89c2b07b480",
+                            "text": "Terminvorschläge versenden",
+                            "done": true,
+                            "importance": 1,
+                            "children": []
+                        },
+                        {
+                            "id": "4fcf03f329114bc5b55913fce6d35771",
+                            "text": "Rückmeldungen dokumentieren",
+                            "done": false,
+                            "importance": 1,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "e22ddb0f79fa49f7afad16e928257557",
+                    "text": "Brandschutz-Hinweis Tiefgarage formulieren",
+                    "done": false,
+                    "importance": 3,
+                    "children": []
+                },
+                {
+                    "id": "0ad6a7e283364cb1abc6d6a31f92ed81",
+                    "text": "Rechnungseingang prüfen und freigeben",
+                    "done": false,
+                    "importance": 2,
+                    "children": []
+                },
+                {
+                    "id": "8aff814ae37f4e409552d91a297859ea",
+                    "text": "iDWELL-Aushang aktualisieren",
+                    "done": true,
+                    "importance": 1,
+                    "children": []
+                }
+            ]
+        },
+        {
+            "id": "866170afb5ab44978a409b705815164f",
+            "title": "Website & Design",
+            "items": [
+                {
+                    "id": "fb2b36080fdd4f5990b659424e26fff0",
+                    "text": "Hero-Bereich der Objektseite überarbeiten",
+                    "done": false,
+                    "importance": 2,
+                    "children": [
+                        {
+                            "id": "02d9d5056b52447b92e4f29be5cd67dc",
+                            "text": "Bildkomposition prüfen",
+                            "done": false,
+                            "importance": 1,
+                            "children": []
+                        },
+                        {
+                            "id": "eea90b0c89de44f89cb2902ba9409e5e",
+                            "text": "Mobile Darstellung testen",
+                            "done": false,
+                            "importance": 2,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "42b5ad4d9ddb4bd7927d339a4228c48c",
+                    "text": "Vorher-/Nachher-Slider optimieren",
+                    "done": false,
+                    "importance": 2,
+                    "children": []
+                },
+                {
+                    "id": "d9842f8d0be14890af1fc181ff29268c",
+                    "text": "DSGVO-Kartenhinweis prüfen",
+                    "done": true,
+                    "importance": 1,
+                    "children": []
+                },
+                {
+                    "id": "971d73d530774a3b9794ff10c1469b9e",
+                    "text": "CSS-Spacing und Button-Zustände angleichen",
+                    "done": false,
+                    "importance": 2,
+                    "children": [
+                        {
+                            "id": "834e66f687da4b078d8ec6c049146ad6",
+                            "text": "Hover",
+                            "done": true,
+                            "importance": 1,
+                            "children": []
+                        },
+                        {
+                            "id": "cdd935b2e4fe4179b2b313e6b7624ff2",
+                            "text": "Focus-State",
+                            "done": false,
+                            "importance": 2,
+                            "children": []
+                        },
+                        {
+                            "id": "4401c14e3a8345adb9c96c08d7c2a2f8",
+                            "text": "Touch-Zielgrößen",
+                            "done": false,
+                            "importance": 2,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "f1b92eb2084747e19fbe2d8c1fb15db8",
+                    "text": "Performance-Check: Bilder und Lazy Loading",
+                    "done": false,
+                    "importance": 3,
+                    "children": []
+                }
+            ]
+        },
+        {
+            "id": "a737a5a1964340b18b69eba5bfa5b8cf",
+            "title": "Tagesgeschäft",
+            "items": [
+                {
+                    "id": "6c4dbd5f745d41a5b40c4417d3d95d59",
+                    "text": "Rückrufe priorisieren",
+                    "done": false,
+                    "importance": 2,
+                    "children": [
+                        {
+                            "id": "370a45c887c64cffbe4ff70f7fdb54e5",
+                            "text": "Hausmeister",
+                            "done": false,
+                            "importance": 1,
+                            "children": []
+                        },
+                        {
+                            "id": "2cbe438cf6884b06b3576008eee9483a",
+                            "text": "Eigentümerbeirat",
+                            "done": false,
+                            "importance": 2,
+                            "children": []
+                        },
+                        {
+                            "id": "d9bf92383a1345af84fcbec963de2d8b",
+                            "text": "Dienstleister Angebot",
+                            "done": true,
+                            "importance": 1,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "45f5b95ce415429693ddcd4ba1e74e48",
+                    "text": "Posteingang sortieren",
+                    "done": false,
+                    "importance": 1,
+                    "children": []
+                },
+                {
+                    "id": "eed7c6527a124607af62aa8ded0859c1",
+                    "text": "3 wichtigste Aufgaben für heute festlegen",
+                    "done": false,
+                    "importance": 3,
+                    "children": []
+                },
+                {
+                    "id": "99725bbc26934046854959d45f2e1f8f",
+                    "text": "Offene Angebote nachfassen",
+                    "done": false,
+                    "importance": 2,
+                    "children": []
+                },
+                {
+                    "id": "ddc3118b330c48759f3a634391b214dd",
+                    "text": "Kurznotizen in CRM übertragen",
+                    "done": true,
+                    "importance": 1,
+                    "children": []
+                }
+            ]
+        },
+        {
+            "id": "b98b7e66604b4473a6de46c0b3f519a0",
+            "title": "Funktionstest & Scrollen",
+            "items": [
+                {
+                    "id": "54c8af7e558e44fa9b571ab70ae5e905",
+                    "text": "Mehrfachauswahl testen: Startpunkt auswählen",
+                    "done": false,
+                    "importance": 1,
+                    "children": []
+                },
+                {
+                    "id": "8a2406d05f12423f8e2ff85d465278fc",
+                    "text": "Shift + Klick Bereichsauswahl testen",
+                    "done": false,
+                    "importance": 2,
+                    "children": []
+                },
+                {
+                    "id": "84a4291f4e0b48f8bf609378e46c02a8",
+                    "text": "Strg + A alle sichtbaren Punkte auswählen",
+                    "done": false,
+                    "importance": 2,
+                    "children": []
+                },
+                {
+                    "id": "50de9d3b7ffc48ceba6470ec163afba5",
+                    "text": "Punkt als erledigt markieren",
+                    "done": true,
+                    "importance": 1,
+                    "children": []
+                },
+                {
+                    "id": "30c314a4923147719bc1966dd9017131",
+                    "text": "Filter: Nur offene Punkte prüfen",
+                    "done": false,
+                    "importance": 2,
+                    "children": []
+                },
+                {
+                    "id": "bf019ddb354147d99d520b08f8a1a91c",
+                    "text": "Filter: Nur erledigte Punkte prüfen",
+                    "done": true,
+                    "importance": 2,
+                    "children": []
+                },
+                {
+                    "id": "30c61a286c87485e8141f133f31f9e20",
+                    "text": "Drag & Drop Reihenfolge ändern",
+                    "done": false,
+                    "importance": 3,
+                    "children": []
+                },
+                {
+                    "id": "df97cdd86cb24fc88efc5d673222f31f",
+                    "text": "Shift + Drag Unterpunkt erstellen",
+                    "done": false,
+                    "importance": 3,
+                    "children": []
+                },
+                {
+                    "id": "079a832be0894f2797c5279c30a1c844",
+                    "text": "Scroll-Test Aufgabe 09",
+                    "done": false,
+                    "importance": 1,
+                    "children": []
+                },
+                {
+                    "id": "24ca0e10ab3f44109dbd8c05a5876023",
+                    "text": "Scroll-Test Aufgabe 10",
+                    "done": true,
+                    "importance": 2,
+                    "children": []
+                },
+                {
+                    "id": "ec26c0ac12a84beead53facb5719a891",
+                    "text": "Scroll-Test Aufgabe 11",
+                    "done": false,
+                    "importance": 3,
+                    "children": []
+                },
+                {
+                    "id": "1adcc75caee8472385c6de021747754e",
+                    "text": "Scroll-Test Aufgabe 12",
+                    "done": false,
+                    "importance": 0,
+                    "children": [
+                        {
+                            "id": "0dbd5b73394245a6a8e252bc12f12c5a",
+                            "text": "Unterpunkt 12.1 prüfen",
+                            "done": true,
+                            "importance": 1,
+                            "children": []
+                        },
+                        {
+                            "id": "6413b123992e46d7a532f84f5fe7f5a8",
+                            "text": "Unterpunkt 12.2 optional",
+                            "done": false,
+                            "importance": 0,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "65b50becccf4414cb2f04ccb438fcc1f",
+                    "text": "Scroll-Test Aufgabe 13",
+                    "done": false,
+                    "importance": 1,
+                    "children": []
+                },
+                {
+                    "id": "545fff5ef9544a8789ed8bbbe45a1242",
+                    "text": "Scroll-Test Aufgabe 14",
+                    "done": false,
+                    "importance": 2,
+                    "children": []
+                },
+                {
+                    "id": "bd96f2e3e2324fedba185c4b8c9ef1db",
+                    "text": "Scroll-Test Aufgabe 15",
+                    "done": true,
+                    "importance": 3,
+                    "children": []
+                },
+                {
+                    "id": "e74535f56de34cbbb08664f032836cbb",
+                    "text": "Scroll-Test Aufgabe 16",
+                    "done": false,
+                    "importance": 0,
+                    "children": []
+                },
+                {
+                    "id": "cd4f582e98c143caa4c7f12c70114b6c",
+                    "text": "Scroll-Test Aufgabe 17",
+                    "done": false,
+                    "importance": 1,
+                    "children": []
+                },
+                {
+                    "id": "1a97eff32f724335a3a59460410980b5",
+                    "text": "Scroll-Test Aufgabe 18",
+                    "done": false,
+                    "importance": 2,
+                    "children": [
+                        {
+                            "id": "b0588f79aa5440b6923e79186c4bb3b9",
+                            "text": "Unterpunkt 18.1 prüfen",
+                            "done": true,
+                            "importance": 1,
+                            "children": []
+                        },
+                        {
+                            "id": "f72c755ea33444609e3a510a82d5af35",
+                            "text": "Unterpunkt 18.2 optional",
+                            "done": false,
+                            "importance": 0,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "79b2fa412e1a4d49a9b0c0ac4cf3ed4b",
+                    "text": "Scroll-Test Aufgabe 19",
+                    "done": false,
+                    "importance": 3,
+                    "children": []
+                },
+                {
+                    "id": "956caeb9b8d84db3af1d7e72bb1915b1",
+                    "text": "Scroll-Test Aufgabe 20",
+                    "done": true,
+                    "importance": 0,
+                    "children": []
+                },
+                {
+                    "id": "40fba65645df4579aa401bd54667e681",
+                    "text": "Scroll-Test Aufgabe 21",
+                    "done": false,
+                    "importance": 1,
+                    "children": []
+                },
+                {
+                    "id": "ed9fef82641742f1954fc1745b43e4a5",
+                    "text": "Scroll-Test Aufgabe 22",
+                    "done": false,
+                    "importance": 2,
+                    "children": []
+                },
+                {
+                    "id": "bfe09c9585eb47fa9c7f3e710619a987",
+                    "text": "Scroll-Test Aufgabe 23",
+                    "done": false,
+                    "importance": 3,
+                    "children": []
+                },
+                {
+                    "id": "33e571cc9e96497686beaf8119789cf8",
+                    "text": "Scroll-Test Aufgabe 24",
+                    "done": false,
+                    "importance": 0,
+                    "children": [
+                        {
+                            "id": "cac3cdd4327a4bb69ff8ff4415a533ae",
+                            "text": "Unterpunkt 24.1 prüfen",
+                            "done": true,
+                            "importance": 1,
+                            "children": []
+                        },
+                        {
+                            "id": "3b10f0cb1e1c4061b8978de247416281",
+                            "text": "Unterpunkt 24.2 optional",
+                            "done": false,
+                            "importance": 0,
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "id": "4b025c60fe234b99b5827bf3e45162dc",
+                    "text": "Scroll-Test Aufgabe 25",
+                    "done": true,
+                    "importance": 1,
+                    "children": []
+                },
+                {
+                    "id": "e25f444caeb149db9b9cc02bfdd7f957",
+                    "text": "Scroll-Test Aufgabe 26",
+                    "done": false,
+                    "importance": 2,
+                    "children": []
+                },
+                {
+                    "id": "9cc2184e45094bfd8059f7d588bd0abf",
+                    "text": "Scroll-Test Aufgabe 27",
+                    "done": false,
+                    "importance": 3,
+                    "children": []
+                },
+                {
+                    "id": "6f41b61ef14a437d9db065dd54b4dc77",
+                    "text": "Scroll-Test Aufgabe 28",
+                    "done": false,
+                    "importance": 0,
+                    "children": []
+                },
+                {
+                    "id": "f0cc7db6d5b44db48c56db8f2f382a62",
+                    "text": "Scroll-Test Aufgabe 29",
+                    "done": false,
+                    "importance": 1,
+                    "children": []
+                },
+                {
+                    "id": "818aba7739ed4eac8a39cc2b190e2dc2",
+                    "text": "Scroll-Test Aufgabe 30",
+                    "done": true,
+                    "importance": 2,
+                    "children": []
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,19 @@
+{
+  "version": "3.32.1",
+  "checked_files": {
+    "python": 139,
+    "bundle": 53
+  },
+  "sha256": {
+    "app.pyw": "dead78042997fa71c1d110724aaed9bfd10f3cedcfdf3a10eddf187799a3be0b",
+    "glide_start.py": "0b6672f92a0b74d611c478d3e54f25915508ce0ca6492063c520f229694d9ae3",
+    "drawing.py": "72754ee4a403dcc51ee4b5f12c6dad1a01ec5a6a4c7c1b824781ca157e87a79a",
+    "drawing_image.py": "d1020a43175f251a5a59aa434ebbc5b4cb43d8e70fc9c245deaff2001bfa1ad9",
+    "backdrop.py": "a45c04144b4366eb805aee56558005976f0e66d53032acb0b6aa37ee702689f8",
+    "page_markdown.py": "5b4828bd801f7b86f098983785b2c5789efe03bc2dde5d37987ab5f722171141",
+    "image_preview.py": "2081133ae0d0e5a827180f870414831e77b640f9c56b6604d2b28ca4b383feb6",
+    "logo.py": "19e4f6f5c1dc574943df929d1ff64388e4f997c63084f7a2bb77ee507a8d6880"
+  },
+  "mismatches": [],
+  "bundle_identifier": "de.shaye.glide"
+}

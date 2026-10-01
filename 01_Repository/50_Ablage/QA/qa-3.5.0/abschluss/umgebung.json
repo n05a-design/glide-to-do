@@ -1,0 +1,33 @@
+{
+  "python": "3.12.7 (tags/v3.12.7:0b05ead, Oct  1 2024, 03:06:41) [MSC v.1941 64 bit (AMD64)]",
+  "tk": "8.6.13",
+  "tk_scaling": 1.3339898243886428,
+  "screen": [
+    2560,
+    1440
+  ],
+  "TkDefaultFont_benannt": {
+    "family": "Segoe UI",
+    "size": 9,
+    "weight": "normal",
+    "slant": "roman",
+    "underline": 0,
+    "overstrike": 0
+  },
+  "tuple_TkDefaultFont_12": {
+    "family": "Arial",
+    "size": 12,
+    "weight": "normal",
+    "slant": "roman",
+    "underline": 0,
+    "overstrike": 0
+  },
+  "tuple_TkDefaultFont_11": {
+    "family": "Arial",
+    "size": 11,
+    "weight": "normal",
+    "slant": "roman",
+    "underline": 0,
+    "overstrike": 0
+  }
+}

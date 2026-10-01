@@ -1,0 +1,23 @@
+{
+  "art": "Visuelle Bewertung selbst erzeugter Windows-Testfenster",
+  "geprueft": [
+    "vorlagen-light-860.png",
+    "vorlagen-light-1280.png",
+    "vorlagen-dark-1280.png",
+    "vorlagen-hover.png",
+    "startseite-light-860.png",
+    "einstellungen-light.png",
+    "einstellungen-dark.png",
+    "labels-light.png",
+    "labels-dark.png",
+    "jahresanzeige-dark.png",
+    "jahresanzeige-light.png",
+    "kalender-hauptphasen.png"
+  ],
+  "ergebnis": "Keine abgeschnittenen Buttonbeschriftungen in den geprueften Ansichten; Vorlagen-Hintergruende themegerecht; Aktionen unten; schmale Texte umbrechen; Einstellungen zweispaltig; Jahresraster vollstaendig; Mondmarkierungen unten rechts.",
+  "grenzen": [
+    "Weitere DPI-Stufen nicht abgenommen",
+    "macOS nicht nativ geprueft",
+    "Kein Screenreader- oder Langzeitnachweis"
+  ]
+}

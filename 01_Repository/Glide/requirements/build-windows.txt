@@ -1,0 +1,1 @@
+# PyInstaller-Version vor dem ersten reproduzierbaren Windows-Build festlegen und pinnen.

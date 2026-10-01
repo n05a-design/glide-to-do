@@ -1,0 +1,15 @@
+{
+  "test": "tests/integration/test_ui_polish36.py",
+  "exit_code": 0,
+  "daten": "Temporäres GLIDE_DATA_DIR",
+  "diagnose": {
+    "completion_history": {
+      "2026-09-05": 2,
+      "2026-09-06": 1
+    },
+    "activity_history": {
+      "2026-09-07": 4
+    },
+    "zugriff": "nur gelesen"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "zeitpunkt": "2026-09-06T00:10:54",
+  "status": "3.6.0-Quellstand nicht gefunden",
+  "tatsaechliche_app_version": "3.5.0",
+  "dateien": [
+    {
+      "datei": "01_Repository\\Glide\\VERSION",
+      "bytes": 7,
+      "geaendert": "2026-09-05T15:34:49",
+      "sha256": "6F878E7ACE09ACC8BD149B653AB56023CA49D46D90C3A0844756D3914780C5F3"
+    },
+    {
+      "datei": "01_Repository\\Glide\\src\\glide\\app.pyw",
+      "bytes": 806470,
+      "geaendert": "2026-09-05T15:34:48",
+      "sha256": "4D7DCA5F644672A2D37EB2D9A01A202025375DA61E5733A90A8C5A766002CF82"
+    },
+    {
+      "datei": "01_Repository\\Glide\\tests\\integration\\test_glide.py",
+      "bytes": 168994,
+      "geaendert": "2026-09-05T15:34:55",
+      "sha256": "453EEA6AC2B4F083FE5EE13701D2DFAA4D6AD59C8F82E648162A8DEC726D6958"
+    },
+    {
+      "datei": "01_Repository\\Glide\\tests\\tools\\releasedaten.py",
+      "bytes": 51648,
+      "geaendert": "2026-09-05T16:00:39",
+      "sha256": "D16D20B29D61CE0F6C9D887572042CEF448146F5168FDAF2B02BDE4A03EE48CF"
+    },
+    {
+      "datei": "07_Python-Versionen\\Glide-Aufgaben-und-Listen_v3.5.0.pyw",
+      "bytes": 806470,
+      "geaendert": "2026-09-05T15:34:49",
+      "sha256": "4D7DCA5F644672A2D37EB2D9A01A202025375DA61E5733A90A8C5A766002CF82"
+    }
+  ],
+  "hinweis": "Der Ordnername qa-3.6.0 bezeichnet den Folgeauftrag. Der Ausgangslauf prüft ausschließlich den unveränderten 3.5.0-Quellcode; er ist kein 3.6.0-Abnahmenachweis."
+}

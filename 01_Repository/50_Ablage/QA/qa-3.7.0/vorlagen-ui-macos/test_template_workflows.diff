@@ -1,0 +1,92 @@
+--- vorher/tests/integration/test_template_workflows.py
++++ tests/integration/test_template_workflows.py
+@@ -101,6 +101,61 @@
+         # Der echte Editor und seine vorhandenen vollständigen Detailmasken.
+         for theme in ('light', 'dark'):
+             app.theme_name = theme; app.apply_theme(); root.update()
++            # Beide Plattformpfade: Windows behält den ursprünglichen Widgettyp.
++            owner = mod.tk.Toplevel(root)
++            owner.geometry('700x400+50+50')
++            variable = mod.tk.StringVar(value='Normal')
++            choices = ['Normal', 'Wichtig'] + [f'Auswahl {i}' for i in range(20)]
++            platform = mod.IS_MACOS
++            for mac in (False, True):
++                try:
++                    mod.IS_MACOS = mac
++                    border, field = app._make_option_menu(owner, variable, choices,
++                                                         option_colors={'Wichtig': 'priority_high'})
++                finally:
++                    mod.IS_MACOS = platform
++                border.pack(fill='x', padx=20, pady=15)
++                owner.update()
++                assert isinstance(field, mod.MacOptionMenu if mac else mod.tk.OptionMenu)
++                variable.set('Wichtig')
++                assert field.cget('fg') == app.theme['priority_high']
++                field['menu'].invoke(0)
++                assert variable.get() == 'Normal'
++                if mac:
++                    assert field.cget('bg') == app.theme['input']
++                    owner.grab_set()
++                    field._open_popup(); owner.update()
++                    assert field._popup is not None
++                    assert root.grab_current() is field._popup
++                    assert field._choices.cget('bg') == app.theme['card']
++                    assert field._choices.yview()[1] < 1, 'Lange Auswahlliste muss scrollbar sein'
++                    field._move(1)
++                    assert variable.get() == 'Normal', 'Navigation darf noch nicht übernehmen'
++                    grabs = []
++                    trace = variable.trace_add('write', lambda *args: grabs.append(root.grab_current()))
++                    field._commit(); owner.update()
++                    assert variable.get() == 'Wichtig' and grabs == [owner]
++                    variable.trace_remove('write', trace)
++                    assert root.grab_current() is owner
++                    field._open_popup(); owner.update()
++                    field._highlight(12)
++                    field._cancel(); owner.update()
++                    assert variable.get() == 'Wichtig' and root.grab_current() is owner
++                    field._open_popup(); owner.update()
++                    field._type_ahead(SimpleNamespace(char='N'))
++                    box = field._choices.bbox(0)
++                    field._choose_mouse(SimpleNamespace(x=10, y=box[1]+2)); owner.update()
++                    assert variable.get() == 'Normal'
++                    field._open_popup(); owner.update()
++                    field._outside_click(SimpleNamespace(x_root=0, y_root=0))
++                    assert field._popup is None and root.grab_current() is owner
++                    # Zerstören eines offenen Feldes darf keinen Grab oder Trace zurücklassen.
++                    field._open_popup(); owner.update()
++                border.destroy(); owner.update()
++                assert not variable.trace_info()
++                if mac:
++                    assert root.grab_current() is owner
++            owner.grab_release(); owner.destroy()
+             with mod.TemplateDraft(app, template) as draft:
+                 draft.ask_yes_no = lambda *args, **kw: True
+                 def details(dialog, parent=None):
+@@ -119,6 +174,27 @@
+                 def main(dialog, parent=None):
+                     dialog.update()
+                     assert dialog.cget('bg') == app.theme['bg']
++                    tree = draft.editor_tree
++                    style = mod.ttk.Style(dialog)
++                    tree_style = tree.cget('style')
++                    assert style.lookup(tree_style, 'background') == app.theme['card']
++                    assert style.lookup(tree_style, 'fieldbackground') == app.theme['card']
++                    assert style.lookup(tree_style, 'foreground') == app.theme['text']
++                    assert style.lookup(tree_style, 'background', ('selected',)) == app.theme['selection']
++                    assert int(style.lookup(tree_style, 'rowheight')) >= 36
++                    assert tuple(map(str, tree.tk.splitlist(tree.cget('show')))) == ('tree',), 'Keine ungestalteten Tabellenköpfe'
++                    assert isinstance(draft.editor_scrollbar, mod.ThemedAutoScrollbar)
++                    for size in ('800x640', '1050x780', '1500x950'):
++                        dialog.geometry(size); dialog.update()
++                        columns = [tree.column(key, 'width') for key in ('#0', 'kind', 'due', 'labels')]
++                        assert sum(columns) <= tree.winfo_width() + 2, (size, columns, tree.winfo_width())
++                        for button in [w for w in descendants(dialog) if isinstance(w, mod.RoundedButton)]:
++                            assert button.winfo_ismapped(), (size, button.text)
++                            assert button.winfo_rooty()+button.winfo_height() <= dialog.winfo_rooty()+dialog.winfo_height()
++                    child_folder = draft.folders[-1]
++                    tree.item(child_folder['id'], open=False)
++                    draft.render_editor(draft.holder['id'])
++                    assert not tree.item(child_folder['id'], 'open'), 'Zugeklappte Zweige beim Auffrischen erhalten'
+                     draft.edit_holder()
+                     assert draft.holder['title'] == 'Geprüfter Titel'
+                     task = draft.lists[0]['items'][2]['children'][0]

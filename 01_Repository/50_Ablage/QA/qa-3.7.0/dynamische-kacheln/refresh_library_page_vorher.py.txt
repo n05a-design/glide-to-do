@@ -1,0 +1,141 @@
+    def refresh_library_page(self):
+        """Scrollbare Kachelübersicht des Bestands; verändert keine Inhalte."""
+        scroll_position = self.home_canvas.yview()[0] if getattr(self, "_home_rendered_view", None) == self.LIBRARY_VIEW else 0
+        self._home_rendered_view = self.LIBRARY_VIEW
+        for widget in self.home_content.winfo_children():
+            widget.destroy()
+        theme = self.theme
+        for widget in (self.home_frame, self.home_canvas, self.home_content):
+            widget.configure(bg=theme["bg"])
+        self.home_scrollbar.set_theme(theme["bg"], theme["bg"], theme["input_border"], theme["muted"])
+        entries = self.library_entries()
+        list_count = sum(kind == "list" for kind, _entry in entries)
+        self._set_stats_text(f"{list_count} Listen · {len(entries) - list_count} Ordner")
+        grid = tk.Frame(self.home_content, bg=theme["bg"])
+        grid.pack(fill="x")
+        self.library_cards = []
+        self.library_open_buttons = {}
+        for kind, entry in entries:
+            color = entry.get("color") or ("import" if kind == "folder" else "ui_accent")
+            surface = self.make_rounded_container(grid, radius=self.HOME_CARD_RADIUS,
+                inner_pad_x=12, inner_pad_y=9, auto_height=True, register=False)
+            panel = surface.inner
+            self.library_cards.append(surface)
+
+            def label(text, size=10, bold=False, foreground="muted", pady=(0, 4)):
+                widget = tk.Label(panel, text=text, anchor="w", justify="left",
+                    bg=theme["card"], fg=theme[foreground], font=app_font(size, "bold" if bold else "normal"))
+                widget.pack(fill="x", pady=pady)
+                widget.bind("<Configure>", lambda event, target=widget: target.configure(wraplength=max(80, event.width - 4)))
+                return widget
+
+            label("ORDNER" if kind == "folder" else "LISTE", 8, True, "muted", pady=(0, 6))
+            label(f"{self.ICONS[kind]}  {entry.get('title') or ('Ordner' if kind == 'folder' else 'Liste')}",
+                  11, True, color)
+            parent_id = entry.get("parent_id" if kind == "folder" else "folder_id")
+            if parent_id:
+                label(" › ".join(self.folder_path_titles(parent_id)), 9)
+            if kind == "folder":
+                nested = {folder["id"] for folder in self.iter_folder_subtree(entry["id"])}
+                lists = [value for value in self.lists if value.get("folder_id") in nested]
+                items = [item for value in lists for item in value.get("items", [])]
+                children = [("folder", value) for value in self.get_child_folders(entry["id"])]
+                children += [("list", value) for value in self.get_folder_lists(entry["id"])]
+                previews = [(self.ICONS[child_kind], " ".join(str(value.get("title") or "").split()), "")
+                            for child_kind, value in children[:3]]
+                remaining = max(0, len(children) - len(previews))
+                summary = f"{len(lists)} Listen · {len(nested) - 1} Unterordner"
+                command = lambda value=entry["id"]: self.set_active_folder(value)
+            else:
+                items = entry.get("items", [])
+                tasks = [item for item in self.walk_items(items) if self.is_schedulable_item(item)]
+                pending = [item for item in tasks if not item.get("done")]
+                pending.sort(key=lambda item: (item.get("due") or "9999", -item.get("importance", 0)))
+                previews = []
+                for item in pending[:3]:
+                    title_line = str(item.get("text") or "").splitlines()[0]
+                    due = self.format_due_display(item.get("due")) if item.get("due") else ""
+                    previews.append((self.ICONS["priority_high"] if item.get("importance", 0) >= 2 else self.ICONS["task_open"],
+                                     title_line, due))
+                remaining = max(0, len(pending) - len(previews))
+                summary = ""
+                command = lambda value=entry["id"]: self.set_active_list(value)
+            total, done, _overdue = self.compute_stats(items)
+            if summary:
+                label(summary, 9)
+            label(f"{total - done} offen   ·   {done} erledigt" + (f"   ·   {_overdue} überfällig" if _overdue else ""),
+                  9, foreground="delete" if _overdue else "muted")
+            progress = tk.Canvas(panel, height=4, bg=theme["line"], highlightthickness=0)
+            progress.pack(fill="x", pady=(3, 10))
+            def draw_progress(event, bar=progress, ratio=done / total if total else 0):
+                bar.delete("all")
+                if ratio:
+                    bar.create_rectangle(0, 0, event.width * ratio, 4, fill=theme["confirm"], outline="")
+            progress.bind("<Configure>", draw_progress)
+            note = " ".join(str(entry.get("note") or "").split())
+            if note:
+                label(note[:100] + ("…" if len(note) > 100 else ""), 9)
+            assigned = [(self.get_label(value) or {}).get("name", "") for value in entry.get("labels", [])]
+            if assigned:
+                label(" · ".join(assigned[:3]) + (f" +{len(assigned)-3}" if len(assigned) > 3 else ""),
+                      8, foreground=color, pady=(0, 8))
+            label("ENTHALTEN" if kind == "folder" else "NÄCHSTE AUFGABEN", 8, True, "muted", pady=(7, 5))
+            if not previews:
+                label("Noch keine Inhalte." if not total else "Alle Aufgaben erledigt.", 9, foreground="text")
+            for marker, text, due in previews:
+                text = " ".join(text.split())
+                short = text[:76] + ("…" if len(text) > 76 else "")
+                preview_row = label(f"{marker}  {short}" + (f"  ·  {due}" if due else ""),
+                                    9, foreground="text", pady=(0, 6))
+                self.add_tooltip(preview_row, text)
+            if remaining:
+                label(f"+ {remaining} weitere " + ("Einträge" if kind == "folder" else "offene Aufgaben"), 8)
+            label("", 8, pady=(0, 1))
+            actions = tk.Frame(panel, bg=theme["card"])
+            actions.pack(fill="x")
+            button = self._make_dialog_button(actions, "Ordner öffnen" if kind == "folder" else "Liste öffnen",
+                                              command, color, width=142, height=34)
+            button.pack(side="left")
+            edit = self._make_dialog_button(actions, "Bearbeiten",
+                lambda value=entry["id"], is_folder=kind == "folder":
+                    self.edit_folder_details(value) if is_folder else self.edit_list_details(value),
+                "accent", width=112, height=34)
+            edit.pack(side="left", padx=(6, 0))
+            self.library_open_buttons[(kind, entry["id"])] = button
+            # Die ganze Vorschau öffnet den Inhalt; der explizite Button ist
+            # zusätzlich per Tab und Enter erreichbar.
+            for widget in (surface, panel, *panel.winfo_children()):
+                self._bind_home_wheel(widget)
+                if widget is not actions:
+                    widget.configure(cursor="hand2")
+                    widget.bind("<Button-1>", lambda _event, open_page=command: open_page())
+
+        def layout(event):
+            columns = max(1, min(3, (grid.winfo_width() + 12) // 352))
+            for column in range(3):
+                grid.columnconfigure(column, weight=1 if column < columns else 0,
+                                     uniform="library" if column < columns else "")
+            for index, surface in enumerate(self.library_cards):
+                surface.grid(row=index // columns, column=index % columns, sticky="nsew",
+                             padx=(0, 12) if index % columns < columns - 1 else 0, pady=(0, 12))
+
+        grid.bind("<Configure>", layout)
+        # Erst einhängen, damit der erste Configure-Aufruf die echte Breite erhält.
+        for index, surface in enumerate(self.library_cards):
+            surface.grid(row=index, column=0, sticky="ew", pady=(0, 12))
+        if not entries:
+            tk.Label(grid, text="Noch keine Listen oder Ordner. Lege unten deine erste Liste an.",
+                     bg=theme["bg"], fg=theme["muted"], anchor="w", justify="left",
+                     wraplength=380).grid(row=0, column=0, sticky="ew", pady=16)
+        self.refresh_page_actions((
+            ("Neue Liste", self.create_new_list, "accent", 148),
+            ("Neuer Ordner", self.create_new_folder, "import", 166),
+            ("Liste importieren", self.import_txt_as_new_lists, "import", 222),
+            ("Listen/Ordner hinzufügen …", self.import_partial_backup, "clear", 252),
+        ))
+        self._bind_home_wheel(grid)
+        self._bind_home_wheel(self.home_canvas)
+        self.home_content.update_idletasks()
+        self._layout_home_canvas()
+        self.home_canvas.yview_moveto(scroll_position)
+
