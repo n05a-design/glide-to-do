@@ -5,7 +5,7 @@
  "art": "Sicherheits-, Konfigurations- und Dokumentationsnachlauf; Anwendung unverändert",
  "entscheidung_inhaber": "Rohprotokolle (*.log) nicht mehr veröffentlichen (öffentliches Repository)",
  "neu": [
-  ".github/SECURITY.md",
+  "SECURITY.md (Wurzel; ersetzt die GitHub-Vorlage aus d5cffc7)",
   ".github/dependabot.yml",
   ".github/workflows/codeql.yml",
   "01_Repository/Glide/scripts/pflege/pfade_bereinigen.py",

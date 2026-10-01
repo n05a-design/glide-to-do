@@ -48,7 +48,7 @@ Vollständige Übersicht: [Was Glide bereits kann](01_Repository/Glide/README.md
 | [20_Grafik_Master](20_Grafik_Master/README.md) | Logo, App-Symbol und Fav-Icon als SVG und PNG, Stilvorlagen |
 | [40_Store_Material](40_Store_Material/README.md) | Entwürfe für die Veröffentlichung |
 | [50_Ablage](50_Ablage/README.md) | Historische Prüfungen, Screenshots und Rückfallstände |
-| `.github` | Prüf- und Sicherheits-Workflows, [Sicherheitsrichtlinie](.github/SECURITY.md), Dependabot |
+| `.github` | Prüf- und Sicherheits-Workflows (Glide-Prüfung, CodeQL), Dependabot |
 
 ## Arbeitsweise mit dem Repository
 
@@ -64,7 +64,7 @@ Vollständige Übersicht: [Was Glide bereits kann](01_Repository/Glide/README.md
 - **CodeQL** (`.github/workflows/codeql.yml`): statische Sicherheitsanalyse für Python und die Workflows; Funde unter *Security → Code scanning*.
 - **Dependabot:** schlägt wöchentlich Aktualisierungen der verwendeten GitHub Actions vor.
 - **Secret Scanning:** aktiv; Schlüssel, Zertifikate und Signing-Secrets gehören nie ins Repository.
-- **Schwachstellen melden:** vertraulich über *Security → Report a vulnerability*, nicht über öffentliche Issues ([Sicherheitsrichtlinie](.github/SECURITY.md)). Technische Regeln der Anwendung: [SECURITY.md](01_Repository/Glide/SECURITY.md).
+- **Schwachstellen melden:** vertraulich über *Security → Report a vulnerability*, nicht über öffentliche Issues ([Sicherheitsrichtlinie](SECURITY.md)). Technische Regeln der Anwendung: [SECURITY.md](01_Repository/Glide/SECURITY.md).
 
 ## Weitere Unterlagen
 

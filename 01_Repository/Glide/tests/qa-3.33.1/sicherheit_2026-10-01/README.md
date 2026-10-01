@@ -15,7 +15,7 @@ Datiert 01.10.2026 · App unverändert 3.33.1 · Konfigurations-, Werkzeug- und 
 
 | Bereich | Änderung |
 |---|---|
-| Sicherheitsrichtlinie | [`.github/SECURITY.md`](../../../../../.github/SECURITY.md): vertraulicher Meldeweg, Umfang, Ablauf, Schutzmaßnahmen. `SECURITY.md` der Anwendung verweist darauf |
+| Sicherheitsrichtlinie | [`SECURITY.md`](../../../../../SECURITY.md) in der Wurzel: vertraulicher Meldeweg, Umfang, Ablauf, Schutzmaßnahmen. Zuerst unter `.github` angelegt; weil parallel die GitHub-Vorlage als Wurzel-`SECURITY.md` entstand (d5cffc7), ersetzt die Projektfassung die Vorlage dort, die Kopie unter `.github` entfällt. `SECURITY.md` der Anwendung verweist darauf |
 | Code-Scanning | [`.github/workflows/codeql.yml`](../../../../../.github/workflows/codeql.yml): CodeQL für Python und Workflows bei Push, Pull Request und wöchentlich. Weil CodeQL nur `.py` liest, werden die `.pyw`-Dateien vor der Analyse gespiegelt; Archive und Lieferkopie sind ausgenommen |
 | Abhängigkeiten | [`.github/dependabot.yml`](../../../../../.github/dependabot.yml): wöchentliche, gebündelte Aktualisierung der GitHub Actions. Laufzeitpakete gibt es nicht |
 | Workflow-Härtung | Checkout ohne gespeichertes Token (`persist-credentials: false`), nur Leserechte |

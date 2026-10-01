@@ -3,7 +3,7 @@
 ## 3.33.1 – Vier Bereiche und Fensterbedienung (01.10.2026)
 
 - **Sicherheit und öffentliches Repository (App unverändert):**
-  - GitHub-Sicherheitsrichtlinie (`.github/SECURITY.md`) mit vertraulichem Meldeweg, CodeQL für Python und Workflows, Dependabot für GitHub Actions; Checkout ohne gespeichertes Token.
+  - GitHub-Sicherheitsrichtlinie (`SECURITY.md` in der Wurzel; ersetzt die dort angelegte GitHub-Vorlage) mit vertraulichem Meldeweg, CodeQL für Python und Workflows, Dependabot für GitHub Actions; Checkout ohne gespeichertes Token.
   - CI-Grundstufe prüft zusätzlich die Herkunft des Fremdcodes (alle 116 Dateien unter `vendor/tkinterdnd2` bytegleich zum PyPI-Paket aus `provenance.json`) und verhindert Benutzerpfade in versionierten Dateien.
   - Rohprotokolle bleiben lokal: `*.log` wieder ausgeschlossen, 263 Protokolle aus dem Stand genommen; 110 Benutzerpfade in 27 Dateien ersetzt; neues Werkzeug `scripts/pflege/pfade_bereinigen.py`.
   - README der Ablage als GitHub-Einstieg neu gegliedert, README des Quellbaums ergänzt. [Nachweis](tests/qa-3.33.1/sicherheit_2026-10-01/README.md).

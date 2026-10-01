@@ -121,7 +121,7 @@ dem Hochladen neuer Ergebnisse
 `python3 -B scripts/pflege/pfade_bereinigen.py tests/qa-<Version>/<Lauf>`
 ausführen; die CI prüft das im Schritt „Datenschutz“. Sicherheitsfunde
 vertraulich über GitHub melden: *Security → Report a vulnerability*
-([Sicherheitsrichtlinie](../../.github/SECURITY.md)).
+([Sicherheitsrichtlinie](../../SECURITY.md)).
 
 ## Zeichnungsseiten
 
