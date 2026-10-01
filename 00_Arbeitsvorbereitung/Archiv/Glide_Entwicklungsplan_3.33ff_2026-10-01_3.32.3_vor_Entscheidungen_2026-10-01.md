@@ -1,12 +1,12 @@
 # Glide – Entwicklungsplan ab 3.33
 
-Stand **01.10.2026** · Glide 3.32.3 (Aufgabenformat 20) · Teil 4 von 4 der Analyse vom 01.10.2026 · nachgeführt nach den Beschlüssen D09–D17 und Befund T8
+Stand **01.10.2026** · Glide 3.32.3 (Aufgabenformat 20) · Teil 4 von 4 der Analyse vom 01.10.2026
 
 Grundlagen:
-- [Bestandsaufnahme Code und Dokumentation](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md): Abweichungen AB01–AB17, technische Befunde T1–T8, Ablage
+- [Bestandsaufnahme Code und Dokumentation](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md): Abweichungen AB01–AB17, technische Befunde T1–T7, Ablage
 - [Konkurrenz- und Featurematrix](Glide_Konkurrenz_und_Featurematrix_2026-10-01.md): Vorschläge N01–N20
 - [Produktprinzipien und UX-Prüfung](Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01.md): Befunde U01–U24
-- [Entscheidungen D09–D17](Glide_Entscheidungsvorlage_2026-10-01.md), beschlossen am 01.10.2026
+- [Entscheidungsvorlage D09–D17](Glide_Entscheidungsvorlage_2026-10-01.md)
 - bestehende Planung:
   - [Arbeits- und Featureplanung](Glide_Arbeits_und_Featureplanung_2026-09-30.md) (D01–D08, G-, P-Kennungen)
   - [Funktionsrecherche](Glide_Funktionsrecherche_Ausbau_2026-09-30.md) (G01–G32, Q1–Q5)
@@ -17,11 +17,10 @@ Grundlagen:
 
 - **Verbindlich bleiben:**
   - D01–D08 und die Antworten Q1–Q5,
-  - die Beschlüsse D09–D17 vom 01.10.2026 (D12 mit sieben Kacheln),
   - die Produktgrenzen,
   - die Regeln aus AGENTS.md und ARBEITSRICHTUNG,
   - der beauftragte Performance-Anschluss (Rest P03, P04/A-02, Rest P06/A-03).
-- **Dieser Plan ist eine Empfehlung.** Er ordnet bestehende und neue Arbeiten, schätzt Aufwand und benennt Risiken. Die Richtung ist mit D09–D17 entschieden; die offene Auswahl A–H und D07 entscheidet der Inhaber. Jeder Umsetzungsschnitt außerhalb der beauftragten Performance-Arbeit braucht einen ausdrücklichen Auftrag.
+- **Dieser Plan ist eine Empfehlung.** Er ordnet bestehende und neue Arbeiten, schätzt Aufwand und benennt Risiken. Die offene Auswahl A–H und D09–D17 entscheidet der Inhaber; bis dahin gilt keine Empfehlung als beauftragt.
 - Zielversionen sind Planungsreservierungen, keine Liefertermine.
 
 ## 1. Ausgangslage in acht Sätzen
@@ -38,7 +37,7 @@ Grundlagen:
 5. **Tempo:**
    - Der Ansichtsaufbau wird bereits optimiert.
    - Neu gemessen: Jede Aktion kostet linear mit dem Gesamtbestand (Abhaken 56 ms bei 1.000, 446 ms bei 10.000 Punkten).
-6. **Architektur:** Eine Klasse mit 41.000 Zeilen trägt Daten, Logik und Oberfläche. Das bremst Tests; G27 „Aufteilen“ erfolgt seit D17 schrittweise über Tk-freie Module.
+6. **Architektur:** Eine Klasse mit 41.000 Zeilen trägt Daten, Logik und Oberfläche. Das bremst Tests; G27 „Aufteilen“ wartet auf die Versionsverwaltung.
 7. **Plattform:**
    - macOS ist Referenz.
    - Linux läuft eingeschränkt; die Pixelschrift ist dort jetzt nachgewiesen.
@@ -46,7 +45,7 @@ Grundlagen:
    - Installation braucht ein separates Python.
 8. **Prozess:**
    - Die vollständige Projektablage liegt seit 01.10.2026 im GitHub-Repository; ihre Struktur wurde in diesem Nachlauf korrigiert.
-   - Seit D09 ist das Repository die maßgebliche Ablage.
+   - Ob Git die Arbeitsgrundlage wird, ist offen (D09).
 
 ## 2. Produktstrategie
 
@@ -90,8 +89,6 @@ Aufwand in **Arbeitstagen (AT) im bisherigen Arbeitsmodus**: KI-gestützte Umset
 | P04 | Bildlayout nur bei geänderter Geometrie | beauftragt, A-02 | Gemessen nötig vor Optimierung | M | mittel | 0 |
 | P06r | Doppelte Refresh-/Schreibanforderungen | beauftragt, A-03 | Bestätigte Doppelarbeit | M | mittel (Fehlerpfade) | 0 |
 | T2 | Eine Schema-Sicherungsprüfung statt neun | T2 | +0,5 s beim ersten Speichern (10 MB); 9 doppelte Methoden | S | gering | 0 |
-| P09a | W1: Tabellenansicht misst keine Zeilen mehr für Listenspalten | T8 | Tabellenaufbau 558 → 69 ms (1.000) bzw. 2.671 → 292 ms (5.000), Linux | XS | gering | 0 |
-| P09b | W2–W5: Kennzahlen einmal je Aktualisierung, Datum über Zwischenspeicher, Schriftobjekte und Zeilenhöhen je Schrift merken | T8 | Listenaufbau −38 % bei 5.000 Punkten | S | gering–mittel | 0 |
 | P08a | Ein Vergleichsdurchlauf für Verlauf, „zuletzt bearbeitet“, Aktivität | T1 | ≈ 78 % von `save_items` bei 10.000 Punkten | M | mittel | 0 |
 | P08b | Nur geänderte Listen vergleichen, Vollvergleich im Autosave | T1 | Kosten pro Aktion unabhängig vom Bestand | M–L | mittel–hoch | 0 |
 | DOK2 | Kommentare und Lieferordner-README (AB03–AB08), Mindestversion prüfen | AB03–AB08 | Widersprüche | S | gering | nächster Produktionsschnitt |
@@ -167,17 +164,17 @@ Aufwand in **Arbeitstagen (AT) im bisherigen Arbeitsmodus**: KI-gestützte Umset
 
 ## 5. Ausbaustufen
 
-### Stufe 0 – Fundament (3.32.4 ff.) · ≈ 10–15 AT (inkl. P09)
+### Stufe 0 – Fundament (3.32.4 ff.) · ≈ 9–14 AT
 
 - **Ziel:** Jede Aktion bleibt bei wachsendem Bestand schnell; Repository und Dokumentation sind verlässliche Grundlage.
 - **Inhalt:**
   - P03r, P04, P06r (beauftragt)
-  - T2, P09, P08a, Messung, P08b
+  - T2, P08a, Messung, P08b
   - DOK2
-  - CI (D09 beschlossen)
+  - D09 und CI
 - **Reihenfolge:**
-  1. T2 und P09a (W1) als kleinste, sichere Schnitte mit sofort messbarem Gewinn; Baseline mit `scripts/pflege/messung_speicherweg.py` und `tests/qa-3.32.3/pruefaufrufe_2026-10-01/werkzeuge/pruefaufrufe_probe.py`.
-  2. Rest P03 – Startseite, kombinierbar mit D12; P09b für die Kennzahlen gleich mit.
+  1. T2 als kleinster, sicherer Schnitt mit sofort messbarem Gewinn; Baseline mit `scripts/pflege/messung_speicherweg.py`.
+  2. Rest P03 – Startseite, kombinierbar mit D12.
   3. P04, P06r.
   4. P08a mit Differenztest.
   5. Messung.
@@ -185,7 +182,6 @@ Aufwand in **Arbeitstagen (AT) im bisherigen Arbeitsmodus**: KI-gestützte Umset
 - **Fertig, wenn:**
   - Abhaken bei 5.000 Punkten ≤ 120 ms auf der Linux-Referenz-VM mit Python 3.14 (heute 218 ms); auf dem Referenz-Mac vergleichbar gemessen.
   - Erstes Speichern ohne Zusatz-Parse.
-  - Tabellenaufbau ohne Zeilenmessung; Kennzahlen einmal je Aktualisierung.
   - Verlauf und „zuletzt bearbeitet“ identisch zum alten Verfahren.
   - Vollprüfung grün; 07/Bundle per SHA-256 abgeglichen.
 - **Risiken:** R4, R11.
@@ -202,7 +198,7 @@ Aufwand in **Arbeitstagen (AT) im bisherigen Arbeitsmodus**: KI-gestützte Umset
 - **Fertig, wenn:**
   - Kopfzeile ≤ 4 Symbolknöpfe;
   - Bedienfläche über dem Inhalt ≤ 15 % bei 1280 × 800 (heute Liste ≈ 27 %);
-  - Startseite Standard sieben Kacheln (D12; heute 12);
+  - Startseite Standard ≤ 5 Kacheln (heute 12);
   - kein Symbol mit zwei Bedeutungen;
   - „Angebot schicken morgen bis Freitag /wichtig“ zeigt vor dem Speichern die Chips Bearbeitungstag, Fälligkeit und Wichtigkeit, einzeln rücknehmbar;
   - eine Aufgabe in einer Notiz hat dieselbe ID in Liste und Text; Löschen der Zeile legt sie in den Papierkorb (Undo);
@@ -326,10 +322,9 @@ Empfehlung für die nächste Featurewahl nach der Performance (bestätigt die Ü
 | Abhaken, 10.000 Punkte | ≤ 200 ms | 446 ms |
 | Erstes Speichern, 10 MB | ≤ Folgespeichern + 50 ms | +488 ms |
 | Startseite aufbauen (Beispieldaten) | ≤ 150 ms | 348 ms (Linux, 3.12) |
-| Tabellenansicht öffnen, 5.000 Punkte | ≤ 400 ms | 2.671 ms (Linux, 3.12, Median) |
 | Kopfzeilen-Symbolknöpfe | ≤ 4 | 8 |
 | Bedienfläche über Inhalt (Liste, 1280 × 840) | ≤ 15 % | ≈ 27 % |
-| Startseitenkacheln im Standard | 7 (D12) | 12 |
+| Startseitenkacheln im Standard | ≤ 5 | 12 |
 | Doppelte Bedienoberflächen (U01, U08, U12, U13) | 0 | 4 |
 | Symbole mit mehreren Bedeutungen | 0 (Bewegungspfeile ausgenommen) | 5 |
 | Standprüfung im Repository | 0 Befunde | 4 (3 Logs, 1 fehlende Archivsicherung) |
@@ -339,14 +334,12 @@ Verbindlich ist die Messung auf dem Referenz-Mac mit Aufwärmen, Median und p95 
 ## 10. Nächste konkrete Schritte
 
 1. **Inhaber:**
-   - ~~D09–D17 beantworten~~ – erledigt am 01.10.2026.
-   - Die zwei zusätzlichen Startseitenkacheln bestätigen (D12; Planungsannahme: Uhr/Datum/nächster Termin, Pinnwand-Vorschau).
-   - Den lokalen Projektordner als Git-Arbeitskopie einrichten (D09) und die drei Prüfprotokolle aus `tests/qa-3.32.0/recherche_planung_2026-09-30/` hochladen.
+   - D09–D17 beantworten (Kurzform genügt).
    - Die fehlende Archivsicherung `tests/fixtures/beispiele/archiv/glide_beispieldaten_3.32.3_vor_Showcase_2026-10-01.glidebackup` nachliefern.
    - Künftig den Projektordner in die Repository-Wurzel hochladen.
-2. **3.32.4 – kleinster belegbarer Schnitt:** T2 und P09a (W1). Baseline und Nachmessung mit `messung_speicherweg.py` und `pruefaufrufe_probe.py`, Vorsicherungstest je Formatstufe, Spaltenbreiten der Liste unverändert, Vollprüfung, Abgleich.
+2. **3.32.4 – kleinster belegbarer Schnitt:** T2. Baseline und Nachmessung mit `messung_speicherweg.py`, Vorsicherungstest je Formatstufe, Vollprüfung, Abgleich.
 3. **Beauftragte Performance-Fortsetzung:** Rest P03 Startseite, dann P04 und P06r gemäß ARBEITSRICHTUNG; danach P08a mit Differenztest.
-4. **D09 B:** Log-Ausnahme in `Glide/.gitignore` erledigt. Danach CI-Grundstufe aus den Proben in `tests/qa-3.32.3/analyse_planung_2026-10-01/werkzeuge`, mit eigenem Auftrag.
+4. **Bei D09 B:** Git-Arbeitskopie einrichten, Log-Ausnahmen, CI-Grundstufe aus den Proben in `tests/qa-3.32.3/analyse_planung_2026-10-01/werkzeuge`.
 5. **3.33.0 vorbereiten:** Aktionskennungen von Menübeschriftungen entkoppeln (R2), dann UX1 in der Reihenfolge U07, U03, U24, U10, U19, U22, U13, U14, N01, U02, U05, U01, U16.
 
 ## 11. Pflege dieses Plans
@@ -375,21 +368,19 @@ Verbindlich ist die Messung auf dem Referenz-Mac mit Aufwärmen, Median und p95 
 | **4. Planung** | | |
 | Schwachstellen und Optimierungspotenziale | Backlog N, Befunde T/U/AB | Plan §4.1 |
 | Fehlende oder interessante Features | Backlog S/Z | Plan §4.2–§4.3 |
-| Technische Verbesserungen | P08, P09, T2, CI, D16/D17, G26 | Plan §4 |
+| Technische Verbesserungen | P08, T2, CI, D16/D17, G26 | Plan §4 |
 | UX-/UI-Verbesserungen | UX1, N04, N05, U18, U09 | Plan §4.2, §5 |
 | Ausbaustufen | Stufen 0–5 mit Schnitten und Abnahme | Plan §5 |
 | Abhängigkeiten und Risiken | Diagramm, Löschregeln, R1–R12 | Plan §6–§7 |
 | Aufwand auf Basis der Code-Basis | AT-Spannen je Punkt und Stufe | Plan §4–§5 |
 | Priorisierung | Begründete Reihenfolge, Zielwerte | Plan §8–§9 |
-| Mehrere Optionen bei Richtungsentscheidungen | D09–D17 mit Vor-/Nachteilen und Empfehlung; beschlossen am 01.10.2026 | Entscheidungsvorlage |
+| Mehrere Optionen bei Richtungsentscheidungen | D09–D17 mit Vor-/Nachteilen und Empfehlung | Entscheidungsvorlage |
 | Notwendig / sinnvoll / Zukunft getrennt | Klassen N/S/Z/X | Plan §3–§4 |
 | **Rahmen** | | |
 | Projektdokumente als Grundlage nutzen, aktualisieren | Nachträge mit Vorsicherung, Index, QA-Bericht, Arbeitsrichtung, Produktgrenzen | Ablage, Index-Abschnitt „Analyse und Planung“ |
 | Neue Dokumente, wo sinnvoll | Fünf Dokumente + Nachweisordner + Messwerkzeug | 00_Arbeitsvorbereitung, `tests/qa-3.32.3/analyse_planung_2026-10-01` |
 | Verbindung Code ↔ Doku ↔ Konkurrenz ↔ Strategie ↔ Umsetzung | Jeder Backlog-Punkt mit Quelle (AB/T/U/N/G) und Stufe | Plan §4 |
 | Alle Dateien im Repository | Erledigt, Ablage korrigiert | – |
-
-**Nachtrag – Rückfrage vom 01.10.2026:** „Bestandteile wie die Schriftart nur einmal beim Start prüfen?“ → [Bestandsaufnahme T8](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md#t8--wiederholte-prüfungen-und-messungen-je-bedienschritt-neu-gemessen) mit Messung; Vorschlag P09 in Stufe 0.
 
 **Nicht vollständig erfüllbar in dieser Umgebung:**
 - Abnahme auf macOS/Tk 9 und Windows, die 58 Integrationssuiten sowie physische Bedienung.

@@ -2,17 +2,10 @@
 
 Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · für den nächsten Chat oder Bearbeiter
 
-**Beschlüsse D09–D17 (01.10.2026):** Alle neun Richtungsfragen sind beantwortet – acht wie empfohlen, D12 mit sieben statt fünf Startseitenkacheln. Sie stehen verbindlich in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md#verbindliche-entscheidungen) und mit Begründung in der [Entscheidungsvorlage](Glide_Entscheidungsvorlage_2026-10-01.md#beschlüsse-vom-01102026).
-- **Repository:** Das Repository ist die maßgebliche Ablage (D09). Prüfprotokolle `tests/qa-*/**/*.log` sind freigegeben.
-- **Umsetzung:** Kein Großumbau; neue oder angefasste Fachlogik entsteht als Tk-freies Modul (D17).
-- **Neu gemessen (T8):** Die Schriftart wird bereits nur einmal geprüft. Die Tabellenansicht misst dagegen nach jedem Aufbau jede Zeile und verwirft das Ergebnis; ohne diese Messung 558 → 69 ms bei 1.000 Punkten (Linux).
-- **Kleinster nächster Schnitt:** T2 + P09a ([Nachweis](../01_Repository/Glide/tests/qa-3.32.3/pruefaufrufe_2026-10-01/README.md)).
-- **Vorfassung:** [Archiv](Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Entscheidungen_2026-10-01.md).
-
 **Analyse und Planung 01.10.2026 (App unverändert 3.32.3):**
 - **Neue Einstiege:**
   - [Entwicklungsplan ab 3.33](Glide_Entwicklungsplan_3.33ff_2026-10-01.md) mit Stufen 0–5 und Abgleich mit dem Auftrag
-  - [Entscheidungsvorlage D09–D17](Glide_Entscheidungsvorlage_2026-10-01.md) (beschlossen 01.10.2026)
+  - [Entscheidungsvorlage D09–D17](Glide_Entscheidungsvorlage_2026-10-01.md) (offen)
   - [Bestandsaufnahme Code/Doku](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md)
   - [Konkurrenz- und Featurematrix](Glide_Konkurrenz_und_Featurematrix_2026-10-01.md)
   - [Produktprinzipien und UX-Prüfung](Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01.md)
@@ -24,9 +17,9 @@ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · für den nächsten Chat
 - **Repository `n05a-design/glide-to-do`:**
   - Enthält seit 01.10.2026 die Projektablage. Die Wurzel des Repositorys ist der Projektordner; `01_Repository/Glide` ist der Quellbaum.
   - Uploads immer in diese Struktur. Ein Upload in einen Unterordner bricht alle Querverweise.
-  - Seit D09 ist es die maßgebliche Ablage.
+  - Ob Git die Arbeitsgrundlage wird, entscheidet D09.
 - **Hinweis zur Claude-Übergabe:** Für Claude Code ist das Paket `Glide_3.32.3_Python_Codebasis.zip` vorgesehen (`Archiv/Glide_3.32.3_Claude_Code_2026-10-01`); in der Sitzung vom 01.10. wurde stattdessen `07_Python-Versionen` übergeben (Laufzeit bytegleich).
-- **Weiterhin gültig:** D01–D08, die Beschlüsse D09–D17 und der beauftragte Performance-Anschluss.
+- **Weiterhin gültig:** D01–D08 und der beauftragte Performance-Anschluss.
 - **Vorfassung:** [Archiv](Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Analyse_2026-10-01.md).
 
 

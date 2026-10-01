@@ -24,7 +24,7 @@ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorl
 ## Aktueller Einstieg
 
 - [Entwicklungsplan ab 3.33 (Analyse 01.10.2026): Backlog notwendig/sinnvoll/Zukunft, Stufen 0–5, Abhängigkeiten, Risiken, Zielwerte](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md)
-- [Entscheidungen D09–D17 vom 01.10.2026: Optionen, Empfehlung und Beschlüsse (D12 mit sieben Kacheln)](../../../00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md)
+- [Entscheidungsvorlage D09–D17 vom 01.10.2026: offene Richtungsfragen mit Optionen und Empfehlung](../../../00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md)
 - [Weitere Aufgaben und Richtungsauswahl nach 3.32.2: 24 Aufgaben, acht Richtungen, Codebezüge und offene Priorisierung](../../../00_Arbeitsvorbereitung/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md)
 - [Arbeits- und Featureplanung 30.09.2026: Quellen, Versionen, Codebefunde, Bildschirmfotos, Entscheidungen D01–D07 und Performance-Abschlussaufgabe](../../../00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md)
 
@@ -1679,7 +1679,7 @@ Vorsicherungen vor diesem Daten-/Werkzeugnachlauf:
 
 Dokumentations-, Analyse- und Werkzeugnachlauf zu 3.32.3; keine Produktionsversion, Anwendung unverändert.
 
-- [Bestandsaufnahme Code und Dokumentation: Inventar, Ablage, Abweichungen AB01–AB17, Befunde T1–T8](../../../00_Arbeitsvorbereitung/Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md)
+- [Bestandsaufnahme Code und Dokumentation: Inventar, Ablage, Abweichungen AB01–AB17, Befunde T1–T7](../../../00_Arbeitsvorbereitung/Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md)
 - [Konkurrenz- und Featurematrix: Stand 2026, zehn Produkte, Lücken N01–N20](../../../00_Arbeitsvorbereitung/Glide_Konkurrenz_und_Featurematrix_2026-10-01.md)
 - [Produktprinzipien und UX-Prüfung: sechs Prinzipien, Befunde U01–U24, Prinzipien-Check](../../../00_Arbeitsvorbereitung/Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01.md)
 - [Entwicklungsplan ab 3.33](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md)
@@ -1702,27 +1702,3 @@ Vorsicherungen vor diesem Nachlauf:
 - [00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Analyse_2026-10-01.md>)
 - [00_Arbeitsvorbereitung/Glide_Konkurrenzuebersicht_und_persoenliche_Vorlieben_2026-10-01.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Konkurrenzuebersicht_und_persoenliche_Vorlieben_2026-10-01_3.32.3_vor_Analyse_2026-10-01.md>)
 - [README.md der Ablage](<../../../Archiv/README_3.32.3_vor_Analyse_2026-10-01.md>)
-
-## Beschlüsse D09–D17 und Prüfaufrufe 01.10.2026
-
-Dokumentations- und Messnachlauf zu 3.32.3; keine Produktionsversion, Anwendung unverändert.
-
-- [Beschlüsse D09–D17 mit Begründung](../../../00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md#beschlüsse-vom-01102026); verbindlich in der [Arbeitsrichtung](ARBEITSRICHTUNG.md#verbindliche-entscheidungen)
-- [Befund T8 und Vorschlag P09: wiederholte Prüfungen und Messungen je Bedienschritt](../../../00_Arbeitsvorbereitung/Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md#t8--wiederholte-prüfungen-und-messungen-je-bedienschritt-neu-gemessen)
-- [Nachweise: Prüfaufruf- und Pixelschrift-Probe, Rohwerte](../tests/qa-3.32.3/pruefaufrufe_2026-10-01/README.md)
-
-Vorsicherungen vor diesem Nachlauf:
-
-- [01_Repository/Glide/docs/00_INDEX.md](<archiv/00_INDEX_3.32.3_vor_Entscheidungen_2026-10-01.md>)
-- [01_Repository/Glide/docs/09_PROJECT_HANDOFF.md](<archiv/09_PROJECT_HANDOFF_3.32.3_vor_Entscheidungen_2026-10-01.md>)
-- [01_Repository/Glide/docs/ARBEITSRICHTUNG.md](<archiv/ARBEITSRICHTUNG_3.32.3_vor_Entscheidungen_2026-10-01.md>)
-- [01_Repository/Glide/CHANGELOG.md](<../archiv/CHANGELOG_3.32.3_vor_Entscheidungen_2026-10-01.md>)
-- [01_Repository/Glide/tests/qa-verlauf.md](<../tests/archiv/qa-verlauf_3.32.3_vor_Entscheidungen_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/README.md](<../../../00_Arbeitsvorbereitung/Archiv/README_3.32.3_vor_Entscheidungen_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Entscheidungsvorlage_2026-10-01_3.32.3_vor_Entscheidungen_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Entwicklungsplan_3.33ff_2026-10-01_3.32.3_vor_Entscheidungen_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01_3.32.3_vor_Entscheidungen_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01_3.32.3_vor_Entscheidungen_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Sitzungsuebergabe_2026-09-30_3.32.3_vor_Entscheidungen_2026-10-01.md>)
-- [00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md](<../../../00_Arbeitsvorbereitung/Archiv/Glide_Arbeits_und_Featureplanung_2026-09-30_3.32.3_vor_Entscheidungen_2026-10-01.md>)
-- [CLAUDE.md der Ablage](<../../../Archiv/CLAUDE_3.32.3_vor_Entscheidungen_2026-10-01.md>)

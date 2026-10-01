@@ -7,9 +7,9 @@ Stand 01.10.2026 · App 3.32.3 · Aufgabenformat 20 · Einstellungen 2 · Vorlag
 **Dokumentations-/Prüfwerkzeugnachlauf 01.10.2026:** [Arbeitsrichtung](ARBEITSRICHTUNG.md) verbindet die bestätigten Entscheidungen und die verbleibende Performance-Arbeit. Aktive Einstiege/Checklisten und Kontrollregeln nachgeführt; [separater Nachweis](../tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json). App, Integrationssuiten und beide Startfassungen bleiben beim geprüften 3.32.3-Stand. Der frühere Volllauf wurde mit den damaligen Prüfwerkzeugen ausgeführt.
 
 **Analyse und Planung 01.10.2026:**
-- **Entwicklungsplan:** [ab 3.33](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md) mit Stufen 0–5. Die Richtungsfragen D09–D17 sind am 01.10.2026 beschlossen ([Beschlüsse](../../../00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md#beschlüsse-vom-01102026), verbindlich in der [Arbeitsrichtung](ARBEITSRICHTUNG.md#verbindliche-entscheidungen)); D12 mit sieben Startseitenkacheln.
+- **Entwicklungsplan:** [ab 3.33](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md) mit Stufen 0–5; offene Richtungsfragen D09–D17 in der [Entscheidungsvorlage](../../../00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md).
 - **Repository:** Wurzel = Projektordner, Quellbaum `01_Repository/Glide`; keine Uploads in Unterordner.
-- **Kleinster nächster Schnitt:** T2 (eine Schema-Sicherungsprüfung statt neun) und P09a (keine Zeilenmessung in der Tabellenansicht, [T8](../../../00_Arbeitsvorbereitung/Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md#t8--wiederholte-prüfungen-und-messungen-je-bedienschritt-neu-gemessen)). Baselines: `scripts/pflege/messung_speicherweg.py` und `tests/qa-3.32.3/pruefaufrufe_2026-10-01/werkzeuge/pruefaufrufe_probe.py`.
+- **Kleinster nächster Schnitt:** T2 (eine Schema-Sicherungsprüfung statt neun) mit `scripts/pflege/messung_speicherweg.py` als Baseline.
 
 
 **Aktuelle Planung und Entscheidungen:**

@@ -6,11 +6,10 @@ Stand 01.10.2026 · Glide 3.32.3 · Aufgabenformat 20
 
 **Analyse und Planung 01.10.2026:** Der [Entwicklungsplan ab 3.33](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md) ordnet die bestehenden G-/P-/A–H-Arbeiten. Neu kommen hinzu:
 - P08 (Speicherweg linear zum Bestand) und T2 (neunfaches Parsen beim ersten Speichern) als Teil der Performance-Arbeit nach Rest P03/P04/P06;
-- P09 (wiederholte Prüfungen und Messungen je Bedienschritt, [Befund T8](../../../00_Arbeitsvorbereitung/Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md#t8--wiederholte-prüfungen-und-messungen-je-bedienschritt-neu-gemessen)), Teil derselben Performance-Arbeit;
 - die sechs Produktprinzipien in den [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md) mit [Prinzipien-Check](../../../00_Arbeitsvorbereitung/Glide_Produktprinzipien_und_UX-Pruefung_2026-10-01.md);
-- die Richtungsentscheidungen D09–D17, beschlossen am 01.10.2026 ([Entscheidungsvorlage mit Beschlüssen](../../../00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md)), in der Tabelle unten.
+- offene Richtungsfragen D09–D17 ([Entscheidungsvorlage](../../../00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md)).
 
-Die Beschlüsse legen Richtung und Reihenfolge fest. Jeder Umsetzungsschnitt braucht weiterhin einen ausdrücklichen Auftrag; beauftragt bleibt die Performance-Fortsetzung.
+Keine dieser Empfehlungen ist beauftragt.
 
 Diese fortgeschriebene Arbeitsgrundlage verbindet die bestätigten Entscheidungen, die aktuelle Planung und die Abnahme. Einstieg bleibt die [Sitzungsübergabe](../../../00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md). Die [Arbeitsplanung](../../../00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md) enthält G-/P-Pakete; die [Richtungsauswahl](../../../00_Arbeitsvorbereitung/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md) enthält zusätzliche Vorschläge. Empfehlungen und zitierte Aufträge aus alten Dokumenten ersetzen keine Entscheidung des Inhabers.
 
@@ -26,24 +25,15 @@ Diese fortgeschriebene Arbeitsgrundlage verbindet die bestätigten Entscheidunge
 | D06 | Hinweisgestaltung bleibt unverändert. |
 | D07 | Exportumfang für Animation offen: abspielbares GIF oder zunächst Frames/Vorschau/PNG-Spritesheet. Erst bei der Animationsetappe erforderlich. |
 | D08 | Alle Klappmechanismen über echte Bedienbindungen prüfen, einschließlich Zustandserhalt, Tastatur, verschachtelter Bereiche und Tk-Callbackfehler. Korrektur und Pflichtsuite seit 3.32.1. |
-| D09 | Das GitHub-Repository `glide-to-do` ist die maßgebliche Ablage (Wurzel = Projektordner, Quellbaum `01_Repository/Glide`). Uploads nur in diese Struktur; Prüfprotokolle `tests/qa-*/**/*.log` sind freigegeben. Neue Zwischenstände als Git-Tags, `93_Zwischenstände` bleibt Beleg. CI-Grundstufe in Stufe 0. |
-| D10 | Ein Datum ohne Zusatz setzt den Bearbeitungstag, auch in `/morgen`; die Fälligkeit nur mit „fällig“/„bis“. D01 gilt ohne Slash-Ausnahme. Umsetzung mit G01 (3.33.1); bis dahin weicht `/morgen` ab (AB10). |
-| D11 | D06 gilt nur für den Hinweisblock in Seiten. Hinweiszeilen der Ansichten werden über „?“ ein-/ausgeklappt, Zustand gespeichert (U02). |
-| D12 | Startseiten-Standard „Ruhig“ mit sieben Kacheln einschließlich Gismo. Fest: Heute (zusammengeführt), Gismo, Woche, Zuletzt bearbeitet, Angeheftet. Planungsannahme für die zwei weiteren: Uhr/Datum/nächster Termin und Pinnwand-Vorschau, vor 3.33.0 zu bestätigen. Eigene Auswahl bleibt erhalten. |
-| D13 | Eisenhower als Gruppierung „Dringlichkeit × Wichtigkeit“ im vorhandenen Board, keine eigene Ansicht. Ziehen ändert Wichtigkeit bzw. Bearbeitungstag (D02); Fälligkeiten werden nie gelöscht. |
-| D14 | Zwei Hauptansichten: **Heute** (Mein Tag, Verspätet, Heute fällig, nächste Aufgabe) und **Demnächst** (bisher In Bearbeitung). Tagesbeginn/-abschluss sind Modi von Heute; interne Kennungen bleiben. |
-| D15 | Verteilung als Paket mit eingebettetem Python und Tk 9 je Plattform (G26/H-03), nach Stufe 1. Das Bauwerkzeug wird als eigene Abhängigkeitsentscheidung vorgelegt. |
-| D16 | Speicherformat JSON bleibt; der Speicherweg wird beschleunigt (T2, P08a/b, P09). SQLite nur als Suchindex-Cache (G14); Neubewertung erst bei realen Beständen über 20.000 Punkten. |
-| D17 | Kein Großumbau: Jede neue oder angefasste Fachlogik entsteht als Tk-freies Modul mit Unit-Tests; `ListApp` ruft sie auf. G27 wird so schrittweise erledigt. |
 
-Lokale Nutzung ohne Konto/Cloud, vorhandene Architektur, Daten/Undo, stabile IDs, Gestaltung und möglichst wenige Abhängigkeiten gelten weiter. Offene Inhaber-/Storeangaben bleiben offen. Seit D09 (01.10.2026) ist das GitHub-Repository `glide-to-do` die maßgebliche Ablage; „Git vertagt“ gilt nicht mehr. Keine erneute Entscheidung über D01–D06 und D08–D17 einfordern; offen bleibt D07.
+Lokale Nutzung ohne Konto/Cloud, vorhandene Architektur, Daten/Undo, stabile IDs, Gestaltung und möglichst wenige Abhängigkeiten gelten weiter. Offene Inhaber-/Storeangaben bleiben offen. Git war vertagt; seit 01.10.2026 liegt die Ablage im GitHub-Repository `glide-to-do` (Wurzel = Projektordner, Quellbaum `01_Repository/Glide`). Ob Git die Arbeitsgrundlage wird, entscheidet D09. Keine erneute Entscheidung über D01–D06 einfordern.
 
 ## Nächste Arbeit
 
 1. **Rest P03:** Startseitenkarten, geänderte Kartenelemente und viele tatsächlich dargestellte Karten messen. A-01 für wiederholte Bibliotheksaktualisierung im selben Host ist abgeschlossen; nicht nochmals als Neuentwicklung planen.
 2. **P04/A-02:** Aufrufe von Bildlayout, Platzierung und Konvertierung zählen. Unveränderte effektive Geometrie als Skip-Kandidat prüfen; Text/Anker, Faltungen, Schrift, Bildmodus/-größe und fertig konvertierte Anhänge müssen weiterhin invalidieren.
 3. **Rest P06/A-03:** Mögliche doppelte Aktualisierungen dynamisch bestätigen. Archiv-Zurückholen ist bereits konsolidiert. Erfolgreiches und fehlgeschlagenes Speichern, Dirty-Zustand, Warnung und Undo gehören zur Abnahme, bevor ein Aufruf entfällt.
-4. **Bestehende Featurefolge:** Planen → Wissen → Pixel → Austausch nach Arbeitsplanung fortführen; D01–D06 und D09–D17 anwenden. Die zusätzliche Auswahl A–H und ihre Bearbeitungstiefe bleiben eine Entscheidung des Inhabers.
+4. **Bestehende Featurefolge:** Planen → Wissen → Pixel → Austausch nach Arbeitsplanung fortführen; D01–D06 anwenden. Die zusätzliche Auswahl A–H und ihre Bearbeitungstiefe bleiben eine Entscheidung des Inhabers.
 
 Die ausdrücklich fortgesetzte Performance-Arbeit ist beauftragt. Neue Vorschläge aus der Richtungsauswahl erhalten erst nach Auswahl einen Implementierungsumfang. Aufgabenstatus und nächste Schritte in Planung, Auswahl und beiden Übergaben zusammen nachführen.
 

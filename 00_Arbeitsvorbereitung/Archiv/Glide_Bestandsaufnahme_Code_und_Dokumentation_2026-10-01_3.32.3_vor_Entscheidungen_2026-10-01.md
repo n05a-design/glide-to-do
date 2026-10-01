@@ -1,6 +1,6 @@
 # Glide – Bestandsaufnahme Code und Dokumentation
 
-Stand **01.10.2026** · Glide 3.32.3 (Aufgabenformat 20) · Teil 1 von 4 der Analyse vom 01.10.2026 · Nachtrag T8 und Beschlüsse D09–D17 vom selben Tag
+Stand **01.10.2026** · Glide 3.32.3 (Aufgabenformat 20) · Teil 1 von 4 der Analyse vom 01.10.2026
 
 Zugehörig:
 - [Konkurrenz- und Featurematrix](Glide_Konkurrenz_und_Featurematrix_2026-10-01.md)
@@ -8,7 +8,6 @@ Zugehörig:
 - [Entwicklungsplan](Glide_Entwicklungsplan_3.33ff_2026-10-01.md)
 - [Entscheidungsvorlage D09–D17](Glide_Entscheidungsvorlage_2026-10-01.md)
 - [Nachweise: Messungen, Proben, Bilder](../01_Repository/Glide/tests/qa-3.32.3/analyse_planung_2026-10-01/README.md)
-- [Nachweise Nachtrag T8: wiederholte Prüfaufrufe](../01_Repository/Glide/tests/qa-3.32.3/pruefaufrufe_2026-10-01/README.md)
 
 ## 1. Ergebnis in Kürze
 
@@ -35,14 +34,7 @@ Zugehörig:
    - Die Standprüfung des Projekts meldet danach statt 290 nur noch 4 Befunde (Abschnitt 4).
 7. **Architektur:**
    - Die Datenschutz- und Integritätsmechanik ist eine echte Stärke.
-   - Strukturell bleibt `ListApp` mit 41.063 Zeilen und 1.396 Methoden (76 % der Hauptdatei) der Engpass für Testbarkeit und Änderungsgeschwindigkeit. G27 „Aufteilen“ erfolgt seit D17 schrittweise über Tk-freie Module.
-8. **Nachtrag – wiederholte Prüfungen (T8):**
-   - Die Schriftart prüft Glide bereits nur einmal.
-   - Teuer wiederholt werden Textmessungen, Kennzahlen und Datumswerte.
-   - Die Tabellenansicht misst nach jedem Aufbau jede Zeile und verwirft das Ergebnis: 558 → 69 ms bei 1.000 Punkten, wenn die Messung entfällt (Linux, Variante im Messprozess).
-   - Vorschlag **P09**.
-
-**Beschlüsse:** D09–D17 sind seit 01.10.2026 entschieden ([Entscheidungsvorlage](Glide_Entscheidungsvorlage_2026-10-01.md#beschlüsse-vom-01102026)). Verweise auf „Empfehlung D…“ in diesem Dokument gelten seither als Beschluss.
+   - Strukturell bleibt `ListApp` mit 41.063 Zeilen und 1.396 Methoden (76 % der Hauptdatei) der Engpass für Testbarkeit und Änderungsgeschwindigkeit; G27 „Aufteilen“ wartet auf die Versionsverwaltung.
 
 ## 2. Grundlage, Prüfumfang und Belegstufen
 
@@ -269,76 +261,6 @@ Ein einziges Abhaken über `item_change` führt aus:
 - **Historische Erzählung in Kommentaren:** DOKUMENTENPFLEGE verlangt bereits „Entwicklungserzählungen gehören in Changelog bzw. Archiv“. Neue Kommentare danach ausrichten, bestehende nicht pauschal umschreiben.
 - **Ausnahmebehandlung:** 46 × `except Exception`, 295 × `except tk.TclError`; durch Fehlerprotokoll abgefedert.
 
-### T8 – Wiederholte Prüfungen und Messungen je Bedienschritt (neu, gemessen)
-
-Nachtrag 01.10.2026 auf die Frage des Inhabers, ob Bestandteile wie die Schriftart nur einmal beim Start geprüft werden können.
-
-**Kurzantwort:**
-- **Schriftart:** Glide prüft sie bereits nur einmal; der Ansatz ist richtig umgesetzt.
-- **Echte Wiederholungen** liegen woanders: Textbreiten, Zeilenhöhen, Kennzahlen und Datumswerte werden je Bedienschritt mehrfach neu ermittelt.
-- **Größter Einzelposten:** eine Messung in der Tabellenansicht, deren Ergebnis verworfen wird.
-
-**Methode:**
-- Werkzeug [`pruefaufrufe_probe.py`](../01_Repository/Glide/tests/qa-3.32.3/pruefaufrufe_2026-10-01/README.md): Aufrufzählung per cProfile je Schritt, dazu je fünf warme Läufe ohne Profiler (Median).
-- Variante „einmal“: Die Stellen W1, W2, W4 und W5 werden nur im laufenden Messprozess durch ihre einmal berechnete Fassung ersetzt. Der Quellcode bleibt unverändert.
-- Umgebung: Linux/Tk 8.6, Python 3.12, künstliche Daten mit 1.000 bzw. 5.000 Punkten in einer Liste.
-- Gleichheitsprüfung: Die Kennzahlen der Liste sind in beiden Varianten identisch; keine Callbackfehler, leeres Fehlerprotokoll.
-
-**Was bereits nur einmal geprüft wird [Code, gemessen]:**
-
-| Bestandteil | Mechanismus | Aufrufe nach dem Start |
-|---|---|---|
-| Liste der Schriftfamilien | `available_font_families` → `_font_families` | 1 × `tkfont.families` je Sitzung |
-| Oberflächenschrift | `ui_font_family` → `_ui_font_family` | Zwischenspeicher, kein Tk-Aufruf |
-| Schwerster Schnitt | `heaviest_font` → `_heaviest_font_cache` | je Größe einmal |
-| Grundschrift für `app_font` | `_APP_FONT_CACHE`, geleert bei Schriftwechsel (`apply_ui_font`) | einmal je Schrifteinstellung |
-| Systemmitteilungen (Tk 9) | `system_notification_backend` | einmal je Sitzung |
-| Eigene Schriften registrieren | `register_private_fonts` beim Start | einmal (≈ 38 ms unter Linux) |
-
-**Was je Bedienschritt wiederholt wird:**
-
-| Nr. | Stelle | Befund | Kosten (Linux, 1.000 / 5.000 Punkte) |
-|---|---|---|---|
-| **W1** | `content_column_widths` in der Tabellenansicht | Misst nach jedem Tabellenaufbau Titel und Typ *jeder* Zeile. Gedacht ist die Funktion für Fälligkeit und Labels der Listenansicht. `sync_task_tree_columns` verwirft das Ergebnis in der Tabelle. | **≈ 490 ms / ≈ 2,4 s** je Tabellenaufbau; 1.025 bzw. 5.025 `font.measure` |
-| W2 | `hint_line_height`, `sync_header_height`, `header_logo_height`; Knöpfe der Startseite (`action`) | Legen je Aufruf ein neues `tkfont.Font` an und fragen Zeilenhöhe bzw. Breite neu ab, obwohl sich die Schrift nicht geändert hat; `cached_font` existiert bereits | 13–21 neue Schriftobjekte und 12–19 `metrics`-Abfragen je Ansichtswechsel, Startseite 40 Schriftobjekte; im Profil einige ms bis ≈ 35 ms |
-| W3 | `pixel_heading_family` | Merkt sich nur einen Treffer. Fehlt „Pixelify Sans“, etwa bei Tk ohne Xft, fragt jeder Startseitenaufbau Tk 10–20-mal erneut. Mit gefundener Schrift (Ubuntu-Tk, macOS) einmal. | gering; nur Pixel-Design ohne Schrift |
-| W4 | `page_chips` | Die Kennzahlen im Seitenkopf werden je Aktualisierung viermal vollständig berechnet: `update_page_chips` über `update_header_title` und `set_note_preview`, dazu `fit_stats_text` nur für eine Ja/Nein-Prüfung. Je Lauf alle Punkte mit `due_status` und dreimal `normalize_due`. | 4 Läufe statt 1; zusammen mit W5 Ursache des Gewinns von 158 ms in der Listenansicht bei 5.000 Punkten |
-| W5 | `due_status` | Liest das Datum je Aufruf mit `strptime` neu ein, ohne den vorhandenen Zwischenspeicher `_parse_iso_date`; dazu `datetime.now()` je Punkt | 5 Aufrufe je Punkt und Listenaufbau; 10.002 bzw. 16.668 `strptime` je Liste bzw. Abhaken (5.000) |
-| W6 | `has_active_filter` in `insert_tree_items` | Prüft den unveränderten Filterzustand für jede Zeile | 1 Aufruf je Punkt, ≈ 5 ms bei 1.000 |
-| W7 | `mix_hex_colors`, `contrast_ratio`, `relative_luminance` | Reine Farbrechnungen ohne Zwischenspeicher, mehrere hundert je Startseitenaufbau | ≈ 10–20 ms auf der Startseite |
-| (T2) | `ensure_schema12_backup` … `ensure_schema20_backup` | Neun Leseläufe der Datendatei beim ersten Speichern – der eigentliche Fall „einmal beim Laden prüfen“ | +0,5 s bei 10 MB, siehe T2 |
-
-**Messung – Median von fünf warmen Läufen** ([Rohwerte](../01_Repository/Glide/tests/qa-3.32.3/pruefaufrufe_2026-10-01/ergebnisse/)):
-
-| Schritt | 1.000: heute | 1.000: einmal | 5.000: heute | 5.000: einmal |
-|---|---:|---:|---:|---:|
-| Tabellenansicht öffnen | 558 ms | **69 ms** | 2.671 ms | **292 ms** |
-| Listenansicht öffnen | 79 ms | 87 ms | 418 ms | **260 ms** |
-| Liste öffnen und abhaken | 234 ms | 208 ms | 860 ms | 799 ms |
-| Startseite | 251 ms | 254 ms | 315 ms | 340 ms |
-| Mein Tag | 131 ms | 137 ms | 1.391 ms | 1.549 ms |
-
-**Einordnung [Einschätzung]:**
-- **W1 ist ein klarer Fehler mit großem Gewinn:** −88 bis −89 % beim Tabellenaufbau, unabhängig von der Bestandsgröße. Korrektur: kleine Wächterbedingung in `content_column_widths`, Aufwand XS.
-- **W4/W5 lohnen ab mittleren Beständen:** −38 % beim Listenaufbau mit 5.000 Punkten. Bei 1.000 Punkten liegt der Unterschied im Rauschen.
-- **Beim Abhaken dominiert der Speicherweg** (T1/P08); W4/W5 bringen dort nur etwa −7 bis −11 %.
-- **Startseite und Mein Tag** gewinnen durch diese Stellen nichts Messbares; ihre Kosten liegen im Kartenaufbau (Rest P03).
-- **W2, W3, W6 und W7** sind einzeln klein. Sie sind sinnvoll, wenn die Stelle ohnehin angefasst wird.
-
-**Was „einmal beim Start“ bedeuten darf:**
-- **Unveränderlich während der Sitzung:** Tk-Version und -Fähigkeiten, Schriftfamilien, Vorhandensein der Pixelschrift. Einmal ermitteln, Treffer *und* Fehlschlag merken. Die Pixelschrift wird erst nach dem ersten Durchlauf der Ereignisschleife geprüft, weil macOS privat registrierte Schriften verzögert meldet.
-- **Von Einstellungen abhängig** (Schriftgröße, Design): bis zur Änderung merken, beim Wechsel verwerfen – wie `_APP_FONT_CACHE` bei `apply_ui_font`.
-- **Von Daten oder Datum abhängig** (Kennzahlen, Fälligkeitsstatus): einmal je Aktualisierung berechnen, nicht einmal je Sitzung. Tageswechsel, Undo und Neu/Löschen müssen den Wert verwerfen.
-- **Beim Laden prüfbar:** Formatstand der Datendatei (T2) einmal beim Laden lesen statt neunmal beim ersten Speichern.
-
-**Vorschlag P09** (Teil der beauftragten Performance-Arbeit, Stufe 0):
-1. **W1** Tabellenmessung abstellen – XS, Risiko gering. Abnahme: Spaltenbreiten der Liste unverändert, Tabelle ohne Messung.
-2. **W4/W5** Kennzahlen einmal je Aktualisierung, Datum über den vorhandenen Zwischenspeicher – S, Risiko gering bis mittel. Abnahme: identische Kennzahlen, Tageswechsel, Undo.
-3. **W2/W3** Schriftobjekte und Zeilenhöhen je Schrift merken, Fehlschlag der Pixelschrift nach dem ersten Leerlauf merken – S. Abnahme: Schrift-/Größen-/Designwechsel.
-4. **W6/W7** beim nächsten Anfassen der Stelle.
-
-Die Belege gelten nur für Linux/Tk 8.6 mit künstlichen Daten. Verbindlich ist die Vorher-/Nachher-Messung auf dem Referenz-Mac.
-
 ## 8. Stärken, die erhalten bleiben müssen
 
 - **Datensicherheit:** atomares Schreiben, Vorsicherungen je Formatstufe, Tagesstände, Bestandswächter, schreibgeschützter Modus, Sperrdatei mit Heartbeat.
@@ -359,4 +281,3 @@ Die Belege gelten nur für Linux/Tk 8.6 mit künstlichen Daten. Verbindlich ist 
 | T4 CI-Grundstufe | sinnvoll | Stufe 0, abhängig von D09 |
 | T5 Linux/Verteilung | sinnvoll | Stufe 4 (D15); JPEG-Rückfall Linux klein in Stufe 1 |
 | T6 Barrierefreiheit | Zukunft | Nach stabiler Tk-9.1-Freigabe und Paketentscheidung |
-| T8 Wiederholte Prüfungen (W1–W7) | W1 notwendig (klein), W2–W5 sinnvoll, W6/W7 bei Gelegenheit | P09 in Stufe 0; W1 zusammen mit T2 als erster Schnitt |

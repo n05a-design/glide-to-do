@@ -11,12 +11,6 @@ Stand 01.10.2026 · Glide 3.32.3 · Datenformat 20 · Zeilen in zeitlicher Folge
 - **Standprüfung nach Ablagekorrektur:** 4 Befunde (fehlende `.log`, eine Archivsicherung).
 - **Grenzen:** Keine Vollprüfung; die bestehende 3.32.3-Vollprüfung bleibt der Laufzeitnachweis.
 
-**Beschluss- und Messnachlauf 01.10.2026, App 3.32.3:** [Nachweis](qa-3.32.3/pruefaufrufe_2026-10-01/ergebnis.json).
-- **Proben (Linux, Xvfb, Python 3.12):** Prüfaufruf-Probe mit 1.000/5.000 Punkten (Variante „heute“ und „einmal“), Pixelschrift-Probe mit und ohne Xft.
-- **Ergebnis:** Tabellenaufbau ohne Zeilenmessung 558 → 69 ms bzw. 2.671 → 292 ms; die Schriftart wird bereits nur einmal geprüft.
-- **Dokumente:** D09–D17 als Beschlüsse eingetragen; `Glide/.gitignore` gibt Prüfprotokolle frei.
-- **Grenzen:** Keine Vollprüfung, Anwendung unverändert.
-
 
 | Datum | Stand | Ergebnis | Nachweis |
 |---|---|---|---|
