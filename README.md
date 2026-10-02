@@ -9,7 +9,7 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 ## Stand
 
 - **Entwicklungsstand 3.33.6 vom 02.10.2026**, Datenformat 20.
-- **Geprüft und lokal ausgeliefert am 02.10.2026, keine Releasefassung:** Vollprüfung auf dem Referenz-Mac grün ([Ergebnis](01_Repository/Glide/tests/qa-3.33.5/eisenhower_2026-10-02/vollpruefung/ergebnis.json)); Python-Fassung und Entwicklungsbundle bytegleich ([QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md)).
+- **Geprüft und lokal ausgeliefert am 02.10.2026, keine Releasefassung:** Vollprüfung auf dem Referenz-Mac grün ([Ergebnis](01_Repository/Glide/tests/qa-3.33.6/heute_2026-10-02/vollpruefung/ergebnis.json)); Python-Fassung und Entwicklungsbundle bytegleich ([QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md)).
 - **Offen:** Signatur, Markenprüfung, Store und die manuelle Abnahme unter Windows, Linux, DPI-Skalierung und Bildschirmleser.
 - **Nächste Schritte:** [Entwicklungsplan ab 3.33](00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md) mit den [beschlossenen Entscheidungen D09–D17](00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md).
 

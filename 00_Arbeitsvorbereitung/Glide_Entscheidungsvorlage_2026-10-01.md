@@ -13,7 +13,7 @@ Der Inhaber hat alle neun Fragen beantwortet. Acht folgen der Empfehlung, D12 mi
 | D11 | **B** | „Hinweise nur bei Bedarf“ | 3.33.0 (U02) |
 | D12 | **B, abgewandelt** | „‚Ruhig‘ mit 7 Kacheln inkl. Gismo“ | umgesetzt in 3.33.2 (Vertrag 76) |
 | D13 | **B** | „als Gruppierung im Board“ | umgesetzt in 3.33.5 (G02, Vertrag 78) |
-| D14 | **B** | „zwei Hauptansichten“ | 3.33.2 |
+| D14 | **B** | „zwei Hauptansichten“ | umgesetzt in 3.33.6 (Vertrag 79) |
 | D15 | **B** | „Paket mit eigenem Python und Tk 9“ | Stufe 4 (G26/H-03) |
 | D16 | **A** | „bestehendes JSON-Speichern beschleunigen“ | Stufe 0 (T2, P08) |
 | D17 | **B** | „schrittweise in eigene Module je Funktion zerlegen“ | ab sofort für jede neue oder angefasste Fachlogik |

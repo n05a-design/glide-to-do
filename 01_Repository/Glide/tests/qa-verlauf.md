@@ -18,6 +18,8 @@ Stand 02.10.2026 · Glide 3.33.6 · Datenformat 20 · Zeilen in zeitlicher Folge
 - **Grenzen:** Keine Vollprüfung, Anwendung unverändert.
 
 
+**Heute und Demnächst 3.33.6, 02.10.2026:** Exitcode 0 im dritten Lauf – 81 Schritte, 64 Integrationssuiten, Unit-Tests, Showcase und fünf Analysen; 146 Python-/60 Bundle-Dateien bytegleich. Zwei ungültige Vorläufe (gesperrter Bildschirm; Zeitrennen in `test_speicherlast330` unter Last). [Nachweis](qa-3.33.6/heute_2026-10-02/README.md), [Vollprotokoll](qa-3.33.6/heute_2026-10-02/vollpruefung/ergebnis.json).
+
 **Eisenhower 3.33.5, 02.10.2026:** Exitcode 0 – 80 Schritte, 63 Integrationssuiten, Unit-Tests, Showcase und fünf Analysen; 145 Python-/59 Bundle-Dateien bytegleich. [Nachweis](qa-3.33.5/eisenhower_2026-10-02/README.md), [Vollprotokoll](qa-3.33.5/eisenhower_2026-10-02/vollpruefung/ergebnis.json).
 
 **Wiederholungen 3.33.4, 02.10.2026:** Exitcode 0 – 79 Schritte, 62 Integrationssuiten, Unit-Tests, Showcase und fünf Analysen; 144 Python-/58 Bundle-Dateien bytegleich. [Nachweis](qa-3.33.4/wiederholung_2026-10-02/README.md), [Vollprotokoll](qa-3.33.4/wiederholung_2026-10-02/vollpruefung/ergebnis.json).

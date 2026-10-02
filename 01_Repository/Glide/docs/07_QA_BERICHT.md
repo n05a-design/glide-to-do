@@ -1,6 +1,8 @@
 # QA-Bericht – Glide 3.33.6
 
-Stand 02.10.2026 (Heute und Demnächst D14, in Abnahme) · App 3.33.6 · Datenformat 20 · macOS, Python 3.14.5, Tk 9.0.3
+Stand 02.10.2026 (Heute und Demnächst D14) · App 3.33.6 · Datenformat 20 · macOS, Python 3.14.5, Tk 9.0.3
+
+**3.33.6 – geprüft und ausgeliefert (02.10.2026):** „Heute“ und „Demnächst“ nach D14: nächste Aufgabe, Verspätet, Liegen geblieben, Tagesplan, Heute fällig und Eingang ohne Dubletten; „Demnächst“ chronologisch; Tagesbeginn/-abschluss als Modi. Vollprüfung Exitcode 0 im dritten Lauf (81 Schritte, 64 Integrationssuiten); 146 Python-/60 Bundle-Dateien bytegleich, Signatur gültig.
 
 **3.33.5 – geprüft und ausgeliefert (02.10.2026):** Eisenhower als Gruppierung „Dringlichkeit × Wichtigkeit“ in Board, Liste und Tabelle (D13); Ziehen setzt Wichtigkeit oder Bearbeitungstag, nie die Fälligkeit. Vollprüfung Exitcode 0 (80 Schritte, 63 Integrationssuiten); 145 Python-/59 Bundle-Dateien bytegleich, Signatur gültig.
 
@@ -26,6 +28,16 @@ Stand 02.10.2026 (Heute und Demnächst D14, in Abnahme) · App 3.33.6 · Datenfo
 - **Grenzen:** Keine Vollprüfung der 58 Suiten in dieser Umgebung; macOS/Windows, physische Bedienung, DPI und Screenreader bleiben offen.
 - **Planung:** [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md).
 
+
+## Version 3.33.6 – geprüft und lokal ausgeliefert, 02.10.2026
+
+[Vertrag 79](79_HEUTE_3.33.6.md), [Nachweis](../tests/qa-3.33.6/heute_2026-10-02/README.md), [Vollprotokoll](../tests/qa-3.33.6/heute_2026-10-02/vollpruefung/ergebnis.json), [Lieferabgleich](../tests/qa-3.33.6/heute_2026-10-02/auslieferung.json).
+
+- **Exitcode 0 (17:27–18:25):** 81 Schritte, alle 64 Integrationssuiten, Unit-Tests (sechs neu für `today_view`), Showcase und fünf Analysen; Quellstand (342 Dateien) unverändert.
+- **Zwei ungültige Vorläufe:** gesperrter Bildschirm (rund 15:02–15:57; `test_ui39`, `test_workspace310` rot, Stillstand) und ein Zeitrennen unter Last: `test_speicherlast330` prüfte den 700 ms später gezeigten Formathinweis erst nach seinem Leerlauf, während OneDrive über 200 % CPU belegte. Messung 3.33.5 gegen 3.33.6: Laden plus Leerlauf je rund 420–433 ms, also keine Verlangsamung durch D14; die Suite akzeptiert jetzt „vorgemerkt oder gezeigt“.
+- **Umfang:** neue Pflichtsuite `test_heute3336.py`, Gegenprobe mit 3.33.5 rot; sieben Altsuiten auf D14 gebracht.
+- **Lieferung:** 146 Python-/60 Bundle-Dateien bytegleich, Bundle 3.33.6, Signatur gültig; Showcase ausgeliefert; 3.33.5-Hauptdatei als `_Z` archiviert.
+- **Grenzen:** echte Tastatur- und Mausbedienung, Windows/Linux, DPI und Screenreader offen; keine echten Nutzerdaten gelesen.
 
 ## Version 3.33.5 – geprüft und lokal ausgeliefert, 02.10.2026
 

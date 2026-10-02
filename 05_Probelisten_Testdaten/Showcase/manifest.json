@@ -1,5 +1,5 @@
 {
-  "app_version": "3.33.5",
+  "app_version": "3.33.6",
   "format_version": 20,
   "bearbeitungstag": "2026-10-02",
   "dokumente": [
@@ -50,16 +50,16 @@
   "vorlagen": 2,
   "dateien": {
     "Glide-Showcase.glidebackup": {
-      "bytes": 32958191,
-      "sha256": "c8eecec4ffdbd8c822deff67b5cd0e67cadd6540b5ec18f772be1dc0f0be861f"
+      "bytes": 32958196,
+      "sha256": "8ff44095347761e888b7a6b43921c79888d39c2ed8ff2c9e9f91edd22488544a"
     },
     "Glide-Showcase_App.glideapp": {
-      "bytes": 37564953,
-      "sha256": "55b7f54684fa8ef71f8f5cd4f0b8dbe184924c6c0dde1f383de6bb7746c32092"
+      "bytes": 37564946,
+      "sha256": "406015471b6ec8562d54db110711a401786878a358e22f97b8e53039f0117a1f"
     },
     "Glide-Showcase.glidetemplates": {
       "bytes": 6066575,
-      "sha256": "46c76d35870160210887c5d44a9ba4730c7ef5cb10ebc874560052bfe0412f86"
+      "sha256": "ff6b5023041d1e5c28d3a60e751c4a149a25a88fbbf648a23a48c66390e2d0f9"
     }
   }
 }

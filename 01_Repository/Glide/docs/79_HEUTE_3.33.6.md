@@ -37,3 +37,13 @@ Die Fachlogik ist Tk-frei in `today_view.py` (D17): Einordnung je Aufgabe, Aufte
 Neue Pflichtsuite `test_heute3336.py` über echte Wege: Auswahl der Seitenleistenzeile; sechs Abschnitte plus Verweis in fester Reihenfolge; nächste Aufgabe gleich Startseite; keine Dubletten, nichts Künftiges oder Erledigtes; Verweis öffnet „Demnächst“; Doppelklick auf neue Überschriften; Zuklappen über Neuladen, alte Kennung verworfen; „Tag …“ sichtbar, Klick auf „Tagesbeginn …“ startet den Modus; Kontextmenü der Seitenleistenzeile; anderer Tag; „Demnächst“ chronologisch ohne nächste Aufgabe; „Nächste Aufgabe“ aus der Startseite; Palette, Schnellsuche, Startansicht, Handbuch, Kontextmenü einer Liste.
 
 Angepasste Altsuiten (frühere Verträge, jetzt durch D14 ersetzt): `test_glide`, `test_features312`, `test_features315`, `test_features317`, `test_features324`, `test_features325`, `test_rueckmeldung330`.
+
+Angepasst wurde außerdem `test_speicherlast330`: Es prüft den Hinweis zur Formatumstellung jetzt zeitunabhängig (vorgemerkt oder bereits gezeigt). Anlass war ein Zeitrennen unter hoher Systemlast im zweiten Prüflauf, kein Fehler der App.
+
+## Abschluss 02.10.2026
+
+[Nachweis](../tests/qa-3.33.6/heute_2026-10-02/README.md), [Vollprotokoll](../tests/qa-3.33.6/heute_2026-10-02/vollpruefung/ergebnis.json), [Quellstand](../tests/qa-3.33.6/heute_2026-10-02/quellstand.json), [Lieferabgleich](../tests/qa-3.33.6/heute_2026-10-02/auslieferung.json).
+
+- **Vollprüfung Exitcode 0** (dritter Lauf, 17:27–18:25, ohne Eingaben): 81 Schritte, alle 64 Integrationssuiten, Unit-Tests, Showcase und fünf Analysen; Quellstand (342 Dateien) unverändert. Zwei ungültige Vorläufe sind im Nachweis belegt: gesperrter Bildschirm und das oben genannte Zeitrennen.
+- **Auslieferung:** `abgleich_07.py` ohne Abweichung (3.33.5-Hauptdatei als `_Z` archiviert), Bundle neu gebaut; 146 Dateien in `07_Python-Versionen` und 60 im Bundle per SHA-256 gleich `src/glide`; Bundle 3.33.6, `de.shaye.glide`, Signatur gültig. Showcase ausgeliefert.
+- **Manuell offen:** „Heute“ und „Tag …“ mit echter Tastatur und Maus, Windows/Linux, DPI und Screenreader.

@@ -202,7 +202,7 @@ Aufwand in **Arbeitstagen (AT) im bisherigen Arbeitsmodus**: KI-gestützte Umset
 | 3.33.3 | G01 Parsermodul + Feldchips (Chipteil von U04), D10 | **abgeschlossen 02.10.2026** (Vollprüfung grün, ausgeliefert); Wiederholungen und N08 nicht enthalten | Vertrag 77 |
 | 3.33.4 | Wiederholungen in der Schnelleingabe („jeden Montag“, „alle 2 Wochen“); Wiederholung setzt die Fälligkeit (Entscheidung 02.10.2026) | **abgeschlossen 02.10.2026** (Vollprüfung grün, ausgeliefert) | Vertrag 77 |
 | 3.33.5 | G02 Eisenhower als Gruppierung „Dringlichkeit × Wichtigkeit“ in Board, Liste und Tabelle | **abgeschlossen 02.10.2026** (Vollprüfung grün, ausgeliefert) | D13, Vertrag 78 |
-| 3.33.6 | D14 „Heute“ und „Demnächst“: Abschnitte nächste Aufgabe, Verspätet, Liegen geblieben, Tagesplan, Heute fällig; Tagesbeginn/-abschluss als Modi | in Abnahme | D14, Vertrag 79 |
+| 3.33.6 | D14 „Heute“ und „Demnächst“: Abschnitte nächste Aufgabe, Verspätet, Liegen geblieben, Tagesplan, Heute fällig; Tagesbeginn/-abschluss als Modi | **abgeschlossen 02.10.2026** (Vollprüfung grün, ausgeliefert) | D14, Vertrag 79 |
 | G05/H-02 (neue Reservierung offen) | G05 Fokus mit Timer, H-02 | 2–4 AT | D14 |
 | 3.33.7 (Reservierung) | G29, G31, G32; N07; N08 JPEG-Vorschau Linux | 4–7 AT | Referenz- und Löschregeln (Abschnitt 6) |
 

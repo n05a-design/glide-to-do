@@ -2,7 +2,7 @@
 
 Glide 3.33.6 · Entwicklungsstand 02.10.2026 · Aufgabenformat 20 · Vorlagenformat 2
 
-`Glide-Aufgaben-und-Listen_v3.33.5.pyw` (geprüft und ausgeliefert am 02.10.2026)
+`Glide-Aufgaben-und-Listen_v3.33.6.pyw` (geprüft und ausgeliefert am 02.10.2026)
 ist die bytegleiche Arbeitskopie des kanonischen Codes
 (`01_Repository/Glide/src/glide/app.pyw`). Daneben gehören, ebenfalls
 bytegleich, in denselben Ordner:

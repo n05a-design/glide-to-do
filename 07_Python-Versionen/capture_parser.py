@@ -39,7 +39,7 @@ SLASH_COMMANDS = (
     ("bis", "Fälligkeit, z. B. /bis Freitag"), ("fällig", "Fälligkeit, z. B. /fällig morgen"),
     ("wichtig", "Wichtigkeit hoch"), ("hoch", "Wichtigkeit hoch"), ("mittel", "Wichtigkeit mittel"),
     ("niedrig", "Wichtigkeit niedrig"),
-    ("meintag", "in „Mein Tag“ einplanen"),
+    ("meintag", "für heute einplanen (Ansicht „Heute“)"),
 )
 SLASH_IMPORTANCE = {"wichtig": 3, "hoch": 3, "mittel": 2, "niedrig": 1}
 
@@ -367,7 +367,7 @@ def parse_capture(text, labels=(), today=None, ignore=()):
                     verbraucht = neu(i, n, felder, _beschreibung("Fällig", felder["due"], felder.get("due_time")),
                                      "faellig", datum_ende=True)
             elif befehl == "meintag" and "plan" not in belegt:
-                verbraucht = neu(i, 1, {"planned_date": today.isoformat()}, "Bearbeitungstag heute (Mein Tag)", "plan")
+                verbraucht = neu(i, 1, {"planned_date": today.isoformat()}, "Bearbeitungstag heute", "plan")
             elif befehl in SLASH_IMPORTANCE and "wichtig" not in belegt:
                 stufe = SLASH_IMPORTANCE[befehl]
                 verbraucht = neu(i, 1, {"importance": stufe}, f"Wichtigkeit {IMPORTANCE_NAMES[stufe]}", "wichtig")

@@ -8,6 +8,8 @@ Stand 02.10.2026 · Glide 3.33.6 · Basisanalyse 3.32.0, Klappkorrektur 3.32.1 �
 
 **3.33.3 (02.10.2026):** G01 deutsche Schnelleingabe mit Feldchips umgesetzt, D10 für „/“-Befehle; geprüft und ausgeliefert ([Vertrag 77](../01_Repository/Glide/docs/77_EINGABE_3.33.3.md)). Wiederholungen in der Eingabe seit 3.33.4; sie setzen die Fälligkeit (Entscheidung 02.10.2026).
 
+**3.33.6 (02.10.2026):** D14 „Heute“ und „Demnächst“ ([Vertrag 79](../01_Repository/Glide/docs/79_HEUTE_3.33.6.md)); G05 Fokus und H-02 als eigene Reservierung.
+
 **3.33.5 (02.10.2026):** G02 Eisenhower als Gruppierung „Dringlichkeit × Wichtigkeit“ nach D13 ([Vertrag 78](../01_Repository/Glide/docs/78_EISENHOWER_3.33.5.md)).
 
 **3.33.0 – erster Umsetzungsschnitt:** T2/P09a umgesetzt und ausgeliefert. 76 automatische Schritte, 59 Integrationssuiten, acht Unit-Tests, Showcase und fünf Analysen grün; 140 Python-/54 Bundle-Dateien bytegleich, Signatur gültig, getrennter Showcase-Starter bei Erststart und Neustart geprüft. [Vertrag](../01_Repository/Glide/docs/73_FUNDAMENT_3.33.0.md) mit Ablageabgleich und Anschlussplan. D12 ist vollständig entschieden: zusätzliche Standardkacheln Zeichnungen und Pinnwand-Vorschau. Der Oberflächenumbau folgt nach diesem Fundament.

@@ -4,6 +4,8 @@
 **Ergänzungsauftrag 01.10.2026, 3.33.1:** Vier Seitenleistenbereiche in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen. Nur Listen bleibt verpflichtend sichtbar. Seiten erlaubt Bücher (bestehende Art `library`), Ordner und Seiten; Notizen Notizbücher, Ordner und Notizen, im Notizbuch auch datierte Zeichnungen (Klarstellung des Inhabers vom 01.10.2026); Zeichnungen Ordner und Zeichnungen; Listen alle Arten. Sichtbarkeit und Root-Zuordnung sind lokale Anzeigeeinstellungen, keine Löschaktion. Gemischte Altordner werden vollständig in Listen angezeigt. Einheitliche Anlege-/Verschieberegeln und Prüfung aller Fenster gehören zur Abnahme. [Vertrag](../01_Repository/Glide/docs/74_BEREICHE_UND_FENSTER_3.33.1.md).
 Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · für den nächsten Chat oder Bearbeiter
 
+**3.33.6 – Heute und Demnächst (D14), geprüft und ausgeliefert (02.10.2026):** „Mein Tag“ heißt „Heute“ mit nächster Aufgabe, Verspätet, Liegen geblieben, Tagesplan, Heute fällig und Eingang – jede Aufgabe einmal; „In Bearbeitung“ heißt „Demnächst“ (chronologisch, Verweis am Ende von „Heute“); Tagesbeginn/-abschluss über „Tag …“. Vollprüfung Exitcode 0 im dritten Lauf (zwei ungültige Vorläufe: gesperrter Bildschirm, Zeitrennen unter Last in `test_speicherlast330`, Suite zeitunabhängig gemacht), 146 Python-/60 Bundle-Dateien bytegleich. [Vertrag 79](../01_Repository/Glide/docs/79_HEUTE_3.33.6.md).
+
 **3.33.5 – Eisenhower G02, geprüft und ausgeliefert (02.10.2026):** Gruppierung „Dringlichkeit × Wichtigkeit“ in Board, Liste und Tabelle nach D13; Ziehen setzt Wichtigkeit (mittel/niedrig) oder Bearbeitungstag (heute/nach dem Zweitagesfenster), nie die Fälligkeit. Vollprüfung Exitcode 0, 145 Python-/59 Bundle-Dateien bytegleich. [Vertrag 78](../01_Repository/Glide/docs/78_EISENHOWER_3.33.5.md).
 
 **3.33.4 – Wiederholungen in der Eingabe, geprüft und ausgeliefert (02.10.2026):** „jeden Montag“, „werktags“, „montags und donnerstags“, „alle 2 Wochen“, „monatlich“ usw. setzen die Wiederholung und als Fälligkeit den ersten Termin (Entscheidung des Inhabers 02.10.2026). Vollprüfung Exitcode 0, 144 Python-/58 Bundle-Dateien bytegleich. [Vertrag 77](../01_Repository/Glide/docs/77_EINGABE_3.33.3.md#ergänzung-3334-wiederholungen).
@@ -166,17 +168,18 @@ um Ziehen erweitern: D04 ist jetzt 3.32.2. [Drag-/Performance-Vertrag 3.32.2](..
 - **Überall fest:** Standprüfung und Linkprüfung laufen in der Vollprüfung mit
   (`tests/tools/standpruefung.py`). Neue Dokumente unter `docs/` müssen in
   `docs/00_INDEX.md` stehen.
-- **Letztes Ergebnis:** 3.33.5 am 02.10.2026, Exitcode 0, 80 Schritte mit 63 Integrationssuiten,
+- **Letztes Ergebnis:** 3.33.6 am 02.10.2026, Exitcode 0, 81 Schritte mit 64 Integrationssuiten,
   Unit-Tests, Showcase und fünf Analysen; Python-Fassung und Bundle SHA-256-bytegleich
-  (145/59 Dateien). Siehe `docs/07_QA_BERICHT.md` und `tests/qa-verlauf.md`.
+  (146/60 Dateien). Siehe `docs/07_QA_BERICHT.md` und `tests/qa-verlauf.md`.
 
 ## 6. Was als Nächstes ansteht
 
-**Stand 02.10.2026, Glide 3.33.6 (Heute und Demnächst nach D14, in Abnahme):**
+**Stand 02.10.2026, nach Abschluss 3.33.6:**
 - **Beauftragt, als Nächstes:** P04 Bildlayout, P06r doppelte Aktualisierungen, P08a/P08b Speicherweg, P09b Kennzahlen; dazu die Einblendung des Einstellungsfensters (rund 2,1 s) als Messpunkt. Für die Startseite bleibt als großer Schritt, unveränderte Kacheln beim Aktualisieren zu erhalten (wie die Bibliothekskarten 3.32.3) – Vertrag 76, Anschluss.
-- **Braucht einen ausdrücklichen Auftrag:** UX1 „Weniger Oberfläche“ ohne D12 (seit 3.33.2) und ohne G01 (seit 3.33.3); vorher stabile Aktionskennungen (R2). Danach laut Plan D14 Heute/Demnächst und G05 Fokus (G02 seit 3.33.5).
+- **Braucht einen ausdrücklichen Auftrag:** UX1 „Weniger Oberfläche“ ohne D12 (seit 3.33.2) und ohne G01 (seit 3.33.3); vorher stabile Aktionskennungen (R2). Danach laut Plan G05 Fokus mit Timer und H-02 (eigene Reservierung); G02 seit 3.33.5, D14 seit 3.33.6.
 - **Entschieden 02.10.2026:** Wiederholungen in der Schnelleingabe setzen die Fälligkeit auf ihren ersten Termin, damit sie im Kalender stehen (Antwort des Inhabers: „Klar kann gerne eine Fälligkeit setzen, soll ja auch im Kalender auftauchen.“). Umsetzung 3.33.4.
 - **Offen beim Inhaber:** Auswahl A–H (Richtung/Tiefe), D07 erst zur Pixel-Etappe, Importquelle und Bauwerkzeug erst in Stufe 4, I1–I6 (Inhaberangaben, Lizenz, Konten, Markenprüfung, Windows-Prüfung).
+- **Prüfumgebung:** OneDrive synchronisiert nach einem Versionswechsel viele neue Archivdateien und belegte am 02.10.2026 über 200 % CPU; Suiten liefen dann bis zu zweieinhalbmal langsamer. Zeitabhängige Prüfungen (700-ms-Fenster) sind davon betroffen – Vollprüfung möglichst erst starten, wenn die Synchronisierung ruht.
 - **Werkzeugnachlauf:** Die Kommentare in `tests/tools/pruefen.py` und `tests/tools/hintergrund/sitecustomize.py` versprechen noch Tastaturabschirmung; beim nächsten Werkzeugschnitt korrigieren (Testplan ist bereits richtig).
 
 **Performance-Fortsetzung 01.10.2026:** Bibliothekskarten und gemeinsame Aktionen in 3.32.3 umgesetzt; gezielte Prüfung und Messserien grün. [Vertrag 71](../01_Repository/Glide/docs/71_KARTEN_PERFORMANCE_3.32.3.md) enthält Lebensdauer/Invalidierung und Messgrenzen. Vollprüfung und Abgleich abgeschlossen: 73 Schritte/58 Suiten und fünf Analysen, 139 Python-/53 Bundle-Dateien bytegleich, Signatur gültig. Beide Startfassungen tragen 3.32.3. Der Inhaber hat die bestehende Performance-Arbeit ausdrücklich fortgesetzt, die zusätzliche Auswahl neuer Features bleibt offen.

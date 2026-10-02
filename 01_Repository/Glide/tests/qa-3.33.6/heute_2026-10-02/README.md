@@ -4,7 +4,7 @@
 
 ## Vollprüfung und Auslieferung
 
-Folgt nach dem Lauf.
+[Eingefrorener Quellstand](quellstand.json) mit 342 Dateien. [Vollprüfung](vollpruefung/ergebnis.json) im dritten Lauf 17:27–18:25, entsperrt, ohne Eingaben: **Exitcode 0**, 81 Schritte, zwei plattformbedingt übersprungen; Quellstand unverändert. [Lieferabgleich](auslieferung.json): 146 Dateien in `07_Python-Versionen` und 60 im Bundle per SHA-256 gleich `src/glide`, Bundle 3.33.6, Signatur gültig; Showcase ausgeliefert.
 
 ## Ungültige Vorläufe
 
