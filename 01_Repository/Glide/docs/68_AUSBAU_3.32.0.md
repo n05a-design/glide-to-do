@@ -1,6 +1,6 @@
 # Ausbau nach der Funktionsrecherche – Glide 3.32.0
 
-Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20
+Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20
 
 Grundlage: [Funktionsrecherche vom 30.09.2026](../../../00_Arbeitsvorbereitung/Glide_Funktionsrecherche_Ausbau_2026-09-30.md),
 Antwort des Inhabers vom selben Tag:

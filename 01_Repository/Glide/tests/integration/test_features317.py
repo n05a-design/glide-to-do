@@ -112,7 +112,8 @@ with tempfile.TemporaryDirectory(prefix="glide-features317-") as folder:
         # --- Formate zeigen die richtige Menge -------------------------------
         tageszettel = app.build_print_html("today")
         # Seit 3.22 gibt es einen Tagesabschnitt statt zweier.
-        assert "Mein Tag" in tageszettel and "Bearbeitungstag heute" not in tageszettel
+        # Seit 3.33.6 (D14) heißt der Abschnitt „Tagesplan“.
+        assert "Tagesplan" in tageszettel and "Bearbeitungstag heute" not in tageszettel
         assert "Heute fällig" in tageszettel and "Überfällig" in tageszettel
         assert "Aus: Besichtigung" in tageszettel, "Übersichten nennen die Quellliste."
         planung = app.build_print_html("planday", day=morgen)

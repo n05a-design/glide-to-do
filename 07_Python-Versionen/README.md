@@ -1,14 +1,14 @@
 # Aktuelle startbare Python-Fassung
 
-Glide 3.33.1 · Entwicklungsstand 01.10.2026 · Aufgabenformat 20 · Vorlagenformat 2
+Glide 3.33.6 · Entwicklungsstand 02.10.2026 · Aufgabenformat 20 · Vorlagenformat 2
 
-`Glide-Aufgaben-und-Listen_v3.33.1.pyw` (Prüfkandidat; Auslieferung nach dem Volllauf)
+`Glide-Aufgaben-und-Listen_v3.33.6.pyw` (geprüft und ausgeliefert am 02.10.2026)
 ist die bytegleiche Arbeitskopie des kanonischen Codes
 (`01_Repository/Glide/src/glide/app.pyw`). Daneben gehören, ebenfalls
 bytegleich, in denselben Ordner:
 
 - die Module `drawing.py`, `drawing_image.py`, `backdrop.py`,
-  `page_markdown.py`, `image_preview.py`, `logo.py` und `schema_backups.py`, `sidebar_policy.py`, `svg_geometry.py` – ohne sie startet
+  `page_markdown.py`, `image_preview.py`, `logo.py` und `schema_backups.py`, `sidebar_policy.py`, `svg_geometry.py`, `home_tiles.py`, `capture_parser.py`, `eisenhower.py`, `today_view.py` – ohne sie startet
   Glide nicht;
 - `Schnellstart.pyw` (im Repository `glide_start.py`);
 - die Ordner `resources` (Schriften, Vorlagen, seit 29.09.2026 das Logo) und

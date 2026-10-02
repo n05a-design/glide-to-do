@@ -1,0 +1,1037 @@
+{
+ "version": "3.33.3",
+ "app_sha256": "f0b18ff6e36260423bee58af88ab1c76a6c87e2bf53ec64d61b5a4ea0d58e631",
+ "ziele": [
+  {
+   "ziel": "python",
+   "anzahl": 144,
+   "abweichungen": [],
+   "dateien": [
+    {
+     "quelle": "app.pyw",
+     "sha256": "f0b18ff6e36260423bee58af88ab1c76a6c87e2bf53ec64d61b5a4ea0d58e631",
+     "gleich": true
+    },
+    {
+     "quelle": "glide_start.py",
+     "sha256": "1df65c109d30e67e31ae1f901b3cc6e04f4a4b59a25c66876b75facf0b585a11",
+     "gleich": true
+    },
+    {
+     "quelle": "drawing.py",
+     "sha256": "72754ee4a403dcc51ee4b5f12c6dad1a01ec5a6a4c7c1b824781ca157e87a79a",
+     "gleich": true
+    },
+    {
+     "quelle": "drawing_image.py",
+     "sha256": "d1020a43175f251a5a59aa434ebbc5b4cb43d8e70fc9c245deaff2001bfa1ad9",
+     "gleich": true
+    },
+    {
+     "quelle": "backdrop.py",
+     "sha256": "a45c04144b4366eb805aee56558005976f0e66d53032acb0b6aa37ee702689f8",
+     "gleich": true
+    },
+    {
+     "quelle": "page_markdown.py",
+     "sha256": "5b4828bd801f7b86f098983785b2c5789efe03bc2dde5d37987ab5f722171141",
+     "gleich": true
+    },
+    {
+     "quelle": "image_preview.py",
+     "sha256": "2081133ae0d0e5a827180f870414831e77b640f9c56b6604d2b28ca4b383feb6",
+     "gleich": true
+    },
+    {
+     "quelle": "logo.py",
+     "sha256": "a3291f1a131c4a610b25045d156016eac185a2aa4ddbebb8eba8d5590fe22240",
+     "gleich": true
+    },
+    {
+     "quelle": "schema_backups.py",
+     "sha256": "8365144479df200dddec4760db77fe7ccc32ca060a98ffcd0b95d91f8a9c6b58",
+     "gleich": true
+    },
+    {
+     "quelle": "sidebar_policy.py",
+     "sha256": "52215f7e9d860642b7ef46925a0666d84efb0eddcc4253e204be2204b8b7d763",
+     "gleich": true
+    },
+    {
+     "quelle": "svg_geometry.py",
+     "sha256": "32babdade157ac5e996e8ca618e78bb5030220e7eabd8eff27a0cb287f832cd4",
+     "gleich": true
+    },
+    {
+     "quelle": "home_tiles.py",
+     "sha256": "e85756e559ae9f876c025d62512df377dbc9bdccbfb1a9c71e63fd3fb3c90ad8",
+     "gleich": true
+    },
+    {
+     "quelle": "capture_parser.py",
+     "sha256": "67a82faf85bf698c4c361080352348d7392160aceed18ced18a087c9e12e1021",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/DejaVuSans-Bold.ttf",
+     "sha256": "e6476c1b80502924294eed40894c5b18e06c181444ca953e5334262df9c27724",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/DejaVuSans-BoldOblique.ttf",
+     "sha256": "eb436dca0c2594b73d8b603b892e374fdfd8d885d25ffb4f18df4c4c0b49e50f",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/DejaVuSans-Oblique.ttf",
+     "sha256": "4af75fa16ee6d3ad43e1ecec41862c24954af26a55c6bb1ebb27bd486a50f5f4",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/DejaVuSans.ttf",
+     "sha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/LICENSE",
+     "sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/OFL-PixelifySans.txt",
+     "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/PixelifySans-Bold.ttf",
+     "sha256": "3c3c203a3f3b862b944e836e4ec0fce201eddc1952cbca0d682e382d668b293c",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/PixelifySans-Regular.ttf",
+     "sha256": "5436d485d1713afa376e1744911cbbcc0849eae1eb55ec9bc34c0753993ffef9",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/provenance.json",
+     "sha256": "663fbc94179ae7e7a76e799783546d07a3826f931699be74ec0265acfb0cc08b",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/logo/glide-app-icon.png",
+     "sha256": "903dd3853f307e32fd756dc55da4d0f149b2d2a0e87dcc408ef99527eb4e4493",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/logo/glide-app-icon.svg",
+     "sha256": "cf2856661c58ac735ce112fb39a4a976932a74581ef34f1a96a616a49a8c2416",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/logo/glide-logo.png",
+     "sha256": "36fd55971c153649a0a8a4c50ffdaf36fafb4df15a1047a5074df4a1336e1deb",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/logo/glide-logo.svg",
+     "sha256": "1a36b52bd4d3f77f34ed2c985a097bfb283924bf098f57c1cc5174067bcbc42f",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/templates/glide_vorlagen.glidetemplates",
+     "sha256": "55f360c6f65907c2ac67a6d8bb7ccc00916e800da90c497971cd5c47c9959277",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/provenance.json",
+     "sha256": "d88d2242930d3d946c357900899c548b7bc90548f2e8e4d549e8c80b2793c2e9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/LICENSE",
+     "sha256": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/TkinterDnD.py",
+     "sha256": "a5c23c0c9dbd1c1c9077809e5520b7edfed60986db7ebc1f7361a8f4c5bd6e29",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/__init__.py",
+     "sha256": "514ce83cf94762760ec0c38aa3a445c998ff4cc3bec2661d3c1c60b8c1033bf2",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+     "sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64/pkgIndex.tcl",
+     "sha256": "6c5bc8d4b2506b03d4332dbd37f8497ca3ceb0b50d6ad90eac0afd33e94378c4",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd.tcl",
+     "sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_compat.tcl",
+     "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_generic.tcl",
+     "sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_macosx.tcl",
+     "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_unix.tcl",
+     "sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_utils.tcl",
+     "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_windows.tcl",
+     "sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+     "sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/pkgIndex.tcl",
+     "sha256": "0d3f23a06a3e08e896f7f6f5eade496967e449128f387b783414d0d75fcda90a",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd.tcl",
+     "sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_compat.tcl",
+     "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_generic.tcl",
+     "sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_macosx.tcl",
+     "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_unix.tcl",
+     "sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_utils.tcl",
+     "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_windows.tcl",
+     "sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+     "sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64/pkgIndex.tcl",
+     "sha256": "6c5bc8d4b2506b03d4332dbd37f8497ca3ceb0b50d6ad90eac0afd33e94378c4",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd.tcl",
+     "sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_compat.tcl",
+     "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_generic.tcl",
+     "sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_macosx.tcl",
+     "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_unix.tcl",
+     "sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_utils.tcl",
+     "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_windows.tcl",
+     "sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+     "sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/pkgIndex.tcl",
+     "sha256": "0d3f23a06a3e08e896f7f6f5eade496967e449128f387b783414d0d75fcda90a",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd.tcl",
+     "sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_compat.tcl",
+     "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_generic.tcl",
+     "sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_macosx.tcl",
+     "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_unix.tcl",
+     "sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_utils.tcl",
+     "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_windows.tcl",
+     "sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/libtkdnd2.10.2.dylib",
+     "sha256": "a94be0fc0bfbeccdda03d3fd484300b740164367c49ede02b22bad012ad5c234",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/pkgIndex.tcl",
+     "sha256": "837e4d08830b95302f972369d5a21999a351bdd59c7fd9afe1622c095637077b",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd.tcl",
+     "sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_compat.tcl",
+     "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_generic.tcl",
+     "sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_macosx.tcl",
+     "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_unix.tcl",
+     "sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_utils.tcl",
+     "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_windows.tcl",
+     "sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/libtcl9tkdnd2.10.2.dylib",
+     "sha256": "482da76e340f6ad63f969c655fb7e6940e4bbfc2c85d761f068da246acf5b30d",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/pkgIndex.tcl",
+     "sha256": "ea1db932b68c57df8327badce9e262c48675ade6b22a4c1a545a9568500da410",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd.tcl",
+     "sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_compat.tcl",
+     "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_generic.tcl",
+     "sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_macosx.tcl",
+     "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_unix.tcl",
+     "sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_utils.tcl",
+     "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_windows.tcl",
+     "sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/libtkdnd2.9.4.dylib",
+     "sha256": "6e4f4fb171fde00d779cd69196b21c7ca12d0e2f9497ef1cc8f76050f2b4f2f6",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/pkgIndex.tcl",
+     "sha256": "fb9bf10034b66ee8f8dd0a05fe7b254db6cae5d6b2ea7389d5a088f7db9f72b6",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd.tcl",
+     "sha256": "24aee2d084581ae85cfe0efdc5c58493b14fea5c2a8d9adf3db8b2132f0d14a2",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_compat.tcl",
+     "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_generic.tcl",
+     "sha256": "3a4172b9c5150d537e1c271fdac1b472af2fad8fc6272c9cdbdef18ca0a8da99",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_macosx.tcl",
+     "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_unix.tcl",
+     "sha256": "4d8adba6618427d9ae6592e4070cfb65a25731fc15566d2657b20610a6a77bcb",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_utils.tcl",
+     "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_windows.tcl",
+     "sha256": "7b7b522a769fcb5d1484891685bc3c0ee4967899317caa0547ab0e8d1d6e808f",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-arm64/libtkdnd2.10.2.dll",
+     "sha256": "b4076e7bbc107902ea3d4d1aa21cb8fc7b015a9ea88d3ea3d997c6d18751ed9f",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-arm64/pkgIndex.tcl",
+     "sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd.tcl",
+     "sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd2.10.2.lib",
+     "sha256": "41744b1b3d217fbef855bd215f55194ea8c7e78db643497d8d6aa2f55fae2f17",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_compat.tcl",
+     "sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_generic.tcl",
+     "sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_macosx.tcl",
+     "sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_unix.tcl",
+     "sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_utils.tcl",
+     "sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_windows.tcl",
+     "sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64/libtkdnd2.10.2.dll",
+     "sha256": "ddf8b01276d9174a21666438caa97a4108b72ae50511506060ceafa9555cd6d4",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64/pkgIndex.tcl",
+     "sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd.tcl",
+     "sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd2.10.2.lib",
+     "sha256": "79511b0e8820d16252ab3a846c610280f0d24cd0b30d294091869107cd72bc4d",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_compat.tcl",
+     "sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_generic.tcl",
+     "sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_macosx.tcl",
+     "sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_unix.tcl",
+     "sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_utils.tcl",
+     "sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_windows.tcl",
+     "sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.2.dll",
+     "sha256": "731e6fb6fd5585074588b16f5b8ad29029bc2a40c83d20b5937f8d1f1edaf82e",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/pkgIndex.tcl",
+     "sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd.tcl",
+     "sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd2.10.2.lib",
+     "sha256": "79511b0e8820d16252ab3a846c610280f0d24cd0b30d294091869107cd72bc4d",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_compat.tcl",
+     "sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_generic.tcl",
+     "sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_macosx.tcl",
+     "sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_unix.tcl",
+     "sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_utils.tcl",
+     "sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_windows.tcl",
+     "sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86/libtkdnd2.10.2.dll",
+     "sha256": "f26bf8b64fb74e2891b7daf30ecfe60e06dc946de724acc5e000e262d55650fd",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86/pkgIndex.tcl",
+     "sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd.tcl",
+     "sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd2.10.2.lib",
+     "sha256": "dd06aaea3ea6f0ca0813fa344a4751cf75603a467b800803032950bededd8981",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_compat.tcl",
+     "sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_generic.tcl",
+     "sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_macosx.tcl",
+     "sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_unix.tcl",
+     "sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_utils.tcl",
+     "sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_windows.tcl",
+     "sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/libtkdnd2.10.2.dll",
+     "sha256": "58bfe0747341ffc82a2ff841eabc7a03130161f73bac5f6a2c4b61526c4bd5c2",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/pkgIndex.tcl",
+     "sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd.tcl",
+     "sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd2.10.2.lib",
+     "sha256": "dd06aaea3ea6f0ca0813fa344a4751cf75603a467b800803032950bededd8981",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_compat.tcl",
+     "sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_generic.tcl",
+     "sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_macosx.tcl",
+     "sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_unix.tcl",
+     "sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_utils.tcl",
+     "sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_windows.tcl",
+     "sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+     "gleich": true
+    }
+   ]
+  },
+  {
+   "ziel": "bundle",
+   "anzahl": 58,
+   "abweichungen": [],
+   "dateien": [
+    {
+     "quelle": "app.pyw",
+     "sha256": "f0b18ff6e36260423bee58af88ab1c76a6c87e2bf53ec64d61b5a4ea0d58e631",
+     "gleich": true
+    },
+    {
+     "quelle": "glide_start.py",
+     "sha256": "1df65c109d30e67e31ae1f901b3cc6e04f4a4b59a25c66876b75facf0b585a11",
+     "gleich": true
+    },
+    {
+     "quelle": "drawing.py",
+     "sha256": "72754ee4a403dcc51ee4b5f12c6dad1a01ec5a6a4c7c1b824781ca157e87a79a",
+     "gleich": true
+    },
+    {
+     "quelle": "drawing_image.py",
+     "sha256": "d1020a43175f251a5a59aa434ebbc5b4cb43d8e70fc9c245deaff2001bfa1ad9",
+     "gleich": true
+    },
+    {
+     "quelle": "backdrop.py",
+     "sha256": "a45c04144b4366eb805aee56558005976f0e66d53032acb0b6aa37ee702689f8",
+     "gleich": true
+    },
+    {
+     "quelle": "page_markdown.py",
+     "sha256": "5b4828bd801f7b86f098983785b2c5789efe03bc2dde5d37987ab5f722171141",
+     "gleich": true
+    },
+    {
+     "quelle": "image_preview.py",
+     "sha256": "2081133ae0d0e5a827180f870414831e77b640f9c56b6604d2b28ca4b383feb6",
+     "gleich": true
+    },
+    {
+     "quelle": "logo.py",
+     "sha256": "a3291f1a131c4a610b25045d156016eac185a2aa4ddbebb8eba8d5590fe22240",
+     "gleich": true
+    },
+    {
+     "quelle": "schema_backups.py",
+     "sha256": "8365144479df200dddec4760db77fe7ccc32ca060a98ffcd0b95d91f8a9c6b58",
+     "gleich": true
+    },
+    {
+     "quelle": "sidebar_policy.py",
+     "sha256": "52215f7e9d860642b7ef46925a0666d84efb0eddcc4253e204be2204b8b7d763",
+     "gleich": true
+    },
+    {
+     "quelle": "svg_geometry.py",
+     "sha256": "32babdade157ac5e996e8ca618e78bb5030220e7eabd8eff27a0cb287f832cd4",
+     "gleich": true
+    },
+    {
+     "quelle": "home_tiles.py",
+     "sha256": "e85756e559ae9f876c025d62512df377dbc9bdccbfb1a9c71e63fd3fb3c90ad8",
+     "gleich": true
+    },
+    {
+     "quelle": "capture_parser.py",
+     "sha256": "67a82faf85bf698c4c361080352348d7392160aceed18ced18a087c9e12e1021",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/DejaVuSans-Bold.ttf",
+     "sha256": "e6476c1b80502924294eed40894c5b18e06c181444ca953e5334262df9c27724",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/DejaVuSans-BoldOblique.ttf",
+     "sha256": "eb436dca0c2594b73d8b603b892e374fdfd8d885d25ffb4f18df4c4c0b49e50f",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/DejaVuSans-Oblique.ttf",
+     "sha256": "4af75fa16ee6d3ad43e1ecec41862c24954af26a55c6bb1ebb27bd486a50f5f4",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/DejaVuSans.ttf",
+     "sha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/LICENSE",
+     "sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/OFL-PixelifySans.txt",
+     "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/PixelifySans-Bold.ttf",
+     "sha256": "3c3c203a3f3b862b944e836e4ec0fce201eddc1952cbca0d682e382d668b293c",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/PixelifySans-Regular.ttf",
+     "sha256": "5436d485d1713afa376e1744911cbbcc0849eae1eb55ec9bc34c0753993ffef9",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/fonts/provenance.json",
+     "sha256": "663fbc94179ae7e7a76e799783546d07a3826f931699be74ec0265acfb0cc08b",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/logo/glide-app-icon.png",
+     "sha256": "903dd3853f307e32fd756dc55da4d0f149b2d2a0e87dcc408ef99527eb4e4493",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/logo/glide-app-icon.svg",
+     "sha256": "cf2856661c58ac735ce112fb39a4a976932a74581ef34f1a96a616a49a8c2416",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/logo/glide-logo.png",
+     "sha256": "36fd55971c153649a0a8a4c50ffdaf36fafb4df15a1047a5074df4a1336e1deb",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/logo/glide-logo.svg",
+     "sha256": "1a36b52bd4d3f77f34ed2c985a097bfb283924bf098f57c1cc5174067bcbc42f",
+     "gleich": true
+    },
+    {
+     "quelle": "resources/templates/glide_vorlagen.glidetemplates",
+     "sha256": "55f360c6f65907c2ac67a6d8bb7ccc00916e800da90c497971cd5c47c9959277",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/provenance.json",
+     "sha256": "d88d2242930d3d946c357900899c548b7bc90548f2e8e4d549e8c80b2793c2e9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/LICENSE",
+     "sha256": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/TkinterDnD.py",
+     "sha256": "a5c23c0c9dbd1c1c9077809e5520b7edfed60986db7ebc1f7361a8f4c5bd6e29",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/__init__.py",
+     "sha256": "514ce83cf94762760ec0c38aa3a445c998ff4cc3bec2661d3c1c60b8c1033bf2",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/libtkdnd2.10.2.dylib",
+     "sha256": "a94be0fc0bfbeccdda03d3fd484300b740164367c49ede02b22bad012ad5c234",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/pkgIndex.tcl",
+     "sha256": "837e4d08830b95302f972369d5a21999a351bdd59c7fd9afe1622c095637077b",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd.tcl",
+     "sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_compat.tcl",
+     "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_generic.tcl",
+     "sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_macosx.tcl",
+     "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_unix.tcl",
+     "sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_utils.tcl",
+     "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_windows.tcl",
+     "sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/libtcl9tkdnd2.10.2.dylib",
+     "sha256": "482da76e340f6ad63f969c655fb7e6940e4bbfc2c85d761f068da246acf5b30d",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/pkgIndex.tcl",
+     "sha256": "ea1db932b68c57df8327badce9e262c48675ade6b22a4c1a545a9568500da410",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd.tcl",
+     "sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_compat.tcl",
+     "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_generic.tcl",
+     "sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_macosx.tcl",
+     "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_unix.tcl",
+     "sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_utils.tcl",
+     "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_windows.tcl",
+     "sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/libtkdnd2.9.4.dylib",
+     "sha256": "6e4f4fb171fde00d779cd69196b21c7ca12d0e2f9497ef1cc8f76050f2b4f2f6",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/pkgIndex.tcl",
+     "sha256": "fb9bf10034b66ee8f8dd0a05fe7b254db6cae5d6b2ea7389d5a088f7db9f72b6",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd.tcl",
+     "sha256": "24aee2d084581ae85cfe0efdc5c58493b14fea5c2a8d9adf3db8b2132f0d14a2",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_compat.tcl",
+     "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_generic.tcl",
+     "sha256": "3a4172b9c5150d537e1c271fdac1b472af2fad8fc6272c9cdbdef18ca0a8da99",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_macosx.tcl",
+     "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_unix.tcl",
+     "sha256": "4d8adba6618427d9ae6592e4070cfb65a25731fc15566d2657b20610a6a77bcb",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_utils.tcl",
+     "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+     "gleich": true
+    },
+    {
+     "quelle": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_windows.tcl",
+     "sha256": "7b7b522a769fcb5d1484891685bc3c0ee4967899317caa0547ab0e8d1d6e808f",
+     "gleich": true
+    }
+   ]
+  }
+ ],
+ "bundle_version": "3.33.3",
+ "bundle_id": "de.shaye.glide",
+ "codesign_exitcode": 0,
+ "quellstand_unveraendert": true,
+ "eingefrorene_dateien": 333,
+ "vollpruefung": "vollpruefung/ergebnis.json (Exitcode 0)",
+ "vorsicherung": "Hauptdatei 3.33.2 als 07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.33.2_Z.pyw; Quellstand 3.33.2 in tests/qa-3.33.2/startseite_2026-10-02/quellstand.json (Prüfsummen) und im Lieferstand"
+}

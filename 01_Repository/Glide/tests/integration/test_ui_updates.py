@@ -118,6 +118,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
                     capture(root, f'liste-{theme}-{width}')
             root.geometry('1280x960+10+10')
             app.settings.update(profile_name='Tim',profile_logo='TV')
+            app.set_home_tile_hidden('welcome', False)  # Seit D12 (3.33.2) nicht mehr im Standard: die geprüfte Kachel ausdrücklich einblenden.
             app.set_home_view()
             root.update()
             assert app.home_frame.winfo_ismapped() and not app.tree.winfo_ismapped()

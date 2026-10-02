@@ -1,6 +1,6 @@
 # Regeln für die Dokumentenpflege
 
-Stand 01.10.2026 · Glide 3.33.1 · Datenformat 20
+Stand 02.10.2026 · Glide 3.33.6 · Datenformat 20
 
 Der aktuelle Nutzerauftrag ergänzt die Arbeitsregeln des Repositorys:
 

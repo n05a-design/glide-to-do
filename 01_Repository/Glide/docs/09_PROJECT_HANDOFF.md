@@ -1,8 +1,8 @@
-# Projektübergabe – Glide 3.33.1
+# Projektübergabe – Glide 3.33.6
 
 
-**Ergänzungsauftrag 01.10.2026, 3.33.1:** Vier Seitenleistenbereiche in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen. Nur Listen bleibt verpflichtend sichtbar. Seiten erlaubt Bücher (bestehende Art `library`), Ordner und Seiten; Notizen Notizbücher, Ordner und Notizen; Zeichnungen Ordner und Zeichnungen; Listen alle Arten. Sichtbarkeit und Root-Zuordnung sind lokale Anzeigeeinstellungen, keine Löschaktion. Gemischte Altordner werden vollständig in Listen angezeigt. Einheitliche Anlege-/Verschieberegeln und Prüfung aller Fenster gehören zur Abnahme. [Vertrag](74_BEREICHE_UND_FENSTER_3.33.1.md).
-Stand 01.10.2026 · App 3.33.1 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+**Ergänzungsauftrag 01.10.2026, 3.33.1:** Vier Seitenleistenbereiche in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen. Nur Listen bleibt verpflichtend sichtbar. Seiten erlaubt Bücher (bestehende Art `library`), Ordner und Seiten; Notizen Notizbücher, Ordner und Notizen, im Notizbuch auch datierte Zeichnungen (Klarstellung des Inhabers vom 01.10.2026); Zeichnungen Ordner und Zeichnungen; Listen alle Arten. Sichtbarkeit und Root-Zuordnung sind lokale Anzeigeeinstellungen, keine Löschaktion. Gemischte Altordner werden vollständig in Listen angezeigt. Einheitliche Anlege-/Verschieberegeln und Prüfung aller Fenster gehören zur Abnahme. [Vertrag](74_BEREICHE_UND_FENSTER_3.33.1.md).
+Stand 02.10.2026 · App 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 **3.33.0 – erster Umsetzungsschnitt:** T2/P09a umgesetzt und ausgeliefert. 76 automatische Schritte, 59 Integrationssuiten, acht Unit-Tests, Showcase und fünf Analysen grün; 140 Python-/54 Bundle-Dateien bytegleich, Signatur gültig, getrennter Showcase-Starter bei Erststart und Neustart geprüft. [Vertrag](73_FUNDAMENT_3.33.0.md) mit Ablageabgleich und Anschlussplan. D12 ist vollständig entschieden: zusätzliche Standardkacheln Zeichnungen und Pinnwand-Vorschau. Der Oberflächenumbau folgt nach diesem Fundament.
 
@@ -26,7 +26,7 @@ Bedienbindungen und sämtliche Tk-Callbackfehler. D04 ist in 3.32.2 umgesetzt; [
 
 ## Code und startbare Kopie
 
-- **Kanonisch:** `src/glide/app.pyw` mit den Modulen `drawing.py`, `drawing_image.py`, `backdrop.py`, `page_markdown.py`, `image_preview.py`, `logo.py`, `schema_backups.py`, `sidebar_policy.py`, `svg_geometry.py` und `glide_start.py`,
+- **Kanonisch:** `src/glide/app.pyw` mit den Modulen `drawing.py`, `drawing_image.py`, `backdrop.py`, `page_markdown.py`, `image_preview.py`, `logo.py`, `schema_backups.py`, `sidebar_policy.py`, `svg_geometry.py`, `home_tiles.py`, `capture_parser.py`, `eisenhower.py`, `today_view.py` und `glide_start.py`,
   dazu `resources` (Schriften, Vorlagen, seit 29.09.2026 `logo`) und `vendor` (tkinterdnd2, seit 27.09.2026).
 - **Startbare Kopie:** `07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.33.1.pyw`
   samt denselben Modulen (`glide_start.py` heißt dort `Schnellstart.pyw`),
@@ -385,7 +385,7 @@ Stand.
 
 **Vollaufruf:**
 
-`python tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.1/<neuer-Ordner> --timeout 900`
+`python tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.6/<neuer-Ordner> --timeout 900`
 
 **Einzelsuiten der Neuerungen:**
 
@@ -452,6 +452,14 @@ Damals geplanter Anschluss: Bibliothekskarten/Startseiten-Neuerzeugung mit Fokus
 
 `schema_backups.py` bündelt die Tk-freie Formatsicherung mit Dateistandprüfung; seit 3.33.0 in beiden Lieferwegen enthalten.
 
-`sidebar_policy.py` führt Zuordnung, Inhaltsgrenzen, Vorlagenprüfung und Geschwisterreihenfolge der vier Bereiche ohne Tk (3.33.1).
+`sidebar_policy.py` führt Zuordnung, Inhaltsgrenzen, Vorlagenprüfung und Geschwisterreihenfolge der vier Bereiche ohne Tk (3.33.1). Listen werden gegen ihren Zielordner geprüft: `CONTAINED` lässt im Bereich Notizen datierte Zeichnungen in einem Notizbuch zu; Aufrufer übergeben deshalb bei jedem Anlegen, Verschieben und Wiederherstellen den Zielordner.
 
 `svg_geometry.py` führt SVG-Pfade einschließlich verkürzter kubischer Kurven, CSS-/Attributfarben und transparente Innenkonturen ohne Tk (3.33.1).
+
+`home_tiles.py` führt Kachelbestand, Startseiten-Standard (D12), Normalisierung, eigene Auswahl und die zusammengeführte Kachel „Heute“ ohne Tk (3.33.2).
+
+`capture_parser.py` führt die deutsche Schnelleingabe (G01) ohne Tk: Bearbeitungstag, Fälligkeit, Uhrzeit, Aufwand, Wichtigkeit, Labels und „/“-Befehle nach D01/D10, jede Erkennung mit Textstelle zum Zurücknehmen (3.33.3).
+
+`eisenhower.py` ordnet Aufgaben ohne Tk in die vier Quadranten „Dringlichkeit × Wichtigkeit“ ein und bestimmt, was Ablegen ändert (G02, D13; 3.33.5).
+
+`today_view.py` teilt die Ansicht „Heute“ ohne Tk in nächste Aufgabe, Verspätet, Liegen geblieben, Tagesplan, Heute fällig und Eingang auf – jede Aufgabe genau einmal (D14; 3.33.6).

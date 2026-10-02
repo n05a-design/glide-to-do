@@ -1,7 +1,9 @@
-"""Versionswechsel für Glide: Nummern, Fixtures und Standangaben – mit Archivkopien.
+"""Versionswechsel für Glide: Nummern, Fixtures und Standangaben.
 
 Aufruf: python3 scripts/pflege/versionswechsel.py 3.33.0 01.10.2026
-Löscht nichts; jede überschriebene Datei liegt vorher im benachbarten Archiv.
+Löscht nichts. Überschriebene Fixtures liegen vorher im benachbarten Archiv;
+Dokumente bekommen seit der Löschfreigabe vom 01.10.2026 keine Kopie mehr,
+ihre Historie trägt Git (docs/DOKUMENTENPFLEGE.md).
 """
 import pathlib
 import re
@@ -64,7 +66,6 @@ for zeile in befund.splitlines():
         ziele.setdefault(treffer.group(1), set()).add(int(treffer.group(2)))
 for datei, zeilen in sorted(ziele.items()):
     pfad = ABLAGE / datei
-    archiv(pfad)
     text = pfad.read_text(encoding="utf-8").split("\n")
     for nummer in zeilen:
         z = text[nummer - 1].replace(ALT, NEU)

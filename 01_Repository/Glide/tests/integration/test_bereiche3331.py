@@ -51,6 +51,25 @@ with tempfile.TemporaryDirectory(prefix='glide-bereiche-') as d:
   with a.sidebar_change() as change:
    assert a.move_sidebar_list_into_folder(entries['drawing']['id'],folders['drawings']['id']);change.mark()
   assert not a.move_sidebar_list_into_folder(entries['page']['id'],folders['drawings']['id'])
+  # A notebook in Notes keeps dated drawings (owner decision 01.10.2026); task lists stay a case for Lists.
+  journal=a.new_folder_object('Notizbuch',folder_kind='journal');a.folders.append(journal);a.update_sidebar_list();idle()
+  menu=a.folder_quick_add_menu(journal['id']);names=labels(menu);menu.destroy()
+  assert names[0]=='Neue Tagesnotiz' and 'Neue Zeichnung' in names and 'Neue Liste …' not in names,names
+  a.create_in_sidebar_section('drawing',journal['id'],'notes');idle();sketch=a.current_list()
+  assert sketch['folder_id']==journal['id'] and sketch['journal']['moment_date'] and sketch['title'].startswith('Zeichnung · ')
+  assert a.sidebar_section_for('folder',journal['id'])=='notes' and a.get_sidebar_tree_for_iid('list:'+sketch['id']) is a.notes_listbox
+  loose=a.new_list_object('Lose Skizze',[],list_kind='drawing');a.lists.append(loose);a.update_sidebar_list();idle()
+  src,dst=a.drawings_listbox,a.notes_listbox;siid,diid='list:'+loose['id'],'folder:'+journal['id'];src.see(siid);dst.see(diid);idle()
+  x,y,w,h=src.bbox(siid);sx,sy=x+40,y+h//2;dx,dy,dw,dh=dst.bbox(diid);tx,ty=dst.winfo_rootx()+dx+40,dst.winfo_rooty()+dy+dh//2
+  src.event_generate('<ButtonPress-1>',x=sx,y=sy,rootx=src.winfo_rootx()+sx,rooty=src.winfo_rooty()+sy)
+  src.event_generate('<B1-Motion>',x=tx-src.winfo_rootx(),y=ty-src.winfo_rooty(),rootx=tx,rooty=ty)
+  src.event_generate('<ButtonRelease-1>',x=tx-src.winfo_rootx(),y=ty-src.winfo_rooty(),rootx=tx,rooty=ty);idle()
+  moved=next(e for e in a.lists if e['id']==loose['id'])
+  assert moved['folder_id']==journal['id'] and moved['journal']['moment_date'] and a.sidebar_section_for('folder',journal['id'])=='notes'
+  a.undo_last_change();idle();assert not next(e for e in a.lists if e['id']==loose['id']).get('folder_id')
+  assert not a.move_sidebar_list_into_folder(loose['id'],folders['notes']['id'])
+  assert not a.move_sidebar_list_into_folder(entries['tasks']['id'],journal['id'])
+  assert a.sidebar_section_for('folder',journal['id'])=='notes'
   nested=a.new_folder_object('Unterordner',parent_id=folders['lists']['id']);a.folders.append(nested)
   mixed=a.new_list_object('Gemischt',[],folder_id=nested['id'],list_kind='tasks');a.lists.append(mixed)
   assert not a.can_move_folder_into(folders['lists']['id'],folders['pages']['id'])

@@ -1,6 +1,51 @@
 # Änderungsverlauf
 
+## 3.33.6 – Heute und Demnächst (02.10.2026)
+
+- **D14:** „Mein Tag“ heißt „Heute“ und beantwortet eine Frage: was ist heute dran? Oben die nächste Aufgabe (dieselbe wie auf der Startseite), dann Verspätet, Liegen geblieben, der Tagesplan (mit Zeitplan und Stundenraster wie bisher), Heute fällig und am Ende der Eingang. Jede Aufgabe steht genau einmal; künftige Fälligkeiten erreicht eine Verweiszeile „Demnächst · N weitere Fälligkeiten“.
+- **„In Bearbeitung“ heißt „Demnächst“** und zeigt alle Fälligkeiten chronologisch, Überfälliges oben. Die nächste Aufgabe steht nicht mehr doppelt dort; „Nächste Aufgabe“ in Menü und Startseite führt nach „Heute“.
+- **Tagesbeginn und Tagesabschluss** sind Modi von „Heute“: Schalter „Tag …“ in der Filterzeile und Einträge im Kontextmenü der Seitenleistenzeile. An anderen Tagen (◀/▶) zeigt die Ansicht „Tagesplan · Datum“ und was an diesem Tag fällig ist.
+- Neue Namen in Seitenleiste, Fenstertitel, Menüs, Befehlspalette, Startseite, Startansicht, Kalenderausgabe, Tageszettel, Handbuch und Kontextmenü („Für heute einplanen“). Interne Kennungen und Einstellungen bleiben; `/meintag` funktioniert weiter. Die Zahl hinter „Heute“ zählt alles, was „Heute“ zeigt.
+- **Tk-frei (D17):** `today_view.py` mit sechs Unit-Tests; neue Pflichtsuite `test_heute3336.py`; sieben Altsuiten auf den neuen Vertrag gebracht. Datenformat 20, keine neue Abhängigkeit. [Vertrag](docs/79_HEUTE_3.33.6.md).
+
+## 3.33.5 – Eisenhower als Gruppierung (02.10.2026)
+
+- **G02 nach D13:** Neue Gruppierung „Dringlichkeit × Wichtigkeit“ im Spaltenboard, in Liste und Tabelle – keine eigene Ansicht. Vier Quadranten: Sofort (wichtig und dringend), Einplanen, Kurz halten, Später. Wichtig heißt Wichtigkeit ab mittel; dringend heißt Fälligkeit oder Bearbeitungstag in den nächsten zwei Tagen oder überfällig.
+- **Ziehen nach D02:** In einen wichtigen Quadranten wird die Wichtigkeit mittel, in einen unwichtigen niedrig; in einen dringenden wird der Bearbeitungstag heute, in einen nicht dringenden der erste Tag nach dem Zweitagesfenster. Eine Fälligkeit ändert sich nie; macht sie die Aufgabe dringend, lehnt Glide das Ablegen mit Begründung ab. Eine Rückmeldung nennt, was sich geändert hat; ein Rückgängig-Schritt.
+- Befehlspalette: der neue Gruppierungsbefehl steht unter „Ansichtseinstellungen“ (Risiko R2: Menübeschriftungen sind Schlüssel). Handbuch ergänzt.
+- **Tk-frei (D17):** `eisenhower.py` mit vier Unit-Tests; neue Pflichtsuite `test_eisenhower3335.py`. [Vertrag](docs/78_EISENHOWER_3.33.5.md).
+
+## 3.33.4 – Wiederholungen in der Schnelleingabe (02.10.2026)
+
+- **Erkannt:** „täglich“, „jeden Tag“, „werktags“, „wöchentlich“, „jeden Montag“, „montags und donnerstags“, „alle 3 Tage“, „alle 2 Wochen“ (als alle 14 Tage), „monatlich“, „jährlich“ – mit Uhrzeit direkt dahinter („jeden Montag 18 Uhr“).
+- **Fälligkeit:** Eine Wiederholung setzt die Fälligkeit auf ihren ersten Termin, damit sie im Kalender steht (Entscheidung des Inhabers vom 02.10.2026, Ergänzung zu D10). Steht zusätzlich „bis …“ da, beginnt die Reihe dort. Der Chip zeigt Regel und ersten Termin; × nimmt die Wiederholung zurück.
+- Abhaken erzeugt den nächsten Termin über die vorhandene Wiederholungslogik. Regeln, die das Datenmodell nicht kennt („alle 3 Monate“), bleiben Text.
+- Drei neue Unit-Tests, `test_eingabe3333.py` um echte Eingabe, Kalender und Folgetermin erweitert; Gegenprobe mit 3.33.3 rot. [Vertrag](docs/77_EINGABE_3.33.3.md#ergänzung-3334-wiederholungen).
+
+## 3.33.3 – Deutsche Schnelleingabe mit Feldchips (02.10.2026)
+
+- **G01:** Die Eingabezeile erkennt deutsche Angaben: „morgen“, ein Wochentag, „nächsten Freitag“, „in 3 Tagen“ oder ein Datum setzen den Bearbeitungstag; „fällig“ oder „bis“ davor die Fälligkeit (D01). Dazu „um 14:30“/„14 Uhr“ (Uhrzeit; allein heißt sie heute), „45 Minuten“/„1 Std. 30 Min.“ (Aufwand), „!hoch“ (Wichtigkeit) und „#Labelname“ für vorhandene Labels.
+- **Feldchips:** Unter der Eingabe steht jede Erkennung als Chip; × nimmt sie zurück, der Text bleibt im Titel. Text in Anführungszeichen bleibt wörtlich. Die Schnellerfassung zeigt dieselben Chips unter dem Titel; ein ausgefülltes Feld „Fällig“ hat Vorrang.
+- **D10:** Auch `/morgen`, ein Wochentag oder `/24.12.2026` setzen jetzt den Bearbeitungstag; die Fälligkeit setzen `/bis Freitag` und `/fällig morgen`. Gespeicherte Daten bleiben unverändert; Handbuch nachgeführt.
+- **Tk-frei (D17):** `capture_parser.py` mit 14 Unit-Tests; die bisherigen Parser aus `app.pyw` sind dorthin umgezogen. Neue Pflichtsuite `test_eingabe3333.py`; `test_bilder330` prüft die neue Bedeutung von `/morgen`. Wiederholungen („jeden Montag“) sind noch nicht dabei – sie hängen im Datenmodell an der Fälligkeit, das braucht eine Entscheidung. [Vertrag](docs/77_EINGABE_3.33.3.md).
+
+## 3.33.2 – Startseite „Ruhig“ und schnellerer Aufbau (02.10.2026)
+
+- **Startseite nach D12:** sieben Standardkacheln – Heute, Gismo, die nächsten sieben Tage, Zuletzt bearbeitet, Pinnwand-Vorschau, Zeichnungen, Angeheftet. Uhr, Begrüßung, Nächste Aufgabe, Vorlagen, Bestand und alle übrigen bleiben wählbar. Eine eigene Auswahl bleibt erhalten; wer die Startseite nie eingerichtet hatte, sieht den neuen Standard.
+- **Kachel „Heute“ zusammengeführt:** Tagesziel und nächste Aufgabe stehen darin, solange ihre eigenen Kacheln aus sind – jede Angabe genau einmal.
+- **Korrektur:** Eine im Bearbeitungsmodus eingeblendete Kachel verschwand nach dem Neustart wieder, wenn die Startseite nie umsortiert worden war. Ein- und Ausblenden speichern jetzt die ganze Auswahl.
+- **Neu:** „Standard wiederherstellen“ im Dialog „Startseite einrichten“.
+- **Schnellerer Aufbau (Rest P03):** Größenmeldungen des Hauptfensters werden in Tcl gefiltert, statt für jedes Kind Python aufzurufen (wirkt in allen Ansichten); gerundete Flächen und Knöpfe zeichnen einmal je Leerlauf statt bei jeder Zwischengröße; Umbruchbreite und Hintergrundfarben werden nur bei Änderung gesetzt.
+- **Tk-frei (D17):** `home_tiles.py` mit acht Unit-Tests; neue Pflichtsuite `test_startseite3332.py`; neues Messwerkzeug `scripts/pflege/messung_startseite.py`. `versionswechsel.py` legt keine Markdown-Kopien mehr an (Git trägt die Historie, Löschfreigabe vom 01.10.2026). Datenformat 20, keine neue Abhängigkeit. [Vertrag](docs/76_STARTSEITE_3.33.2.md).
+
 ## 3.33.1 – Vier Bereiche und Fensterbedienung (01.10.2026)
+
+- **Abschluss nach der Mac-Vollprüfung (01./02.10.2026):** Die vier roten Schritte des Prüfkandidaten sind nachgestellt und behoben. [Nachweis](tests/qa-3.33.1/abschluss_2026-10-01/README.md).
+  - Dialog „Neu anlegen“ auf niedrigen Bildschirmen: macOS meldet beim Einblenden zuerst 1 × 1 Pixel; seit dem verborgenen Vermessen folgte keine echte Breite mehr. Die breite Maske blieb einspaltig, die Beschreibung lag unter dem sichtbaren Rand. Der Spaltenumschalter übergeht diese Platzhaltergröße.
+  - Notizbücher im Bereich Notizen nehmen wieder datierte Zeichnungen auf („Zeichnung · TT.MM.JJJJ“, Vertrag 65; Klarstellung des Inhabers vom 01.10.2026). Anlegen, Ziehen, Verschieben, Einrücken, Wiederherstellen und Vorlagen prüfen dafür den Zielordner (`sidebar_policy.CONTAINED`). Aufgabenlisten und Pinnwände in einem Notizbuch bleiben ein Fall für Listen; ein bestehendes Notizbuch mit Zeichnungen steht wieder unter Notizen.
+  - Zwei Prüfungen auf den 3.33.1-Vertrag gebracht: `audit_app` simuliert den Zeiger nur noch über dem Zielbaum (Bereichsüberschriften sind Ablageziele), `test_aufraeumen330` erwartet die Menüfolge, die `test_features330` schon prüft.
+  - Zwei neue Tk-freie Unit-Tests; `test_bereiche3331` prüft die Notizbuch-Zeichnung über echtes Ziehen, Momentdatum, Rückgängig und die Ablehnung für gewöhnliche Ordner und Aufgabenlisten.
+  - Vollprüfung Exitcode 0 (77 Schritte, 60 Integrationssuiten); `07_Python-Versionen` und neu gebautes macOS-Bundle bytegleich (142/56 Dateien), Signatur gültig. Zwei ungültige Vorläufe sind belegt: gesperrter Bildschirm und wahrscheinlich Tastatureingaben während des Laufs. Der Hintergrundmodus schirmt nur die Maus ab; Testplan und Übergabe nennen diese Grenze.
 
 - **Sicherheit und öffentliches Repository (App unverändert):**
   - GitHub-Sicherheitsrichtlinie (`SECURITY.md` in der Wurzel; ersetzt die dort angelegte GitHub-Vorlage) mit vertraulichem Meldeweg, Dependabot für GitHub Actions; Checkout ohne gespeichertes Token. Der zunächst eingerichtete CodeQL-Workflow ist vom Inhaber deaktiviert.

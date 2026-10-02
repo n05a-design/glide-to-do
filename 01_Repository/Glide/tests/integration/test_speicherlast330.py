@@ -434,9 +434,13 @@ with tempfile.TemporaryDirectory(prefix="glide-last-") as ordner:
             "Format beim Start umgestellt"
         vorsicherungen = [name for name in os.listdir(SICHERUNGEN) if name.startswith("liste_vor_format20_")]
         assert len(vorsicherungen) == 1 and (SICHERUNGEN / vorsicherungen[0]).read_bytes() == alt_bytes
-        assert getattr(app, "_format_migration_notice", None), "Hinweis vorgemerkt"
-        app.show_format_migration_notice()
-        assert meldungen and meldungen[-1][0] == "Bestand umgestellt"
+        # Der Hinweis erscheint 700 ms nach dem Laden. Unter Last kann der
+        # Leerlauf in `neu_laden` ihn schon gezeigt haben (3.33.6: Vollprüfung
+        # bei rund 200 % CPU durch die Dateisynchronisierung) – vorgemerkt
+        # oder gezeigt, beides heißt: Der Nutzer erfährt von der Umstellung.
+        if getattr(app, "_format_migration_notice", None):
+            app.show_format_migration_notice()
+        assert meldungen and meldungen[-1][0] == "Bestand umgestellt", meldungen
         # Ein zweiter Start findet nichts mehr umzustellen.
         stand = SPEICHER.read_bytes()
         app.load_items()

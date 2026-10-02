@@ -51,9 +51,9 @@ Jede Liste lässt sich als Pinnwand ansehen: Karten frei anordnen, Bereiche bene
 
 Die Pixel-Werkstatt zeichnet auf 16 bis 128 Zellen: Pinsel, Füllen, Pipette, Linie, Rechteck, Ellipse und Auswahl, zwei Farben, Symmetrie, Paletten und PNG-Export. Pixelsymbole schmücken Listen und Ordner.
 
-## Mein Tag
+## Heute
 
-„Mein Tag“ sammelt, was heute dran ist – mit Stundenraster, in das Punkte gezogen werden. „In Bearbeitung“ zeigt, was fällig oder überfällig ist.
+„Heute“ sammelt, was heute dran ist – oben die nächste Aufgabe, dann Verspätetes, der Tagesplan mit Stundenraster, in das Punkte gezogen werden, und was heute fällig ist. „Demnächst“ zeigt alle Fälligkeiten chronologisch.
 
 ## Suchen
 
@@ -196,7 +196,7 @@ def build(app, mod, root):
     # Von unten nach oben einsetzen: Zeilennummern darüber bleiben gültig.
     plan = [
         ("Strg/Cmd+O öffnet", "suche.png", "right", 300),
-        ("„Mein Tag“ sammelt", "mein_tag.png", "left", 300),
+        ("„Heute“ sammelt", "mein_tag.png", "left", 300),
         ("Die Pixel-Werkstatt", "zeichnung.png", "right", 300),
         ("Jede Liste lässt sich", "pinnwand.png", "center", 640),
         ("Die Liste ist das Herz", "liste.png", "left", 320),

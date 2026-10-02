@@ -80,25 +80,26 @@ with tempfile.TemporaryDirectory(prefix="glide-features324-") as folder:
         app.set_in_progress_view()
         root.update()
         # Punkte 5 und 6 (3.25.0): Die Abschnitte sind seit 3.25 Elternzeilen
-        # und tragen ihre Punkte als Kinder; davor steht die nächste Aufgabe.
+        # und tragen ihre Punkte als Kinder. Seit 3.33.6 (D14) steht die
+        # nächste Aufgabe in „Heute“; „Demnächst“ beginnt mit „Verspätet“.
         alle = app.tree.get_children("")
         assert app.OVERDUE_SECTION_ROW_ID in alle
-        assert alle.index(app.NEXT_TASK_SECTION_ROW_ID) == 0
-        assert alle.index(app.OVERDUE_SECTION_ROW_ID) == 1
+        assert app.NEXT_TASK_SECTION_ROW_ID not in alle
+        assert alle.index(app.OVERDUE_SECTION_ROW_ID) == 0
         assert app.IN_PROGRESS_SECTION_ROW_ID in alle
         assert alle.index(app.OVERDUE_SECTION_ROW_ID) < alle.index(app.IN_PROGRESS_SECTION_ROW_ID)
         # Die Überschriften sind keine Punkte: Sie tragen keine Quellzuordnung.
         for abschnitt in app.OVERVIEW_SECTION_ROW_IDS:
             assert abschnitt not in app.in_progress_item_sources
-        # Das Überfällige ist zugleich die nächste Aufgabe und steht deshalb
-        # in deren Abschnitt; alles Übrige hängt unter „Noch offen".
+        # Beide überfälligen Punkte stehen unter „Verspätet“; alles Übrige
+        # hängt unter „Noch offen".
         ueberfaellig_zeile = next(row for row, quelle in app.in_progress_item_sources.items()
                                   if quelle[1] == alt["id"])
         kuenftig_zeile = next(row for row, quelle in app.in_progress_item_sources.items()
                               if quelle[1] == neu["id"])
         zweite_zeile = next(row for row, quelle in app.in_progress_item_sources.items()
                             if quelle[1] == alt_zwei["id"])
-        assert app.tree.parent(ueberfaellig_zeile) == app.NEXT_TASK_SECTION_ROW_ID
+        assert app.tree.parent(ueberfaellig_zeile) == app.OVERDUE_SECTION_ROW_ID
         assert app.tree.parent(zweite_zeile) == app.OVERDUE_SECTION_ROW_ID
         assert app.tree.parent(kuenftig_zeile) == app.IN_PROGRESS_SECTION_ROW_ID
         # Ein Doppelklick auf die Überschrift führt in die eigene Ansicht.

@@ -37,6 +37,28 @@ class PolicyTests(unittest.TestCase):
   self.assertTrue(template_allowed(template,'pages'));self.assertFalse(template_allowed(template,'drawings'))
   template['payload']['lists'].append({'list_kind':'drawing'})
   self.assertFalse(template_allowed(template,'pages'));self.assertTrue(template_allowed(template,'lists'))
+ def test_journal_takes_dated_drawings(self):
+  self.assertTrue(accepts('notes','list','drawing','journal'))
+  for container in (None,'standard','library'):self.assertFalse(accepts('notes','list','drawing',container))
+  for kind in ('tasks','page','gallery'):self.assertFalse(accepts('notes','list',kind,'journal'))
+  self.assertFalse(accepts('pages','list','drawing','journal'));self.assertFalse(accepts('notes','folder','drawing','journal'))
+  fs=[{'id':'j','folder_kind':'journal'},{'id':'u','parent_id':'j','folder_kind':'journal'},{'id':'s','folder_kind':'standard'}]
+  es=[{'id':'n','folder_id':'j','list_kind':'note'},{'id':'d','folder_id':'u','list_kind':'drawing'}]
+  p=SidebarPolicy(es,fs)
+  self.assertEqual([p.section('folder','j'),p.section('list','d')],['notes','notes'])
+  es.append({'id':'t','folder_id':'j','list_kind':'tasks'})
+  self.assertEqual(SidebarPolicy(es,fs).section('folder','j'),'lists')
+  p=SidebarPolicy([{'id':'x','folder_id':'s','list_kind':'drawing'}],fs,{'folder:s':'notes'})
+  self.assertEqual(p.section('folder','s'),'lists')
+ def test_template_in_journal(self):
+  self.assertTrue(template_allowed({'kind':'list','list_kind':'drawing'},'notes','journal'))
+  self.assertFalse(template_allowed({'kind':'list','list_kind':'drawing'},'notes'))
+  self.assertTrue(template_allowed({'kind':'folder','folder_kind':'journal','lists':[{'list_kind':'drawing'}]},'notes'))
+  self.assertFalse(template_allowed({'kind':'folder','folder_kind':'standard','lists':[{'list_kind':'drawing'}]},'notes'))
+  template={'kind':'folder','payload':{'folders':[{'id':'j','folder_kind':'journal'}],'lists':[{'list_kind':'drawing','folder_id':'j'}]}}
+  self.assertTrue(template_allowed(template,'notes'))
+  template['payload']['lists'].append({'list_kind':'drawing'})
+  self.assertFalse(template_allowed(template,'notes'));self.assertTrue(template_allowed(template,'notes','journal'))
  def test_siblings_respect_area_and_parent(self):
   es=[{'id':'p','list_kind':'page'},{'id':'n','list_kind':'note'},{'id':'q','list_kind':'page'},{'id':'x','list_kind':'page','folder_id':'f'}]
   p=SidebarPolicy(es,[{'id':'f','folder_kind':'standard'}])

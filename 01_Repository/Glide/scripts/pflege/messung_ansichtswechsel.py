@@ -56,7 +56,7 @@ with tempfile.TemporaryDirectory(prefix="glide-profil-") as ordner:
 
     wechsel = [("Startseite", app.set_home_view), ("Listen und Ordner", app.set_library_view),
                ("Liste", liste), ("Tabelle", tabelle), ("Pinnwand", pinnwand),
-               ("Mein Tag", app.set_today_view), ("Vorlagen", app.set_template_view)]
+               ("Heute", app.set_today_view), ("Vorlagen", app.set_template_view)]
     if seite:
         wechsel.append(("Seite", lambda: app.set_active_list(seite["id"])))
     if notiz:

@@ -1,6 +1,6 @@
 # Architektur – Glide
 
-Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20
+Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20
 
 **3.33.0:** `schema_backups.py` führt die Formatprüfung ohne Tk. `load_items` liefert die Formatnummer aus dem bereits gelesenen Bestand; Dateisignaturen invalidieren den Zwischenspeicher bei Austausch/Änderung. Bestehende Migrationseinstiege delegieren, erfolgreiche Sicherungen bestätigen ihre bisherigen Flags. [Vertrag](73_FUNDAMENT_3.33.0.md).
 

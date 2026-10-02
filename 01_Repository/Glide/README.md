@@ -5,7 +5,7 @@ Listen, Notizen, Tagebücher und visuelle Pinnwände. Die Anwendung läuft lokal
 mit Python 3.14 und Tk 9 (Tk 8.6 geht auch), benötigt weder Konto noch
 Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
-> **Projektstatus:** interner Entwicklungsstand **3.33.1** · Datenformat 20 ·
+> **Projektstatus:** interner Entwicklungsstand **3.33.6** · Datenformat 20 ·
 > keine veröffentlichte oder signierte Releasefassung. Der aktuelle
 > [QA-Bericht](docs/07_QA_BERICHT.md) nennt bestandene Prüfungen und offene
 > Plattformtests.
@@ -14,7 +14,8 @@ Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
 - verschachtelte Listen, Ordner und datumsorientierte Notizbücher (bis
   27.09.2026 „Tagebuch“); ein Notizbuch nimmt Notizen, Listen, Zeichnungen
-  und Pinnwände auf und filtert nach Tag oder Zeitraum;
+  und Pinnwände auf und filtert nach Tag oder Zeitraum; im Bereich Notizen
+  steht es mit Notizen und Zeichnungen, mit Listen oder Pinnwänden unter Listen;
 - eine Pixel-Werkstatt direkt in der Seitenansicht:
   - Flächen mit 16, 32, 64 oder 128 Zellen;
   - Pinsel, Füllen, Pipette, Linie, Rechteck, Ellipse und Auswahl;
@@ -25,7 +26,9 @@ Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 - Aufgaben, Long-Tasks, Gruppen, Überschriften, Unterpunkte und Notizseiten;
 - Fälligkeiten, Wiederholungen, Erinnerungen, Prioritäten, Labels, Farben,
   Beschreibungen und lokale Anhänge;
-- „Mein Tag“, Tagesplanung, Kapazität, Bearbeitungstag und Aufwandsschätzung;
+- „Heute“ mit nächster Aufgabe, Verspätetem, Tagesplan und heute Fälligem,
+  „Demnächst“ mit allen Fälligkeiten; Kapazität, Bearbeitungstag und
+  Aufwandsschätzung;
 - Listen-, Tabellen-, Kalender-, Karten- und Pinnwandansichten auf demselben
   Datenbestand – Gruppieren nach Feld, Spaltenboard mit Ziehen, Bereiche,
   beschriftete Verbindungen und Präsentation;
@@ -39,12 +42,12 @@ Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
   Voll- und Teilbackups;
 - zehn Designs (darunter „Pixel“), Hell-/Dunkelmodus, Akzentfarben und drei
   Schriftgrößen, alle mit lesbarem Kontrast nach WCAG AA;
-- ein Stundenraster in „Mein Tag“ und ein Detailbereich neben der Liste;
+- ein Stundenraster in „Heute“ und ein Detailbereich neben der Liste;
 - eine saubere Darstellung bis zur Mindestgröße 860 × 700;
 - je Design fünf moderne Hintergrundverläufe (Mesh, Nordlicht, Körnung,
   Pixel); Kacheln, Listen und Fenster tönen sich darüber als Milchglas;
-- eine aufgeräumte Oberfläche: Verlauf als Kopfzeilenknopf, „In Bearbeitung“
-  als Abschnitt in „Mein Tag“, Farbe nur mit Bedeutung;
+- eine aufgeräumte Oberfläche: Verlauf als Kopfzeilenknopf, „Demnächst“
+  ohne eigene Seitenleistenzeile, Farbe nur mit Bedeutung;
 - die Seitenart „Seite“ für KI-Berichte (Markdown hinein und hinaus, Aufgaben
   als echte Punkte) und die Ordnertypen Ordner, Bibliothek und Notizbuch;
 - einen eigenen Seitenbereich mit Vorlagen und dem Austauschformat
@@ -144,7 +147,7 @@ Der Anwendungskern liegt in `src/glide/app.pyw`; der Zeichenkern in
 Datenordnern. Der vollständige Prüflauf wird aus dem Repository-Stamm gestartet:
 
 ```bash
-python3 tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.1/lokaler_lauf --timeout 900
+python3 tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.6/lokaler_lauf --timeout 900
 ```
 
 Eine schnelle Prüfung von Versions- und Dokumentationsständen:

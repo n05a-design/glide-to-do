@@ -9,11 +9,11 @@ Der Inhaber hat alle neun Fragen beantwortet. Acht folgen der Empfehlung, D12 mi
 | Nr. | Beschluss | Wortlaut der Antwort | Wirkt ab |
 |---|---|---|---|
 | D09 | **B** | „Das Repository wird die maßgebliche Ablage“ | sofort (Ablageregeln); CI in Stufe 0 |
-| D10 | **B** | „einheitliche Bedeutung“ | 3.33.1 (G01) |
+| D10 | **B** | „einheitliche Bedeutung“ | umgesetzt in 3.33.3 (G01, Vertrag 77); Ergänzung 02.10.2026: Wiederholung in der Eingabe setzt die Fälligkeit (3.33.4) |
 | D11 | **B** | „Hinweise nur bei Bedarf“ | 3.33.0 (U02) |
-| D12 | **B, abgewandelt** | „‚Ruhig‘ mit 7 Kacheln inkl. Gismo“ | 3.33.0 (U05) |
-| D13 | **B** | „als Gruppierung im Board“ | 3.33.2 (G02) |
-| D14 | **B** | „zwei Hauptansichten“ | 3.33.2 |
+| D12 | **B, abgewandelt** | „‚Ruhig‘ mit 7 Kacheln inkl. Gismo“ | umgesetzt in 3.33.2 (Vertrag 76) |
+| D13 | **B** | „als Gruppierung im Board“ | umgesetzt in 3.33.5 (G02, Vertrag 78) |
+| D14 | **B** | „zwei Hauptansichten“ | umgesetzt in 3.33.6 (Vertrag 79) |
 | D15 | **B** | „Paket mit eigenem Python und Tk 9“ | Stufe 4 (G26/H-03) |
 | D16 | **A** | „bestehendes JSON-Speichern beschleunigen“ | Stufe 0 (T2, P08) |
 | D17 | **B** | „schrittweise in eigene Module je Funktion zerlegen“ | ab sofort für jede neue oder angefasste Fachlogik |

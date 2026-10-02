@@ -1,6 +1,6 @@
 # Startkontext
 
-Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 Kanonisch: `src/glide/app.pyw`. Die startbare Kopie liegt unter `../../../07_Python-Versionen/` und trägt die Nummer aus `VERSION`; der vollständige Nachbarordner `resources` gehört dazu. Kein Git-Checkout.
 
