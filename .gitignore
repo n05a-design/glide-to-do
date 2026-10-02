@@ -227,3 +227,7 @@ __marimo__/
 # Nutzerdaten und persönliche Fehlerprotokolle nie einchecken.
 fehlerprotokoll.txt
 glide.lock
+# Ablagegröße (02.10.2026): Vorfassungen trägt Git, deshalb keine Archivkopien
+# des Showcase; Reste abgebrochener Übertragungen nie einchecken.
+*.fetch
+05_Probelisten_Testdaten/Showcase/archiv/

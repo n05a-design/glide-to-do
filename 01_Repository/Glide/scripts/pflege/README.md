@@ -2,13 +2,18 @@
 
 Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20
 
-Werkzeuge für jede Arbeitsrunde und für Messungen. Sie löschen nichts; jede
-überschriebene Datei liegt vorher im benachbarten Archiv.
+Werkzeuge für jede Arbeitsrunde und für Messungen. Seit 02.10.2026 legen sie
+keine Archivkopien mehr an: Vorfassungen von Fixtures, Showcase und Vorlagen
+trägt Git. Bis 3.33.6 kamen so je Versionswechsel und Showcase-Abgleich rund
+75 MB Kopien hinzu; die CI-Grundstufe weist neue Archivkopien zurück
+([`ablagegroesse.py`](../../tests/tools/ablagegroesse.py)). Ausnahme bleibt
+`abgleich_07.py`, das die abgelöste Hauptdatei als `_Z` in
+`07_Python-Versionen/Archiv` legt.
 
 | Werkzeug | Wozu | Aufruf |
 |---|---|---|
-| [versionswechsel.py](versionswechsel.py) | Hebt die Version: `VERSION`, `APP_VERSION`, Versionsprüfungen der Tests, Beispieldaten, Rundgang, Showcase, Vorlagenkatalog, neue Releaseplanung und die Standangaben aller fortgeschriebenen Dokumente (mit Archivkopien `_<alt>_vor_<neu>`) | `python3 scripts/pflege/versionswechsel.py 3.33.0 01.10.2026` |
-| [showcase_abgleich.py](showcase_abgleich.py) | Prüft den aktiven Showcase über tatsächlichen Import/Neustart und kopiert Basis, Vorlagen, Anleitung und Starter nach `05_Probelisten_Testdaten/Showcase`; Archivkopien, SHA-256, kein Eingriff in den bearbeiteten Arbeitsstand | `python3 -B scripts/pflege/showcase_abgleich.py` |
+| [versionswechsel.py](versionswechsel.py) | Hebt die Version: `VERSION`, `APP_VERSION`, Versionsprüfungen der Tests, Beispieldaten, Rundgang, Showcase, Vorlagenkatalog, neue Releaseplanung und die Standangaben aller fortgeschriebenen Dokumente; ohne Archivkopien | `python3 scripts/pflege/versionswechsel.py 3.33.0 01.10.2026` |
+| [showcase_abgleich.py](showcase_abgleich.py) | Prüft den aktiven Showcase über tatsächlichen Import/Neustart und kopiert Basis, Vorlagen, Anleitung und Starter nach `05_Probelisten_Testdaten/Showcase`; ohne Archivkopien, SHA-256, kein Eingriff in den bearbeiteten Arbeitsstand | `python3 -B scripts/pflege/showcase_abgleich.py` |
 | [abgleich_07.py](abgleich_07.py) | Spielt den Stand aus `src/glide` nach `07_Python-Versionen` und prüft SHA-256 | `python3 scripts/pflege/abgleich_07.py` |
 | [messung_ansichtswechsel.py](messung_ansichtswechsel.py) | Misst jeden Ansichtswechsel (Median in ms) und zeigt die teuersten Funktionen (cProfile) | siehe Kopf der Datei |
 | [messung_performance.py](messung_performance.py) | Unprofilierter Vorher-/Nachher-Vergleich mit festen Aufgaben-, Notiz- und Bildseiteninhalten; erste/warme Wechsel, Median/p95 und Rohwerte | `python3 -B scripts/pflege/messung_performance.py --items 1000 --json <Ausgabe>`; `--app` für gesicherten Vergleichsstand |

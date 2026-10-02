@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Prüft und liefert den Showcase nach 05; verändert keinen Arbeitsstand."""
+"""Prüft und liefert den Showcase nach 05; verändert keinen Arbeitsstand.
+
+Überschreibt die Lieferkopie ohne Archivkopie: Vorfassungen trägt Git. Bis
+3.33.6 legte jeder Lauf rund 73 MB unter 05_Probelisten_Testdaten/Showcase/archiv ab.
+"""
 import hashlib
 import json
 import os
@@ -7,7 +11,6 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
-from datetime import datetime
 
 REPO = Path(__file__).resolve().parents[2]
 BASE = REPO.parents[1]
@@ -28,11 +31,6 @@ def main():
     for name in names:
         source, target = SOURCE/name, TARGET/name
         assert source.is_file(), source
-        if target.exists() and target.suffix != ".md" and target.read_bytes() != source.read_bytes():
-            archive = TARGET/"archiv"
-            archive.mkdir(exist_ok=True)
-            snapshot = archive/(target.stem+"_vor_Abgleich_"+datetime.now().strftime("%Y-%m-%d_%H-%M-%S_%f")+target.suffix)
-            shutil.copy2(target,snapshot)
         shutil.copy2(source,target)
         sha = hashlib.sha256(source.read_bytes()).hexdigest()
         assert hashlib.sha256(target.read_bytes()).hexdigest() == sha

@@ -9,7 +9,7 @@ mit demselben Ergebnis. Nutzt die Prüfungen aus `pruefen.py`, statt sie zu
 duplizieren:
 
 1. Vorprüfungen: Syntax, Versionskonsistenz, Dokumentationsindex mit Links, Fixtures.
-2. Werkzeugtests (`test_standpruefung.py`) und Tk-freie Fachlogik (`tests/unit`).
+2. Werkzeugtests (`tests/tools/test_*.py`) und Tk-freie Fachlogik (`tests/unit`).
 3. Die fünf Analysen, darunter `standpruefung.py`.
 4. Startprobe: Glide startet mit temporärem `GLIDE_DATA_DIR` unter Tk (ohne
    Bildschirm über `xvfb-run`) und wechselt durch sechs Ansichten, ohne
@@ -23,6 +23,9 @@ duplizieren:
 7. Datenschutz: Keine versionierte Textdatei enthält einen Benutzerpfad
    (`/Users/<Name>/`, `C:\\Users\\<Name>`, `/home/<Name>/`). Das Repository ist
    öffentlich; Rohprotokolle bleiben deshalb seit 01.10.2026 lokal.
+8. Ablagegröße (`ablagegroesse.py`): keine Archivkopien von Glide-Daten,
+   keine `*.fetch`-Reste, keine Fensterbilder neuer Vollprüfungen, keine
+   Datei über 50 MB.
 
 Die Integrationssuiten sind auf den Referenz-Mac abgestimmt und gehören nicht
 dazu; unter Linux laufen sie über `pruefen.py --modus schnell` (in GitHub
@@ -48,6 +51,7 @@ import urllib.request
 import zipfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import ablagegroesse  # noqa: E402
 import pruefen  # noqa: E402
 
 REPO = pruefen.REPO
@@ -214,7 +218,8 @@ def main():
     run.funktion("Versionskonsistenz", pruefen.versionen_pruefen)
     run.funktion("Dokumentation", pruefen.dokumentation_pruefen)
     run.funktion("Fixtures", pruefen.fixtures_pruefen)
-    run.prozess("Werkzeugtests", [sys.executable, "-B", str(REPO / "tests/tools/test_standpruefung.py")])
+    run.prozess("Werkzeugtests", [sys.executable, "-B", "-m", "unittest", "discover", "-s", str(REPO / "tests/tools"),
+                                  "-p", "test_*.py"])
     run.prozess("Fachlogik-Unit-Tests", [sys.executable, "-B", "-m", "unittest", "discover", "-s", str(REPO / "tests/unit")])
     for name in pruefen.ANALYSEN:
         run.prozess(Path(name).stem, [sys.executable, "-B", str(REPO / "tests/tools" / name)])
@@ -254,6 +259,14 @@ def main():
                     + ". Pfade durch ~ bzw. %USERPROFILE% ersetzen; Rohprotokolle nicht versionieren")
     else:
         run.meldung("Datenschutz", "ausgeführt", "keine Benutzerpfade in versionierten Textdateien")
+
+    eintraege = ablagegroesse.versionierte_dateien()
+    if eintraege is None:
+        run.meldung("Ablagegröße", "Hinweis", "kein Git-Arbeitsstand; versionierte Dateien nicht ermittelbar")
+    else:
+        funde = ablagegroesse.befunde(eintraege)
+        run.meldung("Ablagegröße", "fehlgeschlagen" if funde else "ausgeführt",
+                    ablagegroesse.zusammenfassung(eintraege, funde))
 
     fehlgeschlagen = [zeile["schritt"] for zeile in run.results if zeile["status"] == "fehlgeschlagen"]
     exitcode = 1 if fehlgeschlagen else 0

@@ -962,3 +962,4 @@ Vorsicherungen vor diesem Nachlauf:
 
 - [Heute und Demnächst (D14)](79_HEUTE_3.33.6.md)
 - [Nachweis Heute und Demnächst 3.33.6](../tests/qa-3.33.6/heute_2026-10-02/README.md)
+- [Nachweis schlanke Ablage 3.33.6](../tests/qa-3.33.6/ablage_2026-10-02/README.md) – Archivkopien und überholte Fensterbilder entfernt, CI-Schritt „Ablagegröße“

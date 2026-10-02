@@ -39,8 +39,8 @@ Ein Datensatz kann Bedienhandlungen, Betriebssystemzustände oder Fehlerfälle n
 - [showcase.py](../tests/tools/showcase.py) verwendet temporäres `GLIDE_DATA_DIR`, echte Objekt-/Anhang-/Seiten-/Vorlagen-APIs und einen frei wählbaren Datumsanker (`--tag YYYY-MM-DD`).
 - [Quellenmanifest](../tests/fixtures/showcase/quellen.json) belegt sechs unveränderte Originaldateien; die Grafikmaster wurden nicht bearbeitet. Die Fixture hält lokale Kopien für spätere Erzeugung vor.
 - [pruefe_showcase.py](../tests/tools/pruefe_showcase.py) ist zusätzlich zu 58 Integrationssuiten in beiden Prüfmodi verpflichtend. SHA-256, ZIP, Schema, Hinzufügen mit Erhalt vorhandener Daten, App-Restore, IDs/Anhänge, Ansichten, Bildvorschauen, Klappblock, Status-Undo, Vorlagen, Export und Neustart werden tatsächlich geprüft. Jede Tk-Callbackexception beendet die Abnahme negativ.
-- [showcase_abgleich.py](../scripts/pflege/showcase_abgleich.py) prüft vor der Auslieferung, sichert ersetzte Basisdateien und vergleicht die sechs Nutzerkopien per SHA-256. Der bearbeitete Arbeitsstand wird nicht verändert.
-- `versionswechsel.py` archiviert und erzeugt die Showcase-Basis mit. Nach der Vollprüfung den Datenabgleich zusätzlich ausführen. Jede neue implementierte Funktion bekommt ein geeignetes Beispiel oder eine ausführbare Bedienprüfung.
+- [showcase_abgleich.py](../scripts/pflege/showcase_abgleich.py) prüft vor der Auslieferung, ersetzt die Basisdateien (seit 02.10.2026 ohne Archivkopie; Vorfassungen trägt Git) und vergleicht die sechs Nutzerkopien per SHA-256. Der bearbeitete Arbeitsstand wird nicht verändert.
+- `versionswechsel.py` erzeugt die Showcase-Basis mit, seit 02.10.2026 ohne Archivkopie. Nach der Vollprüfung den Datenabgleich zusätzlich ausführen. Jede neue implementierte Funktion bekommt ein geeignetes Beispiel oder eine ausführbare Bedienprüfung.
 
 ## Nachweise und Grenzen
 

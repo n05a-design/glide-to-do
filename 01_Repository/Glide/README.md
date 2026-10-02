@@ -165,7 +165,8 @@ python3 -B tests/tools/ci_grundstufe.py
 
 Sie umfasst Vorprüfungen, Unit-Tests, die fünf Analysen, eine Startprobe,
 den Lieferstand gegenüber `07_Python-Versionen`, die Herkunft des
-mitgelieferten Fremdcodes und den Datenschutz-Wächter. Sie ersetzt nicht die Vollprüfung auf dem
+mitgelieferten Fremdcodes, den Datenschutz-Wächter und die Ablagegröße
+(keine Archivkopien, keine Fensterbilder neuer Vollprüfungen). Sie ersetzt nicht die Vollprüfung auf dem
 Referenz-Mac. Der CodeQL-Workflow ist derzeit deaktiviert.
 
 Ein nicht vollständig grüner Lauf darf nicht als Releasefreigabe ausgelegt

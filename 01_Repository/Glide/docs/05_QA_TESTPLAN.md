@@ -179,7 +179,9 @@ Seit dem 29.09.2026:
 - `test_fenster330.py` öffnet jedes Fenster über Menüleiste, „+“-Menüs,
   Kontextmenüs und Knöpfe (derzeit 41) und prüft: sichtbar, im Bildschirm,
   Knöpfe erreichbar, Esc schließt, kein stummer „…“-Befehl. Im Vollmodus
-  legt es je Fenster ein Foto des eigenen Fensters in `fenster/`.
+  legt es je Fenster ein Foto des eigenen Fensters in `fenster/`. Diese
+  Fotos bleiben seit 02.10.2026 lokal (`.gitignore`); versioniert werden
+  Ergebnis und README der Prüfung.
 - `test_tempo330.py` misst das Scrolltempo gegen reines Tk: Liste, Tabelle
   und Seite höchstens das Dreifache, Startseite und Übersicht mit Verlauf
   höchstens das Sechsfache.
