@@ -119,6 +119,11 @@ import page_markdown as glide_page_markdown  # noqa: E402
 import image_preview as glide_image_preview  # noqa: E402
 import logo as glide_logo  # noqa: E402
 import sidebar_policy as glide_sidebar  # noqa: E402
+import home_tiles as glide_home  # noqa: E402
+import eisenhower as glide_eisenhower  # noqa: E402
+import today_view as glide_today  # noqa: E402
+from capture_parser import (SLASH_COMMANDS, SLASH_IMPORTANCE, parse_capture,  # noqa: E402,F401
+                            parse_capture_due, slash_suggestions)
 from schema_backups import SchemaBackups  # noqa: E402
 
 
@@ -152,7 +157,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.33.1"
+APP_VERSION = "3.33.6"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
 # Einstellungen des Betriebssystems hängen daran.
@@ -1190,7 +1195,44 @@ class MonogramTile(tk.Canvas):
                          text=self.tile_text, fill=self.text_color, font=metrics)
 
 
-class RoundedButton(tk.Canvas):
+class DeferredDrawCanvas(tk.Canvas):
+    """Canvas, die sich einmal je Leerlauf statt bei jeder Zwischengröße zeichnet.
+
+    Beim Aufbau der Startseite meldet jede gerundete Fläche ihre Größe rund
+    ein Dutzend Mal, bis das Layout steht, und jede Meldung zeichnete sie
+    vollständig neu (P03, 02.10.2026). Gezeichnet wird jetzt mit der Größe,
+    die im Leerlauf gilt; `_draw()` bleibt für sofortige Änderungen wie Design
+    oder Hover direkt aufrufbar.
+    """
+
+    _draw_pending = None
+
+    def _draw(self):
+        """Unterklassen zeichnen hier ihre Fläche."""
+
+    def _schedule_draw(self, _event=None):
+        if self._draw_pending is None:
+            self._draw_pending = self.after_idle(self._draw_scheduled)
+            if not getattr(self, "_draw_cancel_bound", False):
+                self.bind("<Destroy>", self._cancel_draw, add="+")
+                self._draw_cancel_bound = True
+
+    def _draw_scheduled(self):
+        self._draw_pending = None
+        self._draw()
+
+    def _cancel_draw(self, event=None):
+        if event is not None and event.widget is not self:
+            return
+        if self._draw_pending is not None:
+            try:
+                self.after_cancel(self._draw_pending)
+            except tk.TclError:
+                pass
+            self._draw_pending = None
+
+
+class RoundedButton(DeferredDrawCanvas):
     """Nativer Tkinter-Button mit abgerundeter Outline und Hover-Fill."""
 
     def __init__(
@@ -1251,7 +1293,7 @@ class RoundedButton(tk.Canvas):
         self.min_width = int(width)
         self._fit_width()
 
-        bind_resize(self, lambda event: self._draw())
+        bind_resize(self, self._schedule_draw)
         self.bind("<Enter>", self._on_enter)
         self.bind("<Leave>", self._on_leave)
         self.bind("<ButtonPress-1>", self._on_press)
@@ -1918,7 +1960,7 @@ class FieldPairGrid(tk.Frame):
         return self._cells[schluessel]
 
 
-class RoundedContainer(tk.Canvas):
+class RoundedContainer(DeferredDrawCanvas):
     """Runde, themebare Box mit innenliegendem Frame für normale Tkinter-Widgets.
 
     Hinweis: Normale Tkinter-Widgets sind rechteckig. Damit sie die gerundeten Ecken
@@ -2024,7 +2066,7 @@ class RoundedContainer(tk.Canvas):
                 width=max(1, w - pad_x * 2),
                 height=max(1, h - pad_y * 2),
             )
-        self._draw()
+        self._schedule_draw()
 
     def _draw(self):
         self.delete("surface")
@@ -3491,104 +3533,8 @@ class LabelDropdown(tk.Frame):
         return [label["id"] for label in self.labels if label.get("id") in chosen]
 
 
-def parse_capture_due(value, today=None):
-    """Bewusst begrenzte deutsche Datumseingabe; jede Deutung wird vorab angezeigt."""
-    today = today or date.today()
-    text = " ".join(str(value or "").strip().lower().split())
-    if not text:
-        return None, None
-    due_time = None
-    clock = re.search(r"(?:\s+(?:um\s+)?)(\d{1,2}):(\d{2})(?:\s+uhr)?$", text)
-    if clock:
-        hour, minute = int(clock[1]), int(clock[2])
-        if hour > 23 or minute > 59:
-            raise ValueError("Bitte eine Uhrzeit zwischen 00:00 und 23:59 eingeben.")
-        due_time = f"{hour:02d}:{minute:02d}"
-        text = text[:clock.start()].strip()
-    offsets = {"heute": 0, "morgen": 1, "übermorgen": 2, "uebermorgen": 2}
-    weekdays = ("montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag", "sonntag")
-    try:
-        if text in offsets:
-            day = today + timedelta(days=offsets[text])
-        elif text in weekdays:
-            day = today + timedelta(days=(weekdays.index(text) - today.weekday()) % 7)
-        elif (relative := re.fullmatch(r"in (\d{1,4}) (tag(?:en)?|woche(?:n)?)", text)):
-            days = int(relative[1]) * (7 if relative[2].startswith("woche") else 1)
-            if days > 3650:
-                raise ValueError
-            day = today + timedelta(days=days)
-        elif re.fullmatch(r"\d{1,2}\.\d{1,2}\.\d{4}", text):
-            day = datetime.strptime(text, "%d.%m.%Y").date()
-        elif re.fullmatch(r"\d{4}-\d{2}-\d{2}", text):
-            day = date.fromisoformat(text)
-        else:
-            raise ValueError
-    except (ValueError, OverflowError):
-        raise ValueError("Datum nicht erkannt: z. B. morgen, Montag, in 3 Tagen oder 24.09.2026; optional um 14:30.") from None
-    return day.isoformat(), due_time
-
-
-# „/“-Befehle beim Anlegen eines Punkts (27.09.2026): „Einkauf /morgen /wichtig“.
-# Jeder Befehl steht für genau ein Feld; Unbekanntes bleibt Text.
-SLASH_COMMANDS = (
-    ("heute", "fällig heute"), ("morgen", "fällig morgen"), ("übermorgen", "fällig übermorgen"),
-    ("montag", "fällig Montag"), ("dienstag", "fällig Dienstag"), ("mittwoch", "fällig Mittwoch"),
-    ("donnerstag", "fällig Donnerstag"), ("freitag", "fällig Freitag"), ("samstag", "fällig Samstag"),
-    ("sonntag", "fällig Sonntag"),
-    ("wichtig", "Wichtigkeit hoch"), ("hoch", "Wichtigkeit hoch"), ("mittel", "Wichtigkeit mittel"),
-    ("niedrig", "Wichtigkeit niedrig"),
-    ("meintag", "in „Mein Tag“ einplanen"),
-)
-SLASH_IMPORTANCE = {"wichtig": 3, "hoch": 3, "mittel": 2, "niedrig": 1}
-
-
-def parse_slash_commands(text, labels=(), today=None):
-    """Zerlegt „Titel /befehl …“ in (Titel, Felder, erkannte Beschreibungen).
-
-    Erkannt werden die Befehle aus SLASH_COMMANDS, ein Datum wie „/24.12.2026“
-    und vorhandene Labels („/Büro“, Groß- und Kleinschreibung egal). Ein
-    Schrägstrich mitten im Wort („und/oder“) ist kein Befehl.
-    """
-    today = today or date.today()
-    namen = {str(label.get("name") or "").strip().lower(): label.get("id")
-             for label in labels or () if isinstance(label, dict) and label.get("id")}
-    felder, erkannt, rest = {}, [], []
-    for wort in str(text or "").split(" "):
-        if not wort.startswith("/") or len(wort) < 2:
-            rest.append(wort)
-            continue
-        befehl = wort[1:].lower().rstrip(".,;")
-        beschreibung = dict(SLASH_COMMANDS).get(befehl)
-        if befehl in SLASH_IMPORTANCE:
-            felder["importance"] = SLASH_IMPORTANCE[befehl]
-        elif befehl == "meintag":
-            felder["planned_date"] = today.isoformat()
-        elif beschreibung or re.fullmatch(r"\d{1,2}\.\d{1,2}\.\d{4}", befehl):
-            try:
-                felder["due"], _zeit = parse_capture_due(befehl, today)
-            except ValueError:
-                rest.append(wort)
-                continue
-            beschreibung = beschreibung or f"fällig {befehl}"
-        elif befehl in namen:
-            felder.setdefault("labels", [])
-            if namen[befehl] not in felder["labels"]:
-                felder["labels"].append(namen[befehl])
-            beschreibung = f"Label {wort[1:]}"
-        else:
-            rest.append(wort)
-            continue
-        erkannt.append(beschreibung)
-    return " ".join(" ".join(rest).split()), felder, erkannt
-
-
-def slash_suggestions(teil, labels=()):
-    """Befehle, die zum angefangenen Wort „/mo…“ passen – für die Vorschlagszeile."""
-    teil = str(teil or "").lower()
-    treffer = [befehl for befehl, _text in SLASH_COMMANDS if befehl.startswith(teil)]
-    treffer += [str(label.get("name")) for label in labels or ()
-                if isinstance(label, dict) and str(label.get("name") or "").lower().startswith(teil)]
-    return treffer[:8]
+# Datumseingabe, „/“-Befehle und die deutsche Schnelleingabe (G01) stehen
+# Tk-frei in capture_parser.py.
 
 
 class FilterSelection(LabelDropdown):
@@ -4055,9 +4001,10 @@ class ItemWorkspace:
     # Text und Strich, Flächenhintergrund. Alles additiv im Abschnitt
     # `pinboards`; eine ältere Fassung liest die Pinnwand weiter als freie
     # Fläche mit einfachen Linien.
+    # Seit 3.33.5 (G02, D13) auch Eisenhower als Gruppierung statt eigener Ansicht.
     BOARD_GROUP_FIELDS = (("due", "Fälligkeit"), ("planned", "Bearbeitungstag"),
-                          ("importance", "Wichtigkeit"), ("label", "Label"),
-                          ("done", "Erledigt"), ("list", "Liste"))
+                          ("importance", "Wichtigkeit"), ("eisenhower", "Dringlichkeit × Wichtigkeit"),
+                          ("label", "Label"), ("done", "Erledigt"), ("list", "Liste"))
     BOARD_GROUP_KEYS = tuple(key for key, _name in BOARD_GROUP_FIELDS)
     # Von streng nach frei; „Frei anordnen“ bleibt wie bis 3.29 der letzte Eintrag.
     BOARD_LAYOUTS = (("grid", "Geordnete Karten"), ("columns", "Spalten"), ("free", "Frei anordnen"))
@@ -4914,9 +4861,10 @@ class ItemWorkspace:
             journal_button.pack_forget()
         app.plan_day_prev_button.pack_forget()
         app.plan_day_next_button.pack_forget()
-        raster_knopf = getattr(app, "plan_day_grid_button", None)
-        if raster_knopf is not None:
-            raster_knopf.pack_forget()
+        for name in ("plan_day_grid_button", "plan_day_mode_button"):
+            knopf = getattr(app, name, None)
+            if knopf is not None:
+                knopf.pack_forget()
         # Der Zwischenraum sitzt links von jeder Schaltfläche.
         # Dadurch endet die Zeile immer bündig mit der Eingabezeile darüber –
         # gleichgültig, wie viele Schalter gerade sichtbar sind. Vorher trug
@@ -4955,6 +4903,8 @@ class ItemWorkspace:
             app.pack_relative(app.plan_day_next_button, app.plan_day_prev_button, side="right", padx=(8, 0))
             if getattr(app, "plan_day_grid_button", None) is not None:
                 app.pack_relative(app.plan_day_grid_button, app.plan_day_next_button, side="right", padx=(8, 0))
+                if getattr(app, "plan_day_mode_button", None) is not None:
+                    app.pack_relative(app.plan_day_mode_button, app.plan_day_grid_button, side="right", padx=(8, 0))
         app.sync_view_switch_buttons()
         app.sync_detail_button()
         if self.visible:
@@ -13017,8 +12967,8 @@ class ListApp:
     STARTUP_VIEW_CHOICES = (
         ("last", "Letzte Ansicht", "Glide öffnet dort, wo zuletzt gearbeitet wurde."),
         ("home", "Startseite", "Der persönliche Überblick mit Uhr, Tagesziel und Kacheln."),
-        ("planday", "Mein Tag", "Die Aufgaben mit Bearbeitungstag für heute."),
-        ("in_progress", "In Bearbeitung", "Alle Aufgaben mit Fälligkeit, Verspätetes zuerst."),
+        ("planday", "Heute", "Nächste Aufgabe, Verspätetes, der Tagesplan und heute Fälliges."),
+        ("in_progress", "Demnächst", "Alle Aufgaben mit Fälligkeit, chronologisch."),
         ("library", "Listen- und Ordnerübersicht", "Der gesamte Bestand als Kacheln."),
         ("templates", "Vorlagen", "Der Vorlagenkatalog für neue Listen und Ordner."),
         ("globalboard", "Globale Pinnwand", "Die Arbeitsfläche über den gesamten Bestand."),
@@ -13133,8 +13083,8 @@ class ListApp:
         "Ansichten": (
             "Seite, Punkt oder Aktion suchen …", "Nächste Aufgabe", "Tagesbeginn …", "Tagesabschluss …",
             "Wochenrückblick",
-            "Startseite", "Startseite einrichten …", "Vorlagen", "Vorlagen öffnen", "Mein Tag",
-            "Mein Tag: Tag zurück", "Mein Tag: Tag vor", "Mein Tag: Stundenraster ein/aus", "In Bearbeitung",
+            "Startseite", "Startseite einrichten …", "Vorlagen", "Vorlagen öffnen", "Heute",
+            "Heute: Tag zurück", "Heute: Tag vor", "Heute: Stundenraster ein/aus", "Demnächst",
             "Verspätet", "Eingang öffnen",
             "Papierkorb", "Tabellenansicht", "Zur Listenansicht", "Pinnwand öffnen",
             "Globale Pinnwand öffnen",
@@ -13146,7 +13096,8 @@ class ListApp:
             "Seitenleiste ein-/ausblenden", "Design wechseln (Hell/Dunkel)",
             "Tabellenspalten …", "Einstellungen …",
             "Gruppieren: aus", "Gruppieren: Fälligkeit", "Gruppieren: Bearbeitungstag",
-            "Gruppieren: Wichtigkeit", "Gruppieren: Label", "Gruppieren: Erledigt",
+            "Gruppieren: Wichtigkeit", "Gruppieren: Dringlichkeit × Wichtigkeit",
+            "Gruppieren: Label", "Gruppieren: Erledigt",
             "Tabelle: Unterpunkte verschachtelt", "Tabelle: Unterpunkte flach",
             "Detailbereich ein-/ausblenden",
         ),
@@ -13232,7 +13183,7 @@ class ListApp:
             ("Gliederung", "„Mehr › Gliederung“ listet die Überschriften und springt hin; eine zugeklappte "
              "Liste öffnet sich dabei.", "Seite und Notiz › Mehr › Gliederung"),
             ("Aufgaben in Seiten", "Jede Aufgabe ist ein vollwertiger Glide-Punkt: Kästchen hakt ab, Doppelklick "
-             "auf den Titel öffnet alle Punktdetails, sie erscheint in „Mein Tag“ und im Kalender. Eine "
+             "auf den Titel öffnet alle Punktdetails, sie erscheint in „Heute“ und im Kalender. Eine "
              "gelöschte Aufgabenzeile legt den Punkt in den Papierkorb.", "Seite"),
             ("Lesen", "Endlos scrollend in einer ruhigen Lesespalte; „Mehr › Volle Breite“ schaltet um. "
              "„Mehr“ speichert oder kopiert die Seite als Markdown und nimmt sie in die Favoriten.",
@@ -13347,35 +13298,36 @@ class ListApp:
                            "Gismo steht zusätzlich still neben leeren Listen, Ordnern und Pinnwänden; "
                            "„Spielereien aus“ in seiner Kachel blendet ihn überall aus.",
              "Seitenleiste › Startseite · Ansicht › Ansichten › Startseite"),
-            ("Mein Tag", "Was für einen Tag eingeplant ist – über den Bearbeitungstag, nicht über die "
-                         "Fälligkeit. Punkte mit Uhrzeit stehen als Zeitplan vorn; die Dauer kommt aus der "
+            ("Heute", "Was heute dran ist: oben die nächste Aufgabe, dann Verspätetes, Liegengebliebenes, "
+                      "der Tagesplan und was heute fällig ist, am Ende der Eingang mit allem ohne Tag. Jede "
+                      "Aufgabe steht genau einmal; künftige Fälligkeiten zeigt „Demnächst“. ◀ und ▶ blättern "
+                      "zu anderen Tagen; dort stehen deren Tagesplan und was an ihnen fällig ist. Der "
+                      "Tagesplan zeigt, was über den Bearbeitungstag eingeplant ist, nicht über die "
+                      "Fälligkeit. Punkte mit Uhrzeit stehen als Zeitplan vorn; die Dauer kommt aus der "
                          "Schätzung, Überschneidungen werden benannt. Einen Block ziehen: auf die obere Hälfte "
                          "eines anderen – davor, auf die untere – danach, nach „Ohne Uhrzeit“ – ohne Zeit. "
                          "Alt+↑/↓ verschiebt um 15 Minuten. „Raster“ zeigt daneben ein Stundenraster, in dem "
                          "man Blöcke im 15-Minuten-Takt verschiebt; jeder Punkt der Liste – auch ohne Uhrzeit "
                          "oder aus dem Eingang – lässt sich hineinziehen; in schmalen Fenstern steht das Raster "
-                         "statt der Liste. Aus jeder Liste auf „Mein Tag“ in der Seitenleiste gezogen, wird ein "
-                         "Punkt für den Tag eingeplant. Darunter „In Bearbeitung“ mit allem Fälligen, das nicht für "
-                         "den Tag eingeplant ist, und der Eingang mit allem ohne Tag.",
-             "Seitenleiste › Mein Tag"),
+                         "statt der Liste. Aus jeder Liste auf „Heute“ in der Seitenleiste gezogen, wird ein "
+                         "Punkt für den Tag eingeplant. „Tag …“ öffnet Tagesbeginn und Tagesabschluss.",
+             "Seitenleiste › Heute"),
             ("Tagesbeginn", "Geführt durch Überfälliges, Verschlepptes und den Eingang: heute, morgen, nächste "
                             "Woche, ohne Tag, erledigt oder überspringen.",
-             "Ansicht › Ansichten › Tagesbeginn"),
+             "Heute › Tag … · Ansicht › Ansichten › Tagesbeginn"),
             ("Tagesabschluss", "Am Abend: Was für heute eingeplant oder fällig war und offen blieb, bekommt "
                                "einen neuen Tag (morgen, nächste Woche, ohne Tag) oder wird abgehakt. Danach steht, "
                                "was heute erledigt wurde; „In die Tagesnotiz übernehmen“ schreibt das als Rückblick "
-                               "in die heutige Tagesnotiz.", "Ansicht › Ansichten › Tagesabschluss"),
+                               "in die heutige Tagesnotiz.", "Heute › Tag … · Ansicht › Ansichten › Tagesabschluss"),
             ("Wochenrückblick", "Was in der Woche erledigt wurde, was weitergewandert ist, geschätzte gegen "
                                 "erfasste Zeit und die Kapazität je Tag.",
              "Ansicht › Ansichten › Wochenrückblick"),
-            ("In Bearbeitung", "Alle Punkte mit Fälligkeit, listenübergreifend. In „Mein Tag“ als "
-                               "Abschnitt unter den Aufgaben des Tages; die ganze Ansicht mit den "
-                               "Abschnitten Nächste Aufgabe, Verspätet und Noch offen öffnet ein "
-                               "Doppelklick auf die Abschnittsüberschrift.",
-             "Mein Tag › In Bearbeitung · Ansicht › Ansichten · Startseite"),
-            ("Nächste Aufgabe", "Genau ein Punkt: heute eingeplant, sonst überfällig, sonst nach "
-                                "Wichtigkeit und Termin.",
-             "Abschnitt in „In Bearbeitung“ · Startseitenkachel"),
+            ("Demnächst", "Alle Punkte mit Fälligkeit, listenübergreifend und chronologisch; "
+                          "Überfälliges steht oben unter „Verspätet“. Hieß bis 3.33.5 „In Bearbeitung“.",
+             "Seitenleiste › Demnächst · Ansicht › Ansichten · Startseite"),
+            ("Nächste Aufgabe", "Genau ein Punkt: heute eingeplant, sonst überfällig oder heute fällig, sonst "
+                                "liegen geblieben – jeweils nach Wichtigkeit und Termin.",
+             "Oben in „Heute“ · Startseitenkachel"),
             ("Verspätet", "Alles Überfällige als eigene Ansicht.",
              "Ansicht › Ansichten › Verspätet"),
             ("Labels", "Derselbe Bestand nach Labels gruppiert; Punkte lassen sich hineinziehen.",
@@ -13397,14 +13349,19 @@ class ListApp:
              "Punktmaske › Art · Rechtsklick › Art"),
             ("Wichtigkeit", "Vier Stufen; sie bestimmt mit, welche Aufgabe als Nächstes drankommt.",
              "Punktmaske › Wichtigkeit · Strg+Shift+F"),
-            ("Fälligkeit", "Datum und optional Uhrzeit. Grundlage für „In Bearbeitung“ und „Verspätet“.",
+            ("Fälligkeit", "Datum und optional Uhrzeit. Grundlage für „Heute“, „Demnächst“ und „Verspätet“.",
              "Punktmaske › Fälligkeit · Strg+T"),
             ("Wiederholung", "Regel auf Basis der Fälligkeit; ohne Datum keine Wiederholung.",
              "Punktmaske › Wiederholung"),
-            ("„/“-Befehle", "Beim Eintippen eines Punkts: /heute, /morgen, /übermorgen, ein Wochentag oder ein "
-             "Datum wie /24.12.2026 setzen die Fälligkeit; /wichtig, /hoch, /mittel, /niedrig die Wichtigkeit; "
-             "/meintag plant für heute ein; /Labelname vergibt ein vorhandenes Label. Unter der Eingabe steht, "
-             "was erkannt wurde; Tab ergänzt ein angefangenes Wort.", "Eingabezeile der Liste"),
+            ("Schnelleingabe", "Beim Eintippen eines Punkts erkennt Glide deutsche Angaben: „morgen“, ein "
+             "Wochentag, „in 3 Tagen“ oder ein Datum setzen den Bearbeitungstag, „fällig“ oder „bis“ davor die "
+             "Fälligkeit; „um 14:30“ die Uhrzeit, „45 Minuten“ den Aufwand, „!hoch“ die Wichtigkeit, "
+             "„#Labelname“ ein vorhandenes Label. „jeden Montag“, „täglich“, „werktags“, „alle 2 Wochen“ oder "
+             "„monatlich“ setzen eine Wiederholung und als Fälligkeit ihren ersten Termin. Die „/“-Befehle "
+             "gelten weiter (/morgen, /bis Freitag, "
+             "/wichtig, /meintag, /Labelname). Unter der Eingabe steht jede Erkennung als Chip; × nimmt sie "
+             "zurück, der Text bleibt im Titel. Text in Anführungszeichen bleibt wörtlich; Tab ergänzt ein "
+             "angefangenes „/“-Wort.", "Eingabezeile der Liste und Schnellerfassung"),
             ("Auswahlleiste", "Solange Punkte markiert sind, steht unter der Liste – an der Stelle des Hinweises – "
              "die Leiste mit Wichtigkeit, Fällig, Einplanen, Labels und Löschen.", "Unter der Liste"),
             ("Wiederkehrende Checkliste", "Rechtsklick auf eine Aufgabenliste › Wiederkehrende Checkliste: Ist "
@@ -13416,7 +13373,7 @@ class ListApp:
              "Infobereich. „Systemmitteilung testen“ zeigt, ob sie ankommt.",
              "Punktmaske › Erinnerung · Einstellungen › Persönlich · Ansicht › Systemmitteilung testen"),
             ("Bearbeitungstag", "Wann gearbeitet wird – unabhängig davon, wann etwas fällig ist. "
-                                "Steuert „Mein Tag“.",
+                                "Steuert den Tagesplan in „Heute“.",
              "Punktmaske › Bearbeitungstag · Bearbeiten › Punkt"),
             ("Labels", "Mehrfach vergebbar, farbig, eigene Ansicht.",
              "Punktmaske › Labels · Strg+L"),
@@ -13454,8 +13411,8 @@ class ListApp:
             ("Kontextmenü", "Alle Aktionen der getroffenen Karte, sonst die der Fläche.",
              "Rechtsklick auf der Fläche"),
             ("Spaltenboard", "Alle Punkte des Bereichs in Spalten nach Fälligkeit, Bearbeitungstag, "
-                             "Wichtigkeit, Label, Erledigt oder Liste. Ziehen in eine Spalte setzt das Feld; "
-                             "Alt+←/→ verschiebt per Tastatur.",
+                             "Wichtigkeit, Dringlichkeit × Wichtigkeit, Label, Erledigt oder Liste. Ziehen in "
+                             "eine Spalte setzt das Feld; Alt+←/→ verschiebt per Tastatur.",
              "Pinnwand › Anordnung Spalten"),
             ("Karteninhalt und Farbe", "Beschreibung, Checkliste und Bild auf der Karte; Farbe als Streifen, "
                                        "Kopf oder ganze Karte, aus Punktfarbe oder erstem Label.",
@@ -13488,8 +13445,14 @@ class ListApp:
              "Ansicht › Liste › Aktive Liste sortieren"),
             ("Reiter", "Einen Punkt als eigenen Reiter offen halten.",
              "Ansicht › Reiter · Strg+Shift+O"),
-            ("Gruppieren", "Liste und Tabelle nach Fälligkeit, Bearbeitungstag, Wichtigkeit, Label oder "
-                           "Erledigt in Abschnitte teilen; Ziehen zwischen Abschnitten setzt das Feld. "
+            ("Dringlichkeit × Wichtigkeit", "Die vier Eisenhower-Quadranten als Gruppierung: wichtig ab "
+             "Wichtigkeit mittel, dringend bei Fälligkeit oder Bearbeitungstag in den nächsten zwei Tagen. "
+             "Ziehen setzt nur, was der Quadrant verlangt – Wichtigkeit mittel bzw. niedrig, Bearbeitungstag "
+             "heute bzw. nach den zwei Tagen. Eine Fälligkeit ändert sich nie; macht sie die Aufgabe dringend, "
+             "sagt Glide das.", "Spaltenboard und Liste › Gruppieren"),
+            ("Gruppieren", "Liste und Tabelle nach Fälligkeit, Bearbeitungstag, Wichtigkeit, "
+                           "Dringlichkeit × Wichtigkeit, Label oder Erledigt in Abschnitte teilen; Ziehen "
+                           "zwischen Abschnitten setzt das Feld. "
                            "Nummern und Zwischenüberschriften der Liste bleiben erhalten; eine "
                            "Spaltensortierung der Tabelle gilt innerhalb jeder Überschrift.",
              "Ansicht › Liste › Gruppieren nach · Rechtsklick auf Liste"),
@@ -13683,9 +13646,16 @@ class ListApp:
     PLAN_INBOX_HEADING_ROW_ID = "planinbox:heading"
     PLAN_INBOX_MORE_ROW_ID = "planinbox:more"
     PLAN_INBOX_VISIBLE = 50
-    # „In Bearbeitung“ als Abschnitt von „Mein Tag“ (26.09.2026): die fälligen
-    # Aufgaben, die nicht schon für den gezeigten Tag eingeplant sind.
-    PLAN_IN_PROGRESS_ROW_ID = "planinprogress:heading"
+    # „Heute“ (3.33.6, D14) ersetzt den Abschnitt „In Bearbeitung“ in „Mein
+    # Tag“: Liegengebliebenes, der Tagesplan und heute Fälliges stehen unter
+    # eigenen Überschriften; künftige Fälligkeiten zeigt „Demnächst“.
+    LEFTOVER_SECTION_ROW_ID = "section:leftover"
+    DAYPLAN_SECTION_ROW_ID = "section:dayplan"
+    DUE_TODAY_SECTION_ROW_ID = "section:duetoday"
+    # Verweiszeile am Ende von „Heute“: Der Abschnitt „In Bearbeitung“ war der
+    # Weg von „Mein Tag“ zu allen Fälligkeiten; ein Doppelklick führt jetzt
+    # nach „Demnächst“, das bewusst keine eigene Seitenleistenzeile hat (U06).
+    UPCOMING_LINK_ROW_ID = "section:upcoming"
     # Die Abschnitte der Übersichten sind aufklappbar. Ihr
     # Zustand gehört zur Ansicht und nicht zu den Daten – er liegt deshalb in
     # den Einstellungen und übersteht einen Neustart.
@@ -13694,7 +13664,8 @@ class ListApp:
     UNTIMED_SECTION_ROW_ID = "section:untimed"
     OVERVIEW_SECTION_ROW_IDS = (NEXT_TASK_SECTION_ROW_ID, OVERDUE_SECTION_ROW_ID,
                                 IN_PROGRESS_SECTION_ROW_ID, PLAN_INBOX_HEADING_ROW_ID,
-                                TIMEPLAN_SECTION_ROW_ID, UNTIMED_SECTION_ROW_ID, PLAN_IN_PROGRESS_ROW_ID)
+                                TIMEPLAN_SECTION_ROW_ID, UNTIMED_SECTION_ROW_ID, LEFTOVER_SECTION_ROW_ID,
+                                DAYPLAN_SECTION_ROW_ID, DUE_TODAY_SECTION_ROW_ID, UPCOMING_LINK_ROW_ID)
     # Die Labelansicht sammelt denselben Bestand nach Labels statt nach
     # Fälligkeit. Sie verhält sich wie die beiden Übersichten – abgeleitet,
     # nicht direkt befüllbar – nimmt aber zusätzlich Punkte per Ziehen auf.
@@ -14027,8 +13998,8 @@ class ListApp:
     ICS_SCOPES = (
         ("list", "Aktuelle Liste oder Ordner"),
         ("all", "Alle Listen"),
-        ("today", "Mein Tag und heute Fällige"),
-        ("planday", "Mein Tag des gewählten Tages"),
+        ("today", "Heute: Tagesplan und heute Fällige"),
+        ("planday", "Tagesplan des gewählten Tages"),
     )
     ICS_OPTION_LABELS = (
         ("done", "Erledigte Punkte mitausgeben"),
@@ -14309,6 +14280,8 @@ class ListApp:
         # Punkte sind das übliche Zeichen für „hier steckt mehr".
         "print": "⎙",
         "overflow": "⋯",
+        # Eine erkannte Angabe zurücknehmen (Feldchips der Eingabe, 3.33.3).
+        "remove": "×",
     }
     # Begrüßungen der Startseite. `{name}` steht für „, Tim“ und bleibt leer,
     # solange kein Name eingetragen ist – deshalb gehört das Komma in den
@@ -16569,34 +16542,15 @@ class ListApp:
             and len(value) <= 260))[-1000:]
         # Reihenfolge, Sichtbarkeit und Spaltenzahl der
         # Startseitenkacheln. Alles additiv – fehlende Werte ergeben die
-        # bisherige Startseite in ihrer bisherigen Reihenfolge.
-        order = result.get("home_tile_order", [])
-        cleaned_order = []
-        if isinstance(order, list):
-            for key in order:
-                if key in cls.HOME_TILE_KEYS and key not in cleaned_order:
-                    cleaned_order.append(key)
-        result["home_tile_order"] = cleaned_order
-        hidden = result.get("home_tiles_hidden", [])
-        cleaned_hidden = []
-        if isinstance(hidden, list):
-            for key in hidden:
-                if key in cls.HOME_TILE_KEYS and key not in cleaned_hidden:
-                    cleaned_hidden.append(key)
+        # Standardstartseite.
         # Wer „Heute fällig“ ausgeblendet hatte, hatte die
         # Fälligkeiten abgewählt, nicht die Tagesplanung. Die verschmolzene
         # Kachel bleibt deshalb sichtbar; der veraltete Schlüssel fällt hier
-        # heraus, weil er in HOME_TILE_KEYS nicht mehr steht.
-        # Kacheln, die es vor 3.22 nicht gab, bleiben ohne eigene Angabe aus:
-        # Eine bestehende Startseite soll nach dem Versionswechsel gleich
-        # aussehen, bis jemand sie bewusst ändert.
-        if not isinstance(result.get("home_tile_order"), list) or not cleaned_order:
-            for key, _titel, _gewicht, _breit, standard in cls.HOME_TILE_DEFINITIONS:
-                if not standard and key not in cleaned_hidden:
-                    cleaned_hidden.append(key)
-        if not result["show_home_stats"] and "stats" not in cleaned_hidden:
-            cleaned_hidden.append("stats")
-        result["home_tiles_hidden"] = cleaned_hidden
+        # heraus, weil er unter den bekannten Kacheln nicht mehr steht.
+        # Ohne eigene Reihenfolge gilt der Standard (D12); eine eigene
+        # Auswahl bleibt nach dem Versionswechsel unverändert.
+        result["home_tile_order"], result["home_tiles_hidden"] = glide_home.normalize(
+            result.get("home_tile_order"), result.get("home_tiles_hidden"), result["show_home_stats"])
         columns = str(result.get("home_columns", "auto"))
         result["home_columns"] = columns if columns in dict(cls.HOME_COLUMN_CHOICES) else "auto"
         # Beide additiv; fehlende Werte bedeuten „Monat"
@@ -17202,7 +17156,7 @@ class ListApp:
         return f"{minuten // 60:02d}:{minuten % 60:02d}"
 
     def time_plan_section_of(self, row_id):
-        """Zeitplan-Abschnitt einer Baumzeile in „Mein Tag“ – sonst None."""
+        """Zeitplan-Abschnitt einer Baumzeile in „Heute“ – sonst None."""
         if self.view_mode != self.PLAN_DAY_VIEW or not row_id or not hasattr(self, "tree"):
             return None
         abschnitte = (self.TIMEPLAN_SECTION_ROW_ID, self.UNTIMED_SECTION_ROW_ID)
@@ -17251,7 +17205,7 @@ class ListApp:
         return True
 
     def time_plan_drop(self, target_id, rows, event_y=None):
-        """Ziehen im Zeitplan von „Mein Tag“ setzt die Uhrzeit (AO-070, zweite Stufe).
+        """Ziehen im Zeitplan von „Heute“ setzt die Uhrzeit (AO-070, zweite Stufe).
 
         Wie beim Umordnen entscheidet die Zeilenhälfte: obere Hälfte eines
         Blocks – der gezogene Punkt endet, wo der Block beginnt; untere Hälfte
@@ -17307,7 +17261,7 @@ class ListApp:
         return "break"
 
     def on_time_plan_drag_start(self, event):
-        """Ziehen beginnt in „Mein Tag“ auf Punktzeilen; sonst bleibt es ein Klick.
+        """Ziehen beginnt in „Heute“ auf Punktzeilen; sonst bleibt es ein Klick.
 
         Innerhalb der Liste wirkt es nur im Zeitplan. Ins Stundenraster darf
         jede Punktzeile fallen – auch aus „Ohne Uhrzeit“ und dem Eingang.
@@ -17797,6 +17751,11 @@ class ListApp:
                     for value in (3, 2, 1, 0)]
         if field == "done":
             return [gruppe("open", "Offen", theme["ui_accent"]), gruppe("done", "Erledigt", theme["confirm"])]
+        if field == "eisenhower":
+            # Jeder Quadrant nimmt an; was Ablegen ändert, entscheidet eisenhower.aenderung.
+            farben = {"q1": theme[self.importance_color_key(3)], "q2": theme["clear"],
+                      "q3": theme["due_action"], "q4": theme["muted"]}
+            return [gruppe(key, titel, farben[key]) for key, titel, _wichtig, _dringend in glide_eisenhower.QUADRANTEN]
         if field == "label":
             result = [gruppe(label["id"], str(label.get("name") or "Label"), self.label_color(label))
                       for label in self.labels if not self.is_system_label(label)]
@@ -17820,6 +17779,8 @@ class ListApp:
             return [self.date_group_key(item.get("planned_date"))]
         if field == "importance":
             return [str(self.clamp_importance(item.get("importance", 0)))]
+        if field == "eisenhower":
+            return [glide_eisenhower.quadrant(item)]
         if field == "done":
             return ["done" if item.get("done") else "open"]
         if field == "label":
@@ -17869,6 +17830,33 @@ class ListApp:
                         item["importance"] = wert
                         change.mark()
             return bool(change.changed and change.saved is not False), None
+        if field == "eisenhower":
+            # D13/D02: nur Wichtigkeit oder Bearbeitungstag ändern sich; eine
+            # Fälligkeit nie. Was nicht geht, bleibt unverändert und sagt warum.
+            heute = date.today()
+            plaene, gruende = [], []
+            for item in items:
+                felder, grund = glide_eisenhower.aenderung(item, target, heute)
+                if felder is None:
+                    gruende.append(grund)
+                else:
+                    plaene.append((item, felder))
+            if not plaene:
+                return False, gruende[0] if gruende else None
+            with self.item_change([item["id"] for item, _felder in plaene], restore=False) as change:
+                for item, felder in plaene:
+                    for key, value in felder.items():
+                        if item.get(key) != value:
+                            item[key] = value
+                            change.mark()
+            geaendert = bool(change.changed and change.saved is not False)
+            if geaendert:
+                teile = []
+                for key, value in next((felder for _item, felder in plaene if felder), {}).items():
+                    teile.append(f"Wichtigkeit {self.IMPORTANCE_NAMES.get(value, value)}" if key == "importance"
+                                 else f"Bearbeitungstag {self.format_due_display(value)}")
+                self.show_undo_toast("Eingeordnet · " + " · ".join(teile) if teile else "Eingeordnet")
+            return geaendert, gruende[0] if gruende else None
         if field == "done":
             erledigt = target == "done"
             offen = [item for item in items if not item.get("done")]
@@ -19490,7 +19478,7 @@ class ListApp:
             menu.add_command(label="Neue Pinnwand …", command=lambda: self.create_container_dialog(
                 "list", parent_id=folder_id, list_kind="board"))
             menu.add_command(label="Neue Galerie", command=lambda: self.create_new_gallery(folder_id))
-        if section in ("drawings", "lists"):
+        if glide_sidebar.accepts(section, "list", "drawing", ordnerart):
             menu.add_command(label="Neue Zeichnung", command=lambda: self.create_in_sidebar_section("drawing", folder_id, section))
         for key, info in self.FOLDER_KINDS.items():
             if glide_sidebar.accepts(section, "folder", key):
@@ -19807,10 +19795,8 @@ class ListApp:
         return self.move_home_tile(key, max(0, min(len(visible) - 1, visible_index)) - visible.index(key))
 
     def set_home_tile_hidden(self, key, hidden=True):
-        values = [value for value in self.settings.get("home_tiles_hidden", []) if value != key]
-        if hidden:
-            values.append(key)
-        self.settings["home_tiles_hidden"] = values
+        self.settings["home_tile_order"], self.settings["home_tiles_hidden"] = glide_home.own_selection(
+            self.settings.get("home_tile_order"), self.settings.get("home_tiles_hidden"), key, hidden)
         if key == "stats":
             self.settings["show_home_stats"] = not hidden
         self._home_tile_settings_changed()
@@ -20141,12 +20127,12 @@ class ListApp:
             if len(erledigt) > 12:
                 text(f"… und {len(erledigt) - 12} weitere", 10, color="muted", pady=(0, 2))
             buttons.pack(fill="x", pady=(10, 0))
-            # „Zur Startseite“ und „Mein Tag öffnen“ stehen in der Leiste unten;
+            # „Zur Startseite“ und „Heute öffnen“ stehen in der Leiste unten;
             # hier nur der neue Weg.
             buttons.add(self._make_dialog_button(buttons, "In die Tagesnotiz übernehmen", self.write_day_close_note,
                                                  "confirm", width=230, height=36))
             self.refresh_page_actions((("Zur Startseite", self.set_home_view, "muted", 160),
-                                       ("Mein Tag öffnen", self.set_today_view, "confirm", 170)))
+                                       ("Heute öffnen", self.set_today_view, "confirm", 170)))
             return surface
         if position >= len(queue):
             counts = state["counts"]
@@ -20159,7 +20145,7 @@ class ListApp:
             # Beide Wege stehen in der Leiste unten – einmal, nicht zweimal
             # (bis 30.09.2026 zusätzlich hier in der Karte).
             self.refresh_page_actions((("Zur Startseite", self.set_home_view, "muted", 160),
-                                       ("Mein Tag öffnen", self.set_today_view, "confirm", 170)))
+                                       ("Heute öffnen", self.set_today_view, "confirm", 170)))
             return surface
         step = queue[position]
         found = self.find_item_in_lists(step["item_id"])
@@ -20198,7 +20184,7 @@ class ListApp:
         panel.configure(takefocus=1)
         panel.focus_set()
         self.refresh_page_actions((("Zur Startseite", self.set_home_view, "muted", 160),
-                                   ("Mein Tag öffnen", self.set_today_view, "confirm", 170)))
+                                   ("Heute öffnen", self.set_today_view, "confirm", 170)))
         return surface
 
     def week_days(self, offset=0, reference=None):
@@ -20492,44 +20478,10 @@ class ListApp:
     # Seit 3.22 stehen die Kacheln in einem Raster, dessen Spaltenzahl der
     # Fensterbreite folgt, und jede Kachel lässt sich ein- und ausschalten
     # sowie in ihrer Reihenfolge verschieben.
-    HOME_TILE_DEFINITIONS = (
-        ("clock", "Uhr, Datum und nächster Termin", 1, True, True),
-        ("welcome", "Begrüßung, Tagesziel und Schnellzugriff", 3, True, True),
-        # „Mein Tag“ und „Heute fällig“ standen bis 3.22
-        # als zwei gleich aussehende Kacheln nebeneinander. Fachlich sind es
-        # zwei Fragen – woran arbeite ich heute, und was muss heute fertig
-        # sein –, aber zwei Kacheln beantworten sie schlechter als eine mit
-        # zwei Abschnitten: Erst nebeneinander wird sichtbar, ob das eine zum
-        # anderen passt.
-        ("mascot", "Gismo – Begleiter", 1, False, True),
-        ("today", "Heute – eingeplant und fällig", 2, False, True),
-        ("focus", "Nächste Aufgabe – der konkrete nächste Schritt", 2, False, True),
-        ("week", "Die nächsten sieben Tage", 2, False, True),
-        ("labels", "Labels im Bestand", 2, False, False),
-        ("recent", "Zuletzt bearbeitet", 2, False, True),
-        ("templates", "Mit einer Vorlage starten", 2, False, True),
-        ("impulse", "Impuls für den Tag", 1, False, False),
-        # Vier weitere Bausteine. Bis 3.23 gab es zehn
-        # Kacheln, von denen sich sieben um dieselbe Frage drehten – was ist
-        # offen. Die neuen beantworten andere: wann (Kalender), was ist liegen
-        # geblieben (Verspätet), wie weit bin ich (Fortschritt) und woran
-        # denke ich gerade (Pinnwände).
-        ("calendar", "Kalendervorschau", 3, False, False),
-        ("overdue", "Verspätet – was liegen geblieben ist", 2, False, False),
-        ("progress", "Fortschritt heute und diese Woche", 2, False, False),
-        ("boards", "Pinnwände", 2, False, False),
-        # Die Pinnwand als Bild statt als
-        # Zeile. Standardmäßig sichtbar, weil sie genau das leistet, was der
-        # Startseite fehlte: eine Fläche, die man ansieht statt liest.
-        ("boardpreview", "Pinnwand-Vorschau", 2, False, True),
-        # 3.30: Zeichnungen als Bilder, angeheftete Seiten und Filter.
-        ("drawings", "Zeichnungen", 2, False, True),
-        ("pinned", "Angeheftet", 2, False, True),
-        ("filters", "Angeheftete Filter", 2, False, False),
-        # Der Arbeitsbegleiter als Kachel.
-        ("stats", "Dein aktueller Bestand", 6, False, True),
-    )
-    HOME_TILE_KEYS = tuple(key for key, _titel, _gewicht, _breit, _sichtbar in HOME_TILE_DEFINITIONS)
+    # Bestand, Standard (D12) und Begründungen der einzelnen Kacheln stehen
+    # Tk-frei in home_tiles.py.
+    HOME_TILE_DEFINITIONS = glide_home.DEFINITIONS
+    HOME_TILE_KEYS = glide_home.KEYS
     HOME_COLUMN_CHOICES = (("auto", "Automatisch"), ("1", "Eine Spalte"),
                            ("2", "Zwei Spalten"), ("3", "Drei Spalten"))
     # Höhe der Pinnwandvorschau. Hoch genug,
@@ -20580,10 +20532,7 @@ class ListApp:
 
     def home_tile_order(self):
         """Reihenfolge der Kacheln; unbekannte Namen fallen still heraus."""
-        gespeichert = self.settings.get("home_tile_order", [])
-        reihenfolge = [key for key in gespeichert if key in self.HOME_TILE_KEYS] if isinstance(gespeichert, list) else []
-        reihenfolge += [key for key in self.HOME_TILE_KEYS if key not in reihenfolge]
-        return reihenfolge
+        return glide_home.ordered(self.settings.get("home_tile_order", []))
 
     def home_calendar_mode(self):
         """Die gewählte Darstellung der Kalendervorschau."""
@@ -20780,8 +20729,8 @@ class ListApp:
     def home_primary_actions(self):
         """Die vier Wege, die auf der Startseite täglich gebraucht werden."""
         return (
-            ("today", f"{self.ICONS['today']}  Mein Tag", self.set_today_view, "accent"),
-            ("progress", f"{self.ICONS['in_progress']}  In Bearbeitung", self.set_in_progress_view, "due_action"),
+            ("today", f"{self.ICONS['today']}  Heute", self.set_today_view, "accent"),
+            ("progress", f"{self.ICONS['in_progress']}  Demnächst", self.set_in_progress_view, "due_action"),
             ("inbox", f"{self.ICONS['inbox']}  Eingang", self.open_inbox_list, "ui_accent"),
             ("board", f"{self.ICONS['board']}  Pinnwand", self.open_global_board, "muted"),
         )
@@ -21003,19 +20952,31 @@ class ListApp:
             zeichnen(ziel)
             return "break"
 
+        def standard():
+            # D12: Eine zurückgesetzte Startseite bekommt den Standard „Ruhig“.
+            entwurf[:] = [[key, key in glide_home.STANDARD] for key in glide_home.KEYS]
+            zeichnen(0)
+            return "break"
+
         aktionen = ButtonFlow(outer, bg=self.theme["bg"])
         aktionen.pack(fill="x", pady=(10, 0))
         for text, befehl, farbe in (("Ein-/Ausschalten", umschalten, "confirm"),
                                     ("▲ Nach oben", lambda: verschieben(-1), "accent"),
-                                    ("▼ Nach unten", lambda: verschieben(1), "accent")):
+                                    ("▼ Nach unten", lambda: verschieben(1), "accent"),
+                                    ("Standard wiederherstellen", standard, "muted")):
             aktionen.add(self._make_dialog_button(aktionen, text, befehl, farbe, width=170, height=36))
         liste.bind("<Double-Button-1>", umschalten)
         liste.bind("<space>", umschalten)
 
         def submit(_event=None):
             vorher = dict(self.settings)
-            self.settings["home_tile_order"] = [key for key, _sichtbar in entwurf]
-            self.settings["home_tiles_hidden"] = [key for key, sichtbar in entwurf if not sichtbar]
+            if entwurf == [[key, key in glide_home.STANDARD] for key in glide_home.KEYS]:
+                # Entspricht die Auswahl dem Standard, bleibt die Startseite
+                # „nicht eingerichtet“ und folgt einem künftigen Standard.
+                self.settings["home_tile_order"], self.settings["home_tiles_hidden"] = glide_home.standard_selection()
+            else:
+                self.settings["home_tile_order"] = [key for key, _sichtbar in entwurf]
+                self.settings["home_tiles_hidden"] = [key for key, sichtbar in entwurf if not sichtbar]
             self.settings["home_columns"] = next(
                 (key for key, text in self.HOME_COLUMN_CHOICES if text == spalten.get()), "auto")
             self.settings["home_calendar_mode"] = next(
@@ -21059,9 +21020,15 @@ class ListApp:
         theme = self.theme
         for widget in self.home_content.winfo_children():
             widget.destroy()
+        # Dieselbe Farbe erneut zu setzen zeichnete die ganze Startseite neu
+        # (rund 37 ms je Aufbau); gesetzt wird nur nach einem Designwechsel.
         for widget in (self.home_frame, self.home_canvas, self.home_content):
-            widget.configure(bg=theme["bg"])
-        self.home_scrollbar.set_theme(theme["bg"], theme["bg"], theme["input_border"], theme["muted"])
+            if widget.cget("bg") != theme["bg"]:
+                widget.configure(bg=theme["bg"])
+        leiste = self.home_scrollbar
+        farben = (theme["bg"], theme["bg"], theme["input_border"], theme["muted"])
+        if (leiste.bg_color, leiste.track_color, leiste.thumb_color, leiste.active_thumb_color) != farben:
+            leiste.set_theme(*farben)
         summary = self.home_summary()
         self._home_summary = summary
         self._set_stats_text(date.today().strftime("%d.%m.%Y"))
@@ -21085,8 +21052,14 @@ class ListApp:
                               justify="left", anchor=anchor)
             widget.pack(fill="x", pady=pady)
             if wrap:
-                widget.bind("<Configure>", lambda event, target=widget: target.configure(
-                    wraplength=max(100, event.width - 4)))
+                def umbruch(event, target=widget):
+                    # Gleiche Breite, gleicher Umbruch: Ein erneutes Setzen
+                    # stieße nur eine weitere Layoutrunde an.
+                    breite = max(100, event.width - 4)
+                    if getattr(target, "_wrap_seen", None) != breite:
+                        target._wrap_seen = breite
+                        target.configure(wraplength=breite)
+                widget.bind("<Configure>", umbruch)
             self._bind_home_wheel(widget)
             return widget
 
@@ -21197,6 +21170,23 @@ class ListApp:
                 label(kopf_text, "Nichts Terminiertes in Sicht.", 10, color="muted",
                       pady=(0, 0), surface="card")
 
+        def tagesziel(parent):
+            """Fortschritt zum Tagesziel; nichts, solange kein Ziel gesetzt ist."""
+            ziel = self.daily_goal()
+            if not ziel:
+                return
+            geschafft = self.completions_today()
+            erreicht = geschafft >= ziel
+            label(parent,
+                  f"Heute geschafft: {geschafft} von {ziel}"
+                  + ("  – Ziel erreicht." if erreicht else ""),
+                  11, True, "confirm" if erreicht else "text", pady=(0, 5))
+            ProgressBar(
+                parent, value=geschafft, maximum=ziel, bg_color=theme["card"],
+                track_color=theme["input"],
+                fill_color=theme["confirm"] if erreicht else theme["ui_accent"],
+            ).pack(fill="x", pady=(0, 10))
+
         def kachel_welcome(parent):
             welcome = card(parent)
             gruss_zeile = tk.Frame(welcome, bg=theme["card"])
@@ -21214,19 +21204,7 @@ class ListApp:
             self._bind_home_wheel(gruss_text)
             label(gruss_text, self.home_greeting(), 15, True, pady=(2, 4), surface="card")
             label(gruss_text, self.home_prompt(), color="muted", pady=(0, 0), surface="card")
-            ziel = self.daily_goal()
-            if ziel:
-                geschafft = self.completions_today()
-                erreicht = geschafft >= ziel
-                label(welcome,
-                      f"Heute geschafft: {geschafft} von {ziel}"
-                      + ("  – Ziel erreicht." if erreicht else ""),
-                      11, True, "confirm" if erreicht else "text", pady=(0, 5))
-                ProgressBar(
-                    welcome, value=geschafft, maximum=ziel, bg_color=theme["card"],
-                    track_color=theme["input"],
-                    fill_color=theme["confirm"] if erreicht else theme["ui_accent"],
-                ).pack(fill="x", pady=(0, 10))
+            tagesziel(welcome)
             # Zehn gleich aussehende
             # Schaltflächen nebeneinander sind keine Auswahl, sondern eine
             # Wand. Vier davon führen dorthin, wo man täglich hinwill; die
@@ -21249,7 +21227,20 @@ class ListApp:
             eintraege = self.plan_day_entries(apply_filters=False, day=heute_iso)
             offen = [item for _d, _l, _i, _e, item in eintraege if not item.get("done")]
             tile = card(parent, f"{self.ICONS['today']}  Heute")
-            label(tile, "Eingeplant", 10, True, "muted", pady=(0, 3))
+            # D12: Tagesziel und nächste Aufgabe stehen hier, solange ihre
+            # eigenen Kacheln aus sind – sichtbar ist jede Angabe nur einmal.
+            zusatz = glide_home.today_sections(sichtbar)
+            if zusatz["goal"]:
+                tagesziel(tile)
+            naechste = None
+            if zusatz["next"]:
+                naechste, naechste_quelle = self.home_focus_candidate()
+                if naechste is not None:
+                    label(tile, "Als Nächstes", 10, True, "muted", pady=(0, 3))
+                    action(tile, self.item_display_text(naechste).splitlines()[0],
+                           lambda lid=naechste_quelle["id"], iid=naechste["id"]: self.open_task_in_source_list(lid, iid),
+                           list_color(naechste_quelle))
+            label(tile, "Eingeplant", 10, True, "muted", pady=(10 if naechste is not None else 0, 3))
             if eintraege:
                 planung = self.format_planning_summary(
                     self.planning_summary([item for _d, _l, _i, _e, item in eintraege], day=heute_iso))
@@ -21276,10 +21267,10 @@ class ListApp:
                            lambda lid=eintrag["id"]: self.set_active_list(lid), list_color(eintrag))
             else:
                 label(tile, "Für heute sind keine offenen Aufgaben fällig.", color="muted")
-            action(tile, f"{self.ICONS['today']}  Mein Tag öffnen", self.set_today_view, "accent")
+            action(tile, f"{self.ICONS['today']}  Heute öffnen", self.set_today_view, "accent")
 
         def kachel_focus(parent):
-            # Dieselbe Aufgabe, die „In Bearbeitung“ unter
+            # Dieselbe Aufgabe, die „Heute“ unter
             # „Nächste Aufgabe“ zeigt – und der Weg genau dorthin. Die Kachel
             # hieß bis 3.24 „Fokus“; das war ein Zustand, kein Gegenstand.
             item, quelle = self.home_focus_candidate()
@@ -21287,7 +21278,7 @@ class ListApp:
             if item is None:
                 label(tile, "Nichts steht an. Ein guter Moment, um zu planen oder Feierabend zu machen.",
                       color="muted")
-                action(tile, f"{self.ICONS['in_progress']}  In Bearbeitung öffnen",
+                action(tile, f"{self.ICONS['in_progress']}  Demnächst öffnen",
                        self.set_in_progress_view, "due_action")
                 return
             label(tile, self.item_display_text(item).splitlines()[0], 12, True)
@@ -21680,10 +21671,10 @@ class ListApp:
                 label(stats, f"Heute geplant: {heute_geplant['items']} Aufgabe(n)"
                       + (f"  ·  {planungstext}" if planungstext else ""), color="muted")
             bestand_zeile = flow(stats, pady=(4, 8))
-            action(bestand_zeile, f"{self.ICONS['in_progress']}  In Bearbeitung öffnen",
+            action(bestand_zeile, f"{self.ICONS['in_progress']}  Demnächst öffnen",
                    self.set_in_progress_view, "due_action", side="left")
             if heute_geplant["items"]:
-                action(bestand_zeile, f"{self.ICONS['today']}  Mein Tag öffnen",
+                action(bestand_zeile, f"{self.ICONS['today']}  Heute öffnen",
                        self.set_today_view, "ui_accent", side="left")
             if summary["overdue"]:
                 action(bestand_zeile, f"{self.ICONS['overdue']}  Verspätet öffnen",
@@ -23349,8 +23340,8 @@ class ListApp:
         tk.Label(personal, text="Ansicht beim Öffnen", bg=self.theme["bg"], fg=self.theme["muted"],
                  font=app_font(10), anchor="w").pack(fill="x", pady=(8, 5))
         startup_farben = {
-            "Letzte Ansicht": "muted", "Startseite": "accent", "Mein Tag": "ui_accent",
-            "In Bearbeitung": "due_action", "Listen- und Ordnerübersicht": "import",
+            "Letzte Ansicht": "muted", "Startseite": "accent", "Heute": "ui_accent",
+            "Demnächst": "due_action", "Listen- und Ordnerübersicht": "import",
             "Vorlagen": "confirm", "Globale Pinnwand": "confirm", "Eine feste Liste": "flag",
         }
         startup_frame, _startup_button = self._make_option_menu(
@@ -23703,9 +23694,9 @@ class ListApp:
         if self.view_mode == self.GLOBAL_BOARD_VIEW:
             return self.GLOBAL_BOARD_TITLE
         if self.view_mode == "in_progress":
-            return "In Bearbeitung"
+            return "Demnächst"
         if self.view_mode == self.PLAN_DAY_VIEW:
-            return f"Mein Tag · {self.format_plan_day()}"
+            return self.plan_day_title()
         if self.view_mode == self.LABELS_VIEW:
             return "Labels"
         if self.view_mode == "overdue":
@@ -24091,7 +24082,7 @@ class ListApp:
     BUTTON_ROLE_RULES = (
         ("muted", r"^Suche löschen$|^Abbrechen$|^Schließen$|öffnen\b|^Öffnen|^Globale Pinnwand$|^Heute$"
                   r"|^Filtern$|mportieren|xportieren|^Zurücksetzen|zurücksetzen|^Einplanen|^Auswählen$"
-                  r"|^Mein Tag öffnen$"),
+                  r"|^Heute öffnen$"),
         ("delete", r"[Ll]öschen|[Ee]ntfernen|[Ll]eeren|endgültig"),
         ("add", r"^\+|^Neue[rs]?\b|[Hh]inzufügen|^Nachzeichnen|^Anheften|^Erfassen"),
         ("confirm", r"^(✓\s*)?(Anlegen|Speichern|Übernehmen|Fertig|Erledigt|Wiederherstellen|OK|Bestätigen"
@@ -25432,7 +25423,7 @@ class ListApp:
         entry.pack(fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
         if source.get("estimated_minutes") is not None:
             entry.insert(0, str(source["estimated_minutes"]))
-        planning_hint = tk.Label(parent, text="Der Bearbeitungstag steuert „Mein Tag“; die Fälligkeit bleibt davon unberührt. Leere Felder entfernen die jeweilige Angabe.",
+        planning_hint = tk.Label(parent, text="Der Bearbeitungstag steuert den Tagesplan in „Heute“; die Fälligkeit bleibt davon unberührt. Leere Felder entfernen die jeweilige Angabe.",
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9), justify="left",
                  wraplength=620, anchor="w")
         planning_hint.pack(fill="x", pady=(6, 0))
@@ -28552,7 +28543,7 @@ class ListApp:
         return self.count_plan_day()
 
     def set_today_view(self, refresh=True):
-        """Öffnet „Mein Tag“ beim heutigen Tag."""
+        """Öffnet „Heute“ beim heutigen Tag."""
         return self.set_plan_day_view(refresh=refresh, day=date.today().isoformat())
 
     def plan_inbox_items(self, apply_filters=True):
@@ -28581,20 +28572,52 @@ class ListApp:
             treffer.append((inbox, item))
         return treffer
 
-    def plan_in_progress_entries(self, apply_filters=True, day=None):
-        """Offene Aufgaben mit Fälligkeit, die am gezeigten Tag nicht eingeplant sind.
+    def today_view_pool(self, apply_filters=True):
+        """Offene Aufgaben mit Fälligkeit oder Bearbeitungstag, chronologisch.
 
-        Seit dem 26.09.2026 hat „In Bearbeitung“ keine eigene Zeile in der
-        Seitenleiste mehr, sondern steht in „Mein Tag“ unter den Aufgaben des
-        Tages. Was schon eingeplant ist oder im Eingangsblock steht, erscheint
-        dort nicht ein zweites Mal – dieselbe Zeile zweimal wäre eine Dublette.
+        Aus ihnen nimmt „Heute“ (D14) Verspätetes, Liegengebliebenes und heute
+        Fälliges; was davon wohin gehört, entscheidet `today_view.py`.
         """
-        ziel = self.normalize_due(day) or self.plan_day()
-        eingang = {id(item) for _liste, item in self.plan_inbox_items(apply_filters=False)}
-        return [eintrag for eintrag in self.get_in_progress_items(apply_filters=apply_filters)
-                if not eintrag[4].get("done")
-                and self.normalize_due(eintrag[4].get("planned_date")) != ziel
-                and id(eintrag[4]) not in eingang]
+        return self.render_cached(
+            ("today_pool", bool(apply_filters),
+             self.current_search_query() if apply_filters else "",
+             self.get_filter_mode() if apply_filters and hasattr(self, "hide_done_var") else ""),
+            lambda: self._collect_today_view_pool(apply_filters))
+
+    def _collect_today_view_pool(self, apply_filters):
+        query = self.current_search_query() if apply_filters else ""
+        results = []
+        for list_index, entry in enumerate(self.planning_lists()):
+            for item_index, item in enumerate(self.walk_items(entry.get("items", []))):
+                if not self.is_schedulable_item(item) or item.get("done"):
+                    continue
+                due_value = self.normalize_due(item.get("due"))
+                if not due_value and not self.normalize_due(item.get("planned_date")):
+                    continue
+                if apply_filters and (
+                    not self.item_text_matches_query(item, query)
+                    or not self.item_matches_status_filter(item)
+                ):
+                    continue
+                results.append((due_value or "", list_index, item_index, entry, item))
+        results.sort(key=lambda value: (value[0] or "9999-12-31", value[1], value[2]))
+        return results
+
+    def plan_day_sections(self, geplant=None, apply_filters=True, day=None):
+        """Die Abschnitte von „Heute“ für den gezeigten Tag (D14).
+
+        Am heutigen Tag: nächste Aufgabe, Verspätet, Liegen geblieben,
+        Tagesplan, Heute fällig und Eingang; an jedem anderen Tag nur der
+        Tagesplan, was an diesem Tag fällig ist, und der Eingang. Die nächste
+        Aufgabe folgt derselben Rangfolge und Grenze wie die Startseite.
+        """
+        tag = self.normalize_due(day) or self.plan_day()
+        if geplant is None:
+            geplant = self.plan_day_entries(apply_filters=apply_filters, day=tag)
+        return glide_today.abschnitte(
+            geplant, self.today_view_pool(apply_filters=apply_filters),
+            self.plan_inbox_items(apply_filters=apply_filters), tag, date.today().isoformat(),
+            rang=self.task_urgency_rank, hoechste_stufe=self.NEXT_TASK_TODAY_RANK)
 
     def update_today_plan(self, item_ids, add=None, day=None):
         """Trägt den Bearbeitungstag ein oder nimmt ihn weg.
@@ -28729,6 +28752,33 @@ class ListApp:
             text += " · heute"
         return text
 
+    def plan_day_title(self, day=None):
+        """Titel der Tagesansicht: „Heute“ am heutigen Tag, sonst der Tagesplan des Tags (D14)."""
+        target = self.normalize_due(day) or self.plan_day()
+        if target != date.today().isoformat():
+            return f"Tagesplan · {self.format_plan_day(target)}"
+        parsed = date.today()
+        return f"Heute · {self.WEEKDAY_NAMES[parsed.weekday()]}, {parsed.strftime('%d.%m.%Y')}"
+
+    def count_today_view(self):
+        """Zahl hinter „Heute“: alle Aufgaben, die „Heute“ ohne Filter zeigt – ohne den Eingang."""
+        heute = date.today().isoformat()
+        teile = self.plan_day_sections(apply_filters=False, day=heute)
+        return (len(teile.plan) + len(teile.verspaetet) + len(teile.liegen) + len(teile.faellig)
+                + (1 if teile.naechste is not None else 0))
+
+    def show_plan_day_mode_menu(self, event=None):
+        """„Tag …“ in „Heute“: Tagesbeginn und Tagesabschluss sind Modi dieser Ansicht (D14)."""
+        knopf = getattr(self, "plan_day_mode_button", None)
+        if knopf is None or not knopf.winfo_exists():
+            return "break"
+        modi = {"review": self.start_day_review, "close": self.start_day_close}
+        return self.show_option_panel(
+            knopf,
+            (("review", "Tagesbeginn …", "Überfälliges, Liegengebliebenes und den Eingang Punkt für Punkt entscheiden"),
+             ("close", "Tagesabschluss …", "Offen Gebliebenes weitergeben und den Tag in die Tagesnotiz übernehmen")),
+            None, lambda schluessel: modi[schluessel]())
+
     def set_plan_day_view(self, refresh=True, day=None):
         """Öffnet die Tagesplanung; ohne Angabe beim heutigen Tag."""
         self.plan_day_value = self.normalize_due(day) or date.today().isoformat()
@@ -28853,7 +28903,7 @@ class ListApp:
         self._render_cache = None
 
     def count_due_tasks(self):
-        """Anzahl aller Punkte mit Fälligkeit – Grundlage für „In Bearbeitung“."""
+        """Anzahl aller Punkte mit Fälligkeit – Grundlage für „Demnächst“."""
         return len(self.get_in_progress_items(apply_filters=False))
 
     def set_trash_view(self, refresh=True):
@@ -29320,9 +29370,9 @@ class ListApp:
                 count = self.folder_task_count(row_id)
                 depth = self.folder_depth(row_id)
             elif row == ("view", "in_progress"):
-                title, count = "In Bearbeitung", self.count_due_tasks()
+                title, count = "Demnächst", self.count_due_tasks()
             elif row == ("view", self.PLAN_DAY_VIEW):
-                title, count = "Mein Tag", self.count_plan_day()
+                title, count = "Heute", self.count_today_view()
             elif row == ("view", "overdue"):
                 title, count = "Verspätet", len(self.get_overdue_items(apply_filters=False))
             elif row == ("view", self.HOME_VIEW):
@@ -29412,10 +29462,10 @@ class ListApp:
                 "",
                 "end",
                 iid=self.PLAN_DAY_ROW_ID,
-                values=(self.sidebar_row_icon(("view", self.PLAN_DAY_VIEW)), f"({self.count_plan_day()})"),
+                values=(self.sidebar_row_icon(("view", self.PLAN_DAY_VIEW)), f"({self.count_today_view()})"),
                 text=self.sidebar_row_text(
-                    self.sidebar_display_title(("view", self.PLAN_DAY_VIEW), "Mein Tag"),
-                    self.count_plan_day(),
+                    self.sidebar_display_title(("view", self.PLAN_DAY_VIEW), "Heute"),
+                    self.count_today_view(),
                     tree=self.system_listbox,
                 ),
                 tags=("system",),
@@ -29630,12 +29680,14 @@ class ListApp:
             self.settings.setdefault("sidebar_locations", {})[f"{kind}:{identifier}"] = section
             self.clear_render_cache()
 
-    def sidebar_accepts(self, kind, identifier, section):
+    def sidebar_accepts(self, kind, identifier, section, folder_id=None):
+        """Passt das Objekt in den Bereich – bei Listen in den Zielordner ``folder_id``?"""
         policy = self.sidebar_policy()
         if kind == "folder":
             return policy.subtree_accepts(identifier, section)
         entry = policy.entries.get(identifier)
-        return bool(entry and glide_sidebar.accepts(section, kind, entry.get("list_kind", "tasks")))
+        container = (policy.folders.get(folder_id) or {}).get("folder_kind", "standard") if folder_id else None
+        return bool(entry and glide_sidebar.accepts(section, kind, entry.get("list_kind", "tasks"), container))
 
     def sidebar_section_visible(self, key):
         return glide_sidebar.normalize_visibility(self.settings.get("sidebar_sections_visible")).get(key, True)
@@ -31111,9 +31163,11 @@ class ListApp:
         menu = self._new_themed_popup_menu()
         if view_id == self.PLAN_DAY_VIEW:
             count = self.count_plan_day()
-            menu.add_command(label=f"Mein Tag · {self.format_plan_day()} ({count})", state="disabled")
+            menu.add_command(label=f"{self.plan_day_title()} ({self.count_today_view()})", state="disabled")
             menu.add_separator()
             menu.add_command(label="Öffnen", command=self.set_today_view)
+            menu.add_command(label="Tagesbeginn …", command=self.start_day_review)
+            menu.add_command(label="Tagesabschluss …", command=self.start_day_close)
             menu.add_command(label="Tag zurück", command=self.plan_day_backward)
             menu.add_command(label="Tag vor", command=self.plan_day_forward)
             menu.add_command(label="Stundenraster ein/aus", command=self.toggle_plan_day_grid)
@@ -31147,7 +31201,7 @@ class ListApp:
                 state="normal" if self.trash else "disabled",
             )
             return menu
-        menu.add_command(label="In Bearbeitung", state="disabled")
+        menu.add_command(label="Demnächst", state="disabled")
         menu.add_separator()
         menu.add_command(label="Öffnen", command=self.set_in_progress_view)
         menu.add_command(label="Kalender öffnen …", command=self.open_calendar_view)
@@ -31346,8 +31400,9 @@ class ListApp:
             title_label="Ordnertitel", page=folder)
         return self._apply_page_details(folder, details)
 
-    def sidebar_template_allowed(self, template, section):
-        return glide_sidebar.template_allowed(template, section)
+    def sidebar_template_allowed(self, template, section, folder_id=None):
+        container = (self.get_folder(folder_id) or {}).get("folder_kind", "standard") if folder_id else None
+        return glide_sidebar.template_allowed(template, section, container)
 
     def run_sidebar_creation(self, callback, section):
         previous = getattr(self, "_creating_sidebar_section", None)
@@ -31359,7 +31414,7 @@ class ListApp:
 
     def create_template_in_section(self, key, folder_id, section):
         template = self.template_by_id(key)
-        if template is None or not self.sidebar_template_allowed(template, section):
+        if template is None or not self.sidebar_template_allowed(template, section, folder_id):
             return None
         before = {e["id"] for e in self.lists}
         result = self.run_sidebar_creation(lambda: self.create_list_from_template(key), section)
@@ -31387,14 +31442,17 @@ class ListApp:
 
     def create_new_drawing(self, folder_id=None, event=None, size=glide_drawing.WIDTH):
         """Legt direkt eine leere Zeichnungsseite an und öffnet sie."""
-        if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "drawing"):
+        def passt(ordner_id):
+            ordnerart = (self.get_folder(ordner_id) or {}).get("folder_kind", "standard")
+            return glide_sidebar.accepts(self.sidebar_section_for("folder", ordner_id), "list", "drawing", ordnerart)
+        if folder_id and not passt(folder_id):
             self.show_info("Anlegen", "Diese Dokumentart gehört nicht in diesen Bereich.")
             return "break"
         self.flush_rich_note()
         if folder_id is None and not getattr(self, "_creating_sidebar_section", None) and self.view_mode == "folder" and self.get_folder(self.active_folder_id):
             folder_id = self.active_folder_id
-        if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "drawing"):
-            self.show_info("Anlegen", "Zeichnungen gehören in Zeichnungen oder Listen.")
+        if folder_id and not passt(folder_id):
+            self.show_info("Anlegen", "Zeichnungen gehören in Zeichnungen, Listen oder ein Notizbuch.")
             return "break"
         folder = self.get_folder(folder_id) if folder_id else None
         journal = bool(folder and folder.get("folder_kind") == "journal")
@@ -31469,7 +31527,7 @@ class ListApp:
             (folder.get("id"), str(folder.get("title") or "Ordner").strip() or "Ordner")
             for folder in self.folders
             if folder.get("id") != entry.get("folder_id")
-            and self.sidebar_accepts("list", list_id, self.sidebar_section_for("folder", folder["id"]))
+            and self.sidebar_accepts("list", list_id, self.sidebar_section_for("folder", folder["id"]), folder["id"])
         ]
         if not choices:
             self.show_info("Verschieben", "Es gibt keinen anderen Ordner als Ziel.")
@@ -32146,7 +32204,8 @@ class ListApp:
             choices = [
                 (folder.get("id"), str(folder.get("title") or "Ordner").strip() or "Ordner")
                 for folder in self.folders
-                if all(glide_sidebar.accepts(self.sidebar_section_for("folder", folder["id"]), "list", kind)
+                if all(glide_sidebar.accepts(self.sidebar_section_for("folder", folder["id"]), "list", kind,
+                                             folder.get("folder_kind", "standard"))
                        for kind in list_kinds)
             ]
             if not choices:
@@ -32297,7 +32356,8 @@ class ListApp:
         if is_list:
             label("Listenart")
             kind_frame, _ = self._make_option_menu(
-                primary, list_kind_var, [info["label"] for key, info in self.LIST_KINDS.items() if glide_sidebar.accepts(section, "list", key)]
+                primary, list_kind_var, [info["label"] for key, info in self.LIST_KINDS.items()
+                                         if glide_sidebar.accepts(section, "list", key, eltern.get("folder_kind", "standard") if eltern else None)]
                 + ([self.BOARD_KIND_LABEL] if section == "lists" else []))
             kind_frame.pack(fill="x")
             kind_hint = tk.Label(primary, text="Die Art bleibt nach dem Anlegen fest. „Pinnwand“ ist eine "
@@ -32382,7 +32442,7 @@ class ListApp:
         show_moment()
         template_map = {"Ohne Vorlage": None}
         for index, template in enumerate(self.templates, 1):
-            if template["kind"] == kind and self.sidebar_template_allowed(template, section):
+            if template["kind"] == kind and self.sidebar_template_allowed(template, section, parent_id):
                 name = template["title"]
                 if name in template_map:
                     name += f" ({index})"
@@ -32425,8 +32485,9 @@ class ListApp:
             if template_id:
                 template = self.template_by_id(template_id) or {}
                 candidate_kind = template.get("list_kind", "tasks") if is_list else template.get("folder_kind", "standard")
-            if not glide_sidebar.accepts(target_section, kind, candidate_kind) or (
-                    template_id and not self.sidebar_template_allowed(template, target_section)):
+            container = (parent_folder or {}).get("folder_kind", "standard") if parent_folder else None
+            if not glide_sidebar.accepts(target_section, kind, candidate_kind, container) or (
+                    template_id and not self.sidebar_template_allowed(template, target_section, parent)):
                 error.configure(text=f"Diese Art gehört nicht in den Bereich {glide_sidebar.TITLES[target_section]}.")
                 return
             # Seit 3.30 (ZF-120) nimmt ein Tagebuch jede Inhaltsart auf; der
@@ -32521,7 +32582,11 @@ class ListApp:
         self._center_dialog(dialog, min_width=940 if wide else 640, min_height=needed_height)
         dialog.minsize(560, min(420, usable_height))
         def adapt(event):
-            if event.widget is dialog:
+            # Beim Einblenden meldet macOS zuerst 1 × 1 Pixel. Seit der Dialog
+            # verborgen vermessen wird (3.33.1), folgt keine weitere Meldung
+            # mit der echten Breite; der Platzhalter schaltete die breite Maske
+            # dauerhaft einspaltig und schob die Beschreibung unter den Rand.
+            if event.widget is dialog and event.width > 1:
                 layout_columns(event.width >= 860)
         dialog.bind("<Configure>", adapt, add="+")
         self._schedule_windows_chrome_theme(dialog)
@@ -32560,7 +32625,7 @@ class ListApp:
         if row and row[0] == "view":
             self.show_info(
                 "Systemansicht",
-                "Eingang, „In Bearbeitung“ und Papierkorb gehören fest zur Anwendung.",
+                "Eingang, „Heute“, „Demnächst“ und Papierkorb gehören fest zur Anwendung.",
             )
             return "break"
         if row and row[0] == "folder":
@@ -32751,7 +32816,8 @@ class ListApp:
         if not target_folder_id:
             self.show_info("Hinweis", "Zum Einrücken muss oberhalb ein Ordner vorhanden sein. Lege zuerst über „+“ neben „Listen“ einen Ordner an.")
             return "break"
-        if not self.sidebar_accepts("list", list_entry["id"], self.sidebar_section_for("folder", target_folder_id)):
+        if not self.sidebar_accepts("list", list_entry["id"], self.sidebar_section_for("folder", target_folder_id),
+                                    target_folder_id):
             return "break"
         if not self.ensure_journal_moment(list_entry, target_folder_id):
             return "break"
@@ -33094,7 +33160,7 @@ class ListApp:
         list_entry = next((entry for entry in self.lists if entry.get("id") == list_id), None)
         if not list_entry or self.is_inbox_list(list_entry) or not any(folder.get("id") == folder_id for folder in self.folders):
             return False
-        if not self.sidebar_accepts("list", list_id, self.sidebar_section_for("folder", folder_id)):
+        if not self.sidebar_accepts("list", list_id, self.sidebar_section_for("folder", folder_id), folder_id):
             return False
         if not self.ensure_journal_moment(list_entry, folder_id):
             return False
@@ -33112,7 +33178,7 @@ class ListApp:
         if not source or not target or self.is_inbox_list(source):
             return False
         target_section = self.sidebar_section_for("list", target_id)
-        if not self.sidebar_accepts("list", source_id, target_section):
+        if not self.sidebar_accepts("list", source_id, target_section, target.get("folder_id")):
             return False
         if not target.get("folder_id"):
             self.locate_sidebar_root("list", source_id, target_section)
@@ -33716,13 +33782,13 @@ class ListApp:
         top_frame.bind("<Configure>", self.update_header_title, add="+")
         top_frame.bind("<Configure>", self.sync_header_density, add="+")
         # Die Höhenstufe hängt am Hauptfenster; Konfigurationsereignisse der
-        # Kinder laufen über dasselbe Bindtag und werden dort herausgefiltert.
-        self.root.bind("<Configure>", self.sync_height_density, add="+")
+        # Kinder laufen über dasselbe Bindtag und werden in Tcl herausgefiltert.
+        self.bind_main_window_resize(self.sync_height_density)
         # Neu gezeigte Widgets – ein Neuaufbau der Startseite, ein Dialog –
         # bekommen Verlauf und Milchglas im nächsten Leerlauf.
         self.root.bind_all("<Map>", self._on_widget_map, add="+")
-        self.root.bind("<Configure>", lambda event: self.schedule_backdrop_sync_soon()
-                       if event.widget is self.root and getattr(self, "_backdrop", None) else None, add="+")
+        self.bind_main_window_resize(lambda event: self.schedule_backdrop_sync_soon()
+                                     if getattr(self, "_backdrop", None) else None)
 
         # Logo links neben Titel und Unterzeile (29.09.2026, Wunsch des Nutzers
         # mit Skizze). Es erscheint ab der ersten Breitenstufe der Kopfzeile in
@@ -34053,6 +34119,12 @@ class ListApp:
             self.search_frame, "Raster", self.toggle_plan_day_grid,
             "muted", width=84, height=38, font=app_font(9, "bold"),
         )
+        # Tagesbeginn und Tagesabschluss sind seit 3.33.6 (D14) Modi von „Heute“.
+        self.plan_day_mode_button = self.make_button(
+            self.search_frame, "Tag …", self.show_plan_day_mode_menu,
+            "muted", width=72, height=38, font=app_font(9, "bold"),
+        )
+        self.add_tooltip(self.plan_day_mode_button, "Tagesbeginn oder Tagesabschluss")
 
         self.hide_done_box_border = self.make_rounded_container(
             self.search_frame,
@@ -34426,6 +34498,19 @@ class ListApp:
         if height <= 1 or height >= self.HEIGHT_DENSITY_FULL:
             return "full"
         return "compact" if height >= self.HEIGHT_DENSITY_COMPACT else "minimal"
+
+    def bind_main_window_resize(self, callback):
+        """Meldet <Configure> nur des Hauptfensters an Python.
+
+        Ein Binding am Hauptfenster gilt über dessen Bindtag für jedes Kind.
+        Ein Neuaufbau der Startseite rief so rund 5.000-mal Python auf, nur
+        um festzustellen, dass das Ereignis von einem Kind kam (P03,
+        02.10.2026). Der Vergleich steht deshalb in Tcl; Python sieht nur die
+        Größenänderung des Fensters selbst.
+        """
+        befehl = self.root.register(lambda breite, hoehe: callback(types.SimpleNamespace(
+            widget=self.root, width=int(breite), height=int(hoehe))))
+        self.root.bind("<Configure>", f'+if {{"%W" eq "{self.root}"}} {{{befehl} %w %h}}')
 
     def sync_height_density(self, event=None):
         """Reagiert auf Größenänderungen des Hauptfensters (nicht seiner Kinder)."""
@@ -35514,7 +35599,7 @@ class ListApp:
         elif self.view_mode == "in_progress":
             new_placeholder = "Automatische Ansicht – Aufgabe in der Quellliste anlegen"
         elif self.view_mode == self.PLAN_DAY_VIEW:
-            new_placeholder = "Mein Tag – Aufgaben aus dem Eingangsblock oder über das Kontextmenü einplanen"
+            new_placeholder = "Heute – Aufgaben aus dem Eingangsblock oder über das Kontextmenü einplanen"
         elif self.view_mode == self.TABLE_VIEW:
             new_placeholder = "Tabellenansicht – neue Aufgabe in dieser Liste anlegen"
         elif self.view_mode == "overdue":
@@ -39036,7 +39121,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         return None
 
     def update_in_progress_item(self, item_id, field, value):
-        """Ändert eine Aufgabe direkt aus der Ansicht „In Bearbeitung“ heraus."""
+        """Ändert eine Aufgabe direkt aus einer Übersicht wie „Heute“ oder „Demnächst“ heraus."""
         found = self.find_item_in_lists(item_id)
         if not found:
             return "break"
@@ -42511,14 +42596,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self.in_progress_item_sources = {}
 
         entries = self.current_task_overview_items(apply_filters=True)
-        eingang = self.plan_inbox_items() if self.view_mode == self.PLAN_DAY_VIEW else []
-        bearbeitung = self.plan_in_progress_entries() if self.view_mode == self.PLAN_DAY_VIEW else []
-        if not entries and not eingang and not bearbeitung:
+        teile = self.plan_day_sections(entries) if self.view_mode == self.PLAN_DAY_VIEW else None
+        if glide_today.leer(teile) if teile is not None else not entries:
             if self.view_mode == self.PLAN_DAY_VIEW:
                 empty_text = (
                     "Keine Aufgaben dieses Tages passen zu den aktuellen Filtern."
                     if self.has_active_filter()
-                    else f"Für {self.format_plan_day()} ist nichts eingeplant und der Eingang ist leer. "
+                    else f"Für {self.format_plan_day()} ist nichts eingeplant, nichts fällig und der Eingang ist leer. "
                          "Aufgaben lassen sich über das Kontextmenü oder in den Punktdetails einplanen."
                 )
             elif self.view_mode == "saved_filter":
@@ -42631,86 +42715,99 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                              open=self.overview_section_open(kennung))
             return kennung
 
-        # In „In Bearbeitung“ steht das Überfällige oben und
-        # unter eigener Überschrift. Es ist dieselbe Teilmenge, die bis 3.23
-        # eine eigene Seitenleistenzeile hatte – nur ohne den Umweg über einen
-        # zweiten Klick. Die Reihenfolge innerhalb beider Abschnitte bleibt die
-        # chronologische der Gesamtansicht.
-        # Davor steht seit 3.25 die eine Aufgabe,
-        # die als Nächstes dran ist. Sie wird aus den übrigen Abschnitten
-        # herausgenommen – zweimal dieselbe Zeile wäre keine Hervorhebung,
-        # sondern eine Dublette.
-        # Ein leerer Tag bleibt als solcher erkennbar, auch wenn darunter
-        # „In Bearbeitung“ oder der Eingang Zeilen zeigen.
-        if self.view_mode == self.PLAN_DAY_VIEW and not entries:
-            self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, tags=("empty",), text=(
-                "Keine Aufgaben dieses Tages passen zu den aktuellen Filtern."
-                if self.has_active_filter()
-                else f"Für {self.format_plan_day()} ist nichts eingeplant."))
-        naechste = None
-        if self.view_mode == "in_progress":
-            naechste = self.next_task_entry(entries)
-        uebrig = [eintrag for eintrag in entries if eintrag is not naechste]
-        if naechste is not None:
-            abschnitt(self.NEXT_TASK_SECTION_ROW_ID,
-                      f"{self.ICONS['next']}  Nächste Aufgabe")
-            punktzeile(naechste[0], naechste[3], naechste[4],
-                       parent=self.NEXT_TASK_SECTION_ROW_ID)
-        ueberfaellig = []
-        if self.view_mode == "in_progress":
-            ueberfaellig = [eintrag for eintrag in uebrig
-                            if not eintrag[4].get("done") and self.due_status(eintrag[4]) == "overdue"]
-        if ueberfaellig:
-            ueberfaellige_ids = {id(eintrag) for eintrag in ueberfaellig}
-            uebrige = [eintrag for eintrag in uebrig if id(eintrag) not in ueberfaellige_ids]
-            abschnitt(self.OVERDUE_SECTION_ROW_ID,
-                      f"{self.ICONS['overdue']}  Verspätet · {len(ueberfaellig)} überfällig")
-            for due_value, _list_index, _item_index, source_list, item in ueberfaellig:
-                punktzeile(due_value, source_list, item, parent=self.OVERDUE_SECTION_ROW_ID)
-            if uebrige:
-                abschnitt(self.IN_PROGRESS_SECTION_ROW_ID,
-                          f"{self.ICONS['in_progress']}  Noch offen · {len(uebrige)}")
-                for due_value, _list_index, _item_index, source_list, item in uebrige:
-                    punktzeile(due_value, source_list, item,
-                               parent=self.IN_PROGRESS_SECTION_ROW_ID)
-        elif naechste is not None and uebrig:
-            abschnitt(self.IN_PROGRESS_SECTION_ROW_ID,
-                      f"{self.ICONS['in_progress']}  Noch offen · {len(uebrig)}")
-            for due_value, _list_index, _item_index, source_list, item in uebrig:
-                punktzeile(due_value, source_list, item, parent=self.IN_PROGRESS_SECTION_ROW_ID)
-        elif self.view_mode == self.PLAN_DAY_VIEW and any(eintrag[4].get("planned_time") for eintrag in uebrig):
-            # Zeitblöcke (AO-070): Punkte mit Uhrzeit chronologisch, die Dauer
-            # aus der Schätzung. Überschneidungen werden benannt, nicht verschoben.
-            bloecke = self.time_blocks([(eintrag[3], eintrag[4]) for eintrag in uebrig])
-            ohne = [eintrag for eintrag in uebrig if not eintrag[4].get("planned_time")]
-            erster, letzter = bloecke[0], bloecke[-1]
-            abschnitt(self.TIMEPLAN_SECTION_ROW_ID,
-                      f"{self.ICONS['timer']}  Zeitplan · "
-                      + ("1 Block" if len(bloecke) == 1 else f"{len(bloecke)} Blöcke")
-                      + f" · {erster['start']}–{letzter['end'] or letzter['start']}")
-            for block in bloecke:
-                zeit = f"{block['start']}–{block['end']}" if block["end"] else block["start"]
-                hinweis = " · überschneidet sich" if block["overlap"] else ""
-                punktzeile(self.normalize_due(block["item"].get("due")) or "", block["entry"], block["item"],
-                           parent=self.TIMEPLAN_SECTION_ROW_ID, prefix=f"{zeit}{hinweis}   ")
-            if ohne:
-                abschnitt(self.UNTIMED_SECTION_ROW_ID, f"Ohne Uhrzeit · {len(ohne)}")
-                for due_value, _list_index, _item_index, source_list, item in ohne:
-                    punktzeile(due_value, source_list, item, parent=self.UNTIMED_SECTION_ROW_ID)
-        else:
-            for due_value, _list_index, _item_index, source_list, item in uebrig:
-                punktzeile(due_value, source_list, item)
+        def zeilen(eintraege, parent=""):
+            for due_value, _list_index, _item_index, source_list, item in eintraege:
+                punktzeile(due_value, source_list, item, parent=parent)
 
-        # Unter den Aufgaben des Tages steht, was sonst noch in Bearbeitung
-        # ist: fällig, offen, aber nicht für diesen Tag eingeplant. Überfälliges
-        # steht durch die Sortierung nach Fälligkeit von selbst oben.
-        if bearbeitung:
-            verspaetet = sum(1 for eintrag in bearbeitung if self.due_status(eintrag[4]) == "overdue")
-            abschnitt(self.PLAN_IN_PROGRESS_ROW_ID,
-                      f"{self.ICONS['in_progress']}  In Bearbeitung · {len(bearbeitung)}"
-                      + (f" · {verspaetet} überfällig" if verspaetet else ""))
-            for due_value, _list_index, _item_index, source_list, item in bearbeitung:
-                punktzeile(due_value, source_list, item, parent=self.PLAN_IN_PROGRESS_ROW_ID)
+        def tagesplan(eintraege, ueberschrift):
+            """Die für den Tag eingeplanten Aufgaben, mit Zeitplan, wenn Uhrzeiten da sind."""
+            if any(eintrag[4].get("planned_time") for eintrag in eintraege):
+                # Zeitblöcke (AO-070): Punkte mit Uhrzeit chronologisch, die Dauer
+                # aus der Schätzung. Überschneidungen werden benannt, nicht verschoben.
+                bloecke = self.time_blocks([(eintrag[3], eintrag[4]) for eintrag in eintraege])
+                ohne = [eintrag for eintrag in eintraege if not eintrag[4].get("planned_time")]
+                erster, letzter = bloecke[0], bloecke[-1]
+                abschnitt(self.TIMEPLAN_SECTION_ROW_ID,
+                          f"{self.ICONS['timer']}  Zeitplan · "
+                          + ("1 Block" if len(bloecke) == 1 else f"{len(bloecke)} Blöcke")
+                          + f" · {erster['start']}–{letzter['end'] or letzter['start']}")
+                for block in bloecke:
+                    zeit = f"{block['start']}–{block['end']}" if block["end"] else block["start"]
+                    hinweis = " · überschneidet sich" if block["overlap"] else ""
+                    punktzeile(self.normalize_due(block["item"].get("due")) or "", block["entry"], block["item"],
+                               parent=self.TIMEPLAN_SECTION_ROW_ID, prefix=f"{zeit}{hinweis}   ")
+                if ohne:
+                    abschnitt(self.UNTIMED_SECTION_ROW_ID, f"Ohne Uhrzeit · {len(ohne)}")
+                    zeilen(ohne, self.UNTIMED_SECTION_ROW_ID)
+            elif ueberschrift and eintraege:
+                abschnitt(self.DAYPLAN_SECTION_ROW_ID,
+                          f"{self.ICONS['today']}  Tagesplan · {len(eintraege)}")
+                zeilen(eintraege, self.DAYPLAN_SECTION_ROW_ID)
+            else:
+                zeilen(eintraege)
+
+        eingang = []
+        if teile is not None:
+            # „Heute“ (3.33.6, D14): oben die eine nächste Aufgabe, dann
+            # Verspätetes und Liegengebliebenes, der Tagesplan und was heute
+            # fällig ist. Jede Aufgabe steht genau einmal; künftige
+            # Fälligkeiten zeigt „Demnächst“. An einem anderen Tag bleiben
+            # der Tagesplan und was an diesem Tag fällig ist.
+            if teile.naechste is not None:
+                abschnitt(self.NEXT_TASK_SECTION_ROW_ID, f"{self.ICONS['next']}  Nächste Aufgabe")
+                zeilen([teile.naechste], self.NEXT_TASK_SECTION_ROW_ID)
+            if teile.verspaetet:
+                abschnitt(self.OVERDUE_SECTION_ROW_ID,
+                          f"{self.ICONS['overdue']}  Verspätet · {len(teile.verspaetet)} überfällig")
+                zeilen(teile.verspaetet, self.OVERDUE_SECTION_ROW_ID)
+            if teile.liegen:
+                # Ohne Symbol: ◐ steht für „Demnächst“, und ein Symbol trägt
+                # nur eine Bedeutung.
+                abschnitt(self.LEFTOVER_SECTION_ROW_ID, f"Liegen geblieben · {len(teile.liegen)}")
+                zeilen(teile.liegen, self.LEFTOVER_SECTION_ROW_ID)
+            if not entries:
+                # Ein leerer Tag bleibt als solcher erkennbar, auch wenn
+                # darüber oder darunter andere Abschnitte Zeilen zeigen.
+                self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, tags=("empty",), text=(
+                    "Keine Aufgaben dieses Tages passen zu den aktuellen Filtern."
+                    if self.has_active_filter()
+                    else f"Für {self.format_plan_day()} ist nichts eingeplant."))
+            tagesplan(teile.plan, teile.naechste is not None or bool(teile.verspaetet or teile.liegen))
+            if teile.faellig:
+                heute_gezeigt = self.plan_day() == date.today().isoformat()
+                abschnitt(self.DUE_TODAY_SECTION_ROW_ID,
+                          f"{self.ICONS['calendar']}  "
+                          + ("Heute fällig" if heute_gezeigt else "An diesem Tag fällig")
+                          + f" · {len(teile.faellig)}")
+                zeilen(teile.faellig, self.DUE_TODAY_SECTION_ROW_ID)
+            if teile.demnaechst:
+                anzahl = len(teile.demnaechst)
+                self.tree.insert("", "end", iid=self.UPCOMING_LINK_ROW_ID, values=("", "", ""), tags=("empty",),
+                                 text=f"{self.ICONS['in_progress']}  Demnächst · {anzahl} weitere "
+                                      + ("Fälligkeit" if anzahl == 1 else "Fälligkeiten")
+                                      + " – Doppelklick öffnet")
+            eingang = teile.eingang
+        else:
+            # „Demnächst“ (bis 3.33.5 „In Bearbeitung“) zeigt alle offenen
+            # Fälligkeiten chronologisch; das Überfällige steht oben unter
+            # eigener Überschrift. Die nächste Aufgabe gehört seit D14 nach
+            # „Heute“ – hier wäre sie eine zweite Antwort auf dieselbe Frage.
+            ueberfaellig = []
+            if self.view_mode == "in_progress":
+                ueberfaellig = [eintrag for eintrag in entries
+                                if not eintrag[4].get("done") and self.due_status(eintrag[4]) == "overdue"]
+            if ueberfaellig:
+                ueberfaellige_ids = {id(eintrag) for eintrag in ueberfaellig}
+                uebrige = [eintrag for eintrag in entries if id(eintrag) not in ueberfaellige_ids]
+                abschnitt(self.OVERDUE_SECTION_ROW_ID,
+                          f"{self.ICONS['overdue']}  Verspätet · {len(ueberfaellig)} überfällig")
+                zeilen(ueberfaellig, self.OVERDUE_SECTION_ROW_ID)
+                if uebrige:
+                    abschnitt(self.IN_PROGRESS_SECTION_ROW_ID,
+                              f"{self.ICONS['in_progress']}  Noch offen · {len(uebrige)}")
+                    zeilen(uebrige, self.IN_PROGRESS_SECTION_ROW_ID)
+            else:
+                zeilen(entries)
 
         # Was noch im Eingang liegt und keinen Tag trägt,
         # steht am Ende derselben Ansicht. So ist die Frage „was mache ich
@@ -43592,37 +43689,20 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.remember_tree_open_states()
         return "break"
 
-    def next_task_entry(self, entries=None, apply_filters=True):
-        """Die eine Aufgabe, die als Nächstes dran ist – oder None.
-
-        Maßgeblich ist `task_urgency_rank` – dieselbe
-        Rangfolge, nach der die Startseite ihren nächsten Schritt bestimmt.
-        Beide Stellen nennen damit dieselbe Aufgabe.
-
-        Rückgabe ist ein Eintrag in der Tupelform der Übersichten
-        `(Fälligkeit, Listenindex, Punktindex, Quellliste, Punkt)`.
-        """
-        if entries is None:
-            entries = self.get_in_progress_items(apply_filters=apply_filters)
-        offen = [eintrag for eintrag in entries if not eintrag[4].get("done")]
-        if not offen:
-            return None
-        return min(offen, key=lambda eintrag: self.task_urgency_rank(eintrag[4]))
-
     def open_next_task(self, event=None):
         """Führt auf die nächste Aufgabe – aus jeder Ansicht heraus.
 
         Die Startseite und das Menü brauchen einen Weg
         dorthin, der nicht voraussetzt, dass man weiß, in welchem Abschnitt
-        welcher Ansicht sie steht.
+        welcher Ansicht sie steht. Seit 3.33.6 (D14) steht sie oben in „Heute“
+        und ist dieselbe Aufgabe wie auf der Startseite.
         """
-        eintrag = self.next_task_entry()
-        self.set_in_progress_view()
+        self.set_overview_section_open(self.NEXT_TASK_SECTION_ROW_ID, True)
+        self.set_today_view()
+        eintrag = self.plan_day_sections().naechste
         if eintrag is None:
             return "break"
-        self.set_overview_section_open(self.NEXT_TASK_SECTION_ROW_ID, True)
         zeile = f"in-progress:{eintrag[3].get('id')}:{eintrag[4].get('id')}"
-        self.refresh_task_overview(selected_id=zeile)
         if hasattr(self, "tree") and self.tree.exists(zeile):
             self.tree.selection_set(zeile)
             self.tree.focus(zeile)
@@ -43630,7 +43710,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         return "break"
 
     def open_in_progress_source_item(self, event=None):
-        """Öffnet die echte Quellliste einer Zeile aus „In Bearbeitung“."""
+        """Öffnet die echte Quellliste einer Zeile aus „Heute“ oder „Demnächst“."""
         row_id = ""
         if event is not None and self.is_mouse_event(event):
             row_id = self.tree.identify_row(event.y)
@@ -43645,11 +43725,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if row_id == self.OVERDUE_SECTION_ROW_ID:
             self.set_overdue_view()
             return "break"
-        if row_id == self.PLAN_IN_PROGRESS_ROW_ID:
-            # Aus „Mein Tag“ führt der Abschnitt zur vollständigen Ansicht.
+        if row_id == self.UPCOMING_LINK_ROW_ID:
             self.set_in_progress_view()
             return "break"
-        if row_id in (self.NEXT_TASK_SECTION_ROW_ID, self.IN_PROGRESS_SECTION_ROW_ID):
+        if row_id in (self.NEXT_TASK_SECTION_ROW_ID, self.IN_PROGRESS_SECTION_ROW_ID,
+                      self.LEFTOVER_SECTION_ROW_ID, self.DAYPLAN_SECTION_ROW_ID,
+                      self.DUE_TODAY_SECTION_ROW_ID, self.TIMEPLAN_SECTION_ROW_ID,
+                      self.UNTIMED_SECTION_ROW_ID):
             # Eine Abschnittsüberschrift klappt auf und zu; ein Doppelklick
             # darauf soll nichts anderes tun als das.
             return "break"
@@ -44885,41 +44967,72 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         return wort[1:] if wort.startswith("/") else None
 
     def update_slash_hint(self, event=None):
-        """Zeigt unter der Eingabe, was die „/“-Befehle bewirken – ohne eigenes Fenster und ohne Fokus."""
+        """Zeigt unter der Eingabe jede Erkennung als Chip mit × – ohne eigenes Fenster und ohne Fokus (G01)."""
         if self.view_mode != "list" or getattr(self, "entry_placeholder_active", False):
             return self.hide_slash_hint()
         text = self.get_entry_text()
+        if not text:
+            self._capture_ignored = set()
+        erfassung = parse_capture(text, self.labels, ignore=self.capture_ignored())
         wort = self.slash_word()
-        teile = []
+        vorschlag = None
         if wort is not None:
             vorschlaege = slash_suggestions(wort, self.labels)
-            teile.append(("Tab ergänzt: " + "  ".join("/" + v for v in vorschlaege)) if vorschlaege
+            vorschlag = (("Tab ergänzt: " + "  ".join("/" + v for v in vorschlaege)) if vorschlaege
                          else "Kein Befehl passt – das Wort bleibt Text.")
-        if "/" in (text or ""):
-            _titel, _felder, erkannt = parse_slash_commands(text, self.labels)
-            if erkannt:
-                teile.insert(0, "→ " + " · ".join(erkannt))
-        if not teile:
+        if not erfassung.teile and vorschlag is None:
             return self.hide_slash_hint()
-        hinweis = getattr(self, "_slash_hint", None)
+        leiste = getattr(self, "_capture_hint", None)
         owner = self.entry.winfo_toplevel()
-        if hinweis is None or not hinweis.winfo_exists():
-            hinweis = self._slash_hint = tk.Label(owner, bg=self.theme["card"], fg=self.theme["muted"],
-                                                  font=app_font(9), anchor="w", justify="left", padx=8, pady=4,
-                                                  highlightthickness=1,
-                                                  highlightbackground=self.theme["input_border"])
-        hinweis.configure(text="\n".join(teile))
+        if leiste is None or not leiste.winfo_exists():
+            leiste = self._capture_hint = tk.Frame(owner, padx=6, pady=4, highlightthickness=1)
+        leiste.configure(bg=self.theme["card"], highlightbackground=self.theme["input_border"])
+        self.fill_capture_chips(leiste, erfassung.teile, vorschlag, self.ignore_capture_part)
         x = self.entry_border.winfo_rootx() - owner.winfo_rootx()
         y = self.entry_border.winfo_rooty() - owner.winfo_rooty() + self.entry_border.winfo_height() + 2
-        hinweis.place(x=x, y=y, width=max(240, self.entry_border.winfo_width()))
-        hinweis.lift()
+        leiste.place(x=x, y=y, width=max(240, self.entry_border.winfo_width()))
+        leiste.lift()
         return None
 
+    def capture_ignored(self):
+        """Schlüssel der zurückgenommenen Erkennungen der laufenden Eingabe."""
+        if not isinstance(getattr(self, "_capture_ignored", None), set):
+            self._capture_ignored = set()
+        return self._capture_ignored
+
+    def ignore_capture_part(self, schluessel):
+        self.capture_ignored().add(schluessel)
+        self.update_slash_hint()
+        self.entry.focus_set()
+
+    def fill_capture_chips(self, leiste, teile, hinweis, zuruecknehmen):
+        """Baut die Chipzeile neu: je Erkennung Text und ×, darunter ein Hinweis."""
+        theme = self.theme
+        for kind in leiste.winfo_children():
+            kind.destroy()
+        if teile:
+            zeile = tk.Frame(leiste, bg=leiste.cget("bg"))
+            zeile.pack(fill="x")
+            for teil in teile:
+                chip = tk.Frame(zeile, bg=theme["input"], highlightthickness=1,
+                                highlightbackground=theme["input_border"])
+                chip.pack(side="left", padx=(0, 6), pady=1)
+                tk.Label(chip, text=teil.text, bg=theme["input"], fg=theme["text"],
+                         font=app_font(9)).pack(side="left", padx=(6, 2))
+                weg = tk.Label(chip, text=self.ICONS["remove"], bg=theme["input"], fg=theme["muted"],
+                               font=app_font(10, "bold"), cursor="hand2", padx=4)
+                weg.pack(side="left")
+                weg.bind("<Button-1>", lambda _event, key=teil.schluessel: zuruecknehmen(key))
+                self.add_tooltip(weg, "Erkennung zurücknehmen – der Text bleibt im Titel")
+        if hinweis:
+            tk.Label(leiste, text=hinweis, bg=leiste.cget("bg"), fg=theme["muted"], font=app_font(9),
+                     anchor="w", justify="left").pack(fill="x", pady=(3 if teile else 0, 0))
+
     def hide_slash_hint(self):
-        hinweis = getattr(self, "_slash_hint", None)
-        if hinweis is not None:
+        leiste = getattr(self, "_capture_hint", None)
+        if leiste is not None:
             try:
-                hinweis.place_forget()
+                leiste.place_forget()
             except tk.TclError:
                 pass
         return None
@@ -44971,9 +45084,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.save_items()
             self.refresh_folder_overview(selected_id=f"folder-list:{new_entry['id']}")
             return
-        titel, felder, erkannt = parse_slash_commands(text, self.labels)
+        erfassung = parse_capture(text, self.labels, ignore=self.capture_ignored())
+        titel, felder = erfassung.titel, erfassung.felder
+        erkannt = [teil.text for teil in erfassung.teile]
         if not titel:
-            self.show_warning("Hinweis", "Bitte vor den „/“-Befehlen einen Titel eingeben.")
+            self.show_warning("Hinweis", "Bitte einen Titel eingeben – erkannt wurden nur Angaben wie Datum oder Wichtigkeit.")
             return
         self.snapshot_undo()
         self.items.append(self.new_item(titel, False, **felder))
@@ -44987,6 +45102,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def clear_entry_text(self):
         """Leert die Schnelleingabe und setzt den Platzhalterzustand zurück."""
+        self._capture_ignored = set()
         self.entry.delete(0, tk.END)
         self.entry_placeholder_active = False
         self.entry.configure(fg=self.theme["text"])
@@ -45053,14 +45169,19 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                         dialog_parent=dialog_parent).pack(side="right", padx=(8, 0), before=border)
         return entry
 
-    def capture_item(self, text, list_id, due_text="", description=""):
+    def capture_item(self, text, list_id, due_text="", description="", ignore=()):
         """Erfasst ohne Ansichtswechsel; ein Schreibfehler darf keine Dublette hinterlassen.
 
         Die Beschreibung kam dazu. Sie ist freiwillig und
         läuft durch dieselbe Begrenzung wie in der vollständigen Eingabemaske,
         damit hier nichts entstehen kann, was die Maske nicht mehr annimmt.
+
+        Seit 3.33.3 (G01) liest derselbe Parser wie in der Eingabezeile den
+        Titel; ein ausgefülltes Feld „Fällig“ hat Vorrang vor einer
+        Fälligkeit im Titel.
         """
-        text = str(text or "").strip()
+        erfassung = parse_capture(str(text or "").strip(), self.labels, ignore=ignore)
+        text, felder = erfassung.titel, dict(erfassung.felder)
         if not text:
             raise ValueError("Bitte einen Aufgabentitel eingeben.")
         target = next((entry for entry in self.lists if entry["id"] == list_id), None)
@@ -45069,10 +45190,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if not self.list_accepts_items(target):
             raise ValueError("Eine Zeichnung nimmt keine Aufgaben auf. Bitte eine andere Liste wählen.")
         due, due_time = parse_capture_due(due_text)
+        if due:
+            felder["due"], felder["due_time"] = due, due_time
         beschreibung = str(description or "").strip()
         if getattr(self, "_data_read_only", False):
             raise ValueError("Die Datenablage ist schreibgeschützt. Die Aufgabe wurde nicht angelegt.")
-        item = self.new_item(text, due=due, due_time=due_time, description=beschreibung)
+        item = self.new_item(text, description=beschreibung, **felder)
         undo_before, dirty_before = list(self.undo_stack), self.dirty
         items = target.setdefault("items", [])
         with self.item_change((), restore=False, update_sidebar=True) as change:
@@ -45102,6 +45225,25 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                  font=app_font(16, "bold"), anchor="w").pack(fill="x", pady=(0, 4))
         title_var, due_var = tk.StringVar(), tk.StringVar()
         entry = self._capture_text_field(body, "Aufgabe", title_var, pady=(0, 5))
+        # Dieselbe Erkennung wie in der Eingabezeile (G01): Chips mit ×.
+        erkannt = tk.Frame(body, bg=theme["bg"])
+        erkannt.pack(fill="x")
+        ignoriert = set()
+
+        def zeige_erkannt(*_args):
+            if not title_var.get().strip():
+                ignoriert.clear()
+            teile = parse_capture(title_var.get(), self.labels, ignore=ignoriert).teile
+            if due_var.get().strip():
+                teile = tuple(teil._replace(text=f"{teil.text} – das Feld „Fällig“ hat Vorrang")
+                              if "due" in teil.felder else teil for teil in teile)
+            self.fill_capture_chips(erkannt, teile, None, zuruecknehmen)
+
+        def zuruecknehmen(schluessel):
+            ignoriert.add(schluessel)
+            zeige_erkannt()
+            entry.focus_set()
+        titel_trace = title_var.trace_add("write", zeige_erkannt)
         self._make_field_label(body, "In Liste ablegen").pack(anchor="w", pady=(12, 5))
         choices, colors = {}, {}
         inbox_id = self.ensure_inbox_list()["id"]
@@ -45168,10 +45310,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             except ValueError as exc:
                 preview.configure(text=str(exc), fg=theme["delete"])
         trace = due_var.trace_add("write", show_preview)
+        due_trace = due_var.trace_add("write", zeige_erkannt)
         def submit(open_source=False):
             try:
                 item = self.capture_item(title_var.get(), choices.get(list_var.get()),
-                                         due_var.get(), note.get("1.0", "end-1c"))
+                                         due_var.get(), note.get("1.0", "end-1c"), ignore=ignoriert)
             except ValueError as exc:
                 message.configure(text=str(exc), fg=theme["delete"]); return "break"
             if item is None:
@@ -45213,6 +45356,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.run_modal(dialog)
         finally:
             due_var.trace_remove("write", trace)
+            due_var.trace_remove("write", due_trace)
+            title_var.trace_remove("write", titel_trace)
             self._quick_capture_dialog = None
         return "break"
 
@@ -45902,11 +46047,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             planned_count = sum(1 for item in tasks
                                 if self.normalize_due(item.get("planned_date")) == heute)
             if planned_count == len(tasks):
-                today_label, today_add = "Aus Mein Tag entfernen", False
+                today_label, today_add = "Aus dem heutigen Tagesplan nehmen", False
             elif planned_count:
-                today_label, today_add = "Auswahl für Mein Tag ergänzen", None
+                today_label, today_add = "Auswahl für heute ergänzen", None
             else:
-                today_label, today_add = "Für Mein Tag einplanen (heute)", True
+                today_label, today_add = "Für heute einplanen", True
             menu.add_command(
                 label=today_label,
                 command=lambda ids=[item.get("id") for item in tasks]:
@@ -46065,7 +46210,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         return menu
 
     def build_in_progress_context_menu(self, row_id):
-        """Kontextmenü einer Zeile der abgeleiteten Ansicht „In Bearbeitung“."""
+        """Kontextmenü einer Zeile der abgeleiteten Ansichten „Heute“ und „Demnächst“."""
         source = self.in_progress_item_sources.get(row_id)
         if not source:
             return None
@@ -46185,7 +46330,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         return menu
 
     def toggle_in_progress_label(self, item_id, label_id):
-        """Labelzuweisung direkt aus der Ansicht „In Bearbeitung“ heraus."""
+        """Labelzuweisung direkt aus einer Übersicht wie „Heute“ oder „Demnächst“ heraus."""
         found = self.find_item_in_lists(item_id)
         if not found or self.get_label(label_id) is None:
             return "break"
@@ -49924,7 +50069,7 @@ Labels, Termine und Metadaten."""
             untertitel = f"{self.WEEKDAY_NAMES[heute.weekday()]}, {heute.strftime('%d.%m.%Y')}"
             geplant = self.plan_day_entries(apply_filters=False, day=heute.isoformat())
             if geplant:
-                abschnitte.append(("Mein Tag",
+                abschnitte.append(("Tagesplan",
                                    [(0, eintrag[4], eintrag[3]) for eintrag in geplant]))
             faellig = [eintrag for eintrag in self.get_in_progress_items(apply_filters=False)
                        if self.normalize_due(eintrag[4].get("due")) == heute.isoformat()]
@@ -52608,8 +52753,8 @@ Labels, Termine und Metadaten."""
     def quick_open_views(self):
         return (
             ("Startseite", self.ICONS["home"], self.set_home_view),
-            ("Mein Tag", self.ICONS["today"], self.set_today_view),
-            ("In Bearbeitung", self.ICONS["in_progress"], self.set_in_progress_view),
+            ("Heute", self.ICONS["today"], self.set_today_view),
+            ("Demnächst", self.ICONS["in_progress"], self.set_in_progress_view),
             ("Verspätet", self.ICONS["overdue"], self.set_overdue_view),
             ("Labels", self.ICONS["labels"], self.set_labels_view),
             ("Listen und Ordner", self.ICONS["list"], self.set_library_view),
@@ -53219,8 +53364,8 @@ Labels, Termine und Metadaten."""
                     ("Seite, Punkt oder Aktion suchen …", self.show_quick_open, self.accel("O")),
                     None,
                     ("Startseite", self.set_home_view),
-                    ("Mein Tag", self.set_today_view),
-                    ("In Bearbeitung", self.set_in_progress_view),
+                    ("Heute", self.set_today_view),
+                    ("Demnächst", self.set_in_progress_view),
                     ("Nächste Aufgabe", self.open_next_task),
                     ("Tagesbeginn …", self.start_day_review),
                     ("Tagesabschluss …", self.start_day_close),
@@ -53235,10 +53380,10 @@ Labels, Termine und Metadaten."""
                     ("Kalender …", self.open_calendar_view, self.accel("K")),
                     ("Papierkorb", self.set_trash_view),
                 )),
-                ("Mein Tag", (
-                    ("Mein Tag: Tag zurück", self.plan_day_backward),
-                    ("Mein Tag: Tag vor", self.plan_day_forward),
-                    ("Mein Tag: Stundenraster ein/aus", self.toggle_plan_day_grid),
+                ("Heute", (
+                    ("Heute: Tag zurück", self.plan_day_backward),
+                    ("Heute: Tag vor", self.plan_day_forward),
+                    ("Heute: Stundenraster ein/aus", self.toggle_plan_day_grid),
                 )),
                 None,
                 ("Liste", (
@@ -53731,7 +53876,7 @@ Labels, Termine und Metadaten."""
                 (self.accel("A"), "Alle Punkte auswählen"),
                 (self.accel("G"), "Ausgewählte Punkte gruppieren"),
                 ("Alt + ↑ / ↓", "Ausgewählte Punkte nach oben / unten verschieben"),
-                ("Mein Tag, Zeitplan: Alt + ↑ / ↓", "Ausgewählte Blöcke 15 Minuten früher / später"),
+                ("Heute, Zeitplan: Alt + ↑ / ↓", "Ausgewählte Blöcke 15 Minuten früher / später"),
                 ("Alt + ← / →", "Ausgewählte Punkte ausrücken / einrücken"),
                 ("Tab", "Einrücken / ausrücken"),
                 ("Drag & Drop", "Reihenfolge ändern"),

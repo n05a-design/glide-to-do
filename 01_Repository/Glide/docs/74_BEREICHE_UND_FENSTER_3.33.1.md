@@ -10,8 +10,10 @@ Der Ergänzungsauftrag erweitert 3.33 um Zeichnungen, wählbare Bereichssichtbar
 |---|---|---|
 | Seiten | Bücher (Art `library`, bisher Bibliothek), Ordner, Seiten | Ja |
 | Listen | Alle bestehenden Dokument- und Ordnerarten | Nein |
-| Notizen | Notizbücher, Ordner, Notizen | Ja |
+| Notizen | Notizbücher, Ordner, Notizen; im Notizbuch auch datierte Zeichnungen | Ja |
 | Zeichnungen | Ordner, Zeichnungen | Ja |
+
+**Klarstellung des Inhabers vom 01.10.2026:** Ein Notizbuch nimmt im Bereich Notizen weiterhin datierte Zeichnungen auf („Zeichnung · TT.MM.JJJJ“ mit Momentdatum, [Vertrag 65](65_ZEICHNUNGSSEITE_3.29.0.md)). Die Regel hängt am direkten Elternordner der Art `journal`; ein gewöhnlicher Ordner unter Notizen nimmt keine Zeichnung auf. Aufgabenlisten und Pinnwände in einem Notizbuch bleiben ein Fall für Listen. Anlegen, Ziehen, Verschieben, Einrücken, Wiederherstellen und Vorlagen prüfen dafür den Zielordner (`sidebar_policy.CONTAINED`).
 
 Ausblenden entfernt nur die Navigation. Ganze Zweige bleiben in Listen erreichbar. Gemischte Altbestände stehen vollständig unter Listen; keine automatische Umwandlung oder Teilung. Die neue Zeichnungsübersicht zeigt Zeichnungen auch in bestehenden gemischten Ordnern. Eine gewöhnliche Ordnerwurzel merkt ihren Bereich über `sidebar_locations` in Einstellungen; Aufgabenbackups enthalten diese gerätespezifische Anzeigeeinstellung nicht, Komplettbackups mit Einstellungen schon. Ohne Einstellung gelten die natürlichen Arten. Kein neues Datenformat oder Inhaltstyp.
 
@@ -29,7 +31,7 @@ Das Logo hat einen Schriftabhängigen oberen Innenabstand und eine entsprechend 
 
 [Arbeitsnachweise](../tests/qa-3.33.1/bereiche_fenster_2026-10-01/README.md). Passende Baseline, vollständige Quell-/Python-/Bundle-Vorsicherung, bestehende Fenster-, Logo-, Drag- und Klappsuiten sowie neue Bereichssuite. Die Fensterprüfung erreicht 50 Fenster über Menüs und Knöpfe. Neue Bereichssuite: echte Formular-/Klick-/Tastatur-/Drag-Bindungen, Root-Undo, Speichern/Ausblenden/Wiedereinblenden, kleine Höhe, Schriftwechsel und Reload. Showcase-Pixelskizze sichtbar im Zeichnungsbereich; Fotos zeigen ausschließlich eigene Prüffenster.
 
-Vollprüfung und Auslieferung werden erst nach dem tatsächlichen Abschluss hier nachgetragen. Physische OS-Maus-/Fokusbedienung, Windows/Linux, DPI/Mehrmonitor und Screenreader bleiben separat offen.
+**Abschluss 02.10.2026** ([Nachweis](../tests/qa-3.33.1/abschluss_2026-10-01/README.md)): Die erste Vollprüfung des Prüfkandidaten war rot (vier Suiten). Behoben: Der Dialog „Neu anlegen“ übergeht die 1 × 1-Meldung beim Einblenden, sonst blieb die breite Maske auf niedrigen Bildschirmen einspaltig; Notizbücher nehmen datierte Zeichnungen auf (Klarstellung oben); zwei Prüfungen auf diesen Vertrag gebracht. Abnahme: Vollprüfung Exitcode 0 mit 60 Integrationssuiten, Unit-Tests, Showcase und fünf Analysen; 142 Python-/56 Bundle-Dateien bytegleich, Signatur gültig. Physische OS-Maus-/Fokusbedienung, Windows/Linux, DPI/Mehrmonitor und Screenreader bleiben separat offen.
 
 ## Ablage
 

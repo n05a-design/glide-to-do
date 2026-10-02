@@ -1,6 +1,6 @@
 # Referenzdaten und Beispiele
 
-Aktueller Aufgabenstand: **Glide 3.33.1 / Format 20**. `current_v20` enthält
+Aktueller Aufgabenstand: **Glide 3.33.6 / Format 20**. `current_v20` enthält
 die feste Referenz für aktuelle Daten.
 
 - Enthalten sind die Tagebuchseiten aus Format 19, dazu Punkte mit

@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide (fortgeschriebene Prüfliste)
 
-Stand 01.10.2026 · Glide 3.33.1 · Herkunft der Verdichtung 3.30.0; zusätzliche Bedienproben A19–A21 · Aufgabenformat 20 · ersetzt die bisherigen Listen 3.28, 3.29 und 3.30 · noch nicht ausgeführt
+Stand 02.10.2026 · Glide 3.33.6 · Herkunft der Verdichtung 3.30.0; zusätzliche Bedienproben A19–A21 · Aufgabenformat 20 · ersetzt die bisherigen Listen 3.28, 3.29 und 3.30 · noch nicht ausgeführt
 
 Diese Datei behält ihren historischen Namen als stabiles Linkziel. [Arbeitsrichtung](../../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) und [QA-Bericht](../../01_Repository/Glide/docs/07_QA_BERICHT.md) unterscheiden automatische Logikprüfung und offene physische Abnahme. A19–A21 ergänzen 3.32.1–3.32.3.
 

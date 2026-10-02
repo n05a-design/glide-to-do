@@ -5,10 +5,17 @@ DOCUMENTS = {'pages': frozenset(('page',)), 'notes': frozenset(('note',)),
              'drawings': frozenset(('drawing',))}
 FOLDERS = {'pages': frozenset(('standard', 'library')), 'notes': frozenset(('standard', 'journal')),
            'drawings': frozenset(('standard',))}
+# Ein Notizbuch nimmt neben Notizen auch datierte Zeichnungen auf (Vertrag 65,
+# vom Inhaber am 01.10.2026 für den Bereich Notizen bestätigt). Aufgabenlisten
+# und Pinnwände in einem Notizbuch bleiben ein Fall für Listen.
+CONTAINED = {('notes', 'journal'): frozenset(('drawing',))}
 
 
-def accepts(section, kind, value):
+def accepts(section, kind, value, container=None):
+    """Darf diese Art in den Bereich? ``container`` ist die Art des direkten Elternordners einer Liste."""
     if section == 'lists':
+        return True
+    if kind == 'list' and value in CONTAINED.get((section, container), ()):
         return True
     return value in (DOCUMENTS if kind == 'list' else FOLDERS).get(section, ())
 
@@ -46,8 +53,9 @@ class SidebarPolicy:
             return False
         seen.add(folder_id)
         folder = self.folders[folder_id]
-        return (accepts(section, 'folder', folder.get('folder_kind', 'standard'))
-                and all(accepts(section, 'list', e.get('list_kind', 'tasks'))
+        folder_kind = folder.get('folder_kind', 'standard')
+        return (accepts(section, 'folder', folder_kind)
+                and all(accepts(section, 'list', e.get('list_kind', 'tasks'), folder_kind)
                         for e in self.contents.get(folder_id, ()))
                 and all(self.subtree_accepts(f['id'], section, seen)
                         for f in self.children.get(folder_id, ())))
@@ -77,17 +85,22 @@ class SidebarPolicy:
         return section
 
 
-def template_allowed(template, section):
+def template_allowed(template, section, container=None):
+    """``container`` ist die Art des Ordners, in dem die Vorlage angelegt wird."""
     if section == 'lists':
         return True
     payload = template.get('payload')
     if isinstance(payload, dict):
-        return (all(accepts(section, 'list', entry.get('list_kind', 'tasks')) for entry in payload.get('lists', ()))
+        kinds = {folder.get('id'): folder.get('folder_kind', 'standard')
+                 for folder in payload.get('folders', ()) if isinstance(folder, dict) and folder.get('id')}
+        return (all(accepts(section, 'list', entry.get('list_kind', 'tasks'), kinds.get(entry.get('folder_id'), container))
+                    for entry in payload.get('lists', ()))
                 and all(accepts(section, 'folder', folder.get('folder_kind', 'standard')) for folder in payload.get('folders', ())))
     if template.get('kind') == 'list':
-        return accepts(section, 'list', template.get('list_kind', 'tasks'))
-    return (accepts(section, 'folder', template.get('folder_kind', 'standard'))
-            and all(accepts(section, 'list', entry.get('list_kind', 'tasks'))
+        return accepts(section, 'list', template.get('list_kind', 'tasks'), container)
+    folder_kind = template.get('folder_kind', 'standard')
+    return (accepts(section, 'folder', folder_kind)
+            and all(accepts(section, 'list', entry.get('list_kind', 'tasks'), folder_kind)
                     for entry in template.get('lists', ()) if isinstance(entry, dict))
             and all(template_allowed(dict(child, kind='folder'), section)
                     for child in template.get('folders', ()) if isinstance(child, dict)))

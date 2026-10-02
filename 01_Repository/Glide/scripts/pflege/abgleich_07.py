@@ -20,7 +20,7 @@ ZIEL = ABLAGE / "07_Python-Versionen"
 VERSION = (ABLAGE / "01_Repository/Glide/VERSION").read_text().strip()
 
 DATEIEN = {"app.pyw": f"Glide-Aufgaben-und-Listen_v{VERSION}.pyw", "glide_start.py": "Schnellstart.pyw"}
-for modul in ("drawing.py", "drawing_image.py", "backdrop.py", "page_markdown.py", "image_preview.py", "logo.py", "schema_backups.py", "sidebar_policy.py", "svg_geometry.py"):
+for modul in ("drawing.py", "drawing_image.py", "backdrop.py", "page_markdown.py", "image_preview.py", "logo.py", "schema_backups.py", "sidebar_policy.py", "svg_geometry.py", "home_tiles.py", "capture_parser.py", "eisenhower.py", "today_view.py"):
     DATEIEN[modul] = modul
 
 

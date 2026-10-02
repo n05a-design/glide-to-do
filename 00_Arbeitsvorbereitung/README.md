@@ -1,6 +1,6 @@
 # Arbeitsvorbereitung
 
-Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 **Dauerhafte Richtung:** [Arbeitsrichtung und Abnahme](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) verbindet Regeln, D01–D17 (D09–D17 beschlossen am 01.10.2026), Performance-Fortsetzung, QA und Dokumentenpflege. Die datierten Einstiegspfade werden weiter gepflegt und maschinell auf Aktualität geprüft.
 

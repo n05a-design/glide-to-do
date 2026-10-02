@@ -1,6 +1,6 @@
 # Produktgrenzen
 
-Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 Glide ist eine deutschsprachige lokale Desktop-Anwendung für Aufgaben, Listen, Notizen, Zeichnungen und Ordner. Kernfunktionen benötigen weder Internet noch Benutzerkonto oder Cloudservice. Laufzeit: Python, Tk und Standardbibliothek, mitgelieferte privat registrierte Schriften. Nutzerdaten liegen außerhalb des Programmordners.
 
@@ -69,7 +69,8 @@ Seit dem 26.09.2026 gelten außerdem:
     01.10.2026).
 - **Form folgt Funktion (26.09.2026):** Jede Fläche hat eine eigene Aufgabe.
   - Keine Seitenleistenzeile ist ein zweiter Weg zu denselben Punkten:
-    „In Bearbeitung“ steht in „Mein Tag“, der Verlauf ist ein Knopf.
+    „Demnächst“ (bis 3.33.5 „In Bearbeitung“) erreicht man aus „Heute“,
+    der Verlauf ist ein Knopf (D14, 3.33.6).
   - Kein Symbol trägt zwei Bedeutungen: ↶ heißt nur „Rückgängig“, „+“ nur
     „Neu anlegen“, ✎ nur „Bearbeiten“.
   - Knöpfe erscheinen dort, wo sie wirken: die Auswahlleiste nur mit

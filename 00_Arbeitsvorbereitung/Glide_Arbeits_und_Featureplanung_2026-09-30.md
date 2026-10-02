@@ -1,8 +1,14 @@
 # Glide – Arbeits- und Featureplanung nach Recherche und Codeabgleich
 
 
-**Ergänzungsauftrag 01.10.2026, 3.33.1:** Vier Seitenleistenbereiche in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen. Nur Listen bleibt verpflichtend sichtbar. Seiten erlaubt Bücher (bestehende Art `library`), Ordner und Seiten; Notizen Notizbücher, Ordner und Notizen; Zeichnungen Ordner und Zeichnungen; Listen alle Arten. Sichtbarkeit und Root-Zuordnung sind lokale Anzeigeeinstellungen, keine Löschaktion. Gemischte Altordner werden vollständig in Listen angezeigt. Einheitliche Anlege-/Verschieberegeln und Prüfung aller Fenster gehören zur Abnahme. [Vertrag](../01_Repository/Glide/docs/74_BEREICHE_UND_FENSTER_3.33.1.md).
-Stand 01.10.2026 · Glide 3.33.1 · Basisanalyse 3.32.0, Klappkorrektur 3.32.1 · Aufgabenformat 20
+**Ergänzungsauftrag 01.10.2026, 3.33.1:** Vier Seitenleistenbereiche in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen. Nur Listen bleibt verpflichtend sichtbar. Seiten erlaubt Bücher (bestehende Art `library`), Ordner und Seiten; Notizen Notizbücher, Ordner und Notizen, im Notizbuch auch datierte Zeichnungen (Klarstellung des Inhabers vom 01.10.2026); Zeichnungen Ordner und Zeichnungen; Listen alle Arten. Sichtbarkeit und Root-Zuordnung sind lokale Anzeigeeinstellungen, keine Löschaktion. Gemischte Altordner werden vollständig in Listen angezeigt. Einheitliche Anlege-/Verschieberegeln und Prüfung aller Fenster gehören zur Abnahme. [Vertrag](../01_Repository/Glide/docs/74_BEREICHE_UND_FENSTER_3.33.1.md).
+Stand 02.10.2026 · Glide 3.33.6 · Basisanalyse 3.32.0, Klappkorrektur 3.32.1 · Aufgabenformat 20
+
+**3.33.2 (02.10.2026):** D12-Startseite mit sieben Kacheln und Rest P03 für die Startseite umgesetzt, geprüft und ausgeliefert ([Vertrag 76](../01_Repository/Glide/docs/76_STARTSEITE_3.33.2.md)). Weiter offen in der Performance-Arbeit: P04, P06r, P08, P09b und das Erhalten unveränderter Startseitenkacheln.
+
+**3.33.3 (02.10.2026):** G01 deutsche Schnelleingabe mit Feldchips umgesetzt, D10 für „/“-Befehle; geprüft und ausgeliefert ([Vertrag 77](../01_Repository/Glide/docs/77_EINGABE_3.33.3.md)). Wiederholungen in der Eingabe seit 3.33.4; sie setzen die Fälligkeit (Entscheidung 02.10.2026).
+
+**3.33.5 (02.10.2026):** G02 Eisenhower als Gruppierung „Dringlichkeit × Wichtigkeit“ nach D13 ([Vertrag 78](../01_Repository/Glide/docs/78_EISENHOWER_3.33.5.md)).
 
 **3.33.0 – erster Umsetzungsschnitt:** T2/P09a umgesetzt und ausgeliefert. 76 automatische Schritte, 59 Integrationssuiten, acht Unit-Tests, Showcase und fünf Analysen grün; 140 Python-/54 Bundle-Dateien bytegleich, Signatur gültig, getrennter Showcase-Starter bei Erststart und Neustart geprüft. [Vertrag](../01_Repository/Glide/docs/73_FUNDAMENT_3.33.0.md) mit Ablageabgleich und Anschlussplan. D12 ist vollständig entschieden: zusätzliche Standardkacheln Zeichnungen und Pinnwand-Vorschau. Der Oberflächenumbau folgt nach diesem Fundament.
 

@@ -1,6 +1,6 @@
 # Langfristiger Prüfverlauf
 
-Stand 01.10.2026 · Glide 3.33.1 · Datenformat 20 · Zeilen in zeitlicher Folge
+Stand 02.10.2026 · Glide 3.33.6 · Datenformat 20 · Zeilen in zeitlicher Folge
 
 **Showcase-Nachlauf 01.10.2026:** [Gezielte Abnahme](qa-3.32.3/showcase_2026-10-01/einzelpruefung.json), tatsächlicher Import/Neustart grün; neue Pflichtprüfung zusätzlich zu 58 Suiten. Daten-/Werkzeugänderung zur unveränderten App 3.32.3. Die abschließende Vollregression wird separat geführt.
 
@@ -17,6 +17,16 @@ Stand 01.10.2026 · Glide 3.33.1 · Datenformat 20 · Zeilen in zeitlicher Folge
 - **Dokumente:** D09–D17 als Beschlüsse eingetragen; `Glide/.gitignore` gibt Prüfprotokolle frei.
 - **Grenzen:** Keine Vollprüfung, Anwendung unverändert.
 
+
+**Eisenhower 3.33.5, 02.10.2026:** Exitcode 0 – 80 Schritte, 63 Integrationssuiten, Unit-Tests, Showcase und fünf Analysen; 145 Python-/59 Bundle-Dateien bytegleich. [Nachweis](qa-3.33.5/eisenhower_2026-10-02/README.md), [Vollprotokoll](qa-3.33.5/eisenhower_2026-10-02/vollpruefung/ergebnis.json).
+
+**Wiederholungen 3.33.4, 02.10.2026:** Exitcode 0 – 79 Schritte, 62 Integrationssuiten, Unit-Tests, Showcase und fünf Analysen; 144 Python-/58 Bundle-Dateien bytegleich. [Nachweis](qa-3.33.4/wiederholung_2026-10-02/README.md), [Vollprotokoll](qa-3.33.4/wiederholung_2026-10-02/vollpruefung/ergebnis.json).
+
+**Schnelleingabe 3.33.3, 02.10.2026:** Exitcode 0 – 79 Schritte, 62 Integrationssuiten, Unit-Tests, Showcase und fünf Analysen; 144 Python-/58 Bundle-Dateien bytegleich, Signatur gültig. [Nachweis](qa-3.33.3/eingabe_2026-10-02/README.md), [Vollprotokoll](qa-3.33.3/eingabe_2026-10-02/vollpruefung/ergebnis.json).
+
+**Startseite 3.33.2, 02.10.2026:** Exitcode 0 im zweiten Lauf – 78 Schritte, 61 Integrationssuiten, Unit-Tests, Showcase und fünf Analysen; 143 Python-/57 Bundle-Dateien bytegleich, Signatur gültig. Erster Lauf nur an der Attributprüfung gescheitert. [Nachweis](qa-3.33.2/startseite_2026-10-02/README.md), [Vollprotokoll](qa-3.33.2/startseite_2026-10-02/vollpruefung/ergebnis.json).
+
+**Abschluss 3.33.1, 02.10.2026:** Exitcode 0 im dritten Lauf – 77 Schritte, 60 Integrationssuiten, Unit-Tests, Showcase und fünf Analysen; 142 Python-/56 Bundle-Dateien bytegleich, Signatur gültig. Zwei ungültige Vorläufe (gesperrter Bildschirm; wahrscheinlich Tastatureingaben während des Laufs) mit Ursache belegt. [Nachweis](qa-3.33.1/abschluss_2026-10-01/README.md), [Vollprotokoll](qa-3.33.1/abschluss_2026-10-01/vollpruefung_3/ergebnis.json).
 
 **Fundament 3.33.0, 01.10.2026:** 76 automatische Schritte, 59 Integrationssuiten, acht Unit-Tests, Showcase und fünf Analysen grün; 140 Python-/54 Bundle-Dateien bytegleich, Signatur gültig, getrennter Showcase-Starter bei Erststart und Neustart geprüft. [Vollprotokoll](qa-3.33.0/fundament_2026-10-01/vollpruefung/ergebnis.json).
 

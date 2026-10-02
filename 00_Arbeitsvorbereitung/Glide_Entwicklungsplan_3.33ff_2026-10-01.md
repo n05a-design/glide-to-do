@@ -1,8 +1,8 @@
 # Glide – Entwicklungsplan ab 3.33
 
 
-**Ergänzungsauftrag 01.10.2026, 3.33.1:** Vier Seitenleistenbereiche in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen. Nur Listen bleibt verpflichtend sichtbar. Seiten erlaubt Bücher (bestehende Art `library`), Ordner und Seiten; Notizen Notizbücher, Ordner und Notizen; Zeichnungen Ordner und Zeichnungen; Listen alle Arten. Sichtbarkeit und Root-Zuordnung sind lokale Anzeigeeinstellungen, keine Löschaktion. Gemischte Altordner werden vollständig in Listen angezeigt. Einheitliche Anlege-/Verschieberegeln und Prüfung aller Fenster gehören zur Abnahme. [Vertrag](../01_Repository/Glide/docs/74_BEREICHE_UND_FENSTER_3.33.1.md).
-Stand **01.10.2026** · Glide 3.33.0 (Aufgabenformat 20) · Teil 4 von 4 der Analyse vom 01.10.2026 · nachgeführt nach den Beschlüssen D09–D17 und Befund T8
+**Ergänzungsauftrag 01.10.2026, 3.33.1:** Vier Seitenleistenbereiche in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen. Nur Listen bleibt verpflichtend sichtbar. Seiten erlaubt Bücher (bestehende Art `library`), Ordner und Seiten; Notizen Notizbücher, Ordner und Notizen, im Notizbuch auch datierte Zeichnungen (Klarstellung des Inhabers vom 01.10.2026); Zeichnungen Ordner und Zeichnungen; Listen alle Arten. Sichtbarkeit und Root-Zuordnung sind lokale Anzeigeeinstellungen, keine Löschaktion. Gemischte Altordner werden vollständig in Listen angezeigt. Einheitliche Anlege-/Verschieberegeln und Prüfung aller Fenster gehören zur Abnahme. [Vertrag](../01_Repository/Glide/docs/74_BEREICHE_UND_FENSTER_3.33.1.md).
+Stand **02.10.2026** · Glide 3.33.1 (Aufgabenformat 20) · Teil 4 von 4 der Analyse vom 01.10.2026 · nachgeführt nach den Beschlüssen D09–D17, Befund T8 und dem Abschluss von 3.33.1
 
 Grundlagen:
 - [Bestandsaufnahme Code und Dokumentation](Glide_Bestandsaufnahme_Code_und_Dokumentation_2026-10-01.md): Abweichungen AB01–AB17, technische Befunde T1–T8, Ablage
@@ -196,11 +196,15 @@ Aufwand in **Arbeitstagen (AT) im bisherigen Arbeitsmodus**: KI-gestützte Umset
 
 | Schnitt | Inhalt | Aufwand | Voraussetzung |
 |---|---|---|---|
-| 3.33.1 (Ergänzungsauftrag) | Vier Bereiche, Inhaltsgrenzen, Logo, Fensterreaktion und Ablagekontrolle | umgesetzt; Abnahme folgt | Vertrag 74 |
-| UX1 (neue Reservierung offen) | UX1 „Weniger Oberfläche“ inkl. N01, U24 | 5–8 AT | D11, D12; R2 beachten |
-| 3.33.2 (Reservierung) | G01 Parsermodul + Feldchips (U04), N08 | 3–4 AT | D10 |
-| 3.33.3 (Reservierung) | D14 Heute/Demnächst, G05 Fokus, G02 als Board-Gruppierung, H-02 | 4–7 AT | D13, D14 |
-| 3.33.4 (Reservierung) | G29, G31, G32; N07 | 4–7 AT | Referenz- und Löschregeln (Abschnitt 6) |
+| 3.33.1 (Ergänzungsauftrag) | Vier Bereiche, Inhaltsgrenzen, Logo, Fensterreaktion und Ablagekontrolle; Notizbuch mit datierten Zeichnungen | **abgeschlossen 02.10.2026** (Vollprüfung grün, ausgeliefert) | Vertrag 74 |
+| 3.33.2 | D12 Startseite „Ruhig“ (sieben Kacheln, „Heute“ zusammengeführt, Zurücksetzen) + Rest P03 Aufbaukosten | **abgeschlossen 02.10.2026** (Vollprüfung grün, ausgeliefert) | Vertrag 76 |
+| UX1 (neue Reservierung offen) | UX1 „Weniger Oberfläche“ inkl. N01, U24; D12 bereits mit 3.33.2 | 5–7 AT | D11; R2 beachten |
+| 3.33.3 | G01 Parsermodul + Feldchips (Chipteil von U04), D10 | **abgeschlossen 02.10.2026** (Vollprüfung grün, ausgeliefert); Wiederholungen und N08 nicht enthalten | Vertrag 77 |
+| 3.33.4 | Wiederholungen in der Schnelleingabe („jeden Montag“, „alle 2 Wochen“); Wiederholung setzt die Fälligkeit (Entscheidung 02.10.2026) | **abgeschlossen 02.10.2026** (Vollprüfung grün, ausgeliefert) | Vertrag 77 |
+| 3.33.5 | G02 Eisenhower als Gruppierung „Dringlichkeit × Wichtigkeit“ in Board, Liste und Tabelle | **abgeschlossen 02.10.2026** (Vollprüfung grün, ausgeliefert) | D13, Vertrag 78 |
+| 3.33.6 | D14 „Heute“ und „Demnächst“: Abschnitte nächste Aufgabe, Verspätet, Liegen geblieben, Tagesplan, Heute fällig; Tagesbeginn/-abschluss als Modi | in Abnahme | D14, Vertrag 79 |
+| G05/H-02 (neue Reservierung offen) | G05 Fokus mit Timer, H-02 | 2–4 AT | D14 |
+| 3.33.7 (Reservierung) | G29, G31, G32; N07; N08 JPEG-Vorschau Linux | 4–7 AT | Referenz- und Löschregeln (Abschnitt 6) |
 
 - **Fertig, wenn:**
   - Kopfzeile ≤ 4 Symbolknöpfe;
@@ -328,11 +332,11 @@ Empfehlung für die nächste Featurewahl nach der Performance (bestätigt die Ü
 | Abhaken, 5.000 Punkte | ≤ 120 ms | 218 ms |
 | Abhaken, 10.000 Punkte | ≤ 200 ms | 446 ms |
 | Erstes Speichern, 10 MB | ≤ Folgespeichern + 50 ms | +488 ms |
-| Startseite aufbauen (Beispieldaten) | ≤ 150 ms | 348 ms (Linux, 3.12) |
+| Startseite aufbauen (Beispieldaten) | ≤ 150 ms | 348 ms (Linux, 3.12); macOS mit 1.000 Punkten 764 → 507 ms (3.33.2) |
 | Tabellenansicht öffnen, 5.000 Punkte | ≤ 400 ms | 2.671 ms (Linux, 3.12, Median) |
 | Kopfzeilen-Symbolknöpfe | ≤ 4 | 8 |
 | Bedienfläche über Inhalt (Liste, 1280 × 840) | ≤ 15 % | ≈ 27 % |
-| Startseitenkacheln im Standard | 7 (D12) | 12 |
+| Startseitenkacheln im Standard | 7 (D12) | **7 seit 3.33.2** (vorher 12) |
 | Doppelte Bedienoberflächen (U01, U08, U12, U13) | 0 | 4 |
 | Symbole mit mehreren Bedeutungen | 0 (Bewegungspfeile ausgenommen) | 5 |
 | Standprüfung im Repository | 0 Befunde | 4 (3 Logs, 1 fehlende Archivsicherung) |
@@ -347,9 +351,9 @@ Verbindlich ist die Messung auf dem Referenz-Mac mit Aufwärmen, Median und p95 
    - Die lokale Git-Arbeitskopie ist eingerichtet (`Github/glide-to-do`, HEAD 569020e). Rohprotokolle bleiben seit 01.10.2026 lokal (öffentliches Repository); ein Upload der drei alten Recherchelogs entfällt.
    - Die fehlende Archivsicherung der Core-Fixture wurde bytegleich aus dem Zwischenstandsabbild wiederhergestellt. Nur drei alte Recherchelogs fehlen weiterhin.
    - Künftig den Projektordner in die Repository-Wurzel hochladen.
-2. **3.33.0 – erster beauftragter Schnitt, abgeschlossen:** T2 und P09a (W1), Vollprüfung und beide Startfassungen grün. Baseline und Nachmessung mit `messung_speicherweg.py` und `pruefaufrufe_probe.py`, Vorsicherungstest je Formatstufe, Spaltenbreiten der Liste unverändert, Vollprüfung, Abgleich.
-3. **Beauftragte Performance-Fortsetzung:** Rest P03 Startseite, dann P04 und P06r gemäß ARBEITSRICHTUNG; danach P08a mit Differenztest.
-4. **D09 B:** Log-Ausnahme in `Glide/.gitignore` und CI-Grundstufe erledigt (01.10.2026). Offen: Integrationssuiten unter Linux kalibrieren, damit sie verpflichtend in die CI können.
+2. **3.33.1 – Ergänzungsauftrag, abgeschlossen 02.10.2026:** vier Befunde der ersten Vollprüfung behoben (Dialogfehler, Notizbuch-Zeichnung nach Klarstellung des Inhabers, zwei veraltete Prüfungen), Vollprüfung grün, beide Startfassungen abgeglichen. **3.33.0 – erster beauftragter Schnitt, abgeschlossen:** T2 und P09a (W1), Vollprüfung und beide Startfassungen grün. Baseline und Nachmessung mit `messung_speicherweg.py` und `pruefaufrufe_probe.py`, Vorsicherungstest je Formatstufe, Spaltenbreiten der Liste unverändert, Vollprüfung, Abgleich.
+3. **Beauftragte Performance-Fortsetzung:** Rest P03 Startseite mit D12 in 3.33.2 umgesetzt (764 → 507 ms; Kacheln erhalten statt neu aufbauen bleibt als größerer Schritt). Dann P04 und P06r gemäß ARBEITSRICHTUNG; danach P08a mit Differenztest. Die Einblendung des Einstellungsfensters (Median rund 2,1 s, Vertrag 74) gehört als eigener Messpunkt dazu. Empfehlung: Rest P03 zusammen mit dem D12-Standard (sieben Kacheln) beauftragen – sonst wird die Startseite mit zwölf Kacheln optimiert und danach umgebaut.
+4. **D09 B:** CI-Grundstufe erledigt (01.10.2026); Rohprotokolle (`*.log`) bleiben seit der Entscheidung des Inhabers lokal. Offen: Integrationssuiten unter Linux kalibrieren, damit sie verpflichtend in die CI können.
 5. **Nächsten Oberflächenschnitt vorbereiten:** Aktionskennungen von Menübeschriftungen entkoppeln (R2), dann UX1 in der Reihenfolge U07, U03, U24, U10, U19, U22, U13, U14, N01, U02, U05, U01, U16.
 
 ## 11. Pflege dieses Plans

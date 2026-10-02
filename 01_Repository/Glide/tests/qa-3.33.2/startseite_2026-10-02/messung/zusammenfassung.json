@@ -1,0 +1,77 @@
+{
+ "fixture": "messung_startseite.py, 1000 Punkte, 12 Listen, 3 Zeichnungen, 2 angeheftete Seiten, Fenster 1400x950, 6 warme Runden, 4 Paare alt/neu abwechselnd",
+ "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+ "python": "3.14.5",
+ "tk": "9.0.3",
+ "alt_quelle_sha256": "0d432ea8f4381b631f2f1c6f5601acfa50be99e2d05127eef6c957eaaaa38cf4",
+ "neu_quelle_sha256": "63eb7f84651f1f3289b7b47b3378e262700dc8e79acd704ccf94575b6a596e2d",
+ "startseite": {
+  "alter_code_alt_kacheln": {
+   "wechsel_median_ms": 789.7,
+   "aktualisierung_median_ms": 764.2,
+   "aktualisierung_paare_ms": [
+    761.696,
+    766.719,
+    767.227,
+    760.077
+   ],
+   "widgets": 180,
+   "callbackfehler": 0
+  },
+  "alter_code_d12_kacheln": {
+   "wechsel_median_ms": 593.3,
+   "aktualisierung_median_ms": 547.4,
+   "aktualisierung_paare_ms": [
+    548.027,
+    555.282,
+    546.749,
+    545.914
+   ],
+   "widgets": 110,
+   "callbackfehler": 0
+  },
+  "neuer_code_alt_kacheln": {
+   "wechsel_median_ms": 636.3,
+   "aktualisierung_median_ms": 620.7,
+   "aktualisierung_paare_ms": [
+    620.156,
+    621.313,
+    618.058,
+    622.943
+   ],
+   "widgets": 180,
+   "callbackfehler": 0
+  },
+  "neuer_code_d12_kacheln": {
+   "wechsel_median_ms": 547.8,
+   "aktualisierung_median_ms": 506.7,
+   "aktualisierung_paare_ms": [
+    506.305,
+    507.447,
+    506.996,
+    504.747
+   ],
+   "widgets": 114,
+   "callbackfehler": 0
+  }
+ },
+ "ansichten_median_ms": {
+  "alter_code_eigener_standard": {
+   "Startseite": 797.9,
+   "Bibliothek": 974.0,
+   "Liste": 151.3,
+   "Tabelle": 126.6,
+   "Seite mit zwei Bildern": 212.1,
+   "Notiz": 267.3
+  },
+  "neuer_code_eigener_standard": {
+   "Startseite": 510.3,
+   "Bibliothek": 855.7,
+   "Liste": 150.2,
+   "Tabelle": 126.0,
+   "Seite mit zwei Bildern": 209.5,
+   "Notiz": 267.4
+  }
+ },
+ "vergleichsstand": "vorher/quelle: Codedateien 3.33.1 und der damalige Vorlagenkatalog; 156 weitere Ressourcen- und vendor-Dateien waren SHA-256-gleich mit src/glide und wurden nach der Messung entfernt. Zum erneuten Messen diese aus src/glide daneben kopieren."
+}

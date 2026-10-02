@@ -1,6 +1,6 @@
 # Daten, Backups und Migration – Glide
 
-Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20
+Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20
 
 ## Format 20: Beziehungen, Zeit, Pixelsymbole, Archiv, kleine Zeichnungen
 

@@ -1,6 +1,6 @@
 # Prüfplan – Glide
 
-Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
+Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
 
 **Showcase-Pflichtprüfung:** `tests/tools/pruefe_showcase.py` gehört zusätzlich zu den 58 Integrationssuiten in beide Prüfmodi. Sie prüft die gelieferten ZIPs und SHA-256, Teil-/App-Import, Anhangdateien, Remapping von Aufgaben/Bildankern/Boardkarten, alle Dokument-/Ordnerarten, echte Bildvorschauen unter macOS, Klappzustand, Aufgaben-Undo, selbstfüllende Vorlagen und Neustart in einem separaten Prozess. Keine echten Nutzerdaten. [Showcase-Vertrag](72_SHOWCASE_3.32.3.md).
 
@@ -15,7 +15,7 @@ Vor dem finalen Volllauf App-/Modul-/Prüfstand einfrieren und danach per SHA-25
 Die folgenden Suitebeschreibungen behalten ihre Einführungsstände; diese Nummern begrenzen nicht die aktuelle Prüfung.
 
 
-Vollständiger Lauf: `python tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.1/abschluss`; er umfasst alle Suiten, Syntax-, Versions-, Dokument- und Fixtureprüfung, Zeitzonenmessung, fünf Analysen, reproduzierte Beispiel-/Releasedaten und Screenshots. Die Zahl der Schritte steht im Quelltext. `test_features328.py` ergänzt Tagebuch, Format 18, konturlose Menüs, neutrale Aktionen und die verdichtete Notizwerkzeugleiste. `test_features329.py` prüft die Zeichnungsseite: Format-19-Vorsicherung, Ablehnung unbekannter Listenarten, eingebettete Fläche ohne Extrafenster, Pinselvorschau je Zoom, gebündeltes Autosave und Schreibfehler, Referenz-PNG, Nachzeichnung mit Vorher-Snapshot, Rückgängig-Semantik, Duplizieren, Papierkorb, Voll- und additiver Import, Teilbackup, Austausch, Vorlagen, JSON-/SVG-Datei-Rundlauf und Tagebuchübersicht. Manuell bleiben Maus- und Trackpadbedienung, DPI, Mehrmonitor, Screenreader und der Illustrator-/Affinity-Rundlauf.
+Vollständiger Lauf: `python tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.6/abschluss`; er umfasst alle Suiten, Syntax-, Versions-, Dokument- und Fixtureprüfung, Zeitzonenmessung, fünf Analysen, reproduzierte Beispiel-/Releasedaten und Screenshots. Die Zahl der Schritte steht im Quelltext. `test_features328.py` ergänzt Tagebuch, Format 18, konturlose Menüs, neutrale Aktionen und die verdichtete Notizwerkzeugleiste. `test_features329.py` prüft die Zeichnungsseite: Format-19-Vorsicherung, Ablehnung unbekannter Listenarten, eingebettete Fläche ohne Extrafenster, Pinselvorschau je Zoom, gebündeltes Autosave und Schreibfehler, Referenz-PNG, Nachzeichnung mit Vorher-Snapshot, Rückgängig-Semantik, Duplizieren, Papierkorb, Voll- und additiver Import, Teilbackup, Austausch, Vorlagen, JSON-/SVG-Datei-Rundlauf und Tagebuchübersicht. Manuell bleiben Maus- und Trackpadbedienung, DPI, Mehrmonitor, Screenreader und der Illustrator-/Affinity-Rundlauf.
 
 Seit 3.30.0 kommen zwei Suiten dazu.
 
@@ -90,8 +90,8 @@ Zeichenflächen misst sie nicht.
 - gleiche Unterkanten in sieben Ansichten;
 - die Kopfzeilenreihenfolge über Dichtewechsel;
 - den Verlauf als Knopf und Karte;
-- die Seitenleiste ohne „In Bearbeitung“, „Verlauf“ und Klapppfeil;
-- „In Bearbeitung“ als Abschnitt in „Mein Tag“;
+- die Seitenleiste ohne „Demnächst“ (bis 3.33.5 „In Bearbeitung“), „Verlauf“ und Klapppfeil;
+- seit 3.33.6 den Verweis auf „Demnächst“ am Ende von „Heute“;
 - die ruhige Zeichenfläche und die Auswahl;
 - seit der zweiten Rückmeldung außerdem:
   - Farbregel, Kennzahlen als Text und „Startseite anpassen“ unten;
@@ -186,8 +186,21 @@ Seit dem 29.09.2026:
 
 **Im Hintergrund (seit 30.09.2026):** Unter macOS startet `pruefen.py` jede
 Suite mit `tests/tools/hintergrund/sitecustomize.py`. Die Prüffenster nehmen
-weder Fokus noch Tastatur; `--vordergrund` schaltet das ab. Einzelsuiten im
-selben Modus: `GLIDE_QA_HINTERGRUND=1 PYTHONPATH=tests/tools/hintergrund`.
+keine Maus an und holen sich nicht über `focus_force` nach vorn; `--vordergrund`
+schaltet das ab. Einzelsuiten im selben Modus:
+`GLIDE_QA_HINTERGRUND=1 PYTHONPATH=tests/tools/hintergrund`.
+
+**Grenze (gemessen 02.10.2026):** Die Prüf-App bleibt trotzdem die aktive App
+(`NSApplication.isActive` wahr, unabhängig vom Einblendweg). Tastatureingaben
+während eines Laufs können deshalb in Prüfdialogen landen – der
+wahrscheinliche Grund, warum im zweiten Abschlusslauf 3.33.1 eine
+Aufgabenliste einmalig einen fremden Titel trug (nicht nachstellbar). Die
+Suiten mit echten Tastenereignissen (Esc, Return) brauchen diese aktive App;
+bei gesperrtem Bildschirm scheitern sie. Während einer Vollprüfung daher weder
+tippen noch den Mac sperren; `caffeinate -dims` hält das Display wach.
+Aus demselben Grund Suiten mit Tastenereignissen nicht parallel starten: Sie
+nehmen sich gegenseitig die aktive App (02.10.2026, `test_features330`).
+[Nachweis](../tests/qa-3.33.1/abschluss_2026-10-01/README.md).
 
 - `test_etappe1_332.py` prüft Etappe 1 des Ausbaus (Vertrag 68): ICO-Aufbau und
   Skalierung ohne Mischfarben, Aseprite- und Adobe-Paletten samt Ablehnung,

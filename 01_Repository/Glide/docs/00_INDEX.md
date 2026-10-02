@@ -1,8 +1,8 @@
 # Dokumentationsindex
 
-Aktueller Einstieg: [Fundament 3.33](73_FUNDAMENT_3.33.0.md), [Arbeitsrichtung und Abnahme](ARBEITSRICHTUNG.md), [Projektübergabe](09_PROJECT_HANDOFF.md), [Ausbau ab 3.32](68_AUSBAU_3.32.0.md), [Modernisierung 3.30](66_MODERNISIERUNG_3.30.0.md), [Sitzungsprotokoll 24.–26.09.2026](67_SITZUNGSPROTOKOLL_2026-09-24_BIS_2026-09-26.md), [QA-Bericht](07_QA_BERICHT.md), [Zeichnungsseite 3.29](65_ZEICHNUNGSSEITE_3.29.0.md) und [isolierter Zeichenflächenkern](61_ZEICHENFLAECHE_ISOLIERTER_KERN_2026-09-24.md). Die Detaildokumente der vorherigen Versionen bleiben fachliche Nachweise für fortbestehende Funktionen; die Übergabe 62 und die Prüfberichte 63/64 vom 24.09.2026 sind seit dem 26.09.2026 archiviert.
+Aktueller Einstieg: [Heute und Demnächst 3.33.6](79_HEUTE_3.33.6.md), [Eisenhower 3.33.5](78_EISENHOWER_3.33.5.md), [Schnelleingabe 3.33.3](77_EINGABE_3.33.3.md), [Startseite 3.33.2](76_STARTSEITE_3.33.2.md), [Bereiche und Fenster 3.33.1](74_BEREICHE_UND_FENSTER_3.33.1.md), [Fundament 3.33](73_FUNDAMENT_3.33.0.md), [Arbeitsrichtung und Abnahme](ARBEITSRICHTUNG.md), [Projektübergabe](09_PROJECT_HANDOFF.md), [Ausbau ab 3.32](68_AUSBAU_3.32.0.md), [Modernisierung 3.30](66_MODERNISIERUNG_3.30.0.md), [Sitzungsprotokoll 24.–26.09.2026](67_SITZUNGSPROTOKOLL_2026-09-24_BIS_2026-09-26.md), [QA-Bericht](07_QA_BERICHT.md), [Zeichnungsseite 3.29](65_ZEICHNUNGSSEITE_3.29.0.md) und [isolierter Zeichenflächenkern](61_ZEICHENFLAECHE_ISOLIERTER_KERN_2026-09-24.md). Die Detaildokumente der vorherigen Versionen bleiben fachliche Nachweise für fortbestehende Funktionen; die Übergabe 62 und die Prüfberichte 63/64 vom 24.09.2026 sind seit dem 26.09.2026 archiviert.
 
-Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · Einstellungen 2 · Vorlagenformat 2
+Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagenformat 2
 
 ## Begriffe
 
@@ -936,7 +936,29 @@ Vorsicherungen vor diesem Nachlauf:
 ## Ergänzungen 3.33.1
 
 - [Bereiche und Fenster](74_BEREICHE_UND_FENSTER_3.33.1.md)
+- [Abschlussnachweis 3.33.1 (Nachstellung, drei Volläufe, Auslieferung)](../tests/qa-3.33.1/abschluss_2026-10-01/README.md)
 
 - [Recherche vor Roadmapabgleich 3.33.1](../../../00_Arbeitsvorbereitung/Glide_Funktionsrecherche_Ausbau_2026-09-30.md) – unveränderter vorheriger Planungsstand.
 
 - [Dokumentationsreduktion, Wissenseinstieg und neue Logo-Varianten 3.33.1](75_DOKUMENTATIONSREDUKTION_UND_LOGOS_3.33.1.md)
+
+## Startseite 3.33.2
+
+- [Startseite „Ruhig“ und Aufbaukosten](76_STARTSEITE_3.33.2.md)
+- [Nachweis Startseite 3.33.2](../tests/qa-3.33.2/startseite_2026-10-02/README.md)
+
+## Schnelleingabe 3.33.3
+
+- [Deutsche Schnelleingabe mit Feldchips (G01)](77_EINGABE_3.33.3.md)
+- [Nachweis Schnelleingabe 3.33.3](../tests/qa-3.33.3/eingabe_2026-10-02/README.md)
+- [Nachweis Wiederholungen in der Eingabe 3.33.4](../tests/qa-3.33.4/wiederholung_2026-10-02/README.md)
+
+## Eisenhower 3.33.5
+
+- [Eisenhower als Gruppierung (G02)](78_EISENHOWER_3.33.5.md)
+- [Nachweis Eisenhower 3.33.5](../tests/qa-3.33.5/eisenhower_2026-10-02/README.md)
+
+## Heute und Demnächst 3.33.6
+
+- [Heute und Demnächst (D14)](79_HEUTE_3.33.6.md)
+- [Nachweis Heute und Demnächst 3.33.6](../tests/qa-3.33.6/heute_2026-10-02/README.md)

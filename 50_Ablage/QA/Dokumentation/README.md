@@ -1,6 +1,6 @@
 # Dokumentprüfung
 
-Stand der Dokumentationspflege: 01.10.2026 · aktueller Glide-Stand 3.33.1 · Aufgabenformat 20. Die hier abgelegten Renderläufe sind historisch und werden nicht nachgezogen; ihre Versionsangaben gelten für den jeweiligen Lauf.
+Stand der Dokumentationspflege: 02.10.2026 · aktueller Glide-Stand 3.33.6 · Aufgabenformat 20. Die hier abgelegten Renderläufe sind historisch und werden nicht nachgezogen; ihre Versionsangaben gelten für den jeweiligen Lauf.
 
 Historischer Lauf 3.2: `Renderlaeufe/3.2.0_2026-09-04/`. Die Word-Vorlage 2.6.0
 und die fortgeschriebene 3.2.0-Datei wurden mit installiertem Microsoft Word

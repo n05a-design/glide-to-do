@@ -1,6 +1,16 @@
-# QA-Bericht – Glide 3.33.1
+# QA-Bericht – Glide 3.33.6
 
-Stand 01.10.2026 (Formatsicherung, Tabellenmessung, Ablageabgleich) · App 3.33.1 · Datenformat 20 · macOS, Python 3.14.5, Tk 9.0.3
+Stand 02.10.2026 (Heute und Demnächst D14, in Abnahme) · App 3.33.6 · Datenformat 20 · macOS, Python 3.14.5, Tk 9.0.3
+
+**3.33.5 – geprüft und ausgeliefert (02.10.2026):** Eisenhower als Gruppierung „Dringlichkeit × Wichtigkeit“ in Board, Liste und Tabelle (D13); Ziehen setzt Wichtigkeit oder Bearbeitungstag, nie die Fälligkeit. Vollprüfung Exitcode 0 (80 Schritte, 63 Integrationssuiten); 145 Python-/59 Bundle-Dateien bytegleich, Signatur gültig.
+
+**3.33.4 – geprüft und ausgeliefert (02.10.2026):** Wiederholungen in der Schnelleingabe („jeden Montag“, „werktags“, „alle 2 Wochen“, „monatlich“) setzen Regel und als Fälligkeit den ersten Termin (Entscheidung des Inhabers). Vollprüfung Exitcode 0 (79 Schritte, 62 Integrationssuiten); 144 Python-/58 Bundle-Dateien bytegleich, Signatur gültig.
+
+**3.33.3 – geprüft und ausgeliefert (02.10.2026):** Deutsche Schnelleingabe mit Feldchips (G01, D01/D10): Bearbeitungstag, Fälligkeit, Uhrzeit, Aufwand, Wichtigkeit und Labels werden erkannt und als Chips mit × gezeigt; `/morgen` setzt den Bearbeitungstag. Vollprüfung Exitcode 0 (79 Schritte, 62 Integrationssuiten); 144 Python-/58 Bundle-Dateien bytegleich, Signatur gültig. Details im Abschnitt unten.
+
+**3.33.2 – geprüft und ausgeliefert (02.10.2026):** Startseite „Ruhig“ mit sieben Kacheln (D12), zusammengeführte Kachel „Heute“, eigene Auswahl bleibt nach Neustart, „Standard wiederherstellen“; Aufbau der Standardstartseite 764 → 507 ms (1.000 Punkte, Median). Vollprüfung Exitcode 0 (78 Schritte, 61 Integrationssuiten); 143 Python-/57 Bundle-Dateien bytegleich, Signatur gültig. Details im Abschnitt unten.
+
+**3.33.1 – geprüft und ausgeliefert (02.10.2026):** Vollprüfung Exitcode 0 (77 Schritte, 60 Integrationssuiten, Unit-Tests, Showcase, fünf Analysen); 142 Python-/56 Bundle-Dateien bytegleich, Signatur gültig. Vier Befunde des Prüfkandidaten behoben, darunter ein echter Dialogfehler und die vom Inhaber entschiedene Notizbuch-Zeichnung. Details im Abschnitt unten.
 
 **3.33.0 – erster Umsetzungsschnitt:** T2/P09a umgesetzt und ausgeliefert. 76 automatische Schritte, 59 Integrationssuiten, acht Unit-Tests, Showcase und fünf Analysen grün; 140 Python-/54 Bundle-Dateien bytegleich, Signatur gültig, getrennter Showcase-Starter bei Erststart und Neustart geprüft. [Vertrag](73_FUNDAMENT_3.33.0.md) mit Ablageabgleich und Anschlussplan. D12 ist vollständig entschieden: zusätzliche Standardkacheln Zeichnungen und Pinnwand-Vorschau. Der Oberflächenumbau folgt nach diesem Fundament.
 
@@ -16,6 +26,54 @@ Stand 01.10.2026 (Formatsicherung, Tabellenmessung, Ablageabgleich) · App 3.33.
 - **Grenzen:** Keine Vollprüfung der 58 Suiten in dieser Umgebung; macOS/Windows, physische Bedienung, DPI und Screenreader bleiben offen.
 - **Planung:** [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md).
 
+
+## Version 3.33.5 – geprüft und lokal ausgeliefert, 02.10.2026
+
+[Vertrag 78](78_EISENHOWER_3.33.5.md), [Nachweis](../tests/qa-3.33.5/eisenhower_2026-10-02/README.md), [Vollprotokoll](../tests/qa-3.33.5/eisenhower_2026-10-02/vollpruefung/ergebnis.json), [Lieferabgleich](../tests/qa-3.33.5/eisenhower_2026-10-02/auslieferung.json).
+
+- **Exitcode 0 (rund 14:01–14:27):** 80 Schritte, alle 63 Integrationssuiten, Unit-Tests (vier neu für `eisenhower`), Showcase und fünf Analysen; Quellstand (338 Dateien) unverändert.
+- **Umfang:** Gruppierung über die gemeinsame Gruppenlogik; neue Pflichtsuite `test_eisenhower3335.py` (Auswahl, Spalten, Ablegen, Ablehnung bei naher Fälligkeit, Undo, Alt+Rechts, Liste, Neuladen), Gegenprobe mit 3.33.4 rot. `test_features322`/`325` fanden den zunächst nicht zugeordneten Palettenbefehl (R2); behoben.
+- **Lieferung:** 145 Python-/59 Bundle-Dateien bytegleich, Bundle 3.33.5, Signatur gültig; Showcase ausgeliefert.
+- **Grenzen:** Ziehen mit echter Maus, Windows/Linux, DPI und Screenreader offen; keine echten Nutzerdaten gelesen.
+
+## Version 3.33.4 – geprüft und lokal ausgeliefert, 02.10.2026
+
+[Vertrag 77, Ergänzung 3.33.4](77_EINGABE_3.33.3.md#ergänzung-3334-wiederholungen), [Nachweis](../tests/qa-3.33.4/wiederholung_2026-10-02/README.md), [Vollprotokoll](../tests/qa-3.33.4/wiederholung_2026-10-02/vollpruefung/ergebnis.json), [Lieferabgleich](../tests/qa-3.33.4/wiederholung_2026-10-02/auslieferung.json).
+
+- **Exitcode 0 (rund 13:27–13:51):** 79 Schritte, alle 62 Integrationssuiten, 51 Unit-Tests (drei neu), Showcase und fünf Analysen; Quellstand (334 Dateien) unverändert.
+- **Umfang:** Wiederholungsregeln des Datenmodells aus der Eingabe; Fälligkeit = erster Termin, eine ausdrückliche Fälligkeit hat Vorrang; Folgetermin beim Abhaken über die vorhandene Logik. `test_eingabe3333` prüft Eingabe, Kalender, Folgetermin und Zurücknehmen; Gegenprobe mit 3.33.3 rot.
+- **Lieferung:** 144 Python-/58 Bundle-Dateien bytegleich, Bundle 3.33.4, Signatur gültig; Showcase ausgeliefert. Vorheriger Stand: 3.33.3-Hauptdatei als `_Z` im Archiv.
+- **Grenzen:** echte Bedienung, Windows/Linux, DPI und Screenreader offen; keine echten Nutzerdaten gelesen.
+
+## Version 3.33.3 – geprüft und lokal ausgeliefert, 02.10.2026
+
+[Vertrag 77](77_EINGABE_3.33.3.md), [Nachweis](../tests/qa-3.33.3/eingabe_2026-10-02/README.md), [Vollprotokoll](../tests/qa-3.33.3/eingabe_2026-10-02/vollpruefung/ergebnis.json), [Quellstand](../tests/qa-3.33.3/eingabe_2026-10-02/quellstand.json), [Lieferabgleich](../tests/qa-3.33.3/eingabe_2026-10-02/auslieferung.json).
+
+- **Exitcode 0 (02.10.2026, rund 11:58–12:22):** 79 automatische Schritte, darunter alle 62 Integrationssuiten und die Unit-Tests (14 neu für `capture_parser`); zwei plattformbedingt übersprungen. Quellstand (333 Dateien) vor und nach dem Lauf unverändert.
+- **Umfang:** Parser Tk-frei in `capture_parser.py`, bisherige Parser dorthin umgezogen; Chipleiste unter der Eingabezeile und in der Schnellerfassung; D10 für „/“-Befehle. Neue Pflichtsuite `test_eingabe3333.py` über Tastenereignis, Klick auf ×, Return, Rückgängig und Schnellerfassung; Gegenprobe mit 3.33.2 rot. `test_bilder330` prüft `/morgen` als Bearbeitungstag.
+- **Lieferung:** `abgleich_07.py` ohne Abweichung, Bundle neu gebaut; 144 Python-/58 Bundle-Dateien bytegleich, Bundle 3.33.3, `de.shaye.glide`, `codesign --verify --deep --strict` bestanden; Showcase ausgeliefert. Vorheriger Stand: 3.33.2-Hauptdatei als `_Z` im Archiv.
+- **Grenzen:** Wiederholungen in der Eingabe nicht enthalten (Entscheidung offen). Echte Tastatur-/Mausbedienung, Windows/Linux, DPI und Screenreader offen; keine echten Nutzerdaten gelesen; keine Releasefreigabe.
+
+## Version 3.33.2 – geprüft und lokal ausgeliefert, 02.10.2026
+
+[Vertrag 76](76_STARTSEITE_3.33.2.md), [Nachweis](../tests/qa-3.33.2/startseite_2026-10-02/README.md), [Vollprotokoll](../tests/qa-3.33.2/startseite_2026-10-02/vollpruefung/ergebnis.json), [Quellstand](../tests/qa-3.33.2/startseite_2026-10-02/quellstand.json), [Lieferabgleich](../tests/qa-3.33.2/startseite_2026-10-02/auslieferung.json), [Messung](../tests/qa-3.33.2/startseite_2026-10-02/messung/zusammenfassung.json).
+
+- **Exitcode 0 (02.10.2026, rund 11:00–11:24):** 78 automatische Schritte, darunter alle 61 Integrationssuiten, Unit-Tests (`home_tiles` mit acht neuen), Showcase und fünf Analysen; zwei plattformbedingt übersprungen. Quellstand (329 Dateien) vor und nach dem Lauf unverändert. Erster Versuch nur an der Attributprüfung gescheitert (Hilfsklasse ohne Canvas-Basis), korrigiert und vollständig wiederholt.
+- **Umfang:** D12-Standard mit sieben Kacheln; „Heute“ mit Tagesziel und nächster Aufgabe ohne Doppelung; Korrektur der verlorenen Einblendung nach Neustart; „Standard wiederherstellen“. Neue Pflichtsuite `test_startseite3332.py` über echte Knöpfe, Dialog und Neuladen der Einstellungen; Gegenprobe mit 3.33.1 rot. Fünf ältere Suiten blenden die von ihnen geprüften Kacheln jetzt ausdrücklich ein.
+- **Tempo (macOS, 1.000 Punkte, vier abwechselnde Paare, Median):** Aktualisierung der Startseite 764,2 → 506,7 ms, Wechsel 789,7 → 547,8 ms; bei gleichen zwölf Kacheln 620,7 ms. Bibliothek im Ansichtswerkzeug 974 → 856 ms; Liste, Tabelle, Seite und Notiz unverändert. Das Planziel 150 ms ist nicht erreicht; der Rest ist Tk-Layout je Widget.
+- **Lieferung:** `abgleich_07.py` ohne Abweichung, Bundle neu gebaut; 143 Python-/57 Bundle-Dateien bytegleich, Bundle 3.33.2, `de.shaye.glide`, `codesign --verify --deep --strict` bestanden. Showcase ausgeliefert. Vorheriger Stand: 3.33.1-Hauptdatei als `_Z` im Archiv, Quellstand in `vorher/quelle` und Git.
+- **Grenzen:** physische Bedienung, Windows/Linux, DPI/Mehrmonitor und Screenreader offen; keine echten Nutzerdaten gelesen; keine Releasefreigabe.
+
+## Version 3.33.1 – geprüft und lokal ausgeliefert, 02.10.2026
+
+[Vertrag 74](74_BEREICHE_UND_FENSTER_3.33.1.md), [Abschlussnachweis](../tests/qa-3.33.1/abschluss_2026-10-01/README.md), [Vollprotokoll](../tests/qa-3.33.1/abschluss_2026-10-01/vollpruefung_3/ergebnis.json), [eingefrorener Quellstand](../tests/qa-3.33.1/abschluss_2026-10-01/quellstand.json), [Lieferabgleich](../tests/qa-3.33.1/abschluss_2026-10-01/auslieferung.json), [Nachstellung](../tests/qa-3.33.1/abschluss_2026-10-01/nachstellung.json).
+
+- **Ausgangslage:** Die Vollprüfung des Prüfkandidaten vom 01.10.2026, 18:51 ([Ergebnis](../tests/qa-3.33.1/bereiche_fenster_2026-10-01/vollpruefung/ergebnis.json)) war rot: `audit_app`, `test_ui39`, `test_features329`, `test_aufraeumen330`. Alle vier auf dem Mac nachgestellt.
+- **Korrekturen:** Dialog „Neu anlegen“ übergeht die 1 × 1-Meldung beim Einblenden und bleibt auf niedrigen Bildschirmen zweispaltig (echter Fehler seit dem verborgenen Vermessen). Notizbücher im Bereich Notizen nehmen datierte Zeichnungen auf (Entscheidung des Inhabers 01.10.2026; `sidebar_policy.CONTAINED`, Zielordner in allen Anlege-/Verschiebewegen). `audit_app` und `test_aufraeumen330` auf den 3.33.1-Vertrag gebracht. Zwei neue Unit-Tests (26), `test_bereiche3331` mit echtem Ziehen ins Notizbuch, Momentdatum, Undo und Ablehnungen; Gegenprobe gegen Git 5b2682c rot, neuer Stand grün.
+- **Exitcode 0 (dritter Lauf, 02.10.2026 00:52–01:17):** 77 automatische Schritte bestanden, zwei plattformbedingt übersprungen (Screenshot-Erzeuger, menschliche Sichtprüfung). Quellstand (324 Dateien) vor und nach dem Lauf unverändert.
+- **Zwei ungültige Vorläufe, belegt:** Lauf 1 scheiterte an `test_fenster330`/`test_bereiche3331`, weil der Bildschirm ab 00:16 gesperrt war (Gegenprobe gesperrt rot, entsperrt grün). Lauf 2 scheiterte einmalig an `test_features330` (fremder Listentitel), wahrscheinlich durch Tastatureingaben während des Laufs; einzeln und dreifach instrumentiert grün. Eine Aktivierungsprobe zeigt: Der Hintergrundmodus schirmt die Maus ab, nicht die Tastatur. Testplan und Übergabe nennen diese Grenze jetzt.
+- **Lieferung:** `abgleich_07.py` ohne Abweichung; Bundle mit `baue_app.py` neu gebaut. 142 Dateien in `07_Python-Versionen` und 56 im Bundle per SHA-256 gleich `src/glide`; Bundle 3.33.1, `de.shaye.glide`, `codesign --verify --deep --strict` bestanden. Vorheriger 07-Stand in Git 5b2682c. Entwicklungsbundle mit Ad-hoc-Signatur und installiertem Python 3.14.5.
+- **Grenzen:** Fenstermessung „alle Fenster sofort“ weiter nicht abgenommen (Einstellungsfenster Median rund 2,1 s, Vertrag 74). Physische Maus-/Trackpad-/OS-Fokusbedienung, Windows/Linux, Mehrmonitor/DPI und Screenreader offen. Keine echten Nutzerdaten gelesen; alle Läufe mit temporärem `GLIDE_DATA_DIR`. Keine Releasefreigabe.
 
 ## Version 3.33.0 – geprüft und lokal ausgeliefert, 01.10.2026
 

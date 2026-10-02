@@ -1,0 +1,65 @@
+{
+  "app_version": "3.33.4",
+  "format_version": 20,
+  "bearbeitungstag": "2026-10-02",
+  "dokumente": [
+    {
+      "titel": "Vermarktung · Umsetzung",
+      "art": "tasks"
+    },
+    {
+      "titel": "Abstimmung · Entwurf 02",
+      "art": "note"
+    },
+    {
+      "titel": "Bildwelt · Auswahl mit Kommentaren",
+      "art": "gallery"
+    },
+    {
+      "titel": "Quartier · Pixelskizze",
+      "art": "drawing"
+    },
+    {
+      "titel": "Wochenstart · Wiederkehrende Checkliste",
+      "art": "tasks"
+    },
+    {
+      "titel": "Wiedervorlagen · Projektrhythmus",
+      "art": "tasks"
+    },
+    {
+      "titel": "Rückblick · Briefing freigegeben",
+      "art": "note"
+    },
+    {
+      "titel": "Tagesnotiz · Gestaltung und Freigabe",
+      "art": "note"
+    },
+    {
+      "titel": "Vorbereitung · abgeschlossen",
+      "art": "tasks"
+    },
+    {
+      "titel": "Parkquartier · Briefing und Freigabe",
+      "art": "page"
+    }
+  ],
+  "bilder": 6,
+  "seitenbilder": 3,
+  "projektpinnwaende": 2,
+  "vorlagen": 2,
+  "dateien": {
+    "Glide-Showcase.glidebackup": {
+      "bytes": 32958184,
+      "sha256": "75326caa968847f038ced86d3c80ac5dd47b871f4574427ecbc96dd6da64a88f"
+    },
+    "Glide-Showcase_App.glideapp": {
+      "bytes": 37564959,
+      "sha256": "bdddc022b182877d8614a299520053a733f92df2392ae03e0586d0c3cf99ca21"
+    },
+    "Glide-Showcase.glidetemplates": {
+      "bytes": 6066575,
+      "sha256": "76e954090c45107bd9eab725e89e82b4454a4ef0d01c231ccbdaa7260cf835a4"
+    }
+  }
+}

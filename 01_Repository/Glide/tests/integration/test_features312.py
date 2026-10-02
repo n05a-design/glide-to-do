@@ -58,7 +58,8 @@ with tempfile.TemporaryDirectory(prefix="glide-features312-") as folder:
         app.set_today_view()
         root.update()
         assert app.view_mode == app.PLAN_DAY_VIEW and app.plan_day() == heute
-        assert app.get_display_title().startswith("Mein Tag · ")
+        # Seit 3.33.6 (D14) heißt die Ansicht am heutigen Tag „Heute“.
+        assert app.get_display_title().startswith("Heute · ")
         assert app.count_today_plan() == 2
         assert app.system_listbox.exists(app.PLAN_DAY_ROW_ID)
         assert not app.system_listbox.exists("smart:today")

@@ -141,13 +141,32 @@ with tempfile.TemporaryDirectory(prefix="glide-features325-") as folder:
         # ================================================================
         # Punkte 1.5, 1.6 und 2.2: Abschnitte mit Hierarchie
         # ================================================================
+        # Seit 3.33.6 (D14) steht die nächste Aufgabe oben in „Heute“;
+        # „Demnächst“ (bis 3.33.5 „In Bearbeitung“) zeigt chronologisch ohne sie.
         app.set_in_progress_view()
         root.update()
         abschnitte = [zeile for zeile in app.tree.get_children("")
                       if zeile in app.OVERVIEW_SECTION_ROW_IDS]
-        assert abschnitte[0] == app.NEXT_TASK_SECTION_ROW_ID
-        assert app.OVERDUE_SECTION_ROW_ID in abschnitte
+        assert app.NEXT_TASK_SECTION_ROW_ID not in abschnitte
+        assert abschnitte[0] == app.OVERDUE_SECTION_ROW_ID
         assert app.IN_PROGRESS_SECTION_ROW_ID in abschnitte
+        # Ein Abschnitt lässt sich zuklappen, und das übersteht den Aufbau.
+        app.set_overview_section_open(app.OVERDUE_SECTION_ROW_ID, False)
+        app.refresh_tree()
+        root.update()
+        assert not app.tree.item(app.OVERDUE_SECTION_ROW_ID, "open")
+        assert app.tree.item(app.IN_PROGRESS_SECTION_ROW_ID, "open")
+        assert app.OVERDUE_SECTION_ROW_ID in app.settings["overview_sections_closed"]
+        # Eine unbekannte Kennung überlebt die Normalisierung nicht.
+        bereinigt = app.normalize_personal_settings(
+            {"overview_sections_closed": [app.OVERDUE_SECTION_ROW_ID, "section:erfunden"]})
+        assert bereinigt["overview_sections_closed"] == [app.OVERDUE_SECTION_ROW_ID]
+        app.set_overview_section_open(app.OVERDUE_SECTION_ROW_ID, True)
+        app.set_today_view()
+        root.update()
+        abschnitte = [zeile for zeile in app.tree.get_children("")
+                      if zeile in app.OVERVIEW_SECTION_ROW_IDS]
+        assert abschnitte[0] == app.NEXT_TASK_SECTION_ROW_ID
         # Genau eine Aufgabe steht im Abschnitt „Nächste Aufgabe".
         assert len(app.tree.get_children(app.NEXT_TASK_SECTION_ROW_ID)) == 1
         # Und sie steht in keinem anderen Abschnitt noch einmal.
@@ -160,18 +179,6 @@ with tempfile.TemporaryDirectory(prefix="glide-features325-") as folder:
         assert fokus_item["id"] == alt["id"]
         # Die Rangfolge steht an einer Stelle und ist begründbar.
         assert app.task_urgency_rank(alt) < app.task_urgency_rank(spaeter)
-        # Ein Abschnitt lässt sich zuklappen, und das übersteht den Aufbau.
-        app.set_overview_section_open(app.OVERDUE_SECTION_ROW_ID, False)
-        app.refresh_tree()
-        root.update()
-        assert not app.tree.item(app.OVERDUE_SECTION_ROW_ID, "open")
-        assert app.tree.item(app.NEXT_TASK_SECTION_ROW_ID, "open")
-        assert app.OVERDUE_SECTION_ROW_ID in app.settings["overview_sections_closed"]
-        # Eine unbekannte Kennung überlebt die Normalisierung nicht.
-        bereinigt = app.normalize_personal_settings(
-            {"overview_sections_closed": [app.OVERDUE_SECTION_ROW_ID, "section:erfunden"]})
-        assert bereinigt["overview_sections_closed"] == [app.OVERDUE_SECTION_ROW_ID]
-        app.set_overview_section_open(app.OVERDUE_SECTION_ROW_ID, True)
         # Der Eingang in „Mein Tag" ist ebenfalls ein Abschnitt mit Kindern.
         eingang_punkt = app.new_item("Ohne Tag und ohne Frist")
         liste["items"].append(eingang_punkt)
@@ -184,7 +191,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features325-") as folder:
         # Der Weg zur nächsten Aufgabe führt in ihren Abschnitt.
         app.set_home_view()
         assert app.open_next_task() == "break"
-        assert app.view_mode == "in_progress"
+        assert app.view_mode == app.PLAN_DAY_VIEW
         assert app.tree.selection() and app.tree.parent(app.tree.selection()[0]) == \
             app.NEXT_TASK_SECTION_ROW_ID
 

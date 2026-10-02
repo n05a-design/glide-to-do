@@ -84,8 +84,11 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
         menue = app.folder_quick_add_menu(None)
         eintraege = [menue.entrycget(index, "label") for index in range(menue.index("end") + 1)
                      if menue.type(index) == "command"]
-        assert eintraege == ["Neue Liste …", "Neue Seite", "Neue Notiz …", "Neue Pinnwand …", "Neue Zeichnung",
-                             "Neue Galerie", "Neuer Ordner …", "Listen importieren …"], eintraege
+        # Seit 3.33.1 nimmt „Listen“ jede Art auf, also auch Buch und Notizbuch
+        # (Vertrag 74); gleiche Reihenfolge wie im Ordnermenü (test_features330).
+        assert eintraege == ["Neue Liste …", "Neue Seite", "Neue Notiz …", "Neue Pinnwand …", "Neue Galerie",
+                             "Neue Zeichnung", "Neuer Ordner …", "Neues Buch …", "Neues Notizbuch …",
+                             "Listen importieren …"], eintraege
         listen_iid = f"list:{normal['id']}"
         app.sidebar_listbox.see(listen_iid)
         ruhe()

@@ -1,8 +1,18 @@
 # Glide – Übergabe an eine neue Sitzung
 
 
-**Ergänzungsauftrag 01.10.2026, 3.33.1:** Vier Seitenleistenbereiche in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen. Nur Listen bleibt verpflichtend sichtbar. Seiten erlaubt Bücher (bestehende Art `library`), Ordner und Seiten; Notizen Notizbücher, Ordner und Notizen; Zeichnungen Ordner und Zeichnungen; Listen alle Arten. Sichtbarkeit und Root-Zuordnung sind lokale Anzeigeeinstellungen, keine Löschaktion. Gemischte Altordner werden vollständig in Listen angezeigt. Einheitliche Anlege-/Verschieberegeln und Prüfung aller Fenster gehören zur Abnahme. [Vertrag](../01_Repository/Glide/docs/74_BEREICHE_UND_FENSTER_3.33.1.md).
-Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · für den nächsten Chat oder Bearbeiter
+**Ergänzungsauftrag 01.10.2026, 3.33.1:** Vier Seitenleistenbereiche in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen. Nur Listen bleibt verpflichtend sichtbar. Seiten erlaubt Bücher (bestehende Art `library`), Ordner und Seiten; Notizen Notizbücher, Ordner und Notizen, im Notizbuch auch datierte Zeichnungen (Klarstellung des Inhabers vom 01.10.2026); Zeichnungen Ordner und Zeichnungen; Listen alle Arten. Sichtbarkeit und Root-Zuordnung sind lokale Anzeigeeinstellungen, keine Löschaktion. Gemischte Altordner werden vollständig in Listen angezeigt. Einheitliche Anlege-/Verschieberegeln und Prüfung aller Fenster gehören zur Abnahme. [Vertrag](../01_Repository/Glide/docs/74_BEREICHE_UND_FENSTER_3.33.1.md).
+Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · für den nächsten Chat oder Bearbeiter
+
+**3.33.5 – Eisenhower G02, geprüft und ausgeliefert (02.10.2026):** Gruppierung „Dringlichkeit × Wichtigkeit“ in Board, Liste und Tabelle nach D13; Ziehen setzt Wichtigkeit (mittel/niedrig) oder Bearbeitungstag (heute/nach dem Zweitagesfenster), nie die Fälligkeit. Vollprüfung Exitcode 0, 145 Python-/59 Bundle-Dateien bytegleich. [Vertrag 78](../01_Repository/Glide/docs/78_EISENHOWER_3.33.5.md).
+
+**3.33.4 – Wiederholungen in der Eingabe, geprüft und ausgeliefert (02.10.2026):** „jeden Montag“, „werktags“, „montags und donnerstags“, „alle 2 Wochen“, „monatlich“ usw. setzen die Wiederholung und als Fälligkeit den ersten Termin (Entscheidung des Inhabers 02.10.2026). Vollprüfung Exitcode 0, 144 Python-/58 Bundle-Dateien bytegleich. [Vertrag 77](../01_Repository/Glide/docs/77_EINGABE_3.33.3.md#ergänzung-3334-wiederholungen).
+
+**3.33.3 – Schnelleingabe G01, geprüft und ausgeliefert (02.10.2026):** Die Eingabezeile erkennt Bearbeitungstag, Fälligkeit („fällig“/„bis“), Uhrzeit, Aufwand, Wichtigkeit („!hoch“) und Labels („#Name“) und zeigt jede Erkennung als Chip mit ×; zurückgenommener Text bleibt im Titel, Anführungszeichen schützen. D10 umgesetzt: `/morgen` setzt den Bearbeitungstag. Schnellerfassung mit denselben Chips; Feld „Fällig“ hat Vorrang. Fachlogik Tk-frei in `capture_parser.py`. Vollprüfung Exitcode 0 (79 Schritte, 62 Integrationssuiten), 144 Python-/58 Bundle-Dateien bytegleich. **Offen zur Entscheidung:** Wiederholungen in der Eingabe („jeden Montag“) bräuchten eine Fälligkeit – widerspricht D01/D10 ohne neue Festlegung. [Vertrag 77](../01_Repository/Glide/docs/77_EINGABE_3.33.3.md).
+
+**3.33.2 – Startseite „Ruhig“, geprüft und ausgeliefert (02.10.2026):** D12 umgesetzt – sieben Standardkacheln, „Heute“ trägt Tagesziel und nächste Aufgabe ohne Doppelung, eine eigene Auswahl bleibt auch nach Neustart (Korrektur), „Standard wiederherstellen“ im Dialog. Rest P03: Größenmeldungen des Hauptfensters in Tcl gefiltert, gerundete Flächen einmal je Leerlauf gezeichnet, Umbruch und Farben nur bei Änderung. Standardstartseite 764 → 507 ms (1.000 Punkte), Bibliothek 974 → 856 ms; Ziel 150 ms nicht erreicht. Fachlogik Tk-frei in `home_tiles.py`. Vollprüfung Exitcode 0 (78 Schritte, 61 Integrationssuiten), 143 Python-/57 Bundle-Dateien bytegleich. [Vertrag 76](../01_Repository/Glide/docs/76_STARTSEITE_3.33.2.md).
+
+**3.33.1 – geprüft und ausgeliefert (02.10.2026):** Der Prüfkandidat war in der Mac-Vollprüfung rot (vier Suiten). Behoben: Dialog „Neu anlegen“ bleibt auf niedrigen Bildschirmen zweispaltig (1 × 1-Meldung beim Einblenden übergangen); Notizbücher im Bereich Notizen nehmen datierte Zeichnungen auf (**Klarstellung des Inhabers vom 01.10.2026**, nicht erneut vorlegen); zwei Prüfungen auf Vertrag 74 gebracht. Vollprüfung Exitcode 0 (77 Schritte, 60 Integrationssuiten), 142 Python-/56 Bundle-Dateien bytegleich, Signatur gültig. Beide Startfassungen tragen 3.33.1. **Neue Prüfregel:** Während der Vollprüfung den Mac nicht sperren und nicht tippen – der Hintergrundmodus schirmt nur die Maus ab. [Nachweis](../01_Repository/Glide/tests/qa-3.33.1/abschluss_2026-10-01/README.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
 
 **3.33.0 – erster Umsetzungsschnitt:** T2/P09a umgesetzt und ausgeliefert. 76 automatische Schritte, 59 Integrationssuiten, acht Unit-Tests, Showcase und fünf Analysen grün; 140 Python-/54 Bundle-Dateien bytegleich, Signatur gültig, getrennter Showcase-Starter bei Erststart und Neustart geprüft. [Vertrag](../01_Repository/Glide/docs/73_FUNDAMENT_3.33.0.md) mit Ablageabgleich und Anschlussplan. D12 ist vollständig entschieden: zusätzliche Standardkacheln Zeichnungen und Pinnwand-Vorschau. Der Oberflächenumbau folgt nach diesem Fundament.
 
@@ -34,7 +44,7 @@ Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · für den nächsten Chat
 - **Vorfassung:** [Archiv](Glide_Sitzungsuebergabe_2026-09-30.md).
 
 
-**Aktiver Showcase:** [Vertrag und Prüfgrenzen](../01_Repository/Glide/docs/72_SHOWCASE_3.32.3.md), [Nutzeranleitung](../05_Probelisten_Testdaten/Showcase/README.md). Eigenständiger, dauerhaft bearbeitbarer Arbeitsstand mit allen fünf Dokumentarten und den Bildern aus `20_Grafik_Master/06_Beispielbilder`; normale Glide-Nutzerdaten bleiben getrennt. Die Funktionsvorschau wurde auf den 01.10.2026 aktualisiert. Showcase-Prüfung ist zusätzlich zu 58 Suiten verpflichtend. Bestehende Feature-/Performancefolge und offene Auswahl bleiben gültig.
+**Aktiver Showcase:** [Vertrag und Prüfgrenzen](../01_Repository/Glide/docs/72_SHOWCASE_3.32.3.md), [Nutzeranleitung](../05_Probelisten_Testdaten/Showcase/README.md). Eigenständiger, dauerhaft bearbeitbarer Arbeitsstand mit allen fünf Dokumentarten und den Bildern aus `20_Grafik_Master/06_Beispielbilder`; normale Glide-Nutzerdaten bleiben getrennt. Die Funktionsvorschau wurde auf den 01.10.2026 aktualisiert. Showcase-Prüfung ist zusätzlich zu den 60 Pflichtsuiten verpflichtend. Bestehende Feature-/Performancefolge und offene Auswahl bleiben gültig.
 
 **Fortlaufende Arbeitsgrundlage:** [Arbeitsrichtung und Abnahme](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) ist in AGENTS.md verankert. Der [Dokumentations-/Prüfwerkzeugnachlauf](../01_Repository/Glide/tests/qa-3.32.3/dokumentationsabgleich_2026-10-01/ergebnis.json) aktualisiert lokale Regeln und Einstiege bei unveränderter App 3.32.3.
 
@@ -53,8 +63,9 @@ um Ziehen erweitern: D04 ist jetzt 3.32.2. [Drag-/Performance-Vertrag 3.32.2](..
 ## 1. In fünf Sätzen
 
 - Glide ist eine lokale Aufgaben-, Notiz- und Seiten-App in Python mit Tk 9
-  (eine Datei `src/glide/app.pyw` mit rund 54.000 Zeilen, dazu sieben Module).
-- Der aktuelle Stand ist **3.33.1**:
+  (eine Datei `src/glide/app.pyw` mit rund 54.400 Zeilen, dazu zehn Module; Fachlogik nach D17
+  Tk-frei in `schema_backups.py`, `sidebar_policy.py` und `svg_geometry.py`).
+- Der aktuelle Stand ist **3.33.6**:
   - Etappe 1 der Funktionsrecherche: Symbol-Export, Paletten, Platzhalter,
     Tagesabschluss;
   - zwei behobene Hänger: Menüleiste und Seite mit Bildern;
@@ -63,7 +74,9 @@ um Ziehen erweitern: D04 ist jetzt 3.32.2. [Drag-/Performance-Vertrag 3.32.2](..
   - Prüfungen laufen im Hintergrund;
   - Drag-and-drop in bestehenden Seiten-/Notizbereichen;
   - Schriftcache, gebündelte Formatleistenlayouts und gemeinsamer Hover, mit Vorher-/Nachher-Messungen;
-  - erhaltene Bibliothekskarten/Aktionsleisten im selben Host und einmaliges Archiv-Zurückholen.
+  - erhaltene Bibliothekskarten/Aktionsleisten im selben Host und einmaliges Archiv-Zurückholen;
+  - 3.33.0: gemeinsame Formatsicherung (T2) und Tabelle ohne Listenspaltenmessung (P09a);
+  - 3.33.1: vier Seitenleistenbereiche, Inhaltsgrenzen, neues Logo, Dialoge erst fertig positioniert einblenden.
 - Der Inhaber startet Glide **nur** aus `07_Python-Versionen` oder aus
   `01_Repository/Glide/build/macos/Glide.app`. Eine Änderung ist erst bei ihm,
   wenn beide abgeglichen sind.
@@ -75,7 +88,7 @@ um Ziehen erweitern: D04 ist jetzt 3.32.2. [Drag-/Performance-Vertrag 3.32.2](..
 
 | Was | Wo |
 |---|---|
-| Code | `01_Repository/Glide/src/glide/` (`app.pyw`, `drawing.py`, `drawing_image.py`, `backdrop.py`, `page_markdown.py`, `image_preview.py`, `logo.py`, `glide_start.py`) |
+| Code | `01_Repository/Glide/src/glide/` (`app.pyw`, `drawing.py`, `drawing_image.py`, `backdrop.py`, `page_markdown.py`, `image_preview.py`, `logo.py`, `glide_start.py`, `schema_backups.py`, `sidebar_policy.py`, `svg_geometry.py`) |
 | Startbare Fassung des Inhabers | `07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.32.3.pyw` plus Module, `resources`, `vendor` |
 | macOS-Bundle | `01_Repository/Glide/build/macos/Glide.app` (Kennung `de.shaye.glide`, nie ändern; Windows `Shaye.Glide`) |
 | Verträge | `docs/66_MODERNISIERUNG_3.30.0.md` (3.30, 3.31: Abschnitte 2.17, 2.18), `docs/68_AUSBAU_3.32.0.md` (ab 3.32) |
@@ -141,20 +154,30 @@ um Ziehen erweitern: D04 ist jetzt 3.32.2. [Drag-/Performance-Vertrag 3.32.2](..
 ## 5. Prüfen
 
 - **Vollprüfung:**
-  `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.1/<Name> --timeout 900`
-  - 58 Suiten einschließlich Klapp-, Drag-/Performance- und Bibliothekskarten-Kontrolle, bisher rund 25 Minuten.
-  - Unter macOS laufen die Fenster im Hintergrund und nehmen weder Fokus noch
-    Tastatur; `--vordergrund` schaltet das ab.
+  `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.6/<Name> --timeout 900`
+  - 60 Suiten einschließlich Klapp-, Drag-/Performance-, Bibliothekskarten-, Fundament- und Bereichskontrolle, dazu Unit-Tests, Showcase und fünf Analysen; rund 25 Minuten.
+  - Den Mac während des Laufs nicht sperren: Ein gesperrter Bildschirm stellt weder Tastaturfokus noch Fensterfotos zu, `test_fenster330` und `test_bereiche3331` scheitern dann (01./02.10.2026 belegt). Für lange Läufe `caffeinate -dims` voranstellen.
+  - Unter macOS laufen die Fenster im Hintergrund und nehmen keine Maus an;
+    `--vordergrund` schaltet das ab. Die Tastatur ist **nicht** abgeschirmt: Die
+    Prüf-App bleibt aktiv, Eingaben können in Prüfdialogen landen. Während des
+    Laufs nicht tippen (02.10.2026 gemessen, siehe Testplan).
 - **Einzelsuite:** `python3 -B tests/integration/<suite>.py`, im Hintergrund
   mit `GLIDE_QA_HINTERGRUND=1 PYTHONPATH=tests/tools/hintergrund`.
 - **Überall fest:** Standprüfung und Linkprüfung laufen in der Vollprüfung mit
   (`tests/tools/standpruefung.py`). Neue Dokumente unter `docs/` müssen in
   `docs/00_INDEX.md` stehen.
-- **Letztes Ergebnis:** 3.32.3, Exitcode 0, 73 Schritte/58 Suiten und fünf Analysen; Python-Fassung
-  und Bundle SHA-256-bytegleich (139/53 Dateien). Siehe
-  `docs/07_QA_BERICHT.md` und `tests/qa-verlauf.md`.
+- **Letztes Ergebnis:** 3.33.5 am 02.10.2026, Exitcode 0, 80 Schritte mit 63 Integrationssuiten,
+  Unit-Tests, Showcase und fünf Analysen; Python-Fassung und Bundle SHA-256-bytegleich
+  (145/59 Dateien). Siehe `docs/07_QA_BERICHT.md` und `tests/qa-verlauf.md`.
 
 ## 6. Was als Nächstes ansteht
+
+**Stand 02.10.2026, Glide 3.33.6 (Heute und Demnächst nach D14, in Abnahme):**
+- **Beauftragt, als Nächstes:** P04 Bildlayout, P06r doppelte Aktualisierungen, P08a/P08b Speicherweg, P09b Kennzahlen; dazu die Einblendung des Einstellungsfensters (rund 2,1 s) als Messpunkt. Für die Startseite bleibt als großer Schritt, unveränderte Kacheln beim Aktualisieren zu erhalten (wie die Bibliothekskarten 3.32.3) – Vertrag 76, Anschluss.
+- **Braucht einen ausdrücklichen Auftrag:** UX1 „Weniger Oberfläche“ ohne D12 (seit 3.33.2) und ohne G01 (seit 3.33.3); vorher stabile Aktionskennungen (R2). Danach laut Plan D14 Heute/Demnächst und G05 Fokus (G02 seit 3.33.5).
+- **Entschieden 02.10.2026:** Wiederholungen in der Schnelleingabe setzen die Fälligkeit auf ihren ersten Termin, damit sie im Kalender stehen (Antwort des Inhabers: „Klar kann gerne eine Fälligkeit setzen, soll ja auch im Kalender auftauchen.“). Umsetzung 3.33.4.
+- **Offen beim Inhaber:** Auswahl A–H (Richtung/Tiefe), D07 erst zur Pixel-Etappe, Importquelle und Bauwerkzeug erst in Stufe 4, I1–I6 (Inhaberangaben, Lizenz, Konten, Markenprüfung, Windows-Prüfung).
+- **Werkzeugnachlauf:** Die Kommentare in `tests/tools/pruefen.py` und `tests/tools/hintergrund/sitecustomize.py` versprechen noch Tastaturabschirmung; beim nächsten Werkzeugschnitt korrigieren (Testplan ist bereits richtig).
 
 **Performance-Fortsetzung 01.10.2026:** Bibliothekskarten und gemeinsame Aktionen in 3.32.3 umgesetzt; gezielte Prüfung und Messserien grün. [Vertrag 71](../01_Repository/Glide/docs/71_KARTEN_PERFORMANCE_3.32.3.md) enthält Lebensdauer/Invalidierung und Messgrenzen. Vollprüfung und Abgleich abgeschlossen: 73 Schritte/58 Suiten und fünf Analysen, 139 Python-/53 Bundle-Dateien bytegleich, Signatur gültig. Beide Startfassungen tragen 3.32.3. Der Inhaber hat die bestehende Performance-Arbeit ausdrücklich fortgesetzt, die zusätzliche Auswahl neuer Features bleibt offen.
 

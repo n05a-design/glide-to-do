@@ -1,6 +1,6 @@
 # Produkt- und Identitätsregister
 
-Stand 01.10.2026 · App-Version 3.33.1 · Datenformat 20
+Stand 02.10.2026 · App-Version 3.33.6 · Datenformat 20
 
 Der obere Block ist durch den Quellcode belegt und muss nicht mehr entschieden
 werden. Der untere Block enthält Geschäfts- und Rechtsentscheidungen. Offene
@@ -13,7 +13,7 @@ ersetzt werden.
 |---|---|---|
 | Produktname | Glide | `APP_NAME` |
 | Langname | Glide – Aufgaben und Listen | `APP_PRODUCT_NAME` |
-| App-Version | 3.33.1 | `APP_VERSION`, `VERSION` |
+| App-Version | 3.33.6 | `APP_VERSION`, `VERSION` |
 | Datenformat | 20 | `DATA_SCHEMA_VERSION` |
 | Unterstützte Backup-Formate | 4 bis 20 | `MIN_PORTABLE_BACKUP_SCHEMA_VERSION`, `DATA_SCHEMA_VERSION` |
 | Laufzeit | Python 3.14 mit Tk 9 als Grundlage (27.09.2026); Tk 8.6 bleibt lauffähig, ohne Systemmitteilung und SVG-Vorschau. Sonst nur Standardbibliothek | Importliste in `app.pyw` |

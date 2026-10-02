@@ -80,6 +80,11 @@ with tempfile.TemporaryDirectory(prefix="glide-bilder-") as ordner:
     meldungen = []
     app.show_info = app.show_warning = app.show_error = lambda *args, **kwargs: meldungen.append(args)
 
+    def descendants(widget):
+        for kind in widget.winfo_children():
+            yield kind
+            yield from descendants(kind)
+
     def ruhe(runden=6):
         for _ in range(runden):
             root.update_idletasks()
@@ -269,12 +274,14 @@ with tempfile.TemporaryDirectory(prefix="glide-bilder-") as ordner:
         app.entry_placeholder_active = False
         app.update_slash_hint()
         ruhe()
-        assert app._slash_hint.winfo_ismapped() and "fällig morgen" in app._slash_hint.cget("text"), \
-            (app.view_mode, getattr(app, "_slash_hint", None) and app._slash_hint.cget("text"))
+        # Seit 3.33.3 (G01, D10): Chips statt Hinweistext; „/morgen“ setzt den Bearbeitungstag.
+        chips = [w.cget("text") for w in descendants(app._capture_hint) if isinstance(w, mod.tk.Label)]
+        assert app._capture_hint.winfo_ismapped() and "Wichtigkeit hoch" in chips, chips
+        assert any(text.startswith("Bearbeitungstag") for text in chips), chips
         app.add_item()
         ruhe()
         punkt = liste["items"][-1]
-        assert punkt["text"] == "Milch" and punkt["importance"] == 3 and punkt["due"], punkt
+        assert punkt["text"] == "Milch" and punkt["importance"] == 3 and punkt["planned_date"] and not punkt["due"], punkt
         app.entry.insert(0, "Brot /mo")
         app.entry.icursor("end")
         assert app.complete_slash_command() == "break"

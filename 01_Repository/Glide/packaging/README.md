@@ -1,6 +1,6 @@
 # Paketierung Glide
 
-Stand 01.10.2026 · Glide 3.33.1 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 Der aktuelle Stand ist eine geprüfte Python-Anwendung mit Ressourcen.
 Ein Installer, eine Signatur oder eine Store-Abnahme wird hier nicht behauptet.
@@ -77,3 +77,11 @@ Geprüft wird die Vorstufe von `tests/integration/test_paketierung330.py`.
 `sidebar_policy.py` führt Zuordnung, Inhaltsgrenzen, Vorlagenprüfung und Geschwisterreihenfolge der vier Bereiche ohne Tk (3.33.1).
 
 `svg_geometry.py` führt SVG-Pfade einschließlich verkürzter kubischer Kurven, CSS-/Attributfarben und transparente Innenkonturen ohne Tk (3.33.1).
+
+`home_tiles.py` führt Kachelbestand, Startseiten-Standard (D12), Normalisierung, eigene Auswahl und die zusammengeführte Kachel „Heute“ ohne Tk (3.33.2).
+
+`capture_parser.py` führt die deutsche Schnelleingabe (G01) ohne Tk: Bearbeitungstag, Fälligkeit, Uhrzeit, Aufwand, Wichtigkeit, Labels und „/“-Befehle nach D01/D10, jede Erkennung mit Textstelle zum Zurücknehmen (3.33.3).
+
+`eisenhower.py` ordnet Aufgaben ohne Tk in die vier Quadranten „Dringlichkeit × Wichtigkeit“ ein und bestimmt, was Ablegen ändert (G02, D13; 3.33.5).
+
+`today_view.py` teilt die Ansicht „Heute“ ohne Tk in nächste Aufgabe, Verspätet, Liegen geblieben, Tagesplan, Heute fällig und Eingang auf – jede Aufgabe genau einmal (D14; 3.33.6).

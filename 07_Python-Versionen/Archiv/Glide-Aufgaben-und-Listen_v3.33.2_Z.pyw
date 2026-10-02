@@ -119,6 +119,7 @@ import page_markdown as glide_page_markdown  # noqa: E402
 import image_preview as glide_image_preview  # noqa: E402
 import logo as glide_logo  # noqa: E402
 import sidebar_policy as glide_sidebar  # noqa: E402
+import home_tiles as glide_home  # noqa: E402
 from schema_backups import SchemaBackups  # noqa: E402
 
 
@@ -152,7 +153,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.33.1"
+APP_VERSION = "3.33.2"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
 # Einstellungen des Betriebssystems hängen daran.
@@ -1190,7 +1191,44 @@ class MonogramTile(tk.Canvas):
                          text=self.tile_text, fill=self.text_color, font=metrics)
 
 
-class RoundedButton(tk.Canvas):
+class DeferredDrawCanvas(tk.Canvas):
+    """Canvas, die sich einmal je Leerlauf statt bei jeder Zwischengröße zeichnet.
+
+    Beim Aufbau der Startseite meldet jede gerundete Fläche ihre Größe rund
+    ein Dutzend Mal, bis das Layout steht, und jede Meldung zeichnete sie
+    vollständig neu (P03, 02.10.2026). Gezeichnet wird jetzt mit der Größe,
+    die im Leerlauf gilt; `_draw()` bleibt für sofortige Änderungen wie Design
+    oder Hover direkt aufrufbar.
+    """
+
+    _draw_pending = None
+
+    def _draw(self):
+        """Unterklassen zeichnen hier ihre Fläche."""
+
+    def _schedule_draw(self, _event=None):
+        if self._draw_pending is None:
+            self._draw_pending = self.after_idle(self._draw_scheduled)
+            if not getattr(self, "_draw_cancel_bound", False):
+                self.bind("<Destroy>", self._cancel_draw, add="+")
+                self._draw_cancel_bound = True
+
+    def _draw_scheduled(self):
+        self._draw_pending = None
+        self._draw()
+
+    def _cancel_draw(self, event=None):
+        if event is not None and event.widget is not self:
+            return
+        if self._draw_pending is not None:
+            try:
+                self.after_cancel(self._draw_pending)
+            except tk.TclError:
+                pass
+            self._draw_pending = None
+
+
+class RoundedButton(DeferredDrawCanvas):
     """Nativer Tkinter-Button mit abgerundeter Outline und Hover-Fill."""
 
     def __init__(
@@ -1251,7 +1289,7 @@ class RoundedButton(tk.Canvas):
         self.min_width = int(width)
         self._fit_width()
 
-        bind_resize(self, lambda event: self._draw())
+        bind_resize(self, self._schedule_draw)
         self.bind("<Enter>", self._on_enter)
         self.bind("<Leave>", self._on_leave)
         self.bind("<ButtonPress-1>", self._on_press)
@@ -1918,7 +1956,7 @@ class FieldPairGrid(tk.Frame):
         return self._cells[schluessel]
 
 
-class RoundedContainer(tk.Canvas):
+class RoundedContainer(DeferredDrawCanvas):
     """Runde, themebare Box mit innenliegendem Frame für normale Tkinter-Widgets.
 
     Hinweis: Normale Tkinter-Widgets sind rechteckig. Damit sie die gerundeten Ecken
@@ -2024,7 +2062,7 @@ class RoundedContainer(tk.Canvas):
                 width=max(1, w - pad_x * 2),
                 height=max(1, h - pad_y * 2),
             )
-        self._draw()
+        self._schedule_draw()
 
     def _draw(self):
         self.delete("surface")
@@ -16569,34 +16607,15 @@ class ListApp:
             and len(value) <= 260))[-1000:]
         # Reihenfolge, Sichtbarkeit und Spaltenzahl der
         # Startseitenkacheln. Alles additiv – fehlende Werte ergeben die
-        # bisherige Startseite in ihrer bisherigen Reihenfolge.
-        order = result.get("home_tile_order", [])
-        cleaned_order = []
-        if isinstance(order, list):
-            for key in order:
-                if key in cls.HOME_TILE_KEYS and key not in cleaned_order:
-                    cleaned_order.append(key)
-        result["home_tile_order"] = cleaned_order
-        hidden = result.get("home_tiles_hidden", [])
-        cleaned_hidden = []
-        if isinstance(hidden, list):
-            for key in hidden:
-                if key in cls.HOME_TILE_KEYS and key not in cleaned_hidden:
-                    cleaned_hidden.append(key)
+        # Standardstartseite.
         # Wer „Heute fällig“ ausgeblendet hatte, hatte die
         # Fälligkeiten abgewählt, nicht die Tagesplanung. Die verschmolzene
         # Kachel bleibt deshalb sichtbar; der veraltete Schlüssel fällt hier
-        # heraus, weil er in HOME_TILE_KEYS nicht mehr steht.
-        # Kacheln, die es vor 3.22 nicht gab, bleiben ohne eigene Angabe aus:
-        # Eine bestehende Startseite soll nach dem Versionswechsel gleich
-        # aussehen, bis jemand sie bewusst ändert.
-        if not isinstance(result.get("home_tile_order"), list) or not cleaned_order:
-            for key, _titel, _gewicht, _breit, standard in cls.HOME_TILE_DEFINITIONS:
-                if not standard and key not in cleaned_hidden:
-                    cleaned_hidden.append(key)
-        if not result["show_home_stats"] and "stats" not in cleaned_hidden:
-            cleaned_hidden.append("stats")
-        result["home_tiles_hidden"] = cleaned_hidden
+        # heraus, weil er unter den bekannten Kacheln nicht mehr steht.
+        # Ohne eigene Reihenfolge gilt der Standard (D12); eine eigene
+        # Auswahl bleibt nach dem Versionswechsel unverändert.
+        result["home_tile_order"], result["home_tiles_hidden"] = glide_home.normalize(
+            result.get("home_tile_order"), result.get("home_tiles_hidden"), result["show_home_stats"])
         columns = str(result.get("home_columns", "auto"))
         result["home_columns"] = columns if columns in dict(cls.HOME_COLUMN_CHOICES) else "auto"
         # Beide additiv; fehlende Werte bedeuten „Monat"
@@ -19490,7 +19509,7 @@ class ListApp:
             menu.add_command(label="Neue Pinnwand …", command=lambda: self.create_container_dialog(
                 "list", parent_id=folder_id, list_kind="board"))
             menu.add_command(label="Neue Galerie", command=lambda: self.create_new_gallery(folder_id))
-        if section in ("drawings", "lists"):
+        if glide_sidebar.accepts(section, "list", "drawing", ordnerart):
             menu.add_command(label="Neue Zeichnung", command=lambda: self.create_in_sidebar_section("drawing", folder_id, section))
         for key, info in self.FOLDER_KINDS.items():
             if glide_sidebar.accepts(section, "folder", key):
@@ -19807,10 +19826,8 @@ class ListApp:
         return self.move_home_tile(key, max(0, min(len(visible) - 1, visible_index)) - visible.index(key))
 
     def set_home_tile_hidden(self, key, hidden=True):
-        values = [value for value in self.settings.get("home_tiles_hidden", []) if value != key]
-        if hidden:
-            values.append(key)
-        self.settings["home_tiles_hidden"] = values
+        self.settings["home_tile_order"], self.settings["home_tiles_hidden"] = glide_home.own_selection(
+            self.settings.get("home_tile_order"), self.settings.get("home_tiles_hidden"), key, hidden)
         if key == "stats":
             self.settings["show_home_stats"] = not hidden
         self._home_tile_settings_changed()
@@ -20492,44 +20509,10 @@ class ListApp:
     # Seit 3.22 stehen die Kacheln in einem Raster, dessen Spaltenzahl der
     # Fensterbreite folgt, und jede Kachel lässt sich ein- und ausschalten
     # sowie in ihrer Reihenfolge verschieben.
-    HOME_TILE_DEFINITIONS = (
-        ("clock", "Uhr, Datum und nächster Termin", 1, True, True),
-        ("welcome", "Begrüßung, Tagesziel und Schnellzugriff", 3, True, True),
-        # „Mein Tag“ und „Heute fällig“ standen bis 3.22
-        # als zwei gleich aussehende Kacheln nebeneinander. Fachlich sind es
-        # zwei Fragen – woran arbeite ich heute, und was muss heute fertig
-        # sein –, aber zwei Kacheln beantworten sie schlechter als eine mit
-        # zwei Abschnitten: Erst nebeneinander wird sichtbar, ob das eine zum
-        # anderen passt.
-        ("mascot", "Gismo – Begleiter", 1, False, True),
-        ("today", "Heute – eingeplant und fällig", 2, False, True),
-        ("focus", "Nächste Aufgabe – der konkrete nächste Schritt", 2, False, True),
-        ("week", "Die nächsten sieben Tage", 2, False, True),
-        ("labels", "Labels im Bestand", 2, False, False),
-        ("recent", "Zuletzt bearbeitet", 2, False, True),
-        ("templates", "Mit einer Vorlage starten", 2, False, True),
-        ("impulse", "Impuls für den Tag", 1, False, False),
-        # Vier weitere Bausteine. Bis 3.23 gab es zehn
-        # Kacheln, von denen sich sieben um dieselbe Frage drehten – was ist
-        # offen. Die neuen beantworten andere: wann (Kalender), was ist liegen
-        # geblieben (Verspätet), wie weit bin ich (Fortschritt) und woran
-        # denke ich gerade (Pinnwände).
-        ("calendar", "Kalendervorschau", 3, False, False),
-        ("overdue", "Verspätet – was liegen geblieben ist", 2, False, False),
-        ("progress", "Fortschritt heute und diese Woche", 2, False, False),
-        ("boards", "Pinnwände", 2, False, False),
-        # Die Pinnwand als Bild statt als
-        # Zeile. Standardmäßig sichtbar, weil sie genau das leistet, was der
-        # Startseite fehlte: eine Fläche, die man ansieht statt liest.
-        ("boardpreview", "Pinnwand-Vorschau", 2, False, True),
-        # 3.30: Zeichnungen als Bilder, angeheftete Seiten und Filter.
-        ("drawings", "Zeichnungen", 2, False, True),
-        ("pinned", "Angeheftet", 2, False, True),
-        ("filters", "Angeheftete Filter", 2, False, False),
-        # Der Arbeitsbegleiter als Kachel.
-        ("stats", "Dein aktueller Bestand", 6, False, True),
-    )
-    HOME_TILE_KEYS = tuple(key for key, _titel, _gewicht, _breit, _sichtbar in HOME_TILE_DEFINITIONS)
+    # Bestand, Standard (D12) und Begründungen der einzelnen Kacheln stehen
+    # Tk-frei in home_tiles.py.
+    HOME_TILE_DEFINITIONS = glide_home.DEFINITIONS
+    HOME_TILE_KEYS = glide_home.KEYS
     HOME_COLUMN_CHOICES = (("auto", "Automatisch"), ("1", "Eine Spalte"),
                            ("2", "Zwei Spalten"), ("3", "Drei Spalten"))
     # Höhe der Pinnwandvorschau. Hoch genug,
@@ -20580,10 +20563,7 @@ class ListApp:
 
     def home_tile_order(self):
         """Reihenfolge der Kacheln; unbekannte Namen fallen still heraus."""
-        gespeichert = self.settings.get("home_tile_order", [])
-        reihenfolge = [key for key in gespeichert if key in self.HOME_TILE_KEYS] if isinstance(gespeichert, list) else []
-        reihenfolge += [key for key in self.HOME_TILE_KEYS if key not in reihenfolge]
-        return reihenfolge
+        return glide_home.ordered(self.settings.get("home_tile_order", []))
 
     def home_calendar_mode(self):
         """Die gewählte Darstellung der Kalendervorschau."""
@@ -21003,19 +20983,31 @@ class ListApp:
             zeichnen(ziel)
             return "break"
 
+        def standard():
+            # D12: Eine zurückgesetzte Startseite bekommt den Standard „Ruhig“.
+            entwurf[:] = [[key, key in glide_home.STANDARD] for key in glide_home.KEYS]
+            zeichnen(0)
+            return "break"
+
         aktionen = ButtonFlow(outer, bg=self.theme["bg"])
         aktionen.pack(fill="x", pady=(10, 0))
         for text, befehl, farbe in (("Ein-/Ausschalten", umschalten, "confirm"),
                                     ("▲ Nach oben", lambda: verschieben(-1), "accent"),
-                                    ("▼ Nach unten", lambda: verschieben(1), "accent")):
+                                    ("▼ Nach unten", lambda: verschieben(1), "accent"),
+                                    ("Standard wiederherstellen", standard, "muted")):
             aktionen.add(self._make_dialog_button(aktionen, text, befehl, farbe, width=170, height=36))
         liste.bind("<Double-Button-1>", umschalten)
         liste.bind("<space>", umschalten)
 
         def submit(_event=None):
             vorher = dict(self.settings)
-            self.settings["home_tile_order"] = [key for key, _sichtbar in entwurf]
-            self.settings["home_tiles_hidden"] = [key for key, sichtbar in entwurf if not sichtbar]
+            if entwurf == [[key, key in glide_home.STANDARD] for key in glide_home.KEYS]:
+                # Entspricht die Auswahl dem Standard, bleibt die Startseite
+                # „nicht eingerichtet“ und folgt einem künftigen Standard.
+                self.settings["home_tile_order"], self.settings["home_tiles_hidden"] = glide_home.standard_selection()
+            else:
+                self.settings["home_tile_order"] = [key for key, _sichtbar in entwurf]
+                self.settings["home_tiles_hidden"] = [key for key, sichtbar in entwurf if not sichtbar]
             self.settings["home_columns"] = next(
                 (key for key, text in self.HOME_COLUMN_CHOICES if text == spalten.get()), "auto")
             self.settings["home_calendar_mode"] = next(
@@ -21059,9 +21051,15 @@ class ListApp:
         theme = self.theme
         for widget in self.home_content.winfo_children():
             widget.destroy()
+        # Dieselbe Farbe erneut zu setzen zeichnete die ganze Startseite neu
+        # (rund 37 ms je Aufbau); gesetzt wird nur nach einem Designwechsel.
         for widget in (self.home_frame, self.home_canvas, self.home_content):
-            widget.configure(bg=theme["bg"])
-        self.home_scrollbar.set_theme(theme["bg"], theme["bg"], theme["input_border"], theme["muted"])
+            if widget.cget("bg") != theme["bg"]:
+                widget.configure(bg=theme["bg"])
+        leiste = self.home_scrollbar
+        farben = (theme["bg"], theme["bg"], theme["input_border"], theme["muted"])
+        if (leiste.bg_color, leiste.track_color, leiste.thumb_color, leiste.active_thumb_color) != farben:
+            leiste.set_theme(*farben)
         summary = self.home_summary()
         self._home_summary = summary
         self._set_stats_text(date.today().strftime("%d.%m.%Y"))
@@ -21085,8 +21083,14 @@ class ListApp:
                               justify="left", anchor=anchor)
             widget.pack(fill="x", pady=pady)
             if wrap:
-                widget.bind("<Configure>", lambda event, target=widget: target.configure(
-                    wraplength=max(100, event.width - 4)))
+                def umbruch(event, target=widget):
+                    # Gleiche Breite, gleicher Umbruch: Ein erneutes Setzen
+                    # stieße nur eine weitere Layoutrunde an.
+                    breite = max(100, event.width - 4)
+                    if getattr(target, "_wrap_seen", None) != breite:
+                        target._wrap_seen = breite
+                        target.configure(wraplength=breite)
+                widget.bind("<Configure>", umbruch)
             self._bind_home_wheel(widget)
             return widget
 
@@ -21197,6 +21201,23 @@ class ListApp:
                 label(kopf_text, "Nichts Terminiertes in Sicht.", 10, color="muted",
                       pady=(0, 0), surface="card")
 
+        def tagesziel(parent):
+            """Fortschritt zum Tagesziel; nichts, solange kein Ziel gesetzt ist."""
+            ziel = self.daily_goal()
+            if not ziel:
+                return
+            geschafft = self.completions_today()
+            erreicht = geschafft >= ziel
+            label(parent,
+                  f"Heute geschafft: {geschafft} von {ziel}"
+                  + ("  – Ziel erreicht." if erreicht else ""),
+                  11, True, "confirm" if erreicht else "text", pady=(0, 5))
+            ProgressBar(
+                parent, value=geschafft, maximum=ziel, bg_color=theme["card"],
+                track_color=theme["input"],
+                fill_color=theme["confirm"] if erreicht else theme["ui_accent"],
+            ).pack(fill="x", pady=(0, 10))
+
         def kachel_welcome(parent):
             welcome = card(parent)
             gruss_zeile = tk.Frame(welcome, bg=theme["card"])
@@ -21214,19 +21235,7 @@ class ListApp:
             self._bind_home_wheel(gruss_text)
             label(gruss_text, self.home_greeting(), 15, True, pady=(2, 4), surface="card")
             label(gruss_text, self.home_prompt(), color="muted", pady=(0, 0), surface="card")
-            ziel = self.daily_goal()
-            if ziel:
-                geschafft = self.completions_today()
-                erreicht = geschafft >= ziel
-                label(welcome,
-                      f"Heute geschafft: {geschafft} von {ziel}"
-                      + ("  – Ziel erreicht." if erreicht else ""),
-                      11, True, "confirm" if erreicht else "text", pady=(0, 5))
-                ProgressBar(
-                    welcome, value=geschafft, maximum=ziel, bg_color=theme["card"],
-                    track_color=theme["input"],
-                    fill_color=theme["confirm"] if erreicht else theme["ui_accent"],
-                ).pack(fill="x", pady=(0, 10))
+            tagesziel(welcome)
             # Zehn gleich aussehende
             # Schaltflächen nebeneinander sind keine Auswahl, sondern eine
             # Wand. Vier davon führen dorthin, wo man täglich hinwill; die
@@ -21249,7 +21258,20 @@ class ListApp:
             eintraege = self.plan_day_entries(apply_filters=False, day=heute_iso)
             offen = [item for _d, _l, _i, _e, item in eintraege if not item.get("done")]
             tile = card(parent, f"{self.ICONS['today']}  Heute")
-            label(tile, "Eingeplant", 10, True, "muted", pady=(0, 3))
+            # D12: Tagesziel und nächste Aufgabe stehen hier, solange ihre
+            # eigenen Kacheln aus sind – sichtbar ist jede Angabe nur einmal.
+            zusatz = glide_home.today_sections(sichtbar)
+            if zusatz["goal"]:
+                tagesziel(tile)
+            naechste = None
+            if zusatz["next"]:
+                naechste, naechste_quelle = self.home_focus_candidate()
+                if naechste is not None:
+                    label(tile, "Als Nächstes", 10, True, "muted", pady=(0, 3))
+                    action(tile, self.item_display_text(naechste).splitlines()[0],
+                           lambda lid=naechste_quelle["id"], iid=naechste["id"]: self.open_task_in_source_list(lid, iid),
+                           list_color(naechste_quelle))
+            label(tile, "Eingeplant", 10, True, "muted", pady=(10 if naechste is not None else 0, 3))
             if eintraege:
                 planung = self.format_planning_summary(
                     self.planning_summary([item for _d, _l, _i, _e, item in eintraege], day=heute_iso))
@@ -29630,12 +29652,14 @@ class ListApp:
             self.settings.setdefault("sidebar_locations", {})[f"{kind}:{identifier}"] = section
             self.clear_render_cache()
 
-    def sidebar_accepts(self, kind, identifier, section):
+    def sidebar_accepts(self, kind, identifier, section, folder_id=None):
+        """Passt das Objekt in den Bereich – bei Listen in den Zielordner ``folder_id``?"""
         policy = self.sidebar_policy()
         if kind == "folder":
             return policy.subtree_accepts(identifier, section)
         entry = policy.entries.get(identifier)
-        return bool(entry and glide_sidebar.accepts(section, kind, entry.get("list_kind", "tasks")))
+        container = (policy.folders.get(folder_id) or {}).get("folder_kind", "standard") if folder_id else None
+        return bool(entry and glide_sidebar.accepts(section, kind, entry.get("list_kind", "tasks"), container))
 
     def sidebar_section_visible(self, key):
         return glide_sidebar.normalize_visibility(self.settings.get("sidebar_sections_visible")).get(key, True)
@@ -31346,8 +31370,9 @@ class ListApp:
             title_label="Ordnertitel", page=folder)
         return self._apply_page_details(folder, details)
 
-    def sidebar_template_allowed(self, template, section):
-        return glide_sidebar.template_allowed(template, section)
+    def sidebar_template_allowed(self, template, section, folder_id=None):
+        container = (self.get_folder(folder_id) or {}).get("folder_kind", "standard") if folder_id else None
+        return glide_sidebar.template_allowed(template, section, container)
 
     def run_sidebar_creation(self, callback, section):
         previous = getattr(self, "_creating_sidebar_section", None)
@@ -31359,7 +31384,7 @@ class ListApp:
 
     def create_template_in_section(self, key, folder_id, section):
         template = self.template_by_id(key)
-        if template is None or not self.sidebar_template_allowed(template, section):
+        if template is None or not self.sidebar_template_allowed(template, section, folder_id):
             return None
         before = {e["id"] for e in self.lists}
         result = self.run_sidebar_creation(lambda: self.create_list_from_template(key), section)
@@ -31387,14 +31412,17 @@ class ListApp:
 
     def create_new_drawing(self, folder_id=None, event=None, size=glide_drawing.WIDTH):
         """Legt direkt eine leere Zeichnungsseite an und öffnet sie."""
-        if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "drawing"):
+        def passt(ordner_id):
+            ordnerart = (self.get_folder(ordner_id) or {}).get("folder_kind", "standard")
+            return glide_sidebar.accepts(self.sidebar_section_for("folder", ordner_id), "list", "drawing", ordnerart)
+        if folder_id and not passt(folder_id):
             self.show_info("Anlegen", "Diese Dokumentart gehört nicht in diesen Bereich.")
             return "break"
         self.flush_rich_note()
         if folder_id is None and not getattr(self, "_creating_sidebar_section", None) and self.view_mode == "folder" and self.get_folder(self.active_folder_id):
             folder_id = self.active_folder_id
-        if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "drawing"):
-            self.show_info("Anlegen", "Zeichnungen gehören in Zeichnungen oder Listen.")
+        if folder_id and not passt(folder_id):
+            self.show_info("Anlegen", "Zeichnungen gehören in Zeichnungen, Listen oder ein Notizbuch.")
             return "break"
         folder = self.get_folder(folder_id) if folder_id else None
         journal = bool(folder and folder.get("folder_kind") == "journal")
@@ -31469,7 +31497,7 @@ class ListApp:
             (folder.get("id"), str(folder.get("title") or "Ordner").strip() or "Ordner")
             for folder in self.folders
             if folder.get("id") != entry.get("folder_id")
-            and self.sidebar_accepts("list", list_id, self.sidebar_section_for("folder", folder["id"]))
+            and self.sidebar_accepts("list", list_id, self.sidebar_section_for("folder", folder["id"]), folder["id"])
         ]
         if not choices:
             self.show_info("Verschieben", "Es gibt keinen anderen Ordner als Ziel.")
@@ -32146,7 +32174,8 @@ class ListApp:
             choices = [
                 (folder.get("id"), str(folder.get("title") or "Ordner").strip() or "Ordner")
                 for folder in self.folders
-                if all(glide_sidebar.accepts(self.sidebar_section_for("folder", folder["id"]), "list", kind)
+                if all(glide_sidebar.accepts(self.sidebar_section_for("folder", folder["id"]), "list", kind,
+                                             folder.get("folder_kind", "standard"))
                        for kind in list_kinds)
             ]
             if not choices:
@@ -32297,7 +32326,8 @@ class ListApp:
         if is_list:
             label("Listenart")
             kind_frame, _ = self._make_option_menu(
-                primary, list_kind_var, [info["label"] for key, info in self.LIST_KINDS.items() if glide_sidebar.accepts(section, "list", key)]
+                primary, list_kind_var, [info["label"] for key, info in self.LIST_KINDS.items()
+                                         if glide_sidebar.accepts(section, "list", key, eltern.get("folder_kind", "standard") if eltern else None)]
                 + ([self.BOARD_KIND_LABEL] if section == "lists" else []))
             kind_frame.pack(fill="x")
             kind_hint = tk.Label(primary, text="Die Art bleibt nach dem Anlegen fest. „Pinnwand“ ist eine "
@@ -32382,7 +32412,7 @@ class ListApp:
         show_moment()
         template_map = {"Ohne Vorlage": None}
         for index, template in enumerate(self.templates, 1):
-            if template["kind"] == kind and self.sidebar_template_allowed(template, section):
+            if template["kind"] == kind and self.sidebar_template_allowed(template, section, parent_id):
                 name = template["title"]
                 if name in template_map:
                     name += f" ({index})"
@@ -32425,8 +32455,9 @@ class ListApp:
             if template_id:
                 template = self.template_by_id(template_id) or {}
                 candidate_kind = template.get("list_kind", "tasks") if is_list else template.get("folder_kind", "standard")
-            if not glide_sidebar.accepts(target_section, kind, candidate_kind) or (
-                    template_id and not self.sidebar_template_allowed(template, target_section)):
+            container = (parent_folder or {}).get("folder_kind", "standard") if parent_folder else None
+            if not glide_sidebar.accepts(target_section, kind, candidate_kind, container) or (
+                    template_id and not self.sidebar_template_allowed(template, target_section, parent)):
                 error.configure(text=f"Diese Art gehört nicht in den Bereich {glide_sidebar.TITLES[target_section]}.")
                 return
             # Seit 3.30 (ZF-120) nimmt ein Tagebuch jede Inhaltsart auf; der
@@ -32521,7 +32552,11 @@ class ListApp:
         self._center_dialog(dialog, min_width=940 if wide else 640, min_height=needed_height)
         dialog.minsize(560, min(420, usable_height))
         def adapt(event):
-            if event.widget is dialog:
+            # Beim Einblenden meldet macOS zuerst 1 × 1 Pixel. Seit der Dialog
+            # verborgen vermessen wird (3.33.1), folgt keine weitere Meldung
+            # mit der echten Breite; der Platzhalter schaltete die breite Maske
+            # dauerhaft einspaltig und schob die Beschreibung unter den Rand.
+            if event.widget is dialog and event.width > 1:
                 layout_columns(event.width >= 860)
         dialog.bind("<Configure>", adapt, add="+")
         self._schedule_windows_chrome_theme(dialog)
@@ -32751,7 +32786,8 @@ class ListApp:
         if not target_folder_id:
             self.show_info("Hinweis", "Zum Einrücken muss oberhalb ein Ordner vorhanden sein. Lege zuerst über „+“ neben „Listen“ einen Ordner an.")
             return "break"
-        if not self.sidebar_accepts("list", list_entry["id"], self.sidebar_section_for("folder", target_folder_id)):
+        if not self.sidebar_accepts("list", list_entry["id"], self.sidebar_section_for("folder", target_folder_id),
+                                    target_folder_id):
             return "break"
         if not self.ensure_journal_moment(list_entry, target_folder_id):
             return "break"
@@ -33094,7 +33130,7 @@ class ListApp:
         list_entry = next((entry for entry in self.lists if entry.get("id") == list_id), None)
         if not list_entry or self.is_inbox_list(list_entry) or not any(folder.get("id") == folder_id for folder in self.folders):
             return False
-        if not self.sidebar_accepts("list", list_id, self.sidebar_section_for("folder", folder_id)):
+        if not self.sidebar_accepts("list", list_id, self.sidebar_section_for("folder", folder_id), folder_id):
             return False
         if not self.ensure_journal_moment(list_entry, folder_id):
             return False
@@ -33112,7 +33148,7 @@ class ListApp:
         if not source or not target or self.is_inbox_list(source):
             return False
         target_section = self.sidebar_section_for("list", target_id)
-        if not self.sidebar_accepts("list", source_id, target_section):
+        if not self.sidebar_accepts("list", source_id, target_section, target.get("folder_id")):
             return False
         if not target.get("folder_id"):
             self.locate_sidebar_root("list", source_id, target_section)
@@ -33716,13 +33752,13 @@ class ListApp:
         top_frame.bind("<Configure>", self.update_header_title, add="+")
         top_frame.bind("<Configure>", self.sync_header_density, add="+")
         # Die Höhenstufe hängt am Hauptfenster; Konfigurationsereignisse der
-        # Kinder laufen über dasselbe Bindtag und werden dort herausgefiltert.
-        self.root.bind("<Configure>", self.sync_height_density, add="+")
+        # Kinder laufen über dasselbe Bindtag und werden in Tcl herausgefiltert.
+        self.bind_main_window_resize(self.sync_height_density)
         # Neu gezeigte Widgets – ein Neuaufbau der Startseite, ein Dialog –
         # bekommen Verlauf und Milchglas im nächsten Leerlauf.
         self.root.bind_all("<Map>", self._on_widget_map, add="+")
-        self.root.bind("<Configure>", lambda event: self.schedule_backdrop_sync_soon()
-                       if event.widget is self.root and getattr(self, "_backdrop", None) else None, add="+")
+        self.bind_main_window_resize(lambda event: self.schedule_backdrop_sync_soon()
+                                     if getattr(self, "_backdrop", None) else None)
 
         # Logo links neben Titel und Unterzeile (29.09.2026, Wunsch des Nutzers
         # mit Skizze). Es erscheint ab der ersten Breitenstufe der Kopfzeile in
@@ -34426,6 +34462,19 @@ class ListApp:
         if height <= 1 or height >= self.HEIGHT_DENSITY_FULL:
             return "full"
         return "compact" if height >= self.HEIGHT_DENSITY_COMPACT else "minimal"
+
+    def bind_main_window_resize(self, callback):
+        """Meldet <Configure> nur des Hauptfensters an Python.
+
+        Ein Binding am Hauptfenster gilt über dessen Bindtag für jedes Kind.
+        Ein Neuaufbau der Startseite rief so rund 5.000-mal Python auf, nur
+        um festzustellen, dass das Ereignis von einem Kind kam (P03,
+        02.10.2026). Der Vergleich steht deshalb in Tcl; Python sieht nur die
+        Größenänderung des Fensters selbst.
+        """
+        befehl = self.root.register(lambda breite, hoehe: callback(types.SimpleNamespace(
+            widget=self.root, width=int(breite), height=int(hoehe))))
+        self.root.bind("<Configure>", f'+if {{"%W" eq "{self.root}"}} {{{befehl} %w %h}}')
 
     def sync_height_density(self, event=None):
         """Reagiert auf Größenänderungen des Hauptfensters (nicht seiner Kinder)."""

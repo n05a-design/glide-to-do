@@ -211,6 +211,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-followup36-') as tmp:
                     button_text_fits(app.template_actions)
                     capture(f'vorlagen-{theme}-{width}-' + ('bearbeiten' if editing else 'ansehen'))
 
+            app.set_home_tile_hidden('stats', False)  # Seit D12 (3.33.2) nicht mehr im Standard: die geprüfte Kachel ausdrücklich einblenden.
             app.set_home_view()
             for width in (860, 1280, 1660):
                 resize(width)

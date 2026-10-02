@@ -133,24 +133,31 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
         assert not hasattr(app, "folders_section_toggle")
         assert app.sidebar_section_open("folders")
 
-        # --- Mein Tag: „In Bearbeitung“ als Abschnitt -----------------------
+        # --- Heute (3.33.6, D14): Verweis auf „Demnächst“ statt Abschnitt -----
+        # Bis 3.33.5 stand „In Bearbeitung“ als Abschnitt in „Mein Tag“. Jetzt
+        # zeigt „Heute“ nur, was heute dran ist; künftige Fälligkeiten erreicht
+        # eine Verweiszeile, deren Doppelklick „Demnächst“ öffnet.
+        from datetime import date as _date, timedelta as _timedelta
+        kuenftig = app.new_item("Später fällig", due=(_date.today() + _timedelta(days=30)).isoformat())
+        planliste = next(entry for entry in app.planning_lists() if entry.get("list_kind", "tasks") == "tasks"
+                         and not app.is_inbox_list(entry))
+        planliste["items"].append(kuenftig)
+        app.save_items()
         app.set_plan_day_view()
         ruhe()
+        assert not hasattr(app, "PLAN_IN_PROGRESS_ROW_ID")
         abschnitte = list(app.tree.get_children(""))
-        assert app.PLAN_IN_PROGRESS_ROW_ID in abschnitte, abschnitte
+        assert app.UPCOMING_LINK_ROW_ID in abschnitte, abschnitte
         if app.PLAN_INBOX_HEADING_ROW_ID in abschnitte:
-            assert abschnitte.index(app.PLAN_IN_PROGRESS_ROW_ID) < abschnitte.index(app.PLAN_INBOX_HEADING_ROW_ID)
-        zeilen = app.tree.get_children(app.PLAN_IN_PROGRESS_ROW_ID)
-        erwartet_anzahl = len(app.plan_in_progress_entries())
-        assert len(zeilen) == erwartet_anzahl > 0, (len(zeilen), erwartet_anzahl)
-        heute = {eintrag[4].get("id") for eintrag in app.plan_day_entries(apply_filters=False)}
-        for zeile in zeilen:
-            _liste, punkt = app.in_progress_item_sources[zeile]
-            assert punkt not in heute, "Eingeplantes steht nicht doppelt da"
-        app.tree.focus(app.PLAN_IN_PROGRESS_ROW_ID)
+            assert abschnitte.index(app.UPCOMING_LINK_ROW_ID) < abschnitte.index(app.PLAN_INBOX_HEADING_ROW_ID)
+        sichtbar = [kind for kopf in abschnitte for kind in app.tree.get_children(kopf)]
+        assert len(sichtbar) == len(set(sichtbar)), "Keine Aufgabe steht doppelt da"
+        assert all(app.in_progress_item_sources[zeile][1] != kuenftig["id"] for zeile in sichtbar)
+        app.tree.focus(app.UPCOMING_LINK_ROW_ID)
         app.open_in_progress_source_item()
         ruhe()
-        assert app.view_mode == "in_progress", "Doppelklick auf den Abschnitt öffnet die ganze Ansicht"
+        assert app.view_mode == "in_progress", "Doppelklick auf den Verweis öffnet „Demnächst“"
+        assert any(quelle[1] == kuenftig["id"] for quelle in app.in_progress_item_sources.values())
 
         # --- Zeichenfläche --------------------------------------------------
         app.set_active_list(zeichnung["id"])
@@ -289,4 +296,4 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
         root.destroy()
 
 print("test_rueckmeldung330: OK; Unterkanten in sieben Ansichten, Kopfzeilenreihenfolge, Verlauf als Knopf "
-      "und Karte, Seitenleiste, „In Bearbeitung“ in „Mein Tag“, ruhige Zeichenfläche und Auswahl geprüft.")
+      "und Karte, Seitenleiste, Verweis auf „Demnächst“ in „Heute“, ruhige Zeichenfläche und Auswahl geprüft.")

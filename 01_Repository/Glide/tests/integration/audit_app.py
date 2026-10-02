@@ -504,7 +504,11 @@ def drop(source_iid, target_iid, zone="into"):
     app.sidebar_drag_has_moved = True
     app.sidebar_drag_start_y = y - 20
     original = app.pointer_is_over_widget
-    app.pointer_is_over_widget = lambda *a, **k: True
+    # Der Zeiger liegt über der Zielzeile, also nur über ihrem Baum. Seit 3.33.1
+    # sind die Bereichsüberschriften eigene Ablageziele; ein Zeiger „über
+    # allem“ hätte jeden Drop auf die Überschrift „Seiten“ gelenkt.
+    target_tree = app.get_sidebar_tree_for_iid(target_iid) or app.sidebar_listbox
+    app.pointer_is_over_widget = lambda widget, *a, **k: widget is target_tree
     original_identify = app.identify_sidebar_drop_row
     app.identify_sidebar_drop_row = lambda event=None: (
         target_iid, app.sidebar_iid_to_row.get(target_iid)

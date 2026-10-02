@@ -90,7 +90,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     app = mod.ListApp(root)
     root.update_idletasks()
 
-    assert mod.APP_VERSION == "3.33.1"
+    assert mod.APP_VERSION == "3.33.6"
     assert (REPOSITORY_ROOT / "VERSION").read_text(encoding="utf-8").strip() == mod.APP_VERSION
     assert len([entry for entry in app.lists if entry.get("system_role") == "inbox"]) == 1
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
@@ -136,7 +136,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     # Ziehen am Fensterrand.
     app.refresh_sidebar_row_texts()
     root.update_idletasks()
-    assert app.system_listbox.item(app.PLAN_DAY_ROW_ID, "text") == "Mein Tag"
+    assert app.system_listbox.item(app.PLAN_DAY_ROW_ID, "text") == "Heute"
     assert app.system_listbox.set(app.PLAN_DAY_ROW_ID, "icon") == app.ICONS["today"]
     assert app.system_listbox.set(app.TRASH_ROW_ID, "icon") == app.ICONS["trash"]
     assert app.IN_PROGRESS_ROW_ID not in app.sidebar_iid_to_row
@@ -830,25 +830,24 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
 
     abschnittszeilen = [row_id for row_id in app.tree.get_children("")
                         if row_id in app.OVERVIEW_SECTION_ROW_IDS]
-    assert app.NEXT_TASK_SECTION_ROW_ID in abschnittszeilen
-    assert len(app.tree.get_children(app.NEXT_TASK_SECTION_ROW_ID)) == 1
+    # Seit 3.33.6 (D14) steht die nächste Aufgabe oben in „Heute“; „Demnächst“
+    # (bis 3.33.5 „In Bearbeitung“) zeigt alle Fälligkeiten chronologisch.
+    assert app.NEXT_TASK_SECTION_ROW_ID not in abschnittszeilen
     progress_rows = uebersichtszeilen()
     assert all(row_id not in app.in_progress_item_sources for row_id in abschnittszeilen)
     assert len(progress_rows) == 3
-    # Punkt 5 (3.25.0): Dieselben drei Fälligkeiten – aber vorn steht nicht
-    # mehr die früheste, sondern die nächste Aufgabe nach `task_urgency_rank`:
-    # innerhalb derselben Dringlichkeitsstufe entscheidet die Wichtigkeit, und
-    # der Punkt vom 01.09. trägt die höchste. Danach folgt die chronologische
-    # Reihenfolge wie bisher.
     assert [app.tree.set(row_id, "due") for row_id in progress_rows] == [
-        f"{app.DUE_COLUMN_ICON} 01.09.26",
         f"{app.DUE_COLUMN_ICON} 30.08.26",
         f"{app.DUE_COLUMN_ICON} 31.08.26",
+        f"{app.DUE_COLUMN_ICON} 01.09.26",
     ]
-    assert app.tree.parent(progress_rows[0]) == app.NEXT_TASK_SECTION_ROW_ID
-    # Startseite und Übersicht nennen dieselbe Aufgabe.
+    # Punkt 5 (3.25.0): Die nächste Aufgabe folgt `task_urgency_rank` –
+    # innerhalb derselben Dringlichkeitsstufe entscheidet die Wichtigkeit, und
+    # der Punkt vom 01.09. trägt die höchste. Startseite und „Heute“ nennen
+    # dieselbe Aufgabe.
     fokus_item, _fokus_liste = app.home_focus_candidate()
-    assert fokus_item["id"] == app.in_progress_item_sources[progress_rows[0]][1]
+    assert fokus_item["id"] == app.in_progress_item_sources[progress_rows[2]][1]
+    assert app.plan_day_sections(apply_filters=False, day=datetime_date.today().isoformat()).naechste[4] is fokus_item
     nested_progress_row = next(
         row_id
         for row_id, source in app.in_progress_item_sources.items()
@@ -2546,12 +2545,12 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     # Punkt 2 (3.24.0): Der überfällige Punkt steht jetzt im ersten Abschnitt
     # von „In Bearbeitung“, und die Abschnittsüberschrift führt per Doppelklick
     # in die eigene Ansicht.
-    # Punkt 5 (3.25.0): Davor steht seit 3.25 die nächste Aufgabe; „Verspätet“
-    # ist damit der zweite Abschnitt.
+    # Punkt 5 (3.25.0) stellte die nächste Aufgabe davor; seit 3.33.6 (D14)
+    # steht sie in „Heute“, und „Verspätet“ ist wieder der erste Abschnitt.
     zeilen = app.tree.get_children("")
     assert app.OVERDUE_SECTION_ROW_ID in zeilen
-    assert zeilen.index(app.NEXT_TASK_SECTION_ROW_ID) == 0
-    assert zeilen.index(app.OVERDUE_SECTION_ROW_ID) == 1
+    assert app.NEXT_TASK_SECTION_ROW_ID not in zeilen
+    assert zeilen.index(app.OVERDUE_SECTION_ROW_ID) == 0
     assert "Verspätet" in app.tree.item(app.OVERDUE_SECTION_ROW_ID, "text")
     app.tree.focus(app.OVERDUE_SECTION_ROW_ID)
     assert app.open_in_progress_source_item() == "break"

@@ -136,10 +136,12 @@ with tempfile.TemporaryDirectory(prefix="glide-features315-") as folder:
         assert "5 Aufgaben am " in zeile and "05.10.2090" in zeile, zeile
         assert "3 h 30 min geplant" in zeile and "1 h erledigt" in zeile, zeile
         assert "1 ohne Schätzung" in zeile and "30 min frei von 5 h" in zeile, zeile
-        assert app.get_display_title() == f"Mein Tag · {app.format_plan_day()}"
+        # Seit 3.33.6 (D14): an einem anderen Tag „Tagesplan · …“, heute „Heute · …“.
+        assert app.get_display_title() == f"Tagesplan · {app.format_plan_day()}"
         assert "05.10.2090" in app.format_plan_day()
         assert app.format_plan_day(date.today().isoformat()).endswith("· heute")
-        assert app.system_listbox.set(app.PLAN_DAY_ROW_ID, "count") == "(5)"
+        # Die Zahl hinter „Heute“ gilt dem heutigen Tag, nicht dem gezeigten (D14).
+        assert app.system_listbox.set(app.PLAN_DAY_ROW_ID, "count") == f"({app.count_today_view()})"
 
         app.shift_plan_day(1)
         root.update()
@@ -219,6 +221,8 @@ with tempfile.TemporaryDirectory(prefix="glide-features315-") as folder:
         app.hide_done_var.set(False)
 
         # --- Startseite: Zeile nur bei tatsächlicher Tagesplanung ------------
+        app.set_home_tile_hidden('stats', False)  # Seit D12 (3.33.2) nicht mehr im Standard: die geprüfte Kachel ausdrücklich einblenden.
+        app.set_home_tile_hidden('welcome', False)
         app.set_home_view()
         root.update()
         assert not any("Heute geplant" in text for text in labels(app.home_content))
@@ -232,7 +236,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features315-") as folder:
         geplant = [text for text in labels(app.home_content) if "Heute geplant" in text]
         assert geplant and "1 Aufgabe(n)" in geplant[0] and "2 h geplant" in geplant[0], geplant
         assert "3 h frei von 5 h" in geplant[0], geplant[0]
-        assert any(getattr(button, "text", "").endswith("Mein Tag öffnen")
+        assert any(getattr(button, "text", "").endswith("Heute öffnen")
                    for button in descendants(app.home_content) if isinstance(button, mod.RoundedButton))
         assert "today" in [key for _button, key in app.home_quick_actions.entries]
         assert "planday" not in [key for _button, key in app.home_quick_actions.entries]

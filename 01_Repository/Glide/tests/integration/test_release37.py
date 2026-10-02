@@ -229,6 +229,7 @@ with tempfile.TemporaryDirectory(prefix='glide-release37-') as tmp:
         for theme in ('dark', 'light'):
             app.set_design(theme, apply_now=False)
             app.apply_theme()
+            app.set_home_tile_hidden('stats', False)  # Seit D12 (3.33.2) nicht mehr im Standard: die geprüfte Kachel ausdrücklich einblenden.
             app.set_home_view()
             settle()
             for cls in (mod.YearHeatmap, mod.CompletionChart):

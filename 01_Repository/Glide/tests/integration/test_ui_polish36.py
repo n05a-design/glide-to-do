@@ -113,6 +113,8 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-polish36-') as tmp:
             assert app.home_canvas.cget('bg') == app.theme['bg']
             app.set_design(name, apply_now=False)
             app.apply_theme()
+            app.set_home_tile_hidden('welcome', False)  # Seit D12 (3.33.2) nicht mehr im Standard: die geprüfte Kachel ausdrücklich einblenden.
+            app.set_home_tile_hidden('stats', False)
             app.set_home_view()
             for width in (860, 1280):
                 root.geometry(f'{width}x960+10+10')
