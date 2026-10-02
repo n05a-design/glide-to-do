@@ -2,6 +2,11 @@
 
 ## 3.33.6 – Heute und Demnächst (02.10.2026)
 
+- **Schlanke Ablage (App unverändert, Entscheidung des Inhabers):**
+  - Die Arbeitskopie war mit 3.33.1–3.33.6 von 1,2 auf 2,0 GB gewachsen: Versionswechsel und Showcase-Abgleich legten je Lauf rund 75 MB Archivkopien an, jede Vollprüfung brachte rund 25 MB Fensterbilder mit.
+  - 335 Dateien mit 912 MB entfernt: Archivkopien von Showcase, Beispieldaten und Rundgang, ein `.fetch`-Rest und die Fensterbilder überholter Vollprüfungen (je Version bleibt die letzte). Vorfassungen trägt Git.
+  - `versionswechsel.py` und `showcase_abgleich.py` ohne Archivkopien; `.gitignore` schließt Archivordner, `*.fetch` und `fenster/` aus; neuer CI-Schritt „Ablagegröße“ (`tests/tools/ablagegroesse.py`, 7 Werkzeugtests). [Nachweis](tests/qa-3.33.6/ablage_2026-10-02/README.md).
+
 - **D14:** „Mein Tag“ heißt „Heute“ und beantwortet eine Frage: was ist heute dran? Oben die nächste Aufgabe (dieselbe wie auf der Startseite), dann Verspätet, Liegen geblieben, der Tagesplan (mit Zeitplan und Stundenraster wie bisher), Heute fällig und am Ende der Eingang. Jede Aufgabe steht genau einmal; künftige Fälligkeiten erreicht eine Verweiszeile „Demnächst · N weitere Fälligkeiten“.
 - **„In Bearbeitung“ heißt „Demnächst“** und zeigt alle Fälligkeiten chronologisch, Überfälliges oben. Die nächste Aufgabe steht nicht mehr doppelt dort; „Nächste Aufgabe“ in Menü und Startseite führt nach „Heute“.
 - **Tagesbeginn und Tagesabschluss** sind Modi von „Heute“: Schalter „Tag …“ in der Filterzeile und Einträge im Kontextmenü der Seitenleistenzeile. An anderen Tagen (◀/▶) zeigt die Ansicht „Tagesplan · Datum“ und was an diesem Tag fällig ist.

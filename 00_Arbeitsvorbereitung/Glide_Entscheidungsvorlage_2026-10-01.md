@@ -85,6 +85,9 @@ Kurzantwort genügt, z. B. „D09 B, D10 A, D11 B …“.
 - **Änderung durch den Inhaber (01.10.2026, abends):** Weil das Repository öffentlich ist, werden Rohprotokolle nicht mehr veröffentlicht.
   - `.gitignore` schließt `*.log` wieder vollständig aus; die 263 versionierten Protokolle sind aus dem aktuellen Stand genommen und bleiben in der Git-Historie.
   - Veröffentlichte Zusammenfassungen (`ergebnis.json`, README) enthalten keine Benutzerpfade; die CI prüft das.
+- **Änderung durch den Inhaber (02.10.2026):** Die Arbeitskopie war an einem Tag von 1,2 auf 2,0 GB gewachsen. Ursache waren Archivkopien von Showcase und Beispieldaten bei jedem Versionswechsel und Showcase-Abgleich sowie die Fensterbilder jeder Vollprüfung.
+  - Archivkopien von Fixtures und Showcase entfallen; Vorfassungen trägt Git. Von den Fensterbildern bleibt je Version nur die letzte Vollprüfung; neue Vollprüfungen versionieren nur Ergebnis und README.
+  - `versionswechsel.py` und `showcase_abgleich.py` legen keine Kopien mehr an; der CI-Schritt „Ablagegröße“ weist Archivkopien, `*.fetch`-Reste, neue Fensterbilder und Dateien über 50 MB zurück ([Nachweis](../01_Repository/Glide/tests/qa-3.33.6/ablage_2026-10-02/README.md)).
 - **Beim Inhaber:** den lokalen Projektordner als Git-Arbeitskopie dieses Repositorys einrichten, z. B. mit GitHub Desktop. Bis dahin gilt die Upload-Regel.
 - **Neue Zwischenstände** werden als Git-Tags geführt; `93_Zwischenstände` bleibt als Beleg erhalten.
 - **CI-Grundstufe (T4)** in Stufe 0; sie braucht einen eigenen Auftrag.

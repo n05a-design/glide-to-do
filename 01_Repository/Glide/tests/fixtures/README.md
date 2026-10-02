@@ -35,10 +35,11 @@ versionierten Dateinamen genau die Version aus dem Namen – ohne Namen die
 aktuelle. Diese Reihe ist damit der Nachweis, dass jede Formatstufe weiterhin
 lesbar ist. Wer sie aufräumt, nimmt dem Prüfstand seine Migrationsbelege.
 
-Vorfassungen der **unversionierten** Bestände sind dagegen zu archivieren:
-`glide_beispieldaten.glidebackup` wird bei jedem Stand ersetzt, seine
-Vorfassung liegt als `glide_beispieldaten_<alt>_vor_<neu>.glidebackup` in
-`beispiele/archiv/`.
+Vorfassungen der **unversionierten** Bestände (`glide_beispieldaten`,
+`glide_rundgang`, Showcase) trägt seit 02.10.2026 allein Git; Archivkopien
+entfallen und werden von der CI-Grundstufe zurückgewiesen. In
+`beispiele/archiv/` bleibt nur die ursprüngliche Beispieldatei vor dem
+Showcase, die der Dokumentationsindex als Vorsicherung verlinkt.
 
 ## Umgang mit den Beispielen
 

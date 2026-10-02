@@ -11,6 +11,7 @@ Der aktuelle Nutzerauftrag ergänzt die Arbeitsregeln des Repositorys:
 - Für normale Änderungen zunächst die letzten drei Versionen lesen. Ältere Unterlagen bei konkretem Bedarf gezielt hinzunehmen.
 - `PRODUCT_IDENTITY.md`, `ARBEITSBEGLEITER.md`, `09_PROJECT_HANDOFF.md`, `07_QA_BERICHT.md` und weiterhin gültige Entscheidungen werden nicht automatisch archiviert.
 - Nutzeraufträge, historische Screenshots und abgeschlossene QA-Ergebnisse sind Belege. Sie werden nicht auf eine neue Versionsnummer umetikettiert.
+- Seit 02.10.2026 (Entscheidung des Inhabers) keine Archivkopien von Fixtures, Showcase und Beispieldaten: Vorfassungen trägt Git wie bei Dokumenten. Fensterbilder (`fenster/`) der Vollprüfung bleiben lokal; versioniert werden Ergebnis und README. Von älteren Läufen bleibt je Version nur die letzte Vollprüfung mit Bildern, Ergebnisse aller Läufe bleiben erhalten.
 - Neue Dokumente und Archive im Index aufnehmen. Stand- und Linkprüfung vor einer Freigabe ausführen.
 
 Produktionskommentare erklären Invarianten, technische Gründe und Plattformbesonderheiten. Arbeitsauftragsnummern und Entwicklungserzählungen gehören in Changelog beziehungsweise Archiv. Eine reine Kommentarbereinigung muss den ausführbaren Syntaxbaum unverändert lassen.

@@ -47,6 +47,6 @@ GLIDE_QA_HINTERGRUND=1 PYTHONPATH=tests/tools/hintergrund python3 -B tests/tools
 python3 -B scripts/pflege/showcase_abgleich.py
 ```
 
-Der Abgleich prüft die Demo vor der Auslieferung und sichert ersetzte Basisdateien im Archiv. Dein bearbeiteter `Arbeitsstand` bleibt erhalten. Für eine neue Demo den bisherigen Arbeitsstand bei geschlossener App umbenennen und den Starter erneut öffnen.
+Der Abgleich prüft die Demo vor der Auslieferung und ersetzt die Basisdateien; frühere Fassungen hält Git vor. Dein bearbeiteter `Arbeitsstand` bleibt erhalten. Für eine neue Demo den bisherigen Arbeitsstand bei geschlossener App umbenennen und den Starter erneut öffnen.
 
 Mobile Nutzung, GIF-Animationsexport, allgemeine Typkonvertierung und die noch offene Richtungswahl sind nicht Bestandteil der aktuellen App. Die bestehenden Entscheidungen D01–D08 bleiben maßgeblich.

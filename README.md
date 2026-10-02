@@ -52,7 +52,8 @@ Vollständige Übersicht: [Was Glide bereits kann](01_Repository/Glide/README.md
 ## Arbeitsweise mit dem Repository
 
 - **Struktur:** Uploads und Commits immer in diese Struktur, nie in einen Unterordner; sonst brechen die Querverweise. Lokale Arbeitskopie: `Github/glide-to-do`.
-- **Prüfung:** Jeder Push und Pull Request auf `main` startet die [Glide-Prüfung](01_Repository/Glide/tests/README.md). Sie umfasst Syntax, Versionen, Dokumentationslinks, Unit-Tests, Analysen, Startprobe, Lieferstand, Herkunft des Fremdcodes und Datenschutz. Pull Requests erst mergen, wenn sie grün ist.
+- **Prüfung:** Jeder Push und Pull Request auf `main` startet die [Glide-Prüfung](01_Repository/Glide/tests/README.md). Sie umfasst Syntax, Versionen, Dokumentationslinks, Unit-Tests, Analysen, Startprobe, Lieferstand, Herkunft des Fremdcodes, Datenschutz und Ablagegröße. Pull Requests erst mergen, wenn sie grün ist.
+- **Schlanke Ablage:** Keine Archivkopien von Showcase, Beispieldaten oder Fixtures – frühere Fassungen hält Git vor. Fensterbilder der Vollprüfung bleiben lokal.
 - **Öffentliches Repository:** Rohprotokolle (`*.log`) bleiben lokal. Veröffentlicht werden Zusammenfassungen ohne Benutzerpfade; vor dem Hochladen neuer Prüfergebnisse `python3 -B scripts/pflege/pfade_bereinigen.py <Ordner>` im Quellbaum ausführen.
 - **Regeln:** [Arbeitsregeln für Claude Code](CLAUDE.md) und [AGENTS.md](01_Repository/Glide/AGENTS.md).
 - **Dokumentationspflege:** Seit dem Auftrag vom 01.10.2026 werden doppelte und überholte Dokumente nach Wissensabgleich gelöscht; aktuelle Quellen werden fortgeschrieben, Git trägt die Historie ([Wissenseinstieg und Bereinigungsnachweis](01_Repository/Glide/docs/75_DOKUMENTATIONSREDUKTION_UND_LOGOS_3.33.1.md)).

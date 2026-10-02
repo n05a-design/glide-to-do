@@ -1,13 +1,13 @@
 """Versionswechsel für Glide: Nummern, Fixtures und Standangaben.
 
 Aufruf: python3 scripts/pflege/versionswechsel.py 3.33.0 01.10.2026
-Löscht nichts. Überschriebene Fixtures liegen vorher im benachbarten Archiv;
-Dokumente bekommen seit der Löschfreigabe vom 01.10.2026 keine Kopie mehr,
-ihre Historie trägt Git (docs/DOKUMENTENPFLEGE.md).
+Legt keine Archivkopien an: Vorfassungen von Fixtures, Showcase, Vorlagen und
+Dokumenten trägt Git (docs/DOKUMENTENPFLEGE.md). Bis 3.33.6 entstand hier je
+Versionswechsel rund 75 MB Kopien; die CI-Grundstufe weist neue Archivkopien
+zurück (tests/tools/ablagegroesse.py).
 """
 import pathlib
 import re
-import shutil
 import subprocess
 import sys
 
@@ -16,17 +16,6 @@ NEU, DATUM = sys.argv[1], sys.argv[2]
 ABLAGE = pathlib.Path(__file__).resolve().parents[4]
 REPO = ABLAGE / "01_Repository/Glide"
 ALT = (REPO / "VERSION").read_text().strip()
-E = f"_{ALT}_vor_{NEU}"
-
-
-def archiv(pfad):
-    ordner = pfad.parent
-    ziel_ordner = next((ordner / n for n in ("archiv", "Archiv") if (ordner / n).is_dir()), ordner / "archiv")
-    ziel_ordner.mkdir(exist_ok=True)
-    ziel = ziel_ordner / f"{pfad.stem}{E}{pfad.suffix}"
-    if not ziel.exists():
-        shutil.copy2(pfad, ziel)
-    return ziel
 
 
 def ersetze(pfad, alt, neu, anzahl=1):
@@ -42,14 +31,6 @@ for name in ("test_glide.py", "test_glide_36.py", "test_features329.py"):
     ersetze(REPO / "tests/integration" / name, f'APP_VERSION == "{ALT}"', f'APP_VERSION == "{NEU}"')
 
 beispiele = REPO / "tests/fixtures/beispiele"
-for name in ("glide_beispieldaten.glidebackup", "glide_rundgang.glidebackup"):
-    archiv(beispiele / name)
-vorlagen = REPO / "src/glide/resources/templates/glide_vorlagen.glidetemplates"
-archiv(vorlagen)
-showcase = REPO / "tests/fixtures/showcase"
-for name in ("Glide-Showcase.glidebackup", "Glide-Showcase_App.glideapp", "Glide-Showcase.glidetemplates", "manifest.json"):
-    if (showcase / name).exists():
-        archiv(showcase / name)
 for werkzeug, argumente in (("beispieldaten.py", []), ("rundgang.py", []), ("showcase.py", []), ("vorlagendaten.py", []),
                             ("releasedaten.py", ["--ziel", str(beispiele / f"glide_releaseplanung_{NEU}.glidebackup")])):
     lauf = subprocess.run([sys.executable, "-B", str(REPO / "tests/tools" / werkzeug), *argumente],
@@ -73,4 +54,4 @@ for datei, zeilen in sorted(ziele.items()):
                    r"\d\d\.\d\d\.2026", rf"\g<1>{DATUM}", z)
         text[nummer - 1] = z
     pfad.write_text("\n".join(text), encoding="utf-8")
-print(f"{len(ziele)} Standangaben angepasst; Archivendung {E}")
+print(f"{len(ziele)} Standangaben angepasst")

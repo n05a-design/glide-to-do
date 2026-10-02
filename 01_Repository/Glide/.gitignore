@@ -21,6 +21,10 @@ dist/
 *.glidebackup
 # Generierte Referenz-/Arbeitsbestände gehören mit ihrem Erzeuger ins Repository.
 !tests/fixtures/beispiele/*.glidebackup
-!tests/fixtures/beispiele/archiv/*.glidebackup
 !tests/fixtures/showcase/*.glidebackup
 release-artifacts/
+# Seit 02.10.2026 keine Archivkopien von Fixtures (Git trägt die Vorfassungen)
+# und keine Bildschirmfotos der Vollprüfung (Ordner fenster/); versioniert
+# werden Ergebnis und README. Bereits versionierte Dateien bleiben erhalten.
+tests/fixtures/**/archiv/
+tests/qa-*/**/fenster/
