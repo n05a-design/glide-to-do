@@ -5,7 +5,7 @@ Aufruf aus `01_Repository/Glide`:
     python3 -B scripts/pflege/pfade_bereinigen.py PFAD [PFAD …] [--pruefen]
 
 PFAD ist eine Datei oder ein Ordner (rekursiv). Ersetzt werden
-`/Users/<Name>/` durch `~/` und `C:\\Users\\<Name>` (auch JSON-maskiert) durch
+`/Users/<Name>/` durch `~/` und `C:\\Users\\<Name>` (beide auch JSON-maskiert) durch
 `%USERPROFILE%`. Binärdateien bleiben unberührt; Zeilenenden und Kodierung
 bleiben erhalten, weil auf Bytes gearbeitet wird. JSON-Dateien müssen danach
 gültig bleiben, sonst bricht das Werkzeug ab, ohne die Datei zu schreiben.
@@ -20,7 +20,7 @@ from pathlib import Path
 import re
 import sys
 
-MAC = re.compile(rb"/Users/(?!Shared/)[A-Za-z0-9._-]+/")
+MAC = re.compile(rb"(\\?/)Users\1(?!Shared\\?/)[A-Za-z0-9._-]+\1")
 WINDOWS = re.compile(rb"[A-Za-z]:(\\{1,2})Users\1(?!Public\b)[A-Za-z0-9._-]+")
 
 
@@ -43,7 +43,7 @@ def main():
         alt = datei.read_bytes()
         if b"\0" in alt[:8192]:
             continue
-        neu, mac = MAC.subn(b"~/", alt)
+        neu, mac = MAC.subn(lambda treffer: b"~" + treffer.group(1), alt)
         neu, win = WINDOWS.subn(b"%USERPROFILE%", neu)
         if not mac + win:
             continue

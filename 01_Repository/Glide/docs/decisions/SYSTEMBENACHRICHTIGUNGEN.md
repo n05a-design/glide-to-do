@@ -120,8 +120,8 @@ Startmenü-Verknüpfung und ein macOS-`.app`-Bundle gibt. Dann gilt:
 - `packaging/macos/baue_app.py` baut ein Entwicklungsbundle, das macOS als
   „Glide“ mit dieser Kennung führt.
 
-**Umsetzung am 27.09.2026** (Entscheidung des Nutzers, Vertrag 66,
-Abschnitt 2.14):
+**Umsetzung am 27.09.2026** (Entscheidung des Nutzers; Verhalten heute in
+[Funktionen](../20_FUNKTIONEN.md#10-suche-aktionen-erinnerungen)):
 
 - Tk 9 bringt `tk sysnotify` und `tk systray` mit – ohne Zusatzpaket, unter
   macOS über die Mitteilungszentrale, unter Windows über den Infobereich,

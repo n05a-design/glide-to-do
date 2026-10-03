@@ -47,7 +47,7 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 
 - **Rückwärtsverhalten messen, nicht annehmen:** 3.29 überschreibt einen Format-20-Bestand bei der ersten Eingabe. Vor jedem Formatwechsel die Vorgängerversion mit einer Kopie echter Daten prüfen; der Schutz vor unbekannten Formaten muss eine Version vorher im Code sein (seit 3.30 vorhanden).
 - **Erst nach dem Abgleich erledigt:** Am 29.09.2026 prüfte der Inhaber einen alten Stand, weil 07 und Bundle nicht nachgezogen waren.
-- **Vollprüfung ohne Last und ohne Eingaben:** Mac nicht sperren, nicht tippen, Dateisynchronisierung ruhen lassen; zeitabhängige Prüfungen rechnen relativ zum Tag.
+- **Vollprüfung ohne Last und ohne Eingaben** – Einzelheiten im [Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md#regeln).
 - **Optionen mit Empfehlung vorlegen:** nummerierte Fragen mit je einer Empfehlung und der Wahl „erste Stufe oder vollständig“ machen Rückfragen kurz; Lizenzfragen gleich mit Quelle und Lizenz vorlegen.
 - **Inhaberentscheidungen früh abfragen:** Kennungen, Logo und Signatur blockieren Paketierung und Mitteilungen.
 - **Planung nach jeder Etappe inhaltlich abgleichen**, nicht nur Statusspalten. Bekannte Grenzen sind die nächste Aufgabenliste.

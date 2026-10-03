@@ -26,6 +26,8 @@ Einziger Prüfbericht. Am 03.10.2026 mit dem bisherigen Prüfverlauf (`tests/qa-
 
 ### Befunde und ungültige Läufe
 
+Regeln, die aus diesen Läufen folgen (nicht tippen, nicht sperren, Last vermeiden, „Flaky“ ist keine Ursache), stehen im [Prüfplan](05_QA_TESTPLAN.md#regeln).
+
 - **3.33.6:** Zwei ungültige Vorläufe: gesperrter Bildschirm (`test_ui39`, `test_workspace310` rot, Stillstand) und ein Zeitrennen unter Last: `test_speicherlast330` prüfte den 700 ms später gezeigten Formathinweis erst nach seinem Leerlauf, während OneDrive über 200 % CPU belegte. Laden plus Leerlauf je rund 420–433 ms in 3.33.5 und 3.33.6, also keine Verlangsamung; die Suite akzeptiert jetzt „vorgemerkt oder gezeigt“. Sieben Altsuiten auf D14 gebracht.
 - **3.33.5:** `test_features322`/`325` fanden einen nicht zugeordneten Palettenbefehl (Risiko R2, Gruppierung über Beschriftungen); behoben.
 - **3.33.2:** Erster Lauf nur an der Attributprüfung gescheitert (Hilfsklasse ohne Canvas-Basis, heute `DeferredDrawCanvas`). Messung auf macOS mit 1.000 Punkten: Aktualisierung 764,2 → 506,7 ms, Wechsel 789,7 → 547,8 ms, Bibliothek 974 → 856 ms; Ziel 150 ms nicht erreicht, der Rest ist Tk-Layout je Widget.
@@ -56,12 +58,6 @@ Nur das Ergebnis; Berichte und Protokolle stehen in der Git-Historie.
 | 3.28.0 | 23.09.2026 | Gesamtlauf offen (OneDrive-Platzhalter, Zeitüberschreitungen); Tagebuch, Format 18 |
 | 3.26.0 | 21.09.2026 | Exit 0, 47 Schritte (Windows, Python 3.13.15); Notizlisten, Format 17 |
 | 3.25.0 | 19.09.2026 | Exit 0 (Windows, Python 3.13.15) |
-
-## Prüfumgebung – Lehren
-
-- **Bildschirm nicht sperren, nicht tippen:** Ein gesperrter Mac stellt weder Tastaturfokus noch Fensterfotos zu (`test_fenster330`, `test_bereiche3331` scheitern). Tastatureingaben landen in Prüfdialogen. Für lange Läufe `caffeinate -dims` voranstellen.
-- **Dateisynchronisierung abwarten:** OneDrive belegte nach einem Versionswechsel über 200 % CPU; Suiten liefen bis zu zweieinhalbmal langsamer, zeitabhängige Prüfungen (700-ms-Fenster) scheiterten.
-- **Flaky ist keine Ursache:** Jeder rote Lauf wurde nachgestellt und begründet; ein wiederholter Lauf zählt nur mit belegter Ursache für den ersten.
 
 ## Offen und nur manuell prüfbar
 

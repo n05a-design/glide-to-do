@@ -29,7 +29,4 @@ Unter Windows heißt der Aufruf `python`; `--timeout 900` ist dort mit Virenschu
 | `fixtures/` | Referenzformate 2 und 4–20, Beispiel- und Releasedaten, Rundgang, Showcase ([Übersicht](fixtures/README.md)) |
 | `qa-<Version>/` | Nachweise der sieben neuesten Versionen: README, `ergebnis.json`, Quellstand, Lieferabgleich, Messwerte; Fensterbilder nur der drei neuesten, Rohprotokolle nie |
 
-## Zwei Lehren aus dem Prüfstand
-
-- **Zeitzone:** Der Prüfstand setzt `TZ=Europe/Berlin`, wenn der Aufrufer keine Zone vorgibt, und misst nach, was tatsächlich gilt – in einer Zone ohne Versatz ist jeder Zeitzonenfehler unsichtbar. Unter Windows wird `TZ` nicht gesetzt (kein `time.tzset()`, falsche erfundene Zone); dort gilt die Systemzeitzone. Versatz null oder ein gesetztes `TZ` unter Windows beenden den Lauf mit Exitcode 2.
-- **Termine in Suiten liegen in der Zukunft:** Ein Punkt „heute 14:00“ mit relativer Erinnerung wurde mitten im Lauf ausgeliefert und veränderte den Bestand; zwei Suiten scheiterten dadurch tageszeitabhängig.
+Regeln für die Prüfumgebung (Zeitzone, Termine in Suiten, Hintergrundmodus, Last): [Prüfplan](../docs/05_QA_TESTPLAN.md#regeln).

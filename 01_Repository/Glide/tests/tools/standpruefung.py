@@ -285,8 +285,8 @@ def dokumente(wurzel: Path):
             continue
         if any(ZWISCHENSTAND.fullmatch(t) for t in teile[:-1]):
             continue
-        # Mit „_Z“ markiert der Inhaber, was er selbst löschen will (29.09.2026):
-        # Ordner als `Name_Z`, Dateien als `Name_Z.md`.
+        # Mit „_Z“ markierte der Inhaber bis 03.10.2026, was er selbst löschen
+        # wollte (Ordner `Name_Z`, Dateien `Name_Z.md`); seitdem wird gelöscht.
         if any(t.endswith("_Z") for t in teile[:-1]) or pfad.stem.endswith("_Z"):
             continue
         if ("__pycache__" in teile or "node_modules" in teile

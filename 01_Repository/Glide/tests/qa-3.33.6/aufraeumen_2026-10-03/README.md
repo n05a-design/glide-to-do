@@ -8,17 +8,17 @@ Auftrag des Inhabers vom 03.10.2026: keine Dopplungen, nur aktuelle und für die
 
 | Bereich | Dateien vorher | MB vorher | Dateien nachher | MB nachher |
 |---|---:|---:|---:|---:|
-| gesamt | 4.985 | 1.158,0 | 843 | 406,3 |
+| gesamt | 4.985 | 1.158,0 | 819 | 404,4 |
 | `00_Arbeitsvorbereitung` | 142 | 2,7 | 5 | 0,1 |
 | `01_Repository/Glide/docs` | 177 | 7,1 | 16 | 0,2 |
-| `tests/qa-*` | 1.922 | 422,9 | 284 | 79,2 |
+| `tests/qa-*` | 1.922 | 422,9 | 259 | 77,2 |
 | Releaseplanungen (`tests/fixtures/beispiele`) | 41 | 1,2 | 17 | 0,5 |
 | `07_Python-Versionen/Archiv` | 582 | 155,0 | 7 | 16,5 |
 | `05_Probelisten_Testdaten` | 86 | 85,8 | 7 | 76,6 |
 | `20_Grafik_Master` | 50 | 133,2 | 34 | 111,5 |
 | `40_Store_Material` | 29 | 0,1 | – | – |
 
-Markdown-Dateien 659 → 56; Dokumentzeilen in `00_Arbeitsvorbereitung` und `docs/` 100.339 → rund 2.500; Änderungsverlauf 2.461 → 134 Zeilen; Fensterbilder 587 → 150 (3.33.4–3.33.6). Zahlen in [ergebnis.json](ergebnis.json); MB = 10⁶ Byte (die Ablageprüfung rechnet in MiB und meldet 387). Die Git-Historie behält alle früheren Stände; sie wurde nicht umgeschrieben.
+Markdown-Dateien 659 → 57; Dokumentzeilen in `00_Arbeitsvorbereitung` und `docs/` 100.339 → rund 2.500; Änderungsverlauf 2.461 → 134 Zeilen; Fensterbilder 587 → 150 (3.33.4–3.33.6). Zahlen in [ergebnis.json](ergebnis.json); MB = 10⁶ Byte (die Ablageprüfung rechnet in MiB und meldet 386). Die Git-Historie behält alle früheren Stände; sie wurde nicht umgeschrieben.
 
 ## Regeln, die das dauerhaft halten
 
@@ -49,6 +49,13 @@ Auch korrigiert: Formatstufe 10 entstand mit 2.11.0, nicht 3.4.0 ([Daten und Mig
 - Grafikmaster in `20_Grafik_Master` (Inhaberdateien). Offen beim Inhaber: Rechte an Fremdbildern in `05_Inspiration` und `06_Beispielbilder` im öffentlichen Repository.
 - Textangaben in `tests/tools/releasedaten.py`, die auf entfernte Dokumente verweisen: Sie sind Teil der reproduzierten Releaseplanung 3.33.6 und ändern sich erst mit der nächsten Produktionsrunde.
 
+## Nachprüfung (03.10.2026, zweiter Durchgang)
+
+- **Datenschutzlücke geschlossen:** Eine Aufräumprotokolldatei im Nachweis 3.33.1 enthielt macOS-Benutzerpfade in JSON-Schreibweise (`\/Users\/<Name>\/`). Der CI-Schritt „Datenschutz“ und `pfade_bereinigen.py` kannten diese Form nicht. Beide erkennen sie jetzt; neuer Werkzeugtest `tests/tools/test_datenschutz.py`. Die Datei ist gelöscht; in der Git-Historie bleibt sie, solange die Historie nicht umgeschrieben wird.
+- **Sitzungsreste entfernt:** im Nachweis 3.33.1 einmalige Bearbeitungs- und Aufräumskripte, ihre Protokolle über damalige Archivkopien und eine Archivkopie des alten Logos; im Nachweis 3.33.0 die Protokolle über Vorsicherungen und den Ablageumzug (25 Dateien, rund 2 MB).
+- **Archivnamen:** Die Hauptdateien in `07_Python-Versionen/Archiv` tragen nicht mehr die Endung `_Z` („zum Löschen vorgemerkt“) – sie werden nach der Sieben-Versionen-Regel bewusst behalten. `abgleich_07.py` legt neue Archivdateien ohne `_Z` ab.
+- **Weitere Dopplungen zusammengeführt:** Funktionsliste nur in der Projekt-README; Regeln der Prüfumgebung nur im Prüfplan (QA-Bericht, Test- und Werkzeug-README, Übergabe verweisen); nächste Schritte nur im Entwicklungsplan (Arbeitsrichtung verweist); Funktionsgrenzen nicht mehr doppelt in Produktgrenzen und Funktionen; veralteter Verweis „Vertrag 66“ ersetzt.
+
 ## Prüfung
 
-Linux-Container, Python 3.14 mit Tk 8.6 unter Xvfb, künstliche Daten: CI-Grundstufe vollständig, Standprüfung ohne Befund, Werkzeugtests (`test_standpruefung`, `test_ablagegroesse`) grün, alle relativen Links aller Markdown-Dateien auflösbar. Keine macOS-/Tk-9-Abnahme nötig, da die App unverändert ist.
+Linux-Container, Python 3.14 mit Tk 8.6 unter Xvfb, künstliche Daten: CI-Grundstufe vollständig, Standprüfung ohne Befund, Werkzeugtests (`test_standpruefung`, `test_ablagegroesse`, `test_datenschutz`) grün, alle relativen Links aller Markdown-Dateien auflösbar. Keine macOS-/Tk-9-Abnahme nötig, da die App unverändert ist.

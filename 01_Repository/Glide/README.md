@@ -4,16 +4,7 @@ Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen
 
 > **Projektstatus:** interner Entwicklungsstand **3.33.6** · Datenformat 20 · keine veröffentlichte oder signierte Releasefassung. Der [QA-Bericht](docs/07_QA_BERICHT.md) nennt bestandene Prüfungen und offene Plattformtests.
 
-## Was Glide kann
-
-- **Planen:** Aufgaben mit Unterpunkten, Checklisten, Fälligkeit und Bearbeitungstag, Wiederholungen, Erinnerungen, Wichtigkeit, Labels, Aufwand und Zeiterfassung; „Heute“ und „Demnächst“, Stundenraster, Kapazität, Tagesbeginn und -abschluss; Schnelleingabe in Alltagssprache mit Feldchips.
-- **Ansichten:** Liste, Tabelle, Kalender, Karten und Pinnwand auf demselben Bestand; Gruppieren nach Feld einschließlich Eisenhower; Spaltenboard, Bereiche, Verbindungen, Präsentation; Startseite „Ruhig“ zum Anpassen.
-- **Wissen:** Seiten mit Markdown, Bildern und echten Aufgaben, Notizen, Notizbücher, Bücher und Galerien; Suche über Seiten, Punkte und Befehle.
-- **Pixel-Werkstatt:** Zeichnungen mit 16–128 Zellen, Formen, Symmetrie, Mustern, Paletten, PNG- und ICO-Export, Pixelsymbole.
-- **Daten:** atomares Speichern, Sicherungen nur bei Änderung, Vorsicherung je Formatstufe, Voll-, Teil- und App-Backup, CSV, Markdown, ICS, Austauschformat für KI; Rückgängig für alles.
-- **Gestaltung:** zehn Designs mit Kontrast nach WCAG AA, Hintergrundverläufe, Mindestgröße 860 × 700.
-
-Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md). Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
+Funktionsumfang im Überblick: [Projekt-README](../../README.md#was-glide-kann); Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md); Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 
 ## Schnellstart aus dem Quellstand
 

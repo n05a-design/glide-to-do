@@ -24,6 +24,8 @@ Maßgeblich sind `SUITEN` und `ANALYSEN` in `tests/tools/pruefen.py`. Einzelsuit
 - **Echte Bedienwege** statt Setter: native Tk-Bindungen (Pfeilklick, Tastatur, Ziehen, Menü), Callbackfehler sammeln und scheitern lassen, Undo, Neustart und Reload prüfen.
 - **Hintergrund unter macOS:** Prüffenster nehmen keine Maus an (`--vordergrund` schaltet das ab), die Prüf-App bleibt aber aktiv. Tastatureingaben während eines Laufs landen in Prüfdialogen; bei gesperrtem Bildschirm scheitern Suiten mit Tastenereignissen. Deshalb weder tippen noch sperren (`caffeinate -dims`), Suiten mit Tastenereignissen nicht parallel starten. Tk-Fokus im Hintergrund ist kein Nachweis des OS-Fokus.
 - **Last:** UI-Messtests nicht parallel zur Vollprüfung; große Dateisynchronisierung (OneDrive) vorher ruhen lassen. Neue Dateien im Dokumentbestand erst nach dem Lauf anlegen – die Dokumentationsprüfung läuft zuerst.
+- **Termine in Suiten liegen in der Zukunft:** Ein Punkt „heute 14:00“ mit relativer Erinnerung wurde mitten im Lauf ausgeliefert und veränderte den Bestand; zwei Suiten scheiterten dadurch tageszeitabhängig.
+- **„Flaky“ ist keine Ursache:** Jeder rote Lauf wird nachgestellt und begründet; ein wiederholter Lauf zählt nur mit belegter Ursache für den ersten.
 - **Messen** unprofiliert mit gleicher Fixture, Aufwärmlauf, Median und p95 (`scripts/pflege/messung_*.py`, `--measure` der Pflichtsuiten). Keine absoluten Zeitassertions in Bedienungstests.
 - **Lieferung erst nach grüner Vollprüfung:** `scripts/pflege/abgleich_07.py`, `packaging/macos/baue_app.py`, SHA-256 von 07 und Bundle gegen `src/glide`, `codesign --verify --deep --strict`, `scripts/pflege/showcase_abgleich.py`.
 
@@ -31,11 +33,11 @@ Maßgeblich sind `SUITEN` und `ANALYSEN` in `tests/tools/pruefen.py`. Einzelsuit
 
 - **Syntax, Versionskonsistenz** (VERSION, `APP_VERSION`, Hauptsuite, oberster CHANGELOG-Eintrag, Datenformat), **Dokumentation** (jedes `docs/**/*.md` im [Index](00_INDEX.md), lokale Links erreichbar), **Fixtures** (Format und Version der Beispielbackups).
 - **Fachlogik-Unit-Tests** (`tests/unit`, Tk-frei nach D17): `schema_backups`, `sidebar_policy`, `svg_geometry`, `home_tiles`, `capture_parser`, `eisenhower`, `today_view`.
-- **Tk-Probe** (`pruefe_tk.py`): unter macOS native Mausisolierung von Hauptfenster, Dialog und Tooltip. **Zeitzone:** misst den tatsächlich geltenden Versatz im Kindprozess; Versatz null beendet mit Exitcode 2. Unter Windows gilt die Systemzone, ein gesetztes `TZ` ist dort ein Befund.
+- **Tk-Probe** (`pruefe_tk.py`): unter macOS native Mausisolierung von Hauptfenster, Dialog und Tooltip. **Zeitzone:** Der Prüfstand setzt `TZ=Europe/Berlin`, wenn der Aufrufer keine Zone vorgibt, und misst den tatsächlich geltenden Versatz im Kindprozess – in einer Zone ohne Versatz ist jeder Zeitzonenfehler unsichtbar; Versatz null beendet mit Exitcode 2. Unter Windows gilt die Systemzone (kein `time.tzset()`), ein gesetztes `TZ` ist dort ein Befund.
 - **Integrationssuiten** (64) und **Showcase** (`pruefe_showcase.py`: ZIP und SHA-256, Teil-/App-Import, Anhänge, Remapping, alle Arten, Vorschauen, Klappzustand, Undo, Vorlagen, Neustart in eigenem Prozess).
 - **Analysen:** `analyse_statisch.py`, `analyse_erreichbarkeit.py`, `standpruefung.py` (Stand, Formate, überholte Aussagen, Modullisten, Links; Regeln R1–R14), `attributpruefung.py` (Aufrufe ohne Ziel je Klasse, auch über Tk-Basen), `dublettenpruefung.py` (meldet Wiederholungen, bewertet nicht).
 - **Nur Vollprüfung:** Beispieldaten und Releasedaten werden neu erzeugt und inhaltlich mit den Fixtures verglichen (Abweichungen erst auf Plattformabhängigkeit des Erzeugers prüfen); Fensterfotos aus `test_fenster330` unter macOS (versioniert werden nur `ergebnis.json` und README, keine Fensterbilder).
-- **Nur CI:** Werkzeugtests (`tests/tools/test_*.py`), Startprobe unter Xvfb, Lieferstand (`src/glide` = `07_Python-Versionen`), Fremdcode (vendor/fonts unverändert), Datenschutz (keine Benutzerpfade), Ablagegröße (`tests/tools/ablagegroesse.py`).
+- **Nur CI:** Werkzeugtests (`tests/tools/test_*.py`), Startprobe unter Xvfb, Lieferstand (`src/glide` = `07_Python-Versionen`), Fremdcode (vendor/fonts unverändert), Datenschutz (keine Benutzerpfade, auch JSON-maskiert), Ablagegröße (`tests/tools/ablagegroesse.py`).
 
 ## Integrationssuiten nach Bereich
 

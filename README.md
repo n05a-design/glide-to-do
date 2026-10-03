@@ -27,14 +27,14 @@ Unter Windows: `python 07_Python-Versionen\Schnellstart.pyw`. Weitere Startwege 
 
 ## Was Glide kann
 
-- **Planen:** Aufgaben mit Unterpunkten, Fälligkeit, Bearbeitungstag, Wiederholung, Erinnerung, Wichtigkeit, Labels und Aufwand; „Heute“ und „Demnächst“ mit Stundenraster, Tagesbeginn, Tagesabschluss und Wochenrückblick; Schnelleingabe in Alltagssprache; Eisenhower-Gruppierung.
-- **Ansichten:** Liste, Tabelle, Kalender, Karten, Spaltenboard und Pinnwand auf demselben Bestand; Startseite zum direkten Anpassen.
-- **Wissen:** Seiten mit Markdown und Bildern, Notizbücher, Bücher und Galerien; Suche über Seiten, Punkte und Befehle (Strg/Cmd+O).
-- **Pixel-Werkstatt:** Zeichnungen von 16 bis 128 Zellen mit Werkzeugen, Symmetrie, Paletten, PNG-Export und Pixelsymbolen.
-- **Austausch und Sicherheit der Daten:** Vorlagen, CSV, Markdown, ICS und Glide-Formate; atomares Speichern, Vorsicherungen je Formatstufe, Tagesstände und Rückgängig für alles.
-- **Gestaltung:** zehn Designs mit lesbarem Kontrast nach WCAG AA, Hell/Dunkel, Akzentfarben und Hintergrundverläufe.
+- **Planen:** Aufgaben mit Unterpunkten, Checklisten, Fälligkeit und Bearbeitungstag, Wiederholungen, Erinnerungen, Wichtigkeit, Labels, Aufwand und Zeiterfassung; „Heute“ und „Demnächst“ mit Stundenraster, Kapazität, Tagesbeginn, Tagesabschluss und Wochenrückblick; Schnelleingabe in Alltagssprache mit Feldchips.
+- **Ansichten:** Liste, Tabelle, Kalender, Karten, Spaltenboard und Pinnwand auf demselben Bestand; Gruppieren nach Feld einschließlich Eisenhower; Pinnwand mit Bereichen, Verbindungen und Präsentation; Startseite „Ruhig“ zum Anpassen.
+- **Wissen:** Seiten mit Markdown, Bildern und echten Aufgaben, Notizen, Notizbücher, Bücher und Galerien; Suche über Seiten, Punkte und Befehle (Strg/Cmd+O).
+- **Pixel-Werkstatt:** Zeichnungen mit 16–128 Zellen, Formen, Symmetrie, Mustern, Paletten, PNG- und ICO-Export, Pixelsymbole.
+- **Daten:** atomares Speichern, Sicherungen nur bei Änderung, Vorsicherung je Formatstufe, Tagesstände; Voll-, Teil- und App-Backup, Vorlagen, CSV, Markdown, ICS, Austauschformat für KI; Rückgängig für alles.
+- **Gestaltung:** zehn Designs mit Kontrast nach WCAG AA, Hell/Dunkel, Akzentfarben und Hintergrundverläufe; Mindestgröße 860 × 700.
 
-Vollständige Übersicht: [Was Glide kann](01_Repository/Glide/README.md#was-glide-kann). Entwicklung je Version: [Änderungsverlauf](01_Repository/Glide/CHANGELOG.md).
+Verhalten im Einzelnen: [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md). Entwicklung je Version: [Änderungsverlauf](01_Repository/Glide/CHANGELOG.md).
 
 ## Ablage
 

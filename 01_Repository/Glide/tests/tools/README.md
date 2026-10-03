@@ -4,7 +4,7 @@ Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorl
 
 Alle Werkzeuge werden aus `01_Repository/Glide` gestartet. Werkzeuge, die echte Tk-Fenster prüfen, brauchen eine grafische Sitzung (unter Linux Xvfb; das ersetzt keine native Windows- oder macOS-Abnahme). Zahlen zu Suiten und Formaten stehen bewusst nicht hier, sondern im Quelltext (`SUITEN`, `ANALYSEN`, `APP_VERSION`, `DATA_SCHEMA_VERSION`) – bis 3.21.3 rotteten sie in dieser Datei. Was tatsächlich lief: [QA-Bericht](../../docs/07_QA_BERICHT.md).
 
-**Hintergrund unter macOS (seit 30.09.2026):** `pruefen.py` startet die Suiten mit `hintergrund/sitecustomize.py`; die Prüffenster nehmen keine Maus an und holen sich nicht den Vordergrund. Die **Tastatur ist nicht abgeschirmt** (gemessen 02.10.2026): während eines Laufs nicht tippen und den Mac nicht sperren. `--vordergrund` schaltet den Hintergrundmodus ab.
+**Hintergrund unter macOS:** `pruefen.py` startet die Suiten mit `hintergrund/sitecustomize.py`; die Prüffenster nehmen keine Maus an, die **Tastatur ist nicht abgeschirmt**. `--vordergrund` schaltet das ab. Verhalten während eines Laufs: [Prüfplan, Regeln](../../docs/05_QA_TESTPLAN.md#regeln).
 
 | Werkzeug | Zweck |
 |---|---|
@@ -27,4 +27,4 @@ Alle Werkzeuge werden aus `01_Repository/Glide` gestartet. Werkzeuge, die echte 
 | `symbolpruefung.py` | Private App-Schrift registrieren und tatsächliche Glyphenfamilien messen |
 | `leistungspruefung.py --ziel DATEI.json` | Lokale synthetische Neudarstellungs- und Speichermessung |
 | `dauerlauf.py --minuten 10 --aufgaben 4000 --ziel DATEI.json` | Dauerlauf: wachsende Callbacks, Undo-Stände, Speicher, Unversehrtheit nach Neuladen. Nicht im Standardlauf; zehn Minuten sind das Minimum, damit der 15-Sekunden-Takt der Erinnerungen oft genug feuert |
-| `test_standpruefung.py`, `test_ablagegroesse.py` | Werkzeugtests der beiden Wächter; laufen in der CI |
+| `test_standpruefung.py`, `test_ablagegroesse.py`, `test_datenschutz.py` | Werkzeugtests der Wächter (Stand, Ablage, Benutzerpfade auch JSON-maskiert); laufen in der CI |

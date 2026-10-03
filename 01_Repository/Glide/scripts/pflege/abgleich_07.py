@@ -4,7 +4,8 @@ Aufruf: python3 scripts/pflege/abgleich_07.py
 
 - Hauptdatei als `Glide-Aufgaben-und-Listen_v<VERSION>.pyw`, Module, `Schnellstart.pyw`,
   `resources` und `vendor` (ohne Archive).
-- Ältere Hauptdateien wandern mit Endung `_Z` nach `07_Python-Versionen/Archiv`.
+- Ältere Hauptdateien wandern unter ihrem Namen nach `07_Python-Versionen/Archiv`
+  (bis 03.10.2026 mit Endung `_Z`; sie werden aber behalten, nicht vorgemerkt).
   Das Archiv hält mit der aktuellen Fassung die sieben neuesten Versionen;
   ältere entfernt `ablage_kuerzen.py` beim Versionswechsel. Vollständige
   Vorstände trägt Git, keine Ordnerkopien.
@@ -33,11 +34,11 @@ def sha(pfad):
 # Ältere startbare Fassungen aus dem Ordner nehmen, damit Schnellstart eindeutig ist.
 for alt in ZIEL.glob("Glide-Aufgaben-und-Listen_v*.pyw"):
     if alt.name != DATEIEN["app.pyw"]:
-        ziel = ZIEL / "Archiv" / (alt.stem + "_Z" + alt.suffix)
+        ziel = ZIEL / "Archiv" / alt.name
         if ziel.exists():
             sys.exit(f"{ziel} existiert schon")
         shutil.move(str(alt), str(ziel))
-        print("ins Archiv (Endung _Z):", ziel.name)
+        print("ins Archiv:", ziel.name)
 
 fehler = []
 for quelle, name in DATEIEN.items():

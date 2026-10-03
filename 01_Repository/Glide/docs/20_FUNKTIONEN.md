@@ -195,9 +195,9 @@ Aufbau und Bausteine: [Architektur](02_ARCHITECTURE.md). Datenfelder und Formate
 ## 13. Bekannte Grenzen
 
 - **Plattformen:** Abnahme nur auf macOS mit Python 3.14/Tk 9. Windows (Vorschauen über WIC, Systemmitteilungen, Ziehen aus dem Explorer, Lupe, Logo unter Tk 8.6) und Linux (Pixelschrift über Fontconfig nur nachgebildet geprüft) sind ungeprüft; ebenso DPI, mehrere Monitore und Screenreader.
-- **Vorschauen:** macOS alle gängigen Formate (`nsimage`); Windows JPEG, TIFF, BMP über WIC, HEIC/WebP nur mit Microsoft-Erweiterungen; Linux PNG, GIF, SVG (JPEG fehlt, N08). Unter Tk 8.6 keine SVG-Vorschau. Die Großansicht vergrößert kleine Bilder nicht.
+- **Vorschauen:** unterstützte Formate je System in den [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md#grenzen-einzelner-funktionen); offen sind JPEG unter Linux (N08) und SVG unter Tk 8.6. Die Großansicht vergrößert kleine Bilder nicht.
 - **Bilder in Seiten:** Umfluss über Ränder nachgebildet; zwei Bilder auf gleicher Höhe können sich überlappen; Druck/PDF und „Markdown kopieren“ zeigen nur Dateinamen (B4). Oben am Textfeld bis zu 18 px Versatz beim Scrollen.
-- **Seiten:** Blöcke lassen sich nicht einzeln mit der Maus ziehen; Tabellen sind ausgerichteter Text; Titelbild fehlt (G09). Ältere Glide-Stände verwerfen die Blockarten `h4`, `toggle`, `toggle_closed`, `callout` (Text bleibt).
+- **Seiten:** Titelbild fehlt (G09); weitere bewusste Grenzen in den [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md#grenzen-einzelner-funktionen). Ältere Glide-Stände verwerfen die Blockarten `h4`, `toggle`, `toggle_closed`, `callout` (Text bleibt).
 - **Milchglas:** keine echte Durchsicht; beim Scrollen gleichen sich die Flächen erst in der Ruhe an.
 - **Seitenleiste:** jeder Baum scrollt für sich (B1).
 - **Startseite:** Aufbau 507 ms (macOS, 1.000 Punkte), Ziel 150 ms nicht erreicht; Einstellungsfenster rund 2,1 s bis zur Anzeige.

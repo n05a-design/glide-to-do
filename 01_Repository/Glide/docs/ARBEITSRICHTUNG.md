@@ -44,7 +44,7 @@ Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Ent
 
 Fortlaufend (Wortlaut des Inhabers): „Ich habe Performance Probleme mit Glide, hilf mir die Code-Basis zu optimieren, mit Variabeln für die gleichen Funktionen, Streamlinen und optimieren.“
 
-Nächste Schritte: P04 Bildlayout nur bei geänderter Geometrie, P06r doppelte Aktualisierungen je Aktion, P08a/P08b Speicherweg, P09b Kennzahlen, die Einblendung des Einstellungsfensters als Messpunkt und unveränderte Startseitenkacheln erhalten. Einzelheiten und Abnahme im Entwicklungsplan, Abschnitt 3. Neue Funktionen erst nach Auftrag; empfohlen ist danach UX1 mit vorher stabilen Aktionskennungen.
+Welche Pakete dazu offen sind, mit Status und Abnahme, steht nur im [Entwicklungsplan, Abschnitt 3](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#3-performance-stufe-0-beauftragt). Neue Funktionen erst nach Auftrag.
 
 ## Arbeitsablauf einer Implementierung
 

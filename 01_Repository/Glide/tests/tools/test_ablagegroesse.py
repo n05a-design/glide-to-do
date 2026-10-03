@@ -21,7 +21,7 @@ def releaseplanung(version):
 
 
 def archivdatei(version):
-    return f"07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v{version}_Z.pyw"
+    return f"07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v{version}.pyw"
 
 
 class Ablagegroesse(unittest.TestCase):

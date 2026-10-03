@@ -47,6 +47,7 @@ GRENZE_MB = 50
 _V = r"(\d+\.\d+\.\d+)"
 # Pfade, deren Version die Aufbewahrung bestimmt.
 VERSIONIERT = (
+    # Bis 03.10.2026 mit Endung „_Z“ abgelegt; beide Schreibweisen zählen.
     re.compile(r"07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v" + _V + r"(?:_Z)?\.pyw"),
     re.compile(re.escape(QUELLBAUM) + r"tests/qa-" + _V + r"/.+"),
     re.compile(re.escape(QUELLBAUM) + r"tests/fixtures/beispiele/glide_releaseplanung_" + _V + r"\.glidebackup"),
