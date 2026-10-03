@@ -4,7 +4,7 @@ Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20
 
 Einziges Planungsdokument. Es führt zusammen, was bis 03.10.2026 auf zwölf Planungs-, Auswahl-, Recherche- und Entscheidungsdokumente verteilt war (Entwicklungsplan 3.33ff, Aufgabenauswahl A–H, Funktionsrecherche G01–G32, Arbeits- und Featureplanung P01–P07, Bestandsaufnahme AB/T, UX-Prüfung U01–U24, Übersicht vom 29.09.2026 und die älteren Kataloge). Die Vorfassungen trägt Git.
 
-Verbindliche Entscheidungen stehen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), Produktgrenzen und Prinzipien in den [Produktgrenzen](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md). Dieser Plan ist eine Empfehlung: Jeder Umsetzungsschnitt braucht einen ausdrücklichen Auftrag, die offene Auswahl A–H und D07 entscheidet der Inhaber.
+Leitbild, Prinzipien, Produktgrenzen, Entscheidungen, Wettbewerb und offene Richtungsfragen stehen in der [Richtung](Glide_Richtung.md). Dieser Plan ist eine Empfehlung: Jeder Umsetzungsschnitt braucht einen ausdrücklichen Auftrag, die offene Auswahl A–H und D07 entscheidet der Inhaber.
 
 ## Statusmarken
 
@@ -17,13 +17,9 @@ Verbindliche Entscheidungen stehen in der [Arbeitsrichtung](../01_Repository/Gli
 | ◇ | Zukunft, wartet auf einen Auslöser |
 | ✕ | bewusst nicht (Produktgrenze oder Entscheidung) |
 
-## 1. Leitsatz und Reihenfolge
+## 1. Stufen
 
-*Glide ist der ruhige, lokale Arbeitsplatz für den eigenen Tag – planen, erledigen, festhalten; alles in einer eigenen Datei, ohne Konto. Die Pixel-Werkstatt ist die persönliche Signatur.*
-
-Drei Säulen in dieser Rangfolge: **verlässlich und schnell** (Daten sicher, Aktionen unter 100 ms bei realistischen Beständen) → **klarer Alltag** (Heute, Demnächst, Listen, Seiten; Erfassen ohne Nachdenken) → **Wissen im Kontext** (Aufgaben in Seiten und Notizen, Verweise, Suche).
-
-Reihenfolge der Stufen (Antwort des Inhabers vom 30.09.2026, bestätigt am 01.10.2026): Fundament → Planen → Wissen → Pixel → Austausch und Verteilung. Zielversionen sind Reservierungen, keine Termine.
+Leitsatz, Säulen und Begründung der Reihenfolge: [Richtung, Abschnitt 2](Glide_Richtung.md#2-leitbild). Zielversionen sind Reservierungen, keine Termine.
 
 | Stufe | Inhalt | Stand |
 |---|---|---|
@@ -163,15 +159,8 @@ Reservierung 3.33.7: G29, G31, G32, N07, N08 (4–7 AT).
 | G06 | Gewohnheiten | ◇ | vorerst nicht; zuerst G05 |
 | B1 | Seitenleiste als Ganzes scrollen | ◇ | wenn die kleinen Bereiche im Alltag stören |
 | B7 | Tk-Fehler (Rahmen einer ausgeblendeten Leinwand) an Tcl/Tk melden | ○ | braucht ein Konto bei core.tcl-lang.org |
-| N09 | Erinnerungen bei geschlossener App (Stufe C) | ✕ | Produktgrenze |
-| N10 | Lokaler MCP-Server | ✕ | Q3: Dokumente statt Schnittstelle |
-| N14 = G07 | Systemweiter Erfassungs-Hotkey | ✕ | nur plattformeigen lösbar (Q2) |
-| N06 | „Erste Schritte“-Seite, Einstieg für neue Nutzer | ✕ | bewusst nicht gewählt; Rundgang und Showcase vorhanden |
-| G23 | Gleichzeitige Bearbeitung auf zwei Geräten | ✕ | Produktgrenze |
-| G22 | Verschlüsselte Ablage | ✕ | keine Priorität |
-| G12, G13 | Spalten in Seiten, Graph | ✕ | Entscheidungen 29./30.09.2026 |
-| ZF-200 | Eigene Felder je Liste | ✕ | am 25.09.2026 nicht gewählt |
-| N15–N20 | Spracherfassung, Cloud-KI, Teamfunktionen, freie Datenbankfelder, Web Clipper | ✕ | Produktgrenzen |
+
+**Bewusst nicht (✕):** N09, N10, N14 = G07, N06, G23, G22, G12, G13, ZF-200, N15–N20 – Gründe in der [Richtung, Abschnitt 5](Glide_Richtung.md#5-was-glide-ist-und-was-es-nicht-wird).
 
 ## 8. Abhängigkeiten und Regeln vor der Umsetzung
 
@@ -210,20 +199,10 @@ Verbindlich ist die Messung auf dem Referenz-Mac mit Aufwärmen, Median und p95;
 
 ## 11. Nur durch den Inhaber
 
-| Nr. | Aufgabe | Stand |
-|---|---|---|
-| A–H | Richtung und Bearbeitungstiefe der weiteren Auswahl | ○ Empfehlung: Performance fertig, dann UX1, danach C-01 |
-| D07 | Animationsexport | ○ erst zur Pixel-Etappe |
-| I1 | Inhaberangaben bestätigen | ○ Vorschläge in [Veröffentlichung](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#inhaberangaben) |
-| I2 | Lizenzbedingungen veröffentlichen | ○ Entwurf: kostenlos für private, nicht kommerzielle Nutzung |
-| I3 | Apple-Developer-Konto, Windows-Code-Signing-Zertifikat | ○ |
-| I4 | Markenprüfung „Glide“ | ○ Fachanwalt für Markenrecht |
-| I5 | Python 3.14.7 auf dem Mac installieren | ○ braucht das Passwort des Inhabers |
-| I6 | Windows-Vollprüfung und manuelle Prüfsitzungen | ○ [Prüfliste](Glide_Manuelle_Pruefung.md) |
-| – | Erste Importquelle für G21, Bauwerkzeug für G26 | ○ erst in Stufe 4 |
+Auswahl A–H, D07, Importquelle (G21), Bauwerkzeug (G26), Inhaberangaben und Freigaben I1–I6 sowie die Rechte- und Repository-Fragen stehen mit Optionen und je einer Empfehlung in der [Richtung, Abschnitt 10](Glide_Richtung.md#10-offene-richtungsfragen).
 
 ## 12. Pflege
 
 - Bei jeder Produktionsrunde Statusmarken, Abschnitt 2 und die Ziele nachführen. Keine datierte Kopie anlegen; Git trägt die Vorfassung.
-- Neue Ideen erst nach dem [Prinzipien-Check](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md#prinzipien-check-für-neue-funktionen) und mit Marke aufnehmen.
-- Neue Entscheidungen gehören in die [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), nicht hierher.
+- Neue Ideen erst nach dem [Prinzipien-Check](Glide_Richtung.md#prinzipien-check-für-neue-funktionen) und mit Marke aufnehmen.
+- Neue Entscheidungen gehören in die [Richtung](Glide_Richtung.md#6-entscheidungen), nicht hierher.

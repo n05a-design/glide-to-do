@@ -11,7 +11,7 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 - **Entwicklungsstand 3.33.6 vom 02.10.2026**, Datenformat 20.
 - **Geprüft und lokal ausgeliefert am 02.10.2026, keine Releasefassung:** Vollprüfung auf dem Referenz-Mac grün ([Ergebnis](01_Repository/Glide/tests/qa-3.33.6/heute_2026-10-02/vollpruefung/ergebnis.json)); Python-Fassung und Entwicklungsbundle bytegleich ([QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md)).
 - **Offen:** Signatur, Markenprüfung, Store und die manuelle Abnahme unter Windows, Linux, DPI-Skalierung und Bildschirmleser.
-- **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe; Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
+- **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe; Leitbild, Entscheidungen, Wettbewerb und offene Richtungsfragen in der [Richtung](00_Arbeitsvorbereitung/Glide_Richtung.md).
 
 ## Schnellstart
 
@@ -43,7 +43,7 @@ Verhalten im Einzelnen: [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md).
 | [01_Repository/Glide](01_Repository/Glide/README.md) | Kanonischer Quellcode, Tests, Prüfwerkzeuge und technische Dokumentation |
 | [07_Python-Versionen](07_Python-Versionen/README.md) | Startbare, bytegleich gehaltene Python-Fassung; im Archiv die Hauptdateien der sieben neuesten Versionen |
 | [05_Probelisten_Testdaten](05_Probelisten_Testdaten/README.md) | Showcase mit eigenem Starter (bytegleiche Lieferkopie der Fixture) |
-| [00_Arbeitsvorbereitung](00_Arbeitsvorbereitung/README.md) | Übergabe, Entwicklungsplan, Markt und Vorbilder, manuelle Prüfliste |
+| [00_Arbeitsvorbereitung](00_Arbeitsvorbereitung/README.md) | Richtung (Leitbild, Entscheidungen, Wettbewerb), Übergabe, Entwicklungsplan, manuelle Prüfliste |
 | [20_Grafik_Master](20_Grafik_Master/README.md) | Logo, App-Symbol und Fav-Icon als SVG und PNG, Affinity-Quelle, Inspiration, Beispielbilder |
 | `.github` | Prüf-Workflow (Glide-Prüfung), Dependabot; CodeQL-Workflow deaktiviert |
 
@@ -66,7 +66,7 @@ Verhalten im Einzelnen: [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md).
 
 ## Weitere Unterlagen
 
-- **Einstieg:** [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) · [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) · [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) · [Dokumentationsindex](01_Repository/Glide/docs/00_INDEX.md)
+- **Einstieg:** [Richtung](00_Arbeitsvorbereitung/Glide_Richtung.md) · [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) · [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) · [Dokumentationsindex](01_Repository/Glide/docs/00_INDEX.md)
 - **Fachlich:** [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md) · [Architektur](01_Repository/Glide/docs/02_ARCHITECTURE.md) · [Daten und Migration](01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md) · [Vorlagen](01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md) · [Systemmitteilungen](01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md)
 - **Prüfung und Veröffentlichung:** [Prüfplan](01_Repository/Glide/docs/05_QA_TESTPLAN.md) · [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) · [Manuelle Prüfung](00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md) · [Veröffentlichung](01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md)
 

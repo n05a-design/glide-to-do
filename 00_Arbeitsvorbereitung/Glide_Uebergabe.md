@@ -9,16 +9,16 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 - Glide ist eine lokale, deutschsprachige Aufgaben-, Notiz-, Seiten- und Pixel-App in Python 3.14 mit Tk 9: `src/glide/app.pyw` (rund 54.500 Zeilen, Klasse `ListApp`) und dreizehn Module, davon sieben Tk-freie Fachmodule nach D17.
 - Aktueller Stand ist **3.33.6** (02.10.2026, Vollprüfung grün, ausgeliefert): Heute/Demnächst, Eisenhower, Schnelleingabe mit Feldchips und Wiederholungen, Startseite „Ruhig“, vier Seitenleistenbereiche, gemeinsame Formatsicherung. Verlauf: [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
 - Der Inhaber startet Glide **nur** aus `07_Python-Versionen` oder `01_Repository/Glide/build/macos/Glide.app`; eine Änderung ist erst bei ihm, wenn beide per SHA-256 abgeglichen sind.
-- Beauftragt ist die Performance-Fortsetzung; neue Funktionen nur mit ausdrücklichem Auftrag. Entscheidungen trifft der Inhaber; Entschiedenes wird nicht erneut vorgelegt ([Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md)).
+- Beauftragt ist die Performance-Fortsetzung; neue Funktionen nur mit ausdrücklichem Auftrag. Entscheidungen trifft der Inhaber; Entschiedenes wird nicht erneut vorgelegt ([Richtung](Glide_Richtung.md)).
 - Antworten, Dokumente und Oberfläche sind deutsch.
 
 ## 2. Wo was liegt
 
 | Was | Wo |
 |---|---|
-| Arbeitsregeln und Abschlusskriterium | [`01_Repository/Glide/AGENTS.md`](../01_Repository/Glide/AGENTS.md), für Claude Code zusätzlich `CLAUDE.md` in der Wurzel |
+| Leitbild, Gedanken und Vorgaben des Inhabers, Prinzipien, Produktgrenzen, Entscheidungen D01–D17, Wettbewerb, offene Richtungsfragen | [Richtung](Glide_Richtung.md) |
+| Arbeitsregeln, Arbeitsablauf und Abschlusskriterium | [`01_Repository/Glide/AGENTS.md`](../01_Repository/Glide/AGENTS.md), für Claude Code zusätzlich `CLAUDE.md` in der Wurzel |
 | Aufgaben, Stufen, Ziele | [Entwicklungsplan](Glide_Entwicklungsplan.md) |
-| Entscheidungen D01–D17 und frühere Antworten | [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) |
 | Code | `01_Repository/Glide/src/glide/` – Module siehe [Architektur](../01_Repository/Glide/docs/02_ARCHITECTURE.md) |
 | Verhalten der Funktionen | [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md) |
 | Datenformat, Backups, Austausch | [Daten und Migration](../01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md) |
@@ -27,7 +27,6 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 | macOS-Bundle | `01_Repository/Glide/build/macos/Glide.app` (lokal, nicht versioniert), Kennung `de.shaye.glide` (Windows `Shaye.Glide`), nie ändern |
 | Pflegewerkzeuge | [`scripts/pflege/`](../01_Repository/Glide/scripts/pflege/README.md): Versionswechsel, Abgleich nach 07, Kürzen der Ablage, Messungen, Pfadbereinigung |
 | Demo- und Testdaten | `05_Probelisten_Testdaten/Showcase` (eigener Starter), Fixtures unter `01_Repository/Glide/tests/fixtures` |
-| Markt und Vorbilder | [Markt und Vorbilder](Glide_Markt_und_Vorbilder.md) |
 | Manuelle Prüfung | [Prüfliste](Glide_Manuelle_Pruefung.md) |
 | Veröffentlichung, Store, Lizenz | [Veröffentlichung](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md) |
 | Grafik-Master | `20_Grafik_Master` (Logo, App-Symbol, Affinity-Quelle, Inspiration, Beispielbilder) |
@@ -38,7 +37,7 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 - **Echte Daten nur als Kopie und nur mit Erlaubnis.** Tests und Messungen immer mit temporärem `GLIDE_DATA_DIR`, vor dem Import gesetzt. Originale nie verändern; nur Zahlen berichten.
 - **Fotos nur vom eigenen Glide-Fenster** (`screencapture -l <Fensternummer>`), nie vom Bildschirm.
 - **Plattformunabhängig:** keine Funktion nur für eine Plattform, keine neue Laufzeitabhängigkeit ohne Entscheidung.
-- **Form folgt Funktion und die sechs Produktprinzipien** ([Produktgrenzen](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md)); Farben nur über `BUTTON_ROLE_RULES`.
+- **Form folgt Funktion und die sechs Produktprinzipien** ([Richtung, Abschnitt 4](Glide_Richtung.md#4-produktprinzipien)); Farben nur über `BUTTON_ROLE_RULES`.
 - **Jede Produktionsrunde bekommt eine Version** (`scripts/pflege/versionswechsel.py`). Reine Dokumentations-, Ablage- oder Werkzeugnachläufe bekommen einen datierten Nachweis zur unveränderten App-Version.
 - **Ablage:** Das öffentliche Repository `n05a-design/glide-to-do` ist maßgeblich (D09). Uploads nur in die Projektstruktur, keine Benutzerpfade, keine Rohprotokolle, keine Archivkopien. Archive und Nachweise nur der sieben neuesten Versionen, Fensterbilder nur der drei neuesten ([Dokumentenpflege](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md)).
 - **Dokumente:** ein Thema, ein Dokument; zusammenführen und löschen statt archivieren; Erledigtes im Entwicklungsplan markieren.
@@ -69,6 +68,4 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 
 ## 7. Offen beim Inhaber
 
-- Auswahl A–H (Richtung, Tiefe); D07 erst zur Pixel-Etappe; Importquelle und Bauwerkzeug erst in Stufe 4.
-- I1 Inhaberangaben bestätigen, I2 Lizenz veröffentlichen, I3 Developer-ID und Code-Signing-Zertifikat, I4 Markenprüfung, I5 Python 3.14.7 installieren, I6 Windows-Vollprüfung und manuelle Prüfsitzungen ([Prüfliste](Glide_Manuelle_Pruefung.md)).
-- Lizenzlage der Inspirations- und Beispielbilder in `20_Grafik_Master` (Stockfotos in einem öffentlichen Repository) prüfen.
+Auswahl A–H, D07, Inhaberangaben und Freigaben I1–I6, Rechte an Fremdbildern, Bereinigung der Git-Historie und der GitHub-Auftritt – mit Optionen und je einer Empfehlung in der [Richtung, Abschnitt 10](Glide_Richtung.md#10-offene-richtungsfragen).

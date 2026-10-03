@@ -58,6 +58,6 @@ Sie ersetzt nicht die Vollprüfung auf dem Mac. Ein nicht vollständig grüner L
 
 ## Mitwirken und Lizenz
 
-Vor Änderungen gelten die [Arbeitsregeln](AGENTS.md); Entscheidungen und Arbeitsablauf stehen in der [Arbeitsrichtung](docs/ARBEITSRICHTUNG.md). Änderungen müssen zum Datenmodell passen, Nutzerdaten schützen und mit den betroffenen Tests und der Dokumentation abgeschlossen werden.
+Vor Änderungen gelten die [Arbeitsregeln](AGENTS.md) mit dem Arbeitsablauf; Leitbild, Prinzipien und Entscheidungen stehen in der [Richtung](../../00_Arbeitsvorbereitung/Glide_Richtung.md). Änderungen müssen zum Datenmodell passen, Nutzerdaten schützen und mit den betroffenen Tests und der Dokumentation abgeschlossen werden.
 
 Für Glide ist noch keine öffentliche Softwarelizenz festgelegt; der Quelltext räumt derzeit keine Nutzungs-, Änderungs- oder Weiterverteilungsrechte ein ([Lizenzstatus](LICENSE.md)).

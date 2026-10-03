@@ -38,6 +38,7 @@ Regeln, die aus diesen Läufen folgen (nicht tippen, nicht sperren, Last vermeid
 
 | Datum | Nachlauf | Nachweis |
 |---|---|---|
+| 03.10.2026 | Richtungsdokument: Leitbild, Entscheidungen, Prinzipien und Wettbewerb in einem Dokument; Produktgrenzen, Arbeitsrichtung und Markt und Vorbilder aufgelöst (Linux/Tk 8.6, künstliche Daten) | [README](../tests/qa-3.33.6/richtung_2026-10-03/README.md) |
 | 03.10.2026 | Bereinigung der Ablage und Dokumentation: Archive auf 3.33.0–3.33.6, Fensterbilder nur 3.33.4–3.33.6, Dokumente zusammengeführt (Linux/Tk 8.6, künstliche Daten) | [README](../tests/qa-3.33.6/aufraeumen_2026-10-03/README.md) |
 | 02.10.2026 | Schlanke Ablage: Archivkopien entfernt, CI-Schritt „Ablagegröße“ | [README](../tests/qa-3.33.6/ablage_2026-10-02/README.md) |
 | 01.10.2026 | Analyse und Planung, Beschlüsse D09–D17, Showcase, Prüfaufruf- und Speicherwegmessung (Linux, Xvfb), Dokumentations- und Werkzeugabgleich zu 3.32.3 | Protokolle in Git (Ordner `tests/qa-3.32.3`, gelöscht am 03.10.2026) |
