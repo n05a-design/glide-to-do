@@ -165,7 +165,7 @@ ZWISCHENSTAND = re.compile(r"Glide_\d+\.\d+\.\d+_Zwischenstand_\d{4}-\d{2}-\d{2}
 
 # Fortgeschrieben, obwohl der Dateiname ein Datum oder eine Version trägt.
 # Seit dem Aufräumen vom 03.10.2026 tragen die gepflegten Dokumente
-# (Übergabe, Entwicklungsplan, Markt und Vorbilder, manuelle Prüfliste) kein
+# (Richtung, Übergabe, Entwicklungsplan, manuelle Prüfliste) kein
 # Datum mehr im Namen; die Liste bleibt für künftige Ausnahmen.
 GEPFLEGT: tuple[str, ...] = ()
 

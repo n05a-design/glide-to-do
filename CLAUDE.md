@@ -7,7 +7,7 @@ Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf 
 ## Struktur
 
 - Repository-Wurzel = Projektordner:
-  - `00_Arbeitsvorbereitung` – Übergabe, Entwicklungsplan, Markt und Vorbilder, manuelle Prüfliste
+  - `00_Arbeitsvorbereitung` – Richtung, Übergabe, Entwicklungsplan, manuelle Prüfliste
   - `01_Repository/Glide` – Quellbaum: `src/glide/app.pyw`, Tests, Dokumentation, Pflegewerkzeuge
   - `07_Python-Versionen` – startbarer, bytegleicher Lieferstand
   - `05_Probelisten_Testdaten` (Showcase), `20_Grafik_Master` (Grafikquellen)
@@ -16,7 +16,7 @@ Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf 
 ## Lesereihenfolge
 
 1. [01_Repository/Glide/AGENTS.md](01_Repository/Glide/AGENTS.md) – verbindliche Arbeitsregeln und Abschlusskriterium
-2. [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) – Stand, verbindliche Entscheidungen D01–D17, beauftragte Arbeit, Abnahme
+2. [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [Richtung](00_Arbeitsvorbereitung/Glide_Richtung.md) – Stand, Leitbild, Prinzipien und Produktgrenzen, verbindliche Entscheidungen D01–D17, offene Richtungsfragen
 3. [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) – Aufgaben mit Status, Stufen, Ziele; Verhalten der Funktionen in [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md)
 4. [Dokumentenpflege](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md) vor jeder Dokumentänderung: ein Thema, ein Dokument; zusammenführen und löschen statt archivieren (Auftrag vom 03.10.2026)
 5. Erst dann die betroffene Codestelle **und ihre Aufrufer** (Funktionsnamen suchen, nicht Zeilennummern)

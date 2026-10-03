@@ -2,27 +2,25 @@
 
 Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagenformat 2
 
-Seit 03.10.2026 zwölf Dokumente und fünf Einzelentscheidungen statt 53: Funktionsverträge 45–79, Projektübergabe, Startkontext, Entwicklungsnotizen, Sitzungsprotokoll, Releasecheckliste und Lizenz-, Signierungs- und Vertriebsentwürfe sind in die Dokumente unten eingegangen. Ältere Fassungen trägt Git (`git log --follow docs/<Datei>`). Regeln: [Dokumentenpflege](DOKUMENTENPFLEGE.md).
+Seit 03.10.2026 neun Dokumente und fünf Einzelentscheidungen statt 53: Funktionsverträge 45–79, Projektübergabe, Startkontext, Entwicklungsnotizen, Sitzungsprotokoll, Releasecheckliste und Lizenz-, Signierungs- und Vertriebsentwürfe sind in die Dokumente unten eingegangen; Produktgrenzen, Prinzipien und Entscheidungsregister in die [Richtung](../../../00_Arbeitsvorbereitung/Glide_Richtung.md), der Arbeitsablauf in die [Arbeitsregeln](../AGENTS.md). Ältere Fassungen trägt Git (`git log --follow docs/<Datei>`). Regeln: [Dokumentenpflege](DOKUMENTENPFLEGE.md).
 
 ## Einstieg
 
 - **Neue Sitzung:** [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md), dann [Arbeitsregeln](../AGENTS.md).
 - **Was als Nächstes ansteht:** [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md).
-- **Was entschieden ist:** [Arbeitsrichtung](ARBEITSRICHTUNG.md).
+- **Wohin Glide geht und was entschieden ist:** [Richtung](../../../00_Arbeitsvorbereitung/Glide_Richtung.md).
 
 ## Dokumente
 
 | Dokument | Inhalt |
 |---|---|
-| [01 Produktgrenzen und Prinzipien](01_PRODUCT_CONSTRAINTS.md) | Was Glide ist und nicht wird, sechs Produktprinzipien, Prinzipien-Check, Grenzen einzelner Funktionen |
 | [02 Architektur](02_ARCHITECTURE.md) | Module, Speicherweg, Bausteine der Oberfläche, Performance-Regeln, Tk-Fallstricke |
 | [05 Prüfplan](05_QA_TESTPLAN.md) | Prüfstufen, Regeln, Schritte, Integrationssuiten nach Bereich |
 | [06 Daten, Backups und Migration](06_DATA_BACKUP_MIGRATION.md) | Format 20, Formatstufen, Startprüfung, Sicherungen, Einstellungen, Austauschformat |
 | [07 QA-Bericht](07_QA_BERICHT.md) | Geprüfter Stand der Versionen 3.33.0–3.33.6, ältere Ergebnisse, offene manuelle Prüfungen |
 | [10 Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Releasecheckliste, Signierung, Vertrieb und Marke, Lizenzentwurf, Inhaberangaben, Produktdatenblatt |
-| [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
+| [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79), Grenzen je Funktion |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
-| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Entscheidungen D01–D17 und frühere gültige Antworten, Auftrag, Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Ein Thema, ein Dokument; Aufbewahrung; Zuständigkeiten |
 
 ## Einzelentscheidungen

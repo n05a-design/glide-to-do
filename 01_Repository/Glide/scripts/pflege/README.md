@@ -23,7 +23,7 @@ Releaseplanungen gelten ebenfalls für sieben Versionen, Fensterbilder für drei
 | [messung_startseite.py](messung_startseite.py) | Unprofilierte Messung der Startseite (P03): Wechsel, Aktualisierung an Ort und Stelle, Widgetzahl; `--kacheln alt` oder `d12`, `--profil` nur zur Ursachensuche | `python3 -B scripts/pflege/messung_startseite.py --kacheln d12`; `--app` für gesicherten Vergleichsstand |
 | [messung_speicherweg.py](messung_speicherweg.py) | Unprofilierter Vergleich des Speicherwegs bei wachsendem Bestand (P08, T2): erstes Speichern, Undo-Schnappschuss, `save_items`, Verlaufsvergleich, JSON, Abhaken über `item_change`; Aufwärmlauf, Median/p95, Rohwerte; `--profil` für cProfile | `python3 -B scripts/pflege/messung_speicherweg.py --items 10000 --json <Ausgabe>`; `--app` für gesicherten Vergleichsstand |
 
-**Reihenfolge einer Produktionsrunde** (Dokumentations-/Werkzeugnachlauf nach [Arbeitsrichtung](../../docs/ARBEITSRICHTUNG.md)):
+**Reihenfolge einer Produktionsrunde** (Dokumentations-/Werkzeugnachlauf nach den [Arbeitsregeln](../../AGENTS.md#nachläufe-ohne-neue-app-version)):
 
 1. Baseline mit passender bestehender Prüfung; der Ausgangsstand liegt in Git.
 2. Umsetzen und Einzelsuiten ausführen.

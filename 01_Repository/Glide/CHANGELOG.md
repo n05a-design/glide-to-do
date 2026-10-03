@@ -2,6 +2,12 @@
 
 Vollständig beschrieben sind die sieben neuesten Versionen; ältere stehen verdichtet in der Tabelle am Ende. Ihre ausführlichen Einträge, Verträge und Nachweise trägt Git (Stand vor dem 03.10.2026). Das aktuelle Verhalten beschreiben die [Funktionen](docs/20_FUNKTIONEN.md).
 
+## Richtungsdokument (03.10.2026, App unverändert, kein Versionswechsel)
+
+- **Neu: [Richtung](../../00_Arbeitsvorbereitung/Glide_Richtung.md)** – ein Ort für Leitbild, Gedanken und Vorgaben des Inhabers mit Wortlaut und Datum, die sechs Produktprinzipien mit Prinzipien-Check, Produktgrenzen, das Entscheidungsregister D01–D17 mit früheren Antworten, Markt und Wettbewerb, Wegweisungen, Veröffentlichung und GitHub-Stand sowie die offenen Richtungsfragen mit je einer Empfehlung.
+- **Wettbewerb wiederhergestellt:** Die Verdichtung vom Vormittag hatte aus den Konkurrenzdokumenten vom 01.10.2026 Produktsteckbriefe, Belegstufen der Vorlieben, Vergleich nach Dimensionen und berichtigte ältere Bewertungen verloren; sie stehen jetzt, auf 3.33.6 nachgeführt, in der Richtung (Featurematrix mit 46 Zeilen).
+- **Zusammengeführt und gelöscht:** `00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md`, `docs/01_PRODUCT_CONSTRAINTS.md` (Grenzen je Funktion jetzt in [Funktionen, Abschnitt 13](docs/20_FUNKTIONEN.md#13-grenzen)), `docs/ARBEITSRICHTUNG.md` (Arbeitsablauf und Nachläufe jetzt in [AGENTS.md](AGENTS.md)). Entwicklungsplan und Übergabe verweisen für Leitbild, „bewusst nicht“ und Inhaberfragen auf die Richtung. [Nachweis](tests/qa-3.33.6/richtung_2026-10-03/README.md).
+
 ## Aufräumen der Ablage (03.10.2026, App unverändert, kein Versionswechsel)
 
 - **Dokumente zusammengeführt:** `00_Arbeitsvorbereitung` von 24 Dokumenten auf vier ([Übergabe](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md), [Entwicklungsplan](../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Statusmarken, Markt und Vorbilder, manuelle Prüfliste); `docs/` von 53 auf elf Dokumente und fünf Entscheidungen. Die Funktionsverträge 45–79 (32 Dateien) stehen verdichtet in [Funktionen](docs/20_FUNKTIONEN.md), Releasecheckliste, Signierung, Vertrieb, Lizenzentwurf und Inhaberangaben in [Veröffentlichung](docs/10_VEROEFFENTLICHUNG.md), Tk-Fallstricke und Performance-Regeln in der [Architektur](docs/02_ARCHITECTURE.md). Keine Archivordner mehr; gelöscht statt verschoben.

@@ -4,7 +4,7 @@ Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorl
 
 Gültiges Verhalten je Bereich, verdichtet aus den Funktionsverträgen 45–79 (Glide 3.21–3.33.6, Zusammenführung am 03.10.2026). Überholte Zwischenstände sind weggelassen; die Vorfassungen trägt Git. Die Spalte „Herkunft“ nennt die früheren Vertragsnummern, damit ältere Verweise im Code und in Nachweisen auffindbar bleiben. Ausführbarer Vertrag sind die Pflichtsuiten unter `tests/integration` und `tests/unit`.
 
-Aufbau und Bausteine: [Architektur](02_ARCHITECTURE.md). Datenfelder und Formate: [Daten und Migration](06_DATA_BACKUP_MIGRATION.md). Regeln für neue Funktionen: [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md).
+Aufbau und Bausteine: [Architektur](02_ARCHITECTURE.md). Datenfelder und Formate: [Daten und Migration](06_DATA_BACKUP_MIGRATION.md). Prinzipien, Produktgrenzen und Prinzipien-Check für neue Funktionen: [Richtung](../../../00_Arbeitsvorbereitung/Glide_Richtung.md#4-produktprinzipien).
 
 | Abschnitt | Herkunft | Pflichtsuiten (Auswahl) |
 |---|---|---|
@@ -20,7 +20,7 @@ Aufbau und Bausteine: [Architektur](02_ARCHITECTURE.md). Datenfelder und Formate
 | [10 Suche, Aktionen, Erinnerungen](#10-suche-aktionen-erinnerungen) | 56, 66 | `test_reminders`, `test_fenster330` |
 | [11 Import und Ausgabe](#11-import-ausgabe-und-austausch) | 45, 52, 66 | `test_features316`–`test_features321`, `test_template_workflows` |
 | [12 Erscheinungsbild](#12-erscheinungsbild-und-fenster) | 50, 51, 57, 66, 74, 75 | `test_kontrast330`, `test_mindestgroesse330`, `test_hintergrund330`, `test_logo330`, `test_festlayout330`, `test_kartenfuss330` |
-| [13 Grenzen](#13-bekannte-grenzen) | 66 §11 und Folgeverträge | – |
+| [13 Grenzen](#13-grenzen) | 66 §11 und Folgeverträge, Produktgrenzen | – |
 
 ## 1. Grundbegriffe
 
@@ -192,12 +192,29 @@ Aufbau und Bausteine: [Architektur](02_ARCHITECTURE.md). Datenfelder und Formate
 - **Dialoge** erscheinen erst fertig positioniert; jeder schließt mit Escape. Schaltflächen wachsen mit ihrer Beschriftung; Feldpaare stehen auf einer Linie (`FieldPairGrid`).
 - **Hinweise:** höchstens ein Tooltip sichtbar, jeder Klick schließt ihn. Hinweiszeilen der Ansichten werden nach D11 einklappbar (noch offen, UX1); der Hinweisblock in Seiten bleibt unverändert (D06).
 
-## 13. Bekannte Grenzen
+## 13. Grenzen
+
+### Bewusste Grenzen je Funktion
+
+| Bereich | Grenze |
+|---|---|
+| Zeichnung | 16–128 Zellen, eine bemalbare Ebene, höchstens 256 Farben, deckend weißer Grund; keine Vektorobjekte, Texte, Ebenen, Transparenz, Stiftdruck, Touchgesten, kein allgemeiner Fremd-SVG-Import. Mitgeliefert nur die eigene Palette |
+| Seiten | ein Blatt ohne Unterseiten; Tabellen als ausgerichteter Text; Blöcke nicht einzeln mit der Maus ziehbar |
+| Galerie und Vorschauen | Bilder sind lokale Anhänge; JPEG, HEIC, WebP, TIFF, BMP über das System (macOS `nsimage`/`sips`, Windows WIC, HEIC/WebP nur mit Store-Erweiterungen), unter Linux nur PNG, GIF, SVG |
+| Kalender (ICS) | Import einer gegebenen Datei und Ausgabe als Datei; keine Synchronisierung, kein Abonnement, keine Teilnehmer, Ausnahmetermine oder VTODO; höchstens 2.000 Termine, 12 MB |
+| CSV | Import mit Spaltenzuordnung; kein XLSX, keine Anhänge, Wiederholungen oder Erinnerungen aus Spalten, kein Abgleich mit Vorhandenem; 5.000 Zeilen, 64 Spalten, 12 MB |
+| Druck und PDF | HTML-Druckansicht im Standardprogramm; kein eigener PDF-Schreiber, keine Druckerauswahl, ab 2.000 Punkten abgeschnitten |
+| App-Backup | kein Cloudspeicher, kein Zeitplan, kein Zusammenführen, kein Passwortschutz |
+| Änderungsverlauf | Aufgabenbestand, höchstens 15 Einträge und 15 Tage, abschaltbar; kein Wiederherstellen alter Werte |
+| Planung | Bearbeitungstag und Aufwand erzeugen keine Fälligkeit; Kapazität je Wochentag, keine automatische Terminverteilung und keine Bewertung der arbeitenden Person |
+| Gismo | spiegelt den Bestand, nie den Menschen; leitet aus Abschlüssen keine Bewertung ab |
+
+### Bekannte Mängel und Prüflücken
 
 - **Plattformen:** Abnahme nur auf macOS mit Python 3.14/Tk 9. Windows (Vorschauen über WIC, Systemmitteilungen, Ziehen aus dem Explorer, Lupe, Logo unter Tk 8.6) und Linux (Pixelschrift über Fontconfig nur nachgebildet geprüft) sind ungeprüft; ebenso DPI, mehrere Monitore und Screenreader.
-- **Vorschauen:** unterstützte Formate je System in den [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md#grenzen-einzelner-funktionen); offen sind JPEG unter Linux (N08) und SVG unter Tk 8.6. Die Großansicht vergrößert kleine Bilder nicht.
+- **Vorschauen:** offen sind JPEG unter Linux (N08) und SVG unter Tk 8.6. Die Großansicht vergrößert kleine Bilder nicht.
 - **Bilder in Seiten:** Umfluss über Ränder nachgebildet; zwei Bilder auf gleicher Höhe können sich überlappen; Druck/PDF und „Markdown kopieren“ zeigen nur Dateinamen (B4). Oben am Textfeld bis zu 18 px Versatz beim Scrollen.
-- **Seiten:** Titelbild fehlt (G09); weitere bewusste Grenzen in den [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md#grenzen-einzelner-funktionen). Ältere Glide-Stände verwerfen die Blockarten `h4`, `toggle`, `toggle_closed`, `callout` (Text bleibt).
+- **Seiten:** Titelbild fehlt (G09). Ältere Glide-Stände verwerfen die Blockarten `h4`, `toggle`, `toggle_closed`, `callout` (Text bleibt).
 - **Milchglas:** keine echte Durchsicht; beim Scrollen gleichen sich die Flächen erst in der Ruhe an.
 - **Seitenleiste:** jeder Baum scrollt für sich (B1).
 - **Startseite:** Aufbau 507 ms (macOS, 1.000 Punkte), Ziel 150 ms nicht erreicht; Einstellungsfenster rund 2,1 s bis zur Anzeige.

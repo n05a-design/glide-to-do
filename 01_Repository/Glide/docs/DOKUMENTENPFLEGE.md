@@ -20,16 +20,15 @@ Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder
 |---|---|
 | Einstieg, Stand, Regeln, nächste Schritte | `00_Arbeitsvorbereitung/Glide_Uebergabe.md` |
 | Aufgaben, Backlog, Stufen, Ziele | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` |
-| Markt und Vorbilder | `00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md` |
+| Richtung: Leitbild, Gedanken des Inhabers, Prinzipien, Produktgrenzen, Entscheidungen, Wettbewerb, offene Richtungsfragen | `00_Arbeitsvorbereitung/Glide_Richtung.md` |
 | Manuelle Prüfung (Mac, Windows, Linux) | `00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md` |
-| Entscheidungen und Arbeitsablauf | [ARBEITSRICHTUNG.md](ARBEITSRICHTUNG.md) |
-| Produktgrenzen und Prinzipien | [01_PRODUCT_CONSTRAINTS.md](01_PRODUCT_CONSTRAINTS.md) |
+| Arbeitsregeln, Arbeitsablauf, Abschlusskriterium | [AGENTS.md](../AGENTS.md) |
 | Architektur, Performance-Regeln, Tk-Fallstricke | [02_ARCHITECTURE.md](02_ARCHITECTURE.md) |
 | Prüfplan | [05_QA_TESTPLAN.md](05_QA_TESTPLAN.md) |
 | Datenformat, Backups, Austauschformat | [06_DATA_BACKUP_MIGRATION.md](06_DATA_BACKUP_MIGRATION.md) |
 | Geprüfter Stand | [07_QA_BERICHT.md](07_QA_BERICHT.md) |
 | Veröffentlichung, Lizenz, Signierung, Store | [10_VEROEFFENTLICHUNG.md](10_VEROEFFENTLICHUNG.md) |
-| Verhalten der Funktionen | [20_FUNKTIONEN.md](20_FUNKTIONEN.md) |
+| Verhalten und Grenzen der Funktionen | [20_FUNKTIONEN.md](20_FUNKTIONEN.md) |
 | Vorlagen in der Praxis | [27_VORLAGEN_PRAXISANLEITUNG.md](27_VORLAGEN_PRAXISANLEITUNG.md) |
 | Einzelentscheidungen mit eigenem Gegenstand | `decisions/` (Produktregister, tkdnd, Arbeitsbegleiter, Gruppe/Ordner/Überschrift, Systembenachrichtigungen) |
 | Änderungsverlauf | `CHANGELOG.md` (sieben neueste Versionen ausführlich, ältere als Zeile) |

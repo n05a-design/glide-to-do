@@ -1,0 +1,27 @@
+{
+  "datum": "2026-10-03",
+  "app_version": "3.33.6",
+  "app_geaendert": false,
+  "umgebung": "Linux/Tk 8.6, künstliche Daten",
+  "ausgangsstand": "267baab",
+  "neu": ["00_Arbeitsvorbereitung/Glide_Richtung.md"],
+  "geloescht": [
+    "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+    "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+    "01_Repository/Glide/docs/ARBEITSRICHTUNG.md"
+  ],
+  "richtung": {
+    "abschnitte": 11,
+    "featurematrix_zeilen": 46,
+    "entscheidungen": "D01–D17",
+    "offene_richtungsfragen": ["A–H", "D07", "G21", "G26", "I1", "I2", "I3", "I4", "I5", "I6", "R1", "R2", "R3"]
+  },
+  "github_stand_2026_10_03": {
+    "releases": 0,
+    "tags": 0,
+    "pull_requests_gemergt": 11,
+    "lizenz": "keine",
+    "oeffentlich": true
+  },
+  "wettbewerb_neu_recherchiert": false
+}
