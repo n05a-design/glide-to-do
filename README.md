@@ -11,7 +11,7 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 - **Entwicklungsstand 3.33.6 vom 02.10.2026**, Datenformat 20.
 - **Geprüft und lokal ausgeliefert am 02.10.2026, keine Releasefassung:** Vollprüfung auf dem Referenz-Mac grün ([Ergebnis](01_Repository/Glide/tests/qa-3.33.6/heute_2026-10-02/vollpruefung/ergebnis.json)); Python-Fassung und Entwicklungsbundle bytegleich ([QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md)).
 - **Offen:** Signatur, Markenprüfung, Store und die manuelle Abnahme unter Windows, Linux, DPI-Skalierung und Bildschirmleser.
-- **Nächste Schritte:** [Entwicklungsplan ab 3.33](00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md) mit den [beschlossenen Entscheidungen D09–D17](00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md).
+- **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe; Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 
 ## Schnellstart
 
@@ -27,36 +27,34 @@ Unter Windows: `python 07_Python-Versionen\Schnellstart.pyw`. Weitere Startwege 
 
 ## Was Glide kann
 
-- **Planen:** Aufgaben mit Unterpunkten, Fälligkeit, Bearbeitungstag, Wiederholung, Erinnerung, Wichtigkeit, Labels und Aufwand; „Mein Tag“ mit Stundenraster, Tagesbeginn und Wochenrückblick.
+- **Planen:** Aufgaben mit Unterpunkten, Fälligkeit, Bearbeitungstag, Wiederholung, Erinnerung, Wichtigkeit, Labels und Aufwand; „Heute“ und „Demnächst“ mit Stundenraster, Tagesbeginn, Tagesabschluss und Wochenrückblick; Schnelleingabe in Alltagssprache; Eisenhower-Gruppierung.
 - **Ansichten:** Liste, Tabelle, Kalender, Karten, Spaltenboard und Pinnwand auf demselben Bestand; Startseite zum direkten Anpassen.
-- **Wissen:** Seiten mit Markdown und Bildern, Notizbücher, Bibliotheken und Galerien; Suche über Seiten, Punkte und Befehle (Strg/Cmd+O).
+- **Wissen:** Seiten mit Markdown und Bildern, Notizbücher, Bücher und Galerien; Suche über Seiten, Punkte und Befehle (Strg/Cmd+O).
 - **Pixel-Werkstatt:** Zeichnungen von 16 bis 128 Zellen mit Werkzeugen, Symmetrie, Paletten, PNG-Export und Pixelsymbolen.
 - **Austausch und Sicherheit der Daten:** Vorlagen, CSV, Markdown, ICS und Glide-Formate; atomares Speichern, Vorsicherungen je Formatstufe, Tagesstände und Rückgängig für alles.
 - **Gestaltung:** zehn Designs mit lesbarem Kontrast nach WCAG AA, Hell/Dunkel, Akzentfarben und Hintergrundverläufe.
 
-Vollständige Übersicht: [Was Glide bereits kann](01_Repository/Glide/README.md#was-glide-bereits-kann). Entwicklung je Version: [Änderungsverlauf](01_Repository/Glide/CHANGELOG.md).
+Vollständige Übersicht: [Was Glide kann](01_Repository/Glide/README.md#was-glide-kann). Entwicklung je Version: [Änderungsverlauf](01_Repository/Glide/CHANGELOG.md).
 
 ## Ablage
 
 | Ordner | Zweck |
 |---|---|
 | [01_Repository/Glide](01_Repository/Glide/README.md) | Kanonischer Quellcode, Tests, Prüfwerkzeuge und technische Dokumentation |
-| [07_Python-Versionen](07_Python-Versionen/README.md) | Startbare, bytegleich gehaltene Python-Fassung mit Ressourcen |
-| [05_Probelisten_Testdaten](05_Probelisten_Testdaten/README.md) | 16 Praxisvorlagen, Beispielsicherungen, „Rundgang“ und Showcase |
-| [00_Arbeitsvorbereitung](00_Arbeitsvorbereitung/README.md) | Planung, Entscheidungen, Übergaben, manuelle Prüflisten |
-| [20_Grafik_Master](20_Grafik_Master/README.md) | Logo, App-Symbol und Fav-Icon als SVG und PNG, Stilvorlagen |
-| [40_Store_Material](40_Store_Material/README.md) | Entwürfe für die Veröffentlichung |
-| [50_Ablage](50_Ablage/README.md) | Historische Prüfungen, Screenshots und Rückfallstände |
+| [07_Python-Versionen](07_Python-Versionen/README.md) | Startbare, bytegleich gehaltene Python-Fassung; im Archiv die Hauptdateien der sieben neuesten Versionen |
+| [05_Probelisten_Testdaten](05_Probelisten_Testdaten/README.md) | Showcase mit eigenem Starter (bytegleiche Lieferkopie der Fixture) |
+| [00_Arbeitsvorbereitung](00_Arbeitsvorbereitung/README.md) | Übergabe, Entwicklungsplan, Markt und Vorbilder, manuelle Prüfliste |
+| [20_Grafik_Master](20_Grafik_Master/README.md) | Logo, App-Symbol und Fav-Icon als SVG und PNG, Affinity-Quelle, Inspiration, Beispielbilder |
 | `.github` | Prüf-Workflow (Glide-Prüfung), Dependabot; CodeQL-Workflow deaktiviert |
 
 ## Arbeitsweise mit dem Repository
 
 - **Struktur:** Uploads und Commits immer in diese Struktur, nie in einen Unterordner; sonst brechen die Querverweise. Lokale Arbeitskopie: `Github/glide-to-do`.
 - **Prüfung:** Jeder Push und Pull Request auf `main` startet die [Glide-Prüfung](01_Repository/Glide/tests/README.md). Sie umfasst Syntax, Versionen, Dokumentationslinks, Unit-Tests, Analysen, Startprobe, Lieferstand, Herkunft des Fremdcodes, Datenschutz und Ablagegröße. Pull Requests erst mergen, wenn sie grün ist.
-- **Schlanke Ablage:** Keine Archivkopien von Showcase, Beispieldaten oder Fixtures – frühere Fassungen hält Git vor. Fensterbilder der Vollprüfung bleiben lokal.
-- **Öffentliches Repository:** Rohprotokolle (`*.log`) bleiben lokal. Veröffentlicht werden Zusammenfassungen ohne Benutzerpfade; vor dem Hochladen neuer Prüfergebnisse `python3 -B scripts/pflege/pfade_bereinigen.py <Ordner>` im Quellbaum ausführen.
+- **Schlanke Ablage (03.10.2026):** Archive und Prüfnachweise nur der sieben neuesten Versionen, Fensterbilder nur der drei neuesten, keine Archivkopien – frühere Fassungen hält Git vor. `scripts/pflege/ablage_kuerzen.py` kürzt beim Versionswechsel automatisch.
+- **Öffentliches Repository:** Rohprotokolle (`*.log`) bleiben lokal. Veröffentlicht werden Zusammenfassungen ohne Benutzerpfade; vor dem Hochladen neuer Prüfergebnisse `python3 -B scripts/pflege/pfade_bereinigen.py <Ordner>` im Quellbaum ausführen. Was `.gitignore` abfängt und was nicht, steht in ihrem Kopf.
 - **Regeln:** [Arbeitsregeln für Claude Code](CLAUDE.md) und [AGENTS.md](01_Repository/Glide/AGENTS.md).
-- **Dokumentationspflege:** Seit dem Auftrag vom 01.10.2026 werden doppelte und überholte Dokumente nach Wissensabgleich gelöscht; aktuelle Quellen werden fortgeschrieben, Git trägt die Historie ([Wissenseinstieg und Bereinigungsnachweis](01_Repository/Glide/docs/75_DOKUMENTATIONSREDUKTION_UND_LOGOS_3.33.1.md)).
+- **Dokumente:** Ein Thema, ein Dokument; zusammenführen und löschen statt archivieren, Erledigtes im Entwicklungsplan markieren ([Dokumentenpflege](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md)).
 
 ## Qualität und Sicherheit
 
@@ -68,10 +66,9 @@ Vollständige Übersicht: [Was Glide bereits kann](01_Repository/Glide/README.md
 
 ## Weitere Unterlagen
 
-- **Einstieg:** [Sitzungsübergabe](00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md) · [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) · [Dokumentationsindex](01_Repository/Glide/docs/00_INDEX.md) · [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md)
-- **Aktuelle Verträge:** [Fundament 3.33.0](01_Repository/Glide/docs/73_FUNDAMENT_3.33.0.md) · [Bereiche und Fenster 3.33.1](01_Repository/Glide/docs/74_BEREICHE_UND_FENSTER_3.33.1.md) · [Modernisierung 3.30](01_Repository/Glide/docs/66_MODERNISIERUNG_3.30.0.md) · [Zeichnungsseite 3.29](01_Repository/Glide/docs/65_ZEICHNUNGSSEITE_3.29.0.md) · [Tagebuch und UI 3.28](01_Repository/Glide/docs/59_TAGEBUCH_UND_UI_3.28.0.md) · [Flackern und Ablageprüfung 3.28](01_Repository/Glide/docs/60_FLACKERN_UND_ABLAGEPRUEFUNG_3.28.0.md)
-- **Bedienung einzelner Bereiche:** [Erinnerungen](01_Repository/Glide/docs/archiv/31_ERINNERUNGEN_3.8.0.md) · [Systemmitteilungen](01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md) · [Vorlagen](01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md) · [Kalenderimport (ICS)](01_Repository/Glide/docs/45_KALENDERIMPORT_3.21.0.md) · [Kalenderausgabe (ICS)](01_Repository/Glide/docs/archiv/44_KALENDERAUSGABE_3.20.0.md) · [Änderungsverlauf in der App](01_Repository/Glide/docs/archiv/43_AENDERUNGSVERLAUF_3.19.0.md) · [CSV-Import](01_Repository/Glide/docs/archiv/42_CSV_IMPORT_3.18.0.md) · [Druck und PDF](01_Repository/Glide/docs/archiv/41_DRUCK_UND_PDF_3.17.0.md) · [Bearbeitungstag und Aufwand](01_Repository/Glide/docs/archiv/37_PLANUNG_UND_AUFWAND_3.14.0.md) · [Tabellenansicht](01_Repository/Glide/docs/archiv/36_TABELLENANSICHT_3.13.0.md)
-- **Konzepte und frühere Entscheidungen:** [Seiten wie Notion](00_Arbeitsvorbereitung/Glide_Konzept_Seiten_wie_Notion_2026-09-26.md) · [Bestandsprüfung 27.09.2026](00_Arbeitsvorbereitung/Glide_Bestandspruefung_und_Entscheidungen_2026-09-27.md) · [Übersicht 29.09.2026](00_Arbeitsvorbereitung/Glide_Uebersicht_und_Entscheidungen_2026-09-29.md) · [Zeichenfläche](00_Arbeitsvorbereitung/Glide_Aufgabensammlung_Zeichenflaeche_2026-09-23.md) · [Ablageprotokoll](01_Repository/Glide/docs/archiv/28_ABLAGEPRUEFUNG_2026-09-11.md)
+- **Einstieg:** [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) · [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) · [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) · [Dokumentationsindex](01_Repository/Glide/docs/00_INDEX.md)
+- **Fachlich:** [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md) · [Architektur](01_Repository/Glide/docs/02_ARCHITECTURE.md) · [Daten und Migration](01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md) · [Vorlagen](01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md) · [Systemmitteilungen](01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md)
+- **Prüfung und Veröffentlichung:** [Prüfplan](01_Repository/Glide/docs/05_QA_TESTPLAN.md) · [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) · [Manuelle Prüfung](00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md) · [Veröffentlichung](01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md)
 
 ## Lizenz
 

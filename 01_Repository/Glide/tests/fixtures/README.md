@@ -13,33 +13,21 @@ die feste Referenz für aktuelle Daten.
 Migrationen erhalten; sie werden nicht auf den aktuellen App-Stand
 umetikettiert.
 
-Unter `beispiele` liegen `glide_beispieldaten.glidebackup` und
-`glide_releaseplanung_3.22.0.glidebackup`. Beide werden im Vollmodus mit den
-aktuellen Erzeugern reproduziert und verglichen.
+Unter `beispiele` liegen `glide_beispieldaten.glidebackup`, `glide_rundgang.glidebackup` und die Releaseplanungen. Beispieldaten und die Releaseplanung der aktuellen Version werden im Vollmodus mit den aktuellen Erzeugern reproduziert und verglichen.
 
-Seit dem 27.09.2026 liegt dort außerdem `glide_rundgang.glidebackup`: ein
-Teilbackup mit dem Ordner „Rundgang“ – je eine Liste, Notiz, Seite und
-Zeichnung. Die Seite erklärt die Funktionen mit fünf Aufnahmen des
-Glide-Fensters; diese Bilder liegen unter `rundgang/` und zeigen nur die
-künstlichen Beispieldaten. Erzeuger: `tests/tools/rundgang.py`;
-`test_bilder330` liest die Datei ein. Der Rundgang wird nicht im Vollmodus
-neu erzeugt, weil die Seitenbilder über den sichtbaren Seiteneditor
-eingesetzt werden.
+`glide_rundgang.glidebackup` ist ein Teilbackup mit dem Ordner „Rundgang“ – je eine Liste, Notiz, Seite und Zeichnung. Die Seite erklärt die Funktionen mit fünf Aufnahmen des Glide-Fensters; diese Bilder liegen unter `rundgang/` und zeigen nur künstliche Beispieldaten. Erzeuger: `tests/tools/rundgang.py`; `test_bilder330` liest die Datei ein. Der Rundgang wird nicht im Vollmodus neu erzeugt, weil die Seitenbilder über den sichtbaren Seiteneditor eingesetzt werden.
 
-## Warum hier einundzwanzig Releaseplanungen aktiv liegen
+`showcase/` enthält den Showcase (Teil-, App-Backup, Vorlagen, Starter, Manifest) und unter `bilder/` die sechs Originalmotive; `quellen.json` belegt sie per SHA-256. Erzeuger `tests/tools/showcase.py`, Prüfung `tests/tools/pruefe_showcase.py`, Auslieferung nach `05_Probelisten_Testdaten/Showcase` mit `scripts/pflege/showcase_abgleich.py`.
 
-`glide_releaseplanung_3.5.0` bis `glide_releaseplanung_3.21.4` liegen
-**absichtlich** alle im aktiven Ordner und gehören **nicht** ins Archiv. Die
-Fixtureprüfung liest jede `*.glidebackup` und erwartet bei einem
-versionierten Dateinamen genau die Version aus dem Namen – ohne Namen die
-aktuelle. Diese Reihe ist damit der Nachweis, dass jede Formatstufe weiterhin
-lesbar ist. Wer sie aufräumt, nimmt dem Prüfstand seine Migrationsbelege.
+## Releaseplanungen
 
-Vorfassungen der **unversionierten** Bestände (`glide_beispieldaten`,
-`glide_rundgang`, Showcase) trägt seit 02.10.2026 allein Git; Archivkopien
-entfallen und werden von der CI-Grundstufe zurückgewiesen. In
-`beispiele/archiv/` bleibt nur die ursprüngliche Beispieldatei vor dem
-Showcase, die der Dokumentationsindex als Vorsicherung verlinkt.
+Die Fixtureprüfung liest jede `glide_releaseplanung_<Version>.glidebackup` und erwartet genau die Version aus dem Namen und das zugehörige Datenformat. Seit 03.10.2026 bleiben (Regel „Archivalter“ der Ablageprüfung):
+
+- die Releaseplanungen der sieben neuesten Versionen;
+- je älterer Formatstufe ab Format 11 die letzte Releaseplanung als Lesbarkeitsbeleg (3.6.0, 3.7.0, 3.13.0, 3.18.0, 3.21.4, 3.25.0, 3.26.0, 3.28.0, 3.29.0);
+- 3.30.0, die `test_tempo330` als feste Messgrundlage liest.
+
+Ältere Fassungen trägt Git. Vorfassungen der unversionierten Bestände (`glide_beispieldaten`, `glide_rundgang`, Showcase) ebenfalls; Archivkopien weist die CI-Grundstufe zurück.
 
 ## Umgang mit den Beispielen
 

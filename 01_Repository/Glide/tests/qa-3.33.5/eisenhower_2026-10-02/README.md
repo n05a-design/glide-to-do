@@ -1,6 +1,6 @@
 # Eisenhower 3.33.5 – Nachweis
 
-02.10.2026 · App 3.33.5 · macOS, Python 3.14.5, Tk 9.0 · temporäres `GLIDE_DATA_DIR`, keine echten Nutzerdaten · [Vertrag 78](../../../docs/78_EISENHOWER_3.33.5.md)
+02.10.2026 · App 3.33.5 · macOS, Python 3.14.5, Tk 9.0 · temporäres `GLIDE_DATA_DIR`, keine echten Nutzerdaten · [Funktionen, Gruppierung](../../../docs/20_FUNKTIONEN.md#5-liste-tabelle-gruppierung)
 
 ## Vollprüfung und Auslieferung
 

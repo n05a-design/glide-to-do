@@ -38,5 +38,8 @@ Nicht im Umfang: Schwachstellen in Python, Tk oder im Betriebssystem selbst; die
 |---|---|
 | CI-Grundstufe bei jedem Push und Pull Request: Prüfungen, Startprobe, Lieferstand, **Herkunft des Fremdcodes** gegen das Originalpaket, **keine Benutzerpfade** in versionierten Dateien | `.github/workflows/python-app.yml`, `01_Repository/Glide/tests/tools/ci_grundstufe.py` |
 | Wöchentliche Aktualisierung der verwendeten GitHub Actions | `.github/dependabot.yml` |
-| Keine Schlüssel, Zertifikate oder Signing-Secrets im Repository; Secret Scanning ist aktiv | `01_Repository/Glide/.gitignore` |
-| Rohprotokolle (`*.log`) bleiben lokal; veröffentlichte Prüfergebnisse enthalten keine Benutzerpfade | `scripts/pflege/pfade_bereinigen.py` |
+| Keine Schlüssel, Zertifikate, Zugangsdaten oder Signing-Secrets im Repository; Secret Scanning ist aktiv | `.gitignore` (Abschnitt Sicherheit) |
+| Keine echten Nutzerbestände, Sicherungen oder Archivkopien; Archive und Nachweise nur der sieben neuesten Versionen | `.gitignore`, CI-Schritt „Ablagegröße“ |
+| Rohprotokolle (`*.log`) bleiben lokal; veröffentlichte Prüfergebnisse enthalten keine Benutzerpfade (vor dem Hochladen `python3 -B scripts/pflege/pfade_bereinigen.py <Ordner>`) | `.gitignore`, CI-Schritt „Datenschutz“ |
+
+`.gitignore` verhindert nur das versehentliche Hinzufügen neuer Dateien; bereits versionierte Dateien, `git add -f` und Uploads über die Weboberfläche umgehen es. Deshalb setzen CI und Secret Scanning die Regeln zusätzlich durch.

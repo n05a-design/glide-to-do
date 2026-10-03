@@ -27,12 +27,6 @@ Automatisierte und manuelle Tests dürfen den echten Datenordner nicht berühren
 
 Seit 3.2.0 sucht Glide beim Start nicht mehr in Ordnern früherer Programmnamen nach Nutzerdaten. Der Datenordner ist der Standardordner, die über die gerätespezifische Zeigerdatei gewählte Ablage oder der über `GLIDE_DATA_DIR` gesetzte – ein Programmstart liest keine fremden Verzeichnisse mehr.
 
-## Meldung
+## Meldung und öffentliches Repository
 
-Sicherheitsfunde vertraulich über GitHub melden: Reiter *Security* → *Report a vulnerability*. Ablauf und Umfang stehen in der [Sicherheitsrichtlinie](../../SECURITY.md). Keine öffentlichen Issues und keine echten Nutzerdaten, Sicherungen oder Anhänge mitschicken.
-
-## Öffentliches Repository
-
-- Rohprotokolle (`*.log`) bleiben lokal (`.gitignore`); veröffentlichte Prüfergebnisse enthalten keine Benutzerpfade. Vor dem Hochladen `python3 -B scripts/pflege/pfade_bereinigen.py <Ordner>` ausführen.
-- Die CI-Grundstufe prüft bei jedem Push, dass keine versionierte Textdatei einen Benutzerpfad enthält, und vergleicht den Fremdcode unter `src/glide/vendor` Datei für Datei mit dem in `provenance.json` festgehaltenen Originalpaket.
-- Dependabot hält die GitHub Actions aktuell. Der CodeQL-Workflow ist seit 01.10.2026 vom Inhaber deaktiviert.
+Meldeweg, Umfang und die Schutzmaßnahmen des öffentlichen Repositorys (CI-Prüfungen, `.gitignore`, Secret Scanning, keine Rohprotokolle und Benutzerpfade) stehen in der [Sicherheitsrichtlinie](../../SECURITY.md).

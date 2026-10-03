@@ -1,212 +1,72 @@
 # Glide – lokale Aufgaben, Notizen und Pinnwände
 
-Glide ist eine deutschsprachige Desktop-Anwendung für persönliche Aufgaben,
-Listen, Notizen, Tagebücher und visuelle Pinnwände. Die Anwendung läuft lokal
-mit Python 3.14 und Tk 9 (Tk 8.6 geht auch), benötigt weder Konto noch
-Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
+Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Sie läuft lokal mit Python 3.14 und Tk 9 (Tk 8.6 eingeschränkt), braucht weder Konto noch Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
-> **Projektstatus:** interner Entwicklungsstand **3.33.6** · Datenformat 20 ·
-> keine veröffentlichte oder signierte Releasefassung. Der aktuelle
-> [QA-Bericht](docs/07_QA_BERICHT.md) nennt bestandene Prüfungen und offene
-> Plattformtests.
+> **Projektstatus:** interner Entwicklungsstand **3.33.6** · Datenformat 20 · keine veröffentlichte oder signierte Releasefassung. Der [QA-Bericht](docs/07_QA_BERICHT.md) nennt bestandene Prüfungen und offene Plattformtests.
 
-## Was Glide bereits kann
+## Was Glide kann
 
-- verschachtelte Listen, Ordner und datumsorientierte Notizbücher (bis
-  27.09.2026 „Tagebuch“); ein Notizbuch nimmt Notizen, Listen, Zeichnungen
-  und Pinnwände auf und filtert nach Tag oder Zeitraum; im Bereich Notizen
-  steht es mit Notizen und Zeichnungen, mit Listen oder Pinnwänden unter Listen;
-- eine Pixel-Werkstatt direkt in der Seitenansicht:
-  - Flächen mit 16, 32, 64 oder 128 Zellen;
-  - Pinsel, Füllen, Pipette, Linie, Rechteck, Ellipse und Auswahl;
-  - zwei Farben, Symmetrie, Muster, Paletten und Rückgängig je Aktion;
-  - PNG-Export, PNG-Referenz und Nachzeichnung;
-  - JSON- und Glide-SVG-Austausch;
-  - Pixelsymbole für Listen und Ordner;
-- Aufgaben, Long-Tasks, Gruppen, Überschriften, Unterpunkte und Notizseiten;
-- Fälligkeiten, Wiederholungen, Erinnerungen, Prioritäten, Labels, Farben,
-  Beschreibungen und lokale Anhänge;
-- „Heute“ mit nächster Aufgabe, Verspätetem, Tagesplan und heute Fälligem,
-  „Demnächst“ mit allen Fälligkeiten; Kapazität, Bearbeitungstag und
-  Aufwandsschätzung;
-- Listen-, Tabellen-, Kalender-, Karten- und Pinnwandansichten auf demselben
-  Datenbestand – Gruppieren nach Feld, Spaltenboard mit Ziehen, Bereiche,
-  beschriftete Verbindungen und Präsentation;
-- verknüpfte Punkte, Abhängigkeiten, Zeiterfassung, Tagesbeginn und
-  Wochenrückblick, Archiv statt Löschen;
-- eine Startseite zum direkten Anpassen, angeheftete Seiten und Filter sowie
-  eine Seiten- und Befehlssuche mit Strg/Cmd+O;
-- Suche, gespeicherte Filter, Schnellerfassung, Mehrfachauswahl, Rückgängig und
-  Papierkorb;
-- Vorlagen, CSV-, TXT-, Markdown-, ICS- und Glide-Austausch sowie lokale
-  Voll- und Teilbackups;
-- zehn Designs (darunter „Pixel“), Hell-/Dunkelmodus, Akzentfarben und drei
-  Schriftgrößen, alle mit lesbarem Kontrast nach WCAG AA;
-- ein Stundenraster in „Heute“ und ein Detailbereich neben der Liste;
-- eine saubere Darstellung bis zur Mindestgröße 860 × 700;
-- je Design fünf moderne Hintergrundverläufe (Mesh, Nordlicht, Körnung,
-  Pixel); Kacheln, Listen und Fenster tönen sich darüber als Milchglas;
-- eine aufgeräumte Oberfläche: Verlauf als Kopfzeilenknopf, „Demnächst“
-  ohne eigene Seitenleistenzeile, Farbe nur mit Bedeutung;
-- die Seitenart „Seite“ für KI-Berichte (Markdown hinein und hinaus, Aufgaben
-  als echte Punkte) und die Ordnertypen Ordner, Bibliothek und Notizbuch;
-- einen eigenen Seitenbereich mit Vorlagen und dem Austauschformat
-  `.glidepage` sowie die Galerie für Bildersammlungen;
-- Knöpfe nur, wo sie wirken: die Auswahlleiste mit Auswahl, eine Kopfzeile
-  aus Symbolen, einen festen Umschalter Liste · Tabelle · Pinnwand;
-- einen kompakten Kopf (Titel höchstens 40 Zeichen, Beschreibung neben den
-  Kennzahlen), einklappbare Seiten und Listen und die Bibliothek als Tabelle;
-- deutlich schnelleres Scrollen und Öffnen sowie einen Schnellstart
-  (`src/glide/glide_start.py`);
-- seit dem 27.09.2026:
-  - Bilder in Seiten, die der Text umfließt – verschiebbar, in der Größe
-    ziehbar, auch aus Finder/Explorer hineinziehbar;
-  - Vorschauen über Tk 9 (unter macOS auch JPEG, HEIC und WebP, überall SVG);
-  - Systemmitteilungen für Erinnerungen (Option);
-  - „/“-Befehle wie /morgen und /wichtig beim Anlegen eines Punkts;
-  - wiederkehrende Checklisten;
-  - feste Bestandteile: Seitenleiste, Kopfzeile und Fläche bleiben beim
-    Wechseln der Ansichten stehen;
-  - eine hervorgehobene Suche und schnelleres Speichern;
-- seit dem 29.09.2026:
-  - das Logo in der Akzentfarbe neben dem Titel und als Programmsymbol;
-  - die Lupe ⌕ für die Suche;
-  - Inhaltskarten bis zur Unterkante;
-  - Sicherungen nur bei Änderung, mit Tagesständen;
-  - eine Startprüfung des Bestands;
-  - die Seitenleiste mit den Bereichen Seiten, Listen und Notizen.
+- **Planen:** Aufgaben mit Unterpunkten, Checklisten, Fälligkeit und Bearbeitungstag, Wiederholungen, Erinnerungen, Wichtigkeit, Labels, Aufwand und Zeiterfassung; „Heute“ und „Demnächst“, Stundenraster, Kapazität, Tagesbeginn und -abschluss; Schnelleingabe in Alltagssprache mit Feldchips.
+- **Ansichten:** Liste, Tabelle, Kalender, Karten und Pinnwand auf demselben Bestand; Gruppieren nach Feld einschließlich Eisenhower; Spaltenboard, Bereiche, Verbindungen, Präsentation; Startseite „Ruhig“ zum Anpassen.
+- **Wissen:** Seiten mit Markdown, Bildern und echten Aufgaben, Notizen, Notizbücher, Bücher und Galerien; Suche über Seiten, Punkte und Befehle.
+- **Pixel-Werkstatt:** Zeichnungen mit 16–128 Zellen, Formen, Symmetrie, Mustern, Paletten, PNG- und ICO-Export, Pixelsymbole.
+- **Daten:** atomares Speichern, Sicherungen nur bei Änderung, Vorsicherung je Formatstufe, Voll-, Teil- und App-Backup, CSV, Markdown, ICS, Austauschformat für KI; Rückgängig für alles.
+- **Gestaltung:** zehn Designs mit Kontrast nach WCAG AA, Hintergrundverläufe, Mindestgröße 860 × 700.
 
-Die Einführung einzelner Funktionen ist in den
-[fortgeltenden Funktionsverträgen](docs/00_INDEX.md) dokumentiert.
+Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md). Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 
 ## Schnellstart aus dem Quellstand
 
-Voraussetzung ist eine Python-Installation mit Tk/Tcl. Zusätzliche
-Laufzeitpakete werden derzeit nicht benötigt.
+Voraussetzung ist Python mit Tk; zusätzliche Laufzeitpakete sind nicht nötig.
 
 ```bash
-python3 src/glide/app.pyw
+python3 src/glide/app.pyw          # Windows: python src\glide\app.pyw
 ```
 
-Unter Windows lautet der Aufruf üblicherweise:
-
-```powershell
-python src\glide\app.pyw
-```
-
-Die mitgelieferten Schriften und Vorlagen unter `src/glide/resources` müssen
-neben der Anwendung erhalten bleiben. Ein Installer ist noch nicht Bestandteil
-dieses Repository-Stands.
-
-Unter macOS lässt sich ein Entwicklungsbundle „Glide.app“ bauen. Es nutzt das
-installierte Python und ist nicht zur Weitergabe gedacht:
+Die Ressourcen unter `src/glide/resources` müssen neben der Anwendung liegen. Startbare Lieferfassung: `07_Python-Versionen/Schnellstart.pyw`. Unter macOS lässt sich ein Entwicklungsbundle bauen (nutzt das installierte Python, nicht zur Weitergabe):
 
 ```bash
 python3 packaging/macos/baue_app.py --ziel build/macos
 ```
 
-## Daten, Datenschutz und Sicherungen
+Die isolierte Bedienprobe der Zeichenfläche (2026-09-24) startet mit `python3 src/glide/drawing_prototype.pyw`.
 
-Glide arbeitet ohne eigenen Netzwerkzugriff. Nutzerdaten und Anhänge werden in
-einem lokalen Datenordner gespeichert. Der genaue Pfad hängt vom Betriebssystem
-oder einer bewusst gewählten Ablage ab. Vollständige Backups verwenden das
-Format `.glidebackup`; ein Komplettimport erzeugt vor dem Ersetzen des Bestands
-ein Rückfallbackup.
+## Daten und Datenschutz
 
-Vor Tests muss `GLIDE_DATA_DIR` auf ein temporäres Verzeichnis zeigen. So
-bleiben persönliche Daten vom Prüfbestand getrennt. Details stehen im
-[Daten-, Backup- und Migrationsvertrag](docs/06_DATA_BACKUP_MIGRATION.md) und
-in den [Sicherheitshinweisen](SECURITY.md).
+Glide arbeitet ohne eigenen Netzwerkzugriff. Nutzerdaten und Anhänge liegen im lokalen Datenordner des Betriebssystems oder einer bewusst gewählten Ablage. Vor Tests muss `GLIDE_DATA_DIR` auf ein temporäres Verzeichnis zeigen. Details: [Daten und Migration](docs/06_DATA_BACKUP_MIGRATION.md), [Sicherheitshinweise](SECURITY.md).
 
-Das Repository ist öffentlich. Rohprotokolle (`*.log`) bleiben deshalb lokal,
-und veröffentlichte Prüfergebnisse dürfen keine Benutzerpfade enthalten. Vor
-dem Hochladen neuer Ergebnisse
-`python3 -B scripts/pflege/pfade_bereinigen.py tests/qa-<Version>/<Lauf>`
-ausführen; die CI prüft das im Schritt „Datenschutz“. Sicherheitsfunde
-vertraulich über GitHub melden: *Security → Report a vulnerability*
-([Sicherheitsrichtlinie](../../SECURITY.md)).
-
-## Zeichnungsseiten
-
-Seit 3.29.0 ist die Zeichnung eine eigene Listenart im Glide-Bestand
-(Datenformat 19); 3.30 erweitert sie zur Pixel-Werkstatt
-([Vertrag 3.30](docs/66_MODERNISIERUNG_3.30.0.md)). Die Fläche liegt eingebettet in der Seitenanzeige, speichert
-automatisch und reist mit Duplizieren, Papierkorb, Backups, Vorlagen und
-Austausch. Bedienung, Datenvertrag und offene Punkte:
-[Zeichnungsseite 3.29](docs/65_ZEICHNUNGSSEITE_3.29.0.md). Die isolierte
-Bedienprobe bleibt für Experimente erhalten:
-
-```bash
-python3 src/glide/drawing_prototype.pyw
-```
+Das Repository ist öffentlich: Rohprotokolle (`*.log`) bleiben lokal, veröffentlichte Prüfergebnisse enthalten keine Benutzerpfade (`python3 -B scripts/pflege/pfade_bereinigen.py tests/qa-<Version>/<Lauf>`, CI-Schritt „Datenschutz“). Sicherheitsfunde vertraulich über *Security → Report a vulnerability* ([Sicherheitsrichtlinie](../../SECURITY.md)).
 
 ## Entwicklung und Prüfung
 
-Der Anwendungskern liegt in `src/glide/app.pyw`; der Zeichenkern in
-`src/glide/drawing.py` und `src/glide/drawing_image.py`. Tests arbeiten mit isolierten
-Datenordnern. Der vollständige Prüflauf wird aus dem Repository-Stamm gestartet:
+Vollprüfung auf dem Referenz-Mac (aus `01_Repository/Glide`):
 
 ```bash
-python3 tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.6/lokaler_lauf --timeout 900
+python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.6/lokaler_lauf --timeout 900
 ```
 
-Eine schnelle Prüfung von Versions- und Dokumentationsständen:
-
-```bash
-python3 tests/tools/standpruefung.py
-```
-
-Dieselbe Grundstufe, die GitHub bei jedem Push und Pull Request auf `main`
-ausführt (Workflow „Glide-Prüfung“), läuft lokal mit:
+CI-Grundstufe, wie GitHub sie bei jedem Push und Pull Request auf `main` ausführt (Syntax, Versionen, Dokumentation, Unit- und Werkzeugtests, fünf Analysen, Startprobe, Lieferstand, Fremdcode, Datenschutz, Ablagegröße):
 
 ```bash
 python3 -B tests/tools/ci_grundstufe.py
 ```
 
-Sie umfasst Vorprüfungen, Unit-Tests, die fünf Analysen, eine Startprobe,
-den Lieferstand gegenüber `07_Python-Versionen`, die Herkunft des
-mitgelieferten Fremdcodes, den Datenschutz-Wächter und die Ablagegröße
-(keine Archivkopien, keine Fensterbilder neuer Vollprüfungen). Sie ersetzt nicht die Vollprüfung auf dem
-Referenz-Mac. Der CodeQL-Workflow ist derzeit deaktiviert.
+Sie ersetzt nicht die Vollprüfung auf dem Mac. Ein nicht vollständig grüner Lauf ist keine Releasefreigabe. Einzelheiten: [Prüfplan](docs/05_QA_TESTPLAN.md).
 
-Ein nicht vollständig grüner Lauf darf nicht als Releasefreigabe ausgelegt
-werden. Umfang, Plattformgrenzen und bekannte Blockaden stehen im
-[Testplan](docs/05_QA_TESTPLAN.md) und im [QA-Bericht](docs/07_QA_BERICHT.md).
-
-## Repository-Struktur
+## Struktur
 
 | Pfad | Inhalt |
 |---|---|
-| `src/glide/` | Anwendung, Zeichenflächenprobe und Laufzeitressourcen |
-| `tests/` | Integrationsprüfungen, Fixtures, Werkzeuge und QA-Nachweise |
-| `docs/` | Architektur, Produktverträge, Entscheidungen und Übergaben |
-| `packaging/` | Bauskripte: macOS-Entwicklungsbundle, Windows-Startmenü-Verknüpfung; Voraussetzungen für Release-Pakete |
-| `assets/` | reservierter Ort für freigegebene Branding-Master (noch leer; Logo-Quelle siehe `20_Grafik_Master`) |
+| `src/glide/` | Anwendung, Tk-freie Fachmodule, Ressourcen, `vendor/tkinterdnd2` ([Modulübersicht](src/glide/README.md)) |
+| `tests/` | Integrationssuiten, Unit-Tests, Fixtures, Prüfwerkzeuge und Nachweise der sieben neuesten Versionen ([Übersicht](tests/README.md)) |
+| `docs/` | Produkt, Architektur, Funktionen, Daten, Prüfung, Veröffentlichung, Entscheidungen ([Index](docs/00_INDEX.md)) |
+| `scripts/pflege/` | Versionswechsel, Abgleich nach 07, Kürzen der Ablage, Messungen ([Übersicht](scripts/pflege/README.md)) |
+| `packaging/` | macOS-Entwicklungsbundle, Windows-Verknüpfung, Programmsymbole ([Übersicht](packaging/README.md)) |
+| `assets/icons/` | erzeugte Paketsymbole ([Herkunft](assets/README.md)) |
 | `requirements/` | Laufzeit-, Entwicklungs- und Build-Abhängigkeiten |
 
-## Dokumentation
+## Mitwirken und Lizenz
 
-- [Dokumentationsindex](docs/00_INDEX.md)
-- [Produktgrenzen](docs/01_PRODUCT_CONSTRAINTS.md)
-- [Architektur](docs/02_ARCHITECTURE.md)
-- [Projektübergabe](docs/09_PROJECT_HANDOFF.md)
-- [Releasecheckliste](docs/10_RELEASE_CHECKLIST.md)
-- [Modernisierung 3.30](docs/66_MODERNISIERUNG_3.30.0.md)
-- [QA-Bericht](docs/07_QA_BERICHT.md)
-- [Sitzungsprotokoll 24.–26.09.2026](docs/67_SITZUNGSPROTOKOLL_2026-09-24_BIS_2026-09-26.md)
-- [Änderungsverlauf](CHANGELOG.md)
+Vor Änderungen gelten die [Arbeitsregeln](AGENTS.md); Entscheidungen und Arbeitsablauf stehen in der [Arbeitsrichtung](docs/ARBEITSRICHTUNG.md). Änderungen müssen zum Datenmodell passen, Nutzerdaten schützen und mit den betroffenen Tests und der Dokumentation abgeschlossen werden.
 
-Historische Unterlagen liegen in `archiv/`-Ordnern. Sie belegen frühere
-Entscheidungen und Prüfläufe, bilden aber keinen aktuellen Funktionsstand ab.
-
-## Mitwirken und Weitergabe
-
-Vor Änderungen gelten die Regeln in [AGENTS.md](AGENTS.md). Änderungen müssen
-zum bestehenden Datenmodell passen, Nutzerdaten schützen und mit den jeweils
-betroffenen Tests sowie der Dokumentation abgeschlossen werden.
-
-Für Glide ist noch keine öffentliche Softwarelizenz festgelegt. Der vorhandene
-Quelltext räumt deshalb derzeit keine allgemeinen Nutzungs-, Änderungs- oder
-Weiterverteilungsrechte ein. Maßgeblich ist der [Lizenzstatus](LICENSE.md).
-
-Weitere Entwicklung und Dokumentationsnachläufe folgen der [fortlaufenden Arbeitsrichtung](docs/ARBEITSRICHTUNG.md). Bestätigte Entscheidungen, Cache-Regeln und aktuelle Aufgaben werden dort mit Planung und Übergaben verbunden.
+Für Glide ist noch keine öffentliche Softwarelizenz festgelegt; der Quelltext räumt derzeit keine Nutzungs-, Änderungs- oder Weiterverteilungsrechte ein ([Lizenzstatus](LICENSE.md)).

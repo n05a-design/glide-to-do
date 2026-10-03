@@ -4,7 +4,9 @@ Aufruf: python3 scripts/pflege/versionswechsel.py 3.33.0 01.10.2026
 Legt keine Archivkopien an: Vorfassungen von Fixtures, Showcase, Vorlagen und
 Dokumenten trägt Git (docs/DOKUMENTENPFLEGE.md). Bis 3.33.6 entstand hier je
 Versionswechsel rund 75 MB Kopien; die CI-Grundstufe weist neue Archivkopien
-zurück (tests/tools/ablagegroesse.py).
+zurück (tests/tools/ablagegroesse.py). Zum Schluss kürzt `ablage_kuerzen.py`
+Archive und Nachweise auf die sieben neuesten Versionen und Fensterbilder auf
+die drei neuesten (Entscheidung des Inhabers vom 03.10.2026).
 """
 import pathlib
 import re
@@ -55,3 +57,7 @@ for datei, zeilen in sorted(ziele.items()):
         text[nummer - 1] = z
     pfad.write_text("\n".join(text), encoding="utf-8")
 print(f"{len(ziele)} Standangaben angepasst")
+kuerzen = subprocess.run([sys.executable, "-B", str(REPO / "scripts/pflege/ablage_kuerzen.py")],
+                         capture_output=True, text=True, cwd=REPO)
+assert kuerzen.returncode == 0, kuerzen.stderr[-2000:]
+print(kuerzen.stdout.strip().splitlines()[-1])

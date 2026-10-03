@@ -1,30 +1,6 @@
-__pycache__/
-*.py[cod]
-*.tmp
-*.log
-# Rohprotokolle (*.log) bleiben lokal: Entscheidung des Inhabers vom 01.10.2026
-# (öffentliches Repository). Veröffentlicht werden Zusammenfassungen wie ergebnis.json
-# und README; sie dürfen keine Benutzerpfade enthalten (CI-Grundstufe, Schritt Datenschutz).
-.pytest_cache/
-.mypy_cache/
-.venv/
-venv/
-build/
-dist/
-*.spec.bak
-*.pfx
-*.p12
-*.pem
-*.key
-*.mobileprovision
-*.provisionprofile
-*.glidebackup
-# Generierte Referenz-/Arbeitsbestände gehören mit ihrem Erzeuger ins Repository.
-!tests/fixtures/beispiele/*.glidebackup
-!tests/fixtures/showcase/*.glidebackup
-release-artifacts/
-# Seit 02.10.2026 keine Archivkopien von Fixtures (Git trägt die Vorfassungen)
-# und keine Bildschirmfotos der Vollprüfung (Ordner fenster/); versioniert
-# werden Ergebnis und README. Bereits versionierte Dateien bleiben erhalten.
-tests/fixtures/**/archiv/
+# Regeln nur für den Quellbaum. Sicherheit, Nutzerdaten, Protokolle, Archive
+# und Werkzeugreste regelt die .gitignore in der Wurzel der Ablage.
+
+# Bildschirmfotos der Vollprüfung bleiben lokal (seit 02.10.2026); versioniert
+# werden ergebnis.json und README. Messwerkzeuge schreiben ihre Fotos in fenster/.
 tests/qa-*/**/fenster/

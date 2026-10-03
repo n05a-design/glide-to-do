@@ -93,10 +93,9 @@ Einstellungen, Kalender, Startseite, Suche, Undo und Datenordnerwahl sind
 Bedienfunktionen der Anwendung. Eine Vorlagendatei speichert diese Einstellungen
 nicht und führt keine Veröffentlichung, Kontaktaufnahme oder Webaktion aus.
 
-[Historischer Techniknachweis](archiv/26_MAC_VORLAGEN_UND_ABLAGE_3.7.0.md) ·
 [Daten und Backups](06_DATA_BACKUP_MIGRATION.md)
 
-Seit 3.14 übernehmen Vorlagen Bearbeitungstag und geschätzten Aufwand. Bei relativen Vorlagen verschiebt sich der Bearbeitungstag um denselben Abstand wie die Fälligkeit, auch ohne Frist am Punkt. Feste Vorlagen lassen die Daten unverändert. Der Aufwand bleibt konstant. Aktuelle Teilpayloads verwenden Aufgabenformat 18 und benötigen Glide 3.28 oder neuer; das Vorlagenformat selbst bleibt 2. [Bedienung 3.14](archiv/37_PLANUNG_UND_AUFWAND_3.14.0.md).
+Seit 3.14 übernehmen Vorlagen Bearbeitungstag und geschätzten Aufwand. Bei relativen Vorlagen verschiebt sich der Bearbeitungstag um denselben Abstand wie die Fälligkeit, auch ohne Frist am Punkt. Feste Vorlagen lassen die Daten unverändert. Der Aufwand bleibt konstant. Aktuelle Teilpayloads verwenden Aufgabenformat 18 und benötigen Glide 3.28 oder neuer; das Vorlagenformat selbst bleibt 2.
 
 ## Eingabefelder in Vorlagen (seit 3.30)
 

@@ -1,7 +1,0 @@
-Für Claude Code diese zwei Dateien verwenden:
-1. CLAUDE_UEBERGABE_Glide_3.32.3.md
-2. Glide_3.32.3_Python_Codebasis.zip
-
-Die Markdown-Datei enthält Stand, Entscheidungen und Planung. Das ZIP enthält die Python-Laufzeitbasis und dieselbe Übergabe als CLAUDE.md. Wenn die verwendete Oberfläche ZIP-Dateien nicht direkt verarbeitet, das Code-ZIP entpacken und den Codeordner in die Arbeitsumgebung übernehmen.
-
-Einmaliger Snapshot 01.10.2026; keine spätere Aktualisierung oder Synchronisierung. Die aktiven Projektunterlagen bleiben unverändert.

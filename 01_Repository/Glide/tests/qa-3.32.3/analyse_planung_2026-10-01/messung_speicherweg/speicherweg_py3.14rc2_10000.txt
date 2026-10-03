@@ -1,5 +1,0 @@
-snapshot_undo: Median 84.415 ms, p95 104.979 ms
-save_items: Median 355.499 ms, p95 491.22 ms
-history_snapshot: Median 72.697 ms, p95 95.446 ms
-abhaken_item_change: Median 446.001 ms, p95 501.989 ms
-erstes Speichern: 843.941 ms · Datei 10306 KB

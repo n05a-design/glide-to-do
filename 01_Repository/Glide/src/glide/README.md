@@ -1,99 +1,32 @@
 # Anwendungskern
 
-Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
-`app.pyw` ist die kanonische Anwendung. Seit 3.29.0 gehören `drawing.py`
-(UI-unabhängiger Zellvertrag, JSON und Glide-SVG) und `drawing_image.py`
-(Tk-Bildfunktionen für PNG-Referenz und Nachzeichnung) als Module daneben;
-sie werden beim Start aus demselben Ordner geladen.
+`app.pyw` ist die kanonische Anwendung (Klasse `ListApp`). Daneben liegen Module, die beim Start aus demselben Ordner geladen werden und beim Kopieren oder Paketieren immer mitgehen:
 
-Seit 3.30.0 enthalten die Module außerdem:
+| Modul | Aufgabe |
+|---|---|
+| `glide_start.py` | Schnellstart mit Bytecode-Cache im Systemcache (in `07_Python-Versionen` als `Schnellstart.pyw`) |
+| `drawing.py` | Zellmodell der Pixel-Werkstatt, JSON, Glide-SVG, PNG/ICO, Paletten |
+| `drawing_image.py` | Tk-Bildfunktionen und Miniaturen der Zeichnung |
+| `backdrop.py` | Hintergrundverläufe |
+| `page_markdown.py` | Markdown ↔ Seitendokument |
+| `image_preview.py` | Bildvorschauen mit den Mitteln von Tk 9 |
+| `logo.py` | Logo und App-Symbol aus den SVG-Mastern in der Akzentfarbe |
+| `schema_backups.py` | Formatsicherung vor Migrationen (Tk-frei) |
+| `sidebar_policy.py` | Regeln der vier Seitenleistenbereiche (Tk-frei) |
+| `svg_geometry.py` | SVG-Pfade und Farben für den Logo-Rückfall (Tk-frei) |
+| `home_tiles.py` | Startseitenkacheln und Standard D12 (Tk-frei) |
+| `capture_parser.py` | Deutsche Schnelleingabe mit Feldchips (Tk-frei) |
+| `eisenhower.py` | Quadranten „Dringlichkeit × Wichtigkeit“ (Tk-frei) |
+| `today_view.py` | Aufteilung der Ansicht „Heute“ (Tk-frei) |
 
-- `drawing.py`: Aktionspuffer, Flächengrößen 16–128, Formen, Symmetrie,
-  Muster, Bereiche, PNG-Kodierung und Paletten (`.gpl`/`.hex`, Glide 32);
-- `drawing_image.py`: Miniaturen für Galerie, Startseite und Pinnwand.
+Die Tk-freien Fachmodule entstehen nach D17 und haben Unit-Tests unter `tests/unit`. `drawing_prototype.pyw` ist die isolierte Bedienprobe der Zeichenfläche und gehört nicht zur App.
 
-Weitere Module neben `app.pyw` (alle beim Kopieren mitnehmen):
+- **Ressourcen:** `resources/fonts` (DejaVu Sans, Pixelify Sans unter SIL OFL 1.1, Lizenztexte, `provenance.json`; prozesslokal registriert), `resources/templates` (Vorlagenkatalog), `resources/logo` (unveränderte Kopien aus `20_Grafik_Master`).
+- **`vendor/tkinterdnd2`:** optional für das Ziehen aus Finder und Explorer, MIT, Herkunft in `vendor/provenance.json` ([Entscheidung](../../docs/decisions/ABHAENGIGKEIT_TKDND.md)). Fehlt der Ordner, startet Glide ohne diese Funktion.
+- **Laufzeit:** Python 3.14 mit Tk 9 und Standardbibliothek; Tk 8.6 bleibt lauffähig. Beim Start setzt `app.pyw` den Bytecode-Cache auf den Cacheordner des Systems; neben den Modulen entsteht kein `__pycache__`.
+- **Tests** importieren die App erst nach gesetztem isoliertem `GLIDE_DATA_DIR`.
+- **Lieferung:** `scripts/pflege/abgleich_07.py` spielt diesen Stand nach `07_Python-Versionen` (SHA-256), `packaging/macos/baue_app.py` baut daraus das Entwicklungsbundle. Änderungen hier nur im Rahmen einer Produktionsrunde.
 
-- `backdrop.py`: Hintergrundverläufe (26.09.2026);
-- `page_markdown.py`: Markdown ↔ Seitendokument (26.09.2026), seit dem
-  27.09.2026 mit Bildzeilen;
-- `image_preview.py`: Bildvorschauen mit den Mitteln von Tk 9 (27.09.2026);
-- `logo.py`: Logo und App-Symbol aus den SVG-Mastern unter
-  `resources/logo`, eingefärbt in der Akzentfarbe (29.09.2026);
-- `glide_start.py`: Schnellstart mit Bytecode-Cache (in `07_Python-Versionen`
-  als `Schnellstart.pyw`).
-
-`vendor/tkinterdnd2` (seit 27.09.2026) bringt tkDnD für das Ziehen aus Finder
-und Explorer mit – optional, MIT-Lizenz, Herkunft in `vendor/provenance.json`,
-[Entscheidung](../../docs/decisions/ABHAENGIGKEIT_TKDND.md). Fehlt der Ordner,
-startet Glide ohne diese Funktion.
-
-`resources/logo` (seit 29.09.2026) enthält unveränderte Kopien der Master aus
-`20_Grafik_Master`: das Logo und das App-Symbol je als SVG und PNG. Beim
-Start setzt `app.pyw` den Bytecode-Cache auf den Cacheordner des Systems
-(`bytecode_cache_dir`); neben den Modulen entsteht kein `__pycache__`.
-
-Die Archivkopien des Stands vor 3.30 liegen in `archiv/`. `drawing_prototype.pyw`
-bleibt die isolierte Bedienprobe. Python 3.14 mit Tk 9 und die
-Standardbibliothek bilden die Laufzeit (Tk 8.6 bleibt lauffähig). `resources/fonts` enthält vier DejaVu-Sans-TTF-Dateien und
-seit 3.30 Pixelify Sans (Regular, Bold; SIL OFL 1.1, nur Überschriften im
-Design „Pixel“), jeweils mit Lizenztext; Herkunft und Prüfsummen stehen in
-`provenance.json`. Ressourcen beim Kopieren oder Paketieren
-mitführen. Die Schriften werden nur **prozesslokal** registriert – unter
-Windows über `FR_PRIVATE`, unter macOS im Prozessumfang über CoreText, unter Linux
-über Fontconfig (`FcConfigAppFontAddDir`); sie werden nicht im
-System installiert und stehen anderen Programmen deshalb nicht zur Verfügung.
-
-Der Funktionsbestand entspricht dem Repository-README: Designsystem mit
-zehn Designs (einschließlich „Pixel“), fünf Anzeigemodi der Listenansicht,
-Glide-Austauschformat, Pinnwand als Arbeitsfläche mit Spaltenboard, Bereichen
-und Präsentation, Kalenderimport und Kalenderausgabe als ICS, Zeichnungsseiten
-mit 16 bis 128 Zellen (Pixel-Werkstatt), dauerhafter Änderungsverlauf, CSV-Import mit
-Spaltenzuordnung, Druck- und PDF-Ausgabe, vollständiges App-Backup mit
-Inhaltsvorschau, Tagesplanung mit Tageskapazität, Bearbeitungstag und
-geschätzter Aufwand, Tabellenansicht mit listenspezifischen Spalten, „Mein
-Tag“, Schnellerfassung, gespeicherte Filter, Reiter und Pinnwände. Alle
-Ansichten bearbeiten dieselben Objekte; Spaltenauswahl und Tagesauswahl liegen
-als persönliche Einstellungen vor.
-
-Datenpfad und weitere Details: [Architektur](../../docs/02_ARCHITECTURE.md),
-[Backups](../../docs/06_DATA_BACKUP_MIGRATION.md).
-Tests dürfen die App erst nach gesetztem isolierten `GLIDE_DATA_DIR`
-importieren.
-
-Die startbare Kopie im äußeren Ordner `07_Python-Versionen` wird nach jedem
-geprüften Quellstand synchronisiert und über SHA-256 abgeglichen. Ein
-macOS-Entwicklungsbundle baut `packaging/macos/baue_app.py` aus diesem Ordner.
-
-Seit dem 26.09.2026 gehört `backdrop.py` dazu: Es enthält die Hintergrundverläufe
-(Entwürfe, Lesezone, PNG), nutzt nur die Standardbibliothek und muss wie die
-übrigen Module neben `app.pyw` liegen.
-
-`page_markdown.py` übersetzt Markdown in Seiten und zurück (Seitenart „Seite“,
-Standardbibliothek) und muss neben `app.pyw` liegen.
-
-Die Galerie (seit 27.09.2026, Klasse `GalleryView` in `app.pyw`) braucht kein
-weiteres Modul: PNG und GIF liest Tk, andere Bildformate wandelt unter macOS
-das Systemwerkzeug `sips` in Vorschauen im Cache.
-
-`glide_start.py` ist der Schnellstart.
-
-- Es lädt `app.pyw` als Modul und legt den übersetzten Stand im Cache des
-  Systems ab (macOS `~/Library/Caches/Glide/bytecode`).
-- Ab dem zweiten Start lädt Glide dadurch rund eine halbe Sekunde schneller.
-- `python3 src/glide/glide_start.py` startet Glide wie `app.pyw`.
-
-`schema_backups.py` bündelt die Tk-freie Formatsicherung mit Dateistandprüfung; seit 3.33.0 in beiden Lieferwegen enthalten.
-
-`sidebar_policy.py` führt Zuordnung, Inhaltsgrenzen, Vorlagenprüfung und Geschwisterreihenfolge der vier Bereiche ohne Tk (3.33.1).
-
-`svg_geometry.py` führt SVG-Pfade einschließlich verkürzter kubischer Kurven, CSS-/Attributfarben und transparente Innenkonturen ohne Tk (3.33.1).
-
-`home_tiles.py` führt Kachelbestand, Startseiten-Standard (D12), Normalisierung, eigene Auswahl und die zusammengeführte Kachel „Heute“ ohne Tk (3.33.2).
-
-`capture_parser.py` führt die deutsche Schnelleingabe (G01) ohne Tk: Bearbeitungstag, Fälligkeit, Uhrzeit, Aufwand, Wichtigkeit, Labels und „/“-Befehle nach D01/D10, jede Erkennung mit Textstelle zum Zurücknehmen (3.33.3).
-
-`eisenhower.py` ordnet Aufgaben ohne Tk in die vier Quadranten „Dringlichkeit × Wichtigkeit“ ein und bestimmt, was Ablegen ändert (G02, D13; 3.33.5).
-
-`today_view.py` teilt die Ansicht „Heute“ ohne Tk in nächste Aufgabe, Verspätet, Liegen geblieben, Tagesplan, Heute fällig und Eingang auf – jede Aufgabe genau einmal (D14; 3.33.6).
+Aufbau und Datenwege: [Architektur](../../docs/02_ARCHITECTURE.md). Verhalten: [Funktionen](../../docs/20_FUNKTIONEN.md). Datenformat: [Daten und Migration](../../docs/06_DATA_BACKUP_MIGRATION.md).

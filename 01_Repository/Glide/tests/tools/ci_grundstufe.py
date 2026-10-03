@@ -24,8 +24,8 @@ duplizieren:
    (`/Users/<Name>/`, `C:\\Users\\<Name>`, `/home/<Name>/`). Das Repository ist
    öffentlich; Rohprotokolle bleiben deshalb seit 01.10.2026 lokal.
 8. Ablagegröße (`ablagegroesse.py`): keine Archivkopien von Glide-Daten,
-   keine `*.fetch`-Reste, keine Fensterbilder neuer Vollprüfungen, keine
-   Datei über 50 MB.
+   keine `*.fetch`-Reste, Archive und Nachweise nur der sieben neuesten
+   Versionen, Fensterbilder nur der drei neuesten, keine Datei über 50 MB.
 
 Die Integrationssuiten sind auf den Referenz-Mac abgestimmt und gehören nicht
 dazu; unter Linux laufen sie über `pruefen.py --modus schnell` (in GitHub
@@ -264,7 +264,7 @@ def main():
     if eintraege is None:
         run.meldung("Ablagegröße", "Hinweis", "kein Git-Arbeitsstand; versionierte Dateien nicht ermittelbar")
     else:
-        funde = ablagegroesse.befunde(eintraege)
+        funde = ablagegroesse.befunde(eintraege, ablagegroesse.aktuelle_version())
         run.meldung("Ablagegröße", "fehlgeschlagen" if funde else "ausgeführt",
                     ablagegroesse.zusammenfassung(eintraege, funde))
 

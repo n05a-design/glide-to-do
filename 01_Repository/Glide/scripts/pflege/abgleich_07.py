@@ -4,8 +4,10 @@ Aufruf: python3 scripts/pflege/abgleich_07.py
 
 - Hauptdatei als `Glide-Aufgaben-und-Listen_v<VERSION>.pyw`, Module, `Schnellstart.pyw`,
   `resources` und `vendor` (ohne Archive).
-- Ältere Hauptdateien wandern mit Endung `_Z` nach `07_Python-Versionen/Archiv`;
-  vorher den vollständigen Stand als Ordner archivieren.
+- Ältere Hauptdateien wandern mit Endung `_Z` nach `07_Python-Versionen/Archiv`.
+  Das Archiv hält mit der aktuellen Fassung die sieben neuesten Versionen;
+  ältere entfernt `ablage_kuerzen.py` beim Versionswechsel. Vollständige
+  Vorstände trägt Git, keine Ordnerkopien.
 - Danach `python3 packaging/macos/baue_app.py --ziel build/macos` für das Bundle.
 """
 import hashlib

@@ -62,8 +62,6 @@ jobs:
           config: |
             paths-ignore:
               - 07_Python-Versionen
-              - 50_Ablage
-              - Archiv
               - "**/archiv/**"
               - "**/Archiv/**"
               - "01_Repository/Glide/tests/qa-*/**"

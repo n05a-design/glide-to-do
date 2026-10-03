@@ -1,6 +1,0 @@
-{
-  "src/glide/app.pyw": "72c590e80c6db4fc89b61fda82b8eabecf7e90c079ed0caaf37fa7e497f70f88",
-  "tests/integration/test_ui_updates.py": "f4c08f32c06c129f5779f46603cb38a413b06c50eff76f04bc9982223478553a",
-  "tests/integration/test_release37.py": "0b7451a357e0dfc25387b7db27ea2a8bbf9bd0059f957b1682104caff910655b",
-  "tests/integration/test_template_workflows.py": "b337c263e99107f6ecfec7ddbf4a88e8caec9a985174ed049bd1d476fb33dbd3"
-}

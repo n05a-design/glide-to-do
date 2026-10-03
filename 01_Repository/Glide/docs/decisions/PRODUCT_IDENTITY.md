@@ -1,6 +1,6 @@
 # Produkt- und Identitätsregister
 
-Stand 02.10.2026 · App-Version 3.33.6 · Datenformat 20
+Stand 03.10.2026 · App-Version 3.33.6 · Datenformat 20
 
 Der obere Block ist durch den Quellcode belegt und muss nicht mehr entschieden
 werden. Der untere Block enthält Geschäfts- und Rechtsentscheidungen. Offene
@@ -55,7 +55,7 @@ ersetzt werden.
 | Support-E-Mail | mailme@shaye.de | Inhaber |
 | Website | Shaye.de | Inhaber |
 | Datenschutz-URL | offen | Inhaber, für beide Stores Pflicht |
-| Lizenzmodell | Entwurf: kostenlose private, nicht kommerzielle Nutzung; siehe LIZENZENTWURF_3.26.0.md | Veröffentlichung der Bedingungen noch offen |
+| Lizenzmodell | Entwurf: kostenlose private, nicht kommerzielle Nutzung ([Lizenzentwurf](../10_VEROEFFENTLICHUNG.md#lizenzentwurf)) | Veröffentlichung der Bedingungen noch offen |
 | Preis / Monetarisierung | Private Nutzung kostenlos; kommerzielle Nutzung nicht durch den Entwurf erlaubt | Entwicklungsauftrag 3.26.0 |
 | Vertriebsweg | zuerst Direktvertrieb (Website, Developer-ID-Signatur und Notarisierung, Windows-Installer); Stores später – entschieden 27.09.2026 | Inhaber |
 | Windows-Zielarchitektur | x64 – entschieden 27.09.2026 | Inhaber |
@@ -66,29 +66,13 @@ ersetzt werden.
 | Markenprüfung „Glide“ | offen | Fachanwalt, nicht durch Recherche ersetzbar |
 
 Für Copyright, Datenschutz-URL, Sicherheitskontakt, Inno-AppId und
-macOS-Mindestversion liegen seit dem 27.09.2026
-[Vorschläge zur Bestätigung](../../../../40_Store_Material/Inhaberangaben_Vorschlaege_2026-09-27.md)
-bereit. Sie gelten erst nach der Bestätigung durch den Inhaber.
-
-Echter selektiver Desktop-Blur, Synchronisationsdienst und
-Konfliktzusammenführung sind Architekturentscheidungen außerhalb des lokalen
-Tk-3.7-Funktionsstands; ihre Bewertung steht in den aktuellen 3.7-Berichten.
+macOS-Mindestversion liegen seit dem 27.09.2026 Vorschläge bereit
+([Inhaberangaben](../10_VEROEFFENTLICHUNG.md#inhaberangaben)). Sie gelten erst
+nach der Bestätigung durch den Inhaber.
 
 Der Name „Glide“ wird von mehreren Anbietern in der Software genutzt. Vor einer
 öffentlichen Veröffentlichung ist eine professionelle Marken- und
 Namensrecherche erforderlich; eine eigene Suche ersetzt sie nicht.
-
-## Pflege dieser Datei
-
-`AGENTS.md` nennt dieses Register als verbindliche Quelle für Build- und
-Store-Konfigurationen. Bei jeder Versionserhöhung sind Version, Datenformat,
-Backupgrenzen, Pfade und Plattformnachweise gegen den Quelltext und den
-aktuellen QA-Lauf zu prüfen. Historische Fassungen liegen unter
-`docs/decisions/archiv/`.
-
-Format 12 ergänzt Anhänge an Listen und Ordnern. Vor dem ersten Überschreiben älterer lokaler Daten entsteht eine unrotierte Originalkopie. [Änderungen und aktueller Nachweis](../archiv/24_VERSION_3.7.0.md).
-
-Format 13: lokale Erinnerungen mit Originalsicherung. [Vertrag](../archiv/31_ERINNERUNGEN_3.8.0.md).
 
 Eine Systembenachrichtigung mit Glide-Namen verlangt eine feste AppUserModelID
 beziehungsweise einen festen Bundle-Identifikator. Beide sind seit dem
@@ -96,8 +80,11 @@ beziehungsweise einen festen Bundle-Identifikator. Beide sind seit dem
 [Entscheidung](SYSTEMBENACHRICHTIGUNGEN.md) und
 [Paketierung](../../packaging/README.md).
 
-3.9 ergänzt die additive Einstellung `sidebar_visible` und vereinheitlicht Dropdowns als eingebettete Frames ohne zusätzliche Fenster/Grabs. Keine Formatänderung. [UI-Vertrag](../archiv/32_UI_UND_BEDIENUNG_3.9.0.md).
+## Pflege dieser Datei
 
-3.10 ergänzt Reiter und Pinnwände als Ansichten vorhandener Punktobjekte. `ItemWorkspace` normalisiert und prüft `open_tabs`, `active_tab` und `pinboards` in den Einstellungen. Aufgabenformat 13 bleibt unverändert; Aufgabenbackups transportieren diese Ansichten nicht. Bearbeitungen laufen durch `item_change`, modale Auswahl durch `run_modal`. [Bedienung und Grenzen](../archiv/33_REITER_UND_PINNWAND_3.10.0.md).
-
-3.11 ergänzt die app-interne Schnellerfassung mit deutscher Fristvorschau und gespeicherte Filter; 3.12 ergänzt „Mein Tag“; 3.13 ergänzt die flache Tabellenansicht. `SavedFilters`, `today_plan` und `table_columns` halten nur Kriterien, IDs beziehungsweise Spaltennamen; Aufgabenobjekte werden nicht kopiert. Die Einstellungen bleiben Format 2; das Aufgabenformat bleibt bis 3.13 bei 13, erst 3.14 ergänzt mit Format 14 Bearbeitungstag und geschätzten Aufwand. [Bedienung 3.13](../archiv/36_TABELLENANSICHT_3.13.0.md).
+`AGENTS.md` nennt dieses Register als verbindliche Quelle für Build- und
+Store-Konfigurationen. Bei jeder Versionserhöhung sind Version, Datenformat,
+Backupgrenzen, Pfade und Plattformnachweise gegen den Quelltext und den
+aktuellen QA-Lauf zu prüfen. Was welche Formatstufe ergänzt hat, steht in
+[Daten und Migration](../06_DATA_BACKUP_MIGRATION.md#formatstufen); frühere
+Fassungen dieser Datei trägt Git.

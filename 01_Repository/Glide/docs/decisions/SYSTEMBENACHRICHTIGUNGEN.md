@@ -103,8 +103,8 @@ Startmenü-Verknüpfung und ein macOS-`.app`-Bundle gibt. Dann gilt:
   bestehende Sammelanzeige bleibt das Vorbild, 25 verpasste Hinweise ergeben
   einen Hinweis;
 - Auslösung ausschließlich nach dauerhaft gespeichertem Zustellbeleg, also im
-  bestehenden Pfad nach `process_reminders`; der Zustellvertrag aus
-  [31_ERINNERUNGEN_3.8.0](../archiv/31_ERINNERUNGEN_3.8.0.md) bleibt unverändert;
+  bestehenden Pfad nach `process_reminders`; der Zustellvertrag der Erinnerungen
+  ([Funktionen](../20_FUNKTIONEN.md#10-suche-aktionen-erinnerungen)) bleibt unverändert;
 - fehlende Systemberechtigung wird erkannt und in der Oberfläche benannt,
   statt stumm zu scheitern;
 - keine Zustellung ist kein Datenverlust: Der Hinweis bleibt in der Übersicht
@@ -164,8 +164,8 @@ Regel brechen, dass Glide ohne Zusatzinstallation lauffähig bleibt.
 
 ## Auswirkung auf die Reihenfolge
 
-Die [historischen Funktionsvorschläge](../../../../00_Arbeitsvorbereitung/Archiv/Glide_Funktionsvorschlaege_2026-09-16.md)
-nennen Systembenachrichtigungen als nächsten Ausbauschritt. Nach diesem Befund
+Die historischen Funktionsvorschläge vom 16.09.2026
+nannten Systembenachrichtigungen als nächsten Ausbauschritt. Nach diesem Befund
 zerfällt der Schritt in einen kleinen Teil im Anwendungscode (Stufe A) und
 einen, der am Installer hängt (Stufe B). Vorgeschlagen wird deshalb:
 
