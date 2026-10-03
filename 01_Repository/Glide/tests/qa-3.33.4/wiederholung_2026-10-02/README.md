@@ -1,6 +1,6 @@
 # Wiederholungen in der Eingabe 3.33.4 – Nachweis
 
-02.10.2026 · App 3.33.4 · macOS, Python 3.14.5, Tk 9.0 · temporäres `GLIDE_DATA_DIR`, keine echten Nutzerdaten · [Vertrag 77, Ergänzung 3.33.4](../../../docs/77_EINGABE_3.33.3.md#ergänzung-3334-wiederholungen)
+02.10.2026 · App 3.33.4 · macOS, Python 3.14.5, Tk 9.0 · temporäres `GLIDE_DATA_DIR`, keine echten Nutzerdaten · [Funktionen, Erfassen](../../../docs/20_FUNKTIONEN.md#3-erfassen)
 
 ## Vollprüfung und Auslieferung
 

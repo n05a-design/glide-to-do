@@ -1,8 +1,0 @@
-{
-  "erwartete_fixture_sha256": "719c7b397effc8882157d8969c363ae9efab0ae5f516f0f66b4ac6a5cf13aa70",
-  "bytegleiche_kandidaten": [
-    "93_Zwischenstände/Glide_3.32.3_Zwischenstand_2026-10-01/01_Repository/Glide/tests/fixtures/beispiele/glide_beispieldaten.glidebackup"
-  ],
-  "alte_recherchelogs": "nicht vorhanden; aktive Links als Verlust gekennzeichnet",
-  "fixture_wiederhergestellt": "tests/fixtures/beispiele/archiv/glide_beispieldaten_3.32.3_vor_Showcase_2026-10-01.glidebackup"
-}

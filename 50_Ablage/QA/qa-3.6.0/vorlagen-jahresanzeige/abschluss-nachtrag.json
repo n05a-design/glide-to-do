@@ -1,9 +1,0 @@
-{
-  "start": "2026-09-07T15:34:34",
-  "ende": "2026-09-07T15:37:21",
-  "suite": "test_ui_followup36.py",
-  "exit_code": 0,
-  "quelle_sha256": "b22ffdc12eb61f588cf844c0168fb2f40c900911dc1650ac96ae697151e95003",
-  "umfang": "Mit zusätzlicher Scrollleisten-Grenzfallprüfung und echtem App-Neustart",
-  "protokollhinweis": "Der Test wurde erfolgreich beendet. Beim anschließenden Ausgeben des bereits gespeicherten Logs hatte der PowerShell-Ausgabehelfer einen Zeichensatzfehler (UTF-8/cp1252); der Test-Exitcode ist separat erfasst."
-}

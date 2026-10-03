@@ -1,5 +1,0 @@
-{
-  "suite": "test_release37",
-  "exitcode": 0,
-  "grund": "Testfinder akzeptiert den neuen Mac-Widgettyp; alle bisherigen inhaltlichen Assertions bleiben erhalten."
-}

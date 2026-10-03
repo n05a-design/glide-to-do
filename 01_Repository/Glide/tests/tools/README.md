@@ -1,51 +1,30 @@
 # Prüfwerkzeuge für Glide
 
-Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
-**Hintergrund (macOS, seit 30.09.2026):** `pruefen.py` startet die Suiten mit
-`hintergrund/sitecustomize.py`. Prüffenster nehmen dann weder Fokus noch
-Tastatur; man kann während einer Vollprüfung weiterarbeiten.
-`--vordergrund` schaltet das ab.
+Alle Werkzeuge werden aus `01_Repository/Glide` gestartet. Werkzeuge, die echte Tk-Fenster prüfen, brauchen eine grafische Sitzung (unter Linux Xvfb; das ersetzt keine native Windows- oder macOS-Abnahme). Zahlen zu Suiten und Formaten stehen bewusst nicht hier, sondern im Quelltext (`SUITEN`, `ANALYSEN`, `APP_VERSION`, `DATA_SCHEMA_VERSION`) – bis 3.21.3 rotteten sie in dieser Datei. Was tatsächlich lief: [QA-Bericht](../../docs/07_QA_BERICHT.md).
 
-Prüfläufe verwenden `TZ=Europe/Berlin`, wenn der Aufrufer keine Zone vorgibt: In einer Zone ohne Versatz ist jeder Zeitzonenfehler unsichtbar. Seit 3.23 misst `pruefen.py` nach, welcher Versatz für die Suiten tatsächlich gilt. **Unter Windows wird `TZ` nicht gesetzt** – die Laufzeit baut daraus eine erfundene Zone ohne Sommerzeitregel; dort gilt die Systemzeitzone.
-
-Alle Werkzeuge werden aus dem Repository gestartet. Werkzeuge benötigen eine
-grafische Sitzung, soweit sie echte Tk-Fenster prüfen. Linux kann dafür Xvfb
-verwenden; das ersetzt keine native Windows- oder macOS-Abnahme. Welche Läufe
-tatsächlich ausgeführt wurden und welche Plattformprüfungen offen sind, steht
-ausschließlich im [aktuellen QA-Bericht](../../docs/07_QA_BERICHT.md).
+**Hintergrund unter macOS:** `pruefen.py` startet die Suiten mit `hintergrund/sitecustomize.py`; die Prüffenster nehmen keine Maus an, die **Tastatur ist nicht abgeschirmt**. `--vordergrund` schaltet das ab. Verhalten während eines Laufs: [Prüfplan, Regeln](../../docs/05_QA_TESTPLAN.md#regeln).
 
 | Werkzeug | Zweck |
 |---|---|
-| `pruefen.py --modus voll --protokoll PFAD` | Vollprüflauf: alle Suiten aus `SUITEN`, alle Analysen aus `ANALYSEN`, Vorprüfungen einschließlich Tk-Voraussetzung und gemessenem Zeitzonenversatz, Daten-Reproduktion und Bilder. Die Zahlen stehen im Quelltext, nicht hier. Exitcode 1 bei einem Fehlschlag, 2 wenn Tk oder die Zeitzone den Lauf unvollständig lassen. |
-| `ci_grundstufe.py [--protokoll PFAD] [--lieferstand-streng]` | CI-Grundstufe (D09), in GitHub Actions bei jedem Push/PR auf `main` und lokal gleich: Vorprüfungen aus `pruefen.py`, Werkzeugtests `test_*.py`, Tk-freie Unit-Tests, die fünf Analysen, Startprobe mit temporärem Datenordner (ohne Bildschirm über `xvfb-run`) und Lieferstand `src/glide` ↔ `07_Python-Versionen` (Hinweis, mit `--lieferstand-streng` Fehler), Fremdcode Datei für Datei gegen das Originalpaket aus `vendor/provenance.json` (ohne Netz Hinweis), Datenschutz (keine Benutzerpfade in versionierten Textdateien) und Ablagegröße. Ohne Integrationssuiten; ersetzt nicht die Vollprüfung. Exitcode 1 bei einem Fehlschlag |
-| `ablagegroesse.py` | Prüft alle versionierten Dateien: keine Archivkopien von Glide-Daten unter `tests/fixtures` und `05_Probelisten_Testdaten/Showcase`, keine `*.fetch`-Reste, keine Fensterbilder (`fenster/`) von Vollprüfungen nach 3.33.6, keine Datei über 50 MB. Teil der CI-Grundstufe; Regeln getestet in `test_ablagegroesse.py`. Exitcode 1 bei einem Fund |
-| `standpruefung.py` | Standangaben und Formatstufen aller aktiven Dokumente gegen `VERSION` und `DATA_SCHEMA_VERSION`; seit 29.09.2026 außerdem bekannte überholte Aussagen (R9), vollständige Modullisten (R10) und alle relativen Links aktiver Dokumente (R11), aktuelle Titel (R12) und erster Vollprüfungsaufruf (R13), Suitezahl in laufenden Standzeilen gegen SUITEN (R14); gepflegte datierte Übergaben/Checklisten sind ausdrücklich registriert; ohne Tk, Laufzeit Sekunden |
+| `pruefen.py [--modus voll] [--protokoll PFAD] [--timeout S]` | Prüflauf: Vorprüfungen (Syntax, Version, Dokumentation, Fixtures), Unit-Tests, Tk-Probe, gemessener Zeitzonenversatz, alle Suiten, Showcase, Analysen; im Vollmodus zusätzlich Reproduktion von Beispiel- und Releasedaten und Fensterfotos. Exitcode 1 bei einem Fehlschlag, 2 wenn Tk oder die Zeitzone den Lauf unvollständig lassen |
+| `ci_grundstufe.py [--protokoll PFAD] [--lieferstand-streng]` | CI-Grundstufe (GitHub Actions und lokal): Vorprüfungen, Werkzeugtests, Unit-Tests, Analysen, Startprobe, Lieferstand `src/glide` ↔ `07_Python-Versionen`, Fremdcode gegen `vendor/provenance.json`, Datenschutz (keine Benutzerpfade), Ablagegröße. Ohne Integrationssuiten |
+| `ablagegroesse.py` | Keine Archivkopien von Glide-Daten, keine `*.fetch`-Reste, Archive, Nachweise und Releaseplanungen nur der sieben neuesten Versionen (je Datenformat bleibt ein Beleg), Fensterbilder nur der drei neuesten, keine Datei über 50 MB. Kürzen: `scripts/pflege/ablage_kuerzen.py` |
+| `standpruefung.py` | Standangaben, Formatstufen, überholte Aussagen, Modullisten, relative Links, Titel, erster Vollprüfungsaufruf und Suitezahl aller aktiven Dokumente (R1–R14); ohne Tk, Sekunden |
 | `analyse_statisch.py`, `analyse_erreichbarkeit.py` | Quelltextbefunde und Referenzen, keine Laufzeitgarantie |
-| `beispieldaten.py --ziel DATEI` | Demonstrationsbestand im aktuellen Aufgabenformat erzeugen und importieren |
-| `vorlagendaten.py` | Vorlagenkatalog `resources/templates/glide_vorlagen.glidetemplates` reproduzierbar erzeugen |
-| `releasedaten.py --ziel DATEI --stichtag JJJJ-MM-TT` | Drei Release-Arbeitslisten plus Eingang zum aktuellen Stand, mit Quellen und Codebelegen |
-| `screenshots.py` | Linux/X11-Aufnahmen eigener Testfenster; Windows nutzt `pruefen.py --screenshots` oder die `--screenshots`-Option der Integrationssuiten |
-| `windows_vollpruefung.cmd` / `.ps1` | Windows: prüft Python/Tk und OneDrive-Platzhalter, startet dann den Vollmodus in `tests/qa-<Version>/windows_<Zeitstempel>`; Anleitung in `00_Arbeitsvorbereitung/Checklisten/Windows_Pruefung_3.30.0.md` |
+| `attributpruefung.py` | Aufrufe über `self` ohne Ziel in ihrer Klasse, auch über geerbte Tk-Basen |
+| `dublettenpruefung.py [--laenge N]` | Wiederholte Codeblöcke; meldet, bewertet nicht |
+| `pruefe_tk.py` | Tk-Voraussetzung und unter macOS die native Mausisolierung der Prüffenster |
+| `pruefe_showcase.py` | Pflichtprüfung des gelieferten Showcase (Import, Remapping, Vorschauen, Undo, Vorlagen, Neustart) |
+| `showcase.py [--tag JJJJ-MM-TT]` | Erzeugt den Showcase aus den Bildern in `tests/fixtures/showcase/bilder` |
+| `beispieldaten.py --ziel DATEI` | Demonstrationsbestand im aktuellen Format |
+| `releasedaten.py --ziel DATEI --stichtag JJJJ-MM-TT` | Release-Arbeitslisten zum aktuellen Stand; Planungsfristen folgen dem Stichtag, Webquellen nicht |
+| `rundgang.py` | Probedaten „Rundgang“ (Liste, Notiz, Seite mit Bildern, Zeichnung) |
+| `vorlagendaten.py` | Vorlagenkatalog `resources/templates/glide_vorlagen.glidetemplates` |
+| `screenshots.py` | Linux/X11-Aufnahmen eigener Testfenster |
+| `windows_vollpruefung.cmd` / `.ps1` | Windows: prüft Python/Tk und OneDrive-Platzhalter, startet den Vollmodus in `tests/qa-<Version>/windows_<Zeitstempel>`; Anleitung in der [manuellen Prüfliste](../../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md) |
 | `symbolpruefung.py` | Private App-Schrift registrieren und tatsächliche Glyphenfamilien messen |
-| `leistungspruefung.py --ziel DATEI.json` | Lokale synthetische Neudarstellungs-/Speichermessung |
-| `dauerlauf.py --minuten 10 --aufgaben 4000 --ziel DATEI.json` | Dauer- und Belastungslauf: wachsende Callbacks, Undo-Stände, Speicher und Unversehrtheit nach dem Neuladen |
-
-Die Zwecke sind absichtlich ohne Versions- und Formatzahlen formuliert. Bis
-3.21.3 stand hier „Achtzehn Suiten", „Format 14" und „für 3.14" – Angaben, die
-bei jedem Stand hätten mitgehen müssen und es nicht taten. Was die Werkzeuge
-tatsächlich erzeugen, bindet ihr Quelltext an `APP_VERSION` und
-`DATA_SCHEMA_VERSION`.
-
-`dauerlauf.py` gehört bewusst nicht in den Standardlauf: Er misst nichts, was
-in Sekunden sichtbar wird, sondern ob über Stunden etwas wächst, das nicht
-wachsen darf. Zehn Minuten sind das Minimum, damit der 15-Sekunden-Takt der
-Benachrichtigungen oft genug feuert; `--minuten 1 --aufgaben 500` ist ein
-Rauchtest des Werkzeugs, kein Nachweis. Exitcode 1 bei einem Befund.
-
-Der Release-Erzeuger aktualisiert Planungsfristen anhand des Stichtags, nicht
-automatisch die Webquellen. Ältere Quellenabrufe stehen in den Arbeitslisten.
-[QA](../../docs/07_QA_BERICHT.md) · [Prüfungen und Umfang](../README.md) ·
-[Historische Leistungsmessung 3.6](<../../docs/archiv/21_LEISTUNGSBERICHT_3.6.0_vor_Nachbesserung_2026-09-11.md>).
-
-`python3 -B tests/tools/test_standpruefung.py` prüft veraltete gepflegte Einstiege samt Historienausnahmen. Inhaltlicher Abgleich von Aufgabenstatus/Entscheidungen bleibt zusätzlich erforderlich; [Arbeitsrichtung](../../docs/ARBEITSRICHTUNG.md).
+| `leistungspruefung.py --ziel DATEI.json` | Lokale synthetische Neudarstellungs- und Speichermessung |
+| `dauerlauf.py --minuten 10 --aufgaben 4000 --ziel DATEI.json` | Dauerlauf: wachsende Callbacks, Undo-Stände, Speicher, Unversehrtheit nach Neuladen. Nicht im Standardlauf; zehn Minuten sind das Minimum, damit der 15-Sekunden-Takt der Erinnerungen oft genug feuert |
+| `test_standpruefung.py`, `test_ablagegroesse.py`, `test_datenschutz.py` | Werkzeugtests der Wächter (Stand, Ablage, Benutzerpfade auch JSON-maskiert); laufen in der CI |

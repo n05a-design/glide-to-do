@@ -1,6 +1,6 @@
 # Heute und Demnächst 3.33.6 – Nachweis
 
-02.10.2026 · App 3.33.6 · macOS, Python 3.14.5, Tk 9.0 · temporäres `GLIDE_DATA_DIR`, keine echten Nutzerdaten · [Vertrag 79](../../../docs/79_HEUTE_3.33.6.md)
+02.10.2026 · App 3.33.6 · macOS, Python 3.14.5, Tk 9.0 · temporäres `GLIDE_DATA_DIR`, keine echten Nutzerdaten · [Funktionen, Heute](../../../docs/20_FUNKTIONEN.md#4-heute-demnächst-und-planung)
 
 ## Vollprüfung und Auslieferung
 

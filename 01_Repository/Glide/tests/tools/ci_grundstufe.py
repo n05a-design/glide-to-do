@@ -21,11 +21,12 @@ duplizieren:
    Originalpaket sein, dessen Quelle und SHA-256 `vendor/provenance.json`
    festhält. Das Paket wird von PyPI geladen; ohne Netz nur ein Hinweis.
 7. Datenschutz: Keine versionierte Textdatei enthält einen Benutzerpfad
-   (`/Users/<Name>/`, `C:\\Users\\<Name>`, `/home/<Name>/`). Das Repository ist
-   öffentlich; Rohprotokolle bleiben deshalb seit 01.10.2026 lokal.
+   (`/Users/<Name>/`, `C:\\Users\\<Name>`, `/home/<Name>/`, auch JSON-maskiert).
+   Das Repository ist öffentlich; Rohprotokolle bleiben deshalb seit
+   01.10.2026 lokal.
 8. Ablagegröße (`ablagegroesse.py`): keine Archivkopien von Glide-Daten,
-   keine `*.fetch`-Reste, keine Fensterbilder neuer Vollprüfungen, keine
-   Datei über 50 MB.
+   keine `*.fetch`-Reste, Archive und Nachweise nur der sieben neuesten
+   Versionen, Fensterbilder nur der drei neuesten, keine Datei über 50 MB.
 
 Die Integrationssuiten sind auf den Referenz-Mac abgestimmt und gehören nicht
 dazu; unter Linux laufen sie über `pruefen.py --modus schnell` (in GitHub
@@ -123,8 +124,11 @@ def lieferstand_abweichungen():
 
 # Benutzerpfade verraten Konten- und Personennamen. Platzhalter und die
 # Konten der CI-Umgebungen sind erlaubt.
+# Auch JSON-maskiert (`\/Users\/<Name>\/`): So schreibt etwa Swifts JSONEncoder
+# Pfade; ein solcher Fund rutschte bis 03.10.2026 durch.
 BENUTZERPFAD = re.compile(
-    r"/Users/([A-Za-z0-9._-]+)/|[A-Za-z]:(?:\\\\|\\)Users(?:\\\\|\\)([A-Za-z0-9._-]+)|/home/([a-z][a-z0-9._-]*)/")
+    r"\\?/Users\\?/([A-Za-z0-9._-]+)\\?/|[A-Za-z]:(?:\\\\|\\)Users(?:\\\\|\\)([A-Za-z0-9._-]+)"
+    r"|\\?/home\\?/([a-z][a-z0-9._-]*)\\?/")
 ERLAUBTE_KONTEN = {"shared", "public", "name", "username", "user", "benutzer", "nutzer", "example", "runner"}
 BINAERFORMATE = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".heic", ".icns", ".ico", ".pdf", ".zip", ".whl",
                  ".glidebackup", ".glideapp", ".lib", ".avif", ".so", ".dll", ".dylib", ".ttf", ".otf", ".docx",
@@ -264,7 +268,7 @@ def main():
     if eintraege is None:
         run.meldung("Ablagegröße", "Hinweis", "kein Git-Arbeitsstand; versionierte Dateien nicht ermittelbar")
     else:
-        funde = ablagegroesse.befunde(eintraege)
+        funde = ablagegroesse.befunde(eintraege, ablagegroesse.aktuelle_version())
         run.meldung("Ablagegröße", "fehlgeschlagen" if funde else "ausgeführt",
                     ablagegroesse.zusammenfassung(eintraege, funde))
 

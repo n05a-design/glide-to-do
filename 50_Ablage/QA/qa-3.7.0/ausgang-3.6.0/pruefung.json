@@ -1,8 +1,0 @@
-{
-  "tests": [
-    "test_glide_36",
-    "test_release36"
-  ],
-  "exitcode": 0,
-  "daten": "temporäres GLIDE_DATA_DIR"
-}

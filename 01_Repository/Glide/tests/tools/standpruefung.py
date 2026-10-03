@@ -163,18 +163,11 @@ VERSIONSORDNER = re.compile(r"(^|[-_/])\d+\.\d+\.\d+([-_]|$)")
 # Ein Zwischenstand kann unvollständige Nachweise enthalten; nichts nachschreiben.
 ZWISCHENSTAND = re.compile(r"Glide_\d+\.\d+\.\d+_Zwischenstand_\d{4}-\d{2}-\d{2}")
 
-# Fortgeschrieben, obwohl der Dateiname ein Datum oder eine Version trägt:
-# Diese Dokumente sind ausdrücklich die aktive Fassung und werden gepflegt.
-# Der Name stammt aus dem Tag ihrer Anlage und bleibt, damit Verweise halten.
-GEPFLEGT = (
-    "00_Arbeitsvorbereitung/Glide_Weitergabe_neuer_Chat_2026-09-11.md",
-    "00_Arbeitsvorbereitung/Glide_Funktionsvorschlaege_2026-09-11.md",
-    "00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md",
-    "00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md",
-    "00_Arbeitsvorbereitung/Glide_Aufgabenauswahl_nach_3.32.2_2026-09-30.md",
-    "00_Arbeitsvorbereitung/Checklisten/Manuelle_Pruefung_3.30.0.md",
-    "00_Arbeitsvorbereitung/Checklisten/Windows_Pruefung_3.30.0.md",
-)
+# Fortgeschrieben, obwohl der Dateiname ein Datum oder eine Version trägt.
+# Seit dem Aufräumen vom 03.10.2026 tragen die gepflegten Dokumente
+# (Übergabe, Entwicklungsplan, Markt und Vorbilder, manuelle Prüfliste) kein
+# Datum mehr im Namen; die Liste bleibt für künftige Ausnahmen.
+GEPFLEGT: tuple[str, ...] = ()
 
 # Zusätzliche festgeschriebene Einzeldateien außerhalb klar datierter Pfade.
 # Der frühere Reiterentwurf ist seit der Existenzprüfung vom 24.09.2026 im
@@ -213,7 +206,7 @@ UEBERHOLT: tuple[tuple[str, str], ...] = (
 # R10: Wer die Module neben `app.pyw` aufzählt, nennt alle. Die Moduldateien
 # ergeben sich aus `src/glide/*.py` (ohne die isolierte Bedienprobe).
 MODULLISTEN = (
-    "docs/09_PROJECT_HANDOFF.md",
+    "docs/02_ARCHITECTURE.md",
     "src/glide/README.md",
     "packaging/README.md",
     "packaging/macos/baue_app.py",
@@ -292,8 +285,8 @@ def dokumente(wurzel: Path):
             continue
         if any(ZWISCHENSTAND.fullmatch(t) for t in teile[:-1]):
             continue
-        # Mit „_Z“ markiert der Inhaber, was er selbst löschen will (29.09.2026):
-        # Ordner als `Name_Z`, Dateien als `Name_Z.md`.
+        # Mit „_Z“ markierte der Inhaber bis 03.10.2026, was er selbst löschen
+        # wollte (Ordner `Name_Z`, Dateien `Name_Z.md`); seitdem wird gelöscht.
         if any(t.endswith("_Z") for t in teile[:-1]) or pfad.stem.endswith("_Z"):
             continue
         if ("__pycache__" in teile or "node_modules" in teile
@@ -571,8 +564,8 @@ def lauf(wurzeln: list[Path], version: str) -> Befund:
             text = pfad.read_text(encoding="utf-8-sig")
             datei_pruefen(befund, kurz, text)
             teile = pfad.relative_to(wurzel).parts
-            # Belege (QA-Läufe, Ablage) zitieren Pfade ihres Tages.
-            if not ("50_Ablage" in teile or any(t.startswith("qa-") for t in teile)):
+            # Belege (QA-Läufe) zitieren Pfade ihres Tages.
+            if not any(t.startswith("qa-") for t in teile):
                 links_pruefen(befund, wurzel, pfad, text)
     module_pruefen(befund, wurzeln)
     return befund

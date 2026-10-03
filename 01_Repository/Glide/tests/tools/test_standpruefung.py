@@ -13,8 +13,9 @@ class Einstiegspruefung(unittest.TestCase):
         stand.datei_pruefen(result, path, text)
         return result
 
-    def test_all_live_dated_documents_require_current_version(self):
-        for path in stand.GEPFLEGT:
+    def test_live_documents_require_current_version(self):
+        for path in stand.GEPFLEGT + ("00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+                                      "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md"):
             with self.subTest(path=path):
                 old = self.check(path, "# Arbeitsgrundlage\n\nStand 30.09.2026 · Glide 3.32.2\n")
                 self.assertTrue(old.fehler)
@@ -66,7 +67,7 @@ class Einstiegspruefung(unittest.TestCase):
     def test_inventory_keeps_active_documents_and_excludes_dated_snapshots(self):
         with tempfile.TemporaryDirectory(prefix="glide-standregeln-") as folder:
             root = Path(folder)
-            active = root / "00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md"
+            active = root / "00_Arbeitsvorbereitung/Glide_Uebergabe.md"
             snapshot = root / "Glide_3.32.3_Zwischenstand_2026-10-01/README.md"
             archived = root / "docs/archiv/README.md"
             for file in (active, snapshot, archived):

@@ -1,6 +1,6 @@
 # Grafik-Master
 
-Stand 02.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 Hier liegen die Quellen des Glide-Logos und alle freigegebenen Exporte. Glide
 selbst und die Paketierung arbeiten mit **Kopien** daraus (siehe unten). Wer
@@ -11,13 +11,14 @@ einen Master ändert, erneuert danach die Kopien.
 | Ordner | Inhalt | Verwendung |
 |---|---|---|
 | `01_Logo` | `Glide-Logo-01.svg` und `Glide-Logo.png`: das Zeichen allein, eine Fläche in Glide-Blau | Kopfzeile, „Über Glide“ und Startfenster, dort in der Akzentfarbe der Oberfläche |
-| `02_App-Icon` | derzeit leer; aktuelle Exporte stehen in `03_Fav-Icon` | frühere weiße Variante wird nicht mehr verwendet |
 | `03_Fav-Icon` | `App-Icon-transparent-02.svg` und `App-Icon-transparent.png`: blaue Fläche mit ausgespartem Zeichen | aktuelles Programmsymbol, Basis für Dock, Taskleiste, Installer und Website |
 | `04_Affinity` | `Glide-Logo.af`: die Arbeitsdatei aller Exporte | Quelle |
 | `05_Inspiration` | Stilvorlagen und Skizzen, darunter `Glide-Logo-Position.png` (Skizze der Logoposition vom 29.09.2026) und `Inspiration für Glide.png` | Belege, keine Programmdateien |
-| `Archiv` | überholte Stände dieses Ordners | nur bei historischer Frage öffnen |
+| `06_Beispielbilder` | Motive für Showcase und Arbeitsdokumente | siehe unten |
 
-Glide-Blau ist `rgb(1,133,225)` = `#0185E1`.
+Glide-Blau ist `rgb(1,133,225)` = `#0185E1`. Ein Archivordner entfällt seit 03.10.2026: Vorfassungen trägt Git.
+
+**Rechte (öffentliches Repository):** `05_Inspiration` und `06_Beispielbilder` enthalten auch Fremdbilder aus Bildagenturen und Webquellen. Vor einer Veröffentlichung klären, ob sie öffentlich liegen dürfen; sonst entfernen (offen beim Inhaber, siehe [Übergabe](../00_Arbeitsvorbereitung/Glide_Uebergabe.md)).
 
 ## Was die App daraus macht (seit 29.09.2026)
 

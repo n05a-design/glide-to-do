@@ -1,8 +1,8 @@
 # Glide-Prüfung (D09, CI-Grundstufe)
 #
 # Ersetzt die GitHub-Vorlage „Python application“. Deren `pytest` sammelte das
-# ganze Repository ein: Archivkopien mit Punkten im Dateinamen, Altstände in
-# 50_Ablage und die Integrationssuiten, die schon beim Import ein Tk-Fenster
+# ganze Repository ein: Archivkopien mit Punkten im Dateinamen, Altstände
+# und die Integrationssuiten, die schon beim Import ein Tk-Fenster
 # öffnen. Glides Prüfungen laufen über die eigenen Werkzeuge in
 # 01_Repository/Glide/tests/tools; sie brauchen nur die Standardbibliothek.
 #

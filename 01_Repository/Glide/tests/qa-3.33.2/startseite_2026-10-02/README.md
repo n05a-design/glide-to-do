@@ -1,6 +1,6 @@
 # Startseite 3.33.2 – Nachweis
 
-02.10.2026 · App 3.33.2 · macOS, Python 3.14.5, Tk 9.0 · temporäres `GLIDE_DATA_DIR`, keine echten Nutzerdaten · [Vertrag 76](../../../docs/76_STARTSEITE_3.33.2.md)
+02.10.2026 · App 3.33.2 · macOS, Python 3.14.5, Tk 9.0 · temporäres `GLIDE_DATA_DIR`, keine echten Nutzerdaten · [Funktionen, Startseite](../../../docs/20_FUNKTIONEN.md#7-startseite)
 
 ## Ausgangsstand
 
@@ -10,7 +10,7 @@
 
 `scripts/pflege/messung_startseite.py` (neu): feste Inhalte mit 1.000 Punkten in zwölf Listen, Bearbeitungstage und Fälligkeiten über die Woche verteilt, drei Zeichnungen, zwei angeheftete Seiten; Fenster 1400 × 950; je Lauf ein Aufwärmwert und sechs warme Runden; „Wechsel“ von einer Liste zur Startseite, „Aktualisierung“ als Neuaufbau an Ort und Stelle; `--kacheln alt` (zwölf Kacheln bis 3.33.1) bzw. `d12` (sieben Kacheln). Alter und neuer Code laufen abwechselnd in vier Paaren (`messung/`). Ergänzend `messung_performance.py` für alle Ansichten in zwei Paaren.
 
-[Zusammenfassung](messung/zusammenfassung.json): Aktualisierung der Startseite im Median 764,2 ms (3.33.1, zwölf Kacheln) → 506,7 ms (3.33.2, sieben Kacheln); bei gleichen zwölf Kacheln 620,7 ms. Wechsel 789,7 → 547,8 ms. Ansichtswerkzeug: Bibliothek 974 → 856 ms, übrige Ansichten unverändert. Keine Callbackfehler. Tabelle und Grenzen im [Vertrag 76](../../../docs/76_STARTSEITE_3.33.2.md#messung).
+[Zusammenfassung](messung/zusammenfassung.json): Aktualisierung der Startseite im Median 764,2 ms (3.33.1, zwölf Kacheln) → 506,7 ms (3.33.2, sieben Kacheln); bei gleichen zwölf Kacheln 620,7 ms. Wechsel 789,7 → 547,8 ms. Ansichtswerkzeug: Bibliothek 974 → 856 ms, übrige Ansichten unverändert. Keine Callbackfehler. Verhalten: [Funktionen, Startseite](../../../docs/20_FUNKTIONEN.md#7-startseite).
 
 ## Ursachensuche
 

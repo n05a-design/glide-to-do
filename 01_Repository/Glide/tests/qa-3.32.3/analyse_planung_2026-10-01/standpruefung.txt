@@ -1,6 +1,0 @@
-Standprüfung gegen VERSION 3.32.3 · Ablage einschließlich Repository · 107 aktive Dokumente (46 fortgeschrieben, 57 festgeschrieben, 4 ohne Standaussage)
-BEFUNDE (4)
-- 00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md:162: Link auf ../01_Repository/Glide/tests/qa-3.32.0/recherche_planung_2026-09-30/test_tempo330.log führt ins Leere (R11)
-- 00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md:163: Link auf ../01_Repository/Glide/tests/qa-3.32.0/recherche_planung_2026-09-30/messung_ansichtswechsel.log führt ins Leere (R11)
-- 00_Arbeitsvorbereitung/Glide_Arbeits_und_Featureplanung_2026-09-30.md:164: Link auf ../01_Repository/Glide/tests/qa-3.32.0/recherche_planung_2026-09-30/analyse_codebasis.log führt ins Leere (R11)
-- 01_Repository/Glide/docs/00_INDEX.md:1661: Link auf ../tests/fixtures/beispiele/archiv/glide_beispieldaten_3.32.3_vor_Showcase_2026-10-01.glidebackup führt ins Leere (R11)

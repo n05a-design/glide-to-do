@@ -23,7 +23,7 @@ Figur macht sie freundlicher, verdeckt nichts und ist nie der einzige Weg zu
 einer Information. Ein führender Begleiter mit Hinweisen bleibt an ein
 Endnutzer-Onboarding gebunden, das am 25.09.2026 nicht gewählt wurde.
 Umsetzung: `empty_state_mascot`,
-[Vertrag 3.30](../66_MODERNISIERUNG_3.30.0.md).
+[Funktionen, Startseite](../20_FUNKTIONEN.md#7-startseite).
 
 ## Ergänzung 3.26.0
 
@@ -44,7 +44,7 @@ Zustand spiegelt den Bestand, nicht den Menschen.
 **Die Lieferliste unten bleibt vollständig gültig.** Die gezeichnete Figur ist
 die Zwischenlösung, bis es Assets gibt; wer sie liefert, tauscht die
 Zeichenbefehle gegen `tk.PhotoImage` und lässt alles Übrige stehen.
-Siehe [Startseite und Begleiter](../58_STARTSEITE_UND_BEGLEITER_3.25.0.md).
+Siehe [Funktionen, Startseite](../20_FUNKTIONEN.md#7-startseite).
 
 ## Die kurze Antwort
 

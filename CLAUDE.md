@@ -1,24 +1,24 @@
 # Arbeitsregeln für Claude Code – Glide
 
-Stand 02.10.2026 · Glide 3.33.6
+Stand 03.10.2026 · Glide 3.33.6
 
 Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf die verbindlichen Projektregeln und ergänzt, was für Claude-Code-Sitzungen im Repository gilt. Regeln nicht hier doppeln, sondern an der Quelle pflegen.
 
 ## Struktur
 
 - Repository-Wurzel = Projektordner:
-  - `00_Arbeitsvorbereitung` – Planung, Entscheidungen, Übergaben
-  - `01_Repository/Glide` – Quellbaum: `src/glide/app.pyw`, Tests, Verträge, Pflegewerkzeuge
+  - `00_Arbeitsvorbereitung` – Übergabe, Entwicklungsplan, Markt und Vorbilder, manuelle Prüfliste
+  - `01_Repository/Glide` – Quellbaum: `src/glide/app.pyw`, Tests, Dokumentation, Pflegewerkzeuge
   - `07_Python-Versionen` – startbarer, bytegleicher Lieferstand
-  - weitere Ablageordner
+  - `05_Probelisten_Testdaten` (Showcase), `20_Grafik_Master` (Grafikquellen)
 - Querverweise setzen genau diese Struktur voraus.
 
 ## Lesereihenfolge
 
 1. [01_Repository/Glide/AGENTS.md](01_Repository/Glide/AGENTS.md) – verbindliche Arbeitsregeln und Abschlusskriterium
-2. [Sitzungsübergabe](00_Arbeitsvorbereitung/Glide_Sitzungsuebergabe_2026-09-30.md) und [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) – Stand, verbindliche Entscheidungen D01–D17, beauftragte Arbeit, Abnahme
-3. [Entwicklungsplan ab 3.33](00_Arbeitsvorbereitung/Glide_Entwicklungsplan_3.33ff_2026-10-01.md) und [Beschlüsse D09–D17 vom 01.10.2026](00_Arbeitsvorbereitung/Glide_Entscheidungsvorlage_2026-10-01.md#beschlüsse-vom-01102026)
-4. Dokumentationskopien seit ausdrücklichem Auftrag vom 01.10.2026 nach Wissensabgleich löschen, aktuelle Quellen fortschreiben; [Dokumentenpflege](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md) vor jeder Dokumentänderung
+2. [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) – Stand, verbindliche Entscheidungen D01–D17, beauftragte Arbeit, Abnahme
+3. [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) – Aufgaben mit Status, Stufen, Ziele; Verhalten der Funktionen in [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md)
+4. [Dokumentenpflege](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md) vor jeder Dokumentänderung: ein Thema, ein Dokument; zusammenführen und löschen statt archivieren (Auftrag vom 03.10.2026)
 5. Erst dann die betroffene Codestelle **und ihre Aufrufer** (Funktionsnamen suchen, nicht Zeilennummern)
 
 ## Ergänzungen für diese Umgebung
@@ -26,13 +26,14 @@ Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf 
 - **Auftrag:** Nur den ausdrücklich beauftragten Schnitt umsetzen; offene Auswahl (A–H, D07) nicht selbst entscheiden. Bereits Entschiedenes (z. B. Q3, G07, D09–D17, Produktgrenzen) nicht erneut vorlegen. Neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests (D17).
 - **Daten:** Nie echte Nutzerdaten; `GLIDE_DATA_DIR` vor dem Import auf einen temporären Ordner setzen. Werkzeuge mit `python3 -B` starten.
 - **Linux-Container:**
-  - Möglich sind Standprüfung (`python3 -B tests/tools/standpruefung.py` in `01_Repository/Glide`), Syntaxprüfung, Startprobe unter Xvfb (Tk 8.6), `scripts/pflege/messung_speicherweg.py` und `tests/qa-3.32.3/pruefaufrufe_2026-10-01/werkzeuge/pruefaufrufe_probe.py`.
+  - Möglich sind die CI-Grundstufe (`python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` in `01_Repository/Glide`; braucht ein Python mit tkinter) mit Stand-, Link- und Ablageprüfung, Startprobe unter Xvfb (Tk 8.6) und `scripts/pflege/messung_speicherweg.py`.
   - Nicht möglich sind macOS/Tk-9-Abnahme, Bundlebau und physische Bedienung. Ergebnisse als „Linux/Tk 8.6, künstliche Daten“ kennzeichnen.
 - **Lieferstand:** `07_Python-Versionen` und `src/glide` nur im Rahmen einer Produktionsrunde ändern (Versionswechsel, `abgleich_07.py`, SHA-256).
 - **Git-Regeln der Ablage:**
   - `vendor/**` und `resources/fonts/**` werden unverändert gespeichert (`-text`).
   - tkdnd-`.so` sind ausdrücklich erlaubt.
   - Das Repository ist öffentlich: `*.log` bleibt ausgeschlossen (Rohprotokolle lokal), `*.glidebackup` bis auf Fixtures. Keine Benutzerpfade in versionierten Dateien – vor Uploads `scripts/pflege/pfade_bereinigen.py`; die CI prüft das.
-  - Keine Archivkopien von Fixtures oder Showcase und keine Fensterbilder (`fenster/`) neuer Vollprüfungen: Vorfassungen trägt Git. Die CI prüft das (Schritt „Ablagegröße“).
+  - Keine Archivkopien von Fixtures oder Showcase, keine Fensterbilder (`fenster/`) neuer Vollprüfungen; Archive und Nachweise nur der sieben neuesten Versionen, Fensterbilder nur der drei neuesten (`scripts/pflege/ablage_kuerzen.py`). Vorfassungen trägt Git. Die CI prüft das (Schritt „Ablagegröße“).
+  - Was `.gitignore` abfängt und wo sie nicht schützt (bereits versionierte Dateien, `git add -f`, Web-Upload), steht in ihrem Kopf.
 
-Lokaler Start 3.33.0: T2/P09a zuerst. Aktiver Projektpfad `Github/glide-to-do`. D12 jetzt vollständig: Zeichnungen und Pinnwand-Vorschau. [Fundament-Vertrag](01_Repository/Glide/docs/73_FUNDAMENT_3.33.0.md).
+Aktiver Projektpfad `Github/glide-to-do`.

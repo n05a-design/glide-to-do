@@ -1,0 +1,147 @@
+{
+  "datum": "2026-10-03",
+  "app_version": "3.33.6",
+  "app_geaendert": false,
+  "umgebung": "Linux/Tk 8.6, künstliche Daten",
+  "ausgangsstand": "7f30baf",
+  "regeln": {
+    "archiv_versionen": 7,
+    "fensterbilder_versionen": 3,
+    "werkzeug_pruefung": "tests/tools/ablagegroesse.py",
+    "werkzeug_kuerzen": "scripts/pflege/ablage_kuerzen.py"
+  },
+  "versionierter_stand": {
+    "vorher": {
+      "dateien": 4985,
+      "mb": 1158.0,
+      "markdown": 659
+    },
+    "nachher": {
+      "dateien": 819,
+      "mb": 404.4,
+      "markdown": 57
+    }
+  },
+  "bereiche": {
+    "00_Arbeitsvorbereitung": {
+      "vorher": [
+        142,
+        2.7
+      ],
+      "nachher": [
+        5,
+        0.1
+      ]
+    },
+    "01_Repository/Glide/docs": {
+      "vorher": [
+        177,
+        7.1
+      ],
+      "nachher": [
+        16,
+        0.2
+      ]
+    },
+    "01_Repository/Glide/tests/qa-*": {
+      "vorher": [
+        1922,
+        422.9
+      ],
+      "nachher": [
+        259,
+        77.2
+      ]
+    },
+    "tests/fixtures/beispiele/glide_releaseplanung_*": {
+      "vorher": [
+        41,
+        1.2
+      ],
+      "nachher": [
+        17,
+        0.5
+      ]
+    },
+    "07_Python-Versionen/Archiv": {
+      "vorher": [
+        582,
+        155.0
+      ],
+      "nachher": [
+        7,
+        16.5
+      ]
+    },
+    "05_Probelisten_Testdaten": {
+      "vorher": [
+        86,
+        85.8
+      ],
+      "nachher": [
+        7,
+        76.6
+      ]
+    },
+    "20_Grafik_Master": {
+      "vorher": [
+        50,
+        133.2
+      ],
+      "nachher": [
+        34,
+        111.5
+      ]
+    },
+    "40_Store_Material": {
+      "vorher": [
+        29,
+        0.1
+      ],
+      "nachher": [
+        0,
+        0.0
+      ]
+    }
+  },
+  "einheit_bereiche": "[Dateien, MB]",
+  "dokumente": {
+    "00_Arbeitsvorbereitung": {
+      "vorher": 24,
+      "nachher": 4
+    },
+    "docs": {
+      "vorher": 53,
+      "nachher": 16
+    },
+    "changelog_zeilen": {
+      "vorher": 2461,
+      "nachher": 134
+    }
+  },
+  "fensterbilder": {
+    "vorher": 587,
+    "nachher": 150,
+    "versionen": [
+      "3.33.4",
+      "3.33.5",
+      "3.33.6"
+    ]
+  },
+  "nachweisordner": [
+    "qa-3.33.0",
+    "qa-3.33.1",
+    "qa-3.33.2",
+    "qa-3.33.3",
+    "qa-3.33.4",
+    "qa-3.33.5",
+    "qa-3.33.6"
+  ],
+  "git_historie_umgeschrieben": false,
+  "nachpruefung": {
+    "datenschutz_json_maskiert": "geschlossen",
+    "entfernte_sitzungsreste": 25,
+    "archivnamen_ohne_Z": 6,
+    "neuer_werkzeugtest": "tests/tools/test_datenschutz.py"
+  }
+}
