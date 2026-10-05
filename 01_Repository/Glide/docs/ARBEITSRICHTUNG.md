@@ -13,7 +13,10 @@ Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Ent
 - die Auswahl A–H mit ihrer Bearbeitungstiefe
 - die erste Importquelle (G21) und das Bauwerkzeug (G26)
 - die Inhaberangaben I1–I6
-- aus dem Ausbauprogramm: die Referenzentwürfe I7, die Vorgabe des Hinweises zu Tagesbeginn und Tagesabschluss (AU03), dezente Bewegung (OB04) und Termine als belegte Zeit (AU07, berührt eine Produktgrenze) Empfehlungen in Dokumenten ersetzen keine Entscheidung des Inhabers; jeder Umsetzungsschnitt außerhalb der beauftragten Performance-Arbeit braucht einen ausdrücklichen Auftrag.
+- aus dem Ausbauprogramm: die Referenzentwürfe I7, die Vorgabe des Hinweises zu Tagesbeginn und Tagesabschluss (AU03), dezente Bewegung (OB04) und Termine als belegte Zeit (AU07, berührt eine Produktgrenze)
+- der Lösungsweg für das Logo unter Tk 8.6 (I8, [Diagnose](diagnosen/LOGO_KANTENGLAETTUNG.md#7-lösungswege))
+
+Empfehlungen in Dokumenten ersetzen keine Entscheidung des Inhabers; jeder Umsetzungsschnitt außerhalb der beauftragten Performance-Arbeit braucht einen ausdrücklichen Auftrag.
 
 ## Verbindliche Entscheidungen
 
@@ -26,7 +29,7 @@ Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Ent
 | D05 | Einzelne Aufgaben in Notizen und Seiten mit erhaltener ID; Liste, Notiz und Seite bleiben eigenständige Arten, keine allgemeine Umwandlung (beantwortet F11). | G29/G31 offen |
 | D06 | Die Gestaltung der Hinweisblöcke in Seiten bleibt unverändert. | gilt |
 | D07 | Exportumfang der Animation: abspielbares GIF oder zunächst Frames/Vorschau/PNG-Spritesheet (Empfehlung: Spritesheet zuerst). | **offen**, erst zur Pixel-Etappe |
-| D08 | Alle Klappmechanismen über echte Bedienbindungen prüfen, einschließlich Zustandserhalt, Tastatur und Tk-Callbackfehler. | umgesetzt 3.32.1, Pflichtsuite |
+| D08 | Alle Klappmechanismen über echte Bedienbindungen prüfen, einschließlich Zustandserhalt, Tastatur, verschachtelter Bereiche und Tk-Callbackfehler. | umgesetzt 3.32.1, Pflichtsuite |
 | D09 | Das GitHub-Repository `glide-to-do` ist die maßgebliche Ablage (Wurzel = Projektordner, Quellbaum `01_Repository/Glide`); Uploads nur in diese Struktur. Öffentlich: Rohprotokolle (`*.log`) bleiben lokal, veröffentlichte Ergebnisse ohne Benutzerpfade (`pfade_bereinigen.py`, CI „Datenschutz“). Keine Archivkopien von Fixtures und Showcase, keine Fensterbilder neuer Vollprüfungen (02.10.2026); Archive und Nachweise nur der sieben neuesten Versionen, Fensterbilder nur der drei neuesten, Dokumente werden zusammengeführt und gelöscht statt archiviert (03.10.2026); CI „Ablagegröße“ prüft das. Sicherheitsmeldungen über GitHub (`SECURITY.md`), Dependabot; CodeQL-Workflow vom Inhaber deaktiviert. Zwischenstände als Git-Tags. | gilt; CI-Grundstufe seit 01.10.2026 |
 | D10 | Ein Datum ohne Zusatz setzt den Bearbeitungstag, auch `/morgen`; die Fälligkeit nur mit „fällig“/„bis“, `/bis`, `/fällig`. Eine Wiederholung in der Eingabe setzt die Fälligkeit auf ihren ersten Termin (Ergänzung 02.10.2026). | umgesetzt 3.33.3/3.33.4 |
 | D11 | D06 gilt nur für Hinweisblöcke in Seiten; Hinweiszeilen der Ansichten werden über „?“ ein-/ausgeklappt, Zustand gespeichert (U02). | offen (UX1) |

@@ -439,8 +439,17 @@ def save_windows_screenshot(root, target):
 def screenshots(app, root, target):
     root.geometry("1380x950+0+0")
     root.deiconify()
-    for theme, path in (("light", target), ("dark", target.with_stem(target.stem + "_dunkel"))):
-        app.theme_name = theme
+    # Das Design ist die einzige Quelle der Erscheinung: `apply_theme` leitet
+    # `theme_name` daraus ab, eine Zuweisung an `theme_name` wirkt nicht. Hell
+    # ist das aktive helle Design, Dunkel sein Gegenstück aus `DESIGNS`.
+    info = app.design_info()
+    hell = app.design_name() if info["base"] == "light" else info["partner"]
+    dunkel = app.DESIGNS[hell]["partner"]
+    if app.DESIGNS[hell]["base"] != "light" or app.DESIGNS[dunkel]["base"] != "dark":
+        raise RuntimeError(f"Kein helles/dunkles Designpaar für die Aufnahme: {hell} / {dunkel}")
+    dunkel_pfad = target.with_stem(target.stem + "_dunkel")
+    for design, path in ((hell, target), (dunkel, dunkel_pfad)):
+        app.set_design(design, apply_now=False)
         app.apply_theme()
         app.update_sidebar_list()
         app.refresh_tree()
@@ -450,7 +459,10 @@ def screenshots(app, root, target):
         root.tk.call("vwait", "::glide_capture_ready")
         root.update()
         save_windows_screenshot(root, path)
-        print(f"Sichtnachweis ({theme}): {path}")
+        print(f"Sichtnachweis ({design}): {path}")
+    # Zwei gleiche Bilder hießen: Der Designwechsel hat nicht gewirkt.
+    if target.read_bytes() == dunkel_pfad.read_bytes():
+        raise RuntimeError("Hell- und Dunkelaufnahme sind identisch; der Designwechsel hat nicht gewirkt.")
 
 
 def main():

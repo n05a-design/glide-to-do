@@ -31,8 +31,11 @@ Glide-Blau ist `rgb(1,133,225)` = `#0185E1`. Ein Archivordner entfällt seit 03.
 - **Warum SVG:** Tk 9 rechnet SVG in jeder Größe scharf. Für die Akzentfarbe
   ersetzt Glide die Füllfarbe `#0185e1` (auch ältere RGB-Schreibweise möglich), bevor das Bild
   entsteht. Die gewählte Variante verwendet direkte Attribute; CSS-Exporte werden ebenfalls verarbeitet. Unter
-  Tk 8.6 (ohne SVG) zeichnet Glide dasselbe Zeichen als Fläche. Die PNGs
-  dienen dort als Programmsymbol.
+  Tk 8.6 (ohne SVG) zeichnet Glide dasselbe Zeichen als Leinwandfläche;
+  unter Windows und X11 bleibt sie ungeglättet. Als Programmsymbol lädt Glide
+  dort nur das PNG des App-Icons und verkleinert es ohne Filterung.
+  `glide-logo.png` verwendet die Laufzeit nicht. Ursache und Lösungswege:
+  [Diagnose](../01_Repository/Glide/docs/diagnosen/LOGO_KANTENGLAETTUNG.md).
 - **Paketierung:** `packaging/baue_symbole.py` erzeugt aus dem App-Icon unter
   `01_Repository/Glide/assets/icons/`:
   - `glide.ico` für Windows (16 bis 256 px);
@@ -53,6 +56,28 @@ Glide-Blau ist `rgb(1,133,225)` = `#0185E1`. Ein Archivordner entfällt seit 03.
    `01_Repository/Glide` ausführen.
 4. `python3 tests/integration/test_logo330.py` ausführen und danach den Stand
    nach `07_Python-Versionen` übernehmen.
+
+## Befunde am Logo-Master (05.10.2026, Entscheidung beim Inhaber)
+
+`01_Logo/Glide-Logo-01.svg` ist ein sauberer Einzelpfad mit gerade-ungerade-Füllregel und für die Darstellung unkritisch. Die folgenden Konstruktionsdetails werden erst in großen Größen (512/1024 px, Druck) sichtbar. Ob sie gewollt sind, entscheidet der Inhaber (Entwicklungsplan LG04).
+
+**Nicht tangentiale Übergänge** (Master-Einheiten, viewBox 841,89):
+
+| Punkt | Lage x / y | Übergang | Knick |
+|---|---|---|---|
+| 1 | 342,74 / 621,76 | um 4,3° geneigte Gerade → Rundung | 5,9° |
+| 2 | 325,94 / 603,24 | Rundung → Gerade | 3,5° |
+| 3 | 608,11 / 601,85 | Rundung → Gerade | 2,9° |
+| 4 | 525,70 / 475,61 | um 2,6° geneigte Gerade → Rundung | 2,6° |
+| 5 | 344,45 / 720,37 | Grundlinie: waagerechtes Stück → um 1,1° steigende Gerade | 1,1° |
+| 6 | 561,92 / 124,93 | Rundung → Gerade (Ansatz oben rechts) | 7,3° |
+
+- Weitere Knicke von 0,5–2,7° bei 516,11 / 484,28, 319,63 / 461,24, 326,30 / 562,37, 335,93 / 554,20, 529,95 / 576,66 und 621,39 / 195,69. Muster: Die Rundungen sind tangential zu achsparallelen Kanten angelegt; die anschließenden Geraden wurden geneigt, ohne die Rundungen nachzuführen.
+- Fast achsparallele Geraden: 0,01° (Oberkante, 504,75 → 330,20), 0,22° (625,34 / 636,52 → 625,27 / 618,56), 0,50° (325,94 / 603,24 → 326,30 / 562,37), 1,05° (611,56 / 108,77 → 578,13 / 109,38), 1,09° (Grundlinie, Punkt 5). Das Paar mit 6,6° und 6,7° (Ober- und Unterkante des unteren Bogens) ist parallel und damit erkennbar gewollt.
+- Kurzsegment: Der Außenumriss endet mit `h-.02`, einem 0,02 Einheiten langen Stück vor dem Schließen.
+- Kleine Größen: Der Innenraum des „g“ ist im Logo bei 54 px 3,6 px breit, im App-Symbol bei 16 px 0,78 px, bei 32 px 1,56 px und bei 48 px 2,34 px. Bei 16 und 32 px läuft er auch geglättet zu; eine Kleingrößenfassung mit breiterem Innenraum wäre eine Option.
+
+Eine Überarbeitung läuft über „Einen Master ändern“ oben.
 
 ## Hinweis zur Typografie
 

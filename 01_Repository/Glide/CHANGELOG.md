@@ -2,6 +2,14 @@
 
 Vollständig beschrieben sind die sieben neuesten Versionen; ältere stehen verdichtet in der Tabelle am Ende. Ihre ausführlichen Einträge, Verträge und Nachweise trägt Git (Stand vor dem 03.10.2026). Das aktuelle Verhalten beschreiben die [Funktionen](docs/20_FUNKTIONEN.md).
 
+## Windows-Prüfung und Befunde festgehalten (05.10.2026, App unverändert, kein Versionswechsel)
+
+- **Dunkelaufnahme:** `tests/tools/releasedaten.py` wechselt für `--screenshot` über `set_design` ins helle Design und sein dunkles Gegenstück und bricht bei gleichen Bildern ab. Bisher setzte er `theme_name`, das `apply_theme` aus dem Design neu ableitet. `release_hell_dunkel.png` war deshalb eine zweite helle Aufnahme.
+- **Fensterfotos unter Windows:** `test_fenster330` fotografiert mit `GLIDE_FENSTER_FOTOS` jetzt auch unter Windows jedes Fenster (PrintWindow, nur das eigene Fenster). Fotofehler bleiben wie am Mac ein Zusatzbefund.
+- **Dokumente:** Prüfliste B0 neu gefasst. Sie beschreibt die tatsächliche Laufzeitwahl, gibt PowerShell-Pfade an, legt die Prüflaufzeit mit Herstellerhash reproduzierbar an, nennt alle Exitcodes und regelt Sichtprüfung und Rückmeldung. Befunde der Logo-Diagnose in Architektur (Tk-Fallstricke), Funktionen (Grenzen), Grafik-Master (Masterbefunde) und Entwicklungsplan übernommen (LG01–LG04, W01–W04, I8).
+- **Windows-Lauf mit Fensterfotos (18:29, vom Inhaber gestartet):** 50 Fensterfotos und eine echte Dunkelaufnahme; alle 66 Suiten grün. Rot war nur ein einmaliger Absturz des Python-Interpreters in `attributpruefung`, nicht reproduzierbar (0 von 30). Vorbefunde W05–W08 aus den Fotos stehen in der Prüfliste (B1a). [Nachweis](tests/qa-3.33.8/windows_2026-10-05_1829/README.md)
+- **Synchronisationskopien zusammengeführt:** Mit 3.33.8 kamen aus der Windows-Arbeitskopie gekürzte Fassungen von Index, Produktgrenzen, Prüfplan, QA-Bericht, Paketierungs- und Lieferstand-README ins Repository; die vollständigen Fassungen lagen daneben als OneDrive-Konfliktkopien. Je Paar ist jetzt ein Dokument übrig: die vollständige Fassung plus die Windows-Ergänzungen (Nachweisregeln, Kontrollmatrix, Prüfstatus 3.33.7/3.33.8, Windows-Start). Kopien und die wiederaufgetauchte `docs/09_PROJECT_HANDOFF.md` sind gelöscht; tote Sprungmarken wie `#regeln` oder `#grenzen-einzelner-funktionen` führen wieder ans Ziel. [Nachweis](tests/qa-3.33.8/windows_vorbereitung_2026-10-05/README.md)
+
 ## 3.33.8 – Windows-Layout und Prüflaufzeit (05.10.2026)
 
 - **Kopfleiste:** Titelkürzung folgt auch der tatsächlichen Breite seiner Titelzeile. Geänderte Kennzahlen konnten den Titel unter Windows abschneiden, obwohl sich die äußere Kopfbreite nicht änderte.

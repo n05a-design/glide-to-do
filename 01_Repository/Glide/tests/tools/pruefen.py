@@ -452,7 +452,8 @@ def main():
         run.env["PYTHONPATH"] = os.pathsep.join(filter(None, (hintergrund, run.env.get("PYTHONPATH"))))
         run.env["GLIDE_QA_HINTERGRUND"] = "1"
     if args.modus == "voll" and logdir:
-        # Fotos aller Fenster aus test_fenster330 (nur macOS, 29.09.2026).
+        # Fotos aller Fenster aus test_fenster330 (macOS seit 29.09.2026,
+        # Windows seit 05.10.2026); sie bleiben lokal (.gitignore: fenster/).
         run.env["GLIDE_FENSTER_FOTOS"] = str(logdir / "fenster")
     print(f"Glide-Prüflauf ({args.modus}) · Python {sys.version.split()[0]} · {sys.platform}"
           + (" · im Hintergrund" if run.env.get("GLIDE_QA_HINTERGRUND") else ""), flush=True)

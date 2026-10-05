@@ -46,7 +46,7 @@ Reihenfolge der Stufen (Antwort des Inhabers vom 30.09.2026, bestätigt am 01.10
 | ✅ 3.33.0 | T2 gemeinsame Formatsicherung, P09a Tabelle ohne Listenspaltenmessung |
 | ✅ 3.33.1 | Vier Seitenleistenbereiche, Inhaltsgrenzen, neues Logo, Dialoge fertig positioniert einblenden |
 | ✅ 3.33.2 | D12 Startseite „Ruhig“ mit sieben Kacheln, Rest P03 für die Startseite (764 → 507 ms) |
-| ✅ 3.33.3 | G01 deutsche Schnelleingabe mit Feldchips, D10 |
+| ✅ 3.33.3 | G01 = B-01 deutsche Schnelleingabe mit Feldchips, D10 |
 | ✅ 3.33.4 | Wiederholungen in der Schnelleingabe (setzen die Fälligkeit) |
 | ✅ 3.33.5 | G02 Eisenhower als Gruppierung (D13) |
 | ✅ 3.33.6 | D14 „Heute“ und „Demnächst“ |
@@ -86,13 +86,13 @@ Vorher stabile Aktionskennungen statt Menübeschriftungen (Risiko R2: die Befehl
 
 | ID | Befund (Prinzip) | Empfehlung | Stand |
 |---|---|---|---|
-| U01 | Kopfzeile mit acht Symbolknöpfen, zwei Suchen (P3, P5) | ⌕ und ⌘ zu einer Befehlspalette (`Strg/Cmd+O`; `Strg/Cmd+K` bleibt Kalender); Verlauf und Drucken ins Menü; Glocke nur bei Bedarf; Ziel ≤ 4 Symbolknöpfe | ○ |
+| U01 = N03 | Kopfzeile mit acht Symbolknöpfen, zwei Suchen (P3, P5) | ⌕ und ⌘ zu einer Befehlspalette (`Strg/Cmd+O`; `Strg/Cmd+K` bleibt Kalender); Verlauf und Drucken ins Menü; Glocke nur bei Bedarf; Ziel ≤ 4 Symbolknöpfe | ○ |
 | U02 | Dauerhafte Hinweiszeilen (P1, P4) | „?“ klappt Hinweise ein/aus, Zustand gemerkt (D11) | ○ |
 | U03 | „Suche löschen“ auch bei leerer Suche | Löschkreuz nur bei Inhalt, `Esc` leert | ○ |
 | U04 | „Erweitert“/„Hinzufügen“ als Textknöpfe | ◐ Feldchips ✅ 3.33.3; offen: „+“-Knopf, `Shift+Enter` für „Erweitert“ | ◐ |
 | U05 | Startseite überladen | ✅ 3.33.2 (D12); offen: Gismo-Kachel kompakter (Pflegeknöpfe beim Überfahren) | ◐ |
 | U06 | Überlappende Ansichten | ✅ 3.33.6 (D14) | ✅ |
-| U07 | Eingang nicht in der Seitenleiste | Zeile „Eingang (n)“ nur solange er Einträge hat | ○ |
+| U07 = N02 | Eingang nicht in der Seitenleiste | Zeile „Eingang (n)“ nur solange er Einträge hat | ○ |
 | U10 | Kopfzeile kürzt den Titel zugunsten der Kennzahlen | Titel hat Vorrang, Kennzahlen immer in der Unterzeile | ○ |
 | U13 | Bibliothek mit doppelten Wegen | Kachelklick öffnet; Fußleiste „Neu ▾ · Importieren ▾ · Archiv (n) · Kartengröße“ | ○ |
 | U14 | Menüeinträge am falschen Ort, drei Sicherungsbegriffe | Papierkorb leeren → Bearbeiten; Mitteilung testen → Einstellungen; Sicherung vereinheitlichen | ○ |
@@ -118,6 +118,19 @@ Vorher stabile Aktionskennungen statt Menübeschriftungen (Risiko R2: die Befehl
 | U20 | Leerzustand ohne doppelten Anlegen-Knopf | ○ |
 | DOK2 | Code-Kommentar AB06 („Benachrichtigungen … Nicht-Ziel“) nachführen; Mindestversion Python/Tk festlegen und beim Start prüfen (AB08) | ○ nächster Produktionsschnitt (AB03–AB05, AB07 ✅) |
 | – | Kommentare in `tests/tools/pruefen.py` und `tests/tools/hintergrund/sitecustomize.py` versprechen noch Tastaturabschirmung | ○ nächster Werkzeugschnitt |
+| LG01 | Logo-Rückfall unter Tk 8.6 geglättet: Ein Tk-freies Modul rastert die Umrisse aus `svg_geometry.outline` mit Flächenanteil je Pixel und übergibt ein RGBA-PNG (Weg B der [Diagnose](../01_Repository/Glide/docs/diagnosen/LOGO_KANTENGLAETTUNG.md)) | ○ Auswahl I8 |
+| LG02 | App-Symbol in 16, 32, 64 und 256 px vorrechnen (`baue_symbole.py`), `icon_photos` lädt sie unter Tk 8.6 direkt; spart rund 0,5 s beim Start. Unbenutztes `glide-logo.png` und Modulkopf von `logo.py` berichtigen (Wege C und F) | ○ Auswahl I8; nur in einer Produktionsrunde |
+| LG03 | `test_logo330` verlangt für beide Wege Zwischentöne an der Logokante, zum Beispiel mindestens 20 Farbwerte bei 54 px (Weg D) | ○ Auswahl I8 |
+| LG04 | Logo-Master überarbeiten: Rundungen tangential an die geneigten Geraden, Kleinstabweichungen, Kurzsegment, optional Kleingrößenfassung (Weg E; [Befunde](../20_Grafik_Master/README.md#befunde-am-logo-master-05102026-entscheidung-beim-inhaber)) | ○ Gestaltung beim Inhaber |
+| W01 | Seitenleistentitel unter Windows/Tk 9 rechts um etwa ein Zeichen angeschnitten, ohne „…“ (Aufnahme 05.10.2026). Die Breitenrechnung in `sidebar_available_text_width` mit dem tatsächlich gezeichneten Platz der Treeview-Spalte abgleichen | ○ in der Sichtprüfung bestätigen (Prüfliste B1), dann Produktionsschnitt |
+| W02 | `test_ui_updates` (Dunkelschleife) und `test_ui_polish36` setzen `theme_name` direkt; seit das Design die einzige Quelle ist, wirkt das nicht, die Dunkelfälle laufen hell. Auf `set_design` umstellen und auf Mac und Windows nachprüfen | ○ nächster Werkzeugschnitt; `releasedaten.py` ✅ 05.10.2026 |
+| W03 | Zeilenenden in der Wurzel festlegen (`.gitattributes` mit `text=auto`, `-text` für `vendor` und Schriften auch in `07_Python-Versionen`). Bisher regelt nur `01_Repository/Glide` sie; Dateien aus der Windows-Arbeitskopie kamen beim Übernehmen in einen Linux-Klon mit CRLF ins Repository (3.33.8, vor dem Push bereinigt) | ○ nächster Ablageschnitt |
+| W05 | Dialoge „Für KI bereitstellen“ (1705 px) und „Tabellenspalten“ (1317 px) unter Windows sehr breit, Knopfreihe links statt wie sonst rechts (Aufnahme 05.10.2026) | ○ Sichtprüfung B1a, dann Produktionsschnitt |
+| W06 | Auf 13 von 22 Fotos von „Neue Liste“/„Neuer Ordner“ fehlen Überschrift und Feldbeschriftungen (weiße Flächen); Aufnahmezeitpunkt oder echte Zeichenlücke der Leinwandbeschriftungen | ○ Sichtprüfung B1a; bei Bestätigung Produktionsschnitt, sonst Fotozeitpunkt in `test_fenster330` nach dem verzögerten Zeichnen |
+| W07 | „PNG auf 128 × 128 einpassen“ nach „Ganzes Bild zeigen“: Hinweistext doppelt und überlagert | ○ Sichtprüfung B1a |
+| W08 | „Pixelsymbol“: 16 × 16-Raster nur rund 60 px groß in großer leerer Fläche | ○ Sichtprüfung B1a |
+| W09 | Einmaliger Absturz von Python 3.14.8 unter Windows in `attributpruefung` („Executing a cache“, 0xC0000409); 0 von 30 Wiederholungen | ◇ beobachten; bei Wiederholung mit Speicherauszug an CPython melden |
+| W04 | Wächter in der CI-Grundstufe gegen Synchronisationskopien (Dateiname mit `-<Gerätename>` neben einem gleichnamigen Original) und gegen stark geschrumpfte Hauptdokumente ohne Vermerk | ○ nächster Werkzeugschnitt |
 
 3.33.7 ist für den ersten G14-Schnitt verwendet. G29/G31/G32, N07 und N08 bleiben Folgepakete ohne fest zugesagte Zielversion.
 
@@ -239,7 +252,7 @@ Reservierungen, keine Termine. Die beauftragte Kernfolge bleibt: Aktionskennunge
 | G24 = F-01 | KI-Austausch Stufe 2 über Dokumente: Kontextpaket, Markdown/Felder, Änderungsvorschläge mit Feldvergleich (Q3) | ○ |
 | G21 = F-02 | Begrenzter Import (zuerst eine Quelle: Notion-Markdown/ZIP oder Todoist-CSV – Inhaberentscheidung) mit Verlustbericht | ○ |
 | F-03 | Zwei Sicherungsstände lesbar vergleichen, ohne Schreibzugriff | ○ |
-| G26 = H-03 | Paket mit eingebettetem Python 3.14 + Tk 9 je Plattform (D15); Bauwerkzeug als eigene Abhängigkeitsentscheidung (Vorschlag PyInstaller ≥ 6.22) | ○ |
+| G26 = H-03 = N11 | Paket mit eingebettetem Python 3.14 + Tk 9 je Plattform (D15); Bauwerkzeug als eigene Abhängigkeitsentscheidung (Vorschlag PyInstaller ≥ 6.22) | ○ |
 | – | Windows-/Linux-Abnahme, Linux-App (AppImage/Flatpak später) | ○ Inhaber |
 | H-01 | Kontrollmatrix echter Bedienwege fortführen | laufend |
 
@@ -247,7 +260,7 @@ Reservierungen, keine Termine. Die beauftragte Kernfolge bleibt: Aktionskennunge
 
 | ID | Thema | Marke | Grund / Auslöser |
 |---|---|---|---|
-| N12 = U23 | Screenreader über Tk 9.1 `tk accessible` | ◇ | Tk 9.1.0 ist erschienen (29.09.2026); Voraussetzung G26 und eigene Abnahme |
+| N12 = U23 | Screenreader und beschriftete Canvas-Bedienung über Tk 9.1 `tk accessible` | ◇ | Tk 9.1.0 ist erschienen (29.09.2026); Voraussetzung G26 und eigene Abnahme |
 | N13 | Seitenversionen wiederherstellen | ◇ | nach F-03 |
 | – | SQLite als Hauptspeicher | ◇ | nur bei realen Beständen über 20.000 Punkten (D16) |
 | G25, Mobile | Toolkit-Probe, iPhone/iPad | ◇ | D03 aufheben |
@@ -317,8 +330,9 @@ Verbindlich ist die Messung auf dem Referenz-Mac mit Aufwärmen, Median und p95;
 | I3 | Apple-Developer-Konto, Windows-Code-Signing-Zertifikat | ○ |
 | I4 | Markenprüfung „Glide“ | ○ Fachanwalt für Markenrecht |
 | I5 | Python 3.14.7 auf dem Mac installieren | ○ braucht das Passwort des Inhabers |
-| I6 | Windows-Vollprüfung und manuelle Prüfsitzungen | ◐ Windows-Gesamtprüfung 3.33.8 grün (66 Integrationssuiten, 75 Unit-Tests, Python 3.14.8/Tk 9.0.4); menschliche Abnahme ○ [Prüfliste](Glide_Manuelle_Pruefung.md) |
+| I6 | Windows-Vollprüfung und manuelle Prüfsitzungen | ◐ Windows-Gesamtprüfung 3.33.8 grün (66 Integrationssuiten, 75 Unit-Tests, Python 3.14.8/Tk 9.0.4); Lauf 18:29 mit Fensterfotos: alle Suiten grün, ein einmaliger Interpreterabsturz (W09); Sichtprüfung B1a und menschliche Abnahme B2–B13, C ○ [Prüfliste](Glide_Manuelle_Pruefung.md) |
 | – | Erste Importquelle für G21, Bauwerkzeug für G26 | ○ erst in Stufe 4 |
+| I8 | Lösungsweg für das Logo unter Tk 8.6: Rückfall glätten (LG01), App-Symbol vorrechnen (LG02), Prüfung schärfen (LG03), Master überarbeiten (LG04); Weg A (Python 3.14/Tk 9) gilt bisher nur für die Windows-Prüflaufzeit | ○ [Diagnose, Abschnitt 7](../01_Repository/Glide/docs/diagnosen/LOGO_KANTENGLAETTUNG.md#7-lösungswege) |
 | I7 | Referenzentwürfe für „Heute“, Liste und Seite (Affinity) als Gestaltungsrichtung für OB02/OB03 | ○ vor Welle 2 (§4.3) |
 | – | Ausbauprogramm: Vorgabe des Hinweises zu Tagesbeginn/-abschluss (AU03), dezente Bewegung (OB04), Termine als belegte Zeit (AU07, berührt eine Produktgrenze) | ○ wenn das jeweilige Paket ansteht |
 

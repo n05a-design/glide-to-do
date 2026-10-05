@@ -6,7 +6,7 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 
 ## 1. Aufbau
 
-- **Laufzeit:** Python 3.14 mit Tk 9 ist die Referenz (macOS). Python 3.12/3.13 mit Tk 8.6 starten, sind aber eingeschränkt (keine `nsimage`-Vorschauen, keine Systemmitteilungen über `tk sysnotify`); eine Mindestversion prüft der Code noch nicht (Plan: DOK2).
+- **Laufzeit:** Python 3.14 mit Tk 9 ist die Referenz (macOS; die Windows-Prüfung läuft seit 05.10.2026 mit Python 3.14.8/Tk 9.0.4). Python 3.12/3.13 mit Tk 8.6 starten, sind aber eingeschränkt: keine `nsimage`- und SVG-Vorschauen, keine Systemmitteilungen über `tk sysnotify`, Logo nur als ungeglättete Fläche, App-Symbol ungefiltert verkleinert. Eine Mindestversion prüft der Code noch nicht (Plan: DOK2).
 - **Kanonischer Quellbaum:** `src/glide/`. `app.pyw` (rund 54.500 Zeilen) enthält die Klasse `ListApp`, die Daten, Ansichten und Dialoge koordiniert. Seit D17 entsteht jede neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests unter `tests/unit`; `ListApp` ruft sie auf.
 - **Startbare Kopie:** `07_Python-Versionen` (bytegleich zu `src/glide`, `glide_start.py` heißt dort `Schnellstart.pyw`) und das macOS-Entwicklungsbundle `build/macos/Glide.app` (lokal, nicht versioniert). Beide entstehen nur in einer Produktionsrunde über `scripts/pflege/abgleich_07.py` und `packaging/macos/baue_app.py` mit SHA-256-Abgleich.
 - **Keine Laufzeitabhängigkeit** außer der Standardbibliothek. Einzige mitgelieferte Bibliothek: tkinterdnd2 unter `src/glide/vendor` (optional, beim ersten Ziehen aus Finder/Explorer geladen; [Entscheidung](decisions/ABHAENGIGKEIT_TKDND.md)).
@@ -126,6 +126,12 @@ Ereignisgrenzen: `item_change` → Speichern/Verlauf/Ansicht; `sidebar_change` �
 - **Umfluss:** `lmargin1`/`lmargin2`/`rmargin` wirken je Anzeigezeile nach dem Tag ihres ersten Zeichens. Anzeigezeilen misst `count -update -ypixels`; `dlineinfo` liefert für unsichtbare Zeilen nichts.
 - **Formate beim Tippen:** Eingefügter Text erbt nur Formate beider Nachbarzeichen; Zeilenformate schließen den Umbruch ein, `spread_line_tags` überträgt sie. Eingebettete Fenster zählen als ein Index, fehlen aber in `get()`.
 
+### Zeichnen und Bilder
+
+- **Die Leinwand glättet unter Windows und X11 nicht:** Flächen, Linien und Bögen (`create_polygon`, `create_line`, `create_arc`) rastert Tk dort ohne Kantenglättung, auch unter Tk 9; nur macOS glättet. Geneigte Kanten werden treppig. Glatte Formen entstehen nur als Bild: SVG über Tk 9 (`logo_photo`) oder ein vorgerechnetes PNG mit Alphakanal. Gefunden am Logo-Rückfall unter Tk 8.6 ([Diagnose](diagnosen/LOGO_KANTENGLAETTUNG.md)).
+- **`PhotoImage.subsample` und `zoom` filtern nicht:** Sie übernehmen jedes n-te Pixel bzw. vervielfachen es. Verkleinerte Symbole in Zielgröße vorrechnen oder unter Tk 9 das SVG in Zielgröße laden.
+- **Rückfallwege brauchen ein Qualitätskriterium:** Ein Test, der beim Rückfall nur Elementtyp, Farbe und Rahmen prüft, bleibt grün, während die Darstellung unbrauchbar ist.
+
 ### Daten und Objekte
 
 - **Detailbereich:** übergibt `item_change` bewusst `()` und ruft `change.mark()`, sonst springt die Auswahl zurück. Wiederholungsregel und Beziehungen teilen Maske und Bereich (`read_repeat_rule`, `add_relation_targets`).
@@ -141,5 +147,6 @@ Ereignisgrenzen: `item_change` → Speichern/Verlauf/Ansicht; `sidebar_change` �
 - Neue modale Dialoge auf bestehenden Wegen lassen ältere Tests warten: `run_modal` im Test ersetzen und den Knopf drücken.
 - `root.update()` in einer schnellen Schleife lässt `after`-Aufträge liegen; zwischen den Runden kurz Zeit vergehen lassen. Kurze Animationen (Fahne 0,5 s) direkt nach dem Auslösen prüfen.
 - In Messwerkzeugen nur erwartete Tk-Fehler abfangen; ein abgefangener `AttributeError` lieferte einmal eine falsche Null.
-- Fensteraufnahmen nur vom eigenen Fenster: `screencapture -l <Fensternummer>`, nie `-R`.
+- Fensteraufnahmen nur vom eigenen Fenster: unter macOS `screencapture -l <Fensternummer>`, nie `-R`; unter Windows `PrintWindow` (`save_windows_screenshot` in `tests/tools/releasedaten.py`).
+- **Design statt `theme_name` setzen:** `apply_theme` leitet `theme_name` aus dem Design ab (`_compose_theme`); eine direkte Zuweisung wirkt nicht. Tests und Erzeuger wechseln mit `set_design(key, apply_now=False)` und danach `apply_theme()`. Die Windows-Dunkelaufnahme war deshalb bis 05.10.2026 eine zweite helle Aufnahme; `test_ui_updates` und `test_ui_polish36` enthalten die wirkungslose Zuweisung noch (Entwicklungsplan W02).
 - Prüffenster laufen unter macOS im Hintergrund (`tests/tools/hintergrund/sitecustomize.py`: Aktivierungsrichtlinie Zubehör). Das schirmt die Maus ab, **nicht die Tastatur** – während einer Vollprüfung nicht tippen und den Mac nicht sperren.
