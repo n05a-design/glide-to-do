@@ -1,6 +1,6 @@
 # Architektur – Glide
 
-Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, Performance-Regeln und die teuer gelernten Tk-Fallstricke. Zusammengeführt aus Architektur, Projektübergabe, Entwicklungsnotizen und den technischen Teilen der Funktionsverträge 45–79 (03.10.2026); die Vorfassungen trägt Git. Verhalten der Funktionen: [Funktionen](20_FUNKTIONEN.md). Datenformat: [Daten und Migration](06_DATA_BACKUP_MIGRATION.md).
 
@@ -30,6 +30,7 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 | `capture_parser.py` | Deutsche Schnelleingabe (G01): Bearbeitungstag, Fälligkeit, Uhrzeit, Aufwand, Wichtigkeit, Labels, „/“-Befehle, Wiederholungen; jede Erkennung mit Textstelle zum Zurücknehmen | 3.33.3 |
 | `eisenhower.py` | Quadranten „Dringlichkeit × Wichtigkeit“ und Änderung beim Ablegen (`DRINGEND_TAGE`, `WICHTIG_AB`) | 3.33.5 |
 | `today_view.py` | Aufteilung von „Heute“ ohne Dubletten, nächste Aufgabe, Zählung | 3.33.6 |
+| `content_search.py` | Inhaltssuche, Titelrang und Ausschnitt ohne Tk, I/O oder Index | 3.33.7 |
 
 `drawing_prototype.pyw` ist die isolierte Bedienprobe der Zeichenfläche von 2026-09-24; sie gehört nicht zur App und nicht zu den Lieferwegen. Ein neues Modul muss in `packaging/macos/baue_app.py`, `scripts/pflege/abgleich_07.py`, `src/glide/README.md`, `packaging/README.md`, `07_Python-Versionen/README.md` und hier stehen; die Standprüfung (R10) meldet Lücken.
 
@@ -88,7 +89,7 @@ Gemessen wird unprofiliert mit gleicher Fixture, Aufwärmlauf, Median und p95 (`
 - **Canvas-Widgets** binden `<Configure>` über `bind_resize` (zeichnen nur bei Größenänderung). Bilder nur in sichtbaren Teilen zeichnen.
 - **Aktionsleisten** (`refresh_page_actions`) überspringen den Aufbau nur bei identischen Specs einschließlich Befehl; ersetzte Configure-Bindungen werden abgemeldet.
 - **Schriften** je Tk-Interpreter zwischengespeichert (`app_font`), `apply_ui_font` invalidiert.
-- **Formatsicherung** merkt Dateistand und Formatnummer (`schema_backups.py`); kein erneutes Parsen nach dem Laden.
+- **Formatsicherung** merkt Dateistand und Formatnummer (`schema_backups.py`); kein erneuter JSON-Parse nach dem Laden. Unter Windows gehört der vollständige SHA-256-Inhalt zur Signatur, weil gleich große In-place-Schreibvorgänge selbst native ChangeTime unverändert lassen können. POSIX behält die Metadatensignatur mit ctime. Der zusätzliche Windows-Leselauf bleibt Bestandteil der Speicherwegmessung P08.
 - **Live-Suche** fasst Änderungen mit `after_idle` je Ereigniszyklus zusammen; Rich-Text-Autosave wartet 400 ms und wird vor Seitenwechsel und Ausgabe geleert.
 - Keine pauschale Ersetzung von Datenschlüsseln oder `theme[...]`-Zugriffen durch Variablen; das bringt keinen belegten Gewinn.
 
@@ -133,6 +134,8 @@ Ereignisgrenzen: `item_change` → Speichern/Verlauf/Ansicht; `sidebar_change` �
 - **Bytecode:** `app.pyw` setzt `sys.pycache_prefix` (`bytecode_cache_dir`) vor dem Import der Module.
 
 ### Tests
+
+- `DrawingEditor` beendet beim eigenen `<Destroy>` die Aufträge für Kontextzeilen, Größenanpassung, Vorschau und Speichern. Vor dem Seitenwechsel überträgt `flush_drawing_editor` offene Pixel; der Abbaucallback speichert nicht erneut. Widgetabbau allein löscht die Tcl-Timer nicht. `test_editor3338` prüft die Timerkennungen und den Dateistand bei acht Wechseln.
 
 - `event_generate("<Return>")` erreicht ein Feld nur mit Tk-Fokus. Hintergrundläufe ersetzen `focus_force()` durch `focus_set()`; echter OS-Fokus bleibt manuelle Plattformprüfung.
 - Neue modale Dialoge auf bestehenden Wegen lassen ältere Tests warten: `run_modal` im Test ersetzen und den Knopf drücken.

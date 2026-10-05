@@ -46,7 +46,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features329-") as folder:
         # ================================================================
         # Vertrag und Typregistrierung
         # ================================================================
-        assert mod.APP_VERSION == "3.33.6"
+        assert mod.APP_VERSION == "3.33.8"
         assert app.DATA_SCHEMA_VERSION == 20
         # Seit dem 26.09.2026 kommt die Seitenart „Seite“ hinzu (test_seiten330).
         # 27.09.2026: dazu die Galerie (test_aufraeumen330).

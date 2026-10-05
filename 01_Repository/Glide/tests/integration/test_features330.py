@@ -2069,28 +2069,34 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         root.update()
         assert app.plan_grid_frame.winfo_manager() == "pack"
         # Erweiterung: Unter 900 px steht das Raster statt der Liste.
+        def resize_plan_window(width):
+            height = max(700, root.winfo_height())
+            root.geometry(f"{width}x{height}")
+            # Windows übernimmt WM-Größenänderungen asynchron. Erst die
+            # tatsächliche Größe prüfen, dann den Layoutvertrag testen.
+            for _attempt in range(25):
+                root.update()
+                if root.winfo_width() == width and root.winfo_height() == height:
+                    break
+                root.after(20, root.quit)
+                root.mainloop()
+            assert (root.winfo_width(), root.winfo_height()) == (width, height), root.geometry()
+            app.sync_plan_day_grid()
+            root.update()
+
         breite_vorher = root.winfo_width()
-        root.geometry(f"860x{max(700, root.winfo_height())}")
-        root.update()
-        app.sync_plan_day_grid()
-        root.update()
+        resize_plan_window(860)
         assert app.plan_grid_replaces_list()
         assert app.plan_grid_frame.winfo_manager() == "pack" and not app.list_frame.winfo_manager()
-        root.geometry(f"{max(1280, breite_vorher)}x{max(700, root.winfo_height())}")
-        root.update()
-        app.sync_plan_day_grid()
-        root.update()
+        resize_plan_window(max(1280, breite_vorher))
         assert not app.plan_grid_replaces_list()
         assert app.list_frame.winfo_manager() == "pack" and app.plan_grid_frame.winfo_manager() == "pack"
         # Ein Wechsel der Ansicht holt die Liste auch aus dem schmalen Zustand zurück.
-        root.geometry(f"860x{max(700, root.winfo_height())}")
-        root.update()
-        app.sync_plan_day_grid()
+        resize_plan_window(860)
         app.set_active_list(zeitliste["id"])
         root.update()
         assert app.list_frame.winfo_manager() == "pack" and app.plan_grid_frame.winfo_manager() == ""
-        root.geometry(f"{max(1280, breite_vorher)}x{max(700, root.winfo_height())}")
-        root.update()
+        resize_plan_window(max(1280, breite_vorher))
         app.set_plan_day_view()
         root.update()
         app.toggle_plan_day_grid()
@@ -2287,4 +2293,3 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
             root.destroy()
         except Exception:
             pass
-

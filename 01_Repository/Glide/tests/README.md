@@ -1,6 +1,6 @@
 # Prüfungen für Glide
 
-Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · 64 Suiten aus `pruefen.py` und fünf Analysen
+Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · 66 Suiten aus `pruefen.py` und fünf Analysen
 
 Alle App-Tests setzen vor dem App-Import einen temporären `GLIDE_DATA_DIR`; echte Nutzerdaten sind ausgeschlossen. Was wann läuft, welche Regeln gelten und welche Suite welchen Bereich abdeckt, steht im [Prüfplan](../docs/05_QA_TESTPLAN.md); Ergebnisse im [QA-Bericht](../docs/07_QA_BERICHT.md).
 
@@ -8,7 +8,7 @@ Alle App-Tests setzen vor dem App-Import einen temporären `GLIDE_DATA_DIR`; ech
 
 | Zweck | Aufruf |
 |---|---|
-| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.6/<Name> --timeout 900` |
+| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.8/<Name> --timeout 900` |
 | Schnellprüfung | `python3 -B tests/tools/pruefen.py` |
 | CI-Grundstufe (wie GitHub) | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` |
 | Windows | `tests/tools/windows_vollpruefung.cmd` (Anleitung in der [manuellen Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md)) |
@@ -17,13 +17,13 @@ Alle App-Tests setzen vor dem App-Import einen temporären `GLIDE_DATA_DIR`; ech
 | Werkzeugtests | `python3 -B -m unittest discover -s tests/tools -p "test_*.py"` |
 | Nur Stand und Links | `python3 -B tests/tools/standpruefung.py` |
 
-Unter Windows heißt der Aufruf `python`; `--timeout 900` ist dort mit Virenschutz und synchronisiertem Ordner realistischer als die Vorgabe von 300 Sekunden je Suite. Kein `pytest`: Die Suiten sind ausführbare Skripte, die beim Import ein Tk-Fenster öffnen.
+Unter Windows die geprüfte Python-3.14-/Tk-9-Laufzeit oder `windows_vollpruefung.ps1 -PythonExecutable <Pfad>` verwenden; `--timeout 900` ist dort mit Virenschutz und synchronisiertem Ordner realistischer als die Vorgabe von 300 Sekunden je Suite. Kein `pytest`: Die Suiten sind ausführbare Skripte, die beim Import ein Tk-Fenster öffnen.
 
 ## Aufbau
 
 | Ordner | Inhalt |
 |---|---|
-| `integration/` | 64 Integrationssuiten; Liste in `SUITEN` von `tools/pruefen.py` |
+| `integration/` | 66 Integrationssuiten; Liste in `SUITEN` von `tools/pruefen.py` |
 | `unit/` | Unit-Tests der Tk-freien Fachmodule (D17) |
 | `tools/` | Prüfstand, Analysen, Erzeuger für Beispiel-, Release-, Rundgang- und Showcase-Daten, CI-Grundstufe, Ablagegröße ([Übersicht](tools/README.md)) |
 | `fixtures/` | Referenzformate 2 und 4–20, Beispiel- und Releasedaten, Rundgang, Showcase ([Übersicht](fixtures/README.md)) |

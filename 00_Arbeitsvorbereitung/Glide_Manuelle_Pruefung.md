@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · noch nicht ausgeführt
+Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · manuelle Sitzungen offen; B1 automatisch geprüft
 
 Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt am 03.10.2026 aus der fortgeschriebenen Prüfliste (Ursprung 3.30.0, enthielt die Listen 3.28 und 3.29) und der Windows-Anleitung; die Zuordnung der 201 Ausgangspunkte trägt Git. Automatisch geprüft ist die Logik ([Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)); offen bleiben Handgefühl, Plattformen und fremde Programme.
 
@@ -185,7 +185,7 @@ Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt a
 
 **Vorbereitung (einmalig):**
 
-1. **Python 3.14** von [python.org](https://www.python.org/downloads/windows/)
+1. **Python 3.14/Tk 9 bereitstellen:** Auf dem aktuellen Windows-Gerät liegt die separate verifizierte Laufzeit unter `%USERPROFILE%/.cache/glide-qa/python-3.14.8/runtime`; der Prüfstarter bevorzugt sie. Alternativ **Python 3.14** von [python.org](https://www.python.org/downloads/windows/)
    installieren, mit der Option „tcl/tk and IDLE“ (Standard) und dem
    Python-Starter `py`. Die verwendete Python-/Tk-Kombination ist vor Ort zu prüfen; Grundlage ist Python 3.14/Tk 9 (E-03). Am 28.09.2026 war auf dem PC nur Python 3.13 mit
    Tk 8.6 installiert; damit prüft der Lauf nur den Rückfallweg (Logo als
@@ -232,8 +232,7 @@ Layouts und reagieren auf Last.
 
 Falls der Starter eine andere Laufzeit wählt, die Vollprüfung aus dem Repository ausdrücklich mit `py -3.14 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-<Version>/windows_manuell --timeout 900` starten (`<Version>` durch VERSION ersetzen). Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Windows-Nachweis wird aus dem Mac-Lauf abgeleitet.
 
-- [ ] **B1 Vollprüfung:** nach der
-      Anleitung oben (B0) mit Python 3.14.
+- [x] **B1 Vollprüfung (automatisch, 05.10.2026):** 3.33.8 mit Python 3.14.8/Tk 9.0.4, 66 Integrationssuiten und 75 Unit-Tests grün. [Ergebnis](../01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05/voll_2/ergebnis.json). B2–B12 bleiben physische Inhaberprüfungen.
 - [ ] **B2 Windows-Bestand (Format 17, Inhaberprobe):** Eine unveränderte
       Kopie des eigenen Bestands in einer getrennten Testablage mit
       `GLIDE_DATA_DIR` und aktueller Fassung aus `07_Python-Versionen` öffnen.
@@ -290,3 +289,5 @@ Falls der Starter eine andere Laufzeit wählt, die Vollprüfung aus dem Reposito
 - Signatur, Notarisierung und Installer.
 - Markenprüfung.
 - Store-Freigabe.
+
+Windows-Prüflaufzeit seit 05.10.2026: separate Python-3.14.8-/Tk-9.0.4-Ablage unter `%USERPROFILE%/.cache/glide-qa`. Der Vollprüfungsstarter bevorzugt sie und unterstützt `-PythonExecutable <Pfad>`. Die Standardinstallation bleibt unverändert; die automatische Prüfung ist keine abgehakte Sitzung B. Aktuelles Ergebnis im QA-Bericht.

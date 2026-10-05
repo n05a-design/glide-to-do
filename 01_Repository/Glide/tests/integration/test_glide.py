@@ -61,6 +61,15 @@ def pump_tk(root, milliseconds):
     root.update_idletasks()
 
 
+def close_test_app(app):
+    """Löst Timer des isolierten Interpreters vor einem Tk-Neustart."""
+    app.cancel_pending_callbacks()
+    app.release_data_lock()
+    for job in app.root.tk.call("after", "info"):
+        app.root.tk.call("after", "cancel", job)
+    app.root.destroy()
+
+
 with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     # GLIDE_DATA_DIR isoliert den Nutzerdatenordner auf allen Plattformen.
     # APPDATA allein wirkt nur unter Windows; unter macOS und Linux würde der
@@ -90,7 +99,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     app = mod.ListApp(root)
     root.update_idletasks()
 
-    assert mod.APP_VERSION == "3.33.6"
+    assert mod.APP_VERSION == "3.33.8"
     assert (REPOSITORY_ROOT / "VERSION").read_text(encoding="utf-8").strip() == mod.APP_VERSION
     assert len([entry for entry in app.lists if entry.get("system_role") == "inbox"]) == 1
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
@@ -354,8 +363,12 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
 
     # Der Windows/NumLock-Fehler darf keine Command-Bindings mehr registrieren.
     if os.name == "nt":
-        assert not root.bind("<Command-f>")
-        assert not root.bind("<Command-a>")
+        # Tk 9 normalisiert Command unter Windows zu Control. Die Abfrage
+        # einer Alias-Sequenz liefert daher das erlaubte Control-Binding.
+        assert not any("Command" in sequence for sequence in root.bind())
+        if mod.tk.TkVersion < 9:
+            assert not root.bind("<Command-f>")
+            assert not root.bind("<Command-a>")
         assert root.bind("<Control-f>")
         assert len(app.custom_menu_buttons) == 4
         assert isinstance(app.custom_menu_buttons[0], mod.RoundedButton)
@@ -397,15 +410,22 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
         system_bbox = app.system_listbox.bbox(erste_systemzeile)
         assert system_bbox
         system_mid_y = system_bbox[1] + system_bbox[3] // 2
-        system_text_x = next(
-            x
-            for x in range(app.system_listbox.winfo_width())
-            if app.system_listbox.identify_element(x, system_mid_y) == "text"
-            and app.system_listbox.identify_column(x) == "#2"
-        )
-        assert abs(
-            app.system_listbox.winfo_rootx() + system_text_x - app.sidebar_title.winfo_rootx()
-        ) <= 1, (system_text_x, app.system_listbox.winfo_rootx(), app.sidebar_title.winfo_rootx())
+        # Die Textkante aus der benannten Titelzelle messen.
+        title_bbox = app.system_listbox.bbox(erste_systemzeile, "title")
+        assert str(app.system_listbox.column("title", "anchor")) == "w"
+        heading_offset = app.sidebar_title.winfo_rootx() - app.system_listbox.winfo_rootx()
+        if tuple(map(int, root.tk.call("package", "provide", "Tk").split(".")[:2])) < (9, 0):
+            system_text_x = next(
+                x
+                for x in range(title_bbox[0], title_bbox[0] + title_bbox[2])
+                if app.system_listbox.identify_element(x, system_mid_y) == "text"
+            )
+            assert abs(system_text_x - heading_offset) <= 1
+        else:
+            # Tk 9 identifiziert das text-Element mit einer anderen Zellfläche.
+            # Die benannte Titelzelle bleibt die belastbare Layoutgrenze:
+            # linksbündig, Überschrift innerhalb ihres linken Innenabstands.
+            assert 0 <= heading_offset - title_bbox[0] <= 8, (heading_offset, title_bbox)
         # Seit 2.8 trennt ausschließlich Abstand die beiden Bäume; der
         # frühere Rahmen system_box ist kein Bestandteil der Oberfläche mehr.
         assert not hasattr(app, "sidebar_separator")
@@ -1379,18 +1399,47 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     root.geometry("1000x800")
     root.update_idletasks()
 
-    # Ein sehr langer Listentitel darf Design-Umschalter und Fortschrittszeile
-    # nicht aus dem Fenster schieben.
+    # Ein sehr langer Listentitel darf Einstellungen und Fortschrittszeile
+    # nicht aus dem Fenster schieben. Bei minimaler Kopfbreite sind die
+    # Einstellungen seit 3.30 über den sichtbaren Überlauf erreichbar.
     previous_title = app.app_title
     app.app_title = "Sehr langer Listentitel " * 8
     app.update_header_title()
     root.update_idletasks()
-    assert app.settings_button.winfo_ismapped()
+    root.update()
+    app.sync_header_density()
+    root.update_idletasks()
+    minimal_header = app.header_frame.winfo_width() < app.HEADER_DENSITY_COMPACT
+    assert bool(app.settings_button.winfo_ismapped()) == (not minimal_header)
+    assert bool(app.header_overflow_button.winfo_ismapped()) == minimal_header
+    settings_access = app.header_overflow_button if minimal_header else app.settings_button
     assert app.stats_label.winfo_ismapped()
     header_right = app.header_frame.winfo_rootx() + app.header_frame.winfo_width()
-    theme_right = app.settings_button.winfo_rootx() + app.settings_button.winfo_width()
+    theme_right = settings_access.winfo_rootx() + settings_access.winfo_width()
     assert theme_right <= header_right, (theme_right, header_right)
     assert app.title_label.cget("text").endswith("\u2026")
+
+    # Das echte Überlaufmenü muss die Einstellungen auch auslösen können.
+    # Nur das native Popup wird unterdrückt, damit der Test nicht blockiert.
+    overflow_menu = app._new_themed_popup_menu()
+    saved_menu_factory = app._new_themed_popup_menu
+    saved_settings_dialog = app.show_settings_dialog
+    settings_opened = []
+    overflow_menu.tk_popup = lambda *args: None
+    app._new_themed_popup_menu = lambda: overflow_menu
+    app.show_settings_dialog = lambda: settings_opened.append(True)
+    try:
+        app.show_header_overflow_menu()
+        settings_index = next(index for index in range(overflow_menu.index("end") + 1)
+                              if overflow_menu.type(index) == "command"
+                              and overflow_menu.entrycget(index, "label") == "Einstellungen …")
+        overflow_menu.invoke(settings_index)
+        root.update()  # Menübefehle laufen seit 3.32.0 im nächsten Leerlauf.
+        assert settings_opened == [True]
+    finally:
+        app._new_themed_popup_menu = saved_menu_factory
+        app.show_settings_dialog = saved_settings_dialog
+        overflow_menu.destroy()
     app.app_title = previous_title
     app.update_header_title()
 
@@ -3437,7 +3486,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
 
     app.cancel_pending_callbacks()
     assert app._autosave_id is None
-    root.destroy()
+    close_test_app(app)
     # Strikte Backupprüfung weist fremde oder unsichere Dokumente ab.
     for invalid in ({}, {"version": 4, "folders": [], "lists": "falsch"}):
         try:
@@ -3500,7 +3549,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     assert legacy_app.get_filter_mode() == "all", legacy_app.get_filter_mode()
     assert legacy_app.hide_done_var.get() is False
     assert not hasattr(legacy_app, "show_done_only_var")
-    legacy_root.destroy()
+    close_test_app(legacy_app)
 
     print(
         f"Glide v{mod.APP_VERSION} Kern-, Backup-, UI-, Ordner-, Label-, Chip-, Art-, Papierkorb- "

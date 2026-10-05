@@ -77,6 +77,9 @@ with tempfile.TemporaryDirectory(prefix="glide-kompression-") as ordner:
         liste = next(entry for entry in app.lists if len(entry.get("items", [])) > 5)
         liste["note"] = "Kurz und klar"
         app.set_active_list(liste["id"])
+        # Sechs Kennzahlen plus Beschreibung brauchen mit den nativen
+        # Windows-Schriftmetriken mehr Platz als die bisherige Mac-Breite.
+        root.geometry("1600x860+0+30")
         ruhe()
         assert app.header_note_text() == "Kurz und klar"
         assert not hasattr(app, "note_preview_label"), "keine eigene Beschreibungszeile"

@@ -1,8 +1,10 @@
 # Arbeitsrichtung, Entscheidungen und Abnahme
 
-Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20
+Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20
 
 Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Entscheidungsvorlage vom 01.10.2026 und den Entscheidungslisten vom 25.–30.09.2026 zusammengeführt; deren Wortlaut trägt Git. Aufgabenstand und Reihenfolge: [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Technische Regeln: [Architektur](02_ARCHITECTURE.md).
+
+**Auftrag 05.10.2026:** Zukunftsperspektive, Dokumentation und Konkurrenzanalyse gründlich einbeziehen, nächste Schritte planen und mit Features beginnen. Erster begrenzter Schnitt ist die Inhaltssuche G14 im vorhandenen Strg/Cmd+O-Weg sowie die Windows-Formatsicherung. Mit 3.33.8 sind Windows-Layout-/Editor-Timer-/Formatcachekorrekturen vollständig automatisch geprüft und die Python-Fassung/der Showcase abgeglichen. Referenz-Mac, Bundle und manuelle Freigabe sind offen. Folgepakete stehen im Entwicklungsplan; der Auftrag entscheidet D07, Importquelle, Bauwerkzeug und Veröffentlichungsfragen nicht vorweg.
 
 **Grundsatz:** Entschiedenes wird nicht erneut vorgelegt. Offen sind nur D07, die Auswahl A–H mit ihrer Bearbeitungstiefe, die erste Importquelle (G21), das Bauwerkzeug (G26) und die Inhaberangaben I1–I6. Empfehlungen in Dokumenten ersetzen keine Entscheidung des Inhabers; jeder Umsetzungsschnitt außerhalb der beauftragten Performance-Arbeit braucht einen ausdrücklichen Auftrag.
 
@@ -44,7 +46,7 @@ Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Ent
 
 Fortlaufend (Wortlaut des Inhabers): „Ich habe Performance Probleme mit Glide, hilf mir die Code-Basis zu optimieren, mit Variabeln für die gleichen Funktionen, Streamlinen und optimieren.“
 
-Welche Pakete dazu offen sind, mit Status und Abnahme, steht nur im [Entwicklungsplan, Abschnitt 3](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#3-performance-stufe-0-beauftragt). Neue Funktionen erst nach Auftrag.
+Welche Pakete dazu offen sind, mit Status und Abnahme, steht nur im [Entwicklungsplan, Abschnitt 3](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#3-performance-stufe-0-beauftragt). Der Auftrag vom 05.10.2026 umfasst auch den Beginn der Feature-Arbeit; Umfang und nächste Schnitte stehen im Entwicklungsplan.
 
 ## Arbeitsablauf einer Implementierung
 

@@ -39,8 +39,16 @@ with tempfile.TemporaryDirectory(prefix='glide-release36-') as tmp, tempfile.Tem
     root.deiconify()
     root.update()
     if os.name == 'nt':
-        assert len(app._registered_fonts) == 4
+        # Seit 3.30 gehören auch die beiden Pixelify-Schnitte zum Paket.
+        # Jede ausgelieferte Schrift muss tatsächlich registriert sein;
+        # Lizenz- und Herkunftsdateien zählen nicht als Schriftressource.
+        font_dir = ROOT / 'src/glide/resources/fonts'
+        expected_fonts = {path.resolve() for path in font_dir.iterdir()
+                          if path.suffix.lower() in ('.ttf', '.otf')}
+        registered_fonts = {Path(path).resolve() for path in app._registered_fonts}
+        assert expected_fonts and registered_fonts == expected_fonts, (registered_fonts, expected_fonts)
         assert app.ui_font_family() == 'DejaVu Sans', app.ui_font_family()
+        assert 'Pixelify Sans' in app.available_font_families()
 
     def capture(widget, name):
         if args.screenshots and os.name == 'nt':

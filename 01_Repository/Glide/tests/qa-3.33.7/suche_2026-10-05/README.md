@@ -1,0 +1,11 @@
+# Inhaltssuche und Windows-Formatsicherung – Prüfnachweis
+
+Glide 3.33.7 · 05.10.2026 · Datenformat 20 · Windows, Python 3.12.10, Tk 8.6
+
+Unit-Baseline 3.33.6: 61 Tests, 16 Format-Subtests fehlgeschlagen. Seitensuite unverändert grün. Neue Suchsuite gegen 3.33.6: erwarteter Fehler am fehlenden Seiteninhaltstreffer; neue Fassung grün. Nach Korrektur: 72 Unit-Tests grün.
+
+CI-Grundstufe vollständig bestanden: [ergebnis.json](ci/ergebnis.json). Finale Syntax-/Versions-/Index-/Standprüfung ebenfalls grün. Der diagnostische Windows-Volllauf wurde nach zwölf abgeschlossenen Integrationssuiten beendet: zehn bestanden, zwei fehlgeschlagen (Button-Sichtbarkeit in test_glide, Schriftanzahl in test_release36). Die langsame test_ui_followup36 bestand letztlich; verbleibende Suiten sind nicht vollständig geprüft. Es gibt deshalb kein automatisch erzeugtes Vollprüfungs-ergebnis.json. [Diagnostische Zusammenfassung](diagnostischer_volllauf.json), [Quellhashes und unveränderte aktive Python-Hauptdatei](quellkandidat.json), [Fachmessung](messung_fachsuche.json). Keine Umdeutung älterer macOS-Läufe. Testdaten ausschließlich temporäres GLIDE_DATA_DIR.
+
+macOS-Bundlebau und Referenz-Mac-Abnahme unter Windows nicht möglich. Menschliche Bedien-/DPI-/Screenreader-Abnahme, Linux-Vollprüfung und Releasefreigaben bleiben offen. 3.33.7 ist nicht ausgeliefert. Die aktive Python-Hauptdatei 3.33.6 ist bytegleich zum Git-Ausgangsstand; macOS-Bundle unverändert. Nach den Windows-Prüffehlern vollständige Abnahme nachholen, dann abgleich_07.py und auf dem Mac den Bundlebau ausführen. Fachmessung bei 10.000 synthetischen Inhaltstreffern: Median 151,5 ms / p95 152,1 ms ohne UI. Nächste Suchoptimierung: Ausschnitte nur für angezeigte Treffer, danach Eingabe-bis-Anzeige messen; FTS5 erst nach Bedarf.
+
+Gezielte Nachprüfung nach dem diagnostischen Volllauf: `test_fundament333.py` grün (Formatsicherung, Fehler/Retry, Reload, Tabellen-/Listenbreiten), `test_suche3337.py` erneut grün, vollständige bestehende `test_features330.py` grün (einschließlich bisheriger Seiten-/Punkt-/Aktionssuche). Die langsame Laufzeit der alten UI-Suite ist keine fehlgeschlagene Prüfung; nur die beiden konkret genannten Assertions sind als Fehler gewertet.

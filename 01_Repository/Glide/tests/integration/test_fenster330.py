@@ -225,7 +225,9 @@ with tempfile.TemporaryDirectory(prefix="glide-fenster-") as ordner:
         app.set_active_list(liste["id"])
         ruhe()
         # 1. Menüleiste
-        leiste = root.nametowidget(root.cget("menu"))
+        # Windows nutzt die eigene Menüleiste; root.cget("menu") ist leer.
+        # Beide Darstellungen verwenden dieselbe echte Tk-Menüstruktur.
+        leiste = app.menubar
         menue_durchlaufen(leiste, [])
         anzahl_leiste = len(fenster)
         # 2. „+“-Menüs der Seitenleiste
