@@ -1,0 +1,8 @@
+{
+  "python": "3.14.8",
+  "plattform": "Windows x64",
+  "versuche_je_probe": 100,
+  "gleiche_stat_signatur_trotz_aenderung": 99,
+  "gleiche_native_change_time_trotz_aenderung": 93,
+  "folgen": "Metadaten allein erkennen nicht jeden gleich gro\u00dfen, schnellen In-place-Formatwechsel. Windows braucht einen Inhaltsvergleich."
+}

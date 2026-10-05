@@ -1,6 +1,6 @@
 # Regeln für die Dokumentenpflege
 
-Stand 03.10.2026 · Glide 3.33.6 · Datenformat 20
+Stand 05.10.2026 · Glide 3.33.8 · Datenformat 20
 
 Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder gelöscht anstatt immer nur archiviert und `_Z` zu schreiben“) und ersetzt alle früheren Archivierungsregeln.
 
@@ -32,6 +32,7 @@ Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder
 | Verhalten der Funktionen | [20_FUNKTIONEN.md](20_FUNKTIONEN.md) |
 | Vorlagen in der Praxis | [27_VORLAGEN_PRAXISANLEITUNG.md](27_VORLAGEN_PRAXISANLEITUNG.md) |
 | Einzelentscheidungen mit eigenem Gegenstand | `decisions/` (Produktregister, tkdnd, Arbeitsbegleiter, Gruppe/Ordner/Überschrift, Systembenachrichtigungen) |
+| Fehlerdiagnosen bis zur Übernahme ihrer Ergebnisse | `diagnosen/` (Logo-Kantenglättung); danach löschen |
 | Änderungsverlauf | `CHANGELOG.md` (sieben neueste Versionen ausführlich, ältere als Zeile) |
 
 Neue Dokumente unter `docs/` nur, wenn kein bestehendes das Thema trägt; sie gehören in den [Index](00_INDEX.md).

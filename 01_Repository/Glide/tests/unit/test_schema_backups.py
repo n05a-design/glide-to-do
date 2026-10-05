@@ -6,12 +6,25 @@ import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+from types import SimpleNamespace
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'src/glide'))
-from schema_backups import SchemaBackups
+from schema_backups import SchemaBackups, file_signature
 
 
 class SchemaBackupTests(unittest.TestCase):
+    def test_windows_stat_and_fstat_ctime_difference_does_not_invalidate(self):
+        common = dict(st_dev=1, st_ino=2, st_size=40, st_mtime_ns=200, st_birthtime_ns=100)
+        with patch('schema_backups.os.name', 'nt'):
+            self.assertEqual(file_signature(SimpleNamespace(**common, st_ctime_ns=100)),
+                             file_signature(SimpleNamespace(**common, st_ctime_ns=200)))
+
+    def test_posix_change_time_still_invalidates(self):
+        common = dict(st_dev=1, st_ino=2, st_size=40, st_mtime_ns=200)
+        with patch('schema_backups.os.name', 'posix'):
+            self.assertNotEqual(file_signature(SimpleNamespace(**common, st_ctime_ns=100)),
+                                file_signature(SimpleNamespace(**common, st_ctime_ns=200)))
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
@@ -68,6 +81,37 @@ class SchemaBackupTests(unittest.TestCase):
         self.assertIsNone(self.guard.ensure(self.source, self.backups, 20))
         self.write({'version': 18})
         self.assertTrue(self.guard.ensure(self.source, self.backups, 20))
+
+    def test_windows_same_metadata_still_preserves_changed_format_bytes(self):
+        # Windows kann innerhalb eines Ticks dieselben Zeiten zurückgeben.
+        # Diese Gegenprobe erzwingt den Fall auch auf Linux/macOS.
+        with patch('schema_backups.os.name', 'nt'), patch('schema_backups.file_signature', return_value=(1, 2, 15, 100, 100)):
+            self.write({'version': 20})
+            self.assertIsNone(self.guard.ensure(self.source, self.backups, 20))
+            original = self.write({'version': 18})
+            backup = self.guard.ensure(self.source, self.backups, 20)
+            self.assertTrue(backup)
+            with open(backup, 'rb') as saved:
+                self.assertEqual(saved.read(), original)
+
+    def test_windows_same_metadata_detects_version_after_large_content(self):
+        # Ein bloßer Headervergleich würde den Formatwert hier übersehen.
+        with patch('schema_backups.os.name', 'nt'), patch('schema_backups.file_signature', return_value=(1, 2, 300000, 100, 100)):
+            self.write({'padding': 'x' * 300000, 'version': 20})
+            self.assertIsNone(self.guard.ensure(self.source, self.backups, 20))
+            original = self.write({'padding': 'x' * 300000, 'version': 18})
+            backup = self.guard.ensure(self.source, self.backups, 20)
+            self.assertTrue(backup)
+            with open(backup, 'rb') as saved:
+                self.assertEqual(saved.read(), original)
+
+    def test_windows_unchanged_content_still_parses_only_once(self):
+        self.write({'version': 18})
+        load = json.load
+        with patch('schema_backups.os.name', 'nt'), patch('schema_backups.json.load', wraps=load) as calls:
+            for _ in range(5):
+                self.assertTrue(self.guard.ensure(self.source, self.backups, 20))
+            self.assertEqual(calls.call_count, 1)
 
     def test_failed_copy_propagates_and_retry_preserves_original(self):
         original = self.write({'version': 19})

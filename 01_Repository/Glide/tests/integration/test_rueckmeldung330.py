@@ -169,6 +169,15 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
             ruhe()
             return editor.canvas.winfo_height()
 
+        # Die Kontextleiste misst nach dem ersten Mapping mit 120 ms
+        # Verzögerung. Eine noch ungemessene Fläche ist keine stabile Baseline.
+        for _attempt in range(25):
+            root.update()
+            if editor.context_row.winfo_width() // editor.CONTEXT_WIDTH_STEP in getattr(editor, "_context_row_need", {}):
+                break
+            root.after(20, root.quit)
+            root.mainloop()
+        assert editor.context_row.winfo_width() // editor.CONTEXT_WIDTH_STEP in editor._context_row_need
         editor.update_status()
         hoehe = flaeche()
         for schritt in (editor.toggle_grid, editor.toggle_grid, lambda: editor.set_tool("select"), editor.select_all,

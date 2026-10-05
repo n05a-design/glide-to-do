@@ -1,15 +1,15 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · für den nächsten Chat oder Bearbeiter
+Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · für den nächsten Chat oder Bearbeiter
 
 Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe, Projektübergabe, Startkontext und dem Sitzungsprotokoll vom 24.–26.09.2026; die Vorfassungen trägt Git. Dieses Dokument sagt, wo was steht, was gilt und was als Nächstes ansteht – es ersetzt nicht die Fachdokumente.
 
 ## 1. In fünf Sätzen
 
-- Glide ist eine lokale, deutschsprachige Aufgaben-, Notiz-, Seiten- und Pixel-App in Python 3.14 mit Tk 9: `src/glide/app.pyw` (rund 54.500 Zeilen, Klasse `ListApp`) und dreizehn Module, davon sieben Tk-freie Fachmodule nach D17.
-- Aktueller Stand ist **3.33.6** (02.10.2026, Vollprüfung grün, ausgeliefert): Heute/Demnächst, Eisenhower, Schnelleingabe mit Feldchips und Wiederholungen, Startseite „Ruhig“, vier Seitenleistenbereiche, gemeinsame Formatsicherung. Verlauf: [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
+- Glide ist eine lokale, deutschsprachige Aufgaben-, Notiz-, Seiten- und Pixel-App in Python 3.14 mit Tk 9: `src/glide/app.pyw` (rund 54.500 Zeilen, Klasse `ListApp`) und vierzehn Module, davon acht Tk-freie Fachmodule nach D17.
+- Aktueller Stand ist **3.33.8** (05.10.2026, Windows-Gesamtprüfung grün, Python-Lieferung abgeglichen; Referenz-Mac/Bundle offen), mit Inhaltssuche in Strg/Cmd+O, korrigierter Windows-Formatsicherung, kompakter Mindesthöhe und sicherem Editor-Timerabbau. Der vorherige Stand 3.33.6 enthielt: Heute/Demnächst, Eisenhower, Schnelleingabe mit Feldchips und Wiederholungen, Startseite „Ruhig“, vier Seitenleistenbereiche, gemeinsame Formatsicherung. Verlauf: [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
 - Der Inhaber startet Glide **nur** aus `07_Python-Versionen` oder `01_Repository/Glide/build/macos/Glide.app`; eine Änderung ist erst bei ihm, wenn beide per SHA-256 abgeglichen sind.
-- Beauftragt ist die Performance-Fortsetzung; neue Funktionen nur mit ausdrücklichem Auftrag. Entscheidungen trifft der Inhaber; Entschiedenes wird nicht erneut vorgelegt ([Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md)).
+- Beauftragt sind Performance-Fortsetzung sowie Planung und Beginn der Feature-Umsetzung (05.10.2026). Reihenfolge und Abnahme stehen im Entwicklungsplan. Entscheidungen trifft der Inhaber; Entschiedenes wird nicht erneut vorgelegt ([Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md)).
 - Antworten, Dokumente und Oberfläche sind deutsch.
 
 ## 2. Wo was liegt
@@ -23,7 +23,7 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 | Verhalten der Funktionen | [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md) |
 | Datenformat, Backups, Austausch | [Daten und Migration](../01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md) |
 | Prüfen | [Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md), Ergebnisse im QA-Bericht, Nachweise unter `tests/qa-<Version>/` |
-| Startbare Fassung | `07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.33.6.pyw` plus Module, `resources`, `vendor`; Vorgänger 3.33.0–3.33.5 in `Archiv/` |
+| Startbare Fassung | `07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.33.8.pyw`, nach grüner Windows-Vollprüfung SHA-256-abgeglichen; aktueller Nachweis und offene Mac-/manuelle Abnahme im QA-Bericht |
 | macOS-Bundle | `01_Repository/Glide/build/macos/Glide.app` (lokal, nicht versioniert), Kennung `de.shaye.glide` (Windows `Shaye.Glide`), nie ändern |
 | Pflegewerkzeuge | [`scripts/pflege/`](../01_Repository/Glide/scripts/pflege/README.md): Versionswechsel, Abgleich nach 07, Kürzen der Ablage, Messungen, Pfadbereinigung |
 | Demo- und Testdaten | `05_Probelisten_Testdaten/Showcase` (eigener Starter), Fixtures unter `01_Repository/Glide/tests/fixtures` |
@@ -58,17 +58,20 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 ## 5. Prüfen
 
 - **Vor jedem Commit:** `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` aus `01_Repository/Glide` (braucht Python mit tkinter, unter Linux Xvfb). Im Linux-Container möglich: CI-Grundstufe, Startprobe, `messung_speicherweg.py`; nicht möglich: macOS/Tk-9-Abnahme, Bundlebau, physische Bedienung. Ergebnisse als „Linux/Tk 8.6, künstliche Daten“ kennzeichnen.
-- **Abnahme einer Version** auf dem Mac: `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.6/<Name> --timeout 900` – 81 Schritte, 64 Integrationssuiten, Unit-Tests, Showcase, fünf Analysen.
-- **Letztes Ergebnis:** 3.33.6 am 02.10.2026, Exitcode 0; 146 Python-/60 Bundle-Dateien bytegleich.
+- **Abnahme einer Version** auf dem Mac: `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.33.8/<Name> --timeout 900` – aktuelle Schritte laut Prüfstand, 66 Integrationssuiten, Unit-Tests, Showcase, fünf Analysen.
+- **Historische Referenz:** 3.33.6 auf dem Mac vom 02.10.2026; aktuelle Windows-Prüfung und Lieferung zu 3.33.8 im QA-Bericht. Keine Mac-/Bundle-Abnahme für 3.33.7/3.33.8 behaupten.
 
 ## 6. Was als Nächstes ansteht
 
+- **Aktueller Feature-Schnitt:** G14-Inhaltssuche und Windows-Formatsicherung seit 3.33.7, Windows-Layout/Editorlebensdauer in 3.33.8; Windows-Vollprüfung mit 66 Integrationssuiten und 75 Unit-Tests grün; Python-Fassung und Showcase abgeglichen. Windows-Volllauf/Referenz-Mac/Lieferung im QA-Bericht prüfen. Das ursprüngliche Zukunftsdokument ist im Entwicklungsplan §13 mit heutigem Code und späteren Entscheidungen abgeglichen.
 - **Beauftragt:** P04 Bildlayout, P06r doppelte Aktualisierungen, P08a/P08b Speicherweg, P09b Kennzahlen, Einstellungsfenster als Messpunkt, unveränderte Startseitenkacheln erhalten ([Entwicklungsplan, Abschnitt 3](Glide_Entwicklungsplan.md#3-performance-stufe-0-beauftragt)).
-- **Braucht einen Auftrag:** UX1 „Weniger Oberfläche“ (vorher stabile Aktionskennungen), danach G05 Fokus und H-02, dann G29/G31/G32.
+- **Nächste Feature-Schnitte laut Auftrag 05.10.2026:** UX1 „Weniger Oberfläche“ (vorher stabile Aktionskennungen), danach G05 Fokus und H-02, dann G29/G31/G32.
 - **Kleine Reste für den nächsten Produktions- bzw. Werkzeugschnitt:** Code-Kommentar „Benachrichtigungen … Nicht-Ziel“ (AB06), Mindestversion Python/Tk prüfen (AB08), Kommentare zur Tastaturabschirmung in `pruefen.py` und `hintergrund/sitecustomize.py`, Verweise auf alte Dokumentnummern in den Textbausteinen von `tests/tools/releasedaten.py` (ändern nur zusammen mit neu erzeugter Release-Fixture).
 
 ## 7. Offen beim Inhaber
 
-- Auswahl A–H (Richtung, Tiefe); D07 erst zur Pixel-Etappe; Importquelle und Bauwerkzeug erst in Stufe 4.
-- I1 Inhaberangaben bestätigen, I2 Lizenz veröffentlichen, I3 Developer-ID und Code-Signing-Zertifikat, I4 Markenprüfung, I5 Python 3.14.7 installieren, I6 Windows-Vollprüfung und manuelle Prüfsitzungen ([Prüfliste](Glide_Manuelle_Pruefung.md)).
+- Feature-Arbeit ist am 05.10.2026 beauftragt; D07 erst zur Pixel-Etappe; Importquelle und Bauwerkzeug erst in Stufe 4.
+- I1 Inhaberangaben bestätigen, I2 Lizenz veröffentlichen, I3 Developer-ID und Code-Signing-Zertifikat, I4 Markenprüfung, I5 Python 3.14.7 installieren, I6 Windows-Vollprüfung 3.33.8 und manuelle Prüfsitzungen ([Prüfliste](Glide_Manuelle_Pruefung.md)).
 - Lizenzlage der Inspirations- und Beispielbilder in `20_Grafik_Master` (Stockfotos in einem öffentlichen Repository) prüfen.
+
+Die Windows-Prüflaufzeit liegt separat im QA-Cache: Python 3.14.8/Tk 9.0.4, Hersteller-SHA-256 verifiziert. Der Windows-Standardstarter bleibt unverändert; I5 betrifft weiter den Mac.

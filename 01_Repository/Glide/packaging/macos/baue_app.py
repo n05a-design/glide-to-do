@@ -44,7 +44,7 @@ REPO = Path(__file__).resolve().parents[2]
 QUELLE = REPO / "src" / "glide"
 DATEIEN = ("app.pyw", "drawing.py", "drawing_image.py", "backdrop.py", "page_markdown.py", "image_preview.py",
            "logo.py", "glide_start.py", "schema_backups.py", "sidebar_policy.py", "svg_geometry.py",
-           "home_tiles.py", "capture_parser.py", "eisenhower.py", "today_view.py")
+           "home_tiles.py", "capture_parser.py", "eisenhower.py", "today_view.py", "content_search.py")
 SYMBOL = REPO / "assets" / "icons" / "glide_macos_1024.png"
 
 

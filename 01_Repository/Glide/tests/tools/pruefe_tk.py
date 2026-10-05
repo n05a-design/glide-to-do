@@ -53,6 +53,8 @@ try:
     root.update()
     assert ('button', 5, 7) in events and ('focus',) in events, events
     assert not errors, errors
-    print('Tk, eigene native Fenster und synthetische Bedienbindungen: ok')
+    print('Tk', root.tk.call('package', 'provide', 'Tk'),
+          '· Tcl', root.tk.call('info', 'patchlevel'),
+          '· eigene native Fenster und synthetische Bedienbindungen: ok')
 finally:
     root.destroy()

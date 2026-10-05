@@ -1,0 +1,6 @@
+{
+  "gegen": "Git HEAD, app.pyw 3.33.6; benachbarte Module des Arbeitsstands",
+  "quellhash": "eb94dbd2c7f9cf0aedeb2d6e77d82515c60d025e9aae9421c03a958d2fd154f4",
+  "exitcode": 1,
+  "erwarteter_fehler": "Timer des abgebauten Editors bleiben vorhanden"
+}

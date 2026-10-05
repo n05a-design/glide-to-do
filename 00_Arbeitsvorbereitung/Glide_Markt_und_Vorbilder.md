@@ -1,18 +1,55 @@
 # Glide – Markt und Vorbilder
 
-Stand 03.10.2026 · Glide 3.33.6 · Online-Recherche vom 01.10.2026
+Stand 05.10.2026 · Glide 3.33.8 · Matrix vom 01.10.2026; gezielter Herstellerabgleich 05.10.2026
 
 Zusammengeführt am 03.10.2026 aus der Konkurrenz- und Featurematrix und der Konkurrenzübersicht vom 01.10.2026; diese hatten die älteren Recherchen vom 16.–25.09.2026, den Funktionsvergleich zur Zeichenfläche, die SVG-Untersuchung und das Konzept „Seiten wie Notion“ bereits eingeordnet. Die Vorfassungen trägt Git. Die Lücken N01–N20 und G01–G32 stehen mit Status im [Entwicklungsplan](Glide_Entwicklungsplan.md).
 
-**Verlässlichkeit:** Glides Spalte stammt aus dem Code (Stand 3.33.6). Die übrigen Werte beruhen auf Herstellerangaben und Berichten vom 01.10.2026, nicht auf Praxistests; vor Entscheidungen Herstellerseiten erneut prüfen. Vorteile und Übertragbarkeit sind Einschätzungen, keine Messwerte.
+**Verlässlichkeit:** Glides Spalte stammt aus dem Code (Stand 3.33.7). Die breite Matrix beruht auf Herstellerangaben und Berichten vom 01.10.2026; die Kurzfassung zu Glide, ChatGPT Space und Notion in Abschnitt 1.1 und der gezielte Abgleich in Abschnitt 6 berücksichtigen die Recherche vom 05.10.2026. Es liegt kein praktischer Vergleichstest aller Produkte vor. Vorteile, Positionierung und Übertragbarkeit sind Einschätzungen, keine Messwerte; veränderliche Herstellerangaben vor neuen Entscheidungen erneut prüfen.
 
 ## 1. Ergebnis
 
-1. Glides Funktionsbreite ist für ein Ein-Personen-Projekt außergewöhnlich. In der **Tagesführung** (Bearbeitungstag ≠ Fälligkeit, Kapazität, Zeitblöcke, Heute/Demnächst, Tagesbeginn und -abschluss, Zeiterfassung) liegt Glide auf dem Niveau spezialisierter Planer. Pixel-Werkstatt und Pinnwand mit echten Aufgabenkarten bietet kein anderes untersuchtes Produkt.
+1. Glides Funktionsbreite ist für ein Ein-Personen-Projekt außergewöhnlich. In der **Tagesführung** (Bearbeitungstag ≠ Fälligkeit, Kapazität, Zeitblöcke, Heute/Demnächst, Tagesbeginn und -abschluss, Zeiterfassung) liegt Glide auf dem Niveau spezialisierter Planer. Die Kombination aus Pixel-Werkstatt und Pinnwand mit echten Aufgabenkarten ist im untersuchten Feld besonders; eine weltweite Alleinstellung wurde nicht nachgewiesen.
 2. **AFFiNE** und **AppFlowy** decken die Kombination „Seiten + Datenbanken + Leinwand + lokal“ quelloffen ab. Glides Abgrenzung läuft deshalb über die Tagesführung, nicht über die Kombination.
-3. **Größte Lücken:** Volltextsuche im Inhalt, Verweise zwischen Seiten, Aufgaben im Notiztext, Fokusansicht, Erscheinungsbild „wie System“. Bewusst nicht: Erinnerungen bei geschlossener App, Sync und Mobil.
+3. **Größte Lücken:** Verweise zwischen Seiten, Aufgaben im Notiztext, Fokusansicht, Erscheinungsbild „wie System“. Inhaltssuche ist seit 3.33.7 in erster Stufe vorhanden; Index und vereinheitlichte Befehlspalette bleiben offen. Bewusst nicht: Erinnerungen bei geschlossener App, Sync und Mobil.
 4. **Stand der Technik 2026 ist KI** (Todoist Ramble und MCP, Notion Custom Agents, Apple Intelligence). Glides Antwort ist entschieden (Q3): Austausch über Dokumente statt Schnittstelle (G24).
 5. **Bedienkomfort und Informationsarchitektur** liegen hinter den Vorbildern: nicht zu wenig Funktion, sondern zu viel dauerhaft sichtbar (UX1 im Entwicklungsplan).
+
+### 1.1 Kurzfassung: Glide, ChatGPT Space und Notion
+
+**Empfehlung:** Glide auf einen fertigen persönlichen Tagesablauf mit vollständigem lokalem Datenbestand ausrichten: erfassen, einen machbaren Tag planen, arbeiten und abschließen. Der mögliche Kaufgrund ist weniger Einrichtung und laufende Pflege. Eine bessere Bedienbarkeit gegenüber Space oder einem gut eingerichteten Notion-System ist bislang nicht durch Nutzertests belegt.
+
+**USPs als strategische Einordnung, keine weltweit geprüfte Alleinstellung:**
+
+| Produkt | Stärkster Kernnutzen / USP | Konsequenz für Glide |
+|---|---|---|
+| **ChatGPT Space** | Aus Arbeitskontext gemeinsam mit KI unmittelbar Ergebnisse entwickeln: bearbeitbare Seiten, Dateien, Menschen und KI im selben Arbeitsbereich. | Aufgaben aus vorhandenem Kontext zu gewinnen kann manuelle Erfassung sparen. Glide muss zusätzliche Pflege vermeiden. |
+| **Notion** | Ein anpassbares gemeinsames System für Wissen, Projekte und strukturierte Arbeit, einschließlich Aufgaben und Agenten. | Glides Vorteil muss im fertigen Ablauf liegen, nicht allein in einzelnen Aufgabenfeldern oder Ansichten. |
+| **Glide** | Einen machbaren persönlichen Arbeitstag planen, ohne zuerst ein eigenes Produktivitätssystem einzurichten; der Arbeitsbestand bleibt lokal und ohne Konto nutzbar. | Tagesführung, einfache Bedienung und Datenkontrolle als zusammenhängenden Nutzen zeigen. |
+
+**Belegte Unterschiede und Grenzen:**
+
+- **Space** ist mehr als eine einfache To-do-App: Checklisten, Tabellen, direkte Bearbeitung, Zusammenarbeit und erstellbare interaktive Werkzeuge sind dokumentiert. Ein standardisiertes persönliches Aufgabenmodell mit Aufwand und Tageskapazität sowie vollständiger Offline-Betrieb sind in den geprüften Quellen nicht dokumentiert. Das bedeutet nicht, dass solche Funktionen technisch unmöglich sind. [Produktseite](https://chatgpt.com/features/space/), [Pages](https://learn.chatgpt.com/docs/space/pages)
+- **Notion** besitzt Task-Datenbanken, My Tasks, Unteraufgaben, Abhängigkeiten und Kalenderplanung. Bearbeitungstag neben Fälligkeit sowie Kapazität über Formeln und Rollups sind konfigurierbar. Agenten und externe KI-Anbindung erhöhen die Überschneidung mit Space. [Aufgaben](https://www.notion.com/help/guides/give-your-to-dos-a-home-with-task-databases), [Kalender](https://www.notion.com/help/use-notion-calendar-with-notion), [Eigenschaften](https://www.notion.com/help/database-properties), [Rollups](https://www.notion.com/help/relations-and-rollups), [Custom Agents](https://www.notion.com/help/custom-agents), [MCP](https://www.notion.com/help/notion-mcp)
+- **Glides Datenvorteil** ist der vollständige lokale Primärbestand ohne Konto. Notion bietet ebenfalls Offline-Nutzung, jedoch für heruntergeladene beziehungsweise zwischengespeicherte Inhalte eines Cloudsystems. Glide fehlen gemeinsame Bearbeitung und komfortable Gerätesynchronisation; Erinnerungen benötigen die laufende App, Kalender werden über Dateien ausgetauscht. [Notion offline](https://www.notion.com/help/use-pages-offline), [Glide-Produktgrenzen](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md)
+
+**Glide-Stand 3.33.7:** Tagesplanung mit Kapazität, getrennte Fälligkeit und Bearbeitungstag, Zeiterfassung, echte Aufgaben in Seiten und die erste Inhaltssuche sind vorhanden. Fokus-Timer, weitergehende Aufgabenverknüpfungen und Rückverweise sind geplant. Der vorhandene dateibasierte KI-Austausch erzeugt neue Inhalte und aktualisiert bestehende Aufgaben nicht umfassend. Verbindliche Details: [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md), [KI-Austausch](../01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md), [Entwicklungsplan](Glide_Entwicklungsplan.md).
+
+**Empfohlener Fokus; keine neue Beauftragung oder Änderung des Entwicklungsplans:**
+
+1. Sichere, schnelle Basis und weniger dauerhaft sichtbare Bedienung; Heute, nächste Handlung und verfügbare Zeit erhalten den stärksten visuellen Rang.
+2. Tagesplanung und Umplanung vereinfachen: Aufgaben verschieben, ohne ihre Fälligkeit unbeabsichtigt zu ändern; wenige Pflichtangaben und brauchbare Vorgaben.
+3. Fokus und Tastaturbedienung auf der vorhandenen Zeiterfassung ausbauen.
+4. Aufgaben und Projektwissen so verbinden, dass Suche und doppelte Pflege sinken.
+5. Den beschlossenen dateibasierten KI-Austausch bei Bedarf gezielt vereinfachen; Änderungen prüfbar übernehmen und Dubletten vermeiden.
+
+**Zielgruppe und Marke:** Als erste Zielgruppe eignen sich Menschen, die überwiegend am Desktop mehrere eigene Projekte bearbeiten, etwa Gestaltung, Schreiben, Entwicklung und persönliche Wissensarbeit. Pixel-Werkstatt und Gismo dienen als optionale persönliche Signatur; ein Hauptkaufgrund ist bislang nicht belegt. Die älteren Rundgangbilder erlauben keine vollständige visuelle Bewertung von 3.33.7. „Ruhige Tagesplanung“ ist zudem bereits bei [Sunsama](https://www.sunsama.com/) besetzt; lokale Aufgaben, Zeiterfassung und Fokus bietet auch [Super Productivity](https://super-productivity.com/).
+
+**Formulierung zum Testen:**
+
+> **Plane einen Tag, der zu deiner Zeit passt.**
+> Glide verbindet Aufgaben und Projektwissen mit einer fertigen Tagesplanung. Dein Arbeitsbestand bleibt auf deinem Rechner – ohne Konto.
+
+**Nachweis:** Mit 12–15 passenden Nutzern über zwei bis drei Wochen gegen eine gut eingerichtete Notion-Tagesplanung mit Calendar und einen brauchbaren Space-Ablauf testen. Einrichtung und tägliche Pflege getrennt messen; zusätzlich doppelte Erfassung, Umplanung und freiwillige weitere Nutzung erfassen. Ein Preisvorteil ist nicht belegt: vorhandene Konkurrenzabos können geringe Zusatzkosten bedeuten; Glides öffentliche Preis- und Lizenzbedingungen sind offen.
 
 ## 2. Vorbilder des Inhabers
 
@@ -47,7 +84,7 @@ Für Todoist, TickTick, Things, Sunsama, Akiflow, Obsidian, Anytype, Capacities,
 ## 4. Featurematrix
 
 ● vorhanden · ◐ teilweise/eingeschränkt · ○ fehlt · P per Erweiterung · – nicht Zweck · ? nicht verifiziert
-**Gl** Glide 3.33.6 · **No** Notion · **Td** Todoist · **Th** Things 3 · **TT** TickTick · **SP** Super Productivity · **AF** AFFiNE · **AP** AppFlowy · **Ob** Obsidian · **Ap** Apple
+**Gl** Glide 3.33.7 · **No** Notion · **Td** Todoist · **Th** Things 3 · **TT** TickTick · **SP** Super Productivity · **AF** AFFiNE · **AP** AppFlowy · **Ob** Obsidian · **Ap** Apple
 
 | Bereich | Funktion | Gl | No | Td | Th | TT | SP | AF | AP | Ob | Ap | Glide |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -69,10 +106,10 @@ Für Todoist, TickTick, Things, Sunsama, Akiflow, Obsidian, Anytype, Capacities,
 | Wissen | Block-Editor mit „/“-Menü, Bilder in Seiten | ● | ● | – | – | ◐ | ◐ | ● | ● | ◐ | ◐ | Linux-Bilder eingeschränkt |
 | | Echte Aufgaben im Dokument | ◐ | ◐ | – | – | – | – | ◐ | ◐ | P | ◐ | in Seiten ja, in Notizen nein (G29) |
 | | Verweise und Rückverweise | ◐ | ● | ○ | ○ | ○ | ○ | ● | ● | ● | ● | nur Punkt ↔ Punkt (G08/G30) |
-| | Volltextsuche im Inhalt | ◐ | ● | ● | ● | ● | ● | ● | ● | ● | ● | nur Titel und Punkttexte (G14) |
+| | Volltextsuche im Inhalt | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | seit 3.33.7 Inhalte von Seiten/Notizen und Beschreibungen; kein FTS5-Cache |
 | | Titelbild | ◐ | ● | – | – | – | – | ● | ● | P | ○ | Pixelsymbol ja, Titelbild fehlt (G09) |
 | Visuell | Freie Leinwand mit echten Aufgabenkarten | ● | ○ | ○ | ○ | ○ | ○ | ● | ○ | ● | ◐ | |
-| | Pixel-Zeichnen und Symbol-Export | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | **Alleinstellung** |
+| | Pixel-Zeichnen und Symbol-Export | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | besondere Kombination |
 | Daten | Ohne Konto, offene lokale Datei, automatische Sicherungen | ● | ○ | ○ | ◐ | ○ | ● | ◐ | ◐ | ● | ○ | |
 | | Sync zwischen Geräten, Mobile | ○ | ● | ● | ● | ● | ● | ● | ● | ● | ● | Datenordner in Cloud-Ablage; Mobile zurückgestellt (D03) |
 | | Import aus anderen Apps | ◐ | ● | ● | ◐ | ● | ◐ | ● | ● | ● | ○ | CSV/MD/ICS; Notion/Todoist fehlt (G21) |
@@ -87,3 +124,17 @@ Für Todoist, TickTick, Things, Sunsama, Akiflow, Obsidian, Anytype, Capacities,
 - **Stärken vertiefen:** Tagesführung (G05), Aufgaben im Kontext (G29, G31, G08/G30), Wiederfinden (G14), weniger dauerhaft sichtbare Bedienung (UX1).
 - **Nicht nachbauen:** Team, Cloud, frei definierbare Datenbanken, eingebaute Cloud-KI.
 - **Marke:** Der Name „Glide“ kollidiert mit bekannten Produkten (etwa der No-Code-Plattform Glide); Markenprüfung durch den Inhaber (I4). Gismo und das Pixel-Design sind die stärksten Wiedererkennungsmerkmale.
+
+## 6. Verifizierter Abgleich und Konsequenzen (05.10.2026)
+
+Gezielte Prüfung der folgenden Herstellerquellen; kein Praxistest und keine neue Vollprüfung sämtlicher Produkte/Matrixfelder. Ältere Versions-, Tarif- und KI-Aussagen in Abschnitt 3 bleiben Recherchekontext vom 01.10.2026 und sind für neue Entscheidungen erneut zu prüfen. Herstellerangaben und unsere Konsequenzen sind getrennt:
+
+| Vorbild | Aktuell belegtes Verhalten | Einschätzung / Konsequenz für Glide |
+|---|---|---|
+| Notion | [Offline-Seiten](https://www.notion.com/help/use-pages-offline) in Desktop/Mobil auf allen Plänen; einzeln herunterladen, Unterseiten separat, Datenbanken zunächst erste 50 Zeilen der ersten Ansicht. [Workspace-Suche](https://www.notion.com/help/search) durchsucht Inhalte, mit Grenzen bei Kommentaren und Eigenschaften. | Offline allein grenzt Glide nicht ab; vollständiger eigener Bestand ohne Download-Auswahl und Konto ist die präzisere Positionierung. Inhaltssuche schließt eine konkrete Alltagsschwäche. |
+| Obsidian | [Suche](https://obsidian.md/help/Plugins/Search) durchsucht Notizen und Canvases, mit Operatoren. [Rückverweise](https://obsidian.md/help/plugins/backlinks) zeigen verknüpfte und unverknüpfte Erwähnungen. | Nach dem ersten Suchschnitt Referenzregeln und Rückverweise priorisieren. Eine neue Operatorsprache ist für die erste Glide-Stufe unnötig. |
+| Todoist | [Quick Add](https://www.todoist.com/help/todoist/features/use-task-quick-add-in-todoist-va4Lhpzz) setzt Datums-/Label-/Erinnerungsfelder beim Erfassen. | Bestehende deutsche Erfassung mit sichtbaren Chips weiter pflegen; kein zusätzlicher Erfassungsweg. |
+| Super Productivity | [Herstellerseite](https://super-productivity.com/): Aufgaben, Zeiterfassung, Fokus/Pomodoro und Timeboxing; lokale Daten, offline und ohne Konto, Synchronisierung optional. | Direkter Vergleich für den persönlichen Tag: Fokus ist eine echte Lücke. Bestehende Zeiterfassung nutzen und genau-einmal-Buchung prüfen. |
+| AFFiNE | [Herstellerseite](https://affine.pro/) positioniert Dokumente und Whiteboard als gemeinsamen Wissensarbeitsplatz. | Seiten/Pinnwand allein sind keine belastbare Alleinstellung. Tagesplanung und persönliche Pixelgestaltung verbinden statt freien Datenbankumfang kopieren. |
+
+**Priorität aus diesem Abgleich:** sichere/schnelle Basis → wiederfinden (G14 erste Stufe) → weniger Oberfläche (Aktionskennungen/UX1) → fokussiert erledigen → Aufgaben im Text und Rückverweise. Der erste Suchschnitt darf vor UX1 erfolgen, weil er den vorhandenen Suchweg ergänzt, keine neue Oberfläche einführt und keine Aktionsnamen verändert. FTS5 erst nach Messung, als löschbarer Cache. Umsetzung und Prüfgrenzen stehen ausschließlich im Entwicklungsplan und QA-Bericht.

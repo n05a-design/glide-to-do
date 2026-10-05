@@ -1,6 +1,6 @@
 # Daten, Backups und Migration – Glide
 
-Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2 · Austauschformat 1
+Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2 · Austauschformat 1
 
 Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag 52) ergänzt und um die Verweise auf gelöschte Einzelverträge bereinigt; die Vorfassungen trägt Git. Formate 4–20 und Legacy 2 bleiben lesbar.
 
@@ -61,6 +61,7 @@ Referenz-Fixture: `tests/fixtures/current_v20/reference_v20.json`.
 
 ## Migration und Startprüfung
 
+- **Windows-Dateistand:** Gleich große Überschreibungen können dieselben Dateizeiten behalten. Der Formatcache berücksichtigt daher den vollständigen SHA-256-Inhalt; ein geänderter Formatwert wird auch ohne Metadatenänderung neu gelesen. Unveränderter Inhalt braucht keinen erneuten JSON-Parse.
 - **Älteres Format:** wird beim Start umgestellt (`migrate_on_start`), vorher bytegenau und unrotiert gesichert als `backups/liste_vor_format<N>_<Zeitstempel>.json` (`schema_backups.py`). Scheitert die Sicherung, bleibt die Originaldatei unverändert und es wird nicht gespeichert; der nächste Versuch sichert erneut.
 - **Neueres Format oder unbekannte Listenart** (`NewerDataError`): öffnet schreibgeschützt mit leerem Bestand und Grund; nichts wird gespeichert.
 - **Unlesbare Datei:** erst Kopie `backups/liste_unlesbar_<Zeitstempel>.json`, dann darf ein leerer Bestand sie ersetzen; gelingt die Kopie nicht, bleibt die Sitzung schreibgeschützt.

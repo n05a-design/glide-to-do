@@ -1,6 +1,6 @@
 # Veröffentlichung – Glide
 
-Stand 03.10.2026 · Glide 3.33.6 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 20
+Stand 05.10.2026 · Glide 3.33.8 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 20
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 

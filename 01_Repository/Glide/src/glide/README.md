@@ -1,6 +1,6 @@
 # Anwendungskern
 
-Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 `app.pyw` ist die kanonische Anwendung (Klasse `ListApp`). Daneben liegen Module, die beim Start aus demselben Ordner geladen werden und beim Kopieren oder Paketieren immer mitgehen:
 
@@ -20,6 +20,7 @@ Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorl
 | `capture_parser.py` | Deutsche Schnelleingabe mit Feldchips (Tk-frei) |
 | `eisenhower.py` | Quadranten „Dringlichkeit × Wichtigkeit“ (Tk-frei) |
 | `today_view.py` | Aufteilung der Ansicht „Heute“ (Tk-frei) |
+| `content_search.py` | Inhaltssuche und Trefferausschnitte (Tk-frei) |
 
 Die Tk-freien Fachmodule entstehen nach D17 und haben Unit-Tests unter `tests/unit`. `drawing_prototype.pyw` ist die isolierte Bedienprobe der Zeichenfläche und gehört nicht zur App.
 

@@ -75,7 +75,9 @@ def grosser_payload(marke, punkte=6000):
 
 
 def dateibytes(payload):
-    return json.dumps(payload, ensure_ascii=False, indent=4).encode("utf-8")
+    # write_json_atomic schreibt über TextIO mit nativen Zeilenenden.
+    # Auf Windows ist eine vollständige CRLF-Datei kein halber LF-Bestand.
+    return json.dumps(payload, ensure_ascii=False, indent=4).replace("\n", os.linesep).encode("utf-8")
 
 
 with tempfile.TemporaryDirectory(prefix="glide-last-") as ordner:
@@ -93,7 +95,7 @@ with tempfile.TemporaryDirectory(prefix="glide-last-") as ordner:
     root.report_callback_exception = lambda *args: fehler.append(args)
     app = mod.ListApp(root)
     meldungen = []
-    app.show_info = app.show_warning = app.show_error = lambda *args, **kwargs: meldungen.append(args[:1])
+    app.show_info = app.show_warning = app.show_error = lambda *args, **kwargs: meldungen.append(args)
     # Die Beispieldaten tragen fällige Erinnerungen. Ihre Zustellung ändert den
     # Bestand zu Recht – aber mitten im Vergleich von Gespeichertem und
     # Geladenem. Zustellung prüfen andere Suiten.
@@ -197,7 +199,7 @@ with tempfile.TemporaryDirectory(prefix="glide-last-") as ordner:
                     ziel["items"].append(eintrag["items"].pop(zufall.randrange(len(eintrag["items"]))))
             erwartet = len(alle_punkte())
             papierkorb_voll = papierkorb_voll or len(app.trash) >= app.MAX_TRASH_ENTRIES
-            assert app.save_items(), runde
+            assert app.save_items(), (runde, meldungen, getattr(app, "_read_only_reason", None))
             auf_platte = aus_datei()
             app.load_items()
             assert bestand() == auf_platte, f"Runde {runde}: geladen ≠ gespeichert"

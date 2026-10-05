@@ -1,6 +1,6 @@
 # Funktionen – Glide
 
-Stand 03.10.2026 · Glide 3.33.6 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
 Gültiges Verhalten je Bereich, verdichtet aus den Funktionsverträgen 45–79 (Glide 3.21–3.33.6, Zusammenführung am 03.10.2026). Überholte Zwischenstände sind weggelassen; die Vorfassungen trägt Git. Die Spalte „Herkunft“ nennt die früheren Vertragsnummern, damit ältere Verweise im Code und in Nachweisen auffindbar bleiben. Ausführbarer Vertrag sind die Pflichtsuiten unter `tests/integration` und `tests/unit`.
 
@@ -16,8 +16,8 @@ Aufbau und Bausteine: [Architektur](02_ARCHITECTURE.md). Datenfelder und Formate
 | [6 Pinnwand](#6-pinnwand) | 49, 53, 55, 66 | `test_workspace310`, `test_features324`, `test_features330` |
 | [7 Startseite](#7-startseite) | 48, 56, 58, 59, 60, 76 | `test_startseite3332`, `test_ui_updates`, `test_features328` |
 | [8 Seiten, Notizen, Galerie](#8-seiten-notizen-notizbuch-galerie) | 59, 66 | `test_seiten330`, `test_aufraeumen330`, `test_bilder330`, `test_befunde330` |
-| [9 Pixel-Werkstatt](#9-pixel-werkstatt) | 61, 65, 66, 68 | `test_drawing`, `test_drawing330`, `test_features329`, `test_etappe1_332` |
-| [10 Suche, Aktionen, Erinnerungen](#10-suche-aktionen-erinnerungen) | 56, 66 | `test_reminders`, `test_fenster330` |
+| [9 Pixel-Werkstatt](#9-pixel-werkstatt) | 61, 65, 66, 68 | `test_drawing`, `test_drawing330`, `test_features329`, `test_etappe1_332`, `test_editor3338` |
+| [10 Suche, Aktionen, Erinnerungen](#10-suche-aktionen-erinnerungen) | 56, 66 | `test_reminders`, `test_fenster330`, `test_suche3337`, Unit-Tests `test_content_search` |
 | [11 Import und Ausgabe](#11-import-ausgabe-und-austausch) | 45, 52, 66 | `test_features316`–`test_features321`, `test_template_workflows` |
 | [12 Erscheinungsbild](#12-erscheinungsbild-und-fenster) | 50, 51, 57, 66, 74, 75 | `test_kontrast330`, `test_mindestgroesse330`, `test_hintergrund330`, `test_logo330`, `test_festlayout330`, `test_kartenfuss330` |
 | [13 Grenzen](#13-bekannte-grenzen) | 66 §11 und Folgeverträge | – |
@@ -35,6 +35,7 @@ Aufbau und Bausteine: [Architektur](02_ARCHITECTURE.md). Datenfelder und Formate
 
 ## 2. Seitenleiste und Navigation
 
+- Bei minimaler Fensterhöhe haben alle vier Bereichsüberschriften kompakte Abstände; nach Vergrößern gelten wieder die normalen Abstände. Titel werden bei jeder Änderung der verfügbaren Titelbreite gekürzt, der gespeicherte Titel bleibt vollständig.
 - **Systemzeilen:** Startseite, Heute, Labels, Vorlagen, Papierkorb. „Demnächst“, „Verspätet“ und der Eingang haben bewusst keine eigene Zeile (D14, U06); sie sind über „Heute“, das Ansichtsmenü, die Suche und die Startseite erreichbar. Der Änderungsverlauf ist ein Kopfzeilenknopf ◷ (Strg+H).
 - **Vier Bereiche** in der Reihenfolge Seiten → Listen → Notizen → Zeichnungen (3.33.1):
 
@@ -166,7 +167,7 @@ Aufbau und Bausteine: [Architektur](02_ARCHITECTURE.md). Datenfelder und Formate
 
 ## 10. Suche, Aktionen, Erinnerungen
 
-- **Suche** über Seiten, Punkte und Aktionen: Strg/Cmd+O oder die Lupe ⌕ in der Kopfzeile, eingebettet unter dem Kopf; ohne Eingabe die zuletzt geöffneten Seiten; Umlaute wie ae/oe/ue/ss. Ein Klick außerhalb schließt sie. Eine Volltextsuche über Seiteninhalte gibt es noch nicht (G14).
+- **Suche** über Seiten, Punkte und Aktionen: Strg/Cmd+O oder die Lupe ⌕ in der Kopfzeile, eingebettet unter dem Kopf; ohne Eingabe die zuletzt geöffneten Seiten; Umlaute wie ae/oe/ue/ss. Ein Klick außerhalb schließt sie. Seit 3.33.7 findet dieselbe Suche ab zwei Zeichen auch den Text von Seiten/Notizen, Listenbeschreibungen und Aufgabenbeschreibungen (G14, erste Stufe). Titel stehen innerhalb ihrer Gruppe vor Inhaltstreffern; diese zeigen einen Ausschnitt des Originaltexts (höchstens 100 Zeichen). Groß/Klein und ä/ae, ö/oe, ü/ue, ß/ss sind gleichwertig; gesucht wird die zusammenhängende Eingabe, keine Operatorsprache. Metadaten, URLs in Linkmarken und Bildbytes werden nicht durchsucht. Archivseiten bleiben auffindbar und gekennzeichnet, Aufgaben aus archivierten Listen bleiben wie bisher ausgeschlossen. Öffnen verwendet die bestehenden IDs; Suche verändert keine Daten. Kein dauerhafter Index: aktuelle In-Memory-Daten sind sofort sichtbar, auch nach Undo/Import. FTS5-Cache, Trefferhervorhebung im Dokument und Zusammenführung des separaten Aktionsdialogs bleiben offen.
 - **Alle App-Aktionen** (⌘) gruppiert wie das Tastenkürzel-Fenster; eine Aktion ohne Gruppe erscheint sichtbar unter „Weitere Aktionen“ (die Prüfung verlangt, dass diese Gruppe leer bleibt).
 - **Erinnerungen** relativ zur Fälligkeit oder fest, mit Zustellbeleg; Prüfung alle 15 Sekunden, solange Glide läuft. **Systemmitteilungen** (Einstellung, Vorgabe aus) über Tk 9, je Prüflauf eine Sammelmeldung; sonst Hervorheben im Dock bzw. in der Taskleiste. Keine Zustellung bei beendetem Programm ([Entscheidung](decisions/SYSTEMBENACHRICHTIGUNGEN.md)).
 
@@ -194,7 +195,7 @@ Aufbau und Bausteine: [Architektur](02_ARCHITECTURE.md). Datenfelder und Formate
 
 ## 13. Bekannte Grenzen
 
-- **Plattformen:** Abnahme nur auf macOS mit Python 3.14/Tk 9. Windows (Vorschauen über WIC, Systemmitteilungen, Ziehen aus dem Explorer, Lupe, Logo unter Tk 8.6) und Linux (Pixelschrift über Fontconfig nur nachgebildet geprüft) sind ungeprüft; ebenso DPI, mehrere Monitore und Screenreader.
+- **Plattformen:** Windows-Vollprüfung 3.33.8 mit Python 3.14.8/Tk 9.0.4 grün; aktueller Referenz-Mac-/Bundle- und Linux-Nachweis offen. Physische Systemmitteilungen, Explorer-/Finder-Ziehen, DPI/Mehrmonitor und Screenreader brauchen weiter die manuelle Prüfliste. Ein vollständiger Tk-8.6-Lauf ist kein Nachweis aller Tk-9-Funktionen; aktueller Status im [QA-Bericht](07_QA_BERICHT.md).
 - **Vorschauen:** unterstützte Formate je System in den [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md#grenzen-einzelner-funktionen); offen sind JPEG unter Linux (N08) und SVG unter Tk 8.6. Die Großansicht vergrößert kleine Bilder nicht.
 - **Bilder in Seiten:** Umfluss über Ränder nachgebildet; zwei Bilder auf gleicher Höhe können sich überlappen; Druck/PDF und „Markdown kopieren“ zeigen nur Dateinamen (B4). Oben am Textfeld bis zu 18 px Versatz beim Scrollen.
 - **Seiten:** Titelbild fehlt (G09); weitere bewusste Grenzen in den [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md#grenzen-einzelner-funktionen). Ältere Glide-Stände verwerfen die Blockarten `h4`, `toggle`, `toggle_closed`, `callout` (Text bleibt).
@@ -204,4 +205,4 @@ Aufbau und Bausteine: [Architektur](02_ARCHITECTURE.md). Datenfelder und Formate
 - **Systemmitteilungen** erscheinen aus Python gestartet unter „Python“, nur aus dem Bundle unter „Glide“.
 - **Tagesstände** der Sicherung: bis zu 14 zusätzliche Dateien im Datenordner (in Cloudordnern zählen sie mit).
 - **Messungen** von Mindestgröße und Kontrast decken Widgets ab, nicht Texte auf Zeichenflächen (Pinnwandkarten, Kalenderzellen, Startseitengrafiken).
-- **Kalender** ist noch ein modales Fenster (N04); **Aufgaben im Notiztext**, Verweise, Volltextsuche, Animation und Paket mit eigenem Python sind geplant, nicht vorhanden ([Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md)).
+- **Kalender** ist noch ein modales Fenster (N04); **Aufgaben im Notiztext**, Verweise, FTS5-Suchcache, Animation und Paket mit eigenem Python sind geplant, nicht vorhanden ([Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md)).

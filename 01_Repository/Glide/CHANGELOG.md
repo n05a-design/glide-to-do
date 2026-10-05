@@ -2,6 +2,22 @@
 
 Vollständig beschrieben sind die sieben neuesten Versionen; ältere stehen verdichtet in der Tabelle am Ende. Ihre ausführlichen Einträge, Verträge und Nachweise trägt Git (Stand vor dem 03.10.2026). Das aktuelle Verhalten beschreiben die [Funktionen](docs/20_FUNKTIONEN.md).
 
+## 3.33.8 – Windows-Layout und Prüflaufzeit (05.10.2026)
+
+- **Kopfleiste:** Titelkürzung folgt auch der tatsächlichen Breite seiner Titelzeile. Geänderte Kennzahlen konnten den Titel unter Windows abschneiden, obwohl sich die äußere Kopfbreite nicht änderte.
+- **Mindesthöhe:** Die vier Bereichsüberschriften der Seitenleiste verwenden bei minimaler Höhe kompakte Abstände. Größere Fenster erhalten die bisherigen Abstände zurück; Listen behalten mehr sichtbare Zeilen.
+- **Zeicheneditor:** Beim Seitenwechsel endet jeder zum abgebauten Editor gehörende Timer. Das verhindert verwaiste Rückrufe und zufällige Callback-Fehler bei wiederverwendeten Tk-Kommandokennungen; offene Pixeländerungen werden vorher gespeichert. Neue Pflichtsuite `test_editor3338.py` prüft acht Wechsel, Timerabbau und gespeicherte Pixel.
+- **Windows-Formatcache:** Ein vollständiger SHA-256-Inhaltsvergleich erkennt auch gleich große Überschreibungen mit identischen Zeitstempeln. Native Windows-ChangeTime ist ebenfalls nicht ausreichend. Der Formatwert wird bei unverändertem Inhalt weiterhin nur einmal geparst; drei zusätzliche Unit-Tests prüfen Metadatenkollision, weit hinten stehenden Formatwert und unveränderten Inhalt. Warme Dateiprüfung bei 10.000 synthetischen Punkten: Median 1,5 ms; keine Gesamt-Speichermessung.
+- **Prüfstand:** Private Schriften gegen die ausgelieferten Dateien prüfen, Einstellungen auch über das echte Überlaufmenü öffnen, Windows-Menüstruktur und native JSON-Zeilenenden berücksichtigen. Größenwechsel und Zeichnungs-Kontextmessung vor den strengen Layoutvergleichen abwarten; Timer vor Tk-Neustart abbauen. Separate Prüflaufzeit Python 3.14.8/Tk 9.0.4 per Hersteller-SHA-256 verifiziert. Datenformat bleibt 20. Windows-Vollprüfung (66 Integrationssuiten/75 Unit-Tests) und strenge CI grün; Python-Fassung/Showcase SHA-256-abgeglichen. Referenz-Mac/Bundle und manuelle Freigabe offen; Nachweise im QA-Bericht.
+
+## 3.33.7 – Inhalte wiederfinden (05.10.2026)
+
+- **Inhaltssuche (G14, erste Stufe):** Strg/Cmd+O findet nun Seiten-/Notiztext, Listenbeschreibungen und Aufgabenbeschreibungen. Titel bleiben vor Inhaltstreffern, diese zeigen einen Originalausschnitt. Bestehende IDs und Öffnungswege, Archivregeln und leere Suchansicht bleiben erhalten. Keine Indexdatei, kein Datenformatwechsel, keine neue Laufzeitabhängigkeit. Ein später Titeltreffer wird nicht mehr durch die ersten 200 Inhaltstreffer verdrängt.
+- **Fachlogik:** `content_search.py` ist Tk-frei, mit Unit-Tests und Pflichtsuite `test_suche3337.py` (Eingabe/Enter, Originalziele, Objektwechsel und Neustart). Die Gegenprobe gegen 3.33.6 scheitert erwartungsgemäß am fehlenden Seiteninhaltstreffer.
+- **Windows-Formatsicherung:** `stat` und `fstat` verwenden unter Python 3.12 verschiedene ctime-Werte. Die Signatur nutzt unter Windows die konsistente Erstellzeit sowie Dateiidentität, Größe und Änderungszeit; POSIX behält ctime. Vorher 16 fehlgeschlagene Format-Subtests, nachher grün; bytegenaue Vorsicherung und Invalidierung bleiben geprüft.
+- **Planung:** Marktvergleich mit gezielter Herstellerprüfung vom 05.10.2026, konkrete nächste Schnitte im Entwicklungsplan und korrigierte Verweise auf die bestehenden Quellen. Beim Einstieg vorhandene Synchronisationskopien sind erhalten und im Index als solche eingeordnet.
+- **Prüfung/Lieferung:** aktuelle Ergebnisse und verbleibende Plattformgrenzen im [QA-Bericht](docs/07_QA_BERICHT.md); keine öffentliche Releasefreigabe.
+
 ## Aufräumen der Ablage (03.10.2026, App unverändert, kein Versionswechsel)
 
 - **Dokumente zusammengeführt:** `00_Arbeitsvorbereitung` von 24 Dokumenten auf vier ([Übergabe](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md), [Entwicklungsplan](../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Statusmarken, Markt und Vorbilder, manuelle Prüfliste); `docs/` von 53 auf elf Dokumente und fünf Entscheidungen. Die Funktionsverträge 45–79 (32 Dateien) stehen verdichtet in [Funktionen](docs/20_FUNKTIONEN.md), Releasecheckliste, Signierung, Vertrieb, Lizenzentwurf und Inhaberangaben in [Veröffentlichung](docs/10_VEROEFFENTLICHUNG.md), Tk-Fallstricke und Performance-Regeln in der [Architektur](docs/02_ARCHITECTURE.md). Keine Archivordner mehr; gelöscht statt verschoben.
@@ -54,42 +70,14 @@ Vollständig beschrieben sind die sieben neuesten Versionen; ältere stehen verd
 - **Schnellerer Aufbau (Rest P03):** Größenmeldungen des Hauptfensters werden in Tcl gefiltert, statt für jedes Kind Python aufzurufen (wirkt in allen Ansichten); gerundete Flächen und Knöpfe zeichnen einmal je Leerlauf statt bei jeder Zwischengröße; Umbruchbreite und Hintergrundfarben werden nur bei Änderung gesetzt.
 - **Tk-frei (D17):** `home_tiles.py` mit acht Unit-Tests; neue Pflichtsuite `test_startseite3332.py`; neues Messwerkzeug `scripts/pflege/messung_startseite.py`. `versionswechsel.py` legt keine Markdown-Kopien mehr an (Git trägt die Historie, Löschfreigabe vom 01.10.2026). Datenformat 20, keine neue Abhängigkeit. [Funktionen](docs/20_FUNKTIONEN.md#7-startseite).
 
-## 3.33.1 – Vier Bereiche und Fensterbedienung (01.10.2026)
-
-- **Abschluss nach der Mac-Vollprüfung (01./02.10.2026):** Die vier roten Schritte des Prüfkandidaten sind nachgestellt und behoben. [Nachweis](tests/qa-3.33.1/abschluss_2026-10-01/README.md).
-  - Dialog „Neu anlegen“ auf niedrigen Bildschirmen: macOS meldet beim Einblenden zuerst 1 × 1 Pixel; seit dem verborgenen Vermessen folgte keine echte Breite mehr. Die breite Maske blieb einspaltig, die Beschreibung lag unter dem sichtbaren Rand. Der Spaltenumschalter übergeht diese Platzhaltergröße.
-  - Notizbücher im Bereich Notizen nehmen wieder datierte Zeichnungen auf („Zeichnung · TT.MM.JJJJ“, Vertrag 65; Klarstellung des Inhabers vom 01.10.2026). Anlegen, Ziehen, Verschieben, Einrücken, Wiederherstellen und Vorlagen prüfen dafür den Zielordner (`sidebar_policy.CONTAINED`). Aufgabenlisten und Pinnwände in einem Notizbuch bleiben ein Fall für Listen; ein bestehendes Notizbuch mit Zeichnungen steht wieder unter Notizen.
-  - Zwei Prüfungen auf den 3.33.1-Vertrag gebracht: `audit_app` simuliert den Zeiger nur noch über dem Zielbaum (Bereichsüberschriften sind Ablageziele), `test_aufraeumen330` erwartet die Menüfolge, die `test_features330` schon prüft.
-  - Zwei neue Tk-freie Unit-Tests; `test_bereiche3331` prüft die Notizbuch-Zeichnung über echtes Ziehen, Momentdatum, Rückgängig und die Ablehnung für gewöhnliche Ordner und Aufgabenlisten.
-  - Vollprüfung Exitcode 0 (77 Schritte, 60 Integrationssuiten); `07_Python-Versionen` und neu gebautes macOS-Bundle bytegleich (142/56 Dateien), Signatur gültig. Zwei ungültige Vorläufe sind belegt: gesperrter Bildschirm und wahrscheinlich Tastatureingaben während des Laufs. Der Hintergrundmodus schirmt nur die Maus ab; Testplan und Übergabe nennen diese Grenze.
-
-- **Sicherheit und öffentliches Repository (App unverändert):**
-  - GitHub-Sicherheitsrichtlinie (`SECURITY.md` in der Wurzel; ersetzt die dort angelegte GitHub-Vorlage) mit vertraulichem Meldeweg, Dependabot für GitHub Actions; Checkout ohne gespeichertes Token. Der zunächst eingerichtete CodeQL-Workflow ist vom Inhaber deaktiviert.
-  - CI-Grundstufe prüft zusätzlich die Herkunft des Fremdcodes (alle 116 Dateien unter `vendor/tkinterdnd2` bytegleich zum PyPI-Paket aus `provenance.json`) und verhindert Benutzerpfade in versionierten Dateien.
-  - Rohprotokolle bleiben lokal: `*.log` wieder ausgeschlossen, 263 Protokolle aus dem Stand genommen; 110 Benutzerpfade in 27 Dateien ersetzt; neues Werkzeug `scripts/pflege/pfade_bereinigen.py`.
-  - README der Ablage als GitHub-Einstieg neu gegliedert, README des Quellbaums ergänzt. [Nachweis](tests/qa-3.33.1/sicherheit_2026-10-01/README.md).
-
-- Seiten, Listen, Notizen und Zeichnungen als getrennte Bereiche. Seiten/Notizen/Zeichnungen lassen sich in den Einstellungen ausblenden; alle Daten bleiben über Listen erreichbar.
-- Einheitliche Inhaltsgrenzen für Anlegen, Vorlagen, Kontextmenüs und Verschieben; Listen erlaubt alle Arten. Gemischte bestehende Ordner bleiben vollständig unter Listen. Kein neuer Inhaltstyp und keine Datenmigration.
-- Root-Zuordnung als Anzeigeeinstellung, einschließlich Rückgängig; Zeichnungsübersicht, vier Klappbereiche und begrenzte Baumhöhen bei kleiner Fensterhöhe.
-- Logo beginnt auf Höhe der Titeloberkante. Dialoge werden erst fertig positioniert eingeblendet; doppelte Leerlaufabfragen und unveränderte Breitenmessungen vermieden.
-- Showcase zeigt die vorhandene Pixelskizze im neuen Zeichnungsbereich. Neue Pflichtsuite für die tatsächlichen Bereichs-, Formular-, Drag-, Settings- und Neustartwege.
-- **CI-Grundstufe (D09, App unverändert):** Die GitHub-Vorlage „Python application“ brach mit Exitcode 2 ab, weil `pytest` das ganze Repository einsammelte (Archivkopien, Altstände, Tk-Suiten ohne Bildschirm). Der Workflow führt jetzt `tests/tools/ci_grundstufe.py` aus: Vorprüfungen, Werkzeug- und Unit-Tests, Analysen, Startprobe unter Xvfb, Lieferstand als Hinweis. Integrationssuiten unter Linux nur manuell und informativ. `07_Python-Versionen` mit `abgleich_07.py` auf den Prüfkandidaten 3.33.1 gebracht; `app.pyw.fetch` (Zwischenfassung) und die PyPI-Vorlage entfernt; zwei Verweise auf das entfernte `90_Testdaten_Extern` gelöscht. [Nachweis](tests/qa-3.33.1/ci_grundstufe_2026-10-01/README.md).
-
-## 3.33.0 – Fundament für die geplanten Ausbauten (01.10.2026)
-
-- T2: gemeinsame Formatsicherung in `schema_backups.py`; beim Laden vorhandene Formatinformation nutzen, sonst einmal je Dateistand lesen. Bytegenaue Rückfallkopien, Fehlerabbruch und bestehende Migrationseinstiege erhalten.
-- P09a/W1: Tabellen- und Bibliotheksansicht vermessen keine ungenutzten Listenspalten mehr; Listenspalten unverändert.
-- Acht Tk-freie Unit-Tests und eine neue Integration für alle Formatstufen, Austausch, Fehler/Retry, Reload und Spaltenbreiten; eigener QA-Fenster-Mausschutz geprüft.
-- GitHub-Stand und umgezogene Ablage abgeglichen; ursprüngliche Claude-Übergabe bleibt historisch. D12 ergänzt: Zeichnungen und Pinnwand-Vorschau.
-- Oberflächenumbau folgt nach dem Fundament; Datenformat 20 und bestehende Dokumentarten bleiben erhalten.
-
 ## Frühere Versionen (verdichtet)
 
 Datenformate und ihre Felder: [Daten und Migration](docs/06_DATA_BACKUP_MIGRATION.md#formatstufen).
 
 | Version | Datum | Kern |
 |---|---|---|
+| 3.33.1 | 01.10.2026 | Vier Seitenleistenbereiche, Fensterbedienung, Logo und Schaltflächen nachgezogen; ausführlicher Stand in Git |
+| 3.33.0 | 01.10.2026 | Tk-freies Fundament: gemeinsame Formatsicherung, Bereichsregeln, SVG-Geometrie und Startseitenkacheln |
 | 3.32.3 | 01.10.2026 | Bibliothek und Aktionsleiste behalten unveränderte Karten (Refresh bei 1.000 Aufgaben 776 → 5 ms); aktiver Showcase „Parkquartier“; Beschlüsse D09–D17 |
 | 3.32.2 | 30.09.2026 | Drag-and-drop in allen Seitenleistenbereichen (D04); Schriftwerte je Tk-Interpreter zwischengespeichert |
 | 3.32.1 | 30.09.2026 | Klappzustände von Labelgruppen, Fächern und Bereichen bleiben erhalten; Klapppfeile per Tastatur; D01–D06 übernommen |
