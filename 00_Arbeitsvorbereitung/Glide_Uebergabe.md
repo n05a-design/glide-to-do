@@ -66,12 +66,23 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 - **Aktueller Feature-Schnitt:** G14-Inhaltssuche und Windows-Formatsicherung seit 3.33.7, Windows-Layout/Editorlebensdauer in 3.33.8; Windows-Vollprüfung mit 66 Integrationssuiten und 75 Unit-Tests grün; Python-Fassung und Showcase abgeglichen. Windows-Volllauf/Referenz-Mac/Lieferung im QA-Bericht prüfen. Das ursprüngliche Zukunftsdokument ist im Entwicklungsplan §13 mit heutigem Code und späteren Entscheidungen abgeglichen.
 - **Beauftragt:** P04 Bildlayout, P06r doppelte Aktualisierungen, P08a/P08b Speicherweg, P09b Kennzahlen, Einstellungsfenster als Messpunkt, unveränderte Startseitenkacheln erhalten ([Entwicklungsplan, Abschnitt 3](Glide_Entwicklungsplan.md#3-performance-stufe-0-beauftragt)).
 - **Nächste Feature-Schnitte laut Auftrag 05.10.2026:** UX1 „Weniger Oberfläche“ (vorher stabile Aktionskennungen), danach G05 Fokus und H-02, dann G29/G31/G32.
+- **Ausbauprogramm Alltag, Komfort und Oberfläche** (Planung vom 05.10.2026, [Entwicklungsplan §4.3](Glide_Entwicklungsplan.md#43-ausbauprogramm-alltag-komfort-und-oberfläche)) mit neuen Paketen:
+  - OB01–OB06: moderne Oberfläche
+  - KO01–KO06: Komfort
+  - AU01–AU07: Alltag
+
+  Die Pakete hängen sich in die Kernfolge ein:
+  - Welle 1: Gestaltungsgrundlage, „Einplanen“, verfügbare Zeit, Tagesvorschlag
+  - Welle 2: moderne Oberfläche nach den Referenzentwürfen I7
+  - Welle 3: Verweise und Wochenplanung
+
+  Umgesetzt wird je Paket nach Auftrag.
 - **Kleine Reste für den nächsten Produktions- bzw. Werkzeugschnitt:** Code-Kommentar „Benachrichtigungen … Nicht-Ziel“ (AB06), Mindestversion Python/Tk prüfen (AB08), Kommentare zur Tastaturabschirmung in `pruefen.py` und `hintergrund/sitecustomize.py`, Verweise auf alte Dokumentnummern in den Textbausteinen von `tests/tools/releasedaten.py` (ändern nur zusammen mit neu erzeugter Release-Fixture).
 
 ## 7. Offen beim Inhaber
 
 - Feature-Arbeit ist am 05.10.2026 beauftragt; D07 erst zur Pixel-Etappe; Importquelle und Bauwerkzeug erst in Stufe 4.
-- I1 Inhaberangaben bestätigen, I2 Lizenz veröffentlichen, I3 Developer-ID und Code-Signing-Zertifikat, I4 Markenprüfung, I5 Python 3.14.7 installieren, I6 Windows-Vollprüfung 3.33.8 und manuelle Prüfsitzungen ([Prüfliste](Glide_Manuelle_Pruefung.md)).
+- I1 Inhaberangaben bestätigen, I2 Lizenz veröffentlichen, I3 Developer-ID und Code-Signing-Zertifikat, I4 Markenprüfung, I5 Python 3.14.7 installieren, I6 Windows-Vollprüfung 3.33.8 und manuelle Prüfsitzungen ([Prüfliste](Glide_Manuelle_Pruefung.md)), I7 Referenzentwürfe für „Heute“, Liste und Seite vor Welle 2 des Ausbauprogramms.
 - Lizenzlage der Inspirations- und Beispielbilder in `20_Grafik_Master` (Stockfotos in einem öffentlichen Repository) prüfen.
 
 Die Windows-Prüflaufzeit liegt separat im QA-Cache: Python 3.14.8/Tk 9.0.4, Hersteller-SHA-256 verifiziert. Der Windows-Standardstarter bleibt unverändert; I5 betrifft weiter den Mac.

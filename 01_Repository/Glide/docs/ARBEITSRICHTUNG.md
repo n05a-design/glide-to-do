@@ -6,7 +6,14 @@ Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Ent
 
 **Auftrag 05.10.2026:** Zukunftsperspektive, Dokumentation und Konkurrenzanalyse gründlich einbeziehen, nächste Schritte planen und mit Features beginnen. Erster begrenzter Schnitt ist die Inhaltssuche G14 im vorhandenen Strg/Cmd+O-Weg sowie die Windows-Formatsicherung. Mit 3.33.8 sind Windows-Layout-/Editor-Timer-/Formatcachekorrekturen vollständig automatisch geprüft und die Python-Fassung/der Showcase abgeglichen. Referenz-Mac, Bundle und manuelle Freigabe sind offen. Folgepakete stehen im Entwicklungsplan; der Auftrag entscheidet D07, Importquelle, Bauwerkzeug und Veröffentlichungsfragen nicht vorweg.
 
-**Grundsatz:** Entschiedenes wird nicht erneut vorgelegt. Offen sind nur D07, die Auswahl A–H mit ihrer Bearbeitungstiefe, die erste Importquelle (G21), das Bauwerkzeug (G26) und die Inhaberangaben I1–I6. Empfehlungen in Dokumenten ersetzen keine Entscheidung des Inhabers; jeder Umsetzungsschnitt außerhalb der beauftragten Performance-Arbeit braucht einen ausdrücklichen Auftrag.
+**Ergänzung desselben Tages (Wortlaut):** „Mehr Features, Mehr Quality of Life Updates, Mehr Unterstützung im Alltag und eine modernere Oberfläche genau wie in der Konkurrenz Analyse beschrieben“; Umfang und Arbeitsdokument daran anpassen. Die Planung steht im [Entwicklungsplan, Abschnitt 4.3](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#43-ausbauprogramm-alltag-komfort-und-oberfläche) als Ausbauprogramm in drei Wellen. Die beauftragte Kernfolge bleibt erhalten: Aktionskennungen → UX1 → G05/H-02 → G29/G31/G32. Umgesetzt wird je Paket nach Auftrag.
+
+**Grundsatz:** Entschiedenes wird nicht erneut vorgelegt. Offen sind nur:
+- D07
+- die Auswahl A–H mit ihrer Bearbeitungstiefe
+- die erste Importquelle (G21) und das Bauwerkzeug (G26)
+- die Inhaberangaben I1–I6
+- aus dem Ausbauprogramm: die Referenzentwürfe I7, die Vorgabe des Hinweises zu Tagesbeginn und Tagesabschluss (AU03), dezente Bewegung (OB04) und Termine als belegte Zeit (AU07, berührt eine Produktgrenze) Empfehlungen in Dokumenten ersetzen keine Entscheidung des Inhabers; jeder Umsetzungsschnitt außerhalb der beauftragten Performance-Arbeit braucht einen ausdrücklichen Auftrag.
 
 ## Verbindliche Entscheidungen
 

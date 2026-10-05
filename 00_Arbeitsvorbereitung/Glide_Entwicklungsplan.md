@@ -4,7 +4,7 @@ Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20
 
 Einziges Planungsdokument. Es führt zusammen, was bis 03.10.2026 auf zwölf Planungs-, Auswahl-, Recherche- und Entscheidungsdokumente verteilt war (Entwicklungsplan 3.33ff, Aufgabenauswahl A–H, Funktionsrecherche G01–G32, Arbeits- und Featureplanung P01–P07, Bestandsaufnahme AB/T, UX-Prüfung U01–U24, Übersicht vom 29.09.2026 und die älteren Kataloge). Die Vorfassungen trägt Git.
 
-Verbindliche Entscheidungen stehen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), Produktgrenzen und Prinzipien in den [Produktgrenzen](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md). Der Auftrag vom 05.10.2026 umfasst gründliche Planung und den Beginn der Feature-Umsetzung. Die Reihenfolge unten konkretisiert diesen Auftrag; D07, Importquelle, Bauwerkzeug und Inhaberfreigaben bleiben eigene Entscheidungen.
+Verbindliche Entscheidungen stehen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), Produktgrenzen und Prinzipien in den [Produktgrenzen](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md). Der Auftrag vom 05.10.2026 umfasst gründliche Planung und den Beginn der Feature-Umsetzung; am selben Tag um das [Ausbauprogramm Alltag, Komfort und Oberfläche](#43-ausbauprogramm-alltag-komfort-und-oberfläche) erweitert. Die Reihenfolge unten konkretisiert diesen Auftrag; D07, Importquelle, Bauwerkzeug und Inhaberfreigaben bleiben eigene Entscheidungen.
 
 ## Statusmarken
 
@@ -28,8 +28,8 @@ Reihenfolge der Stufen (Antwort des Inhabers vom 30.09.2026, bestätigt am 01.10
 | Stufe | Inhalt | Stand |
 |---|---|---|
 | 0 Fundament | Performance P03–P09, T2, CI | ◐ T2, P09a, Startseite-P03, CI-Grundstufe erledigt; P04, P06r, P08, P09b beauftragt |
-| 1 Klarer Alltag (3.33.x) | Bereiche, Startseite, Eingabe, Eisenhower, Heute/Demnächst, UX1, Fokus, Aufgaben im Text | ◐ 3.33.1–3.33.6 erledigt, G14-Suchbeginn 3.33.7; UX1, G05/H-02, G29/G31/G32 folgen |
-| 2 Wissen im Kontext (3.34.x) | Inspektor, Volltextsuche, Verweise (Format 21), Live-Liste, Titelbild, Kalender eingebettet | ◐ G14 seit 3.33.7; Prüfung/Lieferung 3.33.8 im QA-Bericht; übriger Ausbau offen |
+| 1 Klarer Alltag (3.33.x) | Bereiche, Startseite, Eingabe, Eisenhower, Heute/Demnächst, UX1, Fokus, Aufgaben im Text; Ausbau Komfort, Tag und Oberfläche Welle 1–2 (§4.3) | ◐ 3.33.1–3.33.6 erledigt, G14-Suchbeginn 3.33.7; UX1, G05/H-02, G29/G31/G32 und Welle 1 folgen |
+| 2 Wissen im Kontext (3.34.x) | Inspektor, Volltextsuche, Verweise (Format 21), Live-Liste, Titelbild, Kalender eingebettet mit Wochenplanung (Welle 3, §4.3) | ◐ G14 seit 3.33.7; Prüfung/Lieferung 3.33.8 im QA-Bericht; übriger Ausbau offen |
 | 3 Pixel (3.35.x) | Palettenbearbeitung, Symbolvorschau, Animation (D07) | ○ |
 | 4 Austausch und Verteilung (3.36.x) | KI-Austausch Stufe 2, Import, Sicherungsvergleich, Paket mit eigenem Python (D15) | ○ |
 | 5 Zukunft (4.x) | Screenreader (Tk 9.1), Seitenversionen, SQLite nur nach D16-Neubewertung | ◇ |
@@ -121,6 +121,95 @@ Vorher stabile Aktionskennungen statt Menübeschriftungen (Risiko R2: die Befehl
 
 3.33.7 ist für den ersten G14-Schnitt verwendet. G29/G31/G32, N07 und N08 bleiben Folgepakete ohne fest zugesagte Zielversion.
 
+### 4.3 Ausbauprogramm Alltag, Komfort und Oberfläche
+
+Auftrag des Inhabers vom 05.10.2026 (Wortlaut): „Mehr Features, Mehr Quality of Life Updates, Mehr Unterstützung im Alltag und eine modernere Oberfläche genau wie in der Konkurrenz Analyse beschrieben“; Umfang und Arbeitsdokument daran anpassen. Dieser Abschnitt ist die Planung dazu. Umgesetzt wird je Paket nach Auftrag; Status ○ heißt geplant.
+
+**Grundlage:** [Markt und Vorbilder](Glide_Markt_und_Vorbilder.md):
+- Abschnitt 1.1: Fertiger Tagesablauf (erfassen → machbaren Tag planen → arbeiten → abschließen). Heute, nächste Handlung und verfügbare Zeit erhalten den stärksten visuellen Rang.
+- Abschnitt 1, Punkt 5: Es ist zu viel dauerhaft sichtbar.
+- Abschnitt 3: TickTick schlägt Tagesaufgaben vor; Things setzt auf Feinschliff mit Schlummer-Intervallen und frühem Erledigen von Wiederholungen; Apple bietet Felder am Objekt und Erinnerungen in eigenen Worten; Super Productivity hat Fokus und Timeboxing; Sunsama hat ein Tagesritual.
+- Abschnitt 6: abgeleitete Prioritäten.
+
+**Regeln für jedes Paket:**
+- Prinzipien-Check der [Produktgrenzen](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md) bestehen: vorhandenen Weg erweitern statt einen zweiten bauen und benennen, was dafür verschwindet.
+- D01/D02 gelten. Fachlogik entsteht als Tk-freies Modul mit Unit-Tests (D17).
+- Keine neue Laufzeitabhängigkeit. Kein Formatwechsel, außer er ist ausdrücklich genannt.
+- Aufwand ist geschätzt, nicht terminiert: S bis 1 Arbeitstag (AT), M 2–4 AT, L mehr als 4 AT.
+
+**Bereits vorhanden, deshalb nicht neu geplant:** Tagesbeginn und Tagesabschluss, Wochenrückblick, Kapazität je Wochentag, Stundenraster, Jahres-Heatmap, Zeiterfassung, Schnelleingabe mit Feldchips und Wiederholungen, mehrzeiliges Einfügen in Listen (`paste_items_from_clipboard`), Seitenleiste ein-/ausblenden, Startseitendichte, Vorlagen mit Platzhaltern (einschließlich „Wochenplanung“), Fokusmodus der Pinnwand.
+
+#### A. Moderne, ruhige Oberfläche
+
+Vorbilder: Things (Feinschliff), Notion (Weißraum, Lesefluss), Apple („Felder am Objekt“). Lücken laut Analyse: zu viel dauerhaft sichtbar; Erscheinungsbild „wie System“ fehlt. Bereits geplant und Teil dieses Bereichs: UX1 (§4.1), N01/U17 „Automatisch (hell/dunkel)“, N05/U12 Inspektor, U15, U18, U09.
+
+| ID | Paket | Nutzen | Abnahme (Auszug) | Aufwand | Stand |
+|---|---|---|---|---|---|
+| OB01 | Gestaltungsgrundlage: eine Skala für Abstände, Radien, Schriftgrößen und Zeilenhöhen als Tk-freies Modul. Sie ersetzt schrittweise Einzelwerte wie `PAD_X` oder `HOME_CARD_RADIUS`. | Einheitlicher Rhythmus; spätere Gestaltungsänderungen an einer Stelle | Erster Schnitt ohne sichtbare Änderung; Kontrast- und Mindestgrößenprüfung grün; Zahl der Abstandswerte je Ansicht gemessen | M | ○ zuerst, Voraussetzung für OB02/OB03 |
+| OB02 | Klare Hierarchie mit vier Textstufen (Ansichtstitel, Abschnitt, Text, Metadaten). Der Kopf von „Heute“ zeigt nächste Aufgabe, verfügbare Zeit und Fortschritt als stärkstes Element. | Analyse 1.1: Heute, nächste Handlung und verfügbare Zeit zuerst | 860 × 700 und große Schrift; jede Angabe genau einmal (Regel aus D12) | M | ○ nach OB01, U10, U19 und I7 |
+| OB03 | Zeilenaktionen nur bei Bedarf: Einplanen, Termin und „…“ erscheinen in Listen-, Heute- und Tabellenzeilen beim Überfahren und bei Auswahl. Dauerhafte Zeilensymbole entfallen. | Weniger dauerhaft sichtbare Bedienung (UX1) | Jede Aktion auch über Tastatur (H-02), Kontextmenü und Befehlspalette; Ziel „Bedienfläche ≤ 15 %“ | M | ○ nach den Aktionskennungen |
+| OB04 | Dezente Bewegung beim Abhaken, Auf- und Zuklappen und Bereichswechsel (≤ 150 ms), nur bei eingeschalteten Animationen | Zeitgemäßes, ruhiges Bediengefühl | Keine messbare Verschlechterung der Ziele aus §3; ohne Animation gleiches Ergebnis | M | ◇ Inhaberentscheidung, nach Stufe 0 |
+| OB05 | Schmale Seitenleiste: eingeklappt nur Pixelsymbole und Systemzeilen, ausgeklappt wie bisher | Mehr Inhaltsfläche bei kleinen Fenstern | Zustand gemerkt; Tastatur; 860 × 700 | M | ◇ nach UX1 |
+| OB06 | Gestaltungsabnahme je Paket: Vorher-/Nachher-Fensterbilder bei 1280 × 800 und 860 × 700, hell und dunkel. Der Inhaber bewertet; die Bilder bleiben lokal und unversioniert. | Gestaltung wird abgenommen, nicht nur getestet | Entscheidung im QA-Bericht vermerkt | S je Paket | ○ gilt für Bereich A |
+
+#### B. Komfort im täglichen Gebrauch
+
+Vorbilder: Todoist Quick Add, Things 3.23/3.24, Apple „Erinnerung in eigenen Worten“. Bereits geplant und Teil dieses Bereichs: U01, U03, U04, U07, U14, U16, H-02, N07.
+
+| ID | Paket | Nutzen | Abnahme (Auszug) | Aufwand | Stand |
+|---|---|---|---|---|---|
+| KO01 | Ein Menü „Einplanen“ mit Heute, Morgen, Wochenende, Nächste Woche, Datum … und Ohne Tag. Es steht im Kontextmenü, in der Auswahlleiste, als Kürzel und als Zeilenaktion (OB03), wirkt auf die Mehrfachauswahl und setzt nur den Bearbeitungstag. | Umplanen ohne Dialog; ersetzt verstreute Einzelwege | Ein Undo-Schritt je Aktion; Fälligkeit bleibt; dieselbe Auswahl im Tagesbeginn | S–M | ○ |
+| KO02 | Wiederholungen: „Diesen Termin überspringen“ und vorzeitiges Erledigen ohne doppelten Folgetermin | Weniger Nacharbeit bei Routinen (Things 3.23) | Unit-Tests der Wiederholungslogik; die Serie bleibt erhalten | S | ○ |
+| KO03 | Erinnerungen in der Schnelleingabe („erinnere 9 Uhr“, „30 min vorher“) als Chip; das Datenmodell ist vorhanden | Erinnerung gleich beim Erfassen (Todoist, Apple) | Chip rücknehmbar; der Chip nennt die Grenze „nur bei laufender App“ | S | ○ |
+| KO04 | Felder am Objekt: Ein Klick auf Termin, Wichtigkeit oder Label einer Zeile öffnet die kleine Auswahl direkt dort | Weniger Masken (Apple, Analyse Abschnitt 3) | Ein Undo-Schritt; Tastatur; einheitlich mit dem Inspektor N05 | M | ○ zusammen mit N05 |
+| KO05 | Mehrzeiliges Einfügen in die Eingabezeile legt nach Rückfrage je Zeile eine Aufgabe an. Es nutzt den vorhandenen Einfügeweg der Liste und den Parser je Zeile. | Schnelle Übernahme aus Mails und Notizen | Vorschau „N Aufgaben anlegen“; ein Undo-Schritt | S | ○ |
+| KO06 | Zuletzt benutzte Ziele zuerst bei „Verschieben nach …“ und in der Labelauswahl | Weniger Suchen in großen Beständen | Keine neue Einstellung; Reihenfolge nur lokal | S | ○ |
+
+#### C. Unterstützung im Alltag
+
+Leitbild: Analyse 1.1. Vorbilder: TickTick 8.0 (vorgeschlagene Tagesaufgaben), Sunsama (Tagesritual), Super Productivity (Fokus, Timeboxing). Bereits geplant und Teil dieses Bereichs: G05, H-02, N04 mit B-03.
+
+| ID | Paket | Nutzen | Abnahme (Auszug) | Aufwand | Stand |
+|---|---|---|---|---|---|
+| AU01 | Tagesvorschlag „Was passt heute?“: Im Tagesbeginn wählt Glide aus Verspätetem, heute oder bald Fälligem, Liegengebliebenem und Wichtigkeit so viel vor, wie in die freie Kapazität passt (Aufwand, sonst 30 Minuten). Jede Zeile nennt ihren Grund; Übernehmen mit einem Klick. | Ein machbarer Tag ohne Grübeln und ohne Cloud-KI | Tk-freies Modul mit Unit-Tests; deterministisch; nichts ändert sich ohne Bestätigung; Fälligkeit unverändert; ein Undo-Schritt | M | ○ |
+| AU02 | Verfügbare Zeit überall beim Planen: Tagesbeginn, Ziehen auf einen Tag, „Einplanen“ (KO01) und der Kopf von „Heute“ zeigen z. B. „frei heute 1 h 20 min“ und benennen Überplanung | Planung sieht die Kapazität | Eine Rechenstelle (`planning_summary`); benennen, nicht verhindern | S–M | ○ |
+| AU03 | Geführter Tagesbeginn in drei Schritten (Rückblick → Vorschlag AU01 → Zeitblöcke im Raster), dazu ein optionaler Hinweis zu Tagesbeginn und Tagesabschluss zur festen Uhrzeit, solange die App läuft | Tagesritual ohne Einrichtung | Vorgabe des Hinweises: Inhaberentscheidung; Systemmitteilung nur über die vorhandene Option | M | ○ nach AU01/AU02 |
+| AU04 | Wochenplanung im eingebetteten Kalender (N04): Woche mit Kapazitätsbalken je Tag; Ziehen setzt den Bearbeitungstag (D02); Übernahme aus dem Wochenrückblick | Die Woche einmal planen statt täglich zu suchen | Teil von N04, kein zweiter Kalender | M | ○ mit N04 (Stufe 2) |
+| AU05 | Fokussitzung (= G05) mit der nächsten Aufgabe aus „Heute“, Pausenhinweis und direktem Wechsel zur nächsten Aufgabe nach dem Abhaken | Arbeiten statt Umschalten | Abnahme von G05: Zeit genau einmal gebucht | M | ○ = G05 (§4.2) |
+| AU06 | Routinen: wiederkehrende Checklisten (Morgen, Abend, Wochenabschluss) erscheinen als eigener Abschnitt in „Heute“, ohne Gewohnheitsstatistik | Alltagsroutinen sichtbar ohne neues Datenmodell | Nutzt die vorhandene wiederkehrende Checkliste; kein Formatwechsel | M | ◇ nach G05; ersetzt die Prüfung von G06 |
+| AU07 | Termine als belegte Zeit: Eine Kalenderdatei (ICS) wird nur gelesen und im Stundenraster als belegt gezeigt, ohne Aufgaben anzulegen | Realistische Kapazität an Besprechungstagen | Berührt die Produktgrenze „ICS ist Dateiaustausch“ und braucht voraussichtlich ein Datenfeld | M–L | ◇ Inhaberentscheidung |
+
+#### D. Funktionsausbau
+
+Die größten Lücken laut Analyse (Abschnitt 1, Punkt 3) sind bereits geplant; dafür gibt es keine neuen Kennungen. Neu ist nur die Zuordnung:
+- G29/G31/G32 (Aufgaben im Text)
+- G08/G30 (Verweise mit Rückverweisen), mit „@“ als Eingabeweg wie bei Notion und Rückverweisen wie bei Obsidian
+- G28 (Live-Liste)
+- G09 (Titelbild)
+- N04 (Kalender eingebettet) mit AU04
+- G14 (FTS5 nach Messung)
+- U08 (Vorlagen im Anlegen-Weg)
+
+Die Stufen 3–4 (Pixel, G24, G21, F-03, G26) bleiben unverändert.
+
+#### Reihenfolge in Wellen
+
+Reservierungen, keine Termine. Die beauftragte Kernfolge bleibt: Aktionskennungen → UX1 → G05/H-02 → G29/G31/G32. Neue Pakete werden dort eingehängt, wo sie dieselbe Codestelle berühren; das ist eine Empfehlung und braucht je Paket den Auftrag.
+
+| Welle | Inhalt | Begründung |
+|---|---|---|
+| 0 | P08a, danach P09b (beauftragt, §3) | Fundament zuerst (Rangfolge der Säulen) |
+| 1 Komfort und Tag (3.33.x) | Aktionskennungen → U03/U07/U10/U19 und OB01 → KO01 mit AU02 → AU01 → G05/AU05 mit H-02 → G29/G31/G32; KO02, KO03, KO05, KO06 als kleine Schnitte dazwischen | Größter Alltagsnutzen bei kleinem Risiko; kein Formatwechsel |
+| 2 Moderne Oberfläche (3.33.x/3.34.0) | Nach I7: OB02 → OB03 → N05 mit KO04 → N01/U17 → U01 → U02/U13/U14/U16/U24 → AU03 | Sichtbarer Modernisierungsschritt auf Grundlage der Referenzentwürfe |
+| 3 Wissen und Woche (3.34.x) | G08/G30 (Format 21) → N04 mit AU04 → G28, G09, U08 | Wissen im Kontext; das Formattor wird gebündelt |
+| Später | OB04, OB05, AU06, AU07; Stufen 3–4 | Entscheidung oder Auslöser offen |
+
+**Fertig (Programm), wenn:**
+- Ein Tag lässt sich aus „Heute“ in höchstens drei Schritten planen: Tagesbeginn → Vorschlag übernehmen → Zeitblöcke.
+- Die verfügbare Zeit ist überall sichtbar, wo geplant wird.
+- Die Oberflächenziele aus §10 sind erreicht.
+- Der Inhaber hat jede Welle gestalterisch abgenommen (OB06).
+
 ## 5. Wissen im Kontext (Stufe 2, 3.34.x)
 
 | ID | Arbeit | Stand |
@@ -163,7 +252,7 @@ Vorher stabile Aktionskennungen statt Menübeschriftungen (Risiko R2: die Befehl
 | – | SQLite als Hauptspeicher | ◇ | nur bei realen Beständen über 20.000 Punkten (D16) |
 | G25, Mobile | Toolkit-Probe, iPhone/iPad | ◇ | D03 aufheben |
 | G18, G15, G10 | Kachelsatz, Filter in Alltagssprache, Registerkarten-Block | ◇ | Vorrat |
-| G06 | Gewohnheiten | ◇ | vorerst nicht; zuerst G05 |
+| G06 | Gewohnheiten | ◇ | vorerst nicht; nach G05 als Routinen in „Heute“ (AU06, §4.3) neu bewerten |
 | B1 | Seitenleiste als Ganzes scrollen | ◇ | wenn die kleinen Bereiche im Alltag stören |
 | B7 | Tk-Fehler (Rahmen einer ausgeblendeten Leinwand) an Tcl/Tk melden | ○ | braucht ein Konto bei core.tcl-lang.org |
 | N09 | Erinnerungen bei geschlossener App (Stufe C) | ✕ | Produktgrenze |
@@ -195,6 +284,9 @@ Vorher stabile Aktionskennungen statt Menübeschriftungen (Risiko R2: die Befehl
 | R9 | Gewohnheitsbruch durch D10/D12/D14 | Bestandseinstellungen bleiben; N07 |
 | R10 | Namenskollision „Glide“ | Markenprüfung durch den Inhaber |
 | R11 | Linux-Messungen nicht auf den Mac übertragbar | Abnahme auf dem Referenz-Mac |
+| R12 | Gestaltungsumbau ohne Referenzentwurf erzeugt Nacharbeit | I7 vor OB02/OB03; Gestaltungsabnahme OB06 je Welle |
+| R13 | Tagesvorschläge wirken bevormundend oder unpassend | AU01 schlägt nur vor, nennt je Zeile den Grund, ändert nichts ohne Bestätigung und ist abschaltbar |
+| R14 | Mehr Funktionen in der ohnehin großen `ListApp` | Neue Fachlogik nur als Tk-freies Modul (D17), kleine Schnitte in Wellenreihenfolge, je Paket „was verschwindet dafür“ |
 
 ## 10. Messbare Ziele
 
@@ -208,6 +300,9 @@ Vorher stabile Aktionskennungen statt Menübeschriftungen (Risiko R2: die Befehl
 | Bedienfläche über Inhalt (Liste, 1280 × 840) | ≤ 15 % | ≈ 27 % |
 | Startseitenkacheln im Standard | 7 (D12) | ✅ 7 seit 3.33.2 |
 | Symbole mit mehreren Bedeutungen | 0 (Bewegungspfeile ausgenommen) | 5 |
+| Tag aus „Heute“ planen (Tagesbeginn → Vorschlag → Zeitblöcke) | ≤ 3 Schritte | Ausgangswert vor AU01 messen |
+| Verfügbare Zeit beim Einplanen sichtbar | in allen Planungswegen (Tagesbeginn, Ziehen auf Tag, Einplanen, Kopf von Heute) | Ausgangsstand vor AU02 je Planungsweg erfassen |
+| Abstandswerte in den Hauptansichten | nur Werte der Skala aus OB01 | Ausgangswert vor OB01 messen |
 
 Verbindlich ist die Messung auf dem Referenz-Mac mit Aufwärmen, Median und p95; Linux-Werte gelten als Trend.
 
@@ -224,6 +319,8 @@ Verbindlich ist die Messung auf dem Referenz-Mac mit Aufwärmen, Median und p95;
 | I5 | Python 3.14.7 auf dem Mac installieren | ○ braucht das Passwort des Inhabers |
 | I6 | Windows-Vollprüfung und manuelle Prüfsitzungen | ◐ Windows-Gesamtprüfung 3.33.8 grün (66 Integrationssuiten, 75 Unit-Tests, Python 3.14.8/Tk 9.0.4); menschliche Abnahme ○ [Prüfliste](Glide_Manuelle_Pruefung.md) |
 | – | Erste Importquelle für G21, Bauwerkzeug für G26 | ○ erst in Stufe 4 |
+| I7 | Referenzentwürfe für „Heute“, Liste und Seite (Affinity) als Gestaltungsrichtung für OB02/OB03 | ○ vor Welle 2 (§4.3) |
+| – | Ausbauprogramm: Vorgabe des Hinweises zu Tagesbeginn/-abschluss (AU03), dezente Bewegung (OB04), Termine als belegte Zeit (AU07, berührt eine Produktgrenze) | ○ wenn das jeweilige Paket ansteht |
 
 ## 12. Zukunftsperspektive und nächste Umsetzung (05.10.2026)
 
@@ -234,9 +331,11 @@ Verbindlich ist die Messung auf dem Referenz-Mac mit Aufwärmen, Median und p95;
 | Jetzt | G14 erste Stufe: vorhandene Inhalte wiederfinden; Windows-Formatsicherung korrigieren | Kein Formatwechsel, keine neue Laufzeitabhängigkeit; Inhalte/IDs/Archiv/Neustart, Differenz zur Vorversion | seit 3.33.7 implementiert, mit 3.33.8 Python-Lieferung; Grenzen im QA-Bericht |
 | Prüftor/Lieferung | Windows-Gesamtabnahme 3.33.8 und 07-Abgleich; Referenz-Mac/Bundle separat | Veraltete Testannahmen korrigiert; Titel-/Mindesthöhen-/Editor-Timerbefunde und übersehene Formatwechsel bei identischen Dateimetadaten behoben. 66 Integrationssuiten/75 Unit-Tests grün, 07/Showcase SHA-256-abgeglichen | ◐ Windows/Python-Lieferung erledigt; Referenz-Mac/Bundle und menschliche Abnahme offen |
 | Nächster Produktionsschnitt | P08a: ein Vergleichslauf für Verlauf/Aktivität/Änderungsdatum; anschließend P09b | Gleiche synthetische Bestände, Median/p95, Differenztest aller Änderungen; alte und neue Historie identisch | ▶ bestehender Performance-Auftrag |
-| Danach | Stabile Aktionskennungen, anschließend UX1 in kleinen Paketen (U03/U07/U10/U19 zuerst) | Jede Aktion über Menü und Palette erreichbar, Copy/Paste/Undo mit Editorfokus; Kalender bleibt Strg/Cmd+K (bestehende Entscheidung) | ▶ im aktuellen Feature-Auftrag vorgesehen, noch nicht umgesetzt |
-| Danach | G05 Fokus auf vorhandener Zeiterfassung, H-02 Tastaturwege | Zeit genau einmal buchen bei Pause, Wechsel und Neustart; 860 × 700/große Schrift, ein Undo je Strukturaktion | ○ geplant |
-| Danach | G29/G31/G32 Aufgaben im Text, dann G08/G30 Rückverweise | Heimatort, Papierkorb/fehlendes Ziel, Rename/Move/Import/Undo zuerst testen; vor inkompatiblen Verweisen Format-21-Tor | ○ geplant |
+| Danach | Stabile Aktionskennungen, anschließend UX1 in kleinen Paketen (U03/U07/U10/U19 zuerst), dazu OB01 Gestaltungsgrundlage | Jede Aktion über Menü und Palette erreichbar, Copy/Paste/Undo mit Editorfokus; Kalender bleibt Strg/Cmd+K (bestehende Entscheidung); OB01 ohne sichtbare Änderung | ▶ im aktuellen Feature-Auftrag vorgesehen, noch nicht umgesetzt; OB01 ○ |
+| Danach | KO01 „Einplanen“ mit AU02 verfügbarer Zeit, dann AU01 Tagesvorschlag (Welle 1, §4.3) | Nur Bearbeitungstag, ein Undo-Schritt; Vorschlag erklärbar, nichts ohne Bestätigung | ○ geplant |
+| Danach | G05 Fokus auf vorhandener Zeiterfassung (= AU05), H-02 Tastaturwege | Zeit genau einmal buchen bei Pause, Wechsel und Neustart; 860 × 700/große Schrift, ein Undo je Strukturaktion | ○ geplant |
+| Danach | G29/G31/G32 Aufgaben im Text; G08/G30 Rückverweise folgen in Welle 3 (§4.3) mit N04/AU04 | Heimatort, Papierkorb/fehlendes Ziel, Rename/Move/Import/Undo zuerst testen; vor inkompatiblen Verweisen Format-21-Tor | ○ geplant |
+| Nach I7 | Welle 2 „Moderne Oberfläche“: OB02, OB03, N05 mit KO04, N01/U17, U01, AU03 (§4.3) | Gestaltungsabnahme durch den Inhaber je Paket (OB06); Oberflächenziele aus §10 | ○ geplant |
 | Nach Messung | G14 FTS5-Ausbau | Nur bei gemessener Suchlatenz; Index vollständig ersetzbar, Öffnen ohne Index, keine SQLite-Hauptablage | ○ geplant |
 | Später | Pixel/Animation, Austausch und Paketierung | D07, erste Importquelle, Bauwerkzeug separat; Paketierung vor Screenreader-Abnahme | ◇ an bestehende Entscheidungen gebunden |
 
