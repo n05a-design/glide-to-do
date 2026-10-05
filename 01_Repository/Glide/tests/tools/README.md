@@ -8,7 +8,7 @@ Alle Werkzeuge werden aus `01_Repository/Glide` gestartet. Werkzeuge, die echte 
 
 | Werkzeug | Zweck |
 |---|---|
-| `pruefen.py [--modus voll] [--protokoll PFAD] [--timeout S]` | Prüflauf: Vorprüfungen (Syntax, Version, Dokumentation, Fixtures), Unit-Tests, Tk-Probe, gemessener Zeitzonenversatz, alle Suiten, Showcase, Analysen; im Vollmodus zusätzlich Reproduktion von Beispiel- und Releasedaten und Fensterfotos. Exitcode 1 bei einem Fehlschlag, 2 wenn Tk oder die Zeitzone den Lauf unvollständig lassen |
+| `pruefen.py [--modus voll] [--protokoll PFAD] [--timeout S]` | Prüflauf: Vorprüfungen (Syntax, Version, Dokumentation, Fixtures), Unit-Tests, Tk-Probe, gemessener Zeitzonenversatz, alle Suiten, Showcase, Analysen; im Vollmodus zusätzlich Reproduktion von Beispiel- und Releasedaten und Fensterfotos (macOS und Windows, lokal unter `fenster/`). Exitcode 1 bei einem Fehlschlag, 2 wenn Tk oder die Zeitzone den Lauf unvollständig lassen |
 | `ci_grundstufe.py [--protokoll PFAD] [--lieferstand-streng]` | CI-Grundstufe (GitHub Actions und lokal): Vorprüfungen, Werkzeugtests, Unit-Tests, Analysen, Startprobe, Lieferstand `src/glide` ↔ `07_Python-Versionen`, Fremdcode gegen `vendor/provenance.json`, Datenschutz (keine Benutzerpfade), Ablagegröße. Ohne Integrationssuiten |
 | `ablagegroesse.py` | Keine Archivkopien von Glide-Daten, keine `*.fetch`-Reste, Archive, Nachweise und Releaseplanungen nur der sieben neuesten Versionen (je Datenformat bleibt ein Beleg), Fensterbilder nur der drei neuesten, keine Datei über 50 MB. Kürzen: `scripts/pflege/ablage_kuerzen.py` |
 | `standpruefung.py` | Standangaben, Formatstufen, überholte Aussagen, Modullisten, relative Links, Titel, erster Vollprüfungsaufruf und Suitezahl aller aktiven Dokumente (R1–R14); ohne Tk, Sekunden |
@@ -19,7 +19,7 @@ Alle Werkzeuge werden aus `01_Repository/Glide` gestartet. Werkzeuge, die echte 
 | `pruefe_showcase.py` | Pflichtprüfung des gelieferten Showcase (Import, Remapping, Vorschauen, Undo, Vorlagen, Neustart) |
 | `showcase.py [--tag JJJJ-MM-TT]` | Erzeugt den Showcase aus den Bildern in `tests/fixtures/showcase/bilder` |
 | `beispieldaten.py --ziel DATEI` | Demonstrationsbestand im aktuellen Format |
-| `releasedaten.py --ziel DATEI --stichtag JJJJ-MM-TT` | Release-Arbeitslisten zum aktuellen Stand; Planungsfristen folgen dem Stichtag, Webquellen nicht |
+| `releasedaten.py --ziel DATEI --stichtag JJJJ-MM-TT [--screenshot PFAD.png]` | Release-Arbeitslisten zum aktuellen Stand; Planungsfristen folgen dem Stichtag, Webquellen nicht. Unter Windows zusätzlich Aufnahmen im hellen Design und seinem dunklen Gegenstück; gleiche Bilder brechen ab |
 | `rundgang.py` | Probedaten „Rundgang“ (Liste, Notiz, Seite mit Bildern, Zeichnung) |
 | `vorlagendaten.py` | Vorlagenkatalog `resources/templates/glide_vorlagen.glidetemplates` |
 | `screenshots.py` | Linux/X11-Aufnahmen eigener Testfenster |

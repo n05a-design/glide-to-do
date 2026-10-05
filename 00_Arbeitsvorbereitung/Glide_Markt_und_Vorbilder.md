@@ -34,7 +34,7 @@ Zusammengeführt am 03.10.2026 aus der Konkurrenz- und Featurematrix und der Kon
 
 **Glide-Stand 3.33.7:** Tagesplanung mit Kapazität, getrennte Fälligkeit und Bearbeitungstag, Zeiterfassung, echte Aufgaben in Seiten und die erste Inhaltssuche sind vorhanden. Fokus-Timer, weitergehende Aufgabenverknüpfungen und Rückverweise sind geplant. Der vorhandene dateibasierte KI-Austausch erzeugt neue Inhalte und aktualisiert bestehende Aufgaben nicht umfassend. Verbindliche Details: [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md), [KI-Austausch](../01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md), [Entwicklungsplan](Glide_Entwicklungsplan.md).
 
-**Empfohlener Fokus; keine neue Beauftragung oder Änderung des Entwicklungsplans:**
+**Empfohlener Fokus** (seit 05.10.2026 im [Ausbauprogramm des Entwicklungsplans](Glide_Entwicklungsplan.md#43-ausbauprogramm-alltag-komfort-und-oberfläche) eingeplant; Umsetzung je Paket nach Auftrag):
 
 1. Sichere, schnelle Basis und weniger dauerhaft sichtbare Bedienung; Heute, nächste Handlung und verfügbare Zeit erhalten den stärksten visuellen Rang.
 2. Tagesplanung und Umplanung vereinfachen: Aufgaben verschieben, ohne ihre Fälligkeit unbeabsichtigt zu ändern; wenige Pflichtangaben und brauchbare Vorgaben.

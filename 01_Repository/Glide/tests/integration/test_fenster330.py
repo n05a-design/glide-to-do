@@ -10,8 +10,10 @@ Für jedes Fenster wird geprüft:
 - jeder Knopf ist sichtbar und liegt im Fenster;
 - Esc schließt es.
 
-Mit `GLIDE_FENSTER_FOTOS=<Ordner>` legt die Suite unter macOS von jedem
-Fenster ein Foto nur dieses Fensters ab (`screencapture -l`).
+Mit `GLIDE_FENSTER_FOTOS=<Ordner>` legt die Suite unter macOS
+(`screencapture -l`) und Windows (PrintWindow) von jedem Fenster ein Foto nur
+dieses Fensters ab. Fotos sind ein Zusatz: Ein Fehler beim Fotografieren lässt
+die Suite nicht scheitern.
 """
 import importlib.machinery
 import importlib.util
@@ -55,9 +57,18 @@ with tempfile.TemporaryDirectory(prefix="glide-fenster-") as ordner:
     root_holder = {}
 
     def fenster_foto(dialog, name):
-        if not FOTOS or sys.platform != "darwin":
+        if not FOTOS or sys.platform not in ("darwin", "win32"):
             return
         try:
+            if sys.platform == "win32":
+                # Gegenstück zu `screencapture -l`: PrintWindow erfasst nur dieses Fenster.
+                werkzeuge = str(REPO / "tests/tools")
+                if werkzeuge not in sys.path:
+                    sys.path.insert(0, werkzeuge)
+                from releasedaten import save_windows_screenshot
+                sicher = "".join(z if z.isalnum() else "_" for z in name)[:60]
+                save_windows_screenshot(dialog, Path(FOTOS) / f"{len(fenster):03d}_{sicher}.png")
+                return
             import ctypes
             import ctypes.util
             cf = ctypes.cdll.LoadLibrary(ctypes.util.find_library("CoreFoundation"))

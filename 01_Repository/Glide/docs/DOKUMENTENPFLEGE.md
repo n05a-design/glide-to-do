@@ -12,6 +12,7 @@ Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder
 - **Code-relevant oder aktuell.** Behalten wird, was den heutigen Code, seine Prüfung, Daten, Entscheidungen oder die offene Planung beschreibt. Recherchen und Zwischenstände werden nach Übernahme ihrer gültigen Ergebnisse gelöscht.
 - **Aufbewahrung:** Archive und Nachweise nur der sieben neuesten Versionen (`07_Python-Versionen/Archiv`, `tests/qa-<Version>`, Releaseplanungen; je Datenformat bleibt eine Releaseplanung als Lesbarkeitsbeleg), Fensterbilder nur der drei neuesten, Rohprotokolle (`*.log`) nie. `scripts/pflege/ablage_kuerzen.py` kürzt, die CI-Grundstufe prüft (Schritt „Ablagegröße“).
 - **Leere Ordner** und Ordner, die nur README und Archiv enthalten, werden aufgelöst.
+- **Synchronisationskopien** (`<Name>-<Gerätename>.md`, etwa von OneDrive) sind keine Dokumente: mit dem Original zusammenführen, dann löschen. Eine Kopie im Index ist kein Ersatz für die Zusammenführung.
 - **Belege bleiben Belege:** Nutzeraufträge, Messwerte und Prüfergebnisse innerhalb der Aufbewahrung werden nicht umetikettiert oder nachträglich geändert.
 
 ## Dokumente und ihre Zuständigkeit

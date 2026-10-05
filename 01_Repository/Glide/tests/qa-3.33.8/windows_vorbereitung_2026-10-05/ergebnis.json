@@ -1,0 +1,137 @@
+{
+  "datum": "2026-10-05",
+  "art": "Werkzeug- und Dokumentationsnachlauf",
+  "app_version": "3.33.8",
+  "app_geaendert": false,
+  "umgebung": "Linux/Tk 8.6, künstliche Daten",
+  "befunde": {
+    "dunkelaufnahme_identisch": {
+      "dateien": [
+        "windows_2026-10-05/voll/screenshots",
+        "windows_2026-10-05/voll_2/screenshots"
+      ],
+      "sha256_praefix": "fa8654d6dfec3e58",
+      "ursache": "theme_name-Zuweisung in releasedaten.screenshots"
+    },
+    "theme_name_wirkungslos_weitere": [
+      "tests/integration/test_ui_updates.py",
+      "tests/integration/test_ui_polish36.py"
+    ],
+    "logo_tk9_windows": {
+      "farbwerte_logobereich": 116,
+      "tk": "9.0.4"
+    },
+    "W01_seitenleistentitel": "rechts um etwa ein Zeichen angeschnitten, ohne Auslassungszeichen; Sichtprüfung offen",
+    "fensterfotos_windows_vorher": false,
+    "pruefliste_b0_veraltet": true
+  },
+  "geaenderte_werkzeuge": [
+    "tests/tools/releasedaten.py",
+    "tests/integration/test_fenster330.py",
+    "tests/tools/pruefen.py (Kommentar)"
+  ],
+  "geaenderte_dokumente": [
+    "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+    "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+    "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+    "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "01_Repository/Glide/docs/diagnosen/LOGO_KANTENGLAETTUNG.md",
+    "01_Repository/Glide/tests/tools/README.md",
+    "01_Repository/Glide/CHANGELOG.md",
+    "20_Grafik_Master/README.md",
+    "01_Repository/Glide/docs/00_INDEX.md",
+    "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+    "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+    "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+    "01_Repository/Glide/packaging/README.md",
+    "07_Python-Versionen/README.md"
+  ],
+  "neue_aufgaben": [
+    "LG01",
+    "LG02",
+    "LG03",
+    "LG04",
+    "W01",
+    "W02",
+    "W03",
+    "W04"
+  ],
+  "neue_inhaberentscheidung": [
+    "I8"
+  ],
+  "neuer_prueflistenpunkt": [
+    "B13"
+  ],
+  "prueflaufzeit_hash_abgleich": {
+    "quelle": "python.org/ftp/python/index-windows.json",
+    "paket": "pythoncore-3.14-64",
+    "version": "3.14.8",
+    "sha256": "4873947a8afc037846b180312b83c744a4146a851cfd316a75c3125a4d8299da",
+    "uebereinstimmung": true
+  },
+  "pruefungen": {
+    "aufnahme_nachgestellt_x11": {
+      "designs": [
+        "glass_light",
+        "glass_dark"
+      ],
+      "bilder_verschieden": true
+    },
+    "test_fenster330_xvfb": {
+      "fenster": 50,
+      "ergebnis": "grün",
+      "fotos_linux": 0
+    },
+    "ci_grundstufe": {
+      "ergebnis": "ci/ergebnis.json"
+    }
+  },
+  "offen": [
+    "Sichtprüfung der Aufnahmen am Gerät (B1a: W01, W05–W08)",
+    "B2–B13 und C am Windows-PC"
+  ],
+  "zusammenfuehrung_synchronisationskopien": {
+    "grundlage": "vollständige Fassung (Konfliktkopie, Inhalt wie Git 267baab) plus Ergänzungen der Windows-Fassung",
+    "dokumente": [
+      "docs/00_INDEX.md",
+      "docs/01_PRODUCT_CONSTRAINTS.md",
+      "docs/05_QA_TESTPLAN.md",
+      "docs/07_QA_BERICHT.md",
+      "packaging/README.md",
+      "07_Python-Versionen/README.md"
+    ],
+    "geloescht": [
+      "6 Konfliktkopien <Name>-MacBook Pro Max Ultra.md",
+      "docs/09_PROJECT_HANDOFF.md"
+    ],
+    "tote_sprungmarken_vorher": 6,
+    "tote_sprungmarken_nachher": 0,
+    "gegenpruefung": {
+      "art": "getrennter Prüfagent, nur lesend",
+      "verlust_aus_vollstaendiger_fassung": 0,
+      "nachgetragen": [
+        "Prinzipien-Check: Tastatur und 860 × 700",
+        "Lizenzen in Paketierung und Lieferung",
+        "G01 = B-01",
+        "U01 = N03",
+        "U07 = N02",
+        "G26 = N11",
+        "N12 mit Canvas-Beschriftung",
+        "D08 verschachtelte Bereiche",
+        "QA-Bericht: übersprungene Schritte, Aufbewahrungsfenster, Windows seit 3.26.0"
+      ],
+      "bewusst_nicht_uebernommen": [
+        "Aufwand-/Risikowerte des alten Aufgabenvorrats (Git)",
+        "wörtliches Zitat der Inhaberantwort vom 30.09.2026 (Inhalt in ARBEITSRICHTUNG Q1–Q5)"
+      ]
+    }
+  },
+  "windows_zweig_bestaetigt": {
+    "lauf": "windows_2026-10-05_1829",
+    "fensterfotos": 50,
+    "hell_dunkel_verschieden": true
+  }
+}

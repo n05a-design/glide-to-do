@@ -4,6 +4,8 @@ Stand 05.10.2026 · Glide 3.33.8 · Datenformat 20
 
 **Status:** Diagnose abgeschlossen, Umsetzung offen. Die Auswahl der Lösungswege (Abschnitt 7) liegt beim Inhaber; bei der Diagnose wurden weder Code noch Master geändert. Nachstellungen: Linux/Tk 8.6, künstliche Daten.
 
+**Übernommen am 05.10.2026:** Tk-Fallstricke in die [Architektur](../02_ARCHITECTURE.md#zeichnen-und-bilder), Grenzen in die [Funktionen](../20_FUNKTIONEN.md#13-bekannte-grenzen), Masterbefunde in den [Grafik-Master](../../../../20_Grafik_Master/README.md), Aufgaben LG01–LG04 und die Auswahl I8 in den [Entwicklungsplan](../../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md), Sichtprüfung in die [Prüfliste](../../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md) (B5). Weg A gilt für die Windows-Prüflaufzeit: In der Aufnahme vom 05.10.2026 (Python 3.14.8/Tk 9.0.4) hat das Logo 116 Farbwerte statt 2. Die Standardinstallation des Inhabers ist unverändert.
+
 **Lebensdauer:** Zwischenablage im Sinne der [Dokumentenpflege](../DOKUMENTENPFLEGE.md). Sobald die gewählten Wege umgesetzt und ihre gültigen Ergebnisse in [Architektur](../02_ARCHITECTURE.md), [Funktionen](../20_FUNKTIONEN.md), [Entwicklungsplan](../../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) und [Grafik-Master](../../../../20_Grafik_Master/README.md) übernommen sind, wird dieses Dokument samt Bildern gelöscht.
 
 ## 1 Symptom
@@ -51,28 +53,9 @@ Besonders auffällig wird der Mangel, weil das Zeichen mehrere flach geneigte Ka
 
 ## 6 Befunde am Master (Gestaltung)
 
-`resources/logo/glide-logo.svg` (Kopie von `20_Grafik_Master/01_Logo/Glide-Logo-01.svg`) ist ein sauberer Einzelpfad mit gerade-ungerade-Füllregel und für die Darstellung unkritisch. Bei der Prüfung der Knoten fielen Konstruktionsdetails auf, die erst in großen Größen (512/1024 px, Druck) sichtbar werden. Ob sie gewollt sind, entscheidet der Inhaber.
+Seit 05.10.2026 im [Grafik-Master](../../../../20_Grafik_Master/README.md#befunde-am-logo-master-05102026-entscheidung-beim-inhaber) geführt: Knicke an Übergängen Gerade → Rundung, fast achsparallele Geraden, ein Kurzsegment und der zulaufende Innenraum bei 16–32 px.
 
 ![Knicke an Übergängen Gerade → Rundung](logo_master_knicke.png)
-
-**Nicht tangentiale Übergänge** (Koordinaten in Master-Einheiten, viewBox 841,89):
-
-| Punkt | Lage x / y | Übergang | Knick |
-|---|---|---|---|
-| 1 | 342,74 / 621,76 | um 4,3° geneigte Gerade → Rundung | 5,9° |
-| 2 | 325,94 / 603,24 | Rundung → Gerade | 3,5° |
-| 3 | 608,11 / 601,85 | Rundung → Gerade | 2,9° |
-| 4 | 525,70 / 475,61 | um 2,6° geneigte Gerade → Rundung | 2,6° |
-| 5 | 344,45 / 720,37 | Grundlinie: waagerechtes Stück → um 1,1° steigende Gerade | 1,1° |
-| 6 | 561,92 / 124,93 | Rundung → Gerade (Ansatz oben rechts) | 7,3° |
-
-Weitere kleine Knicke von 0,5–2,7° liegen bei 516,11 / 484,28, 319,63 / 461,24, 326,30 / 562,37, 335,93 / 554,20, 529,95 / 576,66 und 621,39 / 195,69. Muster: Die Rundungen sind tangential zu achsparallelen Kanten angelegt; die anschließenden Geraden wurden geneigt, ohne die Rundungen nachzuführen.
-
-**Fast achsparallele Geraden:** 0,01° (Oberkante, 504,75 → 330,20), 0,22° (625,34 / 636,52 → 625,27 / 618,56), 0,50° (325,94 / 603,24 → 326,30 / 562,37), 1,05° (611,56 / 108,77 → 578,13 / 109,38), 1,09° (Grundlinie, Punkt 5). Das Paar mit 6,6° und 6,7° (Ober- und Unterkante des unteren Bogens) ist parallel und damit erkennbar gewollt.
-
-**Kurzsegment:** Der Außenumriss endet mit `h-.02`, einem 0,02 Einheiten langen Stück vor dem Schließen.
-
-**Kleine Größen:** Der Innenraum des „g“ ist im Logo bei 54 px 3,6 px breit, im App-Symbol bei 16 px 0,78 px, bei 32 px 1,56 px und bei 48 px 2,34 px. Bei 16 und 32 px läuft er auch geglättet zu.
 
 ## 7 Lösungswege
 

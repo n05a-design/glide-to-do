@@ -183,20 +183,31 @@ Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt a
 
 - [ ] **B0 Windows-Vollprüfung – Anleitung**
 
-**Vorbereitung (einmalig):**
+Dieselbe Vollprüfung wie am Mac (`tests/tools/pruefen.py --modus voll`), gestartet über `windows_vollpruefung.cmd`. Sie umfasst alle Integrationssuiten aus `SUITEN` (3.33.8: 66), Unit-Tests, Showcase, fünf Analysen und die Reproduktion von Beispiel- und Releasedaten. Seit 05.10.2026 legt sie wie am Mac von jedem geprüften Fenster ein Foto ab. Dauer am Arbeitsrechner: 15–20 Minuten.
 
-1. **Python 3.14/Tk 9 bereitstellen:** Auf dem aktuellen Windows-Gerät liegt die separate verifizierte Laufzeit unter `%USERPROFILE%/.cache/glide-qa/python-3.14.8/runtime`; der Prüfstarter bevorzugt sie. Alternativ **Python 3.14** von [python.org](https://www.python.org/downloads/windows/)
-   installieren, mit der Option „tcl/tk and IDLE“ (Standard) und dem
-   Python-Starter `py`. Die verwendete Python-/Tk-Kombination ist vor Ort zu prüfen; Grundlage ist Python 3.14/Tk 9 (E-03). Am 28.09.2026 war auf dem PC nur Python 3.13 mit
-   Tk 8.6 installiert; damit prüft der Lauf nur den Rückfallweg (Logo als
-   Fläche, keine Systemmitteilung, keine SVG-Vorschau). Beide Fassungen
-   dürfen nebeneinander installiert sein; `py -3.14` wählt die neue.
-2. **Projektordner:** die Git-Arbeitskopie `glide-to-do` aktuell ziehen. Liegt
-   sie in OneDrive, den Ordner per Rechtsklick auf „Immer auf diesem Gerät
-   behalten“ stellen und warten, bis alle Dateien heruntergeladen sind; nur
-   online verfügbare Platzhalter ließen den Lauf 3.28 scheitern, das Skript
-   bricht dann mit einem Hinweis ab.
-3. Glide vorher schließen.
+**Vorbereitung (einmalig je Rechner):**
+
+1. **Prüflaufzeit Python 3.14 mit Tk 9:** Der Starter nimmt der Reihe nach:
+   - `-PythonExecutable <Pfad>`;
+   - die separate Laufzeit `$env:USERPROFILE\.cache\glide-qa\python-3.14.8\runtime\python.exe`;
+   - `py -3.14`;
+   - zuletzt `python`.
+
+   Er gibt Python- und Tk-Version aus (`package provide Tk`, nicht die Tcl-Version). Ist Python älter als 3.14 oder Tk älter als 9, endet er mit Exitcode 3, bevor eine Suite läuft. Am Arbeitsrechner liegt die Laufzeit seit 05.10.2026 bereit ([Herkunft und Herstellerhash](../01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05/prueflaufzeit.json)). Auf einem anderen Rechner entweder Python 3.14 von [python.org](https://www.python.org/downloads/windows/) installieren (Option „tcl/tk and IDLE“, Python-Starter `py`) oder die separate Laufzeit anlegen. Diese ändert weder PATH noch Standardinstallation:
+
+   ```powershell
+   $ziel = "$env:USERPROFILE\.cache\glide-qa\python-3.14.8"
+   New-Item -ItemType Directory -Force $ziel | Out-Null
+   Invoke-WebRequest https://www.python.org/ftp/python/3.14.8/python-3.14.8-amd64.zip -OutFile "$ziel\paket.zip"
+   (Get-FileHash "$ziel\paket.zip" -Algorithm SHA256).Hash  # 4873947A8AFC037846B180312B83C744A4146A851CFD316A75C3125A4D8299DA
+   Expand-Archive "$ziel\paket.zip" "$ziel\runtime"
+   ```
+
+   Der Hash ist der des Herstellers (Paketindex `python.org/ftp/python/index-windows.json`, Eintrag `pythoncore-3.14-64`, 3.14.8). Weicht er ab, nicht entpacken. In PowerShell heißt der Benutzerordner `$env:USERPROFILE`. `%USERPROFILE%` ersetzt nur die Eingabeaufforderung (`cmd`); PowerShell nimmt es wörtlich und legt etwa mit `New-Item` einen Ordner dieses Namens an.
+2. **Projektordner:** die Git-Arbeitskopie `glide-to-do` aktuell ziehen (`git pull`). Liegt sie in OneDrive:
+   - Den Ordner per Rechtsklick auf „Immer auf diesem Gerät behalten“ stellen und warten, bis alle Dateien heruntergeladen sind. Nur online verfügbare Platzhalter ließen den Lauf 3.28 scheitern; das Skript bricht dann mit Exitcode 4 ab.
+   - `git status` muss sauber sein. OneDrive-Konfliktkopien (`<Name>-<Gerätename>.md`) vorher löschen; sie sind keine Projektdateien.
+3. Glide schließen.
 
 **Prüfung starten:**
 
@@ -205,34 +216,45 @@ Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt a
 - **oder in PowerShell** aus `01_Repository\Glide`:
   `powershell -NoProfile -ExecutionPolicy Bypass -File tests\tools\windows_vollpruefung.ps1`.
 
-Der Umfang folgt `SUITEN` im Prüfstand (zuletzt 64 Integrationssuiten und fünf Analysen); die Dauer hängt vom PC ab. Dabei öffnen und schließen sich
-Glide-Fenster. Während des Laufs bitte nicht mit der Maus eingreifen und keine
-weiteren rechenintensiven Programme starten: Einige Oberflächentests messen
-Layouts und reagieren auf Last.
+Während des Laufs öffnen und schließen sich Glide-Fenster im Vordergrund. Den Hintergrundmodus des Mac gibt es unter Windows nicht. Deshalb Maus und Tastatur nicht benutzen, den Rechner nicht sperren und keine rechenintensiven Programme starten: Einige Oberflächentests messen Layouts und reagieren auf Last.
 
 **Ergebnis:**
 
 - Am Ende stehen **Exitcode** und Protokollordner, zum Beispiel
-  `tests\qa-<Version>\windows_<Datum>_<Uhrzeit>`.
-  - `0` heißt: alle automatischen Schritte bestanden;
-  - `1` heißt: mindestens ein Schritt gescheitert – die Logdatei im Ordner
-    nennt ihn;
-  - `3` oder `4` heißt: fehlendes Python/Tk bzw. OneDrive-Platzhalter.
-- Unter Windows legt die Prüfung zusätzlich eine Aufnahme des Hauptfensters
-  ab (`release_hell.png`, Releaseplanung im hellen Design). Bitte auf Schärfe
-  und abgeschnittene Texte ansehen. Das Design „Pixel“ prüfst du von Hand (unten).
-- Den Protokollordner liegen lassen und `ergebnis.json` samt README hochladen.
-  Der nächste Agent überträgt das Ergebnis in den
-  [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md); Rohprotokolle
-  (`*.log`) bleiben lokal.
+  `tests\qa-<Version>\windows_<Datum>_<Uhrzeit>`:
+  - `0`: alle automatischen Schritte bestanden;
+  - `1`: mindestens ein Schritt gescheitert, die Logdatei im Ordner nennt ihn;
+  - `2`: unvollständig, weil Tk oder die Zeitzonenmessung fehlte;
+  - `3`: Python/Tk ungeeignet;
+  - `4`: OneDrive-Platzhalter.
+- **Sichtprüfung der Aufnahmen** (nur lokal, nicht hochladen):
+  - `screenshots\release_hell.png` und `release_hell_dunkel.png`: Releaseplanung im hellen und im dunklen Gegenstück des Standarddesigns. Die beiden Bilder müssen sich unterscheiden; der Erzeuger bricht sonst ab.
+  - `fenster\*.png`: jedes geprüfte Fenster einzeln.
 
-**Laufzeit vor Ort abgleichen:**
+  Auf Schärfe, Logo mit glatten Kanten und abgeschnittene Texte ansehen. Seitenleistentitel ohne „…“ müssen vollständig sein (Vorbefund W01, siehe B1a). Das Design „Pixel“ prüfst du von Hand (B3).
+- **Zurückmelden:** Exitcode, Name des Protokollordners und Befunde der Sichtprüfung. Der Agent liest `ergebnis.json` über den verknüpften Rechner oder als Anhang. Er legt den Nachweis unter `tests/qa-<Version>/` an und überträgt das Ergebnis in den [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md). Rohprotokolle (`*.log`) und Bilder bleiben lokal.
 
-`windows_vollpruefung.ps1` wählt `py -3`, sonst `python`; es kann deshalb bei mehreren Installationen eine andere Python-Version auswählen. Die Ausgabe unter „Tk“ liest derzeit die Tcl-Version, nicht `package present Tk`. Die tatsächliche Tk-Version separat prüfen, zum Beispiel mit `py -3.14 -c "import tkinter as t; r=t.Tk(); print(r.tk.call('package', 'present', 'Tk')); r.destroy()"`. Die Probe öffnet kurz ein natives Tk-Fenster und greift nicht auf Glide-Daten zu.
+**Ohne Starter:** Bei Bedarf die Vollprüfung mit ausdrücklicher Laufzeit starten. Die Ausgabe der ersten Zeile prüfen, weil dieser Weg Tk 9 nicht erzwingt:
 
-Falls der Starter eine andere Laufzeit wählt, die Vollprüfung aus dem Repository ausdrücklich mit `py -3.14 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-<Version>/windows_manuell --timeout 900` starten (`<Version>` durch VERSION ersetzen). Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Windows-Nachweis wird aus dem Mac-Lauf abgeleitet.
+```powershell
+$py = "$env:USERPROFILE\.cache\glide-qa\python-3.14.8\runtime\python.exe"
+& $py -B tests\tools\pruefe_tk.py   # erwartet: Tk 9.0.x
+& $py -B tests\tools\pruefen.py --modus voll --protokoll tests\qa-<Version>\windows_manuell --timeout 900
+```
 
-- [x] **B1 Vollprüfung (automatisch, 05.10.2026):** 3.33.8 mit Python 3.14.8/Tk 9.0.4, 66 Integrationssuiten und 75 Unit-Tests grün. [Ergebnis](../01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05/voll_2/ergebnis.json). B2–B12 bleiben physische Inhaberprüfungen.
+Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Windows-Nachweis wird aus dem Mac-Lauf abgeleitet.
+
+- [x] **B1 Vollprüfung (automatisch, 05.10.2026):** 3.33.8 mit Python 3.14.8/Tk 9.0.4.
+  - 15:02: 66 Integrationssuiten und 75 Unit-Tests grün, Exitcode 0 ([Ergebnis](../01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05/voll_2/ergebnis.json)). Die Dunkelaufnahme dieses Laufs gleicht der hellen (Werkzeugfehler, behoben).
+  - 18:29, vom Inhaber gestartet, erstmals mit Fensterfotos und echter Dunkelaufnahme: Exitcode 1. 83 von 85 Schritten sind ausgeführt und alle 66 Suiten grün. `attributpruefung` scheiterte an einem einmaligen Absturz des Python-Interpreters (in 30 Wiederholungen kein weiterer). Die Sichtprüfung ist übersprungen ([Nachweis](../01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05_1829/README.md)).
+- [ ] **B1a Sichtprüfung der Aufnahmen am Gerät:** Fotos unter `tests\qa-3.33.8\windows_2026-10-05_1829\fenster` und `screenshots` durchsehen. Die Vorbefunde mit Testablage in Glide nachstellen:
+  - **W01** Seitenleiste: Lange Listentitel enden mit „…“, kürzere stehen vollständig da („Unterlagen & Assets“).
+  - **W05** Datei › Datenaustausch › „Für KI bereitstellen …“ und Ansicht › Liste › „Tabellenspalten …“: Ist die Fensterbreite angemessen, stehen die Knöpfe wie in den übrigen Dialogen?
+  - **W06** „Neue Liste“ mit der Art Aufgaben bzw. Pinnwand und „Neuer Ordner“ mit Ordner, Buch und Notizbuch: Sind Überschrift und Feldbeschriftungen sichtbar? Mehrmals hintereinander öffnen.
+  - **W07** Zeichnung › Referenz mit einem PNG › „Ganzes Bild zeigen“: Steht der Hinweistext genau einmal da?
+  - **W08** Rechtsklick auf eine Liste › „Pixelsymbol …“: Ist das Raster groß genug zum Zeichnen?
+
+  B2–B13 bleiben physische Inhaberprüfungen.
 - [ ] **B2 Windows-Bestand (Format 17, Inhaberprobe):** Eine unveränderte
       Kopie des eigenen Bestands in einer getrennten Testablage mit
       `GLIDE_DATA_DIR` und aktueller Fassung aus `07_Python-Versionen` öffnen.
@@ -247,8 +269,10 @@ Falls der Starter eine andere Laufzeit wählt, die Vollprüfung aus dem Reposito
 - [ ] **B4 Skalierung:** 100, 150 und 200 % sowie zwei Monitore. Logo,
       Pixelsymbole und Zeichnungen sind scharf.
 - [ ] **B5 Logo und Lupe:**
-  - Mit Python 3.14 (Tk 9) ist das Logo glatt; mit 3.13 (Tk 8.6) ist es eine
-    Fläche mit harten Kanten.
+  - Mit Python 3.14 (Tk 9) ist das Logo glatt, auch bei 150 und 200 %; mit
+    3.13 (Tk 8.6) ist es eine Fläche mit harten Kanten, Fenster- und
+    Taskleistensymbol sind dann ebenfalls treppig. Ursache und Lösungswege:
+    [Diagnose](../01_Repository/Glide/docs/diagnosen/LOGO_KANTENGLAETTUNG.md).
   - Die Lupe ⌕ ist lesbar; bitte notieren, aus welcher Schrift sie kommt
     (`tests/tools/symbolpruefung.py`).
 - [ ] **B6 Startmenü-Verknüpfung:**
@@ -266,6 +290,14 @@ Falls der Starter eine andere Laufzeit wählt, die Vollprüfung aus dem Reposito
 - [ ] **B11 Druck und PDF** wie A9.
 - [ ] **B12 Beenden mit Alt+F4:** Der nächste Start öffnet in derselben
       Größe und Lage.
+- [ ] **B13 Anhänge an Aufgaben:** Eine Datei mit Umlaut und Leerzeichen im
+      Namen, auch eine nur online verfügbare OneDrive-Datei, über den
+      Detailbereich anhängen.
+  - Glide kopiert sie in die Testablage (`attachments`); Doppelklick öffnet
+    sie im zugeordneten Programm (`os.startfile`).
+  - Die Listenanzeige „Anhänge“ zeigt Name und Größe.
+  - Komplettbackup in einer zweiten Testablage einlesen: Der Anhang ist da und
+    öffnet sich.
 
 ## C. Bildschirmleser und Tastatur (VoiceOver bzw. NVDA)
 
@@ -289,5 +321,3 @@ Falls der Starter eine andere Laufzeit wählt, die Vollprüfung aus dem Reposito
 - Signatur, Notarisierung und Installer.
 - Markenprüfung.
 - Store-Freigabe.
-
-Windows-Prüflaufzeit seit 05.10.2026: separate Python-3.14.8-/Tk-9.0.4-Ablage unter `%USERPROFILE%/.cache/glide-qa`. Der Vollprüfungsstarter bevorzugt sie und unterstützt `-PythonExecutable <Pfad>`. Die Standardinstallation bleibt unverändert; die automatische Prüfung ist keine abgehakte Sitzung B. Aktuelles Ergebnis im QA-Bericht.

@@ -1,0 +1,54 @@
+{
+  "datum": "2026-10-05",
+  "lauf": "windows_2026-10-05_1829",
+  "plattform": "Windows x64",
+  "python": "3.14.8",
+  "tk": "9.0.4",
+  "laufzeit": "%USERPROFILE%/.cache/glide-qa/python-3.14.8/runtime",
+  "ergebnis_original": {
+    "exitcode": 1,
+    "schritte": 85,
+    "ausgefuehrt": 83,
+    "fehlgeschlagen": 1,
+    "uebersprungen": 1,
+    "integrationssuiten": 66
+  },
+  "fehlgeschlagen": {
+    "schritt": "attributpruefung",
+    "exitcode": 3221226505,
+    "hex": "0xC0000409",
+    "meldung": "Fatal Python error: _PyEval_EvalFrameDefault: Executing a cache.",
+    "glide_code_beteiligt": false,
+    "nachstellung": {
+      "zeit": "2026-10-05T18:56",
+      "ausgefuehrt_von": "Inhaber am Windows-PC",
+      "aufruf": "python.exe -B tests\\tools\\attributpruefung.py, 30 Wiederholungen",
+      "abstuerze": 0,
+      "laeufe": 30
+    },
+    "fruehere_laeufe_gruen": [
+      "windows_2026-10-05/voll",
+      "windows_2026-10-05/voll_2",
+      "windows_2026-10-05/ci"
+    ],
+    "einordnung": "einmaliger Absturz des Python-Interpreters 3.14.8 in einem statischen Analysewerkzeug; nicht reproduzierbar; Ursache nicht belegt"
+  },
+  "neue_werkzeuge_bestaetigt": {
+    "fensterfotos_windows": 50,
+    "test_fenster330": "50 Fenster geprüft, grün",
+    "dunkelaufnahme_verschieden": true,
+    "sha256": {
+      "screenshots/release_hell.png": "fa8654d6dfec3e588685c1081b1079944f65dbd61b95ff9bf8f267f13f8c4f90",
+      "screenshots/release_hell_dunkel.png": "d56e83d808d664b2fcd2af2f06c64a874dd0b2bb0440a24b6ca41b0b2597ac44"
+    },
+    "hell_gleich_lauf_1502": true
+  },
+  "sichtbefunde_aus_aufnahmen": {
+    "W01": "Seitenleistentitel rechts angeschnitten ohne Auslassungszeichen, hell und dunkel, wie um 15:02",
+    "W05": "Dialoge „Für KI bereitstellen“ (1705 px) und „Tabellenspalten“ (1317 px) sehr breit, Knopfreihe links",
+    "W06": "In 13 von 22 Fotos der Dialoge „Neue Liste“/„Neuer Ordner“ sind Überschrift und Feldbeschriftungen weiße Flächen ohne Text; Eingabefelder sind gezeichnet. Aufnahmezeitpunkt oder Zeichenlücke offen",
+    "W07": "„PNG auf 128 × 128 einpassen“ nach „Ganzes Bild zeigen“: Hinweistext doppelt und überlagert",
+    "W08": "„Pixelsymbol“: 16 × 16-Raster nur rund 60 px groß mitten in großer leerer Fläche (Zoom 5×)"
+  },
+  "logs_und_fensterfotos": "lokal, nicht versioniert"
+}
