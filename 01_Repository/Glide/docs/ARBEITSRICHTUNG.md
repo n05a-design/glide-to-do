@@ -33,6 +33,8 @@ Wortlaute stehen in Anführungszeichen, alles andere ist Zusammenfassung. Was da
 
 ## Verbindliche Entscheidungen
 
+Neue Entscheidungen werden als D18 ff. mit Datum und Wortlaut der Antwort eingetragen.
+
 | Nr. | Entscheidung | Stand |
 |---|---|---|
 | D01 | Allgemeine Datumsangaben setzen den Bearbeitungstag; ausdrücklich „fällig/bis“ setzt die Fälligkeit. Erkannte Felder sind vor dem Speichern sichtbar und rücknehmbar. | umgesetzt 3.33.3 |
@@ -51,7 +53,7 @@ Wortlaute stehen in Anführungszeichen, alles andere ist Zusammenfassung. Was da
 | D14 | Zwei Hauptansichten: Heute (Tag, Verspätet, Heute fällig, nächste Aufgabe) und Demnächst; Tagesbeginn/-abschluss sind Modi von Heute; interne Kennungen bleiben. | umgesetzt 3.33.6 |
 | D15 | Verteilung als Paket mit eingebettetem Python und Tk 9 je Plattform (G26/H-03), nach Stufe 1; das Bauwerkzeug ist eine eigene Abhängigkeitsentscheidung. | offen (Stufe 4) |
 | D16 | JSON bleibt Speicherformat; der Speicherweg wird beschleunigt (T2, P08, P09). SQLite nur als Suchindex-Cache (G14); Neubewertung erst über 20.000 Punkten. | gilt |
-| D17 | Kein Großumbau: jede neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests; `ListApp` ruft sie auf (G27 schrittweise). | gilt, sieben Module seit 3.33.0 |
+| D17 | Kein Großumbau: jede neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests; `ListApp` ruft sie auf; G27 „`app.pyw` aufteilen“ geschieht so schrittweise. | gilt, acht Module seit 3.33.0 |
 
 **Frühere Antworten, die weiter gelten:**
 

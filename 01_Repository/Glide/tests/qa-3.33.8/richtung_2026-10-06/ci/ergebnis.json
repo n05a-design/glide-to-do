@@ -1,5 +1,5 @@
 {
-  "zeitpunkt": "2026-10-06T06:49:52",
+  "zeitpunkt": "2026-10-06T06:58:18",
   "stufe": "CI-Grundstufe",
   "python": "3.14.0rc2 (main, Sep  2 2025, 14:20:56) [Clang 20.1.4 ]",
   "plattform": "linux",
@@ -18,7 +18,7 @@
     {
       "schritt": "Dokumentation",
       "status": "ausgeführt",
-      "grund": "Alle Dokumente einschließlich Archiv im Index; 176 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+      "grund": "Alle Dokumente einschließlich Archiv im Index; 179 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
     },
     {
       "schritt": "Fixtures",
@@ -88,7 +88,7 @@
     {
       "schritt": "Ablagegröße",
       "status": "ausgeführt",
-      "grund": "705 versionierte Dateien, 335 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen"
+      "grund": "707 versionierte Dateien, 335 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen"
     }
   ]
 }

@@ -67,7 +67,7 @@ Vor der Umsetzung in den Abschnitt der Version (Funktionen, Entwicklungsplan) au
 4. **Sichtbarkeit:** was im Standard sichtbar, was bei Bedarf? Zusätzliche Dauerfläche in px bei 1280 × 800? Bleibt alles bei 860 × 700 und nur mit Tastatur bedienbar?
 5. **Selbstverständlichkeit:** ohne Hinweistext? Welche Plattformkonvention?
 6. **Farbe und Form:** Rolle aus `BUTTON_ROLE_RULES`, Symbol aus `ICONS`.
-7. **Begriffe:** neue Wörter mit dem Glossar abgleichen (Aufgabe, Langtext, Zwischenüberschrift, Gruppe; „Punkt“ nur als Oberbegriff).
+7. **Begriffe:** neue Wörter mit den [Grundbegriffen](20_FUNKTIONEN.md#1-grundbegriffe) und den [Begriffen im Index](00_INDEX.md#begriffe) abgleichen (Aufgabe, Langtext, Zwischenüberschrift, Gruppe; „Punkt“ nur als Oberbegriff; „Long-Task“ wird mit U16 zu „Langtext“).
 8. **Rücknahme:** ein Undo-Schritt; Wirkung vor dem Loslassen sichtbar (D02).
 9. **Daten:** neues Feld oder Format? Datenformat-Tor, Altleser, Migration.
 10. **Tempo:** Kosten je Aktion abhängig vom Bestand; Messung mit 1.000 und 10.000 Punkten.

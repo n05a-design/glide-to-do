@@ -339,6 +339,8 @@ Verbindlich ist die Messung auf dem Referenz-Mac mit Aufwärmen, Median und p95;
 | I11 | GitHub-Auftritt: Beschreibung, Tags, Wiki, Issues, KI-Codeprüfung | ○ Empfehlungen in der [Veröffentlichung](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#github-auftritt) |
 | – | Ausbauprogramm: Vorgabe des Hinweises zu Tagesbeginn/-abschluss (AU03), dezente Bewegung (OB04), Termine als belegte Zeit (AU07, berührt eine Produktgrenze) | ○ wenn das jeweilige Paket ansteht |
 
+**Auswahl A–H** (Aufgabenauswahl vom 30.09.2026): A Tempo und Stabilität · B Planen und Fokus · C Aufgaben im Text · D Suchen und Wissen · E Projektseiten · F Austausch und Sicherungen · G Pixel-Werkstatt · H Bedienkontrolle und Auslieferung. Die Aufgaben A-01 bis H-03 stehen mit Status in den Abschnitten oben. Bearbeitungstiefe je Richtung oder Aufgabe: recherchieren, Umsetzung vorbereiten, kleinen Teil umsetzen, später oder nicht verfolgen; „umsetzen“ meint nur den beschriebenen kleinen Schnitt samt Prüfung und Auslieferung.
+
 ## 12. Zukunftsperspektive und nächste Umsetzung (05.10.2026)
 
 **Entscheidungsgrundlage:** [Markt und Vorbilder](Glide_Markt_und_Vorbilder.md#6-verifizierter-abgleich-und-konsequenzen-05102026), aktueller Code und isolierte Windows-Baseline. Die breite Produktmatrix ist keine vollständige neue Herstellerprüfung. Es liegen keine Nutzungsdaten vor; Prioritäten folgen konkreter Funktionslücke, vorhandener Entscheidung, Aufwand und Regressionsrisiko, nicht erfundenen RICE-Zahlen.
