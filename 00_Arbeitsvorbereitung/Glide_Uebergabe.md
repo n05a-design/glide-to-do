@@ -1,6 +1,6 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · für den nächsten Chat oder Bearbeiter
+Stand 06.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · für den nächsten Chat oder Bearbeiter
 
 Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe, Projektübergabe, Startkontext und dem Sitzungsprotokoll vom 24.–26.09.2026; die Vorfassungen trägt Git. Dieses Dokument sagt, wo was steht, was gilt und was als Nächstes ansteht – es ersetzt nicht die Fachdokumente.
 
@@ -48,7 +48,7 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 - **Rückwärtsverhalten messen, nicht annehmen:** 3.29 überschreibt einen Format-20-Bestand bei der ersten Eingabe. Vor jedem Formatwechsel die Vorgängerversion mit einer Kopie echter Daten prüfen; der Schutz vor unbekannten Formaten muss eine Version vorher im Code sein (seit 3.30 vorhanden).
 - **Erst nach dem Abgleich erledigt:** Am 29.09.2026 prüfte der Inhaber einen alten Stand, weil 07 und Bundle nicht nachgezogen waren.
 - **Vollprüfung ohne Last und ohne Eingaben** – Einzelheiten im [Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md#regeln).
-- **Optionen mit Empfehlung vorlegen:** nummerierte Fragen mit je einer Empfehlung und der Wahl „erste Stufe oder vollständig“ machen Rückfragen kurz; Lizenzfragen gleich mit Quelle und Lizenz vorlegen.
+- **Optionen mit Empfehlung vorlegen:** nummerierte Fragen mit Optionen, Vor- und Nachteilen, je einer Empfehlung und der Wahl „erste Stufe oder vollständig“ machen Rückfragen kurz und erlauben eine Kurzantwort (etwa „D09 B, D10 A“); Lizenzfragen gleich mit Quelle und Lizenz vorlegen.
 - **Inhaberentscheidungen früh abfragen:** Kennungen, Logo und Signatur blockieren Paketierung und Mitteilungen.
 - **Planung nach jeder Etappe inhaltlich abgleichen**, nicht nur Statusspalten. Bekannte Grenzen sind die nächste Aufgabenliste.
 - **Jede neue Oberfläche** bei 860 × 700 und großer Schrift prüfen; Farben als Rollen planen, damit die Kontrastprüfung greift.
@@ -90,6 +90,6 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 
 - Feature-Arbeit ist am 05.10.2026 beauftragt; D07 erst zur Pixel-Etappe; Importquelle und Bauwerkzeug erst in Stufe 4.
 - I1 Inhaberangaben bestätigen, I2 Lizenz veröffentlichen, I3 Developer-ID und Code-Signing-Zertifikat, I4 Markenprüfung, I5 Python 3.14.7 installieren, I6 Windows-Vollprüfung 3.33.8 und manuelle Prüfsitzungen ([Prüfliste](Glide_Manuelle_Pruefung.md)), I7 Referenzentwürfe für „Heute“, Liste und Seite vor Welle 2 des Ausbauprogramms, I8 Lösungsweg für das Logo unter Tk 8.6 ([Diagnose](../01_Repository/Glide/docs/diagnosen/LOGO_KANTENGLAETTUNG.md)).
-- Lizenzlage der Inspirations- und Beispielbilder in `20_Grafik_Master` (Stockfotos in einem öffentlichen Repository) prüfen.
+- I9 Rechte an Fremdbildern in `20_Grafik_Master` und im Showcase, I10 Git-Historie bereinigen, I11 GitHub-Auftritt ([Entwicklungsplan §11](Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber)).
 
 Die Windows-Prüflaufzeit liegt separat im QA-Cache: Python 3.14.8/Tk 9.0.4, Hersteller-SHA-256 verifiziert. Der Windows-Standardstarter bleibt unverändert; I5 betrifft weiter den Mac.

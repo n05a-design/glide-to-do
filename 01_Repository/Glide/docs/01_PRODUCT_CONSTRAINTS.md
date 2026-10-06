@@ -1,8 +1,8 @@
 # Produktgrenzen und Produktprinzipien
 
-Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 06.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
 
-Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 03.10.2026 mit der Produktprinzipien- und UX-Prüfung vom 01.10.2026 zusammengeführt; deren Befunde U01–U24 stehen mit Status im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt. Die Vorfassungen trägt Git.
+Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 03.10.2026 mit der Produktprinzipien- und UX-Prüfung vom 01.10.2026 zusammengeführt; deren Befunde U01–U24 stehen mit Status im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt, am 06.10.2026 um die Ausschlüsse der Wettbewerbsrecherche vom 25.09.2026 ergänzt. Die Vorfassungen trägt Git.
 
 ## Was Glide ist
 
@@ -21,12 +21,14 @@ Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 
 | Gleichzeitige Bearbeitung auf zwei Geräten, Konfliktzusammenführung (G23) | Produktgrenze |
 | Zustellung bei beendetem Programm (Stufe C), externe Kalender-/Mailintegration | Produktgrenze; ICS-Import/-Ausgabe sind Dateien, keine Synchronisierung |
 | Mehrsprachigkeit | Produktgrenze |
-| Eingebaute Cloud-KI, Spracherfassung, KI-Schnittstelle (MCP) | Q3: Austausch über Dokumente |
+| Eingebaute Cloud-KI (auch generative Bildfunktionen), Spracherfassung, KI-Schnittstelle (MCP) | Q3: Austausch über Dokumente |
 | Systemweiter Erfassungs-Hotkey (G07) | nur plattformeigen lösbar (Q2) |
 | Einstieg für neue Nutzer, führender Begleiter, Touren | 25./27.09.2026 nicht gewählt; Rundgang und Showcase vorhanden |
-| Eigene Felder je Liste, Datenbank-Baukasten | 25.09.2026 nicht gewählt; Felder, wenn sie kommen, Glide-weit |
+| Eigene Felder je Liste, Datenbank-Baukasten, Formulare | 25.09.2026 nicht gewählt; Felder, wenn sie kommen, Glide-weit |
 | Unterseiten, Spalten in Seiten, Verweisgraph | 29./30.09.2026 entschieden |
 | Allgemeine Umwandlung zwischen Liste, Notiz und Seite | D05 |
+| Freie Klebezettel ohne Aufgabe, Freihand-Tinte auf der Pinnwand | zweiter Datenbestand neben den Punkten; eine Zeichnung ist eine eigene Art und erscheint als Karte |
+| Bilder aus dem Netz (etwa Cover aus Bildarchiven), Web Clipper | automatischer Netzzugriff bzw. neue Plattform |
 | Echte Transparenz oder Unschärfe je Widget | Tk kann das nicht; Milchglas ist eine Tönung |
 | Bildbibliothek (etwa Pillow), allgemeines Textverarbeitungsprogramm | Abhängigkeit bzw. nicht Ziel |
 | Gewohnheiten (G06), verschlüsselte Ablage (G22) | vorerst nicht |
@@ -37,7 +39,7 @@ Installer, Signatur, Store, Markenfreigabe und endgültige Lizenz sind gesondert
 
 | Prinzip | Bedeutung für Glide | Prüffrage | Kriterium |
 |---|---|---|---|
-| **P1 Funktioniert selbstverständlich** | Die naheliegende Handlung führt zum erwarteten Ergebnis, ohne Hinweistext; Systemkonventionen gelten (Hell/Dunkel, Kürzel, Esc, Entf, Doppelklick). | Geht es ohne Hinweis? | Keine Funktion nur über einen Dauerhinweis erklärbar |
+| **P1 Funktioniert selbstverständlich** (Apple-like) | Die naheliegende Handlung führt zum erwarteten Ergebnis, ohne Hinweistext; Systemkonventionen gelten (Hell/Dunkel, Kürzel, Esc, Entf, Doppelklick). | Geht es ohne Hinweis? | Keine Funktion nur über einen Dauerhinweis erklärbar |
 | **P2 Form folgt Funktion** | Farbe = Rolle, Größe = Wichtigkeit, Position = Zusammenhang. | Würde die Funktion ohne dieses Element schlechter verstanden? | Jede Farbe mit genau einer Bedeutung; keine Dekoration im Standard |
 | **P3 Keine Funktion doppelt** | Jede Absicht hat einen primären Weg; Menü und Kürzel dürfen ihn spiegeln. | Gibt es eine zweite Oberfläche für dasselbe Ergebnis? | Je Absicht eine Bedienoberfläche |
 | **P4 Kein Platz verschwenden** | Inhalt vor Bedienung; Bedienelemente erscheinen dort und dann, wo sie gebraucht werden. | Wie viel Fläche zeigt Inhalt? | Bedienfläche über dem Inhalt ≤ 15 % bei 1280 × 800 |
