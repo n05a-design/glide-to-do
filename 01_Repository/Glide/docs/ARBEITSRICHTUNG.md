@@ -1,8 +1,8 @@
 # Arbeitsrichtung, Entscheidungen und Abnahme
 
-Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20
+Stand 06.10.2026 · Glide 3.33.8 · Aufgabenformat 20
 
-Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Entscheidungsvorlage vom 01.10.2026 und den Entscheidungslisten vom 25.–30.09.2026 zusammengeführt; deren Wortlaut trägt Git. Aufgabenstand und Reihenfolge: [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Technische Regeln: [Architektur](02_ARCHITECTURE.md).
+Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Entscheidungsvorlage vom 01.10.2026 und den Entscheidungslisten vom 25.–30.09.2026 zusammengeführt; deren Wortlaut trägt Git. Am 06.10.2026 um die Leitgedanken des Inhabers aus dem nicht übernommenen Richtungsentwurf vom 03.10.2026 ergänzt. Aufgabenstand und Reihenfolge: [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Technische Regeln: [Architektur](02_ARCHITECTURE.md).
 
 **Auftrag 05.10.2026:** Zukunftsperspektive, Dokumentation und Konkurrenzanalyse gründlich einbeziehen, nächste Schritte planen und mit Features beginnen. Erster begrenzter Schnitt ist die Inhaltssuche G14 im vorhandenen Strg/Cmd+O-Weg sowie die Windows-Formatsicherung. Mit 3.33.8 sind Windows-Layout-/Editor-Timer-/Formatcachekorrekturen vollständig automatisch geprüft und die Python-Fassung/der Showcase abgeglichen. Referenz-Mac, Bundle und manuelle Freigabe sind offen. Folgepakete stehen im Entwicklungsplan; der Auftrag entscheidet D07, Importquelle, Bauwerkzeug und Veröffentlichungsfragen nicht vorweg.
 
@@ -15,10 +15,25 @@ Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Ent
 - die Inhaberangaben I1–I6
 - aus dem Ausbauprogramm: die Referenzentwürfe I7, die Vorgabe des Hinweises zu Tagesbeginn und Tagesabschluss (AU03), dezente Bewegung (OB04) und Termine als belegte Zeit (AU07, berührt eine Produktgrenze)
 - der Lösungsweg für das Logo unter Tk 8.6 (I8, [Diagnose](diagnosen/LOGO_KANTENGLAETTUNG.md#7-lösungswege))
+- Bildrechte im öffentlichen Repository, Git-Historie und GitHub-Auftritt (I9–I11)
 
 Empfehlungen in Dokumenten ersetzen keine Entscheidung des Inhabers; jeder Umsetzungsschnitt außerhalb der beauftragten Performance-Arbeit braucht einen ausdrücklichen Auftrag.
 
+## Leitgedanken des Inhabers
+
+Wortlaute stehen in Anführungszeichen, alles andere ist Zusammenfassung. Was daraus entschieden wurde, steht in den Tabellen unten und in den [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md); Aufträge im Wortlaut oben und unter „Beauftragt“.
+
+| Datum | Gedanke bzw. Vorgabe | Was daraus folgt |
+|---|---|---|
+| 18./19.09.2026 | Zusammenhalt der vorhandenen Funktionen statt neuer (3.23, 46 Punkte); Leitsatz für 3.25: „Form follows function“ | weniger Text, Knöpfe und Menüeinträge; wird Prinzip P2 |
+| 25.09.2026 | Referenzen je Bereich: Notion für Darstellung, Startseite, Aufgaben und Ordnerstruktur; Trello, OneNote, Figma/FigJam und Microsoft Planner für die Pinnwand; Affinity für Zeichnen und künstlerische Entfaltung. Glide soll die Pixel-Design-Nische besetzen | Vorbilder für Ablauf und Oberfläche, nicht für den Funktionsumfang ([Markt und Vorbilder](../../../00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md#2-vorbilder-des-inhabers)); Aseprite, Pixelorama und Lospec als Nischenreferenzen |
+| 26.09.2026 | „Ich will allgemein mehr werden wie Notion, die App gefällt mir sehr gut.“ | Seitenart „Seite“, gemeinsamer Editor, Bibliotheken; Notion als Schreib- und Ordnungsort, nicht als Datenbank-Baukasten |
+| 01.10.2026 | Sechs Produktprinzipien: Apple-like (funktioniert selbstverständlich), Form folgt Funktion, keine Funktion doppelt, kein Platz verschwenden, nur das Wesentliche, geringe Komplexität trotz vieler Funktionen | P1–P6 mit Prüffragen in den [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md#sechs-produktprinzipien-auftrag-des-inhabers-vom-01102026) |
+| 03.10.2026 | „Ich möchte keine aufgeblasene Ordnerstruktur mehr“; löschen statt archivieren | D09-Ergänzung, [Dokumentenpflege](DOKUMENTENPFLEGE.md) |
+
 ## Verbindliche Entscheidungen
+
+Neue Entscheidungen werden als D18 ff. mit Datum und Wortlaut der Antwort eingetragen.
 
 | Nr. | Entscheidung | Stand |
 |---|---|---|
@@ -30,7 +45,7 @@ Empfehlungen in Dokumenten ersetzen keine Entscheidung des Inhabers; jeder Umset
 | D06 | Die Gestaltung der Hinweisblöcke in Seiten bleibt unverändert. | gilt |
 | D07 | Exportumfang der Animation: abspielbares GIF oder zunächst Frames/Vorschau/PNG-Spritesheet (Empfehlung: Spritesheet zuerst). | **offen**, erst zur Pixel-Etappe |
 | D08 | Alle Klappmechanismen über echte Bedienbindungen prüfen, einschließlich Zustandserhalt, Tastatur, verschachtelter Bereiche und Tk-Callbackfehler. | umgesetzt 3.32.1, Pflichtsuite |
-| D09 | Das GitHub-Repository `glide-to-do` ist die maßgebliche Ablage (Wurzel = Projektordner, Quellbaum `01_Repository/Glide`); Uploads nur in diese Struktur. Öffentlich: Rohprotokolle (`*.log`) bleiben lokal, veröffentlichte Ergebnisse ohne Benutzerpfade (`pfade_bereinigen.py`, CI „Datenschutz“). Keine Archivkopien von Fixtures und Showcase, keine Fensterbilder neuer Vollprüfungen (02.10.2026); Archive und Nachweise nur der sieben neuesten Versionen, Fensterbilder nur der drei neuesten, Dokumente werden zusammengeführt und gelöscht statt archiviert (03.10.2026); CI „Ablagegröße“ prüft das. Sicherheitsmeldungen über GitHub (`SECURITY.md`), Dependabot; CodeQL-Workflow vom Inhaber deaktiviert. Zwischenstände als Git-Tags. | gilt; CI-Grundstufe seit 01.10.2026 |
+| D09 | Das GitHub-Repository `glide-to-do` ist die maßgebliche Ablage (Wurzel = Projektordner, Quellbaum `01_Repository/Glide`); Uploads nur in diese Struktur. Öffentlich: Rohprotokolle (`*.log`) bleiben lokal, veröffentlichte Ergebnisse ohne Benutzerpfade (`pfade_bereinigen.py`, CI „Datenschutz“). Keine Archivkopien von Fixtures und Showcase, keine Fensterbilder neuer Vollprüfungen (02.10.2026); Archive und Nachweise nur der sieben neuesten Versionen, Fensterbilder nur der drei neuesten, Dokumente werden zusammengeführt und gelöscht statt archiviert (03.10.2026); CI „Ablagegröße“ prüft das. Sicherheitsmeldungen über GitHub (`SECURITY.md`), Dependabot; CodeQL-Workflow vom Inhaber deaktiviert. Zwischenstände als Git-Tags. | gilt; CI-Grundstufe seit 01.10.2026; noch kein Tag gesetzt (06.10.2026) |
 | D10 | Ein Datum ohne Zusatz setzt den Bearbeitungstag, auch `/morgen`; die Fälligkeit nur mit „fällig“/„bis“, `/bis`, `/fällig`. Eine Wiederholung in der Eingabe setzt die Fälligkeit auf ihren ersten Termin (Ergänzung 02.10.2026). | umgesetzt 3.33.3/3.33.4 |
 | D11 | D06 gilt nur für Hinweisblöcke in Seiten; Hinweiszeilen der Ansichten werden über „?“ ein-/ausgeklappt, Zustand gespeichert (U02). | offen (UX1) |
 | D12 | Startseite „Ruhig“ mit sieben Kacheln: Heute (zusammengeführt), Gismo, Woche, Zuletzt bearbeitet, Angeheftet, Zeichnungen, Pinnwand-Vorschau; eigene Auswahl bleibt. | umgesetzt 3.33.2 |
@@ -38,7 +53,7 @@ Empfehlungen in Dokumenten ersetzen keine Entscheidung des Inhabers; jeder Umset
 | D14 | Zwei Hauptansichten: Heute (Tag, Verspätet, Heute fällig, nächste Aufgabe) und Demnächst; Tagesbeginn/-abschluss sind Modi von Heute; interne Kennungen bleiben. | umgesetzt 3.33.6 |
 | D15 | Verteilung als Paket mit eingebettetem Python und Tk 9 je Plattform (G26/H-03), nach Stufe 1; das Bauwerkzeug ist eine eigene Abhängigkeitsentscheidung. | offen (Stufe 4) |
 | D16 | JSON bleibt Speicherformat; der Speicherweg wird beschleunigt (T2, P08, P09). SQLite nur als Suchindex-Cache (G14); Neubewertung erst über 20.000 Punkten. | gilt |
-| D17 | Kein Großumbau: jede neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests; `ListApp` ruft sie auf (G27 schrittweise). | gilt, sieben Module seit 3.33.0 |
+| D17 | Kein Großumbau: jede neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests; `ListApp` ruft sie auf; G27 „`app.pyw` aufteilen“ geschieht so schrittweise. | gilt, acht Module seit 3.33.0 |
 
 **Frühere Antworten, die weiter gelten:**
 

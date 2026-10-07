@@ -1,6 +1,6 @@
 # Glide – Entwicklungsplan und Aufgabenstand
 
-Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20
+Stand 06.10.2026 · Glide 3.33.8 · Aufgabenformat 20
 
 Einziges Planungsdokument. Es führt zusammen, was bis 03.10.2026 auf zwölf Planungs-, Auswahl-, Recherche- und Entscheidungsdokumente verteilt war (Entwicklungsplan 3.33ff, Aufgabenauswahl A–H, Funktionsrecherche G01–G32, Arbeits- und Featureplanung P01–P07, Bestandsaufnahme AB/T, UX-Prüfung U01–U24, Übersicht vom 29.09.2026 und die älteren Kataloge). Die Vorfassungen trägt Git.
 
@@ -250,7 +250,7 @@ Reservierungen, keine Termine. Die beauftragte Kernfolge bleibt: Aktionskennunge
 | G-03 | Symbolvorschau in 16/32/48 px vor dem Export | ○ |
 | G17 = G-02 | Animation: Frames, Dauer, Vorschau; **D07 offen** (abspielbares GIF oder zunächst Frames/Vorschau/Spritesheet; Empfehlung: zuerst Spritesheet) | ○ |
 | G24 = F-01 | KI-Austausch Stufe 2 über Dokumente: Kontextpaket, Markdown/Felder, Änderungsvorschläge mit Feldvergleich (Q3) | ○ |
-| G21 = F-02 | Begrenzter Import (zuerst eine Quelle: Notion-Markdown/ZIP oder Todoist-CSV – Inhaberentscheidung) mit Verlustbericht | ○ |
+| G21 = F-02 | Begrenzter Import (zuerst eine Quelle: Notion-Markdown/ZIP oder Todoist-CSV – Inhaberentscheidung; Empfehlung: Notion als Vorbild des Inhabers) mit Verlustbericht | ○ |
 | F-03 | Zwei Sicherungsstände lesbar vergleichen, ohne Schreibzugriff | ○ |
 | G26 = H-03 = N11 | Paket mit eingebettetem Python 3.14 + Tk 9 je Plattform (D15); Bauwerkzeug als eigene Abhängigkeitsentscheidung (Vorschlag PyInstaller ≥ 6.22) | ○ |
 | – | Windows-/Linux-Abnahme, Linux-App (AppImage/Flatpak später) | ○ Inhaber |
@@ -334,7 +334,12 @@ Verbindlich ist die Messung auf dem Referenz-Mac mit Aufwärmen, Median und p95;
 | – | Erste Importquelle für G21, Bauwerkzeug für G26 | ○ erst in Stufe 4 |
 | I8 | Lösungsweg für das Logo unter Tk 8.6: Rückfall glätten (LG01), App-Symbol vorrechnen (LG02), Prüfung schärfen (LG03), Master überarbeiten (LG04); Weg A (Python 3.14/Tk 9) gilt bisher nur für die Windows-Prüflaufzeit | ○ [Diagnose, Abschnitt 7](../01_Repository/Glide/docs/diagnosen/LOGO_KANTENGLAETTUNG.md#7-lösungswege) |
 | I7 | Referenzentwürfe für „Heute“, Liste und Seite (Affinity) als Gestaltungsrichtung für OB02/OB03 | ○ vor Welle 2 (§4.3) |
+| I9 | Rechte an Fremdbildern (Bildagenturen, Webquellen) im öffentlichen Repository prüfen: `20_Grafik_Master/05_Inspiration`, `06_Beispielbilder` und die sechs von dort übernommenen Showcase-Motive (`tests/fixtures/showcase/bilder`, eingebettet auch in beiden `Glide-Showcase.glidebackup`) | ○ behalten mit Rechtenachweis oder entfernen und den Showcase mit eigenen Motiven neu erzeugen; Empfehlung: ohne Nachweis entfernen |
+| I10 | Git-Historie bereinigen (gelöschte Protokolle mit Benutzerpfaden, frühere Archivkopien) | ○ eigener Auftrag; ändert alle Commit-Kennungen ([Veröffentlichung](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#github-auftritt)) |
+| I11 | GitHub-Auftritt: Beschreibung, Tags, Wiki, Issues, KI-Codeprüfung | ○ Empfehlungen in der [Veröffentlichung](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#github-auftritt) |
 | – | Ausbauprogramm: Vorgabe des Hinweises zu Tagesbeginn/-abschluss (AU03), dezente Bewegung (OB04), Termine als belegte Zeit (AU07, berührt eine Produktgrenze) | ○ wenn das jeweilige Paket ansteht |
+
+**Auswahl A–H** (Aufgabenauswahl vom 30.09.2026): A Tempo und Stabilität · B Planen und Fokus · C Aufgaben im Text · D Suchen und Wissen · E Projektseiten · F Austausch und Sicherungen · G Pixel-Werkstatt · H Bedienkontrolle und Auslieferung. Die Aufgaben A-01 bis H-03 stehen mit Status in den Abschnitten oben. Bearbeitungstiefe je Richtung oder Aufgabe: recherchieren, Umsetzung vorbereiten, kleinen Teil umsetzen, später oder nicht verfolgen; „umsetzen“ meint nur den beschriebenen kleinen Schnitt samt Prüfung und Auslieferung.
 
 ## 12. Zukunftsperspektive und nächste Umsetzung (05.10.2026)
 

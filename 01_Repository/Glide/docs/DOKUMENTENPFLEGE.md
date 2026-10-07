@@ -1,6 +1,6 @@
 # Regeln für die Dokumentenpflege
 
-Stand 05.10.2026 · Glide 3.33.8 · Datenformat 20
+Stand 06.10.2026 · Glide 3.33.8 · Datenformat 20
 
 Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder gelöscht anstatt immer nur archiviert und `_Z` zu schreiben“) und ersetzt alle früheren Archivierungsregeln.
 
@@ -23,13 +23,13 @@ Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder
 | Aufgaben, Backlog, Stufen, Ziele | `00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md` |
 | Markt und Vorbilder | `00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md` |
 | Manuelle Prüfung (Mac, Windows, Linux) | `00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md` |
-| Entscheidungen und Arbeitsablauf | [ARBEITSRICHTUNG.md](ARBEITSRICHTUNG.md) |
+| Entscheidungen, Leitgedanken des Inhabers, Arbeitsablauf | [ARBEITSRICHTUNG.md](ARBEITSRICHTUNG.md) |
 | Produktgrenzen und Prinzipien | [01_PRODUCT_CONSTRAINTS.md](01_PRODUCT_CONSTRAINTS.md) |
 | Architektur, Performance-Regeln, Tk-Fallstricke | [02_ARCHITECTURE.md](02_ARCHITECTURE.md) |
 | Prüfplan | [05_QA_TESTPLAN.md](05_QA_TESTPLAN.md) |
 | Datenformat, Backups, Austauschformat | [06_DATA_BACKUP_MIGRATION.md](06_DATA_BACKUP_MIGRATION.md) |
 | Geprüfter Stand | [07_QA_BERICHT.md](07_QA_BERICHT.md) |
-| Veröffentlichung, Lizenz, Signierung, Store | [10_VEROEFFENTLICHUNG.md](10_VEROEFFENTLICHUNG.md) |
+| Veröffentlichung, Lizenz, Signierung, Store, GitHub-Auftritt | [10_VEROEFFENTLICHUNG.md](10_VEROEFFENTLICHUNG.md) |
 | Verhalten der Funktionen | [20_FUNKTIONEN.md](20_FUNKTIONEN.md) |
 | Vorlagen in der Praxis | [27_VORLAGEN_PRAXISANLEITUNG.md](27_VORLAGEN_PRAXISANLEITUNG.md) |
 | Einzelentscheidungen mit eigenem Gegenstand | `decisions/` (Produktregister, tkdnd, Arbeitsbegleiter, Gruppe/Ordner/Überschrift, Systembenachrichtigungen) |

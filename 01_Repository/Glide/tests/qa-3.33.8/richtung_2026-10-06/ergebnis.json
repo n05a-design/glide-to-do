@@ -1,0 +1,66 @@
+{
+  "datum": "2026-10-06",
+  "art": "Dokumentationsnachlauf",
+  "app_version": "3.33.8",
+  "app_geaendert": false,
+  "umgebung": "Linux/Tk 8.6, künstliche Daten",
+  "ausgangsstand": "254541a",
+  "auftrag": "Ja einarbeiten und Dopplungen vermeiden.",
+  "quelle": "Richtungsentwurf vom 03.10.2026 (PR #12, geschlossen, nicht übernommen)",
+  "neues_dokument": false,
+  "geaenderte_dokumente": [
+    "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+    "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "00_Arbeitsvorbereitung/README.md",
+    "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+    "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+    "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "20_Grafik_Master/README.md",
+    "01_Repository/Glide/docs/00_INDEX.md",
+    "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+    "README.md"
+  ],
+  "featurematrix_zeilen": {
+    "vorher": 28,
+    "nachher": 51
+  },
+  "neue_inhaberaufgaben": [
+    "I9",
+    "I10",
+    "I11"
+  ],
+  "github_stand_abgerufen": "2026-10-06",
+  "fehlende_sprungmarken": 0,
+  "ci_grundstufe": {
+    "exitcode": 0,
+    "ergebnis": "ci/ergebnis.json"
+  },
+  "vollstaendigkeitspruefung": {
+    "auftrag": "anschließend Dokumentation auf Vollständigkeit prüfen.",
+    "gepruefte_dokumente": 43,
+    "richtung_kernaussagen": {
+      "geprueft": 61,
+      "fehlend_vorher": 2,
+      "ergaenzt": [
+        "Auswahl A–H mit Bearbeitungstiefe",
+        "Regel D18 ff."
+      ]
+    },
+    "module": {
+      "gesamt": 15,
+      "tk_frei_d17": 8,
+      "korrigiert": "D17-Stand sieben → acht"
+    },
+    "integrationssuiten": 66,
+    "kennungen": {
+      "verwendet": 208,
+      "unerklaert_vorher": [
+        "G27"
+      ]
+    },
+    "offene_inhaberpunkte_abgeglichen": true,
+    "hinweis_ohne_aenderung": "3.33.7 nie nach 07 geliefert; Archiv-README erst in der nächsten Produktionsrunde nachführen"
+  }
+}

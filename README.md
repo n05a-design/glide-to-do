@@ -10,7 +10,7 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 
 - **Entwicklungsstand 3.33.8 vom 05.10.2026**, Datenformat 20.
 - **Aktueller Schnitt:** Inhaltssuche und Windows-Formatsicherung; automatische Windows-Prüfung und Python-Lieferung im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md). Referenz-Mac und neues macOS-Bundle bleiben offen; keine Releasefassung.
-- **Offen:** Signatur, Markenprüfung, Store und die manuelle Abnahme unter Windows, Linux, DPI-Skalierung und Bildschirmleser.
+- **Offen:** Lizenz, Signatur, Markenprüfung, Store und die manuelle Abnahme unter Windows, Linux, DPI-Skalierung und Bildschirmleser.
 - **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe; Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 
 ## Schnellstart
@@ -29,7 +29,7 @@ Unter Windows: `python 07_Python-Versionen\Schnellstart.pyw`. Weitere Startwege 
 
 - **Planen:** Aufgaben mit Unterpunkten, Checklisten, Fälligkeit und Bearbeitungstag, Wiederholungen, Erinnerungen, Wichtigkeit, Labels, Aufwand und Zeiterfassung; „Heute“ und „Demnächst“ mit Stundenraster, Kapazität, Tagesbeginn, Tagesabschluss und Wochenrückblick; Schnelleingabe in Alltagssprache mit Feldchips.
 - **Ansichten:** Liste, Tabelle, Kalender, Karten, Spaltenboard und Pinnwand auf demselben Bestand; Gruppieren nach Feld einschließlich Eisenhower; Pinnwand mit Bereichen, Verbindungen und Präsentation; Startseite „Ruhig“ zum Anpassen.
-- **Wissen:** Seiten mit Markdown, Bildern und echten Aufgaben, Notizen, Notizbücher, Bücher und Galerien; Suche über Seiten, Punkte und Befehle (Strg/Cmd+O).
+- **Wissen:** Seiten mit Markdown, Bildern und echten Aufgaben, Notizen, Notizbücher, Bücher und Galerien; Suche über Titel, Inhalte von Seiten und Notizen, Beschreibungen und Befehle (Strg/Cmd+O).
 - **Pixel-Werkstatt:** Zeichnungen mit 16–128 Zellen, Formen, Symmetrie, Mustern, Paletten, PNG- und ICO-Export, Pixelsymbole.
 - **Daten:** atomares Speichern, Sicherungen nur bei Änderung, Vorsicherung je Formatstufe, Tagesstände; Voll-, Teil- und App-Backup, Vorlagen, CSV, Markdown, ICS, Austauschformat für KI; Rückgängig für alles.
 - **Gestaltung:** zehn Designs mit Kontrast nach WCAG AA, Hell/Dunkel, Akzentfarben und Hintergrundverläufe; Mindestgröße 860 × 700.

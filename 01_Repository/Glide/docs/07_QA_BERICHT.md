@@ -1,6 +1,6 @@
 # QA-Bericht – Glide 3.33.8
 
-Stand 05.10.2026 · App 3.33.8 · Datenformat 20 · Windows, Python 3.14.8, Tk 9.0.4; Referenz-Mac zuletzt 3.33.6 mit Python 3.14.5, Tk 9.0.3
+Stand 06.10.2026 · App 3.33.8 · Datenformat 20 · Windows, Python 3.14.8, Tk 9.0.4; Referenz-Mac zuletzt 3.33.6 mit Python 3.14.5, Tk 9.0.3
 
 Einziger Prüfbericht. Am 03.10.2026 mit dem bisherigen Prüfverlauf (`tests/qa-verlauf.md`) zusammengeführt und auf die Nachweise der letzten sieben Versionen gekürzt; ältere Läufe stehen nur noch als Zeile in der Übersicht, ihre Protokolle trägt Git. 3.33.0 und 3.33.1 liegen seit 05.10.2026 außerhalb dieses Fensters; ihre Zeilen verweisen auf den unveränderlichen Git-Stand. Am 05.10.2026 mit der Windows-Fassung zusammengeführt. Wie geprüft wird: [Prüfplan](05_QA_TESTPLAN.md).
 
@@ -55,6 +55,7 @@ Regeln, die aus diesen Läufen folgen (nicht tippen, nicht sperren, Last vermeid
 
 | Datum | Nachlauf | Nachweis |
 |---|---|---|
+| 06.10.2026 | Richtungsentwurf vom 03.10.2026 in Markt und Vorbilder, Arbeitsrichtung, Produktgrenzen, Veröffentlichung und Entwicklungsplan eingearbeitet, ohne neues Dokument (Linux/Tk 8.6, künstliche Daten) | [README](../tests/qa-3.33.8/richtung_2026-10-06/README.md) |
 | 05.10.2026 | Windows-Prüfung vorbereitet: Dunkelaufnahme und Fensterfotos unter Windows, Prüfliste B0, Befunde der Logo-Diagnose übernommen, Synchronisationskopien zusammengeführt (Linux/Tk 8.6, künstliche Daten) | [README](../tests/qa-3.33.8/windows_vorbereitung_2026-10-05/README.md) |
 | 05.10.2026 | Planung Ausbauprogramm Alltag, Komfort und Oberfläche | [README](../tests/qa-3.33.8/planung_2026-10-05/README.md) |
 | 03.10.2026 | Bereinigung der Ablage und Dokumentation: Archive auf 3.33.0–3.33.6, Fensterbilder nur 3.33.4–3.33.6, Dokumente zusammengeführt (Linux/Tk 8.6, künstliche Daten) | [README](../tests/qa-3.33.6/aufraeumen_2026-10-03/README.md) |

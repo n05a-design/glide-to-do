@@ -1,10 +1,18 @@
 # Glide – Markt und Vorbilder
 
-Stand 05.10.2026 · Glide 3.33.8 · Matrix vom 01.10.2026; gezielter Herstellerabgleich 05.10.2026
+Stand 06.10.2026 · Glide 3.33.8 · Matrix vom 01.10.2026; gezielter Herstellerabgleich 05.10.2026
 
-Zusammengeführt am 03.10.2026 aus der Konkurrenz- und Featurematrix und der Konkurrenzübersicht vom 01.10.2026; diese hatten die älteren Recherchen vom 16.–25.09.2026, den Funktionsvergleich zur Zeichenfläche, die SVG-Untersuchung und das Konzept „Seiten wie Notion“ bereits eingeordnet. Die Vorfassungen trägt Git. Die Lücken N01–N20 und G01–G32 stehen mit Status im [Entwicklungsplan](Glide_Entwicklungsplan.md).
+Zusammengeführt am 03.10.2026 aus der Konkurrenz- und Featurematrix und der Konkurrenzübersicht vom 01.10.2026; diese hatten die älteren Recherchen vom 16.–25.09.2026, den Funktionsvergleich zur Zeichenfläche, die SVG-Untersuchung und das Konzept „Seiten wie Notion“ bereits eingeordnet. Am 06.10.2026 um die Wettbewerbsteile des nicht übernommenen Richtungsentwurfs vom 03.10.2026 ergänzt: Belegstufen, Steckbriefe mit Stärke, Grenze und Bedeutung, die ungekürzte Matrix, der Vergleich nach Dimensionen und überholte Aussagen. Die Vorfassungen trägt Git. Die Lücken N01–N20 und G01–G32 stehen mit Status im [Entwicklungsplan](Glide_Entwicklungsplan.md).
 
 **Verlässlichkeit:** Glides Spalte stammt aus dem Code (Stand 3.33.7). Die breite Matrix beruht auf Herstellerangaben und Berichten vom 01.10.2026; die Kurzfassung zu Glide, ChatGPT Space und Notion in Abschnitt 1.1 und der gezielte Abgleich in Abschnitt 6 berücksichtigen die Recherche vom 05.10.2026. Es liegt kein praktischer Vergleichstest aller Produkte vor. Vorteile, Positionierung und Übertragbarkeit sind Einschätzungen, keine Messwerte; veränderliche Herstellerangaben vor neuen Entscheidungen erneut prüfen.
+
+**Überholt:** Ältere Analysen vom 16.–18.09.2026 (in Git) enthalten Aussagen, die nicht mehr gelten:
+
+1. „Notion ist kein Ziel“ – seit der Aussage des Inhabers vom 26.09.2026 ist Notions Seitenkonzept ausdrücklich gewünscht, nur nicht der Baukasten.
+2. Bearbeitungstag getrennt von der Fälligkeit ist kein exklusives Glide-Merkmal (Things: Startdatum/Deadline; Todoist: Datum/Deadline).
+3. Natürliche Eingabe ist bei Todoist nicht nur Pro; Things hat natürliche Datumseingabe in Termin- und Erinnerungsfeldern.
+4. Mobile bedeutet nicht zwingend Konto und Server (Super Productivity, Joplin); Glides Desktop-Fokus ist eine Entscheidung (D03), keine technische Notwendigkeit.
+5. Alte Ausschlüsse (Rich Text, Seiten, Rückverweise, Animation) sind durch spätere Entscheidungen ersetzt; es gelten [Produktgrenzen](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md) und [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 
 ## 1. Ergebnis
 
@@ -53,75 +61,149 @@ Zusammengeführt am 03.10.2026 aus der Konkurrenz- und Featurematrix und der Kon
 
 ## 2. Vorbilder des Inhabers
 
-| Produkt | Belegter Bezug | Übernommene Merkmale | Bewusst anders |
-|---|---|---|---|
-| **Notion** (ausdrücklich: „Die App gefällt mir sehr gut“) | Glide soll allgemein mehr wie Notion werden; Bilder als Referenz für Schreiben und Erscheinungsbild | Endlos scrollende Seite, leichter Lesefluss, Seiten für KI-Berichte, integrierte Aufgaben, Formatleiste bei Markierung, Rechtsklick „Umwandeln in“, Aufklapp- und Hinweisblöcke, großer Seitentitel, Weißraum, Bibliotheken und Galerien | Seite und datierte Notiz getrennt; keine Unterseiten; Aufgaben sind echte Glide-Aufgaben; Felder Glide-weit statt je Liste; keine Spalten; Desktop zuerst |
-| **Trello** | Pinnwand-Referenz | Karten in Spalten, Cover und Farben, einklappbare Listen, derselbe Inhalt in mehreren Kontexten | – |
-| **OneNote** | Pinnwand-Referenz | freie Anordnung, Notizbuchcharakter, große Fläche, Linien/Karo | keine Handschrift |
-| **FigJam** (Figma als Whiteboard) | Pinnwand-Referenz | Klebezettel, beschriftete Verbinder, benannte Bereiche, Auswahl aufräumen, schnell den nächsten Zettel | – |
-| **Microsoft Planner** | Aufgaben auf der Pinnwand | Gruppieren nach Status, Termin oder Label; Ziehen ändert die passende Eigenschaft (D02); Checkliste, Beschreibung, Bild auf der Karte | – |
-| **Affinity** | Zeichnen und künstlerische Entfaltung | kontextbezogene Werkzeuge, direkte Farbauswahl und Paletten, Vorschau, Zwischenstände, Exportablauf | kein Vektor- oder Layoutumfang; Pixel-Nische ist eigene Vorgabe |
+Belegstufen: **ausdrücklich belegt** (persönliche Aussage oder Entscheidung dokumentiert) · **als Vorbild benannt** (für einen Bereich vorgegeben am 25.09.2026, Einzelmerkmale aus der Recherche) · **Recherchebezug** (betrachtet, keine persönliche Vorliebe belegt). Die Aussagen im Wortlaut stehen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md#leitgedanken-des-inhabers).
 
-Für Todoist, TickTick, Things, Sunsama, Akiflow, Obsidian, Anytype, Capacities, Evernote, Miro, Aseprite, Pixelorama, Asana, ClickUp und monday.com wurden Stärken recherchiert; eine persönliche Vorliebe ist dafür nicht belegt.
+| Produkt | Belegstufe | Übernommene Merkmale | Bewusst anders |
+|---|---|---|---|
+| **Notion** | ausdrücklich belegt: „Die App gefällt mir sehr gut“ (26.09.2026), Glide soll allgemein mehr wie Notion werden; Bilder als Referenz für Schreiben und Erscheinungsbild | Endlos scrollende Seite, leichter Lesefluss, Seiten für KI-Berichte, integrierte Aufgaben, Formatleiste bei Markierung, Rechtsklick „Umwandeln in“, Aufklapp- und Hinweisblöcke, großer Seitentitel, Weißraum, Bibliotheken und Galerien, Favoriten und Zuletzt im Seitenkontext | Seite und datierte Notiz getrennt; keine Unterseiten; Aufgaben sind echte Glide-Aufgaben; Felder Glide-weit statt je Liste; keine Spalten; Desktop zuerst; kein Datenbank-Baukasten |
+| **Trello** | als Vorbild benannt (Pinnwand) | Karten in Spalten, Cover und Farben, einklappbare Listen, derselbe Inhalt in mehreren Kontexten | keine Cover aus Bildarchiven im Netz |
+| **OneNote** | als Vorbild benannt (Pinnwand) | freie Anordnung, Notizbuchcharakter, große Fläche, Linien/Karo | keine Handschrift |
+| **FigJam** (Figma als Whiteboard) | als Vorbild benannt (Pinnwand) | Klebezettel, beschriftete Verbinder, benannte Bereiche, Auswahl aufräumen, schnell den nächsten Zettel | keine Zettel ohne Aufgabe |
+| **Microsoft Planner** | als Vorbild benannt (Aufgaben auf der Pinnwand) | Gruppieren nach Status, Termin oder Label; Ziehen ändert die passende Eigenschaft (D02); Checkliste, Beschreibung, Bild auf der Karte | – |
+| **Affinity** | als Vorbild benannt (Zeichnen und künstlerische Entfaltung) | kontextbezogene Werkzeuge, direkte Farbauswahl und Paletten, Vorschau, Zwischenstände, Exportablauf | kein Vektor- oder Layoutumfang; die Pixel-Nische ist eigene Vorgabe (25.09.2026) |
+
+Recherchebezug ohne belegte persönliche Vorliebe: Todoist, TickTick, Things, Sunsama, Akiflow, Obsidian, Anytype, Capacities, Evernote, Miro, Aseprite, Pixelorama, Asana, ClickUp und monday.com.
 
 ## 3. Vergleichsfeld und Entwicklung 2026
 
-| Produkt | Kategorie | Entwicklung bis 01.10.2026 | Bedeutung für Glide |
+Je Produkt: Stärke einschließlich der Entwicklung bis 01.10.2026, Grenze und Bedeutung für Glide. Herstellerangaben und Berichte vom 01.10.2026; Grenzen und Bedeutung sind Einschätzungen.
+
+**Aufgaben und Tagesplanung**
+
+| Produkt | Stärke und Entwicklung | Grenze | Bedeutung für Glide |
 |---|---|---|---|
-| Notion | Seiten und Datenbanken | Offline-Modus seit 2.53 (08/2025); 3.2 KI-Notizen und Agenten mobil; 3.3 Custom Agents mit Zeitplänen und MCP ([2.53](https://www.notion.com/en-gb/releases/2025-08-19), [3.2](https://www.notion.com/de/releases/2026-01-20)) | „Notion kann nicht offline“ ist kein Unterscheidungsmerkmal mehr; Notion zielt auf Team-Automation |
-| Todoist | Aufgaben | Ramble: Sprache → Aufgaben mit Feldern; offizieller MCP-Server ([Ramble](https://www.todoist.com/help/articles/from-voice-to-tasks-ramble-july-1), [Changelog 2026](https://www.todoist.com/help/articles/2026-changelog)) | Natürliche Erfassung ist Standard – Glide hat sie seit 3.33.3 |
-| Things 3 | Persönlicher Planer | 3.23 (21.08.2026) frühes Erledigen von Wiederholungen; 3.24 Schlummer-Intervalle, Siri-Anbindung ([Release Notes](https://culturedcode.com/things/support/articles/1100684/)) | Feinschliff statt Funktionsfülle – das Apple-Prinzip |
-| TickTick | Aufgaben, Fokus, Gewohnheiten | 8.0: vorgeschlagene Tagesaufgaben, Jahres-Heatmap ([AlternativeTo](https://alternativeto.net/news/2026/1/ticktick-8-0-adds-suggested-tasks-improved-yearly-monthly-views-and-customization-options/)) | Bestätigt Tagesbeginn und Heatmap in Glide |
-| Apple Erinnerungen/Notizen | Systemapps | iOS/macOS 27: Erinnerung in eigenen Worten, Felder am Objekt, Notizen als Markdown ([9to5Mac](https://9to5mac.com/2026/06/12/heres-everything-new-for-reminders-in-ios-27/)) | Felder am Objekt statt Dialog – bestätigt den Inspektor (N05/U12) |
-| AFFiNE | Lokal-first Dokument + Leinwand | Dokument und Leinwand dieselbe Seite, Kanban, optionale Cloud, KI ([GitHub](https://github.com/toeverything/affine)) | Stärkster Vergleich für Pinnwand + Seiten; schwach in Tagesplanung (Einschätzung) |
-| AppFlowy | Lokal-first Notion-Alternative | Tabelle, Board, Kalender, Galerie; lokale KI über Ollama ([Funktionen](https://mintlify.com/AppFlowy-IO/AppFlowy/features)) | Lokale KI ist machbar, aber mit großer Laufzeitabhängigkeit |
-| Obsidian | Markdown-Wissensbasis | 1.10 Bases mit Gruppieren und Zusammenfassungen ([Changelog](https://obsidian.md/changelog/2025-10-01-desktop-v1.10.0/)) | Feste Glide-Felder bleiben richtig |
-| Logseq | Wissensbasis | 2.0 Beta: Wechsel von Dateien zu SQLite mit Datenverlustrisiko ([Diskussion](https://discuss.logseq.com/t/whats-new-with-logseq-db-may-16th-2026/35020)) | Warnbeispiel, bestätigt D16 (JSON beschleunigen statt SQLite als Hauptspeicher) |
-| Capacities, Heptabase, Sunsama, Craft | Teilaspekte | Aufgaben im Wissenskontext, Karten auf Whiteboards, Tagesritual | Aufgaben im Wissenskontext sind Branchenstandard |
-| Super Productivity | Lokale Aufgaben + Zeit | lokal, MIT, Pomodoro, Timeboxing, WebDAV-Sync ([Produkt](https://super-productivity.com/)) | direktester lokaler Planer-Konkurrent |
-| Tcl/Tk | Laufzeit | 9.1.0 am 29.09.2026 mit Screenreader-Grundlage; python.org-macOS-Installer ab 3.14.5 mit Tk 9.0.3 ([Tcl 9.1](https://www.tcl-lang.org/software/tcltk/9.1.html)) | Chance für Barrierefreiheit (N12) und Verteilung (D15) |
+| [Todoist](https://www.todoist.com/features) | Natürliche Schnelleingabe, Datum und Deadline getrennt, Liste/Board/Kalender; 2026 Ramble (Sprache → Aufgaben mit Feldern) und offizieller MCP-Server ([Ramble](https://www.todoist.com/help/articles/from-voice-to-tasks-ramble-july-1), [Changelog 2026](https://www.todoist.com/help/articles/2026-changelog)) | Konto und Cloud; Kalenderlayout, Dauer und Deadlines teils nur in Bezahltarifen | Natürliche Erfassung ist Standard – Glide hat sie seit 3.33.3 |
+| [Things 3](https://culturedcode.com/things/support/articles/2803579/) | Ruhiger Ablauf Heute/Demnächst/Jederzeit/Irgendwann, Startdatum ≠ Deadline; 3.23 (21.08.2026) frühes Erledigen von Wiederholungen, 3.24 Schlummer-Intervalle und Siri-Anbindung ([Release Notes](https://culturedcode.com/things/support/articles/1100684/)) | nur Apple-Geräte, getrennte Käufe | Feinschliff statt Funktionsfülle – das Apple-Prinzip; Vorbild für D14 |
+| [TickTick](https://ticktick.com/features) | Aufgaben, Kalender, Kanban, Gewohnheiten, Pomodoro, Eisenhower; 8.0 vorgeschlagene Tagesaufgaben, Jahres-Heatmap ([AlternativeTo](https://alternativeto.net/news/2026/1/ticktick-8-0-adds-suggested-tasks-improved-yearly-monthly-views-and-customization-options/)) | dichte Oberfläche, vieles Premium | Fokus neben der Aufgabe (G05); bestätigt Tagesbeginn und Heatmap |
+| [Super Productivity](https://super-productivity.com/) | lokal, ohne Konto, MIT; Fokus/Pomodoro, Zeiterfassung, Timeboxing, Eisenhower, optionaler WebDAV-Sync | eher Arbeitszeit als Seiten und Bibliotheken | direktester lokaler Planer-Konkurrent; Fokus und Zeit gehören zusammen |
+| [Sunsama](https://www.sunsama.com/) | geführte Tagesplanung, Zeitblöcke, Tagesabschluss, Wochenanalyse | Abonnement; lebt von gepflegter Routine | Maßstab für Tagesbeginn und -abschluss; Schätzung und echte Zeit nebeneinander |
+| [Akiflow](https://akiflow.com/) | Universal Inbox, Time Blocking, automatische Planung | Abonnement, Integrationspflege | Zeit durch Ziehen sichtbar zuweisen; freie Zeitfenster vorschlagen (B-03) |
+| [Microsoft To Do](https://www.microsoft.com/en-us/microsoft-365/microsoft-to-do-list-app) | „Mein Tag“ ohne Einrichtung verständlich | wenig Struktur, Konto | Tagesfokus, den man sofort versteht |
+| Apple Erinnerungen/Notizen | iOS/macOS 27: Erinnerung in eigenen Worten, Felder am Objekt, Notizen als Markdown ([9to5Mac](https://9to5mac.com/2026/06/12/heres-everything-new-for-reminders-in-ios-27/)) | Apple-Plattform, Apple Intelligence | Felder am Objekt statt Dialog – stützt den Inspektor (N05/U12) |
+
+**Seiten, Notizen und Wissen**
+
+| Produkt | Stärke und Entwicklung | Grenze | Bedeutung für Glide |
+|---|---|---|---|
+| [Notion](https://www.notion.com/help/writing-and-editing-basics) | Seiten und Blöcke, Slash-Menü, Datenbanken mit Ansichten, Galerie, Titelbild; Offline-Modus seit 2.53 (08/2025), 3.2 KI-Notizen und Agenten mobil, 3.3 Custom Agents mit Zeitplänen und MCP ([2.53](https://www.notion.com/en-gb/releases/2025-08-19), [3.2](https://www.notion.com/de/releases/2026-01-20)) | Datenbankpflege kostet Aufmerksamkeit; Richtung Team-Automation | zentrales Vorbild für Editor, Bibliotheken, Navigation und Aufgaben im Kontext; „Notion kann nicht offline“ ist kein Unterscheidungsmerkmal mehr (Abschnitt 6) |
+| [AFFiNE](https://github.com/toeverything/affine) | Dokument und Leinwand sind dieselbe Seite, Kanban, lokal-first mit optionaler Cloud, KI | schwach in persönlicher Tagesplanung (Einschätzung) | stärkster Vergleich für Pinnwand + Seiten; Abgrenzung über die Tagesführung |
+| [AppFlowy](https://github.com/AppFlowy-IO/AppFlowy) | Tabelle, Board, Kalender, Galerie; lokale KI über Ollama | große Laufzeitabhängigkeit für lokale KI | lokale KI ist machbar, widerspricht aber Glides Abhängigkeitsregel |
+| [Obsidian](https://obsidian.md/) | lokale Markdown-Dateien, Rückverweise, Canvas; 1.10 Bases mit Gruppieren und Zusammenfassungen ([Changelog](https://obsidian.md/changelog/2025-10-01-desktop-v1.10.0/)) | Aufgabenplanung braucht Plugins und Eigenbau | stabile Verweise und Rückverweise (G08/G30); feste Glide-Felder bleiben richtig |
+| [Logseq](https://discuss.logseq.com/t/whats-new-with-logseq-db-may-16th-2026/35020) | 2.0 Beta mit typisierten Eigenschaften, Wechsel von Dateien zu SQLite | Datenverlustrisiko beim Wechsel | Warnbeispiel; bestätigt D16 (JSON beschleunigen statt SQLite als Hauptspeicher) |
+| [Capacities](https://capacities.io/), [Heptabase](https://wiki.heptabase.com/roadmap), [Anytype](https://github.com/anyproto/anytype-ts), Craft | typisierte Objekte, Tagesnotizen, Karten auf Whiteboards mit „wo liegt diese Karte überall“, lokale verschlüsselte Objekte (Anytype) | Umgewöhnung an Objektmodelle; teils Cloud-Sync | Aufgaben im Wissenskontext sind Branchenstandard; Bibliotheken mit festen Eigenschaften |
+| [OneNote](https://support.microsoft.com/en-us/onenote/take-and-format-notes) | Notizbücher, frei platzierte Inhalte, Tags | To-do-Tags ersetzen keine Planung | Notizbuchgefühl; Aufgaben bleiben echte Objekte |
+| [Evernote](https://evernote.com/en-us/features/notes-app), [Joplin](https://joplinapp.org/), [Google Keep](https://support.google.com/keep/answer/6191044?hl=de) | Sammeln, Web Clipper und Suche (Evernote); lokal mit optionalem Sync (Joplin); geringe Schwelle (Keep) | Cloud und Tarife bzw. Einrichtungsaufwand bzw. wenig Struktur | Wiederfinden ist Kernnutzen (G14); Eingang sichtbar, bis eingeordnet (U07) |
+
+**Boards, Pinnwände und Teamwerkzeuge**
+
+| Produkt | Stärke und Entwicklung | Grenze | Bedeutung für Glide |
+|---|---|---|---|
+| [Trello](https://trello.com/en/pricing) | anschaulicher Kartenfluss, Cover, Checklisten, Spiegelkarten | Konto; Ansichten je Tarif | einfaches Kanban, Karte bearbeiten mit Kontext |
+| [Microsoft Planner](https://support.microsoft.com/en-us/planner/compare-microsoft-planner-basic-vs-premium-plans) | Gruppieren nach Status, Termin, Label; Premium mit Abhängigkeiten | lizenzabhängig; das Update 2026 nimmt Whiteboard-Reiter und iCalendar-Feed heraus ([Neowin](https://www.neowin.net/amp/microsoft-confirms-major-2026-update-to-remove-several-planner-features-add-new-ones/)) | nur noch Referenz für die Gruppierungslogik |
+| [FigJam](https://help.figma.com/hc/en-us/articles/15300412458647-Explore-FigJam-files), [Miro](https://miro.com/features/) | Zettel, Verbinder, Bereiche, Aufräumen; Frames und Präsentation | Objekte sind keine Aufgaben; für eine persönliche Fläche überdimensioniert | benannte Bereiche, beschriftete Verbindungen, Präsentation aus Bereichen (vorhanden) |
+| [Asana](https://asana.com/features/project-management), [ClickUp](https://clickup.com/features/views), [monday.com](https://monday.com/capabilities) | Verantwortung, Abhängigkeiten, viele Ansichten, Automationen | Team- und Prozesspflege, tarifabhängig | eine Aufgabe in mehreren Kontexten ohne Kopie; Blockaden sichtbar – Team bleibt außen vor |
+
+**Zeichnen und Pixel**
+
+| Produkt | Stärke und Entwicklung | Grenze | Bedeutung für Glide |
+|---|---|---|---|
+| [Affinity](https://www.canva.com/newsroom/news/all-new-affinity/) | Vektor, Pixel und Layout in einer App, kontextbezogene Studios | viel größerer Umfang; Aktivierung über Canva-Konto | kontextbezogene Werkzeugleisten, erreichbare Farben, klarer Export |
+| [Aseprite](https://www.aseprite.org/) | Pixel-Art, Ebenen, Animation, Zwiebelhaut, Spritesheet | spezialisiert, kein Organisationswerkzeug | Animation als eigener, begrenzter Arbeitsbereich (G17, D07) |
+| [Pixelorama](https://orama-interactive.itch.io/pixelorama) | quelloffen; indizierte Farben, Paletten, Tilemaps, PNG/GIF/Spritesheet | Einarbeitung | Palettenverwaltung und Umfärben über indizierte Farben (G19) |
+| [Lospec](https://lospec.com/palette-list) | Palettenverzeichnis | – | Paletten-Import (GPL/HEX, seit 3.32.0 auch Aseprite/ASE) |
+
+**Laufzeit:** [Tcl/Tk 9.1.0](https://www.tcl-lang.org/software/tcltk/9.1.html) (29.09.2026) bringt eine Screenreader-Grundlage; der python.org-Installer für macOS liefert ab Python 3.14.5 Tk 9.0.3. Chance für Barrierefreiheit (N12) und gleiche Verteilung auf allen Plattformen (D15).
 
 ## 4. Featurematrix
 
-● vorhanden · ◐ teilweise/eingeschränkt · ○ fehlt · P per Erweiterung · – nicht Zweck · ? nicht verifiziert
-**Gl** Glide 3.33.7 · **No** Notion · **Td** Todoist · **Th** Things 3 · **TT** TickTick · **SP** Super Productivity · **AF** AFFiNE · **AP** AppFlowy · **Ob** Obsidian · **Ap** Apple
+● vorhanden · ◐ teilweise, eingeschränkt oder nur im Bezahltarif · ○ fehlt · P per Erweiterung · – nicht Zweck · ? nicht verifiziert
+**Gl** Glide 3.33.7 · **No** Notion · **Td** Todoist · **Th** Things 3 · **TT** TickTick · **SP** Super Productivity · **AF** AFFiNE · **AP** AppFlowy · **Ob** Obsidian · **Ap** Apple Erinnerungen + Notizen
 
 | Bereich | Funktion | Gl | No | Td | Th | TT | SP | AF | AP | Ob | Ap | Glide |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Erfassen | Natürliche Eingabe mit sichtbarer Erkennung | ● | ◐ | ● | ● | ● | ◐ | – | – | P | ● | seit 3.33.3, Wiederholungen seit 3.33.4 |
 | | Systemweite Schnellerfassung | ○ | ● | ● | ● | ● | ◐ | ? | ? | ◐ | ● | bewusst nicht (G07) |
-| | KI-/Spracherfassung | ○ | ● | ● | ◐ | ? | ○ | ◐ | ◐ | P | ● | bewusst nicht |
+| | KI-/Spracherfassung | ○ | ● | ● | ◐ | ? | ○ | ◐ | ◐ | P | ● | bewusst nicht (Q3) |
 | Planen | Bearbeitungstag getrennt von Fälligkeit | ● | ◐ | ● | ● | ◐ | ◐ | – | ◐ | P | ○ | D01 |
-| | Heute-Ansicht ohne Dubletten | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ● | Heute/Demnächst seit 3.33.6 |
-| | Kapazität, Aufwand, Zeitblöcke | ● | – | ◐ | ○ | ● | ● | ○ | ◐ | P | ◐ | Stundenraster |
+| | Heute-Ansicht ohne Dubletten | ● | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ● | D14, seit 3.33.6 |
+| | Tageskapazität, Aufwand | ● | – | ◐ | ○ | ◐ | ● | – | – | – | ○ | Kapazität je Wochentag |
+| | Zeitblöcke, Stundenraster | ● | ◐ | ◐ | ○ | ● | ● | ○ | ◐ | P | ◐ | |
 | | Kalender Monat/Woche | ◐ | ● | ◐ | ◐ | ● | ◐ | ? | ● | P | ● | noch modales Fenster (N04) |
 | | Tagesbeginn, Tagesabschluss, Wochenrückblick | ● | ○ | ◐ | ○ | ◐ | ● | ○ | ○ | P | ○ | Modi von Heute |
 | | Wiederholungen | ● | ◐ | ● | ● | ● | ● | ○ | ? | P | ● | |
-| | Erinnerung bei geschlossener App | ○ | ● | ● | ● | ● | ◐ | ○ | ◐ | P | ● | bewusst nicht |
+| | Erinnerung bei geschlossener App | ○ | ● | ● | ● | ● | ◐ | ○ | ◐ | P | ● | bewusst nicht (N09) |
 | | Fokusansicht/Pomodoro | ◐ | ○ | ○ | ○ | ● | ● | ○ | ○ | P | ○ | Zeiterfassung ja, Fokus fehlt (G05) |
+| | Zeiterfassung je Aufgabe | ● | ◐ | ○ | ○ | ◐ | ● | ○ | ○ | P | ○ | eine laufende Erfassung |
 | | Eisenhower | ● | ◐ | ○ | ○ | ● | ● | ○ | ◐ | P | ○ | Gruppierung seit 3.33.5 |
-| | Abhängigkeiten | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | P | ○ | `blocked_by` |
-| | Gewohnheiten | ○ | ◐ | ○ | ○ | ● | ◐ | ○ | ○ | P | ○ | vorerst nicht |
-| Ordnen | Board, Tabelle, Galerie, gespeicherte Filter, Vorlagen, Checklisten, Archiv | ● | ● | ◐ | ◐ | ● | ◐ | ● | ● | ◐ | ◐ | |
-| Wissen | Block-Editor mit „/“-Menü, Bilder in Seiten | ● | ● | – | – | ◐ | ◐ | ● | ● | ◐ | ◐ | Linux-Bilder eingeschränkt |
+| | Abhängigkeiten | ● | ● | ○ | ○ | ○ | ○ | ○ | ○ | P | ○ | „wartet auf“ (`blocked_by`) mit Kreisprüfung |
+| | Gewohnheiten | ○ | ◐ | ○ | ○ | ● | ◐ | ○ | ○ | P | ○ | vorerst nicht (G06) |
+| Ordnen | Listen, Ordner, Labels, Archiv, Papierkorb | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | |
+| | Gespeicherte Filter | ● | ● | ● | ◐ | ● | ◐ | ◐ | ● | ● | ● | |
+| | Board/Kanban | ● | ● | ● | ○ | ● | ● | ● | ● | ◐ | ● | Pinnwand als Board |
+| | Tabelle | ● | ● | ○ | ○ | ○ | ○ | ● | ● | ● | ○ | |
+| | Galerie/Karten | ● | ● | ○ | ○ | ○ | ○ | ? | ● | ◐ | ○ | |
+| | Vorlagen | ● | ● | ● | ◐ | ● | ◐ | ● | ● | ● | ◐ | mit selbstfüllenden Platzhaltern |
+| | Unteraufgaben, Checklisten | ● | ● | ● | ● | ● | ● | ◐ | ◐ | P | ● | |
+| Wissen | Block-Editor mit „/“-Menü | ● | ● | – | – | ◐ | ◐ | ● | ● | ◐ | ◐ | |
+| | Bilder in Seiten | ● | ● | – | – | ◐ | ○ | ● | ● | ● | ● | Linux nur PNG, GIF, SVG |
 | | Echte Aufgaben im Dokument | ◐ | ◐ | – | – | – | – | ◐ | ◐ | P | ◐ | in Seiten ja, in Notizen nein (G29) |
 | | Verweise und Rückverweise | ◐ | ● | ○ | ○ | ○ | ○ | ● | ● | ● | ● | nur Punkt ↔ Punkt (G08/G30) |
 | | Volltextsuche im Inhalt | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | seit 3.33.7 Inhalte von Seiten/Notizen und Beschreibungen; kein FTS5-Cache |
-| | Titelbild | ◐ | ● | – | – | – | – | ● | ● | P | ○ | Pixelsymbol ja, Titelbild fehlt (G09) |
+| | Eigenschafts-/Datenbankansichten | ◐ | ● | – | – | – | – | ● | ● | ● | – | feste Glide-Felder (bewusst) |
+| | Tagesnotiz, Notizbuch | ● | ◐ | – | – | ◐ | ◐ | ● | ? | ● | ○ | |
+| | Seitensymbol, Titelbild | ◐ | ● | – | – | – | – | ● | ● | P | ○ | Pixelsymbol ja, Titelbild fehlt (G09) |
+| | Markdown-Import/-Export | ● | ● | ◐ | ◐ | ◐ | ◐ | ● | ● | ● | ◐ | |
 | Visuell | Freie Leinwand mit echten Aufgabenkarten | ● | ○ | ○ | ○ | ○ | ○ | ● | ○ | ● | ◐ | |
 | | Pixel-Zeichnen und Symbol-Export | ● | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | ○ | besondere Kombination |
-| Daten | Ohne Konto, offene lokale Datei, automatische Sicherungen | ● | ○ | ○ | ◐ | ○ | ● | ◐ | ◐ | ● | ○ | |
-| | Sync zwischen Geräten, Mobile | ○ | ● | ● | ● | ● | ● | ● | ● | ● | ● | Datenordner in Cloud-Ablage; Mobile zurückgestellt (D03) |
+| | Animation | ○ | – | – | – | – | – | – | – | – | – | G17, D07 offen |
+| Daten | Ohne Konto vollständig nutzbar | ● | ○ | ○ | ● | ○ | ● | ● | ◐ | ● | ◐ | |
+| | Offene lokale Datei | ● | ○ | ○ | ○ | ○ | ◐ | ◐ | ◐ | ● | ○ | eine lesbare JSON-Datei |
+| | Automatische Sicherungen, Versionen | ● | ● | ● | ◐ | ◐ | ◐ | ● | ◐ | ● | ◐ | Sicherungen, Tagesstände, Verlauf |
+| | Sync zwischen Geräten | ◐ | ● | ● | ● | ● | ● | ● | ● | ● | ● | Datenordner in Cloud-Ablage, ohne Zusammenführen |
+| | Mobile Apps | ○ | ● | ● | ● | ● | ● | ● | ● | ● | ● | zurückgestellt (D03) |
+| | Windows, macOS, Linux | ● | ◐ | ● | ○ | ● | ● | ● | ● | ● | ○ | Linux eingeschränkt (Tk 8.6, Bildformate) |
 | | Import aus anderen Apps | ◐ | ● | ● | ◐ | ● | ◐ | ● | ● | ● | ○ | CSV/MD/ICS; Notion/Todoist fehlt (G21) |
+| | Kalenderdatei (ICS) | ● | ◐ | ● | ◐ | ● | ◐ | ○ | ○ | P | ● | als Datei, kein Abo |
+| | Eingebaute KI | ○ | ● | ● | ◐ | ? | ○ | ● | ● | P | ● | bewusst nicht (Q3) |
+| | Schnittstelle für Assistenten (API/MCP) | ◐ | ● | ● | ◐ | ◐ | ? | ? | ◐ | ◐ | ◐ | `.glideexchange`; Dokumente statt Schnittstelle (Q3) |
 | Bedienung | Eine Befehlspalette | ◐ | ● | ● | ◐ | ◐ | ◐ | ● | ◐ | ● | ○ | Suche und Aktionsdialog doppelt (U01) |
 | | Erscheinungsbild wie System | ○ | ● | ● | ● | ● | ● | ● | ● | ● | ● | N01 |
+| | Rückgängig auch für Strukturänderungen | ● | ● | ◐ | ● | ◐ | ◐ | ● | ● | ● | ● | 20 Schritte, Bestandswächter |
+| | Hilfe in der App | ● | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | Handbuch, Kürzel; Hinweise noch dauerhaft (D11) |
+| | Beispielinhalt | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | Showcase und Rundgang; Einstieg bewusst nicht |
 | | Screenreader | ○ | ? | ? | ● | ? | ? | ? | ? | ? | ● | N12 nach Tk 9.1 |
+
+### 4.1 Vergleich nach Dimensionen
+
+Einordnung der Matrix und der UX-Befunde; die Messwerte stehen im [Entwicklungsplan, Abschnitt 10](Glide_Entwicklungsplan.md#10-messbare-ziele).
+
+| Dimension | Maßstab | Glide 3.33.8 | Lücke | Konsequenz |
+|---|---|---|---|---|
+| Funktionen | Notion (Breite), TickTick (Planung + Fokus), AFFiNE (Seite + Leinwand) | sehr breit; in der Tagesplanung stark im Lokal-Segment | Seitenverweise, Fokus, Aufgaben im Notiztext; Suche ohne Index | keine neue Breite, sondern die Lücken im Kern schließen (Stufen 1–2) |
+| Alltag | Things (Heute → Demnächst), Sunsama (Ritual) | Heute und Demnächst, Tagesbeginn/-abschluss als Modi (D14) | Fokus, verfügbare Zeit beim Einplanen | G05 eingebettet in Heute; AU01/AU02 (Ausbauprogramm) |
+| Komfort | Todoist (Erfassung), Apple (Felder am Objekt) | Feldchips seit 3.33.3, Rückgängig überall | Detailbearbeitung doppelt (Maske und Bereich) | ein Inspektor (N05/U12) |
+| Tempo | Things, Apple: jede Aktion unter 100 ms | Abhaken 56 / 218 / 446 ms bei 1.000 / 5.000 / 10.000 Punkten (Linux); Startseite 507 ms (Mac) | linearer Speicherweg, Aufbau | Stufe 0: P04, P06r, P08, P09b |
+| Gestaltung | Things, Notion: viel Weißraum, wenige Bedienelemente | durchdacht im Detail, aber dicht: 8 Kopfsymbole, ≈ 27 % Bedienfläche, 5 Symbole mit Mehrfachbedeutung | zu viel dauerhaft sichtbar | UX1 vor neuen Ansichten; OB01–OB03 |
+| Hilfe | Things („Neu in …“), Notion | Handbuch, Kürzel, Showcase; Hinweise dauerhaft | Hilfe bei Bedarf, „Was ist neu“ | D11/U02, N07 |
+| Marke | Things (eine starke Gestalt), Notion (Minimalismus) | Logo, Gismo, Design „Pixel“ | zehn Designs verwässern die Gestalt; Namenskollision „Glide“ | Signaturdesign vorn mit „Automatisch (hell/dunkel)“ (N01/U17), Gismo als Markenfigur, Markenprüfung (I4) |
+| KI 2026 | Todoist Ramble/MCP, Notion Agents, Apple Intelligence | `.glideexchange` für externe KI | keine direkte Schnittstelle – bewusst (Q3) | G24: Kontextpaket und Änderungsvorschläge mit Vorschau |
 
 ## 5. Positionierung
 
 > **Glide ist der ruhige, lokale Arbeitsplatz für den eigenen Tag:** planen mit Bearbeitungstag, Fälligkeit und Kapazität; erledigen mit Zeit und Fokus; festhalten in Seiten, Notizbuch und Pinnwand; alles in einer eigenen Datei, ohne Konto. Die Pixel-Werkstatt ist die persönliche Signatur.
 
 - **Stärken vertiefen:** Tagesführung (G05), Aufgaben im Kontext (G29, G31, G08/G30), Wiederfinden (G14), weniger dauerhaft sichtbare Bedienung (UX1).
+- **Nische sichtbar machen:** Im untersuchten Feld verbindet keine Anwendung Organisation mit einem echten Pixelraster. Die Nische wird stärker, je sichtbarer Pixelbilder in der Organisation werden: Pixelsymbole an Listen und Ordnern, Kachel „Zeichnungen“, Galerie, Zeichnung als Pinnwandkarte, Titelbild als Pixelzeichnung (G09).
 - **Nicht nachbauen:** Team, Cloud, frei definierbare Datenbanken, eingebaute Cloud-KI.
 - **Marke:** Der Name „Glide“ kollidiert mit bekannten Produkten (etwa der No-Code-Plattform Glide); Markenprüfung durch den Inhaber (I4). Gismo und das Pixel-Design sind die stärksten Wiedererkennungsmerkmale.
 
