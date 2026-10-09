@@ -1,6 +1,6 @@
 # Produkt- und Identitätsregister
 
-Stand 05.10.2026 · App-Version 3.33.8 · Datenformat 20
+Stand 09.10.2026 · App-Version 3.35.0 · Datenformat 23
 
 Der obere Block ist durch den Quellcode belegt und muss nicht mehr entschieden
 werden. Der untere Block enthält Geschäfts- und Rechtsentscheidungen. Offene
@@ -13,12 +13,12 @@ ersetzt werden.
 |---|---|---|
 | Produktname | Glide | `APP_NAME` |
 | Langname | Glide – Aufgaben und Listen | `APP_PRODUCT_NAME` |
-| App-Version | 3.33.8 | `APP_VERSION`, `VERSION` |
-| Datenformat | 20 | `DATA_SCHEMA_VERSION` |
-| Unterstützte Backup-Formate | 4 bis 20 | `MIN_PORTABLE_BACKUP_SCHEMA_VERSION`, `DATA_SCHEMA_VERSION` |
+| App-Version | 3.35.0 | `APP_VERSION`, `VERSION` |
+| Datenformat | 23 | `DATA_SCHEMA_VERSION` |
+| Unterstützte Backup-Formate | 4 bis 23 | `MIN_PORTABLE_BACKUP_SCHEMA_VERSION`, `DATA_SCHEMA_VERSION` |
 | Laufzeit | Python 3.14 mit Tk 9 als Grundlage (27.09.2026); Tk 8.6 bleibt lauffähig, ohne Systemmitteilung und SVG-Vorschau. Sonst nur Standardbibliothek | Importliste in `app.pyw` |
 | Mitgelieferte Bibliothek | tkinterdnd2 0.6.3 (MIT) mit tkDnD für das Ziehen aus Finder/Explorer; optional, lädt beim ersten Gebrauch | `src/glide/vendor`, [Entscheidung](ABHAENGIGKEIT_TKDND.md) |
-| Prüflaufzeit | maßgeblich macOS mit Python 3.14.5 und Tk 9.0.3; der letzte vollständige Windows-Lauf war 3.26 (Python 3.13). Ergebnisse im QA-Bericht | `docs/07_QA_BERICHT.md` |
+| Prüflaufzeit | Referenz-Mac 3.35.0: Python 3.14.5, Tk 9.0.3 (automatische Vollprüfung und Bundle); Windows zuletzt 3.33.18: Python 3.14.7, Tk 9.0.4. Menschliche Abnahme offen; Ergebnisse im QA-Bericht | `docs/07_QA_BERICHT.md` |
 | Netzwerkzugriff | kein automatischer Datentransfer; bewusst angeklickte Links öffnen den Browser | lokale Datenhaltung, `webbrowser` |
 | Benutzerkonto | keines | keine Auth-Pfade |
 | Telemetrie | keine | keine Analytics-Aufrufe |
@@ -44,7 +44,7 @@ ersetzt werden.
 | Mitgelieferte Schriften | DejaVu Sans TTF (vier Schnitte) und Pixelify Sans TTF (Regular, Bold; SIL OFL 1.1, nur Überschriften im Design „Pixel“), private Registrierung | `register_private_fonts`, `app_font`, `pixel_heading_family`, `resources/fonts/provenance.json` |
 | macOS Bundle Identifier | `de.shaye.glide` (Inhaberentscheidung 26.09.2026) | `APP_BUNDLE_ID`, `packaging/macos/baue_app.py` |
 | Windows AppUserModelID | `Shaye.Glide` (Inhaberentscheidung 26.09.2026) | `APP_USER_MODEL_ID`, `set_windows_app_user_model_id`, `packaging/windows/verknuepfung_anlegen.ps1` |
-| Beispielbestand zum Einlesen | aktuelles Format-20-Fixture unter `tests/fixtures/beispiele/`, feste Referenz `current_v20` | `pruefen.py`, `test_features330.py` |
+| Beispielbestand zum Einlesen | aktuelle Backups unter `tests/fixtures/beispiele/` im Format 23; feste aktuelle Referenz `current_v23`, ältere `current_v*` als Migrationsbelege | `pruefen.py`, `test_seiten33318.py` |
 
 ## Offen – Entscheidung oder Plattformabnahme erforderlich
 

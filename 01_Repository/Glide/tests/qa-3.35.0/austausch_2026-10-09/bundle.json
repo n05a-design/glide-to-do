@@ -1,0 +1,13 @@
+{
+  "zeitpunkt": "2026-10-09",
+  "werkzeug": "packaging/macos/baue_app.py",
+  "version": "3.35.0",
+  "python": "3.14.5 (python.org, Tk 9.0.3)",
+  "signatur": "ad hoc; codesign --verify --deep --strict im Bauordner und auf einer Rückkopie aus dem Zielordner bestanden; Zielordner inhaltsgleich (diff -r). Direkt im OneDrive-Ordner scheitert die Prüfung am Dateianbieter (wie 3.34.0)",
+  "app_pyw_sha256_beginn": "9147c66318b7c46d",
+  "dateien_im_bundle": 91,
+  "quelldateien_verglichen_mit_07": 82,
+  "abweichungen_zu_07": 0,
+  "ziel": "01_Repository/Glide/build/macos/Glide.app (lokal, nicht versioniert); ersetzt das Bundle 3.34.0",
+  "manuelle_abnahme": "offen (I6)"
+}

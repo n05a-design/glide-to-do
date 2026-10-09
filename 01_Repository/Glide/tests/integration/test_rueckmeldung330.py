@@ -43,6 +43,7 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
     fehler = []
     root.report_callback_exception = lambda *args: fehler.append(args)
     app = mod.ListApp(root)
+    app.settings["view_hints"] = {key: True for key in ("list", "folder", "trash", "in_progress", app.TABLE_VIEW, app.PLAN_DAY_VIEW, app.LABELS_VIEW)}
     app.show_info = app.show_warning = app.show_error = lambda *args, **kwargs: None
 
     def ruhe(runden=6):
@@ -94,8 +95,8 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
             assert abs(links - rechts) <= 1, (name, links, rechts)
 
         # --- Kopfzeile: feste Reihenfolge, Verlauf als Knopf ----------------
-        erwartet = ["settings_button", "notifications_button", "capture_button", "actions_button",
-                    "search_button", "sidebar_toggle_button", "print_button", "history_button"]
+        app.apply_reminder_badge(0)
+        erwartet = ["settings_button", "capture_button", "search_button", "sidebar_toggle_button"]
         def reihenfolge():
             namen = {str(getattr(app, name)): name for name in erwartet + ["header_overflow_button"]}
             return [namen.get(str(knopf), str(knopf)) for knopf in app.header_controls.pack_slaves()]

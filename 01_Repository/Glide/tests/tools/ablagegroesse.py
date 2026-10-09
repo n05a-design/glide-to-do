@@ -20,7 +20,8 @@ neuesten begrenzt.
    `tests/qa-<Version>` und Releaseplanungen in `tests/fixtures/beispiele`
    gehören zu den sieben neuesten Versionen. Ausgenommen sind die
    Releaseplanungen in `DAUERHAFT`.
-4. Fensterbilder: nur in den drei neuesten Versionen, und Vollprüfungen nach
+4. Fensterbilder: nur in den drei neuesten Versionen, gleich in welchem
+   Bildordner (`fenster/`, `fensterbilder/`, `screenshots/`); Vollprüfungen nach
    3.33.6 versionieren den Ordner `fenster/` gar nicht mehr.
 5. Einzeldateien bis 50 MB; GitHub warnt ab 50 MB und lehnt ab 100 MB ab.
 
@@ -43,6 +44,8 @@ ARCHIVBEREICHE = (QUELLBAUM + "tests/fixtures/", "05_Probelisten_Testdaten/Showc
 ARCHIV_VERSIONEN = 7
 BILDER_VERSIONEN = 3
 FENSTERBILDER_BIS = (3, 33, 6)
+# Die Altersgrenze gilt für jeden dieser Bildordner; das Git-Verbot nach 3.33.6 nur für `fenster/`.
+BILDORDNER = frozenset({"fenster", "fensterbilder", "screenshots"})
 GRENZE_MB = 50
 _V = r"(\d+\.\d+\.\d+)"
 # Pfade, deren Version die Aufbewahrung bestimmt.
@@ -105,8 +108,8 @@ def befunde(eintraege, aktuell=None):
             funde.append(("Archivkopie", pfad, "Vorfassungen trägt Git; keine Kopie im Archivordner"))
         if version and version not in archiv and pfad not in DAUERHAFT:
             funde.append(("Archivalter", pfad, f"{version} liegt vor den {ARCHIV_VERSIONEN} neuesten Versionen"))
-        elif QA_ORDNER.match(pfad) and "fenster" in teile[:-1] and endung == ".png":
-            if als_tupel(version) > FENSTERBILDER_BIS:
+        elif QA_ORDNER.match(pfad) and BILDORDNER & set(teile[:-1]) and endung == ".png":
+            if "fenster" in teile[:-1] and als_tupel(version) > FENSTERBILDER_BIS:
                 funde.append(("Fensterbilder", pfad, "Bildschirmfotos der Vollprüfung bleiben lokal"))
             elif version not in bilder:
                 funde.append(("Fensterbilder", pfad,

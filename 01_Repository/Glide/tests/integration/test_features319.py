@@ -46,7 +46,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features319-") as folder:
         return app.history[-anzahl:]
 
     try:
-        assert A.DATA_SCHEMA_VERSION == 20
+        assert A.DATA_SCHEMA_VERSION == 23
         assert A.MAX_HISTORY_ENTRIES == 15 and A.HISTORY_GROUP_THRESHOLD == 25
 
         # --- 1. Migration von Format 14 --------------------------------------
@@ -66,7 +66,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features319-") as folder:
         sicherungen = list(Path(mod.BACKUP_DIR).glob("liste_vor_format15_*.json"))
         assert len(sicherungen) == 1 and sicherungen[0].read_bytes() == original
         gespeichert = json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))
-        assert gespeichert["version"] == 20 and gespeichert["history"] == []
+        assert gespeichert["version"] == 23 and gespeichert["history"] == []
         assert app.save_items() and len(list(Path(mod.BACKUP_DIR).glob("liste_vor_format15_*.json"))) == 1
         # Das Laden selbst ist keine Änderung.
         assert app.history == [], app.history

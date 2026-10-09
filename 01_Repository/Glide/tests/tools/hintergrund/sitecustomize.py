@@ -1,4 +1,4 @@
-"""Prüfläufe im Hintergrund (macOS): Tk-Fenster nehmen weder Fokus noch Tastatur.
+"""Prüfläufe im Hintergrund (macOS): Tk-Fenster holen sich nicht den Vordergrund und nehmen keine Maus.
 
 Seit 30.09.2026. `tests/tools/pruefen.py` legt diesen Ordner unter macOS in
 den PYTHONPATH und setzt GLIDE_QA_HINTERGRUND=1; Python lädt die Datei dann
@@ -13,8 +13,11 @@ Ablauf je Tk-Hauptfenster:
 
 `focus_force` wird zu `focus_set`: Tk behält seinen inneren Fokus, holt die App
 aber nicht mehr nach vorn. Fenster werden weiter gezeichnet und lassen sich
-fotografieren; sie können über anderen Fenstern erscheinen, nehmen aber weder
-Tastatur noch Maus. `pruefen.py --vordergrund` schaltet das ab.
+fotografieren; sie können über anderen Fenstern erscheinen und nehmen keine
+Maus. Die Tastatur ist nicht abgeschirmt: Die Prüf-App bleibt aktiv, und
+Tastatureingaben während eines Laufs können in Prüfdialogen landen (Prüfplan,
+„Hintergrund unter macOS“). Während einer Vollprüfung deshalb nicht tippen
+und den Mac nicht sperren. `pruefen.py --vordergrund` schaltet das ab.
 """
 import os
 import sys

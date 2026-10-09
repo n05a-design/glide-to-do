@@ -1,0 +1,114 @@
+{
+  "werkzeug": "messung_speicherweg.py",
+  "app": "Quellstand 3.33.19 vor dem Versionswechsel",
+  "app_version": "3.33.18",
+  "punkte": 1000,
+  "datei_kb": 1036,
+  "runden_warm": 9,
+  "vergleich_scope": "deklarierte Punktmutation",
+  "umgebung": {
+    "python": "3.14.5",
+    "tk": "9.0.3",
+    "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "prozessor": "arm"
+  },
+  "erstes_speichern_ms": 22.509,
+  "snapshot_undo": {
+    "median_ms": 3.109,
+    "p95_ms": 3.176,
+    "stichproben_ms": [
+      3.13,
+      3.122,
+      3.066,
+      3.109,
+      3.173,
+      3.063,
+      3.074,
+      3.082,
+      3.176
+    ]
+  },
+  "save_items": {
+    "median_ms": 19.179,
+    "p95_ms": 21.655,
+    "stichproben_ms": [
+      19.044,
+      19.206,
+      18.789,
+      19.179,
+      21.655,
+      19.336,
+      19.076,
+      19.023,
+      19.238
+    ]
+  },
+  "history_snapshot": {
+    "median_ms": 3.45,
+    "p95_ms": 6.426,
+    "stichproben_ms": [
+      3.45,
+      3.497,
+      3.386,
+      3.45,
+      3.403,
+      3.461,
+      6.426,
+      3.381,
+      3.402
+    ]
+  },
+  "json_eingerueckt": {
+    "median_ms": 2.018,
+    "p95_ms": 2.158,
+    "stichproben_ms": [
+      2.018,
+      2.158,
+      2.026,
+      1.976,
+      2.033,
+      1.974,
+      2.092,
+      2.017,
+      2.008
+    ]
+  },
+  "json_kompakt": {
+    "median_ms": 1.963,
+    "p95_ms": 2.048,
+    "stichproben_ms": [
+      2.0,
+      1.942,
+      1.963,
+      1.962,
+      1.933,
+      2.034,
+      1.986,
+      1.961,
+      2.048
+    ]
+  },
+  "abhaken_item_change": {
+    "median_ms": 16.593,
+    "p95_ms": 16.925,
+    "stichproben_ms": [
+      16.888,
+      16.634,
+      16.593,
+      16.925,
+      16.101,
+      16.543,
+      16.472,
+      16.747,
+      16.429
+    ]
+  },
+  "verlauf": true,
+  "speicher_kb": {
+    "vorher": 471088,
+    "nach_50_abhaken": 471088,
+    "hinweis": "größter belegter Arbeitsspeicher des Prozesses (ru_maxrss)"
+  },
+  "callbackfehler": [],
+  "bedingung": "Sprintmessung 08./09.10.2026; Strom- und Fenstermodus nicht protokolliert; Zwischenstand des Quellbaums vor dem Versionswechsel"
+}

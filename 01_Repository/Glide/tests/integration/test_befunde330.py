@@ -309,14 +309,14 @@ with tempfile.TemporaryDirectory(prefix="glide-befunde-") as ordner:
         app.set_active_list(notiz["id"])
         ruhe()
         ned = app.rich_note_editor
-        assert isinstance(ned, mod.NoteEditor) and not ned.ALLOW_TASKS
+        assert isinstance(ned, mod.NoteEditor) and ned.ALLOW_TASKS
         assert app.list_frame.winfo_manager() == "", "leere Notiz ohne Punktliste"
         assert ned.winfo_manager() == "pack"
-        assert all(tag != "task" for _l, tag in ned.block_choices())
+        assert any(tag == "task" for _l, tag in ned.block_choices())
         ned.insert_markdown("## Plan\n\n- [ ] Einkaufen\n- [x] Putzen\n")
         ruhe()
-        assert not notiz.get("items"), "Markdown-Aufgaben werden in der Notiz keine Punkte"
-        assert "Einkaufen" in ned.text.get("1.0", "end") and ned.text.tag_ranges("bullet")
+        assert len(notiz.get("items", [])) == 2, "Markdown-Aufgaben sind seit 3.33.15 echte Notizpunkte"
+        assert "Einkaufen" in ned.text.get("1.0", "end") and ned.text.tag_ranges("task")
         ned.text.insert("end", "\n- ")
         ned.text.mark_set("insert", "end -1c")
         app.flush_rich_note()

@@ -11,9 +11,18 @@ Tabellen sowie fett, kursiv, durchgestrichen, Code und Links im Text.
 
 Aufgaben entstehen hier nur als Platzhalter (`taskref:N`); aus ihnen macht der
 Aufrufer echte Glide-Punkte und ersetzt den Platzhalter durch `item:<id>`.
+
+Bilder (B4 seit 3.34.0): Steht ein Bild allein auf seiner Zeile und findet der
+Aufrufer die Datei (`image_resolver`), wird es wieder ein Seitenbild – so
+übersteht eine Seite den Weg über Markdown samt Bildern. Sonst bleibt es ein
+benannter Verweis im Text.
 """
 
+import os
 import re
+import urllib.parse
+import task_references as task_refs
+import object_references as object_refs
 
 BULLET = "•"
 DIVIDER = "―" * 24
@@ -29,10 +38,38 @@ _RULE = re.compile(r"^\s*([-*_])(\s*\1){2,}\s*$")
 _TABLE_ROW = re.compile(r"^\s*\|.*\|\s*$")
 _TABLE_SEPARATOR = re.compile(r"^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$")
 _IMAGE = re.compile(r"!\[([^\]]*)\]\(([^)\s]+)[^)]*\)")
+_IMAGE_LINE = re.compile(r"^\s*!\[([^\]]*)\]\(([^)\s]+)[^)]*\)\s*$")
+_SCHEME = re.compile(r"^[A-Za-z][A-Za-z0-9+.-]*:")
 _LINK = re.compile(r"\[([^\]]+)\]\(([^)\s]+)[^)]*\)")
 _AUTOLINK = re.compile(r"<(https?://[^>\s]+)>")
 _BARE_URL = re.compile(r"(?<![\w(\[\"'])(https?://[^\s<>()]+[^\s<>().,;:!?\"'])")
 _SAFE_URL = re.compile(r"^(https?://|mailto:)[^\s]+$")
+
+
+def insert_blocks(document, addition, position, link_map):
+    """Blöcke einfügen, vorhandene Bilder und geteilte Formatbereiche bewahren."""
+    if type(position) is not int or not 0 <= position <= len(document['text']):
+        raise ValueError('Ungültige Einfügeposition.')
+    delta = len(addition['text']) + 2
+    spans = []
+    for span in document['spans']:
+        start, end = span['start'], span['end']
+        if start >= position:
+            spans.append(dict(span, start=start + delta, end=end + delta))
+        elif end <= position:
+            spans.append(dict(span))
+        else:
+            spans.append(dict(span, end=position))
+            spans.append(dict(span, start=position + delta, end=end + delta))
+    spans.extend(dict(span, start=span['start'] + position + 1, end=span['end'] + position + 1,
+                      tag=link_map.get(span['tag'], span['tag'])) for span in addition['spans'])
+    links = dict(document.get('links', {}))
+    links.update({link_map.get(tag, tag): url for tag, url in addition.get('links', {}).items()})
+    ergebnis = dict(document, text=document['text'][:position] + '\n' + addition['text'] + '\n'
+                    + document['text'][position:], spans=spans, links=links)
+    if addition.get('images'):
+        ergebnis['images'] = dict(document.get('images') or {}, **addition['images'])
+    return ergebnis
 
 
 def looks_like_markdown(text):
@@ -56,6 +93,7 @@ class _Builder:
         self.spans = []
         self.links = {}
         self.tasks = []
+        self.images = {}
         self._link_index = 0
 
     def line(self, text, tags=(), inline=True):
@@ -96,7 +134,7 @@ class _Builder:
             if treffer.group(2) is not None:
                 inhalt, url = treffer.group(2), treffer.group(3)
                 ausgabe.append(inhalt)
-                if _SAFE_URL.match(url):
+                if _SAFE_URL.match(url) or object_refs.parse(url):
                     self._link_index += 1
                     tag = f"link:md{self._link_index}"
                     self.links[tag] = url
@@ -141,8 +179,12 @@ class _Builder:
         return klartext, spans
 
     def document(self):
-        return {"text": "".join(self.parts), "spans": sorted(self.spans, key=lambda s: (s["start"], s["end"], s["tag"])),
-                "links": self.links, "tasks": self.tasks}
+        dokument = {"text": "".join(self.parts),
+                    "spans": sorted(self.spans, key=lambda s: (s["start"], s["end"], s["tag"])),
+                    "links": self.links, "tasks": self.tasks}
+        if self.images:
+            dokument["images"] = dict(self.images)
+        return dokument
 
 
 def _indent_level(prefix):
@@ -165,11 +207,37 @@ def _table_lines(rows):
     return ausgabe
 
 
-def markdown_to_page(markdown):
-    """Markdown → {'text', 'spans', 'links', 'tasks'}.
+def local_image_path(source, base_dir=None):
+    """Lokaler Dateipfad eines Markdown-Bildverweises oder None – ohne Dateizugriff.
+
+    `file:`-Adressen und absolute Pfade gelten immer, relative Pfade nur mit
+    `base_dir` (Ordner der Markdown-Datei). Andere Adressen (http, data …)
+    werden nie geladen.
+    """
+    quelle = str(source or "").strip()
+    if not quelle or len(quelle) > 4096:
+        return None
+    if quelle.lower().startswith("file:"):
+        teile = urllib.parse.urlsplit(quelle)
+        if teile.netloc not in ("", "localhost"):
+            return None
+        from urllib.request import url2pathname
+        return url2pathname(teile.path) or None
+    if _SCHEME.match(quelle) and not re.match(r"^[A-Za-z]:[\\/]", quelle):
+        return None
+    pfad = urllib.parse.unquote(quelle)
+    if os.path.isabs(pfad):
+        return os.path.normpath(pfad)
+    return os.path.normpath(os.path.join(base_dir, pfad)) if base_dir else None
+
+
+def markdown_to_page(markdown, image_resolver=None):
+    """Markdown → {'text', 'spans', 'links', 'tasks'} (mit Bildern auch 'images').
 
     `tasks` ist eine Liste {'ref', 'text', 'done'}; die Aufgabenzeile trägt die
-    Bereiche `task` und `taskref:<ref>`.
+    Bereiche `task` und `taskref:<ref>`. `image_resolver(beschreibung, quelle)`
+    liefert für ein Bild allein auf seiner Zeile (Kennung `img:…`, Angaben)
+    oder None; dann bleibt es ein Verweis im Text.
     """
     builder = _Builder()
     zeilen = str(markdown or "").replace("\r\n", "\n").replace("\r", "\n").split("\n")
@@ -210,6 +278,15 @@ def markdown_to_page(markdown):
         if _RULE.match(zeile):
             absatz_schliessen()
             builder.line(DIVIDER, ("divider",), inline=False)
+            index += 1
+            continue
+        treffer = _IMAGE_LINE.match(zeile) if image_resolver else None
+        bild = image_resolver(treffer.group(1), treffer.group(2)) if treffer else None
+        if bild:
+            absatz_schliessen()
+            kennung, angaben = bild
+            builder.line(IMAGE_ANCHOR, (kennung,), inline=False)
+            builder.images[kennung] = angaben
             index += 1
             continue
         treffer = _HEADING.match(zeile)
@@ -301,9 +378,11 @@ def page_to_markdown(document, task_state=None, image_source=None):
         einzug = next((2 * (INDENT_TAGS.index(tag) + 1) for tag in INDENT_TAGS if tag in auf_zeile), 0)
         praefix = " " * einzug
         if "task" in auf_zeile:
-            item = next((tag[5:] for tag in auf_zeile if tag.startswith("item:")), None)
+            item = next((task_refs.task_id(tag) for tag in auf_zeile if task_refs.task_id(tag)), None)
             zustand = task_state(item) if item and task_state else None
             erledigt = bool(zustand[1]) if zustand else False
+            if zustand and " ".join(zeile.split()) != " ".join(str(zustand[0]).split()):
+                inhalt = str(zustand[0])
             bloecke.append(("list", f"{praefix}- [{'x' if erledigt else ' '}] {inhalt}"))
         elif any(f"h{stufe}" in auf_zeile for stufe in (1, 2, 3, 4)):
             stufe = next(stufe for stufe in (1, 2, 3, 4) if f"h{stufe}" in auf_zeile)
@@ -378,3 +457,157 @@ def _inline_markdown(zeile, start, spans, links):
         teile.append(zeichen)
     teile.extend(einfuegen.get(len(zeile), []))
     return "".join(teile)
+
+
+# --- Druckseite (B4 seit 3.34.0) -------------------------------------------
+# Eine Seite wird wie für Markdown in Blöcke zerlegt und daraus als HTML
+# gesetzt. Bilder kommen als Daten-URL ins HTML, damit die Druckseite keine
+# Verweise auf Dateien braucht; zu große Bilder bleiben ein benannter Platzhalter.
+IMAGE_PLACEHOLDER = "glide-bild:"
+_HTML_IMAGE = re.compile(r"!\[([^\]]*)\]\((" + re.escape(IMAGE_PLACEHOLDER) + r"\d+)\)")
+_HTML_LINK = re.compile(r"\[([^\]]+)\]\(((?:https?://|mailto:)[^)\s]+)\)")
+
+
+def _html(text):
+    return (str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+            .replace('"', "&quot;"))
+
+
+def _inline_html(zeile, bilder):
+    """Inline-Markdown einer Zeile als HTML; Bilder über ihre Platzhalter."""
+    teile = []
+    pos = 0
+    for treffer in _HTML_IMAGE.finditer(zeile):
+        teile.append(_inline_text_html(zeile[pos:treffer.start()]))
+        beschreibung, quelle = treffer.group(1), bilder.get(treffer.group(2))
+        if quelle:
+            teile.append(f'<img src="{quelle}" alt="{_html(beschreibung)}">')
+        else:
+            teile.append(f'<span class="image-missing">[Bild: {_html(beschreibung)}]</span>')
+        pos = treffer.end()
+    teile.append(_inline_text_html(zeile[pos:]))
+    return "".join(teile)
+
+
+def _inline_text_html(text):
+    links = []
+
+    def link(treffer):
+        links.append((treffer.group(1), treffer.group(2)))
+        return f"\x00{len(links) - 1}\x00"
+    text = _HTML_LINK.sub(link, text)
+    text = _html(text)
+    text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
+    text = re.sub(r"\*\*([^*]+)\*\*", r"<b>\1</b>", text)
+    text = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", r"<i>\1</i>", text)
+    text = re.sub(r"~~([^~]+)~~", r"<s>\1</s>", text)
+    for index, (titel, ziel) in enumerate(links):
+        text = text.replace(f"\x00{index}\x00", f'<a href="{_html(ziel)}">{_html(titel)}</a>')
+    return text
+
+
+def markdown_to_print_html(markdown, bilder=None):
+    """HTML-Körper aus dem Markdown, das `page_to_markdown` schreibt.
+
+    Kennt genau dessen Formen: Überschriften, Absätze, Listen mit Einzug,
+    Aufgaben, Zitate, Codeblöcke, Tabellen und Trennlinien. `bilder` ordnet
+    Platzhalter (`glide-bild:N`) einer Daten-URL zu.
+    """
+    bilder = bilder or {}
+    zeilen = str(markdown or "").split("\n")
+    html = []
+    i = 0
+    while i < len(zeilen):
+        zeile = zeilen[i]
+        if not zeile.strip():
+            i += 1
+            continue
+        if zeile.startswith("```"):
+            block = []
+            i += 1
+            while i < len(zeilen) and not zeilen[i].startswith("```"):
+                block.append(zeilen[i])
+                i += 1
+            html.append("<pre>" + _html("\n".join(block)) + "</pre>")
+            i += 1
+            continue
+        kopf = _HEADING.match(zeile)
+        if kopf:
+            stufe = min(4, len(kopf.group(1)) + 1)  # h1 ist der Seitentitel
+            html.append(f"<h{stufe}>{_inline_html(kopf.group(2), bilder)}</h{stufe}>")
+            i += 1
+            continue
+        if _RULE.match(zeile):
+            html.append("<hr>")
+            i += 1
+            continue
+        if _TABLE_ROW.match(zeile):
+            reihen = []
+            while i < len(zeilen) and _TABLE_ROW.match(zeilen[i]):
+                if not _TABLE_SEPARATOR.match(zeilen[i]):
+                    zellen = [zelle.strip() for zelle in zeilen[i].strip().strip("|").split("|")]
+                    reihen.append("<tr>" + "".join(f"<td>{_inline_html(z, bilder)}</td>" for z in zellen) + "</tr>")
+                i += 1
+            html.append("<table>" + "".join(reihen) + "</table>")
+            continue
+        if _QUOTE.match(zeile):
+            block = []
+            while i < len(zeilen) and _QUOTE.match(zeilen[i]):
+                block.append(_inline_html(_QUOTE.match(zeilen[i]).group(1), bilder))
+                i += 1
+            html.append("<blockquote>" + "<br>".join(block) + "</blockquote>")
+            continue
+        if _TASK.match(zeile) or _BULLET.match(zeile) or _NUMBER.match(zeile):
+            punkte = []
+            while i < len(zeilen) and (_TASK.match(zeilen[i]) or _BULLET.match(zeilen[i]) or _NUMBER.match(zeilen[i])):
+                aufgabe, punkt, nummer = _TASK.match(zeilen[i]), _BULLET.match(zeilen[i]), _NUMBER.match(zeilen[i])
+                if aufgabe:
+                    einzug, inhalt = len(aufgabe.group(1)), aufgabe.group(3)
+                    erledigt = aufgabe.group(2) in "xX"
+                    inhalt = ('<span class="box done">✓</span>' if erledigt else '<span class="box"></span>') + \
+                        (f'<s>{_inline_html(inhalt, bilder)}</s>' if erledigt else _inline_html(inhalt, bilder))
+                elif nummer:
+                    einzug, inhalt = len(nummer.group(1)), f"{nummer.group(2)}. " + _inline_html(nummer.group(3), bilder)
+                else:
+                    einzug, inhalt = len(punkt.group(1)), "• " + _inline_html(punkt.group(2), bilder)
+                punkte.append(f'<li style="margin-left: {einzug * 6}pt">{inhalt}</li>')
+                i += 1
+            html.append('<ul class="page">' + "".join(punkte) + "</ul>")
+            continue
+        absatz = []
+        while i < len(zeilen) and zeilen[i].strip() and not (
+                zeilen[i].startswith("```") or _HEADING.match(zeilen[i]) or _RULE.match(zeilen[i])
+                or _TABLE_ROW.match(zeilen[i]) or _QUOTE.match(zeilen[i]) or _TASK.match(zeilen[i])
+                or _BULLET.match(zeilen[i]) or _NUMBER.match(zeilen[i])):
+            absatz.append(_inline_html(zeilen[i], bilder))
+            i += 1
+        html.append("<p>" + "<br>".join(absatz) + "</p>")
+    return "\n".join(html)
+
+
+def page_to_print_html(document, task_state=None, image_data=None, max_image_bytes=6_000_000,
+                       max_total_bytes=30_000_000):
+    """Seitendokument → HTML-Körper der Druckseite (B4).
+
+    `image_data(info)` liefert (Beschreibung, MIME-Typ, Bytes) eines
+    Seitenbilds oder None. Bilder über `max_image_bytes` oder über die
+    Gesamtgrenze bleiben ein benannter Platzhalter.
+    """
+    import base64
+    bilder, quellen = {}, []
+    gesamt = [0]
+
+    def quelle(info):
+        nummer = len(quellen)
+        quellen.append(info)
+        platzhalter = f"{IMAGE_PLACEHOLDER}{nummer}"
+        daten = image_data(info) if image_data else None
+        if daten:
+            beschreibung, mime, roh = daten
+            if roh and len(roh) <= max_image_bytes and gesamt[0] + len(roh) <= max_total_bytes:
+                gesamt[0] += len(roh)
+                bilder[platzhalter] = f"data:{mime};base64," + base64.b64encode(roh).decode("ascii")
+            return str(beschreibung or "Bild").replace("]", ")"), platzhalter
+        return "Bild", platzhalter
+    markdown = page_to_markdown(document, task_state, quelle)
+    return markdown_to_print_html(markdown, bilder)

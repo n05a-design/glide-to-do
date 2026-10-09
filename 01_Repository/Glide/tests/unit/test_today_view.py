@@ -24,6 +24,14 @@ def texte(eintraege):
  return [e[-1]['text'] for e in eintraege]
 
 class HeuteTests(unittest.TestCase):
+ def test_anzeige_nutzt_feld_statt_sortierplatzhalter(self):
+  for due in (None,'',HEUTE,'9999-12-31'):
+   item=punkt('Geplant',planned_date=HEUTE,due=due)
+   entry=eintrag(item)
+   self.assertEqual(t.angezeigte_faelligkeit(entry),due or None)
+   self.assertEqual(entry[0],due or '9999-12-31')
+   self.assertEqual(item['due'],due)
+
  def setUp(self):
   self.plan=punkt('Plan',planned_date=HEUTE)
   self.plan_wichtig=punkt('Plan wichtig',planned_date=HEUTE,importance=3)

@@ -75,6 +75,29 @@ class Einstiegspruefung(unittest.TestCase):
                 file.write_text("# Prüfdokument\n", encoding="utf-8")
             self.assertEqual(list(stand.dokumente(root)), [active])
 
+    def test_nested_git_worktrees_have_their_own_documentation_scope(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            active = root / 'docs/current.md'
+            active.parent.mkdir();active.write_text('# Aktuell')
+            for name, directory in [('worktree', False), ('checkout', True)]:
+                nested = root / name;nested.mkdir()
+                if directory:
+                    (nested / '.git').mkdir()
+                else:
+                    (nested / '.git').write_text('gitdir: elsewhere')
+                (nested / 'README.md').write_text('# Eigener Stand')
+            self.assertEqual(list(stand.dokumente(root)), [active])
+
+    def test_module_lists_follow_their_own_folder(self):
+        with tempfile.TemporaryDirectory() as ordner:
+            wurzel = Path(ordner)
+            for name in ("a.py", "b.py", "drawing_prototype.py", "app.pyw"):
+                (wurzel / name).write_text("", encoding="utf-8")
+            self.assertEqual(stand.modulnamen(wurzel), ["a.py", "b.py"])
+        self.assertEqual(stand.fehlende_module("`a.py`", ["a.py", "b.py"]), ["b.py"])
+        self.assertEqual(stand.fehlende_module("`Schnellstart.pyw`", ["glide_start.py"]), [])
+
     def test_current_stand_line_uses_actual_suite_count(self):
         old = self.check("tests/README.md",
                          "# Prüfungen\nStand 01.10.2026 · Glide 3.32.3 · 55 Suiten\n")

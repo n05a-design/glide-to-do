@@ -17,6 +17,7 @@ import sys
 import tempfile
 import time
 import zipfile
+from unittest.mock import patch
 
 from rundgang import load_module, ruhe
 
@@ -231,7 +232,17 @@ def check(fixture, images=None, restart_dir=None):
             app.ask_template_fields = lambda fields, title="": (asked.append(fields), {"Projekt":"Demo"})[1]
             count = len(app.lists)
             previous_ids = {entry["id"] for entry in app.lists}
-            app.create_list_from_template(template["id"])
+            previewed = []
+            def accept_preview(dialog, parent=None):
+                text = app._template_preview_text.get("1.0", "end-1c")
+                assert "Demo" in text and "{{" not in text, text
+                previewed.append(text)
+                dialog.deiconify(); dialog.focus_force(); settle(root, .05)
+                dialog.event_generate("<Return>"); settle(root, .05)
+            with patch.object(app, "run_modal", side_effect=accept_preview):
+                app.create_list_from_template(template["id"])
+            assert previewed
+
             settle(root)
             assert asked == [["Projekt"]] and len(app.lists) == count+1
             created = next(entry for entry in app.lists if entry["id"] not in previous_ids)

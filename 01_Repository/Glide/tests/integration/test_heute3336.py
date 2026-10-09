@@ -182,12 +182,12 @@ with tempfile.TemporaryDirectory(prefix='glide-heute-') as directory:
         handbuch = json.dumps(app.MANUAL_SECTIONS, ensure_ascii=False)
         assert '"Heute"' in handbuch and '"Demnächst"' in handbuch
         assert 'Mein Tag' not in handbuch and 'In Bearbeitung“ mit' not in handbuch
-        # Kontextmenü einer Liste: Einplanen heißt jetzt „Für heute einplanen“.
+        # Kontextmenü einer Liste: gemeinsames Einplanen-Menü seit KO01.
         app.set_active_list(liste['id'])
         idle()
         app.tree.selection_set(morgen['id'])
         app.tree.focus(morgen['id'])
-        assert 'Für heute einplanen' in menu_labels(app.build_item_context_menu())
+        assert 'Einplanen' in menu_labels(app.build_item_context_menu())
         assert not errors, errors
         print('test_heute3336: OK; Abschnitte von Heute, nächste Aufgabe wie Startseite, keine Dubletten, '
               'anderer Tag, Demnächst chronologisch, Tag … mit Tagesbeginn, Wege und Texte')

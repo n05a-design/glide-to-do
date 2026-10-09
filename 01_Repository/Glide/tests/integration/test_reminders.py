@@ -71,7 +71,7 @@ with tempfile.TemporaryDirectory(prefix="glide-reminders-") as tmp:
         assert app.save_items()
         backups = list(Path(mod.BACKUP_DIR).glob("liste_vor_format13_*.json"))
         assert len(backups) == 1 and backups[0].read_bytes() == old
-        assert json.loads(Path(mod.SAVE_FILE).read_text())["version"] == 20
+        assert json.loads(Path(mod.SAVE_FILE).read_text())["version"] == 23
         assert app.save_items() and len(list(Path(mod.BACKUP_DIR).glob("liste_vor_format13_*.json"))) == 1
 
         # Persistente Zustellung; Hintergrundvorgänge zählen nicht als Bearbeitung oder Undo.
@@ -371,7 +371,7 @@ with tempfile.TemporaryDirectory(prefix="glide-reminders-") as tmp:
             template = app.capture_template(list_id=app.find_item_in_lists(source["id"])[3]["id"])
             with mod.TemplateDraft(app, template) as draft:
                 record = draft.export_record()
-            assert record["payload"]["version"] == 20
+            assert record["payload"]["version"] == 23
             assert any(task.get("reminder") == {"mode": "relative", "minutes": 0}
                        for entry_record in record["payload"]["lists"] for task in app.walk_items(entry_record["items"]))
         app.run_modal = real_modal

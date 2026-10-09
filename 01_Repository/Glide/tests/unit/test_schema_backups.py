@@ -37,13 +37,13 @@ class SchemaBackupTests(unittest.TestCase):
         return self.source.read_bytes()
 
     def test_all_formats_preserve_exact_original_and_parse_once(self):
-        for version in range(4, 21):
+        for version in range(4, 23):
             with self.subTest(version=version):
                 original = self.write({'version': version, 'text': 'ä\nAltbestand'})
                 guard = SchemaBackups()
                 load = json.load
                 with patch('schema_backups.json.load', wraps=load) as calls:
-                    for target in range(12, 21):
+                    for target in range(12, 23):
                         backup = guard.ensure(self.source, self.backups, target)
                         self.assertEqual(bool(backup), version < target)
                         if backup:

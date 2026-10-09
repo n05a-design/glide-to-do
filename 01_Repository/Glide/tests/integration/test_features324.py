@@ -128,7 +128,13 @@ with tempfile.TemporaryDirectory(prefix="glide-features324-") as folder:
         # Die Schaltflächen darunter enden auf derselben Flucht: kein rechter
         # Abstand an der jeweils äußersten.
         assert str(app.add_button.pack_info().get("padx")) in ("0", "(0, 0)", "0 0")
+        # U03: Flucht am sichtbaren Löschkreuz prüfen, ohne eine leere Suche
+        # dauerhaft mit einem wirkungslosen Knopf zu belegen.
+        app.search_placeholder_active = False
+        app.search_var.set("Aufgabe")
+        app.sync_clear_search_visibility()
         assert str(app.clear_search_button.pack_info().get("padx")) in ("0", "(0, 0)", "0 0")
+        app.clear_search()
 
         # ================================================================
         # Punkte 4, 9 und 10: Mehrfachauswahl, Verbindungsarten, Kartengröße
@@ -214,8 +220,9 @@ with tempfile.TemporaryDirectory(prefix="glide-features324-") as folder:
         assert flaeche.board_focus_active() is True
         aktiv = [knopf for knopf in flaeche.board_controls(flaeche.bar)
                  if getattr(knopf, "text", "") == "Vollbild beenden"]
-        # Seit 27.09.2026 tragen eingeschaltete Schalter die Auswahlfarbe.
-        assert aktiv and aktiv[0].active_fill == app.theme["selection"]
+        # Seit 27.09.2026 sind eingeschaltete Schalter hervorgehoben, seit 3.33.21
+        # (U15) mit der neutralen Rolle „active“ statt der Auswahlfarbe.
+        assert aktiv and aktiv[0].active_fill == app.theme["active"]
         flaeche.exit_board_focus()
         root.update()
         assert flaeche.board_focus_active() is False

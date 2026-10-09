@@ -11,3 +11,10 @@
 # 07_Python-Versionen und das Bundle abgeglichen (CRLF in tkdnd/Windows, Lizenztexte).
 **/vendor/** -text
 **/resources/fonts/** -text
+# Glide-Daten tragen Prüfsummen (Showcase-Manifest, Fixtures): Bytes bleiben,
+# wie sie erzeugt wurden (W03, 08.10.2026).
+*.glidebackup -text
+*.glidetemplates -text
+*.glideapp -text
+*.glidepage -text
+*.glideexchange -text

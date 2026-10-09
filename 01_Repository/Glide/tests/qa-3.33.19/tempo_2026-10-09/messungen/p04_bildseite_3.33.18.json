@@ -1,0 +1,70 @@
+{
+  "version": "3.33.18",
+  "umgebung": {
+    "python": "3.14.5",
+    "tk": "9.0.3",
+    "fenstersystem": "aqua",
+    "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "schriftfamilien": 222,
+    "tk_version": 9.0
+  },
+  "bilder": 30,
+  "ergebnisse": {
+    "Tippen fern": {
+      "layout": 11,
+      "voll": 11,
+      "zeichnen": 330,
+      "umfluss": 220,
+      "runden": 11,
+      "layout_ms_median": 273.36,
+      "layout_ms_p95": 292.891,
+      "layout_ms_roh": [
+        280.303,
+        270.835,
+        292.891,
+        277.928,
+        277.66,
+        276.939,
+        273.36,
+        267.782,
+        267.228,
+        267.843,
+        270.147
+      ]
+    },
+    "Tippen neben Bild": {
+      "layout": 11,
+      "voll": 11,
+      "zeichnen": 330,
+      "umfluss": 220,
+      "runden": 11,
+      "layout_ms_median": 274.588,
+      "layout_ms_p95": 278.152,
+      "layout_ms_roh": [
+        278.152,
+        274.588,
+        274.634,
+        268.596,
+        272.774,
+        276.67,
+        270.206,
+        267.347,
+        276.486,
+        276.353,
+        268.318
+      ]
+    },
+    "Scrollen": {
+      "layout": 0,
+      "voll": 0,
+      "zeichnen": 0,
+      "umfluss": 0,
+      "runden": 11,
+      "layout_ms_median": null,
+      "layout_ms_p95": null,
+      "layout_ms_roh": []
+    }
+  },
+  "callbackfehler": [],
+  "bedingung": "Sprintmessung 08./09.10.2026; Strom- und Fenstermodus nicht protokolliert; Lieferstand 3.33.18"
+}

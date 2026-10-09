@@ -40,12 +40,13 @@ with tempfile.TemporaryDirectory(prefix="glide-features314-") as folder:
     callbacks = []
     root.report_callback_exception = lambda *args: callbacks.append(args)
     app = mod.ListApp(root)
+    app.confirm_template_preview = lambda template: True
     messages = []
     app.show_warning = app.show_error = lambda *args, **kwargs: messages.append(args)
     app.show_info = lambda *args, **kwargs: None
     app.ask_yes_no = lambda *args, **kwargs: True
     try:
-        assert app.DATA_SCHEMA_VERSION == 20, "Format 20 ergänzt Verweise, Symbole und Archiv."
+        assert app.DATA_SCHEMA_VERSION == 23, "Format 23 bewahrt lokale Verweise, Live-Listen und Titelbilder."
         assert app.new_item("Alt")["planned_date"] is None
         assert app.normalize_items([{"text": "Alt"}])[0]["estimated_minutes"] is None
         for value in (0, -1, True, 1.5, "60", [], 60001):

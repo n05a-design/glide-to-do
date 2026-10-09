@@ -1,0 +1,62 @@
+{
+  "version": "3.33.19",
+  "source_sha256": "1159e8e2e96a8414f3e3e4fb8ffd0fdaa0218e1675fd4f38c87027dd5e20eb5e",
+  "python": "3.14.5",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "tk": "9.0.3",
+  "profiling": false,
+  "fixture": {
+    "tasks": 1000,
+    "lists": 12,
+    "drawings": 3,
+    "pinned": 2,
+    "window": "1400x950",
+    "idle_rounds": 3,
+    "kacheln": "d12",
+    "sichtbare_kacheln": [
+      "mascot",
+      "today",
+      "week",
+      "recent",
+      "boardpreview",
+      "drawings",
+      "pinned"
+    ]
+  },
+  "warm_rounds": 9,
+  "wechsel": {
+    "median_ms": 297.244,
+    "p95_ms": 542.907,
+    "stichproben_ms": [
+      542.907,
+      297.244,
+      286.613,
+      273.563,
+      300.64,
+      265.967,
+      301.167,
+      335.382,
+      268.135
+    ],
+    "first_ms": 835.868
+  },
+  "aktualisierung": {
+    "median_ms": 0.274,
+    "p95_ms": 0.303,
+    "stichproben_ms": [
+      0.299,
+      0.3,
+      0.274,
+      0.257,
+      0.26,
+      0.279,
+      0.26,
+      0.258,
+      0.303
+    ],
+    "first_ms": 0.354
+  },
+  "widgets_startseite": 114,
+  "callback_errors": [],
+  "bedingung": "Akkubetrieb, macOS-Hintergrundmodus (GLIDE_QA_HINTERGRUND)"
+}

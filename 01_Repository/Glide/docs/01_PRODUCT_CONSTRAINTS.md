@@ -1,6 +1,6 @@
 # Produktgrenzen und Produktprinzipien
 
-Stand 06.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
 
 Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 03.10.2026 mit der Produktprinzipien- und UX-Prüfung vom 01.10.2026 zusammengeführt; deren Befunde U01–U24 stehen mit Status im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt, am 06.10.2026 um die Ausschlüsse der Wettbewerbsrecherche vom 25.09.2026 ergänzt. Die Vorfassungen trägt Git.
 
@@ -67,7 +67,7 @@ Vor der Umsetzung in den Abschnitt der Version (Funktionen, Entwicklungsplan) au
 4. **Sichtbarkeit:** was im Standard sichtbar, was bei Bedarf? Zusätzliche Dauerfläche in px bei 1280 × 800? Bleibt alles bei 860 × 700 und nur mit Tastatur bedienbar?
 5. **Selbstverständlichkeit:** ohne Hinweistext? Welche Plattformkonvention?
 6. **Farbe und Form:** Rolle aus `BUTTON_ROLE_RULES`, Symbol aus `ICONS`.
-7. **Begriffe:** neue Wörter mit den [Grundbegriffen](20_FUNKTIONEN.md#1-grundbegriffe) und den [Begriffen im Index](00_INDEX.md#begriffe) abgleichen (Aufgabe, Langtext, Zwischenüberschrift, Gruppe; „Punkt“ nur als Oberbegriff; „Long-Task“ wird mit U16 zu „Langtext“).
+7. **Begriffe:** neue Wörter mit den [Grundbegriffen](20_FUNKTIONEN.md#1-grundbegriffe) und den [Begriffen im Index](00_INDEX.md#begriffe) abgleichen (Aufgabe, Langtext, Zwischenüberschrift, Gruppe; „Punkt“ nur als Oberbegriff; seit 3.33.16 (U16) „Langtext“ statt „Long-Task“).
 8. **Rücknahme:** ein Undo-Schritt; Wirkung vor dem Loslassen sichtbar (D02).
 9. **Daten:** neues Feld oder Format? Datenformat-Tor, Altleser, Migration.
 10. **Tempo:** Kosten je Aktion abhängig vom Bestand; Messung mit 1.000 und 10.000 Punkten.
@@ -78,7 +78,7 @@ Vor der Umsetzung in den Abschnitt der Version (Funktionen, Entwicklungsplan) au
 |---|---|
 | Zeichnung | 16–128 Zellen, eine bemalbare Ebene, höchstens 256 Farben, deckend weißer Grund; keine Vektorobjekte, Texte, Ebenen, Transparenz, Stiftdruck, Touchgesten, kein allgemeiner Fremd-SVG-Import. Mitgeliefert nur die eigene Palette. Formate und Sicherheitsgrenzen: [Funktionen](20_FUNKTIONEN.md#9-pixel-werkstatt) |
 | Seiten | ein Blatt ohne Unterseiten; Tabellen als ausgerichteter Text; Blöcke nicht einzeln mit der Maus ziehbar |
-| Galerie und Vorschauen | Bilder sind lokale Anhänge; JPEG, HEIC, WebP, TIFF, BMP über das System (macOS `nsimage`/`sips`, Windows WIC, HEIC/WebP nur mit Store-Erweiterungen), unter Linux nur PNG, GIF, SVG |
+| Galerie und Vorschauen | Bilder sind lokale Anhänge; JPEG, HEIC, WebP, TIFF, BMP über das System (macOS `nsimage`/`sips`, Windows WIC, HEIC/WebP nur mit Store-Erweiterungen), unter Linux PNG, GIF, SVG und – nur mit vorhandenem Systemwerkzeug `gdk-pixbuf-thumbnailer` oder `djpeg` – JPEG und weitere Formate (3.34.0, N08); Glide bringt dafür keine Abhängigkeit mit |
 | Kalender (ICS) | Import einer gegebenen Datei und Ausgabe als Datei; keine Synchronisierung, kein Abonnement, keine Teilnehmer, Ausnahmetermine oder VTODO; höchstens 2.000 Termine, 12 MB ([Datenvertrag](06_DATA_BACKUP_MIGRATION.md)) |
 | CSV | Import mit Spaltenzuordnung; kein XLSX, keine Anhänge, Wiederholungen oder Erinnerungen aus Spalten, kein Abgleich mit Vorhandenem; 5.000 Zeilen, 64 Spalten, 12 MB |
 | Druck und PDF | HTML-Druckansicht im Standardprogramm; kein eigener PDF-Schreiber, keine Druckerauswahl, ab 2.000 Punkten abgeschnitten |

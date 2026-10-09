@@ -27,6 +27,7 @@ with tempfile.TemporaryDirectory(prefix='glide-template-qa-') as tmp:
     errors = []
     root.report_callback_exception = lambda *exc: errors.append(exc)
     app = mod.ListApp(root)
+    app.confirm_template_preview = lambda template: True
     app.show_error = lambda *args, **kw: errors.append(args)
     app.show_warning = lambda *args, **kw: errors.append(args)
     app.show_info = lambda *args, **kw: None

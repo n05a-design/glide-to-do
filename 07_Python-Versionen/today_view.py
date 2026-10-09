@@ -29,6 +29,11 @@ def _punkt(eintrag):
     return eintrag[-1]
 
 
+def angezeigte_faelligkeit(eintrag):
+    """Echte Fälligkeit; der Datumsplatzhalter im Sortiertupel ist unsichtbar."""
+    return _punkt(eintrag).get("due") or None
+
+
 def einordnung(item, tag, heute):
     """In welchen Abschnitt eine Aufgabe gehört, die nicht am Tag eingeplant ist.
 

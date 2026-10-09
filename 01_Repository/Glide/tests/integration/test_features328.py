@@ -32,7 +32,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features328-") as folder:
     try:
         # Die 3.28-Funktionen bleiben in jeder späteren Fassung erhalten.
         assert tuple(map(int, mod.APP_VERSION.split("."))) >= (3, 28, 0)
-        assert app.DATA_SCHEMA_VERSION == 20
+        assert app.DATA_SCHEMA_VERSION == 23
         assert app.ENTRY_MIN_WIDTH == 180
 
         journal_folder = app.new_folder_object("Tagebuch", folder_kind="journal")
@@ -53,7 +53,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features328-") as folder:
         app.set_active_list(entry["id"], refresh=False)
         assert app.save_items()
         payload = json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))
-        assert payload["version"] == 20
+        assert payload["version"] == 23
         loaded, active_id = app.normalize_lists_data(payload)
         restored = next(value for value in loaded if value["id"] == entry["id"])
         assert restored["journal"]["favorite"] is True
@@ -92,10 +92,10 @@ with tempfile.TemporaryDirectory(prefix="glide-features328-") as folder:
         editor = app.rich_note_editor
         labels = [widget.text for widget in editor.winfo_children()[0].entries for widget in [widget[0]]]
         # Seit 29.09.2026 (R5) schreibt die Notiz wie eine Seite: dieselben
-        # Blockwerkzeuge, ohne Aufgabenzeilen; Formatieren über Rechtsklick,
-        # Formatleiste und Kürzel.
+        # Blockwerkzeuge; seit G29/3.33.15 auch echte Aufgabenzeilen.
+        # Formatieren bleibt über Rechtsklick, Formatleiste und Kürzel.
         assert isinstance(editor, mod.NoteEditor)
-        assert labels == ["Überschrift", "Liste", "Nummeriert", "Zitat", "Code", "Bild", "Mehr"], labels
+        assert labels == ["Überschrift", "Liste", "Nummeriert", f"{app.ICONS['task_open']} Aufgabe", "Zitat", "Code", "Bild", "Mehr"], labels
 
         # Gismo aktualisiert beim Füttern nur seinen Karteninhalt. Ein kompletter
         # Startseiten-Neuaufbau erzeugte besonders im Dopamin-Design einen

@@ -185,7 +185,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features318-") as folder:
                                (str(A.MAX_ESTIMATED_MINUTES + 1), None)):
             assert A.parse_csv_minutes(wert) == erwartet, wert
         for wert, erwartet in (("Aufgabe", A.ITEM_KIND_TASK), ("Gruppe", A.ITEM_KIND_GROUP),
-                               ("Long-Task", A.ITEM_KIND_LONG), ("Überschrift", A.ITEM_KIND_HEADING),
+                               ("Langtext", A.ITEM_KIND_LONG), ("Zwischenüberschrift", A.ITEM_KIND_HEADING),
                                ("Zwischenüberschrift", A.ITEM_KIND_HEADING), ("heading", A.ITEM_KIND_HEADING),
                                ("", None), ("Epic", None)):
             assert A.parse_csv_kind(wert) == erwartet, wert

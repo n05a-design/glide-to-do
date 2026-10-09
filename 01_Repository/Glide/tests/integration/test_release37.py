@@ -37,6 +37,7 @@ with tempfile.TemporaryDirectory(prefix='glide-release37-') as tmp:
     errors = []
     root.report_callback_exception = lambda *e: errors.append(e)
     app = mod.ListApp(root)
+    app.confirm_template_preview = lambda template: True
     app.show_error = lambda *e, **kw: errors.append(e)
     app.show_warning = lambda *e, **kw: errors.append(e)
     app.show_info = lambda *a, **kw: None
@@ -77,7 +78,7 @@ with tempfile.TemporaryDirectory(prefix='glide-release37-') as tmp:
         assert app.save_items()
         copies = list(Path(mod.BACKUP_DIR).glob('liste_vor_format12_*.json'))
         assert len(copies) == 1 and copies[0].read_bytes() == old
-        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))['version'] == 20
+        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))['version'] == 23
         assert app.save_items() and len(list(Path(mod.BACKUP_DIR).glob('liste_vor_format12_*.json'))) == 1
 
         folder = app.new_folder_object('Projektunterlagen', color='clear', note='Unterlagen und nächste Schritte.')
@@ -250,6 +251,16 @@ with tempfile.TemporaryDirectory(prefix='glide-release37-') as tmp:
             assert heatmap.hover_text_at(-10, -10) == ''
             app.home_canvas.yview_moveto(1)
             # Tooltip-Fenster testen, ohne den echten Mauszeiger zu bewegen.
+            # Fremde Hinweise ruhen solange: Unter macOS kann die echte
+            # Mausposition über dem Prüffenster etwa die Pinnwand-Vorschau
+            # ansprechen, deren Hinweis den geprüften nach der Ein-Hinweis-Regel
+            # schließt (Mac-Vollprüfung 08.10.2026). Danach gelten sie wieder.
+            fremde_hinweise = {}
+            for widget in descendants(root):
+                zustand = getattr(widget, '_glide_tooltip', None)
+                if zustand is not None and widget is not heatmap:
+                    fremde_hinweise[widget] = zustand['source']
+                    zustand['source'] = ''
             for iso in (yesterday, today):
                 cell = heatmap.find_withtag(iso)[0]
                 x1, y1, x2, y2 = heatmap.coords(cell)
@@ -264,13 +275,15 @@ with tempfile.TemporaryDirectory(prefix='glide-release37-') as tmp:
             heatmap.event_generate('<Leave>')
             root.update()
             assert not heatmap.winfo_children()
+            for widget, quelle in fremde_hinweise.items():
+                widget._glide_tooltip['source'] = quelle
             capture(root, 'jahresanzeige-'+theme)
             app.set_library_view()
             settle()
             assert app.home_canvas.winfo_width() == app.content_frame.winfo_width()
             if app.home_scrollbar.winfo_ismapped():
                 assert app.home_scrollbar.winfo_rootx() > app.home_canvas.winfo_rootx()+app.home_canvas.winfo_width()
-            assert all(any(isinstance(w, mod.RoundedButton) and w.text in ('Liste bearbeiten', 'Ordner bearbeiten') for w in descendants(card))
+            assert all(any(isinstance(w, mod.tk.Label) and callable(getattr(w, 'command', None)) for w in descendants(card))
                        for card in app.library_cards)
             capture(root, 'kacheln-'+theme)
             app.templates = app.templates[:2]

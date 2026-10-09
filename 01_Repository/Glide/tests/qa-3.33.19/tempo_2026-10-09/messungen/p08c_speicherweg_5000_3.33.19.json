@@ -1,0 +1,114 @@
+{
+  "werkzeug": "messung_speicherweg.py",
+  "app": "Quellstand 3.33.19 vor dem Versionswechsel",
+  "app_version": "3.33.18",
+  "punkte": 5000,
+  "datei_kb": 5150,
+  "runden_warm": 9,
+  "vergleich_scope": "deklarierte Punktmutation",
+  "umgebung": {
+    "python": "3.14.5",
+    "tk": "9.0.3",
+    "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "prozessor": "arm"
+  },
+  "erstes_speichern_ms": 105.359,
+  "snapshot_undo": {
+    "median_ms": 15.862,
+    "p95_ms": 15.984,
+    "stichproben_ms": [
+      15.879,
+      15.873,
+      15.868,
+      15.778,
+      15.767,
+      15.731,
+      15.862,
+      15.849,
+      15.984
+    ]
+  },
+  "save_items": {
+    "median_ms": 87.443,
+    "p95_ms": 90.225,
+    "stichproben_ms": [
+      87.107,
+      87.014,
+      90.225,
+      87.049,
+      89.217,
+      87.692,
+      90.176,
+      87.443,
+      87.208
+    ]
+  },
+  "history_snapshot": {
+    "median_ms": 16.783,
+    "p95_ms": 37.496,
+    "stichproben_ms": [
+      16.757,
+      18.877,
+      16.783,
+      17.064,
+      37.496,
+      16.753,
+      18.876,
+      16.721,
+      16.717
+    ]
+  },
+  "json_eingerueckt": {
+    "median_ms": 10.335,
+    "p95_ms": 10.413,
+    "stichproben_ms": [
+      10.258,
+      10.349,
+      10.335,
+      10.313,
+      10.413,
+      10.222,
+      10.339,
+      10.364,
+      10.24
+    ]
+  },
+  "json_kompakt": {
+    "median_ms": 9.574,
+    "p95_ms": 9.825,
+    "stichproben_ms": [
+      9.825,
+      9.609,
+      9.507,
+      9.43,
+      9.582,
+      9.479,
+      9.618,
+      9.484,
+      9.574
+    ]
+  },
+  "abhaken_item_change": {
+    "median_ms": 60.999,
+    "p95_ms": 64.062,
+    "stichproben_ms": [
+      59.961,
+      60.909,
+      61.479,
+      61.288,
+      60.999,
+      64.062,
+      61.47,
+      60.567,
+      60.698
+    ]
+  },
+  "verlauf": true,
+  "speicher_kb": {
+    "vorher": 697696,
+    "nach_50_abhaken": 738144,
+    "hinweis": "größter belegter Arbeitsspeicher des Prozesses (ru_maxrss)"
+  },
+  "callbackfehler": [],
+  "bedingung": "Sprintmessung 08./09.10.2026; Strom- und Fenstermodus nicht protokolliert; Zwischenstand des Quellbaums vor dem Versionswechsel"
+}

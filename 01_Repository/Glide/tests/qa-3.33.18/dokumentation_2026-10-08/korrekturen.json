@@ -1,0 +1,44 @@
+{
+  "version": "3.33.18",
+  "date": "2026-10-08",
+  "changed_documents": [
+    "README.md",
+    "01_Repository/Glide/docs/00_INDEX.md",
+    "01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md",
+    "01_Repository/Glide/tests/README.md",
+    "05_Probelisten_Testdaten/README.md",
+    "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+    "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "07_Python-Versionen/Archiv/README.md",
+    "01_Repository/Glide/tests/fixtures/README.md",
+    "01_Repository/Glide/tests/tools/README.md",
+    "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+    "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+    "01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md",
+    "01_Repository/Glide/docs/07_QA_BERICHT.md"
+  ],
+  "original_documents": 50,
+  "inventory_before": {
+    "active": 43,
+    "third_party": 3,
+    "configuration_or_data": 4,
+    "qa_evidence": 7
+  },
+  "fixes": [
+    "Projektstatus und Funktionsueberblick 3.33.18",
+    "Glide-Spalte der Markt-/Featurematrix",
+    "Aktuelle Formate und Suitezahl",
+    "Modulliste statt veralteter Modulzahl",
+    "Aktuelle Releaseplanung und Archivfenster",
+    "Lokale ausgeschlossene Altdateien explizit in Pflegeumfang",
+    "Systemmitteilungen: vorhandene Tk-9-Option und offene native Paketabnahme getrennt"
+  ],
+  "kept": [
+    "Logo-Diagnose: LG01-LG04/I8 weiter offen",
+    "Unveraenderte QA-Belege 3.33.12-3.33.18",
+    "Feste Migrationsreferenzen",
+    "Bytegleiche Showcase-Anleitung und Lizenztexte als Lieferbestand",
+    "Separate Git-Worktrees unter .claude"
+  ]
+}

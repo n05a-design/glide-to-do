@@ -1,6 +1,6 @@
 # Prüfwerkzeuge für Glide
 
-Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
 
 Alle Werkzeuge werden aus `01_Repository/Glide` gestartet. Werkzeuge, die echte Tk-Fenster prüfen, brauchen eine grafische Sitzung (unter Linux Xvfb; das ersetzt keine native Windows- oder macOS-Abnahme). Zahlen zu Suiten und Formaten stehen bewusst nicht hier, sondern im Quelltext (`SUITEN`, `ANALYSEN`, `APP_VERSION`, `DATA_SCHEMA_VERSION`) – bis 3.21.3 rotteten sie in dieser Datei. Was tatsächlich lief: [QA-Bericht](../../docs/07_QA_BERICHT.md).
 
@@ -8,8 +8,9 @@ Alle Werkzeuge werden aus `01_Repository/Glide` gestartet. Werkzeuge, die echte 
 
 | Werkzeug | Zweck |
 |---|---|
-| `pruefen.py [--modus voll] [--protokoll PFAD] [--timeout S]` | Prüflauf: Vorprüfungen (Syntax, Version, Dokumentation, Fixtures), Unit-Tests, Tk-Probe, gemessener Zeitzonenversatz, alle Suiten, Showcase, Analysen; im Vollmodus zusätzlich Reproduktion von Beispiel- und Releasedaten und Fensterfotos (macOS und Windows, lokal unter `fenster/`). Exitcode 1 bei einem Fehlschlag, 2 wenn Tk oder die Zeitzone den Lauf unvollständig lassen |
-| `ci_grundstufe.py [--protokoll PFAD] [--lieferstand-streng]` | CI-Grundstufe (GitHub Actions und lokal): Vorprüfungen, Werkzeugtests, Unit-Tests, Analysen, Startprobe, Lieferstand `src/glide` ↔ `07_Python-Versionen`, Fremdcode gegen `vendor/provenance.json`, Datenschutz (keine Benutzerpfade), Ablagegröße. Ohne Integrationssuiten |
+| `pruefen.py [--modus voll] [--protokoll PFAD] [--timeout S]` | Prüflauf: Vorprüfungen (Syntax, Version, Dokumentation, Fixtures), Unit-Tests, Tk-Probe, gemessener Zeitzonenversatz, alle Suiten, Showcase, Analysen; im Vollmodus zusätzlich Reproduktion von Beispiel- und Releasedaten und Fensterfotos (macOS und Windows, lokal im jeweiligen Prüfprotokoll). Exitcode 1 bei einem Fehlschlag, 2 wenn Tk oder die Zeitzone den Lauf unvollständig lassen |
+| `ci_grundstufe.py [--protokoll PFAD] [--lieferstand-streng]` | CI-Grundstufe (GitHub Actions und lokal): Vorprüfungen, Werkzeugtests, Unit-Tests, Analysen, Startprobe, Lieferstand `src/glide` ↔ `07_Python-Versionen`, Fremdcode gegen `vendor/provenance.json`, Datenschutz (keine Benutzerpfade), Ablagegröße, Synchronisation. Ohne Integrationssuiten |
+| `synchronisationswaechter.py` | Konfliktkopien `<Name>-<Gerätename>` neben ihrem Original und Hauptdokumente, die gegenüber der Git-Vorfassung ohne Vermerk („gekürzt“/„zusammengeführt“ mit dem Datum der Standzeile) mehr als 40 % ihrer Zeilen verlieren (W04, seit 08.10.2026); Schritt „Synchronisation“ der CI-Grundstufe |
 | `ablagegroesse.py` | Keine Archivkopien von Glide-Daten, keine `*.fetch`-Reste, Archive, Nachweise und Releaseplanungen nur der sieben neuesten Versionen (je Datenformat bleibt ein Beleg), Fensterbilder nur der drei neuesten, keine Datei über 50 MB. Kürzen: `scripts/pflege/ablage_kuerzen.py` |
 | `standpruefung.py` | Standangaben, Formatstufen, überholte Aussagen, Modullisten, relative Links, Titel, erster Vollprüfungsaufruf und Suitezahl aller aktiven Dokumente (R1–R14); ohne Tk, Sekunden |
 | `analyse_statisch.py`, `analyse_erreichbarkeit.py` | Quelltextbefunde und Referenzen, keine Laufzeitgarantie |
@@ -27,6 +28,6 @@ Alle Werkzeuge werden aus `01_Repository/Glide` gestartet. Werkzeuge, die echte 
 | `symbolpruefung.py` | Private App-Schrift registrieren und tatsächliche Glyphenfamilien messen |
 | `leistungspruefung.py --ziel DATEI.json` | Lokale synthetische Neudarstellungs- und Speichermessung |
 | `dauerlauf.py --minuten 10 --aufgaben 4000 --ziel DATEI.json` | Dauerlauf: wachsende Callbacks, Undo-Stände, Speicher, Unversehrtheit nach Neuladen. Nicht im Standardlauf; zehn Minuten sind das Minimum, damit der 15-Sekunden-Takt der Erinnerungen oft genug feuert |
-| `test_standpruefung.py`, `test_ablagegroesse.py`, `test_datenschutz.py` | Werkzeugtests der Wächter (Stand, Ablage, Benutzerpfade auch JSON-maskiert); laufen in der CI |
+| `test_standpruefung.py`, `test_ablagegroesse.py`, `test_datenschutz.py`, `test_synchronisationswaechter.py` | Werkzeugtests der Wächter (Stand, Ablage, Benutzerpfade auch JSON-maskiert, Synchronisationskopien); laufen in der CI |
 
 Die Windows-Vollprüfung nimmt zuerst `-PythonExecutable <Pfad>`, danach die separate Prüflaufzeit unter `%USERPROFILE%/.cache/glide-qa/python-3.14.8/runtime/python.exe`, danach `py -3.14` oder `python`. Ein ungeeignetes Python/Tk beendet den Starter mit Exitcode 3 vor der Suite. Der Cache ändert weder PATH noch die Standardinstallation. Herkunft und Herstellerhash stehen im aktuellen [QA-Bericht](../../docs/07_QA_BERICHT.md).

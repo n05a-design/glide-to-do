@@ -36,6 +36,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features329-") as folder:
     errors = []
     root.report_callback_exception = lambda *exc: errors.append(exc)
     app = mod.ListApp(root)
+    app.confirm_template_preview = lambda template: True
     app.show_error = lambda *args, **kwargs: errors.append(args)
     app.show_warning = lambda *args, **kwargs: errors.append(args)
     app.show_info = lambda *args, **kwargs: None
@@ -46,8 +47,8 @@ with tempfile.TemporaryDirectory(prefix="glide-features329-") as folder:
         # ================================================================
         # Vertrag und Typregistrierung
         # ================================================================
-        assert mod.APP_VERSION == "3.33.8"
-        assert app.DATA_SCHEMA_VERSION == 20
+        assert mod.APP_VERSION == "3.35.0"
+        assert app.DATA_SCHEMA_VERSION == 23
         # Seit dem 26.09.2026 kommt die Seitenart „Seite“ hinzu (test_seiten330).
         # 27.09.2026: dazu die Galerie (test_aufraeumen330).
         assert set(app.LIST_KINDS) == {"tasks", "note", "drawing", "page", "gallery"}
@@ -97,7 +98,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features329-") as folder:
         assert app.save_items()
         migrations = list(Path(mod.BACKUP_DIR).glob("liste_vor_format19_*.json"))
         assert len(migrations) == 1 and migrations[0].read_bytes() == old_bytes
-        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 20
+        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 23
 
         # ================================================================
         # Anlage und eingebettete Zeichenseite
@@ -494,7 +495,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features329-") as folder:
         finally:
             mod.shutil.copy2 = original_copy
         assert app.save_items()
-        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 20
+        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 23
 
         # Bestehende Tagebuchnotiz aus Format 18 bleibt nach der Normalisierung gleich.
         reference18 = json.loads((ROOT / "tests/fixtures/current_v18/reference_v18.json").read_text(encoding="utf-8"))

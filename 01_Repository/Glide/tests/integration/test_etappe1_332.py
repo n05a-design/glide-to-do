@@ -128,6 +128,7 @@ with tempfile.TemporaryDirectory(prefix="glide-etappe1-") as ordner:
             root.update()
 
     app = mod.ListApp(root)
+    app.confirm_template_preview = lambda template: True
     try:
         ruhe()
         # G16/G20 in der Zeichnung: Menüeinträge, Export und Import über die Oberfläche.
@@ -139,7 +140,22 @@ with tempfile.TemporaryDirectory(prefix="glide-etappe1-") as ordner:
         editor.flush()
         ziel = os.path.join(ordner, "symbol.ico")
         mod.filedialog.asksaveasfilename = lambda **kwargs: ziel
-        app.drawing_export_ico(editor, True)
+        # Seit 3.35.0 (G-03) steht vor dem Speichern die Symbolvorschau; ihr Knopf führt weiter.
+        def symbolvorschau(dialog, *args, **kwargs):
+            dialog.update()
+            stapel, knoepfe = [dialog], []
+            while stapel:
+                widget = stapel.pop()
+                stapel.extend(widget.winfo_children())
+                if isinstance(widget, mod.RoundedButton) and widget.text == "Exportieren":
+                    knoepfe.append(widget)
+            knoepfe[0].command()
+        original_modal = app.run_modal
+        app.run_modal = symbolvorschau
+        try:
+            app.drawing_export_ico(editor, True)
+        finally:
+            app.run_modal = original_modal
         daten = Path(ziel).read_bytes()
         assert daten[:6] == struct.pack("<HHH", 0, 1, 4), "ICO geschrieben"
         palette = os.path.join(ordner, "figur.aseprite")

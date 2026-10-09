@@ -1,0 +1,70 @@
+{
+  "version": "3.33.18",
+  "umgebung": {
+    "python": "3.14.5",
+    "tk": "9.0.3",
+    "fenstersystem": "aqua",
+    "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "schriftfamilien": 222,
+    "tk_version": 9.0
+  },
+  "bilder": 30,
+  "ergebnisse": {
+    "Tippen fern": {
+      "layout": 11,
+      "voll": 0,
+      "zeichnen": 0,
+      "umfluss": 0,
+      "runden": 11,
+      "layout_ms_median": 2.518,
+      "layout_ms_p95": 2.734,
+      "layout_ms_roh": [
+        2.428,
+        2.387,
+        2.45,
+        2.475,
+        2.734,
+        2.607,
+        2.522,
+        2.558,
+        2.518,
+        2.632,
+        2.419
+      ]
+    },
+    "Tippen neben Bild": {
+      "layout": 11,
+      "voll": 11,
+      "zeichnen": 0,
+      "umfluss": 11,
+      "runden": 11,
+      "layout_ms_median": 22.533,
+      "layout_ms_p95": 23.463,
+      "layout_ms_roh": [
+        22.965,
+        22.942,
+        23.463,
+        22.335,
+        23.225,
+        22.563,
+        22.533,
+        22.371,
+        22.233,
+        22.344,
+        22.4
+      ]
+    },
+    "Scrollen": {
+      "layout": 0,
+      "voll": 0,
+      "zeichnen": 0,
+      "umfluss": 0,
+      "runden": 11,
+      "layout_ms_median": null,
+      "layout_ms_p95": null,
+      "layout_ms_roh": []
+    }
+  },
+  "callbackfehler": [],
+  "bedingung": "Sprintmessung 08./09.10.2026; Strom- und Fenstermodus nicht protokolliert; Zwischenstand des Quellbaums vor dem Versionswechsel"
+}

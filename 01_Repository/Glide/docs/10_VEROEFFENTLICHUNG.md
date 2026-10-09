@@ -1,12 +1,12 @@
 # Veröffentlichung – Glide
 
-Stand 06.10.2026 · Glide 3.33.8 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 20
+Stand 09.10.2026 · Glide 3.35.0 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 23
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
-**Je Version (erfüllt bis 3.33.6):**
+**Je Version (erfüllt bis 3.33.6 und wieder seit 3.33.18; 3.33.7–3.33.17 nur unter Windows ohne Bundle):**
 
 - [x] VERSION, `APP_VERSION`, Hauptsuite und CHANGELOG gleich; Datenformat geprüft.
 - [x] Vollprüfung Exitcode 0 auf dem Referenz-Mac; Ergebnis im [QA-Bericht](07_QA_BERICHT.md).

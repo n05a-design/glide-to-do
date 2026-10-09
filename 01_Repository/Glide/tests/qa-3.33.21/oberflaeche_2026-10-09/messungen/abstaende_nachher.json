@@ -1,0 +1,208 @@
+{
+  "source_sha256": "13860d5f68dc193de719a998144edb83b7f756e4e6497fa083e67875ce86f1a5",
+  "views": {
+    "Hauptfenster": {
+      "methods": [
+        "create_ui"
+      ],
+      "spacing_expressions": 52,
+      "with_numeric_literals": 1,
+      "with_shared_values": 51,
+      "distinct_values": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        10,
+        12,
+        14,
+        18,
+        28
+      ],
+      "distinct_value_count": 12,
+      "unresolved": [
+        {
+          "method": "create_ui",
+          "expression": "(glide_design.SPACING[0] if ziel == 'list' else glide_design.SPACING[4], glide_design.SPACING[0])"
+        }
+      ]
+    },
+    "Kopf": {
+      "methods": [
+        "update_path_row",
+        "update_page_chips",
+        "fit_page_chips",
+        "update_page_labels"
+      ],
+      "spacing_expressions": 10,
+      "with_numeric_literals": 0,
+      "with_shared_values": 10,
+      "distinct_values": [
+        0,
+        1,
+        4,
+        6,
+        14
+      ],
+      "distinct_value_count": 5,
+      "unresolved": []
+    },
+    "Startseite": {
+      "methods": [
+        "create_home_panel",
+        "_refresh_home"
+      ],
+      "spacing_expressions": 66,
+      "with_numeric_literals": 1,
+      "with_shared_values": 62,
+      "distinct_values": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        10,
+        12,
+        14,
+        15,
+        18
+      ],
+      "distinct_value_count": 13,
+      "unresolved": [
+        {
+          "method": "_refresh_home",
+          "expression": "pady"
+        },
+        {
+          "method": "_refresh_home",
+          "expression": "self.HOME_CARD_PAD_Y if pad_y is None else pad_y"
+        },
+        {
+          "method": "_refresh_home",
+          "expression": "pady"
+        },
+        {
+          "method": "_refresh_home",
+          "expression": "(glide_design.SPACING[10] if naechste is not None else glide_design.SPACING[0], glide_design.SPACING[3])"
+        },
+        {
+          "method": "_refresh_home",
+          "expression": "(glide_design.SPACING[0] if index == 0 else self.HOME_CARD_GAP, glide_design.SPACING[0])"
+        },
+        {
+          "method": "_refresh_home",
+          "expression": "pady"
+        },
+        {
+          "method": "_refresh_home",
+          "expression": "pady"
+        }
+      ]
+    },
+    "Heute": {
+      "methods": [
+        "sync_plan_day_grid",
+        "refresh_task_overview"
+      ],
+      "spacing_expressions": 0,
+      "with_numeric_literals": 0,
+      "with_shared_values": 0,
+      "distinct_values": [],
+      "distinct_value_count": 0,
+      "unresolved": []
+    },
+    "Bibliothek": {
+      "methods": [
+        "refresh_library_page"
+      ],
+      "spacing_expressions": 11,
+      "with_numeric_literals": 0,
+      "with_shared_values": 8,
+      "distinct_values": [
+        0,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        16
+      ],
+      "distinct_value_count": 9,
+      "unresolved": [
+        {
+          "method": "refresh_library_page",
+          "expression": "card_padding"
+        },
+        {
+          "method": "refresh_library_page",
+          "expression": "card_padding"
+        },
+        {
+          "method": "refresh_library_page",
+          "expression": "pady"
+        },
+        {
+          "method": "refresh_library_page",
+          "expression": "(glide_design.SPACING[0], card_gap if index + columns < len(self.library_cards) else glide_design.SPACING[0])"
+        }
+      ]
+    },
+    "Einstellungen": {
+      "methods": [
+        "show_settings_dialog"
+      ],
+      "spacing_expressions": 54,
+      "with_numeric_literals": 1,
+      "with_shared_values": 54,
+      "distinct_values": [
+        0,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        12,
+        13,
+        16,
+        18,
+        22,
+        24
+      ],
+      "distinct_value_count": 14,
+      "unresolved": []
+    },
+    "Schnellerfassung": {
+      "methods": [
+        "show_quick_capture"
+      ],
+      "spacing_expressions": 18,
+      "with_numeric_literals": 0,
+      "with_shared_values": 18,
+      "distinct_values": [
+        0,
+        1,
+        4,
+        5,
+        6,
+        8,
+        9,
+        12,
+        16,
+        18,
+        24
+      ],
+      "distinct_value_count": 11,
+      "unresolved": []
+    }
+  }
+}

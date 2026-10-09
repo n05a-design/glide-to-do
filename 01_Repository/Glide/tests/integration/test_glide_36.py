@@ -20,7 +20,7 @@ spec = importlib.util.spec_from_loader(loader.name, loader)
 mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
 
-assert mod.APP_VERSION == "3.33.8"
+assert mod.APP_VERSION == "3.35.0"
 assert mod.moon_phase_info(date(2000, 1, 6))["percent"] == 0
 assert mod.moon_phase_info(date(2000, 1, 20))["percent"] > 90
 

@@ -1,0 +1,375 @@
+{
+  "version": 22,
+  "app": "Glide",
+  "app_version": "3.33.17",
+  "active_list_id": "fixture-journal-entry",
+  "active_folder_id": null,
+  "folders": [
+    {
+      "id": "fixture-journal",
+      "title": "Tagebuch 2026",
+      "color": null,
+      "note": "Referenz für Datenformat 19.",
+      "labels": [],
+      "attachments": [],
+      "parent_id": null,
+      "folder_kind": "journal"
+    },
+    {
+      "id": "fixture-project",
+      "title": "Projekt 2026",
+      "color": null,
+      "note": "Referenz für Datenformat 20.",
+      "labels": [],
+      "attachments": [],
+      "parent_id": null,
+      "folder_kind": "standard",
+      "icon": {
+        "format": "glide.drawing",
+        "format_version": 2,
+        "width": 16,
+        "height": 16,
+        "color_space": "srgb",
+        "palette_id": "glide-drawing-default",
+        "palette_version": 1,
+        "palette": [
+          "#FFFFFF",
+          "#1F4E79"
+        ],
+        "encoding": "hex8-row-v1",
+        "rows": [
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000010101010101010100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010101010101010100000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000"
+        ]
+      },
+      "archived": false,
+      "archived_at": null
+    }
+  ],
+  "labels": [],
+  "lists": [
+    {
+      "id": "fixture-journal-entry",
+      "title": "Tagebuch · 23.09.2026",
+      "folder_id": "fixture-journal",
+      "color": null,
+      "note": "",
+      "list_kind": "note",
+      "rich_note": {
+        "text": "Verweis auf die Aufgabe",
+        "spans": [
+          {
+            "tag": "link:format22",
+            "start": 0,
+            "end": 22
+          }
+        ],
+        "links": {
+          "link:format22": "glide://item/fixture-item-prepare"
+        }
+      },
+      "created_at": "2026-09-23T08:00:00+02:00",
+      "updated_at": "2026-09-23T08:00:00+02:00",
+      "journal": {
+        "favorite": true,
+        "mood": "grateful",
+        "location": "Berlin",
+        "moment_date": "2026-09-23",
+        "prompt": "Wofür bin ich heute dankbar?"
+      },
+      "system_role": null,
+      "labels": [],
+      "attachments": [],
+      "icon": null,
+      "archived": false,
+      "archived_at": null,
+      "items": [],
+      "references": [
+        "glide://list/fixture-tasks"
+      ]
+    },
+    {
+      "id": "fixture-tasks",
+      "title": "Beziehungen und Zeit",
+      "folder_id": "fixture-project",
+      "color": null,
+      "note": "Format 20: links, blocked_by, planned_time, time_spent_minutes, done_at.",
+      "list_kind": "tasks",
+      "rich_note": {
+        "text": "",
+        "spans": [],
+        "links": {}
+      },
+      "created_at": "2026-09-25T08:00:00+02:00",
+      "updated_at": "2026-09-25T08:00:00+02:00",
+      "journal": {
+        "favorite": false,
+        "mood": "",
+        "location": "",
+        "moment_date": "2026-09-25",
+        "prompt": ""
+      },
+      "system_role": null,
+      "labels": [],
+      "attachments": [],
+      "icon": {
+        "format": "glide.drawing",
+        "format_version": 2,
+        "width": 16,
+        "height": 16,
+        "color_space": "srgb",
+        "palette_id": "glide-drawing-default",
+        "palette_version": 1,
+        "palette": [
+          "#FFFFFF",
+          "#1F4E79"
+        ],
+        "encoding": "hex8-row-v1",
+        "rows": [
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000010101010101010100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010101010101010100000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000"
+        ]
+      },
+      "archived": false,
+      "archived_at": null,
+      "items": [
+        {
+          "id": "fixture-item-prepare",
+          "text": "Unterlagen sammeln",
+          "done": false,
+          "importance": 0,
+          "due": null,
+          "due_time": null,
+          "description": "",
+          "attachments": [],
+          "color": null,
+          "kind": "task",
+          "labels": [],
+          "repeat": null,
+          "reminder": null,
+          "planned_date": "2026-09-25",
+          "estimated_minutes": 45,
+          "checklist": [],
+          "links": [
+            "fixture-item-meeting"
+          ],
+          "blocked_by": [],
+          "planned_time": "09:00",
+          "time_spent_minutes": null,
+          "done_at": null,
+          "children": [],
+          "references": [
+            "glide://list/fixture-journal-entry"
+          ]
+        },
+        {
+          "id": "fixture-item-meeting",
+          "text": "Termin wahrnehmen",
+          "done": false,
+          "importance": 0,
+          "due": "2026-09-28",
+          "due_time": "10:30",
+          "description": "",
+          "attachments": [],
+          "color": null,
+          "kind": "task",
+          "labels": [],
+          "repeat": null,
+          "reminder": null,
+          "planned_date": null,
+          "estimated_minutes": null,
+          "checklist": [],
+          "links": [
+            "fixture-item-prepare"
+          ],
+          "blocked_by": [
+            "fixture-item-prepare"
+          ],
+          "planned_time": null,
+          "time_spent_minutes": null,
+          "done_at": null,
+          "children": []
+        },
+        {
+          "id": "fixture-item-done",
+          "text": "Auszug anfordern",
+          "done": true,
+          "importance": 0,
+          "due": null,
+          "due_time": null,
+          "description": "",
+          "attachments": [],
+          "color": null,
+          "kind": "task",
+          "labels": [],
+          "repeat": null,
+          "reminder": null,
+          "planned_date": null,
+          "estimated_minutes": 20,
+          "checklist": [],
+          "links": [],
+          "blocked_by": [],
+          "planned_time": null,
+          "time_spent_minutes": 25,
+          "done_at": "2026-09-24T16:45:00+02:00",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "fixture-archived",
+      "title": "Abgeschlossen",
+      "folder_id": null,
+      "color": null,
+      "note": "",
+      "list_kind": "tasks",
+      "rich_note": {
+        "text": "",
+        "spans": [],
+        "links": {}
+      },
+      "created_at": "2026-09-25T08:00:00+02:00",
+      "updated_at": "2026-09-25T08:00:00+02:00",
+      "journal": {
+        "favorite": false,
+        "mood": "",
+        "location": "",
+        "moment_date": "2026-09-25",
+        "prompt": ""
+      },
+      "system_role": null,
+      "labels": [],
+      "attachments": [],
+      "icon": null,
+      "archived": true,
+      "archived_at": "2026-09-20T18:00:00+02:00",
+      "items": [
+        {
+          "id": "fixture-item-archived",
+          "text": "Letzter Schritt",
+          "done": true,
+          "importance": 0,
+          "due": null,
+          "due_time": null,
+          "description": "",
+          "attachments": [],
+          "color": null,
+          "kind": "task",
+          "labels": [],
+          "repeat": null,
+          "reminder": null,
+          "planned_date": null,
+          "estimated_minutes": null,
+          "checklist": [],
+          "links": [],
+          "blocked_by": [],
+          "planned_time": null,
+          "time_spent_minutes": null,
+          "done_at": "2026-09-01T12:00:00+02:00",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "fixture-ref-page",
+      "title": "Aufgaben im Wissen",
+      "folder_id": null,
+      "color": null,
+      "note": "Format 20: links, blocked_by, planned_time, time_spent_minutes, done_at.",
+      "list_kind": "page",
+      "rich_note": {
+        "text": "Unterlagen sammeln",
+        "links": {},
+        "spans": [
+          {
+            "tag": "task",
+            "start": 0,
+            "end": 18
+          },
+          {
+            "tag": "taskref:fixture-item-prepare",
+            "start": 0,
+            "end": 18
+          }
+        ]
+      },
+      "created_at": "2026-09-25T08:00:00+02:00",
+      "updated_at": "2026-09-25T08:00:00+02:00",
+      "journal": {
+        "favorite": false,
+        "mood": "",
+        "location": "",
+        "moment_date": "2026-09-25",
+        "prompt": ""
+      },
+      "system_role": null,
+      "labels": [],
+      "attachments": [],
+      "icon": {
+        "format": "glide.drawing",
+        "format_version": 2,
+        "width": 16,
+        "height": 16,
+        "color_space": "srgb",
+        "palette_id": "glide-drawing-default",
+        "palette_version": 1,
+        "palette": [
+          "#FFFFFF",
+          "#1F4E79"
+        ],
+        "encoding": "hex8-row-v1",
+        "rows": [
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000010101010101010100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010000000000000100000000",
+          "00000000010101010101010100000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000",
+          "00000000000000000000000000000000"
+        ]
+      },
+      "archived": false,
+      "archived_at": null,
+      "items": []
+    }
+  ],
+  "trash": [],
+  "history": []
+}

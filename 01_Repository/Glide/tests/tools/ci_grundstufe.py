@@ -27,6 +27,9 @@ duplizieren:
 8. Ablagegröße (`ablagegroesse.py`): keine Archivkopien von Glide-Daten,
    keine `*.fetch`-Reste, Archive und Nachweise nur der sieben neuesten
    Versionen, Fensterbilder nur der drei neuesten, keine Datei über 50 MB.
+9. Synchronisation (`synchronisationswaechter.py`, seit 08.10.2026): keine
+   Konfliktkopien `<Name>-<Gerätename>` neben ihrem Original und kein
+   Hauptdokument, das ohne Vermerk mehr als 40 % seiner Zeilen verliert.
 
 Die Integrationssuiten sind auf den Referenz-Mac abgestimmt und gehören nicht
 dazu; unter Linux laufen sie über `pruefen.py --modus schnell` (in GitHub
@@ -53,6 +56,7 @@ import zipfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import ablagegroesse  # noqa: E402
+import synchronisationswaechter  # noqa: E402
 import pruefen  # noqa: E402
 
 REPO = pruefen.REPO
@@ -271,6 +275,17 @@ def main():
         funde = ablagegroesse.befunde(eintraege, ablagegroesse.aktuelle_version())
         run.meldung("Ablagegröße", "fehlgeschlagen" if funde else "ausgeführt",
                     ablagegroesse.zusammenfassung(eintraege, funde))
+
+    ergebnis = synchronisationswaechter.arbeitsstand_pruefen(ABLAGE)
+    if ergebnis is None:
+        run.meldung("Synchronisation", "Hinweis", "kein Git-Arbeitsstand; Dateien nicht ermittelbar")
+    else:
+        kopien, geschrumpft = ergebnis
+        befunde = ([f"Konfliktkopie {kopie} neben {original}" for kopie, original in kopien]
+                   + [f"{pfad}: {vorher} → {jetzt} Zeilen ohne Vermerk" for pfad, vorher, jetzt in geschrumpft])
+        run.meldung("Synchronisation", "fehlgeschlagen" if befunde else "ausgeführt",
+                    "; ".join(befunde[:6]) + (" …" if len(befunde) > 6 else "") if befunde else
+                    "keine Synchronisationskopien, kein Hauptdokument ohne Vermerk stark gekürzt")
 
     fehlgeschlagen = [zeile["schritt"] for zeile in run.results if zeile["status"] == "fehlgeschlagen"]
     exitcode = 1 if fehlgeschlagen else 0

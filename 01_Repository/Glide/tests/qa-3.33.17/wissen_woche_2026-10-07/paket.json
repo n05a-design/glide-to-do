@@ -1,0 +1,165 @@
+{
+  "version": "3.33.17",
+  "format": 22,
+  "exitcode": 0,
+  "checks": [
+    "Format 21 → 22: bytegenaue Vorsicherung und Startmigration",
+    "Seiteneditor: Verweis, @-Tastaturweg, Abbruch, Rückverweis, Markdown-Roundtrip, ein Undo-Schritt",
+    "IDs und Zustände: Umbenennen, Archiv, Papierkorb, globales Undo und Text-Redo, fehlende Ziele; Speicherfehler ohne Datenänderung",
+    "Additiver Import remappt Seiten-, Listen- und Aufgabenkennungen konsistent",
+    "16 Layouts: Woche/Monat eingebettet, Mindestgröße/große Schrift/hell/dunkel, gleiche Tagesbilanz ohne Mutation",
+    "Kalender: echter Return- und Dragweg, Randscrollen und Abbruch außerhalb des Inhalts, ausschließlich Bearbeitungstag, ein Undo, Speicherfehler zurückgenommen",
+    "Freie Zeitfenster: Abbruch, bestätigte Übernahme, Uhrzeit/Fälligkeit; Verbindung zum Wochenrückblick",
+    "Tagesmenü: Anlegen mit Bearbeitungstag oder ausdrücklicher Fälligkeit, Abbruch und je ein Undo",
+    "Format-22-Vorsicherung: Kopierfehler verhindert Überschreiben der alten Datei",
+    "Unveränderte 3.33.16: Format 22 schreibgeschützt, Daten bytegleich",
+    "Neustart erhält Planung, Uhrzeit, IDs, ausgehende Verweise und Rückverweise"
+  ],
+  "app_sha256": "c609a36901fc6835c054b1579b9f24608320822bcd07cef95f2c1966285a48cc",
+  "observations": [
+    {
+      "font": "mittel",
+      "design": "light",
+      "width": 1280,
+      "height": 800,
+      "mode": "week",
+      "render_ms": 897.32,
+      "days": 7
+    },
+    {
+      "font": "mittel",
+      "design": "light",
+      "width": 1280,
+      "height": 800,
+      "mode": "month",
+      "render_ms": 1060.04,
+      "days": 35
+    },
+    {
+      "font": "mittel",
+      "design": "light",
+      "width": 860,
+      "height": 700,
+      "mode": "week",
+      "render_ms": 1274.99,
+      "days": 7
+    },
+    {
+      "font": "mittel",
+      "design": "light",
+      "width": 860,
+      "height": 700,
+      "mode": "month",
+      "render_ms": 854.01,
+      "days": 35
+    },
+    {
+      "font": "mittel",
+      "design": "dark",
+      "width": 1280,
+      "height": 800,
+      "mode": "week",
+      "render_ms": 1244.35,
+      "days": 7
+    },
+    {
+      "font": "mittel",
+      "design": "dark",
+      "width": 1280,
+      "height": 800,
+      "mode": "month",
+      "render_ms": 971.47,
+      "days": 35
+    },
+    {
+      "font": "mittel",
+      "design": "dark",
+      "width": 860,
+      "height": 700,
+      "mode": "week",
+      "render_ms": 1208.09,
+      "days": 7
+    },
+    {
+      "font": "mittel",
+      "design": "dark",
+      "width": 860,
+      "height": 700,
+      "mode": "month",
+      "render_ms": 833.89,
+      "days": 35
+    },
+    {
+      "font": "gross",
+      "design": "light",
+      "width": 1280,
+      "height": 800,
+      "mode": "week",
+      "render_ms": 1086.8,
+      "days": 7
+    },
+    {
+      "font": "gross",
+      "design": "light",
+      "width": 1280,
+      "height": 800,
+      "mode": "month",
+      "render_ms": 1122.1,
+      "days": 35
+    },
+    {
+      "font": "gross",
+      "design": "light",
+      "width": 860,
+      "height": 700,
+      "mode": "week",
+      "render_ms": 1794.77,
+      "days": 7
+    },
+    {
+      "font": "gross",
+      "design": "light",
+      "width": 860,
+      "height": 700,
+      "mode": "month",
+      "render_ms": 1220.51,
+      "days": 35
+    },
+    {
+      "font": "gross",
+      "design": "dark",
+      "width": 1280,
+      "height": 800,
+      "mode": "week",
+      "render_ms": 1742.66,
+      "days": 7
+    },
+    {
+      "font": "gross",
+      "design": "dark",
+      "width": 1280,
+      "height": 800,
+      "mode": "month",
+      "render_ms": 1379.54,
+      "days": 35
+    },
+    {
+      "font": "gross",
+      "design": "dark",
+      "width": 860,
+      "height": 700,
+      "mode": "week",
+      "render_ms": 1838.06,
+      "days": 7
+    },
+    {
+      "font": "gross",
+      "design": "dark",
+      "width": 860,
+      "height": 700,
+      "mode": "month",
+      "render_ms": 1287.51,
+      "days": 35
+    }
+  ]
+}

@@ -178,10 +178,17 @@ with tempfile.TemporaryDirectory(prefix="glide-features323-") as folder:
         # Testfenster bei null.
         assert app.plan_day_prev_button.winfo_manager() == "pack"
         assert app.plan_day_next_button.winfo_manager() == "pack"
+        # U03: Der Löschknopf gehört nur bei tatsächlicher Suche in die Zeile.
+        app.search_placeholder_active = False
+        app.search_var.set("Punkt")
+        root.update()
         geschwister = list(app.search_frame.pack_slaves())
         assert geschwister.index(app.plan_day_next_button) < geschwister.index(app.plan_day_prev_button)
         assert geschwister.index(app.plan_day_prev_button) < geschwister.index(app.clear_search_button)
         assert app.plan_day_prev_button.text == "◀" and app.plan_day_next_button.text == "▶"
+        app.search_var.set("")
+        root.update()
+        assert not app.clear_search_button.winfo_manager()
 
         # ================================================================
         # Punkt 22: globales Auf- und Zuklappen mit sichtbarem Pfad
@@ -383,7 +390,8 @@ with tempfile.TemporaryDirectory(prefix="glide-features323-") as folder:
         for breite, sichtbar in ((1400, True), (700, False)):
             app._header_density = None
             app.sync_header_density(type("E", (), {"width": breite})())
-            assert (app.print_button.winfo_manager() == "pack") is sichtbar, breite
+            assert not app.print_button.winfo_manager(), breite
+            assert len(app.header_controls.pack_slaves()) <= 4, breite
             assert (app.header_overflow_button.winfo_manager() == "pack") is (not sichtbar), breite
         app._header_density = None
         app.sync_header_density(type("E", (), {"width": 1400})())
@@ -391,7 +399,8 @@ with tempfile.TemporaryDirectory(prefix="glide-features323-") as folder:
         # Punkt 24: Drucken ist ohne Menü erreichbar und liegt neben dem
         # Seitenleistenschalter.
         geschwister = list(app.header_controls.pack_slaves())
-        assert app.print_button in geschwister and app.sidebar_toggle_button in geschwister
+        assert app.print_button not in geschwister and app.sidebar_toggle_button in geschwister
+        assert any("print" in action["id"] for action in app.app_action_entries())
 
         # ================================================================
         # Punkte 33, 34: Anzeigemodi der Listenansicht

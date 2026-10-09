@@ -237,8 +237,8 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
         # --- Lupe: globale Suche ----------------------------------------------
         assert app.ICONS["search"] == "⌕" and app.search_button.text == app.ICONS["search"]
         reihe = [str(knopf) for knopf in app.header_controls.pack_slaves()]
-        assert reihe.index(str(app.search_button)) == reihe.index(str(app.actions_button)) + 1, \
-            "Lupe links neben ⌘"
+        assert str(app.search_button) in reihe and str(app.actions_button) not in reihe
+        assert len(reihe) <= 4, "Gemeinsame Palette in der Kopfzeile"
         app.search_button.command()
         ruhe()
         assert getattr(app, "_quick_open", None) is not None, "Lupe öffnet die Suche"

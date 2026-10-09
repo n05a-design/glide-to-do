@@ -95,7 +95,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-followup36-') as tmp:
             # Seit 3.30 wartet derselbe Durchlauf auch auf die Sichtbarkeit der
             # Schaltflächen: Unter Last meldete eine frisch gescrollte Karte
             # „Liste öffnen“ einmal als noch nicht eingeblendet.
-            kartenknoepfe = [w for w in descendants(card) if isinstance(w, mod.RoundedButton)]
+            kartenknoepfe = [w for w in descendants(card) if isinstance(w, mod.tk.Label) and getattr(w, "command", None)]
             for _attempt in range(6):
                 # Der Lasttest vom 26.09.2026 zeigte: Unter Last stand die Karte
                 # nach dem einmaligen Scrollen teils außerhalb des Sichtbereichs,
@@ -117,15 +117,11 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-followup36-') as tmp:
             assert min(insets) >= 12 and max(insets) - min(insets) <= 2, ('Innenabstände', insets, (x, y, width, height))
             labels = [w.cget('text') for w in descendants(card) if isinstance(w, mod.tk.Label)]
             assert 'LISTE' not in labels and 'ORDNER' not in labels
-            buttons = [w for w in descendants(card) if isinstance(w, mod.RoundedButton)]
-            assert len(buttons) == 2
-            for button in buttons:
-                assert button.winfo_ismapped(), button.text
-                assert button.winfo_rootx() >= x + insets[0]
-                assert button.winfo_rootx()+button.winfo_width() <= x + width - insets[2]
-                assert button.winfo_rooty()+button.winfo_height() <= y + height - insets[3]
-            bottom = max(button.winfo_rooty()+button.winfo_height() for button in buttons)
-            assert abs(y + height - bottom - insets[0]) <= 2, ('CTA-Abstand unten', insets, y+height-bottom)
+            assert not [w for w in descendants(card) if isinstance(w, mod.RoundedButton)]
+            assert len(kartenknoepfe) == 1 and kartenknoepfe[0].winfo_ismapped()
+            heading = kartenknoepfe[0]
+            assert heading.winfo_rootx() >= x + insets[0]
+            assert heading.winfo_rootx() + heading.winfo_width() <= x + width - insets[2]
             button_text_fits(card)
         app.home_canvas.yview_moveto(0)
         settle()
@@ -151,7 +147,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-followup36-') as tmp:
         # Auch ein per Tastatur erreichter CTA unterhalb des sichtbaren
         # Bereichs muss vollständig in den Ausschnitt gescrollt werden.
         last_card = max(cards, key=lambda card: card.winfo_rooty()+card.winfo_height())
-        last_button = [w for w in descendants(last_card) if isinstance(w, mod.RoundedButton)][-1]
+        last_button = [w for w in descendants(last_card) if isinstance(w, mod.tk.Label) and getattr(w, "command", None)][0]
         last_button.event_generate('<FocusIn>')
         settle()
         assert last_button.winfo_rooty() >= app.home_canvas.winfo_rooty()

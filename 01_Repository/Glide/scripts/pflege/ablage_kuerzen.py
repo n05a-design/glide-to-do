@@ -26,9 +26,15 @@ REGELN = {"Archivalter", "Fensterbilder"}
 
 
 def kandidaten():
-    eintraege = ablagegroesse.versionierte_dateien()
-    if eintraege is None:
+    lauf = subprocess.run(["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+                          cwd=ablagegroesse.ABLAGE, capture_output=True)
+    if lauf.returncode:
         sys.exit("kein Git-Arbeitsstand; nichts gekürzt")
+    eintraege = []
+    for name in sorted(set(lauf.stdout.decode("utf-8").split("\0")) - {""}):
+        pfad = ablagegroesse.ABLAGE / name
+        if pfad.is_file() and not pfad.is_symlink():
+            eintraege.append((name, pfad.stat().st_size))
     funde = ablagegroesse.befunde(eintraege, ablagegroesse.aktuelle_version())
     return sorted({pfad for regel, pfad, _ in funde if regel in REGELN})
 
@@ -36,7 +42,12 @@ def kandidaten():
 def leere_ordner_entfernen(ordner):
     for pfad in sorted(ordner, key=lambda p: len(p.parts), reverse=True):
         while pfad != ablagegroesse.ABLAGE and pfad.is_dir() and not any(pfad.iterdir()):
-            pfad.rmdir()
+            try:
+                pfad.rmdir()
+            except OSError:
+                # OneDrive kann einen bereits leeren Ordner vorübergehend
+                # halten. Das betrifft keine Dateien oder Aufbewahrungsregel.
+                break
             pfad = pfad.parent
 
 
@@ -48,9 +59,30 @@ def main():
     for pfad in pfade:
         print(("würde entfernen: " if args.anzeigen else "entfernt: ") + pfad)
     if pfade and not args.anzeigen:
+        for name in pfade:
+            pfad = ablagegroesse.ABLAGE / name
+            if not pfad.resolve().is_relative_to(ablagegroesse.ABLAGE.resolve()):
+                raise ValueError("Ablagepfad außerhalb der Projektwurzel")
+            # Nur Glieder innerhalb der Ablage prüfen: Oberhalb der Wurzel sind
+            # Verknüpfungen normal (macOS: /var → /private/var, OneDrive-Ordner)
+            # und kein Hinweis auf einen umgelenkten Ablagepfad.
+            glieder = pfad.relative_to(ablagegroesse.ABLAGE).parts
+            if any((ablagegroesse.ABLAGE.joinpath(*glieder[:tiefe])).is_symlink()
+                   or (ablagegroesse.ABLAGE.joinpath(*glieder[:tiefe])).is_junction()
+                   for tiefe in range(1, len(glieder) + 1)):
+                raise ValueError("Verknüpfung wird nicht gelöscht")
         for start in range(0, len(pfade), 200):
-            subprocess.run(["git", "rm", "-q", "--", *pfade[start:start + 200]],
+            subprocess.run(["git", "rm", "-q", "-f", "--ignore-unmatch", "--", *pfade[start:start + 200]],
                            cwd=ablagegroesse.ABLAGE, check=True)
+        # Neue Nachweise sind häufig noch nicht im Index. Gleiche Regeln und
+        # gleicher geprüfter Plan wie bei den bereits versionierten Dateien.
+        for name in pfade:
+            pfad = ablagegroesse.ABLAGE / name
+            if not pfad.resolve().is_relative_to(ablagegroesse.ABLAGE.resolve()):
+                raise ValueError("Ablagepfad außerhalb der Projektwurzel")
+            if pfad.is_symlink():
+                raise ValueError("Verknüpfung wird nicht gelöscht")
+            pfad.unlink(missing_ok=True)
         leere_ordner_entfernen({(ablagegroesse.ABLAGE / pfad).parent for pfad in pfade})
     print(f"{len(pfade)} Dateien {'zu kürzen' if args.anzeigen else 'gekürzt'}")
     return 0

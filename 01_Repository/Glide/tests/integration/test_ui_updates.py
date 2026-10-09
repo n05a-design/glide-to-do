@@ -34,6 +34,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
     loader.exec_module(mod)
     root = mod.tk.Tk()
     app = mod.ListApp(root)
+    app.confirm_template_preview = lambda template: True
     root.geometry('1280x960+10+10')
     root.update()
     reported_errors=[]
@@ -100,8 +101,11 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
         assert app.settings['recent_lists'] == recent, 'Navigation/Autosave ist keine Bearbeitung'
 
         for theme in ('dark','light'):
-            app.theme_name=theme
+            # Seit das Design die einzige Quelle ist, wirkt eine Zuweisung an
+            # theme_name nicht mehr; bis 08.10.2026 lief der Dunkelfall hier hell (W02).
+            app.set_design(theme, apply_now=False)
             app.apply_theme()
+            assert (mod.relative_luminance(app.theme['bg']) < 0.2) == (theme == 'dark'), (theme, app.theme['bg'])
             app.set_active_list(entry['id'])
             for width in (1280,980,860):
                 root.geometry(f'{width}x900+10+10')
@@ -153,13 +157,13 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
                 heading_label=app.get_system_label('heading')
                 assert long_label in dropdown.labels and heading_label in dropdown.labels
                 dropdown.toggle_label(long_label['id'])
-                assert kind_menu.cget('text') == 'Long-Task'
+                assert kind_menu.cget('text') == 'Langtext'
                 assert not title_entry.winfo_manager()
                 long_text=next(w for w in descendants(dialog) if isinstance(w,mod.tk.Text) and w.get('1.0','end-1c')==task['text'])
                 long_text.delete('1.0','end')
                 long_text.insert('1.0','Erste Zeile\nZweite Zeile')
                 dropdown.toggle_label(heading_label['id'])
-                assert kind_menu.cget('text') == 'Überschrift'
+                assert kind_menu.cget('text') == 'Zwischenüberschrift'
                 assert heading_label['id'] in dropdown.read() and long_label['id'] not in dropdown.read()
                 assert not due.master.winfo_manager()
                 assert due.date_entry.get() == today.strftime('%d.%m.%Y')
