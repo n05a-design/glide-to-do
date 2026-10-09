@@ -52,7 +52,8 @@ R9  Ein aktives Dokument wiederholt keine als überholt bekannte Aussage
 R10 Jede Moduldatei neben `app.pyw` steht in allen Dokumenten und Skripten, die
     die Module aufzählen (`MODULLISTEN`). Anlass: `30_Release_Exports/README.md`
     nannte nur zwei von sechs Modulen, und das macOS-Bundle hätte ein neues
-    Modul ohne Fehlermeldung weggelassen.
+    Modul ohne Fehlermeldung weggelassen. Die README in `07_Python-Versionen`
+    folgt seit 09.10.2026 den Modulen dieses Ordners, nicht dem Quellbaum.
 R11 Jeder relative Link eines aktiven Dokuments führt zu einer vorhandenen
     Datei. Anlass: das Aufräumen leerer Ordner am 29.09.2026.
 R12 Ein fortgeschriebener Titel behauptet keinen älteren Glide-Stand.
@@ -281,6 +282,11 @@ def ablagewurzel(repo: Path) -> Path | None:
 def dokumente(wurzel: Path):
     for pfad in sorted(wurzel.rglob("*.md")):
         teile = pfad.relative_to(wurzel).parts
+        # Verschachtelte Git-Checkouts haben einen eigenen Stand und Auftrag.
+        # .git ist im Worktree eine Datei, im eigenständigen Checkout ein Ordner.
+        if any((parent / ".git").exists() for parent in pfad.parents
+               if parent != wurzel and parent.is_relative_to(wurzel)):
+            continue
         if any(t.lower().startswith("archiv") for t in teile):
             continue
         if any(ZWISCHENSTAND.fullmatch(t) for t in teile[:-1]):
@@ -533,23 +539,40 @@ def links_pruefen(befund: Befund, wurzel: Path, pfad: Path, text: str) -> None:
                 befund.melden(kurz, nr, f"Link auf {ziel} führt ins Leere (R11)")
 
 
+def modulnamen(ordner: Path) -> list[str]:
+    """Moduldateien eines Ordners neben der Hauptdatei (ohne die isolierte Bedienprobe)."""
+    return sorted(pfad.name for pfad in ordner.glob("*.py") if pfad.name != "drawing_prototype.py")
+
+
+def fehlende_module(text: str, module: list[str]) -> list[str]:
+    """Module, die eine Aufzählung nicht nennt; der Schnellstart heißt in 07 `Schnellstart.pyw`."""
+    fehlend = []
+    for modul in module:
+        namen = (modul, "Schnellstart.pyw") if modul == "glide_start.py" else (modul,)
+        if not any(name in text for name in namen):
+            fehlend.append(modul)
+    return fehlend
+
+
 def module_pruefen(befund: Befund, wurzeln: list[Path]) -> None:
-    """R10: Jede Moduldatei steht in jeder Modulliste."""
-    module = sorted(pfad.name for pfad in (REPO / "src/glide").glob("*.py")
-                    if pfad.name != "drawing_prototype.py")
+    """R10: Jede Moduldatei steht in jeder Modulliste.
+
+    Die Listen im Repository folgen `src/glide`. Die README in
+    `07_Python-Versionen` beschreibt dagegen den gelieferten Ordner und folgt
+    dessen Modulen: Zwischen Prüfkandidat und Auslieferung darf der Quellbaum
+    ein Modul mehr haben (die CI meldet das unter „Lieferstand“).
+    """
+    module = modulnamen(REPO / "src/glide")
     ablage = ablagewurzel(REPO)
-    listen = [(REPO / name, f"{REPO_TEIL}/{name}") for name in MODULLISTEN]
+    listen = [(REPO / name, f"{REPO_TEIL}/{name}", module) for name in MODULLISTEN]
     if ablage is not None:
-        listen += [(ablage / name, name) for name in MODULLISTEN_ABLAGE]
-    for pfad, kurz in listen:
+        for name in MODULLISTEN_ABLAGE:
+            listen.append((ablage / name, name, modulnamen((ablage / name).parent)))
+    for pfad, kurz, erwartet in listen:
         if not pfad.is_file():
             continue
-        text = pfad.read_text(encoding="utf-8-sig")
-        for modul in module:
-            # In 07_Python-Versionen heißt der Schnellstart Schnellstart.pyw.
-            namen = (modul, "Schnellstart.pyw") if modul == "glide_start.py" else (modul,)
-            if not any(name in text for name in namen):
-                befund.melden(kurz, 1, f"Modul {modul} fehlt in der Aufzählung (R10)")
+        for modul in fehlende_module(pfad.read_text(encoding="utf-8-sig"), erwartet):
+            befund.melden(kurz, 1, f"Modul {modul} fehlt in der Aufzählung (R10)")
 
 
 def lauf(wurzeln: list[Path], version: str) -> Befund:

@@ -1,0 +1,76 @@
+{
+  "version": "3.33.18",
+  "format": 23,
+  "exitcode": 0,
+  "checks": [
+    "Format 22 → 23, bytegenaue Vorsicherung",
+    "Live-Liste: Original-ID, Unteraufgabe, Tastatur-Abhaken/Details, ein Undo; Lösen erhält Quelle; Speicherfehler/Schreibschutz",
+    "Frische Titel und Zustände nach Umbenennen, Archiv, Papierkorb und Undo; fehlende Ziele",
+    "Bilddatei bytegleich, native Vorschau, Pixelzeichnung als unabhängiges Titelbild, Undo und Speicherfehler ohne Dateireste",
+    "Kopie/echtes Backup mit Anhängen/additiver Import remappen gemeinsam; Papierkorb-Wiederherstellung erhält Bild und Live-Liste",
+    "Echte gefüllte Vorschau: Unteraufgaben/gleiche Termine, Escape/Abbruch ohne Mutation, Return erzeugt geprüfte Werte im gewählten Ordner vor erstem Commit; ein Undo, atomarer Schreibfehler ohne Anhänge, Markdown-Vorlage",
+    "Mindestfenster/große Schrift/hell-dunkel: Seitentext, Live-Liste und Titelbild sichtbar; Bibliotheksbilder ohne Änderung am Bestand",
+    "Neustart aus gespeicherten Bytes erhält Original-IDs, Cover und Live-Liste",
+    "Fehlgeschlagene Format-23-Vorsicherung verhindert Startmigration und Überschreiben",
+    "Unveränderte 3.33.17 erkennt Format 23; Start und Speicherprobe erhalten Datei bytegenau"
+  ],
+  "layouts": [
+    {
+      "size": "mittel",
+      "theme": "light",
+      "width": 1280,
+      "text_height": 196,
+      "live_height": 171
+    },
+    {
+      "size": "mittel",
+      "theme": "light",
+      "width": 860,
+      "text_height": 96,
+      "live_height": 171
+    },
+    {
+      "size": "mittel",
+      "theme": "dark",
+      "width": 1280,
+      "text_height": 196,
+      "live_height": 171
+    },
+    {
+      "size": "mittel",
+      "theme": "dark",
+      "width": 860,
+      "text_height": 96,
+      "live_height": 171
+    },
+    {
+      "size": "gross",
+      "theme": "light",
+      "width": 1280,
+      "text_height": 194,
+      "live_height": 171
+    },
+    {
+      "size": "gross",
+      "theme": "light",
+      "width": 860,
+      "text_height": 94,
+      "live_height": 171
+    },
+    {
+      "size": "gross",
+      "theme": "dark",
+      "width": 1280,
+      "text_height": 194,
+      "live_height": 171
+    },
+    {
+      "size": "gross",
+      "theme": "dark",
+      "width": 860,
+      "text_height": 94,
+      "live_height": 171
+    }
+  ],
+  "app_sha256": "1f2cdbe6f009d8ebb0a785d2088f1915bddc5e219a10b79d6cd54976e2e31e74"
+}

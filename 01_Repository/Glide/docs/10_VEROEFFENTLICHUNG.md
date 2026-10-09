@@ -1,8 +1,8 @@
 # Veröffentlichung – Glide
 
-Stand 05.10.2026 · Glide 3.33.8 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 20
+Stand 09.10.2026 · Glide 3.35.0 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 23
 
-Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
+Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
@@ -45,6 +45,31 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 - Jeder Kanal braucht dasselbe geprüfte Artefakt, SHA-256-Prüfsumme, Versionshinweise, Systemvoraussetzungen, Kontakt und die freigegebene Lizenz.
 - **Marke:** „Glide“ wird von mehreren Softwareanbietern genutzt. Vor einer Veröffentlichung professionelle Marken- und Namensrecherche durch einen Fachanwalt (I4). Ausgangspunkte: [DPMA-Recherche](https://www.dpma.de/marken/markenrecherche/index.html) (nur übereinstimmende Wortelemente, keine Ähnlichkeitsprüfung), [EUIPO/TMview](https://www.euipo.europa.eu/en/trade-marks/before-applying/availability). Eine Rechercheakte nennt Datum, Suchausdruck mit Varianten, Register, Waren-/Dienstleistungsklassen, Treffer, Inhaber, Status und Links.
 - **Gismo** wird selbst produziert; die gezeichnete Tk-Figur bleibt, bis freigegebene Dateien vorliegen ([Arbeitsbegleiter](decisions/ARBEITSBEGLEITER.md)). Aus Inspirationsbildern wird keine Marken- oder Lizenzfreigabe abgeleitet.
+
+## GitHub-Auftritt
+
+Stand am 06.10.2026, über die GitHub-Schnittstelle abgerufen:
+
+| Merkmal | Stand |
+|---|---|
+| Repository | [`n05a-design/glide-to-do`](https://github.com/n05a-design/glide-to-do), angelegt am 24.09.2026, öffentlich, Standardzweig `main`, maßgebliche Ablage (D09) |
+| Beschreibung | englisch: „Glide is an offline desktop app for tasks, lists, notes, and journals, featuring daily planning, a calendar, pinboards, and local backups. No account or cloud service required. Built with Python and Tkinter.“ Sie nennt weder Seiten noch Pixel-Werkstatt; „journals“ heißen seit 3.30 Notizbücher. Keine Homepage |
+| Tags, Releases | keine; D09 sieht Tags für Zwischenstände vor |
+| Lizenz | keine; `LICENSE.md` räumt keine Nutzungs-, Änderungs- oder Weiterverteilungsrechte ein |
+| Prüfungen | „Glide-Prüfung“ (CI-Grundstufe), Dependabot; CodeQL-Workflow deaktiviert; die KI-Codeprüfung „github-advanced-security“ scheiterte am 03.10.2026 am aufgebrauchten Monatskontingent |
+| Funktionen | Issues (keine offen), Wiki und Projects eingeschaltet; Discussions und Pages aus |
+| Größe | rund 510 MB laut GitHub, überwiegend Git-Historie |
+
+**Empfehlungen** (nicht entschieden, I11):
+
+1. Beschreibung aktualisieren, etwa: „Calm, local desktop workspace for your day – tasks, pages, notebooks, pinboards and a pixel workshop. No account, no cloud, German UI. Python 3.14 + Tk 9.“
+2. Tags je ausgelieferter Version, wie D09 es vorsieht; eine GitHub-Release erst mit signiertem Paket und Lizenz.
+3. Wiki ausschalten: Die Dokumentation liegt im Repository, ein Wiki wäre ein zweiter Ort (P3).
+4. Issues bis zur Lizenz ausschalten oder nur für Fehlermeldungen öffnen; Sicherheitsmeldungen laufen vertraulich über *Security → Report a vulnerability* (`SECURITY.md`).
+5. KI-Codeprüfung abschalten oder ihr Kontingent anpassen, damit kein dauerhaft roter Haken am PR steht.
+6. Den Lizenzentwurf (I2) rechtlich prüfen und veröffentlichen, bevor das Repository beworben wird.
+
+**Git-Historie (I10, eigener Auftrag):** Sie enthält gelöschte Protokolldateien mit Benutzerpfaden und frühere Archivkopien. Umschreiben verkleinert das Repository deutlich, ändert aber alle Commit-Kennungen und verlangt neue Klone auf allen Geräten. Empfehlung: bereinigen, solange es keine fremden Kopien gibt, und dabei die Entscheidung zu den Bildrechten (I9) mit umsetzen.
 
 ## Lizenzentwurf
 

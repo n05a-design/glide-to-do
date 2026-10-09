@@ -1,0 +1,13 @@
+{
+  "zeitpunkt": "2026-10-09",
+  "werkzeug": "packaging/macos/baue_app.py",
+  "version": "3.34.0",
+  "python": "3.14.5 (python.org, Tk 9.0.3)",
+  "signatur": "ad hoc; codesign --verify --deep --strict im Bauordner bestanden und auf einer Rückkopie aus dem Zielordner bestanden. Im OneDrive-Zielordner selbst meldet codesign „host has no guest with the requested attributes“ (Dateianbieter); Inhalt mit diff -r gleich dem Bauordner",
+  "app_pyw_sha256_beginn": "62f738ce83748d30",
+  "dateien_im_bundle": 89,
+  "quelldateien_verglichen_mit_07": 80,
+  "abweichungen_zu_07": 0,
+  "ziel": "01_Repository/Glide/build/macos/Glide.app (lokal, nicht versioniert); ersetzt das Bundle 3.33.21",
+  "manuelle_abnahme": "offen (I6)"
+}

@@ -78,6 +78,14 @@ class Ablagegroesse(unittest.TestCase):
         self.assertEqual(regeln(*bilder, aktuell="3.33.7"),
                          [("Fensterbilder", nachweis("3.33.4", "vollpruefung/fenster/01.png"))])
 
+    def test_other_image_folders_follow_the_age_limit(self):
+        """`fensterbilder/` und `screenshots/` unterliegen nur der Altersgrenze, nicht dem Verbot."""
+        bilder = [(nachweis(f"3.33.{n}", ordner + "/a.png"), MB)
+                  for n in range(17, 21) for ordner in ("fensterbilder", "voll/screenshots")]
+        self.assertEqual(regeln(*bilder, aktuell="3.33.20"),
+                         [("Fensterbilder", nachweis("3.33.17", "fensterbilder/a.png")),
+                          ("Fensterbilder", nachweis("3.33.17", "voll/screenshots/a.png"))])
+
     def test_other_evidence_stays_allowed(self):
         erlaubt = [(Q + "tests/qa-3.33.6/heute_2026-10-02/vollpruefung/fenster/01_start.png", MB),
                    (Q + "tests/qa-3.33.6/heute_2026-10-02/vollpruefung/ergebnis.json", 4096),

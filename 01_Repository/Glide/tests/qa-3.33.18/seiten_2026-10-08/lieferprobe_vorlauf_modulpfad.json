@@ -1,0 +1,8 @@
+{
+  "exitcode": 1,
+  "ursache": "Archivierte 3.33.17 fand drawing nicht: Beim ersten direkten Lieferaufruf fehlte der gemeinsame Modulpfad.",
+  "korrektur": "Lieferproben erhalten 07_Python-Versionen als PYTHONPATH; unveraenderte archivierte Vorversion verwendet die dort mitgelieferten Begleitmodule.",
+  "source_unchanged": true,
+  "source_sha256": "1f2cdbe6f009d8ebb0a785d2088f1915bddc5e219a10b79d6cd54976e2e31e74",
+  "vorlauf_log": "lieferprobe_vorlauf_modulpfad.log (lokal; nicht versionieren)"
+}

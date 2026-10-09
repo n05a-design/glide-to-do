@@ -45,6 +45,7 @@ with tempfile.TemporaryDirectory(prefix="glide-kompression-") as ordner:
     fehler = []
     root.report_callback_exception = lambda *args: fehler.append(args)
     app = mod.ListApp(root)
+    app.confirm_template_preview = lambda template: True
     app.show_warning = app.show_error = lambda *args, **kwargs: fehler.append(args)
 
     def ruhe(runden=6):

@@ -1,14 +1,12 @@
 # Referenzdaten und Beispiele
 
-Aktueller Aufgabenstand: **Glide 3.33.8 / Format 20**. `current_v20` enthält
-die feste Referenz für aktuelle Daten.
+Aktueller Aufgabenstand: **Glide 3.35.0 / Format 23**. `current_v23` enthält die aktuelle Referenz mit Live-Liste und Pixel-Titelbild; ältere `current_v*` bleiben feste Migrationsreferenzen.
 
-- Enthalten sind die Tagebuchseiten aus Format 19, dazu Punkte mit
+- Enthalten sind unter anderem die Tagebuch-/Zeichnungsdaten älterer Formatstufen, dazu Punkte mit
   Verknüpfung, „wartet auf“, Uhrzeit, erfasster Zeit und Erledigt-Zeitpunkt.
 - Dazu kommen Pixelsymbole an Liste und Ordner, eine archivierte Liste und
   eine 32er-Zeichnung (Dokumentversion 2).
-- Die Datei ist ein Fixpunkt der Normalisierung; `test_features330.py` prüft
-  das.
+- Die aktuelle Format-23-Referenz bleibt bei wiederholter Normalisierung unverändert; die [Dokumentationsprüfung](../qa-3.33.18/dokumentation_2026-10-08/README.md) bestätigt dies mit isolierter Ablage. `test_features330.py` prüft weiterhin die feste Format-20-Referenz.
 - `current_v19` bleibt die Referenz für Format 19. Historische Formatordner bleiben für
 Migrationen erhalten; sie werden nicht auf den aktuellen App-Stand
 umetikettiert.
@@ -37,6 +35,10 @@ Ein Komplettimport ersetzt den Bestand. Beispiele deshalb in isolierter Ablage
 Der Vollprüflauf vergleicht Struktur, Inhalte, Verknüpfungen und relative
 Fristen; zufällige IDs, Erzeugungszeit und die Zeitpunkte des Änderungsverlaufs
 (`history[].at`) sind ausgenommen – sie entstehen beim Speichern und könnten
-zwischen zwei Erzeugungen nie gleich sein. Die Tabellenansicht, „Mein Tag“,
+zwischen zwei Erzeugungen nie gleich sein. Die Tabellenansicht, „Heute“,
 Filter und Reiter/Pinnwand bleiben Einstellungen der App und werden nicht in
 ein Aufgabenbackup geschrieben.
+
+`current_v21/reference_v21.json` enthält einen Textverweis auf eine Aufgabe in einer anderen Heimatliste (3.33.15). Format-20-Referenzen bleiben unverändert als Migrationsbelege.
+
+`current_v22/reference_v22.json` prüft typisierte Seiten-/Listen-/Aufgabenverweise und interne Links im Seitentext. `current_v21` bleibt der unveränderte Migrationsvorstand für die bytegenaue Format-22-Vorsicherung.

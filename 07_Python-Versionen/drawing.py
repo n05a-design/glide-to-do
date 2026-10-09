@@ -613,6 +613,35 @@ def encode_rgba_png(size: int, pixels: Sequence[tuple[int, int, int, int]]) -> b
             + _png_chunk(b"IDAT", zlib.compress(bytes(raw), 9)) + _png_chunk(b"IEND", b""))
 
 
+def icon_rgba(width: int, palette: Sequence[str], cells: Sequence[int], size: int,
+              transparent_background: bool = True) -> list[tuple[int, int, int, int]]:
+    """RGBA-Pixel eines Symbolbilds – dieselbe Rechnung für Export und Vorschau (G-03)."""
+    rgba = []
+    for index, color in enumerate(palette):
+        value = normalize_color(color)
+        alpha = 0 if (index == 0 and transparent_background) else 255
+        rgba.append((int(value[1:3], 16), int(value[3:5], 16), int(value[5:7], 16), alpha))
+    return [rgba[value] for value in resample_cells(width, cells, size)]
+
+
+def icon_preview_rows(width: int, palette: Sequence[str], cells: Sequence[int], size: int,
+                      background: str = BACKGROUND, transparent_background: bool = True) -> list[list[str]]:
+    """Zeilen aus Hexfarben für die Symbolvorschau auf einem Grund (G-03 seit 3.35.0).
+
+    Durchsichtige Pixel zeigen den Grund; sonst genau die Exportfarbe – die
+    Vorschau ist damit pixelgleich zum ICO-Bild derselben Größe.
+    """
+    grund = normalize_color(background)
+    pixel = icon_rgba(width, palette, cells, size, transparent_background)
+    zeilen = []
+    for y in range(size):
+        zeile = []
+        for red, green, blue, alpha in pixel[y * size:(y + 1) * size]:
+            zeile.append(grund if alpha == 0 else f"#{red:02X}{green:02X}{blue:02X}")
+        zeilen.append(zeile)
+    return zeilen
+
+
 def encode_ico(width: int, palette: Sequence[str], cells: Sequence[int],
                sizes: Sequence[int] = ICON_SIZES, transparent_background: bool = True) -> bytes:
     """ICO mit je einem PNG-Bild pro Größe (Windows ab Vista, alle Browser als Favicon).
@@ -623,12 +652,7 @@ def encode_ico(width: int, palette: Sequence[str], cells: Sequence[int],
     sizes = tuple(dict.fromkeys(int(size) for size in sizes))
     if not sizes or any(size < 1 or size > 256 for size in sizes):
         raise DrawingFormatError("Symbolgrößen müssen zwischen 1 und 256 Pixel liegen")
-    rgba = []
-    for index, color in enumerate(palette):
-        value = normalize_color(color)
-        alpha = 0 if (index == 0 and transparent_background) else 255
-        rgba.append((int(value[1:3], 16), int(value[3:5], 16), int(value[5:7], 16), alpha))
-    images = [encode_rgba_png(size, [rgba[value] for value in resample_cells(width, cells, size)])
+    images = [encode_rgba_png(size, icon_rgba(width, palette, cells, size, transparent_background))
               for size in sizes]
     header = struct.pack("<HHH", 0, 1, len(images))
     offset = 6 + 16 * len(images)
@@ -900,6 +924,23 @@ class DrawingModel:
                 self.cells[index] = values[0]
                 count += 1
             values[1] = values[0]
+        return count
+
+    def discard_open_action(self, palette_length: int | None = None) -> int:
+        """Verwirft die offene Aktion ohne Verlaufseintrag – etwa eine abgelehnte Vorschau (G19).
+
+        Farben, die erst in dieser Aktion hinten an die Palette kamen und danach
+        unbenutzt sind, fallen wieder weg; `palette_length` ist die Länge davor.
+        Liefert die Zahl zurückgesetzter Zellen.
+        """
+        count = self.revert_open_action()
+        self._open = None
+        self._open_label = ""
+        self._open_depth = 0
+        if palette_length is not None and 0 < palette_length < len(self.palette):
+            used = set(self.cells)
+            if not any(index in used for index in range(palette_length, len(self.palette))):
+                del self.palette[palette_length:]
         return count
 
     def restore_in_action(self, x: int, y: int) -> bool:

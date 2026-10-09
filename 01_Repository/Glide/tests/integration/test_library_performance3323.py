@@ -321,17 +321,17 @@ with tempfile.TemporaryDirectory(prefix="glide-library-cards-") as folder:
             app.toggle_library_archive()
             idle()
             assert ("list", "list-0") in cards()
-            archived_card = cards()[("list", "list-0")]
-            restore = [button for flow in archived_card.inner.winfo_children() if isinstance(flow, mod.ButtonFlow)
-                       for button, _key in flow.entries][-1]
+            # U13: Rückholen über denselben Kontextbefehl, keine zweite Knopfleiste.
             refresh_calls = [0]
             original_refresh = app.refresh_library_page
             def count_refresh(*a, **k):
                 refresh_calls[0] += 1
                 return original_refresh(*a, **k)
             app.refresh_library_page = count_refresh
-            restore.event_generate("<ButtonPress-1>", x=10, y=10)
-            restore.event_generate("<ButtonRelease-1>", x=10, y=10)
+            menu = app.build_list_menu("list-0")
+            index = next(i for i in range(menu.index("end") + 1)
+                         if menu.type(i) == "command" and menu.entrycget(i, "label") == "Aus Archiv zurückholen")
+            menu.invoke(index)
             idle()
             app.refresh_library_page = original_refresh
             assert refresh_calls[0] == 1, "Zurückholen zeichnet doppelt oder nicht"

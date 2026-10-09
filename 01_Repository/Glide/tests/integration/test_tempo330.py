@@ -31,14 +31,29 @@ with tempfile.TemporaryDirectory(prefix="glide-tempo-") as ordner:
     os.environ["GLIDE_DATA_DIR"] = ordner
     os.environ["GLIDE_TEST_MODE"] = "1"
     with zipfile.ZipFile(REPO / "tests/fixtures/beispiele/glide_releaseplanung_3.30.0.glidebackup") as archiv:
-        Path(ordner, "liste_speicher.json").write_bytes(archiv.read("data.json"))
+        fixture_bytes = archiv.read("data.json")
+        Path(ordner, "liste_speicher.json").write_bytes(fixture_bytes)
     loader = importlib.machinery.SourceFileLoader("glide_tempo", str(REPO / "src/glide/app.pyw"))
     spec = importlib.util.spec_from_loader(loader.name, loader)
     mod = importlib.util.module_from_spec(spec)
     loader.exec_module(mod)
+    # Die historische Format-20-Fixture migriert vor der Scrollmessung.
+    # Nur diesen erwarteten Hinweis abfangen; unerwartete Meldungen bleiben Fehler.
+    migration_notices = []
+
+    def accept_fixture_migration(app, title, message, **options):
+        assert title == "Bestand umgestellt", (title, message)
+        assert "Datenformat 20" in message and f"Format {app.DATA_SCHEMA_VERSION}" in message
+        backups = list(Path(mod.BACKUP_DIR).glob(f"liste_vor_format{app.DATA_SCHEMA_VERSION}_*.json"))
+        assert any(path.read_bytes() == fixture_bytes for path in backups), "Historische Fixture muss bytegleich gesichert sein"
+        migration_notices.append(title)
+
+    mod.ListApp.show_info = accept_fixture_migration
     tk, ttk = mod.tk, mod.ttk
     root = tk.Tk()
     root.geometry("1400x950+20+20")
+    callback_errors = []
+    root.report_callback_exception = lambda *error: callback_errors.append(error)
 
     def ruhe(runden=6):
         for _ in range(runden):
@@ -112,6 +127,8 @@ with tempfile.TemporaryDirectory(prefix="glide-tempo-") as ordner:
         assert not getattr(app, "_backdrop_settle_job", None)
     finally:
         root.destroy()
+
+    assert not callback_errors, callback_errors
 
     print(f"Reines Tk: {grund:.1f} ms je Bild")
     for name, wert in werte.items():

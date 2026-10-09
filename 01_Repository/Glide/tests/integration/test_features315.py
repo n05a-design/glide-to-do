@@ -38,7 +38,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features315-") as folder:
     app.ask_yes_no = lambda *args, **kwargs: True
     try:
         # --- Einstellung: Vorgabe, Grenzen und Rückfall ----------------------
-        assert app.DATA_SCHEMA_VERSION == 20, "Format 20 ergänzt Verweise, Symbole und Archiv."
+        assert app.DATA_SCHEMA_VERSION == 23, "Format 23 bewahrt lokale Verweise, Live-Listen und Titelbilder."
         assert app.DAILY_CAPACITY_DEFAULT == 0 and app.DAILY_CAPACITY_MAX == 1440
         assert app.daily_capacity_minutes() == 0, "Ohne Angabe gibt es keinen Vergleichswert."
         for value, expected in ((0, 0), (1, 1), (1440, 1440), (2000, 1440), (-5, 0),
@@ -134,8 +134,12 @@ with tempfile.TemporaryDirectory(prefix="glide-features315-") as folder:
         sichtbar = app.stats_label.cget("text")
         assert zeile.startswith(sichtbar.rstrip(" …")), (sichtbar, zeile)
         assert "5 Aufgaben am " in zeile and "05.10.2090" in zeile, zeile
-        assert "3 h 30 min geplant" in zeile and "1 h erledigt" in zeile, zeile
-        assert "1 ohne Schätzung" in zeile and "30 min frei von 5 h" in zeile, zeile
+        # Der Kopf nennt die freie Zeit des gezeigten Tages. Erledigte
+        # Schätzungen belegen weiterhin Kapazität; der Rechenvertrag bleibt.
+        tagesbilanz = app.planning_available(tag)
+        assert (tagesbilanz["capacity"], tagesbilanz["minutes"],
+                tagesbilanz["done_minutes"], tagesbilanz["remaining"]) == (300, 210, 60, 90), tagesbilanz
+        assert zeile.startswith("frei 1 h 30 min · 1 ohne Schätzung · "), zeile
         # Seit 3.33.6 (D14): an einem anderen Tag „Tagesplan · …“, heute „Heute · …“.
         assert app.get_display_title() == f"Tagesplan · {app.format_plan_day()}"
         assert "05.10.2090" in app.format_plan_day()

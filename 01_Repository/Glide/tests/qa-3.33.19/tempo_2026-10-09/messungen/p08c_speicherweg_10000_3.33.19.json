@@ -1,0 +1,114 @@
+{
+  "werkzeug": "messung_speicherweg.py",
+  "app": "Quellstand 3.33.19 vor dem Versionswechsel",
+  "app_version": "3.33.18",
+  "punkte": 10000,
+  "datei_kb": 10306,
+  "runden_warm": 9,
+  "vergleich_scope": "deklarierte Punktmutation",
+  "umgebung": {
+    "python": "3.14.5",
+    "tk": "9.0.3",
+    "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "prozessor": "arm"
+  },
+  "erstes_speichern_ms": 208.501,
+  "snapshot_undo": {
+    "median_ms": 31.533,
+    "p95_ms": 31.869,
+    "stichproben_ms": [
+      31.533,
+      31.312,
+      31.275,
+      31.289,
+      31.304,
+      31.535,
+      31.706,
+      31.658,
+      31.869
+    ]
+  },
+  "save_items": {
+    "median_ms": 178.432,
+    "p95_ms": 199.929,
+    "stichproben_ms": [
+      178.472,
+      178.432,
+      173.422,
+      199.929,
+      173.892,
+      180.247,
+      178.481,
+      178.172,
+      177.586
+    ]
+  },
+  "history_snapshot": {
+    "median_ms": 36.193,
+    "p95_ms": 87.712,
+    "stichproben_ms": [
+      36.282,
+      36.291,
+      34.757,
+      38.003,
+      36.193,
+      87.712,
+      35.963,
+      35.736,
+      34.163
+    ]
+  },
+  "json_eingerueckt": {
+    "median_ms": 20.834,
+    "p95_ms": 21.403,
+    "stichproben_ms": [
+      20.834,
+      20.669,
+      20.882,
+      20.782,
+      20.821,
+      20.864,
+      20.857,
+      21.403,
+      20.773
+    ]
+  },
+  "json_kompakt": {
+    "median_ms": 19.884,
+    "p95_ms": 20.279,
+    "stichproben_ms": [
+      19.884,
+      19.982,
+      19.886,
+      19.87,
+      19.789,
+      19.795,
+      20.279,
+      19.94,
+      19.818
+    ]
+  },
+  "abhaken_item_change": {
+    "median_ms": 117.509,
+    "p95_ms": 122.861,
+    "stichproben_ms": [
+      115.67,
+      116.534,
+      116.103,
+      117.688,
+      117.564,
+      118.651,
+      122.861,
+      116.453,
+      117.509
+    ]
+  },
+  "verlauf": true,
+  "speicher_kb": {
+    "vorher": 748464,
+    "nach_50_abhaken": 787776,
+    "hinweis": "größter belegter Arbeitsspeicher des Prozesses (ru_maxrss)"
+  },
+  "callbackfehler": [],
+  "bedingung": "Sprintmessung 08./09.10.2026; Strom- und Fenstermodus nicht protokolliert; Zwischenstand des Quellbaums vor dem Versionswechsel"
+}

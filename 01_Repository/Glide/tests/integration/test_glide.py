@@ -99,7 +99,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     app = mod.ListApp(root)
     root.update_idletasks()
 
-    assert mod.APP_VERSION == "3.33.8"
+    assert mod.APP_VERSION == "3.35.0"
     assert (REPOSITORY_ROOT / "VERSION").read_text(encoding="utf-8").strip() == mod.APP_VERSION
     assert len([entry for entry in app.lists if entry.get("system_role") == "inbox"]) == 1
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
@@ -126,7 +126,8 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     )
     assert not app.system_listbox.exists(app.IN_PROGRESS_ROW_ID)
     assert not app.system_listbox.exists("smart:history")
-    assert app.history_button.winfo_manager() == "pack"
+    assert not app.history_button.winfo_manager()
+    assert any("history" in action["id"] for action in app.app_action_entries())
     assert app.SYSTEM_NESTED_VIEWS == ()
     assert app.system_row_depth(("view", "overdue")) == 0
     assert app.system_row_depth(("view", app.PLAN_DAY_VIEW)) == 0
@@ -175,7 +176,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     v7_lists, v7_active = app.normalize_lists_data(v7_fixture)
     assert v7_active == "fixture-list-project"
     # Die beiden festen Labels stehen immer oben und entstehen beim Laden.
-    assert [entry["name"] for entry in app.labels[:2]] == ["Long-Task", "Überschrift"]
+    assert [entry["name"] for entry in app.labels[:2]] == ["Langtext", "Zwischenüberschrift"]
     assert [app.system_label_role(entry) for entry in app.labels[:2]] == ["long", "heading"]
     user_labels = [entry for entry in app.labels if not app.is_system_label(entry)]
     assert [entry["name"] for entry in user_labels] == ["Dringend", "Kunde"]
@@ -251,7 +252,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     finally:
         app.lists, app.trash, app.active_list_id, app.items, app.app_title = _saved_state
 
-    # Format 9 laedt unveraendert weiter: verschachtelte Ordner und ein Long-Task
+    # Format 9 laedt unveraendert weiter: verschachtelte Ordner und ein Langtext
     # mit echten Zeilenumbrüchen.
     v9_fixture = json.loads(
         (REPOSITORY_ROOT / "tests" / "fixtures" / "current_v9" / "reference_v9.json").read_text(encoding="utf-8")
@@ -301,7 +302,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
         "fixture-label-urgent",
         "fixture-label-long",
     ]
-    assert [entry["name"] for entry in app.labels[:2]] == ["Long-Task", "Überschrift"]
+    assert [entry["name"] for entry in app.labels[:2]] == ["Langtext", "Zwischenüberschrift"]
 
     v6_fixture = json.loads(
         (REPOSITORY_ROOT / "tests" / "fixtures" / "current_v6" / "reference_v6.json").read_text(encoding="utf-8")
@@ -311,7 +312,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     assert v6_active == "fixture-list-project"
     # Ein Format-6-Bestand kennt weder eigene Labels noch Papierkorb; die beiden
     # festen Labels ergänzt die Migration.
-    assert [entry["name"] for entry in app.labels] == ["Long-Task", "Überschrift"]
+    assert [entry["name"] for entry in app.labels] == ["Langtext", "Zwischenüberschrift"]
     assert app.trash == []
     assert all(
         item.get("labels") == []
@@ -553,7 +554,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
         assert app.tree.set(context_task["id"], "due") == f"{app.DUE_COLUMN_ICON} 01.09.26"
     # Die Labelspalte steht ganz rechts neben der Fälligkeit und bleibt
     # unsichtbar, solange keine Labels angelegt sind.
-    assert tuple(app.tree.cget("columns")) == ("due", "labels", "due_padding", "text_gap")
+    assert tuple(app.tree.cget("columns")) == ("due", "labels", "due_padding", "text_gap", "source")
     assert tuple(app.tree.cget("displaycolumns")) == ("text_gap", "due", "labels", "due_padding")
     assert int(app.tree.column("due", "width")) == app.active_due_column_width()
     # Die Mindestbreite ist 0, damit die Spalte in einem schmalen Fenster
@@ -945,10 +946,10 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     normal_list["note"] = "Beschreibungstext"
     app.save_items()
     payload = json.loads(pathlib.Path(mod.SAVE_FILE).read_text(encoding="utf-8"))
-    assert payload["version"] == mod.ListApp.DATA_SCHEMA_VERSION == 20
+    assert payload["version"] == mod.ListApp.DATA_SCHEMA_VERSION == 23
     assert payload["lists"][0]["system_role"] == "inbox"
     # Format 7 und 8 ergänzen ausschließlich additive Felder.
-    assert [entry["name"] for entry in payload["labels"]] == ["Long-Task", "Überschrift"]
+    assert [entry["name"] for entry in payload["labels"]] == ["Langtext", "Zwischenüberschrift"]
     assert [entry["system"] for entry in payload["labels"]] == ["long", "heading"]
     assert payload["trash"] == []
     assert all("labels" in item for item in app.walk_items(payload["lists"][0].get("items", [])))
@@ -960,7 +961,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     v6_backup.pop("trash", None)
     app.validate_backup_schema(v6_backup, portable=True)
     v6_migrated_lists, _v6_migrated_active = app.normalize_lists_data(v6_backup)
-    assert [entry["name"] for entry in app.labels] == ["Long-Task", "Überschrift"]
+    assert [entry["name"] for entry in app.labels] == ["Langtext", "Zwischenüberschrift"]
     assert app.trash == []
     assert all(
         item.get("labels") == []
@@ -1777,21 +1778,16 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
         app.LABEL_COLUMN_MIN_TREE_WIDTH - 1
     )
     assert below_labels == 0, below_labels
-    # „Erweitert“ weicht, bevor der Knopf gestaucht wuerde.
+    # Seit 3.33.20 (U04): „+“ statt „Hinzufuegen“, „Erweitert“ nur noch ueber
+    # Umschalt+Enter, Menue und Palette – kein Dauerknopf, bei keiner Breite.
     class _W:
         def __init__(self, width):
             self.width = width
-    app.update_advanced_button_visibility(_W(app.advanced_button_min_width()))
-    assert app._advanced_button_visible is True
-    assert app.advanced_add_button.winfo_manager() == "pack"
-    app.update_advanced_button_visibility(_W(app.advanced_button_min_width() - 1))
-    assert app._advanced_button_visible is False
-    assert app.advanced_add_button.winfo_manager() == ""
-    app.update_advanced_button_visibility(_W(app.advanced_button_min_width()))
-    assert app.advanced_add_button.winfo_manager() == "pack"
-    # Der Knopf steht danach wieder links von „Hinzufuegen“.
-    order = [str(child) for child in app.input_frame.pack_slaves()]
-    assert str(app.advanced_add_button) in order and str(app.add_button) in order
+    for breite in (1, app.ADVANCED_BUTTON_MIN_WIDTH, 2000):
+        app.update_advanced_button_visibility(_W(breite))
+        assert app._advanced_button_visible is False
+        assert app.advanced_add_button.winfo_manager() == ""
+    assert app.add_button.text == "+" and str(app.add_button) in [str(c) for c in app.input_frame.pack_slaves()]
 
     # Die Hinweiszeile folgt derselben Schwelle.
     app.update_hint_visibility(app.LABEL_COLUMN_MIN_TREE_WIDTH)
@@ -1850,8 +1846,8 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     normalized_lists, _normalized_active = app.normalize_lists_data(label_payload)
     # Beim Laden ergaenzt Glide die beiden festen Labels vor den eigenen.
     assert [entry["name"] for entry in app.labels] == [
-        "Long-Task",
-        "Überschrift",
+        "Langtext",
+        "Zwischenüberschrift",
         "Dringend",
         "Kunde",
     ]
@@ -2283,7 +2279,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
         entry["name"] for entry in app.labels if not app.is_system_label(entry)
     ] == labels_before_import
     # Ein Import ohne feste Labels ergaenzt sie, ohne eigene zu verlieren.
-    assert [entry["name"] for entry in app.labels[:2]] == ["Long-Task", "Überschrift"]
+    assert [entry["name"] for entry in app.labels[:2]] == ["Langtext", "Zwischenüberschrift"]
     restored_trash_list = app.trash[0]["list"]
     restored_trash_attachment = restored_trash_list["items"][0]["attachments"][0]
     assert restored_trash_attachment["storage"] != integrity_attachment["storage"]
@@ -2342,25 +2338,25 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
 
 
     # ------------------------------------------------------------------
-    # 2.8.0: Verspaetet, Long-Task, Zwischenueberschrift, Hover, Anlegen
+    # 2.8.0: Verspaetet, Langtext, Zwischenueberschrift, Hover, Anlegen
     # ------------------------------------------------------------------
     app.labels = []
     app.ensure_system_labels()
     long_label = app.get_system_label(app.SYSTEM_LABEL_LONG)
     heading_label = app.get_system_label(app.SYSTEM_LABEL_HEADING)
-    assert long_label["name"] == "Long-Task" and heading_label["name"] == "Überschrift"
+    assert long_label["name"] == "Langtext" and heading_label["name"] == "Zwischenüberschrift"
     assert app.SYSTEM_LABEL_KIND[app.SYSTEM_LABEL_LONG] == app.ITEM_KIND_LONG
     assert app.SYSTEM_LABEL_KIND[app.SYSTEM_LABEL_HEADING] == app.ITEM_KIND_HEADING
     # Ein zweiter Aufruf erzeugt keine Dubletten und stellt die Reihenfolge her.
     app.labels.append(app.new_label_object("Frei", None, "export"))
     assert app.ensure_system_labels() is False
-    assert [entry["name"] for entry in app.labels] == ["Long-Task", "Überschrift", "Frei"]
+    assert [entry["name"] for entry in app.labels] == ["Langtext", "Zwischenüberschrift", "Frei"]
     free_label = app.get_label_by_name("Frei")
 
     # Ein von Hand angelegtes Label desselben Namens wird uebernommen statt verdoppelt.
-    app.labels = [app.new_label_object("Long-Task", None, "delete")]
+    app.labels = [app.new_label_object("Langtext", None, "delete")]
     app.ensure_system_labels()
-    assert len([entry for entry in app.labels if entry["name"] == "Long-Task"]) == 1
+    assert len([entry for entry in app.labels if entry["name"] == "Langtext"]) == 1
     assert app.get_system_label(app.SYSTEM_LABEL_LONG)["color"] == "delete"
 
     app.labels = []
@@ -2419,7 +2415,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     app.items.pop(0)
     app.refresh_tree()
 
-    # Ein Long-Task zeigt seinen vollstaendigen Text ueber mehrere Zeilen.
+    # Ein Langtext zeigt seinen vollstaendigen Text ueber mehrere Zeilen.
     long_task["text"] = (
         "Kernbotschaft in einem einzigen Satz formulieren, der ohne weitere Erklaerung "
         "funktioniert und sowohl im Vertrieb als auch auf der Startseite traegt"
@@ -2507,8 +2503,8 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     page_menu = app._new_themed_popup_menu()
     page_label_menu = app._add_page_label_menu(page_menu, kind_list, "list")
     page_label_names = [entry.strip() for entry in menu_labels(page_label_menu)]
-    assert "Long-Task" not in page_label_names
-    assert "Überschrift" not in page_label_names
+    assert "Langtext" not in page_label_names
+    assert "Zwischenüberschrift" not in page_label_names
     assert "Frei" in page_label_names
     app.toggle_page_label("list", kind_list["id"], long_label["id"])
     assert kind_list.get("labels") in (None, [])
@@ -2671,7 +2667,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
 
 
     # ------------------------------------------------------------------
-    # 2.9.0: verschachtelte Ordner, Long-Task-Details, Bildlaufleisten
+    # 2.9.0: verschachtelte Ordner, Langtext-Details, Bildlaufleisten
     # ------------------------------------------------------------------
     app.folders = []
     app.lists = [entry for entry in app.lists if app.is_inbox_list(entry)]
@@ -2806,7 +2802,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     # Format 9: parent_id wird gespeichert, geprüft und beim Laden bereinigt.
     app.save_items()
     nested_payload = json.loads(pathlib.Path(mod.SAVE_FILE).read_text(encoding="utf-8"))
-    assert nested_payload["version"] == 20
+    assert nested_payload["version"] == 23
     assert all("parent_id" in folder for folder in nested_payload["folders"])
     assert app.validate_backup_schema(nested_payload) == set()
     broken_parent = json.loads(json.dumps(nested_payload))
@@ -2863,7 +2859,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
         next(entry["id"] for entry in app.lists if entry["title"] == "Liste tief")
     )
 
-    # --- Long-Task: eigene Zeilenumbrüche -------------------------------
+    # --- Langtext: eigene Zeilenumbrüche -------------------------------
     assert app.normalize_item_text("Eins\nZwei", app.ITEM_KIND_LONG) == "Eins\nZwei"
     assert app.normalize_item_text("Eins\nZwei", app.ITEM_KIND_TASK) == "Eins Zwei"
     assert app.normalize_item_text("Eins\r\n\n\nZwei  ", app.ITEM_KIND_LONG) == "Eins\nZwei"
@@ -3000,11 +2996,11 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     chip_probe.destroy()
 
     # Alle vier Arten überstehen den TXT-Rundlauf – auch ein einzeiliger
-    # Long-Task, der keine Fortsetzungszeilen mitbringt.
+    # Langtext, der keine Fortsetzungszeilen mitbringt.
     kind_roundtrip = [
         app.new_item("Gewöhnliche Aufgabe"),
-        app.new_item("Einzeiliger Long-Task", kind=app.ITEM_KIND_LONG),
-        app.new_item("Mehrzeiliger\nLong-Task", kind=app.ITEM_KIND_LONG),
+        app.new_item("Einzeiliger Langtext", kind=app.ITEM_KIND_LONG),
+        app.new_item("Mehrzeiliger\nLangtext", kind=app.ITEM_KIND_LONG),
         app.new_item("Zwischenüberschrift", kind=app.ITEM_KIND_HEADING),
         app.new_item("Gruppe", kind=app.ITEM_KIND_GROUP, children=[app.new_item("Kind")]),
         app.new_item("Wichtig und erledigt", importance=3, done=True),
@@ -3017,7 +3013,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     kind_back = app.parse_txt_items(kind_text.splitlines(keepends=True))
     assert [(entry["text"].splitlines()[0], app.item_kind(entry)) for entry in kind_back] == [
         ("Gewöhnliche Aufgabe", app.ITEM_KIND_TASK),
-        ("Einzeiliger Long-Task", app.ITEM_KIND_LONG),
+        ("Einzeiliger Langtext", app.ITEM_KIND_LONG),
         ("Mehrzeiliger", app.ITEM_KIND_LONG),
         ("Zwischenüberschrift", app.ITEM_KIND_HEADING),
         ("Gruppe", app.ITEM_KIND_GROUP),
@@ -3072,7 +3068,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     assert full_due.calendar_button is None
     due_host.destroy()
 
-    # Kopfbereich: Labels stehen rechts unter der Fortschrittszeile und halten
+    # U10: Labels und Fortschritt stehen in der Unterzeile und halten
     # ihre Hoehe, damit der Kopf beim Listenwechsel nicht springt.
     assert app.stats_label.master is app.header_meta
     assert app.page_labels_frame.master is app.header_meta
@@ -3087,15 +3083,14 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     root.update_idletasks()
     height_without_labels = app.page_labels_frame.winfo_reqheight()
     assert height_with_labels == height_without_labels, (height_with_labels, height_without_labels)
-    # Native Schriftmetriken können den angeforderten Textblock um einen Pixel
-    # vom festen Themenschalter unterscheiden (Windows: 43/42). Das ausbleibende
-    # Springen beim Labelwechsel bleibt oben ohne Toleranz geprüft.
+    # Die Unterzeile liegt unter dem Titel; die Kennzahlen konkurrieren nicht
+    # mehr mit dessen Breite. Der Labelwechsel behält oben exakt seine Höhe.
     header_list["labels"] = [picker_labels[0]["id"]]
     app.update_page_labels()
     root.update_idletasks()
-    assert abs(app.header_meta.winfo_reqheight() - app.settings_button.winfo_reqheight()) <= 1, (
-        app.header_meta.winfo_reqheight(), app.settings_button.winfo_reqheight()
-    )
+    assert app.header_meta.master is app.subtitle_row
+    assert app.header_meta.winfo_height() <= app.subtitle_row.winfo_height()
+    assert app.header_meta.winfo_rooty() >= app.title_row.winfo_rooty() + app.title_row.winfo_height()
     header_list["labels"] = saved_header_labels
     app.update_page_labels()
 
@@ -3417,7 +3412,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
         app.inspect_backup_archive(release_archive)
         release_data = json.loads(release_archive.read("data.json"))
     app.validate_backup_schema(release_data, portable=True)
-    assert release_data["version"] == 20
+    assert release_data["version"] == 23
     assert release_data["app_version"] == mod.APP_VERSION
     release_previous = (app.folders, app.labels, app.trash)
     try:

@@ -28,6 +28,7 @@ with tempfile.TemporaryDirectory(prefix='glide-release36-') as tmp, tempfile.Tem
     root = mod.tk.Tk()
     root.withdraw()
     app = mod.ListApp(root)
+    app.confirm_template_preview = lambda template: True
     errors = []
     callback_errors = []
     root.report_callback_exception = lambda *error: callback_errors.append(error)

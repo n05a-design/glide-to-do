@@ -1,6 +1,6 @@
 # Systembenachrichtigungen für Erinnerungen – Entscheidung
 
-Stand: 05.10.2026 · Glide 3.33.8, Stufe B als Option umgesetzt (Tk 9, standardmäßig aus) · Ausgangspunkt: Glide 3.8.0, erste lokale Erinnerungsstufe.
+Stand: 09.10.2026 · Glide 3.35.0, Stufe B als Option umgesetzt (Tk 9, standardmäßig aus) · Ausgangspunkt: Glide 3.8.0, erste lokale Erinnerungsstufe.
 Diese Entscheidung ist nach Regel 4 der [Arbeitsregeln](../../AGENTS.md) nötig,
 bevor ein Hilfsprozess, ein Autostart oder eine neue Abhängigkeit entsteht.
 
@@ -10,15 +10,10 @@ bevor ein Hilfsprozess, ein Autostart oder eine neue Abhängigkeit entsteht.
 |---|---|---|
 | App läuft, Fenster sichtbar | Hinweis in der App – **vorhanden seit 3.8.0** | keine |
 | App läuft, Fenster verdeckt oder minimiert | Aufmerksamkeit über Taskleiste/Dock und Statuszeile | Stufe A, reiner App-Code |
-| App läuft, echte Systembenachrichtigung mit Glide-Namen | Mitteilungszentrale von macOS bzw. Windows | **Stufe B, setzt Paketierung voraus** |
+| App läuft, Systembenachrichtigung eingeschaltet | Mitteilungszentrale bzw. Infobereich; angezeigter App-Name hängt vom Startweg ab | **Stufe B seit 27.09.2026 als Tk-9-Option umgesetzt**; native Zustellung und Glide-Benennung offen |
 | App beendet, abgemeldet, Ruhezustand, Gerät aus | keine Zustellung; verpasste Termine erscheinen gesammelt nach dem Start | bewusst nicht umgesetzt |
 
-Der entscheidende Befund: **Eine Systembenachrichtigung, die als „Glide"
-erscheint, ist kein Feature des Anwendungscodes, sondern eine Folge der
-Paketierung.** Beide Zielplattformen verlangen dafür eine installierte,
-beim Betriebssystem registrierte Anwendung. Das koppelt Stufe B an das
-Installer- und Signierungsthema, das im [QA-Bericht](../07_QA_BERICHT.md)
-ohnehin offen steht.
+Stufe B ist als standardmäßig ausgeschaltete Option im App-Code vorhanden. Die native Zustellung unter dem Namen „Glide“ ist eine zusätzliche Paket- und Plattformabnahme: feste Kennungen stehen im [Produktregister](PRODUCT_IDENTITY.md), Installer und Signierung bleiben in der [Veröffentlichung](../10_VEROEFFENTLICHUNG.md) offen. Aus Python gestartet erscheinen macOS-Mitteilungen unter „Python“; die Bundle-Benennung ist am echten Gerät zu prüfen.
 
 ## Warum der naheliegende Weg nicht trägt
 
@@ -94,8 +89,7 @@ bleibt in der Oberfläche sichtbar, wie sie es seit 3.8.0 ist.
 
 ### Stufe B – Echte Systembenachrichtigung (an Paketierung gekoppelt)
 
-Wird erst umgesetzt, wenn es ein Windows-Installationspaket mit
-Startmenü-Verknüpfung und ein macOS-`.app`-Bundle gibt. Dann gilt:
+**Ursprünglicher Paketierungsplan vor der Umsetzung am 27.09.2026:** Die Glide-Benennung sollte mit Windows-Startmenü-Verknüpfung und macOS-`.app`-Bundle geprüft werden. Die Tk-9-Option ist inzwischen im App-Code umgesetzt (unten); die native Paketabnahme bleibt offen. Dafür gilt:
 
 - eine feste AppUserModelID bzw. ein fester Bundle-Identifikator,
   abgestimmt mit [PRODUCT_IDENTITY](PRODUCT_IDENTITY.md);
@@ -164,17 +158,7 @@ Regel brechen, dass Glide ohne Zusatzinstallation lauffähig bleibt.
 
 ## Auswirkung auf die Reihenfolge
 
-Die historischen Funktionsvorschläge vom 16.09.2026
-nannten Systembenachrichtigungen als nächsten Ausbauschritt. Nach diesem Befund
-zerfällt der Schritt in einen kleinen Teil im Anwendungscode (Stufe A) und
-einen, der am Installer hängt (Stufe B). Vorgeschlagen wird deshalb:
-
-1. Stufe A umsetzen und nativ abnehmen – **umgesetzt am 12.09.2026**; die
-   Sichtabnahme auf beiden Plattformen steht aus, für macOS insbesondere die
-   tatsächliche Dock-Wirkung.
-2. Reiteransicht – **umgesetzt in 3.10.0**; sie hing an
-   keiner Paketierung.
-3. Stufe B gemeinsam mit Installer und Signierung planen, nicht davor.
+Stufe A ist seit 12.09.2026 umgesetzt, die Reiteransicht seit 3.10.0. Stufe B ist seit 27.09.2026 als Tk-9-Option vorhanden und wartet weiterhin auf die native Zustell- und Benennungsprüfung. Installer, Signierung und die Prüfung des Glide-Namens bleiben eigene Veröffentlichungsschritte; sie sind keine Voraussetzung für die bereits verfügbare Option. Stufe C bleibt bewusst ausgeschlossen. Automatische Integrationsprüfungen ersetzen die tatsächliche Anzeige in Mitteilungszentrale, Dock oder Infobereich nicht.
 
 ## Prüfkriterien
 

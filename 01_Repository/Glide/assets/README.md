@@ -1,6 +1,6 @@
 # Assets
 
-Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
 
 Hier liegen Installer- und Paketierungs-Assets, die reproduzierbar aus den
 freigegebenen Mastern in `20_Grafik_Master` entstehen. Laufzeitgrafiken

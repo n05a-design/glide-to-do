@@ -1,9 +1,0 @@
-{
-  "python": "3.14.8",
-  "tk": "9.0.4",
-  "plattform": "Windows x64",
-  "quelle": "https://www.python.org/ftp/python/3.14.8/python-3.14.8-amd64.zip",
-  "sha256": "4873947a8afc037846b180312b83c744a4146a851cfd316a75c3125a4d8299da",
-  "ablage": "%USERPROFILE%/.cache/glide-qa/python-3.14.8/runtime",
-  "standardinstallation_geaendert": false
-}

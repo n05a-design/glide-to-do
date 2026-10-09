@@ -1,6 +1,6 @@
 # Anwendungskern
 
-Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
 
 `app.pyw` ist die kanonische Anwendung (Klasse `ListApp`). Daneben liegen Module, die beim Start aus demselben Ordner geladen werden und beim Kopieren oder Paketieren immer mitgehen:
 
@@ -21,6 +21,27 @@ Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · Einstellungen 2 · Vorl
 | `eisenhower.py` | Quadranten „Dringlichkeit × Wichtigkeit“ (Tk-frei) |
 | `today_view.py` | Aufteilung der Ansicht „Heute“ (Tk-frei) |
 | `content_search.py` | Inhaltssuche und Trefferausschnitte (Tk-frei) |
+| `save_comparison.py` | Gemeinsamer Vergleich für Verlauf, Listenänderung und Aktivität (Tk-frei, P08a) |
+| `view_metrics.py` | Datumslesen, Fälligkeitsstatus, Fortschritt und Kennzahlen sowie Zeilenhöhenformel (Tk-frei, P09b) |
+| `action_catalog.py` | Stabile Aktionskennungen, Gruppen und virtuelle Editorbefehle (Tk-frei) |
+| `ui_design.py` | Gemeinsame Abstände, Radien, Schriftgrößen und Zeilenhöhen; Titel-/Herkunftsbreiten (Tk-frei, OB01/U10/U19) |
+| `planning.py` | Bearbeitungstagsziele, Wochentagskapazität, Bilanz und Vorschau (Tk-frei, KO01/AU02) |
+| `day_proposal.py` | Erklärbare Tagesauswahl, Budget und Prüfung veralteter Vorschläge (Tk-frei, AU01) |
+| `focus_timer.py` | Pausierbarer Fokus und genau einmal gebuchte Zeit (Tk-frei, G05/AU05) |
+| `task_references.py` | Heimat und Textverweise, Quellenindex, Zielzustand, ID-Neuvergabe und bearbeitete Zeilentitel ohne Tk |
+| `interaction_policy.py` | Palettensuche, gemerkte Hinweise und getrennte Datumsanzeige (Tk-frei) |
+| `object_references.py` | Typisierte lokale Verweise, abgeleitete Rückverweise und Import-/Kopierregeln (Tk-frei) |
+| `week_planning.py` | Gemeinsame Wochenbilanz und Zeitfenster aus vorhandenen Glide-Blöcken (Tk-frei) |
+| `page_features.py` | Live-Listen, Titelbilder und gefüllte Vorlagenvorschau (Tk-frei) |
+| `repeat_rules.py` | Wiederholungsregeln, Termin überspringen, verpasste Termine überspringen (Tk-frei, KO02) |
+| `routines.py` | Routinen in „Heute“: Auswahl, Fortschritt, heute erledigt (Tk-frei, AU06) |
+| `runtime_check.py` | Mindestversion Python/Tk vor dem Start, in einfacher Syntax (AB08) |
+| `release_notes.py` | Katalog und Regeln der Karte „Neu in …“ (Tk-frei, N07) |
+| `appearance.py` | Designpaar und Erkennung des Systemmodus für „Automatisch hell/dunkel“ (Tk-frei, N01) |
+| `preview_tools.py` | Systemwerkzeuge für Bildvorschauen unter Linux, JPEG-Größe (Tk-frei, N08) |
+| `filter_explain.py` | Bedingungen gespeicherter Filter prüfen und erklären (Tk-frei, D-03) |
+| `exchange_patch.py` | KI-Austausch Stufe 2: Kontextpaket, Änderungsvorschlag prüfen, Konflikte (Tk-frei, G24) |
+| `backup_diff.py` | Zwei Datenstände vergleichen, nur lesend (Tk-frei, F-03) |
 
 Die Tk-freien Fachmodule entstehen nach D17 und haben Unit-Tests unter `tests/unit`. `drawing_prototype.pyw` ist die isolierte Bedienprobe der Zeichenfläche und gehört nicht zur App.
 

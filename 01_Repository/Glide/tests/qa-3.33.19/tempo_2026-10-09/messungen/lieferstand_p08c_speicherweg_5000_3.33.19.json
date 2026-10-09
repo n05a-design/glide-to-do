@@ -1,0 +1,114 @@
+{
+  "werkzeug": "messung_speicherweg.py",
+  "app": "Lieferstand 3.33.19 (eingefrorene Kopie)",
+  "app_version": "3.33.19",
+  "punkte": 5000,
+  "datei_kb": 5150,
+  "runden_warm": 9,
+  "vergleich_scope": "Vollvergleich",
+  "umgebung": {
+    "python": "3.14.5",
+    "tk": "9.0.3",
+    "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "prozessor": "arm"
+  },
+  "erstes_speichern_ms": 114.102,
+  "snapshot_undo": {
+    "median_ms": 17.974,
+    "p95_ms": 19.033,
+    "stichproben_ms": [
+      19.033,
+      17.892,
+      17.945,
+      18.498,
+      17.841,
+      18.085,
+      17.435,
+      17.992,
+      17.974
+    ]
+  },
+  "save_items": {
+    "median_ms": 93.575,
+    "p95_ms": 107.022,
+    "stichproben_ms": [
+      90.81,
+      89.516,
+      91.67,
+      89.309,
+      94.627,
+      93.575,
+      95.686,
+      96.605,
+      107.022
+    ]
+  },
+  "history_snapshot": {
+    "median_ms": 20.713,
+    "p95_ms": 44.664,
+    "stichproben_ms": [
+      20.713,
+      23.084,
+      20.716,
+      20.469,
+      44.664,
+      20.065,
+      22.356,
+      20.026,
+      19.302
+    ]
+  },
+  "json_eingerueckt": {
+    "median_ms": 11.932,
+    "p95_ms": 12.51,
+    "stichproben_ms": [
+      11.563,
+      10.35,
+      10.559,
+      11.184,
+      11.997,
+      11.932,
+      12.51,
+      12.311,
+      12.467
+    ]
+  },
+  "json_kompakt": {
+    "median_ms": 11.353,
+    "p95_ms": 11.935,
+    "stichproben_ms": [
+      11.935,
+      11.353,
+      11.8,
+      10.945,
+      10.675,
+      11.411,
+      11.215,
+      11.392,
+      10.842
+    ]
+  },
+  "abhaken_item_change": {
+    "median_ms": 119.047,
+    "p95_ms": 122.338,
+    "stichproben_ms": [
+      114.269,
+      122.338,
+      119.966,
+      118.244,
+      119.274,
+      116.197,
+      119.047,
+      120.343,
+      111.879
+    ]
+  },
+  "verlauf": true,
+  "speicher_kb": {
+    "vorher": 478944,
+    "nach_50_abhaken": 616096,
+    "hinweis": "größter belegter Arbeitsspeicher des Prozesses (ru_maxrss)"
+  },
+  "callbackfehler": [],
+  "bedingung": "Akkubetrieb, macOS-Hintergrundmodus (GLIDE_QA_HINTERGRUND)"
+}

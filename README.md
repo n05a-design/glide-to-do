@@ -8,9 +8,9 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 
 ## Stand
 
-- **Entwicklungsstand 3.33.8 vom 05.10.2026**, Datenformat 20.
-- **Aktueller Schnitt:** Inhaltssuche und Windows-Formatsicherung; automatische Windows-Prüfung und Python-Lieferung im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md). Referenz-Mac und neues macOS-Bundle bleiben offen; keine Releasefassung.
-- **Offen:** Signatur, Markenprüfung, Store und die manuelle Abnahme unter Windows, Linux, DPI-Skalierung und Bildschirmleser.
+- **Entwicklungsstand 3.35.0 vom 08.10.2026**, Datenformat 23.
+- **Aktuelles Paket 3.33.18 – Seiten im Alltag:** Live-Listen mit Originalaufgaben, Titelbilder für Seiten und Bibliothekskarten sowie gefüllte Vorlagenvorschau beim Anlegen. Windows-Vollprüfung und strenge CI grün; Python und Showcase bytegleich geliefert. Wochenplanung, lokale Verweise/Rückverweise und die gemeinsame Befehlspalette aus 3.33.16/3.33.17 sind ebenfalls enthalten. Format 23 mit bytegenauer Vorsicherung und Schreibschutz in der unveränderten 3.33.17. Native Mac-/Linux- und menschliche Abnahme offen. Einzelheiten und Zahlen im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md); weitere Arbeit in der [Paketfolge](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#44-größere-umsetzungspakete-auftrag-07102026).
+- **Offen:** Lizenz, Signatur, Markenprüfung, Store und die manuelle Abnahme unter Windows, Linux, DPI-Skalierung und Bildschirmleser.
 - **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe; Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 
 ## Schnellstart
@@ -27,9 +27,9 @@ Unter Windows: `python 07_Python-Versionen\Schnellstart.pyw`. Weitere Startwege 
 
 ## Was Glide kann
 
-- **Planen:** Aufgaben mit Unterpunkten, Checklisten, Fälligkeit und Bearbeitungstag, Wiederholungen, Erinnerungen, Wichtigkeit, Labels, Aufwand und Zeiterfassung; „Heute“ und „Demnächst“ mit Stundenraster, Kapazität, Tagesbeginn, Tagesabschluss und Wochenrückblick; Schnelleingabe in Alltagssprache mit Feldchips.
+- **Planen:** Aufgaben mit Unterpunkten, Checklisten, Fälligkeit und Bearbeitungstag, Wiederholungen, Erinnerungen, Wichtigkeit, Labels, Aufwand und Zeiterfassung; „Heute“ und „Demnächst“ mit Stundenraster, eingebetteter Wochen-/Monatsplanung, Kapazität, Tagesbeginn, Tagesabschluss und Wochenrückblick; Schnelleingabe in Alltagssprache mit Feldchips.
 - **Ansichten:** Liste, Tabelle, Kalender, Karten, Spaltenboard und Pinnwand auf demselben Bestand; Gruppieren nach Feld einschließlich Eisenhower; Pinnwand mit Bereichen, Verbindungen und Präsentation; Startseite „Ruhig“ zum Anpassen.
-- **Wissen:** Seiten mit Markdown, Bildern und echten Aufgaben, Notizen, Notizbücher, Bücher und Galerien; Suche über Seiten, Punkte und Befehle (Strg/Cmd+O).
+- **Wissen:** Seiten mit Markdown, Bildern, Titelbildern, echten Aufgaben und eingebetteten Live-Listen; Notizen, Notizbücher, Bücher und Galerien; lokale Verweise und Rückverweise; gemeinsame Suche und Befehlspalette (Strg/Cmd+O).
 - **Pixel-Werkstatt:** Zeichnungen mit 16–128 Zellen, Formen, Symmetrie, Mustern, Paletten, PNG- und ICO-Export, Pixelsymbole.
 - **Daten:** atomares Speichern, Sicherungen nur bei Änderung, Vorsicherung je Formatstufe, Tagesstände; Voll-, Teil- und App-Backup, Vorlagen, CSV, Markdown, ICS, Austauschformat für KI; Rückgängig für alles.
 - **Gestaltung:** zehn Designs mit Kontrast nach WCAG AA, Hell/Dunkel, Akzentfarben und Hintergrundverläufe; Mindestgröße 860 × 700.

@@ -149,8 +149,9 @@ with tempfile.TemporaryDirectory(prefix="glide-workspace310-") as folder:
             for child in widget.winfo_children():
                 yield child
                 yield from descendants(child)
-        field = next(widget for widget in descendants(w.body) if isinstance(widget, mod.AppOptionMenu)
-                     and "Frei anordnen" in widget.options)
+        # Seit 3.33.21 (U09) steht „Anordnung“ in der Schalterzeile über der Fläche.
+        field = next(widget for widget in list(descendants(w.bar)) + list(descendants(w.body))
+                     if isinstance(widget, mod.AppOptionMenu) and "Frei anordnen" in widget.options)
         field._open_popup(); root.update()
         field._choices.event_generate("<End>")
         field._choices.event_generate("<Return>"); root.update()
@@ -179,6 +180,10 @@ with tempfile.TemporaryDirectory(prefix="glide-workspace310-") as folder:
         assert w.card_boxes[target["id"]][0] < 1000
         assert all(card["x"] < 3000 and card["y"] < 8000 for card in w.board()["cards"])
         w.focus_card(target["id"])
+        # Nach einem Fensterwechsel übernimmt Tk den Fokus asynchron. Erst
+        # nach dessen Zustellung prüft Entf die tatsächliche Pinnwandbindung.
+        root.update()
+        assert root.focus_get() == w.canvas, "Pinnwand muss vor Entf den Tastaturfokus besitzen"
         w.canvas.event_generate("<Delete>"); root.update()
         assert target["id"] not in w.card_ids
         assert app.find_item_in_lists(target["id"])

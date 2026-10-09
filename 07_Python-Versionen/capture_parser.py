@@ -7,6 +7,13 @@ Fälligkeit – auch in „/“-Befehlen. Eine Wiederholung setzt die Fälligkei
 ihren ersten Termin, damit sie im Kalender steht (Entscheidung 02.10.2026). Jede Erkennung kommt mit ihrer Textstelle zurück, damit
 die Oberfläche sie vor dem Speichern zeigen und einzeln zurücknehmen kann.
 Text in Anführungszeichen bleibt wörtlich und behält seine Zeichen.
+
+Seit 3.33.20 (KO03) erkennt die Eingabe auch eine Erinnerung: „erinnere 9 Uhr“,
+„Erinnerung morgen 14:30“, „erinnern 30 min vorher“, „/erinnern bei Fälligkeit“.
+Was nach dem Auslösewort steht, gehört zur Erinnerung und setzt weder
+Bearbeitungstag noch Fälligkeit. Ein Vorlauf braucht eine Fälligkeit; fehlt sie,
+bleibt der Text stehen und der Chip sagt warum. Erinnerungen werden nur bei
+laufender Glide zugestellt (Produktgrenze); der Chip nennt das.
 """
 import re
 from datetime import date, datetime, timedelta
@@ -40,8 +47,14 @@ SLASH_COMMANDS = (
     ("wichtig", "Wichtigkeit hoch"), ("hoch", "Wichtigkeit hoch"), ("mittel", "Wichtigkeit mittel"),
     ("niedrig", "Wichtigkeit niedrig"),
     ("meintag", "für heute einplanen (Ansicht „Heute“)"),
+    ("erinnern", "Erinnerung, z. B. /erinnern 9:00 oder /erinnern 30 min vorher"),
 )
 SLASH_IMPORTANCE = {"wichtig": 3, "hoch": 3, "mittel": 2, "niedrig": 1}
+# Auslösewörter einer Erinnerung (KO03). „Erinnerung an …“ ohne Zeitangabe
+# bleibt gewöhnlicher Text.
+REMINDER_WORDS = ("erinnern", "erinnere", "erinnerung", "erinner")
+REMINDER_NOTE = "nur bei laufender Glide"
+REMINDER_MAX_MINUTES = 525600
 
 
 def parse_capture_due(value, today=None):
@@ -326,6 +339,47 @@ def _wiederholung(woerter, i, today):
     return None
 
 
+def _erinnerung(woerter, i, today):
+    """Erinnerung ab Wort i (nach dem Auslösewort).
+
+    Liefert (Anzahl Wörter, Felder) oder None. Fest: {"mode": "fixed", "day":
+    ISO oder None, "time": "HH:MM"}; der Tag fehlt, wenn keiner genannt ist –
+    dann gilt der Bearbeitungstag, sonst die Fälligkeit, sonst heute. Vorlauf:
+    {"mode": "relative", "minutes": N}.
+    """
+    if i >= len(woerter):
+        return None
+    w = [wort.wort for wort in woerter[i:i + 6]]
+    if w[:2] in (["bei", "fälligkeit"], ["bei", "faelligkeit"], ["zur", "fälligkeit"], ["zur", "faelligkeit"]):
+        return 2, {"mode": "relative", "minutes": 0}
+    # Vorlauf: „30 min vorher“, „1 Std. vorher“, „2h vorher“, „einen Tag vorher“.
+    menge, n = None, 0
+    if (teile := re.fullmatch(r"(\d{1,4})(min|h|std)", w[0])):
+        menge, einheit, n = int(teile[1]), teile[2], 1
+    elif len(w) > 1:
+        zahl = 1 if w[0] in ("einen", "eine", "einer") else int(w[0]) if re.fullmatch(r"\d{1,4}", w[0]) else None
+        if zahl is not None:
+            menge, einheit, n = zahl, w[1], 2
+    if menge is not None and n < len(w) and w[n] == "vorher":
+        faktor = (1 if re.fullmatch(r"min|minute|minuten", einheit) else
+                  60 if re.fullmatch(r"h|std|stunde|stunden", einheit) else
+                  1440 if re.fullmatch(r"tag|tage|tagen", einheit) else None)
+        if faktor and 0 <= menge * faktor <= REMINDER_MAX_MINUTES:
+            return n + 1, {"mode": "relative", "minutes": menge * faktor}
+        return None
+    # Fester Zeitpunkt: optional ein Tag, dann eine Uhrzeit („um 9“ genügt hier).
+    n, tag = 0, None
+    if (datum := _datum(woerter, i, today)):
+        n, tag = datum[0], datum[1]
+    if (zeit := _zeit(woerter, i + n)):
+        return n + zeit[0], {"mode": "fixed", "day": tag.isoformat() if tag else None, "time": zeit[1]}
+    if (i + n + 1 < len(woerter) and woerter[i + n].wort == "um"
+            and re.fullmatch(r"\d{1,2}", woerter[i + n + 1].wort) and int(woerter[i + n + 1].wort) <= 23):
+        return n + 2, {"mode": "fixed", "day": tag.isoformat() if tag else None,
+                       "time": f"{int(woerter[i + n + 1].wort):02d}:00"}
+    return None
+
+
 def parse_capture(text, labels=(), today=None, ignore=()):
     """Zerlegt eine Eingabezeile in Titel, Felder und erkannte Teile.
 
@@ -355,7 +409,13 @@ def parse_capture(text, labels=(), today=None, ignore=()):
     while i < len(woerter):
         wort = woerter[i].wort
         verbraucht = None
-        if wort.startswith("/") and len(wort) > 1:
+        if (wort in REMINDER_WORDS or wort == "/erinnern") and "erinnerung" not in belegt:
+            if (erinnerung := _erinnerung(woerter, i + 1, today)):
+                verbraucht = neu(i, 1 + erinnerung[0], {"reminder": erinnerung[1]}, "Erinnerung", "erinnerung",
+                                 datum_ende=True)
+        if verbraucht is not None:
+            pass
+        elif wort.startswith("/") and len(wort) > 1:
             befehl = wort[1:]
             if befehl in ("bis", "fällig", "faellig") and "faellig" not in belegt:
                 if (datum := _datum(woerter, i + 1, today)):
@@ -449,6 +509,30 @@ def parse_capture(text, labels=(), today=None, ignore=()):
                 felder["labels"] += [v for v in value if v not in felder["labels"]]
             else:
                 felder.setdefault(key, value)
+    # Erinnerung (KO03): fester Tag aus Bearbeitungstag, Fälligkeit oder heute;
+    # ein Vorlauf ohne Fälligkeit wirkt nicht und bleibt deshalb Text.
+    hinweise = []
+    if "reminder" in felder:
+        erinnerung = dict(felder["reminder"])
+        teil = next(t for t, a in teile if a == "erinnerung")
+        if erinnerung["mode"] == "fixed":
+            erinnerung["day"] = erinnerung["day"] or felder.get("planned_date") or felder.get("due") or today.isoformat()
+            text_chip = f"Erinnerung {format_day(erinnerung['day'])} {erinnerung['time']} · {REMINDER_NOTE}"
+            felder["reminder"] = erinnerung
+            teile = [((t._replace(felder={"reminder": erinnerung}, text=text_chip)) if a == "erinnerung" else t, a)
+                     for t, a in teile]
+        elif "due" not in felder:
+            del felder["reminder"]
+            hinweis = teil._replace(felder={}, text="Erinnerung mit Vorlauf braucht eine Fälligkeit – bleibt Text")
+            hinweise.append(hinweis)
+            teile = [(t, a) for t, a in teile if a != "erinnerung"]
+        else:
+            minuten = erinnerung["minutes"]
+            vorlauf = ("bei Fälligkeit" if not minuten else
+                       f"{minuten // 1440} Tag(e) vor Fälligkeit" if minuten % 1440 == 0 else
+                       f"{format_minutes(minuten)} vor Fälligkeit")
+            teile = [((t._replace(text=f"Erinnerung {vorlauf} · {REMINDER_NOTE}")) if a == "erinnerung" else t, a)
+                     for t, a in teile]
     # Eine Uhrzeit ohne eigenes Datum hängt am Bearbeitungstag – ohne ihn gilt heute.
     ergebnis_teile = []
     for teil, art in teile:
@@ -460,7 +544,8 @@ def parse_capture(text, labels=(), today=None, ignore=()):
                 teil = teil._replace(text=f"{teil.text} (heute)")
         ergebnis_teile.append(teil)
     titel = _titel(text, [t for t in ergebnis_teile])
-    return Erfassung(titel, felder, tuple(sorted(ergebnis_teile, key=lambda t: t.start)))
+    # Hinweise sind Chips ohne Wirkung: Ihr Text bleibt im Titel.
+    return Erfassung(titel, felder, tuple(sorted(ergebnis_teile + hinweise, key=lambda t: t.start)))
 
 
 def _beschreibung(art, iso, zeit=None):
@@ -482,3 +567,33 @@ def _titel(text, teile):
     rest.append(text[pos:])
     titel = " ".join("".join(rest).split())
     return titel.strip(" ,;:-")
+
+
+# --- Mehrzeiliges Einfügen in die Eingabezeile (KO05 seit 3.33.20) ---------
+MAX_PASTE_LINES = 200
+_AUFZAEHLUNG = re.compile(r"^(?:[-*•–—+]|\d{1,3}[.)]|[a-zA-Z][)])\s+")
+_KAESTCHEN = re.compile(r"^\[\s*([xX✓])?\s*\]\s*")
+
+
+def split_capture_lines(text, limit=MAX_PASTE_LINES):
+    """Zerlegt eingefügten Text in Aufgabenzeilen.
+
+    Aufzählungszeichen, Nummern und Kästchen (`- [ ]`, `[x]`) am Zeilenanfang
+    entfallen; ein abgehaktes Kästchen markiert die Zeile als erledigt. Leere
+    Zeilen werden übersprungen, Leerraum zusammengezogen. Liefert (Zeilen,
+    abgeschnitten); jede Zeile ist {"text": …, "done": bool}.
+    """
+    zeilen = []
+    for roh in str(text or "").splitlines():
+        zeile = " ".join(roh.split())
+        if not zeile:
+            continue
+        zeile = _AUFZAEHLUNG.sub("", zeile, count=1)
+        erledigt = False
+        if (kaestchen := _KAESTCHEN.match(zeile)):
+            erledigt = bool(kaestchen.group(1))
+            zeile = zeile[kaestchen.end():]
+        zeile = zeile.strip()
+        if zeile:
+            zeilen.append({"text": zeile, "done": erledigt})
+    return zeilen[:limit], len(zeilen) > limit

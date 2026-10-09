@@ -1,0 +1,147 @@
+{
+  "version": "3.33.18",
+  "umgebung": {
+    "python": "3.14.5",
+    "tk": "9.0.3",
+    "fenstersystem": "aqua",
+    "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "schriftfamilien": 222,
+    "tk_version": 9.0
+  },
+  "aufgaben": 200,
+  "ergebnis": [
+    {
+      "aktion": "Aufgabe anlegen (Eingabezeile)",
+      "save_items": 1,
+      "save_settings": 1,
+      "_update_sidebar_list": 1,
+      "_refresh_tree": 1,
+      "datei_daten": 1,
+      "datei_einstellungen": 1,
+      "datei_sperre": 2
+    },
+    {
+      "aktion": "Abhaken",
+      "save_items": 1,
+      "save_settings": 3,
+      "_update_sidebar_list": 1,
+      "_refresh_tree": 1,
+      "datei_daten": 1,
+      "datei_einstellungen": 3,
+      "datei_sperre": 3
+    },
+    {
+      "aktion": "Wichtigkeit setzen",
+      "save_items": 1,
+      "save_settings": 2,
+      "_update_sidebar_list": 1,
+      "_refresh_tree": 1,
+      "datei_daten": 1,
+      "datei_einstellungen": 2,
+      "datei_sperre": 2
+    },
+    {
+      "aktion": "Einplanen morgen",
+      "save_items": 1,
+      "save_settings": 2,
+      "_update_sidebar_list": 1,
+      "_refresh_tree": 1,
+      "datei_daten": 1,
+      "datei_einstellungen": 2,
+      "datei_sperre": 2
+    },
+    {
+      "aktion": "Aufgabe löschen",
+      "save_items": 1,
+      "save_settings": 1,
+      "_update_sidebar_list": 1,
+      "_refresh_tree": 1,
+      "datei_daten": 1,
+      "datei_einstellungen": 1,
+      "datei_sperre": 2
+    },
+    {
+      "aktion": "Rückgängig",
+      "save_items": 1,
+      "save_settings": 2,
+      "_update_sidebar_list": 2,
+      "_refresh_tree": 1,
+      "datei_daten": 1,
+      "datei_einstellungen": 2,
+      "datei_sperre": 2
+    },
+    {
+      "aktion": "Liste umbenennen",
+      "save_items": 1,
+      "save_settings": 1,
+      "_update_sidebar_list": 2,
+      "_refresh_tree": 1,
+      "datei_daten": 1,
+      "datei_einstellungen": 1,
+      "datei_sperre": 2
+    },
+    {
+      "aktion": "Liste archivieren",
+      "save_items": 1,
+      "save_settings": 1,
+      "_update_sidebar_list": 2,
+      "_refresh_tree": 1,
+      "datei_daten": 1,
+      "datei_einstellungen": 1,
+      "datei_sperre": 2
+    },
+    {
+      "aktion": "Liste zurückholen",
+      "save_items": 1,
+      "save_settings": 2,
+      "_update_sidebar_list": 2,
+      "_refresh_tree": 1,
+      "datei_daten": 1,
+      "datei_einstellungen": 2,
+      "datei_sperre": 2
+    },
+    {
+      "aktion": "Liste duplizieren",
+      "save_items": 1,
+      "save_settings": 4,
+      "_update_sidebar_list": 3,
+      "_refresh_tree": 2,
+      "datei_daten": 1,
+      "datei_einstellungen": 4,
+      "datei_sperre": 2
+    },
+    {
+      "aktion": "Liste in Ordner",
+      "save_items": 1,
+      "save_settings": 2,
+      "_update_sidebar_list": 2,
+      "_refresh_tree": 0,
+      "datei_daten": 1,
+      "datei_einstellungen": 2,
+      "datei_sperre": 2
+    },
+    {
+      "aktion": "Liste löschen",
+      "save_items": 1,
+      "save_settings": 3,
+      "_update_sidebar_list": 2,
+      "_refresh_tree": 1,
+      "datei_daten": 1,
+      "datei_einstellungen": 3,
+      "datei_sperre": 2
+    },
+    {
+      "aktion": "Papierkorb leeren",
+      "save_items": 1,
+      "save_settings": 0,
+      "_update_sidebar_list": 2,
+      "_refresh_tree": 1,
+      "datei_daten": 1,
+      "datei_einstellungen": 0,
+      "datei_sperre": 2
+    }
+  ],
+  "callbackfehler": [],
+  "fehlerprotokoll": "",
+  "bedingung": "Akkubetrieb, macOS-Hintergrundmodus (GLIDE_QA_HINTERGRUND)"
+}

@@ -1,6 +1,6 @@
 # Grafik-Master
 
-Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · Einstellungen 2 · Vorlagen 2
+Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
 
 Hier liegen die Quellen des Glide-Logos und alle freigegebenen Exporte. Glide
 selbst und die Paketierung arbeiten mit **Kopien** daraus (siehe unten). Wer
@@ -18,7 +18,7 @@ einen Master ändert, erneuert danach die Kopien.
 
 Glide-Blau ist `rgb(1,133,225)` = `#0185E1`. Ein Archivordner entfällt seit 03.10.2026: Vorfassungen trägt Git.
 
-**Rechte (öffentliches Repository):** `05_Inspiration` und `06_Beispielbilder` enthalten auch Fremdbilder aus Bildagenturen und Webquellen. Vor einer Veröffentlichung klären, ob sie öffentlich liegen dürfen; sonst entfernen (offen beim Inhaber, siehe [Übergabe](../00_Arbeitsvorbereitung/Glide_Uebergabe.md)).
+**Rechte (öffentliches Repository):** `05_Inspiration` und `06_Beispielbilder` enthalten auch Fremdbilder aus Bildagenturen und Webquellen. Vor einer Veröffentlichung klären, ob sie öffentlich liegen dürfen; sonst entfernen (offen beim Inhaber als I9, siehe [Entwicklungsplan](../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber)).
 
 ## Was die App daraus macht (seit 29.09.2026)
 

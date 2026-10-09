@@ -1,0 +1,62 @@
+{
+  "version": "3.33.18",
+  "source_sha256": "1f2cdbe6f009d8ebb0a785d2088f1915bddc5e219a10b79d6cd54976e2e31e74",
+  "python": "3.14.5",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "tk": "9.0.3",
+  "profiling": false,
+  "fixture": {
+    "tasks": 1000,
+    "lists": 12,
+    "drawings": 3,
+    "pinned": 2,
+    "window": "1400x950",
+    "idle_rounds": 3,
+    "kacheln": "d12",
+    "sichtbare_kacheln": [
+      "mascot",
+      "today",
+      "week",
+      "recent",
+      "boardpreview",
+      "drawings",
+      "pinned"
+    ]
+  },
+  "warm_rounds": 9,
+  "wechsel": {
+    "median_ms": 561.073,
+    "p95_ms": 595.975,
+    "stichproben_ms": [
+      568.822,
+      556.21,
+      551.564,
+      550.053,
+      595.975,
+      552.75,
+      582.289,
+      576.234,
+      561.073
+    ],
+    "first_ms": 844.829
+  },
+  "aktualisierung": {
+    "median_ms": 517.007,
+    "p95_ms": 531.799,
+    "stichproben_ms": [
+      531.799,
+      517.007,
+      510.908,
+      530.812,
+      521.455,
+      507.925,
+      508.84,
+      513.271,
+      518.614
+    ],
+    "first_ms": 532.011
+  },
+  "widgets_startseite": 114,
+  "callback_errors": [],
+  "bedingung": "Sprintmessung 08./09.10.2026; Strom- und Fenstermodus nicht protokolliert; Lieferstand 3.33.18"
+}

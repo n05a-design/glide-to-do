@@ -41,10 +41,16 @@ def app_datei():
 
 
 def main():
-    if not sys.pycache_prefix:
+    # Zuerst den Cache umlenken: Schon die Prüfung unten wird übersetzt, und
+    # im signierten Bundle darf neben den Quellen nichts entstehen.
+    if not getattr(sys, "pycache_prefix", None):
         sys.pycache_prefix = cache_ordner()
     if HIER not in sys.path:
         sys.path.insert(0, HIER)
+    # Mindestversion vor jedem Datenzugriff (AB08): Ein zu altes Python
+    # bekommt eine verständliche Meldung statt eines Syntaxfehlers.
+    import runtime_check
+    runtime_check.pruefen_oder_beenden()
     loader = importlib.machinery.SourceFileLoader("glide_app", app_datei())
     spec = importlib.util.spec_from_loader(loader.name, loader)
     modul = importlib.util.module_from_spec(spec)

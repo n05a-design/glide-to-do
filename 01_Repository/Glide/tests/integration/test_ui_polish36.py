@@ -107,8 +107,10 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-polish36-') as tmp:
                     button_text_fits(actions)
                 capture(root, f'vorlagen-{name}-{width}')
             # Wechsel ohne Zwischenbesuch auf der Startseite reproduziert den alten schwarzen Hintergrund.
-            app.theme_name = 'light' if name == 'dark' else 'dark'
+            # Gegenstück über das Design wählen (W02): theme_name allein wirkt nicht.
+            app.set_design('light' if name == 'dark' else 'dark', apply_now=False)
             app.apply_theme()
+            assert (mod.relative_luminance(app.theme['bg']) < 0.2) == (name != 'dark'), app.theme['bg']
             root.update()
             assert app.home_canvas.cget('bg') == app.theme['bg']
             app.set_design(name, apply_now=False)
@@ -230,18 +232,18 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-polish36-') as tmp:
         shifted = mod.calendar_moon_phases(date(2026,6,29), date(2026,6,30), timezone(timedelta(hours=2)))
         assert date(2026,6,30) in shifted and shifted[date(2026,6,30)]['name'] == 'Vollmond'
 
-        def calendar_check(dialog, parent=None):
-            dialog.update()
-            markers = [w for w in descendants(dialog) if hasattr(w, 'moon_day')]
-            assert markers
-            for marker in markers:
-                cell = marker.master
-                assert marker.winfo_y() >= cell.winfo_height()-marker.winfo_height()-8
-            button_text_fits(dialog)
-            capture(dialog, 'kalender-hauptphasen')
-            dialog.destroy()
-        app.run_modal = calendar_check
+        app._calendar_mode = 'month'
         app.open_calendar_view()
+        for _ in range(3):
+            root.update_idletasks(); root.update()
+        assert app.home_mode() == 'calendar' and root.grab_current() is None
+        markers = [w for w in descendants(app.home_content) if hasattr(w, 'moon_day')]
+        assert markers
+        for marker in markers:
+            cell = marker.master
+            assert marker.winfo_y() >= cell.winfo_height()-marker.winfo_height()-8
+        button_text_fits(app.home_content)
+        capture(root, 'kalender-hauptphasen')
         assert not errors, errors
         print(f'UI-Nachbesserung: OK; Hell/Dunkel, 860/1280, Vorlagenaktionen, Hover, Einstellungen, Auswahlfarben, Symbolnavigation. 50 USNO-Phasen: max. {max(differences):.1f} Minuten Abweichung.')
     finally:

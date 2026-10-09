@@ -1,0 +1,208 @@
+{
+  "source_sha256": "cddf4679e082e29c891356601a79c7f0f6ff2269ce31c821d8bbcc4f1c6b674d",
+  "views": {
+    "Hauptfenster": {
+      "methods": [
+        "create_ui"
+      ],
+      "spacing_expressions": 51,
+      "with_numeric_literals": 1,
+      "with_shared_values": 50,
+      "distinct_values": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        8,
+        10,
+        12,
+        14,
+        18,
+        28
+      ],
+      "distinct_value_count": 12,
+      "unresolved": [
+        {
+          "method": "create_ui",
+          "expression": "(glide_design.SPACING[0] if ziel == 'list' else glide_design.SPACING[4], glide_design.SPACING[0])"
+        }
+      ]
+    },
+    "Kopf": {
+      "methods": [
+        "update_path_row",
+        "update_page_chips",
+        "fit_page_chips",
+        "update_page_labels"
+      ],
+      "spacing_expressions": 10,
+      "with_numeric_literals": 0,
+      "with_shared_values": 10,
+      "distinct_values": [
+        0,
+        1,
+        4,
+        6,
+        14
+      ],
+      "distinct_value_count": 5,
+      "unresolved": []
+    },
+    "Startseite": {
+      "methods": [
+        "create_home_panel",
+        "_refresh_home"
+      ],
+      "spacing_expressions": 66,
+      "with_numeric_literals": 58,
+      "with_shared_values": 6,
+      "distinct_values": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        10,
+        12,
+        14,
+        15,
+        18
+      ],
+      "distinct_value_count": 13,
+      "unresolved": [
+        {
+          "method": "_refresh_home",
+          "expression": "pady"
+        },
+        {
+          "method": "_refresh_home",
+          "expression": "self.HOME_CARD_PAD_Y if pad_y is None else pad_y"
+        },
+        {
+          "method": "_refresh_home",
+          "expression": "pady"
+        },
+        {
+          "method": "_refresh_home",
+          "expression": "(10 if naechste is not None else 0, 3)"
+        },
+        {
+          "method": "_refresh_home",
+          "expression": "(0 if index == 0 else self.HOME_CARD_GAP, 0)"
+        },
+        {
+          "method": "_refresh_home",
+          "expression": "pady"
+        },
+        {
+          "method": "_refresh_home",
+          "expression": "pady"
+        }
+      ]
+    },
+    "Heute": {
+      "methods": [
+        "sync_plan_day_grid",
+        "refresh_task_overview"
+      ],
+      "spacing_expressions": 0,
+      "with_numeric_literals": 0,
+      "with_shared_values": 0,
+      "distinct_values": [],
+      "distinct_value_count": 0,
+      "unresolved": []
+    },
+    "Bibliothek": {
+      "methods": [
+        "refresh_library_page"
+      ],
+      "spacing_expressions": 11,
+      "with_numeric_literals": 8,
+      "with_shared_values": 1,
+      "distinct_values": [
+        0,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        16
+      ],
+      "distinct_value_count": 9,
+      "unresolved": [
+        {
+          "method": "refresh_library_page",
+          "expression": "card_padding"
+        },
+        {
+          "method": "refresh_library_page",
+          "expression": "card_padding"
+        },
+        {
+          "method": "refresh_library_page",
+          "expression": "pady"
+        },
+        {
+          "method": "refresh_library_page",
+          "expression": "(0, card_gap if index + columns < len(self.library_cards) else 0)"
+        }
+      ]
+    },
+    "Einstellungen": {
+      "methods": [
+        "show_settings_dialog"
+      ],
+      "spacing_expressions": 53,
+      "with_numeric_literals": 51,
+      "with_shared_values": 3,
+      "distinct_values": [
+        0,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        12,
+        13,
+        16,
+        18,
+        22,
+        24
+      ],
+      "distinct_value_count": 14,
+      "unresolved": []
+    },
+    "Schnellerfassung": {
+      "methods": [
+        "show_quick_capture"
+      ],
+      "spacing_expressions": 18,
+      "with_numeric_literals": 16,
+      "with_shared_values": 2,
+      "distinct_values": [
+        0,
+        1,
+        4,
+        5,
+        6,
+        8,
+        9,
+        12,
+        16,
+        18,
+        24
+      ],
+      "distinct_value_count": 11,
+      "unresolved": []
+    }
+  }
+}

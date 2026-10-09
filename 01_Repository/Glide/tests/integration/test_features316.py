@@ -43,7 +43,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features316-") as folder:
     app.ask_yes_no = lambda *args, **kwargs: True
     try:
         assert app.APP_BACKUP_FORMAT_VERSION == 1 and app.APP_BACKUP_EXTENSION == ".glideapp"
-        assert app.DATA_SCHEMA_VERSION == 20, "Format 20 ergänzt Verweise, Symbole und Archiv."
+        assert app.DATA_SCHEMA_VERSION == 23, "Format 23 bewahrt lokale Verweise, Live-Listen und Titelbilder."
 
         # --- Ausgangsbestand -------------------------------------------------
         liste = app.new_list_object("Archivprobe", [])
@@ -94,7 +94,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features316-") as folder:
 
         # --- Inhaltsvorschau -------------------------------------------------
         vorschau = app.describe_app_backup(daten, gelesen)
-        assert vorschau["app_version"] == mod.APP_VERSION and vorschau["schema"] == 20
+        assert vorschau["app_version"] == mod.APP_VERSION and vorschau["schema"] == app.DATA_SCHEMA_VERSION
         # Zwei echte Aufgaben (eine davon im Gruppenzweig), eine Gruppe.
         assert vorschau["tasks"] == 2 and vorschau["structural"] == 1, vorschau
         assert vorschau["lists"] == len(daten["lists"]) and vorschau["templates"] == vorlagen_vorher

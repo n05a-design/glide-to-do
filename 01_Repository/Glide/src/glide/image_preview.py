@@ -12,7 +12,10 @@ Glide bleibt ohne Bildbibliothek. Was Tk 9 selbst kann, reicht weit:
 - **Übrige Formate unter Windows:** Die Windows-Bildkomponenten (WIC) wandeln
   über PowerShell in ein PNG im Cache – so wie `sips` unter macOS. HEIC und
   WebP gehen dort nur mit den Erweiterungen aus dem Microsoft Store.
-- **Linux:** nur PNG, GIF und SVG; andere Formate zeigen die Endung.
+- **Linux:** PNG, GIF und SVG direkt; JPEG und weitere Formate, wenn ein
+  Systemwerkzeug vorhanden ist (`gdk-pixbuf-thumbnailer`, sonst `djpeg` für
+  JPEG; seit 3.34.0, N08, `preview_tools.py`). Sonst zeigt die Vorschau die
+  Endung.
 
 Alle geladenen Bilder bleiben in einem kleinen Zwischenspeicher je
 Anzeigegröße, damit Galerie und Seiten beim Scrollen und Neuzeichnen nicht
@@ -25,6 +28,8 @@ import os
 import subprocess
 import sys
 import tkinter as tk
+
+import preview_tools as glide_preview_tools
 
 NATIVE = (".png", ".gif", ".ppm", ".pgm")
 VECTOR = (".svg",)
@@ -104,6 +109,9 @@ def windows_convert_command(quelle, ziel, max_kante=MAX_CONVERTED):
 class PreviewCache:
     """Lädt Bilder in Anzeigegröße und merkt sich die letzten `limit` Stück."""
 
+    # Plattform für Umwandlung; Prüfungen erzwingen so den Linux-Weg (N08).
+    PLATFORM = None
+
     def __init__(self, cache_dir=None, limit=160):
         self._cache_dir = cache_dir
         self._limit = limit
@@ -135,42 +143,75 @@ class PreviewCache:
             self._svg = has_svg(master)
         return self._svg
 
-    def converted_path(self, path, stamp=None):
+    def platform(self):
+        return self.PLATFORM or ("nt" if os.name == "nt" else sys.platform)
+
+    def converted_base(self, path, stamp=None):
         stamp = stamp or self.stamp(path)
         if stamp is None:
             return None
         schluessel = hashlib.sha1(repr(stamp).encode("utf-8")).hexdigest()
-        return os.path.join(self.cache_dir(), f"{schluessel}.png")
+        return os.path.join(self.cache_dir(), schluessel)
+
+    def converted_path(self, path, stamp=None):
+        basis = self.converted_base(path, stamp)
+        return basis + ".png" if basis else None
+
+    def existing_conversion(self, path, stamp=None):
+        """Vorhandene Vorschaudatei (PNG, unter Linux auch PPM aus `djpeg`) oder None."""
+        basis = self.converted_base(path, stamp)
+        if not basis:
+            return None
+        for endung in (".png", ".ppm"):
+            if os.path.isfile(basis + endung) and os.path.getsize(basis + endung) > 0:
+                return basis + endung
+        return None
+
+    def native_loader(self, master):
+        """Lädt macOS über `nsimage`? Nur auf dem Mac – Prüfungen können das abschalten."""
+        return self.platform() == "darwin" and self.uses_nsimage(master)
 
     def needs_conversion(self, master, path):
         """True, wenn erst ein Unterprozess eine Vorschau anlegen muss."""
         endung = extension(path)
-        if endung not in CONVERTIBLE or self.uses_nsimage(master):
+        if endung not in CONVERTIBLE or self.native_loader(master):
             return False
-        ziel = self.converted_path(path)
-        return bool(ziel) and not os.path.isfile(ziel) and self.can_convert()
+        return bool(self.converted_base(path)) and not self.existing_conversion(path) and self.can_convert(path)
 
-    @staticmethod
-    def can_convert():
-        return sys.platform == "darwin" or os.name == "nt"
+    def can_convert(self, path=None):
+        """Gibt es einen Umwandlungsweg? Unter Linux nur mit passendem Systemwerkzeug."""
+        if self.platform() in ("darwin", "nt"):
+            return True
+        if path is None:
+            return any(glide_preview_tools.shutil.which(name) for name in ("gdk-pixbuf-thumbnailer", "djpeg"))
+        return glide_preview_tools.linux_plan(path, "x") is not None
 
     def convert(self, path):
         """Legt die PNG-Vorschau an (blockierend, mit Zeitlimit). Liefert den Pfad oder None."""
         ziel = self.converted_path(path)
         if not ziel:
             return None
-        if os.path.isfile(ziel):
-            return ziel
+        vorhanden = self.existing_conversion(path)
+        if vorhanden:
+            return vorhanden
         try:
             os.makedirs(os.path.dirname(ziel), exist_ok=True)
-            if sys.platform == "darwin":
+            plattform = self.platform()
+            optionen = {}
+            if plattform == "darwin":
                 befehl = ["sips", "-s", "format", "png", "-Z", str(MAX_CONVERTED), path, "--out", ziel]
-                optionen = {}
-            elif os.name == "nt":
+            elif plattform == "nt":
                 befehl = windows_convert_command(path, ziel)
                 optionen = {"creationflags": getattr(subprocess, "CREATE_NO_WINDOW", 0)}
             else:
-                return None
+                groesse = None
+                if extension(path) in glide_preview_tools.JPEG:
+                    with open(path, "rb") as datei:
+                        groesse = glide_preview_tools.jpeg_size(datei.read(256 * 1024))
+                plan = glide_preview_tools.linux_plan(path, ziel[:-4], groesse, MAX_CONVERTED)
+                if plan is None:
+                    return None
+                befehl, ziel = plan
             subprocess.run(befehl, capture_output=True, timeout=45, check=False, **optionen)
         except (OSError, subprocess.SubprocessError, ValueError):
             return None
@@ -201,13 +242,13 @@ class PreviewCache:
                 if not self.reads_svg(master):
                     return None
                 return tk.PhotoImage(master=master, file=path, format="svg")
-            if self.uses_nsimage(master) and endung in NATIVE + CONVERTIBLE:
+            if self.native_loader(master) and endung in NATIVE + CONVERTIBLE:
                 return tk.Image("nsimage", master=master, cnf={"source": path, "as": "file"})
             if endung in NATIVE:
                 return tk.PhotoImage(master=master, file=path)
             if endung in CONVERTIBLE:
-                ziel = self.converted_path(path, stamp)
-                if ziel and os.path.isfile(ziel):
+                ziel = self.existing_conversion(path, stamp)
+                if ziel:
                     return tk.PhotoImage(master=master, file=ziel)
         except (tk.TclError, OSError, MemoryError):
             return None
@@ -266,11 +307,11 @@ class PreviewCache:
                 if not self.reads_svg(master):
                     return None
                 return tk.PhotoImage(master=master, file=path, format=f"svg -scaletowidth {max(1, ziel_w)}")
-            if self.uses_nsimage(master) and endung in NATIVE + CONVERTIBLE:
+            if self.native_loader(master) and endung in NATIVE + CONVERTIBLE:
                 return tk.Image("nsimage", master=master,
                                 cnf={"source": path, "as": "file", "width": max(1, ziel_w),
                                      "height": max(1, ziel_h)})
-            quelle = path if endung in NATIVE else self.converted_path(path, stamp)
+            quelle = path if endung in NATIVE else self.existing_conversion(path, stamp)
             if not quelle or not os.path.isfile(quelle):
                 return None
             roh = tk.PhotoImage(master=master, file=quelle)

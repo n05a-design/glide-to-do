@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · manuelle Sitzungen offen; B1 automatisch geprüft
+Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · manuelle Sitzungen offen; B1 automatisch geprüft
 
 Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt am 03.10.2026 aus der fortgeschriebenen Prüfliste (Ursprung 3.30.0, enthielt die Listen 3.28 und 3.29) und der Windows-Anleitung; die Zuordnung der 201 Ausgangspunkte trägt Git. Automatisch geprüft ist die Logik ([Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)); offen bleiben Handgefühl, Plattformen und fremde Programme.
 
@@ -183,7 +183,7 @@ Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt a
 
 - [ ] **B0 Windows-Vollprüfung – Anleitung**
 
-Dieselbe Vollprüfung wie am Mac (`tests/tools/pruefen.py --modus voll`), gestartet über `windows_vollpruefung.cmd`. Sie umfasst alle Integrationssuiten aus `SUITEN` (3.33.8: 66), Unit-Tests, Showcase, fünf Analysen und die Reproduktion von Beispiel- und Releasedaten. Seit 05.10.2026 legt sie wie am Mac von jedem geprüften Fenster ein Foto ab. Dauer am Arbeitsrechner: 15–20 Minuten.
+Dieselbe Vollprüfung wie am Mac (`tests/tools/pruefen.py --modus voll`), gestartet über `windows_vollpruefung.cmd`. Sie umfasst alle Integrationssuiten aus `SUITEN` (3.33.18: 76), Unit-Tests, Showcase, fünf Analysen und die Reproduktion von Beispiel- und Releasedaten. Seit 05.10.2026 legt sie wie am Mac von jedem geprüften Fenster ein Foto ab. Dauer am Arbeitsrechner: 15–20 Minuten.
 
 **Vorbereitung (einmalig je Rechner):**
 
@@ -193,7 +193,7 @@ Dieselbe Vollprüfung wie am Mac (`tests/tools/pruefen.py --modus voll`), gestar
    - `py -3.14`;
    - zuletzt `python`.
 
-   Er gibt Python- und Tk-Version aus (`package provide Tk`, nicht die Tcl-Version). Ist Python älter als 3.14 oder Tk älter als 9, endet er mit Exitcode 3, bevor eine Suite läuft. Am Arbeitsrechner liegt die Laufzeit seit 05.10.2026 bereit ([Herkunft und Herstellerhash](../01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05/prueflaufzeit.json)). Auf einem anderen Rechner entweder Python 3.14 von [python.org](https://www.python.org/downloads/windows/) installieren (Option „tcl/tk and IDLE“, Python-Starter `py`) oder die separate Laufzeit anlegen. Diese ändert weder PATH noch Standardinstallation:
+   Er gibt Python- und Tk-Version aus (`package provide Tk`, nicht die Tcl-Version). Ist Python älter als 3.14 oder Tk älter als 9, endet er mit Exitcode 3, bevor eine Suite läuft. Historisch wurde am 05.10.2026 eine separate 3.14.8-Laufzeit geprüft; am aktuellen Arbeitsrechner läuft die installierte Python-Fassung 3.14.7/Tk 9.0.4 über `py -3.14`, die separate Laufzeit ist hier nicht vorhanden ([Herkunft und Herstellerhash](https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05/prueflaufzeit.json)). Auf einem anderen Rechner entweder Python 3.14 von [python.org](https://www.python.org/downloads/windows/) installieren (Option „tcl/tk and IDLE“, Python-Starter `py`) oder die separate Laufzeit anlegen. Diese ändert weder PATH noch Standardinstallation:
 
    ```powershell
    $ziel = "$env:USERPROFILE\.cache\glide-qa\python-3.14.8"
@@ -244,10 +244,10 @@ $py = "$env:USERPROFILE\.cache\glide-qa\python-3.14.8\runtime\python.exe"
 
 Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Windows-Nachweis wird aus dem Mac-Lauf abgeleitet.
 
-- [x] **B1 Vollprüfung (automatisch, 05.10.2026):** 3.33.8 mit Python 3.14.8/Tk 9.0.4.
-  - 15:02: 66 Integrationssuiten und 75 Unit-Tests grün, Exitcode 0 ([Ergebnis](../01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05/voll_2/ergebnis.json)). Die Dunkelaufnahme dieses Laufs gleicht der hellen (Werkzeugfehler, behoben).
-  - 18:29, vom Inhaber gestartet, erstmals mit Fensterfotos und echter Dunkelaufnahme: Exitcode 1. 83 von 85 Schritten sind ausgeführt und alle 66 Suiten grün. `attributpruefung` scheiterte an einem einmaligen Absturz des Python-Interpreters (in 30 Wiederholungen kein weiterer). Die Sichtprüfung ist übersprungen ([Nachweis](../01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05_1829/README.md)).
-- [ ] **B1a Sichtprüfung der Aufnahmen am Gerät:** Fotos unter `tests\qa-3.33.8\windows_2026-10-05_1829\fenster` und `screenshots` durchsehen. Die Vorbefunde mit Testablage in Glide nachstellen:
+- [x] **B1 Vollprüfung (automatisch, 08.10.2026):** Seiten im Alltag (G28/G09/U08), 3.33.18: Live-Listen mit Originalaufgaben, Titelbilder aus lokalen Anhängen oder übernommenen Pixelzeichnungen und gefüllte Vorlagenvorschau im Anlegen-Weg. Format 23 mit bytegenauer Vorsicherung und unveränderter 3.33.17 schreibgeschützt. Windows-Vollprüfung Exit 0: 95 Schritte, 76 Integrationssuiten, 170 Unit-Tests; 365 eingefrorene Dateien unverändert. 28 Code-Dateien, 131 Ressourcen und sechs Showcase-Dateien bytegleich; drei direkte Lieferproben und 26 Modulimporte grün. Strenge CI Exit 0 (17 Schritte, 25 Werkzeugtests). Native Mac-/Linux-, Bundle- und menschliche Abnahme offen. [Aktueller Nachweis](../01_Repository/Glide/tests/qa-3.33.18/seiten_2026-10-08/README.md). Menschliche Sichtprüfung übersprungen; B1a–B1h bleiben offen. Frühere Läufe 3.33.8 vom 05.10.2026 bleiben als Belege:
+  - 15:02: 66 Integrationssuiten und 75 Unit-Tests grün, Exitcode 0 ([Ergebnis](https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05/voll_2/ergebnis.json)). Die Dunkelaufnahme dieses Laufs gleicht der hellen (Werkzeugfehler, behoben).
+  - 18:29, vom Inhaber gestartet, erstmals mit Fensterfotos und echter Dunkelaufnahme: Exitcode 1. 83 von 85 Schritten sind ausgeführt und alle 66 Suiten grün. `attributpruefung` scheiterte an einem einmaligen Absturz des Python-Interpreters (in 30 Wiederholungen kein weiterer). Die Sichtprüfung ist übersprungen ([Nachweis](https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05_1829/README.md)).
+- [ ] **B1a Sichtprüfung der Aufnahmen am Gerät:** Aktuelle Fotos unter `tests\qa-3.33.14\tagpaket_2026-10-07\voll_final\fenster` und `screenshots` durchsehen. Die Vorbefunde mit Testablage in Glide nachstellen:
   - **W01** Seitenleiste: Lange Listentitel enden mit „…“, kürzere stehen vollständig da („Unterlagen & Assets“).
   - **W05** Datei › Datenaustausch › „Für KI bereitstellen …“ und Ansicht › Liste › „Tabellenspalten …“: Ist die Fensterbreite angemessen, stehen die Knöpfe wie in den übrigen Dialogen?
   - **W06** „Neue Liste“ mit der Art Aufgaben bzw. Pinnwand und „Neuer Ordner“ mit Ordner, Buch und Notizbuch: Sind Überschrift und Feldbeschriftungen sichtbar? Mehrmals hintereinander öffnen.
@@ -255,6 +255,28 @@ Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Wind
   - **W08** Rechtsklick auf eine Liste › „Pixelsymbol …“: Ist das Raster groß genug zum Zeichnen?
 
   B2–B13 bleiben physische Inhaberprüfungen.
+- [ ] **B1b Gestaltungsabnahme U10/U19/OB01 (3.33.12, OB06):** Vorher-/Nachher-Fotos aus `01_Repository\Glide\tests\qa-3.33.12\titel_2026-10-06\fenster\vorher` und `nachher` vergleichen (lokale Fotos; seit 3.33.19 außerhalb der Aufbewahrung von drei Bildständen, auf dem Windows-PC nur noch vorhanden, falls nicht gekürzt – sonst die Gestaltung am laufenden 3.33.19 beurteilen): Liste und Heute, 1280 × 800 und 860 × 700, hell und dunkel. Mit getrennter Testablage auch große Schrift ansehen: Titel hat Vorrang vor Kennzahlen, Herkunft rechts ist lesbar, Kopf und Zeilen wirken ruhig. Lange Kennzahlen mit Auslassung und vollständigem Tooltip prüfen; Aufgaben ohne Fälligkeit zeigen kein Datum. Die automatisierte Geometrie- und Bedienprüfung ersetzt diese Bewertung nicht. Entscheidung im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) festhalten; Fotos bleiben lokal/unversioniert.
+- [ ] **B1c KO01/AU02 (3.33.13):** lokale Vorher-/Nachher-Fensterbilder unter
+      `01_Repository/Glide/tests/qa-3.33.13/planen_2026-10-06/fenster/` bewerten:
+      860 × 700 und 1280 × 800, hell/dunkel. Zwei Aufgaben aus verschiedenen
+      Quelllisten in Heute markieren, Rechtsklick → Einplanen → Morgen:
+      Fälligkeit/Uhrzeit/Aufwand bleiben; ein Strg+Z nimmt beide zurück.
+      Strg+Umschalt+P, Kalenderaktion beim Überfahren einer Zeile und Datum …
+      mit Abbruch prüfen. Freie Zeit/Überplanung vor Übernahme mit dem Profil
+      des Zieltags vergleichen, Aufgaben ohne Schätzung getrennt. Tagesbeginn:
+      dieselben sechs Ziele; Ohne Tag erhält die Uhrzeit. Nach Neustart prüfen.
+      Automatische Nachweise ersetzen diese physische Gestaltungsabnahme nicht.
+
+- [ ] **B1d Tagespaket (3.33.14):** mit getrennter Testablage Rückblick → „Was passt heute?“ → Raster bedienen. Gründe/Auswahlbudget einschließlich unbekannter Kapazität und fehlender Schätzung prüfen; Übernahme am festen Kartenfuß auch bei 860 × 700/großer Schrift erreichbar. Mehrfachauswahl mit Strg+Umschalt+T planen, Raster mit Tab/Enter/Alt+Pfeilen/Entf/Esc bedienen und rücknehmen. Fokus mit Strg+Umschalt+F, Pause/Fortsetzen, Beenden & Buchen und Erledigt & weiter; Pausenzeit zählt nicht, Abschluss und Zeit gemeinsam rücknehmbar. Hell/dunkel, echte Tastatur/Screenreader/DPI und Wiederaufnahme nach Neustart prüfen. Lokale Fotos unter `tests/qa-3.33.14/tagpaket_2026-10-07/fenster/abnahme`; automatische Nachweise ersetzen diese Bewertung nicht.
+
+- [ ] **B1e Aufgaben im Wissen (3.33.15):** Mit separater Testablage eine Aufgabe im Notiztext erzeugen und denselben Punkt in der Notizliste abhaken/umbenennen. Vorhandene Aufgabe über „Mehr › Aufgabe verknüpfen …“ zweimal einsetzen, einen Verweis löschen und den anderen bearbeiten. Auch einen Verweis auf einen Punkt derselben Notiz löschen: Punkt bleibt. Heimatzeile trotz zweitem Verweis löschen: Punkt im Papierkorb; Undo/Redo ohne Duplikat. Seitenaufgabe mit Unterpunkten „In Liste übernehmen …“; gleiche IDs und Verweiszeile erhalten, globales Undo prüfen. Ansicht › Aus Seiten und Textquelle öffnen; Archiv, Papierkorb, endgültig fehlendes Ziel, Text-Undo/Redo, Import und Neustart. Mehrzeiliger Klartext darf keine Verweiskennung in neue Absätze tragen. Bei Mindestfenster/großer Schrift/hell/dunkel Ziele und fehlende Ziele gut lesbar; echte Tastatur/DPI/Screenreader prüfen. Format-21-Vorsicherung und Hinweis verstehen; ältere Fassungen nur auf separaten Kopien prüfen. Fotos unter `tests/qa-3.33.15/wissen_2026-10-07/fenster/besitz`. Automatische Prüfung ersetzt diese Bedienabnahme nicht.
+
+- [ ] **B1f Bedienkomfort (3.33.16):** Strg+O und Befehlsfilter `>` mit echtem Editorfokus, Escape und Rückkehr prüfen; Kopfaktionen und Kontextmenüs erreichbar. Hinweise über `?` ein-/ausblenden, Neustart; Bibliothekskacheln mit Maus/Return/Leertaste öffnen, Fußaktionen und Archivkontext. Bearbeitungstag und Fälligkeit nebeneinander lesbar, mindestens 860 × 700, große Schrift und hell/dunkel; native DPI/Mehrmonitor prüfen.
+
+- [ ] **B1g Wissen und Woche (3.33.17):** Strg+K, Woche/Monat und Wochenrückblick ohne Modalität. Mehrfachauswahl per Tastatur einplanen, Maus/Trackpad auf sichtbare Tagesziele ziehen, Randscrollen und Abbruch außerhalb; Fälligkeit unverändert, je ein Undo. Kapazität/fehlende Schätzung verstehen, vorgeschlagenes Zeitfenster ausdrücklich bestätigen oder abbrechen. Seiten-/Listen-/Aufgabenverweise über @ und Kontextmenü; Rückverweise nach Umbenennen, Archiv, Papierkorb, Undo und Neustart prüfen. Kleine Fenster/große Schrift scrollen den Inhalt, Datum und Planungsaktionen im Fuß erreichbar. Vorsicherungs-/Schreibschutzhinweise mit separaten Testkopien verstehen; native Mac-/Linux-, DPI-/Tastatur- und menschliche Abnahme offen.
+
+- [ ] **B1h Seiten im Alltag (3.33.18):** In separater Testablage Live-Liste einbetten; Originalaufgabe per Leertaste abhaken, Details öffnen, Quelle umbenennen/archivieren/löschen, Undo und Verknüpfung lösen. Mehrere und leere Quellen, lange Titel sowie Mindestfenster/große Schrift/hell-dunkel prüfen. Lokales Titelbild und Pixelzeichnung wählen, Bibliothekskarte ansehen, Kopie/Backup/Import/Papierkorb/Neustart. Vorlagen aus dem Anlegen-Menü ausfüllen und Vorschau einschließlich Termine/Titelbild lesen; Escape erhält den Bestand, Return legt an. Native DPI/Screenreader und menschliche Gestaltung prüfen; automatische Nachweise ersetzen diese Abnahme nicht.
+
 - [ ] **B2 Windows-Bestand (Format 17, Inhaberprobe):** Eine unveränderte
       Kopie des eigenen Bestands in einer getrennten Testablage mit
       `GLIDE_DATA_DIR` und aktueller Fassung aus `07_Python-Versionen` öffnen.

@@ -1,5 +1,6 @@
 """3.9: reale Dropdown-Ereignisse, Dialoggeometrie, Aktionsparität und Persistenz."""
 import copy
+import argparse
 import importlib.machinery
 import importlib.util
 import json
@@ -9,6 +10,10 @@ import tempfile
 from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[2]
+parser = argparse.ArgumentParser()
+parser.add_argument('--app', type=Path, default=REPO/'src/glide/app.pyw')
+parser.add_argument('--dropdown-only', action='store_true')
+args = parser.parse_args()
 
 def descendants(widget):
     for child in widget.winfo_children():
@@ -18,7 +23,7 @@ def descendants(widget):
 with tempfile.TemporaryDirectory(prefix='glide-ui39-') as temp:
     os.environ['GLIDE_DATA_DIR'] = temp
     os.environ['GLIDE_TEST_MODE'] = '1'
-    loader = importlib.machinery.SourceFileLoader('glide_ui39', str(REPO/'src/glide/app.pyw'))
+    loader = importlib.machinery.SourceFileLoader('glide_ui39', str(args.app))
     spec = importlib.util.spec_from_loader(loader.name, loader)
     mod = importlib.util.module_from_spec(spec)
     loader.exec_module(mod)
@@ -44,7 +49,9 @@ with tempfile.TemporaryDirectory(prefix='glide-ui39-') as temp:
             app.toggle_sidebar(); root.update()
             assert app.sidebar_shell.winfo_ismapped()
             assert app.content_frame.winfo_width() == before
-            assert abs(app.notifications_button.winfo_rooty()-app.settings_button.winfo_rooty()) <= 1
+            assert abs(app.capture_button.winfo_rooty()-app.search_button.winfo_rooty()) <= 1
+            if hasattr(app, 'toggle_view_hints'):
+                assert not app.notifications_button.winfo_ismapped()
             assert not app.reminder_status.winfo_ismapped()
             app.set_template_view(); root.update()
             for card, title, note, actions in app.template_rows:
@@ -63,10 +70,13 @@ with tempfile.TemporaryDirectory(prefix='glide-ui39-') as temp:
             owner.lift(); owner.focus_force(); owner.update()
             top_count = sum(isinstance(w, mod.tk.Toplevel) for w in descendants(root))
             for index in range(15):
-                owner.lift(); owner.focus_force(); owner.update_idletasks()
+                # focus_force liefert unter Windows auch verzögerte native
+                # Ereignisse. Vor dem Popup vollständig abarbeiten, sonst
+                # kann die alte Anforderung dessen neuen Fokus verdrängen.
+                owner.lift(); owner.focus_force(); owner.update()
                 field._open_popup(); owner.update()
                 popup = field._popup
-                assert isinstance(popup, mod.DropdownPopup)
+                assert isinstance(popup, mod.DropdownPopup), (index, theme, str(app.current_focus_widget()), str(owner))
                 assert root.grab_current() is owner
                 assert sum(isinstance(w, mod.tk.Toplevel) for w in descendants(root)) == top_count
                 assert popup.winfo_rootx() >= owner.winfo_rootx()
@@ -112,6 +122,10 @@ with tempfile.TemporaryDirectory(prefix='glide-ui39-') as temp:
             assert root.grab_current() is None
             assert not getattr(app, '_active_dropdown', None)
 
+            if args.dropdown_only:
+                print('OK: echte Dropdown-Baseline')
+                raise SystemExit(0)
+
             for screen_height in (720, 1400):
                 def container(dialog, parent=None):
                     dialog.update()
@@ -153,44 +167,27 @@ with tempfile.TemporaryDirectory(prefix='glide-ui39-') as temp:
         entries = app.app_action_entries()
         assert len(entries) >= 50
         assert {'Datei','Bearbeiten','Ansicht','Hilfe'} == {a['category'] for a in entries}
-        for label in ('Als CSV …','Komplettbackup laden …','Gruppe auflösen','Nach Wichtigkeit','Tastenkürzel anzeigen'):
+        for label in ('Als CSV …','Aufgabensicherung laden …','Gruppe auflösen','Nach Wichtigkeit','Tastenkürzel anzeigen'):
             assert any(a['label'] == label for a in entries)
         text = mod.tk.Entry(root)
         text.pack(); text.insert(0,'Auswahl kopieren'); text.selection_range(0,7); text.focus_force(); root.update()
         app.invoke_app_action(next(a for a in entries if a['label']=='Kopieren'), text)
         assert root.clipboard_get() == 'Auswahl'
         text.destroy()
-        # Seit 3.22 gliedert der Dialog die Aktionen in Gruppen. Überschriften
-        # und Leerzeilen sind eigene Zeilen des Baums und zählen nicht mit.
-        def aktionszeilen(tree):
-            return [row for row in tree.get_children()
-                    if not row.startswith((mod.ListApp.ACTION_GROUP_ROW_PREFIX,
-                                           mod.ListApp.ACTION_SPACER_ROW_PREFIX))]
-
-        def gruppenzeilen(tree):
-            return [row for row in tree.get_children()
-                    if row.startswith(mod.ListApp.ACTION_GROUP_ROW_PREFIX)]
-
-        def actions(dialog, parent=None):
-            dialog.update()
-            tree = next(w for w in descendants(dialog) if w.winfo_name() == 'actions_tree')
-            assert len(aktionszeilen(tree)) == len(entries)
-            assert len(gruppenzeilen(tree)) >= 5
-            # Vor jeder Gruppe außer der ersten steht genau eine Leerzeile.
-            assert len([row for row in tree.get_children()
-                        if row.startswith(mod.ListApp.ACTION_SPACER_ROW_PREFIX)]) == len(gruppenzeilen(tree)) - 1
-            # Die Auswahl steht auf einer echten Aktion, nicht auf einer Überschrift.
-            assert tree.selection() and tree.selection()[0] in aktionszeilen(tree)
-            search = next(w for w in descendants(dialog) if w.winfo_name() == 'action_search')
-            search.insert(0,'CSV'); dialog.update()
-            # Seit 3.18 trägt auch der Import CSV im Namen; die Suche filtert
-            # auf genau die Einträge, die den Begriff führen.
-            csv_entries = [a for a in entries if 'csv' in a['label'].lower()]
-            assert len(csv_entries) >= 2, csv_entries
-            assert len(aktionszeilen(tree)) == len(csv_entries)
-            dialog.destroy()
-        with patch.object(app, 'run_modal', actions):
-            app.show_actions_dialog()
+        # U01: derselbe eingebettete Weg, alle Aktionen und echte CSV-Eingabe.
+        app.show_actions_dialog(); root.update()
+        state = app._quick_open
+        assert state and not root.grab_current()
+        tree = state['tree']
+        actions = [r for r in tree.get_children() if not r.startswith('group:')]
+        assert len(actions) == len(entries)
+        assert len([r for r in tree.get_children() if r.startswith('group:')]) >= 5
+        assert tree.selection()[0] in actions
+        state['entry'].delete(0, 'end'); state['entry'].insert(0, '> CSV'); root.update()
+        csv_entries = [a for a in entries if 'csv' in (a['label'] + ' ' + a['path']).lower()]
+        assert len(csv_entries) >= 2
+        assert len(state['results']) == len(csv_entries)
+        app.close_quick_open()
         assert original == app.lists
         assert not errors, errors
         print('UI 3.9: OK (beide Themes, eingebettete Dropdowns, Außerklick, Tastatur, Grabs, Geometrie, Aktionen, Speicherung)')

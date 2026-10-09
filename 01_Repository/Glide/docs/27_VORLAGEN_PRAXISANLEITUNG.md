@@ -1,6 +1,6 @@
 # Vorlagen im Unternehmensalltag
 
-Stand 05.10.2026 · Glide 3.33.8 · Aufgabenformat 20 · Vorlagenformat 2
+Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Vorlagenformat 2
 
 3.28 ergänzt vier integrierte Tagebuchvorlagen: Tagesnotiz, Dankbarkeit,
 Wochenrückblick und Jahresordner mit Quartalen. Sie verwenden Notizseiten und
@@ -104,7 +104,7 @@ Seit 3.14 übernehmen Vorlagen Bearbeitungstag und geschätzten Aufwand. Bei rel
 in Listentitel, Punkten, Beschreibungen, Checklisten oder im Notiztext. Dann
 die Liste wie gewohnt als Vorlage speichern.
 
-**Vorlage verwenden:**
+**Vorlage verwenden:** Seit 3.33.18 auch über „Neu → Aus Vorlage …“ in der Bibliothek bzw. im Anlegen-Menü. Nach dem Ausfüllen zeigt Glide vor dem Anlegen die vorbereiteten Inhalte, Unteraufgaben, Termine und gegebenenfalls das Titelbild. „Anlegen“ bzw. Return übernimmt genau diese vorbereiteten Werte; Abbrechen bzw. Escape erhält den Bestand. Der Vorlagenkatalog bleibt ebenfalls als Einstieg verfügbar.
 
 - Glide fragt jeden Namen einmal in einem kleinen Dialog ab (höchstens zwölf).
 - Die Angabe steht danach überall, wo der Platzhalter stand.

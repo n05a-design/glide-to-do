@@ -46,6 +46,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
     errors = []
     root.report_callback_exception = lambda *exc: errors.append(exc)
     app = mod.ListApp(root)
+    app.confirm_template_preview = lambda template: True
     app.show_error = lambda *args, **kwargs: errors.append(args)
     app.show_warning = lambda *args, **kwargs: errors.append(args)
     app.show_info = lambda *args, **kwargs: None
@@ -397,7 +398,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         # ================================================================
         # Format 20: Migration mit Vorsicherung, neue Felder, Bereinigung
         # ================================================================
-        assert app.DATA_SCHEMA_VERSION == 20
+        assert app.DATA_SCHEMA_VERSION == 23
         payload19 = app.data_payload()
         payload19["version"] = 19
         old_bytes = json.dumps(payload19, ensure_ascii=False, indent=4).encode("utf-8")
@@ -406,14 +407,15 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert app.save_items()
         backups20 = list(Path(mod.BACKUP_DIR).glob("liste_vor_format20_*.json"))
         assert len(backups20) == 1 and backups20[0].read_bytes() == old_bytes
-        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 20
+        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 23
         # Eine Datei aus einer späteren Glide-Fassung wird abgelehnt.
+        future_version = app.DATA_SCHEMA_VERSION + 1
         try:
-            app.normalize_lists_data({"version": 21, "lists": []})
+            app.normalize_lists_data({"version": future_version, "lists": []})
         except ValueError:
             pass
         else:
-            raise AssertionError("Format 21 wurde angenommen")
+            raise AssertionError(f"Unbekanntes Format {future_version} wurde angenommen")
         # Neue Punktfelder werden streng normalisiert.
         plain = app.new_item("Planung", planned_date="2026-10-01", planned_time="9.30",
                              links=["a", "a", 7, "b"], blocked_by=["c"], time_spent_minutes=45)
@@ -584,9 +586,10 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         app.toggle_library_archive()
         root.update()
         assert [entry["id"] for _kind, entry in app.library_entries(archived=True)] == [archive_folder["id"]]
-        restore_button = next(widget for widget in descendants(app.home_content)
-                              if isinstance(widget, mod.RoundedButton) and widget.text == "Zurückholen")
-        restore_button.command()
+        restore_menu = app.build_folder_menu(archive_folder['id'])
+        index = next(i for i in range(restore_menu.index('end') + 1)
+                     if restore_menu.type(i) == 'command' and restore_menu.entrycget(i, 'label') == 'Aus Archiv zurückholen')
+        restore_menu.invoke(index)
         root.update()
         assert archive_folder["archived"] is False and not app.is_archived_entry(archived_list)
         app.toggle_library_archive()
@@ -1526,7 +1529,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert {iid: app.sidebar_listbox.bbox(iid) for iid in app.sidebar_listbox.get_children("")} == vorher
         schnell = app.folder_quick_add_menu(eltern["id"])
         eintraege = [schnell.entrycget(index, "label") for index in range(schnell.index("end") + 1)]
-        assert eintraege == ["Neue Liste …", "Neue Seite", "Seite aus Vorlage", "Neue Notiz …",
+        assert eintraege == ["Aus Vorlage …", "Neue Liste …", "Neue Seite", "Seite aus Vorlage", "Neue Notiz …",
                              "Neue Pinnwand …", "Neue Galerie", "Neue Zeichnung",
                              "Neuer Unterordner …", "Neues Buch …", "Neues Notizbuch …"], eintraege
         # Jede Schnellaktion steht auch im Kontextmenü des Ordners (Tastatur).
@@ -1560,7 +1563,9 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         root.update()
         assert app.page_chips() == ["2 offen", "1 erledigt", "1 überfällig", "nächste Fälligkeit morgen", "1 Label"]
         assert app.page_chip_row.winfo_manager() == "pack"
-        assert app.page_chip_row.winfo_y() > app.title_row.winfo_y()
+        # U10 setzt die Unterzeile in einen eigenen Elternrahmen. Daher die
+        # tatsächlichen Fensterpositionen vergleichen, nicht Elternkoordinaten.
+        assert app.page_chip_row.winfo_rooty() >= app.title_row.winfo_rooty() + app.title_row.winfo_height()
         # Seit dem 26.09.2026 Text mit Trennpunkt statt Kästen.
         texte = [widget.cget("text").removeprefix("·  ") for widget in app.page_chip_row.winfo_children()
                  if not getattr(widget, "_is_backdrop", False)]
@@ -1573,31 +1578,30 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         app.set_home_view()
         root.update()
         # Seit 27.09.2026 steht dort der Untertitel der Startseite – ohne Kennzahlen.
-        assert not app.page_chips() and app.header_note_text().startswith("Dein Überblick")
-        # Leere Liste: Satz in der Leerzeile, darunter „Ersten Punkt anlegen“.
+        assert not app.page_chips() and app.header_note_text() == ""
+        app.toggle_view_hints();root.update()
+        assert app.header_note_text().startswith("Dein Überblick")
+        # Leere Liste: Satz in der Leerzeile. Seit 3.33.20 (U20) gibt es keinen
+        # zweiten Anlegen-Knopf in der Fläche, wenn die Eingabezeile sichtbar ist.
         leer = app.new_list_object("Ganz leer", [])
         app.lists.append(leer)
         app.save_items()
         app.set_active_list(leer["id"])
         root.update()
-        knopf = app.empty_action_button
-        assert knopf.winfo_manager() == "place" and knopf.text == "Ersten Punkt anlegen"
-        # Ausbau MO-050: Gismo steht klein und still daneben (Stufe 2).
+        assert app.entry_line_visible()
+        knopf = getattr(app, "empty_action_button", None)
+        assert knopf is None or knopf.winfo_manager() == ""
+        # Ausbau MO-050: Gismo steht klein und still unter dem Leertext (Stufe 2).
         figur = app.empty_state_figure
         assert figur is not None and figur.winfo_manager() == "place" and figur.state_name == "ruhig"
-        assert figur.winfo_x() > knopf.winfo_x() + int(float(knopf.cget("width")))
         assert not figur._jobs, "Kein Blinzeln im Leerzustand"
         app.settings["mascot_playful"] = False
         app.refresh_tree()
         root.update()
-        assert figur.winfo_manager() == "" and knopf.winfo_manager() == "place"
+        assert figur.winfo_manager() == ""
         app.settings["mascot_playful"] = True
         app.refresh_tree()
         root.update()
-        knopf = app.empty_action_button
-        knopf.command()
-        root.update()
-        assert app.root.focus_lastfor() is app.entry
         # Leere Suche: „Suche zurücksetzen“ leert den Filter.
         app.set_active_list(chipliste["id"])
         app.search_var.set("gibt es nirgends")
@@ -1614,9 +1618,15 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         app.save_items()
         app.set_active_folder(leerer_ordner["id"])
         root.update()
-        assert app.empty_action_button.text == "Neue Liste anlegen"
+        # Mit sichtbarer Eingabezeile genau ein Anlegeweg (U20); ohne sie der Knopf.
+        if app.entry_line_visible():
+            assert app.empty_action_button.winfo_manager() == ""
+        else:
+            assert app.empty_action_button.text == "Neue Liste anlegen"
         app.set_active_folder(leeres_tagebuch["id"])
         root.update()
+        # Ein Notizbucheintrag trägt seinen Tag; die Eingabezeile legt nur eine
+        # gewöhnliche Liste an. Der eigene Weg bleibt deshalb (U20).
         assert app.empty_action_button.text == "Ersten Eintrag anlegen"
         app.empty_action_button.command()
         root.update()
@@ -2234,10 +2244,10 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert app.save_items(show_error=False)
         speicher = Path(mod.SAVE_FILE)
         gueltig = speicher.read_bytes()
-        assert app.settings.get("data_format_written") == 20
+        assert app.settings.get("data_format_written") == 23
 
         neuer = json.loads(gueltig)
-        neuer["version"] = 21
+        neuer["version"] = future_version
         speicher.write_text(json.dumps(neuer), encoding="utf-8")
         vorher = speicher.read_bytes()
         app.load_items()
@@ -2257,7 +2267,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert len(kopien) == 1 and kopien[0].read_bytes() == kaputt
         assert not app._data_read_only
         assert app.save_items(show_error=False), "Nach der Kopie muss Speichern wieder gehen"
-        assert json.loads(speicher.read_text(encoding="utf-8"))["version"] == 20
+        assert json.loads(speicher.read_text(encoding="utf-8"))["version"] == 23
 
         aelter = json.loads(gueltig)
         aelter["version"] = 19

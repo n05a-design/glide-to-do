@@ -1,0 +1,90 @@
+{
+  "version": "3.33.19",
+  "umgebung": {
+    "python": "3.14.5",
+    "tk": "9.0.3",
+    "fenstersystem": "aqua",
+    "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "schriftfamilien": 222,
+    "tk_version": 9.0
+  },
+  "bilder": 30,
+  "ergebnisse": {
+    "Tippen fern": {
+      "layout": 21,
+      "voll": 0,
+      "zeichnen": 0,
+      "umfluss": 0,
+      "runden": 21,
+      "layout_ms_median": 3.918,
+      "layout_ms_p95": 4.004,
+      "layout_ms_roh": [
+        3.955,
+        3.937,
+        3.972,
+        3.897,
+        3.015,
+        3.826,
+        3.951,
+        3.988,
+        4.004,
+        2.441,
+        3.498,
+        4.017,
+        3.936,
+        3.918,
+        3.889,
+        3.835,
+        3.897,
+        3.923,
+        3.938,
+        3.91,
+        3.893
+      ]
+    },
+    "Tippen neben Bild": {
+      "layout": 21,
+      "voll": 21,
+      "zeichnen": 0,
+      "umfluss": 21,
+      "runden": 21,
+      "layout_ms_median": 43.234,
+      "layout_ms_p95": 47.887,
+      "layout_ms_roh": [
+        44.769,
+        26.997,
+        45.952,
+        44.073,
+        34.133,
+        40.589,
+        43.731,
+        47.887,
+        46.372,
+        33.653,
+        44.75,
+        39.726,
+        43.484,
+        40.638,
+        40.119,
+        42.889,
+        43.234,
+        41.801,
+        67.23,
+        41.419,
+        44.036
+      ]
+    },
+    "Scrollen": {
+      "layout": 0,
+      "voll": 0,
+      "zeichnen": 0,
+      "umfluss": 0,
+      "runden": 21,
+      "layout_ms_median": null,
+      "layout_ms_p95": null,
+      "layout_ms_roh": []
+    }
+  },
+  "callbackfehler": [],
+  "bedingung": "Akkubetrieb, macOS-Hintergrundmodus (GLIDE_QA_HINTERGRUND)"
+}

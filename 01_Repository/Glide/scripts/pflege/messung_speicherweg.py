@@ -5,6 +5,10 @@ Schema-Sicherungsprüfungen), `snapshot_undo`, `save_items`, `history_snapshot`,
 JSON mit und ohne Einrückung und einen vollständigen Abhak-Vorgang über
 `item_change`. --app erlaubt einen gesicherten Quellstand für Vorher/Nachher.
 --profil schlüsselt drei Abhak-Vorgänge zusätzlich mit cProfile auf.
+--ohne-verlauf misst dasselbe bei ausgeschaltetem Änderungsverlauf (P01r,
+08.10.2026). Die Speicherentwicklung (größter belegter Arbeitsspeicher des
+Prozesses vor und nach 50 Abhak-Vorgängen, `resource.getrusage`) steht in
+jedem Ergebnis; unter Windows fehlt sie (kein `resource`).
 
 Künstliche Daten mit festem Zufallskeim (200 Punkte je Liste, Beschreibung und
 Fälligkeit wechselnd), isolierter GLIDE_DATA_DIR. Kein Latenzversprechen: Werte
@@ -18,6 +22,7 @@ import argparse
 import cProfile
 import importlib.machinery
 import importlib.util
+import inspect
 import io
 import json
 import math
@@ -72,6 +77,17 @@ def bestand_anlegen(app, punkte, je_liste=200):
                 due="2026-10-%02d" % random.randint(1, 28) if i % 3 == 0 else None))
 
 
+def hoechster_speicher_kb():
+    """Größter belegter Arbeitsspeicher in KB; None ohne `resource` (Windows)."""
+    try:
+        import resource
+    except ImportError:
+        return None
+    wert = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    # macOS meldet Bytes, Linux Kilobytes.
+    return round(wert / 1024) if sys.platform == "darwin" else wert
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--app", type=Path, default=REPO / "src/glide/app.pyw")
@@ -79,6 +95,10 @@ def main():
     parser.add_argument("--items", type=int, default=1000)
     parser.add_argument("--rounds", type=int, default=9)
     parser.add_argument("--profil", action="store_true")
+    parser.add_argument("--ohne-verlauf", action="store_true",
+                        help="Änderungsverlauf ausschalten (history_enabled=False)")
+    parser.add_argument("--lokale-punktmutation", action="store_true",
+                        help="Bei P08b den geprüften lokalen item_change-Weg messen")
     args = parser.parse_args()
     if args.items < 1 or args.rounds < 2:
         parser.error("Mindestens ein Punkt und zwei warme Runden erforderlich")
@@ -101,6 +121,8 @@ def main():
         root.report_callback_exception = callback_error
         app = mod.ListApp(root)
         root.update()
+        if args.ohne_verlauf:
+            app.settings["history_enabled"] = False
         bestand_anlegen(app, args.items)
         app.save_items()
         datei = Path(folder) / "liste_speicher.json"
@@ -111,9 +133,11 @@ def main():
         app.save_items()
         erstes = (time.perf_counter() - start) * 1000
         punkt = app.lists[0]["items"][0]
+        local_options = ({"local": True} if args.lokale_punktmutation
+                         and "local" in inspect.signature(app.item_change).parameters else {})
 
         def abhaken():
-            with app.item_change([punkt["id"]]) as aenderung:
+            with app.item_change([punkt["id"]], **local_options) as aenderung:
                 punkt["done"] = not punkt["done"]
                 aenderung.mark()
 
@@ -124,6 +148,7 @@ def main():
             "punkte": args.items,
             "datei_kb": datei.stat().st_size // 1024,
             "runden_warm": args.rounds,
+            "vergleich_scope": "deklarierte Punktmutation" if local_options else "Vollvergleich",
             "umgebung": {"python": platform.python_version(), "tk": root.tk.call("info", "patchlevel"),
                          "plattform": platform.platform(), "prozessor": platform.processor() or platform.machine()},
             "erstes_speichern_ms": round(erstes, 3),
@@ -135,7 +160,13 @@ def main():
             "json_kompakt": messen(lambda: json.dumps(app.data_payload(), ensure_ascii=False,
                                                       separators=(",", ":")), args.rounds),
             "abhaken_item_change": messen(abhaken, args.rounds),
+            "verlauf": not args.ohne_verlauf,
         }
+        speicher_vorher = hoechster_speicher_kb()
+        for _ in range(50):
+            abhaken()
+        ergebnis["speicher_kb"] = {"vorher": speicher_vorher, "nach_50_abhaken": hoechster_speicher_kb(),
+                                   "hinweis": "größter belegter Arbeitsspeicher des Prozesses (ru_maxrss)"}
         if args.profil:
             profiler = cProfile.Profile()
             profiler.enable()

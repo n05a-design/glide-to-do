@@ -1,0 +1,12 @@
+{
+  "zeitpunkt": "2026-10-09",
+  "werkzeug": "packaging/macos/baue_app.py",
+  "version": "3.33.19",
+  "python": "3.14.5 (python.org, Tk 9.0.3)",
+  "signatur": "ad hoc, codesign --verify --deep --strict bestanden (Bauordner und Ziel)",
+  "app_pyw_sha256": "1159e8e2e96a8414f3e3e4fb8ffd0fdaa0218e1675fd4f38c87027dd5e20eb5e",
+  "dateien_im_bundle": 74,
+  "abweichungen_zu_07": 0,
+  "ziel": "01_Repository/Glide/build/macos/Glide.app (lokal, nicht versioniert); ersetzt das Bundle 3.33.18",
+  "manuelle_abnahme": "offen (I6)"
+}

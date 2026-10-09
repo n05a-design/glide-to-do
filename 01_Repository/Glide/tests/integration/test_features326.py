@@ -18,6 +18,7 @@ with tempfile.TemporaryDirectory(prefix='glide326-') as isolated:
     errors = []
     root.report_callback_exception = lambda *args: errors.append(args)
     app = mod.ListApp(root)
+    app.confirm_template_preview = lambda template: True
     app.show_info = app.show_warning = app.show_error = lambda *a, **k: None
     try:
         root.update()
@@ -225,7 +226,7 @@ with tempfile.TemporaryDirectory(prefix='glide326-') as isolated:
         assert app.save_items()
         backups = list(Path(mod.BACKUP_DIR).glob('liste_vor_format17_*.json'))
         assert backups and backups[-1].read_bytes() == original_bytes
-        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))['version'] == 20
+        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))['version'] == 23
         from datetime import datetime, timedelta
         now = datetime.now()
         history = [{'id': str(i), 'at': (now-timedelta(minutes=i)).isoformat(),
@@ -240,6 +241,8 @@ with tempfile.TemporaryDirectory(prefix='glide326-') as isolated:
         assert app.get_active_page() is None
         assert 'Änderungen' in app.stats_label.cget('text')
         # Seit 27.09.2026 steht der Untertitel in der Kennzahlenzeile unter dem Titel.
+        assert app.header_note_text() == ''
+        app.toggle_view_hints();root.update()
         assert 'letzten Änderungen' in app.header_note_text()
         assert not app.system_listbox.exists('smart:history')  # seit 26.09.2026 Kopfzeilenknopf
         assert app.home_content.winfo_children()

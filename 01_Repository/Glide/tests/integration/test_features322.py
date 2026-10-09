@@ -39,7 +39,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features322-") as folder:
         # ================================================================
         # Punkt 18: Checkliste (Aufgabenformat 16)
         # ================================================================
-        assert app.DATA_SCHEMA_VERSION == 20
+        assert app.DATA_SCHEMA_VERSION == 23
         assert app.MAX_CHECKLIST_ENTRIES == 50 and app.MAX_CHECKLIST_TEXT == 200
         leer = app.new_item("Ohne Checkliste")
         assert leer["checklist"] == [], "Ein neuer Punkt trägt eine leere Checkliste."
@@ -82,7 +82,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features322-") as folder:
         app.set_active_list(liste["id"])
         assert app.save_items()
         gespeichert = json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))
-        assert gespeichert["version"] == 20
+        assert gespeichert["version"] == 23
         assert app.validate_backup_schema(gespeichert) == set()
         kaputt = copy.deepcopy(gespeichert)
         kaputt["lists"][-1]["items"][1]["checklist"] = "keine Liste"
@@ -145,7 +145,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features322-") as folder:
         # Seit dem 27.09.2026 ein fester Umschalter; die aktive Ansicht ist
         # hervorgehoben statt ausgeblendet.
         assert app.view_switch.winfo_manager() == "pack" and app.list_view_button.text == "Liste"
-        assert app.table_button.active_fill == app.theme["selection"]
+        assert app.table_button.active_fill == app.theme["active"]  # U15: neutral statt Lila
         assert app.list_view_button.active_fill is None and app.board_button.active_fill is None
         app.toggle_table_view()
         root.update()
@@ -247,8 +247,13 @@ with tempfile.TemporaryDirectory(prefix="glide-features322-") as folder:
         # Punkt 10: Die Schalter stehen in der Reiterzeile, kein Statusband mehr.
         assert not hasattr(arbeitsflaeche, "board_status")
         beschriftungen = [getattr(w, "text", "") for w in descendants(arbeitsflaeche.bar)]
-        for erwartet in ("Raster", "Vorschau", "Auto anheften", "Finden"):
+        for erwartet in ("Raster", "Finden", "Mehr"):
             assert erwartet in beschriftungen, (erwartet, beschriftungen)
+        # Seit 3.33.21 (U09) stehen „Vorschau“ und „Auto anheften“ im Menü „…“.
+        einstellungen = arbeitsflaeche.board_settings_menu(root)
+        punkte = [einstellungen.entrycget(i, "label") for i in range(einstellungen.index("end") + 1)
+                  if einstellungen.type(i) != "separator"]
+        assert any("Bildvorschau" in p for p in punkte) and any("automatisch anheften" in p for p in punkte), punkte
 
         # Punkt 8: automatisches Anheften nimmt neue Punkte mit.
         arbeitsflaeche.configure_board("auto", True)

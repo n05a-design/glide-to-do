@@ -1,0 +1,62 @@
+{
+  "version": "3.33.18",
+  "source_sha256": "1f2cdbe6f009d8ebb0a785d2088f1915bddc5e219a10b79d6cd54976e2e31e74",
+  "python": "3.14.5",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "tk": "9.0.3",
+  "profiling": false,
+  "fixture": {
+    "tasks": 1000,
+    "lists": 12,
+    "drawings": 3,
+    "pinned": 2,
+    "window": "1400x950",
+    "idle_rounds": 3,
+    "kacheln": "d12",
+    "sichtbare_kacheln": [
+      "mascot",
+      "today",
+      "week",
+      "recent",
+      "boardpreview",
+      "drawings",
+      "pinned"
+    ]
+  },
+  "warm_rounds": 9,
+  "wechsel": {
+    "median_ms": 543.259,
+    "p95_ms": 589.208,
+    "stichproben_ms": [
+      543.622,
+      542.829,
+      543.259,
+      565.469,
+      545.273,
+      589.208,
+      541.176,
+      542.805,
+      541.226
+    ],
+    "first_ms": 825.95
+  },
+  "aktualisierung": {
+    "median_ms": 501.9,
+    "p95_ms": 514.951,
+    "stichproben_ms": [
+      502.325,
+      514.951,
+      500.611,
+      499.013,
+      496.46,
+      501.38,
+      501.9,
+      502.937,
+      506.739
+    ],
+    "first_ms": 506.111
+  },
+  "widgets_startseite": 114,
+  "callback_errors": [],
+  "bedingung": "Akkubetrieb, macOS-Hintergrundmodus (GLIDE_QA_HINTERGRUND)"
+}

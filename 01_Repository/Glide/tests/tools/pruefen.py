@@ -26,7 +26,7 @@ REPO = Path(__file__).resolve().parents[2]
 APP = REPO / "src/glide/app.pyw"
 SUITEN = ("test_glide.py", "test_datenintegritaet.py", "test_drawing.py", "test_drawing_prototype.py", "audit_app.py",
           "test_dialog_theme.py", "test_ui_updates.py", "test_glide_36.py", "test_release36.py", "test_ui_polish36.py",
-          "test_ui_followup36.py", "test_release37.py", "test_template_workflows.py", "test_reminders.py", "test_ui39.py", "test_workspace310.py", "test_features311.py", "test_features312.py", "test_features313.py", "test_features314.py", "test_features315.py", "test_features316.py", "test_features317.py", "test_features318.py", "test_features319.py", "test_features320.py", "test_features321.py", "test_features322.py", "test_features323.py", "test_features324.py", "test_features325.py", "test_features326.py", "test_features328.py", "test_features329.py", "test_drawing330.py", "test_features330.py", "test_mindestgroesse330.py", "test_kontrast330.py", "test_paketierung330.py", "test_hintergrund330.py", "test_rueckmeldung330.py", "test_seiten330.py", "test_aufraeumen330.py", "test_kompression330.py", "test_bilder330.py", "test_festlayout330.py", "test_logo330.py", "test_kartenfuss330.py", "test_speicherlast330.py", "test_notizbereich330.py", "test_befunde330.py", "test_fenster330.py", "test_tempo330.py", "test_etappe1_332.py", "test_klappmechanismen3321.py", "test_drag_performance3322.py", "test_library_performance3323.py", "test_fundament333.py", "test_bereiche3331.py", "test_startseite3332.py", "test_eingabe3333.py", "test_eisenhower3335.py", "test_heute3336.py", "test_suche3337.py", "test_editor3338.py", "test_vollpruefung325.py")
+          "test_ui_followup36.py", "test_release37.py", "test_template_workflows.py", "test_reminders.py", "test_ui39.py", "test_workspace310.py", "test_features311.py", "test_features312.py", "test_features313.py", "test_features314.py", "test_features315.py", "test_features316.py", "test_features317.py", "test_features318.py", "test_features319.py", "test_features320.py", "test_features321.py", "test_features322.py", "test_features323.py", "test_features324.py", "test_features325.py", "test_features326.py", "test_features328.py", "test_features329.py", "test_drawing330.py", "test_features330.py", "test_mindestgroesse330.py", "test_kontrast330.py", "test_paketierung330.py", "test_hintergrund330.py", "test_rueckmeldung330.py", "test_seiten330.py", "test_aufraeumen330.py", "test_kompression330.py", "test_bilder330.py", "test_festlayout330.py", "test_logo330.py", "test_kartenfuss330.py", "test_speicherlast330.py", "test_notizbereich330.py", "test_befunde330.py", "test_fenster330.py", "test_tempo330.py", "test_etappe1_332.py", "test_klappmechanismen3321.py", "test_drag_performance3322.py", "test_library_performance3323.py", "test_fundament333.py", "test_bereiche3331.py", "test_startseite3332.py", "test_eingabe3333.py", "test_eisenhower3335.py", "test_heute3336.py", "test_suche3337.py", "test_editor3338.py", "test_speichervergleich3339.py", "test_kennzahlen33310.py", "test_fortsetzung33311.py", "test_titel33312.py", "test_planen33313.py", "test_tagpaket33314.py", "test_wissen33315.py", "test_bedienung33316.py", "test_woche33317.py", "test_seiten33318.py", "test_tempo33319.py", "test_komfort33320.py", "test_oberflaeche33321.py", "test_wissen3340.py", "test_pixel3350.py", "test_austausch3350.py", "test_vollpruefung325.py")
 # standpruefung.py ist seit 3.21.3 dabei: Sieben Dokumente standen zwei
 # Versionssprünge lang auf 3.21.0, weil nichts die Standzeilen gegen VERSION
 # geprüft hat. Index- und Linkprüfung finden das nicht – ein Dokument kann
@@ -148,6 +148,9 @@ def fixtures_pruefen():
                            # Format 19 (Zeichnungsseite) mit 3.29.0, Format 20
                            # (Beziehungen, Zeit, Symbole, Archiv) mit 3.30.0.
                            19 if versioned_name and version_tuple <= (3, 29, 0) else
+                           20 if versioned_name and version_tuple <= (3, 33, 14) else
+                           21 if versioned_name and version_tuple <= (3, 33, 16) else
+                           22 if versioned_name and version_tuple <= (3, 33, 17) else
                            values["DATA_SCHEMA_VERSION"])
         if payload.get("version") != expected_schema:
             raise ValueError(f"{path.name}: Datenformat passt nicht zur Erzeugerversion")
@@ -445,9 +448,10 @@ def main():
     logdir = args.protokoll.expanduser().resolve() if args.protokoll else None
     run = Prueflauf(logdir, args.timeout)
     if sys.platform == "darwin" and not args.vordergrund:
-        # Seit 30.09.2026 laufen die Prüffenster im Hintergrund: Sie nehmen
-        # weder Fokus noch Tastatur, man kann nebenher weiterarbeiten
-        # (tests/tools/hintergrund/sitecustomize.py).
+        # Seit 30.09.2026 laufen die Prüffenster im Hintergrund: Sie holen
+        # sich nicht den Vordergrund und nehmen keine Maus. Die Tastatur ist
+        # nicht abgeschirmt – während des Laufs nicht tippen
+        # (tests/tools/hintergrund/sitecustomize.py, Prüfplan).
         hintergrund = str(REPO / "tests/tools/hintergrund")
         run.env["PYTHONPATH"] = os.pathsep.join(filter(None, (hintergrund, run.env.get("PYTHONPATH"))))
         run.env["GLIDE_QA_HINTERGRUND"] = "1"

@@ -1,6 +1,6 @@
 # Arbeitsregeln für Claude Code – Glide
 
-Stand 05.10.2026 · Glide 3.33.8
+Stand 09.10.2026 · Glide 3.35.0
 
 Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf die verbindlichen Projektregeln und ergänzt, was für Claude-Code-Sitzungen im Repository gilt. Regeln nicht hier doppeln, sondern an der Quelle pflegen.
 
@@ -37,3 +37,5 @@ Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf 
   - Was `.gitignore` abfängt und wo sie nicht schützt (bereits versionierte Dateien, `git add -f`, Web-Upload), steht in ihrem Kopf.
 
 Aktiver Projektpfad `Github/glide-to-do`.
+
+Größere Feature-Pakete sind seit 07.10.2026 beauftragt; Umfang und Folgepakete im [Entwicklungsplan §4.4](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#44-größere-umsetzungspakete-auftrag-07102026). Ein gemeinsamer eingefrorener Volllauf je Paket, gezielte Teilprüfungen bleiben Pflicht.

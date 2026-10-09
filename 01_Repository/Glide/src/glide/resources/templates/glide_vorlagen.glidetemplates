@@ -7,8 +7,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -156,13 +156,13 @@
         "labels": [
           {
             "id": "d2df1e61e7465f61baeb847f4555c606",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "3acf1299637e546d9ae304b766da066b",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -196,8 +196,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -418,13 +418,13 @@
         "labels": [
           {
             "id": "94bcdda52fa95c4c831d419a7b67db00",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "7e43ca3db68152009202cf4601108475",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -462,8 +462,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -607,13 +607,13 @@
         "labels": [
           {
             "id": "7d48663ec97d5b66bb751b2edc0f358f",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "abe7420ec8565edd89790412fa9bbf44",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -651,8 +651,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -885,13 +885,13 @@
         "labels": [
           {
             "id": "ee0000d62d2e5eb4a8a1cf0d279968e0",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "1ee9188fe3a75ec1adff1d611703e8e8",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -930,8 +930,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -1178,13 +1178,13 @@
         "labels": [
           {
             "id": "1832a523ccce581c98649cef9262d20b",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "97bffe11c15b58a3b5436d68611cada4",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -1222,8 +1222,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -1470,13 +1470,13 @@
         "labels": [
           {
             "id": "8332f53b5f9254c5adc52efac59cea1c",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "e06e0373fdc25d44a7fc1f8ac11ff7f1",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -1519,8 +1519,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -1741,13 +1741,13 @@
         "labels": [
           {
             "id": "79ec5a4a4ee75ee48ee33665c8791b7c",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "fbcd7aaa00d85c8eac7c047b578e25ce",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -1785,8 +1785,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -2033,13 +2033,13 @@
         "labels": [
           {
             "id": "ce499c83599f50439f43c79981ca1ee2",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "729c91ab859452a68f351204dff2e376",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -2077,8 +2077,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -2350,13 +2350,13 @@
         "labels": [
           {
             "id": "ee89727addd754abaa2b03cd469dce3d",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "a65bb96625f253a2be4674a804583bba",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -2400,8 +2400,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -2596,13 +2596,13 @@
         "labels": [
           {
             "id": "aa3524d202e15f54a7c6d530b9c9cd42",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "0c5d5393b3d6580cbba96d14d1174925",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -2640,8 +2640,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -3730,13 +3730,13 @@
         "labels": [
           {
             "id": "1c73a83195775d98a82d78312646c08e",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "a8c3814c91b754aea845578e7da8ad7f",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -3794,8 +3794,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -4884,13 +4884,13 @@
         "labels": [
           {
             "id": "9513201811f150f29ec084e29b72ab39",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "3183bc60224454489a5ae343b66f04f8",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -4948,8 +4948,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -6038,13 +6038,13 @@
         "labels": [
           {
             "id": "67dcbb3896be5ca1be206d313d2823eb",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "f17e70047a1751e585006fe8ff94dccb",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -6102,8 +6102,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -7192,13 +7192,13 @@
         "labels": [
           {
             "id": "03f4b8a792dc591585f9d7c1e16701fd",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "9db34444876d5d9294a98fe57129a714",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -7256,8 +7256,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -8346,13 +8346,13 @@
         "labels": [
           {
             "id": "8fe2ed1e69d35aa888b3932f2435147c",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "a2d15fe00c545f7eb5c577277c7bbe4f",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },
@@ -8410,8 +8410,8 @@
       "items": [],
       "payload": {
         "app": "Glide",
-        "app_version": "3.33.8",
-        "version": 20,
+        "app_version": "3.35.0",
+        "version": 23,
         "exported_at": "2026-09-11T00:00:00",
         "lists": [
           {
@@ -9500,13 +9500,13 @@
         "labels": [
           {
             "id": "1e5371bb11a95f0986d7391014d119f5",
-            "name": "Long-Task",
+            "name": "Langtext",
             "color": "clear",
             "system": "long"
           },
           {
             "id": "4017a8094c0457cf9976132aa85b35e5",
-            "name": "Überschrift",
+            "name": "Zwischenüberschrift",
             "color": "accent",
             "system": "heading"
           },

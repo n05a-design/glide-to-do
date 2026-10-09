@@ -43,6 +43,7 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
     fehler = []
     root.report_callback_exception = lambda *args: fehler.append(args)
     app = mod.ListApp(root)
+    app.confirm_template_preview = lambda template: True
     app.show_info = app.show_warning = lambda *args, **kwargs: None
     app.show_error = lambda *args, **kwargs: fehler.append(args)
     # Die Beispieldaten verweisen auf Anhänge, deren Dateien hier fehlen; der
@@ -86,7 +87,7 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
                      if menue.type(index) == "command"]
         # Seit 3.33.1 nimmt „Listen“ jede Art auf, also auch Buch und Notizbuch
         # (Vertrag 74); gleiche Reihenfolge wie im Ordnermenü (test_features330).
-        assert eintraege == ["Neue Liste …", "Neue Seite", "Neue Notiz …", "Neue Pinnwand …", "Neue Galerie",
+        assert eintraege == ["Aus Vorlage …", "Neue Liste …", "Neue Seite", "Neue Notiz …", "Neue Pinnwand …", "Neue Galerie",
                              "Neue Zeichnung", "Neuer Ordner …", "Neues Buch …", "Neues Notizbuch …",
                              "Listen importieren …"], eintraege
         listen_iid = f"list:{normal['id']}"
@@ -104,7 +105,9 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
         ruhe()
         assert not app.selection_bar.winfo_ismapped()
         # Seit 29.09.2026 teilen sich Hinweis und Leiste den Kartenfuß.
-        assert app.card_foot_mode() == "hint" and app.hint_label.winfo_ismapped(), "ohne Auswahl der Hinweis"
+        assert app.card_foot_mode() is None and not app.hint_label.winfo_ismapped()
+        app.toggle_view_hints();ruhe()
+        assert app.card_foot_mode() == "hint" and app.hint_label.winfo_ismapped(), "auf Wunsch der Hinweis"
         zeilen = [iid for iid in app.tree.get_children("") if app.find_item(iid)]
         app.tree.selection_set(zeilen[:2])
         ruhe()
@@ -114,14 +117,17 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
         app.tree.selection_set(())
         ruhe()
         assert not app.selection_bar.winfo_ismapped()
-        assert app.list_view_button.active_fill == app.theme["selection"]
+        # Seit 3.33.21 (U15) trägt die offene Ansicht die neutrale Rolle „active“.
+        assert app.list_view_button.active_fill == app.theme["active"]
         assert app.table_button.active_fill is None and app.board_button.active_fill is None
         app.set_table_view()
         ruhe()
-        assert app.table_button.active_fill == app.theme["selection"]
+        assert app.table_button.active_fill == app.theme["active"]
         app.set_trash_view()
         ruhe()
-        assert app.button_frame.winfo_manager() == "" and app.card_foot_mode() == "hint"
+        assert app.button_frame.winfo_manager() == "" and app.card_foot_mode() is None
+        app.toggle_view_hints();ruhe()
+        assert app.card_foot_mode() == "hint"
 
         # --- Seite nach Zeichnung ohne Eingabe und Suche ------------------------
         seite = app.new_page_from_markdown("# Bericht\n\nText\n\n- [ ] Aufgabe eins\n")
