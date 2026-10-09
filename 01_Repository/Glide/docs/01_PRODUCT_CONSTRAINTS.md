@@ -1,6 +1,6 @@
 # Produktgrenzen und Produktprinzipien
 
-Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
+Stand 10.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
 
 Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 03.10.2026 mit der Produktprinzipien- und UX-Prüfung vom 01.10.2026 zusammengeführt; deren Befunde U01–U24 stehen mit Status im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt, am 06.10.2026 um die Ausschlüsse der Wettbewerbsrecherche vom 25.09.2026 ergänzt. Die Vorfassungen trägt Git.
 
@@ -34,6 +34,8 @@ Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 
 | Gewohnheiten (G06), verschlüsselte Ablage (G22) | vorerst nicht |
 
 Installer, Signatur, Store, Markenfreigabe und endgültige Lizenz sind gesonderte, offene Schritte ([Veröffentlichung](10_VEROEFFENTLICHUNG.md)); was automatisch und was von Menschen auf welcher Plattform geprüft ist, unterscheidet der [QA-Bericht](07_QA_BERICHT.md). Die Kennungen `de.shaye.glide` und `Shaye.Glide` ändern sich nie.
+
+**Geplante begrenzte Erweiterung (10.10.2026, D30; noch nicht umgesetzt):** Eine ausdrücklich gewählte lokale ICS-Datei darf rein lesend als belegte Zeit in Zeitraster und Kapazitätsbilanz einfließen, einschließlich der vereinbarten Serien/Ausnahmen. Der bestehende Aufgabenimport bleibt ein eigener Dateivorgang; Synchronisation, Abonnement, Teilnehmer und VTODO bleiben ausgeschlossen. Die bestehende Importgrenze ist bis zur Lieferung unverändert. Umfang und Prüfung in [Entwicklungsplan S26-06](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#15-neuer-feature-sprint-ab-09102026-gemeinsame-planung).
 
 ## Sechs Produktprinzipien (Auftrag des Inhabers vom 01.10.2026)
 

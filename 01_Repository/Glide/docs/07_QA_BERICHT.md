@@ -59,6 +59,7 @@ Die Mac-Läufe 3.33.0–3.33.3 meldeten je zwei übersprungene Schritte. „Lief
 
 | Datum | Nachlauf | Nachweis |
 |---|---|---|
+| 10.10.2026 | Runden 4–6 entschieden (D30–D43), alle Aufgabenkarten präzisiert, Gesamtplan mit acht Versionen/Abnahmetoren zur Bestätigung vorbereitet; keine Produktionsänderung. Strenge CI auf isolierter Projektkopie grün (SSL-Hinweis beim Fremdcodeabruf), Lieferhashes unverändert; externe Skill-Dateien unangetastet | [README](../tests/qa-3.35.0/planung_fortsetzung_2026-10-10/README.md) |
 | 10.10.2026 | Auswahl D18–D29 festgehalten, drei Referenztafeln auf Basis eigener isolierter Fensteraufnahmen vorgelegt; Bild 1 und vier Oberflächenfunktionen vollständig gewählt, ebenso Notion/Paketierung/Logo/Symbole; keine Produktionsänderung, Lieferhashes unverändert. Strenge CI auf isolierter Projektkopie grün; Arbeitsordner wegen externer unversionierter Skill-Datei in Standprüfung rot | [README](../tests/qa-3.35.0/planung_2026-10-10/README.md) |
 | 09.10.2026 | Beginn der gemeinsamen Sprintplanung: Kandidatenkarten und Entscheidungsverfahren, Primärquellenabgleich; keine Funktionsauswahl und keine Produktionsänderung; strenge CI grün, Lieferhashes unverändert | [README](../tests/qa-3.35.0/planung_2026-10-09/README.md) |
 | 09.10.2026 | Gesamtprüfung der lokalen Dokumentation auf Stand, Inhalt und Aktualität; veraltete Stände gelöscht, Plan auf den Ist-Stand verdichtet, Altersgrenze für Bildordner im Kürzwerkzeug (Referenz-Mac, künstliche Daten) | [README](../tests/qa-3.35.0/dokumentation_2026-10-09/README.md) |
