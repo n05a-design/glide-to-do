@@ -179,7 +179,7 @@ Je Produkt: Stärke einschließlich der Entwicklung bis 01.10.2026, Grenze und B
 | | Eingebaute KI | ○ | ● | ● | ◐ | ? | ○ | ● | ● | P | ● | bewusst nicht (Q3) |
 | | Schnittstelle für Assistenten (API/MCP) | ◐ | ● | ● | ◐ | ◐ | ? | ? | ◐ | ◐ | ◐ | `.glideexchange`; Dokumente statt Schnittstelle (Q3) |
 | Bedienung | Eine Befehlspalette | ● | ● | ● | ◐ | ◐ | ◐ | ● | ◐ | ● | ○ | gemeinsame Inhaltssuche und Aktionen seit 3.33.16 (U01) |
-| | Erscheinungsbild wie System | ○ | ● | ● | ● | ● | ● | ● | ● | ● | ● | N01 |
+| | Erscheinungsbild wie System | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | N01 ✅ 3.33.21 |
 | | Rückgängig auch für Strukturänderungen | ● | ● | ◐ | ● | ◐ | ◐ | ● | ● | ● | ● | 20 Schritte, Bestandswächter |
 | | Hilfe in der App | ● | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | Handbuch, Kürzel; Hinweise je Ansicht einklappbar seit 3.33.16 (D11/U02) |
 | | Beispielinhalt | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | Showcase und Rundgang; Einstieg bewusst nicht |
@@ -241,3 +241,17 @@ Gezielte Recherche am 08.10.2026 zu den Aufgaben des Sprints ([Entwicklungsplan 
 | Notion | Keine offizielle Veröffentlichung nach dem 28.08.2026 gefunden; Notion 3.6 (01.07.2026) mit externen Agenten. [Releases](https://www.notion.com/releases/2026-07-08) | Keine neue Konsequenz; Q3 bleibt. | – |
 
 **Grenzen dieser Recherche:** Für macOS 27 Erinnerungen und Sunsamas Routinen fanden sich keine Herstellerangaben; Aussagen Dritter sind nicht geprüft. Preise und Tarife wurden nicht erneut geprüft.
+
+## 8. Quellenabgleich für die neue Planung (09.10.2026)
+
+Gezielte Primärquellen, kein praktischer Produktvergleich. Die Folgerungen sind Vorschläge für die gemeinsame Planung, keine Inhaberentscheidungen. Aufgaben und Auswahl ausschließlich im [Entwicklungsplan §15](Glide_Entwicklungsplan.md#15-neuer-feature-sprint-ab-09102026-gemeinsame-planung).
+
+| Quelle | Belegtes Verhalten | Eigene Folgerung für Glide |
+|---|---|---|
+| [Aseprite: Spritesheets](https://www.aseprite.org/docs/sprite-sheet/) | Mehrere Frames in einem PNG, horizontal, vertikal oder als Raster; eigener Exportweg | E-S1 kann ohne GIF mit einem brauchbaren Austauschformat beginnen. GIF und Bearbeitungstiefe bleiben getrennte Auswahlfragen. |
+| [Notion: Export](https://www.notion.com/help/export-your-content) | Markdown für Seiten, CSV für Datenbanken, ZIP mit getrennten Seiten/Dateien; Hinweisblöcke werden als HTML exportiert | E-S4: klar begrenzter Notion-Import mit Verlustbericht. V02 als zusätzlicher Vorschlag: wiederholte Übernahme desselben Exportinhalts erkennt unveränderte Quellen und zeigt Konflikte vor einer Änderung. Kein Anspruch auf vollständige Notion-Kompatibilität. |
+| [Sunsama: Tagesplanung](https://help.sunsama.com/docs/usage-guides/daily-planning/) | Optionale Hinweise zur eingestellten Planungszeit; Aufwandsbilanz mit Überlastwarnung; Aufgaben ausdrücklich auf spätere Tage oder in den Vorrat verschieben | E-S3 bekommt getrennte Optionen für Vorgabe und Tiefe. V01: aus Glides vorhandener Überplanungswarnung direkt eine vom Nutzer ausgewählte Umplanung mit Vorher-/Nachher-Bilanz öffnen. Keine automatische Verteilung. |
+| [PyInstaller: Voraussetzungen](https://pyinstaller.org/en/stable/requirements.html) | Dokumentation 6.22.3; Paketierung je Zielplattform, Linux benötigt Systemwerkzeuge; macOS-Pakete sind an die Bauumgebung gebunden | E-S5 muss native Bau- und Prüfumgebungen je Zielsystem einplanen. Ein erfolgreicher Mac-Bau ist kein Nachweis für Windows oder Linux. Werkzeugversion, Lizenz und Tk-Mitnahme vor der Entscheidungsrunde separat prüfen. |
+| [Tk 9.1: accessible](https://www.tcl-lang.org/man/tcl9.1/TkCmd/accessible.html) | Rollen, Namen, Werte, Zustände, Aktionen, virtuelle zugängliche Objekte sowie Auswahl-/Fokusereignisse | N12 ist mehr als neue Beschriftungen: vollständiger Kernablauf braucht Tk-9.1-Laufzeit und tatsächliche Screenreader-Abnahme; erste Stufe und vollständiger Umfang getrennt anbieten. |
+
+V01 und V02 sind neue Vorschläge aus diesen Quellen und dem vorhandenen Verhalten (`planning_summary`, ICS-UID-Duplikaterkennung). N13 (selektive Seitenwiederherstellung) ist bereits ein Zukunftskandidat aus dem Plan, keine neu entdeckte Lücke. Beim Abgleich die bislang falsche Glide-Markierung „Erscheinungsbild wie System“ in der Matrix auf den belegten Stand 3.33.21 berichtigt; keine Herstellerzeile neu bewertet.

@@ -59,6 +59,7 @@ Die Mac-Läufe 3.33.0–3.33.3 meldeten je zwei übersprungene Schritte. „Lief
 
 | Datum | Nachlauf | Nachweis |
 |---|---|---|
+| 09.10.2026 | Beginn der gemeinsamen Sprintplanung: Kandidatenkarten und Entscheidungsverfahren, Primärquellenabgleich; keine Funktionsauswahl und keine Produktionsänderung; strenge CI grün, Lieferhashes unverändert | [README](../tests/qa-3.35.0/planung_2026-10-09/README.md) |
 | 09.10.2026 | Gesamtprüfung der lokalen Dokumentation auf Stand, Inhalt und Aktualität; veraltete Stände gelöscht, Plan auf den Ist-Stand verdichtet, Altersgrenze für Bildordner im Kürzwerkzeug (Referenz-Mac, künstliche Daten) | [README](../tests/qa-3.35.0/dokumentation_2026-10-09/README.md) |
 | 08.10.2026 | Projektstatus, Vergleichsmatrix, Format-/Suiteangaben und Systemmitteilungen abgeglichen; lokale Altartefakte nach Aufbewahrung bereinigt (App und Lieferung unverändert) | [README](../tests/qa-3.33.18/dokumentation_2026-10-08/README.md) |
 

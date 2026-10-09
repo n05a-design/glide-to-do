@@ -12,6 +12,8 @@ Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Ent
 
 **Sprintauftrag vom 08.10.2026 (Kern im Wortlaut):** „Führe auf dieser Grundlage anschließend einen langfristigen, umfangreichen Feature-Sprint durch.“ Umgesetzt und auf dem Referenz-Mac geprüft geliefert als 3.33.19 bis 3.35.0; Aufgabenkatalog, Abgleich und Offenes im [Entwicklungsplan §14](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#14-sprint-ab-08102026-aufgabenkatalog).
 
+**Neuer Sprintauftrag vom 09.10.2026, zunächst gemeinsame Planung (Wortlaut):** „Bereite ein neues, umfangreiches Feature-Sprint-Paket vor und setze es danach vollständig um.“ Dabei: „Lass mich jede Funktion selbst entscheiden.“ Der fertige Paketplan mit Reihenfolge und Versionen wird ausdrücklich bestätigt: „Erst nach meinem ‚ja‘ beginnt die Umsetzung.“ Dieser Auftrag ersetzt für den neuen Sprint die frühere pauschale Auswahlfreigabe innerhalb der Paketfolge. Empfehlungen sind keine Auswahl; unbeantwortete Kandidaten gehören nicht zum bestätigten Umfang. Antworten werden unmittelbar als D18 ff. mit Datum und Originalwortlaut eingetragen; Aufgaben und Fortsetzungsstand stehen im [Entwicklungsplan §15](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#15-neuer-feature-sprint-ab-09102026-gemeinsame-planung). Bisher liegt keine neue Auswahlantwort vor.
+
 **Grundsatz:** Entschiedenes wird nicht erneut vorgelegt. Offen sind nur:
 - D07
 - die Auswahl A–H mit ihrer Bearbeitungstiefe

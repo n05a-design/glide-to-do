@@ -1,0 +1,22 @@
+{
+  "version": "3.35.0",
+  "referenz_commit": "b5f5c226ccdb06b02537c8b091086bd5defd6fcd",
+  "app_07_showcase_gegen_referenz_unveraendert": true,
+  "quell_lieferabgleich": {
+    "dateien": 168,
+    "sha256_manifest": "b733442401677fb2546dbe2d1e59df04b249025f67966b39e50d9dd49b39605e",
+    "abweichungen": []
+  },
+  "app_sha256": "9147c66318b7c46d7fd581eedcb5c6996bf19e7eebed857893c1b2fffc5bfb94",
+  "07_hauptdatei_sha256": "9147c66318b7c46d7fd581eedcb5c6996bf19e7eebed857893c1b2fffc5bfb94",
+  "bundle_info_sha256": "16ed0ce846c794b13f7327006bc28b0f503c405cd05fffa234e0cd47b2fb219e",
+  "bundle_abgleich": {
+    "dateien": 82,
+    "abweichungen": [],
+    "plattformfremde_tkdnd_bibliotheken": "wie im bestehenden Mac-Bauwerkzeug ausgeschlossen"
+  },
+  "stand": "09.10.2026",
+  "nachlauf": "Beginn der gemeinsamen Sprintplanung; keine neue App-Version und keine neue Funktionsentscheidung",
+  "ci_exitcode": 0,
+  "vollpruefung": "nicht neu ausgeführt; kein ausführbarer Pfad geändert"
+}
