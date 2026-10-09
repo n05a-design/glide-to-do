@@ -1,6 +1,6 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · für den nächsten Chat oder Bearbeiter
+Stand 10.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · für den nächsten Chat oder Bearbeiter
 
 Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe, Projektübergabe, Startkontext und dem Sitzungsprotokoll vom 24.–26.09.2026; die Vorfassungen trägt Git. Dieses Dokument sagt, wo was steht, was gilt und was als Nächstes ansteht – es ersetzt nicht die Fachdokumente.
 
@@ -18,7 +18,7 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 |---|---|
 | Arbeitsregeln und Abschlusskriterium | [`01_Repository/Glide/AGENTS.md`](../01_Repository/Glide/AGENTS.md), für Claude Code zusätzlich `CLAUDE.md` in der Wurzel |
 | Aufgaben, Stufen, Ziele | [Entwicklungsplan](Glide_Entwicklungsplan.md) |
-| Entscheidungen D01–D17, frühere Antworten, Leitgedanken des Inhabers | [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) |
+| Entscheidungen D01–D29, frühere Antworten, Leitgedanken des Inhabers | [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md) |
 | Produktgrenzen, sechs Prinzipien, Prinzipien-Check | [Produktgrenzen](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md) |
 | Code | `01_Repository/Glide/src/glide/` – Module siehe [Architektur](../01_Repository/Glide/docs/02_ARCHITECTURE.md) |
 | Verhalten der Funktionen | [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md) |
@@ -78,9 +78,10 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 
 ## 6. Was als Nächstes ansteht
 
-- **Neuer Sprint, Phase 1 seit 09.10.2026:** Einstieg vollständig gelesen; `main` war sauber und enthielt PR #16 (`b5f5c22`). Planung auf `claude/glide-sprint-2026-10-09`, App und Lieferung bleiben 3.35.0. Kandidaten und Gesprächsstand im [Entwicklungsplan §15](Glide_Entwicklungsplan.md#15-neuer-feature-sprint-ab-09102026-gemeinsame-planung). Erste Fragerunde: E-S1 Animation, E-S2 Referenzweg, E-S3 Tageshinweise. Noch keine Antwort und keine Entscheidung D18; anschließend weitere Runden einschließlich jeder einzelnen Oberflächenfunktion, E-S4–E-S8, Qualitätsreste, neuer Vorschläge und I1–I11. Erst das ausdrückliche „ja“ zum fertigen Paketplan erlaubt Produktionsänderungen. Nach jeder Antwort Entscheidungsregister und Aufgaben sofort nachführen.
+- **Neuer Sprint, Phase 1 seit 09.10.2026, fortgesetzt 10.10.2026:** Einstieg vollständig gelesen; `main` war sauber und enthielt PR #16 (`b5f5c22`). Planung auf `claude/glide-sprint-2026-10-09`, App und Lieferung bleiben 3.35.0. [Entwicklungsplan §15](Glide_Entwicklungsplan.md#15-neuer-feature-sprint-ab-09102026-gemeinsame-planung): Runden 1–3 entschieden (D18–D29), Wortlaute in der Arbeitsrichtung. Animation A/V; Referenzweg B/V, Bild 1; OB02/OB03/N05/KO04 vollständig; Tageshinweise A/V; Notion A/V; PyInstaller 6.22.3 für Mac/Windows A/V; Logo B+C+D+F; gesamte ICONS-Tabelle mit Systemzeichen. Ausgewähltes Bild im Grafik-Master gesichert. Weitere Funktionen bleiben zur gemeinsamen Auswahl, neue Entscheidungen ab D30. Erst das ausdrückliche „ja“ zum fertigen Paketplan erlaubt Produktionsänderungen. Nach jeder Antwort Entscheidungsregister und Aufgaben sofort nachführen.
+- **Weitere Entscheidungen des Inhabers:** Runde 4 zu E-S8a ICS, E-S8b Bewegung, Bedienfläche, P03-Rest, E01-Rest und Linux-Matrix gestellt, Antwort offen. Danach Screenreader/Tk 9.1, Seitenwiederherstellung, neue Vorschläge V01/V02, P05, Logo-Master und externe Abnahmetore/I1–I11. E-S1–E-S7 entschieden, ausgenommen Logo-Master LG04; ihre Umsetzung steht aus. Stash, `codex/`-Zweig und Windows-Worktrees unangetastet.
 - **Sprint abgeschlossen** (3.33.19–3.35.0, eingecheckt am 09.10.2026): Abgleich, Abweichungen und Offenes in [Entwicklungsplan §14.2](Glide_Entwicklungsplan.md#142-abschlussabgleich-abs-09102026); Ergebnisse je Version im QA-Bericht.
-- **Entscheidungen des Inhabers** E-S1–E-S8 ([Entwicklungsplan §11](Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber)) geben die nächsten Pakete frei: Animation (D07), Oberfläche nach Referenzentwürfen (I7), Tageshinweise, Importquelle, Bauwerkzeug, Logo unter Tk 8.6, Symbolschrift, ICS als belegte Zeit und Bewegung.
+- **Planungsprüfung 10.10.2026:** [Nachweis](../01_Repository/Glide/tests/qa-3.35.0/planung_2026-10-10/README.md). Strenge CI auf isolierter Projektkopie grün, App/07/Showcase und Bundle unverändert. Im Arbeitsordner schlägt nur die Standprüfung der externen unversionierten `Apple Design Skill.md` fehl (keine Glide-Standzeile); Datei unverändert belassen. Der rote Vorlauf ist erhalten. Künftige Prüfungen müssen diesen Unterschied ausdrücklich ausweisen, bis die externe Datei außerhalb der Projektablage liegt.
 - **Prüfungen außerhalb des Macs:** Windows-Vollprüfung des Stands 3.35.0 (deckt W02 und die Lieferungen ab 3.33.19), Windows-Sichtprüfung W01/W06–W08 (B1a), Linux-Sichtprüfung der JPEG-Vorschau (N08), menschliche Abnahme I6 ([Prüfliste](Glide_Manuelle_Pruefung.md)).
 - **Ohne Entscheidung möglich, aber nicht beauftragt:** Bedienfläche nach U09/OB05 neu messen (Ziel ≤ 15 %), P03-Rest, Linux-Kalibrierung der Integrationssuiten; Stufe 5 nur auf ausdrücklichen Auftrag.
 
@@ -88,6 +89,6 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 
 Vollständige Liste mit Stand und Empfehlungen: [Entwicklungsplan §11](Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber).
 
-- **Entscheidungen:** E-S1–E-S8 (D07, I7, AU03, G21, D15/G26, I8, A14, AU07/OB04) und die weitere Bearbeitungstiefe der Auswahl A–H.
+- **Entscheidungen:** E-S8 (AU07/OB04), Logo-Master LG04, Qualitäts-/Zukunftskandidaten und weitere Bearbeitungstiefe A–H, soweit nicht bereits D18–D29 abdecken. E-S1–E-S7 sind entschieden; ihre Umsetzung steht aus.
 - **Freigaben und Konten:** I1 Inhaberangaben, I2 Lizenz, I3 Developer-ID und Code-Signing-Zertifikat, I4 Markenprüfung, I5 aktuelles Python auf dem Mac (3.14.5 trägt die Volläufe), I9 Rechte an Fremdbildern, I10 Git-Historie, I11 GitHub-Auftritt.
 - **Prüfungen:** I6 Windows-Vollprüfung des aktuellen Stands und menschliche Prüfsitzungen nach der [Prüfliste](Glide_Manuelle_Pruefung.md).

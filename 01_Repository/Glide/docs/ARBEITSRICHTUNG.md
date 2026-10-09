@@ -1,6 +1,6 @@
 # Arbeitsrichtung, Entscheidungen und Abnahme
 
-Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23
+Stand 10.10.2026 · Glide 3.35.0 · Aufgabenformat 23
 
 Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Entscheidungsvorlage vom 01.10.2026 und den Entscheidungslisten vom 25.–30.09.2026 zusammengeführt; deren Wortlaut trägt Git. Am 06.10.2026 um die Leitgedanken des Inhabers aus dem nicht übernommenen Richtungsentwurf vom 03.10.2026 ergänzt. Aufgabenstand und Reihenfolge: [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Technische Regeln: [Architektur](02_ARCHITECTURE.md).
 
@@ -12,17 +12,15 @@ Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Ent
 
 **Sprintauftrag vom 08.10.2026 (Kern im Wortlaut):** „Führe auf dieser Grundlage anschließend einen langfristigen, umfangreichen Feature-Sprint durch.“ Umgesetzt und auf dem Referenz-Mac geprüft geliefert als 3.33.19 bis 3.35.0; Aufgabenkatalog, Abgleich und Offenes im [Entwicklungsplan §14](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#14-sprint-ab-08102026-aufgabenkatalog).
 
-**Neuer Sprintauftrag vom 09.10.2026, zunächst gemeinsame Planung (Wortlaut):** „Bereite ein neues, umfangreiches Feature-Sprint-Paket vor und setze es danach vollständig um.“ Dabei: „Lass mich jede Funktion selbst entscheiden.“ Der fertige Paketplan mit Reihenfolge und Versionen wird ausdrücklich bestätigt: „Erst nach meinem ‚ja‘ beginnt die Umsetzung.“ Dieser Auftrag ersetzt für den neuen Sprint die frühere pauschale Auswahlfreigabe innerhalb der Paketfolge. Empfehlungen sind keine Auswahl; unbeantwortete Kandidaten gehören nicht zum bestätigten Umfang. Antworten werden unmittelbar als D18 ff. mit Datum und Originalwortlaut eingetragen; Aufgaben und Fortsetzungsstand stehen im [Entwicklungsplan §15](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#15-neuer-feature-sprint-ab-09102026-gemeinsame-planung). Bisher liegt keine neue Auswahlantwort vor.
+**Neuer Sprintauftrag vom 09.10.2026, zunächst gemeinsame Planung (Wortlaut):** „Bereite ein neues, umfangreiches Feature-Sprint-Paket vor und setze es danach vollständig um.“ Dabei: „Lass mich jede Funktion selbst entscheiden.“ Der fertige Paketplan mit Reihenfolge und Versionen wird ausdrücklich bestätigt: „Erst nach meinem ‚ja‘ beginnt die Umsetzung.“ Dieser Auftrag ersetzt für den neuen Sprint die frühere pauschale Auswahlfreigabe innerhalb der Paketfolge. Empfehlungen sind keine Auswahl; unbeantwortete Kandidaten gehören nicht zum bestätigten Umfang. Antworten werden unmittelbar als D18 ff. mit Datum und Originalwortlaut eingetragen; Aufgaben und Fortsetzungsstand stehen im [Entwicklungsplan §15](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#15-neuer-feature-sprint-ab-09102026-gemeinsame-planung).
+
+**Rückmeldung und Auswahl vom 10.10.2026 (Wortlaut):** „Das sind sehr langweilige Features aber gut setze sie um.“ Auf die Umfangsfrage wählte der Inhaber: „Empfehlungen der ersten Runde: Animation A/V, Referenzentwürfe B/V und Tageshinweise A/V; übrige Funktionen weiter gemeinsam auswählen.“ Damit sind D18–D20 festgelegt; die gemeinsame Planung der übrigen Funktionen läuft weiter. Der Wunsch nach spürbarerem Produktnutzen ist festgehalten; daraus werden keine zusätzlichen Funktionen ohne Auswahl abgeleitet.
 
 **Grundsatz:** Entschiedenes wird nicht erneut vorgelegt. Offen sind nur:
-- D07
 - die Auswahl A–H mit ihrer Bearbeitungstiefe
-- die erste Importquelle (G21) und das Bauwerkzeug (G26)
 - die Inhaberangaben I1–I6
-- aus dem Ausbauprogramm: die Referenzentwürfe I7, die Vorgabe des Hinweises zu Tagesbeginn und Tagesabschluss (AU03), dezente Bewegung (OB04) und Termine als belegte Zeit (AU07, berührt eine Produktgrenze)
-- der Lösungsweg für das Logo unter Tk 8.6 (I8, [Diagnose](diagnosen/LOGO_KANTENGLAETTUNG.md#7-lösungswege))
+- aus dem Ausbauprogramm: dezente Bewegung (OB04) und Termine als belegte Zeit (AU07, berührt eine Produktgrenze)
 - Bildrechte im öffentlichen Repository, Git-Historie und GitHub-Auftritt (I9–I11)
-- die Symbolschrift (A14)
 
 Dieselben Punkte mit Stand und Empfehlung (E-S1–E-S8, I1–I11): [Entwicklungsplan §11](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber).
 
@@ -42,7 +40,7 @@ Wortlaute stehen in Anführungszeichen, alles andere ist Zusammenfassung. Was da
 
 ## Verbindliche Entscheidungen
 
-Neue Entscheidungen werden als D18 ff. mit Datum und Wortlaut der Antwort eingetragen.
+Neue Entscheidungen werden fortlaufend mit Datum und Wortlaut der Antwort eingetragen; nächste freie Nummer D30.
 
 | Nr. | Entscheidung | Stand |
 |---|---|---|
@@ -52,7 +50,7 @@ Neue Entscheidungen werden als D18 ff. mit Datum und Wortlaut der Antwort einget
 | D04 | Drag-and-drop erweitert die bestehenden Bereiche. | umgesetzt 3.32.2 |
 | D05 | Einzelne Aufgaben in Notizen und Seiten mit erhaltener ID; Liste, Notiz und Seite bleiben eigenständige Arten, keine allgemeine Umwandlung (beantwortet F11). | umgesetzt 3.33.15 (G29/G31) |
 | D06 | Die Gestaltung der Hinweisblöcke in Seiten bleibt unverändert. | gilt |
-| D07 | Exportumfang der Animation: abspielbares GIF oder zunächst Frames/Vorschau/PNG-Spritesheet (Empfehlung: Spritesheet zuerst). | **offen**, erst zur Pixel-Etappe |
+| D07 | Exportumfang der Animation: abspielbares GIF oder zunächst Frames/Vorschau/PNG-Spritesheet (Empfehlung: Spritesheet zuerst). | entschieden 10.10.2026 durch D18 |
 | D08 | Alle Klappmechanismen über echte Bedienbindungen prüfen, einschließlich Zustandserhalt, Tastatur, verschachtelter Bereiche und Tk-Callbackfehler. | umgesetzt 3.32.1, Pflichtsuite |
 | D09 | Das GitHub-Repository `glide-to-do` ist die maßgebliche Ablage (Wurzel = Projektordner, Quellbaum `01_Repository/Glide`); Uploads nur in diese Struktur. Öffentlich: Rohprotokolle (`*.log`) bleiben lokal, veröffentlichte Ergebnisse ohne Benutzerpfade (`pfade_bereinigen.py`, CI „Datenschutz“). Keine Archivkopien von Fixtures und Showcase, keine Fensterbilder neuer Vollprüfungen (02.10.2026); Archive und Nachweise nur der sieben neuesten Versionen, Fensterbilder nur der drei neuesten, Dokumente werden zusammengeführt und gelöscht statt archiviert (03.10.2026); CI „Ablagegröße“ prüft das. Sicherheitsmeldungen über GitHub (`SECURITY.md`), Dependabot; CodeQL-Workflow vom Inhaber deaktiviert. Zwischenstände als Git-Tags. | gilt; CI-Grundstufe seit 01.10.2026; noch kein Tag gesetzt (Stand 09.10.2026) |
 | D10 | Ein Datum ohne Zusatz setzt den Bearbeitungstag, auch `/morgen`; die Fälligkeit nur mit „fällig“/„bis“, `/bis`, `/fällig`. Eine Wiederholung in der Eingabe setzt die Fälligkeit auf ihren ersten Termin (Ergänzung 02.10.2026). | umgesetzt 3.33.3/3.33.4 |
@@ -60,9 +58,21 @@ Neue Entscheidungen werden als D18 ff. mit Datum und Wortlaut der Antwort einget
 | D12 | Startseite „Ruhig“ mit sieben Kacheln: Heute (zusammengeführt), Gismo, Woche, Zuletzt bearbeitet, Angeheftet, Zeichnungen, Pinnwand-Vorschau; eigene Auswahl bleibt. | umgesetzt 3.33.2 |
 | D13 | Eisenhower als Gruppierung „Dringlichkeit × Wichtigkeit“ im vorhandenen Board; Ziehen ändert Wichtigkeit bzw. Bearbeitungstag, Fälligkeiten werden nie gelöscht. | umgesetzt 3.33.5 |
 | D14 | Zwei Hauptansichten: Heute (Tag, Verspätet, Heute fällig, nächste Aufgabe) und Demnächst; Tagesbeginn/-abschluss sind Modi von Heute; interne Kennungen bleiben. | umgesetzt 3.33.6 |
-| D15 | Verteilung als Paket mit eingebettetem Python und Tk 9 je Plattform (G26/H-03), nach Stufe 1; das Bauwerkzeug ist eine eigene Abhängigkeitsentscheidung. | offen (Stufe 4) |
+| D15 | Verteilung als Paket mit eingebettetem Python und Tk 9 je Plattform (G26/H-03), nach Stufe 1; das Bauwerkzeug ist eine eigene Abhängigkeitsentscheidung. | ausgewählt nach D27; Umsetzung im neuen Sprint offen |
 | D16 | JSON bleibt Speicherformat; der Speicherweg wird beschleunigt (T2, P08, P09). SQLite nur als Suchindex-Cache (G14); Neubewertung erst über 20.000 Punkten. | gilt; ein Suchindex ist nach Messung nicht nötig (P07, 3.34.0) |
 | D17 | Kein Großumbau: jede neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests; `ListApp` ruft sie auf; G27 „`app.pyw` aufteilen“ geschieht so schrittweise. | gilt; aktuelle Module und ihre Unit-Tests in der [Architektur](02_ARCHITECTURE.md#module-neben-apppyw) |
+| D18 | **10.10.2026, E-S1 A/V:** Animation vollständig im angebotenen Rahmen: Frames anlegen, duplizieren, löschen und umordnen; Dauer gemeinsam sowie je Frame; Vorschau, PNG-Spritesheet und PNG-Einzelbildfolge. Kein GIF in diesem Auftrag. Neues Datenformat-Tor mit Vorsicherung, Migration und Altleserschutz. Wortlaut: „Animation A/V“ aus der oben vollständig zitierten Auswahlantwort. | ausgewählt; Umsetzung im neuen Sprint nach Abschluss der gemeinsamen Planung |
+| D19 | **10.10.2026, E-S2 B/V:** gemeinsam abzustimmende Referenzentwürfe für Heute, Liste, Seite und Inspektor einschließlich kleiner Feldauswahl. Wortlaut: „Referenzentwürfe B/V“ aus der oben vollständig zitierten Auswahlantwort. Aufnahme und Tiefe von OB02, OB03, N05 und KO04 sind durch D22–D25 vollständig gewählt. | drei Bildtafeln vorgelegt; Bild 1 und vier Funktionen vollständig gewählt (D21–D25) |
+| D20 | **10.10.2026, E-S3 A/V:** Tageshinweise optional, Vorgabe aus, vorgeschlagene Uhrzeiten 08:30/17:30. Vollständiger angebotener Umfang: Einstieg in die bestehenden Tagesmodi, einstellbare Uhrzeiten/Wochentage, später erinnern, heute überspringen, gesammelte verpasste Hinweise. Nur bei laufender App, keine doppelte Zustellung. Wortlaut: „Tageshinweise A/V“ aus der oben vollständig zitierten Auswahlantwort. | ausgewählt; Umsetzung im neuen Sprint nach Abschluss der gemeinsamen Planung |
+| D21 | **10.10.2026, Referenzrichtung:** Bild 1 leitet Anordnung und Hierarchie von Heute, Liste, Seite und Inspektor. Wortlaut: „Bild 1 als Grundlage (Empfehlung)“. Bindende Tk-/Produktregeln und Bildbefunde stehen im Entwicklungsplan §15.4. | ausgewählt; Referenz im Grafik-Master gesichert |
+| D22 | **10.10.2026, OB02 B:** Heute-Kopf mit nächster Aufgabe, Zeit und Fortschritt; vier Textstufen in Heute, Listen, Seiten und Inspektor. Wortlaut: „B – vollständig (Empfehlung): Heute-Kopf plus vier Textstufen in Heute, Listen, Seiten und Inspektor; Aufwand M–L.“ | ausgewählt; Umsetzung nach Gesamtplanung |
+| D23 | **10.10.2026, OB03 B:** Einplanen, Fälligkeit und „…“ bedarfsabhängig bei Überfahren oder Auswahl in Liste, Tabelle, Heute und Demnächst. Tastatur, Kontextmenü und Palette gleichwertig erreichbar. Wortlaut: „B – vollständig (Empfehlung): Liste, Tabelle, Heute und Demnächst; Aufwand M–L.“ | ausgewählt; Umsetzung nach Gesamtplanung |
+| D24 | **10.10.2026, N05 B:** ein gemeinsamer Aufgabeneditor statt bisheriger doppelter Bearbeitungsflächen, alle Felder und Einstiege erhalten. Wortlaut: „B – vollständig (Empfehlung): gemeinsamer Inspektor für Liste, Tabelle, Heute, Demnächst, Pinnwand und Aufgabenverweise in Dokumenten; bei schmalem Fenster innerhalb der Inhaltsfläche; Aufwand L.“ | ausgewählt; Umsetzung nach Gesamtplanung |
+| D25 | **10.10.2026, KO04 B:** Bearbeitungstag, Fälligkeit, Wichtigkeit und Labels direkt am sichtbaren Feld öffnen, mit identischer Fachlogik und geprüftem Fokus-/Abbruchverhalten. Wortlaut: „B – vollständig (Empfehlung): Inspektor und sichtbare Aufgabenfelder in Liste, Tabelle, Heute, Demnächst, Pinnwand und Dokumentverweisen; Aufwand L.“ | ausgewählt; Umsetzung nach Gesamtplanung |
+| D26 | **10.10.2026, E-S4 A/V:** erste Quelle Notion-Export „Markdown & CSV“ als ZIP. Vollständig im angebotenen begrenzten Rahmen: Text, Überschriften, Listen, lokale Bilder/Anhänge, Aufgaben-Kästchen und interne Seitenverweise; Vorschau und Verlustbericht. Exportierte Unterseiten in bestehende Ordner/Seiten einordnen; keine neue Seitenart oder Notion-Datenbank. Wortlaut: „A/V – Notion, vollständig (Empfehlung)“. | ausgewählt; Umsetzung nach Gesamtplanung |
+| D27 | **10.10.2026, E-S5 A/V:** PyInstaller 6.22.3 fest gepinnt als reine Bauabhängigkeit; vollständige Bauwege für macOS arm64 und Windows x64 mit Python 3.14/Tk 9, Ressourcen, Lizenzbelegen, Start-/Signaturprüfungen und reproduzierbaren Bauanweisungen. Native Windows-Prüfung als eigenes Tor; Lizenz für Glide und Developer-ID separat. Wortlaut: „A/V – PyInstaller, beide Zielsysteme (Empfehlung)“. | ausgewählt; Umsetzung nach Gesamtplanung |
+| D28 | **10.10.2026, E-S6 A/V:** Diagnosewege B+C+D+F: geglätteter Tk-8.6-Rückfall per Standardbibliothek, vorberechnete App-Symbole in 16/32/64/256 px, schärfere Tests und Dokumentation. Logo-Master bleibt eigene Entscheidung. Wortlaut: „A/V – Rückfall und App-Symbole vollständig (Empfehlung)“. | ausgewählt; Umsetzung nach Gesamtplanung |
+| D29 | **10.10.2026, E-S7 A/V:** Zeichen aus der tatsächlich verwendeten UI-Schrift wählen; gesamte ICONS-Tabelle auf Größe, Ausrichtung und eindeutige Bedeutung prüfen/korrigieren; keine zusätzliche Symbolschrift. Beschriftungen und Tastaturwege erhalten; native Windows-/Linux-Sichtprüfung als Tor. Wortlaut: „A/V – Systemzeichen, gesamte Tabelle (Empfehlung)“. | ausgewählt; Umsetzung nach Gesamtplanung |
 
 **Frühere Antworten, die weiter gelten:**
 

@@ -1,6 +1,6 @@
 # Glide – Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung
 
-Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Analyse vom 08.10.2026, fortgeschrieben am 09.10.2026 nach dem Sprint (Code, Dokumente, Git-Historie, native Mac-Volläufe)
+Stand 10.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Analyse vom 08.10.2026, fortgeschrieben am 09.10.2026 nach dem Sprint (Code, Dokumente, Git-Historie, native Mac-Volläufe)
 
 Bestandsaufnahme im Auftrag vom 08.10.2026: lokale Ablage untersuchen, Dokumentation und Code abgleichen, daraus den Sprint ableiten. Dieses Dokument trägt die **Analyse** (Funktions-, Oberflächen-, Entscheidungs- und Nutzungsanalyse sowie den Abgleich Dokumentation ↔ Code). Der Wettbewerb steht in [Markt und Vorbilder](Glide_Markt_und_Vorbilder.md), die Entscheidungen selbst in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), die daraus abgeleiteten Aufgaben ausschließlich im [Entwicklungsplan, Abschnitt 14](Glide_Entwicklungsplan.md#14-sprint-ab-08102026-aufgabenkatalog). Erledigte Befunde werden hier als erledigt markiert, nicht gelöscht, bis die nächste Analyse sie ersetzt.
 
@@ -111,7 +111,7 @@ Grundlage: Code (`_refresh_tree`, `sync_view_chrome`, `pack_header_controls`, Se
 
 **Bewusst verworfen** (nicht erneut vorlegen): Konten/Cloud/Mehrbenutzer, Zustellung bei geschlossener App (N09), MCP-Server (N10), systemweiter Hotkey (G07/N14), Einstieg für neue Nutzer (N06), gleichzeitige Bearbeitung (G23), verschlüsselte Ablage (G22), Spalten in Seiten und Graph (G12/G13), eigene Felder je Liste (ZF-200), Spracherfassung/Cloud-KI/Team/Web Clipper (N15–N20), freie Klebezettel, Bilder aus dem Netz, Unterseiten, allgemeine Umwandlung (D05).
 
-**Offen beim Inhaber:** D07, I7, die Vorgabe automatischer Tageshinweise (AU03), Bewegung (OB04), Termine als belegte Zeit (AU07), die erste Importquelle (G21), das Bauwerkzeug (G26/D15), das Logo unter Tk 8.6 (I8), die Symbolschrift (A14) sowie I1–I4, I6 und I9–I11. Was jeweils davon abhängt und die Empfehlungen stehen an einer Stelle: [Entwicklungsplan §11](Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber).
+**Auswahlstand 10.10.2026:** Animation, Referenzweg/Bild 1, OB02/OB03/N05/KO04, Tageshinweise, Notion-Import, PyInstaller für Mac/Windows, Tk-8.6-Logo und Systemzeichen sind durch D18–D29 gewählt, noch nicht umgesetzt. Offen bleiben Bewegung (OB04), Termine als belegte Zeit (AU07), Logo-Master LG04, Qualitäts-/Zukunftskandidaten sowie I1–I6 und I9–I11. Umfang, Abhängigkeiten und Empfehlungen ausschließlich im [Entwicklungsplan §11/§15](Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber).
 
 **Widerspruch mit Vorschlag:** A04 – N01/U17 ist eine Systemkonvention (P1) und kein Gestaltungsumbau im Sinn von R12. Vorschlag war, N01 ohne I7 umzusetzen; so geschehen in 3.33.21 (Pixel als Signaturdesign vorn, ohne neue Farben).
 

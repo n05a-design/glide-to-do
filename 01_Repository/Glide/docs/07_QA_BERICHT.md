@@ -1,6 +1,6 @@
 # QA-Bericht – Glide 3.35.0
 
-Stand 09.10.2026 · App 3.35.0 · Datenformat 23 · Referenz-Mac 3.35.0 mit Python 3.14.5, Tk 9.0.3 (09.10.2026); Windows zuletzt 3.33.18 mit Python 3.14.7, Tk 9.0.4
+Stand 10.10.2026 · App 3.35.0 · Datenformat 23 · Referenz-Mac 3.35.0 mit Python 3.14.5, Tk 9.0.3 (09.10.2026); Windows zuletzt 3.33.18 mit Python 3.14.7, Tk 9.0.4
 
 Einziger Prüfbericht. Ausführlich stehen die sieben neuesten Versionen, deren Nachweise unter `tests/qa-<Version>/` liegen; ältere Läufe stehen als Zeile in der Versionstabelle, ihre Protokolle trägt Git, soweit sie eingecheckt waren. Wie geprüft wird: [Prüfplan](05_QA_TESTPLAN.md).
 
@@ -59,6 +59,7 @@ Die Mac-Läufe 3.33.0–3.33.3 meldeten je zwei übersprungene Schritte. „Lief
 
 | Datum | Nachlauf | Nachweis |
 |---|---|---|
+| 10.10.2026 | Auswahl D18–D29 festgehalten, drei Referenztafeln auf Basis eigener isolierter Fensteraufnahmen vorgelegt; Bild 1 und vier Oberflächenfunktionen vollständig gewählt, ebenso Notion/Paketierung/Logo/Symbole; keine Produktionsänderung, Lieferhashes unverändert. Strenge CI auf isolierter Projektkopie grün; Arbeitsordner wegen externer unversionierter Skill-Datei in Standprüfung rot | [README](../tests/qa-3.35.0/planung_2026-10-10/README.md) |
 | 09.10.2026 | Beginn der gemeinsamen Sprintplanung: Kandidatenkarten und Entscheidungsverfahren, Primärquellenabgleich; keine Funktionsauswahl und keine Produktionsänderung; strenge CI grün, Lieferhashes unverändert | [README](../tests/qa-3.35.0/planung_2026-10-09/README.md) |
 | 09.10.2026 | Gesamtprüfung der lokalen Dokumentation auf Stand, Inhalt und Aktualität; veraltete Stände gelöscht, Plan auf den Ist-Stand verdichtet, Altersgrenze für Bildordner im Kürzwerkzeug (Referenz-Mac, künstliche Daten) | [README](../tests/qa-3.35.0/dokumentation_2026-10-09/README.md) |
 | 08.10.2026 | Projektstatus, Vergleichsmatrix, Format-/Suiteangaben und Systemmitteilungen abgeglichen; lokale Altartefakte nach Aufbewahrung bereinigt (App und Lieferung unverändert) | [README](../tests/qa-3.33.18/dokumentation_2026-10-08/README.md) |

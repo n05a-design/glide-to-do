@@ -1,0 +1,115 @@
+{
+  "stand": "10.10.2026",
+  "version": "3.35.0",
+  "referenz_commit": "b5f5c226ccdb06b02537c8b091086bd5defd6fcd",
+  "nachlauf": "D18–D29: Runden 1 bis 3 entschieden; Runde 4 und Gesamtplanbestätigung offen",
+  "auswahl_wortlaut": "Empfehlungen der ersten Runde: Animation A/V, Referenzentwürfe B/V und Tageshinweise A/V; übrige Funktionen weiter gemeinsam auswählen.",
+  "entscheidungen": [
+    "D18",
+    "D19",
+    "D20",
+    "D21",
+    "D22",
+    "D23",
+    "D24",
+    "D25",
+    "D26",
+    "D27",
+    "D28",
+    "D29"
+  ],
+  "produktion_geaendert": false,
+  "app_07_showcase_gegen_referenz_unveraendert": true,
+  "quell_lieferabgleich": {
+    "dateien": 168,
+    "sha256_manifest": "f1d50354e6942df452aba6e3bdeefa990f109fd21780b2691d7a527cec3bbfce",
+    "abweichungen": []
+  },
+  "app_sha256": "9147c66318b7c46d7fd581eedcb5c6996bf19e7eebed857893c1b2fffc5bfb94",
+  "07_hauptdatei_sha256": "9147c66318b7c46d7fd581eedcb5c6996bf19e7eebed857893c1b2fffc5bfb94",
+  "bundle_info_sha256": "16ed0ce846c794b13f7327006bc28b0f503c405cd05fffa234e0cd47b2fb219e",
+  "bundle_abgleich": {
+    "dateien": 82,
+    "abweichungen": [],
+    "plattformfremde_tkdnd_bibliotheken": "wie im bestehenden Mac-Bauwerkzeug ausgeschlossen"
+  },
+  "referenzen": {
+    "eigene_fensteraufnahme": true,
+    "daten": "künstlich, temporäres GLIDE_DATA_DIR vor Import",
+    "fenster": "1280 × 840",
+    "python": "3.14.5",
+    "tk": "9.0.3",
+    "quellbilder": [
+      {
+        "datei": "detail_ist.png",
+        "sha256": "31b7f68e1650fc4c781dd03f44838830b068c5d3f990920c2f6bdf8241a78b6d"
+      },
+      {
+        "datei": "heute_ist.png",
+        "sha256": "a3e1f8071ed582087971076c361ad94ff69f4157fd9c8bc2db58757f5afa0014"
+      },
+      {
+        "datei": "liste_ist.png",
+        "sha256": "c8475fa47706e1b1fdd65299c1c470a9bacaa96a1533e2867a14808b1479e402"
+      },
+      {
+        "datei": "seite_ist.png",
+        "sha256": "b62264a32006b69f7aab79af609ee3c2424967feaa36c7673a5319dde904696b"
+      }
+    ],
+    "bildtafeln": [
+      {
+        "sichtbare_nummer": 1,
+        "datei": "exec-54aa307c-afd5-4865-8b4f-a9c8bf9834f3.png",
+        "sha256": "10878274c61bcd88b8fd3778e0a85ef7c0884fa342deaeb19abe3393de60113d",
+        "bekannte_abweichung": "Listen-/Tabellenwahl muss bei Umsetzung erhalten bleiben"
+      },
+      {
+        "sichtbare_nummer": 2,
+        "datei": "exec-881c3be5-d725-4606-bd42-6945118d9c6d.png",
+        "sha256": "caa10aeca045e04bdc6ad79b5ed36d450812d44b4fe5c55f2ab1757befa1754c",
+        "bekannte_abweichung": "Nächste Aufgabe doppelt; vor Umsetzung entfernen"
+      },
+      {
+        "sichtbare_nummer": 3,
+        "datei": "exec-6cc1ed81-1e0e-4174-b6d0-cd7525d2f59f.png",
+        "sha256": "306badbb203a953e4634d62d38ba40ead43380d3de205d911b951b5852057088",
+        "bekannte_abweichung": "Vorhandenes dunkles Erscheinungsbild; keine neue Unschärfe ableiten"
+      }
+    ],
+    "auswahl_offen": false,
+    "oberflaechenabnahme": false,
+    "gewaehlt": 1,
+    "projektdatei": "20_Grafik_Master/05_Inspiration/Glide-Oberflaeche-Referenz.png"
+  },
+  "vollpruefung": "nicht neu ausgeführt; kein ausführbarer Pfad geändert",
+  "ci_vorlauf": {
+    "exitcode": 1,
+    "einziger_befund": "Apple Design Skill.md: keine Glide-Standangabe (R1)",
+    "einordnung": "externe unversionierte Datei; unverändert im Arbeitsordner belassen",
+    "nachweis": "ci_vorlauf/ergebnis.json"
+  },
+  "ci_pruefstand": {
+    "basis": "Git-Stand f9c07c1 mit eigenen Dokumentänderungen D18–D29, ausgewählter Referenz und neuen Nachweisdateien",
+    "verfahren": "isolierte lokale Git-Kopie außerhalb von OneDrive",
+    "ausgeschlossen": "externe unversionierte Datei Apple Design Skill.md",
+    "produktionsstand": "unverändert 3.35.0; kein neues Bundle gebaut",
+    "nachweis": "ci/ergebnis.json"
+  },
+  "ci_exitcode": 0,
+  "pruefgrenze_arbeitsordner": "Standprüfung bleibt wegen externer unversionierter Skill-Datei rot; grüne CI gilt für isolierten Projektprüfstand",
+  "runde_2_wortlaute": [
+    "Bild 1 als Grundlage (Empfehlung)",
+    "B – vollständig (Empfehlung): Heute-Kopf plus vier Textstufen in Heute, Listen, Seiten und Inspektor; Aufwand M–L.“ | ausgewählt; Umsetzung nach Gesamtplanung |",
+    "B – vollständig (Empfehlung): Liste, Tabelle, Heute und Demnächst; Aufwand M–L.“ | ausgewählt; Umsetzung nach Gesamtplanung |",
+    "B – vollständig (Empfehlung): gemeinsamer Inspektor für Liste, Tabelle, Heute, Demnächst, Pinnwand und Aufgabenverweise in Dokumenten; bei schmalem Fenster innerhalb der Inhaltsfläche; Aufwand L.“ | ausgewählt; Umsetzung nach Gesamtplanung |",
+    "B – vollständig (Empfehlung): Inspektor und sichtbare Aufgabenfelder in Liste, Tabelle, Heute, Demnächst, Pinnwand und Dokumentverweisen; Aufwand L.“ | ausgewählt; Umsetzung nach Gesamtplanung |"
+  ],
+  "runde_3_wortlaute": [
+    "A/V – Notion, vollständig (Empfehlung)",
+    "A/V – PyInstaller, beide Zielsysteme (Empfehlung)",
+    "A/V – Rückfall und App-Symbole vollständig (Empfehlung)",
+    "A/V – Systemzeichen, gesamte Tabelle (Empfehlung)"
+  ],
+  "nachpruefung": "Stand, Dokumentationsverweise, Datenschutz und Synchronisation nach Quellen-/Nachweisergänzung bestanden"
+}

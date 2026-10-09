@@ -1,10 +1,10 @@
 # Glide – Entwicklungsplan und Aufgabenstand
 
-Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23
+Stand 10.10.2026 · Glide 3.35.0 · Aufgabenformat 23
 
 Einziges Planungsdokument: alle Aufgaben mit Marke, Stufen, Ziele und was der Inhaber entscheidet. Erledigte Zwischenstände (Paketbeschreibungen, Messerzählungen, Aufgabenkarten) werden nach der Lieferung gelöscht; Ergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) und im [CHANGELOG](../01_Repository/Glide/CHANGELOG.md), Verhalten in den [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md), Vorfassungen in Git.
 
-Verbindliche Entscheidungen stehen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), Produktgrenzen und Prinzipien in den [Produktgrenzen](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md). D07, Importquelle, Bauwerkzeug und Inhaberfreigaben bleiben eigene Entscheidungen (§11).
+Verbindliche Entscheidungen stehen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), Produktgrenzen und Prinzipien in den [Produktgrenzen](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md). D07 ist durch D18 entschieden; Importquelle und Bauwerkzeug sind durch D26/D27 gewählt; Inhaberfreigaben bleiben eigene Entscheidungen (§11).
 
 ## Statusmarken
 
@@ -34,8 +34,8 @@ Reihenfolge der Stufen (Antwort des Inhabers vom 30.09.2026, bestätigt am 01.10
 | 0 Fundament | Performance P01–P09, T2, CI | ◐ Ziele für Abhaken und Suche erreicht (3.33.19, 3.34.0); offen P03-Rest, P05, Linux-Kalibrierung der Integrationssuiten |
 | 1 Klarer Alltag | Bereiche, Startseite, Eingabe, Eisenhower, Heute/Demnächst, UX1, Fokus, Komfort, Tag, Oberfläche Welle 1 | ◐ geliefert bis 3.33.21; offen Welle 2 nach I7 (OB02, OB03-Rest, N05 mit KO04), AU03-Hinweise, OB04, AU07 |
 | 2 Wissen im Kontext | Suche, Verweise, Live-Liste, Titelbild, Kalender mit Wochenplanung, Bilder in Seiten, Filter erklären | ◐ geliefert 3.33.7–3.34.0; offen N05 (Inspektor) |
-| 3 Pixel | Palettenbearbeitung, Symbolvorschau, Animation | ◐ G19, G-03 ✅ 3.35.0; G17 wartet auf D07 |
-| 4 Austausch und Verteilung | KI-Austausch Stufe 2, Import, Sicherungsvergleich, Paket mit eigenem Python | ◐ G24, F-03 ✅ 3.35.0; G21 und G26 warten auf Entscheidungen |
+| 3 Pixel | Palettenbearbeitung, Symbolvorschau, Animation | ◐ G19, G-03 ✅ 3.35.0; G17 ausgewählt durch D18, Umsetzung im neuen Sprint offen |
+| 4 Austausch und Verteilung | KI-Austausch Stufe 2, Import, Sicherungsvergleich, Paket mit eigenem Python | ◐ G24, F-03 ✅ 3.35.0; G21 und G26 durch D26/D27 ausgewählt; Umsetzung offen |
 | 5 Zukunft (4.x) | Screenreader (Tk 9.1), Seitenversionen, SQLite nur nach D16-Neubewertung | ◇ |
 
 ## 2. Erledigt seit 3.30
@@ -130,8 +130,8 @@ Auftrag des Inhabers vom 05.10.2026 (Wortlaut): „Mehr Features, Mehr Quality o
 | ID | Paket | Abnahme (Auszug) | Aufwand | Stand |
 |---|---|---|---|---|
 | OB01 | Gestaltungsskala für Abstände, Radien, Schriftgrößen und Zeilenhöhen (`ui_design.py`) | ohne sichtbare Änderung; Abstandswerte je Ansicht gemessen | M | ✅ 3.33.12 / 3.33.21 (Startseite, Bibliothek, Einstellungen, Schnellerfassung: direkte Zahlen 134 → 3); weitere Ansichten bei Gelegenheit |
-| OB02 | Vier Textstufen; Kopf von „Heute“ zeigt nächste Aufgabe, verfügbare Zeit und Fortschritt als stärkstes Element | 860 × 700, große Schrift; jede Angabe genau einmal | M | ○ nach I7 (E-S2) |
-| OB03 | Zeilenaktionen nur bei Bedarf (Einplanen, Termin, „…“ beim Überfahren und bei Auswahl) | jede Aktion auch über Tastatur, Kontextmenü, Palette; Bedienfläche ≤ 15 % | M | ◐ Kalenderaktion 3.33.13; Rest nach I7 (E-S2) |
+| OB02 | Vier Textstufen; Kopf von „Heute“ zeigt nächste Aufgabe, verfügbare Zeit und Fortschritt als stärkstes Element | 860 × 700, große Schrift; jede Angabe genau einmal | M | ▶ vollständig ausgewählt D22; Umsetzung offen |
+| OB03 | Zeilenaktionen nur bei Bedarf (Einplanen, Termin, „…“ beim Überfahren und bei Auswahl) | jede Aktion auch über Tastatur, Kontextmenü, Palette; Bedienfläche ≤ 15 % | M | ◐ Kalenderaktion 3.33.13; Rest vollständig ausgewählt D23; Umsetzung offen |
 | OB04 | Dezente Bewegung beim Abhaken, Klappen und Bereichswechsel (≤ 150 ms), nur mit Animationen | keine messbare Verschlechterung der Ziele aus §10 | M | ◇ E-S8 |
 | OB05 | Schmale Seitenleiste mit Symbolen | Zustand gemerkt; Tastatur; 860 × 700 | M | ✅ 3.33.21 |
 | OB06 | Gestaltungsabnahme je Paket: Vorher-/Nachher-Fensterbilder, vom Inhaber bewertet; Bilder lokal und unversioniert | Entscheidung im QA-Bericht vermerkt | S je Paket | ◐ Bewertung durch den Inhaber offen |
@@ -143,7 +143,7 @@ Auftrag des Inhabers vom 05.10.2026 (Wortlaut): „Mehr Features, Mehr Quality o
 | KO01 | Ein Menü „Einplanen“ (Heute, Morgen, Wochenende, Nächste Woche, Datum …, Ohne Tag) für die Mehrfachauswahl | ein Undo-Schritt; Fälligkeit bleibt | S–M | ✅ 3.33.13 |
 | KO02 | Wiederholungen: Termin überspringen, verpasste Termine überspringen | Serie bleibt; ein Undo-Schritt | S | ✅ 3.33.20 |
 | KO03 | Erinnerungen in der Schnelleingabe als Chip | Chip nennt „nur bei laufender App“ | S | ✅ 3.33.20 |
-| KO04 | Felder am Objekt: Klick auf Termin, Wichtigkeit oder Label öffnet die kleine Auswahl dort | ein Undo-Schritt; einheitlich mit N05 | M | ○ mit N05 nach I7 (E-S2) |
+| KO04 | Felder am Objekt: Klick auf Termin, Wichtigkeit oder Label öffnet die kleine Auswahl dort | ein Undo-Schritt; einheitlich mit N05 | M | ▶ vollständig ausgewählt D25; Umsetzung mit N05 offen |
 | KO05 | Mehrzeiliges Einfügen in die Eingabezeile nach Rückfrage | ein Undo-Schritt | S | ✅ 3.33.20 |
 | KO06 | Zuletzt benutzte Ziele zuerst bei „Verschieben nach …“ und Labels | keine neue Einstellung | S | ✅ 3.33.20 |
 
@@ -153,7 +153,7 @@ Auftrag des Inhabers vom 05.10.2026 (Wortlaut): „Mehr Features, Mehr Quality o
 |---|---|---|---|---|
 | AU01 | Tagesvorschlag „Was passt heute?“ mit Grund je Zeile | deterministisch; nichts ohne Bestätigung; ein Undo-Schritt | M | ✅ 3.33.14 |
 | AU02 | Verfügbare Zeit in allen Planungswegen | eine Rechenstelle (`planning_summary`) | S–M | ✅ 3.33.13 |
-| AU03 | Geführter Tagesbeginn (Rückblick → Vorschlag → Zeitblöcke) und optionaler Hinweis zu Tagesbeginn/-abschluss | Vorgabe des Hinweises entscheidet der Inhaber | M | ◐ geführter Weg 3.33.14; Hinweise nach E-S3 |
+| AU03 | Geführter Tagesbeginn (Rückblick → Vorschlag → Zeitblöcke) und optionaler Hinweis zu Tagesbeginn/-abschluss | Hinweise nach D20 | M | ◐ geführter Weg 3.33.14; Hinweise ausgewählt 10.10.2026, Umsetzung offen |
 | AU04 | Wochenplanung im eingebetteten Kalender mit Kapazitätsbalken | Teil von N04 | M | ✅ 3.33.17 |
 | AU05 | Fokussitzung mit nächster Aufgabe (= G05) | Zeit genau einmal gebucht | M | ✅ 3.33.14 |
 | AU06 | Routinen als Abschnitt in „Heute“ | kein Formatwechsel | M | ✅ 3.33.20 |
@@ -171,7 +171,7 @@ Der Inhaber beauftragt mehrere zusammengehörige Features je Umsetzung, abgeleit
 
 | ID | Arbeit | Stand |
 |---|---|---|
-| N05 = U12 | Ein Inspektor statt Maske + Detailbereich | ○ nach I7 (E-S2) |
+| N05 = U12 | Ein Inspektor statt Maske + Detailbereich | ▶ vollständig ausgewählt D22; Umsetzung offen |
 | G14 = D-01 | Inhaltssuche, gemeinsame Befehlspalette, Treffer im Dokument hervorheben | ✅ 3.33.7 / 3.33.16 / 3.34.0; FTS5 nach Messung nicht nötig (P07) |
 | D-03 | Erklären, warum ein Filter einen Punkt zeigt oder ausblendet | ✅ 3.34.0 (gespeicherte Filter) |
 | G08/G30 = D-02 | Seiten-, Listen- und Aufgabenverweise mit Rückverweisen (Format 22) | ✅ 3.33.17 |
@@ -188,7 +188,7 @@ Der Inhaber beauftragt mehrere zusammengehörige Features je Umsetzung, abgeleit
 |---|---|---|
 | G19 = G-01 | Paletteneintrag ändern färbt die Zeichnung um, mit Vorschau und Undo | ✅ 3.35.0 |
 | G-03 | Symbolvorschau in 16/32/48 px vor dem Export | ✅ 3.35.0 |
-| G17 = G-02 | Animation: Frames, Dauer, Vorschau | ○ E-S1 (D07) |
+| G17 = G-02 | Animation: Frames, Dauer, Vorschau | ▶ E-S1 A/V durch D18 entschieden 10.10.2026; Umsetzung offen |
 | G24 = F-01 | KI-Austausch Stufe 2: Kontextpaket, Änderungsvorschläge mit Feldvergleich (Q3) | ✅ 3.35.0 |
 | G21 = F-02 | Begrenzter Import aus einer ersten Quelle mit Verlustbericht | ○ E-S4 |
 | F-03 | Zwei Sicherungsstände lesbar vergleichen | ✅ 3.35.0 |
@@ -269,24 +269,24 @@ Der Inhaber beauftragt mehrere zusammengehörige Features je Umsetzung, abgeleit
 | I4 | Markenprüfung „Glide“ | ○ Fachanwalt für Markenrecht |
 | I5 | Aktuelles Python auf dem Mac installieren | ◐ Referenz-Mac mit Python 3.14.5/Tk 9.0.3 trägt die Volläufe; python.org führt 3.14.8 (Windows-Absturz W09 beobachten); Installation braucht das Passwort des Inhabers |
 | I6 | Windows-Vollprüfung des aktuellen Stands und manuelle Prüfsitzungen | ○ Windows zuletzt 3.33.18; menschliche Sicht- und Bedienabnahme aller Versionen nach der [Prüfliste](Glide_Manuelle_Pruefung.md) |
-| I7 | Referenzentwürfe für „Heute“, Liste und Seite (Affinity) | ○ E-S2 |
+| I7 | Referenzentwürfe für „Heute“, Liste, Seite und Inspektor | ▶ drei Entwürfe vorbereitet; Bild 1 und vier Funktionen vollständig gewählt (D19, D21–D25) |
 | I8 | Lösungsweg für das Logo unter Tk 8.6 (LG01–LG04) | ○ E-S6, [Diagnose, Abschnitt 7](../01_Repository/Glide/docs/diagnosen/LOGO_KANTENGLAETTUNG.md#7-lösungswege) |
 | I9 | Rechte an Fremdbildern im öffentlichen Repository (`20_Grafik_Master/05_Inspiration`, `06_Beispielbilder`, die sechs Showcase-Motive) | ○ behalten mit Rechtenachweis oder entfernen und den Showcase mit eigenen Motiven neu erzeugen; Empfehlung: ohne Nachweis entfernen |
 | I10 | Git-Historie bereinigen (gelöschte Protokolle mit Benutzerpfaden, frühere Archivkopien) | ○ eigener Auftrag; ändert alle Commit-Kennungen ([Veröffentlichung](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#github-auftritt)) |
 | I11 | GitHub-Auftritt: Beschreibung, Tags, Wiki, Issues, KI-Codeprüfung | ○ Empfehlungen in der [Veröffentlichung](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#github-auftritt) |
 | A–H | Bearbeitungstiefe der Auswahl vom 30.09.2026 (A Tempo · B Planen und Fokus · C Aufgaben im Text · D Suchen und Wissen · E Projektseiten · F Austausch und Sicherungen · G Pixel-Werkstatt · H Bedienkontrolle und Auslieferung) | beauftragte Teile umgesetzt (Aufgaben A-01 bis H-03 mit Status oben); weitere Tiefe je Richtung entscheidet der Inhaber |
 
-**Benötigte Entscheidungen** (Stand 09.10.2026; Empfehlungen sind keine Entscheidungen):
+**Entscheidungen und Auswahlstand** (Stand 10.10.2026; Empfehlungen sind keine Entscheidungen):
 
 | Nr. | Frage | Blockiert | Empfehlung |
 |---|---|---|---|
-| E-S1 | D07: Animationsexport GIF oder zuerst Frames/Spritesheet? | G17 | Spritesheet zuerst |
-| E-S2 | I7: Referenzentwürfe liefern, oder N05/KO04 ohne Entwurf mit den bestehenden Rollen bauen? | OB02, OB03-Rest, N05, KO04 | N05 ohne Entwurf freigeben, OB02/OB03 weiter nach I7 |
-| E-S3 | AU03: Vorgabe automatischer Tageshinweise (Uhrzeiten, an/aus) | AU03-Rest | Option, Vorgabe aus, 08:30/17:30 |
-| E-S4 | G21: erste Importquelle | G21 | Notion-Markdown/ZIP |
-| E-S5 | D15/G26: Bauwerkzeug | G26, N12 | PyInstaller ≥ 6.22 als reine Bauabhängigkeit |
-| E-S6 | I8: Logo-Rückfall unter Tk 8.6 | LG01–LG04 | Weg B + D |
-| E-S7 | A14: Symbolschrift | einheitliche Symbolgröße | Zeichen aus der Systemschrift wählen |
+| E-S1 | D07: Animationsexport | G17 | entschieden 10.10.2026: A/V, D18; Umsetzung offen |
+| E-S2 | I7: Referenzweg und Auswahl der vier Oberflächenfunktionen | OB02, OB03-Rest, N05, KO04 | Referenzweg und Bild 1 entschieden (D19/D21); vier Funktionen vollständig gewählt (D22–D25) |
+| E-S3 | AU03: Vorgabe und Tiefe automatischer Tageshinweise | AU03-Rest | entschieden 10.10.2026: A/V, D20; Umsetzung offen |
+| E-S4 | G21: erste Importquelle | G21 | entschieden 10.10.2026: Notion A/V, D26; Umsetzung offen |
+| E-S5 | D15/G26: Bauwerkzeug | G26, N12 | entschieden 10.10.2026: PyInstaller 6.22.3, beide Zielsysteme A/V, D27 |
+| E-S6 | I8: Logo-Rückfall unter Tk 8.6 | LG01–LG04 | B+C+D+F vollständig gewählt (D28); Master LG04 gesondert offen |
+| E-S7 | A14: Symbolschrift | einheitliche Symbolgröße | Systemzeichen, gesamte Tabelle gewählt (D29) |
 | E-S8 | AU07, OB04 | AU07, OB04 | AU07 nur lesend aus gewählter ICS-Datei; OB04 nach Tempozielen |
 
 ## 12. Pflege
@@ -399,7 +399,7 @@ Jede Zeile aus 14.1 gegen Code, Prüfung und Nachweis abgeglichen. Quelle der Pr
 
 ## 15. Neuer Feature-Sprint ab 09.10.2026: gemeinsame Planung
 
-**Status: Phase 1, Auswahl offen.** Auftrag: umfangreiches Paket gemeinsam planen, jede Funktion durch den Inhaber auswählen lassen, Antworten unmittelbar als D18 ff. in der Arbeitsrichtung festhalten und erst nach ausdrücklichem „ja“ zum vollständigen Paketplan umsetzen. Keine Auswahl aus Empfehlungen oder Schweigen ableiten. Die Aufgaben unten sind Kandidaten, noch kein bestätigter Paketumfang. Reihenfolge und Versionsnummern werden nach den Auswahlrunden festgelegt.
+**Status: Phase 1, Runden 1 bis 3 am 10.10.2026 festgelegt (D18–D29), weitere Runden offen.** Auftrag: umfangreiches Paket gemeinsam planen, jede Funktion durch den Inhaber auswählen lassen, Antworten unmittelbar in der Arbeitsrichtung festhalten und erst nach ausdrücklichem „ja“ zum vollständigen Paketplan umsetzen. Keine Auswahl aus Empfehlungen oder Schweigen ableiten. Ausgewählte Aufgaben sind als solche markiert; die übrigen bleiben Kandidaten. Reihenfolge und Versionsnummern werden nach den Auswahlrunden festgelegt.
 
 Grundlagen vollständig gelesen: `CLAUDE.md` → `01_Repository/Glide/AGENTS.md` → Übergabe → Arbeitsrichtung; danach §11, §4.3, §5–§7, §14.2 sowie Analyse und Markt/Vorbilder; ergänzend Produktgrenzen und Dokumentenpflege. Ausgangspunkt: 3.35.0, Format 23, sauberes `main` mit PR #16 (`b5f5c22`). Arbeitszweig: `claude/glide-sprint-2026-10-09`. Q1–Q5, D01–D17 und die bewussten Ausschlüsse werden nicht neu zur Wahl gestellt. E-S8 wird in ICS-Belegzeiten und Oberflächenbewegung getrennt; bei E-S2 sind Referenzweg und vier Funktionsumfänge eigene Antworten.
 
@@ -409,18 +409,18 @@ Die Akzeptanzkriterien beschreiben den vorgeschlagenen Rahmen. „Erste Stufe“
 
 | ID / Herkunft | Ausgangslage → Ziel / Nutzen | Vorgeschlagener Umfang | Abhängigkeiten | Vorläufige Akzeptanzkriterien | Prüfung | Status |
 |---|---|---|---|---|---|---|
-| S26-01 / OB02, E-S2 | Heute ohne ausgeprägte Hierarchie → nächste Aufgabe, Zeit und Fortschritt schnell erfassen | vier Textstufen und stärkerer Heute-Kopf; M | Referenzweg I7; Auswahl OB02 | jede Angabe einmal, feste Kanten; 860 × 700 und große Schrift | echte Bedienwege, Geometrie, Kontrast, Vorher/Nachher | ○ Kandidat |
-| S26-02 / OB03, E-S2 | nur Einplanen bedarfsabhängig → weitere Zeilenaktionen erreichbar und ruhig | Termin und „…“ bei Hover/Auswahl; M | Referenzweg; Auswahl OB03; S26-13 | Tastatur, Kontextmenü und Palette gleichwertig; keine Fokusverluste | Hover/Auswahl/Fokus, Aktion über ID, Flächenmessung | ○ Kandidat |
-| S26-03 / N05, E-S2 | Maske und Detailbereich doppelt → eine verlässliche Bearbeitungsfläche | Inspektor im bestehenden Bereich; M–L | Referenzweg; eigene Auswahl N05 | alle bisherigen Felder und Wege erhalten; ein primärer Editor, Undo und Abbruch konsistent | Feldmatrix, Schreibschutz, Fokus, Neustart | ○ Kandidat |
-| S26-04 / KO04, E-S2 | häufige Felder erfordern Umweg → direkt am Objekt bearbeiten | kleine Auswahl für Termin, Wichtigkeit, Label; M | S26-03; eigene Auswahl KO04 | identische Fachlogik; D01/D02; je Änderung ein Undo | Maus/Tastatur, Abbruch, Mehrfachauswahl soweit gewählt | ○ Kandidat |
-| S26-05 / AU03, E-S3 | Tagesbeginn/-abschluss nur manuell → optional rechtzeitig erinnern | lokale Tageshinweise, Vorgabe/Uhrzeiten und Tiefe wählbar; M | E-S3 | nur bei laufender App; kein Zwangswechsel, keine Mehrfachzustellung je Termin | künstliche Uhr, Tageswechsel, Neustart, modaler Zustand | ○ Kandidat |
+| S26-01 / OB02, E-S2 | Heute ohne ausgeprägte Hierarchie → nächste Aufgabe, Zeit und Fortschritt schnell erfassen | vollständig nach D22: Heute-Kopf und vier Textstufen in Heute, Listen, Seiten und Inspektor; M–L | Bild 1 (D21); N05 für Inspektor | jede Angabe einmal, feste Kanten; 860 × 700 und große Schrift; alle gewählten Ansichten erfasst | echte Bedienwege, Geometrie, Kontrast, Vorher/Nachher; Gegenprobe gegen Vorversion | ▶ ausgewählt 10.10.2026; Umsetzung nach Gesamtplanung |
+| S26-02 / OB03, E-S2 | nur Einplanen bedarfsabhängig → weitere Zeilenaktionen erreichbar und ruhig | vollständig nach D23: Einplanen, Fälligkeit und „…“ bei Hover/Auswahl in Liste, Tabelle, Heute und Demnächst; M–L | Bild 1; S26-13 bei Auswahl | Tastatur, Kontextmenü und Palette gleichwertig; keine Fokusverluste; alle vier Ansichten | Hover/Auswahl/Fokus, Aktion über stabile ID, Flächenmessung; Gegenprobe gegen Vorversion | ▶ ausgewählt 10.10.2026; Umsetzung nach Gesamtplanung |
+| S26-03 / N05, E-S2 | Maske und Detailbereich doppelt → eine verlässliche Bearbeitungsfläche | vollständig nach D24: gemeinsamer Inspektor in Liste, Tabelle, Heute, Demnächst, Pinnwand und Dokumentverweisen; bei schmalem Fenster in Inhaltsfläche; L | Bild 1; Grundlage für KO04 | alle bisherigen Felder und Einstiege erhalten; ein primärer Editor; Undo, Abbruch, Auswahl und Schreibschutz konsistent | Feld-/Einstiegsmatrix aller Kontexte, Fokus, Neustart, große Schrift; Gegenprobe gegen Vorversion | ▶ ausgewählt 10.10.2026; Umsetzung nach Gesamtplanung |
+| S26-04 / KO04, E-S2 | häufige Felder erfordern Umweg → direkt am Objekt bearbeiten | vollständig nach D25: Bearbeitungstag, Fälligkeit, Wichtigkeit und Labels im Inspektor und an sichtbaren Aufgabenfeldern in Liste, Tabelle, Heute, Demnächst, Pinnwand und Dokumentverweisen; L | S26-03 (D24) | identische Fachlogik; D01/D02; je Änderung ein Undo; Positionierung, Fokus und Abbruch konsistent | Maus/Tastatur, alle Kontexte und Felder, Abbruch, Neustart; Gegenprobe gegen Vorversion | ▶ ausgewählt 10.10.2026; Umsetzung nach Gesamtplanung |
+| S26-05 / AU03, E-S3 | Tagesbeginn/-abschluss nur manuell → optional rechtzeitig erinnern | A/V nach D20: Vorgabe aus, 08:30/17:30; Uhrzeiten/Wochentage, später erinnern, heute überspringen, gesammelte verpasste Hinweise; M | D20 entschieden; Gesamtplan offen | nur bei laufender App; kein Zwangswechsel, keine Mehrfachzustellung je Termin; Einstellungen und Zustellzustand bleiben über Neustart erhalten | Tk-freie Zeit-/Zustelltests mit künstlicher Uhr; Tageswechsel, Neustart, modaler Zustand; echte Bindungen; Gegenprobe gegen Vorversion | ▶ ausgewählt 10.10.2026; Umsetzung nach Gesamtplanung |
 | S26-06 / AU07, E-S8a | freie Fenster berücksichtigen nur Glide → lokale Termine als Belegzeiten berücksichtigen | gewählte ICS-Datei lesend im Raster und in der Bilanz; M–L | ausdrückliche begrenzte Erweiterung der ICS-Grenze; E-S8a | Überlappung nicht doppelt zählen; keine Aufgaben erzeugen; Umfang für Zeitzonen/Serien festlegen | ICS-Fixtures, Randtage, Überlappungen, Planungsbilanz | ○ Kandidat |
 | S26-07 / OB04, E-S8b | Zustandswechsel abrupt → dezente optionale Rückmeldung | Abhaken, Klappen, Bereichswechsel bis 150 ms; M | E-S8b; Tempoziel vor/nach | bestehende Animationsoption beachten; keine zurückbleibenden after-Aufträge; keine Zielverschlechterung | schnelle Folgeaktionen, Fokus, Messen, Animationen aus | ○ Kandidat |
-| S26-08 / G17, E-S1/D07 | statische Zeichnungen → begrenzte Pixelanimation | Frames, Dauer, Vorschau, Spritesheet oder zusätzlich GIF; L | E-S1; nächstes Datenformat-Tor | Altzeichnungen erhalten; Vorsicherung/Migration/Altleser; exportierte Bilder entsprechen Vorschau | Tk-freie Frame-/Exporttests, echte Werkzeuge, Undo, Altleser | ○ Kandidat |
-| S26-09 / G21, E-S4 | generischer Dateiimport → erste Fremdquelle kontrolliert übernehmen | Quelle und Tiefe wählbar, Vorschau und Verlustbericht; M–L | E-S4 | nichts still verlieren oder überschreiben; lokale Anhänge; klare Größen-/Pfadgrenzen | künstliche Quellpakete, fehlerhafte Archive, Abbruch, Undo | ○ Kandidat |
-| S26-10 / G26, E-S5/D15 | installiertes Python nötig → eigenständig startende Pakete | eingebettetes Python 3.14/Tk 9, Werkzeugentscheidung, native Bauwege; L | E-S5; native Zielumgebungen | Start ohne externes Python; Daten außerhalb Paket; Ressourcen/vendor vollständig; Lizenzbelege | native isolierte Start-/Ressourcenproben, Hash, Signatur | ○ Kandidat |
-| S26-11 / LG01–LG03, E-S6/I8 | Tk-8.6-Logo treppig und großes PNG → geglätteter Rückfall und richtige Symbolgrößen | Wege B/C/D/F wählbar; Master LG04 gesondert; M | E-S6 | Zwischentöne und korrekte Größen bei wechselndem DPI/Akzent; Tk 9 bleibt erhalten | Tk-freie Rastertests, Bildwerte, Tk 8.6/9, Sichtprüfung | ○ Kandidat |
-| S26-12 / A14, E-S7 | Ersatzschriften für einige Symbole → einheitliche und eindeutige Zeichen | Systemzeichen oder ausdrücklich gewählte Symbolschrift; S–M | E-S7; ggf. Lizenzentscheidung | nur ICONS; keine Mehrfachbedeutung; gleiche Lesbarkeit/Größe | Symbolprüfung je Plattform, Kontrast, Tastaturbeschriftung | ○ Kandidat |
+| S26-08 / G17, E-S1/D07 | statische Zeichnungen → begrenzte Pixelanimation | A/V nach D18: Frames anlegen/duplizieren/löschen/umordnen, gemeinsame und einzelne Dauer, Vorschau, PNG-Spritesheet und Einzelbildfolge; kein GIF; L | D18 entschieden; nächstes Datenformat-Tor; Gesamtplan offen | Altzeichnungen erhalten; Vorsicherung/Migration/Altleser; Vorschau und Exporte entsprechen den Frames; jede Bearbeitung rücknehmbar; Reihenfolge und Dauer über Neustart erhalten | Tk-freie Frame-/Exporttests; echte Werkzeuge, Exportdateien, Undo, Altleser; Gegenprobe gegen Vorversion | ▶ ausgewählt 10.10.2026; Umsetzung nach Gesamtplanung |
+| S26-09 / G21, E-S4 | generischer Dateiimport → erste Fremdquelle kontrolliert übernehmen | Notion A/V nach D26: ZIP, Text/Überschriften/Listen, lokale Bilder/Anhänge, Aufgaben-Kästchen und interne Seitenverweise; Vorschau und Verlustbericht; L | D26; vorhandener Markdown-Import und lokale Verweise | nichts still verlieren oder überschreiben; keine Notion-Datenbank; Unterseiten in bestehende Ordner/Seiten; sichere Größen-/Pfadgrenzen; ein Undo und Vorsicherung | Tk-freie Parser-/Archivtests; künstliche Exportpakete, fehlerhafte Archive, Quellverluste, Abbruch, Undo, Neustart; Gegenprobe gegen Vorversion | ▶ ausgewählt 10.10.2026; Umsetzung nach Gesamtplanung |
+| S26-10 / G26, E-S5/D15 | installiertes Python nötig → eigenständig startende Pakete | A/V nach D27: PyInstaller 6.22.3 nur zum Bauen; Python 3.14/Tk 9; macOS arm64 und Windows x64, vollständige Ressourcen, Lizenzbelege und Bauanweisungen; L | native Mac-/Windows-Bau- und Prüfumgebung; I3 für öffentliche Signatur | Start ohne externes Python; Daten außerhalb Paket; Ressourcen/vendor vollständig; Version/Architektur nachvollziehbar; Signaturstatus ehrlich ausgewiesen | native isolierte Start-/Ressourcen-/Datenproben, Hash und Signatur; Gegenprobe: Vorversion benötigt externes Python | ▶ ausgewählt 10.10.2026; Umsetzung nach Gesamtplanung |
+| S26-11 / LG01–LG03, E-S6/I8 | Tk-8.6-Logo treppig und großes PNG → geglätteter Rückfall und richtige Symbolgrößen | A/V nach D28: Wege B+C+D+F; Glättung, App-Symbole 16/32/64/256, Tests und Dokumentation; M–L | D28; Master LG04 separat offen | Zwischentöne und korrekte Größen bei wechselndem DPI/Akzent; Tk 9 bleibt erhalten; kein großes PNG im Startweg | Tk-freie Raster-/PNGtests; Bildwerte, Tk 8.6/9, Startmessung, native Sichtprüfung; Gegenprobe gegen Vorversion | ▶ ausgewählt 10.10.2026; Umsetzung nach Gesamtplanung |
+| S26-12 / A14, E-S7 | Ersatzschriften für einige Symbole → einheitliche und eindeutige Zeichen | A/V nach D29: gesamte ICONS-Tabelle mit Zeichen aus tatsächlich verwendeter UI-Schrift; Größe/Ausrichtung/Bedeutung; M | D29; native Plattformprüfung | nur ICONS; keine zusätzliche Symbolschrift; keine Mehrfachbedeutung; Beschriftung und Tastaturwege erhalten | Symbolprüfung je Plattform, Schrift-/DPI-Wechsel, Kontrast und Sichtabnahme; Gegenprobe für belegte Ersatzschriftfehler | ▶ ausgewählt 10.10.2026; Umsetzung nach Gesamtplanung |
 | S26-13 / Bedienfläche ≤ 15 % | zuletzt ≈ 27 %, seit U09/OB05 ungemessen → Inhalt gewinnt Fläche | Messdefinition vereinheitlichen, danach gewählten Rest reduzieren; S–M | eigene Auswahl; OB02/OB03 koordinieren | verbindliche Referenzgröße festlegen (Dokumente nennen 800 und 840 px Höhe); alle Wege bleiben erreichbar | Geometrie 1280 × 800/840 und 860 × 700, große Schrift | ○ Kandidat |
 | S26-14 / P03-Rest, E01 | geänderte Karten teuer, Startseite 270–300 ms, Einstellungen ≈ 560 ms → weniger Aufbau | Teilaktualisierung geänderter Karten, viele Karten; Einstellungsrest separat auswählen; M–L | eigene Auswahl je Schnitt; gemessene Baseline | unveränderte Widgets erhalten; Auswahl/Fokus/Scrollen stabil; Ziel Startseite ≤ 150 ms oder Abweichung ausdrücklich klären | warm/kalt, Median/p95, 1.000/10.000 Punkte, Widget-/Speicherentwicklung | ○ Kandidat |
 | S26-15 / Linux-CI | nur Grundstufe verpflichtend → kalibrierte Integrationssuiten | ausgewählte Kernwege oder vollständige Linux-Matrix; M–L | eigene Auswahl; Linux mit tkinter/Xvfb | echte Befunde nicht wegkalibrieren; plattformabhängige Auslassungen benennen | native Linux-Läufe, absichtlich fehlerhafte Gegenfälle, CI-Nachweis | ○ Kandidat |
@@ -435,13 +435,46 @@ Quellen: [Analyse](Glide_Analyse.md), §3–§7/§14.2 dieses Plans und [Markt/V
 
 ### 15.2 Entscheidungsrunden und Gesprächsstand
 
-- **Runde 1 offen:** E-S1 Exportweg und Bearbeitungstiefe der Animation; E-S2 Referenzweg (eigene Affinity-Entwürfe, gemeinsam abgestimmte Referenzen oder bestehende Rollen ohne Entwurf); E-S3 Vorgabe/Uhrzeiten und Tiefe der Tageshinweise.
-- Danach E-S2-Funktionen OB02, OB03, N05, KO04 einzeln; E-S4–E-S7; E-S8a ICS und E-S8b Bewegung getrennt; Qualitätsreste und V01/V02/N13; Bearbeitungstiefe A–H nur soweit nicht bereits durch diese Antworten abgedeckt.
+- **Runde 1 entschieden am 10.10.2026:** E-S1 A/V (D18), E-S2 B/V (D19), E-S3 A/V (D20). Vollständiger Antwortwortlaut und verbindlicher Umfang in der Arbeitsrichtung. Drei Referenztafeln für alle vier Bereiche sind vorgelegt; Bild 1 und OB02/OB03/N05/KO04 anschließend durch D21–D25 gewählt.
+- Danach E-S8a ICS und E-S8b Bewegung getrennt; Qualitätsreste und V01/V02/N13; Bearbeitungstiefe A–H nur soweit nicht bereits durch diese Antworten abgedeckt.
 - I1–I5 und I9–I11 in einer eigenen Runde für Veröffentlichung und Zuständigkeit behandeln; I6 als Prüfumfang, I7 über E-S2, I8 über E-S6. Konten, Lizenz, Markenprüfung und Historienumschreibung sind keine beiläufige technische Umsetzung. I10 ändert Commit-Kennungen und braucht einen eigenen ausdrücklich bestätigten Auftrag.
-- **Noch keine Antworten.** D18 ff. bleiben frei. Keine Versionen oder Lieferfolge beschlossen. Abschließend vollständigen Plan einschließlich ausgewählter Stufe, Reihenfolge, Versionen, Abhängigkeiten und externer Abnahmetore zur Bestätigung vorlegen.
+- **Runde 2 entschieden am 10.10.2026:** Bild 1 (D21); OB02, OB03, N05 und KO04 jeweils B – vollständig (D22–D25). Antworten im Wortlaut in der Arbeitsrichtung, Umfang in den Aufgabenkarten und §15.4. Neue Entscheidungen ab D30. Keine Versionen oder Lieferfolge beschlossen. Abschließend vollständigen Plan einschließlich ausgewählter Stufe, Reihenfolge, Versionen, Abhängigkeiten und externer Abnahmetore zur Bestätigung vorlegen.
+
+- **Runde 3 entschieden am 10.10.2026:** E-S4 Notion A/V (D26), E-S5 PyInstaller 6.22.3 für Mac/Windows A/V (D27), E-S6 Logo B+C+D+F A/V (D28), E-S7 Systemzeichen/gesamte ICONS-Tabelle A/V (D29).
 
 ### 15.3 Verbindlicher Lieferrahmen nach Bestätigung
 
 Je Paket eine Produktionsversion nach Übergabe §5: isolierte Baseline → Umsetzung mit Tk-freier Fachlogik/Unit-Tests (D17) und echten Bedienwegen → Pflichtsuite mit roter Gegenprobe gegen die Vorversion → CHANGELOG → Versionswechsel → 07-README → Nachweisrahmen/Standprüfung → eingefrorene Kopie außerhalb OneDrive → Vollprüfung → Abgleich 07 und Showcase in der Kopie → 07/05 zurück → Bundle und Signatur im Bauordner sowie auf Rückkopie → Nachweise/QA/Plan/Funktionen/Übergabe → CI-Grundstufe → sofortiger Commit. Neue 07-Hauptdatei beim Vormerken ausführbar setzen. Erster Versionswechsel: Nachweisverweise 3.33.17 auf Commit `6098877` festsetzen.
 
 Commits mit `Claude <noreply@anthropic.com>` auf dem genannten `claude/`-Zweig; PR nur als Merge-Commit. Stash, `codex/`-Zweig und Windows-Worktrees unangetastet lassen. Keine UI-Prüfungen parallel zu Vollprüfungen oder Messungen; keine Konsolenumleitung nach OneDrive. Neue Produktfragen vorlegen und unabhängig weiterarbeiten; Umfang nicht still reduzieren. Externe Prüfungen und benötigte Inhaberhandlungen vor Bestätigung als konkrete Tore vereinbaren. Zum Abschluss Plan ↔ Code ↔ Prüfergebnisse mit allen Abweichungen abgleichen.
+
+### 15.4 Referenzentwürfe und zweite Auswahlrunde (10.10.2026)
+
+Nach D19 drei Bildtafeln mit jeweils Heute, Liste, Seite und Inspektor erstellt und in dieser Reihenfolge im Chat gezeigt. Grundlage: vier neue Aufnahmen des eigenen Glide-3.35.0-Fensters, künstliche Daten im temporären `GLIDE_DATA_DIR`, Python 3.14.5/Tk 9.0.3, 1280 × 840; nur `screencapture -l` des eigenen Prozesses. Quellenbilder außerhalb von OneDrive. Erzeugung über das eingebaute Image-Gen-Werkzeug nach Product Design; Apple-Design-Grundsätze zu Hierarchie, Nähe und unmittelbarer Rückmeldung berücksichtigt, keine Webbibliothek oder Laufzeitabhängigkeit eingeführt.
+
+Die Bildtafeln sind lokale Vorschauen, keine implementierten oder nativ abgenommenen Oberflächen. Ablagepräfix: `~/.codex/generated_images/01a12269-6761-77d1-af2d-28dc26d3041d/`. Bild 1 ist nach Auswahl im Grafik-Master gesichert; Varianten 2/3 bleiben unversionierte Vorschauen. Der ausgewählte Entwurf wird vor Umsetzung an die tatsächlichen Tk-Mittel und Regeln gebunden. Maßgeblich ist die sichtbare Reihenfolge, nicht eine gedachte Reihenfolge von Generierungsaufträgen.
+
+| Sichtbare Auswahl | Datei im Vorschauordner | Bindung und Bildbefunde |
+|---|---|---|
+| Bild 1 | `exec-54aa307c-afd5-4865-8b4f-a9c8bf9834f3.png` | kompakte Hierarchie; Bildempfehlung. Die Listenoptik darf nicht die vorhandenen Ansichtsmodelle ändern; Tabellen-/Listenwahl bleibt erhalten. |
+| Bild 2 | `exec-881c3be5-d725-4606-bd42-6945118d9c6d.png` | stärkere nächste Handlung; Bildfehler: „Nächste Aufgabe“ doppelt. Vor Umsetzung entfernen; Nutzer im Chat darauf hingewiesen. |
+| Bild 3 | `exec-6cc1ed81-1e0e-4174-b6d0-cd7525d2f59f.png` | dokumentorientierte Hierarchie im vorhandenen dunklen Erscheinungsbild; kein neues Design und keine echte Unschärfe daraus ableiten. |
+
+Für alle drei gelten unabhängig vom Bild: bestehende Symbole aus `ICONS`, Farben aus Rollen, jede Angabe einmal, keine erfundenen Feld-/Navigationsfunktionen, alle bisherigen Felder erhalten. Kontrast, große Schrift, 860 × 700 und das 15-%-Ziel sind erst in einer tatsächlichen Umsetzung messbar; die Bilder belegen sie nicht. Bei einer Bildwahl mit Änderungswunsch zunächst die gewählte Referenz gezielt überarbeiten, dann im Gesamtplan festlegen.
+
+| Einzelentscheidung | A – erste Stufe | B – vollständig (Empfehlung) | C / Nutzen und Abwägung |
+|---|---|---|---|
+| OB02 / S26-01 | nur Heute-Kopf mit nächster Aufgabe, Zeit und Fortschritt; M | vier Textstufen in Heute, Listen, Seiten und Inspektor sowie Heute-Kopf; M–L | C: auslassen. Schnellere Orientierung; größere Tiefe berührt mehr Layouts. |
+| OB03 / S26-02 | bedarfsabhängige Zeilenaktionen in der Aufgabenliste; M | Liste, Tabelle, Heute und Demnächst; M–L | C: auslassen. Weniger Dauerbedienung; Tastatur, Kontextmenü und Palette in beiden Stufen Pflicht. |
+| N05 / S26-03 | gemeinsamer Inspektor für Liste/Tabelle, andere Bearbeitungswege zunächst erhalten; M–L | ein Aufgabeneditor über Liste, Tabelle, Heute, Demnächst, Pinnwand und Aufgabenverweise; schmal innerhalb der Inhaltsfläche; L | C: auslassen. Größter struktureller Nutzen, zugleich größtes Regressionsrisiko dieser Runde; alle Felder/Einstiege erhalten. |
+| KO04 / S26-04 | Bearbeitungstag, Fälligkeit, Wichtigkeit und Labels direkt im Inspektor öffnen; M | außerdem an sichtbaren Aufgabenfeldern in Liste, Tabelle, Heute, Demnächst, Pinnwand und Dokumentverweisen; L | C: auslassen. Kürzere Wege; braucht ausgewähltes N05 und Prüfung von Positionierung, Fokus und Abbruch. |
+
+Bildwahl und Funktionsauswahl wurden getrennt beantwortet: Bild 1 und jeweils B – vollständig für OB02, OB03, N05 und KO04 (D21–D25, 10.10.2026). D18–D29 werden nicht erneut zur Wahl gestellt. Ausgewählte Referenz: [Glide-Oberflaeche-Referenz.png](../20_Grafik_Master/05_Inspiration/Glide-Oberflaeche-Referenz.png), mit dem integrierten Image-Gen-Werkzeug aus den vier eigenen Aufnahmen erzeugt. Promptvorgaben: native Glide-/Tk-Desktopanwendung, vier Ansichten auf einer Tafel, kompakte Hierarchie und kürzere Wege; bestehende drei Zonen, deutsche Texte, Rollenfarben und vier Textstufen; künstliche Aufgaben vom 10.10.2026; keine neuen Felder, Cloudfunktionen oder Abhängigkeiten. Bild 2/3 bleiben verworfene lokale Varianten.
+
+### 15.5 Dritte Auswahlrunde und Quellenbindung (10.10.2026)
+
+Entschieden: E-S4 A/V (D26), E-S5 A/V (D27), E-S6 A/V (D28), E-S7 A/V (D29). Antworten im Wortlaut in der Arbeitsrichtung; Umfang, Nutzen, Abhängigkeiten, Akzeptanz und Prüfung in S26-09 bis S26-12. Erste Stufen/Alternativen wurden einzeln angeboten: Notion nur Text oder allgemeiner Markdown-Ordner; Paket zunächst Mac; Logo zunächst B+D+F oder nur vorhandener Tk-9-Weg; drei Problemzeichen statt gesamte ICONS-Tabelle bzw. Symbolschrift je System; jeweils Verschieben/Auslassen möglich. Gewählt wurde jeweils der vollständige angebotene Rahmen.
+
+PyInstaller-Version, Lizenz, Tk-Hook, native Plattformbindung, Ordnerpaket und Tk-/macOS-Hinweise vor der Auswahl anhand der Primärquellen geprüft ([Markt §8](Glide_Markt_und_Vorbilder.md#8-quellenabgleich-für-die-neue-planung-09102026)). D27 enthält Bauwerkzeug und Bauwege, keine Freigabe für öffentliche Veröffentlichung, Konten oder neue Glide-Lizenz.
+
+**Runde 4 gestellt, Antwort offen:** 13 E-S8a ICS (Einzeltermine oder zusätzlich Serien/Ausnahmen), 14 E-S8b Bewegung (Abhaken/Klappen oder zusätzlich Bereichswechsel), 15 Bedienfläche (Liste/Heute oder alle betroffenen Hauptansichten; alternativ nur messen), 16 P03-Rest (Karten oder zusätzlich Startseiten-Neuaufbau), 17 E01-Rest (erste Anzeige oder zusätzlich Wiederverwendung), 18 Linux (Kernwege oder gesamte sachlich ausführbare Matrix). Jeweils A/1 erste Stufe, A/V vollständig oder B auslassen; bei Bedienfläche B nur messen/C auslassen. Empfehlung jeweils A/V. Bedienflächen-Referenz 1280 × 800 folgt bereits dem verbindlichen P4; 840 ist nur Zusatzmessung. Ziele P03 ≤ 150 ms; E01 erste Anzeige ≤ 250 ms, erneutes Öffnen ≤ 150 ms. Abweichungen belegt vorlegen. E01 wird getrennt als S26-14b geführt, sobald gewählt.
