@@ -24,8 +24,8 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 | Verhalten der Funktionen | [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md) |
 | Datenformat, Backups, Austausch | [Daten und Migration](../01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md) |
 | Prüfen | [Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md), Ergebnisse im QA-Bericht, Nachweise unter `tests/qa-<Version>/` |
-| Startbare Fassung | `07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.33.18.pyw`; nach grüner Vollprüfung 28 Code-Dateien/131 Ressourcen und Showcase SHA-256-abgeglichen |
-| macOS-Bundle | `01_Repository/Glide/build/macos/Glide.app` trägt seit 09.10.2026 **3.33.18** (Mac-Vollprüfung Exitcode 0, Ad-hoc-Signatur, SHA-256-gleich zu 07); menschliche Abnahme offen. Kennung `de.shaye.glide` (Windows `Shaye.Glide`) |
+| Startbare Fassung | `07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.35.0.pyw` mit `Schnellstart.pyw`; 37 Code-Dateien, 131 Ressourcen und Showcase SHA-256-abgeglichen |
+| macOS-Bundle | `01_Repository/Glide/build/macos/Glide.app` (lokal, nicht versioniert) trägt **3.35.0**, Ad-hoc-Signatur, SHA-256-gleich zu 07; menschliche Abnahme offen. Kennung `de.shaye.glide` (Windows `Shaye.Glide`) |
 | Pflegewerkzeuge | [`scripts/pflege/`](../01_Repository/Glide/scripts/pflege/README.md): Versionswechsel, Abgleich nach 07, Kürzen der Ablage, Messungen, Pfadbereinigung |
 | Demo- und Testdaten | `05_Probelisten_Testdaten/Showcase` (eigener Starter), Fixtures unter `01_Repository/Glide/tests/fixtures` |
 | Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung, Abweichungen Dokumentation ↔ Code | [Analyse](Glide_Analyse.md) |
@@ -58,47 +58,34 @@ Einstieg für jede Sitzung. Zusammengeführt am 03.10.2026 aus Sitzungsübergabe
 - **Aktionskennungen seit 3.33.11:** Menü und Palette verwenden stabile IDs; Beschriftungen können sich ändern. Bei Ausführung die aktuelle Menüposition ermitteln, Copy/Paste/Undo mit Editorfokus prüfen (R2).
 - **Rückfallwege und Prüfwerkzeuge sichtbar prüfen:** Der Tk-8.6-Rückfall des Logos war grün getestet und unter Windows doch treppig. Die Windows-Dunkelaufnahme war byte-gleich mit der hellen. Ein Qualitätskriterium bzw. ein einfacher Vergleich hätte beides sofort gezeigt.
 - **Windows-Arbeitskopie in OneDrive:**
-  - Die Arbeitskopie hat CRLF; außerhalb von `01_Repository/Glide` regelt keine `.gitattributes` die Zeilenenden (W03). Dateien von dort vor dem Commit in einem Linux-Klon nach LF normalisieren.
+  - Die Arbeitskopie hat CRLF; seit 08.10.2026 legt die Wurzel-`.gitattributes` die Zeilenenden für die ganze Ablage fest (W03).
   - Windows zeigt Dateinamen teils kleingeschrieben (`glide-showcase.glidebackup`); maßgeblich ist die Schreibweise in Git.
   - OneDrive legt Konfliktkopien `<Name>-<Gerätename>.md` an, und eine dort liegende Arbeitskopie kann veraltete Fassungen behalten. Mit 3.33.8 gelangten so sechs Kopien und die am 03.10.2026 aufgelöste Projektübergabe ins Repository, vier Hauptdokumente waren dabei gekürzt. Am 05.10.2026 zusammengeführt. Vor jedem Commit neu hinzugefügte Dateien und stark geschrumpfte Dokumente prüfen (W04).
   - In PowerShell heißt der Benutzerordner `$env:USERPROFILE`, nicht `%USERPROFILE%`.
+- **Sofort nach jeder Lieferung committen:** Die Nachweise 3.33.13–3.33.16 waren nie eingecheckt und sind mit der Aufbewahrung verschwunden; nur ihre Werte im QA-Bericht blieben.
+- **Git und Signatur im OneDrive-Ordner:** OneDrive kann Git-Objekte leeren (09.10.2026: ein leerer Baum in einem lokalen Codex-Checkpoint) und lässt `codesign --verify` direkt im Ordner scheitern; die Signatur deshalb im Bauordner und auf einer Rückkopie prüfen. Eine leere, verwaiste `.git/index.lock` ohne laufenden Git-Prozess hält `ablage_kuerzen.py` an.
 - Technische Fallstricke (Menübefehle unter macOS, `update()` in Rückrufen, Tk 9 und `place`, Bindtags, Leinwand ohne Kantenglättung, Design statt `theme_name`): [Architektur, Abschnitt 5](../01_Repository/Glide/docs/02_ARCHITECTURE.md#5-tk-fallstricke-teuer-gelernt).
 
 ## 5. Prüfen
 
 - **Windows-Konsole:** Vor Prüfbefehlen in PowerShell `$env:PYTHONUTF8="1"` setzen; sonst kann die Ausgabe einer Fehlermeldung mit Checkbox-Zeichen unter cp1252 abbrechen, bevor das Gesamtprotokoll geschrieben wird.
 - **Vor jedem Commit:** `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` aus `01_Repository/Glide` (braucht Python mit tkinter, unter Linux Xvfb). Im Linux-Container möglich: CI-Grundstufe, Startprobe, `messung_speicherweg.py`; nicht möglich: macOS/Tk-9-Abnahme, Bundlebau, physische Bedienung. Ergebnisse als „Linux/Tk 8.6, künstliche Daten“ kennzeichnen.
-- **Abnahme einer Version** auf dem Mac: `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.35.0/<Name> --timeout 900` – 76 Integrationssuiten, Unit-Tests, Showcase, fünf Analysen.
+- **Abnahme einer Version** auf dem Mac: `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.35.0/<Name> --timeout 900` – 82 Integrationssuiten, Unit-Tests, Showcase, fünf Analysen.
 - **Windows:** `tests\tools\windows_vollpruefung.cmd` (dieselbe Vollprüfung mit Python 3.14/Tk 9 und Fensterfotos); Anleitung und Rückmeldung in der [Prüfliste, B0](Glide_Manuelle_Pruefung.md#b-windows-pc-nach-der-vollprüfung).
-- **Historische Referenz:** 3.33.6 auf dem Mac vom 02.10.2026; aktueller Windows-/Python-Stand 3.33.18 im QA-Bericht. Vorhandenes Bundle weiter 3.33.6; keine native Mac-/Bundle-Abnahme der neuen Pakete behaupten.
+- **Lieferweg je Version:** CHANGELOG → `versionswechsel.py` → 07-README (Lieferabsatz, Module) → Nachweisrahmen → Standprüfung → eingefrorene Kopie außerhalb von OneDrive (ohne `.git`, `.claude`, `archiv`, `build`) → `pruefen.py --modus voll` → in der Kopie `abgleich_07.py` und `showcase_abgleich.py` → 07 und 05 zurückspielen → `baue_app.py`, Signatur prüfen → Nachweise, QA-Bericht, Plan → CI-Grundstufe → Commit.
+- **Prüffallstricke:** Konsolenausgabe nie in den OneDrive-Ordner umleiten (Exit 120); keine UI-Suiten parallel zur Vollprüfung oder zu Messungen; erzeugte Mehrfachklicks brauchen Zeitstempel (`time=`), sonst zählt Tk sie als eine Folge; Dialogknöpfe zeigen „Speichern“ statt „Speichern …“ (`RoundedButton.action_text`).
 
 ## 6. Was als Nächstes ansteht
 
-- **Sprint abgeschlossen** (3.33.19–3.35.0): Abgleich, Abweichungen und Offenes in [Entwicklungsplan §15.4](Glide_Entwicklungsplan.md#154-abschlussabgleich-abs-09102026).
-- **Für den Inhaber:** Arbeitsstand committen (die Versionen 3.33.19–3.35.0 und ihre Nachweise sind nicht eingecheckt; die Aufbewahrung entfernt sonst weitere uneingecheckte Nachweise). Danach die Entscheidungen E-S1–E-S8 ([§15.3](Glide_Entwicklungsplan.md#153-benötigte-inhaberentscheidungen-stand-08102026)) – sie geben die nächsten Pakete frei.
-- **Prüfungen außerhalb des Macs:** Windows-Vollprüfung des Stands 3.35.0 (deckt W02 und die Lieferungen ab 3.33.19), Windows-Sichtprüfung W07/W08 (B1a), Linux-Sichtprüfung der JPEG-Vorschau (N08), menschliche Abnahme I6 ([Prüfliste](Glide_Manuelle_Pruefung.md)).
-- **Ohne Entscheidung möglich, aber nicht beauftragt:** Stufe 5 (N13, SQLite-Neubewertung, Vorrat) nur auf ausdrücklichen Auftrag.
-
-## 6a. Verlauf des Sprints (Stand 09.10.2026)
-
-Maßgeblich: [Entwicklungsplan §15](Glide_Entwicklungsplan.md#15-sprint-ab-08102026-aufgabenkatalog). Nachweise unter `01_Repository/Glide/tests/qa-<Version>/`.
-
-| Version | Paket | Aufgaben | Nachweis |
-|---|---|---|---|
-| 3.33.19 | Tempo | P06r, P04, P03r, E01, P01r, P08c | `qa-3.33.19/tempo_2026-10-09/` |
-| 3.33.20 | Komfort | KO02, KO03, KO05, KO06, U04, U20, N07, AB08, AU06 | `qa-3.33.20/komfort_2026-10-09/` |
-| 3.33.21 | Ruhige Oberfläche | N01, U15, U05r, U09, U18, OB05, OB01r, W05 (W07/W08 ◇) | `qa-3.33.21/oberflaeche_2026-10-09/` |
-| 3.34.0 | Wissen und Seiten | B4, G14h, D-03, H-02r, N08; P07 ✕ nach Messung | `qa-3.34.0/wissen_2026-10-09/` |
-| 3.35.0 | Pixel und Austausch | G19, G-03, G24, F-03 | `qa-3.35.0/austausch_2026-10-09/` |
-
-- **Phase 0:** A01, PR01 (Mac-Vollprüfung und Bundle 3.33.18), W03, W04, W10–W15, DOK3; W02 auf dem Mac erledigt, Windows offen.
-- **Lieferweg je Version:** CHANGELOG → `versionswechsel.py` → 07-README (Lieferabsatz, Module) → Nachweisrahmen → Standprüfung → eingefrorene Kopie im Scratchpad (ohne `.git`, `.claude`, `archiv`, `build`) → `pruefen.py --modus voll` → in der Kopie `abgleich_07.py` und `showcase_abgleich.py` → 07 und 05 zurückspielen → `baue_app.py`, Signatur im Bauordner und auf Rückkopie prüfen (im OneDrive-Ordner selbst scheitert `codesign` am Dateianbieter) → Nachweise, QA-Bericht, Plan.
-- **Prüffallstricke:** Konsolenausgabe nie in den OneDrive-Ordner umleiten (Exit 120); keine UI-Suiten parallel zur Vollprüfung oder zu Messungen; erzeugte Mehrfachklicks brauchen Zeitstempel (`time=`), sonst zählt Tk sie als eine Folge; Dialogknöpfe zeigen „Speichern“ statt „Speichern …“ (`RoundedButton.action_text`); eine verwaiste `.git/index.lock` (leer, kein Git-Prozess) hält `ablage_kuerzen.py` an.
+- **Sprint abgeschlossen** (3.33.19–3.35.0, eingecheckt am 09.10.2026): Abgleich, Abweichungen und Offenes in [Entwicklungsplan §14.2](Glide_Entwicklungsplan.md#142-abschlussabgleich-abs-09102026); Ergebnisse je Version im QA-Bericht.
+- **Entscheidungen des Inhabers** E-S1–E-S8 ([Entwicklungsplan §11](Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber)) geben die nächsten Pakete frei: Animation (D07), Oberfläche nach Referenzentwürfen (I7), Tageshinweise, Importquelle, Bauwerkzeug, Logo unter Tk 8.6, Symbolschrift, ICS als belegte Zeit und Bewegung.
+- **Prüfungen außerhalb des Macs:** Windows-Vollprüfung des Stands 3.35.0 (deckt W02 und die Lieferungen ab 3.33.19), Windows-Sichtprüfung W01/W06–W08 (B1a), Linux-Sichtprüfung der JPEG-Vorschau (N08), menschliche Abnahme I6 ([Prüfliste](Glide_Manuelle_Pruefung.md)).
+- **Ohne Entscheidung möglich, aber nicht beauftragt:** Bedienfläche nach U09/OB05 neu messen (Ziel ≤ 15 %), P03-Rest, Linux-Kalibrierung der Integrationssuiten; Stufe 5 nur auf ausdrücklichen Auftrag.
 
 ## 7. Offen beim Inhaber
 
-- Feature-Arbeit ist am 05.10.2026 beauftragt; Bearbeitungstiefe der Auswahl A–H je Paket; D07 erst zur Pixel-Etappe; Importquelle und Bauwerkzeug erst in Stufe 4; AU03, OB04 und AU07, wenn das jeweilige Paket des Ausbauprogramms ansteht.
-- I1 Inhaberangaben bestätigen, I2 Lizenz veröffentlichen, I3 Developer-ID und Code-Signing-Zertifikat, I4 Markenprüfung, I5 Python 3.14.7 auf dem Mac installieren, I6 manuelle Prüfsitzungen nach grüner Windows-Vollprüfung 3.33.18 ([Prüfliste](Glide_Manuelle_Pruefung.md)), I7 Referenzentwürfe für „Heute“, Liste und Seite vor Welle 2 des Ausbauprogramms, I8 Lösungsweg für das Logo unter Tk 8.6 ([Diagnose](../01_Repository/Glide/docs/diagnosen/LOGO_KANTENGLAETTUNG.md)).
-- I9 Rechte an Fremdbildern in `20_Grafik_Master` und im Showcase, I10 Git-Historie bereinigen, I11 GitHub-Auftritt ([Entwicklungsplan §11](Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber)).
+Vollständige Liste mit Stand und Empfehlungen: [Entwicklungsplan §11](Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber).
 
-Die aktuellen Vollprüfungen liefen mit Python 3.14.7/Tk 9.0.4 auf Windows. I5 betrifft weiter den Mac.
+- **Entscheidungen:** E-S1–E-S8 (D07, I7, AU03, G21, D15/G26, I8, A14, AU07/OB04) und die weitere Bearbeitungstiefe der Auswahl A–H.
+- **Freigaben und Konten:** I1 Inhaberangaben, I2 Lizenz, I3 Developer-ID und Code-Signing-Zertifikat, I4 Markenprüfung, I5 aktuelles Python auf dem Mac (3.14.5 trägt die Volläufe), I9 Rechte an Fremdbildern, I10 Git-Historie, I11 GitHub-Auftritt.
+- **Prüfungen:** I6 Windows-Vollprüfung des aktuellen Stands und menschliche Prüfsitzungen nach der [Prüfliste](Glide_Manuelle_Pruefung.md).

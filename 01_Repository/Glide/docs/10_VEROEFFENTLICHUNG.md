@@ -6,7 +6,7 @@ Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierun
 
 ## Releasecheckliste
 
-**Je Version (erfüllt bis 3.33.6):**
+**Je Version (erfüllt bis 3.33.6 und wieder seit 3.33.18; 3.33.7–3.33.17 nur unter Windows ohne Bundle):**
 
 - [x] VERSION, `APP_VERSION`, Hauptsuite und CHANGELOG gleich; Datenformat geprüft.
 - [x] Vollprüfung Exitcode 0 auf dem Referenz-Mac; Ergebnis im [QA-Bericht](07_QA_BERICHT.md).

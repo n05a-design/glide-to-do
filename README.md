@@ -8,10 +8,10 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 
 ## Stand
 
-- **Entwicklungsstand 3.35.0 vom 08.10.2026**, Datenformat 23.
-- **Aktuelles Paket 3.33.18 – Seiten im Alltag:** Live-Listen mit Originalaufgaben, Titelbilder für Seiten und Bibliothekskarten sowie gefüllte Vorlagenvorschau beim Anlegen. Windows-Vollprüfung und strenge CI grün; Python und Showcase bytegleich geliefert. Wochenplanung, lokale Verweise/Rückverweise und die gemeinsame Befehlspalette aus 3.33.16/3.33.17 sind ebenfalls enthalten. Format 23 mit bytegenauer Vorsicherung und Schreibschutz in der unveränderten 3.33.17. Native Mac-/Linux- und menschliche Abnahme offen. Einzelheiten und Zahlen im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md); weitere Arbeit in der [Paketfolge](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#44-größere-umsetzungspakete-auftrag-07102026).
-- **Offen:** Lizenz, Signatur, Markenprüfung, Store und die manuelle Abnahme unter Windows, Linux, DPI-Skalierung und Bildschirmleser.
-- **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe; Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
+- **Entwicklungsstand 3.35.0 vom 09.10.2026**, Datenformat 23; keine veröffentlichte oder signierte Releasefassung.
+- **Zuletzt geliefert (Sprint 08./09.10.2026):** Tempo (3.33.19), Komfort im Alltag (3.33.20), ruhige Oberfläche mit hell/dunkel nach System (3.33.21), Wissen und Seiten mit Bildern in Druck und Markdown, markierten Fundstellen und erklärten Filtern (3.34.0) sowie Pixel und Austausch mit geprüften KI-Änderungsvorschlägen und Sicherungsvergleich (3.35.0). Jede Version ist auf dem Referenz-Mac automatisch vollständig geprüft und bytegleich nach `07_Python-Versionen` geliefert; Windows zuletzt 3.33.18. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
+- **Offen:** Lizenz, Signatur, Markenprüfung, Store, Windows-Prüfung des aktuellen Stands und die manuelle Abnahme unter Windows, Linux, DPI-Skalierung und Bildschirmleser.
+- **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe und den offenen Entscheidungen des Inhabers; Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 
 ## Schnellstart
 
@@ -23,16 +23,16 @@ python3 07_Python-Versionen/Schnellstart.pyw
 
 Unter Windows: `python 07_Python-Versionen\Schnellstart.pyw`. Weitere Startwege (aus dem Quellstand, macOS-Entwicklungsbundle) stehen in der [README des Quellbaums](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand).
 
-**Hinweis für bestehende Daten:** Nach dem Update auf Format 20 Glide 3.29 nicht mehr starten. Es überschreibt einen Bestand im Format 20 bei der ersten Eingabe; zurück geht es dann nur über die Vorsicherung `liste_vor_format20_*.json`.
+**Hinweis für bestehende Daten:** Nach einem Formatwechsel (zuletzt Format 23) keine ältere Fassung mit dem umgestellten Bestand starten. Seit 3.30 öffnen ältere Fassungen einen neueren Bestand nur schreibgeschützt; Glide 3.29 und älter überschreiben ihn bei der ersten Eingabe. Vor jeder Umstellung entsteht eine Vorsicherung `liste_vor_format<N>_*.json`.
 
 ## Was Glide kann
 
-- **Planen:** Aufgaben mit Unterpunkten, Checklisten, Fälligkeit und Bearbeitungstag, Wiederholungen, Erinnerungen, Wichtigkeit, Labels, Aufwand und Zeiterfassung; „Heute“ und „Demnächst“ mit Stundenraster, eingebetteter Wochen-/Monatsplanung, Kapazität, Tagesbeginn, Tagesabschluss und Wochenrückblick; Schnelleingabe in Alltagssprache mit Feldchips.
+- **Planen:** Aufgaben mit Unterpunkten, Checklisten, Fälligkeit und Bearbeitungstag, Wiederholungen (auch Termin überspringen), Erinnerungen, Wichtigkeit, Labels, Aufwand und Zeiterfassung; „Heute“ und „Demnächst“ mit Tagesvorschlag, Routinen, Fokus, Stundenraster, eingebetteter Wochen-/Monatsplanung, Kapazität, Tagesbeginn, Tagesabschluss und Wochenrückblick; Schnelleingabe in Alltagssprache mit Feldchips.
 - **Ansichten:** Liste, Tabelle, Kalender, Karten, Spaltenboard und Pinnwand auf demselben Bestand; Gruppieren nach Feld einschließlich Eisenhower; Pinnwand mit Bereichen, Verbindungen und Präsentation; Startseite „Ruhig“ zum Anpassen.
-- **Wissen:** Seiten mit Markdown, Bildern, Titelbildern, echten Aufgaben und eingebetteten Live-Listen; Notizen, Notizbücher, Bücher und Galerien; lokale Verweise und Rückverweise; gemeinsame Suche und Befehlspalette (Strg/Cmd+O).
-- **Pixel-Werkstatt:** Zeichnungen mit 16–128 Zellen, Formen, Symmetrie, Mustern, Paletten, PNG- und ICO-Export, Pixelsymbole.
-- **Daten:** atomares Speichern, Sicherungen nur bei Änderung, Vorsicherung je Formatstufe, Tagesstände; Voll-, Teil- und App-Backup, Vorlagen, CSV, Markdown, ICS, Austauschformat für KI; Rückgängig für alles.
-- **Gestaltung:** zehn Designs mit Kontrast nach WCAG AA, Hell/Dunkel, Akzentfarben und Hintergrundverläufe; Mindestgröße 860 × 700.
+- **Wissen:** Seiten mit Markdown, Bildern (auch in Druck/PDF und Markdown), Titelbildern, echten Aufgaben und eingebetteten Live-Listen; Notizen, Notizbücher, Bücher und Galerien; lokale Verweise und Rückverweise; gemeinsame Suche und Befehlspalette (Strg/Cmd+O) mit markierten Fundstellen; gespeicherte Filter, die erklären, warum etwas erscheint.
+- **Pixel-Werkstatt:** Zeichnungen mit 16–128 Zellen, Formen, Symmetrie, Mustern, Paletten mit Umfärben und Vorschau, PNG- und ICO-Export mit Symbolvorschau, Pixelsymbole.
+- **Daten:** atomares Speichern, Sicherungen nur bei Änderung, Vorsicherung je Formatstufe, Tagesstände, Sicherungen vergleichen; Voll-, Teil- und App-Backup, Vorlagen, CSV, Markdown, ICS, Austauschformat für KI mit geprüften Änderungsvorschlägen; Rückgängig für alles.
+- **Gestaltung:** zehn Designs mit Kontrast nach WCAG AA, automatisch hell/dunkel nach System, Akzentfarben und Hintergrundverläufe, schmale Seitenleiste; Mindestgröße 860 × 700.
 
 Verhalten im Einzelnen: [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md). Entwicklung je Version: [Änderungsverlauf](01_Repository/Glide/CHANGELOG.md).
 

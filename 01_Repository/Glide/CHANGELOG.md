@@ -66,50 +66,18 @@
 - Lokale Seiten-/Listen-/Aufgabenverweise über @, Kontextmenü und Palette, mit abgeleiteten Rückverweisen. Kennungen erhalten Beziehungen bei Kopie, Import, Archiv, Papierkorb und Neustart; Undo und fehlgeschlagene Speicherung gemeinsam abgesichert.
 - Eigenes Aufgabenformat 22 mit bytegenauer Vorsicherung und schreibgeschützter Vorversion. Zwei Tk-freie Module ohne neue Laufzeitabhängigkeit; Paket- und Vollprüfung sowie Lieferstand im QA-Bericht. Native Mac-/Linux-, Bundle- und menschliche Abnahme bleiben separat.
 
-## 3.33.16 · 07.10.2026
-
-- Bedienkomfort (U01/U02/U13/U14/U16/U22/U24): eine eingebettete Palette für Inhalte und Aktionen, höchstens vier Kopfknöpfe, Glocke nur bei offenen Hinweisen. `>` begrenzt die Palette auf Aktionen; Editorfokus und Aktionskennungen bleiben erhalten.
-- Hinweise je Ansicht über „?“ ein-/ausklappen und dauerhaft merken. Keine Änderung an Hinweisblöcken in Seiten. Bibliothekskacheln per Klick und Tastatur öffnen; gemeinsamer Fuß mit Neu, Importieren, Archiv und Kartengröße; Bearbeiten/Rückholen im Kontextmenü.
-- Papierkorb leeren unter Bearbeiten, Mitteilungstest in Einstellungen. Aufgabensicherung und vollständige App-Sicherung benennen ihren jeweiligen Umfang. Langtext/Zwischenüberschrift als Anzeige, interne Arten und Kennungen unverändert.
-- Bearbeitungstag zusätzlich zur Fälligkeit in der Datumsspalte, auch im Mindestfenster. Eigene Symbole für Eingang, Verspätet und Zeiterfassung. Keine neue Laufzeitabhängigkeit; Aufgabenformat bleibt 21.
-
-## 3.33.15 – 07.10.2026
-
-- Aufgaben im Wissen (G29/G31/G32): Notiztext enthält echte Aufgaben mit derselben ID wie die Notizliste; Markdown-Aufgaben werden ebenfalls echte Punkte.
-- „Aufgabe verknüpfen …“ im Textmenü/Mehr verknüpft vorhandene Aufgaben, auch mehrfach. Checkbox und bearbeiteter Titel gelten derselben Aufgabe; Löschen eines Verweises entfernt nur die Zeile.
-- „In Liste übernehmen …“ verschiebt eine Seiten-/Notizaufgabe samt Unteraufgaben mit unveränderten IDs. Die Textzeile bleibt als Verweis; „Textquelle öffnen …“ führt aus Aufgabenansichten zurück.
-- „Aus Seiten“ in Ansicht/Befehlspalette öffnet einen gespeicherten Filter, dessen Aufgabenquelle auch im Filterdialog wählbar ist. Heimatseiten und aktive Seitenverweise zählen, inklusive Unteraufgaben; Archiviertes bleibt außerhalb der Planung.
-- Aufgabenformat 21 schützt die neuen Textverweismarken. Startmigration mit bytegenauer Vorsicherung; ohne Sicherung kein Überschreiben. Format-20-Fassungen öffnen den neuen Bestand schreibgeschützt.
-- Verweislöschen erhält auch Aufgaben derselben Notiz. Heimatlöschen wirkt trotz weiterer Verweise, Undo/Redo stellt genau einen Punkt her; entfernte Checkboxen und ihr Widgetindex werden bereinigt.
-- Fehlende und im Papierkorb liegende Ziele behalten ihre Kennung und einen Hinweis; Laden legt keine Ersatzaufgabe an. Editor-Undo/Redo stellt nur die tatsächlich entfernte Heimatzeile wieder her.
-- Strg+V übernimmt Aufgabenmarken nicht in Folgeabsätze. Strg+Z/Strg+Y im Text nimmt eigene Änderungen am echten Aufgabentitel zurück; spätere Änderungen an anderer Stelle bleiben erhalten.
-- Gemeinsame Editor-Mutation für Text und Aufgaben, Markdown als ein Undo-Schritt; Tk-freie Referenz-/Titel-/Einfügelogik und neue Paketprüfung. Markdown-Export folgt dem echten Titel/Erledigt-Zustand; vorhandene Bilder bleiben beim Einfügen erhalten.
-
-
-Vollständig beschrieben sind die sieben neuesten Versionen; ältere stehen verdichtet in der Tabelle am Ende. Ihre ausführlichen Einträge, Verträge und Nachweise trägt Git (Stand vor dem 03.10.2026). Das aktuelle Verhalten beschreiben die [Funktionen](docs/20_FUNKTIONEN.md).
-
-## 3.33.14 – Den Tag planen und fokussiert abarbeiten (07.10.2026)
-
-- **AU01 Tagesvorschlag:** „Was passt heute?“ nennt je Aufgabe den Auswahlgrund, berücksichtigt die freie Tageskapazität und übernimmt die bestätigte Auswahl listenübergreifend mit einem Undo. Fehlende Schätzungen reservieren nur für die Auswahl 30 Minuten; Kapazität 0 bleibt unbekannt. Veraltete Vorschläge werden vor dem Schreiben neu berechnet.
-- **AU03, geführter Weg:** vorhandener Tagesbeginn → Tagesvorschlag → Zeitraster. Automatische Tageshinweise bleiben eine offene Entscheidung.
-- **H-02, Zeitblöcke:** Strg/Cmd+Umschalt+T plant die Auswahl nacheinander ein. Im Raster: Tab/Pfeile wählen, Enter öffnet Datum/Uhrzeit, Alt+Pfeile verschieben um 15 Minuten, Entf entfernt nur die Uhrzeit. Pinnwand- und Seitenbaumwege folgen später.
-- **G05/AU05 Fokus:** Strg/Cmd+Umschalt+F, 25 Minuten mit Pause/Fortsetzen, Beenden und Buchen sowie Erledigen und nächste Aufgabe. Pausen zählen nicht. Ein persistenter Buchungsnachweis verhindert doppelte Zeit nach Schreibfehler und Neustart; offene Buchungen sperren weitere Aufgabenänderungen bis zur Klärung. Zeit und Erledigung lassen sich gemeinsam rückgängig machen.
-- **Paketprüfung:** zwei neue Tk-freie Module, 20 zusätzliche Unit-Tests und eine gemeinsame Pflichtsuite mit echten Bedienwegen, Schreibfehlern an drei Grenzen, beiden Crashfenstern, Neustart und 16 Layoutkombinationen. Aufgabenformat 20 und Einstellungsformat 2 bleiben erhalten; keine neue Laufzeitabhängigkeit. Tatsächlicher Vollprüfungs- und Lieferstand im [QA-Bericht](docs/07_QA_BERICHT.md).
-
-## 3.33.13 – Einplanen und verfügbare Zeit (07.10.2026)
-
-- **KO01:** gemeinsames Menü mit Heute, Morgen, Wochenende, Nächste Woche, Datum … und Ohne Tag. Kontextmenü, Auswahlleiste, Strg/Cmd+Umschalt+P, Palette und bedarfsweise Kalenderaktion in Listen-/Heute-/Tabellenzeilen verwenden denselben Weg. Menüdatum und Vorschau bleiben auch über Mitternacht auf demselben Zieltag. Mehrfachauswahl über Quelllisten wirkt in einem Undo-Schritt; reine Umplanung verändert ausschließlich `planned_date`.
-- **Tagesbeginn:** dieselben sechs Ziele; „Ohne Tag“ erhält jetzt die Uhrzeit. Die bisherigen lokalen H/M/W/O-Kürzel bleiben erhalten. Die allgemeine Listenbindung des Aufwandsdialogs bleibt bestehen.
-- **AU02:** freier Rest bzw. Überplanung im Kopf von Heute, bei Tagesbeginn, im Menü nach der vorgeschlagenen Änderung, in der Datumswahl sowie beim Ziehen auf Heute und im Raster. Bilanz des tatsächlichen Zieltags mit erledigten Schätzungen; ungeschätzte Aufgaben getrennt, Kapazität 0 bedeutet unbekannter Rest. Überplanung wird benannt und bleibt zulässig.
-- **Fachlogik:** Tk-freies `planning.py` für Ziele, Wochentagsprofil, Bilanz und Vorschau. Acht neue Unit-Tests und Pflichtsuite `test_planen33313.py`; keine neue Laufzeitabhängigkeit und kein Formatwechsel. Automatisierter Prüf-/Lieferstand im [QA-Bericht](docs/07_QA_BERICHT.md); native und menschliche Abnahme bleiben offen.
-- **Windows-Prüfabschluss:** alte Kopfzeilenerwartung der Kapazitätssuite korrigiert, Fokuszustellung vor dem Pinnwand-Entf-Test ausdrücklich geprüft. App-Code unverändert; vollständige Prüfung Exit 0 mit 90 Schritten, 71 Integrationssuiten und 117 Unit-Tests. Python/Showcase bytegleich geliefert; Referenz-Mac/Bundle und menschliche Abnahme offen.
-
 ## Frühere Versionen (verdichtet)
+
+Vollständig beschrieben sind die sieben neuesten Versionen; ältere stehen verdichtet in der Tabelle darunter. Ihre ausführlichen Einträge, Verträge und Nachweise trägt Git (3.33.13–3.33.16 im Commit `6098877`, ältere im Stand vor dem 03.10.2026). Das aktuelle Verhalten beschreiben die [Funktionen](docs/20_FUNKTIONEN.md).
 
 Datenformate und ihre Felder: [Daten und Migration](docs/06_DATA_BACKUP_MIGRATION.md#formatstufen).
 
 | Version | Datum | Kern |
 |---|---|---|
+| 3.33.16 | 07.10.2026 | Bedienkomfort: eine Palette für Inhalte und Aktionen, höchstens vier Kopfknöpfe, einklappbare Hinweise, Bibliothekswege, Bearbeitungstag in der Datumsspalte, eindeutige Symbole (U01/U02/U13/U14/U16/U22/U24) |
+| 3.33.15 | 07.10.2026 | Aufgaben im Wissen: echte Aufgaben im Notiztext, Übernahme in Listen mit erhaltenen IDs, „Aus Seiten“ (G29/G31/G32); Format 21 |
+| 3.33.14 | 07.10.2026 | Tagesvorschlag „Was passt heute?“, geführter Tagesbeginn, Zeitblöcke per Tastatur, Fokus mit genau einmal gebuchter Zeit (AU01/AU03/H-02/G05) |
+| 3.33.13 | 07.10.2026 | Gemeinsames Menü „Einplanen“ und verfügbare Zeit in allen Planungswegen (KO01/AU02, `planning.py`) |
 | 3.33.12 | 06.10.2026 | Titel vor Kennzahlen, Herkunft rechts in Heute (U10/U19), erste Gestaltungsskala (OB01); ausführlicher Stand in Git |
 | 3.33.11 | 06.10.2026 | Gezielter Speichervergleich (P08b), stabile Aktionskennungen, U03/U07; ausführlicher Stand in Git |
 | 3.33.10 | 06.10.2026 | Kennzahlen und Messwerte je Aufbau wiederverwenden (P09b); ausführlicher Stand in Git |

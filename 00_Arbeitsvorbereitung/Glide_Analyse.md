@@ -1,41 +1,41 @@
 # Glide – Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung
 
-Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Analyse vom 08.10.2026 (Code, Dokumente, Git-Historie, native Mac-Vollprüfung)
+Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Analyse vom 08.10.2026, fortgeschrieben am 09.10.2026 nach dem Sprint (Code, Dokumente, Git-Historie, native Mac-Volläufe)
 
-Bestandsaufnahme im Auftrag vom 08.10.2026: lokale Ablage untersuchen, Dokumentation und Code abgleichen, daraus den Sprint ableiten. Dieses Dokument trägt die **Analyse** (Funktions-, Oberflächen-, Entscheidungs- und Nutzungsanalyse sowie den Abgleich Dokumentation ↔ Code). Der Wettbewerb steht in [Markt und Vorbilder](Glide_Markt_und_Vorbilder.md), die Entscheidungen selbst in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), die daraus abgeleiteten Aufgaben ausschließlich im [Entwicklungsplan, Abschnitt 15](Glide_Entwicklungsplan.md#15-sprint-ab-08102026-aufgabenkatalog). Erledigte Befunde werden hier als erledigt markiert, nicht gelöscht, bis die nächste Analyse sie ersetzt.
+Bestandsaufnahme im Auftrag vom 08.10.2026: lokale Ablage untersuchen, Dokumentation und Code abgleichen, daraus den Sprint ableiten. Dieses Dokument trägt die **Analyse** (Funktions-, Oberflächen-, Entscheidungs- und Nutzungsanalyse sowie den Abgleich Dokumentation ↔ Code). Der Wettbewerb steht in [Markt und Vorbilder](Glide_Markt_und_Vorbilder.md), die Entscheidungen selbst in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), die daraus abgeleiteten Aufgaben ausschließlich im [Entwicklungsplan, Abschnitt 14](Glide_Entwicklungsplan.md#14-sprint-ab-08102026-aufgabenkatalog). Erledigte Befunde werden hier als erledigt markiert, nicht gelöscht, bis die nächste Analyse sie ersetzt.
 
 **Belegstufen** in allen Tabellen: **[Code]** im Quellstand nachgelesen · **[Test]** durch eine automatische Prüfung belegt · **[Mac]** in der nativen Mac-Vollprüfung vom 08.10.2026 (Python 3.14.5, Tk 9.0.3, künstliche Daten) gesehen · **[Dok]** nur in Dokumenten belegt · **[Einschätzung]** eigene Schlussfolgerung · **[Unbestätigt]** Annahme ohne Beleg. Es liegen **keine Nutzungsdaten** vor (keine Telemetrie nach Produktgrenze, keine Nutzerstudie); Aussagen über Nutzer sind deshalb als Einschätzung gekennzeichnet.
 
 ## 1. Untersuchter Bestand
 
-| Bereich | Umfang am 08.10.2026 | Beleg |
+| Bereich | Umfang am 09.10.2026 (3.35.0) | Beleg |
 |---|---|---|
-| Code | `src/glide/app.pyw` 55.826 Zeilen (Klasse `ListApp` 42.357 Zeilen, 1.505 Methoden), 27 Begleitmodule (davon 18 Tk-freie Fachmodule nach D17 seit 3.33.0) | [Code] |
-| Tests | 76 Integrationssuiten, 23 Unit-Testdateien mit 170 Tests, 25 Werkzeugtests, fünf Analysen | [Code], [Test] |
-| Dokumente | 50 aktive Markdown-Dokumente; Planung, Entscheidungen, Funktionen, QA, Daten, Markt | [Dok] |
-| Git | Arbeitsstand 3.33.9–3.33.18 noch nicht eingecheckt (Zweig `claude/glide-3.33.15`, Basis `254541a`); `main` enthält zwei Dokumentationscommits vom 06.10.2026 (PR #15), die dem Arbeitsstand fehlten und am 08.10.2026 per Drei-Wege-Abgleich übernommen wurden | [Code] |
+| Code | `src/glide/app.pyw` 57.409 Zeilen, 35 Begleitmodule (davon 27 Tk-freie Fachmodule nach D17); am 08.10.2026 waren es 55.826 Zeilen und 27 Module | [Code] |
+| Tests | 82 Integrationssuiten, 257 Unit-Tests, 34 Werkzeugtests, fünf Analysen (08.10.2026: 76 Suiten, 170 Unit-Tests) | [Code], [Test] |
+| Dokumente | 44 Markdown-Dokumente außerhalb der Nachweisordner; Planung, Entscheidungen, Funktionen, QA, Daten, Markt | [Dok] |
+| Git | Arbeitsstand 3.33.9–3.35.0 am 09.10.2026 eingecheckt (Commit `6098877` auf `claude/glide-3.33.15`); die Dokumentationscommits aus `main` (PR #15) waren am 08.10.2026 per Drei-Wege-Abgleich übernommen | [Code] |
 | Laufzeit auf dem Referenz-Mac | Python 3.14.5 (python.org) mit Tk 9.0.3; python.org führt inzwischen 3.14.8 (30.09.2026) | [Code], [Mac] |
 
 ## 2. Funktionsanalyse
 
 Vollständigkeit: **●** im Alltag vollständig nutzbar · **◐** nutzbar mit dokumentierter Lücke · **○** fehlt. „Plattform“ meint die zuletzt automatisch geprüften Systeme.
 
-| Bereich | Vorhanden (Version) | Vollständigkeit | Fehlende Erweiterung (Aufgabe) |
+| Bereich | Vorhanden (Version) | Vollständigkeit | Offene Erweiterung (Aufgabe) |
 |---|---|---|---|
-| Erfassen | Schnelleingabe mit Feldchips, D01/D10, Wiederholungen, „/“-Befehle, Labels, mehrzeiliges Einfügen in Listen (3.33.3/3.33.4) | ◐ | Erinnerung beim Erfassen (KO03); mehrzeiliges Einfügen in die Eingabezeile (KO05); „+“-Knopf und Umschalt+Enter statt zweier Textknöpfe (U04) |
-| Heute und Planung | Heute/Demnächst (D14), Tagesbeginn/-abschluss, Tagesvorschlag (AU01), verfügbare Zeit (AU02), Einplanen (KO01), Zeitblöcke mit Tastatur, Fokus (G05), Wochenkalender (N04/AU04) | ● | Routinen als Abschnitt in Heute (AU06); automatische Tageshinweise (AU03, Vorgabe offen); Termine als belegte Zeit (AU07, Produktgrenze) |
-| Wiederholungen | Regeln täglich … jährlich, Enddatum, Anker gegen Monatsende-Drift; Abhaken rückt die Fälligkeit vor | ◐ | „Diesen Termin überspringen“, verpasste Termine überspringen statt nachholen (KO02) [Code: `advance_repeating_items` rückt genau einen Schritt nach der alten Fälligkeit vor] |
-| Listen, Tabelle, Board | Gruppierung inkl. Eisenhower, Auswahlleiste, Tabellenspalten, Detailbereich | ● | „Verschieben nach …“ und Labelauswahl ohne zuletzt benutzte Ziele (KO06); Inspektor statt Maske + Detailbereich (N05/KO04, nach I7) |
-| Pinnwand | frei/geordnet/Spaltenboard, Bereiche, Verbindungen, Präsentation | ◐ | Tastaturwege (H-02-Rest); kompakte Leiste (U09) |
-| Seiten und Notizen | Block-Editor, Bilder, Aufgaben mit Original-ID, Verweise/Rückverweise, Live-Listen, Titelbild, Vorlagenvorschau | ◐ | Bilder überlappen auf gleicher Höhe, fehlen in Druck/PDF/Markdown (B4); Seitentitel im Dokument und Platzhalter (U18); Tastaturwege im Seitenbaum (H-02-Rest) |
-| Suche | gemeinsame Palette für Inhalte und Aktionen (G14 erste Stufe, U01) | ◐ | Treffer im Dokument hervorheben; FTS5 nur nach gemessener Latenz (G14/P07); Begründung, warum ein Filter einen Punkt zeigt (D-03) |
+| Erfassen | Schnelleingabe mit Feldchips (D01/D10), Wiederholungen, Erinnerung als Chip (3.33.20), „/“-Befehle, Labels, mehrzeiliges Einfügen auch in die Eingabezeile (3.33.20), „+“ und Umschalt+Enter | ● | – |
+| Heute und Planung | Heute/Demnächst (D14), Tagesbeginn/-abschluss, Tagesvorschlag, verfügbare Zeit, Einplanen, Zeitblöcke mit Tastatur, Fokus, Wochenkalender, Routinen (3.33.20) | ● | automatische Tageshinweise (AU03, E-S3); Termine als belegte Zeit (AU07, E-S8) |
+| Wiederholungen | Regeln täglich … jährlich, Enddatum, Anker gegen Monatsende-Drift; Termin und verpasste Termine überspringen (3.33.20) | ● | – |
+| Listen, Tabelle, Board | Gruppierung inkl. Eisenhower, Auswahlleiste, Tabellenspalten, Detailbereich, zuletzt benutzte Ziele (3.33.20) | ● | Inspektor statt Maske + Detailbereich (N05/KO04, E-S2) |
+| Pinnwand | frei/geordnet/Spaltenboard, Bereiche, Verbindungen, Präsentation, eine Werkzeugzeile (3.33.21), Tastaturwege mit Hinweis (3.34.0) | ● | – |
+| Seiten und Notizen | Block-Editor, Bilder ohne Überlappung und in Druck/Markdown (3.34.0), Aufgaben mit Original-ID, Verweise/Rückverweise, Live-Listen, Titelbild, Seitentitel im Dokument (3.33.21) | ● | – |
+| Suche | gemeinsame Palette für Inhalte und Aktionen, Treffer im Dokument markiert (3.34.0), erklärte gespeicherte Filter (3.34.0); 66,6 ms bei 10.000 Punkten | ● | – (FTS5 nach Messung nicht nötig) |
 | Erinnerungen | fest/relativ, Zustellbeleg, Systemmitteilung (Option) bei laufender App | ● | Zustellung bei geschlossener App bewusst nicht (N09) |
-| Pixel-Werkstatt | 16–128 Zellen, Werkzeuge, Paletten, ICO/PNG/SVG/JSON, Pixelsymbol | ◐ | Palettenfarbe ändern färbt die Zeichnung um (G19); Symbolvorschau 16/32/48 (G-03); Animation (G17, D07 offen) |
-| Austausch | CSV, Markdown, ICS, `.glidepage`, Backups, `.glideexchange` Stufe 1 | ◐ | KI-Austausch Stufe 2 mit Kontextpaket und Änderungsvorschlägen (G24); zwei Sicherungen vergleichen (F-03); erste Fremdquelle (G21, Entscheidung offen) |
-| Erscheinungsbild | zehn Designs, berechneter Kontrast, Hintergrundverläufe, Mindestgröße 860 × 700 | ◐ | „Automatisch (hell/dunkel)“ nach System (N01/U17); Lila nur für Hinzufügen, aktiver Zustand neutral (U15); schmale Seitenleiste (OB05) |
-| Hilfe | Handbuch, Kürzel, einklappbare Hinweise (D11), Showcase/Rundgang | ◐ | einmalige Karte „Neu in …“ nach einem Update (N07); Leerzustand ohne doppelten Anlegen-Knopf (U20) |
-| Betrieb | Formatschutz bis Format 23, Vorsicherungen, Sperrdatei, Sicherungen nur bei Änderung | ◐ | Mindestversion Python/Tk beim Start prüfen (AB08) [Code: keine Prüfung vorhanden]; Linux-JPEG-Vorschau (N08) |
-| Tempo | P02/P03/P08a/P08b/P09a/P09b umgesetzt | ◐ | Bildlayout nur bei geänderter Geometrie (P04), doppelte Aktualisierungen (P06r), Einstellungsfenster ≈ 2,1 s, unveränderte Startseitenkacheln behalten (P03-Rest), Abhaken bei 5.000 Punkten ≤ 120 ms (P08b-Ziel) |
+| Pixel-Werkstatt | 16–128 Zellen, Werkzeuge, Paletten mit Umfärben und Vorschau (3.35.0), ICO mit Symbolvorschau (3.35.0), PNG/SVG/JSON, Pixelsymbol | ◐ | Animation (G17, E-S1/D07) |
+| Austausch | CSV, Markdown mit Bildern, ICS, `.glidepage`, Backups, KI-Austausch Stufe 1 und 2 (3.35.0), Sicherungen vergleichen (3.35.0) | ◐ | erste Fremdquelle (G21, E-S4) |
+| Erscheinungsbild | zehn Designs, „Automatisch hell/dunkel“ (3.33.21), neutrale aktive Rolle, schmale Seitenleiste, berechneter Kontrast, Mindestgröße 860 × 700 | ◐ | Hierarchie und Zeilenaktionen nach Referenzentwürfen (OB02/OB03, E-S2); Bewegung (OB04, E-S8) |
+| Hilfe | Handbuch, Kürzel, einklappbare Hinweise (D11), Showcase/Rundgang, Karte „Neu in Glide“ (3.33.20) | ● | – |
+| Betrieb | Formatschutz bis Format 23, Vorsicherungen, Sperrdatei, Sicherungen nur bei Änderung, Mindestversion beim Start (3.33.20), Linux-JPEG-Vorschau mit Systemwerkzeug (3.34.0) | ◐ | Paket mit eigenem Python (G26, E-S5); Logo unter Tk 8.6 (E-S6) |
+| Tempo | Abhaken 17/61/118 ms bei 1.000/5.000/10.000 Punkten, Bildlayout, einmal schreiben/aufbauen, unveränderte Startseite 0,3 ms (3.33.19) | ◐ | Neuaufbau der Startseite 270–300 ms und Einstellungsfenster ≈ 560 ms (Grenze Tk-Zeichnen, P03-Rest) |
 
 ## 3. Abgleich Dokumentation ↔ Implementierung
 
@@ -73,29 +73,29 @@ Grundlage: Code (`_refresh_tree`, `sync_view_chrome`, `pack_header_controls`, Se
 
 **Aufbau.** Ein Fenster mit drei festen Zonen: Seitenleiste (Systemzeilen Startseite/Heute/Labels/Vorlagen/Papierkorb, bedingt „Eingang“, angeheftete Seiten, vier klappbare Bäume Seiten → Listen → Notizen → Zeichnungen), Kopf (Titel, Kennzahlen in der Unterzeile, bis zu vier Symbolknöpfe) und Inhaltskarte mit Werkzeugband oben und Kartenfuß unten. Feste Kanten werden durch `test_festlayout330`/`test_kartenfuss330` erzwungen [Code][Test].
 
-**Navigation.** Primär über die Seitenleiste; gleichwertig über die Palette (Strg/Cmd+O, `>` für Aktionen), Menüleiste und Kürzel. Stabile Aktionskennungen seit 3.33.11 verhindern, dass ein umbenannter Eintrag eine falsche Aktion auslöst [Code][Test]. Ansichtswechsel innerhalb einer Liste: Liste · Tabelle · Pinnwand fest nebeneinander.
+**Navigation.** Primär über die Seitenleiste; gleichwertig über die Palette (Strg/Cmd+O, `>` für Aktionen), Menüleiste und Kürzel. Stabile Aktionskennungen seit 3.33.11 verhindern, dass ein umbenannter Eintrag eine falsche Aktion auslöst [Code][Test]. Ansichtswechsel innerhalb einer Liste: Liste · Tabelle · Pinnwand fest nebeneinander; seit 3.33.21 eine schmale Seitenleiste mit Symbolen.
 
-**Interaktionen.** Kontextmenü an jeder Zeile, Auswahlleiste im Kartenfuß bei Mehrfachauswahl, Ziehen nach D02 mit sichtbarem Ziel, Zeilenaktion „Einplanen“ beim Überfahren, Undo für jede Aktion. Tastaturwege fehlen noch für Pinnwand und Seitenbäume (H-02-Rest) [Dok][Code].
+**Interaktionen.** Kontextmenü an jeder Zeile, Auswahlleiste im Kartenfuß bei Mehrfachauswahl, Ziehen nach D02 mit sichtbarem Ziel, Zeilenaktion „Einplanen“ beim Überfahren, Undo für jede Aktion. Seit 3.34.0 gibt es Tastaturwege auch für Pinnwand und alle Bereichsbäume (H-02r) [Code][Test].
 
 **Zustände.** Leerzustände mit Gismo und einer Anlegen-Aktion; Schreibschutz bei neuerem Format oder Fremdbelegung mit Grund; Fehler- und Speicherfehlerwege mit Rücknahme. Ladezustände gibt es kaum, weil Aufbau synchron ist; lange Aufbauten (Heute bei 10.000 Aufgaben, Einstellungsfenster) zeigen keinen Fortschritt [Code][Einschätzung].
 
 **Nutzerführung.** Hinweiszeilen je Ansicht einklappbar (D11, Vorgabe eingeklappt), Tooltips (höchstens einer), Feldchips der Schnelleingabe, Handbuch und Kürzelübersicht. Keine Einführung für neue Nutzer (bewusst nicht, N06).
 
-**Inkonsistenzen und Potenziale** (Aufgaben im Entwicklungsplan §15):
+**Inkonsistenzen und Potenziale** (Aufgaben im Entwicklungsplan §14; Stand 09.10.2026):
 
 | Nr. | Befund | Prinzip | Aufgabe |
 |---|---|---|---|
-| O01 | Eingabezeile mit zwei Textknöpfen „Hinzufügen“ und „Erweitert“; „Erweitert“ verschwindet bei schmalem Fenster ganz und ist dann nur über Menü erreichbar [Code] | P4, P5 | U04 |
-| O02 | Kein Erscheinungsbild „wie System“; der Hell/Dunkel-Schalter wechselt nur zum Gegenstück des gewählten Designs [Code] | P1 | N01/U17 |
-| O03 | Lila erscheint auch für aktive Zustände (Auswahl, geöffnete Ansicht), nicht nur für Hinzufügen [Dok] | P2 | U15 |
-| O04 | Leerzustände zeigen teils zwei Wege zum Anlegen (Knopf in der Fläche und „+“) [Dok] | P3 | U20 |
-| O05 | Pinnwandleiste belegt dauerhaft eine ganze Werkzeugzeile [Dok] | P4 | U09 |
-| O06 | Seitentitel steht nur im Kopf, nicht im Dokument; leere Seite ohne Schreibhinweis [Dok] | P1 | U18 |
-| O07 | Gismo-Kachel mit dauerhaft sichtbaren Pflegeknöpfen [Dok] | P4, P5 | U05-Rest |
-| O08 | Nach einem Update sieht man nicht, was neu ist; Gewohnheitsbrüche (D10/D12/D14) bleiben unerklärt (R9) [Einschätzung] | P1 | N07 |
-| O09 | Zwei Dialoge unter Windows sehr breit, Knopfreihe links (W05); Hinweis doppelt (W07); kleines Pixelraster (W08) [Dok] | P2, P4 | W05/W07/W08 |
-| O10 | Bilder in Seiten können sich auf gleicher Höhe überlappen [Dok] | P1 | B4 |
-| O11 | Eingeklappte Seitenleiste blendet ganz aus; eine schmale Zwischenstufe fehlt [Dok] | P4 | OB05 |
+| O01 | Eingabezeile mit zwei Textknöpfen „Hinzufügen“ und „Erweitert“; „Erweitert“ verschwindet bei schmalem Fenster ganz und ist dann nur über Menü erreichbar [Code] | P4, P5 | U04 ✅ 3.33.20 |
+| O02 | Kein Erscheinungsbild „wie System“; der Hell/Dunkel-Schalter wechselt nur zum Gegenstück des gewählten Designs [Code] | P1 | N01/U17 ✅ 3.33.21 |
+| O03 | Lila erscheint auch für aktive Zustände (Auswahl, geöffnete Ansicht), nicht nur für Hinzufügen [Dok] | P2 | U15 ✅ 3.33.21 |
+| O04 | Leerzustände zeigen teils zwei Wege zum Anlegen (Knopf in der Fläche und „+“) [Dok] | P3 | U20 ✅ 3.33.20 |
+| O05 | Pinnwandleiste belegt dauerhaft eine ganze Werkzeugzeile [Dok] | P4 | U09 ✅ 3.33.21 |
+| O06 | Seitentitel steht nur im Kopf, nicht im Dokument; leere Seite ohne Schreibhinweis [Dok] | P1 | U18 ✅ 3.33.21 |
+| O07 | Gismo-Kachel mit dauerhaft sichtbaren Pflegeknöpfen [Dok] | P4, P5 | U05r ✅ 3.33.21 |
+| O08 | Nach einem Update sieht man nicht, was neu ist; Gewohnheitsbrüche (D10/D12/D14) bleiben unerklärt (R9) [Einschätzung] | P1 | N07 ✅ 3.33.20 |
+| O09 | Zwei Dialoge unter Windows sehr breit, Knopfreihe links (W05); Hinweis doppelt (W07); kleines Pixelraster (W08) [Dok] | P2, P4 | W05 ✅ 3.33.21; W07/W08 ◇ Windows-Sichtprüfung |
+| O10 | Bilder in Seiten können sich auf gleicher Höhe überlappen [Dok] | P1 | B4 ✅ 3.34.0 |
+| O11 | Eingeklappte Seitenleiste blendet ganz aus; eine schmale Zwischenstufe fehlt [Dok] | P4 | OB05 ✅ 3.33.21 |
 
 ## 5. Entscheidungsanalyse
 
@@ -111,22 +111,9 @@ Grundlage: Code (`_refresh_tree`, `sync_view_chrome`, `pack_header_controls`, Se
 
 **Bewusst verworfen** (nicht erneut vorlegen): Konten/Cloud/Mehrbenutzer, Zustellung bei geschlossener App (N09), MCP-Server (N10), systemweiter Hotkey (G07/N14), Einstieg für neue Nutzer (N06), gleichzeitige Bearbeitung (G23), verschlüsselte Ablage (G22), Spalten in Seiten und Graph (G12/G13), eigene Felder je Liste (ZF-200), Spracherfassung/Cloud-KI/Team/Web Clipper (N15–N20), freie Klebezettel, Bilder aus dem Netz, Unterseiten, allgemeine Umwandlung (D05).
 
-**Offen beim Inhaber** und was davon abhängt:
+**Offen beim Inhaber:** D07, I7, die Vorgabe automatischer Tageshinweise (AU03), Bewegung (OB04), Termine als belegte Zeit (AU07), die erste Importquelle (G21), das Bauwerkzeug (G26/D15), das Logo unter Tk 8.6 (I8), die Symbolschrift (A14) sowie I1–I4, I6 und I9–I11. Was jeweils davon abhängt und die Empfehlungen stehen an einer Stelle: [Entwicklungsplan §11](Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber).
 
-| Frage | Blockiert | Empfehlung (keine Entscheidung) |
-|---|---|---|
-| D07 Animationsexport | G17 | zuerst Frames/Vorschau/PNG-Spritesheet, GIF später |
-| I7 Referenzentwürfe | OB02, OB03-Rest, N05 mit KO04 | Entwürfe liefern; alternativ N05 ausdrücklich ohne Entwurf mit bestehenden Rollen freigeben |
-| AU03 Vorgabe automatischer Tageshinweise | AU03-Rest | Option, Vorgabe aus (wie Systemmitteilungen seit 27.09.2026) |
-| OB04 dezente Bewegung | OB04 | erst nach den Tempozielen aus §3 |
-| AU07 Termine als belegte Zeit | AU07 | nur lesend aus einer gewählten ICS-Datei, ohne Abo; berührt die Produktgrenze |
-| G21 erste Importquelle | G21 | Notion-Markdown/ZIP (Vorbild des Inhabers) |
-| G26/D15 Bauwerkzeug | G26, danach N12 | PyInstaller ≥ 6.22 als reine Bauabhängigkeit |
-| I8 Logo unter Tk 8.6 | LG01–LG04 | Weg B (vorgerechnetes RGBA-PNG) und Weg D (Prüfschärfe) |
-| I1–I4, I6, I9–I11 | Veröffentlichung, menschliche Abnahme | siehe Entwicklungsplan §11 |
-| Symbolschriften (A14) | einheitliche Symbolgröße | Zeichen wählen, die die Systemschrift enthält, oder eine mitgelieferte Symbolschrift (bräuchte eine Entscheidung) |
-
-**Widerspruch mit Vorschlag:** A04 – N01/U17 ist eine Systemkonvention (P1) und kein Gestaltungsumbau im Sinn von R12. Vorschlag: N01 ohne I7 umsetzen; das Design „Pixel“ als Signaturdesign vorn bleibt Teil von N01, ohne neue Farben. Begründung und Umsetzung im Entwicklungsplan §15.
+**Widerspruch mit Vorschlag:** A04 – N01/U17 ist eine Systemkonvention (P1) und kein Gestaltungsumbau im Sinn von R12. Vorschlag war, N01 ohne I7 umzusetzen; so geschehen in 3.33.21 (Pixel als Signaturdesign vorn, ohne neue Farben).
 
 ## 6. Nutzungsanalyse
 
@@ -134,20 +121,20 @@ Grundlage: Code (`_refresh_tree`, `sync_view_chrome`, `pack_header_controls`, Se
 
 **Anwendungsfälle und Arbeitsabläufe** (aus Funktionen und Vorlagen abgeleitet):
 
-| Ablauf | Schritte heute | Schwierigkeit [Einschätzung] | Potenzial (Aufgabe) |
+| Ablauf | Schritte am 08.10.2026 | Schwierigkeit [Einschätzung] | Potenzial (Aufgabe, Stand 09.10.2026) |
 |---|---|---|---|
-| Morgens den Tag planen | Heute → Tagesbeginn → Vorschlag übernehmen → Raster | Routinen (Morgen/Abend) sind verstreute Wiederholungen | AU06 Routinen in Heute |
-| Unterwegs Gesammeltes übernehmen | Liste öffnen, Zeilen einfügen oder einzeln tippen | Mehrere Zeilen in der Eingabezeile werden ein Titel | KO05 |
-| Routine verpasst | Wiederkehrende Aufgabe überfällig, Abhaken rückt nur einen Schritt vor | Mehrfaches Abhaken bis heute; kein „überspringen“ | KO02 |
-| Termin mit Hinweis erfassen | Erfassen, danach Maske für Erinnerung öffnen | Zweiter Weg für ein häufiges Feld | KO03 |
-| Aufgaben umsortieren | „Verschieben nach …“ mit allen Listen alphabetisch | Lange Menüs bei großem Bestand | KO06 |
-| Projektseite pflegen | Seite mit Bildern, Aufgaben, Live-Liste | Bilder überlappen, fehlen im Druck/Markdown | B4 |
-| Etwas wiederfinden | Palette mit Inhaltssuche | Fundstelle im Dokument nicht markiert | G14-Hervorhebung |
-| Filter verstehen | gespeicherte Filter | Unklar, warum etwas fehlt | D-03 |
-| Mit KI arbeiten | „Für KI bereitstellen“ → externes Werkzeug → Ergebnis importieren | Bestehende Aufgaben werden nicht geändert, nur neu angelegt | G24 |
-| Sicherung prüfen | Backup-Ordner, Wiederherstellen | Unterschiede zweier Stände nicht sichtbar | F-03 |
-| Pixelsymbol gestalten | Zeichnung, Palette, Export | Palettenänderung färbt nicht um; keine Vorschau in Zielgrößen | G19, G-03 |
-| Abends hell/dunkel | Design wählen | System-Wechsel wird nicht übernommen | N01 |
+| Morgens den Tag planen | Heute → Tagesbeginn → Vorschlag übernehmen → Raster | Routinen (Morgen/Abend) sind verstreute Wiederholungen | AU06 Routinen in Heute ✅ 3.33.20 |
+| Unterwegs Gesammeltes übernehmen | Liste öffnen, Zeilen einfügen oder einzeln tippen | Mehrere Zeilen in der Eingabezeile werden ein Titel | KO05 ✅ 3.33.20 |
+| Routine verpasst | Wiederkehrende Aufgabe überfällig, Abhaken rückt nur einen Schritt vor | Mehrfaches Abhaken bis heute; kein „überspringen“ | KO02 ✅ 3.33.20 |
+| Termin mit Hinweis erfassen | Erfassen, danach Maske für Erinnerung öffnen | Zweiter Weg für ein häufiges Feld | KO03 ✅ 3.33.20 |
+| Aufgaben umsortieren | „Verschieben nach …“ mit allen Listen alphabetisch | Lange Menüs bei großem Bestand | KO06 ✅ 3.33.20 |
+| Projektseite pflegen | Seite mit Bildern, Aufgaben, Live-Liste | Bilder überlappen, fehlen im Druck/Markdown | B4 ✅ 3.34.0 |
+| Etwas wiederfinden | Palette mit Inhaltssuche | Fundstelle im Dokument nicht markiert | G14-Hervorhebung ✅ 3.34.0 |
+| Filter verstehen | gespeicherte Filter | Unklar, warum etwas fehlt | D-03 ✅ 3.34.0 |
+| Mit KI arbeiten | „Für KI bereitstellen“ → externes Werkzeug → Ergebnis importieren | Bestehende Aufgaben werden nicht geändert, nur neu angelegt | G24 ✅ 3.35.0 |
+| Sicherung prüfen | Backup-Ordner, Wiederherstellen | Unterschiede zweier Stände nicht sichtbar | F-03 ✅ 3.35.0 |
+| Pixelsymbol gestalten | Zeichnung, Palette, Export | Palettenänderung färbt nicht um; keine Vorschau in Zielgrößen | G19, G-03 ✅ 3.35.0 |
+| Abends hell/dunkel | Design wählen | System-Wechsel wird nicht übernommen | N01 ✅ 3.33.21 |
 
 **Anforderungen, die daraus folgen** [Einschätzung]: kurze Wege für häufige Planungsfelder; keine zusätzliche Dauerfläche; jede Änderung mit Vorschau und einem Undo; Tempo bei großen Beständen; Daten bleiben lokal.
 

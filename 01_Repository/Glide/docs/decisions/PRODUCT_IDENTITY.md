@@ -18,7 +18,7 @@ ersetzt werden.
 | Unterstützte Backup-Formate | 4 bis 23 | `MIN_PORTABLE_BACKUP_SCHEMA_VERSION`, `DATA_SCHEMA_VERSION` |
 | Laufzeit | Python 3.14 mit Tk 9 als Grundlage (27.09.2026); Tk 8.6 bleibt lauffähig, ohne Systemmitteilung und SVG-Vorschau. Sonst nur Standardbibliothek | Importliste in `app.pyw` |
 | Mitgelieferte Bibliothek | tkinterdnd2 0.6.3 (MIT) mit tkDnD für das Ziehen aus Finder/Explorer; optional, lädt beim ersten Gebrauch | `src/glide/vendor`, [Entscheidung](ABHAENGIGKEIT_TKDND.md) |
-| Prüflaufzeit | Windows 3.33.18: Python 3.14.7, Tk 9.0.4; Referenz-Mac zuletzt 3.33.6, aktuelle native Abnahme offen. Ergebnisse im QA-Bericht | `docs/07_QA_BERICHT.md` |
+| Prüflaufzeit | Referenz-Mac 3.35.0: Python 3.14.5, Tk 9.0.3 (automatische Vollprüfung und Bundle); Windows zuletzt 3.33.18: Python 3.14.7, Tk 9.0.4. Menschliche Abnahme offen; Ergebnisse im QA-Bericht | `docs/07_QA_BERICHT.md` |
 | Netzwerkzugriff | kein automatischer Datentransfer; bewusst angeklickte Links öffnen den Browser | lokale Datenhaltung, `webbrowser` |
 | Benutzerkonto | keines | keine Auth-Pfade |
 | Telemetrie | keine | keine Analytics-Aufrufe |
