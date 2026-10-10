@@ -58,6 +58,17 @@ class Einstiegspruefung(unittest.TestCase):
                          "`python3 tests/tools/pruefen.py --modus voll --protokoll tests\\qa-3.30.0\\a`\n")
         self.assertTrue(any("(R13)" in f for f in old.fehler))
 
+    def test_skill_files_need_no_stand_line_but_keep_r3(self):
+        path = ".claude/skills/apple-design/SKILL.md"
+        skill = self.check(path, "---\nname: apple-design\ndescription: Gestaltung\n---\n\n"
+                                 "# Apple Design\n\nWWDC 2018, Tabelle 1.0 / 0.4\n")
+        self.assertEqual(skill.fehler, [])
+        self.assertEqual(skill.ohne_stand, 1)
+        stale = self.check(path, "# Skill\n\nAktueller Entwicklungsstand: Glide 3.32.2\n")
+        self.assertTrue(any("(R3)" in f for f in stale.fehler))
+        other = self.check(".claude/skills/apple-design/NOTES.md", "# Notizen\n")
+        self.assertTrue(any("(R1)" in f for f in other.fehler))
+
     def test_historical_banner_still_cannot_claim_current_old_version(self):
         result = self.check("Recherche_2026-09-30.md",
                             "# Recherche\nStand 30.09.2026 · Glide 3.32.2\n"
