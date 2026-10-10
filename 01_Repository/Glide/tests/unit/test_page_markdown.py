@@ -41,11 +41,21 @@ class BilderImRundlauf(unittest.TestCase):
     def test_local_image_path(self):
         import os
         from page_markdown import local_image_path
-        self.assertEqual(local_image_path("file:///tmp/a%20b.png"), os.path.normpath("/tmp/a b.png"))
-        self.assertEqual(local_image_path("Bilder/a%20b.png", "/x/y"), os.path.normpath("/x/y/Bilder/a b.png"))
-        self.assertEqual(local_image_path("/abs/c.png"), os.path.normpath("/abs/c.png"))
+        basis = Path.cwd() / "Bildquellen"
+        absolut = basis / "a b.png"
+        self.assertEqual(local_image_path(absolut.as_uri()), os.path.normpath(str(absolut)))
+        self.assertEqual(local_image_path("Bilder/a%20b.png", basis),
+                         os.path.normpath(str(basis / "Bilder/a b.png")))
+        self.assertEqual(local_image_path(str(absolut)), os.path.normpath(str(absolut)))
+        # Seit Python 3.13 ist ein einzelner führender Slash unter Windows
+        # laufwerksrelativ. Ohne Basis wird kein solches Bild geladen.
+        if os.name == "nt":
+            self.assertIsNone(local_image_path("/abs/c.png"))
+            self.assertIsNone(local_image_path(r"C:relativ.png"))
+        else:
+            self.assertEqual(local_image_path("/abs/c.png"), "/abs/c.png")
         for fremd in ("https://example.org/a.png", "data:image/png;base64,AAAA", "file://server/a.png", "", None):
-            self.assertIsNone(local_image_path(fremd, "/x"), fremd)
+            self.assertIsNone(local_image_path(fremd, basis), fremd)
         self.assertIsNone(local_image_path("relativ.png"))
 
     def test_image_line_becomes_anchor_only_when_resolved(self):

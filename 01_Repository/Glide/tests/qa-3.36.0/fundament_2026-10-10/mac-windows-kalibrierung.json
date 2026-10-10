@@ -1,0 +1,23 @@
+{
+  "datum": "10.10.2026",
+  "plattform": "macOS arm64, Python 3.14.5, Tk 9.0.3",
+  "app_sha256": "04a059704080685ee9a10957116508a3261a51316c6d27edc8249738259dbf01",
+  "art": "Prüfwerkzeugnachlauf; App und Lieferung unverändert",
+  "suiten": [
+    {
+      "suite": "test_kompression330",
+      "exitcode": 0,
+      "pruefdatei_sha256": "d221ed1922485c2a566d8e779bc2d5f2b6173d34667b1a7ee3855a5af94d1925"
+    }
+  ],
+  "unit_tests": {
+    "datei": "test_page_markdown.py",
+    "anzahl": 7,
+    "exitcode": 0,
+    "sha256": "f61b5cf489159f5270faed75beb9f36fe29f0a26e6dc6775d1b8743cc155613d"
+  },
+  "windows_desktop": {
+    "sha256": "8d3f317e9542e7e9b7d1d306fd89418f9fecbbdb962e48cb61f0b1b5cfcb8f71",
+    "native_pruefung": "ausstehend"
+  }
+}

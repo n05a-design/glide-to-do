@@ -107,7 +107,8 @@ with tempfile.TemporaryDirectory(prefix="glide-kompression-") as ordner:
         app.toggle_sidebar_section("pages")
         ruhe()
         assert app.sidebar_listbox.winfo_manager() == "pack" and app.pages_listbox.winfo_manager() == "pack"
-        assert int(app.sidebar_title_row.pack_info()["pady"][0]) == app.SIDEBAR_LISTS_GAP
+        abstand = root.tk.splitlist(app.sidebar_title_row.pack_info()["pady"])
+        assert abstand and int(abstand[0]) == app.SIDEBAR_LISTS_GAP, abstand
         assert app.SIDEBAR_LISTS_GAP < app.SIDEBAR_SECTION_GAP
         assert app.normalize_personal_settings({"sidebar_sections_closed": ["pages", "lists", "folders"]})[
             "sidebar_sections_closed"] == ["pages", "lists"]

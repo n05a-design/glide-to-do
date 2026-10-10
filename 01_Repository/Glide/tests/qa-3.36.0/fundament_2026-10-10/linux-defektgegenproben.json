@@ -1,0 +1,54 @@
+{
+  "plattform": "linux",
+  "gegenproben": [
+    {
+      "fall": "ueberlauf",
+      "suite": "test_mindestgroesse330.py",
+      "exitcode": 1,
+      "erwartete_beobachtung": "assert app.header_overflow_button.winfo_ismapped()",
+      "gegenprobe_rot": true
+    },
+    {
+      "fall": "reihenfolge",
+      "suite": "test_rueckmeldung330.py",
+      "exitcode": 1,
+      "erwartete_beobachtung": "assert reihenfolge() == erwartet",
+      "gegenprobe_rot": true
+    },
+    {
+      "fall": "svg-fähigkeit",
+      "suite": "test_befunde330.py",
+      "exitcode": 1,
+      "erwartete_beobachtung": "SVG ohne SVG-Leser muss verständlich abgelehnt werden",
+      "gegenprobe_rot": true
+    },
+    {
+      "fall": "scrollen",
+      "suite": "test_tempo330.py",
+      "exitcode": 1,
+      "erwartete_beobachtung": "Scrollereignisse bewegen die lange Prüfansicht nicht",
+      "gegenprobe_rot": true
+    },
+    {
+      "fall": "datum",
+      "suite": "test_planen33313.py",
+      "exitcode": 1,
+      "erwartete_beobachtung": "assert fresh(a[\"id\"])[\"planned_date\"] == chosen",
+      "gegenprobe_rot": true
+    },
+    {
+      "fall": "hintergrundvorschau",
+      "suite": "test_hintergrund330.py",
+      "exitcode": 1,
+      "erwartete_beobachtung": "assert gesehen.get(\"kacheln\") == 6",
+      "gegenprobe_rot": true
+    },
+    {
+      "fall": "dialogabschluss",
+      "suite": "test_fenster330.py",
+      "exitcode": 1,
+      "erwartete_beobachtung": "Esc schließt nicht",
+      "gegenprobe_rot": true
+    }
+  ]
+}
