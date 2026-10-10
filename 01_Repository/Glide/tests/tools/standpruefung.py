@@ -177,9 +177,12 @@ FESTGESCHRIEBEN: tuple[str, ...] = ()
 
 # Dateien ohne Standaussage. Arbeitsregeln und Änderungsverlauf tragen ihren
 # Stand in der Sache selbst: AGENTS.md gilt versionsunabhängig, CHANGELOG.md
-# beginnt mit dem Eintrag der aktuellen Version.
+# beginnt mit dem Eintrag der aktuellen Version. Claude-Skills
+# (`.claude/skills/<Name>/SKILL.md`, seit 10.10.2026) gelten wie AGENTS.md
+# versionsunabhängig und bleiben bei Fremdskills unverändert; Links, Formate
+# und überholte Aussagen werden weiter geprüft.
 OHNE_STAND = ("AGENTS.md", "CHANGELOG.md", "LIESMICH.md",
-              "LICENSE.md", "SECURITY.md")
+              "LICENSE.md", "SECURITY.md", "SKILL.md")
 
 # R9: Aussagen, die nachweislich überholt sind (Prüfung vom 28.09.2026 und
 # später). Jede Zeile: Muster, Grund. Geprüft werden alle aktiven Dokumente
