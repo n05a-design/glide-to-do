@@ -16,14 +16,14 @@ Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf 
 ## Lesereihenfolge
 
 1. [01_Repository/Glide/AGENTS.md](01_Repository/Glide/AGENTS.md) – verbindliche Arbeitsregeln und Abschlusskriterium
-2. [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) – Stand, verbindliche Entscheidungen D01–D43, beauftragte Arbeit, Abnahme
+2. [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) – Stand, verbindliche Entscheidungen D01–D44, beauftragte Arbeit, Abnahme
 3. [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) – Aufgaben mit Status, Stufen, Ziele; Verhalten der Funktionen in [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md)
 4. [Dokumentenpflege](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md) vor jeder Dokumentänderung: ein Thema, ein Dokument; zusammenführen und löschen statt archivieren (Auftrag vom 03.10.2026)
 5. Erst dann die betroffene Codestelle **und ihre Aufrufer** (Funktionsnamen suchen, nicht Zeilennummern)
 
 ## Ergänzungen für diese Umgebung
 
-- **Auftrag:** Nur den ausdrücklich beauftragten Schnitt umsetzen; offene Auswahl nicht selbst entscheiden. Bereits Entschiedenes (Q1–Q5, D01–D43, Produktgrenzen) nicht erneut vorlegen. Der neue Sprint wird gemeinsam geplant (Entwicklungsplan §15); Runden 1–6 sind entschieden, acht Versionen in §15.7/§15.8 vorgeschlagen; Gesamtplanbestätigung offen. Neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests (D17).
+- **Auftrag:** Nur den ausdrücklich beauftragten Schnitt umsetzen; offene Auswahl nicht selbst entscheiden. Bereits Entschiedenes (Q1–Q5, D01–D44, Produktgrenzen) nicht erneut vorlegen. Der neue Sprint wird gemeinsam geplant (Entwicklungsplan §15); Runden 1–6 sind entschieden, acht Versionen in §15.7/§15.8 durch „ja“ bestätigt (D44); Phase 2 beginnt mit 3.36.0. Neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests (D17).
 - **Daten:** Nie echte Nutzerdaten; `GLIDE_DATA_DIR` vor dem Import auf einen temporären Ordner setzen. Werkzeuge mit `python3 -B` starten.
 - **Linux-Container:**
   - Möglich sind die CI-Grundstufe (`python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` in `01_Repository/Glide`; braucht ein Python mit tkinter) mit Stand-, Link- und Ablageprüfung, Startprobe unter Xvfb (Tk 8.6) und `scripts/pflege/messung_speicherweg.py`.

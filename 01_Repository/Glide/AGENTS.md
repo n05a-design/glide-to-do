@@ -8,7 +8,7 @@ Glide ist eine lokale Desktop-Anwendung. Kernfunktionen müssen ohne Internet, B
 
 - Einstieg für jede neue Sitzung: `../../00_Arbeitsvorbereitung/Glide_Uebergabe.md` (Stand, Regeln, nächste Schritte)
 - Aufgaben mit Status: `../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md`
-- Entscheidungen D01–D43, Auftrag und Arbeitsablauf: `docs/ARBEITSRICHTUNG.md`
+- Entscheidungen D01–D44, Auftrag und Arbeitsablauf: `docs/ARBEITSRICHTUNG.md`
 - Produkt, Grenzen und Prinzipien: `docs/01_PRODUCT_CONSTRAINTS.md`
 - Architektur, Performance-Regeln, Tk-Fallstricke: `docs/02_ARCHITECTURE.md`
 - Verhalten der Funktionen: `docs/20_FUNKTIONEN.md`

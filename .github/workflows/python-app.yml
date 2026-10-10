@@ -14,24 +14,18 @@
 # Geheimnisse. Der Schritt „Fremdcode“ lädt das in vendor/provenance.json
 # genannte Originalpaket von PyPI und vergleicht jede Datei.
 #
-# Integrationssuiten (nur manuell über „Run workflow“): pruefen.py unter
-# Linux/Tk 8.6. Die Suiten sind auf den Referenz-Mac abgestimmt; Abweichungen
-# bei Schriftmetrik und Layout sind dort erwartbar. Der Job ist informativ und
-# ersetzt nicht die Vollprüfung auf dem Mac.
+# Native Prüfstände laufen nacheinander. Linux/Xvfb prüft jede sachlich
+# ausführbare Suite verpflichtend; Windows verwendet denselben Vollprüfstand.
+# Eine grüne Automatik ersetzt keine menschliche Sicht-/Screenreaderprüfung.
 
 name: Glide-Prüfung
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "claude/**"]
   pull_request:
     branches: ["main"]
   workflow_dispatch:
-    inputs:
-      integrationssuiten:
-        description: "Zusätzlich alle Integrationssuiten unter Linux/Xvfb ausführen (informativ, rund 45 Minuten)"
-        type: boolean
-        default: false
 
 permissions:
   contents: read
@@ -77,11 +71,11 @@ jobs:
           if-no-files-found: ignore
 
   integrationssuiten-linux:
-    name: Integrationssuiten (Linux/Xvfb, informativ)
-    if: github.event_name == 'workflow_dispatch' && inputs.integrationssuiten
+    name: Vollprüfung (Linux/Xvfb, Python 3.14, Tk 8.6)
+    needs: grundstufe
+    if: always() && !cancelled()
     runs-on: ubuntu-24.04
     timeout-minutes: 120
-    continue-on-error: true
     defaults:
       run:
         working-directory: 01_Repository/Glide
@@ -97,14 +91,47 @@ jobs:
       - name: Xvfb, Tk und ImageMagick
         run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb libtk8.6 imagemagick
 
-      - name: Prüfstand im Schnellmodus
-        run: python -B tests/tools/pruefen.py --modus schnell --protokoll "$RUNNER_TEMP/integration" --timeout 900
+      - name: Vollprüfstand Linux
+        run: python -B tests/tools/pruefen.py --modus voll --protokoll "$RUNNER_TEMP/integration" --timeout 900
 
       - name: Protokolle sichern
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: integrationssuiten-linux
+          path: ${{ runner.temp }}/integration
+          retention-days: 14
+          if-no-files-found: ignore
+
+  vollpruefung-windows:
+    name: Vollprüfung (Windows x64, Python 3.14)
+    needs: integrationssuiten-linux
+    if: always() && !cancelled()
+    runs-on: windows-2025
+    timeout-minutes: 180
+    defaults:
+      run:
+        working-directory: 01_Repository/Glide
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+          architecture: x64
+      - name: Native Zeitzone mit Sommerzeit
+        run: |
+          Remove-Item Env:TZ -ErrorAction SilentlyContinue
+          tzutil /s "W. Europe Standard Time"
+          python -B tests/tools/pruefe_tk.py
+      - name: Vollprüfstand Windows
+        run: python -B tests/tools/pruefen.py --modus voll --protokoll "$env:RUNNER_TEMP/integration" --timeout 900
+      - name: Protokolle sichern
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: integrationssuiten-windows
           path: ${{ runner.temp }}/integration
           retention-days: 14
           if-no-files-found: ignore
