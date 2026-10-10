@@ -207,26 +207,45 @@ with tempfile.TemporaryDirectory(prefix="glide-planen-") as folder:
                 app.hide_quick_plan_row()
             # Arbitrary date uses the actual modal calendar; cancel remains a no-op.
             select("list", [a["id"]])
+            original_modal = app.run_modal
+            modal_errors = []
+            def modal_operation(dialog, parent, action):
+                def perform():
+                    try:
+                        assert dialog.winfo_ismapped(), "Kalender muss vor der Bedienung sichtbar sein"
+                        assert str(root.focus_get()).startswith(str(dialog)), "Tastaturfokus muss im Kalender liegen"
+                        action(dialog)
+                    except Exception as exc:
+                        modal_errors.append(repr(exc))
+                    finally:
+                        if dialog.winfo_exists():
+                            dialog.destroy()
+                root.after(30, perform)
+                return original_modal(dialog, parent)
             def cancel(dialog, parent=None):
-                dialog.event_generate("<Escape>"); idle()
-                if dialog.winfo_exists(): dialog.destroy()
+                return modal_operation(dialog, parent, lambda window: window.event_generate("<Escape>"))
             count = len(app.undo_stack)
             with patch.object(app, "run_modal", cancel):
                 app.choose_quick_plan("date")
+            idle()
+            assert not modal_errors, modal_errors
             assert len(app.undo_stack) == count
             chosen = (date.today() + timedelta(days=10)).isoformat()
             assert a["id"] in app.quick_plan_selection(), ("Auswahl nach Kalenderabbruch verloren", app.quick_plan_selection(), errors)
             confirmed = []
             def confirm(dialog, parent=None):
-                confirmed.append(True)
-                field = next(w for w in descendants(dialog) if isinstance(w, mod.DueField))
-                field.set_due(chosen)
-                idle()
-                assert field.read() == ((chosen, None), None), (field.read(), chosen, errors)
-                texts = [str(w.cget("text")) for w in descendants(dialog) if isinstance(w, mod.tk.Label)]
-                assert any("frei" in text for text in texts), texts
-                next(w for w in descendants(dialog) if isinstance(w, mod.RoundedButton) and w.text == "Übernehmen").command()
+                def choose(window):
+                    confirmed.append(True)
+                    field = next(w for w in descendants(window) if isinstance(w, mod.DueField))
+                    field.set_due(chosen)
+                    assert field.read() == ((chosen, None), None), (field.read(), chosen, errors)
+                    texts = [str(w.cget("text")) for w in descendants(window) if isinstance(w, mod.tk.Label)]
+                    assert any("frei" in text for text in texts), texts
+                    next(w for w in descendants(window) if isinstance(w, mod.RoundedButton) and w.text == "Übernehmen").command()
+                return modal_operation(dialog, parent, choose)
             with patch.object(app, "run_modal", confirm): app.choose_quick_plan("date")
+            idle()
+            assert not modal_errors, modal_errors
             assert confirmed, ("Kalender zum Bestätigen nicht geöffnet", app.quick_plan_selection(), errors)
             assert fresh(a["id"])["planned_date"] == chosen, (fresh(a["id"])["planned_date"], chosen, errors)
             app.undo_last_change(); idle()

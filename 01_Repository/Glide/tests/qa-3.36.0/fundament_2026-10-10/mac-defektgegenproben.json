@@ -30,6 +30,13 @@
       "gegenprobe_rot": true
     },
     {
+      "fall": "dialogabschluss",
+      "suite": "test_fenster330.py",
+      "exitcode": 1,
+      "erwartete_beobachtung": "Esc schließt nicht",
+      "gegenprobe_rot": true
+    },
+    {
       "fall": "datum",
       "suite": "test_planen33313.py",
       "exitcode": 1,
@@ -37,10 +44,10 @@
       "gegenprobe_rot": true
     },
     {
-      "fall": "dialogabschluss",
-      "suite": "test_fenster330.py",
+      "fall": "hintergrundvorschau",
+      "suite": "test_hintergrund330.py",
       "exitcode": 1,
-      "erwartete_beobachtung": "Esc schließt nicht",
+      "erwartete_beobachtung": "assert gesehen.get(\"kacheln\") == 6",
       "gegenprobe_rot": true
     }
   ]

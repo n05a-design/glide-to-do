@@ -1,0 +1,605 @@
+{
+  "lauf": {
+    "conclusion": "failure",
+    "databaseId": 38057349586,
+    "headSha": "a7197d463ca3ba0ff5b30af9690a6366cc4be4e0",
+    "status": "completed",
+    "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38057349586"
+  },
+  "jobs": [
+    {
+      "completedAt": "2026-10-10T13:54:18Z",
+      "conclusion": "success",
+      "databaseId": 114228432300,
+      "name": "Grundstufe (Linux, Python 3.14, Tk 8.6)",
+      "startedAt": "2026-10-10T13:51:40Z",
+      "status": "completed",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38057349586/job/114228432300"
+    },
+    {
+      "completedAt": "2026-10-10T14:14:26Z",
+      "conclusion": "failure",
+      "databaseId": 114228920897,
+      "name": "Vollprüfung (Linux/Xvfb, Python 3.14, Tk 8.6)",
+      "startedAt": "2026-10-10T13:54:21Z",
+      "status": "completed",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38057349586/job/114228920897"
+    },
+    {
+      "completedAt": "2026-10-10T14:14:32Z",
+      "conclusion": "failure",
+      "databaseId": 114232702147,
+      "name": "Vollprüfung (Windows x64, Python 3.14)",
+      "startedAt": "2026-10-10T14:14:28Z",
+      "status": "completed",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38057349586/job/114232702147"
+    }
+  ],
+  "linux": {
+    "zeitpunkt": "2026-10-10T14:13:41",
+    "modus": "voll",
+    "python": "3.14.8 (main, Oct  1 2026, 02:38:33) [GCC 13.3.0]",
+    "plattform": "linux",
+    "exitcode": 1,
+    "schritte": [
+      {
+        "schritt": "Syntax",
+        "status": "ausgeführt",
+        "grund": "190 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+      },
+      {
+        "schritt": "Versionskonsistenz",
+        "status": "ausgeführt",
+        "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.36.0; Datenformat 23"
+      },
+      {
+        "schritt": "Dokumentation",
+        "status": "ausgeführt",
+        "grund": "Alle Dokumente einschließlich Archiv im Index; 198 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+      },
+      {
+        "schritt": "Fixtures",
+        "status": "ausgeführt",
+        "grund": "20 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite"
+      },
+      {
+        "schritt": "Fachlogik-Unit-Tests",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "Tk-Voraussetzung",
+        "status": "ausgeführt",
+        "grund": "Tk-Fenster im gewählten Python gestartet und geschlossen"
+      },
+      {
+        "schritt": "Zeitzone",
+        "status": "ausgeführt",
+        "grund": "CEST, Versatz +02:00, mit Sommerzeitregel; Zeitzonenfehler bleiben sichtbar"
+      },
+      {
+        "schritt": "test_glide",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_datenintegritaet",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_drawing",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_drawing_prototype",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "audit_app",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_dialog_theme",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_ui_updates",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_glide_36",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_release36",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_ui_polish36",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_ui_followup36",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_release37",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_template_workflows",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_reminders",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_ui39",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_workspace310",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features311",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features312",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features313",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features314",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features315",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features316",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features317",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features318",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features319",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features320",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features321",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features322",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features323",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features324",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features325",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features326",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features328",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features329",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_drawing330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_features330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_mindestgroesse330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_kontrast330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_paketierung330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_hintergrund330",
+        "status": "fehlgeschlagen",
+        "grund": "Exitcode 1"
+      },
+      {
+        "schritt": "test_rueckmeldung330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_seiten330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_aufraeumen330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_kompression330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_bilder330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_festlayout330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_logo330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_kartenfuss330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_speicherlast330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_notizbereich330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_befunde330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_fenster330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_tempo330",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_etappe1_332",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_klappmechanismen3321",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_drag_performance3322",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_library_performance3323",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_fundament333",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_bereiche3331",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_startseite3332",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_eingabe3333",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_eisenhower3335",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_heute3336",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_suche3337",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_editor3338",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_speichervergleich3339",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_kennzahlen33310",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_fortsetzung33311",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_titel33312",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_planen33313",
+        "status": "fehlgeschlagen",
+        "grund": "Exitcode 1"
+      },
+      {
+        "schritt": "test_tagpaket33314",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_wissen33315",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_bedienung33316",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_woche33317",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_seiten33318",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_tempo33319",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_komfort33320",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_oberflaeche33321",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_wissen3340",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_pixel3350",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_austausch3350",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_fundament3360",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "test_vollpruefung325",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "Showcase",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "analyse_statisch",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "analyse_erreichbarkeit",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "standpruefung",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "attributpruefung",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "dublettenpruefung",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "Beispieldaten-erzeugen",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "Beispieldaten-Abgleich",
+        "status": "ausgeführt",
+        "grund": "Inhalt, Verknüpfungen und relative Fristen gleich; IDs und Erzeugungszeit sind ausgenommen"
+      },
+      {
+        "schritt": "Release-erzeugen",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "Release-Abgleich",
+        "status": "ausgeführt",
+        "grund": "Inhalt, Fristen und Verknüpfungen zum Planungsstichtag 2026-10-10 gleich"
+      },
+      {
+        "schritt": "Screenshots",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "Sichtprüfung",
+        "status": "übersprungen",
+        "grund": "Bilder müssen von einer Person angesehen werden; native Plattformprüfung bleibt offen"
+      }
+    ]
+  },
+  "linux_defektgegenproben": {
+    "plattform": "linux",
+    "gegenproben": [
+      {
+        "fall": "ueberlauf",
+        "suite": "test_mindestgroesse330.py",
+        "exitcode": 1,
+        "erwartete_beobachtung": "assert app.header_overflow_button.winfo_ismapped()",
+        "gegenprobe_rot": true
+      },
+      {
+        "fall": "reihenfolge",
+        "suite": "test_rueckmeldung330.py",
+        "exitcode": 1,
+        "erwartete_beobachtung": "assert reihenfolge() == erwartet",
+        "gegenprobe_rot": true
+      },
+      {
+        "fall": "svg-fähigkeit",
+        "suite": "test_befunde330.py",
+        "exitcode": 1,
+        "erwartete_beobachtung": "SVG ohne SVG-Leser muss verständlich abgelehnt werden",
+        "gegenprobe_rot": true
+      },
+      {
+        "fall": "scrollen",
+        "suite": "test_tempo330.py",
+        "exitcode": 1,
+        "erwartete_beobachtung": "Scrollereignisse bewegen die lange Prüfansicht nicht",
+        "gegenprobe_rot": true
+      },
+      {
+        "fall": "datum",
+        "suite": "test_planen33313.py",
+        "gegenprobe_rot": false,
+        "grund": "Positive Basis dieser Suite nicht grün; keine Defekt-Gegenprobe behaupten"
+      },
+      {
+        "fall": "dialogabschluss",
+        "suite": "test_fenster330.py",
+        "exitcode": 1,
+        "erwartete_beobachtung": "Esc schließt nicht",
+        "gegenprobe_rot": true
+      }
+    ]
+  },
+  "windows_app_geprueft": false,
+  "windows_fehler": "Vorlauf vor Checkout übernahm das erst später vorhandene Unterverzeichnis 01_Repository/Glide als Arbeitsverzeichnis. Workflow setzt diesen Schritt nun ausdrücklich auf github.workspace."
+}

@@ -1,0 +1,27 @@
+{
+  "datum": "10.10.2026",
+  "plattform": "macOS arm64, Python 3.14.5, Tk 9.0.3",
+  "art": "Gezielter Werkzeugnachlauf nach unverändert grüner eingefrorener Mac-Vollprüfung; keine Produktionsänderung",
+  "app_sha256": "04a059704080685ee9a10957116508a3261a51316c6d27edc8249738259dbf01",
+  "suiten": [
+    {
+      "suite": "test_planen33313",
+      "exitcode": 0,
+      "pruefdatei_sha256": "a81c5d95a4cddd6a338cb6fd57df1e4f65ce3f5195c7446b0703eaad33f95497"
+    },
+    {
+      "suite": "test_hintergrund330",
+      "exitcode": 0,
+      "pruefdatei_sha256": "b1df8147f43df966d515a37a47036be7fdc7deafc6083fb8e134b10626ef0139"
+    }
+  ],
+  "nachgepruefte_defekte": [
+    "datum",
+    "hintergrundvorschau"
+  ],
+  "aenderungen": {
+    "test_planen33313": "Tatsächlicher Modalweg mit sichtbarem Kalender und Tastaturfokus; Escape bewahrt Auswahl/Undo; Datumsauswahl muss übernommen werden.",
+    "test_hintergrund330": "Tatsächlicher Modalweg; Abschnitt sichtbar scrollen, danach weiterhin genau sechs Vorschauen verlangen.",
+    "workflow": "Windows-Vorlauf vor Checkout verwendet github.workspace."
+  }
+}
