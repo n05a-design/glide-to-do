@@ -10,11 +10,11 @@ Wie Glide geprüft wird. Was tatsächlich geprüft wurde, steht im [QA-Bericht](
 |---|---|---|---|
 | CI-Grundstufe | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` | Syntax, Version, Dokumentation, Fixtures, Werkzeugtests, Unit-Tests, fünf Analysen, Startprobe, Lieferstand, Fremdcode, Datenschutz, Ablagegröße, Synchronisation (seit 08.10.2026) | GitHub Actions (Linux, Python 3.14, Tk 8.6, Xvfb) und lokal |
 | Schnellprüfung | `python3 -B tests/tools/pruefen.py` | Syntax, Version, Dokumentation, Fixtures, Unit-Tests (3.35.0: 257), Tk-Probe, Zeitzone, alle Integrationssuiten (3.35.0: 82), Showcase, fünf Analysen | Entwicklungsrechner |
-| Vollprüfung | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-<Version>/<Name> --timeout 900` | zusätzlich Reproduktion von Beispiel- und Releasedaten, Fensterfotos; 3.35.0: 101 Schritte, davon 99 automatisch auf dem Referenz-Mac, je nach Rechner 15–60 Minuten | Referenz-Mac, Abnahme jeder Version auf einer eingefrorenen Kopie außerhalb der synchronisierten Ablage |
+| Vollprüfung | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-<Version>/<Name> --timeout 900` | zusätzlich Reproduktion von Beispiel- und Releasedaten, Fensterfotos; 3.36.0: 102 Schritte, davon 100 automatisch auf dem Referenz-Mac und 101 auf Linux/Windows, je nach Rechner 15–60 Minuten | Referenz-Mac, Abnahme jeder Version auf einer eingefrorenen Kopie außerhalb der synchronisierten Ablage |
 | Windows | `tests/tools/windows_vollpruefung.cmd` | dieselbe Vollprüfung; verlangt Python 3.14 mit Tk 9 (sonst Exitcode 3) und prüft OneDrive-Platzhalter (Exitcode 4); Anleitung in der Prüfliste, B0 | Windows-PC des Inhabers |
 | Manuell | [Manuelle Prüfung](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md) | echte Bedienung, Plattformen, DPI, Screenreader | Inhaber |
 
-Maßgeblich sind `SUITEN` und `ANALYSEN` in `tests/tools/pruefen.py`. Einzelsuite: `python3 -B tests/integration/<suite>.py`, unter macOS im Hintergrund mit `GLIDE_QA_HINTERGRUND=1 PYTHONPATH=tests/tools/hintergrund`. Unter Linux laufen die Integrationssuiten nur informativ; vier reine Linux-Abweichungen sind noch nicht kalibriert. Die Suiten sind auf den Referenz-Mac abgestimmt; Linux-Grundstufe und Windows-Lauf ersetzen keine Mac-Vollprüfung, und kein Windows-Nachweis wird aus einem Mac-Lauf abgeleitet. Laufzeit, Betriebssystem und tatsächlicher Umfang stehen in jedem `ergebnis.json`.
+Maßgeblich sind `SUITEN` und `ANALYSEN` in `tests/tools/pruefen.py`. Einzelsuite: `python3 -B tests/integration/<suite>.py`, unter macOS im Hintergrund mit `GLIDE_QA_HINTERGRUND=1 PYTHONPATH=tests/tools/hintergrund`. Seit 3.36.0 laufen alle sachlich ausführbaren Integrationssuiten unter Linux/Xvfb verpflichtend; kalibrierte Erwartungen haben passende Defektgegenproben. Die Suiten sind auf den Referenz-Mac abgestimmt; Linux-Grundstufe und Windows-Lauf ersetzen keine Mac-Vollprüfung, und kein Windows-Nachweis wird aus einem Mac-Lauf abgeleitet. Laufzeit, Betriebssystem und tatsächlicher Umfang stehen in jedem `ergebnis.json`.
 
 ## Regeln
 
@@ -86,7 +86,7 @@ Neue Klappflächen gehören in `test_klappmechanismen3321`, neue Fenster in `tes
 
 ## Was nur manuell geht
 
-Echte Maus-, Trackpad- und Tastaturbedienung, Windows- und Linux-Desktop, DPI und mehrere Monitore, Screenreader, Schlafen/Aufwachen und Langzeitbetrieb, Druck im Browser, Signatur/Notarisierung/Installer. Die automatischen Prüfungen ersetzen diese Abnahme nicht und werden nie als solche ausgegeben. Einzelpunkte je Gerät: [Manuelle Prüfung](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md).
+Echte Maus-, Trackpad- und Tastaturbedienung, Windows- und Linux-Desktop, DPI und mehrere Monitore, Screenreader, Schlafen/Aufwachen und Langzeitbetrieb, Druck im Browser sowie gesonderte Veröffentlichungstore für öffentliche Signatur/Notarisierung/Installer. Die lokale Ad-hoc-Signatur wird automatisch geprüft. Die automatischen Prüfungen ersetzen diese Abnahme nicht und werden nie als solche ausgegeben. Einzelpunkte je Gerät: [Manuelle Prüfung](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md).
 
 **Kontrollmatrix:** Jede Zeile bleibt offen, bis ein tatsächlicher Geräteversuch dokumentiert ist.
 

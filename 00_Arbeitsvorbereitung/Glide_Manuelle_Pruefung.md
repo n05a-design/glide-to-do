@@ -187,6 +187,8 @@ Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt a
   - **Wissen und Seiten (3.34.0):** zwei Bilder auf aufeinanderfolgenden Absätzen überlappen nicht; Mehr › „Drucken und PDF …“ zeigt die Bilder; „Als Markdown speichern …“ und „Markdown als Seite öffnen“ bringen die Bilder zurück; ein Suchtreffer öffnet die Seite mit markierten Fundstellen, Esc hebt auf; im gespeicherten Filter „Warum steht das hier?“; Alt+Pfeile im Seitenbaum.
   - **Pixel und Austausch (3.35.0):** Doppelklick auf eine Farbe der Farbleiste zeigt die Umfärbung vor der Rückfrage; Symbolexport zeigt 16/32/48 px hell und dunkel; „Für KI bereitstellen …“ mit Zweck „überarbeiten“ und einen von Hand geänderten Vorschlag importieren (Konflikt nach einer Zwischenänderung sichtbar); Datei › Sicherung › „Sicherungen vergleichen …“.
 
+- [ ] **A28 Fundament/Tempo 3.36.0:** Wege des Sprintnachlaufs am Anfang dieses Dokuments mit echter Maus/Trackpad/Tastatur prüfen; besonders Kartenänderung/Undo bei weit gescrollter Bibliothek und Einstellungen nach Abbrechen/Design-/Schriftwechsel.
+
 ## B. Windows-PC (nach der Vollprüfung)
 
 - [ ] **B0 Windows-Vollprüfung – Anleitung**
@@ -252,7 +254,7 @@ $py = "$env:USERPROFILE\.cache\glide-qa\python-3.14.8\runtime\python.exe"
 
 Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Windows-Nachweis wird aus dem Mac-Lauf abgeleitet.
 
-- [x] **B1 Vollprüfung (automatisch):** Windows zuletzt 3.33.18 (08.10.2026): Exit 0, 95 Schritte, 76 Integrationssuiten, 170 Unit-Tests, Lieferung bytegleich ([Nachweis](../01_Repository/Glide/tests/qa-3.33.18/seiten_2026-10-08/README.md)). Referenz-Mac 3.35.0 (09.10.2026): Exit 0, 99 ausgeführt, 82 Integrationssuiten, 257 Unit-Tests ([Nachweis](../01_Repository/Glide/tests/qa-3.35.0/austausch_2026-10-09/README.md)). Für 3.33.19–3.35.0 steht die Windows-Vollprüfung nach B0 aus; die menschliche Sichtprüfung bleibt je Lauf übersprungen, deshalb sind B1a–B1i offen.
+- [x] **B1 Vollprüfung (automatisch):** Stand 3.36.0, 10.10.2026: Mac Exit 0, 100 ausgeführt; native Linux-/Windows-Vollprüfung je Exit 0, 101 ausgeführt; je 83 Integrationssuiten/264 Unit-Tests. Windows Python 3.14.7/Tk 9.0.4, bestätigter Desktop 1920 × 1080. Die früheren Sprintlieferungen sind mitgeprüft. [Nachweis](../01_Repository/Glide/tests/qa-3.36.0/fundament_2026-10-10/README.md). Die menschliche Sichtprüfung ist jeweils übersprungen; B1a–B1j bleiben offen.
 - [ ] **B1a Sichtprüfung der Aufnahmen am Gerät:** Die Fotos des nächsten Windows-Laufs (B0) unter `tests\qa-<Version>\<Lauf>\…\fenster` und `screenshots` durchsehen (sie bleiben lokal). Die Vorbefunde mit Testablage in Glide nachstellen:
   - **W01** Seitenleiste: Lange Listentitel enden mit „…“, kürzere stehen vollständig da („Unterlagen & Assets“).
   - **W05** (auf dem Mac behoben in 3.33.21) Datei › Datenaustausch › „Für KI bereitstellen …“ und Ansicht › Liste › „Tabellenspalten …“: Ist die Fensterbreite angemessen, stehen die Knöpfe rechts wie in den übrigen Dialogen?
@@ -283,6 +285,8 @@ Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Wind
 - [ ] **B1h Seiten im Alltag (3.33.18):** In separater Testablage Live-Liste einbetten; Originalaufgabe per Leertaste abhaken, Details öffnen, Quelle umbenennen/archivieren/löschen, Undo und Verknüpfung lösen. Mehrere und leere Quellen, lange Titel sowie Mindestfenster/große Schrift/hell-dunkel prüfen. Lokales Titelbild und Pixelzeichnung wählen, Bibliothekskarte ansehen, Kopie/Backup/Import/Papierkorb/Neustart. Vorlagen aus dem Anlegen-Menü ausfüllen und Vorschau einschließlich Termine/Titelbild lesen; Escape erhält den Bestand, Return legt an. Native DPI/Screenreader und menschliche Gestaltung prüfen; automatische Nachweise ersetzen diese Abnahme nicht.
 
 - [ ] **B1i Sprint 3.33.19–3.35.0 unter Windows:** dieselben Wege wie A27; zusätzlich „Automatisch hell/dunkel“ mit dem Windows-Farbmodus (Registrierung), Drucken und PDF im Standardbrowser, Markdown-Bildverweise mit Laufwerksbuchstaben, Kontextpaket und Vorschlag mit Umlauten im Dateinamen, Doppelklick-Geschwindigkeit der Farbleiste nach Windows-Einstellung.
+
+- [ ] **B1j Fundament/Tempo 3.36.0:** A28 und Sprintnachlauf am Anfang dieses Dokuments unter Windows prüfen; zusätzlich vorhandene W01/W06–W08 sichtbar nachstellen. Grüner CI-Lauf ersetzt die Bedienabnahme nicht.
 
 - [ ] **B2 Windows-Bestand (Format 17, Inhaberprobe):** Eine unveränderte
       Kopie des eigenen Bestands in einer getrennten Testablage mit

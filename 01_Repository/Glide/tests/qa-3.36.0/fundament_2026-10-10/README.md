@@ -1,8 +1,8 @@
 # Fundament und Tempo – Liefernachweis 3.36.0
 
-Stand 10.10.2026 · Glide 3.36.0 · Aufgabenformat 23 · native Abnahme offen
+Stand 10.10.2026 · Glide 3.36.0 · Aufgabenformat 23 · Mac, Linux und Windows automatisch grün
 
-P03 und E01 sind lokal umgesetzt und geprüft. Die Lieferkopien tragen 3.36.0; ein vollständiger Produktionsabschluss setzt zusätzlich die native Linux-/Windows-Prüfung voraus. Ausgangsproduktion 3.35.0 aus `62ad554`, Prüfstand-Commit `38b3e13`.
+P03 und E01 sind umgesetzt, auf Mac/Linux/Windows automatisch geprüft und als 3.36.0 in 07, Showcase und Mac-Bundle geliefert. Die menschliche Abnahme bleibt getrennt offen. Ausgangsproduktion 3.35.0 aus `62ad554`, Prüfstand-Commit `38b3e13`.
 
 | Tor | Ergebnis |
 |---|---|
@@ -13,7 +13,7 @@ P03 und E01 sind lokal umgesetzt und geprüft. Die Lieferkopien tragen 3.36.0; e
 | Sichtvergleich | eigene isolierte Hell-/Dunkelfenster bei 1280 × 800 und 860 × 700 mit großer Schrift geprüft; Scrollleiste korrigiert |
 | Eingefrorene Mac-Vollprüfung | Exit 0, 100 ausgeführt, zwei übersprungen; 83 Integrationssuiten, 264 Unit-Tests. 835 Dateien nach Lauf unverändert; [Ergebnis](mac-voll.json) |
 | Native Linux-Vollprüfung | Kandidat `6a2cebe`, Python 3.14.8/Tk 8.6, Exit 0; gesamte sachlich ausführbare Matrix und sieben Defektgegenproben grün; [Ergebnis](linux-voll.json) |
-| Native Windows-Vollprüfung | läuft am selben unveränderten Kandidatcommit; Menschenabnahme getrennt |
+| Native Windows-Vollprüfung | `3f267a2`, Python 3.14.7/Tk 9.0.4, Exit 0, 101 ausgeführt/eine Sichtprüfung übersprungen, 83 Suiten/264 Unit-Tests; [Ergebnis](windows-voll.json), [bestätigter Desktop 1920 × 1080](windows-desktop.json) |
 | 07 und Showcase | 38 Code-Dateien, 131 Ressourcen, sechs Showcase-Dateien SHA-256-gleich; [Hashabgleich](lieferabgleich.json) |
 | macOS-Bundle | 3.36.0; 38 Code-Dateien und 45 Mac-Ressourcen bytegleich; Ad-hoc-Signatur im Bauordner und auf Rückkopie mit `codesign --verify --deep --strict` grün; [Nachweis](bundle.json) |
 | Menschliche Plattform-/DPI-/Screenreader-Abnahme | getrennt offen; keine automatische Freigabe |
@@ -27,3 +27,7 @@ Rohprotokolle und Fensteraufnahmen bleiben lokal außerhalb von OneDrive. Die [s
 Der [erste native Kandidatlauf](native-erster-kandidat.json) auf `a7197d4` ist abgeschlossen: Grundstufe grün, Linux mit zwei Suitefehlern, Windows bereits vor Checkout wegen eines falschen Arbeitsverzeichnisses beendet. Kein Windows-App-Ergebnis. Beide Linux-Befunde betrafen Prüfabläufe: Hintergrundvorschauen wurden vor dem sichtbaren Abschnitt gezählt; der ersetzte Modalweg ließ Escape zur Hauptauswahl gelangen. Die Tests verwenden nun den wirklichen Modalweg. Genau sechs Vorschauen, unveränderte Auswahl beim Abbruch und tatsächlich übernommenes Datum bleiben verbindlich. Beide Suiten sind lokal grün, die beiden passenden Defekte rot; [Werkzeugnachlauf](mac-werkzeugnachlauf.json). App, 07 und Bundle bleiben bytegleich zum eingefrorenen Volllauf. Die [strenge lokale CI des Werkzeugnachlaufs](ci-werkzeugnachlauf.json) ist grün (bekannter SSL-Hinweis). Der [zweite native Lauf](https://github.com/n05a-design/glide-to-do/actions/runs/38059598984) auf `6a2cebe` hat Grundstufe, Linux-Vollprüfung und alle sieben Linux-Defektgegenproben bestanden; die Windows-Vollprüfung ist mit zehn Befunden beendet ([Ergebnis](native-zweiter-kandidat.json)). Die neue Fundamentsuite ist grün. Der Desktop war nur 1024 × 768 groß; mehrere Geometriesuiten konnten die vorgesehenen Größen nicht erreichen. Der nächste Werkzeugnachlauf setzt und bestätigt ausdrücklich 1920 × 1080 im vergänglichen CI-Desktop. Der Markdown-Unit-Test verwendet echte absolute Betriebssystempfade (Python 3.13+ behandelt einen einzelnen führenden Slash unter Windows als laufwerksrelativ); die Kompressionssuite liest Tcl-Padding über `splitlist`. App und Lieferung bleiben unverändert. Die übrigen Befunde sind bis zum erneuten nativen Lauf offen.
 
 Der [gezielte Mac-Nachlauf](mac-windows-kalibrierung.json) für Kompression und sieben Markdown-Unit-Tests sowie die [strenge lokale CI](ci-windows-kalibrierung.json) sind grün. Die native Wirkung der Desktopvorbereitung ist erst im nächsten Windows-Lauf belegt.
+
+Abschluss am 10.10.2026 auf `3f267a2`: [native Matrix](https://github.com/n05a-design/glide-to-do/actions/runs/38063849170) vollständig grün. [Grundstufe](grundstufe-abschluss.json): 18 Schritte; [Linux-Vollprüfung](linux-final-voll.json): 101 ausgeführt/eine Sichtprüfung übersprungen, 83 Suiten/264 Unit-Tests; [sieben Linux-Defektgegenproben](linux-final-defektgegenproben.json) passend rot. Windows bestätigt vor dem Lauf 1920 × 1080 und Tk 9.0.4; sämtliche zehn früheren Befunde sind im vollständigen Wiederholungslauf grün. [Quellstand und Jobs](native-final.json); App-/Ressourcenstand unverändert zum eingefrorenen Mac-Lauf. Frühere fehlgeschlagene Läufe bleiben als Verlauf erhalten. Die aktuelle native Desktopwirkung ist damit belegt; menschliche Sicht-/Bedien-/DPI-/Readerproben weiterhin offen.
+
+Die [abschließende strenge CI-Grundstufe](lieferung-ci.json) ist grün (18 Schritte; bekannter lokaler SSL-Hinweis, nativer Originalabgleich grün). Der [Dokumentationsvorlauf](ci-lieferabschluss-vorlauf.json) meldete ausschließlich zwei ähnlich benannte Nachweise als Synchronisationskopie; eindeutige Benennung und Bereinigung der isolierten Prüfkopie beheben den Befund. Produktionsdateien unverändert.
