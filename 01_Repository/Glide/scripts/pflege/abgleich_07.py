@@ -25,7 +25,7 @@ ZIEL = ABLAGE / "07_Python-Versionen"
 VERSION = (ABLAGE / "01_Repository/Glide/VERSION").read_text().strip()
 
 DATEIEN = {"app.pyw": f"Glide-Aufgaben-und-Listen_v{VERSION}.pyw", "glide_start.py": "Schnellstart.pyw"}
-for modul in ("drawing.py", "drawing_image.py", "backdrop.py", "page_markdown.py", "image_preview.py", "logo.py", "schema_backups.py", "sidebar_policy.py", "svg_geometry.py", "home_tiles.py", "capture_parser.py", "eisenhower.py", "today_view.py", "content_search.py", "save_comparison.py", "view_metrics.py", "action_catalog.py", "ui_design.py", "planning.py", "day_proposal.py", "focus_timer.py", "task_references.py", "interaction_policy.py", "object_references.py", "week_planning.py", "page_features.py", "repeat_rules.py", "routines.py", "runtime_check.py", "release_notes.py", "appearance.py", "preview_tools.py", "filter_explain.py", "exchange_patch.py", "backup_diff.py"):
+for modul in ("drawing.py", "drawing_image.py", "backdrop.py", "page_markdown.py", "image_preview.py", "logo.py", "schema_backups.py", "sidebar_policy.py", "svg_geometry.py", "home_tiles.py", "capture_parser.py", "eisenhower.py", "today_view.py", "content_search.py", "save_comparison.py", "view_metrics.py", "action_catalog.py", "ui_design.py", "planning.py", "day_proposal.py", "focus_timer.py", "task_references.py", "interaction_policy.py", "object_references.py", "week_planning.py", "page_features.py", "repeat_rules.py", "routines.py", "runtime_check.py", "release_notes.py", "appearance.py", "preview_tools.py", "filter_explain.py", "exchange_patch.py", "backup_diff.py", "render_retention.py"):
     DATEIEN[modul] = modul
 
 

@@ -1,6 +1,6 @@
 # Pflegewerkzeuge
 
-Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23
+Stand 10.10.2026 · Glide 3.36.0 · Aufgabenformat 23
 
 Werkzeuge für jede Arbeitsrunde und für Messungen. Sie legen keine
 Archivkopien an: Vorfassungen von Fixtures, Showcase, Vorlagen und Dokumenten
@@ -21,6 +21,7 @@ Releaseplanungen gelten ebenfalls für sieben Versionen, Fensterbilder für drei
 | [analyse_codebasis.py](analyse_codebasis.py) | Größte Klassen und Funktionen, wiederholte Texte, identische Funktionen, häufige Aufrufe | `python3 scripts/pflege/analyse_codebasis.py` |
 | [pfade_bereinigen.py](pfade_bereinigen.py) | Ersetzt Benutzerpfade (`/Users/<Name>/` → `~/`, `C:\Users\<Name>` → `%USERPROFILE%`) in Textdateien vor dem Upload ins öffentliche Repository; bytegenau, JSON bleibt gültig; `--pruefen` meldet nur | `python3 -B scripts/pflege/pfade_bereinigen.py tests/qa-<Version>/<Lauf>` |
 | [messung_startseite.py](messung_startseite.py) | Unprofilierte Messung der Startseite (P03): Wechsel, Aktualisierung an Ort und Stelle, Widgetzahl; `--kacheln alt` oder `d12`, `--profil` nur zur Ursachensuche | `python3 -B scripts/pflege/messung_startseite.py --kacheln d12`; `--app` für gesicherten Vergleichsstand |
+| [messung_fundament3360.py](messung_fundament3360.py) | P03/E01: tatsächlichen Startseiten-Builder erzwingen, erste/warme Werte und Median/p95 getrennt; Einstellungen einschließlich echtem Modalaufbau, ohne Benutzerwartezeit/Schließen. `--lebensdauer` beobachtet zusätzlich fünf Serien je 20 UI-Abgleiche und Dialogöffnungen (Widgets, Tcl-Rückrufe, Python-Speicher, offene Timer); bewusst ohne wachsenden Undo-Verlauf | `python3 -B scripts/pflege/messung_fundament3360.py --app src/glide/app.pyw --json <Datei> --rounds 8`; Vergleichsstände seriell mit demselben Werkzeug, Ausgabe außerhalb von OneDrive |
 | [messung_suche.py](messung_suche.py) | Unprofilierte Messung der Suche (P07): Eingabe in der eingebetteten Palette bis zur gezeichneten Trefferliste, 10.000 Punkte und 200 Seiten, Median/p95 je Begriff | `python3 -B scripts/pflege/messung_suche.py --json <Datei>`; `--app` für Vergleichsstand |
 | [messung_speicherweg.py](messung_speicherweg.py) | Unprofilierter Vergleich des Speicherwegs bei wachsendem Bestand (P08, T2): erstes Speichern, Undo-Schnappschuss, `save_items`, Verlaufsvergleich, JSON, Abhaken über `item_change`; Aufwärmlauf, Median/p95, Rohwerte; `--profil` für cProfile; `--ohne-verlauf` und Speicherentwicklung über 50 Abhak-Vorgänge (P01r) | `python3 -B scripts/pflege/messung_speicherweg.py --items 10000 --json <Ausgabe>`; `--app` für gesicherten Vergleichsstand |
 | [zaehlung_aktualisierungen.py](zaehlung_aktualisierungen.py) | P06r: zählt je Aktion (Anlegen, Abhaken, Wichtigkeit, Einplanen, Löschen, Rückgängig, Umbenennen, Archivieren, Kopieren, Ordner, Papierkorb) Aufrufe von `save_items`/`save_settings`, tatsächlich geschriebene Daten-, Einstellungs- und Sperrdateien sowie Neuaufbauten von Seitenleiste und Inhalt; belegt Doppelarbeit, keine Zeitanteile | `python3 -B scripts/pflege/zaehlung_aktualisierungen.py --json <Ausgabe>`; `--code` für gesicherten Vergleichsstand |

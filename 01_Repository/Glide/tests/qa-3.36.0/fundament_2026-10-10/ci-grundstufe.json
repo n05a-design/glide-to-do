@@ -1,0 +1,99 @@
+{
+  "zeitpunkt": "2026-10-10T15:50:24",
+  "stufe": "CI-Grundstufe",
+  "python": "3.14.5 (v3.14.5:5607950ef23, May 10 2026, 07:38:09) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "plattform": "darwin",
+  "exitcode": 0,
+  "schritte": [
+    {
+      "schritt": "Syntax",
+      "status": "ausgeführt",
+      "grund": "190 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+    },
+    {
+      "schritt": "Versionskonsistenz",
+      "status": "ausgeführt",
+      "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.36.0; Datenformat 23"
+    },
+    {
+      "schritt": "Dokumentation",
+      "status": "ausgeführt",
+      "grund": "Alle Dokumente einschließlich Archiv im Index; 198 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+    },
+    {
+      "schritt": "Fixtures",
+      "status": "ausgeführt",
+      "grund": "20 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite"
+    },
+    {
+      "schritt": "Werkzeugtests",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Fachlogik-Unit-Tests",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "analyse_statisch",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "analyse_erreichbarkeit",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "standpruefung",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "attributpruefung",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "dublettenpruefung",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Tk-Voraussetzung",
+      "status": "ausgeführt",
+      "grund": "Tk-Fenster im gewählten Python gestartet und geschlossen"
+    },
+    {
+      "schritt": "Startprobe",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Lieferstand",
+      "status": "ausgeführt",
+      "grund": "07_Python-Versionen ist bytegleich zu src/glide"
+    },
+    {
+      "schritt": "Fremdcode",
+      "status": "Hinweis",
+      "grund": "tkinterdnd2: Originalpaket nicht abrufbar (<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>); Prüfung ohne Netz nicht möglich"
+    },
+    {
+      "schritt": "Datenschutz",
+      "status": "ausgeführt",
+      "grund": "keine Benutzerpfade in versionierten Textdateien"
+    },
+    {
+      "schritt": "Ablagegröße",
+      "status": "ausgeführt",
+      "grund": "842 versionierte Dateien, 263 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen"
+    },
+    {
+      "schritt": "Synchronisation",
+      "status": "ausgeführt",
+      "grund": "keine Synchronisationskopien, kein Hauptdokument ohne Vermerk stark gekürzt"
+    }
+  ]
+}

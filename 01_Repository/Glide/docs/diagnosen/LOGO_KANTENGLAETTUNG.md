@@ -1,6 +1,6 @@
 # Fehlerdiagnose: Logo ohne Kantenglättung unter Tk 8.6
 
-Stand 09.10.2026 · Glide 3.35.0 · Datenformat 23
+Stand 10.10.2026 · Glide 3.36.0 · Datenformat 23
 
 **Status:** Diagnose abgeschlossen, Umsetzung offen. Die Auswahl der Lösungswege (Abschnitt 7) liegt beim Inhaber; bei der Diagnose wurden weder Code noch Master geändert. Nachstellungen: Linux/Tk 8.6, künstliche Daten.
 

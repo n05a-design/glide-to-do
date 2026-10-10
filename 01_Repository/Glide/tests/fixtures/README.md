@@ -1,6 +1,6 @@
 # Referenzdaten und Beispiele
 
-Aktueller Aufgabenstand: **Glide 3.35.0 / Format 23**. `current_v23` enthält die aktuelle Referenz mit Live-Liste und Pixel-Titelbild; ältere `current_v*` bleiben feste Migrationsreferenzen.
+Aktueller Aufgabenstand: **Glide 3.36.0 / Format 23**. `current_v23` enthält die aktuelle Referenz mit Live-Liste und Pixel-Titelbild; ältere `current_v*` bleiben feste Migrationsreferenzen.
 
 - Enthalten sind unter anderem die Tagebuch-/Zeichnungsdaten älterer Formatstufen, dazu Punkte mit
   Verknüpfung, „wartet auf“, Uhrzeit, erfasster Zeit und Erledigt-Zeitpunkt.

@@ -24,6 +24,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--app", type=Path, default=REPO / "src/glide/app.pyw")
 parser.add_argument("--measure", type=Path)
 parser.add_argument("--items", type=int, default=1000)
+parser.add_argument("--lists", type=int, default=12)
 parser.add_argument("--rounds", type=int, default=8)
 args = parser.parse_args()
 sys.dont_write_bytecode = True
@@ -50,12 +51,30 @@ with tempfile.TemporaryDirectory(prefix="glide-library-cards-") as folder:
             root.update_idletasks()
             root.update()
 
+    class CardObservation:
+        def __init__(self, surface):
+            self.surface = surface
+            # Der alte Test verlangte den Austausch geänderter Karten. Seit dem
+            # Teilabgleich zählt stattdessen ihr tatsächlich sichtbarer Inhalt.
+            self.content = []
+            for widget in app.iter_descendants(surface):
+                options = widget.keys()
+                self.content.append((type(widget).__name__, tuple((key, str(widget.cget(key)))
+                    for key in ("text", "image", "font", "fg", "bg") if key in options)))
+                if isinstance(widget, mod.tk.Canvas):
+                    self.content.append(tuple((widget.type(item), tuple(widget.coords(item)))
+                        for item in widget.find_all()))
+        def winfo_exists(self):
+            return self.surface.winfo_exists()
+
     def cards():
         return dict(zip([(kind, entry["id"]) for kind, entry in app.library_entries(
-            archived=bool(getattr(app, "_library_show_archive", False)))], app.library_cards))
+            archived=bool(getattr(app, "_library_show_archive", False)))],
+            (CardObservation(surface) for surface in app.library_cards)))
 
     def changed(before, after):
-        return {key for key in before.keys() & after.keys() if before[key] is not after[key]}
+        return {key for key in before.keys() & after.keys()
+                if before[key].surface is not after[key].surface or before[key].content != after[key].content}
 
     try:
         inbox = app.ensure_inbox_list()
@@ -63,10 +82,10 @@ with tempfile.TemporaryDirectory(prefix="glide-library-cards-") as folder:
         folder_entry = app.new_folder_object("Projekt", folder_id="perf-folder")
         app.folders = [folder_entry]
         app.lists = [inbox]
-        for number in range(12):
+        for number in range(args.lists):
             items = [app.new_item(f"Aufgabe {i:05d}", item_id=f"task-{i}",
                      due=(mod.date.today() - mod.timedelta(days=1)).isoformat(),
-                     description="Prüftext " * 5) for i in range(number, args.items, 12)]
+                     description="Prüftext " * 5) for i in range(number, args.items, args.lists)]
             app.lists.append(app.new_list_object(f"Liste {number:02d}", items,
                 list_id=f"list-{number}", folder_id=folder_entry["id"] if number == 0 else None))
         first = app.lists[1]
@@ -121,7 +140,7 @@ with tempfile.TemporaryDirectory(prefix="glide-library-cards-") as folder:
             assert not errors, errors
             result = {"version": mod.APP_VERSION, "source_sha256": hashlib.sha256(args.app.read_bytes()).hexdigest(),
                 "python": platform.python_version(), "platform": platform.platform(), "tk": root.tk.call("info", "patchlevel"),
-                "profiling": False, "fixture": {"tasks": args.items, "task_lists": 12,
+                "profiling": False, "fixture": {"tasks": args.items, "task_lists": args.lists,
                     "notes": 1, "drawings": 1, "folders": 1, "window": "1400x950", "idle_rounds": 3},
                 "scope": "Render-only repeated refresh within existing library, not cross-view switches or save latency",
                 "warm_rounds": args.rounds, "timings": timings, "rounded_container_creations": counts,
@@ -280,8 +299,8 @@ with tempfile.TemporaryDirectory(prefix="glide-library-cards-") as folder:
                 app.refresh_library_page()
                 idle()
                 assert changed(before, cards()) == {("list", first["id"]), ("folder", "perf-folder")}, "neue Überfälligkeit nicht frisch berechnet"
-                assert before[("list", "note-fixture")] is cards()[("list", "note-fixture")]
-                assert before[("list", "drawing-fixture")] is cards()[("list", "drawing-fixture")]
+                assert before[("list", "note-fixture")].surface is cards()[("list", "note-fixture")].surface
+                assert before[("list", "drawing-fixture")].surface is cards()[("list", "drawing-fixture")].surface
             finally:
                 mod.date, mod.datetime = old_day, old_clock
             app.clear_render_cache()

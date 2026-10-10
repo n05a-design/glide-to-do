@@ -1,6 +1,6 @@
 # Prüfungen für Glide
 
-Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · 82 Suiten aus `pruefen.py` und fünf Analysen
+Stand 10.10.2026 · Glide 3.36.0 · Aufgabenformat 23 · 83 Suiten aus `pruefen.py` und fünf Analysen
 
 Alle App-Tests setzen vor dem App-Import einen temporären `GLIDE_DATA_DIR`; echte Nutzerdaten sind ausgeschlossen. Was wann läuft, welche Regeln gelten und welche Suite welchen Bereich abdeckt, steht im [Prüfplan](../docs/05_QA_TESTPLAN.md); Ergebnisse im [QA-Bericht](../docs/07_QA_BERICHT.md).
 
@@ -8,7 +8,7 @@ Alle App-Tests setzen vor dem App-Import einen temporären `GLIDE_DATA_DIR`; ech
 
 | Zweck | Aufruf |
 |---|---|
-| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.35.0/<Name> --timeout 900` |
+| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.36.0/<Name> --timeout 900` |
 | Schnellprüfung | `python3 -B tests/tools/pruefen.py` |
 | CI-Grundstufe (wie GitHub) | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` |
 | Windows | `tests/tools/windows_vollpruefung.cmd` (Anleitung in der [manuellen Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md)) |
@@ -23,7 +23,7 @@ Unter Windows die geprüfte Python-3.14-/Tk-9-Laufzeit oder `windows_vollpruefun
 
 | Ordner | Inhalt |
 |---|---|
-| `integration/` | 82 Integrationssuiten; Liste in `SUITEN` von `tools/pruefen.py` |
+| `integration/` | 83 Integrationssuiten; Liste in `SUITEN` von `tools/pruefen.py` |
 | `unit/` | Unit-Tests der Tk-freien Fachmodule (D17) |
 | `tools/` | Prüfstand, Analysen, Erzeuger für Beispiel-, Release-, Rundgang- und Showcase-Daten, CI-Grundstufe, Ablagegröße ([Übersicht](tools/README.md)) |
 | `fixtures/` | Referenzformate 2 und 4–23, Beispiel- und Releasedaten, Rundgang, Showcase ([Übersicht](fixtures/README.md)) |

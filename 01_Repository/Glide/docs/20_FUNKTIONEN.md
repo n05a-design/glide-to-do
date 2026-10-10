@@ -1,6 +1,6 @@
 # Funktionen – Glide
 
-Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
+Stand 10.10.2026 · Glide 3.36.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
 
 ## Aufgaben im Wissen (3.33.15: G29/G31/G32)
 
@@ -279,7 +279,7 @@ Kennungen erhalten die Beziehung bei Umbenennen, Verschieben, Archiv, Papierkorb
 - **Seiten:** Weitere bewusste Grenzen in den [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md#grenzen-einzelner-funktionen). Ältere Glide-Stände verwerfen die Blockarten `h4`, `toggle`, `toggle_closed`, `callout` (Text bleibt).
 - **Milchglas:** keine echte Durchsicht; beim Scrollen gleichen sich die Flächen erst in der Ruhe an.
 - **Seitenleiste:** jeder Baum scrollt für sich (B1).
-- **Startseite und Einstellungen (Referenz-Mac, 3.33.19, 1.000 Aufgaben):** Eine unveränderte Startseite bleibt stehen (0,2–0,3 ms); ein Neuaufbau, etwa beim Wechsel aus einer Liste, dauert 270–300 ms, das Ziel 150 ms ist nicht erreicht. Das Einstellungsfenster erscheint nach etwa 560 ms. Der Rest ist in beiden Fällen das Zeichnen in Tk ([Nachweis](../tests/qa-3.33.19/tempo_2026-10-09/README.md)); die früheren Angaben 507 ms und 2,1 s stammen aus 3.33.1/3.33.2.
+- **Startseite und Einstellungen (3.36.0):** Änderungen werden in erhaltenen Flächen abgeglichen; Einstellungen werden bei unverändertem Kontext wiederverwendet. Das ursprüngliche Startseiten-Kaltziel ≤ 150 ms wird durch D46 auf ≤ 300 ms bei direktem Start/≤ 500 ms im beobachteten Kindprozessverfahren begrenzt; warm bleibt ≤ 150 ms. Verschiedene Startverfahren werden getrennt ausgewiesen, die langsamere Serie nicht verworfen. Messverfahren und Ergebnisse im [Nachweis](../tests/qa-3.36.0/fundament_vorher_nachher/README.md).
 - **Systemmitteilungen** erscheinen aus Python gestartet unter „Python“, nur aus dem Bundle unter „Glide“.
 - **Tagesstände** der Sicherung: bis zu 14 zusätzliche Dateien im Datenordner (in Cloudordnern zählen sie mit).
 - **Messungen** von Mindestgröße und Kontrast decken Widgets ab, nicht Texte auf Zeichenflächen (Pinnwandkarten, Kalenderzellen, Startseitengrafiken).
@@ -320,8 +320,19 @@ Kein neues Bedienelement, kein neues Datenfeld; Verhalten und Undo bleiben gleic
 
 **Bildlayout in Seiten (P04):** Ränder und Bildflächen werden nur neu berechnet, wenn sich Spalte, Schrift, Design, Faltungen, Bildmenge oder für ein Bild Größe, Modus oder der Text in seinem Umflussbereich ändern – und dann nur für die betroffenen Bilder (reicht ein neuer Bereich bis zum nächsten Bild, auch für dieses). Ein Bild wird nur bei geänderter Darstellung neu gezeichnet; Scrollen platziert nur.
 
-**Startseite (P03r):** Bleiben Datenstand, Einstellungen (ohne Navigationswerte), Design, Tag und Minute, Spaltenzahl, Kachelauswahl und Modus gleich, bleibt die Startseite stehen, statt neu gebaut zu werden – etwa bei der Rückkehr aus einer Liste. Jede Änderung einer dieser Größen baut sie wie bisher vollständig neu.
+**Startseite (P03r):** Bleiben Datenstand, Einstellungen (ohne Navigationswerte), Design, Tag und Minute, Spaltenzahl, Kachelauswahl und Modus gleich, bleibt die Startseite stehen, statt neu gebaut zu werden – etwa bei der Rückkehr aus einer Liste. Seit 3.36.0 gleicht eine Änderung die tatsächlich betroffenen Inhalte ab; unveränderte Flächen behalten ihre Lebensdauer. Eine geänderte Spaltenzahl, Schrift, Design- oder Kachelauswahl verwirft den betroffenen Aufbau. Die Scrollleiste bleibt auch ohne neues Größenereignis bedienbar.
 
 **Einstellungsfenster (E01):** Der Zeilenumbruch der Beschriftungen wird je Spalte in einem Schritt gesetzt statt je Beschriftung; das Fenster erscheint schneller. Grenze: Unter macOS bleibt der Zeichenaufwand von Tk für den Fensterinhalt der größte Anteil.
 
 Pflichtsuite `test_tempo33319.py` (Gegenprobe gegen 3.33.18 rot), Messwerkzeuge `scripts/pflege/zaehlung_aktualisierungen.py`, `messung_bildseite.py`, `messung_startseite.py`, `messung_speicherweg.py`.
+
+
+## Fundament und Tempo 3.36.0 (P03, E01)
+
+**Bibliothek:** Karten behalten ihre Identität über Aufgabenänderungen, Undo und neu geladene Python-Objekte mit denselben Kennungen. Geänderte Titel, Vorschautexte, Titelbilder und Fortschrittsanzeigen werden gezielt aktualisiert; entfernte Elemente verschwinden. Fokusziele, Scrollposition und Reihenfolge bleiben erhalten. Beim Verlassen des Hosts werden die alten Widgets freigegeben. Umordnen bleibt vollständig möglich; eine allgemeine Beschleunigung jeder Bibliotheksaktion wird nicht behauptet.
+
+**Startseite:** Der Builder aktualisiert erhaltene Widgets statt alle Kacheln zu ersetzen. Natürliche Kartenhöhen vermeiden zusätzliche Geometrieschleifen. Tageszahlen und nächste Aufgabe werden nach Abhaken/Undo frisch angezeigt; kumulative Tageszählungen behalten ihr bisheriges Verhalten. Die Scrollleiste folgt dem tatsächlichen Inhalt auch bei unveränderter Geometrie.
+
+**Einstellungen:** Erste Anzeige ≤ 250 ms, erneute Anzeige Median ≤ 150 ms/p95 ≤ 170 ms nach D47 auf dem Referenz-Mac. Ein unveränderter Dialog öffnet erneut mit den gespeicherten Werten; verworfene Eingaben bleiben verworfen. Änderungen an Einstellungen, Design, Schrift oder Listen machen den alten Dialog ungültig. Vorschauen außerhalb des sichtbaren Bereichs werden bei Bedarf aufgebaut. Escape, Abbrechen und Fensterschließen geben Griff und anstehende Rückrufe frei; der zentrale Modalweg bleibt verbindlich.
+
+Neue Darstellungslogik liegt Tk-frei in `render_retention.py`. Pflichtsuite `test_fundament3360.py`, drei getrennte rote Gegenproben gegen 3.35.0 und Lebensdauermessung; kein Formatwechsel. Linux-/Windows-Pflichtmatrix und tatsächliche menschliche Abnahme werden im [QA-Bericht](07_QA_BERICHT.md) getrennt geführt.

@@ -1,6 +1,6 @@
 # Regeln für die Dokumentenpflege
 
-Stand 09.10.2026 · Glide 3.35.0 · Datenformat 23
+Stand 10.10.2026 · Glide 3.36.0 · Datenformat 23
 
 Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder gelöscht anstatt immer nur archiviert und `_Z` zu schreiben“) und ersetzt alle früheren Archivierungsregeln.
 

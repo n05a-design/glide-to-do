@@ -94,6 +94,10 @@ jobs:
       - name: Vollprüfstand Linux
         run: python -B tests/tools/pruefen.py --modus voll --protokoll "$RUNNER_TEMP/integration" --timeout 900
 
+      - name: Kalibrierte Erwartungen gegen Defekte prüfen
+        if: always() && !cancelled()
+        run: python -B tests/tools/linux_gegenproben.py --protokoll "$RUNNER_TEMP/integration/defektgegenproben" --basis-ergebnis "$RUNNER_TEMP/integration/ergebnis.json"
+
       - name: Protokolle sichern
         if: always()
         uses: actions/upload-artifact@v7
@@ -113,6 +117,8 @@ jobs:
       run:
         working-directory: 01_Repository/Glide
     steps:
+      - name: Lange Git-Pfade zulassen
+        run: git config --global core.longpaths true
       - uses: actions/checkout@v7
         with:
           persist-credentials: false

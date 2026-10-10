@@ -211,6 +211,7 @@ MODULLISTEN = (
     "src/glide/README.md",
     "packaging/README.md",
     "packaging/macos/baue_app.py",
+    "scripts/pflege/abgleich_07.py",
 )
 MODULLISTEN_ABLAGE = ("07_Python-Versionen/README.md",)
 

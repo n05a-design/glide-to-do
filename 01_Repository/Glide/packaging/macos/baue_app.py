@@ -44,7 +44,7 @@ REPO = Path(__file__).resolve().parents[2]
 QUELLE = REPO / "src" / "glide"
 DATEIEN = ("app.pyw", "drawing.py", "drawing_image.py", "backdrop.py", "page_markdown.py", "image_preview.py",
            "logo.py", "glide_start.py", "schema_backups.py", "sidebar_policy.py", "svg_geometry.py",
-           "home_tiles.py", "capture_parser.py", "eisenhower.py", "today_view.py", "content_search.py", "save_comparison.py", "view_metrics.py", "action_catalog.py", "ui_design.py", "planning.py", "day_proposal.py", "focus_timer.py", "task_references.py", "interaction_policy.py", "object_references.py", "week_planning.py", "page_features.py", "repeat_rules.py", "routines.py", "runtime_check.py", "release_notes.py", "appearance.py", "preview_tools.py", "filter_explain.py", "exchange_patch.py", "backup_diff.py")
+           "home_tiles.py", "capture_parser.py", "eisenhower.py", "today_view.py", "content_search.py", "save_comparison.py", "view_metrics.py", "action_catalog.py", "ui_design.py", "planning.py", "day_proposal.py", "focus_timer.py", "task_references.py", "interaction_policy.py", "object_references.py", "week_planning.py", "page_features.py", "repeat_rules.py", "routines.py", "runtime_check.py", "release_notes.py", "appearance.py", "preview_tools.py", "filter_explain.py", "exchange_patch.py", "backup_diff.py", "render_retention.py")
 SYMBOL = REPO / "assets" / "icons" / "glide_macos_1024.png"
 
 

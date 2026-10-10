@@ -1,6 +1,6 @@
 # Arbeitsrichtung, Entscheidungen und Abnahme
 
-Stand 10.10.2026 · Glide 3.35.0 · Aufgabenformat 23
+Stand 10.10.2026 · Glide 3.36.0 · Aufgabenformat 23
 
 Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Entscheidungsvorlage vom 01.10.2026 und den Entscheidungslisten vom 25.–30.09.2026 zusammengeführt; deren Wortlaut trägt Git. Am 06.10.2026 um die Leitgedanken des Inhabers aus dem nicht übernommenen Richtungsentwurf vom 03.10.2026 ergänzt. Aufgabenstand und Reihenfolge: [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Technische Regeln: [Architektur](02_ARCHITECTURE.md).
 
@@ -38,7 +38,7 @@ Wortlaute stehen in Anführungszeichen, alles andere ist Zusammenfassung. Was da
 
 ## Verbindliche Entscheidungen
 
-Neue Entscheidungen werden fortlaufend mit Datum und Wortlaut der Antwort eingetragen; nächste freie Nummer D45.
+Neue Entscheidungen werden fortlaufend mit Datum und Wortlaut der Antwort eingetragen; nächste freie Nummer D48.
 
 | Nr. | Entscheidung | Stand |
 |---|---|---|
@@ -82,11 +82,14 @@ Neue Entscheidungen werden fortlaufend mit Datum und Wortlaut der Antwort einget
 | D38 | **10.10.2026, V01 A/V:** überplanten Tag im bestehenden Heute-, Wochen- und Tagesvorschlagsweg entlasten: ausgewählte Aufgaben ausdrücklich auf anderen Tag oder in Vorrat verschieben; Vorher-/Nachher-Bilanz einschließlich ICS-Belegzeiten; keine automatische Verteilung, Fälligkeiten erhalten, ein Undo. Wortlaut: „A/V – Heute, Woche und Tagesvorschlag (Empfehlung)“. | beauftragt nach D44; Umsetzung offen |
 | D39 | **10.10.2026, V02 A/V:** wiederholten Notion-Import erkennen, unveränderte/neue/geänderte Quellen vergleichen; eigene Bearbeitungen als Konflikt zeigen und nur ausdrücklich gewählte Änderungen übernehmen. Dauerhafte Quellenmetadaten mit Formatsicherung/Migration, keine Live-Synchronisation oder stilles Überschreiben. Wortlaut: „A/V – Wiedererkennung und Konfliktvergleich (Empfehlung)“. | beauftragt nach D44; Umsetzung offen |
 | D40 | **10.10.2026, P05 A/1:** nur nachweislich gleiche Texte und Abläufe im angefassten Sprint-Code zusammenführen; kein systematischer Gesamtabgleich oder Architektur-Großumbau. D17 bleibt verbindlich. Wortlaut: „A/1 – gezielt im Sprint-Code (Empfehlung)“. | beauftragt nach D44; Umsetzung offen |
-| D41 | **10.10.2026, LG04 A/V:** Rundungen tangential anschließen und bedeutungsloses Kurzsegment entfernen, Silhouette/Farbe erhalten; zusätzliche Kleingrößenfassung 16/32 px mit breiterem Innenraum. Vorher-/Nachher-Entwürfe vor Masterübernahme vom Inhaber beurteilen lassen. D28 bleibt unabhängig. Wortlaut: „A/V – zusätzlich Kleingrößenfassung“. | ausgewählt; Gestaltungsabnahme vor Übernahme, Umsetzung nach D44 beauftragt |
+| D41 | **10.10.2026, LG04 A/V:** Rundungen tangential anschließen und bedeutungsloses Kurzsegment entfernen, Silhouette/Farbe erhalten; zusätzliche Kleingrößenfassung 16/32 px mit breiterem Innenraum. Vorher-/Nachher-Entwürfe vor Masterübernahme vom Inhaber beurteilen lassen. D28 bleibt unabhängig. Wortlaut: „A/V – zusätzlich Kleingrößenfassung“. | Gestaltungsabnahme D45 erteilt; Umsetzung nach D44 beauftragt |
 | D42 | **10.10.2026, I6/S26-20 A/V:** zusätzliche native Windows-Vollprüfung je Lieferung; vorhandene Windows-/Linux-Sichtprüffälle systematisch nachführen. Mac-Vollprüfung je Lieferung und gewählte Linux-Matrix bleiben verbindlich. Tatsächliche menschliche Bedienung, DPI/Mehrmonitor und VoiceOver/NVDA/Linux-Screenreader als getrennte Abnahmetore, niemals aus grünen Automatiken ableiten. Wortlaut: „A/V – Windows je Lieferung (Empfehlung)“. | ausgewählt; Umsetzung/Prüfung nach D44 beauftragt |
 | D43 | **10.10.2026, Veröffentlichungsrahmen A:** Feature-Sprint mit Entwicklungsartefakten; I1 Inhaberangaben, I2 endgültige Glide-Lizenz, I3 Developer-ID/Windows-Zertifikat, I4 Markenprüfung, I5 systemweite Python-Installation, I9 Fremdbildrechte, I10 Git-Historie umschreiben und I11 öffentlicher GitHub-Auftritt bleiben gesonderte Veröffentlichungstore. Keine öffentliche Releasefreigabe, Käufe, Historienumschreibung oder stillen Bildlöschungen. Gewählte eigenständige Pakete, native Prüfungen und Logo-Master bleiben vollständig im Sprint. Wortlaut: „A – Veröffentlichungstore gesondert offen halten (Empfehlung)“. | für diesen Sprint abgegrenzt; Veröffentlichungstore bleiben offen |
-
 | D44 | **10.10.2026, Gesamtplan bestätigt:** acht Produktionslieferungen 3.36.0, 3.37.0, 3.38.0, 3.39.0, 3.40.0, 3.41.0, 3.42.0 und 4.0.0 mit Umfang, Reihenfolge, Prüfungen und Abnahmetoren nach Entwicklungsplan §15.7/§15.8. Wortlaut: „ja“. Die Umsetzung beginnt; D41-Gestaltungsbeurteilung und tatsächliche Menschen-/Readerabnahme bleiben eigene Tore, Veröffentlichungstore nach D43 gesondert offen. | bestätigt; Phase 2 beauftragt |
+| D45 | **10.10.2026, Logo-Gestaltungsabnahme:** vorgelegter Vergleich des bisherigen Logos mit tangential geglättetem Master und breiterem Innenraum; Normalfassung für alle übrigen Größen, Kleingrößenfassung ausschließlich 16/32 px. Beide Entwürfe zur Umsetzung in 3.37.0 freigegeben; Farbe und Grundform erhalten. [Logo-Vergleich](../../../20_Grafik_Master/05_Inspiration/Glide-Logo-Vergleich-2026-10-10.png), [App-Symbol-Vergleich](../../../20_Grafik_Master/05_Inspiration/Glide-App-Symbol-Vergleich-2026-10-10.png), jeweils auch 512 px. Wortlaut: „A – beide Entwürfe übernehmen (Empfehlung)“. | Gestaltungstor D41 erfüllt; technische Umsetzung offen |
+| D46 | **10.10.2026, P03-Kalt-Ausnahme für Paket 1:** belegte Abweichung vom ursprünglichen Ziel ≤ 150 ms für den Aufbau ohne vorhandene Startseiten-Widgets akzeptiert: ≤ 300 ms bei direktem Start und ≤ 500 ms im beobachteten Kindprozessverfahren. Warmer tatsächlicher Builder weiterhin ≤ 150 ms; sämtliche gewählten Funktionen bleiben enthalten. Vorgelegte Messung: direkt kalt Median/p95 283/286 ms (vorher 802/835), warm 78/90; Kindprozess kalt 487/497. Die langsamere Kindprozessserie bleibt ausgewiesen, ihre Ursache ist nicht abschließend belegt. Wortlaut: „A – belegte Kalt-Ausnahme übernehmen (Empfehlung)“. | Ausnahme akzeptiert; endgültiger Lieferstand und übrige Abnahmetore weiter prüfen |
+
+| D47 | **10.10.2026, E01-Warmgrenze für Paket 1:** erneutes Öffnen der Einstellungen mit Median ≤ 150 ms und p95 ≤ 170 ms akzeptiert; erste Anzeige weiterhin ≤ 250 ms, sämtliche Funktionen unverändert. Vorgelegte endgültige Kandidatenmessung: direkt warm Median/p95 149/155 ms, Kindprozess 149/161 ms, höchster Einzelwert 164 ms; erste Anzeige p95 198 ms. Wortlaut: „A – 150 ms Median / 170 ms p95 akzeptieren (Empfehlung)“. | Ausnahme akzeptiert; reparierten Lieferstand und übrige Abnahmetore weiter prüfen |
 
 **Frühere Antworten, die weiter gelten:**
 

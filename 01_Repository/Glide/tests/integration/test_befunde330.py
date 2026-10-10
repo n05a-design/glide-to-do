@@ -221,8 +221,16 @@ with tempfile.TemporaryDirectory(prefix="glide-befunde-") as ordner:
         ruhe(2)
         assert geoeffnet == [zeichnung], "Referenz ohne Bild öffnet die Auswahl"
         del app.drawing_load_reference
-        svg = app.reference_png_path(str(LOGO / "glide-logo.svg"))
-        assert svg.endswith(".png") and app.read_reference_png(svg).width() > 0
+        if mod.glide_logo.has_svg(root):
+            svg = app.reference_png_path(str(LOGO / "glide-logo.svg"))
+            assert svg.endswith(".png") and app.read_reference_png(svg).width() > 0
+        else:
+            try:
+                app.reference_png_path(str(LOGO / "glide-logo.svg"))
+            except mod.glide_drawing.DrawingFormatError as exc:
+                assert "SVG braucht Tk 9" in str(exc), str(exc)
+            else:
+                raise AssertionError("SVG ohne SVG-Leser muss verständlich abgelehnt werden")
         assert app.reference_png_path(str(LOGO / "glide-logo.png")).endswith("glide-logo.png")
         if app.previews.can_convert():
             jpeg = os.path.join(ordner, "probe.jpg")

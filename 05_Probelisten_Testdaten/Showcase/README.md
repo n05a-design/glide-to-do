@@ -1,6 +1,6 @@
 # Glide · aktiver Showcase
 
-Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23
+Stand 10.10.2026 · Glide 3.36.0 · Aufgabenformat 23
 
 Das fiktive Projekt **Parkquartier** zeigt fertige, bearbeitbare Arbeitsdokumente: Briefing, Abstimmungsnotiz, Aufgabenliste, Bildgalerie, Pixelskizze, Routinen und Projekttagebuch. Die sechs Originalmotive stammen unverändert aus `20_Grafik_Master/06_Beispielbilder`. Sie illustrieren Themen; sie zeigen kein reales Verkaufsobjekt. Personen und Projektangaben sind fiktiv.
 

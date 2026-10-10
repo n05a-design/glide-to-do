@@ -284,13 +284,16 @@ with tempfile.TemporaryDirectory(prefix="glide-tempo-") as ordner:
         app.set_home_view()
         ruhe(0.3)
         assert set(map(str, descendants(app.home_content))) == erste, "Rückkehr ohne Änderung baut nicht neu"
+        flaechen = tuple(app.home_content.winfo_children())
+        texte_vorher = [w.cget("text") for w in descendants(app.home_content) if isinstance(w, mod.tk.Label)]
         aufgabe = listen[0]["items"][1]
         app.toggle_item_done_anywhere(aufgabe["id"])
         ruhe(0.3)
         app.set_home_view()
         ruhe(0.3)
         nach_aenderung = set(map(str, descendants(app.home_content)))
-        assert nach_aenderung != erste, "Datenänderung baut die Startseite neu"
+        assert [w.cget("text") for w in descendants(app.home_content) if isinstance(w, mod.tk.Label)] != texte_vorher, "Datenänderung aktualisiert sichtbare Inhalte"
+        assert tuple(app.home_content.winfo_children()) == flaechen, "Datenänderung erhält Startseitenflächen"
         versteckt = next(key for key in app.home_tile_order() if app.home_tile_visible(key))
         app.set_home_tile_hidden(versteckt, True)
         app.set_home_view()
@@ -304,7 +307,7 @@ with tempfile.TemporaryDirectory(prefix="glide-tempo-") as ordner:
         assert set(map(str, descendants(app.home_content))) != vorher, "Designwechsel baut neu"
         assert app.home_content.cget("bg") == app.theme["bg"]
         app.set_design("light", apply_now=True)
-        pruefungen.append("P03r: Rückkehr ohne Änderung ohne Neuaufbau; Daten, Kachelauswahl und Design bauen neu")
+        pruefungen.append("P03r: Rückkehr ohne Änderung ohne Neuaufbau; Daten aktualisieren Inhalte; Kachelauswahl und Design invalidieren")
 
         # --- E01: Umbruch je Spalte -----------------------------------------
         geprueft = {}

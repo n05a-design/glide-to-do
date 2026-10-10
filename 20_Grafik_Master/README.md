@@ -1,6 +1,6 @@
 # Grafik-Master
 
-Stand 10.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
+Stand 10.10.2026 · Glide 3.36.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
 
 Hier liegen die Quellen des Glide-Logos und alle freigegebenen Exporte. Glide
 selbst und die Paketierung arbeiten mit **Kopien** daraus (siehe unten). Wer
@@ -78,6 +78,8 @@ Glide-Blau ist `rgb(1,133,225)` = `#0185E1`. Ein Archivordner entfällt seit 03.
 - Fast achsparallele Geraden: 0,01° (Oberkante, 504,75 → 330,20), 0,22° (625,34 / 636,52 → 625,27 / 618,56), 0,50° (325,94 / 603,24 → 326,30 / 562,37), 1,05° (611,56 / 108,77 → 578,13 / 109,38), 1,09° (Grundlinie, Punkt 5). Das Paar mit 6,6° und 6,7° (Ober- und Unterkante des unteren Bogens) ist parallel und damit erkennbar gewollt.
 - Kurzsegment: Der Außenumriss endet mit `h-.02`, einem 0,02 Einheiten langen Stück vor dem Schließen.
 - Kleine Größen: Der Innenraum des „g“ ist im Logo bei 54 px 3,6 px breit, im App-Symbol bei 16 px 0,78 px, bei 32 px 1,56 px und bei 48 px 2,34 px. Bei 16 und 32 px läuft er auch geglättet zu; eine Kleingrößenfassung mit breiterem Innenraum wäre eine Option.
+
+**Gestaltungsabnahme 10.10.2026 (D45):** Beide vorgelegten Entwürfe sind freigegeben: tangentiale Rundungsanschlüsse und entfernte Kurzsegmente für den Normalmaster, breiterer Innenraum ausschließlich bei 16/32 px. [Logo-Vergleich](05_Inspiration/Glide-Logo-Vergleich-2026-10-10.png) und [App-Symbol-Vergleich](05_Inspiration/Glide-App-Symbol-Vergleich-2026-10-10.png) zeigen alt/neu sowie 16/32/54/512 px. Die freigegebenen Vektorquellen liegen bis zur Übernahme ebenfalls unter `05_Inspiration`: `Glide-Logo-freigegeben.svg`, `Glide-App-Symbol-freigegeben.svg` sowie beide Fassungen `*-klein-freigegeben.svg`. Bei Lieferung 3.37.0 gehen sie in die regulären Master über; die Entwurfsdateien entfallen dann. Die Produktionsmaster und Ressourcen bleiben bis dahin unverändert. Die Affinity-Datei ist binär und wird nicht still als nachgeführt behauptet; maßgebliche neue SVG-/PNG-Exporte werden bei Übernahme ausgewiesen.
 
 Eine Überarbeitung läuft über „Einen Master ändern“ oben.
 

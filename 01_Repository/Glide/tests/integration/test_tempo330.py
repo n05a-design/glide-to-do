@@ -52,6 +52,7 @@ with tempfile.TemporaryDirectory(prefix="glide-tempo-") as ordner:
     tk, ttk = mod.tk, mod.ttk
     root = tk.Tk()
     root.geometry("1400x950+20+20")
+    touchpad_supported = int(root.tk.call("info", "patchlevel").split(".")[0]) >= 9
     callback_errors = []
     root.report_callback_exception = lambda *error: callback_errors.append(error)
 
@@ -60,22 +61,28 @@ with tempfile.TemporaryDirectory(prefix="glide-tempo-") as ordner:
             root.update_idletasks()
             root.update()
 
-    def bildzeit(widget, sekunden=1.2, schritt=-6, packed=True):
+    def bildzeit(widget, sekunden=1.2, schritt=-6, packed=True, require_scroll=False):
         """Mittlere Zeit je Bild beim dauerhaften Scrollen in ms."""
         widget.update()
         x, y = widget.winfo_width() // 2, widget.winfo_height() // 2
         zeiten, runde = [], 0
+        positions = {widget.yview()}
         ende = time.perf_counter() + sekunden
         while time.perf_counter() < ende:
             richtung = schritt if (runde // 25) % 2 == 0 else -schritt
             start = time.perf_counter()
-            if packed:
+            if packed and touchpad_supported:
                 widget.event_generate("<TouchpadScroll>", delta=richtung & 0xffff, x=x, y=y)
+            elif sys.platform.startswith("linux"):
+                widget.event_generate("<Button-5>" if richtung < 0 else "<Button-4>", x=x, y=y)
             else:
                 widget.event_generate("<MouseWheel>", delta=-120 if richtung < 0 else 120, x=x, y=y)
             root.update()
+            positions.add(widget.yview())
             zeiten.append((time.perf_counter() - start) * 1000)
             runde += 1
+        if require_scroll:
+            assert len(positions) > 1, "Scrollereignisse bewegen die lange Prüfansicht nicht"
         return statistics.mean(zeiten)
 
     # --- Vergleich: reines Tk --------------------------------------------------
@@ -88,7 +95,7 @@ with tempfile.TemporaryDirectory(prefix="glide-tempo-") as ordner:
     baum.bind("<MouseWheel>", lambda e: baum.yview_scroll(-1 if e.delta > 0 else 1, "units") or "break")
     rein.update()
     time.sleep(0.3)
-    grund = bildzeit(baum, packed=False)
+    grund = bildzeit(baum, packed=False, require_scroll=True)
     rein.destroy()
 
     app = mod.ListApp(root)
@@ -99,16 +106,16 @@ with tempfile.TemporaryDirectory(prefix="glide-tempo-") as ordner:
         groesste = max(app.lists, key=lambda e: app.count_items(e.get("items", [])))
         app.set_active_list(groesste["id"])
         ruhe()
-        werte["Liste"] = bildzeit(app.tree, schritt=-48)
+        werte["Liste"] = bildzeit(app.tree, schritt=-48, require_scroll=True)
         app.set_table_view()
         ruhe()
-        werte["Tabelle"] = bildzeit(app.tree, schritt=-48)
+        werte["Tabelle"] = bildzeit(app.tree, schritt=-48, require_scroll=True)
         seite = app.new_page_from_markdown("# Tempo\n\n" + "\n\n".join(
             f"Absatz {i} " + "Text " * 40 for i in range(200)))
         ruhe()
         app.set_active_list(seite["id"])
         ruhe()
-        werte["Seite"] = bildzeit(app.rich_note_editor.text, schritt=-48)
+        werte["Seite"] = bildzeit(app.rich_note_editor.text, schritt=-48, require_scroll=True)
         app.set_design("dark")
         ruhe()
         import backdrop as glide_backdrop  # noqa: E402 – liegt neben app.pyw

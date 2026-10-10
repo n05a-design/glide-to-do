@@ -43,6 +43,10 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
     fehler = []
     root.report_callback_exception = lambda *args: fehler.append(args)
     app = mod.ListApp(root)
+    for source in app.planning_lists():
+        for item in app.walk_items(source.get("items", [])):
+            item["reminder"] = None
+    app.refresh_reminder_status()
     app.settings["view_hints"] = {key: True for key in ("list", "folder", "trash", "in_progress", app.TABLE_VIEW, app.PLAN_DAY_VIEW, app.LABELS_VIEW)}
     app.show_info = app.show_warning = app.show_error = lambda *args, **kwargs: None
 
@@ -98,7 +102,7 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
         app.apply_reminder_badge(0)
         erwartet = ["settings_button", "capture_button", "search_button", "sidebar_toggle_button"]
         def reihenfolge():
-            namen = {str(getattr(app, name)): name for name in erwartet + ["header_overflow_button"]}
+            namen = {str(getattr(app, name)): name for name in erwartet + ["header_overflow_button", "notifications_button"]}
             return [namen.get(str(knopf), str(knopf)) for knopf in app.header_controls.pack_slaves()]
         assert reihenfolge() == erwartet, reihenfolge()
         for breite in (1400, 860, 1400):
@@ -108,6 +112,10 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
         assert reihenfolge() == erwartet, ("nach Dichtewechsel", reihenfolge())
         app._header_density = "minimal"
         app.pack_header_controls()
+        assert reihenfolge()[0] == "header_overflow_button", reihenfolge()
+        app.apply_reminder_badge(2)
+        assert reihenfolge() == ["notifications_button", *erwartet[1:]], reihenfolge()
+        app.apply_reminder_badge(0)
         assert reihenfolge()[0] == "header_overflow_button", reihenfolge()
         app._header_density = None
         app.pack_header_controls()

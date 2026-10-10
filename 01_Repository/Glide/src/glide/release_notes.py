@@ -8,6 +8,10 @@ Nutzer ist bewusst nicht gewählt (N06). „Gelesen“ merkt die Version lokal.
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.36.0": (
+        "Startseite und geänderte Bibliothekskarten werden schneller aktualisiert.",
+        "Die Einstellungen öffnen schneller und verwerfen ungespeicherte Eingaben weiterhin beim Abbrechen.",
+    ),
     "3.33.19": (
         "Schneller: Seiten mit vielen Bildern, die Startseite und das Einstellungsfenster reagieren zügiger.",
         "Weniger Schreibvorgänge je Aktion – gespeichert wird weiterhin sofort.",

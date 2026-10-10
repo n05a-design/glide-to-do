@@ -55,6 +55,12 @@ with tempfile.TemporaryDirectory(prefix="glide-mindestgroesse-") as ordner:
     root.report_callback_exception = lambda *args: fehler.append(args)
     app = mod.ListApp(root)
     app.show_info = app.show_warning = app.show_error = lambda *args, **kwargs: None
+    # Dieser Geometriefall prüft den Überlauf ohne offene Hinweise. Die
+    # relativen Erinnerungen des Beispiels dürfen nicht von der Uhr abhängen.
+    for source in app.planning_lists():
+        for item in app.walk_items(source.get("items", [])):
+            item["reminder"] = None
+    app.refresh_reminder_status()
 
     def ruhe():
         for _ in range(4):
@@ -192,6 +198,13 @@ with tempfile.TemporaryDirectory(prefix="glide-mindestgroesse-") as ordner:
         assert zeilen(app.tree) >= 6.5 and zeilen(app.sidebar_listbox) >= 4.5, (
             zeilen(app.tree), zeilen(app.sidebar_listbox))
         # Ausgeblendete Aktionen bleiben erreichbar: Überlaufmenü der Kopfzeile.
+        assert app.header_overflow_button.winfo_ismapped()
+        app.apply_reminder_badge(2)
+        ruhe()
+        assert app.notifications_button.winfo_ismapped()
+        assert not app.header_overflow_button.winfo_ismapped()
+        app.apply_reminder_badge(0)
+        ruhe()
         assert app.header_overflow_button.winfo_ismapped()
         # Die Kennzahlen unter dem Titel zeigen nur ganze Chips.
         zeile = app.page_chip_row

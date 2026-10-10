@@ -215,15 +215,20 @@ with tempfile.TemporaryDirectory(prefix="glide-planen-") as folder:
                 app.choose_quick_plan("date")
             assert len(app.undo_stack) == count
             chosen = (date.today() + timedelta(days=10)).isoformat()
+            assert a["id"] in app.quick_plan_selection(), ("Auswahl nach Kalenderabbruch verloren", app.quick_plan_selection(), errors)
+            confirmed = []
             def confirm(dialog, parent=None):
+                confirmed.append(True)
                 field = next(w for w in descendants(dialog) if isinstance(w, mod.DueField))
                 field.set_due(chosen)
                 idle()
+                assert field.read() == ((chosen, None), None), (field.read(), chosen, errors)
                 texts = [str(w.cget("text")) for w in descendants(dialog) if isinstance(w, mod.tk.Label)]
                 assert any("frei" in text for text in texts), texts
                 next(w for w in descendants(dialog) if isinstance(w, mod.RoundedButton) and w.text == "Übernehmen").command()
             with patch.object(app, "run_modal", confirm): app.choose_quick_plan("date")
-            assert fresh(a["id"])["planned_date"] == chosen
+            assert confirmed, ("Kalender zum Bestätigen nicht geöffnet", app.quick_plan_selection(), errors)
+            assert fresh(a["id"])["planned_date"] == chosen, (fresh(a["id"])["planned_date"], chosen, errors)
             app.undo_last_change(); idle()
             # Real drag bindings announce projected capacity at minimum size.
             root.geometry("860x700+20+20")

@@ -1,6 +1,6 @@
 # Daten, Backups und Migration – Glide
 
-Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2 · Austauschformat 1 (Änderungsvorschläge 2)
+Stand 10.10.2026 · Glide 3.36.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2 · Austauschformat 1 (Änderungsvorschläge 2)
 
 Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag 52) ergänzt und um die Verweise auf gelöschte Einzelverträge bereinigt; die Vorfassungen trägt Git. Formate 4–23 und Legacy 2 bleiben lesbar.
 
