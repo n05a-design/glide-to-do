@@ -1,6 +1,6 @@
 # Arbeitsbegleiter und Markenfigur – Konzept und Formatentscheidung
 
-Stand 10.10.2026 · Glide 3.36.0 · pflegbarer Begleiter auf der Startseite, stiller Auftritt in Leerzuständen, Assets offen
+Stand 10.10.2026 · Glide 3.37.0 · pflegbarer Begleiter auf der Startseite, stiller Auftritt in Leerzuständen, Assets offen
 
 Punkt 21 des Auftrags vom 18.09.2026, fortgeschrieben mit Punkt 2 des
 Startseitenabschnitts vom 19.09.2026. Diese Entscheidung ist nach Regel 4 der

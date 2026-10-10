@@ -99,7 +99,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     app = mod.ListApp(root)
     root.update_idletasks()
 
-    assert mod.APP_VERSION == "3.36.0"
+    assert mod.APP_VERSION == "3.37.0"
     assert (REPOSITORY_ROOT / "VERSION").read_text(encoding="utf-8").strip() == mod.APP_VERSION
     assert len([entry for entry in app.lists if entry.get("system_role") == "inbox"]) == 1
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
@@ -3475,7 +3475,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
         assert symbol, symbol_name
         assert "\uFE0F" not in symbol
         assert all(ord(char) < 0x1F000 for char in symbol) or (symbol_name == "trash" and symbol == "\U0001F5D1")
-    assert app.ICONS["attachment"] == "⊕"
+    assert app.ICONS["attachment"] and app.ICONS["attachment"] != app.ICONS["remove"]
     assert app.DUE_COLUMN_ICON == app.ICONS["calendar"]
     assert app.LABEL_COLUMN_ICON == app.ICONS["labels"]
 

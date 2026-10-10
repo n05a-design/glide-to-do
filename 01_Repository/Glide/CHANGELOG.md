@@ -1,5 +1,13 @@
 # Änderungsverlauf
 
+## 3.37.0 – Logo und Symbole (10.10.2026)
+
+- **Logo unter Tk 8.6:** Ein Tk-freier Rasterweg mit Alpha-Zwischentönen ersetzt den ungeglätteten Canvas-Rückfall; die Akzentfarbe bleibt zur Laufzeit wählbar. Tk 9 nutzt weiter SVG.
+- **App-Symbole:** Vorberechnete PNGs in genau 16/32/64/256 px vermeiden Laden und ungefiltertes Verkleinern des großen PNG. Windows-/Linux- und macOS-Ränder werden getrennt berücksichtigt.
+- **Freigegebene Master (D45):** Tangentiale Rundungsanschlüsse und entferntes Kurzsegment; breiterer Innenraum ausschließlich bei 16/32 px. Reguläre SVG-Quellen und Exporte ersetzen die Entwurfsquellen; die binäre Affinity-Datei bleibt als nicht nachgeführt gekennzeichnet.
+- **Gesamte ICONS-Tabelle:** Auswahl nach tatsächlicher Abdeckung in normalem und fettem UI-Schriftschnitt; lesbare deutsche Kurztexte bei fehlenden Zeichen. Kopfzeilenknöpfe berücksichtigen die Textbreite. Pixel-Kachelköpfe setzen Symbol und Pixelschrift getrennt. Beschriftungen, Aktionskennungen und Tastaturwege bleiben erhalten.
+- **Prüfung:** Pflichtsuite `test_logo3370.py` mit getrennten Gegenproben gegen 3.36.0, Raster-/PNG-, Geometrie- und Symbolregeln mit Unit-Tests; kein Formatwechsel und keine zusätzliche Laufzeitbibliothek. Native Vollprüfungen und menschliche Sicht-/DPI-Abnahme getrennt ausweisen.
+
 ## 3.36.0 – Fundament und Tempo (10.10.2026)
 
 - **P03 Startseite:** Geänderte Inhalte werden in erhaltenen Flächen abgeglichen; natürliche Kartenhöhen vermeiden zusätzliche Layoutschleifen. Der tatsächliche Builder wird warm und kalt gemessen, keine Cachetreffer als Neuaufbau gezählt. Kalt-Ausnahme D46: ≤ 300 ms bei direktem Start und ≤ 500 ms im beobachteten Kindprozessverfahren, warm weiterhin ≤ 150 ms. Ansichtswechsel und erneuter Abgleich erhalten die bedienbare Scrollleiste.

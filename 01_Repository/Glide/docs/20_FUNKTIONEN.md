@@ -1,6 +1,6 @@
 # Funktionen – Glide
 
-Stand 10.10.2026 · Glide 3.36.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
+Stand 11.10.2026 · Glide 3.37.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
 
 ## Aufgaben im Wissen (3.33.15: G29/G31/G32)
 
@@ -272,7 +272,7 @@ Kennungen erhalten die Beziehung bei Umbenennen, Verschieben, Archiv, Papierkorb
 
 - **Plattformen:** Native Windows-Vollprüfung 3.36.0 mit Python 3.14.7/Tk 9.0.4, Referenz-Mac-Vollprüfung und Bundle 3.36.0 mit Python 3.14.5/Tk 9.0.3 sowie Linux/Xvfb-Vollprüfung mit Python 3.14.8/Tk 8.6 grün. Physische Systemmitteilungen, Explorer-/Finder-Ziehen, DPI/Mehrmonitor und Screenreader brauchen weiter die manuelle Prüfliste. Ein vollständiger Tk-8.6-Lauf ist kein Nachweis aller Tk-9-Funktionen; aktueller Status im [QA-Bericht](07_QA_BERICHT.md).
 - **Mindestlaufzeit (3.33.20, AB08):** Python älter als 3.12 oder Tk älter als 8.6 weist Glide vor jedem Datenzugriff mit einer verständlichen Meldung ab (`runtime_check.py`, über `glide_start.py` und `main`); Python 3.12/3.13 und Tk 8.6 starten mit den bekannten Einschränkungen.
-- **Logo und Programmsymbol unter Tk 8.6:** Ohne SVG zeichnet Glide das Logo als Leinwandfläche; unter Windows und X11 ist sie ungeglättet und treppig. Das Fenster- und Taskleistensymbol wird ohne Filterung verkleinert. Ab Python 3.14/Tk 9 sind beide glatt (Windows-Aufnahme 05.10.2026). Lösungswege und offene Auswahl: [Diagnose](diagnosen/LOGO_KANTENGLAETTUNG.md), Entwicklungsplan LG01–LG04.
+- **Logo und Programmsymbol unter Tk 8.6 (seit 3.37.0):** Das Logo wird als transparentes geglättetes PNG in der gewählten Höhe und Akzentfarbe gerechnet. App-Symbole laden ausschließlich passende 16/32/64/256-px-PNGs; kein großes PNG und kein ungefiltertes Verkleinern. Tk 9 liest weiterhin SVG. Tatsächliche native Sicht-/DPI-Abnahme steht getrennt im QA-Bericht.
 - **Seitenleistentitel unter Windows:** In der Aufnahme vom 05.10.2026 (Tk 9.0.4) stehen gekürzte Titel rechts um etwa ein Zeichen angeschnitten, ohne „…“ (Vorbefund W01, Sichtprüfung offen).
 - **Vorschauen:** unterstützte Formate je System in den [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md#grenzen-einzelner-funktionen). Unter Linux wandelt seit 3.34.0 (N08) ein vorhandenes Systemwerkzeug für die Vorschau um – `gdk-pixbuf-thumbnailer` (JPEG, WebP, TIFF, BMP …) oder `djpeg` (nur JPEG, verkleinert in den Stufen von libjpeg); ohne Werkzeug bleibt der Platzhalter mit Endung. Glide bringt dafür nichts mit; geprüft ist der Weg auf dem Mac mit erzwungener Linux-Wahl, eine Sichtprüfung unter Linux steht aus. SVG unter Tk 8.6 bleibt ohne Vorschau. Die Großansicht vergrößert kleine Bilder nicht.
 - **Bilder in Seiten:** Umfluss über Ränder nachgebildet; oben am Textfeld bis zu 18 px Versatz beim Scrollen. Ein Bild weicht einem vorigen nach unten aus; dadurch kann Text zwischen zwei Bildern mehr Abstand bekommen, als die Zeile selbst braucht.
@@ -336,3 +336,14 @@ Pflichtsuite `test_tempo33319.py` (Gegenprobe gegen 3.33.18 rot), Messwerkzeuge 
 **Einstellungen:** Erste Anzeige ≤ 250 ms, erneute Anzeige Median ≤ 150 ms/p95 ≤ 170 ms nach D47 auf dem Referenz-Mac. Ein unveränderter Dialog öffnet erneut mit den gespeicherten Werten; verworfene Eingaben bleiben verworfen. Änderungen an Einstellungen, Design, Schrift oder Listen machen den alten Dialog ungültig. Vorschauen außerhalb des sichtbaren Bereichs werden bei Bedarf aufgebaut. Escape, Abbrechen und Fensterschließen geben Griff und anstehende Rückrufe frei; der zentrale Modalweg bleibt verbindlich.
 
 Neue Darstellungslogik liegt Tk-frei in `render_retention.py`. Pflichtsuite `test_fundament3360.py`, drei getrennte rote Gegenproben gegen 3.35.0 und Lebensdauermessung; kein Formatwechsel. Linux-/Windows-Pflichtmatrix und tatsächliche menschliche Abnahme werden im [QA-Bericht](07_QA_BERICHT.md) getrennt geführt.
+
+
+## Logo und Oberflächensymbole 3.37.0
+
+Die freigegebenen Normalmaster erhalten tangentiale Kurvenanschlüsse und verlieren das bedeutungslose Kurzsegment. Nur 16/32 px verwenden den eigenen Master mit breiterem Innenraum. Farbe und Grundform bleiben erhalten. SVG-/PNG-Quellen und reguläre Exporte stehen im [Grafik-Master](../../../20_Grafik_Master/README.md). Die Affinity-Datei ist nicht nachgeführt.
+
+`logo_raster.py` berechnet die Flächenabdeckung nach der Gerade-Ungerade-Füllregel und erzeugt ein RGBA-PNG nur mit der Standardbibliothek. Die Alpha-Maske wird unabhängig von der Farbe begrenzt zwischengespeichert; DPI-/Größenwechsel erhalten die genaue Zielhöhe.
+
+Die vollständige `ICONS`-Tabelle wird gegen normale und fette Schnitte der tatsächlich gewählten UI-Schrift geprüft. Fehlt ein Zeichen, wird ein lesbarer Text aus derselben Schrift verwendet. Suche und Drucken tragen kurze deutsche Texte; Meldungen ein Ausrufezeichen. Unterschiedliche Aktionen behalten unterschiedliche Text-Rückfälle. Pixel-Kachelköpfe führen Symbole in der UI-Schrift und Überschriften in Pixelify Sans. Tastatur, Hinweise, Beschriftungen und stabile Aktionskennungen bleiben erhalten.
+
+Pflichtsuite `test_logo3370.py`: Glättung/Farbe/Innenraum über echten Logo-Aufrufer, exakte App-Symbole ohne großen PNG-Ladeweg und Schriftabdeckung einschließlich Suche und Pixel-Kopf. Physische Plattform-/DPI-Sichtprüfung bleibt gesonderte Abnahme.

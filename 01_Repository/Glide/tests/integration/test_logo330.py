@@ -1,7 +1,7 @@
 """Logo, Lupe und Programmsymbol (Auftrag vom 29.09.2026).
 
 - Das Logo kommt aus den SVG-Mastern in `resources/logo` und trägt die
-  Akzentfarbe der Oberfläche; ohne SVG (Tk 8.6) wird es als Fläche gezeichnet.
+  Akzentfarbe der Oberfläche; ohne SVG (Tk 8.6) entsteht ein transparentes, geglättetes PNG.
 - In der Kopfzeile steht es ab der ersten Breitenstufe links neben Titel und
   Unterzeile und rückt beide nach rechts; bei schmalem Fenster weicht es.
 - Es steht in jeder Ansicht an derselben Stelle, „Über Glide“ zeigt es groß.
@@ -110,7 +110,7 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
             assert rendered.transparency_get(round((410 - bx) * 80 / bh), round((280 - by) * 80 / bh))
         # --- Programmsymbol ---------------------------------------------------
         assert getattr(root, "_glide_icons", None), "Fenster trägt das App-Symbol"
-        assert [bild.width() for bild in root._glide_icons] == [256, 64, 32, 16] or not svg_da
+        assert [(bild.width(), bild.height()) for bild in root._glide_icons] == [(n, n) for n in (256, 64, 32, 16)]
         klein = app.app_icon_photo(16)
         assert klein.width() == 16 and klein.height() == 16
 
@@ -179,20 +179,21 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
         ruhe(16)
         assert app.header_logo.winfo_ismapped() and lage(app.header_logo)[0] == zeichen[0]
 
-        # --- Rückfall ohne SVG (Tk 8.6): gezeichnete Fläche --------------------
+        # --- Rückfall ohne SVG (Tk 8.6): geglättetes transparentes Bild ---------
         leinwand = mod.tk.Canvas(root)
         echt_svg = logo.has_svg
         logo.has_svg = lambda master: False
         try:
-            assert logo.logo_photo(leinwand, 40) is None
+            photo = logo.logo_photo(leinwand, 40)
+            assert photo is not None and photo.height() == 40, "Geglätteter PNG-Rückfall fehlt"
             breite = app.draw_logo(leinwand, 50, "#AB12CD")
             flaechen = leinwand.find_withtag("logo")
-            assert flaechen and leinwand.type(flaechen[0]) == "polygon", flaechen
-            assert leinwand.itemcget(flaechen[0], "fill").upper() == "#AB12CD"
+            assert flaechen and leinwand.type(flaechen[0]) == "image", flaechen
+            assert nahe(logo_farbe(leinwand), "#AB12CD")
             box = leinwand.bbox("logo")
             assert abs((box[3] - box[1]) - 50) <= 2 and abs((box[2] - box[0]) - breite) <= 2, (box, breite)
             png_symbole = logo.icon_photos(root, (32,))
-            assert png_symbole and png_symbole[0].width() <= 40, "App-Symbol aus dem PNG"
+            assert png_symbole and (png_symbole[0].width(), png_symbole[0].height()) == (32, 32), "App-Symbol aus passendem 32-px-PNG"
         finally:
             logo.has_svg = echt_svg
             leinwand.destroy()
@@ -235,7 +236,7 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
         assert geoeffnet, "Klick auf das Logo"
 
         # --- Lupe: globale Suche ----------------------------------------------
-        assert app.ICONS["search"] == "⌕" and app.search_button.text == app.ICONS["search"]
+        assert app.search_button.text == app.ICONS["search"] and app.ICONS["search"], "Beschriftete Suche aus ICONS"
         reihe = [str(knopf) for knopf in app.header_controls.pack_slaves()]
         assert str(app.search_button) in reihe and str(app.actions_button) not in reihe
         assert len(reihe) <= 4, "Gemeinsame Palette in der Kopfzeile"

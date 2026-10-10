@@ -66,8 +66,8 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
         # --- Kopfzeile ---------------------------------------------------------
         app.set_active_list(normal["id"])
         ruhe()
-        assert app.actions_button.text == app.ICONS["actions"] == "⌘"
-        assert app.capture_button.text == app.ICONS["capture"] == "↯"
+        assert app.actions_button.text == app.ICONS["actions"] and app.ICONS["actions"]
+        assert app.capture_button.text == app.ICONS["capture"] and app.ICONS["capture"]
         assert len({app.ICONS[key] for key in ("capture", "edit", "actions", "list", "history", "notifications")}) == 6
         assert app.notifications_button.text.startswith(app.ICONS["notifications"])
         assert app.ICONS["actions"] != app.ICONS["list"], "ein Zeichen, eine Bedeutung"

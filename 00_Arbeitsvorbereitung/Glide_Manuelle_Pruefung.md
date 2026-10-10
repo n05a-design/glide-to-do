@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 10.10.2026 · Glide 3.36.0 · Aufgabenformat 23 · manuelle Sitzungen offen; B1 automatisch geprüft
+Stand 10.10.2026 · Glide 3.37.0 · Aufgabenformat 23 · manuelle Sitzungen offen; B1 automatisch geprüft
 
 Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt am 03.10.2026 aus der fortgeschriebenen Prüfliste (Ursprung 3.30.0, enthielt die Listen 3.28 und 3.29) und der Windows-Anleitung; die Zuordnung der 201 Ausgangspunkte trägt Git. Automatisch geprüft ist die Logik ([Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)); offen bleiben Handgefühl, Plattformen und fremde Programme.
 
@@ -189,6 +189,8 @@ Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt a
 
 - [ ] **A28 Fundament/Tempo 3.36.0:** Wege des Sprintnachlaufs am Anfang dieses Dokuments mit echter Maus/Trackpad/Tastatur prüfen; besonders Kartenänderung/Undo bei weit gescrollter Bibliothek und Einstellungen nach Abbrechen/Design-/Schriftwechsel.
 
+- [ ] **A29 Logo/Symbole 3.37.0:** B5 auf dem Mac durchführen, Hell/Dunkel/Pixel, große Schrift und Mindestfenster. Suchknopf und zugehöriges Kürzel öffnen dieselbe Suche; Symbole in Kachelköpfen bleiben lesbar.
+
 ## B. Windows-PC (nach der Vollprüfung)
 
 - [ ] **B0 Windows-Vollprüfung – Anleitung**
@@ -288,6 +290,8 @@ Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Wind
 
 - [ ] **B1j Fundament/Tempo 3.36.0:** A28 und Sprintnachlauf am Anfang dieses Dokuments unter Windows prüfen; zusätzlich vorhandene W01/W06–W08 sichtbar nachstellen. Grüner CI-Lauf ersetzt die Bedienabnahme nicht.
 
+- [ ] **B1k Logo/Symbole 3.37.0:** B5 nach grünem nativem Volllauf durchführen; DPI-/Mehrmonitorprobe B4 bleibt getrennt erforderlich.
+
 - [ ] **B2 Windows-Bestand (Format 17, Inhaberprobe):** Eine unveränderte
       Kopie des eigenen Bestands in einer getrennten Testablage mit
       `GLIDE_DATA_DIR` und aktueller Fassung aus `07_Python-Versionen` öffnen.
@@ -301,13 +305,9 @@ Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Wind
       Umlaute und ß korrekt.
 - [ ] **B4 Skalierung:** 100, 150 und 200 % sowie zwei Monitore. Logo,
       Pixelsymbole und Zeichnungen sind scharf.
-- [ ] **B5 Logo und Lupe:**
-  - Mit Python 3.14 (Tk 9) ist das Logo glatt, auch bei 150 und 200 %; mit
-    3.13 (Tk 8.6) ist es eine Fläche mit harten Kanten, Fenster- und
-    Taskleistensymbol sind dann ebenfalls treppig. Ursache und Lösungswege:
-    [Diagnose](../01_Repository/Glide/docs/diagnosen/LOGO_KANTENGLAETTUNG.md).
-  - Die Lupe ⌕ ist lesbar; bitte notieren, aus welcher Schrift sie kommt
-    (`tests/tools/symbolpruefung.py`).
+- [ ] **B5 Logo und Oberflächenzeichen (3.37.0):**
+  - Tk 9 nutzt SVG, Tk 8.6 geglättete transparente Bilder. Logo bei 100/150/200 % und mit anderer Akzentfarbe beurteilen; Innenraum bleibt offen. Taskleisten-/Fenstersymbol in 16/32 px mit Kleinmaster, größere Symbole mit Normalmaster prüfen.
+  - Gesamte Symboltabelle, insbesondere Suche, Design und Drucken, in der eingestellten UI-Schrift beurteilen. Fehlende Zeichen erscheinen als kurze lesbare Beschriftung. `tests/tools/symbolpruefung.py` meldet die tatsächlich aufgelöste Tabelle in normalem/fettem Schnitt; Größe/Ausrichtung zusätzlich am Gerät prüfen.
 - [ ] **B6 Startmenü-Verknüpfung:**
   `powershell -ExecutionPolicy Bypass -File packaging\windows\verknuepfung_anlegen.ps1`.
   - „Glide“ mit Glide-Symbol erscheint im Startmenü.

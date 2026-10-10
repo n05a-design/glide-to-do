@@ -1,6 +1,6 @@
 # Grafik-Master
 
-Stand 10.10.2026 · Glide 3.36.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
+Stand 10.10.2026 · Glide 3.37.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
 
 Hier liegen die Quellen des Glide-Logos und alle freigegebenen Exporte. Glide
 selbst und die Paketierung arbeiten mit **Kopien** daraus (siehe unten). Wer
@@ -12,7 +12,7 @@ einen Master ändert, erneuert danach die Kopien.
 |---|---|---|
 | `01_Logo` | `Glide-Logo-01.svg` und `Glide-Logo.png`: das Zeichen allein, eine Fläche in Glide-Blau | Kopfzeile, „Über Glide“ und Startfenster, dort in der Akzentfarbe der Oberfläche |
 | `03_Fav-Icon` | `App-Icon-transparent-02.svg` und `App-Icon-transparent.png`: blaue Fläche mit ausgespartem Zeichen | aktuelles Programmsymbol, Basis für Dock, Taskleiste, Installer und Website |
-| `04_Affinity` | `Glide-Logo.af`: die Arbeitsdatei aller Exporte | Quelle |
+| `04_Affinity` | `Glide-Logo.af`: frühere binäre Arbeitsdatei, nicht auf D45 nachgeführt | reguläre SVGs sind seit 3.37.0 maßgeblich |
 | `05_Inspiration` | Stilvorlagen und Skizzen, darunter `Glide-Logo-Position.png` (Skizze der Logoposition vom 29.09.2026) und `Inspiration für Glide.png` | Belege, keine Programmdateien |
 | `06_Beispielbilder` | Motive für Showcase und Arbeitsdokumente | siehe unten |
 
@@ -22,66 +22,61 @@ Glide-Blau ist `rgb(1,133,225)` = `#0185E1`. Ein Archivordner entfällt seit 03.
 
 **Ausgewählte Oberflächenreferenz (10.10.2026, D21):** [Glide-Oberflaeche-Referenz.png](05_Inspiration/Glide-Oberflaeche-Referenz.png), Bild 1 aus drei unabhängig erzeugten Entwürfen. Mit dem integrierten Image-Gen-Werkzeug aus vier eigenen Glide-Fensteraufnahmen mit künstlichen Daten erzeugt. Herkunft, Promptvorgaben, bekannte Abweichungen und Bindung an die native Tk-Oberfläche stehen im [Entwicklungsplan §15.4](../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#154-referenzentwürfe-und-zweite-auswahlrunde-10102026). Gestaltungsgrundlage für die ausgewählten Funktionen, keine Programmressource oder bereits abgenommene Oberfläche.
 
-## Was die App daraus macht (seit 29.09.2026)
+## Freigegebene Master und Laufzeit (3.37.0)
 
-- **Laufzeit:** `01_Repository/Glide/src/glide/resources/logo/` enthält
-  unveränderte Kopien:
-  - `glide-logo.svg` aus `01_Logo/Glide-Logo-01.svg`, PNG aus `01_Logo/Glide-Logo.png`;
-  - `glide-app-icon.svg` aus `03_Fav-Icon/App-Icon-transparent-02.svg`, PNG aus `03_Fav-Icon/App-Icon-transparent.png`.
+D45 vom 10.10.2026 gibt den geglätteten Normalmaster und eigene Kleinfassungen
+frei: Rundungsanschlüsse sind tangential, das bedeutungslose Kurzsegment
+entfällt. Ausschließlich 16/32 px verwenden den breiteren Innenraum.
+Grundform und Glide-Blau bleiben erhalten. Die [Logo-Vergleichstafel](05_Inspiration/Glide-Logo-Vergleich-2026-10-10.png)
+und die [App-Symbol-Vergleichstafel](05_Inspiration/Glide-App-Symbol-Vergleich-2026-10-10.png)
+bleiben der Abnahmebeleg; die übernommenen Entwurfs-SVGs entfallen.
 
-  Das Modul `logo.py` liest sie ein.
-- **Warum SVG:** Tk 9 rechnet SVG in jeder Größe scharf. Für die Akzentfarbe
-  ersetzt Glide die Füllfarbe `#0185e1` (auch ältere RGB-Schreibweise möglich), bevor das Bild
-  entsteht. Die gewählte Variante verwendet direkte Attribute; CSS-Exporte werden ebenfalls verarbeitet. Unter
-  Tk 8.6 (ohne SVG) zeichnet Glide dasselbe Zeichen als Leinwandfläche;
-  unter Windows und X11 bleibt sie ungeglättet. Als Programmsymbol lädt Glide
-  dort nur das PNG des App-Icons und verkleinert es ohne Filterung.
-  `glide-logo.png` verwendet die Laufzeit nicht. Ursache und Lösungswege:
-  [Diagnose](../01_Repository/Glide/docs/diagnosen/LOGO_KANTENGLAETTUNG.md).
-- **Paketierung:** `packaging/baue_symbole.py` erzeugt aus dem App-Icon unter
-  `01_Repository/Glide/assets/icons/`:
-  - `glide.ico` für Windows (16 bis 256 px);
-  - `glide_macos_1024.png` für macOS, mit Apples Rand;
-  - `glide_512.png` für Linux und Stores.
+| Reguläre Quelle | Unveränderte Laufzeitkopie in `src/glide/resources/logo` |
+|---|---|
+| `01_Logo/Glide-Logo-01.svg` | `glide-logo.svg` |
+| `01_Logo/Glide-Logo-klein.svg` | `glide-logo-klein.svg` |
+| `03_Fav-Icon/App-Icon-transparent-02.svg` | `glide-app-icon.svg` |
+| `03_Fav-Icon/App-Icon-klein.svg` | `glide-app-icon-klein.svg` |
+| `01_Logo/Glide-Logo.png` | `glide-logo.png` |
+| `03_Fav-Icon/App-Icon-transparent.png` | `glide-app-icon.png` |
 
-  Das macOS-Bundle und die Windows-Verknüpfung nehmen diese Dateien.
+Die binäre Arbeitsdatei `04_Affinity/Glide-Logo.af` ist **nicht nachgeführt**.
+Für den freigegebenen Stand sind die vier regulären SVGs maßgeblich.
+Andere vorhandene Varianten sind keine aktuelle Laufzeitquelle.
 
-## Einen Master ändern
+- **Tk 9:** natives SVG, im Logo mit der aktuellen Akzentfarbe. Die Farbe
+  `#0185e1` wird vor dem Rendern ersetzt; keine zusätzliche Bildbibliothek.
+- **Tk 8.6:** Logo als transparentes RGBA-PNG in genauer Höhe und Akzentfarbe,
+  mit Flächenabdeckung und Gerade-Ungerade-Füllregel aus `logo_raster.py`.
+  Der alte ungeglättete Canvas-Weg ist nicht mehr der Anzeige-Rückfall.
+- **App-Symbole:** passende PNGs in exakt 16/32/64/256 px, jeweils randlos
+  für Windows/Linux und mit macOS-Rand. Tk 8.6 lädt diese Dateien direkt;
+  das große PNG und ungefiltertes `subsample` entfallen im Startweg.
+- **Paketierung:** `packaging/baue_symbole.py` schreibt `assets/icons/glide.ico`
+  (16/24/32/48/64/128/256), `glide_macos_1024.png` und `glide_512.png`.
+  ICO und ICNS verwenden bei 16/32 px den freigegebenen Kleinmaster.
+  Allgemeine PNG-Exporte bleiben für Dateiverwendung verfügbar; das Logo
+  ist dabei auf seinen Zeichenrahmen zugeschnitten, das App-Symbol quadratisch.
 
-1. In `04_Affinity/Glide-Logo.af` ändern und wie bisher als SVG und PNG
-   exportieren. Beim Logo muss es bei **einer** Füllfarbe `rgb(1,133,225)`
-   bleiben. Sonst lässt sich die Akzentfarbe nicht mehr einsetzen, und
-   `test_logo330` meldet es.
-2. PNGs quadratisch exportieren. Die aktuellen PNG-Master vom 01.10.2026 haben 3509 × 3508 Pixel; die SVG-ViewBox ist quadratisch. Die Paketierung leitet ihre Zielgrößen aus SVG ab.
-3. Die geänderte Datei nach `src/glide/resources/logo/` kopieren (Namen siehe
-   oben) und `python3 packaging/baue_symbole.py` im Ordner
-   `01_Repository/Glide` ausführen.
-4. `python3 tests/integration/test_logo330.py` ausführen und danach den Stand
-   nach `07_Python-Versionen` übernehmen.
+## Master und Exporte nachführen
 
-## Befunde am Logo-Master (05.10.2026, Entscheidung beim Inhaber)
+1. Den richtigen regulären SVG-Master bearbeiten. Das Logo bleibt eine
+   einfarbige Fläche in `#0185E1`; Kleinmaster ausschließlich für 16/32 px.
+2. SVGs unverändert in die oben genannten Laufzeitpfade kopieren.
+3. Unter Python 3.14/Tk 9 im Ordner `01_Repository/Glide` erzeugen:
 
-`01_Logo/Glide-Logo-01.svg` ist ein sauberer Einzelpfad mit gerade-ungerade-Füllregel und für die Darstellung unkritisch. Die folgenden Konstruktionsdetails werden erst in großen Größen (512/1024 px, Druck) sichtbar. Ob sie gewollt sind, entscheidet der Inhaber (Entwicklungsplan LG04).
+   ```sh
+   python3 -B packaging/baue_symbole.py --ressourcen-ziel src/glide/resources/logo
+   ```
 
-**Nicht tangentiale Übergänge** (Master-Einheiten, viewBox 841,89):
-
-| Punkt | Lage x / y | Übergang | Knick |
-|---|---|---|---|
-| 1 | 342,74 / 621,76 | um 4,3° geneigte Gerade → Rundung | 5,9° |
-| 2 | 325,94 / 603,24 | Rundung → Gerade | 3,5° |
-| 3 | 608,11 / 601,85 | Rundung → Gerade | 2,9° |
-| 4 | 525,70 / 475,61 | um 2,6° geneigte Gerade → Rundung | 2,6° |
-| 5 | 344,45 / 720,37 | Grundlinie: waagerechtes Stück → um 1,1° steigende Gerade | 1,1° |
-| 6 | 561,92 / 124,93 | Rundung → Gerade (Ansatz oben rechts) | 7,3° |
-
-- Weitere Knicke von 0,5–2,7° bei 516,11 / 484,28, 319,63 / 461,24, 326,30 / 562,37, 335,93 / 554,20, 529,95 / 576,66 und 621,39 / 195,69. Muster: Die Rundungen sind tangential zu achsparallelen Kanten angelegt; die anschließenden Geraden wurden geneigt, ohne die Rundungen nachzuführen.
-- Fast achsparallele Geraden: 0,01° (Oberkante, 504,75 → 330,20), 0,22° (625,34 / 636,52 → 625,27 / 618,56), 0,50° (325,94 / 603,24 → 326,30 / 562,37), 1,05° (611,56 / 108,77 → 578,13 / 109,38), 1,09° (Grundlinie, Punkt 5). Das Paar mit 6,6° und 6,7° (Ober- und Unterkante des unteren Bogens) ist parallel und damit erkennbar gewollt.
-- Kurzsegment: Der Außenumriss endet mit `h-.02`, einem 0,02 Einheiten langen Stück vor dem Schließen.
-- Kleine Größen: Der Innenraum des „g“ ist im Logo bei 54 px 3,6 px breit, im App-Symbol bei 16 px 0,78 px, bei 32 px 1,56 px und bei 48 px 2,34 px. Bei 16 und 32 px läuft er auch geglättet zu; eine Kleingrößenfassung mit breiterem Innenraum wäre eine Option.
-
-**Gestaltungsabnahme 10.10.2026 (D45):** Beide vorgelegten Entwürfe sind freigegeben: tangentiale Rundungsanschlüsse und entfernte Kurzsegmente für den Normalmaster, breiterer Innenraum ausschließlich bei 16/32 px. [Logo-Vergleich](05_Inspiration/Glide-Logo-Vergleich-2026-10-10.png) und [App-Symbol-Vergleich](05_Inspiration/Glide-App-Symbol-Vergleich-2026-10-10.png) zeigen alt/neu sowie 16/32/54/512 px. Die freigegebenen Vektorquellen liegen bis zur Übernahme ebenfalls unter `05_Inspiration`: `Glide-Logo-freigegeben.svg`, `Glide-App-Symbol-freigegeben.svg` sowie beide Fassungen `*-klein-freigegeben.svg`. Bei Lieferung 3.37.0 gehen sie in die regulären Master über; die Entwurfsdateien entfallen dann. Die Produktionsmaster und Ressourcen bleiben bis dahin unverändert. Die Affinity-Datei ist binär und wird nicht still als nachgeführt behauptet; maßgebliche neue SVG-/PNG-Exporte werden bei Übernahme ausgewiesen.
-
-Eine Überarbeitung läuft über „Einen Master ändern“ oben.
+4. Die allgemeinen Logo-/App-PNGs bytegleich in die regulären Masterpfade
+   zurückkopieren. `baue_app.py` erzeugt daraus die ICNS-Fassungen; für den
+   Kleinmaster benötigt es weiterhin Tk 9.
+5. `test_logo330.py` und `test_logo3370.py` sowie Raster-/Symbol-Unit-Tests
+   ausführen; 16/32/54/512 px, beide Akzente, Tk-8.6-Rückfall und Tk 9 prüfen.
+   Native Menschen-/DPI-Sichtprüfung gesondert nachweisen.
+6. Produktionsversion und eingefrorene Vollprüfung, 07-/Showcase-Abgleich,
+   Bundle und Signatur nach dem verbindlichen Lieferweg durchführen.
 
 ## Hinweis zur Typografie
 

@@ -1,12 +1,12 @@
 # Referenzdaten und Beispiele
 
-Aktueller Aufgabenstand: **Glide 3.36.0 / Format 23**. `current_v23` enthält die aktuelle Referenz mit Live-Liste und Pixel-Titelbild; ältere `current_v*` bleiben feste Migrationsreferenzen.
+Aktueller Aufgabenstand: **Glide 3.37.0 / Format 23**. `current_v23` enthält die aktuelle Referenz mit Live-Liste und Pixel-Titelbild; ältere `current_v*` bleiben feste Migrationsreferenzen.
 
 - Enthalten sind unter anderem die Tagebuch-/Zeichnungsdaten älterer Formatstufen, dazu Punkte mit
   Verknüpfung, „wartet auf“, Uhrzeit, erfasster Zeit und Erledigt-Zeitpunkt.
 - Dazu kommen Pixelsymbole an Liste und Ordner, eine archivierte Liste und
   eine 32er-Zeichnung (Dokumentversion 2).
-- Die aktuelle Format-23-Referenz bleibt bei wiederholter Normalisierung unverändert; die [Dokumentationsprüfung](../qa-3.33.18/dokumentation_2026-10-08/README.md) bestätigt dies mit isolierter Ablage. `test_features330.py` prüft weiterhin die feste Format-20-Referenz.
+- Die aktuelle Format-23-Referenz bleibt bei wiederholter Normalisierung unverändert; die [Dokumentationsprüfung](https://github.com/n05a-design/glide-to-do/blob/cbd8939d718d1062cc6aad6c931717867ed98e63/01_Repository/Glide/tests/qa-3.33.18/dokumentation_2026-10-08/README.md) bestätigt dies mit isolierter Ablage. `test_features330.py` prüft weiterhin die feste Format-20-Referenz.
 - `current_v19` bleibt die Referenz für Format 19. Historische Formatordner bleiben für
 Migrationen erhalten; sie werden nicht auf den aktuellen App-Stand
 umetikettiert.

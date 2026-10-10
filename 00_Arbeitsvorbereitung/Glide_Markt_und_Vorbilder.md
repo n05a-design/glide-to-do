@@ -1,6 +1,6 @@
 # Glide – Markt und Vorbilder
 
-Stand 10.10.2026 · Glide 3.36.0 · Hersteller-Matrix vom 01.10.2026, gezielte Abgleiche 05./07.10.2026, Sprintrecherche 08.10.2026; Glide-Codeabgleich 09.10.2026 (3.36.0)
+Stand 10.10.2026 · Glide 3.37.0 · Hersteller-Matrix vom 01.10.2026, gezielte Abgleiche 05./07.10.2026, Sprintrecherche 08.10.2026; Glide-Codeabgleich 09.10.2026 (3.37.0)
 
 Zusammengeführt am 03.10.2026 aus der Konkurrenz- und Featurematrix und der Konkurrenzübersicht vom 01.10.2026; diese hatten die älteren Recherchen vom 16.–25.09.2026, den Funktionsvergleich zur Zeichenfläche, die SVG-Untersuchung und das Konzept „Seiten wie Notion“ bereits eingeordnet. Am 06.10.2026 um die Wettbewerbsteile des nicht übernommenen Richtungsentwurfs vom 03.10.2026 ergänzt: Belegstufen, Steckbriefe mit Stärke, Grenze und Bedeutung, die ungekürzte Matrix, der Vergleich nach Dimensionen und überholte Aussagen. Die Vorfassungen trägt Git. Die Lücken N01–N20 und G01–G32 stehen mit Status im [Entwicklungsplan](Glide_Entwicklungsplan.md).
 

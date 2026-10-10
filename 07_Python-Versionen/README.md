@@ -1,10 +1,10 @@
 # Aktuelle startbare Python-Fassung
 
-Glide 3.36.0 · Entwicklungsstand 10.10.2026 · Aufgabenformat 23 · Vorlagenformat 2
+Glide 3.37.0 · Entwicklungsstand 10.10.2026 · Aufgabenformat 23 · Vorlagenformat 2
 
-Geliefert wird `Glide-Aufgaben-und-Listen_v3.36.0.pyw`: gezielter Abgleich geänderter Bibliothekskarten und der Startseite, schnellerer erster und wiederholter Zugang zu Einstellungen. Aufgabenformat 23 unverändert. Eingefrorene Mac-Vollprüfung grün; 07, Showcase und Bundle werden mit SHA-256 abgeglichen. Native Linux-/Windows-Vollprüfung am unveränderten Kandidatcommit `3f267a2` ebenfalls grün; menschliche Abnahme getrennt offen. [Liefernachweis](../01_Repository/Glide/tests/qa-3.36.0/fundament_2026-10-10/README.md). In denselben Ordner gehören:
+Geliefert wird `Glide-Aufgaben-und-Listen_v3.37.0.pyw`: freigegebener geglätteter Logo-Master, eigene Kleingrößenfassung für 16/32 px, exakte App-Symbole und sämtliche Oberflächensymbole aus der verwendeten UI-Schrift. Aufgabenformat 23 unverändert. Eingefrorene Mac-Vollprüfung grün; 07, Showcase und Bundle werden mit SHA-256 abgeglichen. Native Linux-/Windows-Abnahme folgt am unveränderten Kandidatcommit. [Liefernachweis](../01_Repository/Glide/tests/qa-3.37.0/logo_symbole_2026-10-10/README.md). In denselben Ordner gehören:
 
-- die Module `drawing.py`, `drawing_image.py`, `backdrop.py`, `page_markdown.py`, `image_preview.py`, `logo.py`, `schema_backups.py`, `sidebar_policy.py`, `svg_geometry.py`, `home_tiles.py`, `capture_parser.py`, `eisenhower.py`, `today_view.py`, `content_search.py`, `save_comparison.py`, `view_metrics.py`, `action_catalog.py`, `ui_design.py`, `planning.py`, `day_proposal.py`, `focus_timer.py`, `task_references.py`, `interaction_policy.py`, `object_references.py`, `week_planning.py`, `page_features.py`, `repeat_rules.py`, `routines.py`, `runtime_check.py`, `release_notes.py`, `appearance.py`, `preview_tools.py`, `filter_explain.py`, `exchange_patch.py`, `backup_diff.py`, `render_retention.py` – ohne sie startet Glide nicht;
+- die Module `drawing.py`, `drawing_image.py`, `backdrop.py`, `page_markdown.py`, `image_preview.py`, `logo.py`, `schema_backups.py`, `sidebar_policy.py`, `svg_geometry.py`, `home_tiles.py`, `capture_parser.py`, `eisenhower.py`, `today_view.py`, `content_search.py`, `save_comparison.py`, `view_metrics.py`, `action_catalog.py`, `ui_design.py`, `planning.py`, `day_proposal.py`, `focus_timer.py`, `task_references.py`, `interaction_policy.py`, `object_references.py`, `week_planning.py`, `page_features.py`, `repeat_rules.py`, `routines.py`, `runtime_check.py`, `release_notes.py`, `appearance.py`, `preview_tools.py`, `filter_explain.py`, `exchange_patch.py`, `backup_diff.py`, `render_retention.py`, `logo_raster.py`, `symbol_policy.py` – ohne sie startet Glide nicht;
 - `Schnellstart.pyw` (im Repository `glide_start.py`);
 - die Ordner `resources` (Schriften, Vorlagen, Logo) und `vendor` (tkinterdnd2 für das Ziehen aus Finder und Explorer; fehlt er, startet Glide ohne diese Funktion), beide samt Lizenz- und Herkunftsnachweisen.
 
@@ -12,7 +12,7 @@ Verbindliche Modultabelle: [Architektur](../01_Repository/Glide/docs/02_ARCHITEC
 
 Abgleich und Prüfsummen: `scripts/pflege/abgleich_07.py` (SHA-256). Änderungen hier nur im Rahmen einer Produktionsrunde.
 
-Mit Python 3.14 und Tk 9 starten; ein Python vor 3.12 oder ein Tk vor 8.6 weist Glide mit einer Meldung ab, bevor es Daten öffnet. Mit Python 3.13 und Tk 8.6 startet Glide ebenfalls, nur ohne Systemmitteilung und SVG-Vorschau; das Logo erscheint dann als ungeglättete Fläche, Fenster- und Taskleistensymbol sind treppig ([Diagnose](../01_Repository/Glide/docs/diagnosen/LOGO_KANTENGLAETTUNG.md)). Eine laufende ältere Instanz vorher schließen.
+Mit Python 3.14 und Tk 9 starten; ein Python vor 3.12 oder ein Tk vor 8.6 weist Glide vor dem Öffnen von Daten ab. Mit Python 3.13/Tk 8.6 startet Glide ebenfalls, ohne Systemmitteilung und SVG-Vorschau; Logo und App-Symbole nutzen dort geglättete Bilder in exakter Zielgröße. Eine laufende ältere Instanz vorher schließen.
 
 ## Windows mit der geprüften Laufzeit starten
 

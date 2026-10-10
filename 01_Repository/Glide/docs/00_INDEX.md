@@ -1,6 +1,6 @@
 # Dokumentationsindex
 
-Stand 10.10.2026 · Glide 3.36.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagenformat 2
+Stand 10.10.2026 · Glide 3.37.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagenformat 2
 
 Seit 03.10.2026 zwölf Dokumente und fünf Einzelentscheidungen statt 53: Funktionsverträge 45–79, Projektübergabe, Startkontext, Entwicklungsnotizen, Sitzungsprotokoll, Releasecheckliste und Lizenz-, Signierungs- und Vertriebsentwürfe sind in die Dokumente unten eingegangen. Ältere Fassungen trägt Git (`git log --follow docs/<Datei>`). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt; deren Synchronisationskopien und die wiederaufgetauchte Projektübergabe sind aufgelöst. Regeln: [Dokumentenpflege](DOKUMENTENPFLEGE.md).
 
@@ -24,7 +24,6 @@ Seit 03.10.2026 zwölf Dokumente und fünf Einzelentscheidungen statt 53: Funkti
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
 | [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken des Inhabers, Entscheidungen D01–D17 und frühere gültige Antworten, Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Ein Thema, ein Dokument; Aufbewahrung; Zuständigkeiten |
-| [Fehlerdiagnose Logo](diagnosen/LOGO_KANTENGLAETTUNG.md) | Logo ohne Kantenglättung unter Tk 8.6: Ursache, Nachweise, Lösungswege; gelöscht, sobald die gewählten Wege umgesetzt sind |
 
 ## Einzelentscheidungen
 

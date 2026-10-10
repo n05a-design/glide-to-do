@@ -8,7 +8,7 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 
 ## Stand
 
-- **Entwicklungsstand 3.36.0 vom 09.10.2026**, Datenformat 23; keine veröffentlichte oder signierte Releasefassung.
+- **Entwicklungsstand 3.37.0 vom 09.10.2026**, Datenformat 23; keine veröffentlichte oder signierte Releasefassung.
 - **Zuletzt geliefert (Sprint 08./09.10.2026):** Tempo (3.33.19), Komfort im Alltag (3.33.20), ruhige Oberfläche mit hell/dunkel nach System (3.33.21), Wissen und Seiten mit Bildern in Druck und Markdown, markierten Fundstellen und erklärten Filtern (3.34.0) sowie Pixel und Austausch mit geprüften KI-Änderungsvorschlägen und Sicherungsvergleich (3.35.0). Jede Version ist auf dem Referenz-Mac automatisch vollständig geprüft und bytegleich nach `07_Python-Versionen` geliefert; Windows zuletzt 3.33.18. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
 - **Offen:** Lizenz, Signatur, Markenprüfung, Store, Windows-Prüfung des aktuellen Stands und die manuelle Abnahme unter Windows, Linux, DPI-Skalierung und Bildschirmleser.
 - **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe und den offenen Entscheidungen des Inhabers; Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).

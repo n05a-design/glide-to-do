@@ -44,7 +44,7 @@ REPO = Path(__file__).resolve().parents[2]
 QUELLE = REPO / "src" / "glide"
 DATEIEN = ("app.pyw", "drawing.py", "drawing_image.py", "backdrop.py", "page_markdown.py", "image_preview.py",
            "logo.py", "glide_start.py", "schema_backups.py", "sidebar_policy.py", "svg_geometry.py",
-           "home_tiles.py", "capture_parser.py", "eisenhower.py", "today_view.py", "content_search.py", "save_comparison.py", "view_metrics.py", "action_catalog.py", "ui_design.py", "planning.py", "day_proposal.py", "focus_timer.py", "task_references.py", "interaction_policy.py", "object_references.py", "week_planning.py", "page_features.py", "repeat_rules.py", "routines.py", "runtime_check.py", "release_notes.py", "appearance.py", "preview_tools.py", "filter_explain.py", "exchange_patch.py", "backup_diff.py", "render_retention.py")
+           "home_tiles.py", "capture_parser.py", "eisenhower.py", "today_view.py", "content_search.py", "save_comparison.py", "view_metrics.py", "action_catalog.py", "ui_design.py", "planning.py", "day_proposal.py", "focus_timer.py", "task_references.py", "interaction_policy.py", "object_references.py", "week_planning.py", "page_features.py", "repeat_rules.py", "routines.py", "runtime_check.py", "release_notes.py", "appearance.py", "preview_tools.py", "filter_explain.py", "exchange_patch.py", "backup_diff.py", "render_retention.py", "logo_raster.py", "symbol_policy.py")
 SYMBOL = REPO / "assets" / "icons" / "glide_macos_1024.png"
 
 
@@ -71,7 +71,7 @@ def python_starter():
     return kandidat
 
 
-def baue_icns(png, ziel_icns):
+def baue_icns(png, ziel_icns, kleinbilder=None):
     """Erzeugt aus einem quadratischen PNG (ab 1024 px empfohlen) eine .icns-Datei."""
     with tempfile.TemporaryDirectory() as ordner:
         satz = Path(ordner) / "Glide.iconset"
@@ -79,9 +79,12 @@ def baue_icns(png, ziel_icns):
         for groesse in (16, 32, 128, 256, 512):
             for faktor, endung in ((1, ""), (2, "@2x")):
                 pixel = groesse * faktor
-                subprocess.run(["sips", "-z", str(pixel), str(pixel), str(png), "--out",
-                                str(satz / f"icon_{groesse}x{groesse}{endung}.png")],
-                               check=True, capture_output=True)
+                ausgabe = satz / f"icon_{groesse}x{groesse}{endung}.png"
+                if kleinbilder and pixel in kleinbilder:
+                    shutil.copy2(kleinbilder[pixel], ausgabe)
+                else:
+                    subprocess.run(["sips", "-z", str(pixel), str(pixel), str(png), "--out", str(ausgabe)],
+                                   check=True, capture_output=True)
         subprocess.run(["iconutil", "-c", "icns", str(satz), "-o", str(ziel_icns)], check=True)
 
 
@@ -123,7 +126,9 @@ def baue(ziel, symbol=None):
     symbol_png = Path(symbol) if symbol else SYMBOL
     if not symbol_png.is_file():
         raise SystemExit(f"Programmsymbol fehlt: {symbol_png}. Erst `python3 packaging/baue_symbole.py` ausführen.")
-    baue_icns(symbol_png, ressourcen / "Glide.icns")
+    baue_icns(symbol_png, ressourcen / "Glide.icns", kleinbilder={
+        size: QUELLE / "resources/logo" / f"glide-app-icon-macos-{size}.png" for size in (16, 32)
+    } if symbol is None else None)
 
     info = {
         "CFBundleName": konstanten["APP_NAME"],

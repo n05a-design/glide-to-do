@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Erzeugt die Programmsymbole aus dem SVG-Master – reproduzierbar, ohne neue Abhängigkeit.
 
-Quelle ist `src/glide/resources/logo/glide-app-icon.svg`, eine unveränderte
+Quellen sind `src/glide/resources/logo/glide-app-icon.svg` und die ausdrücklich
+für 16/32 px freigegebene Kleinfassung. Der Normalmaster ist eine unveränderte
 Kopie von `20_Grafik_Master/03_Fav-Icon/App-Icon-transparent-02.svg`. Tk 9 rechnet das
 SVG in jeder Größe scharf (nanosvg); daraus entstehen unter `assets/icons/`:
 
@@ -58,7 +59,7 @@ def ico_bytes(pngs):
     return kopf + eintraege + daten
 
 
-def erzeugen(ziel):
+def erzeugen(ziel, ressourcen=None):
     logo = logo_modul()
     root = tk.Tk()
     root.withdraw()
@@ -68,14 +69,27 @@ def erzeugen(ziel):
         ziel.mkdir(parents=True, exist_ok=True)
         randlos = logo.icon_svg(0.0)
         mit_rand = logo.icon_svg((1 - logo.MACOS_ICON_SHARE) / 2)
+        klein = logo.icon_svg(0.0, logo.ICON_SMALL_FILE)
+        klein_macos = logo.icon_svg((1 - logo.MACOS_ICON_SHARE) / 2, logo.ICON_SMALL_FILE)
 
         def bild(svg, kante):
             return logo.square_icon(root, svg, kante)
 
-        pngs = [(kante, png_bytes(bild(randlos, kante))) for kante in ICO_GROESSEN]
+        pngs = [(kante, png_bytes(bild(klein if kante in (16, 32) else randlos, kante)))
+                for kante in ICO_GROESSEN]
         (ziel / "glide.ico").write_bytes(ico_bytes(pngs))
         (ziel / "glide_macos_1024.png").write_bytes(png_bytes(bild(mit_rand, 1024)))
         (ziel / "glide_512.png").write_bytes(png_bytes(bild(randlos, 512)))
+        if ressourcen is not None:
+            ressourcen.mkdir(parents=True, exist_ok=True)
+            for kante in (16, 32, 64, 256):
+                for prefix, normal, small in (("glide-app-icon", randlos, klein),
+                                               ("glide-app-icon-macos", mit_rand, klein_macos)):
+                    svg = small if kante in (16, 32) else normal
+                    (ressourcen / f"{prefix}-{kante}.png").write_bytes(png_bytes(bild(svg, kante)))
+            # Vorhandene allgemeine PNG-Einstiege für Anhänge und Prüfdaten.
+            (ressourcen / "glide-app-icon.png").write_bytes(png_bytes(bild(randlos, 1024)))
+            (ressourcen / "glide-logo.png").write_bytes(png_bytes(logo.logo_photo(root, 1024)))
     finally:
         root.destroy()
     return [ziel / name for name in ("glide.ico", "glide_macos_1024.png", "glide_512.png")]
@@ -84,8 +98,10 @@ def erzeugen(ziel):
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--ziel", default=str(REPO / "assets" / "icons"), help="Ausgabeordner")
+    parser.add_argument("--ressourcen-ziel", type=Path,
+                        help="Zusätzlich exakte Laufzeit-PNGs und allgemeine PNG-Fassungen erzeugen")
     argumente = parser.parse_args()
-    for pfad in erzeugen(Path(argumente.ziel)):
+    for pfad in erzeugen(Path(argumente.ziel), argumente.ressourcen_ziel):
         print(f"Geschrieben: {pfad} ({pfad.stat().st_size} Bytes)")
 
 
