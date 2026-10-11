@@ -26,6 +26,12 @@ on:
   pull_request:
     branches: ["main"]
   workflow_dispatch:
+    inputs:
+      bereich:
+        description: "Vollständige Matrix oder gezielte Windows-Layoutdiagnose"
+        type: choice
+        default: voll
+        options: [voll, aufgaben-layout]
 
 permissions:
   contents: read
@@ -40,6 +46,7 @@ env:
 
 jobs:
   grundstufe:
+    if: github.event_name != 'workflow_dispatch' || github.event.inputs.bereich != 'aufgaben-layout'
     name: Grundstufe (Linux, Python 3.14, Tk 8.6)
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -73,7 +80,7 @@ jobs:
   integrationssuiten-linux:
     name: Vollprüfung (Linux/Xvfb, Python 3.14, Tk 8.6)
     needs: grundstufe
-    if: always() && !cancelled()
+    if: always() && !cancelled() && github.event.inputs.bereich != 'aufgaben-layout'
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     defaults:
@@ -110,7 +117,7 @@ jobs:
   vollpruefung-windows:
     name: Vollprüfung (Windows x64, Python 3.14)
     needs: integrationssuiten-linux
-    if: always() && !cancelled()
+    if: always() && !cancelled() && github.event.inputs.bereich != 'aufgaben-layout'
     runs-on: windows-2025
     timeout-minutes: 180
     defaults:
@@ -142,5 +149,39 @@ jobs:
         with:
           name: integrationssuiten-windows
           path: ${{ runner.temp }}/integration
+          retention-days: 14
+          if-no-files-found: ignore
+
+  aufgaben-layout-windows:
+    name: Aufgabenlayout-Diagnose (Windows x64, Python 3.14)
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.bereich == 'aufgaben-layout'
+    runs-on: windows-2025
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: 01_Repository/Glide
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+          architecture: x64
+      - name: Native Zeitzone und Referenzdesktop
+        run: |
+          tzutil /s "W. Europe Standard Time"
+          python -B tests/tools/windows_desktop.py --breite 1920 --hoehe 1080 --protokoll "$env:RUNNER_TEMP/layout/windows-desktop.json"
+      - name: Unveränderte Flächenkriterien mit Einzelmessungen
+        run: |
+          New-Item -ItemType Directory -Force "$env:RUNNER_TEMP/layout" | Out-Null
+          python -B tests/integration/test_aufgaben3380.py --fall flaeche *> "$env:RUNNER_TEMP/layout/aufgabenlayout.log"
+          exit $LASTEXITCODE
+      - name: Diagnosen sichern
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: aufgaben-layout-windows
+          path: ${{ runner.temp }}/layout
           retention-days: 14
           if-no-files-found: ignore

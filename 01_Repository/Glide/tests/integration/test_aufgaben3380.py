@@ -803,18 +803,22 @@ def flaeche(app_path, report, *, gross=False, tempo=False):
                     open_view()
                     idle()
                     widgets = {}
-                    for key in ('header_frame', 'content_toolbar', 'main_area', 'content_frame', 'input_frame', 'search_frame', 'tool_band', 'list_frame_outer', 'tree', 'home_frame', 'sidebar_shell'):
+                    for key in ('header_frame', 'content_toolbar', 'main_area', 'content_frame', 'input_frame', 'search_frame', 'tool_band', 'list_frame_outer', 'tree', 'home_frame', 'sidebar_shell', 'add_button', 'advanced_add_button', 'list_view_button', 'table_button', 'board_button', 'search_entry', 'entry'):
                         w = getattr(app, key, None)
                         if w is not None and w.winfo_exists():
-                            widgets[key] = {'sichtbar': bool(w.winfo_ismapped()), 'manager': w.winfo_manager(), 'x': w.winfo_rootx() - root.winfo_rootx(), 'y': w.winfo_rooty() - root.winfo_rooty(), 'breite': w.winfo_width(), 'hoehe': w.winfo_height()}
+                            widgets[key] = {'sichtbar': bool(w.winfo_ismapped()), 'manager': w.winfo_manager(), 'x': w.winfo_rootx() - root.winfo_rootx(), 'y': w.winfo_rooty() - root.winfo_rooty(), 'breite': w.winfo_width(), 'hoehe': w.winfo_height(), 'wunschbreite': w.winfo_reqwidth(), 'wunschhoehe': w.winfo_reqheight()}
                     surface = app.rich_note_editor.title_label if name == 'Seiten' else app.workspace.canvas if name == 'Pinnwand' else app.tree
                     content_y = surface.winfo_rooty() - root.winfo_rooty()
                     assert surface.winfo_ismapped(), (name, 'Inhalt unsichtbar')
                     if name in ('Liste', 'Tabelle'):
                         assert app.input_frame.winfo_ismapped(), (name, 'Eingabe verloren')
+                    record = {'tatsaechlicher_inhalt': content_y, 'anteil_tatsaechlich': content_y / root.winfo_height(), 'ansicht': name, 'fenster': [root.winfo_width(), root.winfo_height()], 'schrift': app.settings.get('ui_font_size'), 'widgets': widgets, 'inhalt_oberkante': widgets['list_frame_outer']['y'], 'anteil_bis_inhalt': widgets['list_frame_outer']['y'] / root.winfo_height()}
+                    print("Geometrie-Einzelmessung:", json.dumps(
+                        dict(record, tk_scaling=float(root.tk.call("tk", "scaling")),
+                             standardfont=root.tk.call("font", "actual", "TkDefaultFont")),
+                        ensure_ascii=False, sort_keys=True), flush=True)
                     if width == 1280 and (not args.gross):
                         assert content_y <= 120, (name, content_y, '15 Prozent überschritten')
-                    record = {'tatsaechlicher_inhalt': content_y, 'anteil_tatsaechlich': content_y / root.winfo_height(), 'ansicht': name, 'fenster': [root.winfo_width(), root.winfo_height()], 'schrift': app.settings.get('ui_font_size'), 'widgets': widgets, 'inhalt_oberkante': widgets['list_frame_outer']['y'], 'anteil_bis_inhalt': widgets['list_frame_outer']['y'] / root.winfo_height()}
                     out.append(record)
             assert not errors, errors
         finally:
