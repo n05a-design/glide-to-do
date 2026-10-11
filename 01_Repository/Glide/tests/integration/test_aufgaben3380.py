@@ -508,7 +508,14 @@ def klicks(app_path, report, *, gross=False, tempo=False):
                 for zoom in (75, 150):
                     app.workspace.configure_board('zoom', zoom)
                     idle()
+                    # Spalten können breiter als der sichtbare Canvas sein.
+                    # Die vorhandene Kartennavigation muss die Karte erreichbar
+                    # machen; danach jeden Feldtreffer wirklich anklicken.
+                    app.workspace.focus_card(tid)
+                    idle()
                     hits = list(app.workspace._field_hits)
+                    available = {field for _box, identity, field in hits if identity == tid}
+                    assert {'due', 'planned', 'importance', 'labels'} <= available, (layout, zoom, 'Feld fehlt', available)
                     fields = set()
                     for box, identity, field in hits:
                         if identity != tid:
@@ -516,10 +523,15 @@ def klicks(app_path, report, *, gross=False, tempo=False):
                         x = box[0] + box[2] / 2
                         y = box[1] + box[3] / 2
                         c = app.workspace.canvas
+                        region = tuple(map(float, root.tk.splitlist(c.cget('scrollregion'))))
+                        assert len(region) == 4, (layout, zoom, region)
+                        c.xview_moveto(max(0, x-region[0]-c.winfo_width()/2) / max(1, region[2]-region[0]))
+                        c.yview_moveto(max(0, y-region[1]-c.winfo_height()/2) / max(1, region[3]-region[1]))
+                        idle()
                         px = x - c.canvasx(0)
                         py = y - c.canvasy(0)
-                        if not (0 <= px < c.winfo_width() and 0 <= py < c.winfo_height()):
-                            continue
+                        assert 0 <= px < c.winfo_width() and 0 <= py < c.winfo_height(), (
+                            layout, zoom, field, 'Feld nicht erreichbar', box, region, c.xview(), c.yview())
                         before = len(calls)
                         click(c, px, py)
                         assert calls[before:] == [(tid, field)], (layout, zoom, field, calls[before:])

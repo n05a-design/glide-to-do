@@ -58,10 +58,38 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
             root.update_idletasks()
             root.update()
 
+    def pruefe_werkzeugzeile(seite):
+        app.set_active_list(zeichnung["id"])
+        ruhe()
+        app.set_active_list(seite["id"])
+        ruhe()
+        assert app.input_frame.winfo_manager() == "" and app.search_frame.winfo_manager() == ""
+        app.set_active_list(normal["id"])
+        ruhe()
+        assert app.input_frame.winfo_manager() == "pack" and app.search_frame.winfo_manager() == "pack"
+        # 3.38: Eingabe vor Suche, bei genügend Breite nebeneinander;
+        # beide bleiben vollständig in der Werkzeugzeile über dem Inhalt.
+        eingabe, suche = app.input_frame, app.search_frame
+        assert (eingabe.winfo_rootx() + eingabe.winfo_width() <= suche.winfo_rootx() + 1
+                or eingabe.winfo_rooty() + eingabe.winfo_height() <= suche.winfo_rooty() + 1)
+        for feld in (eingabe, suche):
+            assert feld.master is app.content_toolbar and feld.winfo_ismapped()
+            assert feld.winfo_y() >= 0
+            assert feld.winfo_y() + feld.winfo_height() <= app.content_toolbar.winfo_height()
+        assert (app.content_toolbar.winfo_rooty() + app.content_toolbar.winfo_height()
+                <= app.list_frame_outer.winfo_rooty())
+
     try:
         normal = next(entry for entry in app.lists
                       if entry.get("list_kind") in (None, "", "list", "tasks") and len(entry.get("items", [])) > 5)
         zeichnung = next(entry for entry in app.lists if entry.get("list_kind") == "drawing")
+        if "--werkzeugzeile" in sys.argv:
+            seite = app.new_page_from_markdown("# Werkzeugleistenprobe\n\nText\n")
+            ruhe()
+            pruefe_werkzeugzeile(seite)
+            assert not fehler, fehler[:1]
+            print("test_aufraeumen330: OK; echter Seiten-/Zeichnungs-/Listenwechsel, Reihenfolge und vollständige Werkzeugzeile")
+            raise SystemExit(0)
 
         # --- Kopfzeile ---------------------------------------------------------
         app.set_active_list(normal["id"])
@@ -132,25 +160,7 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
         # --- Seite nach Zeichnung ohne Eingabe und Suche ------------------------
         seite = app.new_page_from_markdown("# Bericht\n\nText\n\n- [ ] Aufgabe eins\n")
         ruhe()
-        app.set_active_list(zeichnung["id"])
-        ruhe()
-        app.set_active_list(seite["id"])
-        ruhe()
-        assert app.input_frame.winfo_manager() == "" and app.search_frame.winfo_manager() == ""
-        app.set_active_list(normal["id"])
-        ruhe()
-        assert app.input_frame.winfo_manager() == "pack" and app.search_frame.winfo_manager() == "pack"
-        # 3.38: Eingabe vor Suche, bei genügend Breite nebeneinander;
-        # beide bleiben vollständig in der Werkzeugzeile über dem Inhalt.
-        eingabe, suche = app.input_frame, app.search_frame
-        assert (eingabe.winfo_rootx() + eingabe.winfo_width() <= suche.winfo_rootx() + 1
-                or eingabe.winfo_rooty() + eingabe.winfo_height() <= suche.winfo_rooty() + 1)
-        for feld in (eingabe, suche):
-            assert feld.master is app.content_toolbar and feld.winfo_ismapped()
-            assert feld.winfo_y() >= 0
-            assert feld.winfo_y() + feld.winfo_height() <= app.content_toolbar.winfo_height()
-        assert (app.content_toolbar.winfo_rooty() + app.content_toolbar.winfo_height()
-                <= app.list_frame_outer.winfo_rooty())
+        pruefe_werkzeugzeile(seite)
 
         # --- Textlogo, Gismo, Fahne, Startseite anpassen ----------------------
         app.settings["accent_color"] = "confirm"

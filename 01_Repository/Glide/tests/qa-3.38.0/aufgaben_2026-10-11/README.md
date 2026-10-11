@@ -13,13 +13,13 @@ Aktueller App-SHA: `49ca48aad93d0be0ba9fce8dd0bd82e980e3eaa673ff549bdb3ba04614eb
 | Direkte Felder | 30 Klickgruppen grün: vier Listenansichten, Pinnwand frei/geordnet/Spalten bei 75/150 %, Live-Listen, echter Dokumentdoppelklick; Modifier bleiben Auswahl |
 | Fachlogik | 11 Dreiwege-/Feldkonflikttests und sieben Zeit-/Abbruchtests grün |
 | Vorversion | vier getrennte passende Assertion-Gegenproben gegen unveränderte 3.37.0 rot |
-| Beschädigte Kandidaten | vier Funktionsdefekte plus vier [Kalibrierdefekte](kalibriergegenproben.json) passend rot, positive Kontrollläufe grün; native Wiederholung prüft insgesamt 16 Defektfälle |
+| Beschädigte Kandidaten | vier Funktionsdefekte plus vier [Kalibrierdefekte](kalibriergegenproben.json) passend rot, positive Kontrollläufe grün; nächste native Wiederholung prüft insgesamt 17 Defektfälle |
 | Bedienfläche | sechs echte Inhaltswidgets × drei Größen × zwei gültige Schriftstufen; [aktuelle Geometrie](bedienflaechenmessung.json) |
 | Bewegung | aktueller Quellstand: 215 Abschlüsse/Abbrüche, maximal 114,55 ms; Fokus sofort, Abschaltung/Schließen räumen auf; [Nachmessung](plattformkorrektur.json) |
 | Eigene Fensterbilder | sechs eigene NSView-Aufnahmen für Hell/Dunkel, große Schrift, Mindestgröße und Inspektor tatsächlich betrachtet; [Bildhashes und Befund](fenster-neustart.json); keine menschliche Abnahme |
 | Fundamenttempo | aktueller Quellstand: Startseite kalt 267 ms, warm 74/82 ms Median/p95; Einstellungen zuerst 195 ms, warm 129/137 ms. D46/D47 eingehalten; [Nachmessung](plattformkorrektur.json) |
 | Mac-Vollprüfung eingefroren | erneuter vollständiger Fensterfokuslauf Exit 0: 102 ausgeführt/zwei übersprungen, 85 Suiten/294 Unit-Tests; alle 862 Dateien nach Lauf unverändert; [Volllauf](mac-voll.json) |
-| Native Linux-/Windows-Matrix | erster Lauf: Grundstufe grün, Linux drei Befunde, Windows gezielt abgebrochen; [Vorlauf](native-vorlauf.json). Vollständige Wiederholung folgt |
+| Native Linux-/Windows-Matrix | erster Lauf: Grundstufe grün, Linux drei Befunde, Windows gezielt abgebrochen; [Vorlauf](native-vorlauf.json). zweiter Lauf: Linux-Vollprüfung grün, Windows ein Prüfstandbefund; [Ergebnis](native-wiederholung.json). Zwei Werkzeuge gezielt korrigiert, [Nachlauf](../pruefstand_2026-10-11/README.md); erneute vollständige Matrix folgt |
 | 07 und Showcase | 42 Code-/141 Ressourcen-/sechs Showcase-Dateien SHA-256-gleich; [Abgleich](lieferabgleich.json). Ausdrücklicher Fensterfokus des Showcase-Werkzeugs gezielt geprüft; [Werkzeugnachlauf](showcase-werkzeugnachlauf.json) |
 | Mac-Entwicklungsbundle | 42 Code-/55 Plattformressourcen gleich Quelle; Ad-hoc-Signatur im Bauordner und auf Rückkopie grün; [Bundle](bundle.json) |
 | Menschen-/DPI-/Mehrmonitorabnahme | getrennt offen |
