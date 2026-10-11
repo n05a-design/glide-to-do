@@ -44,6 +44,8 @@ def _tokens(pfad):
 
 def subpaths(pfad, schritte=10):
     """Zerlegt einen SVG-Pfad (M, L, H, V, C, S, Z – absolut und relativ) in Polygonzüge."""
+    if type(schritte) is not int or not 1 <= schritte <= 256:
+        raise ValueError("Ungültige Kurvenabtastung")
     teile, aktuell = [], []
     zeichen = _tokens(pfad)
     i, befehl = 0, None
@@ -116,7 +118,7 @@ def subpaths(pfad, schritte=10):
     return teile
 
 
-def outline(svg):
+def outline(svg, schritte=10):
     """Polygonzüge aller Flächen im Koordinatensystem des Masters (viewBox).
 
     Gelesen werden nur die mitgelieferten Master aus `resources/logo`, nie
@@ -140,7 +142,7 @@ def outline(svg):
         if knoten.tag == _SVG_NS + "path":
             stil = (knoten.get("style") or "") + " " + (knoten.get("fill") or "")
             if knoten.get("fill") != "none" and "fill:none" not in stil.replace(" ", "") and not (set((knoten.get("class") or "").split()) & empty_classes):
-                for teil in subpaths(knoten.get("d") or ""):
+                for teil in subpaths(knoten.get("d") or "", schritte=schritte):
                     ergebnis.append([_apply(matrix, px, py) for px, py in teil])
         for kind in knoten:
             laufen(kind, matrix)

@@ -1,9 +1,9 @@
 """Feste Bestandteile bleiben fest (Entscheidung des Nutzers vom 27.09.2026).
 
 Beim Wechsel zwischen Aufgabenliste, Liste im Unterordner, Notiz, Zeichnung,
-Seite, Galerie, Ordner und „Mein Tag“ verschieben sich weder Seitenleiste,
-Kopfzeile, Kopfknöpfe, Suchzeile noch die Inhaltsfläche – auch nicht beim
-Markieren eines Punkts und auch nicht bei Mindestgröße. Über dem Titel steht
+Seite, Galerie, Ordner und „Mein Tag“ bleiben Seitenleiste, Kopfzeile und
+Kopfknöpfe fest. Die kompakte Inhaltsleiste wächst nur mit tatsächlich
+benötigten Werkzeug-/Eingabereihen; Markieren verschiebt weiterhin nichts. Über dem Titel steht
 kein Ordnerpfad mehr. Seite, Zeichnung und Galerie tragen ihre Werkzeuge in
 der festen Leiste über der Fläche.
 """
@@ -89,11 +89,17 @@ with tempfile.TemporaryDirectory(prefix="glide-fest-") as ordner:
                 assert all(werte.values()), (groesse, name, werte)
                 if basis is None:
                     basis = werte
-                    suche = mass(app.search_frame)
-                abweichung = {teil: (basis[teil], wert) for teil, wert in werte.items() if wert != basis[teil]}
+                    suche = app.content_toolbar.winfo_height()
+                abweichung = {teil: (basis[teil], wert) for teil, wert in werte.items()
+                              if teil != "Inhaltsfläche" and wert != basis[teil]}
                 assert not abweichung, f"{groesse} · {name} verschiebt: {abweichung}"
+                delta = app.content_toolbar.winfo_height() - suche
+                original = basis["Inhaltsfläche"]
+                expected = (original[0], original[1] + delta, original[2], original[3] - delta)
+                assert werte["Inhaltsfläche"] == expected, (groesse, name, werte["Inhaltsfläche"], expected)
                 if app.search_frame.winfo_ismapped():
-                    assert mass(app.search_frame)[1] == suche[1], f"{groesse} · {name}: Suchzeile verschoben"
+                    assert app.search_frame.winfo_y() >= 0
+                    assert app.search_frame.winfo_y() + app.search_frame.winfo_height() <= app.content_toolbar.winfo_height()
                 assert not app.path_row.winfo_children(), "kein Ordnerpfad über dem Titel"
             # Markieren eines Punkts ändert die Fläche nicht.
             app.set_active_list(aufgaben["id"])

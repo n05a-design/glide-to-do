@@ -1,0 +1,26 @@
+{
+  "suite": "test_fundament3360",
+  "gegenproben": [
+    {
+      "fall": "home",
+      "vorversion": "3.35.0",
+      "exitcode": 1,
+      "erwarteter_befund": "Heute-Zahl mehrfach im selben Aufbau berechnet",
+      "passend_rot": true
+    },
+    {
+      "fall": "library",
+      "vorversion": "3.35.0",
+      "exitcode": 1,
+      "erwarteter_befund": "geänderte Bibliothekskarte vollständig ersetzt",
+      "passend_rot": true
+    },
+    {
+      "fall": "settings",
+      "vorversion": "3.35.0",
+      "exitcode": 1,
+      "erwarteter_befund": "wiederverwendbares Einstellungsfenster fehlt",
+      "passend_rot": true
+    }
+  ]
+}

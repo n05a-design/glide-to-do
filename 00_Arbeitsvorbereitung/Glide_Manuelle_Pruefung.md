@@ -1,10 +1,14 @@
 # Manuelle Prüfung – Glide
 
-Stand 09.10.2026 · Glide 3.35.0 · Aufgabenformat 23 · manuelle Sitzungen offen; B1 automatisch geprüft
+Stand 11.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · manuelle Sitzungen offen; B1 automatisch geprüft
 
 Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt am 03.10.2026 aus der fortgeschriebenen Prüfliste (Ursprung 3.30.0, enthielt die Listen 3.28 und 3.29) und der Windows-Anleitung; die Zuordnung der 201 Ausgangspunkte trägt Git. Automatisch geprüft ist die Logik ([Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)); offen bleiben Handgefühl, Plattformen und fremde Programme.
 
 **Sitzungen:** A am Mac (etwa 60 Minuten), B am Windows-PC nach der Vollprüfung, C Bildschirmleser und Tastatur, D Linux (falls vorhanden), E nur durch den Inhaber.
+
+**Sprintnachlauf 3.36.0, getrennt offen:** Auf Mac, Windows und Linux jeweils Startseite öffnen → Liste → zurück, auch bei 860 × 700/großer Schrift und Hell/Dunkel: Scrollleiste sichtbar und mit Maus/Trackpad bedienbar. Bibliothek weit scrollen, Aufgabe in einer Karte ändern/Undo, Titel/Vorschautext ändern und Karten umordnen: Fokus/Scrollposition und Inhalte bleiben nachvollziehbar. Einstellungen öffnen, Kapazität ändern/Abbrechen, erneut öffnen (alter gespeicherter Wert); danach Design/Schrift ändern und erneut öffnen. Alle Vorschauen beim Scrollen erreichbar, Escape/Fenster-X beendet den Dialog. Windows zusätzlich vorhandene Fälle W01/W06–W08 (Titelkürzung, Dialogbreiten und Tabellenfeldabstände), Linux N08 (native Bildvorschau) nach der jeweiligen automatischen Vollprüfung durchführen. Diese Punkte sind durch Screenshots und CI noch nicht menschlich abgenommen.
+
+**Sprintnachlauf 3.38.0, getrennt offen:** Auf Mac, Windows und Linux alle sechs Aufgaben-Kontexte mit echter Maus und Tastatur bedienen: gleiche Felder, direktes Datum/Labels/Wichtigkeit, Speichern/Verwerfen, Kontextmenü und Palette. Bei 860 × 700/großer Schrift Inspektor öffnen, alle Felder scrollen, Navigation und Zurückweg prüfen. Auf zwei Monitoren mit negativer Anordnung Popoverposition/Fokus; DPI 100/150/200 %. Zeilenaktionen bei Hover und Tastaturauswahl, schnelle Ansichts-/Klapp-/Erledigtfolgen und Animationen aus prüfen. Eigene Agentenaufnahmen und grüne Automatiken ersetzen diese Sitzung nicht.
 
 ## Rahmen
 
@@ -185,6 +189,10 @@ Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt a
   - **Wissen und Seiten (3.34.0):** zwei Bilder auf aufeinanderfolgenden Absätzen überlappen nicht; Mehr › „Drucken und PDF …“ zeigt die Bilder; „Als Markdown speichern …“ und „Markdown als Seite öffnen“ bringen die Bilder zurück; ein Suchtreffer öffnet die Seite mit markierten Fundstellen, Esc hebt auf; im gespeicherten Filter „Warum steht das hier?“; Alt+Pfeile im Seitenbaum.
   - **Pixel und Austausch (3.35.0):** Doppelklick auf eine Farbe der Farbleiste zeigt die Umfärbung vor der Rückfrage; Symbolexport zeigt 16/32/48 px hell und dunkel; „Für KI bereitstellen …“ mit Zweck „überarbeiten“ und einen von Hand geänderten Vorschlag importieren (Konflikt nach einer Zwischenänderung sichtbar); Datei › Sicherung › „Sicherungen vergleichen …“.
 
+- [ ] **A28 Fundament/Tempo 3.36.0:** Wege des Sprintnachlaufs am Anfang dieses Dokuments mit echter Maus/Trackpad/Tastatur prüfen; besonders Kartenänderung/Undo bei weit gescrollter Bibliothek und Einstellungen nach Abbrechen/Design-/Schriftwechsel.
+
+- [ ] **A29 Logo/Symbole 3.37.0:** B5 auf dem Mac durchführen, Hell/Dunkel/Pixel, große Schrift und Mindestfenster. Suchknopf und zugehöriges Kürzel öffnen dieselbe Suche; Symbole in Kachelköpfen bleiben lesbar.
+
 ## B. Windows-PC (nach der Vollprüfung)
 
 - [ ] **B0 Windows-Vollprüfung – Anleitung**
@@ -250,7 +258,7 @@ $py = "$env:USERPROFILE\.cache\glide-qa\python-3.14.8\runtime\python.exe"
 
 Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Windows-Nachweis wird aus dem Mac-Lauf abgeleitet.
 
-- [x] **B1 Vollprüfung (automatisch):** Windows zuletzt 3.33.18 (08.10.2026): Exit 0, 95 Schritte, 76 Integrationssuiten, 170 Unit-Tests, Lieferung bytegleich ([Nachweis](../01_Repository/Glide/tests/qa-3.33.18/seiten_2026-10-08/README.md)). Referenz-Mac 3.35.0 (09.10.2026): Exit 0, 99 ausgeführt, 82 Integrationssuiten, 257 Unit-Tests ([Nachweis](../01_Repository/Glide/tests/qa-3.35.0/austausch_2026-10-09/README.md)). Für 3.33.19–3.35.0 steht die Windows-Vollprüfung nach B0 aus; die menschliche Sichtprüfung bleibt je Lauf übersprungen, deshalb sind B1a–B1i offen.
+- [x] **B1 Vollprüfung (automatisch):** Stand 3.36.0, 10.10.2026: Mac Exit 0, 100 ausgeführt; native Linux-/Windows-Vollprüfung je Exit 0, 101 ausgeführt; je 83 Integrationssuiten/264 Unit-Tests. Windows Python 3.14.7/Tk 9.0.4, bestätigter Desktop 1920 × 1080. Die früheren Sprintlieferungen sind mitgeprüft. [Nachweis](../01_Repository/Glide/tests/qa-3.36.0/fundament_2026-10-10/README.md). Die menschliche Sichtprüfung ist jeweils übersprungen; B1a–B1j bleiben offen.
 - [ ] **B1a Sichtprüfung der Aufnahmen am Gerät:** Die Fotos des nächsten Windows-Laufs (B0) unter `tests\qa-<Version>\<Lauf>\…\fenster` und `screenshots` durchsehen (sie bleiben lokal). Die Vorbefunde mit Testablage in Glide nachstellen:
   - **W01** Seitenleiste: Lange Listentitel enden mit „…“, kürzere stehen vollständig da („Unterlagen & Assets“).
   - **W05** (auf dem Mac behoben in 3.33.21) Datei › Datenaustausch › „Für KI bereitstellen …“ und Ansicht › Liste › „Tabellenspalten …“: Ist die Fensterbreite angemessen, stehen die Knöpfe rechts wie in den übrigen Dialogen?
@@ -282,6 +290,10 @@ Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Wind
 
 - [ ] **B1i Sprint 3.33.19–3.35.0 unter Windows:** dieselben Wege wie A27; zusätzlich „Automatisch hell/dunkel“ mit dem Windows-Farbmodus (Registrierung), Drucken und PDF im Standardbrowser, Markdown-Bildverweise mit Laufwerksbuchstaben, Kontextpaket und Vorschlag mit Umlauten im Dateinamen, Doppelklick-Geschwindigkeit der Farbleiste nach Windows-Einstellung.
 
+- [ ] **B1j Fundament/Tempo 3.36.0:** A28 und Sprintnachlauf am Anfang dieses Dokuments unter Windows prüfen; zusätzlich vorhandene W01/W06–W08 sichtbar nachstellen. Grüner CI-Lauf ersetzt die Bedienabnahme nicht.
+
+- [ ] **B1k Logo/Symbole 3.37.0:** B5 nach grünem nativem Volllauf durchführen; DPI-/Mehrmonitorprobe B4 bleibt getrennt erforderlich.
+
 - [ ] **B2 Windows-Bestand (Format 17, Inhaberprobe):** Eine unveränderte
       Kopie des eigenen Bestands in einer getrennten Testablage mit
       `GLIDE_DATA_DIR` und aktueller Fassung aus `07_Python-Versionen` öffnen.
@@ -295,13 +307,9 @@ Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Wind
       Umlaute und ß korrekt.
 - [ ] **B4 Skalierung:** 100, 150 und 200 % sowie zwei Monitore. Logo,
       Pixelsymbole und Zeichnungen sind scharf.
-- [ ] **B5 Logo und Lupe:**
-  - Mit Python 3.14 (Tk 9) ist das Logo glatt, auch bei 150 und 200 %; mit
-    3.13 (Tk 8.6) ist es eine Fläche mit harten Kanten, Fenster- und
-    Taskleistensymbol sind dann ebenfalls treppig. Ursache und Lösungswege:
-    [Diagnose](../01_Repository/Glide/docs/diagnosen/LOGO_KANTENGLAETTUNG.md).
-  - Die Lupe ⌕ ist lesbar; bitte notieren, aus welcher Schrift sie kommt
-    (`tests/tools/symbolpruefung.py`).
+- [ ] **B5 Logo und Oberflächenzeichen (3.37.0):**
+  - Tk 9 nutzt SVG, Tk 8.6 geglättete transparente Bilder. Logo bei 100/150/200 % und mit anderer Akzentfarbe beurteilen; Innenraum bleibt offen. Taskleisten-/Fenstersymbol in 16/32 px mit Kleinmaster, größere Symbole mit Normalmaster prüfen.
+  - Gesamte Symboltabelle, insbesondere Suche, Design und Drucken, in der eingestellten UI-Schrift beurteilen. Fehlende Zeichen erscheinen als kurze lesbare Beschriftung. `tests/tools/symbolpruefung.py` meldet die tatsächlich aufgelöste Tabelle in normalem/fettem Schnitt; Größe/Ausrichtung zusätzlich am Gerät prüfen.
 - [ ] **B6 Startmenü-Verknüpfung:**
   `powershell -ExecutionPolicy Bypass -File packaging\windows\verknuepfung_anlegen.ps1`.
   - „Glide“ mit Glide-Symbol erscheint im Startmenü.

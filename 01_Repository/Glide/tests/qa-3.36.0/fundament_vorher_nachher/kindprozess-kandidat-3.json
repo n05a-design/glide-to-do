@@ -1,0 +1,58 @@
+{
+  "version": "3.35.0",
+  "source_sha256": "94bdce465af097f2f15524fa1e52f2b6a868b77b00f4909143888b96809e5d17",
+  "python": "3.14.5",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "tk": "9.0.3",
+  "profiling": false,
+  "fixture": {
+    "tasks": 1000,
+    "task_lists": 12,
+    "window": "1280x800",
+    "idle_rounds": 3,
+    "forced_home_rebuild": true,
+    "settings_close_excluded": true,
+    "actual_modal_setup": true,
+    "user_wait_excluded": true
+  },
+  "warm_rounds": 8,
+  "timings": {
+    "startseite_neuaufbau": {
+      "first_ms": 497.491,
+      "median_ms": 76.923,
+      "p95_ms": 84.593,
+      "samples_ms": [
+        497.491,
+        84.593,
+        80.357,
+        83.254,
+        76.13,
+        75.54,
+        76.981,
+        75.859,
+        76.864
+      ]
+    },
+    "einstellungen": {
+      "first_ms": 185.603,
+      "median_ms": 134.814,
+      "p95_ms": 144.001,
+      "samples_ms": [
+        185.603,
+        134.423,
+        144.001,
+        136.713,
+        135.873,
+        133.217,
+        134.263,
+        133.66,
+        135.205
+      ]
+    }
+  },
+  "widget_counts": {
+    "einstellungen": 137,
+    "startseite": 119
+  },
+  "callback_errors": []
+}

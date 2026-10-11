@@ -1,6 +1,6 @@
 # Glide – Markt und Vorbilder
 
-Stand 09.10.2026 · Glide 3.35.0 · Hersteller-Matrix vom 01.10.2026, gezielte Abgleiche 05./07.10.2026, Sprintrecherche 08.10.2026; Glide-Codeabgleich 09.10.2026 (3.35.0)
+Stand 11.10.2026 · Glide 3.38.0 · Hersteller-Matrix vom 01.10.2026, gezielte Abgleiche 05./07.10.2026, Sprintrecherche 08.10.2026; Glide-Codeabgleich 09.10.2026 (3.38.0)
 
 Zusammengeführt am 03.10.2026 aus der Konkurrenz- und Featurematrix und der Konkurrenzübersicht vom 01.10.2026; diese hatten die älteren Recherchen vom 16.–25.09.2026, den Funktionsvergleich zur Zeichenfläche, die SVG-Untersuchung und das Konzept „Seiten wie Notion“ bereits eingeordnet. Am 06.10.2026 um die Wettbewerbsteile des nicht übernommenen Richtungsentwurfs vom 03.10.2026 ergänzt: Belegstufen, Steckbriefe mit Stärke, Grenze und Bedeutung, die ungekürzte Matrix, der Vergleich nach Dimensionen und überholte Aussagen. Die Vorfassungen trägt Git. Die Lücken N01–N20 und G01–G32 stehen mit Status im [Entwicklungsplan](Glide_Entwicklungsplan.md).
 
@@ -179,7 +179,7 @@ Je Produkt: Stärke einschließlich der Entwicklung bis 01.10.2026, Grenze und B
 | | Eingebaute KI | ○ | ● | ● | ◐ | ? | ○ | ● | ● | P | ● | bewusst nicht (Q3) |
 | | Schnittstelle für Assistenten (API/MCP) | ◐ | ● | ● | ◐ | ◐ | ? | ? | ◐ | ◐ | ◐ | `.glideexchange`; Dokumente statt Schnittstelle (Q3) |
 | Bedienung | Eine Befehlspalette | ● | ● | ● | ◐ | ◐ | ◐ | ● | ◐ | ● | ○ | gemeinsame Inhaltssuche und Aktionen seit 3.33.16 (U01) |
-| | Erscheinungsbild wie System | ○ | ● | ● | ● | ● | ● | ● | ● | ● | ● | N01 |
+| | Erscheinungsbild wie System | ● | ● | ● | ● | ● | ● | ● | ● | ● | ● | N01 ✅ 3.33.21 |
 | | Rückgängig auch für Strukturänderungen | ● | ● | ◐ | ● | ◐ | ◐ | ● | ● | ● | ● | 20 Schritte, Bestandswächter |
 | | Hilfe in der App | ● | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | Handbuch, Kürzel; Hinweise je Ansicht einklappbar seit 3.33.16 (D11/U02) |
 | | Beispielinhalt | ◐ | ● | ● | ● | ● | ◐ | ◐ | ◐ | ◐ | ◐ | Showcase und Rundgang; Einstieg bewusst nicht |
@@ -241,3 +241,21 @@ Gezielte Recherche am 08.10.2026 zu den Aufgaben des Sprints ([Entwicklungsplan 
 | Notion | Keine offizielle Veröffentlichung nach dem 28.08.2026 gefunden; Notion 3.6 (01.07.2026) mit externen Agenten. [Releases](https://www.notion.com/releases/2026-07-08) | Keine neue Konsequenz; Q3 bleibt. | – |
 
 **Grenzen dieser Recherche:** Für macOS 27 Erinnerungen und Sunsamas Routinen fanden sich keine Herstellerangaben; Aussagen Dritter sind nicht geprüft. Preise und Tarife wurden nicht erneut geprüft.
+
+## 8. Quellenabgleich für die neue Planung (09.10.2026)
+
+Gezielte Primärquellen, kein praktischer Produktvergleich. Die Folgerungen sind Vorschläge für die gemeinsame Planung, keine Inhaberentscheidungen. Aufgaben und Auswahl ausschließlich im [Entwicklungsplan §15](Glide_Entwicklungsplan.md#15-neuer-feature-sprint-ab-09102026-gemeinsame-planung).
+
+| Quelle | Belegtes Verhalten | Eigene Folgerung für Glide |
+|---|---|---|
+| [Aseprite: Spritesheets](https://www.aseprite.org/docs/sprite-sheet/) | Mehrere Frames in einem PNG, horizontal, vertikal oder als Raster; eigener Exportweg | E-S1 kann ohne GIF mit einem brauchbaren Austauschformat beginnen. GIF und Bearbeitungstiefe bleiben getrennte Auswahlfragen. |
+| [Notion: Export](https://www.notion.com/help/export-your-content) | Markdown für Seiten, CSV für Datenbanken, ZIP mit getrennten Seiten/Dateien; Hinweisblöcke werden als HTML exportiert | E-S4: klar begrenzter Notion-Import mit Verlustbericht. V02 als zusätzlicher Vorschlag: wiederholte Übernahme desselben Exportinhalts erkennt unveränderte Quellen und zeigt Konflikte vor einer Änderung. Kein Anspruch auf vollständige Notion-Kompatibilität. |
+| [Sunsama: Tagesplanung](https://help.sunsama.com/docs/usage-guides/daily-planning/) | Optionale Hinweise zur eingestellten Planungszeit; Aufwandsbilanz mit Überlastwarnung; Aufgaben ausdrücklich auf spätere Tage oder in den Vorrat verschieben | E-S3 bekommt getrennte Optionen für Vorgabe und Tiefe. V01: aus Glides vorhandener Überplanungswarnung direkt eine vom Nutzer ausgewählte Umplanung mit Vorher-/Nachher-Bilanz öffnen. Keine automatische Verteilung. |
+| [PyInstaller: Voraussetzungen](https://pyinstaller.org/en/stable/requirements.html) | Dokumentation 6.22.3; Paketierung je Zielplattform, Linux benötigt Systemwerkzeuge; macOS-Pakete sind an die Bauumgebung gebunden | E-S5 muss native Bau- und Prüfumgebungen je Zielsystem einplanen. Ein erfolgreicher Mac-Bau ist kein Nachweis für Windows oder Linux. Werkzeugversion, Lizenz und Tk-Mitnahme vor der Entscheidungsrunde separat prüfen. |
+| [Tk 9.1: accessible](https://www.tcl-lang.org/man/tcl9.1/TkCmd/accessible.html) | Rollen, Namen, Werte, Zustände, Aktionen, virtuelle zugängliche Objekte sowie Auswahl-/Fokusereignisse | N12 ist mehr als neue Beschriftungen: vollständiger Kernablauf braucht Tk-9.1-Laufzeit und tatsächliche Screenreader-Abnahme; erste Stufe und vollständiger Umfang getrennt anbieten. |
+
+V01 und V02 sind neue Vorschläge aus diesen Quellen und dem vorhandenen Verhalten (`planning_summary`, ICS-UID-Duplikaterkennung). N13 (selektive Seitenwiederherstellung) ist bereits ein Zukunftskandidat aus dem Plan, keine neu entdeckte Lücke. Beim Abgleich die bislang falsche Glide-Markierung „Erscheinungsbild wie System“ in der Matrix auf den belegten Stand 3.33.21 berichtigt; keine Herstellerzeile neu bewertet.
+
+**Vertiefung 10.10.2026 für E-S5:** [PyInstaller 6.22.3 – Lizenz](https://pyinstaller.org/en/stable/license.html) beschreibt GPL 2.0 mit Bootloader-Ausnahme und Apache 2.0 für einzelne Dateien; die Ausnahme erlaubt kommerzielle Bundles, Rechte der eingebetteten Abhängigkeiten bleiben zu beachten. [Betriebsweise](https://pyinstaller.org/en/stable/operating-mode.html) belegt Mitnahme des Python-Interpreters und plattformgebundene Bauten; ein Ordnerpaket ist leichter zu prüfen und startet ohne Entpacken einer Ein-Datei-App. Der [Tk-Hook im Tag v6.22.3](https://github.com/pyinstaller/pyinstaller/blob/v6.22.3/PyInstaller/hooks/hook-_tkinter.py) sammelt Tcl/Tk-Daten und bricht bei fehlenden Datenverzeichnissen ab. Die [macOS-Hinweise](https://pyinstaller.org/en/stable/feature-notes.html) beschreiben Ad-hoc-Signierung und warnen vor `argv_emulation` mit Tk. Folgerung für D27: Version fest pinnen, eigene Ressourcensuche und dynamische Importe ausdrücklich aufnehmen, Tcl/Tk und tkdnd nativ prüfen, öffentliche Signatur separat. Keine Lizenzentscheidung für Glide daraus ableiten. Notions Exportbeschreibung erneut geprüft: Datenbank-CSV und HTML-Hinweisblöcke müssen in Vorschau/Verlustbericht ausdrücklich eingeordnet werden; kein Datenbank-Nachbau.
+
+**Laufzeitabgleich 10.10.2026 für N12:** Die [offizielle Tk-9.1.0-Veröffentlichung](https://github.com/tcltk/tk/releases/tag/core-9-1-0) nennt den 29.09.2026 als erste stabile Fassung, einschließlich Screenreader-Unterstützung. Die Distribution besteht aus Quellcode; angehängte automatische Binärbauten sind laut Hersteller ungeprüft und gegebenenfalls unsigniert. Die [Accessibility-Schnittstelle](https://www.tcl-lang.org/man/tcl9.1/TkCmd/accessible.html) bietet Rollen, Namen, Werte, Zustände und Fokus-/Auswahlereignisse; Canvas-Inhalt erhält keine automatische semantische Bedienbarkeit. Folgerung: N12 braucht eine ausdrücklich geprüfte Python-/Tk-9.1-Laufzeit und zugängliche Alternativen für eigene Canvas-Flächen sowie tatsächliche Screenreader-Abnahme. Die bislang geprüfte Glide-Laufzeit Tk 9.0.3 erfüllt diese Voraussetzung noch nicht.

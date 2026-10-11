@@ -128,12 +128,13 @@ with tempfile.TemporaryDirectory(prefix="glide-features315-") as folder:
 
         # --- Statistikzeile, Titel und Leertext ------------------------------
         app.update_stats_label()
-        # Seit dem festen Layout (27.09.2026) kürzt die Kopfzeile sichtbar auf
-        # drei Zeilen; der vollständige Text steht im Tooltip und hier.
+        # Seit 3.38 steht der Fortschritt einzeilig unter dem Titel; der
+        # vollständige Text bleibt im Tooltip. Das Datum trägt der Titel.
         zeile = app._stats_full_text
         sichtbar = app.stats_label.cget("text")
         assert zeile.startswith(sichtbar.rstrip(" …")), (sichtbar, zeile)
-        assert "5 Aufgaben am " in zeile and "05.10.2090" in zeile, zeile
+        assert "1 von 5 erledigt" in zeile, zeile
+        assert "05.10.2090" in app.get_display_title(), app.get_display_title()
         # Der Kopf nennt die freie Zeit des gezeigten Tages. Erledigte
         # Schätzungen belegen weiterhin Kapazität; der Rechenvertrag bleibt.
         tagesbilanz = app.planning_available(tag)

@@ -1,0 +1,34 @@
+{
+  "pruefungen": [
+    {
+      "fall": "positiv-test_features325",
+      "exitcode": 0,
+      "passend": true,
+      "erwarteter_befund": null
+    },
+    {
+      "fall": "positiv-test_aufraeumen330",
+      "exitcode": 0,
+      "passend": true,
+      "erwarteter_befund": null
+    },
+    {
+      "fall": "positiv-test_glide",
+      "exitcode": 0,
+      "passend": true,
+      "erwarteter_befund": null
+    },
+    {
+      "fall": "defekt-rueckmeldung",
+      "exitcode": 1,
+      "passend": true,
+      "erwarteter_befund": "assert gezeigt =="
+    },
+    {
+      "fall": "defekt-aktionsknopf",
+      "exitcode": 1,
+      "passend": true,
+      "erwarteter_befund": "assert app.actions_button.text =="
+    }
+  ]
+}

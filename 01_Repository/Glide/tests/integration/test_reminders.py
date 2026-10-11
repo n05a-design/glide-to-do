@@ -316,7 +316,9 @@ with tempfile.TemporaryDirectory(prefix="glide-reminders-") as tmp:
                 # Abbruch darf weder Konfiguration noch Zustellstatus anfassen.
                 dialog.destroy()
             app.run_modal = edit_dialog
-            assert app.themed_item_details_dialog(source) is None
+            draft = copy.deepcopy(source)
+            draft["id"] = "ungespeicherter-erinnerungsentwurf"
+            assert app.themed_item_details_dialog(draft) is None
             assert source == original
             def overview(dialog, parent=None):
                 dialog.geometry("720x520")
@@ -360,12 +362,23 @@ with tempfile.TemporaryDirectory(prefix="glide-reminders-") as tmp:
                 due_fields[0].set_due("2090-09-14")
                 next(w for w in descendants(dialog) if isinstance(w, mod.RoundedButton) and w.text == "Speichern").command()
             app.run_modal = save_form
-            details_result = app.themed_item_details_dialog(source)
+            details_result = app.themed_item_details_dialog(draft)
             assert details_result["reminder"] == {"mode": "relative", "minutes": 0}
             details_result["text"] += " " + theme
-            with app.item_change((), restore=False) as change:
-                assert app.apply_item_details(source, details_result)
-                change.mark()
+            assert app.themed_item_details_dialog(source) is None
+            root.update()
+            fields = app._detail_state["fields"]
+            fields["due"].set_due("2090-09-14")
+            editor = next(w for w in descendants(app.detail_pane) if w.winfo_name() == "reminder_editor")
+            editor.mode_var.set("Zur Fälligkeit")
+            title = fields["text"]
+            title.delete(0, "end")
+            title.insert(0, details_result["text"])
+            app.save_task_inspector()
+            assert not app._detail_commit_error
+            assert app.reminder_config(source["reminder"]) == {"mode": "relative", "minutes": 0}
+            assert source["due"] == "2090-09-14" and source["text"] == details_result["text"]
+            app.close_task_inspector()
             # Vorlagen erhalten denselben relativen Hinweis, aber keine alten
             # Zustellbelege beim Einsetzen als neue Aufgabenidentität.
             template = app.capture_template(list_id=app.find_item_in_lists(source["id"])[3]["id"])

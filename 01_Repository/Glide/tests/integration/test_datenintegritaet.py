@@ -567,7 +567,9 @@ edit_target = app.new_item("Zu bearbeiten", due="2026-01-05")
 app.items.append(edit_target)
 app.refresh_tree()
 edited, _ = open_form(
-    lambda: app.themed_item_details_dialog(edit_target),
+    # Ungespeicherte Entwürfe behalten den Modalvertrag; gespeicherte
+    # Aufgaben und ihr echter Neustart stehen in test_aufgaben3380.
+    lambda: app.themed_item_details_dialog(dict(edit_target, id="ungespeicherter-integritaetsentwurf")),
     lambda dlg: fill_and_submit(dlg, "Umbenannt", "06.01.2026", "07:30"),
 )
 check(isinstance(edited, dict), "Detail-Maske lieferte nichts zurueck")

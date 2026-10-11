@@ -14,24 +14,24 @@
 # Geheimnisse. Der Schritt „Fremdcode“ lädt das in vendor/provenance.json
 # genannte Originalpaket von PyPI und vergleicht jede Datei.
 #
-# Integrationssuiten (nur manuell über „Run workflow“): pruefen.py unter
-# Linux/Tk 8.6. Die Suiten sind auf den Referenz-Mac abgestimmt; Abweichungen
-# bei Schriftmetrik und Layout sind dort erwartbar. Der Job ist informativ und
-# ersetzt nicht die Vollprüfung auf dem Mac.
+# Native Prüfstände laufen nacheinander. Linux/Xvfb prüft jede sachlich
+# ausführbare Suite verpflichtend; Windows verwendet denselben Vollprüfstand.
+# Eine grüne Automatik ersetzt keine menschliche Sicht-/Screenreaderprüfung.
 
 name: Glide-Prüfung
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "claude/**"]
   pull_request:
     branches: ["main"]
   workflow_dispatch:
     inputs:
-      integrationssuiten:
-        description: "Zusätzlich alle Integrationssuiten unter Linux/Xvfb ausführen (informativ, rund 45 Minuten)"
-        type: boolean
-        default: false
+      bereich:
+        description: "Vollständige Matrix oder gezielte Windows-Layoutdiagnose"
+        type: choice
+        default: voll
+        options: [voll, aufgaben-layout]
 
 permissions:
   contents: read
@@ -46,6 +46,7 @@ env:
 
 jobs:
   grundstufe:
+    if: github.event_name != 'workflow_dispatch' || github.event.inputs.bereich != 'aufgaben-layout'
     name: Grundstufe (Linux, Python 3.14, Tk 8.6)
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -77,11 +78,11 @@ jobs:
           if-no-files-found: ignore
 
   integrationssuiten-linux:
-    name: Integrationssuiten (Linux/Xvfb, informativ)
-    if: github.event_name == 'workflow_dispatch' && inputs.integrationssuiten
+    name: Vollprüfung (Linux/Xvfb, Python 3.14, Tk 8.6)
+    needs: grundstufe
+    if: always() && !cancelled() && github.event.inputs.bereich != 'aufgaben-layout'
     runs-on: ubuntu-24.04
     timeout-minutes: 120
-    continue-on-error: true
     defaults:
       run:
         working-directory: 01_Repository/Glide
@@ -97,8 +98,12 @@ jobs:
       - name: Xvfb, Tk und ImageMagick
         run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb libtk8.6 imagemagick
 
-      - name: Prüfstand im Schnellmodus
-        run: python -B tests/tools/pruefen.py --modus schnell --protokoll "$RUNNER_TEMP/integration" --timeout 900
+      - name: Vollprüfstand Linux
+        run: python -B tests/tools/pruefen.py --modus voll --protokoll "$RUNNER_TEMP/integration" --timeout 900
+
+      - name: Kalibrierte Erwartungen gegen Defekte prüfen
+        if: always() && !cancelled()
+        run: python -B tests/tools/linux_gegenproben.py --protokoll "$RUNNER_TEMP/integration/defektgegenproben" --basis-ergebnis "$RUNNER_TEMP/integration/ergebnis.json"
 
       - name: Protokolle sichern
         if: always()
@@ -106,5 +111,80 @@ jobs:
         with:
           name: integrationssuiten-linux
           path: ${{ runner.temp }}/integration
+          retention-days: 14
+          if-no-files-found: ignore
+
+  vollpruefung-windows:
+    name: Vollprüfung (Windows x64, Python 3.14)
+    needs: integrationssuiten-linux
+    if: always() && !cancelled() && github.event.inputs.bereich != 'aufgaben-layout'
+    runs-on: windows-2025
+    timeout-minutes: 180
+    defaults:
+      run:
+        working-directory: 01_Repository/Glide
+    steps:
+      - name: Lange Git-Pfade zulassen
+        working-directory: ${{ github.workspace }}
+        run: git config --global core.longpaths true
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+          architecture: x64
+      - name: Native Zeitzone mit Sommerzeit
+        run: |
+          Remove-Item Env:TZ -ErrorAction SilentlyContinue
+          tzutil /s "W. Europe Standard Time"
+          python -B tests/tools/pruefe_tk.py
+      - name: Referenzdesktop für Geometrieprüfungen
+        run: python -B tests/tools/windows_desktop.py --breite 1920 --hoehe 1080 --protokoll "$env:RUNNER_TEMP/integration/windows-desktop.json"
+      - name: Vollprüfstand Windows
+        run: python -B tests/tools/pruefen.py --modus voll --protokoll "$env:RUNNER_TEMP/integration" --timeout 900
+      - name: Protokolle sichern
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: integrationssuiten-windows
+          path: ${{ runner.temp }}/integration
+          retention-days: 14
+          if-no-files-found: ignore
+
+  aufgaben-layout-windows:
+    name: Aufgabenlayout-Diagnose (Windows x64, Python 3.14)
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.bereich == 'aufgaben-layout'
+    runs-on: windows-2025
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: 01_Repository/Glide
+    steps:
+      - name: Lange Git-Pfade zulassen
+        working-directory: ${{ github.workspace }}
+        run: git config --global core.longpaths true
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+          architecture: x64
+      - name: Native Zeitzone und Referenzdesktop
+        run: |
+          tzutil /s "W. Europe Standard Time"
+          python -B tests/tools/windows_desktop.py --breite 1920 --hoehe 1080 --protokoll "$env:RUNNER_TEMP/layout/windows-desktop.json"
+      - name: Unveränderte Flächenkriterien mit Einzelmessungen
+        run: |
+          New-Item -ItemType Directory -Force "$env:RUNNER_TEMP/layout" | Out-Null
+          python -B tests/integration/test_aufgaben3380.py --fall flaeche *> "$env:RUNNER_TEMP/layout/aufgabenlayout.log"
+          exit $LASTEXITCODE
+      - name: Diagnosen sichern
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: aufgaben-layout-windows
+          path: ${{ runner.temp }}/layout
           retention-days: 14
           if-no-files-found: ignore

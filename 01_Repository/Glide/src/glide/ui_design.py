@@ -1,15 +1,14 @@
 """Gemeinsame Gestaltungsskalen und reine Regeln für Titel und Herkunft.
 
-OB01 beginnt mit bestehenden Werten. Die unregelmäßigen Zwischenstufen
-bewahren die bisherige Darstellung; weitere Ansichten werden schrittweise
-übernommen, bevor eine bewusst sichtbare Vereinheitlichung entschieden wird.
+Vier Inhaltsstufen: Seitentitel, Abschnitt, Inhalt und Zusatzangabe.
+Bestehende Symbol- und Bediengrößen bleiben unabhängig davon.
 """
 from types import MappingProxyType
 
 SPACING = MappingProxyType({value: value for value in
                            (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 18, 22, 24, 28, 30)})
 RADII = MappingProxyType({"card": 18, "field": 16})
-FONT_SIZES = MappingProxyType({"caption": 8, "source": 9, "body": 12, "title": 24})
+FONT_SIZES = MappingProxyType({"caption": 9, "source": 9, "body": 12, "section": 16, "title": 24})
 ROW_HEIGHTS = MappingProxyType({"task": 36})
 
 

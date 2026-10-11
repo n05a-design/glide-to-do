@@ -1,0 +1,167 @@
+{
+  "stand": "10.10.2026",
+  "version": "3.35.0",
+  "aufgabenformat": 23,
+  "basis_commit": "f38d613b42944a5e2b1b595587b4efde024ce051",
+  "nachlauf": "Runden 4–6 D30–D43 entschieden; Gesamtplan mit acht Versionen zur Bestätigung vorbereitet",
+  "entscheidungen": [
+    {
+      "id": "D30",
+      "datum": "10.10.2026",
+      "wortlaut": "A/V – ICS-Belegzeiten vollständig im beschriebenen Rahmen (Empfehlung)"
+    },
+    {
+      "id": "D31",
+      "datum": "10.10.2026",
+      "wortlaut": "A/V – alle drei Übergänge (Empfehlung)"
+    },
+    {
+      "id": "D32",
+      "datum": "10.10.2026",
+      "wortlaut": "A/V – alle betroffenen Hauptansichten (Empfehlung)"
+    },
+    {
+      "id": "D33",
+      "datum": "10.10.2026",
+      "wortlaut": "A/V – Karten und Startseiten-Neuaufbau (Empfehlung)"
+    },
+    {
+      "id": "D34",
+      "datum": "10.10.2026",
+      "wortlaut": "A/V – erster und wiederholter Aufbau (Empfehlung)"
+    },
+    {
+      "id": "D35",
+      "datum": "10.10.2026",
+      "wortlaut": "A/V – gesamte ausführbare Linux-Matrix (Empfehlung)"
+    },
+    {
+      "id": "D36",
+      "datum": "10.10.2026",
+      "wortlaut": "A/1 – zugänglicher Aufgaben-Kernablauf (Empfehlung)"
+    },
+    {
+      "id": "D37",
+      "datum": "10.10.2026",
+      "wortlaut": "A/V – Seite einschließlich Bilder und Verweise (Empfehlung)"
+    },
+    {
+      "id": "D38",
+      "datum": "10.10.2026",
+      "wortlaut": "A/V – Heute, Woche und Tagesvorschlag (Empfehlung)"
+    },
+    {
+      "id": "D39",
+      "datum": "10.10.2026",
+      "wortlaut": "A/V – Wiedererkennung und Konfliktvergleich (Empfehlung)"
+    },
+    {
+      "id": "D40",
+      "datum": "10.10.2026",
+      "wortlaut": "A/1 – gezielt im Sprint-Code (Empfehlung)"
+    },
+    {
+      "id": "D41",
+      "datum": "10.10.2026",
+      "wortlaut": "A/V – zusätzlich Kleingrößenfassung"
+    },
+    {
+      "id": "D42",
+      "datum": "10.10.2026",
+      "wortlaut": "A/V – Windows je Lieferung (Empfehlung)"
+    },
+    {
+      "id": "D43",
+      "datum": "10.10.2026",
+      "wortlaut": "A – Veröffentlichungstore gesondert offen halten (Empfehlung)"
+    }
+  ],
+  "gesamtplan_bestaetigt": false,
+  "vorgeschlagene_versionen": [
+    {
+      "version": "3.36.0",
+      "inhalt": "Fundament/Tempo, Linux-Matrix; Windows je Lieferung"
+    },
+    {
+      "version": "3.37.0",
+      "inhalt": "Logo, Master/Kleingrößen, gesamte ICONS-Tabelle"
+    },
+    {
+      "version": "3.38.0",
+      "inhalt": "Aufgabenoberfläche, ein Inspektor, direkte Felder, Bewegung, Bedienfläche"
+    },
+    {
+      "version": "3.39.0",
+      "inhalt": "Tageshinweise, ICS-Belegzeiten, Tag entlasten"
+    },
+    {
+      "version": "3.40.0",
+      "inhalt": "Pixelanimation vollständig mit PNG-Exporten"
+    },
+    {
+      "version": "3.41.0",
+      "inhalt": "Notion, Quellen-/Konfliktvergleich, einzelne Seite wiederherstellen"
+    },
+    {
+      "version": "3.42.0",
+      "inhalt": "Eigenständige Mac-arm64-/Windows-x64-Pakete"
+    },
+    {
+      "version": "4.0.0",
+      "inhalt": "N12 erster zugänglicher Aufgaben-Kernablauf mit geprüfter Tk-9.1-Laufzeit"
+    }
+  ],
+  "aufgabenkarten": 23,
+  "erste_stufen": [
+    "S26-16/N12",
+    "S26-21/P05"
+  ],
+  "produktion_geaendert": false,
+  "app_07_showcase_gegen_referenz_unveraendert": true,
+  "referenz_commit": "b5f5c226ccdb06b02537c8b091086bd5defd6fcd",
+  "quell_lieferabgleich": {
+    "dateien": 168,
+    "sha256_manifest": "f1d50354e6942df452aba6e3bdeefa990f109fd21780b2691d7a527cec3bbfce",
+    "abweichungen": []
+  },
+  "app_sha256": "9147c66318b7c46d7fd581eedcb5c6996bf19e7eebed857893c1b2fffc5bfb94",
+  "07_hauptdatei_sha256": "9147c66318b7c46d7fd581eedcb5c6996bf19e7eebed857893c1b2fffc5bfb94",
+  "bundle_info_sha256": "16ed0ce846c794b13f7327006bc28b0f503c405cd05fffa234e0cd47b2fb219e",
+  "bundle_abgleich": {
+    "dateien": 82,
+    "abweichungen": []
+  },
+  "grafik_suiten_unveraendert": true,
+  "ci_pruefstand": {
+    "basis": "f38d613 mit eigenen Dokumentänderungen D30–D43, Gesamtplan und neuen Nachweisen",
+    "verfahren": "isolierte Git-Projektkopie außerhalb OneDrive",
+    "ausgeschlossen": "projektfremde unversionierte Apple Design Skill.md und skills-main/; unangetastet im Arbeitsordner",
+    "nachweis": "ci/ergebnis.json"
+  },
+  "ci_exitcode": 0,
+  "pruefgrenze_arbeitsordner": "bekannter roter Standprüfungsvorlauf wegen externer Skill-Datei; keine grüne Prüfung des gesamten Arbeitsordners behauptet",
+  "native_ci_verfuegbarkeit": "GitHub Actions lesend geprüft: aktiviert, alle Actions erlaubt, Push-Berechtigung vorhanden; keine nativen Appprüfungen in diesem Nachlauf",
+  "vollpruefung": "nicht neu ausgeführt; kein ausführbarer Pfad geändert",
+  "bundlebau_signatur": "nicht neu ausgeführt; vorhandenes Bundle bytegleich, keine neue Signatur behauptet",
+  "ci_hinweis": "Fremdcodeabruf von PyPI: CERTIFICATE_VERIFY_FAILED; unveränderte Abhängigkeit, Hinweis im CI-Ergebnis",
+  "ci_pflichtschritte_bestanden": true,
+  "nachpruefung": {
+    "stand": {
+      "exitcode": 0,
+      "aktive_dokumente": 56
+    },
+    "dokumentverweise": {
+      "exitcode": 0,
+      "lokale_links": 198
+    },
+    "datenschutz": {
+      "exitcode": 0,
+      "benutzerpfade": 0
+    },
+    "synchronisation": {
+      "exitcode": 0,
+      "konfliktkopien": 0,
+      "stark_gekuerzte_hauptdokumente": 0
+    }
+  }
+}

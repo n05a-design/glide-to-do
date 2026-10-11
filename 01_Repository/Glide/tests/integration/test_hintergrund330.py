@@ -201,11 +201,32 @@ with tempfile.TemporaryDirectory(prefix="glide-hintergrund-") as ordner:
         # Die Auswahl in den Einstellungen: „Aus“ und fünf Vorschauen je Design.
         gesehen = {}
 
+        original_modal = app.run_modal
         def messen(self, dialog, parent=None):
-            rahmen = self._backdrop_choice_frame
-            gesehen["kacheln"] = sum(1 for zelle in rahmen.winfo_children() for kind in zelle.winfo_children()
-                                     if isinstance(kind, mod.tk.Canvas))
-            dialog.destroy()
+            def zaehlen():
+                try:
+                    rahmen = self._backdrop_choice_frame
+                    gesehen["kacheln"] = sum(1 for zelle in rahmen.winfo_children() for kind in zelle.winfo_children()
+                                             if isinstance(kind, mod.tk.Canvas))
+                finally:
+                    dialog.destroy()
+            def sichtbar_machen():
+                try:
+                    rahmen = self._backdrop_choice_frame
+                    canvas = rahmen.master
+                    while not isinstance(canvas, mod.tk.Canvas):
+                        canvas = canvas.master
+                    bbox = canvas.bbox("all")
+                    top = rahmen.winfo_rooty() - canvas.winfo_rooty() + canvas.canvasy(0)
+                    canvas.yview_moveto(max(0, (top - 12) / (bbox[3] - bbox[1])))
+                    # Der Abschnitt muss wie bei echter Bedienung sichtbar
+                    # werden; die ursprünglichen sechs Vorschauen bleiben Pflicht.
+                    root.after(30, zaehlen)
+                except Exception:
+                    dialog.destroy()
+                    raise
+            root.after(30, sichtbar_machen)
+            return original_modal(dialog, parent)
 
         mod.ListApp.run_modal = messen
         app.show_settings_dialog()

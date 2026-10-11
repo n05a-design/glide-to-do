@@ -1,0 +1,215 @@
+{
+  "datum": "2026-10-10",
+  "daten": "ausschließlich künstlich",
+  "paket": "3.36.0-Vorbereitung; APP_VERSION beim Messen noch 3.35.0",
+  "reihen": {
+    "direkt": {
+      "baseline": {
+        "messung": {
+          "startseite_neuaufbau": {
+            "kalt": {
+              "n": 5,
+              "median_ms": 801.767,
+              "p95_ms": 834.988,
+              "max_ms": 834.988
+            },
+            "warm": {
+              "n": 40,
+              "median_ms": 449.142,
+              "p95_ms": 471.608,
+              "max_ms": 479.956
+            }
+          },
+          "einstellungen": {
+            "kalt": {
+              "n": 5,
+              "median_ms": 598.9,
+              "p95_ms": 637.944,
+              "max_ms": 637.944
+            },
+            "warm": {
+              "n": 40,
+              "median_ms": 590.401,
+              "p95_ms": 627.876,
+              "max_ms": 640.145
+            }
+          }
+        },
+        "source_sha256": "9147c66318b7c46d7fd581eedcb5c6996bf19e7eebed857893c1b2fffc5bfb94",
+        "python": "3.14.5",
+        "tk": "9.0.3",
+        "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "widget_counts": {
+          "einstellungen": 137,
+          "startseite": 112
+        },
+        "fixture": {
+          "tasks": 1000,
+          "task_lists": 12,
+          "window": "1280x800",
+          "idle_rounds": 3,
+          "forced_home_rebuild": true,
+          "settings_close_excluded": true,
+          "actual_modal_setup": true,
+          "user_wait_excluded": true
+        },
+        "callback_errors": []
+      },
+      "kandidat": {
+        "messung": {
+          "startseite_neuaufbau": {
+            "kalt": {
+              "n": 5,
+              "median_ms": 283.111,
+              "p95_ms": 285.985,
+              "max_ms": 285.985
+            },
+            "warm": {
+              "n": 40,
+              "median_ms": 78.231,
+              "p95_ms": 89.536,
+              "max_ms": 90.406
+            }
+          },
+          "einstellungen": {
+            "kalt": {
+              "n": 5,
+              "median_ms": 177.668,
+              "p95_ms": 180.033,
+              "max_ms": 180.033
+            },
+            "warm": {
+              "n": 40,
+              "median_ms": 132.519,
+              "p95_ms": 136.449,
+              "max_ms": 141.081
+            }
+          }
+        },
+        "source_sha256": "94bdce465af097f2f15524fa1e52f2b6a868b77b00f4909143888b96809e5d17",
+        "python": "3.14.5",
+        "tk": "9.0.3",
+        "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "widget_counts": {
+          "einstellungen": 137,
+          "startseite": 119
+        },
+        "fixture": {
+          "tasks": 1000,
+          "task_lists": 12,
+          "window": "1280x800",
+          "idle_rounds": 3,
+          "forced_home_rebuild": true,
+          "settings_close_excluded": true,
+          "actual_modal_setup": true,
+          "user_wait_excluded": true
+        },
+        "callback_errors": []
+      }
+    },
+    "kindprozess": {
+      "baseline": {
+        "messung": {
+          "startseite_neuaufbau": {
+            "kalt": {
+              "n": 5,
+              "median_ms": 824.505,
+              "p95_ms": 830.718,
+              "max_ms": 830.718
+            },
+            "warm": {
+              "n": 40,
+              "median_ms": 456.76,
+              "p95_ms": 480.861,
+              "max_ms": 508.446
+            }
+          },
+          "einstellungen": {
+            "kalt": {
+              "n": 5,
+              "median_ms": 604.84,
+              "p95_ms": 617.291,
+              "max_ms": 617.291
+            },
+            "warm": {
+              "n": 40,
+              "median_ms": 599.178,
+              "p95_ms": 638.576,
+              "max_ms": 654.375
+            }
+          }
+        },
+        "source_sha256": "9147c66318b7c46d7fd581eedcb5c6996bf19e7eebed857893c1b2fffc5bfb94",
+        "python": "3.14.5",
+        "tk": "9.0.3",
+        "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "widget_counts": {
+          "einstellungen": 137,
+          "startseite": 112
+        },
+        "fixture": {
+          "tasks": 1000,
+          "task_lists": 12,
+          "window": "1280x800",
+          "idle_rounds": 3,
+          "forced_home_rebuild": true,
+          "settings_close_excluded": true,
+          "actual_modal_setup": true,
+          "user_wait_excluded": true
+        },
+        "callback_errors": []
+      },
+      "kandidat": {
+        "messung": {
+          "startseite_neuaufbau": {
+            "kalt": {
+              "n": 5,
+              "median_ms": 486.716,
+              "p95_ms": 497.491,
+              "max_ms": 497.491
+            },
+            "warm": {
+              "n": 40,
+              "median_ms": 79.945,
+              "p95_ms": 90.24,
+              "max_ms": 90.939
+            }
+          },
+          "einstellungen": {
+            "kalt": {
+              "n": 5,
+              "median_ms": 185.603,
+              "p95_ms": 199.586,
+              "max_ms": 199.586
+            },
+            "warm": {
+              "n": 40,
+              "median_ms": 136.399,
+              "p95_ms": 144.001,
+              "max_ms": 146.426
+            }
+          }
+        },
+        "source_sha256": "94bdce465af097f2f15524fa1e52f2b6a868b77b00f4909143888b96809e5d17",
+        "python": "3.14.5",
+        "tk": "9.0.3",
+        "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+        "widget_counts": {
+          "einstellungen": 137,
+          "startseite": 119
+        },
+        "fixture": {
+          "tasks": 1000,
+          "task_lists": 12,
+          "window": "1280x800",
+          "idle_rounds": 3,
+          "forced_home_rebuild": true,
+          "settings_close_excluded": true,
+          "actual_modal_setup": true,
+          "user_wait_excluded": true
+        },
+        "callback_errors": []
+      }
+    }
+  }
+}

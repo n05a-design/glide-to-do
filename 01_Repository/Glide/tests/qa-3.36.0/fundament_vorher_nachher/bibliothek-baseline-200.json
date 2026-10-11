@@ -1,0 +1,99 @@
+{
+  "version": "3.35.0",
+  "source_sha256": "9147c66318b7c46d7fd581eedcb5c6996bf19e7eebed857893c1b2fffc5bfb94",
+  "python": "3.14.5",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "tk": "9.0.3",
+  "profiling": false,
+  "fixture": {
+    "tasks": 10000,
+    "task_lists": 200,
+    "notes": 1,
+    "drawings": 1,
+    "folders": 1,
+    "window": "1400x950",
+    "idle_rounds": 3
+  },
+  "scope": "Render-only repeated refresh within existing library, not cross-view switches or save latency",
+  "warm_rounds": 8,
+  "timings": {
+    "Unverändert": {
+      "warmup_ms": 83.4,
+      "median_ms": 10.302,
+      "p95_ms": 10.773,
+      "samples_ms": [
+        10.77,
+        10.207,
+        10.219,
+        10.099,
+        9.818,
+        10.386,
+        10.773,
+        10.401
+      ]
+    },
+    "Aufgabenstatus": {
+      "warmup_ms": 378.165,
+      "median_ms": 549.875,
+      "p95_ms": 559.869,
+      "samples_ms": [
+        559.869,
+        557.444,
+        547.065,
+        549.396,
+        547.233,
+        548.057,
+        550.948,
+        550.355
+      ]
+    },
+    "Reihenfolge": {
+      "warmup_ms": 218.516,
+      "median_ms": 218.148,
+      "p95_ms": 222.157,
+      "samples_ms": [
+        219.377,
+        222.157,
+        218.269,
+        217.492,
+        218.105,
+        217.592,
+        218.191,
+        217.246
+      ]
+    }
+  },
+  "rounded_container_creations": {
+    "Unverändert": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "Aufgabenstatus": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "Reihenfolge": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "callback_errors": []
+}

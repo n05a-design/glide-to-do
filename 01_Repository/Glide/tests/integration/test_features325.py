@@ -296,7 +296,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features325-") as folder:
         app.set_design("dopamine", apply_now=False)
         assert app.action_feedback_level() == "all"
         app.feedback("list_created")
-        assert gezeigt == ["☷  Liste angelegt"], gezeigt
+        assert gezeigt == [f"{app.ICONS['list']}  Liste angelegt"], gezeigt
         # Jeder Vorgang hat einen Text in Einzahl und Mehrzahl.
         gezeigt.clear()
         for schluessel, (symbol, einzahl, mehrzahl) in app.ACTION_FEEDBACK_TEXTS.items():

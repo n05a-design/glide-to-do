@@ -1,0 +1,392 @@
+{
+  "tk": "9.0.3",
+  "rastervergleich": [
+    {
+      "hoehe": 16,
+      "breite": 11,
+      "alpha_mittlere_abweichung": 6.8125,
+      "alpha_p95_abweichung": 31,
+      "abweichung_ueber_32": 7,
+      "sichtbare_pixel": 167,
+      "zwischenwerte": 58
+    },
+    {
+      "hoehe": 32,
+      "breite": 22,
+      "alpha_mittlere_abweichung": 2.6136363636363638,
+      "alpha_p95_abweichung": 18,
+      "abweichung_ueber_32": 0,
+      "sichtbare_pixel": 571,
+      "zwischenwerte": 90
+    },
+    {
+      "hoehe": 54,
+      "breite": 36,
+      "alpha_mittlere_abweichung": 1.743312757201646,
+      "alpha_p95_abweichung": 13,
+      "abweichung_ueber_32": 14,
+      "sichtbare_pixel": 1571,
+      "zwischenwerte": 121
+    },
+    {
+      "hoehe": 108,
+      "breite": 72,
+      "alpha_mittlere_abweichung": 0.6624228395061729,
+      "alpha_p95_abweichung": 4,
+      "abweichung_ueber_32": 5,
+      "sichtbare_pixel": 6022,
+      "zwischenwerte": 191
+    },
+    {
+      "hoehe": 256,
+      "breite": 169,
+      "alpha_mittlere_abweichung": 0.40692030325443784,
+      "alpha_p95_abweichung": 0,
+      "abweichung_ueber_32": 101,
+      "sichtbare_pixel": 32686,
+      "zwischenwerte": 241
+    }
+  ],
+  "laufzeiten": {
+    "32": {
+      "kalt": {
+        "median_ms": 7.042125005682465,
+        "p95_ms": 7.204832989373244,
+        "werte_ms": [
+          7.168875003117137,
+          7.204832989373244,
+          6.972666989895515,
+          7.09958300285507,
+          6.965458000195213,
+          6.987458007642999,
+          7.09679200372193,
+          6.9602920120814815
+        ]
+      },
+      "warm": {
+        "median_ms": 0.2938955003628507,
+        "p95_ms": 0.3603749937610701,
+        "werte_ms": [
+          0.3603749937610701,
+          0.3151669952785596,
+          0.2942080027423799,
+          0.29533398628700525,
+          0.2908750029746443,
+          0.29045899282209575,
+          0.29358299798332155,
+          0.29191700741648674
+        ]
+      }
+    },
+    "54": {
+      "kalt": {
+        "median_ms": 12.529416497272905,
+        "p95_ms": 12.707500005490147,
+        "werte_ms": [
+          12.525915997684933,
+          12.707500005490147,
+          12.504667000030167,
+          12.38812500378117,
+          12.560874994960614,
+          12.532916996860877,
+          12.601416994584724,
+          12.433249998139217
+        ]
+      },
+      "warm": {
+        "median_ms": 0.7805209897924215,
+        "p95_ms": 0.8046669972827658,
+        "werte_ms": [
+          0.7881670026108623,
+          0.7806669891579077,
+          0.7803749904269353,
+          0.8032079931581393,
+          0.8046669972827658,
+          0.7610839966218919,
+          0.7532090094173327,
+          0.7500840001739562
+        ]
+      }
+    },
+    "108": {
+      "kalt": {
+        "median_ms": 28.70337500644382,
+        "p95_ms": 28.87212499626912,
+        "werte_ms": [
+          28.87212499626912,
+          28.717374996631406,
+          28.63083301053848,
+          28.70325000549201,
+          28.703500007395633,
+          28.7272919958923,
+          28.60766700177919,
+          28.530083000077866
+        ]
+      },
+      "warm": {
+        "median_ms": 3.179375002218876,
+        "p95_ms": 3.244624997023493,
+        "werte_ms": [
+          3.244624997023493,
+          3.22754199441988,
+          3.2145830045919865,
+          3.176625003106892,
+          3.18212500133086,
+          3.1498330063186586,
+          3.144834001432173,
+          3.1491669942624867
+        ]
+      }
+    }
+  },
+  "symbole": {
+    "familie": ".AppleSystemUIFont",
+    "anzahl": 63,
+    "tabelle": {
+      "move_up": "▲",
+      "move_down": "▼",
+      "history": "V",
+      "bullet": "•",
+      "actions": "⌘",
+      "search": "Su",
+      "details": "Dt",
+      "home": "St",
+      "today": "H",
+      "pages": "Se",
+      "planday": "Pl",
+      "settings": "Ei",
+      "capture": "+",
+      "notifications": "!",
+      "sidebar": "Sl",
+      "check": "✓",
+      "task_open": "□",
+      "templates": "Vo",
+      "inbox": "E",
+      "in_progress": "De",
+      "overdue": "△",
+      "trash": "Pk",
+      "theme_to_dark": "☾",
+      "theme_to_light": "He",
+      "labels": "La",
+      "calendar": "Ka",
+      "attachment": "⊕",
+      "repeat": "↻",
+      "group": "▸",
+      "back": "◂",
+      "next": "▶",
+      "board": "Pi",
+      "folder": "Or",
+      "list": "Li",
+      "drawing": "Ze",
+      "gallery": "Ga",
+      "undo": "Zu",
+      "redo": "No",
+      "swap": "<>",
+      "link": "Ve",
+      "blocked": "Wa",
+      "timer": "Zt",
+      "archive": "Ar",
+      "pinned": "Fa",
+      "symmetry_x": "↔",
+      "symmetry_y": "Y",
+      "edit": "Be",
+      "dropdown_closed": "▾",
+      "dropdown_open": "▴",
+      "moon_new": "●",
+      "moon_first": ")",
+      "moon_full": "○",
+      "moon_last": "(",
+      "description": "≡",
+      "priority_low": "1",
+      "priority_medium": "2",
+      "priority_high": "3",
+      "checklist": "☑",
+      "sort_ascending": "▲",
+      "sort_descending": "▼",
+      "print": "Dr",
+      "overflow": "...",
+      "remove": "×"
+    },
+    "korrekturen": {
+      "history": {
+        "vorher": "◷",
+        "nachher": "V"
+      },
+      "search": {
+        "vorher": "⌕",
+        "nachher": "Su"
+      },
+      "details": {
+        "vorher": "☰",
+        "nachher": "Dt"
+      },
+      "home": {
+        "vorher": "▣",
+        "nachher": "St"
+      },
+      "today": {
+        "vorher": "◉",
+        "nachher": "H"
+      },
+      "pages": {
+        "vorher": "▢",
+        "nachher": "Se"
+      },
+      "planday": {
+        "vorher": "◰",
+        "nachher": "Pl"
+      },
+      "settings": {
+        "vorher": "⚙",
+        "nachher": "Ei"
+      },
+      "capture": {
+        "vorher": "↯",
+        "nachher": "+"
+      },
+      "notifications": {
+        "vorher": "⍾",
+        "nachher": "!"
+      },
+      "sidebar": {
+        "vorher": "◧",
+        "nachher": "Sl"
+      },
+      "templates": {
+        "vorher": "▤",
+        "nachher": "Vo"
+      },
+      "inbox": {
+        "vorher": "⊔",
+        "nachher": "E"
+      },
+      "in_progress": {
+        "vorher": "◒",
+        "nachher": "De"
+      },
+      "trash": {
+        "vorher": "🗑",
+        "nachher": "Pk"
+      },
+      "theme_to_light": {
+        "vorher": "☀",
+        "nachher": "He"
+      },
+      "labels": {
+        "vorher": "◈",
+        "nachher": "La"
+      },
+      "calendar": {
+        "vorher": "▦",
+        "nachher": "Ka"
+      },
+      "board": {
+        "vorher": "▨",
+        "nachher": "Pi"
+      },
+      "folder": {
+        "vorher": "▰",
+        "nachher": "Or"
+      },
+      "list": {
+        "vorher": "☷",
+        "nachher": "Li"
+      },
+      "drawing": {
+        "vorher": "▩",
+        "nachher": "Ze"
+      },
+      "gallery": {
+        "vorher": "▥",
+        "nachher": "Ga"
+      },
+      "undo": {
+        "vorher": "↶",
+        "nachher": "Zu"
+      },
+      "redo": {
+        "vorher": "↷",
+        "nachher": "No"
+      },
+      "swap": {
+        "vorher": "⇄",
+        "nachher": "<>"
+      },
+      "link": {
+        "vorher": "⇆",
+        "nachher": "Ve"
+      },
+      "blocked": {
+        "vorher": "⊘",
+        "nachher": "Wa"
+      },
+      "timer": {
+        "vorher": "◴",
+        "nachher": "Zt"
+      },
+      "archive": {
+        "vorher": "▭",
+        "nachher": "Ar"
+      },
+      "pinned": {
+        "vorher": "◆",
+        "nachher": "Fa"
+      },
+      "symmetry_y": {
+        "vorher": "↕",
+        "nachher": "Y"
+      },
+      "edit": {
+        "vorher": "✎",
+        "nachher": "Be"
+      },
+      "moon_first": {
+        "vorher": "◐",
+        "nachher": ")"
+      },
+      "moon_last": {
+        "vorher": "◑",
+        "nachher": "("
+      },
+      "priority_low": {
+        "vorher": "⚐",
+        "nachher": "1"
+      },
+      "priority_medium": {
+        "vorher": "⚑",
+        "nachher": "2"
+      },
+      "priority_high": {
+        "vorher": "⚑⚑",
+        "nachher": "3"
+      },
+      "print": {
+        "vorher": "⎙",
+        "nachher": "Dr"
+      },
+      "overflow": {
+        "vorher": "⋯",
+        "nachher": "..."
+      }
+    }
+  },
+  "fotos": [
+    "004_Tafel_hell.png",
+    "003_App_pixel.png",
+    "005_Tafel_dunkel.png",
+    "001_App_light.png",
+    "002_App_dark.png"
+  ],
+  "foto_befunde": [],
+  "pruefgrenzen": [
+    "Eigene isolierte Mac-Fenster, künstliche Daten; keine menschliche Abnahme",
+    "Natives SVG und erzwungener Rasterweg unter Tk 9.0.3 verglichen; tatsächlicher Tk-8.6-Lauf folgt nativ unter Linux",
+    "Alle 63 Symbole in tatsächlicher UI-Schrift geprüft; lesbare Kurztexte bei fehlenden Glyphen"
+  ],
+  "vergleichskriterien": {
+    "alpha_mittlere_abweichung_max": 8,
+    "alpha_p95_abweichung_max": 32,
+    "massstab": "beide Achsen gleich; Rundungsrest transparent"
+  },
+  "zeitpunkt_im_lieferweg": "gezielte Prüfung vor Versionswechsel; unveränderte Funktionslogik"
+}

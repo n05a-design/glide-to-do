@@ -1,0 +1,177 @@
+{
+  "version": "3.35.0",
+  "source_sha256": "94bdce465af097f2f15524fa1e52f2b6a868b77b00f4909143888b96809e5d17",
+  "python": "3.14.5",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "tk": "9.0.3",
+  "profiling": false,
+  "fixture": {
+    "tasks": 1000,
+    "task_lists": 12,
+    "window": "1280x800",
+    "idle_rounds": 3,
+    "forced_home_rebuild": true,
+    "settings_close_excluded": true,
+    "actual_modal_setup": true,
+    "user_wait_excluded": true
+  },
+  "warm_rounds": 2,
+  "timings": {
+    "startseite_neuaufbau": {
+      "first_ms": 294.258,
+      "median_ms": 90.976,
+      "p95_ms": 98.631,
+      "samples_ms": [
+        294.258,
+        98.631,
+        83.322
+      ]
+    },
+    "einstellungen": {
+      "first_ms": 208.867,
+      "median_ms": 138.507,
+      "p95_ms": 140.692,
+      "samples_ms": [
+        208.867,
+        136.321,
+        140.692
+      ]
+    }
+  },
+  "widget_counts": {
+    "einstellungen": 137,
+    "startseite": 119
+  },
+  "callback_errors": [],
+  "ui_lifetime": {
+    "startseite": {
+      "warmup": 5,
+      "series": 5,
+      "rounds_per_series": 20,
+      "samples": [
+        {
+          "python_bytes": 57068,
+          "widgets": 119,
+          "tcl_callbacks": 945,
+          "pending_after": 5
+        },
+        {
+          "python_bytes": 81219,
+          "widgets": 119,
+          "tcl_callbacks": 945,
+          "pending_after": 5
+        },
+        {
+          "python_bytes": 92506,
+          "widgets": 119,
+          "tcl_callbacks": 945,
+          "pending_after": 5
+        },
+        {
+          "python_bytes": 97473,
+          "widgets": 119,
+          "tcl_callbacks": 945,
+          "pending_after": 5
+        },
+        {
+          "python_bytes": 99955,
+          "widgets": 119,
+          "tcl_callbacks": 945,
+          "pending_after": 5
+        },
+        {
+          "python_bytes": 102606,
+          "widgets": 119,
+          "tcl_callbacks": 945,
+          "pending_after": 5
+        }
+      ]
+    },
+    "bibliothek": {
+      "warmup": 5,
+      "series": 5,
+      "rounds_per_series": 20,
+      "samples": [
+        {
+          "python_bytes": 1238143,
+          "widgets": 125,
+          "tcl_callbacks": 1198,
+          "pending_after": 4
+        },
+        {
+          "python_bytes": 1238838,
+          "widgets": 125,
+          "tcl_callbacks": 1198,
+          "pending_after": 4
+        },
+        {
+          "python_bytes": 1240206,
+          "widgets": 125,
+          "tcl_callbacks": 1198,
+          "pending_after": 4
+        },
+        {
+          "python_bytes": 1240492,
+          "widgets": 125,
+          "tcl_callbacks": 1198,
+          "pending_after": 4
+        },
+        {
+          "python_bytes": 1240830,
+          "widgets": 125,
+          "tcl_callbacks": 1198,
+          "pending_after": 4
+        },
+        {
+          "python_bytes": 1241199,
+          "widgets": 125,
+          "tcl_callbacks": 1198,
+          "pending_after": 4
+        }
+      ]
+    },
+    "einstellungen": {
+      "warmup": 5,
+      "series": 5,
+      "rounds_per_series": 20,
+      "samples": [
+        {
+          "python_bytes": 1472994,
+          "widgets": 137,
+          "tcl_callbacks": 204,
+          "pending_after": 4
+        },
+        {
+          "python_bytes": 1473314,
+          "widgets": 137,
+          "tcl_callbacks": 204,
+          "pending_after": 4
+        },
+        {
+          "python_bytes": 1474216,
+          "widgets": 137,
+          "tcl_callbacks": 204,
+          "pending_after": 4
+        },
+        {
+          "python_bytes": 1474432,
+          "widgets": 137,
+          "tcl_callbacks": 204,
+          "pending_after": 4
+        },
+        {
+          "python_bytes": 1474648,
+          "widgets": 137,
+          "tcl_callbacks": 204,
+          "pending_after": 4
+        },
+        {
+          "python_bytes": 1474864,
+          "widgets": 137,
+          "tcl_callbacks": 204,
+          "pending_after": 4
+        }
+      ]
+    }
+  }
+}

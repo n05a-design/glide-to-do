@@ -154,8 +154,13 @@ with tempfile.TemporaryDirectory(prefix="glide-fenster-") as ordner:
             for _ in range(3):
                 root.update()
             if dialog.winfo_exists():
-                befunde.append(("Esc schließt nicht", titel, ""))
-                dialog.destroy()
+                finished = getattr(dialog, "_glide_modal_finished", None)
+                if dialog.state() != "withdrawn":
+                    befunde.append(("Esc schließt nicht", titel, ""))
+                    dialog.destroy()
+                elif finished is None or not finished.get() or root.grab_current() is dialog:
+                    befunde.append(("Esc beendet Modalzustand nicht", titel, ""))
+                    dialog.destroy()
         except mod.tk.TclError:
             pass
 

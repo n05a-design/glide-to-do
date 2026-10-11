@@ -1,39 +1,26 @@
-"""Glide-Logo und App-Symbol aus den SVG-Mastern (29.09.2026).
+"""Glide-Logo und App-Symbol aus freigegebenen SVG-Mastern.
 
-Die Master liegen in `20_Grafik_Master`; Kopien stehen unverändert unter
-`resources/logo/`:
-
-- `glide-logo.svg` – das Zeichen, eine Fläche in einer Farbe;
-- `glide-app-icon.svg` – das App-Symbol: blaue Fläche mit ausgespartem Zeichen;
-- `glide-logo.png`, `glide-app-icon.png` – dieselben Motive als PNG für Tk 8.6.
-
-**Warum SVG:** Tk 9 liest SVG selbst (nanosvg) und rechnet es für jede Größe
-scharf. Die Farbe steht im SVG als Füllwert. Für die Akzentfarbe wird genau
-dieser Wert ersetzt, bevor Tk das Bild rechnet – eine Textersetzung an einer
-bekannten Stelle, kein Nachfärben von Pixeln. Das Motiv selbst bleibt
-unangetastet; ein neu exportierter Master braucht keine Codeänderung, solange
-er die freigegebene Füllfarbe in CSS oder Inline-Stil trägt (`test_logo330` prüft das).
-
-**Tk 8.6** kennt kein SVG. Dann zeichnet Glide das Zeichen als Fläche auf eine
-Canvas: Der Pfad besteht nur aus Geraden und kubischen Bézierkurven, die hier
-in einen Polygonzug zerlegt werden. Das App-Symbol kommt dort aus dem PNG.
-
-Nur Standardbibliothek und tkinter.
+Tk 9 rastert SVG nativ. Tk 8.6 bekommt ein transparentes, mit der
+Standardbibliothek geglättetes PNG in exakter Zielgröße; vorberechnete
+App-Symbole vermeiden den großen PNG-Lade- und Verkleinerungsweg.
+Kleingrößenmaster gelten ausschließlich für 16 und 32 px.
 """
 
 import functools
-import math
 import os
 import re
 import sys
 import tkinter as tk
 import svg_geometry
+import logo_raster
 
 # Füllfarbe der Master (Glide-Blau). Genau dieser Wert wird ersetzt.
 MASTER_FILL = "#0185e1"
 BRAND_BLUE = "#0185E1"
 LOGO_FILE = "glide-logo.svg"
 ICON_FILE = "glide-app-icon.svg"
+LOGO_SMALL_FILE = "glide-logo-klein.svg"
+ICON_SMALL_FILE = "glide-app-icon-klein.svg"
 LOGO_PNG = "glide-logo.png"
 ICON_PNG = "glide-app-icon.png"
 # Luft um das Zeichen, damit geglättete Kanten nicht angeschnitten werden –
@@ -63,7 +50,7 @@ tinted = svg_geometry.tinted
 
 
 # --- Geometrie ---------------------------------------------------------------
-# Keep existing geometry entry points while the implementation remains Tk-free.
+# Bestehende Geometrie-Einstiege bleiben auf das Tk-freie Modul delegiert.
 _matrix = svg_geometry._matrix
 _multiply = svg_geometry._multiply
 _apply = svg_geometry._apply
@@ -72,8 +59,8 @@ subpaths = svg_geometry.subpaths
 
 
 @functools.lru_cache(maxsize=8)
-def outline(name=LOGO_FILE):
-    return svg_geometry.outline(read_svg(name))
+def outline(name=LOGO_FILE, schritte=10):
+    return svg_geometry.outline(read_svg(name), schritte=schritte)
 
 
 def bounding_box(name=LOGO_FILE):
@@ -120,17 +107,26 @@ def has_svg(master):
 
 
 def logo_photo(master, hoehe, farbe=BRAND_BLUE, name=LOGO_FILE):
-    """Das Zeichen als Bild in `farbe`, `hoehe` Pixel hoch und randlos – oder None ohne SVG."""
-    if not has_svg(master):
-        return None
-    svg = cropped_svg(tinted(read_svg(name), farbe), bounding_box(name))
-    return tk.PhotoImage(master=master, data=svg, format=f"svg -scaletoheight {max(1, int(hoehe))}")
+    """Logo in exakter Höhe: natives SVG oder geglättetes transparentes PNG."""
+    hoehe = max(1, int(hoehe))
+    if name == LOGO_FILE and hoehe in (16, 32):
+        name = LOGO_SMALL_FILE
+    svg = tinted(read_svg(name), farbe)  # Prüft die Farbe in beiden Wegen gleich.
+    box = bounding_box(name)
+    if has_svg(master):
+        return tk.PhotoImage(master=master, data=cropped_svg(svg, box),
+                             format=f"svg -scaletoheight {hoehe}")
+    breite, raster_box = logo_raster.proportional_box(box, hoehe)
+    mask = logo_raster.alpha_mask(outline(name, schritte=32), raster_box, breite, hoehe)
+    rgb = tuple(int(farbe[i:i + 2], 16) for i in (1, 3, 5))
+    png = logo_raster.rgba_png(mask, breite, hoehe, rgb)
+    return tk.PhotoImage(master=master, data=png, format="png")
 
 
-def icon_svg(rand=0.0):
+def icon_svg(rand=0.0, name=ICON_FILE):
     """App-Symbol als SVG-Text, mit `rand` (Anteil je Seite) Luft um die Fläche."""
-    svg = svg_geometry.inline_styles(read_svg(ICON_FILE))
-    x, y, breite, hoehe = bounding_box(ICON_FILE)
+    svg = svg_geometry.inline_styles(read_svg(name))
+    x, y, breite, hoehe = bounding_box(name)
     seite = max(breite, hoehe)
     zusatz = seite * rand / max(1e-6, 1 - 2 * rand)
     box = (x - (seite - breite) / 2 - zusatz, y - (seite - hoehe) / 2 - zusatz,
@@ -160,20 +156,20 @@ def square_icon(master, svg, kante):
 
 
 def icon_photos(master, groessen=(256, 64, 32, 16)):
-    """App-Symbol in mehreren Größen für `wm iconphoto` – aus SVG, sonst aus dem PNG."""
+    """Exakte App-Symbole; unter Tk 8.6 nur passende vorberechnete Kleinbilder."""
     fotos = []
     if has_svg(master):
-        svg = icon_svg(icon_margin())
         for groesse in groessen:
-            fotos.append(square_icon(master, svg, groesse))
+            name = ICON_SMALL_FILE if groesse in (16, 32) else ICON_FILE
+            fotos.append(square_icon(master, icon_svg(icon_margin(), name), groesse))
         return fotos
-    pfad = os.path.join(resource_dir(), ICON_PNG)
-    if not os.path.isfile(pfad):
-        return []
-    quelle = tk.PhotoImage(master=master, file=pfad)
     for groesse in groessen:
-        faktor = max(1, math.ceil(quelle.width() / groesse))
-        fotos.append(quelle.subsample(faktor, faktor))
+        prefix = "glide-app-icon-macos" if sys.platform == "darwin" else "glide-app-icon"
+        path = os.path.join(resource_dir(), f"{prefix}-{int(groesse)}.png")
+        bild = tk.PhotoImage(master=master, file=path)
+        if (bild.width(), bild.height()) != (groesse, groesse):
+            raise ValueError(f"App-Symbol hat falsche Maße: {groesse}")
+        fotos.append(bild)
     return fotos
 
 

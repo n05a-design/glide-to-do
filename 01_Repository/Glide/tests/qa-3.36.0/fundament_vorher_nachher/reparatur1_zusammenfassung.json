@@ -1,0 +1,108 @@
+{
+  "datum": "2026-10-10",
+  "version": "3.36.0",
+  "daten": "ausschließlich künstlich",
+  "hinweis": "Nach Kalender- und Updatekartenkorrektur; beide Startverfahren getrennt; alle Rohwerte; keine Profilerwerte",
+  "reihen": {
+    "direkt": {
+      "source_sha256": "cee39df996ccd617e21baefd0fb84d9d92dee5506305bc86f7e4547c6a294ad2",
+      "python": "3.14.5",
+      "tk": "9.0.3",
+      "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+      "fixture": {
+        "tasks": 1000,
+        "task_lists": 12,
+        "window": "1280x800",
+        "idle_rounds": 3,
+        "forced_home_rebuild": true,
+        "settings_close_excluded": true,
+        "actual_modal_setup": true,
+        "user_wait_excluded": true
+      },
+      "widget_counts": {
+        "einstellungen": 137,
+        "startseite": 119
+      },
+      "messung": {
+        "startseite_neuaufbau": {
+          "kalt": {
+            "n": 5,
+            "median_ms": 262.545,
+            "p95_ms": 273.973,
+            "max_ms": 273.973
+          },
+          "warm": {
+            "n": 40,
+            "median_ms": 78.691,
+            "p95_ms": 91.307,
+            "max_ms": 93.242
+          }
+        },
+        "einstellungen": {
+          "kalt": {
+            "n": 5,
+            "median_ms": 177.401,
+            "p95_ms": 183.697,
+            "max_ms": 183.697
+          },
+          "warm": {
+            "n": 40,
+            "median_ms": 133.149,
+            "p95_ms": 139.579,
+            "max_ms": 142.514
+          }
+        }
+      }
+    },
+    "kindprozess": {
+      "source_sha256": "cee39df996ccd617e21baefd0fb84d9d92dee5506305bc86f7e4547c6a294ad2",
+      "python": "3.14.5",
+      "tk": "9.0.3",
+      "plattform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+      "fixture": {
+        "tasks": 1000,
+        "task_lists": 12,
+        "window": "1280x800",
+        "idle_rounds": 3,
+        "forced_home_rebuild": true,
+        "settings_close_excluded": true,
+        "actual_modal_setup": true,
+        "user_wait_excluded": true
+      },
+      "widget_counts": {
+        "einstellungen": 137,
+        "startseite": 119
+      },
+      "messung": {
+        "startseite_neuaufbau": {
+          "kalt": {
+            "n": 5,
+            "median_ms": 483.895,
+            "p95_ms": 507.906,
+            "max_ms": 507.906
+          },
+          "warm": {
+            "n": 40,
+            "median_ms": 78.809,
+            "p95_ms": 88.029,
+            "max_ms": 95.922
+          }
+        },
+        "einstellungen": {
+          "kalt": {
+            "n": 5,
+            "median_ms": 178.096,
+            "p95_ms": 189.677,
+            "max_ms": 189.677
+          },
+          "warm": {
+            "n": 40,
+            "median_ms": 133.882,
+            "p95_ms": 139.399,
+            "max_ms": 144.116
+          }
+        }
+      }
+    }
+  }
+}

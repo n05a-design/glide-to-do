@@ -1,0 +1,25 @@
+{
+  "freigabe": "D45, 10.10.2026",
+  "quellen": {
+    "glide-logo.svg": {
+      "master": "01_Logo/Glide-Logo-01.svg",
+      "sha256": "0e770ea15a69d3e91f2e849f32468d4960edcf5d5f176f1bc628c7b7b79d5323",
+      "d45_bytegleich": true
+    },
+    "glide-logo-klein.svg": {
+      "master": "01_Logo/Glide-Logo-klein.svg",
+      "sha256": "6a214146dda487580d3edac4363e8095aba3e2ebb366f285f9ee828f2ff373ef",
+      "d45_bytegleich": true
+    },
+    "glide-app-icon.svg": {
+      "master": "03_Fav-Icon/App-Icon-transparent-02.svg",
+      "sha256": "e35e51d07fffe4d87c4c98dfba42ebabb3d3a8b7b3de7b797d2f3b97e1fe8e46",
+      "d45_bytegleich": true
+    },
+    "glide-app-icon-klein.svg": {
+      "master": "03_Fav-Icon/App-Icon-klein.svg",
+      "sha256": "a9266fb8559f3086c13c0b1844416775ec09e5fe948c56de73567c46d6daecf3",
+      "d45_bytegleich": true
+    }
+  }
+}

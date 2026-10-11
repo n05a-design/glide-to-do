@@ -4,8 +4,8 @@
 Aufruf aus `01_Repository/Glide`:
     python3 -B tests/tools/ci_grundstufe.py [--protokoll ORDNER] [--lieferstand-streng]
 
-Läuft in GitHub Actions bei jedem Push und Pull Request auf `main` und lokal
-mit demselben Ergebnis. Nutzt die Prüfungen aus `pruefen.py`, statt sie zu
+Läuft in GitHub Actions bei Push auf `main` und `claude/**`, bei Pull Requests
+auf `main` sowie lokal. Nutzt die Prüfungen aus `pruefen.py`, statt sie zu
 duplizieren:
 
 1. Vorprüfungen: Syntax, Versionskonsistenz, Dokumentationsindex mit Links, Fixtures.
@@ -31,9 +31,12 @@ duplizieren:
    Konfliktkopien `<Name>-<Gerätename>` neben ihrem Original und kein
    Hauptdokument, das ohne Vermerk mehr als 40 % seiner Zeilen verliert.
 
-Die Integrationssuiten sind auf den Referenz-Mac abgestimmt und gehören nicht
-dazu; unter Linux laufen sie über `pruefen.py --modus schnell` (in GitHub
-Actions als manuell startbarer Job). Die Vollprüfung ersetzt diese Stufe nicht.
+Die Integrationssuiten gehören nicht zu dieser Grundstufe. GitHub Actions
+führt anschließend die vollständige sachlich ausführbare Linux-Matrix und
+danach die native Windows-Vollprüfung verpflichtend aus (D35/D42/D44).
+Kalibrierte Linux-Erwartungen brauchen passende Defekt-Gegenproben; native
+Sicht- und Screenreaderabnahmen bleiben eigene Tore. Die Vollprüfung ersetzt
+diese Grundstufe nicht.
 
 Exitcode 0: alle Schritte bestanden. Exitcode 1: mindestens ein Schritt
 fehlgeschlagen oder die Startprobe war nicht ausführbar.

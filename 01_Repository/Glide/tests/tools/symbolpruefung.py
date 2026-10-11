@@ -40,85 +40,48 @@ _isolated = tempfile.TemporaryDirectory(prefix="glide-symbols-")
 os.environ["GLIDE_DATA_DIR"] = _isolated.name
 
 
-def lade_symbole():
-    """Liest die Symboltabelle aus dem Quelltext, ohne die App zu starten."""
-    import ast
-
-    quelle = (REPO / "src/glide/app.pyw").read_text(encoding="utf-8-sig")
-    baum = ast.parse(quelle)
-    for knoten in ast.walk(baum):
-        if isinstance(knoten, ast.Assign):
-            for ziel in knoten.targets:
-                if isinstance(ziel, ast.Name) and ziel.id == "ICONS":
-                    return ast.literal_eval(knoten.value)
-    raise SystemExit("ICONS nicht gefunden – liegt app.pyw an der erwarteten Stelle?")
-
-
 def main():
-    symbole = lade_symbole()
     loader = importlib.machinery.SourceFileLoader("glide_symbols", str(REPO / "src/glide/app.pyw"))
     spec = importlib.util.spec_from_loader(loader.name, loader)
     mod = importlib.util.module_from_spec(spec)
+    os.environ["GLIDE_TEST_MODE"] = "1"
     loader.exec_module(mod)
-    registered = mod.register_private_fonts()
     root = tk.Tk()
     root.withdraw()
-    available = set(tkfont.families(root))
-    family = next((name for name in mod.ListApp.PREFERRED_UI_FONTS if name in available),
-                  tkfont.nametofont("TkDefaultFont", root=root).actual("family"))
-
-    schriften = {
-        "Seitenleiste und Liste (App-Schrift 12)": tkfont.Font(root=root, family=family, size=12),
-        "Knöpfe (App-Schrift 10)": tkfont.Font(root=root, family=family, size=10),
-    }
-
-    print(f"Plattform: {sys.platform} · Tcl/Tk {root.tk.call('info', 'patchlevel')}")
-    print(f"Privat registrierte Dateien: {len(registered)} · App-Familie: {family}")
-    print()
-
-    fazit = []
-    for beschreibung, schrift in schriften.items():
-        eingestellt = schrift.actual("family")
-        print(f"{beschreibung} – eingestellt: {eingestellt}")
-        print(f"  {'Symbol':<10} {'Zeichen':<8} {'Breite':>7} {'Höhe':>6}  Schrift")
-        for name, zeichen in symbole.items():
-            # Je Zeichen fragen, nicht je Zeichenkette: „⚑⚑" besteht aus zwei
-            # Zeichen, und `font actual` beantwortet immer nur genau eines.
-            familien = []
-            for einzeln in zeichen:
-                try:
-                    gefunden = root.tk.call("font", "actual", schrift.name, "-family", einzeln)
-                except tk.TclError:
-                    gefunden = "(nicht ermittelbar)"
-                if gefunden not in familien:
-                    familien.append(gefunden)
-            familie = " + ".join(familien)
-            breite = schrift.measure(zeichen)
-            hoehe = schrift.metrics("linespace")
-            ersatz = familie != eingestellt
-            marke = "  ← Ersatzschrift" if ersatz else ""
-            codepunkte = " ".join(f"U+{ord(z):04X}" for z in zeichen)
-            print(f"  {name:<10} {zeichen:<8} {breite:>7} {hoehe:>6}  {familie}{marke}")
-            if ersatz:
-                fazit.append((beschreibung, name, zeichen, codepunkte, familie))
-        print()
-
-    if not fazit:
-        print("Alle Symbole kommen aus der eingestellten Schrift. Größe und Strichstärke")
-        print("benötigen auf diesem Rechner keine Ersatzfamilie; weitere Plattformen getrennt prüfen.")
-        root.destroy()
+    app = None
+    try:
+        app = mod.ListApp(root)
+        root.withdraw()
+        symbole = app.ICONS
+        family = app.ui_font_family()
+        print(f"Plattform: {sys.platform} · Tk {root.tk.call('package', 'provide', 'Tk')}")
+        print(f"App-Familie: {family} · {len(symbole)} aufgelöste Symbole")
+        print(f"Angepasste Zeichen: {len(app._symbol_changes)}")
+        fazit = []
+        for weight in ("normal", "bold"):
+            schrift = tkfont.Font(root=root, family=family, size=12, weight=weight)
+            eingestellt = str(schrift.actual("family"))
+            print(f"\nSchnitt {weight} – eingestellt: {eingestellt}")
+            for name, zeichen in symbole.items():
+                familien = list(dict.fromkeys(str(root.tk.call("font", "actual", schrift.name,
+                                                               "-family", char)) for char in zeichen))
+                ersatz = any(f.casefold() != eingestellt.casefold() for f in familien)
+                print(f"  {name:<18} {zeichen:<8} {schrift.measure(zeichen):>5} px · "
+                      f"{schrift.metrics('linespace'):>3} px hoch · {' + '.join(familien)}"
+                      + (" ← Ersatzschrift" if ersatz else ""))
+                if ersatz:
+                    fazit.append((weight, name, zeichen, familien))
+        if fazit:
+            print(f"FEHLER: {len(fazit)} Zeichen benötigen eine Ersatzschrift.")
+            return 1
+        print("Alle aufgelösten Zeichen kommen aus der tatsächlichen UI-Schrift.")
+        print("Größe, Ausrichtung und DPI weiterhin auf jeder Plattform sichtbar prüfen.")
         return 0
-
-    print("Aus einer Ersatzschrift gezeichnet:")
-    for beschreibung, name, zeichen, codepunkte, familie in fazit:
-        print(f"  {name} „{zeichen}\" ({codepunkte}) → {familie}  [{beschreibung}]")
-    print()
-    print("Das erklärt Größen- und Stärkeunterschiede zwischen den Systemen. Zwei Wege:")
-    print("  1. Für diese Symbole Zeichen wählen, die die Systemschrift selbst enthält.")
-    print("  2. Eine Schrift für die Symbole festlegen, die alle Zeichen mitbringt.")
-    print("Die Entscheidung gehört in docs/ – dieses Werkzeug liefert nur den Befund.")
-    root.destroy()
-    return 0
+    finally:
+        if app is not None:
+            app.cancel_pending_callbacks()
+            app.release_data_lock()
+        root.destroy()
 
 
 if __name__ == "__main__":

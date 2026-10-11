@@ -1,0 +1,41 @@
+{
+  "pruefungen": [
+    {
+      "fall": "logo3370",
+      "exitcode": 0,
+      "erwarteter_befund": null,
+      "bestanden": true
+    },
+    {
+      "fall": "logo330",
+      "exitcode": 0,
+      "erwarteter_befund": null,
+      "bestanden": true
+    },
+    {
+      "fall": "units",
+      "exitcode": 0,
+      "erwarteter_befund": null,
+      "bestanden": true
+    },
+    {
+      "fall": "vorversion-logo",
+      "exitcode": 1,
+      "erwarteter_befund": "Tk-8.6-Logo fehlt als geglättetes Bild",
+      "bestanden": true
+    },
+    {
+      "fall": "vorversion-icons",
+      "exitcode": 1,
+      "erwarteter_befund": "App-Symbole nicht exakt in Zielgröße",
+      "bestanden": true
+    },
+    {
+      "fall": "vorversion-symbole",
+      "exitcode": 1,
+      "erwarteter_befund": "Ersatzschrift",
+      "bestanden": true
+    }
+  ],
+  "zeitpunkt_im_lieferweg": "gezielte Prüfung vor Versionswechsel; unveränderte Funktionslogik"
+}

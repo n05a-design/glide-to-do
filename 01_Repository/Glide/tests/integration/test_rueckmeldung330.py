@@ -43,6 +43,10 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
     fehler = []
     root.report_callback_exception = lambda *args: fehler.append(args)
     app = mod.ListApp(root)
+    for source in app.planning_lists():
+        for item in app.walk_items(source.get("items", [])):
+            item["reminder"] = None
+    app.refresh_reminder_status()
     app.settings["view_hints"] = {key: True for key in ("list", "folder", "trash", "in_progress", app.TABLE_VIEW, app.PLAN_DAY_VIEW, app.LABELS_VIEW)}
     app.show_info = app.show_warning = app.show_error = lambda *args, **kwargs: None
 
@@ -98,7 +102,7 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
         app.apply_reminder_badge(0)
         erwartet = ["settings_button", "capture_button", "search_button", "sidebar_toggle_button"]
         def reihenfolge():
-            namen = {str(getattr(app, name)): name for name in erwartet + ["header_overflow_button"]}
+            namen = {str(getattr(app, name)): name for name in erwartet + ["header_overflow_button", "notifications_button"]}
             return [namen.get(str(knopf), str(knopf)) for knopf in app.header_controls.pack_slaves()]
         assert reihenfolge() == erwartet, reihenfolge()
         for breite in (1400, 860, 1400):
@@ -108,6 +112,10 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
         assert reihenfolge() == erwartet, ("nach Dichtewechsel", reihenfolge())
         app._header_density = "minimal"
         app.pack_header_controls()
+        assert reihenfolge()[0] == "header_overflow_button", reihenfolge()
+        app.apply_reminder_badge(2)
+        assert reihenfolge() == ["notifications_button", *erwartet[1:]], reihenfolge()
+        app.apply_reminder_badge(0)
         assert reihenfolge()[0] == "header_overflow_button", reihenfolge()
         app._header_density = None
         app.pack_header_controls()
@@ -255,7 +263,17 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
         app.open_list_view()  # die Liste stand oben noch auf „Pinnwand“
         ruhe()
         assert app.input_frame.winfo_manager() == "pack" and app.card_foot_mode() == "hint"
-        assert app.input_frame.winfo_y() < app.search_frame.winfo_y(), "Eingabe steht wieder über der Suche"
+        # 3.38: Eingabe vor Suche, bei genügend Breite nebeneinander;
+        # beide bleiben vollständig in der Werkzeugzeile über dem Inhalt.
+        eingabe, suche = app.input_frame, app.search_frame
+        assert (eingabe.winfo_rootx() + eingabe.winfo_width() <= suche.winfo_rootx() + 1
+                or eingabe.winfo_rooty() + eingabe.winfo_height() <= suche.winfo_rooty() + 1)
+        for feld in (eingabe, suche):
+            assert feld.master is app.content_toolbar and feld.winfo_ismapped()
+            assert feld.winfo_y() >= 0
+            assert feld.winfo_y() + feld.winfo_height() <= app.content_toolbar.winfo_height()
+        assert (app.content_toolbar.winfo_rooty() + app.content_toolbar.winfo_height()
+                <= app.list_frame_outer.winfo_rooty())
         # Erledigte Punkte löschen: in den Papierkorb, Rückgängig holt zurück.
         liste = next(entry for entry in app.lists if entry["id"] == normal["id"])
         erledigt = [item["id"] for item in app.walk_items(liste["items"]) if item.get("done")]
@@ -291,7 +309,18 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
         mod.ListApp.run_modal = pruefen
         app.tree.selection_set(app.tree.get_children("")[1])
         app.tree.focus(app.tree.get_children("")[1])
+        # Der echte Bearbeiten-Einstieg öffnet seit 3.38 den Inspektor.
+        # Beide Flächen müssen auch mit Verlauf ohne Layoutschleife öffnen.
+        import time as zeit
+        selected_id = app.get_selected_item_id()
+        start = zeit.monotonic()
         app.edit_item()
+        ruhe()
+        assert zeit.monotonic() - start < 5
+        assert app.detail_pane.winfo_ismapped() and app._detail_state["item_id"] == selected_id
+        app.close_task_inspector(discard=True)
+        app.themed_item_details_dialog(dict(app.find_item_in_lists(selected_id)[0],
+                                           id="ungespeicherte-verlaufsprobe"))
         assert gemessen.get("dauer", 99) < 5, gemessen
         # Neuzeichnen nur bei echter Größenänderung.
         knopf = app.add_button

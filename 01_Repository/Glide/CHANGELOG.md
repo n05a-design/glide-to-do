@@ -1,5 +1,31 @@
 # Änderungsverlauf
 
+## 3.38.0 – Aufgaben unmittelbar bearbeiten (11.10.2026)
+
+- **Ein gemeinsamer Inspektor:** Liste, Tabelle, Heute, Demnächst, Pinnwand und Aufgabenverweise in Seiten öffnen dieselbe Bearbeitungsfläche mit allen bisherigen Feldern. Bei schmalem Fenster liegt sie innerhalb der Inhaltsfläche; die Navigation bleibt erreichbar. Speichern, Strg/Cmd+S, Verwerfen und Schließen erhalten Eingaben bei Fehlern. Geänderte Aufgaben werden vor dem Schreiben erneut verglichen; Schreibfehler setzen Bearbeitung, Verlauf und Undo zurück.
+- **Felder direkt ändern:** Bearbeitungstag, Fälligkeit, Wichtigkeit und Labels öffnen ihre Auswahl am sichtbaren Aufgabenfeld, auch auf Pinnwandkarten und in Live-Listen. Im Inspektor bleiben dieselben Fachregeln wirksam. Einplanen, Fälligkeit und weitere Aktionen erscheinen an der Zeile bei Überfahren oder Auswahl; Tastatur, Kontextmenü und Palette bleiben erreichbar.
+- **Hierarchie und Platz:** Vier Textstufen vereinheitlichen Heute, Listen, Seiten und Inspektor; die nächste Aufgabe tritt in Heute hervor. Eingabe und Suche teilen bei ausreichender Breite eine Zeile, unbenutzte Zeilen entfallen. Pinnwandwerkzeuge liegen im Kartenfuß. Die tatsächliche Inhaltskante liegt in allen sechs gewählten Ansichten bei 1280 × 800 unter 15 % der Fensterhöhe; Mindestgröße und große Schrift separat geprüft.
+- **Schnelleingabe bei enger Zeile:** Erkennungschips brechen bei Bedarf um; jede Rücknahme bleibt innerhalb der sichtbaren Hinweisfläche erreichbar.
+- **Dezente Bewegung:** Kurze, unterbrechbare Rückmeldung beim Abhaken, Auf-/Zuklappen und Bereichswechsel. Der Inhalt ist sofort bedienbar; die vorhandene Abschaltoption beendet auch laufende Übergänge. Keine bleibenden Rückrufe nach dem Schließen.
+- **Prüfwerkzeuge:** Foto-Einstiege verwenden den gemeinsamen Inspektor und Labelpicker. Der Showcase-Abgleich bietet `--vordergrund` für Mac-Prüfstände, deren synthetische Eingaben echten Fensterfokus benötigen; Prüfkriterien unverändert. Pinnwand-Feldklicks scrollen jeden nachgewiesenen Treffer erreichbar, statt ihn außerhalb des Ausschnitts zu überspringen; die Werkzeugleisten-Gegenprobe erreicht gezielt ihre unveränderten Layoutassertionen.
+- **Prüfung:** Neue Pflichtsuite `test_aufgaben3380.py`, vier passende rote Gegenproben gegen 3.37.0 und vier absichtlich beschädigte Kandidaten. Neue Tk-freie Module `task_editing.py` und `motion.py` mit 18 Unit-Tests. Bestehende Form-, Erinnerungs- und Layoutprüfungen an den gemeinsamen Editor und die kompakte Leiste angepasst; ihre ursprünglichen Feld- und Speicherprüfungen bleiben erhalten. Aufgabenformat 23 unverändert, keine neue Laufzeitabhängigkeit. Vollprüfungen, Messwerte und Lieferhashes im QA-Bericht.
+
+## 3.37.0 – Logo und Symbole (10.10.2026)
+
+- **Logo unter Tk 8.6:** Ein Tk-freier Rasterweg mit Alpha-Zwischentönen ersetzt den ungeglätteten Canvas-Rückfall; die Akzentfarbe bleibt zur Laufzeit wählbar. Tk 9 nutzt weiter SVG.
+- **App-Symbole:** Vorberechnete PNGs in genau 16/32/64/256 px vermeiden Laden und ungefiltertes Verkleinern des großen PNG. Windows-/Linux- und macOS-Ränder werden getrennt berücksichtigt.
+- **Freigegebene Master (D45):** Tangentiale Rundungsanschlüsse und entferntes Kurzsegment; breiterer Innenraum ausschließlich bei 16/32 px. Reguläre SVG-Quellen und Exporte ersetzen die Entwurfsquellen; die binäre Affinity-Datei bleibt als nicht nachgeführt gekennzeichnet.
+- **Gesamte ICONS-Tabelle:** Auswahl nach tatsächlicher Abdeckung in normalem und fettem UI-Schriftschnitt; lesbare deutsche Kurztexte bei fehlenden Zeichen. Kopfzeilenknöpfe berücksichtigen die Textbreite. Pixel-Kachelköpfe setzen Symbol und Pixelschrift getrennt. Beschriftungen, Aktionskennungen und Tastaturwege bleiben erhalten.
+- **Prüfung:** Pflichtsuite `test_logo3370.py` mit getrennten Gegenproben gegen 3.36.0, Raster-/PNG-, Geometrie- und Symbolregeln mit Unit-Tests; kein Formatwechsel und keine zusätzliche Laufzeitbibliothek. Native Vollprüfungen und menschliche Sicht-/DPI-Abnahme getrennt ausweisen.
+
+## 3.36.0 – Fundament und Tempo (10.10.2026)
+
+- **P03 Startseite:** Geänderte Inhalte werden in erhaltenen Flächen abgeglichen; natürliche Kartenhöhen vermeiden zusätzliche Layoutschleifen. Der tatsächliche Builder wird warm und kalt gemessen, keine Cachetreffer als Neuaufbau gezählt. Kalt-Ausnahme D46: ≤ 300 ms bei direktem Start und ≤ 500 ms im beobachteten Kindprozessverfahren, warm weiterhin ≤ 150 ms. Ansichtswechsel und erneuter Abgleich erhalten die bedienbare Scrollleiste.
+- **P03 Bibliothek:** Geänderte Karten aktualisieren ihre betroffenen Elemente, unveränderte Karten behalten Fokus und Lebensdauer. Bei 200 Listen/10.000 Aufgaben sinkt der Statusabgleich im Median von rund 550 auf 11 ms; Umordnen war rund 7 % langsamer und bleibt ausdrücklich ausgewiesen.
+- **E01 Einstellungen:** Sichtbare Vorschauen entstehen zuerst; ein unveränderter Dialog wird beim nächsten Öffnen wiederverwendet. Abbrechen verwirft Eingaben, geänderte Einstellungen, Listen, Design und Schrift verwerfen den alten Dialog; geschlossene Fenster geben Griff und Rückrufe frei. Erste Anzeige ≤ 250 ms, erneute Anzeige Median ≤ 150 ms/p95 ≤ 170 ms nach Freigabe D47. Kalenderwechsel und Updatekarte bleiben im gezielten Startseitenabgleich aktuell.
+- **Native Prüfstände:** Gesamte sachlich ausführbare Linux-Matrix und native Windows-Vollprüfung je Lieferung verpflichtend. Uhrabhängige Prüfaufbauten und Tk-8.6-Fähigkeitszweige gezielt kalibriert, mit absichtlich defekten Gegenfällen. Windows-Checkout erlaubt lange Grafikpfade. Menschliche Sicht-, DPI- und Screenreader-Abnahme bleibt getrennt.
+- **Prüfung:** Neue Pflichtsuite `test_fundament3360.py` mit drei getrennten Gegenproben gegen 3.35.0, Tk-freier Widget-Abgleich `render_retention.py` mit Unit-Tests, Lebensdauer- und Vorher-/Nachhermessung. Aufgabenformat 23 und Einstellungenformat 2 unverändert; keine neue Laufzeitabhängigkeit. Endgültige Prüfergebnisse und Lieferhashes im QA-Bericht.
+
 ## 3.35.0 – Pixel und Austausch (09.10.2026)
 
 - **G24 KI-Austausch Stufe 2:** „Für KI bereitstellen …“ hat einen Zweck „Vorhandene Aufgaben überarbeiten lassen“ und schreibt dann ein Kontextpaket (`.glidecontext`) der aktuellen Liste, des Ordners, aller Listen oder der ausgewählten Punkte – je Aufgabe ein Verweis ohne interne Kennung, ihre Felder und eine Prüfsumme des Ausgangsstands. Die Antwort einer KI (Änderungsvorschlag, `mode: "patch"`, Austauschformat 2) öffnet „KI-Ergebnis importieren …“ in einer eigenen Prüfung: jede Änderung Feld für Feld, Konflikte (die Aufgabe hat sich seither geändert), Unbekanntes und Ungültiges benannt. Übernommen wird nur Anwendbares, nach einer Vorsicherung und als ein Rückgängig-Schritt; Erledigt an einer Wiederholung bleibt dem Abhaken in Glide vorbehalten. Version 1 bleibt unverändert lesbar.
@@ -60,12 +86,6 @@
 - Vorlagen im Anlegen-Menü, ausgefüllte Vorschau mit Scrollleiste vor dem Anlegen, einschließlich Seitentext, Unteraufgaben und derselben verschobenen Termine. Abbrechen verändert den Bestand nicht. Vorlagen aus einem Ordner-Menü werden vor dem ersten Speichern im gewählten Ordner eingeordnet; ein Undo und Schreibfehler sind gemeinsam abgesichert.
 - Aufgabenformat 23 mit bytegenauer Vorsicherung und schreibgeschützter Vorversion; neue Fachlogik ohne Tk und ohne zusätzliche Laufzeitabhängigkeit. Prüf- und Lieferstand im QA-Bericht; native und menschliche Abnahme separat.
 
-## 3.33.17 – 07.10.2026
-
-- Wissen und Woche (N04/AU04, G08/G30): Kalender als eingebettete Woche/Monat mit gemeinsamer Tageskapazität, Planungsauswahl, Ziehen auf Bearbeitungstage, bestätigten Zeitfenstervorschlägen und Verbindung zum Wochenrückblick. Fälligkeit bleibt erhalten; Mondphasen und ausdrückliches Anlegen mit Fälligkeit bleiben verfügbar.
-- Lokale Seiten-/Listen-/Aufgabenverweise über @, Kontextmenü und Palette, mit abgeleiteten Rückverweisen. Kennungen erhalten Beziehungen bei Kopie, Import, Archiv, Papierkorb und Neustart; Undo und fehlgeschlagene Speicherung gemeinsam abgesichert.
-- Eigenes Aufgabenformat 22 mit bytegenauer Vorsicherung und schreibgeschützter Vorversion. Zwei Tk-freie Module ohne neue Laufzeitabhängigkeit; Paket- und Vollprüfung sowie Lieferstand im QA-Bericht. Native Mac-/Linux-, Bundle- und menschliche Abnahme bleiben separat.
-
 ## Frühere Versionen (verdichtet)
 
 Vollständig beschrieben sind die sieben neuesten Versionen; ältere stehen verdichtet in der Tabelle darunter. Ihre ausführlichen Einträge, Verträge und Nachweise trägt Git (3.33.13–3.33.16 im Commit `6098877`, ältere im Stand vor dem 03.10.2026). Das aktuelle Verhalten beschreiben die [Funktionen](docs/20_FUNKTIONEN.md).
@@ -74,6 +94,7 @@ Datenformate und ihre Felder: [Daten und Migration](docs/06_DATA_BACKUP_MIGRATIO
 
 | Version | Datum | Kern |
 |---|---|---|
+| 3.33.17 | 07.10.2026 | Wissen und Woche: eingebetteter Kalender, Kapazität/Zeitfenster, lokale Objektverweise und Rückverweise; Format 22 |
 | 3.33.16 | 07.10.2026 | Bedienkomfort: eine Palette für Inhalte und Aktionen, höchstens vier Kopfknöpfe, einklappbare Hinweise, Bibliothekswege, Bearbeitungstag in der Datumsspalte, eindeutige Symbole (U01/U02/U13/U14/U16/U22/U24) |
 | 3.33.15 | 07.10.2026 | Aufgaben im Wissen: echte Aufgaben im Notiztext, Übernahme in Listen mit erhaltenen IDs, „Aus Seiten“ (G29/G31/G32); Format 21 |
 | 3.33.14 | 07.10.2026 | Tagesvorschlag „Was passt heute?“, geführter Tagesbeginn, Zeitblöcke per Tastatur, Fokus mit genau einmal gebuchter Zeit (AU01/AU03/H-02/G05) |

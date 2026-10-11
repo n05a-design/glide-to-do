@@ -8,7 +8,7 @@
 - Die Startseite zeigt nach keinem Wechsel eine Listenzeile. Bis 29.09.2026
   stand nach „Mein Tag“ die Eingabezeile unter den Kacheln (Rückmeldung mit
   Bildschirmfoto); nach dem Papierkorb und einer Seite ebenso.
-- Zurück in der Liste stehen Eingabe, Suche und Karte wieder in dieser Folge.
+- Zurück in der Liste stehen die gemeinsame Eingabe-/Suchleiste und die Karte wieder in dieser Folge.
 """
 import importlib.machinery
 import importlib.util
@@ -100,7 +100,7 @@ with tempfile.TemporaryDirectory(prefix="glide-kartenfuss-") as ordner:
             "Galerie": (lambda: app.set_active_list(galerie["id"]), None),
             "Ordner": (lambda: app.set_active_folder(ordner_eintrag["id"]), "hint"),
         }
-        reihe = ["input_frame", "tool_band", "search_frame", "list_frame_outer"]
+        reihe = ["content_toolbar", "list_frame_outer"]
 
         def zeilen():
             namen = {str(getattr(app, name)): name for name in reihe + ["home_frame", "template_actions"]
@@ -113,6 +113,11 @@ with tempfile.TemporaryDirectory(prefix="glide-kartenfuss-") as ordner:
         def pruefen(von, nach):
             _oeffnen, erwartet = ansichten[nach]
             stand = zeilen()
+            if nach in ("Liste", "Tabelle"):
+                children = app.content_toolbar.pack_slaves()
+                assert app.input_frame in children and app.search_frame in children
+                assert children.index(app.input_frame) < children.index(app.search_frame)
+                assert app.input_frame.winfo_ismapped() and app.search_frame.winfo_ismapped()
             if erwartet == "seite":
                 rest = [name for name in stand if name not in ("home_frame", "template_actions")]
                 assert not rest, f"{von} → {nach}: Listenzeilen in einer Seitenansicht {stand}"
