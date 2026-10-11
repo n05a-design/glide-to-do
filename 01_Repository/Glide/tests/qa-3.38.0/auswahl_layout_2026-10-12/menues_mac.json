@@ -1,0 +1,16 @@
+{
+  "app_sha256": "8cda250ca0e6219f9d9cab165e6a05b8e161b4bad148175d916e3143d993dccc",
+  "umgebung": "macOS/Tk 9.0.3; ausschließlich Windows-Menüerzeugung in der echten App aktiviert; kein nativer Windows-Nachweis",
+  "proben": [
+    {
+      "schrift": "mittel",
+      "messungen": 18,
+      "fehler": []
+    },
+    {
+      "schrift": "gross",
+      "messungen": 18,
+      "fehler": []
+    }
+  ]
+}

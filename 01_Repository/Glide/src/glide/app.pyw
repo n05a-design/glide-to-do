@@ -36304,7 +36304,6 @@ class ListApp:
     # UI
     # -----------------------------
     def create_ui(self):
-        self.create_menubar()
         self.shell = self.register_theme_widget(tk.Frame(self.root, bg=self.theme["bg"]), "bg")
         self.shell.pack(fill="both", expand=True, padx=glide_design.SPACING[28], pady=(glide_design.SPACING[4], glide_design.SPACING[14]))
 
@@ -36381,6 +36380,7 @@ class ListApp:
 
         self.header_controls = self.register_theme_widget(tk.Frame(top_frame, bg=self.theme["bg"]), "bg")
         self.header_controls.pack(side="right", padx=(glide_design.SPACING[12], glide_design.SPACING[0]), pady=(glide_design.SPACING[4], glide_design.SPACING[4]))
+        self.create_menubar()
         self.settings_button = self.make_button(self.header_controls, self.ICONS["settings"],
                                                 self.show_settings_dialog, "muted", width=42, font=self.symbol_font("settings", 16))
         self.settings_button.pack(side="right")
@@ -47318,11 +47318,27 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         def run():
             self._after_ids.discard(getattr(self, "_long_reflow_id", None))
             self._long_reflow_id = None
+            if self.view_mode != "list":
+                return
             width = self.task_text_available_width()
             if width == getattr(self, "_long_reflow_width", None):
                 return
             self._long_reflow_width = width
-            self.refresh_tree()
+            # Reiner Layoutumbruch: vollständige Auswahl, Fokus und Bildlauf
+            # erhalten; die Aufgabenbearbeitung darf dabei nicht umschalten.
+            tree = self.tree
+            selection, focus, scroll = tree.selection(), tree.focus(), tree.yview()
+            restoring = getattr(self, "_inspector_selection_restore", False)
+            self._inspector_selection_restore = True
+            try:
+                self.refresh_tree()
+                tree.selection_set([row for row in selection if tree.exists(row)])
+                if focus and tree.exists(focus):
+                    tree.focus(focus)
+                if scroll:
+                    tree.yview_moveto(scroll[0])
+            finally:
+                self._inspector_selection_restore = restoring
 
         try:
             self._long_reflow_id = self._register_after(self.root.after(120, run))
@@ -57339,13 +57355,12 @@ Labels, Termine und Metadaten."""
             self.action_menus.append((titel, menu))
         self.custom_menu_buttons = []
         if IS_WINDOWS:
-            # Eine native Tk-Menüzeile bleibt unter Windows häufig weiß. Die
-            # eigene schmale Menüzeile lässt sich zuverlässig mit dem Theme färben.
+            # Die thematisierbaren Menüs teilen die vorhandene Kopfzeile;
+            # eine zusätzliche Zeile würde dauerhaft Inhaltsfläche belegen.
             self.custom_menubar = self.register_theme_widget(
-                tk.Frame(self.root, bg=self.theme["bg"], height=30), "bg"
+                tk.Frame(self.header_frame, bg=self.theme["bg"], height=30), "bg"
             )
-            self.custom_menubar.pack(fill="x", side="top")
-            self.custom_menubar.pack_propagate(False)
+            self.custom_menubar.pack(side="right", padx=(8, 0))
             kuerzel = {"Datei": "d", "Bearbeiten": "b", "Ansicht": "a", "Hilfe": "h"}
             menu_specs = [(titel, menu, kuerzel.get(titel, titel[:1].lower()))
                           for titel, menu in self.action_menus]

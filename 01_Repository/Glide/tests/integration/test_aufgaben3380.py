@@ -802,6 +802,19 @@ def flaeche(app_path, report, *, gross=False, tempo=False):
                 for name, open_view in contexts:
                     open_view()
                     idle()
+                    menu_row = getattr(app, 'custom_menubar', None)
+                    if menu_row is not None:
+                        assert menu_row.master is app.header_frame, 'Windows-Menüs belegen eine zusätzliche Zeile'
+                        assert menu_row.winfo_ismapped(), 'Windows-Menüs verschwunden'
+                        expected = [title for title, _menu in app.action_menus]
+                        assert [button.text for button in app.custom_menu_buttons] == expected
+                        for button in app.custom_menu_buttons:
+                            assert button.winfo_ismapped(), ('Menüknopf verborgen', button.text)
+                            assert button.winfo_rootx() >= app.header_frame.winfo_rootx()
+                            assert button.winfo_rootx()+button.winfo_width() <= app.header_frame.winfo_rootx()+app.header_frame.winfo_width()
+                            assert button.winfo_width() >= button.winfo_reqwidth(), ('Menüknopf abgeschnitten', button.text)
+                        for mnemonic in ('d', 'b', 'a', 'h'):
+                            assert root.bind('<Alt-'+mnemonic+'>'), ('Menükürzel fehlt', mnemonic)
                     widgets = {}
                     for key in ('header_frame', 'content_toolbar', 'main_area', 'content_frame', 'input_frame', 'search_frame', 'tool_band', 'list_frame_outer', 'tree', 'home_frame', 'sidebar_shell', 'add_button', 'advanced_add_button', 'list_view_button', 'table_button', 'board_button', 'search_entry', 'entry', 'title_row', 'subtitle_row', 'page_chip_row', 'header_controls', 'title_block'):
                         w = getattr(app, key, None)
