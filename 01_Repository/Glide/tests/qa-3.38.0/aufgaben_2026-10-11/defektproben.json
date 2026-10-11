@@ -1,0 +1,50 @@
+{
+  "checklisten-speicherfehler": {
+    "plattform": "darwin",
+    "gegenproben": [
+      {
+        "fall": "checklisten-speicherfehler",
+        "suite": "test_aufgaben3380.py",
+        "exitcode": 1,
+        "erwartete_beobachtung": "assert action() is False and app._detail_commit_error",
+        "gegenprobe_rot": true
+      }
+    ]
+  },
+  "bedienflaeche": {
+    "plattform": "darwin",
+    "gegenproben": [
+      {
+        "fall": "bedienflaeche",
+        "suite": "test_aufgaben3380.py",
+        "exitcode": 1,
+        "erwartete_beobachtung": "15 Prozent überschritten",
+        "gegenprobe_rot": true
+      }
+    ]
+  },
+  "inspektor-mindestgroesse": {
+    "plattform": "darwin",
+    "gegenproben": [
+      {
+        "fall": "inspektor-mindestgroesse",
+        "suite": "test_aufgaben3380.py",
+        "exitcode": 1,
+        "erwartete_beobachtung": "assert pane.winfo_ismapped() and app._inspector_narrow",
+        "gegenprobe_rot": true
+      }
+    ]
+  },
+  "feldtreffer": {
+    "plattform": "darwin",
+    "gegenproben": [
+      {
+        "fall": "feldtreffer",
+        "suite": "test_aufgaben3380.py",
+        "exitcode": 1,
+        "erwartete_beobachtung": "assert calls[before:] == [(tid, field)]",
+        "gegenprobe_rot": true
+      }
+    ]
+  }
+}

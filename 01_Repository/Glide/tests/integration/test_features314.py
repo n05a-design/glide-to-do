@@ -193,14 +193,32 @@ with tempfile.TemporaryDirectory(prefix="glide-features314-") as folder:
                 effort.insert(0, "120")
                 save.command()
             app.run_modal = form
-            details = app.themed_item_details_dialog(first)
+            draft = copy.deepcopy(first)
+            draft["id"] = "ungespeicherter-planungsentwurf"
+            details = app.themed_item_details_dialog(draft)
             assert first == before
             assert details["estimated_minutes"] == 120 and details["planned_date"] == "2090-09-19"
             built = app.build_item_from_dialog(details)
             assert built["estimated_minutes"] == 120
-            with app.item_change([ids[0]]) as change:
-                assert app.apply_item_details(first, details)
-                change.mark()
+            # Gespeicherte Aufgaben verwenden den gemeinsamen Inspektor;
+            # der ungespeicherte Entwurf behält seinen Modalvertrag.
+            depth = len(app.undo_stack)
+            assert app.themed_item_details_dialog(first) is None
+            root.update()
+            fields = app._detail_state["fields"]
+            fields["planned"].set_due("2090-09-19")
+            effort = fields["estimated_minutes"]
+            effort.delete(0, "end")
+            effort.insert(0, "1.5")
+            app.save_task_inspector()
+            assert app._detail_commit_error and first == before
+            effort.delete(0, "end")
+            effort.insert(0, "120")
+            app.save_task_inspector()
+            assert not app._detail_commit_error
+            assert first["estimated_minutes"] == 120 and first["planned_date"] == "2090-09-19"
+            assert len(app.undo_stack) == depth + 1
+            app.close_task_inspector()
 
             def bulk(dialog, parent=None):
                 dialog.update()
@@ -219,6 +237,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features314-") as folder:
             app.run_modal = lambda dialog, parent=None: dialog.destroy()
             before = copy.deepcopy(app.data_payload())
             assert app.themed_item_details_dialog(first) is None
+            app.close_task_inspector(discard=True)
             app.set_planning_selected()
             assert app.data_payload() == before
         assert not callbacks, callbacks

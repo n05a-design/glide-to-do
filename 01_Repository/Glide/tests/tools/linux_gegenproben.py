@@ -17,6 +17,35 @@ import tempfile
 
 REPO = Path(__file__).resolve().parents[2]
 CASES = (
+    ("dialogbildlauf", "test_glide.py",
+     'self._make_checklist_editor(checklist_block, dialog, checklist)',
+     'tk.Frame(checklist_block)', 'assert scrollbar_counts.get("long") == 5'),
+    ("tagesfortschritt", "test_features315.py",
+     'text = f"{done} von {len(due_entries)} erledigt"',
+     'text = f"{done + 1} von {len(due_entries)} erledigt"', 'assert "1 von 5 erledigt" in zeile'),
+    ("eingabe-suche-reihenfolge", "test_rueckmeldung330.py",
+     '"side": "top" if stacked else "left", "fill": "both", "expand": True',
+     '"side": "bottom" if stacked else "right", "fill": "both", "expand": True',
+     'assert (eingabe.winfo_rootx() + eingabe.winfo_width() <= suche.winfo_rootx() + 1'),
+    ("ansichtswechsel-werkzeugzeile", "test_aufraeumen330.py",
+     '"side": "top" if stacked else "left", "fill": "both", "expand": True',
+     '"side": "bottom" if stacked else "right", "fill": "both", "expand": True',
+     'assert (eingabe.winfo_rootx() + eingabe.winfo_width() <= suche.winfo_rootx() + 1'),
+    ("inspektor-mindestgroesse", "test_aufgaben3380.py",
+     'narrow = self.root.winfo_width() < self.DETAIL_PANE_MIN_WINDOW',
+     'narrow = False', 'assert pane.winfo_ismapped() and app._inspector_narrow', ('--fall', 'inspektor')),
+    ("feldtreffer", "test_aufgaben3380.py",
+     'field={"due":"due","planned_date":"planned","importance":"importance","labels":"labels"}.get(key)',
+     'field={"due":"planned","planned_date":"planned","importance":"importance","labels":"labels"}.get(key)',
+     'assert calls[before:] == [(tid, field)]', ('--fall', 'klicks')),
+    ("bedienflaeche", "test_aufgaben3380.py",
+     'row_height = max([40] + [widget.winfo_reqheight() for widget in rows])',
+     'row_height = max([80] + [widget.winfo_reqheight() for widget in rows])',
+     '15 Prozent überschritten', ('--fall', 'flaeche')),
+    ("checklisten-speicherfehler", "test_aufgaben3380.py",
+     'if change.saved is False:\n            self._detail_commit_error = "Die Checkliste konnte nicht gespeichert werden. Aktion erneut ausführen."',
+     'if False:\n            self._detail_commit_error = "Die Checkliste konnte nicht gespeichert werden. Aktion erneut ausführen."',
+     'assert action() is False and app._detail_commit_error', ('--fall', 'inspektor')),
     ("ueberlauf", "test_mindestgroesse330.py",
      '("header_overflow_button", minimal and not pending, (0, 0))',
      '("header_overflow_button", False, (0, 0))', 'assert app.header_overflow_button.winfo_ismapped()'),
@@ -58,7 +87,9 @@ def main():
              if args.basis_ergebnis else None)
     # Die SVG-Gegenprobe gilt gezielt für einen Prüfstand ohne SVG-Leser.
     # Unter Tk 9 wird stattdessen die positive Konvertierungsanforderung rot.
-    for name, suite, old, new, observation in CASES:
+    for case in CASES:
+        name, suite, old, new, observation, *options = case
+        suite_args = list(options[0]) if options else []
         if args.fall and name != args.fall:
             continue
         if basis is not None and not any(step["schritt"] == Path(suite).stem and step["status"] == "ausgeführt"
@@ -71,6 +102,8 @@ def main():
             for directory in ("src/glide", "tests/fixtures"):
                 shutil.copytree(REPO / directory, clone / directory,
                                 ignore=shutil.ignore_patterns("__pycache__", "archiv"))
+            for filename in ("VERSION", "CHANGELOG.md"):
+                shutil.copy2(REPO / filename, clone / filename)
             target = clone / "tests/integration" / suite
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(REPO / "tests/integration" / suite, target)
@@ -84,7 +117,7 @@ def main():
             source = source.replace(old, new)
             ast.parse(source)
             env = dict(os.environ, PYTHONUTF8="1", PYTHONDONTWRITEBYTECODE="1")
-            command = [sys.executable, "-B", str(target)]
+            command = [sys.executable, "-B", str(target), *suite_args]
             if sys.platform.startswith("linux") and not env.get("DISPLAY"):
                 command = ["xvfb-run", "-a", "--server-args=-screen 0 1400x1100x24", *command]
             if basis is None:

@@ -140,7 +140,17 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
         app.set_active_list(normal["id"])
         ruhe()
         assert app.input_frame.winfo_manager() == "pack" and app.search_frame.winfo_manager() == "pack"
-        assert app.input_frame.winfo_y() < app.search_frame.winfo_y() < app.list_frame_outer.winfo_y()
+        # 3.38: Eingabe vor Suche, bei genügend Breite nebeneinander;
+        # beide bleiben vollständig in der Werkzeugzeile über dem Inhalt.
+        eingabe, suche = app.input_frame, app.search_frame
+        assert (eingabe.winfo_rootx() + eingabe.winfo_width() <= suche.winfo_rootx() + 1
+                or eingabe.winfo_rooty() + eingabe.winfo_height() <= suche.winfo_rooty() + 1)
+        for feld in (eingabe, suche):
+            assert feld.master is app.content_toolbar and feld.winfo_ismapped()
+            assert feld.winfo_y() >= 0
+            assert feld.winfo_y() + feld.winfo_height() <= app.content_toolbar.winfo_height()
+        assert (app.content_toolbar.winfo_rooty() + app.content_toolbar.winfo_height()
+                <= app.list_frame_outer.winfo_rooty())
 
         # --- Textlogo, Gismo, Fahne, Startseite anpassen ----------------------
         app.settings["accent_color"] = "confirm"

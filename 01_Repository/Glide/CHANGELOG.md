@@ -1,5 +1,13 @@
 # Änderungsverlauf
 
+## 3.38.0 – Aufgaben unmittelbar bearbeiten (11.10.2026)
+
+- **Ein gemeinsamer Inspektor:** Liste, Tabelle, Heute, Demnächst, Pinnwand und Aufgabenverweise in Seiten öffnen dieselbe Bearbeitungsfläche mit allen bisherigen Feldern. Bei schmalem Fenster liegt sie innerhalb der Inhaltsfläche; die Navigation bleibt erreichbar. Speichern, Strg/Cmd+S, Verwerfen und Schließen erhalten Eingaben bei Fehlern. Geänderte Aufgaben werden vor dem Schreiben erneut verglichen; Schreibfehler setzen Bearbeitung, Verlauf und Undo zurück.
+- **Felder direkt ändern:** Bearbeitungstag, Fälligkeit, Wichtigkeit und Labels öffnen ihre Auswahl am sichtbaren Aufgabenfeld, auch auf Pinnwandkarten und in Live-Listen. Im Inspektor bleiben dieselben Fachregeln wirksam. Einplanen, Fälligkeit und weitere Aktionen erscheinen an der Zeile bei Überfahren oder Auswahl; Tastatur, Kontextmenü und Palette bleiben erreichbar.
+- **Hierarchie und Platz:** Vier Textstufen vereinheitlichen Heute, Listen, Seiten und Inspektor; die nächste Aufgabe tritt in Heute hervor. Eingabe und Suche teilen bei ausreichender Breite eine Zeile, unbenutzte Zeilen entfallen. Pinnwandwerkzeuge liegen im Kartenfuß. Die tatsächliche Inhaltskante liegt in allen sechs gewählten Ansichten bei 1280 × 800 unter 15 % der Fensterhöhe; Mindestgröße und große Schrift separat geprüft.
+- **Dezente Bewegung:** Kurze, unterbrechbare Rückmeldung beim Abhaken, Auf-/Zuklappen und Bereichswechsel. Der Inhalt ist sofort bedienbar; die vorhandene Abschaltoption beendet auch laufende Übergänge. Keine bleibenden Rückrufe nach dem Schließen.
+- **Prüfung:** Neue Pflichtsuite `test_aufgaben3380.py`, vier passende rote Gegenproben gegen 3.37.0 und vier absichtlich beschädigte Kandidaten. Neue Tk-freie Module `task_editing.py` und `motion.py` mit 18 Unit-Tests. Bestehende Form-, Erinnerungs- und Layoutprüfungen an den gemeinsamen Editor und die kompakte Leiste angepasst; ihre ursprünglichen Feld- und Speicherprüfungen bleiben erhalten. Aufgabenformat 23 unverändert, keine neue Laufzeitabhängigkeit. Vollprüfungen, Messwerte und Lieferhashes im QA-Bericht.
+
 ## 3.37.0 – Logo und Symbole (10.10.2026)
 
 - **Logo unter Tk 8.6:** Ein Tk-freier Rasterweg mit Alpha-Zwischentönen ersetzt den ungeglätteten Canvas-Rückfall; die Akzentfarbe bleibt zur Laufzeit wählbar. Tk 9 nutzt weiter SVG.

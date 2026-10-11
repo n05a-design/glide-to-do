@@ -91,7 +91,8 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         app.set_active_list(zweite["id"])
         root.update()
         grundordnung = list(app.content_frame.pack_slaves())
-        assert app.input_frame in grundordnung
+        assert app.content_toolbar in grundordnung
+        assert app.input_frame in app.content_toolbar.pack_slaves()
         app.set_home_view()
         app.create_new_drawing()
         root.update()
@@ -1740,7 +1741,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert not app.detail_pane_enabled()
         app.toggle_detail_pane()
         root.update()
-        assert app.detail_pane.winfo_manager() == "pack" and app.detail_pane.winfo_toplevel() is root
+        assert app.detail_pane.winfo_manager() == "place" and app.detail_pane.winfo_toplevel() is root
         app.tree.selection_set(d1["id"])
         app.tree.focus(d1["id"])
         app.tree.event_generate("<<TreeviewSelect>>")
@@ -1773,7 +1774,9 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         feld.date_entry.insert(0, "99.99.9999")
         assert app.commit_detail_pane() is False and app.detail_status.cget("text")
         assert app.find_item_in_lists(d2["id"])[0]["due"] is None
-        app.sync_detail_pane(force=True)
+        # Ungültige Eingabe bleibt jetzt erhalten, bis sie ausdrücklich
+        # verworfen oder durch den aktuellen Bestand ersetzt wird.
+        app.reload_task_inspector()
 
         # Ausbau MO-030: alle Felder außer den Anhängen direkt im Bereich.
         def punkt(eintrag):
@@ -1888,17 +1891,20 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         app._detail_sash_drag(SimpleNamespace(x_root=860))
         app._detail_sash_release(SimpleNamespace(x_root=860))
         root.update()
-        assert app.settings["detail_pane_width"] == int(app.detail_pane.cget("width"))
+        assert app.settings["detail_pane_width"] == app.detail_pane.winfo_width()
         assert app.DETAIL_PANE_WIDTH_RANGE[0] <= app.settings["detail_pane_width"] <= app.DETAIL_PANE_WIDTH_RANGE[1]
-        # Schmales Fenster: die Maske bleibt, der Bereich verschwindet.
+        # Schmales Fenster: derselbe Inspektor innerhalb des Inhalts;
+        # die Seitenleiste bleibt sichtbar und die Aufgabenfläche kommt zurück.
         root.geometry("900x800+20+20")
         root.update()
         app.sync_detail_pane()
-        assert app.detail_pane.winfo_manager() == ""
+        assert app.detail_pane.winfo_manager() == "place" and app._inspector_narrow
+        assert app.sidebar_shell.winfo_ismapped() and not app.list_frame_outer.winfo_ismapped()
         root.geometry("1280x900+20+20")
         root.update()
         app.sync_detail_pane()
-        assert app.detail_pane.winfo_manager() == "pack"
+        assert app.detail_pane.winfo_manager() == "place" and not app._inspector_narrow
+        assert app.list_frame_outer.winfo_ismapped()
         app.toggle_detail_pane()
         root.update()
         assert app.detail_pane.winfo_manager() == "" and not app.detail_pane_enabled()

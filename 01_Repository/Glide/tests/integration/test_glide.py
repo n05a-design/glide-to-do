@@ -99,7 +99,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     app = mod.ListApp(root)
     root.update_idletasks()
 
-    assert mod.APP_VERSION == "3.37.0"
+    assert mod.APP_VERSION == "3.38.0"
     assert (REPOSITORY_ROOT / "VERSION").read_text(encoding="utf-8").strip() == mod.APP_VERSION
     assert len([entry for entry in app.lists if entry.get("system_role") == "inbox"]) == 1
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
@@ -2924,7 +2924,10 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
         root.after(200, close)
         opener()
 
-    count_dialog_scrollbars(lambda: app.themed_item_details_dialog(multi), "long")
+    # Persistierte Aufgaben öffnen seit 3.38 den Inspektor. Die bestehende
+    # Dialogprobe misst weiterhin alle fünf Leisten am ungespeicherten Entwurf.
+    count_dialog_scrollbars(lambda: app.themed_item_details_dialog(
+        dict(multi, id="ungespeicherte-bildlaufprobe")), "long")
     count_dialog_scrollbars(lambda: app.themed_item_details_dialog(app.new_item("Kurz")), "task")
     count_dialog_scrollbars(lambda: app.edit_folder_details(nest_top["id"]), "folder")
     count_dialog_scrollbars(app.open_label_manager, "labels")
@@ -3107,7 +3110,8 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
 
     # Suchzeile und Filter stehen ueber der Liste, nicht ueber der vollen
     # Fensterbreite – dadurch beginnt die Seitenleiste eine Zeile weiter oben.
-    assert app.search_frame.master is app.content_frame
+    assert app.search_frame.master is app.content_toolbar
+    assert app.content_toolbar.master is app.content_frame
     assert app.sidebar_shell.master is app.main_area
     assert app.content_frame.master is app.main_area
     assert app.hide_done_box_border.master is app.search_frame
