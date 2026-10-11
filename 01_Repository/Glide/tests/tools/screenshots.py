@@ -42,6 +42,7 @@ def load_module(temp_root):
     duerfen von einem Aufnahmelauf niemals beruehrt werden.
     """
     os.environ["GLIDE_DATA_DIR"] = str(pathlib.Path(temp_root) / "Glide")
+    os.environ["GLIDE_TEST_MODE"] = "1"
     # Ein SourceFileLoader ist nötig: Die Endung .pyw erkennt der Importmechanismus
     # nicht von selbst als Quelltext.
     loader = importlib.machinery.SourceFileLoader("glide_app", str(APP_PATH))
@@ -67,11 +68,12 @@ def capture(target):
 class Recorder:
     """Haelt Ziel und Zaehler, damit die Dateinamen ihre Reihenfolge tragen."""
 
-    def __init__(self, root, out_dir):
+    def __init__(self, root, out_dir, control_only=False):
         self.root = root
         self.out_dir = out_dir
         self.index = 0
         self.failures = []
+        self.control_only = control_only
 
     def settle(self, rounds=3):
         for _ in range(rounds):
@@ -82,8 +84,8 @@ class Recorder:
         self.index += 1
         self.settle()
         target = self.out_dir / f"{self.index:02d}_{name}.png"
-        ok = capture(target)
-        print(f"  {'OK ' if ok else 'FEHLT'} {target.name}")
+        ok = True if self.control_only else capture(target)
+        print(f"  {'ABLAUF (kein Bild)' if self.control_only else 'OK ' if ok else 'FEHLT'} {target.name}")
         if not ok:
             self.failures.append(target.name)
         return ok
@@ -112,8 +114,11 @@ class Recorder:
                 except Exception:
                     pass
 
-        self.root.after(delay, run)
-        opener()
+        pending = self.root.after(delay, run)
+        try:
+            opener()
+        finally:
+            self.root.after_cancel(pending)
 
     def _all_tops(self):
         import glide_app as mod
@@ -201,6 +206,7 @@ def build_demo(app, mod):
 def main():
     parser = argparse.ArgumentParser(description="Aufnahmen der Glide-Oberflaeche")
     parser.add_argument("--out", default="/tmp/glide-shots", help="Zielordner der PNG-Dateien")
+    parser.add_argument("--ablaufprobe", action="store_true", help="Echte Tk-Einstiege prüfen, ohne Bilddateien zu erzeugen")
     args = parser.parse_args()
     out_dir = pathlib.Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -216,7 +222,7 @@ def main():
         # Nach dem Aufbau: ListApp setzt im Konstruktor selbst 1000x800.
         root.geometry("1180x860+0+0")
         detail_item = build_demo(app, mod)
-        rec = Recorder(root, out_dir)
+        rec = Recorder(root, out_dir, control_only=args.ablaufprobe)
 
         print(f"Aufnahmen nach {out_dir}:")
         for theme in ("hell", "dunkel"):
@@ -236,10 +242,11 @@ def main():
             rec.take(f"kopf_ohne_labels_{theme}")
             app.set_active_list(app.lists[0]["id"])
 
-            rec.take_dialog(
-                f"punktdetails_{theme}",
-                lambda item=detail_item: app.themed_item_details_dialog(item),
-            )
+            app.themed_item_details_dialog(detail_item)
+            rec.settle()
+            assert app.detail_pane.winfo_ismapped(), "Gemeinsamer Inspektor fehlt"
+            rec.take(f"punktdetails_{theme}")
+            app.close_task_inspector()
 
             # Dieselbe Maske mit aufgeklappter Labelauswahl.
             def open_labels(dialog):
@@ -252,7 +259,7 @@ def main():
 
             rec.take_dialog(
                 f"labelauswahl_offen_{theme}",
-                lambda item=detail_item: app.themed_item_details_dialog(item),
+                lambda item=detail_item: app.edit_task_field(item["id"], "labels"),
                 before_shot=open_labels,
             )
 
@@ -261,12 +268,17 @@ def main():
                 lambda: app.themed_due_dialog("2026-10-03", "09:30"),
             )
 
+        app.cancel_pending_callbacks()
+        app.release_data_lock()
+        for job in root.tk.call("after", "info"):
+            root.tk.call("after", "cancel", job)
         root.destroy()
 
     if rec.failures:
         print("Nicht erzeugt:", ", ".join(rec.failures))
         return 1
-    print("Alle Aufnahmen erzeugt.")
+    assert rec.index == 12, ("Aufnahme-Einstiege fehlen", rec.index)
+    print("Zwölf Aufnahme-Einstiege grün; keine Bildprüfung." if args.ablaufprobe else "Alle Aufnahmen erzeugt.")
     return 0
 
 

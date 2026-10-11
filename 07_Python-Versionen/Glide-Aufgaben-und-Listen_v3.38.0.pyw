@@ -36773,7 +36773,7 @@ class ListApp:
             radius=18,
             padding=glide_design.SPACING[6],
         )
-        self.list_frame_outer.pack(fill="both", expand=True, pady=(2, 0))
+        self.list_frame_outer.pack(fill="both", expand=True)
 
         # Fuß der Inhaltskarte (29.09.2026): Hinweis und Auswahlleiste teilen
         # sich unten in der Karte einen Streifen fester Höhe. Bis dahin lagen
@@ -48260,12 +48260,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         for kind in leiste.winfo_children():
             kind.destroy()
         if teile:
-            zeile = tk.Frame(leiste, bg=leiste.cget("bg"))
+            zeile = ButtonFlow(leiste, bg=leiste.cget("bg"), gap=6)
             zeile.pack(fill="x")
             for teil in teile:
                 chip = tk.Frame(zeile, bg=theme["input"], highlightthickness=1,
                                 highlightbackground=theme["input_border"])
-                chip.pack(side="left", padx=(0, 6), pady=1)
+                zeile.add(chip)
                 tk.Label(chip, text=teil.text, bg=theme["input"], fg=theme["text" if teil.felder else "muted"],
                          font=app_font(9)).pack(side="left", padx=(6, 2 if teil.felder else 6))
                 if not teil.felder:

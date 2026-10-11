@@ -13,7 +13,7 @@ Releaseplanungen gelten ebenfalls für sieben Versionen, Fensterbilder für drei
 | Werkzeug | Wozu | Aufruf |
 |---|---|---|
 | [versionswechsel.py](versionswechsel.py) | Hebt die Version: `VERSION`, `APP_VERSION`, Versionsprüfungen der Tests, Beispieldaten, Rundgang, Showcase, Vorlagenkatalog, neue Releaseplanung und die Standangaben aller fortgeschriebenen Dokumente; ohne Archivkopien; kürzt zum Schluss die Ablage | `python3 scripts/pflege/versionswechsel.py 3.33.0 01.10.2026` |
-| [showcase_abgleich.py](showcase_abgleich.py) | Prüft den aktiven Showcase über tatsächlichen Import/Neustart und kopiert Basis, Vorlagen, Anleitung und Starter nach `05_Probelisten_Testdaten/Showcase`; ohne Archivkopien, SHA-256, kein Eingriff in den bearbeiteten Arbeitsstand | `python3 -B scripts/pflege/showcase_abgleich.py` |
+| [showcase_abgleich.py](showcase_abgleich.py) | Prüft den aktiven Showcase über tatsächlichen Import/Neustart und kopiert Basis, Vorlagen, Anleitung und Starter nach `05_Probelisten_Testdaten/Showcase`; ohne Archivkopien, SHA-256, kein Eingriff in den bearbeiteten Arbeitsstand. `--vordergrund` erlaubt auf dem Mac echten Fensterfokus für die Tastaturprüfung | `python3 -B scripts/pflege/showcase_abgleich.py` |
 | [abgleich_07.py](abgleich_07.py) | Spielt den Stand aus `src/glide` nach `07_Python-Versionen` und prüft SHA-256 | `python3 scripts/pflege/abgleich_07.py` |
 | [ablage_kuerzen.py](ablage_kuerzen.py) | Entfernt Archive, Nachweise und Releaseplanungen außerhalb der sieben neuesten Versionen und Fensterbilder außerhalb der drei neuesten (`git rm`); läuft am Ende von `versionswechsel.py` | `python3 -B scripts/pflege/ablage_kuerzen.py`; `--anzeigen` listet nur |
 | [messung_ansichtswechsel.py](messung_ansichtswechsel.py) | Misst jeden Ansichtswechsel (Median in ms) und zeigt die teuersten Funktionen (cProfile) | siehe Kopf der Datei |
@@ -45,6 +45,8 @@ Releaseplanungen gelten ebenfalls für sieben Versionen, Fensterbilder für drei
 6. QA-Bericht, Index, Entwicklungsplan und Übergabe nachführen.
 
 Erst nach Schritt 5 trägt die Glide-Fassung des Inhabers den Stand.
+
+Erreichen synthetische Tastaturereignisse auf dem Mac im Hintergrund ihr Ziel nicht, den vollständigen Prüflauf mit `--vordergrund` wiederholen und anschließend auch `showcase_abgleich.py --vordergrund` verwenden. Der rote Hintergrundlauf bleibt als Beleg erhalten; Kriterien und Anwendung bleiben unverändert. Die Modi nie gleichzeitig ausführen.
 
 `versionswechsel.py` pflegt Standzeilen und Fixtures, keine semantischen Aufgabenstatus. Titel, erste Prüfaufrufe, beantwortete Entscheidungen und nächste Schritte zusätzlich abgleichen. Für Werkzeugnachläufe `python3 -B tests/tools/test_standpruefung.py`, Syntax/Version/Stand/Index/Links und unveränderte App-/Paket-Hashes prüfen; den früheren Volllauf nicht überschreiben.
 

@@ -834,6 +834,8 @@ def main():
                 print("OK",name,"große Schrift" if gross else "",len(evidence.get("pruefungen",evidence.get("messungen",[]))))
                 if name=="bewegung":
                     print("Tatsächliche Übergangsdauer ms:",evidence["tatsaechliche_dauer_ms"])
+                if name=="flaeche":
+                    print("Geometrie-Nachweis:",json.dumps(evidence,ensure_ascii=False,sort_keys=True))
     print("test_aufgaben3380: OK")
 
 if __name__=="__main__":

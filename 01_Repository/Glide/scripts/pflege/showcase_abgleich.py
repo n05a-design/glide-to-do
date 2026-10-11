@@ -4,6 +4,7 @@
 Überschreibt die Lieferkopie ohne Archivkopie: Vorfassungen trägt Git. Bis
 3.33.6 legte jeder Lauf rund 73 MB unter 05_Probelisten_Testdaten/Showcase/archiv ab.
 """
+import argparse
 import hashlib
 import json
 import os
@@ -19,8 +20,14 @@ TARGET = BASE/"05_Probelisten_Testdaten/Showcase"
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--vordergrund", action="store_true",
+                        help="macOS: echter Fensterfokus für die Tastaturprüfung des Showcase")
+    args = parser.parse_args()
     env = dict(os.environ)
-    if sys.platform == "darwin":
+    if args.vordergrund:
+        env.pop("GLIDE_QA_HINTERGRUND", None)
+    elif sys.platform == "darwin":
         env["GLIDE_QA_HINTERGRUND"] = "1"
         env["PYTHONPATH"] = os.pathsep.join(filter(None, (str(REPO/"tests/tools/hintergrund"), env.get("PYTHONPATH"))))
     subprocess.run([sys.executable,"-B",str(REPO/"tests/tools/pruefe_showcase.py")],cwd=REPO,env=env,check=True)

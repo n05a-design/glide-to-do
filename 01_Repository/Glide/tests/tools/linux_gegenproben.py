@@ -17,6 +17,10 @@ import tempfile
 
 REPO = Path(__file__).resolve().parents[2]
 CASES = (
+    ("erkennungschips", "test_eingabe3333.py",
+     'zeile = ButtonFlow(leiste, bg=leiste.cget("bg"), gap=6)',
+     'zeile = ButtonFlow(leiste, bg=leiste.cget("bg"), gap=6); zeile.reflow = lambda *_: None',
+     'Erkennungschips abgeschnitten'),
     ("dialogbildlauf", "test_glide.py",
      'self._make_checklist_editor(checklist_block, dialog, checklist)',
      'tk.Frame(checklist_block)', 'assert scrollbar_counts.get("long") == 5'),

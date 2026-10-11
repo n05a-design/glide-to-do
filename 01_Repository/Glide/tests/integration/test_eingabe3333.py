@@ -74,7 +74,23 @@ with tempfile.TemporaryDirectory(prefix='glide-eingabe-') as directory:
         texts = chip_texts(hint)
         assert len(texts) == 3 and any(t.startswith('Bearbeitungstag') for t in texts), texts
         assert any(t.startswith('Fällig') for t in texts) and 'Wichtigkeit hoch' in texts, texts
-        remove_button(hint, 'Fällig').event_generate('<Button-1>')
+        assert all(w.winfo_ismapped() and w.master.winfo_rootx() + w.master.winfo_width()
+                   <= hint.winfo_rootx() + hint.winfo_width() for w in chips(hint)), 'Erkennungschips abgeschnitten'
+        for width, height in ((1280, 900), (860, 700)):
+            root.geometry(f'{width}x{height}+20+20')
+            idle()
+            app.update_slash_hint()
+            idle()
+            hint = app._capture_hint
+            assert all(w.winfo_ismapped() and w.master.winfo_rootx() + w.master.winfo_width()
+                       <= hint.winfo_rootx() + hint.winfo_width() for w in chips(hint)), 'Erkennungschips abgeschnitten'
+            assert all(w.master.winfo_rooty() + w.master.winfo_height()
+                       <= hint.winfo_rooty() + hint.winfo_height() for w in chips(hint)), 'Erkennungschips unten abgeschnitten'
+        root.geometry('1280x900+20+20')
+        idle()
+        app.update_slash_hint()
+        idle()
+        remove_button(hint, 'Fällig').event_generate('<Button-1>', time=1000)
         idle()
         assert app.entry.get() == 'Angebot schicken morgen bis Freitag /wichtig', 'Text bleibt unverändert'
         assert not any(t.startswith('Fällig') for t in chip_texts(app._capture_hint)), chip_texts(app._capture_hint)
@@ -128,7 +144,7 @@ with tempfile.TemporaryDirectory(prefix='glide-eingabe-') as directory:
         offen = [p for p in liste['items'] if p['text'] == 'Sport' and not p.get('done')]
         assert offen and offen[0]['due'] == (montag + timedelta(days=7)).isoformat(), offen
         type_into_entry('Sport jeden Montag')
-        remove_button(app._capture_hint, 'Wiederholung').event_generate('<Button-1>')
+        remove_button(app._capture_hint, 'Wiederholung').event_generate('<Button-1>', time=2000)
         idle()
         app.add_item()
         idle()
