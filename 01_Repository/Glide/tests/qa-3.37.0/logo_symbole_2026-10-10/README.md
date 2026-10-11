@@ -1,6 +1,6 @@
 # Logo und Symbole – Liefernachweis 3.37.0
 
-Stand 11.10.2026 · Glide 3.37.0 · Aufgabenformat 23 · Mac vollständig grün, native Matrix ausstehend
+Stand 11.10.2026 · Glide 3.37.0 · Aufgabenformat 23 · automatischer Lieferabschluss Mac/Linux/Windows grün
 
 Paket 2 setzt D28/D29/D41/D45 vollständig um: Tk-freies geglättetes Raster,
 exakte App-PNGs, freigegebene Normal-/Kleinmaster und alle 63 Oberflächenzeichen
@@ -20,7 +20,11 @@ Ausgangslieferung 3.36.0, Liefercommit `efad5df`.
 | Erster eingefrorener Mac-Volllauf | 99 Schritte grün, zwei alte fest codierte Symbolerwartungen rot, zwei Schritte übersprungen; 829 Dateien unverändert; [Ergebnis](mac-erster-volllauf.json) |
 | Korrigierter eingefrorener Mac-Volllauf | Exit 0, 101 ausgeführt/zwei übersprungen, 84 Suiten/276 Unit-Tests; alle 831 Dateien nach Lauf unverändert; [Ergebnis](mac-voll.json) |
 | Strenge lokale CI | bestanden: 17 ausgeführt, ein SSL-Hinweis beim Originalabruf; [Ergebnis](grundstufe-lokal.json) |
-| Native Linux-/Windows-Vollprüfung | ausstehend |
+| Native Grundstufe | 18 Schritte grün; [Ergebnis](grundstufe-nativ.json) |
+| Native Linux-Vollprüfung | Exit 0, 102 ausgeführt/eine menschliche Sichtprüfung übersprungen, 84 Suiten/276 Unit-Tests; [Ergebnis](linux-voll.json) |
+| Linux-Defektgegenproben | sieben passende Gegenfälle rot; [Ergebnis](linux-defektgegenproben.json) |
+| Native Windows-Vollprüfung | Exit 0, 102 ausgeführt/eine menschliche Sichtprüfung übersprungen, 84 Suiten/276 Unit-Tests; [Ergebnis](windows-voll.json) |
+| Windows-Referenzdesktop | 1920 × 1080, Tk 9.0.4; [Ergebnis](windows-desktop.json) |
 | 07 und Showcase | 40 Code-/141 Ressourcen-/sechs Showcase-Dateien SHA-256-gleich; [Abgleich](lieferabgleich.json) |
 | Mac-Entwicklungsbundle | 40 Code-/55 Plattformressourcen gleich Quelle; Ad-hoc-Signatur im Bauordner und auf Rückkopie grün; [Bundle](bundle.json) |
 | Menschen-/DPI-Abnahme | getrennt offen |
@@ -46,4 +50,6 @@ scheitern genau an der Rückmeldung bzw. am Aktionsknopf. [Kalibrierungsnachweis
 bewusst auch die unbedeutende Leerzeile ihrer freigegebenen Bytefassung;
 `git diff --check` meldet deshalb vier reine SVG-Leerzeichenhinweise.
 
-Die Entwicklung und der Versionswechsel begannen am 10.10.2026; eingefrorene Mac-Abnahme und Lieferabgleich endeten am 11.10.2026. Native Prüfungen erfolgen anschließend am unveränderten Kandidatcommit. Menschen-/DPI-Prüfungen bleiben eigene Tore.
+Die Entwicklung und der Versionswechsel begannen am 10.10.2026; eingefrorene Mac-Abnahme und Lieferabgleich endeten am 11.10.2026. Native Prüfungen am unveränderten Kandidatcommit `b050eb7` vollständig grün: [CI-Lauf](https://github.com/n05a-design/glide-to-do/actions/runs/38091494118), [Quell-/Jobnachweis](native-final.json). Der erneute Abgleich bestätigt alle 187 Lieferdateien und alle Bundle-Dateien unverändert. Menschen-/DPI-Prüfungen bleiben eigene Tore.
+
+Der Lieferabschluss besteht die strenge isolierte CI: 17 Schritte ausgeführt, ein bekannter lokaler SSL-Hinweis beim Fremdcodeabruf; [Ergebnis](lieferung-ci.json). Der native Originalabgleich ist ohne diesen Hinweis grün. Code und Ressourcen wurden für den Dokumentationsabschluss nicht verändert.
