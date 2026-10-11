@@ -803,7 +803,7 @@ def flaeche(app_path, report, *, gross=False, tempo=False):
                     open_view()
                     idle()
                     widgets = {}
-                    for key in ('header_frame', 'content_toolbar', 'main_area', 'content_frame', 'input_frame', 'search_frame', 'tool_band', 'list_frame_outer', 'tree', 'home_frame', 'sidebar_shell', 'add_button', 'advanced_add_button', 'list_view_button', 'table_button', 'board_button', 'search_entry', 'entry'):
+                    for key in ('header_frame', 'content_toolbar', 'main_area', 'content_frame', 'input_frame', 'search_frame', 'tool_band', 'list_frame_outer', 'tree', 'home_frame', 'sidebar_shell', 'add_button', 'advanced_add_button', 'list_view_button', 'table_button', 'board_button', 'search_entry', 'entry', 'title_row', 'subtitle_row', 'page_chip_row', 'header_controls', 'title_block'):
                         w = getattr(app, key, None)
                         if w is not None and w.winfo_exists():
                             widgets[key] = {'sichtbar': bool(w.winfo_ismapped()), 'manager': w.winfo_manager(), 'x': w.winfo_rootx() - root.winfo_rootx(), 'y': w.winfo_rooty() - root.winfo_rooty(), 'breite': w.winfo_width(), 'hoehe': w.winfo_height(), 'wunschbreite': w.winfo_reqwidth(), 'wunschhoehe': w.winfo_reqheight()}

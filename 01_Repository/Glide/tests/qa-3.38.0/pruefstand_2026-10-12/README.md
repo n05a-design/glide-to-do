@@ -27,3 +27,11 @@ Die isolierte [CI-Grundstufe](ci-grundstufe.json) ist grün (bekannter lokaler
 SSL-Hinweis beim Fremdcodeabruf); App und 07 sind dort bytegleich am
 unveränderten Hash 49ca48aa. Der [Werkzeugbeleg](ergebnis.json) enthält die
 SHA-256 der beiden geänderten Werkzeuge.
+
+Erster [Diagnoselauf 38180748925](https://github.com/n05a-design/glide-to-do/actions/runs/38180748925)
+scheiterte bereits beim Checkout am langen Grafikdateinamen. Keine
+Layoutmessung und kein Artefakt entstanden. Der im Volljob vorhandene
+Schritt `core.longpaths` ist jetzt auch im Diagnosejob vor dem Checkout
+gesetzt; Kopfzeilen-Unterrahmen werden zusätzlich berichtet. Die
+[erneute isolierte Grundstufe](ci_folge.json) ist grün;
+[separater Nachlaufbeleg](nachlauf.json).

@@ -1,0 +1,16 @@
+{
+  "app_sha256": "49ca48aad93d0be0ba9fce8dd0bd82e980e3eaa673ff549bdb3ba04614ebcf28",
+  "erste_diagnose": {
+    "run": 38180748925,
+    "commit": "5684c0bdccd97d7ef34421e69363d76157c2da11",
+    "status": "Checkout fehlgeschlagen: Dateiname zu lang",
+    "layoutmessung_ausgefuehrt": false,
+    "artefakte": []
+  },
+  "korrektur": "core.longpaths vor Checkout auch im Diagnosejob; zusätzliche Kopfzeilenmaße",
+  "grundstufe_exitcode": 0,
+  "werkzeuge_sha256": {
+    ".github/workflows/python-app.yml": "0eac56831cd385ce0a01e6ec5192e96874bf6b54a6b0285cd1677a1a228c5a01",
+    "01_Repository/Glide/tests/integration/test_aufgaben3380.py": "d81113139782d4243427b49c32f187136bb398749ae5d57b04eb531ea5a9ea54"
+  }
+}
