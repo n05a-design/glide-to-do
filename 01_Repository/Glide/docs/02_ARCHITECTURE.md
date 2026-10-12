@@ -84,7 +84,7 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 - **Feste Bestandteile:** Werkzeuge einer Ansicht gehören in `tool_band_host()`, ihr Hinweis in `surface_hint_text()`; `sync_tool_band` hält die Oberkante, `sync_card_foot` den Kartenfuß (Hinweis oder Auswahlleiste) bis zur Unterkante. Keine andere Stelle blendet sie aus. `test_festlayout330` und `test_kartenfuss330` messen es.
 - Zeichnung und Galerie sind Flächenlisten (`is_surface_list`): keine Punkte, keine Tabelle, keine Pinnwand; `hide_drawing_chrome` blendet Eingabe, Suche und Aufgabenbaum aus.
 - **Kleine Fenster** (Mindestgröße 860 × 700): `height_density` staffelt nach Höhe, `header_density` nach Breite; Knöpfe der Suchzeile werden vor `search_row_anchor()` gepackt. Jedes neue Bedienelement braucht eine Antwort, was bei Mindestgröße mit ihm geschieht (`test_mindestgroesse330`).
-- **Kopfzeile:** Neue Knöpfe gehören in die Reihe von `pack_header_controls`, nie in ein eigenes `pack()`. Das Logo hängt nur an der Breite.
+- **Kopfzeile:** Kopfaktionen gehören in die Reihe von `pack_header_controls`, nie in ein eigenes `pack()`. Die vier beschrifteten Windows-Menüs stehen innerhalb von `title_row`; ihre Breite geht in die Titelkürzung ein, die Statuszeile bleibt davon frei. Das Logo hängt nur an der Breite.
 
 ### Bausteine
 

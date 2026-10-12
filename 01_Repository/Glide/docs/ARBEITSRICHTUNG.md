@@ -1,6 +1,6 @@
 # Arbeitsrichtung, Entscheidungen und Abnahme
 
-Stand 11.10.2026 · Glide 3.38.0 · Aufgabenformat 23
+Stand 12.10.2026 · Glide 3.38.0 · Aufgabenformat 23
 
 Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Entscheidungsvorlage vom 01.10.2026 und den Entscheidungslisten vom 25.–30.09.2026 zusammengeführt; deren Wortlaut trägt Git. Am 06.10.2026 um die Leitgedanken des Inhabers aus dem nicht übernommenen Richtungsentwurf vom 03.10.2026 ergänzt. Aufgabenstand und Reihenfolge: [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Technische Regeln: [Architektur](02_ARCHITECTURE.md).
 
@@ -38,7 +38,7 @@ Wortlaute stehen in Anführungszeichen, alles andere ist Zusammenfassung. Was da
 
 ## Verbindliche Entscheidungen
 
-Neue Entscheidungen werden fortlaufend mit Datum und Wortlaut der Antwort eingetragen; nächste freie Nummer D48.
+Neue Entscheidungen werden fortlaufend mit Datum und Wortlaut der Antwort eingetragen; nächste freie Nummer D49.
 
 | Nr. | Entscheidung | Stand |
 |---|---|---|
@@ -90,6 +90,8 @@ Neue Entscheidungen werden fortlaufend mit Datum und Wortlaut der Antwort einget
 | D46 | **10.10.2026, P03-Kalt-Ausnahme für Paket 1:** belegte Abweichung vom ursprünglichen Ziel ≤ 150 ms für den Aufbau ohne vorhandene Startseiten-Widgets akzeptiert: ≤ 300 ms bei direktem Start und ≤ 500 ms im beobachteten Kindprozessverfahren. Warmer tatsächlicher Builder weiterhin ≤ 150 ms; sämtliche gewählten Funktionen bleiben enthalten. Vorgelegte Messung: direkt kalt Median/p95 283/286 ms (vorher 802/835), warm 78/90; Kindprozess kalt 487/497. Die langsamere Kindprozessserie bleibt ausgewiesen, ihre Ursache ist nicht abschließend belegt. Wortlaut: „A – belegte Kalt-Ausnahme übernehmen (Empfehlung)“. | Ausnahme akzeptiert; endgültiger Lieferstand und übrige Abnahmetore weiter prüfen |
 
 | D47 | **10.10.2026, E01-Warmgrenze für Paket 1:** erneutes Öffnen der Einstellungen mit Median ≤ 150 ms und p95 ≤ 170 ms akzeptiert; erste Anzeige weiterhin ≤ 250 ms, sämtliche Funktionen unverändert. Vorgelegte endgültige Kandidatenmessung: direkt warm Median/p95 149/155 ms, Kindprozess 149/161 ms, höchster Einzelwert 164 ms; erste Anzeige p95 198 ms. Wortlaut: „A – 150 ms Median / 170 ms p95 akzeptieren (Empfehlung)“. | Ausnahme akzeptiert; reparierten Lieferstand und übrige Abnahmetore weiter prüfen |
+
+| D48 | **12.10.2026, E01-Tempoabschluss für Paket 3:** Einstellungen warm weiterhin Median ≤ 150 ms, künftig p95 ≤ 190 ms; erste Anzeige weiterhin ≤ 250 ms, Funktionsumfang unverändert. Die neue p95-Grenze ersetzt für den weiteren Sprint die bisherige Grenze 170 ms aus D47; historische Messungen und Entscheidungen bleiben unverändert. Vorgelegte serielle Abschlussmessung ohne parallele Prüfungen: fünf frische direkte Prozesse mit je 40 Wiederholungen, warm 146,85 ms Median/179,59 ms p95, höchster Einzelwert 189,45 ms; erste Anzeige p95 203,90 ms. Startseite kalt p95 272,71 ms, warm 73,52/79,67 ms innerhalb D46. Privater Versuch mit abgeschalteter eigener macOS-Fensteranimation ohne Gewinn, keine Produktänderung daraus. Wortlaut: „A – Median 150 ms / p95 190 ms akzeptieren (Empfehlung)“. | akzeptiert; Tempoabschluss grün, native Vollmatrix und übrige Abnahmetore weiter prüfen |
 
 **Frühere Antworten, die weiter gelten:**
 

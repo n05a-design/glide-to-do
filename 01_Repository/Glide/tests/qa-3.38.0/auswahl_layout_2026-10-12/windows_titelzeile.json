@@ -1,0 +1,26 @@
+{
+  "run": 38220307993,
+  "commit": "6992ce7",
+  "app_sha256": "bcdbc4da2197aadaffbe65cd57054c68b93db4d1aedcb9cbeb16c2204bd8ef41",
+  "plattform": "Windows x64, Python 3.14, nativer Desktop 1920 × 1080",
+  "exitcode": 0,
+  "layoutkombinationen": 36,
+  "suiten": [
+    {
+      "suite": "test_mindestgroesse330",
+      "exitcode": 0,
+      "ergebnis": "test_mindestgroesse330: OK; 75 Ansichten in fünf Design-, Größen- und Schriftstufen und 46 Dialogaufrufe bei Mindestgröße ohne Befund, Höhenstufen und Tabellenspalten geprüft."
+    },
+    {
+      "suite": "test_titel33312",
+      "exitcode": 0,
+      "ergebnis": "OK Titel: 18 Kombinationen; observe=False; keine Callbackfehler"
+    },
+    {
+      "suite": "test_planen33313",
+      "exitcode": 0,
+      "ergebnis": "test_planen33313: OK; Menü/Kürzel/Palette/Zeile, Quelllisten-Mehrfachauswahl, Undo, Kapazität, Datum/Abbruch, Speicherfehler"
+    }
+  ],
+  "pruefgrenze": "gezielte native Wiederholung, keine vollständige Matrix"
+}
