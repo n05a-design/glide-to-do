@@ -79,10 +79,46 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
         assert (app.content_toolbar.winfo_rooty() + app.content_toolbar.winfo_height()
                 <= app.list_frame_outer.winfo_rooty())
 
+    def pruefe_auswahlumbruch():
+        app.set_active_list(normal["id"])
+        app.open_list_view()
+        root.geometry("1300x860+0+30")
+        ruhe()
+        # Verzögerter Langtextumbruch muss Mehrfachauswahl und Zeilenfokus
+        # auch nach einem wirklichen Größenwechsel bewahren.
+        import time
+        selected_rows = [iid for iid in app.tree.get_children("")
+                         if (found := app.find_item(iid)) and app.is_schedulable_item(found[0])][:2]
+        assert len(selected_rows) == 2
+        assert any(app.is_long_item(item) for item in app.walk_items())
+        def pump_layout():
+            stop = time.monotonic() + .35
+            while time.monotonic() < stop:
+                root.update()
+                time.sleep(.005)
+        pump_layout()
+        for geometry in ("1280x840+0+30", "1300x860+0+30"):
+            app.tree.selection_set(selected_rows)
+            app.tree.focus(selected_rows[1])
+            before_width = app.task_text_available_width()
+            root.geometry(geometry)
+            pump_layout()
+            assert app.task_text_available_width() != before_width, "Größenwechsel erreicht den Aufgabenbaum nicht"
+            assert set(app.tree.selection()) == set(selected_rows), ("Umbruch verliert Mehrfachauswahl", app.tree.selection())
+            assert app.tree.focus() == selected_rows[1], "Umbruch verliert fokussierte Zeile"
+            assert app.selection_count_label.cget("text") == "2 Punkte"
+        app.tree.selection_set(())
+        ruhe()
+
     try:
         normal = next(entry for entry in app.lists
                       if entry.get("list_kind") in (None, "", "list", "tasks") and len(entry.get("items", [])) > 5)
         zeichnung = next(entry for entry in app.lists if entry.get("list_kind") == "drawing")
+        if "--auswahlumbruch" in sys.argv:
+            pruefe_auswahlumbruch()
+            assert not fehler, fehler[:1]
+            print("test_aufraeumen330: OK; Mehrfachauswahl und Fokus bei echtem Langtextumbruch")
+            raise SystemExit(0)
         if "--werkzeugzeile" in sys.argv:
             seite = app.new_page_from_markdown("# Werkzeugleistenprobe\n\nText\n")
             ruhe()
@@ -156,6 +192,8 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
         assert app.button_frame.winfo_manager() == "" and app.card_foot_mode() is None
         app.toggle_view_hints();ruhe()
         assert app.card_foot_mode() == "hint"
+
+        pruefe_auswahlumbruch()
 
         # --- Seite nach Zeichnung ohne Eingabe und Suche ------------------------
         seite = app.new_page_from_markdown("# Bericht\n\nText\n\n- [ ] Aufgabe eins\n")
