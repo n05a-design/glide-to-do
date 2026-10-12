@@ -1,5 +1,12 @@
 # Änderungsverlauf
 
+## 3.39.1 – Wiederholungen richtig erfassen und austauschen (13.10.2026)
+
+- **Schnelleingabe ganz oder gar nicht (A29):** Ankertag und Wochentage gehören zur Wiederholung – „monatlich am 15.“, „jeden 15.“, „jährlich am 24.12.“, „wöchentlich montags“, „alle 2 Wochen montags“, „jeden zweiten Dienstag“, „jeden zweiten Tag“. Bisher begann die Reihe heute und der Rest blieb Titeltext. Regeln, die das Datenformat nicht abbildet („jeden ersten Montag im Monat“, „alle 2 Monate“, „alle 2 Wochen montags und donnerstags“), bleiben vollständig Text mit gedämpftem Hinweis ohne Wirkung; kein Wort daraus wird als Bearbeitungstag gelesen.
+- **Kalenderaustausch am Monatsende (A28):** Monats- und Jahresreihen ab dem 29. bzw. am 29.02. tragen in der ICS-Ausgabe die Klemmform `BYMONTHDAY=…;BYSETPOS=-1`, sodass Kalenderprogramme dieselben Termine wie Glide zeigen. Der Import prüft den Starttag und übernimmt eine RFC-Monatsreihe am 31. nicht mehr still mit anderer Terminfolge, sondern meldet sie als nicht abbildbar.
+- **Zeitzonen im Aufgabenimport (A30):** `TZID` wird mit den seit 3.39.0 mitgelieferten IANA-Daten gelesen, Windows-Namen über CLDR; bisher fiel der Import unter Windows ohne Systemdatenbank auf Ortszeit zurück.
+- **Prüfung:** Neues Tk-freies Modul `repeat_ics.py`, 19 neue Unit-Tests (Monatsreihen jedes Starttags gegen `ics_recurrence` gerechnet), Pflichtsuite `test_wiederholung3391.py` mit Gegenprobe gegen 3.39.0. Aufgabenformat 23 und alle gespeicherten Regeln unverändert; nur neue Eingaben und Ausgaben ändern sich.
+
 ## 3.39.0 – Tagesplanung mit belegter Zeit (12.10.2026)
 
 - **Optionale Tageshinweise:** Vorgabe aus; frei wählbare Uhrzeiten und Wochentage für Beginn/Abschluss, 08:30/17:30 vorbelegt. Später erinnern, heute überspringen und gesammelte verpasste Hinweise; nur bei laufender App, ohne erzwungenen Bereichswechsel. Zustellbelege werden vor der Anzeige atomar gespeichert und verhindern doppelte Zustellung über Neustarts.

@@ -34,6 +34,7 @@ Stand 12.10.2026 · Glide 3.39.0 · Aufgabenformat 23 · Einstellungen 2 · Vorl
 | `week_planning.py` | Gemeinsame Wochenbilanz und Zeitfenster aus vorhandenen Glide-Blöcken (Tk-frei) |
 | `page_features.py` | Live-Listen, Titelbilder und gefüllte Vorlagenvorschau (Tk-frei) |
 | `repeat_rules.py` | Wiederholungsregeln, Termin überspringen, verpasste Termine überspringen (Tk-frei, KO02) |
+| `repeat_ics.py` | Wiederholung ↔ iCalendar-RRULE: Monatsende-Klemmform in der Ausgabe, strenger Rückweg mit Starttag (Tk-frei, 3.39.1) |
 | `routines.py` | Routinen in „Heute“: Auswahl, Fortschritt, heute erledigt (Tk-frei, AU06) |
 | `runtime_check.py` | Mindestversion Python/Tk vor dem Start, in einfacher Syntax (AB08) |
 | `release_notes.py` | Katalog und Regeln der Karte „Neu in …“ (Tk-frei, N07) |

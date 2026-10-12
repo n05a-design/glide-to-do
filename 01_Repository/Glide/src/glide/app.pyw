@@ -151,6 +151,7 @@ import day_proposal as glide_day_proposal  # noqa: E402
 import focus_timer as glide_focus  # noqa: E402
 import task_references as glide_task_refs  # noqa: E402
 import repeat_rules as glide_repeat  # noqa: E402
+import repeat_ics as glide_repeat_ics  # noqa: E402
 import routines as glide_routines  # noqa: E402
 import release_notes as glide_release  # noqa: E402
 import runtime_check as glide_runtime  # noqa: E402
@@ -55383,23 +55384,13 @@ Labels, Termine und Metadaten."""
         regel = cls.normalize_repeat(item.get("repeat"))
         if not regel:
             return None
-        art = regel.get("art")
-        if art == cls.REPEAT_DAILY:
-            teile = ["FREQ=DAILY"]
-        elif art == cls.REPEAT_EVERY_N_DAYS:
-            teile = ["FREQ=DAILY", f"INTERVAL={int(regel.get('abstand') or 1)}"]
-        elif art == cls.REPEAT_WEEKDAYS:
-            tage = [cls.ICS_WEEKDAYS[tag] for tag in regel.get("tage") or () if 0 <= tag <= 6]
-            if not tage:
-                return None
-            teile = ["FREQ=WEEKLY", "BYDAY=" + ",".join(tage)]
-        elif art == cls.REPEAT_WEEKLY:
-            teile = ["FREQ=WEEKLY"]
-        elif art == cls.REPEAT_MONTHLY:
-            teile = ["FREQ=MONTHLY"]
-        elif art == cls.REPEAT_YEARLY:
-            teile = ["FREQ=YEARLY"]
-        else:
+        # Monats- und Jahresreihen ab dem 29. klemmt Glide aufs Monatsende;
+        # repeat_ics bildet genau das ab statt der RFC-Lesart, die Monate auslässt (A28).
+        anker = glide_repeat.anchor_date(regel)
+        if anker is None and cls.normalize_due(item.get("due")):
+            anker = date.fromisoformat(cls.normalize_due(item.get("due")))
+        teile = glide_repeat_ics.rule_parts(regel, anker)
+        if not teile:
             return None
         ende = cls.normalize_due(regel.get("ende"))
         if ende:
@@ -55800,6 +55791,19 @@ Labels, Termine und Metadaten."""
                 return eintrag
         return None
 
+    _ics_resolver = None
+
+    @classmethod
+    def ics_import_zone(cls, tzid):
+        """Zone einer ICS-TZID aus den mitgelieferten IANA-Daten; Windows-Namen über CLDR."""
+        if ListApp._ics_resolver is None:
+            ListApp._ics_resolver = timezones.Resolver()
+        resolver = ListApp._ics_resolver
+        try:
+            return resolver(tzid)
+        except (ValueError, ZoneInfoNotFoundError):
+            return resolver(resolver.windows_key(tzid))
+
     @classmethod
     def parse_ics_moment(cls, parameter, wert):
         """Zeitangabe lesen: (Datum, Uhrzeit oder None, Hinweis oder None)."""
@@ -55825,11 +55829,11 @@ Labels, Termine und Metadaten."""
             # UTC in die Zone des Geräts holen.
             moment = moment.replace(tzinfo=timezone.utc).astimezone().replace(tzinfo=None)
         elif parameter.get("TZID"):
-            # Die Zeitzonendatenbank der Standardbibliothek nutzen, wenn das
-            # System sie mitbringt; sonst bleibt die Angabe Ortszeit.
+            # Mitgelieferte IANA-Daten (timezones) statt der Systemdatenbank,
+            # die unter Windows fehlt (A30); Windows-Namen wie „W. Europe
+            # Standard Time“ über die CLDR-Zuordnung. Unbekanntes bleibt Ortszeit.
             try:
-                from zoneinfo import ZoneInfo  # stdlib; Datenbank kann fehlen
-                zone = ZoneInfo(parameter["TZID"])
+                zone = cls.ics_import_zone(parameter["TZID"])
                 moment = moment.replace(tzinfo=zone).astimezone().replace(tzinfo=None)
             except Exception:
                 hinweis = "tzid"
@@ -55848,39 +55852,22 @@ Labels, Termine und Metadaten."""
         return vorzeichen * gesamt
 
     @classmethod
-    def ics_repeat_from_rule(cls, wert):
+    def ics_repeat_from_rule(cls, wert, start=None):
         """RRULE auf eine Glide-Regel abbilden; None wenn nicht abbildbar.
 
         Bewusst streng: Was Glide nicht genauso wiederholen kann, wird
         verworfen. Eine still vereinfachte Regel wäre schlimmer als keine.
+        `start` ist der erste Termin (ISO oder date); ab dem 29. entscheidet er,
+        ob eine Monats- oder Jahresreihe in Glide dieselbe Folge ergibt (A28).
         """
-        teile = {}
-        for stueck in str(wert or "").split(";"):
-            if "=" in stueck:
-                schluessel, roh = stueck.split("=", 1)
-                teile[schluessel.strip().upper()] = roh.strip().upper()
-        freq = teile.get("FREQ")
-        if not freq or "COUNT" in teile or "BYSETPOS" in teile or "BYMONTHDAY" in teile \
-                or "BYMONTH" in teile or "BYWEEKNO" in teile or "BYYEARDAY" in teile:
-            return None
-        intervall = teile.get("INTERVAL", "1")
-        if not intervall.isdigit() or int(intervall) < 1:
-            return None
-        intervall = int(intervall)
-        tage = [cls.ICS_WEEKDAYS.index(kuerzel) for kuerzel in teile.get("BYDAY", "").split(",")
-                if kuerzel in cls.ICS_WEEKDAYS] if teile.get("BYDAY") else []
-        if teile.get("BYDAY") and len(tage) != len([k for k in teile["BYDAY"].split(",") if k]):
-            return None  # etwa „2MO" – eine Position im Monat kennt Glide nicht
-        if freq == "DAILY" and not tage:
-            regel = {"art": cls.REPEAT_DAILY} if intervall == 1 else \
-                {"art": cls.REPEAT_EVERY_N_DAYS, "abstand": intervall}
-        elif freq == "WEEKLY" and intervall == 1:
-            regel = {"art": cls.REPEAT_WEEKDAYS, "tage": tage} if tage else {"art": cls.REPEAT_WEEKLY}
-        elif freq == "MONTHLY" and intervall == 1 and not tage:
-            regel = {"art": cls.REPEAT_MONTHLY}
-        elif freq == "YEARLY" and intervall == 1 and not tage:
-            regel = {"art": cls.REPEAT_YEARLY}
-        else:
+        teile = glide_repeat_ics.parse_parts(wert)
+        if isinstance(start, str):
+            try:
+                start = date.fromisoformat(start)
+            except ValueError:
+                start = None
+        regel = glide_repeat_ics.from_parts(teile, start if isinstance(start, date) else None)
+        if regel is None:
             return None
         ende = teile.get("UNTIL")
         if ende:
@@ -56053,7 +56040,7 @@ Labels, Termine und Metadaten."""
             regel = None
             regel_eintrag = self.ics_property(block, "RRULE")
             if regel_eintrag:
-                regel = self.ics_repeat_from_rule(regel_eintrag[2])
+                regel = self.ics_repeat_from_rule(regel_eintrag[2], start=tag)
                 if regel is None:
                     verwerfe("rrule", "Wiederholungsregel nicht abbildbar – ohne Wiederholung angelegt")
 
