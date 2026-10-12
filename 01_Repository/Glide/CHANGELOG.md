@@ -1,5 +1,12 @@
 # Änderungsverlauf
 
+## 3.39.0 – Tagesplanung mit belegter Zeit (12.10.2026)
+
+- **Optionale Tageshinweise:** Vorgabe aus; frei wählbare Uhrzeiten und Wochentage für Beginn/Abschluss, 08:30/17:30 vorbelegt. Später erinnern, heute überspringen und gesammelte verpasste Hinweise; nur bei laufender App, ohne erzwungenen Bereichswechsel. Zustellbelege werden vor der Anzeige atomar gespeichert und verhindern doppelte Zustellung über Neustarts.
+- **Kalender als Belegzeiten:** Eine ausdrücklich gewählte lokale ICS-Datei fließt rein lesend in Raster und freie Tageszeit ein. Einzeltermine, ganztägige Termine, übliche tägliche/wöchentliche/monatliche/jährliche Serien samt Ausnahmen, Zeitzonen und Sommerzeit; transparente/stornierte Termine zählen nicht. Überlappungen zählen als vereinigte Zeit, nicht unterstützte Regeln und Lesefehler bleiben sichtbar. Keine Aufgabenanlage und keine Synchronisierung.
+- **Tag entlasten:** Aus Heute, Woche und Tagesvorschlag Aufgaben ausdrücklich auf einen anderen Tag oder in den Vorrat verschieben. Vorher-/Nachher-Bilanz verwendet dieselben Belegzeiten und ungeschätzten Aufgaben. Fälligkeiten bleiben erhalten; Mehrfachübernahme ist ein Undo. Veraltete Vorschau und Schreibfehler verhindern unvollständige Änderungen.
+- **Prüfung:** Pflichtsuite `test_tag3390.py` mit vier getrennten Vorversionsgegenproben; 138 zusätzliche Tk-freie Tests für Zeit-/Zustell-/Serien-/ICS-/Bilanzregeln. Gebündelte IANA-/CLDR-Daten mit festen Quellen, Prüfsummen und Lizenzbelegen. Aufgabenformat 23 und Einstellungenformat 2 bleiben unverändert; neue Einstellungen erhalten den bestehenden Altleser-Rundlauf. Vollabnahmen und Lieferhashes im QA-Bericht.
+
 ## 3.38.0 – Aufgaben unmittelbar bearbeiten (11.10.2026)
 
 - **Ein gemeinsamer Inspektor:** Liste, Tabelle, Heute, Demnächst, Pinnwand und Aufgabenverweise in Seiten öffnen dieselbe Bearbeitungsfläche mit allen bisherigen Feldern. Bei schmalem Fenster liegt sie innerhalb der Inhaltsfläche; die Navigation bleibt erreichbar. Speichern, Strg/Cmd+S, Verwerfen und Schließen erhalten Eingaben bei Fehlern. Geänderte Aufgaben werden vor dem Schreiben erneut verglichen; Schreibfehler setzen Bearbeitung, Verlauf und Undo zurück.

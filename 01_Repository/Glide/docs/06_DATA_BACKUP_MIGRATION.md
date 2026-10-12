@@ -1,6 +1,6 @@
 # Daten, Backups und Migration – Glide
 
-Stand 11.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2 · Austauschformat 1 (Änderungsvorschläge 2)
+Stand 12.10.2026 · Glide 3.39.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2 · Austauschformat 1 (Änderungsvorschläge 2)
 
 Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag 52) ergänzt und um die Verweise auf gelöschte Einzelverträge bereinigt; die Vorfassungen trägt Git. Formate 4–23 und Legacy 2 bleiben lesbar.
 
@@ -126,6 +126,16 @@ Einstellungsformat **2**; alle neuen Schlüssel sind additiv und werden beim Lad
 | Startseite | `home_tile_order`, `home_tile_span`, `home_columns`, `home_density`, `home_calendar_mode`, `home_filter_tiles`, `mascot_name`, Gismo-Werte |
 | Pinnwände | `pinboards` je Pinnwand: Karten mit Positionen und Größe, Anordnung, Spaltenboard, Bereiche (≤ 50), Verbindungen (≤ `MAX_CONNECTIONS` = 200, mit Art, Beschriftung, Strichart, Farbe), Hintergrund, Vorschau, Auto-Anheften. Verweise auf entfernte Karten fallen beim Normalisieren weg; ältere Fassungen lesen die Pinnwand als freie Fläche |
 | Sonstiges | `system_notifications` (Vorgabe aus), `data_format_written`, `today_plan_migrated`, `release_notes_seen` (zuletzt gelesene Karte „Neu in …“, 3.33.20; Unlesbares entfällt) |
+
+### Tagesplanung seit 3.39.0
+
+Aufgabenformat 23 und Einstellungsformat 2 bleiben unverändert. `daily_hints` speichert aktiviert/Zeiten/Wochentage; `daily_hint_state` die normalisierten Zustellbelege, Aufschub in UTC und übersprungene Termine. Der vollständige nächste Zustellzustand wird vor der Anzeige atomar gespeichert. Fehler lässt den letzten Dateistand erhalten und erlaubt Wiederholung, Neustarts stellen nicht doppelt zu. Die echte 3.38-Normalisierung und deren atomarer Settings-Schreiber bewahren diese additiven Schlüssel einschließlich unbekannter Zusatzfelder; der Rundlauf wird gesondert geprüft.
+
+`busy_calendar` speichert ausschließlich die ausdrücklich gewählte lokale Quelldatei, Importzeitzone und deren SHA-256-/Größen-/Ladebelege. Keine Termine im Aufgabenbestand, keine Änderung der ICS-Datei. Kalenderlesen geschieht außerhalb des UI-Threads; bis zum passenden Ergebnis bleibt die Belegung unbekannt. Unlesbare Konfiguration wird sichtbar beibehalten und nur ausdrücklich ersetzt/entfernt. Aufgabenbackups enthalten wie bisher keine persönlichen Einstellungen und somit keine Kalenderquelle oder Tageshinweise.
+
+Die Belegdatei ist UTF-8, regulär und höchstens 12 MiB groß: 5.000 VEVENT, 128 VTIMEZONE, 200.000 Zeilen, 65.536 Byte je entfalteter Eigenschaft und 32 Verschachtelungsstufen. Ein Auswertungsfenster umfasst höchstens 370 Tage; pro Serie gelten endliche Schritt-/Vorkommensgrenzen. Überschreitungen brechen sichtbar ab und ergeben keine Teilbilanz. Die gebündelten IANA-2026e-/CLDR-48.2-Daten liegen samt Quellenhashes und Original-Lizenzbelegen unter `resources/timezones`; keine systemweite Änderung und keine zusätzliche Laufzeitabhängigkeit.
+
+Entlasten schreibt über `item_change`: Zieltag oder Vorrat, Planungsuhrzeit nach dem Umplanungsvertrag, Fälligkeit bleibt erhalten. Vor Übernahme werden Aufgaben-/Kapazitäts-/Belegfingerprints erneut verglichen; veraltete Vorschau oder unbekannte Kalenderbelegung verhindert das Schreiben. Ein Undo umfasst die ganze Auswahl, Schreibfehler rollt alles zurück.
 
 ## Austauschformat (`.glideexchange`)
 

@@ -1,24 +1,24 @@
 {
-  "zeitpunkt": "2026-10-09T01:52:58",
+  "zeitpunkt": "2026-10-12T19:34:50",
   "modus": "voll",
   "python": "3.14.5 (v3.14.5:5607950ef23, May 10 2026, 07:38:09) [Clang 21.0.0 (clang-2100.0.123.102)]",
   "plattform": "darwin",
-  "exitcode": 0,
+  "exitcode": 1,
   "schritte": [
     {
       "schritt": "Syntax",
       "status": "ausgeführt",
-      "grund": "169 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+      "grund": "223 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
     },
     {
       "schritt": "Versionskonsistenz",
       "status": "ausgeführt",
-      "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.33.20; Datenformat 23"
+      "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.39.0; Datenformat 23"
     },
     {
       "schritt": "Dokumentation",
       "status": "ausgeführt",
-      "grund": "Alle Dokumente einschließlich Archiv im Index; 189 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+      "grund": "Alle Dokumente einschließlich Archiv im Index; 168 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
     },
     {
       "schritt": "Fixtures",
@@ -107,8 +107,8 @@
     },
     {
       "schritt": "test_reminders",
-      "status": "ausgeführt",
-      "grund": "Exitcode 0"
+      "status": "fehlgeschlagen",
+      "grund": "Exitcode 1"
     },
     {
       "schritt": "test_ui39",
@@ -426,6 +426,46 @@
       "grund": "Exitcode 0"
     },
     {
+      "schritt": "test_oberflaeche33321",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_wissen3340",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_pixel3350",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_austausch3350",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_fundament3360",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_logo3370",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_aufgaben3380",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "test_tag3390",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
       "schritt": "test_vollpruefung325",
       "status": "ausgeführt",
       "grund": "Exitcode 0"
@@ -478,7 +518,7 @@
     {
       "schritt": "Release-Abgleich",
       "status": "ausgeführt",
-      "grund": "Inhalt, Fristen und Verknüpfungen zum Planungsstichtag 2026-10-09 gleich"
+      "grund": "Inhalt, Fristen und Verknüpfungen zum Planungsstichtag 2026-10-12 gleich"
     },
     {
       "schritt": "Screenshots",

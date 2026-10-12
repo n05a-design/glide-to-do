@@ -326,11 +326,21 @@ with tempfile.TemporaryDirectory(prefix="glide-reminders-") as tmp:
                 tree = next(w for w in descendants(dialog) if w.winfo_name() == "reminders_tree")
                 assert len(tree.get_children()) >= 25
                 buttons = [w for w in descendants(dialog) if isinstance(w, mod.RoundedButton)]
-                assert len(buttons) == 5
+                expected = {
+                    "Aufgabe öffnen", "Verschieben", "Aufgabe erledigen",
+                    "Hinweis bestätigen", "Schließen",
+                    f"Tageshinweise ({getattr(app, '_daily_hint_count', 0)})",
+                    "Tageshinweise einstellen",
+                }
+                assert len(buttons) == len(expected)
+                assert {button.text for button in buttons} == expected
                 for button in buttons:
                     assert button.winfo_ismapped()
                     assert button.winfo_rooty() + button.winfo_height() <= dialog.winfo_rooty() + dialog.winfo_height()
                     assert mod.tkfont.Font(font=button.font).measure(button.text) + 24 <= button.winfo_width()
+                next(button for button in buttons if button.text.startswith("Tageshinweise (")).command()
+                next(button for button in buttons if button.text == "Tageshinweise einstellen").command()
+                assert daily_calls == ["anzeigen", "einstellen"]
                 target_id = tree.selection()[0]
                 app.search_placeholder_active = False
                 app.search_var.set("Nicht zutreffender Suchfilter")
@@ -338,7 +348,10 @@ with tempfile.TemporaryDirectory(prefix="glide-reminders-") as tmp:
                 assert not app.current_search_query()
                 assert app.tree.exists(target_id) and app.tree.selection() == (target_id,)
             app.run_modal = overview
-            app.open_reminders()
+            daily_calls = []
+            with patch.object(app, "show_daily_hints", side_effect=lambda: daily_calls.append("anzeigen")), \
+                    patch.object(app, "show_daily_hint_settings", side_effect=lambda: daily_calls.append("einstellen")):
+                app.open_reminders()
             holder = mod.tk.Toplevel(root)
             editor, read = app.make_reminder_editor(holder, holder, {"reminder": None})
             editor.pack(fill="x")

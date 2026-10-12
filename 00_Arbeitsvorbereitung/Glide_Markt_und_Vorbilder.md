@@ -1,6 +1,6 @@
 # Glide – Markt und Vorbilder
 
-Stand 11.10.2026 · Glide 3.38.0 · Hersteller-Matrix vom 01.10.2026, gezielte Abgleiche 05./07.10.2026, Sprintrecherche 08.10.2026; Glide-Codeabgleich 09.10.2026 (3.38.0)
+Stand 12.10.2026 · Glide 3.39.0 · Hersteller-Matrix vom 01.10.2026, gezielte Abgleiche 05./07.10.2026, Sprintrecherche 08.10.2026; Glide-Codeabgleich 09.10.2026 (3.39.0)
 
 Zusammengeführt am 03.10.2026 aus der Konkurrenz- und Featurematrix und der Konkurrenzübersicht vom 01.10.2026; diese hatten die älteren Recherchen vom 16.–25.09.2026, den Funktionsvergleich zur Zeichenfläche, die SVG-Untersuchung und das Konzept „Seiten wie Notion“ bereits eingeordnet. Am 06.10.2026 um die Wettbewerbsteile des nicht übernommenen Richtungsentwurfs vom 03.10.2026 ergänzt: Belegstufen, Steckbriefe mit Stärke, Grenze und Bedeutung, die ungekürzte Matrix, der Vergleich nach Dimensionen und überholte Aussagen. Die Vorfassungen trägt Git. Die Lücken N01–N20 und G01–G32 stehen mit Status im [Entwicklungsplan](Glide_Entwicklungsplan.md).
 
@@ -42,7 +42,7 @@ Zusammengeführt am 03.10.2026 aus der Konkurrenz- und Featurematrix und der Kon
 
 **Glide-Stand 3.35.0 (Codeabgleich 09.10.2026):** Tagesvorschlag und Fokus seit 3.33.14, Aufgaben im Notiztext seit 3.33.15, gemeinsame Befehlspalette seit 3.33.16, Wochenplanung und Verweise mit Rückverweisen seit 3.33.17, Live-Listen, Titelbilder und Vorlagenvorschau seit 3.33.18 (Format 23). Im Sprint dazu: Termine überspringen, Erinnerung beim Erfassen und Routinen (3.33.20), hell/dunkel nach System und schmale Seitenleiste (3.33.21), Seitenbilder in Druck und Markdown, Fundstellen und erklärte Filter (3.34.0), geprüfte KI-Änderungsvorschläge und Sicherungsvergleich (3.35.0). Jede Version auf dem Referenz-Mac automatisch geprüft; Windows zuletzt 3.33.18, menschliche Abnahme offen. Herstellerangaben behalten ihre ausdrücklich genannten Recherchezeitpunkte. Details: [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
 
-**Eigener Produktabgleich 12.10.2026:** Fundament/Tempo 3.36.0 und Logo/Symbole 3.37.0 sind inzwischen mit Mac-/Linux-/Windows-Vollprüfung geliefert. Inspektor, direkte Felder, Textstufen und dezente Übergänge stehen im Quellstand 3.38.0; nach nativen Auswahl-/Menübefunden läuft die erneute Paketabnahme. Herstellerangaben oben werden dadurch nicht als neu recherchiert ausgegeben. Bestätigter Umfang und Folgepakete stehen im [Plan §15.7](Glide_Entwicklungsplan.md#157-bestätigter-gesamtplan-acht-produktionsversionen).
+**Eigener Produktabgleich 12.10.2026:** Fundament/Tempo 3.36.0 und Logo/Symbole 3.37.0 sind inzwischen mit Mac-/Linux-/Windows-Vollprüfung geliefert. Inspektor, direkte Felder, Textstufen und dezente Übergänge sind mit 3.38.0 und grüner Mac-/Linux-/Windows-Vollprüfung geliefert; Auswahl-/Menübefunde sind korrigiert und nachgeprüft. Menschliche Bedienung/DPI bleiben getrennt offen. Herstellerangaben oben werden dadurch nicht als neu recherchiert ausgegeben. Bestätigter Umfang und Folgepakete stehen im [Plan §15.7](Glide_Entwicklungsplan.md#157-bestätigter-gesamtplan-acht-produktionsversionen).
 
 **Empfohlener Fokus** (seit 05.10.2026 im [Ausbauprogramm des Entwicklungsplans](Glide_Entwicklungsplan.md#43-ausbauprogramm-alltag-komfort-und-oberfläche) eingeplant; Umsetzung je Paket nach Auftrag):
 

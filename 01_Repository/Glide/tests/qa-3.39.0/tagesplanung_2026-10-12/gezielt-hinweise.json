@@ -1,0 +1,14 @@
+{
+  "version": "3.38.0",
+  "checks": [
+    "Tageshinweis: echter gespeicherter Beleg vor Anzeige, Glocke, keine Mehrfachzustellung/kein Zwangswechsel",
+    "Später und Hinweistag überspringen: echte Settings-Schreibwege, kein erneuter Hinweis",
+    "Echter Settings-Dateischreibfehler: Belege/Datei unverändert, Retry stellt genau einmal zu",
+    "Schreibschutz und echter modaler Grab schieben automatische Zustellung auf",
+    "Echter Hinweiskorb: Später, Hinweistag überspringen und ausdrücklich gewählter Tagesbeginn",
+    "Tatsächlicher neuer App-Prozess: gespeicherte Belege unverändert, keine doppelte Zustellung"
+  ],
+  "callback_errors": [],
+  "hinweise": [],
+  "app_sha256": "2276ba1b03579cc8f62cda13ee1250f6b0f50f4aedb7847cf8c56ffd3c906547"
+}

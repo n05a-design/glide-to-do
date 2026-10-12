@@ -1,6 +1,6 @@
 # Prüfplan – Glide
 
-Stand 12.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
+Stand 12.10.2026 · Glide 3.39.0 · Aufgabenformat 23 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
 
 Wie Glide geprüft wird. Was tatsächlich geprüft wurde, steht im [QA-Bericht](07_QA_BERICHT.md). Am 03.10.2026 auf den gültigen Stand verdichtet; am 05.10.2026 um Nachweisregeln und Kontrollmatrix der Windows-Fassung ergänzt. Die Suitebeschreibungen je Einführungsversion trägt Git.
 
@@ -61,6 +61,7 @@ Ausführbarer Vertrag zu [Funktionen](20_FUNKTIONEN.md). Pflichtsuiten der letzt
 | Pixel (3.35.0): Farbe ändern per Doppelklick mit sichtbarer Vorschau, Ablehnen ohne Spur, Übernehmen ein Undo; Symbolvorschau vor dem ICO-Export pixelgleich zur Datei auf hellem und dunklem Grund, Abbrechen schreibt nichts | `test_pixel3350` |
 | Wissen und Seiten (3.34.0): Seitenbilder ohne Überlappung in fünf Umflusskombinationen, Druckseite mit eingebetteten Bildern aus dem Seitenmenü, Markdown kopieren/speichern mit Bildverweisen und Rückweg als Seitenbilder, Trefferhervorhebung nach Enter mit Esc/Tippen, „Warum steht das hier?“ und „Filter erklären …“ ohne Datenänderung, Alt+Pfeile in Bereichsbäumen und Spaltenboard mit Hinweis, Undo und Neustart, JPEG über `djpeg` mit erzwungenem Linux-Weg | `test_wissen3340` |
 | Ruhige Oberfläche (3.33.21): Automatisch hell/dunkel mit simulierter Erkennung und Neustart, neutrale Rolle aktiver Zustände in allen Designs, Gismo-Pflege bei Überfahren/Fokus ohne Neuaufbau, eine Werkzeugzeile über der Pinnwand mit Menü „…“, Seitentitel und Schreibhinweis, schmale Seitenleiste, Dialogbreite und Knopfreihe | `test_oberflaeche33321` |
+| Tagesplanung (3.39.0): Hinweise mit künstlicher Uhr, Deduplizierung/Später/Überspringen/Neustart/Dateifehler, lokale ICS-Serien/Ausnahmen/Zeitzonen und gemeinsame Bilanz, Entlastung mit Vorschau/Undo/Schreibfehler, vier Dialoge bei 860 × 700/großer Schrift und Timerabbau | `test_tag3390`; elf Tk-freie Unitsuiten/138 neue Fälle, vier getrennte rote Vorversionsgegenproben |
 | Komfort (3.33.20): Termin überspringen über Menüs mit Undo und ohne Tageszahl, Erledigen in Übersichten wie in der Liste, Erinnerung aus Eingabezeile und Schnellerfassung, mehrzeiliges Einfügen mit Rückfrage, zuletzt benutzte Ziele, „+“/Umschalt+Enter, Leerzustand, Routinen in „Heute“, Karte „Neu in …“, Mindestlaufzeit mit altem Python, Normalisierung der neuen Einstellungen | `test_komfort33320` |
 | Tempo (3.33.19): Seitenleiste/Einstellungen/Sperre je Aktion, Bildlayout inkrementell = vollständig, Startseite bleibt stehen, Einstellungsfenster | `test_tempo33319` |
 | Einplanen und verfügbare Zeit (3.33.13): gemeinsame Menüs/Kürzel/Palette/Zeilenaktion, mehrere Quelllisten, Feldinvarianten, Undo, Tageswechsel, Datumswahl/Abbruch, Speicherfehler, Neustart und Mindestgröße/große Schrift | `test_planen33313`; `test_features315` erhält die unabhängige Tagesbilanzprüfung, der Kopf zeigt die freie Zeit des Zieltags |

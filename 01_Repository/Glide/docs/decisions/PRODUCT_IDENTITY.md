@@ -1,6 +1,6 @@
 # Produkt- und Identitätsregister
 
-Stand 11.10.2026 · App-Version 3.38.0 · Datenformat 23
+Stand 12.10.2026 · App-Version 3.39.0 · Datenformat 23
 
 Der obere Block ist durch den Quellcode belegt und muss nicht mehr entschieden
 werden. Der untere Block enthält Geschäfts- und Rechtsentscheidungen. Offene
@@ -13,12 +13,12 @@ ersetzt werden.
 |---|---|---|
 | Produktname | Glide | `APP_NAME` |
 | Langname | Glide – Aufgaben und Listen | `APP_PRODUCT_NAME` |
-| App-Version | 3.38.0 | `APP_VERSION`, `VERSION` |
+| App-Version | 3.39.0 | `APP_VERSION`, `VERSION` |
 | Datenformat | 23 | `DATA_SCHEMA_VERSION` |
 | Unterstützte Backup-Formate | 4 bis 23 | `MIN_PORTABLE_BACKUP_SCHEMA_VERSION`, `DATA_SCHEMA_VERSION` |
 | Laufzeit | Python 3.14 mit Tk 9 als Grundlage (27.09.2026); Tk 8.6 bleibt lauffähig, ohne Systemmitteilung und SVG-Vorschau. Sonst nur Standardbibliothek | Importliste in `app.pyw` |
 | Mitgelieferte Bibliothek | tkinterdnd2 0.6.3 (MIT) mit tkDnD für das Ziehen aus Finder/Explorer; optional, lädt beim ersten Gebrauch | `src/glide/vendor`, [Entscheidung](ABHAENGIGKEIT_TKDND.md) |
-| Prüflaufzeit | Zuletzt vollständig geliefert 3.37.0: Referenz-Mac Python 3.14.5/Tk 9.0.3, Windows x64 Python 3.14/Tk 9.0.4 und Linux/Xvfb Python 3.14/Tk 8.6 automatisch grün. Kandidat 3.38.0 benötigt nach Produktionskorrektur erneut die vollständige Abnahme. Menschliche Abnahme offen; Ergebnisse im QA-Bericht | `docs/07_QA_BERICHT.md` |
+| Prüflaufzeit | Zuletzt automatisch vollständig geliefert 3.38.0: Referenz-Mac Python 3.14.5/Tk 9.0.3, Windows x64 Python 3.14.7/Tk 9.0.4 und Linux/Xvfb Python 3.14/Tk 8.6 automatisch grün. Produktionskorrektur am Apphash bcdbc4da in nativer Vollmatrix 38272561080 abgenommen. Menschliche Abnahme offen; Ergebnisse im QA-Bericht | `docs/07_QA_BERICHT.md` |
 | Netzwerkzugriff | kein automatischer Datentransfer; bewusst angeklickte Links öffnen den Browser | lokale Datenhaltung, `webbrowser` |
 | Benutzerkonto | keines | keine Auth-Pfade |
 | Telemetrie | keine | keine Analytics-Aufrufe |
