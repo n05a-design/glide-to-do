@@ -37558,6 +37558,7 @@ class ListApp:
             for widget, gap in (
                 (getattr(self, "header_controls", None), 12),
                 (logo if logo is not None and logo.winfo_manager() else None, self.HEADER_LOGO_GAP),
+                (getattr(self, "custom_menubar", None), 8),
             ):
                 if widget is not None:
                     # Die Wunschbreite eines Rahmens rechnet Tk erst im
@@ -57355,12 +57356,14 @@ Labels, Termine und Metadaten."""
             self.action_menus.append((titel, menu))
         self.custom_menu_buttons = []
         if IS_WINDOWS:
-            # Die thematisierbaren Menüs teilen die vorhandene Kopfzeile;
-            # eine zusätzliche Zeile würde dauerhaft Inhaltsfläche belegen.
+            # Die Menüs teilen nur die Titelzeile. Die Statuszeile darunter
+            # behält die volle Breite für Tagesbilanz und Ziehrückmeldung.
             self.custom_menubar = self.register_theme_widget(
-                tk.Frame(self.header_frame, bg=self.theme["bg"], height=30), "bg"
+                tk.Frame(self.title_row, bg=self.theme["bg"], height=30), "bg"
             )
             self.custom_menubar.pack(side="right", padx=(8, 0))
+            self.title_label.pack_forget()
+            self.title_label.pack(side="left", anchor="w")
             kuerzel = {"Datei": "d", "Bearbeiten": "b", "Ansicht": "a", "Hilfe": "h"}
             menu_specs = [(titel, menu, kuerzel.get(titel, titel[:1].lower()))
                           for titel, menu in self.action_menus]

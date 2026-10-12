@@ -804,7 +804,7 @@ def flaeche(app_path, report, *, gross=False, tempo=False):
                     idle()
                     menu_row = getattr(app, 'custom_menubar', None)
                     if menu_row is not None:
-                        assert menu_row.master is app.header_frame, 'Windows-Menüs belegen eine zusätzliche Zeile'
+                        assert menu_row.master is app.title_row, 'Windows-Menüs belegen eine zusätzliche Zeile oder verengen die Statuszeile'
                         assert menu_row.winfo_ismapped(), 'Windows-Menüs verschwunden'
                         expected = [title for title, _menu in app.action_menus]
                         assert [button.text for button in app.custom_menu_buttons] == expected

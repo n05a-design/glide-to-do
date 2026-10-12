@@ -2,7 +2,7 @@
 
 Stand 12.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · neue Produktionskorrektur in Abnahme
 
-App-SHA-256: `8cda250ca0e6219f9d9cab165e6a05b8e161b4bad148175d916e3143d993dccc`. Dieser Stand ist noch keine Lieferung.
+Aktueller Root-App-SHA-256: `bcdbc4da2197aadaffbe65cd57054c68b93db4d1aedcb9cbeb16c2204bd8ef41`. Dieser Stand ist noch keine Lieferung. Die folgenden abgeschlossenen Mac-/Linux-Belege gelten für den Vorgänger `8cda250c`.
 Die bisherigen Mac-Vollprüfung, 07- und Bundlebelege am Hash `49ca48aa`
 bleiben [historisch getrennt](../aufgaben_2026-10-11/README.md).
 
@@ -57,8 +57,12 @@ am selben Hash neu belegt; menschliche Bedienung bleibt getrennt.
 
 Main-Merge PR #19 (029b821) ist bytegleich zum Kandidatcommit 034662d.
 Seine native Matrix 38213392543 bestätigt bereits [Linux](linux-voll.json)
-und [alle 18 Defektgegenproben](linux-defektgegenproben.json); Windows läuft.
+und [alle 18 Defektgegenproben](linux-defektgegenproben.json). [Windows](windows-vollbefunde.json) ist mit drei Kopftextanschnitten beendet: Mindestgröße, Titel und Planungsrückmeldung; übrige 82 Suiten einschließlich neuer Aufgabensuite grün.
 Die [Tempo-Diagnose](tempo.json) enthält beide Grenzbefunde und den
 Vergleich mit dem unveränderten bisherigen Kandidaten. Nach Ende der Matrix
 ist eine serielle Abschlussmessung nötig; D47 wird nicht still gelockert.
 Lieferabgleich/Bundle und strenge Liefer-CI bleiben offen.
+
+Die anschließende technische Korrektur ordnet die vier Windows-Menüs innerhalb der Titelzeile an; die Statuszeile darunter behält ihre Breite. Titelmessung berücksichtigt die Menübreite. [36 lokale Menüpfadkombinationen](menues_titelzeile_mac.json) und [alle drei betroffenen Suiten](titelzeilen_mac.json) sind grün; die unveränderte Titelprüfung ist am Vorgänger passend rot. Eine solche Prüfung auf dem Mac ersetzt keine native Windows-Abnahme. Die vollständigen Prüfstände werden erneut ausgeführt.
+
+[Serielle Abschlussmessung](tempo_abschluss.json) nach Ende der Matrix: fünf direkte Prozesse × 40 Wiederholungen, Einstellungen warm 146,85 ms Median/179,59 ms p95. Erstöffnung und Startseite innerhalb ihrer Grenzen; Einstellungs-p95 überschreitet D47. Frage 30 zur vorgeschlagenen Grenze 190 ms bleibt offen; keine Ausnahme vorweggenommen. [Kandidat-Grundstufe](kopfzeilen_grundstufe.json) grün, Lieferstand weiterhin ausdrücklich abweichend.
