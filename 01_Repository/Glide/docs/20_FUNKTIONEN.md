@@ -1,6 +1,6 @@
 # Funktionen – Glide
 
-Stand 11.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
+Stand 12.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
 
 ## Aufgaben im Wissen (3.33.15: G29/G31/G32)
 

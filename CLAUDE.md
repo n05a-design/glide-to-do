@@ -1,8 +1,6 @@
 # Arbeitsregeln für Claude Code – Glide
 
-claude/glide-sprint-2026-10-09
 Stand 11.10.2026 · Glide 3.38.0
-main
 
 Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf die verbindlichen Projektregeln und ergänzt, was für Claude-Code-Sitzungen im Repository gilt. Regeln nicht hier doppeln, sondern an der Quelle pflegen.
 

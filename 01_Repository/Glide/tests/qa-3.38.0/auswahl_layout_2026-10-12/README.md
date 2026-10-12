@@ -37,3 +37,7 @@ Die isolierte [Kandidat-Grundstufe](kandidat_grundstufe.json) ist grün.
 Der noch abweichende 07-Hauptstand wird ausdrücklich als Kandidathinweis
 gemeldet; dies ist keine strenge Lieferstandabnahme. Der lokale
 Originalpaketabruf meldet den bekannten SSL-Zertifikathinweis.
+
+Nach Übernahme des Remote-Merges b34cbd7/main 42e6c35 ist die
+[erneute Grundstufe](grundstufe_nach_main.json) ebenfalls grün; App unverändert.
+Die Main-Ergänzung enthält Projekt-Skill/Standprüfwerkzeug, keine App-Funktion.
