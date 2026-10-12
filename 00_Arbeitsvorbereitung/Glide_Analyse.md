@@ -1,6 +1,6 @@
 # Glide – Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung
 
-Stand 12.10.2026 · Glide 3.39.0 · Aufgabenformat 23 · Analyse vom 08.10.2026, fortgeschrieben am 12.10.2026 nach Paket 2 und während der Paket-3-Neuabnahme (Code, Dokumente, Git-Historie, Plattformnachweise)
+Stand 13.10.2026 · Glide 3.39.0 · Aufgabenformat 23 · Analyse vom 08.10.2026, fortgeschrieben am 12.10.2026 nach Paket 2 und während der Paket-3-Neuabnahme (Code, Dokumente, Git-Historie, Plattformnachweise); Bestandsaufnahme und Gap-Analyse nach Wettbewerbs- und Codeabgleich am 13.10.2026 (§8)
 
 Bestandsaufnahme im Auftrag vom 08.10.2026: lokale Ablage untersuchen, Dokumentation und Code abgleichen, daraus den Sprint ableiten. Dieses Dokument trägt die **Analyse** (Funktions-, Oberflächen-, Entscheidungs- und Nutzungsanalyse sowie den Abgleich Dokumentation ↔ Code). Der Wettbewerb steht in [Markt und Vorbilder](Glide_Markt_und_Vorbilder.md), die Entscheidungen selbst in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), die daraus abgeleiteten Aufgaben ausschließlich im [Entwicklungsplan, Abschnitt 14](Glide_Entwicklungsplan.md#14-sprint-ab-08102026-aufgabenkatalog). Erledigte Befunde werden hier als erledigt markiert, nicht gelöscht, bis die nächste Analyse sie ersetzt.
 
@@ -68,6 +68,12 @@ Abweichungen, veraltete Angaben und unbestätigte Annahmen, Stand 08.10.2026. Sp
 | A21 | Suche (Strg/Cmd+O) | Der Textausschnitt eines Inhaltstreffers normalisierte jedes Zeichen einzeln; bei 10.000 Punkten lag die Eingabe bis zur gezeichneten Liste mit 99–101 ms (eingefrorene 3.33.21: 100,8 ms) genau an der Grenze, ab der der Plan einen FTS5-Index vorsah [Messung `messung_suche.py`, Profil] | Engpass | Arbeitsstand 3.34.0: Positionsabbildung per Halbierungssuche, gleichwertig zur alten Fassung (Unit-Test), Median 66,6 ms; P07 ✕; geliefert 3.34.0 |
 | A22 | Seiten | Zwei Bilder auf aufeinanderfolgenden Absätzen überlappten (nachgestellt: drei Bilder links, je 30 px versetzt übereinander); Druck und „Markdown kopieren“ zeigten statt der Bilder nur Dateinamen, Markdown-Import machte Bilder zu Textverweisen [Code, Nachstellprobe] | Fehler bzw. Lücke (B4) | geliefert 3.34.0 |
 | A23 | Pixel-Werkstatt, Farbleiste | Mit dem neuen Doppelklick (G19) passte auch ein dritter Klick auf die Doppelklick-Bindung und öffnete „ersetzen durch …“ erneut – mit der Farbe, die nach dem Ersetzen an dieser Stelle steht [Prüfung `test_pixel3350`] | Fehler im Arbeitsstand | vor der Lieferung behoben: Dreifachklick abgefangen, in der Suite geprüft; geliefert 3.35.0 |
+| A24 | Architektur §1 „Laufzeit“ | nannte als aktuell geprüft Mac 3.35.0 und Windows 3.33.18, Linux offen; seit 3.36.0 laufen je Lieferung Mac-, Linux- und Windows-Vollprüfungen [QA] | veraltet | 13.10.2026: Versionsangabe durch Verweis auf den QA-Bericht ersetzt |
+| A25 | Markt und Vorbilder §1 Punkt 3, §4 (Animation), §4.1 (Komfort, Gestaltung) | Inspektor, Felder am Objekt und OB02/OB03 als offen „nach I7“, Animation „D07 offen“; geliefert in 3.38.0 bzw. entschieden durch D18 [Dok] | veraltet | 13.10.2026 berichtigt |
+| A26 | `repeat_rules.py` gegenüber `ics_recurrence.py` | zwei getrennte Wiederholungsrechner: Aufgaben kennen sechs feste Arten ohne Intervall für Woche/Monat/Jahr; der ICS-Leser (3.39.0) rechnet INTERVAL, COUNT, UNTIL, BYDAY mit Ordinal, BYMONTHDAY und BYSETPOS [Code] | technische Doppelung | offen; Vorschlag FP-02 ([Plan §16](Glide_Entwicklungsplan.md#16-vorschläge-aus-wettbewerbs--und-open-source-analyse-13102026)) |
+| A27 | `SavedFilters.normalize_settings`, `ItemWorkspace.prune` | Unbekannte Schlüssel auf oberster Ebene der Einstellungen bleiben erhalten (`normalize_personal_settings` kopiert `dict(data)`); innerhalb bekannter Strukturen bauen die Normalisierer Einträge aber nur aus bekannten Schlüsseln, und `prune` behält als Seitenkarte nur Zeichnungen. Einstellungen haben kein Formattor. Eine Erweiterung **innerhalb** gespeicherter Filter oder der Pinnwand würde von einer älteren Fassung beim nächsten Einstellungsschreiben still gekürzt [Code; Nachprüfung 13.10.2026] | Vorwärtsverträglichkeit fehlt | offen; WA-09 vor FP-04; FP-03 kann über einen eigenen Schlüssel auf oberster Ebene ohne WA-09 auskommen |
+| A28 | ICS-Ausgabe `ics_repeat_rule`, ICS-Import `ics_repeat_from_rule` | „monatlich“ wird als `FREQ=MONTHLY`, „jährlich“ als `FREQ=YEARLY` ausgegeben. Glide klemmt Termine am 29.–31. auf das Monatsende (31.01. → 28.02. → 31.03.), ein RFC-5545-Leser überspringt Monate ohne diesen Tag (31.01. → 31.03. → 31.05.); bei „jährlich ab 29.02.“ fehlen dort drei von vier Jahren. Umgekehrt wird eine importierte Monatsserie am 31. in Glide zusätzlich auf Monatsenden gelegt – entgegen dem eigenen Grundsatz der Methode, nicht Abbildbares zu verwerfen. Korrektur `BYMONTHDAY=28,29,30,31;BYSETPOS=-1` (bzw. 28,29,30 / 28,29; jährlich mit `BYMONTH=2`) stimmt in allen fünf Proben mit Glides Folge überein [Code; Probe `probe_wiederholung.py`] | Fehler (Randfall, Austausch) | offen; WA-17 in FP-00 |
+| A29 | Schnelleingabe `capture_parser._wiederholung` | Wiederholungsangaben mit Ankertag werden teilweise erkannt und anders gebildet als gemeint: „monatlich am 15.“ und „jeden Monat am Ersten“ wiederholen ab heute (13.), „am 15.“ bleibt Titeltext; „wöchentlich montags“, „alle 2 Wochen montags“ und „… montags und donnerstags“ wiederholen ab heute (Dienstag), die Wochentage bleiben Titeltext; „alle 2 Wochen am Montag“ setzt eine Dienstagsserie und zusätzlich Montag als Bearbeitungstag; „jeden zweiten Dienstag“, „jeden 2. Dienstag“ und „jeden ersten Montag im Monat“ ergeben nur einen einmaligen Bearbeitungstag. Der Chip zeigt den Ankertag nicht [Code; Probe `probe_wiederholung.py`, Stichtag Dienstag 13.10.2026] | Fehler (Kernfunktion Erfassen) | offen; WA-18 in FP-00 |
 
 ## 4. Oberflächenanalyse
 
@@ -143,3 +149,94 @@ Grundlage: Code (`_refresh_tree`, `sync_view_chrome`, `pack_header_controls`, Se
 ## 7. Pflege
 
 Bei der nächsten Analyse fortschreiben statt kopieren. Befunde mit „Behoben“ erst entfernen, wenn eine neue Analyse den Abschnitt ersetzt; ihre Vorfassung trägt Git.
+
+## 8. Bestandsaufnahme und Gap-Analyse (13.10.2026)
+
+Auftrag des Inhabers vom 12./13.10.2026: vor Wettbewerbsrecherche und Feature-Planung den tatsächlichen Entwicklungsstand verifizieren; maßgeblich ist der Code. Grundlage: Arbeitskopie auf `claude/glide-sprint-2026-10-09`, Commit `c38d960`, `VERSION` 3.39.0, `src/glide/app.pyw` mit SHA-256 `7995ecbc…` (gleich `07_Python-Versionen`). Keine Produktionsänderung, kein GUI-Lauf. Belegstufen wie oben, zusätzlich **[QA]** = im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) belegter automatischer Prüfstand. Wettbewerb und Codeanalyse fremder Projekte: [Markt und Vorbilder §9](Glide_Markt_und_Vorbilder.md#9-wettbewerbs--und-open-source-analyse-13102026); Pakete: [Entwicklungsplan §16](Glide_Entwicklungsplan.md#16-vorschläge-aus-wettbewerbs--und-open-source-analyse-13102026).
+
+**Statuswerte:** **Implementiert** (im Code, automatisch geprüft) · **Teilweise** (vorhanden, mit benannter Lücke) · **Fehlerhaft** (reproduzierbares Problem) · **Geplant** (dokumentiert, nicht im Lieferstand) · **Nicht vorhanden** · **Unklar** (noch zu verifizieren). „Implementiert“ heißt automatisch geprüft, nicht menschlich abgenommen; die Menschen-, DPI- und Readerabnahme ist für alle Versionen offen (I6).
+
+### 8.1 Funktionsinventar
+
+| Bereich | Funktion | Status | Beleg | Einschränkung, Prüfstand |
+|---|---|---|---|---|
+| Aufgaben | Arten Aufgabe, Langtext, Gruppe, Zwischenüberschrift; Unterpunkte rekursiv | Implementiert | [Code] `ITEM_KINDS`, `new_item` | Austauschformat-Rundlauf erhält Unterpunkte bis Ebene 12 (`max_depth`) |
+| | Checklisten | Implementiert | [Code] `MAX_CHECKLIST_ENTRIES = 50`, 200 Zeichen | bewusst knapp; wiederkehrende Checklisten öffnen sich neu |
+| | „Wartet auf“ (`blocked_by`) mit Kreisprüfung, Verknüpfungen (`links`) | Implementiert | [Code] `is_blocked`, `normalize_item_references` (≤ 50) | Tagesvorschlag überspringt blockierte Aufgaben [Code `day_proposal.propose`] |
+| | Wichtigkeit 0–3, Farbe, Labels, Aufwand, gebuchte Zeit | Implementiert | [Code] `new_item` | Zeit als Summe je Aufgabe, nicht je Tag |
+| | Gemeinsamer Inspektor, direkte Felder, Zeilenaktionen | Implementiert (3.38.0) | [Code][QA] | Menschen-/DPI-Abnahme offen |
+| | Rückgängig | Implementiert | [Code] `MAX_UNDO_STEPS = 20`, `undo_last_change`, `PackedState` | Vollschnappschuss von Listen, Ordnern, Labels, Papierkorb |
+| | Wiederholen nach Rückgängig für Aufgaben- und Strukturänderungen | Nicht vorhanden | [Code] kein Redo in `ListApp`; Wiederholen nur in `RichNoteEditor`, `PageEditor`, `DrawingEditor` | FP-01 |
+| Organisation | Listenarten Aufgaben, Notiz, Seite, Galerie, Zeichnung; Ordner, Buch, Notizbuch | Implementiert | [Code] `LIST_KINDS`, `FOLDER_KINDS` | neue Arten nur mit neuer Formatnummer |
+| | Labels, Archiv, Papierkorb, Eingang, vier Seitenleistenbereiche, schmale Seitenleiste | Implementiert | [Code][QA] | – |
+| Planung | Heute und Demnächst (früher „Mein Tag“, „In Bearbeitung“; D14) | Implementiert | [Code] `today_view.py` | – |
+| | Bearbeitungstag ≠ Fälligkeit, Kapazität je Wochentag, Zeitblöcke, eingebettete Woche/Monat | Implementiert | [Code] `planning.py`, `week_planning.py` | – |
+| | Tagesvorschlag, Routinen, Fokus mit genau einmal gebuchter Zeit, Tagesbeginn/-abschluss | Implementiert | [Code] `day_proposal.py`, `routines.py`, `focus_timer.py` | – |
+| | Tageshinweise, lokale ICS-Belegzeiten, Tag entlasten | Implementiert, Lieferabschluss offen | [Code] `daily_hints.py`, `ics_busy.py`, `day_relief.py`; [QA] Mac-vollgeprüft | native Linux-/Windows-Matrix 3.39.0 laut Übergabe offen |
+| | Erinnerungen fest/relativ mit Zustellbeleg, Systemmitteilungen (Option) | Implementiert | [Code] `process_reminders` | nur bei laufender App (Produktgrenze) |
+| | Wiederholungen | Teilweise | [Code] `repeat_rules.KINDS`: täglich, alle N Tage, Wochentage, wöchentlich, monatlich, jährlich; Start/Ende; Termin bzw. verpasste Termine überspringen | kein Intervall für Woche/Monat/Jahr, kein n-ter oder letzter Wochentag, nicht ab Erledigung, keine Pause → FP-02 |
+| | Wiederholungen in der Schnelleingabe | Fehlerhaft | [Code][Probe] A29 | Ankertag und Wochentage nach Intervall werden nicht übernommen, Rest bleibt Titeltext → FP-00 |
+| | Wiederholungen in ICS-Ausgabe und -Import | Fehlerhaft (Randfall) | [Code][Probe] A28 | Monatsserien am 29.–31. und Jahresserien am 29.02. weichen in Kalenderprogrammen von Glides Folge ab → FP-00 |
+| | ICS-Serienrechner `ics_recurrence.py` (Belegzeiten 3.39.0) | Implementiert, unabhängig gegengeprüft | [Code][Probe] 11.192 Regel-/Startkombinationen gegen eigenständige RFC-5545-Abtastung ohne Abweichung | Randfall UNTIL vor DTSTART: kein Termin (Auslegungsfrage) |
+| Ansichten | Liste (fünf Anzeigestufen), Tabelle (Spaltenwahl je Liste, Sortieren), Gruppieren einschließlich Eisenhower | Implementiert | [Code] `group_columns`, `table_sort` | – |
+| | Pinnwand frei/geordnet/Spaltenboard, Bereiche, Verbindungen, Präsentation, PDF, Tastaturwege | Implementiert | [Code] `ItemWorkspace` | – |
+| | Seiten und Notizen als Pinnwandkarte | Nicht vorhanden | [Code] `ItemWorkspace.valid_pages` lässt nur Zeichnungen zu (ZF-100) | FP-04 |
+| | Gespeicherte Filter mit Erklärung | Teilweise | [Code] `SavedFilters`, `filter_explain.py` | Bedingungen nur Liste, Quelle, Status, Wichtigkeit (genau), Labels (beliebig/alle), feste Fälligkeitsstufen, Text; kein Bearbeitungstag, Aufwand, „wartet auf“ oder Ausschluss; Ergebnis immer nach Fälligkeit, Darstellung nicht gespeichert → FP-03 |
+| Wissen | Seiten mit Block-Editor, Bildern, Titelbild, Live-Listen, Aufgaben mit Original-ID; Notizen, Notizbuch, Galerie, Bücher | Implementiert | [Code] `PageEditor`, `NoteEditor`, `page_features.py` | Unterseiten, Spalten bewusst nicht |
+| | Verweise und Rückverweise (Seiten, Listen, Aufgaben) | Implementiert | [Code] `object_references.py`, `task_references.py` | – |
+| | Unverknüpfte Erwähnungen | Nicht vorhanden | [Code] keine Fundstelle | FP-05 |
+| | Anhänge an Punkten, Listen und Galerien | Implementiert | [Code] `normalize_attachments` | Vorschauformate je System |
+| Suche | Palette für Inhalte und Aktionen, markierte Fundstellen, erklärte Filter | Implementiert | [Code] `content_search.py`; [QA] 66,6 ms bei 10.000 Punkten | Rangfolge nach Titelrang |
+| Statistik, Verlauf | Startseitenkachel mit Jahres-Heatmap, Wochenrückblick (geschätzt gegen gebucht für erledigte Aufgaben), Änderungsverlauf | Teilweise | [Code] `YearHeatmap`, `COMPLETION_HISTORY_DAYS = 371`, `week_review_data`, `MAX_HISTORY_ENTRIES = 15` | keine Zeitauswertung je Tag, Liste oder Label; Verlauf ohne Wiederherstellen (Produktgrenze) → WA-08 |
+| Vorlagen | Katalog mit Platzhaltern und Vorschau; Liste oder Ordner als Vorlage speichern | Implementiert | [Code] `save_list_as_template`, `TEMPLATE_FORMAT_VERSION = 2` | keine wiederkehrenden Vorlagen → WA-14 |
+| Austausch | CSV, Markdown, TXT, ICS, `.glidepage`, Druck/PDF je Liste/Ordner; KI-Austausch Stufe 1/2 | Implementiert | [Code] `export_list_as`, `export_folder_as`, `exchange_patch.py` | – |
+| | Gesamtexport als offener Dateibaum; Pinnwand als offenes Format | Nicht vorhanden | [Code] keine Fundstelle | FP-07 |
+| | Notion-Import mit Wiedererkennung; einzelne Seite aus Sicherung | Geplant (Paket 6 / 3.41.0) | [Dok] Übergabe §6: privat vorbereitet, keine Produktionsübernahme | – |
+| Sicherung | atomares Schreiben, Vorsicherung je Format, Sicherungen bei Änderung, 14 Tagesstände, Teil-/Komplett-/App-Backup, Vergleich | Implementiert | [Code] `write_json_atomic`, `migrate_on_start`, `schema_backups.py`, `backup_diff.py` | Pinnwandlayout und Einstellungen nur im App-Backup [Dok 06] |
+| Gestaltung | zehn Designs (`DESIGN_ORDER`: Pixel, Hell, Dunkel, Liquid Glass hell/dunkel, Minimal hell/dunkel, Dopamin, Kontrast hell/dunkel), automatisch hell/dunkel, Akzent, Verläufe, WCAG AA | Implementiert | [Code] `DESIGNS`, `contrast_ratio`; Rückfallwert ohne gültige Einstellung `DESIGN_DEFAULT = "glass_dark"` | – |
+| Pixel | Zeichnungen 16–128 Zellen, Paletten, PNG/ICO/SVG, Pixelsymbol | Implementiert; Animation Geplant (Paket 5) | [Code] `drawing.py` | – |
+| Verteilung, Zugang | eigenständige Pakete (Paket 7), Screenreader-Kernablauf (Paket 8) | Geplant | [Dok] Plan §15.7 | – |
+| Bekannte Befunde | W01 Seitenleistentitel unter Windows angeschnitten | Unklar | [Dok] eine Aufnahme vom 05.10.2026, Sichtprüfung offen | – |
+| | W07/W08 Windows-Dialogdarstellung | Unklar | [Dok] auf dem Mac nicht nachstellbar | – |
+| | W09 einmaliger Absturz von Python 3.14.8 unter Windows | Unklar | [Dok] 0 von 30 Wiederholungen | beobachten |
+| | B7 Rahmen einer ausgeblendeten Leinwand wird unter Tk 9 wieder eingeblendet | Fehlerhaft (Tk), in Glide umgangen | [Dok] Architektur §5 | Meldung an Tcl/Tk offen |
+
+**Ergebnis der Verifikation:** Kein Datenintegritätsrisiko für den gespeicherten Bestand. Die erste Durchsicht vom 13.10.2026 fand keinen reproduzierbaren Fehler; die anschließende Vorprüfung für FP-02 belegte **zwei reproduzierbare Fehler** im Lieferstand: Teilerkennung von Wiederholungsangaben in der Schnelleingabe (A29) und abweichende Monats-/Jahresserien in ICS-Ausgabe und -Import (A28). Dazu zwei Dokumentabweichungen (A24, A25, behoben), eine technische Doppelung (A26), eine fehlende Vorwärtsverträglichkeit innerhalb der Einstellungen (A27) und die Funktionslücken oben. Der in 3.39.0 neue ICS-Serienrechner stimmt mit einer unabhängigen Referenz überein.
+
+### 8.2 Technische Einschränkungen
+
+| Befund [Code] | Wirkung | Konsequenz |
+|---|---|---|
+| `app.pyw` 59.534 Zeilen, davon `ListApp` Zeilen 13.376–58.987 (rund 45.600); 50 Begleitmodule einschließlich `glide_start.py`, mit `app.pyw` zusammen 68.966 Zeilen | Regressionsrisiko R1/R14 bei jeder Erweiterung | D17 fortsetzen; neue Logik der Vorschläge ausschließlich als Tk-freie Module; kein Großumbau (Kosten-Nutzen im Plan §16.6) |
+| Rückgängig als Vollschnappschuss, 20 Schritte | Speicher wächst mit Bestand × Schritte; ein Wiederholen-Stapel verdoppelt schlimmstenfalls | FP-01 misst Speicher bei 10.000 Punkten vor der Lieferung |
+| Ganzer Bestand wird je Änderung atomar geschrieben | gemessen unkritisch (Plan §10); D16 gilt | keine Änderung vorgeschlagen |
+| Einstellungen ohne Formattor; Normalisierer verwerfen Unbekanntes innerhalb bekannter Strukturen, oberste Ebene bleibt erhalten (A27) | Erweiterungen innerhalb gespeicherter Filter oder der Pinnwand gingen in älteren Fassungen still verloren | WA-09 eine Version vor FP-04; FP-03 über eigenen Schlüssel auf oberster Ebene (Lehre aus 3.29/3.30, Übergabe §4) |
+| Zwei Wiederholungsrechner (A26) | doppelte Regeln, unterschiedliche Fähigkeiten | FP-02 vereinheitlicht über `ics_recurrence.py` |
+| Tk-Leinwand ohne Kantenglättung unter Windows/X11 | Formen und Kurven würden treppig | keine Formen-/Freihandwerkzeuge auf der Pinnwand |
+| Screenreader erst mit eigener Tk-9.1-Laufzeit | Zugänglichkeit vor Paket 8 nicht belegbar | neue Vorschläge mit semantischen Tastaturwegen planen |
+
+### 8.3 Gap-Analyse
+
+- **Überzeugend gelöst** (nicht umbauen): Tagesführung mit Bearbeitungstag, Kapazität, Zeitblöcken und Belegzeiten – im untersuchten Open-Source-Feld ohne Gegenstück; Datensicherheit mit Vorsicherung, Altleserschutz, Bestandswächter und Sicherungsvergleich; Aufgaben im Wissen mit Original-ID und Live-Listen; Pinnwand mit echten Aufgaben und D02-Semantik; Befehlspalette mit stabilen Aktionskennungen; berechneter Kontrast in zehn Designs; Prüfkultur mit Gegenproben. **Differenzierung** gegenüber AFFiNE, AppFlowy und Obsidian liegt hier, nicht in Editor oder Datenbank.
+- **Vorhanden, verbessern:** Wiederholungsregeln (FP-02), gespeicherte Filter (FP-03), Inhalte der Pinnwand (FP-04), Rückverweise (FP-05), Bedienung des KI-Austauschs (FP-06), Ausgabe (FP-07), Zeitauswertung (WA-08).
+- **Fehlerhaft (P0 nach Auftragsdefinition):** Teilerkennung von Wiederholungsangaben (A29) und Monatsende-Serien im ICS-Austausch (A28); beide ohne Formatwechsel behebbar (FP-00).
+- **Fehlend mit hohem Nutzen:** Wiederholen nach Rückgängig (FP-01) – eine Systemkonvention nach P1, die jedes Vergleichsprodukt bietet.
+- **Vereinfachung bestehender Abläufe** [Einschätzung]: KI-Austausch braucht heute eigene Anweisungen je Auftrag (FP-06 macht daraus eine Auswahl); Projektwand mit Wissen erfordert Wechsel zwischen Seite und Pinnwand (FP-04); Sonderrhythmen wie „jeden zweiten Dienstag“ werden mit mehreren Aufgaben nachgebildet (FP-02).
+- **Redundant oder inkonsistent:** zwei Wiederholungsrechner (A26); drei Rückblickwege mit verschiedener Reichweite – Rückgängig (20 Schritte), Änderungsverlauf (15 Einträge, ohne Wiederherstellen), Sicherungsvergleich – sinnvoll getrennt, aber der Verlauf verweist nicht auf den Wiederherstellungsweg (Vorschlag in FP-01, Stufe 2); mehrere Filterwege (Listensuche mit Status, gespeicherte Filter, Pinnwand-Labelfilter, Gruppierung) – FP-03 vereinheitlicht nur die Auswertung gespeicherter Filter, die einfachen Wege bleiben; Pinnwandlayout reist nur im App-Backup, ein Komplettbackup stellt es nicht her [Dok 06] – in FP-07 sichtbar benennen.
+- **Bewusst nicht erneut vorgelegt:** Unterseiten, Spalten, Graph, Datenbank-Baukasten und freie Felder, freie Klebezettel und Freihand, Sync und gleichzeitige Bearbeitung, eingebaute Cloud-KI und MCP, Spracherfassung, systemweiter Hotkey, Gewohnheiten, Mobile (Produktgrenzen, Plan §7). Die Recherche liefert keinen Beleg, der eine dieser Entscheidungen entkräftet; Logseq und Super Productivity bestätigen die Kosten von Speicherwechsel bzw. Sync.
+
+### 8.4 Einordnung der Kandidaten
+
+| Kandidat | In bestehendes Modul | Eigene Ansicht | Optionale Erweiterung | Architekturänderung | Besser nicht |
+|---|---|---|---|---|---|
+| FP-00 Fehlerbehebung Wiederholungen | ✓ Schnelleingabe, ICS-Ausgabe/-Import | – | – | – | – |
+| FP-01 Wiederholen | ✓ Rückgängig-Weg, Menü, Palette | – | – | – | – |
+| FP-02 Wiederholungsregeln | ✓ Wiederholung, Schnelleingabe, ICS-Ausgabe | – | – | Formattor | – |
+| FP-03 Gespeicherte Ansichten | ✓ gespeicherte Filter, `filter_explain` | – | – | eigener Einstellungsschlüssel auf oberster Ebene (ohne WA-09) | – |
+| FP-04 Seitenkarten | ✓ Pinnwand | – | – | WA-09 | – |
+| FP-05 Unverknüpfte Erwähnungen | ✓ Rückverweise | – | – | – | – |
+| FP-06 KI-Aufträge | ✓ Datei › KI-Austausch | – | ✓ | – | – |
+| FP-07 Offene Ausgabe | ✓ Datei › Ausgabe | – | – | – | – |
+| WA-08 Zeitauswertung | ✓ Wochenrückblick | – | – | Formattor (Zeiteinträge je Tag) | – |
+| WA-10 Lokaler KI-Endpunkt | – | – | ✓ | neue Schnittstelle (Q3) | ohne Entscheidung |
+| Block-Editor-Neubau, Whiteboard-Engine, Sync/CRDT, Toolkit-Wechsel | – | – | – | ✓ | ✓ |

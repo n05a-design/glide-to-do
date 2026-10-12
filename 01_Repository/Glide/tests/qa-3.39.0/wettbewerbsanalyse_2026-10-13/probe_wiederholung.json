@@ -1,0 +1,298 @@
+{
+ "stichtag": "2026-10-13",
+ "schnelleingabe": [
+  {
+   "eingabe": "Zahnarzt jeden 2. Dienstag",
+   "gemeint": "zweiter Dienstag im Monat oder jede zweite Woche (mehrdeutig)",
+   "titel": "Zahnarzt jeden 2.",
+   "felder": {
+    "planned_date": "2026-10-13"
+   }
+  },
+  {
+   "eingabe": "Zahnarzt jeden zweiten Dienstag",
+   "gemeint": "alle 2 Wochen dienstags",
+   "titel": "Zahnarzt jeden zweiten",
+   "felder": {
+    "planned_date": "2026-10-13"
+   }
+  },
+  {
+   "eingabe": "Team jeden ersten Montag im Monat",
+   "gemeint": "erster Montag im Monat",
+   "titel": "Team jeden ersten im Monat",
+   "felder": {
+    "planned_date": "2026-10-19"
+   }
+  },
+  {
+   "eingabe": "F jeden dritten Freitag",
+   "gemeint": "mehrdeutig; nicht teilweise deuten",
+   "titel": "F jeden dritten",
+   "felder": {
+    "planned_date": "2026-10-16"
+   }
+  },
+  {
+   "eingabe": "B alle 2 Wochen am Montag",
+   "gemeint": "alle 2 Wochen montags",
+   "titel": "B",
+   "felder": {
+    "repeat": {
+     "art": "tage",
+     "abstand": 14,
+     "start": "2026-10-13"
+    },
+    "due": "2026-10-13",
+    "planned_date": "2026-10-19"
+   }
+  },
+  {
+   "eingabe": "C alle 2 Wochen montags",
+   "gemeint": "alle 2 Wochen montags",
+   "titel": "C montags",
+   "felder": {
+    "repeat": {
+     "art": "tage",
+     "abstand": 14,
+     "start": "2026-10-13"
+    },
+    "due": "2026-10-13"
+   }
+  },
+  {
+   "eingabe": "Jour fixe alle 2 Wochen montags und donnerstags",
+   "gemeint": "alle 2 Wochen montags und donnerstags",
+   "titel": "Jour fixe montags und donnerstags",
+   "felder": {
+    "repeat": {
+     "art": "tage",
+     "abstand": 14,
+     "start": "2026-10-13"
+    },
+    "due": "2026-10-13"
+   }
+  },
+  {
+   "eingabe": "J wöchentlich montags",
+   "gemeint": "wöchentlich montags",
+   "titel": "J montags",
+   "felder": {
+    "repeat": {
+     "art": "woechentlich",
+     "start": "2026-10-13"
+    },
+    "due": "2026-10-13"
+   }
+  },
+  {
+   "eingabe": "G monatlich am 15.",
+   "gemeint": "monatlich am 15.",
+   "titel": "G am 15.",
+   "felder": {
+    "repeat": {
+     "art": "monatlich",
+     "start": "2026-10-13"
+    },
+    "due": "2026-10-13"
+   }
+  },
+  {
+   "eingabe": "H jeden Monat am Ersten",
+   "gemeint": "monatlich am 1.",
+   "titel": "H am Ersten",
+   "felder": {
+    "repeat": {
+     "art": "monatlich",
+     "start": "2026-10-13"
+    },
+    "due": "2026-10-13"
+   }
+  },
+  {
+   "eingabe": "Bericht alle 2 Monate",
+   "gemeint": "alle 2 Monate",
+   "titel": "Bericht alle 2 Monate",
+   "felder": {}
+  },
+  {
+   "eingabe": "A jeden Montag und Donnerstag",
+   "gemeint": "montags und donnerstags",
+   "titel": "A",
+   "felder": {
+    "repeat": {
+     "art": "wochentage",
+     "tage": [
+      0,
+      3
+     ],
+     "start": "2026-10-15"
+    },
+    "due": "2026-10-15"
+   }
+  },
+  {
+   "eingabe": "D jeden Montag",
+   "gemeint": "wöchentlich montags",
+   "titel": "D",
+   "felder": {
+    "repeat": {
+     "art": "woechentlich",
+     "start": "2026-10-19"
+    },
+    "due": "2026-10-19"
+   }
+  },
+  {
+   "eingabe": "I alle zwei Wochen",
+   "gemeint": "alle 14 Tage",
+   "titel": "I",
+   "felder": {
+    "repeat": {
+     "art": "tage",
+     "abstand": 14,
+     "start": "2026-10-13"
+    },
+    "due": "2026-10-13"
+   }
+  }
+ ],
+ "ics_ausgabe": [
+  {
+   "art": "monatlich",
+   "start": "2026-01-31",
+   "glide": [
+    "2026-01-31",
+    "2026-02-28",
+    "2026-03-31",
+    "2026-04-30",
+    "2026-05-31",
+    "2026-06-30",
+    "2026-07-31",
+    "2026-08-31"
+   ],
+   "heutige_ausgabe": "FREQ=MONTHLY",
+   "leser_aus_heutiger_ausgabe": [
+    "2026-01-31",
+    "2026-03-31",
+    "2026-05-31",
+    "2026-07-31",
+    "2026-08-31",
+    "2026-10-31",
+    "2026-12-31",
+    "2027-01-31"
+   ],
+   "gleich_heute": false,
+   "vorschlag": "FREQ=MONTHLY;BYMONTHDAY=28,29,30,31;BYSETPOS=-1",
+   "gleich_vorschlag": true
+  },
+  {
+   "art": "monatlich",
+   "start": "2026-01-30",
+   "glide": [
+    "2026-01-30",
+    "2026-02-28",
+    "2026-03-30",
+    "2026-04-30",
+    "2026-05-30",
+    "2026-06-30",
+    "2026-07-30",
+    "2026-08-30"
+   ],
+   "heutige_ausgabe": "FREQ=MONTHLY",
+   "leser_aus_heutiger_ausgabe": [
+    "2026-01-30",
+    "2026-03-30",
+    "2026-04-30",
+    "2026-05-30",
+    "2026-06-30",
+    "2026-07-30",
+    "2026-08-30",
+    "2026-09-30"
+   ],
+   "gleich_heute": false,
+   "vorschlag": "FREQ=MONTHLY;BYMONTHDAY=28,29,30;BYSETPOS=-1",
+   "gleich_vorschlag": true
+  },
+  {
+   "art": "monatlich",
+   "start": "2026-01-29",
+   "glide": [
+    "2026-01-29",
+    "2026-02-28",
+    "2026-03-29",
+    "2026-04-29",
+    "2026-05-29",
+    "2026-06-29",
+    "2026-07-29",
+    "2026-08-29"
+   ],
+   "heutige_ausgabe": "FREQ=MONTHLY",
+   "leser_aus_heutiger_ausgabe": [
+    "2026-01-29",
+    "2026-03-29",
+    "2026-04-29",
+    "2026-05-29",
+    "2026-06-29",
+    "2026-07-29",
+    "2026-08-29",
+    "2026-09-29"
+   ],
+   "gleich_heute": false,
+   "vorschlag": "FREQ=MONTHLY;BYMONTHDAY=28,29;BYSETPOS=-1",
+   "gleich_vorschlag": true
+  },
+  {
+   "art": "monatlich",
+   "start": "2026-01-15",
+   "glide": [
+    "2026-01-15",
+    "2026-02-15",
+    "2026-03-15",
+    "2026-04-15",
+    "2026-05-15",
+    "2026-06-15",
+    "2026-07-15",
+    "2026-08-15"
+   ],
+   "heutige_ausgabe": "FREQ=MONTHLY",
+   "leser_aus_heutiger_ausgabe": [
+    "2026-01-15",
+    "2026-02-15",
+    "2026-03-15",
+    "2026-04-15",
+    "2026-05-15",
+    "2026-06-15",
+    "2026-07-15",
+    "2026-08-15"
+   ],
+   "gleich_heute": true,
+   "vorschlag": "FREQ=MONTHLY",
+   "gleich_vorschlag": true
+  },
+  {
+   "art": "jaehrlich",
+   "start": "2028-02-29",
+   "glide": [
+    "2028-02-29",
+    "2029-02-28",
+    "2030-02-28",
+    "2031-02-28",
+    "2032-02-29",
+    "2033-02-28",
+    "2034-02-28",
+    "2035-02-28"
+   ],
+   "heutige_ausgabe": "FREQ=YEARLY",
+   "leser_aus_heutiger_ausgabe": [
+    "2028-02-29",
+    "2032-02-29",
+    "2036-02-29",
+    "2040-02-29"
+   ],
+   "gleich_heute": false,
+   "vorschlag": "FREQ=YEARLY;BYMONTH=2;BYMONTHDAY=28,29;BYSETPOS=-1",
+   "gleich_vorschlag": true
+  }
+ ]
+}

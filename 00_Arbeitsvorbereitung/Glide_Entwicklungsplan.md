@@ -1,6 +1,6 @@
 # Glide – Entwicklungsplan und Aufgabenstand
 
-Stand 12.10.2026 · Glide 3.39.0 · Aufgabenformat 23
+Stand 13.10.2026 · Glide 3.39.0 · Aufgabenformat 23
 
 Einziges Planungsdokument: alle Aufgaben mit Marke, Stufen, Ziele und was der Inhaber entscheidet. Erledigte Zwischenstände (Paketbeschreibungen, Messerzählungen, Aufgabenkarten) werden nach der Lieferung gelöscht; Ergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) und im [CHANGELOG](../01_Repository/Glide/CHANGELOG.md), Verhalten in den [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md), Vorfassungen in Git.
 
@@ -483,11 +483,11 @@ Entschieden: E-S4 A/V (D26), E-S5 A/V (D27), E-S6 A/V (D28), E-S7 A/V (D29). Ant
 
 PyInstaller-Version, Lizenz, Tk-Hook, native Plattformbindung, Ordnerpaket und Tk-/macOS-Hinweise vor der Auswahl anhand der Primärquellen geprüft ([Markt §8](Glide_Markt_und_Vorbilder.md#8-quellenabgleich-für-die-neue-planung-09102026)). D27 enthält Bauwerkzeug und Bauwege, keine Freigabe für öffentliche Veröffentlichung, Konten oder neue Glide-Lizenz.
 
-**Runde 4 entschieden (D30–D35):** 13 E-S8a ICS (Einzeltermine oder zusätzlich Serien/Ausnahmen), 14 E-S8b Bewegung (Abhaken/Klappen oder zusätzlich Bereichswechsel), 15 Bedienfläche (Liste/Heute oder alle betroffenen Hauptansichten; alternativ nur messen), 16 P03-Rest (Karten oder zusätzlich Startseiten-Neuaufbau), 17 E01-Rest (erste Anzeige oder zusätzlich Wiederverwendung), 18 Linux (Kernwege oder gesamte sachlich ausführbare Matrix). Jeweils A/1 erste Stufe, A/V vollständig oder B auslassen; bei Bedienfläche B nur messen/C auslassen. Gewählt jeweils A/V. Bedienflächen-Referenz 1280 × 800 folgt bereits dem verbindlichen P4; 840 ist nur Zusatzmessung. Ziele P03 ≤ 150 ms; E01 erste Anzeige ≤ 250 ms, erneutes Öffnen ≤ 150 ms. Abweichungen belegt vorlegen. E01 wird nach D34 getrennt als S26-14b geführt. Gesamtplan D44 bestätigt; nächste freie Entscheidung D49. P03/E01 und Linux-Matrix mit 3.36.0 geliefert, Bewegung/Bedienfläche mit 3.38.0 und grüner Mac-/Linux-/Windows-Vollprüfung geliefert; Menschenabnahme getrennt offen. Ziele nach D46/D47 und der Folgeentscheidung D48 präzisiert; übrige Umsetzungen gemäß §15.7.
+**Runde 4 entschieden (D30–D35):** 13 E-S8a ICS (Einzeltermine oder zusätzlich Serien/Ausnahmen), 14 E-S8b Bewegung (Abhaken/Klappen oder zusätzlich Bereichswechsel), 15 Bedienfläche (Liste/Heute oder alle betroffenen Hauptansichten; alternativ nur messen), 16 P03-Rest (Karten oder zusätzlich Startseiten-Neuaufbau), 17 E01-Rest (erste Anzeige oder zusätzlich Wiederverwendung), 18 Linux (Kernwege oder gesamte sachlich ausführbare Matrix). Jeweils A/1 erste Stufe, A/V vollständig oder B auslassen; bei Bedienfläche B nur messen/C auslassen. Gewählt jeweils A/V. Bedienflächen-Referenz 1280 × 800 folgt bereits dem verbindlichen P4; 840 ist nur Zusatzmessung. Ziele P03 ≤ 150 ms; E01 erste Anzeige ≤ 250 ms, erneutes Öffnen ≤ 150 ms. Abweichungen belegt vorlegen. E01 wird nach D34 getrennt als S26-14b geführt. Gesamtplan D44 bestätigt; nächste freie Entscheidung D50. P03/E01 und Linux-Matrix mit 3.36.0 geliefert, Bewegung/Bedienfläche mit 3.38.0 und grüner Mac-/Linux-/Windows-Vollprüfung geliefert; Menschenabnahme getrennt offen. Ziele nach D46/D47 und der Folgeentscheidung D48 präzisiert; übrige Umsetzungen gemäß §15.7.
 
 ### 15.6 Fünfte Auswahlrunde (10.10.2026)
 
-Entschieden durch D36–D41; Schlussrunde anschließend D42/D43, Gesamtplan D44 bestätigt, Logoentwürfe D45 freigegeben; nächste freie Entscheidung D49. Aufwand S bis 1 Arbeitstag, M 2–4, L mehr als 4; N12 vollständig braucht mehrere Pakete. Empfehlungen sind keine Auswahl.
+Entschieden durch D36–D41; Schlussrunde anschließend D42/D43, Gesamtplan D44 bestätigt, Logoentwürfe D45 freigegeben; nächste freie Entscheidung D50. Aufwand S bis 1 Arbeitstag, M 2–4, L mehr als 4; N12 vollständig braucht mehrere Pakete. Empfehlungen sind keine Auswahl.
 
 | Frage / Aufgabe | Erste Stufe A/1 | Vollständig A/V | Nutzen / Abwägung / Empfehlung |
 |---|---|---|---|
@@ -548,3 +548,335 @@ Quellen für V01/V02 im Marktvergleich §8; eigene Ableitungen. N12 nach dem dor
 - **Veröffentlichungstore:** nach D43 bleiben I1–I5/I9–I11 gesondert offen: Inhaberangaben, endgültige Glide-Lizenz, öffentliche Signaturen/Konten, Marke, systemweite Python-Installation, Fremdbildrechte, Historienumschreibung und öffentlicher GitHub-Auftritt. Der Sprint liefert Entwicklungsartefakte, keine öffentliche Releasefreigabe. Drittanbieter-Lizenzbelege für D27 gehören trotzdem zum Sprint. Keine Käufe, Historienumschreibung oder stillen Fremdbildlöschungen aus diesem Auftrag ableiten.
 - **Abweichungen:** neue Produktfragen dem Inhaber vorlegen und unabhängig weiterarbeiten; technische Routineentscheidungen dokumentieren. Unerreichte Tempo-/Flächenziele mit Messbeleg vorlegen, Umfang nicht still verkleinern oder Punkte als erledigt markieren. Bei einem offenen Tor ist der betroffene Punkt offen, auch wenn andere Pakete geliefert sind.
 - **Abschluss:** Plan ↔ Code ↔ Prüfergebnisse für jede S26-Kennung abgleichen; gewählte erste Stufen, alle Abweichungen, offene Menschen-/Veröffentlichungstore und native Nachweise ausdrücklich nennen. QA-Bericht, Funktionen und Übergabe fortschreiben; nach jeder Lieferung Claude-Commit. Reviewbarer Pull Request, Merge ausschließlich als Merge-Commit wegen der dokumentierten Commit-Verweise. Beim ersten Versionswechsel QA-Verweise 3.33.17 auf `6098877` festsetzen; 07-Hauptdatei ausführbar vormerken, Stash/`codex/`/Windows-Worktrees unangetastet lassen.
+
+## 16. Vorschläge aus Wettbewerbs- und Open-Source-Analyse (13.10.2026)
+
+**Status seit D49 (13.10.2026): beauftragt mit den empfohlenen Optionen.** Zunächst als Vorschläge vorgelegt; auf „bitte immer weiter machen bis alles umgesetzt ist“ legt D49 die Empfehlungen E-W1–E-W7 als Auftrag aus (Auslegung durch Claude, jederzeit korrigierbar). Reihenfolge: Abschluss 3.39.0 → FP-00 → Pakete 5–8 (§15.7) → übrige Pakete nach §16.7. Grundlagen: [Analyse §8](Glide_Analyse.md#8-bestandsaufnahme-und-gap-analyse-13102026) (Bestand, Gap), [Markt und Vorbilder §9](Glide_Markt_und_Vorbilder.md#9-wettbewerbs--und-open-source-analyse-13102026) (Wettbewerb, Codeanalyse, Featurematrix). Der Wunsch des Inhabers nach spürbarerem Produktnutzen (Arbeitsrichtung, 10.10.2026) ist Anlass; daraus folgt nur dieses Angebot, keine Umsetzung.
+
+### 16.1 Priorisierung
+
+- **P0 – Kritisch:** Fehler, Datenintegrität, Stabilität, bestehende Kernfunktionen. Die erste Durchsicht fand keinen P0-Fehler; die Vorprüfung für FP-02 (§16.10) belegte **zwei reproduzierbare Fehler** im Lieferstand: Teilerkennung von Wiederholungsangaben in der Schnelleingabe (A29, WA-18) und abweichende Monats-/Jahresserien im ICS-Austausch (A28, WA-17), gebündelt als FP-00. Daneben bleiben P0 der Abschluss von 3.39.0, die offenen Befunde W01/W06–W09 in §4.2 und der erledigte Dokumentabgleich WA-13.
+- **P1 – Hoch:** deutlich spürbar im Alltag bei beherrschbarem Risiko.
+- **P2 – Mittel:** wertvolle Erweiterung oder Optimierung.
+- **P3 – Optional:** experimentell, größere Architektur, langfristig.
+
+Bewertung je Eintrag: Nutzen, Aufwand (S bis 1, M 2–4, L mehr als 4 Arbeitstage, wie §4.3), technisches Risiko, Wartbarkeit. Geringer Aufwand mit hohem Nutzen geht vor; Prestige-Funktionen ohne belegten Alltagsnutzen sind ausgeschlossen. Jedes Paket wäre eine Produktionsversion nach §15.3.
+
+### 16.2 Feature-Backlog
+
+| ID | Titel | Problem (Fakt, Beleg) | Herkunft | Nutzen | Aufwand | Risiko | Wartbarkeit | Prio | Marke | Paket |
+|---|---|---|---|---|---|---|---|---|---|---|
+| WA-01 | Wiederholen nach Rückgängig | kein Redo in `ListApp`, nur in Text- und Zeicheneditor [Code] | Systemkonvention (P1); alle Vergleichsprodukte | hoch | M | mittel | gut | P1 | ▶ D49 | FP-01 |
+| WA-02 | Erweiterte Wiederholungsregeln | sechs Arten ohne Intervall für Woche/Monat/Jahr, ohne n-ten Wochentag, nicht ab Erledigung [Code `repeat_rules.py`]; zweiter Rechner `ics_recurrence.py` kann mehr (A26) | Super Productivity, Todoist, RFC 5545 | hoch | M–L | mittel (Formattor) | besser als heute (ein Rechner) | P1 | ▶ D49 | FP-02 |
+| WA-03 | Gespeicherte Ansichten | Filter ohne Bearbeitungstag, Aufwand, „wartet auf“, Ausschluss; Darstellung nicht gespeichert [Code `SavedFilters`] | AFFiNE, Vikunja, Obsidian Bases | mittel–hoch | M–L | mittel | gut (eine Auswertung) | P2 | ▶ D49 | FP-03 |
+| WA-04 | Seiten und Notizen als Pinnwandkarten | nur Zeichnungen als Seitenkarte [Code `valid_pages`] | AFFiNE, Milanote, FigJam | mittel–hoch | M | gering–mittel | gut | P2 | ▶ D49 | FP-04 |
+| WA-05 | Unverknüpfte Erwähnungen | Rückverweise nur für echte Verweise [Code] | Obsidian; Buildin (Dritte) | mittel | S–M | gering | gut | P2 | ▶ D49 | FP-05 |
+| WA-06 | Wiederverwendbare KI-Aufträge | Kontextpaket ohne mitgelieferte Anweisungen [Code `exchange_patch.py`] | Notion, AFFiNE, Buildin (Bedienidee); Q3 | mittel–hoch | S–M | gering | gut | P2 | ▶ D49 | FP-06 |
+| WA-07 | Offene Ausgabeformate | Ausgabe nur je Liste/Ordner; Pinnwand nur als PDF [Code] | Obsidian, JSON Canvas | mittel | M | gering | gut | P2/P3 | ▶ D49 | FP-07 |
+| WA-08 | Zeitauswertung je Tag, Liste, Label | Zeit nur als Summe je Aufgabe; Wochenrückblick summiert erledigte Aufgaben [Code `week_review_data`] | Super Productivity (Arbeitsprotokoll) | mittel | M–L | mittel (Formattor) | mittel | P3 | ◇ Auslöser: Bedarf an Zeitnachweis | – |
+| WA-09 | Vorwärtsverträgliche Einstellungen | innerhalb bekannter Strukturen verwerfen Normalisierer Unbekanntes, `prune` entfernt unbekannte Seitenkarten; oberste Ebene bleibt erhalten (A27) [Code] | Lehre 3.29/3.30 (Übergabe §4) | Schutz, keine sichtbare Funktion | S–M | gering | besser | P1 als Vorarbeit | ▶ D49 | vor FP-04 |
+| WA-10 | Optionaler lokaler KI-Endpunkt | Q3 erlaubt nur Dokumente | AppFlowy (Ollama), AFFiNE (BYOK) | unbelegt | M | mittel | mittel | P3 | ✕ E-W3 A (D49) | – |
+| WA-11 | Seitenvorschau für Verweise | Verweis navigiert, Kontext geht verloren [Code] | AFFiNE „Peek“ | mittel | M | gering | gut | P3 | ◇ | – |
+| WA-12 | Tagesvorschlag: Grund „gibt andere frei“ | Vorschlag kennt blockierte, nicht blockierende Aufgaben [Code `day_proposal.py`] | Taskwarrior (Gewicht 8) | gering–mittel | S | gering | gut | P3 | ○ | – |
+| WA-13 | Dokumentabgleich A24/A25 | veraltete Plattform- und Statusangaben [Dok] | eigene Prüfung | Verlässlichkeit | S | – | – | P0 | ✅ 13.10.2026 | – |
+| WA-14 | Wiederkehrende Vorlagen | Vorlagen nur von Hand [Code] | Notion-Wiederholvorlagen | mittel | M | mittel | mittel | P3 | ◇ nach FP-02 | – |
+| WA-15 | Rangfolge der Inhaltstreffer | Titelrang, keine Relevanzformel [Code `content_search.py`] | AFFiNE BM25+ | gering | S | gering | gut | P3 | ◇ nur nach belegter schlechter Rangfolge | – |
+| WA-16 | Wartbarkeitskennzahl je Lieferung | Größe von `ListApp` (rund 45.600 Zeilen) nirgends verfolgt [Code] | eigene Analyse | indirekt | S | – | besser | P3 | ○ | – |
+| WA-17 | ICS-Austausch von Monats- und Jahresserien am Monatsende | Ausgabe `FREQ=MONTHLY`/`FREQ=YEARLY` für Termine am 29.–31. bzw. 29.02. ergibt in Kalenderprogrammen andere Termine als in Glide; Import einer Monatsserie am 31. legt zusätzliche Termine auf Monatsenden (A28) [Code][Probe] | eigene Vorprüfung | Korrektheit des Austauschs | S | gering | gut | P0 (Fehler, Randfall) | ▶ D49 | FP-00 |
+| WA-18 | Wiederholungsangaben in der Schnelleingabe vollständig oder gar nicht erkennen | „monatlich am 15.“, „wöchentlich montags“, „alle 2 Wochen montags“ u. a. ergeben Serien ab heute, der Rest bleibt Titeltext; „jeden zweiten Dienstag“ ergibt nur einen Bearbeitungstag (A29) [Code][Probe] | eigene Vorprüfung | Korrektheit einer Kernfunktion | S–M | gering | gut | P0 (Fehler) | ▶ D49 | FP-00 |
+
+**Geprüft und nicht vorgeschlagen:** vollständiger Block-Editor (Neubau des Seitenmodells, L+, Nutzen gezielt erreichbar), Whiteboard-Engine mit Formen/Freihand (Tk-Leinwand ohne Glättung; Produktgrenze), Datenbank-Baukasten und freie Felder (N15–N20), neue Beziehungsarten wie bei Vikunja (`links`/`blocked_by`/Unterpunkte genügen), Synchronisation/CRDT (G23), eingebaute Cloud-KI und BYOK (Produktgrenze), semantische Suche (Nutzen unbelegt, native Abhängigkeit), Daueralarm wie TickTick (widerspricht ruhiger Tagesführung), bezahlte Veröffentlichung wie Buildin (kein Ziel), Toolkit-Wechsel (§16.6).
+
+### 16.3 Feature-Pakete
+
+**Prinzipien-Check in Kurzform** ([Produktgrenzen](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md#prinzipien-check-für-neue-funktionen)); vor Umsetzung je Paket ausführlich in Funktionen und Plan eintragen.
+
+| Paket | Vorgeschichte (0) | Ort (2) | Doppelung, was entfällt (3) | Dauerfläche bei 1280 × 800 (4) | Rücknahme (8) | Daten (9) | Tempo (10) |
+|---|---|---|---|---|---|---|---|
+| FP-00 | Fehlerbehebung, keine Produktentscheidung | Schnelleingabe, ICS-Ausgabe/-Import | keine | 0 px; Chip nennt zusätzlich den Ankertag | ein Undo wie bisher | nein (nur bestehende Arten) | – |
+| FP-01 | nicht entschieden | Bearbeiten-Menü, Palette, Kürzel, Rückgängig-Hinweis | keine; ergänzt Rückgängig | 0 px (Hinweis zeigt nur bei Bedarf „Wiederholen“) | ist selbst Rücknahme | nein | Speicher messen |
+| FP-02 | Wiederholungen bestehen; Erweiterung nicht entschieden | Inspektor, Schnelleingabe | zweiter Rechner entfällt intern (A26) | 0 px | ein Undo je Änderung | Formattor | Budget im Rechner |
+| FP-03 | gespeicherte Filter bestehen; eigene Felder ✕ bleibt | Filterdialog, Kachel, Palette | Bedingungen in einem Modul | 0 px | ein Undo je Ziehen | Einstellungen additiv, eigener Schlüssel auf oberster Ebene | ≤ 100 ms bei 10.000 |
+| FP-04 | Zeichnungskarten bestehen (ZF-100); freie Zettel ✕ bleibt | Pinnwand, Seitenleisten-Kontextmenü | keine neue Art | 0 px | Flächenstapel | Einstellungen additiv (WA-09) | Auszug je Aufbau gecacht |
+| FP-05 | nicht entschieden | Rückverweisbereich der Seite, eingeklappt | keine | 0 px (eingeklappt) | ein Undo | nein | nur beim Aufklappen |
+| FP-06 | Q3 entschieden; bleibt gewahrt | Dialog „Für KI bereitstellen …“ | keine | 0 px | Import mit bestehendem Undo | nein | – |
+| FP-07 | Ausgabe je Liste/Ordner besteht | Datei › Ausgabe | keine; ergänzt Einzel-Ausgaben | 0 px | schreibt nur außerhalb des Datenordners | nein | Fortschritt bei großen Beständen |
+
+#### FP-00 Wiederholungen richtig erfassen und austauschen (WA-17, WA-18)
+
+| Bestandteil | Beschreibung |
+|---|---|
+| Paket-ID | FP-00 |
+| Titel | Fehlerbehebung: Wiederholungsangaben in der Schnelleingabe und Monatsende-Serien im ICS-Austausch |
+| Zielsetzung | Eine erkannte Wiederholung entspricht dem Eingegebenen oder wird gar nicht gedeutet; exportierte Serien zeigen in Kalenderprogrammen dieselben Termine wie in Glide. |
+| Ausgangssituation | [Code][Probe `probe_wiederholung.py`] A29: `capture_parser._wiederholung` erkennt Intervall bzw. „monatlich/wöchentlich“, aber nicht den folgenden Ankertag oder die Wochentage; die Serie beginnt heute, der Rest bleibt Titeltext. Ordinale wie „jeden zweiten Dienstag“ ergeben nur einen Bearbeitungstag. A28: `ics_repeat_rule` gibt „monatlich“/„jährlich“ als `FREQ=MONTHLY`/`FREQ=YEARLY` aus; `ics_repeat_from_rule` bildet `FREQ=MONTHLY` unabhängig vom Starttag auf „monatlich“ ab. |
+| Geplante Funktionen | (1) Ankertag und Wochentage im bestehenden Datenformat übernehmen: „monatlich am 15.“/„jeden Monat am Ersten“ → `monatlich` mit Start am nächsten 15./1.; „wöchentlich montags“ → `woechentlich` ab nächstem Montag; „alle 2 Wochen montags“/„… am Montag“ → `tage` 14 ab nächstem Montag; „jeden zweiten Dienstag“ → `tage` 14 ab nächstem Dienstag. (2) Was das heutige Format nicht abbilden kann („alle 2 Wochen montags und donnerstags“, „jeden ersten Montag im Monat“, „jeden dritten Freitag“), bleibt vollständig Titeltext mit einem Hinweischip „Wiederholung nicht erkannt“ statt Teilerkennung. (3) Der Wiederholungschip nennt den Ankertag. (4) ICS-Ausgabe für Starttage 29–31 mit `BYMONTHDAY=…;BYSETPOS=-1`, jährlich am 29.02. mit `BYMONTH=2;BYMONTHDAY=28,29;BYSETPOS=-1`; ICS-Import erkennt genau diese Formen als „monatlich“/„jährlich“ und verwirft `FREQ=MONTHLY` mit Starttag 29–31 bzw. `FREQ=YEARLY` am 29.02. sichtbar, statt die Folge still zu ändern. |
+| Nutzermehrwert | Keine unbemerkt falschen Fälligkeiten bei Routinen; Kalenderausgabe vertrauenswürdig. |
+| Betroffene Komponenten | `capture_parser.py` (Tk-frei), Chiptexte der Schnelleingabe, `ListApp.ics_repeat_rule`, `ics_repeat_from_rule` und ihr Aufrufer im ICS-Import (Starttag). |
+| Technische Umsetzung | Erkennung als Muster über die vorhandenen Wort- und Datumsfunktionen; Teilerkennung verhindern, indem eine Wiederholungsangabe mit nicht abbildbarem Rest als Ganzes verworfen wird. RRULE-Ausgabe und -Rückweg als reine Funktionen in einem Tk-freien Modul (D17), geprüft gegen `ics_recurrence.dates`. |
+| Abhängigkeiten | keine; unabhängig von FP-02, das später die nicht abbildbaren Formen ergänzt. |
+| Kompatibilität | kein Formatwechsel: nur bestehende Arten und Startdaten. Bereits gespeicherte Serien bleiben unverändert; nur neue Eingaben und neue Ausgaben ändern sich. Re-Import früherer Glide-ICS-Dateien bleibt möglich. |
+| Risiken | Mehrdeutigkeit der Sprache („jeden 2. Dienstag“ als zweiter Dienstag im Monat oder alle zwei Wochen) – Vorschlag: Ordinal ohne „im Monat“ gilt als „jede zweite Woche“, mit „im Monat“ erst in FP-02; geänderte Erwartungen bestehender Unit-Tests der Schnelleingabe; Kalenderprogramme mit unvollständiger BYSETPOS-Unterstützung (manuelle Probe). |
+| Aufwand | S–M |
+| Priorität | P0 (Fehlerbehebung nach Auftragsdefinition; Häufigkeit gering bis mittel) |
+| Akzeptanzkriterien | (1) Jede Eingabe aus `probe_wiederholung.py` ergibt entweder die gemeinte Serie oder keine Wiederholung mit vollständigem Titeltext; keine Teilerkennung. (2) Chip nennt Art und Ankertag. (3) Für alle Starttage 1–31 und den 29.02. stimmt die Folge aus der ausgegebenen RRULE (gerechnet mit `ics_recurrence`) über 24 Termine mit `repeat_rules.next_date` überein. (4) Rundlauf Ausgabe → Import ergibt dieselbe Glide-Regel. (5) Importierte `FREQ=MONTHLY` am 31. wird sichtbar abgewiesen. |
+| Tests | Unit-Tests für Parser-Muster (positiv und Teilerkennungsfallen) und RRULE-Abbildung über alle Starttage; Gegenprobe: dieselben Fälle gegen 3.39.0 rot; Regression bestehende Schnelleingabe-, ICS- und Wiederholungssuiten (`test_features320`, `test_features321`, `test_komfort33320`). |
+| Dokumentation | Funktionen §3 (Erfassen) und §11 (ICS), Analyse A28/A29 erledigt, CHANGELOG, QA-Bericht, Prüfliste (Kalenderprogramm öffnet die Ausgabe). |
+
+#### FP-01 Wiederholen nach Rückgängig (WA-01)
+
+| Bestandteil | Beschreibung |
+|---|---|
+| Paket-ID | FP-01 |
+| Titel | Wiederholen für Aufgaben-, Listen- und Strukturänderungen |
+| Zielsetzung | Ein versehentliches Rückgängig lässt sich zurücknehmen; Cmd/Strg+Umschalt+Z (Windows zusätzlich Strg+Y) wirkt überall wie erwartet (P1). |
+| Ausgangssituation | [Code] `snapshot_undo` legt Schnappschüsse (Listen, Ordner, Labels, Papierkorb als `PackedState`, Ansicht) auf `undo_stack` (`MAX_UNDO_STEPS = 20`); `undo_last_change` stellt über `apply_snapshot` her; eigener Flächenstapel der Pinnwand (`workspace.view_undo_pending`), der sich die Tiefe von `undo_stack` merkt; offene Fokusbuchung sperrt (`recover_time_booking`); Bestandswächter nimmt über `rollback_to_undo_depth` zurück. Vorprüfung 13.10.2026: 38 Aufrufe von `snapshot_undo` und 32 direkte Stapeleingriffe (`pop`, `del`, Rücksetzen) in 31 Methoden, meist zum Zurücknehmen wirkungsloser oder gescheiterter Aktionen; `item_change(background=True)` speichert Zustellbelege ohne Rückgängig-Punkt. Wiederholen gibt es nur in `RichNoteEditor`, `PageEditor` und `DrawingEditor`. |
+| Geplante Funktionen | **Stufe 1:** Wiederholen für alle Wege, die über `undo_stack` rückgängig gehen; Bearbeiten › Wiederholen mit stabiler Aktionskennung, Palette, Kürzel; der Rückgängig-Hinweis bietet danach „Wiederholen“; Text- und Zeichenfokus behalten ihre Editorstapel. **Stufe 2:** Wiederholen auch für Pinnwand-Flächenänderungen; der Änderungsverlauf verweist für ältere Stände auf „Sicherungen vergleichen“. |
+| Nutzermehrwert | Fehlbedienung folgenlos korrigierbar; Mut zu Strukturaktionen; erwartetes Desktopverhalten. |
+| Betroffene Komponenten | `ListApp.snapshot_undo`, `undo_last_change`, `rollback_to_undo_depth`, `trim_undo_stack`, Rückgängig-Hinweis, `build_menu`/`action_catalog.py`, Tastaturbindungen; neues Tk-freies `undo_history.py`. |
+| Technische Umsetzung | Schnappschuss-Stapel wie Rückgängig (AE-3): Rückgängig legt den aktuellen Stand auf „Wiederholen“, Wiederholen legt ihn zurück auf „Rückgängig“. **Gültigkeitsregel statt Eingriffen an 32 Stellen:** Ein Wiederholen-Eintrag merkt sich Tiefe und oberstes Objekt von `undo_stack` sowie einen Schreibzähler, den `save_items` bei jedem erfolgreichen Schreiben erhöht (auch für Zustellbelege). Wiederholen ist nur erlaubt, solange alle drei unverändert sind; sonst wird der Stapel verworfen. Wirkungslose Aktionen, die einen Punkt anlegen und wieder entfernen, lassen ihn gültig; jede gespeicherte Änderung macht ihn ungültig. Der Flächenstapel der Pinnwand vergleicht weiterhin Tiefen und wird in Stufe 2 einbezogen. Gleiche Grenze 20. Regeln im Tk-freien Modul, `ListApp` bleibt Adapter (D17). Scheitert das Speichern, bleiben beide Stapel unverändert. |
+| Abhängigkeiten | keine; sinnvoll vor weiteren neuen Mutationsarten (FP-02 ff.), damit diese von Beginn an mitgeprüft werden. |
+| Kompatibilität | kein Daten- oder Einstellungsformat; Stapel nur im Arbeitsspeicher wie heute. |
+| Risiken | Reihenfolge gegenüber dem Flächenstapel; Zeichen-Editor-Flush; Fokusbuchung; Speicher bis 2 × 20 Schnappschüsse; Strg+Y in Windows-Textfeldern. |
+| Aufwand | Stufe 1 M, Stufe 2 S |
+| Priorität | P1 |
+| Akzeptanzkriterien | (1) Jede rücknehmbare Aktion der Einstiegsmatrix (anlegen, löschen, verschieben, einrücken, gruppieren, abhaken mit Wiederholung, einplanen, entlasten, importieren) ist nach Rückgängig mit genau einem Wiederholen wiederhergestellt; Bestand nach JSON-Vergleich gleich dem Zustand vor Rückgängig. (2) Neue Änderung, Laden und Wächterabbruch leeren „Wiederholen“. (3) Text- und Zeicheneditor unverändert. (4) Abhaken 5.000 Punkte weiter ≤ 120 ms (§10); Zusatzspeicher bei 10.000 Punkten gemessen und benannt. (5) Menü, Palette, Kürzel und Hinweis lösen dieselbe Kennung aus. |
+| Tests | Unit `test_undo_history.py` (Stapelregeln, Grenze, Leeren); Pflichtsuite über echte Bindungen mit Bytevergleich, Schreibfehler/Retry, Fokusbuchung, Flächenstapel, Neustart; rote Gegenprobe gegen die Vorversion; Regression `test_datenintegritaet` und bestehende Rückgängig-Suiten, Mindestgröße. |
+| Dokumentation | Funktionen (Bedienung, Kürzel), Architektur §2 „Rückgängig“, Kürzelübersicht der App, CHANGELOG, QA-Bericht, Plan-Marke, manuelle Prüfliste (Kürzel je Plattform). |
+
+#### FP-02 Erweiterte Wiederholungsregeln (WA-02)
+
+| Bestandteil | Beschreibung |
+|---|---|
+| Paket-ID | FP-02 |
+| Titel | Wiederholungen mit Intervall, n-tem Wochentag und Bezug auf Erledigung |
+| Zielsetzung | Übliche Rhythmen ohne Hilfskonstruktion: „alle zwei Wochen montags und donnerstags“, „am zweiten Dienstag im Monat“, „letzter Werktag im Monat“, „alle 3 Monate am 15.“, „drei Tage nach Erledigung“. |
+| Ausgangssituation | [Code] `repeat_rules.py`: Arten `taeglich`, `tage` (1–365), `wochentage`, `woechentlich`, `monatlich`, `jaehrlich`; Start/Ende, Monatsende-Anker (31.01. → 28.02. → 31.03.), Termin und verpasste Termine überspringen (KO02); Folgetermin stets ab Fälligkeit. Schnelleingabe kennt „täglich“, „werktags“, „jeden <Wochentag>“, Wochentagslisten, „alle N Tage/Wochen“ (als N·7 Tage), „monatlich“, „jährlich“ (`capture_parser._wiederholung`; Fehler A29 → FP-00). `ics_recurrence.py` (3.39.0) rechnet RFC-5545-Serien mit INTERVAL, COUNT, UNTIL, BYDAY samt Ordinal, BYMONTHDAY, BYSETPOS und Budget; Vorprüfung: 11.192 Kombinationen ohne Abweichung von einer unabhängigen Referenz (§16.10). |
+| Geplante Funktionen | **Stufe 1:** Intervall für Monat/Jahr und für Wochen mit mehreren Wochentagen; n-ter und letzter Wochentag im Monat; letzter Tag bzw. letzter Werktag im Monat (Werktag = Montag bis Freitag, ohne Feiertage); Vorschau der nächsten fünf Termine im Inspektor. **Stufe 2:** Folgetermin ab Erledigung; Serie pausieren; Anzahl Termine mit sichtbarem Rest; Schnelleingabe für die geprüften Formen der Beispieltabelle in §16.10 als Chip mit Ankertag; Ordinal mit Wochentag nur zusammen mit „im Monat“ als Monatsposition (ohne „im Monat“ gilt „jeden zweiten Dienstag“ als „alle 2 Wochen“, siehe FP-00); ICS-Ausgabe als RRULE. |
+| Nutzermehrwert | Verlässliche Routinen für Beruf und Alltag; Gleichstand mit Todoist, TickTick, Super Productivity. |
+| Betroffene Komponenten | `repeat_rules.py` (Fassade), `ics_recurrence.py` (Rechner), `capture_parser.py`, Wiederholungsfeld im Inspektor (`read_repeat_rule`), `build_ics_document`, Datenformat/Migration; Austauschformat bleibt Stufe 0 für Wiederholungen. |
+| Technische Umsetzung | Neue Regeln intern als normalisierte RRULE-Teilmenge plus Bezug (`faellig`/`erledigt`) und Pausenmarke; alle Berechnungen über `ics_recurrence` (AE-2). Die sechs alten Arten bleiben gespeichert, wie sie sind, und rechnen unverändert. Semantik nach RFC 5545 und Super Productivity (MIT) portiert, kein Fremdcode. Fachlogik Tk-frei mit Unit-Tests (D17). |
+| Abhängigkeiten | Datenformat-Tor mit der nächsten freien Nummer nach den Paketen 5 und 6 (Vergabe beim Formatschnitt); FP-00 und FP-01 empfohlen vorher. |
+| Kompatibilität | **Formatwechsel zwingend:** `repeat_rules.normalize` älterer Fassungen gibt für unbekannte Arten `None` zurück; ohne Tor verlöre eine ältere Fassung die Regel beim nächsten Speichern. Vorsicherung, Migration (Formatnummer; alte Regeln unverändert), schreibgeschützter Altleser. |
+| Risiken | Monatsenden, Schaltjahre, Sommerzeit; Bezug auf Erledigung mit Rückgängig/Wiederholen; Verständlichkeit der Eingabesprache; CSV- und Austauschgrenzen benennen. |
+| Aufwand | Stufe 1 M, Stufe 2 M (zusammen M–L) |
+| Priorität | P1 |
+| Akzeptanzkriterien | (1) 30 Referenzregeln: die nächsten 24 Termine gleich einer unabhängig erstellten Tabelle (Monatsende, Schaltjahr, Sommerzeit). (2) Alle sechs alten Arten liefern dieselben Folgetermine wie 3.39.0. (3) Ältere Fassung öffnet den neuen Bestand schreibgeschützt, Vorsicherung vorhanden. (4) Jede erkannte Eingabe erscheint als rücknehmbarer Chip (D01/D10). (5) Überspringen, verpasste überspringen und frühes Erledigen gelten auch für neue Regeln. (6) Ausgegebene RRULE liest `ics_recurrence` mit identischer Terminfolge wieder ein. |
+| Tests | Unit für Normalisierung, Terminfolgen und Parser; Altleser- und Migrations-Kindprozess über `tests/integration/vorversion.py`; Pflichtsuite mit Inspektor, Schnelleingabe, Abhaken, Überspringen, Undo, Neustart; rote Gegenprobe; Regression Erinnerungen relativ zur Fälligkeit, Heute/Demnächst, Wochenplanung. |
+| Dokumentation | Funktionen §3/§4, Daten und Migration (Format, Regelvertrag), Produktgrenzen (Planung), CHANGELOG, QA-Bericht, Prüfliste. |
+
+#### FP-03 Gespeicherte Ansichten (WA-03, Vorarbeit WA-09)
+
+| Bestandteil | Beschreibung |
+|---|---|
+| Paket-ID | FP-03 |
+| Titel | Gespeicherte Ansichten: vollständige Bedingungen und gespeicherte Darstellung |
+| Zielsetzung | Wiederkehrende Sichten wie „diese Woche geplant, ohne Label Warten, nach Liste gruppiert, als Tabelle“ einmal festlegen und mit einem Klick öffnen. |
+| Ausgangssituation | [Code] `SavedFilters` (≤ 100) mit Liste, Quelle, Status, Wichtigkeit (genau), Labels (beliebig/alle), festen Fälligkeitsstufen und Text; immer nach Fälligkeit sortiert; Erklärung über `filter_explain.py` (D-03); bis zu vier als Startseitenkachel. Gruppierung und Tabellenspalten werden je Liste gespeichert. |
+| Geplante Funktionen | **Stufe 1:** Bedingungen Bearbeitungstag (heute, liegen geblieben, diese/nächste Woche, ohne, Zeitraum), Aufwand (ohne Schätzung, höchstens/mindestens), „wartet auf“ (blockiert/frei), Wichtigkeit „mindestens“, Labels ausschließen; Verknüpfung „alle“ oder „mindestens eine“ (eine Ebene). **Stufe 2:** Darstellung je Ansicht – Liste, Tabelle oder Spaltenboard, Gruppierung, Sortierung, Tabellenspalten; „Als Ansicht speichern“ aus der aktuellen Darstellung. „Warum steht das hier?“ deckt alle Bedingungen ab. |
+| Nutzermehrwert | Wiederkehrende Auswertungen ohne Nachbauen; keine doppelte Pflege, weil Ansichten Ableitungen bleiben. |
+| Betroffene Komponenten | `SavedFilters`, `filter_explain.py`, neues Tk-freies `view_definition.py`, Filterdialog, `group_columns`/`set_group_value`, Tabellenspalten, Startseitenkacheln, Palette. |
+| Technische Umsetzung | Ansichtsdefinition als JSON nach dem Muster AFFiNE/Vikunja (Markt §9.3, T01–T04), ausschließlich über festen Glide-Feldern (AE-1). Reine Auswertung über die vorhandenen Punktfakten; unbekannte Bedingungen sichtbar ungültig, nie still erfüllt. **Speicherort:** neue Bedingungen und Darstellung in einem eigenen Einstellungsschlüssel auf oberster Ebene, je Filterkennung (A27: oberste Ebene überlebt ältere Fassungen); `saved_filters` behält seine bisherigen Felder unverändert, verwaiste Erweiterungen räumt die neue Fassung auf. Treffer bleiben Originale. Ziehen zwischen Gruppen über `set_group_value` (D02). |
+| Abhängigkeiten | keine (WA-09 entfällt durch den eigenen Schlüssel; Alternative: Erweiterung innerhalb `saved_filters` nur nach WA-09). |
+| Kompatibilität | Datenformat unverändert; Einstellungen additiv. Eine ältere Fassung zeigt einen erweiterten Filter nur mit seinen bisherigen Bedingungen (mehr Treffer, kein Datenverlust) und lässt den Erweiterungsschlüssel unberührt. Bestehende Filter liefern unverändert dieselben Treffer. |
+| Risiken | Bedienkomplexität (P5/P6): Standarddialog bleibt kurz, weitere Bedingungen über „Bedingung hinzufügen“; Tempo; verständliche Erklärtexte. |
+| Aufwand | Stufe 1 M, Stufe 2 M |
+| Priorität | P2 |
+| Akzeptanzkriterien | (1) Jede neue Bedingung erscheint in der Erklärung mit ✓/✗ und dem Wert des Punkts. (2) Auswertung bei 10.000 Punkten Median ≤ 100 ms. (3) Gespeicherte Darstellung nach Neustart identisch. (4) Ziehen zwischen Gruppen setzt genau das sichtbare Feld, ein Undo. (5) Alte Filter: gleiche Treffer wie 3.39.0. (6) Dialog bei 860 × 700 und großer Schrift vollständig bedienbar. |
+| Tests | Unit `test_view_definition.py` (Normalisierung, Auswertung, Erklärung, Unbekanntes); Pflichtsuite mit Dialog, Kachel, Palette, Gruppieren/Ziehen, Neustart; Messung; rote Gegenprobe; Regression `test_wissen3340` (D-03). |
+| Dokumentation | Funktionen §5, Daten und Migration (Einstellungen), CHANGELOG, QA-Bericht, Prüfliste. |
+
+#### FP-04 Seiten und Notizen als Pinnwandkarten (WA-04, Vorarbeit WA-09)
+
+| Bestandteil | Beschreibung |
+|---|---|
+| Paket-ID | FP-04 |
+| Titel | Seiten und Notizen als Karten auf der Pinnwand |
+| Zielsetzung | Projektwand mit Wissen und Aufgaben auf einer Fläche, ohne neue Inhaltsart und ohne freie Zettel. |
+| Ausgangssituation | [Code] Karten sind Aufgaben/Langtexte und Zeichnungen; Zeichnungskarten tragen `page:<Kennung>` (`ItemWorkspace.PAGE_CARD_PREFIX`), `valid_pages` lässt nur `is_drawing_list` zu; Verbindungen laufen über Kartenkennungen; Vorschau über `page_card_blocks`. |
+| Geplante Funktionen | Seite oder Notiz anheften (Seitenleisten-Kontextmenü, Pinnwand „Anheften …“, Ziehen aus der Seitenleiste). Karte zeigt Titel, Pixelsymbol oder Titelbild, die ersten Zeilen (≤ 160 Zeichen) und die Zahl offener Aufgaben; Doppelklick öffnet die Seite; Verbindungen zu Aufgabenkarten; Präsentation und PDF berücksichtigen Seitenkarten; archivierte oder gelöschte Seiten fallen wie Zeichnungen weg. |
+| Nutzermehrwert | Projektkontext ohne Wechsel zwischen Seite und Pinnwand. |
+| Betroffene Komponenten | `ItemWorkspace.valid_pages`, `page_card_pseudo`, `page_card_blocks`, `prune`, Druck (`board_region_lines`), Seitenleisten-Kontextmenü, `page_features.py`. |
+| Technische Umsetzung | `valid_pages` auf nicht archivierte Seiten und Notizen erweitern; Auszug und Aufgabenzahl als Tk-freie Funktion in `page_features.py`, je Aufbau über `render_cached`; Vorschau nur lesend, keine Kopie von Inhalten. |
+| Abhängigkeiten | WA-09 (ältere Fassungen entfernen sonst beim `prune` die neuen Seitenkarten aus `settings.json`). |
+| Kompatibilität | Datenformat unverändert; Einstellungen additiv. |
+| Risiken | Tempo bei vielen Textauszügen; Erwartung „freie Notizzettel“ – Produktgrenze bleibt: jede Karte zeigt ein bestehendes Objekt. |
+| Aufwand | M |
+| Priorität | P2 |
+| Akzeptanzkriterien | (1) Anheften, Verschieben, Verbinden, Entfernen je ein Undo-Schritt im Flächenstapel. (2) Kartentext folgt einer Seitenänderung ohne Neustart. (3) Archivieren/Löschen der Seite entfernt die Karte; Undo stellt beides her. (4) 200 Karten, davon 50 Seitenkarten: Aufbau höchstens 10 % über der bisherigen Pinnwandmessung. (5) Eine ältere Fassung mit WA-09 behält die Seitenkarten. |
+| Tests | Unit (Auszug, Aufgabenzahl); Pflichtsuite mit Anheften, Ziehen, Tastatur (H-02), Präsentation, Druck, Undo, Neustart; Altleser mit Vorversion; rote Gegenprobe. |
+| Dokumentation | Funktionen §6, Daten und Migration (`pinboards`), Produktgrenzen (Karten nur für Objekte), CHANGELOG, QA-Bericht. |
+
+#### FP-05 Unverknüpfte Erwähnungen (WA-05)
+
+| Bestandteil | Beschreibung |
+|---|---|
+| Paket-ID | FP-05 |
+| Titel | Erwähnungen ohne Verweis finden und verknüpfen |
+| Zielsetzung | Bezüge, die nur als Text bestehen, mit einem Schritt zu echten Verweisen machen – deterministisch statt KI-Vorschlag. |
+| Ausgangssituation | [Code] typisierte Verweise mit abgeleiteten Rückverweisen (`object_references.py`, Format 22); Inhaltssuche mit Umlautnormalisierung ohne Index (`content_search.py`). |
+| Geplante Funktionen | Im Rückverweisbereich einer Seite oder Liste ein eingeklappter Abschnitt „Erwähnt ohne Verweis (n)“: Fundstellen des Titels als ganzes Wort (Mindestlänge 4 Zeichen, Umlautregeln der Suche) in Seiten, Notizen und Beschreibungen; je Fundstelle markierter Ausschnitt mit „Verknüpfen“ (ersetzt die Textstelle durch einen Verweis) und „Öffnen“. |
+| Nutzermehrwert | Wissen vernetzt sich ohne zusätzliche Pflege. |
+| Betroffene Komponenten | `object_references.py`, `content_search.py` (Normalisierung), Rückverweisbereich im `PageEditor`, vorhandene Verweiserstellung. |
+| Technische Umsetzung | Tk-freie Funktion für Fundstellen mit Wortgrenzen; Berechnung erst beim Aufklappen, Ergebnis je Aufbau gehalten; Verknüpfen über den bestehenden Verweisweg. |
+| Abhängigkeiten | keine |
+| Kompatibilität | kein neues Format (Verweise aus Format 22). |
+| Risiken | Fehltreffer bei kurzen oder allgemeinen Titeln (Mindestlänge, bereits verknüpfte Stellen ausnehmen); Tempo bei großen Seiten. |
+| Aufwand | S–M |
+| Priorität | P2 |
+| Akzeptanzkriterien | (1) Fixture mit 20 erwarteten Treffern und 10 Fehltrefferfallen: alle Treffer, keine Falle. (2) „Verknüpfen“ erzeugt denselben Verweis wie der bestehende Weg, ein Undo, Rückverweis sofort sichtbar. (3) 500 Seiten/10.000 Punkte: Aufklappen Median ≤ 150 ms. |
+| Tests | Unit; Pflichtsuite mit Aufklappen, Verknüpfen, Undo, Neustart; Messung; rote Gegenprobe. |
+| Dokumentation | Funktionen §8 und Abschnitt Verweise, CHANGELOG, QA-Bericht. |
+
+#### FP-06 Wiederverwendbare KI-Aufträge im Austauschformat (WA-06)
+
+| Bestandteil | Beschreibung |
+|---|---|
+| Paket-ID | FP-06 |
+| Titel | KI-Aufträge für das Kontextpaket |
+| Zielsetzung | Häufige KI-Aufgaben – Notiz in Aufgaben zerlegen, Projekt mit Aufwand planen, Beschreibung zusammenfassen, Priorisierung mit Begründung vorschlagen, Labels vorschlagen – ohne selbst formulierte Anweisung; Q3-konform, ohne Netz und ohne Abhängigkeit. |
+| Ausgangssituation | [Code] „Für KI bereitstellen …“ schreibt `.glidecontext` mit Zweck, Auswahl und Prüfsummen; eine Antwort als Änderungsvorschlag wird mit Feldvergleich, Konflikten, Vorsicherung und einem Undo übernommen (`exchange_patch.py`, G24). |
+| Geplante Funktionen | Auswahl „Auftrag“ im Bereitstellen-Dialog mit fünf mitgelieferten Aufträgen; jeder ergänzt das Kontextpaket um eine deutsche Anweisung, das erwartete Antwortschema und die erlaubten Felder; „In Zwischenablage kopieren“ für Chatwerkzeuge; eigene Aufträge als lokale Textvorlagen; Übernahme unverändert über den Prüfdialog. |
+| Nutzermehrwert | KI-Hilfe für Strukturierung und Planung mit einem frei gewählten Werkzeug (lokal oder Cloud nach Entscheidung des Nutzers); Datenhoheit und Prüfung bleiben. |
+| Betroffene Komponenten | Austauschdialog, Kontextpaket (`build_exchange_payload`), neues Tk-freies `exchange_recipes.py`, versionierte Ressource mit Aufträgen, Spezifikation in Daten und Migration. |
+| Technische Umsetzung | Aufträge als Ressource (Kennung, Titel, Zweck, Anweisung, erlaubte Felder). Vorprüfung 13.10.2026 [Code `exchange_patch.build_context`, `EXCHANGE_ROOT_FIELDS`]: Das Kontextpaket trägt bereits ein Feld `instructions`; der Auftrag ergänzt dessen Text, ein neues Feld ist nicht nötig. Änderungsvorschläge (Stufe 2) überarbeiten nur die neun Felder vorhandener Aufgaben – passend für Zusammenfassen, Priorisieren, Aufwand schätzen, Labels. Neue Aufgaben (Notiz zerlegen, Projekt planen) entstehen nur über Stufe 1 (`mode: "create"`); deren Import meldet unbekannte Wurzelfelder, deshalb dort keine zusätzlichen Wurzelfelder verlangen. „Zusammenfassen“ schreibt die Zusammenfassung vor den unveränderten Originaltext der Beschreibung, damit die Übernahme nichts verliert. Kein Formatwechsel. |
+| Abhängigkeiten | G24 (✅ 3.35.0) |
+| Kompatibilität | Kontextpaket additiv; Antwortformat und Importweg unverändert. |
+| Risiken | Antwortqualität fremder KI ist nicht steuerbar – Prüfdialog bleibt Pflicht; Missverständnis „Glide hat eingebaute KI“ – Texte klarstellen; Pflege der Anweisungen. |
+| Aufwand | S–M |
+| Priorität | P2 |
+| Akzeptanzkriterien | (1) Für jeden Auftrag besteht eine Musterantwort den bestehenden Import ohne Fehler. (2) Ohne Auftragswahl bleibt das Kontextpaket bis auf Zeit und Prüfsumme gleich 3.39.0. (3) Kein neues Modul enthält Netzwerkfunktionen (statische Prüfung). (4) Eigene Aufträge überstehen Neustart und App-Backup. |
+| Tests | Unit (Auftragsnormalisierung, Paketerweiterung); Rundlauf mit fünf Musterantworten; Pflichtsuite für Dialog und Zwischenablage; rote Gegenprobe; statischer Test ohne `urllib`/`socket`. |
+| Dokumentation | Funktionen §11, Daten und Migration (Austauschformat), Produktgrenzen (KI nur über Dokumente), CHANGELOG, QA-Bericht. |
+
+#### FP-07 Offene Ausgabeformate (WA-07)
+
+| Bestandteil | Beschreibung |
+|---|---|
+| Paket-ID | FP-07 |
+| Titel | Gesamtausgabe als Markdown-Ordner und Pinnwand als JSON Canvas |
+| Zielsetzung | Datensouveränität und Ausstiegsfähigkeit: gesamter Bestand in einem Schritt als lesbarer Dateibaum; Pinnwand in einem offenen Leinwandformat. |
+| Ausgangssituation | [Code] Ausgabe je Liste (TXT/MD/CSV) und je Ordner (TXT/MD), Seiten als Markdown mit Bildern, Druck/PDF, ICS; Bestand ohnehin als lesbares JSON; Pinnwand nur als Druckseite; Pinnwandlayout nur im App-Backup [Dok 06]. |
+| Geplante Funktionen | **Stufe 1 „Alles als Markdown-Ordner …“:** Ordnerbaum wie die Seitenleiste; je Seite, Notiz und Liste eine `.md` mit Kopfdaten (Kennung, Art, Labels, Termine); Aufgaben als `- [ ]`/`- [x]` mit Feldern; interne Verweise als relative Links; Anhänge und Bilder kopiert; Tabellen zusätzlich als CSV; `INDEX.md` mit Zählung und Verlustbericht (Wiederholungsdetails, Erinnerungen, Pinnwandlayout). **Stufe 2 „Pinnwand als JSON Canvas …“:** Karten als `text`-Knoten, Seiten- und Zeichnungskarten als `file`-Knoten auf die Dateien aus Stufe 1, Bereiche als `group`, Verbindungen als Kanten mit Pfeilenden nach Richtung, Beschriftung und Farbe. |
+| Nutzermehrwert | Vertrauen und Weiterverwendung in Obsidian, AFFiNE, Notion (Markdown-Import) und jeder Textsuche. |
+| Betroffene Komponenten | Datei › Ausgabe, `page_markdown.py`, `export_list_as`/`export_folder_as`, neue Tk-freie Module für Ordnerausgabe und Canvas, Anhangspfade. |
+| Technische Umsetzung | In temporären Zielordner schreiben und erst am Ende umbenennen; Dateinamen bereinigen (Windows-Zeichen, Länge, Kollisionen); eigener JSON-Canvas-Schreiber nach Spezifikation 1.0 (MIT) in der Standardbibliothek; keine Netz- oder Fremdbibliothek. |
+| Abhängigkeiten | Paket 6 vorher empfohlen (gemeinsame Markdown- und Verweisregeln mit dem Notion-Import). |
+| Kompatibilität | reine Ausgabe, kein Format. |
+| Risiken | lange Windows-Pfade, große Anhänge, Namenskollisionen; Erwartung eines Wiederimports – ausdrücklich nicht Ziel der Stufe 1. |
+| Aufwand | Stufe 1 M, Stufe 2 S–M |
+| Priorität | Stufe 1 P2, Stufe 2 P3 |
+| Akzeptanzkriterien | (1) Showcase vollständig ausgegeben: Zahl der Seiten, Aufgaben und Anhänge gleich dem Bestand; der Verlustbericht nennt jede nicht abgebildete Eigenschaft. (2) Alle internen Links im Ausgabeordner lösen auf. (3) Datenordner nach der Ausgabe bytegleich. (4) `.canvas` erfüllt die Spezifikation (Pflichtattribute, eindeutige Kennungen, gültige Kantenenden) und öffnet in einem Referenzleser (manuelle Probe). (5) Pfade unter Windows ≤ 240 Zeichen. |
+| Tests | Unit (Dateinamen, Kopfdaten, Linkauflösung, Canvas-Schema); Pflichtsuite mit Showcase, Abbruch und Schreibfehler; Windows-Pfade in der nativen Matrix; rote Gegenprobe. |
+| Dokumentation | Funktionen §11, Daten und Migration (Ausgabe, Verlustbericht), Repository-README (Daten), CHANGELOG, QA-Bericht, Prüfliste. |
+
+### 16.4 Übrige Backlogpunkte
+
+- **WA-08 Zeitauswertung:** Zeiteinträge je Tag aus Fokus- und Handbuchungen (Formattor), Auswertung je Woche/Monat nach Liste und Label mit CSV-Ausgabe im Wochenrückblick; Vorbild Arbeitsprotokoll von Super Productivity. Erst bei belegtem Bedarf.
+- **WA-09 Vorwärtsverträgliche Einstellungen:** Unbekannte Schlüssel auf oberster Ebene überleben schon heute (A27). `ItemWorkspace.prune` und die Normalisierer innerhalb von `pinboards` und `saved_filters` erhalten künftig unbekannte Karten und Schlüssel bis zu ihren Grenzen unverändert; eine gemeinsame Regel mit Test „ältere Fassung schreibt Zukunftsfelder verlustfrei zurück“. Zwingend eine Lieferung vor FP-04 (AE-4); für FP-03 nicht nötig.
+- **WA-10 Optionaler lokaler KI-Endpunkt:** nur über Entscheidungsvorlage E-W3.
+- **WA-11 Seitenvorschau für Verweise:** „Vorschau“ im Kontextmenü eines Verweises zeigt die Zielseite lesend im Inspektorbereich.
+- **WA-12 Tagesvorschlag „gibt andere frei“:** Aufgaben, auf die andere warten, erhalten einen eigenen erklärten Grund vor „wichtig“ (`day_proposal.REASONS`); Tk-frei, kein Format.
+- **WA-14 Wiederkehrende Vorlagen:** Vorlage plus Regel aus FP-02 legt zum Termin eine Liste oder Seite an.
+- **WA-15 Rangfolge der Inhaltstreffer:** BM25-Formel über den vorhandenen Treffern, ohne Index; nur nach belegter schlechter Rangfolge.
+- **WA-16 Wartbarkeitskennzahl:** Pflegewerkzeug schreibt je Lieferung Zeilen von `ListApp`, Zahl der Tk-freien Module und Unit-Tests in den Nachweis.
+
+### 16.5 Entscheidungsvorlagen für den Inhaber
+
+Nummeriert nach dem bewährten Muster (Übergabe §4); Kurzantwort etwa „E-W7 A, E-W1 A/V, E-W2 A/1“. Neue Entscheidungen würden als D49 ff. in der Arbeitsrichtung eingetragen.
+
+| Nr. | Frage | A/1 – erste Stufe | A/V – vollständig | B / C | Empfehlung |
+|---|---|---|---|---|---|
+| E-W1 | FP-01 Wiederholen | Aufgaben- und Strukturänderungen; M | zusätzlich Pinnwandfläche und Verlaufshinweis; M+S | B auslassen | A/V |
+| E-W2 | FP-02 Wiederholungsregeln | Intervalle, n-ter/letzter Wochentag, letzter (Werk-)Tag, Terminvorschau; M; Formattor | zusätzlich ab Erledigung, Pause, Anzahl, deutsche Schnelleingabe, RRULE-Ausgabe; M–L; ein Formattor | B auslassen | A/V (das Formattor fällt nur einmal an) |
+| E-W3 | KI-Richtung | – | – | A: Q3 bleibt, nur FP-06 · B: zusätzlich WA-10 lokaler Endpunkt (nur `localhost`, Vorgabe aus, Prüfdialog Pflicht) als Ergänzung von Q3 · C: weder noch | A; WA-10 nach Nutzungserfahrung mit FP-06 neu bewerten |
+| E-W4 | FP-03 | neue Bedingungen; M | zusätzlich gespeicherte Darstellung; M+M | B auslassen | A/V mit eigenem Einstellungsschlüssel (ohne WA-09) |
+| E-W5 | FP-04, FP-05, FP-07 je einzeln | FP-07 nur Markdown-Ordner | jeweils vollständig | B auslassen | FP-05 A/V, FP-04 A/V nach WA-09, FP-07 A/1 |
+| E-W6 | Einordnung | – | – | A: neuer Sprint nach 4.0.0 · B: FP-01 zwischen 3.40.0 und 3.41.0 einschieben (ändert die durch D44 bestätigte Reihenfolge) | A – bestätigten Plan nicht unterbrechen |
+| E-W7 | FP-00 Fehlerbehebung | – | – | A: kleine eigene Fehlerbehebungslieferung direkt nach dem Lieferabschluss von 3.39.0, vor Paket 5 (ändert die durch D44 bestätigte Folge um eine Zwischenlieferung) · B: nach 4.0.0 mit W1 · C: als bekannte Grenze dokumentieren | A – Fehler in einer Kernfunktion, klein, ohne Formatwechsel |
+
+### 16.6 Architekturentscheidungen: geprüfte Alternativen
+
+| Nr. | Thema | Geprüfte Alternativen | Empfehlung | Begründung |
+|---|---|---|---|---|
+| AE-1 | Ansichtsmodell | (a) neue Ansichtsart mit eigener Datenhaltung · (b) Datenbankblock wie AFFiNE/AppFlowy · (c) gespeicherte Filter erweitern | (c) | keine Parallelstruktur; feste Felder (N15–N20); vorhandene Erklärung D-03 weiterverwendbar |
+| AE-2 | Wiederholungsrechner | (a) `repeat_rules.py` erweitern · (b) `ics_recurrence.py` als einziger Rechner hinter der bestehenden Fassade · (c) `dateutil.rrule` | (b) | Rechner vorhanden und geprüft; (c) wäre neue Laufzeitabhängigkeit; (a) verdoppelt Logik weiter (A26) |
+| AE-3 | Wiederholen | (a) Befehlsmuster mit inversen Operationen · (b) Schnappschuss-Stapel wie Rückgängig | (b) | gleicher Weg wie Rückgängig und Bestandswächter; (a) verlangte Umbau aller Mutationswege |
+| AE-4 | Vorwärtsverträglichkeit der Einstellungen | (a) Einstellungs-Formattor mit Schreibschutz · (b) unbekannte Schlüssel erhalten | zuerst (b), (a) nur bei Bedeutungswechsel | billig, wirkt rückwirkend für alle künftigen Erweiterungen; Lehre 3.29/3.30 |
+| AE-5 | Lokale KI | (a) eingebettetes Modell über native Bindung · (b) externer Dienst über HTTP auf `localhost` · (c) Dateiaustausch | jetzt (c); (b) nur nach E-W3; (a) ✕ | (a) native Abhängigkeit und GB-große Modelle im Paket; (b) berührt Q3 |
+| AE-6 | Toolkit-/Framework-Wechsel | Qt (PySide6), Web (Electron/Tauri), Flutter | kein Wechsel | Nutzen (Kantenglättung, reichere Editoren, Zugänglichkeit) teils über Tk 9/9.1 erreichbar (SVG/PNG, Paket 8); Kosten: Neubau der rund 59.500 Zeilen in `app.pyw`, die überwiegend an Tk gebunden sind, Verlust der geprüften Tk-Lösungen und Suiten, neue Abhängigkeiten. D03/Q4 bleiben; Neubewertung nur, wenn Paket 8 scheitert oder D03 aufgehoben wird |
+| AE-7 | Speicher | JSON (D16) · SQLite · CRDT (Yjs/yrs) | JSON | CRDT dient bei AFFiNE/AppFlowy der Synchronisation (G23 ✕); Logseq-Beta zeigt das Risiko eines Speicherwechsels |
+
+### 16.7 Empfohlene Reihenfolge
+
+Nach Abschluss des bestätigten Sprints (4.0.0), je Zeile eine Produktionsversion; Versionsnummern und Formatnummern vergibt der jeweilige Lieferweg.
+
+| Folge | Inhalt | Prio | Abhängig von | Warum hier |
+|---|---|---|---|---|
+| W0 (ohne App-Version) | WA-13 Dokumentabgleich ✅; Vorprüfungen §16.10 ✅; Entscheidungsvorlagen E-W1–E-W7 | P0/– | – | erledigt bzw. Voraussetzung jeder Auswahl |
+| W0b | FP-00 Fehlerbehebung Wiederholungen | P0 | – | Fehler zuerst; ohne Formatwechsel; Zeitpunkt nach E-W7 |
+| W1 | FP-01 Wiederholen und WA-09 Vorwärtsverträglichkeit | P1 | – | beide klein, ohne Formatwechsel; sichern alle folgenden Pakete ab |
+| W2 | FP-02 Wiederholungsregeln | P1 | Formattor, FP-01 | größter Alltagsnutzen; ein Formatschnitt |
+| W3 | FP-05 und FP-04 (Seiten im Kontext) | P2 | WA-09 für FP-04 | beide verbinden Seiten mit ihrem Umfeld; kein Format |
+| W4 | FP-03 Gespeicherte Ansichten | P2 | – | eigener Einstellungsschlüssel; Bedienentwurf Stufe 2 vorher |
+| W5 | FP-06 KI-Aufträge und FP-07 Stufe 1 | P2 | G24, Paket 6 | beide im Bereich Datei › Austausch/Ausgabe |
+| später | WA-12, FP-07 Stufe 2, WA-11, WA-16, WA-14, WA-08, WA-15; WA-10 nur nach E-W3 | P3 | je Eintrag | nach Bedarf |
+
+### 16.8 Umsetzungsreife
+
+| Paket | Spezifikation | Vorbereitendes Refactoring | Offene Entscheidung | Datenmigration | Erforderliche Testabdeckung |
+|---|---|---|---|---|---|
+| FP-00 | ausreichend; Beispiel- und Fallenliste liegt als Probe vor | – | E-W7; Lesart von „jeden 2. Dienstag“ | nein | Parser-Positiv-/Fallenfälle, RRULE über alle Starttage |
+| FP-01 | ausreichend; Einstiegsinventar erstellt (38 + 32 Stellen), Gültigkeitsregel festgelegt | Stapelregeln in `undo_history.py` herauslösen, Schreibzähler in `save_items` | E-W1; Strg+Y unter Windows | nein | Einstiegsmatrix aller Rückgängig-Wege mit Bytevergleich |
+| FP-02 | ausreichend; Beispieltabelle der Eingabesprache gegen `ics_recurrence` geprüft (§16.10) | `repeat_rules.py` als Fassade über `ics_recurrence.py`; alte Arten rechnen weiter selbst (Monatsende-Anker weicht von RFC ab) | E-W2; Formatnummer beim Schnitt | ja | Referenztermine aus unabhängiger Rechnung (Werkzeug liegt vor), Altleser-Kindprozess |
+| FP-03 | Stufe 1 ausreichend; Stufe 2 braucht Bedienentwurf des Dialogs | – (eigener Einstellungsschlüssel) | E-W4 | Einstellungen additiv | Referenzbestand für Filtertreffer, Messung |
+| FP-04 | ausreichend | WA-09 | E-W5 | nein | Pinnwand-Altleser, Messung mit 200 Karten |
+| FP-05 | ausreichend | – | E-W5 | nein | Treffer-/Fallen-Fixture |
+| FP-06 | ausreichend; Austauschweg geprüft (`instructions` vorhanden, Erstellen nur über Stufe 1) | – | E-W3 | nein | Musterantworten je Auftrag, beide Stufen |
+| FP-07 | Stufe 1 ausreichend | gemeinsame Markdown-Regeln mit Paket 6 | E-W5 | nein | Showcase-Rundlauf, Linkauflösung, Canvas-Schema |
+
+**Sofort nach Auswahl umsetzbar:** FP-00, FP-05, FP-06, WA-12. **Nach kleinem Extrakt:** FP-01. **Erst vollständig spezifizieren:** Bedienentwurf für Stufe 2 von FP-03. Keine produktive Komponente wird vor einer Auswahl verändert.
+
+### 16.9 QA-Strategie für die Vorschläge
+
+Es gelten Prüfplan, §15.3 und §15.8 unverändert: Tk-freie Unit-Tests (D17), Pflichtsuite mit roter Gegenprobe gegen die Vorversion, eingefrorene Mac-Vollprüfung, native Linux-/Windows-Matrix (D35/D42), Mindestgröße, große Schrift, hell und dunkel, Tempo nach §10, Altleser-Kindprozess bei jedem Formatschnitt, Menschenabnahme getrennt (I6). Zusätzlich aus dieser Analyse:
+
+1. **Vorwärtsverträglichkeit** als fester Test ab WA-09: Die Vorversion öffnet einen Einstellungsstand mit Zukunftsfeldern und schreibt ihn verlustfrei zurück.
+2. **Unabhängige Referenzwerte** für Wiederholungstermine (Tabelle aus getrennter Rechnung, nicht aus dem Code unter Test).
+3. **Bytevergleich im Rundlauf** Rückgängig → Wiederholen.
+4. **Statischer Netzwerktest** für KI-nahe Module (keine `urllib`-/`socket`-Nutzung ohne Entscheidung).
+5. **Ausgabevalidierung:** Linkauflösung im Markdown-Ordner, JSON-Canvas-Schema, unveränderter Datenordner.
+6. **Fallenlisten für die Schnelleingabe:** Jede Eingabe wird ganz oder gar nicht gedeutet; die Proben aus `probe_wiederholung.py` sind Ausgangsbestand.
+7. **Gegenrechnung statt Selbstbestätigung:** Terminfolgen und RRULE-Abbildungen gegen `gegenprobe_rrule.py` bzw. eine Referenztabelle prüfen.
+
+### 16.10 Vorprüfungen zur Umsetzungsreife (13.10.2026)
+
+Nur lesend, ohne Tk-Fenster, am Lieferstand `7995ecbc…`; Werkzeuge und Ergebnisse im [Nachweis](../01_Repository/Glide/tests/qa-3.39.0/wettbewerbsanalyse_2026-10-13/README.md).
+
+| Prüfung | Ergebnis | Folge |
+|---|---|---|
+| Unabhängige Gegenrechnung von `ics_recurrence.dates` (`gegenprobe_rrule.py`, eigenständige Tag-für-Tag-Abtastung nach RFC 5545) | 11.192 zufällige Regel-/Startkombinationen aus drei Reihen ohne Abweichung; Randfall UNTIL vor DTSTART liefert keinen Termin (Auslegungsfrage) | Rechner ist tragfähige Grundlage für FP-02 (AE-2); 3.39.0-Belegzeiten zusätzlich bestätigt |
+| Wiederholungsangaben der Schnelleingabe (`probe_wiederholung.py`) | Teilerkennung oder Fehldeutung in 10 von 14 Proben, Details A29 | Fehler → FP-00 (WA-18) |
+| Glide-Folge gegen ICS-Ausgabe | 4 von 5 Monatsende-/Schaltjahrproben weichen ab, der Korrekturvorschlag stimmt in 5 von 5 | Fehler → FP-00 (WA-17) |
+| Rückgängig-Inventar für FP-01 | 38 Aufrufe `snapshot_undo`, 32 direkte Stapeleingriffe in 31 Methoden, Zustellbelege ohne Rückgängig-Punkt | Gültigkeitsregel mit Schreibzähler statt Einzeleingriffen |
+| Einstellungsnormalisierung für FP-03/FP-04 | oberste Ebene bleibt erhalten, innerhalb bekannter Strukturen nicht (A27) | FP-03 ohne WA-09; WA-09 nur vor FP-04 |
+| Austauschweg für FP-06 | `instructions` vorhanden; Stufe 2 nur Überarbeiten; Stufe 1 meldet unbekannte Wurzelfelder | kein Formatwechsel; Aufträge nach Stufe getrennt |
+
+**Geprüfte Beispieltabelle der Eingabesprache für FP-02** (Regel mit `ics_recurrence.parse_rule` akzeptiert, erste Termine ab Dienstag 13.10.2026 gerechnet):
+
+| Eingabe | Regel | Erste Termine |
+|---|---|---|
+| alle 2 Monate | `FREQ=MONTHLY;INTERVAL=2` | 13.10., 13.12.2026, 13.02.2027 |
+| alle 3 Monate am 15. | `FREQ=MONTHLY;INTERVAL=3;BYMONTHDAY=15` | 15.10.2026, 15.01., 15.04.2027 |
+| jedes Quartal | `FREQ=MONTHLY;INTERVAL=3` | 13.10.2026, 13.01., 13.04.2027 |
+| alle 2 Jahre | `FREQ=YEARLY;INTERVAL=2` | 13.10.2026, 13.10.2028 |
+| alle 2 Wochen montags und donnerstags | `FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,TH` | 15.10., 26.10., 29.10.2026 |
+| am zweiten Dienstag im Monat | `FREQ=MONTHLY;BYDAY=2TU` | 13.10., 10.11., 08.12.2026 |
+| jeden ersten Montag im Monat | `FREQ=MONTHLY;BYDAY=1MO` | 02.11., 07.12.2026, 04.01.2027 |
+| letzten Freitag im Monat | `FREQ=MONTHLY;BYDAY=-1FR` | 30.10., 27.11., 25.12.2026 |
+| am Monatsende | `FREQ=MONTHLY;BYMONTHDAY=-1` | 31.10., 30.11., 31.12.2026 |
+| letzter Werktag im Monat | `FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-1` | 30.10., 30.11., 31.12.2026 |
+| erster Werktag im Monat | `FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=1` | 02.11., 01.12.2026, 01.01.2027 (Feiertag; Werktag = Mo–Fr) |
+| wöchentlich, 10 Termine | `FREQ=WEEKLY;COUNT=10` | 13.10., 20.10., 27.10.2026 |
+
+„Ab Erledigung“ und „pausieren“ sind keine RRULE-Teile; sie werden als eigene Felder neben der Regel geführt (FP-02 Stufe 2).

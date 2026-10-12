@@ -1,12 +1,12 @@
 # Architektur – Glide
 
-Stand 12.10.2026 · Glide 3.39.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
+Stand 13.10.2026 · Glide 3.39.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
 
 Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, Performance-Regeln und die teuer gelernten Tk-Fallstricke. Zusammengeführt aus Architektur, Projektübergabe, Entwicklungsnotizen und den technischen Teilen der Funktionsverträge 45–79 (03.10.2026); die Vorfassungen trägt Git. Verhalten der Funktionen: [Funktionen](20_FUNKTIONEN.md). Datenformat: [Daten und Migration](06_DATA_BACKUP_MIGRATION.md).
 
 ## 1. Aufbau
 
-- **Laufzeit:** Python 3.14 mit Tk 9 ist die Referenz. Aktuell geprüft: Referenz-Mac 3.35.0 mit Python 3.14.5/Tk 9.0.3 (automatische Vollprüfung, Bundle 3.35.0) und Windows 3.33.18 mit Python 3.14.7/Tk 9.0.4; Linux und menschliche Abnahme offen ([QA-Bericht](07_QA_BERICHT.md)). Python 3.12/3.13 mit Tk 8.6 starten, sind aber eingeschränkt: keine `nsimage`- und SVG-Vorschauen, keine Systemmitteilungen über `tk sysnotify`, Logo nur als ungeglättete Fläche, App-Symbol ungefiltert verkleinert; Herkunftszelle in Heute ohne eigene gedämpfte Textfarbe. Ältere Laufzeiten (Python vor 3.12, Tk vor 8.6) weist `runtime_check.py` seit 3.33.20 vor jedem Datenzugriff mit einer Meldung ab (AB08).
+- **Laufzeit:** Python 3.14 mit Tk 9 ist die Referenz. Referenz-Mac mit Python 3.14.5/Tk 9.0.3, native Windows-Prüfung mit Tk 9.0.4, Linux/Xvfb mit Tk 8.6; welche Version auf welcher Plattform automatisch vollgeprüft ist, steht ausschließlich im [QA-Bericht](07_QA_BERICHT.md). Menschliche Abnahme offen. Python 3.12/3.13 mit Tk 8.6 starten, sind aber eingeschränkt: keine `nsimage`- und SVG-Vorschauen, keine Systemmitteilungen über `tk sysnotify`, Logo nur als ungeglättete Fläche, App-Symbol ungefiltert verkleinert; Herkunftszelle in Heute ohne eigene gedämpfte Textfarbe. Ältere Laufzeiten (Python vor 3.12, Tk vor 8.6) weist `runtime_check.py` seit 3.33.20 vor jedem Datenzugriff mit einer Meldung ab (AB08).
 - **Kanonischer Quellbaum:** `src/glide/`. `app.pyw` enthält die Klasse `ListApp`, die Daten, Ansichten und Dialoge koordiniert. Seit D17 entsteht jede neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests unter `tests/unit`; `ListApp` ruft sie auf.
 - **Startbare Kopie:** `07_Python-Versionen` (bytegleich zu `src/glide`, `glide_start.py` heißt dort `Schnellstart.pyw`) und das macOS-Entwicklungsbundle `build/macos/Glide.app` (lokal, nicht versioniert). Beide entstehen nur in einer Produktionsrunde über `scripts/pflege/abgleich_07.py` und `packaging/macos/baue_app.py` mit SHA-256-Abgleich.
 - **Keine Laufzeitabhängigkeit** außer der Standardbibliothek. Einzige mitgelieferte Bibliothek: tkinterdnd2 unter `src/glide/vendor` (optional, beim ersten Ziehen aus Finder/Explorer geladen; [Entscheidung](decisions/ABHAENGIGKEIT_TKDND.md)).
