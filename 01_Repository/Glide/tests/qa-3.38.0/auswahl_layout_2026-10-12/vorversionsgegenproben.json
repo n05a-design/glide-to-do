@@ -1,0 +1,32 @@
+{
+  "suite_sha256": "e9fc12fd72dcc55019838a9aa69b1d12d1d38d7c9b0d4c66ca324c79ae4bbc68",
+  "app_sha256": "15c006ecb5ee11b10a913891290cb0619200888f021254e7710ae6db1c17530f",
+  "vorversion": "3.37.0",
+  "vorversion_commit": "0e7b3583a9d7a53925e0b67053895718bbd1c6b6",
+  "gegenproben": [
+    {
+      "fall": "inspektor",
+      "exitcode": 1,
+      "beobachtung": "Gemeinsamer Aufgabeninspektor fehlt",
+      "passend_rot": true
+    },
+    {
+      "fall": "klicks",
+      "exitcode": 1,
+      "beobachtung": "Direkte Aufgabenfeldbearbeitung fehlt",
+      "passend_rot": true
+    },
+    {
+      "fall": "bewegung",
+      "exitcode": 1,
+      "beobachtung": "Unterbrechbare Aufgabenübergänge fehlen",
+      "passend_rot": true
+    },
+    {
+      "fall": "flaeche",
+      "exitcode": 1,
+      "beobachtung": "15 Prozent überschritten",
+      "passend_rot": true
+    }
+  ]
+}

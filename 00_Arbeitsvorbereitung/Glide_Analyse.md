@@ -1,6 +1,6 @@
 # Glide – Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung
 
-Stand 11.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · Analyse vom 08.10.2026, fortgeschrieben am 10.10.2026 nach Paket 1 (Code, Dokumente, Git-Historie, Mac-/Linux-/Windows-Volläufe)
+Stand 12.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · Analyse vom 08.10.2026, fortgeschrieben am 12.10.2026 nach Paket 2 und während der Paket-3-Neuabnahme (Code, Dokumente, Git-Historie, Plattformnachweise)
 
 Bestandsaufnahme im Auftrag vom 08.10.2026: lokale Ablage untersuchen, Dokumentation und Code abgleichen, daraus den Sprint ableiten. Dieses Dokument trägt die **Analyse** (Funktions-, Oberflächen-, Entscheidungs- und Nutzungsanalyse sowie den Abgleich Dokumentation ↔ Code). Der Wettbewerb steht in [Markt und Vorbilder](Glide_Markt_und_Vorbilder.md), die Entscheidungen selbst in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), die daraus abgeleiteten Aufgaben ausschließlich im [Entwicklungsplan, Abschnitt 14](Glide_Entwicklungsplan.md#14-sprint-ab-08102026-aufgabenkatalog). Erledigte Befunde werden hier als erledigt markiert, nicht gelöscht, bis die nächste Analyse sie ersetzt.
 
@@ -16,6 +16,8 @@ Bestandsaufnahme im Auftrag vom 08.10.2026: lokale Ablage untersuchen, Dokumenta
 | Git | Arbeitsstand 3.33.9–3.35.0 am 09.10.2026 eingecheckt (Commit `6098877` auf `claude/glide-3.33.15`); die Dokumentationscommits aus `main` (PR #15) waren am 08.10.2026 per Drei-Wege-Abgleich übernommen | [Code] |
 | Laufzeit auf dem Referenz-Mac | Python 3.14.5 (python.org) mit Tk 9.0.3; python.org führt inzwischen 3.14.8 (30.09.2026) | [Code], [Mac] |
 
+**Sprintfortsetzung 12.10.2026:** Der Tabellenbestand oben bleibt die datierte 3.35.0-Baseline. Fundament/Tempo 3.36.0 und Logo/Symbole 3.37.0 sind inzwischen mit Mac-/Linux-/Windows-Vollprüfungen geliefert. Der Tk-8.6-Logorückfall samt App-Symbolen und Systemzeichen ist damit umgesetzt; Sicht-/DPI-Abnahme bleibt getrennt. Der Quellstand 3.38.0 enthält 42 Code-Dateien, 85 Integrationssuiten und 294 Unit-Tests sowie gemeinsamen Inspektor, direkte Felder, Textstufen und Übergänge. Paket 3 bleibt nach korrigierten nativen Auswahl-/Windows-Menübefunden in Neuabnahme; keine frühere grüne Vollprüfung wird auf den neuen Hash übertragen. Gewählte Folgepakete und Stufen stehen in [Plan §15.7](Glide_Entwicklungsplan.md#157-bestätigter-gesamtplan-acht-produktionsversionen), Ergebnisse im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
+
 ## 2. Funktionsanalyse
 
 Vollständigkeit: **●** im Alltag vollständig nutzbar · **◐** nutzbar mit dokumentierter Lücke · **○** fehlt. „Plattform“ meint die zuletzt automatisch geprüften Systeme.
@@ -25,16 +27,16 @@ Vollständigkeit: **●** im Alltag vollständig nutzbar · **◐** nutzbar mit 
 | Erfassen | Schnelleingabe mit Feldchips (D01/D10), Wiederholungen, Erinnerung als Chip (3.33.20), „/“-Befehle, Labels, mehrzeiliges Einfügen auch in die Eingabezeile (3.33.20), „+“ und Umschalt+Enter | ● | – |
 | Heute und Planung | Heute/Demnächst (D14), Tagesbeginn/-abschluss, Tagesvorschlag, verfügbare Zeit, Einplanen, Zeitblöcke mit Tastatur, Fokus, Wochenkalender, Routinen (3.33.20) | ● | automatische Tageshinweise (AU03, E-S3); Termine als belegte Zeit (AU07, E-S8) |
 | Wiederholungen | Regeln täglich … jährlich, Enddatum, Anker gegen Monatsende-Drift; Termin und verpasste Termine überspringen (3.33.20) | ● | – |
-| Listen, Tabelle, Board | Gruppierung inkl. Eisenhower, Auswahlleiste, Tabellenspalten, Detailbereich, zuletzt benutzte Ziele (3.33.20) | ● | Inspektor statt Maske + Detailbereich (N05/KO04, E-S2) |
+| Listen, Tabelle, Board | Gruppierung inkl. Eisenhower, Auswahlleiste, Tabellenspalten, gemeinsamer Inspektor und direkte Felder im Quellstand 3.38.0, zuletzt benutzte Ziele (3.33.20) | ● | N05/KO04 implementiert; Paket-3-Abnahme offen |
 | Pinnwand | frei/geordnet/Spaltenboard, Bereiche, Verbindungen, Präsentation, eine Werkzeugzeile (3.33.21), Tastaturwege mit Hinweis (3.34.0) | ● | – |
 | Seiten und Notizen | Block-Editor, Bilder ohne Überlappung und in Druck/Markdown (3.34.0), Aufgaben mit Original-ID, Verweise/Rückverweise, Live-Listen, Titelbild, Seitentitel im Dokument (3.33.21) | ● | – |
 | Suche | gemeinsame Palette für Inhalte und Aktionen, Treffer im Dokument markiert (3.34.0), erklärte gespeicherte Filter (3.34.0); 66,6 ms bei 10.000 Punkten | ● | – (FTS5 nach Messung nicht nötig) |
 | Erinnerungen | fest/relativ, Zustellbeleg, Systemmitteilung (Option) bei laufender App | ● | Zustellung bei geschlossener App bewusst nicht (N09) |
 | Pixel-Werkstatt | 16–128 Zellen, Werkzeuge, Paletten mit Umfärben und Vorschau (3.35.0), ICO mit Symbolvorschau (3.35.0), PNG/SVG/JSON, Pixelsymbol | ◐ | Animation (G17, E-S1/D07) |
 | Austausch | CSV, Markdown mit Bildern, ICS, `.glidepage`, Backups, KI-Austausch Stufe 1 und 2 (3.35.0), Sicherungen vergleichen (3.35.0) | ◐ | erste Fremdquelle (G21, E-S4) |
-| Erscheinungsbild | zehn Designs, „Automatisch hell/dunkel“ (3.33.21), neutrale aktive Rolle, schmale Seitenleiste, berechneter Kontrast, Mindestgröße 860 × 700 | ◐ | Hierarchie und Zeilenaktionen nach Referenzentwürfen (OB02/OB03, E-S2); Bewegung (OB04, E-S8) |
+| Erscheinungsbild | zehn Designs, „Automatisch hell/dunkel“ (3.33.21), neutrale aktive Rolle, schmale Seitenleiste, berechneter Kontrast, Mindestgröße 860 × 700 | ◐ | Hierarchie, Zeilenaktionen und Bewegung im Quellstand 3.38.0 umgesetzt; erneute Paketabnahme offen |
 | Hilfe | Handbuch, Kürzel, einklappbare Hinweise (D11), Showcase/Rundgang, Karte „Neu in Glide“ (3.33.20) | ● | – |
-| Betrieb | Formatschutz bis Format 23, Vorsicherungen, Sperrdatei, Sicherungen nur bei Änderung, Mindestversion beim Start (3.33.20), Linux-JPEG-Vorschau mit Systemwerkzeug (3.34.0) | ◐ | Paket mit eigenem Python (G26, E-S5); Logo unter Tk 8.6 (E-S6) |
+| Betrieb | Formatschutz bis Format 23, Vorsicherungen, Sperrdatei, Sicherungen nur bei Änderung, Mindestversion beim Start (3.33.20), Linux-JPEG-Vorschau mit Systemwerkzeug (3.34.0) | ◐ | Paket mit eigenem Python (G26, S26-10); Logo/Symbole mit 3.37.0 automatisch geprüft, menschliche Sichtabnahme offen |
 | Tempo | Abhaken 17/61/118 ms bei 1.000/5.000/10.000 Punkten, Bildlayout, einmal schreiben/aufbauen, unveränderte Startseite 0,3 ms (3.33.19) | ◐ | 3.36.0: Startseite direkt kalt 266/282 ms, warm 75/88; Einstellungen zuerst 175/178 ms, erneut 134/140; akzeptierte Ausnahmen D46/D47, Kindprozessserie getrennt im QA-Nachweis |
 
 ## 3. Abgleich Dokumentation ↔ Implementierung

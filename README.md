@@ -8,10 +8,11 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 
 ## Stand
 
-- **Entwicklungsstand 3.38.0 vom 09.10.2026**, Datenformat 23; keine veröffentlichte oder signierte Releasefassung.
-- **Zuletzt geliefert (Sprint 08./09.10.2026):** Tempo (3.33.19), Komfort im Alltag (3.33.20), ruhige Oberfläche mit hell/dunkel nach System (3.33.21), Wissen und Seiten mit Bildern in Druck und Markdown, markierten Fundstellen und erklärten Filtern (3.34.0) sowie Pixel und Austausch mit geprüften KI-Änderungsvorschlägen und Sicherungsvergleich (3.35.0). Jede Version ist auf dem Referenz-Mac automatisch vollständig geprüft und bytegleich nach `07_Python-Versionen` geliefert; Windows zuletzt 3.33.18. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
-- **Offen:** Lizenz, Signatur, Markenprüfung, Store, Windows-Prüfung des aktuellen Stands und die manuelle Abnahme unter Windows, Linux, DPI-Skalierung und Bildschirmleser.
-- **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe und den offenen Entscheidungen des Inhabers; Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
+- **Entwicklungsstand 3.38.0 vom 12.10.2026**, Datenformat 23; Aufgabenoberfläche in erneuter Abnahme. Dies ist eine Entwicklungsfassung.
+- **Zuletzt vollständig automatisch geliefert:** Fundament/Tempo 3.36.0 und Logo/Symbole 3.37.0; eingefrorene Mac-Vollprüfung sowie native Linux-/Windows-Matrix grün, 07/Showcase/Bundle abgeglichen und Mac-Signaturen geprüft. Der vorherige Sprint 3.33.19–3.35.0 ist abgeschlossen. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
+- **Kandidat 3.38.0:** gemeinsamer Inspektor, direkte Felder, ruhigere Zeilenaktionen und unterbrechbare Rückmeldungen. Nach nativen Auswahl-/Windows-Layoutbefunden korrigiert; gezielte Windows-Layoutwiederholung grün. Neuer eingefrorener Mac-Volllauf und Linux-Wiederholung sind grün; vollständige Windows- und Tempoabnahme stehen noch aus. Der derzeitige 07-/Bundlestand gehört zum vorherigen Kandidathash und wird erst nach neuer Abnahme ersetzt.
+- **Offen:** verbleibende bestätigte Sprintpakete, manuelle Bedien-/DPI-/Mehrmonitor-/Screenreaderabnahme sowie die gesonderten Veröffentlichungstore (u. a. Lizenz, öffentliche Signatur und Marke).
+- **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe; bestätigte Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 
 ## Schnellstart
 
@@ -58,7 +59,7 @@ Verhalten im Einzelnen: [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md).
 
 ## Qualität und Sicherheit
 
-- **Glide-Prüfung** (`.github/workflows/python-app.yml`): CI-Grundstufe unter Linux. Die Integrationssuiten unter Linux lassen sich zusätzlich von Hand starten; maßgeblich bleibt die Vollprüfung auf dem Mac.
+- **Glide-Prüfung** (`.github/workflows/python-app.yml`): verpflichtende Grundstufe sowie vollständige Linux-/Windows-Prüfmatrix. Jede Lieferung erhält zusätzlich ihre eingefrorene Mac-Vollprüfung. Gezielte Diagnoseläufe ersetzen keine Vollmatrix; menschliche Bedien- und Readerabnahmen bleiben getrennt.
 - **CodeQL:** `.github/workflows/codeql.yml` liegt bereit, ist aber seit 01.10.2026 vom Inhaber deaktiviert. Wieder einschalten unter *Actions → CodeQL → Enable workflow*, nie zusammen mit der CodeQL-Standardeinrichtung.
 - **Dependabot:** schlägt wöchentlich Aktualisierungen der verwendeten GitHub Actions vor.
 - **Secret Scanning:** aktiv; Schlüssel, Zertifikate und Signing-Secrets gehören nie ins Repository.

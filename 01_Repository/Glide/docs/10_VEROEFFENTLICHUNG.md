@@ -1,15 +1,17 @@
 # Veröffentlichung – Glide
 
-Stand 11.10.2026 · Glide 3.38.0 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 23
+Stand 12.10.2026 · Glide 3.38.0 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 23
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
-**Je Version (erfüllt bis 3.33.6 und wieder seit 3.33.18; 3.33.7–3.33.17 nur unter Windows ohne Bundle):**
+**Je Version (zuletzt vollständig geliefert 3.37.0; 3.38.0 in erneuter Abnahme):**
+
+Die Haken beschreiben den zuletzt abgeschlossenen Lieferstand. Für den aktuellen Kandidaten gelten die offenen Schritte im [QA-Bericht](07_QA_BERICHT.md); ein früherer grüner Bundlebeleg ist keine Abnahme des geänderten Codes. Historisch wurden bis 3.33.6 und wieder seit 3.33.18 Mac-Bundle und Python-Fassung geliefert; 3.33.7–3.33.17 nur unter Windows ohne Bundle.
 
 - [x] VERSION, `APP_VERSION`, Hauptsuite und CHANGELOG gleich; Datenformat geprüft.
-- [x] Vollprüfung Exitcode 0 auf dem Referenz-Mac; Ergebnis im [QA-Bericht](07_QA_BERICHT.md).
+- [x] Eingefrorene Vollprüfung auf dem Referenz-Mac; seit D42 zusätzlich native Windows-Vollprüfung je Lieferung und seit D35 gesamte ausführbare Linux-Matrix, einschließlich passender Defektgegenproben. Ergebnisse getrennt im [QA-Bericht](07_QA_BERICHT.md).
 - [x] `07_Python-Versionen` und macOS-Entwicklungsbundle per SHA-256 gleich `src/glide`, Bundle `de.shaye.glide`, Ad-hoc-Signatur gültig; Showcase ausgeliefert.
 - [x] macOS-Paket enthält alle Module neben `app.pyw`, `resources` (Schriften mit Lizenztexten und `provenance.json`, Vorlagen, Logo) und `vendor/tkinterdnd2` mit Lizenz und nur den Bibliotheken der Zielplattform.
 - [x] Kennungen `de.shaye.glide` und `Shaye.Glide` festgelegt (26.09.2026); echtes Programmsymbol aus dem Logo-Master (`assets/icons`).
@@ -18,7 +20,7 @@ Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierun
 **Vor der ersten Veröffentlichung (offen):**
 
 - [ ] Manuelle Prüfung auf macOS und Windows nach der [Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md), einschließlich Windows-Vollprüfung mit `tests/tools/windows_vollpruefung.cmd`.
-- [ ] Release-Build mit eingebettetem Python 3.14 und Tk 9 je Plattform (D15, G26); Bauwerkzeug als eigene Abhängigkeitsentscheidung (Vorschlag: PyInstaller ab 6.22, gepinnt, Spezifikationsdatei).
+- [ ] Eigenständige Pakete mit Python 3.14 und Tk 9 für macOS arm64 und Windows x64 (D15/D27, S26-10): PyInstaller 6.22.3 ist als ausschließlich zum Bauen verwendete Abhängigkeit entschieden. Umsetzung und native Start-/Ressourcen-/Lizenzprüfung sind in Paket 7 beauftragt; aktuelle Entwicklungsbundles benötigen weiterhin externes Python.
 - [ ] Developer-ID-Signatur und Notarisierung (macOS), Code-Signing und Installer (Windows, Inno Setup); tkDnD-Bibliothek mit signieren ([Entscheidung](decisions/ABHAENGIGKEIT_TKDND.md)).
 - [ ] Windows-Verknüpfung mit AppUserModelID prüfen (`packaging/windows/verknuepfung_anlegen.ps1`); Hintergrundverläufe unter Windows ohne Bildreste.
 - [ ] Clean-Machine-Test, Gatekeeper/SmartScreen, Update über eine vorhandene Installation, Datenordner in einem Cloudordner.
@@ -59,6 +61,8 @@ Stand am 06.10.2026, über die GitHub-Schnittstelle abgerufen:
 | Prüfungen | „Glide-Prüfung“ (CI-Grundstufe), Dependabot; CodeQL-Workflow deaktiviert; die KI-Codeprüfung „github-advanced-security“ scheiterte am 03.10.2026 am aufgebrauchten Monatskontingent |
 | Funktionen | Issues (keine offen), Wiki und Projects eingeschaltet; Discussions und Pages aus |
 | Größe | rund 510 MB laut GitHub, überwiegend Git-Historie |
+
+Der datierte GitHub-Abruf oben bleibt ein historischer Befund. Eigener Prüfstand am 12.10.2026: verpflichtende Linux-/Windows-Vollmatrix ist eingerichtet, Einzelstände im QA-Bericht. Der öffentliche Auftritt und die übrigen Veröffentlichungstore bleiben nach D43 gesondert offen.
 
 **Empfehlungen** (nicht entschieden, I11):
 

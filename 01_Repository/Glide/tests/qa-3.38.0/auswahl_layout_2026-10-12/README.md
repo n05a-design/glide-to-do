@@ -28,9 +28,10 @@ vorhandenen Alt-Bindungen. Die 15-Prozent-Grenze bleibt unverändert.
 
 [Gezielte Kontrollen](gezielte_proben.json) am oben genannten Hash grün:
 Hauptsuite, vollständige Aufräumsuite sowie passende rote Defektkopien für
-Mehrfachauswahl und separate Windows-Menüzeile. Native Windows-Wiederholung,
-neue eingefrorene Mac-Vollprüfung und abschließender
-07-/Showcase-/Bundleabgleich bleiben Pflicht und werden am tatsächlichen Hash nachgetragen. Menschenabnahme bleibt getrennt.
+Mehrfachauswahl und separate Windows-Menüzeile. Die neue Mac-Vollprüfung
+und die gezielte native Windows-Wiederholung sind inzwischen grün (unten).
+Vollständige Windows-Abnahme, Tempoabschluss und neuer
+07-/Showcase-/Bundleabgleich bleiben offen. Menschenabnahme bleibt getrennt.
 Rohprotokolle und eigene Fensterbilder bleiben außerhalb OneDrive und Git.
 
 Die isolierte [Kandidat-Grundstufe](kandidat_grundstufe.json) ist grün.
@@ -41,3 +42,23 @@ Originalpaketabruf meldet den bekannten SSL-Zertifikathinweis.
 Nach Übernahme des Remote-Merges b34cbd7/main 42e6c35 ist die
 [erneute Grundstufe](grundstufe_nach_main.json) ebenfalls grün; App unverändert.
 Die Main-Ergänzung enthält Projekt-Skill/Standprüfwerkzeug, keine App-Funktion.
+
+Die [native Windows-Wiederholung](windows_layout.json) am Kandidatcommit
+034662d besteht alle 36 Layoutkombinationen einschließlich der Menüknöpfe.
+Lauf 38213138878 ist vollständig beendet, Ergebnis grün. Dies ist eine
+gezielte Layoutprüfung; die vollständige native Matrix bleibt erforderlich.
+
+Neue [Mac-Vollprüfung](mac-voll.json) grün: 102 ausgeführt/zwei übersprungen,
+85 Suiten/294 Unit-Tests; alle 885 eingefrorenen Dateien unverändert.
+[Vier aktuelle Vorversionsgegenproben](vorversionsgegenproben.json) gegen
+den gelieferten 3.37.0-Commit passend rot. [Bewegung](bewegung.json) und
+[sechs tatsächlich betrachtete eigene Fenster](fensterbeurteilung.json)
+am selben Hash neu belegt; menschliche Bedienung bleibt getrennt.
+
+Main-Merge PR #19 (029b821) ist bytegleich zum Kandidatcommit 034662d.
+Seine native Matrix 38213392543 bestätigt bereits [Linux](linux-voll.json)
+und [alle 18 Defektgegenproben](linux-defektgegenproben.json); Windows läuft.
+Die [Tempo-Diagnose](tempo.json) enthält beide Grenzbefunde und den
+Vergleich mit dem unveränderten bisherigen Kandidaten. Nach Ende der Matrix
+ist eine serielle Abschlussmessung nötig; D47 wird nicht still gelockert.
+Lieferabgleich/Bundle und strenge Liefer-CI bleiben offen.
