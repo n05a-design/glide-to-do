@@ -1,6 +1,6 @@
 # Arbeitsrichtung, Entscheidungen und Abnahme
 
-Stand 12.10.2026 · Glide 3.39.0 · Aufgabenformat 23
+Stand 13.10.2026 · Glide 3.39.0 · Aufgabenformat 23
 
 Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Entscheidungsvorlage vom 01.10.2026 und den Entscheidungslisten vom 25.–30.09.2026 zusammengeführt; deren Wortlaut trägt Git. Am 06.10.2026 um die Leitgedanken des Inhabers aus dem nicht übernommenen Richtungsentwurf vom 03.10.2026 ergänzt. Aufgabenstand und Reihenfolge: [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Technische Regeln: [Architektur](02_ARCHITECTURE.md).
 
@@ -38,7 +38,7 @@ Wortlaute stehen in Anführungszeichen, alles andere ist Zusammenfassung. Was da
 
 ## Verbindliche Entscheidungen
 
-Neue Entscheidungen werden fortlaufend mit Datum und Wortlaut der Antwort eingetragen; nächste freie Nummer D49.
+Neue Entscheidungen werden fortlaufend mit Datum und Wortlaut der Antwort eingetragen; nächste freie Nummer D50.
 
 | Nr. | Entscheidung | Stand |
 |---|---|---|
@@ -92,6 +92,8 @@ Neue Entscheidungen werden fortlaufend mit Datum und Wortlaut der Antwort einget
 | D47 | **10.10.2026, E01-Warmgrenze für Paket 1:** erneutes Öffnen der Einstellungen mit Median ≤ 150 ms und p95 ≤ 170 ms akzeptiert; erste Anzeige weiterhin ≤ 250 ms, sämtliche Funktionen unverändert. Vorgelegte endgültige Kandidatenmessung: direkt warm Median/p95 149/155 ms, Kindprozess 149/161 ms, höchster Einzelwert 164 ms; erste Anzeige p95 198 ms. Wortlaut: „A – 150 ms Median / 170 ms p95 akzeptieren (Empfehlung)“. | Ausnahme akzeptiert und in 3.36.0 eingehalten; aktuelle p95-Grenze seit 12.10.2026 nach D48; Menschenabnahme getrennt offen |
 
 | D48 | **12.10.2026, E01-Tempoabschluss für Paket 3:** Einstellungen warm weiterhin Median ≤ 150 ms, künftig p95 ≤ 190 ms; erste Anzeige weiterhin ≤ 250 ms, Funktionsumfang unverändert. Die neue p95-Grenze ersetzt für den weiteren Sprint die bisherige Grenze 170 ms aus D47; historische Messungen und Entscheidungen bleiben unverändert. Vorgelegte serielle Abschlussmessung ohne parallele Prüfungen: fünf frische direkte Prozesse mit je 40 Wiederholungen, warm 146,85 ms Median/179,59 ms p95, höchster Einzelwert 189,45 ms; erste Anzeige p95 203,90 ms. Startseite kalt p95 272,71 ms, warm 73,52/79,67 ms innerhalb D46. Privater Versuch mit abgeschalteter eigener macOS-Fensteranimation ohne Gewinn, keine Produktänderung daraus. Wortlaut: „A – Median 150 ms / p95 190 ms akzeptieren (Empfehlung)“. | akzeptiert; Tempoabschluss und Mac/Linux/Windows-Vollmatrix grün, Menschen-/DPI-Abnahme getrennt offen |
+
+| D49 | **13.10.2026, Fortsetzungsauftrag:** Nach Vorlage der Wettbewerbsanalyse und der Entscheidungsvorlagen E-W1–E-W7 ([Entwicklungsplan §16](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#165-entscheidungsvorlagen-für-den-inhaber)) antwortete der Inhaber zweimal „weiter“ und dann: „bitte immer weiter machen bis alles umgesetzt ist.“ **Auslegung durch Claude, nicht je Frage beantwortet:** Abschluss 3.39.0, die bestätigten Pakete 5–8 (D44) und die Vorschläge aus §16 jeweils mit der dort empfohlenen Option – E-W7 A (FP-00 als eigene Fehlerbehebung nach 3.39.0, vor Paket 5), E-W6 A (übrige Vorschläge nach 4.0.0), E-W1 A/V, E-W2 A/V, E-W3 A (kein lokaler KI-Endpunkt), E-W4 A/V, E-W5 FP-05 A/V, FP-04 A/V nach WA-09, FP-07 A/1. P3-Einträge mit Auslöser (◇) bleiben bis zum Auslöser offen. Jeder Widerspruch des Inhabers hat Vorrang; Veröffentlichungstore D43 bleiben gesondert offen, Menschen-/Readerabnahme getrennt. | in Umsetzung; Auslegung jederzeit korrigierbar |
 
 **Frühere Antworten, die weiter gelten:**
 

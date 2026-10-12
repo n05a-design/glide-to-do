@@ -2,11 +2,15 @@
 from datetime import date, datetime, timedelta, timezone
 import random
 import unittest
-from zoneinfo import ZoneInfo
 from occupied_time import Block, BlockIndex, grid_segments, local_interval, merged_intervals, utc, planning_slots
+import timezones
+
+# Mitgelieferte IANA-Daten statt Systemdatenbank: Windows bringt keine mit,
+# Glide selbst löst Zonen ebenfalls über timezones.Resolver auf.
+IANA = timezones.Resolver()
 
 UTC = timezone.utc
-BERLIN = ZoneInfo("Europe/Berlin")
+BERLIN = IANA("Europe/Berlin")
 
 
 class GridTests(unittest.TestCase):
@@ -59,7 +63,7 @@ class GridTests(unittest.TestCase):
         self.assertEqual(sum((part.end-part.start).total_seconds() for part in parts), 3600)
 
     def test_half_hour_dst_transition_and_boundary_exactly_at_end(self):
-        zone = ZoneInfo("Australia/Lord_Howe")
+        zone = IANA("Australia/Lord_Howe")
         block = Block(datetime(2026, 4, 5, 1, 45, tzinfo=zone, fold=0),
                       datetime(2026, 4, 5, 1, 45, tzinfo=zone, fold=1))
         parts = grid_segments((block,), date(2026, 4, 5), zone)

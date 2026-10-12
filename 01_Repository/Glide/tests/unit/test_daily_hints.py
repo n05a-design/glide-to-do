@@ -3,7 +3,11 @@ import copy
 from datetime import datetime, timedelta, timezone
 import unittest
 import daily_hints as hints
-from zoneinfo import ZoneInfo
+import timezones
+
+# Mitgelieferte IANA-Daten statt Systemdatenbank: Windows bringt keine mit,
+# Glide selbst löst Zonen ebenfalls über timezones.Resolver auf.
+IANA = timezones.Resolver()
 
 
 def at(value):
@@ -81,7 +85,7 @@ class DailyHintTests(unittest.TestCase):
                          [("2026-10-10", "close", True), ("2026-10-11", "start", False)])
 
     def test_snooze_uses_elapsed_minutes_across_both_dst_changes(self):
-        berlin=ZoneInfo("Europe/Berlin")
+        berlin=IANA("Europe/Berlin")
         for day in ((2026,3,29),(2026,10,25)):
             hour=1 if day[1]==3 else 2
             now=datetime(*day,hour,55,tzinfo=berlin)
@@ -96,7 +100,7 @@ class DailyHintTests(unittest.TestCase):
             self.assertEqual(len(hints.collect_due(config,state,after)),1)
 
     def test_first_ambiguous_clock_is_due_during_second_occurrence(self):
-        berlin=ZoneInfo("Europe/Berlin")
+        berlin=IANA("Europe/Berlin")
         now=datetime(2026,10,25,2,15,tzinfo=berlin,fold=1)
         due=hints.collect_due(dict(enabled=True,start="02:30",close="23:59"),{},now)
         self.assertEqual([(h.kind,h.due.fold)for h in due],[("start",0)])
@@ -158,7 +162,7 @@ class DailyHintTests(unittest.TestCase):
                 hints.pending(self.config, state, self.now)
 
     def test_missing_spring_clock_moves_forward_without_double_delivery(self):
-        zone = ZoneInfo("Europe/Berlin")
+        zone = IANA("Europe/Berlin")
         config = dict(enabled=True, start="02:30", close="23:59")
         before = datetime(2026, 3, 29, 3, 29, tzinfo=zone)
         self.assertEqual(hints.collect_due(config, {}, before), ())

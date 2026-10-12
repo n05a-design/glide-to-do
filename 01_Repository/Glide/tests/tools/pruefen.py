@@ -320,13 +320,15 @@ class Prueflauf:
         else:
             self.meldung(name, "ausgeführt", reason)
 
-    def prozess(self, name, command, gui=False):
+    def prozess(self, name, command, gui=False, umgebung=None):
         if gui and self.gui_problem:
             self.meldung(name, "übersprungen", self.gui_problem)
             return False
+        # `umgebung` ergänzt einzelne Variablen nur für diesen Schritt.
+        env = self.env if umgebung is None else {**(self.env or os.environ), **umgebung}
         try:
             result = subprocess.run((self.gui_prefix if gui else []) + command,
-                                    cwd=REPO, env=self.env, capture_output=True,
+                                    cwd=REPO, env=env, capture_output=True,
                                     text=True, encoding="utf-8", errors="replace",
                                     timeout=self.timeout)
         except (OSError, subprocess.TimeoutExpired) as exc:

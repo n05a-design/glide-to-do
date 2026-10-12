@@ -1,9 +1,13 @@
 import unittest
 from datetime import datetime,timedelta,timezone
-from zoneinfo import ZoneInfo
 from ics_timezone import CalendarZone,Observance,offset,parse_zone
 import ics_recurrence as recurrence
 import ics_busy as ics
+import timezones
+
+# Mitgelieferte IANA-Daten statt Systemdatenbank: Windows bringt keine mit,
+# Glide selbst löst Zonen ebenfalls über timezones.Resolver auf.
+IANA = timezones.Resolver()
 
 UTC=timezone.utc
 class TimezoneTests(unittest.TestCase):
@@ -19,7 +23,7 @@ class TimezoneTests(unittest.TestCase):
         for value in ('-0000','+2400','+0060','+000060','0100'):
             with self.assertRaises(ValueError): offset(value)
     def test_all_2026_utc_instants_match_iana(self):
-        reference=ZoneInfo('Europe/Berlin')
+        reference=IANA('Europe/Berlin')
         instant=datetime(2026,1,1,tzinfo=UTC)
         while instant.year==2026:
             actual=instant.astimezone(self.zone);expected=instant.astimezone(reference)

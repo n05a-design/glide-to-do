@@ -1,11 +1,15 @@
 import unittest
 from datetime import date, datetime, timedelta, timezone
-from zoneinfo import ZoneInfo
 import occupied_time as busy
+import timezones
+
+# Mitgelieferte IANA-Daten statt Systemdatenbank: Windows bringt keine mit,
+# Glide selbst löst Zonen ebenfalls über timezones.Resolver auf.
+IANA = timezones.Resolver()
 
 class OccupancyTests(unittest.TestCase):
     def setUp(self):
-        self.zone = ZoneInfo("Europe/Berlin")
+        self.zone = IANA("Europe/Berlin")
         self.day = date(2026, 10, 10)
     def at(self, hour, minute=0):
         return datetime(2026, 10, 10, hour, minute, tzinfo=self.zone)

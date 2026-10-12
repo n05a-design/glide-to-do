@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import tempfile
+import time
 from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -120,10 +121,18 @@ with tempfile.TemporaryDirectory(prefix="glide-features329-") as folder:
         assert app.require_list_view(message=False) is False
         assert app.workspace.context() is None
         # Passt die Fläche hinein, gibt es nichts zu scrollen – keine Leisten,
-        # kein Verrutschen durch Trackpadgesten beim Zeichnen.
-        root.after(150, root.quit)
-        root.mainloop()
-        assert editor.canvas.xview() == (0.0, 1.0) and editor.canvas.yview() == (0.0, 1.0)
+        # kein Verrutschen durch Trackpadgesten beim Zeichnen. Das Einpassen
+        # läuft über verzögerte Aufträge (Kontextzeilen nach 120 ms, Zoom 30 ms
+        # danach); unter Last dauerte das länger als feste 150 ms (Windows-CI
+        # 3.39.0). Gewartet wird bis zum Ruhezustand, die Anforderung bleibt.
+        frist = time.monotonic() + 3.0
+        while True:
+            root.after(50, root.quit)
+            root.mainloop()
+            if editor.canvas.xview() == (0.0, 1.0) and editor.canvas.yview() == (0.0, 1.0):
+                break
+            assert time.monotonic() < frist, (editor.canvas.xview(), editor.canvas.yview(), editor.zoom,
+                                              editor.canvas.winfo_width(), editor.canvas.winfo_height())
         # Weder Tabelle noch Pinnwand: Die Seite bleibt die Zeichenfläche.
         app.set_table_view()
         app.workspace.set_mode("board")

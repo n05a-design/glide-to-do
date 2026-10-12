@@ -1,8 +1,12 @@
 from datetime import date, datetime, timedelta, timezone
 import unittest
-from zoneinfo import ZoneInfo
 import ics_busy as ics
 from ics_recurrence import dates, matches_start
+import timezones
+
+# Mitgelieferte IANA-Daten statt Systemdatenbank: Windows bringt keine mit,
+# Glide selbst löst Zonen ebenfalls über timezones.Resolver auf.
+IANA = timezones.Resolver()
 
 UTC=timezone.utc
 
@@ -77,7 +81,7 @@ END:VTIMEZONE
 """
         calendar=parse("UID:half\nDTSTART;TZID=Local/LordHowe:20260101T120000\nDURATION:PT1H",zones=zones)
         self.assertFalse(calendar.issues)
-        embedded=calendar.events[0].start.tzinfo;actual=ZoneInfo("Australia/Lord_Howe")
+        embedded=calendar.events[0].start.tzinfo;actual=IANA("Australia/Lord_Howe")
         moment=datetime(2026,1,1,tzinfo=UTC)
         while moment.year==2026:
             left,right=moment.astimezone(embedded),moment.astimezone(actual)

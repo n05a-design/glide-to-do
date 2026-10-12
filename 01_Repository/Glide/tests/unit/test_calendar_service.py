@@ -54,8 +54,8 @@ class ServiceTests(unittest.TestCase):
     def test_day_index_returns_local_day_only_without_losing_year_preview(self):
         self.path.write_text("BEGIN:VCALENDAR\nBEGIN:VEVENT\nUID:probe\nDTSTART:20261011T230000Z\nDURATION:PT1H\nEND:VEVENT\nEND:VCALENDAR\n")
         self.load()
-        from zoneinfo import ZoneInfo
-        zone = ZoneInfo("Europe/Berlin")
+        import timezones
+        zone = timezones.Resolver()("Europe/Berlin")  # mitgelieferte IANA-Daten (Windows ohne Systemdatenbank)
         self.assertEqual(self.service.view(DAY, zone).blocks, ())
         self.assertEqual(len(self.service.view(date(2026, 10, 12), zone).blocks), 1)
         self.assertEqual(len(self.service.windows[DAY.year].blocks), 1)
@@ -65,8 +65,8 @@ class ServiceTests(unittest.TestCase):
         self.path.write_text("BEGIN:VCALENDAR\nBEGIN:VEVENT\nUID:probe\nDTSTART:20251231T230000Z\nDURATION:PT1H\nEND:VEVENT\nEND:VCALENDAR\n")
         self.service.load(self.path, timezone.utc, date(2026, 1, 1))
         self.finish()
-        from zoneinfo import ZoneInfo
-        self.assertEqual(len(self.service.view(date(2026, 1, 1), ZoneInfo("Europe/Berlin")).blocks), 1)
+        import timezones
+        self.assertEqual(len(self.service.view(date(2026, 1, 1), timezones.Resolver()("Europe/Berlin")).blocks), 1)
         self.assertEqual(self.service.view(date(2026, 1, 1), timezone.utc).blocks, ())
         self.assertEqual(self.service.windows[2026].first, date(2026, 1, 1))
 

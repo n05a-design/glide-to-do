@@ -1,15 +1,19 @@
 import unittest
 from datetime import datetime, timedelta, timezone
-from zoneinfo import ZoneInfo
 import ics_busy as ics
 from occupied_time import utc
+import timezones
+
+# Mitgelieferte IANA-Daten statt Systemdatenbank: Windows bringt keine mit,
+# Glide selbst löst Zonen ebenfalls über timezones.Resolver auf.
+IANA = timezones.Resolver()
 
 class CalendarTests(unittest.TestCase):
     def setUp(self):
-        self.zone=ZoneInfo('Europe/Berlin')
+        self.zone=IANA('Europe/Berlin')
         self.start=datetime(2026,3,1,tzinfo=self.zone)
         self.end=datetime(2026,4,2,tzinfo=self.zone)
-    def parse(self,*events,resolver=ZoneInfo):
+    def parse(self,*events,resolver=IANA):
         text='BEGIN:VCALENDAR\r\nVERSION:2.0\r\n'+''.join('BEGIN:VEVENT\r\n'+event.replace('\n','\r\n')+'\r\nEND:VEVENT\r\n' for event in events)+'END:VCALENDAR\r\n'
         return ics.parse_calendar(text,self.zone,resolver)
     def expand(self,*events):
