@@ -8,9 +8,9 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 
 ## Stand
 
-- **Entwicklungsstand 3.38.0 vom 12.10.2026**, Datenformat 23; Aufgabenoberfläche in erneuter Abnahme. Dies ist eine Entwicklungsfassung.
-- **Zuletzt vollständig automatisch geliefert:** Fundament/Tempo 3.36.0 und Logo/Symbole 3.37.0; eingefrorene Mac-Vollprüfung sowie native Linux-/Windows-Matrix grün, 07/Showcase/Bundle abgeglichen und Mac-Signaturen geprüft. Der vorherige Sprint 3.33.19–3.35.0 ist abgeschlossen. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
-- **Kandidat 3.38.0:** gemeinsamer Inspektor, direkte Felder, ruhigere Zeilenaktionen und unterbrechbare Rückmeldungen. Nach nativen Auswahl-/Windows-Layoutbefunden korrigiert; gezielte Windows-Layoutwiederholung grün. Der vorige Korrekturstand besteht Mac/Linux, die vollständige Windows-Prüfung meldet noch drei Kopftextanschnitte. Eine weitere Titelzeilenkorrektur besteht die betroffenen Suiten im lokalen Windows-Menüpfad; neue Vollabnahme und Tempoabschluss stehen aus. Der derzeitige 07-/Bundlestand gehört zum vorherigen Kandidathash und wird erst nach neuer Abnahme ersetzt.
+- **Entwicklungsstand 3.38.0 vom 12.10.2026**, Datenformat 23; Aufgabenoberfläche automatisch geliefert. Dies ist eine Entwicklungsfassung.
+- **Zuletzt vollständig automatisch geliefert:** Aufgabenoberfläche 3.38.0, davor Fundament/Tempo 3.36.0 und Logo/Symbole 3.37.0. Eingefrorene Mac-Vollprüfung sowie native Linux-/Windows-Matrix grün; 07/Showcase/Bundle abgeglichen und Mac-Signaturen geprüft. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
+- **3.38.0:** gemeinsamer Inspektor, direkte Felder, ruhigere Zeilenaktionen, vier Textstufen und unterbrechbare Rückmeldungen. Auswahl-/Windows-Titelbefunde korrigiert und in der vollständigen nativen Matrix geprüft; Tempoausnahme D48 ausdrücklich angenommen. Quellbaum, 07 und Bundle tragen den geprüften Apphash bcdbc4da.
 - **Offen:** verbleibende bestätigte Sprintpakete, manuelle Bedien-/DPI-/Mehrmonitor-/Screenreaderabnahme sowie die gesonderten Veröffentlichungstore (u. a. Lizenz, öffentliche Signatur und Marke).
 - **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe; bestätigte Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 

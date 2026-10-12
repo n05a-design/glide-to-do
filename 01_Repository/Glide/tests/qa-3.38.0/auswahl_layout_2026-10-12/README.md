@@ -1,9 +1,9 @@
-# Auswahl und Windows-Kopfzeile – Kandidat 3.38.0
+# Aufgabenoberfläche und Windows-Kopfzeile – Lieferung 3.38.0
 
-Stand 12.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · Produktionskorrektur in Abnahme
+Stand 12.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · geliefert; Menschenabnahme getrennt offen
 
 Aktueller App-SHA-256: `bcdbc4da2197aadaffbe65cd57054c68b93db4d1aedcb9cbeb16c2204bd8ef41`.
-Root, 07 und Bundle tragen diesen Stand. Die vollständige native Matrix fehlt noch zum Lieferabschluss.
+Root, 07 und Bundle tragen diesen Stand. Die vollständige native Matrix am Kandidat a0288b7 ist grün.
 Die strenge lokale Liefer-CI ist grün; die Tempoabweichung wurde als D48 angenommen.
 
 ## Aktueller Prüfstand
@@ -25,6 +25,13 @@ Die strenge lokale Liefer-CI ist grün; die Tempoabweichung wurde als D48 angeno
   [Lauf 38220307993](https://github.com/n05a-design/glide-to-do/actions/runs/38220307993),
   grün: 36 Layoutkombinationen und alle drei zuvor roten Textsuiten. Diese gezielte
   Wiederholung ersetzt keine vollständige native Matrix.
+- [Native Linux-Vollprüfung](linux_titelzeile.json) am Kandidat a0288b7 grün,
+  103 ausgeführt/eine menschliche Sichtprüfung übersprungen. Alle
+  [18 Defektgegenproben](linux_defektgegenproben_titelzeile.json) passend rot.
+  [Windows-Vollprüfung](windows_voll_titelzeile.json) desselben [Laufs 38272561080](https://github.com/n05a-design/glide-to-do/actions/runs/38272561080)
+  ebenfalls Exit 0, 103 ausgeführt/eine menschliche Sichtprüfung übersprungen,
+  85 Integrationssuiten/294 Unit-Tests; [Referenzdesktop](windows_desktop_titelzeile.json)
+  1920 × 1080, Python 3.14.7/Tk 9.0.4. [Native Quell-/Jobnachweise](native_titelzeile.json).
 - [07/Showcase](lieferung_titelzeile.json): 42 Code-/141 Ressourcen-/sechs
   Showcase-Dateien bytegleich; [Bundle](bundle_titelzeile.json) mit 42 Code-/55
   Mac-Ressourcen gleich Quelle, Signatur im Bauordner und auf Rückkopie grün.
@@ -45,6 +52,12 @@ die unveränderte Titelprüfung ist am Vorgänger passend rot.
 Die [strenge Liefer-Grundstufe](liefergrundstufe_titelzeile.json) ist grün: 17 Schritte
 ausgeführt, 07 bytegleich; ein bekannter lokaler SSL-Zertifikathinweis beim
 Abruf des Fremdcode-Originalpakets.
+
+[Erneuter Lieferabschluss](lieferabschluss_titelzeile.json): 189 Liefer- und 97 Bundle-Dateien nach
+der nativen Matrix unverändert. Gesamtes lokales Bundle erneut mit Bauordner
+und frischer Rückkopie bytegleich, beide Signaturen grün. Die 899 Freeze-Dateien
+waren nach der Mac-Vollprüfung unverändert; der anschließende vorgeschriebene
+Lieferabgleich zog ausschließlich die 07-Hauptdatei auf die geprüfte Quelle nach.
 
 ## Frühere Kandidaten und Ursache
 
@@ -69,3 +82,5 @@ nicht ab; sie sind jetzt Bestandteil der gezielten Windows-Wiederholung.
 abweichendem 07-Hauptstand; keine strenge Lieferabnahme daraus ableiten.
 Ältere 49ca48aa-Lieferbelege stehen [getrennt](../aufgaben_2026-10-11/README.md).
 Rohprotokolle und eigene Fensterbilder bleiben außerhalb OneDrive und Git.
+
+[Strenge CI zum Lieferabschluss](ci_lieferabschluss_titelzeile.json): Exit 0, 17 Schritte ausgeführt, ein bekannter lokaler SSL-Hinweis beim Fremdcodeabruf. Abschließender inhaltlicher Statusabgleich und Standprüfung grün; App-/Lieferhashes unverändert.
