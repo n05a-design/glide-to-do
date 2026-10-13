@@ -1,6 +1,6 @@
 # Dokumentationsindex
 
-Stand 13.10.2026 · Glide 3.41.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagenformat 2
+Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagenformat 2
 
 Seit 03.10.2026 zwölf Dokumente und fünf Einzelentscheidungen statt 53: Funktionsverträge 45–79, Projektübergabe, Startkontext, Entwicklungsnotizen, Sitzungsprotokoll, Releasecheckliste und Lizenz-, Signierungs- und Vertriebsentwürfe sind in die Dokumente unten eingegangen. Ältere Fassungen trägt Git (`git log --follow docs/<Datei>`). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt; deren Synchronisationskopien und die wiederaufgetauchte Projektübergabe sind aufgelöst. Regeln: [Dokumentenpflege](DOKUMENTENPFLEGE.md).
 

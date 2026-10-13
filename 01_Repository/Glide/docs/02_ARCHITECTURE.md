@@ -1,6 +1,6 @@
 # Architektur – Glide
 
-Stand 13.10.2026 · Glide 3.41.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
 
 Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, Performance-Regeln und die teuer gelernten Tk-Fallstricke. Zusammengeführt aus Architektur, Projektübergabe, Entwicklungsnotizen und den technischen Teilen der Funktionsverträge 45–79 (03.10.2026); die Vorfassungen trägt Git. Verhalten der Funktionen: [Funktionen](20_FUNKTIONEN.md). Datenformat: [Daten und Migration](06_DATA_BACKUP_MIGRATION.md).
 
@@ -80,6 +80,10 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 | `attachment_paths.py` | Portable flache Anhangspfade prüfen (Tk-frei, D26/D37/D39) | 3.41.0 |
 
 `drawing_prototype.pyw` ist die isolierte Bedienprobe der Zeichenfläche von 2026-09-24; sie gehört nicht zur App und nicht zu den Lieferwegen. Ein neues Modul muss in `packaging/macos/baue_app.py`, `scripts/pflege/abgleich_07.py`, `src/glide/README.md`, `packaging/README.md`, `07_Python-Versionen/README.md` und hier stehen; die Standprüfung (R10) meldet Lücken.
+
+### Eigenständige Pakete
+
+`packaging/paket/baue_paket.py` erstellt native Entwicklungsartefakte mit fest gepinntem PyInstaller 6.22.3. `package_sources.py` erfasst reale Module und plattformspezifische Ressourcen; `compiled_contract.py` vergleicht ihre kompilierten Codeobjekte mit dem PYZ-Archiv. `license_contract.py`, Mach-O-/PE-Prüfer und native Startproben prüfen die tatsächliche Laufzeit, Bibliotheksanbieter und Lizenztexte. Der Bootstrap setzt für die Paketprobe `GLIDE_DATA_DIR` vor dem Import auf künstliche Daten und startet regulär dieselbe Anwendung. Kein neues Datenformat und keine neue Fachlogik im Bootstrap. Details und Aufrufe: [Paketierung](../packaging/README.md).
 
 ## 2. Nutzdaten und Speicherweg
 

@@ -1,1 +1,12 @@
-# PyInstaller-Version vor dem ersten reproduzierbaren Windows-Build festlegen und pinnen.
+# Bauabhängigkeiten des eigenständigen Windows-Pakets (Paket 7, D27). PyInstaller fest gepinnt;
+# Alle Bauabhängigkeiten sind gepinnt. Der CI-Lauf belegt die tatsächlich verwendeten
+# Versionen zusätzlich in bauabhaengigkeiten.txt und im Lizenzbestand.
+pyinstaller==6.22.3
+pyinstaller-hooks-contrib==2026.8
+altgraph==0.17.5
+packaging==26.3
+setuptools==84.0.0
+# https://pypi.org/project/pefile/2024.8.26/
+pefile==2024.8.26
+# https://pypi.org/project/pywin32-ctypes/0.2.3/
+pywin32-ctypes==0.2.3

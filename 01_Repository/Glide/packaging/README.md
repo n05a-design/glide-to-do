@@ -1,6 +1,6 @@
 # Paketierung Glide
 
-Stand 13.10.2026 · Glide 3.41.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
 
 Der aktuelle Stand ist eine geprüfte Python-Anwendung mit Ressourcen. Ein Installer, eine Signatur oder eine Store-Abnahme wird hier nicht behauptet; offene Schritte stehen in der [Veröffentlichung](../docs/10_VEROEFFENTLICHUNG.md).
 
@@ -30,4 +30,63 @@ Baut `Glide.app` mit Quellen und Modulen (Start über `glide_start.py`), Ressour
 
 **Windows-Verknüpfung – [`windows/verknuepfung_anlegen.ps1`](windows/verknuepfung_anlegen.ps1):** legt im Startmenü „Glide“ an (pythonw.exe mit `app.pyw`, Symbol `glide.ico`) mit der AppUserModelID; kein Adminrecht, keine Registry. Glide meldet sich beim Start mit derselben Kennung an (`set_windows_app_user_model_id`). Unter Windows noch nicht ausgeführt.
 
-Geprüft wird die Vorstufe von `tests/integration/test_paketierung330.py`. Der Release-Build mit eingebettetem Python (D15), Developer-ID-Signatur, Notarisierung und Installer bleibt offen.
+Die vorhandene Vorstufe bleibt durch `tests/integration/test_paketierung330.py` geprüft. Die eigenständigen Entwicklungsbauten stehen im folgenden Abschnitt; Developer-ID-Signatur, Notarisierung, Windows-Zertifikat und Installer bleiben nach D43 gesondert offen.
+
+## Eigenständige Entwicklungspakete (Paket 7)
+
+Die Bauwerkzeuge unter `packaging/paket` bündeln Python, Tcl/Tk, alle aktuellen
+Glide-Module und die Ressourcen der gewählten Plattform. Gebaut wird nativ auf
+macOS arm64 beziehungsweise Windows x64. PyInstaller 6.22.3 und die übrigen
+Bauabhängigkeiten stehen in `requirements/build-*.txt`; sie sind keine
+Laufzeitabhängigkeiten der Python-Fassung. Ein eigenständiges Linux-Paket ist
+nicht gewählt.
+
+Für jeden Bau einen neuen Ordner außerhalb von OneDrive verwenden. Folgende
+Mac-Aufrufe erfolgen aus `01_Repository/Glide`; `BAU_GLIDE` bezeichnet ausschließlich
+den eigenen Bauordner:
+
+```sh
+BAU_GLIDE="$TMPDIR/glide-paketbau"
+mkdir "$BAU_GLIDE"
+python3 -m venv "$BAU_GLIDE/venv"
+"$BAU_GLIDE/venv/bin/python3" -m pip install -r requirements/build-macos.txt
+"$BAU_GLIDE/venv/bin/python3" -B packaging/paket/lizenzen_vorbereiten_macos.py \
+  --quelle src/glide --repo . --ziel "$BAU_GLIDE/lizenzen"
+"$BAU_GLIDE/venv/bin/python3" -B packaging/paket/baue_paket.py \
+  --quelle src/glide --version "$(cat VERSION)" --ziel "$BAU_GLIDE/bau" \
+  --plattform macos-arm64 --lizenzen "$BAU_GLIDE/lizenzen"
+PYTHON_GLIDE="$("$BAU_GLIDE/venv/bin/python3" -c 'import sys; print(sys.base_prefix)')"
+"$BAU_GLIDE/venv/bin/python3" -B packaging/paket/pruefe_start_macos.py \
+  --paket "$BAU_GLIDE/bau/dist/Glide.app" --bericht "$BAU_GLIDE/startprobe.json" \
+  --sperren "$PYTHON_GLIDE" --sperren "$BAU_GLIDE/venv" \
+  --sperren "$BAU_GLIDE/bau/quelle" --sperren "$PWD"
+```
+
+Der eingecheckte Mac-Lizenzbestand belegt Python 3.14.5/Tcl-Tk 9.0.3 und seine
+konkreten Bibliotheken. Der Generator prüft Laufzeit, Bauabhängigkeiten und
+Originaltexte vor der Übernahme. Eine andere Laufzeit benötigt passende neue
+Originalbelege; der Generator verweigert eine bloße Umbenennung. Aktuelle
+Projektlizenzhinweise werden aus genau dem anschließend gebauten Quellstand
+übernommen.
+
+Der native Windows-Bau läuft im Workflow `Glide-Prüfung` nach der vollständigen
+Linux-/Windows-Matrix: eigene Bauumgebung, Lizenzbelege aus der tatsächlich
+installierten Laufzeit, `baue_paket.py --plattform windows-x64` und anschließend
+`pruefe_start_windows.py`. Dessen ACL-Sperre ist ausschließlich für den
+vergänglichen GitHub-Hosted-Runner zugelassen. Originalrechte werden im
+`finally`-Zweig wiederhergestellt und das externe Python danach erneut geprüft.
+Der Workflow sichert Paket und Belege als getrennte Artefakte.
+
+Die native Startprobe legt ausschließlich künstliche Daten an und prüft sechs
+Ansichten, Speichern und erneutes Dateilesen, Abhaken und Undo, den App-Sicherungs-
+Rundlauf, gebündelte Schriften/Logo/DND, Ressourcen-
+und Lizenzhashes sowie geladene Bibliotheken und Python-Suchpfade. Das externe
+Python muss in einer Gegenprobe tatsächlich blockiert sein. `test_paket3420.py`
+prüft zusätzlich die vollständigen realen Bauquellen beider Zielpakete; ein
+nativer Startbericht kann mit `--startnachweis <Datei>` abgeglichen werden.
+Bau, GUI-Proben und Vollprüfung nacheinander ausführen. Der genaue Abnahmestand
+steht im [QA-Bericht](../docs/07_QA_BERICHT.md).
+
+Mac-Pakete tragen eine geprüfte Ad-hoc-Signatur, Windows-Pakete bleiben ohne
+Inhaberzertifikat unsignierte Entwicklungsartefakte. Öffentliche Signaturen,
+Installer und Veröffentlichungstore sind weiterhin getrennt offen (D43).

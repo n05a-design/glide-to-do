@@ -171,9 +171,11 @@ ZWISCHENSTAND = re.compile(r"Glide_\d+\.\d+\.\d+_Zwischenstand_\d{4}-\d{2}-\d{2}
 GEPFLEGT: tuple[str, ...] = ()
 
 # Zusätzliche festgeschriebene Einzeldateien außerhalb klar datierter Pfade.
-# Der frühere Reiterentwurf ist seit der Existenzprüfung vom 24.09.2026 im
-# Archiv und benötigt deshalb keine aktive Sonderbehandlung mehr.
-FESTGESCHRIEBEN: tuple[str, ...] = ()
+# Lizenzoriginale sind gehashte Baugrundlagen; aktuelle Projekttexte übernimmt
+# der Lizenzgenerator aus dem gebauten Quellstand, nicht aus diesem Beleg.
+FESTGESCHRIEBEN: tuple[str, ...] = (
+    "packaging/paket/lizenzen/macos/Glide-Lizenzstatus.md",
+)
 
 # Dateien ohne Standaussage. Arbeitsregeln und Änderungsverlauf tragen ihren
 # Stand in der Sache selbst: AGENTS.md gilt versionsunabhängig, CHANGELOG.md
@@ -286,6 +288,10 @@ def ablagewurzel(repo: Path) -> Path | None:
 def dokumente(wurzel: Path):
     for pfad in sorted(wurzel.rglob("*.md")):
         teile = pfad.relative_to(wurzel).parts
+        # Gebaute Pakete enthalten Lizenz-/Ressourcenkopien ihres Quellstands;
+        # sie sind keine zweite gepflegte Dokumentation der Arbeitskopie.
+        if teile[0] == "build" or teile[:3] == ("01_Repository", "Glide", "build"):
+            continue
         # Verschachtelte Git-Checkouts haben einen eigenen Stand und Auftrag.
         # .git ist im Worktree eine Datei, im eigenständigen Checkout ein Ordner.
         if any((parent / ".git").exists() for parent in pfad.parents
@@ -351,7 +357,7 @@ def datei_pruefen(befund: Befund, kurz: str, text: str) -> None:
     titel_historisch = "historisch" in titel.lower()
 
     fest = bool(name_version or hat_datum or ordner_fest or titel_historisch
-                or kurz in FESTGESCHRIEBEN)
+                or kurz.removeprefix(REPO_TEIL + "/") in FESTGESCHRIEBEN)
     if kurz in GEPFLEGT:
         fest = False
     if fest:

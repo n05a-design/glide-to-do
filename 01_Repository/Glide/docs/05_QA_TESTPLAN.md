@@ -1,6 +1,6 @@
 # Prüfplan – Glide
 
-Stand 13.10.2026 · Glide 3.41.0 · Aufgabenformat 25 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
+Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
 
 Wie Glide geprüft wird. Was tatsächlich geprüft wurde, steht im [QA-Bericht](07_QA_BERICHT.md). Am 03.10.2026 auf den gültigen Stand verdichtet; am 05.10.2026 um Nachweisregeln und Kontrollmatrix der Windows-Fassung ergänzt. Die Suitebeschreibungen je Einführungsversion trägt Git.
 
@@ -63,6 +63,7 @@ Ausführbarer Vertrag zu [Funktionen](20_FUNKTIONEN.md). Pflichtsuiten der letzt
 | Ruhige Oberfläche (3.33.21): Automatisch hell/dunkel mit simulierter Erkennung und Neustart, neutrale Rolle aktiver Zustände in allen Designs, Gismo-Pflege bei Überfahren/Fokus ohne Neuaufbau, eine Werkzeugzeile über der Pinnwand mit Menü „…“, Seitentitel und Schreibhinweis, schmale Seitenleiste, Dialogbreite und Knopfreihe | `test_oberflaeche33321` |
 | Wiederholungen erfassen und austauschen (3.39.1): Ankertag und Wochentage über die echte Eingabezeile, nicht Abbildbares vollständig Text mit Hinweis ohne ×, Undo; ICS-Ausgabe am Monatsende, Import mit Starttag und Verlustbericht, Rundlauf, IANA- und Windows-Zeitzonen | `test_wiederholung3391` |
 | Pixelanimation (3.40.0): Bilder anlegen, duplizieren, umordnen, Dauer, Löschen mit Rückgängig und getrenntem Zeichenverlauf; Autosave-/Struktur-/Zwischenstandsfehler ohne Datenverlust; Vorschau mit Zeitgeberabbau; PNG-Spritesheet und Einzelbildfolge bytegenau; 860 × 700 mit großer Schrift; Format-23→24-Migration mit Vorsicherung und schreibgeschützter Vorversion | `test_animation3400` |
+| Eigenständige Pakete (3.42.0): vollständige reale Bauquellen beider Ziele, Ressourcen-/Lizenzprovenienz, feste Baupins; native Mac-/Windows-Bauten, kompilierte Codeobjekte, Architektur, isolierte Starts mit blockiertem externem Python, erneutes Dateilesen und App-Sicherungs-Rundlauf separat belegen | `test_paket3420` |
 | Notion-Import und Seitenwiederherstellung (3.41.0): Erstimport mit ausdrücklicher Auswahl, Verlustbericht und Originalarchiv; Wiederimport mit Konfliktfreigabe; selektiver Seitenrestore mit Vergleich, Anhängen und Aufgabenverweisen; Vorsicherungs- und Schreibfehler ohne Datenverlust; Vorschauen bei 860 × 700; Format-24→25-Migration und schreibgeschützte Vorversion | `test_import3410` |
 | Tagesplanung (3.39.0): Hinweise mit künstlicher Uhr, Deduplizierung/Später/Überspringen/Neustart/Dateifehler, lokale ICS-Serien/Ausnahmen/Zeitzonen und gemeinsame Bilanz, Entlastung mit Vorschau/Undo/Schreibfehler, vier Dialoge bei 860 × 700/großer Schrift und Timerabbau | `test_tag3390`; elf Tk-freie Unitsuiten/138 neue Fälle, vier getrennte rote Vorversionsgegenproben |
 | Komfort (3.33.20): Termin überspringen über Menüs mit Undo und ohne Tageszahl, Erledigen in Übersichten wie in der Liste, Erinnerung aus Eingabezeile und Schnellerfassung, mehrzeiliges Einfügen mit Rückfrage, zuletzt benutzte Ziele, „+“/Umschalt+Enter, Leerzustand, Routinen in „Heute“, Karte „Neu in …“, Mindestlaufzeit mit altem Python, Normalisierung der neuen Einstellungen | `test_komfort33320` |

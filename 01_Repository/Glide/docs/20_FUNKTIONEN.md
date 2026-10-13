@@ -1,6 +1,6 @@
 # Funktionen – Glide
 
-Stand 13.10.2026 · Glide 3.41.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
 
 ## Aufgaben im Wissen (3.33.15: G29/G31/G32)
 
@@ -36,6 +36,10 @@ Aufbau und Bausteine: [Architektur](02_ARCHITECTURE.md). Datenfelder und Formate
 | [13 Grenzen](#13-bekannte-grenzen) | 66 §11 und Folgeverträge | – |
 
 ## 1. Grundbegriffe
+
+### Eigenständiger Start (3.42.0)
+
+Die Entwicklungspakete für macOS arm64 und Windows x64 enthalten Python, Tcl/Tk, Glide-Module, Schriften, Logo, Vorlagen, Zeitzonen und Drag-and-drop-Bibliotheken samt Lizenztexten. Eine externe Python-Installation ist für diese Pakete nicht erforderlich. Nutzerdaten liegen weiterhin außerhalb des Pakets; vorhandene Daten und Aufgabenformat 25 bleiben erhalten. Die Python-Fassung mit Schnellstart bleibt als eigener Startweg verfügbar. Die Pakete sind Entwicklungsartefakte mit Mac-Ad-hoc-Signatur beziehungsweise ohne Windows-Zertifikat. Tatsächlich bestandene Bau- und Startprüfungen nennt der [QA-Bericht](07_QA_BERICHT.md), Bauanweisungen die [Paketierung](../packaging/README.md).
 
 **Prinzipien-Check 3.33.11 (P08b, Aktionskennungen, U03/U07):** bestehender Performance- und Feature-Auftrag, Reihenfolge laut Entwicklungsplan. Absicht: gezielte Vergleichsarbeit und verlässliche Aktionen; Eingang bei Inhalt direkt erreichen, wirkungslose Suchelemente ausblenden. Ort: bestehender Speicherweg, Menü/Palette, Suchzeile und Systembereich. Dieselbe geschützte Eingangsliste, keine neue Ansicht. U03 entfernt Dauerfläche; U07 zeigt bedingt eine zusätzliche Zeile in der vorhandenen Zeilenhöhe, der leere Eingang bleibt verborgen. Tastatur, aktuelle Farbrollen und vorhandenes Eingangssymbol bleiben; Rücknahme über bestehendes Undo. Format 20, keine neuen Datenfelder oder Laufzeitabhängigkeiten. Tempo mit 1.000/10.000 synthetischen Aufgaben, Median/p95; manuelle Abnahme offen.
 
@@ -307,7 +311,7 @@ Benannte Zwischenstände merken die gesamte Folge; Wiederherstellen und Als neue
 - **Seiten:** Weitere bewusste Grenzen in den [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md#grenzen-einzelner-funktionen). Ältere Glide-Stände verwerfen die Blockarten `h4`, `toggle`, `toggle_closed`, `callout` (Text bleibt).
 - **Milchglas:** keine echte Durchsicht; beim Scrollen gleichen sich die Flächen erst in der Ruhe an.
 - **Seitenleiste:** jeder Baum scrollt für sich (B1).
-- **Startseite und Einstellungen (3.36.0):** Änderungen werden in erhaltenen Flächen abgeglichen; Einstellungen werden bei unverändertem Kontext wiederverwendet. Das ursprüngliche Startseiten-Kaltziel ≤ 150 ms wird durch D46 auf ≤ 300 ms bei direktem Start/≤ 500 ms im beobachteten Kindprozessverfahren begrenzt; warm bleibt ≤ 150 ms. Verschiedene Startverfahren werden getrennt ausgewiesen, die langsamere Serie nicht verworfen. Messverfahren und Ergebnisse im [Nachweis](../tests/qa-3.36.0/fundament_vorher_nachher/README.md).
+- **Startseite und Einstellungen (3.36.0):** Änderungen werden in erhaltenen Flächen abgeglichen; Einstellungen werden bei unverändertem Kontext wiederverwendet. Das ursprüngliche Startseiten-Kaltziel ≤ 150 ms wird durch D46 auf ≤ 300 ms bei direktem Start/≤ 500 ms im beobachteten Kindprozessverfahren begrenzt; warm bleibt ≤ 150 ms. Verschiedene Startverfahren werden getrennt ausgewiesen, die langsamere Serie nicht verworfen. Messverfahren und Ergebnisse im [Nachweis](https://github.com/n05a-design/glide-to-do/blob/3f75265429410ed186109626d4e0776d5dcc3438/01_Repository/Glide/tests/qa-3.36.0/fundament_vorher_nachher/README.md).
 - **Systemmitteilungen** erscheinen aus Python gestartet unter „Python“, nur aus dem Bundle unter „Glide“.
 - **Tagesstände** der Sicherung: bis zu 14 zusätzliche Dateien im Datenordner (in Cloudordnern zählen sie mit).
 - **Messungen** von Mindestgröße und Kontrast decken Widgets ab, nicht Texte auf Zeichenflächen (Pinnwandkarten, Kalenderzellen, Startseitengrafiken).

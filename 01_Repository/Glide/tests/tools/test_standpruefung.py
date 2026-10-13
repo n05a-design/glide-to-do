@@ -31,6 +31,15 @@ class Einstiegspruefung(unittest.TestCase):
                 self.assertEqual(result.fehler, [])
                 self.assertEqual(result.festgeschrieben, 1)
 
+    def test_package_license_original_is_fixed_but_packaging_docs_are_live(self):
+        for prefix in ("", "01_Repository/Glide/"):
+            result = self.check(prefix + "packaging/paket/lizenzen/macos/Glide-Lizenzstatus.md",
+                                "# Lizenzstatus\nKeine öffentliche Softwarelizenz festgelegt.\n")
+            self.assertEqual(result.fehler, [])
+            self.assertEqual(result.festgeschrieben, 1)
+        current = self.check("packaging/README.md", "# Paketierung\n")
+        self.assertTrue(any("(R1)" in error for error in current.fehler))
+
     def test_current_banner_does_not_hide_stale_title(self):
         result = self.check("docs/05_QA_TESTPLAN.md",
                             "# Prüfplan – Glide 3.30.0\n\nStand 01.10.2026 · Glide 3.32.3\n")
@@ -84,6 +93,16 @@ class Einstiegspruefung(unittest.TestCase):
             for file in (active, snapshot, archived):
                 file.parent.mkdir(parents=True, exist_ok=True)
                 file.write_text("# Prüfdokument\n", encoding="utf-8")
+            self.assertEqual(list(stand.dokumente(root)), [active])
+
+    def test_built_packages_are_not_active_docs_but_packaging_sources_are(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            active = root / "packaging/README.md"
+            for file in (active, root / "build/macos/Glide.app/Contents/Resources/licenses/Glide-Lizenzstatus.md",
+                         root / "01_Repository/Glide/build/windows/Glide/licenses/Glide-Lizenzstatus.md"):
+                file.parent.mkdir(parents=True, exist_ok=True)
+                file.write_text("# Lizenzoriginal\n")
             self.assertEqual(list(stand.dokumente(root)), [active])
 
     def test_nested_git_worktrees_have_their_own_documentation_scope(self):

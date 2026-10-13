@@ -1,6 +1,6 @@
 # Veröffentlichung – Glide
 
-Stand 13.10.2026 · Glide 3.41.0 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 25
+Stand 13.10.2026 · Glide 3.42.0 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 25
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
@@ -20,7 +20,7 @@ Die Haken beschreiben den zuletzt abgeschlossenen Lieferstand. Für den aktuelle
 **Vor der ersten Veröffentlichung (offen):**
 
 - [ ] Manuelle Prüfung auf macOS und Windows nach der [Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md), einschließlich Windows-Vollprüfung mit `tests/tools/windows_vollpruefung.cmd`.
-- [ ] Eigenständige Pakete mit Python 3.14 und Tk 9 für macOS arm64 und Windows x64 (D15/D27, S26-10): PyInstaller 6.22.3 ist als ausschließlich zum Bauen verwendete Abhängigkeit entschieden. Umsetzung und native Start-/Ressourcen-/Lizenzprüfung sind in Paket 7 beauftragt; aktuelle Entwicklungsbundles benötigen weiterhin externes Python.
+- [ ] Eigenständige Pakete mit Python 3.14 und Tk 9 für macOS arm64 und Windows x64 (D15/D27, S26-10): PyInstaller 6.22.3 ist als ausschließlich zum Bauen verwendete Abhängigkeit entschieden. Mac-Bau und tatsächlicher isolierter Start am 3.42.0-Kandidaten grün; native Windows-Paketprüfung und Lieferabschluss stehen aus. Die bestehende Python-Entwicklungsvorstufe bleibt verfügbar.
 - [ ] Developer-ID-Signatur und Notarisierung (macOS), Code-Signing und Installer (Windows, Inno Setup); tkDnD-Bibliothek mit signieren ([Entscheidung](decisions/ABHAENGIGKEIT_TKDND.md)).
 - [ ] Windows-Verknüpfung mit AppUserModelID prüfen (`packaging/windows/verknuepfung_anlegen.ps1`); Hintergrundverläufe unter Windows ohne Bildreste.
 - [ ] Clean-Machine-Test, Gatekeeper/SmartScreen, Update über eine vorhandene Installation, Datenordner in einem Cloudordner.

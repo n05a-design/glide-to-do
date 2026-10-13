@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 13.10.2026 · Glide 3.41.0 · Aufgabenformat 25 · manuelle Sitzungen offen; B1 automatisch geprüft
+Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · manuelle Sitzungen offen; B1 automatisch geprüft
 
 Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt am 03.10.2026 aus der fortgeschriebenen Prüfliste (Ursprung 3.30.0, enthielt die Listen 3.28 und 3.29) und der Windows-Anleitung; die Zuordnung der 201 Ausgangspunkte trägt Git. Automatisch geprüft ist die Logik ([Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)); offen bleiben Handgefühl, Plattformen und fremde Programme.
 
@@ -260,7 +260,7 @@ $py = "$env:USERPROFILE\.cache\glide-qa\python-3.14.8\runtime\python.exe"
 
 Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Windows-Nachweis wird aus dem Mac-Lauf abgeleitet.
 
-- [x] **B1 Vollprüfung (automatisch):** Stand 3.36.0, 10.10.2026: Mac Exit 0, 100 ausgeführt; native Linux-/Windows-Vollprüfung je Exit 0, 101 ausgeführt; je 83 Integrationssuiten/264 Unit-Tests. Windows Python 3.14.7/Tk 9.0.4, bestätigter Desktop 1920 × 1080. Die früheren Sprintlieferungen sind mitgeprüft. [Nachweis](../01_Repository/Glide/tests/qa-3.36.0/fundament_2026-10-10/README.md). Die menschliche Sichtprüfung ist jeweils übersprungen; B1a–B1j bleiben offen.
+- [x] **B1 Vollprüfung (automatisch):** Stand 3.36.0, 10.10.2026: Mac Exit 0, 100 ausgeführt; native Linux-/Windows-Vollprüfung je Exit 0, 101 ausgeführt; je 83 Integrationssuiten/264 Unit-Tests. Windows Python 3.14.7/Tk 9.0.4, bestätigter Desktop 1920 × 1080. Die früheren Sprintlieferungen sind mitgeprüft. [Nachweis](https://github.com/n05a-design/glide-to-do/blob/3f75265429410ed186109626d4e0776d5dcc3438/01_Repository/Glide/tests/qa-3.36.0/fundament_2026-10-10/README.md). Die menschliche Sichtprüfung ist jeweils übersprungen; B1a–B1j bleiben offen.
 - [ ] **B1a Sichtprüfung der Aufnahmen am Gerät:** Die Fotos des nächsten Windows-Laufs (B0) unter `tests\qa-<Version>\<Lauf>\…\fenster` und `screenshots` durchsehen (sie bleiben lokal). Die Vorbefunde mit Testablage in Glide nachstellen:
   - **W01** Seitenleiste: Lange Listentitel enden mit „…“, kürzere stehen vollständig da („Unterlagen & Assets“).
   - **W05** (auf dem Mac behoben in 3.33.21) Datei › Datenaustausch › „Für KI bereitstellen …“ und Ansicht › Liste › „Tabellenspalten …“: Ist die Fensterbreite angemessen, stehen die Knöpfe rechts wie in den übrigen Dialogen?
@@ -336,7 +336,9 @@ Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Wind
   - Komplettbackup in einer zweiten Testablage einlesen: Der Anhang ist da und
     öffnet sich.
 
-## C. Bildschirmleser und Tastatur (VoiceOver bzw. NVDA)
+## C. Bildschirmleser und Tastatur (VoiceOver, NVDA, Linux/Orca)
+
+Verfügbarkeit am 13.10.2026: Zusätzlich zu Mac/VoiceOver stehen dem Inhaber keine Windows-/NVDA- oder Linux-/Orca-Prüfplätze zur Verfügung (Antwort: „Keiner der beiden Prüfplätze“). Automatisierte native Plattformprüfungen können weiterlaufen; die tatsächlichen Reader- und Menschenabnahmen bleiben getrennt offen.
 
 - [ ] **C1** Seitenleiste, Suche, Detailbereich und Anpassen-Modus der
       Startseite sind erreichbar und werden sinnvoll angesagt.

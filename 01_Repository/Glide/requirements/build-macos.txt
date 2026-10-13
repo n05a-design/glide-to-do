@@ -1,1 +1,8 @@
-# PyInstaller-Version vor dem ersten reproduzierbaren macOS-Build festlegen und pinnen.
+# Bauabhängigkeiten des eigenständigen macOS-Pakets (Paket 7, D27). PyInstaller fest gepinnt;
+# die übrigen Versionen sind die tatsächlich mit 6.22.3 verwendeten (packaging/paket/lizenzen/macos/manifest.json).
+pyinstaller==6.22.3
+pyinstaller-hooks-contrib==2026.8
+altgraph==0.17.5
+macholib==1.16.4
+packaging==26.3
+setuptools==84.0.0
