@@ -8,9 +8,9 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 
 ## Stand
 
-- **Entwicklungsstand 3.39.1 vom 13.10.2026**, Datenformat 23. Dies ist eine Entwicklungsfassung.
+- **Entwicklungsstand 3.40.0 vom 13.10.2026**, Datenformat 24. Dies ist eine Entwicklungsfassung.
 - **Zuletzt vollständig automatisch geliefert:** Wiederholungen 3.39.1 (Fehlerbehebung), davor Tagesplanung 3.39.0, Aufgabenoberfläche 3.38.0, Logo/Symbole 3.37.0 und Fundament/Tempo 3.36.0. Eingefrorene Mac-Vollprüfung sowie native Linux-/Windows-Matrix grün; 07/Showcase/Bundle abgeglichen und Mac-Signaturen geprüft. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
-- **Nächste Lieferung 3.40.0:** Pixelanimation (Paket 5), danach die bestätigten Pakete 6–8.
+- **Kandidat 3.40.0:** Pixelanimation (Paket 5): Bildfolgen, Vorschau, PNG-Ausgabe, Datenformat 24; Mac-Vollprüfung grün, Liefer-/Bundleabgleich und native Linux-/Windows-Matrix offen. Danach die bestätigten Pakete 6–8.
 - **Offen:** verbleibende bestätigte Sprintpakete, manuelle Bedien-/DPI-/Mehrmonitor-/Screenreaderabnahme sowie die gesonderten Veröffentlichungstore (u. a. Lizenz, öffentliche Signatur und Marke).
 - **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe; bestätigte Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 
@@ -24,7 +24,7 @@ python3 07_Python-Versionen/Schnellstart.pyw
 
 Unter Windows: `python 07_Python-Versionen\Schnellstart.pyw`. Weitere Startwege (aus dem Quellstand, macOS-Entwicklungsbundle) stehen in der [README des Quellbaums](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand).
 
-**Hinweis für bestehende Daten:** Nach einem Formatwechsel (zuletzt Format 23) keine ältere Fassung mit dem umgestellten Bestand starten. Seit 3.30 öffnen ältere Fassungen einen neueren Bestand nur schreibgeschützt; Glide 3.29 und älter überschreiben ihn bei der ersten Eingabe. Vor jeder Umstellung entsteht eine Vorsicherung `liste_vor_format<N>_*.json`.
+**Hinweis für bestehende Daten:** Nach einem Formatwechsel (zuletzt Format 24) keine ältere Fassung mit dem umgestellten Bestand starten. Seit 3.30 öffnen ältere Fassungen einen neueren Bestand nur schreibgeschützt; Glide 3.29 und älter überschreiben ihn bei der ersten Eingabe. Vor jeder Umstellung entsteht eine Vorsicherung `liste_vor_format<N>_*.json`.
 
 ## Was Glide kann
 

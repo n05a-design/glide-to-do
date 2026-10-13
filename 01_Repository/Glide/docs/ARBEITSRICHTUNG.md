@@ -1,6 +1,6 @@
 # Arbeitsrichtung, Entscheidungen und Abnahme
 
-Stand 13.10.2026 · Glide 3.39.1 · Aufgabenformat 23
+Stand 13.10.2026 · Glide 3.40.0 · Aufgabenformat 24
 
 Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Entscheidungsvorlage vom 01.10.2026 und den Entscheidungslisten vom 25.–30.09.2026 zusammengeführt; deren Wortlaut trägt Git. Am 06.10.2026 um die Leitgedanken des Inhabers aus dem nicht übernommenen Richtungsentwurf vom 03.10.2026 ergänzt. Aufgabenstand und Reihenfolge: [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Technische Regeln: [Architektur](02_ARCHITECTURE.md).
 

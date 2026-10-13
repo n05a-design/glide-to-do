@@ -1,6 +1,6 @@
 # Funktionen – Glide
 
-Stand 13.10.2026 · Glide 3.39.1 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
+Stand 13.10.2026 · Glide 3.40.0 · Aufgabenformat 24 · Einstellungen 2 · Vorlagen 2
 
 ## Aufgaben im Wissen (3.33.15: G29/G31/G32)
 
@@ -253,7 +253,7 @@ Kennungen erhalten die Beziehung bei Umbenennen, Verschieben, Archiv, Papierkorb
 
 ### Bildfolgen seit 3.40.0
 
-„Bilder …“ öffnet die Bildfolge der Zeichnung: neues leeres Bild, Duplizieren, Löschen und Umordnen. Das letzte Bild bleibt erhalten; alle Bilder haben dieselbe Fläche, höchstens 120 Bilder. Gemeinsame Dauer und eigene Dauer je Bild sind von 20 bis 60.000 ms wählbar. Die Auswahlliste „Bild“ wechselt erst nach erfolgreichem Speichern des aktuellen Bildes. Jedes Bild behält einen eigenen Zeichenverlauf; Bildstruktur und Dauer sind je Aktion ein Rückgängig-Schritt.
+„Bilder …“ öffnet die Bildfolge der Zeichnung: neues leeres Bild, Duplizieren, Löschen und Umordnen. Das letzte Bild bleibt erhalten; alle Bilder haben dieselbe Fläche, höchstens 120 Bilder. Gemeinsame Dauer und eigene Dauer je Bild sind von 20 bis 60.000 ms wählbar. Der Knopf „Bild n von m“ öffnet die Bildauswahl als Menü; gewechselt wird erst nach erfolgreichem Speichern des aktuellen Bildes. Jedes Bild behält einen eigenen Zeichenverlauf; Bildstruktur und Dauer sind je Aktion ein Rückgängig-Schritt.
 
 „Abspielen …“ zeigt eine unabhängige Kopie der gespeicherten Folge. Abspielen/Pause, Von vorn und Wiederholen verändern keine Bestandsdaten; Schließen baut laufende Zeitgeber ab. „Bildfolge exportieren …“ bietet PNG-Spritesheet oder PNG-Einzelbildfolge samt JSON-Zeitachse mit stabilen Bildkennungen, Reihenfolge und wirksamen Dauern. Die PNG-Pixel einschließlich Transparenz entsprechen den Bildern. Ein vorhandenes Spritesheet und seine Zeitachse werden nur gemeinsam nach Bestätigung ersetzt; die Einzelbilder kommen in einen neuen Ordner „<Titel> – Bildfolge“ (bei Bedarf mit Nummer). Bei einem Fehler bleibt der vorige Dateisatz erhalten. Kein GIF.
 

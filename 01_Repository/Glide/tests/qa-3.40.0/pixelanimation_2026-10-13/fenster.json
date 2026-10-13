@@ -1,0 +1,18 @@
+{
+  "app_sha256": "165dad0821c6151679eac2af0fb2ddb1523becd05b8f27a180721591becb65c6",
+  "ablage": "nur lokal, nicht versioniert",
+  "daten": "künstlich, temporärer GLIDE_DATA_DIR",
+  "aufnahmen": [
+    "hell_1_editor.png",
+    "hell_2_bilder.png",
+    "hell_3_abspielen.png",
+    "dunkel_1_editor.png",
+    "dunkel_2_bilder.png",
+    "dunkel_3_abspielen.png"
+  ],
+  "befunde_vor_korrektur": [
+    "Native ttk.Combobox der Bildauswahl blieb im dunklen Design hellgrau – ersetzt durch Glide-Knopf mit Menü",
+    "Tabelle der Bildfolge mit Leerraum und verkürzter Kopfzeile, eigene Dauer erst nach Bildlauf sichtbar – Muster der Dialogtabellen übernommen, Höhe 5 Zeilen"
+  ],
+  "nach_korrektur": "Editorzeile, Bildfolge-Dialog und Vorschau in Hell und Dunkel tatsächlich betrachtet; keine weiteren Befunde"
+}

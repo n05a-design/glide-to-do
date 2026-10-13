@@ -196,7 +196,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.39.1"
+APP_VERSION = "3.40.0"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
 # Einstellungen des Betriebssystems hängen daran.
@@ -13427,8 +13427,9 @@ class DrawingEditor(tk.Frame):
         row.pack(fill="x", pady=(0, 4))
         label = tk.Label(row, text="Bild", bg=self.app.theme["card"], fg=self.app.theme["text"],
                          font=app_font(10))
-        self.frame_choice = ttk.Combobox(row, state="readonly", width=23, name="animation_frame")
-        self.frame_choice.bind("<<ComboboxSelected>>", self._frame_chosen)
+        # Glide-eigener Auswahlknopf mit Menü wie beim Export: Eine native
+        # Combobox bliebe im dunklen Design hellgrau.
+        self.frame_choice = self._button(row, "Bild 1", self.frame_menu, width=150)
         row.add(label)
         row.add(self.frame_choice)
         self.frames_button = self._button(row, "Bilder …",
@@ -13440,12 +13441,27 @@ class DrawingEditor(tk.Frame):
         self._sync_frame_choices()
 
     def _sync_frame_choices(self):
-        self.frame_choice.configure(values=tuple(
-            f"Bild {index} · {duration} ms" for index, duration in enumerate(self.animation.durations(), 1)))
-        self.frame_choice.current(self.animation.index(self.frame_id))
+        index = self.animation.index(self.frame_id)
+        self.frame_choice.set_text(f"Bild {index + 1} von {len(self.animation.frames)} · "
+                                   f"{self.animation.durations()[index]} ms ▾")
 
-    def _frame_chosen(self, _event=None):
-        index = self.frame_choice.current()
+    def frame_menu(self):
+        """Bildauswahl als Glide-Menü; das aktive Bild trägt die Markierung."""
+        theme = self.app.theme
+        menu = tk.Menu(self, tearoff=False, bg=theme["card"], fg=theme["text"],
+                       activebackground=theme["selection"], activeforeground=theme["selection_text"])
+        # Die Variable muss so lange leben wie das Menü, sonst fehlt die Markierung.
+        menu._active_frame = tk.IntVar(menu, value=self.animation.index(self.frame_id))
+        for index, milliseconds in enumerate(self.animation.durations()):
+            menu.add_radiobutton(label=f"Bild {index + 1} · {milliseconds} ms", variable=menu._active_frame,
+                                 value=index, command=lambda value=index: self._frame_chosen(value))
+        try:
+            anchor = self.frame_choice
+            menu.tk_popup(anchor.winfo_rootx(), anchor.winfo_rooty() + anchor.winfo_height())
+        finally:
+            menu.grab_release()
+
+    def _frame_chosen(self, index):
         if 0 <= index < len(self.animation.frames):
             self.select_frame(self.animation.frames[index].id)
         self._sync_frame_choices()
@@ -45366,17 +45382,21 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                           "den Bestand als ein Rückgängig-Schritt; die Vorschau verändert ihn nicht.")
         area = tk.Frame(body, bg=self.theme["bg"])
         area.pack(fill="x", pady=(10, 0))
-        tree = ttk.Treeview(area, columns=("duration", "source"), show="tree headings", height=7,
+        tree = ttk.Treeview(area, columns=("duration", "source"), show="tree headings", height=5,
                            selectmode="browse", style="Dialog.Treeview", name="animation_frames")
-        for column, title in (("#0", "Bild"), ("duration", "Dauer"), ("source", "Vorgabe")):
-            tree.heading(column, text=title)
-        self._daily_horizontal(area, tree)
+        # Wie die übrigen Dialogtabellen: volle Breite, schmale Leiste. Die
+        # Leiste fordert keine eigene Höhe an, sonst stünde die Tabelle mit
+        # Leerraum darüber und darunter in der Mitte.
+        self.prepare_table(tree, (("#0", "Bild", 160), ("duration", "Dauer", 140), ("source", "Vorgabe", 160)),
+                           stretch="source")
         scrollbar = ThemedAutoScrollbar(area, bg_color=self.theme["card"], track_color=self.theme["card"],
-                                         thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"])
-        scrollbar.pack(side="right", fill="y")
+                                         thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"],
+                                         width=10, radius=5)
+        scrollbar.configure(height=1)
         scrollbar.set_command(tree.yview)
+        scrollbar.pack(side="right", fill="y")
         tree.configure(yscrollcommand=scrollbar.set)
-        tree.pack(side="left", fill="x", expand=True)
+        tree.pack(fill="both", expand=True)
         operations = ButtonFlow(body, self.theme["bg"], gap=6)
         operations.pack(fill="x", pady=(8, 8))
         message = self._daily_label(body, "")
@@ -45418,7 +45438,6 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             for index, (frame, milliseconds) in enumerate(zip(current.animation.frames, current.animation.durations()), 1):
                 tree.insert("", "end", iid=frame.id, text=f"Bild {index}",
                             values=(f"{milliseconds} ms", "Gemeinsam" if frame.duration_ms is None else "Eigen"))
-            self._daily_fit_columns(tree, (("#0", 160), ("duration", 160), ("source", 190)))
             tree.selection_set(current.frame_id)
             tree.see(current.frame_id)
             show_duration(current)

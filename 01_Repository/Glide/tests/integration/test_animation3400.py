@@ -72,9 +72,9 @@ def run(app_path, cases, report, previous):
 
         def choose(index):
             value = editor()
-            value.frame_choice.current(index)
-            value.frame_choice.event_generate('<<ComboboxSelected>>')
+            value._frame_chosen(index)  # Befehl des Menüeintrags „Bild n“
             pump()
+            assert value.frame_choice.text.startswith(f'Bild {index+1} von '), value.frame_choice.text
             assert editor().frame_id == editor().animation.frames[index].id
 
         def button(parent, text):
@@ -157,13 +157,13 @@ def run(app_path, cases, report, previous):
                     radio = next(w for w in children(dialog) if isinstance(w, mod.tk.Radiobutton) and w.cget('text') == 'Eigene Dauer')
                     radio.invoke()
                     activate(button(dialog, 'Dauer speichern'))
-                    assert editor().animation.durations() == [250, 90, 250]
+                    assert editor().animation.durations() == (250, 90, 250)
                     activate(button(dialog, 'Löschen'))
                     assert [f.id for f in editor().animation.frames] == [first, second]
                 modal('Bildfolge bearbeiten', lambda: activate(editor().frames_button), frame_actions)
                 assert len(document()['frames']) == 2
                 app.undo_last_change();pump()
-                assert len(document()['frames']) == 3 and editor().animation.durations() == [250, 90, 250]
+                assert len(document()['frames']) == 3 and editor().animation.durations() == (250, 90, 250)
                 # Zell-Undo gehört zum ausgewählten Bild, globale Struktur-Undo bleibt getrennt.
                 choose(0);paint('#ABCDEF', 1, 1)
                 choose(1);paint('#F01234', 2, 2)
@@ -251,8 +251,14 @@ def run(app_path, cases, report, previous):
                 expected_manifest['file'] = png_path.name
                 assert png_path.read_bytes() == expected_png and manifest == expected_manifest
                 prior = {p.name:p.read_bytes() for p in exports.iterdir()}
-                with patch.object(mod.filedialog, 'asksaveasfilename', return_value=str(png_path)), patch.object(app, 'ask_yes_no', return_value=False):
+                # Eine geänderte Folge würde andere Bytes schreiben: Ablehnen muss
+                # den vorhandenen Dateisatz erhalten, und die Rückfrage muss kommen.
+                assert app.change_animation_frames(editor(), 'duration', (110, None));pump()
+                asked = []
+                with patch.object(mod.filedialog, 'asksaveasfilename', return_value=str(png_path)), \
+                     patch.object(app, 'ask_yes_no', side_effect=lambda *a, **k: asked.append(a) or False):
                     app.drawing_animation_export(editor())
+                assert asked, 'Vorhandene Dateien ohne Rückfrage'
                 assert {p.name:p.read_bytes() for p in exports.iterdir()} == prior
                 before_notices = len(notices)
                 with patch.object(mod.filedialog, 'asksaveasfilename', return_value=str(png_path)), patch.object(mod.glide_animation_export.os, 'fsync', side_effect=OSError('synthetischer Exportfehler')):

@@ -1,0 +1,11 @@
+{
+  "commit": "2cbd561b289b549372e4ef0abb8aaa9405047fa4",
+  "bytegleich": true,
+  "sha256": {
+    "01_Repository/Glide/tests/qa-3.34.0/wissen_2026-10-09/README.md": "c5ef2b5fd6c86542ec773d310a5eecc55505f367d4f61360a17b2db2f288380e",
+    "01_Repository/Glide/tests/qa-3.34.0/wissen_2026-10-09/bundle.json": "48337a6b4f98f3c1b055bcaf5ebcb8773f5a791e010042c873bfe15eed219dd7",
+    "01_Repository/Glide/tests/qa-3.34.0/wissen_2026-10-09/messungen/suche_3.33.21.json": "7360bdd94fb729ff6c7ce828fc2a6b1e4c7601bffdb6794a034c818a0309c5f1",
+    "01_Repository/Glide/tests/qa-3.34.0/wissen_2026-10-09/messungen/suche_3.34.0.json": "d572b1688dfc60e51e53c0f41eb432a7cd55297a147bcbb57d37f08f54575abc",
+    "01_Repository/Glide/tests/qa-3.34.0/wissen_2026-10-09/voll/ergebnis.json": "705d58e9383af4282894e908b218ed82b89e863dc3daf166c969722c00376df1"
+  }
+}

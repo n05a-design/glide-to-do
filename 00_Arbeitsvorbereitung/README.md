@@ -1,6 +1,6 @@
 # Arbeitsvorbereitung
 
-Stand 13.10.2026 · Glide 3.39.1 · Aufgabenformat 23
+Stand 13.10.2026 · Glide 3.40.0 · Aufgabenformat 24
 
 Planung, Übergabe und alles, was der Inhaber entscheidet oder von Hand prüft. Seit 03.10.2026 vier Dokumente statt 24, seit 08.10.2026 dazu die Analyse; zusammengeführt wurden Übergaben, Planungen, Auswahl- und Entscheidungsvorlagen, Recherchen und Checklisten. Die Vorfassungen trägt Git.
 

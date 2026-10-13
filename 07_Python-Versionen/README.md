@@ -1,8 +1,8 @@
 # Aktuelle startbare Python-Fassung
 
-Glide 3.39.1 · Entwicklungsstand 13.10.2026 · Aufgabenformat 23 · Vorlagenformat 2
+Glide 3.40.0 · Entwicklungsstand 13.10.2026 · Aufgabenformat 24 · Vorlagenformat 2
 
-Die startbare Fassung `Glide-Aufgaben-und-Listen_v3.39.1.pyw` behebt Wiederholungen in Schnelleingabe und Kalenderaustausch (FP-00): Ankertag und Wochentage werden vollständig Teil der Regel, nicht Abbildbares bleibt Text mit Hinweis ohne Wirkung; Monats- und Jahresreihen ab dem 29. ergeben in Kalenderprogrammen dieselben Termine wie in Glide; der Aufgabenimport liest Zeitzonen aus den mitgelieferten IANA-Daten. Aufgabenformat 23/Einstellungenformat 2 unverändert, gespeicherte Regeln unverändert. 451 Unit-Tests/87 Suiten, Gegenprobe gegen 3.39.0 passend rot. Eingefrorene Mac-Vollprüfung grün (104/2, 998 Dateien unverändert), 52 Code-/146 Ressourcen-/sechs Showcase-Dateien bytegleich, Mac-Bundle/Signaturen grün. Native Linux-/Windows-Vollmatrix 38357770894 grün; geliefert. [Nachweise](../01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/README.md). In denselben Ordner gehören:
+Die startbare Fassung `Glide-Aufgaben-und-Listen_v3.40.0.pyw` ergänzt Pixelbildfolgen (Paket 5, D18): Bilder anlegen, duplizieren, löschen und umordnen, gemeinsame oder eigene Dauer, unterbrechbare Vorschau sowie PNG-Spritesheet und PNG-Einzelbildfolge mit Zeitachse; Zwischenstände enthalten die ganze Folge. Aufgabenformat 24 mit bytegenauer Vorsicherung; die unveränderte 3.39.1 öffnet den neuen Bestand schreibgeschützt. 491 Unit-Tests/88 Suiten. Mac-Vollprüfung, Lieferabgleich und native Matrix folgen. [Nachweise](../01_Repository/Glide/tests/qa-3.40.0/pixelanimation_2026-10-13/README.md). In denselben Ordner gehören:
 
 - die Module `drawing.py`, `drawing_image.py`, `backdrop.py`, `page_markdown.py`, `image_preview.py`, `logo.py`, `schema_backups.py`, `sidebar_policy.py`, `svg_geometry.py`, `home_tiles.py`, `capture_parser.py`, `eisenhower.py`, `today_view.py`, `content_search.py`, `save_comparison.py`, `view_metrics.py`, `action_catalog.py`, `ui_design.py`, `planning.py`, `day_proposal.py`, `focus_timer.py`, `task_references.py`, `interaction_policy.py`, `object_references.py`, `week_planning.py`, `page_features.py`, `repeat_rules.py`, `repeat_ics.py`, `routines.py`, `runtime_check.py`, `release_notes.py`, `appearance.py`, `preview_tools.py`, `filter_explain.py`, `exchange_patch.py`, `backup_diff.py`, `render_retention.py`, `logo_raster.py`, `symbol_policy.py`, `motion.py`, `task_editing.py`, `daily_hints.py`, `ics_recurrence.py`, `occupied_time.py`, `ics_busy.py`, `ics_timezone.py`, `timezones.py`, `day_relief.py`, `busy_calendar.py`, `calendar_service.py`, `animation.py`, `animation_export.py` – ohne sie startet Glide nicht;
 - `Schnellstart.pyw` (im Repository `glide_start.py`);
@@ -30,7 +30,7 @@ Python legt den übersetzten Stand im Cacheordner des Systems ab, nie hier: macO
 
 ## Datenformat und frühere Fassungen
 
-Aufgabenformat 23 schützt Live-Listen und Titelbilder; die frühere 3.33.17 verwendet Format 22. Vor der Umstellung entsteht die bytegleiche Vorsicherung `liste_vor_format23_<Zeitstempel>.json`; schlägt sie fehl, bleibt die alte Datei unverändert. Die unveränderte 3.33.17 öffnet Format 23 nachweislich schreibgeschützt.
+Aufgabenformat 24 bewahrt vollständige Pixelbildfolgen; die frühere 3.39.1 verwendet Format 23. Vor der Umstellung entsteht die bytegleiche Vorsicherung `liste_vor_format24_<Zeitstempel>.json`; schlägt sie fehl, bleibt die alte Datei unverändert. Die unveränderte 3.39.1 öffnet Format 24 schreibgeschützt.
 
 **Ältere Fassungen nie mit dem umgestellten Bestand starten.** Glide 3.29 hält ihn für beschädigt, beginnt leer und überschreibt ihn bei der ersten Eingabe. Zurück geht es nur mit der Vorsicherung in einer getrennten Ablage (`GLIDE_DATA_DIR`). Eine Fassung öffnet einen Bestand aus einer neueren Version nur schreibgeschützt.
 

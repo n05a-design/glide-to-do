@@ -1,6 +1,6 @@
 # Paketierung Glide
 
-Stand 13.10.2026 · Glide 3.39.1 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
+Stand 13.10.2026 · Glide 3.40.0 · Aufgabenformat 24 · Einstellungen 2 · Vorlagen 2
 
 Der aktuelle Stand ist eine geprüfte Python-Anwendung mit Ressourcen. Ein Installer, eine Signatur oder eine Store-Abnahme wird hier nicht behauptet; offene Schritte stehen in der [Veröffentlichung](../docs/10_VEROEFFENTLICHUNG.md).
 
