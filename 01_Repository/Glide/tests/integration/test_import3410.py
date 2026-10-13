@@ -345,7 +345,8 @@ def run(app_path, cases, report=None, previous=None):
                 child = '''import importlib.machinery,importlib.util,json,os,pathlib,sys
 from unittest.mock import patch
 p=pathlib.Path(os.environ['GLIDE_DATA_DIR'])/'liste_speicher.json';before=p.read_bytes()
-sys.path.insert(0,str(pathlib.Path(sys.argv[1]).parent))
+app_path=pathlib.Path(sys.argv[1])
+sys.path.insert(0,str(app_path.parent.parent if app_path.parent.name=='Archiv' else app_path.parent))
 l=importlib.machinery.SourceFileLoader('format3410',sys.argv[1]);m=importlib.util.module_from_spec(importlib.util.spec_from_loader(l.name,l));l.exec_module(m)
 m.ListApp.show_error=m.ListApp.show_warning=m.ListApp.show_info=lambda *a,**kw:None
 r=m.tk.Tk();r.withdraw()

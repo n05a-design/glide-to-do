@@ -27,5 +27,17 @@ Mac-Abnahme und Lieferweg:
 - [Frische eingefrorene Mac-Vollprüfung](mac_voll.json) am Kandidaten 56b9b98 außerhalb OneDrive: Exit 0, 106 ausgeführt/zwei übersprungen; alle 1042 eingefrorenen Dateien danach unverändert. Der rebasierte Kandidat trägt denselben Code, dieselben Tests und Fixtures; hinzu kamen nur Dokumente und Belege des Lieferabschlusses 3.40.0.
 - [Produktionsübernahme](produktionsuebernahme.json), [215 Lieferdateien](lieferung.json), [123 Bundle-Dateien und beide Signaturen](bundle.json). 3.40.0 liegt im Archiv.
 
-Native Linux-/Windows-Matrix und Lieferabschluss folgen.
+Der [erste native Lauf](https://github.com/n05a-design/glide-to-do/actions/runs/38388529406) endete rot. Drei Ursachen werden im Nachlauf vom 13.10.2026 korrigiert:
+
+- Anhangsrollback: Gerät/Inode allein unterscheiden auf Linux eine inzwischen eingesetzte Verknüpfung bei wiederverwendeter Inode nicht. Zusätzlich den Dateityp prüfen; die bestehende Gegenprobe erzwingt die Wiederverwendung auch auf dem Mac und scheitert mit dem unveränderten Vorgänger passend.
+- Altleser: Ein Kindprozess mit der Hauptdatei im Archiv muss die Begleitmodule im übergeordneten Lieferordner finden; auf Linux und Windows scheiterte zuvor der Import von `drawing`.
+- ZIP-Pfade: Testarchive bewahren Backslashes unverändert. Auch der ZIP-Leser normalisiert sie unter Windows und kürzt Nullbytes; der Produktionsparser prüft deshalb `orig_filename` vor jeder Nutzung. Gegenproben mit beiden Plattformtrennzeichen und Nullbytes scheitern mit dem unveränderten Vorgänger passend.
+
+[31 betroffene Unit-Tests und passende rote Vorgängerproben](korrektur_gegenproben.json) sowie die [gezielte Importprüfung mit sechs Gruppen](korrektur_gezielt.json) sind grün. Ein begonnener Mac-Volllauf wurde nach Ergänzung der ZIP-Originalnamenprüfung gezielt beendet (Exit 143); er gilt ausdrücklich nicht als Abnahme.
+
+Die [frische eingefrorene Mac-Vollprüfung](mac_korrektur_voll.json) ist vollständig grün: Exit 0, 106 ausgeführt/zwei übersprungen, 89 Integrationssuiten/638 Units. [Alle 1.064 eingefrorenen Dateien sind unverändert](korrektur_quellstand.json); Code und Tests stimmen mit der Arbeitskopie überein. Die Hauptdatei bleibt am Hash 4dedf0c5; die geänderten Begleitmodule `notion_archive.py` und `restore_assets.py` sind mit eigenen Hashes belegt. [215 Lieferdateien](lieferung_korrektur.json) und [123 Bundle-Dateien](bundle_korrektur.json) bytegleich; Signaturen im Bauordner und auf frischer Rückkopie grün. Die früheren Belege oben bleiben für ihren damaligen Stand erhalten.
+
+[Strenge lokale CI-Grundstufe](ci_korrektur.json) grün, einschließlich Werkzeugtests, 638 Units mit und ohne Systemzeitzonen, Startprobe und bytegleichem Lieferstand. Der Fremdcode-Originalabruf blieb wegen des bekannten lokalen SSL-Zertifikatsfehlers ein Hinweis; die native CI führt ihn erneut aus.
+
+Native Wiederholung und Lieferabschluss bleiben bis zum jeweiligen Nachweis offen.
 Tatsächliche menschliche Bedienung bleibt ein gesondertes Abnahmetor.

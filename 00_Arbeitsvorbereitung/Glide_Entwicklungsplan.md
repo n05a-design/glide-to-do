@@ -36,7 +36,7 @@ Reihenfolge der Stufen (Antwort des Inhabers vom 30.09.2026, bestätigt am 01.10
 | 2 Wissen im Kontext | Suche, Verweise, Live-Liste, Titelbild, Kalender mit Wochenplanung, Bilder in Seiten, Filter erklären | ◐ geliefert 3.33.7–3.34.0; N05 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen |
 | 3 Pixel | Palettenbearbeitung, Symbolvorschau, Animation | ◐ G19, G-03 ✅ 3.35.0; G17 ✅ 3.40.0 geliefert |
 | 4 Austausch und Verteilung | KI-Austausch Stufe 2, Import, Sicherungsvergleich, Paket mit eigenem Python | ◐ G24, F-03 ✅ 3.35.0; G21 ▶ 3.41.0 Mac-vollgeprüft, native Matrix offen; G26 durch D27 ausgewählt, Paket 7 offen |
-| 5 Zukunft (4.x) | Screenreader (Tk 9.1), Seitenversionen, SQLite nur nach D16-Neubewertung | ◇ |
+| 5 Zukunft (4.x) | Screenreader (Tk 9.1), Seitenversionen, SQLite nur nach D16-Neubewertung | ▶ N12 Aufgaben-Kernablauf durch D36/D44 für 4.0.0 beauftragt und vorbereitet; übrige Zukunftspunkte ◇ |
 
 ## 2. Erledigt seit 3.30
 
@@ -301,7 +301,7 @@ Original vollständig aus der Git-Historie gelesen: „Glide – KI-Austauschfor
 
 | Ursprüngliche Idee | Heutiger Code / Entscheidung | Konsequenz |
 |---|---|---|
-| Internes Format, Exchange und KI-Beschreibung trennen | `DATA_SCHEMA_VERSION = 23`, `EXCHANGE_FORMAT_VERSION = 1` (Änderungsvorschläge 2), `exchange_manifest`, erzeugte Spezifikation vorhanden | ✅ Grundlage erhalten; neue Funktionen nicht automatisch zum Exchange-Vertrag erklären |
+| Internes Format, Exchange und KI-Beschreibung trennen | `DATA_SCHEMA_VERSION = 25`, `EXCHANGE_FORMAT_VERSION = 1` (Änderungsvorschläge 2), `exchange_manifest`, erzeugte Spezifikation vorhanden | ✅ Grundlage erhalten; neue Funktionen nicht automatisch zum Exchange-Vertrag erklären |
 | Create mit freien Schlüsseln statt erfundener UUIDs | `parse_exchange_document`, Preview und Import; echte IDs werden von Glide vergeben | ✅ kein neuer Importweg nötig |
 | Capability Registry, unbekannte Felder sichtbar | `exchange_capabilities`, Feldlisten, Importbericht; Anhänge/Repeat/Reminder bewusst Stufe 0, `patch_mode` 1 seit 3.35.0 | ✅ Registry, Spezifikation und Verlustbericht mit G24 weitergeführt |
 | `.glidecontext` plus geprüfte Patch-Operationen | Kontextpaket und Änderungsvorschlag seit 3.35.0 (`exchange_patch.py`) | ✅ G24: Auswahlumfang, Prüfsummen, Ausgangsstand, Feldvergleich, Vorsicherung, ein Undo-Schritt; Konflikte nie still überschrieben |
@@ -551,7 +551,7 @@ Quellen für V01/V02 im Marktvergleich §8; eigene Ableitungen. N12 nach dem dor
 
 ## 16. Vorschläge aus Wettbewerbs- und Open-Source-Analyse (13.10.2026)
 
-**Status seit D49 (13.10.2026): beauftragt mit den empfohlenen Optionen.** Zunächst als Vorschläge vorgelegt; auf „bitte immer weiter machen bis alles umgesetzt ist“ legt D49 die Empfehlungen E-W1–E-W7 als Auftrag aus (Auslegung durch Claude, jederzeit korrigierbar). Reihenfolge: Abschluss 3.39.0 → FP-00 → Pakete 5–8 (§15.7) → übrige Pakete nach §16.7. Grundlagen: [Analyse §8](Glide_Analyse.md#8-bestandsaufnahme-und-gap-analyse-13102026) (Bestand, Gap), [Markt und Vorbilder §9](Glide_Markt_und_Vorbilder.md#9-wettbewerbs--und-open-source-analyse-13102026) (Wettbewerb, Codeanalyse, Featurematrix). Der Wunsch des Inhabers nach spürbarerem Produktnutzen (Arbeitsrichtung, 10.10.2026) ist Anlass; daraus folgt nur dieses Angebot, keine Umsetzung.
+**Status seit D49 (13.10.2026): beauftragt mit den empfohlenen Optionen.** Zunächst als Vorschläge vorgelegt; auf „bitte immer weiter machen bis alles umgesetzt ist“ legt D49 die Empfehlungen E-W1–E-W7 als Auftrag aus (Auslegung durch Claude, jederzeit korrigierbar). Reihenfolge: Abschluss 3.39.0 → FP-00 → Pakete 5–8 (§15.7) → übrige Pakete nach §16.7. Grundlagen: [Analyse §8](Glide_Analyse.md#8-bestandsaufnahme-und-gap-analyse-13102026) (Bestand, Gap), [Markt und Vorbilder §9](Glide_Markt_und_Vorbilder.md#9-wettbewerbs--und-open-source-analyse-13102026) (Wettbewerb, Codeanalyse, Featurematrix). Der Wunsch des Inhabers nach spürbarerem Produktnutzen (Arbeitsrichtung, 10.10.2026) ist Anlass; die empfohlenen Optionen sind seit D49 beauftragt; P3-Einträge mit Auslöser bleiben bis zu diesem offen.
 
 ### 16.1 Priorisierung
 
@@ -784,7 +784,7 @@ Bewertung je Eintrag: Nutzen, Aufwand (S bis 1, M 2–4, L mehr als 4 Arbeitstag
 
 ### 16.5 Entscheidungsvorlagen für den Inhaber
 
-Nummeriert nach dem bewährten Muster (Übergabe §4); Kurzantwort etwa „E-W7 A, E-W1 A/V, E-W2 A/1“. Neue Entscheidungen würden als D49 ff. in der Arbeitsrichtung eingetragen.
+Nummeriert nach dem bewährten Muster (Übergabe §4); Kurzantwort etwa „E-W7 A, E-W1 A/V, E-W2 A/1“. Die empfohlenen Optionen sind durch D49 beauftragt; neue abweichende Entscheidungen werden ab D50 in der Arbeitsrichtung eingetragen.
 
 | Nr. | Frage | A/1 – erste Stufe | A/V – vollständig | B / C | Empfehlung |
 |---|---|---|---|---|---|
@@ -825,18 +825,18 @@ Nach Abschluss des bestätigten Sprints (4.0.0), je Zeile eine Produktionsversio
 
 ### 16.8 Umsetzungsreife
 
-| Paket | Spezifikation | Vorbereitendes Refactoring | Offene Entscheidung | Datenmigration | Erforderliche Testabdeckung |
+| Paket | Spezifikation | Vorbereitendes Refactoring | Entscheidung / verbleibendes Tor | Datenmigration | Erforderliche Testabdeckung |
 |---|---|---|---|---|---|
-| FP-00 | ausreichend; Beispiel- und Fallenliste liegt als Probe vor | – | E-W7; Lesart von „jeden 2. Dienstag“ | nein | Parser-Positiv-/Fallenfälle, RRULE über alle Starttage |
-| FP-01 | ausreichend; Einstiegsinventar erstellt (38 + 32 Stellen), Gültigkeitsregel festgelegt | Stapelregeln in `undo_history.py` herauslösen, Schreibzähler in `save_items` | E-W1; Strg+Y unter Windows | nein | Einstiegsmatrix aller Rückgängig-Wege mit Bytevergleich |
-| FP-02 | ausreichend; Beispieltabelle der Eingabesprache gegen `ics_recurrence` geprüft (§16.10) | `repeat_rules.py` als Fassade über `ics_recurrence.py`; alte Arten rechnen weiter selbst (Monatsende-Anker weicht von RFC ab) | E-W2; Formatnummer beim Schnitt | ja | Referenztermine aus unabhängiger Rechnung (Werkzeug liegt vor), Altleser-Kindprozess |
-| FP-03 | Stufe 1 ausreichend; Stufe 2 braucht Bedienentwurf des Dialogs | – (eigener Einstellungsschlüssel) | E-W4 | Einstellungen additiv | Referenzbestand für Filtertreffer, Messung |
-| FP-04 | ausreichend | WA-09 | E-W5 | nein | Pinnwand-Altleser, Messung mit 200 Karten |
-| FP-05 | ausreichend | – | E-W5 | nein | Treffer-/Fallen-Fixture |
-| FP-06 | ausreichend; Austauschweg geprüft (`instructions` vorhanden, Erstellen nur über Stufe 1) | – | E-W3 | nein | Musterantworten je Auftrag, beide Stufen |
-| FP-07 | Stufe 1 ausreichend | gemeinsame Markdown-Regeln mit Paket 6 | E-W5 | nein | Showcase-Rundlauf, Linkauflösung, Canvas-Schema |
+| FP-00 | ausreichend; Beispiel- und Fallenliste liegt als Probe vor | – | E-W7 A durch D49; geliefert 3.39.1 | nein | Parser-Positiv-/Fallenfälle, RRULE über alle Starttage |
+| FP-01 | ausreichend; Einstiegsinventar erstellt (38 + 32 Stellen), Gültigkeitsregel festgelegt | Stapelregeln in `undo_history.py` herauslösen, Schreibzähler in `save_items` | E-W1 A/V durch D49; Strg+Y gemäß Systemkonvention | nein | Einstiegsmatrix aller Rückgängig-Wege mit Bytevergleich |
+| FP-02 | ausreichend; Beispieltabelle der Eingabesprache gegen `ics_recurrence` geprüft (§16.10) | `repeat_rules.py` als Fassade über `ics_recurrence.py`; alte Arten rechnen weiter selbst (Monatsende-Anker weicht von RFC ab) | E-W2 A/V durch D49; Formatnummer beim Schnitt | ja | Referenztermine aus unabhängiger Rechnung (Werkzeug liegt vor), Altleser-Kindprozess |
+| FP-03 | Stufe 1 ausreichend; Stufe 2 braucht Bedienentwurf des Dialogs | – (eigener Einstellungsschlüssel) | E-W4 A/V durch D49 | Einstellungen additiv | Referenzbestand für Filtertreffer, Messung |
+| FP-04 | ausreichend | WA-09 | E-W5 durch D49 gemäß §16.5 | nein | Pinnwand-Altleser, Messung mit 200 Karten |
+| FP-05 | ausreichend | – | E-W5 durch D49 gemäß §16.5 | nein | Treffer-/Fallen-Fixture |
+| FP-06 | ausreichend; Austauschweg geprüft (`instructions` vorhanden, Erstellen nur über Stufe 1) | – | E-W3 A durch D49; kein lokaler KI-Endpunkt | nein | Musterantworten je Auftrag, beide Stufen |
+| FP-07 | Stufe 1 ausreichend | gemeinsame Markdown-Regeln mit Paket 6 | E-W5 durch D49 gemäß §16.5 | nein | Showcase-Rundlauf, Linkauflösung, Canvas-Schema |
 
-**Sofort nach Auswahl umsetzbar:** FP-00, FP-05, FP-06, WA-12. **Nach kleinem Extrakt:** FP-01. **Erst vollständig spezifizieren:** Bedienentwurf für Stufe 2 von FP-03. Keine produktive Komponente wird vor einer Auswahl verändert.
+**Umsetzungsfolge nach D49:** FP-00 ist als 3.39.1 geliefert. Die übrigen beauftragten Pakete folgen nach Abschluss 4.0.0 gemäß §16.7. FP-05, FP-06 und WA-12 sind ausreichend spezifiziert; FP-01 braucht einen kleinen Extrakt. Vor Stufe 2 von FP-03 ist der Bedienentwurf des Dialogs vollständig zu spezifizieren. Bereits durch D49 gewählte Optionen brauchen keine erneute Auswahl.
 
 ### 16.9 QA-Strategie für die Vorschläge
 

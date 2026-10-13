@@ -2,6 +2,7 @@ from pathlib import Path
 import copy
 import io
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 import restore_assets
@@ -71,7 +72,16 @@ class AssetsTest(unittest.TestCase):
             directory=Path(folder);(directory/'unbekannt-fremd.bin').write_bytes(b'Fremd')
             result=restore_assets.stage([attachment()],directory,lambda _p:io.BytesIO(b'PNG'),max_bytes=10,new_id=lambda:'new')
             created=directory/'new.png';created.unlink();created.symlink_to(directory/'unbekannt-fremd.bin')
-            result.cleanup()
+            # Inode-Wiederverwendung wie auf ext4 erzwingen, auch auf APFS.
+            device, inode = result.created[0][1][:2]
+            original_stat = Path.stat
+            def reused_inode(path, *args, **kwargs):
+                current = original_stat(path, *args, **kwargs)
+                if path == created and kwargs.get('follow_symlinks') is False:
+                    return SimpleNamespace(st_dev=device, st_ino=inode, st_mode=current.st_mode)
+                return current
+            with patch.object(Path, 'stat', reused_inode):
+                result.cleanup()
             self.assertTrue(created.is_symlink())
             self.assertEqual(created.read_bytes(),b'Fremd')
             self.assertEqual((directory/'unbekannt-fremd.bin').read_bytes(),b'Fremd')

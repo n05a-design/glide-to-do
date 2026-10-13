@@ -19,7 +19,12 @@ def archive(files):
     stream = io.BytesIO()
     with zipfile.ZipFile(stream, "w", zipfile.ZIP_DEFLATED) as output:
         for name, value in files.items():
-            output.writestr(name, value)
+            # ZipInfo normalisiert unter Windows sonst schon den ungültigen
+            # Testpfad. Das Archiv muss die tatsächlich geprüften Bytes tragen.
+            entry = zipfile.ZipInfo(name)
+            entry.filename = name
+            entry.compress_type = zipfile.ZIP_DEFLATED
+            output.writestr(entry, value)
     stream.seek(0)
     return stream
 
@@ -160,9 +165,11 @@ class NotionArchiveTests(unittest.TestCase):
         self.assertEqual(notion.local_target("folder/page.md", "../inside.png", members), "inside.png")
 
     def test_traversal_absolute_windows_and_control_paths_are_rejected(self):
-        for path in ("../bad.md", "/bad.md", "C:/bad.md", "a\\bad.md", "a/./bad.md", "a//bad.md", "a/../bad.md", "a/\x01bad.md"):
-            with self.subTest(path=path), self.assertRaises(notion.NotionFormatError):
-                notion.inspect_export(archive({path: "# Bad"}))
+        for separator in ('/', '\\'):
+            with patch.object(zipfile.os, 'sep', separator):
+                for path in ("../bad.md", "/bad.md", "C:/bad.md", "a\\bad.md", "a/./bad.md", "a//bad.md", "a/../bad.md", "a/\x01bad.md", "a/bad.md\x00hidden"):
+                    with self.subTest(separator=separator, path=path), self.assertRaises(notion.NotionFormatError):
+                        notion.inspect_export(archive({path: "# Bad"}))
 
     def test_duplicate_case_and_unicode_paths_are_rejected(self):
         for paths in (("A.md", "a.md"), ("ä.md", "a\u0308.md")):

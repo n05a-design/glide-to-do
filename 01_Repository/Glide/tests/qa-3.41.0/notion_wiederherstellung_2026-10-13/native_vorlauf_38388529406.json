@@ -1,0 +1,34 @@
+{
+  "conclusion": "failure",
+  "databaseId": 38388529406,
+  "headSha": "4b5b21e24d79528d5720d0879a872f9a15d4fd48",
+  "jobs": [
+    {
+      "name": "Grundstufe (Linux, Python 3.14, Tk 8.6)",
+      "conclusion": "failure",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38388529406/job/115266202489"
+    },
+    {
+      "name": "Aufgabenlayout-Diagnose (Windows x64, Python 3.14)",
+      "conclusion": "skipped",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38388529406/job/115266204309"
+    },
+    {
+      "name": "Vollprüfung (Linux/Xvfb, Python 3.14, Tk 8.6)",
+      "conclusion": "failure",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38388529406/job/115267310671"
+    },
+    {
+      "name": "Vollprüfung (Windows x64, Python 3.14)",
+      "conclusion": "failure",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38388529406/job/115275303687"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38388529406",
+  "befunde": [
+    "Linux: Inode-Wiederverwendung beim Anhangsrollback",
+    "Linux/Windows: Modulsuchpfad der archivierten Vorversion",
+    "Windows: ZIP-Normalisierung von Testpfad und ursprünglichem Archivnamen"
+  ]
+}

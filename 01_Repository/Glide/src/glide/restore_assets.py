@@ -3,6 +3,7 @@ import copy
 from dataclasses import dataclass
 import os
 from pathlib import Path
+import stat
 import re
 import uuid
 import unicodedata
@@ -27,8 +28,10 @@ class Staged:
             return
         for path,identity in reversed(self.created):
             try:
+                # Gerät, Inode und Dateityp: ext4 vergibt eine freie Inode-Nummer
+                # sofort neu; ein inzwischen eingesetzter Symlink ist nie die eigene Datei.
                 st=path.stat(follow_symlinks=False)
-                if (st.st_dev,st.st_ino)==identity:
+                if (st.st_dev,st.st_ino,stat.S_IFMT(st.st_mode))==identity:
                     path.unlink()
             except FileNotFoundError:
                 pass
@@ -91,7 +94,7 @@ def stage(attachments, directory, open_source, *, occupied_ids=(), occupied_stor
             else:
                 raise OSError('Kein freier Anhangsname für die Wiederherstellung.')
             # Diese Datei gehört allein dieser Transaktion; nie vorhandene Bytes entfernen.
-            st=os.fstat(output.fileno());created.append((target,(st.st_dev,st.st_ino)))
+            st=os.fstat(output.fileno());created.append((target,(st.st_dev,st.st_ino,stat.S_IFMT(st.st_mode))))
             result.created=tuple(created)
             with output,open_source(old_storage)as source:
                 total=0

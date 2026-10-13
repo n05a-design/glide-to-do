@@ -146,7 +146,9 @@ def _read_members(source):
             total = 0
             inspected = []
             for info in infos:
-                name = safe_member(info.filename)
+                # ZipInfo normalisiert Backslashes unter Windows und kürzt
+                # Nullbytes. Den ungekürzten Archivnamen vor jeder Nutzung prüfen.
+                name = safe_member(info.orig_filename)
                 if name in paths or name.casefold() in folded:
                     raise NotionFormatError("Das Archiv enthält doppelte oder mehrdeutige Dateipfade.")
                 paths.add(name); folded.add(name.casefold())
