@@ -6,7 +6,7 @@ Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierun
 
 ## Releasecheckliste
 
-**Je Version (zuletzt automatisch vollständig geliefert 3.38.0; menschliche Abnahme und Veröffentlichungstore getrennt offen):**
+**Je Version (zuletzt automatisch vollständig geliefert 3.41.0; menschliche Abnahme und Veröffentlichungstore getrennt offen):**
 
 Die Haken beschreiben den zuletzt abgeschlossenen Lieferstand. Für den aktuellen Kandidaten gelten die offenen Schritte im [QA-Bericht](07_QA_BERICHT.md); ein früherer grüner Bundlebeleg ist keine Abnahme des geänderten Codes. Historisch wurden bis 3.33.6 und wieder seit 3.33.18 Mac-Bundle und Python-Fassung geliefert; 3.33.7–3.33.17 nur unter Windows ohne Bundle.
 

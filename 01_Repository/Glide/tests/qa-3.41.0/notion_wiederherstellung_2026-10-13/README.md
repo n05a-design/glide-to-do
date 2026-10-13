@@ -39,5 +39,7 @@ Die [frische eingefrorene Mac-Vollprüfung](mac_korrektur_voll.json) ist vollst�
 
 [Strenge lokale CI-Grundstufe](ci_korrektur.json) grün, einschließlich Werkzeugtests, 638 Units mit und ohne Systemzeitzonen, Startprobe und bytegleichem Lieferstand. Der Fremdcode-Originalabruf blieb wegen des bekannten lokalen SSL-Zertifikatsfehlers ein Hinweis; die native CI führt ihn erneut aus.
 
-Native Wiederholung und Lieferabschluss bleiben bis zum jeweiligen Nachweis offen.
-Tatsächliche menschliche Bedienung bleibt ein gesondertes Abnahmetor.
+[Native Wiederholung 38441333442](https://github.com/n05a-design/glide-to-do/actions/runs/38441333442) am Kandidaten `1bc2db1` vollständig grün: [Grundstufe](grundstufe_native_korrektur.json) 19 ausgeführt, [Linux-Vollprüfung](linux_korrektur_voll.json) und [Windows-Vollprüfung](windows_korrektur_voll.json) je Exit 0, 107 ausgeführt/eine menschliche Sichtprüfung übersprungen. [18 Linux-Defektgegenproben](linux_defekt_korrektur.json) passend rot; [Job-/Laufzeitnachweise](native_final_korrektur.json). Windows Python 3.14.7/Tk 9.0.4, Referenzdesktop 1920 × 1080; Linux Python 3.14.8. Der native Originalabruf bestätigt alle 116 Vendor-Dateien bytegleich und räumt den lokalen SSL-Hinweis aus.
+
+[Lieferabschluss](lieferabschluss.json): 215 Liefer-/123 Bundle-Dateien nach der Matrix erneut bytegleich, Ad-hoc-Signaturen im Bauordner und auf frischer Rückkopie erneut grün. Frühere rote und grüne Belege bleiben an ihren ursprünglichen Code-/Prüfständen erhalten.
+[Abschließende strenge Liefer-CI](ci_lieferabschluss.json) grün; Appcode und Tests seit der nativen Matrix unverändert. Tatsächliche menschliche Bedienung bleibt ein gesondertes Abnahmetor.
