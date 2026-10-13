@@ -29,5 +29,7 @@ Mac-Abnahme und Lieferweg:
 - [Frische eingefrorene Mac-Vollprüfung](mac_voll.json) am Kandidaten 2d002ad außerhalb OneDrive: Exit 0, 105 ausgeführt/zwei übersprungen; alle 1014 eingefrorenen Dateien danach unverändert. Der rebasierte Kandidat trägt denselben Code, dieselben Tests und Fixtures; hinzu kamen nur Dokumente und Belege des Lieferabschlusses 3.39.1.
 - [Produktionsübernahme](produktionsuebernahme.json), [206 Lieferdateien](lieferung.json), [114 Bundle-Dateien und beide Signaturen](bundle.json). 3.39.1 liegt im Archiv.
 
+Die erste native Matrix [38365723954](https://github.com/n05a-design/glide-to-do/actions/runs/38365723954) endete rot ([Auswertung](native_38365723954.json)), beide Befunde am Prüfstand: Unter Linux prüfte `test_animation3400` den Knopf „Duplizieren“, bevor die Knopfzeile unter Xvfb angeordnet war; unter Windows verglich `test_animation_export` den Sicherungspfad textlich, während Windows den Temp-Ordner einmal in Kurzform nennt. Die Suite wartet jetzt höchstens 3 s auf die Anordnung, der Unit-Test vergleicht aufgelöste Pfade; ein tatsächlich nie angeordneter Knopf macht die Suite weiterhin rot ([Prüfstandskorrektur](pruefstand_wartezeit.json)). App, Lieferdateien und Bundle unverändert.
+
 Native Linux-/Windows-Matrix und Lieferabschluss folgen.
 Tatsächliche menschliche Bedienung bleibt ein gesondertes Abnahmetor.

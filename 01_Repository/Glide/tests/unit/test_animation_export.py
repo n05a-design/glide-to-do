@@ -67,7 +67,8 @@ class AnimationExportTests(unittest.TestCase):
     def test_failed_rollback_retains_backup_and_reports_location(self):
         actual = os.replace
         with tempfile.TemporaryDirectory() as folder:
-            root = Path(folder)
+            # Aufgelöst wie in write_files: Windows nennt Temp-Ordner sonst in Kurzform (RUNNER~1).
+            root = Path(folder).resolve()
             (root / 'bild.png').write_bytes(b'vorher')
             def replace(source, target):
                 if Path(source).parent.name in ('neu', 'vorher'):
