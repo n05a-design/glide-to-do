@@ -17,5 +17,10 @@ Gezielte Proben vor dem Einfrieren:
 - 451 Unit-Tests grün, mit und ohne Systemzeitzonen; darunter 19 neue für `repeat_ics.py` und die Erfassung. Die Monatsreihen jedes Starttags werden mit `ics_recurrence` gegengerechnet.
 - [Auslaufende QA-Nachweise 3.33.21](aufbewahrung33321.json): sechs Dateien bytegleich zum Commit, auf den der QA-Bericht nun verweist.
 
-Die Mac-Vollprüfung auf eingefrorener Kopie, der Lieferabgleich, Bundle und Signaturen sowie die native Linux-/Windows-Matrix folgen.
+Mac-Abnahme und Lieferweg:
+
+- [Eingefrorene Mac-Vollprüfung](mac_voll.json) am Kandidaten b5cf4ec außerhalb OneDrive: Exit 0, 104 ausgeführt/zwei übersprungen (Screenshots nur Linux, Sichtprüfung durch eine Person); alle 998 eingefrorenen Dateien danach unverändert.
+- [Produktionsübernahme](produktionsuebernahme.json), [204 Lieferdateien](lieferung.json), [112 Bundle-Dateien und beide Signaturen](bundle.json). Die doppelte Hauptdatei 3.38.0 im Lieferordner war bytegleich zur Archivkopie und ist entfernt; 3.39.0 liegt im Archiv.
+
+Native Linux-/Windows-Matrix und Lieferabschluss folgen.
 Tatsächliche menschliche Bedienung bleibt ein gesondertes Abnahmetor.

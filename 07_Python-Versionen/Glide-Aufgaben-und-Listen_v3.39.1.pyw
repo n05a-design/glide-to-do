@@ -122,6 +122,17 @@ import sidebar_policy as glide_sidebar  # noqa: E402
 import home_tiles as glide_home  # noqa: E402
 import motion as glide_motion
 import task_editing as glide_task_editing
+import daily_hints
+import ics_recurrence
+import occupied_time
+import ics_busy
+import ics_timezone
+import timezones
+import day_relief
+import busy_calendar
+from calendar_service import CalendarService, View
+from zoneinfo import ZoneInfoNotFoundError
+
 import symbol_policy as glide_symbols
 import render_retention as glide_retention  # noqa: E402
 import eisenhower as glide_eisenhower  # noqa: E402
@@ -140,6 +151,7 @@ import day_proposal as glide_day_proposal  # noqa: E402
 import focus_timer as glide_focus  # noqa: E402
 import task_references as glide_task_refs  # noqa: E402
 import repeat_rules as glide_repeat  # noqa: E402
+import repeat_ics as glide_repeat_ics  # noqa: E402
 import routines as glide_routines  # noqa: E402
 import release_notes as glide_release  # noqa: E402
 import runtime_check as glide_runtime  # noqa: E402
@@ -182,7 +194,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.38.0"
+APP_VERSION = "3.39.1"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
 # Einstellungen des Betriebssystems hängen daran.
@@ -15435,6 +15447,7 @@ class ListApp:
         self.root.bind("<FocusIn>", lambda event: self.sync_system_appearance()
                        if event.widget is self.root else None, add="+")
         self.schedule_appearance_check()
+        self.init_daily_planning()
 
         # Tastaturkürzel
         # Enter wird direkt im Eingabefeld behandelt, damit add_item nicht doppelt ausgelöst wird.
@@ -17247,6 +17260,7 @@ class ListApp:
                     shutil.copy2(src, dst)
         if not os.environ.get("GLIDE_DATA_DIR"):
             self.write_json_atomic(DATA_POINTER_FILE, {"version": self.DATA_POINTER_VERSION, "path": target})
+        self.close_daily_planning()
         self.release_data_lock()
         BASE_DIR = target
         SAVE_FILE = target_data
@@ -17275,6 +17289,7 @@ class ListApp:
         self.undo_stack.clear()
         self.update_sidebar_list()
         self.apply_theme()
+        self.init_daily_planning()
         return True
 
     def show_data_folder_dialog(self):
@@ -18028,6 +18043,964 @@ class ListApp:
                     bester = (schluessel, item, entry)
         return (bester[1], bester[2]) if bester else (None, None)
 
+    def daily_now(self):
+        return datetime.now(self._daily_zone)
+
+
+    def _daily_after(self, delay, action, owner=None):
+        generation = self._daily_generation
+        owner = self.root if owner is None else owner
+        jobs = getattr(self, "_daily_jobs", None)
+        if jobs is None:
+            jobs = self._daily_jobs = {}
+        holder = []
+        def invoke():
+            jobs.pop(holder[0], None)
+            self._after_ids.discard(holder[0])
+            if generation == self._daily_generation and owner.winfo_exists():
+                action()
+        holder.append(self._register_after(self.root.after(delay, invoke)))
+        jobs[holder[0]] = owner
+        return holder[0]
+
+
+    def _cancel_daily_jobs(self, owner=None):
+        jobs = getattr(self, "_daily_jobs", {})
+        for handle, widget in tuple(jobs.items()):
+            if owner is None or widget is owner:
+                jobs.pop(handle, None)
+                getattr(self, "_after_ids", set()).discard(handle)
+                try:
+                    self.root.after_cancel(handle)
+                except tk.TclError:
+                    pass
+
+    def init_daily_planning(self):
+        self.close_daily_planning()
+        self._daily_generation = getattr(self, "_daily_generation", 0) + 1
+        self._daily_resolver = timezones.Resolver()
+        self._daily_zone_error = ""
+        self._daily_hint_error = ""
+        self._daily_hint_count = 0
+        self._daily_last_hint_check = -60.0
+        self._calendar_service = CalendarService()
+        try:
+            self._daily_zone = timezones.local_zone(self._daily_resolver)
+        except (OSError, ValueError, ZoneInfoNotFoundError) as exc:
+            self._daily_zone = timezone.utc
+            self._daily_zone_error = "Lokale Zeitzone nicht verfügbar: " + str(exc)
+        try:
+            config = busy_calendar.normalize_config(self.settings.get("busy_calendar"))
+            if config.get("path"):
+                zone = self.busy_zone(config)
+                self._calendar_service.load(config["path"], zone, date.fromisoformat(self.plan_day()),
+                                            self._daily_resolver, self._daily_zone)
+        except (OSError, ValueError, TypeError, ZoneInfoNotFoundError) as exc:
+            self._calendar_service.error = str(exc)
+        self.refresh_daily_hint_indicator()
+        self._daily_after(1000, self.poll_daily_planning)
+
+
+    def close_daily_planning(self):
+        self._cancel_daily_jobs()
+        self._daily_generation = getattr(self, "_daily_generation", 0) + 1
+        service = getattr(self, "_calendar_service", None)
+        if service is not None:
+            service.close()
+        dialog = getattr(self, "_daily_hints_dialog", None)
+        if dialog is not None:
+            try:
+                if dialog.winfo_exists():
+                    dialog.destroy()
+            except tk.TclError:
+                pass
+        self._daily_hints_dialog = None
+
+
+    def busy_zone(self, config=None):
+        config = self.settings.get("busy_calendar", {}) if config is None else config
+        key = config.get("zone", "local") if isinstance(config, dict) else "local"
+        if key == "local":
+            if self._daily_zone_error:
+                raise ValueError(self._daily_zone_error)
+            return self._daily_zone
+        return self._daily_resolver(key)
+
+
+    def busy_view(self, day):
+        try:
+            config = busy_calendar.normalize_config(self.settings.get("busy_calendar"))
+        except (TypeError, ValueError) as exc:
+            return View("error", message=str(exc))
+        if not config.get("path"):
+            return View("disabled")
+        if getattr(self, "_daily_zone_error", ""):
+            return View("error", message=self._daily_zone_error)
+        service = getattr(self, "_calendar_service", None)
+        if service is None:
+            return View("loading", message="Kalender wird vorbereitet …")
+        try:
+            parsed = date.fromisoformat(day)
+        except (ValueError, TypeError):
+            return View("error", message="Ungültiger Kalendertag.")
+        return service.view(parsed, self._daily_zone)
+
+
+    def poll_daily_planning(self):
+        service = self._calendar_service
+        generation = self._daily_generation
+        try:
+            if service.poll():
+                # Dieselbe aktive Ansicht; kein Auswahl- oder Fokuswechsel.
+                self.refresh_tree()
+                self.update_stats_label()
+                self.draw_plan_grid()
+            if time.monotonic() - self._daily_last_hint_check >= 30:
+                self._daily_last_hint_check = time.monotonic()
+                self.process_daily_hints()
+        finally:
+            if generation == self._daily_generation:
+                delay = 100 if service.loading or service.pending else 1000
+                self._daily_after(delay, self.poll_daily_planning)
+
+
+    def daily_hint_pending(self):
+        if getattr(self, "_daily_zone_error", ""):
+            return ()
+        return daily_hints.pending(self.settings.get("daily_hints"),
+                                   self.settings.get("daily_hint_state"), self.daily_now())
+
+
+    def save_daily_state(self, state, *, show_error=True):
+        before = copy.deepcopy(self.settings)
+        self.settings["daily_hint_state"] = state
+        if not self.save_settings(show_error=show_error):
+            self.settings = before
+            return False
+        self.refresh_daily_hint_indicator()
+        return True
+
+
+    def process_daily_hints(self):
+        config = daily_hints.normalize(self.settings.get("daily_hints"))
+        if not config["enabled"] or getattr(self, "_data_read_only", False):
+            return ()
+        try:
+            if self._daily_zone_error:
+                raise ValueError(self._daily_zone_error)
+            if self.root.grab_current() is not None or any(
+                    getattr(child, "_glide_modal_active", False) for child in self.root.winfo_children()):
+                return ()
+            now = self.daily_now()
+            state = self.settings.get("daily_hint_state")
+            due, next_state = daily_hints.prepare_delivery(config, state, now)
+            if next_state != state and not self.save_daily_state(next_state, show_error=False):
+                self._daily_hint_error = "Tageshinweise konnten nicht gespeichert werden; Zustellung wird erneut versucht."
+                self.refresh_daily_hint_indicator()
+                return ()
+            self._daily_hint_error = ""
+            self.refresh_daily_hint_indicator()
+            if due:
+                titles = ["Tagesbeginn" if hint.kind == "start" else "Tagesabschluss" for hint in due]
+                # Standardmäßig die vorhandene Glocke; Systemhinweise nutzen
+                # ausschließlich die bereits ausdrücklich gewählte Einstellung.
+                self.send_reminder_notification(titles)
+            return due
+        except (ValueError, OSError) as exc:
+            self._daily_hint_error = str(exc)
+            self.refresh_daily_hint_indicator()
+            return ()
+
+
+    def refresh_daily_hint_indicator(self):
+        try:
+            self._daily_hint_count = len(self.daily_hint_pending())
+        except (ValueError, OSError) as exc:
+            self._daily_hint_count = 0
+            self._daily_hint_error = str(exc)
+        if hasattr(self, "notifications_button"):
+            self.apply_reminder_badge()
+
+
+    def _daily_toggle(self, master, text, variable):
+        return tk.Checkbutton(master, text=text, variable=variable, bg=self.theme["bg"],
+                              fg=self.theme["text"], selectcolor=self.theme["input"],
+                              activebackground=self.theme["bg"], activeforeground=self.theme["text"],
+                              highlightthickness=0, font=app_font(10), takefocus=True)
+
+
+    def _daily_label(self, master, text, *, size=10, color="text", bold=False):
+        label = tk.Label(master, text=text, bg=self.theme["bg"], fg=self.theme[color],
+                         font=app_font(size, "bold" if bold else "normal"),
+                         anchor="w", justify="left", wraplength=620)
+        label.pack(fill="x", pady=(0, 8))
+        label.bind("<Configure>", lambda event: label.configure(wraplength=max(120, event.width - 4)))
+        return label
+
+
+    def _daily_dialog(self, title, width=700, height=480):
+        dialog = tk.Toplevel(self.root)
+        dialog.withdraw()
+        dialog.title(title)
+        dialog.configure(bg=self.theme["bg"])
+        dialog.transient(self.root)
+        dialog.minsize(width, height)
+        outer = tk.Frame(dialog, bg=self.theme["bg"])
+        outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
+        footer = tk.Frame(outer, bg=self.theme["bg"])
+        footer.pack(side="bottom", fill="x", pady=(12, 0))
+        viewport = tk.Frame(outer, bg=self.theme["bg"])
+        viewport.pack(fill="both", expand=True)
+        canvas = tk.Canvas(viewport, bg=self.theme["bg"], highlightthickness=0, bd=0,
+                           height=max(180, height-100), yscrollincrement=16)
+        scrollbar = ThemedAutoScrollbar(viewport, bg_color=self.theme["bg"], track_color=self.theme["bg"],
+                                         thumb_color=self.theme["input_border"],
+                                         active_thumb_color=self.theme["muted"], width=10, radius=5)
+        scrollbar.pack(side="right", fill="y")
+        scrollbar.set_command(canvas.yview)
+        canvas.configure(yscrollcommand=scrollbar.set)
+        canvas.pack(side="left", fill="both", expand=True)
+        body = tk.Frame(canvas, bg=self.theme["bg"])
+        window = canvas.create_window((0, 0), window=body, anchor="nw")
+        def size(_event=None):
+            if not dialog.winfo_exists():
+                return
+            wanted_width = max(240, canvas.winfo_width())
+            wanted_height = max(canvas.winfo_height(), body.winfo_reqheight())
+            if int(float(canvas.itemcget(window, "width"))) != wanted_width:
+                canvas.itemconfigure(window, width=wanted_width)
+            if int(float(canvas.itemcget(window, "height"))) != wanted_height:
+                canvas.itemconfigure(window, height=wanted_height)
+            canvas.configure(scrollregion=(0, 0, wanted_width, wanted_height))
+        body.bind("<Configure>", size)
+        canvas.bind("<Configure>", size)
+        def reveal(widget):
+            if not dialog.winfo_exists() or not widget.winfo_exists():
+                return
+            total = max(1, body.winfo_height())
+            y = widget.winfo_rooty()-body.winfo_rooty()
+            top = canvas.canvasy(0)
+            height = widget.winfo_height()
+            if y < top:
+                canvas.yview_moveto(max(0, y-8)/total)
+            elif y+height > top+canvas.winfo_height():
+                canvas.yview_moveto(max(0, y+height-canvas.winfo_height()+8)/total)
+        def focus(event):
+            widget = event.widget
+            if widget not in (dialog, outer, body, canvas, viewport) and widget.winfo_toplevel() is dialog:
+                self._daily_after(0, lambda: reveal(widget), owner=dialog)
+        def wheel(event):
+            step = -1 if getattr(event, "num", 0) == 4 or getattr(event, "delta", 0) > 0 else 1
+            widget = event.widget
+            while widget is not body and widget is not dialog:
+                if isinstance(widget, (tk.Text, tk.Listbox, ttk.Treeview, tk.Canvas)) and widget is not canvas:
+                    first, last = widget.yview()
+                    if (step < 0 and first > 0) or (step > 0 and last < 1):
+                        return "break"
+                parent = widget.winfo_parent()
+                if not parent:
+                    break
+                widget = widget.nametowidget(parent)
+            canvas.yview_scroll(step * max(1, abs(int(getattr(event, "delta", 0))) // 120), "units")
+            return "break"
+        dialog.bind("<Destroy>", lambda event: self._cancel_daily_jobs(dialog)
+                    if event.widget is dialog else None, add="+")
+        dialog.bind("<FocusIn>", focus, add="+")
+        for event in ("<MouseWheel>", "<Button-4>", "<Button-5>"):
+            dialog.bind(event, wheel, add="+")
+        dialog._daily_scroll_canvas = canvas
+        dialog._daily_body = body
+        dialog._daily_footer = footer
+        self._daily_label(body, title, size=16, bold=True)
+        return dialog, body, footer
+
+
+    def _daily_fit_columns(self, tree, minima):
+        font = self.measurement_font(self.style.lookup("Dialog.Treeview", "font") or app_font(11))
+        for column, minimum in minima:
+            values = [tree.heading(column, "text")]
+            values.extend(tree.item(identity, "text") if column == "#0" else tree.set(identity, column)
+                          for identity in tree.get_children())
+            width = max(minimum, max((font.measure(value) + 24 for value in values), default=0))
+            tree.column(column, width=width, minwidth=width, stretch=False)
+
+
+    def _daily_horizontal(self, frame, tree):
+        scrollbar = ThemedAutoScrollbar(frame, bg_color=self.theme["card"], track_color=self.theme["card"],
+                                         thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"],
+                                         orient="horizontal", width=10, radius=5)
+        scrollbar.set_command(tree.xview)
+        scrollbar.pack(side="bottom", fill="x")
+        tree.configure(xscrollcommand=scrollbar.set)
+        return scrollbar
+
+
+    def show_daily_hints(self, event=None):
+        old = getattr(self, "_daily_hints_dialog", None)
+        if old is not None and old.winfo_exists():
+            old.lift()
+            return "break"
+        dialog, body, footer = self._daily_dialog("Tageshinweise", 760, 540)
+        self._daily_hints_dialog = dialog
+        self._daily_label(body, "Hinweise öffnen keinen Bereich automatisch. Verpasste Tage stehen gesammelt hier. "
+                          "Ein gewählter Tagesbeginn oder Abschluss öffnet die heutige Planung; frühere Tage bleiben als Hinweis bezeichnet.")
+        message = self._daily_label(body, "", color="muted")
+        frame = tk.Frame(body, bg=self.theme["card"])
+        frame.pack(fill="both", expand=True)
+        tree = ttk.Treeview(frame, name="daily_hints_tree", columns=("day", "at", "state"),
+                            selectmode="extended", style="Dialog.Treeview", height=9)
+        self.prepare_table(tree, (("#0", "Hinweis", 180), ("day", "Hinweistag", 120),
+                                 ("at", "Zeitpunkt", 140), ("state", "Status", 160)), stretch="#0")
+        scroll = ThemedAutoScrollbar(frame, bg_color=self.theme["card"], track_color=self.theme["card"],
+                                     thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"],
+                                     width=10, radius=5)
+        scroll.set_command(tree.yview)
+        scroll.pack(side="right", fill="y")
+        tree.configure(yscrollcommand=scroll.set)
+        self._daily_horizontal(frame, tree)
+        tree.pack(fill="both", expand=True)
+        offers = {}
+        def refresh():
+            old_selection = tree.selection()
+            offers.clear()
+            tree.delete(*tree.get_children())
+            try:
+                pending = self.daily_hint_pending()
+                for hint in pending:
+                    offers[hint.identity] = hint
+                    state = ("Später" if hint.snoozed else "Verpasst" if hint.missed else "Offen")
+                    tree.insert("", "end", iid=hint.identity,
+                                text="Tagesbeginn" if hint.kind == "start" else "Tagesabschluss",
+                                values=(date.fromisoformat(hint.day).strftime("%d.%m.%Y"),
+                                        hint.due.strftime("%d.%m. %H:%M"), state))
+                self._daily_fit_columns(tree, (("#0", 180), ("day", 120), ("at", 140), ("state", 160)))
+                selected = [key for key in old_selection if key in offers]
+                if not selected and offers:
+                    selected = [next(iter(offers))]
+                tree.selection_set(selected)
+                message.configure(text=self._daily_hint_error or (
+                    f"{len(pending)} offene Tageshinweise" if pending else "Keine offenen Tageshinweise."),
+                    fg=self.theme["delete"] if self._daily_hint_error else self.theme["muted"])
+            except (ValueError, OSError) as exc:
+                message.configure(text=str(exc), fg=self.theme["delete"])
+        def change(action):
+            selected = [offers[key] for key in tree.selection() if key in offers]
+            if not selected:
+                return
+            try:
+                state = self.settings.get("daily_hint_state")
+                now = self.daily_now()
+                for hint in selected:
+                    if action == "snooze":
+                        state = daily_hints.snooze(state, hint, now, 15)
+                    elif action == "skip":
+                        state = daily_hints.skip_day(state, hint.day, now)
+                    else:
+                        state = daily_hints.complete(state, hint, now)
+                if self.save_daily_state(state):
+                    refresh()
+            except (ValueError, OSError) as exc:
+                message.configure(text=str(exc), fg=self.theme["delete"])
+        def open_day(_event=None):
+            selected = tree.selection()
+            hint = offers.get(selected[0]) if selected else None
+            if hint and self.prepare_inspector_switch():
+                state = daily_hints.complete(self.settings.get("daily_hint_state"), hint, self.daily_now())
+                if self.save_daily_state(state):
+                    dialog.destroy()
+                    (self.start_day_review if hint.kind == "start" else self.start_day_close)()
+            return "break"
+        actions = (("Heute öffnen", open_day, "accent"), ("15 Min. später", lambda: change("snooze"), "muted"),
+                   ("Hinweistag überspringen", lambda: change("skip"), "muted"),
+                   ("Erledigen", lambda: change("complete"), "confirm"))
+        flow = ButtonFlow(footer, bg=self.theme["bg"], gap=6)
+        flow.pack(fill="x")
+        for text, command, color in (*actions, ("Schließen", dialog.destroy, "muted")):
+            flow.add(self._make_dialog_button(flow, text, command, color, width=150, height=36))
+        tree.bind("<Double-1>", open_day)
+        tree.bind("<Return>", open_day)
+        dialog.bind("<Escape>", lambda _event: dialog.destroy())
+        refresh()
+        self._center_dialog(dialog, min_width=760, min_height=540)
+        self._schedule_windows_chrome_theme(dialog)
+        try:
+            self.run_modal(dialog)
+        finally:
+            self._daily_hints_dialog = None
+        return "break"
+
+
+
+    def show_daily_hint_settings(self, event=None):
+        dialog, body, footer = self._daily_dialog("Tageshinweise einstellen", 620, 430)
+        config = daily_hints.normalize(self.settings.get("daily_hints"))
+        enabled = tk.BooleanVar(master=dialog, value=config["enabled"])
+        self._daily_toggle(body, "Tageshinweise aktivieren", enabled).pack(anchor="w", pady=(0, 12))
+        self._daily_label(body, "Standardmäßig aus. Hinweise erscheinen nur bei laufendem Glide. "
+                          "Die Glocke sammelt offene und verpasste Hinweise. Ein Bereich öffnet sich erst nach deiner Auswahl.", color="muted")
+        clocks = {}
+        for key, title in (("start", "Tagesbeginn (HH:MM)"), ("close", "Tagesabschluss (HH:MM)")):
+            self._make_field_label(body, title).pack(anchor="w")
+            value = clocks[key] = tk.StringVar(master=dialog, value=config[key])
+            border, field = self._make_field(body)
+            border.pack(fill="x", pady=(4, 10))
+            field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
+            entry = tk.Entry(field, textvariable=value, bg=self.theme["input"], fg=self.theme["text"],
+                             insertbackground=self.theme["text"], relief="flat", bd=0,
+                             font=app_font(12), highlightthickness=0, name="hint_"+key)
+            entry.pack(fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+        days = tk.Frame(body, bg=self.theme["bg"])
+        days.pack(fill="x", pady=(4, 12))
+        weekdays = []
+        for index, name in enumerate(self.REPEAT_WEEKDAY_NAMES):
+            value = tk.BooleanVar(master=dialog, value=index in config["weekdays"])
+            weekdays.append(value)
+            self._daily_toggle(days, name[:2], value).pack(side="left", padx=(0, 10))
+        message = self._daily_label(body, self._daily_hint_error, color="delete")
+        def save(_event=None):
+            requested = dict(enabled=enabled.get(), start=clocks["start"].get().strip(),
+                             close=clocks["close"].get().strip(),
+                             weekdays=[index for index, value in enumerate(weekdays) if value.get()])
+            normalized = daily_hints.normalize(requested)
+            if any(normalized[key] != requested[key] for key in daily_hints.KINDS):
+                message.configure(text="Bitte beide Uhrzeiten als HH:MM zwischen 00:00 und 23:59 eingeben.")
+                return "break"
+            try:
+                if self._daily_zone_error and normalized["enabled"]:
+                    raise ValueError(self._daily_zone_error)
+                state = self.settings.get("daily_hint_state")
+                if normalized["enabled"]:
+                    state = daily_hints.checkpoint(state, self.daily_now())
+                before = copy.deepcopy(self.settings)
+                self.settings.update(daily_hints=normalized, daily_hint_state=state)
+                if not self.save_settings(show_error=True):
+                    self.settings = before
+                    return "break"
+                self._daily_hint_error = ""
+                self._daily_last_hint_check = -60.0
+                self.refresh_daily_hint_indicator()
+                dialog.destroy()
+            except (ValueError, OSError) as exc:
+                message.configure(text=str(exc))
+            return "break"
+        self._make_dialog_button(footer, "Abbrechen", dialog.destroy, "muted", width=130, height=36).pack(side="right")
+        self._make_dialog_button(footer, "Speichern", save, "confirm", width=130, height=36).pack(side="right", padx=(0, 8))
+        dialog.bind("<Control-s>", save)
+        if self.root.tk.call("tk", "windowingsystem") == "aqua":
+            dialog.bind("<Command-s>", save)
+        dialog.bind("<Escape>", lambda _event: dialog.destroy())
+        self._center_dialog(dialog, min_width=620, min_height=430)
+        self._schedule_windows_chrome_theme(dialog)
+        self.run_modal(dialog)
+        return "break"
+
+
+    def show_busy_calendar_dialog(self, event=None):
+        dialog, body, footer = self._daily_dialog("Kalender als Belegzeiten", 820, 620)
+        self._daily_label(body, "Eine ausdrücklich gewählte lokale ICS-Datei zählt als belegte Zeit. "
+                          "Sie wird ausschließlich gelesen. Termine werden nicht zu Aufgaben; Änderungen der Datei "
+                          "übernimmst du während einer Sitzung über „Neu laden“; beim Appstart wird die gewählte Datei erneut gelesen. Die freie Tageszeit berücksichtigt Überschneidungen nur einmal. Ganztägige Termine gelten am jeweiligen Ortsdatum.", color="muted")
+        config_error = ""
+        try:
+            config = busy_calendar.normalize_config(self.settings.get("busy_calendar"))
+        except (TypeError, ValueError) as exc:
+            config = {}
+            config_error = str(exc)
+        explicit_selection = [False]
+        chosen = tk.StringVar(master=dialog, value=config.get("path", ""))
+        zone_key = tk.StringVar(master=dialog, value=config.get("zone", "local"))
+        self._daily_label(body, "Datei")
+        path_label = self._daily_label(body, chosen.get() or "Keine Datei gewählt", color="muted")
+        self._make_field_label(body, "Zeitzone für Termine ohne eigene Zeitzone (local = System)").pack(anchor="w")
+        border, field = self._make_field(body)
+        border.pack(fill="x", pady=(4, 8))
+        field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
+        zone_entry = tk.Entry(field, textvariable=zone_key, name="calendar_zone", bg=self.theme["input"],
+                              fg=self.theme["text"], insertbackground=self.theme["text"], relief="flat", bd=0,
+                              font=app_font(11), highlightthickness=0)
+        zone_entry.pack(fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+        message = self._daily_label(body, "", color="muted")
+        issues = tk.Text(body, name="busy_calendar_issues", height=4, wrap="word", bg=self.theme["input"], fg=self.theme["delete"],
+                         font=app_font(10), relief="flat", bd=0, highlightthickness=0, state="disabled")
+        issues.pack(fill="x", pady=(0, 8))
+        frame = tk.Frame(body, bg=self.theme["card"])
+        frame.pack(fill="both", expand=True)
+        tree = ttk.Treeview(frame, name="busy_calendar_tree", columns=("start", "end"),
+                            style="Dialog.Treeview", selectmode="browse", height=8)
+        self.prepare_table(tree, (("#0", "Belegte Zeit", 300), ("start", "Beginn", 180),
+                                 ("end", "Ende", 180)), stretch="#0")
+        scroll = ThemedAutoScrollbar(frame, bg_color=self.theme["card"], track_color=self.theme["card"],
+                                     thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"],
+                                     width=10, radius=5)
+        scroll.set_command(tree.yview)
+        scroll.pack(side="right", fill="y")
+        tree.configure(yscrollcommand=scroll.set)
+        self._daily_horizontal(frame, tree)
+        tree.pack(fill="both", expand=True)
+        pages = tk.Frame(body, bg=self.theme["bg"])
+        pages.pack(fill="x", pady=(6, 0))
+        page_label = tk.Label(pages, text="", bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9))
+        page_label.pack(side="left")
+        preview = CalendarService()
+        signature = [None]
+        page = [0]
+        rows = [()]
+        focus_day = date.fromisoformat(self.plan_day())
+        def render_rows(delta=0):
+            maximum = max(0, (len(rows[0]) - 1) // 100)
+            page[0] = max(0, min(maximum, page[0] + delta))
+            tree.delete(*tree.get_children())
+            zone = self._daily_zone
+            for index, block in enumerate(rows[0][page[0]*100:(page[0]+1)*100]):
+                start, end = block.start.astimezone(zone), block.end.astimezone(zone)
+                tree.insert("", "end", iid=str(index), text=block.title,
+                            values=(start.strftime("%d.%m.%Y") + " ganztägig" if block.all_day else start.strftime("%d.%m.%Y %H:%M %Z"),
+                                    end.strftime("%d.%m.%Y") + " exklusiv" if block.all_day else end.strftime("%d.%m.%Y %H:%M %Z")))
+            self._daily_fit_columns(tree, (("#0", 200), ("start", 180), ("end", 180)))
+            page_label.configure(text=f"Seite {page[0]+1} von {maximum+1} · {len(rows[0])} Intervalle im Jahr {focus_day.year}")
+        def previous():
+            render_rows(-1)
+        def following():
+            render_rows(1)
+        self._make_dialog_button(pages, "Zurück", previous, "muted", width=90, height=28).pack(side="right", padx=(0, 6))
+        self._make_dialog_button(pages, "Weiter", following, "muted", width=90, height=28).pack(side="right")
+        def update_preview():
+            if config_error and not explicit_selection[0]:
+                message.configure(text=config_error + " Bitte die Quelle ausdrücklich neu wählen oder entfernen.",
+                                  fg=self.theme["delete"])
+                return
+            preview.poll()
+            view = preview.view(focus_day, self._daily_zone)
+            message.configure(text=view.message or (
+                f"Lokale Datei geladen · {len(preview.windows[focus_day.year].blocks)} "
+                f"{'Terminintervall' if len(preview.windows[focus_day.year].blocks) == 1 else 'Terminintervalle'} · "
+                f"{len(view.issues)} {'Hinweis' if len(view.issues) == 1 else 'Hinweise'}"
+                if view.status == "ready" else (
+                    "Gewählte Kalenderdatei noch nicht geprüft. Bitte „Neu laden“ wählen."
+                    if chosen.get() else "Keine Kalenderdatei gewählt.")),
+                fg=self.theme["delete"] if view.status == "error" else self.theme["muted"])
+            if view.status == "ready":
+                rows[0] = preview.windows[focus_day.year].blocks
+                render_rows()
+                issues.configure(state="normal", fg=self.theme["delete"] if view.issues else self.theme["muted"])
+                issues.delete("1.0", "end")
+                issues.insert("1.0", "\n".join(f"{uid or 'Kalender'}: {text}" for uid, text in view.issues)
+                              or "Keine Einschränkungen gemeldet.")
+                issues.configure(state="disabled")
+        def wait_preview():
+            if not dialog.winfo_exists():
+                return
+            update_preview()
+            if preview.loading or preview.pending:
+                self._daily_after(100, wait_preview, owner=dialog)
+        def load():
+            if not chosen.get():
+                message.configure(text="Bitte zuerst eine lokale ICS-Datei wählen.", fg=self.theme["delete"])
+                return
+            try:
+                zone = self.busy_zone({"zone": zone_key.get().strip() or "local"})
+                preview.load(chosen.get(), zone, focus_day, self._daily_resolver, self._daily_zone)
+                signature[0] = (chosen.get(), zone_key.get().strip() or "local")
+                page[0] = 0
+                rows[0] = ()
+                render_rows()
+                wait_preview()
+            except (OSError, ValueError, ZoneInfoNotFoundError) as exc:
+                message.configure(text=str(exc), fg=self.theme["delete"])
+        def choose():
+            path = filedialog.askopenfilename(parent=dialog, title="Kalender als Belegzeiten wählen",
+                                              filetypes=(("Kalenderdatei", "*.ics"), ("Alle Dateien", "*")))
+            if path:
+                explicit_selection[0] = True
+                chosen.set(path)
+                path_label.configure(text=path)
+                load()
+        def remove():
+            explicit_selection[0] = True
+            chosen.set("")
+            signature[0] = None
+            preview.disable()
+            path_label.configure(text="Keine Datei gewählt")
+            rows[0] = ()
+            render_rows()
+            update_preview()
+        def save():
+            if config_error and not explicit_selection[0]:
+                update_preview()
+                return
+            selected = None
+            if chosen.get():
+                view = preview.view(focus_day, self._daily_zone)
+                if view.status != "ready" or signature[0] != (chosen.get(), zone_key.get().strip() or "local"):
+                    message.configure(text="Bitte den gewählten Stand zuerst über „Neu laden“ vollständig prüfen.",
+                                      fg=self.theme["delete"])
+                    return
+                selected = dict(path=preview.source.path, zone=signature[0][1], sha256=preview.source.sha256,
+                                loaded_at=self.daily_now().isoformat())
+            before = copy.deepcopy(self.settings)
+            self.settings["busy_calendar"] = selected or {}
+            if not self.save_settings(show_error=True):
+                self.settings = before
+                return
+            if selected:
+                window = preview.windows[focus_day.year]
+                self._calendar_service.adopt(preview.source, window)
+            else:
+                self._calendar_service.disable()
+            dialog.destroy()
+            self.refresh_tree()
+            self.update_stats_label()
+        flow = ButtonFlow(footer, bg=self.theme["bg"], gap=8)
+        flow.pack(fill="x")
+        for text, command, color in (("Datei wählen …", choose, "accent"), ("Neu laden", load, "muted"),
+                                     ("Entfernen", remove, "muted"), ("Speichern", save, "confirm"),
+                                     ("Abbrechen", dialog.destroy, "muted")):
+            flow.add(self._make_dialog_button(flow, text, command, color, width=130, height=36))
+        # Der bereits gelesene Stand bleibt bis zum ausdrücklichen Neuladen
+        # erhalten; das Öffnen dieses Dialogs liest die Originaldatei nicht.
+        active = self._calendar_service
+        if active.source is not None:
+            window = active.windows.get(focus_day.year)
+            if window is not None:
+                preview.adopt(active.source, window)
+                signature[0] = (chosen.get(), zone_key.get())
+        update_preview()
+        dialog.bind("<Escape>", lambda _event: dialog.destroy())
+        self._center_dialog(dialog, min_width=820, min_height=620)
+        self._schedule_windows_chrome_theme(dialog)
+        try:
+            self.run_modal(dialog)
+        finally:
+            preview.close()
+        return "break"
+
+
+
+    def calendar_grid_blocks(self):
+        day = self.plan_day()
+        view = self.busy_view(day)
+        if view.status != "ready":
+            return []
+        parsed = date.fromisoformat(day)
+        return [dict(calendar=True, segment=part, minutes=part.minutes,
+                     start=part.start.astimezone(self._daily_zone).strftime("%H:%M"),
+                     title=part.block.title + " · " + part.zone_label,
+                     overlap=False, item=None)
+                for part in occupied_time.grid_segments(view.blocks, parsed, self._daily_zone)]
+
+
+    def mark_calendar_overlaps(self, blocks):
+        day = self.plan_day()
+        view = self.busy_view(day)
+        if view.status != "ready":
+            return
+        for block in blocks:
+            if block["item"].get("done"):
+                continue
+            try:
+                start, end = occupied_time.local_interval(
+                    date.fromisoformat(day), block["start"], self.block_minutes(block["item"]), self._daily_zone)
+                if occupied_time.overlaps(view.blocks, start, end):
+                    block.update(overlap=True, calendar_overlap=True)
+            except ValueError:
+                block.update(overlap=True, calendar_time_error=True)
+
+
+    def calendar_grid_caption(self):
+        view = self.busy_view(self.plan_day())
+        if view.status in ("loading", "error", "closed"):
+            return " · Kalenderzeit unbekannt"
+        if view.status != "ready":
+            return ""
+        busy = occupied_time.day_occupancy(view.blocks, date.fromisoformat(self.plan_day()), self._daily_zone, 0)
+        text = " · Kalender nur lesend"
+        if busy["all_day"]:
+            text += " · ganztägig belegt"
+        if busy["day_minutes"] != 1440:
+            text += f" · {busy['day_minutes']//60} tatsächliche Stunden"
+        if view.issues:
+            text += " · Hinweise"
+        return text
+
+
+    def calendar_free_slots(self, items, day, duration):
+        view = self.busy_view(day)
+        if view.status == "disabled":
+            return glide_week.free_slots(items, day, duration)
+        if view.status != "ready":
+            raise ValueError("Freie Zeit unbekannt: " + view.message)
+        return occupied_time.planning_slots(
+            [item for item in items if self.is_schedulable_item(item)],
+            date.fromisoformat(day), duration, view.blocks, self._daily_zone)
+
+
+    def relief_items(self):
+        return [item for entry in self.planning_lists()
+                for item in self.walk_items(entry.get("items", []))
+                if self.is_schedulable_item(item)]
+
+
+    def relief_blocks(self, day):
+        view = self.busy_view(day)
+        if view.status not in ("ready", "disabled"):
+            raise ValueError("Freie Zeit für " + self.format_due_display(day) + " unbekannt: " + view.message)
+        return view.blocks
+
+
+    def relief_plan(self, identities, target):
+        return day_relief.propose(
+            self.relief_items(), identities, target,
+            capacity=self.daily_capacity_minutes, blocks=self.relief_blocks,
+            zone=self._daily_zone,
+            schedulable=self.is_schedulable_item)
+
+
+    def apply_day_relief(self, plan):
+        if getattr(self, "_data_read_only", False):
+            return False
+        items = self.relief_items()
+        changes = day_relief.validate(
+            plan, items, self.is_schedulable_item,
+            capacity=self.daily_capacity_minutes, blocks=self.relief_blocks,
+            zone=self._daily_zone)
+        if not changes:
+            return False
+        index = {item["id"]: item for item in items}
+        previous = {identity: copy.deepcopy(index[identity]) for identity, _day, _clock in changes}
+        undo, dirty = list(self.undo_stack), self.dirty
+        history, baseline = copy.deepcopy(self.history), getattr(self, "_history_baseline", None)
+        with self.item_change(list(previous), restore=False, local=True) as change:
+            for identity, day, clock in changes:
+                index[identity].update(planned_date=day, planned_time=clock)
+                change.mark(identity)
+        if change.saved is False:
+            for identity, value in previous.items():
+                index[identity].clear()
+                index[identity].update(value)
+            self.undo_stack[:] = undo
+            self.dirty = dirty
+            self.history = history
+            self._history_baseline = baseline
+            self._saved_comparison_parts = None
+            self.clear_render_cache()
+            self.update_sidebar_list()
+            self.refresh_tree()
+        return bool(change.saved)
+
+
+    def relief_summary_text(self, summary):
+        return (str(summary["items"]) + " Aufgaben · "
+                + (self.format_estimated_minutes(summary["minutes"]) or "0 min") + " · "
+                + day_relief.available_text(summary))
+
+
+    def show_day_relief(self, event=None, days=None):
+        if getattr(self, "_data_read_only", False) or not self.prepare_inspector_switch():
+            return "break"
+        if days is None:
+            mode = getattr(self, "_home_mode", "") if self.view_mode == self.HOME_VIEW else ""
+            if mode == "calendar":
+                days = ([day.isoformat() for day in self.week_days(reference=self._calendar_anchor)]
+                        if getattr(self, "_calendar_mode", "week") == "week" else
+                        [getattr(self, "_calendar_selected_day", self.plan_day())])
+            elif mode == "week_review":
+                days = [day.isoformat() for day in self.week_days(getattr(self, "_week_offset", 0))]
+            elif mode == "day_proposal":
+                days = [getattr(self, "_day_proposal", {}).get("proposal", {}).get("day", self.plan_day())]
+            else:
+                days = [self.plan_day()]
+        days = tuple(dict.fromkeys(day_relief.iso_day(day) for day in days))
+        dialog, body, footer = self._daily_dialog("Tag entlasten", 820, 620)
+        self._daily_label(body, "Wähle selbst, welche offenen Aufgaben auf einen anderen Bearbeitungstag "
+                          "oder zurück in den Vorrat gehen. Fälligkeiten bleiben erhalten. Eine Übernahme "
+                          "ist ein Rückgängig-Schritt; es gibt keine automatische Verteilung.", color="muted")
+        label = ("Tag: " + self.format_due_display(days[0]) if len(days) == 1 else
+                 "Zeitraum: " + self.format_due_display(days[0]) + " bis " + self.format_due_display(days[-1]))
+        labels = {label: set(days),
+                  "Alle eingeplanten Aufgaben": None}
+        scope = tk.StringVar(master=dialog, value=next(iter(labels)))
+        menu, _widget = self._make_option_menu(body, scope, list(labels))
+        menu.pack(fill="x", pady=(0, 6))
+        frame = tk.Frame(body, bg=self.theme["card"])
+        frame.pack(fill="both", expand=True)
+        tree = ttk.Treeview(frame, name="day_relief_tasks", columns=("day", "effort", "list"),
+                            selectmode="extended", style="Dialog.Treeview", height=6)
+        self.prepare_table(tree, (("#0", "Aufgabe", 280), ("day", "Bearbeitungstag", 125),
+                                 ("effort", "Aufwand", 85), ("list", "Liste", 130)), stretch="#0")
+        scroll = ThemedAutoScrollbar(frame, bg_color=self.theme["card"], track_color=self.theme["card"],
+                                     thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"],
+                                     width=10, radius=5)
+        scroll.set_command(tree.yview)
+        scroll.pack(side="right", fill="y")
+        tree.configure(yscrollcommand=scroll.set)
+        self._daily_horizontal(frame, tree)
+        tree.pack(fill="both", expand=True)
+        selected, page_ids, rows = set(), set(), []
+        page, rebuilding, plan = [0], [False], [None]
+        line = tk.Frame(body, bg=self.theme["bg"])
+        line.pack(fill="x", pady=(5, 8))
+        count = tk.Label(line, text="", bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(9))
+        count.pack(side="left")
+        self._daily_label(body, "Ziel: anderer Bearbeitungstag oder Vorrat", bold=True)
+        destination = tk.StringVar(master=dialog, value="day")
+        target_frame = tk.Frame(body, bg=self.theme["bg"])
+        target_frame.pack(fill="x")
+        for key, text in (("day", "Anderer Tag"), ("stock", "Vorrat · ohne Bearbeitungstag")):
+            tk.Radiobutton(target_frame, text=text, value=key, variable=destination,
+                           bg=self.theme["bg"], fg=self.theme["text"], selectcolor=self.theme["input"],
+                           activebackground=self.theme["bg"], activeforeground=self.theme["text"],
+                           font=app_font(10)).pack(side="left", padx=(0, 12))
+        target = DueField(body, self, due=days[0] if days else self.plan_day(), due_time=None,
+                          compact=True, show_time=False, dialog_parent=dialog, purpose="planned")
+        target.pack(fill="x", pady=(5, 8))
+        self._daily_label(body, "Vorhandene Uhrzeiten bleiben beim Wechsel des Tages erhalten. "
+                          "Im Vorrat wird die Aufgabenzeit entfernt.",
+                          size=9, color="muted")
+        preview_frame = tk.Frame(body, bg=self.theme["card"])
+        preview_frame.pack(fill="both", expand=True)
+        preview = ttk.Treeview(preview_frame, name="day_relief_balance", columns=("before", "after"),
+                               selectmode="none", style="Dialog.Treeview", height=4)
+        self.prepare_table(preview, (("#0", "Tag", 110), ("before", "Vorher", 290),
+                                    ("after", "Nachher", 290)), stretch="after")
+        preview_scroll = ThemedAutoScrollbar(preview_frame, bg_color=self.theme["card"], track_color=self.theme["card"],
+                                             thumb_color=self.theme["input_border"],
+                                             active_thumb_color=self.theme["muted"], width=10, radius=5)
+        preview_scroll.set_command(preview.yview)
+        preview_scroll.pack(side="right", fill="y")
+        preview.configure(yscrollcommand=preview_scroll.set)
+        self._daily_horizontal(preview_frame, preview)
+        preview.pack(fill="both", expand=True)
+        message = self._daily_label(body, "", size=9, color="muted")
+        preview_page = [0]
+
+        def invalidate(*_args):
+            plan[0] = None
+            preview.delete(*preview.get_children())
+            message.configure(text="Auswahl und Ziel anschließend über „Vergleichen“ prüfen.",
+                              fg=self.theme["muted"])
+
+        def capture(_event=None):
+            if rebuilding[0]:
+                return
+            before = set(selected)
+            selected.difference_update(page_ids)
+            selected.update(tree.selection())
+            count.configure(text=f"{len(selected)} ausgewählt · Seite {page[0]+1} von {max(1, (len(rows)+99)//100)}")
+            if selected != before:
+                invalidate()
+
+        def render(delta=0, reset=False):
+            if not reset and not rebuilding[0]:
+                selected.difference_update(page_ids)
+                selected.update(tree.selection())
+            page[0] = 0 if reset else max(0, min(max(0, (len(rows)-1)//100), page[0]+delta))
+            rebuilding[0] = True
+            try:
+                tree.delete(*tree.get_children())
+                page_ids.clear()
+                for entry, item in rows[page[0]*100:(page[0]+1)*100]:
+                    identity = item["id"]
+                    page_ids.add(identity)
+                    tree.insert("", "end", iid=identity, text=item.get("text", ""),
+                                values=(self.format_due_display(item["planned_date"]),
+                                        self.format_estimated_minutes(item.get("estimated_minutes")) or "Ohne Schätzung",
+                                        entry.get("title", "")))
+                self._daily_fit_columns(tree, (("#0", 280), ("day", 125), ("effort", 85), ("list", 130)))
+                tree.selection_set([identity for identity in selected if identity in page_ids])
+            finally:
+                rebuilding[0] = False
+            count.configure(text=f"{len(selected)} ausgewählt · Seite {page[0]+1} von {max(1, (len(rows)+99)//100)}")
+
+        def refresh(*_args):
+            selected.clear()
+            wanted = labels[scope.get()]
+            rows[:] = [(entry, item) for entry in self.planning_lists()
+                       for item in self.walk_items(entry.get("items", []))
+                       if self.is_schedulable_item(item) and not item.get("done") and item.get("planned_date")
+                       and (wanted is None or item["planned_date"] in wanted)]
+            rows.sort(key=lambda pair: (pair[1]["planned_date"], pair[0].get("title", "").casefold(),
+                                        pair[1].get("text", "").casefold(), pair[1]["id"]))
+            render(reset=True)
+            invalidate()
+
+        def show_comparison(delta=0):
+            preview.delete(*preview.get_children())
+            if plan[0] is None:
+                return
+            preview_page[0] = max(0, min(max(0, (len(plan[0].before)-1)//50), preview_page[0]+delta))
+            pairs = list(zip(plan[0].before, plan[0].after))
+            for before, after in pairs[preview_page[0]*50:(preview_page[0]+1)*50]:
+                preview.insert("", "end", text=self.format_due_display(before["day"]),
+                               values=(self.relief_summary_text(before), self.relief_summary_text(after)))
+            self._daily_fit_columns(preview, (("#0", 110), ("before", 290), ("after", 290)))
+            warnings = sum(bool(self.busy_view(value["day"]).issues) for value in plan[0].before)
+            message.configure(text=(f"{len(plan[0].moves)} Aufgaben · {len(pairs)} betroffene Tage · "
+                                    f"Bilanzseite {preview_page[0]+1} von {max(1, (len(pairs)+49)//50)}"
+                                    + (" · Kalenderhinweise beachten" if warnings else "")
+                                    if plan[0].moves else "Keine Änderung: Die Auswahl liegt bereits am gewählten Tag."),
+                              fg=self.theme["muted"])
+
+        def compare():
+            try:
+                value = None
+                if destination.get() == "day":
+                    parsed, error = target.read()
+                    if error or not parsed[0]:
+                        raise ValueError(error or "Bitte einen Bearbeitungstag wählen.")
+                    value = parsed[0]
+                plan[0] = self.relief_plan(sorted(selected), value)
+                preview_page[0] = 0
+                show_comparison()
+            except (ValueError, OSError, ZoneInfoNotFoundError) as exc:
+                plan[0] = None
+                preview.delete(*preview.get_children())
+                message.configure(text=str(exc), fg=self.theme["delete"])
+
+        def apply(_event=None):
+            if plan[0] is None:
+                message.configure(text="Bitte zuerst die aktuelle Auswahl vergleichen.", fg=self.theme["delete"])
+                return "break"
+            try:
+                if self.apply_day_relief(plan[0]):
+                    dialog.destroy()
+                else:
+                    message.configure(text="Keine Änderung gespeichert. Die Auswahl bleibt für einen erneuten Versuch erhalten.",
+                                      fg=self.theme["delete"])
+            except (ValueError, OSError, ZoneInfoNotFoundError) as exc:
+                plan[0] = None
+                message.configure(text=str(exc), fg=self.theme["delete"])
+            return "break"
+
+        for text, delta in (("Vorige Aufgaben", -1), ("Weitere Aufgaben", 1)):
+            self._make_dialog_button(line, text, lambda step=delta: render(step), "muted",
+                                     width=140, height=28).pack(side="right", padx=(4, 0))
+        preview_navigation = tk.Frame(body, bg=self.theme["bg"])
+        preview_navigation.pack(fill="x")
+        for text, delta in (("Vorige Bilanzen", -1), ("Weitere Bilanzen", 1)):
+            self._make_dialog_button(preview_navigation, text, lambda step=delta: show_comparison(step),
+                                     "muted", width=145, height=28).pack(side="left", padx=(0, 6))
+        flow = ButtonFlow(footer, bg=self.theme["bg"], gap=8)
+        flow.pack(fill="x")
+        for text, command, color in (("Vergleichen", compare, "accent"), ("Übernehmen", apply, "confirm"),
+                                     ("Abbrechen", dialog.destroy, "muted")):
+            flow.add(self._make_dialog_button(flow, text, command, color, width=150, height=36))
+        scope.trace_add("write", refresh)
+        destination.trace_add("write", invalidate)
+        target.on_change = invalidate
+        target.date_entry.bind("<KeyRelease>", invalidate, add="+")
+        tree.bind("<<TreeviewSelect>>", capture)
+        dialog.bind("<Escape>", lambda _event: dialog.destroy())
+        dialog.bind("<Control-s>", apply)
+        if self.root.tk.call("tk", "windowingsystem") == "aqua":
+            dialog.bind("<Command-s>", apply)
+        refresh()
+        self._center_dialog(dialog, min_width=820, min_height=620)
+        self._schedule_windows_chrome_theme(dialog)
+        self.run_modal(dialog)
+        return "break"
+
+
+
     def daily_goal(self):
         goal = self.settings.get("daily_goal", self.DAILY_GOAL_DEFAULT)
         return goal if isinstance(goal, int) and not isinstance(goal, bool) else self.DAILY_GOAL_DEFAULT
@@ -18067,6 +19040,7 @@ class ListApp:
             if block["minutes"][1] > spaetestes:
                 spaetestes = block["minutes"][1]
                 vorheriger = block
+        self.mark_calendar_overlaps(bloecke)
         return bloecke
 
     TIME_PLAN_STEP_MINUTES = 15
@@ -18452,6 +19426,8 @@ class ListApp:
         canvas.configure(bg=theme["card"])
         canvas.delete("all")
         bloecke = self.time_blocks([(eintrag[3], eintrag[4]) for eintrag in self.plan_day_entries()])
+        bloecke.extend(self.calendar_grid_blocks())
+        bloecke.sort(key=lambda block: (block["minutes"][0], block["minutes"][1], bool(block.get("calendar"))))
         erste, letzte = self.PLAN_GRID_RANGE
         for block in bloecke:
             erste = min(erste, block["minutes"][0] // 60)
@@ -18477,27 +19453,32 @@ class ListApp:
             platz.append(bahn)
         spalte = (breite - links - 8) / max(1, len(bahnen))
         self._plan_grid_blocks = {}
-        for block, bahn in zip(bloecke, platz):
+        for number, (block, bahn) in enumerate(zip(bloecke, platz)):
             start, ende = block["minutes"]
             y1 = self.plan_grid_y(start)
             y2 = max(y1 + 18, self.plan_grid_y(ende))
             x1 = links + 4 + bahn * spalte
             x2 = x1 + spalte - 4
-            farbe = theme["line"] if block["item"].get("done") else theme["ui_accent"]
-            kennung = block["item"].get("id")
-            marke = f"block:{kennung}"
+            calendar = bool(block.get("calendar"))
+            item = block.get("item")
+            farbe = theme["input"] if calendar else theme["line"] if item.get("done") else theme["ui_accent"]
+            kennung = item.get("id") if item is not None else None
+            marke = f"calendar:{number}" if calendar else f"block:{kennung}"
+            tags = ("calendar_busy" if calendar else "block", marke)
             canvas.create_rectangle(x1, y1, x2, y2, fill=farbe,
                                     outline=theme["delete"] if block["overlap"] else farbe,
-                                    width=2 if block["overlap"] else 1, tags=("block", marke))
+                                    width=2 if block["overlap"] else 1, tags=tags)
             canvas.create_text(x1 + 6, y1 + 3, anchor="nw", width=max(20, x2 - x1 - 10),
-                               text=f"{block['start']}  {self.item_display_text(block['item'])}",
-                               fill=readable_text_color(farbe), font=app_font(9), tags=("block", marke))
-            self._plan_grid_blocks[kennung] = (block, (x1, y1, x2, y2))
-            if kennung == getattr(self, "_plan_grid_focus_id", None):
+                               text=(f"{block['start']}  Kalender · {block['title']}" if calendar else
+                                     f"{block['start']}  {self.item_display_text(item)}"),
+                               fill=readable_text_color(farbe), font=app_font(9), tags=tags)
+            if kennung is not None:
+                self._plan_grid_blocks[kennung] = (block, (x1, y1, x2, y2))
+            if kennung is not None and kennung == getattr(self, "_plan_grid_focus_id", None):
                 canvas.create_rectangle(x1 - 2, y1 - 2, x2 + 2, y2 + 2,
                                         outline=theme["text"], width=2, dash=(3, 2), tags=("keyboard_focus",))
         focused = self.find_item_in_lists(getattr(self, "_plan_grid_focus_id", None))
-        self.plan_grid_title.configure(text="STUNDENRASTER" +
+        self.plan_grid_title.configure(text="STUNDENRASTER" + self.calendar_grid_caption() +
             (f" · {self.item_display_text(focused[0])[:32]}" if focused else ""))
         if not bloecke:
             canvas.create_text(links + 8, 14, anchor="nw", width=max(80, breite - links - 16), fill=theme["muted"],
@@ -18717,7 +19698,7 @@ class ListApp:
         return self.planning_summary(projected, day=day)
 
     def planning_available_text(self, day, item_ids=()):
-        return glide_planning.available_text(self.planning_available(day, item_ids))
+        return day_relief.available_text(self.planning_available(day, item_ids))
 
     def apply_quick_plan(self, item_ids, day, toast=True):
         """Nur planned_date, ein Undo-Schritt, frische Objekte nach jedem Undo."""
@@ -18783,7 +19764,7 @@ class ListApp:
             if choice not in ("date", "unplan"):
                 day = glide_planning.target_day(choice, reference, self.settings.get("week_start"))
                 summary = self.planning_summary(glide_planning.projected_items(items, selected, day), day=day)
-                label += " · " + glide_planning.available_text(summary) + " · " + self.format_due_display(day)
+                label += " · " + day_relief.available_text(summary) + " · " + self.format_due_display(day)
             menu.add_command(label=label, state="normal" if selected else "disabled",
                              command=lambda value=choice, shown=day: self.choose_quick_plan(value, ids, review, shown))
         return menu
@@ -18950,13 +19931,30 @@ class ListApp:
         return row,item_id,field
 
     def planning_summary(self, items, capacity=None, day=None):
-        """Eine Aufwandsbilanz für alle Planungswege, unabhängig von Tk."""
-        capacity = self.daily_capacity_minutes(day) if capacity is None else capacity
-        return glide_planning.summarize(items, capacity, self.is_schedulable_item)
+        """Eine Bilanz; Tageswege berücksichtigen denselben bekannten Kalenderstand."""
+        if capacity is not None or day is None:
+            capacity = self.daily_capacity_minutes(day) if capacity is None else capacity
+            return glide_planning.summarize(items, capacity, self.is_schedulable_item)
+        capacity = self.daily_capacity_minutes(day)
+        view = self.busy_view(day)
+        if view.status == "disabled":
+            return glide_planning.summarize(items, capacity, self.is_schedulable_item)
+        if view.status == "ready":
+            value = day_relief.summary(items, day, capacity, view.blocks, self._daily_zone,
+                                       self.is_schedulable_item)
+        else:
+            value = glide_planning.summarize(items, 0, self.is_schedulable_item)
+            value.update(day=day, capacity_before=capacity, remaining=None, calendar_message=view.message)
+        value.update(calendar_state=view.status, calendar_issues=view.issues)
+        return value
 
     def format_planning_summary(self, summary):
         """Klartext zur Aufwandsbilanz; nennt immer Grund und Bezugsgröße."""
-        if not summary or not summary.get("items"):
+        if not summary:
+            return ""
+        if summary.get("calendar_state"):
+            return day_relief.available_text(summary)
+        if not summary.get("items"):
             return ""
         teile = []
         if summary["estimated"]:
@@ -21935,7 +22933,7 @@ class ListApp:
 
         today_iso = date.today().isoformat()
         planned_today = self.planning_summary(self.plan_day_items(day=today_iso), day=today_iso)
-        capacity_text = glide_planning.available_text(planned_today)
+        capacity_text = day_relief.available_text(planned_today)
         buttons = ButtonFlow(panel, bg=theme["card"], gap=8)
         abschluss = state.get("mode") == "close"
         if not abschluss:
@@ -22139,7 +23137,8 @@ class ListApp:
                     state["page"] = (state["page"] + step) % pages
                     self.refresh_home()
                 buttons.add(self._make_dialog_button(buttons, title, turn, "muted", width=100, height=36))
-        self.refresh_page_actions((("Zurück zum Rückblick", self.start_day_review, "muted", 210),
+        self.refresh_page_actions((("Tag entlasten …", self.show_day_relief, "muted", 170),
+                                   ("Zurück zum Rückblick", self.start_day_review, "muted", 210),
                                    ("Abbrechen · Heute öffnen", self.set_today_view, "muted", 230),
                                    ("Übernehmen & Raster", self.apply_day_proposal, "confirm", 220)))
         apply_button = next(button for group in self.template_action_groups for button in group.inner.winfo_children()
@@ -22179,6 +23178,10 @@ class ListApp:
                     spent += item.get("time_spent_minutes") or 0
                     estimate += item.get("estimated_minutes") or 0
         for day in days:
+            summary = self.planning_available(day)
+            rows[day].update(capacity=summary["capacity"], remaining=summary["remaining"],
+                             calendar_state=summary.get("calendar_state"),
+                             calendar_text=day_relief.available_text(summary))
             rows[day]["done"] = history.get(day, 0) if isinstance(history.get(day, 0), int) else 0
         return {"days": days, "rows": rows, "done_items": done_items, "carried": carried,
                 "spent": spent, "estimate": estimate}
@@ -22215,15 +23218,20 @@ class ListApp:
         for row_number, day in enumerate(data["days"], 1):
             row = data["rows"][day]
             parsed = date.fromisoformat(day)
-            over = row["capacity"] and row["planned_minutes"] > row["capacity"]
+            over = row["remaining"] is not None and row["remaining"] < 0
             cells = (f"{self.WEEKDAY_NAMES[parsed.weekday()][:2]} {parsed:%d.%m.}", str(row["planned"]),
                      self.format_estimated_minutes(row["planned_minutes"]) or "–",
-                     self.format_estimated_minutes(row["capacity"]) if row["capacity"] else "–", str(row["done"]))
+                     ("Unbekannt" if row["calendar_state"] in ("loading", "error", "closed") else
+                      self.format_estimated_minutes(row["capacity"]) or ("0 min" if row["remaining"] is not None else "–")),
+                     str(row["done"]))
             for column, value in enumerate(cells):
                 tk.Label(table, text=value, bg=theme["card"],
                          fg=theme["delete"] if over and column == 2 else theme["text"],
                          font=app_font(10, "bold" if day == date.today().isoformat() else "normal"),
                          anchor="w").grid(row=row_number, column=column, sticky="w", padx=(0, 18))
+        for day in data["days"]:
+            if data["rows"][day]["calendar_state"]:
+                text(self.format_due_display(day) + " · " + data["rows"][day]["calendar_text"], 9, color="muted")
         total_done = sum(row["done"] for row in data["rows"].values())
         text(f"{total_done} Aufgaben erledigt · {len(data['carried'])} weitergewandert", 11, True, pady=(12, 4))
         if data["spent"] or data["estimate"]:
@@ -22246,6 +23254,7 @@ class ListApp:
             ("Diese Woche", lambda: self.show_week_review(offset=0), "accent", 130),
             ("Folgewoche", lambda: self.show_week_review(offset=offset + 1), "muted", 130),
             ("Woche planen", self.calendar_from_week_review, "accent", 150),
+            ("Woche entlasten …", self.show_day_relief, "muted", 180),
             ("Zur Startseite", self.set_home_view, "muted", 150),
         ))
         return surface
@@ -23007,7 +24016,9 @@ class ListApp:
             einstellungen_text = json.dumps(einstellungen, sort_keys=True, ensure_ascii=False, default=str)
         except (TypeError, ValueError):
             return None
-        return (getattr(self, "_data_revision", 0), einstellungen_text,
+        kalender = self.busy_view(date.today().isoformat())
+        kalenderstand = (kalender.status, kalender.sha256, kalender.message, kalender.issues)
+        return (getattr(self, "_data_revision", 0), einstellungen_text, kalenderstand,
                 id(self.theme), datetime.now().strftime("%Y-%m-%d %H:%M"), self.home_column_count(),
                 self.home_mode(), bool(getattr(self, "_home_editing", False)), self.view_mode,
                 bool(getattr(self, "_timer_indicator_visible", False)), self.is_pixel_design(),
@@ -23539,6 +24550,9 @@ class ListApp:
                 _ui.pack(_ui.make(ProgressBar, tile, value=belegt, maximum=kapazitaet, bg_color=theme["card"],
                             track_color=theme["input"], fill_color=theme["flag"]), fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[4]))
                 label(tile, self.format_planning_summary(planung) or "", color="muted")
+            elif planung.get("calendar_state"):
+                label(tile, "Tageskapazität", 10, True, "muted", pady=(glide_design.SPACING[8], glide_design.SPACING[3]))
+                label(tile, self.format_planning_summary(planung) or "", color="muted")
 
         def kachel_boards(parent):
             """Welche Pinnwände etwas tragen – und der Weg auf die globale."""
@@ -23766,7 +24780,7 @@ class ListApp:
             label(stats, f"{summary['due_today']} heute fällig  ·  {summary['overdue']} überfällig", color="muted")
             heute_geplant = self.planning_summary(self.plan_day_items(day=date.today().isoformat()),
                                                   day=date.today().isoformat())
-            if heute_geplant["items"]:
+            if heute_geplant["items"] or heute_geplant.get("calendar_state"):
                 planungstext = self.format_planning_summary(heute_geplant)
                 label(stats, f"Heute geplant: {heute_geplant['items']} Aufgabe(n)"
                       + (f"  ·  {planungstext}" if planungstext else ""), color="muted")
@@ -25428,6 +26442,12 @@ class ListApp:
             feld.configure(borderwidth=7)
             zahlenfelder.append(feld)
         fields.extend(zahlenfelder)
+        planungswege = ButtonFlow(personal, bg=self.theme["bg"], gap=8)
+        planungswege.pack(fill="x", pady=(10, 0))
+        planungswege.add(self._make_dialog_button(
+            planungswege, "Tageshinweise …", self.show_daily_hint_settings, "muted", width=180, height=32))
+        planungswege.add(self._make_dialog_button(
+            planungswege, "Kalender als Belegzeiten …", self.show_busy_calendar_dialog, "muted", width=240, height=32))
         # Kapazität je Wochentag (3.30): leer übernimmt den allgemeinen Wert.
         tk.Label(personal, text="Kapazität je Wochentag · Minuten (leer = wie oben)", bg=self.theme["bg"],
                  fg=self.theme["muted"], font=app_font(10), anchor="w").pack(fill="x", pady=(glide_design.SPACING[10], glide_design.SPACING[4]))
@@ -25549,7 +26569,7 @@ class ListApp:
                                 # eine eigene Wahl und stehen überall zur
                                 # Verfügung; das Dopamin-Design steigert sie
                                 # nur noch.
-                                ("Bewegte Rückmeldung beim Erledigen", animationen)):
+                                ("Bewegte Rückmeldung bei Zustands- und Bereichswechseln", animationen)):
             tk.Checkbutton(appearance, text=title, variable=variable, bg=self.theme["bg"], fg=self.theme["text"],
                            activebackground=self.theme["bg"], activeforeground=self.theme["text"],
                            selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=glide_design.SPACING[5])
@@ -28997,6 +30017,8 @@ class ListApp:
     def calendar_footer_actions(self):
         day = self.format_due_display(self._calendar_selected_day)
         return (('Einplanen · ' + day, self.calendar_plan_selection, 'accent', 190),
+                ('Tag entlasten …', self.show_day_relief, 'muted', 170),
+                ('Kalender als Belegzeiten …', self.show_busy_calendar_dialog, 'muted', 240),
                 ('Freies Zeitfenster …', self.calendar_free_slot, 'muted', 190),
                 ('Zur Startseite', self.set_home_view, 'muted', 150))
 
@@ -29095,10 +30117,14 @@ class ListApp:
             return False
         day = self._calendar_selected_day
         items = [item for entry in self.planning_lists() for item in self.walk_items(entry.get('items', [])) if item['id'] != identity]
-        slots = glide_week.free_slots(items, day, duration)
+        try:
+            slots = self.calendar_free_slots(items, day, duration)
+        except ValueError as exc:
+            self.show_warning("Zeitfenster", str(exc))
+            return False
         clock = self.themed_choice_dialog('Freie Zeitfenster',
-            '08:00–18:00 · nur Glide-Zeitblöcke mit Schätzung belegen Zeit.\n'
-            'Externe Termine und Aufgaben ohne Schätzung sind nicht berücksichtigt.\n'
+            '08:00–18:00 · Glide-Zeitblöcke mit Schätzung und gewählte ICS-Belegzeiten belegen Zeit.\n'
+            'Aufgaben ohne Schätzung sind nicht berücksichtigt; der gewählte Kalenderstand ist rein lesend.\n'
             f'{self.format_due_display(day)} · {duration} Minuten · Auswählen plant die Aufgabe ein.',
             [(start, f'{start}–{end} · Vorschlag: {start} für {duration} Minuten') for start, end in slots])
         if clock is None:
@@ -29107,7 +30133,11 @@ class ListApp:
         found = self.find_item_in_lists(identity)
         active_ids = {item['id'] for entry in self.planning_lists() for item in self.walk_items(entry.get('items', []))}
         current_items = [item for entry in self.planning_lists() for item in self.walk_items(entry.get('items', [])) if item['id'] != identity]
-        current_slots = glide_week.free_slots(current_items, day, duration)
+        try:
+            current_slots = self.calendar_free_slots(current_items, day, duration)
+        except ValueError as exc:
+            self.show_warning("Zeitfenster", str(exc))
+            return False
         if not found or identity not in active_ids or found[0].get('done') or found[0].get('estimated_minutes') != duration or (clock, next((end for start,end in slots if start == clock), '')) not in current_slots:
             self.show_warning('Zeitfenster', 'Die Planung hat sich geändert. Bitte den Vorschlag neu öffnen.')
             return False
@@ -29148,7 +30178,9 @@ class ListApp:
         items = [item for _, item in entries]
         buckets = glide_week.calendar_buckets(entries, dates, self.normalize_due)
         moon_events = calendar_moon_phases(dates[0], dates[-1])
-        self._calendar_summaries = glide_week.summarize(items, dates, self.settings, self.is_schedulable_item)
+        self._calendar_summaries = {day.isoformat(): self.planning_summary(
+            [item for item in items if item.get("planned_date") == day.isoformat()], day=day.isoformat())
+            for day in dates}
         self._calendar_day_cells = {}
         self._calendar_task_widgets = {}
         panel = tk.Frame(self.home_content, bg=theme['bg'])
@@ -29200,12 +30232,14 @@ class ListApp:
                 button.bind('<Button-2>', lambda event,day=iso: self.calendar_day_menu(day,event))
             summary = self._calendar_summaries[iso]
             if mode == 'week':
-                text = label(header, glide_planning.available_text(summary), 9, color='muted', surface='card')
+                text = label(header, day_relief.available_text(summary), 9, color='muted', surface='card')
                 if summary['capacity']:
                     ProgressBar(card, value=summary['minutes'], maximum=summary['capacity'],
                         bg_color=theme['card'], track_color=theme['input'], fill_color=theme['delete'] if summary['remaining'] < 0 else theme['accent'], height=6).pack(fill='x', padx=10, pady=(2, 4))
                 else:
-                    label(card, 'Kapazität unbekannt', 8, color='muted', surface='card')
+                    label(card, '0 Minuten frei' if summary.get('remaining') is not None else
+                          'Kalenderzeit unbekannt' if summary.get('calendar_state') in ('loading','error','closed') else
+                          'Kapazität unbekannt', 8, color='muted', surface='card')
             day_items = buckets[iso]
             if mode == 'month':
                 planned = sum(item.get('planned_date') == iso for _,item in day_items)
@@ -31133,14 +32167,17 @@ class ListApp:
         knopf = getattr(self, "plan_day_mode_button", None)
         if knopf is None or not knopf.winfo_exists():
             return "break"
-        modi = {"review": self.start_day_review, "close": self.start_day_close,
+        modi = {"relief": self.show_day_relief, "hints": self.show_daily_hints,
+                "review": self.start_day_review, "close": self.start_day_close,
                 "proposal": self.start_day_proposal, "focus": self.start_focus_selected}
         return self.show_option_panel(
             knopf,
             (("review", "Tagesbeginn …", "Überfälliges, Liegengebliebenes und den Eingang Punkt für Punkt entscheiden"),
              ("proposal", "Was passt heute?", "Begründeten Vorschlag für die freie Tageskapazität auswählen"),
              ("focus", "Fokus starten", "Auswahl oder nächste Aufgabe mit pausierbarer Zeiterfassung"),
-             ("close", "Tagesabschluss …", "Offen Gebliebenes weitergeben und den Tag in die Tagesnotiz übernehmen")),
+             ("close", "Tagesabschluss …", "Offen Gebliebenes weitergeben und den Tag in die Tagesnotiz übernehmen"),
+             ("relief", "Tag entlasten …", "Ausgewählte Aufgaben mit Vorher-/Nachher-Bilanz umplanen"),
+             ("hints", "Tageshinweise …", "Verpasste oder verschobene Hinweise ausdrücklich öffnen")),
             None, lambda schluessel: modi[schluessel]())
 
     def set_plan_day_view(self, refresh=True, day=None):
@@ -33625,6 +34662,8 @@ class ListApp:
             menu.add_command(label="Öffnen", command=self.set_today_view)
             menu.add_command(label="Tagesbeginn …", command=self.start_day_review)
             menu.add_command(label="Tagesabschluss …", command=self.start_day_close)
+            menu.add_command(label="Tag entlasten …", command=self.show_day_relief)
+            menu.add_command(label="Tageshinweise …", command=self.show_daily_hints)
             menu.add_command(label="Tag zurück", command=self.plan_day_backward)
             menu.add_command(label="Tag vor", command=self.plan_day_forward)
             menu.add_command(label="Stundenraster ein/aus", command=self.toggle_plan_day_grid)
@@ -38854,6 +39893,7 @@ class ListApp:
     def cancel_pending_callbacks(self):
         if not hasattr(self, "root"):
             return
+        self.close_daily_planning()
         controller = getattr(self, "_ui_transitions", None)
         if controller is not None:
             controller.close()
@@ -41436,23 +42476,24 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self.apply_reminder_badge(pending)
 
     def apply_reminder_badge(self, pending=None):
-        """Glocke mit der Zahl offener Hinweise; das Wort steht im Tooltip.
-
-        Bis 27.09.2026 stand bei breitem Fenster „Benachrichtigungen (1)“ als
-        breitester Knopf zwischen lauter Symbolen. Die Zahl ist die eigentliche
-        Auskunft und bleibt deshalb in jeder Breite neben der Glocke.
-        """
+        """Vorhandene Glocke: Aufgaben- und Tageshinweise, ohne zusätzliche Kopfzeile."""
         button = getattr(self, "notifications_button", None)
         if button is None:
             return
         if pending is None:
             pending = sum(row["state"] == "Offen / verpasst" for row in self.reminder_rows())
-        self._pending_reminder_count = pending
+        daily = getattr(self, "_daily_hint_count", 0)
+        error = getattr(self, "_daily_hint_error", "")
+        total = pending + daily
+        self._pending_reminder_count = total or int(bool(error))
         self.pack_header_controls()
-        button.set_text(f"{self.ICONS['notifications']} {pending}" if pending else self.ICONS["notifications"])
-        button.configure(width=72 if pending else 42)
-        self.add_tooltip(button, "Benachrichtigungen"
-                         + (f" · {pending} offen" if pending else " · keine offenen Hinweise"))
+        suffix = (f" {total}" if total else "") + (" !" if error else "")
+        button.set_text(self.ICONS["notifications"] + suffix)
+        button.configure(width=85 if error and total else 72 if total or error else 42)
+        detail = (f"{total} offen" if total else "keine offenen Hinweise")
+        if daily:
+            detail += f" · {pending} Aufgabenhinweise · {daily} Tageshinweise"
+        self.add_tooltip(button, "Benachrichtigungen · " + detail + (" · " + error if error else ""))
 
     def update_reminder_badge(self):
         """Nur die Beschriftung nachziehen, ohne den Bestand erneut zu prüfen."""
@@ -41499,6 +42540,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def open_reminders(self):
         self.process_reminders()
+        self.process_daily_hints()
         dialog = tk.Toplevel(self.root)
         dialog.title("Benachrichtigungen")
         dialog.configure(bg=self.theme["bg"])
@@ -41508,6 +42550,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         outer.pack(fill="both", expand=True, padx=self.DIALOG_PAD_X, pady=self.DIALOG_PAD_Y)
         tk.Label(outer, text="Benachrichtigungen", font=app_font(16, "bold"),
                  bg=self.theme["bg"], fg=self.theme["text"]).pack(anchor="w")
+        daily_actions = ButtonFlow(outer, bg=self.theme["bg"], gap=8)
+        daily_actions.pack(fill="x", pady=(8, 0))
+        daily_actions.add(self._make_dialog_button(
+            daily_actions, f"Tageshinweise ({getattr(self, '_daily_hint_count', 0)})",
+            self.show_daily_hints, "accent", width=190, height=32))
+        daily_actions.add(self._make_dialog_button(
+            daily_actions, "Tageshinweise einstellen …", self.show_daily_hint_settings, "muted", width=240, height=32))
+        if getattr(self, "_daily_hint_error", ""):
+            self._daily_label(outer, self._daily_hint_error, size=9, color="delete")
         tk.Label(outer, text="Hinweise erscheinen in Glide bei laufender App. Nach einer Pause stehen verpasste Termine gesammelt hier.\n"
                  "Bei beendetem Programm gibt es noch keine Systembenachrichtigung. Verschieben ändert nur die Benachrichtigung.",
                  font=app_font(10), bg=self.theme["bg"], fg=self.theme["muted"], justify="left",
@@ -54333,23 +55384,13 @@ Labels, Termine und Metadaten."""
         regel = cls.normalize_repeat(item.get("repeat"))
         if not regel:
             return None
-        art = regel.get("art")
-        if art == cls.REPEAT_DAILY:
-            teile = ["FREQ=DAILY"]
-        elif art == cls.REPEAT_EVERY_N_DAYS:
-            teile = ["FREQ=DAILY", f"INTERVAL={int(regel.get('abstand') or 1)}"]
-        elif art == cls.REPEAT_WEEKDAYS:
-            tage = [cls.ICS_WEEKDAYS[tag] for tag in regel.get("tage") or () if 0 <= tag <= 6]
-            if not tage:
-                return None
-            teile = ["FREQ=WEEKLY", "BYDAY=" + ",".join(tage)]
-        elif art == cls.REPEAT_WEEKLY:
-            teile = ["FREQ=WEEKLY"]
-        elif art == cls.REPEAT_MONTHLY:
-            teile = ["FREQ=MONTHLY"]
-        elif art == cls.REPEAT_YEARLY:
-            teile = ["FREQ=YEARLY"]
-        else:
+        # Monats- und Jahresreihen ab dem 29. klemmt Glide aufs Monatsende;
+        # repeat_ics bildet genau das ab statt der RFC-Lesart, die Monate auslässt (A28).
+        anker = glide_repeat.anchor_date(regel)
+        if anker is None and cls.normalize_due(item.get("due")):
+            anker = date.fromisoformat(cls.normalize_due(item.get("due")))
+        teile = glide_repeat_ics.rule_parts(regel, anker)
+        if not teile:
             return None
         ende = cls.normalize_due(regel.get("ende"))
         if ende:
@@ -54750,6 +55791,19 @@ Labels, Termine und Metadaten."""
                 return eintrag
         return None
 
+    _ics_resolver = None
+
+    @classmethod
+    def ics_import_zone(cls, tzid):
+        """Zone einer ICS-TZID aus den mitgelieferten IANA-Daten; Windows-Namen über CLDR."""
+        if ListApp._ics_resolver is None:
+            ListApp._ics_resolver = timezones.Resolver()
+        resolver = ListApp._ics_resolver
+        try:
+            return resolver(tzid)
+        except (ValueError, ZoneInfoNotFoundError):
+            return resolver(resolver.windows_key(tzid))
+
     @classmethod
     def parse_ics_moment(cls, parameter, wert):
         """Zeitangabe lesen: (Datum, Uhrzeit oder None, Hinweis oder None)."""
@@ -54775,11 +55829,11 @@ Labels, Termine und Metadaten."""
             # UTC in die Zone des Geräts holen.
             moment = moment.replace(tzinfo=timezone.utc).astimezone().replace(tzinfo=None)
         elif parameter.get("TZID"):
-            # Die Zeitzonendatenbank der Standardbibliothek nutzen, wenn das
-            # System sie mitbringt; sonst bleibt die Angabe Ortszeit.
+            # Mitgelieferte IANA-Daten (timezones) statt der Systemdatenbank,
+            # die unter Windows fehlt (A30); Windows-Namen wie „W. Europe
+            # Standard Time“ über die CLDR-Zuordnung. Unbekanntes bleibt Ortszeit.
             try:
-                from zoneinfo import ZoneInfo  # stdlib; Datenbank kann fehlen
-                zone = ZoneInfo(parameter["TZID"])
+                zone = cls.ics_import_zone(parameter["TZID"])
                 moment = moment.replace(tzinfo=zone).astimezone().replace(tzinfo=None)
             except Exception:
                 hinweis = "tzid"
@@ -54798,39 +55852,22 @@ Labels, Termine und Metadaten."""
         return vorzeichen * gesamt
 
     @classmethod
-    def ics_repeat_from_rule(cls, wert):
+    def ics_repeat_from_rule(cls, wert, start=None):
         """RRULE auf eine Glide-Regel abbilden; None wenn nicht abbildbar.
 
         Bewusst streng: Was Glide nicht genauso wiederholen kann, wird
         verworfen. Eine still vereinfachte Regel wäre schlimmer als keine.
+        `start` ist der erste Termin (ISO oder date); ab dem 29. entscheidet er,
+        ob eine Monats- oder Jahresreihe in Glide dieselbe Folge ergibt (A28).
         """
-        teile = {}
-        for stueck in str(wert or "").split(";"):
-            if "=" in stueck:
-                schluessel, roh = stueck.split("=", 1)
-                teile[schluessel.strip().upper()] = roh.strip().upper()
-        freq = teile.get("FREQ")
-        if not freq or "COUNT" in teile or "BYSETPOS" in teile or "BYMONTHDAY" in teile \
-                or "BYMONTH" in teile or "BYWEEKNO" in teile or "BYYEARDAY" in teile:
-            return None
-        intervall = teile.get("INTERVAL", "1")
-        if not intervall.isdigit() or int(intervall) < 1:
-            return None
-        intervall = int(intervall)
-        tage = [cls.ICS_WEEKDAYS.index(kuerzel) for kuerzel in teile.get("BYDAY", "").split(",")
-                if kuerzel in cls.ICS_WEEKDAYS] if teile.get("BYDAY") else []
-        if teile.get("BYDAY") and len(tage) != len([k for k in teile["BYDAY"].split(",") if k]):
-            return None  # etwa „2MO" – eine Position im Monat kennt Glide nicht
-        if freq == "DAILY" and not tage:
-            regel = {"art": cls.REPEAT_DAILY} if intervall == 1 else \
-                {"art": cls.REPEAT_EVERY_N_DAYS, "abstand": intervall}
-        elif freq == "WEEKLY" and intervall == 1:
-            regel = {"art": cls.REPEAT_WEEKDAYS, "tage": tage} if tage else {"art": cls.REPEAT_WEEKLY}
-        elif freq == "MONTHLY" and intervall == 1 and not tage:
-            regel = {"art": cls.REPEAT_MONTHLY}
-        elif freq == "YEARLY" and intervall == 1 and not tage:
-            regel = {"art": cls.REPEAT_YEARLY}
-        else:
+        teile = glide_repeat_ics.parse_parts(wert)
+        if isinstance(start, str):
+            try:
+                start = date.fromisoformat(start)
+            except ValueError:
+                start = None
+        regel = glide_repeat_ics.from_parts(teile, start if isinstance(start, date) else None)
+        if regel is None:
             return None
         ende = teile.get("UNTIL")
         if ende:
@@ -55003,7 +56040,7 @@ Labels, Termine und Metadaten."""
             regel = None
             regel_eintrag = self.ics_property(block, "RRULE")
             if regel_eintrag:
-                regel = self.ics_repeat_from_rule(regel_eintrag[2])
+                regel = self.ics_repeat_from_rule(regel_eintrag[2], start=tag)
                 if regel is None:
                     verwerfe("rrule", "Wiederholungsregel nicht abbildbar – ohne Wiederholung angelegt")
 
@@ -57267,6 +58304,10 @@ Labels, Termine und Metadaten."""
                     ("Fokus starten", self.start_focus_selected, self.accel("Shift+F")),
                     ("Tagesabschluss …", self.start_day_close),
                     ("Wochenrückblick", self.show_week_review),
+                    ("Tag entlasten …", self.show_day_relief),
+                    ("Tageshinweise …", self.show_daily_hints),
+                    ("Tageshinweise einstellen …", self.show_daily_hint_settings),
+                    ("Kalender als Belegzeiten …", self.show_busy_calendar_dialog),
                     # „Verspätet“ und der Eingang
                     # haben keine eigene Seitenleistenzeile mehr. Eine Ansicht
                     # ohne Weg dorthin gibt es nicht.
@@ -57937,6 +58978,9 @@ class TemplateDraft(ListApp):
     Struktur und Anhänge gehören bis zum Übernehmen ausschließlich dem Entwurf.
     """
 
+    def busy_view(self, day):
+        return self._owner.busy_view(day)
+
     def __init__(self, app, template):
         self.root = app.root
         self.theme = dict(app.theme)
@@ -57950,6 +58994,7 @@ class TemplateDraft(ListApp):
         self._temporary = tempfile.TemporaryDirectory(prefix="glide-template-edit-")
         self._draft_dir = self._temporary.name
         self._owner = app
+        self._daily_zone = getattr(app, "_daily_zone", timezone.utc)
         try:
             if "payload" in template:
                 referenced = app.validate_template_payload(template)

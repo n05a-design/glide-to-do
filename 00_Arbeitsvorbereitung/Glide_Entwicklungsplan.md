@@ -555,7 +555,7 @@ Quellen für V01/V02 im Marktvergleich §8; eigene Ableitungen. N12 nach dem dor
 
 ### 16.1 Priorisierung
 
-- **P0 – Kritisch:** Fehler, Datenintegrität, Stabilität, bestehende Kernfunktionen. Die erste Durchsicht fand keinen P0-Fehler; die Vorprüfung für FP-02 (§16.10) belegte **zwei reproduzierbare Fehler** im Lieferstand: Teilerkennung von Wiederholungsangaben in der Schnelleingabe (A29, WA-18) und abweichende Monats-/Jahresserien im ICS-Austausch (A28, WA-17), gebündelt als FP-00. Daneben bleiben P0 die offenen Befunde W01/W06–W09 in §4.2; 3.39.0 ist seit 13.10.2026 geliefert, der Dokumentabgleich WA-13 erledigt.
+- **P0 – Kritisch:** Fehler, Datenintegrität, Stabilität, bestehende Kernfunktionen. Die erste Durchsicht fand keinen P0-Fehler; die Vorprüfung für FP-02 (§16.10) belegte **zwei reproduzierbare Fehler** im Lieferstand: Teilerkennung von Wiederholungsangaben in der Schnelleingabe (A29, WA-18) und abweichende Monats-/Jahresserien im ICS-Austausch (A28, WA-17), gebündelt als FP-00 und mit A30 (Zeitzonen im Aufgabenimport) als 3.39.1 umgesetzt (Mac-vollgeprüft, native Matrix offen). Daneben bleiben P0 die offenen Befunde W01/W06–W09 in §4.2; 3.39.0 ist seit 13.10.2026 geliefert, der Dokumentabgleich WA-13 erledigt.
 - **P1 – Hoch:** deutlich spürbar im Alltag bei beherrschbarem Risiko.
 - **P2 – Mittel:** wertvolle Erweiterung oder Optimierung.
 - **P3 – Optional:** experimentell, größere Architektur, langfristig.
@@ -582,8 +582,8 @@ Bewertung je Eintrag: Nutzen, Aufwand (S bis 1, M 2–4, L mehr als 4 Arbeitstag
 | WA-14 | Wiederkehrende Vorlagen | Vorlagen nur von Hand [Code] | Notion-Wiederholvorlagen | mittel | M | mittel | mittel | P3 | ◇ nach FP-02 | – |
 | WA-15 | Rangfolge der Inhaltstreffer | Titelrang, keine Relevanzformel [Code `content_search.py`] | AFFiNE BM25+ | gering | S | gering | gut | P3 | ◇ nur nach belegter schlechter Rangfolge | – |
 | WA-16 | Wartbarkeitskennzahl je Lieferung | Größe von `ListApp` (rund 45.600 Zeilen) nirgends verfolgt [Code] | eigene Analyse | indirekt | S | – | besser | P3 | ○ | – |
-| WA-17 | ICS-Austausch von Monats- und Jahresserien am Monatsende | Ausgabe `FREQ=MONTHLY`/`FREQ=YEARLY` für Termine am 29.–31. bzw. 29.02. ergibt in Kalenderprogrammen andere Termine als in Glide; Import einer Monatsserie am 31. legt zusätzliche Termine auf Monatsenden (A28) [Code][Probe] | eigene Vorprüfung | Korrektheit des Austauschs | S | gering | gut | P0 (Fehler, Randfall) | ▶ D49 | FP-00 |
-| WA-18 | Wiederholungsangaben in der Schnelleingabe vollständig oder gar nicht erkennen | „monatlich am 15.“, „wöchentlich montags“, „alle 2 Wochen montags“ u. a. ergeben Serien ab heute, der Rest bleibt Titeltext; „jeden zweiten Dienstag“ ergibt nur einen Bearbeitungstag (A29) [Code][Probe] | eigene Vorprüfung | Korrektheit einer Kernfunktion | S–M | gering | gut | P0 (Fehler) | ▶ D49 | FP-00 |
+| WA-17 | ICS-Austausch von Monats- und Jahresserien am Monatsende | Ausgabe `FREQ=MONTHLY`/`FREQ=YEARLY` für Termine am 29.–31. bzw. 29.02. ergibt in Kalenderprogrammen andere Termine als in Glide; Import einer Monatsserie am 31. legt zusätzliche Termine auf Monatsenden (A28) [Code][Probe] | eigene Vorprüfung | Korrektheit des Austauschs | S | gering | gut | P0 (Fehler, Randfall) | ▶ 3.39.1 Mac-vollgeprüft, native Matrix offen | FP-00 |
+| WA-18 | Wiederholungsangaben in der Schnelleingabe vollständig oder gar nicht erkennen | „monatlich am 15.“, „wöchentlich montags“, „alle 2 Wochen montags“ u. a. ergeben Serien ab heute, der Rest bleibt Titeltext; „jeden zweiten Dienstag“ ergibt nur einen Bearbeitungstag (A29) [Code][Probe] | eigene Vorprüfung | Korrektheit einer Kernfunktion | S–M | gering | gut | P0 (Fehler) | ▶ 3.39.1 Mac-vollgeprüft, native Matrix offen | FP-00 |
 
 **Geprüft und nicht vorgeschlagen:** vollständiger Block-Editor (Neubau des Seitenmodells, L+, Nutzen gezielt erreichbar), Whiteboard-Engine mit Formen/Freihand (Tk-Leinwand ohne Glättung; Produktgrenze), Datenbank-Baukasten und freie Felder (N15–N20), neue Beziehungsarten wie bei Vikunja (`links`/`blocked_by`/Unterpunkte genügen), Synchronisation/CRDT (G23), eingebaute Cloud-KI und BYOK (Produktgrenze), semantische Suche (Nutzen unbelegt, native Abhängigkeit), Daueralarm wie TickTick (widerspricht ruhiger Tagesführung), bezahlte Veröffentlichung wie Buildin (kein Ziel), Toolkit-Wechsel (§16.6).
 
@@ -622,6 +622,7 @@ Bewertung je Eintrag: Nutzen, Aufwand (S bis 1, M 2–4, L mehr als 4 Arbeitstag
 | Akzeptanzkriterien | (1) Jede Eingabe aus `probe_wiederholung.py` ergibt entweder die gemeinte Serie oder keine Wiederholung mit vollständigem Titeltext; keine Teilerkennung. (2) Chip nennt Art und Ankertag. (3) Für alle Starttage 1–31 und den 29.02. stimmt die Folge aus der ausgegebenen RRULE (gerechnet mit `ics_recurrence`) über 24 Termine mit `repeat_rules.next_date` überein. (4) Rundlauf Ausgabe → Import ergibt dieselbe Glide-Regel. (5) Importierte `FREQ=MONTHLY` am 31. wird sichtbar abgewiesen. |
 | Tests | Unit-Tests für Parser-Muster (positiv und Teilerkennungsfallen) und RRULE-Abbildung über alle Starttage; Gegenprobe: dieselben Fälle gegen 3.39.0 rot; Regression bestehende Schnelleingabe-, ICS- und Wiederholungssuiten (`test_features320`, `test_features321`, `test_komfort33320`). |
 | Dokumentation | Funktionen §3 (Erfassen) und §11 (ICS), Analyse A28/A29 erledigt, CHANGELOG, QA-Bericht, Prüfliste (Kalenderprogramm öffnet die Ausgabe). |
+| Umsetzungsstand | ▶ 3.39.1 Mac-vollgeprüft, native Matrix offen: `repeat_ics.py`, Erkennung in `capture_parser.py`, Import-Zeitzonen über `timezones` (A30); 19 Unit-Tests, `test_wiederholung3391`, getrennte Gegenprobe gegen 3.39.0 ([Nachweise](../01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/README.md)). |
 
 #### FP-01 Wiederholen nach Rückgängig (WA-01)
 
@@ -814,7 +815,7 @@ Nach Abschluss des bestätigten Sprints (4.0.0), je Zeile eine Produktionsversio
 | Folge | Inhalt | Prio | Abhängig von | Warum hier |
 |---|---|---|---|---|
 | W0 (ohne App-Version) | WA-13 Dokumentabgleich ✅; Vorprüfungen §16.10 ✅; Entscheidungsvorlagen E-W1–E-W7 | P0/– | – | erledigt bzw. Voraussetzung jeder Auswahl |
-| W0b | FP-00 Fehlerbehebung Wiederholungen | P0 | – | Fehler zuerst; ohne Formatwechsel; Zeitpunkt nach E-W7 |
+| W0b | FP-00 Fehlerbehebung Wiederholungen | P0 | – | ▶ 3.39.1 Mac-vollgeprüft, native Matrix offen; ohne Formatwechsel, mit A30 |
 | W1 | FP-01 Wiederholen und WA-09 Vorwärtsverträglichkeit | P1 | – | beide klein, ohne Formatwechsel; sichern alle folgenden Pakete ab |
 | W2 | FP-02 Wiederholungsregeln | P1 | Formattor, FP-01 | größter Alltagsnutzen; ein Formatschnitt |
 | W3 | FP-05 und FP-04 (Seiten im Kontext) | P2 | WA-09 für FP-04 | beide verbinden Seiten mit ihrem Umfeld; kein Format |
