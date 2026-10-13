@@ -37,6 +37,15 @@ Stand 13.10.2026 · Glide 3.40.0 · Aufgabenformat 24 · Einstellungen 2 · Vorl
 | `repeat_ics.py` | Wiederholung ↔ iCalendar-RRULE: Monatsende-Klemmform in der Ausgabe, strenger Rückweg mit Starttag (Tk-frei, 3.39.1) |
 | `animation.py` | Bildfolge einer Zeichnung: stabile Frame-IDs, gemeinsame und eigene Dauer, Vorschau-Zeitachse, PNG-Spritesheet und -Einzelbilder (Tk-frei, 3.40.0) |
 | `animation_export.py` | Zusammengehörige PNG-/Zeitachsendateien vollständig schreiben oder zurücknehmen (Tk-frei, 3.40.0) |
+| `notion_archive.py` | Notion-Export „Markdown & CSV“ als ZIP begrenzt lesen: Seiten, Unterseiten, Bilder/Anhänge, Verluste; ohne Entpacken (Tk-frei, 3.41.0) |
+| `notion_import.py` | Ausdrücklich gewählte Notion-Seiten planen: Texte, Listen, Aufgaben-Kästchen, interne Verweise, Verlustbericht (Tk-frei, 3.41.0) |
+| `notion_reimport.py` | Erneuter Export: unverändert/neu/geändert/lokal geändert über Quellenschlüssel und Inhaltsfingerabdruck (Tk-frei, 3.41.0) |
+| `notion_hierarchy.py` | Unterseiten in bestehende Glide-Ordner und Seiten einordnen (Tk-frei, 3.41.0) |
+| `source_metadata.py` | Notion-Quellenzuordnungen beim Lesen, Kopieren, Wiederherstellen und Verlegen von Anhängen erhalten (Tk-frei, 3.41.0) |
+| `page_restore.py` | Einzelne Seite aus einer Sicherung vergleichen und die Wiederherstellung planen; fehlende Ziele vorab (Tk-frei, 3.41.0) |
+| `restore_assets.py` | Anhänge einer Seitenwiederherstellung neu ablegen, ohne Bestandsmutation (Tk-frei, 3.41.0) |
+| `backup_snapshot.py` | Unveränderliche Sicherungsquelle zwischen Vorschau und Übernahme (Tk-frei, 3.41.0) |
+| `attachment_paths.py` | Portable flache Anhangspfade prüfen (Tk-frei, 3.41.0) |
 | `routines.py` | Routinen in „Heute“: Auswahl, Fortschritt, heute erledigt (Tk-frei, AU06) |
 | `runtime_check.py` | Mindestversion Python/Tk vor dem Start, in einfacher Syntax (AB08) |
 | `release_notes.py` | Katalog und Regeln der Karte „Neu in …“ (Tk-frei, N07) |

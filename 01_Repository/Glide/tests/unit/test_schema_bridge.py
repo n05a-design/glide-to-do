@@ -65,7 +65,7 @@ class SchemaBridgeTests(unittest.TestCase):
         self.assertEqual(self.app.normalize_lists_data(dict(version=23, lists=[
             {k: v for k, v in entry.items() if k != 'animation'}]))[0][0]['animation']['frames'][0]['drawing'], entry['drawing'])
         with self.assertRaisesRegex(ValueError, 'Datenformat-Version'):
-            self.app.normalize_lists_data(dict(version=25, lists=[entry]))
+            self.app.normalize_lists_data(dict(version=self.app.DATA_SCHEMA_VERSION + 1, lists=[entry]))
 
     def test_corrupt_or_misplaced_sequence_is_rejected_without_source_mutation(self):
         for field in ('drawing', 'animation'):

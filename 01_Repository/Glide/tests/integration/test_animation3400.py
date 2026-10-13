@@ -200,7 +200,7 @@ def run(app_path, cases, report, previous):
                 assert current.flush() and current.save_state == 'saved'
                 disk_entry = next(value for value in json.loads(saved_path.read_text())['lists'] if value['id'] == identity)
                 assert disk_entry['animation'] == document() and saved_path.read_bytes() != old_bytes
-                assert json.loads(saved_path.read_text())['version'] == 24
+                assert json.loads(saved_path.read_text())['version'] == mod.ListApp.DATA_SCHEMA_VERSION >= 24
                 choose(0);choose(1)
                 assert editor().model.color_at(3, 3) == '#345678'
                 before, depth = document(), len(app.undo_stack)
@@ -413,7 +413,7 @@ if sys.argv[2]=='failure':
  with patch.object(m.shutil,'copy2',side_effect=OSError('synthetischer Vorsicherungsfehler')):
   a=m.ListApp(r);assert not a.save_items(show_error=False);assert p.read_bytes()==before
 else:
- a=m.ListApp(r);assert a.DATA_SCHEMA_VERSION==24 and json.loads(p.read_text())['version']==24
+ a=m.ListApp(r);assert a.DATA_SCHEMA_VERSION>=24 and json.loads(p.read_text())['version']==a.DATA_SCHEMA_VERSION
  backups=list(pathlib.Path(m.BACKUP_DIR).glob('liste_vor_format24_*.json'))
  assert len(backups)==1 and backups[0].read_bytes()==before
  old=json.loads(before);old_drawings={v['id']:v['drawing'] for v in old['lists'] if v.get('list_kind')=='drawing'}

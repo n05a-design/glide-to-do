@@ -69,6 +69,15 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 | `repeat_ics.py` | Glide-Wiederholung ↔ iCalendar-RRULE: Monats-/Jahresreihen ab dem 29. als BYSETPOS-Klemmform wie in Glide, Rückweg nur bei gleicher Terminfolge (Tk-frei, A28) | 3.39.1 |
 | `animation.py` | Bildfolge einer Zeichnung: stabile Frame-IDs, gemeinsame und eigene Dauer, Vorschau-Zeitachse, pixelgenaue PNG-Ausgabe (Tk-frei, D18) | 3.40.0 |
 | `animation_export.py` | Zusammengehörige PNG-/Zeitachsendateien mit rückrollbarem Austausch (Tk-frei) | 3.40.0 |
+| `notion_archive.py` | Notion-Export „Markdown & CSV“ als ZIP begrenzt lesen: Seiten, Unterseiten, Bilder/Anhänge, Verluste; ohne Entpacken (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `notion_import.py` | Ausdrücklich gewählte Notion-Seiten planen: Texte, Listen, Aufgaben-Kästchen, interne Verweise, Verlustbericht (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `notion_reimport.py` | Erneuter Export: unverändert/neu/geändert/lokal geändert über Quellenschlüssel und Inhaltsfingerabdruck (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `notion_hierarchy.py` | Unterseiten in bestehende Glide-Ordner und Seiten einordnen (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `source_metadata.py` | Notion-Quellenzuordnungen beim Lesen, Kopieren, Wiederherstellen und Verlegen von Anhängen erhalten (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `page_restore.py` | Einzelne Seite aus einer Sicherung vergleichen und die Wiederherstellung planen; fehlende Ziele vorab (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `restore_assets.py` | Anhänge einer Seitenwiederherstellung neu ablegen, ohne Bestandsmutation (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `backup_snapshot.py` | Unveränderliche Sicherungsquelle zwischen Vorschau und Übernahme (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `attachment_paths.py` | Portable flache Anhangspfade prüfen (Tk-frei, D26/D37/D39) | 3.41.0 |
 
 `drawing_prototype.pyw` ist die isolierte Bedienprobe der Zeichenfläche von 2026-09-24; sie gehört nicht zur App und nicht zu den Lieferwegen. Ein neues Modul muss in `packaging/macos/baue_app.py`, `scripts/pflege/abgleich_07.py`, `src/glide/README.md`, `packaging/README.md`, `07_Python-Versionen/README.md` und hier stehen; die Standprüfung (R10) meldet Lücken.
 

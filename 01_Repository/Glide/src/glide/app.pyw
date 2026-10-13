@@ -114,6 +114,14 @@ if not sys.pycache_prefix and not getattr(sys, "frozen", False):
     sys.pycache_prefix = bytecode_cache_dir()
 import drawing as glide_drawing  # noqa: E402
 import animation as glide_animation  # noqa: E402
+import notion_archive as glide_notion_archive  # noqa: E402
+import notion_import as glide_notion_import  # noqa: E402
+import notion_reimport as glide_notion_reimport  # noqa: E402
+import notion_hierarchy as glide_notion_hierarchy  # noqa: E402
+import source_metadata as glide_source_metadata  # noqa: E402
+import page_restore as glide_page_restore  # noqa: E402
+import restore_assets as glide_restore_assets  # noqa: E402
+import backup_snapshot as glide_backup_snapshot  # noqa: E402
 import animation_export as glide_animation_export  # noqa: E402
 import drawing_image as glide_drawing_image  # noqa: E402
 import backdrop as glide_backdrop  # noqa: E402
@@ -14665,7 +14673,9 @@ class ListApp:
     # Format 21 bewahrt Textverweise nach Heimatwechsel und fehlende Ziele.
     # Format 24 (3.40.0) ergänzt Zeichnungen um die Bildfolge (`animation`);
     # `drawing` bleibt das erste Bild und damit die statische Vorschau.
-    DATA_SCHEMA_VERSION = 24
+    # Format 25 (3.41.0) ergänzt Quellenzuordnungen übernommener Notion-Seiten
+    # (`notion_source` an Listen, `notion_source_key` an Ordnern).
+    DATA_SCHEMA_VERSION = 25
     # Zentrale Typregistrierung der Listenarten. Eine Art ist nach der Anlage
     # unveränderlich. Unbekannte Arten eines Format-19-Bestands werden sichtbar
     # abgelehnt statt still zu Aufgabenlisten umgedeutet.
@@ -18574,6 +18584,12 @@ class ListApp:
             width = max(minimum, max((font.measure(value) + 24 for value in values), default=0))
             tree.column(column, width=width, minwidth=width, stretch=False)
 
+
+    def _dialog_scrollbar(self, frame):
+        """Senkrechte Glide-Leiste für Dialogtabellen und -texte (statt ttk im Systemstil)."""
+        return ThemedAutoScrollbar(frame, bg_color=self.theme["card"], track_color=self.theme["card"],
+                                   thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"],
+                                   width=10, radius=5)
 
     def _daily_horizontal(self, frame, tree):
         scrollbar = ThemedAutoScrollbar(frame, bg_color=self.theme["card"], track_color=self.theme["card"],
@@ -25863,6 +25879,7 @@ class ListApp:
     def show_library_import_menu(self, event=None):
         menu = self.build_menu(self.root, (("TXT als Liste …", self.import_txt_as_new_lists),
             ("Listen/Ordner hinzufügen …", self.import_partial_backup),
+            ("Notion-Export übernehmen …", self.import_notion_archive),
             ("Markdown als Seite …", self.import_markdown_page), ("Glide-Seiten …", self.import_glide_pages)))
         self._popup_at_widget(menu, self.template_actions)
         return "break"
@@ -30835,6 +30852,7 @@ class ListApp:
         live_lists=None,
         cover=None,
         animation=None,
+        notion_source=None,
     ):
         title = self._clip_and_note_title((title or "Neue Liste").strip() or "Neue Liste")
         created = self._list_timestamp(created_at, default_now=created_at is None)
@@ -30894,6 +30912,9 @@ class ListApp:
             entry.update(self.normalize_animation_fields(drawing, animation, title))
             entry["drawing_reference"] = self.normalize_drawing_reference(
                 drawing_reference, entry["attachments"])
+        source = glide_source_metadata.normalize(notion_source, entry["id"], kind)
+        if source is not None:
+            entry["notion_source"] = source
         return entry
 
     @classmethod
@@ -31026,9 +31047,9 @@ class ListApp:
 
     def new_folder_object(self, title=None, folder_id=None, color=None, note="", labels=None,
                           parent_id=None, attachments=None, folder_kind="standard", icon=None,
-                          archived=False, archived_at=None):
+                          archived=False, archived_at=None, notion_source_key=None):
         title = self._clip_and_note_title((title or "Neuer Ordner").strip() or "Neuer Ordner")
-        return {
+        folder = {
             "id": folder_id or uuid.uuid4().hex,
             "title": title,
             "color": color if color in self.LIST_COLOR_KEYS else None,
@@ -31044,6 +31065,9 @@ class ListApp:
             "archived": archived is True,
             "archived_at": self._list_timestamp(archived_at, default_now=True) if archived is True else None,
         }
+        if notion_source_key is not None:
+            folder["notion_source_key"] = glide_notion_hierarchy.source_key(notion_source_key)
+        return folder
 
     # --- Verschachtelte Ordner ----------------------------------------------
     def folder_path_titles(self, folder_id):
@@ -35494,6 +35518,7 @@ class ListApp:
 
     def prepare_additive_import(self, lists, folders, labels):
         """Neue IDs und vollständige Labelzuordnung ohne Änderung des Altbestands."""
+        lists, folders = glide_source_metadata.independent_collection(lists, folders)
         id_map = {obj["id"]: uuid.uuid4().hex for obj in folders + lists}
         item_map = {}
         label_map, merged_labels = {}, copy.deepcopy(self.labels)
@@ -35903,6 +35928,7 @@ class ListApp:
                 restored.get("title"), folder_id, restored.get("color"), restored.get("note"),
                 restored.get("labels"), parent_id,
                 restored.get("attachments"), restored.get("folder_kind"),
+                notion_source_key=glide_notion_hierarchy.restored_source_key(restored, self.folders),
             ))
             self.trash = [entry for entry in self.trash if entry.get("id") != trash_id]
             if cascade:
@@ -35950,6 +35976,7 @@ class ListApp:
                 references=restored.get("references"),
                 live_lists=restored.get("live_lists"), cover=restored.get("cover"),
                 animation=copy.deepcopy(restored.get("animation")),
+                notion_source=glide_source_metadata.restored_source(restored, list_id, self.lists),
             )
             self.lists.append(restored_list)
             self.trash = [entry for entry in self.trash if entry.get("id") != trash_id]
@@ -37165,6 +37192,7 @@ class ListApp:
             raw_trash = data.get("trash", [])
             if not isinstance(raw_labels, list) or not isinstance(raw_trash, list):
                 raise ValueError("Die Felder 'labels' und 'trash' müssen Listen sein.")
+            self.check_stored_list_kinds(data, version)
             label_ids = set()
             for label in raw_labels:
                 if not isinstance(label, dict):
@@ -37431,7 +37459,8 @@ class ListApp:
                     self.new_folder_object(title, folder_id, color, note, folder_labels, parent_id,
                                            folder.get("attachments"), folder.get("folder_kind"),
                                            icon=folder.get("icon"), archived=folder.get("archived") is True,
-                                           archived_at=folder.get("archived_at"))
+                                           archived_at=folder.get("archived_at"),
+                                           notion_source_key=folder.get("notion_source_key"))
                 )
                 folder_ids.add(folder_id)
             # Unbekannte Eltern, Kreise und zu große Tiefen aufräumen, bevor
@@ -37471,6 +37500,7 @@ class ListApp:
                         references=entry.get("references"),
                         live_lists=entry.get("live_lists"), cover=entry.get("cover"),
                         animation=copy.deepcopy(entry.get("animation")),
+                        notion_source=entry.get("notion_source"),
                     )
                 )
 
@@ -37510,6 +37540,27 @@ class ListApp:
         for entry in pages():
             if isinstance(entry, dict):
                 self.check_list_kind(entry.get("list_kind"), version)
+                if entry.get("notion_source") is not None:
+                    if version is None or version < 25:
+                        raise ValueError("Notion-Quellenmetadaten brauchen Datenformat 25.")
+                    glide_source_metadata.normalize(entry["notion_source"], entry.get("id"), entry.get("list_kind"))
+        glide_source_metadata.records(entry for entry in data.get("lists", []) if isinstance(entry, dict))
+        live_keys = set()
+        for folder in data.get("folders") or []:
+            if not isinstance(folder, dict) or folder.get("notion_source_key") is None:
+                continue
+            if version is None or version < 25:
+                raise ValueError("Notion-Ordnerzuordnungen brauchen Datenformat 25.")
+            key = glide_notion_hierarchy.source_key(folder["notion_source_key"])
+            if key in live_keys:
+                raise ValueError("Die Notion-Ordnerzuordnung ist nicht eindeutig.")
+            live_keys.add(key)
+        for raw in data.get("trash") or []:
+            folder = raw.get("folder") if isinstance(raw, dict) else None
+            if isinstance(folder, dict) and folder.get("notion_source_key") is not None:
+                if version is None or version < 25:
+                    raise ValueError("Notion-Ordnerzuordnungen brauchen Datenformat 25.")
+                glide_notion_hierarchy.source_key(folder["notion_source_key"])
 
     def normalize_trash_data(self, data, item_ids=None, item_counter=None, known_label_ids=None):
         """Bereinigt den Papierkorb; unvollständige Einträge werden verworfen."""
@@ -37569,7 +37620,8 @@ class ListApp:
                 stored = self.new_folder_object(title, payload.get("id"), color, note, payload_labels,
                                                parent_id=payload.get("parent_id"),
                                                attachments=payload.get("attachments"),
-                                               folder_kind=payload.get("folder_kind"))
+                                               folder_kind=payload.get("folder_kind"),
+                                               notion_source_key=payload.get("notion_source_key"))
             else:
                 stored = self.new_list_object(
                     title,
@@ -37589,6 +37641,7 @@ class ListApp:
                     references=payload.get("references"),
                     live_lists=payload.get("live_lists"), cover=payload.get("cover"),
                     animation=copy.deepcopy(payload.get("animation")),
+                    notion_source=payload.get("notion_source"),
                 )
             trash_entry = {
                 "id": entry_id,
@@ -41652,6 +41705,7 @@ class ListApp:
             self.ensure_schema_backup(22)
             self.ensure_schema_backup(23)
             self.ensure_schema_backup(24)
+            self.ensure_schema_backup(25)
             # Der Verlauf entsteht vor dem Schreiben, damit die Datei den
             # Bestand und das dazu passende Protokoll gemeinsam enthält.
             # Nur geprüfte lokale Punktmutationen liefern eine ID-Menge.
@@ -54765,6 +54819,436 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     BACKUP_COMPARE_LIMIT = 30
     BACKUP_COMPARE_LINES = 200
 
+    def page_restore_preview(self, plan, backup):
+        """Seite, Anhänge und fehlende Ziele vor einer selektiven Übernahme zeigen."""
+        theme = self.theme
+        dialog, outer, footer = self._daily_dialog("Einzelne Seite wiederherstellen", 720, 620)
+        self.dialog_label(outer, "Prüfe den Sicherungsstand und die offenen Verweise. Andere Seiten bleiben "
+                          "erhalten. Vor der Übernahme entsteht eine vollständige Vorsicherung; "
+                          "die Änderung ist ein Rückgängig-Schritt.", color="muted", pady=(4, 10))
+        current = self.page_entry(plan.page["id"])
+        source_index = glide_objects.nodes(backup.get("lists", ()), backup.get("trash", ()))
+        lines = ["Seite aus der Sicherung: " + plan.page.get("title", "Seite"), "",
+                 "Heutiger Seitenstand:",
+                 (str((current.get("rich_note") or {}).get("text") or "")[:24000]
+                  if current is not None else "Die Seite ist heute nicht vorhanden."), "",
+                 "Sicherungsstand:", str((plan.page.get("rich_note") or {}).get("text") or "")[:24000], "",
+                 f"{len(plan.attachments)} Anhang/Anhänge werden neu abgelegt:"]
+        lines += [value.get("name", "Datei") for value in plan.attachments] or ["Keine."]
+        if plan.missing_files:
+            lines += ["", "Fehlende Dateien – Wiederherstellung gesperrt:", *plan.missing_files]
+        if plan.missing_targets:
+            lines += ["", "Fehlende oder nicht aktive Ziele:"]
+            states = {"missing": "fehlt", "trash": "im Papierkorb", "archived": "archiviert"}
+            for kind, identity, state in plan.missing_targets:
+                target = source_index.get((kind, identity))
+                holder = target[1] if target else {}
+                name = holder.get("title") or holder.get("text") or identity
+                lines.append(f"{name}: {states.get(state, state)}")
+            lines += ["Diese Ziele werden nicht mit wiederhergestellt; ihre Verweise bleiben sichtbar."]
+        if plan.remapped_items:
+            lines += ["", f"{len(plan.remapped_items)} Aufgabenkennung(en) müssen neu vergeben werden, "
+                      "weil sie heute einer anderen Seite gehören. Interne Verweise ziehen mit um."]
+        lines += ["", *plan.warnings]
+        frame = tk.Frame(outer, bg=theme["bg"])
+        frame.pack(fill="both", expand=True)
+        preview = tk.Text(frame, wrap="word", height=22, width=72, font=app_font(10), padx=10, pady=8,
+                          bg=theme["input"], fg=theme["text"], relief="flat", borderwidth=0,
+                          highlightthickness=1, highlightbackground=theme["muted"])
+        scroll = self._dialog_scrollbar(frame)
+        scroll.set_command(preview.yview)
+        preview.configure(yscrollcommand=scroll.set)
+        scroll.pack(side="right", fill="y")
+        preview.pack(side="left", fill="both", expand=True)
+        preview.insert("1.0", "\n".join(lines))
+        preview.configure(state="disabled")
+        result = [False]
+        message = self.dialog_label(outer, "" if plan.ready else "Dateien fehlen. Übernahme gesperrt.",
+                                    color="delete", pady=(6, 0))
+        def accept():
+            if not plan.ready:
+                message.configure(text="Dateien fehlen. Wähle eine vollständige Sicherung dieser Seite.")
+                return "break"
+            result[0] = True
+            dialog.destroy()
+            return "break"
+        buttons = ButtonFlow(footer, bg=theme["bg"], align="e")
+        buttons.pack(fill="x", pady=(10, 0))
+        buttons.add(self._make_dialog_button(buttons, "Abbrechen", dialog.destroy, "muted", width=120))
+        buttons.add(self._make_dialog_button(buttons, "Seite wiederherstellen", accept, "confirm", width=220))
+        dialog._glide_restore_preview = {"plan": plan, "preview": preview, "accept": accept}
+        dialog.bind("<Escape>", lambda _event: dialog.destroy())
+        self._center_dialog(dialog, min_width=720, min_height=620)
+        self._schedule_windows_chrome_theme(dialog)
+        preview.focus_set()
+        self.run_modal(dialog)
+        return result[0]
+
+    def notion_import_preview(self, export, plan, page_ids):
+        """Quellenvergleich, Auswahl und Konfliktfreigabe vor jeder Bestandsänderung."""
+        theme = self.theme
+        dialog, outer, footer = self._daily_dialog("Notion-Export übernehmen", 760, 660)
+        self.dialog_label(outer, "Wähle die Seiten, die du übernehmen möchtest. Bereits unveränderte Quellen "
+                          "werden ausgelassen. Eigene Änderungen brauchen eine zusätzliche Konfliktfreigabe.",
+                          color="muted", pady=(4, 10))
+        status_names = {"new": "Neu", "changed": "Quelle geändert", "conflict": "Konflikt mit eigenem Stand",
+                        "unchanged": "Unverändert", "local-only": "Nur in Glide geändert",
+                        "missing-target": "Glide-Seite fehlt"}
+        source_rows = {str(index): row for index, row in enumerate(plan.rows)}
+        frame = tk.Frame(outer, bg=theme["bg"])
+        frame.pack(fill="both", expand=True)
+        # Wie die übrigen Dialogtabellen: Glide-Tabellenstil, eigene Leisten.
+        tree = ttk.Treeview(frame, columns=("status", "source"), show="tree headings",
+                            selectmode="extended", height=6, style="Dialog.Treeview")
+        self.prepare_table(tree, (("#0", "Seite", 200), ("status", "Vergleich", 210),
+                                  ("source", "Quelle im Export", 300)), stretch="source")
+        vertical = self._dialog_scrollbar(frame)
+        vertical.configure(height=1)
+        vertical.set_command(tree.yview)
+        tree.configure(yscrollcommand=vertical.set)
+        vertical.pack(side="right", fill="y")
+        self._daily_horizontal(frame, tree)
+        tree.pack(fill="both", expand=True)
+        for key, row in source_rows.items():
+            tree.insert("", "end", iid=key, text=row.page.title,
+                        values=(status_names[row.status], row.page.path))
+        # Keine vorgewählte Übernahme: die ausdrückliche Seitenauswahl ist das
+        # gemeinsame Tor für Erstimport, Quelländerung und Konfliktersatz.
+        detail_frame = tk.Frame(outer, bg=theme["bg"])
+        detail_frame.pack(fill="both", expand=True, pady=(10, 0))
+        details = tk.Text(detail_frame, wrap="word", height=9, width=64, font=app_font(10), padx=10, pady=8,
+                          bg=theme["input"], fg=theme["text"], relief="flat", borderwidth=0,
+                          highlightthickness=1, highlightbackground=theme["muted"], state="disabled")
+        detail_scroll = self._dialog_scrollbar(detail_frame)
+        detail_scroll.set_command(details.yview)
+        details.configure(yscrollcommand=detail_scroll.set)
+        detail_scroll.pack(side="right", fill="y")
+        details.pack(side="left", fill="both", expand=True)
+        message = self.dialog_label(outer, "Keine Seite zur Übernahme ausgewählt.", color="muted", pady=(6, 0))
+        result = [None]
+        def selection_changed(_event=None):
+            keys = tree.selection()
+            rows = [source_rows[key] for key in keys]
+            current = source_rows.get(tree.focus())
+            losses = tuple(export.losses) + glide_notion_archive.unresolved_links(
+                export, {**page_ids, **{row.page.key: "ausgewählt" for row in rows}})
+            lines = [f"{len(rows)} Seite(n) ausdrücklich ausgewählt.", ""]
+            if current is not None:
+                lines += [current.page.title, status_names[current.status], current.page.path, "",
+                          "Text aus dem Export:", current.page.markdown[:24000], "",
+                          "Dateien aus der Quelle:", *current.page.asset_paths, ""]
+                if len(current.page.markdown) > 24000:
+                    lines.append("Die Textvorschau ist gekürzt; die vollständige Quelle bleibt erhalten.")
+                local = self.page_entry(current.target_id) if current.target_id else None
+                if local is not None:
+                    lines += ["Heutiger Text in Glide:", str((local.get("rich_note") or {}).get("text") or "")[:24000], "",
+                              "Heutige Anhänge:", *[asset.get("name", "Datei") for asset in local.get("attachments", ())], ""]
+            lines += ["Verluste und offene Verweise:"]
+            lines += [f"{loss.path}: {loss.message}" for loss in losses] or ["Keine gemeldet."]
+            if plan.absent_source_keys:
+                lines += ["", f"{len(plan.absent_source_keys)} frühere Quellen fehlen in diesem Export; "
+                           "ihre Glide-Seiten werden beibehalten."]
+            details.configure(state="normal")
+            details.delete("1.0", "end")
+            details.insert("1.0", "\n".join(lines))
+            details.configure(state="disabled")
+            message.configure(text=f"{len(rows)} Seite(n) ausgewählt; "
+                              "Strg/Cmd-Klick oder Umschalt für Mehrfachauswahl.")
+        def accept():
+            selection_changed()
+            rows = [source_rows[key] for key in tree.selection()]
+            if not rows:
+                message.configure(text="Wähle zuerst mindestens eine Seite.")
+                tree.focus_set()
+                return "break"
+            if any(row.status in ("unchanged", "local-only") for row in rows):
+                message.configure(text="Unveränderte Quellen und nur lokal geänderte Seiten werden ausgelassen. "
+                                  "Nimm sie aus der Auswahl.")
+                return "break"
+            conflicts = [row for row in rows if row.status == "conflict"]
+            overwrite = tuple(row.page.key for row in conflicts)
+            if conflicts and not self.ask_yes_no("Eigene Seitenänderungen ersetzen?",
+                    "Die Quelle und dein Glide-Stand haben sich verändert. Der gewählte Quellstand ersetzt "
+                    "die Inhalte dieser Seiten:\n\n" + "\n".join(row.page.title for row in conflicts) +
+                    "\n\nVorher wird der gesamte Bestand gesichert. Andere Seiten bleiben erhalten; "
+                    "die Übernahme lässt sich einmal rückgängig machen.", parent=dialog):
+                return "break"
+            result[0] = (tuple(row.page.key for row in rows), overwrite)
+            dialog.destroy()
+            return "break"
+        tree.bind("<<TreeviewSelect>>", selection_changed)
+        controls = ButtonFlow(footer, bg=theme["bg"], align="e")
+        controls.pack(fill="x", pady=(10, 0))
+        controls.add(self._make_dialog_button(controls, "Abbrechen", dialog.destroy, "muted", width=120))
+        controls.add(self._make_dialog_button(controls, "Ausgewählte übernehmen", accept, "confirm", width=220))
+        dialog._glide_notion_preview = {"tree": tree, "details": details, "accept": accept, "plan": plan}
+        dialog.bind("<Escape>", lambda _event: dialog.destroy())
+        self._center_dialog(dialog, min_width=760, min_height=660)
+        self._schedule_windows_chrome_theme(dialog)
+        selection_changed()
+        tree.focus_set()
+        self.run_modal(dialog)
+        return result[0]
+
+    def import_notion_archive(self, event=None, *, path=None):
+        self.refresh_data_lock()
+        if getattr(self, '_data_read_only', False):
+            self.show_warning('Notion-Export übernehmen', self.read_only_notice())
+            return False
+        if not self.prepare_inspector_switch() or self.flush_rich_note() is False or not self.save_items():
+            return False
+        path = path or filedialog.askopenfilename(title='Notion-Export übernehmen', parent=self.root,
+                                                  filetypes=[('Notion Markdown & CSV', '*.zip')])
+        if not path:
+            return False
+        try:
+            with open(path, 'rb') as source:
+                original_bytes = source.read(glide_notion_archive.MAX_ARCHIVE_BYTES+1)
+            if len(original_bytes) > glide_notion_archive.MAX_ARCHIVE_BYTES:
+                raise ValueError('Das Notion-Archiv darf höchstens 200 MiB groß sein.')
+            export = glide_notion_archive.inspect_export(io.BytesIO(original_bytes))
+            current = copy.deepcopy(self.data_payload())
+            page_hashes, asset_hashes, issues = glide_notion_import.current_sources(
+                self.lists, self.resolve_attachment_path, max_bytes=self.MAX_BACKUP_TOTAL_BYTES)
+            export = glide_notion_archive.Export(export.pages, export.members, tuple(export.losses)+issues)
+            records = glide_source_metadata.records(self.lists)
+            comparison = glide_notion_reimport.compare(export, records, page_hashes)
+            choices = self.notion_import_preview(export, comparison,
+                                                 {record.key: record.target_id for record in records})
+            if choices is None:
+                return False
+            selection = glide_notion_import.select(current, export, comparison, *choices, original_bytes,
+                                                     max_depth=self.MAX_FOLDER_DEPTH)
+            return self.apply_notion_selection(selection, export, original_bytes, page_hashes, asset_hashes)
+        except (OSError, ValueError, zipfile.BadZipFile) as exc:
+            self.show_error('Notion-Export übernehmen', str(exc))
+            return False
+
+    def apply_notion_selection(self, selection, export, original_bytes, page_hashes, asset_hashes):
+        self.refresh_data_lock()
+        if getattr(self, '_data_read_only', False) or self.flush_rich_note() is False:
+            return False
+        current = copy.deepcopy(self.data_payload())
+        fresh_page_hashes, fresh_asset_hashes, _issues = glide_notion_import.current_sources(
+            self.lists, self.resolve_attachment_path, max_bytes=self.MAX_BACKUP_TOTAL_BYTES)
+        if (glide_page_restore.fingerprint(current) != selection.current_hash
+                or fresh_page_hashes != page_hashes or fresh_asset_hashes != asset_hashes):
+            raise ValueError('Der Bestand oder eine Anhangsdatei hat sich geändert; bitte erneut vergleichen.')
+        pre_backup = os.path.join(BACKUP_DIR, 'vor_notion_import_'
+                                 + datetime.now().strftime('%Y%m%d_%H%M%S_%f') + '.glidebackup')
+        self.write_complete_backup(pre_backup, self.complete_backup_payload())
+        payloads = {storage: original_bytes if path is None else export.members[path]
+                    for storage, path in selection.source_paths}
+        occupied_ids, occupied_storage = set(), set()
+        for holder in self.attachment_owners(self.lists, self.trash, self.folders):
+            for value in holder.get('attachments', []):
+                occupied_ids.add(value['id']);occupied_storage.add(value['storage'])
+        with glide_restore_assets.stage(selection.assets, ATTACHMENTS_DIR,
+                lambda storage: io.BytesIO(payloads[storage]), occupied_ids=occupied_ids,
+                occupied_storage=occupied_storage, max_bytes=self.MAX_BACKUP_ATTACHMENT_BYTES,
+                now=datetime.now().astimezone().isoformat(timespec='seconds')) as staged:
+            checked_pages, checked_assets, _issues = glide_notion_import.current_sources(
+                self.lists, self.resolve_attachment_path, max_bytes=self.MAX_BACKUP_TOTAL_BYTES)
+            if checked_pages != page_hashes or checked_assets != asset_hashes:
+                raise ValueError('Eine Anhangsdatei hat sich beim Vorbereiten geändert; bitte erneut vergleichen.')
+            planned = glide_notion_import.content(selection, current, export, staged.metadata,
+                page_factory=self.new_list_object, item_factory=self.new_item, folder_factory=self.new_folder_object,
+                now=datetime.now().astimezone().isoformat(timespec='seconds'), max_trash=self.MAX_TRASH_ENTRIES,
+                current_asset_hashes=fresh_asset_hashes)
+            new_lists, new_folders, new_trash = list(planned.lists), list(planned.folders), list(planned.trash)
+            self.validate_backup_schema(dict(self.data_payload(lists=new_lists, folders=new_folders,
+                                                              trash=new_trash), app=APP_NAME), portable=True)
+            before = (self.lists, self.folders, self.trash, self.items, self.app_title,
+                      list(self.undo_stack), self.dirty, copy.deepcopy(self.history),
+                      copy.deepcopy(getattr(self, '_history_baseline', None)),
+                      copy.deepcopy(self.settings.get('sidebar_locations', {})))
+            change = None
+            def rollback():
+                (self.lists, self.folders, self.trash, self.items, self.app_title,
+                 undo, self.dirty, self.history, self._history_baseline, locations) = before
+                self.undo_stack[:] = undo
+                self.settings['sidebar_locations'] = locations
+                self.save_settings(defer=True)
+                self._saved_comparison_parts = None
+                self.clear_render_cache();self.update_sidebar_list();self.refresh_tree()
+            try:
+                with self.guarded_structural_change('Notion-Export übernehmen'):
+                    with self.sidebar_change(refresh_tree=False, feedback=False) as change:
+                        self.lists, self.folders, self.trash = new_lists, new_folders, new_trash
+                        for folder in selection.folders.folders:
+                            if folder.parent_id is None:
+                                self.locate_sidebar_root('folder', folder.identity, 'pages')
+                        active = next((page for page in new_lists if page['id'] == self.active_list_id), None)
+                        if active is not None:
+                            self.items = active['items']
+                            if self.view_mode == 'list':
+                                self.app_title = active['title']
+                        change.mark()
+                    if change.saved is False:
+                        rollback()
+                        return False
+            except Exception:
+                if change is not None and change.saved and self.lists is new_lists:
+                    staged.keep()
+                else:
+                    rollback()
+                raise
+            if not change.saved or self.lists is not new_lists:
+                rollback()
+                return False
+            staged.keep()
+        self.refresh_tree()
+        self.show_undo_toast('Notion-Seiten übernommen · Importbericht und Vorsicherung angelegt')
+        return True
+
+    def read_page_restore_backup(self, path):
+        snapshot = glide_backup_snapshot.read(
+            path, inspect_archive=self.inspect_backup_archive,
+            validate_data=self.validate_backup_schema, read_member=self.read_zip_member_limited,
+            max_archive_bytes=self.MAX_BACKUP_TOTAL_BYTES, max_data_bytes=self.MAX_BACKUP_DATA_BYTES)
+        # Normalisierung benutzt dieselbe Brücke wie der vollständige Import,
+        # ohne deren temporäre Ordner-/Label-/Papierkorbwerte zu übernehmen.
+        previous = (self.folders, self.labels, self.trash)
+        sentinel = object()
+        loaded_history = getattr(self, '_loaded_history', sentinel)
+        try:
+            lists, _active = self.normalize_lists_data(snapshot.data)
+            normalized = dict(snapshot.data, lists=lists, folders=self.folders,
+                              labels=self.labels, trash=self.trash)
+        finally:
+            self.folders, self.labels, self.trash = previous
+            if loaded_history is sentinel:
+                self.__dict__.pop('_loaded_history', None)
+            else:
+                self._loaded_history = loaded_history
+        return glide_backup_snapshot.Snapshot(snapshot.content, normalized, snapshot.portable,
+                                              snapshot.referenced, snapshot.archive_assets)
+
+    def restore_page_from_backup(self, event=None, *, path=None, page_id=None):
+        self.refresh_data_lock()
+        if getattr(self, '_data_read_only', False):
+            self.show_warning('Seite wiederherstellen', self.read_only_notice())
+            return False
+        if not self.prepare_inspector_switch():
+            return False
+        if self.flush_rich_note() is False or not self.save_items():
+            return False
+        path = path or filedialog.askopenfilename(
+            title='Einzelne Seite aus Sicherung wiederherstellen',
+            filetypes=[('Glide-Aufgabensicherung', '*.glidebackup'),
+                       ('Frühere JSON-Sicherungen', '*.json'), ('Alle Dateien', '*.*')])
+        if not path:
+            return False
+        try:
+            snapshot = self.read_page_restore_backup(path)
+            pages = [entry for entry in snapshot.data.get('lists', [])
+                     if entry.get('list_kind') == self.LIST_KIND_PAGE]
+            if not pages:
+                self.show_info('Seite wiederherstellen', 'Die Sicherung enthält keine Seite.')
+                return False
+            if page_id is None:
+                page_id = self.themed_choice_dialog(
+                    'Seite wiederherstellen', 'Welche Seite soll aus dieser Sicherung zurückkehren?',
+                    [(entry['id'], entry.get('title') or 'Seite') for entry in pages])
+            if page_id is None:
+                return False
+            local_paths = {storage: self.resolve_attachment_path({'storage': storage})
+                           for storage in snapshot.referenced} if not snapshot.portable else {}
+            plan = glide_page_restore.prepare(
+                copy.deepcopy(self.data_payload()), snapshot.data, page_id,
+                snapshot.available(local_paths), max_trash=self.MAX_TRASH_ENTRIES,
+                max_labels=self.MAX_LABELS)
+            if not self.page_restore_preview(plan, snapshot.data):
+                return False
+            assets = snapshot.capture_assets(
+                (value['storage'] for value in plan.attachments),
+                max_member_bytes=self.MAX_BACKUP_ATTACHMENT_BYTES,
+                max_total_bytes=self.MAX_BACKUP_TOTAL_BYTES, local_paths=local_paths)
+            return self.apply_page_restore(plan, snapshot, assets)
+        except (OSError, ValueError, zipfile.BadZipFile) as exc:
+            self.show_error('Seite wiederherstellen', str(exc))
+            return False
+
+    def apply_page_restore(self, plan, snapshot, assets):
+        self.refresh_data_lock()
+        if getattr(self, '_data_read_only', False):
+            return False
+        if self.flush_rich_note() is False:
+            return False
+        # Dateien werden erst danach exklusiv angelegt. Auch eine während der
+        # Vorschau erfolgte Bestandsänderung führt vorher zum Abbruch.
+        current = copy.deepcopy(self.data_payload())
+        if not plan.ready or glide_page_restore.fingerprint(current) != plan.current_hash:
+            raise ValueError('Der Bestand hat sich geändert oder Sicherungsdateien fehlen; bitte neu vergleichen.')
+        original = next(page for page in snapshot.data['lists'] if page.get('id') == plan.page['id'])
+        pre_backup = os.path.join(BACKUP_DIR, 'vor_seitenrestore_'
+                                 + datetime.now().strftime('%Y%m%d_%H%M%S_%f') + '.glidebackup')
+        self.write_complete_backup(pre_backup, self.complete_backup_payload())
+        with glide_restore_assets.stage(
+                plan.attachments, ATTACHMENTS_DIR, assets.open,
+                occupied_ids=plan.occupied_attachment_ids, occupied_storage=plan.occupied_storage,
+                max_bytes=self.MAX_BACKUP_ATTACHMENT_BYTES,
+                now=datetime.now().astimezone().isoformat(timespec='seconds')) as staged:
+            planned = glide_page_restore.with_attachments(plan, staged.metadata)
+            glide_page_restore.validate(planned, copy.deepcopy(self.data_payload()))
+            old_hashes = {attachment['id']: hashlib.sha256(assets.payloads[attachment['storage']]).hexdigest()
+                          for attachment in plan.attachments}
+            new_hashes = {staged.metadata[identity]['id']: value for identity, value in old_hashes.items()}
+            restored = glide_source_metadata.selectively_restored(
+                original, planned.page, old_hashes, new_hashes, self.lists, plan.remapped_items)
+            new_lists = [restored if entry.get('id') == restored['id'] else entry for entry in self.lists]
+            if not any(entry.get('id') == restored['id'] for entry in self.lists):
+                new_lists.append(restored)
+            new_labels = self.labels + [copy.deepcopy(value) for value in plan.added_labels]
+            new_trash = copy.deepcopy(list(plan.trash))
+            for value in new_trash:
+                if not value.get('deleted_at'):
+                    value['deleted_at'] = datetime.now().astimezone().isoformat(timespec='seconds')
+            self.validate_backup_schema(
+                dict(self.data_payload(lists=new_lists, labels=new_labels, trash=new_trash), app=APP_NAME),
+                portable=True)
+            before = (self.lists, self.labels, self.trash, self.items, self.app_title,
+                      list(self.undo_stack), self.dirty, copy.deepcopy(self.history),
+                      copy.deepcopy(getattr(self, '_history_baseline', None)))
+            change = None
+            def rollback():
+                (self.lists, self.labels, self.trash, self.items, self.app_title,
+                 undo, self.dirty, self.history, self._history_baseline) = before
+                self.undo_stack[:] = undo
+                self._saved_comparison_parts = None
+                self.clear_render_cache()
+                self.update_sidebar_list()
+                self.refresh_tree()
+            try:
+                with self.guarded_structural_change('Einzelne Seite wiederherstellen'):
+                    with self.sidebar_change(refresh_tree=False, feedback=False) as change:
+                        self.lists, self.labels, self.trash = new_lists, new_labels, new_trash
+                        if self.active_list_id == restored['id']:
+                            self.items = restored['items']
+                            if self.view_mode == 'list':
+                                self.app_title = restored['title']
+                        change.mark()
+                    if change.saved is False:
+                        rollback()
+                        return False
+            except Exception:
+                if change is not None and change.saved and self.lists is new_lists:
+                    # Die atomare Datendatei steht bereits. Referenzierte neue
+                    # Dateien auch bei einem nachfolgenden UI-Fehler behalten.
+                    staged.keep()
+                else:
+                    rollback()
+                raise
+            # Der Bestandswächter kann einen bereits geschriebenen Schritt
+            # wieder zurücknehmen, ohne eine Ausnahme weiterzureichen.
+            if not change.saved or self.lists is not new_lists:
+                rollback()
+                return False
+            staged.keep()
+        self.refresh_tree()
+        self.show_undo_toast('Seite wiederhergestellt · Vorsicherung angelegt')
+        return True
+
     def backup_compare_sources(self):
         """[(Name, Pfad)] – der aktuelle Bestand (Pfad None), dann die automatischen Sicherungen, neueste zuerst."""
         quellen = [("Aktueller Bestand", None)]
@@ -57372,6 +57856,8 @@ Labels, Termine und Metadaten."""
             storage_map = {}
             staged_files = {}
             if is_portable:
+                source_restore_before = (copy.deepcopy((new_lists, new_trash))
+                    if not additive and glide_source_metadata.source_pages((new_lists, new_trash)) else None)
                 storage_map = self.remap_import_attachments(new_lists, new_trash, new_folders)
                 staging_dir = tempfile.TemporaryDirectory(prefix=".glide-import-", dir=BASE_DIR)
                 total_written = 0
@@ -57385,6 +57871,13 @@ Labels, Termine und Metadaten."""
                     if total_written > self.MAX_BACKUP_TOTAL_BYTES:
                         raise ValueError("Die extrahierten Anhänge überschreiten die zulässige Gesamtgröße.")
                     staged_files[new_storage] = staged_path
+                if source_restore_before is not None:
+                    restored_hashes = glide_source_metadata.staged_source_hashes(
+                        (new_lists, new_trash), staged_files, max_bytes=self.MAX_BACKUP_TOTAL_BYTES)
+                    original_hashes = {old: restored_hashes[new] for old, new in storage_map.items()
+                                       if new in restored_hashes}
+                    new_lists, new_trash = glide_source_metadata.relocated_collections(
+                        source_restore_before, (new_lists, new_trash), original_hashes, restored_hashes)
             elif referenced:
                 missing_local = [
                     storage
@@ -58814,6 +59307,7 @@ Labels, Termine und Metadaten."""
                     ("Kalenderdatei (ICS) importieren …", self.show_ics_import_dialog),
                     ("Zeichnung (SVG/JSON) importieren …", self.import_drawing_as_new),
                     ("Markdown als Seite …", self.import_markdown_page),
+                    ("Notion-Export übernehmen …", self.import_notion_archive),
                     ("Seite aus Zwischenablage", self.new_page_from_clipboard),
                     ("Glide-Seiten importieren …", self.import_glide_pages),
                 )),
@@ -58844,6 +59338,7 @@ Labels, Termine und Metadaten."""
                     None,
                     ("Listen/Ordner hinzufügen …", self.import_partial_backup),
                     ("Sicherungen vergleichen …", self.show_backup_compare_dialog),
+                    ("Einzelne Seite wiederherstellen …", self.restore_page_from_backup),
                     ("Sicherungsordner öffnen", self.open_backup_folder),
                 )),
                 ("Vorlagen", (
