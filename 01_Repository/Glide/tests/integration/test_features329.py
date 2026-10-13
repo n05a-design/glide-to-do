@@ -125,24 +125,27 @@ with tempfile.TemporaryDirectory(prefix="glide-features329-") as folder:
         # läuft über verzögerte Aufträge (Kontextzeilen nach 120 ms, Zoom 30 ms
         # danach); unter Last dauerte das länger als feste 150 ms (Windows-CI
         # 3.39.0). Gewartet wird bis zum Ruhezustand, die Anforderung bleibt.
-        frist = time.monotonic() + 3.0
-        while True:
-            root.after(50, root.quit)
+        def warte_bis(bedingung, frist=3.0):
+            """Mindestens die früheren 150 ms warten, dann bis die Bedingung gilt; sonst mit Messwerten scheitern."""
+            ende = time.monotonic() + frist
+            root.after(150, root.quit)
             root.mainloop()
-            if editor.canvas.xview() == (0.0, 1.0) and editor.canvas.yview() == (0.0, 1.0):
-                break
-            assert time.monotonic() < frist, (editor.canvas.xview(), editor.canvas.yview(), editor.zoom,
-                                              editor.canvas.winfo_width(), editor.canvas.winfo_height())
+            while not bedingung():
+                assert time.monotonic() < ende, (editor.canvas.xview(), editor.canvas.yview(), editor.zoom,
+                                                 editor.canvas.winfo_width(), editor.canvas.winfo_height())
+                root.after(50, root.quit)
+                root.mainloop()
+
+        warte_bis(lambda: editor.canvas.xview() == (0.0, 1.0) and editor.canvas.yview() == (0.0, 1.0))
         # Weder Tabelle noch Pinnwand: Die Seite bleibt die Zeichenfläche.
         app.set_table_view()
         app.workspace.set_mode("board")
         root.update()
         assert app.view_mode == "list" and app.current_drawing_editor() is not None
 
-        # Ohne manuelle Wahl folgt der Zoom der Fläche; danach bleibt er fest.
-        root.after(150, root.quit)
-        root.mainloop()
-        assert editor.zoom * 128 <= min(editor.canvas.winfo_width(), editor.canvas.winfo_height())
+        # Ohne manuelle Wahl folgt der Zoom der Fläche; danach bleibt er fest. Der
+        # Ansichtswechsel ändert die Fläche, das Einpassen folgt verzögert (siehe oben).
+        warte_bis(lambda: editor.zoom * 128 <= min(editor.canvas.winfo_width(), editor.canvas.winfo_height()))
         editor.change_zoom(1)
         assert editor._auto_zoom is False
         # Pinselvorschau = tatsächlich getroffene Zellen, für alle Größen und Zoomstufen.
