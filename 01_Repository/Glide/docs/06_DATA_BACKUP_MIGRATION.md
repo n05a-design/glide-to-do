@@ -1,8 +1,8 @@
 # Daten, Backups und Migration – Glide
 
-Stand 13.10.2026 · Glide 3.39.1 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2 · Austauschformat 1 (Änderungsvorschläge 2)
+Stand 13.10.2026 · Glide 3.39.1 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
 
-Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag 52) ergänzt und um die Verweise auf gelöschte Einzelverträge bereinigt; die Vorfassungen trägt Git. Formate 4–23 und Legacy 2 bleiben lesbar.
+Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag 52) ergänzt und um die Verweise auf gelöschte Einzelverträge bereinigt; die Vorfassungen trägt Git. Formate 4–24 und Legacy 2 bleiben lesbar.
 
 ## Ablage
 
@@ -18,6 +18,14 @@ Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag
 - Der Datenordner liegt außerhalb des Programms. `GLIDE_DATA_DIR` hat Vorrang (Tests), sonst Plattformstandard und optional `datenordner.json`. Ein Wechsel kopiert in ein leeres Ziel oder öffnet einen vorhandenen Bestand; die Quelle bleibt.
 - `glide.lock` verhindert gleichzeitiges Schreiben zweier Instanzen; erkannte Fremdbelegung verhindert Speichern. Die Sperre ersetzt keinen Synchronisationsdienst.
 - Gespeichert wird sofort und atomar (Temporärdatei, `replace_with_retry`; unter Windows bis 1,5 s Warten bei Dateisperren). Liegengebliebene `.glide-json-*.tmp`, älter als zehn Minuten, räumt der Start auf.
+
+## Format 24
+
+Seit 3.40.0 tragen Zeichnungsseiten `animation` im Dokumentformat `glide.animation` Version 1: quadratische Fläche 16/32/64/128, gemeinsame `duration_ms` und 1–120 Bilder (`frames`) mit eindeutiger stabiler `id`, `drawing` und optionaler eigener `duration_ms`. Dauern sind ganze 20–60.000 ms; alle Bilder haben dieselbe Fläche. Das vorhandene Feld `drawing` enthält das erste Bild als statische Vorschau; ein Widerspruch oder eine beschädigte Folge wird abgewiesen und nie durch eine leere Zeichnung ersetzt.
+
+Alte Zeichnungen werden verlustfrei zu einem Bild. Kopie, Papierkorb, Rückgängig/Wiederholen, Verlauf, Sicherungen, Vorlagen und normalisierte Bestände erhalten die vollständige Folge; Bildcache und Startseite erkennen auch Änderungen an späteren Bildern und Dauern. Der Zeichenverlauf bleibt je Bild getrennt, ein Struktur-Rückgängig holt die ganze Folge zurück. Zwischenstandsanhänge enthalten eine vollständige `glide.animation`; bisherige `glide.drawing`-Anhänge bleiben lesbar. Austausch-Erstellen 2 bewahrt Bildfolgen, Erstellen 1 bleibt lesbar; Änderungsvorschläge bleiben Version 2.
+
+Vor dem ersten Format-24-Schreiben wird die alte Datei unverändert nach `liste_vor_format24_*.json` kopiert. Ein Kopierfehler verhindert das Schreiben; der ursprüngliche Bestand bleibt bytegleich. Die unveränderte 3.39.1 (Format 23) öffnet Format 24 schreibgeschützt. Der Referenzbestand `tests/fixtures/current_v24/reference_v24.json` enthält eine Bildfolge mit drei Bildern, gemeinsamer und eigener Dauer; historische Referenzen und alte Releaseplanungen behalten ihre Formatnummer. Einstellungen 2 und Vorlagenhülle 2 bleiben, enthaltene neue Aufgabenbackups tragen Format 24. Migrations-, Altleser- und Dateischreibproben in `test_animation3400.py`.
 
 ## Format 23
 
@@ -81,6 +89,7 @@ Referenz-Fixture: `tests/fixtures/current_v20/reference_v20.json`.
 | 21 | 3.33.15 | Aufgaben im Notiztext, stabile Textverweise `taskref:<id>` und Heimatwechsel | 3.33.14 und ältere Format-20-Leser öffnen schreibgeschützt |
 | 22 | 3.33.17 | Typisierte lokale Listen-/Aufgabenbeziehungen und Textlinks, abgeleitete Rückverweise | 3.33.16 und ältere Format-21-Leser öffnen schreibgeschützt |
 | 23 | 3.33.18 | Live-Listen und Titelbilder in Seiten | 3.33.17 und ältere Format-22-Leser öffnen schreibgeschützt |
+| 24 | 3.40.0 | Vollständige Pixelbildfolgen mit Bildkennungen und Dauern | 3.39.1 und ältere Format-23-Leser öffnen schreibgeschützt |
 
 **Glide 3.29 und älter nach der Umstellung nicht mehr starten.** Sie halten einen Format-20-Bestand für beschädigt, beginnen leer und überschreiben ihn bei der ersten Eingabe (nachgewiesen am 25.09.2026 mit einer Kopie eines echten Bestands). Alte Fassungen nur mit getrennter Ablage (`GLIDE_DATA_DIR`) starten.
 
@@ -139,12 +148,12 @@ Entlasten schreibt über `item_change`: Zieltag oder Vorrat, Planungsuhrzeit nac
 
 ## Austauschformat (`.glideexchange`)
 
-Transportformat für fremde Systeme und KI, **kein Speicherformat**. Zwei getrennte Zahlen: `DATA_SCHEMA_VERSION` (wie Glide speichert, 23) und `EXCHANGE_FORMAT_VERSION` (worauf sich ein fremdes System verlassen kann, 1). Leitsatz: Die Quelle beschreibt, was entstehen soll; Glide entscheidet, wie es intern gespeichert wird.
+Transportformat für fremde Systeme und KI, **kein Speicherformat**. Zwei getrennte Zahlen: `DATA_SCHEMA_VERSION` (wie Glide speichert, 24) und `EXCHANGE_FORMAT_VERSION` (worauf sich ein fremdes System verlassen kann, 2; Erstellen 1 bleibt lesbar). Leitsatz: Die Quelle beschreibt, was entstehen soll; Glide entscheidet, wie es intern gespeichert wird.
 
 ```json
 {
   "format": "glide.exchange",
-  "format_version": 1,
+  "format_version": 2,
   "mode": "create",
   "generator": { "type": "ai" },
   "created_for": { "application": "Glide", "application_version": "…", "data_schema": 20 },
@@ -158,8 +167,8 @@ Transportformat für fremde Systeme und KI, **kein Speicherformat**. Zwei getren
 
 Ein Punkt: `type` (`task` ausführbare Handlung, `long` textorientierter Arbeitsgegenstand, `group` Behälter ohne Termin, `heading` reine Gliederung), `title`, `description`, `importance`, `due`/`due_time` (bis wann fertig), `planned_date` (wann daran arbeiten), `estimated_minutes`, `labels` (Schlüssel), `done`, `checklist` (Schritte ohne eigene Termine), `children` (eigenständig erledigbare Unterpunkte).
 
-- **Keine internen Kennungen:** Die Datei arbeitet mit frei wählbaren Schlüsseln; echte IDs vergibt Glide beim Import. Eine exportierte Datei enthält keine internen Kennungen.
-- **Capabilities** nennen je Fähigkeit eine Stufe (0 = unbekannt). Anhänge, Wiederholungen und Erinnerungen stehen bewusst auf 0; `patch_mode` steht seit 3.35.0 auf 1 (Änderungsvorschläge, unten). Grenzen: `max_items` 5.000, `max_checklist_entries` 50, `max_depth` 12, 12 MB je Datei.
+- **Keine internen Kennungen:** Die Datei arbeitet mit frei wählbaren Schlüsseln; echte IDs vergibt Glide beim Import. Eine exportierte Datei enthält keine Aufgaben- oder Listenkennungen; Bildkennungen innerhalb einer Bildfolge dienen nur deren Reihenfolge und Zeitachse.
+- **Capabilities** nennen je Fähigkeit eine Stufe (0 = unbekannt). Seit 3.40.0 steht `animations` auf 1, `max_animation_frames` auf 120 und `animation_duration_ms` nennt 20–60.000 ms; Zeichnungslisten tragen ihre vollständige Folge. Anhänge, Wiederholungen und Erinnerungen stehen bewusst auf 0; `patch_mode` steht seit 3.35.0 auf 1 (Änderungsvorschläge, unten). Grenzen: `max_items` 5.000, `max_checklist_entries` 50, `max_depth` 12, 12 MB je Datei.
 - **Import:** JSON, Formatname, Version und Modus prüfen → Felder, Werte, Verweise prüfen → Vorschau → Bestätigung → ein Rückgängig-Schritt. Unbekannte Felder nennt die Vorschau, der Fokus liegt dann auf „Abbrechen“. Der Import legt ausschließlich Neues an; scheitert das Speichern, gehen Listen, Ordner, Labels und Rückgängig-Stapel exakt zurück.
 - **Markdown-Gliederung** als zweite, schwächere Ebene: `# Liste`, `## Abschnitt`, `- Aufgabe`, eingerückte Unterpunkte, `- [ ]` als Checklistenschritt, freier Text als Beschreibung. Ohne Schlüssel und Labels, daher nicht für den Rückweg.
 - **Bedienung:** Datei › „Für KI bereitstellen …“ (Export), „KI-Ergebnis importieren …“ (`.glideexchange`, `.json`, `.md`), „Austauschformat anzeigen …“ (Anweisung für eine KI, aus den tatsächlichen Konstanten erzeugt).

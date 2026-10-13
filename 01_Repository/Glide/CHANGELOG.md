@@ -1,5 +1,12 @@
 # Änderungsverlauf
 
+## 3.40.0 – Pixelanimation (13.10.2026)
+
+- **Bildfolgen lokal gestalten:** In der Pixel-Werkstatt Bilder anlegen, duplizieren, löschen und umordnen; gemeinsame oder eigene Dauer je Bild (20 bis 60.000 ms, höchstens 120 Bilder). Jedes Bild behält seinen eigenen Zeichenverlauf; Strukturänderungen sind ein Rückgängig-Schritt. Alte Zeichnungen bleiben als einzelnes Bild verlustfrei erhalten.
+- **Vorschau und Ausgabe:** Unterbrechbare Vorschau mit Pause, Wiederholung und Neustart; beim Schließen werden Rückrufe und Bildressourcen abgebaut. PNG-Spritesheet und PNG-Einzelbildfolge tragen eine Zeitachse mit Bildkennungen, Reihenfolge und Dauern; die Einzelbilder landen in einem neuen, lesbar benannten Ordner. Vorhandene Dateien werden nur nach ausdrücklicher Bestätigung gemeinsam ersetzt; ein Fehler rollt den Dateisatz zurück. Kein GIF.
+- **Ganze Zwischenstände:** Benannte Zwischenstände enthalten die vollständige Bildfolge; Wiederherstellen, Als neue Zeichnung und Rückgängig erhalten alle Bilder und Zeiten. Bestehende statische Zwischenstände bleiben lesbar. Ein fehlgeschlagenes Speichern erhält Datei, Metadaten und Rückgängig-Verlauf und entfernt nur den eigenen neuen Anhang.
+- **Format 24:** Bytegenaue Vorsicherung vor dem ersten Schreiben, bei Fehler kein Überschreiben. Kopie, Papierkorb, Verlauf, Sicherung, Vorlagen und Austausch-Erstellen 2 bewahren die Folge; Erstellen 1 bleibt lesbar. Die unveränderte 3.39.1 öffnet neuere Bestände schreibgeschützt. Tk-freie Module `animation.py` und `animation_export.py`, 40 zusätzliche Unit-Tests und Pflichtsuite `test_animation3400.py`; Abnahmen und Lieferartefakte im QA-Bericht.
+
 ## 3.39.1 – Wiederholungen richtig erfassen und austauschen (13.10.2026)
 
 - **Schnelleingabe ganz oder gar nicht (A29):** Ankertag und Wochentage gehören zur Wiederholung – „monatlich am 15.“, „jeden 15.“, „jährlich am 24.12.“, „wöchentlich montags“, „alle 2 Wochen montags“, „jeden zweiten Dienstag“, „jeden zweiten Tag“. Bisher begann die Reihe heute und der Rest blieb Titeltext. Regeln, die das Datenformat nicht abbildet („jeden ersten Montag im Monat“, „alle 2 Monate“, „alle 2 Wochen montags und donnerstags“), bleiben vollständig Text mit gedämpftem Hinweis ohne Wirkung; kein Wort daraus wird als Bearbeitungstag gelesen.
