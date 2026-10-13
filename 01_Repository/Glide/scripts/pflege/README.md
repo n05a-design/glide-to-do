@@ -1,6 +1,6 @@
 # Pflegewerkzeuge
 
-Stand 13.10.2026 · Glide 3.40.0 · Aufgabenformat 24
+Stand 13.10.2026 · Glide 3.41.0 · Aufgabenformat 25
 
 Werkzeuge für jede Arbeitsrunde und für Messungen. Sie legen keine
 Archivkopien an: Vorfassungen von Fixtures, Showcase, Vorlagen und Dokumenten

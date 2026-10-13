@@ -1,5 +1,12 @@
 # Änderungsverlauf
 
+## 3.41.0 – Notion-Import und Seitenwiederherstellung (13.10.2026)
+
+- **Notion-Export übernehmen:** Datei › Importieren liest einen Notion-Export „Markdown & CSV“ als ZIP (bis 200 MiB, ohne Entpacken). Die Vorschau zeigt jede Seite mit Vergleichsstatus, Text und Dateien; übernommen wird nur, was ausdrücklich ausgewählt ist. Überschriften, Absätze, Listen, Aufgaben-Kästchen, lokale Bilder und Anhänge sowie interne Seitenverweise; Unterseiten landen in Ordnern. CSV-Datenbanken, HTML-Dateien und andere nicht übernommene Bestandteile stehen im Verlustbericht; das Originalarchiv bleibt als Anhang der Seite „Notion-Importbericht“ erhalten. Vorsicherung, ein Rückgängig-Schritt.
+- **Spätere Exporte kontrolliert nachziehen:** Glide erkennt übernommene Seiten wieder (unverändert, neu, Quelle geändert, nur in Glide geändert, Konflikt). Unveränderte Quellen werden ausgelassen; eine Seite mit eigenen Änderungen wird nur nach ausdrücklicher Konfliktfreigabe ersetzt. Keine Live-Synchronisierung.
+- **Einzelne Seite wiederherstellen:** Datei › Sicherung vergleicht eine Seite aus einer vorhandenen Sicherung mit dem heutigen Stand und stellt sie mit Text, Bildern, Anhängen, Aufgabenverweisen und Live-Listen wieder her. Fehlende Ziele und Dateien stehen vorab in der Vorschau; andere Seiten bleiben unverändert, Kennungen bleiben eindeutig. Vorsicherung, ein Rückgängig-Schritt.
+- **Format 25:** Quellenzuordnungen übernommener Seiten (`notion_source`) und Ordner (`notion_source_key`); bytegenaue Vorsicherung vor dem ersten Schreiben, die unveränderte 3.40.0 öffnet den neuen Bestand schreibgeschützt. Neun Tk-freie Module, 147 zusätzliche Unit-Tests und Pflichtsuite `test_import3410.py`; Abnahmen im QA-Bericht.
+
 ## 3.40.0 – Pixelanimation (13.10.2026)
 
 - **Bildfolgen lokal gestalten:** In der Pixel-Werkstatt Bilder anlegen, duplizieren, löschen und umordnen; gemeinsame oder eigene Dauer je Bild (20 bis 60.000 ms, höchstens 120 Bilder). Jedes Bild behält seinen eigenen Zeichenverlauf; Strukturänderungen sind ein Rückgängig-Schritt. Alte Zeichnungen bleiben als einzelnes Bild verlustfrei erhalten.

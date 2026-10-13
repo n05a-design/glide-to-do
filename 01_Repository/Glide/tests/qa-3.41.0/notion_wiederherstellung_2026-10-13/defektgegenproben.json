@@ -1,0 +1,33 @@
+{
+  "gegenproben": [
+    {
+      "fall": "vergleich",
+      "defekt": "Lokale Änderungen werden beim erneuten Import nicht erkannt (kein Konflikt)",
+      "exitcode": 1,
+      "gegenprobe_rot": true,
+      "beobachtung": "AssertionError: Keine passende Quelle in der Vorschau"
+    },
+    {
+      "fall": "import",
+      "defekt": "CSV-Datenbank fehlt im Verlustbericht",
+      "exitcode": 1,
+      "gegenprobe_rot": true,
+      "beobachtung": "AssertionError"
+    },
+    {
+      "fall": "restore",
+      "defekt": "Seitenrestore ohne Vorsicherung",
+      "exitcode": 1,
+      "gegenprobe_rot": true,
+      "beobachtung": "AssertionError"
+    },
+    {
+      "fall": "migration",
+      "defekt": "keine Vorsicherung vor dem ersten Format-25-Schreiben",
+      "exitcode": 1,
+      "gegenprobe_rot": true,
+      "beobachtung": "AssertionError"
+    }
+  ],
+  "app_sha256": "d7f6e59026a31e1f82cdcfdaa3689d226a5a49fc92b05fc526df4bcd7785844b"
+}

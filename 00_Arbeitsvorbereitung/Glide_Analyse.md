@@ -1,6 +1,6 @@
 # Glide – Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung
 
-Stand 13.10.2026 · Glide 3.40.0 · Aufgabenformat 24 · Analyse vom 08.10.2026, fortgeschrieben am 12.10.2026 nach Paket 2 und während der Paket-3-Neuabnahme (Code, Dokumente, Git-Historie, Plattformnachweise); Bestandsaufnahme und Gap-Analyse nach Wettbewerbs- und Codeabgleich am 13.10.2026 (§8)
+Stand 13.10.2026 · Glide 3.41.0 · Aufgabenformat 25 · Analyse vom 08.10.2026, fortgeschrieben am 12.10.2026 nach Paket 2 und während der Paket-3-Neuabnahme (Code, Dokumente, Git-Historie, Plattformnachweise); Bestandsaufnahme und Gap-Analyse nach Wettbewerbs- und Codeabgleich am 13.10.2026 (§8)
 
 Bestandsaufnahme im Auftrag vom 08.10.2026: lokale Ablage untersuchen, Dokumentation und Code abgleichen, daraus den Sprint ableiten. Dieses Dokument trägt die **Analyse** (Funktions-, Oberflächen-, Entscheidungs- und Nutzungsanalyse sowie den Abgleich Dokumentation ↔ Code). Der Wettbewerb steht in [Markt und Vorbilder](Glide_Markt_und_Vorbilder.md), die Entscheidungen selbst in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), die daraus abgeleiteten Aufgaben ausschließlich im [Entwicklungsplan, Abschnitt 14](Glide_Entwicklungsplan.md#14-sprint-ab-08102026-aufgabenkatalog). Erledigte Befunde werden hier als erledigt markiert, nicht gelöscht, bis die nächste Analyse sie ersetzt.
 

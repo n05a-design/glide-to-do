@@ -1,8 +1,8 @@
 # Daten, Backups und Migration – Glide
 
-Stand 13.10.2026 · Glide 3.40.0 · Aufgabenformat 24 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
+Stand 13.10.2026 · Glide 3.41.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
 
-Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag 52) ergänzt und um die Verweise auf gelöschte Einzelverträge bereinigt; die Vorfassungen trägt Git. Formate 4–24 und Legacy 2 bleiben lesbar.
+Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag 52) ergänzt und um die Verweise auf gelöschte Einzelverträge bereinigt; die Vorfassungen trägt Git. Formate 4–25 und Legacy 2 bleiben lesbar.
 
 ## Ablage
 
@@ -18,6 +18,12 @@ Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag
 - Der Datenordner liegt außerhalb des Programms. `GLIDE_DATA_DIR` hat Vorrang (Tests), sonst Plattformstandard und optional `datenordner.json`. Ein Wechsel kopiert in ein leeres Ziel oder öffnet einen vorhandenen Bestand; die Quelle bleibt.
 - `glide.lock` verhindert gleichzeitiges Schreiben zweier Instanzen; erkannte Fremdbelegung verhindert Speichern. Die Sperre ersetzt keinen Synchronisationsdienst.
 - Gespeichert wird sofort und atomar (Temporärdatei, `replace_with_retry`; unter Windows bis 1,5 s Warten bei Dateisperren). Liegengebliebene `.glide-json-*.tmp`, älter als zehn Minuten, räumt der Start auf.
+
+## Format 25
+
+Seit 3.41.0 tragen aus Notion übernommene Seiten `notion_source` (Version 1): `key` (`notion:` mit 32 Hexzeichen aus dem Dateinamen oder `path:` mit SHA-256 des Archivpfads), `target_id` (die Glide-Seite), `source_hash` (Inhalt der Quelle), `local_hash` (übernommener Glide-Stand) und `source_path` (relativer Archivpfad ohne `..`, Laufwerk oder Steuerzeichen). Ordner für Unterseiten tragen `notion_source_key`. Jede Quelle gehört zu genau einer lebenden Seite; Kopien und Duplikate erhalten keine Zuordnung, Papierkorb und Wiederherstellung behalten sie. Unbekannte oder widersprüchliche Zuordnungen werden abgewiesen.
+
+Vor dem ersten Format-25-Schreiben wird die alte Datei unverändert nach `liste_vor_format25_*.json` kopiert; ein Kopierfehler verhindert das Schreiben. Die unveränderte 3.40.0 (Format 24) öffnet Format 25 schreibgeschützt. Ein Bestand mit Format 24 darf keine Zuordnungsfelder tragen. Der Referenzbestand `tests/fixtures/current_v25/reference_v25.json` enthält eine zugeordnete Seite und einen Ordner. Seitenwiederherstellung und Notion-Import legen vor der Übernahme eine vollständige Sicherung `vor_seitenrestore_*.glidebackup` bzw. eine Vorsicherung an. Migrations-, Altleser- und Schreibproben in `test_import3410.py`.
 
 ## Format 24
 
@@ -90,6 +96,7 @@ Referenz-Fixture: `tests/fixtures/current_v20/reference_v20.json`.
 | 22 | 3.33.17 | Typisierte lokale Listen-/Aufgabenbeziehungen und Textlinks, abgeleitete Rückverweise | 3.33.16 und ältere Format-21-Leser öffnen schreibgeschützt |
 | 23 | 3.33.18 | Live-Listen und Titelbilder in Seiten | 3.33.17 und ältere Format-22-Leser öffnen schreibgeschützt |
 | 24 | 3.40.0 | Vollständige Pixelbildfolgen mit Bildkennungen und Dauern | 3.39.1 und ältere Format-23-Leser öffnen schreibgeschützt |
+| 25 | 3.41.0 | Notion-Quellenzuordnungen an Seiten und Ordnern | 3.40.0 und ältere Format-24-Leser öffnen schreibgeschützt |
 
 **Glide 3.29 und älter nach der Umstellung nicht mehr starten.** Sie halten einen Format-20-Bestand für beschädigt, beginnen leer und überschreiben ihn bei der ersten Eingabe (nachgewiesen am 25.09.2026 mit einer Kopie eines echten Bestands). Alte Fassungen nur mit getrennter Ablage (`GLIDE_DATA_DIR`) starten.
 
@@ -148,7 +155,7 @@ Entlasten schreibt über `item_change`: Zieltag oder Vorrat, Planungsuhrzeit nac
 
 ## Austauschformat (`.glideexchange`)
 
-Transportformat für fremde Systeme und KI, **kein Speicherformat**. Zwei getrennte Zahlen: `DATA_SCHEMA_VERSION` (wie Glide speichert, 24) und `EXCHANGE_FORMAT_VERSION` (worauf sich ein fremdes System verlassen kann, 2; Erstellen 1 bleibt lesbar). Leitsatz: Die Quelle beschreibt, was entstehen soll; Glide entscheidet, wie es intern gespeichert wird.
+Transportformat für fremde Systeme und KI, **kein Speicherformat**. Zwei getrennte Zahlen: `DATA_SCHEMA_VERSION` (wie Glide speichert, 25) und `EXCHANGE_FORMAT_VERSION` (worauf sich ein fremdes System verlassen kann, 2; Erstellen 1 bleibt lesbar). Leitsatz: Die Quelle beschreibt, was entstehen soll; Glide entscheidet, wie es intern gespeichert wird.
 
 ```json
 {
