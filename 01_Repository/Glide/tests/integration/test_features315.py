@@ -38,7 +38,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features315-") as folder:
     app.ask_yes_no = lambda *args, **kwargs: True
     try:
         # --- Einstellung: Vorgabe, Grenzen und Rückfall ----------------------
-        assert app.DATA_SCHEMA_VERSION == 23, "Format 23 bewahrt lokale Verweise, Live-Listen und Titelbilder."
+        assert app.DATA_SCHEMA_VERSION == 24, "Ab Format 23 bewahrt der Bestand lokale Verweise, Live-Listen und Titelbilder."
         assert app.DAILY_CAPACITY_DEFAULT == 0 and app.DAILY_CAPACITY_MAX == 1440
         assert app.daily_capacity_minutes() == 0, "Ohne Angabe gibt es keinen Vergleichswert."
         for value, expected in ((0, 0), (1, 1), (1440, 1440), (2000, 1440), (-5, 0),

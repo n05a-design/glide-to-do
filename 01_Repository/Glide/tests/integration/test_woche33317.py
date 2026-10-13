@@ -58,10 +58,10 @@ with tempfile.TemporaryDirectory(prefix='glide-woche-') as directory:
     def task(identity):return app.find_item_in_lists(identity)[0]
     def entry(identity):return next(e for e in app.lists if e['id']==identity)
     try:
-        assert app.DATA_SCHEMA_VERSION==23
+        assert app.DATA_SCHEMA_VERSION==24
         backups=list(Path(mod.BACKUP_DIR).glob('liste_vor_format22_*.json'))
         assert len(backups)==1 and backups[0].read_bytes()==original
-        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))['version']==23
+        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))['version']==24
         checks.append(f'Format 21 → {app.DATA_SCHEMA_VERSION}: bytegenaue Vorsicherung und Startmigration')
         today=date.today();first=app.calendar_week_start(today)
         due=(today+timedelta(days=10)).isoformat()

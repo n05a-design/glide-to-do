@@ -54,8 +54,8 @@ with tempfile.TemporaryDirectory(prefix='glide-seiten18-') as directory:
         for job in root.tk.call('after','info'): root.tk.call('after','cancel',job)
         root.destroy()
     try:
-        assert app.DATA_SCHEMA_VERSION == 23
-        assert json.loads(Path(mod.SAVE_FILE).read_text())['version'] == 23
+        assert app.DATA_SCHEMA_VERSION == 24
+        assert json.loads(Path(mod.SAVE_FILE).read_text())['version'] == 24
         backups = list(Path(mod.BACKUP_DIR).glob('liste_vor_format23_*.json'))
         assert len(backups) == 1 and backups[0].read_bytes() == original
         checks.append('Format 22 → 23, bytegenaue Vorsicherung')

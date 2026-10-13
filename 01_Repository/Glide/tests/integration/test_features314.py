@@ -46,7 +46,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features314-") as folder:
     app.show_info = lambda *args, **kwargs: None
     app.ask_yes_no = lambda *args, **kwargs: True
     try:
-        assert app.DATA_SCHEMA_VERSION == 23, "Format 23 bewahrt lokale Verweise, Live-Listen und Titelbilder."
+        assert app.DATA_SCHEMA_VERSION == 24, "Ab Format 23 bewahrt der Bestand lokale Verweise, Live-Listen und Titelbilder."
         assert app.new_item("Alt")["planned_date"] is None
         assert app.normalize_items([{"text": "Alt"}])[0]["estimated_minutes"] is None
         for value in (0, -1, True, 1.5, "60", [], 60001):

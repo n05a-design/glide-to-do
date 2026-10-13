@@ -67,6 +67,8 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 | `busy_calendar.py` | Gemeinsamer Belegzeitenvertrag, Dateigrenzen, unbekannte Zustände und Quellenkonfiguration ohne Tk | 3.39.0 |
 | `calendar_service.py` | Begrenzter asynchroner Kalenderleser mit Generationsschutz und Lebensdauer ohne Tk | 3.39.0 |
 | `repeat_ics.py` | Glide-Wiederholung ↔ iCalendar-RRULE: Monats-/Jahresreihen ab dem 29. als BYSETPOS-Klemmform wie in Glide, Rückweg nur bei gleicher Terminfolge (Tk-frei, A28) | 3.39.1 |
+| `animation.py` | Bildfolge einer Zeichnung: stabile Frame-IDs, gemeinsame und eigene Dauer, Vorschau-Zeitachse, pixelgenaue PNG-Ausgabe (Tk-frei, D18) | 3.40.0 |
+| `animation_export.py` | Zusammengehörige PNG-/Zeitachsendateien mit rückrollbarem Austausch (Tk-frei) | 3.40.0 |
 
 `drawing_prototype.pyw` ist die isolierte Bedienprobe der Zeichenfläche von 2026-09-24; sie gehört nicht zur App und nicht zu den Lieferwegen. Ein neues Modul muss in `packaging/macos/baue_app.py`, `scripts/pflege/abgleich_07.py`, `src/glide/README.md`, `packaging/README.md`, `07_Python-Versionen/README.md` und hier stehen; die Standprüfung (R10) meldet Lücken.
 

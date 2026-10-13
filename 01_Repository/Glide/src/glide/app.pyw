@@ -113,6 +113,8 @@ def bytecode_cache_dir():
 if not sys.pycache_prefix and not getattr(sys, "frozen", False):
     sys.pycache_prefix = bytecode_cache_dir()
 import drawing as glide_drawing  # noqa: E402
+import animation as glide_animation  # noqa: E402
+import animation_export as glide_animation_export  # noqa: E402
 import drawing_image as glide_drawing_image  # noqa: E402
 import backdrop as glide_backdrop  # noqa: E402
 import page_markdown as glide_page_markdown  # noqa: E402
@@ -11686,10 +11688,22 @@ class DrawingEditor(tk.Frame):
         self.app = app
         self.list_id = entry.get("id")
         self.on_change = on_change
-        self.model = glide_drawing.DrawingModel.from_document(entry.get("drawing"))
+        self.animation = glide_animation.from_entry(entry)
+        self.frame_id = self.animation.frames[0].id
+        self.model = self.animation.frames[0].model
+        self._last_animation_document = self.animation.to_document()
+        self._animation_windows = set()
         self._last_document = self.model.to_document()
         size = self.model.width
         view = app.drawing_view_state(self.list_id)
+        selected = view.get("frame_id")
+        if any(frame.id == selected for frame in self.animation.frames):
+            self.frame_id = selected
+            self.model = self.animation.frames[self.animation.index(selected)].model
+            self._last_document = self.model.to_document()
+        self._trace_backups = copy.deepcopy(view.get("trace_backups", {}))
+        if not isinstance(self._trace_backups, dict):
+            self._trace_backups = {}
         tools = app.drawing_tool_settings()
         tool_keys = {key for key, _label, _shortcut in self.TOOLS}
         self.tool = view.get("tool") if view.get("tool") in tool_keys else "brush"
@@ -11731,7 +11745,8 @@ class DrawingEditor(tk.Frame):
         self.reference_colors = None
         self.reference_faded = None
         self.reference_message = ""
-        self.trace_backup = view.get("trace_backup")
+        if self.frame_id not in self._trace_backups and self.frame_id == self.animation.frames[0].id:
+            self.trace_backup = view.get("trace_backup")
         self._base = None
         self._photo = None
         self._rendered = None
@@ -11795,6 +11810,8 @@ class DrawingEditor(tk.Frame):
         self.app.add_tooltip(self.zoom_out_button, "Verkleinern (−, Strg+Mausrad)")
         self.app.add_tooltip(self.zoom_in_button, "Vergrößern (+, Strg+Mausrad)")
         self.app.add_tooltip(self.preview_button, "Vorschau in Originalgröße (Taste P)")
+
+        self._build_animation_controls()
 
         # Die Kontextleiste zeigt nur, was das aktive Werkzeug braucht.
         self.context_row = ButtonFlow(self, theme["card"], gap=6)
@@ -12104,7 +12121,8 @@ class DrawingEditor(tk.Frame):
         self.app.drawing_view_state(self.list_id).update(
             tool=self.tool, brush_size=self.brush_size, color=self.color, secondary=self.secondary,
             zoom=self.zoom, grid=self.grid_visible, reference=self.reference_visible, cursor=self.cursor,
-            trace_backup=self.trace_backup, auto_zoom=self._auto_zoom, symmetry=self.symmetry,
+            trace_backup=self.trace_backup, trace_backups=copy.deepcopy(self._trace_backups),
+            frame_id=self.frame_id, auto_zoom=self._auto_zoom, symmetry=self.symmetry,
             fill_pattern=self.fill_pattern, shape_filled=self.shape_filled, wrap=self.wrap,
             tiled=self.tiled_preview, grayscale=self.grayscale, selection=self.selection,
         )
@@ -13283,7 +13301,8 @@ class DrawingEditor(tk.Frame):
 
     def replace_model(self, model, label="Geändert"):
         """Übernimmt ein neues Zellmodell derselben Größe, etwa nach Farbersetzung."""
-        self.model = model
+        self.animation.replace_model(self.frame_id, model)
+        self.model = self.animation.frames[self.animation.index(self.frame_id)].model
         self.render_full()
         self.mark_unsaved()
         self.schedule_save()
@@ -13307,7 +13326,7 @@ class DrawingEditor(tk.Frame):
             self._save_job = None
 
     def has_pending_changes(self):
-        return self.model.to_document() != self._last_document
+        return self.animation.to_document() != self._last_animation_document
 
     def flush(self):
         """Überträgt das Modell in den Glide-Bestand und speichert atomar.
@@ -13322,8 +13341,8 @@ class DrawingEditor(tk.Frame):
             self._save_job = None
         if self._busy():
             return False
-        document = self.model.to_document()
-        if document == self._last_document and self.save_state != "error":
+        document = self.animation.to_document()
+        if document == self._last_animation_document and self.save_state != "error":
             return True
         self.save_state = "saving"
         self.update_status()
@@ -13331,19 +13350,33 @@ class DrawingEditor(tk.Frame):
         if ok is False:
             self.save_state = "error"
         else:
-            self._last_document = document
+            self._last_animation_document = document
+            self._last_document = self.model.to_document()
             self.save_state = "saved"
         self.update_status()
         return ok is not False
 
     def reload(self, entry):
         """Übernimmt einen extern veränderten Stand, etwa nach Rückgängig."""
-        document = entry.get("drawing")
-        if document != self._last_document:
-            self.model = glide_drawing.DrawingModel.from_document(document)
+        incoming = glide_animation.from_entry(entry)
+        document = incoming.to_document()
+        if document != self._last_animation_document:
+            previous = {frame.id: frame for frame in self.animation.frames}
+            # Unveränderte Frames behalten ihren eigenen Zell-Undo-Puffer.
+            for frame in incoming.frames:
+                old = previous.get(frame.id)
+                if old is not None and old.model.to_document() == frame.model.to_document():
+                    frame.model = old.model
+            self.animation = incoming
+            if not any(frame.id == self.frame_id for frame in incoming.frames):
+                self.frame_id = incoming.frames[0].id
+                self.selection = None
+            self.model = incoming.frames[incoming.index(self.frame_id)].model
+            self._last_animation_document = document
             self._last_document = self.model.to_document()
             self.save_state = "saved"
             self._adopt_model_size()
+            self._sync_frame_choices()
         reference = entry.get("drawing_reference")
         key = None if not isinstance(reference, dict) else (
             reference.get("attachment_id"), reference.get("mode"), reference.get("zoom_percent"),
@@ -13355,6 +13388,13 @@ class DrawingEditor(tk.Frame):
     def _destroyed(self, event=None):
         if event is not None and event.widget is not self:
             return
+        for window in tuple(self._animation_windows):
+            try:
+                if window.winfo_exists():
+                    window.destroy()
+            except tk.TclError:
+                pass
+        self._animation_windows.clear()
         # Tk entfernt Python-Kommandos beim Widgetabbau, seine after-Timer
         # bleiben aber bestehen. Eine wiederverwendete Kommandokennung kann
         # später sogar eine neue Ereignisbindung ohne Event aufrufen.
@@ -13372,6 +13412,186 @@ class DrawingEditor(tk.Frame):
             self.remember_view()
         except (tk.TclError, AttributeError):
             pass
+
+
+    @property
+    def trace_backup(self):
+        return self._trace_backups.get(self.frame_id)
+
+    @trace_backup.setter
+    def trace_backup(self, value):
+        self._trace_backups[self.frame_id] = value
+
+    def _build_animation_controls(self):
+        row = ButtonFlow(self, self.app.theme["card"], gap=6)
+        row.pack(fill="x", pady=(0, 4))
+        label = tk.Label(row, text="Bild", bg=self.app.theme["card"], fg=self.app.theme["text"],
+                         font=app_font(10))
+        self.frame_choice = ttk.Combobox(row, state="readonly", width=23, name="animation_frame")
+        self.frame_choice.bind("<<ComboboxSelected>>", self._frame_chosen)
+        row.add(label)
+        row.add(self.frame_choice)
+        self.frames_button = self._button(row, "Bilder …",
+            lambda: self.app.drawing_animation_dialog(self), width=112)
+        self.play_animation_button = self._button(row, "Abspielen …", self.show_animation_preview, width=112)
+        self.animation_export_button = self._button(row, "Bildfolge exportieren …", self.animation_export_menu, width=170)
+        for button in (self.frames_button, self.play_animation_button, self.animation_export_button):
+            row.add(button)
+        self._sync_frame_choices()
+
+    def _sync_frame_choices(self):
+        self.frame_choice.configure(values=tuple(
+            f"Bild {index} · {duration} ms" for index, duration in enumerate(self.animation.durations(), 1)))
+        self.frame_choice.current(self.animation.index(self.frame_id))
+
+    def _frame_chosen(self, _event=None):
+        index = self.frame_choice.current()
+        if 0 <= index < len(self.animation.frames):
+            self.select_frame(self.animation.frames[index].id)
+        self._sync_frame_choices()
+        return "break"
+
+    def select_frame(self, identity):
+        index = self.animation.index(identity)
+        if self.frame_id == identity:
+            return True
+        self._release()
+        if not self.flush():
+            return False
+        self.remember_view()
+        self.frame_id = identity
+        self.model = self.animation.frames[index].model
+        self._last_document = self.model.to_document()
+        self.selection = None
+        self._key_anchor = None
+        self._clear_preview()
+        self.render_full()
+        self._sync_frame_choices()
+        self.remember_view()
+        self.update_status(f"Bild {index + 1} von {len(self.animation.frames)}")
+        return True
+
+    def animation_export_menu(self):
+        menu = tk.Menu(self, tearoff=False, bg=self.app.theme["card"], fg=self.app.theme["text"],
+                       activebackground=self.app.theme["selection"],
+                       activeforeground=self.app.theme["selection_text"])
+        menu.add_command(label="PNG-Spritesheet …", command=lambda: self.app.drawing_animation_export(self))
+        menu.add_command(label="PNG-Einzelbildfolge …",
+                         command=lambda: self.app.drawing_animation_export(self, sequence=True))
+        try:
+            anchor = self.animation_export_button
+            menu.tk_popup(anchor.winfo_rootx(), anchor.winfo_rooty() + anchor.winfo_height())
+        finally:
+            menu.grab_release()
+
+    def show_animation_preview(self):
+        previous = getattr(self, "_animation_preview_dialog", None)
+        if previous is not None and previous.winfo_exists():
+            previous.lift()
+            return "break"
+        self._release()
+        if not self.flush():
+            return "break"
+        animation = glide_animation.Animation.from_document(self.animation.to_document())
+        dialog, body, footer = self.app._daily_dialog("Bildfolge abspielen", 560, 510)
+        self._animation_preview_dialog = dialog
+        self._animation_windows.add(dialog)
+        canvas = tk.Canvas(body, width=320, height=320, bg=self.app.theme["card"],
+                           highlightthickness=0, name="animation_preview")
+        canvas.pack(fill="both", expand=True)
+        label = tk.Label(body, bg=self.app.theme["bg"], fg=self.app.theme["text"], font=app_font(11))
+        label.pack(fill="x", pady=(8, 0))
+        loop = tk.BooleanVar(dialog, value=True)
+        self.app._daily_toggle(body, "Wiederholen", loop).pack(anchor="w", pady=(8, 0))
+        state = dict(job=None, running=False, elapsed=0.0, started=0.0, images={})
+        dialog._animation_preview_state = state
+        dialog._animation_preview_source = animation.to_document()
+
+        def cancel_timer():
+            job = state["job"]
+            if job is not None:
+                dialog.after_cancel(job)
+                self.app._after_ids.discard(job)
+                state["job"] = None
+
+        def draw(elapsed):
+            position = animation.playback(elapsed, loop=loop.get())
+            frame = animation.frames[position.index]
+            images = state["images"]
+            if frame.id not in images:
+                # Nur wenige Bildressourcen gleichzeitig halten, auch bei 120 Frames.
+                while len(images) >= 4:
+                    images.pop(next(iter(images)))
+                images[frame.id] = glide_drawing_image.thumbnail_photo(frame.model, 256, master=canvas)
+            canvas.delete("all")
+            canvas.create_image(canvas.winfo_width() // 2, canvas.winfo_height() // 2,
+                                image=images[frame.id], anchor="center")
+            label.configure(text=f"Bild {position.index + 1} von {len(animation.frames)} · "
+                                 f"{animation.durations()[position.index]} ms")
+            dialog._animation_preview_frame = frame.id
+            return position
+
+        def tick():
+            job = state["job"]
+            self.app._after_ids.discard(job)
+            state["job"] = None
+            if not dialog.winfo_exists() or not state["running"]:
+                return
+            elapsed = state["elapsed"] + (time.perf_counter() - state["started"]) * 1000
+            position = draw(elapsed)
+            if position.finished:
+                state.update(running=False, elapsed=elapsed)
+                play.set_text("Abspielen")
+                return
+            state["job"] = dialog.after(position.remaining_ms, tick)
+            self.app._after_ids.add(state["job"])
+
+        def pause():
+            if state["running"]:
+                state["elapsed"] += (time.perf_counter() - state["started"]) * 1000
+            state["running"] = False
+            cancel_timer()
+            play.set_text("Abspielen")
+
+        def toggle():
+            if state["running"]:
+                pause()
+            else:
+                if not loop.get() and state["elapsed"] >= sum(animation.durations()):
+                    state["elapsed"] = 0.0
+                state.update(running=True, started=time.perf_counter())
+                play.set_text("Pause")
+                tick()
+
+        def restart():
+            pause()
+            state["elapsed"] = 0.0
+            draw(0)
+
+        def destroyed(event):
+            if event.widget is dialog:
+                state["running"] = False
+                cancel_timer()
+                self._animation_windows.discard(dialog)
+                self._animation_preview_dialog = None
+
+        flow = ButtonFlow(footer, self.app.theme["bg"], gap=8)
+        flow.pack(fill="x")
+        play = self._button(flow, "Abspielen", toggle, width=112)
+        for button in (play, self._button(flow, "Von vorn", restart, width=112),
+                       self._button(flow, "Schließen", dialog.destroy, width=112)):
+            flow.add(button)
+        dialog.bind("<Destroy>", destroyed, add="+")
+        dialog.bind("<Escape>", lambda _event: dialog.destroy())
+        dialog.protocol("WM_DELETE_WINDOW", dialog.destroy)
+        canvas.bind("<Configure>", lambda _event: draw(
+            state["elapsed"] + ((time.perf_counter() - state["started"]) * 1000 if state["running"] else 0)))
+        draw(0)
+        self.app._center_dialog(dialog, min_width=560, min_height=510)
+        self.app._schedule_windows_chrome_theme(dialog)
+        dialog.deiconify()
+        self.app.run_modal(dialog)
+        return "break"
 
 
 class ListApp:
@@ -14415,7 +14635,9 @@ class ListApp:
     # Zeichnungen dürfen 16, 32, 64 oder 128 Zellen breit sein. Ältere
     # Fassungen würden diese Felder beim Speichern verlieren.
     # Format 21 bewahrt Textverweise nach Heimatwechsel und fehlende Ziele.
-    DATA_SCHEMA_VERSION = 23
+    # Format 24 (3.40.0) ergänzt Zeichnungen um die Bildfolge (`animation`);
+    # `drawing` bleibt das erste Bild und damit die statische Vorschau.
+    DATA_SCHEMA_VERSION = 24
     # Zentrale Typregistrierung der Listenarten. Eine Art ist nach der Anlage
     # unveränderlich. Unbekannte Arten eines Format-19-Bestands werden sichtbar
     # abgelehnt statt still zu Aufgabenlisten umgedeutet.
@@ -30583,6 +30805,7 @@ class ListApp:
         references=None,
         live_lists=None,
         cover=None,
+        animation=None,
     ):
         title = self._clip_and_note_title((title or "Neue Liste").strip() or "Neue Liste")
         created = self._list_timestamp(created_at, default_now=created_at is None)
@@ -30593,6 +30816,8 @@ class ListApp:
             # Aufgabenliste, gleich was eine fremde Datei behauptet.
             kind = self.LIST_KIND_TASKS if kind == self.LIST_KIND_DRAWING else kind
         items = items if isinstance(items, list) else []
+        if animation is not None and kind != self.LIST_KIND_DRAWING:
+            raise ValueError("Eine Bildfolge gehört in eine Zeichnungsseite.")
         if kind == self.LIST_KIND_DRAWING and items:
             # Eine Zeichnung hat keinen Aufgabenbereich. Punkte würden beim
             # stillen Verwerfen verloren gehen; der Bestand wird abgelehnt.
@@ -30637,7 +30862,7 @@ class ListApp:
         if kind == self.LIST_KIND_DRAWING:
             # Das Zellmodell ist Seiteninhalt wie der Notiztext. Zoom, Werkzeug,
             # Raster und Referenzsichtbarkeit sind Ansichtszustand und fehlen hier.
-            entry["drawing"] = self.normalize_drawing_document(drawing, title=title)
+            entry.update(self.normalize_animation_fields(drawing, animation, title))
             entry["drawing_reference"] = self.normalize_drawing_reference(
                 drawing_reference, entry["attachments"])
         return entry
@@ -30727,6 +30952,17 @@ class ListApp:
         except glide_drawing.DrawingFormatError as exc:
             name = f" „{title}“" if title else ""
             raise ValueError(f"Die Zeichnung{name} ist ungültig: {exc}") from exc
+
+    @classmethod
+    def normalize_animation_fields(cls, drawing, animation=None, title=""):
+        """Alte Einzelbilder und vollständige Bildfolgen verlustfrei lesen."""
+        drawing = cls.normalize_drawing_document(drawing, title)
+        try:
+            return glide_animation.entry_fields(glide_animation.from_entry(
+                {"drawing": drawing, "animation": animation}))
+        except glide_drawing.DrawingFormatError as exc:
+            name = f" „{title}“" if title else ""
+            raise ValueError(f"Die Bildfolge{name} ist ungültig: {exc}") from exc
 
     @classmethod
     def normalize_drawing_reference(cls, value, attachments):
@@ -35078,6 +35314,7 @@ class ListApp:
                     live_lists=copy.deepcopy(entry.get("live_lists")),
                     cover=copy.deepcopy(entry.get("cover")),
                     icon=copy.deepcopy(entry.get("icon")),
+                    animation=copy.deepcopy(entry.get("animation")),
                 )
                 self.remap_rich_note_items(new_entry, zuordnung)
                 glide_objects.remap_holder(new_entry, {list_id: new_entry["id"]}, zuordnung)
@@ -35683,6 +35920,7 @@ class ListApp:
                 drawing_reference=restored.get("drawing_reference"),
                 references=restored.get("references"),
                 live_lists=restored.get("live_lists"), cover=restored.get("cover"),
+                animation=copy.deepcopy(restored.get("animation")),
             )
             self.lists.append(restored_list)
             self.trash = [entry for entry in self.trash if entry.get("id") != trash_id]
@@ -37203,6 +37441,7 @@ class ListApp:
                         recurring_checklist=entry.get("recurring_checklist") is True,
                         references=entry.get("references"),
                         live_lists=entry.get("live_lists"), cover=entry.get("cover"),
+                        animation=copy.deepcopy(entry.get("animation")),
                     )
                 )
 
@@ -37320,6 +37559,7 @@ class ListApp:
                     drawing_reference=payload.get("drawing_reference"),
                     references=payload.get("references"),
                     live_lists=payload.get("live_lists"), cover=payload.get("cover"),
+                    animation=copy.deepcopy(payload.get("animation")),
                 )
             trash_entry = {
                 "id": entry_id,
@@ -41382,6 +41622,7 @@ class ListApp:
             self.ensure_schema21_backup()
             self.ensure_schema_backup(22)
             self.ensure_schema_backup(23)
+            self.ensure_schema_backup(24)
             # Der Verlauf entsteht vor dem Schreiben, damit die Datei den
             # Bestand und das dazu passende Protokoll gemeinsam enthält.
             # Nur geprüfte lokale Punktmutationen liefern eine ID-Menge.
@@ -41617,11 +41858,17 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     @staticmethod
     def drawing_history_hash(entry):
-        """SHA-256 des kanonischen Zellmodells oder None für andere Listenarten."""
+        """SHA-256 über erstes Bild und Bildfolge oder None für andere Listenarten.
+
+        Die Bestandsfelder sind beim Laden bereits geprüft. Der Schlüssel dient
+        Bildcache und Startseite und wird deshalb nicht erneut validiert: Ein
+        späteres Bild oder eine Dauer ändert ihn genauso wie das erste Bild.
+        """
         document = entry.get("drawing") if isinstance(entry, dict) else None
         if not isinstance(document, dict):
             return None
-        return hashlib.sha256(glide_drawing.canonical_json(document).encode("utf-8")).hexdigest()
+        fields = {"drawing": document, "animation": entry.get("animation")}
+        return hashlib.sha256(glide_drawing.canonical_json(fields).encode("utf-8")).hexdigest()
 
     def history_events(self, vorher, nachher):
         """Unterschiede zweier Vergleichsstände als Verlaufsereignisse."""
@@ -44630,45 +44877,77 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def drawing_snapshot_save(self, editor):
         entry = self.drawing_entry(editor)
-        if entry is None:
-            return
+        if entry is None or getattr(self, "_data_read_only", False):
+            return False
         if len(self.drawing_snapshots(entry)) >= self.MAX_DRAWING_SNAPSHOTS:
             self.show_info("Zwischenstand merken", f"Eine Zeichnung behält höchstens "
                                                    f"{self.MAX_DRAWING_SNAPSHOTS} Zwischenstände. Bitte zuerst "
                                                    "einen älteren löschen.")
-            return
+            return False
         name = self.themed_input_dialog("Zwischenstand merken", "Name des Zwischenstands:",
                                         initial=datetime.now().strftime("%d.%m.%Y %H:%M"))
-        if name is None:
-            return
+        if name is None or not editor.flush():
+            return False
         name = " ".join(name.split())[:60] or datetime.now().strftime("%d.%m.%Y %H:%M")
-        editor.flush()
         handle, temporary = tempfile.mkstemp(prefix=".glide-snapshot-", suffix=".json")
         try:
             with os.fdopen(handle, "w", encoding="utf-8") as file:
-                file.write(editor.model.to_json() + "\n")
+                file.write(editor.animation.to_json() + "\n")
             stored = self.store_attachment(temporary)
         except OSError as exc:
             self.show_error("Zwischenstand merken", str(exc))
-            return
+            return False
         finally:
             try:
                 os.remove(temporary)
             except OSError:
                 pass
         stored.update(name=f"Zwischenstand – {name}.json", mime=self.DRAWING_SNAPSHOT_MIME)
+        before = copy.deepcopy(entry)
+        undo, dirty = list(self.undo_stack), self.dirty
+        history = copy.deepcopy(self.history)
+        baseline = copy.deepcopy(getattr(self, "_history_baseline", None))
         with self.sidebar_change(refresh_tree=False, feedback=False) as change:
             entry.setdefault("attachments", []).append(stored)
             change.mark()
+        if change.saved is False:
+            entry.clear()
+            entry.update(before)
+            self.undo_stack[:] = undo
+            self.dirty = dirty
+            self.history = history
+            self._history_baseline = baseline
+            self._saved_comparison_parts = None
+            self.clear_render_cache()
+            self.update_sidebar_list()
+            # store_attachment vergibt eine neue Kennung: nur diese eigene,
+            # noch nicht referenzierte Datei nach dem Schreibfehler entfernen.
+            path = self.resolve_attachment_path(stored)
+            cleanup = ""
+            try:
+                if path:
+                    os.remove(path)
+            except OSError as exc:
+                cleanup = " Der neue Anhang blieb zum Aufräumen erhalten: " + str(exc)
+            self.show_error("Zwischenstand merken", "Der Zwischenstand konnte nicht gespeichert werden. "
+                            "Die Zeichnung und vorhandene Zwischenstände bleiben erhalten." + cleanup)
+            return False
         editor.update_status(f"Zwischenstand „{name}“ gemerkt · „Mehr“ → „Zwischenstände …“")
+        return True
 
-    def read_drawing_snapshot(self, attachment):
+
+    def read_drawing_animation_snapshot(self, attachment):
         path = self.resolve_attachment_path(attachment)
         if not path or not os.path.isfile(path):
             raise OSError("Die Datei des Zwischenstands fehlt auf diesem Gerät.")
         with open(path, "rb") as source:
-            content = source.read(glide_drawing.MAX_JSON_BYTES + 1)
-        return glide_drawing.DrawingModel.from_json(content)
+            content = source.read(glide_animation.MAX_JSON_BYTES + 1)
+        return glide_animation.from_snapshot(content)
+
+
+    def read_drawing_snapshot(self, attachment):
+        """Statische Vorschau für vorhandene Aufrufer; Datei bleibt vollständig."""
+        return self.read_drawing_animation_snapshot(attachment).frames[0].model
 
     def drawing_snapshot_dialog(self, editor):
         """Gemerkte Stände ansehen, wiederherstellen, als neue Zeichnung öffnen oder löschen."""
@@ -44694,8 +44973,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 row = tk.Frame(rows, bg=self.theme["bg"])
                 row.pack(fill="x", pady=4)
                 try:
-                    model = self.read_drawing_snapshot(attachment)
-                    image = glide_drawing_image.thumbnail_photo(model, 48, master=row)
+                    model = self.read_drawing_animation_snapshot(attachment)
+                    image = glide_drawing_image.thumbnail_photo(model.frames[0].model, 48, master=row)
                     images.append(image)
                     tk.Label(row, image=image, **self.thumbnail_frame_options()).pack(side="left")
                 except (OSError, glide_drawing.DrawingFormatError) as exc:
@@ -44721,7 +45000,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
         def restore(model):
             def mutate():
-                entry["drawing"] = model.to_document()
+                entry.update(glide_animation.entry_fields(model))
                 return True
             if self.apply_drawing_change(entry, mutate):
                 dialog.destroy()
@@ -44754,11 +45033,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self.run_modal(dialog)
 
     def create_drawing_from_model(self, model, title, folder_id=None):
+        animation = model if isinstance(model, glide_animation.Animation) else \
+            glide_animation.Animation.from_legacy(model.to_document())
+        fields = glide_animation.entry_fields(animation)
         folder = self.get_folder(folder_id) if folder_id else None
         entry = self.new_list_object(
             " ".join(str(title or "Zeichnung").split())[:120] or "Zeichnung", [],
             folder_id=folder_id if folder else None, list_kind=self.LIST_KIND_DRAWING,
-            drawing=model.to_document(),
+            drawing=fields["drawing"], animation=fields["animation"],
             journal={"moment_date": date.today().isoformat()} if folder and folder.get("folder_kind") == "journal" else None,
         )
         with self.sidebar_change(refresh_tree=True) as change:
@@ -44772,8 +45054,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         entry = self.drawing_entry(editor)
         if entry is None:
             return
-        editor.flush()
-        model = glide_drawing.DrawingModel.from_document(entry.get("drawing"))
+        if not editor.flush():
+            return
+        model = editor.model.copy()
         title = str(entry.get("title") or "Zeichnung")
         stem = re.sub(r"[^\w .()-]+", "_", title, flags=re.UNICODE).strip(" .")[:80] or "Zeichnung"
         path = filedialog.asksaveasfilename(
@@ -44862,8 +45145,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         entry = self.drawing_entry(editor)
         if entry is None:
             return
-        editor.flush()
-        model = glide_drawing.DrawingModel.from_document(entry.get("drawing"))
+        if not editor.flush():
+            return
+        model = editor.model.copy()
         if not self.drawing_icon_preview(model, transparent):
             editor.update_status("Symbolexport abgebrochen")
             return
@@ -44971,7 +45255,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                                     allow_replace=entry is not None,
                                                     current_title=str(entry.get("title", "")) if entry else "")
         if choice == "replace" and entry is not None:
-            self.apply_drawing_change(entry, lambda: entry.update(drawing=model.to_document()) or True)
+            self.apply_drawing_change(entry, lambda: self.set_drawing_frame(entry, model))
         elif choice == "new":
             folder_id = entry.get("folder_id") if entry else None
             self.create_drawing_from_model(model, "Eingefügte Zeichnung", folder_id)
@@ -44993,6 +45277,270 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         editor._release()
         return editor.flush()
 
+    def set_drawing_frame(self, entry, model, frame_id=None):
+        """Ein aktives Bild ersetzen, die übrige Folge und Zeitachse bewahren."""
+        if getattr(self, "_data_read_only", False):
+            return False
+        animation = glide_animation.from_entry(entry)
+        editor = self.current_drawing_editor()
+        if frame_id is None:
+            frame_id = (editor.frame_id if editor is not None and editor.list_id == entry.get("id")
+                        else animation.frames[0].id)
+        try:
+            animation.replace_model(frame_id, model)
+            fields = glide_animation.entry_fields(animation)
+        except glide_drawing.DrawingFormatError as exc:
+            self.show_error("Bild ersetzen", str(exc))
+            return False
+        if all(entry.get(key) == value for key, value in fields.items()):
+            return False
+        entry.update(fields)
+        return True
+
+    def change_animation_frames(self, editor, action, value=None):
+        """Frame-/Daueränderung als ein geprüfter globaler Rückgängig-Schritt."""
+        entry = self.drawing_entry(editor)
+        if entry is None or self.current_drawing_editor() is not editor or getattr(self, "_data_read_only", False):
+            return False
+        editor._release()
+        if not editor.flush():
+            return False
+        animation = glide_animation.Animation.from_document(editor.animation.to_document())
+        identity = editor.frame_id
+        try:
+            if action == "new":
+                identity = animation.add(identity)
+            elif action == "duplicate":
+                identity = animation.duplicate(identity)
+            elif action == "delete":
+                identity = animation.remove(identity)
+            elif action == "move":
+                if not animation.move(identity, animation.index(identity) + value):
+                    return False
+            elif action == "duration":
+                common, single = value
+                animation.set_duration(common)
+                animation.set_duration(single, identity)
+            else:
+                raise glide_drawing.DrawingFormatError("Unbekannte Bildfolgenaktion.")
+            fields = glide_animation.entry_fields(animation)
+        except (ValueError, TypeError, glide_drawing.DrawingFormatError) as exc:
+            self.show_error("Bildfolge", str(exc))
+            return False
+        if all(entry.get(key) == val for key, val in fields.items()):
+            return False
+        before = copy.deepcopy(entry)
+        undo, dirty = list(self.undo_stack), self.dirty
+        history, baseline = copy.deepcopy(self.history), getattr(self, "_history_baseline", None)
+        saved = self.apply_drawing_change(entry, lambda: entry.update(fields) or True)
+        if not saved:
+            entry.clear()
+            entry.update(before)
+            self.undo_stack[:] = undo
+            self.dirty = dirty
+            self.history = history
+            self._history_baseline = baseline
+            self._saved_comparison_parts = None
+            self.clear_render_cache()
+            self.update_sidebar_list()
+            self.refresh_tree()
+            return False
+        current = self.current_drawing_editor()
+        if current is not None and current.list_id == entry.get("id"):
+            current.select_frame(identity)
+            current._sync_frame_choices()
+            current.update_status("Bildfolge gespeichert · Rückgängig stellt den vorherigen Stand wieder her")
+        return True
+
+    def drawing_animation_dialog(self, editor):
+        previous = getattr(editor, "_animation_frames_dialog", None)
+        if previous is not None and previous.winfo_exists():
+            previous.lift()
+            return
+        if not editor.flush():
+            return
+        dialog, body, footer = self._daily_dialog("Bildfolge bearbeiten", 720, 600)
+        editor._animation_frames_dialog = dialog
+        editor._animation_windows.add(dialog)
+        self._daily_label(body, "Jedes Bild hat einen eigenen Zeichenverlauf. Bilder und Dauer ändern "
+                          "den Bestand als ein Rückgängig-Schritt; die Vorschau verändert ihn nicht.")
+        area = tk.Frame(body, bg=self.theme["bg"])
+        area.pack(fill="x", pady=(10, 0))
+        tree = ttk.Treeview(area, columns=("duration", "source"), show="tree headings", height=7,
+                           selectmode="browse", style="Dialog.Treeview", name="animation_frames")
+        for column, title in (("#0", "Bild"), ("duration", "Dauer"), ("source", "Vorgabe")):
+            tree.heading(column, text=title)
+        self._daily_horizontal(area, tree)
+        scrollbar = ThemedAutoScrollbar(area, bg_color=self.theme["card"], track_color=self.theme["card"],
+                                         thumb_color=self.theme["input_border"], active_thumb_color=self.theme["muted"])
+        scrollbar.pack(side="right", fill="y")
+        scrollbar.set_command(tree.yview)
+        tree.configure(yscrollcommand=scrollbar.set)
+        tree.pack(side="left", fill="x", expand=True)
+        operations = ButtonFlow(body, self.theme["bg"], gap=6)
+        operations.pack(fill="x", pady=(8, 8))
+        message = self._daily_label(body, "")
+        common = tk.StringVar(dialog)
+        own = tk.StringVar(dialog)
+        own_mode = tk.StringVar(dialog, value="common")
+        for title, variable, name in (("Gemeinsame Bilddauer (ms)", common, "animation_common_duration"),
+                                       ("Eigene Dauer dieses Bildes (ms)", own, "animation_frame_duration")):
+            self._daily_label(body, title)
+            field = tk.Entry(body, textvariable=variable, name=name, font=app_font(self.ui_font_size()),
+                             bg=self.theme["input"], fg=self.theme["text"], insertbackground=self.theme["text"])
+            field.pack(fill="x", pady=(2, 8))
+        modes = ButtonFlow(body, self.theme["bg"], gap=8)
+        modes.pack(fill="x")
+        for label, value in (("Gemeinsame Dauer", "common"), ("Eigene Dauer", "own")):
+            radio = tk.Radiobutton(modes, text=label, variable=own_mode, value=value,
+                                   font=app_font(self.ui_font_size()), bg=self.theme["bg"], fg=self.theme["text"],
+                                   selectcolor=self.theme["input"], activebackground=self.theme["bg"])
+            modes.add(radio)
+
+        def live_editor():
+            current = self.current_drawing_editor()
+            if current is None or current.list_id != editor.list_id:
+                message.configure(text="Die Zeichnungsseite ist nicht mehr geöffnet.", fg=self.theme["delete"])
+                return None
+            return current
+
+        def show_duration(current):
+            frame = current.animation.frames[current.animation.index(current.frame_id)]
+            common.set(str(current.animation.duration_ms))
+            own.set(str(frame.duration_ms if frame.duration_ms is not None else current.animation.duration_ms))
+            own_mode.set("common" if frame.duration_ms is None else "own")
+
+        def fill():
+            current = live_editor()
+            if current is None:
+                return
+            tree.delete(*tree.get_children())
+            for index, (frame, milliseconds) in enumerate(zip(current.animation.frames, current.animation.durations()), 1):
+                tree.insert("", "end", iid=frame.id, text=f"Bild {index}",
+                            values=(f"{milliseconds} ms", "Gemeinsam" if frame.duration_ms is None else "Eigen"))
+            self._daily_fit_columns(tree, (("#0", 160), ("duration", 160), ("source", 190)))
+            tree.selection_set(current.frame_id)
+            tree.see(current.frame_id)
+            show_duration(current)
+
+        def select(_event=None):
+            current = live_editor()
+            chosen = tree.selection()
+            if current is None or not chosen or chosen[0] == current.frame_id:
+                return
+            if current.select_frame(chosen[0]):
+                show_duration(current)
+            else:
+                tree.selection_set(current.frame_id)
+
+        def change(action, value=None):
+            current = live_editor()
+            if current is None:
+                return
+            if action == "delete" and not self.ask_yes_no(
+                    "Bild löschen", "Dieses Bild aus der Folge entfernen? Rückgängig stellt es wieder her.", parent=dialog):
+                return
+            if self.change_animation_frames(current, action, value):
+                message.configure(text="Bildfolge gespeichert.", fg=self.theme["muted"])
+                fill()
+
+        for title, action, value in (("Neu", "new", None), ("Duplizieren", "duplicate", None),
+                                     ("Löschen", "delete", None), ("Nach links", "move", -1),
+                                     ("Nach rechts", "move", 1)):
+            button = self._make_dialog_button(operations, title,
+                lambda a=action, v=value: change(a, v), "muted", width=126, height=32)
+            operations.add(button)
+
+        def duration():
+            try:
+                values = (int(common.get()), None if own_mode.get() == "common" else int(own.get()))
+                glide_animation.duration(values[0])
+                if values[1] is not None:
+                    glide_animation.duration(values[1])
+            except (ValueError, glide_drawing.DrawingFormatError) as exc:
+                message.configure(text="Bitte ganze Millisekunden von 20 bis 60.000 eingeben. " + str(exc),
+                                  fg=self.theme["delete"])
+                return
+            change("duration", values)
+
+        actions = ButtonFlow(footer, self.theme["bg"], gap=8)
+        actions.pack(fill="x")
+        for title, command in (("Dauer speichern", duration), ("Schließen", dialog.destroy)):
+            actions.add(self._make_dialog_button(actions, title, command, "muted", width=168))
+        tree.bind("<<TreeviewSelect>>", select)
+        dialog.bind("<Escape>", lambda _event: dialog.destroy())
+        def destroyed(event):
+            if event.widget is dialog:
+                editor._animation_windows.discard(dialog)
+                editor._animation_frames_dialog = None
+        dialog.bind("<Destroy>", destroyed, add="+")
+        dialog.protocol("WM_DELETE_WINDOW", dialog.destroy)
+        fill()
+        self._center_dialog(dialog, min_width=720, min_height=600)
+        self._schedule_windows_chrome_theme(dialog)
+        dialog.deiconify()
+        self.run_modal(dialog)
+
+    def drawing_animation_export(self, editor, sequence=False):
+        if self.drawing_entry(editor) is None:
+            return
+        editor._release()
+        if not editor.flush():
+            return
+        animation = glide_animation.Animation.from_document(editor.animation.to_document())
+        title = self.drawing_title(editor)
+        stem = re.sub(r"[^\w .()-]+", "_", title, flags=re.UNICODE).strip(" .")[:80] or "Bildfolge"
+        target_directory = None
+        try:
+            if sequence:
+                parent = filedialog.askdirectory(parent=self.root, title="Ordner für die PNG-Bildfolge wählen")
+                if not parent:
+                    return
+                files = animation.png_sequence()
+                # Ein lesbarer, neuer Ordner je Ausgabe; vorhandene Ordner
+                # bleiben unberührt und erhalten keine fremden Bilder.
+                name = stem + " – Bildfolge"
+                for number in range(1, 1000):
+                    candidate = os.path.join(parent, name if number == 1 else f"{name} {number}")
+                    try:
+                        os.mkdir(candidate)
+                    except FileExistsError:
+                        continue
+                    target_directory = candidate
+                    break
+                else:
+                    raise OSError("Für die Bildfolge ist kein freier Ordnername vorhanden.")
+                glide_animation_export.write_files(target_directory, files)
+                location = target_directory
+            else:
+                path = filedialog.asksaveasfilename(parent=self.root, title="PNG-Spritesheet exportieren",
+                    initialfile=stem + "_spritesheet.png", defaultextension=".png", filetypes=[("PNG-Bild", "*.png")])
+                if not path:
+                    return
+                png, manifest = animation.png_spritesheet()
+                directory, name = os.path.split(path)
+                manifest_name = os.path.splitext(name)[0] + ".glideanimation.json"
+                existing = [value for value in (name, manifest_name) if os.path.lexists(os.path.join(directory, value))]
+                if existing and not self.ask_yes_no("Bildfolge exportieren",
+                    "PNG und Zeitachse werden gemeinsam gespeichert. Vorhandene Dateien ersetzen?\n\n" + "\n".join(existing)):
+                    return
+                manifest["file"] = name
+                glide_animation_export.write_files(directory, {
+                    name: png, manifest_name: (glide_drawing.canonical_json(manifest) + "\n").encode("utf-8")}, replace=True)
+                location = path
+        except (OSError, ValueError, glide_drawing.DrawingFormatError) as exc:
+            if target_directory:
+                # Nur einen leeren selbst erzeugten Ordner entfernen; einen
+                # fehlgeschlagenen Wiederherstellungsbestand niemals löschen.
+                try:
+                    os.rmdir(target_directory)
+                except OSError:
+                    pass
+            self.show_error("Bildfolge exportieren", str(exc))
+            return
+        editor.update_status("Bildfolge exportiert: " + os.path.basename(location))
+
+
     def store_drawing(self, list_id, document):
         """Autosave einer Zeichnung: Modell übernehmen, atomar speichern.
 
@@ -45005,9 +45553,17 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         entry = next((value for value in self.lists if value.get("id") == list_id), None)
         if entry is None or not self.is_drawing_list(entry):
             return False
-        document = self.normalize_drawing_document(document, entry.get("title", ""))
-        if entry.get("drawing") != document:
-            entry["drawing"] = document
+        if getattr(self, "_data_read_only", False):
+            return False
+        if isinstance(document, dict) and document.get("format") == glide_animation.FORMAT:
+            animation = glide_animation.Animation.from_document(document)
+        else:
+            animation = glide_animation.from_entry(entry)
+            animation.replace_model(animation.frames[0].id,
+                glide_drawing.DrawingModel.from_document(self.normalize_drawing_document(document)))
+        fields = glide_animation.entry_fields(animation)
+        if any(entry.get(key) != value for key, value in fields.items()):
+            entry.update(fields)
             entry["updated_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
         elif not self.dirty:
             return True
@@ -45158,7 +45714,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             key = None if not isinstance(reference, dict) else (
                 reference.get("attachment_id"), reference.get("mode"), reference.get("zoom_percent"),
                 reference.get("offset_x"), reference.get("offset_y"))
-            if entry.get("drawing") != editor._last_document or key != editor.reference_key:
+            if entry.get("animation") != editor._last_animation_document or key != editor.reference_key:
                 editor.reload(entry)
         folder = self.get_folder(entry.get("folder_id")) if entry.get("folder_id") else None
         if folder and folder.get("folder_kind") == "journal":
@@ -45369,13 +45925,15 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         Rückgängig-Schritt, der ausdrücklich auch das Zellmodell dieser Seite
         zurückholt.
         """
-        self.flush_drawing_editor()
-        with self.sidebar_change(refresh_tree=True, feedback=False) as record:
-            if self.undo_stack:
-                self.undo_stack[-1]["drawing_restore"] = [entry.get("id")]
-            if mutate():
-                entry["updated_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
-                record.mark()
+        if getattr(self, "_data_read_only", False) or not self.flush_drawing_editor():
+            return False
+        with self.guarded_structural_change("Zeichnung ändern"):
+            with self.sidebar_change(refresh_tree=True, feedback=False) as record:
+                if self.undo_stack:
+                    self.undo_stack[-1]["drawing_restore"] = [entry.get("id")]
+                if mutate():
+                    entry["updated_at"] = datetime.now().astimezone().isoformat(timespec="seconds")
+                    record.mark()
         return bool(record.changed and record.saved is not False)
 
     def snapshot_keeping_drawings(self, snapshot):
@@ -45394,6 +45952,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             if current is None or entry.get("id") in restore or not self.is_drawing_list(entry):
                 continue
             entry["drawing"] = copy.deepcopy(current.get("drawing"))
+            entry["animation"] = copy.deepcopy(current.get("animation"))
         result["lists"] = lists
         return result
 
@@ -45525,7 +46084,16 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self._apply_reference_choice(editor, entry, choice, None)
 
     def _apply_reference_choice(self, editor, entry, choice, new_attachment):
-        previous_document = copy.deepcopy(entry.get("drawing"))
+        previous_document = editor.model.to_document()
+        trace_fields = None
+        if choice.get("trace_model") is not None:
+            try:
+                sequence = glide_animation.from_entry(entry)
+                sequence.replace_model(editor.frame_id, choice["trace_model"])
+                trace_fields = glide_animation.entry_fields(sequence)
+            except glide_drawing.DrawingFormatError as exc:
+                self.show_error("Referenz nachzeichnen", str(exc))
+                return
         old_reference = entry.get("drawing_reference") if isinstance(entry.get("drawing_reference"), dict) else None
 
         def mutate():
@@ -45541,7 +46109,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             entry["drawing_reference"] = self.normalize_drawing_reference(
                 dict(choice["frame"], attachment_id=attachment_id), entry.get("attachments"))
             if choice.get("trace_model") is not None:
-                entry["drawing"] = choice["trace_model"].to_document()
+                entry.update(trace_fields)
             return True
 
         if not self.apply_drawing_change(entry, mutate):
@@ -45587,8 +46155,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return
 
         def mutate():
-            entry["drawing"] = self.normalize_drawing_document(backup, entry.get("title", ""))
-            return True
+            return self.set_drawing_frame(entry, glide_drawing.DrawingModel.from_document(backup))
 
         if self.apply_drawing_change(entry, mutate):
             current = self.current_drawing_editor()
@@ -45606,12 +46173,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return
 
         def mutate():
-            size = glide_drawing.DrawingModel.from_document(entry.get("drawing")).width
-            blank = glide_drawing.DrawingModel.blank(size).to_document()
-            if entry.get("drawing") == blank:
-                return False
-            entry["drawing"] = blank
-            return True
+            return self.set_drawing_frame(entry,
+                glide_drawing.DrawingModel.blank(editor.model.width), editor.frame_id)
 
         self.apply_drawing_change(entry, mutate)
 
@@ -45631,7 +46194,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         entry = self.drawing_entry(editor)
         if entry is None:
             return
-        editor.flush()
+        if not editor.flush():
+            return
         title = str(entry.get("title") or "Zeichnung")
         stem = re.sub(r"[^\w .()-]+", "_", title, flags=re.UNICODE).strip(" .")[:80] or "Zeichnung"
         extension = ".svg" if fmt == "svg" else ".json"
@@ -45641,7 +46205,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             filetypes=[("SVG", "*.svg")] if fmt == "svg" else [("JSON", "*.json")])
         if not path:
             return
-        model = glide_drawing.DrawingModel.from_document(entry.get("drawing"))
+        model = editor.model.copy()
         text = model.to_svg(title) if fmt == "svg" else model.to_json() + "\n"
         try:
             self.write_text_atomic(path, text)
@@ -45701,8 +46265,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return
 
         def mutate():
-            entry["drawing"] = model.to_document()
-            return True
+            return self.set_drawing_frame(entry, model)
 
         self.apply_drawing_change(entry, mutate)
 
@@ -53088,7 +53651,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     # Der Leitsatz dahinter: Die Quelle beschreibt, was entstehen soll.
     # Glide entscheidet, wie es im aktuellen internen Format gespeichert wird.
     EXCHANGE_FORMAT_NAME = "glide.exchange"
-    EXCHANGE_FORMAT_VERSION = 1
+    EXCHANGE_FORMAT_VERSION = 2
     EXCHANGE_SUFFIX = ".glideexchange"
     MAX_EXCHANGE_BYTES = 12 * 1024 * 1024
     MAX_EXCHANGE_ITEMS = 5000
@@ -53108,7 +53671,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         "checklist", "children",
     }
     EXCHANGE_LIST_FIELDS = {"key", "title", "description", "folder", "labels", "items", "list_kind", "rich_note",
-                            "drawing"}
+                            "drawing", "animation"}
     EXCHANGE_FOLDER_FIELDS = {"key", "title", "description", "parent", "labels"}
     EXCHANGE_LABEL_FIELDS = {"key", "name", "color"}
     EXCHANGE_ROOT_FIELDS = {"format", "format_version", "generator", "created_for",
@@ -53136,6 +53699,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             "checklists": 1,
             "folders": 1,
             "list_descriptions": 1,
+            "animations": 1,
+            "max_animation_frames": glide_animation.MAX_FRAMES,
+            "animation_duration_ms": [glide_animation.MIN_DURATION_MS, glide_animation.MAX_DURATION_MS],
             # Bewusst noch nicht: Anhänge kommen als Dateien, nicht als Text;
             # Wiederholungen und Erinnerungen hätten eigene Regelwerke, die
             # eine erzeugende Stelle kaum verlässlich trifft.
@@ -53250,7 +53816,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 # Das Zellmodell reist vollständig mit. Die PNG-Referenz ist ein
                 # Anhang und gehört wie alle Dateien nicht in den Austausch.
                 darstellung["list_kind"] = self.LIST_KIND_DRAWING
-                darstellung["drawing"] = self.normalize_drawing_document(eintrag.get("drawing"))
+                darstellung.update(self.normalize_animation_fields(
+                    eintrag.get("drawing"), eintrag.get("animation")))
             listen.append(darstellung)
         nutzlast = self.exchange_manifest()
         nutzlast["generator"] = {"type": "glide", "name": APP_NAME}
@@ -53427,12 +53994,16 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             if art is not None and art not in self.LIST_KINDS:
                 bericht.errors.append(f"„{listentitel}“: Unbekannte Listenart {art!r}.")
                 return None, bericht
+            if eintrag.get("animation") is not None and art != self.LIST_KIND_DRAWING:
+                bericht.errors.append(f"„{listentitel}“: Eine Bildfolge gehört in eine Zeichnungsseite.")
+                return None, bericht
             if art == self.LIST_KIND_DRAWING:
                 if eintrag.get("items"):
                     bericht.errors.append(f"„{listentitel}“: Eine Zeichnung kann keine Punkte enthalten.")
                     return None, bericht
                 try:
-                    self.normalize_drawing_document(eintrag.get("drawing"), listentitel)
+                    self.normalize_animation_fields(
+                        eintrag.get("drawing"), eintrag.get("animation"), listentitel)
                 except ValueError as error:
                     bericht.errors.append(str(error))
                     return None, bericht
@@ -53574,6 +54145,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 list_kind=eintrag.get("list_kind"), rich_note=eintrag.get("rich_note"),
                 folder_id=ordner_ids.get(str(eintrag.get("folder") or "")) or ziel_ordner_id,
                 drawing=eintrag.get("drawing"),
+                animation=copy.deepcopy(eintrag.get("animation")),
             )
             neue_listen.append(liste)
         if not neue_listen:
