@@ -5,7 +5,7 @@ Stand 13.10.2026 · Glide 3.39.0 · Aufgabenformat 23
 Paket 4 setzt S26-05/06/18 nach D20/D30/D38 vollständig im gewählten Rahmen um.
 Kandidat c38d960 mit Apphash 7995ecbc ist auf dem Mac vollständig geprüft.
 Gezielte Prüfungen, Vorversion, Lieferhashes, Bundle und Signaturen sind unten belegt.
-Die serielle native Matrix [38309209555](https://github.com/n05a-design/glide-to-do/actions/runs/38309209555) endete rot: Grundstufe und Linux-Vollprüfung grün (18 Defektgegenproben passend rot), Windows mit zwei Prüfstandsbefunden ([Auswertung](native_38309209555.json)). Korrigiert wurde nur der Prüfstand; App, Lieferdateien und Bundle bleiben am Apphash 7995ecbc. Neuer nativer Lauf und Liefercommit stehen aus.
+Die serielle native Matrix [38309209555](https://github.com/n05a-design/glide-to-do/actions/runs/38309209555) endete rot: Grundstufe und Linux-Vollprüfung grün (18 Defektgegenproben passend rot), Windows mit zwei Prüfstandsbefunden ([Auswertung](native_38309209555.json)). Korrigiert wurde nur der Prüfstand; App, Lieferdateien und Bundle bleiben am Apphash 7995ecbc. Nach zwei Prüfstandskorrekturen geliefert (Lieferabschluss unten).
 Tatsächliche menschliche Bedienung bleibt ein gesondertes Abnahmetor.
 
 Gezielte Proben vor dem Einfrieren:
@@ -40,7 +40,7 @@ Mac-Abnahme und lokaler Lieferweg abgeschlossen:
 - [Frischer vollständiger Mac-Lauf](mac_voll.json): Exit 0, 103 ausgeführt/zwei übersprungen, 950 eingefrorene Dateien nach Vollprüfung unverändert.
 - [Produktionsübernahme](produktionsuebernahme.json), [203 Lieferdateien](lieferung.json), [111 Bundle-Dateien und beide Signaturen](bundle.json).
 - 86 Suiten/432 Unit-Tests; 22 neue Prüfgruppen, vier passende rote Vorversionskontrollen, tatsächlicher 3.38-Settings-Rundlauf und acht betrachtete eigene Dialogbilder.
-- Strenge Kandidat-CI grün; erste native Matrix unter Windows rot (Prüfstand, siehe oben), Wiederholung und Liefercommit offen. Menschliche Bedien-/DPI-/Readerprüfung getrennt.
+- Strenge Kandidat-CI grün; native Matrix erst nach zwei Prüfstandskorrekturen grün (siehe oben und Lieferabschluss). Menschliche Bedien-/DPI-/Readerprüfung getrennt.
 
 
 [Strenge lokale Kandidat-CI](grundstufe_kandidat.json) grün (bekannter lokaler SSL-Hinweis beim unveränderten Fremdcodeabruf). Nutzer-Skilldateien waren vom isolierten Projektprüfstand ausgeschlossen. Nativer Originalvergleich folgt verpflichtend in der Matrix.
@@ -48,3 +48,5 @@ Mac-Abnahme und lokaler Lieferweg abgeschlossen:
 Prüfstandskorrektur nach der roten Windows-Matrix (13.10.2026): sieben Unit-Testdateien nutzen die mitgelieferten IANA-Daten über `timezones.Resolver`, `test_features329` wartet bis zum Ruhezustand der Zeichenfläche (Frist 3 s, Defektgegenprobe rot), die CI-Grundstufe prüft die Fachlogik zusätzlich ohne Systemzeitzonen. [Strenge isolierte Kandidat-CI](grundstufe_kandidat2.json) grün mit 19 Schritten (bekannter lokaler SSL-Hinweis beim Fremdcodeabruf). App/07/Bundle unverändert am Apphash 7995ecbc.
 
 Zweite native Matrix [38322509008](https://github.com/n05a-design/glide-to-do/actions/runs/38322509008) am Kandidaten c2e792b ([Auswertung](native_38322509008.json)): Grundstufe und Linux grün, unter Windows die Unit-Tests und die erste Zeichenflächenstelle grün; `test_features329` scheiterte an einer zweiten festen 150-ms-Wartezeit nach dem Ansichtswechsel. Beide Stellen nutzen jetzt dieselbe Wartefunktion (mindestens 150 ms, dann bis zur Bedingung, Frist 3 s); zwei Defektgegenproben rot. Mac-Vollprüfung am Kandidaten c2e792b auf eingefrorener Kopie: 103 ausgeführt/zwei übersprungen, 988 Dateien unverändert.
+
+**Lieferabschluss 13.10.2026:** Native Matrix [38349430978](https://github.com/n05a-design/glide-to-do/actions/runs/38349430978) am Kandidaten b1eee57 grün – [Linux](linux_voll.json) und [Windows](windows_voll.json) je 104 ausgeführt/eine menschliche Sichtprüfung übersprungen, [18 Defektgegenproben](linux_defektgegenproben.json) passend rot, [Referenzdesktop](windows_desktop.json). [Zusammenfassung](native.json), [Lieferabschluss](lieferabschluss.json): 203 Liefer-/111 Bundle-Dateien unverändert, Signaturen grün. Menschliche Bedien-/DPI-/Readerprüfung bleibt getrennt offen.

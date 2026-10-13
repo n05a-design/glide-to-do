@@ -1,0 +1,23 @@
+{
+  "lauf": 38349430978,
+  "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38349430978",
+  "commit": "b1eee5704b3d9781917b2ccd700eb663455939e0",
+  "app_sha256": "7995ecbc3514ca702d2568a88fac6759ca3b091ad349038fc009295e107368a5",
+  "ergebnis": "success",
+  "linux": {
+    "ausgefuehrt": 104,
+    "uebersprungen": 1
+  },
+  "windows": {
+    "ausgefuehrt": 104,
+    "uebersprungen": 1,
+    "python": "3.14.7"
+  },
+  "linux_defektgegenproben": "18 von 18 passend rot",
+  "suiten": 86,
+  "unit_tests": 432,
+  "vorlaeufe": [
+    "native_38309209555.json",
+    "native_38322509008.json"
+  ]
+}
