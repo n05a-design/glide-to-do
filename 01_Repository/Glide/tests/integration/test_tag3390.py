@@ -11,6 +11,7 @@ import sys
 import subprocess
 import tempfile
 import time
+import traceback
 from threading import Event
 
 
@@ -109,7 +110,7 @@ def run(app_path, cases, report):
                 try:
                     action(dialog)
                 except BaseException as exc:
-                    failures.append(repr(exc))
+                    failures.append(traceback.format_exc())
                     if dialog.winfo_exists():
                         dialog.destroy()
             def timeout():
@@ -518,16 +519,25 @@ def run(app_path, cases, report):
                     assert mod.tkfont.nametofont("TkDefaultFont",root=root).actual("size") == app.ui_font_size()
                     def geometry(dialog):
                         footer=dialog._daily_footer
-                        assert footer.winfo_rooty()>=dialog.winfo_rooty()
-                        assert footer.winfo_rooty()+footer.winfo_height()<=dialog.winfo_rooty()+dialog.winfo_height()
                         canvas=dialog._daily_scroll_canvas
-                        assert canvas.winfo_ismapped()
+                        bounds=lambda widget: (widget.winfo_rootx(),widget.winfo_rooty(),
+                                                widget.winfo_width(),widget.winfo_height())
+                        measured={"dialog":title,"schrift":font_stage,"fenster":bounds(dialog),
+                                  "fuss":bounds(footer),"inhalt":bounds(canvas),
+                                  "sichtbar":bool(canvas.winfo_ismapped()),
+                                  "tasten":[{"text":widget.text,"grenzen":bounds(widget)}
+                                             for widget in descendants(footer)
+                                             if isinstance(widget,mod.RoundedButton)]}
+                        print("Dialoggeometrie: "+json.dumps(measured,ensure_ascii=False),flush=True)
+                        assert footer.winfo_rooty()>=dialog.winfo_rooty(), measured
+                        assert footer.winfo_rooty()+footer.winfo_height()<=dialog.winfo_rooty()+dialog.winfo_height(), measured
+                        assert canvas.winfo_ismapped(), measured
                         for widget in descendants(footer):
                             if isinstance(widget,mod.RoundedButton):
-                                assert widget.winfo_rootx()>=dialog.winfo_rootx()
-                                assert widget.winfo_rootx()+widget.winfo_width()<=dialog.winfo_rootx()+dialog.winfo_width()
+                                assert widget.winfo_rootx()>=dialog.winfo_rootx(), measured
+                                assert widget.winfo_rootx()+widget.winfo_width()<=dialog.winfo_rootx()+dialog.winfo_width(), measured
                         canvas.yview_moveto(1);pump()
-                        assert canvas.yview()[1]>.99
+                        assert canvas.yview()[1]>.99, {**measured,"bildlauf":canvas.yview()}
                         dialog.event_generate("<Escape>");pump()
                     for title,opener in (("Tageshinweise",app.show_daily_hints),
                                          ("Tageshinweise einstellen",app.show_daily_hint_settings),
