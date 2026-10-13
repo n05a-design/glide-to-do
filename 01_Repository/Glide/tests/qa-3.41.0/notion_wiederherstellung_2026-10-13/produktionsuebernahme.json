@@ -1,0 +1,12 @@
+{
+  "version": "3.41.0",
+  "app_sha256": "4dedf0c52c682ec23cf3a04fb56fb9ccf5a6229affa1924b995a4124ec8c4013",
+  "kandidat_commit": "56b9b98",
+  "ausgangslieferung": "3e50e6e",
+  "aufbewahrung_entfernt": [
+    "01_Repository/Glide/tests/qa-3.35.0 (20 Dateien, Prüfsummen in aufbewahrung3350.json)",
+    "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.35.0.glidebackup",
+    "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.35.0.pyw"
+  ],
+  "eingefrorene_dateien_unveraendert": 1042
+}

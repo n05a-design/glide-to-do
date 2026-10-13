@@ -1,0 +1,42 @@
+{
+ "werkzeug": "gegenprobe_rrule.py",
+ "aufruf": "src/glide 4000 <seed>",
+ "laeufe": [
+  {
+   "erzeugt": 4000,
+   "von_parse_rule_abgelehnt": 0,
+   "start_passt_nicht_zur_regel": 226,
+   "until_vor_start_ausgenommen": 47,
+   "verglichen": 3727,
+   "abweichend": 0,
+   "beispiele": [],
+   "seed": 1
+  },
+  {
+   "erzeugt": 4000,
+   "von_parse_rule_abgelehnt": 0,
+   "start_passt_nicht_zur_regel": 219,
+   "until_vor_start_ausgenommen": 54,
+   "verglichen": 3727,
+   "abweichend": 0,
+   "beispiele": [],
+   "seed": 2
+  },
+  {
+   "erzeugt": 4000,
+   "von_parse_rule_abgelehnt": 0,
+   "start_passt_nicht_zur_regel": 221,
+   "until_vor_start_ausgenommen": 41,
+   "verglichen": 3738,
+   "abweichend": 0,
+   "beispiele": [],
+   "seed": 3
+  }
+ ],
+ "gesamt": {
+  "verglichen": 11192,
+  "abweichend": 0,
+  "until_vor_start_ausgenommen": 142,
+  "start_ohne_passenden_tag": 666
+ }
+}

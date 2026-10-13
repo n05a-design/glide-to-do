@@ -1,0 +1,16 @@
+{
+  "app_sha256": "4dedf0c52c682ec23cf3a04fb56fb9ccf5a6229affa1924b995a4124ec8c4013",
+  "ablage": "nur lokal, nicht versioniert",
+  "daten": "künstlich, temporärer GLIDE_DATA_DIR",
+  "aufnahmen": [
+    "hell_5_notion.png",
+    "hell_6_restore.png",
+    "dunkel_5_notion.png",
+    "dunkel_6_restore.png"
+  ],
+  "befunde_vor_korrektur": [
+    "Notion-Vorschau mit nativer ttk-Tabelle und -Leisten (grau, Pfeiltasten), dritte Spaltenüberschrift leer – auf Dialogtabelle und Glide-Leisten umgestellt",
+    "Seitenrestore-Vorschau mit heller nativer Leiste im Dunkelmodus – Glide-Leiste; beide Textfelder mit Innenabstand"
+  ],
+  "nach_korrektur": "Beide Vorschauen in Hell und Dunkel tatsächlich betrachtet; keine weiteren Befunde"
+}

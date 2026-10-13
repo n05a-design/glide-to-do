@@ -1,0 +1,105 @@
+{
+  "vorher": {
+    "breite": 1024,
+    "hoehe": 768,
+    "farbtiefe": 32,
+    "frequenz": 64
+  },
+  "ziel": [
+    1920,
+    1080
+  ],
+  "modi": [
+    {
+      "breite": 640,
+      "hoehe": 480,
+      "farbtiefe": 32,
+      "frequenz": 64
+    },
+    {
+      "breite": 800,
+      "hoehe": 600,
+      "farbtiefe": 32,
+      "frequenz": 64
+    },
+    {
+      "breite": 1024,
+      "hoehe": 768,
+      "farbtiefe": 32,
+      "frequenz": 64
+    },
+    {
+      "breite": 1152,
+      "hoehe": 864,
+      "farbtiefe": 32,
+      "frequenz": 64
+    },
+    {
+      "breite": 1280,
+      "hoehe": 720,
+      "farbtiefe": 32,
+      "frequenz": 64
+    },
+    {
+      "breite": 1280,
+      "hoehe": 800,
+      "farbtiefe": 32,
+      "frequenz": 64
+    },
+    {
+      "breite": 1280,
+      "hoehe": 1024,
+      "farbtiefe": 32,
+      "frequenz": 64
+    },
+    {
+      "breite": 1366,
+      "hoehe": 768,
+      "farbtiefe": 32,
+      "frequenz": 64
+    },
+    {
+      "breite": 1440,
+      "hoehe": 900,
+      "farbtiefe": 32,
+      "frequenz": 64
+    },
+    {
+      "breite": 1600,
+      "hoehe": 900,
+      "farbtiefe": 32,
+      "frequenz": 64
+    },
+    {
+      "breite": 1600,
+      "hoehe": 1200,
+      "farbtiefe": 32,
+      "frequenz": 64
+    },
+    {
+      "breite": 1680,
+      "hoehe": 1050,
+      "farbtiefe": 32,
+      "frequenz": 64
+    },
+    {
+      "breite": 1920,
+      "hoehe": 1080,
+      "farbtiefe": 32,
+      "frequenz": 64
+    }
+  ],
+  "tk": {
+    "breite": 1920,
+    "hoehe": 1080,
+    "skalierung": 1.3333333333333333,
+    "version": "9.0.4"
+  },
+  "nachher": {
+    "breite": 1920,
+    "hoehe": 1080,
+    "farbtiefe": 32,
+    "frequenz": 64
+  },
+  "status": "ausgeführt"
+}

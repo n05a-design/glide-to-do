@@ -1,0 +1,12 @@
+{
+  "app_sha256": "7995ecbc3514ca702d2568a88fac6759ca3b091ad349038fc009295e107368a5",
+  "test_sha256": "d00adb7442a4903e24fec892fd03bdd77bee16104ad8b392a3da2355f8778190",
+  "exitcode": 0,
+  "pruefung": "Alle fünf Bestandsaktionen und beide Tageshinweisaktionen konkret beschriftet/sichtbar; Weiterleitungen in Hell/Dunkel; ursprüngliche Speicher-/Zustell-/Neustartfälle",
+  "vorversion": "3.38.0",
+  "vorversion_commit": "4bf8a78",
+  "vorversion_app_sha256": "bcdbc4da2197aadaffbe65cd57054c68b93db4d1aedcb9cbeb16c2204bd8ef41",
+  "vorversion_exitcode": 1,
+  "vorversion_passend_rot": true,
+  "vorversion_befund": "Neue Tageshinweis-Weiterleitung fehlt in tatsächlicher Vorversion"
+}

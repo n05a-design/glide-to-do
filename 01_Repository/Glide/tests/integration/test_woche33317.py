@@ -58,10 +58,10 @@ with tempfile.TemporaryDirectory(prefix='glide-woche-') as directory:
     def task(identity):return app.find_item_in_lists(identity)[0]
     def entry(identity):return next(e for e in app.lists if e['id']==identity)
     try:
-        assert app.DATA_SCHEMA_VERSION==23
+        assert app.DATA_SCHEMA_VERSION==25
         backups=list(Path(mod.BACKUP_DIR).glob('liste_vor_format22_*.json'))
         assert len(backups)==1 and backups[0].read_bytes()==original
-        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))['version']==23
+        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))['version']==25
         checks.append(f'Format 21 → {app.DATA_SCHEMA_VERSION}: bytegenaue Vorsicherung und Startmigration')
         today=date.today();first=app.calendar_week_start(today)
         due=(today+timedelta(days=10)).isoformat()
@@ -132,7 +132,7 @@ with tempfile.TemporaryDirectory(prefix='glide-woche-') as directory:
         app.undo_last_change();idle();assert mod.glide_objects.caption(('item',a_id),app.object_graph()[0])[0]=='active' 
         checks.append('IDs und Zustände: Umbenennen, Archiv, Papierkorb, globales Undo und Text-Redo, fehlende Ziele; Speicherfehler ohne Datenänderung')
         copied=copy.deepcopy([entry(source_id),entry(page_id)])
-        app.prepare_additive_import(copied,[],[])
+        copied, _folders, _labels = app.prepare_additive_import(copied,[],[])
         mapping=app._additive_import_maps
         cpage=next(e for e in copied if e['id']==mapping['containers'][page_id])
         assert set(cpage['rich_note']['links'].values())=={mod.glide_objects.uri('list',mapping['containers'][source_id]),mod.glide_objects.uri('item',mapping['items'][a_id])}

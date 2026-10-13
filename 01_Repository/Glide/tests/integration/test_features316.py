@@ -43,7 +43,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features316-") as folder:
     app.ask_yes_no = lambda *args, **kwargs: True
     try:
         assert app.APP_BACKUP_FORMAT_VERSION == 1 and app.APP_BACKUP_EXTENSION == ".glideapp"
-        assert app.DATA_SCHEMA_VERSION == 23, "Format 23 bewahrt lokale Verweise, Live-Listen und Titelbilder."
+        assert app.DATA_SCHEMA_VERSION == 25, "Ab Format 23 bewahrt der Bestand lokale Verweise, Live-Listen und Titelbilder."
 
         # --- Ausgangsbestand -------------------------------------------------
         liste = app.new_list_object("Archivprobe", [])

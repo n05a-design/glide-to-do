@@ -2,7 +2,7 @@
 
 Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Sie läuft lokal mit Python 3.14 und Tk 9 (Tk 8.6 eingeschränkt), braucht weder Konto noch Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
-> **Projektstatus:** interner Entwicklungsstand **3.38.0** · Datenformat 23 · keine veröffentlichte oder signierte Releasefassung. Der [QA-Bericht](docs/07_QA_BERICHT.md) nennt bestandene Prüfungen und offene Plattformtests.
+> **Projektstatus:** interner Entwicklungsstand **3.42.0** · Datenformat 25 · keine veröffentlichte oder signierte Releasefassung. Der [QA-Bericht](docs/07_QA_BERICHT.md) nennt bestandene Prüfungen und offene Plattformtests.
 
 Funktionsumfang im Überblick: [Projekt-README](../../README.md#was-glide-kann); Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md); Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 
@@ -13,6 +13,8 @@ Voraussetzung ist Python mit Tk; zusätzliche Laufzeitpakete sind nicht nötig.
 ```bash
 python3 src/glide/app.pyw          # Windows: python src\glide\app.pyw
 ```
+
+Eigenständige Entwicklungsbauten für macOS arm64 und Windows x64 bündeln Python und Tcl/Tk; Bauanleitung und Prüfgrenzen stehen in der [Paketierung](packaging/README.md#eigenständige-entwicklungspakete-paket-7).
 
 Die Ressourcen unter `src/glide/resources` müssen neben der Anwendung liegen. Startbare Lieferfassung: `07_Python-Versionen/Schnellstart.pyw`. Unter macOS lässt sich ein Entwicklungsbundle bauen (nutzt das installierte Python, nicht zur Weitergabe):
 
@@ -33,7 +35,7 @@ Das Repository ist öffentlich: Rohprotokolle (`*.log`) bleiben lokal, veröffen
 Vollprüfung auf dem Referenz-Mac (aus `01_Repository/Glide`):
 
 ```bash
-python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.38.0/lokaler_lauf --timeout 900
+python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.42.0/lokaler_lauf --timeout 900
 ```
 
 CI-Grundstufe, wie GitHub sie bei jedem Push und Pull Request auf `main` ausführt (Syntax, Versionen, Dokumentation, Unit- und Werkzeugtests, fünf Analysen, Startprobe, Lieferstand, Fremdcode, Datenschutz, Ablagegröße):
@@ -52,7 +54,7 @@ Sie ersetzt nicht die Vollprüfung auf dem Mac. Ein nicht vollständig grüner L
 | `tests/` | Integrationssuiten, Unit-Tests, Fixtures, Prüfwerkzeuge und Nachweise der sieben neuesten Versionen ([Übersicht](tests/README.md)) |
 | `docs/` | Produkt, Architektur, Funktionen, Daten, Prüfung, Veröffentlichung, Entscheidungen ([Index](docs/00_INDEX.md)) |
 | `scripts/pflege/` | Versionswechsel, Abgleich nach 07, Kürzen der Ablage, Messungen ([Übersicht](scripts/pflege/README.md)) |
-| `packaging/` | macOS-Entwicklungsbundle, Windows-Verknüpfung, Programmsymbole ([Übersicht](packaging/README.md)) |
+| `packaging/` | eigenständige Mac-/Windows-Pakete, Entwicklungsbundle, Windows-Verknüpfung, Programmsymbole ([Übersicht](packaging/README.md)) |
 | `assets/icons/` | erzeugte Paketsymbole ([Herkunft](assets/README.md)) |
 | `requirements/` | Laufzeit-, Entwicklungs- und Build-Abhängigkeiten |
 

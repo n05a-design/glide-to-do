@@ -1,0 +1,22 @@
+{
+  "app_sha256": "7995ecbc3514ca702d2568a88fac6759ca3b091ad349038fc009295e107368a5",
+  "version": "3.39.0",
+  "A29": {
+    "titel": "Miete am 15.",
+    "faellig_tag": 13,
+    "befund": "vorhanden"
+  },
+  "A28": {
+    "ausgabe": "FREQ=MONTHLY",
+    "import": {
+      "art": "monatlich",
+      "start": "2027-01-31",
+      "ende": null
+    },
+    "befund": "vorhanden"
+  },
+  "A30": {
+    "hinweis": "tzid",
+    "befund": "vorhanden"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "app_sha256": "fa9a7bb6802b1958bb60ebdb006928b3bd4f600805463fba5479ee218692e4ee",
+  "faelle": [
+    "frames",
+    "speichern",
+    "vorschau",
+    "export",
+    "zwischenstand",
+    "geometrie",
+    "migration"
+  ],
+  "pruefungen": [
+    "Frame-Dialog: Neu/Duplizieren/Umordnen/Dauer/Löschen; globales Undo und unabhängiges Zell-Undo",
+    "Autosavefehler erhält Dateibytes und aktiven Frame; Retry; Strukturfehler rollt Folge und Undo zurück; Schreibschutz",
+    "Vorschau: Start/Pause/Fortsetzen/Neustart; begrenzter Bildcache; Timerabbau; keine Bestandsänderung",
+    "PNG-Spritesheet und Zeitachse bytegenau; ausdrückliches Ersetzen/Abbruch; Exportfehler ohne Teilbestand; PNG-Einzelbildfolge in neuem, lesbar benanntem Ordner",
+    "Zwischenstand: echter Schreibfehler erhält Datei/Metadaten/Undo und räumt eigenen Anhang auf; Retry und Schreibschutz; volle Wiederherstellung/Undo und Als-neue-Zeichnung",
+    "860 × 700 mit mittlerer/großer Schrift: Editoraktionen erreichbar, beide Dialoge scrollen und feste Fußaktionen bleiben sichtbar",
+    "Echter Neustart/Altleser; Format 23 → 24 mit bytegenauer Vorsicherung; Kopierfehler verhindert Überschreiben; statische Bilder verlustfrei"
+  ],
+  "callbackfehler": [],
+  "exitcode": 0
+}

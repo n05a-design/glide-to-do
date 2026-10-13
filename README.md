@@ -8,10 +8,11 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 
 ## Stand
 
-- **Entwicklungsstand 3.38.0 vom 09.10.2026**, Datenformat 23; keine veröffentlichte oder signierte Releasefassung.
-- **Zuletzt geliefert (Sprint 08./09.10.2026):** Tempo (3.33.19), Komfort im Alltag (3.33.20), ruhige Oberfläche mit hell/dunkel nach System (3.33.21), Wissen und Seiten mit Bildern in Druck und Markdown, markierten Fundstellen und erklärten Filtern (3.34.0) sowie Pixel und Austausch mit geprüften KI-Änderungsvorschlägen und Sicherungsvergleich (3.35.0). Jede Version ist auf dem Referenz-Mac automatisch vollständig geprüft und bytegleich nach `07_Python-Versionen` geliefert; Windows zuletzt 3.33.18. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
-- **Offen:** Lizenz, Signatur, Markenprüfung, Store, Windows-Prüfung des aktuellen Stands und die manuelle Abnahme unter Windows, Linux, DPI-Skalierung und Bildschirmleser.
-- **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe und den offenen Entscheidungen des Inhabers; Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
+- **Entwicklungsstand 3.42.0 vom 13.10.2026**, Datenformat 25. Dies ist eine Entwicklungsfassung.
+- **Zuletzt vollständig automatisch geliefert:** Notion-Import und Seitenwiederherstellung 3.41.0, davor Pixelanimation 3.40.0, davor Wiederholungen 3.39.1 (Fehlerbehebung), Tagesplanung 3.39.0, Aufgabenoberfläche 3.38.0, Logo/Symbole 3.37.0 und Fundament/Tempo 3.36.0. Eingefrorene Mac-Vollprüfung sowie native Linux-/Windows-Matrix grün; 07/Showcase/Bundle abgeglichen und Mac-Signaturen geprüft. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
+- **Nächste Pakete:** 3.42.0 mit eigenständigen Mac-/Windows-Paketen, danach 4.0.0 mit dem zugänglichen Aufgaben-Kernablauf. Beide sind bestätigt und vorbereitet.
+- **Offen:** verbleibende bestätigte Sprintpakete, manuelle Bedien-/DPI-/Mehrmonitor-/Screenreaderabnahme sowie die gesonderten Veröffentlichungstore (u. a. Lizenz, öffentliche Signatur und Marke).
+- **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe; bestätigte Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 
 ## Schnellstart
 
@@ -23,7 +24,7 @@ python3 07_Python-Versionen/Schnellstart.pyw
 
 Unter Windows: `python 07_Python-Versionen\Schnellstart.pyw`. Weitere Startwege (aus dem Quellstand, macOS-Entwicklungsbundle) stehen in der [README des Quellbaums](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand).
 
-**Hinweis für bestehende Daten:** Nach einem Formatwechsel (zuletzt Format 23) keine ältere Fassung mit dem umgestellten Bestand starten. Seit 3.30 öffnen ältere Fassungen einen neueren Bestand nur schreibgeschützt; Glide 3.29 und älter überschreiben ihn bei der ersten Eingabe. Vor jeder Umstellung entsteht eine Vorsicherung `liste_vor_format<N>_*.json`.
+**Hinweis für bestehende Daten:** Nach einem Formatwechsel (zuletzt Format 25) keine ältere Fassung mit dem umgestellten Bestand starten. Seit 3.30 öffnen ältere Fassungen einen neueren Bestand nur schreibgeschützt; Glide 3.29 und älter überschreiben ihn bei der ersten Eingabe. Vor jeder Umstellung entsteht eine Vorsicherung `liste_vor_format<N>_*.json`.
 
 ## Was Glide kann
 
@@ -31,7 +32,7 @@ Unter Windows: `python 07_Python-Versionen\Schnellstart.pyw`. Weitere Startwege 
 - **Ansichten:** Liste, Tabelle, Kalender, Karten, Spaltenboard und Pinnwand auf demselben Bestand; Gruppieren nach Feld einschließlich Eisenhower; Pinnwand mit Bereichen, Verbindungen und Präsentation; Startseite „Ruhig“ zum Anpassen.
 - **Wissen:** Seiten mit Markdown, Bildern (auch in Druck/PDF und Markdown), Titelbildern, echten Aufgaben und eingebetteten Live-Listen; Notizen, Notizbücher, Bücher und Galerien; lokale Verweise und Rückverweise; gemeinsame Suche und Befehlspalette (Strg/Cmd+O) mit markierten Fundstellen; gespeicherte Filter, die erklären, warum etwas erscheint.
 - **Pixel-Werkstatt:** Zeichnungen mit 16–128 Zellen, Formen, Symmetrie, Mustern, Paletten mit Umfärben und Vorschau, PNG- und ICO-Export mit Symbolvorschau, Pixelsymbole.
-- **Daten:** atomares Speichern, Sicherungen nur bei Änderung, Vorsicherung je Formatstufe, Tagesstände, Sicherungen vergleichen; Voll-, Teil- und App-Backup, Vorlagen, CSV, Markdown, ICS, Austauschformat für KI mit geprüften Änderungsvorschlägen; Rückgängig für alles.
+- **Daten:** atomares Speichern, Sicherungen nur bei Änderung, Vorsicherung je Formatstufe, Tagesstände, Sicherungen vergleichen; Voll-, Teil- und App-Backup, Notion-Import mit Quellenvergleich, einzelne Seiten aus Sicherungen wiederherstellen, Vorlagen, CSV, Markdown, ICS, Austauschformat für KI mit geprüften Änderungsvorschlägen; Rückgängig für alles.
 - **Gestaltung:** zehn Designs mit Kontrast nach WCAG AA, automatisch hell/dunkel nach System, Akzentfarben und Hintergrundverläufe, schmale Seitenleiste; Mindestgröße 860 × 700.
 
 Verhalten im Einzelnen: [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md). Entwicklung je Version: [Änderungsverlauf](01_Repository/Glide/CHANGELOG.md).
@@ -58,7 +59,7 @@ Verhalten im Einzelnen: [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md).
 
 ## Qualität und Sicherheit
 
-- **Glide-Prüfung** (`.github/workflows/python-app.yml`): CI-Grundstufe unter Linux. Die Integrationssuiten unter Linux lassen sich zusätzlich von Hand starten; maßgeblich bleibt die Vollprüfung auf dem Mac.
+- **Glide-Prüfung** (`.github/workflows/python-app.yml`): verpflichtende Grundstufe sowie vollständige Linux-/Windows-Prüfmatrix. Jede Lieferung erhält zusätzlich ihre eingefrorene Mac-Vollprüfung. Gezielte Diagnoseläufe ersetzen keine Vollmatrix; menschliche Bedien- und Readerabnahmen bleiben getrennt.
 - **CodeQL:** `.github/workflows/codeql.yml` liegt bereit, ist aber seit 01.10.2026 vom Inhaber deaktiviert. Wieder einschalten unter *Actions → CodeQL → Enable workflow*, nie zusammen mit der CodeQL-Standardeinrichtung.
 - **Dependabot:** schlägt wöchentlich Aktualisierungen der verwendeten GitHub Actions vor.
 - **Secret Scanning:** aktiv; Schlüssel, Zertifikate und Signing-Secrets gehören nie ins Repository.

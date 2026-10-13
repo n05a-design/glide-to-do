@@ -399,7 +399,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         # ================================================================
         # Format 20: Migration mit Vorsicherung, neue Felder, Bereinigung
         # ================================================================
-        assert app.DATA_SCHEMA_VERSION == 23
+        assert app.DATA_SCHEMA_VERSION == 25
         payload19 = app.data_payload()
         payload19["version"] = 19
         old_bytes = json.dumps(payload19, ensure_ascii=False, indent=4).encode("utf-8")
@@ -408,7 +408,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert app.save_items()
         backups20 = list(Path(mod.BACKUP_DIR).glob("liste_vor_format20_*.json"))
         assert len(backups20) == 1 and backups20[0].read_bytes() == old_bytes
-        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 23
+        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 25
         # Eine Datei aus einer späteren Glide-Fassung wird abgelehnt.
         future_version = app.DATA_SCHEMA_VERSION + 1
         try:
@@ -2232,7 +2232,14 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         # bleibt über spätere Versionen gleich (seit 3.31.0 festgeschrieben).
         assert reference20["version"] == 20 and reference20["app_version"] == "3.30.0"
         geladen, _aktiv = app.normalize_lists_data(copy.deepcopy(reference20))
-        assert geladen == reference20["lists"]
+        # Seit Format 24 erhält jede Zeichnung ihre Bildfolge aus genau dem
+        # gespeicherten Bild; alle übrigen Felder bleiben unverändert.
+        for entry in geladen:
+            if entry.get("list_kind") == "drawing":
+                frames = entry["animation"]["frames"]
+                assert len(frames) == 1 and frames[0]["drawing"] == entry["drawing"], entry["id"]
+        assert [{key: value for key, value in entry.items() if key != "animation"} for entry in geladen] == \
+            reference20["lists"]
         beziehungen = next(entry for entry in geladen if entry["id"] == "fixture-tasks")
         assert beziehungen["items"][1]["blocked_by"] == ["fixture-item-prepare"]
         assert beziehungen["items"][2]["time_spent_minutes"] == 25 and beziehungen["icon"]["width"] == 16
@@ -2250,7 +2257,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert app.save_items(show_error=False)
         speicher = Path(mod.SAVE_FILE)
         gueltig = speicher.read_bytes()
-        assert app.settings.get("data_format_written") == 23
+        assert app.settings.get("data_format_written") == 25
 
         neuer = json.loads(gueltig)
         neuer["version"] = future_version
@@ -2273,7 +2280,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert len(kopien) == 1 and kopien[0].read_bytes() == kaputt
         assert not app._data_read_only
         assert app.save_items(show_error=False), "Nach der Kopie muss Speichern wieder gehen"
-        assert json.loads(speicher.read_text(encoding="utf-8"))["version"] == 23
+        assert json.loads(speicher.read_text(encoding="utf-8"))["version"] == 25
 
         aelter = json.loads(gueltig)
         aelter["version"] = 19

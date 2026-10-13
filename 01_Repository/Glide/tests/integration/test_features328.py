@@ -32,7 +32,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features328-") as folder:
     try:
         # Die 3.28-Funktionen bleiben in jeder späteren Fassung erhalten.
         assert tuple(map(int, mod.APP_VERSION.split("."))) >= (3, 28, 0)
-        assert app.DATA_SCHEMA_VERSION == 23
+        assert app.DATA_SCHEMA_VERSION == 25
         assert app.ENTRY_MIN_WIDTH == 180
 
         journal_folder = app.new_folder_object("Tagebuch", folder_kind="journal")
@@ -53,7 +53,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features328-") as folder:
         app.set_active_list(entry["id"], refresh=False)
         assert app.save_items()
         payload = json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))
-        assert payload["version"] == 23
+        assert payload["version"] == 25
         loaded, active_id = app.normalize_lists_data(payload)
         restored = next(value for value in loaded if value["id"] == entry["id"])
         assert restored["journal"]["favorite"] is True

@@ -1,0 +1,99 @@
+{
+  "app_sha256": "8cda250ca0e6219f9d9cab165e6a05b8e161b4bad148175d916e3143d993dccc",
+  "aufnahmen": [
+    {
+      "name": "heute-hell",
+      "design": "light",
+      "window": "1280x800",
+      "large": false,
+      "inspector": false,
+      "owner_pid_bestaetigt": true,
+      "aufnahme": "Eigene NSWindow.contentView direkt gerendert; keine Bildschirmaufnahme",
+      "image_size": [
+        2560,
+        1600
+      ],
+      "sha256": "2c83ca7a880f464f146aa83b2466dbb0f8c2866744a9795029bb2155d79d70b6"
+    },
+    {
+      "name": "liste-dunkel",
+      "design": "dark",
+      "window": "1280x800",
+      "large": false,
+      "inspector": false,
+      "owner_pid_bestaetigt": true,
+      "aufnahme": "Eigene NSWindow.contentView direkt gerendert; keine Bildschirmaufnahme",
+      "image_size": [
+        2560,
+        1600
+      ],
+      "sha256": "4d7346421064606c9fb2f32615ac167ddc1b762a60d2df71f6659b18b2feb8fe"
+    },
+    {
+      "name": "seite-hell",
+      "design": "light",
+      "window": "1280x800",
+      "large": false,
+      "inspector": false,
+      "owner_pid_bestaetigt": true,
+      "aufnahme": "Eigene NSWindow.contentView direkt gerendert; keine Bildschirmaufnahme",
+      "image_size": [
+        2560,
+        1600
+      ],
+      "sha256": "ef053525a9c9689d31e817cccec5189abd268748745451a66873e4b282725698"
+    },
+    {
+      "name": "inspektor-dunkel",
+      "design": "dark",
+      "window": "1280x800",
+      "large": false,
+      "inspector": true,
+      "owner_pid_bestaetigt": true,
+      "aufnahme": "Eigene NSWindow.contentView direkt gerendert; keine Bildschirmaufnahme",
+      "image_size": [
+        2560,
+        1600
+      ],
+      "sha256": "bc54471b6fd7796edcaff8402d0ee80fa54778468a595e064467f294ff246648"
+    },
+    {
+      "name": "inspektor-mindestgroesse",
+      "design": "light",
+      "window": "860x700",
+      "large": false,
+      "inspector": true,
+      "owner_pid_bestaetigt": true,
+      "aufnahme": "Eigene NSWindow.contentView direkt gerendert; keine Bildschirmaufnahme",
+      "image_size": [
+        1720,
+        1400
+      ],
+      "sha256": "20a103025a918c43b836c955a22c186e3cba873ca2bdc2d0f78a5a53fc3870ad"
+    },
+    {
+      "name": "heute-grosse-schrift",
+      "design": "dark",
+      "window": "860x700",
+      "large": true,
+      "inspector": false,
+      "owner_pid_bestaetigt": true,
+      "aufnahme": "Eigene NSWindow.contentView direkt gerendert; keine Bildschirmaufnahme",
+      "image_size": [
+        1720,
+        1400
+      ],
+      "sha256": "dbe9af14abe8776885b6e60936e522baf26f85ef096dc00edb545539dc60dfcb"
+    }
+  ],
+  "pruefgrenze": "Eigene synthetische Fenster; getrennte menschliche Abnahme bleibt offen.",
+  "bildbeurteilung": {
+    "tatsaechlich_betrachtet": true,
+    "befunde": [
+      "Hell-/Dunkelansichten, lesbare Hierarchie und feste Inhaltskanten bestätigt.",
+      "Inspektor bei 1280 rechts, bei 860 innerhalb der Inhaltsfläche; Speichern und Schließen sichtbar, weiterer Inhalt vertikal erreichbar.",
+      "Lange Aufgabentitel werden in begrenzten Zeilenspalten angeschnitten; vollständiger Titel im schmalen Inhaltsinspektor sichtbar.",
+      "Große Schrift bei 860: nächste Aufgabe hervorgehoben, Kopfaktionen über Mehr; echte Menschen-/DPI-Abnahme getrennt offen."
+    ]
+  }
+}

@@ -268,30 +268,76 @@ def _aufwand(woerter, i):
     return n, minuten
 
 
+ORDINAL_WORDS = {"ersten": 1, "zweiten": 2, "dritten": 3, "vierten": 4, "fünften": 5, "fuenften": 5,
+                 "letzten": -1}
+ORDINAL_FEMININE = {"zweite": 2, "dritte": 3, "vierte": 4}
+UNSUPPORTED_REPEAT = "wird noch nicht unterstützt – bleibt Text"
+
+
 def _wiederholung(woerter, i, today):
-    """Wiederholung ab Wort i: (Anzahl Wörter, Regel ohne Start, erster Termin, Text) oder None."""
+    """Wiederholung ab Wort i: (Anzahl Wörter, Regel ohne Start, erster Termin, Text) oder None.
+
+    Eine Angabe wird ganz oder gar nicht gedeutet (A29): Folgt einem Rhythmus
+    ein Ankertag oder Wochentag, gehört er dazu. Was das Datenformat nicht
+    abbilden kann, liefert die Regel None und einen Hinweistext – die Wörter
+    bleiben dann vollständig Titel und werden nicht teilweise als Datum gelesen.
+    """
     if i >= len(woerter):
         return None
-    w = [wort.wort for wort in woerter[i:i + 8]]
+    w = [wort.wort for wort in woerter[i:i + 10]]
+    d = [wort.datum for wort in woerter[i:i + 10]]
 
     def naechster(tage):
         return min(today + timedelta(days=(tag - today.weekday()) % 7) for tag in tage)
+
+    def wochentag(wort):
+        """Wochentag aus „Montag“ oder „montags“, sonst None."""
+        name = wort[:-1] if wort.endswith("s") and wort[:-1] in WEEKDAYS else wort
+        return WEEKDAYS.index(name) if name in WEEKDAYS else None
 
     def wochentage(start):
         """„Montag“, „Montag und Donnerstag“, „Montag, Mittwoch und Freitag“ ab Position start."""
         tage, n = [], start
         while n < len(w):
-            name = w[n][:-1] if w[n].endswith("s") and w[n][:-1] in WEEKDAYS else w[n]
-            if name not in WEEKDAYS:
+            tag = wochentag(w[n])
+            if tag is None:
                 break
-            tage.append(WEEKDAYS.index(name))
+            tage.append(tag)
             n += 1
-            if n + 1 < len(w) and w[n] == "und" and (w[n + 1] in WEEKDAYS or w[n + 1] in WEEKDAY_PLURAL):
+            if n + 1 < len(w) and w[n] == "und" and wochentag(w[n + 1]) is not None:
                 n += 1
-            elif not (n < len(w) and woerter[i + n - 1].roh.endswith(",")
-                      and (w[n] in WEEKDAYS or w[n] in WEEKDAY_PLURAL)):
+            elif not (n < len(w) and woerter[i + n - 1].roh.endswith(",") and wochentag(w[n]) is not None):
                 break
         return sorted(set(tage)), n - start
+
+    def tage_text(tage):
+        namen = [WEEKDAYS[tag] + "s" for tag in tage]
+        return namen[0] if len(namen) == 1 else ", ".join(namen[:-1]) + " und " + namen[-1]
+
+    def ordinal(k):
+        """Ordnungszahl an Position k: (Wert, Wörter) oder None; „2.“ oder „zweiten“."""
+        if k >= len(w):
+            return None
+        if re.fullmatch(r"\d{1,2}", w[k]) and d[k].endswith("."):
+            return int(w[k]), 1
+        if w[k] in ORDINAL_WORDS:
+            return ORDINAL_WORDS[w[k]], 1
+        return None
+
+    def im_monat(k):
+        """Länge von „im Monat“, „des Monats“ oder „jedes Monats“ an Position k, sonst 0."""
+        if w[k:k + 2] in (["im", "monat"], ["des", "monats"], ["jedes", "monats"]):
+            return 2
+        return 0
+
+    def nach_tagen(k):
+        """Optionale Wochentage nach einem Rhythmus: (Tage, Wörter) – „am Montag“, „montags“."""
+        n = 1 if k < len(w) and w[k] in ("am", "immer") else 0
+        tage, laenge = wochentage(k + n)
+        return (tage, n + laenge) if tage else ([], 0)
+
+    def hinweis(n, was):
+        return n, None, None, f"Wiederholung „{was}“ {UNSUPPORTED_REPEAT}"
 
     if w[0] in ("täglich", "taeglich") or w[:2] == ["jeden", "tag"]:
         n = 1 if w[0] != "jeden" else 2
@@ -301,41 +347,114 @@ def _wiederholung(woerter, i, today):
         return n, {"art": REPEAT_WEEKDAYS, "tage": [0, 1, 2, 3, 4]}, naechster(range(5)), "werktags"
     if w[0] in ("wöchentlich", "woechentlich") or w[:2] == ["jede", "woche"]:
         n = 1 if w[0] != "jede" else 2
-        return n, {"art": REPEAT_WEEKLY}, today, "wöchentlich"
+        tage, laenge = nach_tagen(n)
+        if not tage:
+            return n, {"art": REPEAT_WEEKLY}, today, "wöchentlich"
+        if len(tage) == 1:
+            return n + laenge, {"art": REPEAT_WEEKLY}, naechster(tage), "wöchentlich " + tage_text(tage)
+        return n + laenge, {"art": REPEAT_WEEKDAYS, "tage": tage}, naechster(tage), tage_text(tage)
     if w[0] == "monatlich" or w[:2] == ["jeden", "monat"]:
         n = 1 if w[0] == "monatlich" else 2
-        return n, {"art": REPEAT_MONTHLY}, today, "monatlich"
+        k = n + (1 if n < len(w) and w[n] in ("am", "zum") else 0)
+        tag = None
+        if k < len(w) and re.fullmatch(r"\d{1,2}", w[k]) and (d[k].endswith(".") or k > n):
+            tag = int(w[k])
+        elif k < len(w) and w[k] == "ersten":
+            tag = 1
+        elif k < len(w) and w[k] == "letzten":
+            laenge = k + 1 + (1 if k + 1 < len(w) and w[k + 1] in ("tag", "werktag") else 0)
+            return hinweis(laenge, " ".join(woerter[i + x].roh for x in range(laenge)))
+        if tag is None:
+            return n, {"art": REPEAT_MONTHLY}, today, "monatlich"
+        if not 1 <= tag <= 31:
+            return None
+        erster = today
+        while erster.day != tag:
+            erster += timedelta(days=1)
+        return k + 1, {"art": REPEAT_MONTHLY}, erster, f"monatlich am {tag}."
     if w[0] in ("jährlich", "jaehrlich") or w[:2] == ["jedes", "jahr"]:
         n = 1 if w[0] != "jedes" else 2
+        k = n + (1 if n < len(w) and w[n] in ("am", "zum") else 0)
+        if k < len(w) and re.fullmatch(r"\d{1,2}\.\d{1,2}\.", d[k]):
+            erster = _tag(woerter[i + k], today)
+            if erster is not None:
+                return k + 1, {"art": REPEAT_YEARLY}, erster, f"jährlich am {erster:%d.%m.}"
         return n, {"art": REPEAT_YEARLY}, today, "jährlich"
-    if w[0] == "jeden" or w[0] in WEEKDAY_PLURAL:
+    if w[0] == "jede" and len(w) >= 3 and w[2] == "woche" and (
+            w[1] in ORDINAL_FEMININE or (re.fullmatch(r"\d", w[1]) and d[1].endswith("."))):
+        menge = ORDINAL_FEMININE.get(w[1]) or int(w[1])
+        tage, laenge = nach_tagen(3)
+        if len(tage) > 1:
+            return hinweis(3 + laenge, " ".join(woerter[i + x].roh for x in range(3 + laenge)))
+        erster = naechster(tage) if tage else today
+        text = f"alle {menge} Wochen" + (" " + tage_text(tage) if tage else "")
+        return 3 + laenge, {"art": REPEAT_EVERY_N_DAYS, "abstand": menge * 7}, erster, text
+    if w[0] == "jeden" and (stelle := ordinal(1)):
+        wert, laenge = stelle
+        tag = wochentag(w[1 + laenge]) if 1 + laenge < len(w) else None
+        if tag is None and 1 + laenge < len(w) and w[1 + laenge] == "tag" and 2 <= wert <= REPEAT_MAX_INTERVAL:
+            return 2 + laenge, {"art": REPEAT_EVERY_N_DAYS, "abstand": wert}, today, f"alle {wert} Tage"
+        if tag is None:
+            # „jeden 15.“ ist ein Monatstag; „jeden 2. und 4. …“ bleibt Text.
+            if wert > 0 and 1 + laenge < len(w) and w[1 + laenge] in ("und", "oder"):
+                return hinweis(1 + laenge, " ".join(woerter[i + x].roh for x in range(1 + laenge)))
+            if wert < 1 or wert > 31 or not d[1].endswith("."):
+                return None
+            erster = today
+            while erster.day != wert:
+                erster += timedelta(days=1)
+            ende = 2 + im_monat(2)
+            return ende, {"art": REPEAT_MONTHLY}, erster, f"monatlich am {wert}."
+        ende = 2 + laenge
+        monat = im_monat(ende)
+        if monat or wert in (1, -1):
+            # Position im Monat („zweiter Dienstag im Monat“, „erster Montag“, „letzter Freitag“)
+            # kennt das heutige Format nicht.
+            ende += monat
+            return hinweis(ende, " ".join(woerter[i + x].roh for x in range(ende)))
+        if not 2 <= wert <= 5:
+            return None
+        return ende, {"art": REPEAT_EVERY_N_DAYS, "abstand": wert * 7}, naechster([tag]), \
+            f"alle {wert} Wochen {tage_text([tag])}"
+    if w[0] == "jeden" or wochentag(w[0]) is not None and w[0].endswith("s"):
         start = 1 if w[0] == "jeden" else 0
         if start and (len(w) < 2 or w[1] not in WEEKDAYS):
             return None
         tage, laenge = wochentage(start)
         if not tage:
             return None
-        namen = [WEEKDAYS[tag].capitalize() for tag in tage]
-        text = ("jeden " + namen[0]) if len(tage) == 1 else (
-            ", ".join(name.lower() + "s" for name in namen[:-1]) + " und " + namen[-1].lower() + "s")
+        text = ("jeden " + WEEKDAYS[tage[0]].capitalize()) if len(tage) == 1 else tage_text(tage)
         regel = {"art": REPEAT_WEEKLY} if len(tage) == 1 else {"art": REPEAT_WEEKDAYS, "tage": tage}
         return start + laenge, regel, naechster(tage), text
     if w[0] == "alle" and len(w) >= 3:
         menge = NUMBER_WORDS.get(w[1]) or (int(w[1]) if re.fullmatch(r"\d{1,3}", w[1]) else None)
         if menge is None:
             return None
+        if re.fullmatch(r"monate?n?|jahre?n?|quartale?n?", w[2]):
+            return hinweis(3, " ".join(woerter[i + x].roh for x in range(3)))
         if re.fullmatch(r"tage?n?", w[2]):
-            tage = menge
+            tage_abstand, wochen = menge, False
         elif re.fullmatch(r"wochen?", w[2]):
-            tage = menge * 7
+            tage_abstand, wochen = menge * 7, True
         else:
             return None
-        if not 1 <= tage <= REPEAT_MAX_INTERVAL:
+        if not 1 <= tage_abstand <= REPEAT_MAX_INTERVAL:
             return None
-        if tage == 1:
+        tage, laenge = nach_tagen(3) if wochen else ([], 0)
+        if len(tage) > 1 and menge > 1:
+            return hinweis(3 + laenge, " ".join(woerter[i + x].roh for x in range(3 + laenge)))
+        if tage and menge == 1:
+            regel = {"art": REPEAT_WEEKLY} if len(tage) == 1 else {"art": REPEAT_WEEKDAYS, "tage": tage}
+            return 3 + laenge, regel, naechster(tage), "wöchentlich " + tage_text(tage)
+        if tage_abstand == 1:
             return 3, {"art": REPEAT_DAILY}, today, "täglich"
-        text = f"alle {menge} Wochen" if w[2].startswith("woche") else f"alle {menge} Tage"
-        return 3, {"art": REPEAT_EVERY_N_DAYS, "abstand": tage}, today, text
+        text = f"alle {menge} Wochen" if wochen else f"alle {menge} Tage"
+        if tage:
+            return 3 + laenge, {"art": REPEAT_EVERY_N_DAYS, "abstand": tage_abstand}, naechster(tage), \
+                text + " " + tage_text(tage)
+        return 3, {"art": REPEAT_EVERY_N_DAYS, "abstand": tage_abstand}, today, text
+    if w[0] == "jedes" and len(w) >= 2 and w[1] == "quartal":
+        return hinweis(2, " ".join(woerter[i + x].roh for x in range(2)))
     return None
 
 
@@ -395,6 +514,7 @@ def parse_capture(text, labels=(), today=None, ignore=()):
     woerter = _woerter(text, geschuetzt)
     teile, zeiten = [], []
     belegt = set()
+    wiederholung_hinweise = []
 
     def neu(i, n, felder, beschreibung, art, datum_ende=False):
         """Hält eine Stelle fest; eine zurückgenommene bleibt mit allen Wörtern Text."""
@@ -463,6 +583,17 @@ def parse_capture(text, labels=(), today=None, ignore=()):
                                  "faellig", datum_ende=ende_datum)
         if verbraucht is None and "wiederholung" not in belegt and (regel := _wiederholung(woerter, i, today)):
             n, wiederholung, erster, beschreibung = regel
+        else:
+            wiederholung = False
+        if wiederholung is None:
+            # Nicht abbildbar: ein Hinweis ohne Wirkung, die Wörter bleiben
+            # vollständig Titel und werden nicht teilweise gedeutet (A29).
+            ende = woerter[i + n - 1].ende_datum
+            wiederholung_hinweise.append(Teil(woerter[i].start, ende, " ".join(text[woerter[i].start:ende].lower().split()),
+                                              {}, beschreibung))
+            belegt.add("wiederholung")
+            verbraucht = n
+        elif wiederholung:
             felder = {"repeat": wiederholung, "due": erster.isoformat()}
             if (zeit := _zeit(woerter, i + n)):
                 n += zeit[0]
@@ -511,7 +642,7 @@ def parse_capture(text, labels=(), today=None, ignore=()):
                 felder.setdefault(key, value)
     # Erinnerung (KO03): fester Tag aus Bearbeitungstag, Fälligkeit oder heute;
     # ein Vorlauf ohne Fälligkeit wirkt nicht und bleibt deshalb Text.
-    hinweise = []
+    hinweise = list(wiederholung_hinweise)
     if "reminder" in felder:
         erinnerung = dict(felder["reminder"])
         teil = next(t for t, a in teile if a == "erinnerung")

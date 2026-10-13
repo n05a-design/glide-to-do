@@ -1,0 +1,26 @@
+{
+  "version": "3.39.0",
+  "source_sha256": "7995ecbc3514ca702d2568a88fac6759ca3b091ad349038fc009295e107368a5",
+  "verfahren": "Fünf direkte frische Prozesse, je 40 Wiederholungen; warme Rohwerte gepoolt; kein paralleler GUI-Lauf",
+  "reihen": 5,
+  "warmwerte_je_weg": 200,
+  "timings": {
+    "startseite_neuaufbau": {
+      "first_median_ms": 280.055,
+      "first_p95_ms": 293.564,
+      "warm_median_ms": 72.059,
+      "warm_p95_ms": 78.483,
+      "warm_max_ms": 88.045
+    },
+    "einstellungen": {
+      "first_median_ms": 184.373,
+      "first_p95_ms": 203.071,
+      "warm_median_ms": 136.05200000000002,
+      "warm_p95_ms": 170.043,
+      "warm_max_ms": 202.054
+    }
+  },
+  "callback_errors": [],
+  "D46_erfuellt": true,
+  "D48_erfuellt": true
+}

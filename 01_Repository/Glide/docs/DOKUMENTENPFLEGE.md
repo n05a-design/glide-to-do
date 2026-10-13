@@ -1,6 +1,6 @@
 # Regeln für die Dokumentenpflege
 
-Stand 11.10.2026 · Glide 3.38.0 · Datenformat 23
+Stand 13.10.2026 · Glide 3.42.0 · Datenformat 25
 
 Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder gelöscht anstatt immer nur archiviert und `_Z` zu schreiben“) und ersetzt alle früheren Archivierungsregeln.
 
@@ -47,4 +47,4 @@ Neue Dokumente unter `docs/` nur, wenn kein bestehendes das Thema trägt; sie ge
 
 ## Was die Standprüfung erzwingt
 
-`tests/tools/standpruefung.py` (Regeln R1–R14) prüft alle aktiven Markdown-Dokumente: Standzeile mit der aktuellen Version, Formatstufen gegen den Code, bekannte überholte Aussagen, vollständige Modullisten, erreichbare relative Links, aktuelle Titel und erste Vollprüfungsaufrufe, Suitezahl in Standzeilen. Dokumente mit Version oder Datum im Namen gelten als festgeschrieben; seit 03.10.2026 gibt es unter den gepflegten Dokumenten keine mehr.
+`tests/tools/standpruefung.py` (Regeln R1–R14) prüft alle aktiven Markdown-Dokumente: Standzeile mit der aktuellen Version, Formatstufen gegen den Code, bekannte überholte Aussagen, vollständige Modullisten, erreichbare relative Links, aktuelle Titel und erste Vollprüfungsaufrufe, Suitezahl in Standzeilen. Erzeugte Pakete unter `build/` sind Kopien, keine aktiven Dokumente. Dokumente mit Version oder Datum im Namen sowie der gehashte Mac-Paketlizenzbeleg gelten als festgeschrieben; seit 03.10.2026 gibt es unter den gepflegten Dokumenten keine mehr.

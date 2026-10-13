@@ -78,7 +78,7 @@ with tempfile.TemporaryDirectory(prefix='glide-release37-') as tmp:
         assert app.save_items()
         copies = list(Path(mod.BACKUP_DIR).glob('liste_vor_format12_*.json'))
         assert len(copies) == 1 and copies[0].read_bytes() == old
-        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))['version'] == 23
+        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))['version'] == 25
         assert app.save_items() and len(list(Path(mod.BACKUP_DIR).glob('liste_vor_format12_*.json'))) == 1
 
         folder = app.new_folder_object('Projektunterlagen', color='clear', note='Unterlagen und nächste Schritte.')

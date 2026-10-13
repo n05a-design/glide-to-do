@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 11.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · manuelle Sitzungen offen; B1 automatisch geprüft
+Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · manuelle Sitzungen offen; B1 automatisch geprüft
 
 Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt am 03.10.2026 aus der fortgeschriebenen Prüfliste (Ursprung 3.30.0, enthielt die Listen 3.28 und 3.29) und der Windows-Anleitung; die Zuordnung der 201 Ausgangspunkte trägt Git. Automatisch geprüft ist die Logik ([Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)); offen bleiben Handgefühl, Plattformen und fremde Programme.
 
@@ -8,7 +8,9 @@ Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt a
 
 **Sprintnachlauf 3.36.0, getrennt offen:** Auf Mac, Windows und Linux jeweils Startseite öffnen → Liste → zurück, auch bei 860 × 700/großer Schrift und Hell/Dunkel: Scrollleiste sichtbar und mit Maus/Trackpad bedienbar. Bibliothek weit scrollen, Aufgabe in einer Karte ändern/Undo, Titel/Vorschautext ändern und Karten umordnen: Fokus/Scrollposition und Inhalte bleiben nachvollziehbar. Einstellungen öffnen, Kapazität ändern/Abbrechen, erneut öffnen (alter gespeicherter Wert); danach Design/Schrift ändern und erneut öffnen. Alle Vorschauen beim Scrollen erreichbar, Escape/Fenster-X beendet den Dialog. Windows zusätzlich vorhandene Fälle W01/W06–W08 (Titelkürzung, Dialogbreiten und Tabellenfeldabstände), Linux N08 (native Bildvorschau) nach der jeweiligen automatischen Vollprüfung durchführen. Diese Punkte sind durch Screenshots und CI noch nicht menschlich abgenommen.
 
-**Sprintnachlauf 3.38.0, getrennt offen:** Auf Mac, Windows und Linux alle sechs Aufgaben-Kontexte mit echter Maus und Tastatur bedienen: gleiche Felder, direktes Datum/Labels/Wichtigkeit, Speichern/Verwerfen, Kontextmenü und Palette. Bei 860 × 700/großer Schrift Inspektor öffnen, alle Felder scrollen, Navigation und Zurückweg prüfen. Auf zwei Monitoren mit negativer Anordnung Popoverposition/Fokus; DPI 100/150/200 %. Zeilenaktionen bei Hover und Tastaturauswahl, schnelle Ansichts-/Klapp-/Erledigtfolgen und Animationen aus prüfen. Eigene Agentenaufnahmen und grüne Automatiken ersetzen diese Sitzung nicht.
+**Automatischer Stand 3.39.0:** Mac-Vollprüfung und lokaler Liefer-/Bundleabgleich grün. Native Linux-/Windows-Vollmatrix offen; zuletzt vollständig nativ geprüft ist 3.38.0. Die folgenden Sitzungen bleiben ausdrücklich menschliche Abnahmen.
+
+**Sprintnachlauf 3.38.0, getrennt offen:** Auf Mac, Windows und Linux alle sechs Aufgaben-Kontexte mit echter Maus und Tastatur bedienen: gleiche Felder, direktes Datum/Labels/Wichtigkeit, Speichern/Verwerfen, Kontextmenü und Palette. Bei 860 × 700/großer Schrift Inspektor öffnen, alle Felder scrollen, Navigation und Zurückweg prüfen. Auf zwei Monitoren mit negativer Anordnung Popoverposition/Fokus; DPI 100/150/200 %. Unter Windows alle vier beschrifteten Menüs in der gemeinsamen Titelzeile, Alt-D/B/A/H und Popups prüfen; keine abgeschnittenen Knöpfe. Zeilenaktionen bei Hover und Tastaturauswahl, schnelle Ansichts-/Klapp-/Erledigtfolgen und Animationen aus prüfen. Eigene Agentenaufnahmen und grüne Automatiken ersetzen diese Sitzung nicht.
 
 ## Rahmen
 
@@ -197,7 +199,7 @@ Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt a
 
 - [ ] **B0 Windows-Vollprüfung – Anleitung**
 
-Dieselbe Vollprüfung wie am Mac (`tests/tools/pruefen.py --modus voll`), gestartet über `windows_vollpruefung.cmd`. Sie umfasst alle Integrationssuiten aus `SUITEN` (3.35.0: 82), Unit-Tests, Showcase, fünf Analysen und die Reproduktion von Beispiel- und Releasedaten. Seit 05.10.2026 legt sie wie am Mac von jedem geprüften Fenster ein Foto ab. Dauer am Arbeitsrechner: 15–20 Minuten.
+Dieselbe Vollprüfung wie am Mac (`tests/tools/pruefen.py --modus voll`), gestartet über `windows_vollpruefung.cmd`. Sie umfasst alle Integrationssuiten aus `SUITEN` (3.38.0: 85), Unit-Tests, Showcase, fünf Analysen und die Reproduktion von Beispiel- und Releasedaten. Seit 05.10.2026 legt sie wie am Mac von jedem geprüften Fenster ein Foto ab. Dauer am Arbeitsrechner: 15–20 Minuten.
 
 **Vorbereitung (einmalig je Rechner):**
 
@@ -258,7 +260,7 @@ $py = "$env:USERPROFILE\.cache\glide-qa\python-3.14.8\runtime\python.exe"
 
 Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Windows-Nachweis wird aus dem Mac-Lauf abgeleitet.
 
-- [x] **B1 Vollprüfung (automatisch):** Stand 3.36.0, 10.10.2026: Mac Exit 0, 100 ausgeführt; native Linux-/Windows-Vollprüfung je Exit 0, 101 ausgeführt; je 83 Integrationssuiten/264 Unit-Tests. Windows Python 3.14.7/Tk 9.0.4, bestätigter Desktop 1920 × 1080. Die früheren Sprintlieferungen sind mitgeprüft. [Nachweis](../01_Repository/Glide/tests/qa-3.36.0/fundament_2026-10-10/README.md). Die menschliche Sichtprüfung ist jeweils übersprungen; B1a–B1j bleiben offen.
+- [x] **B1 Vollprüfung (automatisch):** Stand 3.36.0, 10.10.2026: Mac Exit 0, 100 ausgeführt; native Linux-/Windows-Vollprüfung je Exit 0, 101 ausgeführt; je 83 Integrationssuiten/264 Unit-Tests. Windows Python 3.14.7/Tk 9.0.4, bestätigter Desktop 1920 × 1080. Die früheren Sprintlieferungen sind mitgeprüft. [Nachweis](https://github.com/n05a-design/glide-to-do/blob/3f75265429410ed186109626d4e0776d5dcc3438/01_Repository/Glide/tests/qa-3.36.0/fundament_2026-10-10/README.md). Die menschliche Sichtprüfung ist jeweils übersprungen; B1a–B1j bleiben offen.
 - [ ] **B1a Sichtprüfung der Aufnahmen am Gerät:** Die Fotos des nächsten Windows-Laufs (B0) unter `tests\qa-<Version>\<Lauf>\…\fenster` und `screenshots` durchsehen (sie bleiben lokal). Die Vorbefunde mit Testablage in Glide nachstellen:
   - **W01** Seitenleiste: Lange Listentitel enden mit „…“, kürzere stehen vollständig da („Unterlagen & Assets“).
   - **W05** (auf dem Mac behoben in 3.33.21) Datei › Datenaustausch › „Für KI bereitstellen …“ und Ansicht › Liste › „Tabellenspalten …“: Ist die Fensterbreite angemessen, stehen die Knöpfe rechts wie in den übrigen Dialogen?
@@ -334,7 +336,9 @@ Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Wind
   - Komplettbackup in einer zweiten Testablage einlesen: Der Anhang ist da und
     öffnet sich.
 
-## C. Bildschirmleser und Tastatur (VoiceOver bzw. NVDA)
+## C. Bildschirmleser und Tastatur (VoiceOver, NVDA, Linux/Orca)
+
+Verfügbarkeit am 13.10.2026: Zusätzlich zu Mac/VoiceOver stehen dem Inhaber keine Windows-/NVDA- oder Linux-/Orca-Prüfplätze zur Verfügung (Antwort: „Keiner der beiden Prüfplätze“). Automatisierte native Plattformprüfungen können weiterlaufen; die tatsächlichen Reader- und Menschenabnahmen bleiben getrennt offen.
 
 - [ ] **C1** Seitenleiste, Suche, Detailbereich und Anpassen-Modus der
       Startseite sind erreichbar und werden sinnvoll angesagt.
@@ -358,3 +362,12 @@ Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Wind
 - Signatur, Notarisierung und Installer.
 - Markenprüfung.
 - Store-Freigabe.
+
+## Sprintnachlauf Tagesplanung 3.39.0
+
+Mac-Vollprüfung/Lieferabgleich grün, native Linux-/Windows-Vollmatrix noch ausstehend; menschliche Abnahme getrennt.
+
+- [ ] Mac/Windows/Linux: Tageshinweise aktivieren, freie Zeiten/Wochentage ändern; Glocke, Später, Hinweistag überspringen und ausdrücklich Tagesbeginn öffnen prüfen. Beim laufenden Modal keine unaufgeforderte Anzeige, nach Neustart keine doppelte Zustellung.
+- [ ] Lokale ICS-Datei ausdrücklich wählen; Zeitzone, Sommerzeit, Serienausnahme, ganztägiger/stornierter/transparenter Termin; Fehler/Verlustbericht und unbekannte freie Zeit sichtbar. Quelle bleibt unverändert.
+- [ ] Heute/Woche/Tagesvorschlag: Aufgaben wählen, Zieltag/Vorrat vergleichen/übernehmen; Fälligkeit bleibt, ein Undo stellt die ganze Auswahl her. Vergleich und Abbruch ändern nichts.
+- [ ] Bei 860 × 700, großer Schrift und plattformspezifischem DPI: vier neue Dialoge vollständig scrollen, horizontale Tabellenwerte lesen, Fußaktionen und Tastaturfokus erreichen.

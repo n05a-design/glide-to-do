@@ -1,0 +1,12 @@
+{
+  "version": "3.42.0",
+  "exitcode": 0,
+  "fach_und_ui_syntaxbaum_unveraendert_ausser_app_version": true,
+  "begleitmodule_bytegleich_zur_3410": 62,
+  "paket_quelle_ressourcen_bytegleich_zum_kandidaten": 105,
+  "kompilierte_codeobjekte": 64,
+  "native_dateien": 53,
+  "lizenzkomponenten": 23,
+  "paket_dateihashes": 330,
+  "app_sha256": "d6709820b223293d6480e2fa15616cbf4257293d4cfb87422bc9782d409afa05"
+}

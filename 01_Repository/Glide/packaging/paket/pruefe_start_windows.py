@@ -1,0 +1,102 @@
+"""Echte native Startprobe: ACL-Sperre ausschließlich auf einem Hosted-CI-Runner.
+
+Vor jeder Sperre werden die ACLs gesichert, im finally-Zweig exakt restauriert
+und das externe Python erneut gestartet. Inhaberinstallationen sind durch den
+Tk-freien Grenzvertrag ausdrücklich ausgeschlossen.
+"""
+import argparse
+import csv
+import io
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+import traceback
+from windows_isolation import plan
+
+
+def run(package,report,forbidden,*,timeout=150):
+    if sys.platform!='win32':raise RuntimeError('Native Windows-Probe erforderlich.')
+    # Reale Pfade vor der reinen Prüfung auflösen; keine Junction darf eine
+    # Quelle außerhalb des zulässigen vergänglichen Prüfbereichs verstecken.
+    environment=dict(os.environ)
+    for key in ('RUNNER_TEMP','RUNNER_TOOL_CACHE','GITHUB_WORKSPACE','SystemRoot'):
+        if key in environment:environment[key]=str(Path(environment[key]).resolve())
+    boundary=plan(environment,str(Path(package).resolve()),str(Path(report).resolve()),
+                  [str(Path(path).resolve())for path in forbidden])
+    package,report=Path(boundary['package']),Path(boundary['report'])
+    sources=[Path(path)for path in boundary['forbidden']]
+    executable=package/'Glide.exe'
+    if not executable.is_file()or report.exists():raise ValueError('Paket und unbenutzter Berichtspfad erforderlich.')
+    if not any(Path(sys.executable).resolve().is_relative_to(path)for path in sources):
+        raise ValueError('Die tatsächliche externe Prüflaufzeit muss gesperrt werden.')
+    report.parent.mkdir(parents=True,exist_ok=True)
+    smoke=report.with_name(report.stem+'-paket.json')
+    if smoke.exists():raise ValueError('Neuer Paketbericht erforderlich.')
+    system=Path(environment['SystemRoot'])/'System32'
+    def command(args,**kwargs):
+        return subprocess.run([str(value)for value in args],capture_output=True,text=True,
+                              encoding='utf-8',errors='replace',timeout=timeout,**kwargs)
+    who=command([system/'whoami.exe','/user','/fo','csv','/nh'])
+    if who.returncode:raise RuntimeError('CI-Benutzerkennung nicht ermittelbar.')
+    sid=next(csv.reader(io.StringIO(who.stdout)))[1]
+    if not sid.startswith('S-1-'):raise ValueError('Ungültige Windows-SID.')
+    assert command([system/'cmd.exe','/d','/c','exit','0']).returncode==0
+    assert command([sys.executable,'-B','-c','raise SystemExit(0)']).returncode==0
+    result={'plattform':'Windows x64','nur_vergaenglicher_hosted_ci_runner':True,
+            'inhaber_installationen_unveraendert':True,'exitcode':1}
+    saved=[];restored=[]
+    with tempfile.TemporaryDirectory(prefix='glide-acl-',dir=environment['RUNNER_TEMP'])as backup:
+        try:
+            for number,path in enumerate(sources):
+                if not path.is_dir():raise ValueError('Externe CI-Quelle fehlt.')
+                acl=Path(backup)/f'acl-{number}.txt'
+                save=command([system/'icacls.exe',path,'/save',acl,'/T','/Q'])
+                if save.returncode:raise RuntimeError('Original-ACL konnte nicht vollständig gesichert werden.')
+                saved.append((path,acl))
+                deny=command([system/'icacls.exe',path,'/deny','*'+sid+':(OI)(CI)(RX)','/T','/Q'])
+                if deny.returncode:raise RuntimeError('Externe Laufzeit nicht vollständig gesperrt.')
+            try:
+                blocked=command([sys.executable,'-B','-c','raise SystemExit(0)'])
+                code=blocked.returncode
+            except OSError as exc:
+                code='OS-Zugriff verweigert: '+str(exc.winerror)
+            if code==0:raise RuntimeError('Gegenprobe fehlgeschlagen: externes Python noch ausführbar.')
+            child_env=dict(environment,PATH=str(system),PYTHONDONTWRITEBYTECODE='1',PYTHONUTF8='1')
+            for key in ('PYTHONHOME','PYTHONPATH','TCL_LIBRARY','TK_LIBRARY'):child_env.pop(key,None)
+            # Arbeitsverzeichnis neben dem Paket: die Projektquelle ist gesperrt.
+            child=command([executable,'--paket-pruefen',smoke],env=child_env,cwd=str(package.parent))
+            result.update(externes_python_gegenprobe=code,paketprozess_exitcode=child.returncode,
+                          ausgabe=child.stdout+child.stderr)
+            if smoke.exists():result['paket']=json.loads(smoke.read_text(encoding='utf-8'))
+            if child.returncode==0 and result.get('paket',{}).get('exitcode')==0:result['exitcode']=0
+        except BaseException as exc:
+            result.update(fehler=str(exc),traceback=traceback.format_exc(),exitcode=1)
+        finally:
+            for path,acl in reversed(saved):
+                try:
+                    restore=command([system/'icacls.exe',path.parent,'/restore',acl,'/Q'])
+                    restored.append(restore.returncode)
+                except BaseException:
+                    restored.append(1)
+            result['acl_restaurierung_exitcodes']=restored
+            if len(restored)!=len(saved) or any(restored):result['exitcode']=1
+    try:
+        code=command([sys.executable,'-B','-c','raise SystemExit(0)']).returncode
+    except OSError:
+        code=1
+    result['externes_python_nach_restaurierung_exitcode']=code
+    if code:result['exitcode']=1
+    report.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    print('Native isolierte Windows-Paketprobe Exit',result['exitcode'])
+    return result['exitcode']
+
+
+if __name__=='__main__':
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--paket',type=Path,required=True)
+    parser.add_argument('--bericht',type=Path,required=True)
+    parser.add_argument('--sperren',type=Path,action='append',required=True)
+    args=parser.parse_args();raise SystemExit(run(args.paket,args.bericht,args.sperren))

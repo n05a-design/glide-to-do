@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import tempfile
+import time
 from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -47,8 +48,8 @@ with tempfile.TemporaryDirectory(prefix="glide-features329-") as folder:
         # ================================================================
         # Vertrag und Typregistrierung
         # ================================================================
-        assert mod.APP_VERSION == "3.38.0"
-        assert app.DATA_SCHEMA_VERSION == 23
+        assert mod.APP_VERSION == "3.42.0"
+        assert app.DATA_SCHEMA_VERSION == 25
         # Seit dem 26.09.2026 kommt die Seitenart „Seite“ hinzu (test_seiten330).
         # 27.09.2026: dazu die Galerie (test_aufraeumen330).
         assert set(app.LIST_KINDS) == {"tasks", "note", "drawing", "page", "gallery"}
@@ -98,7 +99,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features329-") as folder:
         assert app.save_items()
         migrations = list(Path(mod.BACKUP_DIR).glob("liste_vor_format19_*.json"))
         assert len(migrations) == 1 and migrations[0].read_bytes() == old_bytes
-        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 23
+        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 25
 
         # ================================================================
         # Anlage und eingebettete Zeichenseite
@@ -120,20 +121,31 @@ with tempfile.TemporaryDirectory(prefix="glide-features329-") as folder:
         assert app.require_list_view(message=False) is False
         assert app.workspace.context() is None
         # Passt die Fläche hinein, gibt es nichts zu scrollen – keine Leisten,
-        # kein Verrutschen durch Trackpadgesten beim Zeichnen.
-        root.after(150, root.quit)
-        root.mainloop()
-        assert editor.canvas.xview() == (0.0, 1.0) and editor.canvas.yview() == (0.0, 1.0)
+        # kein Verrutschen durch Trackpadgesten beim Zeichnen. Das Einpassen
+        # läuft über verzögerte Aufträge (Kontextzeilen nach 120 ms, Zoom 30 ms
+        # danach); unter Last dauerte das länger als feste 150 ms (Windows-CI
+        # 3.39.0). Gewartet wird bis zum Ruhezustand, die Anforderung bleibt.
+        def warte_bis(bedingung, frist=3.0):
+            """Mindestens die früheren 150 ms warten, dann bis die Bedingung gilt; sonst mit Messwerten scheitern."""
+            ende = time.monotonic() + frist
+            root.after(150, root.quit)
+            root.mainloop()
+            while not bedingung():
+                assert time.monotonic() < ende, (editor.canvas.xview(), editor.canvas.yview(), editor.zoom,
+                                                 editor.canvas.winfo_width(), editor.canvas.winfo_height())
+                root.after(50, root.quit)
+                root.mainloop()
+
+        warte_bis(lambda: editor.canvas.xview() == (0.0, 1.0) and editor.canvas.yview() == (0.0, 1.0))
         # Weder Tabelle noch Pinnwand: Die Seite bleibt die Zeichenfläche.
         app.set_table_view()
         app.workspace.set_mode("board")
         root.update()
         assert app.view_mode == "list" and app.current_drawing_editor() is not None
 
-        # Ohne manuelle Wahl folgt der Zoom der Fläche; danach bleibt er fest.
-        root.after(150, root.quit)
-        root.mainloop()
-        assert editor.zoom * 128 <= min(editor.canvas.winfo_width(), editor.canvas.winfo_height())
+        # Ohne manuelle Wahl folgt der Zoom der Fläche; danach bleibt er fest. Der
+        # Ansichtswechsel ändert die Fläche, das Einpassen folgt verzögert (siehe oben).
+        warte_bis(lambda: editor.zoom * 128 <= min(editor.canvas.winfo_width(), editor.canvas.winfo_height()))
         editor.change_zoom(1)
         assert editor._auto_zoom is False
         # Pinselvorschau = tatsächlich getroffene Zellen, für alle Größen und Zoomstufen.
@@ -495,7 +507,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features329-") as folder:
         finally:
             mod.shutil.copy2 = original_copy
         assert app.save_items()
-        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 23
+        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 25
 
         # Bestehende Tagebuchnotiz aus Format 18 bleibt nach der Normalisierung gleich.
         reference18 = json.loads((ROOT / "tests/fixtures/current_v18/reference_v18.json").read_text(encoding="utf-8"))

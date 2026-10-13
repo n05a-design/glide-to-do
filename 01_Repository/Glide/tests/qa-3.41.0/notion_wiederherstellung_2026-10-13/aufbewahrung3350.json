@@ -1,0 +1,26 @@
+{
+  "commit": "ba060bc5e0074c0f375b6da29b07450ab08b34be",
+  "bytegleich": true,
+  "sha256": {
+    "01_Repository/Glide/tests/qa-3.35.0/austausch_2026-10-09/README.md": "bb8b665bc2e7366063349077ef4076fc6fff36b36f9c6a1d789aa837376a9ea6",
+    "01_Repository/Glide/tests/qa-3.35.0/austausch_2026-10-09/bundle.json": "bed94636efad8d6eb5b7d6e2ba9f0f425b59d34af818e66ce29f0f3814ca7a2f",
+    "01_Repository/Glide/tests/qa-3.35.0/austausch_2026-10-09/voll/ergebnis.json": "629fd0122c4931d7747ce8dbf949e50ece3c6bbaf68daab3176b4fe0733306d3",
+    "01_Repository/Glide/tests/qa-3.35.0/claude_skills_2026-10-10/README.md": "3523d7473fc91d141c0c7a7de2f9585c93bb89b7647c388cdc0f582875b3327d",
+    "01_Repository/Glide/tests/qa-3.35.0/claude_skills_2026-10-10/ci/ergebnis.json": "bec45b43a94c174c97b7056607125e6fc983cddf9de82881d423ef4ac0cc737a",
+    "01_Repository/Glide/tests/qa-3.35.0/dokumentation_2026-10-09/README.md": "7145de3215876f08a2aa0f83ac5cc69ccca4782a6dfbfa10bee5a90f003e55f8",
+    "01_Repository/Glide/tests/qa-3.35.0/dokumentation_2026-10-09/ci/ergebnis.json": "cf8b6b66ab7384f5982b6659eae8ba06d8ea4256b69a751f11c7b868626a68f9",
+    "01_Repository/Glide/tests/qa-3.35.0/native_baseline_2026-10-10/README.md": "c8ad038efcad8f2ecee912efa53ca83b0e66275e3222b0b51f0d10965450e9ae",
+    "01_Repository/Glide/tests/qa-3.35.0/native_baseline_2026-10-10/linux.json": "13c4f7454ebd05f08aaca2885587263312c2e8ee09e2c7a43c6165e6bcff7e05",
+    "01_Repository/Glide/tests/qa-3.35.0/planung_2026-10-09/README.md": "7b95a50411176427b97d1a58d63ea12679889eee0a70fa0de96fef0903abd4da",
+    "01_Repository/Glide/tests/qa-3.35.0/planung_2026-10-09/ci/ergebnis.json": "984d5f89f6aba505c52ea369a462a82a82fa198f17bfe355ecc8b9423fece5c7",
+    "01_Repository/Glide/tests/qa-3.35.0/planung_2026-10-09/ergebnis.json": "aa5eb93242387ddd1e6451902256e4dc0a32e6add6005f58a312db3d7e4f0aa8",
+    "01_Repository/Glide/tests/qa-3.35.0/planung_2026-10-10/README.md": "2a140a4daad23c2372615e31b2ccf799515160d171f4be1ab898cbec6602271a",
+    "01_Repository/Glide/tests/qa-3.35.0/planung_2026-10-10/ci/ergebnis.json": "bdea9c1e8c4dfa065630a86d7fe03c0ba0eb8babeebe1a028e9a8841b198116e",
+    "01_Repository/Glide/tests/qa-3.35.0/planung_2026-10-10/ci_runde_1/ergebnis.json": "d7bd5b26e8559031325f02f2ad53413b22f76ab8103713a052fad80d58db5fe9",
+    "01_Repository/Glide/tests/qa-3.35.0/planung_2026-10-10/ci_vorlauf/ergebnis.json": "41e5daf0812ec82f9b11ef281dedf914f19b4b0e07a6d63c72f1f0f90876a739",
+    "01_Repository/Glide/tests/qa-3.35.0/planung_2026-10-10/ergebnis.json": "bd7a00938a8c72e3b50c3ebd903562a04325cda555f8fcc2942c83371fc5d0d2",
+    "01_Repository/Glide/tests/qa-3.35.0/planung_fortsetzung_2026-10-10/README.md": "70bb83b3d19675c30cbde4422818af3502fac95b7158324775c73eb2c028c08f",
+    "01_Repository/Glide/tests/qa-3.35.0/planung_fortsetzung_2026-10-10/ci/ergebnis.json": "98764a8a1eb2b1a1941c03647a9043ff0cbe3641587b4b7b114177ba0d5313f8",
+    "01_Repository/Glide/tests/qa-3.35.0/planung_fortsetzung_2026-10-10/ergebnis.json": "23f9bda0a567f84a271bef0691d5dee22dc501788350d3dfdd7d24dfb362f986"
+  }
+}

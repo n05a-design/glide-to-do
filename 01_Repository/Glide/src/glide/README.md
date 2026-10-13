@@ -1,6 +1,6 @@
 # Anwendungskern
 
-Stand 11.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
+Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
 
 `app.pyw` ist die kanonische Anwendung (Klasse `ListApp`). Daneben liegen Module, die beim Start aus demselben Ordner geladen werden und beim Kopieren oder Paketieren immer mitgehen:
 
@@ -34,6 +34,18 @@ Stand 11.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · Einstellungen 2 · Vorl
 | `week_planning.py` | Gemeinsame Wochenbilanz und Zeitfenster aus vorhandenen Glide-Blöcken (Tk-frei) |
 | `page_features.py` | Live-Listen, Titelbilder und gefüllte Vorlagenvorschau (Tk-frei) |
 | `repeat_rules.py` | Wiederholungsregeln, Termin überspringen, verpasste Termine überspringen (Tk-frei, KO02) |
+| `repeat_ics.py` | Wiederholung ↔ iCalendar-RRULE: Monatsende-Klemmform in der Ausgabe, strenger Rückweg mit Starttag (Tk-frei, 3.39.1) |
+| `animation.py` | Bildfolge einer Zeichnung: stabile Frame-IDs, gemeinsame und eigene Dauer, Vorschau-Zeitachse, PNG-Spritesheet und -Einzelbilder (Tk-frei, 3.40.0) |
+| `animation_export.py` | Zusammengehörige PNG-/Zeitachsendateien vollständig schreiben oder zurücknehmen (Tk-frei, 3.40.0) |
+| `notion_archive.py` | Notion-Export „Markdown & CSV“ als ZIP begrenzt lesen: Seiten, Unterseiten, Bilder/Anhänge, Verluste; ohne Entpacken (Tk-frei, 3.41.0) |
+| `notion_import.py` | Ausdrücklich gewählte Notion-Seiten planen: Texte, Listen, Aufgaben-Kästchen, interne Verweise, Verlustbericht (Tk-frei, 3.41.0) |
+| `notion_reimport.py` | Erneuter Export: unverändert/neu/geändert/lokal geändert über Quellenschlüssel und Inhaltsfingerabdruck (Tk-frei, 3.41.0) |
+| `notion_hierarchy.py` | Unterseiten in bestehende Glide-Ordner und Seiten einordnen (Tk-frei, 3.41.0) |
+| `source_metadata.py` | Notion-Quellenzuordnungen beim Lesen, Kopieren, Wiederherstellen und Verlegen von Anhängen erhalten (Tk-frei, 3.41.0) |
+| `page_restore.py` | Einzelne Seite aus einer Sicherung vergleichen und die Wiederherstellung planen; fehlende Ziele vorab (Tk-frei, 3.41.0) |
+| `restore_assets.py` | Anhänge einer Seitenwiederherstellung neu ablegen, ohne Bestandsmutation (Tk-frei, 3.41.0) |
+| `backup_snapshot.py` | Unveränderliche Sicherungsquelle zwischen Vorschau und Übernahme (Tk-frei, 3.41.0) |
+| `attachment_paths.py` | Portable flache Anhangspfade prüfen (Tk-frei, 3.41.0) |
 | `routines.py` | Routinen in „Heute“: Auswahl, Fortschritt, heute erledigt (Tk-frei, AU06) |
 | `runtime_check.py` | Mindestversion Python/Tk vor dem Start, in einfacher Syntax (AB08) |
 | `release_notes.py` | Katalog und Regeln der Karte „Neu in …“ (Tk-frei, N07) |
@@ -47,6 +59,15 @@ Stand 11.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · Einstellungen 2 · Vorl
 | `symbol_policy.py` | Vollständige Symbolauswahl nach tatsächlicher UI-Schriftabdeckung und lesbare Text-Rückfälle (Tk-frei) |
 | `motion.py` | Unterbrechbare zeitgesteuerte Übergänge mit vollständigem Abbau (Tk-frei) |
 | `task_editing.py` | Feldvertrag, Dreiwegevergleich und verständliche Bearbeitungskonflikte (Tk-frei) |
+| `daily_hints.py` | Optionale Tageshinweise, verpasste Tage, Später/Überspringen und persistente Zustellbelege ohne Tk |
+| `ics_recurrence.py` | Begrenzte tägliche/wöchentliche/monatliche/jährliche Serien ohne Tk |
+| `occupied_time.py` | Vereinigung belegter Zeit und lokale Tages-/Rasterprojektion ohne Tk |
+| `ics_busy.py` | Rein lesende lokale ICS-Belegzeiten, Ausnahmen und sichtbare Verlustmeldungen ohne Tk |
+| `ics_timezone.py` | Eingebettete ICS-Zeitzonen einschließlich Sommerzeit ohne Tk |
+| `timezones.py` | Gebündelte IANA-Zeitzonen und CLDR-Windows-Zuordnung ohne Systemänderung und Tk |
+| `day_relief.py` | Explizite Mehrfach-Umplanung mit gemeinsamem Kapazitätsvergleich und Konfliktschutz ohne Tk |
+| `busy_calendar.py` | Gemeinsamer Belegzeitenvertrag, Dateigrenzen, unbekannte Zustände und Quellenkonfiguration ohne Tk |
+| `calendar_service.py` | Begrenzter asynchroner Kalenderleser mit Generationsschutz und Lebensdauer ohne Tk |
 
 Die Tk-freien Fachmodule entstehen nach D17 und haben Unit-Tests unter `tests/unit`. `drawing_prototype.pyw` ist die isolierte Bedienprobe der Zeichenfläche und gehört nicht zur App.
 

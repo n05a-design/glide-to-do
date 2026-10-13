@@ -1,0 +1,227 @@
+{
+  "runtime": {
+    "python": "3.14.5",
+    "tcl": "9.0.3",
+    "tk_compiled": "9.0",
+    "platform": "darwin",
+    "machine": "arm64",
+    "pyinstaller": "6.22.3"
+  },
+  "components": [
+    {
+      "name": "PyInstaller",
+      "version": "6.22.3",
+      "source": "https://pypi.org/project/pyinstaller/6.22.3/",
+      "files": {
+        "pyinstaller-COPYING.txt": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+      }
+    },
+    {
+      "name": "PyInstaller-Hooks",
+      "version": "2026.8",
+      "source": "https://pypi.org/project/pyinstaller-hooks-contrib/2026.8/",
+      "files": {
+        "pyinstaller-hooks-contrib-LICENSE": "91d0baaff00773038e72c0a1fc9d5d2d38706b7a2b9c04f34296608f931b9cd0"
+      }
+    },
+    {
+      "name": "altgraph",
+      "version": "0.17.5",
+      "source": "https://pypi.org/project/altgraph/0.17.5/",
+      "files": {
+        "altgraph-LICENSE": "6c194d6db0c64d45535d10c95142b9b0cda7b7dcc7f1ddee302b3d536f3dbe46"
+      }
+    },
+    {
+      "name": "macholib",
+      "version": "1.16.4",
+      "source": "https://pypi.org/project/macholib/1.16.4/",
+      "files": {
+        "macholib-LICENSE": "47082ab2bc0184123ec9f10fdf80c70723ee68f07d44382e17615c2a6ba70b09"
+      }
+    },
+    {
+      "name": "packaging",
+      "version": "26.3",
+      "source": "https://pypi.org/project/packaging/26.3/",
+      "files": {
+        "packaging-LICENSE": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+        "packaging-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "packaging-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5"
+      }
+    },
+    {
+      "name": "setuptools",
+      "version": "84.0.0",
+      "source": "https://pypi.org/project/setuptools/84.0.0/",
+      "files": {
+        "setuptools-LICENSE": "5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d",
+        "setuptools-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "setuptools-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+        "setuptools-LICENSE.txt": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+      }
+    },
+    {
+      "name": "Python",
+      "version": "3.14.5",
+      "source": "https://github.com/python/cpython/tree/v3.14.5",
+      "files": {
+        "Python-LICENSE.txt": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+        "Python-THIRD-PARTY-NOTICES.rst": "c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd"
+      }
+    },
+    {
+      "name": "Tcl",
+      "version": "9.0.3",
+      "source": "https://github.com/tcltk/tcl/tree/core-9-0-3",
+      "files": {
+        "Tcl-LICENSE.txt": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16"
+      }
+    },
+    {
+      "name": "Tk",
+      "version": "9.0.3",
+      "source": "https://github.com/tcltk/tk/tree/core-9-0-3",
+      "files": {
+        "Tk-LICENSE.txt": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198"
+      }
+    },
+    {
+      "name": "libtommath",
+      "version": "aus Tcl 9.0.3 bcd73c5cf807577f93f890c0efdd577b14a66418",
+      "source": "https://github.com/tcltk/tcl/tree/bcd73c5cf807577f93f890c0efdd577b14a66418/libtommath",
+      "files": {
+        "libtommath-LICENSE.txt": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a"
+      }
+    },
+    {
+      "name": "Henry-Spencer-Regex",
+      "version": "aus Tcl 9.0.3 bcd73c5cf807577f93f890c0efdd577b14a66418",
+      "source": "https://github.com/tcltk/tcl/blob/bcd73c5cf807577f93f890c0efdd577b14a66418/generic/regcustom.h",
+      "files": {
+        "Henry-Spencer-Regex-LICENSE.txt": "8efb2d7215828acd974545d4177cadc7239d676c9a2c1a9834cab33efe9967fe"
+      }
+    },
+    {
+      "name": "NanoSVG",
+      "version": "Tk 9.0.3 72e252081cb8d1633757b62d7bdbc3d9aa39578e",
+      "source": "https://github.com/tcltk/tk/tree/72e252081cb8d1633757b62d7bdbc3d9aa39578e/generic",
+      "files": {
+        "nanosvg.h-LICENSE.txt": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818",
+        "nanosvgrast.h-LICENSE.txt": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9"
+      }
+    },
+    {
+      "name": "Glide",
+      "version": "Entwicklungsstand; öffentliche Lizenz offen",
+      "source": "LICENSE.md",
+      "files": {
+        "Glide-Lizenzstatus.md": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e"
+      }
+    },
+    {
+      "name": "tkinterdnd2",
+      "version": "0.6.3",
+      "source": "https://pypi.org/project/tkinterdnd2/0.6.3/",
+      "files": {
+        "tkinterdnd2-LICENSE": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05"
+      }
+    },
+    {
+      "name": "tkdnd",
+      "version": "2.10.2",
+      "source": "https://pypi.org/project/tkinterdnd2/0.6.3/; unveränderter Kommentarblock aus tkdnd.tcl",
+      "files": {
+        "tkdnd-LICENSE.txt": "3e752e3d3d249387b477e79e2566dfd076b706175129a1edee395ff66dad2641"
+      }
+    },
+    {
+      "name": "Glide-Schriften",
+      "version": "DejaVu 2.37 / Pixelify Sans 39df74a",
+      "source": "resources/fonts/provenance.json",
+      "files": {
+        "DejaVu-LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+        "PixelifySans-OFL.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+      }
+    },
+    {
+      "name": "OpenSSL",
+      "version": "3.0.20",
+      "source": "https://github.com/openssl/openssl/tree/openssl-3.0.20",
+      "files": {
+        "OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+      }
+    },
+    {
+      "name": "Zstandard",
+      "version": "1.5.7",
+      "source": "https://github.com/facebook/zstd/tree/v1.5.7",
+      "files": {
+        "Zstandard-LICENSE.txt": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+      }
+    },
+    {
+      "name": "liblzma",
+      "version": "5.2.3",
+      "source": "https://github.com/tukaani-project/xz/tree/v5.2.3",
+      "files": {
+        "XZ-COPYING.txt": "c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8"
+      }
+    },
+    {
+      "name": "SQLite",
+      "version": "3.50.4",
+      "source": "https://www.sqlite.org/copyright.html",
+      "files": {
+        "SQLite-Copyright.html": "44ca9f793055c8e32fc65f65a4f5bcf813a33f5bdaaa084067dd617a4ed3cc70"
+      }
+    },
+    {
+      "name": "libmpdec",
+      "version": "4.0.0",
+      "source": "https://github.com/python/cpython/blob/v3.14.5/Doc/license.rst",
+      "files": {
+        "Python-THIRD-PARTY-NOTICES.rst": "c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd"
+      }
+    },
+    {
+      "name": "IANA-Zeitzonen",
+      "version": "2026e",
+      "source": "https://data.iana.org/time-zones/releases/tzdata2026e.tar.gz",
+      "files": {
+        "IANA-LICENSE.txt": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf"
+      }
+    },
+    {
+      "name": "Unicode-CLDR",
+      "version": "48.2",
+      "source": "https://github.com/unicode-org/cldr/tree/release-48-2",
+      "files": {
+        "CLDR-LICENSE.txt": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b"
+      }
+    }
+  ],
+  "downloads": [
+    {
+      "source": "https://raw.githubusercontent.com/openssl/openssl/openssl-3.0.20/LICENSE.txt",
+      "file": "OpenSSL-LICENSE.txt",
+      "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+    },
+    {
+      "source": "https://raw.githubusercontent.com/facebook/zstd/v1.5.7/LICENSE",
+      "file": "Zstandard-LICENSE.txt",
+      "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+    },
+    {
+      "source": "https://raw.githubusercontent.com/tukaani-project/xz/v5.2.3/COPYING",
+      "file": "XZ-COPYING.txt",
+      "sha256": "c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8"
+    },
+    {
+      "source": "https://www.sqlite.org/copyright.html",
+      "file": "SQLite-Copyright.html",
+      "sha256": "44ca9f793055c8e32fc65f65a4f5bcf813a33f5bdaaa084067dd617a4ed3cc70"
+    }
+  ],
+  "abnahme": "Vorbereiteter Lizenzbestand; Zuordnung zur tatsächlichen Binärmenge und isolierter Start offen"
+}

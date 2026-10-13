@@ -54,8 +54,8 @@ with tempfile.TemporaryDirectory(prefix='glide-seiten18-') as directory:
         for job in root.tk.call('after','info'): root.tk.call('after','cancel',job)
         root.destroy()
     try:
-        assert app.DATA_SCHEMA_VERSION == 23
-        assert json.loads(Path(mod.SAVE_FILE).read_text())['version'] == 23
+        assert app.DATA_SCHEMA_VERSION == 25
+        assert json.loads(Path(mod.SAVE_FILE).read_text())['version'] == 25
         backups = list(Path(mod.BACKUP_DIR).glob('liste_vor_format23_*.json'))
         assert len(backups) == 1 and backups[0].read_bytes() == original
         checks.append('Format 22 → 23, bytegenaue Vorsicherung')
@@ -136,7 +136,11 @@ with tempfile.TemporaryDirectory(prefix='glide-seiten18-') as directory:
         assert snapshot['document'] == entry(did)['drawing']
         changed_drawing = mod.glide_drawing.DrawingModel.from_document(entry(did)['drawing'])
         changed_drawing.set_cell(0, 0, '#FF0000')
-        entry(did)['drawing'] = changed_drawing.to_document()
+        # Seit Format 24 trägt eine Zeichnung ihre Bildfolge; das erste Bild
+        # ändert beide Felder gemeinsam.
+        sequence = mod.glide_animation.from_entry(entry(did))
+        sequence.replace_model(sequence.frames[0].id, changed_drawing)
+        entry(did).update(mod.glide_animation.entry_fields(sequence))
         assert entry(pid)['cover'] == snapshot
         app.undo_last_change(); idle(); assert entry(pid)['cover']['kind'] == 'image'
         checks.append('Bilddatei bytegleich, native Vorschau, Pixelzeichnung als unabhängiges Titelbild, Undo und Speicherfehler ohne Dateireste')
@@ -145,7 +149,7 @@ with tempfile.TemporaryDirectory(prefix='glide-seiten18-') as directory:
         assert duplicate['items'] == []
         app.undo_last_change(); idle()
         copied = copy.deepcopy([entry(sid),entry(pid)])
-        app.prepare_additive_import(copied,[],[]); mapping = app._additive_import_maps
+        copied, _folders, _labels = app.prepare_additive_import(copied,[],[]); mapping = app._additive_import_maps
         copy_page = next(e for e in copied if e['id'] == mapping['containers'][pid])
         assert copy_page['live_lists'] == [mod.glide_objects.uri('list',mapping['containers'][sid])]
         app.remap_import_attachments(copied)

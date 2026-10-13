@@ -1,0 +1,16 @@
+{
+  "release": "2026e",
+  "source": "https://data.iana.org/time-zones/releases/tzdata2026e.tar.gz",
+  "source_sha256": "b26882805f26aac59d5b222978e6580484b834ccdc98be89df2f05a6dc53a652",
+  "compiler": "macOS /usr/sbin/zic -b slim",
+  "zones": 597,
+  "archive_sha256": "8754618b5e58bce763865aa1a748fe5d0f15908cae586ed45d929c9839b710e9",
+  "windowsZones.xml": {
+    "source": "https://raw.githubusercontent.com/unicode-org/cldr/release-48-2/common/supplemental/windowsZones.xml",
+    "sha256": "9cf3db6a31fb382fee21b70be6feba1e82766b0fcd06e6261fb7936a73e537ff"
+  },
+  "LICENSE-CLDR.txt": {
+    "source": "https://raw.githubusercontent.com/unicode-org/cldr/release-48-2/LICENSE",
+    "sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b"
+  }
+}

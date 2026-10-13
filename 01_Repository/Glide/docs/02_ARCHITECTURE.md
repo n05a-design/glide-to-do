@@ -1,12 +1,12 @@
 # Architektur – Glide
 
-Stand 11.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
+Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
 
 Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, Performance-Regeln und die teuer gelernten Tk-Fallstricke. Zusammengeführt aus Architektur, Projektübergabe, Entwicklungsnotizen und den technischen Teilen der Funktionsverträge 45–79 (03.10.2026); die Vorfassungen trägt Git. Verhalten der Funktionen: [Funktionen](20_FUNKTIONEN.md). Datenformat: [Daten und Migration](06_DATA_BACKUP_MIGRATION.md).
 
 ## 1. Aufbau
 
-- **Laufzeit:** Python 3.14 mit Tk 9 ist die Referenz. Aktuell geprüft: Referenz-Mac 3.35.0 mit Python 3.14.5/Tk 9.0.3 (automatische Vollprüfung, Bundle 3.35.0) und Windows 3.33.18 mit Python 3.14.7/Tk 9.0.4; Linux und menschliche Abnahme offen ([QA-Bericht](07_QA_BERICHT.md)). Python 3.12/3.13 mit Tk 8.6 starten, sind aber eingeschränkt: keine `nsimage`- und SVG-Vorschauen, keine Systemmitteilungen über `tk sysnotify`, Logo nur als ungeglättete Fläche, App-Symbol ungefiltert verkleinert; Herkunftszelle in Heute ohne eigene gedämpfte Textfarbe. Ältere Laufzeiten (Python vor 3.12, Tk vor 8.6) weist `runtime_check.py` seit 3.33.20 vor jedem Datenzugriff mit einer Meldung ab (AB08).
+- **Laufzeit:** Python 3.14 mit Tk 9 ist die Referenz. Referenz-Mac mit Python 3.14.5/Tk 9.0.3, native Windows-Prüfung mit Tk 9.0.4, Linux/Xvfb mit Tk 8.6; welche Version auf welcher Plattform automatisch vollgeprüft ist, steht ausschließlich im [QA-Bericht](07_QA_BERICHT.md). Menschliche Abnahme offen. Python 3.12/3.13 mit Tk 8.6 starten, sind aber eingeschränkt: keine `nsimage`- und SVG-Vorschauen, keine Systemmitteilungen über `tk sysnotify`, Logo nur als ungeglättete Fläche, App-Symbol ungefiltert verkleinert; Herkunftszelle in Heute ohne eigene gedämpfte Textfarbe. Ältere Laufzeiten (Python vor 3.12, Tk vor 8.6) weist `runtime_check.py` seit 3.33.20 vor jedem Datenzugriff mit einer Meldung ab (AB08).
 - **Kanonischer Quellbaum:** `src/glide/`. `app.pyw` enthält die Klasse `ListApp`, die Daten, Ansichten und Dialoge koordiniert. Seit D17 entsteht jede neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests unter `tests/unit`; `ListApp` ruft sie auf.
 - **Startbare Kopie:** `07_Python-Versionen` (bytegleich zu `src/glide`, `glide_start.py` heißt dort `Schnellstart.pyw`) und das macOS-Entwicklungsbundle `build/macos/Glide.app` (lokal, nicht versioniert). Beide entstehen nur in einer Produktionsrunde über `scripts/pflege/abgleich_07.py` und `packaging/macos/baue_app.py` mit SHA-256-Abgleich.
 - **Keine Laufzeitabhängigkeit** außer der Standardbibliothek. Einzige mitgelieferte Bibliothek: tkinterdnd2 unter `src/glide/vendor` (optional, beim ersten Ziehen aus Finder/Explorer geladen; [Entscheidung](decisions/ABHAENGIGKEIT_TKDND.md)).
@@ -57,8 +57,33 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 | `symbol_policy.py` | Vollständige Symbolauswahl nach tatsächlicher UI-Schriftabdeckung und lesbare Text-Rückfälle (Tk-frei) | 3.37.0 |
 | `motion.py` | Unterbrechbare zeitgesteuerte Übergänge mit vollständigem Abbau (Tk-frei) | 3.38.0 |
 | `task_editing.py` | Feldvertrag, Dreiwegevergleich und verständliche Bearbeitungskonflikte (Tk-frei) | 3.38.0 |
+| `daily_hints.py` | Optionale Tageshinweise, verpasste Tage, Später/Überspringen und persistente Zustellbelege ohne Tk | 3.39.0 |
+| `ics_recurrence.py` | Begrenzte tägliche/wöchentliche/monatliche/jährliche Serien ohne Tk | 3.39.0 |
+| `occupied_time.py` | Vereinigung belegter Zeit und lokale Tages-/Rasterprojektion ohne Tk | 3.39.0 |
+| `ics_busy.py` | Rein lesende lokale ICS-Belegzeiten, Ausnahmen und sichtbare Verlustmeldungen ohne Tk | 3.39.0 |
+| `ics_timezone.py` | Eingebettete ICS-Zeitzonen einschließlich Sommerzeit ohne Tk | 3.39.0 |
+| `timezones.py` | Gebündelte IANA-Zeitzonen und CLDR-Windows-Zuordnung ohne Systemänderung und Tk | 3.39.0 |
+| `day_relief.py` | Explizite Mehrfach-Umplanung mit gemeinsamem Kapazitätsvergleich und Konfliktschutz ohne Tk | 3.39.0 |
+| `busy_calendar.py` | Gemeinsamer Belegzeitenvertrag, Dateigrenzen, unbekannte Zustände und Quellenkonfiguration ohne Tk | 3.39.0 |
+| `calendar_service.py` | Begrenzter asynchroner Kalenderleser mit Generationsschutz und Lebensdauer ohne Tk | 3.39.0 |
+| `repeat_ics.py` | Glide-Wiederholung ↔ iCalendar-RRULE: Monats-/Jahresreihen ab dem 29. als BYSETPOS-Klemmform wie in Glide, Rückweg nur bei gleicher Terminfolge (Tk-frei, A28) | 3.39.1 |
+| `animation.py` | Bildfolge einer Zeichnung: stabile Frame-IDs, gemeinsame und eigene Dauer, Vorschau-Zeitachse, pixelgenaue PNG-Ausgabe (Tk-frei, D18) | 3.40.0 |
+| `animation_export.py` | Zusammengehörige PNG-/Zeitachsendateien mit rückrollbarem Austausch (Tk-frei) | 3.40.0 |
+| `notion_archive.py` | Notion-Export „Markdown & CSV“ als ZIP begrenzt lesen: Seiten, Unterseiten, Bilder/Anhänge, Verluste; ohne Entpacken (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `notion_import.py` | Ausdrücklich gewählte Notion-Seiten planen: Texte, Listen, Aufgaben-Kästchen, interne Verweise, Verlustbericht (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `notion_reimport.py` | Erneuter Export: unverändert/neu/geändert/lokal geändert über Quellenschlüssel und Inhaltsfingerabdruck (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `notion_hierarchy.py` | Unterseiten in bestehende Glide-Ordner und Seiten einordnen (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `source_metadata.py` | Notion-Quellenzuordnungen beim Lesen, Kopieren, Wiederherstellen und Verlegen von Anhängen erhalten (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `page_restore.py` | Einzelne Seite aus einer Sicherung vergleichen und die Wiederherstellung planen; fehlende Ziele vorab (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `restore_assets.py` | Anhänge einer Seitenwiederherstellung neu ablegen, ohne Bestandsmutation (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `backup_snapshot.py` | Unveränderliche Sicherungsquelle zwischen Vorschau und Übernahme (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `attachment_paths.py` | Portable flache Anhangspfade prüfen (Tk-frei, D26/D37/D39) | 3.41.0 |
 
 `drawing_prototype.pyw` ist die isolierte Bedienprobe der Zeichenfläche von 2026-09-24; sie gehört nicht zur App und nicht zu den Lieferwegen. Ein neues Modul muss in `packaging/macos/baue_app.py`, `scripts/pflege/abgleich_07.py`, `src/glide/README.md`, `packaging/README.md`, `07_Python-Versionen/README.md` und hier stehen; die Standprüfung (R10) meldet Lücken.
+
+### Eigenständige Pakete
+
+`packaging/paket/baue_paket.py` erstellt native Entwicklungsartefakte mit fest gepinntem PyInstaller 6.22.3. `package_sources.py` erfasst reale Module und plattformspezifische Ressourcen; `compiled_contract.py` vergleicht ihre kompilierten Codeobjekte mit dem PYZ-Archiv. `license_contract.py`, Mach-O-/PE-Prüfer und native Startproben prüfen die tatsächliche Laufzeit, Bibliotheksanbieter und Lizenztexte. Der Bootstrap setzt für die Paketprobe `GLIDE_DATA_DIR` vor dem Import auf künstliche Daten und startet regulär dieselbe Anwendung. Kein neues Datenformat und keine neue Fachlogik im Bootstrap. Details und Aufrufe: [Paketierung](../packaging/README.md).
 
 ## 2. Nutzdaten und Speicherweg
 
@@ -84,7 +109,7 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 - **Feste Bestandteile:** Werkzeuge einer Ansicht gehören in `tool_band_host()`, ihr Hinweis in `surface_hint_text()`; `sync_tool_band` hält die Oberkante, `sync_card_foot` den Kartenfuß (Hinweis oder Auswahlleiste) bis zur Unterkante. Keine andere Stelle blendet sie aus. `test_festlayout330` und `test_kartenfuss330` messen es.
 - Zeichnung und Galerie sind Flächenlisten (`is_surface_list`): keine Punkte, keine Tabelle, keine Pinnwand; `hide_drawing_chrome` blendet Eingabe, Suche und Aufgabenbaum aus.
 - **Kleine Fenster** (Mindestgröße 860 × 700): `height_density` staffelt nach Höhe, `header_density` nach Breite; Knöpfe der Suchzeile werden vor `search_row_anchor()` gepackt. Jedes neue Bedienelement braucht eine Antwort, was bei Mindestgröße mit ihm geschieht (`test_mindestgroesse330`).
-- **Kopfzeile:** Neue Knöpfe gehören in die Reihe von `pack_header_controls`, nie in ein eigenes `pack()`. Das Logo hängt nur an der Breite.
+- **Kopfzeile:** Kopfaktionen gehören in die Reihe von `pack_header_controls`, nie in ein eigenes `pack()`. Die vier beschrifteten Windows-Menüs stehen innerhalb von `title_row`; ihre Breite geht in die Titelkürzung ein, die Statuszeile bleibt davon frei. Das Logo hängt nur an der Breite.
 
 ### Bausteine
 

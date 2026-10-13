@@ -28,10 +28,10 @@ on:
   workflow_dispatch:
     inputs:
       bereich:
-        description: "Vollständige Matrix oder gezielte Windows-Layoutdiagnose"
+        description: "Vollständige Matrix oder gezielte Windows-UI-Diagnose"
         type: choice
         default: voll
-        options: [voll, aufgaben-layout]
+        options: [voll, aufgaben-layout, tagesdialoge]
 
 permissions:
   contents: read
@@ -46,7 +46,7 @@ env:
 
 jobs:
   grundstufe:
-    if: github.event_name != 'workflow_dispatch' || github.event.inputs.bereich != 'aufgaben-layout'
+    if: github.event_name != 'workflow_dispatch' || (github.event.inputs.bereich == '' || github.event.inputs.bereich == 'voll')
     name: Grundstufe (Linux, Python 3.14, Tk 8.6)
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -80,7 +80,7 @@ jobs:
   integrationssuiten-linux:
     name: Vollprüfung (Linux/Xvfb, Python 3.14, Tk 8.6)
     needs: grundstufe
-    if: always() && !cancelled() && github.event.inputs.bereich != 'aufgaben-layout'
+    if: always() && !cancelled() && (github.event.inputs.bereich == '' || github.event.inputs.bereich == 'voll')
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     defaults:
@@ -117,7 +117,7 @@ jobs:
   vollpruefung-windows:
     name: Vollprüfung (Windows x64, Python 3.14)
     needs: integrationssuiten-linux
-    if: always() && !cancelled() && github.event.inputs.bereich != 'aufgaben-layout'
+    if: always() && !cancelled() && (github.event.inputs.bereich == '' || github.event.inputs.bereich == 'voll')
     runs-on: windows-2025
     timeout-minutes: 180
     defaults:
@@ -152,9 +152,74 @@ jobs:
           retention-days: 14
           if-no-files-found: ignore
 
+  paket-windows:
+    # Paket 7 (D27): eigenständiges Entwicklungspaket ohne installiertes Python.
+    # Unsigniertes Entwicklungsartefakt; Integrität über Paket- und Quellhashes.
+    name: Eigenständiges Paket (Windows x64, PyInstaller 6.22.3)
+    needs: vollpruefung-windows
+    if: success() && (github.event.inputs.bereich == '' || github.event.inputs.bereich == 'voll')
+    runs-on: windows-2025
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: 01_Repository/Glide/packaging/paket
+    steps:
+      - name: Lange Git-Pfade zulassen
+        working-directory: ${{ github.workspace }}
+        run: git config --global core.longpaths true
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        id: python
+        with:
+          python-version: "3.14"
+          architecture: x64
+      - name: Gepinnte Bauabhängigkeiten in eigener Umgebung
+        run: |
+          New-Item -ItemType Directory -Force "$env:RUNNER_TEMP/paket" | Out-Null
+          python -m venv "$env:RUNNER_TEMP/bau-venv"
+          & "$env:RUNNER_TEMP/bau-venv/Scripts/python.exe" -m pip install --disable-pip-version-check -r ../../requirements/build-windows.txt
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & "$env:RUNNER_TEMP/bau-venv/Scripts/python.exe" -m pip freeze --all > "$env:RUNNER_TEMP/paket/bauabhaengigkeiten.txt"
+      - name: Lizenzbestand aus der Baulaufzeit
+        run: |
+          & "$env:RUNNER_TEMP/bau-venv/Scripts/python.exe" -B lizenzen_vorbereiten_windows.py --quelle ../../src/glide --repo ../.. --ziel "$env:RUNNER_TEMP/paket/lizenzen"
+          exit $LASTEXITCODE
+      - name: Nativer Paketbau
+        run: |
+          $version = (Get-Content ../../VERSION -Raw).Trim()
+          & "$env:RUNNER_TEMP/bau-venv/Scripts/python.exe" -B baue_paket.py --quelle ../../src/glide --version $version --ziel "$env:RUNNER_TEMP/paket/bau" --plattform windows-x64 --lizenzen "$env:RUNNER_TEMP/paket/lizenzen"
+          exit $LASTEXITCODE
+      - name: Isolierte Startprobe ohne externes Python
+        run: |
+          $python = Split-Path -Parent "${{ steps.python.outputs.python-path }}"
+          python -B pruefe_start_windows.py --paket "$env:RUNNER_TEMP/paket/bau/dist/Glide" --bericht "$env:RUNNER_TEMP/paket/startprobe.json" --sperren $python --sperren "$env:RUNNER_TEMP/bau-venv" --sperren "$env:RUNNER_TEMP/paket/bau/quelle" --sperren "$env:GITHUB_WORKSPACE"
+          exit $LASTEXITCODE
+      - name: Bau- und Startbelege sichern
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: paket-windows-belege
+          path: |
+            ${{ runner.temp }}/paket/*.json
+            ${{ runner.temp }}/paket/*.txt
+            ${{ runner.temp }}/paket/lizenzen/manifest.json
+            ${{ runner.temp }}/paket/bau/*.json
+            ${{ runner.temp }}/paket/bau/bau.log
+          retention-days: 14
+          if-no-files-found: ignore
+      - name: Paket sichern (unsigniertes Entwicklungsartefakt)
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: paket-windows-glide
+          path: ${{ runner.temp }}/paket/bau/dist/Glide
+          retention-days: 14
+
   aufgaben-layout-windows:
-    name: Aufgabenlayout-Diagnose (Windows x64, Python 3.14)
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.bereich == 'aufgaben-layout'
+    name: UI-Diagnose (Windows x64, Python 3.14)
+    if: github.event_name == 'workflow_dispatch' && (github.event.inputs.bereich == 'aufgaben-layout' || github.event.inputs.bereich == 'tagesdialoge')
     runs-on: windows-2025
     timeout-minutes: 20
     defaults:
@@ -176,9 +241,21 @@ jobs:
           tzutil /s "W. Europe Standard Time"
           python -B tests/tools/windows_desktop.py --breite 1920 --hoehe 1080 --protokoll "$env:RUNNER_TEMP/layout/windows-desktop.json"
       - name: Unveränderte Flächenkriterien mit Einzelmessungen
+        if: github.event.inputs.bereich == 'aufgaben-layout'
         run: |
           New-Item -ItemType Directory -Force "$env:RUNNER_TEMP/layout" | Out-Null
           python -B tests/integration/test_aufgaben3380.py --fall flaeche *> "$env:RUNNER_TEMP/layout/aufgabenlayout.log"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          foreach ($suite in @("test_mindestgroesse330", "test_titel33312", "test_planen33313")) {
+            python -B "tests/integration/$suite.py" *> "$env:RUNNER_TEMP/layout/$suite.log"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+          exit $LASTEXITCODE
+      - name: Tagesdialoge mit unveränderten Geometriekriterien
+        if: github.event.inputs.bereich == 'tagesdialoge'
+        run: |
+          New-Item -ItemType Directory -Force "$env:RUNNER_TEMP/layout" | Out-Null
+          python -B tests/integration/test_tag3390.py --fall dialoge --report "$env:RUNNER_TEMP/layout/tagesdialoge.json" *> "$env:RUNNER_TEMP/layout/tagesdialoge.log"
           exit $LASTEXITCODE
       - name: Diagnosen sichern
         if: always()

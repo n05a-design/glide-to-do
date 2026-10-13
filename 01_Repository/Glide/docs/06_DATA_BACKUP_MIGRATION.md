@@ -1,8 +1,8 @@
 # Daten, Backups und Migration – Glide
 
-Stand 11.10.2026 · Glide 3.38.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2 · Austauschformat 1 (Änderungsvorschläge 2)
+Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
 
-Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag 52) ergänzt und um die Verweise auf gelöschte Einzelverträge bereinigt; die Vorfassungen trägt Git. Formate 4–23 und Legacy 2 bleiben lesbar.
+Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag 52) ergänzt und um die Verweise auf gelöschte Einzelverträge bereinigt; die Vorfassungen trägt Git. Formate 4–25 und Legacy 2 bleiben lesbar.
 
 ## Ablage
 
@@ -18,6 +18,20 @@ Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag
 - Der Datenordner liegt außerhalb des Programms. `GLIDE_DATA_DIR` hat Vorrang (Tests), sonst Plattformstandard und optional `datenordner.json`. Ein Wechsel kopiert in ein leeres Ziel oder öffnet einen vorhandenen Bestand; die Quelle bleibt.
 - `glide.lock` verhindert gleichzeitiges Schreiben zweier Instanzen; erkannte Fremdbelegung verhindert Speichern. Die Sperre ersetzt keinen Synchronisationsdienst.
 - Gespeichert wird sofort und atomar (Temporärdatei, `replace_with_retry`; unter Windows bis 1,5 s Warten bei Dateisperren). Liegengebliebene `.glide-json-*.tmp`, älter als zehn Minuten, räumt der Start auf.
+
+## Format 25
+
+Seit 3.41.0 tragen aus Notion übernommene Seiten `notion_source` (Version 1): `key` (`notion:` mit 32 Hexzeichen aus dem Dateinamen oder `path:` mit SHA-256 des Archivpfads), `target_id` (die Glide-Seite), `source_hash` (Inhalt der Quelle), `local_hash` (übernommener Glide-Stand) und `source_path` (relativer Archivpfad ohne `..`, Laufwerk oder Steuerzeichen). Ordner für Unterseiten tragen `notion_source_key`. Jede Quelle gehört zu genau einer lebenden Seite; Kopien und Duplikate erhalten keine Zuordnung, Papierkorb und Wiederherstellung behalten sie. Unbekannte oder widersprüchliche Zuordnungen werden abgewiesen.
+
+Vor dem ersten Format-25-Schreiben wird die alte Datei unverändert nach `liste_vor_format25_*.json` kopiert; ein Kopierfehler verhindert das Schreiben. Die unveränderte 3.40.0 (Format 24) öffnet Format 25 schreibgeschützt. Ein Bestand mit Format 24 darf keine Zuordnungsfelder tragen. Der Referenzbestand `tests/fixtures/current_v25/reference_v25.json` enthält eine zugeordnete Seite und einen Ordner. Seitenwiederherstellung und Notion-Import legen vor der Übernahme eine vollständige Sicherung `vor_seitenrestore_*.glidebackup` bzw. eine Vorsicherung an. Migrations-, Altleser- und Schreibproben in `test_import3410.py`.
+
+## Format 24
+
+Seit 3.40.0 tragen Zeichnungsseiten `animation` im Dokumentformat `glide.animation` Version 1: quadratische Fläche 16/32/64/128, gemeinsame `duration_ms` und 1–120 Bilder (`frames`) mit eindeutiger stabiler `id`, `drawing` und optionaler eigener `duration_ms`. Dauern sind ganze 20–60.000 ms; alle Bilder haben dieselbe Fläche. Das vorhandene Feld `drawing` enthält das erste Bild als statische Vorschau; ein Widerspruch oder eine beschädigte Folge wird abgewiesen und nie durch eine leere Zeichnung ersetzt.
+
+Alte Zeichnungen werden verlustfrei zu einem Bild. Kopie, Papierkorb, Rückgängig/Wiederholen, Verlauf, Sicherungen, Vorlagen und normalisierte Bestände erhalten die vollständige Folge; Bildcache und Startseite erkennen auch Änderungen an späteren Bildern und Dauern. Der Zeichenverlauf bleibt je Bild getrennt, ein Struktur-Rückgängig holt die ganze Folge zurück. Zwischenstandsanhänge enthalten eine vollständige `glide.animation`; bisherige `glide.drawing`-Anhänge bleiben lesbar. Austausch-Erstellen 2 bewahrt Bildfolgen, Erstellen 1 bleibt lesbar; Änderungsvorschläge bleiben Version 2.
+
+Vor dem ersten Format-24-Schreiben wird die alte Datei unverändert nach `liste_vor_format24_*.json` kopiert. Ein Kopierfehler verhindert das Schreiben; der ursprüngliche Bestand bleibt bytegleich. Die unveränderte 3.39.1 (Format 23) öffnet Format 24 schreibgeschützt. Der Referenzbestand `tests/fixtures/current_v24/reference_v24.json` enthält eine Bildfolge mit drei Bildern, gemeinsamer und eigener Dauer; historische Referenzen und alte Releaseplanungen behalten ihre Formatnummer. Einstellungen 2 und Vorlagenhülle 2 bleiben, enthaltene neue Aufgabenbackups tragen Format 24. Migrations-, Altleser- und Dateischreibproben in `test_animation3400.py`.
 
 ## Format 23
 
@@ -81,6 +95,8 @@ Referenz-Fixture: `tests/fixtures/current_v20/reference_v20.json`.
 | 21 | 3.33.15 | Aufgaben im Notiztext, stabile Textverweise `taskref:<id>` und Heimatwechsel | 3.33.14 und ältere Format-20-Leser öffnen schreibgeschützt |
 | 22 | 3.33.17 | Typisierte lokale Listen-/Aufgabenbeziehungen und Textlinks, abgeleitete Rückverweise | 3.33.16 und ältere Format-21-Leser öffnen schreibgeschützt |
 | 23 | 3.33.18 | Live-Listen und Titelbilder in Seiten | 3.33.17 und ältere Format-22-Leser öffnen schreibgeschützt |
+| 24 | 3.40.0 | Vollständige Pixelbildfolgen mit Bildkennungen und Dauern | 3.39.1 und ältere Format-23-Leser öffnen schreibgeschützt |
+| 25 | 3.41.0 | Notion-Quellenzuordnungen an Seiten und Ordnern | 3.40.0 und ältere Format-24-Leser öffnen schreibgeschützt |
 
 **Glide 3.29 und älter nach der Umstellung nicht mehr starten.** Sie halten einen Format-20-Bestand für beschädigt, beginnen leer und überschreiben ihn bei der ersten Eingabe (nachgewiesen am 25.09.2026 mit einer Kopie eines echten Bestands). Alte Fassungen nur mit getrennter Ablage (`GLIDE_DATA_DIR`) starten.
 
@@ -127,14 +143,24 @@ Einstellungsformat **2**; alle neuen Schlüssel sind additiv und werden beim Lad
 | Pinnwände | `pinboards` je Pinnwand: Karten mit Positionen und Größe, Anordnung, Spaltenboard, Bereiche (≤ 50), Verbindungen (≤ `MAX_CONNECTIONS` = 200, mit Art, Beschriftung, Strichart, Farbe), Hintergrund, Vorschau, Auto-Anheften. Verweise auf entfernte Karten fallen beim Normalisieren weg; ältere Fassungen lesen die Pinnwand als freie Fläche |
 | Sonstiges | `system_notifications` (Vorgabe aus), `data_format_written`, `today_plan_migrated`, `release_notes_seen` (zuletzt gelesene Karte „Neu in …“, 3.33.20; Unlesbares entfällt) |
 
+### Tagesplanung seit 3.39.0
+
+Aufgabenformat 23 und Einstellungsformat 2 bleiben unverändert. `daily_hints` speichert aktiviert/Zeiten/Wochentage; `daily_hint_state` die normalisierten Zustellbelege, Aufschub in UTC und übersprungene Termine. Der vollständige nächste Zustellzustand wird vor der Anzeige atomar gespeichert. Fehler lässt den letzten Dateistand erhalten und erlaubt Wiederholung, Neustarts stellen nicht doppelt zu. Die echte 3.38-Normalisierung und deren atomarer Settings-Schreiber bewahren diese additiven Schlüssel einschließlich unbekannter Zusatzfelder; der Rundlauf wird gesondert geprüft.
+
+`busy_calendar` speichert ausschließlich die ausdrücklich gewählte lokale Quelldatei, Importzeitzone und deren SHA-256-/Größen-/Ladebelege. Keine Termine im Aufgabenbestand, keine Änderung der ICS-Datei. Kalenderlesen geschieht außerhalb des UI-Threads; bis zum passenden Ergebnis bleibt die Belegung unbekannt. Unlesbare Konfiguration wird sichtbar beibehalten und nur ausdrücklich ersetzt/entfernt. Aufgabenbackups enthalten wie bisher keine persönlichen Einstellungen und somit keine Kalenderquelle oder Tageshinweise.
+
+Die Belegdatei ist UTF-8, regulär und höchstens 12 MiB groß: 5.000 VEVENT, 128 VTIMEZONE, 200.000 Zeilen, 65.536 Byte je entfalteter Eigenschaft und 32 Verschachtelungsstufen. Ein Auswertungsfenster umfasst höchstens 370 Tage; pro Serie gelten endliche Schritt-/Vorkommensgrenzen. Überschreitungen brechen sichtbar ab und ergeben keine Teilbilanz. Die gebündelten IANA-2026e-/CLDR-48.2-Daten liegen samt Quellenhashes und Original-Lizenzbelegen unter `resources/timezones`; keine systemweite Änderung und keine zusätzliche Laufzeitabhängigkeit.
+
+Entlasten schreibt über `item_change`: Zieltag oder Vorrat, Planungsuhrzeit nach dem Umplanungsvertrag, Fälligkeit bleibt erhalten. Vor Übernahme werden Aufgaben-/Kapazitäts-/Belegfingerprints erneut verglichen; veraltete Vorschau oder unbekannte Kalenderbelegung verhindert das Schreiben. Ein Undo umfasst die ganze Auswahl, Schreibfehler rollt alles zurück.
+
 ## Austauschformat (`.glideexchange`)
 
-Transportformat für fremde Systeme und KI, **kein Speicherformat**. Zwei getrennte Zahlen: `DATA_SCHEMA_VERSION` (wie Glide speichert, 23) und `EXCHANGE_FORMAT_VERSION` (worauf sich ein fremdes System verlassen kann, 1). Leitsatz: Die Quelle beschreibt, was entstehen soll; Glide entscheidet, wie es intern gespeichert wird.
+Transportformat für fremde Systeme und KI, **kein Speicherformat**. Zwei getrennte Zahlen: `DATA_SCHEMA_VERSION` (wie Glide speichert, 25) und `EXCHANGE_FORMAT_VERSION` (worauf sich ein fremdes System verlassen kann, 2; Erstellen 1 bleibt lesbar). Leitsatz: Die Quelle beschreibt, was entstehen soll; Glide entscheidet, wie es intern gespeichert wird.
 
 ```json
 {
   "format": "glide.exchange",
-  "format_version": 1,
+  "format_version": 2,
   "mode": "create",
   "generator": { "type": "ai" },
   "created_for": { "application": "Glide", "application_version": "…", "data_schema": 20 },
@@ -148,8 +174,8 @@ Transportformat für fremde Systeme und KI, **kein Speicherformat**. Zwei getren
 
 Ein Punkt: `type` (`task` ausführbare Handlung, `long` textorientierter Arbeitsgegenstand, `group` Behälter ohne Termin, `heading` reine Gliederung), `title`, `description`, `importance`, `due`/`due_time` (bis wann fertig), `planned_date` (wann daran arbeiten), `estimated_minutes`, `labels` (Schlüssel), `done`, `checklist` (Schritte ohne eigene Termine), `children` (eigenständig erledigbare Unterpunkte).
 
-- **Keine internen Kennungen:** Die Datei arbeitet mit frei wählbaren Schlüsseln; echte IDs vergibt Glide beim Import. Eine exportierte Datei enthält keine internen Kennungen.
-- **Capabilities** nennen je Fähigkeit eine Stufe (0 = unbekannt). Anhänge, Wiederholungen und Erinnerungen stehen bewusst auf 0; `patch_mode` steht seit 3.35.0 auf 1 (Änderungsvorschläge, unten). Grenzen: `max_items` 5.000, `max_checklist_entries` 50, `max_depth` 12, 12 MB je Datei.
+- **Keine internen Kennungen:** Die Datei arbeitet mit frei wählbaren Schlüsseln; echte IDs vergibt Glide beim Import. Eine exportierte Datei enthält keine Aufgaben- oder Listenkennungen; Bildkennungen innerhalb einer Bildfolge dienen nur deren Reihenfolge und Zeitachse.
+- **Capabilities** nennen je Fähigkeit eine Stufe (0 = unbekannt). Seit 3.40.0 steht `animations` auf 1, `max_animation_frames` auf 120 und `animation_duration_ms` nennt 20–60.000 ms; Zeichnungslisten tragen ihre vollständige Folge. Anhänge, Wiederholungen und Erinnerungen stehen bewusst auf 0; `patch_mode` steht seit 3.35.0 auf 1 (Änderungsvorschläge, unten). Grenzen: `max_items` 5.000, `max_checklist_entries` 50, `max_depth` 12, 12 MB je Datei.
 - **Import:** JSON, Formatname, Version und Modus prüfen → Felder, Werte, Verweise prüfen → Vorschau → Bestätigung → ein Rückgängig-Schritt. Unbekannte Felder nennt die Vorschau, der Fokus liegt dann auf „Abbrechen“. Der Import legt ausschließlich Neues an; scheitert das Speichern, gehen Listen, Ordner, Labels und Rückgängig-Stapel exakt zurück.
 - **Markdown-Gliederung** als zweite, schwächere Ebene: `# Liste`, `## Abschnitt`, `- Aufgabe`, eingerückte Unterpunkte, `- [ ]` als Checklistenschritt, freier Text als Beschreibung. Ohne Schlüssel und Labels, daher nicht für den Rückweg.
 - **Bedienung:** Datei › „Für KI bereitstellen …“ (Export), „KI-Ergebnis importieren …“ (`.glideexchange`, `.json`, `.md`), „Austauschformat anzeigen …“ (Anweisung für eine KI, aus den tatsächlichen Konstanten erzeugt).

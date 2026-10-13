@@ -9,7 +9,8 @@ auf `main` sowie lokal. Nutzt die Prüfungen aus `pruefen.py`, statt sie zu
 duplizieren:
 
 1. Vorprüfungen: Syntax, Versionskonsistenz, Dokumentationsindex mit Links, Fixtures.
-2. Werkzeugtests (`tests/tools/test_*.py`) und Tk-freie Fachlogik (`tests/unit`).
+2. Werkzeugtests (`tests/tools/test_*.py`) und Tk-freie Fachlogik (`tests/unit`),
+   diese zusätzlich ohne Systemzeitzonen wie unter Windows.
 3. Die fünf Analysen, darunter `standpruefung.py`.
 4. Startprobe: Glide startet mit temporärem `GLIDE_DATA_DIR` unter Tk (ohne
    Bildschirm über `xvfb-run`) und wechselt durch sechs Ansichten, ohne
@@ -232,6 +233,11 @@ def main():
     run.prozess("Werkzeugtests", [sys.executable, "-B", "-m", "unittest", "discover", "-s", str(REPO / "tests/tools"),
                                   "-p", "test_*.py"])
     run.prozess("Fachlogik-Unit-Tests", [sys.executable, "-B", "-m", "unittest", "discover", "-s", str(REPO / "tests/unit")])
+    # Windows bringt keine IANA-Datenbank mit (3.39.0: 35 Unit-Fehler nur dort).
+    # Ein leerer TZPATH stellt das unter Linux und macOS nach; Glide und seine
+    # Tests müssen mit den mitgelieferten Zeitzonen auskommen.
+    run.prozess("Fachlogik ohne Systemzeitzonen", [sys.executable, "-B", "-m", "unittest", "discover", "-s",
+                                                   str(REPO / "tests/unit")], umgebung={"PYTHONTZPATH": ""})
     for name in pruefen.ANALYSEN:
         run.prozess(Path(name).stem, [sys.executable, "-B", str(REPO / "tests/tools" / name)])
 

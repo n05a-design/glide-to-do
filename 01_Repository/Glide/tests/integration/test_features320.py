@@ -187,7 +187,9 @@ with tempfile.TemporaryDirectory(prefix="glide-features320-") as folder:
             ({"art": A.REPEAT_MONTHLY}, "FREQ=MONTHLY"),
             ({"art": A.REPEAT_YEARLY}, "FREQ=YEARLY"),
         ):
-            probe = app.new_item("Serienprobe", due=heute, repeat=dict(regel))
+            # Fester Tag vor dem 29.: Ab dem 29. klemmt die Ausgabe seit 3.39.1 aufs
+            # Monatsende (A28), die Erwartung hinge sonst vom Kalendertag des Laufs ab.
+            probe = app.new_item("Serienprobe", due="2027-01-15", repeat=dict(regel))
             assert app.ics_repeat_rule(probe) == erwartet, (regel, app.ics_repeat_rule(probe))
         mit_ende = app.new_item("Mit Ende", due=heute,
                                 repeat={"art": A.REPEAT_DAILY, "ende": "2027-03-01"})

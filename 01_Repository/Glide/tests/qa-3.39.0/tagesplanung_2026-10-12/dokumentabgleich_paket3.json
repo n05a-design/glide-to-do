@@ -1,0 +1,185 @@
+{
+  "stand": "12.10.2026",
+  "liefercommit": "4bf8a78",
+  "app_sha256": "bcdbc4da2197aadaffbe65cd57054c68b93db4d1aedcb9cbeb16c2204bd8ef41",
+  "grundlage": "QA-Bericht, native Matrix 38272561080, lokales Git-Log und gh pr list (keine offenen PRs)",
+  "abgleich": [
+    {
+      "ablage": "Arbeitskopie",
+      "datei": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "stellen": [
+        {
+          "vorher": "Welle 2 nach I7 in 3.38.0 Mac-vollgeprüft (native Abnahme offen)",
+          "nachher": "Welle 2 nach I7 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen"
+        },
+        {
+          "vorher": "N05 in 3.38.0 Mac-vollgeprüft; native Abnahme offen",
+          "nachher": "N05 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen"
+        },
+        {
+          "vorher": "im 3.38.0-Kandidaten an sechs Inhaltswidgets 14,125–14,625 % gemessen und Mac-vollgeprüft; native/menschliche Abnahme offen.",
+          "nachher": "mit 3.38.0 an sechs Inhaltswidgets 14,125–14,625 % gemessen und Mac/Linux/Windows automatisch grün; menschliche Abnahme getrennt offen."
+        },
+        {
+          "vorher": "Bewegung/Bedienfläche in 3.38.0 in erneuter Plattformabnahme.",
+          "nachher": "Bewegung/Bedienfläche mit 3.38.0 und grüner Mac-/Linux-/Windows-Vollprüfung geliefert; Menschenabnahme getrennt offen."
+        }
+      ],
+      "sha256_vorher": "180039325c8655f344481894b06dc042aa5ad1033b1643cdafffcaed52524394",
+      "sha256_nachher": "d53b5131c22353ee7c881a6bad74e2cbc82ee1466f62fc20ec1a5d6c12cac78d"
+    },
+    {
+      "ablage": "Arbeitskopie",
+      "datei": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "stellen": [
+        {
+          "vorher": "N05/KO04 implementiert; Paket-3-Abnahme offen",
+          "nachher": "N05/KO04 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschen-/DPI-Abnahme getrennt offen"
+        },
+        {
+          "vorher": "Hierarchie, Zeilenaktionen und Bewegung im Quellstand 3.38.0 umgesetzt; erneute Paketabnahme offen",
+          "nachher": "Hierarchie, Zeilenaktionen und Bewegung mit 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschen-/DPI-Abnahme getrennt offen"
+        }
+      ],
+      "sha256_vorher": "5e0ed280c3f4da1c70e5490e36cc6fed2c0bbcb3ba53384b56a7d10031a38115",
+      "sha256_nachher": "72c7f487f33e80c1835bc3eff19ba9987221c684e89db1393b445781a9b6e0d4"
+    },
+    {
+      "ablage": "Arbeitskopie",
+      "datei": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+      "stellen": [
+        {
+          "vorher": "Inspektor, direkte Felder, Textstufen und dezente Übergänge stehen im Quellstand 3.38.0; nach nativen Auswahl-/Menübefunden läuft die erneute Paketabnahme.",
+          "nachher": "Inspektor, direkte Felder, Textstufen und dezente Übergänge sind mit 3.38.0 und grüner Mac-/Linux-/Windows-Vollprüfung geliefert; Auswahl-/Menübefunde sind korrigiert und nachgeprüft. Menschliche Bedienung/DPI bleiben getrennt offen."
+        }
+      ],
+      "sha256_vorher": "fa946833e1829607173c6a860e9f2ce93dc3616b00fe692b1e2e51168d95e9ef",
+      "sha256_nachher": "b8b5b7b65e4cca81d215efc644674c1f898aa05648b5c60e45b9ad8bd75cfa57"
+    },
+    {
+      "ablage": "Arbeitskopie",
+      "datei": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+      "stellen": [
+        {
+          "vorher": "zuletzt vollständig geliefert 3.37.0; 3.38.0 in erneuter Abnahme",
+          "nachher": "zuletzt automatisch vollständig geliefert 3.38.0; menschliche Abnahme und Veröffentlichungstore getrennt offen"
+        }
+      ],
+      "sha256_vorher": "a8295ce47e8809a52d3dd56eb87b68e3a2638f859281e7e972ee9e465bb7c687",
+      "sha256_nachher": "ef41336b5e71ac28e403312f6092bf86ff4dd9e0a19126c960f86064933cef2e"
+    },
+    {
+      "ablage": "Arbeitskopie",
+      "datei": "01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md",
+      "stellen": [
+        {
+          "vorher": "Zuletzt vollständig geliefert 3.37.0: Referenz-Mac Python 3.14.5/Tk 9.0.3, Windows x64 Python 3.14/Tk 9.0.4 und Linux/Xvfb Python 3.14/Tk 8.6 automatisch grün. Kandidat 3.38.0 benötigt nach Produktionskorrektur erneut die vollständige Abnahme.",
+          "nachher": "Zuletzt automatisch vollständig geliefert 3.38.0: Referenz-Mac Python 3.14.5/Tk 9.0.3, Windows x64 Python 3.14.7/Tk 9.0.4 und Linux/Xvfb Python 3.14/Tk 8.6 automatisch grün. Produktionskorrektur am Apphash bcdbc4da in nativer Vollmatrix 38272561080 abgenommen."
+        }
+      ],
+      "sha256_vorher": "b02a91b26b9c3265bf08e481da37fa80da832d612a0c1dff0d7f8bb336445758",
+      "sha256_nachher": "c820d3f67f4b9be1423e25b6cc4755a93cee998799156b6df4c71e9e128f14d7"
+    },
+    {
+      "ablage": "Arbeitskopie",
+      "datei": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "stellen": [
+        {
+          "vorher": "Standardzweig `main` (Merge `029b821` über Pull Request #19, 12.10.2026; Kandidat 8cda250c mit drei Windows-Kopftextbefunden, noch keine bestandene Paket-3-Abnahme);",
+          "nachher": "Standardzweig `main` zuletzt lokal als Merge `029b821` über Pull Request #19 bekannt (12.10.2026). Die danach vollständig automatisch geprüfte Paket-3-Lieferung liegt als `4bf8a78` auf `claude/glide-sprint-2026-10-09` und dem gleichnamigen Remotezweig; noch kein weiterer Pull Request offen;"
+        }
+      ],
+      "sha256_vorher": "90d652c03fb79e705f85de33c0ced0f2183e1b5ba842167885d4a9586138e292",
+      "sha256_nachher": "4f2201000116edc0d76752f7d190a821cf67289c5b320893b6c4f53a77e984f1"
+    },
+    {
+      "ablage": "Paket-4-Kandidat",
+      "datei": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "stellen": [
+        {
+          "vorher": "Welle 2 nach I7 in 3.38.0 Mac-vollgeprüft (native Abnahme offen)",
+          "nachher": "Welle 2 nach I7 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen"
+        },
+        {
+          "vorher": "N05 in 3.38.0 Mac-vollgeprüft; native Abnahme offen",
+          "nachher": "N05 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen"
+        },
+        {
+          "vorher": "im 3.38.0-Kandidaten an sechs Inhaltswidgets 14,125–14,625 % gemessen und Mac-vollgeprüft; native/menschliche Abnahme offen.",
+          "nachher": "mit 3.38.0 an sechs Inhaltswidgets 14,125–14,625 % gemessen und Mac/Linux/Windows automatisch grün; menschliche Abnahme getrennt offen."
+        },
+        {
+          "vorher": "Bewegung/Bedienfläche in 3.38.0 in erneuter Plattformabnahme.",
+          "nachher": "Bewegung/Bedienfläche mit 3.38.0 und grüner Mac-/Linux-/Windows-Vollprüfung geliefert; Menschenabnahme getrennt offen."
+        }
+      ],
+      "sha256_vorher": "1750c01e1c1fad833133282946173964ea590310ee1d6d0769c5bbbfce1fc9e1",
+      "sha256_nachher": "c405010e365d1390a8a07e9a9246e38b92342f3e147f7bea56ff61705395724e"
+    },
+    {
+      "ablage": "Paket-4-Kandidat",
+      "datei": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "stellen": [
+        {
+          "vorher": "N05/KO04 implementiert; Paket-3-Abnahme offen",
+          "nachher": "N05/KO04 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschen-/DPI-Abnahme getrennt offen"
+        },
+        {
+          "vorher": "Hierarchie, Zeilenaktionen und Bewegung im Quellstand 3.38.0 umgesetzt; erneute Paketabnahme offen",
+          "nachher": "Hierarchie, Zeilenaktionen und Bewegung mit 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschen-/DPI-Abnahme getrennt offen"
+        }
+      ],
+      "sha256_vorher": "e785d28cf9ad46397badc16ddd5d3cf165d171a57b51ef439a0df7a7c0a88b5d",
+      "sha256_nachher": "4c873d3964bc4c6654c1ec90803f4470999d8027af84036137d90b67d0e7157b"
+    },
+    {
+      "ablage": "Paket-4-Kandidat",
+      "datei": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+      "stellen": [
+        {
+          "vorher": "Inspektor, direkte Felder, Textstufen und dezente Übergänge stehen im Quellstand 3.38.0; nach nativen Auswahl-/Menübefunden läuft die erneute Paketabnahme.",
+          "nachher": "Inspektor, direkte Felder, Textstufen und dezente Übergänge sind mit 3.38.0 und grüner Mac-/Linux-/Windows-Vollprüfung geliefert; Auswahl-/Menübefunde sind korrigiert und nachgeprüft. Menschliche Bedienung/DPI bleiben getrennt offen."
+        }
+      ],
+      "sha256_vorher": "f9942c2a1f1fef16de0cdeb6c1ebfbdca33b9a50a3a24bab93e4b41754b00743",
+      "sha256_nachher": "f25056eb1441cc627421f978b64146abe201171c3f6a807f86e0f9989b2e2012"
+    },
+    {
+      "ablage": "Paket-4-Kandidat",
+      "datei": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+      "stellen": [
+        {
+          "vorher": "zuletzt vollständig geliefert 3.37.0; 3.38.0 in erneuter Abnahme",
+          "nachher": "zuletzt automatisch vollständig geliefert 3.38.0; menschliche Abnahme und Veröffentlichungstore getrennt offen"
+        }
+      ],
+      "sha256_vorher": "37d81e27da0f0d5f2535d3aafd61d373dbc8b4c8fd8ede550d2bb212df797f48",
+      "sha256_nachher": "8f5c0d0d2462bf0c50cbf1898a48fe3510fdad27efed8b5ee46d01490023e98b"
+    },
+    {
+      "ablage": "Paket-4-Kandidat",
+      "datei": "01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md",
+      "stellen": [
+        {
+          "vorher": "Zuletzt vollständig geliefert 3.37.0: Referenz-Mac Python 3.14.5/Tk 9.0.3, Windows x64 Python 3.14/Tk 9.0.4 und Linux/Xvfb Python 3.14/Tk 8.6 automatisch grün. Kandidat 3.38.0 benötigt nach Produktionskorrektur erneut die vollständige Abnahme.",
+          "nachher": "Zuletzt automatisch vollständig geliefert 3.38.0: Referenz-Mac Python 3.14.5/Tk 9.0.3, Windows x64 Python 3.14.7/Tk 9.0.4 und Linux/Xvfb Python 3.14/Tk 8.6 automatisch grün. Produktionskorrektur am Apphash bcdbc4da in nativer Vollmatrix 38272561080 abgenommen."
+        }
+      ],
+      "sha256_vorher": "025264a1616e538cbe29a6f316290f75f8597ef77c72bf81d5d3c31bc1bcec85",
+      "sha256_nachher": "225f9d97c97432c5bd547a3d2b2a04c0d56f4a44cfa17ba01b96743db5c20d22"
+    },
+    {
+      "ablage": "Paket-4-Kandidat",
+      "datei": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "stellen": [
+        {
+          "vorher": "Standardzweig `main` (Merge `029b821` über Pull Request #19, 12.10.2026; Kandidat 8cda250c mit drei Windows-Kopftextbefunden, noch keine bestandene Paket-3-Abnahme);",
+          "nachher": "Standardzweig `main` zuletzt lokal als Merge `029b821` über Pull Request #19 bekannt (12.10.2026). Die danach vollständig automatisch geprüfte Paket-3-Lieferung liegt als `4bf8a78` auf `claude/glide-sprint-2026-10-09` und dem gleichnamigen Remotezweig; noch kein weiterer Pull Request offen;"
+        }
+      ],
+      "sha256_vorher": "684fc6fb329e4087b63f8f3b84a894f90e1039534cbabbb75af4936f85a14464",
+      "sha256_nachher": "56b0c89a25ba46e3c360d24ad1410c95d75f47c3f1094ef148eb8bf156826023"
+    }
+  ],
+  "grenze": "Laufender Abgleich; endgültiger lokaler Sprintabgleich nach Paket 8 offen."
+}
