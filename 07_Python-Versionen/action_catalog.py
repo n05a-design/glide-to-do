@@ -16,6 +16,8 @@ GROUP_ORDER = ('Neu anlegen',
  'Weitere Aktionen')
 
 GROUPS = {
+    "import_notion_archive": "Import",
+    "restore_page_from_backup": "Import",
     "show_day_relief": "Planen und einordnen",
     "show_daily_hints": "Planen und einordnen",
     "show_daily_hint_settings": "Ansichtseinstellungen",
