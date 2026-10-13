@@ -22,5 +22,5 @@ Mac-Abnahme und Lieferweg:
 - [Eingefrorene Mac-Vollprüfung](mac_voll.json) am Kandidaten b5cf4ec außerhalb OneDrive: Exit 0, 104 ausgeführt/zwei übersprungen (Screenshots nur Linux, Sichtprüfung durch eine Person); alle 998 eingefrorenen Dateien danach unverändert.
 - [Produktionsübernahme](produktionsuebernahme.json), [204 Lieferdateien](lieferung.json), [112 Bundle-Dateien und beide Signaturen](bundle.json). Die doppelte Hauptdatei 3.38.0 im Lieferordner war bytegleich zur Archivkopie und ist entfernt; 3.39.0 liegt im Archiv.
 
-Native Linux-/Windows-Matrix und Lieferabschluss folgen.
+**Lieferabschluss 13.10.2026:** Native Matrix [38357770894](https://github.com/n05a-design/glide-to-do/actions/runs/38357770894) am Kandidaten 2cbd561 grün – [Linux](linux_voll.json) 105 und [Windows](windows_voll.json) 105 ausgeführt, je eine menschliche Sichtprüfung übersprungen, [18 Defektgegenproben](linux_defektgegenproben.json) passend rot, [Windows-Desktop](windows_desktop.json). [Lieferabschluss](lieferabschluss.json): 204 Liefer- und 112 Bundle-Dateien unverändert, Signaturen erneut grün. [Strenge Kandidat-CI](grundstufe_kandidat.json) grün.
 Tatsächliche menschliche Bedienung bleibt ein gesondertes Abnahmetor.

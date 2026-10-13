@@ -9,8 +9,8 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 ## Stand
 
 - **Entwicklungsstand 3.39.1 vom 13.10.2026**, Datenformat 23. Dies ist eine Entwicklungsfassung.
-- **Zuletzt vollständig automatisch geliefert:** Tagesplanung 3.39.0, davor Aufgabenoberfläche 3.38.0, Logo/Symbole 3.37.0 und Fundament/Tempo 3.36.0. Eingefrorene Mac-Vollprüfung sowie native Linux-/Windows-Matrix grün; 07/Showcase/Bundle abgeglichen und Mac-Signaturen geprüft. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
-- **Kandidat 3.39.1:** Fehlerbehebung Wiederholungen (Schnelleingabe, ICS-Austausch am Monatsende, Import-Zeitzonen); Mac-Vollprüfung und lokaler Liefer-/Bundleabgleich grün, native Linux-/Windows-Matrix offen. Danach die bestätigten Pakete 5–8.
+- **Zuletzt vollständig automatisch geliefert:** Wiederholungen 3.39.1 (Fehlerbehebung), davor Tagesplanung 3.39.0, Aufgabenoberfläche 3.38.0, Logo/Symbole 3.37.0 und Fundament/Tempo 3.36.0. Eingefrorene Mac-Vollprüfung sowie native Linux-/Windows-Matrix grün; 07/Showcase/Bundle abgeglichen und Mac-Signaturen geprüft. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
+- **Nächste Lieferung 3.40.0:** Pixelanimation (Paket 5), danach die bestätigten Pakete 6–8.
 - **Offen:** verbleibende bestätigte Sprintpakete, manuelle Bedien-/DPI-/Mehrmonitor-/Screenreaderabnahme sowie die gesonderten Veröffentlichungstore (u. a. Lizenz, öffentliche Signatur und Marke).
 - **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe; bestätigte Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 
