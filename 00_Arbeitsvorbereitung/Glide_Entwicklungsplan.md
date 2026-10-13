@@ -34,7 +34,7 @@ Reihenfolge der Stufen (Antwort des Inhabers vom 30.09.2026, bestätigt am 01.10
 | 0 Fundament | Performance P01–P09, T2, CI | ◐ Ziele für Abhaken und Suche erreicht (3.33.19, 3.34.0); P03/E01 und Linux-Kalibrierung mit 3.36.0 geliefert; P05 im Sprint-Code fortsetzen |
 | 1 Klarer Alltag | Bereiche, Startseite, Eingabe, Eisenhower, Heute/Demnächst, UX1, Fokus, Komfort, Tag, Oberfläche Welle 1 | ◐ geliefert bis 3.33.21; Welle 2 nach I7 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen; AU03-Hinweise/AU07 mit 3.39.0 geliefert |
 | 2 Wissen im Kontext | Suche, Verweise, Live-Liste, Titelbild, Kalender mit Wochenplanung, Bilder in Seiten, Filter erklären | ◐ geliefert 3.33.7–3.34.0; N05 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen |
-| 3 Pixel | Palettenbearbeitung, Symbolvorschau, Animation | ◐ G19, G-03 ✅ 3.35.0; G17 ▶ 3.40.0 Mac-vollgeprüft, native Matrix offen |
+| 3 Pixel | Palettenbearbeitung, Symbolvorschau, Animation | ◐ G19, G-03 ✅ 3.35.0; G17 ✅ 3.40.0 geliefert |
 | 4 Austausch und Verteilung | KI-Austausch Stufe 2, Import, Sicherungsvergleich, Paket mit eigenem Python | ◐ G24, F-03 ✅ 3.35.0; G21 und G26 durch D26/D27 ausgewählt; Umsetzung offen |
 | 5 Zukunft (4.x) | Screenreader (Tk 9.1), Seitenversionen, SQLite nur nach D16-Neubewertung | ◇ |
 
@@ -188,7 +188,7 @@ Der Inhaber beauftragt mehrere zusammengehörige Features je Umsetzung, abgeleit
 |---|---|---|
 | G19 = G-01 | Paletteneintrag ändern färbt die Zeichnung um, mit Vorschau und Undo | ✅ 3.35.0 |
 | G-03 | Symbolvorschau in 16/32/48 px vor dem Export | ✅ 3.35.0 |
-| G17 = G-02 | Animation: Frames, Dauer, Vorschau | ▶ E-S1 A/V durch D18; 3.40.0 Mac-vollgeprüft, native Matrix offen |
+| G17 = G-02 | Animation: Frames, Dauer, Vorschau | ✅ E-S1 A/V durch D18; 3.40.0 geliefert |
 | G24 = F-01 | KI-Austausch Stufe 2: Kontextpaket, Änderungsvorschläge mit Feldvergleich (Q3) | ✅ 3.35.0 |
 | G21 = F-02 | Begrenzter Import aus einer ersten Quelle mit Verlustbericht | ○ E-S4 |
 | F-03 | Zwei Sicherungsstände lesbar vergleichen | ✅ 3.35.0 |
@@ -280,7 +280,7 @@ Der Inhaber beauftragt mehrere zusammengehörige Features je Umsetzung, abgeleit
 
 | Nr. | Frage | Blockiert | Empfehlung |
 |---|---|---|---|
-| E-S1 | D07: Animationsexport | G17 | entschieden 10.10.2026: A/V, D18; 3.40.0 Mac-vollgeprüft, native Matrix offen |
+| E-S1 | D07: Animationsexport | G17 | entschieden 10.10.2026: A/V, D18; 3.40.0 geliefert |
 | E-S2 | I7: Referenzweg und Auswahl der vier Oberflächenfunktionen | OB02, OB03-Rest, N05, KO04 | Referenzweg und Bild 1 entschieden (D19/D21); vier Funktionen D22–D25 in 3.38.0 geliefert, automatisch Mac/Linux/Windows grün |
 | E-S3 | AU03: Vorgabe und Tiefe automatischer Tageshinweise | AU03-Rest | entschieden 10.10.2026: A/V, D20; in 3.39.0 geliefert |
 | E-S4 | G21: erste Importquelle | G21 | entschieden 10.10.2026: Notion A/V, D26; Umsetzung offen |
@@ -510,7 +510,7 @@ Quellen für V01/V02 im Marktvergleich §8; eigene Ableitungen. N12 nach dem dor
 | 2 / **3.37.0** | Logo und Symbole: Tk-8.6-Rückfall/App-Symbole S26-11, gesamte ICONS-Tabelle S26-12, Logo-Master und Kleingrößen S26-22 | Grafikgrundlagen vor neuen Oberflächenaufnahmen; Gestaltungsabnahme vor Masterübernahme | ✅ geliefert 11.10.2026: Mac/Linux/Windows automatisch grün, 07/05/Bundle bytegleich, Signaturen grün; Menschenabnahme getrennt |
 | 3 / **3.38.0** | Aufgabenoberfläche nach Bild 1: OB02 S26-01, OB03 S26-02, gemeinsamer Inspektor S26-03, direkte Felder S26-04, Bewegung S26-07, Bedienfläche S26-13 | einheitliche Bearbeitungsfläche als Grundlage für folgende Planungs- und Zugänglichkeitswege | ✅ 12.10.2026 geliefert; Hash bcdbc4da, Mac/Linux/Windows-Vollprüfung und 18 Defektgegenproben grün; Tempo D46/D48 erfüllt, Lieferdateien/Signaturen erneut geprüft; Menschen-/DPI-Abnahme getrennt offen |
 | 4 / **3.39.0** | Tagesplanung: Tageshinweise S26-05, ICS-Belegzeiten S26-06, Tag entlasten S26-18 | alle Kapazitätswege teilen dieselbe Bilanz; Entlasten berücksichtigt die neuen Belegzeiten | ✅ 3.39.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt offen |
-| 5 / **3.40.0** | Pixelanimation S26-08 vollständig mit PNG-Spritesheet/Einzelbildfolge | eigenes Datenformat- und Exportpaket, getrennt vom folgenden Import | ▶ 3.40.0 Mac-vollgeprüft, native Matrix offen |
+| 5 / **3.40.0** | Pixelanimation S26-08 vollständig mit PNG-Spritesheet/Einzelbildfolge | eigenes Datenformat- und Exportpaket, getrennt vom folgenden Import | ✅ 3.40.0 geliefert |
 | 6 / **3.41.0** | Notion-Import S26-09, Wiedererkennung/Konfliktvergleich S26-19, einzelne Seite aus Sicherung S26-17 | Quellenzuordnung und Wiederherstellung gemeinsam gegen Verweis-/Anhangsregeln prüfen | beauftragt nach D44; Umsetzung offen |
 | 7 / **3.42.0** | Eigenständige Pakete S26-10: PyInstaller 6.22.3, macOS arm64 und Windows x64, Python 3.14/Tk 9 | vollständigen Funktionsstand samt Ressourcen bündeln; Bauweg vor Tk-9.1-Wechsel festigen | beauftragt nach D44; Umsetzung offen |
 | 8 / **4.0.0** | Zugänglicher Aufgaben-Kernablauf S26-16 A/1 mit eigener geprüfter Tk-9.1-Laufzeit und tatsächlichen Readerproben | baut auf gemeinsamem Inspektor und eigenständigen Paketen auf; Stufe 5 des Plans beginnt mit dem gewählten Schnitt | beauftragt nach D44; Readerabnahme offen |

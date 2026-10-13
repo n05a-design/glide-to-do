@@ -1,0 +1,18 @@
+{
+  "version": "3.40.0",
+  "app_sha256": "fa9a7bb6802b1958bb60ebdb006928b3bd4f600805463fba5479ee218692e4ee",
+  "kandidat_commit": "3e50e6ef24c3ae503514ae95e0c139797ba107ac",
+  "native_run": "https://github.com/n05a-design/glide-to-do/actions/runs/38380786813",
+  "native_ergebnis": "success",
+  "linux": "106 ausgeführt/1 übersprungen",
+  "windows": "106 ausgeführt/1 übersprungen",
+  "linux_defekte": 18,
+  "lieferdateien_unveraendert": 206,
+  "bundle_dateien_unveraendert": 114,
+  "signatur_repository_und_rueckkopie": "grün nach der Matrix erneut geprüft",
+  "mac_vollpruefung": "Kandidat 2d002ad: 105 ausgeführt/2 übersprungen, 1014 eingefrorene Dateien unverändert; Lieferkandidat mit identischem Code, Tests und Fixtures",
+  "menschenabnahme": "getrennt offen",
+  "vorlaeufe": [
+    "native_38365723954.json (Prüfstand korrigiert, siehe pruefstand_wartezeit.json)"
+  ]
+}
