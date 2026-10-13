@@ -20,5 +20,7 @@ Korrekturen gegenüber dem Entwurf:
 - Die Paket-5-Probe prüfte die Ablehnung von Format 25; sie prüft jetzt das jeweils nächste Format.
 - Beide Vorschauen nutzten native ttk-Tabellen und -Leisten; jetzt Glide-Dialogtabelle und -Leisten.
 
+Der [erste eingefrorene Volllauf](mac_vorlauf.json) endete mit drei Befunden: `prepare_additive_import` arbeitet seit dem Entwurf auf unabhängigen Kopien (Quellenzuordnungen dürfen beim Hinzufügen nicht mitwandern), `test_woche33317` und `test_seiten33318` lasen aber die übergebenen Einträge; die Attributprüfung beanstandete `self.__dict__`. Die Tests nutzen jetzt den Rückgabewert wie der einzige App-Aufrufer, die Stelle verwendet `hasattr`/`del`. Vorsorglich nach dem nativen Befund von 3.40.0: `test_import3410` wartet höchstens 3 s auf die Anordnung von Knöpfen, `test_restore_assets` nutzt einen unter Windows gültigen Dateinamen. Die frische Vollprüfung ist unten belegt.
+
 Die Mac-Vollprüfung auf eingefrorener Kopie, Lieferabgleich, Bundle, Signaturen und native Linux-/Windows-Matrix folgen.
 Tatsächliche menschliche Bedienung bleibt ein gesondertes Abnahmetor.

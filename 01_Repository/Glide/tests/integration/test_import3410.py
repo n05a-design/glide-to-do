@@ -62,6 +62,11 @@ def run(app_path, cases, report=None, previous=None):
             return matches[0]
 
         def activate(widget):
+            # Wie in test_animation3400: Knopfzeilen ordnen sich nach dem ersten
+            # Größenereignis an; unter Xvfb höchstens 3 s darauf warten.
+            deadline = time.monotonic()+3
+            while not (widget.winfo_exists() and widget.winfo_ismapped()) and time.monotonic() < deadline:
+                pump(.05)
             assert widget.winfo_ismapped(), 'Aktionsknopf nicht sichtbar'
             widget.focus_set()
             pump(.03)

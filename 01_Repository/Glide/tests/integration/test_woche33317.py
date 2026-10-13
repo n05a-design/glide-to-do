@@ -132,7 +132,7 @@ with tempfile.TemporaryDirectory(prefix='glide-woche-') as directory:
         app.undo_last_change();idle();assert mod.glide_objects.caption(('item',a_id),app.object_graph()[0])[0]=='active' 
         checks.append('IDs und Zustände: Umbenennen, Archiv, Papierkorb, globales Undo und Text-Redo, fehlende Ziele; Speicherfehler ohne Datenänderung')
         copied=copy.deepcopy([entry(source_id),entry(page_id)])
-        app.prepare_additive_import(copied,[],[])
+        copied, _folders, _labels = app.prepare_additive_import(copied,[],[])
         mapping=app._additive_import_maps
         cpage=next(e for e in copied if e['id']==mapping['containers'][page_id])
         assert set(cpage['rich_note']['links'].values())=={mod.glide_objects.uri('list',mapping['containers'][source_id]),mod.glide_objects.uri('item',mapping['items'][a_id])}

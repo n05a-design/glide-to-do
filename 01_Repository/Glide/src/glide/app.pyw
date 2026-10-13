@@ -55118,7 +55118,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         finally:
             self.folders, self.labels, self.trash = previous
             if loaded_history is sentinel:
-                self.__dict__.pop('_loaded_history', None)
+                if hasattr(self, '_loaded_history'):
+                    del self._loaded_history
             else:
                 self._loaded_history = loaded_history
         return glide_backup_snapshot.Snapshot(snapshot.content, normalized, snapshot.portable,

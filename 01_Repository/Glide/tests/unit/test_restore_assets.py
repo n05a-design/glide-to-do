@@ -68,13 +68,13 @@ class AssetsTest(unittest.TestCase):
 
     def test_unrelated_names_and_replaced_path_are_never_removed(self):
         with tempfile.TemporaryDirectory()as folder:
-            directory=Path(folder);(directory/'unbekannt:name').write_bytes(b'Fremd')
+            directory=Path(folder);(directory/'unbekannt-fremd.bin').write_bytes(b'Fremd')
             result=restore_assets.stage([attachment()],directory,lambda _p:io.BytesIO(b'PNG'),max_bytes=10,new_id=lambda:'new')
-            created=directory/'new.png';created.unlink();created.symlink_to(directory/'unbekannt:name')
+            created=directory/'new.png';created.unlink();created.symlink_to(directory/'unbekannt-fremd.bin')
             result.cleanup()
             self.assertTrue(created.is_symlink())
             self.assertEqual(created.read_bytes(),b'Fremd')
-            self.assertEqual((directory/'unbekannt:name').read_bytes(),b'Fremd')
+            self.assertEqual((directory/'unbekannt-fremd.bin').read_bytes(),b'Fremd')
 
     def test_read_and_fsync_errors_roll_back(self):
         with tempfile.TemporaryDirectory()as folder:

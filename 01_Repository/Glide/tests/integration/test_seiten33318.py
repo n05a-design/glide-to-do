@@ -149,7 +149,7 @@ with tempfile.TemporaryDirectory(prefix='glide-seiten18-') as directory:
         assert duplicate['items'] == []
         app.undo_last_change(); idle()
         copied = copy.deepcopy([entry(sid),entry(pid)])
-        app.prepare_additive_import(copied,[],[]); mapping = app._additive_import_maps
+        copied, _folders, _labels = app.prepare_additive_import(copied,[],[]); mapping = app._additive_import_maps
         copy_page = next(e for e in copied if e['id'] == mapping['containers'][pid])
         assert copy_page['live_lists'] == [mod.glide_objects.uri('list',mapping['containers'][sid])]
         app.remap_import_attachments(copied)
