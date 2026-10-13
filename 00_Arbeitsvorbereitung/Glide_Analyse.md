@@ -32,7 +32,7 @@ Vollständigkeit: **●** im Alltag vollständig nutzbar · **◐** nutzbar mit 
 | Seiten und Notizen | Block-Editor, Bilder ohne Überlappung und in Druck/Markdown (3.34.0), Aufgaben mit Original-ID, Verweise/Rückverweise, Live-Listen, Titelbild, Seitentitel im Dokument (3.33.21) | ● | – |
 | Suche | gemeinsame Palette für Inhalte und Aktionen, Treffer im Dokument markiert (3.34.0), erklärte gespeicherte Filter (3.34.0); 66,6 ms bei 10.000 Punkten | ● | – (FTS5 nach Messung nicht nötig) |
 | Erinnerungen | fest/relativ, Zustellbeleg, Systemmitteilung (Option) bei laufender App | ● | Zustellung bei geschlossener App bewusst nicht (N09) |
-| Pixel-Werkstatt | 16–128 Zellen, Werkzeuge, Paletten mit Umfärben und Vorschau (3.35.0), ICO mit Symbolvorschau (3.35.0), PNG/SVG/JSON, Pixelsymbol | ◐ | Animation (G17, E-S1/D07) |
+| Pixel-Werkstatt | 16–128 Zellen, Werkzeuge, Paletten mit Umfärben und Vorschau (3.35.0), ICO mit Symbolvorschau (3.35.0), PNG/SVG/JSON, Pixelsymbol | ◐ | Animation (G17, D18): 3.40.0 Mac-vollgeprüft, native Matrix offen |
 | Austausch | CSV, Markdown mit Bildern, ICS, `.glidepage`, Backups, KI-Austausch Stufe 1 und 2 (3.35.0), Sicherungen vergleichen (3.35.0) | ◐ | erste Fremdquelle (G21, E-S4) |
 | Erscheinungsbild | zehn Designs, „Automatisch hell/dunkel“ (3.33.21), neutrale aktive Rolle, schmale Seitenleiste, berechneter Kontrast, Mindestgröße 860 × 700 | ◐ | Hierarchie, Zeilenaktionen und Bewegung mit 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschen-/DPI-Abnahme getrennt offen |
 | Hilfe | Handbuch, Kürzel, einklappbare Hinweise (D11), Showcase/Rundgang, Karte „Neu in Glide“ (3.33.20) | ● | – |
@@ -195,7 +195,7 @@ Auftrag des Inhabers vom 12./13.10.2026: vor Wettbewerbsrecherche und Feature-Pl
 | | Notion-Import mit Wiedererkennung; einzelne Seite aus Sicherung | Geplant (Paket 6 / 3.41.0) | [Dok] Übergabe §6: privat vorbereitet, keine Produktionsübernahme | – |
 | Sicherung | atomares Schreiben, Vorsicherung je Format, Sicherungen bei Änderung, 14 Tagesstände, Teil-/Komplett-/App-Backup, Vergleich | Implementiert | [Code] `write_json_atomic`, `migrate_on_start`, `schema_backups.py`, `backup_diff.py` | Pinnwandlayout und Einstellungen nur im App-Backup [Dok 06] |
 | Gestaltung | zehn Designs (`DESIGN_ORDER`: Pixel, Hell, Dunkel, Liquid Glass hell/dunkel, Minimal hell/dunkel, Dopamin, Kontrast hell/dunkel), automatisch hell/dunkel, Akzent, Verläufe, WCAG AA | Implementiert | [Code] `DESIGNS`, `contrast_ratio`; Rückfallwert ohne gültige Einstellung `DESIGN_DEFAULT = "glass_dark"` | – |
-| Pixel | Zeichnungen 16–128 Zellen, Paletten, PNG/ICO/SVG, Pixelsymbol | Implementiert; Animation Geplant (Paket 5) | [Code] `drawing.py` | – |
+| Pixel | Zeichnungen 16–128 Zellen, Paletten, PNG/ICO/SVG, Pixelsymbol | Implementiert; Animation implementiert (3.40.0 Mac-vollgeprüft, native Matrix offen) | [Code] `drawing.py` | – |
 | Verteilung, Zugang | eigenständige Pakete (Paket 7), Screenreader-Kernablauf (Paket 8) | Geplant | [Dok] Plan §15.7 | – |
 | Bekannte Befunde | W01 Seitenleistentitel unter Windows angeschnitten | Unklar | [Dok] eine Aufnahme vom 05.10.2026, Sichtprüfung offen | – |
 | | W07/W08 Windows-Dialogdarstellung | Unklar | [Dok] auf dem Mac nicht nachstellbar | – |

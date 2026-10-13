@@ -24,5 +24,10 @@ Korrekturen gegenüber dem Entwurf:
 
 Der [erste eingefrorene Volllauf](mac_vorlauf.json) endete mit zwei Befunden: Der Pixelsymbol-Dialog nutzt den Zeichnungseditor und erhielt seit dem Entwurf die ganze Bildfolge statt eines Bildes, das Symbol ging verloren (`test_features330`); `test_seiten33318` änderte nur `drawing` am Bestand, das Backup war dadurch inkonsistent und der Import lehnte es zu Recht ab. Der Editor hat jetzt einen Einzelbildmodus ohne Bildfolgenknöpfe; der Test ändert beide Felder; der Format-20-Vergleich prüft die neue Bildfolge ausdrücklich. Die frische Vollprüfung ist unten belegt.
 
-Die Mac-Vollprüfung auf eingefrorener Kopie, Lieferabgleich, Bundle, Signaturen und native Linux-/Windows-Matrix folgen.
+Mac-Abnahme und Lieferweg:
+
+- [Frische eingefrorene Mac-Vollprüfung](mac_voll.json) am Kandidaten 2d002ad außerhalb OneDrive: Exit 0, 105 ausgeführt/zwei übersprungen; alle 1014 eingefrorenen Dateien danach unverändert. Der rebasierte Kandidat trägt denselben Code, dieselben Tests und Fixtures; hinzu kamen nur Dokumente und Belege des Lieferabschlusses 3.39.1.
+- [Produktionsübernahme](produktionsuebernahme.json), [206 Lieferdateien](lieferung.json), [114 Bundle-Dateien und beide Signaturen](bundle.json). 3.39.1 liegt im Archiv.
+
+Native Linux-/Windows-Matrix und Lieferabschluss folgen.
 Tatsächliche menschliche Bedienung bleibt ein gesondertes Abnahmetor.
