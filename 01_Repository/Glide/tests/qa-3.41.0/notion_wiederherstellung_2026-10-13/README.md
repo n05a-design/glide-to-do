@@ -22,5 +22,10 @@ Korrekturen gegenüber dem Entwurf:
 
 Der [erste eingefrorene Volllauf](mac_vorlauf.json) endete mit drei Befunden: `prepare_additive_import` arbeitet seit dem Entwurf auf unabhängigen Kopien (Quellenzuordnungen dürfen beim Hinzufügen nicht mitwandern), `test_woche33317` und `test_seiten33318` lasen aber die übergebenen Einträge; die Attributprüfung beanstandete `self.__dict__`. Die Tests nutzen jetzt den Rückgabewert wie der einzige App-Aufrufer, die Stelle verwendet `hasattr`/`del`. Vorsorglich nach dem nativen Befund von 3.40.0: `test_import3410` wartet höchstens 3 s auf die Anordnung von Knöpfen, `test_restore_assets` nutzt einen unter Windows gültigen Dateinamen. Die frische Vollprüfung ist unten belegt.
 
-Die Mac-Vollprüfung auf eingefrorener Kopie, Lieferabgleich, Bundle, Signaturen und native Linux-/Windows-Matrix folgen.
+Mac-Abnahme und Lieferweg:
+
+- [Frische eingefrorene Mac-Vollprüfung](mac_voll.json) am Kandidaten 56b9b98 außerhalb OneDrive: Exit 0, 106 ausgeführt/zwei übersprungen; alle 1042 eingefrorenen Dateien danach unverändert. Der rebasierte Kandidat trägt denselben Code, dieselben Tests und Fixtures; hinzu kamen nur Dokumente und Belege des Lieferabschlusses 3.40.0.
+- [Produktionsübernahme](produktionsuebernahme.json), [215 Lieferdateien](lieferung.json), [123 Bundle-Dateien und beide Signaturen](bundle.json). 3.40.0 liegt im Archiv.
+
+Native Linux-/Windows-Matrix und Lieferabschluss folgen.
 Tatsächliche menschliche Bedienung bleibt ein gesondertes Abnahmetor.
