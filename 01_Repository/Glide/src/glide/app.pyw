@@ -11683,11 +11683,15 @@ class DrawingEditor(tk.Frame):
         "error": "Speichern fehlgeschlagen – Änderungen bleiben erhalten",
     }
 
-    def __init__(self, master, app, entry, on_change=None):
+    def __init__(self, master, app, entry, on_change=None, animated=True):
         super().__init__(master, bg=app.theme["card"])
         self.app = app
         self.list_id = entry.get("id")
         self.on_change = on_change
+        # Zeichnungsseiten tragen eine Bildfolge. Das Pixelsymbol ist ein
+        # einzelnes Bild: ohne Bildfolgenbedienung, `on_change` erhält wie
+        # bisher das Zellmodell eines Bildes.
+        self.animated = animated
         self.animation = glide_animation.from_entry(entry)
         self.frame_id = self.animation.frames[0].id
         self.model = self.animation.frames[0].model
@@ -11811,7 +11815,8 @@ class DrawingEditor(tk.Frame):
         self.app.add_tooltip(self.zoom_in_button, "Vergrößern (+, Strg+Mausrad)")
         self.app.add_tooltip(self.preview_button, "Vorschau in Originalgröße (Taste P)")
 
-        self._build_animation_controls()
+        if self.animated:
+            self._build_animation_controls()
 
         # Die Kontextleiste zeigt nur, was das aktive Werkzeug braucht.
         self.context_row = ButtonFlow(self, theme["card"], gap=6)
@@ -13325,8 +13330,12 @@ class DrawingEditor(tk.Frame):
         except tk.TclError:
             self._save_job = None
 
+    def _current_document(self):
+        return self.animation.to_document() if self.animated else self.model.to_document()
+
     def has_pending_changes(self):
-        return self.animation.to_document() != self._last_animation_document
+        last = self._last_animation_document if self.animated else self._last_document
+        return self._current_document() != last
 
     def flush(self):
         """Überträgt das Modell in den Glide-Bestand und speichert atomar.
@@ -13341,8 +13350,9 @@ class DrawingEditor(tk.Frame):
             self._save_job = None
         if self._busy():
             return False
-        document = self.animation.to_document()
-        if document == self._last_animation_document and self.save_state != "error":
+        document = self._current_document()
+        last = self._last_animation_document if self.animated else self._last_document
+        if document == last and self.save_state != "error":
             return True
         self.save_state = "saving"
         self.update_status()
@@ -13350,7 +13360,7 @@ class DrawingEditor(tk.Frame):
         if ok is False:
             self.save_state = "error"
         else:
-            self._last_animation_document = document
+            self._last_animation_document = self.animation.to_document()
             self._last_document = self.model.to_document()
             self.save_state = "saved"
         self.update_status()
@@ -13376,7 +13386,8 @@ class DrawingEditor(tk.Frame):
             self._last_document = self.model.to_document()
             self.save_state = "saved"
             self._adopt_model_size()
-            self._sync_frame_choices()
+            if self.animated:
+                self._sync_frame_choices()
         reference = entry.get("drawing_reference")
         key = None if not isinstance(reference, dict) else (
             reference.get("attachment_id"), reference.get("mode"), reference.get("zoom_percent"),
@@ -13482,7 +13493,8 @@ class DrawingEditor(tk.Frame):
         self._key_anchor = None
         self._clear_preview()
         self.render_full()
-        self._sync_frame_choices()
+        if self.animated:
+            self._sync_frame_choices()
         self.remember_view()
         self.update_status(f"Bild {index + 1} von {len(self.animation.frames)}")
         return True
@@ -25392,7 +25404,7 @@ class ListApp:
             state["document"] = document
             return True
 
-        editor = DrawingEditor(holder_frame, self, pseudo, on_change=keep)
+        editor = DrawingEditor(holder_frame, self, pseudo, on_change=keep, animated=False)
         editor.pack(fill="both", expand=True, padx=8, pady=8)
         editor.more_button.destroy()
         drawings = [entry for entry in self.lists if self.is_drawing_list(entry) and entry.get("id") != identity]
@@ -25416,7 +25428,8 @@ class ListApp:
         def adopt(entry):
             model = glide_drawing.DrawingModel.from_document(entry.get("drawing"))
             icon = model.downscaled(size) if model.width > size else model
-            editor.model = icon
+            editor.animation.replace_model(editor.frame_id, icon)
+            editor.model = editor.animation.frames[0].model
             editor.render_full()
             editor.mark_unsaved()
             editor.update_status(f"Aus „{entry.get('title', 'Zeichnung')}“ verkleinert – nach Belieben nachbessern")

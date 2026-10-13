@@ -22,5 +22,7 @@ Korrekturen gegenüber dem Entwurf:
 - Die Einzelbildfolge landet in einem lesbar benannten neuen Ordner statt in einem Zufallsnamen.
 - Der Bildcache-Schlüssel validiert nicht bei jedem Aufruf die ganze Folge neu.
 
+Der [erste eingefrorene Volllauf](mac_vorlauf.json) endete mit zwei Befunden: Der Pixelsymbol-Dialog nutzt den Zeichnungseditor und erhielt seit dem Entwurf die ganze Bildfolge statt eines Bildes, das Symbol ging verloren (`test_features330`); `test_seiten33318` änderte nur `drawing` am Bestand, das Backup war dadurch inkonsistent und der Import lehnte es zu Recht ab. Der Editor hat jetzt einen Einzelbildmodus ohne Bildfolgenknöpfe; der Test ändert beide Felder; der Format-20-Vergleich prüft die neue Bildfolge ausdrücklich. Die frische Vollprüfung ist unten belegt.
+
 Die Mac-Vollprüfung auf eingefrorener Kopie, Lieferabgleich, Bundle, Signaturen und native Linux-/Windows-Matrix folgen.
 Tatsächliche menschliche Bedienung bleibt ein gesondertes Abnahmetor.

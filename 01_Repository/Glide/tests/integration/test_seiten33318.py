@@ -136,7 +136,11 @@ with tempfile.TemporaryDirectory(prefix='glide-seiten18-') as directory:
         assert snapshot['document'] == entry(did)['drawing']
         changed_drawing = mod.glide_drawing.DrawingModel.from_document(entry(did)['drawing'])
         changed_drawing.set_cell(0, 0, '#FF0000')
-        entry(did)['drawing'] = changed_drawing.to_document()
+        # Seit Format 24 trägt eine Zeichnung ihre Bildfolge; das erste Bild
+        # ändert beide Felder gemeinsam.
+        sequence = mod.glide_animation.from_entry(entry(did))
+        sequence.replace_model(sequence.frames[0].id, changed_drawing)
+        entry(did).update(mod.glide_animation.entry_fields(sequence))
         assert entry(pid)['cover'] == snapshot
         app.undo_last_change(); idle(); assert entry(pid)['cover']['kind'] == 'image'
         checks.append('Bilddatei bytegleich, native Vorschau, Pixelzeichnung als unabhängiges Titelbild, Undo und Speicherfehler ohne Dateireste')

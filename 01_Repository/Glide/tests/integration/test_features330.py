@@ -2232,7 +2232,14 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         # bleibt über spätere Versionen gleich (seit 3.31.0 festgeschrieben).
         assert reference20["version"] == 20 and reference20["app_version"] == "3.30.0"
         geladen, _aktiv = app.normalize_lists_data(copy.deepcopy(reference20))
-        assert geladen == reference20["lists"]
+        # Seit Format 24 erhält jede Zeichnung ihre Bildfolge aus genau dem
+        # gespeicherten Bild; alle übrigen Felder bleiben unverändert.
+        for entry in geladen:
+            if entry.get("list_kind") == "drawing":
+                frames = entry["animation"]["frames"]
+                assert len(frames) == 1 and frames[0]["drawing"] == entry["drawing"], entry["id"]
+        assert [{key: value for key, value in entry.items() if key != "animation"} for entry in geladen] == \
+            reference20["lists"]
         beziehungen = next(entry for entry in geladen if entry["id"] == "fixture-tasks")
         assert beziehungen["items"][1]["blocked_by"] == ["fixture-item-prepare"]
         assert beziehungen["items"][2]["time_spent_minutes"] == 25 and beziehungen["icon"]["width"] == 16
