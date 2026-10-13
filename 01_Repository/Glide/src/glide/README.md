@@ -1,6 +1,6 @@
 # Anwendungskern
 
-Stand 12.10.2026 · Glide 3.39.0 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
+Stand 13.10.2026 · Glide 3.39.1 · Aufgabenformat 23 · Einstellungen 2 · Vorlagen 2
 
 `app.pyw` ist die kanonische Anwendung (Klasse `ListApp`). Daneben liegen Module, die beim Start aus demselben Ordner geladen werden und beim Kopieren oder Paketieren immer mitgehen:
 

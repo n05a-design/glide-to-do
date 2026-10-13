@@ -1,0 +1,12 @@
+{
+  "commit": "cc19f7b3dbc7bb6ae0c05807af9df2d7e2e189f9",
+  "bytegleich": true,
+  "sha256": {
+    "01_Repository/Glide/tests/qa-3.33.21/oberflaeche_2026-10-09/README.md": "20e95f166248c588e3364e13057acf10fa0a43544503acbc207d3accff0ddf2a",
+    "01_Repository/Glide/tests/qa-3.33.21/oberflaeche_2026-10-09/bundle.json": "9c4db4898cbbf0ad38f1e802760da64e964cb604eee4a96c6c912b9a8e1de5c3",
+    "01_Repository/Glide/tests/qa-3.33.21/oberflaeche_2026-10-09/messungen/abstaende_nachher.json": "50a1414399f5b5ebaf1dff5cb8987233e488f027ad26787d857f438b032c0bde",
+    "01_Repository/Glide/tests/qa-3.33.21/oberflaeche_2026-10-09/messungen/abstaende_vorher.json": "9fc8ac609cf7175fe1e4058d7581433c8f3951f312a6e0d7c030f30634729983",
+    "01_Repository/Glide/tests/qa-3.33.21/oberflaeche_2026-10-09/voll/ergebnis.json": "b4c357265be138150616a7c1837ac240763af9dc3d2466b1a1a7488163905e9b",
+    "01_Repository/Glide/tests/qa-3.33.21/oberflaeche_2026-10-09/voll_vorlauf/ergebnis.json": "aa20640642afb6bdd4d76576541e3fbb530d94d18de2078cc3570b093f2db1fe"
+  }
+}

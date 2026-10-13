@@ -1,6 +1,6 @@
 # Glide – Entwicklungsplan und Aufgabenstand
 
-Stand 13.10.2026 · Glide 3.39.0 · Aufgabenformat 23
+Stand 13.10.2026 · Glide 3.39.1 · Aufgabenformat 23
 
 Einziges Planungsdokument: alle Aufgaben mit Marke, Stufen, Ziele und was der Inhaber entscheidet. Erledigte Zwischenstände (Paketbeschreibungen, Messerzählungen, Aufgabenkarten) werden nach der Lieferung gelöscht; Ergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) und im [CHANGELOG](../01_Repository/Glide/CHANGELOG.md), Verhalten in den [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md), Vorfassungen in Git.
 
