@@ -14,6 +14,12 @@ PYTHON_PINS = {
 }
 
 
+def export_identity(header, pin):
+    if header != b'git-' or pin not in PINS.values():
+        raise ValueError('Buildkennung benötigt den Originalpräfix und einen verifizierten Tcl-/Tk-Pin.')
+    return header + pin.encode('ascii') + b'\n'
+
+
 def python_pin(version, header, *, free_threaded=False, debug=False):
     if free_threaded or debug:
         raise ValueError('Nur die reguläre CPython-3.14-Release-ABI ist geprüft.')

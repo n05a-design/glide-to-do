@@ -283,7 +283,7 @@ jobs:
         with:
           python-version: "3.14.8"
       - name: Native Bau- und AT-SPI-Voraussetzungen
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq build-essential pkg-config libx11-dev libxext-dev libxft-dev libxss-dev libatk1.0-dev libatk-bridge2.0-dev at-spi2-core python3-gi gir1.2-atspi-2.0 dbus-x11 xvfb
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq build-essential pkg-config libx11-dev libxext-dev libxft-dev libxss-dev libharfbuzz-dev libatk1.0-dev libatk-bridge2.0-dev at-spi2-core python3-gi gir1.2-atspi-2.0 dbus-x11 xvfb
       - name: Originalquellen mit festen Pins
         run: python -B packaging/runtime/hole_runtimequellen.py --ziel "$RUNNER_TEMP/zugang-quellen"
       - name: Eigene native Runtime bauen

@@ -1,0 +1,41 @@
+{
+  "version": "3.42.0",
+  "typ": "privater 4.0-Bauprototyp, keine Lieferung",
+  "exitcode": 0,
+  "runtime": {
+    "python": "3.14.5",
+    "tcl": "9.1.0",
+    "tk_compiled": "9.1",
+    "platform": "darwin",
+    "machine": "arm64",
+    "pyinstaller": "6.22.3"
+  },
+  "own_runtime": {
+    "quellpins": {
+      "tcl": "0c6bad08d91fa2ad51f05a50a41f8c1ea82ce985",
+      "tk": "3f45110c0a568b70f2ebd5412f215e87d199bc7d",
+      "python": "5607950ef232dad16d75c0cf53101d9649d89115"
+    },
+    "runtime_patches": [
+      {
+        "id": "macos-accessibility-core",
+        "platform": "darwin",
+        "file": "macosx/tkMacOSXAccessibility.c",
+        "patch": "patches/macos-accessibility-core.patch",
+        "before_sha256": "86c3cf69bcbce3ec4e460e2ed3b62095c036d74b6c8989dd9e1beb9cd74e91e4",
+        "after_sha256": "6771ac367c45ac8ac42547cc96e40e8569fbf4342e2df5f12d03bac35ab84525",
+        "patch_sha256": "41189047d40fa3b9add1648adcc7cc907d63796b44d76a6d4944bc10e2e6eeba"
+      }
+    ],
+    "dateien": 1749,
+    "manifest_sha256": "df82a74c4377d3ad65c15dc505e6d18ff486b51ad88db0f88a206dc76a8e978a"
+  },
+  "kompilierte_module": 67,
+  "alle_codeobjekte_verglichen": true,
+  "native_dateien": 53,
+  "lizenzkomponenten": 24,
+  "paket_dateien": 462,
+  "signatur": "Ad-hoc-Signatur geprüft; Developer-ID bleibt offen",
+  "start": "mac_prototyp_start.json",
+  "app_sha256": "ee2221071d5c59734d3294ee10ba054e3957dfd4574967f50cbb22a9ed605f92"
+}

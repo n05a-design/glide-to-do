@@ -5,10 +5,17 @@ import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'packaging/runtime'))
-from runtime_contract import build_destination, extension_command, python_pin, require_atk
+from runtime_contract import PINS, build_destination, export_identity, extension_command, python_pin, require_atk
 
 
 class RuntimeContract(unittest.TestCase):
+    def test_export_identity_retains_original_prefix_and_exact_source_pin(self):
+        self.assertEqual(export_identity(b'git-', PINS['tcl']), ('git-'+PINS['tcl']+'\n').encode('ascii'))
+        for prefix, pin in ((b'git-\n', PINS['tk']), (b'foreign-', PINS['tcl']),
+                            (b'git-', 'main'), (b'git-', PINS['tcl']+'\n')):
+            with self.subTest(prefix=prefix, pin=pin), self.assertRaises(ValueError):
+                export_identity(prefix, pin)
+
     def test_header_patch_and_regular_abi_are_required(self):
         self.assertEqual(python_pin('3.14.5', '#define PY_VERSION "3.14.5"')[:8], '5607950e')
         for version, header, options in (

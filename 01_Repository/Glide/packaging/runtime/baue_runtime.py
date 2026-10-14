@@ -17,7 +17,7 @@ import sys
 import sysconfig
 import tarfile
 
-from runtime_contract import PINS, build_destination, extension_command, python_pin, require_atk
+from runtime_contract import PINS, build_destination, export_identity, extension_command, python_pin, require_atk
 from runtime_patches import apply_patches
 
 
@@ -69,6 +69,14 @@ def build(tcl_source, tk_source, python_source, destination):
     if (sources / 'python/Include/patchlevel.h').read_bytes() != (include / 'patchlevel.h').read_bytes():
         raise ValueError('Installierter Python-Header weicht vom gepinnten Original ab.')
     patches = apply_patches(sources / 'tk', system)
+    export_identities = {}
+    if system == 'win32':
+        # Die offiziellen nmake-Regeln rufen für eine fehlende manifest.uuid
+        # git rev-parse auf. Der saubere Export hat absichtlich keine .git.
+        for kind in ('tcl', 'tk'):
+            data = export_identity((sources / kind / 'win/gitmanifest.in').read_bytes(), PINS[kind])
+            (sources / kind / 'manifest.uuid').write_bytes(data)
+            export_identities[kind] = hashlib.sha256(data).hexdigest()
     prefix = destination / 'runtime'
     build_root = destination / 'bau'
     extension = destination / 'python-extension'
@@ -97,7 +105,9 @@ def build(tcl_source, tk_source, python_source, destination):
             directory.mkdir()
             configure = [sources / kind / 'unix/configure', f'--prefix={prefix}', '--enable-shared']
             if system == 'darwin':
-                configure.append('--disable-framework')
+                # Angehängte ZipFS-Archive liegen hinter Mach-O __LINKEDIT;
+                # install_name_tool kann solche Dylibs nicht paketieren.
+                configure.extend(('--disable-framework', '--disable-zipfs'))
             if kind == 'tk':
                 configure.append(f'--with-tcl={build_root / "tcl"}')
                 if system == 'darwin':
@@ -128,6 +138,7 @@ def build(tcl_source, tk_source, python_source, destination):
              for folder in (prefix, extension) for path in folder.rglob('*') if path.is_file()}
     proof = dict(python=version, platform=system, machine=machine, quellpins={**PINS, 'python': python_commit},
                  runtime_patches=patches,
+                 export_identities=export_identities,
                  runtime=str(prefix), extension=str(target), sha256=files, tcl_probe=result,
                  native_backend='ATK/AT-SPI' if system == 'linux' else 'Aqua' if system == 'darwin' else 'MSAA',
                  gui_reader_abnahme='offen; Tcl-Konsole ersetzt keine GUI-/Readerprobe')

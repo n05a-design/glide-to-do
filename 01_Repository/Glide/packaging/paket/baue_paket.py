@@ -22,6 +22,7 @@ from compiled_contract import inspect_archive
 from package_sources import TARGETS, identity, in_onedrive, manifest
 from package_spec import specification, windows_version
 from license_contract import macos_native_components, windows_native_components, pure_components, resource_components, validate_components
+from runtime_provenance import validate_runtime_proof
 
 PIN = "6.22.3"
 
@@ -88,8 +89,25 @@ def stage_licenses(source, stage, runtime):
     return dict(components=records, sha256=hashes)
 
 
-def build(source, repo_version, destination, target, licenses):
+def build(source, repo_version, destination, target, licenses, runtime_manifest=None):
     runtime = check_native(target)
+    own_runtime = None
+    if runtime['tcl'] == '9.1.0' or runtime['tk_compiled'] == '9.1':
+        if runtime_manifest is None:
+            raise ValueError('Tk 9.1 benötigt das geprüfte eigene Runtime-Baumanifest.')
+        contract_path = Path(__file__).parents[1] / 'runtime/runtime_contract.py'
+        spec = importlib.util.spec_from_file_location('glide_own_runtime_contract', contract_path)
+        contract = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(contract)
+        include = Path(sysconfig.get_path('include'))
+        pins = dict(contract.PINS, python=contract.python_pin(runtime['python'],
+                    (include / 'patchlevel.h').read_text(encoding='utf-8'),
+                    free_threaded=bool(sysconfig.get_config_var('Py_GIL_DISABLED')),
+                    debug=bool(sysconfig.get_config_var('Py_DEBUG'))))
+        patches = json.loads(contract_path.with_name('patches.json').read_text(encoding='utf-8'))['patches']
+        patches = [patch for patch in patches if patch['platform'] == sys.platform]
+        import _tkinter
+        own_runtime = validate_runtime_proof(runtime_manifest, runtime, _tkinter.__file__, pins=pins, patches=patches)
     source = source.resolve()
     destination = destination.resolve()
     if destination == source or destination.is_relative_to(source):
@@ -119,6 +137,7 @@ def build(source, repo_version, destination, target, licenses):
     shutil.copy2(runtime_contract, stage / runtime_contract.name)
     license_proof = stage_licenses(licenses, stage, runtime)
     input_proof = dict(version=repo_version, target=target, product=product,
+                       own_runtime=own_runtime,
                        runtime=runtime, sha256=files, bootstrap_sha256=sha(bootstrap),
                        runtime_contract_sha256=sha(runtime_contract),
                        licenses_sha256={"licenses/"+n:h for n,h in license_proof["sha256"].items()} |
@@ -209,8 +228,9 @@ def main():
     parser.add_argument("--ziel", type=Path, required=True)
     parser.add_argument("--plattform", choices=tuple(TARGETS), required=True)
     parser.add_argument("--lizenzen", type=Path, required=True)
+    parser.add_argument("--runtime-bau", type=Path, help="Geprüftes eigenes Tk-9.1-Baumanifest")
     args = parser.parse_args()
-    build(args.quelle, args.version, args.ziel, args.plattform, args.lizenzen)
+    build(args.quelle, args.version, args.ziel, args.plattform, args.lizenzen, args.runtime_bau)
 
 
 if __name__ == "__main__":
