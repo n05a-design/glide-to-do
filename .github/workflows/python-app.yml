@@ -287,11 +287,12 @@ jobs:
       - name: Originalquellen mit festen Pins
         run: python -B packaging/runtime/hole_runtimequellen.py --ziel "$RUNNER_TEMP/zugang-quellen"
       - name: Eigene native Runtime bauen
+        id: runtime
         run: python -B packaging/runtime/baue_runtime.py --tcl-quelle "$RUNNER_TEMP/zugang-quellen/tcl" --tk-quelle "$RUNNER_TEMP/zugang-quellen/tk" --python-quelle "$RUNNER_TEMP/zugang-quellen/python" --ziel "$RUNNER_TEMP/zugang-runtime"
       - name: Echte native AT-SPI-Textschnittstelle
         run: dbus-run-session -- xvfb-run -a python -B tests/tools/pruefe_linux_runtime.py --runtime "$RUNNER_TEMP/zugang-runtime" --ziel "$RUNNER_TEMP/zugang-native"
       - name: Aufgaben-Kernablauf auf eigener Runtime
-        if: success()
+        if: always() && !cancelled() && steps.runtime.outcome == 'success'
         run: dbus-run-session -- xvfb-run -a env PYTHONPATH="$RUNNER_TEMP/zugang-runtime/python-extension" python -B tests/integration/test_zugang400.py --nativ --report "$RUNNER_TEMP/zugang-gui.json"
       - name: Native Belege sichern
         if: always()
@@ -333,6 +334,7 @@ jobs:
       - name: Originalquellen mit festen Pins
         run: python -B packaging/runtime/hole_runtimequellen.py --ziel "$env:RUNNER_TEMP/zugang-quellen"
       - name: Eigene native Runtime mit MSVC bauen
+        id: runtime
         run: |
           $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
           $vs = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
@@ -349,6 +351,7 @@ jobs:
           python -B tests/integration/test_zugang400.py --nativ --report "$env:RUNNER_TEMP/zugang-gui.json"
           exit $LASTEXITCODE
       - name: Tatsächliche NVDA-Sprachausgabe im isolierten Testprofil
+        if: always() && !cancelled() && steps.runtime.outcome == 'success'
         run: |
           $env:PYTHONPATH = "$env:RUNNER_TEMP/zugang-runtime/python-extension"
           python -B tests/tools/pruefe_reader_nvda.py --ziel "$env:RUNNER_TEMP/zugang-nvda"

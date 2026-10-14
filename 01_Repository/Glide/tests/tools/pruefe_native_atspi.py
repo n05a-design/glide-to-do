@@ -13,6 +13,16 @@ import time
 import traceback
 
 
+def text_values(text_interface, accessible):
+    # Accessible.get_text() ist in PyGObject ein gleichnamiger Zugriff auf
+    # das Interface. Die Methoden mit Offsets explizit auswählen.
+    actual = text_interface.get_text(accessible, 0, -1)
+    count = text_interface.get_character_count(accessible)
+    caret = text_interface.get_caret_offset(accessible)
+    prefix = text_interface.get_text(accessible, 0, min(2, count))
+    return actual, count, caret, prefix
+
+
 def run(pid, name, expected, report):
     if (sys.platform != 'linux' or os.environ.get('GITHUB_ACTIONS') != 'true'
             or os.environ.get('RUNNER_ENVIRONMENT') != 'github-hosted'):
@@ -50,14 +60,12 @@ def run(pid, name, expected, report):
         assert field is not None, 'Feld nativ nicht auffindbar: ' + name
         text = field.get_text_iface()
         assert text is not None, 'Benanntes Eingabefeld bietet kein natives AtspiText'
-        actual = text.get_text(0, -1)
-        count = text.get_character_count()
-        caret = text.get_caret_offset()
+        actual, count, caret, prefix = text_values(Atspi.Text, text)
         result.update(name=field.get_name(), role=field.get_role_name(), text=actual,
                       character_count=count, caret=caret, besuchte_eigene_knoten=len(seen))
         assert actual == expected, ('Native Textschnittstelle liefert einen anderen Inhalt', actual, expected)
         assert count == len(expected) and 0 <= caret <= count, (count, caret)
-        assert text.get_text(0, min(2, count)) == expected[:2], 'AT-SPI-Zeichenoffsets müssen Unicode-Zeichen zählen'
+        assert prefix == expected[:2], 'AT-SPI-Zeichenoffsets müssen Unicode-Zeichen zählen'
         result['exitcode'] = 0
     except BaseException as error:
         result.update(fehler=str(error), traceback=traceback.format_exc())

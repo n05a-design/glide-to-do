@@ -54,7 +54,7 @@ def extension_command(system, machine, *, include, prefix, modules, output, pyth
         return ['cl', '/nologo', '/LD', '/MD', '/O2'] + [f'/I{path}' for path in includes] + [
             str(modules / '_tkinter.c'), f'/Fo{output.with_suffix(".obj")}', '/link',
             f'/OUT:{output}', '/MACHINE:X64', str(python_library),
-            str(prefix / 'lib/tcl91.lib'), str(prefix / 'lib/tcl9tk91.lib')]
+            str(prefix / 'lib/tcl91.lib'), str(prefix / 'lib/tcl9tk91.lib'), str(prefix / 'lib/tommath.lib')]
     if system == 'darwin' and machine == 'arm64':
         flags = ['-bundle', '-undefined', 'dynamic_lookup', '-arch', 'arm64']
         libraries = ['libtcl9tk9.1.dylib', 'libtcl9.1.dylib']

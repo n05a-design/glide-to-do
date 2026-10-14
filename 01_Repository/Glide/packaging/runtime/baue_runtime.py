@@ -124,7 +124,7 @@ def build(tcl_source, tk_source, python_source, destination):
     execute(command, cwd=extension, environment=environment, log=logs / 'tkinter-extension.log')
     if system == 'win32':
         # Python lädt abhängige DLLs aus dem pyd-Ordner; PATH genügt seit 3.8 nicht.
-        for name in ('tcl91.dll', 'tcl9tk91.dll'):
+        for name in ('tcl91.dll', 'tcl9tk91.dll', 'zlib1.dll', 'libtommath.dll'):
             shutil.copy2(prefix / 'bin' / name, extension / name)
     probe_environment = dict(environment, PYTHONPATH=str(extension))
     code = ('import _tkinter,tkinter,json; t=tkinter.Tcl(); print(json.dumps(dict('
