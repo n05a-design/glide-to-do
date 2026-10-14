@@ -1,5 +1,26 @@
 """Grenzen einer Laufzeitsperre ausschließlich im vergänglichen Hosted-CI-Runner."""
+import errno
 from pathlib import PureWindowsPath
+
+
+def access_denied(error):
+    # FileIO meldet Windows-Zugriffsfehler über die C-Runtime als EACCES;
+    # CreateProcess liefert dagegen den ursprünglichen WinError 5.
+    return (getattr(error, 'winerror', None) == 5 or
+            isinstance(error, PermissionError) and error.errno == errno.EACCES)
+
+
+def acl_snapshot(raw):
+    """icacls-/save-DACLs unabhängig von der Verzeichnisreihenfolge vergleichen."""
+    lines = raw.decode('utf-16').splitlines()
+    if not lines or len(lines) % 2:
+        raise ValueError('Unvollständige icacls-ACL-Sicherung.')
+    result = {}
+    for name, dacl in zip(lines[::2], lines[1::2]):
+        if not name or not dacl.startswith('D:') or name in result:
+            raise ValueError('Ungültige oder doppelte icacls-ACL-Sicherung.')
+        result[name] = dacl
+    return result
 
 
 def normalize_environment(environment):

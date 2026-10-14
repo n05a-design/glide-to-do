@@ -1,8 +1,37 @@
 import sys as _sys
 from pathlib import Path as _Path
 _sys.path.insert(0, str(_Path(__file__).resolve().parents[2] / 'packaging/paket'))
+import errno
 import unittest
-from windows_isolation import normalize_environment, plan
+from windows_isolation import access_denied, acl_snapshot, normalize_environment, plan
+
+
+class NativeDenialEvidence(unittest.TestCase):
+    def test_crt_fileio_eacces_and_native_winerror_are_both_access_denied(self):
+        self.assertTrue(access_denied(PermissionError(errno.EACCES, 'Permission denied')))
+        native = OSError('Access denied')
+        native.winerror = 5
+        self.assertTrue(access_denied(native))
+
+    def test_unrelated_missing_file_and_other_os_failures_do_not_prove_denial(self):
+        for error in (FileNotFoundError(errno.ENOENT, 'Missing'),
+                      OSError(errno.EIO, 'I/O error'), PermissionError(errno.EPERM, 'Not permitted')):
+            with self.subTest(error=error):
+                self.assertFalse(access_denied(error))
+
+    def test_acl_comparison_preserves_every_dacl_but_ignores_enumeration_order(self):
+        before = 'Python\\\r\nD:AI(A;OICI;FA;;;SY)\r\nPython\\python.exe\r\nD:AI(A;ID;FA;;;SY)\r\n'
+        after = 'Python\\python.exe\r\nD:AI(A;ID;FA;;;SY)\r\nPython\\\r\nD:AI(A;OICI;FA;;;SY)\r\n'
+        snapshot = acl_snapshot(before.encode('utf-16'))
+        self.assertEqual(snapshot, acl_snapshot(after.encode('utf-16')))
+        self.assertNotEqual(snapshot, acl_snapshot(after.replace(';FA;', ';RX;', 1).encode('utf-16')))
+        self.assertNotEqual(snapshot, acl_snapshot('Python\\\r\nD:AI(A;OICI;FA;;;SY)\r\n'.encode('utf-16')))
+
+    def test_incomplete_duplicate_and_malformed_acl_backups_are_rejected(self):
+        for text in ('', 'Python\r\n', 'Python\r\ninvalid\r\n',
+                     'Python\r\nD:AI\r\nPython\r\nD:AI\r\n'):
+            with self.subTest(text=text), self.assertRaises(ValueError):
+                acl_snapshot(text.encode('utf-16'))
 
 
 class HostedIsolationBoundary(unittest.TestCase):
