@@ -14,15 +14,15 @@ import subprocess
 import sys
 import tempfile
 import traceback
-from windows_isolation import plan
+from windows_isolation import normalize_environment, plan
 
 
 def run(package,report,forbidden,*,timeout=150):
     if sys.platform!='win32':raise RuntimeError('Native Windows-Probe erforderlich.')
     # Reale Pfade vor der reinen Prüfung auflösen; keine Junction darf eine
     # Quelle außerhalb des zulässigen vergänglichen Prüfbereichs verstecken.
-    environment=dict(os.environ)
-    for key in ('RUNNER_TEMP','RUNNER_TOOL_CACHE','GITHUB_WORKSPACE','SystemRoot'):
+    environment=normalize_environment(os.environ)
+    for key in ('RUNNER_TEMP','RUNNER_TOOL_CACHE','GITHUB_WORKSPACE','SYSTEMROOT'):
         if key in environment:environment[key]=str(Path(environment[key]).resolve())
     boundary=plan(environment,str(Path(package).resolve()),str(Path(report).resolve()),
                   [str(Path(path).resolve())for path in forbidden])
@@ -35,7 +35,7 @@ def run(package,report,forbidden,*,timeout=150):
     report.parent.mkdir(parents=True,exist_ok=True)
     smoke=report.with_name(report.stem+'-paket.json')
     if smoke.exists():raise ValueError('Neuer Paketbericht erforderlich.')
-    system=Path(environment['SystemRoot'])/'System32'
+    system=Path(environment['SYSTEMROOT'])/'System32'
     def command(args,**kwargs):
         return subprocess.run([str(value)for value in args],capture_output=True,text=True,
                               encoding='utf-8',errors='replace',timeout=timeout,**kwargs)

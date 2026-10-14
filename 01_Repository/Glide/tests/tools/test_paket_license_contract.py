@@ -98,6 +98,15 @@ class LicenseContractTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Microsoft-VC-Runtime'):
             validate_components(matrix, records)
 
+    def test_windows_static_zlib_ng_cannot_inherit_only_the_python_license(self):
+        matrix = windows_native_components(['_internal/python314.dll', '_internal/_decimal.pyd'])
+        self.assertEqual(matrix['_internal/python314.dll'], ['Python', 'zlib-ng'])
+        self.assertEqual(matrix['_internal/_decimal.pyd'], ['Python', 'libmpdec'])
+        records = [dict(name=name, version='pin', source='original', files={'terms': 'digest'})
+                   for name in ('Python', 'libmpdec')]
+        with self.assertRaisesRegex(ValueError, 'zlib-ng'):
+            validate_components(matrix, records)
+
     def test_windows_new_dlls_extensions_and_duplicate_names_refuse_the_build(self):
         for names in (['_internal/alien.dll'], ['_internal/_unknown.pyd'],
                       ['_internal/python315.dll'], ['_internal/../outside.dll'],

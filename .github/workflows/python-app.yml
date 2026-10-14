@@ -28,10 +28,10 @@ on:
   workflow_dispatch:
     inputs:
       bereich:
-        description: "Vollständige Matrix oder gezielte Windows-UI-Diagnose"
+        description: "Vollständige Matrix, Windows-UI-Diagnose oder Entwicklungspaket"
         type: choice
         default: voll
-        options: [voll, aufgaben-layout, tagesdialoge]
+        options: [voll, aufgaben-layout, tagesdialoge, windows-paket]
 
 permissions:
   contents: read
@@ -155,9 +155,10 @@ jobs:
   paket-windows:
     # Paket 7 (D27): eigenständiges Entwicklungspaket ohne installiertes Python.
     # Unsigniertes Entwicklungsartefakt; Integrität über Paket- und Quellhashes.
+    # windows-paket wiederholt nur den Bau-/Startnachweis. Es ersetzt keine Vollmatrix.
     name: Eigenständiges Paket (Windows x64, PyInstaller 6.22.3)
     needs: vollpruefung-windows
-    if: success() && (github.event.inputs.bereich == '' || github.event.inputs.bereich == 'voll')
+    if: always() && !cancelled() && (needs.vollpruefung-windows.result == 'success' || (github.event_name == 'workflow_dispatch' && github.event.inputs.bereich == 'windows-paket'))
     runs-on: windows-2025
     timeout-minutes: 60
     defaults:

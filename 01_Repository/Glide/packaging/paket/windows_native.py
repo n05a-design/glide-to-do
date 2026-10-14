@@ -9,10 +9,10 @@ SYSTEM_DLLS = frozenset(name+'.dll' for name in (
     'comdlg32', 'crypt32', 'cryptbase', 'cryptsp', 'dbghelp', 'dnsapi', 'dwmapi',
     'gdi32', 'imm32', 'iphlpapi', 'kernel32', 'kernelbase', 'mpr', 'msimg32',
     'msvcrt', 'ncrypt', 'netapi32', 'normaliz', 'ntdll', 'ole32', 'oleaut32',
-    'powrprof', 'profapi', 'psapi', 'rpcrt4', 'sechost', 'secur32', 'setupapi',
+    'powrprof', 'profapi', 'propsys', 'psapi', 'rpcrt4', 'sechost', 'secur32', 'setupapi',
     'shell32', 'shlwapi', 'ucrtbase', 'user32', 'userenv', 'usp10', 'uxtheme',
     'version', 'winhttp', 'wininet', 'winmm', 'winspool', 'wintrust', 'ws2_32',
-    'wtsapi32'))
+    'wtsapi32')) | {'winspool.drv'}
 
 
 def system_library(name):

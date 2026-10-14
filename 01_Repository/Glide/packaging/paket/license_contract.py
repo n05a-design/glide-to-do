@@ -92,7 +92,7 @@ def windows_native_components(names):
     """Geprüfte CPython-/Tcl-/Tk-9-Dateinamen; neue DLLs brauchen neue Belege."""
     fixed = {
         'Glide.exe': ['PyInstaller'],
-        '_internal/python314.dll': ['Python'],
+        '_internal/python314.dll': ['Python', 'zlib-ng'],
         '_internal/python3.dll': ['Python'],
         '_internal/tcl90.dll': ['Tcl', 'Henry-Spencer-Regex'],
         '_internal/tcl9tk90.dll': ['Tk', 'NanoSVG'],

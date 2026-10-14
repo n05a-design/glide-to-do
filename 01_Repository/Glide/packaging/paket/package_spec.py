@@ -33,6 +33,17 @@ def specification(stage, target, product, icon, *, modules=()):
         ')',
         'coll = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name='+repr(product['APP_NAME'])+')',
     ]
+    if not mac:
+        # Python 3.14 verlangt Windows 10. UCRT und API-set-Verträge kommen
+        # dort vom Betriebssystem; die von PyInstaller gesammelten alten
+        # Kompatibilitätskopien sollen diese Anbieter nicht überlagern.
+        position = lines.index('pyz = PYZ(a.pure)')
+        lines[position:position] = [
+            "def system_runtime_stub(name):",
+            "    name = name.replace('\\\\', '/').rsplit('/', 1)[-1].casefold()",
+            "    return name == 'ucrtbase.dll' or (name.endswith('.dll') and name.startswith(('api-ms-win-', 'ext-ms-win-')))",
+            "a.binaries = [record for record in a.binaries if not system_runtime_stub(record[0])]",
+        ]
     if mac:
         info=dict(CFBundleName=product['APP_NAME'],CFBundleDisplayName=product['APP_NAME'],
                   CFBundleShortVersionString=product['APP_VERSION'],CFBundleVersion=product['APP_VERSION'],

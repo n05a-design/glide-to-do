@@ -9,6 +9,7 @@ Veröffentlichungslizenz gewählt; der vorhandene Statushinweis wird beigelegt.
 Aufruf: python -B lizenzen_vorbereiten_windows.py --quelle src/glide --repo 01_Repository/Glide --ziel <Ordner>
 """
 import argparse
+import ctypes
 import hashlib
 import importlib.metadata
 import json
@@ -18,6 +19,8 @@ import shutil
 import ssl
 import sys
 import urllib.request
+
+from windows_license_sources import static_sources
 
 PIN = "6.22.3"
 BUILD = ("pyinstaller", "pyinstaller-hooks-contrib", "altgraph", "packaging", "setuptools", "pefile", "pywin32-ctypes")
@@ -107,7 +110,7 @@ def main():
     b.add("Python", python_version, "https://github.com/python/cpython/tree/v" + python_version, [python_license])
     # Die Windows-Ausgabe von Python führt die Lizenzen ihrer mitgelieferten
     # Bibliotheken in LICENSE.txt; jede Zuordnung braucht ihren Abschnitt.
-    for component, marker in (("libffi", "libffi"), ("libmpdec", "mpdecimal"), ("zlib", "zlib")):
+    for component, marker in (("libffi", "libffi"),):
         if marker.casefold() not in license_text.casefold():
             raise SystemExit("LICENSE.txt der Laufzeit enthält keinen Abschnitt für " + component)
         b.add(component, "mit Python " + python_version, "Python-LICENSE.txt (Windows-Ausgabe)", [python_license])
@@ -120,6 +123,26 @@ def main():
     # Versionen der mitgelieferten Fremdbibliotheken versionsgenau aus dem Bauskript des CPython-Tags.
     externals = b.fetch("https://raw.githubusercontent.com/python/cpython/v" + python_version + "/PCbuild/get_externals.bat",
                         "Python-get_externals.bat").read_text(encoding="utf-8", errors="replace")
+    import _decimal
+    import zlib
+    for record in static_sources(externals, _decimal.__libmpdec_version__, getattr(zlib, 'ZLIBNG_VERSION', None)):
+        terms = b.fetch(record['url'], record['file'])
+        b.add(record['name'], record['version'], record['source'], [terms])
+    # Eine gegebenenfalls mit Tcl gelieferte klassische zlib-DLL ist von
+    # der statischen zlib-ng im Python-Kern zu unterscheiden.
+    classic = [path for path in (base / 'zlib1.dll', base / 'DLLs/zlib1.dll') if path.is_file()]
+    if len(classic) > 1 and len({sha(path) for path in classic}) != 1:
+        raise SystemExit('Mehrdeutige klassische zlib-Anbieter in der Python-Installation.')
+    if classic:
+        library = ctypes.CDLL(str(classic[0]))
+        library.zlibVersion.restype = ctypes.c_char_p
+        version = library.zlibVersion().decode('ascii')
+        import re
+        if re.fullmatch(r'\d+\.\d+(?:\.\d+)?', version) is None:
+            raise SystemExit('Klassische zlib-Version nicht eindeutig.')
+        url = 'https://raw.githubusercontent.com/madler/zlib/v' + version + '/LICENSE'
+        b.add('zlib', version, 'https://github.com/madler/zlib/tree/v' + version,
+              [b.fetch(url, 'zlib-LICENSE.txt')])
 
     tag = "core-" + tcl.replace(".", "-")
     for name in ("Tcl", "Tk"):
