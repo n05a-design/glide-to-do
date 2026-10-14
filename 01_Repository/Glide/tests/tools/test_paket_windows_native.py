@@ -4,6 +4,7 @@ _sys.path.insert(0, str(_Path(__file__).resolve().parents[2] / 'packaging/paket'
 import copy
 import unittest
 from windows_native import validate_graph, validate_loaded
+from runtime_paths import defender_provider
 
 
 def record(path, imports=(), *, machine=0x8664, sha256='a'*64):
@@ -74,6 +75,34 @@ class WindowsNativeContract(unittest.TestCase):
         self.assertEqual(result['exitcode'], 1)
         with self.assertRaises(ValueError):
             validate_loaded('relatives-paket', 'C:\\Windows', [])
+
+    def test_defender_amsi_requires_exact_system_location_and_valid_microsoft_signature(self):
+        provider = r'C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.26090.7-0\MpOav.dll'
+        signed = lambda path: dict(Status='Valid', Subject='CN=Microsoft Windows, O=Microsoft Corporation, C=US')
+        result = validate_loaded(r'C:\Paket\Glide', r'C:\Windows', [provider],
+                                 programdata=r'C:\ProgramData', authenticate=signed)
+        self.assertEqual(result['exitcode'], 0)
+        self.assertEqual(result['bibliotheken'][0]['bereich'], 'windows-defender')
+        self.assertNotIn('C:\\ProgramData', str(result))
+        for signature in (dict(Status='NotSigned', Subject='O=Microsoft Corporation'),
+                          dict(Status='HashMismatch', Subject='O=Microsoft Corporation'),
+                          dict(Status='Valid', Subject='CN=Microsoft Corporation, O=Other Corporation')):
+            with self.subTest(signature=signature):
+                result = validate_loaded(r'C:\Paket\Glide', r'C:\Windows', [provider],
+                    programdata=r'C:\ProgramData', authenticate=lambda path: signature)
+                self.assertEqual(result['exitcode'], 1)
+
+    def test_defender_filename_does_not_allow_external_runtimes_or_other_locations(self):
+        for name in (r'C:\ProgramData\MpOav.dll',
+                     r'C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.1.0-0\python314.dll',
+                     r'C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.1.0-0\nested\MpOav.dll',
+                     r'C:\ProgramData\Microsoft\Windows Defender\Platform\..\MpOav.dll',
+                     r'D:\Other\Microsoft\Windows Defender\Platform\4.18.1.0-0\MpOav.dll'):
+            with self.subTest(name=name):
+                self.assertIsNone(defender_provider(name, r'C:\ProgramData'))
+                result = validate_loaded(r'C:\Paket\Glide', r'C:\Windows', [name],
+                    programdata=r'C:\ProgramData', authenticate=lambda path: self.fail('Kein Signaturaufruf für fremde Pfade'))
+                self.assertEqual(result['exitcode'], 1)
 
 
 if __name__ == '__main__':

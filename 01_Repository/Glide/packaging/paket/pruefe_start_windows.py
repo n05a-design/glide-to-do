@@ -121,13 +121,24 @@ def run(package,report,forbidden,*,timeout=150):
                 restored.append(restore)
                 after=acl.with_name(acl.stem+'-nachher.txt')
                 check,check_output=cleanup([system/'icacls.exe',path,'/save',after,'/T','/Q'])
+                difference={}
                 try:
-                    verified.append(check==0 and acl_snapshot(after.read_bytes())==original)
+                    actual=acl_snapshot(after.read_bytes()) if check==0 else {}
+                    verified.append(check==0 and actual==original)
+                    if actual!=original:
+                        changed=[name for name in original.keys() & actual.keys() if original[name]!=actual[name]]
+                        difference={'vorher':len(original),'nachher':len(actual),
+                                    'fehlend':len(original.keys()-actual.keys()),
+                                    'neu':len(actual.keys()-original.keys()),'geaendert':len(changed),
+                                    'fehlende_beispiele':sorted(original.keys()-actual.keys())[:3],
+                                    'neue_beispiele':sorted(actual.keys()-original.keys())[:3],
+                                    'beispiele':[{'datei':name,'vorher':original[name],'nachher':actual[name]}
+                                                 for name in sorted(changed)[:3]]}
                 except BaseException as exc:
                     verified.append(False)
                     check_output+='\n'+str(exc)
                 restore_details.append({'entsperren':unlock_output,'restaurieren':restore_output,
-                                        'nachpruefen':check_output})
+                                        'nachpruefen':check_output,'acl_vergleich':difference})
             result['acl_entsperrung_exitcodes']=unlocked
             result['acl_restaurierung_exitcodes']=restored
             result['acl_originale_wiederhergestellt']=verified

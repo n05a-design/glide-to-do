@@ -142,7 +142,7 @@ def smoke(report_path):
             external_paths = [value for value in sys.path
                               if value and not Path(value).resolve().is_relative_to(bundle)]
             assert not external_paths, external_paths
-            from runtime_paths import script_library, tk_providers, validate_loaded
+            from runtime_paths import authenticode, script_library, tk_providers, validate_loaded
             native_libraries = loaded_libraries()
             providers = tk_providers(native_libraries)
             assert {'tcl', 'tk'} <= providers.keys(), 'Geladene native Tcl-/Tk-Anbieter fehlen.'
@@ -150,7 +150,9 @@ def smoke(report_path):
                 assert Path(provider).resolve().is_relative_to(bundle), 'Geladene Tcl-/Tk-Bibliothek außerhalb des Pakets.'
             loaded_proof = None
             if sys.platform == 'win32':
-                loaded_proof = validate_loaded(str(bundle), os.environ['SystemRoot'], native_libraries)
+                loaded_proof = validate_loaded(str(bundle), os.environ['SystemRoot'], native_libraries,
+                    programdata=os.environ.get('ProgramData'),
+                    authenticate=lambda path: authenticode(path, os.environ['SystemRoot']))
                 assert loaded_proof['exitcode'] == 0, loaded_proof['fehler']
             libraries = {}
             for key, command in (("tcl", ("info", "library")), ("tk", ("set", "tk_library"))):
