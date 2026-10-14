@@ -1,0 +1,11 @@
+# Eigene Tcl/Tk-9.1-Runtime
+
+Stand 14.10.2026 · Glide 3.42.0 · Vorbereitung von Paket 8 / 4.0.0, keine Lieferung
+
+`baue_runtime.py` exportiert saubere Git-Originale aus den Pins in `runtime_contract.py` und baut Tcl, Tk und die dazu passende CPython-3.14-Erweiterung `_tkinter` in einem neuen Ziel außerhalb von OneDrive. Installierte Python-Header und Quellheader müssen bytegleich sein. Native Ziele: macOS arm64, Windows x64 mit MSVC, Linux x64 mit verpflichtendem ATK/AT-SPI. Es gibt keine Systeminstallation.
+
+`runtime_patches.py` wendet ausschließlich die in `patches.json` dokumentierten Korrekturen auf die exportierte Baukopie an. Quellpin, Originalbytes, Diffbytes und Ergebnisbytes müssen passen. Originalquellen bleiben unverändert. Die Mac-Korrektur betrifft bestätigte native Verträge bei Aktionswarteschlange, deaktivierten Inhalten, Fokus, Verfügbarkeit, Kennungen, Hilfe und Aufgabengruppen. Jede vorgemerkte Aktion besitzt Interpreter und Kommandodaten; entfernte, versteckte, deaktivierte oder ersetzte Ziele werden verworfen. Interpreterlöschung entfernt ausstehende Aktionen.
+
+`hole_runtimequellen.py` lädt die offiziellen festen Git-Pins ausschließlich in ein neues Hosted-CI-Ziel unter `RUNNER_TEMP`. Der vorhandene Workflow `Glide-Prüfung` mit manuellem Bereich `zugang400` baut Linux und anschließend Windows; Linux prüft die reale externe AT-SPI-Textschnittstelle, Windows den Aufgaben-Kernablauf und danach tatsächliche NVDA-Sprache mit isoliertem Profil. Die nativen Vollprüfungen je Lieferung bleiben zusätzlich erforderlich.
+
+Mac-Bau und zwölf native Anbieterfälle, acht GUI-Prüfgruppen, bestehende Inspektorsuite und Tk-9.0-Rückfall sind grün. [Vorprüfnachweise](../../tests/qa-3.42.0/zugang400_vorbereitung_2026-10-14/README.md). Windows/Linux, eigene 4.0-Pakete und tatsächliche Readerabnahme sind noch offen. `lizenzen_tk91_macos.py` erzeugt die passende Original-Lizenzbasis einschließlich utf8proc; die eigentliche Paket-Lizenzprüfung folgt beim 4.0-Bau. NVDA und GPL-Testhelfer werden nicht in Glide-Pakete übernommen.

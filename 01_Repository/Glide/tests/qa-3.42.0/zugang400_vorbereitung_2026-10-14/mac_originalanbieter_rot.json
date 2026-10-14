@@ -1,0 +1,271 @@
+{
+  "exitcode": 1,
+  "native_getter": true,
+  "nur_eigener_testprozess": true,
+  "python": "3.14.5 (v3.14.5:5607950ef23, May 10 2026, 07:38:09) [Clang 21.0.0 (clang-2100.0.123.102)]",
+  "tk": "9.1.0",
+  "anbieter_sha256": "cb61829d5462df081919cf0a18d61b52007700b4362c5d5058f1d392c05c1b81",
+  "voiceover_abnahme": "offen; nativer Anbieter ersetzt keine Readerprobe",
+  "checks": [
+    "Native Rollen, deutscher Schaltflächentitel und unveränderter Unicode-Feldtext",
+    "Echter Checkboxwert und AXPress",
+    "Eine vorgemerkte Aktion eines entfernten Widgets bleibt ohne Aufruf und Tcl-Fehler"
+  ],
+  "failures": [
+    {
+      "pruefung": "Nativer Anbieter unterstützt den vollständigen Fokus-/Auswahlvertrag",
+      "ist": false
+    },
+    {
+      "pruefung": "Native Aufgaben-Gruppe nennt ihren Bereich und die jeweils aktuelle Auswahl",
+      "ist": {
+        "vorher": {
+          "role": "AXGroup",
+          "title": "Aufgaben",
+          "label": "Table with 1 items. ",
+          "value": "Angebot prüfen. Offen. Heute eingeplant.",
+          "help": null,
+          "identifier": "112",
+          "enabled": false,
+          "focused": false,
+          "ignored": false
+        },
+        "nachher": {
+          "role": "AXGroup",
+          "title": "Aufgaben",
+          "label": "Table with 1 items. ",
+          "value": "Unterlagen prüfen. Erledigt. Morgen eingeplant.",
+          "help": null,
+          "identifier": "341",
+          "enabled": false,
+          "focused": false,
+          "ignored": false
+        }
+      }
+    },
+    {
+      "pruefung": "Aktive native Bedienelemente melden sich als verfügbar",
+      "ist": {
+        "button": {
+          "role": "AXButton",
+          "title": "Erste native Aktion",
+          "label": "Erste native Aktion",
+          "value": "",
+          "help": null,
+          "identifier": "230",
+          "enabled": false,
+          "focused": false,
+          "ignored": false
+        },
+        "entry": {
+          "role": "AXTextField",
+          "title": "Aufgabentitel",
+          "label": "",
+          "value": "  Angebot prüfen 🏠",
+          "help": null,
+          "identifier": "703",
+          "enabled": false,
+          "focused": false,
+          "ignored": false
+        },
+        "checkbox": {
+          "role": "AXCheckBox",
+          "title": "Unterlagen prüfen",
+          "label": "",
+          "value": "0",
+          "help": null,
+          "identifier": "416",
+          "enabled": false,
+          "focused": false,
+          "ignored": false
+        }
+      }
+    },
+    {
+      "pruefung": "Native Kennung bleibt für dasselbe Widget stabil",
+      "ist": {
+        "role": "AXButton",
+        "title": "Erste native Aktion",
+        "label": "Erste native Aktion",
+        "value": "",
+        "help": null,
+        "identifier": "564",
+        "enabled": false,
+        "focused": false,
+        "ignored": false
+      }
+    },
+    {
+      "pruefung": "Nativer Fokus unterscheidet das aktuelle Feld von anderen Widgets",
+      "ist": {
+        "fokussiert": {
+          "role": "AXTextField",
+          "title": "Aufgabentitel",
+          "label": "",
+          "value": "  Angebot prüfen 🏠",
+          "help": null,
+          "identifier": "253",
+          "enabled": false,
+          "focused": false,
+          "ignored": false
+        },
+        "nicht_fokussiert": {
+          "role": "AXButton",
+          "title": "Erste native Aktion",
+          "label": "Erste native Aktion",
+          "value": "",
+          "help": null,
+          "identifier": "558",
+          "enabled": false,
+          "focused": false,
+          "ignored": false
+        }
+      }
+    },
+    {
+      "pruefung": "Native Bearbeitungshilfe ist über den offiziellen NSAccessibility-Getter erreichbar",
+      "ist": {
+        "role": "AXTextField",
+        "title": "Aufgabentitel",
+        "label": "",
+        "value": "  Angebot prüfen 🏠",
+        "help": null,
+        "identifier": "253",
+        "enabled": false,
+        "focused": false,
+        "ignored": false
+      }
+    },
+    {
+      "pruefung": "Zwei vor der Ereignisverarbeitung ausgelöste native Aktionen behalten jeweils ihr eigenes Ziel",
+      "ist": [
+        "zweite",
+        "zweite"
+      ]
+    },
+    {
+      "pruefung": "Deaktivierte native Aktionen werden bereits vom Anbieter verweigert",
+      "ist": {
+        "angenommen": true,
+        "aufrufe": [
+          "zweite",
+          "zweite"
+        ]
+      }
+    },
+    {
+      "pruefung": "Schreibgeschützter Feldinhalt bleibt nativ lesbar und meldet sich als nicht bearbeitbar",
+      "ist": {
+        "role": "AXTextField",
+        "title": "Aufgabentitel",
+        "label": "",
+        "value": "  Angebot prüfen 🏠",
+        "help": null,
+        "identifier": "538",
+        "enabled": false,
+        "focused": false,
+        "ignored": true
+      }
+    }
+  ],
+  "vollstaendiger_backend_vertrag": false,
+  "native_werte": {
+    "button": {
+      "role": "AXButton",
+      "title": "Erste native Aktion",
+      "label": "Erste native Aktion",
+      "value": "",
+      "help": null,
+      "identifier": "230",
+      "enabled": false,
+      "focused": false,
+      "ignored": false
+    },
+    "entry": {
+      "role": "AXTextField",
+      "title": "Aufgabentitel",
+      "label": "",
+      "value": "  Angebot prüfen 🏠",
+      "help": null,
+      "identifier": "703",
+      "enabled": false,
+      "focused": false,
+      "ignored": false
+    },
+    "checkbox": {
+      "role": "AXCheckBox",
+      "title": "Unterlagen prüfen",
+      "label": "",
+      "value": "0",
+      "help": null,
+      "identifier": "416",
+      "enabled": false,
+      "focused": false,
+      "ignored": false
+    }
+  },
+  "native_auswahl": {
+    "vorher": {
+      "role": "AXGroup",
+      "title": "Aufgaben",
+      "label": "Table with 1 items. ",
+      "value": "Angebot prüfen. Offen. Heute eingeplant.",
+      "help": null,
+      "identifier": "112",
+      "enabled": false,
+      "focused": false,
+      "ignored": false
+    },
+    "nachher": {
+      "role": "AXGroup",
+      "title": "Aufgaben",
+      "label": "Table with 1 items. ",
+      "value": "Unterlagen prüfen. Erledigt. Morgen eingeplant.",
+      "help": null,
+      "identifier": "341",
+      "enabled": false,
+      "focused": false,
+      "ignored": false
+    }
+  },
+  "nativer_fokus": {
+    "fokussiert": {
+      "role": "AXTextField",
+      "title": "Aufgabentitel",
+      "label": "",
+      "value": "  Angebot prüfen 🏠",
+      "help": null,
+      "identifier": "253",
+      "enabled": false,
+      "focused": false,
+      "ignored": false
+    },
+    "nicht_fokussiert": {
+      "role": "AXButton",
+      "title": "Erste native Aktion",
+      "label": "Erste native Aktion",
+      "value": "",
+      "help": null,
+      "identifier": "558",
+      "enabled": false,
+      "focused": false,
+      "ignored": false
+    }
+  },
+  "native_aktionen": [
+    "zweite",
+    "zweite"
+  ],
+  "schreibgeschuetztes_feld": {
+    "role": "AXTextField",
+    "title": "Aufgabentitel",
+    "label": "",
+    "value": "  Angebot prüfen 🏠",
+    "help": null,
+    "identifier": "538",
+    "enabled": false,
+    "focused": false,
+    "ignored": true
+  },
+  "callback_errors": []
+}

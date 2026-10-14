@@ -132,6 +132,7 @@ import sidebar_policy as glide_sidebar  # noqa: E402
 import home_tiles as glide_home  # noqa: E402
 import motion as glide_motion
 import task_editing as glide_task_editing
+import core_accessibility as glide_core_accessibility
 import daily_hints
 import ics_recurrence
 import occupied_time
@@ -1350,6 +1351,8 @@ class RoundedButton(DeferredDrawCanvas):
 
         self._draw()
 
+        glide_core_accessibility.bind_button(self)
+
     def set_theme(self, bg_color, text_color, border_color=None, hover_fill=None, hover_text_color=None):
         self.bg_color = bg_color
         self.text_color = text_color
@@ -1380,6 +1383,8 @@ class RoundedButton(DeferredDrawCanvas):
         self.text = self.action_text(text)
         self._fit_width()
         self._draw()
+
+        glide_core_accessibility.refresh(self)
 
     def state_colors(self, state):
         """(Füllung, Schrift) für „ruhend“, „hover“ oder „aktiv“ – wie gezeichnet."""
@@ -2673,6 +2678,8 @@ class DueField(tk.Frame):
             self._build_calendar()
             self._render_month()
 
+        glide_core_accessibility.bind_due(self)
+
     # --- Aufbau ---------------------------------------------------------
     def _build_inputs(self, time_value):
         row = tk.Frame(self, bg=self.theme["bg"])
@@ -3124,6 +3131,8 @@ class OptionRows(tk.Canvas):
         self.paint(old)
         self.paint(index)
 
+        glide_core_accessibility.refresh(self, selection=True)
+
     def activate(self, _index):
         pass
 
@@ -3173,6 +3182,8 @@ class AppOptionMenu(tk.Label):
         self.bind("<Destroy>", self._on_destroy, add="+")
         self.bind("<Unmap>", lambda e: self._close_popup(restore_focus=False), add="+")
 
+        glide_core_accessibility.bind_choice(self)
+
     def __getitem__(self, key):
         return self.menu if key == "menu" else super().__getitem__(key)
 
@@ -3186,7 +3197,7 @@ class AppOptionMenu(tk.Label):
         return "break"
 
     def _open_popup(self, _event=None):
-        if self._popup is not None or self.cget("state") == "disabled" or not self.options:
+        if self._popup is not None or glide_core_accessibility.choice_disabled(self) or not self.options:
             return "break"
         self.focus_set()
         theme = self.app.theme
@@ -3197,6 +3208,7 @@ class AppOptionMenu(tk.Label):
         row_height = font.metrics("linespace") + 16
         choices = self._choices = OptionRows(surface, self.app, self.options, self.menu,
                                              self.cget("font"), min(7, len(self.options)) * row_height)
+        glide_core_accessibility.bind_options(choices, self)
         scrollbar = ThemedAutoScrollbar(surface, theme["input"], theme["input"],
                                        theme["input_border"], theme["muted"])
         scrollbar.pack(side="right", fill="y")
@@ -3271,6 +3283,9 @@ class AppOptionMenu(tk.Label):
         return "break"
 
     def _commit(self, _event=None):
+        if glide_core_accessibility.choice_disabled(self):
+            self._close_popup()
+            return "break"
         selected = self._choices.curselection()
         index = selected[0] if selected else None
         # Erst die Auswahlfläche schließen: StringVar-Beobachter können
@@ -3365,6 +3380,8 @@ class LabelDropdown(tk.Frame):
         self._build()
         self.bind("<Destroy>", self._on_destroy, add="+")
 
+        glide_core_accessibility.bind_labels(self)
+
     # --- Aufbau ---------------------------------------------------------
     def _build(self):
         border, field = self.app._make_field(self)
@@ -3421,7 +3438,8 @@ class LabelDropdown(tk.Frame):
     def _open_popup(self):
         # Auch ohne vorhandene Labels aufklappbar – sonst wäre „Neues Label“
         # nicht erreichbar, solange noch keines angelegt ist.
-        if self._popup is not None or not (self.labels or self.allow_create):
+        if (self._popup is not None or glide_core_accessibility.choice_disabled(self)
+                or not (self.labels or self.allow_create)):
             return
         popup = self._popup = DropdownPopup(self, self.app, self._close_popup)
         surface = tk.Frame(popup, bg=self.theme["input"])
@@ -3463,6 +3481,7 @@ class LabelDropdown(tk.Frame):
         popup.bind("<Shift-Tab>", lambda event: self._tab(True))
         popup.bind("<ISO_Left_Tab>", lambda event: self._tab(True))
         self._focus_index = 0
+        glide_core_accessibility.bind_labels(self, popup)
         self._place_popup(popup)
         self.arrow_label.configure(text=self.app.ICONS["dropdown_open"])
 
@@ -3494,6 +3513,7 @@ class LabelDropdown(tk.Frame):
                 self._labels_canvas.yview_moveto(top / total)
             elif bottom > last * total:
                 self._labels_canvas.yview_moveto((bottom - self._labels_canvas.winfo_height()) / total)
+        glide_core_accessibility.refresh(self._popup, selection=True)
         return "break"
 
     def _toggle_focused(self, _event=None):
@@ -3552,7 +3572,13 @@ class LabelDropdown(tk.Frame):
         for label_id in self._rows:
             self._paint_row(label_id)
 
+        glide_core_accessibility.refresh(self.summary_label)
+        if self._popup is not None:
+            glide_core_accessibility.refresh(self._popup, selection=True)
+
     def toggle_label(self, label_id):
+        if glide_core_accessibility.choice_disabled(self):
+            return False
         label = next((value for value in self.labels if value.get("id") == label_id), None)
         if label is None:
             return False
@@ -3632,6 +3658,8 @@ class LabelDropdown(tk.Frame):
         – hier die Liste, dort die Namensabfrage – enden sonst damit, dass
         keiner von beiden die Eingabe bekommt.
         """
+        if glide_core_accessibility.choice_disabled(self):
+            return
         self._close_popup()
         label = self.app.create_label_interactively(
             parent=self.dialog_parent or self.winfo_toplevel()
@@ -15708,6 +15736,7 @@ class ListApp:
                        if event.widget is self.root else None, add="+")
         self.schedule_appearance_check()
         self.init_daily_planning()
+        glide_core_accessibility.install_core(self)
 
         # Tastaturkürzel
         # Enter wird direkt im Eingabefeld behandelt, damit add_item nicht doppelt ausgelöst wird.
@@ -21171,7 +21200,9 @@ class ListApp:
             if not force and state["signature"] == signature:
                 return
             if (not force and item is not None and state["item_id"] == item.get("id")
-                    and self.detail_pane_has_focus()):
+                    and self.detail_pane_has_focus()
+                    and glide_core_accessibility.inspector_structure_matches(self, item)):
+                glide_core_accessibility.refresh_inspector(self)
                 state["signature"] = signature
                 return
             if state["item_id"]:
@@ -21246,6 +21277,10 @@ class ListApp:
                                         "confirm", width=96, height=32)
         save.pack(side="right", padx=(0, 6))
         self._inspector_close_button = close
+        close._accessible_name = "Aufgabeninspektor schließen"
+        save._accessible_name = "Aufgabe speichern"
+        glide_core_accessibility.refresh(close)
+        glide_core_accessibility.refresh(save)
 
         def ueberschrift(text):
             tk.Label(inhalt, text=text, bg=theme["card"], fg=theme["muted"], font=app_font(glide_design.FONT_SIZES["caption"], "bold"),
@@ -21282,12 +21317,14 @@ class ListApp:
             zeile, f"{self.ICONS['check']} Erledigt" if item.get("done") else "Erledigen",
             lambda value=item["id"]: self.toggle_detail_pane_done(value),
             "confirm" if not item.get("done") else "muted", width=120, height=32)
+        glide_core_accessibility.bind_task_completion(erledigt, self, item["id"])
         erledigt.pack(side="left")
         wichtigkeit = tk.StringVar(value=self.IMPORTANCE_NAMES.get(self.clamp_importance(item.get("importance", 0)),
                                                                    "keine"))
         namen = [self.IMPORTANCE_NAMES.get(value, str(value)) for value in (0, 1, 2, 3)]
         rand, _feld = self._make_option_menu(zeile, wichtigkeit, namen)
         rand.pack(side="left", fill="x", expand=True, padx=(8, 0))
+        glide_core_accessibility.bind_choice(_feld, "Wichtigkeit")
         wichtigkeit.trace_add("write", lambda *_: self.commit_detail_pane())
         state["fields"]["importance"] = wichtigkeit
 
@@ -21300,12 +21337,14 @@ class ListApp:
                                              option_colors={name: self.kind_color_key(value)
                                                             for name, value in art_namen.items()})
         rand.pack(side="left", fill="x", expand=True)
+        glide_core_accessibility.bind_choice(_feld, "Art")
         farb_namen = {"Keine Farbe": None, **{name: key for name, key in self.ITEM_COLOR_CHOICES}}
         farbe = tk.StringVar(value=next((name for name, key in self.ITEM_COLOR_CHOICES if key == item.get("color")),
                                         "Keine Farbe"))
         rand, _feld = self._make_option_menu(zeile, farbe, list(farb_namen),
                                              option_colors={name: key for name, key in self.ITEM_COLOR_CHOICES})
         rand.pack(side="left", fill="x", expand=True, padx=(8, 0))
+        glide_core_accessibility.bind_choice(_feld, "Farbe")
         art.trace_add("write", lambda *_: self.detail_pane_kind_changed())
         farbe.trace_add("write", lambda *_: self.commit_detail_pane())
         state["fields"]["kind"] = (art, art_namen)
@@ -21323,6 +21362,7 @@ class ListApp:
                                                 if key == regel.get("art", self.REPEAT_NONE)),
                                                self.REPEAT_CHOICES[0][0]))
         wiederholungs_rand, _feld = self._make_option_menu(inhalt, wiederholung, list(wiederholungs_namen))
+        glide_core_accessibility.bind_choice(_feld, "Wiederholung")
         wiederholungs_rand.pack(fill="x")
         zusatz = tk.Frame(inhalt, bg=theme["card"])
         abstand_zeile = tk.Frame(zusatz, bg=theme["card"])
@@ -21330,19 +21370,24 @@ class ListApp:
                  fg=theme["muted"], font=app_font(glide_design.FONT_SIZES["caption"]), anchor="w").pack(fill="x")
         abstand = eingabe(abstand_zeile, regel.get("abstand", 2))
         abstand.pack(fill="x")
+        glide_core_accessibility.bind_entry(abstand, "Wiederholung: Abstand in Tagen")
         tage_zeile = tk.Frame(zusatz, bg=theme["card"])
         gewaehlt = set(regel.get("tage", []))
         tage = [tk.BooleanVar(value=index in gewaehlt) for index in range(7)]
         for index, name in enumerate(self.REPEAT_WEEKDAY_NAMES):
-            tk.Checkbutton(tage_zeile, text=name, variable=tage[index], command=self.commit_detail_pane,
+            tagwahl = tk.Checkbutton(tage_zeile, text=name, variable=tage[index], command=self.commit_detail_pane,
                            bg=theme["card"], fg=theme["text"], activebackground=theme["card"],
                            activeforeground=theme["text"], selectcolor=theme["input"],
-                           font=app_font(glide_design.FONT_SIZES["body"])).grid(row=index // 4, column=index % 4, sticky="w", padx=(0, 6))
+                           font=app_font(glide_design.FONT_SIZES["body"]))
+            tagwahl.grid(row=index // 4, column=index % 4, sticky="w", padx=(0, 6))
+            glide_core_accessibility.bind_checkbox(tagwahl, tage[index], "Wiederholung: " +
+                ("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag")[index])
         ende_zeile = tk.Frame(zusatz, bg=theme["card"])
         tk.Label(ende_zeile, text="Endet am (leer: kein Ende)", bg=theme["card"], fg=theme["muted"],
                  font=app_font(glide_design.FONT_SIZES["caption"]), anchor="w").pack(fill="x")
         ende = eingabe(ende_zeile, self.format_due_display(regel.get("ende") or ""))
         ende.pack(fill="x")
+        glide_core_accessibility.bind_entry(ende, "Wiederholung: Enddatum")
         # KO02 (3.33.20): derselbe Weg wie im Kontextmenü, nur für eine
         # gespeicherte Regel mit Termin. Offene Eingaben gehen vorher ein.
         ueberspringen = None
@@ -21416,17 +21461,23 @@ class ListApp:
         for index, eintrag in enumerate(schritte):
             reihe = tk.Frame(inhalt, bg=theme["card"])
             reihe.pack(fill="x")
-            marke = self.ICONS["check"] if eintrag.get("done") else self.ICONS["task_open"]
-            schritt = tk.Label(reihe, text=f"{marke}  {eintrag.get('text', '')}", bg=theme["card"],
-                               fg=theme["muted"] if eintrag.get("done") else theme["text"],
-                               font=app_font(glide_design.FONT_SIZES["body"]), anchor="w", cursor="hand2", justify="left",
-                               wraplength=breite - 36)
+            variable = tk.BooleanVar(value=bool(eintrag.get("done")))
+            schritt = tk.Checkbutton(reihe, text=eintrag.get("text", ""), variable=variable,
+                                    state="disabled" if getattr(self, "_data_read_only", False) else "normal",
+                                    bg=theme["card"], activebackground=theme["card"],
+                                    fg=theme["muted"] if eintrag.get("done") else theme["text"],
+                                    activeforeground=theme["text"], selectcolor=theme["input"],
+                                    font=app_font(glide_design.FONT_SIZES["body"]), anchor="w", cursor="hand2",
+                                    justify="left", wraplength=breite - 36, highlightthickness=1,
+                                    highlightbackground=theme["card"], highlightcolor=theme["selection"])
+            schritt._accessible_variable = variable
+            glide_core_accessibility.bind_checklist(schritt, self, item["id"], index)
             schritt.pack(side="left", fill="x", expand=True)
-            schritt.bind("<Button-1>", lambda _event, value=index, iid=item["id"]:
-                         self.toggle_detail_pane_step(iid, value))
-            self._make_dialog_button(reihe, "×", lambda value=index, iid=item["id"]:
-                                     self.remove_detail_pane_step(iid, value), "muted", width=30, height=24
-                                     ).pack(side="right")
+            entfernen = self._make_dialog_button(reihe, "×", lambda value=index, iid=item["id"]:
+                                                  self.remove_detail_pane_step(iid, value), "muted", width=30, height=24)
+            entfernen._accessible_name = "Checklistenpunkt entfernen: " + eintrag.get("text", "")
+            glide_core_accessibility.refresh(entfernen)
+            entfernen.pack(side="right")
         neuer_schritt = tk.Entry(inhalt, font=app_font(glide_design.FONT_SIZES["body"]), bg=theme["input"], fg=theme["text"],
                                  insertbackground=theme["text"], relief="flat", highlightthickness=1,
                                  highlightbackground=theme["input_border"], highlightcolor=theme["selection"])
@@ -21436,6 +21487,8 @@ class ListApp:
             self.add_detail_pane_step(iid, neuer_schritt.get())
             return "break"
         neuer_schritt.bind("<Return>", schritt_anfuegen)
+        glide_core_accessibility.bind_entry(neuer_schritt, "Neuer Checklistenpunkt",
+                                            help="Text eingeben und mit Enter hinzufügen.")
         hinweis("Schritt eintippen, Enter fügt ihn an.")
 
         # Anhänge (zweiter Ausbau): damit braucht der Bereich die Maske nicht mehr.
@@ -21456,8 +21509,13 @@ class ListApp:
                                wraplength=breite - 36)
             eintrag.pack(side="left", fill="x", expand=True)
             eintrag.bind("<Button-1>", lambda _event, value=index: self.open_detail_pane_attachment(value))
-            self._make_dialog_button(reihe, "×", lambda value=index: self.remove_detail_pane_attachment(value),
-                                     "muted", width=30, height=24).pack(side="right")
+            eintrag.configure(highlightthickness=1, highlightbackground=theme["card"], highlightcolor=theme["selection"])
+            glide_core_accessibility.bind_attachment(eintrag, self, item["id"], index)
+            entfernen = self._make_dialog_button(reihe, "×", lambda value=index: self.remove_detail_pane_attachment(value),
+                                                 "muted", width=30, height=24)
+            entfernen._accessible_name = "Anhang entfernen: " + anhang.get("name", "Anhang")
+            glide_core_accessibility.refresh(entfernen)
+            entfernen.pack(side="right")
         self._make_dialog_button(inhalt, "+ Datei …", self.add_detail_pane_attachments, "muted",
                                  width=170, height=30).pack(anchor="w", pady=(4, 0))
 
@@ -21480,8 +21538,12 @@ class ListApp:
                 reihe.pack(fill="x")
                 tk.Label(reihe, text=text, bg=theme["card"], fg=theme["text"], font=app_font(glide_design.FONT_SIZES["body"]), anchor="w",
                          justify="left", wraplength=breite - 36).pack(side="left", fill="x", expand=True)
-                self._make_dialog_button(reihe, "×", lambda f=feld, z=ziel: self.remove_detail_pane_relation(f, z),
-                                         "muted", width=30, height=24).pack(side="right")
+                entfernen = self._make_dialog_button(reihe, "×", lambda f=feld, z=ziel: self.remove_detail_pane_relation(f, z),
+                                                     "muted", width=30, height=24)
+                entfernen._accessible_name = ("Voraussetzung entfernen: " if feld == "blocked_by" else
+                                              "Verknüpfung entfernen: ") + text
+                glide_core_accessibility.refresh(entfernen)
+                entfernen.pack(side="right")
             self._make_dialog_button(inhalt, f"+ {knopf}",
                                      lambda f=feld, t=nur_aufgaben, k=knopf, h=kopf.capitalize():
                                      self.add_detail_pane_relation(f, t, k, h),
@@ -21509,6 +21571,10 @@ class ListApp:
         for kind in self.iter_descendants(erinnerung):
             if isinstance(kind, tk.Entry):
                 kind.bind("<FocusOut>", lambda _event: self.commit_detail_pane(), add="+")
+        glide_core_accessibility.bind_inspector_fields(state["fields"])
+        for widget in self.iter_descendants(inhalt):
+            if isinstance(widget, (AppOptionMenu, LabelDropdown)):
+                widget._inspector_readonly = lambda: getattr(self, "_data_read_only", False)
         # Mausrad über dem ganzen Bereich; Textfelder behalten ihr eigenes.
         self.bind_mousewheel(leinwand)
         for kind in self.iter_descendants(huelle):
@@ -21517,12 +21583,16 @@ class ListApp:
         if getattr(self,"_data_read_only",False):
             self.detail_status.configure(text="Schreibgeschützter Bestand · Angaben nur ansehen.")
             for widget in self.iter_descendants(inhalt):
-                if isinstance(widget,(tk.Entry,tk.Text,tk.Checkbutton,tk.Button,tk.Menubutton)):
+                if isinstance(widget,(tk.Entry,tk.Text,tk.Checkbutton,tk.Button,tk.Menubutton,AppOptionMenu)):
                     widget.configure(state="disabled")
+                elif isinstance(widget, LabelDropdown):
+                    widget.summary_label.configure(state="disabled")
                 elif isinstance(widget,RoundedButton) and widget.text not in (
                         "Schließen","Eingabe verwerfen","Aktuellen Stand laden"):
                     widget.command = lambda: "break"
                     widget.configure(takefocus=0)
+                    widget._accessible_disabled = True
+                    glide_core_accessibility.refresh(widget)
         if position:
             leinwand.after_idle(lambda: leinwand.winfo_exists() and leinwand.yview_moveto(position))
 
@@ -25987,12 +26057,14 @@ class ListApp:
         state = getattr(widget, "_glide_tooltip", None)
         if state is not None:
             state["source"] = text
+            glide_core_accessibility.refresh(widget)
             return
         state = {"after": None, "window": None, "text": "", "source": text}
         try:
             widget._glide_tooltip = state
         except (AttributeError, TypeError):
             pass
+        glide_core_accessibility.refresh(widget)
         self._install_tooltip_guard()
 
         def quelle():
@@ -28885,20 +28957,26 @@ class ListApp:
         block.mode_var = tk.StringVar(value=selected)
         border, _button = self._make_option_menu(block, block.mode_var, list(choices))
         border.pack(fill="x")
+        glide_core_accessibility.bind_choice(_button, "Erinnerung")
         custom = tk.Frame(block, bg=self.theme["bg"])
         self._make_field_label(custom, "Minuten vor der Fälligkeit (0 bis 525600)").pack(anchor="w")
         block.minutes_var = tk.StringVar(value=str((current or {}).get("minutes", 1440)))
         custom_border, field = self._make_field(custom)
         custom_border.pack(fill="x", pady=(4, 0))
         field.pack(fill="x", padx=self.FIELD_BORDER_WIDTH, pady=self.FIELD_BORDER_WIDTH)
-        tk.Entry(field, textvariable=block.minutes_var, bg=self.theme["input"], fg=self.theme["text"],
+        minutes_entry = tk.Entry(field, textvariable=block.minutes_var, bg=self.theme["input"], fg=self.theme["text"],
                  insertbackground=self.theme["text"], relief="flat", bd=0, font=app_font(11),
-                 selectbackground=self.theme["selection"], selectforeground=self.theme["selection_text"]).pack(
-                     fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+                 selectbackground=self.theme["selection"], selectforeground=self.theme["selection_text"])
+        minutes_entry.pack(fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+        glide_core_accessibility.bind_entry(minutes_entry, "Erinnerung: Minuten vor der Fälligkeit")
         default = (datetime.fromisoformat(current["at"]).astimezone() if current and current["mode"] == "fixed"
                    else datetime.now().astimezone() + timedelta(hours=1))
         block.fixed_field = DueField(block, self, due=default.date().isoformat(), due_time=default.strftime("%H:%M"),
                                      compact=True, dialog_parent=dialog)
+        glide_core_accessibility.bind_entry(block.fixed_field.date_entry, "Erinnerung: Datum")
+        glide_core_accessibility.bind_entry(block.fixed_field.time_entry, "Erinnerung: Uhrzeit")
+        block.fixed_field.calendar_button._accessible_name = "Erinnerungsdatum im Kalender wählen"
+        glide_core_accessibility.refresh(block.fixed_field.calendar_button)
         hint = tk.Label(block, text="", bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10),
                         justify="left", anchor="w", wraplength=640)
 
@@ -33140,6 +33218,7 @@ class ListApp:
             ergebnis = self._update_sidebar_list(capture=capture)
             if self.sidebar_narrow():
                 self.refresh_sidebar_rail()
+            glide_core_accessibility.bind_navigation(self)
             return ergebnis
 
     def _update_sidebar_list(self, capture=True):
@@ -43651,6 +43730,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if before is not None and before != context:
             self._ui_transitions.cancel("rows")
             self.animate_area_change()
+        glide_core_accessibility.refresh(self.tree)
         return result
 
     def flush_rich_note(self):

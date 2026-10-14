@@ -1,0 +1,14 @@
+{
+  "exitcode": 1,
+  "checks": [
+    "Echte Erfassung mit Enter: genau eine Aufgabe; Eingabe und Suche eindeutig benannt",
+    "Suche und echte Zeilenauswahl: aktueller Aufgabentext, Status und getrennte Datumsarten",
+    "Heute-Planungsaktion und gemeinsamer Inspektor: Fälligkeit getrennt, Unicode/Absätze gespeichert",
+    "Echte Checkbox per Leertaste: kanonische 0/1-Variable, ein Undo, frische Objekte nach Undo",
+    "Echter Dateischreibfehler und nachträglicher Schreibschutz: Modell, Datei, Undo und Haken unverändert",
+    "Eigener Anhang mit Enter/Leertaste erreichbar; aktueller Dateiname und entfernte Zielprüfung ohne externes Öffnen"
+  ],
+  "fehler": "",
+  "callback_errors": [],
+  "app_sha256": "ec339665f055b8f95e6d443574fb94f0e1fd87679d6b43e66fd28c36e7f2b865"
+}

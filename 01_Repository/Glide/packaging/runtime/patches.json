@@ -1,0 +1,14 @@
+{
+  "tk_pin": "3f45110c0a568b70f2ebd5412f215e87d199bc7d",
+  "patches": [
+    {
+      "id": "macos-accessibility-core",
+      "platform": "darwin",
+      "file": "macosx/tkMacOSXAccessibility.c",
+      "patch": "patches/macos-accessibility-core.patch",
+      "before_sha256": "86c3cf69bcbce3ec4e460e2ed3b62095c036d74b6c8989dd9e1beb9cd74e91e4",
+      "after_sha256": "6771ac367c45ac8ac42547cc96e40e8569fbf4342e2df5f12d03bac35ab84525",
+      "patch_sha256": "41189047d40fa3b9add1648adcc7cc907d63796b44d76a6d4944bc10e2e6eeba"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "exitcode": 1,
+  "checks": [
+    "Echte Erfassung mit Enter: genau eine Aufgabe; Eingabe und Suche eindeutig benannt",
+    "Suche und echte Zeilenauswahl: aktueller Aufgabentext, Status und getrennte Datumsarten",
+    "Heute-Planungsaktion und gemeinsamer Inspektor: Fälligkeit getrennt, Unicode/Absätze gespeichert"
+  ],
+  "fehler": "{'modell': [{'id': 'bcfd92b507f84f6eab61848b7c9a94be', 'text': 'Unterlagen prüfen', 'done': False}], 'variable': True, 'undo': 4, 'vorher': 4}",
+  "callback_errors": [],
+  "app_sha256": "f098316f547167f054bdbbab46b595e5d1f8a3336d4892e52213220819b3d3db"
+}

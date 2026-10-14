@@ -1,0 +1,256 @@
+--- a/macosx/tkMacOSXAccessibility.c
++++ b/macosx/tkMacOSXAccessibility.c
+@@ -43,7 +43,18 @@
+ int TkMacOSXAccessibility_Init(Tcl_Interp * interp);
+ static int ActionEventProc(Tcl_Event *ev, int flags);
+ 
+-char *callback_command;
++/* Each queued action owns its command and originating interpreter. */
++typedef struct {
++    Tcl_Event header;
++    Tcl_Interp *interp;
++    Tcl_Obj *command;
++    Tcl_Obj *path;
++} AccessibilityActionEvent;
++
++static int DeleteActionEvent(Tcl_Event *event, void *clientData);
++static void DeleteInterpreterActions(void *clientData, Tcl_Interp *interp);
++static int EmitFocusChanged(void *clientData, Tcl_Interp *ip,
++        Tcl_Size objc, Tcl_Obj *const objv[]);
+ static Tcl_HashTable *TkWindowToElementTable = NULL;
+ static Tcl_HashTable *ElementToTkWindowTable = NULL;
+ static bool accessibilityTablesInitialized = false;
+@@ -229,6 +240,12 @@
+     /* Special handling for group roles (tables, listboxes, trees). */
+     CFStringRef role = (__bridge CFStringRef)self.accessibilityRole;
+     if (role && CFStringCompare(role, kAXGroupRole, 0) == kCFCompareEqualTo) {
++        NSString *name = self.accessibilityTitle;
++        NSString *value = self.accessibilityValue;
++        if (name && [name length] > 0) {
++            return value && [value length] > 0 ?
++                    [NSString stringWithFormat:@"%@. %@", name, value] : name;
++        }
+ 	NSInteger rowCount = [self accessibilityRowCount];
+ 	NSString *count = [NSString stringWithFormat:@"Table with %ld items. ", (long)rowCount];
+ 	NSString *interact = self.accessibilityHint ?: @"";
+@@ -492,10 +509,11 @@
+ - (NSString*) accessibilityIdentifier
+ {
+ 
+-    int x = arc4random_uniform(1000);
+-    NSNumber *id = [NSNumber numberWithInt: x];
+-    NSString *identifier = [id stringValue];
+-    return identifier;
++    Tk_Window win = self.tk_win;
++    if (!win) {
++        return @"";
++    }
++    return [NSString stringWithFormat:@"tk-%p-%s", Tk_Interp(win), Tk_PathName(win)];
+ }
+ 
+ - (NSString *) accessibilityLanguage
+@@ -540,9 +558,11 @@
+     return nil;
+ }
+ 
+-- (BOOL) accessibilityIsFocused
+-{
+-    return [self.accessibilityParent window] == [NSApp keyWindow];
++- (BOOL)isAccessibilityFocused
++{
++    TkWindow *winPtr = (TkWindow *)self.tk_win;
++    return winPtr && !(winPtr->flags & TK_ALREADY_DEAD) &&
++            TkGetFocusWin(winPtr) == winPtr;
+ }
+ 
+ - (BOOL)becomeFirstResponder
+@@ -556,33 +576,32 @@
+     return YES;
+ }
+ 
++- (BOOL)isAccessibilityEnabled
++{
++    Tk_Window win = self.tk_win;
++    if (!win || !Tk_IsMapped(win)) {
++        return NO;
++    }
++    Tcl_HashEntry *hPtr = Tcl_FindHashEntry(TkAccessibilityObject, win);
++    if (!hPtr) {
++        return NO;
++    }
++    Tcl_HashTable *attributes = (Tcl_HashTable *)Tcl_GetHashValue(hPtr);
++    hPtr = Tcl_FindHashEntry(attributes, "state");
++    return !hPtr || strcmp(Tcl_GetString((Tcl_Obj *)Tcl_GetHashValue(hPtr)),
++            "disabled") != 0;
++}
++
+ - (BOOL)accessibilityIsIgnored
+ {
+-
+-    /* Check if Tk state is disabled. If so, ignore accessible atribute. */
++    /* Disabled content remains available for reading. Hidden widgets do not. */
+     Tk_Window win = self.tk_win;
+-    Tcl_HashEntry *hPtr, *hPtr2;
+-    Tcl_HashTable *AccessibleAttributes;
+-
+-    hPtr=Tcl_FindHashEntry(TkAccessibilityObject, win);
+-    if (!hPtr) {
+-	return NO;
+-    }
+-
+-    AccessibleAttributes = (Tcl_HashTable *)Tcl_GetHashValue(hPtr);
+-    hPtr2=Tcl_FindHashEntry(AccessibleAttributes, "state");
+-    if (!hPtr2) {
+-	return NO;
+-    }
+-
+-    char *result = Tcl_GetString((Tcl_Obj *)Tcl_GetHashValue(hPtr2));
+-    if (strcmp(result, "disabled") == 0) {
+-	return YES;
+-    }
+-
+-
+-    /* If state is NOT disabled, leave accessibility on. */
+-    return NO;
++    return !win || !Tk_IsMapped(win);
++}
++
++- (NSString *)accessibilityHelp
++{
++    return self.accessibilityHint;
+ }
+ 
+ /* Various actions for buttons. */
+@@ -613,7 +632,11 @@
+     Tk_Window win = self.tk_win;
+     Tcl_HashEntry *hPtr, *hPtr2;
+     Tcl_HashTable *AccessibleAttributes;
+-    Tcl_Event *event;
++    AccessibilityActionEvent *event;
++
++    if (![self isAccessibilityEnabled]) {
++        return FALSE;
++    }
+ 
+     /* Standard button press. */
+     hPtr = Tcl_FindHashEntry(TkAccessibilityObject, win);
+@@ -626,12 +649,18 @@
+     if (!hPtr2) {
+ 	return FALSE;
+     }
+-    char *action = Tcl_GetString((Tcl_Obj *)Tcl_GetHashValue(hPtr2));
+-
+-
+-    callback_command = action;
+-    event = (Tcl_Event *)Tcl_Alloc(sizeof(Tcl_Event));
+-    event->proc = ActionEventProc;
++    Tcl_Obj *action = (Tcl_Obj *)Tcl_GetHashValue(hPtr2);
++    if (Tcl_GetCharLength(action) == 0) {
++        return FALSE;
++    }
++    event = (AccessibilityActionEvent *)Tcl_Alloc(sizeof(AccessibilityActionEvent));
++    event->header.proc = ActionEventProc;
++    event->interp = Tk_Interp(win);
++    event->command = Tcl_DuplicateObj(action);
++    event->path = Tcl_NewStringObj(Tk_PathName(win), -1);
++    Tcl_IncrRefCount(event->command);
++    Tcl_IncrRefCount(event->path);
++    Tcl_Preserve(event->interp);
+     Tcl_QueueEvent((Tcl_Event *)event, TCL_QUEUE_TAIL);
+ 
+     return TRUE;
+@@ -734,12 +763,51 @@
+  * Event proc which calls the ActionEventProc procedure.
+  */
+ 
+-static int ActionEventProc(
+-    TCL_UNUSED(Tcl_Event *), /* ev */
+-    TCL_UNUSED(int)) /* flags */
+-{
+-    TkMainInfo *info = TkGetMainInfoList();
+-    Tcl_GlobalEval(info->interp, callback_command);
++static void ReleaseActionEvent(AccessibilityActionEvent *event)
++{
++    Tcl_DecrRefCount(event->command);
++    Tcl_DecrRefCount(event->path);
++    Tcl_Release(event->interp);
++}
++
++static int DeleteActionEvent(Tcl_Event *event, void *clientData)
++{
++    if (event->proc == ActionEventProc &&
++            ((AccessibilityActionEvent *)event)->interp == clientData) {
++        ReleaseActionEvent((AccessibilityActionEvent *)event);
++        return 1;
++    }
++    return 0;
++}
++
++static void DeleteInterpreterActions(TCL_UNUSED(void *), Tcl_Interp *interp)
++{
++    Tcl_DeleteEvents(DeleteActionEvent, interp);
++}
++
++static int ActionEventProc(Tcl_Event *ev, TCL_UNUSED(int))
++{
++    AccessibilityActionEvent *event = (AccessibilityActionEvent *)ev;
++    Tcl_Interp *interp = event->interp;
++    if (!Tcl_InterpDeleted(interp) && Tk_MainWindow(interp)) {
++        Tcl_InterpState saved = Tcl_SaveInterpState(interp, TCL_OK);
++        Tk_Window win = Tk_NameToWindow(interp, Tcl_GetString(event->path), Tk_MainWindow(interp));
++        TkAccessibilityElement *element = win ? TkAccessibility_GetElementForWindow(win) : nil;
++        Tcl_HashEntry *hPtr = win ? Tcl_FindHashEntry(TkAccessibilityObject, win) : NULL;
++        Tcl_HashTable *attributes = hPtr ? (Tcl_HashTable *)Tcl_GetHashValue(hPtr) : NULL;
++        hPtr = attributes ? Tcl_FindHashEntry(attributes, "action") : NULL;
++        /* Never invoke a destroyed, disabled, hidden or replaced target. */
++        if (element && [element isAccessibilityEnabled] && hPtr &&
++                strcmp(Tcl_GetString((Tcl_Obj *)Tcl_GetHashValue(hPtr)),
++                    Tcl_GetString(event->command)) == 0) {
++            int code = Tcl_EvalObjEx(interp, event->command, TCL_EVAL_GLOBAL);
++            if (code != TCL_OK && !Tcl_InterpDeleted(interp)) {
++                Tcl_BackgroundException(interp, code);
++            }
++        }
++        Tcl_RestoreInterpState(interp, saved);
++    }
++    ReleaseActionEvent(event);
+     return 1;
+ }
+ 
+@@ -977,6 +1045,27 @@
+     return TCL_OK;
+ }
+ 
++/* Explicit focus notification for Tk focus changes in custom controls. */
++static int EmitFocusChanged(TCL_UNUSED(void *), Tcl_Interp *ip,
++        Tcl_Size objc, Tcl_Obj *const objv[])
++{
++    if (objc != 2) {
++        Tcl_WrongNumArgs(ip, 1, objv, "window");
++        return TCL_ERROR;
++    }
++    Tk_Window win = Tk_NameToWindow(ip, Tcl_GetString(objv[1]), Tk_MainWindow(ip));
++    if (!win) {
++        return TCL_ERROR;
++    }
++    TkAccessibilityElement *element = TkAccessibility_GetElementForWindow(win);
++    if (!element) {
++        Tcl_SetObjResult(ip, Tcl_NewStringObj("no accessibility element for window", -1));
++        return TCL_ERROR;
++    }
++    NSAccessibilityPostNotification(element, NSAccessibilityFocusedUIElementChangedNotification);
++    return TCL_OK;
++}
++
+ /*
+  *----------------------------------------------------------------------
+  *
+@@ -1113,6 +1202,8 @@
+     Tcl_CreateObjCommand2(interp, "::tk::accessible::add_acc_object", TkMacOSXAccessibleObjCmd, NULL, NULL);
+     Tcl_CreateObjCommand2(interp, "::tk::accessible::emit_selection_change", EmitSelectionChanged, NULL, NULL);
+     Tcl_CreateObjCommand2(interp, "::tk::accessible::check_screenreader", IsVoiceOverRunning, NULL, NULL);
++    Tcl_CreateObjCommand2(interp, "::tk::accessible::emit_focus_change", EmitFocusChanged, NULL, NULL);
++    Tcl_CallWhenDeleted(interp, DeleteInterpreterActions, NULL);
+     [pool release];
+     return TCL_OK;
+ }

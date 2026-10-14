@@ -42,6 +42,9 @@ Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorl
 | `notion_reimport.py` | Erneuter Export: unverändert/neu/geändert/lokal geändert über Quellenschlüssel und Inhaltsfingerabdruck (Tk-frei, 3.41.0) |
 | `notion_hierarchy.py` | Unterseiten in bestehende Glide-Ordner und Seiten einordnen (Tk-frei, 3.41.0) |
 | `source_metadata.py` | Notion-Quellenzuordnungen beim Lesen, Kopieren, Wiederherstellen und Verlegen von Anhängen erhalten (Tk-frei, 3.41.0) |
+| `accessibility.py` | Namen, Rollen, Werte und Zustände für den gewählten Aufgaben-Kernablauf, Tk-frei |
+| `accessibility_bindings.py` | Native Semantik mit Widget-Lebensdauer, zusammengefassten Meldungen und Aktionsguards, Tk-frei |
+| `core_accessibility.py` | Adapter für Navigation, Aufgabeninspektor, Checkboxen, Anhänge und Schreibschutz, Tk-frei |
 | `page_restore.py` | Einzelne Seite aus einer Sicherung vergleichen und die Wiederherstellung planen; fehlende Ziele vorab (Tk-frei, 3.41.0) |
 | `restore_assets.py` | Anhänge einer Seitenwiederherstellung neu ablegen, ohne Bestandsmutation (Tk-frei, 3.41.0) |
 | `backup_snapshot.py` | Unveränderliche Sicherungsquelle zwischen Vorschau und Übernahme (Tk-frei, 3.41.0) |

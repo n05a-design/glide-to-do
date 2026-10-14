@@ -1,5 +1,10 @@
 # Änderungsverlauf
 
+## In Vorbereitung – 4.0.0 (keine Lieferung)
+
+- Zugänglicher Aufgaben-Kernablauf nach D36: additive Semantik, echte Checklistencheckboxen, Tastaturanhänge und geschützte Auswahlflächen. Neue Fachlogik Tk-frei; bestehende Mutationswege und Format 25 erhalten.
+- Eigene gepinnte Tk-9.1-Runtime mit nativ belegten Mac-Korrekturen. Vorprüfungen grün, weitere Plattformen, tatsächliche Reader, eigene Pakete und Vollmatrix offen; die folgenden Lieferstände bleiben unverändert.
+
 ## 3.42.0 – Eigenständige Entwicklungspakete (13.10.2026)
 
 - **Ohne externe Python-Installation starten:** native Pakete für macOS arm64 und Windows x64 bündeln den vollständigen Funktionsstand mit Python 3.14/Tcl-Tk 9, Ressourcen, Schriften und Drag-and-drop. Daten bleiben im bisherigen Benutzerordner. Die Python-Fassung und der bisherige Entwicklungsbuilder bleiben erhalten.
