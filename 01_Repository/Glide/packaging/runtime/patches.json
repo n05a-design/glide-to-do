@@ -1,0 +1,23 @@
+{
+  "tk_pin": "3f45110c0a568b70f2ebd5412f215e87d199bc7d",
+  "patches": [
+    {
+      "id": "macos-accessibility-core",
+      "platform": "darwin",
+      "file": "macosx/tkMacOSXAccessibility.c",
+      "patch": "patches/macos-accessibility-core.patch",
+      "before_sha256": "86c3cf69bcbce3ec4e460e2ed3b62095c036d74b6c8989dd9e1beb9cd74e91e4",
+      "after_sha256": "6771ac367c45ac8ac42547cc96e40e8569fbf4342e2df5f12d03bac35ab84525",
+      "patch_sha256": "41189047d40fa3b9add1648adcc7cc907d63796b44d76a6d4944bc10e2e6eeba"
+    },
+    {
+      "id": "linux-accessibility-text",
+      "platform": "linux",
+      "file": "unix/tkUnixAccessibility.c",
+      "patch": "patches/linux-accessibility-text.patch",
+      "before_sha256": "de0a9d9e6b3e9ea1d08dbb97927e49817fa4ef84adb34ee8bea6fb10e49d9f6a",
+      "after_sha256": "c55218bf7aa7868522cb511d7346352a4dc8852b81aa3379426fee3fc82f5baf",
+      "patch_sha256": "cdf7b1a3e33472b1910a983ad24f320d16487fd225bb40bcf232e463498f17fc"
+    }
+  ]
+}

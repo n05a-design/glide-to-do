@@ -1,0 +1,56 @@
+{
+  "plattform": "macOS arm64",
+  "nur_kindprozess_gesperrt": true,
+  "system_installationen_unveraendert": true,
+  "sandbox_positive_kontrolle_exitcode": 0,
+  "externes_python_gegenprobe_exitcode": 71,
+  "paketprozess_exitcode": 0,
+  "ausgabe": "",
+  "gesperrte_orte": [
+    "externe Python-Laufzeit/Bauumgebung/Projektquelle; nur lokale Prozessregel"
+  ],
+  "exitcode": 0,
+  "paket": {
+    "eigenstaendiger_pruefstart": true,
+    "exitcode": 0,
+    "app_version": "3.42.0",
+    "python": "3.14.5",
+    "tcl": "9.1.0",
+    "tk": "9.1.0",
+    "plattform": "darwin",
+    "architektur": "arm64",
+    "ansichten": 6,
+    "anlegen_abhaken_undo": true,
+    "dateilesen": true,
+    "app_backup_rundlauf": true,
+    "daten_isoliert": true,
+    "bibliotheken": {
+      "tcl": {
+        "modus": "dateien",
+        "ort": "Resources/_tcl_data"
+      },
+      "tk": {
+        "modus": "dateien",
+        "ort": "Resources/_tk_data"
+      }
+    },
+    "native_anbieter": {
+      "tcl": "Frameworks/libtcl9.1.dylib",
+      "tk": "Frameworks/libtcl9tk9.1.dylib"
+    },
+    "windows_geladene_bibliotheken": null,
+    "ressourcen_sha256_geprueft": 29,
+    "lizenzdateien_sha256_geprueft": 32,
+    "logo_geladen": true,
+    "gebuendelte_schriften_verfuegbar": [
+      "DejaVu Sans",
+      "Pixelify Sans"
+    ],
+    "dnd_version": "2.10.2",
+    "native_dnd_bibliotheken": [
+      "Frameworks/tkinterdnd2/tkdnd/osx-arm64-tcl9/libtcl9tkdnd2.10.2.dylib"
+    ],
+    "externe_python_suchpfade": [],
+    "callbackfehler": []
+  }
+}

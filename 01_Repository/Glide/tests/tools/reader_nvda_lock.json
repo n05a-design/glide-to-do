@@ -1,0 +1,47 @@
+{
+  "version": "2026.2",
+  "commit": "f62c980589d1ac30babf68ad48177e9ad29a2e84",
+  "installer": {
+    "file": "nvda_2026.2.exe",
+    "source": "https://github.com/nvaccess/nvda/releases/download/release-2026.2/nvda_2026.2.exe",
+    "sha256": "f3f8d29974a88d687b3c4809be192219ec579c5bdabcda5aaf53635288bca824"
+  },
+  "files": [
+    {
+      "file": "speechSpySynthDriver.py",
+      "source": "https://raw.githubusercontent.com/nvaccess/nvda/f62c980589d1ac30babf68ad48177e9ad29a2e84/tests/system/libraries/SystemTestSpy/speechSpySynthDriver.py",
+      "sha256": "424cfcdb6c7566d2627bf27e88be266b3c94c5e0cb98dc480b5a51ba2374f890"
+    },
+    {
+      "file": "copying.txt",
+      "source": "https://raw.githubusercontent.com/nvaccess/nvda/f62c980589d1ac30babf68ad48177e9ad29a2e84/copying.txt",
+      "sha256": "2851776cc0d74f9110e127f925cab9410854b9261f53bf8f887b6441f5feafd6"
+    },
+    {
+      "file": "speechSpyGlobalPlugin.py",
+      "source": "https://raw.githubusercontent.com/nvaccess/nvda/f62c980589d1ac30babf68ad48177e9ad29a2e84/tests/system/libraries/SystemTestSpy/speechSpyGlobalPlugin.py",
+      "sha256": "1bf6319b2b66896618b34d492b5772846ab55b150613935f4290803945087641"
+    },
+    {
+      "file": "blockUntilConditionMet.py",
+      "source": "https://raw.githubusercontent.com/nvaccess/nvda/f62c980589d1ac30babf68ad48177e9ad29a2e84/tests/system/libraries/SystemTestSpy/blockUntilConditionMet.py",
+      "sha256": "17b832a5f6dfacb67c4459f6cee7adeed99869a6e18faaa6c2c48170b8931d0c"
+    },
+    {
+      "file": "robotremoteserver.py",
+      "source": "https://raw.githubusercontent.com/robotframework/PythonRemoteServer/fc46b521a03ebb1104e9625250317a714d9c4b7c/src/robotremoteserver.py",
+      "sha256": "46ae809cd5b84891deaac83e3f136d8adb66315443c47d34222ff62989b81a72"
+    },
+    {
+      "file": "RobotRemoteServer-LICENSE.txt",
+      "source": "https://raw.githubusercontent.com/robotframework/PythonRemoteServer/fc46b521a03ebb1104e9625250317a714d9c4b7c/LICENSE.txt",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "file": "RobotRemoteServer-COPYRIGHT.txt",
+      "source": "https://raw.githubusercontent.com/robotframework/PythonRemoteServer/fc46b521a03ebb1104e9625250317a714d9c4b7c/COPYRIGHT.txt",
+      "sha256": "a1fd92dc99d231f574bc4d4789e9e983f6d9a571447c7234e101b62131223a8c"
+    }
+  ],
+  "scope": "Nur optionales CI-Testwerkzeug; keine Glide-Laufzeit-/Paketabhängigkeit."
+}

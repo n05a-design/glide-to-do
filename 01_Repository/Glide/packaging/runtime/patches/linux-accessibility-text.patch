@@ -1,0 +1,131 @@
+--- a/unix/tkUnixAccessibility.c
++++ b/unix/tkUnixAccessibility.c
+@@ -889,28 +889,100 @@
+ }
+ 
+ /*
+- * ATK text interface. These are stub functions to ensure that Orca recognizes
+- * text widgets. All accessibility in text data is managed at the script level.
++ * ATK text interface. Read the current native widget text and cursor using
++ * Unicode character offsets while preserving the Tcl interpreter result.
+  */
+ 
+-static gchar *tk_text_get_text(
+-    TCL_UNUSED(AtkText *),
+-    TCL_UNUSED(gint),
+-    TCL_UNUSED(gint))
+-{
+-    return NULL;
+-}
+-
+-static gint tk_text_get_caret_offset(
+-    TCL_UNUSED(AtkText *))
+-{
+-    return -1;
+-}
+-
+-static gint tk_text_get_character_count(
+-    TCL_UNUSED(AtkText *))
+-{
+-    return 0;
++/* Read current widget contents without changing the interpreter result. */
++static gchar *TkAtkTextValue(TkAtkAccessible *acc)
++{
++    if (!acc || !acc->tkwin || !acc->interp || Tcl_InterpDeleted(acc->interp)) {
++        return g_strdup("");
++    }
++    AtkRole role = GetAtkRoleForWidget(acc->tkwin);
++    if (role != ATK_ROLE_ENTRY && role != ATK_ROLE_TEXT) {
++        gchar *value = GetAtkValueForWidget(acc->tkwin);
++        return value ? value : g_strdup("");
++    }
++    Tcl_Obj *argv[4];
++    int argc = role == ATK_ROLE_TEXT ? 4 : 2;
++    argv[0] = Tcl_NewStringObj(Tk_PathName(acc->tkwin), -1);
++    argv[1] = Tcl_NewStringObj("get", -1);
++    if (argc == 4) {
++        argv[2] = Tcl_NewStringObj("1.0", -1);
++        argv[3] = Tcl_NewStringObj("end-1c", -1);
++    }
++    Tcl_Preserve(acc->interp);
++    Tcl_InterpState saved = Tcl_SaveInterpState(acc->interp, TCL_OK);
++    for (int i = 0; i < argc; i++) Tcl_IncrRefCount(argv[i]);
++    int code = Tcl_EvalObjv(acc->interp, argc, argv, TCL_EVAL_GLOBAL);
++    gchar *value = code == TCL_OK ? g_utf8_make_valid(Tcl_GetStringResult(acc->interp), -1) : g_strdup("");
++    for (int i = 0; i < argc; i++) Tcl_DecrRefCount(argv[i]);
++    Tcl_RestoreInterpState(acc->interp, saved);
++    Tcl_Release(acc->interp);
++    return value;
++}
++
++static gchar *tk_text_get_text(AtkText *text, gint start, gint end)
++{
++    gchar *value = TkAtkTextValue((TkAtkAccessible *)text);
++    glong length = g_utf8_strlen(value, -1);
++    start = CLAMP(start, 0, length);
++    end = end < 0 ? length : CLAMP(end, start, length);
++    gchar *slice = g_utf8_substring(value, start, end);
++    g_free(value);
++    return slice;
++}
++
++static gint tk_text_get_character_count(AtkText *text)
++{
++    gchar *value = TkAtkTextValue((TkAtkAccessible *)text);
++    glong length = g_utf8_strlen(value, -1);
++    g_free(value);
++    return length > G_MAXINT ? G_MAXINT : (gint)length;
++}
++
++static gunichar tk_text_get_character_at_offset(AtkText *text, gint offset)
++{
++    gchar *value = TkAtkTextValue((TkAtkAccessible *)text);
++    glong length = g_utf8_strlen(value, -1);
++    gunichar result = offset >= 0 && offset < length ?
++            g_utf8_get_char(g_utf8_offset_to_pointer(value, offset)) : 0;
++    g_free(value);
++    return result;
++}
++
++static gint tk_text_get_caret_offset(AtkText *text)
++{
++    TkAtkAccessible *acc = (TkAtkAccessible *)text;
++    if (!acc || !acc->tkwin || !acc->interp || Tcl_InterpDeleted(acc->interp)) {
++        return -1;
++    }
++    AtkRole role = GetAtkRoleForWidget(acc->tkwin);
++    if (role != ATK_ROLE_ENTRY && role != ATK_ROLE_TEXT) return -1;
++    Tcl_Obj *argv[5];
++    int argc = role == ATK_ROLE_TEXT ? 5 : 3;
++    argv[0] = Tcl_NewStringObj(Tk_PathName(acc->tkwin), -1);
++    if (argc == 5) {
++        argv[1] = Tcl_NewStringObj("count", -1);
++        argv[2] = Tcl_NewStringObj("-chars", -1);
++        argv[3] = Tcl_NewStringObj("1.0", -1);
++        argv[4] = Tcl_NewStringObj("insert", -1);
++    } else {
++        argv[1] = Tcl_NewStringObj("index", -1);
++        argv[2] = Tcl_NewStringObj("insert", -1);
++    }
++    Tcl_Preserve(acc->interp);
++    Tcl_InterpState saved = Tcl_SaveInterpState(acc->interp, TCL_OK);
++    for (int i = 0; i < argc; i++) Tcl_IncrRefCount(argv[i]);
++    int result = -1;
++    if (Tcl_EvalObjv(acc->interp, argc, argv, TCL_EVAL_GLOBAL) == TCL_OK) {
++        if (Tcl_GetIntFromObj(acc->interp, Tcl_GetObjResult(acc->interp), &result) != TCL_OK) result = -1;
++    }
++    for (int i = 0; i < argc; i++) Tcl_DecrRefCount(argv[i]);
++    Tcl_RestoreInterpState(acc->interp, saved);
++    Tcl_Release(acc->interp);
++    return result;
+ }
+ 
+ 
+@@ -919,6 +991,7 @@
+     iface->get_text = tk_text_get_text;
+     iface->get_caret_offset = tk_text_get_caret_offset;
+     iface->get_character_count = tk_text_get_character_count;
++    iface->get_character_at_offset = tk_text_get_character_at_offset;
+     iface->get_selection = NULL;
+     iface->get_text_at_offset = NULL;
+     iface->get_text_after_offset = NULL;

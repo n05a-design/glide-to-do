@@ -74,6 +74,9 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 | `notion_reimport.py` | Erneuter Export: unverändert/neu/geändert/lokal geändert über Quellenschlüssel und Inhaltsfingerabdruck (Tk-frei, D26/D37/D39) | 3.41.0 |
 | `notion_hierarchy.py` | Unterseiten in bestehende Glide-Ordner und Seiten einordnen (Tk-frei, D26/D37/D39) | 3.41.0 |
 | `source_metadata.py` | Notion-Quellenzuordnungen beim Lesen, Kopieren, Wiederherstellen und Verlegen von Anhängen erhalten (Tk-frei, D26/D37/D39) | 3.41.0 |
+| `accessibility.py` | Namen, Rollen, Werte und Zustände für den gewählten Aufgaben-Kernablauf, Tk-frei | Vorbereitung 4.0.0 |
+| `accessibility_bindings.py` | Native Semantik mit Widget-Lebensdauer, zusammengefassten Meldungen und Aktionsguards, Tk-frei | Vorbereitung 4.0.0 |
+| `core_accessibility.py` | Adapter für Navigation, Aufgabeninspektor, Checkboxen, Anhänge und Schreibschutz, Tk-frei | Vorbereitung 4.0.0 |
 | `page_restore.py` | Einzelne Seite aus einer Sicherung vergleichen und die Wiederherstellung planen; fehlende Ziele vorab (Tk-frei, D26/D37/D39) | 3.41.0 |
 | `restore_assets.py` | Anhänge einer Seitenwiederherstellung neu ablegen, ohne Bestandsmutation (Tk-frei, D26/D37/D39) | 3.41.0 |
 | `backup_snapshot.py` | Unveränderliche Sicherungsquelle zwischen Vorschau und Übernahme (Tk-frei, D26/D37/D39) | 3.41.0 |

@@ -13,6 +13,9 @@
 **/resources/fonts/** -text
 # Paketlizenzbelege bleiben bytegleich zu ihren gehashten Originalquellen.
 packaging/paket/lizenzen/** -text
+# Diff-Kontext trägt führende Leerzeichen vor Originaltabs und leere Zeilen.
+# Unverändert anwenden; unter Windows dieselben gehashten LF-Bytes erhalten.
+packaging/runtime/patches/*.patch text eol=lf -whitespace
 # Glide-Daten tragen Prüfsummen (Showcase-Manifest, Fixtures): Bytes bleiben,
 # wie sie erzeugt wurden (W03, 08.10.2026).
 *.glidebackup -text

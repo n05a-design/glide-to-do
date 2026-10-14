@@ -28,10 +28,10 @@ on:
   workflow_dispatch:
     inputs:
       bereich:
-        description: "Vollständige Matrix, Windows-UI-Diagnose oder Entwicklungspaket"
+        description: "Vollmatrix, Windows-Diagnose, Entwicklungspaket oder Zugangs-Vorprüfung"
         type: choice
         default: voll
-        options: [voll, aufgaben-layout, tagesdialoge, windows-paket]
+        options: [voll, aufgaben-layout, tagesdialoge, windows-paket, zugang400]
 
 permissions:
   contents: read
@@ -264,5 +264,109 @@ jobs:
         with:
           name: aufgaben-layout-windows
           path: ${{ runner.temp }}/layout
+          retention-days: 14
+          if-no-files-found: ignore
+
+  runtime-linux:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.bereich == 'zugang400'
+    name: Tk 9.1 und AT-SPI (Linux x64)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    defaults:
+      run:
+        working-directory: 01_Repository/Glide
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14.8"
+      - name: Native Bau- und AT-SPI-Voraussetzungen
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq build-essential pkg-config libx11-dev libxext-dev libxft-dev libxss-dev libharfbuzz-dev libatk1.0-dev libatk-bridge2.0-dev at-spi2-core python3-gi gir1.2-atspi-2.0 dbus-x11 xvfb
+      - name: Originalquellen mit festen Pins
+        run: python -B packaging/runtime/hole_runtimequellen.py --ziel "$RUNNER_TEMP/zugang-quellen"
+      - name: Eigene native Runtime bauen
+        id: runtime
+        run: python -B packaging/runtime/baue_runtime.py --tcl-quelle "$RUNNER_TEMP/zugang-quellen/tcl" --tk-quelle "$RUNNER_TEMP/zugang-quellen/tk" --python-quelle "$RUNNER_TEMP/zugang-quellen/python" --ziel "$RUNNER_TEMP/zugang-runtime"
+      - name: Echte native AT-SPI-Textschnittstelle
+        run: dbus-run-session -- xvfb-run -a python -B tests/tools/pruefe_linux_runtime.py --runtime "$RUNNER_TEMP/zugang-runtime" --ziel "$RUNNER_TEMP/zugang-native"
+      - name: Aufgaben-Kernablauf auf eigener Runtime
+        if: always() && !cancelled() && steps.runtime.outcome == 'success'
+        run: dbus-run-session -- xvfb-run -a env PYTHONPATH="$RUNNER_TEMP/zugang-runtime/python-extension" python -B tests/integration/test_zugang400.py --nativ --report "$RUNNER_TEMP/zugang-gui.json"
+      - name: Native Belege sichern
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: zugang400-linux
+          path: |
+            ${{ runner.temp }}/zugang-runtime/runtime-bau.json
+            ${{ runner.temp }}/zugang-runtime/protokolle
+            ${{ runner.temp }}/zugang-native
+            ${{ runner.temp }}/zugang-gui.json
+          retention-days: 14
+          if-no-files-found: ignore
+
+  runtime-windows:
+    name: Tk 9.1 und NVDA (Windows x64)
+    needs: runtime-linux
+    if: always() && !cancelled() && github.event_name == 'workflow_dispatch' && github.event.inputs.bereich == 'zugang400'
+    runs-on: windows-2025
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: 01_Repository/Glide
+    steps:
+      - name: Lange Git-Pfade zulassen
+        working-directory: ${{ github.workspace }}
+        run: git config --global core.longpaths true
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14.7"
+          architecture: x64
+      - name: Native Zeitzone und Referenzdesktop
+        run: |
+          tzutil /s "W. Europe Standard Time"
+          python -B tests/tools/windows_desktop.py --breite 1920 --hoehe 1080 --protokoll "$env:RUNNER_TEMP/zugang-desktop.json"
+      - name: Originalquellen mit festen Pins
+        run: python -B packaging/runtime/hole_runtimequellen.py --ziel "$env:RUNNER_TEMP/zugang-quellen"
+      - name: Eigene native Runtime mit MSVC bauen
+        id: runtime
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
+          $vs = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (-not $vs) { throw "Native x64-MSVC-Bauumgebung fehlt" }
+          $devcmd = Join-Path $vs "Common7/Tools/VsDevCmd.bat"
+          cmd /s /c "`"$devcmd`" -arch=x64 -host_arch=x64 >nul && set" | ForEach-Object {
+            if ($_ -match '^([^=]+)=(.*)$') { Set-Item "Env:$($matches[1])" $matches[2] }
+          }
+          python -B packaging/runtime/baue_runtime.py --tcl-quelle "$env:RUNNER_TEMP/zugang-quellen/tcl" --tk-quelle "$env:RUNNER_TEMP/zugang-quellen/tk" --python-quelle "$env:RUNNER_TEMP/zugang-quellen/python" --ziel "$env:RUNNER_TEMP/zugang-runtime"
+          exit $LASTEXITCODE
+      - name: Aufgaben-Kernablauf auf eigener Runtime
+        run: |
+          $env:PYTHONPATH = "$env:RUNNER_TEMP/zugang-runtime/python-extension"
+          python -B tests/integration/test_zugang400.py --nativ --report "$env:RUNNER_TEMP/zugang-gui.json"
+          exit $LASTEXITCODE
+      - name: Tatsächliche NVDA-Sprachausgabe im isolierten Testprofil
+        if: always() && !cancelled() && steps.runtime.outcome == 'success'
+        run: |
+          $env:PYTHONPATH = "$env:RUNNER_TEMP/zugang-runtime/python-extension"
+          python -B tests/tools/pruefe_reader_nvda.py --ziel "$env:RUNNER_TEMP/zugang-nvda"
+          exit $LASTEXITCODE
+      - name: Native Belege sichern
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: zugang400-windows
+          path: |
+            ${{ runner.temp }}/zugang-runtime/runtime-bau.json
+            ${{ runner.temp }}/zugang-runtime/protokolle
+            ${{ runner.temp }}/zugang-desktop.json
+            ${{ runner.temp }}/zugang-gui.json
+            ${{ runner.temp }}/zugang-nvda/*.json
+            ${{ runner.temp }}/zugang-nvda/*.log
           retention-days: 14
           if-no-files-found: ignore

@@ -1,0 +1,18 @@
+{
+  "run": 38581204221,
+  "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38581204221",
+  "commit": "154ccaf28fb51a95f30811f60bb2f82934d6ac67",
+  "ergebnis": "failure",
+  "linux": {
+    "quellpins": "verifiziert",
+    "tcl_bau": "grün",
+    "tk_configure": "rot: --enable-bidi requires HarfBuzz development files",
+    "native_atspi_gui_reader": "nicht ausgeführt"
+  },
+  "windows": {
+    "quellpins": "verifiziert",
+    "tcl_make": "rot: nmake versucht git rev-parse im sauberen Quellexport ohne .git",
+    "gui_nvda": "nicht ausgeführt"
+  },
+  "nachlauf": "HarfBuzz-Bauvoraussetzung ergänzt; manifest.uuid deterministisch aus Originalpräfix und verifiziertem Pin; native Wiederholung offen"
+}

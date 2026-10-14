@@ -14,12 +14,12 @@ Voraussetzung ist Python mit Tk; zusätzliche Laufzeitpakete sind nicht nötig.
 python3 src/glide/app.pyw          # Windows: python src\glide\app.pyw
 ```
 
-Eigenständige Entwicklungsbauten für macOS arm64 und Windows x64 bündeln Python und Tcl/Tk; Bauanleitung und Prüfgrenzen stehen in der [Paketierung](packaging/README.md#eigenständige-entwicklungspakete-paket-7).
+Gelieferte eigenständige Entwicklungspakete liegen unter `build/macos/Glide.app` und `build/windows/Glide-3.42.0/Glide.exe`; sie bündeln Python und Tcl/Tk; Bauanleitung und Prüfgrenzen stehen in der [Paketierung](packaging/README.md#eigenständige-entwicklungspakete-paket-7).
 
 Die Ressourcen unter `src/glide/resources` müssen neben der Anwendung liegen. Startbare Lieferfassung: `07_Python-Versionen/Schnellstart.pyw`. Unter macOS lässt sich ein Entwicklungsbundle bauen (nutzt das installierte Python, nicht zur Weitergabe):
 
 ```bash
-python3 packaging/macos/baue_app.py --ziel build/macos
+python3 packaging/macos/baue_app.py --ziel build/macos-vorstufe
 ```
 
 Die isolierte Bedienprobe der Zeichenfläche (2026-09-24) startet mit `python3 src/glide/drawing_prototype.pyw`.

@@ -1,12 +1,12 @@
 # Paketierung Glide
 
-Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+Stand 14.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
 
-Der aktuelle Stand ist eine geprüfte Python-Anwendung mit Ressourcen. Ein Installer, eine Signatur oder eine Store-Abnahme wird hier nicht behauptet; offene Schritte stehen in der [Veröffentlichung](../docs/10_VEROEFFENTLICHUNG.md).
+Der aktuelle Stand enthält eigenständige Entwicklungspakete für macOS arm64 und Windows x64 mit eigenem Python/Tcl-Tk, geliefert und isoliert geprüft. Mac ad hoc signiert, Windows unsigniert; öffentliche Signaturen, Installer und Store-Abnahme bleiben in der [Veröffentlichung](../docs/10_VEROEFFENTLICHUNG.md) offen.
 
 ## Inhalt eines Pakets
 
-`src/glide/app.pyw` mit allen Modulen daneben – `glide_start.py`, `drawing.py`, `drawing_image.py`, `backdrop.py`, `page_markdown.py`, `image_preview.py`, `logo.py`, `schema_backups.py`, `sidebar_policy.py`, `svg_geometry.py`, `home_tiles.py`, `capture_parser.py`, `eisenhower.py`, `today_view.py`, `content_search.py`, `save_comparison.py`, `view_metrics.py`, `action_catalog.py`, `ui_design.py`, `planning.py`, `day_proposal.py`, `focus_timer.py`, `task_references.py`, `interaction_policy.py`, `object_references.py`, `week_planning.py`, `page_features.py`, `repeat_rules.py`, `repeat_ics.py`, `routines.py`, `runtime_check.py`, `release_notes.py`, `appearance.py`, `preview_tools.py`, `filter_explain.py`, `exchange_patch.py`, `backup_diff.py`, `render_retention.py`, `logo_raster.py`, `symbol_policy.py`, `motion.py`, `task_editing.py`, `daily_hints.py`, `ics_recurrence.py`, `occupied_time.py`, `ics_busy.py`, `ics_timezone.py`, `timezones.py`, `day_relief.py`, `busy_calendar.py`, `calendar_service.py`, `animation.py`, `animation_export.py`, `attachment_paths.py`, `backup_snapshot.py`, `notion_archive.py`, `notion_hierarchy.py`, `notion_import.py`, `notion_reimport.py`, `page_restore.py`, `restore_assets.py`, `source_metadata.py` (Aufgaben siehe [Modulübersicht](../src/glide/README.md)) –, der vollständige Ordner `resources` (Schriften mit Lizenztexten, Vorlagen, Logo) und `vendor/tkinterdnd2` nur mit den Bibliotheken der Zielplattform, samt Lizenzen. Die Bedienprobe `drawing_prototype.pyw` gehört nicht hinein. Daten werden nie in den Installationsordner geschrieben.
+`src/glide/app.pyw` mit allen Modulen daneben – `glide_start.py`, `drawing.py`, `drawing_image.py`, `backdrop.py`, `page_markdown.py`, `image_preview.py`, `logo.py`, `schema_backups.py`, `sidebar_policy.py`, `svg_geometry.py`, `home_tiles.py`, `capture_parser.py`, `eisenhower.py`, `today_view.py`, `content_search.py`, `save_comparison.py`, `view_metrics.py`, `action_catalog.py`, `ui_design.py`, `planning.py`, `day_proposal.py`, `focus_timer.py`, `task_references.py`, `interaction_policy.py`, `object_references.py`, `week_planning.py`, `page_features.py`, `repeat_rules.py`, `repeat_ics.py`, `routines.py`, `runtime_check.py`, `release_notes.py`, `appearance.py`, `preview_tools.py`, `filter_explain.py`, `exchange_patch.py`, `backup_diff.py`, `render_retention.py`, `logo_raster.py`, `symbol_policy.py`, `motion.py`, `task_editing.py`, `daily_hints.py`, `ics_recurrence.py`, `occupied_time.py`, `ics_busy.py`, `ics_timezone.py`, `timezones.py`, `day_relief.py`, `busy_calendar.py`, `calendar_service.py`, `animation.py`, `animation_export.py`, `attachment_paths.py`, `backup_snapshot.py`, `notion_archive.py`, `notion_hierarchy.py`, `notion_import.py`, `notion_reimport.py`, `page_restore.py`, `restore_assets.py`, `source_metadata.py`, `accessibility.py`, `accessibility_bindings.py`, `core_accessibility.py` (Aufgaben siehe [Modulübersicht](../src/glide/README.md)) –, der vollständige Ordner `resources` (Schriften mit Lizenztexten, Vorlagen, Logo) und `vendor/tkinterdnd2` nur mit den Bibliotheken der Zielplattform, samt Lizenzen. Die Bedienprobe `drawing_prototype.pyw` gehört nicht hinein. Daten werden nie in den Installationsordner geschrieben.
 
 ## Kennungen (26.09.2026, nie ändern)
 
@@ -19,11 +19,11 @@ Eingetragen im [Produktregister](../docs/decisions/PRODUCT_IDENTITY.md).
 
 **Programmsymbole – [`baue_symbole.py`](baue_symbole.py):** erzeugt mit Tk 9 aus `src/glide/resources/logo/glide-app-icon.svg` (Kopie von `20_Grafik_Master/03_Fav-Icon/App-Icon-transparent-02.svg`) unter `assets/icons/` die Dateien `glide.ico` (Windows, 16–256 px), `glide_macos_1024.png` (macOS, mit Apples Rand) und `glide_512.png` (Linux, Stores).
 
-**macOS-Entwicklungsbundle – [`macos/baue_app.py`](macos/baue_app.py):**
+**macOS-Vorstufe mit externem Python – [`macos/baue_app.py`](macos/baue_app.py):**
 
 ```
 python3 -B packaging/baue_symbole.py
-python3 -B packaging/macos/baue_app.py --ziel build/macos [--symbol anderes_1024.png]
+python3 -B packaging/macos/baue_app.py --ziel build/macos-vorstufe [--symbol anderes_1024.png]
 ```
 
 Baut `Glide.app` mit Quellen und Modulen (Start über `glide_start.py`), Ressourcen, dem macOS-Teil von `vendor/tkinterdnd2`, einer Kopie des Python-Starters aus dem installierten python.org-Framework, `Glide.icns` und Ad-hoc-Signatur. macOS führt den Prozess als „Glide“ mit `de.shaye.glide`. Das Bundle braucht das installierte Python mit Tk und ist nicht zur Weitergabe gedacht.
@@ -73,8 +73,10 @@ Der native Windows-Bau läuft im Workflow `Glide-Prüfung` nach der vollständig
 Linux-/Windows-Matrix: eigene Bauumgebung, Lizenzbelege aus der tatsächlich
 installierten Laufzeit, `baue_paket.py --plattform windows-x64` und anschließend
 `pruefe_start_windows.py`. Dessen ACL-Sperre ist ausschließlich für den
-vergänglichen GitHub-Hosted-Runner zugelassen. Originalrechte werden im
-`finally`-Zweig wiederhergestellt und das externe Python danach erneut geprüft.
+vergänglichen GitHub-Hosted-Runner zugelassen. Originale Zugriffsregeln werden im
+`finally`-Zweig wiederhergestellt und vollständig verglichen; nur der AI-Modellmarker
+darf im vergänglichen Runner abweichen, der Rohvergleich bleibt separat sichtbar.
+Das externe Python wird danach erneut gestartet.
 Der Workflow sichert Paket und Belege als getrennte Artefakte.
 
 Die native Startprobe legt ausschließlich künstliche Daten an und prüft sechs
