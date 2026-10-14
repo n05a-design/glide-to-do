@@ -23,7 +23,7 @@ def text_values(text_interface, accessible):
     return actual, count, caret, prefix
 
 
-def run(pid, name, expected, report):
+def run(pid, name, expected, report, expected_caret=None):
     if (sys.platform != 'linux' or os.environ.get('GITHUB_ACTIONS') != 'true'
             or os.environ.get('RUNNER_ENVIRONMENT') != 'github-hosted'):
         raise RuntimeError('AT-SPI-Verbraucher nur im eigenen vergänglichen Linux-Hosted-CI-Prüfstand.')
@@ -65,7 +65,13 @@ def run(pid, name, expected, report):
                       character_count=count, caret=caret, besuchte_eigene_knoten=len(seen))
         assert actual == expected, ('Native Textschnittstelle liefert einen anderen Inhalt', actual, expected)
         assert count == len(expected) and 0 <= caret <= count, (count, caret)
+        if expected_caret is not None:
+            assert caret == expected_caret, ('Native Cursorposition', caret, expected_caret)
         assert prefix == expected[:2], 'AT-SPI-Zeichenoffsets müssen Unicode-Zeichen zählen'
+        if '🏠' in expected:
+            character = Atspi.Text.get_character_at_offset(text, expected.index('🏠'))
+            result['unicode_character'] = character
+            assert character == ord('🏠'), ('Nativer Unicode-Zeichenoffset', character)
         result['exitcode'] = 0
     except BaseException as error:
         result.update(fehler=str(error), traceback=traceback.format_exc())
@@ -81,8 +87,9 @@ def main():
     parser.add_argument('--name', required=True)
     parser.add_argument('--text', required=True)
     parser.add_argument('--bericht', type=Path, required=True)
+    parser.add_argument('--caret', type=int)
     args = parser.parse_args()
-    return run(args.pid, args.name, args.text, args.bericht)
+    return run(args.pid, args.name, args.text, args.bericht, args.caret)
 
 
 if __name__ == '__main__':

@@ -28,7 +28,7 @@ def child(exchange):
     field.focus_force()
     def ready():
         (exchange / 'bereit.json').write_text(json.dumps(dict(pid=os.getpid(), text=text,
-            name='AT-SPI-Prüffeld', tk=str(root.tk.call('package', 'provide', 'Tk')),
+            name='AT-SPI-Prüffeld', caret=3, tk=str(root.tk.call('package', 'provide', 'Tk')),
             native_backend=field._glide_accessibility.supported)), encoding='utf-8')
     root.after(300, ready)
     root.after(90_000, root.destroy)
@@ -69,7 +69,8 @@ def run(runtime, destination):
                     raise RuntimeError('Eigene native Tk-9.1-Fixture nicht belegt.')
                 report = destination / 'atspi-text.json'
                 consumer = subprocess.run(['/usr/bin/python3', '-B', str(Path(__file__).with_name('pruefe_native_atspi.py')),
-                    '--pid', str(process.pid), '--name', ready['name'], '--text', ready['text'], '--bericht', str(report)],
+                    '--pid', str(process.pid), '--name', ready['name'], '--text', ready['text'],
+                    '--caret', str(ready['caret']), '--bericht', str(report)],
                     env=env, timeout=45)
                 result.update(exitcode=consumer.returncode, tk=ready['tk'], native_backend=True)
             except Exception as error:

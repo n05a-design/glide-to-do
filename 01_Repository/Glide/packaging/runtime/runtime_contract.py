@@ -51,7 +51,7 @@ def extension_command(system, machine, *, include, prefix, modules, output, pyth
     include, prefix, modules, output = map(Path, (include, prefix, modules, output))
     includes = [include, include / 'internal', prefix / 'include', modules]
     if system == 'win32' and machine == 'x86_64' and python_library is not None:
-        return ['cl', '/nologo', '/LD', '/MD', '/O2'] + [f'/I{path}' for path in includes] + [
+        return ['cl', '/nologo', '/LD', '/MD', '/O2', '/DTCL_WITH_EXTERNAL_TOMMATH'] + [f'/I{path}' for path in includes] + [
             str(modules / '_tkinter.c'), f'/Fo{output.with_suffix(".obj")}', '/link',
             f'/OUT:{output}', '/MACHINE:X64', str(python_library),
             str(prefix / 'lib/tcl91.lib'), str(prefix / 'lib/tcl9tk91.lib'), str(prefix / 'lib/tommath.lib')]

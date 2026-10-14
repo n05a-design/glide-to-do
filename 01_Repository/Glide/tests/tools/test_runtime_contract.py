@@ -51,6 +51,7 @@ class RuntimeContract(unittest.TestCase):
         windows = extension_command('win32', 'x86_64', python_library=Path('python314.lib'), **arguments)
         self.assertIn(str(Path('runtime/lib/tcl9tk91.lib')), windows)
         self.assertIn(str(Path('runtime/lib/tommath.lib')), windows)
+        self.assertIn('/DTCL_WITH_EXTERNAL_TOMMATH', windows)
         self.assertIn('python314.lib', windows)
         with self.assertRaises(ValueError):
             extension_command('win32', 'x86_64', **arguments)
