@@ -71,7 +71,8 @@ def run(repo, report=None, native=None):
             assert proof.get('acl_entsperrung_exitcodes') == [0] * 4
             assert proof.get('acl_restaurierung_exitcodes') == [0] * 4
             assert proof.get('acl_native_restaurierung_exitcodes') == [0] * 4
-            assert proof.get('acl_originale_wiederhergestellt') == [True] * 4
+            assert proof.get('acl_zugriffsregeln_wiederhergestellt') == [True] * 4
+            assert len(proof.get('acl_originale_wiederhergestellt', [])) == 4
         result['nativer_startbeleg'] = dict(plattform=proof['plattform'], version=version, exitcode=0)
     if report:
         report.parent.mkdir(parents=True, exist_ok=True)

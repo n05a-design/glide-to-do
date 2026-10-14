@@ -3,10 +3,38 @@ from pathlib import Path as _Path
 _sys.path.insert(0, str(_Path(__file__).resolve().parents[2] / 'packaging/paket'))
 import errno
 import unittest
-from windows_isolation import access_denied, acl_snapshot, normalize_environment, plan, restoration_entries
+from windows_isolation import access_denied, acl_rules, acl_snapshot, normalize_environment, plan, restoration_entries
 
 
 class NativeDenialEvidence(unittest.TestCase):
+    def test_acl_rules_only_ignore_auto_inherited_descriptor_model_marker(self):
+        original={'x64':'D:AI(A;OICIID;FA;;;SY)', 'x64\\python.exe':'D:AI(A;ID;0x1301bf;;;AU)'}
+        after={name:dacl.replace('D:AI','D:') for name,dacl in original.items()}
+        self.assertNotEqual(original,after)
+        self.assertEqual(acl_rules(original),acl_rules(after))
+        self.assertEqual(original['x64'],'D:AI(A;OICIID;FA;;;SY)')
+
+    def test_acl_rule_comparison_keeps_protection_request_and_every_ace_bit(self):
+        original={'x64':'D:AI(A;OICIID;FA;;;SY)(A;ID;RX;;;BU)'}
+        for dacl in ('D:PAI(A;OICIID;FA;;;SY)(A;ID;RX;;;BU)',
+                     'D:ARAI(A;OICIID;FA;;;SY)(A;ID;RX;;;BU)',
+                     'D:AI(A;OICIID;RX;;;SY)(A;ID;RX;;;BU)',
+                     'D:AI(A;ID;FA;;;SY)(A;ID;RX;;;BU)',
+                     'D:AI(A;OICIID;FA;;;BA)(A;ID;RX;;;BU)',
+                     'D:AI(A;ID;RX;;;BU)(A;OICIID;FA;;;SY)'):
+            with self.subTest(dacl=dacl):
+                self.assertNotEqual(acl_rules(original),acl_rules({'x64':dacl}))
+
+    def test_previous_icacls_python_file_reinheritance_remains_a_failure(self):
+        original={'python.exe':'D:AI(A;ID;0x1301bf;;;AU)(A;ID;FA;;;SY)'}
+        rewritten={'python.exe':'D:AI(A;ID;0x1301bf;;;AU)(A;OICIIOID;SDGXGWGR;;;AU)(A;OICIID;FA;;;SY)'}
+        self.assertNotEqual(acl_rules(original),acl_rules(rewritten))
+
+    def test_acl_rule_comparison_requires_the_complete_same_file_set(self):
+        original={'x64':'D:AI(A;ID;FA;;;SY)', 'x64\\python.exe':'D:AI(A;ID;FA;;;SY)'}
+        self.assertNotEqual(acl_rules(original),acl_rules({'x64':original['x64']}))
+        self.assertNotEqual(acl_rules(original),acl_rules(dict(original,foreign=original['x64'])))
+
     def test_original_acl_restore_targets_only_the_saved_tree_and_parent_first(self):
         source = r'C:\Python\x64'
         entries = restoration_entries(source, {r'x64\python.exe':'D:AI(A;ID;FA;;;SY)',

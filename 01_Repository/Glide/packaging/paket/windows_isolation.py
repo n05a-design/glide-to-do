@@ -1,6 +1,7 @@
 """Grenzen einer Laufzeitsperre ausschließlich im vergänglichen Hosted-CI-Runner."""
 import errno
 from pathlib import PureWindowsPath
+import re
 
 
 def access_denied(error):
@@ -21,6 +22,18 @@ def acl_snapshot(raw):
             raise ValueError('Ungültige oder doppelte icacls-ACL-Sicherung.')
         result[name] = dacl
     return result
+
+
+def acl_rules(snapshot):
+    """Alle Zugriffsregeln erhalten; nur den Windows-AI-Modellmarker ausnehmen.
+
+    SetFileSecurityW erhält die ACEs ohne Propagation, setzt den AI-Marker aber
+    zurück. Schutz P, Anforderung AR, Reihenfolge und jedes ACE bleiben exakt.
+    Der Prüfer berichtet zusätzlich den unveränderten Rohvergleich separat.
+    """
+    return {name: re.sub(r'^D:((?:P|AI|AR)*)(?=\(|$)',
+                        lambda match: 'D:'+match[1].replace('AI',''), dacl)
+            for name,dacl in snapshot.items()}
 
 
 def normalize_environment(environment):

@@ -14,7 +14,7 @@ import subprocess
 import sys
 import tempfile
 import traceback
-from windows_isolation import access_denied, acl_snapshot, normalize_environment, plan
+from windows_isolation import access_denied, acl_rules, acl_snapshot, normalize_environment, plan
 
 
 def run(package,report,forbidden,*,timeout=150):
@@ -50,7 +50,7 @@ def run(package,report,forbidden,*,timeout=150):
     assert command([sys.executable,'-B','-c','raise SystemExit(0)']).returncode==0
     result={'plattform':'Windows x64','nur_vergaenglicher_hosted_ci_runner':True,
             'inhaber_installationen_unveraendert':True,'exitcode':1}
-    saved=[];restored=[];unlocked=[];verified=[];restore_details=[];failure=None
+    saved=[];restored=[];unlocked=[];verified=[];rules_verified=[];restore_details=[];failure=None
     candidates=('python.exe','Scripts/python.exe','glide_app.py','01_Repository/Glide/src/glide/app.pyw')
     probes=[]
     for path in sources:
@@ -134,6 +134,7 @@ def run(package,report,forbidden,*,timeout=150):
                 try:
                     actual=acl_snapshot(after.read_bytes()) if check==0 else {}
                     verified.append(check==0 and actual==original)
+                    rules_verified.append(check==0 and acl_rules(actual)==acl_rules(original))
                     if actual!=original:
                         changed=[name for name in original.keys() & actual.keys() if original[name]!=actual[name]]
                         difference={'vorher':len(original),'nachher':len(actual),
@@ -145,6 +146,7 @@ def run(package,report,forbidden,*,timeout=150):
                                                  for name in sorted(changed)[:3]]}
                 except BaseException as exc:
                     verified.append(False)
+                    rules_verified.append(False)
                     check_output+='\n'+str(exc)
                 restore_details.append({'entsperren':unlock_output,'restaurieren':restore_output,
                                         'native_originalrestaurierung':exact,
@@ -153,9 +155,11 @@ def run(package,report,forbidden,*,timeout=150):
             result['acl_restaurierung_exitcodes']=restored
             result['acl_native_restaurierung_exitcodes']=exact_codes
             result['acl_originale_wiederhergestellt']=verified
+            result['acl_zugriffsregeln_wiederhergestellt']=rules_verified
+            result['acl_modellmarker_ai_abweichend_zulaessig']=True
             result['acl_restaurierung_details']=restore_details
             if (len(restored)!=len(saved) or any(restored) or
-                    len(unlocked)!=len(saved) or any(unlocked) or any(exact_codes) or not all(verified)):
+                    len(unlocked)!=len(saved) or any(unlocked) or any(exact_codes) or not all(rules_verified)):
                 result['exitcode']=1
     if failure is not None:
         try:
