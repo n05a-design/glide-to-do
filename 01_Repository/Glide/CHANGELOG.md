@@ -5,7 +5,9 @@
 - **Ohne externe Python-Installation starten:** native Pakete für macOS arm64 und Windows x64 bündeln den vollständigen Funktionsstand mit Python 3.14/Tcl-Tk 9, Ressourcen, Schriften und Drag-and-drop. Daten bleiben im bisherigen Benutzerordner. Die Python-Fassung und der bisherige Entwicklungsbuilder bleiben erhalten.
 - **Nachvollziehbarer Bau:** PyInstaller 6.22.3 und alle Bauabhängigkeiten fest gepinnt; geprüfte Original-Lizenzbelege passend zur tatsächlichen Laufzeit, Quell-/Ressourcenhashes, Vergleich kompilierter Codeobjekte und native Architektur-/Bibliotheksprüfung. Keine neue App-Laufzeitabhängigkeit.
 - **Native Startabnahme:** Externes Python und Bauquellen werden ausschließlich im eigenen Mac-Kindprozess beziehungsweise vergänglichen Windows-CI-Prüfstand blockiert. Die Probe prüft sechs Ansichten, Speichern/Dateilesen, Abhaken/Undo, App-Sicherungs-Rundlauf, gebündelte Schriften/Logo/DND und interne Bibliotheken. Mac ad hoc signiert, Windows unsigniertes Entwicklungsartefakt; öffentliche Signaturen und Veröffentlichungstore bleiben offen. Abnahmestand im QA-Bericht.
-- **Prüfung:** Pflichtsuite `test_paket3420.py` prüft reale Bauquellen beider Ziele und feste Pins; native Paketproben separat verpflichtend. Datenformat 25 unverändert.
+- **Prüfung:** Pflichtsuite `test_paket3420.py` prüft reale Bauquellen beider Ziele und feste Pins; native Paketproben separat verpflichtend. Datenformat 25 unverändert. Automatisch geliefert am 14.10.2026: Mac 107/2 mit 1.083 unveränderten Dateien, Linux/Windows je 108/1, beide tatsächlichen isolierten Paketstarts grün; lokale Startwege/Artefakte bytegleich und Mac-Rückkopie signaturgeprüft. Menschen- und öffentliche Releaseabnahme bleiben getrennt offen.
+
+- **Prüfwerkzeugnachlauf 14.10.2026:** Die Dokumentinventur beschränkt Git-Arbeitskopien auf versionierte und vorgemerkte Projektdokumente. Private Nutzerdateien bleiben unverändert; zwei neue Git-Regressionsfälle, insgesamt 16 Inventurtests grün. App und ausgelieferte Pakete unverändert.
 
 ## 3.41.0 – Notion-Import und Seitenwiederherstellung (13.10.2026)
 

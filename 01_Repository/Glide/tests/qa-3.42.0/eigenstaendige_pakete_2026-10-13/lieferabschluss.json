@@ -1,0 +1,33 @@
+{
+  "version": "3.42.0",
+  "app_sha256": "d6709820b223293d6480e2fa15616cbf4257293d4cfb87422bc9782d409afa05",
+  "code_dateien": 63,
+  "ressourcen_vendor_dateien": 146,
+  "07_bytegleich": true,
+  "mac_bundle_dateien": 330,
+  "mac_bundle_symlinks": 29,
+  "mac_bundle_bytegleich": true,
+  "mac_rueckkopie_signatur": true,
+  "windows_paket_dateien": 102,
+  "windows_paket_bytegleich": true,
+  "windows_paket": "01_Repository/Glide/build/windows/Glide-3.42.0",
+  "windows_signatur": "unsigniertes Entwicklungsartefakt",
+  "entfernte_alte_qa_dateien": 565,
+  "zusaetzlich_entfernte_alte_fensterbilder": 0,
+  "menschen_dpi_readerabnahme": "getrennt offen",
+  "root_startprobe": "Exit 0; echtes externes Python und Quellen gesperrt; eigener temporärer Datenordner",
+  "exitcode": 0,
+  "showcase_dateien": 6,
+  "showcase_bytegleich": true,
+  "mac_voll": {
+    "ausgeführt": 107,
+    "übersprungen": 2,
+    "fehlgeschlagen": 0
+  },
+  "frozen_dateien": 1083,
+  "appbaum_native_vollmatrix_unveraendert": true,
+  "appbaum_git": "de50d871269ec12e8cd5ddf667761fb0fc713634",
+  "native_vollmatrix": "https://github.com/n05a-design/glide-to-do/actions/runs/38475080827",
+  "windows_paketlauf": "https://github.com/n05a-design/glide-to-do/actions/runs/38547672592",
+  "kandidat": "abb846520c1813a7d8e57a6ff10b59a291e8a549"
+}

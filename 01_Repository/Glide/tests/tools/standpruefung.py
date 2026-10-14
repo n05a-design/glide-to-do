@@ -89,6 +89,7 @@ import argparse
 import ast
 from pathlib import Path
 import re
+import subprocess
 import sys
 
 REPO = Path(__file__).resolve().parents[2]
@@ -286,7 +287,22 @@ def ablagewurzel(repo: Path) -> Path | None:
 
 
 def dokumente(wurzel: Path):
-    for pfad in sorted(wurzel.rglob("*.md")):
+    # Die Arbeitskopie enthält auch private, nicht versionierte Nutzerdateien.
+    # Neue Projektdokumente vor der CI vormerken; ein eingefrorener Export ohne
+    # Git-Metadaten prüft weiterhin seinen gesamten übergebenen Dokumentbaum.
+    try:
+        inside = subprocess.run(['git', '-C', str(wurzel), 'rev-parse', '--is-inside-work-tree'],
+                                capture_output=True, text=True, timeout=15)
+    except FileNotFoundError:
+        inside = None
+    if inside is not None and inside.returncode == 0 and inside.stdout.strip() == 'true':
+        listed = subprocess.run(['git', '-C', str(wurzel), 'ls-files', '--cached', '-z'],
+                                capture_output=True, check=True, timeout=30)
+        candidates = [wurzel / name.decode('utf-8', 'surrogateescape')
+                      for name in listed.stdout.split(b'\0') if name.endswith(b'.md')]
+    else:
+        candidates = wurzel.rglob('*.md')
+    for pfad in sorted(candidates):
         teile = pfad.relative_to(wurzel).parts
         # Gebaute Pakete enthalten Lizenz-/Ressourcenkopien ihres Quellstands;
         # sie sind keine zweite gepflegte Dokumentation der Arbeitskopie.

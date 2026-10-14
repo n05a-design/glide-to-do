@@ -3,6 +3,7 @@
 import unittest
 from pathlib import Path
 import tempfile
+import subprocess
 
 import standpruefung as stand
 
@@ -104,6 +105,30 @@ class Einstiegspruefung(unittest.TestCase):
                 file.parent.mkdir(parents=True, exist_ok=True)
                 file.write_text("# Lizenzoriginal\n")
             self.assertEqual(list(stand.dokumente(root)), [active])
+
+    def test_git_inventory_includes_staged_project_docs_and_preserves_untracked_user_files(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            subprocess.run(['git', 'init', '-q', str(root)], check=True)
+            active = root/'docs/current.md';active.parent.mkdir()
+            active.write_text('# Aktuelles Projektdokument')
+            imported = root/'personal-skills/REFERENCE.md';imported.parent.mkdir()
+            imported.write_text('# Unverändertes Nutzermaterial')
+            note = root/'Personal design notes.md';note.write_text('# Eigene Notizen')
+            before = {path:path.read_bytes() for path in (imported,note)}
+            subprocess.run(['git','-C',str(root),'add','docs/current.md'],check=True)
+            self.assertEqual(list(stand.dokumente(root)),[active])
+            self.assertEqual({path:path.read_bytes() for path in before},before)
+
+    def test_git_inventory_respects_requested_subdirectory_and_staged_new_document(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            subprocess.run(['git','init','-q',str(root)],check=True)
+            top = root/'README.md';top.write_text('# Projekt')
+            nested = root/'packaging/README.md';nested.parent.mkdir();nested.write_text('# Paketierung')
+            subprocess.run(['git','-C',str(root),'add','README.md','packaging/README.md'],check=True)
+            self.assertEqual(list(stand.dokumente(nested.parent)),[nested])
+            self.assertEqual(list(stand.dokumente(root)),[top,nested])
 
     def test_nested_git_worktrees_have_their_own_documentation_scope(self):
         with tempfile.TemporaryDirectory() as folder:
