@@ -63,11 +63,11 @@ def run(destination, app_path):
                 assert text in value, (text, value)
                 return value
 
-            def find_by_tab(text):
+            def find_by_tab(text, *, role=None):
                 for _ in range(90):
                     key('tab')
                     spoken = speak_focus()
-                    if text in spoken:
+                    if text in spoken and (role is None or role in spoken.casefold()):
                         return spoken
                 raise AssertionError('Per Tab und NVDA nicht erreichbar: ' + text)
 
@@ -85,11 +85,22 @@ def run(destination, app_path):
             focus_expected('Aufgaben suchen')
             type_text('Angebot')
             key('escape')
-            find_by_tab('Aufgaben')
+            find_by_tab('Aufgaben', role='tree')
+            key('home')
+            focus_expected('Angebot pruefen')
             key('control+shift+p')
             key('home')
+            focus_expected('Heute')
             key('enter')
             wait_value(exchange/'zustand.json', lambda value: value['tasks'][0].get('planned_date') == date.today().isoformat())
+            find_by_tab('Arbeitsbereiche', role='tree')
+            key('home')
+            key('down')
+            focus_expected('Heute')
+            wait_value(exchange/'zustand.json', lambda value: value['view'] == ready['plan_day_view'])
+            find_by_tab('Aufgaben', role='tree')
+            key('home')
+            focus_expected('Angebot pruefen')
             key('f2')
             focus_expected('Aufgabentitel')
             key('control+a')
@@ -115,12 +126,15 @@ def run(destination, app_path):
             assert not final['tasks'][0].get('due'), 'Einplanen darf keine Fälligkeit setzen'
             result.update(exitcode=0, version=ready['version'], tk=ready['tk'], checks=[
                 'NVDA benennt Erfassung, Suche, Aufgabenliste und Inspektorfelder bei echter Tastaturbedienung',
-                'Planungsmenü per Tastatur setzt Heute ohne Fälligkeit; Titel gespeichert',
+                'Reader benennt ausgewählte Aufgabe und Heute-Menü; tatsächliche Heute-Ansicht erreicht, keine Fälligkeit; Titel gespeichert',
                 'Checklistenpunkt per Tastatur hinzugefügt; NVDA meldet native Checkbox und Checked-Zustand',
                 'Leertaste und ein Undo verändern den gespeicherten Datensatz; keine Callbackfehler'])
         except BaseException as error:
             result.update(fehler=str(error), traceback=traceback.format_exc())
         finally:
+            state_path = destination/'glide-diagnose/zustand.json'
+            if state_path.is_file():
+                result['app_callback_errors'] = json.loads(state_path.read_text(encoding='utf-8'))['callback_errors']
             if child is not None and child.poll() is None:
                 child.terminate()
                 child.wait(timeout=15)

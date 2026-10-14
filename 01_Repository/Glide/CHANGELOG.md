@@ -1,5 +1,7 @@
 # Änderungsverlauf
 
+Vorbereitung 4.0.0 (unveröffentlichter Kandidat): Linux-/Windows-Runtimebau und GUI bestätigt; Linux-AT-SPI-Textkorrektur extern geprüft. Nach roter NVDA-Probe Windows-Namenszuordnung und Spy-Konfiguration korrigiert; tatsächliche Orca-Probe ergänzt. Readerwiederholung, eigene 4.0-Pakete und Vollmatrix bleiben offen.
+
 ## In Vorbereitung – 4.0.0 (keine Lieferung)
 
 - Zugänglicher Aufgaben-Kernablauf nach D36: additive Semantik, echte Checklistencheckboxen, Tastaturanhänge und geschützte Auswahlflächen. Neue Fachlogik Tk-frei; bestehende Mutationswege und Format 25 erhalten.

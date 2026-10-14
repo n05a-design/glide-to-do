@@ -269,7 +269,7 @@ jobs:
 
   runtime-linux:
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.bereich == 'zugang400'
-    name: Tk 9.1 und AT-SPI (Linux x64)
+    name: Tk 9.1, AT-SPI und Orca (Linux x64)
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     defaults:
@@ -283,7 +283,7 @@ jobs:
         with:
           python-version: "3.14.8"
       - name: Native Bau- und AT-SPI-Voraussetzungen
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq build-essential pkg-config libx11-dev libxext-dev libxft-dev libxss-dev libharfbuzz-dev libatk1.0-dev libatk-bridge2.0-dev at-spi2-core python3-gi gir1.2-atspi-2.0 dbus-x11 xvfb
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq build-essential pkg-config libx11-dev libxext-dev libxft-dev libxss-dev libharfbuzz-dev libatk1.0-dev libatk-bridge2.0-dev at-spi2-core python3-gi gir1.2-atspi-2.0 dbus-x11 xvfb orca speech-dispatcher speech-dispatcher-espeak-ng espeak-ng python3-speechd python3-setproctitle pulseaudio pulseaudio-utils xdotool openbox
       - name: Originalquellen mit festen Pins
         run: python -B packaging/runtime/hole_runtimequellen.py --ziel "$RUNNER_TEMP/zugang-quellen"
       - name: Eigene native Runtime bauen
@@ -294,6 +294,15 @@ jobs:
       - name: Aufgaben-Kernablauf auf eigener Runtime
         if: always() && !cancelled() && steps.runtime.outcome == 'success'
         run: dbus-run-session -- xvfb-run -a env PYTHONPATH="$RUNNER_TEMP/zugang-runtime/python-extension" python -B tests/integration/test_zugang400.py --nativ --report "$RUNNER_TEMP/zugang-gui.json"
+      - name: Tatsächliche Orca-Sprachausgabe im isolierten Testprofil
+        if: always() && !cancelled() && steps.runtime.outcome == 'success'
+        run: |
+          dbus-run-session -- xvfb-run -a -s "-screen 0 1920x1080x24" bash -c '
+            openbox >"$RUNNER_TEMP/zugang-orca-windowmanager.log" 2>&1 &
+            wm_pid=$!
+            trap "kill $wm_pid 2>/dev/null || true" EXIT
+            PYTHONPATH="$RUNNER_TEMP/zugang-runtime/python-extension" python -B tests/tools/pruefe_reader_orca.py --ziel "$RUNNER_TEMP/zugang-orca"
+          '
       - name: Native Belege sichern
         if: always()
         uses: actions/upload-artifact@v7
@@ -303,6 +312,9 @@ jobs:
             ${{ runner.temp }}/zugang-runtime/runtime-bau.json
             ${{ runner.temp }}/zugang-runtime/protokolle
             ${{ runner.temp }}/zugang-native
+            ${{ runner.temp }}/zugang-orca/*.json
+            ${{ runner.temp }}/zugang-orca/*.log
+            ${{ runner.temp }}/zugang-orca-windowmanager.log
             ${{ runner.temp }}/zugang-gui.json
           retention-days: 14
           if-no-files-found: ignore

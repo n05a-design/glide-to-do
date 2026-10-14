@@ -31,6 +31,12 @@ def run(app_path, exchange):
         root.geometry('1280x800+20+20')
         callbacks = []
         root.report_callback_exception = lambda *args: callbacks.append(''.join(traceback.format_exception(*args)))
+        # Auch native Tcl-Klassenbindungen des aktiven Readers können Fehler
+        # auslösen. Im Prüfling protokollieren statt einen blockierenden
+        # Fehlerdialog zu öffnen; jeder Eintrag lässt die Readerprobe scheitern.
+        root.tk.createcommand('glide_reader_bgerror', lambda message:
+            callbacks.append('Tcl: '+message+'\n'+str(root.tk.call('set', '::errorInfo'))))
+        root.tk.call('proc', 'bgerror', 'message', 'glide_reader_bgerror $message')
         app = mod.ListApp(root)
         if str(root.tk.call('package', 'provide', 'Tk')) != '9.1.0' or not app.tree._glide_accessibility.supported:
             root.destroy()
@@ -59,11 +65,11 @@ def run(app_path, exchange):
             root.focus_force()
             app.entry.focus_set()
             write('bereit', dict(pid=os.getpid(), tk=str(root.tk.call('package', 'provide', 'Tk')),
-                                  version=mod.APP_VERSION, daten='ausschließlich temporäre künstliche Daten'))
+                                  version=mod.APP_VERSION, plan_day_view=app.PLAN_DAY_VIEW, daten='ausschließlich temporäre künstliche Daten'))
             snapshot()
 
         root.after(500, ready)
-        root.after(240_000, root.destroy)
+        root.after(600_000, root.destroy)
         try:
             root.mainloop()
         finally:
@@ -76,6 +82,7 @@ def run(app_path, exchange):
             if exists:
                 app.close_daily_planning()
                 root.destroy()
+            app.release_data_lock()
 
 
 def main():

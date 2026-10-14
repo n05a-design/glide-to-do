@@ -1,0 +1,13 @@
+{
+  "exitcode": 0,
+  "pid": 13096,
+  "eigener_testprozess": true,
+  "orca_abnahme": "getrennt offen",
+  "name": "AT-SPI-Prüffeld",
+  "role": "text",
+  "text": "  Angebot prüfen 🏠\nZweite Zeile",
+  "character_count": 31,
+  "caret": 3,
+  "besuchte_eigene_knoten": 3,
+  "unicode_character": 127968
+}

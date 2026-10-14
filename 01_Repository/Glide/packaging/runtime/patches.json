@@ -18,6 +18,15 @@
       "before_sha256": "de0a9d9e6b3e9ea1d08dbb97927e49817fa4ef84adb34ee8bea6fb10e49d9f6a",
       "after_sha256": "c55218bf7aa7868522cb511d7346352a4dc8852b81aa3379426fee3fc82f5baf",
       "patch_sha256": "cdf7b1a3e33472b1910a983ad24f320d16487fd225bb40bcf232e463498f17fc"
+    },
+    {
+      "id": "windows-accessibility-name",
+      "platform": "win32",
+      "file": "win/tkWinAccessibility.c",
+      "patch": "patches/windows-accessibility-name.patch",
+      "before_sha256": "a81918f91245de9d1c5f74efe722e40ae4cfb83e49481412377ce5b7b7b3a91e",
+      "after_sha256": "1ddea5947df51ff3f0efead484223833d97722dd06b832a9e4e2e789b12b9a12",
+      "patch_sha256": "1f83a7e34c899a4454e462bf6ddd862b1667f42fc37523994c525a73f27e2ed0"
     }
   ]
 }

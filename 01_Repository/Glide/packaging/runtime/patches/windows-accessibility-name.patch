@@ -1,0 +1,59 @@
+--- a/win/tkWinAccessibility.c
++++ b/win/tkWinAccessibility.c
+@@ -206,6 +206,7 @@
+ static HRESULT TkAccState(Tk_Window win, VARIANT *pvarState);
+ static void TkAccFocus(int num_args, void **args);
+ static HRESULT TkAccDescription(Tk_Window win, BSTR *pDesc);
++static HRESULT TkAccAttribute(Tk_Window win, const char *attribute, BSTR *value);
+ static HRESULT TkAccValue(Tk_Window win, BSTR *pValue);
+ static void TkDoDefaultAction(int num_args, void **args);
+ static HRESULT TkAccHelp(Tk_Window win, BSTR *pszHelp);
+@@ -538,11 +539,11 @@
+     }
+ 
+ 
+-    /* Child widgets - return description. */
++    /* Child widgets expose their name separately from the description. */
+     if (varChild.vt == VT_I4 && varChild.lVal > 0) {
+ 	Tk_Window child = GetTkWindowForChildId(varChild.lVal, tkAccessible->toplevel);
+ 	if (child) {
+-	    HRESULT hr = TkAccDescription(child, pszName);
++	    HRESULT hr = TkAccAttribute(child, "name", pszName);
+ 	    TkGlobalUnlock();
+ 	    return hr;
+ 	}
+@@ -1329,17 +1330,18 @@
+     }
+ }
+ 
+-/* Function to get MSAA description. */
++/* Read a named MSAA string attribute with the existing UTF-16 conversion. */
+ static HRESULT
+-TkAccDescription(
++TkAccAttribute(
+     Tk_Window win,
++    const char *attribute,
+     BSTR *pDesc)
+ {
+     if (!win || !pDesc) return E_INVALIDARG;
+     Tcl_HashEntry *hPtr = Tcl_FindHashEntry(TkAccessibilityObject, win);
+     if (!hPtr) return S_FALSE;
+     Tcl_HashTable *AccessibleAttributes = Tcl_GetHashValue(hPtr);
+-    Tcl_HashEntry *hPtr2 = Tcl_FindHashEntry(AccessibleAttributes, "description");
++    Tcl_HashEntry *hPtr2 = Tcl_FindHashEntry(AccessibleAttributes, attribute);
+     if (!hPtr2) return S_FALSE;
+     const char *desc = Tcl_GetString(Tcl_GetHashValue(hPtr2));
+     Tcl_DString ds;
+@@ -1347,6 +1349,12 @@
+     *pDesc = SysAllocString(Tcl_UtfToWCharDString(desc, -1, &ds));
+     Tcl_DStringFree(&ds);
+     return S_OK;
++}
++
++static HRESULT
++TkAccDescription(Tk_Window win, BSTR *pDesc)
++{
++    return TkAccAttribute(win, "description", pDesc);
+ }
+ 
+ /* Function to get MSAA help. */
