@@ -37,6 +37,9 @@ def run(package,report,forbidden,*,timeout=150):
     if smoke.exists():raise ValueError('Neuer Paketbericht erforderlich.')
     system=Path(environment['SYSTEMROOT'])/'System32'
     def command(args,**kwargs):
+        # Projekt und externes Python werden gesperrt. Systembefehle und
+        # Gegenproben müssen weiterhin aus einem ungesperrten Ordner starten.
+        kwargs.setdefault('cwd', str(package.parent))
         return subprocess.run([str(value)for value in args],capture_output=True,text=True,
                               encoding='utf-8',errors='replace',timeout=timeout,**kwargs)
     who=command([system/'whoami.exe','/user','/fo','csv','/nh'])
