@@ -1,0 +1,19 @@
+{
+  "run": "https://github.com/n05a-design/glide-to-do/actions/runs/38475080827",
+  "commit": "f8b6ce103320c028390aef4d5d26873970779664",
+  "grundstufe_exitcode": 0,
+  "linux": {
+    "ausgeführt": 108,
+    "übersprungen": 1,
+    "exitcode": 0
+  },
+  "windows": {
+    "ausgeführt": 108,
+    "übersprungen": 1,
+    "exitcode": 0
+  },
+  "linux_defektgegenproben": 18,
+  "alle_defekte_passend_rot": true,
+  "paketjob": "Lizenzvorlauf fehlgeschlagen; gezielte native Bau-/Startnachläufe separat.",
+  "menschen_dpi_reader": "getrennt offen"
+}

@@ -50,7 +50,14 @@ def run(package,report,forbidden,*,timeout=150):
     assert command([sys.executable,'-B','-c','raise SystemExit(0)']).returncode==0
     result={'plattform':'Windows x64','nur_vergaenglicher_hosted_ci_runner':True,
             'inhaber_installationen_unveraendert':True,'exitcode':1}
-    saved=[];restored=[]
+    saved=[];restored=[];failure=None
+    candidates=('python.exe','Scripts/python.exe','glide_app.py','01_Repository/Glide/src/glide/app.pyw')
+    probes=[]
+    for path in sources:
+        probe=next((path/name for name in candidates if (path/name).is_file()),None)
+        if probe is None:raise ValueError('Externe Quelle braucht eine tatsächlich lesbare Prüfdatei.')
+        with probe.open('rb') as stream:stream.read(1)
+        probes.append(probe)
     with tempfile.TemporaryDirectory(prefix='glide-acl-',dir=environment['RUNNER_TEMP'])as backup:
         try:
             for number,path in enumerate(sources):
@@ -59,8 +66,22 @@ def run(package,report,forbidden,*,timeout=150):
                 save=command([system/'icacls.exe',path,'/save',acl,'/T','/Q'])
                 if save.returncode:raise RuntimeError('Original-ACL konnte nicht vollständig gesichert werden.')
                 saved.append((path,acl))
-                deny=command([system/'icacls.exe',path,'/deny','*'+sid+':(OI)(CI)(RX)','/T','/Q'])
-                if deny.returncode:raise RuntimeError('Externe Laufzeit nicht vollständig gesperrt.')
+                # OI/CI vererbt die Sperre. /T würde nach dem Sperren des
+                # Elternordners erneut hineingehen und an sich selbst scheitern.
+                deny=command([system/'icacls.exe',path,'/deny','*'+sid+':(OI)(CI)(RX)','/Q'])
+                if deny.returncode:
+                    result['acl_sperrfehler']=deny.stdout+deny.stderr
+                    raise RuntimeError('Externe Laufzeit nicht vollständig gesperrt.')
+            denied=[]
+            for probe in probes:
+                try:
+                    with probe.open('rb') as stream:stream.read(1)
+                except OSError as exc:
+                    if exc.winerror!=5:raise
+                    denied.append(True)
+                else:
+                    raise RuntimeError('Gegenprobe fehlgeschlagen: externe Quelldatei noch lesbar.')
+            result['externe_quellen_lesegegenproben']=denied
             try:
                 blocked=command([sys.executable,'-B','-c','raise SystemExit(0)'])
                 code=blocked.returncode
@@ -76,7 +97,10 @@ def run(package,report,forbidden,*,timeout=150):
             if smoke.exists():result['paket']=json.loads(smoke.read_text(encoding='utf-8'))
             if child.returncode==0 and result.get('paket',{}).get('exitcode')==0:result['exitcode']=0
         except BaseException as exc:
-            result.update(fehler=str(exc),traceback=traceback.format_exc(),exitcode=1)
+            # traceback kann Module nachladen. Während der Sperre nur die
+            # Ausnahme merken; erst nach der Restaurierung formatieren.
+            failure=exc
+            result.update(fehler=str(exc),exitcode=1)
         finally:
             for path,acl in reversed(saved):
                 try:
@@ -86,6 +110,11 @@ def run(package,report,forbidden,*,timeout=150):
                     restored.append(1)
             result['acl_restaurierung_exitcodes']=restored
             if len(restored)!=len(saved) or any(restored):result['exitcode']=1
+    if failure is not None:
+        try:
+            result['traceback']=''.join(traceback.format_exception(failure))
+        except Exception as error:
+            result['traceback']='Fehlerformatierung nach Restaurierung fehlgeschlagen: '+type(error).__name__
     try:
         code=command([sys.executable,'-B','-c','raise SystemExit(0)']).returncode
     except OSError:
