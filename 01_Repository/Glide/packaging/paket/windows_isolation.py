@@ -42,6 +42,21 @@ def absolute(value):
     return path
 
 
+def restoration_entries(source, snapshot):
+    root = absolute(source)
+    entries = []
+    for name, dacl in snapshot.items():
+        relative = PureWindowsPath(name)
+        path = root.parent / relative
+        if (relative.is_absolute() or relative.drive or '..' in relative.parts or
+                not path.is_relative_to(root) or not dacl.startswith('D:')):
+            raise ValueError('ACL-Restaurierung verlässt die gesicherte CI-Quelle.')
+        entries.append((str(path), dacl))
+    if not entries or not any(PureWindowsPath(path) == root for path, _ in entries):
+        raise ValueError('Original-ACL des gesicherten Wurzelordners fehlt.')
+    return sorted(entries, key=lambda entry: (len(PureWindowsPath(entry[0]).parts), entry[0].casefold()))
+
+
 def plan(environment, package, report, forbidden):
     environment = normalize_environment(environment)
     required = {'GITHUB_ACTIONS':'true', 'CI':'true', 'RUNNER_ENVIRONMENT':'github-hosted', 'RUNNER_OS':'Windows'}

@@ -58,6 +58,10 @@ def run(package,report,forbidden,*,timeout=150):
         if probe is None:raise ValueError('Externe Quelle braucht eine tatsächlich lesbare Prüfdatei.')
         with probe.open('rb') as stream:stream.read(1)
         probes.append(probe)
+    # ctypes und alle API-Definitionen vor der externen Python-Sperre laden.
+    from windows_acl import OriginalAclRestorer
+    exact_restorer=OriginalAclRestorer(environment,package,report,sources)
+    exact_codes=[]
     with tempfile.TemporaryDirectory(prefix='glide-acl-',dir=environment['RUNNER_TEMP'])as backup:
         try:
             for number,path in enumerate(sources):
@@ -119,6 +123,11 @@ def run(package,report,forbidden,*,timeout=150):
                 unlocked.append(unlock)
                 restore,restore_output=cleanup([system/'icacls.exe',path.parent,'/restore',acl,'/Q'])
                 restored.append(restore)
+                try:
+                    exact=exact_restorer.restore(path,original)
+                except BaseException as exc:
+                    exact={'exitcode':1,'fehler':str(exc)}
+                exact_codes.append(exact['exitcode'])
                 after=acl.with_name(acl.stem+'-nachher.txt')
                 check,check_output=cleanup([system/'icacls.exe',path,'/save',after,'/T','/Q'])
                 difference={}
@@ -138,13 +147,15 @@ def run(package,report,forbidden,*,timeout=150):
                     verified.append(False)
                     check_output+='\n'+str(exc)
                 restore_details.append({'entsperren':unlock_output,'restaurieren':restore_output,
+                                        'native_originalrestaurierung':exact,
                                         'nachpruefen':check_output,'acl_vergleich':difference})
             result['acl_entsperrung_exitcodes']=unlocked
             result['acl_restaurierung_exitcodes']=restored
+            result['acl_native_restaurierung_exitcodes']=exact_codes
             result['acl_originale_wiederhergestellt']=verified
             result['acl_restaurierung_details']=restore_details
             if (len(restored)!=len(saved) or any(restored) or
-                    len(unlocked)!=len(saved) or any(unlocked) or not all(verified)):
+                    len(unlocked)!=len(saved) or any(unlocked) or any(exact_codes) or not all(verified)):
                 result['exitcode']=1
     if failure is not None:
         try:

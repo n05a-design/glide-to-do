@@ -3,10 +3,27 @@ from pathlib import Path as _Path
 _sys.path.insert(0, str(_Path(__file__).resolve().parents[2] / 'packaging/paket'))
 import errno
 import unittest
-from windows_isolation import access_denied, acl_snapshot, normalize_environment, plan
+from windows_isolation import access_denied, acl_snapshot, normalize_environment, plan, restoration_entries
 
 
 class NativeDenialEvidence(unittest.TestCase):
+    def test_original_acl_restore_targets_only_the_saved_tree_and_parent_first(self):
+        source = r'C:\Python\x64'
+        entries = restoration_entries(source, {r'x64\python.exe':'D:AI(A;ID;FA;;;SY)',
+                                               r'x64':'D:(A;OICI;FA;;;SY)'})
+        self.assertEqual([path for path, _ in entries], [source, source+r'\python.exe'])
+        self.assertEqual(entries[0][1], 'D:(A;OICI;FA;;;SY)')
+
+    def test_acl_restore_rejects_parent_escape_absolute_paths_and_foreign_sibling(self):
+        for name in (r'x64\..\foreign', r'C:\Other', r'other\python.exe', r'\system'):
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                restoration_entries(r'C:\Python\x64', {'x64':'D:AI', name:'D:AI'})
+
+    def test_acl_restore_requires_root_descriptor_and_valid_dacl(self):
+        for snapshot in ({}, {r'x64\python.exe':'D:AI'}, {'x64':'S:'}):
+            with self.subTest(snapshot=snapshot), self.assertRaises(ValueError):
+                restoration_entries(r'C:\Python\x64', snapshot)
+
     def test_crt_fileio_eacces_and_native_winerror_are_both_access_denied(self):
         self.assertTrue(access_denied(PermissionError(errno.EACCES, 'Permission denied')))
         native = OSError('Access denied')
