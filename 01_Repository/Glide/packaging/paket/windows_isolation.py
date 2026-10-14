@@ -1,5 +1,39 @@
 """Grenzen einer Laufzeitsperre ausschließlich im vergänglichen Hosted-CI-Runner."""
+import errno
 from pathlib import PureWindowsPath
+import re
+
+
+def access_denied(error):
+    # FileIO meldet Windows-Zugriffsfehler über die C-Runtime als EACCES;
+    # CreateProcess liefert dagegen den ursprünglichen WinError 5.
+    return (getattr(error, 'winerror', None) == 5 or
+            isinstance(error, PermissionError) and error.errno == errno.EACCES)
+
+
+def acl_snapshot(raw):
+    """icacls-/save-DACLs unabhängig von der Verzeichnisreihenfolge vergleichen."""
+    lines = raw.decode('utf-16').splitlines()
+    if not lines or len(lines) % 2:
+        raise ValueError('Unvollständige icacls-ACL-Sicherung.')
+    result = {}
+    for name, dacl in zip(lines[::2], lines[1::2]):
+        if not name or not dacl.startswith('D:') or name in result:
+            raise ValueError('Ungültige oder doppelte icacls-ACL-Sicherung.')
+        result[name] = dacl
+    return result
+
+
+def acl_rules(snapshot):
+    """Alle Zugriffsregeln erhalten; nur den Windows-AI-Modellmarker ausnehmen.
+
+    SetFileSecurityW erhält die ACEs ohne Propagation, setzt den AI-Marker aber
+    zurück. Schutz P, Anforderung AR, Reihenfolge und jedes ACE bleiben exakt.
+    Der Prüfer berichtet zusätzlich den unveränderten Rohvergleich separat.
+    """
+    return {name: re.sub(r'^D:((?:P|AI|AR)*)(?=\(|$)',
+                        lambda match: 'D:'+match[1].replace('AI',''), dacl)
+            for name,dacl in snapshot.items()}
 
 
 def normalize_environment(environment):
@@ -19,6 +53,21 @@ def absolute(value):
     if not path.is_absolute() or not path.drive.endswith(':') or '..' in path.parts:
         raise ValueError('Eindeutiger lokaler absoluter Windows-Pfad erforderlich.')
     return path
+
+
+def restoration_entries(source, snapshot):
+    root = absolute(source)
+    entries = []
+    for name, dacl in snapshot.items():
+        relative = PureWindowsPath(name)
+        path = root.parent / relative
+        if (relative.is_absolute() or relative.drive or '..' in relative.parts or
+                not path.is_relative_to(root) or not dacl.startswith('D:')):
+            raise ValueError('ACL-Restaurierung verlässt die gesicherte CI-Quelle.')
+        entries.append((str(path), dacl))
+    if not entries or not any(PureWindowsPath(path) == root for path, _ in entries):
+        raise ValueError('Original-ACL des gesicherten Wurzelordners fehlt.')
+    return sorted(entries, key=lambda entry: (len(PureWindowsPath(entry[0]).parts), entry[0].casefold()))
 
 
 def plan(environment, package, report, forbidden):

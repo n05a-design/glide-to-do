@@ -63,6 +63,16 @@ def run(repo, report=None, native=None):
         assert not package.get('externe_python_suchpfade') and not package.get('callbackfehler')
         assert package.get('anlegen_abhaken_undo') and package.get('logo_geladen')
         assert package.get('dateilesen') and package.get('app_backup_rundlauf')
+        if proof.get('plattform') == 'Windows x64':
+            assert proof.get('nur_vergaenglicher_hosted_ci_runner')
+            assert proof.get('externes_python_gegenprobe') != 0
+            assert proof.get('externes_python_nach_restaurierung_exitcode') == 0
+            assert proof.get('externe_quellen_lesegegenproben') == [True] * 4
+            assert proof.get('acl_entsperrung_exitcodes') == [0] * 4
+            assert proof.get('acl_restaurierung_exitcodes') == [0] * 4
+            assert proof.get('acl_native_restaurierung_exitcodes') == [0] * 4
+            assert proof.get('acl_zugriffsregeln_wiederhergestellt') == [True] * 4
+            assert len(proof.get('acl_originale_wiederhergestellt', [])) == 4
         result['nativer_startbeleg'] = dict(plattform=proof['plattform'], version=version, exitcode=0)
     if report:
         report.parent.mkdir(parents=True, exist_ok=True)

@@ -1,8 +1,82 @@
 import sys as _sys
 from pathlib import Path as _Path
 _sys.path.insert(0, str(_Path(__file__).resolve().parents[2] / 'packaging/paket'))
+import errno
 import unittest
-from windows_isolation import normalize_environment, plan
+from windows_isolation import access_denied, acl_rules, acl_snapshot, normalize_environment, plan, restoration_entries
+
+
+class NativeDenialEvidence(unittest.TestCase):
+    def test_acl_rules_only_ignore_auto_inherited_descriptor_model_marker(self):
+        original={'x64':'D:AI(A;OICIID;FA;;;SY)', 'x64\\python.exe':'D:AI(A;ID;0x1301bf;;;AU)'}
+        after={name:dacl.replace('D:AI','D:') for name,dacl in original.items()}
+        self.assertNotEqual(original,after)
+        self.assertEqual(acl_rules(original),acl_rules(after))
+        self.assertEqual(original['x64'],'D:AI(A;OICIID;FA;;;SY)')
+
+    def test_acl_rule_comparison_keeps_protection_request_and_every_ace_bit(self):
+        original={'x64':'D:AI(A;OICIID;FA;;;SY)(A;ID;RX;;;BU)'}
+        for dacl in ('D:PAI(A;OICIID;FA;;;SY)(A;ID;RX;;;BU)',
+                     'D:ARAI(A;OICIID;FA;;;SY)(A;ID;RX;;;BU)',
+                     'D:AI(A;OICIID;RX;;;SY)(A;ID;RX;;;BU)',
+                     'D:AI(A;ID;FA;;;SY)(A;ID;RX;;;BU)',
+                     'D:AI(A;OICIID;FA;;;BA)(A;ID;RX;;;BU)',
+                     'D:AI(A;ID;RX;;;BU)(A;OICIID;FA;;;SY)'):
+            with self.subTest(dacl=dacl):
+                self.assertNotEqual(acl_rules(original),acl_rules({'x64':dacl}))
+
+    def test_previous_icacls_python_file_reinheritance_remains_a_failure(self):
+        original={'python.exe':'D:AI(A;ID;0x1301bf;;;AU)(A;ID;FA;;;SY)'}
+        rewritten={'python.exe':'D:AI(A;ID;0x1301bf;;;AU)(A;OICIIOID;SDGXGWGR;;;AU)(A;OICIID;FA;;;SY)'}
+        self.assertNotEqual(acl_rules(original),acl_rules(rewritten))
+
+    def test_acl_rule_comparison_requires_the_complete_same_file_set(self):
+        original={'x64':'D:AI(A;ID;FA;;;SY)', 'x64\\python.exe':'D:AI(A;ID;FA;;;SY)'}
+        self.assertNotEqual(acl_rules(original),acl_rules({'x64':original['x64']}))
+        self.assertNotEqual(acl_rules(original),acl_rules(dict(original,foreign=original['x64'])))
+
+    def test_original_acl_restore_targets_only_the_saved_tree_and_parent_first(self):
+        source = r'C:\Python\x64'
+        entries = restoration_entries(source, {r'x64\python.exe':'D:AI(A;ID;FA;;;SY)',
+                                               r'x64':'D:(A;OICI;FA;;;SY)'})
+        self.assertEqual([path for path, _ in entries], [source, source+r'\python.exe'])
+        self.assertEqual(entries[0][1], 'D:(A;OICI;FA;;;SY)')
+
+    def test_acl_restore_rejects_parent_escape_absolute_paths_and_foreign_sibling(self):
+        for name in (r'x64\..\foreign', r'C:\Other', r'other\python.exe', r'\system'):
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                restoration_entries(r'C:\Python\x64', {'x64':'D:AI', name:'D:AI'})
+
+    def test_acl_restore_requires_root_descriptor_and_valid_dacl(self):
+        for snapshot in ({}, {r'x64\python.exe':'D:AI'}, {'x64':'S:'}):
+            with self.subTest(snapshot=snapshot), self.assertRaises(ValueError):
+                restoration_entries(r'C:\Python\x64', snapshot)
+
+    def test_crt_fileio_eacces_and_native_winerror_are_both_access_denied(self):
+        self.assertTrue(access_denied(PermissionError(errno.EACCES, 'Permission denied')))
+        native = OSError('Access denied')
+        native.winerror = 5
+        self.assertTrue(access_denied(native))
+
+    def test_unrelated_missing_file_and_other_os_failures_do_not_prove_denial(self):
+        for error in (FileNotFoundError(errno.ENOENT, 'Missing'),
+                      OSError(errno.EIO, 'I/O error'), PermissionError(errno.EPERM, 'Not permitted')):
+            with self.subTest(error=error):
+                self.assertFalse(access_denied(error))
+
+    def test_acl_comparison_preserves_every_dacl_but_ignores_enumeration_order(self):
+        before = 'Python\\\r\nD:AI(A;OICI;FA;;;SY)\r\nPython\\python.exe\r\nD:AI(A;ID;FA;;;SY)\r\n'
+        after = 'Python\\python.exe\r\nD:AI(A;ID;FA;;;SY)\r\nPython\\\r\nD:AI(A;OICI;FA;;;SY)\r\n'
+        snapshot = acl_snapshot(before.encode('utf-16'))
+        self.assertEqual(snapshot, acl_snapshot(after.encode('utf-16')))
+        self.assertNotEqual(snapshot, acl_snapshot(after.replace(';FA;', ';RX;', 1).encode('utf-16')))
+        self.assertNotEqual(snapshot, acl_snapshot('Python\\\r\nD:AI(A;OICI;FA;;;SY)\r\n'.encode('utf-16')))
+
+    def test_incomplete_duplicate_and_malformed_acl_backups_are_rejected(self):
+        for text in ('', 'Python\r\n', 'Python\r\ninvalid\r\n',
+                     'Python\r\nD:AI\r\nPython\r\nD:AI\r\n'):
+            with self.subTest(text=text), self.assertRaises(ValueError):
+                acl_snapshot(text.encode('utf-16'))
 
 
 class HostedIsolationBoundary(unittest.TestCase):
