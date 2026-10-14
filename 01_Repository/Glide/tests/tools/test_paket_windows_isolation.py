@@ -2,7 +2,7 @@ import sys as _sys
 from pathlib import Path as _Path
 _sys.path.insert(0, str(_Path(__file__).resolve().parents[2] / 'packaging/paket'))
 import unittest
-from windows_isolation import plan
+from windows_isolation import normalize_environment, plan
 
 
 class HostedIsolationBoundary(unittest.TestCase):
@@ -17,6 +17,18 @@ class HostedIsolationBoundary(unittest.TestCase):
         result=plan(self.environment,self.package,self.report,[self.python,self.python+r'\DLLs',r'D:\a\glide\glide'])
         self.assertEqual(len(result['forbidden']),2)
         self.assertIn(self.python,result['forbidden'])
+
+    def test_real_windows_uppercase_environment_has_the_same_boundary(self):
+        native = {key.upper(): value for key,value in self.environment.items()}
+        before = dict(native)
+        self.assertEqual(plan(native,self.package,self.report,[self.python]),
+                         plan(self.environment,self.package,self.report,[self.python]))
+        self.assertEqual(native,before)
+        self.assertEqual(normalize_environment(self.environment)['SYSTEMROOT'], r'C:\Windows')
+
+    def test_conflicting_case_variants_are_refused_before_any_acl_change(self):
+        with self.assertRaisesRegex(ValueError,'Widersprüchliche'):
+            plan(dict(self.environment,SYSTEMROOT=r'D:\Anderes'),self.package,self.report,[self.python])
 
     def test_human_windows_and_self_hosted_machines_are_always_rejected(self):
         for key,value in [('GITHUB_ACTIONS','false'),('CI','false'),('RUNNER_ENVIRONMENT','self-hosted'),('RUNNER_OS','macOS')]:

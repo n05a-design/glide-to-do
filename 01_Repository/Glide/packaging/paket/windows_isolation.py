@@ -2,6 +2,18 @@
 from pathlib import PureWindowsPath
 
 
+def normalize_environment(environment):
+    # os.environ ist unter Windows schreibungsunabhängig. Ein dict daraus
+    # enthält dagegen SYSTEMROOT und verliert diese Nachschlage-Eigenschaft.
+    result = {}
+    for key, value in environment.items():
+        name = key.upper()
+        if name in result and result[name] != value:
+            raise ValueError('Widersprüchliche Schreibvarianten der Windows-Umgebung.')
+        result[name] = value
+    return result
+
+
 def absolute(value):
     path = PureWindowsPath(value)
     if not path.is_absolute() or not path.drive.endswith(':') or '..' in path.parts:
@@ -10,11 +22,12 @@ def absolute(value):
 
 
 def plan(environment, package, report, forbidden):
+    environment = normalize_environment(environment)
     required = {'GITHUB_ACTIONS':'true', 'CI':'true', 'RUNNER_ENVIRONMENT':'github-hosted', 'RUNNER_OS':'Windows'}
     if any(environment.get(key) != value for key,value in required.items()):
         raise ValueError('Laufzeitsperre ausschließlich im vergänglichen GitHub-Hosted-Windows-Prüfstand.')
     roots = {key:absolute(environment.get(key,'')) for key in
-             ('RUNNER_TEMP','RUNNER_TOOL_CACHE','GITHUB_WORKSPACE','SystemRoot')}
+             ('RUNNER_TEMP','RUNNER_TOOL_CACHE','GITHUB_WORKSPACE','SYSTEMROOT')}
     package, report = absolute(package), absolute(report)
     if not package.is_relative_to(roots['RUNNER_TEMP']) or not report.is_relative_to(roots['RUNNER_TEMP']):
         raise ValueError('Paket und Bericht müssen im temporären CI-Prüfbereich liegen.')
@@ -27,7 +40,7 @@ def plan(environment, package, report, forbidden):
         owned = path.is_relative_to(python_cache) or path.is_relative_to(roots['GITHUB_WORKSPACE']) or path.is_relative_to(roots['RUNNER_TEMP'])
         if not owned or path in (roots['RUNNER_TEMP'],roots['RUNNER_TOOL_CACHE']):
             raise ValueError('Sperre darf ausschließlich CI-Python, Projektquelle oder eigene temporäre Bauquellen betreffen.')
-        if any(path.is_relative_to(p) or p.is_relative_to(path) for p in (package,report,roots['SystemRoot'])):
+        if any(path.is_relative_to(p) or p.is_relative_to(path) for p in (package,report,roots['SYSTEMROOT'])):
             raise ValueError('Sperre darf Paket, Bericht und Windows-Systemverzeichnis nicht überdecken.')
         values.add(path)
     if not values:
