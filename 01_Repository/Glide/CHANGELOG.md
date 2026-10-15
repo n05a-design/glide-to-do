@@ -2,6 +2,10 @@
 
 ## In Vorbereitung – 4.0.0 (keine Lieferung)
 
+- Native Linux-Lebensdauer nach Orca-Absturz abgesichert; externer Referenztest und Absturzdiagnose vorbereitet. Reader-Abschnittsnavigation, tatsächlicher MSAA-Client-HWND und Restaurierung originaler CI-Symlinks korrigiert; native Wiederholung offen.
+
+- Vollprüfstand um Aufgaben-Zugang und native Tcl-Bindungen ergänzt; ab Version 4 Tk-9.1-Prüfung verpflichtend. Standard-Linux-/Windows-Matrix und Windows-Paketjob auf eigene gepinnte 9.1-Runtimes vorbereitet; finale Ausführung offen. Linux-Fokuskorrektur nach tatsächlichen Orca-Containerereignissen vorbereitet.
+
 - Native Zustands- und Readergegenproben nachgeführt: Linux-Disabled-Zustände, Orca-Initialisierung, NVDA-Pfeiltastennamen sowie native Windows-Signaturprüfung mit Manipulationsgegenprobe vorbereitet. CI-ACL-Restaurierung erhält den ursprünglichen Vererbungsschutz explizit; native Abnahme offen.
 
 - Nach tatsächlichen Readerfehlern gemeinsame Tk-Auswahlinitialisierung und Linux-ACTIVE-Zustand korrigiert. Native Tcl-Gegenfälle und Mac-Neubau geprüft; isolierter Mac-Paket-Kernablauf grün. Native Reader-/Zustands-/Windows-Paketwiederholung offen.

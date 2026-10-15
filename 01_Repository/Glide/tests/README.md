@@ -1,6 +1,6 @@
 # Prüfungen für Glide
 
-Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · 90 Suiten aus `pruefen.py` und fünf Analysen
+Stand 15.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · 91 Suiten aus `pruefen.py` und fünf Analysen
 
 Alle App-Tests setzen vor dem App-Import einen temporären `GLIDE_DATA_DIR`; echte Nutzerdaten sind ausgeschlossen. Was wann läuft, welche Regeln gelten und welche Suite welchen Bereich abdeckt, steht im [Prüfplan](../docs/05_QA_TESTPLAN.md); Ergebnisse im [QA-Bericht](../docs/07_QA_BERICHT.md).
 

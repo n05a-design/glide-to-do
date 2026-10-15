@@ -54,6 +54,33 @@
       "before_sha256": "4f016f3c70a5d2aa0c49aff9189b65b83bf232f40f27be60bf5b5c477fcd86a7",
       "after_sha256": "cea6252d7ad1a9cb9312609da79a60e10d497e0a3065b2ffd9abac04fd89f07d",
       "patch_sha256": "3553e888731bf351d6c768cc0830bfe604078c98bc7b7ec3951497d37ff39bcf"
+    },
+    {
+      "id": "linux-accessibility-focus",
+      "platform": "linux",
+      "file": "unix/tkUnixAccessibility.c",
+      "patch": "patches/linux-accessibility-focus.patch",
+      "before_sha256": "cea6252d7ad1a9cb9312609da79a60e10d497e0a3065b2ffd9abac04fd89f07d",
+      "after_sha256": "9419515aee63a73d04ed294a1a11743843230f19141d45836b628e57abadd43d",
+      "patch_sha256": "64f1bd6be862f6c932346d821f8a7b1576cfaa0497eb4823db77969ab6ab9f55"
+    },
+    {
+      "id": "windows-accessibility-identity",
+      "platform": "win32",
+      "file": "win/tkWinAccessibility.c",
+      "patch": "patches/windows-accessibility-identity.patch",
+      "before_sha256": "1ddea5947df51ff3f0efead484223833d97722dd06b832a9e4e2e789b12b9a12",
+      "after_sha256": "11fa8b0d9b222c159e6355a4b5fe907cc83d5747a1a8f2bcb70923dca6b8c256",
+      "patch_sha256": "0c2049e08fc2f4ce6b0f05cb4de42c89f7510cdb42a9b8b55dbda20101714613"
+    },
+    {
+      "id": "linux-accessibility-lifetime",
+      "platform": "linux",
+      "file": "unix/tkUnixAccessibility.c",
+      "patch": "patches/linux-accessibility-lifetime.patch",
+      "before_sha256": "9419515aee63a73d04ed294a1a11743843230f19141d45836b628e57abadd43d",
+      "after_sha256": "302421f901515a5a03dee922c4f02e53e493d208fa2c3e7a8fbe6edea7f42965",
+      "patch_sha256": "5f87b514dd14e3ea438d35745979ebeb5596f85fdd8e0c67232ac8ade00b4c81"
     }
   ]
 }

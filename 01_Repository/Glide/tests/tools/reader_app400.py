@@ -5,6 +5,7 @@ die echte Oberfläche; kein Steuerkanal führt Appbefehle aus. Diagnose und
 Modellschnappschuss stammen ausschließlich aus dieser künstlichen Instanz.
 """
 import argparse
+import faulthandler
 import importlib.machinery
 import importlib.util
 import json
@@ -28,6 +29,7 @@ def run(app_path, exchange):
         raise ValueError('Für die Reader-App einen eigenen neuen Diagnoseordner verwenden.')
     with tempfile.TemporaryDirectory(prefix='glide-reader400-') as data:
         os.environ.update(GLIDE_DATA_DIR=data, GLIDE_TEST_MODE='1')
+        faulthandler.enable()
         sys.path.insert(0, str(app_path.parent))
         loader = importlib.machinery.SourceFileLoader('glide_reader400', str(app_path))
         mod = importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name, loader))
@@ -66,7 +68,10 @@ def run(app_path, exchange):
         def snapshot():
             if not root.winfo_exists():
                 return
-            write('zustand', diagnostic_state(app, os.getpid(), callbacks))
+            value = diagnostic_state(app, os.getpid(), callbacks)
+            focused = root.focus_get()
+            value['tk_fokus'] = dict(pfad=str(focused), klasse=focused.winfo_class()) if focused else None
+            write('zustand', value)
             root.after(150, snapshot)
 
         def ready():

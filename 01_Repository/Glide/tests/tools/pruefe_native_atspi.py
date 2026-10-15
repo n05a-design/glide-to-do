@@ -23,7 +23,7 @@ def text_values(text_interface, accessible):
     return actual, count, caret, prefix
 
 
-def run(pid, name, expected, report, expected_caret=None, require_active=False, expect_disabled=False):
+def run(pid, name, expected, report, expected_caret=None, require_active=False, expect_disabled=False, exclusive_focus=None):
     if (sys.platform != 'linux' or os.environ.get('GITHUB_ACTIONS') != 'true'
             or os.environ.get('RUNNER_ENVIRONMENT') != 'github-hosted'):
         raise RuntimeError('AT-SPI-Verbraucher nur im eigenen vergänglichen Linux-Hosted-CI-Prüfstand.')
@@ -45,7 +45,7 @@ def run(pid, name, expected, report, expected_caret=None, require_active=False, 
                 break
             time.sleep(.1)
         assert application is not None, 'Eigene Tk-Instanz ist nicht im AT-SPI registriert'
-        queue, seen, field = [application], set(), None
+        queue, seen, field, focused = [application], set(), None, []
         while queue:
             node = queue.pop(0)
             if node is None or node in seen:
@@ -53,11 +53,18 @@ def run(pid, name, expected, report, expected_caret=None, require_active=False, 
             seen.add(node)
             assert len(seen) <= 4096, 'Unerwartet großer Accessibility-Baum der kleinen Testfixture'
             assert node.get_process_id() == pid, 'Fremder Prozess darf nicht gelesen werden'
+            if exclusive_focus is not None and node.get_state_set().contains(Atspi.StateType.FOCUSED):
+                focused.append(dict(name=node.get_name(), role=node.get_role_name()))
             if node.get_name() == name:
                 field = node
-                break
+                if exclusive_focus is None:
+                    break
             queue.extend(node.get_child_at_index(index) for index in range(node.get_child_count()))
         assert field is not None, 'Feld nativ nicht auffindbar: ' + name
+        if exclusive_focus is not None:
+            result['fokussierte_knoten'] = focused
+            assert len(focused) == 1 and focused[0]['name'] == exclusive_focus, (
+                'Nur das tatsächliche Eingabefeld darf FOCUSED melden, keine Vorfahren', focused)
         if require_active:
             window = field
             for _ in range(16):
@@ -109,8 +116,9 @@ def main():
     parser.add_argument('--caret', type=int)
     parser.add_argument('--active-window', action='store_true')
     parser.add_argument('--disabled', action='store_true')
+    parser.add_argument('--exclusive-focus', help='Einziges tatsächlich fokussiertes Feld in der eigenen Fixture')
     args = parser.parse_args()
-    return run(args.pid, args.name, args.text, args.bericht, args.caret, args.active_window, args.disabled)
+    return run(args.pid, args.name, args.text, args.bericht, args.caret, args.active_window, args.disabled, args.exclusive_focus)
 
 
 if __name__ == '__main__':

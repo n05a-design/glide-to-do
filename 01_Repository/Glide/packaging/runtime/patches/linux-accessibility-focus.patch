@@ -1,0 +1,114 @@
+--- a/unix/tkUnixAccessibility.c
++++ b/unix/tkUnixAccessibility.c
+@@ -329,10 +329,6 @@
+        /* Notify parent about active descendant */
+        g_signal_emit_by_name(parent, "active-descendant-changed", obj);
+ 
+-       /* Also emit children-changed to ensure ATK hierarchy is refreshed. */
+-       g_signal_emit_by_name(parent, "children-changed::add",
+-			     atk_object_get_n_accessible_children(parent) - 1,
+-			     obj);
+    }
+ 
+    return TRUE;
+@@ -645,7 +641,8 @@
+     }
+ 
+     /* Add FOCUSED if widget has focus. */
+-    if (acc->is_focused) {
++    if (acc->tkwin &&
++	    TkGetFocusWin((TkWindow *)acc->tkwin) == (TkWindow *)acc->tkwin) {
+ 	atk_state_set_add_state(state_set, ATK_STATE_FOCUSED);
+     }
+ 
+@@ -1375,13 +1372,6 @@
+ 	RegisterWidgetRecursive(interp, (Tk_Window)child);
+     }
+ 
+-    /* After registering all children, emit one more children-changed
+-     * for this container to ensure ATK sees all children. */
+-    if (acc) {
+-	g_signal_emit_by_name(acc, "children-changed::add",
+-			      atk_object_get_n_accessible_children(acc),
+-			      NULL);
+-    }
+ }
+ 
+  /*  Function to ensure a widget and all its ancestors are in the ATK hierarchy. */
+@@ -1454,10 +1444,12 @@
+ 
+     TkAtkAccessible *focusedTkAcc = (TkAtkAccessible *)focusedAcc;
+ 
+-    /* Update focus state. */
+-    focusedTkAcc->is_focused = true;
+-    atk_object_notify_state_change(focusedAcc, ATK_STATE_FOCUSED, TRUE);
+-    g_signal_emit_by_name(focusedAcc, "focus-event", TRUE);
++    /* Re-registering an existing focused widget is not a new focus event. */
++    if (!focusedTkAcc->is_focused) {
++	focusedTkAcc->is_focused = true;
++	atk_object_notify_state_change(focusedAcc, ATK_STATE_FOCUSED, TRUE);
++	g_signal_emit_by_name(focusedAcc, "focus-event", TRUE);
++    }
+ 
+     /* Walk up the hierarchy and update parent focus states. */
+     Tk_Window current = focused;
+@@ -1472,10 +1464,6 @@
+ 		    g_signal_emit_by_name(parentAcc, "active-descendant-changed", childAcc);
+ 		}
+ 
+-		/* Also emit children-changed to refresh ATK's view. */
+-		g_signal_emit_by_name(parentAcc, "children-changed::add",
+-				      atk_object_get_n_accessible_children(parentAcc) - 1,
+-				      childAcc);
+ 	    }
+ 	}
+ 	current = parent;
+@@ -1754,14 +1742,18 @@
+     TkAtkAccessible *acc = (TkAtkAccessible *)clientData;
+     if (!acc || !acc->tkwin) return;
+ 
+-    bool focused = (eventPtr->type == FocusIn);
++    /* X11 also sends virtual focus events to ancestors. Only the real
++     * Tk focus target is focused; ancestors remain containers. */
++    TkWindow *focusPtr = TkGetFocusWin((TkWindow *)acc->tkwin);
++    bool focused = eventPtr->type == FocusIn && focusPtr == (TkWindow *)acc->tkwin;
+     AtkObject *obj = ATK_OBJECT(acc);
+     AtkRole role = GetAtkRoleForWidget(acc->tkwin);
+ 
+-    /* Update this widget's focus state. */
+-    acc->is_focused = focused;
+-    atk_object_notify_state_change(obj, ATK_STATE_FOCUSED, focused);
+-    g_signal_emit_by_name(obj, "focus-event", focused);
++    if (acc->is_focused != focused) {
++	acc->is_focused = focused;
++	atk_object_notify_state_change(obj, ATK_STATE_FOCUSED, focused);
++	g_signal_emit_by_name(obj, "focus-event", focused);
++    }
+ 
+     /* Track the last focused widget globally. */
+     static Tk_Window last_focused_win = NULL;
+@@ -1776,10 +1768,6 @@
+ 	    if (parent) {
+ 		g_signal_emit_by_name(parent, "active-descendant-changed", obj);
+ 
+-		/* Also emit children-changed to refresh ATK's view. */
+-		g_signal_emit_by_name(parent, "children-changed::add",
+-				      atk_object_get_n_accessible_children(parent) - 1,
+-				      obj);
+ 	    }
+ 	}
+     } else {
+@@ -1791,11 +1779,8 @@
+ 
+     /* Handle window activation/deactivation for toplevels. */
+     if (role == ATK_ROLE_WINDOW) {
+-	if (focused) {
+-	    g_signal_emit_by_name(obj, "window-activate");
+-	} else {
+-	    g_signal_emit_by_name(obj, "window-deactivate");
+-	}
++	bool active = focusPtr && GetToplevelOfWidget((Tk_Window)focusPtr) == acc->tkwin;
++	g_signal_emit_by_name(obj, active ? "window-activate" : "window-deactivate");
+     }
+ }
+ /*

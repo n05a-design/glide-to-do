@@ -1,6 +1,6 @@
 # Prüfplan – Glide
 
-Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
+Stand 15.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
 
 Wie Glide geprüft wird. Was tatsächlich geprüft wurde, steht im [QA-Bericht](07_QA_BERICHT.md). Am 03.10.2026 auf den gültigen Stand verdichtet; am 05.10.2026 um Nachweisregeln und Kontrollmatrix der Windows-Fassung ergänzt. Die Suitebeschreibungen je Einführungsversion trägt Git.
 
@@ -15,6 +15,8 @@ Wie Glide geprüft wird. Was tatsächlich geprüft wurde, steht im [QA-Bericht](
 | Manuell | [Manuelle Prüfung](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md) | echte Bedienung, Plattformen, DPI, Screenreader | Inhaber |
 
 Maßgeblich sind `SUITEN` und `ANALYSEN` in `tests/tools/pruefen.py`. Einzelsuite: `python3 -B tests/integration/<suite>.py`, unter macOS im Hintergrund mit `GLIDE_QA_HINTERGRUND=1 PYTHONPATH=tests/tools/hintergrund`. Seit 3.36.0 laufen alle sachlich ausführbaren Integrationssuiten unter Linux/Xvfb verpflichtend; kalibrierte Erwartungen haben passende Defektgegenproben. Die Suiten sind auf den Referenz-Mac abgestimmt; Linux-Grundstufe und Windows-Lauf ersetzen keine Mac-Vollprüfung, und kein Windows-Nachweis wird aus einem Mac-Lauf abgeleitet. Laufzeit, Betriebssystem und tatsächlicher Umfang stehen in jedem `ergebnis.json`.
+
+**Private 4.0-Vorbereitung:** 91 Integrationssuiten einschließlich `test_zugang400`. Ab Version 4 verlangt dieser Einstieg die eigene native Tk-9.1-Laufzeit; in der Vorstufe erzwingt `--zugang-nativ` denselben Vertrag. Eigenen Erweiterungspfad vor dem Pythonstart über `PYTHONPATH` setzen. Native installierte Tcl-Bindungen werden zusätzlich geprüft. Standard-Linux-/Windows-Vollmatrix und Windows-Paketjob auf eigene gepinnte Runtime vorbereitet; die Grundstufe behält Tk 8.6 als bezeichneten Rückfall. Gezielter Mac-Hintergrundpfad grün, finale 4.0-Vollprüfung und vollständige Readerabläufe offen. [Runtimeweg](../packaging/runtime/README.md).
 
 ## Regeln
 
