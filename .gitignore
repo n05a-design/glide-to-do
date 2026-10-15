@@ -88,6 +88,16 @@ release-artifacts/
 ._*
 Thumbs.db
 desktop.ini
+
+# Nutzerreferenzen UI/UX: unveränderte Screenshots enthalten Kontoangaben.
+# Lokal für Agentenübergaben erhalten; nicht unverändert veröffentlichen.
+00_Arbeitsvorbereitung/Featurepaket_UI_UX/bilder/
+
+# Lokale Kopie des Fremdrepositorys emilkowalski/skills (MIT). Kein aktiver
+# Skill und keine Projektquelle: Übernommene Grundsätze stehen übersetzt in
+# docs/DESIGN_RICHTLINIEN.md, der genutzte Fremdtext mit Lizenz unter
+# .claude/skills/design-richtlinien/referenzen/ (B20, 15.10.2026).
+skills-main/
 .idea/
 .vscode/
 

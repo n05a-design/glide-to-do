@@ -145,6 +145,7 @@ from calendar_service import CalendarService, View
 from zoneinfo import ZoneInfoNotFoundError
 
 import symbol_policy as glide_symbols
+import glyph_metrics as glide_glyphs
 import render_retention as glide_retention  # noqa: E402
 import eisenhower as glide_eisenhower  # noqa: E402
 import today_view as glide_today  # noqa: E402
@@ -1317,7 +1318,13 @@ class RoundedButton(DeferredDrawCanvas):
         self.bg_color = bg_color
         self.height = height
         self.radius = radius
-        self.font = app_font(font[1], *font[2:])
+        # Knöpfe zeichnen in der UI-Schrift. Ausnahme seit B10: ein Zeichen
+        # aus einer der Systemsymbolschriften der Symbolregel (die Lupe)
+        # behält seine Familie, sonst erschiene ein Ersatzkästchen.
+        if isinstance(font, tuple) and font and font[0] in glide_symbols.SYMBOL_FONT_FAMILIES:
+            self.font = tuple(font)
+        else:
+            self.font = app_font(font[1], *font[2:])
         self.is_hovered = False
         self.is_pressed = False
         # Dauerhafte Füllung für Schaltflächen, die einen aktiven Zustand
@@ -1462,6 +1469,12 @@ class RoundedButton(DeferredDrawCanvas):
             pad = 3
             border_width = 1.8
 
+        # B17 (15.10.2026): Ein Knopf ohne Kontur ist in Ruhe durchsichtig.
+        # Mit Hintergrundverlauf stand sonst eine flache Fläche in der
+        # Fensterfarbe über dem Verlauf – etwa graue Kästen hinter den
+        # Windows-Menüs. Überfahren, Fokus und aktiver Zustand bleiben sichtbar.
+        if not self.outline and not self.is_hovered and not self.active_fill:
+            fill = ""
         self._rounded_rect(
             pad,
             pad,
@@ -1823,7 +1836,7 @@ class MascotCanvas(tk.Canvas):
 
     def start(self):
         """Beginnt das Blinzeln – die einzige Bewegung im Ruhezustand."""
-        if not self.app.animations_enabled() or not self.app.settings.get("mascot_playful", True):
+        if not self.app.animations_enabled():
             return
         if getattr(self, "_blink_started", False):
             return
@@ -2649,7 +2662,14 @@ class DueField(tk.Frame):
 
     def __init__(self, parent, app, due=None, due_time=None, on_change=None,
                  compact=False, dialog_parent=None, show_time=True, purpose="due"):
-        super().__init__(parent, bg=app.theme["bg"])
+        # B19 (15.10.2026): Im Inspektor liegt das Feld auf einer Karte. Mit
+        # der Fensterfarbe standen Beschriftungen und Kalenderknopf in einem
+        # abweichenden Kasten, bei Hintergrundverlauf in einem Verlaufsstück.
+        try:
+            self.surface = parent.cget("bg")
+        except (tk.TclError, AttributeError):
+            self.surface = app.theme["bg"]
+        super().__init__(parent, bg=self.surface)
         self.app = app
         # Monats- und Wochentagsnamen kommen aus der App: Der Kalender im
         # Dialog und der große Kalender sollen dieselben Bezeichnungen zeigen.
@@ -2682,10 +2702,10 @@ class DueField(tk.Frame):
 
     # --- Aufbau ---------------------------------------------------------
     def _build_inputs(self, time_value):
-        row = tk.Frame(self, bg=self.theme["bg"])
+        row = tk.Frame(self, bg=self.surface)
         row.pack(fill="x")
 
-        date_block = tk.Frame(row, bg=self.theme["bg"])
+        date_block = tk.Frame(row, bg=self.surface)
         date_block.pack(side="left", fill="x", expand=True)
         self.app._make_field_label(date_block, "Datum (TT.MM.JJJJ)").pack(
             anchor="w", pady=(0, self.app.FIELD_LABEL_GAP)
@@ -2706,7 +2726,7 @@ class DueField(tk.Frame):
             # Der Knopf sitzt zwischen Datum und Uhrzeit, weil er das Datum
             # setzt. Die leere Beschriftung darüber hält ihn auf einer Linie
             # mit den beiden Feldern.
-            picker_block = tk.Frame(row, bg=self.theme["bg"])
+            picker_block = tk.Frame(row, bg=self.surface)
             picker_block.pack(side="left", padx=(8, 0))
             self.app._make_field_label(picker_block, " ").pack(
                 anchor="w", pady=(0, self.app.FIELD_LABEL_GAP)
@@ -2719,7 +2739,7 @@ class DueField(tk.Frame):
         # Spalte schmaler sein; dann wandert die Uhrzeit unter das Datum,
         # statt auf vierzig Pixel zusammenzuschrumpfen, in denen „14:30“ nicht
         # mehr steht.
-        self.time_block = time_block = tk.Frame(row, bg=self.theme["bg"], width=110)
+        self.time_block = time_block = tk.Frame(row, bg=self.surface, width=110)
         self.time_row = row
         time_block.pack(side="left", padx=(10, 0))
         if not self.show_time:
@@ -4128,8 +4148,10 @@ class SystemNavigation(ttk.Treeview):
             fill = theme["selection"] if iid in selected else theme["hover"] if "hover" in tags else grund
             foreground = theme["selection_text"] if iid in selected else theme["text"]
             canvas.create_rectangle(0, y, width, y + height, fill=fill, outline=fill)
-            canvas.create_text(width / 2, y + height / 2 - self.ICON_RISE,
-                               text=self.set(iid, "icon"), fill=foreground,
+            symbol = self.set(iid, "icon")
+            # B09: abweichende Glyphenformen (♲) auf die Mitte der Bezugsformen.
+            canvas.create_text(width / 2, y + height / 2 - self.ICON_RISE + self.app.symbol_row_shift(symbol),
+                               text=symbol, fill=foreground,
                                font=self.app.sidebar_section_font())
 
 
@@ -10238,7 +10260,9 @@ class PageEditor(RichNoteEditor):
                      ('Liste', lambda: self.set_block('bullet')),
                      ('Nummeriert', lambda: self.set_block('number'))]
         if self.ALLOW_TASKS:
-            eintraege.append((f"{self.app.ICONS['task_open']} Aufgabe", lambda: self.set_block('task')))
+            # B14 (15.10.2026): ohne Kästchen davor – kein anderer Knopf der
+            # Leiste trägt ein Symbol. Echte Aufgabenkästchen im Text bleiben.
+            eintraege.append(("Aufgabe", lambda: self.set_block('task')))
         eintraege += [('Zitat', lambda: self.set_block('quote')),
                       ('Code', lambda: self.set_block('codeblock')),
                       ('Bild', self.choose_images),
@@ -14278,7 +14302,8 @@ class ListApp:
                            "angehefteten Seiten und Filtern, Pinnwandvorschau und Bestand. „Startseite anpassen“ "
                            "ordnet direkt auf der Seite: ziehen oder Alt+↑/↓, ganze Breite, aus- und einblenden. "
                            "Gismo steht zusätzlich still neben leeren Listen, Ordnern und Pinnwänden; "
-                           "„Spielereien aus“ in seiner Kachel blendet ihn überall aus.",
+                           "wer ihn nicht möchte, blendet seine Kachel unter „Startseite anpassen“ aus – "
+                           "dann erscheint er nirgends.",
              "Seitenleiste › Startseite · Ansicht › Ansichten › Startseite"),
             ("Heute", "Was heute dran ist: oben die nächste Aufgabe, dann Verspätetes, Liegengebliebenes, "
                       "der Tagesplan und was heute fällig ist, am Ende der Eingang mit allem ohne Tag. Jede "
@@ -17746,9 +17771,9 @@ class ListApp:
         for key, default in (("start_on_home", False), ("show_home_stats", True)):
             value = result.get(key, default)
             result[key] = value if isinstance(value, bool) else default
-        # Der Name des Begleiters.
-        mascot = result.get("mascot_name", "")
-        result["mascot_name"] = " ".join(str(mascot).split())[:24] if isinstance(mascot, str) else ""
+        # B03 (15.10.2026): Gismo heißt fest so und behält seine Spielereien.
+        # Frühere Namen und „Spielereien aus“ wirken nicht mehr und entfallen.
+        result = glide_home.retire_mascot_settings(result)
         care = result.get("mascot_care") if isinstance(result.get("mascot_care"), dict) else {}
         normalized_care = {}
         for key, default in (("satiety", 70), ("energy", 70), ("affection", 60)):
@@ -17824,7 +17849,7 @@ class ListApp:
         # fehlender Wert bedeutet „protokollieren".
         for key, default in (("sidebar_visible", True), ("sidebar_narrow", False),
                              ("show_moon_phase", True), ("show_yearly_stats", True),
-                             ("show_seconds", True), ("reminder_attention", True), ("history_enabled", True), ("mascot_playful", True),
+                             ("show_seconds", True), ("reminder_attention", True), ("history_enabled", True),
                              # Seit 27.09.2026: echte Systembenachrichtigung über Tk 9
                              # (`tk sysnotify`). Aus, bis man sie einschaltet.
                              ("system_notifications", False)):
@@ -18067,7 +18092,9 @@ class ListApp:
     @classmethod
     def normalize_settings_330(cls, result):
         """Alle Einstellungen, die 3.30 ergänzt. Fehlende Werte ergeben 3.29."""
-        result["view_hints"] = glide_interaction.normalize_hints(result.get("view_hints"))
+        # B06 (15.10.2026): ein gespeicherter Schalter für ergänzende
+        # Bedienhinweise statt „?“ je Ansicht; eine frühere Wahl wird übernommen.
+        result = glide_interaction.migrate_hint_setting(result)
         result["drawing_tools"] = cls.normalize_drawing_tools(result.get("drawing_tools"))
         pinned = []
         for value in result.get("pinned_pages") if isinstance(result.get("pinned_pages"), list) else []:
@@ -18138,6 +18165,8 @@ class ListApp:
                         hidden.append(key)
                 result["home_tiles_hidden"] = hidden
             result["home_tiles_330"] = True
+        # B04 (15.10.2026): dieselbe einmalige Regel für „Galeriebilder“.
+        result = glide_home.hide_new_tiles_once(result)
         profile = result.get("daily_capacity_by_weekday")
         result["daily_capacity_by_weekday"] = [
             (max(0, min(cls.DAILY_CAPACITY_MAX, value)) if isinstance(value, int) and not isinstance(value, bool)
@@ -20201,8 +20230,7 @@ class ListApp:
                 box = self.tree.bbox(row, "#0")
                 start = next((x for x in range(box[0], min(box[0]+box[2], box[0]+400))
                               if self.tree.identify_element(x, event.y) == "text"), None)
-                font = (self.measurement_font(app_font(glide_design.FONT_SIZES["section"], "bold"))
-                        if "today_next" in self.tree.item(row, "tags") else self.task_row_font())
+                font = self.tree_cell_font(row, "#0")
                 if start is not None:
                     left = start + font.measure(display[:marker_at])
                     right = left + font.measure(marker.rstrip())
@@ -20218,8 +20246,7 @@ class ListApp:
                 field = "planned"
             elif planned and due:
                 box = self.tree.bbox(row,column)
-                font = (self.measurement_font(app_font(glide_design.FONT_SIZES["section"],"bold"))
-                        if "today_next" in self.tree.item(row,"tags") else self.task_row_font())
+                font = self.tree_cell_font(row, column)
                 prefix = glide_interaction.date_text(due,"",self.DUE_COLUMN_ICON,self.ICONS["today"])+" · "
                 if box and event.x >= box[0]+8+font.measure(prefix):
                     field = "planned"
@@ -21613,6 +21640,13 @@ class ListApp:
                     kind.configure(bg=bg)
                     if isinstance(kind, tk.Checkbutton):
                         kind.configure(activebackground=bg)
+                    if isinstance(kind, DueField):
+                        kind.surface = bg
+                # B19 (15.10.2026): Auch Knöpfe (etwa der Kalenderknopf der
+                # Erinnerung) übernehmen die neue Fläche; sonst blieb um sie
+                # ein Rechteck in der Fensterfarbe.
+                elif isinstance(kind, RoundedButton) and str(kind.bg_color).lower() == str(self.theme["bg"]).lower():
+                    kind.set_theme(bg, kind.text_color, kind.border_color, kind.hover_fill, kind.hover_text_color)
                 if isinstance(kind, tk.Label) and int(float(kind.cget("wraplength") or 0)) > wraplength:
                     kind.configure(wraplength=wraplength)
                 if hide_label and isinstance(kind, tk.Label) and kind.cget("text") == hide_label:
@@ -22407,6 +22441,100 @@ class ListApp:
     # (29.09.2026) ist der Notizbereich unter den Listen.
     SIDEBAR_SECTIONS = ("views", "pinned", "pages", "lists", "notes", "drawings")
     SIDEBAR_SECTION_ARROWS = {True: "▽", False: "▷"}
+
+    # --- Optische Symbolmitte (B09, 15.10.2026) ----------------------------
+    # Tk setzt Zeichen nach Schriftmetrik. Dreiecke standen dadurch neben
+    # Bereichstiteln zu tief, das Wiederverwertungszeichen im Papierkorb höher
+    # als die übrigen Symbole. Eine Regel für alle: Die sichtbare Mitte eines
+    # Symbols liegt auf der Mitte der Großbuchstabenhöhe seines Textes; in
+    # Baumzeilen auf der Mitte der geometrischen Bezugsformen (▣ ◉ ◈ ▤). Die
+    # Begrenzungsrahmen kommen aus der mitgelieferten Schriftdatei
+    # (glyph_metrics.py); bei einer anderen UI-Schrift bleibt alles, wie es ist.
+    SYMBOL_REFERENCE_GLYPH = "▣"
+
+    def glyph_metrics_for(self, font_spec):
+        """Glyphenrahmen der mitgelieferten UI-Schrift für `font_spec` – oder None."""
+        try:
+            font = self.measurement_font(font_spec)
+            familie = str(font.actual("family"))
+            fett = str(font.actual("weight")) == "bold"
+        except (tk.TclError, AttributeError, TypeError, ValueError):
+            return None
+        if familie.casefold() != "dejavu sans":
+            return None
+        speicher = getattr(self, "_glyph_metrics", None)
+        if speicher is None:
+            speicher = self._glyph_metrics = {}
+        if fett not in speicher:
+            datei = os.path.join(_GLIDE_SOURCE_DIR, "resources", "fonts",
+                                 "DejaVuSans-Bold.ttf" if fett else "DejaVuSans.ttf")
+            try:
+                speicher[fett] = glide_glyphs.load(datei)
+            except (OSError, ValueError):
+                speicher[fett] = None
+        return speicher[fett]
+
+    def font_pixels(self, font):
+        """Schriftgröße in Pixeln (Em) für eine tkfont.Font."""
+        groesse = float(font.actual("size"))
+        return -groesse if groesse < 0 else groesse * float(self.root.tk.call("tk", "scaling"))
+
+    def align_symbol_to_heading(self, row, symbol_label, text_label):
+        """Hält ein Symbol-Label senkrecht auf der Großbuchstabenmitte seines Titels.
+
+        Beide Labels liegen im selben Rahmen `row`; das Symbol füllt seinen
+        Platz senkrecht. Gerechnet wird nach jedem Größenwechsel des Rahmens,
+        gepackt nur bei geänderter Lage.
+        """
+        def ausrichten(_event=None):
+            try:
+                if not (row.winfo_exists() and symbol_label.winfo_exists() and text_label.winfo_exists()):
+                    return
+                hoehe = symbol_label.master.winfo_height()
+                if hoehe <= 1 or text_label.winfo_height() <= 1:
+                    return
+                text_font = self.measurement_font(text_label.cget("font"))
+                symbol_font = self.measurement_font(symbol_label.cget("font"))
+                text_metrics = self.glyph_metrics_for(text_label.cget("font"))
+                symbol_metrics = self.glyph_metrics_for(symbol_label.cget("font"))
+                if text_metrics is None or symbol_metrics is None:
+                    return
+                oben_text = text_label.winfo_rooty() - symbol_label.master.winfo_rooty()
+                grundlinie = (oben_text + (text_label.winfo_height() - text_font.metrics("linespace")) / 2
+                              + text_font.metrics("ascent"))
+                mitte = glide_glyphs.label_center_for_cap(
+                    grundlinie, text_metrics, self.font_pixels(text_font), symbol_metrics,
+                    str(symbol_label.cget("text")) or "▽", self.font_pixels(symbol_font),
+                    symbol_font.metrics("ascent"), symbol_font.metrics("linespace"))
+                if mitte is None:
+                    return
+                versatz = round(2 * mitte - hoehe)
+                rand = (max(0, versatz), max(0, -versatz))
+                if tuple(int(wert) for wert in self.root.tk.splitlist(
+                        str(symbol_label.pack_info().get("pady", "0 0")).replace("{", "").replace("}", ""))
+                         or (0, 0)) != rand:
+                    symbol_label.pack_configure(pady=rand)
+            except (tk.TclError, ValueError, TypeError):
+                return
+
+        row.bind("<Configure>", ausrichten, add="+")
+        return ausrichten
+
+    def symbol_row_shift(self, symbol):
+        """Pixel nach unten, damit ein Zeilensymbol mittig steht wie die Bezugsformen."""
+        speicher = getattr(self, "_symbol_row_shifts", None)
+        schluessel = (str(symbol), self.sidebar_section_font())
+        if speicher is None or speicher.get("_font") != schluessel[1]:
+            speicher = self._symbol_row_shifts = {"_font": schluessel[1]}
+        if schluessel[0] not in speicher:
+            metrics = self.glyph_metrics_for(schluessel[1])
+            try:
+                pixel = self.font_pixels(self.measurement_font(schluessel[1]))
+            except (tk.TclError, ValueError):
+                pixel = 0
+            speicher[schluessel[0]] = (glide_glyphs.relative_shift(metrics, schluessel[0], self.SYMBOL_REFERENCE_GLYPH,
+                                                                   pixel) if schluessel[0] and pixel else 0)
+        return speicher[schluessel[0]]
     # Abstand zwischen Seiten- und Listenbereich – enger als zum Systembereich.
     SIDEBAR_LISTS_GAP = 10
 
@@ -24000,9 +24128,12 @@ class ListApp:
         return "ruhig", self.MASCOT_STATES["ruhig"]
 
     def mascot_name(self):
-        """Wie der Begleiter heißt – ohne Vergabe bleibt er namenlos."""
-        name = self.settings.get("mascot_name", "")
-        return (" ".join(str(name).split())[:24] if isinstance(name, str) else "") or "Gismo"
+        """Der Begleiter heißt fest Gismo (B03, 15.10.2026)."""
+        return glide_home.MASCOT_NAME
+
+    def mascot_visible(self):
+        """Gismo erscheint, solange seine Startseitenkachel eingeblendet ist."""
+        return glide_home.mascot_visible(self.settings.get("home_tiles_hidden", []))
 
     def mascot_care(self):
         """Lokale Tamagotchi-Werte; sie bewerten nie die Arbeitsleistung."""
@@ -24035,19 +24166,6 @@ class ListApp:
             self.settings["mascot_care"] = previous
             return ""
         return messages[action]
-
-    def rename_mascot(self, event=None):
-        """Vergibt oder löscht den Namen des Begleiters."""
-        name = self.themed_input_dialog(
-            "Begleiter benennen",
-            "Wie soll der Begleiter heißen? Ein leeres Feld verwendet Gismo.",
-            initial=self.mascot_name(), ok_text="Übernehmen")
-        if name is None:
-            return "break"
-        self.settings["mascot_name"] = " ".join(str(name).split())[:24]
-        self.save_settings()
-        self.refresh_home()
-        return "break"
 
     def home_primary_actions(self):
         """Die vier Wege, die auf der Startseite täglich gebraucht werden."""
@@ -24334,6 +24452,78 @@ class ListApp:
         with self.render_pass():
             return self._refresh_home()
 
+    # --- Galeriebilder auf der Startseite (B04, 15.10.2026) ----------------
+    HOME_GALLERY_THUMBNAIL = 64
+
+    def show_home_gallery_thumbnail(self, widget, anhang, groesse):
+        """Zeigt eine bekannte Vorschau sofort, sonst die Dateiendung; der Rest lädt im Leerlauf."""
+        schluessel = (anhang.get("storage"), groesse)
+        widget._home_gallery_key = schluessel
+        bilder = getattr(self, "_home_gallery_images", None)
+        if bilder is None:
+            bilder = self._home_gallery_images = {}
+        bild = bilder.get(schluessel)
+        if bild is not None:
+            widget.configure(image=bild, text="")
+            return
+        endung = os.path.splitext(str(anhang.get("name") or anhang.get("storage") or ""))[1].lstrip(".").upper()
+        widget.configure(image="", text=endung[:5] or "Bild")
+        warteschlange = getattr(self, "_home_gallery_pending", None)
+        if warteschlange is None:
+            warteschlange = self._home_gallery_pending = []
+        warteschlange.append((schluessel, widget, anhang))
+        if getattr(self, "_home_gallery_job", None) is None:
+            self._home_gallery_job = self._register_after(self.root.after(20, self._load_home_gallery_thumbnail))
+
+    def _load_home_gallery_thumbnail(self):
+        """Eine Galerievorschau je Schritt – wie die Galerie selbst, damit nichts blockiert."""
+        self._after_ids.discard(getattr(self, "_home_gallery_job", None))
+        self._home_gallery_job = None
+        warteschlange = getattr(self, "_home_gallery_pending", None) or []
+        while warteschlange:
+            schluessel, widget, anhang = warteschlange.pop(0)
+            try:
+                if not widget.winfo_exists() or getattr(widget, "_home_gallery_key", None) != schluessel:
+                    continue
+            except tk.TclError:
+                continue
+            bild = self._home_gallery_images.get(schluessel)
+            pfad = None if bild is not None else self.resolve_attachment_path(anhang)
+            if bild is None and pfad and os.path.isfile(pfad):
+                try:
+                    if self.previews.needs_conversion(self.root, pfad):
+                        self.previews.convert(pfad)
+                    bild = self.previews.image(self.root, pfad, box=schluessel[1])
+                except (tk.TclError, OSError, ValueError):
+                    bild = None
+            try:
+                if bild is not None:
+                    self._home_gallery_images[schluessel] = bild
+                    widget.configure(image=bild, text="")
+                elif not pfad or not os.path.isfile(pfad):
+                    # Fehlende Datei: verständlich statt leer; die Endung
+                    # bleibt bei einem nicht unterstützten Format stehen.
+                    widget.configure(image="", text="fehlt")
+            except tk.TclError:
+                pass
+            break
+        if warteschlange:
+            self._home_gallery_job = self._register_after(self.root.after(20, self._load_home_gallery_thumbnail))
+        elif len(self._home_gallery_images) > 60:
+            for schluessel in list(self._home_gallery_images)[:-30]:
+                self._home_gallery_images.pop(schluessel, None)
+
+    def open_gallery_image(self, list_id, index):
+        """Öffnet die Galerie direkt bei diesem Bild (Einstieg der Startseitenvorschau)."""
+        self.set_active_list(list_id)
+        ansicht = getattr(self, "gallery_view", None)
+        try:
+            if ansicht is not None and ansicht.winfo_exists() and ansicht.list_id == list_id:
+                ansicht.open_detail(index)
+        except tk.TclError:
+            pass
+        return "break"
+
     # Navigationswerte in settings.json; keine Kachel liest sie (P03r).
     HOME_SIGNATURE_IGNORED = frozenset(("active_list_id", "active_folder_id", "view_mode", "title", "recent_pages"))
 
@@ -24372,6 +24562,13 @@ class ListApp:
             return
         self._home_signature = None
         scroll_position = self.home_canvas.yview()[0] if getattr(self, "_home_rendered_view", None) == self.HOME_VIEW else 0
+        # B01 (15.10.2026): Nach „Gelesen“ fällt die Karte oben weg. Die
+        # gemerkte Bruchteilposition stand danach mitten im kürzeren Inhalt,
+        # erst ein Designwechsel holte den Anfang zurück. Ein ausdrücklicher
+        # Wunsch nach dem Seitenanfang gilt für genau diesen Aufbau.
+        if getattr(self, "_home_scroll_to_top", False):
+            self._home_scroll_to_top = False
+            scroll_position = 0
         self._home_rendered_view = self.HOME_VIEW
         self._home_columns_rendered = self.home_column_count()
         theme = self.theme
@@ -24406,7 +24603,9 @@ class ListApp:
             leiste.set_theme(*farben)
         summary = self.home_summary()
         self._home_summary = summary
-        self._set_stats_text(date.today().strftime("%d.%m.%Y"))
+        # B06 (15.10.2026): kein Datum mehr in der Kopfzeile der Startseite;
+        # Uhr-, Heute- und Kalenderkacheln tragen den Tag weiterhin.
+        self._set_stats_text("")
         # Tagesbeginn und Wochenrückblick sind Unterseiten der Startseite:
         # derselbe eingebettete Bereich, kein eigenes Fenster.
         mode = self.home_mode()
@@ -24958,8 +25157,7 @@ class ListApp:
         def kachel_mascot(parent):
             """Der Begleiter: ein Blick auf den Tag, keine Bewertung."""
             zustand, satz = self.mascot_state()
-            name = self.mascot_name()
-            tile = card(parent, name or "Begleiter")
+            tile = card(parent, self.mascot_name())
             figur = _ui.make(MascotCanvas, tile, self, size=112)
             _ui.pack(figur, pady=(glide_design.SPACING[0], glide_design.SPACING[8]))
             figur.set_state(zustand)
@@ -24984,8 +25182,6 @@ class ListApp:
                 care_bars[key] = bar
 
             def react(feed=False, care_action=None):
-                if not self.settings.get("mascot_playful", True):
-                    return "break"
                 figur.react("freut" if feed else "winkt")
                 pool = [satz, "Ein Schritt nach dem anderen.", "Ich bin hier, wenn du eine Pause brauchst."]
                 if zustand == "sorgt":
@@ -25025,36 +25221,26 @@ class ListApp:
                 return react()
 
             def streicheln(_event=None):
-                if self.settings.get("mascot_playful", True):
-                    figur.react("freut", schritte=5)
+                figur.react("freut", schritte=5)
 
             for sequenz in ("<Button-1>", "<Return>", "<space>"):
                 _ui.bind(figur, sequenz, beruehren)
             _ui.bind(figur, "<Enter>", streicheln)
             _ui.bind(figur, "<Leave>", lambda _event: figur.set_state(zustand))
 
-            def toggle_play():
-                before = self.settings.get("mascot_playful", True)
-                self.settings["mascot_playful"] = not before
-                if self.save_settings():
-                    self.refresh_home()
-                else:
-                    self.settings["mascot_playful"] = before
-
             # U05r (3.33.21): Pflege und Einstellungen erscheinen beim
             # Überfahren der Kachel oder wenn die Tastatur in ihr steht; in Ruhe
             # zeigt sie nur Figur, Satz und Balken. Die Leiste liegt über den
             # Balken: Die Kachel behält ihre Höhe, nichts springt, und die
             # Startseite baut dafür nicht neu.
+            # B03 (15.10.2026): Pflege bleibt immer verfügbar; ein Umbenennen
+            # und „Spielereien aus“ gibt es nicht mehr. Ausblenden geht über
+            # die ganze Kachel. Bewegungsreduktion nimmt nur die Bewegung.
             pflege = make_flow(tile, bg=theme["card"])
             self._bind_home_wheel(pflege)
-            if self.settings.get("mascot_playful", True):
-                action(pflege, "Füttern", lambda: react(feed=True, care_action="feed"), "muted")
-                action(pflege, "Spielen", lambda: react(care_action="play"), "muted")
-                action(pflege, "Ruhen", lambda: react(care_action="rest"), "muted")
-            action(pflege, "Spielereien aus" if self.settings.get("mascot_playful", True) else "Spielereien an",
-                   toggle_play, "muted")
-            action(pflege, "Benennen …", self.rename_mascot, "muted")
+            action(pflege, "Füttern", lambda: react(feed=True, care_action="feed"), "muted")
+            action(pflege, "Spielen", lambda: react(care_action="play"), "muted")
+            action(pflege, "Ruhen", lambda: react(care_action="rest"), "muted")
             self._mascot_care_bar = pflege
 
             def in_kachel(widget):
@@ -25199,6 +25385,72 @@ class ListApp:
                 for schluessel in [key for key in bilder if key not in aktuell]:
                     bilder.pop(schluessel, None)
 
+        def kachel_gallery(parent):
+            """Bilder aus vorhandenen Galerien als eigene Vorschau (B04, 15.10.2026).
+
+            Getrennt von „Zeichnungen“: Galeriebilder sind Anhänge einer Galerie,
+            Zeichnungen eigene Pixelbilder. Die Vorschau nutzt denselben
+            Zwischenspeicher wie die Galerie und lädt nach dem Aufbau Bild für
+            Bild nach; ein Klick öffnet die Galerie mit diesem Bild.
+            """
+            tile = card(parent, f"{self.ICONS['gallery']}  Galeriebilder")
+            galerien = [entry for entry in self.planning_lists() if self.is_gallery_list(entry)]
+            galerien.sort(key=lambda entry: str(entry.get("updated_at") or entry.get("created_at") or ""),
+                          reverse=True)
+            if not galerien:
+                label(tile, "Noch keine Galerie. Eine Galerie sammelt Bilder: „+“ neben „Listen“ › Neue Galerie.",
+                      color="muted")
+                return
+            bilder = [(entry, index, anhang) for entry in galerien
+                      for index, anhang in reversed(list(enumerate(entry.get("attachments") or [])))
+                      if isinstance(anhang, dict)]
+            if not bilder:
+                erste = galerien[0]
+                label(tile, f"„{str(erste.get('title') or 'Galerie')[:40]}“ enthält noch keine Bilder.",
+                      color="muted")
+                action(tile, f"{self.ICONS['gallery']}  Galerie öffnen",
+                       lambda value=erste["id"]: self.set_active_list(value), "muted")
+                return
+            reihe = _ui.make(tk.Frame, tile, bg=theme["card"])
+            _ui.pack(reihe, fill="x", pady=(glide_design.SPACING[2], glide_design.SPACING[0]))
+            self._bind_home_wheel(reihe)
+            groesse = self.HOME_GALLERY_THUMBNAIL
+            abstand = glide_design.SPACING[10]
+            # So viele Bilder je Zeile, wie in die Kachel passen; zwei Zeilen.
+            # Eine Unterschrift ist nie breiter als ihr Bild, sonst schob sie
+            # die dritte Spalte aus der Kachel.
+            breite = getattr(tile, "_home_build_width", 0) or 3 * (groesse + abstand)
+            je_zeile = max(1, min(6, (breite + abstand) // (groesse + 2 + abstand)))
+            schrift = self.measurement_font(app_font(8))
+            for position, (entry, index, anhang) in enumerate(bilder[:2 * je_zeile]):
+                zelle = _ui.make(tk.Frame, reihe, bg=theme["card"], cursor="hand2")
+                _ui.grid(zelle, row=position // je_zeile, column=position % je_zeile, sticky="nw",
+                         padx=(glide_design.SPACING[0], abstand),
+                         pady=(glide_design.SPACING[0], glide_design.SPACING[8]))
+                # Fester Rahmen: Hoch- und Querformate behalten ihr
+                # Seitenverhältnis, das Raster bleibt trotzdem gleichmäßig.
+                rahmen = _ui.make(tk.Frame, zelle, width=groesse, height=groesse, cursor="hand2",
+                                  **self.thumbnail_frame_options())
+                rahmen.pack_propagate(False)
+                _ui.pack(rahmen, anchor="w")
+                bildfeld = _ui.make(tk.Label, rahmen, bg=rahmen.cget("bg"), fg="#555555", font=app_font(8, "bold"),
+                                    cursor="hand2", text="", image="")
+                _ui.pack(bildfeld, fill="both", expand=True)
+                self.show_home_gallery_thumbnail(bildfeld, anhang, groesse)
+                titel = str(anhang.get("title") or entry.get("title") or "Bild")
+                unterschrift = _ui.make(tk.Label, zelle, text=glide_design.fit_text(titel, schrift.measure, groesse + 2),
+                                        bg=theme["card"], fg=theme["muted"], font=app_font(8), anchor="w",
+                                        padx=0, bd=0)
+                _ui.pack(unterschrift, anchor="w")
+                self.add_tooltip(bildfeld, f"{self.list_path_title(entry)} · {titel}")
+                for widget in (zelle, rahmen, bildfeld, unterschrift):
+                    _ui.bind(widget, "<Button-1>", lambda _event, lid=entry["id"], value=index:
+                             self.open_gallery_image(lid, value))
+                    self._bind_home_wheel(widget)
+            if len(bilder) > 2 * je_zeile:
+                label(tile, f"{len(bilder)} Bilder in {len(galerien)} "
+                            f"{'Galerie' if len(galerien) == 1 else 'Galerien'}", 9, color="muted")
+
         def kachel_filters(parent):
             """Angeheftete gespeicherte Filter mit ihren ersten Treffern (ST-020)."""
             tile = card(parent, f"{self.ICONS['labels']}  Angeheftete Filter")
@@ -25250,7 +25502,8 @@ class ListApp:
                                  " › ".join(self.folder_path_titles(holder["id"])))
 
         bauer = {"boardpreview": kachel_boardpreview, "mascot": kachel_mascot,
-                 "drawings": kachel_drawings, "filters": kachel_filters, "pinned": kachel_pinned,
+                 "drawings": kachel_drawings, "gallery": kachel_gallery,
+                 "filters": kachel_filters, "pinned": kachel_pinned,
                  "clock": kachel_clock, "welcome": kachel_welcome, "today": kachel_today,
                  "focus": kachel_focus, "week": kachel_week,
                  "labels": kachel_labels, "recent": kachel_recent, "templates": kachel_templates,
@@ -25275,12 +25528,14 @@ class ListApp:
             return
         # „Startseite anpassen“ steht unter den Kacheln (Rückmeldung
         # 26.09.2026): Es ist selten gebraucht und gehört nicht an den Anfang.
+        # B02 (15.10.2026): an der linken Inhaltsflucht des Kachelrasters,
+        # im Kachelabstand darunter – rechts unten stand er ohne Bezug.
         anpassen = _ui.make(tk.Frame, self.home_content, bg=theme["bg"])
-        _ui.pack(anpassen, side="bottom", fill="x", pady=(glide_design.SPACING[14], glide_design.SPACING[0]))
+        _ui.pack(anpassen, side="bottom", fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[0]))
         self._bind_home_wheel(anpassen)
         anpassen_knopf = _ui.make(self._make_dialog_button, anpassen, "Startseite anpassen", self.toggle_home_editing,
                                                   "muted", width=170, height=30)
-        _ui.pack(anpassen_knopf, side="right")
+        _ui.pack(anpassen_knopf, side="left")
         self.add_tooltip(anpassen_knopf, "Kacheln ordnen, verbreitern, aus- und einblenden – direkt hier")
 
         kopfbereich = _ui.make(tk.Frame, self.home_content, bg=theme["bg"])
@@ -25309,6 +25564,7 @@ class ListApp:
             def gelesen():
                 self.settings.update(glide_release.remember_seen(self.settings, APP_VERSION))
                 self.save_settings()
+                self._home_scroll_to_top = True
                 self.refresh_home()
             action(neu_karte, "Gelesen", gelesen, "confirm", pady=(glide_design.SPACING[8], glide_design.SPACING[0]))
         for key in [k for k in sichtbar if k in breite_kacheln]:
@@ -26674,6 +26930,7 @@ class ListApp:
         systemhinweis = tk.BooleanVar(value=self.settings.get("system_notifications", False))
         verlauf = tk.BooleanVar(value=self.settings.get("history_enabled", True))
         animationen = tk.BooleanVar(value=self.settings.get("animations_enabled", True))
+        hinweise = tk.BooleanVar(value=glide_interaction.hints_visible(self.settings))
         sidebar_visibility = {key: tk.BooleanVar(value=self.sidebar_section_visible(key))
                               for key in ("pages", "notes", "drawings")}
         rueckmeldung_namen = dict(self.ACTION_FEEDBACK_CHOICES)
@@ -26910,7 +27167,9 @@ class ListApp:
                                 # eine eigene Wahl und stehen überall zur
                                 # Verfügung; das Dopamin-Design steigert sie
                                 # nur noch.
-                                ("Bewegte Rückmeldung bei Zustands- und Bereichswechseln", animationen)):
+                                ("Bewegte Rückmeldung bei Zustands- und Bereichswechseln", animationen),
+                                # B06 (15.10.2026): ersetzt das „?“ je Ansicht.
+                                ("Ergänzende Bedienhinweise in den Ansichten anzeigen", hinweise)):
             tk.Checkbutton(appearance, text=title, variable=variable, bg=self.theme["bg"], fg=self.theme["text"],
                            activebackground=self.theme["bg"], activeforeground=self.theme["text"],
                            selectcolor=self.theme["input"], anchor="w", font=app_font(10)).pack(fill="x", pady=glide_design.SPACING[5])
@@ -27139,6 +27398,7 @@ class ListApp:
                                  show_seconds=seconds.get(), reminder_attention=attention.get(),
                                  system_notifications=systemhinweis.get(),
                                  history_enabled=verlauf.get(),
+                                 **{glide_interaction.HINTS_SETTING: hinweise.get()},
                                  week_start=week_value,
                                  ui_font_size=font_size.get(), ui_font_family=font_family.get().strip(),
                                  )
@@ -27218,7 +27478,7 @@ class ListApp:
                     widget.configure(justify="left", anchor="w")
             panel.bind("<Configure>", lambda event, ziel=panel: umbrechen(event, ziel), add="+")
         variables = (name, logo, start, startup, startliste, stats, moon, yearly, seconds,
-                     attention, systemhinweis, verlauf, animationen, rueckmeldung, week_start,
+                     attention, systemhinweis, verlauf, animationen, hinweise, rueckmeldung, week_start,
                      design_var, font_size, font_family, accent, ziel, kapazitaet, hell_dunkel,
                      *sidebar_visibility.values(), *wochenwerte)
         initial_values = tuple(variable.get() for variable in variables)
@@ -27395,8 +27655,20 @@ class ListApp:
         def covers(text):
             return all(str(self.root.tk.call("font", "actual", font.name, "-family", char)).casefold()
                        == str(font.actual("family")).casefold() for font in fonts for char in text)
-        self.ICONS, self._symbol_changes = glide_symbols.resolve(type(self).ICONS, covers)
-        for attribute, key, size in (("search_button", "search", 16), ("settings_button", "settings", 16),
+
+        verfuegbar = {name.casefold() for name in self.available_font_families()}
+
+        def covers_in(family, text):
+            # B10: nur eine tatsächlich installierte Systemschrift, deren
+            # eigenes Zeichen Tk verwendet – kein stiller Ersatz durch Tk.
+            if family.casefold() not in verfuegbar:
+                return False
+            probe = tkfont.Font(root=self.root, family=family, size=self.ui_font_size(1), weight="bold")
+            return all(str(self.root.tk.call("font", "actual", probe.name, "-family", char)).casefold()
+                       == family.casefold() for char in text)
+        self.ICONS, self._symbol_changes, self._symbol_fonts = glide_symbols.resolve_with_fonts(
+            type(self).ICONS, covers, covers_in)
+        for attribute, key, size in (("search_button", "search", self.SEARCH_SYMBOL_SIZE), ("settings_button", "settings", 16),
                                      ("notifications_button", "notifications", 16), ("print_button", "print", 15),
                                      ("capture_button", "capture", 16), ("history_button", "history", 15),
                                      ("actions_button", "actions", 16), ("sidebar_toggle_button", "sidebar", 16)):
@@ -27413,8 +27685,17 @@ class ListApp:
             *((self.IMPORTANCE_MARKERS[value], value) for value in (3, 2, 1)),
             *type(self).IMPORTANCE_PARSE_MARKERS)))
 
+    # Die Lupe ist zierlicher als ⚙ und ◧; zwei Punkte mehr gleichen das
+    # Gewicht in der Kopfreihe aus (B10). Der Textrückfall „Su“ bleibt bei 11.
+    SEARCH_SYMBOL_SIZE = 18
+
     def symbol_font(self, key, size=16):
         text = self.ICONS[key]
+        familie = getattr(self, "_symbol_fonts", {}).get(key)
+        if familie:
+            # B10: Die Lupe kommt aus einer Systemschrift; dieselbe Größe wie
+            # die übrigen Kopfsymbole, damit Reihe und Gewicht stimmen.
+            return (familie, *app_font(size, "bold")[1:])
         return app_font(11 if len(text) > 1 and text.isascii() else size, "bold")
 
     def available_font_families(self):
@@ -27759,6 +28040,7 @@ class ListApp:
         outline=True,
     ):
         color_key = self.button_color_key(color_key, text)
+        bg_key = self.surface_key(master, bg_key)
         button = RoundedButton(
             master,
             text=text,
@@ -27864,6 +28146,24 @@ class ListApp:
             anchor="w",
             justify="left",
         )
+
+    def surface_key(self, master, requested="bg"):
+        """Themeschlüssel der Fläche, auf der ein Element tatsächlich liegt (B17/B19).
+
+        Knöpfe zeichnen ihre Ecken in einer Grundfarbe. Stand sie auf
+        „Fenster“, lag der Knopf aber auf einer Karte, blieb ein Rechteck in
+        Fensterfarbe stehen – mit Hintergrundverlauf sogar ein Stück Verlauf.
+        Passt die angeforderte Farbe zur Elternfläche, bleibt sie; sonst gilt
+        die Karten- bzw. Eingabefarbe, wenn die Elternfläche genau diese trägt.
+        """
+        try:
+            grund = str(master.cget("bg")).lower()
+        except (tk.TclError, AttributeError):
+            return requested
+        for key in (requested, "card", "input", "bg"):
+            if str(self.theme.get(key, "")).lower() == grund:
+                return key
+        return requested
 
     def _make_dialog_button(self, master, text, command, color_key, width=124, height=40):
         """RoundedButton für Dialoge – bewusst NICHT in self.buttons, da der Dialog kurzlebig ist."""
@@ -32772,7 +33072,7 @@ class ListApp:
         # ein und aus; die Überschrift selbst öffnet die Übersicht.
         self.sidebar_heading_icon = tk.Label(icon_slot, text=self.SIDEBAR_SECTION_ARROWS[True],
             font=app_font(9), bg=self.theme["card"], fg=self.theme["text"], cursor="hand2", takefocus=True)
-        self.sidebar_heading_icon.pack(fill="both", expand=True, pady=(4, 0))
+        self.sidebar_heading_icon.pack(fill="both", expand=True, pady=(0, 0))
         self.sidebar_title = self.register_theme_widget(
             tk.Label(
                 self.sidebar_heading_frame,
@@ -32793,6 +33093,7 @@ class ListApp:
             side="left", fill="x", expand=True,
             padx=(5, 0), pady=(self.SIDEBAR_TITLE_BASELINE_SHIFT, 0),
         )
+        self.align_symbol_to_heading(self.sidebar_heading_frame, self.sidebar_heading_icon, self.sidebar_title)
         for widget in (self.sidebar_heading_frame, icon_slot, self.sidebar_heading_icon, self.sidebar_title):
             if widget in (icon_slot, self.sidebar_heading_icon):
                 widget.bind("<Button-1>", lambda _event: self.toggle_sidebar_section("lists") or "break")
@@ -33575,11 +33876,12 @@ class ListApp:
         platz.pack_propagate(False)
         pfeil = tk.Label(platz, text=self.SIDEBAR_SECTION_ARROWS[True], font=app_font(9),
                          bg=theme["card"], fg=theme["text"], cursor="hand2", takefocus=True)
-        pfeil.pack(fill="both", expand=True, pady=(4, 0))
+        pfeil.pack(fill="both", expand=True, pady=(0, 0))
         beschriftung = tk.Label(kopf, text=titel, font=self.sidebar_section_font(), bg=theme["card"],
                                 fg=theme["text"], anchor="w", cursor="hand2", takefocus=True)
         beschriftung.pack(side="left", fill="x", expand=True, padx=(5, 0),
                           pady=(self.SIDEBAR_TITLE_BASELINE_SHIFT, 0))
+        self.align_symbol_to_heading(kopf, pfeil, beschriftung)
         for widget in (kopf, platz, pfeil, beschriftung):
             if widget in (platz, pfeil):
                 widget.bind("<Button-1>", lambda _event: self.toggle_sidebar_section(key) or "break")
@@ -37819,11 +38121,16 @@ class ListApp:
         # Untertitel einer Systemansicht die Zeile `page_chip_row`
         # (Rückmeldung: „die App weiter komprimieren“).
 
-        self.header_controls = self.register_theme_widget(tk.Frame(top_frame, bg=self.theme["bg"]), "bg")
-        self.header_controls.pack(side="right", padx=(glide_design.SPACING[12], glide_design.SPACING[0]), pady=(glide_design.SPACING[4], glide_design.SPACING[4]))
+        # B07 (15.10.2026): Die Symbolknöpfe stehen in der Titelzeile, rechts
+        # neben den Windows-Menüs. Beide werden dort von pack auf dieselbe
+        # Mittellinie gesetzt und haben dieselbe Höhe (HEADER_CONTROL_HEIGHT);
+        # vorher standen die Menüs oben in der Titelzeile, die Knöpfe mittig
+        # über Titel und Unterzeile. Die Unterzeile behält die volle Breite.
+        self.header_controls = self.register_theme_widget(tk.Frame(title_row, bg=self.theme["bg"]), "bg")
+        self.header_controls.pack(side="right", padx=(glide_design.SPACING[12], glide_design.SPACING[0]))
         self.create_menubar()
         self.settings_button = self.make_button(self.header_controls, self.ICONS["settings"],
-                                                self.show_settings_dialog, "muted", width=42, font=self.symbol_font("settings", 16))
+                                                self.show_settings_dialog, "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("settings", 16))
         self.settings_button.pack(side="right")
         self.add_tooltip(self.settings_button, "Einstellungen · Design, Profil und Bedienung")
         # Seit dem 27.09.2026 trägt die Kopfzeile nur Symbole: „Aktionen“ und
@@ -37831,10 +38138,10 @@ class ListApp:
         # Aufgabe (Aufräumen, Form folgt Funktion). Die Bedeutung steht im
         # Tooltip, die Zahl offener Hinweise bleibt neben der Glocke sichtbar.
         self.notifications_button = self.make_button(self.header_controls, self.ICONS["notifications"],
-                                                    self.open_reminders, "attention", width=42, font=self.symbol_font("notifications", 16))
+                                                    self.open_reminders, "attention", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("notifications", 16))
         self.notifications_button.pack(side="right", padx=(glide_design.SPACING[0], glide_design.SPACING[8]))
         self.capture_button = self.make_button(self.header_controls, self.ICONS["capture"], self.show_quick_capture,
-                                               "muted", width=42, font=self.symbol_font("capture", 16))
+                                               "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("capture", 16))
         self.capture_button.pack(side="right", padx=(glide_design.SPACING[0], glide_design.SPACING[8]))
         self.add_tooltip(self.capture_button, "Schnellerfassung · " + self.accel("Alt", "N"))
         # Die Lupe öffnet die Suche über Seiten, Punkte und Aktionen – dieselbe
@@ -37842,11 +38149,11 @@ class ListApp:
         # Das Zeichen ist in allen Schriften zierlicher als ⌘ und ⚙; eine
         # größere Schrift gleicht die Gewichte in der Reihe aus.
         self.search_button = self.make_button(self.header_controls, self.ICONS["search"], self.show_quick_open,
-                                              "muted", width=42, font=self.symbol_font("search", 16))
+                                              "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("search", self.SEARCH_SYMBOL_SIZE))
         self.add_tooltip(self.search_button, "Suchen: Seiten, Punkte und Aktionen · " + self.accel("O"))
         self.search_button.pack(side="right", padx=(glide_design.SPACING[0], glide_design.SPACING[8]))
         self.actions_button = self.make_button(self.header_controls, self.ICONS["actions"], self.show_actions_dialog,
-                                               "muted", width=42, font=self.symbol_font("actions", 16))
+                                               "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("actions", 16))
         self.add_tooltip(self.actions_button, "Alle Aktionen durchsuchen")
         self.actions_button.pack(side="right", padx=(glide_design.SPACING[0], glide_design.SPACING[8]))
         def remember_action_focus(event):
@@ -37857,12 +38164,12 @@ class ListApp:
             self._actions_source_focus = self.current_focus_widget()
             self.search_button._on_press(event)
         self.search_button.bind("<ButtonPress-1>", remember_palette_focus)
-        self.hints_button = self.make_button(self.subtitle_row, "?", self.toggle_view_hints,
-                                             "muted", width=24, height=18, font=app_font(9))
-        self.hints_button.pack(side="right", padx=(8, 0))
-        self.add_tooltip(self.hints_button, "Hinweise dieser Ansicht ein-/ausklappen")
+        # B06 (15.10.2026): Das „?“ unter den Menüs stand tiefer als die
+        # Kopfknöpfe und wirkte fehl am Platz. Ergänzende Bedienhinweise
+        # schaltet jetzt Einstellungen › Darstellung und Bedienung für alle
+        # Ansichten gemeinsam.
         self.sidebar_toggle_button = self.make_button(self.header_controls, self.ICONS["sidebar"],
-                                                      self.toggle_sidebar, "muted", width=42, font=self.symbol_font("sidebar", 16))
+                                                      self.toggle_sidebar, "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("sidebar", 16))
         self.sidebar_toggle_button.pack(side="right", padx=(glide_design.SPACING[0], glide_design.SPACING[8]))
         self.add_tooltip(self.sidebar_toggle_button, "Listen- und Ordnerleiste ein-/ausblenden")
 
@@ -37877,17 +38184,17 @@ class ListApp:
         # zweite Werkzeugleiste werden; alles Weitere liegt im Überlaufmenü,
         # das bei schmalem Fenster ohnehin gebraucht wird.
         self.print_button = self.make_button(self.header_controls, self.ICONS["print"],
-                                             self.show_print_dialog, "muted", width=42, font=self.symbol_font("print", 15))
+                                             self.show_print_dialog, "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("print", 15))
         self.print_button.pack(side="right", padx=(glide_design.SPACING[0], glide_design.SPACING[8]))
         # Der Änderungsverlauf steht seit dem 26.09.2026 neben „Drucken“ statt
         # als Zeile in der Seitenleiste – beide wirken über die ganze Ablage.
         self.history_button = self.make_button(self.header_controls, self.ICONS["history"],
-                                               self.open_history_view, "muted", width=42, font=self.symbol_font("history", 15))
+                                               self.open_history_view, "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("history", 15))
         self.history_button.pack(side="right", padx=(glide_design.SPACING[0], glide_design.SPACING[8]))
         self.add_tooltip(self.history_button, "Änderungsverlauf · " + self.accel("Strg", "H"))
         # Laufende Zeiterfassung (3.30): nur sichtbar, solange sie läuft.
         self.timer_button = self.make_button(self.header_controls, "", self.stop_time_tracking_from_header,
-                                             "due_action", width=120)
+                                             "due_action", width=120, height=self.HEADER_CONTROL_HEIGHT)
         self.add_tooltip(self.timer_button, "Zeiterfassung stoppen und auf den Punkt buchen")
         self.root.after_idle(self.update_timer_indicator)
         self.add_tooltip(self.print_button, "Drucken und als PDF speichern · " + self.accel("Strg", "P"))
@@ -37898,7 +38205,7 @@ class ListApp:
         # Inhalt.
         self.header_overflow_button = self.make_button(
             self.header_controls, self.ICONS["overflow"], self.show_header_overflow_menu,
-            "muted", width=42, font=app_font(16))
+            "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=app_font(16))
         self.add_tooltip(self.header_overflow_button, "Weitere Aktionen dieser Ansicht")
 
         # Rechte Kopfspalte: Fortschrittszeile oben, darunter die Labels der
@@ -39267,8 +39574,12 @@ class ListApp:
         if hasattr(self, "tree"):
             self.tree.tag_configure("today_source", foreground=self.theme["muted"],
                                     font=app_font(glide_design.FONT_SIZES["source"]))
-            self.tree.tag_configure("today_next", font=app_font(glide_design.FONT_SIZES["section"],"bold"),
+            # B13 (15.10.2026): Die hervorgehobene Zeile behält die normale
+            # Zeilengröße; nur ihr Titel ist fett (Zelltag unter Tk 9). Datum,
+            # Label und Herkunft bleiben nachgeordnet.
+            self.tree.tag_configure("today_next",
                                     background=mix_hex_colors(self.theme["card"],self.theme["ui_accent"],.06))
+            self.tree.tag_configure("today_next_title", font=self.next_task_title_font())
             self.tree.tag_configure("open", foreground=self.theme["text"])
             self.tree.tag_configure("priority_low", foreground=self.theme["priority_low"])
             self.tree.tag_configure("priority_medium", foreground=self.theme["priority_medium"])
@@ -40891,7 +41202,6 @@ class ListApp:
             return None
         due_width = 0
         label_width = 0
-        due_has_time = False
         # Die Messung lief über jede Zeile und rief für
         # jede `font.measure` auf – im Profilerlauf 164 ms je Aufbau und
         # damit der größte verbliebene Posten. Fälligkeiten und Labelspalten
@@ -40918,18 +41228,15 @@ class ListApp:
             if len(values) > 0 and values[0]:
                 due_text = str(values[0])
                 due_width = max(due_width, breite(due_text))
-                # Das Komma trennt Datum und Uhrzeit: „15.09.26, 10:30“.
-                if "," in due_text:
-                    due_has_time = True
             if len(values) > 1 and values[1]:
                 label_width = max(label_width, breite(str(values[1])))
         padding = self.tree_cell_padding(font)
         due_total = due_width + padding if due_width else 0
-        if due_has_time:
-            # Sobald irgendwo eine Uhrzeit steht, muss die vollständige Angabe
-            # in die Zeile passen – Datum und Uhrzeit, nie nur das Datum. Die
-            # Musterbreite ist genau dafür bemessen und gilt hier als Untergrenze.
-            due_total = max(due_total, self.due_column_width())
+        # B11 (15.10.2026): Bis 3.42.0 bekam die Spalte die volle Musterbreite
+        # („Datum, Uhrzeit · Bearbeitungstag“), sobald irgendwo eine Uhrzeit
+        # stand – in „Labels“ rund 275 px für „13.10.26, 11:00“, während die
+        # Titel früh abbrachen. Gemessen ist bereits der vollständige
+        # Zellentext mit Uhrzeit; er passt immer, der Rest gehört dem Titel.
         return (
             due_total,
             label_width + padding if label_width else 0,
@@ -41037,13 +41344,13 @@ class ListApp:
     EMPTY_STATE_MASCOT_SIZE = 56
 
     def empty_state_mascot(self, parent, existing=None, bg_key="card"):
-        """Gismo klein und still neben einem Leerzustand – None, wenn „Spielereien“ aus sind.
+        """Gismo klein und still neben einem Leerzustand – None, wenn seine Kachel ausgeblendet ist.
 
         Stufe 2 der Begleiter-Entscheidung (docs/decisions/ARBEITSBEGLEITER.md):
         ein statischer Auftritt ohne Sprechblase, ohne Führung, ohne Blinzeln.
         Er erklärt nichts, was nicht auch ohne ihn dasteht.
         """
-        if not self.settings.get("mascot_playful", True):
+        if not self.mascot_visible():
             return None
         if existing is None or not existing.winfo_exists() or existing.master is not parent \
                 or existing.bg_key != bg_key:
@@ -41175,8 +41482,28 @@ class ListApp:
             hinweis.configure(wraplength=breite - 48)
             hinweis.place(x=0, y=box[1] if box else 4, width=breite)
             hinweis.tk.call("raise", hinweis._w)
+            self._follow_empty_text(baum, hinweis)
         except tk.TclError:
             pass
+
+    def _follow_empty_text(self, baum, hinweis):
+        """Hauptaktion und Gismo rücken unter einen neu umbrochenen Leertext (B15).
+
+        Bis 3.42.0 blieb der Knopf stehen, wo er beim ersten Aufbau lag. Wurde
+        das Fenster danach schmaler, brach der Text auf mehr Zeilen um und
+        überdeckte den Knopf. Knöpfe dürfen nie überdeckt werden.
+        """
+        oben = self.empty_state_top(baum, hinweis)
+        knopf = getattr(self, "empty_action_button", None)
+        figur = getattr(self, "empty_state_figure", None)
+        knopf_sichtbar = (knopf is not None and knopf.winfo_exists() and knopf.master is baum
+                          and knopf.winfo_manager() == "place")
+        if knopf_sichtbar and int(float(knopf.place_info().get("y", 0))) != oben:
+            knopf.place_configure(y=oben)
+        if figur is not None and figur.winfo_exists() and figur.master is baum and figur.winfo_manager() == "place":
+            ziel = oben + 18 - self.EMPTY_STATE_MASCOT_SIZE // 2 if knopf_sichtbar else oben
+            if int(float(figur.place_info().get("y", 0))) != ziel:
+                figur.place_configure(y=ziel)
 
     # -----------------------------
     # Wiederholungen (Format 11)
@@ -43592,7 +43919,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 f"{len(board.get('connections', []))} Verbindung(en)")
             return
         if self.view_mode == self.HOME_VIEW:
-            self._set_stats_text(date.today().strftime("%d.%m.%Y"))
+            self._set_stats_text("")
             return
         if self.view_mode == "trash":
             folders = sum(1 for entry in self.trash if entry.get("kind") == self.TRASH_KIND_FOLDER)
@@ -46892,16 +47219,22 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             hinweis, getattr(self, "_hint_full_text", aktuell), self.HINT_MAX_LINES)
 
     def toggle_view_hints(self, event=None):
-        key = str(self.view_mode)
-        before = copy.deepcopy(self.settings.get("view_hints", {}))
-        self.settings.setdefault("view_hints", {})[key] = not glide_interaction.hints_visible(self.settings, key)
+        """Schaltet die ergänzenden Bedienhinweise aller Ansichten (B06)."""
+        before = self.settings.get(glide_interaction.HINTS_SETTING, glide_interaction.HINTS_DEFAULT)
+        self.settings[glide_interaction.HINTS_SETTING] = not glide_interaction.hints_visible(self.settings)
         if not self.save_settings():
-            self.settings["view_hints"] = before
+            self.settings[glide_interaction.HINTS_SETTING] = before
+        self.apply_hint_setting()
+        return "break"
+
+    def apply_hint_setting(self):
+        """Zeigt oder verbirgt die ergänzenden Hinweise in der offenen Ansicht."""
         self._tool_hint_key = None
         self.sync_tool_band_hint()
         self.sync_card_foot()
         self.update_page_chips()
-        return "break"
+        if self.view_mode == "trash":
+            self.refresh_trash_overview()
 
     def item_date_text(self, item):
         return glide_interaction.date_text(
@@ -47090,6 +47423,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     # --- Logo in der Kopfzeile (29.09.2026) -------------------------------
     HEADER_LOGO_GAP = 14
+    # Höhe der Kopfsymbole und der Windows-Menüknöpfe (B07): eine Höhe, eine
+    # Mittellinie. 38 px = Höhe der Titelzeile; mit 42 px wuchs der Kopf um
+    # 4 px, und die Bedienfläche überschritt bei 1280 × 800 die 15 % (Paket 3).
+    HEADER_CONTROL_HEIGHT = 38
 
     def header_logo_color(self):
         """Akzentfarbe der Oberfläche, auf dem Grund mindestens 3:1 (WCAG für Grafiken)."""
@@ -47099,17 +47436,30 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         return legible_on(farbe, [self.theme.get("bg")], minimum=3.0).upper()
 
     def header_logo_height(self):
-        font = self.cached_font("_header_subtitle_font", app_font(9, "bold"))
-        line = font.metrics("linespace") if font is not None else 18
-        return max(24, self.title_row.winfo_reqheight() + max(self.subtitle_row.winfo_reqheight(), line + 4)
-                   - self.header_logo_top_inset())
+        """Vom oberen Rand der Großbuchstaben bis zur Grundlinie der Unterzeile (B05).
+
+        Bis 3.42.0 reichte das Logo bis zum unteren Rand der Unterzeile und
+        stand damit deutlich unter „2 offen · 1 überfällig“. Die Grundlinie der
+        Unterzeile ist die optische Unterkante dieser Zeile.
+        """
+        font = self.cached_font("_header_subtitle_font", app_font(glide_design.FONT_SIZES["caption"], "bold"))
+        ascent = font.metrics("ascent") if font is not None else 11
+        zeile = font.metrics("linespace") if font is not None else 14
+        # Die Kennzahlenzeile steht senkrecht mittig in der Unterzeile, die
+        # wegen der Labelchips höher sein kann als eine Textzeile.
+        chips = self.page_chip_row.winfo_reqheight() if self.page_chip_row.winfo_children() else zeile
+        versatz = max(0, (self.subtitle_row.winfo_reqheight() - max(1, chips)) // 2)
+        return max(24, self.title_row.winfo_reqheight() + versatz + ascent - self.header_logo_top_inset())
 
     def header_logo_top_inset(self):
         font = self.cached_font("_header_cap_font", self.header_title_font())
         if font is None:
             return 4
         pixels = abs(font.actual("size")) * float(self.root.tk.call("tk", "scaling"))
-        return max(2, round(font.metrics("ascent") - pixels * 0.72) + CanvasLabel.LABEL_INSET_Y + 1)
+        # Der Titel steht senkrecht mittig in der Titelzeile, die seit B07
+        # auch die Kopfknöpfe trägt; sein Abstand nach oben zählt mit.
+        versatz = max(0, (self.title_row.winfo_reqheight() - self.title_label.winfo_reqheight()) // 2)
+        return versatz + max(2, round(font.metrics("ascent") - pixels * 0.72) + CanvasLabel.LABEL_INSET_Y + 1)
 
     def sync_header_logo(self):
         """Zeigt das Logo ab der ersten Breitenstufe und zeichnet es in Akzentfarbe und Höhe neu."""
@@ -47574,6 +47924,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 ),
                 tags=(tag,"today_next") if self.view_mode == self.PLAN_DAY_VIEW and parent == self.NEXT_TASK_SECTION_ROW_ID else (tag,),
             )
+            if self.view_mode == self.PLAN_DAY_VIEW and parent == self.NEXT_TASK_SECTION_ROW_ID:
+                self.mark_next_task_title(row_id)
 
             if self.view_mode == self.PLAN_DAY_VIEW:
                 self._today_source_titles[row_id] = source_title
@@ -47638,12 +47990,17 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             # fällig ist. Jede Aufgabe steht genau einmal; künftige
             # Fälligkeiten zeigt „Demnächst“. An einem anderen Tag bleiben
             # der Tagesplan und was an diesem Tag fällig ist.
+            # B12 (15.10.2026): Vor jedem Abschnitt steht schon der
+            # Aufklapppfeil. „▶“ vor „Nächste Aufgabe“ und „△“ vor „Verspätet“
+            # waren ein zweites Dreieck daneben – und ▶ blättert oben zum
+            # nächsten Tag. Pfeile bedeuten hier nur noch Auf-/Zuklappen und
+            # Blättern; die Überschrift sagt den Rest.
             if teile.naechste is not None:
-                abschnitt(self.NEXT_TASK_SECTION_ROW_ID, f"{self.ICONS['next']}  Nächste Aufgabe")
+                abschnitt(self.NEXT_TASK_SECTION_ROW_ID, "Nächste Aufgabe")
                 zeilen([teile.naechste], self.NEXT_TASK_SECTION_ROW_ID)
             if teile.verspaetet:
                 abschnitt(self.OVERDUE_SECTION_ROW_ID,
-                          f"{self.ICONS['overdue']}  Verspätet · {len(teile.verspaetet)} überfällig")
+                          f"Verspätet · {len(teile.verspaetet)} überfällig")
                 zeilen(teile.verspaetet, self.OVERDUE_SECTION_ROW_ID)
             if teile.liegen:
                 # Ohne Symbol: ◐ steht für „Demnächst“, und ein Symbol trägt
@@ -47653,10 +48010,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             if not entries:
                 # Ein leerer Tag bleibt als solcher erkennbar, auch wenn
                 # darüber oder darunter andere Abschnitte Zeilen zeigen.
+                # B11 (15.10.2026): Die Zeile steht in der Textspalte und wurde
+                # mit Wochentag, Datum und „heute“ abgeschnitten. Der Tag steht
+                # bereits im Titel; hier genügt die kurze Aussage.
                 self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, tags=("empty",), text=(
                     "Keine Aufgaben dieses Tages passen zu den aktuellen Filtern."
                     if self.has_active_filter()
-                    else f"Für {self.format_plan_day()} ist nichts eingeplant."))
+                    else "Heute ist nichts eingeplant." if self.plan_day() == date.today().isoformat()
+                    else "An diesem Tag ist nichts eingeplant."))
             tagesplan(teile.plan, teile.naechste is not None or bool(teile.verspaetet or teile.liegen))
             if teile.faellig:
                 heute_gezeigt = self.plan_day() == date.today().isoformat()
@@ -47688,7 +48049,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 self.tree.insert("", "end", iid=self.UPCOMING_LINK_ROW_ID, values=("", "", ""), tags=("empty",),
                                  text=f"{self.ICONS['in_progress']}  Demnächst · {anzahl} weitere "
                                       + ("Fälligkeit" if anzahl == 1 else "Fälligkeiten")
-                                      + " – Doppelklick öffnet")
+                                      # B06: Der Bedienweg ist ein ergänzender Hinweis.
+                                      + (" – Doppelklick öffnet" if glide_interaction.hints_visible(self.settings)
+                                         else ""))
             eingang = teile.eingang
         else:
             # „Demnächst“ (bis 3.33.5 „In Bearbeitung“) zeigt alle offenen
@@ -48011,7 +48374,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             empty_text = (
                 "Kein Eintrag im Papierkorb passt zur aktuellen Suche."
                 if query
-                else "Der Papierkorb ist leer. Gelöschte Punkte, Listen und Ordner landen hier und bleiben wiederherstellbar."
+                else glide_interaction.trash_empty_text(glide_interaction.hints_visible(self.settings))
             )
             self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=empty_text, tags=("empty",))
             self.finish_tree_refresh()
@@ -48980,6 +49343,27 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def task_row_font(self):
         """Schrift des Aufgabenbaums – dieselbe, aus der die Spaltenbreiten folgen."""
         return self.cached_font("_task_row_font", self.tree_font())
+
+    def next_task_title_font(self):
+        """Titel der nächsten Aufgabe in „Heute“: Zeilenschrift, nur fett (B13)."""
+        return (self.ui_font_family(), self.ui_font_size(1), "bold")
+
+    def mark_next_task_title(self, row_id):
+        """Setzt allein die Titelzelle fett; Tk 8.6 ohne Zelltags setzt die ganze Zeile fett."""
+        if getattr(self, "_tree_cell_tags_supported", True):
+            try:
+                self.tree.tk.call(str(self.tree), "tag", "cell", "add", "today_next_title", (row_id, "#0"))
+                return
+            except tk.TclError:
+                self._tree_cell_tags_supported = False
+        self.tree.item(row_id, tags=(*self.tree.item(row_id, "tags"), "today_next_title"))
+
+    def tree_cell_font(self, row, column):
+        """Messschrift einer Baumzelle – berücksichtigt die fette Titelzelle der nächsten Aufgabe."""
+        if "today_next" in self.tree.item(row, "tags") and (
+                column == "#0" or not getattr(self, "_tree_cell_tags_supported", True)):
+            return self.measurement_font(self.next_task_title_font())
+        return self.task_row_font()
 
     def task_text_available_width(self, depth=0):
         """Nutzbare Pixelbreite der Textspalte auf der angegebenen Ebene."""
@@ -58368,9 +58752,41 @@ Labels, Termine und Metadaten."""
         self.bind_optional(widget, "<TouchpadScroll>",
                            lambda event: self._on_mousewheel(event, target, precise=True))
 
+    def _scroll_text_like_class(self, widget, delta, precise=False):
+        """Scrollt ein Textfeld genau wie seine eigene Tk-Klassenbindung – in Pixeln (B16).
+
+        Über einem Seitenbild leitete Glide das Rad bis 3.42.0 zeilenweise an
+        den Text weiter. Die Textzeile nach einem Bild trägt dessen Höhe als
+        Abstand; ein Raststück übersprang deshalb Bild und erste Folgezeile.
+        Über dem Text selbst scrollt Tk 9 pixelweise. Liefert False ohne die
+        Tk-9-Hilfen; dann bleibt der bisherige Weg.
+        """
+        try:
+            menge = widget.tk.call("tk::ScaleNum", delta)
+            if precise:
+                widget.tk.call(widget._w, "yview", "scroll", menge, "pixels")
+            else:
+                widget.tk.call("tk::MouseWheel", widget._w, "y", menge, -4.0, "pixels")
+            return True
+        except tk.TclError:
+            return False
+
     def _on_mousewheel(self, event, widget, precise=False):
         self.note_scrolling()
         try:
+            if isinstance(widget, tk.Text):
+                if precise:
+                    packed = int(getattr(event, "delta", 0))
+                    vertical = packed & 0xffff
+                    if vertical >= 0x8000:
+                        vertical -= 0x10000
+                    if vertical and self._scroll_text_like_class(widget, -vertical, precise=True):
+                        return "break"
+                else:
+                    delta = (120 if event.num == 4 else -120) if getattr(event, "num", None) in (4, 5) else \
+                        int(getattr(event, "delta", 0) or 0)
+                    if delta and self._scroll_text_like_class(widget, delta):
+                        return "break"
             if precise:
                 # Tk 9 kodiert X/Y als zwei vorzeichenbehaftete 16-Bit-Werte.
                 packed = int(getattr(event, "delta", 0))
@@ -59581,7 +59997,7 @@ Labels, Termine und Metadaten."""
             # Die Menüs teilen nur die Titelzeile. Die Statuszeile darunter
             # behält die volle Breite für Tagesbilanz und Ziehrückmeldung.
             self.custom_menubar = self.register_theme_widget(
-                tk.Frame(self.title_row, bg=self.theme["bg"], height=30), "bg"
+                tk.Frame(self.title_row, bg=self.theme["bg"]), "bg"
             )
             self.custom_menubar.pack(side="right", padx=(8, 0))
             self.title_label.pack_forget()
@@ -59596,7 +60012,8 @@ Labels, Termine und Metadaten."""
                 # deshalb unter Windows robuster.
                 width = tkfont.Font(font=app_font(9)).measure(label) + 24
                 button = self.make_button(self.custom_menubar, label, None, "muted", width=width,
-                                          height=28, radius=10, font=app_font(9), outline=False)
+                                          height=self.HEADER_CONTROL_HEIGHT, radius=10, font=app_font(9),
+                                          outline=False)
                 button.command = lambda b=button, m=menu: self._post_custom_menu(b, m)
                 button.pack(side="left", fill="y", padx=(0, 4))
                 self.custom_menu_buttons.append(button)
@@ -59669,9 +60086,12 @@ Labels, Termine und Metadaten."""
                                 name="about_logo")
             self.draw_logo(zeichen, self.ABOUT_LOGO_HEIGHT, self.header_logo_color())
             zeichen.pack(side="left", anchor="n", padx=(0, 16))
+        # B08 (15.10.2026): Überschrift und Meldungstext teilen eine linke
+        # Kante. Ein Label trägt unter Windows standardmäßig Rand und Innenabstand
+        # (zusammen rund 3 px); der Text darunter steht randlos.
         heading = tk.Label(
             kopf, text=title, bg=self.theme["bg"], fg=self.theme[heading_color],
-            font=app_font(15, "bold"), anchor="w", justify="left",
+            font=app_font(15, "bold"), anchor="w", justify="left", bd=0, padx=0, highlightthickness=0,
         )
         heading.pack(fill="x", pady=(0, 0 if logo else 16), side="left" if logo else "top", anchor="w")
         container.bind("<Configure>", lambda event: heading.configure(wraplength=max(160, event.width)))
@@ -59801,12 +60221,22 @@ Labels, Termine und Metadaten."""
         mehreren Geräten – ist genau das der Einstieg.
         """
         return (
+            ("Neuerungen …", self.show_release_notes_dialog, "muted"),
             ("Arbeitsdateien verschieben …", self.show_data_folder_dialog, "ui_accent"),
             ("Standardordner benutzen", self.use_default_data_folder, "muted"),
             ("Ordner öffnen", lambda: self.open_external_path(BASE_DIR), "muted"),
         )
 
     ABOUT_LOGO_HEIGHT = 56
+
+    def show_release_notes_dialog(self):
+        """Alle Neuerungen nach Version (B18, 15.10.2026).
+
+        Dieselben Einträge wie die einmalige Karte „Neu in …“ auf der
+        Startseite – eine Quelle in release_notes.py. Nach „Gelesen“ und
+        Neustart bleiben sie hier erreichbar.
+        """
+        return self.themed_message_dialog("Neuerungen", glide_release.history_text(APP_VERSION), kind="info")
 
     def show_about_dialog(self):
         return self.themed_message_dialog(

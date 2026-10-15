@@ -1,5 +1,14 @@
 # Änderungsverlauf
 
+## In Vorbereitung – UI-/UX-Paket vom 15.10.2026 (keine Lieferung; Version beim Lieferweg, vorrangig vor 4.0.0 nach D50)
+
+- **Startseite:** Nach „Gelesen“ steht die Startseite sofort am Anfang (B01). „Startseite anpassen“ an der linken Rasterkante (B02). Gismo heißt fest so und behält Füttern/Spielen/Ruhen; Umbenennen und „Spielereien aus“ entfallen, Ausblenden über die Kachel (B03). Neue Kachel „Galeriebilder“ mit Vorschau aus vorhandenen Galerien, Teil des Standards, eigene Auswahl bleibt (B04).
+- **Kopfzeile:** Logo endet an der Grundlinie der Unterzeile (B05); kein Datum und kein „?“ mehr, ergänzende Bedienhinweise über einen Schalter in den Einstellungen (B06); Windows-Menüs und Kopfsymbole auf einer Mittellinie (B07); Lupe statt „Su“ aus einer Systemschrift (B10).
+- **Ansichten:** Fehlerprotokoll-Überschrift fluchtet mit dem Text (B08); Bereichspfeile und Papierkorbsymbol nach einer gemeinsamen Glyphenregel optisch zentriert (B09, `glyph_metrics.py`); Metadatenspalten auf Inhaltsbreite, Titel bekommen den Rest (B11); in „Heute“ keine doppelten Dreiecke, nur der Titel der nächsten Aufgabe fett (B12/B13); „Aufgabe“ in der Seiten-Blockleiste ohne Kästchen (B14).
+- **Bedienelemente geschützt:** Papierkorb zeigt „Der Papierkorb ist leer.“; der Knopf darunter rückt bei jedem Umbruch mit und wird nie überdeckt (B15). Mausrad über Seitenbildern scrollt pixelweise wie über Text (B16, vorher bis 389 px Sprung). Knöpfe und Felder übernehmen ihre Trägerfläche statt der Fensterfarbe; keine Kästen hinter Notiz-, Menü- und Inspektorelementen (B17/B19).
+- **Neuerungen** bleiben unter Hilfe › Über Glide nachlesbar, aus demselben Katalog (B18). Gestaltungsskill neutral als `design-richtlinien` mit Lizenz und Herkunft der Fremdquelle (B20).
+- **Prüfung:** Pflichtsuite `test_uiux_paket.py` (16 Fälle grün, gegen 3.42.0 alle rot), neue Unit-Tests für Glyphenmetrik, Hinweisschalter, Kacheln/Gismo, Neuerungsverlauf und Symbolregel; Namensprüfung `test_design_richtlinien.py`. Datenformat 25 unverändert; Einstellungen additiv (`show_hints`), Altwerte werden beim Laden übernommen bzw. entfernt.
+
 ## In Vorbereitung – 4.0.0 (keine Lieferung)
 
 - Native Linux-Lebensdauer nach Orca-Absturz abgesichert; externer Referenztest und Absturzdiagnose vorbereitet. Reader-Abschnittsnavigation, tatsächlicher MSAA-Client-HWND und Restaurierung originaler CI-Symlinks korrigiert; native Wiederholung offen.

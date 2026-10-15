@@ -47,7 +47,7 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
         for item in app.walk_items(source.get("items", [])):
             item["reminder"] = None
     app.refresh_reminder_status()
-    app.settings["view_hints"] = {key: True for key in ("list", "folder", "trash", "in_progress", app.TABLE_VIEW, app.PLAN_DAY_VIEW, app.LABELS_VIEW)}
+    app.settings["show_hints"] = True  # B06: ein Schalter für alle Ansichten
     app.show_info = app.show_warning = app.show_error = lambda *args, **kwargs: None
 
     def ruhe(runden=6):

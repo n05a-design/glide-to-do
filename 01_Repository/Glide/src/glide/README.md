@@ -60,6 +60,7 @@ Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorl
 | `render_retention.py` | Inhaltsabgleich und Lebensdauer wiederverwendbarer Ansichtsbausteine (Tk-frei) |
 | `logo_raster.py` | Geglättete transparente Logo-Raster und PNG-Ausgabe ohne Zusatzbibliothek (Tk-frei) |
 | `symbol_policy.py` | Vollständige Symbolauswahl nach tatsächlicher UI-Schriftabdeckung und lesbare Text-Rückfälle (Tk-frei) |
+| `glyph_metrics.py` | Optische Symbolmitte aus den Glyphenrahmen der mitgelieferten TrueType-Schrift; eine Regel statt Pixelversätzen (Tk-frei, B09) |
 | `motion.py` | Unterbrechbare zeitgesteuerte Übergänge mit vollständigem Abbau (Tk-frei) |
 | `task_editing.py` | Feldvertrag, Dreiwegevergleich und verständliche Bearbeitungskonflikte (Tk-frei) |
 | `daily_hints.py` | Optionale Tageshinweise, verpasste Tage, Später/Überspringen und persistente Zustellbelege ohne Tk |

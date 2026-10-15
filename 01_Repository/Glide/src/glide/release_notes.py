@@ -3,11 +3,24 @@
 Der Katalog nennt je Version höchstens fünf Neuerungen in einem Satz. Nach dem
 ersten Start ohne Vorgängerversion erscheint nichts: Ein Einstieg für neue
 Nutzer ist bewusst nicht gewählt (N06). „Gelesen“ merkt die Version lokal.
+
+Seit B18 (15.10.2026) liest „Hilfe › Über Glide › Neuerungen“ denselben
+Katalog: Was auf der Startseite weggeklickt wurde, bleibt dort nachlesbar.
+Pflege je Version: siehe docs/10_VEROEFFENTLICHUNG.md („Neuerungen“). Der
+Katalog ist keine Kopie des technischen CHANGELOG; Versionen ohne Eintrag
+bleiben ohne Eintrag, nachträglich wird nichts erfunden.
 """
 
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.43.0": (
+        "Startseite: neue Kachel Galeriebilder, „Startseite anpassen“ links, nach „Gelesen“ sofort oben.",
+        "Gismo heißt fest Gismo und spielt immer mit; wer ihn nicht möchte, blendet seine Kachel aus.",
+        "Ruhigere Kopfzeile mit Lupe zum Suchen, ohne Datum und „?“; Bedienhinweise über die Einstellungen.",
+        "Titel haben mehr Platz, Knöpfe werden nicht mehr überdeckt, Seiten mit Bildern scrollen gleichmäßig.",
+        "Diese Neuerungen bleiben unter Hilfe › Über Glide nachlesbar.",
+    ),
     "3.36.0": (
         "Startseite und geänderte Bibliothekskarten werden schneller aktualisiert.",
         "Die Einstellungen öffnen schneller und verwerfen ungespeicherte Eingaben weiterhin beim Abbrechen.",
@@ -98,3 +111,26 @@ def remember_seen(settings, current):
     neu = dict(settings or {})
     neu["release_notes_seen"] = str(current)
     return neu
+
+
+def history(current, catalog=None):
+    """Alle Neuerungen bis einschließlich `current`, neueste Version zuerst."""
+    katalog = CATALOG if catalog is None else catalog
+    neu = version_tuple(current)
+    treffer = []
+    for version, punkte in katalog.items():
+        stand = version_tuple(version)
+        if stand is not None and punkte and (neu is None or stand <= neu):
+            treffer.append((stand, version, list(punkte)[:5]))
+    return [(version, punkte) for _stand, version, punkte in sorted(treffer, reverse=True)]
+
+
+def history_text(current, catalog=None):
+    """Lesbarer Text für „Über Glide › Neuerungen“."""
+    eintraege = history(current, catalog)
+    if not eintraege:
+        return "Für diese Version sind keine Neuerungen hinterlegt."
+    abschnitte = []
+    for version, punkte in eintraege:
+        abschnitte.append(f"Version {version}\n" + "\n".join(f"• {punkt}" for punkt in punkte))
+    return "\n\n".join(abschnitte)

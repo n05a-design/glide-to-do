@@ -1,7 +1,15 @@
----
-name: apple-design
-description: Apple's approach to interface design and fluid, physical motion, translated for the web. Use when building or reviewing gesture-driven UI, spring animations, drag/swipe/sheet interactions, momentum and interruptible transitions, translucent materials and depth, typography (optical sizing, tracking, leading), reduced-motion, or the design foundations (feedback, spatial consistency, restraint) behind Apple-style interfaces.
----
+<!--
+Stand 15.10.2026 · Glide 3.42.0 · Fremdreferenz zu den Design Richtlinien (B20), kein aktiver Skill.
+
+Herkunft: Skill „apple-design“ aus https://github.com/emilkowalski/skills (MIT,
+Copyright (c) 2026 Emil Kowalski, Lizenztext in ../LICENSE). Fassung des
+Inhabers ohne den Abschnitt „Initial Response“, am 12.10.2026 als Projekt-Skill
+eingerichtet (Commit 634dfb9). Am 15.10.2026 nur der Skillkopf (name,
+description) entfernt und diese Herkunftsangabe ergänzt; der Text darunter ist
+unverändert. Er ist für das Web geschrieben: Grundsätze gelten, CSS-/JS-Beispiele
+nicht auf Tk übertragen. Verbindlich für Glide ist allein
+01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md.
+-->
 
 # Apple Design
 

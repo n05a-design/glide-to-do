@@ -1596,11 +1596,13 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         figur = app.empty_state_figure
         assert figur is not None and figur.winfo_manager() == "place" and figur.state_name == "ruhig"
         assert not figur._jobs, "Kein Blinzeln im Leerzustand"
-        app.settings["mascot_playful"] = False
+        # B03 (15.10.2026): Ausblenden geht nur noch über Gismos Startseitenkachel.
+        verborgen = list(app.settings.get("home_tiles_hidden", []))
+        app.settings["home_tiles_hidden"] = verborgen + ["mascot"]
         app.refresh_tree()
         root.update()
         assert figur.winfo_manager() == ""
-        app.settings["mascot_playful"] = True
+        app.settings["home_tiles_hidden"] = verborgen
         app.refresh_tree()
         root.update()
         # Leere Suche: „Suche zurücksetzen“ leert den Filter.

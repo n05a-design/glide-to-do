@@ -69,14 +69,14 @@ class Einstiegspruefung(unittest.TestCase):
         self.assertTrue(any("(R13)" in f for f in old.fehler))
 
     def test_skill_files_need_no_stand_line_but_keep_r3(self):
-        path = ".claude/skills/apple-design/SKILL.md"
-        skill = self.check(path, "---\nname: apple-design\ndescription: Gestaltung\n---\n\n"
-                                 "# Apple Design\n\nWWDC 2018, Tabelle 1.0 / 0.4\n")
+        path = ".claude/skills/design-richtlinien/SKILL.md"
+        skill = self.check(path, "---\nname: design-richtlinien\ndescription: Gestaltung\n---\n\n"
+                                 "# Design Richtlinien\n\nWWDC 2018, Tabelle 1.0 / 0.4\n")
         self.assertEqual(skill.fehler, [])
         self.assertEqual(skill.ohne_stand, 1)
         stale = self.check(path, "# Skill\n\nAktueller Entwicklungsstand: Glide 3.32.2\n")
         self.assertTrue(any("(R3)" in f for f in stale.fehler))
-        other = self.check(".claude/skills/apple-design/NOTES.md", "# Notizen\n")
+        other = self.check(".claude/skills/design-richtlinien/NOTES.md", "# Notizen\n")
         self.assertTrue(any("(R1)" in f for f in other.fehler))
 
     def test_historical_banner_still_cannot_claim_current_old_version(self):
@@ -128,7 +128,9 @@ class Einstiegspruefung(unittest.TestCase):
             nested = root/'packaging/README.md';nested.parent.mkdir();nested.write_text('# Paketierung')
             subprocess.run(['git','-C',str(root),'add','README.md','packaging/README.md'],check=True)
             self.assertEqual(list(stand.dokumente(nested.parent)),[nested])
-            self.assertEqual(list(stand.dokumente(root)),[top,nested])
+            # Dieser Vertrag prüft den vollständigen Bestand, nicht die
+            # plattformabhängige Sortierung von WindowsPath und PosixPath.
+            self.assertCountEqual(list(stand.dokumente(root)),[top,nested])
 
     def test_nested_git_worktrees_have_their_own_documentation_scope(self):
         with tempfile.TemporaryDirectory() as folder:

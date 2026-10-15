@@ -1,6 +1,6 @@
 # Regeln für die Dokumentenpflege
 
-Stand 13.10.2026 · Glide 3.42.0 · Datenformat 25
+Stand 15.10.2026 · Glide 3.42.0 · Datenformat 25
 
 Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder gelöscht anstatt immer nur archiviert und `_Z` zu schreiben“) und ersetzt alle früheren Archivierungsregeln.
 
@@ -14,6 +14,7 @@ Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder
 - **Leere Ordner** und Ordner, die nur README und Archiv enthalten, werden aufgelöst.
 - **Synchronisationskopien** (`<Name>-<Gerätename>.md`, etwa von OneDrive) sind keine Dokumente: mit dem Original zusammenführen, dann löschen. Eine Kopie im Index ist kein Ersatz für die Zusammenführung.
 - **Belege bleiben Belege:** Nutzeraufträge, Messwerte und Prüfergebnisse innerhalb der Aufbewahrung werden nicht umetikettiert oder nachträglich geändert.
+- **Nutzerreferenzen für offene Anforderungen:** Der Auftrag vom 15.10.2026 verlangt, das [UI-/UX-Paket](../../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md) mit Originalauftrag und 28 Screenshots für spätere Agenten zu erhalten. Das sind Eingangsreferenzen, keine neu erzeugten QA-Fensterbilder. Solange Anforderungen oder ihre Referenzfunktion offen sind, nicht mit der Drei-Versionen-Grenze für QA-Aufnahmen entsorgen. Originalbilder wegen Kontoangaben lokal und vom Git-Upload ausgeschlossen halten; bei Übergaben ausdrücklich mitgeben. Nach Abschluss Zweck und Verlinkung prüfen, keine ungeprüfte Sammellöschung.
 
 ## Dokumente und ihre Zuständigkeit
 
@@ -24,6 +25,8 @@ Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder
 | Analyse (Funktionen, Oberfläche, Entscheidungen, Nutzung, Abgleich Dokumentation ↔ Code) | `00_Arbeitsvorbereitung/Glide_Analyse.md` |
 | Markt und Vorbilder | `00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md` |
 | Manuelle Prüfung (Mac, Windows, Linux) | `00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md` |
+| Ausführbarer UI-/UX-Nutzerauftrag und Eingangsreferenzen vom 15.10.2026 | `00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md`; Originalauftrag, Bildzuordnung und Manifest daneben; Aufgabenstatus ausschließlich im Entwicklungsplan |
+| Konkrete Gestaltungsvorgaben des Benutzers, Informationshierarchie, Buttonschutz | [DESIGN_RICHTLINIEN.md](DESIGN_RICHTLINIEN.md); bestehende Produkt-/Architekturregeln referenzieren, nicht kopieren |
 | Entscheidungen, Leitgedanken des Inhabers, Arbeitsablauf | [ARBEITSRICHTUNG.md](ARBEITSRICHTUNG.md) |
 | Produktgrenzen und Prinzipien | [01_PRODUCT_CONSTRAINTS.md](01_PRODUCT_CONSTRAINTS.md) |
 | Architektur, Performance-Regeln, Tk-Fallstricke | [02_ARCHITECTURE.md](02_ARCHITECTURE.md) |

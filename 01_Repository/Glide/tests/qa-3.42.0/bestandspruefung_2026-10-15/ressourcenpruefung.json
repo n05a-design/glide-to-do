@@ -1,0 +1,155 @@
+{
+  "pruefdatum": "2026-10-15",
+  "art": "Lesende Bestandspruefung ohne GUI, Build oder Nutzerdatenzugriff; nur dieser Ergebnisbericht wird geschrieben",
+  "version": "3.42.0",
+  "versionskonstanten": {
+    "APP_VERSION": "3.42.0",
+    "SETTINGS_VERSION": 2,
+    "TEMPLATE_FORMAT_VERSION": 2,
+    "DATA_SCHEMA_VERSION": 25
+  },
+  "fixtures": {
+    "ergebnis": "20 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite",
+    "status": "bestanden",
+    "echte_importpruefung": "hier nicht ausgefuehrt"
+  },
+  "versionenkonsistenz": {
+    "ergebnis": "VERSION, App, Hauptsuite und CHANGELOG: 3.42.0; Datenformat 25",
+    "status": "bestanden"
+  },
+  "lieferstand_07": {
+    "abweichungen": [],
+    "code_dateien": 63,
+    "ressourcen_quelle": 146,
+    "ressourcen_lieferung": 146,
+    "zusaetzlich": [],
+    "fehlend": []
+  },
+  "showcase": {
+    "manifest": "01_Repository/Glide/tests/fixtures/showcase/manifest.json",
+    "lieferkopien": {
+      "Glide-Showcase.glidebackup": true,
+      "Glide-Showcase_App.glideapp": true,
+      "Glide-Showcase.glidetemplates": true,
+      "manifest.json": true,
+      "Showcase_starten.pyw": true,
+      "README.md": true
+    },
+    "manifestdateien": {
+      "Glide-Showcase.glidebackup": {
+        "bytes_korrekt": true,
+        "sha256_korrekt": true
+      },
+      "Glide-Showcase_App.glideapp": {
+        "bytes_korrekt": true,
+        "sha256_korrekt": true
+      },
+      "Glide-Showcase.glidetemplates": {
+        "bytes_korrekt": true,
+        "sha256_korrekt": true
+      }
+    },
+    "originalbilder": {
+      "Haus-in-weiß-1114004174.jpeg": true,
+      "Architektin-171340787.jpeg": true,
+      "Helm-auf-Zeichnung-23388604.jpeg": true,
+      "Haus-in-gelb-666269411.jpeg": true,
+      "Haus-auf-Statistik-1172003382.jpeg": true,
+      "Tipps-in-der-Einrichtung-02.png": true
+    }
+  },
+  "windows": {
+    "manifest": "01_Repository/Glide/tests/qa-3.42.0/eigenstaendige_pakete_2026-10-13/windows_abschluss_bau.json",
+    "paket": "01_Repository/Glide/build/windows/Glide-3.42.0",
+    "json_hashfeld": "package_sha256: Objekt aus relativem Paketpfad -> SHA-256",
+    "quelle_hashfeld": "input.sha256: Objekt aus relativem src/glide-Pfad -> SHA-256",
+    "manifestdateien": 102,
+    "vorhandene_dateien": 102,
+    "fehlende_manifestdateien": [],
+    "abweichende_manifestdateien": [],
+    "bauinput_abweichungen": [
+      {
+        "datei": "resources/logo/glide-app-icon-klein.svg",
+        "art": "zeilenenden",
+        "passt_nach_crlf_normalisierung": true
+      },
+      {
+        "datei": "resources/logo/glide-app-icon.svg",
+        "art": "zeilenenden",
+        "passt_nach_crlf_normalisierung": true
+      },
+      {
+        "datei": "resources/logo/glide-logo-klein.svg",
+        "art": "zeilenenden",
+        "passt_nach_crlf_normalisierung": true
+      },
+      {
+        "datei": "resources/logo/glide-logo.svg",
+        "art": "zeilenenden",
+        "passt_nach_crlf_normalisierung": true
+      },
+      {
+        "datei": "resources/timezones/LICENSE-CLDR.txt",
+        "art": "zeilenenden",
+        "passt_nach_crlf_normalisierung": true
+      },
+      {
+        "datei": "resources/timezones/LICENSE-iana.txt",
+        "art": "zeilenenden",
+        "passt_nach_crlf_normalisierung": true
+      },
+      {
+        "datei": "resources/timezones/provenance.json",
+        "art": "zeilenenden",
+        "passt_nach_crlf_normalisierung": true
+      },
+      {
+        "datei": "resources/timezones/windowsZones.xml",
+        "art": "zeilenenden",
+        "passt_nach_crlf_normalisierung": true
+      }
+    ],
+    "status": "bestanden",
+    "grenze": "Keine native Start-, Signatur- oder Symlinkpruefung. Historische native Liefernachweise werden nicht ersetzt.",
+    "zeilenendenbewertung": "Acht Textressourcen im Bauinput unterscheiden sich ausschliesslich LF/CRLF; alle passen nach CRLF-Normalisierung. Fertiges Paket 102/102 Dateihashes korrekt."
+  },
+  "macos": {
+    "manifest": "01_Repository/Glide/tests/qa-3.42.0/eigenstaendige_pakete_2026-10-13/mac_abschluss_bau.json",
+    "paket": "01_Repository/Glide/build/macos/Glide.app",
+    "json_hashfeld": "package_sha256: Objekt aus relativem Paketpfad -> SHA-256",
+    "quelle_hashfeld": "input.sha256: Objekt aus relativem src/glide-Pfad -> SHA-256",
+    "manifestdateien": 330,
+    "vorhandene_dateien": 327,
+    "fehlende_manifestdateien": [
+      "Contents/Frameworks/Python.framework/Versions/3.14/Python",
+      "Contents/Frameworks/Python.framework/Versions/3.14/Resources/Info.plist",
+      "Contents/Frameworks/Python.framework/Versions/3.14/_CodeSignature/CodeResources"
+    ],
+    "abweichende_manifestdateien": [],
+    "bauinput_abweichungen": [],
+    "status": "lokal unvollstaendig",
+    "grenze": "Keine native Start-, Signatur- oder Symlinkpruefung. Historische native Liefernachweise werden nicht ersetzt.",
+    "bewertung": "Aktuelle Windows-Kopie: 327/330 Manifestdateien vorhanden und hashgleich; drei Python.framework-Dateien fehlen. Vollstaendiges natives Mac-Paket heute hier nicht bestaetigt."
+  },
+  "logo_master_laufzeit": {
+    "01_Logo/Glide-Logo-01.svg": true,
+    "01_Logo/Glide-Logo-klein.svg": true,
+    "03_Fav-Icon/App-Icon-transparent-02.svg": true,
+    "03_Fav-Icon/App-Icon-klein.svg": true,
+    "01_Logo/Glide-Logo.png": true,
+    "03_Fav-Icon/App-Icon-transparent.png": true
+  },
+  "vorlagen": {
+    "katalog_vorlagen": 16,
+    "standard_vorlagen_inkl_tagebuch": 20,
+    "reproduziert_identisch": true,
+    "format": 2,
+    "payload_versionen": [
+      "3.42.0"
+    ],
+    "payload_formate": [
+      25
+    ],
+    "isolierung": "Temporaeres GLIDE_DATA_DIR, kein Tk-Fenster, keine Katalogdatei geschrieben"
+  }
+}

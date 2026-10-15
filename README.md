@@ -14,6 +14,8 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 - **Offen:** verbleibende bestätigte Sprintpakete, manuelle Bedien-/DPI-/Mehrmonitor-/Screenreaderabnahme sowie die gesonderten Veröffentlichungstore (u. a. Lizenz, öffentliche Signatur und Marke).
 - **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe; bestätigte Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
 
+**Lokale Bestandsprüfung 15.10.2026:** [Prüfbericht](01_Repository/Glide/tests/qa-3.42.0/bestandspruefung_2026-10-15/README.md). Gelieferte lokale Basis 3.42.0 / `05483a8`; GitHub `main` liegt mit 4.0-Vorbereitung 13 Commits voraus. Quellstand und 07 bytegleich, Windows-Paket vollständig geprüft; die lokale Windows-Kopie des Mac-Bundles ist mit 327/330 Dateien unvollständig. Frühere native Mac-Nachweise bleiben historische Belege. [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) und [UI-/UX-Auftrag](00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md) gehören zum neuen Paket.
+
 ## Schnellstart
 
 Die gelieferten Entwicklungspakete starten unter macOS aus `01_Repository/Glide/build/macos/Glide.app` und unter Windows aus `01_Repository/Glide/build/windows/Glide-3.42.0/Glide.exe`, jeweils mit eingebettetem Python/Tcl-Tk. Bau und Prüfgrenzen: [Paketierung](01_Repository/Glide/packaging/README.md#eigenständige-entwicklungspakete-paket-7).

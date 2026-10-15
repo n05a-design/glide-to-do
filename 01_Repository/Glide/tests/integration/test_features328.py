@@ -95,7 +95,8 @@ with tempfile.TemporaryDirectory(prefix="glide-features328-") as folder:
         # Blockwerkzeuge; seit G29/3.33.15 auch echte Aufgabenzeilen.
         # Formatieren bleibt über Rechtsklick, Formatleiste und Kürzel.
         assert isinstance(editor, mod.NoteEditor)
-        assert labels == ["Überschrift", "Liste", "Nummeriert", f"{app.ICONS['task_open']} Aufgabe", "Zitat", "Code", "Bild", "Mehr"], labels
+        # B14 (15.10.2026): „Aufgabe“ ohne Kästchen, wie alle übrigen Knöpfe der Leiste.
+        assert labels == ["Überschrift", "Liste", "Nummeriert", "Aufgabe", "Zitat", "Code", "Bild", "Mehr"], labels
 
         # Gismo aktualisiert beim Füttern nur seinen Karteninhalt. Ein kompletter
         # Startseiten-Neuaufbau erzeugte besonders im Dopamin-Design einen

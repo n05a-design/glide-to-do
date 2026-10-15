@@ -315,7 +315,8 @@ with tempfile.TemporaryDirectory(prefix="glide-features322-") as folder:
         # Kacheln zusätzlich aus – hier geht es nur um die Bereinigung.
         gepruft = app.normalize_personal_settings({"home_tile_order": ["stats", "gibtsnicht", "clock"],
                                                    "home_tiles_hidden": ["week", "falsch"],
-                                                   "home_columns": "17", "home_tiles_330": True})
+                                                   "home_columns": "17", "home_tiles_330": True,
+                                                   "home_tiles_gallery": True})  # B04: Übergang ebenso ausgenommen
         assert gepruft["home_tile_order"] == ["stats", "clock"]
         assert gepruft["home_tiles_hidden"] == ["week"]
         assert gepruft["home_columns"] == "auto"

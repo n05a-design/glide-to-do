@@ -1,0 +1,425 @@
+{
+  "auftragsdatum": "2026-10-15",
+  "beobachtungsreferenz": "Glide 3.42.0; Nutzerangabe 15.10.2026, 13:42 Uhr Europe/Berlin; keine verifizierte Aufnahmezeit der Einzelbilder",
+  "quelle": "28 vom Benutzer bereitgestellte Screenshots in Chat-Reihenfolge",
+  "originale_unveraendert": true,
+  "originalbilder_nur_lokal": true,
+  "bilder": [
+    {
+      "id": "S01",
+      "nummer_im_chat": 1,
+      "datei": "bilder/01-glide-startseite-vorher.png",
+      "originaldatei": "codex-clipboard-416bd076-3a61-4558-824d-0eb1c7c97fb8.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B01",
+        "B03",
+        "B04",
+        "B07",
+        "B09",
+        "B10"
+      ],
+      "breite_px": 1888,
+      "hoehe_px": 940,
+      "bytes": 365128,
+      "sha256": "d9057ebf5602a355e0e6f0c795192786833c620df9380fe40850df72957aa262"
+    },
+    {
+      "id": "S02",
+      "nummer_im_chat": 2,
+      "datei": "bilder/02-glide-menue-datum-hinweise.png",
+      "originaldatei": "codex-clipboard-6bd28738-5d7a-4e50-a9a6-cd6e2abf7a56.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B06",
+        "B07"
+      ],
+      "breite_px": 330,
+      "hoehe_px": 71,
+      "bytes": 7174,
+      "sha256": "6cbf8aa78faa0bd951745a5b7ce54d9da9726c41406ca1235c21ea926286d75f"
+    },
+    {
+      "id": "S03",
+      "nummer_im_chat": 3,
+      "datei": "bilder/03-glide-kopfzeile-suche.png",
+      "originaldatei": "codex-clipboard-05f9eefb-c133-4484-a067-e12fdf8d27c4.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B06",
+        "B07",
+        "B10"
+      ],
+      "breite_px": 578,
+      "hoehe_px": 78,
+      "bytes": 12877,
+      "sha256": "6d60ec6a8721e0da59b190f3c488b10e5b403b9d9906f7a6a3b31377622f5f28"
+    },
+    {
+      "id": "S04",
+      "nummer_im_chat": 4,
+      "datei": "bilder/04-glide-seiten-blockleiste.png",
+      "originaldatei": "codex-clipboard-e0a97e01-05d6-4a2f-9714-d288a43d9ef7.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B14"
+      ],
+      "breite_px": 729,
+      "hoehe_px": 45,
+      "bytes": 9599,
+      "sha256": "eda4305ad1a65a6d9e55debc759350e8c011eb38cd3e5e44f5866e43780d0735"
+    },
+    {
+      "id": "S05",
+      "nummer_im_chat": 5,
+      "datei": "bilder/05-glide-bildseite-vor-scrollen.png",
+      "originaldatei": "codex-clipboard-df52ac67-8173-4e10-a58d-cce888513655.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B16"
+      ],
+      "breite_px": 810,
+      "hoehe_px": 828,
+      "bytes": 177991,
+      "sha256": "cd1fadf28ef3fdef61085ea9bf7ef4cb72b00a7d3395f216fe80ec6526d49920"
+    },
+    {
+      "id": "S06",
+      "nummer_im_chat": 6,
+      "datei": "bilder/06-glide-bildseite-nach-scrollen.png",
+      "originaldatei": "codex-clipboard-7df2583a-a801-4d23-b437-41455e97e102.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B16"
+      ],
+      "breite_px": 815,
+      "hoehe_px": 820,
+      "bytes": 258270,
+      "sha256": "a196313f23a31f7528167c4d4f43f2645e51d2251e5bf8d63d55671514ad613a"
+    },
+    {
+      "id": "S07",
+      "nummer_im_chat": 7,
+      "datei": "bilder/07-glide-notiz-aktionshintergruende.png",
+      "originaldatei": "codex-clipboard-2183c20e-79b7-4049-a29e-500ecb4d6a71.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B17",
+        "B19"
+      ],
+      "breite_px": 581,
+      "hoehe_px": 166,
+      "bytes": 11536,
+      "sha256": "5130e5350d99f01d00ea812b0dac7b2eef6754704f8ad0e388842cb91b5b3178"
+    },
+    {
+      "id": "S08",
+      "nummer_im_chat": 8,
+      "datei": "bilder/08-glide-logo-hoehe.png",
+      "originaldatei": "codex-clipboard-c2b09bc4-7c27-4fb1-9762-6a9d93f35c6c.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B05"
+      ],
+      "breite_px": 658,
+      "hoehe_px": 88,
+      "bytes": 41880,
+      "sha256": "fb618e12889a96af746b675791df0c752df4d584b3ff66022de739edacbfe28a"
+    },
+    {
+      "id": "S09",
+      "nummer_im_chat": 9,
+      "datei": "bilder/09-glide-punkteditor-geteilte-ansicht.png",
+      "originaldatei": "codex-clipboard-79012a9d-39a7-4204-9066-5701f58db9b1.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "A02",
+        "B05",
+        "B17",
+        "B19"
+      ],
+      "breite_px": 1662,
+      "hoehe_px": 1607,
+      "bytes": 648613,
+      "sha256": "384bde0dd9fdfdff075090bb32ec41d7a51f8f1ed29cd13995b3476a2addcec8"
+    },
+    {
+      "id": "S10",
+      "nummer_im_chat": 10,
+      "datei": "bilder/10-microsoft-to-do-kompakt.png",
+      "originaldatei": "codex-clipboard-b464e755-e9d5-471d-ac06-24dcb02d55da.png",
+      "anwendung": "Microsoft To Do",
+      "anforderungen": [
+        "A01"
+      ],
+      "breite_px": 507,
+      "hoehe_px": 515,
+      "bytes": 179423,
+      "sha256": "7072910ab01867b28574aa264a3beeefc13039f85c072c6c361d5db5d9d3f0f5"
+    },
+    {
+      "id": "S11",
+      "nummer_im_chat": 11,
+      "datei": "bilder/11-microsoft-to-do-normal.png",
+      "originaldatei": "codex-clipboard-dece0087-cef5-44bc-aebd-83fe5fb26b9b.png",
+      "anwendung": "Microsoft To Do",
+      "anforderungen": [
+        "A01"
+      ],
+      "breite_px": 1206,
+      "hoehe_px": 941,
+      "bytes": 636848,
+      "sha256": "244a9eeb4827f4f8fcaa7eaf05dc53a173dca3c2adefdda7a9567e558f36e4f2"
+    },
+    {
+      "id": "S12",
+      "nummer_im_chat": 12,
+      "datei": "bilder/12-notion-fenster-tabs-leere-seite.png",
+      "originaldatei": "codex-clipboard-0ef5d785-eec7-4be7-bb3a-9d550a9d4342.png",
+      "anwendung": "Notion",
+      "anforderungen": [
+        "A02",
+        "A03"
+      ],
+      "breite_px": 1919,
+      "hoehe_px": 1030,
+      "bytes": 121081,
+      "sha256": "6c8776806de7f30723dcd13e68b0e06fa70ee0fb34788ea9a5ed9fa9be1143e6"
+    },
+    {
+      "id": "S13",
+      "nummer_im_chat": 13,
+      "datei": "bilder/13-notion-ansichten-menue.png",
+      "originaldatei": "codex-clipboard-19a3477b-d7ba-4c89-a028-2ae25ebdce7d.png",
+      "anwendung": "Notion",
+      "anforderungen": [
+        "A03"
+      ],
+      "breite_px": 860,
+      "hoehe_px": 289,
+      "bytes": 22765,
+      "sha256": "e829e3a7645de770616c24beaa84d1d1a1af5212ac2441e5498227e6b3c45038"
+    },
+    {
+      "id": "S14",
+      "nummer_im_chat": 14,
+      "datei": "bilder/14-notion-seitenaktionen.png",
+      "originaldatei": "codex-clipboard-fba12b13-ae81-4e3f-8c9d-b713a1b92fa4.png",
+      "anwendung": "Notion",
+      "anforderungen": [
+        "A03"
+      ],
+      "breite_px": 272,
+      "hoehe_px": 604,
+      "bytes": 41570,
+      "sha256": "6f653ecd2cdcaf9de1d4ed0411db2ec00b9ffc3a22fccfc684798ebead96e063"
+    },
+    {
+      "id": "S15",
+      "nummer_im_chat": 15,
+      "datei": "bilder/15-notion-seitenkopf.png",
+      "originaldatei": "codex-clipboard-3ec7d6c6-b16d-4810-a131-6a0797a5d3d5.png",
+      "anwendung": "Notion",
+      "anforderungen": [
+        "A03"
+      ],
+      "breite_px": 380,
+      "hoehe_px": 115,
+      "bytes": 7351,
+      "sha256": "0f575461f1ddb36744d0ec40437cad55d3f04c21f651f70de4b7f64f86d47621"
+    },
+    {
+      "id": "S16",
+      "nummer_im_chat": 16,
+      "datei": "bilder/16-notion-blockaktionen.png",
+      "originaldatei": "codex-clipboard-09571d60-c266-4da4-a7c3-2b586f62a5b3.png",
+      "anwendung": "Notion",
+      "anforderungen": [
+        "A03"
+      ],
+      "breite_px": 1039,
+      "hoehe_px": 493,
+      "bytes": 36272,
+      "sha256": "3fe8c2f807da1f0084b51706f322eab745827a52bdc5f76c1440a4ef4fe8d6fc"
+    },
+    {
+      "id": "S17",
+      "nummer_im_chat": 17,
+      "datei": "bilder/17-notion-blocktypen.png",
+      "originaldatei": "codex-clipboard-c9014047-c079-468f-adf8-eaefe10236ab.png",
+      "anwendung": "Notion",
+      "anforderungen": [
+        "A03"
+      ],
+      "breite_px": 492,
+      "hoehe_px": 724,
+      "bytes": 66253,
+      "sha256": "b4cd5f08511f2c06b3ab7fdd228e7b7bf06af2b3d8e6def05e0b1d8f5ed3cda5"
+    },
+    {
+      "id": "S18",
+      "nummer_im_chat": 18,
+      "datei": "bilder/18-glide-heute-pfeile.png",
+      "originaldatei": "codex-clipboard-39f4e4b8-7413-4079-9a30-219789ca5bf4.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B12",
+        "B13"
+      ],
+      "breite_px": 559,
+      "hoehe_px": 226,
+      "bytes": 14979,
+      "sha256": "3eec2e87d98e28ce613880be9899243a794d0fb0bce22996de7af5ed877f3cf3"
+    },
+    {
+      "id": "S19",
+      "nummer_im_chat": 19,
+      "datei": "bilder/19-glide-naechste-aufgabe-metadaten.png",
+      "originaldatei": "codex-clipboard-5447db52-0fa4-41da-bb64-328e094d1599.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B11",
+        "B12",
+        "B13"
+      ],
+      "breite_px": 1578,
+      "hoehe_px": 66,
+      "bytes": 9939,
+      "sha256": "36af27a24630f4b7e32b317510d9f14f87a6edaad8e8257b065fdfc561cd1f9e"
+    },
+    {
+      "id": "S20",
+      "nummer_im_chat": 20,
+      "datei": "bilder/20-glide-startseite-anpassen.png",
+      "originaldatei": "codex-clipboard-2087b853-4a79-4ec5-8856-cee3fe24182d.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B02",
+        "B03",
+        "B04"
+      ],
+      "breite_px": 1891,
+      "hoehe_px": 856,
+      "bytes": 324441,
+      "sha256": "7e856a313b3ed595ef098da05f9b0b2f1e69105081f61d9abd70aeccf00c3c8a"
+    },
+    {
+      "id": "S21",
+      "nummer_im_chat": 21,
+      "datei": "bilder/21-glide-papierkorb-ueberdeckung.png",
+      "originaldatei": "codex-clipboard-d928dc04-6b7f-45c4-b4f1-4d37d51bf7fd.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B15"
+      ],
+      "breite_px": 838,
+      "hoehe_px": 365,
+      "bytes": 53555,
+      "sha256": "28bed6ebd22e58e82db22847957ed5ae298aff5ce36a4634932a2ff5705749f3"
+    },
+    {
+      "id": "S22",
+      "nummer_im_chat": 22,
+      "datei": "bilder/22-glide-labels-titel-abgeschnitten.png",
+      "originaldatei": "codex-clipboard-2e67bd0c-4833-4858-bed7-fbba06f30857.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B11"
+      ],
+      "breite_px": 858,
+      "hoehe_px": 992,
+      "bytes": 155532,
+      "sha256": "7f803ba10613038355d9f1da9f68566cd1bcc133bf467a75ddc0c233877785da"
+    },
+    {
+      "id": "S23",
+      "nummer_im_chat": 23,
+      "datei": "bilder/23-glide-fehlerprotokoll-flucht.png",
+      "originaldatei": "codex-clipboard-8906534c-bf1a-42f7-969f-fb917642ff77.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B08"
+      ],
+      "breite_px": 606,
+      "hoehe_px": 256,
+      "bytes": 10234,
+      "sha256": "35805ddfc5944538845d44c41dcd6668abcb654eac3f4183fe09d2c1c9c2b185"
+    },
+    {
+      "id": "S24",
+      "nummer_im_chat": 24,
+      "datei": "bilder/24-glide-seitenleiste-symbolhoehen.png",
+      "originaldatei": "codex-clipboard-e817dd0e-29a3-467c-ab8e-e19accfae6e3.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B09"
+      ],
+      "breite_px": 236,
+      "hoehe_px": 505,
+      "bytes": 15197,
+      "sha256": "bc014890c5d06d74cec9a20cd0c1351b397e0269c0d0be522ed9d3c3e508d3ef"
+    },
+    {
+      "id": "S25",
+      "nummer_im_chat": 25,
+      "datei": "bilder/25-github-projektuebersicht.png",
+      "originaldatei": "codex-clipboard-346a4868-be2a-4ad0-9e41-4bbe1cb4c384.png",
+      "anwendung": "GitHub",
+      "anforderungen": [
+        "B20",
+        "B21",
+        "B22"
+      ],
+      "breite_px": 3247,
+      "hoehe_px": 2031,
+      "bytes": 452244,
+      "sha256": "e662224c863192ba007ff086950c154825e2805958e8329004b2c577894260e4"
+    },
+    {
+      "id": "S26",
+      "nummer_im_chat": 26,
+      "datei": "bilder/26-github-readme-funktionen.png",
+      "originaldatei": "codex-clipboard-9fc170c3-48a2-4df2-a0bf-c4cf05db024c.png",
+      "anwendung": "GitHub",
+      "anforderungen": [
+        "B21",
+        "B22"
+      ],
+      "breite_px": 1128,
+      "hoehe_px": 2016,
+      "bytes": 381988,
+      "sha256": "c2d3d327c33a0b148549b25780e4304c803d6a90504728a3091d2099b671fde4"
+    },
+    {
+      "id": "S27",
+      "nummer_im_chat": 27,
+      "datei": "bilder/27-github-readme-ablage-regeln.png",
+      "originaldatei": "codex-clipboard-c6308940-d0ee-4053-aa4d-8bfd8c2c001e.png",
+      "anwendung": "GitHub",
+      "anforderungen": [
+        "B21",
+        "B22"
+      ],
+      "breite_px": 1129,
+      "hoehe_px": 1825,
+      "bytes": 355291,
+      "sha256": "73b732e799fd0c827dfb399ef6c2e20b747ab348587854c201e1d4d5964cecde"
+    },
+    {
+      "id": "S28",
+      "nummer_im_chat": 28,
+      "datei": "bilder/28-glide-startseite-kartenlayout.png",
+      "originaldatei": "codex-clipboard-dc83948e-976b-4cd7-8e90-159bdb7664d3.png",
+      "anwendung": "Glide",
+      "anforderungen": [
+        "B04",
+        "B09",
+        "B11"
+      ],
+      "breite_px": 1023,
+      "hoehe_px": 880,
+      "bytes": 184589,
+      "sha256": "efc2b02a1d5efe1f5494865c4217030259f13ef0c337eacc6a2cfa697a587d82"
+    }
+  ]
+}

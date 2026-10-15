@@ -56,6 +56,22 @@ class Neuerungen(unittest.TestCase):
                 self.assertLess(len(punkt), 140, punkt)
         self.assertLess(rn.version_tuple(rn.BEFORE_CATALOG), min(rn.version_tuple(v) for v in rn.CATALOG))
 
+    def test_history_lists_every_version_up_to_current_newest_first(self):
+        # B18 (15.10.2026): „Über Glide › Neuerungen“ liest denselben Katalog.
+        verlauf = rn.history("1.0.2", KATALOG)
+        self.assertEqual(verlauf, [("1.0.2", ["b", "c"]), ("1.0.1", ["a"])])
+        self.assertEqual([v for v, _ in rn.history("2.0.0", KATALOG)], ["1.1.0", "1.0.2", "1.0.1"])
+        self.assertEqual(len(rn.history("2.0.0", KATALOG)[0][1]), 5)
+        # Nach „Gelesen“ bleibt alles nachlesbar: Der Verlauf hängt nicht an der gemerkten Version.
+        self.assertEqual(rn.history("1.0.2", KATALOG), rn.history("1.0.2", KATALOG))
+
+    def test_history_text_has_version_headings_and_no_invented_entries(self):
+        text = rn.history_text("1.0.2", KATALOG)
+        self.assertEqual(text, "Version 1.0.2\n• b\n• c\n\nVersion 1.0.1\n• a")
+        self.assertNotIn("1.0.3", rn.history_text("1.1.0", KATALOG))
+        self.assertEqual(rn.history_text("0.9", KATALOG), "Für diese Version sind keine Neuerungen hinterlegt.")
+        self.assertIn("Version 3.36.0", rn.history_text("3.42.0"))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -189,9 +189,10 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
         assert app.table_button.active_fill == app.theme["active"]
         app.set_trash_view()
         ruhe()
-        assert app.button_frame.winfo_manager() == "" and app.card_foot_mode() is None
+        # B06 (15.10.2026): Der Hinweisschalter gilt für alle Ansichten.
+        assert app.button_frame.winfo_manager() == "" and app.card_foot_mode() == "hint"
         app.toggle_view_hints();ruhe()
-        assert app.card_foot_mode() == "hint"
+        assert app.card_foot_mode() is None
 
         pruefe_auswahlumbruch()
 

@@ -1,12 +1,12 @@
 # Architektur – Glide
 
-Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+Stand 15.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
 
 Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, Performance-Regeln und die teuer gelernten Tk-Fallstricke. Zusammengeführt aus Architektur, Projektübergabe, Entwicklungsnotizen und den technischen Teilen der Funktionsverträge 45–79 (03.10.2026); die Vorfassungen trägt Git. Verhalten der Funktionen: [Funktionen](20_FUNKTIONEN.md). Datenformat: [Daten und Migration](06_DATA_BACKUP_MIGRATION.md).
 
 ## 1. Aufbau
 
-- **Laufzeit:** Python 3.14 mit Tk 9 ist die Referenz. Referenz-Mac mit Python 3.14.5/Tk 9.0.3, native Windows-Prüfung mit Tk 9.0.4, Linux/Xvfb mit Tk 8.6; welche Version auf welcher Plattform automatisch vollgeprüft ist, steht ausschließlich im [QA-Bericht](07_QA_BERICHT.md). Menschliche Abnahme offen. Python 3.12/3.13 mit Tk 8.6 starten, sind aber eingeschränkt: keine `nsimage`- und SVG-Vorschauen, keine Systemmitteilungen über `tk sysnotify`, Logo nur als ungeglättete Fläche, App-Symbol ungefiltert verkleinert; Herkunftszelle in Heute ohne eigene gedämpfte Textfarbe. Ältere Laufzeiten (Python vor 3.12, Tk vor 8.6) weist `runtime_check.py` seit 3.33.20 vor jedem Datenzugriff mit einer Meldung ab (AB08).
+- **Laufzeit:** Python 3.14 mit Tk 9 ist die Referenz. Referenz-Mac mit Python 3.14.5/Tk 9.0.3, native Windows-Prüfung mit Tk 9.0.4, Linux/Xvfb mit Tk 8.6; welche Version auf welcher Plattform automatisch vollgeprüft ist, steht ausschließlich im [QA-Bericht](07_QA_BERICHT.md). Menschliche Abnahme offen. Python 3.12/3.13 mit Tk 8.6 starten, sind aber eingeschränkt: keine nativen `nsimage`- und SVG-Vorschauen oder Systemmitteilungen über `tk sysnotify`; Herkunftszelle in Heute ohne eigene gedämpfte Textfarbe. Seit 3.37.0 erscheinen Logo und App-Symbole auch unter Tk 8.6 geglättet: RGBA-Logo in exakter Zielgröße, vorberechnete Symbole in 16/32/64/256 px. Ältere Laufzeiten (Python vor 3.12, Tk vor 8.6) weist `runtime_check.py` seit 3.33.20 vor jedem Datenzugriff mit einer Meldung ab (AB08).
 - **Kanonischer Quellbaum:** `src/glide/`. `app.pyw` enthält die Klasse `ListApp`, die Daten, Ansichten und Dialoge koordiniert. Seit D17 entsteht jede neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests unter `tests/unit`; `ListApp` ruft sie auf.
 - **Startbare Kopie:** `07_Python-Versionen` (bytegleich zu `src/glide`, `glide_start.py` heißt dort `Schnellstart.pyw`) und das macOS-Entwicklungsbundle `build/macos/Glide.app` (lokal, nicht versioniert). Beide entstehen nur in einer Produktionsrunde über `scripts/pflege/abgleich_07.py` und `packaging/macos/baue_app.py` mit SHA-256-Abgleich.
 - **Keine Laufzeitabhängigkeit** außer der Standardbibliothek. Einzige mitgelieferte Bibliothek: tkinterdnd2 unter `src/glide/vendor` (optional, beim ersten Ziehen aus Finder/Explorer geladen; [Entscheidung](decisions/ABHAENGIGKEIT_TKDND.md)).
@@ -22,7 +22,7 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 | `backdrop.py` | Hintergrundverläufe: Entwürfe, Lesezone, PNG schreiben/lesen | 3.30 |
 | `page_markdown.py` | Markdown ↔ Seitendokument | 3.30 |
 | `image_preview.py` | `PreviewCache`: Vorschauen über Tk 9 `nsimage`, SVG, Windows WIC, `sips` (macOS) | 3.30 |
-| `logo.py` | Logo aus den SVG-Mastern mit Akzentfarbe, Canvas-Rückfall unter Tk 8.6 | 3.30 |
+| `logo.py` | Logo aus den SVG-Mastern mit Akzentfarbe; seit 3.37.0 geglätteter RGBA-Rückfall über `logo_raster.py` unter Tk 8.6 | 3.30 |
 | `schema_backups.py` | Formatsicherung vor Migrationen mit Dateistandprüfung (T2) | 3.33.0 |
 | `sidebar_policy.py` | Zuordnung, Inhaltsgrenzen, Vorlagenprüfung und Reihenfolge der vier Seitenleistenbereiche; `CONTAINED` lässt datierte Zeichnungen im Notizbuch zu | 3.33.1 |
 | `svg_geometry.py` | SVG-Pfade einschließlich verkürzter kubischer Kurven, CSS-/Attributfarben, transparente Innenkonturen | 3.33.1 |
@@ -55,6 +55,7 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 | `render_retention.py` | Lebensdauer, Inhaltsabgleich und stabile Bindungen wiederverwendbarer Ansichtsbausteine (Tk-frei) | 3.36.0 |
 | `logo_raster.py` | Geglättete transparente Logo-Raster und PNG-Ausgabe ohne Zusatzbibliothek (Tk-frei) | 3.37.0 |
 | `symbol_policy.py` | Vollständige Symbolauswahl nach tatsächlicher UI-Schriftabdeckung und lesbare Text-Rückfälle (Tk-frei) | 3.37.0 |
+| `glyph_metrics.py` | Optische Symbolmitte aus den Glyphenrahmen der mitgelieferten TrueType-Schrift; eine Regel statt Pixelversätzen (Tk-frei, B09) | UI-/UX-Paket |
 | `motion.py` | Unterbrechbare zeitgesteuerte Übergänge mit vollständigem Abbau (Tk-frei) | 3.38.0 |
 | `task_editing.py` | Feldvertrag, Dreiwegevergleich und verständliche Bearbeitungskonflikte (Tk-frei) | 3.38.0 |
 | `daily_hints.py` | Optionale Tageshinweise, verpasste Tage, Später/Überspringen und persistente Zustellbelege ohne Tk | 3.39.0 |

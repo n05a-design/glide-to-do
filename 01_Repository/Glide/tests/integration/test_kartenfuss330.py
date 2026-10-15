@@ -36,7 +36,7 @@ with tempfile.TemporaryDirectory(prefix="glide-kartenfuss-") as ordner:
     root.report_callback_exception = lambda *args: fehler.append(args)
     app = mod.ListApp(root)
     # Geprüft wird hier ausdrücklich der aufgeklappte Hinweiszustand (U02).
-    app.settings["view_hints"] = {key: True for key in ("list", "folder", "trash", "in_progress", app.TABLE_VIEW, app.PLAN_DAY_VIEW, app.LABELS_VIEW)}
+    app.settings["show_hints"] = True  # B06: ein Schalter für alle Ansichten
     app.show_info = app.show_warning = app.show_error = lambda *args, **kwargs: None
 
     def ruhe(runden=8):

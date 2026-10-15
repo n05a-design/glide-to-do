@@ -1,8 +1,8 @@
 # Glide · aktiver Showcase
 
-Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25
+Stand 15.10.2026 · Glide 3.42.0 · Aufgabenformat 25
 
-Das fiktive Projekt **Parkquartier** zeigt fertige, bearbeitbare Arbeitsdokumente: Briefing, Abstimmungsnotiz, Aufgabenliste, Bildgalerie, Pixelskizze, Routinen und Projekttagebuch. Die sechs Originalmotive stammen unverändert aus `20_Grafik_Master/06_Beispielbilder`. Sie illustrieren Themen; sie zeigen kein reales Verkaufsobjekt. Personen und Projektangaben sind fiktiv.
+Das fiktive Projekt **Parkquartier** zeigt fertige, bearbeitbare Arbeitsdokumente: Briefing, Abstimmungsnotiz, Aufgabenliste, Bildgalerie, Pixelskizze, Routinen und Projekttagebuch. Die sechs Originalmotive liegen unverändert unter `tests/fixtures/showcase/bilder`; Herkunft und Prüfsummen stehen in `quellen.json`. Seit 03.10.2026 liegen sie ausschließlich in dieser Fixture-Ablage, zuvor zusätzlich im Grafikmaster. Sie illustrieren Themen; sie zeigen kein reales Verkaufsobjekt. Personen und Projektangaben sind fiktiv.
 
 ## Starten und weiterbenutzen
 
@@ -28,8 +28,8 @@ Die Wiederherstellung eines App-Backups ersetzt den gewählten Bestand und seine
 3. **Bildwelt:** sechs Bilder mit Titeln und Kommentaren; Doppelklick zeigt ein Motiv groß. Die Originale sind im Backup enthalten.
 4. **Vermarktung · Umsetzung:** Steckbrief, Bildauswahl, Entwurf und Übergabe mit Wichtigkeit, Labels, Beschreibung, Checkliste, Anhängen, Bearbeitungstag, Uhrzeit, Aufwand, erfasster Zeit und Abhängigkeiten. Liste, Tabelle und Pinnwand ausprobieren.
 5. **Projektpinnwand:** den obersten Showcase-Ordner öffnen. Fünf Karten, zwei beschriftete Verbindungen und ein benannter Bereich; die Pixelskizze ist als Dokumentverweis angeheftet.
-6. **Mein Tag:** Steckbrief um 09:00 und Bildauswahl um 10:30. Die Fälligkeit ist gesondert gesetzt. Ziehen in einen bezeichneten Terminkontext wirkt auf dessen Feld.
-7. **Notiz und Tagebuch:** Aufgaben stehen oberhalb des Protokolls. Tagebuchnotizen tragen Datum, Stimmung, Ort und Favorit. Die archivierte Vorbereitung ist über die Archivansicht zurückholbar.
+6. **Heute:** Steckbrief um 09:00 und Bildauswahl um 10:30. Die Fälligkeit ist gesondert gesetzt. Ziehen in einen bezeichneten Terminkontext wirkt auf dessen Feld.
+7. **Notiz und Notizbuch:** Aufgaben stehen oberhalb des Protokolls. Notizbuchseiten tragen Datum, Stimmung, Ort und Favorit. Die archivierte Vorbereitung ist über die Archivansicht zurückholbar.
 8. **Pixel-Werkstatt:** In „Zeichnungen“ die Pixelskizze öffnen. Bücher/Seiten, Notizbuch und Zeichnung haben jetzt eigene Bereiche; die gemischte Projektarbeit bleibt in Listen. In den Einstellungen Bereiche ausblenden und ihre vollständigen Zweige weiter in Listen öffnen. 32 × 32 Zeichnung mit PNG-Referenz, 16 × 16 Symbol und ICO-Anhang. GPL-/HEX-Paletten, CSV-Steckbrief und TXT-Übergabe liegen an der Umsetzungsliste.
 9. **Vorlagen:** `{{Wochentag}}` und `{{KW}}` werden automatisch gefüllt; nur `{{Projekt}}` wird abgefragt. Die Notizvorlage enthält Aufgaben und einen Bildanhang.
 10. **Tagesabschluss:** offene Tagesaufgaben umplanen und den Rückblick in die Tagesnotiz übernehmen. Die Wochenstart-Checkliste öffnet sich nach vollständigem Abhaken wieder.
@@ -40,7 +40,7 @@ Alle fünf Dokumentarten, alle drei Ordnertypen, alle vier Punktarten, alle sech
 
 Ein Showcase kann nicht jede Bedienhandlung als gespeicherten Inhalt darstellen. Automatisierte Prüfungen kontrollieren zusätzlich Import/Export, ID-Zuordnung, Bilder, Klappblock, Undo, Vorlagen und Neustart. Klappmechanismen, Drag-and-drop, Datumsaktionen, Pixel-/Palettenexport und Performance werden durch die vorhandenen Pflichtsuiten geprüft. OS-Druckdialog, physische Maus/Trackpad, Windows/Linux und Screenreader bleiben manuelle Abnahme.
 
-Backups behalten ihre konkreten Termine beim Import. Dieser Stand wurde am **01.10.2026** erzeugt; später erscheinen alte Aufgaben überfällig. Zum Auffrischen aus `01_Repository/Glide`:
+Backups behalten ihre konkreten Termine beim Import. Der Bearbeitungstag dieses Bestands ist gemäß `manifest.json` **13.10.2026**; später erscheinen alte Aufgaben überfällig. Zum Auffrischen aus `01_Repository/Glide`:
 
 ```sh
 GLIDE_QA_HINTERGRUND=1 PYTHONPATH=tests/tools/hintergrund python3 -B tests/tools/showcase.py
@@ -49,4 +49,4 @@ python3 -B scripts/pflege/showcase_abgleich.py
 
 Der Abgleich prüft die Demo vor der Auslieferung und ersetzt die Basisdateien; frühere Fassungen hält Git vor. Dein bearbeiteter `Arbeitsstand` bleibt erhalten. Für eine neue Demo den bisherigen Arbeitsstand bei geschlossener App umbenennen und den Starter erneut öffnen.
 
-Mobile Nutzung, GIF-Animationsexport, allgemeine Typkonvertierung und die noch offene Richtungswahl sind nicht Bestandteil der aktuellen App. Die bestehenden Entscheidungen D01–D08 bleiben maßgeblich.
+Mobile Nutzung, GIF-Animationsexport und allgemeine Typkonvertierung gehören nicht zur aktuellen App. Maßgeblich sind die aktuelle Arbeitsrichtung mit D01–D49 (D49 mit Korrekturvorbehalt) und der Entwicklungsplan; Menschen-/Readerabnahmen bleiben getrennt offen.

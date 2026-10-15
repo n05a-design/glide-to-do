@@ -1,6 +1,6 @@
 # Arbeitsregeln für Claude Code – Glide
 
-Stand 13.10.2026 · Glide 3.42.0
+Stand 15.10.2026 · Glide 3.42.0 · lokale gelieferte Basis; Upstream-Abgleich vor Produktionsarbeit
 
 Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf die verbindlichen Projektregeln und ergänzt, was für Claude-Code-Sitzungen im Repository gilt. Regeln nicht hier doppeln, sondern an der Quelle pflegen.
 
@@ -16,16 +16,16 @@ Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf 
 ## Lesereihenfolge
 
 1. [01_Repository/Glide/AGENTS.md](01_Repository/Glide/AGENTS.md) – verbindliche Arbeitsregeln und Abschlusskriterium
-2. [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) – Stand, verbindliche Entscheidungen D01–D48, beauftragte Arbeit, Abnahme
+2. [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) – Stand, Entscheidungen D01–D49 (D49 als Auslegung mit Korrekturvorbehalt), beauftragte Arbeit, Abnahme
 3. [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) – Aufgaben mit Status, Stufen, Ziele; Verhalten der Funktionen in [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md)
 4. [Dokumentenpflege](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md) vor jeder Dokumentänderung: ein Thema, ein Dokument; zusammenführen und löschen statt archivieren (Auftrag vom 03.10.2026)
 5. Erst dann die betroffene Codestelle **und ihre Aufrufer** (Funktionsnamen suchen, nicht Zeilennummern)
 
 ## Ergänzungen für diese Umgebung
 
-- **Auftrag:** Nur den ausdrücklich beauftragten Schnitt umsetzen; offene Auswahl nicht selbst entscheiden. Bereits Entschiedenes (Q1–Q5, D01–D48, Produktgrenzen) nicht erneut vorlegen. Der neue Sprint wird gemeinsam geplant (Entwicklungsplan §15); Runden 1–6 sind entschieden, acht Versionen in §15.7/§15.8 durch „ja“ bestätigt (D44); Phase 2 beginnt mit 3.36.0. Neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests (D17).
+- **Auftrag:** Den ausdrücklich beauftragten Schnitt vollständig umsetzen; offene Produktauswahl nicht selbst entscheiden. Bereits Entschiedenes (Q1–Q5, D01–D49, Produktgrenzen; D49 unter seinem dokumentierten Korrekturvorbehalt) nicht erneut vorlegen. Pakete 1–7 einschließlich FP-00 sind geliefert, Paket 8 / 4.0.0 ist vorbereitet und noch nicht geliefert. Für das neue UI-/UX-Paket gelten [Ausführungsprompt](00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md) und [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md). Neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests (D17).
 - **Daten:** Nie echte Nutzerdaten; `GLIDE_DATA_DIR` vor dem Import auf einen temporären Ordner setzen. Werkzeuge mit `python3 -B` starten.
-- **Skills:** Projekt-Skills liegen unter `.claude/skills/<Name>/SKILL.md` und werden in jeder Claude-Code-Sitzung erkannt, auch in der Cloud, aber nur bei passender Aufgabe geladen; lose `.md`-Dateien oder `skills-main/` im Projektordner erkennt Claude nicht. Fremdskills mit ihrer Lizenz ablegen und nicht um Glide-Regeln ergänzen; die bleiben in den verbindlichen Quellen. `apple-design` (MIT, `emilkowalski/skills`; Fassung des Inhabers ohne den Abschnitt „Initial Response“) ist für das Web geschrieben: Grundsätze übernehmen, CSS-/JS-Beispiele nicht auf Tk übertragen.
+- **Skills:** Projekt-Skills liegen unter `.claude/skills/<Name>/SKILL.md` und werden in jeder Claude-Code-Sitzung erkannt, auch in der Cloud, aber nur bei passender Aufgabe geladen; lose `.md`-Dateien oder `skills-main/` im Projektordner erkennt Claude nicht. Fremdskills mit ihrer Lizenz ablegen und nicht um Glide-Regeln ergänzen; die bleiben in den verbindlichen Quellen. Aktiver Gestaltungsskill ist `design-richtlinien` (B20, 15.10.2026): ein Einstieg, der auf [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) verweist. Der frühere Fremdskill (MIT, `emilkowalski/skills`; Fassung des Inhabers ohne „Initial Response“) liegt unverändert mit Lizenz unter `referenzen/`; er ist für das Web geschrieben: Grundsätze übernehmen, CSS-/JS-Beispiele nicht auf Tk übertragen.
 - **Linux-Container:**
   - Möglich sind die CI-Grundstufe (`python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` in `01_Repository/Glide`; braucht ein Python mit tkinter) mit Stand-, Link- und Ablageprüfung, Startprobe unter Xvfb (Tk 8.6) und `scripts/pflege/messung_speicherweg.py`.
   - Nicht möglich sind macOS/Tk-9-Abnahme, Bundlebau und physische Bedienung. Ergebnisse als „Linux/Tk 8.6, künstliche Daten“ kennzeichnen.

@@ -7,6 +7,11 @@
 # Pinnwand-Vorschau. Bis 3.33.1 waren es zwölf; „Heute“ erschien dabei
 # viermal (Begrüßung mit Tagesziel, Heute, Nächste Aufgabe, Uhr mit nächstem
 # Termin). Alle übrigen Kacheln bleiben wählbar.
+#
+# B04 (15.10.2026, D50): Galeriebilder bekommen eine eigene Kachel neben den
+# Zeichnungen. Sie gehört zum Standard, der damit acht Kacheln zeigt. Eine
+# eigene, gespeicherte Auswahl bleibt unverändert: Dort steht die neue Kachel
+# zunächst ausgeblendet und lässt sich über „Startseite anpassen“ einblenden.
 DEFINITIONS = (
     ("clock", "Uhr, Datum und nächster Termin", 1, True, False),
     ("welcome", "Begrüßung, Tagesziel und Schnellzugriff", 3, True, False),
@@ -39,12 +44,25 @@ DEFINITIONS = (
     ("boardpreview", "Pinnwand-Vorschau", 2, False, True),
     # 3.30: Zeichnungen als Bilder, angeheftete Seiten und Filter.
     ("drawings", "Zeichnungen", 2, False, True),
+    ("gallery", "Galeriebilder", 2, False, True),
     ("pinned", "Angeheftet", 2, False, True),
     ("filters", "Angeheftete Filter", 2, False, False),
     ("stats", "Dein aktueller Bestand", 6, False, False),
 )
 KEYS = tuple(key for key, _titel, _gewicht, _breit, _standard in DEFINITIONS)
 STANDARD = tuple(key for key, _titel, _gewicht, _breit, standard in DEFINITIONS if standard)
+# Kacheln, die nach dem Entstehen eigener Auswahlen hinzukamen – mit einer
+# Marke je Generation wie `home_tiles_330` (3.30). Fehlt eine solche Kachel in
+# einer gespeicherten Reihenfolge, kannte die Auswahl sie noch nicht: Sie wird
+# dort genau einmal ausgeblendet, danach entscheidet die Person.
+NEW_TILE_MARKERS = (("home_tiles_gallery", ("gallery",)),)
+
+# B03 (15.10.2026, D50): Der Begleiter heißt fest Gismo und behält seine
+# Spielereien. Wer ihn nicht möchte, blendet seine Kachel aus; damit steht er
+# auch nicht neben Leerzuständen. Umbenennen und „Spielereien aus“ entfallen.
+MASCOT_KEY = "mascot"
+MASCOT_NAME = "Gismo"
+RETIRED_MASCOT_SETTINGS = ("mascot_name", "mascot_playful")
 
 
 def _known(values):
@@ -100,3 +118,44 @@ def today_sections(visible):
     """Was die Kachel „Heute“ zusätzlich zeigt, ohne andere sichtbare Kacheln zu doppeln."""
     visible = set(visible)
     return {"goal": "welcome" not in visible, "next": "focus" not in visible}
+
+
+def hide_new_tiles_once(settings):
+    """Blendet neue Kacheln in einer gespeicherten eigenen Auswahl genau einmal aus (B04).
+
+    Ohne eigene Reihenfolge gilt der Standard, der die neue Kachel bereits
+    enthält. Die Marke verhindert ein erneutes Ausblenden, nachdem die Person
+    die Kachel eingeblendet hat. Liefert ein neues Wörterbuch.
+    """
+    result = dict(settings or {})
+    for marke, schluessel in NEW_TILE_MARKERS:
+        if result.get(marke) is True:
+            continue
+        ordnung = result.get("home_tile_order")
+        if isinstance(ordnung, list) and ordnung:
+            versteckt = list(result.get("home_tiles_hidden") or []) if isinstance(
+                result.get("home_tiles_hidden"), list) else []
+            for key in schluessel:
+                if key not in versteckt and key not in ordnung:
+                    versteckt.append(key)
+            result["home_tiles_hidden"] = versteckt
+        result[marke] = True
+    return result
+
+
+def retire_mascot_settings(settings):
+    """Entfernt frühere Namens- und Abschaltwerte des Begleiters (B03).
+
+    Ein gespeicherter Name oder „Spielereien aus“ aus 3.42.0 und früher wirkt
+    nicht mehr; Sichtbarkeit steuert allein die Kachel. Liefert ein neues
+    Wörterbuch, das Original bleibt unverändert.
+    """
+    result = dict(settings or {})
+    for key in RETIRED_MASCOT_SETTINGS:
+        result.pop(key, None)
+    return result
+
+
+def mascot_visible(hidden):
+    """Gismo erscheint – auf der Startseite und neben Leerzuständen –, solange seine Kachel nicht ausgeblendet ist."""
+    return MASCOT_KEY not in (hidden if isinstance(hidden, list) else [])

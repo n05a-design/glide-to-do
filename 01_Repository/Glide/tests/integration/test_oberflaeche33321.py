@@ -151,7 +151,8 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
         leiste = app._mascot_care_bar
         kachel = leiste.master
         texte = [w.text for w in descendants(leiste) if isinstance(w, mod.RoundedButton)]
-        assert texte == ["Füttern", "Spielen", "Ruhen", "Spielereien aus", "Benennen"], texte
+        # B03 (15.10.2026): kein Umbenennen und kein Spielereien-Schalter mehr.
+        assert texte == ["Füttern", "Spielen", "Ruhen"], texte
         assert leiste.winfo_manager() == "", "Pflegeknöpfe im Ruhezustand sichtbar"
         hoehe = kachel.winfo_height()
         neubau = []
