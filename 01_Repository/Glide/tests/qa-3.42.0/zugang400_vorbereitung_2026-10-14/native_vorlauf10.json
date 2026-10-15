@@ -1,0 +1,35 @@
+{
+  "run": 38741910227,
+  "commit": "8463c98f395217e1bcfb61fc19983bb804d1ee1f",
+  "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38741910227",
+  "ergebnis": "failure",
+  "app_sha256": "f1c01b3cba1f2ffe1fdb1c649e076ed348434709e1b3a6623250e7b6def748fa",
+  "linux": {
+    "runtime_tcl_gui": "grün: eigene Runtime, Tcl4 und GUI10",
+    "atspi": "Unicode/Caret/ACTIVE/Disabled plus genau ein tatsächlicher FOCUSED-Knoten im verschachtelten Container grün",
+    "orca": "Erfassung/Suche gesprochen, danach nativer Prozessabsturz",
+    "app_exitcode_vor_aufraeumen": -11,
+    "letzter_tk_fokus": {
+      "pfad": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!frame.!frame2.!frame.!roundedbutton5",
+      "klasse": "Canvas"
+    }
+  },
+  "windows": {
+    "runtime_tcl_gui": "grün: eigene Runtime, Tcl4 und GUI10",
+    "nvda": "Vorheriges unknown beseitigt: Arbeitsbereiche: Heute samt Tree-Rolle und Wert gesprochen; Heute erreicht. Weitere Taskauswahl scheitert an Pos1 auf Abschnittszeile.",
+    "nvda_fehler": "('Angebot pruefen', 'Mein Tag: Aufgaben  tree view  Keine Aufgabe ausgewählt.  focused')",
+    "msaa": "Gegenprobe erreicht falsche Windows-Rahmenhülle und erhält VT_DISPATCH statt native Kindkennung; Tk-Client-HWND korrigiert, Lebensdauerkriterien offen.",
+    "msaa_fehler": "(0, 9, -549316416)",
+    "paketprozess_exitcode": 0,
+    "paketkern_exitcode": 0,
+    "acl_regeln_wiederhergestellt": [
+      true,
+      false,
+      true,
+      true,
+      true
+    ],
+    "acl": "Zwei abweichende Dateien laut gepinntem CPython-Gitbaum originale Symlinks (Modus120000); Restaurierung soll Linkhandle ohne Zielverfolgung verwenden. Native Bestätigung offen."
+  },
+  "nachlauf": "Linux: typgerechte Create/Configure-Callbackdaten, ausschließlich GObject-finalisierte Lebensdauer und DEFUNCT; externer Referenztest über dynamische Nachbarn und Widgetersatz. Native Absturzdiagnose einschalten. Readeraufgabenauswahl durch reale Abschnittsnavigation, drei neue reine Fälle. MSAA-Client-HWND, Windows-Reparse-ACL am eigenen Linkhandle. Native11 offen."
+}

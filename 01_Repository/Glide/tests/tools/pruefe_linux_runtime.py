@@ -14,15 +14,19 @@ def child(exchange):
     if not os.environ.get('GLIDE_DATA_DIR'):
         raise ValueError('Temporärer Testdatenordner fehlt.')
     import tkinter as tk
+    import faulthandler
+    faulthandler.enable()
     sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'src/glide'))
     from core_accessibility import bind_entry
     root = tk.Tk()
+    errors = []
+    root.report_callback_exception = lambda _kind, error, _trace: errors.append(str(error))
     root.title('Glide – künstliche AT-SPI-Textprobe')
     root.geometry('500x200')
     text = '  Angebot prüfen 🏠\nZweite Zeile'
     container = tk.Frame(root)
     container.pack()
-    field = tk.Text(container, height=4)
+    field = tk.Text(container, name='field', height=4)
     field.insert('1.0', text)
     field.pack()
     bind_entry(field, 'AT-SPI-Prüffeld', text=True)
@@ -39,6 +43,35 @@ def child(exchange):
             name='AT-SPI-Prüffeld', readonly_name='Geschütztes Prüffeld', readonly_text=readonly_text, caret=3, tk=str(root.tk.call('package', 'provide', 'Tk')),
             native_backend=field._glide_accessibility.supported)), encoding='utf-8')
     root.after(300, ready)
+    phase = 0
+    def lifecycle():
+        nonlocal phase, field
+        request = exchange/'phase.txt'
+        wanted = int(request.read_text()) if request.exists() else 0
+        if wanted != phase:
+            if wanted == 1:
+                for _ in range(12):
+                    widget = tk.Label(container, text='Künstlicher Nachbar')
+                    widget.pack()
+                    widget.after(300, widget.destroy)
+            elif wanted == 2:
+                field.destroy()
+                field = tk.Text(container, name='field', height=2)
+                field.insert('1.0', 'Neuer Inhalt')
+                field.pack()
+                bind_entry(field, 'Ersatz-Prüffeld', text=True)
+                field.focus_force()
+            elif wanted == 3:
+                root.destroy()
+                return
+            phase = wanted
+            def confirm(value=phase):
+                path = exchange/'phase.tmp'
+                path.write_text(json.dumps(dict(pid=os.getpid(), phase=value)))
+                path.replace(exchange/'phase.json')
+            root.after(600, confirm)
+        root.after(80, lifecycle)
+    root.after(500, lifecycle)
     root.after(90_000, root.destroy)
     try:
         root.mainloop()
@@ -47,6 +80,8 @@ def child(exchange):
             root.destroy()
         except tk.TclError:
             pass
+    if errors:
+        raise RuntimeError('Callbackfehler der eigenen AT-SPI-Fixture: '+repr(errors))
 
 
 def run(runtime, destination):
@@ -86,9 +121,18 @@ def run(runtime, destination):
                     env=env, timeout=45)
                 result.update(exitcode=int(bool(consumer.returncode or readonly_consumer.returncode)),
                               tk=ready['tk'], native_backend=True)
+                lifecycle_consumer = subprocess.run(['/usr/bin/python3', '-B', str(Path(__file__).with_name('pruefe_atspi_lifetime.py')),
+                    '--pid', str(process.pid), '--austausch', str(destination)], env=env, timeout=45)
+                if lifecycle_consumer.returncode:
+                    result['exitcode'] = 1
+                else:
+                    code = process.wait(timeout=10)
+                    result['fixture_neustartfrei_beendet'] = code
+                    if code:
+                        result['exitcode'] = 1
 
             except Exception as error:
-                result['fehler'] = str(error)
+                result.update(exitcode=1, fehler=str(error))
             finally:
                 if process.poll() is None:
                     process.terminate()

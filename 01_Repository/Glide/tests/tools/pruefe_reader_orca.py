@@ -15,6 +15,7 @@ import subprocess
 import sys
 import time
 import traceback
+from reader_navigation import select_task
 
 from reader_x11 import foreground_pid
 
@@ -68,7 +69,7 @@ class Actor:
     def key(self, gesture):
         self.assert_focus()
         names={'control':'ctrl','enter':'Return','escape':'Escape','tab':'Tab','home':'Home',
-               'end':'End','up':'Up','down':'Down','insert':'Insert','f2':'F2'}
+               'end':'End','up':'Up','down':'Down','left':'Left','right':'Right','insert':'Insert','f2':'F2'}
         keys='+'.join(names.get(part,part) for part in gesture.split('+'))
         subprocess.run(['xdotool','key','--clearmodifiers',keys],env=self.environment,check=True)
         time.sleep(.15)
@@ -188,12 +189,12 @@ def run(destination, app):
             state(lambda value:len(value['tasks'])==1)
             actor.key('control+f');actor.focus('Aufgaben suchen')
             actor.type('Angebot');actor.key('escape')
-            actor.find('Aufgaben',role='tree');actor.key('home');actor.focus('Angebot pruefen')
+            actor.find('Aufgaben',role='tree');select_task(actor.key,actor.where,'Angebot pruefen')
             actor.key('control+shift+p');actor.key('home');actor.focus('Heute');actor.key('enter')
             state(lambda value:value['tasks'][0].get('planned_date')==date.today().isoformat())
             actor.find('Arbeitsbereiche',role='tree');actor.key('home');actor.key('down');actor.focus('Heute')
             state(lambda value:value['view']==ready['plan_day_view'])
-            actor.find('Aufgaben',role='tree');actor.key('home');actor.focus('Angebot pruefen')
+            actor.find('Aufgaben',role='tree');select_task(actor.key,actor.where,'Angebot pruefen')
             actor.key('f2');actor.focus('Aufgabentitel')
             actor.key('control+a');actor.type('Angebot bearbeitet');actor.key('control+s')
             state(lambda value:value['tasks'][0].get('text')=='Angebot bearbeitet')

@@ -18,6 +18,7 @@ Mac-Runtime4: zwölf native Anbieterfälle, vier installierte Tcl-Fälle, zehn G
 | linux-accessibility-window | ACTIVE am gemappten Fenster mit tatsächlichem Tk-Eingabefokus |
 | linux-accessibility-state | ENABLED/SENSITIVE/EDITABLE aus disabled/readonly; deaktivierter Text bleibt lesbar |
 | linux-accessibility-focus | Virtuelle Vorfahrenereignisse sind kein Eingabefokus; Fokuswechsel sind keine neuen Kinder. Nach Orca-Befund vorbereitet, native Wiederholung offen |
+| linux-accessibility-lifetime | Typgerechte native Callbackdaten, GObject-Referenzlebensdauer und DEFUNCT nach tatsächlichem SIG11; externer Lebensdauertest offen |
 | windows-accessibility-name | get_accName liest den Namen; Beschreibung bleibt separat |
 | windows-accessibility-identity | Stabile MSAA-Kindkennungen, Widget-/Root-Lebensdauer und gültige Fokus-Tabelle nach NVDA-unknown; COM-Gegenprobe offen |
 
@@ -28,3 +29,5 @@ Patchprozesse erzwingen LF lokal und verändern keine globale Git-Konfiguration.
 Standard-Vollmatrix und Windows-Paketjob sind auf eigene 9.1-Runtimes vorbereitet, Python-Pins Linux 3.14.8 / Windows 3.14.7. `pruefen.py` enthält 91 Integrationssuiten. `--zugang-nativ` erzwingt die native Kernprüfung in der Vorstufe; ab Version 4 ist sie ohne Option Pflicht. Native Tcl-Bindungen gehören dazu. Linux-Defektgegenproben bleiben erhalten. Gezielter Mac-Hintergrundpfad und drei Versionsvertragsfälle grün; finale eingefrorene Vollmatrix offen.
 
 Vollständige tatsächliche VoiceOver-/NVDA-/Orca-Abläufe bleiben nach D36 Pflichtnachweise. Attribute, künstlich gesetzter Readerstatus im eigenen Tcl-Interpreter und direkte Tk-/spd-say-Ausgabe zählen dafür nicht. Menschen-/DPI-Abnahme nach D42 bleibt zusätzlich getrennt. Prototypen weiter Basisversion 3.42.0; Mac Ad-hoc-signiert, Windows unsigniert. Keine 4.0-Lieferung oder öffentliche Signaturfreigabe.
+
+Aktuellster Nachlauf: [Native10](../../tests/qa-3.42.0/zugang400_vorbereitung_2026-10-14/native_vorlauf10.json), exklusiver Linux-Fokus grün, danach Orca-SIG11; Linux-Lebensdauer und native Probe vorbereitet. NVDA-Heute-Fokus repariert, weitere Readernavigation/MSAA-Prüfer und Reparse-ACL korrigiert; Native11 offen. Kein4.0-Liefernachweis.

@@ -10,6 +10,7 @@ import time
 import traceback
 
 from reader_nvda import Spy, prepare, require_hosted
+from reader_navigation import select_task
 
 
 def wait_value(path, condition, timeout=20):
@@ -87,8 +88,7 @@ def run(destination, app_path):
             type_text('Angebot')
             key('escape')
             find_by_tab('Aufgaben', role='tree')
-            key('home')
-            focus_expected('Angebot pruefen')
+            select_task(key, speak_focus, 'Angebot pruefen')
             key('control+shift+p')
             # Native Menüs melden bei Insert+Tab häufig den Menücontainer.
             # Die Auswahl muss beim tatsächlichen Navigieren gesprochen werden.
@@ -112,8 +112,7 @@ def run(destination, app_path):
             focus_expected('Heute')
             wait_value(exchange/'zustand.json', lambda value: value['view'] == ready['plan_day_view'])
             find_by_tab('Aufgaben', role='tree')
-            key('home')
-            focus_expected('Angebot pruefen')
+            select_task(key, speak_focus, 'Angebot pruefen')
             key('f2')
             focus_expected('Aufgabentitel')
             key('control+a')

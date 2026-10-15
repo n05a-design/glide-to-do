@@ -1,0 +1,76 @@
+--- a/unix/tkUnixAccessibility.c
++++ b/unix/tkUnixAccessibility.c
+@@ -546,7 +546,8 @@
+     AtkStateSet *state_set = atk_state_set_new();
+     TkAtkAccessible *acc = (TkAtkAccessible *) obj;
+ 
+-    if (!acc) {
++    if (!acc || !acc->tkwin || !acc->interp) {
++	atk_state_set_add_state(state_set, ATK_STATE_DEFUNCT);
+ 	return state_set;
+     }
+ 
+@@ -1202,14 +1203,13 @@
+ 	return;
+     }
+ 
+-    g_object_ref(accessible);
+-
+     AtkObject *parentAcc = NULL;
+ 
+     if (Tk_IsTopLevel(tkwin)) {
+ 	parentAcc = tk_root_accessible;
+ 
+ 	if (!g_list_find(toplevel_accessible_objects, accessible)) {
++	    g_object_ref(accessible); /* One reference owned by the toplevel list. */
+ 	    toplevel_accessible_objects = g_list_append(toplevel_accessible_objects, accessible);
+ 	    gint index = g_list_index(toplevel_accessible_objects, accessible);
+ 	    if (index >= 0 && tk_root_accessible) {
+@@ -1274,6 +1274,7 @@
+ 
+ 	/* Notify about removed child. */
+ 	g_signal_emit_by_name(tk_root_accessible, "children-changed::remove", index, accessible);
++	g_object_unref(accessible);
+     }
+ }
+ 
+@@ -1631,7 +1632,8 @@
+ 	return;
+     }
+ 
+-    Tk_Window parentWin = (Tk_Window)clientData;
++    TkAtkAccessible *parent = (TkAtkAccessible *)clientData;
++    Tk_Window parentWin = parent ? parent->tkwin : NULL;
+     if (!parentWin) return;
+ 
+     Tcl_Interp *interp = Tk_Interp(parentWin);
+@@ -1688,9 +1690,16 @@
+     TkAtkAccessible *acc = (TkAtkAccessible *)clientData;
+     if (!acc) return;
+ 
+-    GObject *obj =  (GObject*)acc;
+-
+-    tk_atk_accessible_finalize(obj);
++    if (!acc->tkwin) return;
++    Tk_Window win = acc->tkwin;
++    /* External AT-SPI references can outlive the widget. Invalidate first;
++     * only GObject may finalize after the final reference is released. */
++    acc->tkwin = NULL;
++    acc->interp = NULL;
++    acc->is_focused = false;
++    atk_object_notify_state_change(ATK_OBJECT(acc), ATK_STATE_DEFUNCT, TRUE);
++    UnregisterAtkObjectForTkWindow(win);
++    g_object_unref(acc); /* Release the widget's initial reference. */
+ }
+ 
+ 
+@@ -1701,7 +1710,8 @@
+ 	return;
+     }
+ 
+-    Tk_Window tkwin = (Tk_Window)clientData;
++    TkAtkAccessible *accessible = (TkAtkAccessible *)clientData;
++    Tk_Window tkwin = accessible ? accessible->tkwin : NULL;
+     if (!tkwin) {
+ 	return;
+     }

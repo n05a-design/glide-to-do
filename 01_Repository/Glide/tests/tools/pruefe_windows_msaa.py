@@ -86,7 +86,6 @@ def run(destination):
     acc.AccessibleObjectFromWindow.argtypes=[W.HWND,W.DWORD,C.POINTER(Guid),C.POINTER(C.c_void_p)]
     acc.AccessibleObjectFromWindow.restype=C.c_int32
     automation.SysFreeString.argtypes=[C.c_void_p];automation.SysFreeString.restype=None
-    user.GetAncestor.argtypes=[W.HWND,W.UINT];user.GetAncestor.restype=W.HWND
     user.GetWindowThreadProcessId.argtypes=[W.HWND,C.POINTER(W.DWORD)];user.GetWindowThreadProcessId.restype=W.DWORD
     result=dict(exitcode=1,nur_eigene_fixture=True,reader_abnahme='getrennt offen')
     child=None;pointer=C.c_void_p()
@@ -96,7 +95,9 @@ def run(destination):
             child=subprocess.Popen([sys.executable,'-B',str(Path(__file__).resolve()),'--kind',str(exchange)],
                 env=dict(os.environ,GLIDE_DATA_DIR=data,PYTHONDONTWRITEBYTECODE='1'),stdout=log,stderr=subprocess.STDOUT)
             ready=wait_state(exchange,child,0)
-            hwnd=user.GetAncestor(ready['hwnd'],2);owner=W.DWORD()
+            # winfo_id ist der Tk-Client-HWND mit dessen WM_GETOBJECT-Anbieter.
+            # GA_ROOT würde die Windows-Rahmenhülle mit Standard-Oleacc liefern.
+            hwnd=ready['hwnd'];owner=W.DWORD()
             user.GetWindowThreadProcessId(hwnd,C.byref(owner));assert owner.value==child.pid
             iid=Guid(0x618736e0,0x3c3d,0x11cf,(C.c_ubyte*8)(0x81,0x0c,0,0xaa,0,0x38,0x9b,0x71))
             assert acc.AccessibleObjectFromWindow(hwnd,0xfffffffc,C.byref(iid),C.byref(pointer))==0 and pointer.value
