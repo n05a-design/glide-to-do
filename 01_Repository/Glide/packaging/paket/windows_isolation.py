@@ -1,6 +1,6 @@
 """Grenzen einer Laufzeitsperre ausschließlich im vergänglichen Hosted-CI-Runner."""
 import errno
-from pathlib import PureWindowsPath
+from pathlib import Path, PureWindowsPath
 import re
 
 
@@ -97,3 +97,16 @@ def plan(environment, package, report, forbidden):
     values = sorted((path for path in values if not any(path != other and path.is_relative_to(other)
                      for other in values)),key=str)
     return {'package':str(package),'report':str(report),'forbidden':[str(path)for path in values]}
+
+
+def isolation_probe(directory):
+    """Reale Code-/Runtimebytes für die spätere verweigerte Lesegegenprobe."""
+    directory = Path(directory).resolve()
+    candidates = ('python.exe', 'Scripts/python.exe', 'glide_app.py',
+                  '01_Repository/Glide/src/glide/app.pyw',
+                  'python-extension/_tkinter.cp314-win_amd64.pyd', 'runtime/bin/tcl91.dll')
+    for relative in candidates:
+        path = directory/relative
+        if path.is_file() and path.resolve().is_relative_to(directory):
+            return path
+    return None

@@ -289,7 +289,11 @@ jobs:
       - name: Eigene native Runtime bauen
         id: runtime
         run: python -B packaging/runtime/baue_runtime.py --tcl-quelle "$RUNNER_TEMP/zugang-quellen/tcl" --tk-quelle "$RUNNER_TEMP/zugang-quellen/tk" --python-quelle "$RUNNER_TEMP/zugang-quellen/python" --ziel "$RUNNER_TEMP/zugang-runtime"
+      - name: Native installierte Tcl-Klassenbindungen
+        if: always() && !cancelled() && steps.runtime.outcome == 'success'
+        run: dbus-run-session -- xvfb-run -a env PYTHONPATH="$RUNNER_TEMP/zugang-runtime/python-extension" python -B tests/tools/pruefe_native_accessibility_skript.py --bericht "$RUNNER_TEMP/zugang-skript.json"
       - name: Echte native AT-SPI-Textschnittstelle
+        if: always() && !cancelled() && steps.runtime.outcome == 'success'
         run: dbus-run-session -- xvfb-run -a python -B tests/tools/pruefe_linux_runtime.py --runtime "$RUNNER_TEMP/zugang-runtime" --ziel "$RUNNER_TEMP/zugang-native"
       - name: Aufgaben-Kernablauf auf eigener Runtime
         if: always() && !cancelled() && steps.runtime.outcome == 'success'
@@ -317,6 +321,7 @@ jobs:
             ${{ runner.temp }}/zugang-orca/glide-diagnose/*.json
             ${{ runner.temp }}/zugang-orca-windowmanager.log
             ${{ runner.temp }}/zugang-gui.json
+            ${{ runner.temp }}/zugang-skript.json
           retention-days: 14
           if-no-files-found: ignore
 
@@ -359,7 +364,14 @@ jobs:
           }
           python -B packaging/runtime/baue_runtime.py --tcl-quelle "$env:RUNNER_TEMP/zugang-quellen/tcl" --tk-quelle "$env:RUNNER_TEMP/zugang-quellen/tk" --python-quelle "$env:RUNNER_TEMP/zugang-quellen/python" --ziel "$env:RUNNER_TEMP/zugang-runtime"
           exit $LASTEXITCODE
+      - name: Native installierte Tcl-Klassenbindungen
+        if: always() && !cancelled() && steps.runtime.outcome == 'success'
+        run: |
+          $env:PYTHONPATH = "$env:RUNNER_TEMP/zugang-runtime/python-extension"
+          python -B tests/tools/pruefe_native_accessibility_skript.py --bericht "$env:RUNNER_TEMP/zugang-skript.json"
+          exit $LASTEXITCODE
       - name: Aufgaben-Kernablauf auf eigener Runtime
+        if: always() && !cancelled() && steps.runtime.outcome == 'success'
         run: |
           $env:PYTHONPATH = "$env:RUNNER_TEMP/zugang-runtime/python-extension"
           python -B tests/integration/test_zugang400.py --nativ --report "$env:RUNNER_TEMP/zugang-gui.json"
@@ -408,6 +420,7 @@ jobs:
             ${{ runner.temp }}/zugang-runtime/protokolle
             ${{ runner.temp }}/zugang-desktop.json
             ${{ runner.temp }}/zugang-gui.json
+            ${{ runner.temp }}/zugang-skript.json
             ${{ runner.temp }}/zugang-nvda/*.json
             ${{ runner.temp }}/zugang-nvda/*.log
             ${{ runner.temp }}/zugang-nvda/glide-diagnose/*.json

@@ -48,6 +48,14 @@ class RuntimePatches(unittest.TestCase):
             self.assertEqual(self.run_patch(), [self.entry])
             self.assertEqual(self.target.read_bytes(), b'first\nnew\nlast\n')
 
+    def test_common_script_patch_is_applied_once_on_every_platform(self):
+        self.entry['platform'] = 'all'
+        for system in ('linux', 'darwin', 'win32'):
+            self.target.write_bytes(b'first\nold\nlast\n')
+            with self.subTest(system=system):
+                self.assertEqual(self.run_patch(system), [self.entry])
+                self.assertEqual(self.target.read_bytes(), b'first\nnew\nlast\n')
+
     def test_other_platform_never_applies_patch(self):
         self.assertEqual(self.run_patch('linux'), [])
         self.assertEqual(self.target.read_bytes(), b'first\nold\nlast\n')

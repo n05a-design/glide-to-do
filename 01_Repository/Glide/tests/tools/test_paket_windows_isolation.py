@@ -3,7 +3,9 @@ from pathlib import Path as _Path
 _sys.path.insert(0, str(_Path(__file__).resolve().parents[2] / 'packaging/paket'))
 import errno
 import unittest
-from windows_isolation import access_denied, acl_rules, acl_snapshot, normalize_environment, plan, restoration_entries
+import tempfile
+from pathlib import Path
+from windows_isolation import access_denied, acl_rules, acl_snapshot, normalize_environment, plan, restoration_entries, isolation_probe
 
 
 class NativeDenialEvidence(unittest.TestCase):
@@ -77,6 +79,29 @@ class NativeDenialEvidence(unittest.TestCase):
                      'Python\r\nD:AI\r\nPython\r\nD:AI\r\n'):
             with self.subTest(text=text), self.assertRaises(ValueError):
                 acl_snapshot(text.encode('utf-16'))
+
+
+class RuntimeReadProbe(unittest.TestCase):
+    def test_own_runtime_requires_real_binary_and_preserves_existing_source_probes(self):
+        with tempfile.TemporaryDirectory() as folder:
+            base = Path(folder).resolve()
+            (base/'runtime-bau.json').write_text('{}')
+            self.assertIsNone(isolation_probe(base))
+            native = base/'python-extension/_tkinter.cp314-win_amd64.pyd'
+            native.parent.mkdir();native.write_bytes(b'own-native-extension')
+            self.assertEqual(isolation_probe(base), native)
+            (base/'python.exe').write_bytes(b'python')
+            self.assertEqual(isolation_probe(base), base/'python.exe')
+
+    def test_link_outside_the_blocked_source_cannot_prove_denial(self):
+        with tempfile.TemporaryDirectory() as folder:
+            base=Path(folder);source=base/'source';source.mkdir()
+            external=base/'external';external.write_bytes(b'outside')
+            try:
+                (source/'python.exe').symlink_to(external)
+            except OSError:
+                self.skipTest('Prüfstand erlaubt keine temporären Dateisymlinks')
+            self.assertIsNone(isolation_probe(source))
 
 
 class HostedIsolationBoundary(unittest.TestCase):

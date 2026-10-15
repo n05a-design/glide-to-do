@@ -1,0 +1,40 @@
+{
+  "python": "3.14.5",
+  "platform": "darwin",
+  "machine": "arm64",
+  "quellpins": {
+    "tcl": "0c6bad08d91fa2ad51f05a50a41f8c1ea82ce985",
+    "tk": "3f45110c0a568b70f2ebd5412f215e87d199bc7d",
+    "python": "5607950ef232dad16d75c0cf53101d9649d89115"
+  },
+  "runtime_patches": [
+    {
+      "id": "macos-accessibility-core",
+      "platform": "darwin",
+      "file": "macosx/tkMacOSXAccessibility.c",
+      "patch": "patches/macos-accessibility-core.patch",
+      "before_sha256": "86c3cf69bcbce3ec4e460e2ed3b62095c036d74b6c8989dd9e1beb9cd74e91e4",
+      "after_sha256": "6771ac367c45ac8ac42547cc96e40e8569fbf4342e2df5f12d03bac35ab84525",
+      "patch_sha256": "41189047d40fa3b9add1648adcc7cc907d63796b44d76a6d4944bc10e2e6eeba"
+    },
+    {
+      "id": "common-accessibility-selection",
+      "platform": "all",
+      "file": "library/accessibility.tcl",
+      "patch": "patches/common-accessibility-selection.patch",
+      "before_sha256": "652369e48634af985c9fdac5bcd4c2695452e260923f1442403f272275bdf4d6",
+      "after_sha256": "4bdba04e1d9def7d0dece0d9243543c0599d7b8ae5b4f8829b79fb5afd9bbc2d",
+      "patch_sha256": "1b8c958d8dc225029e985bb725c59fd5705c3108a396e503c657b650332ea9f3"
+    }
+  ],
+  "tcl_probe": {
+    "extension": "~/.codex/workspaces/glide-fortsetzung-2026-10-13/paket8-runtime-mac4/python-extension/_tkinter.cpython-314-darwin.so",
+    "tcl": "9.1.0",
+    "tcl_library": "~/.codex/workspaces/glide-fortsetzung-2026-10-13/paket8-runtime-mac4/runtime/lib/tcl9.1",
+    "tk_compiled": "9.1"
+  },
+  "native_backend": "Aqua",
+  "exitcode": 0,
+  "dateien": 1749,
+  "manifest_sha256": "5dcaba61b13affa3cd1c600b116e6a91ce222e3817bf51da197347215075692a"
+}

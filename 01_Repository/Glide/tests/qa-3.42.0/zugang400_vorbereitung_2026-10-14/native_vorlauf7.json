@@ -1,0 +1,31 @@
+{
+  "run": 38707688903,
+  "commit": "2140f23577a0023b50f69ca0e09b76dd9eeb6148",
+  "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38707688903",
+  "ergebnis": "failure",
+  "app_sha256": "f1c01b3cba1f2ffe1fdb1c649e076ed348434709e1b3a6623250e7b6def748fa",
+  "linux": {
+    "runtime_text_gui": "grün; zehn GUI-Gruppen",
+    "orca": "Echte Eingabe erreicht, Reader hat kein aktives Fenster/Script; tatsächlicher Anbieter meldet ACTIVE nicht. Frühe Treeview-Ereignisse erzeugen neun No-table-Fehler."
+  },
+  "windows": {
+    "runtime_gui": "grün; zehn GUI-Gruppen",
+    "nvda_speech": [
+      "Neue Aufgabe  edit  focused",
+      "Aufgaben suchen  edit  focused",
+      "Canvas  pane  focused",
+      "Label  text  1 Punkt  focused",
+      "Wichtigkeit  button  focused",
+      "Fällig  button  focused",
+      "Einplanen  button  focused",
+      "Labels  button  focused",
+      "Löschen  button  focused",
+      "Aufgaben  tree view  Angebot pruefen. Offen. Nicht eingeplant. Ohne Fälligkeit. Keine Wichtigkeit. Aufwand nicht geschätzt.  focused",
+      "Aufgaben  tree view  Angebot pruefen. Offen. Nicht eingeplant. Ohne Fälligkeit. Keine Wichtigkeit. Aufwand nicht geschätzt.  focused",
+      "Context  menu"
+    ],
+    "nvda": "Erfassung, Suche, ausgewählter Aufgabentitel samt Status gesprochen; Heute-Fokusabfrage liefert Context/menu; vollständiger Ablauf offen. Ebenfalls frühe No-table-Fehler.",
+    "paket": "Bau/PE/Code-/Lizenzvergleich grün, 67 kompilierte Module; isolierter Start vor ACL-Änderungen an fehlender Runtime-Prüfdatei gestoppt"
+  },
+  "nachlauf": "Gemeinsames Tcl-Script: vor Map/entfernte Widgets abfangen und leere Spaltenköpfe initialisieren. Linux: aktives Fenster aus tatsächlichem Tk-Fokus bestimmen. Windows: reale eigene _tkinter-DLL als Lesegegenprobe; Menüausgabe während echter Navigation erfassen. Native Wiederholung offen."
+}

@@ -105,7 +105,7 @@ def main():
         runtime = dict(python=sys.version.split()[0], tcl=tcl, tk_compiled=_tkinter.TK_VERSION,
                        platform='win32', machine='x86_64')
         own_runtime = validate_runtime_proof(args.runtime_bau, runtime, _tkinter.__file__, pins=own_pins,
-            patches=[entry for entry in patches if entry['platform'] == 'win32'])
+            patches=[entry for entry in patches if entry['platform'] in ('win32', 'all')])
     elif args.runtime_bau is not None:
         raise SystemExit('Runtime-Baumanifest nur zusammen mit der eigenen Tcl/Tk-9.1-Laufzeit.')
     toolkit = toolkit_references(tcl, _tkinter.TK_VERSION, pins=own_pins)

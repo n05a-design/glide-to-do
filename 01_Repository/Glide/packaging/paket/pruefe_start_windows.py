@@ -14,7 +14,7 @@ import subprocess
 import sys
 import tempfile
 import traceback
-from windows_isolation import access_denied, acl_rules, acl_snapshot, normalize_environment, plan
+from windows_isolation import access_denied, acl_rules, acl_snapshot, normalize_environment, plan, isolation_probe
 
 
 def run(package,report,forbidden,*,timeout=150):
@@ -51,10 +51,9 @@ def run(package,report,forbidden,*,timeout=150):
     result={'plattform':'Windows x64','nur_vergaenglicher_hosted_ci_runner':True,
             'inhaber_installationen_unveraendert':True,'exitcode':1}
     saved=[];restored=[];unlocked=[];verified=[];rules_verified=[];restore_details=[];failure=None
-    candidates=('python.exe','Scripts/python.exe','glide_app.py','01_Repository/Glide/src/glide/app.pyw')
     probes=[]
     for path in sources:
-        probe=next((path/name for name in candidates if (path/name).is_file()),None)
+        probe=isolation_probe(path)
         if probe is None:raise ValueError('Externe Quelle braucht eine tatsächlich lesbare Prüfdatei.')
         with probe.open('rb') as stream:stream.read(1)
         probes.append(probe)

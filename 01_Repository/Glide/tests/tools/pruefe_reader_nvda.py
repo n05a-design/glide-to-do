@@ -90,8 +90,20 @@ def run(destination, app_path):
             key('home')
             focus_expected('Angebot pruefen')
             key('control+shift+p')
-            key('home')
-            focus_expected('Heute')
+            # Native Menüs melden bei Insert+Tab häufig den Menücontainer.
+            # Die Auswahl muss beim tatsächlichen Navigieren gesprochen werden.
+            for gesture in ('home', 'down', 'up', 'home'):
+                index = spy.next_speech()
+                key(gesture)
+                try:
+                    spoken = spy.speech(index)
+                except AssertionError:
+                    continue
+                result['speech'].append(spoken)
+                if 'Heute' in spoken:
+                    break
+            else:
+                raise AssertionError('NVDA benennt Heute beim Navigieren im Planungsmenü nicht.')
             key('enter')
             wait_value(exchange/'zustand.json', lambda value: value['tasks'][0].get('planned_date') == date.today().isoformat())
             find_by_tab('Arbeitsbereiche', role='tree')

@@ -1,0 +1,12 @@
+{
+  "exitcode": 1,
+  "nur_kuenstliche_daten": true,
+  "readerstatus": "nur im eigenen Interpreter simuliert",
+  "tk": "9.1.0",
+  "skript_sha256": "b405b92480290e4eda20a2805d7f75c0fa6bf522f6b9cf72fd795cc0341a3819",
+  "fehler": "No table found. You must set the accessibility role first.",
+  "traceback": "Traceback (most recent call last):\n  File \"~/.codex/workspaces/glide-fortsetzung-2026-10-13/paket8-kandidat/01_Repository/Glide/tests/tools/pruefe_native_accessibility_skript.py\", line 60, in run\n    value = str(root.tk.call('::tk::accessible::get_acc_value', str(tree)))\n                ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_tkinter.TclError: No table found. You must set the accessibility role first.\n",
+  "callback_errors": [
+    "can't read \"headerlist\": no such variable"
+  ]
+}

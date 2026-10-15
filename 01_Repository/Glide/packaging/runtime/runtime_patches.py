@@ -20,7 +20,7 @@ def apply_patches(source, system, *, definitions=None):
     source = Path(source).resolve()
     records = []
     for entry in manifest['patches']:
-        if entry['platform'] != system:
+        if entry['platform'] not in (system, 'all'):
             continue
         target = (source / entry['file']).resolve()
         patch = (base / entry['patch']).resolve()

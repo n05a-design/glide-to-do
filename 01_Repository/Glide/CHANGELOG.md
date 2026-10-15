@@ -2,6 +2,8 @@
 
 ## In Vorbereitung – 4.0.0 (keine Lieferung)
 
+- Nach tatsächlichen Readerfehlern gemeinsame Tk-Auswahlinitialisierung und Linux-ACTIVE-Zustand korrigiert. Native Tcl-Gegenfälle und Mac-Neubau geprüft; isolierter Mac-Paket-Kernablauf grün. Native Reader-/Zustands-/Windows-Paketwiederholung offen.
+
 - Fokus nach Tastaturwechsel im Inspektor sichtbar nachführen; Strg+Tab in Kernfeldern/Bäumen ausdrücklich binden und vorhandene Tab-Aktionen erhalten. Sieben neue Tk-freie Fokusfälle und zwei GUI-Prüfgruppen; zehn Mac-Gruppen und Rückfall grün. Reader-Diagnose vor erstem Inspektor korrigiert, Windows-MSAA-Systemanbieter im Paketprüfer ergänzt; native Wiederholung offen.
 
 - Native Vorbereitung 15.10.: Windows-Patchbytes gegen geerbtes Git-autocrlf abgesichert, Orca-Eingaben an tatsächlich belegten X11-Prozess gebunden; eigene Windows-9.1-Lizenz-/Paketvorstufe einschließlich utf8proc ergänzt. Reader-/Paketwiederholung offen.

@@ -1,0 +1,20 @@
+--- a/unix/tkUnixAccessibility.c
++++ b/unix/tkUnixAccessibility.c
+@@ -562,6 +562,17 @@
+     if (acc->tkwin) {
+ 	AtkRole role = GetAtkRoleForWidget(acc->tkwin);
+ 
++	/* Readers need ACTIVE on the window owning the actual Tk focus. */
++	if (role == ATK_ROLE_WINDOW && Tk_IsMapped(acc->tkwin)) {
++	    Tk_Window focused = (Tk_Window) TkGetFocusWin((TkWindow *) acc->tkwin);
++	    while (focused && !Tk_IsTopLevel(focused)) {
++		focused = Tk_Parent(focused);
++	    }
++	    if (focused == acc->tkwin) {
++		atk_state_set_add_state(state_set, ATK_STATE_ACTIVE);
++	    }
++	}
++
+ 	/* Use if-else to avoid switch warning and handle all roles. */
+ 	if (role == ATK_ROLE_PUSH_BUTTON ||
+ 	    role == ATK_ROLE_CHECK_BOX ||
