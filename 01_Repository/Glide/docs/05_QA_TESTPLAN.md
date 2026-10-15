@@ -1,6 +1,6 @@
 # Prüfplan – Glide
 
-Stand 15.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
+Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
 
 Wie Glide geprüft wird. Was tatsächlich geprüft wurde, steht im [QA-Bericht](07_QA_BERICHT.md). Am 03.10.2026 auf den gültigen Stand verdichtet; am 05.10.2026 um Nachweisregeln und Kontrollmatrix der Windows-Fassung ergänzt. Die Suitebeschreibungen je Einführungsversion trägt Git.
 

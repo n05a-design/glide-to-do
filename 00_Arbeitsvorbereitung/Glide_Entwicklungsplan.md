@@ -1,6 +1,6 @@
 # Glide – Entwicklungsplan und Aufgabenstand
 
-Stand 15.10.2026 · Glide 3.42.0 · Aufgabenformat 25
+Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25
 
 Einziges Planungsdokument: alle Aufgaben mit Marke, Stufen, Ziele und was der Inhaber entscheidet. Erledigte Zwischenstände (Paketbeschreibungen, Messerzählungen, Aufgabenkarten) werden nach der Lieferung gelöscht; Ergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) und im [CHANGELOG](../01_Repository/Glide/CHANGELOG.md), Verhalten in den [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md), Vorfassungen in Git.
 
@@ -891,7 +891,7 @@ Nur lesend, ohne Tk-Fenster, am Lieferstand `7995ecbc…`; Werkzeuge und Ergebni
 
 **Ausgangsreferenz:** Glide 3.42.0, 15.10.2026, 13:42 Uhr. **Auftrag:** am 15.10.2026 als vorrangig vor Paket 8 beauftragt (D50). Ausgeführt am Arbeitszweig `claude/ui-ux-paket` auf Basis `origin/main` `27bac83` (enthält die P8-Vorbereitung bis PR #26; deren additive Zugänglichkeitsanbindungen bleiben unverändert erhalten). Quellstand umgesetzt, gezielt geprüft und gegen die gelieferte 3.42.0 rot gegengeprüft; **noch keine neue Produktionsversion**, kein eingefrorener Volllauf, kein 07-/Bundle-Abgleich und kein Upload.
 
-[Vollständiger Ausführungsprompt](Featurepaket_UI_UX/PROMPT.md) · [unveränderter Originalauftrag](Featurepaket_UI_UX/AUFTRAG.md) · [Bildreferenzen S01–S28](Featurepaket_UI_UX/BILDREFERENZEN.md) · [Design Richtlinien](../01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) · [Prüfnachweis](../01_Repository/Glide/tests/qa-3.42.0/ui_ux_umsetzung_2026-10-15/README.md).
+[Vollständiger Ausführungsprompt](Featurepaket_UI_UX/PROMPT.md) · [unveränderter Originalauftrag](Featurepaket_UI_UX/AUFTRAG.md) · [Bildreferenzen S01–S28](Featurepaket_UI_UX/BILDREFERENZEN.md) · [Design Richtlinien](../01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) · [Prüfnachweis](../01_Repository/Glide/tests/qa-3.43.0/ui_ux_umsetzung_2026-10-15/README.md).
 
 Die Kennungen bilden die Originalnummerierung ab (A01 = A.1, B01 = B.1 …). **Belege:** Pflichtsuite `tests/integration/test_uiux_paket.py` (16 Fälle, alle grün; dieselben 16 Fälle gegen `07_Python-Versionen` 3.42.0 alle rot mit dem jeweiligen Ursprungsfehler), 710 Unit-Tests, Vorher-/Nachher-Fensteraufnahmen desselben Kontexts (künstliche Showcase-Daten, Windows 11/Tk 9.0.4). Menschliche Sicht-, DPI- und Screenreaderabnahme bleibt für alle Punkte getrennt offen.
 

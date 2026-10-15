@@ -1,6 +1,6 @@
 # Prüfungen für Glide
 
-Stand 15.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · 91 Suiten aus `pruefen.py` und fünf Analysen
+Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · 91 Suiten aus `pruefen.py` und fünf Analysen
 
 Alle App-Tests setzen vor dem App-Import einen temporären `GLIDE_DATA_DIR`; echte Nutzerdaten sind ausgeschlossen. Was wann läuft, welche Regeln gelten und welche Suite welchen Bereich abdeckt, steht im [Prüfplan](../docs/05_QA_TESTPLAN.md); Ergebnisse im [QA-Bericht](../docs/07_QA_BERICHT.md).
 
@@ -8,7 +8,7 @@ Alle App-Tests setzen vor dem App-Import einen temporären `GLIDE_DATA_DIR`; ech
 
 | Zweck | Aufruf |
 |---|---|
-| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.42.0/<Name> --timeout 900` |
+| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.43.0/<Name> --timeout 900` |
 | Schnellprüfung | `python3 -B tests/tools/pruefen.py` |
 | CI-Grundstufe (wie GitHub) | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` |
 | Windows | `tests/tools/windows_vollpruefung.cmd` (Anleitung in der [manuellen Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md)) |

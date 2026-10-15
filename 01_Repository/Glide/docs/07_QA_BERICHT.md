@@ -1,6 +1,6 @@
-# QA-Bericht – Glide 3.42.0
+# QA-Bericht – Glide 3.43.0
 
-Stand 15.10.2026 · Glide 3.42.0 · eigenständige Pakete (Paket 7) geliefert · Datenformat 25
+Stand 16.10.2026 · Glide 3.43.0 · eigenständige Pakete (Paket 7) geliefert · Datenformat 25
 
 Einziger Prüfbericht. Ausführlich stehen die sieben neuesten Versionen, deren Nachweise unter `tests/qa-<Version>/` liegen; ältere Läufe stehen als Zeile in der Versionstabelle, ihre Protokolle trägt Git, soweit sie eingecheckt waren. Wie geprüft wird: [Prüfplan](05_QA_TESTPLAN.md).
 

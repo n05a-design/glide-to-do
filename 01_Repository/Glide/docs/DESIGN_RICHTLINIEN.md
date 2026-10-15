@@ -1,6 +1,6 @@
 # Design Richtlinien
 
-Stand 15.10.2026 · Glide 3.42.0 · zentrale UI-/UX-Vorgaben; UI-/UX-Paket im Quellstand umgesetzt, Lieferung offen
+Stand 16.10.2026 · Glide 3.43.0 · zentrale UI-/UX-Vorgaben; UI-/UX-Paket im Quellstand umgesetzt, Lieferung offen
 
 Dieses Dokument sammelt die belegten Gestaltungsvorgaben des Inhabers und ihre Konsequenzen für Glide. Es ist agentenunabhängig lesbar; der Claude-Code-Skill `design-richtlinien` (`.claude/skills/design-richtlinien/`) verweist nur hierher. Produktentscheidungen stehen weiterhin in [Arbeitsrichtung](ARBEITSRICHTUNG.md), Produktgrenzen in [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md), technische Umsetzung in [Architektur](02_ARCHITECTURE.md), Funktionsverhalten in [Funktionen](20_FUNKTIONEN.md) und Aufgabenstatus im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Diese Zuständigkeiten nicht durch Kopien ersetzen.
 
@@ -52,7 +52,7 @@ Prioritätsmatrix, am 15.10.2026 an den realen Ansichten mit Showcase-Daten gepr
 
 Zusammengehörige Texte und Aktionen teilen erkennbare Kanten, Abstände und Höhen. Menü, Kopfaktionen, Dialogüberschrift und Fließtext dürfen nicht zufällig versetzt wirken. Gemeinsame Layout-/Symbolregeln gegenüber isolierten Einzelversätzen bevorzugen.
 
-- **Kopfzeile (B07):** Windows-Menüs und Kopfsymbole stehen in derselben Titelzeile, haben dieselbe Höhe (`HEADER_CONTROL_HEIGHT`, 42 px) und damit dieselbe Mittellinie. Die Unterzeile behält die volle Breite.
+- **Kopfzeile (B07):** Windows-Menüs und Kopfsymbole stehen in derselben Titelzeile, haben dieselbe Höhe (`HEADER_CONTROL_HEIGHT`, 38 px = Höhe der Titelzeile) und damit dieselbe Mittellinie; der Kopf wird dadurch nicht höher (Bedienfläche ≤ 15 % bei 1280 × 800 bleibt erfüllt). Die Unterzeile behält die volle Breite.
 - **Logo (B05):** vom oberen Rand der Großbuchstaben des Titels bis zur Grundlinie der Unterzeile; Seitenverhältnis unverändert.
 - **Texte in Dialogen (B08):** Überschrift und Meldungstext beginnen an derselben Pixelkante; Labels dafür ohne Standardrand und -innenabstand.
 - **Startseite (B02):** „Startseite anpassen“ steht an der linken Kante des Kachelrasters im Kachelabstand darunter.

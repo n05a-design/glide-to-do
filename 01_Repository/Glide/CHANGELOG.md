@@ -1,6 +1,6 @@
 # Änderungsverlauf
 
-## In Vorbereitung – UI-/UX-Paket vom 15.10.2026 (keine Lieferung; Version beim Lieferweg, vorrangig vor 4.0.0 nach D50)
+## 3.43.0 – UI-/UX-Paket aus Nutzerbeobachtungen (16.10.2026)
 
 - **Startseite:** Nach „Gelesen“ steht die Startseite sofort am Anfang (B01). „Startseite anpassen“ an der linken Rasterkante (B02). Gismo heißt fest so und behält Füttern/Spielen/Ruhen; Umbenennen und „Spielereien aus“ entfallen, Ausblenden über die Kachel (B03). Neue Kachel „Galeriebilder“ mit Vorschau aus vorhandenen Galerien, Teil des Standards, eigene Auswahl bleibt (B04).
 - **Kopfzeile:** Logo endet an der Grundlinie der Unterzeile (B05); kein Datum und kein „?“ mehr, ergänzende Bedienhinweise über einen Schalter in den Einstellungen (B06); Windows-Menüs und Kopfsymbole auf einer Mittellinie (B07); Lupe statt „Su“ aus einer Systemschrift (B10).

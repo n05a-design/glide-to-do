@@ -329,6 +329,9 @@ def export(target, anchor):
             app.write_complete_backup(str(paths[0]), payload)
             app.write_complete_backup(str(paths[1]), app.app_backup_payload())
             app.write_json_atomic(str(paths[2]), {"format_version":app.TEMPLATE_FORMAT_VERSION,"templates":templates})
+            # Zeilenenden wie im Repository (LF): Unter Windows schreibt die App
+            # CRLF, und die Prüfsumme im Manifest passte nach dem Einchecken nicht.
+            paths[2].write_bytes(paths[2].read_bytes().replace(b"\r\n", b"\n"))
             ruhe(root)
             assert not errors, errors
             manifest = {"app_version":mod.APP_VERSION,"format_version":app.DATA_SCHEMA_VERSION,
@@ -336,7 +339,8 @@ def export(target, anchor):
                 "bilder":len(PHOTOS), "seitenbilder":sum(len((e.get("rich_note") or {}).get("images") or {}) for e in payload["lists"]),
                 "projektpinnwaende":len(payload["pinboards"]), "vorlagen":len(templates),
                 "dateien":{p.name:{"bytes":p.stat().st_size,"sha256":hashlib.sha256(p.read_bytes()).hexdigest()} for p in paths}}
-            (target/"manifest.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+            (target/"manifest.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n",encoding="utf-8",
+                                                newline="\n")
             print(json.dumps(manifest,ensure_ascii=False,indent=2))
         finally:
             root.destroy()

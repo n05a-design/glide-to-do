@@ -8,7 +8,7 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 
 ## Stand
 
-- **Entwicklungsstand 3.42.0 vom 14.10.2026**, Datenformat 25. Dies ist eine Entwicklungsfassung.
+- **Entwicklungsstand 3.43.0 vom 14.10.2026**, Datenformat 25. Dies ist eine Entwicklungsfassung.
 - **Zuletzt vollständig automatisch geliefert:** eigenständige Mac-/Windows-Entwicklungspakete 3.42.0, davor Notion-Import und Seitenwiederherstellung 3.41.0, Pixelanimation 3.40.0, Wiederholungen 3.39.1 (Fehlerbehebung), Tagesplanung 3.39.0, Aufgabenoberfläche 3.38.0, Logo/Symbole 3.37.0 und Fundament/Tempo 3.36.0. Eingefrorene Mac-Vollprüfung sowie native Linux-/Windows-Matrix und beide tatsächlichen isolierten Paketstarts grün; 07/Showcase/Bundle abgeglichen und Mac-Signaturen geprüft. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
 - **Nächstes Paket:** 4.0.0 mit dem zugänglichen Aufgaben-Kernablauf; eigene Tk-9.1-Laufzeit und tatsächliche Readerproben. Die eigenständigen Mac-/Windows-Entwicklungspakete 3.42.0 sind geliefert; danach folgen die bestätigten D49-Pakete.
 - **Offen:** verbleibende bestätigte Sprintpakete, manuelle Bedien-/DPI-/Mehrmonitor-/Screenreaderabnahme sowie die gesonderten Veröffentlichungstore (u. a. Lizenz, öffentliche Signatur und Marke).

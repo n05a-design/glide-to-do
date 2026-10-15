@@ -1,6 +1,6 @@
 # Funktionen – Glide
 
-Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
 
 ## Aufgaben im Wissen (3.33.15: G29/G31/G32)
 
@@ -381,3 +381,15 @@ Die freigegebenen Normalmaster erhalten tangentiale Kurvenanschlüsse und verlie
 Die vollständige `ICONS`-Tabelle wird gegen normale und fette Schnitte der tatsächlich gewählten UI-Schrift geprüft. Fehlt ein Zeichen, wird ein lesbarer Text aus derselben Schrift verwendet. Drucken trägt einen kurzen deutschen Text, Meldungen ein Ausrufezeichen. Die Suche zeigt seit B10 die Lupe ⌕: Die mitgelieferte UI-Schrift kennt sie nicht, deshalb kommt sie gezielt aus einer einfarbigen Systemschrift, die sie nachweislich enthält (`SYMBOL_FONT_FALLBACKS`); sonst bleibt „Su“. Unterschiedliche Aktionen behalten unterschiedliche Text-Rückfälle. Pixel-Kachelköpfe führen Symbole in der UI-Schrift und Überschriften in Pixelify Sans. Tastatur, Hinweise, Beschriftungen und stabile Aktionskennungen bleiben erhalten.
 
 Pflichtsuite `test_logo3370.py`: Glättung/Farbe/Innenraum über echten Logo-Aufrufer, exakte App-Symbole ohne großen PNG-Ladeweg und Schriftabdeckung einschließlich Suche und Pixel-Kopf. Physische Plattform-/DPI-Sichtprüfung bleibt gesonderte Abnahme.
+
+## UI-/UX-Paket 3.43.0 (B01–B20, D50)
+
+Auftrag und Abnahmekriterien: [Ausführungsprompt](../../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md); Gestaltungsregeln: [Design Richtlinien](DESIGN_RICHTLINIEN.md). Das Verhalten steht an den jeweiligen Stellen dieses Dokuments; hier nur der Überblick.
+
+- **Startseite:** „Gelesen“ setzt sofort an den Seitenanfang (B01); „Startseite anpassen“ an der linken Rasterkante (B02); Gismo fest benannt, Pflege immer verfügbar, Ausblenden nur über die Kachel (B03); Kachel „Galeriebilder“ (B04).
+- **Kopf:** Logo bis zur Grundlinie der Unterzeile (B05); Hinweisschalter in den Einstellungen statt Datum und „?“ (B06); Windows-Menüs und Kopfsymbole in einer 38 px hohen Titelzeile auf derselben Mittellinie (B07); Lupe aus einer Systemschrift (B10).
+- **Ansichten:** gemeinsame Kante in Meldungsdialogen (B08); Glyphenregel für Bereichspfeile und Zeilensymbole (B09); Metadatenspalten auf Inhaltsbreite (B11); Heute ohne doppelte Dreiecke, nur der Titel der nächsten Aufgabe fett (B12/B13); Blockleiste ohne Kästchen (B14).
+- **Schutz und Flächen:** Leerzustandsknöpfe folgen dem umbrechenden Text (B15); Mausrad über Seitenbildern pixelweise (B16); Elemente übernehmen ihre Trägerfläche, konturlose Knöpfe sind in Ruhe durchsichtig (B17/B19).
+- **Neuerungen:** Hilfe › Über Glide › „Neuerungen …“ liest denselben Katalog wie die Startseitenkarte (B18).
+
+Pflichtsuite `test_uiux_paket.py` mit 16 Fällen über echte Tk-Wege; rote Gegenprobe mit `--app` gegen die Vorversion. Tk-freie Logik in `glyph_metrics.py`, `home_tiles.py`, `interaction_policy.py`, `release_notes.py` und `symbol_policy.py` mit Unit-Tests. Unter Tk 8.6 entfallen Zelltags (fette Titelzelle wird zur fetten Zeile) und das pixelweise Bildscrollen (bisheriger Weg). Die menschliche Sicht-, DPI- und Screenreaderabnahme bleibt getrennt offen.

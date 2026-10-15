@@ -1,6 +1,6 @@
 # Paketierung Glide
 
-Stand 14.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
 
 Der aktuelle Stand enthält eigenständige Entwicklungspakete für macOS arm64 und Windows x64 mit eigenem Python/Tcl-Tk, geliefert und isoliert geprüft. Mac ad hoc signiert, Windows unsigniert; öffentliche Signaturen, Installer und Store-Abnahme bleiben in der [Veröffentlichung](../docs/10_VEROEFFENTLICHUNG.md) offen.
 

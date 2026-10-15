@@ -1,6 +1,6 @@
 # Referenzdaten und Beispiele
 
-Aktueller Aufgabenstand: **Glide 3.42.0 / Format 25**. `current_v25` enthält die aktuelle Referenz mit einer Notion-Quellenzuordnung an Seite und Ordner, `current_v24` die Format-24-Referenz mit einer Bildfolge aus drei Bildern und eigener Dauer, `current_v23` die Format-23-Referenz mit Live-Liste und Pixel-Titelbild; ältere `current_v*` bleiben feste Migrationsreferenzen.
+Aktueller Aufgabenstand: **Glide 3.43.0 / Format 25**. `current_v25` enthält die aktuelle Referenz mit einer Notion-Quellenzuordnung an Seite und Ordner, `current_v24` die Format-24-Referenz mit einer Bildfolge aus drei Bildern und eigener Dauer, `current_v23` die Format-23-Referenz mit Live-Liste und Pixel-Titelbild; ältere `current_v*` bleiben feste Migrationsreferenzen.
 
 - Enthalten sind unter anderem die Tagebuch-/Zeichnungsdaten älterer Formatstufen, dazu Punkte mit
   Verknüpfung, „wartet auf“, Uhrzeit, erfasster Zeit und Erledigt-Zeitpunkt.
