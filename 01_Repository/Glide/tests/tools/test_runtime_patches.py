@@ -1,10 +1,12 @@
 """Echter Patchlauf und verweigerte fremde/veränderte Eingaben ohne GUI."""
 import hashlib
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'packaging/runtime'))
 from runtime_contract import PINS
@@ -38,6 +40,13 @@ class RuntimePatches(unittest.TestCase):
         self.assertEqual(self.target.read_bytes(), b'first\nnew\nlast\n')
         with self.assertRaises(ValueError):
             self.run_patch()
+
+    def test_inherited_windows_line_endings_cannot_change_verified_patch_bytes(self):
+        config = self.base/'test-gitconfig'
+        config.write_text('[core]\n autocrlf = true\n[apply]\n whitespace = fix\n')
+        with patch.dict(os.environ, GIT_CONFIG_GLOBAL=str(config), GIT_CONFIG_NOSYSTEM='1'):
+            self.assertEqual(self.run_patch(), [self.entry])
+            self.assertEqual(self.target.read_bytes(), b'first\nnew\nlast\n')
 
     def test_other_platform_never_applies_patch(self):
         self.assertEqual(self.run_patch('linux'), [])

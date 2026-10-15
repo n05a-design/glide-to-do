@@ -28,8 +28,11 @@ def apply_patches(source, system, *, definitions=None):
             raise ValueError('Runtimepatch liegt außerhalb seiner Bau-/Werkzeugquelle.')
         if digest(target) != entry['before_sha256'] or digest(patch) != entry['patch_sha256']:
             raise ValueError('Runtimepatch benötigt die exakten Original- und Diffbytes.')
-        subprocess.run(['git', 'apply', '--check', str(patch)], cwd=source, check=True)
-        subprocess.run(['git', 'apply', str(patch)], cwd=source, check=True)
+        # Git for Windows erbt häufig autocrlf; ein Baupatch muss dagegen
+        # exakt seine belegten Bytes erzeugen, ohne globale Git-Änderungen.
+        command = ['git', '-c', 'core.autocrlf=false', '-c', 'core.eol=lf', 'apply', '--whitespace=nowarn']
+        subprocess.run([*command, '--check', str(patch)], cwd=source, check=True)
+        subprocess.run([*command, str(patch)], cwd=source, check=True)
         if digest(target) != entry['after_sha256']:
             raise ValueError('Runtimepatch hat nicht die geprüften Ergebnisbytes erzeugt.')
         records.append(dict(entry))

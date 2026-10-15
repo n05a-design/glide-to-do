@@ -44,6 +44,7 @@ def run(destination, app_path):
                                      stdout=app_log, stderr=subprocess.STDOUT,
                                      env=dict(os.environ, PYTHONDONTWRITEBYTECODE='1'))
             ready = wait_value(exchange/'bereit.json', lambda value: value.get('tk') == '9.1.0')
+            wait_value(exchange/'zustand.json', lambda value: value.get('pid') == child.pid)
             pid = ready['pid']
             assert pid == child.pid, 'Nur die gestartete Glide-Testinstanz darf bedient werden'
 

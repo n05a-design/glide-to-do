@@ -16,7 +16,7 @@ class ReaderOrca(unittest.TestCase):
 
     def test_foreign_foreground_prevents_every_keyboard_operation(self):
         actor = reader.Actor(123, Path('unused'), {})
-        with patch.object(reader.subprocess, 'check_output', return_value='999'), \
+        with patch.object(reader, 'foreground_pid', return_value=999), \
                 patch.object(reader.subprocess, 'run') as send:
             for operation in (lambda: actor.key('tab'), lambda: actor.type('Test')):
                 with self.assertRaisesRegex(RuntimeError, 'Vordergrund'):

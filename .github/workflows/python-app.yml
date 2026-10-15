@@ -283,7 +283,7 @@ jobs:
         with:
           python-version: "3.14.8"
       - name: Native Bau- und AT-SPI-Voraussetzungen
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq build-essential pkg-config libx11-dev libxext-dev libxft-dev libxss-dev libharfbuzz-dev libatk1.0-dev libatk-bridge2.0-dev at-spi2-core python3-gi gir1.2-atspi-2.0 dbus-x11 xvfb orca speech-dispatcher speech-dispatcher-espeak-ng espeak-ng python3-speechd python3-setproctitle pulseaudio pulseaudio-utils xdotool openbox
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq build-essential pkg-config libx11-dev libxext-dev libxft-dev libxss-dev libharfbuzz-dev libatk1.0-dev libatk-bridge2.0-dev at-spi2-core python3-gi gir1.2-atspi-2.0 dbus-x11 xvfb orca speech-dispatcher speech-dispatcher-espeak-ng espeak-ng python3-speechd python3-setproctitle pulseaudio pulseaudio-utils xdotool openbox libxres1
       - name: Originalquellen mit festen Pins
         run: python -B packaging/runtime/hole_runtimequellen.py --ziel "$RUNNER_TEMP/zugang-quellen"
       - name: Eigene native Runtime bauen
@@ -314,6 +314,7 @@ jobs:
             ${{ runner.temp }}/zugang-native
             ${{ runner.temp }}/zugang-orca/*.json
             ${{ runner.temp }}/zugang-orca/*.log
+            ${{ runner.temp }}/zugang-orca/glide-diagnose/*.json
             ${{ runner.temp }}/zugang-orca-windowmanager.log
             ${{ runner.temp }}/zugang-gui.json
           retention-days: 14
@@ -336,6 +337,7 @@ jobs:
         with:
           persist-credentials: false
       - uses: actions/setup-python@v7
+        id: python
         with:
           python-version: "3.14.7"
           architecture: x64
@@ -368,6 +370,34 @@ jobs:
           $env:PYTHONPATH = "$env:RUNNER_TEMP/zugang-runtime/python-extension"
           python -B tests/tools/pruefe_reader_nvda.py --ziel "$env:RUNNER_TEMP/zugang-nvda"
           exit $LASTEXITCODE
+      - name: Gepinnte Paketwerkzeuge für eigenen Tk-9.1-Prototyp
+        id: paket_werkzeuge
+        if: always() && !cancelled() && steps.runtime.outcome == 'success'
+        run: |
+          python -m venv "$env:RUNNER_TEMP/zugang-bau-venv"
+          & "$env:RUNNER_TEMP/zugang-bau-venv/Scripts/python.exe" -m pip install --disable-pip-version-check -r requirements/build-windows.txt
+          exit $LASTEXITCODE
+      - name: Original-Lizenzbelege der eigenen Tk-9.1-Laufzeit
+        id: paket_lizenzen
+        if: always() && !cancelled() && steps.paket_werkzeuge.outcome == 'success'
+        run: |
+          $env:PYTHONPATH = "$env:RUNNER_TEMP/zugang-runtime/python-extension"
+          & "$env:RUNNER_TEMP/zugang-bau-venv/Scripts/python.exe" -B packaging/paket/lizenzen_vorbereiten_windows.py --quelle src/glide --repo . --ziel "$env:RUNNER_TEMP/zugang-paket/lizenzen" --runtime-bau "$env:RUNNER_TEMP/zugang-runtime/runtime-bau.json"
+          exit $LASTEXITCODE
+      - name: Eigenständiger Windows-Tk-9.1-Paketprototyp (keine Lieferung)
+        id: paket_bau
+        if: always() && !cancelled() && steps.paket_lizenzen.outcome == 'success'
+        run: |
+          $env:PYTHONPATH = "$env:RUNNER_TEMP/zugang-runtime/python-extension"
+          $version = (Get-Content VERSION -Raw).Trim()
+          & "$env:RUNNER_TEMP/zugang-bau-venv/Scripts/python.exe" -B packaging/paket/baue_paket.py --quelle src/glide --version $version --ziel "$env:RUNNER_TEMP/zugang-paket/bau" --plattform windows-x64 --lizenzen "$env:RUNNER_TEMP/zugang-paket/lizenzen" --runtime-bau "$env:RUNNER_TEMP/zugang-runtime/runtime-bau.json"
+          exit $LASTEXITCODE
+      - name: Tatsächlicher isolierter Prototypstart mit gesperrter externer Tk-9.1-Laufzeit
+        if: always() && !cancelled() && steps.paket_bau.outcome == 'success'
+        run: |
+          $python = Split-Path -Parent "${{ steps.python.outputs.python-path }}"
+          python -B packaging/paket/pruefe_start_windows.py --paket "$env:RUNNER_TEMP/zugang-paket/bau/dist/Glide" --bericht "$env:RUNNER_TEMP/zugang-paket/startprobe.json" --sperren $python --sperren "$env:RUNNER_TEMP/zugang-bau-venv" --sperren "$env:RUNNER_TEMP/zugang-runtime" --sperren "$env:RUNNER_TEMP/zugang-paket/bau/quelle" --sperren "$env:GITHUB_WORKSPACE"
+          exit $LASTEXITCODE
       - name: Native Belege sichern
         if: always()
         uses: actions/upload-artifact@v7
@@ -380,5 +410,10 @@ jobs:
             ${{ runner.temp }}/zugang-gui.json
             ${{ runner.temp }}/zugang-nvda/*.json
             ${{ runner.temp }}/zugang-nvda/*.log
+            ${{ runner.temp }}/zugang-nvda/glide-diagnose/*.json
+            ${{ runner.temp }}/zugang-paket/*.json
+            ${{ runner.temp }}/zugang-paket/lizenzen/manifest.json
+            ${{ runner.temp }}/zugang-paket/bau/*.json
+            ${{ runner.temp }}/zugang-paket/bau/bau.log
           retention-days: 14
           if-no-files-found: ignore

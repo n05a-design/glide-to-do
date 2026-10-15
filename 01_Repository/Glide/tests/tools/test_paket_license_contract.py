@@ -107,6 +107,19 @@ class LicenseContractTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'zlib-ng'):
             validate_components(matrix, records)
 
+    def test_windows_own_toolkit_needs_utf8proc_and_exact_native_names(self):
+        matrix = windows_native_components(['_internal/tcl91.dll', '_internal/tcl9tk91.dll',
+                                             '_internal/_tkinter.cp314-win_amd64.pyd'])
+        self.assertIn('utf8proc', matrix['_internal/tcl91.dll'])
+        self.assertEqual(matrix['_internal/tcl9tk91.dll'], ['Tk', 'NanoSVG'])
+        self.assertEqual(matrix['_internal/_tkinter.cp314-win_amd64.pyd'], ['Python'])
+        records = [dict(name=name, version='pin', source='original', files={'terms':'digest'})
+                   for name in ('Tcl', 'Henry-Spencer-Regex', 'Tk', 'NanoSVG', 'Python')]
+        with self.assertRaisesRegex(ValueError, 'utf8proc'):
+            validate_components(matrix, records)
+        with self.assertRaises(ValueError):
+            windows_native_components(['_internal/_tkinter.cp315-win_amd64.pyd'])
+
     def test_windows_new_dlls_extensions_and_duplicate_names_refuse_the_build(self):
         for names in (['_internal/alien.dll'], ['_internal/_unknown.pyd'],
                       ['_internal/python315.dll'], ['_internal/../outside.dll'],

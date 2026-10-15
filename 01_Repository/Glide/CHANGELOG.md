@@ -1,8 +1,8 @@
 # Änderungsverlauf
 
-Vorbereitung 4.0.0 (unveröffentlichter Kandidat): Linux-/Windows-Runtimebau und GUI bestätigt; Linux-AT-SPI-Textkorrektur extern geprüft. Nach roter NVDA-Probe Windows-Namenszuordnung und Spy-Konfiguration korrigiert; tatsächliche Orca-Probe ergänzt. Readerwiederholung, eigene 4.0-Pakete und Vollmatrix bleiben offen.
-
 ## In Vorbereitung – 4.0.0 (keine Lieferung)
+
+- Native Vorbereitung 15.10.: Windows-Patchbytes gegen geerbtes Git-autocrlf abgesichert, Orca-Eingaben an tatsächlich belegten X11-Prozess gebunden; eigene Windows-9.1-Lizenz-/Paketvorstufe einschließlich utf8proc ergänzt. Reader-/Paketwiederholung offen.
 
 - Zugänglicher Aufgaben-Kernablauf nach D36: additive Semantik, echte Checklistencheckboxen, Tastaturanhänge und geschützte Auswahlflächen. Neue Fachlogik Tk-frei; bestehende Mutationswege und Format 25 erhalten.
 - Eigene gepinnte Tk-9.1-Runtime mit nativ belegten Mac-Korrekturen und isoliert gestarteter privater Mac-Paketvorstufe. Paketbau verlangt passende Quellpins, Patchsatz und unveränderte Runtimebytes; Lizenzzuordnung einschließlich utf8proc. Vorprüfungen grün, weitere Plattformen, tatsächliche Reader, eigene Pakete und Vollmatrix offen; die folgenden Lieferstände bleiben unverändert.

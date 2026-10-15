@@ -16,6 +16,8 @@ import sys
 import time
 import traceback
 
+from reader_x11 import foreground_pid
+
 
 def require_hosted(destination):
     if (sys.platform != 'linux' or os.environ.get('GITHUB_ACTIONS') != 'true' or
@@ -59,9 +61,7 @@ class Actor:
         self.spoken = []
 
     def assert_focus(self):
-        value = subprocess.check_output(['xdotool','getwindowfocus','getwindowpid'],
-                                        env=self.environment,text=True).strip()
-        if int(value) != self.pid:
+        if foreground_pid(self.environment) != self.pid:
             raise RuntimeError('Kein Tastendruck: eigene Glide-Testinstanz hat nicht den Vordergrund.')
 
     def key(self, gesture):
@@ -160,6 +160,7 @@ def run(destination, app):
                 '--app',str(app),'--diagnose',str(exchange)],env=env,stdout=log,stderr=log)
             ready=wait_value(exchange/'bereit.json',lambda value:value.get('tk')=='9.1.0')
             assert ready['pid']==child.pid
+            wait_value(exchange/'zustand.json',lambda value:value.get('pid')==child.pid)
             actor=Actor(child.pid,debug,env);result['speech']=actor.spoken
             state=lambda condition:wait_value(exchange/'zustand.json',condition)
             actor.key('control+n');actor.focus('Neue Aufgabe')

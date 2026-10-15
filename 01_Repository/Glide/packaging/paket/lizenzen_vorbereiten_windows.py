@@ -12,15 +12,18 @@ import argparse
 import ctypes
 import hashlib
 import importlib.metadata
+import importlib.util
 import json
 from pathlib import Path
 import platform
 import shutil
 import ssl
 import sys
+import sysconfig
 import urllib.request
 
-from windows_license_sources import static_sources
+from windows_license_sources import static_sources, toolkit_references, utf8proc_version
+from runtime_provenance import validate_runtime_proof
 
 PIN = "6.22.3"
 BUILD = ("pyinstaller", "pyinstaller-hooks-contrib", "altgraph", "packaging", "setuptools", "pefile", "pywin32-ctypes")
@@ -74,6 +77,7 @@ def main():
     parser.add_argument("--quelle", type=Path, required=True)
     parser.add_argument("--repo", type=Path, required=True)
     parser.add_argument("--ziel", type=Path, required=True)
+    parser.add_argument("--runtime-bau", type=Path, help="Verifiziertes eigenes Tcl/Tk-9.1-Baumanifest")
     args = parser.parse_args()
     if sys.platform != "win32" or platform.machine().lower() not in ("amd64", "x86_64"):
         raise SystemExit("Nur auf dem nativen Windows-x64-Prüfstand.")
@@ -84,6 +88,27 @@ def main():
     tcl = str(tkinter.Tcl().call("info", "patchlevel"))
     if not tcl.startswith("9."):
         raise SystemExit("Python muss mit Tcl/Tk 9 verbunden sein.")
+    own_pins = None
+    own_runtime = None
+    if tcl == '9.1.0' or _tkinter.TK_VERSION == '9.1':
+        if args.runtime_bau is None:
+            raise SystemExit('Eigene Tcl/Tk-9.1-Lizenzen brauchen das geprüfte Runtime-Baumanifest.')
+        contract_path = Path(__file__).parents[1]/'runtime/runtime_contract.py'
+        spec = importlib.util.spec_from_file_location('glide_license_runtime_contract', contract_path)
+        contract = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(contract)
+        own_pins = dict(contract.PINS, python=contract.python_pin(sys.version.split()[0],
+            (Path(sysconfig.get_path('include'))/'patchlevel.h').read_text(encoding='utf-8'),
+            free_threaded=bool(sysconfig.get_config_var('Py_GIL_DISABLED')),
+            debug=bool(sysconfig.get_config_var('Py_DEBUG'))))
+        patches = json.loads(contract_path.with_name('patches.json').read_text(encoding='utf-8'))['patches']
+        runtime = dict(python=sys.version.split()[0], tcl=tcl, tk_compiled=_tkinter.TK_VERSION,
+                       platform='win32', machine='x86_64')
+        own_runtime = validate_runtime_proof(args.runtime_bau, runtime, _tkinter.__file__, pins=own_pins,
+            patches=[entry for entry in patches if entry['platform'] == 'win32'])
+    elif args.runtime_bau is not None:
+        raise SystemExit('Runtime-Baumanifest nur zusammen mit der eigenen Tcl/Tk-9.1-Laufzeit.')
+    toolkit = toolkit_references(tcl, _tkinter.TK_VERSION, pins=own_pins)
     b = Bestand(args.ziel)
     source, repo, base = args.quelle.resolve(), args.repo.resolve(), Path(sys.base_prefix)
 
@@ -130,7 +155,10 @@ def main():
         b.add(record['name'], record['version'], record['source'], [terms])
     # Eine gegebenenfalls mit Tcl gelieferte klassische zlib-DLL ist von
     # der statischen zlib-ng im Python-Kern zu unterscheiden.
-    classic = [path for path in (base / 'zlib1.dll', base / 'DLLs/zlib1.dll') if path.is_file()]
+    classic_root = Path(_tkinter.__file__).resolve().parent if own_runtime else base
+    classic = [path for path in (classic_root/'zlib1.dll', classic_root/'DLLs/zlib1.dll') if path.is_file()]
+    if own_runtime and not classic:
+        raise SystemExit('Belegte eigene Tcl-9.1-zlib-DLL fehlt.')
     if len(classic) > 1 and len({sha(path) for path in classic}) != 1:
         raise SystemExit('Mehrdeutige klassische zlib-Anbieter in der Python-Installation.')
     if classic:
@@ -144,21 +172,25 @@ def main():
         b.add('zlib', version, 'https://github.com/madler/zlib/tree/v' + version,
               [b.fetch(url, 'zlib-LICENSE.txt')])
 
-    tag = "core-" + tcl.replace(".", "-")
-    for name in ("Tcl", "Tk"):
-        terms = b.fetch("https://raw.githubusercontent.com/tcltk/" + name.lower() + "/" + tag + "/license.terms",
-                        name + "-LICENSE.txt")
-        b.add(name, tcl, "https://github.com/tcltk/" + name.lower() + "/tree/" + tag, [terms])
-    tommath = b.fetch("https://raw.githubusercontent.com/tcltk/tcl/" + tag + "/libtommath/LICENSE", "libtommath-LICENSE.txt")
-    b.add("libtommath", "aus Tcl " + tcl, "https://github.com/tcltk/tcl/tree/" + tag + "/libtommath", [tommath])
-    with urllib.request.urlopen("https://raw.githubusercontent.com/tcltk/tcl/" + tag + "/generic/regcustom.h", timeout=60) as answer:
-        regex = b.write("Henry-Spencer-Regex-LICENSE.txt", comment_block(answer.read(), (b"Henry Spencer", b"Redistribution")))
-    b.add("Henry-Spencer-Regex", "aus Tcl " + tcl, "https://github.com/tcltk/tcl/blob/" + tag + "/generic/regcustom.h", [regex])
+    for name in ('Tcl', 'Tk'):
+        reference = toolkit[name.lower()]
+        terms = b.fetch(reference['raw']+'/license.terms', name+'-LICENSE.txt')
+        b.add(name, tcl, reference['source'], [terms])
+    tcl_ref, tk_ref = toolkit['tcl'], toolkit['tk']
+    tommath = b.fetch(tcl_ref['raw']+'/libtommath/LICENSE', 'libtommath-LICENSE.txt')
+    b.add('libtommath', 'aus Tcl '+tcl, tcl_ref['source']+'/libtommath', [tommath])
+    with urllib.request.urlopen(tcl_ref['raw']+'/generic/regcustom.h', timeout=60) as answer:
+        regex = b.write('Henry-Spencer-Regex-LICENSE.txt', comment_block(answer.read(), (b'Henry Spencer', b'Redistribution')))
+    b.add('Henry-Spencer-Regex', 'aus Tcl '+tcl, tcl_ref['source']+'/generic/regcustom.h', [regex])
     nano = []
-    for header in ("nanosvg.h", "nanosvgrast.h"):
-        with urllib.request.urlopen("https://raw.githubusercontent.com/tcltk/tk/" + tag + "/generic/" + header, timeout=60) as answer:
-            nano.append(b.write(header + "-LICENSE.txt", comment_block(answer.read(), (b"Copyright", b"redistribute"))))
-    b.add("NanoSVG", "aus Tk " + tcl, "https://github.com/tcltk/tk/tree/" + tag + "/generic", nano)
+    for header in ('nanosvg.h', 'nanosvgrast.h'):
+        with urllib.request.urlopen(tk_ref['raw']+'/generic/'+header, timeout=60) as answer:
+            nano.append(b.write(header+'-LICENSE.txt', comment_block(answer.read(), (b'Copyright', b'redistribute'))))
+    b.add('NanoSVG', 'aus Tk '+tcl, tk_ref['source']+'/generic', nano)
+    if own_runtime:
+        utf8_header = b.fetch(tcl_ref['raw']+'/utf8proc/utf8proc.h', 'utf8proc-version.h').read_text(encoding='utf-8')
+        terms = b.fetch(tcl_ref['raw']+'/utf8proc/LICENSE.md', 'utf8proc-LICENSE.txt')
+        b.add('utf8proc', utf8proc_version(utf8_header)+' aus Tcl '+tcl, tcl_ref['source']+'/utf8proc', [terms])
 
     openssl = ssl.OPENSSL_VERSION.split()[1]
     b.add("OpenSSL", openssl, "https://github.com/openssl/openssl/tree/openssl-" + openssl,
@@ -199,6 +231,8 @@ def main():
                    machine="x86_64", pyinstaller=PIN)
     manifest = dict(runtime=runtime, components=b.components, downloads=b.downloads, bauabhaengigkeiten=versions,
                     abnahme="Auf dem nativen Windows-Prüfstand aus der tatsächlichen Baulaufzeit erzeugt")
+    if own_runtime:
+        manifest.update(quellpins=own_pins, eigene_runtime=own_runtime)
     (b.ziel / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(len(b.components), "Komponenten mit Lizenzbelegen für Python", python_version, "/ Tcl", tcl)
 
