@@ -128,3 +128,6 @@ Welche Pakete dazu offen sind, mit Status und Abnahme, steht nur im [Entwicklung
 ## Nachläufe ohne neue App-Version
 
 Reine Dokumentations-, Ablage- oder Werkzeugarbeit bekommt einen datierten Nachweis unter `tests/qa-<aktuelle Version>/<Thema>_<Datum>/` (README und `ergebnis.json`) und keine künstliche Produktionsversion. Geprüft werden CI-Grundstufe, Werkzeugtests und unveränderte App-/Lieferhashes; eine frühere Vollprüfung gilt für ihren eingefrorenen Stand und wird nicht als Lauf mit neuen Werkzeugen ausgegeben. Regeln für Dokumente: [Dokumentenpflege](DOKUMENTENPFLEGE.md).
+
+
+**Technischer P8-Nachlauf 15.10.2026:** Achter nativer Lauf bestätigt die gemeinsame Tcl-Korrektur auf beiden Plattformen und ACTIVE/Unicode unter Linux; deaktivierte Zustände und vollständige Readerabläufe bleiben offen. Gezielte Runtime-/Prüferkorrekturen samt nativer Windows-Signaturgegenprobe und vollständiger ACL-Regelrestaurierung vorbereitet; [aktueller Nachweis](../tests/qa-3.42.0/zugang400_vorbereitung_2026-10-14/README.md). Keine Änderung an D36/D42/D43 oder Lieferstand 3.42.0.

@@ -131,6 +131,8 @@ class Spy:
     def key(self, pid, gesture):
         if self.foreground_pid() != pid:
             raise RuntimeError('Kein Tastendruck: Die eigene Glide-Testinstanz hat nicht den Vordergrund.')
+        aliases = {'up':'upArrow', 'down':'downArrow', 'left':'leftArrow', 'right':'rightArrow'}
+        gesture = '+'.join(aliases.get(part, part) for part in gesture.split('+'))
         return self.call('emulateKeyPress', gesture)
 
     def next_speech(self):

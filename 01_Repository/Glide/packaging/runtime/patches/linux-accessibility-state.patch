@@ -1,0 +1,45 @@
+--- a/unix/tkUnixAccessibility.c
++++ b/unix/tkUnixAccessibility.c
+@@ -554,9 +554,30 @@
+ 	return state_set;
+     }
+ 
+-    /* Always add these basic states. */
+-    atk_state_set_add_state(state_set, ATK_STATE_ENABLED);
+-    atk_state_set_add_state(state_set, ATK_STATE_SENSITIVE);
++    bool disabled = false, readonly = false;
++    if (acc->tkwin && TkAccessibilityObject) {
++	Tcl_HashEntry *entry = Tcl_FindHashEntry(TkAccessibilityObject, acc->tkwin);
++	if (entry) {
++	    Tcl_HashTable *attributes = (Tcl_HashTable *) Tcl_GetHashValue(entry);
++	    Tcl_HashEntry *stateEntry = Tcl_FindHashEntry(attributes, "state");
++	    if (stateEntry) {
++		Tcl_Size count;
++		Tcl_Obj **values;
++		Tcl_Obj *state = (Tcl_Obj *) Tcl_GetHashValue(stateEntry);
++		if (Tcl_ListObjGetElements(NULL, state, &count, &values) == TCL_OK) {
++		    for (Tcl_Size i = 0; i < count; i++) {
++			const char *value = Tcl_GetString(values[i]);
++			disabled |= strcmp(value, "disabled") == 0;
++			readonly |= strcmp(value, "readonly") == 0;
++		    }
++		}
++	    }
++	}
++    }
++    if (!disabled) {
++	atk_state_set_add_state(state_set, ATK_STATE_ENABLED);
++	atk_state_set_add_state(state_set, ATK_STATE_SENSITIVE);
++    }
+ 
+     /* Only add FOCUSABLE if widget can receive focus. */
+     if (acc->tkwin) {
+@@ -594,7 +615,7 @@
+ 	if (role == ATK_ROLE_ENTRY || role == ATK_ROLE_TEXT) {
+ 	    /* Check if widget has -state normal or is not disabled */
+ 	    Tcl_HashEntry *hPtr = Tcl_FindHashEntry(TkAccessibilityObject, (char *)acc->tkwin);
+-	    int is_editable = 1; /* Default to editable. */
++	    int is_editable = !disabled && !readonly;
+ 
+ 	    if (hPtr) {
+ 		Tcl_HashTable *attrs = (Tcl_HashTable *)Tcl_GetHashValue(hPtr);

@@ -36,6 +36,14 @@ def acl_rules(snapshot):
             for name,dacl in snapshot.items()}
 
 
+def restoration_security_information(dacl):
+    """Gesicherten Vererbungsschutz explizit an die native API übergeben."""
+    flags = re.match(r'^D:((?:P|AI|AR)*)(?=\(|$)', dacl)
+    if flags is None:
+        raise ValueError('Ungültiger gesicherter DACL-Kopf.')
+    return 0x4 | (0x80000000 if 'P' in flags[1] else 0x20000000)
+
+
 def normalize_environment(environment):
     # os.environ ist unter Windows schreibungsunabhängig. Ein dict daraus
     # enthält dagegen SYSTEMROOT und verliert diese Nachschlage-Eigenschaft.

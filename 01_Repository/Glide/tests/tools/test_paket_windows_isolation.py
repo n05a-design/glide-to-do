@@ -5,10 +5,24 @@ import errno
 import unittest
 import tempfile
 from pathlib import Path
-from windows_isolation import access_denied, acl_rules, acl_snapshot, normalize_environment, plan, restoration_entries, isolation_probe
+from windows_isolation import access_denied, acl_rules, acl_snapshot, normalize_environment, plan, restoration_entries, restoration_security_information, isolation_probe
 
 
 class NativeDenialEvidence(unittest.TestCase):
+    def test_native8_protected_python_sources_keep_protection_and_explicit_aces(self):
+        original = 'D:P(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)'
+        rewritten = 'D:(A;ID;FA;;;BA)(A;ID;FA;;;SY)(A;ID;0x1200a9;;;BU)'
+        self.assertNotEqual(acl_rules({'token.py': original}), acl_rules({'token.py': rewritten}))
+        self.assertEqual(restoration_security_information(original), 0x80000004)
+        for header in ('D:', 'D:AI', 'D:ARAI'):
+            self.assertEqual(restoration_security_information(header+'(A;ID;FA;;;SY)'), 0x20000004)
+        self.assertEqual(restoration_security_information('D:PAI(A;;FA;;;SY)'), 0x80000004)
+
+    def test_native_acl_flags_reject_non_dacl_or_unknown_header(self):
+        for dacl in ('S:(A;;FA;;;SY)', '', 'D:unknown(A;;FA;;;SY)'):
+            with self.subTest(dacl=dacl), self.assertRaises(ValueError):
+                restoration_security_information(dacl)
+
     def test_acl_rules_only_ignore_auto_inherited_descriptor_model_marker(self):
         original={'x64':'D:AI(A;OICIID;FA;;;SY)', 'x64\\python.exe':'D:AI(A;ID;0x1301bf;;;AU)'}
         after={name:dacl.replace('D:AI','D:') for name,dacl in original.items()}

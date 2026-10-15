@@ -15,6 +15,17 @@ class ReaderNvda(unittest.TestCase):
         self.assertIn('autoCheck = False', profile_configuration())
         self.assertIn('allowUsageStats = False', profile_configuration())
 
+    def test_arrow_aliases_match_nvda_and_foreign_focus_prevents_input(self):
+        spy = object.__new__(Spy)
+        spy.foreground_pid = lambda: 123
+        calls = []
+        spy.call = lambda *args: calls.append(args)
+        spy.key(123, 'down');spy.key(123, 'control+up')
+        self.assertEqual(calls, [('emulateKeyPress','downArrow'), ('emulateKeyPress','control+upArrow')])
+        with self.assertRaisesRegex(RuntimeError, 'Vordergrund'):
+            spy.key(999, 'down')
+        self.assertEqual(len(calls), 2)
+
     def test_empty_or_missing_remote_speech_is_a_clear_failure(self):
         spy = object.__new__(Spy)
         for value in (None, '', '  ', 0):

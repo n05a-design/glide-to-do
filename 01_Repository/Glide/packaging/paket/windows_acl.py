@@ -9,7 +9,7 @@ from ctypes import wintypes
 from pathlib import PureWindowsPath
 import sys
 
-from windows_isolation import plan, restoration_entries
+from windows_isolation import plan, restoration_entries, restoration_security_information
 
 
 class OriginalAclRestorer:
@@ -41,9 +41,9 @@ class OriginalAclRestorer:
             try:
                 if not self.convert(dacl, 1, ctypes.byref(descriptor), None):
                     raise ctypes.WinError(ctypes.get_last_error())
-                # Nur DACL_SECURITY_INFORMATION; Eigentümer/SACL bleiben erhalten.
-                # Diese API propagiert die Ordner-ACL ausdrücklich nicht weiter.
-                if not self.apply(path, 0x4, descriptor):
+                # DACL einschließlich ursprünglichem Vererbungsschutz setzen;
+                # Eigentümer/SACL erhalten, ohne erneute Ordnerpropagation.
+                if not self.apply(path, restoration_security_information(dacl), descriptor):
                     raise ctypes.WinError(ctypes.get_last_error())
             except OSError as error:
                 errors.append({'datei': path, 'winerror': error.winerror})

@@ -382,6 +382,11 @@ jobs:
           $env:PYTHONPATH = "$env:RUNNER_TEMP/zugang-runtime/python-extension"
           python -B tests/tools/pruefe_reader_nvda.py --ziel "$env:RUNNER_TEMP/zugang-nvda"
           exit $LASTEXITCODE
+      - name: Native Systemsignatur und manipulierte Kopie (ohne Netzwerk)
+        if: always() && !cancelled() && steps.runtime.outcome == 'success'
+        run: |
+          python -B tests/tools/pruefe_windows_signatur.py --bericht "$env:RUNNER_TEMP/zugang-signatur.json"
+          exit $LASTEXITCODE
       - name: Gepinnte Paketwerkzeuge für eigenen Tk-9.1-Prototyp
         id: paket_werkzeuge
         if: always() && !cancelled() && steps.runtime.outcome == 'success'
@@ -419,6 +424,7 @@ jobs:
             ${{ runner.temp }}/zugang-runtime/runtime-bau.json
             ${{ runner.temp }}/zugang-runtime/protokolle
             ${{ runner.temp }}/zugang-desktop.json
+            ${{ runner.temp }}/zugang-signatur.json
             ${{ runner.temp }}/zugang-gui.json
             ${{ runner.temp }}/zugang-skript.json
             ${{ runner.temp }}/zugang-nvda/*.json

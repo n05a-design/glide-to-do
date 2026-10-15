@@ -101,9 +101,16 @@ class Actor:
         return value
 
     def focus(self, expected):
-        value=self.where()
-        assert expected in value,(expected,value)
-        return value
+        deadline = time.monotonic()+20
+        value = ''
+        while time.monotonic() < deadline:
+            try:
+                value = self.where()
+            except AssertionError:
+                continue
+            if expected in value:
+                return value
+        raise AssertionError((expected, value))
 
     def find(self, expected, *, role=None):
         for _ in range(90):
@@ -161,6 +168,18 @@ def run(destination, app):
             ready=wait_value(exchange/'bereit.json',lambda value:value.get('tk')=='9.1.0')
             assert ready['pid']==child.pid
             wait_value(exchange/'zustand.json',lambda value:value.get('pid')==child.pid)
+            started = time.monotonic()
+            deadline = started+30
+            while time.monotonic() < deadline:
+                data = debug.read_text(encoding='utf-8', errors='replace')
+                if 'Setting active script to Tk Application' in data:
+                    break
+                if reader.poll() is not None:
+                    raise RuntimeError('Orca vor eigener App-Assoziation beendet.')
+                time.sleep(.1)
+            else:
+                raise AssertionError('Orca hat seine eigene Tk-App noch keinem aktiven Script zugeordnet.')
+            result['orca_app_initialisierung_ms'] = round((time.monotonic()-started)*1000)
             actor=Actor(child.pid,debug,env);result['speech']=actor.spoken
             state=lambda condition:wait_value(exchange/'zustand.json',condition)
             actor.key('control+n');actor.focus('Neue Aufgabe')
