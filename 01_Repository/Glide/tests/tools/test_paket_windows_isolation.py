@@ -3,10 +3,26 @@ from pathlib import Path as _Path
 _sys.path.insert(0, str(_Path(__file__).resolve().parents[2] / 'packaging/paket'))
 import errno
 import unittest
-from windows_isolation import access_denied, acl_rules, acl_snapshot, normalize_environment, plan, restoration_entries
+import tempfile
+from pathlib import Path
+from windows_isolation import access_denied, acl_rules, acl_snapshot, normalize_environment, plan, restoration_entries, restoration_security_information, isolation_probe
 
 
 class NativeDenialEvidence(unittest.TestCase):
+    def test_native8_protected_python_sources_keep_protection_and_explicit_aces(self):
+        original = 'D:P(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)'
+        rewritten = 'D:(A;ID;FA;;;BA)(A;ID;FA;;;SY)(A;ID;0x1200a9;;;BU)'
+        self.assertNotEqual(acl_rules({'token.py': original}), acl_rules({'token.py': rewritten}))
+        self.assertEqual(restoration_security_information(original), 0x80000004)
+        for header in ('D:', 'D:AI', 'D:ARAI'):
+            self.assertEqual(restoration_security_information(header+'(A;ID;FA;;;SY)'), 0x20000004)
+        self.assertEqual(restoration_security_information('D:PAI(A;;FA;;;SY)'), 0x80000004)
+
+    def test_native_acl_flags_reject_non_dacl_or_unknown_header(self):
+        for dacl in ('S:(A;;FA;;;SY)', '', 'D:unknown(A;;FA;;;SY)'):
+            with self.subTest(dacl=dacl), self.assertRaises(ValueError):
+                restoration_security_information(dacl)
+
     def test_acl_rules_only_ignore_auto_inherited_descriptor_model_marker(self):
         original={'x64':'D:AI(A;OICIID;FA;;;SY)', 'x64\\python.exe':'D:AI(A;ID;0x1301bf;;;AU)'}
         after={name:dacl.replace('D:AI','D:') for name,dacl in original.items()}
@@ -77,6 +93,29 @@ class NativeDenialEvidence(unittest.TestCase):
                      'Python\r\nD:AI\r\nPython\r\nD:AI\r\n'):
             with self.subTest(text=text), self.assertRaises(ValueError):
                 acl_snapshot(text.encode('utf-16'))
+
+
+class RuntimeReadProbe(unittest.TestCase):
+    def test_own_runtime_requires_real_binary_and_preserves_existing_source_probes(self):
+        with tempfile.TemporaryDirectory() as folder:
+            base = Path(folder).resolve()
+            (base/'runtime-bau.json').write_text('{}')
+            self.assertIsNone(isolation_probe(base))
+            native = base/'python-extension/_tkinter.cp314-win_amd64.pyd'
+            native.parent.mkdir();native.write_bytes(b'own-native-extension')
+            self.assertEqual(isolation_probe(base), native)
+            (base/'python.exe').write_bytes(b'python')
+            self.assertEqual(isolation_probe(base), base/'python.exe')
+
+    def test_link_outside_the_blocked_source_cannot_prove_denial(self):
+        with tempfile.TemporaryDirectory() as folder:
+            base=Path(folder);source=base/'source';source.mkdir()
+            external=base/'external';external.write_bytes(b'outside')
+            try:
+                (source/'python.exe').symlink_to(external)
+            except OSError:
+                self.skipTest('Prüfstand erlaubt keine temporären Dateisymlinks')
+            self.assertIsNone(isolation_probe(source))
 
 
 class HostedIsolationBoundary(unittest.TestCase):

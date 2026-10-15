@@ -51,6 +51,103 @@ def loaded_libraries():
     raise RuntimeError('Paketprobe braucht eine beauftragte native Zielplattform.')
 
 
+def accessible_core_probe(app, mod, settle):
+    """Echter Paket-Kernablauf bei gebündelter 9.1-Runtime; kein Readerersatz."""
+    import time
+    root = app.root
+    assert str(root.tk.call('package', 'present', 'Tk')) == '9.1.0'
+    assert app.tree._glide_accessibility.supported, 'Paket enthält kein natives Zugangsbackend.'
+    def wait(condition):
+        deadline = time.monotonic()+4
+        while time.monotonic() < deadline:
+            settle()
+            if condition():
+                return
+            time.sleep(.02)
+        raise AssertionError('Kernablauf im isolierten Paket erreicht seinen gespeicherten Zustand nicht.')
+    def named(name):
+        for widget in app.iter_descendants(app.detail_pane):
+            binding = getattr(widget, '_glide_accessibility', None)
+            if binding is not None and widget.winfo_ismapped():
+                value = binding.attributes()
+                if value is not None and value.name == name:
+                    return widget
+        raise AssertionError('Benanntes Paketfeld fehlt: '+name)
+    inbox = app.ensure_inbox_list()
+    app.set_active_list(inbox['id'])
+    settle()
+    listing = lambda: next(entry for entry in app.lists if entry.get('id') == inbox['id'])
+    previous = {item['id'] for item in listing()['items']}
+    app.entry.focus_force()
+    app.entry.delete(0, 'end')
+    app.entry.insert(0, 'Zugängliche Paketprobe')
+    app.entry_placeholder_active = False
+    app.entry.event_generate('<Return>')
+    wait(lambda: len(listing()['items']) == len(previous)+1)
+    item = next(item for item in listing()['items'] if item['id'] not in previous)
+    identity = item['id']
+    fresh = lambda: app.find_item_in_lists(identity)[0]
+    assert app.entry._glide_accessibility.attributes().name == 'Neue Aufgabe'
+    app.search_entry.focus_force()
+    app.search_entry.delete(0, 'end')
+    app.search_entry.insert(0, 'Zugängliche')
+    app.search_placeholder_active = False
+    app.search_entry.event_generate('<KeyRelease>')
+    wait(lambda: app.tree.exists(identity) and all(not app.tree.exists(key) for key in previous))
+    app.search_entry.event_generate('<Escape>')
+    wait(lambda: app.tree.exists(identity) and all(app.tree.exists(key) for key in previous))
+    app.tree.selection_set(identity)
+    app.tree.focus(identity)
+    app.tree.focus_force()
+    settle()
+    assert 'Zugängliche Paketprobe' in app.tree._glide_accessibility.attributes().value
+    menu = app.build_quick_plan_menu(item_ids=(identity,))
+    try:
+        choice = next(index for index in range(menu.index('end')+1)
+                      if menu.type(index) == 'command' and menu.entrycget(index, 'label').startswith('Heute'))
+        menu.invoke(choice)
+        wait(lambda: fresh().get('planned_date') == mod.date.today().isoformat())
+    finally:
+        menu.destroy()
+    assert not fresh().get('due')
+    app.set_today_view()
+    settle()
+    assert app.open_task_inspector(identity)
+    settle()
+    title = named('Aufgabentitel')
+    if isinstance(title, mod.tk.Text):
+        title.delete('1.0', 'end')
+        title.insert('1.0', 'Paketprobe bearbeitet 🏠')
+    else:
+        title.delete(0, 'end')
+        title.insert(0, 'Paketprobe bearbeitet 🏠')
+    title.focus_force()
+    settle()
+    title.event_generate('<Control-s>')
+    wait(lambda: fresh()['text'] == 'Paketprobe bearbeitet 🏠')
+    field = named('Neuer Checklistenpunkt')
+    field.focus_force()
+    settle()
+    field.insert(0, 'Paket-Unterlagen prüfen')
+    field.event_generate('<Return>')
+    wait(lambda: len(fresh().get('checklist', [])) == 1)
+    checkbox = named('Paket-Unterlagen prüfen')
+    assert isinstance(checkbox, mod.tk.Checkbutton)
+    checkbox.focus_force()
+    settle()
+    checkbox.event_generate('<space>')
+    wait(lambda: fresh()['checklist'][0]['done'])
+    current = named('Paket-Unterlagen prüfen')
+    assert current._glide_accessibility.attributes().value == '1'
+    assert root.focus_get() is current, 'Checkbox verliert beim Umschalten ihren Paketfokus.'
+    app.undo_last_change()
+    wait(lambda: not fresh()['checklist'][0]['done'])
+    assert not named('Paket-Unterlagen prüfen')._accessible_variable.get()
+    return dict(native_backend=True, erfassen_suchen_heute_inspektor=True,
+                unicode_titel_gespeichert=True, checkbox_leertaste_undo=True,
+                reader_abnahme='separat offen; tatsächlicher Paketablauf ohne Reader')
+
+
 def smoke(report_path):
     result = {"eigenstaendiger_pruefstart": True, "exitcode": 1}
     root = app = None
@@ -157,6 +254,8 @@ def smoke(report_path):
             libraries = {}
             for key, command in (("tcl", ("info", "library")), ("tk", ("set", "tk_library"))):
                 libraries[key] = script_library(root.tk.call(*command), key, bundle, provider=providers[key])
+            core_proof = accessible_core_probe(app, mod, settle) if inputs.get('own_runtime') else None
+            assert not errors, errors
             result.update(exitcode=0, app_version=mod.APP_VERSION, python=sys.version.split()[0],
                           tcl=str(root.tk.call("info", "patchlevel")),
                           tk=str(root.tk.call("package", "present", "Tk")), plattform=sys.platform,
@@ -170,7 +269,7 @@ def smoke(report_path):
                           lizenzdateien_sha256_geprueft=len(inputs["licenses_sha256"]), logo_geladen=True,
                           gebuendelte_schriften_verfuegbar=list(required_families),
                           dnd_version=dnd_version, native_dnd_bibliotheken=dnd_libraries,
-                          externe_python_suchpfade=external_paths, callbackfehler=errors)
+                          externe_python_suchpfade=external_paths, callbackfehler=errors, zugangs_kernablauf=core_proof)
         except BaseException as exc:
             result.update(fehler=str(exc), traceback=traceback.format_exc())
         finally:

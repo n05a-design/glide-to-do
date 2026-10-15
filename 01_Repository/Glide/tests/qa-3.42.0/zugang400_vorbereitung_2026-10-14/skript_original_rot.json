@@ -1,0 +1,10 @@
+{
+  "exitcode": 1,
+  "nur_kuenstliche_daten": true,
+  "readerstatus": "nur im eigenen Interpreter simuliert",
+  "tk": "9.1.0",
+  "skript_sha256": "652369e48634af985c9fdac5bcd4c2695452e260923f1442403f272275bdf4d6",
+  "fehler": "No table found. You must set the accessibility role first.",
+  "traceback": "Traceback (most recent call last):\n  File \"~/.codex/workspaces/glide-fortsetzung-2026-10-13/paket8-kandidat/01_Repository/Glide/tests/tools/pruefe_native_accessibility_skript.py\", line 54, in run\n    root.tk.call('::tk::accessible::_updateselection', str(tree))\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_tkinter.TclError: No table found. You must set the accessibility role first.\n",
+  "callback_errors": []
+}

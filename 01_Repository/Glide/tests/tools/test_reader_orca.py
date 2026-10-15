@@ -16,12 +16,22 @@ class ReaderOrca(unittest.TestCase):
 
     def test_foreign_foreground_prevents_every_keyboard_operation(self):
         actor = reader.Actor(123, Path('unused'), {})
-        with patch.object(reader.subprocess, 'check_output', return_value='999'), \
+        with patch.object(reader, 'foreground_pid', return_value=999), \
                 patch.object(reader.subprocess, 'run') as send:
             for operation in (lambda: actor.key('tab'), lambda: actor.type('Test')):
                 with self.assertRaisesRegex(RuntimeError, 'Vordergrund'):
                     operation()
             send.assert_not_called()
+
+    def test_keyboard_echo_does_not_count_as_focus_until_actual_field_is_spoken(self):
+        actor = reader.Actor(123, Path('unused'), {})
+        values = iter(['left control n', 'Neue Aufgabe entry'])
+        actor.where = lambda: next(values)
+        self.assertEqual(actor.focus('Neue Aufgabe'), 'Neue Aufgabe entry')
+        actor.where = lambda: 'left control n'
+        with patch.object(reader.time, 'monotonic', side_effect=[0,1,22]):
+            with self.assertRaises(AssertionError):
+                actor.focus('Neue Aufgabe')
 
     def test_hosted_scope_and_private_destination_are_required(self):
         with tempfile.TemporaryDirectory() as directory, \

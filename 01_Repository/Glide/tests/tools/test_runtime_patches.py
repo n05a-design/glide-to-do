@@ -1,10 +1,12 @@
 """Echter Patchlauf und verweigerte fremde/veränderte Eingaben ohne GUI."""
 import hashlib
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'packaging/runtime'))
 from runtime_contract import PINS
@@ -19,9 +21,9 @@ class RuntimePatches(unittest.TestCase):
         self.source = self.base / 'export'
         self.source.mkdir()
         self.target = self.source / 'provider.c'
-        self.target.write_text('first\nold\nlast\n')
+        self.target.write_bytes(b'first\nold\nlast\n')
         self.patch = self.base / 'provider.patch'
-        self.patch.write_text('--- a/provider.c\n+++ b/provider.c\n@@ -1,3 +1,3 @@\n first\n-old\n+new\n last\n')
+        self.patch.write_bytes(b'--- a/provider.c\n+++ b/provider.c\n@@ -1,3 +1,3 @@\n first\n-old\n+new\n last\n')
         sha = lambda value: hashlib.sha256(value).hexdigest()
         self.entry = dict(id='fixture', platform='darwin', file='provider.c', patch='provider.patch',
                           before_sha256=sha(self.target.read_bytes()),
@@ -38,6 +40,21 @@ class RuntimePatches(unittest.TestCase):
         self.assertEqual(self.target.read_bytes(), b'first\nnew\nlast\n')
         with self.assertRaises(ValueError):
             self.run_patch()
+
+    def test_inherited_windows_line_endings_cannot_change_verified_patch_bytes(self):
+        config = self.base/'test-gitconfig'
+        config.write_text('[core]\n autocrlf = true\n[apply]\n whitespace = fix\n')
+        with patch.dict(os.environ, GIT_CONFIG_GLOBAL=str(config), GIT_CONFIG_NOSYSTEM='1'):
+            self.assertEqual(self.run_patch(), [self.entry])
+            self.assertEqual(self.target.read_bytes(), b'first\nnew\nlast\n')
+
+    def test_common_script_patch_is_applied_once_on_every_platform(self):
+        self.entry['platform'] = 'all'
+        for system in ('linux', 'darwin', 'win32'):
+            self.target.write_bytes(b'first\nold\nlast\n')
+            with self.subTest(system=system):
+                self.assertEqual(self.run_patch(system), [self.entry])
+                self.assertEqual(self.target.read_bytes(), b'first\nnew\nlast\n')
 
     def test_other_platform_never_applies_patch(self):
         self.assertEqual(self.run_patch('linux'), [])

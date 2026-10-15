@@ -44,6 +44,7 @@ def run(destination, app_path):
                                      stdout=app_log, stderr=subprocess.STDOUT,
                                      env=dict(os.environ, PYTHONDONTWRITEBYTECODE='1'))
             ready = wait_value(exchange/'bereit.json', lambda value: value.get('tk') == '9.1.0')
+            wait_value(exchange/'zustand.json', lambda value: value.get('pid') == child.pid)
             pid = ready['pid']
             assert pid == child.pid, 'Nur die gestartete Glide-Testinstanz darf bedient werden'
 
@@ -65,11 +66,11 @@ def run(destination, app_path):
 
             def find_by_tab(text, *, role=None):
                 for _ in range(90):
-                    key('tab')
+                    key('control+tab')
                     spoken = speak_focus()
                     if text in spoken and (role is None or role in spoken.casefold()):
                         return spoken
-                raise AssertionError('Per Tab und NVDA nicht erreichbar: ' + text)
+                raise AssertionError('Per Strg+Tab und NVDA nicht erreichbar: ' + text)
 
             def type_text(text):
                 for char in text:
@@ -89,8 +90,20 @@ def run(destination, app_path):
             key('home')
             focus_expected('Angebot pruefen')
             key('control+shift+p')
-            key('home')
-            focus_expected('Heute')
+            # Native Menüs melden bei Insert+Tab häufig den Menücontainer.
+            # Die Auswahl muss beim tatsächlichen Navigieren gesprochen werden.
+            for gesture in ('home', 'down', 'up', 'home'):
+                index = spy.next_speech()
+                key(gesture)
+                try:
+                    spoken = spy.speech(index)
+                except AssertionError:
+                    continue
+                result['speech'].append(spoken)
+                if 'Heute' in spoken:
+                    break
+            else:
+                raise AssertionError('NVDA benennt Heute beim Navigieren im Planungsmenü nicht.')
             key('enter')
             wait_value(exchange/'zustand.json', lambda value: value['tasks'][0].get('planned_date') == date.today().isoformat())
             find_by_tab('Arbeitsbereiche', role='tree')
@@ -144,6 +157,12 @@ def run(destination, app_path):
             except subprocess.TimeoutExpired:
                 reader.terminate()
                 reader.wait(timeout=15)
+    callback_path = destination/'glide-diagnose/callback-fehler.json'
+    if callback_path.is_file():
+        result['app_callback_errors'] = json.loads(callback_path.read_text(encoding='utf-8'))
+        if result['app_callback_errors']:
+            result['exitcode'] = 1
+            result.setdefault('fehler', 'Callbackfehler der künstlichen Reader-App')
     (destination/'reader-ergebnis.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
     return result['exitcode']
 

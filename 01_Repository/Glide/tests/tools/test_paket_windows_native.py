@@ -47,6 +47,14 @@ class WindowsNativeContract(unittest.TestCase):
         self.assertEqual(len(binaries), 8)
         self.assertNotIn('system_runtime_stub', specification('stage', 'macos-arm64', product, 'icon.icns'))
 
+    def test_native_accessibility_oleacc_is_system_provided_and_cannot_be_bundled(self):
+        records = [dict(path='_internal/tcl9tk91.dll', machine=0x8664, sha256='tk', imports=['OLEACC.dll'])]
+        self.assertEqual(validate_graph(records)['exitcode'], 0)
+        records.append(dict(path='_internal/OLEACC.dll', machine=0x8664, sha256='system', imports=[]))
+        self.assertEqual(validate_graph(records)['exitcode'], 1)
+        records[0]['imports'] = ['OLEACC_UNKNOWN.dll']
+        self.assertTrue(any('fehlt' in error['fehler'] for error in validate_graph(records)['fehler']))
+
     def test_wrong_architecture_and_system_shadowing_are_errors(self):
         result = validate_graph([record('Glide.exe', machine=0x14c), record('_internal/kernel32.dll')])
         self.assertEqual(len(result['fehler']), 2)

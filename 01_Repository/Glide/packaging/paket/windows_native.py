@@ -8,7 +8,7 @@ SYSTEM_DLLS = frozenset(name+'.dll' for name in (
     'advapi32', 'bcrypt', 'bcryptprimitives', 'cabinet', 'cfgmgr32', 'comctl32',
     'comdlg32', 'crypt32', 'cryptbase', 'cryptsp', 'dbghelp', 'dnsapi', 'dwmapi',
     'gdi32', 'imm32', 'iphlpapi', 'kernel32', 'kernelbase', 'mpr', 'msimg32',
-    'msvcrt', 'ncrypt', 'netapi32', 'normaliz', 'ntdll', 'ole32', 'oleaut32',
+    'msvcrt', 'ncrypt', 'netapi32', 'normaliz', 'ntdll', 'ole32', 'oleaut32', 'oleacc',
     'powrprof', 'profapi', 'propsys', 'psapi', 'rpcrt4', 'sechost', 'secur32', 'setupapi',
     'shell32', 'shlwapi', 'ucrtbase', 'user32', 'userenv', 'usp10', 'uxtheme',
     'version', 'winhttp', 'wininet', 'winmm', 'winspool', 'wintrust', 'ws2_32',

@@ -105,7 +105,7 @@ def build(source, repo_version, destination, target, licenses, runtime_manifest=
                     free_threaded=bool(sysconfig.get_config_var('Py_GIL_DISABLED')),
                     debug=bool(sysconfig.get_config_var('Py_DEBUG'))))
         patches = json.loads(contract_path.with_name('patches.json').read_text(encoding='utf-8'))['patches']
-        patches = [patch for patch in patches if patch['platform'] == sys.platform]
+        patches = [patch for patch in patches if patch['platform'] in (sys.platform, 'all')]
         import _tkinter
         own_runtime = validate_runtime_proof(runtime_manifest, runtime, _tkinter.__file__, pins=pins, patches=patches)
     source = source.resolve()

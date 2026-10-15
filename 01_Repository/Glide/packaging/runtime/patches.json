@@ -27,6 +27,33 @@
       "before_sha256": "a81918f91245de9d1c5f74efe722e40ae4cfb83e49481412377ce5b7b7b3a91e",
       "after_sha256": "1ddea5947df51ff3f0efead484223833d97722dd06b832a9e4e2e789b12b9a12",
       "patch_sha256": "1f83a7e34c899a4454e462bf6ddd862b1667f42fc37523994c525a73f27e2ed0"
+    },
+    {
+      "id": "common-accessibility-selection",
+      "platform": "all",
+      "file": "library/accessibility.tcl",
+      "patch": "patches/common-accessibility-selection.patch",
+      "before_sha256": "652369e48634af985c9fdac5bcd4c2695452e260923f1442403f272275bdf4d6",
+      "after_sha256": "4bdba04e1d9def7d0dece0d9243543c0599d7b8ae5b4f8829b79fb5afd9bbc2d",
+      "patch_sha256": "1b8c958d8dc225029e985bb725c59fd5705c3108a396e503c657b650332ea9f3"
+    },
+    {
+      "id": "linux-accessibility-window",
+      "platform": "linux",
+      "file": "unix/tkUnixAccessibility.c",
+      "patch": "patches/linux-accessibility-window.patch",
+      "before_sha256": "c55218bf7aa7868522cb511d7346352a4dc8852b81aa3379426fee3fc82f5baf",
+      "after_sha256": "4f016f3c70a5d2aa0c49aff9189b65b83bf232f40f27be60bf5b5c477fcd86a7",
+      "patch_sha256": "931622a2b224518c96f183c0acc5f7f34211c07b56c72454bbd88b07e8bb1e24"
+    },
+    {
+      "id": "linux-accessibility-state",
+      "platform": "linux",
+      "file": "unix/tkUnixAccessibility.c",
+      "patch": "patches/linux-accessibility-state.patch",
+      "before_sha256": "4f016f3c70a5d2aa0c49aff9189b65b83bf232f40f27be60bf5b5c477fcd86a7",
+      "after_sha256": "cea6252d7ad1a9cb9312609da79a60e10d497e0a3065b2ffd9abac04fd89f07d",
+      "patch_sha256": "3553e888731bf351d6c768cc0830bfe604078c98bc7b7ec3951497d37ff39bcf"
     }
   ]
 }

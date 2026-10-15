@@ -101,6 +101,19 @@ def run(app_path, report=None, *, native=False):
             assert 'Angebot prüfen' in value and 'Offen' in value
             assert 'Nicht eingeplant' in value and 'Ohne Fälligkeit' in value
             checks.append('Suche und echte Zeilenauswahl: aktueller Aufgabentext, Status und getrennte Datumsarten')
+            before, depth = copy.deepcopy(fresh()), len(app.undo_stack)
+            for tree in (app.tree, app.sidebar_listbox):
+                tree.focus_force()
+                pump()
+                tree.event_generate('<Control-Tab>')
+                pump()
+                current = root.focus_get()
+                assert current is not None and current is not tree, 'Strg+Tab bleibt im Baum hängen'
+                current.event_generate('<Control-Shift-Tab>')
+                pump()
+                assert root.focus_get() is tree, 'Rückwärtiger Bereichswechsel verliert den Baum'
+            assert fresh() == before and len(app.undo_stack) == depth
+            checks.append('Strg+Tab verlässt Aufgaben-/Listenbaum vorwärts und zurück ohne Daten-/Undoänderung; Tab-Einrücken bleibt erhalten')
 
             menu = app.build_quick_plan_menu(item_ids=(identity,))
             try:
@@ -263,6 +276,48 @@ def run(app_path, report=None, *, native=False):
                 assert old.closed and old.job is None and old.command is None
                 assert not root.tk.call('info', 'commands', command)
             checks.append('Ausgeblendeter Inspektor verweigert Aktionen; Neuaufbau gibt alte Bindungen, Aufträge und Tcl-Kommandos frei')
+            app.close_task_inspector(discard=True)
+            app.settings['ui_font_size'] = 'gross'
+            app.apply_ui_font()
+            root.geometry('860x700+20+20')
+            pump()
+            assert app.open_task_inspector(identity)
+            pump()
+            canvas = app._detail_state['canvas']
+            controller = canvas._glide_inspector_focus
+            app._detail_state['fields']['text'].focus_force()
+            pump()
+            before, depth = copy.deepcopy(fresh()), len(app.undo_stack)
+            reached = False
+            for _ in range(65):
+                focused = root.focus_get()
+                assert focused is not None, 'Tastaturfokus verloren'
+                if str(focused).startswith(str(canvas)+'.'):
+                    top = focused.winfo_rooty()-canvas.winfo_rooty()
+                    height = focused.winfo_height()
+                    assert top >= 0 and (height > canvas.winfo_height()-16 or top+height <= canvas.winfo_height()), (
+                        'Fokussiertes Inspektorfeld außerhalb der sichtbaren Fläche', focused.winfo_class(),
+                        top, height, canvas.winfo_height())
+                if getattr(focused, '_accessible_step_index', None) == 0:
+                    reached = True
+                    break
+                focused.event_generate('<Control-Tab>')
+                pump()
+            assert reached, 'Checkliste per Bereichswechsel nicht erreichbar'
+            title = app._detail_state['fields']['text']
+            for _ in range(65):
+                focused = root.focus_get()
+                if focused is title:
+                    break
+                focused.event_generate('<Control-Shift-Tab>')
+                pump()
+            assert root.focus_get() is title
+            assert 0 <= title.winfo_rooty()-canvas.winfo_rooty() <= canvas.winfo_height()-title.winfo_height()
+            assert fresh() == before and len(app.undo_stack) == depth, 'Bereichswechsel darf Inhalte nicht verändern'
+            app.sync_detail_pane(force=True)
+            pump()
+            assert controller.closed and controller.job is None and controller.canvas is None
+            checks.append('860×700/große Schrift: Strg+Tab vor/zurück hält fokussierte Inspektorfelder sichtbar; Modell/Undo unverändert, alter Scrollauftrag freigegeben')
             assert not callbacks, callbacks
             result = dict(exitcode=0, version=mod.APP_VERSION, tk=runtime, native_backend=supported,
                           checks=checks, callback_errors=callbacks,

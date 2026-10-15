@@ -82,6 +82,8 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 | `backup_snapshot.py` | Unveränderliche Sicherungsquelle zwischen Vorschau und Übernahme (Tk-frei, D26/D37/D39) | 3.41.0 |
 | `attachment_paths.py` | Portable flache Anhangspfade prüfen (Tk-frei, D26/D37/D39) | 3.41.0 |
 
+Der private 4.0-Kandidat bindet den sichtbaren Inspektorfokus an die Lebensdauer seiner Leinwand (`InspectorFocus`); schnelle Wechsel werden gebündelt, entfernte/versteckte Ziele verworfen. Explizites Strg+Tab erhält bestehende Tab-Einrück-/Texteingaben. Keine verschachtelten Updates im Fokusauftrag.
+
 `drawing_prototype.pyw` ist die isolierte Bedienprobe der Zeichenfläche von 2026-09-24; sie gehört nicht zur App und nicht zu den Lieferwegen. Ein neues Modul muss in `packaging/macos/baue_app.py`, `scripts/pflege/abgleich_07.py`, `src/glide/README.md`, `packaging/README.md`, `07_Python-Versionen/README.md` und hier stehen; die Standprüfung (R10) meldet Lücken.
 
 ### Eigenständige Pakete

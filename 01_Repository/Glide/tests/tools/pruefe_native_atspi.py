@@ -23,7 +23,7 @@ def text_values(text_interface, accessible):
     return actual, count, caret, prefix
 
 
-def run(pid, name, expected, report, expected_caret=None):
+def run(pid, name, expected, report, expected_caret=None, require_active=False, expect_disabled=False):
     if (sys.platform != 'linux' or os.environ.get('GITHUB_ACTIONS') != 'true'
             or os.environ.get('RUNNER_ENVIRONMENT') != 'github-hosted'):
         raise RuntimeError('AT-SPI-Verbraucher nur im eigenen vergänglichen Linux-Hosted-CI-Prüfstand.')
@@ -58,6 +58,25 @@ def run(pid, name, expected, report, expected_caret=None):
                 break
             queue.extend(node.get_child_at_index(index) for index in range(node.get_child_count()))
         assert field is not None, 'Feld nativ nicht auffindbar: ' + name
+        if require_active:
+            window = field
+            for _ in range(16):
+                assert window is not None and window.get_process_id() == pid
+                if window.get_role() in (Atspi.Role.WINDOW, Atspi.Role.FRAME, Atspi.Role.DIALOG):
+                    break
+                window = window.get_parent()
+            else:
+                raise AssertionError('Eigenes aktives Fenster ist nicht als Fenster erreichbar.')
+            active = window.get_state_set().contains(Atspi.StateType.ACTIVE)
+            result['fenster_aktiv'] = bool(active)
+            assert active, 'Fenster mit tatsächlichem Tk-Eingabefokus meldet kein natives ACTIVE.'
+        if expect_disabled:
+            state = field.get_state_set()
+            statuses = {key:bool(state.contains(value)) for key,value in (
+                ('enabled', Atspi.StateType.ENABLED), ('sensitive', Atspi.StateType.SENSITIVE),
+                ('editable', Atspi.StateType.EDITABLE))}
+            result['disabled_states'] = statuses
+            assert not any(statuses.values()), ('Deaktiviertes Feld meldet aktive native Zustände', statuses)
         text = field.get_text_iface()
         assert text is not None, 'Benanntes Eingabefeld bietet kein natives AtspiText'
         actual, count, caret, prefix = text_values(Atspi.Text, text)
@@ -88,8 +107,10 @@ def main():
     parser.add_argument('--text', required=True)
     parser.add_argument('--bericht', type=Path, required=True)
     parser.add_argument('--caret', type=int)
+    parser.add_argument('--active-window', action='store_true')
+    parser.add_argument('--disabled', action='store_true')
     args = parser.parse_args()
-    return run(args.pid, args.name, args.text, args.bericht, args.caret)
+    return run(args.pid, args.name, args.text, args.bericht, args.caret, args.active_window, args.disabled)
 
 
 if __name__ == '__main__':

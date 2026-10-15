@@ -1,0 +1,22 @@
+--- a/library/accessibility.tcl
++++ b/library/accessibility.tcl
+@@ -308,6 +308,7 @@
+ 
+ 	# Get treeview column names.
+ 	proc _getcolumnnames {w} {
++	    set headerlist {}
+ 	    set columns [$w cget -columns]
+ 	    foreach col $columns {
+ 		set text [$w heading $col -text]
+@@ -362,6 +363,11 @@
+ 
+ 	# Update data selection for various widgets.
+ 	proc _updateselection {w} {
++	    # Selection can arrive before Map has initialized native attributes.
++	    # Map reads the current selection; removed/uninitialized widgets wait.
++	    if {![winfo exists $w] || [catch {::tk::accessible::get_acc_role $w}]} {
++		return
++	    }
+ 	    if {[winfo class $w] eq "Radiobutton" || [winfo class $w] eq "TRadiobutton"} {
+ 		set state [::tk::accessible::_getradiodata $w]
+ 		set description [::tk::accessible::get_acc_description $w]

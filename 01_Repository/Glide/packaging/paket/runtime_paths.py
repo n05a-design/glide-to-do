@@ -20,47 +20,84 @@ def defender_provider(path, programdata):
 
 
 def authenticode(path, windows):
-    """Native Signaturprüfung nur für die isolierte Windows-Paketprobe."""
-    import json
-    import ctypes
-    import os
-    import subprocess
+    """Native Code-Signatur/Windows-Vertrauenskette ohne Netzwerk oder GUI."""
+    import ctypes as C
     import sys
     if sys.platform != 'win32':
         raise RuntimeError('Authenticode braucht den nativen Windows-Prüfstand.')
-    powershell = Path(windows)/'System32/WindowsPowerShell/v1.0/powershell.exe'
-    literal = "'"+str(Path(path).resolve()).replace("'", "''")+"'"
-    script = ('$s=Get-AuthenticodeSignature -LiteralPath '+literal+'; '
-              '[pscustomobject]@{Status=$s.Status.ToString();Subject=$s.SignerCertificate.Subject}'
-              ' | ConvertTo-Json -Compress')
-    # PyInstaller setzt SetDllDirectoryW auf seine Paketbibliotheken. Ein
-    # Systemprogramm muss dessen eigene DLLs laden; danach den Paketpfad erhalten.
-    kernel = ctypes.WinDLL('kernel32', use_last_error=True)
-    get_directory = kernel.GetDllDirectoryW
-    get_directory.argtypes = [ctypes.c_uint32, ctypes.c_wchar_p]
-    get_directory.restype = ctypes.c_uint32
-    set_directory = kernel.SetDllDirectoryW
-    set_directory.argtypes = [ctypes.c_wchar_p]
-    set_directory.restype = ctypes.c_int
-    previous = ctypes.create_unicode_buffer(32768)
-    length = get_directory(len(previous), previous)
-    if length >= len(previous) or not set_directory(None):
-        raise RuntimeError('System-DLL-Suchpfad nicht sicher herstellbar.')
-    try:
-        result = subprocess.run([str(powershell), '-NoProfile', '-NonInteractive', '-NoLogo',
-                                 '-Command', script], capture_output=True, text=True,
-                                encoding='utf-8', errors='strict', timeout=30,
-                                cwd=str(Path(windows)/'System32'),
-                                env=dict(os.environ, PATH=str(Path(windows)/'System32'),
-                                         PSModulePath=str(powershell.parent/'Modules')))
-    finally:
-        if not set_directory(previous.value if length else None):
-            raise RuntimeError('Paket-DLL-Suchpfad konnte nicht wiederhergestellt werden.')
-    if result.returncode:
-        raise RuntimeError('Native Authenticode-Prüfung fehlgeschlagen: '+str(result.returncode)+
-                           ' '+(result.stdout+result.stderr)[-3000:])
-    return json.loads(result.stdout)
+    system = Path(windows)/'System32'
+    trust = C.WinDLL(str(system/'wintrust.dll'), use_last_error=True)
+    crypto = C.WinDLL(str(system/'crypt32.dll'), use_last_error=True)
+    DWORD = C.c_uint32
 
+    class Guid(C.Structure):
+        _fields_ = [('a',DWORD),('b',C.c_uint16),('c',C.c_uint16),('d',C.c_ubyte*8)]
+
+    class FileInfo(C.Structure):
+        _fields_ = [('size',DWORD),('path',C.c_wchar_p),('file',C.c_void_p),('subject',C.c_void_p)]
+
+    class TrustData(C.Structure):
+        _fields_ = [('size',DWORD),('policy',C.c_void_p),('sip',C.c_void_p),('ui',DWORD),
+                    ('revocation',DWORD),('choice',DWORD),('file',C.POINTER(FileInfo)),
+                    ('action',DWORD),('state',C.c_void_p),('url',C.c_wchar_p),
+                    ('flags',DWORD),('context',DWORD),('settings',C.c_void_p)]
+
+    class FileTime(C.Structure):
+        _fields_ = [('low',DWORD),('high',DWORD)]
+
+    class CertificatePrefix(C.Structure):
+        _fields_ = [('size',DWORD),('certificate',C.c_void_p)]
+
+    class SignerPrefix(C.Structure):
+        _fields_ = [('size',DWORD),('time',FileTime),('count',DWORD),
+                    ('certificates',C.POINTER(CertificatePrefix))]
+
+    verify = trust.WinVerifyTrust
+    verify.argtypes = [C.c_void_p,C.POINTER(Guid),C.POINTER(TrustData)]
+    verify.restype = C.c_int32
+    provider_data = trust.WTHelperProvDataFromStateData
+    provider_data.argtypes = [C.c_void_p];provider_data.restype = C.c_void_p
+    provider_signer = trust.WTHelperGetProvSignerFromChain
+    provider_signer.argtypes = [C.c_void_p,DWORD,C.c_int,DWORD]
+    provider_signer.restype = C.POINTER(SignerPrefix)
+    certificate_name = crypto.CertGetNameStringW
+    certificate_name.argtypes = [C.c_void_p,DWORD,DWORD,C.c_void_p,C.c_wchar_p,DWORD]
+    certificate_name.restype = DWORD
+    if C.sizeof(C.c_void_p) != 8 or C.sizeof(TrustData) != 88 or C.sizeof(FileInfo) != 32:
+        raise RuntimeError('Signaturprobe benötigt die geprüfte native Windows-x64-ABI.')
+    action = Guid(0x00aac56b,0xcd44,0x11d0,(C.c_ubyte*8)(0x8c,0xc2,0,0xc0,0x4f,0xc2,0x95,0xee))
+    file = FileInfo(C.sizeof(FileInfo),str(Path(path).resolve()),None,None)
+    data = TrustData()
+    data.size = C.sizeof(data)
+    data.ui = 2  # WTD_UI_NONE
+    data.choice = 1  # WTD_CHOICE_FILE
+    data.file = C.pointer(file)
+    data.action = 1  # WTD_STATEACTION_VERIFY
+    data.flags = 0x1000 | 0x2000  # Nur lokaler URL-Cache, MD2/MD4 verbieten.
+    try:
+        status = verify(C.c_void_p(-1),C.byref(action),C.byref(data))
+        if status != 0:
+            return {'Status':f'WinVerifyTrust 0x{status & 0xffffffff:08x}','Subject':'',
+                    'verfahren':'lokale Windows-Vertrauenskette, kein Netzwerk'}
+        provider = provider_data(data.state)
+        signer = provider_signer(provider,0,False,0) if provider else None
+        if not signer or signer.contents.size < C.sizeof(SignerPrefix) or signer.contents.count < 1:
+            raise RuntimeError('Windows bestätigt keinen auslesbaren Signierer.')
+        first = signer.contents.certificates[0]
+        if first.size < C.sizeof(CertificatePrefix) or not first.certificate:
+            raise RuntimeError('Windows-Signiererzertifikat fehlt.')
+        name_format = DWORD(3)  # CERT_X500_NAME_STR
+        length = certificate_name(first.certificate,2,0,C.byref(name_format),None,0)
+        if length <= 1:
+            raise RuntimeError('Windows-Signierername fehlt.')
+        subject = C.create_unicode_buffer(length)
+        if certificate_name(first.certificate,2,0,C.byref(name_format),subject,length) != length:
+            raise RuntimeError('Windows-Signierername nicht vollständig gelesen.')
+        return {'Status':'Valid','Subject':subject.value,
+                'verfahren':'WinVerifyTrust, lokale Windows-Vertrauenskette, kein Netzwerk'}
+    finally:
+        data.action = 2  # Jede Verifikation gibt ihren nativen Kontext frei.
+        verify(C.c_void_p(-1),C.byref(action),C.byref(data))
 
 def validate_loaded(package, windows, libraries, *, programdata=None, authenticate=None):
     """Tatsächlich geladene Windows-Bibliotheken zusätzlich zum Baugraph prüfen."""

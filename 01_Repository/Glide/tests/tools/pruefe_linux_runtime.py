@@ -24,11 +24,17 @@ def child(exchange):
     field.insert('1.0', text)
     field.pack()
     bind_entry(field, 'AT-SPI-Prüffeld', text=True)
+    readonly_text = 'Geschützter Inhalt 🏠'
+    readonly = tk.Text(root, height=2)
+    readonly.insert('1.0', readonly_text)
+    readonly.configure(state='disabled')
+    readonly.pack()
+    bind_entry(readonly, 'Geschütztes Prüffeld', text=True)
     field.mark_set('insert', '1.3')
     field.focus_force()
     def ready():
         (exchange / 'bereit.json').write_text(json.dumps(dict(pid=os.getpid(), text=text,
-            name='AT-SPI-Prüffeld', caret=3, tk=str(root.tk.call('package', 'provide', 'Tk')),
+            name='AT-SPI-Prüffeld', readonly_name='Geschütztes Prüffeld', readonly_text=readonly_text, caret=3, tk=str(root.tk.call('package', 'provide', 'Tk')),
             native_backend=field._glide_accessibility.supported)), encoding='utf-8')
     root.after(300, ready)
     root.after(90_000, root.destroy)
@@ -70,9 +76,15 @@ def run(runtime, destination):
                 report = destination / 'atspi-text.json'
                 consumer = subprocess.run(['/usr/bin/python3', '-B', str(Path(__file__).with_name('pruefe_native_atspi.py')),
                     '--pid', str(process.pid), '--name', ready['name'], '--text', ready['text'],
-                    '--caret', str(ready['caret']), '--bericht', str(report)],
+                    '--caret', str(ready['caret']), '--active-window', '--bericht', str(report)],
                     env=env, timeout=45)
-                result.update(exitcode=consumer.returncode, tk=ready['tk'], native_backend=True)
+                readonly_consumer = subprocess.run(['/usr/bin/python3', '-B', str(Path(__file__).with_name('pruefe_native_atspi.py')),
+                    '--pid', str(process.pid), '--name', ready['readonly_name'], '--text', ready['readonly_text'],
+                    '--disabled', '--active-window', '--bericht', str(destination/'atspi-readonly.json')],
+                    env=env, timeout=45)
+                result.update(exitcode=int(bool(consumer.returncode or readonly_consumer.returncode)),
+                              tk=ready['tk'], native_backend=True)
+
             except Exception as error:
                 result['fehler'] = str(error)
             finally:

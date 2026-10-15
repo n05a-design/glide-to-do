@@ -1,8 +1,14 @@
 # Änderungsverlauf
 
-Vorbereitung 4.0.0 (unveröffentlichter Kandidat): Linux-/Windows-Runtimebau und GUI bestätigt; Linux-AT-SPI-Textkorrektur extern geprüft. Nach roter NVDA-Probe Windows-Namenszuordnung und Spy-Konfiguration korrigiert; tatsächliche Orca-Probe ergänzt. Readerwiederholung, eigene 4.0-Pakete und Vollmatrix bleiben offen.
-
 ## In Vorbereitung – 4.0.0 (keine Lieferung)
+
+- Native Zustands- und Readergegenproben nachgeführt: Linux-Disabled-Zustände, Orca-Initialisierung, NVDA-Pfeiltastennamen sowie native Windows-Signaturprüfung mit Manipulationsgegenprobe vorbereitet. CI-ACL-Restaurierung erhält den ursprünglichen Vererbungsschutz explizit; native Abnahme offen.
+
+- Nach tatsächlichen Readerfehlern gemeinsame Tk-Auswahlinitialisierung und Linux-ACTIVE-Zustand korrigiert. Native Tcl-Gegenfälle und Mac-Neubau geprüft; isolierter Mac-Paket-Kernablauf grün. Native Reader-/Zustands-/Windows-Paketwiederholung offen.
+
+- Fokus nach Tastaturwechsel im Inspektor sichtbar nachführen; Strg+Tab in Kernfeldern/Bäumen ausdrücklich binden und vorhandene Tab-Aktionen erhalten. Sieben neue Tk-freie Fokusfälle und zwei GUI-Prüfgruppen; zehn Mac-Gruppen und Rückfall grün. Reader-Diagnose vor erstem Inspektor korrigiert, Windows-MSAA-Systemanbieter im Paketprüfer ergänzt; native Wiederholung offen.
+
+- Native Vorbereitung 15.10.: Windows-Patchbytes gegen geerbtes Git-autocrlf abgesichert, Orca-Eingaben an tatsächlich belegten X11-Prozess gebunden; eigene Windows-9.1-Lizenz-/Paketvorstufe einschließlich utf8proc ergänzt. Reader-/Paketwiederholung offen.
 
 - Zugänglicher Aufgaben-Kernablauf nach D36: additive Semantik, echte Checklistencheckboxen, Tastaturanhänge und geschützte Auswahlflächen. Neue Fachlogik Tk-frei; bestehende Mutationswege und Format 25 erhalten.
 - Eigene gepinnte Tk-9.1-Runtime mit nativ belegten Mac-Korrekturen und isoliert gestarteter privater Mac-Paketvorstufe. Paketbau verlangt passende Quellpins, Patchsatz und unveränderte Runtimebytes; Lizenzzuordnung einschließlich utf8proc. Vorprüfungen grün, weitere Plattformen, tatsächliche Reader, eigene Pakete und Vollmatrix offen; die folgenden Lieferstände bleiben unverändert.

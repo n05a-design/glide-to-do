@@ -87,10 +87,25 @@ def entry_attributes(widget, name, *, text=False, help='', placeholder=None):
     value = '' if placeholder is not None and placeholder() else (
         widget.get('1.0', 'end-1c') if text else widget.get())
     return Attributes('Text' if text else 'Entry', name, value=str(value or ''),
-                      state=str(widget.cget('state')), help=help or 'Mit den normalen Texttasten bearbeiten.')
+                      state=str(widget.cget('state')), help=help or 'Mit den normalen Texttasten bearbeiten. Strg+Tab wechselt zum nächsten Feld.')
+
+
+def bind_focus_traversal(widget):
+    if getattr(widget, '_glide_focus_traversal', False):
+        return
+    def move(backward=False):
+        target = widget.tk_focusPrev() if backward else widget.tk_focusNext()
+        if target is not None:
+            target.focus_set()
+        return 'break'
+    for sequence, backward in (('<Control-Tab>', False), ('<Control-Shift-Tab>', True),
+                               ('<Control-ISO_Left_Tab>', True)):
+        widget.bind(sequence, lambda _event, back=backward: move(back), add='+')
+    widget._glide_focus_traversal = True
 
 
 def bind_entry(widget, name, *, text=False, help='', placeholder=None):
+    bind_focus_traversal(widget)
     binding = bind_control(widget, lambda: entry_attributes(widget, name, text=text, help=help, placeholder=placeholder))
     if binding.supported and not getattr(widget, '_accessible_entry_keys', False):
         identity = widget.bind('<KeyRelease>', lambda _event: binding.refresh(selection=True), add='+')
@@ -153,7 +168,7 @@ def navigation_attributes(tree, name):
     title = plain(tree.item(identity, 'text')) if identity is not None else ''
     return Attributes('Tree', name + (': ' + title if title else ''),
                       value=title or 'Keine Auswahl.',
-                      help='Mit Pfeil auf und ab den Bereich oder die Liste wählen.')
+                      help='Mit Pfeil auf und ab den Bereich oder die Liste wählen. Strg+Tab wechselt den Bereich.')
 
 
 def bind_navigation(app):
@@ -163,6 +178,7 @@ def bind_navigation(app):
                       ('drawings_listbox', 'Zeichnungen')):
         tree = getattr(app, key, None)
         if tree is not None:
+            bind_focus_traversal(tree)
             bind_control(tree, lambda target=tree, caption=name: navigation_attributes(target, caption))
 
 
@@ -289,7 +305,7 @@ def selected_task_attributes(app):
     return Attributes('Tree', name, value=value,
                       description='Schreibgeschützter Bestand.' if getattr(app, '_data_read_only', False) else '',
                       help='Pfeil auf und ab wählen Aufgaben. Leertaste erledigt. F2 öffnet den Inspektor. '
-                           'Strg oder Cmd plus Umschalt plus P plant die Auswahl. Escape schließt den Inspektor.')
+                           'Strg oder Cmd plus Umschalt plus P plant die Auswahl. Strg+Tab wechselt den Bereich. Escape schließt den Inspektor.')
 
 
 def install_core(app):
@@ -298,6 +314,7 @@ def install_core(app):
                placeholder=lambda: app.entry_placeholder_active)
     bind_entry(app.search_entry, 'Aufgaben suchen', help='Suchtext eingeben. Escape löscht die Suche. Die Ergebnisliste folgt darunter.',
                placeholder=lambda: app.search_placeholder_active)
+    bind_focus_traversal(app.tree)
     bind_control(app.tree, lambda: selected_task_attributes(app))
     app.add_button._accessible_name = 'Aufgabe hinzufügen'
     refresh(app.add_button)
@@ -311,3 +328,66 @@ def bind_inspector_fields(fields):
         if widget is not None:
             bind_entry(widget, name, text=key == 'description' or
                        (key == 'text' and widget.winfo_class() == 'Text'))
+
+
+def focus_scroll_fraction(top, height, view_top, view_height, total_height, *, margin=8):
+    """Minimaler Scrollweg; überhohe Felder bleiben an ihrer Oberkante lesbar."""
+    if total_height <= view_height or view_height <= 0:
+        return None
+    if top < view_top + margin:
+        target = top - margin
+    elif height > view_height - 2*margin:
+        target = top - margin
+    elif top + height > view_top + view_height - margin:
+        target = top + height - view_height + margin
+    else:
+        return None
+    target = min(max(0, target), total_height - view_height)
+    return target/total_height if abs(target-view_top) > .5 else None
+
+
+class InspectorFocus:
+    """Ein nachgelagerter Fokusauftrag pro Inspektor-Leinwand; kein Tk-Import."""
+    def __init__(self, canvas, widgets):
+        self.canvas, self.pending, self.job, self.closed = canvas, None, None, False
+        canvas.bind('<Destroy>', lambda event: self.close() if event.widget is canvas else None, add='+')
+        for widget in widgets:
+            widget.bind('<FocusIn>', self.queue, add='+')
+
+    def queue(self, event):
+        if self.closed:
+            return
+        self.pending = event.widget
+        if self.job is None:
+            self.job = self.canvas.after_idle(self.reveal)
+
+    def reveal(self):
+        self.job = None
+        widget, self.pending = self.pending, None
+        if self.closed or widget is None:
+            return
+        canvas = self.canvas
+        if (not canvas.winfo_exists() or not canvas.winfo_ismapped() or
+                not widget.winfo_exists() or not widget.winfo_ismapped() or canvas.focus_get() is not widget):
+            return
+        region = canvas.bbox('all')
+        if not region:
+            return
+        current = canvas.canvasy(0)
+        top = widget.winfo_rooty() - canvas.winfo_rooty() + current
+        target = focus_scroll_fraction(top, widget.winfo_height(), current, canvas.winfo_height(), region[3])
+        if target is not None:
+            canvas.yview_moveto(target)
+
+    def close(self):
+        if self.closed:
+            return
+        self.closed = True
+        if self.job is not None:
+            self.canvas.after_cancel(self.job)
+        self.job = self.pending = self.canvas = None
+
+
+def bind_inspector_focus(canvas, widgets):
+    canvas._glide_inspector_focus = InspectorFocus(canvas, widgets)
+    return canvas._glide_inspector_focus

@@ -16,6 +16,8 @@ import sys
 import time
 import traceback
 
+from reader_x11 import foreground_pid
+
 
 def require_hosted(destination):
     if (sys.platform != 'linux' or os.environ.get('GITHUB_ACTIONS') != 'true' or
@@ -59,9 +61,7 @@ class Actor:
         self.spoken = []
 
     def assert_focus(self):
-        value = subprocess.check_output(['xdotool','getwindowfocus','getwindowpid'],
-                                        env=self.environment,text=True).strip()
-        if int(value) != self.pid:
+        if foreground_pid(self.environment) != self.pid:
             raise RuntimeError('Kein Tastendruck: eigene Glide-Testinstanz hat nicht den Vordergrund.')
 
     def key(self, gesture):
@@ -101,17 +101,24 @@ class Actor:
         return value
 
     def focus(self, expected):
-        value=self.where()
-        assert expected in value,(expected,value)
-        return value
+        deadline = time.monotonic()+20
+        value = ''
+        while time.monotonic() < deadline:
+            try:
+                value = self.where()
+            except AssertionError:
+                continue
+            if expected in value:
+                return value
+        raise AssertionError((expected, value))
 
     def find(self, expected, *, role=None):
         for _ in range(90):
-            self.key('tab')
+            self.key('control+tab')
             value=self.where()
             if expected in value and (role is None or role in value.casefold()):
                 return value
-        raise AssertionError('Mit Tab/Orca nicht erreichbar: '+expected)
+        raise AssertionError('Mit Strg+Tab/Orca nicht erreichbar: '+expected)
 
 
 def run(destination, app):
@@ -160,6 +167,19 @@ def run(destination, app):
                 '--app',str(app),'--diagnose',str(exchange)],env=env,stdout=log,stderr=log)
             ready=wait_value(exchange/'bereit.json',lambda value:value.get('tk')=='9.1.0')
             assert ready['pid']==child.pid
+            wait_value(exchange/'zustand.json',lambda value:value.get('pid')==child.pid)
+            started = time.monotonic()
+            deadline = started+30
+            while time.monotonic() < deadline:
+                data = debug.read_text(encoding='utf-8', errors='replace')
+                if 'Setting active script to Tk Application' in data:
+                    break
+                if reader.poll() is not None:
+                    raise RuntimeError('Orca vor eigener App-Assoziation beendet.')
+                time.sleep(.1)
+            else:
+                raise AssertionError('Orca hat seine eigene Tk-App noch keinem aktiven Script zugeordnet.')
+            result['orca_app_initialisierung_ms'] = round((time.monotonic()-started)*1000)
             actor=Actor(child.pid,debug,env);result['speech']=actor.spoken
             state=lambda condition:wait_value(exchange/'zustand.json',condition)
             actor.key('control+n');actor.focus('Neue Aufgabe')
@@ -201,6 +221,12 @@ def run(destination, app):
                     try:process.wait(timeout=10)
                     except subprocess.TimeoutExpired:process.kill();process.wait(timeout=10)
             subprocess.run(['pulseaudio','--kill'],env=reader_env,stdout=log,stderr=log,timeout=10)
+    callback_path = destination/'glide-diagnose/callback-fehler.json'
+    if callback_path.is_file():
+        result['app_callback_errors'] = json.loads(callback_path.read_text(encoding='utf-8'))
+        if result['app_callback_errors']:
+            result['exitcode'] = 1
+            result.setdefault('fehler', 'Callbackfehler der künstlichen Reader-App')
     (destination/'reader-ergebnis.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     return result['exitcode']
 

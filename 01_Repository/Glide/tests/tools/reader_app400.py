@@ -15,6 +15,12 @@ import tempfile
 import traceback
 
 
+def diagnostic_state(app, pid, callbacks):
+    return dict(pid=pid, view=app.view_mode,
+        tasks=[item for entry in app.lists for item in app.walk_items(entry.get('items', []))],
+        inspector=getattr(app, '_detail_state', {}).get('item_id'), callback_errors=list(callbacks))
+
+
 def run(app_path, exchange):
     exchange = exchange.resolve()
     exchange.mkdir(parents=True, exist_ok=True)
@@ -30,12 +36,17 @@ def run(app_path, exchange):
         root = mod.tk.Tk()
         root.geometry('1280x800+20+20')
         callbacks = []
-        root.report_callback_exception = lambda *args: callbacks.append(''.join(traceback.format_exception(*args)))
+        def record_error(message):
+            callbacks.append(message)
+            temporary = exchange/'callback-fehler.tmp'
+            temporary.write_text(json.dumps(callbacks, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+            temporary.replace(exchange/'callback-fehler.json')
+        root.report_callback_exception = lambda *args: record_error(''.join(traceback.format_exception(*args)))
         # Auch native Tcl-Klassenbindungen des aktiven Readers können Fehler
         # auslösen. Im Prüfling protokollieren statt einen blockierenden
         # Fehlerdialog zu öffnen; jeder Eintrag lässt die Readerprobe scheitern.
         root.tk.createcommand('glide_reader_bgerror', lambda message:
-            callbacks.append('Tcl: '+message+'\n'+str(root.tk.call('set', '::errorInfo'))))
+            record_error('Tcl: '+message+'\n'+str(root.tk.call('set', '::errorInfo'))))
         root.tk.call('proc', 'bgerror', 'message', 'glide_reader_bgerror $message')
         app = mod.ListApp(root)
         if str(root.tk.call('package', 'provide', 'Tk')) != '9.1.0' or not app.tree._glide_accessibility.supported:
@@ -55,9 +66,7 @@ def run(app_path, exchange):
         def snapshot():
             if not root.winfo_exists():
                 return
-            write('zustand', dict(pid=os.getpid(), view=app.view_mode,
-                tasks=[item for entry in app.lists for item in app.walk_items(entry.get('items', []))],
-                inspector=app._detail_state.get('item_id'), callback_errors=callbacks))
+            write('zustand', diagnostic_state(app, os.getpid(), callbacks))
             root.after(150, snapshot)
 
         def ready():
