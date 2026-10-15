@@ -382,5 +382,89 @@ class NavigationAndCompletionContracts(unittest.TestCase):
         binding.invoke(); self.assertEqual(calls, ['done'])
 
 
+class FocusTraversalContracts(unittest.TestCase):
+    def test_explicit_control_tab_moves_focus_without_replacing_existing_tab_action(self):
+        widget = fixtures.Widget()
+        original = object()
+        widget.handlers['<Tab>'] = {'original':original}
+        focused = []
+        widget.tk_focusNext = lambda: SimpleNamespace(focus_set=lambda: focused.append('next'))
+        widget.tk_focusPrev = lambda: SimpleNamespace(focus_set=lambda: focused.append('previous'))
+        core.bind_focus_traversal(widget)
+        core.bind_focus_traversal(widget)
+        for sequence in ('<Control-Tab>', '<Control-Shift-Tab>', '<Control-ISO_Left_Tab>'):
+            self.assertEqual(len(widget.handlers[sequence]), 1)
+            callback = next(iter(widget.handlers[sequence].values()))
+            self.assertEqual(callback(None), 'break')
+        self.assertEqual(focused, ['next','previous','previous'])
+        self.assertIs(widget.handlers['<Tab>']['original'], original)
+
+    def test_missing_traversal_target_is_inert(self):
+        widget = fixtures.Widget()
+        widget.tk_focusNext = widget.tk_focusPrev = lambda: None
+        core.bind_focus_traversal(widget)
+        self.assertEqual(next(iter(widget.handlers['<Control-Tab>'].values()))(None), 'break')
+
+
+class InspectorFocusContracts(unittest.TestCase):
+    def test_visible_fields_do_not_move_and_hidden_fields_use_minimal_scroll(self):
+        self.assertIsNone(core.focus_scroll_fraction(120, 30, 100, 200, 1000))
+        self.assertAlmostEqual(core.focus_scroll_fraction(320, 30, 100, 200, 1000), .158)
+        self.assertAlmostEqual(core.focus_scroll_fraction(80, 30, 100, 200, 1000), .072)
+
+    def test_large_fields_and_content_edges_are_bounded(self):
+        self.assertEqual(core.focus_scroll_fraction(5, 500, 100, 200, 1000), 0)
+        self.assertAlmostEqual(core.focus_scroll_fraction(900, 100, 0, 200, 1000), .8)
+        self.assertIsNone(core.focus_scroll_fraction(20, 30, 0, 200, 100))
+        self.assertIsNone(core.focus_scroll_fraction(20, 30, 0, 0, 100))
+
+    def setup_controller(self):
+        canvas, first, second = fixtures.Widget(), fixtures.Widget(), fixtures.Widget()
+        self.focus, self.moves = [second], []
+        canvas.focus_get = lambda: self.focus[0]
+        canvas.bbox = lambda _tag: (0,0,300,1200)
+        canvas.canvasy = lambda _y: 0
+        canvas.winfo_rooty = lambda: 100
+        canvas.winfo_height = lambda: 200
+        canvas.yview_moveto = self.moves.append
+        first.winfo_rooty = lambda: 400
+        second.winfo_rooty = lambda: 850
+        first.winfo_height = second.winfo_height = lambda: 30
+        self.canvas, self.first, self.second = canvas, first, second
+        return core.bind_inspector_focus(canvas, [first, second])
+
+    def test_rapid_focus_uses_one_job_and_only_the_current_field(self):
+        controller = self.setup_controller()
+        for _ in range(20):
+            controller.queue(SimpleNamespace(widget=self.first))
+            controller.queue(SimpleNamespace(widget=self.second))
+        self.assertEqual(len(self.canvas.jobs), 1)
+        self.assertIs(self.second.handlers['<Return>']['original'], self.second.original_key_binding)
+        self.canvas.flush()
+        self.assertEqual(self.moves, [.49])
+
+    def test_removed_hidden_or_no_longer_focused_field_never_moves(self):
+        controller = self.setup_controller()
+        for reason in ('removed', 'hidden', 'changed_focus'):
+            self.second.exists = reason != 'removed'
+            self.second.mapped = reason != 'hidden'
+            self.focus[0] = self.first if reason == 'changed_focus' else self.second
+            controller.queue(SimpleNamespace(widget=self.second))
+            self.canvas.flush()
+        self.assertEqual(self.moves, [])
+
+    def test_destroy_cancels_pending_work_and_late_callback_is_inert(self):
+        controller = self.setup_controller()
+        controller.queue(SimpleNamespace(widget=self.second))
+        late = next(iter(self.canvas.jobs.values()))
+        controller.close()
+        self.assertFalse(self.canvas.jobs)
+        self.assertIsNone(controller.canvas)
+        late()
+        controller.queue(SimpleNamespace(widget=self.first))
+        self.assertFalse(self.canvas.jobs)
+        self.assertEqual(self.moves, [])
+
+
 if __name__ == '__main__':
     unittest.main()

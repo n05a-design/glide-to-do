@@ -2,6 +2,8 @@
 
 ## In Vorbereitung – 4.0.0 (keine Lieferung)
 
+- Fokus nach Tastaturwechsel im Inspektor sichtbar nachführen; Strg+Tab in Kernfeldern/Bäumen ausdrücklich binden und vorhandene Tab-Aktionen erhalten. Sieben neue Tk-freie Fokusfälle und zwei GUI-Prüfgruppen; zehn Mac-Gruppen und Rückfall grün. Reader-Diagnose vor erstem Inspektor korrigiert, Windows-MSAA-Systemanbieter im Paketprüfer ergänzt; native Wiederholung offen.
+
 - Native Vorbereitung 15.10.: Windows-Patchbytes gegen geerbtes Git-autocrlf abgesichert, Orca-Eingaben an tatsächlich belegten X11-Prozess gebunden; eigene Windows-9.1-Lizenz-/Paketvorstufe einschließlich utf8proc ergänzt. Reader-/Paketwiederholung offen.
 
 - Zugänglicher Aufgaben-Kernablauf nach D36: additive Semantik, echte Checklistencheckboxen, Tastaturanhänge und geschützte Auswahlflächen. Neue Fachlogik Tk-frei; bestehende Mutationswege und Format 25 erhalten.

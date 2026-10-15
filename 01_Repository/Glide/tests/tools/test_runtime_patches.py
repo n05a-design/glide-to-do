@@ -21,9 +21,9 @@ class RuntimePatches(unittest.TestCase):
         self.source = self.base / 'export'
         self.source.mkdir()
         self.target = self.source / 'provider.c'
-        self.target.write_text('first\nold\nlast\n')
+        self.target.write_bytes(b'first\nold\nlast\n')
         self.patch = self.base / 'provider.patch'
-        self.patch.write_text('--- a/provider.c\n+++ b/provider.c\n@@ -1,3 +1,3 @@\n first\n-old\n+new\n last\n')
+        self.patch.write_bytes(b'--- a/provider.c\n+++ b/provider.c\n@@ -1,3 +1,3 @@\n first\n-old\n+new\n last\n')
         sha = lambda value: hashlib.sha256(value).hexdigest()
         self.entry = dict(id='fixture', platform='darwin', file='provider.c', patch='provider.patch',
                           before_sha256=sha(self.target.read_bytes()),

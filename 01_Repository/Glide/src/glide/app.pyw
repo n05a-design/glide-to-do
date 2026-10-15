@@ -21593,6 +21593,7 @@ class ListApp:
                     widget.configure(takefocus=0)
                     widget._accessible_disabled = True
                     glide_core_accessibility.refresh(widget)
+        glide_core_accessibility.bind_inspector_focus(leinwand, self.iter_descendants(huelle))
         if position:
             leinwand.after_idle(lambda: leinwand.winfo_exists() and leinwand.yview_moveto(position))
 

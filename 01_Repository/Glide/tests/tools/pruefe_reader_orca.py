@@ -107,11 +107,11 @@ class Actor:
 
     def find(self, expected, *, role=None):
         for _ in range(90):
-            self.key('tab')
+            self.key('control+tab')
             value=self.where()
             if expected in value and (role is None or role in value.casefold()):
                 return value
-        raise AssertionError('Mit Tab/Orca nicht erreichbar: '+expected)
+        raise AssertionError('Mit Strg+Tab/Orca nicht erreichbar: '+expected)
 
 
 def run(destination, app):
@@ -202,6 +202,12 @@ def run(destination, app):
                     try:process.wait(timeout=10)
                     except subprocess.TimeoutExpired:process.kill();process.wait(timeout=10)
             subprocess.run(['pulseaudio','--kill'],env=reader_env,stdout=log,stderr=log,timeout=10)
+    callback_path = destination/'glide-diagnose/callback-fehler.json'
+    if callback_path.is_file():
+        result['app_callback_errors'] = json.loads(callback_path.read_text(encoding='utf-8'))
+        if result['app_callback_errors']:
+            result['exitcode'] = 1
+            result.setdefault('fehler', 'Callbackfehler der künstlichen Reader-App')
     (destination/'reader-ergebnis.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     return result['exitcode']
 

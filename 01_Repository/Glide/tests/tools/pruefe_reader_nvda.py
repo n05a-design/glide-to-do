@@ -66,11 +66,11 @@ def run(destination, app_path):
 
             def find_by_tab(text, *, role=None):
                 for _ in range(90):
-                    key('tab')
+                    key('control+tab')
                     spoken = speak_focus()
                     if text in spoken and (role is None or role in spoken.casefold()):
                         return spoken
-                raise AssertionError('Per Tab und NVDA nicht erreichbar: ' + text)
+                raise AssertionError('Per Strg+Tab und NVDA nicht erreichbar: ' + text)
 
             def type_text(text):
                 for char in text:
@@ -145,6 +145,12 @@ def run(destination, app_path):
             except subprocess.TimeoutExpired:
                 reader.terminate()
                 reader.wait(timeout=15)
+    callback_path = destination/'glide-diagnose/callback-fehler.json'
+    if callback_path.is_file():
+        result['app_callback_errors'] = json.loads(callback_path.read_text(encoding='utf-8'))
+        if result['app_callback_errors']:
+            result['exitcode'] = 1
+            result.setdefault('fehler', 'Callbackfehler der künstlichen Reader-App')
     (destination/'reader-ergebnis.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
     return result['exitcode']
 
