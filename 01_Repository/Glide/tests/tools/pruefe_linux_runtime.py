@@ -20,7 +20,9 @@ def child(exchange):
     root.title('Glide – künstliche AT-SPI-Textprobe')
     root.geometry('500x200')
     text = '  Angebot prüfen 🏠\nZweite Zeile'
-    field = tk.Text(root, height=4)
+    container = tk.Frame(root)
+    container.pack()
+    field = tk.Text(container, height=4)
     field.insert('1.0', text)
     field.pack()
     bind_entry(field, 'AT-SPI-Prüffeld', text=True)
@@ -76,7 +78,7 @@ def run(runtime, destination):
                 report = destination / 'atspi-text.json'
                 consumer = subprocess.run(['/usr/bin/python3', '-B', str(Path(__file__).with_name('pruefe_native_atspi.py')),
                     '--pid', str(process.pid), '--name', ready['name'], '--text', ready['text'],
-                    '--caret', str(ready['caret']), '--active-window', '--bericht', str(report)],
+                    '--caret', str(ready['caret']), '--active-window', '--exclusive-focus', ready['name'], '--bericht', str(report)],
                     env=env, timeout=45)
                 readonly_consumer = subprocess.run(['/usr/bin/python3', '-B', str(Path(__file__).with_name('pruefe_native_atspi.py')),
                     '--pid', str(process.pid), '--name', ready['readonly_name'], '--text', ready['readonly_text'],

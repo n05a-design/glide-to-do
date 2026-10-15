@@ -1,0 +1,100 @@
+{
+  "run": 38721164498,
+  "commit": "d97d675116a975134b607142c644d25e3cb7f6e6",
+  "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38721164498",
+  "ergebnis": "failure",
+  "app_sha256": "f1c01b3cba1f2ffe1fdb1c649e076ed348434709e1b3a6623250e7b6def748fa",
+  "linux": {
+    "runtime_skript_gui": "grün: eigene Runtime, vier Tcl-Fälle, zehn GUI-Gruppen",
+    "atspi": "grün: Unicode/Caret, ACTIVE, Disabled-Zustände bei lesbarem Text",
+    "orca": "Initialisierung 3124 ms; Erfassung/Suche gesprochen. Weitere Navigation meldet fokussierte Container; später eigener Eingabefokus verloren, weitere Tasten verweigert. Vollständiger Ablauf offen."
+  },
+  "windows": {
+    "runtime_skript_gui": "grün: eigene Runtime, vier Tcl-Fälle, zehn GUI-Gruppen",
+    "nvda": "Aufgabe mit Status und Heute-Menü gesprochen; tatsächlich heute eingeplant und Heute-Ansicht erreicht, danach unknown. Vollständiger Ablauf offen.",
+    "native_signatur": {
+      "exitcode": 0,
+      "system_installationen_unveraendert": true,
+      "positive": {
+        "Status": "Valid",
+        "Subject": "C=US, S=Washington, L=Redmond, O=Microsoft Corporation, CN=Microsoft Windows",
+        "verfahren": "WinVerifyTrust, lokale Windows-Vertrauenskette, kein Netzwerk"
+      },
+      "verifikation_ms": 64,
+      "original_sha256": "24870690fb1e4dfaf6acdb09f12a7ffbbb44b5f3942f24a18ecc17900dfba044",
+      "manipulierte_kopie": {
+        "Status": "WinVerifyTrust 0x80096010",
+        "Subject": "",
+        "verfahren": "lokale Windows-Vertrauenskette, kein Netzwerk"
+      }
+    },
+    "paketprozess_exitcode": 0,
+    "paketkern": {
+      "eigenstaendiger_pruefstart": true,
+      "exitcode": 0,
+      "app_version": "3.42.0",
+      "python": "3.14.7",
+      "tcl": "9.1.0",
+      "tk": "9.1.0",
+      "plattform": "win32",
+      "architektur": "AMD64",
+      "ansichten": 6,
+      "anlegen_abhaken_undo": true,
+      "dateilesen": true,
+      "app_backup_rundlauf": true,
+      "daten_isoliert": true,
+      "bibliotheken": {
+        "tcl": {
+          "modus": "eingebettetes-zip",
+          "ort": "//zipfs:/lib/tcl/tcl_library",
+          "anbieter": "_internal/tcl91.dll"
+        },
+        "tk": {
+          "modus": "eingebettetes-zip",
+          "ort": "//zipfs:/lib/tk/tk_library",
+          "anbieter": "_internal/tcl9tk91.dll"
+        }
+      },
+      "native_anbieter": {
+        "tcl": "_internal/tcl91.dll",
+        "tk": "_internal/tcl9tk91.dll"
+      },
+      "ressourcen_sha256_geprueft": 29,
+      "lizenzdateien_sha256_geprueft": 35,
+      "logo_geladen": true,
+      "gebuendelte_schriften_verfuegbar": [
+        "DejaVu Sans",
+        "Pixelify Sans"
+      ],
+      "dnd_version": "2.10.2",
+      "native_dnd_bibliotheken": [
+        "_internal\\tkinterdnd2\\tkdnd\\win-x64-tcl9\\libtkdnd2.10.2.dll"
+      ],
+      "externe_python_suchpfade": [],
+      "callbackfehler": [],
+      "zugangs_kernablauf": {
+        "native_backend": true,
+        "erfassen_suchen_heute_inspektor": true,
+        "unicode_titel_gespeichert": true,
+        "checkbox_leertaste_undo": true,
+        "reader_abnahme": "separat offen; tatsächlicher Paketablauf ohne Reader"
+      }
+    },
+    "acl_lesegegenproben": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "acl_regeln_wiederhergestellt": [
+      true,
+      false,
+      true,
+      true,
+      true
+    ],
+    "acl_grenze": "Gesamter Startnachweis Exit1: P-Schutz und explizite ACEs zweier Python-Quelldateien trotz Flag abweichend. Externes Python danach wieder startbar; nur Hosted-CI."
+  },
+  "nachlauf": "Linux-Fokus-/Strukturereignisse; stabile Windows-MSAA-Kindkennungen mit Lebensdauer und echter COM-Gegenprobe; geschützte Original-DACLs gezielt per SetNamedSecurityInfoW. Full91 auf eigene9.1 vorbereitet. Native10 und finale Ausführung offen."
+}

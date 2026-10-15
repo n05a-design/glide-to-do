@@ -66,7 +66,10 @@ def run(app_path, exchange):
         def snapshot():
             if not root.winfo_exists():
                 return
-            write('zustand', diagnostic_state(app, os.getpid(), callbacks))
+            value = diagnostic_state(app, os.getpid(), callbacks)
+            focused = root.focus_get()
+            value['tk_fokus'] = dict(pfad=str(focused), klasse=focused.winfo_class()) if focused else None
+            write('zustand', value)
             root.after(150, snapshot)
 
         def ready():

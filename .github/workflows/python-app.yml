@@ -78,7 +78,7 @@ jobs:
           if-no-files-found: ignore
 
   integrationssuiten-linux:
-    name: Vollprüfung (Linux/Xvfb, Python 3.14, Tk 8.6)
+    name: Vollprüfung (Linux/Xvfb, eigene Tk 9.1)
     needs: grundstufe
     if: always() && !cancelled() && (github.event.inputs.bereich == '' || github.event.inputs.bereich == 'voll')
     runs-on: ubuntu-24.04
@@ -93,29 +93,37 @@ jobs:
 
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.14"
+          python-version: "3.14.8"
 
-      - name: Xvfb, Tk und ImageMagick
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb libtk8.6 imagemagick
+      - name: Native Tk-9.1-Bauvoraussetzungen, Xvfb und ImageMagick
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq build-essential pkg-config libx11-dev libxext-dev libxft-dev libxss-dev libharfbuzz-dev libatk1.0-dev libatk-bridge2.0-dev at-spi2-core dbus-x11 xvfb imagemagick
+      - name: Eigene geprüfte Tk-9.1-Laufzeit für alle Suiten
+        run: |
+          python -B packaging/runtime/hole_runtimequellen.py --ziel "$RUNNER_TEMP/voll-quellen"
+          python -B packaging/runtime/baue_runtime.py --tcl-quelle "$RUNNER_TEMP/voll-quellen/tcl" --tk-quelle "$RUNNER_TEMP/voll-quellen/tk" --python-quelle "$RUNNER_TEMP/voll-quellen/python" --ziel "$RUNNER_TEMP/voll-runtime"
+          echo "PYTHONPATH=$RUNNER_TEMP/voll-runtime/python-extension" >> "$GITHUB_ENV"
 
       - name: Vollprüfstand Linux
-        run: python -B tests/tools/pruefen.py --modus voll --protokoll "$RUNNER_TEMP/integration" --timeout 900
+        run: dbus-run-session -- python -B tests/tools/pruefen.py --zugang-nativ --modus voll --protokoll "$RUNNER_TEMP/integration" --timeout 900
 
       - name: Kalibrierte Erwartungen gegen Defekte prüfen
         if: always() && !cancelled()
-        run: python -B tests/tools/linux_gegenproben.py --protokoll "$RUNNER_TEMP/integration/defektgegenproben" --basis-ergebnis "$RUNNER_TEMP/integration/ergebnis.json"
+        run: dbus-run-session -- python -B tests/tools/linux_gegenproben.py --protokoll "$RUNNER_TEMP/integration/defektgegenproben" --basis-ergebnis "$RUNNER_TEMP/integration/ergebnis.json"
 
       - name: Protokolle sichern
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: integrationssuiten-linux
-          path: ${{ runner.temp }}/integration
+          path: |
+            ${{ runner.temp }}/integration
+            ${{ runner.temp }}/voll-runtime/runtime-bau.json
+            ${{ runner.temp }}/voll-runtime/protokolle
           retention-days: 14
           if-no-files-found: ignore
 
   vollpruefung-windows:
-    name: Vollprüfung (Windows x64, Python 3.14)
+    name: Vollprüfung (Windows x64, eigene Tk 9.1)
     needs: integrationssuiten-linux
     if: always() && !cancelled() && (github.event.inputs.bereich == '' || github.event.inputs.bereich == 'voll')
     runs-on: windows-2025
@@ -132,28 +140,44 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.14"
+          python-version: "3.14.7"
           architecture: x64
       - name: Native Zeitzone mit Sommerzeit
         run: |
           Remove-Item Env:TZ -ErrorAction SilentlyContinue
           tzutil /s "W. Europe Standard Time"
-          python -B tests/tools/pruefe_tk.py
+      - name: Originalquellen der eigenen Tk-9.1-Laufzeit
+        run: python -B packaging/runtime/hole_runtimequellen.py --ziel "$env:RUNNER_TEMP/voll-quellen"
+      - name: Eigene geprüfte Tk-9.1-Laufzeit für alle Suiten
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
+          $vs = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (-not $vs) { throw "Native x64-MSVC-Bauumgebung fehlt" }
+          $devcmd = Join-Path $vs "Common7/Tools/VsDevCmd.bat"
+          cmd /s /c "`"$devcmd`" -arch=x64 -host_arch=x64 >nul && set" | ForEach-Object {
+            if ($_ -match '^([^=]+)=(.*)$') { Set-Item "Env:$($matches[1])" $matches[2] }
+          }
+          python -B packaging/runtime/baue_runtime.py --tcl-quelle "$env:RUNNER_TEMP/voll-quellen/tcl" --tk-quelle "$env:RUNNER_TEMP/voll-quellen/tk" --python-quelle "$env:RUNNER_TEMP/voll-quellen/python" --ziel "$env:RUNNER_TEMP/voll-runtime"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Add-Content -Path $env:GITHUB_ENV -Value "PYTHONPATH=$env:RUNNER_TEMP/voll-runtime/python-extension"
       - name: Referenzdesktop für Geometrieprüfungen
         run: python -B tests/tools/windows_desktop.py --breite 1920 --hoehe 1080 --protokoll "$env:RUNNER_TEMP/integration/windows-desktop.json"
       - name: Vollprüfstand Windows
-        run: python -B tests/tools/pruefen.py --modus voll --protokoll "$env:RUNNER_TEMP/integration" --timeout 900
+        run: python -B tests/tools/pruefen.py --zugang-nativ --modus voll --protokoll "$env:RUNNER_TEMP/integration" --timeout 900
       - name: Protokolle sichern
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: integrationssuiten-windows
-          path: ${{ runner.temp }}/integration
+          path: |
+            ${{ runner.temp }}/integration
+            ${{ runner.temp }}/voll-runtime/runtime-bau.json
+            ${{ runner.temp }}/voll-runtime/protokolle
           retention-days: 14
           if-no-files-found: ignore
 
   paket-windows:
-    # Paket 7 (D27): eigenständiges Entwicklungspaket ohne installiertes Python.
+    # Pakete 7/8 (D27/D36): eigenständiges Entwicklungspaket ohne installiertes Python.
     # Unsigniertes Entwicklungsartefakt; Integrität über Paket- und Quellhashes.
     # windows-paket wiederholt nur den Bau-/Startnachweis. Es ersetzt keine Vollmatrix.
     name: Eigenständiges Paket (Windows x64, PyInstaller 6.22.3)
@@ -174,8 +198,22 @@ jobs:
       - uses: actions/setup-python@v7
         id: python
         with:
-          python-version: "3.14"
+          python-version: "3.14.7"
           architecture: x64
+      - name: Originalquellen der eigenen Tk-9.1-Laufzeit
+        run: python -B ../runtime/hole_runtimequellen.py --ziel "$env:RUNNER_TEMP/paket-quellen"
+      - name: Eigene geprüfte Tk-9.1-Laufzeit für das eigenständige Paket
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
+          $vs = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (-not $vs) { throw "Native x64-MSVC-Bauumgebung fehlt" }
+          $devcmd = Join-Path $vs "Common7/Tools/VsDevCmd.bat"
+          cmd /s /c "`"$devcmd`" -arch=x64 -host_arch=x64 >nul && set" | ForEach-Object {
+            if ($_ -match '^([^=]+)=(.*)$') { Set-Item "Env:$($matches[1])" $matches[2] }
+          }
+          python -B ../runtime/baue_runtime.py --tcl-quelle "$env:RUNNER_TEMP/paket-quellen/tcl" --tk-quelle "$env:RUNNER_TEMP/paket-quellen/tk" --python-quelle "$env:RUNNER_TEMP/paket-quellen/python" --ziel "$env:RUNNER_TEMP/paket-runtime"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Add-Content -Path $env:GITHUB_ENV -Value "PYTHONPATH=$env:RUNNER_TEMP/paket-runtime/python-extension"
       - name: Gepinnte Bauabhängigkeiten in eigener Umgebung
         run: |
           New-Item -ItemType Directory -Force "$env:RUNNER_TEMP/paket" | Out-Null
@@ -185,17 +223,17 @@ jobs:
           & "$env:RUNNER_TEMP/bau-venv/Scripts/python.exe" -m pip freeze --all > "$env:RUNNER_TEMP/paket/bauabhaengigkeiten.txt"
       - name: Lizenzbestand aus der Baulaufzeit
         run: |
-          & "$env:RUNNER_TEMP/bau-venv/Scripts/python.exe" -B lizenzen_vorbereiten_windows.py --quelle ../../src/glide --repo ../.. --ziel "$env:RUNNER_TEMP/paket/lizenzen"
+          & "$env:RUNNER_TEMP/bau-venv/Scripts/python.exe" -B lizenzen_vorbereiten_windows.py --quelle ../../src/glide --repo ../.. --ziel "$env:RUNNER_TEMP/paket/lizenzen" --runtime-bau "$env:RUNNER_TEMP/paket-runtime/runtime-bau.json"
           exit $LASTEXITCODE
       - name: Nativer Paketbau
         run: |
           $version = (Get-Content ../../VERSION -Raw).Trim()
-          & "$env:RUNNER_TEMP/bau-venv/Scripts/python.exe" -B baue_paket.py --quelle ../../src/glide --version $version --ziel "$env:RUNNER_TEMP/paket/bau" --plattform windows-x64 --lizenzen "$env:RUNNER_TEMP/paket/lizenzen"
+          & "$env:RUNNER_TEMP/bau-venv/Scripts/python.exe" -B baue_paket.py --quelle ../../src/glide --version $version --ziel "$env:RUNNER_TEMP/paket/bau" --plattform windows-x64 --lizenzen "$env:RUNNER_TEMP/paket/lizenzen" --runtime-bau "$env:RUNNER_TEMP/paket-runtime/runtime-bau.json"
           exit $LASTEXITCODE
       - name: Isolierte Startprobe ohne externes Python
         run: |
           $python = Split-Path -Parent "${{ steps.python.outputs.python-path }}"
-          python -B pruefe_start_windows.py --paket "$env:RUNNER_TEMP/paket/bau/dist/Glide" --bericht "$env:RUNNER_TEMP/paket/startprobe.json" --sperren $python --sperren "$env:RUNNER_TEMP/bau-venv" --sperren "$env:RUNNER_TEMP/paket/bau/quelle" --sperren "$env:GITHUB_WORKSPACE"
+          python -B pruefe_start_windows.py --paket "$env:RUNNER_TEMP/paket/bau/dist/Glide" --bericht "$env:RUNNER_TEMP/paket/startprobe.json" --sperren $python --sperren "$env:RUNNER_TEMP/bau-venv" --sperren "$env:RUNNER_TEMP/paket-runtime" --sperren "$env:RUNNER_TEMP/paket/bau/quelle" --sperren "$env:GITHUB_WORKSPACE"
           exit $LASTEXITCODE
       - name: Bau- und Startbelege sichern
         if: always()
@@ -203,6 +241,8 @@ jobs:
         with:
           name: paket-windows-belege
           path: |
+            ${{ runner.temp }}/paket-runtime/runtime-bau.json
+            ${{ runner.temp }}/paket-runtime/protokolle
             ${{ runner.temp }}/paket/*.json
             ${{ runner.temp }}/paket/*.txt
             ${{ runner.temp }}/paket/lizenzen/manifest.json
@@ -382,6 +422,12 @@ jobs:
           $env:PYTHONPATH = "$env:RUNNER_TEMP/zugang-runtime/python-extension"
           python -B tests/tools/pruefe_reader_nvda.py --ziel "$env:RUNNER_TEMP/zugang-nvda"
           exit $LASTEXITCODE
+      - name: Native MSAA-Kennungen über Layout, Ersatz und Destroy
+        if: always() && !cancelled() && steps.runtime.outcome == 'success'
+        run: |
+          $env:PYTHONPATH = "$env:RUNNER_TEMP/zugang-runtime/python-extension"
+          python -B tests/tools/pruefe_windows_msaa.py --ziel "$env:RUNNER_TEMP/zugang-msaa"
+          exit $LASTEXITCODE
       - name: Native Systemsignatur und manipulierte Kopie (ohne Netzwerk)
         if: always() && !cancelled() && steps.runtime.outcome == 'success'
         run: |
@@ -425,6 +471,8 @@ jobs:
             ${{ runner.temp }}/zugang-runtime/protokolle
             ${{ runner.temp }}/zugang-desktop.json
             ${{ runner.temp }}/zugang-signatur.json
+            ${{ runner.temp }}/zugang-msaa/*.json
+            ${{ runner.temp }}/zugang-msaa/*.log
             ${{ runner.temp }}/zugang-gui.json
             ${{ runner.temp }}/zugang-skript.json
             ${{ runner.temp }}/zugang-nvda/*.json

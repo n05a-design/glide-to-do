@@ -22,11 +22,13 @@ import tempfile
 from urllib.parse import unquote, urlsplit
 import zipfile
 
+from zugang_pruefvertrag import native_zugangspruefung
+
 REPO = Path(__file__).resolve().parents[2]
 APP = REPO / "src/glide/app.pyw"
 SUITEN = ("test_glide.py", "test_datenintegritaet.py", "test_drawing.py", "test_drawing_prototype.py", "audit_app.py",
           "test_dialog_theme.py", "test_ui_updates.py", "test_glide_36.py", "test_release36.py", "test_ui_polish36.py",
-          "test_ui_followup36.py", "test_release37.py", "test_template_workflows.py", "test_reminders.py", "test_ui39.py", "test_workspace310.py", "test_features311.py", "test_features312.py", "test_features313.py", "test_features314.py", "test_features315.py", "test_features316.py", "test_features317.py", "test_features318.py", "test_features319.py", "test_features320.py", "test_features321.py", "test_features322.py", "test_features323.py", "test_features324.py", "test_features325.py", "test_features326.py", "test_features328.py", "test_features329.py", "test_drawing330.py", "test_features330.py", "test_mindestgroesse330.py", "test_kontrast330.py", "test_paketierung330.py", "test_hintergrund330.py", "test_rueckmeldung330.py", "test_seiten330.py", "test_aufraeumen330.py", "test_kompression330.py", "test_bilder330.py", "test_festlayout330.py", "test_logo330.py", "test_kartenfuss330.py", "test_speicherlast330.py", "test_notizbereich330.py", "test_befunde330.py", "test_fenster330.py", "test_tempo330.py", "test_etappe1_332.py", "test_klappmechanismen3321.py", "test_drag_performance3322.py", "test_library_performance3323.py", "test_fundament333.py", "test_bereiche3331.py", "test_startseite3332.py", "test_eingabe3333.py", "test_eisenhower3335.py", "test_heute3336.py", "test_suche3337.py", "test_editor3338.py", "test_speichervergleich3339.py", "test_kennzahlen33310.py", "test_fortsetzung33311.py", "test_titel33312.py", "test_planen33313.py", "test_tagpaket33314.py", "test_wissen33315.py", "test_bedienung33316.py", "test_woche33317.py", "test_seiten33318.py", "test_tempo33319.py", "test_komfort33320.py", "test_oberflaeche33321.py", "test_wissen3340.py", "test_pixel3350.py", "test_austausch3350.py", "test_fundament3360.py", "test_logo3370.py", "test_aufgaben3380.py", "test_tag3390.py", "test_wiederholung3391.py", "test_animation3400.py", "test_import3410.py", "test_paket3420.py", "test_vollpruefung325.py")
+          "test_ui_followup36.py", "test_release37.py", "test_template_workflows.py", "test_reminders.py", "test_ui39.py", "test_workspace310.py", "test_features311.py", "test_features312.py", "test_features313.py", "test_features314.py", "test_features315.py", "test_features316.py", "test_features317.py", "test_features318.py", "test_features319.py", "test_features320.py", "test_features321.py", "test_features322.py", "test_features323.py", "test_features324.py", "test_features325.py", "test_features326.py", "test_features328.py", "test_features329.py", "test_drawing330.py", "test_features330.py", "test_mindestgroesse330.py", "test_kontrast330.py", "test_paketierung330.py", "test_hintergrund330.py", "test_rueckmeldung330.py", "test_seiten330.py", "test_aufraeumen330.py", "test_kompression330.py", "test_bilder330.py", "test_festlayout330.py", "test_logo330.py", "test_kartenfuss330.py", "test_speicherlast330.py", "test_notizbereich330.py", "test_befunde330.py", "test_fenster330.py", "test_tempo330.py", "test_etappe1_332.py", "test_klappmechanismen3321.py", "test_drag_performance3322.py", "test_library_performance3323.py", "test_fundament333.py", "test_bereiche3331.py", "test_startseite3332.py", "test_eingabe3333.py", "test_eisenhower3335.py", "test_heute3336.py", "test_suche3337.py", "test_editor3338.py", "test_speichervergleich3339.py", "test_kennzahlen33310.py", "test_fortsetzung33311.py", "test_titel33312.py", "test_planen33313.py", "test_tagpaket33314.py", "test_wissen33315.py", "test_bedienung33316.py", "test_woche33317.py", "test_seiten33318.py", "test_tempo33319.py", "test_komfort33320.py", "test_oberflaeche33321.py", "test_wissen3340.py", "test_pixel3350.py", "test_austausch3350.py", "test_fundament3360.py", "test_logo3370.py", "test_aufgaben3380.py", "test_tag3390.py", "test_wiederholung3391.py", "test_animation3400.py", "test_import3410.py", "test_paket3420.py", "test_zugang400.py", "test_vollpruefung325.py")
 # standpruefung.py ist seit 3.21.3 dabei: Sieben Dokumente standen zwei
 # Versionssprünge lang auf 3.21.0, weil nichts die Standzeilen gegen VERSION
 # geprüft hat. Index- und Linkprüfung finden das nicht – ein Dokument kann
@@ -446,6 +448,8 @@ def main():
     parser.add_argument("--timeout", type=int, default=300, help="Zeitlimit je Suite/Werkzeug in Sekunden")
     parser.add_argument("--vordergrund", action="store_true",
                         help="macOS: Prüffenster dürfen Fokus und Vordergrund nehmen (Standard: Hintergrund)")
+    parser.add_argument("--zugang-nativ", action="store_true",
+                        help="Schon vor Version 4 die native Tk-9.1-Kernprüfung erzwingen; ab 4 immer Pflicht")
     args = parser.parse_args()
     if args.timeout < 1:
         parser.error("--timeout muss positiv sein")
@@ -472,8 +476,21 @@ def main():
     run.prozess("Fachlogik-Unit-Tests", [sys.executable, "-B", "-m", "unittest", "discover", "-s", str(REPO / "tests/unit")])
     run.gui_pruefen()
     run.zone_pruefen()
+    zugang_nativ = native_zugangspruefung(quelltext(REPO / "VERSION").strip(), angefordert=args.zugang_nativ)
+    if zugang_nativ:
+        with tempfile.TemporaryDirectory(prefix="glide-tcl-pruefbericht-") as temporary:
+            script_report = (logdir or Path(temporary)) / "zugang-skript.json"
+            run.prozess("Native Tcl-Zugangsbindungen", [sys.executable, "-B",
+                str(REPO / "tests/tools/pruefe_native_accessibility_skript.py"),
+                "--bericht", str(script_report)], gui=True)
     for name in SUITEN:
-        run.prozess(Path(name).stem, [sys.executable, str(REPO / "tests/integration" / name)], gui=True)
+        command = [sys.executable, "-B", str(REPO / "tests/integration" / name)]
+        if name == "test_zugang400.py":
+            if zugang_nativ:
+                command.append("--nativ")
+            if logdir:
+                command.extend(["--report", str(logdir / "zugang-kern.json")])
+        run.prozess(Path(name).stem, command, gui=True)
     run.prozess("Showcase", [sys.executable, str(REPO / "tests/tools/pruefe_showcase.py")], gui=True)
     for name in ANALYSEN:
         run.prozess(Path(name).stem, [sys.executable, str(REPO / "tests/tools" / name)])

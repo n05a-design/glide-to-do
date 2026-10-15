@@ -1,0 +1,154 @@
+--- a/win/tkWinAccessibility.c
++++ b/win/tkWinAccessibility.c
+@@ -252,7 +252,13 @@
+ static int EmitFocusChanged(void *cd, Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const *objv);
+ void TkRootAccessible_RegisterForCleanup(Tk_Window tkwin, void *tkAccessible);
+ static void TkRootAccessible_DestroyHandler(void *clientData, XEvent *eventPtr);
+-static void AssignChildIdsRecursive(Tk_Window win, int *nextId, Tcl_Interp *interp, Tk_Window toplevel);
++static void AssignChildIdsRecursive(Tk_Window win, Tcl_Interp *interp, Tk_Window toplevel);
++typedef struct {
++    Tk_Window win;
++    Tk_Window toplevel;
++} ChildIdLifetime;
++static int nextChildId = 1;
++static void ChildIdDestroyed(void *clientData, XEvent *eventPtr);
+ void InitAccessibilityMainThread(void);
+ int TkRootAccessibleObjCmd(void *clientData, Tcl_Interp *interp, Tcl_Size objc, Tcl_Obj *const *objv);
+ int TkWinAccessiblity_Init(Tcl_Interp *interp);
+@@ -691,9 +697,7 @@
+ 	TkGlobalUnlock();
+ 	return E_INVALIDARG;
+     }
+-    ClearChildIdTableForToplevel(tkAccessible->toplevel);
+-    int nextId = 1;
+-    AssignChildIdsRecursive(tkAccessible->toplevel, &nextId, tkAccessible->interp, tkAccessible->toplevel);
++    AssignChildIdsRecursive(tkAccessible->toplevel, tkAccessible->interp, tkAccessible->toplevel);
+     Tk_Window childWin = GetTkWindowForChildId(varChild.lVal, tkAccessible->toplevel);
+     if (!childWin) {
+ 	TkGlobalUnlock();
+@@ -1314,9 +1318,7 @@
+ 	return;
+     }
+     TkGlobalLock();
+-    ClearChildIdTableForToplevel(toplevel);
+-    int nextId = 1;
+-    AssignChildIdsRecursive(toplevel, &nextId, Tk_Interp(win), toplevel);
++    AssignChildIdsRecursive(toplevel, Tk_Interp(win), toplevel);
+     int childId = GetChildIdForTkWindow(focusWin, GetChildIdTableForToplevel(toplevel));
+     TkGlobalUnlock();
+     if (childId > 0) {
+@@ -1478,7 +1480,7 @@
+     entry = Tcl_CreateHashEntry(tkAccessibleTable, win, &newEntry);
+     Tcl_SetHashValue(entry, tkAccessible);
+     TkGlobalUnlock();
+-    TkRootAccessible_AddRef((IAccessible*)tkAccessible);
++    /* The table owns the initial reference; COM consumers acquire their own. */
+     NotifyWinEvent(EVENT_OBJECT_CREATE, hwnd, OBJID_CLIENT, CHILDID_SELF);
+     NotifyWinEvent(EVENT_OBJECT_SHOW, hwnd, OBJID_CLIENT, CHILDID_SELF);
+     NotifyWinEvent(EVENT_OBJECT_NAMECHANGE, hwnd, OBJID_CLIENT, CHILDID_SELF);
+@@ -1636,10 +1638,25 @@
+     return NULL;
+ }
+ 
+-/* Function to assign childId's dynamically. */
++/* Widget identities survive layout changes and are never reused. */
++static void ChildIdDestroyed(void *clientData, XEvent *eventPtr)
++{
++    if (eventPtr->type != DestroyNotify) return;
++    ChildIdLifetime *lifetime = (ChildIdLifetime *)clientData;
++    TkGlobalLock();
++    Tcl_HashEntry *top = toplevelChildTables
++	    ? Tcl_FindHashEntry(toplevelChildTables, lifetime->toplevel) : NULL;
++    if (top) {
++	Tcl_HashTable *table = (Tcl_HashTable *)Tcl_GetHashValue(top);
++	Tcl_HashEntry *entry = Tcl_FindHashEntry(table, lifetime->win);
++	if (entry) Tcl_DeleteHashEntry(entry);
++    }
++    TkGlobalUnlock();
++    Tcl_Free(lifetime);
++}
++
+ static void AssignChildIdsRecursive(
+     Tk_Window win,
+-    int *nextId,
+     Tcl_Interp *interp,
+     Tk_Window toplevel)
+ {
+@@ -1650,15 +1667,21 @@
+     if (!childIdTable) {
+ 	return;
+     }
+-    SetChildIdForTkWindow(win, *nextId, childIdTable);
+-    (*nextId)++;
++    if (GetChildIdForTkWindow(win, childIdTable) < 1) {
++	if (nextChildId == INT_MAX) return;
++	SetChildIdForTkWindow(win, nextChildId++, childIdTable);
++	ChildIdLifetime *lifetime = (ChildIdLifetime *)Tcl_Alloc(sizeof(ChildIdLifetime));
++	lifetime->win = win;
++	lifetime->toplevel = toplevel;
++	Tk_CreateEventHandler(win, StructureNotifyMask, ChildIdDestroyed, lifetime);
++    }
+ 
+     /* Initialize checked state for checkbuttons and radiobuttons. */
+     ComputeAndCacheCheckedState(win, interp);
+ 
+     TkWindow *winPtr = (TkWindow *)win;
+     for (TkWindow *child = winPtr->childList; child != NULL; child = child->nextPtr) {
+-	AssignChildIdsRecursive((Tk_Window)child, nextId, interp, toplevel);
++	AssignChildIdsRecursive((Tk_Window)child, interp, toplevel);
+     }
+ }
+ 
+@@ -1960,6 +1983,10 @@
+     }
+ 
+     ClearChildIdTableForToplevel(tkAccessible->toplevel);
++    tkAccessible->toplevel = NULL;
++    tkAccessible->win = NULL;
++    tkAccessible->interp = NULL;
++    tkAccessible->hwnd = NULL;
+     TkRootAccessible_Release((IAccessible *)tkAccessible);
+     TkGlobalUnlock();
+ }
+@@ -2008,9 +2035,7 @@
+ 	TkGlobalUnlock();
+ 	return TCL_OK;
+     }
+-    ClearChildIdTableForToplevel(toplevel);
+-    int nextId = 1;
+-    AssignChildIdsRecursive(toplevel, &nextId, interp, toplevel);
++    AssignChildIdsRecursive(toplevel, interp, toplevel);
+     LONG childId = GetChildIdForTkWindow(win, childIdTable);
+     if (childId <= 0) {
+ 	Tcl_AppendResult(interp, "Failed to find child ID for ", path, (char *)NULL);
+@@ -2066,13 +2091,17 @@
+ 	return TCL_OK;
+     }
+     TkGlobalLock();
+-    TkRootAccessible *accessible = CreateRootAccessible(interp, hwnd, windowName);
++    TkRootAccessible *accessible = GetTkAccessibleForWindow(toplevel);
++    bool created = accessible == NULL;
++    if (created) {
++	accessible = CreateRootAccessible(interp, hwnd, Tk_PathName(toplevel));
++    }
+     if (!accessible) {
+ 	TkGlobalUnlock();
+ 	Tcl_SetResult(interp, "Unable to create accessible object", TCL_STATIC);
+ 	return TCL_OK;
+     }
+-    TkRootAccessible_RegisterForCleanup(toplevel, accessible);
++    if (created) TkRootAccessible_RegisterForCleanup(toplevel, accessible);
+     Tcl_HashTable *childIdTable = GetChildIdTableForToplevel(toplevel);
+     if (!childIdTable) {
+ 	TkRootAccessible_Release((IAccessible *)accessible);
+@@ -2080,9 +2109,7 @@
+ 	TkGlobalUnlock();
+ 	return TCL_OK;
+     }
+-    ClearChildIdTableForToplevel(toplevel);
+-    int nextId = 1;
+-    AssignChildIdsRecursive(toplevel, &nextId, interp, toplevel);
++    AssignChildIdsRecursive(toplevel, interp, toplevel);
+     TkGlobalUnlock();
+     return TCL_OK;
+ }

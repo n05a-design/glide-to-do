@@ -61,8 +61,9 @@ class Actor:
         self.spoken = []
 
     def assert_focus(self):
-        if foreground_pid(self.environment) != self.pid:
-            raise RuntimeError('Kein Tastendruck: eigene Glide-Testinstanz hat nicht den Vordergrund.')
+        actual = foreground_pid(self.environment)
+        if actual != self.pid:
+            raise RuntimeError(f'Kein Tastendruck: eigene Glide-Testinstanz hat nicht den Vordergrund (Soll-PID {self.pid}, Ist-PID {actual}).')
 
     def key(self, gesture):
         self.assert_focus()
@@ -213,6 +214,7 @@ def run(destination, app):
             result.update(fehler=str(error),traceback=traceback.format_exc())
         finally:
             if child is not None:
+                result['app_exitcode_vor_aufraeumen'] = child.poll()
                 path=destination/'glide-diagnose/zustand.json'
                 if path.is_file():result['app_callback_errors']=json.loads(path.read_text())['callback_errors']
             for process in (child,reader):
