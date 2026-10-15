@@ -18,6 +18,29 @@ import urllib.request
 import xmlrpc.client
 
 
+SPEECH_SPY_MODULE = 'speechSpySynthDriver'
+
+
+def profile_configuration():
+    return '''schemaVersion = 24
+[general]
+language = en
+saveConfigurationOnExit = False
+askToExit = False
+showWelcomeDialogAtStartup = False
+playStartAndExitSounds = False
+[update]
+askedAllowUsageStats = True
+autoCheck = False
+startupNotification = False
+allowUsageStats = False
+[speech]
+synth = '''+SPEECH_SPY_MODULE+'''
+[development]
+enableScratchpadDir = True
+'''
+
+
 def require_hosted(destination):
     if (sys.platform != 'win32' or os.environ.get('GITHUB_ACTIONS') != 'true'
             or os.environ.get('RUNNER_ENVIRONMENT') != 'github-hosted'):
@@ -67,18 +90,7 @@ def prepare(destination):
         shutil.copy2(originals / name, libraries / name)
     shutil.copy2(originals / 'copying.txt', profile / 'NVDA-COPYING.txt')
     shutil.copy2(originals / 'speechSpySynthDriver.py', synths / 'speechSpySynthDriver.py')
-    (profile / 'nvda.ini').write_text('''schemaVersion = 24
-[general]
-language = en
-saveConfigurationOnExit = False
-askToExit = False
-showWelcomeDialogAtStartup = False
-playStartAndExitSounds = False
-[speech]
-synth = SpeechSpySynthDriver
-[development]
-enableScratchpadDir = True
-''', encoding='utf-8')
+    (profile / 'nvda.ini').write_text(profile_configuration(), encoding='utf-8')
     (destination / 'herkunft.json').write_text(json.dumps(lock, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
     return portable / 'nvda.exe', profile
 
@@ -126,7 +138,10 @@ class Spy:
 
     def speech(self, start):
         self.call('wait_for_speech_to_finish', 10, start, None)
-        return self.call('get_speech_at_index_until_now', start)
+        result = self.call('get_speech_at_index_until_now', start)
+        if not isinstance(result, str) or not result.strip():
+            raise AssertionError('NVDA-Testprofil hat keine tatsächliche Sprachausgabe erfasst; Synthesizer und Readerprotokoll prüfen.')
+        return result
 
 
 def main():

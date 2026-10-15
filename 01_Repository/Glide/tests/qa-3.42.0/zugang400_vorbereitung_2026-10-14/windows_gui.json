@@ -1,0 +1,19 @@
+{
+  "exitcode": 0,
+  "version": "3.42.0",
+  "tk": "9.1.0",
+  "native_backend": true,
+  "checks": [
+    "Echte Erfassung mit Enter: genau eine Aufgabe; Eingabe und Suche eindeutig benannt",
+    "Suche und echte Zeilenauswahl: aktueller Aufgabentext, Status und getrennte Datumsarten",
+    "Heute-Planungsaktion und gemeinsamer Inspektor: Fälligkeit getrennt, Unicode/Absätze gespeichert",
+    "Echte Checkbox per Leertaste: kanonische 0/1-Variable, ein Undo, frische Objekte nach Undo",
+    "Echter Dateischreibfehler und nachträglicher Schreibschutz: Modell, Datei, Undo und Haken unverändert",
+    "Eigener Anhang mit Enter/Leertaste erreichbar; aktueller Dateiname und entfernte Zielprüfung ohne externes Öffnen",
+    "Schreibschutz auch während offener Auswahl: Wichtigkeit/Labels verweigern Tastatur- und native Aktionen ohne Modell-/Undoänderung",
+    "Ausgeblendeter Inspektor verweigert Aktionen; Neuaufbau gibt alte Bindungen, Aufträge und Tcl-Kommandos frei"
+  ],
+  "callback_errors": [],
+  "app_sha256": "ee2221071d5c59734d3294ee10ba054e3957dfd4574967f50cbb22a9ed605f92",
+  "reader_abnahme": "offen; Attribut-/Tastaturprüfung ersetzt keine tatsächliche Readerausgabe"
+}

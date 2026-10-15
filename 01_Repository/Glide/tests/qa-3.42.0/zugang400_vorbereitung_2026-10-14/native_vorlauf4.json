@@ -1,0 +1,18 @@
+{
+  "run": 38587952872,
+  "commit": "30fff4777cc52ddb76f1231f70756b4c0a701517",
+  "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38587952872",
+  "ergebnis": "failure",
+  "linux": {
+    "runtime": "Python 3.14.8/Tcl-Tk 9.1/ATK grün",
+    "native_text": "externer AT-SPI-Verbraucher: exakter Text,31 Unicodezeichen,Cursor3,Hauszeichen127968 grün",
+    "gui": "acht Gruppen grün",
+    "orca": "noch nicht ausgeführt"
+  },
+  "windows": {
+    "runtime": "Python 3.14.7/Tcl-Tk 9.1/_tkinter mit externem TomMath grün",
+    "gui": "acht Gruppen grün",
+    "nvda": "tatsächlich gestartet, Spy wegen falscher Modulschreibweise ohne Sprache; oneCore-Rückfall meldet edit ohne Feldname"
+  },
+  "nachlauf": "Exakter Synth-Modulname korrigiert. Windows accName liest nun name statt description, ausschließlich in gepinnter Baukopie; native Wiederholung offen. Orca-Prüfer vorbereitet, noch nicht ausgeführt. Tcl-bgerror wird im künstlichen Prüfling protokolliert; kein Fehler wird als grün akzeptiert."
+}
