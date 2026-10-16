@@ -1,6 +1,6 @@
 # Architektur – Glide
 
-Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
 
 Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, Performance-Regeln und die teuer gelernten Tk-Fallstricke. Zusammengeführt aus Architektur, Projektübergabe, Entwicklungsnotizen und den technischen Teilen der Funktionsverträge 45–79 (03.10.2026); die Vorfassungen trägt Git. Verhalten der Funktionen: [Funktionen](20_FUNKTIONEN.md). Datenformat: [Daten und Migration](06_DATA_BACKUP_MIGRATION.md).
 
@@ -39,7 +39,7 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 | `day_proposal.py` | Erklärbare Tagesauswahl, Auswahlbudget und Prüfung veralteter Vorschläge (Tk-frei, AU01) | 3.33.14 |
 | `focus_timer.py` | Pausierbarer Fokus, Intervallzeit und wiederholbare Buchung nach Schreibfehler/Neustart (Tk-frei, G05/AU05) | 3.33.14 |
 | `task_references.py` | Heimat und Textverweise, Quellenindex, Zielzustand, ID-Neuvergabe und bearbeitete Zeilentitel ohne Tk | 3.33.15 |
-| `interaction_policy.py` | Palettensuche, gemerkte Hinweise und getrennte Datumsanzeige (Tk-frei) | 3.33.16 |
+| `interaction_policy.py` | Palettensuche, gemerkte Hinweise, getrennte Datumsanzeige und X11-Emacs-Auslöser in Listen (Tk-frei; Tastenwege seit 3.43.1) | 3.33.16 |
 | `object_references.py` | Typisierte lokale Verweise, abgeleitete Rückverweise und Import-/Kopierregeln (Tk-frei) | 3.33.17 |
 | `week_planning.py` | Gemeinsame Wochenbilanz und Zeitfenster aus vorhandenen Glide-Blöcken (Tk-frei) | 3.33.17 |
 | `page_features.py` | Live-Listen, Titelbildvertrag und gefüllte Vorlagenvorschau ohne Bestandsmutation (Tk-frei) | 3.33.18 |
@@ -167,6 +167,9 @@ Ereignisgrenzen: `item_change` → Speichern/Verlauf/Ansicht; `sidebar_change` �
 - **Bindtags:** Ein Widget bekommt nie das Bindtag seines Rahmens, um Ereignisse weiterzugeben – dann erreichen den Rahmen auch fremde `<Configure>`-Meldungen, unter macOS bis zum Tk-Absturz (`XMoveResizeWindow`). Stattdessen eigenes Bindtag mit `event_generate` (`GlideBackdrop`).
 - **Treeview:** `TreeviewOpen` kommt vor dem Umschalten – Zustand erst im Leerlauf lesen. `Treeview.see` öffnet alle Vorfahren. Drag-Bindungen mit `break` prüfen, welche native Funktion (z. B. Klapppfeile) sie unterdrücken.
 - **`<TouchpadScroll>`** (Tk 9, TIP 684): `delta` trägt X in den oberen, Y in den unteren 16 Bit, jeweils mit Vorzeichen.
+- **Mausrad unter X11:** Tk 9 liest die Muster `<Button-4>`/`<Button-5>` als Maustaste 8/9 und wandelt nur die echten Radtasten 4–7 in `<MouseWheel>` mit ±120 (`Tk_HandleEvent`). Prüfungen erzeugen unter Tk 9 deshalb `<MouseWheel>`; erzeugtes `<Button-5>` scrollt dort nichts.
+- **Emacs-Kürzel unter X11:** Tk legt Strg+A/B/E/F/N/P, mit Umschalt erweiternd, auf dieselben virtuellen Ereignisse wie Pfeile, Pos1 und Ende (`::tk::EventMotifBindings`). Seit Tk 9.1 navigiert auch die Treeview über diese Ereignisse und verschob vor Glides Strg-Kürzeln die Auswahl; `guard_x11_emacs_navigation` nimmt die Strg-Buchstaben-Auslöser aus ihrer Klassenbindung (3.43.1).
+- **Xvfb ohne Fenstermanager:** Jedes neue Hauptfenster bekommt `<FocusIn>`. Prüfungen ersetzen Systemabfragen wie die Hell-/Dunkel-Erkennung deshalb vor dem ersten Fenster, nicht erst nach einem Neustart.
 - **Schwebende Fenster:** `withdraw()`, positionieren, `deiconify()` – sonst wandern sie unter macOS sichtbar.
 - **Dialoge nicht nachträglich umfärben:** Farben beim Aufbau aus `self.theme` nehmen; Umfärben nach dem Zeigen ließ Tk endlos neu anordnen.
 

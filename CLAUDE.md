@@ -1,6 +1,6 @@
 # Arbeitsregeln für Claude Code – Glide
 
-Stand 16.10.2026 · Glide 3.43.0 · lokale gelieferte Basis; Upstream-Abgleich vor Produktionsarbeit
+Stand 16.10.2026 · Glide 3.43.1 · lokale gelieferte Basis; Upstream-Abgleich vor Produktionsarbeit
 
 Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf die verbindlichen Projektregeln und ergänzt, was für Claude-Code-Sitzungen im Repository gilt. Regeln nicht hier doppeln, sondern an der Quelle pflegen.
 

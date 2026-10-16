@@ -206,7 +206,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.43.0"
+APP_VERSION = "3.43.1"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
 # Einstellungen des Betriebssystems hängen daran.
@@ -15946,6 +15946,31 @@ class ListApp:
             self.root.bind("<Command-Shift-T>", self.choose_time_block)
             self.root.bind("<Command-Shift-F>", self.start_focus_selected)
             self.root.bind("<Command-h>", self.open_history_view)
+        self.guard_x11_emacs_navigation()
+
+    def guard_x11_emacs_navigation(self, force=False):
+        """Strg+Buchstabe bleibt in Listen Glides Kürzel (X11 ab Tk 9.1, 3.43.1).
+
+        Die Treeview-Klasse navigiert seit Tk 9.1 über virtuelle Ereignisse, die
+        Tk unter X11 auch mit Emacs-Kürzeln auslöst. Ihre Klassenbindung lässt
+        diese Auslöser jetzt aus; Pfeiltasten wirken unverändert. `force` gilt
+        nur für Prüfungen, die den X11-Tastenweg nachstellen. Liefert die
+        geschützten Ereignisse.
+        """
+        tcl = self.root.tk
+        try:
+            if not force and str(tcl.call("tk", "windowingsystem")) != "x11":
+                return []
+            ereignisse = [str(e) for e in tcl.splitlist(tcl.call("bind", "Treeview"))]
+            folgen = {e: [str(s) for s in tcl.splitlist(tcl.call("event", "info", e))]
+                      for e in ereignisse if e.startswith("<<")}
+            geschuetzt = glide_interaction.emacs_guarded_events(ereignisse, folgen)
+            for ereignis in geschuetzt:
+                skript = str(tcl.call("bind", "Treeview", ereignis))
+                tcl.call("bind", "Treeview", ereignis, glide_interaction.guard_emacs_script(skript))
+            return geschuetzt
+        except tk.TclError:
+            return []
 
     # -----------------------------
     # Einstellungen / Basis

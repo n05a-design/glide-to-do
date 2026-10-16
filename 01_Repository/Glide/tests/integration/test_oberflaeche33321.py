@@ -38,6 +38,12 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
     mod = importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name, loader))
     sys.modules[loader.name] = mod
     loader.exec_module(mod)
+    # Systemerkennung vor dem ersten Fenster ersetzen: Unter Linux/Xvfb ohne
+    # Fenstermanager bekommt jedes neue Hauptfenster <FocusIn>, und Glide fragt
+    # dann gsettings. Ein Ersatz erst nach dem Neustart kam zu spät.
+    system = {"dunkel": False}
+    echte_erkennung = getattr(mod.ListApp, "system_is_dark", None)  # fehlt in 3.33.20 (Gegenprobe)
+    mod.ListApp.system_is_dark = lambda self: system["dunkel"]
     fehler = []
     root = mod.tk.Tk()
     root.geometry("1280x840+20+20")
@@ -69,8 +75,6 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
     try:
         # --- N01: Einstellung und Wechsel ohne Neustart ---------------------
         assert app.DESIGN_ORDER[0] == "pixel", app.DESIGN_ORDER
-        system = {"dunkel": False}
-        app.system_is_dark = lambda: system["dunkel"]
         app.set_design("glass_dark")
         ruhe()
 
@@ -110,7 +114,6 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
 
         # Neustart: Wahl bleibt; ausschalten beendet das Folgen.
         neu_starten()
-        app.system_is_dark = lambda: system["dunkel"]
         assert app.settings["design_auto"] == {"light": "light", "dark": "pixel"} and app.design_name() == "pixel"
         einstellungen(False)
         assert "design_auto" not in app.settings
@@ -118,7 +121,7 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
         assert app.sync_system_appearance() is False and app.design_name() == "pixel"
         normal = mod.ListApp.normalize_settings_330({"design_auto": {"light": "weg", "dark": "pixel"}})
         assert "design_auto" not in normal
-        echte = app.__class__.system_is_dark(app)
+        echte = echte_erkennung(app)
         assert echte in (True, False, None), echte
         pruefungen.append("N01: Wahl übersteht Neustart; aus beendet das Folgen; Unlesbares ergibt aus")
 

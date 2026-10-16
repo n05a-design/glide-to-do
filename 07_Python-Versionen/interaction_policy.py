@@ -1,4 +1,4 @@
-"""Anzeigeregeln für Palette, Hinweise und Termine, ohne Tk oder Mutation."""
+"""Anzeige- und Bedienregeln für Palette, Hinweise, Termine und Tastenwege, ohne Tk oder Mutation."""
 
 
 def palette_query(query):
@@ -83,3 +83,53 @@ def recent_first(keys, recent, limit=RECENT_LIMIT):
         if len(vorn) >= limit:
             break
     return vorn, [value for value in vorhanden if value not in vorn]
+
+
+# X11-Emacs-Kürzel in Listen (3.43.1): Tk legt unter X11 Strg+A/B/E/F/N/P,
+# mit Umschalt erweiternd, auf dieselben virtuellen Ereignisse wie Pfeiltasten,
+# Pos1 und Ende (tk.tcl, ::tk::EventMotifBindings). Die Treeview reagiert erst
+# seit Tk 9.1 darauf; Strg+Umschalt+P setzte so die Auswahl eine Zeile höher,
+# bevor Glides „Einplanen“ lief. Text- und Eingabefelder behalten die Kürzel.
+NAVIGATION_EVENTS = frozenset(f'<<{name}>>' for name in (
+    'PrevChar', 'NextChar', 'SelectPrevChar', 'SelectNextChar',
+    'PrevLine', 'NextLine', 'SelectPrevLine', 'SelectNextLine',
+    'LineStart', 'LineEnd', 'SelectLineStart', 'SelectLineEnd'))
+EMACS_GUARD_MARK = '# Glide: Strg+Buchstabe bleibt Glide-Kürzel (X11)'
+
+
+def is_emacs_trigger(sequence):
+    """Ob eine Tk-Sequenz Strg mit einem einzelnen Buchstaben ist, etwa <Control-P>.
+
+    Umschalt und Feststelltaste dürfen dazukommen; Pfeil-, Pos1- und
+    Endetasten (<Control-Left>, <Shift-Home>) zählen nicht.
+    """
+    text = str(sequence or '').strip()
+    if not (text.startswith('<') and text.endswith('>')) or text.startswith('<<'):
+        return False
+    *modifiers, detail = text[1:-1].split('-')
+    modifiers = {value for value in modifiers if value not in ('Key', 'KeyPress')}
+    return ('Control' in modifiers and modifiers <= {'Control', 'Shift', 'Lock'}
+            and len(detail) == 1 and detail.isalpha())
+
+
+def emacs_guarded_events(class_events, event_sequences):
+    """Navigationsereignisse einer Tk-Klasse, die auch ein Strg-Buchstabe auslöst.
+
+    `class_events` sind die Ereignisse der Klassenbindung, `event_sequences`
+    ordnet jedem virtuellen Ereignis seine Sequenzen zu (`event info`).
+    """
+    return sorted(event for event in set(class_events) if event in NAVIGATION_EVENTS
+                  and any(is_emacs_trigger(sequence) for sequence in event_sequences.get(event, ())))
+
+
+def guard_emacs_script(script):
+    """Klassenbindung, die bei Strg+Buchstabe nichts tut und sonst unverändert wirkt.
+
+    `%K` ist bei einem Tastendruck das Tastensymbol, beim unmittelbar erzeugten
+    virtuellen Ereignis „??“. Kein `break`: Glides Kürzel an Fenster und
+    Anwendung laufen danach wie unter Tk 9.0. Mehrfaches Anwenden ändert nichts.
+    """
+    text = str(script or '')
+    if not text.strip() or text.startswith(EMACS_GUARD_MARK):
+        return text
+    return f'{EMACS_GUARD_MARK}\nif {{[string length %K] != 1}} {{\n{text}\n}}'

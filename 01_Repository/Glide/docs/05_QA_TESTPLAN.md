@@ -1,6 +1,6 @@
 # Prüfplan – Glide
 
-Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
+Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
 
 Wie Glide geprüft wird. Was tatsächlich geprüft wurde, steht im [QA-Bericht](07_QA_BERICHT.md). Am 03.10.2026 auf den gültigen Stand verdichtet; am 05.10.2026 um Nachweisregeln und Kontrollmatrix der Windows-Fassung ergänzt. Die Suitebeschreibungen je Einführungsversion trägt Git.
 
@@ -71,7 +71,7 @@ Ausführbarer Vertrag zu [Funktionen](20_FUNKTIONEN.md). Pflichtsuiten der letzt
 | Tagesplanung (3.39.0): Hinweise mit künstlicher Uhr, Deduplizierung/Später/Überspringen/Neustart/Dateifehler, lokale ICS-Serien/Ausnahmen/Zeitzonen und gemeinsame Bilanz, Entlastung mit Vorschau/Undo/Schreibfehler, vier Dialoge bei 860 × 700/großer Schrift und Timerabbau | `test_tag3390`; elf Tk-freie Unitsuiten/138 neue Fälle, vier getrennte rote Vorversionsgegenproben |
 | Komfort (3.33.20): Termin überspringen über Menüs mit Undo und ohne Tageszahl, Erledigen in Übersichten wie in der Liste, Erinnerung aus Eingabezeile und Schnellerfassung, mehrzeiliges Einfügen mit Rückfrage, zuletzt benutzte Ziele, „+“/Umschalt+Enter, Leerzustand, Routinen in „Heute“, Karte „Neu in …“, Mindestlaufzeit mit altem Python, Normalisierung der neuen Einstellungen | `test_komfort33320` |
 | Tempo (3.33.19): Seitenleiste/Einstellungen/Sperre je Aktion, Bildlayout inkrementell = vollständig, Startseite bleibt stehen, Einstellungsfenster | `test_tempo33319` |
-| Einplanen und verfügbare Zeit (3.33.13): gemeinsame Menüs/Kürzel/Palette/Zeilenaktion, mehrere Quelllisten, Feldinvarianten, Undo, Tageswechsel, Datumswahl/Abbruch, Speicherfehler, Neustart und Mindestgröße/große Schrift | `test_planen33313`; `test_features315` erhält die unabhängige Tagesbilanzprüfung, der Kopf zeigt die freie Zeit des Zieltags |
+| Einplanen und verfügbare Zeit (3.33.13): gemeinsame Menüs/Kürzel/Palette/Zeilenaktion, mehrere Quelllisten, Feldinvarianten, Undo, Tageswechsel, Datumswahl/Abbruch, Speicherfehler, Neustart und Mindestgröße/große Schrift | `test_planen33313` (seit 3.43.1 mit dem X11-Tastenweg von Tk 9.1, nachgestellt wo Tk ihn nicht hat: Strg+Umschalt+P darf die Auswahl nicht verschieben); `test_features315` erhält die unabhängige Tagesbilanzprüfung, der Kopf zeigt die freie Zeit des Zieltags |
 | Gemeinsamer Speichervergleich (3.33.9): Aktivität, Unterbäume, Fehler/Retry, Tastatur-Undo und Reload | `test_speichervergleich3339`; zusätzlich `--baseline-ref <Git-SHA>` für die Differenzprobe |
 | Editorlebensdauer beim Seitenwechsel (3.33.8) | `test_editor3338` |
 | Inhaltssuche (3.33.7) | `test_suche3337` |

@@ -1,8 +1,0 @@
-{
-  "app_sha256": "49ca48aad93d0be0ba9fce8dd0bd82e980e3eaa673ff549bdb3ba04614ebcf28",
-  "pruefmodus": "--vordergrund",
-  "exitcode": 0,
-  "vollpruefung_werkzeug_sha256": "ff3ecd5d4f1afa5fb1b679b63425dd49aa1b841a4285d86820725035f854f15d",
-  "gezielt_geprueftes_werkzeug_sha256": "84579eaff37ff00aef3b825a37a8b205d382b4c4f9441efa04d65c237e29579f",
-  "aenderung": "CLI-Schalter fuer echten Mac-Fensterfokus; Showcase-Kriterien unveraendert"
-}

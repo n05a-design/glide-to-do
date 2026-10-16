@@ -187,8 +187,23 @@ with tempfile.TemporaryDirectory(prefix="glide-planen-") as folder:
                 app.tree.event_generate("<Button-3>", x=100, y=bbox[1] + bbox[3] // 2)
                 idle()
             assert set(app.quick_plan_selection()) == {a["id"], b["id"]}
-            # Keyboard opens exactly the same choices.
+            # Keyboard opens exactly the same choices. Unter X11 löst Strg+Umschalt+P
+            # auch <<SelectPrevLine>> aus, an das die Treeview seit Tk 9.1 gebunden ist
+            # (3.43.1). Wo Tk das nicht tut, wird dieser Weg wie in Tk 9.1 nachgestellt.
+            if not str(root.tk.call("bind", "Treeview", "<<SelectPrevLine>>")).strip():
+                root.tk.eval("event add <<SelectPrevLine>> <Control-P> <Control-Lock-p>")
+                root.tk.eval("""bind Treeview <<SelectPrevLine>> {apply {w {
+                    set item [$w focus]
+                    if {$item eq {}} return
+                    set vorher [$w prev $item]
+                    if {$vorher eq {}} {set vorher [$w parent $item]}
+                    if {$vorher ne {}} {$w selection set [list $vorher]; $w focus $vorher}
+                }} %W}""")
+                if hasattr(app, "guard_x11_emacs_navigation"):
+                    assert app.guard_x11_emacs_navigation(force=True) == ["<<SelectPrevLine>>"]
             menu = popup(lambda: app.tree.event_generate("<Control-Shift-P>"))
+            assert set(app.quick_plan_selection()) == {a["id"], b["id"]}, ("Kürzel verschiebt die Auswahl",
+                                                                          app.tree.selection())
             invoke(menu, "Ohne Tag")
             assert fresh(a["id"])["planned_date"] is None and fresh(a["id"])["planned_time"] == "09:00"
             app.undo_last_change(); idle()

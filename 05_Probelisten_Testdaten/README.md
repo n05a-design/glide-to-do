@@ -1,6 +1,6 @@
 # Probedaten
 
-Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · Vorlagen 2
+Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Vorlagen 2
 
 Hier liegt nur noch der **[Showcase](Showcase/README.md)**: das fiktive Projekt „Parkquartier“ mit zehn bearbeitbaren Dokumenten in allen fünf Arten, sechs Originalmotiven aus der kanonischen Fixture-Ablage `01_Repository/Glide/tests/fixtures/showcase/bilder`, Projekt- und Demo-Pinnwand, Tagesplanung, Notizbuch, Archiv und zwei Vorlagen. Herkunft und Prüfsummen stehen in `showcase/quellen.json` des Quellbaums; die Motive lagen früher zusätzlich im Grafikmaster. `Showcase_starten.pyw` hält den Demobestand im eigenen Ordner `Arbeitsstand` (nicht versioniert) und öffnet nie den normalen Datenordner.
 
