@@ -1,0 +1,66 @@
+{
+  "datum": "2026-10-16",
+  "app_version": "3.43.0",
+  "app_sha256": "379e97e32e3cc5e52eeb104ec23937df28081b45bd0e63582d5065cd61a2b172",
+  "datenformat": 25,
+  "gegenstand": "Prüfwerkzeugnachlauf: native ACL-Restaurierung an Symlinks in der isolierten Windows-Paketprobe; keine App-Änderung",
+  "plattform": "Windows 11 Pro, Python 3.14.7, Benutzer ohne Adminrechte, künstliche Daten im Scratch-Ordner",
+  "anlass": {
+    "lauf": 38927787712,
+    "schritt": "Isolierte Startprobe ohne externes Python",
+    "paket": "grün (Exit 0, alle Funktionsproben)",
+    "acl_native_restaurierung_exitcodes": [
+      0,
+      0,
+      1,
+      0,
+      1
+    ],
+    "fehler": "WinError 5 an Reparse-Punkten: vier Symlinks unter paket-runtime/quellen/python/Misc/mypy, python3.exe im Tool-Cache"
+  },
+  "ursachen": [
+    "SetSecurityInfo am reinen WRITE_DAC-Linkhandle liest zuerst die vorhandene Beschreibung und scheitert in allen Modi mit WinError 5, auch ohne vorherige Sperre; SetKernelObjectSecurity setzt die DACL wörtlich und braucht kein Leserecht",
+    "icacls /save und /restore ohne /L sichern bzw. schreiben bei Symlinks die DACL des Ziels; Sperre und Entsperrung verändern dagegen den Link selbst"
+  ],
+  "geaendert": [
+    "01_Repository/Glide/packaging/paket/windows_acl.py",
+    "01_Repository/Glide/packaging/paket/pruefe_start_windows.py",
+    "01_Repository/Glide/tests/tools/test_paket_windows_isolation.py",
+    ".github/workflows/python-app.yml"
+  ],
+  "pruefungen": {
+    "test_paket_windows_isolation": {
+      "faelle": 26,
+      "gruen": 26,
+      "neu": 2
+    },
+    "gegenprobe_main_8b59a8b": {
+      "neue_faelle_rot": 2,
+      "befund": "WinError 5 am Link; drei icacls-Aufrufe ohne /L"
+    },
+    "nachbau_ci_ablauf": {
+      "vorher_fehler_winerror5": 3,
+      "nachher_fehler": 0,
+      "zugriffsregeln_gleich": true,
+      "rohvergleich": "nur AI-Modellmarker abweichend (zulässig)"
+    },
+    "ci_grundstufe_windows": "bestanden (Exit 0); 152 Werkzeugtests, 711 Units, fünf Analysen, Startprobe, Lieferstand bytegleich, Datenschutz, Ablagegröße; gelaufen mit zusätzlichem READ_CONTROL am Linkhandle, nach dessen Wegfall Werkzeugtests (152), Nachbau sowie Stand-, Link-, Synchronisations- und Datenschutzprüfung erneut grün"
+  },
+  "lieferstand_unveraendert": {
+    "src_glide_07_05_git_diff": "leer",
+    "codedateien_bytegleich": 67,
+    "ressourcendateien_bytegleich": 146,
+    "abweichend": 0
+  },
+  "grenzen": [
+    "icacls /restore lokal ohne SeRestorePrivilege mit 1300; auf dem erhöhten Hosted-Runner nicht",
+    "grüner Paketschritt erst nach dem nächsten GitHub-Windows-Paketlauf belegt",
+    "keine Inhaberinstallation berührt; gesperrt nur der eigene Scratch-Ordner"
+  ],
+  "offen": [
+    "GitHub-Windows-Paketlauf nach Push",
+    "Linux: test_tempo330, test_planen33313, test_oberflaeche33321 und Kalibrierte Erwartungen (Paket 8)",
+    "Mac-Vollprüfung und Mac-Bundle 3.43.0",
+    "Menschen-/DPI-/Screenreaderabnahme"
+  ]
+}

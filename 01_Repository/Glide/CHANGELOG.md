@@ -9,6 +9,8 @@
 - **Neuerungen** bleiben unter Hilfe › Über Glide nachlesbar, aus demselben Katalog (B18). Gestaltungsskill neutral als `design-richtlinien` mit Lizenz und Herkunft der Fremdquelle (B20).
 - **Prüfung:** Pflichtsuite `test_uiux_paket.py` (17 Fälle grün, gegen 3.42.0 alle rot), darunter eine appweite Knopfschutzprüfung über sieben Ansichten und fünf Dialoge, neue Unit-Tests für Glyphenmetrik, Hinweisschalter, Kacheln/Gismo, Neuerungsverlauf und Symbolregel; Namensprüfung `test_design_richtlinien.py`. Datenformat 25 unverändert; Einstellungen additiv (`show_hints`), Altwerte werden beim Laden übernommen bzw. entfernt.
 
+- **Prüfwerkzeugnachlauf 16.10.2026:** Die isolierte Windows-Paketprobe stellt Zugriffsregeln originaler CI-Symlinks wieder her, statt mit WinError 5 abzubrechen: DACL wörtlich am Linkhandle statt über einen Aufruf, der dafür erst lesen müsste, `icacls` mit `/L` für Link statt Ziel. Nativer Link-Rundlauf und `/L`-Vertrag als neue Werkzeugtests, im Windows-Paketjob vor der Startprobe. App und ausgelieferte Python-Fassung unverändert.
+
 ## In Vorbereitung – 4.0.0 (keine Lieferung)
 
 - Native Linux-Lebensdauer nach Orca-Absturz abgesichert; externer Referenztest und Absturzdiagnose vorbereitet. Reader-Abschnittsnavigation, tatsächlicher MSAA-Client-HWND und Restaurierung originaler CI-Symlinks korrigiert; native Wiederholung offen.

@@ -66,7 +66,9 @@ def run(package,report,forbidden,*,timeout=150):
             for number,path in enumerate(sources):
                 if not path.is_dir():raise ValueError('Externe CI-Quelle fehlt.')
                 acl=Path(backup)/f'acl-{number}.txt'
-                save=command([system/'icacls.exe',path,'/save',acl,'/T','/Q'])
+                # /L: Ohne den Schalter sichert icacls für einen Symlink die
+                # DACL des Ziels und /restore schreibt durch den Link hindurch.
+                save=command([system/'icacls.exe',path,'/save',acl,'/T','/L','/Q'])
                 if save.returncode:raise RuntimeError('Original-ACL konnte nicht vollständig gesichert werden.')
                 original=acl_snapshot(acl.read_bytes())
                 saved.append((path,acl,original))
@@ -120,7 +122,7 @@ def run(package,report,forbidden,*,timeout=150):
                 # vorherige Systembefehl selbst abgebrochen ist.
                 unlock,unlock_output=cleanup([system/'icacls.exe',path,'/remove:d','*'+sid,'/Q'])
                 unlocked.append(unlock)
-                restore,restore_output=cleanup([system/'icacls.exe',path.parent,'/restore',acl,'/Q'])
+                restore,restore_output=cleanup([system/'icacls.exe',path.parent,'/restore',acl,'/L','/Q'])
                 restored.append(restore)
                 try:
                     exact=exact_restorer.restore(path,original)
@@ -128,7 +130,7 @@ def run(package,report,forbidden,*,timeout=150):
                     exact={'exitcode':1,'fehler':str(exc)}
                 exact_codes.append(exact['exitcode'])
                 after=acl.with_name(acl.stem+'-nachher.txt')
-                check,check_output=cleanup([system/'icacls.exe',path,'/save',after,'/T','/Q'])
+                check,check_output=cleanup([system/'icacls.exe',path,'/save',after,'/T','/L','/Q'])
                 difference={}
                 try:
                     actual=acl_snapshot(after.read_bytes()) if check==0 else {}

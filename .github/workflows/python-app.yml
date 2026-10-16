@@ -230,6 +230,9 @@ jobs:
           $version = (Get-Content ../../VERSION -Raw).Trim()
           & "$env:RUNNER_TEMP/bau-venv/Scripts/python.exe" -B baue_paket.py --quelle ../../src/glide --version $version --ziel "$env:RUNNER_TEMP/paket/bau" --plattform windows-x64 --lizenzen "$env:RUNNER_TEMP/paket/lizenzen" --runtime-bau "$env:RUNNER_TEMP/paket-runtime/runtime-bau.json"
           exit $LASTEXITCODE
+      - name: Native ACL-Restaurierung an Symlinks
+        # Vor der Sperre: Restaurierer am eigenen temporären Ordner mit Dateisymlink.
+        run: python -B -m unittest discover -s ../../tests/tools -p test_paket_windows_isolation.py -v
       - name: Isolierte Startprobe ohne externes Python
         run: |
           $python = Split-Path -Parent "${{ steps.python.outputs.python-path }}"
