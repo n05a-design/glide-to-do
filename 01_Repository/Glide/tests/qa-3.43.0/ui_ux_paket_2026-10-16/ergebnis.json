@@ -67,7 +67,7 @@
     ]
   },
   "offen": [
-    "erneute GitHub-Prüfung zum Tk-9.1-Nachtrag; drei Linux-Suiten aus PR #26 in Paket 8",
+    "Windows-Paketlauf: isolierte Startprobe rot, Artefakt paket-windows-belege auswerten; drei Linux-Suiten aus PR #26 in Paket 8",
     "Mac-Vollprüfung und Mac-Bundle",
     "eigenständige Pakete 3.43.0",
     "Menschen-/DPI-/Screenreaderabnahme",
@@ -109,6 +109,17 @@
       "test_planen33313 (Linux)",
       "test_oberflaeche33321 (Linux)",
       "Kalibrierte Erwartungen (Folge)"
-    ]
+    ],
+    "nach_pr29": {
+      "merge_commit": "8b59a8b",
+      "laeufe": [
+        38927787712,
+        38927780332
+      ],
+      "vollpruefung_windows_tk91": "success (beide Läufe)",
+      "vollpruefung_linux_tk91": "failure nur durch test_tempo330, test_planen33313, test_oberflaeche33321 und Kalibrierte Erwartungen",
+      "windows_paket": "failure: Isolierte Startprobe ohne externes Python (erstmals seit PR #26 ausgeführt; zuletzt grün a7f80b8)",
+      "auswertung_paket": "offen – Artefakt paket-windows-belege (startprobe.json)"
+    }
   }
 }
