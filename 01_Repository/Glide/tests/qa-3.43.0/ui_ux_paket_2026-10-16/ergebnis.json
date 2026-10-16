@@ -1,7 +1,7 @@
 {
   "version": "3.43.0",
   "datum": "2026-10-16",
-  "apphash_sha256": "a7b1df819ff2959b5c82797ce988eb3fc8715928cdf6543b8b8d9fe9ebdc6714",
+  "apphash_sha256": "379e97e32e3cc5e52eeb104ec23937df28081b45bd0e63582d5065cd61a2b172",
   "umgebung": "Windows 11, Python 3.14.7, Tk 9.0.4, künstliche Daten, temporäres GLIDE_DATA_DIR",
   "pflichtsuite": {
     "datei": "pflichtsuite_3.43.0.json",
@@ -67,7 +67,7 @@
     ]
   },
   "offen": [
-    "Auswertung der roten GitHub-Vollmatrix mit eigener Tk 9.1 (rot seit PR #26)",
+    "erneute GitHub-Prüfung zum Tk-9.1-Nachtrag; drei Linux-Suiten aus PR #26 in Paket 8",
     "Mac-Vollprüfung und Mac-Bundle",
     "eigenständige Pakete 3.43.0",
     "Menschen-/DPI-/Screenreaderabnahme",
@@ -95,6 +95,20 @@
     "vollpruefung_windows_tk91_zugang_nativ": "failure (Vollprüfstand)",
     "windows_paket": "skipped",
     "vergleich": "gleiche Schritte rot seit PR #26 (27bac83); zuletzt grün a7f80b8 am 15.10.2026",
-    "auswertung": "offen – Protokolle nur angemeldet lesbar"
+    "auswertung": "Protokolle Linux/Windows und Windows-Artefakt ausgewertet (Seitensitzung CI-Auswertung)",
+    "windows_artefakt": {
+      "native_zugangspruefung": "grün",
+      "rot": [
+        "test_klappmechanismen3321: ttk::treeview::Keynav fehlt in Tk 9.1 (Test, seit PR #26)",
+        "test_uiux_paket b15_appweit (Linux und Windows): Leertext beim Ansichtswechsel noch nicht gemappt, Knopf auf der Leerzeile"
+      ],
+      "behoben_mit": "Nachtrag Apphash 379e97e3: platzierter Leertext mit tatsächlicher Höhe, <Map>/<Configure> ziehen nach; Klassenbindung im Keynav-Test"
+    },
+    "seit_pr26_rot_paket8": [
+      "test_tempo330 (Linux)",
+      "test_planen33313 (Linux)",
+      "test_oberflaeche33321 (Linux)",
+      "Kalibrierte Erwartungen (Folge)"
+    ]
   }
 }

@@ -63,7 +63,12 @@ with tempfile.TemporaryDirectory(prefix="glide-klappkontrolle-") as folder:
         tree.focus(iid)
         tree.selection_set(iid)
         # Native Tcl-Class-Bindung: im Hintergrund ist kein OS-Tastaturfokus nötig.
-        tree.tk.call("ttk::treeview::Keynav", tree, direction)
+        # Ausgeführt wird die tatsächlich registrierte Klassenbindung: Tk 9.1
+        # kennt die Hilfsprozedur `ttk::treeview::Keynav` aus 8.6/9.0 nicht mehr.
+        sequence = {"right": "<Key-Right>", "left": "<Key-Left>", "up": "<Key-Up>", "down": "<Key-Down>"}[direction]
+        script = str(tree.tk.call("bind", "Treeview", sequence))
+        assert script.strip(), ("Fehlende Treeview-Klassenbindung", sequence)
+        tree.tk.eval(script.replace("%W", str(tree)))
         idle()
 
     def bound_key(widget, sequence):
