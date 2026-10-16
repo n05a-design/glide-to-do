@@ -1279,6 +1279,49 @@ class DeferredDrawCanvas(tk.Canvas):
             self._draw_pending = None
 
 
+# --- Pfadtrenner optisch mittig (B09, 16.10.2026) ----------------------------
+# „›“ sitzt typografisch auf der x-Höhe und stand in Knöpfen mit Pfaden – etwa
+# in der Startseitenkachel „Pinnwände“ – neben Großbuchstaben rund 1 px zu
+# tief. Knöpfe setzen ihn deshalb einzeln auf die Großbuchstabenmitte; die
+# Schreibweise bleibt. Ohne mitgelieferte UI-Schrift bleibt der Satz nativ.
+PATH_SEPARATOR = "›"
+_BUNDLED_GLYPH_METRICS = {}
+_SEPARATOR_SHIFTS = {}
+
+
+def bundled_glyph_metrics(bold):
+    """Glyphenrahmen der mitgelieferten DejaVu Sans (fett oder normal) – oder None."""
+    if bold not in _BUNDLED_GLYPH_METRICS:
+        datei = os.path.join(_GLIDE_SOURCE_DIR, "resources", "fonts",
+                             "DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf")
+        try:
+            _BUNDLED_GLYPH_METRICS[bold] = glide_glyphs.load(datei)
+        except (OSError, ValueError):
+            _BUNDLED_GLYPH_METRICS[bold] = None
+    return _BUNDLED_GLYPH_METRICS[bold]
+
+
+def separator_shift(widget, font):
+    """Pixel (negativ = nach oben), um die „›“ in `font` auf die Großbuchstabenmitte rückt."""
+    try:
+        skala = float(widget.tk.call("tk", "scaling"))
+        schluessel = (font if isinstance(font, (str, tuple)) else str(font), skala)
+        if schluessel in _SEPARATOR_SHIFTS:
+            return _SEPARATOR_SHIFTS[schluessel]
+        familie = str(widget.tk.call("font", "actual", font, "-family"))
+        fett = str(widget.tk.call("font", "actual", font, "-weight")) == "bold"
+        groesse = float(widget.tk.call("font", "actual", font, "-size"))
+    except (tk.TclError, RuntimeError, TypeError, ValueError):
+        return 0
+    versatz = 0
+    if familie.casefold() == "dejavu sans":
+        metrics = bundled_glyph_metrics(fett)
+        pixel = -groesse if groesse < 0 else groesse * skala
+        versatz = glide_glyphs.optical_shift(metrics, PATH_SEPARATOR, pixel, metrics, pixel)
+    _SEPARATOR_SHIFTS[schluessel] = versatz
+    return versatz
+
+
 class RoundedButton(DeferredDrawCanvas):
     """Nativer Tkinter-Button mit abgerundeter Outline und Hover-Fill."""
 
@@ -1486,22 +1529,68 @@ class RoundedButton(DeferredDrawCanvas):
                     else (fill if (self.active_fill or self.is_hovered) else self.border_color),
             width=border_width if self.outline or focused else 0,
         )
-        text_id = self.create_text(
-            14 if self.text_anchor == "w" else w / 2,
-            h / 2,
-            text=self.text,
-            fill=text_color,
-            font=self.font,
-            anchor=self.text_anchor,
-            justify="left" if self.text_anchor == "w" else "center",
-            width=max(20, w - 28) if self.wrap_text else 0,
-        )
+        versatz = separator_shift(self, self.font) if PATH_SEPARATOR in self.text else 0
+        if versatz:
+            text_id = self._draw_label_runs(text_color, w, h, versatz)
+        else:
+            text_id = self.create_text(
+                14 if self.text_anchor == "w" else w / 2,
+                h / 2,
+                text=self.text,
+                fill=text_color,
+                font=self.font,
+                anchor=self.text_anchor,
+                justify="left" if self.text_anchor == "w" else "center",
+                width=max(20, w - 28) if self.wrap_text else 0,
+            )
         if self.wrap_text and self.winfo_width() > 1:
             bounds = self.bbox(text_id)
             needed = max(self.height, bounds[3] - bounds[1] + 16)
             if int(self.cget("height")) != needed:
                 self.configure(height=needed)
         paint_canvas_backdrop(self)
+
+    def label_lines(self, limit):
+        """Zeilen der Beschriftung, umbrochen wie Canvas-Text an Leerzeichen."""
+        zeilen = []
+        for absatz in self.text.split("\n"):
+            zeile = ""
+            for wort in absatz.split(" "):
+                probe = f"{zeile} {wort}" if zeile else wort
+                if limit and zeile and int(self.tk.call("font", "measure", self.font, probe)) > limit:
+                    zeilen.append(zeile)
+                    zeile = wort
+                else:
+                    zeile = probe
+            zeilen.append(zeile)
+        return zeilen
+
+    def _draw_label_runs(self, text_color, w, h, versatz):
+        """Beschriftung zeilenweise; jeder Pfadtrenner einzeln um `versatz` px gerückt (B09).
+
+        Gibt das Tag der Textteile zurück, damit die Höhe wie beim einzelnen
+        Textelement gemessen wird.
+        """
+        zeilen = self.label_lines(max(20, w - 28) if self.wrap_text else 0)
+        zeilenhoehe = int(self.tk.call("font", "metrics", self.font, "-linespace"))
+        trenner = int(self.tk.call("font", "measure", self.font, PATH_SEPARATOR))
+        # Lage wie Tk beim einzelnen Textelement: gerundeter Ankerpunkt minus
+        # halbe Blockhöhe bzw. -breite (ganzzahlig).
+        oben = int(h / 2 + 0.5) - zeilenhoehe * len(zeilen) // 2
+        for nummer, zeile in enumerate(zeilen):
+            x = 14 if self.text_anchor == "w" else (
+                int(w / 2 + 0.5) - int(self.tk.call("font", "measure", self.font, zeile)) // 2)
+            y = oben + nummer * zeilenhoehe
+            for stelle, teil in enumerate(zeile.split(PATH_SEPARATOR)):
+                if stelle:
+                    self.create_text(x, y + versatz, text=PATH_SEPARATOR, fill=text_color, font=self.font,
+                                     anchor="nw", tags=("glide_label", "glide_label_separator"))
+                    x += trenner
+                if teil:
+                    self.create_text(x, y, text=teil, fill=text_color, font=self.font, anchor="nw",
+                                     tags=("glide_label", "glide_label_text"))
+                    x += int(self.tk.call("font", "measure", self.font, teil))
+        return "glide_label_text" if self.find_withtag("glide_label_text") else "glide_label"
 
     def _on_enter(self, _event):
         self.is_hovered = True
@@ -5137,6 +5226,7 @@ class ItemWorkspace:
             return
         # Beim Neuzeichnen Fokus und Scrollposition erhalten, Filtereingaben nicht zerstören.
         signature = (scope, self.mode, app.theme_name, app.settings.get("ui_font_size"),
+                     glide_interaction.hints_visible(app.settings),
                      json.dumps(app.theme, sort_keys=True), json.dumps(app.settings["pinboards"].get(scope), sort_keys=True),
                      json.dumps(self.eligible_lists(), sort_keys=True),
                      json.dumps(app.labels, sort_keys=True))
@@ -6007,7 +6097,9 @@ class ItemWorkspace:
         """Zusatzzeile des Spaltenboards: Gruppieren nach, leere Spalten, nur offene."""
         app = self.app
         board = self.board()
-        zeile = tk.Frame(self.body, bg=app.theme["card"])
+        # B15 (16.10.2026): Die Zeile bricht um, statt den letzten Knopf zu
+        # quetschen – bei 860 px war „Nur offene“ abgeschnitten.
+        zeile = ButtonFlow(self.body, bg=app.theme["card"], gap=8)
         zeile.pack(side="bottom", fill="x", pady=(6, 0))
         felder = [(key, name) for key, name in self.BOARD_GROUP_FIELDS
                   if key != "list" or not (self.context() or "").startswith("list:")]
@@ -6015,7 +6107,7 @@ class ItemWorkspace:
         aktuell = next((name for key, name in felder if key == self.effective_group_field()), felder[0][1])
         gruppe = tk.StringVar(value=f"Gruppieren: {aktuell}")
         rand, _feld = app._make_option_menu(zeile, gruppe, [f"Gruppieren: {name}" for _key, name in felder])
-        rand.pack(side="left", padx=(0, 8))
+        zeile.add(rand)
         gruppe.trace_add("write", lambda *_: self.set_board_group_field(
             namen.get(gruppe.get().split(": ", 1)[-1], "due")))
         for text, key in (("Leere Spalten ausblenden", "hide_empty"), ("Nur offene", "only_open")):
@@ -6025,11 +6117,12 @@ class ItemWorkspace:
                                             width=tkfont.Font(font=app_font(10, "bold")).measure(text) + 30, height=34)
             if aktiv:
                 knopf.set_active(app.theme["active"], app.theme["active_text"])
-            knopf.pack(side="left", padx=(0, 8))
+            zeile.add(knopf)
         self.group_choice = gruppe
-        hinweis = tk.Label(zeile, text="Ziehen setzt das Feld · Alt+Pfeil links/rechts verschiebt die Karte",
-                           bg=app.theme["card"], fg=app.theme["muted"], font=app_font(9), anchor="w")
-        hinweis.pack(side="left", fill="x", expand=True)
+        # Bedienweg als Textzeile: folgt dem Hinweisschalter (B06).
+        if glide_interaction.hints_visible(app.settings):
+            zeile.add(tk.Label(zeile, text="Ziehen setzt das Feld · Alt+Pfeil links/rechts verschiebt die Karte",
+                               bg=app.theme["card"], fg=app.theme["muted"], font=app_font(9), anchor="w"))
 
     def board_escape(self, event=None):
         """Eine Taste, vier Ebenen – von innen nach außen."""
@@ -14299,7 +14392,8 @@ class ListApp:
         )),
         ("Ansichten", (
             ("Startseite", "Kacheln mit Uhr, Begrüßung, Tagesziel, nächster Aufgabe, Woche, Zeichnungen, "
-                           "angehefteten Seiten und Filtern, Pinnwandvorschau und Bestand. „Startseite anpassen“ "
+                           "Galeriebildern, angehefteten Seiten und Filtern, Pinnwandvorschau und Bestand. "
+                           "Ein Klick auf ein Galeriebild öffnet es in seiner Galerie. „Startseite anpassen“ "
                            "ordnet direkt auf der Seite: ziehen oder Alt+↑/↓, ganze Breite, aus- und einblenden. "
                            "Gismo steht zusätzlich still neben leeren Listen, Ordnern und Pinnwänden; "
                            "wer ihn nicht möchte, blendet seine Kachel unter „Startseite anpassen“ aus – "
@@ -14526,6 +14620,9 @@ class ListApp:
              "Einstellungen › Darstellung › Farbmodus"),
             ("Schrift", "Familie und Grundgröße der gesamten Oberfläche.",
              "Einstellungen › Darstellung"),
+            ("Bedienhinweise", "Ergänzende Hinweise in den Ansichten, etwa „Doppelklick öffnet“ oder die "
+                               "Erklärung im Papierkorb. Standardmäßig aus; notwendige Meldungen erscheinen immer.",
+             "Einstellungen › Darstellung und Bedienung"),
             ("Startseite einrichten", "Welche Kacheln erscheinen, in welcher Reihenfolge und "
                                       "in wie vielen Spalten.",
              "Ansicht › Oberfläche › Startseite einrichten"),
@@ -14539,7 +14636,9 @@ class ListApp:
             ("Tastenkürzel", "Alle Tastenkürzel nach Bereichen.", "Hilfe › Tastenkürzel anzeigen"),
             ("App-Aktionen", "Jede Menüaktion durchsuchbar an einer Stelle.",
              "Kopfleiste › ⌘"),
-            ("Über Glide", "Version, Speicherort der Daten und der Wechsel der Datenablage.",
+            ("Über Glide", "Version, Speicherort der Daten und der Wechsel der Datenablage. „Neuerungen …“ "
+                           "zeigt die Neuerungen aller bisherigen Versionen – auch nachdem die Karte auf der "
+                           "Startseite als gelesen markiert ist.",
              "Hilfe › Über Glide"),
         )),
     )
@@ -22462,17 +22561,7 @@ class ListApp:
             return None
         if familie.casefold() != "dejavu sans":
             return None
-        speicher = getattr(self, "_glyph_metrics", None)
-        if speicher is None:
-            speicher = self._glyph_metrics = {}
-        if fett not in speicher:
-            datei = os.path.join(_GLIDE_SOURCE_DIR, "resources", "fonts",
-                                 "DejaVuSans-Bold.ttf" if fett else "DejaVuSans.ttf")
-            try:
-                speicher[fett] = glide_glyphs.load(datei)
-            except (OSError, ValueError):
-                speicher[fett] = None
-        return speicher[fett]
+        return bundled_glyph_metrics(fett)
 
     def font_pixels(self, font):
         """Schriftgröße in Pixeln (Em) für eine tkfont.Font."""
@@ -43877,9 +43966,6 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             width = int(getattr(event, "width", 0) or row.winfo_width())
             labels = getattr(self, "page_labels_frame", None)
             reserve = self.packed_width(labels) if labels is not None else 0
-            hints = getattr(self, "hints_button", None)
-            if hints is not None and hints.winfo_manager():
-                reserve += hints.winfo_reqwidth() + 8
             font = self.measurement_font(label.cget("font"))
             inset = max(0, label.text_size()[0] - font.measure(label.cget("text")))
             shown = glide_design.fit_text(text, font.measure, max(0, width - reserve - inset - 6)) if width > 1 else text

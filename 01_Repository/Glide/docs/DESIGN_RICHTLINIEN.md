@@ -21,15 +21,15 @@ Die Projektbezeichnung lautet **Design Richtlinien**; der frühere markenbezogen
 
 Jeder Button benötigt einen eindeutigen Zweck und eine Funktion. Er muss in den vorgesehenen Fenstergrößen sichtbar, lesbar und erreichbar bleiben. Texte, Hinweise, Bilder und andere Bereiche dürfen seine Fläche weder überdecken noch abschneiden. Reicht Platz nicht, müssen Layout, Umbruch oder Scrollbereich reagieren. Wirkungsloses Bedienelement ausblenden oder seinen tatsächlichen Zustand verständlich darstellen.
 
-**Umsetzungsregel:** Ein Element, das unter einem umbrechenden Text steht, folgt dessen tatsächlicher Höhe bei jedem Neuumbruch (Leerzustände: `_follow_empty_text`). Positionen nie nur beim ersten Aufbau berechnen.
+**Umsetzungsregeln:** Ein Element, das unter einem umbrechenden Text steht, folgt dessen tatsächlicher Höhe bei jedem Neuumbruch (Leerzustände: `_follow_empty_text`). Positionen nie nur beim ersten Aufbau berechnen. Knopfreihen, die bei der Mindestgröße nicht in eine Zeile passen, brechen um (`ButtonFlow`), statt den letzten Knopf zu quetschen – so die Optionszeile des Spaltenboards („Nur offene“ war bei 860 px abgeschnitten, gefunden mit der appweiten Prüfung am 16.10.2026).
 
-Prüfen: Mindestgröße, große Schrift, DPI, lange deutsche Texte, Hinweise an/aus, Inspektor offen, Größenwechsel, leere und gefüllte Zustände. Die Regel gilt appweit einschließlich Dialogen; die Suite `test_uiux_paket.py` (Fall b06_b15) misst sie für den Papierkorb in zwölf Kombinationen.
+Prüfen: Mindestgröße, große Schrift, DPI, lange deutsche Texte, Hinweise an/aus, Inspektor offen, Größenwechsel, leere und gefüllte Zustände. Die Regel gilt appweit einschließlich Dialogen. Automatisch misst `test_uiux_paket.py` sie zweifach: Fall b06_b15 für den Papierkorb in zwölf Kombinationen, Fall b15_appweit für jeden sichtbaren Knopf in sieben Hauptansichten (Startseite, Heute, Labels, Vorlagen, Papierkorb, Liste, Seite) und fünf Dialogen (Über Glide, Neuerungen, Fehlerprotokoll, Tastenkürzel, Einstellungen) bei 860 × 700 und 1280 × 800, mittlerer und großer Schrift, Hinweisen an und aus: kein fremdes Text-, Eingabe- oder Knopfelement im sichtbaren Knopfbereich, außerhalb scrollbarer Flächen vollständig im Fenster, Beschriftung nicht breiter als der Knopf. Gegen 3.42.0 findet dieselbe Prüfung das gemeldete Überdecken von „Zur Startseite“ im Papierkorb (S21). Eine Geometrieprüfung ersetzt nicht die Sichtprüfung weiterer, seltener Dialoge.
 
 ### Informationshierarchie vor starrer Metadatenbreite (B11)
 
 Für jede Ansicht gilt, welche Information die aktuelle Nutzerabsicht zuerst unterstützt. Titel und wesentlicher Inhalt dürfen nicht früh verschwinden, während nachrangige Metadaten ungenutzte Breite belegen. Datum und Uhrzeit können im Planungs-/Kalenderkontext selbst primär sein; deshalb keine globale Titel-vor-Datum-Regel ohne Kontext.
 
-**Umsetzungsregel:** Metadatenspalten sind so breit wie ihr tatsächlicher Inhalt (gemessen), höchstens so breit wie das Muster des längsten möglichen Werts; den Rest bekommt der Titel. Bis 3.42.0 erzwang eine Uhrzeit irgendwo in der Ansicht die volle Musterbreite (in „Labels“ 281 statt 177 px). Kurze Leer- und Verweiszeilen in Textspalten tragen keine Angaben, die schon im Titel stehen.
+**Umsetzungsregel:** Metadatenspalten sind so breit wie ihr tatsächlicher Inhalt (gemessen), höchstens so breit wie das Muster des längsten möglichen Werts; den Rest bekommt der Titel. Bei Enge weichen Metadaten ganz (zuerst Labels, dann Fälligkeit; in „Heute“ behält der Titel mindestens 260 px), abgeschnitten werden sie nie. Bis 3.42.0 erzwang eine Uhrzeit irgendwo in der Ansicht die volle Musterbreite (in „Labels“ 281 statt 177 px). Kurze Leer- und Verweiszeilen in Textspalten tragen keine Angaben, die schon im Titel stehen. Automatisch geprüft je Aufgabenansicht (Labels, Heute, Liste; Fall b11): Titel ist die breiteste Spalte, Datum und Labels höchstens so breit wie ihr Inhalt und entweder vollständig oder ganz ausgeblendet.
 
 Prioritätsmatrix, am 15.10.2026 an den realen Ansichten mit Showcase-Daten geprüft (Windows, 1280 × 800 und 860 × 700):
 
@@ -57,6 +57,7 @@ Zusammengehörige Texte und Aktionen teilen erkennbare Kanten, Abstände und Hö
 - **Texte in Dialogen (B08):** Überschrift und Meldungstext beginnen an derselben Pixelkante; Labels dafür ohne Standardrand und -innenabstand.
 - **Startseite (B02):** „Startseite anpassen“ steht an der linken Kante des Kachelrasters im Kachelabstand darunter.
 - **Symbolmitte (B09):** Die sichtbare Mitte eines Symbols liegt auf der Mitte der Großbuchstabenhöhe seines Textes; in Baumzeilen auf der Mitte der geometrischen Bezugsformen (▣ ◉ ◈ ▤). Gerechnet wird aus den Glyphenrahmen der mitgelieferten Schrift (`glyph_metrics.py`), nicht mit festen Pixelversätzen. Gemessen nach der Umsetzung: Bereichspfeile −0,3 px, Papierkorbsymbol im selben Abstand zum Text wie die übrigen Systemsymbole. Gleiche Widgetkoordinaten garantieren bei verschiedenen Glyphen keine gleiche wahrgenommene Höhe.
+- **Pfadtrenner (B09, 16.10.2026):** „›“ sitzt typografisch auf der x-Höhe und stand in Knöpfen mit Pfaden – etwa der Startseitenkachel „Pinnwände“ – rund 1 px unter der Großbuchstabenmitte. Knöpfe (`RoundedButton`) setzen jeden Trenner einzeln auf die Großbuchstabenmitte (gemessen −0,05 px); Schreibweise, Umbruch und Lage der übrigen Zeichen bleiben pixelgleich. In nativ gesetzten Texten (Baumzeilen, Fenstertitel, Exporte) bleibt „›“ unverändert.
 
 ### Klare Formen und stabile Symbolbedeutung (B10, B12, B14)
 
@@ -103,11 +104,11 @@ Ausgewählt aus dem Fremdtext unter `referenzen/` (Bewegung, Material, Typografi
 | Handwerk: nichts ist zufällig | Fluchten und optische Mitte nach Regel und Messung, nicht nach Augenmaß einzelner Pixel | B05, B08, B09 |
 | Worst-Case-Daten prüfen (Skill „break-ui“) | Lange Titel, fehlende/lange Metadaten, leere und volle Zustände, große Schrift, kleine Fenster in jede Sichtprüfung; künstliche Daten | B11, B15, QA |
 
+**Geprüft und bewusst nicht übernommen** (16.10.2026, Quelle `skills-main/` des Inhabers, lokal und nicht versioniert): `animate`, `animate-expo`, `improve-animations`, `review-animations`, `find-animation-opportunities` und `animation-vocabulary` beschreiben Web- bzw. React-Native-Bewegung (Kurven, CSS-Übergänge, Federn) – für Glide gilt daraus nur die Kurzregel oben (kurz, unterbrechbar, abschaltbar). `mobile-native` (Mobilbrowser), `pick-ui-library` und `ask-sonner` (JavaScript-Bibliotheken), `write-swift` (Swift) und `prototype` (Web-Variantenumschalter) passen nicht zu einer lokalen Tk-App. `emil-design-eng` deckt sich in den gestalterischen Punkten mit den übernommenen Grundsätzen. Installiert wird kein weiterer Skill; Glide-Regeln stehen nur hier.
+
 ## Offene Untersuchungen
 
 A01 (Kompaktmodus), A02 (zwei Inhalte gleichzeitig) und A03 (Notion-Muster) sind untersucht; Optionen, Empfehlungen und Aufwand stehen im [Entwicklungsplan §17](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#17-ui-ux-feature-paket-aus-nutzerbeobachtungen-15102026) bzw. für A03 in [Markt und Vorbilder §10](../../../00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md). Bis zur Auswahl gilt die Mindestgröße 860 × 700, und Funktionen leben eingebettet in der Ansicht.
-
-Offen als Gestaltungsfrage: Der Pfadtrenner „›“ (u. a. in der Kachel „Pinnwände“) sitzt typografisch auf der x-Höhe und wirkt neben Großbuchstaben tief (B09). Er steht appweit in Pfaden, Fenstertiteln und Exporten; ein Wechsel ist eine sichtbare Schreibweisenänderung und bleibt bis zur Entscheidung des Inhabers unverändert.
 
 ## Pflege und Prüfung
 

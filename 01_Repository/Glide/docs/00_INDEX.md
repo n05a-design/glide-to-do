@@ -22,7 +22,7 @@ Seit 03.10.2026 zwölf Dokumente und fünf Einzelentscheidungen statt 53: Funkti
 | [10 Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben, Produktdatenblatt |
 | [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
-| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D49 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
+| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D50 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Ein Thema, ein Dokument; Aufbewahrung; Zuständigkeiten |
 | [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; neues Feature-Paket vom 15.10.2026 noch umzusetzen |
 

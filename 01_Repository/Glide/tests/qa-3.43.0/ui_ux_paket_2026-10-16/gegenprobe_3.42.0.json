@@ -1,5 +1,5 @@
 {
-  "app": "%USERPROFILE%\\AppData\\Local\\Temp\\glide_3420_src\\01_Repository\\Glide\\src\\glide\\app.pyw",
+  "app": "git archive 05483a8: 01_Repository/Glide/src/glide/app.pyw (3.42.0)",
   "faelle": {
     "b01": {
       "ok": false,
@@ -25,6 +25,10 @@
       "ok": false,
       "befund": "AssertionError('„?“ noch im Kopf')"
     },
+    "b15_appweit": {
+      "ok": false,
+      "befund": "AssertionError((10, ['Papierkorb mittel 860x700 Hinweise aus: „Zur Startseite“ überlagert von Label „Der Papierkorb ist leer. Gelöschte Punkt“ (142×25 px)', 'Liste mittel 860x700 Hinweise aus: Beschriftung „Nur offene“ breiter als Knopf', 'Papierkorb mittel 860x700 Hinweise an: „Zur Startseite“ überlagert von Label „Der Papierkorb ist leer. Gelöschte Punkt“ (142×25 px)', 'Liste mittel 860x700 Hinweise an: Beschriftung „Nur offene“ breiter als Knopf', 'Papierkorb mittel 1280x800 Hinweise aus: „Zur Startseite“ überlagert von Label „Der Papierkorb ist leer. Gelöschte Punkt“ (142×6 px)', 'Papierko"
+    },
     "b07": {
       "ok": false,
       "befund": "AssertionError(('Datei', 75.0, {85.0}))"
@@ -43,7 +47,7 @@
     },
     "b11": {
       "ok": false,
-      "befund": "AssertionError(('Datumsspalte breiter als Inhalt', 281, 177))"
+      "befund": "AssertionError(('Labels', 'due', 'breiter als Inhalt', 281, 177))"
     },
     "b12_b13": {
       "ok": false,
@@ -73,6 +77,7 @@
     "b04",
     "b05",
     "b06_b15",
+    "b15_appweit",
     "b07",
     "b08",
     "b09",

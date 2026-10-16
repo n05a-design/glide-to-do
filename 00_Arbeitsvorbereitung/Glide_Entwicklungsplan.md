@@ -890,11 +890,11 @@ Nur lesend, ohne Tk-Fenster, am Lieferstand `7995ecbc…`; Werkzeuge und Ergebni
 
 ## 17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)
 
-**Ausgangsreferenz:** Glide 3.42.0, 15.10.2026, 13:42 Uhr. **Auftrag:** am 15.10.2026 als vorrangig vor Paket 8 beauftragt (D50). Umgesetzt auf `claude/ui-ux-paket` (Basis `origin/main` `27bac83` mit der P8-Vorbereitung bis PR #26; deren additive Zugänglichkeitsanbindungen bleiben unverändert und reisen mit 3.43.0 mit, ohne Paket 8 zu liefern). **Geliefert als 3.43.0 am 16.10.2026** nach `07_Python-Versionen` und `05_Probelisten_Testdaten`; eingefrorene Windows-Vollprüfung und native Linux-/Windows-Matrix siehe [Nachweis](../01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md). Offen: Mac-Vollprüfung und Mac-Bundle (nur auf dem Referenz-Mac), eigenständige Pakete 3.43.0, Menschenabnahme, Produktentscheidungen E-U1–E-U4.
+**Ausgangsreferenz:** Glide 3.42.0, 15.10.2026, 13:42 Uhr. **Auftrag:** am 15.10.2026 als vorrangig vor Paket 8 beauftragt (D50). Umgesetzt auf `claude/ui-ux-paket` (Basis `origin/main` `27bac83` mit der P8-Vorbereitung bis PR #26; deren additive Zugänglichkeitsanbindungen bleiben unverändert und reisen mit 3.43.0 mit, ohne Paket 8 zu liefern). **Geliefert als 3.43.0 am 16.10.2026** nach `07_Python-Versionen` und `05_Probelisten_Testdaten`; eingefrorene Windows-Vollprüfung und Punkt-für-Punkt-Matrix im [Nachweis](../01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md). Offen: Mac-Vollprüfung und Mac-Bundle (nur auf dem Referenz-Mac), eigenständige Pakete 3.43.0, Menschenabnahme, Produktentscheidungen E-U1–E-U3.
 
 [Vollständiger Ausführungsprompt](Featurepaket_UI_UX/PROMPT.md) · [unveränderter Originalauftrag](Featurepaket_UI_UX/AUFTRAG.md) · [Bildreferenzen S01–S28](Featurepaket_UI_UX/BILDREFERENZEN.md) · [Design Richtlinien](../01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) · [Prüfnachweis](../01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md).
 
-Die Kennungen bilden die Originalnummerierung ab (A01 = A.1, B01 = B.1 …). **Belege:** Pflichtsuite `tests/integration/test_uiux_paket.py` (16 Fälle, alle grün; dieselben 16 Fälle gegen `07_Python-Versionen` 3.42.0 alle rot mit dem jeweiligen Ursprungsfehler), 710 Unit-Tests, Vorher-/Nachher-Fensteraufnahmen desselben Kontexts (künstliche Showcase-Daten, Windows 11/Tk 9.0.4). Menschliche Sicht-, DPI- und Screenreaderabnahme bleibt für alle Punkte getrennt offen.
+Die Kennungen bilden die Originalnummerierung ab (A01 = A.1, B01 = B.1 …). **Belege:** Pflichtsuite `tests/integration/test_uiux_paket.py` (17 Fälle, alle grün; dieselben 17 Fälle gegen den 3.42.0-Quellbaum alle rot mit dem jeweiligen Ursprungsfehler), 711 Unit-Tests, Vorher-/Nachher-Fensteraufnahmen desselben Kontexts (künstliche Showcase-Daten, Windows 11/Tk 9.0.4). Menschliche Sicht-, DPI- und Screenreaderabnahme bleibt für alle Punkte getrennt offen.
 
 | ID | Gegenstand | Status | Umsetzung / Beleg | Rest |
 |---|---|---|---|---|
@@ -906,25 +906,25 @@ Die Kennungen bilden die Originalnummerierung ab (A01 = A.1, B01 = B.1 …). **B
 | B03 | Gismo fest, Spielereien aktiv | ✅ 3.43.0 | `home_tiles.retire_mascot_settings`, Sichtbarkeit nur über die Kachel; b03, Unit-Tests | Mac-Abnahme, Menschenabnahme |
 | B04 | Galeriebilder auf der Startseite | ✅ 3.43.0 | Kachel „Galeriebilder“ (Standard, eigene Auswahl bleibt), Vorschau im Leerlauf, Klick öffnet Bild; b04 | Mac-Abnahme, Menschenabnahme |
 | B05 | Logohöhe | ✅ 3.43.0 | Großbuchstabenhöhe bis Grundlinie der Unterzeile; b05 (vorher 6 px darunter) | Mac-Abnahme, DPI-Sichtprüfung |
-| B06 | Datum/„?“ weg, Hinweisschalter | ✅ 3.43.0 | Einstellung `show_hints`, Übernahme alter Wahl; b06_b15, Unit-Tests; D11 fortgeschrieben | Mac-Abnahme, Menschenabnahme |
+| B06 | Datum/„?“ weg, Hinweisschalter | ✅ 3.43.0 | Einstellung `show_hints`, Übernahme alter Wahl; Bedienwege in Textzeilen (Kopfnotiz, Werkzeugzeile, Kartenfuß, Papierkorb, Spaltenboard) folgen dem Schalter; Handbucheintrag; b06_b15, Unit-Tests; D11 fortgeschrieben | Mac-Abnahme, Menschenabnahme |
 | B07 | Menüs und Kopfsymbole ausgerichtet | ✅ 3.43.0 | eine Titelzeile, `HEADER_CONTROL_HEIGHT`; b07 (vorher 10 px Versatz) | Mac-Abnahme, DPI-Sichtprüfung |
 | B08 | Linke Flucht Fehlerprotokoll | ✅ 3.43.0 | Dialogüberschrift ohne Labelrand; b08 (vorher 3 px) | Mac-Abnahme, Menschenabnahme |
-| B09 | Pfeile/Papierkorb optisch zentriert | ◐ 3.43.0 | `glyph_metrics.py`: Bereichspfeile −0,3 px, Papierkorbsymbol +2 px auf Bezugsform; b09 | Pfadtrenner „›“ in „Pinnwände“: Entscheidung E-U4 |
+| B09 | Pfeile/Papierkorb optisch zentriert | ✅ 3.43.0 | `glyph_metrics.py`: Bereichspfeile −0,3 px, Papierkorbsymbol +2 px auf Bezugsform; Pfadtrenner „›“ in Startseitenknöpfen (Kachel „Pinnwände“) einzeln auf die Großbuchstabenmitte (−0,05 statt +0,95 px), Schreibweise unverändert; b09 | Mac-Abnahme, DPI-Sichtprüfung |
 | B10 | Lupe statt „Su“ | ✅ 3.43.0 | ⌕ aus Segoe UI Symbol (Windows) nach `SYMBOL_FONT_FALLBACKS`; b10; D29 präzisiert | macOS/Linux nativ prüfen |
-| B11 | Informationspriorität, Titelbreite | ✅ 3.43.0 | Metadaten auf Inhaltsbreite (Labels 177 statt 281 px), Matrix in Design Richtlinien geprüft; b11 | Sichtprüfung bei großer Schrift |
+| B11 | Informationspriorität, Titelbreite | ✅ 3.43.0 | Matrix je Ansicht in Design Richtlinien; Metadaten auf Inhaltsbreite (Labels 177 statt 281 px), bei Enge ganz ausgeblendet statt abgeschnitten; b11 prüft Labels, Heute und Liste | Sichtprüfung bei großer Schrift |
 | B12 | Eindeutige Pfeile in Heute | ✅ 3.43.0 | kein ▶/△ neben dem Aufklapppfeil; b12_b13 | Mac-Abnahme, Menschenabnahme |
 | B13 | Nächste Aufgabe nur Titel fett | ✅ 3.43.0 | Zelltag `today_next_title` in Zeilengröße; b12_b13; D22 präzisiert | Mac-Abnahme, Menschenabnahme |
 | B14 | Kein Kästchen vor „Aufgabe“ | ✅ 3.43.0 | Blockleiste; b14 | Mac-Abnahme, Menschenabnahme |
-| B15 | Papierkorbtext, Buttonschutz | ✅ 3.43.0 | kurzer Text, `_follow_empty_text`; 12 Kombinationen ohne Überdeckung (b06_b15) | appweite Sichtprüfung weiterer Dialoge |
+| B15 | Papierkorbtext, Buttonschutz | ✅ 3.43.0 | kurzer Text, `_follow_empty_text`; 12 Kombinationen ohne Überdeckung (b06_b15); appweit jeder sichtbare Knopf in 7 Ansichten und 5 Dialogen (b15_appweit, gegen 3.42.0 rot mit S21); dabei „Nur offene“ im Spaltenboard behoben (Zeile bricht um); Regel in Design Richtlinien | Sichtprüfung seltener Dialoge, DPI |
 | B16 | Scrollsprung über Bildern | ✅ 3.43.0 | Rad über Bild pixelweise wie Text; größter Schritt 30 statt 389 px (b16) | Trackpad/macOS nativ |
 | B17 | Hintergrundkästen oberer Aktionen | ✅ 3.43.0 | Trägerfläche statt Fensterfarbe, konturlose Knöpfe in Ruhe durchsichtig; b17_b19 | alle Designs sichten |
 | B18 | Neuerungen unter „Über Glide“ | ✅ 3.43.0 | „Neuerungen …“ aus `release_notes.history_text`; b18; Pflegeverfahren in Veröffentlichung | Katalogeintrag der neuen Version beim Versionswechsel |
 | B19 | Hintergrundkästen Punktbearbeitung | ✅ 3.43.0 | `DueField.surface`, Kalenderknopf in `blend_embedded_editor`; b17_b19 | alle Designs sichten |
-| B20 | Skills neutral als Design Richtlinien | ✅ 3.43.0 | Skill `design-richtlinien`, Fremdtext mit Lizenz unter `referenzen/`, Prüfung `test_design_richtlinien.py` | – |
-| B21 | Verständliche Übergabe | ◐ | Übergabe, Plan, Richtlinien, Prompt verknüpft; Prüfnachweis angelegt | nach Lieferung abschließen |
-| B22 | Dokumentation/Ablage/Projektauftritt zuletzt | ○ | bewusst letzter Schritt nach Lieferabgleich | nach Versionswechsel, 07-Abgleich und Volllauf |
+| B20 | Skills neutral als Design Richtlinien | ✅ 3.43.0 | Skill `design-richtlinien`, Fremdtext mit Lizenz unter `referenzen/`; alle 15 Skills aus `skills-main/` begründet übernommen oder ausgeschlossen (Design Richtlinien); Prüfung `test_design_richtlinien.py` | – |
+| B21 | Verständliche Übergabe | ✅ 3.43.0 | über Übergabe, Arbeitsvorbereitungsindex und Plan auffindbar; Originalauftrag und Bilder getrennt von Regeln (Design Richtlinien) und Status (§17); Prüfmatrix im [Nachweis](../01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md#prüfung-aller-punkte-des-originalauftrags) | fortlaufende Pflege mit jeder Nutzeranweisung |
+| B22 | Dokumentation/Ablage/Projektauftritt zuletzt | ◐ 3.43.0 | Stand-, Versions-, Entscheidungs- und Archivangaben abgeglichen (u. a. D01–D50, Archiv-README, Showcase-README), Projekt-README aktualisiert; Ablage auf sieben Versionen gekürzt | Push, Pull Request und Merge nach Anmeldung des Inhabers bei GitHub; danach Projektseite und CI-Matrix nachtragen |
 
-**Status „✅ 3.43.0“** heißt hier: umgesetzt, automatisch geprüft (Windows lokal eingefroren, native Linux-/Windows-Matrix) und nach 07/05 geliefert. Abweichend von §Statusmarken fehlen noch die eingefrorene Mac-Vollprüfung und das Mac-Bundle; sie werden auf dem Referenz-Mac nachgeholt.
+**Status „✅ 3.43.0“** heißt hier: umgesetzt, automatisch geprüft (Windows lokal eingefroren, 110 Schritte ohne roten Schritt) und nach 07/05 geliefert. Abweichend von §Statusmarken fehlen noch die native Linux-/Windows-Matrix der GitHub-Prüfung (läuft mit dem Pull Request), die eingefrorene Mac-Vollprüfung und das Mac-Bundle; die beiden letzten werden auf dem Referenz-Mac nachgeholt.
 
 **Beobachtung außerhalb des Pakets:** `test_ui_followup36.py` bleibt auf diesem Windows-Rechner in `root.update()` hängen – identisch am unveränderten Stand `27bac83` (Gegenprobe). Kein Befund dieses Pakets; vor dem Volllauf auf dem Referenz-Mac bzw. in der nativen CI prüfen. Ebenso unverändert vorhanden: In der Showcase-Liste „Vermarktung · Umsetzung“ steht über der Pinnwand der Inhalt der Seite „Parkquartier · Briefing und Freigabe“ (gleiches Bild am Ausgangsstand).
 
@@ -955,13 +955,12 @@ Die Kennungen bilden die Originalnummerierung ab (A01 = A.1, B01 = B.1 …). **B
 
 ### 17.3 Entscheidungsvorlagen für den Inhaber
 
-Kurzantwort wie bisher möglich, etwa „E-U1 A, E-U2 C, E-U3 A, E-U4 B“. Neue Entscheidungen werden ab D51 eingetragen.
+Kurzantwort wie bisher möglich, etwa „E-U1 A, E-U2 A, E-U3 A“. Neue Entscheidungen werden ab D51 eingetragen.
 
 | Nr. | Frage | A | B | C | Empfehlung |
 |---|---|---|---|---|---|
 | E-U1 | Kompaktmodus (A01) | Kompaktmodus als Folgepaket, Mindestgröße dort nach Messung (Vorschlag 480 × 560) | allgemeine Mindestgröße senken | nichts ändern | A |
 | E-U2 | Zwei Inhalte (A02) | Nebenansicht im Inspektorbereich (Option C) | geteilte Inhaltsfläche (Option B) | Zweitfenster (Option A) | A (= Option C), B später |
 | E-U3 | Notion-Muster (A03) | Rang 1–3 als kleines Folgepaket | zusätzlich Rang 4 | nichts übernehmen | A |
-| E-U4 | Pfadtrenner „›“ (B09-Rest) | „›“ beibehalten (typografisch korrekt, sitzt auf x-Höhe) | appweit durch „→“ ersetzen (sitzt mittig, ändert Fenstertitel/Exporte) | nur in Startseitenkacheln „/“ | A |
 
 Originalbilder sind unverändert und lokal vom Git-Upload ausgeschlossen; für einen anderen Dienst das Paket einschließlich `bilder/` mitgeben. Anforderungsdetails und Abnahmekriterien nur im Prompt pflegen, Gestaltungsvorgaben nur in Design Richtlinien, Ergebnisse im QA-Bericht. Die Dokumentationsprüfung der Vorbereitungsrunde steht im [Vorbereitungsnachweis](../01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/README.md).

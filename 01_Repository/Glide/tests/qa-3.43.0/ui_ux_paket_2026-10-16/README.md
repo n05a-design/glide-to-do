@@ -1,6 +1,6 @@
 # UI-/UX-Paket 3.43.0 – Lieferung und Prüfung
 
-Stand 16.10.2026 · Glide 3.43.0 · Datenformat 25 · Apphash `2feea1eef7d55fc9b629757bbc4e8ed5ec41ce00da8840ed46bdd96d31eca936`
+Stand 16.10.2026 · Glide 3.43.0 · Datenformat 25 · Apphash `a7b1df819ff2959b5c82797ce988eb3fc8715928cdf6543b8b8d9fe9ebdc6714`
 
 Auftrag: [UI-/UX-Feature-Paket](../../../../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md) vom 15.10.2026, nach D50 vorrangig vor Paket 8. Status je Kennung im [Entwicklungsplan §17](../../../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#17-ui-ux-feature-paket-aus-nutzerbeobachtungen-15102026), Regeln in [Design Richtlinien](../../../docs/DESIGN_RICHTLINIEN.md). Maschinenlesbar: [ergebnis.json](ergebnis.json). Alle Prüfungen mit künstlichen Daten und temporärem `GLIDE_DATA_DIR`; Rohprotokolle und Fensteraufnahmen bleiben lokal (die Showcase-Aufnahmen zeigen Fremdbilder, I9).
 
@@ -8,10 +8,11 @@ Auftrag: [UI-/UX-Feature-Paket](../../../../../00_Arbeitsvorbereitung/Featurepak
 
 | Prüfung | Ergebnis |
 |---|---|
-| Pflichtsuite `test_uiux_paket.py` (16 Fälle, B01–B19, [Bericht](pflichtsuite_3.43.0.json)) | 16/16 grün |
-| Rote Gegenprobe derselben Suite gegen den gelieferten 3.42.0-Quellbaum (`git archive 05483a8`, [Bericht](gegenprobe_3.42.0.json)) | 16/16 rot, jeweils mit dem Ursprungsfehler (siehe unten) |
+| Pflichtsuite `test_uiux_paket.py` (17 Fälle, B01–B19 einschließlich appweiter Knopfschutzprüfung, [Bericht](pflichtsuite_3.43.0.json)) | 17/17 grün |
+| Rote Gegenprobe derselben Suite gegen den gelieferten 3.42.0-Quellbaum (`git archive 05483a8`, [Bericht](gegenprobe_3.42.0.json)) | 17/17 rot, jeweils mit dem Ursprungsfehler (siehe unten) |
 | Fachlogik-Unit-Tests | 711 grün (neu: Glyphenmetrik, Hinweisschalter, Kacheln/Gismo, Neuerungsverlauf, Symbolregel) |
 | Werkzeugtests einschließlich `test_design_richtlinien.py` | 150 grün |
+| Stand-, Link- und Ablageprüfung (`standpruefung.py`, `ablagegroesse.py`) | grün; 64 aktive Dokumente, Archive und Nachweise nur der sieben neuesten Versionen |
 | Regressionslauf aller Integrationssuiten der Arbeitskopie | nach Anpassung der Suiten, die das bewusst geänderte Verhalten festschrieben (Gismo-Knöpfe, „?“, Standardkacheln, Blockleiste, Lupe, Schrift der nächsten Aufgabe), alle grün; ein Befund im Code behoben (Kopfhöhe, siehe unten) |
 | Linux-Defektmuster der CI (`linux_gegenproben.py`) | alle 18 Muster passen weiterhin auf den Quellstand |
 
@@ -25,6 +26,8 @@ Auftrag: [UI-/UX-Feature-Paket](../../../../../00_Arbeitsvorbereitung/Featurepak
 | B07 | Mittellinie Windows-Menüs zu Kopfsymbolen | 10 px | 0 px |
 | B08 | Überschrift zu Meldungstext (Fehlerprotokoll) | 3 px | 0 px |
 | B09 | Bereichspfeil zur Großbuchstabenmitte | +1,5 px | −0,3 px |
+| B09 | Pfadtrenner „›“ in der Startseitenkachel „Pinnwände“ zur Großbuchstabenmitte | +0,95 px | −0,05 px |
+| B15 | Knöpfe mit Überlagerung oder Beschnitt (7 Ansichten, 5 Dialoge, 2 Größen, 2 Schriftgrößen, Hinweise an/aus) | 10 Befunde (u. a. „Zur Startseite“ vom Papierkorbtext überdeckt, „Nur offene“ abgeschnitten) | 0 |
 | B11 | Datumsspalte in „Labels“ | 281 px | 177 px |
 | B16 | größter Schritt eines Mausradrasters über einem Bild | 378–389 px | 30 px |
 
@@ -34,14 +37,48 @@ Auftrag: [UI-/UX-Feature-Paket](../../../../../00_Arbeitsvorbereitung/Featurepak
 
 ## Eingefrorene Vollprüfung (Windows)
 
-`pruefen.py --modus voll --timeout 600` auf einer Kopie außerhalb von OneDrive (ohne `.git`, `.claude`, `build`, `skills-main` und ohne die lokalen Nutzerbilder): **109 Schritte ausgeführt, alle 92 Integrationssuiten grün** (einschließlich `test_uiux_paket` und `test_ui_followup36`), Unit-Tests, Showcase, Beispiel-/Releasedaten-Abgleich, Bildschirmaufnahmen und vier von fünf Analysen grün; Sichtprüfung wie immer der Person vorbehalten. **Einziger roter Schritt:** die Standprüfung. Die Links der Bildreferenzen zeigten in den bewusst nicht versionierten Ordner `bilder/` (auf GitHub wären sie tot), dazu ein Planlink auf einen falschen Nachweisordner und die Suitenzahl in `tests/README.md`. Als reine Dokumentkorrektur behoben (Bildpfade als Text, Link und Zahl korrigiert); die Standprüfung ist danach grün. Ein ausführbarer Pfad hat sich nicht geändert; nur die Fehlermeldungen zweier Gegenprobenfälle der Pflichtsuite wurden danach präzisiert.
+`pruefen.py --modus voll --timeout 600` auf einer Kopie außerhalb von OneDrive (ohne `.git`, `.claude`, `build`, `skills-main` und ohne die lokalen Nutzerbilder), Endstand mit Apphash `a7b1df81`: **110 Schritte ausgeführt, kein roter Schritt** – alle 92 Integrationssuiten (einschließlich `test_uiux_paket` und `test_ui_followup36`), 711 Unit-Tests, Showcase, Beispiel-/Releasedaten-Abgleich, Bildschirmaufnahmen und alle fünf Analysen einschließlich Standprüfung grün; übersprungen nur die Sichtprüfung, die wie immer einer Person vorbehalten ist.
 
-`test_ui_followup36` hing in der OneDrive-Arbeitskopie in `root.update()` – auch am unveränderten Stand `27bac83` –, lief in der eingefrorenen Kopie aber grün durch: ein Umgebungseffekt des OneDrive-Pfads, kein Befund dieses Pakets.
+Vorlauf am selben Tag (Apphash `2feea1ee`, vor der Punkt-für-Punkt-Prüfung unten): 109 Schritte, einziger roter Schritt die Standprüfung wegen Bildlinks in den nicht versionierten Ordner `bilder/`, eines Planlinks und einer Suitenzahl – als Dokumentkorrektur behoben. Danach wurden die Lücken aus der Punktprüfung geschlossen (Pfadtrenner, Knopfreihe des Spaltenboards, Bedienhinweis, Handbuch); deshalb der zweite, maßgebliche Volllauf oben.
+
+`test_ui_followup36` hing in der OneDrive-Arbeitskopie in `root.update()` – auch am unveränderten Stand `27bac83` –, läuft in der eingefrorenen Kopie aber grün: ein Umgebungseffekt des OneDrive-Pfads, kein Befund dieses Pakets.
+
+## Prüfung aller Punkte des Originalauftrags
+
+Am 16.10.2026 auf Wunsch des Inhabers jeden Punkt des [Originalauftrags](../../../../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/AUFTRAG.md) gegen Code, Prüfungen und Dokumente abgeglichen. Dabei gefundene Lücken wurden vor der Lieferung geschlossen (letzte Spalte). „Automatisch“ heißt: echte Tk-Wege mit künstlichen Daten unter Windows 11/Tk 9.0.4; die menschliche Sicht-, DPI-, Mac- und Screenreaderabnahme bleibt für alle Punkte offen.
+
+| Punkt | Auftrag (gekürzt) | Umgesetzt | Automatisch geprüft | Bei dieser Prüfung nachgezogen |
+|---|---|---|---|---|
+| A.1 | Kompaktmodus, kleinere Mindestgröße? | Untersucht mit Probe an echten Inhalten, Empfehlung „Kompaktmodus als Folgepaket“ ([Plan §17.1](../../../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#171-a01--kompaktmodus-und-kleinere-mindestgröße)) | Messprobe 860 × 700 bis 420 × 520 | – ; Auswahl E-U1 beim Inhaber |
+| A.2 | Zweites Fenster oder geteilte Ansicht? | Optionen A–D mit Aufwand, Risiko und Abnahmekriterien ([§17.2](../../../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#172-a02--zwei-inhalte-gleichzeitig)) | – | – ; Auswahl E-U2 beim Inhaber |
+| A.3 | Notion-Komponenten für Glide? | Priorisierte Tabelle in [Markt und Vorbilder §10](../../../../../00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md#10-notion-muster-für-glide-a03-15102026) | – | – ; Auswahl E-U3 beim Inhaber |
+| B.1 | Nach „Gelesen“ an den Seitenanfang, in die Prüfung | ja | b01 (vorher 0,27) | – |
+| B.2 | „Startseite anpassen“ links ausrichten | ja | b02 bei drei Breiten | – |
+| B.3 | Gismo nicht umbenennen, Spielereien nicht abschaltbar; Ausblenden über die Startseiten-Einstellungen | ja; Kachel „Gismo – Begleiter“ unter „Startseite anpassen“ und „Weitere Einstellungen …“ | b03, Unit-Tests | – |
+| B.4 | Galeriebilder als eigene Vorschau auf der Startseite | ja, Kachel „Galeriebilder“ | b04 | Handbucheintrag „Startseite“ ergänzt |
+| B.5 | Logo niedriger | ja | b05 (vorher 6 px zu tief) | – |
+| B.6 | Datum und „?“ entfernen, Hinweise in den Einstellungen schalten | ja | b06_b15, Unit-Tests | Bedienhinweis des Spaltenboards folgt jetzt ebenfalls dem Schalter; Handbucheintrag „Bedienhinweise“; toter Rest des „?“-Knopfs entfernt |
+| B.7 | Menüs und Kopfsymbole auf gleicher Höhe? (prüfen) | geprüft: 10 px Versatz, behoben | b07 | – |
+| B.8 | Fehlerprotokoll: gleiche linke Flucht, in die Prüfung | ja | b08 (vorher 3 px) | – |
+| B.9 | Pfeile in Seitenleiste und **Pinnwände (Startseite)** zu tief, Papierkorbsymbol zu hoch; in die Prüfung | ja | b09 | **Pinnwände ergänzt:** Der Pfadtrenner „›“ in Startseitenknöpfen stand +0,95 px unter der Großbuchstabenmitte und war als Entscheidung E-U4 zurückgestellt. Jetzt einzeln optisch gesetzt (−0,05 px), Schreibweise unverändert; E-U4 entfällt |
+| B.10 | Lupe statt „Su“ | ja (Segoe UI Symbol; Rückfallkette für macOS/Linux) | b10 | – |
+| B.11 | Priorität je Ansicht festlegen und prüfen | Matrix in [Design Richtlinien](../../../docs/DESIGN_RICHTLINIEN.md); Metadaten auf Inhaltsbreite | b11 | Prüfung von „Labels“ auf Labels, Heute und Liste erweitert |
+| B.12 | Keine doppelten Pfeile in Heute | ja | b12_b13 | – |
+| B.13 | Nächste Aufgabe: nur Titel fett, keine Größenänderung | ja | b12_b13 | Prüfung sichert jetzt auch Datum, Label und Herkunft als normal |
+| B.14 | Kein Kästchen vor „Aufgabe“ | ja | b14 | – |
+| B.15 | Kurzer Papierkorbtext; Knopf nie überdeckt, appweit; Dokument mit allen UI-/UX-Anweisungen | ja; [Design Richtlinien](../../../docs/DESIGN_RICHTLINIEN.md) | b06_b15 | **appweite Prüfung neu (b15_appweit):** jeder sichtbare Knopf in sieben Ansichten und fünf Dialogen; fand „Nur offene“ im Spaltenboard bei 860 px abgeschnitten → Zeile bricht jetzt um. Gegen 3.42.0 findet sie das gemeldete Überdecken (S21) |
+| B.16 | Kein Sprung beim Scrollen über Bilder | ja | b16 (vorher 389 px) | – |
+| B.17 | Keine Hintergrundkästen hinter Listenaktionen | ja | b17_b19 | – |
+| B.18 | Neuerungen unter „Über Glide“, Pflege dokumentiert | ja; Verfahren in [Veröffentlichung](../../../docs/10_VEROEFFENTLICHUNG.md) | b18 | Handbucheintrag „Über Glide“ ergänzt |
+| B.19 | Keine Hintergrundkästen in der Punktbearbeitung | ja | b17_b19 | – |
+| B.20 | Skills neutral als „Design Richtlinien“ integrieren, „und weitere“ | ja, Skill `design-richtlinien` | `test_design_richtlinien.py` | alle 15 Skills aus `skills-main/` begründet übernommen oder ausgeschlossen (Design Richtlinien) |
+| B.21 | Verständlich für Dienste und Agenten ablegen | ja: Übergabe, Index, Plan, Prompt, Richtlinien verknüpft | Stand- und Linkprüfung | veraltete Angaben nachgezogen (D01–D50, Archiv- und Showcase-README, Arbeitsvorbereitungsindex, CLAUDE.md/AGENTS.md) |
+| B.22 | Zuletzt: Dokumentation, Ablage, GitHub-Seite | Ablage gekürzt, README aktualisiert, Dokumente abgeglichen | Stand-, Link-, Ablageprüfung | **offen:** Push, Pull Request und Merge – der Push wartet auf die Anmeldung des Inhabers bei GitHub |
 
 ## Lieferabgleich
 
 - `versionswechsel.py 3.43.0 16.10.2026`: Fixtures, Showcase, Vorlagen, Releaseplanung und Standangaben neu; Ablage auf sieben Versionen gekürzt (3.37.0 entfällt, Verweise auf `0e7b358` festgesetzt).
-- `abgleich_07.py`: 67 Code- und 146 Ressourcendateien in `07_Python-Versionen` bytegleich, 3.42.0 ins Archiv.
+- `abgleich_07.py`: 67 Code- und 146 Ressourcendateien in `07_Python-Versionen` bytegleich (nach den Nachbesserungen erneut abgeglichen, Apphash `a7b1df81`), 3.42.0 ins Archiv.
 - `showcase_abgleich.py`: Import, ID-Verweise, Dokumentarten, Bilder, Pinnwände, Undo, Vorlagen, Export und Neustart geprüft; sechs Dateien nach `05_Probelisten_Testdaten/Showcase`.
 - Das Showcase-Werkzeug schreibt seine Vorlagendatei und das Manifest jetzt mit LF; unter Windows stimmten Prüfsumme und eingecheckte Bytes sonst nicht überein.
 
@@ -50,4 +87,5 @@ Auftrag: [UI-/UX-Feature-Paket](../../../../../00_Arbeitsvorbereitung/Featurepak
 - **Native Linux-/Windows-Vollmatrix** und **Windows-Paketlauf** der GitHub-Prüfung zum Pull Request: Ergebnis im [QA-Bericht](../../../docs/07_QA_BERICHT.md).
 - **macOS-Bundle und Mac-Vollprüfung:** auf Windows nicht baubar bzw. ausführbar; `packaging/macos/baue_app.py` und die eingefrorene Mac-Vollprüfung auf dem Referenz-Mac stehen aus. Bundle und eigenständige Pakete tragen bis dahin 3.42.0.
 - **Menschenabnahme:** Sicht, DPI 100–200 %, Trackpad, große Schrift, alle Designs sowie Screenreader nach der [Prüfliste](../../../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md#ui-ux-paket-15102026-b01b19).
-- **Produktentscheidungen** E-U1–E-U4 (A01–A03, Pfadtrenner) beim Inhaber.
+- **Produktentscheidungen** E-U1–E-U3 (A01–A03) beim Inhaber.
+- **Push, Pull Request und Merge** auf GitHub: Der Push wartet auf die Anmeldung des Inhabers im Git Credential Manager.

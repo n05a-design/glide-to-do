@@ -374,15 +374,15 @@ Mac-Vollprüfung, native Linux-/Windows-Vollmatrix und Lieferabgleich für 3.39.
 
 ## UI-/UX-Paket 15.10.2026 (B01–B19)
 
-Automatisch belegt mit `test_uiux_paket.py` (16 Fälle, Windows 11/Tk 9.0.4, künstliche Showcase-Daten); die Sicht- und Bedienabnahme bleibt hier. Jeweils hell/dunkel, ein Design mit Hintergrundverlauf, 860 × 700 und 1280 × 800, große Schrift; Windows zusätzlich 100/125/150/200 % DPI.
+Automatisch belegt mit `test_uiux_paket.py` (17 Fälle, Windows 11/Tk 9.0.4, künstliche Showcase-Daten); die Sicht- und Bedienabnahme bleibt hier. Jeweils hell/dunkel, ein Design mit Hintergrundverlauf, 860 × 700 und 1280 × 800, große Schrift; Windows zusätzlich 100/125/150/200 % DPI.
 
 - [ ] Startseite nach unten scrollen, Karte „Neu in …“ mit „Gelesen“ bestätigen: steht sofort oben; nochmals öffnen/Neustart ohne Karte; Hilfe › Über Glide › „Neuerungen …“ zeigt die Einträge nach Version.
 - [ ] „Startseite anpassen“ beginnt an der linken Kante der Kacheln; Gismo heißt „Gismo“, Füttern/Spielen/Ruhen wirken, kein „Benennen“/„Spielereien“; Kachel ausblenden → Gismo auch neben leeren Listen weg; „Bewegte Rückmeldung“ aus → Pflege wirkt ohne Hüpfen.
 - [ ] Kachel „Galeriebilder“: Vorschauen erscheinen nach kurzer Zeit, Hoch-/Querformat unverzerrt, Klick öffnet die Galerie beim Bild; Galerie ohne Bilder und gelöschte Bilddatei verständlich.
 - [ ] Kopfzeile: Logo endet auf Höhe der Grundlinie von „2 offen · 1 überfällig“; kein Datum, kein „?“; Windows-Menüs und Symbolknöpfe auf einer Linie (auch Hover, Fokus, gedrückt); Lupe ⌕ gut erkennbar (macOS/Linux: Lupe oder „Su“ notieren), Tooltip „Suchen …“, Strg/Cmd+O.
-- [ ] Einstellungen › Darstellung und Bedienung › „Ergänzende Bedienhinweise …“: aus → Papierkorb nur „Der Papierkorb ist leer.“, an → zusätzlicher Satz; Fenster verkleinern: „Zur Startseite“ wird nie überdeckt; Wahl bleibt nach Neustart.
+- [ ] Einstellungen › Darstellung und Bedienung › „Ergänzende Bedienhinweise …“: aus → Papierkorb nur „Der Papierkorb ist leer.“, an → zusätzlicher Satz; Fenster verkleinern: „Zur Startseite“ wird nie überdeckt; Wahl bleibt nach Neustart. Spaltenboard bei 860 × 700: „Nur offene“ vollständig lesbar, die Zeile bricht um; der Hinweis „Ziehen setzt das Feld …“ nur bei eingeschalteten Bedienhinweisen.
 - [ ] Hilfe › Fehlerprotokoll (leer): Überschrift und Text beginnen an derselben Kante; „OK“ erreichbar.
-- [ ] Seitenleiste: Aufklapppfeile von Seiten/Listen/Notizen/Zeichnungen und das Papierkorbsymbol wirken mittig zum Text (auch ausgewählt/Hover). Offen: Pfadtrenner „›“ in „Pinnwände“ (Entscheidung E-U4).
+- [ ] Seitenleiste: Aufklapppfeile von Seiten/Listen/Notizen/Zeichnungen und das Papierkorbsymbol wirken mittig zum Text (auch ausgewählt/Hover); Startseitenkachel „Pinnwände“: „›“ in „Showcase · Parkquartier › …“ steht auf der Mitte der Großbuchstaben, auch beim Überfahren.
 - [ ] Labels/Heute: Titel deutlich länger lesbar, Datum mit Uhrzeit vollständig; „Nächste Aufgabe“ und „Verspätet“ ohne zweites Dreieck, nur der Titel der nächsten Aufgabe fett in normaler Größe.
 - [ ] Seite mit großem Bild: einzelne Mausrad-Rasten und Trackpad über dem Bild scrollen gleichmäßig, die erste Zeile nach dem Bild bleibt erreichbar; Blockleiste „Aufgabe“ ohne Kästchen.
 - [ ] Notiz-/Notizbuchaktionen (Favorit, Stimmung, Ort, Schreibimpuls) und Punktbearbeitung (Datum, Bearbeitungstag, Erinnerung, Labels): keine abweichenden Kästen in allen Designs und Verläufen; Fokus, Hover, deaktiviert weiter erkennbar.

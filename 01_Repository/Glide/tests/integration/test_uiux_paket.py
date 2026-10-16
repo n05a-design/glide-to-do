@@ -21,8 +21,8 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 SHOWCASE_APP = REPO / "tests/fixtures/showcase/Glide-Showcase_App.glideapp"
-FAELLE = ("b01", "b02", "b03", "b04", "b05", "b06_b15", "b07", "b08", "b09", "b10", "b11", "b12_b13",
-          "b14", "b16", "b17_b19", "b18")
+FAELLE = ("b01", "b02", "b03", "b04", "b05", "b06_b15", "b15_appweit", "b07", "b08", "b09", "b10", "b11",
+          "b12_b13", "b14", "b16", "b17_b19", "b18")
 
 
 class Lauf:
@@ -290,6 +290,136 @@ def fall_b06_b15(lauf):
     return f"{len(befunde)} Kombinationen ohne Überdeckung; Schalter gespeichert"
 
 
+def sichtbarer_ausschnitt(widget, mod):
+    """Bildschirmrechteck nach Beschnitt durch alle Vorfahren – oder None."""
+    if not widget.winfo_viewable():
+        return None
+    x1, y1 = widget.winfo_rootx(), widget.winfo_rooty()
+    x2, y2 = x1 + widget.winfo_width(), y1 + widget.winfo_height()
+    vorfahr = widget.master
+    while vorfahr is not None:
+        ax, ay = vorfahr.winfo_rootx(), vorfahr.winfo_rooty()
+        x1, y1 = max(x1, ax), max(y1, ay)
+        x2, y2 = min(x2, ax + vorfahr.winfo_width()), min(y2, ay + vorfahr.winfo_height())
+        if isinstance(vorfahr, (mod.tk.Tk, mod.tk.Toplevel)):
+            break
+        vorfahr = vorfahr.master
+    return (x1, y1, x2, y2) if x2 > x1 and y2 > y1 else None
+
+
+def knopf_befunde(fenster, mod, kontext):
+    """Appweiter Buttonschutz (B15): kein Knopf verdeckt, abgeschnitten oder überlagert.
+
+    Geprüft wird die tatsächliche Geometrie aller sichtbaren Knöpfe eines
+    Fensters: (1) kein fremdes Text-, Eingabe- oder Knopfelement liegt im
+    sichtbaren Knopfbereich, (2) Knöpfe außerhalb scrollbarer Flächen sind
+    vollständig im Fenster, (3) die Beschriftung passt in den Knopf.
+    """
+    knopfarten = (mod.RoundedButton, mod.tk.Button, mod.ttk.Button)
+    textarten = (mod.tk.Label, mod.tk.Message, mod.tk.Text, mod.tk.Entry, mod.ttk.Label, mod.ttk.Entry)
+    alle = [fenster] + knoepfe(fenster, mod.tk.Misc)
+    knoepfe_hier = [w for w in alle if isinstance(w, knopfarten) and w.winfo_viewable()
+                    and w.winfo_width() > 1 and w.winfo_height() > 1]
+    fremde = [w for w in alle if isinstance(w, textarten + knopfarten) and w.winfo_viewable()]
+    befunde = []
+
+    def verwandt(a, b):
+        return str(a).startswith(str(b) + ".") or str(b).startswith(str(a) + ".") or a is b
+
+    for knopf in knoepfe_hier:
+        sicht = sichtbarer_ausschnitt(knopf, mod)
+        if sicht is None:
+            continue
+        name = getattr(knopf, "text", None) or (knopf.cget("text") if "text" in knopf.keys() else str(knopf))
+        in_scrollflaeche = False
+        vorfahr = knopf.master
+        while vorfahr is not None and not isinstance(vorfahr, (mod.tk.Tk, mod.tk.Toplevel)):
+            if isinstance(vorfahr, mod.tk.Canvas):
+                in_scrollflaeche = True
+            vorfahr = vorfahr.master
+        voll = (knopf.winfo_rootx(), knopf.winfo_rooty(),
+                knopf.winfo_rootx() + knopf.winfo_width(), knopf.winfo_rooty() + knopf.winfo_height())
+        if not in_scrollflaeche and sicht != voll:
+            befunde.append(f"{kontext}: „{name}“ abgeschnitten {voll}→{sicht}")
+        if isinstance(knopf, mod.RoundedButton) and not knopf.wrap_text:
+            if knopf.text_width() > knopf.winfo_width() - 4:
+                befunde.append(f"{kontext}: Beschriftung „{name}“ breiter als Knopf")
+        elif isinstance(knopf, mod.tk.Button) and knopf.winfo_reqwidth() > knopf.winfo_width() + 1:
+            befunde.append(f"{kontext}: Beschriftung „{name}“ breiter als Knopf")
+        for anderes in fremde:
+            if verwandt(knopf, anderes):
+                continue
+            ihre = sichtbarer_ausschnitt(anderes, mod)
+            if ihre is None:
+                continue
+            breite = min(sicht[2], ihre[2]) - max(sicht[0], ihre[0])
+            hoehe = min(sicht[3], ihre[3]) - max(sicht[1], ihre[1])
+            if breite > 0 and hoehe > 0:
+                art = type(anderes).__name__
+                was = getattr(anderes, "text", None) or (str(anderes.cget("text"))[:40] if "text" in anderes.keys() else "")
+                befunde.append(f"{kontext}: „{name}“ überlagert von {art} „{was}“ ({breite}×{hoehe} px)")
+    return len(knoepfe_hier), befunde
+
+
+def fall_b15_appweit(lauf):
+    """Buttonschutz in Hauptansichten und Dialogen, Mindest- und Referenzgröße, große Schrift."""
+    app, mod = lauf.app, lauf.mod
+    lauf.showcase()
+    gesamt, befunde = 0, []
+    for groesse in ("mittel", "gross"):
+        lauf.app.settings["ui_font_size"] = groesse
+        lauf.neustart()
+        app = lauf.app
+        app.show_info = app.show_warning = lambda *a, **k: None
+        seite = next(e for e in app.lists if app.is_page_list(e))
+        liste = max((e for e in app.lists if not app.is_page_list(e) and e.get("items")), key=lambda e: len(e["items"]))
+        ansichten = (("Startseite", app.set_home_view), ("Heute", app.set_today_view),
+                     ("Labels", app.set_labels_view), ("Vorlagen", app.set_template_view),
+                     ("Papierkorb", app.set_trash_view), ("Liste", lambda: app.set_active_list(liste["id"])),
+                     ("Seite", lambda: app.set_active_list(seite["id"])))
+        for geometrie in ("860x700+20+20", "1280x800+20+20"):
+            lauf.root.geometry(geometrie)
+            lauf.idle(4)
+            for hinweise in (False, True):
+                app.settings["show_hints"] = hinweise
+                for name, oeffnen in ansichten:
+                    oeffnen()
+                    lauf.idle(8)
+                    anzahl, funde = knopf_befunde(lauf.root, mod, f"{name} {groesse} {geometrie.split('+')[0]} Hinweise {'an' if hinweise else 'aus'}")
+                    gesamt += anzahl
+                    befunde.extend(funde)
+            gesehen = []
+
+            def modal(dialog, parent=None, _geometrie=geometrie):
+                lauf.idle(4)
+                titel = dialog.title() or type(dialog).__name__
+                anzahl, funde = knopf_befunde(dialog, mod, f"Dialog „{titel}“ {groesse} {_geometrie.split('+')[0]}")
+                gesehen.append((titel, anzahl))
+                befunde.extend(funde)
+                dialog.destroy()
+
+            app.run_modal = modal
+            # Meldungen laufen hier als echte Dialoge (leeres Fehlerprotokoll).
+            app.__dict__.pop("show_info", None)
+            for name in ("show_about_dialog", "show_release_notes_dialog", "open_error_log",
+                         "show_shortcuts_dialog", "show_settings_dialog"):
+                oeffnen = getattr(app, name, None)
+                if oeffnen is None:
+                    continue
+                vorher = set(str(w) for w in lauf.root.winfo_children())
+                oeffnen()
+                lauf.idle(4)
+                for neu in [w for w in lauf.root.winfo_children()
+                            if str(w) not in vorher and isinstance(w, mod.tk.Toplevel) and w.winfo_exists()]:
+                    modal(neu)
+            gesamt += sum(anzahl for _titel, anzahl in gesehen)
+            dialoge = len(gesehen)
+            app.show_info = lambda *a, **k: None
+    assert not befunde, (len(befunde), befunde[:12])
+    assert dialoge >= 5, ("Dialoge nicht gesehen", dialoge)
+    return f"{gesamt} Knopfprüfungen in 7 Ansichten und 5 Dialogen (2 Größen, 2 Schriftgrößen, Hinweise an/aus) ohne Befund"
+
+
 def fall_b07(lauf):
     """Windows-Menüs und Kopfsymbole teilen Mittellinie und Höhe."""
     app = lauf.app
@@ -361,7 +491,38 @@ def fall_b09(lauf):
     kappe = grund_t - tm.cap_center() * app.font_pixels(t_font)
     mitte = grund_p - pm.ink_center(pfeil.cget("text")) * app.font_pixels(p_font)
     assert abs(kappe - mitte) <= 1.0, (kappe, mitte)
-    return f"Papierkorbsymbol {app.symbol_row_shift(app.ICONS['trash']):+d} px, Pfeilabweichung {mitte - kappe:+.2f} px"
+    # Startseitenkachel „Pinnwände“: Pfadtrenner „›“ auf der Großbuchstabenmitte
+    # des Knopftextes (±0,5 px), Schreibweise unverändert.
+    lauf.showcase()
+    app.settings["home_tiles_hidden"] = []
+    app.set_home_view()
+    lauf.idle(10)
+    pfade = [k for k in knoepfe(app.home_content, mod.RoundedButton) if "›" in k.text]
+    assert pfade, "Probe braucht einen Startseitenknopf mit Pfad"
+    knopf = pfade[0]
+    trenner = [i for i in knopf.find_all() if knopf.type(i) == "text" and knopf.itemcget(i, "text") == "›"]
+    assert trenner, ("Pfadtrenner nicht optisch gesetzt", knopf.text)
+    font = mod.tkfont.Font(root=lauf.root, font=knopf.font)
+    metrik, pixel = app.glyph_metrics_for(knopf.font), app.font_pixels(font)
+    abweichung = []
+    for element in trenner:
+        x, y = knopf.coords(element)
+        nachbar = [i for i in knopf.find_withtag("glide_label_text")
+                   if knopf.coords(i)[0] < x and abs(knopf.coords(i)[1] - y) <= 3]
+        assert nachbar, ("kein Text vor dem Trenner", knopf.text)
+        zeile = knopf.coords(nachbar[0])[1]
+        grossmitte = zeile + font.metrics("ascent") - metrik.cap_center() * pixel
+        sichtbar = y + font.metrics("ascent") - metrik.ink_center("›") * pixel
+        abweichung.append(sichtbar - grossmitte)
+        assert abs(sichtbar - grossmitte) <= 0.5, (knopf.text, sichtbar, grossmitte)
+    zeilen = sorted({knopf.coords(i)[1] for i in knopf.find_withtag("glide_label_text")})
+    def stelle(i):
+        x, y = knopf.coords(i)
+        return min(zeilen, key=lambda z: abs(z - y)), x
+    gesetzt = "".join(knopf.itemcget(i, "text") for i in sorted(knopf.find_withtag("glide_label"), key=stelle))
+    assert gesetzt.replace(" ", "") == knopf.text.replace(" ", ""), ("Beschriftung verändert", gesetzt)
+    return (f"Papierkorbsymbol {app.symbol_row_shift(app.ICONS['trash']):+d} px, Pfeilabweichung {mitte - kappe:+.2f} px, "
+            f"Pfadtrenner Startseite {max(abweichung, key=abs):+.2f} px")
 
 
 def fall_b10(lauf):
@@ -391,18 +552,49 @@ def fall_b10(lauf):
 
 
 def fall_b11(lauf):
+    """Je Aufgabenansicht: Titel vorrangig, Metadaten nur so breit wie ihr Inhalt."""
     app = lauf.app
     lauf.showcase()
-    app.set_labels_view()
-    lauf.idle(8)
-    spalte = int(app.tree.column("due", "width"))
-    werte = [app.tree.set(i, "due") for i in app.tree.get_children("") for i in [i] + list(app.tree.get_children(i))]
     font = app.measurement_font(app.tree_font())
-    noetig = max(font.measure(w) for w in werte if w) + app.tree_cell_padding(font)
-    assert any("," in w for w in werte), "Probe braucht eine Uhrzeit"
-    assert spalte <= noetig + 2, ("Datumsspalte breiter als Inhalt", spalte, noetig)
-    assert spalte < app.due_column_width(), "Musterbreite statt Inhaltsbreite"
-    return f"Datumsspalte {spalte} px statt {app.due_column_width()} px"
+    rand = app.tree_cell_padding(font)
+
+    def zeilen():
+        stapel, alle = list(app.tree.get_children("")), []
+        while stapel:
+            zeile = stapel.pop()
+            alle.append(zeile)
+            stapel.extend(app.tree.get_children(zeile))
+        return alle
+
+    liste = max((e for e in app.lists if e.get("items")),
+                key=lambda e: sum(1 for p in e["items"] if p.get("due") and not p.get("done")))
+    ansichten = (("Labels", app.set_labels_view), ("Heute", app.set_today_view),
+                 ("Liste", lambda: app.set_active_list(liste["id"])))
+    befunde, labels_due = [], None
+    for name, oeffnen in ansichten:
+        oeffnen()
+        lauf.idle(8)
+        breiten = {}
+        for spalte in ("due", "labels"):
+            werte = [app.tree.set(z, spalte) for z in zeilen()]
+            werte = [w for w in werte if w]
+            breite = int(app.tree.column(spalte, "width"))
+            breiten[spalte] = breite
+            if not werte:
+                continue
+            noetig = max(font.measure(w) for w in werte) + rand
+            assert breite <= noetig + 2, (name, spalte, "breiter als Inhalt", breite, noetig)
+            # Bei Enge weichen Metadaten ganz (Titel zuerst), abgeschnitten werden sie nie.
+            assert breite == 0 or breite >= noetig - 1, (name, spalte, "abgeschnitten", breite, noetig)
+        titel = int(app.tree.column("#0", "width"))
+        assert titel > max(breiten.values()), (name, "Titel nicht vorrangig", titel, breiten)
+        befunde.append(f"{name}: Titel {titel}, Datum {breiten['due']}, Labels {breiten['labels']}")
+        if name == "Labels":
+            werte = [app.tree.set(z, "due") for z in zeilen()]
+            assert any("," in w for w in werte), "Probe braucht eine Uhrzeit"
+            labels_due = breiten["due"]
+            assert labels_due < app.due_column_width(), "Musterbreite statt Inhaltsbreite"
+    return f"Datumsspalte Labels {labels_due} px statt {app.due_column_width()} px; " + "; ".join(befunde)
 
 
 def fall_b12_b13(lauf):
@@ -422,7 +614,10 @@ def fall_b12_b13(lauf):
     assert int(groesse) == app.ui_font_size(1) and "bold" in stil, titel_font
     zelltag = lauf.root.tk.call(str(app.tree), "tag", "cell", "has", "today_next_title", (zeile, "#0"))
     assert int(zelltag) == 1, "Titelzelle nicht fett"
-    return "keine doppelten Dreiecke; nur Titelzelle fett in Zeilengröße"
+    for spalte in ("due", "labels", "source"):
+        anders = lauf.root.tk.call(str(app.tree), "tag", "cell", "has", "today_next_title", (zeile, spalte))
+        assert int(anders) == 0, ("Metadatenzelle hervorgehoben", spalte)
+    return "keine doppelten Dreiecke; nur Titelzelle fett in Zeilengröße, Datum/Label/Herkunft normal"
 
 
 def fall_b14(lauf):

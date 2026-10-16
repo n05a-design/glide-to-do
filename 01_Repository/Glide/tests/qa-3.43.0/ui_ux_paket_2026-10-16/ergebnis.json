@@ -1,35 +1,35 @@
 {
   "version": "3.43.0",
   "datum": "2026-10-16",
-  "apphash_sha256": "2feea1eef7d55fc9b629757bbc4e8ed5ec41ce00da8840ed46bdd96d31eca936",
+  "apphash_sha256": "a7b1df819ff2959b5c82797ce988eb3fc8715928cdf6543b8b8d9fe9ebdc6714",
   "umgebung": "Windows 11, Python 3.14.7, Tk 9.0.4, künstliche Daten, temporäres GLIDE_DATA_DIR",
   "pflichtsuite": {
     "datei": "pflichtsuite_3.43.0.json",
-    "gruen": 16,
+    "gruen": 17,
     "rot": 0
   },
   "gegenprobe_3_42_0": {
     "datei": "gegenprobe_3.42.0.json",
     "quelle": "git archive 05483a8 (gelieferter 3.42.0-Quellbaum)",
     "gruen": 0,
-    "rot": 16
+    "rot": 17
   },
   "unit_tests": 711,
   "werkzeugtests": 150,
   "eingefrorene_vollpruefung_windows": {
     "kopie": "außerhalb von OneDrive, ohne .git/.claude/build/skills-main und ohne lokale Nutzerbilder",
-    "ausgefuehrt": 109,
+    "apphash": "a7b1df81",
+    "ausgefuehrt": 110,
     "suiten_gruen": 92,
-    "fehlgeschlagen": [
-      "[fehlgeschlagen] standpruefung: Exitcode 1"
-    ],
+    "unit_tests": 711,
+    "fehlgeschlagen": [],
     "uebersprungen": [
       "[übersprungen] Sichtprüfung: Bilder müssen von einer Person angesehen werden; native Plattformprüfung bleibt offen"
     ],
-    "befund": "Einziger roter Schritt war die Standprüfung: Links der Bildreferenzen zeigten in den bewusst nicht versionierten Ordner bilder/, ein Planlink und eine Suitenzahl. Danach als reine Dokumentkorrektur behoben, Standprüfung erneut grün; kein ausführbarer Pfad geändert."
+    "vorlauf": "Apphash 2feea1ee: 109 Schritte, nur Standprüfung rot (Dokumentlinks, behoben); danach Nachbesserungen aus der Punktprüfung"
   },
   "lieferabgleich": {
-    "07_Python-Versionen": "67 Code- und 146 Ressourcendateien bytegleich",
+    "07_Python-Versionen": "67 Code- und 146 Ressourcendateien bytegleich (Apphash a7b1df81)",
     "showcase": "sechs Dateien nach 05 übertragen, Import/Neustart/Export geprüft"
   },
   "messungen_vorher_nachher": {
@@ -56,13 +56,34 @@
     "b16_groesster_radschritt_px": [
       389,
       30
+    ],
+    "b09_pfadtrenner_zur_kappenmitte_px": [
+      0.95,
+      -0.05
+    ],
+    "b15_knopfbefunde_appweit": [
+      10,
+      0
     ]
   },
   "offen": [
+    "Push, Pull Request und Merge (Anmeldung des Inhabers bei GitHub)",
     "native Linux-/Windows-Matrix und Windows-Paketlauf auf GitHub",
     "Mac-Vollprüfung und Mac-Bundle",
     "eigenständige Pakete 3.43.0",
     "Menschen-/DPI-/Screenreaderabnahme",
-    "Produktentscheidungen E-U1–E-U4"
-  ]
+    "Produktentscheidungen E-U1–E-U3"
+  ],
+  "pruefung_aller_punkte": {
+    "datum": "2026-10-16",
+    "ergebnis": "A.1–A.3 untersucht (Auswahl E-U1–E-U3 beim Inhaber), B.1–B.21 umgesetzt und automatisch geprüft, B.22 bis auf Push/PR/Merge",
+    "nachgezogen": [
+      "B09: Pfadtrenner „›“ in Startseitenknöpfen (Kachel „Pinnwände“) optisch auf die Großbuchstabenmitte; E-U4 entfällt",
+      "B15: appweite Knopfschutzprüfung b15_appweit; „Nur offene“ im Spaltenboard bei 860 px abgeschnitten → Zeile bricht um",
+      "B06: Bedienhinweis des Spaltenboards folgt dem Hinweisschalter; Handbucheinträge Bedienhinweise, Galeriebilder, Neuerungen",
+      "B11: Prioritätsprüfung auf Labels, Heute und Liste erweitert; B13: Metadatenzellen der nächsten Aufgabe geprüft",
+      "B20: alle 15 Skills aus skills-main/ begründet übernommen oder ausgeschlossen",
+      "B21/B22: veraltete Stand-, Entscheidungs- und Archivangaben nachgezogen"
+    ]
+  }
 }
