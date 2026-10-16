@@ -1,5 +1,5 @@
 {
-  "app": "src/glide/app.pyw (Apphash a7b1df81)",
+  "app": "src/glide/app.pyw (Apphash 379e97e3)",
   "faelle": {
     "b01": {
       "ok": true,
@@ -23,7 +23,7 @@
     },
     "b06_b15": {
       "ok": true,
-      "befund": "12 Kombinationen ohne Überdeckung; Schalter gespeichert"
+      "befund": "12 Kombinationen, nachträglich gewachsener Leertext und später Map ohne Überdeckung; Schalter gespeichert"
     },
     "b15_appweit": {
       "ok": true,

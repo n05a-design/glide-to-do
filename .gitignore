@@ -55,6 +55,9 @@ window.conf
 *.log
 *.tmp
 .glide-json-*.tmp
+# Von GitHub heruntergeladene Prüfartefakte (Protokolle, Fensterbilder) bleiben
+# lokal; ausgewertet wird im Nachweis (16.10.2026).
+.claude/Tests/
 
 # --- Archive und Kopien ------------------------------------------------------
 # Vorfassungen trägt Git. Einziges Archiv ist 07_Python-Versionen/Archiv mit

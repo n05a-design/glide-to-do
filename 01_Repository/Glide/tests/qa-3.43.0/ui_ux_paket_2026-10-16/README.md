@@ -1,6 +1,6 @@
 # UI-/UX-Paket 3.43.0 – Lieferung und Prüfung
 
-Stand 16.10.2026 · Glide 3.43.0 · Datenformat 25 · Apphash `a7b1df819ff2959b5c82797ce988eb3fc8715928cdf6543b8b8d9fe9ebdc6714`
+Stand 16.10.2026 · Glide 3.43.0 · Datenformat 25 · Apphash `379e97e32e3cc5e52eeb104ec23937df28081b45bd0e63582d5065cd61a2b172`
 
 Auftrag: [UI-/UX-Feature-Paket](../../../../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md) vom 15.10.2026, nach D50 vorrangig vor Paket 8. Status je Kennung im [Entwicklungsplan §17](../../../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#17-ui-ux-feature-paket-aus-nutzerbeobachtungen-15102026), Regeln in [Design Richtlinien](../../../docs/DESIGN_RICHTLINIEN.md). Maschinenlesbar: [ergebnis.json](ergebnis.json). Alle Prüfungen mit künstlichen Daten und temporärem `GLIDE_DATA_DIR`; Rohprotokolle und Fensteraufnahmen bleiben lokal (die Showcase-Aufnahmen zeigen Fremdbilder, I9).
 
@@ -79,16 +79,18 @@ Am 16.10.2026 auf Wunsch des Inhabers jeden Punkt des [Originalauftrags](../../.
 
 Push am 16.10.2026 nach Anmeldung des Inhabers; [PR #27](https://github.com/n05a-design/glide-to-do/pull/27) vom Inhaber als Merge-Commit `fe9366c` in `main` zusammengeführt (Eltern `27bac83` und `23175b7`; Inhalt identisch mit `23175b7`). Ergebnis der GitHub-Prüfung unter „Offen“.
 
+Auswertung der Protokolle beider Vollprüfungen und des Windows-Artefakts (16.10.2026, Inhalt `23175b7` = `fe9366c`, Vergleich mit `27bac83`; Seitensitzung „CI-Auswertung“): **Nativer Zugang ohne rote Stelle** (Native Tcl-Zugangsbindungen und `test_zugang400 --nativ` auf Linux und Windows grün). **Einziger Befund dieses Pakets:** `test_uiux_paket` Fall `b15_appweit` auf Linux und Windows – im leeren Papierkorb überdeckte der Leertext bei eingeschalteten Hinweisen „Zur Startseite“ (6–28 px). Ursache: `empty_state_top` zählte den Leertext nur, wenn er schon gemappt war; beim Ansichtswechsel ist er das unter Tk 9.1 noch nicht, und nichts rückte danach nach. Behoben: Gezählt wird der platzierte Leertext mit seiner tatsächlichen Höhe, `<Map>` und `<Configure>` ziehen Knopf und Gismo nach; b06_b15 prüft späten Map und nachträglich wachsenden Text (gegen `10b3aa3` rot). **Seit PR #26 rot, nicht aus diesem Paket** (Umstellung der ganzen Matrix auf eigene Tk 9.1): `test_klappmechanismen3321` (interne Prozedur `ttk::treeview::Keynav` in Tk 9.1 umbenannt – der Test führt jetzt die registrierte Klassenbindung aus), nur unter Linux `test_tempo330` (Radereignisse der Vergleichsansicht), `test_planen33313` (Strg+Umschalt+P unter X11/Tk 9.1) und `test_oberflaeche33321` (Systemdesign über `gsettings`, Prüfisolation) sowie daraus der Schritt „Kalibrierte Erwartungen“; diese drei Suiten gehören zu Paket 8. Die Korrektur ist ein Nachtrag zu 3.43.0 (Apphash `379e97e3`, 07 erneut bytegleich abgeglichen); der eingefrorene Volllauf oben bezieht sich auf `a7b1df81`, für den Nachtrag liefen die betroffenen Suiten gezielt.
+
 ## Lieferabgleich
 
 - `versionswechsel.py 3.43.0 16.10.2026`: Fixtures, Showcase, Vorlagen, Releaseplanung und Standangaben neu; Ablage auf sieben Versionen gekürzt (3.37.0 entfällt, Verweise auf `0e7b358` festgesetzt).
-- `abgleich_07.py`: 67 Code- und 146 Ressourcendateien in `07_Python-Versionen` bytegleich (nach den Nachbesserungen erneut abgeglichen, Apphash `a7b1df81`), 3.42.0 ins Archiv.
+- `abgleich_07.py`: 67 Code- und 146 Ressourcendateien in `07_Python-Versionen` bytegleich (nach den Nachbesserungen erneut abgeglichen, Apphash `a7b1df81`; nach dem Tk-9.1-Nachtrag nochmals, Apphash `379e97e3`), 3.42.0 ins Archiv.
 - `showcase_abgleich.py`: Import, ID-Verweise, Dokumentarten, Bilder, Pinnwände, Undo, Vorlagen, Export und Neustart geprüft; sechs Dateien nach `05_Probelisten_Testdaten/Showcase`.
 - Das Showcase-Werkzeug schreibt seine Vorlagendatei und das Manifest jetzt mit LF; unter Windows stimmten Prüfsumme und eingecheckte Bytes sonst nicht überein.
 
 ## Offen
 
-- **GitHub-Vollmatrix (Tk 9.1):** GitHub-Prüfung nach dem Merge ([PR #27](https://github.com/n05a-design/glide-to-do/pull/27), Merge-Commit `fe9366c`, [Lauf 38870531738](https://github.com/n05a-design/glide-to-do/actions/runs/38870531738)): Grundstufe (Linux, Tk 8.6) grün; Vollprüfung Linux und Windows mit eigener Tk-9.1-Laufzeit und nativer Zugangsprüfung (`--zugang-nativ`) rot – in denselben Schritten wie seit der Umstellung der Matrix durch PR #26 (`27bac83`, Vorbereitung Paket 8); zuletzt grün war sie am 15.10.2026 bei `a7f80b8`. Windows-Paketlauf deshalb übersprungen. Die Protokolle sind nur angemeldet lesbar; ob das Paket unter Tk 9.1 zusätzliche Befunde hat, ist deshalb noch nicht ausgewertet. Nächster Schritt: Protokolle angemeldet lesen und Befunde trennen (nativer Zugang aus Paket 8 gegen mögliche Tk-9.1-Befunde des UI-/UX-Pakets).
+- **GitHub-Vollmatrix (Tk 9.1):** Befund dieses Pakets behoben (siehe „GitHub“); erneute GitHub-Prüfung zum Nachtrag offen. Weiter rot erwartet bis Paket 8: unter Linux `test_tempo330`, `test_planen33313`, `test_oberflaeche33321` und „Kalibrierte Erwartungen“ (Tk-9.1-Umstellung durch PR #26).
 - **macOS-Bundle und Mac-Vollprüfung:** auf Windows nicht baubar bzw. ausführbar; `packaging/macos/baue_app.py` und die eingefrorene Mac-Vollprüfung auf dem Referenz-Mac stehen aus. Bundle und eigenständige Pakete tragen bis dahin 3.42.0.
 - **Menschenabnahme:** Sicht, DPI 100–200 %, Trackpad, große Schrift, alle Designs sowie Screenreader nach der [Prüfliste](../../../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md#ui-ux-paket-15102026-b01b19).
 - **Produktentscheidungen** E-U1–E-U3 (A01–A03) beim Inhaber.

@@ -274,10 +274,38 @@ def fall_b06_b15(lauf):
                 assert text == erwartet, (text, hinweise)
                 knopf, hinweis = app.empty_action_button, app.empty_text_label
                 assert knopf.winfo_ismapped() and hinweis.winfo_ismapped()
-                unten_text = hinweis.winfo_rooty() + hinweis.winfo_reqheight()
+                # Tatsächliche Höhe: Tk 9.1 meldet die angeforderte Höhe nach
+                # einem neuen Text verspätet (GitHub-Prüfung 16.10.2026).
+                unten_text = hinweis.winfo_rooty() + max(hinweis.winfo_height(), hinweis.winfo_reqheight())
                 assert knopf.winfo_rooty() >= unten_text, ("Knopf überdeckt", geometrie, hinweise, groesse)
                 assert knopf.winfo_rooty() + knopf.winfo_height() <= app.tree.winfo_rooty() + app.tree.winfo_height()
                 befunde.append(f"{groesse}/{hinweise}/{geometrie.split('+')[0]}")
+    # Wächst der Leertext nachträglich, ohne dass die App ihn neu platziert
+    # (so verhält sich Tk 9.1 mit verspäteter Größe), rückt der Knopf nach.
+    app.set_trash_view()
+    lauf.idle(6)
+    knopf, hinweis = app.empty_action_button, app.empty_text_label
+    hinweis.configure(text=str(hinweis.cget("text")) + " Zusatzzeile für die Probe." * 8)
+    lauf.idle(6)
+    assert knopf.winfo_rooty() >= hinweis.winfo_rooty() + hinweis.winfo_height(), \
+        ("Knopf folgt verspätet gewachsenem Leertext nicht", knopf.winfo_rooty(), hinweis.winfo_rooty(), hinweis.winfo_height())
+    befunde.append("nachträglich gewachsener Leertext")
+    # Später Map (unter Tk 9.1/X11 die Regel, Nachstellung der CI-Auswertung
+    # 16.10.2026): Leerzustand aufbauen, solange der Baum nicht gemappt ist,
+    # dann unverändert einblenden – der Knopf steht trotzdem unter dem Text.
+    baum = app.tree
+    verwaltung = baum.winfo_manager()
+    lage = {"pack": baum.pack_info, "grid": baum.grid_info, "place": baum.place_info}[verwaltung]()
+    lage.pop("in", None)
+    getattr(baum, f"{verwaltung}_forget")()
+    lauf.idle(2)
+    app.refresh_trash_overview()
+    lauf.idle(4)
+    getattr(baum, verwaltung)(**lage)
+    lauf.idle(8)
+    knopf, hinweis = app.empty_action_button, app.empty_text_label
+    assert knopf.winfo_y() >= hinweis.winfo_y() + hinweis.winfo_height(), \
+        ("Knopf nach spätem Map überdeckt", knopf.winfo_y(), hinweis.winfo_y(), hinweis.winfo_height())
     app.settings["ui_font_size"] = "mittel"
     # Gefüllter Papierkorb zeigt keinen Leertext.
     liste = app.new_list_object("Papierkorbprobe", [app.new_item("Weg")])
@@ -287,7 +315,7 @@ def fall_b06_b15(lauf):
     app.settings["show_hints"] = True
     lauf.neustart()
     assert lauf.app.settings["show_hints"] is True, "Schalter nicht gespeichert"
-    return f"{len(befunde)} Kombinationen ohne Überdeckung; Schalter gespeichert"
+    return f"{len(befunde) - 1} Kombinationen, nachträglich gewachsener Leertext und später Map ohne Überdeckung; Schalter gespeichert"
 
 
 def sichtbarer_ausschnitt(widget, mod):

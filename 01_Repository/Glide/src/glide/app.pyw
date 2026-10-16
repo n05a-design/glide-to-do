@@ -41516,8 +41516,14 @@ class ListApp:
         except tk.TclError:
             pass
         oben = (box[1] + box[3] + 12) if box else 44
-        if hinweis is not None and hinweis.winfo_ismapped():
-            oben = max(oben, int(float(hinweis.place_info().get("y", 0))) + hinweis.winfo_reqheight() + 12)
+        # Gezählt wird der platzierte Leertext, nicht erst der sichtbare: Beim
+        # Ansichtswechsel ist er oft noch nicht gemappt (unter Tk 9.1 und X11
+        # die Regel), und „Zur Startseite“ landete auf der Leerzeile, bis 28 px
+        # im Text (GitHub-Prüfung 16.10.2026). Die tatsächliche Höhe zählt,
+        # sobald sie feststeht; Map und Größenänderung ziehen den Knopf nach.
+        if hinweis is not None and hinweis.winfo_exists() and hinweis.winfo_manager() == "place":
+            hoehe = max(hinweis.winfo_reqheight(), hinweis.winfo_height() if hinweis.winfo_height() > 1 else 0)
+            oben = max(oben, int(float(hinweis.place_info().get("y", 0))) + hoehe + 12)
         return oben
 
     def sync_empty_text(self, baum, hinweis=None):
@@ -41537,6 +41543,13 @@ class ListApp:
             breite = max(160, baum.winfo_width())
             if hinweis is None or not hinweis.winfo_exists() or hinweis.master is not baum:
                 hinweis = self.empty_text_label = tk.Label(baum, anchor="w", justify="left", bd=0, padx=24, pady=8)
+                # Wird der Leertext sichtbar oder ändert er seine Höhe (Umbruch,
+                # Hinweise an/aus, Schrift), rücken Knopf und Gismo nach – auch
+                # wenn Tk die Größe erst nach dem Platzieren meldet (B15).
+                for ereignis in ("<Configure>", "<Map>"):
+                    hinweis.bind(ereignis, lambda _event, b=baum, h=hinweis: self.root.after_idle(
+                        lambda: self._follow_empty_text(b, h) if h.winfo_exists() and h.winfo_manager() == "place" else None),
+                        add="+")
             hinweis.configure(text=text, bg=grund, fg=farbe, font=schrift, wraplength=breite - 48)
             self._place_empty_text(baum, hinweis)
             # Die Zeile verschiebt sich, wenn die Liste ihre Höhe ändert (etwa
