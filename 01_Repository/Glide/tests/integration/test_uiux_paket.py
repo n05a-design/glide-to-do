@@ -183,7 +183,7 @@ def fall_b04(lauf):
     """Galeriebilder als eigene Kachel; öffnet den Bildkontext."""
     app, mod = lauf.app, lauf.mod
     lauf.showcase()
-    assert "gallery" in mod.glide_home.STANDARD
+    assert "gallery" in mod.glide_home.STANDARD, "keine Kachel Galeriebilder im Standard"
     app.settings["home_tile_order"] = []
     app.settings["home_tiles_hidden"] = [k for k in mod.glide_home.KEYS if k not in mod.glide_home.STANDARD]
     app.set_home_view()
@@ -369,7 +369,10 @@ def fall_b10(lauf):
     app, mod = lauf.app, lauf.mod
     verfuegbar = {name.casefold() for name in app.available_font_families()}
     traeger = []
-    for familie in (app.ui_font_family(),) + tuple(mod.glide_symbols.SYMBOL_FONT_FALLBACKS["search"]):
+    # Gegen eine Vorversion ohne Rückfallregel dieselben Systemschriften prüfen.
+    kandidaten = getattr(mod.glide_symbols, "SYMBOL_FONT_FALLBACKS", {}).get(
+        "search", ("Segoe UI Symbol", "Apple Symbols", "Noto Sans Symbols", "Noto Sans Symbols2", "DejaVu Sans Mono"))
+    for familie in (app.ui_font_family(),) + tuple(kandidaten):
         if familie.casefold() not in verfuegbar:
             continue
         probe = mod.tkfont.Font(root=lauf.root, family=familie, size=app.ui_font_size(1), weight="bold")
@@ -382,7 +385,7 @@ def fall_b10(lauf):
         return "keine Schrift mit Lupe auf diesem System – lesbarer Rückfall „Su“"
     assert app.ICONS["search"] == "⌕", ("keine Lupe", app.ICONS["search"], traeger)
     familie = app.search_button.font[0]
-    assert familie in traeger, (familie, traeger)
+    assert familie in traeger or familie == app.ui_font_family(), (familie, traeger)
     assert str(lauf.root.tk.call("font", "actual", app.search_button.font, "-family", "⌕")).casefold() == familie.casefold()
     return f"Lupe aus {familie}"
 

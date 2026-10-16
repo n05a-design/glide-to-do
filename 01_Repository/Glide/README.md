@@ -14,7 +14,7 @@ Voraussetzung ist Python mit Tk; zusätzliche Laufzeitpakete sind nicht nötig.
 python3 src/glide/app.pyw          # Windows: python src\glide\app.pyw
 ```
 
-Gelieferte eigenständige Entwicklungspakete liegen unter `build/macos/Glide.app` und `build/windows/Glide-3.42.0/Glide.exe`; sie bündeln Python und Tcl/Tk; Bauanleitung und Prüfgrenzen stehen in der [Paketierung](packaging/README.md#eigenständige-entwicklungspakete-paket-7).
+Gelieferte eigenständige Entwicklungspakete (noch 3.42.0; Neubau für 3.43.0 offen) liegen unter `build/macos/Glide.app` und `build/windows/Glide-3.42.0/Glide.exe`; sie bündeln Python und Tcl/Tk; Bauanleitung und Prüfgrenzen stehen in der [Paketierung](packaging/README.md#eigenständige-entwicklungspakete-paket-7).
 
 Die Ressourcen unter `src/glide/resources` müssen neben der Anwendung liegen. Startbare Lieferfassung: `07_Python-Versionen/Schnellstart.pyw`. Unter macOS lässt sich ein Entwicklungsbundle bauen (nutzt das installierte Python, nicht zur Weitergabe):
 

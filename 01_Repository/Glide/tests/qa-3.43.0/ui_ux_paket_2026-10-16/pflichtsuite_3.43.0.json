@@ -1,0 +1,70 @@
+{
+  "app": "%USERPROFILE%\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app.pyw",
+  "faelle": {
+    "b01": {
+      "ok": true,
+      "befund": "Gelesen → Seitenanfang; Aktualisierung behält Lage; Neustart ohne Karte"
+    },
+    "b02": {
+      "ok": true,
+      "befund": "linke Rasterkante bei 1280x800, 860x700, 1600x900"
+    },
+    "b03": {
+      "ok": true,
+      "befund": "Name fest, Altwerte entfernt, Pflege immer, Ausblenden über Kachel"
+    },
+    "b04": {
+      "ok": true,
+      "befund": "6 Vorschauen, 6 geladen, öffnet Detail, eigene Auswahl bleibt, fehlende Datei benannt"
+    },
+    "b05": {
+      "ok": true,
+      "befund": "Unterkante 107 ≈ Grundlinie 108, Seitenverhältnis 0.667"
+    },
+    "b06_b15": {
+      "ok": true,
+      "befund": "12 Kombinationen ohne Überdeckung; Schalter gespeichert"
+    },
+    "b07": {
+      "ok": true,
+      "befund": "4 Menüs auf der Mittellinie der 4 Kopfsymbole"
+    },
+    "b08": {
+      "ok": true,
+      "befund": "gemeinsame linke Textkante x=400"
+    },
+    "b09": {
+      "ok": true,
+      "befund": "Papierkorbsymbol +2 px, Pfeilabweichung -0.29 px"
+    },
+    "b10": {
+      "ok": true,
+      "befund": "Lupe aus Segoe UI Symbol"
+    },
+    "b11": {
+      "ok": true,
+      "befund": "Datumsspalte 177 px statt 281 px"
+    },
+    "b12_b13": {
+      "ok": true,
+      "befund": "keine doppelten Dreiecke; nur Titelzelle fett in Zeilengröße"
+    },
+    "b14": {
+      "ok": true,
+      "befund": "Überschrift · Liste · Nummeriert · Aufgabe · Zitat · Code · Bild · Mehr"
+    },
+    "b16": {
+      "ok": true,
+      "befund": "84 Raststücke über Bildern, größter Schritt 30 px"
+    },
+    "b17_b19": {
+      "ok": true,
+      "befund": "Notizaktionen, Fälligkeitsfelder und Menüs ohne Fremdfläche (hell, Verlauf Morgenrot)"
+    },
+    "b18": {
+      "ok": true,
+      "befund": "Neuerungen nach „Gelesen“ und Neustart unter Über Glide"
+    }
+  },
+  "fehler": []
+}

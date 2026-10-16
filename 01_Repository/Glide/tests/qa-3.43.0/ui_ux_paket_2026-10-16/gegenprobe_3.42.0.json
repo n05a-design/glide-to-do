@@ -1,0 +1,87 @@
+{
+  "app": "%USERPROFILE%\\AppData\\Local\\Temp\\glide_3420_src\\01_Repository\\Glide\\src\\glide\\app.pyw",
+  "faelle": {
+    "b01": {
+      "ok": false,
+      "befund": "AssertionError(('nicht am Seitenanfang', (0.3805970149253731, 1.0)))"
+    },
+    "b02": {
+      "ok": false,
+      "befund": "AssertionError(('1280x800+20+20', 1102, 324))"
+    },
+    "b03": {
+      "ok": false,
+      "befund": "AssertionError('Altwerte bleiben')"
+    },
+    "b04": {
+      "ok": false,
+      "befund": "AssertionError('keine Kachel Galeriebilder im Standard')"
+    },
+    "b05": {
+      "ok": false,
+      "befund": "AssertionError(('Logo-Unterkante', 114, 108))"
+    },
+    "b06_b15": {
+      "ok": false,
+      "befund": "AssertionError('„?“ noch im Kopf')"
+    },
+    "b07": {
+      "ok": false,
+      "befund": "AssertionError(('Datei', 75.0, {85.0}))"
+    },
+    "b08": {
+      "ok": false,
+      "befund": "AssertionError({'kopf': 403, 'text': 400, 'ok': 1})"
+    },
+    "b09": {
+      "ok": false,
+      "befund": "AssertionError('Glyphenregel fehlt')"
+    },
+    "b10": {
+      "ok": false,
+      "befund": "AssertionError(('keine Lupe', 'Su', ['Segoe UI Symbol']))"
+    },
+    "b11": {
+      "ok": false,
+      "befund": "AssertionError(('Datumsspalte breiter als Inhalt', 281, 177))"
+    },
+    "b12_b13": {
+      "ok": false,
+      "befund": "AssertionError('▶  Nächste Aufgabe')"
+    },
+    "b14": {
+      "ok": false,
+      "befund": "AssertionError(['Überschrift', 'Liste', 'Nummeriert', '□ Aufgabe', 'Zitat', 'Code', 'Bild', 'Mehr'])"
+    },
+    "b16": {
+      "ok": false,
+      "befund": "AssertionError(('Sprung über Bild', 378))"
+    },
+    "b17_b19": {
+      "ok": false,
+      "befund": "AssertionError(('☆ Favorit', '#F1F0F6', '#f6f6fc'))"
+    },
+    "b18": {
+      "ok": false,
+      "befund": "AssertionError(['Arbeitsdateien verschieben …', 'Standardordner benutzen', 'Ordner öffnen'])"
+    }
+  },
+  "fehler": [
+    "b01",
+    "b02",
+    "b03",
+    "b04",
+    "b05",
+    "b06_b15",
+    "b07",
+    "b08",
+    "b09",
+    "b10",
+    "b11",
+    "b12_b13",
+    "b14",
+    "b16",
+    "b17_b19",
+    "b18"
+  ]
+}

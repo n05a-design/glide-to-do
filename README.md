@@ -8,17 +8,15 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 
 ## Stand
 
-- **Entwicklungsstand 3.43.0 vom 14.10.2026**, Datenformat 25. Dies ist eine Entwicklungsfassung.
-- **Zuletzt vollständig automatisch geliefert:** eigenständige Mac-/Windows-Entwicklungspakete 3.42.0, davor Notion-Import und Seitenwiederherstellung 3.41.0, Pixelanimation 3.40.0, Wiederholungen 3.39.1 (Fehlerbehebung), Tagesplanung 3.39.0, Aufgabenoberfläche 3.38.0, Logo/Symbole 3.37.0 und Fundament/Tempo 3.36.0. Eingefrorene Mac-Vollprüfung sowie native Linux-/Windows-Matrix und beide tatsächlichen isolierten Paketstarts grün; 07/Showcase/Bundle abgeglichen und Mac-Signaturen geprüft. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
-- **Nächstes Paket:** 4.0.0 mit dem zugänglichen Aufgaben-Kernablauf; eigene Tk-9.1-Laufzeit und tatsächliche Readerproben. Die eigenständigen Mac-/Windows-Entwicklungspakete 3.42.0 sind geliefert; danach folgen die bestätigten D49-Pakete.
-- **Offen:** verbleibende bestätigte Sprintpakete, manuelle Bedien-/DPI-/Mehrmonitor-/Screenreaderabnahme sowie die gesonderten Veröffentlichungstore (u. a. Lizenz, öffentliche Signatur und Marke).
-- **Nächste Schritte:** [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) mit Status je Aufgabe; bestätigte Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md).
-
-**Lokale Bestandsprüfung 15.10.2026:** [Prüfbericht](01_Repository/Glide/tests/qa-3.42.0/bestandspruefung_2026-10-15/README.md). Gelieferte lokale Basis 3.42.0 / `05483a8`; GitHub `main` liegt mit 4.0-Vorbereitung 13 Commits voraus. Quellstand und 07 bytegleich, Windows-Paket vollständig geprüft; die lokale Windows-Kopie des Mac-Bundles ist mit 327/330 Dateien unvollständig. Frühere native Mac-Nachweise bleiben historische Belege. [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) und [UI-/UX-Auftrag](00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md) gehören zum neuen Paket.
+- **Entwicklungsstand 3.43.0 vom 16.10.2026**, Datenformat 25. Dies ist eine Entwicklungsfassung.
+- **3.43.0 – UI-/UX-Paket aus Nutzerbeobachtungen:** ruhigere Kopfzeile mit Lupe und Hinweisschalter, Galeriebilder auf der Startseite, fester Begleiter Gismo, Titel mit mehr Platz, geschützte Bedienelemente, gleichmäßiges Scrollen über Bildern und dauerhaft nachlesbare Neuerungen. Automatisch geprüft (Pflichtsuite mit roter Gegenprobe gegen 3.42.0, eingefrorene Windows-Vollprüfung, native Linux-/Windows-Matrix) und in die Python-Fassung übernommen; Mac-Vollprüfung, Mac-Bundle und eigenständige Pakete 3.43.0 stehen noch aus. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
+- **Zuletzt vollständig einschließlich Paketen geliefert:** eigenständige Mac-/Windows-Entwicklungspakete 3.42.0; davor Notion-Import und Seitenwiederherstellung 3.41.0, Pixelanimation 3.40.0, Wiederholungen 3.39.1, Tagesplanung 3.39.0 und Aufgabenoberfläche 3.38.0.
+- **Nächste Schritte:** Auswahl zu Kompaktmodus, zwei Inhalten gleichzeitig und Notion-Mustern (Entscheidungsvorlagen E-U1–E-U4), danach der pausierte zugängliche Aufgaben-Kernablauf 4.0.0 mit eigener Tk-9.1-Laufzeit.
+- **Offen:** manuelle Bedien-/DPI-/Mehrmonitor-/Screenreaderabnahme sowie die gesonderten Veröffentlichungstore (u. a. Lizenz, öffentliche Signatur und Marke). Status je Aufgabe im [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md), Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md), Gestaltungsregeln in den [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md).
 
 ## Schnellstart
 
-Die gelieferten Entwicklungspakete starten unter macOS aus `01_Repository/Glide/build/macos/Glide.app` und unter Windows aus `01_Repository/Glide/build/windows/Glide-3.42.0/Glide.exe`, jeweils mit eingebettetem Python/Tcl-Tk. Bau und Prüfgrenzen: [Paketierung](01_Repository/Glide/packaging/README.md#eigenständige-entwicklungspakete-paket-7).
+Die gelieferten Entwicklungspakete (noch 3.42.0) starten unter macOS aus `01_Repository/Glide/build/macos/Glide.app` und unter Windows aus `01_Repository/Glide/build/windows/Glide-3.42.0/Glide.exe`, jeweils mit eingebettetem Python/Tcl-Tk. Die Python-Fassung trägt bereits 3.43.0. Bau und Prüfgrenzen: [Paketierung](01_Repository/Glide/packaging/README.md#eigenständige-entwicklungspakete-paket-7).
 
 Für den weiterhin verfügbaren Python-Startweg ist Python mit Tk erforderlich, empfohlen Python 3.14 mit Tk 9. Mit Tk 8.6 startet Glide ebenfalls, nur ohne Systemmitteilungen und SVG-Vorschau. Zusätzliche Pakete sind nicht nötig.
 
@@ -37,7 +35,7 @@ Unter Windows: `python 07_Python-Versionen\Schnellstart.pyw`. Weitere Startwege 
 - **Wissen:** Seiten mit Markdown, Bildern (auch in Druck/PDF und Markdown), Titelbildern, echten Aufgaben und eingebetteten Live-Listen; Notizen, Notizbücher, Bücher und Galerien; lokale Verweise und Rückverweise; gemeinsame Suche und Befehlspalette (Strg/Cmd+O) mit markierten Fundstellen; gespeicherte Filter, die erklären, warum etwas erscheint.
 - **Pixel-Werkstatt:** Zeichnungen mit 16–128 Zellen, Formen, Symmetrie, Mustern, Paletten mit Umfärben und Vorschau, PNG- und ICO-Export mit Symbolvorschau, Pixelsymbole.
 - **Daten:** atomares Speichern, Sicherungen nur bei Änderung, Vorsicherung je Formatstufe, Tagesstände, Sicherungen vergleichen; Voll-, Teil- und App-Backup, Notion-Import mit Quellenvergleich, einzelne Seiten aus Sicherungen wiederherstellen, Vorlagen, CSV, Markdown, ICS, Austauschformat für KI mit geprüften Änderungsvorschlägen; Rückgängig für alles.
-- **Gestaltung:** zehn Designs mit Kontrast nach WCAG AA, automatisch hell/dunkel nach System, Akzentfarben und Hintergrundverläufe, schmale Seitenleiste; Mindestgröße 860 × 700.
+- **Gestaltung:** zehn Designs mit Kontrast nach WCAG AA, automatisch hell/dunkel nach System, Akzentfarben und Hintergrundverläufe, schmale Seitenleiste, abschaltbare Bedienhinweise; Mindestgröße 860 × 700. Regeln in den [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md).
 
 Verhalten im Einzelnen: [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md). Entwicklung je Version: [Änderungsverlauf](01_Repository/Glide/CHANGELOG.md).
 

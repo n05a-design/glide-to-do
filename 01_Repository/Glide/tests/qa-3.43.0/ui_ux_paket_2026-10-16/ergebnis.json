@@ -1,0 +1,68 @@
+{
+  "version": "3.43.0",
+  "datum": "2026-10-16",
+  "apphash_sha256": "2feea1eef7d55fc9b629757bbc4e8ed5ec41ce00da8840ed46bdd96d31eca936",
+  "umgebung": "Windows 11, Python 3.14.7, Tk 9.0.4, künstliche Daten, temporäres GLIDE_DATA_DIR",
+  "pflichtsuite": {
+    "datei": "pflichtsuite_3.43.0.json",
+    "gruen": 16,
+    "rot": 0
+  },
+  "gegenprobe_3_42_0": {
+    "datei": "gegenprobe_3.42.0.json",
+    "quelle": "git archive 05483a8 (gelieferter 3.42.0-Quellbaum)",
+    "gruen": 0,
+    "rot": 16
+  },
+  "unit_tests": 711,
+  "werkzeugtests": 150,
+  "eingefrorene_vollpruefung_windows": {
+    "kopie": "außerhalb von OneDrive, ohne .git/.claude/build/skills-main und ohne lokale Nutzerbilder",
+    "ausgefuehrt": 109,
+    "suiten_gruen": 92,
+    "fehlgeschlagen": [
+      "[fehlgeschlagen] standpruefung: Exitcode 1"
+    ],
+    "uebersprungen": [
+      "[übersprungen] Sichtprüfung: Bilder müssen von einer Person angesehen werden; native Plattformprüfung bleibt offen"
+    ],
+    "befund": "Einziger roter Schritt war die Standprüfung: Links der Bildreferenzen zeigten in den bewusst nicht versionierten Ordner bilder/, ein Planlink und eine Suitenzahl. Danach als reine Dokumentkorrektur behoben, Standprüfung erneut grün; kein ausführbarer Pfad geändert."
+  },
+  "lieferabgleich": {
+    "07_Python-Versionen": "67 Code- und 146 Ressourcendateien bytegleich",
+    "showcase": "sechs Dateien nach 05 übertragen, Import/Neustart/Export geprüft"
+  },
+  "messungen_vorher_nachher": {
+    "b01_scrolllage_nach_gelesen": [
+      0.27,
+      0.0
+    ],
+    "b07_mittellinie_px": [
+      10,
+      0
+    ],
+    "b08_kante_px": [
+      3,
+      0
+    ],
+    "b09_pfeil_zur_kappenmitte_px": [
+      1.5,
+      -0.3
+    ],
+    "b11_datumsspalte_px": [
+      281,
+      177
+    ],
+    "b16_groesster_radschritt_px": [
+      389,
+      30
+    ]
+  },
+  "offen": [
+    "native Linux-/Windows-Matrix und Windows-Paketlauf auf GitHub",
+    "Mac-Vollprüfung und Mac-Bundle",
+    "eigenständige Pakete 3.43.0",
+    "Menschen-/DPI-/Screenreaderabnahme",
+    "Produktentscheidungen E-U1–E-U4"
+  ]
+}

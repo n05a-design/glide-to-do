@@ -32,11 +32,11 @@ Reihenfolge der Stufen (Antwort des Inhabers vom 30.09.2026, bestätigt am 01.10
 | Stufe | Inhalt | Stand |
 |---|---|---|
 | 0 Fundament | Performance P01–P09, T2, CI | ◐ Ziele für Abhaken und Suche erreicht (3.33.19, 3.34.0); P03/E01 und Linux-Kalibrierung mit 3.36.0 geliefert; P05 im Sprint-Code fortsetzen |
-| 1 Klarer Alltag | Bereiche, Startseite, Eingabe, Eisenhower, Heute/Demnächst, UX1, Fokus, Komfort, Tag, Oberfläche Welle 1 | ◐ geliefert bis 3.33.21; Welle 2 nach I7 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen; AU03-Hinweise/AU07 mit 3.39.0 geliefert |
+| 1 Klarer Alltag | Bereiche, Startseite, Eingabe, Eisenhower, Heute/Demnächst, UX1, Fokus, Komfort, Tag, Oberfläche Welle 1 | ◐ geliefert bis 3.33.21; Welle 2 nach I7 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen; AU03-Hinweise/AU07 mit 3.39.0 geliefert; UI-/UX-Paket aus Nutzerbeobachtungen (§17) mit 3.43.0 |
 | 2 Wissen im Kontext | Suche, Verweise, Live-Liste, Titelbild, Kalender mit Wochenplanung, Bilder in Seiten, Filter erklären | ◐ geliefert 3.33.7–3.34.0; N05 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen |
 | 3 Pixel | Palettenbearbeitung, Symbolvorschau, Animation | ◐ G19, G-03 ✅ 3.35.0; G17 ✅ 3.40.0 geliefert |
 | 4 Austausch und Verteilung | KI-Austausch Stufe 2, Import, Sicherungsvergleich, Paket mit eigenem Python | ◐ G24, F-03 ✅ 3.35.0; G21 ✅ 3.41.0 geliefert; G26/D27 ✅ 3.42.0 geliefert |
-| 5 Zukunft (4.x) | Screenreader (Tk 9.1), Seitenversionen, SQLite nur nach D16-Neubewertung | ▶ N12 Aufgaben-Kernablauf durch D36/D44 für 4.0.0 beauftragt und vorbereitet; übrige Zukunftspunkte ◇ |
+| 5 Zukunft (4.x) | Screenreader (Tk 9.1), Seitenversionen, SQLite nur nach D16-Neubewertung | ◐ N12 Aufgaben-Kernablauf durch D36/D44 für 4.0.0 beauftragt und vorbereitet, seit D50 hinter dem UI-/UX-Paket pausiert; übrige Zukunftspunkte ◇ |
 
 ## 2. Erledigt seit 3.30
 
@@ -48,6 +48,7 @@ Reihenfolge der Stufen (Antwort des Inhabers vom 30.09.2026, bestätigt am 01.10
 | ✅ 3.33.7–3.33.12 | Inhaltssuche (G14), Windows-Formatsicherung; P08a, P09b, P08b; stabile Aktionskennungen, U03/U07; U10/U19, erste OB01-Übernahme |
 | ✅ 3.33.13–3.33.18 | KO01/AU02 Einplanen mit verfügbarer Zeit; Tagespaket AU01/AU03-Weg/G05/H-02; Aufgaben im Wissen G29/G31/G32 (Format 21); Bedienkomfort U01/U02/U13/U14/U16/U22/U24; Wissen und Woche N04/AU04, G08/G30 (Format 22); Seiten im Alltag G28/G09/U08 (Format 23) |
 | ✅ 3.33.19–3.35.0 | Sprint (§14): Tempo, Komfort, ruhige Oberfläche, Wissen und Seiten, Pixel und Austausch |
+| ◐ 3.43.0 | UI-/UX-Paket aus Nutzerbeobachtungen (§17, D50): B01–B20; automatisch geprüft und nach 07/05 geliefert, Mac-Vollprüfung und Bundle offen |
 | ✅ 01.–03.10.2026 | D09 Repository als Ablage, CI-Grundstufe, Ablagegröße, Bereinigung der Ablage und Dokumentation |
 
 ## 3. Performance (Stufe 0, beauftragt)
@@ -889,9 +890,9 @@ Nur lesend, ohne Tk-Fenster, am Lieferstand `7995ecbc…`; Werkzeuge und Ergebni
 
 ## 17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)
 
-**Ausgangsreferenz:** Glide 3.42.0, 15.10.2026, 13:42 Uhr. **Auftrag:** am 15.10.2026 als vorrangig vor Paket 8 beauftragt (D50). Ausgeführt am Arbeitszweig `claude/ui-ux-paket` auf Basis `origin/main` `27bac83` (enthält die P8-Vorbereitung bis PR #26; deren additive Zugänglichkeitsanbindungen bleiben unverändert erhalten). Quellstand umgesetzt, gezielt geprüft und gegen die gelieferte 3.42.0 rot gegengeprüft; **noch keine neue Produktionsversion**, kein eingefrorener Volllauf, kein 07-/Bundle-Abgleich und kein Upload.
+**Ausgangsreferenz:** Glide 3.42.0, 15.10.2026, 13:42 Uhr. **Auftrag:** am 15.10.2026 als vorrangig vor Paket 8 beauftragt (D50). Umgesetzt auf `claude/ui-ux-paket` (Basis `origin/main` `27bac83` mit der P8-Vorbereitung bis PR #26; deren additive Zugänglichkeitsanbindungen bleiben unverändert und reisen mit 3.43.0 mit, ohne Paket 8 zu liefern). **Geliefert als 3.43.0 am 16.10.2026** nach `07_Python-Versionen` und `05_Probelisten_Testdaten`; eingefrorene Windows-Vollprüfung und native Linux-/Windows-Matrix siehe [Nachweis](../01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md). Offen: Mac-Vollprüfung und Mac-Bundle (nur auf dem Referenz-Mac), eigenständige Pakete 3.43.0, Menschenabnahme, Produktentscheidungen E-U1–E-U4.
 
-[Vollständiger Ausführungsprompt](Featurepaket_UI_UX/PROMPT.md) · [unveränderter Originalauftrag](Featurepaket_UI_UX/AUFTRAG.md) · [Bildreferenzen S01–S28](Featurepaket_UI_UX/BILDREFERENZEN.md) · [Design Richtlinien](../01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) · [Prüfnachweis](../01_Repository/Glide/tests/qa-3.43.0/ui_ux_umsetzung_2026-10-15/README.md).
+[Vollständiger Ausführungsprompt](Featurepaket_UI_UX/PROMPT.md) · [unveränderter Originalauftrag](Featurepaket_UI_UX/AUFTRAG.md) · [Bildreferenzen S01–S28](Featurepaket_UI_UX/BILDREFERENZEN.md) · [Design Richtlinien](../01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) · [Prüfnachweis](../01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md).
 
 Die Kennungen bilden die Originalnummerierung ab (A01 = A.1, B01 = B.1 …). **Belege:** Pflichtsuite `tests/integration/test_uiux_paket.py` (16 Fälle, alle grün; dieselben 16 Fälle gegen `07_Python-Versionen` 3.42.0 alle rot mit dem jeweiligen Ursprungsfehler), 710 Unit-Tests, Vorher-/Nachher-Fensteraufnahmen desselben Kontexts (künstliche Showcase-Daten, Windows 11/Tk 9.0.4). Menschliche Sicht-, DPI- und Screenreaderabnahme bleibt für alle Punkte getrennt offen.
 
@@ -900,30 +901,30 @@ Die Kennungen bilden die Originalnummerierung ab (A01 = A.1, B01 = B.1 …). **B
 | A01 | Kompaktmodus, kleinere Mindestgröße | ◐ untersucht, Auswahl offen | Ursachen der Grenze 860 × 700 und Entwurf unten; Probe an echten Inhalten | Produktentscheidung E-U1 |
 | A02 | Zweitfenster oder geteilte Ansicht | ◐ untersucht, Auswahl offen | Optionen, Konflikt mit „eingebettet“, Aufwand unten | Produktentscheidung E-U2 |
 | A03 | Notion-Muster | ◐ untersucht, Auswahl offen | priorisierte Tabelle in [Markt und Vorbilder §10](Glide_Markt_und_Vorbilder.md#10-notion-muster-für-glide-a03-15102026) | Produktentscheidung E-U3 |
-| B01 | Startseite nach „Gelesen“ an den Anfang | ✅ Quellstand | `_refresh_home` setzt nach „Gelesen“ die Lage 0; Suite b01 (vorher 0,27) | Lieferung |
-| B02 | „Startseite anpassen“ links | ✅ Quellstand | linke Rasterkante bei 860/1280/1600 px; b02 | Lieferung |
-| B03 | Gismo fest, Spielereien aktiv | ✅ Quellstand | `home_tiles.retire_mascot_settings`, Sichtbarkeit nur über die Kachel; b03, Unit-Tests | Lieferung |
-| B04 | Galeriebilder auf der Startseite | ✅ Quellstand | Kachel „Galeriebilder“ (Standard, eigene Auswahl bleibt), Vorschau im Leerlauf, Klick öffnet Bild; b04 | Lieferung |
-| B05 | Logohöhe | ✅ Quellstand | Großbuchstabenhöhe bis Grundlinie der Unterzeile; b05 (vorher 6 px darunter) | Lieferung, DPI-Sichtprüfung |
-| B06 | Datum/„?“ weg, Hinweisschalter | ✅ Quellstand | Einstellung `show_hints`, Übernahme alter Wahl; b06_b15, Unit-Tests; D11 fortgeschrieben | Lieferung |
-| B07 | Menüs und Kopfsymbole ausgerichtet | ✅ Quellstand | eine Titelzeile, `HEADER_CONTROL_HEIGHT`; b07 (vorher 10 px Versatz) | Lieferung, DPI-Sichtprüfung |
-| B08 | Linke Flucht Fehlerprotokoll | ✅ Quellstand | Dialogüberschrift ohne Labelrand; b08 (vorher 3 px) | Lieferung |
-| B09 | Pfeile/Papierkorb optisch zentriert | ◐ Quellstand | `glyph_metrics.py`: Bereichspfeile −0,3 px, Papierkorbsymbol +2 px auf Bezugsform; b09 | Pfadtrenner „›“ in „Pinnwände“: Entscheidung E-U4 |
-| B10 | Lupe statt „Su“ | ✅ Quellstand | ⌕ aus Segoe UI Symbol (Windows) nach `SYMBOL_FONT_FALLBACKS`; b10; D29 präzisiert | macOS/Linux nativ prüfen |
-| B11 | Informationspriorität, Titelbreite | ✅ Quellstand | Metadaten auf Inhaltsbreite (Labels 177 statt 281 px), Matrix in Design Richtlinien geprüft; b11 | Sichtprüfung bei großer Schrift |
-| B12 | Eindeutige Pfeile in Heute | ✅ Quellstand | kein ▶/△ neben dem Aufklapppfeil; b12_b13 | Lieferung |
-| B13 | Nächste Aufgabe nur Titel fett | ✅ Quellstand | Zelltag `today_next_title` in Zeilengröße; b12_b13; D22 präzisiert | Lieferung |
-| B14 | Kein Kästchen vor „Aufgabe“ | ✅ Quellstand | Blockleiste; b14 | Lieferung |
-| B15 | Papierkorbtext, Buttonschutz | ✅ Quellstand | kurzer Text, `_follow_empty_text`; 12 Kombinationen ohne Überdeckung (b06_b15) | appweite Sichtprüfung weiterer Dialoge |
-| B16 | Scrollsprung über Bildern | ✅ Quellstand | Rad über Bild pixelweise wie Text; größter Schritt 30 statt 389 px (b16) | Trackpad/macOS nativ |
-| B17 | Hintergrundkästen oberer Aktionen | ✅ Quellstand | Trägerfläche statt Fensterfarbe, konturlose Knöpfe in Ruhe durchsichtig; b17_b19 | alle Designs sichten |
-| B18 | Neuerungen unter „Über Glide“ | ✅ Quellstand | „Neuerungen …“ aus `release_notes.history_text`; b18; Pflegeverfahren in Veröffentlichung | Katalogeintrag der neuen Version beim Versionswechsel |
-| B19 | Hintergrundkästen Punktbearbeitung | ✅ Quellstand | `DueField.surface`, Kalenderknopf in `blend_embedded_editor`; b17_b19 | alle Designs sichten |
-| B20 | Skills neutral als Design Richtlinien | ✅ Quellstand | Skill `design-richtlinien`, Fremdtext mit Lizenz unter `referenzen/`, Prüfung `test_design_richtlinien.py` | – |
+| B01 | Startseite nach „Gelesen“ an den Anfang | ✅ 3.43.0 | `_refresh_home` setzt nach „Gelesen“ die Lage 0; Suite b01 (vorher 0,27) | Mac-Abnahme, Menschenabnahme |
+| B02 | „Startseite anpassen“ links | ✅ 3.43.0 | linke Rasterkante bei 860/1280/1600 px; b02 | Mac-Abnahme, Menschenabnahme |
+| B03 | Gismo fest, Spielereien aktiv | ✅ 3.43.0 | `home_tiles.retire_mascot_settings`, Sichtbarkeit nur über die Kachel; b03, Unit-Tests | Mac-Abnahme, Menschenabnahme |
+| B04 | Galeriebilder auf der Startseite | ✅ 3.43.0 | Kachel „Galeriebilder“ (Standard, eigene Auswahl bleibt), Vorschau im Leerlauf, Klick öffnet Bild; b04 | Mac-Abnahme, Menschenabnahme |
+| B05 | Logohöhe | ✅ 3.43.0 | Großbuchstabenhöhe bis Grundlinie der Unterzeile; b05 (vorher 6 px darunter) | Mac-Abnahme, DPI-Sichtprüfung |
+| B06 | Datum/„?“ weg, Hinweisschalter | ✅ 3.43.0 | Einstellung `show_hints`, Übernahme alter Wahl; b06_b15, Unit-Tests; D11 fortgeschrieben | Mac-Abnahme, Menschenabnahme |
+| B07 | Menüs und Kopfsymbole ausgerichtet | ✅ 3.43.0 | eine Titelzeile, `HEADER_CONTROL_HEIGHT`; b07 (vorher 10 px Versatz) | Mac-Abnahme, DPI-Sichtprüfung |
+| B08 | Linke Flucht Fehlerprotokoll | ✅ 3.43.0 | Dialogüberschrift ohne Labelrand; b08 (vorher 3 px) | Mac-Abnahme, Menschenabnahme |
+| B09 | Pfeile/Papierkorb optisch zentriert | ◐ 3.43.0 | `glyph_metrics.py`: Bereichspfeile −0,3 px, Papierkorbsymbol +2 px auf Bezugsform; b09 | Pfadtrenner „›“ in „Pinnwände“: Entscheidung E-U4 |
+| B10 | Lupe statt „Su“ | ✅ 3.43.0 | ⌕ aus Segoe UI Symbol (Windows) nach `SYMBOL_FONT_FALLBACKS`; b10; D29 präzisiert | macOS/Linux nativ prüfen |
+| B11 | Informationspriorität, Titelbreite | ✅ 3.43.0 | Metadaten auf Inhaltsbreite (Labels 177 statt 281 px), Matrix in Design Richtlinien geprüft; b11 | Sichtprüfung bei großer Schrift |
+| B12 | Eindeutige Pfeile in Heute | ✅ 3.43.0 | kein ▶/△ neben dem Aufklapppfeil; b12_b13 | Mac-Abnahme, Menschenabnahme |
+| B13 | Nächste Aufgabe nur Titel fett | ✅ 3.43.0 | Zelltag `today_next_title` in Zeilengröße; b12_b13; D22 präzisiert | Mac-Abnahme, Menschenabnahme |
+| B14 | Kein Kästchen vor „Aufgabe“ | ✅ 3.43.0 | Blockleiste; b14 | Mac-Abnahme, Menschenabnahme |
+| B15 | Papierkorbtext, Buttonschutz | ✅ 3.43.0 | kurzer Text, `_follow_empty_text`; 12 Kombinationen ohne Überdeckung (b06_b15) | appweite Sichtprüfung weiterer Dialoge |
+| B16 | Scrollsprung über Bildern | ✅ 3.43.0 | Rad über Bild pixelweise wie Text; größter Schritt 30 statt 389 px (b16) | Trackpad/macOS nativ |
+| B17 | Hintergrundkästen oberer Aktionen | ✅ 3.43.0 | Trägerfläche statt Fensterfarbe, konturlose Knöpfe in Ruhe durchsichtig; b17_b19 | alle Designs sichten |
+| B18 | Neuerungen unter „Über Glide“ | ✅ 3.43.0 | „Neuerungen …“ aus `release_notes.history_text`; b18; Pflegeverfahren in Veröffentlichung | Katalogeintrag der neuen Version beim Versionswechsel |
+| B19 | Hintergrundkästen Punktbearbeitung | ✅ 3.43.0 | `DueField.surface`, Kalenderknopf in `blend_embedded_editor`; b17_b19 | alle Designs sichten |
+| B20 | Skills neutral als Design Richtlinien | ✅ 3.43.0 | Skill `design-richtlinien`, Fremdtext mit Lizenz unter `referenzen/`, Prüfung `test_design_richtlinien.py` | – |
 | B21 | Verständliche Übergabe | ◐ | Übergabe, Plan, Richtlinien, Prompt verknüpft; Prüfnachweis angelegt | nach Lieferung abschließen |
 | B22 | Dokumentation/Ablage/Projektauftritt zuletzt | ○ | bewusst letzter Schritt nach Lieferabgleich | nach Versionswechsel, 07-Abgleich und Volllauf |
 
-**Status „✅ Quellstand“** heißt: umgesetzt und automatisch geprüft, aber noch nicht als Produktionsversion geliefert. ✅ im Sinn von §Statusmarken (mit Version, geliefert) folgt erst nach Versionswechsel, eingefrorenem Volllauf, 07-/Bundle-Abgleich und nativer Windows-/Linux-Matrix.
+**Status „✅ 3.43.0“** heißt hier: umgesetzt, automatisch geprüft (Windows lokal eingefroren, native Linux-/Windows-Matrix) und nach 07/05 geliefert. Abweichend von §Statusmarken fehlen noch die eingefrorene Mac-Vollprüfung und das Mac-Bundle; sie werden auf dem Referenz-Mac nachgeholt.
 
 **Beobachtung außerhalb des Pakets:** `test_ui_followup36.py` bleibt auf diesem Windows-Rechner in `root.update()` hängen – identisch am unveränderten Stand `27bac83` (Gegenprobe). Kein Befund dieses Pakets; vor dem Volllauf auf dem Referenz-Mac bzw. in der nativen CI prüfen. Ebenso unverändert vorhanden: In der Showcase-Liste „Vermarktung · Umsetzung“ steht über der Pinnwand der Inhalt der Seite „Parkquartier · Briefing und Freigabe“ (gleiches Bild am Ausgangsstand).
 
