@@ -2,6 +2,9 @@ import sys as _sys
 from pathlib import Path as _Path
 _sys.path.insert(0, str(_Path(__file__).resolve().parents[2] / 'packaging/paket'))
 import errno
+import os
+import subprocess
+import sys
 import unittest
 import tempfile
 from pathlib import Path
@@ -93,6 +96,64 @@ class NativeDenialEvidence(unittest.TestCase):
                      'Python\r\nD:AI\r\nPython\r\nD:AI\r\n'):
             with self.subTest(text=text), self.assertRaises(ValueError):
                 acl_snapshot(text.encode('utf-16'))
+
+
+class StartProbeLinkContract(unittest.TestCase):
+    def test_every_acl_save_and_restore_treats_symlinks_as_own_objects(self):
+        # Ohne /L sichert icacls für einen Symlink die DACL des Ziels und
+        # /restore schreibt durch den Link hindurch (Lauf 38927787712).
+        source = (_Path(__file__).resolve().parents[2]/'packaging/paket/pruefe_start_windows.py').read_text(encoding='utf-8')
+        calls = [line.strip() for line in source.splitlines() if "'/save'" in line or "'/restore'" in line]
+        self.assertEqual(len(calls), 3)
+        for line in calls:
+            with self.subTest(line=line):
+                self.assertIn("'/L'", line)
+
+
+@unittest.skipUnless(sys.platform == 'win32', 'Native Windows-ACLs')
+class NativeLinkRestoration(unittest.TestCase):
+    """Originale CI-Symlinks: DACL des Links selbst, Ziel unberührt.
+
+    Wirkt nur auf den eigenen temporären Ordner; die Hosted-CI-Umgebung ist
+    für den Grenzvertrag nachgebildet, gesperrt wird hier nichts.
+    """
+
+    def icacls(self, *args):
+        tool = Path(os.environ['SYSTEMROOT'])/'System32'/'icacls.exe'
+        result = subprocess.run([str(tool), *map(str, args)], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout+result.stderr)
+
+    def snapshot(self, path, backup):
+        self.icacls(path, '/save', backup, '/T', '/L', '/Q')
+        return acl_snapshot(backup.read_bytes())
+
+    def test_symlink_dacl_is_restored_on_the_link_without_touching_the_target(self):
+        from windows_acl import OriginalAclRestorer
+        with tempfile.TemporaryDirectory() as folder:
+            temp = Path(folder).resolve()
+            source = temp/'paket-runtime'
+            (source/'Lib').mkdir(parents=True);(source/'Misc').mkdir()
+            target = source/'Lib'/'token.py';target.write_text('x')
+            link = source/'Misc'/'token.py'
+            try:
+                link.symlink_to(Path('..')/'Lib'/'token.py')
+            except OSError:
+                self.skipTest('Prüfstand erlaubt keine temporären Dateisymlinks')
+            # Verschiedene Regeln an Link und Ziel zeigen, welches Objekt gesichert ist.
+            self.icacls(link, '/grant', '*S-1-1-0:(R)', '/L', '/Q')
+            self.icacls(target, '/grant', '*S-1-5-32-545:(RX)', '/Q')
+            original = self.snapshot(source, temp/'vorher.txt')
+            target_before = self.snapshot(target, temp/'ziel-vorher.txt')
+            self.icacls(link, '/remove:g', '*S-1-1-0', '/L', '/Q')
+            self.assertNotEqual(acl_rules(self.snapshot(source, temp/'gestoert.txt')), acl_rules(original))
+            environment = {'GITHUB_ACTIONS':'true','CI':'true','RUNNER_ENVIRONMENT':'github-hosted','RUNNER_OS':'Windows',
+                           'RUNNER_TEMP':str(temp),'RUNNER_TOOL_CACHE':str(temp/'werkzeuge'),
+                           'GITHUB_WORKSPACE':str(temp/'projekt'),'SYSTEMROOT':os.environ['SYSTEMROOT']}
+            result = OriginalAclRestorer(environment, temp/'paket', temp/'bericht.json', [source]).restore(source, original)
+            self.assertEqual(result['fehler'], [])
+            self.assertEqual(result['reparsepunkte'], [str(link)])
+            self.assertEqual(acl_rules(self.snapshot(source, temp/'nachher.txt')), acl_rules(original))
+            self.assertEqual(acl_rules(self.snapshot(target, temp/'ziel-nachher.txt')), acl_rules(target_before))
 
 
 class RuntimeReadProbe(unittest.TestCase):

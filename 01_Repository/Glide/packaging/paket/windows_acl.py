@@ -4,6 +4,8 @@ Nur der bereits auf Hosted-CI begrenzte Startprüfer verwendet diese Schnittstel
 Unvererbte Original-ACEs brauchen SetFileSecurityW ohne Propagation.
 Bereits geschützte Originale brauchen SetNamedSecurityInfoW für ihren P-Schutz;
 die vollständige Restaurierung läuft deshalb Eltern vor Kindern.
+Symlinks sind eigene Objekte: Ihre mit icacls /L gesicherte DACL wird ohne
+Zielverfolgung wörtlich am Linkhandle gesetzt.
 """
 import ctypes
 from ctypes import wintypes
@@ -35,10 +37,9 @@ class OriginalAclRestorer:
         self.apply_protected.argtypes = [wintypes.LPWSTR, ctypes.c_int, wintypes.DWORD,
                                          ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p]
         self.apply_protected.restype = wintypes.DWORD
-        self.apply_handle = self.api.SetSecurityInfo
-        self.apply_handle.argtypes = [wintypes.HANDLE, ctypes.c_int, wintypes.DWORD,
-                                      ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p]
-        self.apply_handle.restype = wintypes.DWORD
+        self.apply_handle = self.api.SetKernelObjectSecurity
+        self.apply_handle.argtypes = [wintypes.HANDLE, wintypes.DWORD, ctypes.c_void_p]
+        self.apply_handle.restype = wintypes.BOOL
         self.kernel = ctypes.WinDLL('kernel32', use_last_error=True)
         self.free = self.kernel.LocalFree
         self.free.argtypes = [ctypes.c_void_p]
@@ -62,8 +63,24 @@ class OriginalAclRestorer:
                 if not self.convert(dacl, 1, ctypes.byref(descriptor), None):
                     raise ctypes.WinError(ctypes.get_last_error())
                 information = restoration_security_information(dacl)
-                reparse = bool(Path(path).lstat().st_file_attributes & 0x400)
-                if reparse or information & 0x80000000:
+                if Path(path).lstat().st_file_attributes & 0x400:
+                    # Originale CI-Symlinks (CPythons Misc/mypy, python3.exe im
+                    # Tool-Cache). Die Sperre erreicht den Link selbst; dessen
+                    # DACL wird wörtlich gesetzt, ohne Vererbung neu zu
+                    # berechnen und ohne das Ziel zu berühren. SetSecurityInfo
+                    # müsste dafür erst lesen und scheitert am reinen
+                    # WRITE_DAC-Handle mit WinError 5.
+                    handle = self.open(path, 0x40000, 7, None, 3, 0x00200000 | 0x02000000, None)
+                    if handle in (None, ctypes.c_void_p(-1).value):
+                        raise ctypes.WinError(ctypes.get_last_error())
+                    try:
+                        if not self.apply_handle(handle, information, descriptor):
+                            raise ctypes.WinError(ctypes.get_last_error())
+                        reparse_points.append(path)
+                    finally:
+                        if not self.close(handle):
+                            raise ctypes.WinError(ctypes.get_last_error())
+                elif information & 0x80000000:
                     # SetFileSecurityW ignoriert den gesicherten P-Schutz auf
                     # dem nativen Prüfstand. Nur diese Originale explizit setzen.
                     present, defaulted, original_dacl = wintypes.BOOL(), wintypes.BOOL(), ctypes.c_void_p()
@@ -71,20 +88,7 @@ class OriginalAclRestorer:
                         raise ctypes.WinError(ctypes.get_last_error())
                     if not present.value or not original_dacl.value:
                         raise ValueError('Gesicherte geschützte DACL fehlt; keine NULL-DACL setzen.')
-                    if reparse:
-                        # CPythons Misc/mypy-Dateien sind originale Symlinks.
-                        # Deren gesicherte DACL gehört zum Link, nicht zum Ziel.
-                        handle = self.open(path, 0x40000, 7, None, 3, 0x00200000 | 0x02000000, None)
-                        if handle in (None, ctypes.c_void_p(-1).value):
-                            raise ctypes.WinError(ctypes.get_last_error())
-                        try:
-                            code = self.apply_handle(handle, 1, information, None, None, original_dacl, None)
-                            reparse_points.append(path)
-                        finally:
-                            if not self.close(handle):
-                                raise ctypes.WinError(ctypes.get_last_error())
-                    else:
-                        code = self.apply_protected(path, 1, information, None, None, original_dacl, None)
+                    code = self.apply_protected(path, 1, information, None, None, original_dacl, None)
                     if code:
                         raise ctypes.WinError(code)
                 elif not self.apply(path, 0x4, descriptor):

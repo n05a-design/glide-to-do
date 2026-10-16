@@ -67,7 +67,7 @@
     ]
   },
   "offen": [
-    "ACL-Restaurierung von Reparse-Punkten in der Windows-Paketprobe (PR #26, Paket 8); drei Linux-Suiten aus PR #26 in Paket 8",
+    "GitHub-Bestätigung der im Nachlauf acl_symlinks_2026-10-16 behobenen ACL-Restaurierung von Reparse-Punkten; drei Linux-Suiten aus PR #26 in Paket 8",
     "Mac-Vollprüfung und Mac-Bundle",
     "eigenständige Pakete 3.43.0",
     "Menschen-/DPI-/Screenreaderabnahme",

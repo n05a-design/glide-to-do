@@ -92,7 +92,7 @@ Auswertung der Protokolle beider Vollprüfungen und des Windows-Artefakts (16.10
 
 ## Offen
 
-- **GitHub:** Windows-Vollprüfung grün; Linux bis Paket 8 rot durch `test_tempo330`, `test_planen33313`, `test_oberflaeche33321` und „Kalibrierte Erwartungen“ (Tk-9.1-Umstellung durch PR #26). Windows-Paketlauf: Paket grün, rot nur die ACL-Restaurierung von Reparse-Punkten in der Prüfung (seit PR #26, Paket 8).
+- **GitHub:** Windows-Vollprüfung grün; Linux bis Paket 8 rot durch `test_tempo330`, `test_planen33313`, `test_oberflaeche33321` und „Kalibrierte Erwartungen“ (Tk-9.1-Umstellung durch PR #26). Windows-Paketlauf: Paket grün, rot nur die ACL-Restaurierung von Reparse-Punkten in der Prüfung (seit PR #26) – im [Nachlauf 16.10.2026](../acl_symlinks_2026-10-16/README.md) behoben, GitHub-Bestätigung offen.
 - **macOS-Bundle und Mac-Vollprüfung:** auf Windows nicht baubar bzw. ausführbar; `packaging/macos/baue_app.py` und die eingefrorene Mac-Vollprüfung auf dem Referenz-Mac stehen aus. Bundle und eigenständige Pakete tragen bis dahin 3.42.0.
 - **Menschenabnahme:** Sicht, DPI 100–200 %, Trackpad, große Schrift, alle Designs sowie Screenreader nach der [Prüfliste](../../../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md#ui-ux-paket-15102026-b01b19).
 - **Produktentscheidungen** E-U1–E-U3 (A01–A03) beim Inhaber.
