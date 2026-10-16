@@ -73,7 +73,10 @@ with tempfile.TemporaryDirectory(prefix="glide-tempo-") as ordner:
             start = time.perf_counter()
             if packed and touchpad_supported:
                 widget.event_generate("<TouchpadScroll>", delta=richtung & 0xffff, x=x, y=y)
-            elif sys.platform.startswith("linux"):
+            elif sys.platform.startswith("linux") and not touchpad_supported:
+                # Nur Tk 8 meldet das X11-Rad als Taste 4/5. Tk 9 liest das Muster
+                # <Button-4>/<Button-5> als Taste 8/9 und wandelt die echten Radtasten
+                # in <MouseWheel> mit ±120 (Tk_HandleEvent) – das erzeugt der Zweig unten.
                 widget.event_generate("<Button-5>" if richtung < 0 else "<Button-4>", x=x, y=y)
             else:
                 widget.event_generate("<MouseWheel>", delta=-120 if richtung < 0 else 120, x=x, y=y)

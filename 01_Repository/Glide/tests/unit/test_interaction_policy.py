@@ -48,3 +48,34 @@ class InteractionTests(unittest.TestCase):
         self.assertEqual(policy.date_text('7.10.', '7.10.', 'F', 'P'), 'F 7.10. · P 7.10.')
         self.assertEqual(policy.date_text('', '7.10.', 'F', 'P'), 'P 7.10.')
         self.assertEqual(policy.date_text('', '', 'F', 'P'), '')
+
+    def test_emacs_trigger_is_control_with_one_letter(self):
+        # 3.43.1: Tks X11-Emacs-Sequenzen aus ::tk::EventMotifBindings.
+        for sequenz in ('<Control-P>', '<Control-Lock-p>', '<Control-Key-p>', '<Control-Shift-P>', '<Control-a>'):
+            self.assertTrue(policy.is_emacs_trigger(sequenz), sequenz)
+        for sequenz in ('<Up>', '<Shift-Up>', '<Control-Left>', '<Control-Shift-Home>', '<Meta-w>',
+                        '<Alt-Control-p>', '<Control-F10>', '<<PrevLine>>', 'Control-p', '', None):
+            self.assertFalse(policy.is_emacs_trigger(sequenz), sequenz)
+
+    def test_only_navigation_events_with_emacs_trigger_are_guarded(self):
+        # Ausschnitt aus Tk 9.1 unter X11: Treeview-Klasse und `event info`.
+        klasse = ['<<PrevLine>>', '<<SelectPrevLine>>', '<<PrevWord>>', '<<Copy>>', '<Prior>', '<<LineStart>>']
+        folgen = {'<<PrevLine>>': ['<Up>', '<Control-p>', '<Control-Lock-P>'],
+                  '<<SelectPrevLine>>': ['<Shift-Up>', '<Control-P>', '<Control-Lock-p>'],
+                  '<<PrevWord>>': ['<Control-Left>'],
+                  '<<Copy>>': ['<Control-c>', '<F16>'],  # Kopieren ist keine Emacs-Navigation
+                  '<<LineStart>>': ['<Home>']}       # tk_strictMotif: ohne Strg+A
+        self.assertEqual(policy.emacs_guarded_events(klasse, folgen), ['<<PrevLine>>', '<<SelectPrevLine>>'])
+        # Windows/macOS und Tk bis 9.0: keine Navigation über Strg-Buchstaben.
+        self.assertEqual(policy.emacs_guarded_events(klasse, {'<<SelectPrevLine>>': ['<Shift-Up>']}), [])
+        self.assertEqual(policy.emacs_guarded_events([], folgen), [])
+
+    def test_guarded_script_skips_letters_and_is_idempotent(self):
+        original = '::ttk::treeview::KeyNav %W up extend'
+        geschuetzt = policy.guard_emacs_script(original)
+        self.assertTrue(geschuetzt.startswith(policy.EMACS_GUARD_MARK))
+        self.assertIn('if {[string length %K] != 1} {\n' + original + '\n}', geschuetzt)
+        self.assertNotIn('break', geschuetzt)  # Fenster- und Anwendungskürzel laufen weiter
+        self.assertEqual(geschuetzt.count('{'), geschuetzt.count('}'))
+        self.assertEqual(policy.guard_emacs_script(geschuetzt), geschuetzt)
+        self.assertEqual(policy.guard_emacs_script(''), '')

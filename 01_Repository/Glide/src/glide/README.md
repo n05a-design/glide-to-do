@@ -1,6 +1,6 @@
 # Anwendungskern
 
-Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
 
 `app.pyw` ist die kanonische Anwendung (Klasse `ListApp`). Daneben liegen Module, die beim Start aus demselben Ordner geladen werden und beim Kopieren oder Paketieren immer mitgehen:
 
@@ -29,7 +29,7 @@ Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · Einstellungen 2 · Vorl
 | `day_proposal.py` | Erklärbare Tagesauswahl, Budget und Prüfung veralteter Vorschläge (Tk-frei, AU01) |
 | `focus_timer.py` | Pausierbarer Fokus und genau einmal gebuchte Zeit (Tk-frei, G05/AU05) |
 | `task_references.py` | Heimat und Textverweise, Quellenindex, Zielzustand, ID-Neuvergabe und bearbeitete Zeilentitel ohne Tk |
-| `interaction_policy.py` | Palettensuche, gemerkte Hinweise und getrennte Datumsanzeige (Tk-frei) |
+| `interaction_policy.py` | Palettensuche, gemerkte Hinweise, getrennte Datumsanzeige und X11-Emacs-Auslöser in Listen (Tk-frei) |
 | `object_references.py` | Typisierte lokale Verweise, abgeleitete Rückverweise und Import-/Kopierregeln (Tk-frei) |
 | `week_planning.py` | Gemeinsame Wochenbilanz und Zeitfenster aus vorhandenen Glide-Blöcken (Tk-frei) |
 | `page_features.py` | Live-Listen, Titelbilder und gefüllte Vorlagenvorschau (Tk-frei) |

@@ -1,0 +1,97 @@
+{
+  "datum": "2026-10-16",
+  "app_version": "3.43.1",
+  "app_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+  "datenformat": 25,
+  "gegenstand": "Produktionsrunde 3.43.1 auf Wunsch des Inhabers: rote Linux-Suiten der GitHub-Vollprüfung mit eigener Tk 9.1 ausgewertet, Glide-Fehler (X11-Emacs-Auslöser in der Treeview) behoben, zwei Prüfwerkzeuge korrigiert",
+  "plattform": "Windows 11 Pro, Python 3.14.7, Tk 9.0.4, künstliche Daten; Linux nicht nativ ausgeführt",
+  "anlass": {
+    "lauf": 38930140166,
+    "job": 117073693137,
+    "commit": "8b59a8b",
+    "fehler": {
+      "test_tempo330": "Zeile 98 (Vergleichsansicht reines Tk): Scrollereignisse bewegen die lange Prüfansicht nicht",
+      "test_planen33313": "Zeile 191 (<Control-Shift-P>): Einplanen-Menü wurde nicht geöffnet",
+      "test_oberflaeche33321": "Zeile 114 nach neu_starten(): design_name() != pixel",
+      "kalibrierte_erwartungen": "16 Muster passend rot; scrollen und datum ohne grüne Basissuite"
+    }
+  },
+  "ursachen": {
+    "test_tempo330": {
+      "art": "Prüfwerkzeug",
+      "beleg": "Tk 9 GetButtonNumber: <Button-4/5> = Taste 8/9; nur echte X11-Radtasten 4-7 werden <MouseWheel> ±120 (Tk_HandleEvent); lokal unter Tk 9.0.4: erzeugtes <Button-5> kommt als Taste 9"
+    },
+    "test_oberflaeche33321": {
+      "art": "Prüfisolation",
+      "beleg": "Xvfb ohne Fenstermanager: neues Hauptfenster bekommt <FocusIn>, sync_system_appearance fragt gsettings (hell); Simulation unter Windows vorher rot an Zeile 114, nachher grün"
+    },
+    "test_planen33313": {
+      "art": "Glide",
+      "beleg": "X11 ::tk::EventMotifBindings: <Control-P> -> <<SelectPrevLine>>; Tk 9.1 treeview.tcl bindet <<SelectPrevLine>> an KeyNav up extend; Auswahl sprang auf section:timeplan; Nachstellung unter Windows rot wie in der CI"
+    }
+  },
+  "tk_pin": "3f45110c0a568b70f2ebd5412f215e87d199bc7d",
+  "geaendert": [
+    "01_Repository/Glide/src/glide/interaction_policy.py",
+    "01_Repository/Glide/src/glide/app.pyw",
+    "01_Repository/Glide/tests/unit/test_interaction_policy.py",
+    "01_Repository/Glide/tests/integration/test_planen33313.py",
+    "01_Repository/Glide/tests/integration/test_tempo330.py",
+    "01_Repository/Glide/tests/integration/test_oberflaeche33321.py"
+  ],
+  "pruefungen": {
+    "unit_interaction_policy": {
+      "faelle": 9,
+      "neu": 3,
+      "gruen": 9
+    },
+    "test_planen33313": "grün",
+    "gegenprobe_planen_3_43_0": "rot: Einplanen-Menü wurde nicht geöffnet",
+    "test_tempo330": "grün",
+    "test_oberflaeche33321": "grün",
+    "simulation_oberflaeche_hell_fokus": {
+      "vorher": "rot Zeile 114",
+      "nachher": "grün"
+    },
+    "linux_gegenproben_windows": {
+      "scrollen": "passend rot",
+      "datum": "passend rot"
+    },
+    "vollpruefung_eingefroren": {
+      "schritte": 111,
+      "ausgefuehrt_gruen": 108,
+      "fehlgeschlagen": [
+        "standpruefung",
+        "test_tag3390"
+      ],
+      "uebersprungen": [
+        "Sichtprüfung"
+      ],
+      "suiten": "91 von 92",
+      "units": 714,
+      "standpruefung": "rot nur wegen fehlender .claude/skills in der Kopie; ergänzt grün",
+      "test_tag3390": "abwechselnd unter 3.43.1 und 3.43.0 je zweimal rot an denselben Stellen (Speichern nicht sichtbar; Fokus Zeile 297); nicht durch 3.43.1"
+    },
+    "test_template_workflows": {
+      "3.43.1": "4 grün / 3 rot",
+      "3.43.0": "5 grün / 1 rot",
+      "befund": "Auswahl-Popup schließt sich von selbst; vorbestehend"
+    },
+    "ci_grundstufe_windows": {
+      "exitcode": 0,
+      "werkzeugtests": 152,
+      "units": 714
+    }
+  },
+  "lieferabgleich": {
+    "abgleich_07": "67 Code-/146 Ressourcendateien bytegleich, 3.43.0 ins Archiv",
+    "showcase": "abgeglichen, sechs Dateien",
+    "mac_bundle": "nicht gebaut (Windows)"
+  },
+  "offen": [
+    "GitHub-Bestätigung Linux-Vollprüfung und Kalibrierte Erwartungen nach Push",
+    "test_tag3390 bei aktivem Desktop bzw. in der GitHub-Windows-Vollprüfung",
+    "Mac-Vollprüfung und baue_app.py auf dem Referenz-Mac",
+    "Linux-Tastaturabnahme D5 der Prüfliste"
+  ]
+}

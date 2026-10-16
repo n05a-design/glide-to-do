@@ -1,6 +1,6 @@
 # Design Richtlinien
 
-Stand 16.10.2026 · Glide 3.43.0 · zentrale UI-/UX-Vorgaben; UI-/UX-Paket mit 3.43.0 umgesetzt
+Stand 16.10.2026 · Glide 3.43.1 · zentrale UI-/UX-Vorgaben; UI-/UX-Paket mit 3.43.1 umgesetzt
 
 Dieses Dokument sammelt die belegten Gestaltungsvorgaben des Inhabers und ihre Konsequenzen für Glide. Es ist agentenunabhängig lesbar; der Claude-Code-Skill `design-richtlinien` (`.claude/skills/design-richtlinien/`) verweist nur hierher. Produktentscheidungen stehen weiterhin in [Arbeitsrichtung](ARBEITSRICHTUNG.md), Produktgrenzen in [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md), technische Umsetzung in [Architektur](02_ARCHITECTURE.md), Funktionsverhalten in [Funktionen](20_FUNKTIONEN.md) und Aufgabenstatus im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Diese Zuständigkeiten nicht durch Kopien ersetzen.
 

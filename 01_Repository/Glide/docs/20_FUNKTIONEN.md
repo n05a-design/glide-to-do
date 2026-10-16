@@ -1,6 +1,6 @@
 # Funktionen – Glide
 
-Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
 
 ## Aufgaben im Wissen (3.33.15: G29/G31/G32)
 
@@ -393,3 +393,7 @@ Auftrag und Abnahmekriterien: [Ausführungsprompt](../../../00_Arbeitsvorbereitu
 - **Neuerungen:** Hilfe › Über Glide › „Neuerungen …“ liest denselben Katalog wie die Startseitenkarte (B18).
 
 Pflichtsuite `test_uiux_paket.py` mit 17 Fällen über echte Tk-Wege, darunter die appweite Knopfschutzprüfung `b15_appweit`; rote Gegenprobe mit `--app` gegen die Vorversion. Tk-freie Logik in `glyph_metrics.py`, `home_tiles.py`, `interaction_policy.py`, `release_notes.py` und `symbol_policy.py` mit Unit-Tests. Unter Tk 8.6 entfallen Zelltags (fette Titelzelle wird zur fetten Zeile) und das pixelweise Bildscrollen (bisheriger Weg). Die menschliche Sicht-, DPI- und Screenreaderabnahme bleibt getrennt offen.
+
+## Kürzel in Listen unter Linux 3.43.1
+
+Unter X11 belegt Tk Strg+A/B/E/F/N/P, mit Umschalt erweiternd, zusätzlich mit Emacs-Navigation. Die Treeview reagiert darauf erst seit Tk 9.1 – Strg+Umschalt+P (Einplanen) setzte dadurch die Auswahl eine Zeile höher, in „Heute“ auf die Abschnittszeile, und das Menü blieb zu. Glide nimmt diese Strg-Buchstaben-Auslöser beim Start aus der Treeview-Klassenbindung heraus. Pfeiltasten, Pos1 und Ende navigieren unverändert, Text- und Eingabefelder behalten die Emacs-Kürzel, Windows und macOS sind nicht betroffen. Regel Tk-frei in `interaction_policy.py` (`is_emacs_trigger`, `emacs_guarded_events`, `guard_emacs_script`) mit Unit-Tests, App-Einstieg `guard_x11_emacs_navigation`; `test_planen33313` stellt den Tk-9.1-Tastenweg nach, wo Tk ihn nicht selbst hat, und verlangt eine unveränderte Auswahl.

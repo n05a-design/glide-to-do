@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · manuelle Sitzungen offen; B1 automatisch geprüft
+Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · manuelle Sitzungen offen; B1 automatisch geprüft
 
 Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt am 03.10.2026 aus der fortgeschriebenen Prüfliste (Ursprung 3.30.0, enthielt die Listen 3.28 und 3.29) und der Windows-Anleitung; die Zuordnung der 201 Ausgangspunkte trägt Git. Automatisch geprüft ist die Logik ([Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)); offen bleiben Handgefühl, Plattformen und fremde Programme.
 
@@ -356,6 +356,7 @@ Verfügbarkeit am 13.10.2026: Zusätzlich zu Mac/VoiceOver stehen dem Inhaber ke
 - [ ] **D2** Vorschauen PNG, GIF und SVG; Logo und Lupe erscheinen.
 - [ ] **D3 JPEG-Vorschau (N08, 3.34.0):** mit installiertem `gdk-pixbuf-thumbnailer` bzw. `djpeg` erscheinen JPEG-Bilder in Galerie und Seite, ohne Werkzeug der Platzhalter mit Endung; Referenzbild aus JPEG in der Zeichnung.
 - [ ] **D4 Automatisch hell/dunkel (3.33.21)** über `gsettings` bzw. Portal.
+- [ ] **D5 Strg-Kürzel in Listen (3.43.1, mit Tk 9.1):** In „Heute“ und einer Liste zwei Aufgaben wählen; Strg+Umschalt+P öffnet „Einplanen“ für genau diese beiden, die Auswahl bleibt stehen. Ebenso führen Strg+N, Strg+P, Strg+E und Strg+F nur ihre Glide-Aktion aus, ohne die Listenauswahl vorher zu verschieben; Strg+A wählt alle, Pfeiltasten und Umschalt+Pfeil wählen wie bisher. In Eingabefeldern bleiben die Emacs-Kürzel des Systems.
 
 ## E. Nur durch den Inhaber
 

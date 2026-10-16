@@ -1,5 +1,10 @@
 # Änderungsverlauf
 
+## 3.43.1 – Kürzel in Listen unter Linux/Tk 9.1 (16.10.2026)
+
+- **Linux (X11) ab Tk 9.1:** Strg+Umschalt+P öffnet „Einplanen“ wieder für die gewählten Aufgaben. Tk legt unter X11 Strg+A/B/E/F/N/P, mit Umschalt erweiternd, zusätzlich auf Emacs-Navigation, und die Treeview folgt dem seit Tk 9.1: Vor Glides Kürzel sprang die Auswahl eine Zeile höher, in „Heute“ auf die Abschnittszeile, und das Menü blieb zu. Glide nimmt diese Strg-Buchstaben-Auslöser beim Start aus der Treeview-Klassenbindung (`guard_x11_emacs_navigation`). Pfeiltasten, Text- und Eingabefelder unverändert; Windows und macOS nicht betroffen.
+- **Prüfung:** Tk-freie Regel in `interaction_policy.py` mit drei neuen Unit-Tests. `test_planen33313` stellt den Tk-9.1-Tastenweg nach, wo Tk ihn nicht selbst hat, und verlangt eine unveränderte Auswahl (gegen 3.43.0 rot mit „Einplanen-Menü wurde nicht geöffnet“ wie in der GitHub-Vollprüfung). Prüfwerkzeuge für Linux/Tk 9.1: `test_tempo330` erzeugt das Rad der Vergleichsansicht unter Tk 9 als `<MouseWheel>` (Tk 9 liest `<Button-5>` als Maustaste 9), `test_oberflaeche33321` ersetzt die Systemerkennung vor dem ersten Fenster (der Neustart fragte unter Xvfb sonst `gsettings`). Datenformat 25 unverändert, kein Eintrag unter „Neuerungen“ (unter Windows und macOS keine sichtbare Änderung).
+
 ## 3.43.0 – UI-/UX-Paket aus Nutzerbeobachtungen (16.10.2026)
 
 - **Startseite:** Nach „Gelesen“ steht die Startseite sofort am Anfang (B01). „Startseite anpassen“ an der linken Rasterkante (B02). Gismo heißt fest so und behält Füttern/Spielen/Ruhen; Umbenennen und „Spielereien aus“ entfallen, Ausblenden über die Kachel (B03). Neue Kachel „Galeriebilder“ mit Vorschau aus vorhandenen Galerien, Teil des Standards, eigene Auswahl bleibt (B04).
