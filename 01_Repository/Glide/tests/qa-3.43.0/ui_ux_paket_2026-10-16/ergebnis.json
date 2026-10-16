@@ -67,7 +67,7 @@
     ]
   },
   "offen": [
-    "erneute GitHub-Prüfung zum Tk-9.1-Nachtrag; drei Linux-Suiten aus PR #26 in Paket 8",
+    "ACL-Restaurierung von Reparse-Punkten in der Windows-Paketprobe (PR #26, Paket 8); drei Linux-Suiten aus PR #26 in Paket 8",
     "Mac-Vollprüfung und Mac-Bundle",
     "eigenständige Pakete 3.43.0",
     "Menschen-/DPI-/Screenreaderabnahme",
@@ -109,6 +109,17 @@
       "test_planen33313 (Linux)",
       "test_oberflaeche33321 (Linux)",
       "Kalibrierte Erwartungen (Folge)"
-    ]
+    ],
+    "nach_pr29": {
+      "merge_commit": "8b59a8b",
+      "laeufe": [
+        38927787712,
+        38927780332
+      ],
+      "vollpruefung_windows_tk91": "success (beide Läufe)",
+      "vollpruefung_linux_tk91": "failure nur durch test_tempo330, test_planen33313, test_oberflaeche33321 und Kalibrierte Erwartungen",
+      "windows_paket": "failure im Schritt Isolierte Startprobe – Paket selbst grün (Exit 0, alle Funktionsproben), rot nur die native ACL-Restaurierung",
+      "auswertung_paket": "paket-windows-belege ausgewertet: acl_native_restaurierung_exitcodes [0,0,1,0,1]; WinError 5 auf Reparse-Punkten (paket-runtime/quellen/python/Misc/mypy, hostedtoolcache python3.exe); Prüfinfrastruktur aus PR #26, Paket 8"
+    }
   }
 }
