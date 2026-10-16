@@ -67,8 +67,7 @@
     ]
   },
   "offen": [
-    "Push, Pull Request und Merge (Anmeldung des Inhabers bei GitHub)",
-    "native Linux-/Windows-Matrix und Windows-Paketlauf auf GitHub",
+    "Auswertung der roten GitHub-Vollmatrix mit eigener Tk 9.1 (rot seit PR #26)",
     "Mac-Vollprüfung und Mac-Bundle",
     "eigenständige Pakete 3.43.0",
     "Menschen-/DPI-/Screenreaderabnahme",
@@ -85,5 +84,17 @@
       "B20: alle 15 Skills aus skills-main/ begründet übernommen oder ausgeschlossen",
       "B21/B22: veraltete Stand-, Entscheidungs- und Archivangaben nachgezogen"
     ]
+  },
+  "github": {
+    "pull_request": 27,
+    "merge_commit": "fe9366c",
+    "gemergt_von": "Inhaber",
+    "lauf": 38870531738,
+    "grundstufe_linux_tk86": "success",
+    "vollpruefung_linux_tk91_zugang_nativ": "failure (Vollprüfstand, Kalibrierte Erwartungen)",
+    "vollpruefung_windows_tk91_zugang_nativ": "failure (Vollprüfstand)",
+    "windows_paket": "skipped",
+    "vergleich": "gleiche Schritte rot seit PR #26 (27bac83); zuletzt grün a7f80b8 am 15.10.2026",
+    "auswertung": "offen – Protokolle nur angemeldet lesbar"
   }
 }
