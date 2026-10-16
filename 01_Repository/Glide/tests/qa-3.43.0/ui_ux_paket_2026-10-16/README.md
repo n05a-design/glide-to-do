@@ -73,7 +73,11 @@ Am 16.10.2026 auf Wunsch des Inhabers jeden Punkt des [Originalauftrags](../../.
 | B.19 | Keine Hintergrundkästen in der Punktbearbeitung | ja | b17_b19 | – |
 | B.20 | Skills neutral als „Design Richtlinien“ integrieren, „und weitere“ | ja, Skill `design-richtlinien` | `test_design_richtlinien.py` | alle 15 Skills aus `skills-main/` begründet übernommen oder ausgeschlossen (Design Richtlinien) |
 | B.21 | Verständlich für Dienste und Agenten ablegen | ja: Übergabe, Index, Plan, Prompt, Richtlinien verknüpft | Stand- und Linkprüfung | veraltete Angaben nachgezogen (D01–D50, Archiv- und Showcase-README, Arbeitsvorbereitungsindex, CLAUDE.md/AGENTS.md) |
-| B.22 | Zuletzt: Dokumentation, Ablage, GitHub-Seite | Ablage gekürzt, README aktualisiert, Dokumente abgeglichen | Stand-, Link-, Ablageprüfung | **offen:** Push, Pull Request und Merge – der Push wartet auf die Anmeldung des Inhabers bei GitHub |
+| B.22 | Zuletzt: Dokumentation, Ablage, GitHub-Seite | Ablage gekürzt, README aktualisiert, Dokumente abgeglichen | Stand-, Link-, Ablageprüfung | Push und Merge erledigt (PR #27, `fe9366c`); **offen:** Auswertung der roten Tk-9.1-Vollmatrix (rot seit PR #26) |
+
+## GitHub
+
+Push am 16.10.2026 nach Anmeldung des Inhabers; [PR #27](https://github.com/n05a-design/glide-to-do/pull/27) vom Inhaber als Merge-Commit `fe9366c` in `main` zusammengeführt (Eltern `27bac83` und `23175b7`; Inhalt identisch mit `23175b7`). Ergebnis der GitHub-Prüfung unter „Offen“.
 
 ## Lieferabgleich
 
@@ -84,8 +88,7 @@ Am 16.10.2026 auf Wunsch des Inhabers jeden Punkt des [Originalauftrags](../../.
 
 ## Offen
 
-- **Native Linux-/Windows-Vollmatrix** und **Windows-Paketlauf** der GitHub-Prüfung zum Pull Request: Ergebnis im [QA-Bericht](../../../docs/07_QA_BERICHT.md).
+- **GitHub-Vollmatrix (Tk 9.1):** GitHub-Prüfung nach dem Merge ([PR #27](https://github.com/n05a-design/glide-to-do/pull/27), Merge-Commit `fe9366c`, [Lauf 38870531738](https://github.com/n05a-design/glide-to-do/actions/runs/38870531738)): Grundstufe (Linux, Tk 8.6) grün; Vollprüfung Linux und Windows mit eigener Tk-9.1-Laufzeit und nativer Zugangsprüfung (`--zugang-nativ`) rot – in denselben Schritten wie seit der Umstellung der Matrix durch PR #26 (`27bac83`, Vorbereitung Paket 8); zuletzt grün war sie am 15.10.2026 bei `a7f80b8`. Windows-Paketlauf deshalb übersprungen. Die Protokolle sind nur angemeldet lesbar; ob das Paket unter Tk 9.1 zusätzliche Befunde hat, ist deshalb noch nicht ausgewertet. Nächster Schritt: Protokolle angemeldet lesen und Befunde trennen (nativer Zugang aus Paket 8 gegen mögliche Tk-9.1-Befunde des UI-/UX-Pakets).
 - **macOS-Bundle und Mac-Vollprüfung:** auf Windows nicht baubar bzw. ausführbar; `packaging/macos/baue_app.py` und die eingefrorene Mac-Vollprüfung auf dem Referenz-Mac stehen aus. Bundle und eigenständige Pakete tragen bis dahin 3.42.0.
 - **Menschenabnahme:** Sicht, DPI 100–200 %, Trackpad, große Schrift, alle Designs sowie Screenreader nach der [Prüfliste](../../../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md#ui-ux-paket-15102026-b01b19).
 - **Produktentscheidungen** E-U1–E-U3 (A01–A03) beim Inhaber.
-- **Push, Pull Request und Merge** auf GitHub: Der Push wartet auf die Anmeldung des Inhabers im Git Credential Manager.
