@@ -55,8 +55,10 @@ with tempfile.TemporaryDirectory(prefix='glide326-') as isolated:
         app.history_events, app.feedback = original_events, original_feedback
         app.action_feedback_level, app.animations_enabled = original_level, original_animations
         assert app.mascot_name() == 'Gismo'
+        # B03 (15.10.2026): Gismo heißt fest so; ein früher gespeicherter Name wirkt nicht mehr.
         app.settings['mascot_name'] = 'Mika'
-        assert app.mascot_name() == 'Mika'
+        assert app.mascot_name() == 'Gismo'
+        app.settings.pop('mascot_name', None)
         for design in ('minimal_light', 'minimal_dark'):
             app.set_design(design, apply_now=False)
             app.settings['accent_color'] = 'muted'

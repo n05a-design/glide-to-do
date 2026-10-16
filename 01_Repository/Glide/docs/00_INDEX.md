@@ -1,6 +1,6 @@
 # Dokumentationsindex
 
-Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagenformat 2
+Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagenformat 2
 
 Seit 03.10.2026 zwölf Dokumente und fünf Einzelentscheidungen statt 53: Funktionsverträge 45–79, Projektübergabe, Startkontext, Entwicklungsnotizen, Sitzungsprotokoll, Releasecheckliste und Lizenz-, Signierungs- und Vertriebsentwürfe sind in die Dokumente unten eingegangen. Ältere Fassungen trägt Git (`git log --follow docs/<Datei>`). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt; deren Synchronisationskopien und die wiederaufgetauchte Projektübergabe sind aufgelöst. Regeln: [Dokumentenpflege](DOKUMENTENPFLEGE.md).
 
@@ -18,12 +18,13 @@ Seit 03.10.2026 zwölf Dokumente und fünf Einzelentscheidungen statt 53: Funkti
 | [02 Architektur](02_ARCHITECTURE.md) | Module, Speicherweg, Bausteine der Oberfläche, Performance-Regeln, Tk-Fallstricke |
 | [05 Prüfplan](05_QA_TESTPLAN.md) | Prüfstufen, Regeln, Schritte, Integrationssuiten nach Bereich, manuelle Kontrollmatrix |
 | [06 Daten, Backups und Migration](06_DATA_BACKUP_MIGRATION.md) | Format 25, ältere Formatstufen, Startprüfung, Sicherungen, Einstellungen, Austauschformat |
-| [07 QA-Bericht](07_QA_BERICHT.md) | Geprüfter Stand der Versionen bis 3.35.0, ältere Ergebnisse, offene manuelle Prüfungen |
+| [07 QA-Bericht](07_QA_BERICHT.md) | Geprüfter Stand bis 3.42.0, historische Ergebnisse, heutige lokale Prüfgrenzen und offene manuelle Abnahmen |
 | [10 Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben, Produktdatenblatt |
 | [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
-| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken des Inhabers, Entscheidungen D01–D17 und frühere gültige Antworten, Arbeitsablauf |
+| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D50 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Ein Thema, ein Dokument; Aufbewahrung; Zuständigkeiten |
+| [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; neues Feature-Paket vom 15.10.2026 noch umzusetzen |
 
 ## Einzelentscheidungen
 
@@ -52,3 +53,4 @@ Seit 03.10.2026 zwölf Dokumente und fünf Einzelentscheidungen statt 53: Funkti
 - Code: [src/glide/README.md](../src/glide/README.md) · Paketierung: [packaging/README.md](../packaging/README.md) · Lizenzstatus: [LICENSE.md](../LICENSE.md)
 - Showcase: [tests/fixtures/showcase/README.md](../tests/fixtures/showcase/README.md)
 - Planung, Markt und Vorbilder, manuelle Prüfung: [00_Arbeitsvorbereitung](../../../00_Arbeitsvorbereitung/README.md)
+- Neuer UI-/UX-Auftrag: [Ausführungsprompt mit Originalauftrag und 28 Bildreferenzen](../../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md); Aufgabenstatus im Entwicklungsplan §17. Originalbilder nur in der lokalen Ablage.

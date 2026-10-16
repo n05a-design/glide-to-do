@@ -95,16 +95,18 @@ with tempfile.TemporaryDirectory(prefix='glide-bedienung-') as data:
         if not args.observe:
             app.set_active_list(entry['id']); idle()
             undo_count = len(app.undo_stack)
-            app.hints_button.command(); idle()
+            # B06 (15.10.2026): ein gespeicherter Schalter statt „?“ je Ansicht.
+            assert getattr(app, 'hints_button', None) is None, 'Kein „?“ mehr im Kopf'
+            app.toggle_view_hints(); idle()
             assert app.hint_label.winfo_ismapped()
             assert len(app.undo_stack) == undo_count and app.lists == original
-            app.hints_button.command(); idle()
+            app.toggle_view_hints(); idle()
             assert not app.hint_label.winfo_ismapped()
             with patch.object(app, 'save_settings', return_value=False):
                 app.toggle_view_hints()
-            assert not app.settings['view_hints']['list']
+            assert app.settings['show_hints'] is False
             app.toggle_view_hints(); idle()
-            checks.append('Hinweise: echte Schaltfläche, keine Aufgabenänderung, Schreibfehler rücknehmbar')
+            checks.append('Hinweise: ein Schalter, keine Aufgabenänderung, Schreibfehler rücknehmbar')
             # Dieselbe Palette mit einem Editor als ursprünglichem Fokus.
             editor = mod.tk.Text(root, undo=True)
             editor.pack(); editor.insert('1.0', 'Auswahl'); editor.tag_add('sel', '1.0', 'end-1c')
@@ -149,7 +151,7 @@ with tempfile.TemporaryDirectory(prefix='glide-bedienung-') as data:
     if not args.observe:
         root = mod.tk.Tk(); root.withdraw(); app = mod.ListApp(root)
         try:
-            assert app.settings['view_hints']['list'] is True, 'Hinweise bleiben nach Neustart gespeichert'
+            assert app.settings['show_hints'] is True, 'Hinweise bleiben nach Neustart gespeichert'
             assert app.find_item_in_lists(point['id'])[0]['due'] == point['due']
             assert app.find_item_in_lists(point['id'])[0]['planned_date'] == point['planned_date']
             result['checks'].append('Neustart: gemerkte Hinweise und getrennte Datumsfelder')

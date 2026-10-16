@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 14.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · manuelle Sitzungen offen; B1 automatisch geprüft
+Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · manuelle Sitzungen offen; B1 automatisch geprüft
 
 Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt am 03.10.2026 aus der fortgeschriebenen Prüfliste (Ursprung 3.30.0, enthielt die Listen 3.28 und 3.29) und der Windows-Anleitung; die Zuordnung der 201 Ausgangspunkte trägt Git. Automatisch geprüft ist die Logik ([Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)); offen bleiben Handgefühl, Plattformen und fremde Programme.
 
@@ -199,7 +199,7 @@ Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt a
 
 - [ ] **B0 Windows-Vollprüfung – Anleitung**
 
-Dieselbe Vollprüfung wie am Mac (`tests/tools/pruefen.py --modus voll`), gestartet über `windows_vollpruefung.cmd`. Sie umfasst alle Integrationssuiten aus `SUITEN` (3.38.0: 85), Unit-Tests, Showcase, fünf Analysen und die Reproduktion von Beispiel- und Releasedaten. Seit 05.10.2026 legt sie wie am Mac von jedem geprüften Fenster ein Foto ab. Dauer am Arbeitsrechner: 15–20 Minuten.
+Dieselbe Vollprüfung wie am Mac (`tests/tools/pruefen.py --modus voll`), gestartet über `windows_vollpruefung.cmd`. Sie umfasst alle Integrationssuiten aus `SUITEN` (lokale Lieferbasis 3.42.0: 90), Unit-Tests, Showcase, fünf Analysen und die Reproduktion von Beispiel- und Releasedaten. Seit 05.10.2026 legt sie wie am Mac von jedem geprüften Fenster ein Foto ab. Dauer am Arbeitsrechner: 15–20 Minuten.
 
 **Vorbereitung (einmalig je Rechner):**
 
@@ -365,9 +365,24 @@ Verfügbarkeit am 13.10.2026: Zusätzlich zu Mac/VoiceOver stehen dem Inhaber ke
 
 ## Sprintnachlauf Tagesplanung 3.39.0
 
-Mac-Vollprüfung/Lieferabgleich grün, native Linux-/Windows-Vollmatrix noch ausstehend; menschliche Abnahme getrennt.
+Mac-Vollprüfung, native Linux-/Windows-Vollmatrix und Lieferabgleich für 3.39.0 grün; menschliche Abnahme weiterhin getrennt offen.
 
 - [ ] Mac/Windows/Linux: Tageshinweise aktivieren, freie Zeiten/Wochentage ändern; Glocke, Später, Hinweistag überspringen und ausdrücklich Tagesbeginn öffnen prüfen. Beim laufenden Modal keine unaufgeforderte Anzeige, nach Neustart keine doppelte Zustellung.
 - [ ] Lokale ICS-Datei ausdrücklich wählen; Zeitzone, Sommerzeit, Serienausnahme, ganztägiger/stornierter/transparenter Termin; Fehler/Verlustbericht und unbekannte freie Zeit sichtbar. Quelle bleibt unverändert.
 - [ ] Heute/Woche/Tagesvorschlag: Aufgaben wählen, Zieltag/Vorrat vergleichen/übernehmen; Fälligkeit bleibt, ein Undo stellt die ganze Auswahl her. Vergleich und Abbruch ändern nichts.
 - [ ] Bei 860 × 700, großer Schrift und plattformspezifischem DPI: vier neue Dialoge vollständig scrollen, horizontale Tabellenwerte lesen, Fußaktionen und Tastaturfokus erreichen.
+
+## UI-/UX-Paket 15.10.2026 (B01–B19)
+
+Automatisch belegt mit `test_uiux_paket.py` (17 Fälle, Windows 11/Tk 9.0.4, künstliche Showcase-Daten); die Sicht- und Bedienabnahme bleibt hier. Jeweils hell/dunkel, ein Design mit Hintergrundverlauf, 860 × 700 und 1280 × 800, große Schrift; Windows zusätzlich 100/125/150/200 % DPI.
+
+- [ ] Startseite nach unten scrollen, Karte „Neu in …“ mit „Gelesen“ bestätigen: steht sofort oben; nochmals öffnen/Neustart ohne Karte; Hilfe › Über Glide › „Neuerungen …“ zeigt die Einträge nach Version.
+- [ ] „Startseite anpassen“ beginnt an der linken Kante der Kacheln; Gismo heißt „Gismo“, Füttern/Spielen/Ruhen wirken, kein „Benennen“/„Spielereien“; Kachel ausblenden → Gismo auch neben leeren Listen weg; „Bewegte Rückmeldung“ aus → Pflege wirkt ohne Hüpfen.
+- [ ] Kachel „Galeriebilder“: Vorschauen erscheinen nach kurzer Zeit, Hoch-/Querformat unverzerrt, Klick öffnet die Galerie beim Bild; Galerie ohne Bilder und gelöschte Bilddatei verständlich.
+- [ ] Kopfzeile: Logo endet auf Höhe der Grundlinie von „2 offen · 1 überfällig“; kein Datum, kein „?“; Windows-Menüs und Symbolknöpfe auf einer Linie (auch Hover, Fokus, gedrückt); Lupe ⌕ gut erkennbar (macOS/Linux: Lupe oder „Su“ notieren), Tooltip „Suchen …“, Strg/Cmd+O.
+- [ ] Einstellungen › Darstellung und Bedienung › „Ergänzende Bedienhinweise …“: aus → Papierkorb nur „Der Papierkorb ist leer.“, an → zusätzlicher Satz; Fenster verkleinern: „Zur Startseite“ wird nie überdeckt; Wahl bleibt nach Neustart. Spaltenboard bei 860 × 700: „Nur offene“ vollständig lesbar, die Zeile bricht um; der Hinweis „Ziehen setzt das Feld …“ nur bei eingeschalteten Bedienhinweisen.
+- [ ] Hilfe › Fehlerprotokoll (leer): Überschrift und Text beginnen an derselben Kante; „OK“ erreichbar.
+- [ ] Seitenleiste: Aufklapppfeile von Seiten/Listen/Notizen/Zeichnungen und das Papierkorbsymbol wirken mittig zum Text (auch ausgewählt/Hover); Startseitenkachel „Pinnwände“: „›“ in „Showcase · Parkquartier › …“ steht auf der Mitte der Großbuchstaben, auch beim Überfahren.
+- [ ] Labels/Heute: Titel deutlich länger lesbar, Datum mit Uhrzeit vollständig; „Nächste Aufgabe“ und „Verspätet“ ohne zweites Dreieck, nur der Titel der nächsten Aufgabe fett in normaler Größe.
+- [ ] Seite mit großem Bild: einzelne Mausrad-Rasten und Trackpad über dem Bild scrollen gleichmäßig, die erste Zeile nach dem Bild bleibt erreichbar; Blockleiste „Aufgabe“ ohne Kästchen.
+- [ ] Notiz-/Notizbuchaktionen (Favorit, Stimmung, Ort, Schreibimpuls) und Punktbearbeitung (Datum, Bearbeitungstag, Erinnerung, Labels): keine abweichenden Kästen in allen Designs und Verläufen; Fokus, Hover, deaktiviert weiter erkennbar.

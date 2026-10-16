@@ -1,6 +1,6 @@
 # Veröffentlichung – Glide
 
-Stand 14.10.2026 · Glide 3.42.0 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 25
+Stand 16.10.2026 · Glide 3.43.0 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 25
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
@@ -16,6 +16,7 @@ Die Haken beschreiben den zuletzt abgeschlossenen Lieferstand. Für den aktuelle
 - [x] macOS-Paket enthält alle Module neben `app.pyw`, `resources` (Schriften mit Lizenztexten und `provenance.json`, Vorlagen, Logo) und `vendor/tkinterdnd2` mit Lizenz und nur den Bibliotheken der Zielplattform.
 - [x] Kennungen `de.shaye.glide` und `Shaye.Glide` festgelegt (26.09.2026); echtes Programmsymbol aus dem Logo-Master (`assets/icons`).
 - [x] Rückfallschutz: neuere Bestände schreibgeschützt, unlesbare gesichert, `data_format_written` warnt.
+- [ ] **Neuerungen je Version (seit B18, 15.10.2026):** Für jede Version mit sichtbarer Änderung höchstens fünf kurze, nutzerverständliche Sätze in `src/glide/release_notes.py` (`CATALOG`, Schlüssel = neue Versionsnummer) eintragen – im selben Schritt wie CHANGELOG und `versionswechsel.py`. Daraus lesen die einmalige Startseitenkarte „Neu in …“ und Hilfe › Über Glide › „Neuerungen …“; es gibt keine zweite Kopie. Der Katalog ist kein technisches CHANGELOG: Prüfwerkzeuge, Nachweise und interne Umbauten gehören nicht hinein. Versionen ohne sichtbare Änderung bleiben ohne Eintrag; fehlende ältere Einträge (3.37.0–3.42.0) werden nicht nachträglich erfunden. Unit-Test `test_release_notes.py` prüft Länge und Form.
 
 **Vor der ersten Veröffentlichung (offen):**
 
@@ -103,9 +104,9 @@ Nach der Bestätigung: Produktregister mit Datum nachführen, Sicherheitskontakt
 
 ## Produktdatenblatt (Entwurf)
 
-Entwurf auf Stand 3.33.6, keine Freigabe. Store-Grenzen stammen aus der Recherche vom 04.09.2026 und sind bei der Einreichung neu zu prüfen; Screenshots nur vom realen Build.
+Technischer Entwurf zur gelieferten Basis 3.42.0, keine Veröffentlichungsfreigabe. Store-Grenzen stammen aus der Recherche vom 04.09.2026 und sind bei der Einreichung neu zu prüfen; Screenshots nur vom realen Build.
 
-**Kurzprofil:** Deutschsprachige Desktop-App für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Alles lokal – ohne Konto, Server, Abo oder Telemetrie. Python 3.14 mit Tk 9 und Standardbibliothek; mitgeliefert nur tkinterdnd2 (MIT). **Alleinstellung:** Aufgabenorganisation mit echter Pixel-Werkstatt – Zeichnungen werden Symbole, Pinnwandkarten und Galeriebilder.
+**Kurzprofil:** Deutschsprachige Desktop-App für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Alles lokal – ohne Konto, Server, Abo oder Telemetrie. Python 3.14 mit Tk 9 und Standardbibliothek; mitgeliefert nur tkinterdnd2 (MIT). **Positionierungshypothese:** Aufgabenorganisation mit Pixel-Werkstatt – Zeichnungen werden Symbole, Pinnwandkarten und Galeriebilder. Keine weltweit belegte Alleinstellung.
 
 **Kurzbeschreibung** (Microsoft empfiehlt unter 270 Zeichen):
 
@@ -135,5 +136,9 @@ Entwurf auf Stand 3.33.6, keine Freigabe. Store-Grenzen stammen aus der Recherch
 10. Vorlagen mit selbstfüllenden Platzhaltern wie {{Datum}} und Eingabefeldern wie {{Projektname}}.
 11. Zehn Designs, darunter „Pixel“ mit eigener Pixelschrift, sowie Kontrastdesigns.
 12. Vollständig lokal: kein Konto, kein Abo, keine Telemetrie; Backups und Wiederherstellung mit Vorschau.
+13. Eigenständige Mac-/Windows-Entwicklungspakete mit eigenem Python/Tcl-Tk; Python-Startweg zusätzlich verfügbar.
+14. Notion-Import mit Quellenvergleich und ausdrücklich gewählter Übernahme, ohne Live-Synchronisation.
+15. Einzelne Seiten aus Sicherungen mit Vorschau, Bildern und Aufgabenverweisen wiederherstellen.
+16. Pixel-Bildfolgen und Animationsvorschau innerhalb der Pixel-Werkstatt.
 
 **Daten und Grenzen für Store-Texte:** Datenordner frei wählbar, auch synchronisiert; Glide synchronisiert nicht selbst, Fremdbelegung führt zum Schreibschutz. Ein Bestand aus einer neueren Version öffnet schreibgeschützt; **Glide 3.29 und älter nach der Umstellung nicht mehr starten**. Erinnerungen und Systemmitteilungen nur bei laufender App. Schriften DejaVu Sans und Pixelify Sans (SIL OFL 1.1) mit Lizenztexten.

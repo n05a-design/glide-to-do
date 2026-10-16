@@ -1,24 +1,24 @@
 {
-  "zeitpunkt": "2026-10-11T00:25:01",
+  "zeitpunkt": "2026-10-15T15:26:44",
   "stufe": "CI-Grundstufe",
-  "python": "3.14.5 (v3.14.5:5607950ef23, May 10 2026, 07:38:09) [Clang 21.0.0 (clang-2100.0.123.102)]",
-  "plattform": "darwin",
-  "exitcode": 0,
+  "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+  "plattform": "win32",
+  "exitcode": 1,
   "schritte": [
     {
       "schritt": "Syntax",
       "status": "ausgeführt",
-      "grund": "197 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+      "grund": "272 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
     },
     {
       "schritt": "Versionskonsistenz",
       "status": "ausgeführt",
-      "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.37.0; Datenformat 23"
+      "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.42.0; Datenformat 25"
     },
     {
       "schritt": "Dokumentation",
       "status": "ausgeführt",
-      "grund": "Alle Dokumente einschließlich Archiv im Index; 170 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+      "grund": "Alle Dokumente einschließlich Archiv im Index; 172 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
     },
     {
       "schritt": "Fixtures",
@@ -27,11 +27,16 @@
     },
     {
       "schritt": "Werkzeugtests",
+      "status": "fehlgeschlagen",
+      "grund": "Exitcode 1"
+    },
+    {
+      "schritt": "Fachlogik-Unit-Tests",
       "status": "ausgeführt",
       "grund": "Exitcode 0"
     },
     {
-      "schritt": "Fachlogik-Unit-Tests",
+      "schritt": "Fachlogik ohne Systemzeitzonen",
       "status": "ausgeführt",
       "grund": "Exitcode 0"
     },
@@ -77,8 +82,8 @@
     },
     {
       "schritt": "Fremdcode",
-      "status": "Hinweis",
-      "grund": "tkinterdnd2: Originalpaket nicht abrufbar (<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>); Prüfung ohne Netz nicht möglich"
+      "status": "ausgeführt",
+      "grund": "tkinterdnd2 0.6.3: 116 Dateien bytegleich zum Originalpaket (SHA-256 50c738630210…)"
     },
     {
       "schritt": "Datenschutz",
@@ -88,7 +93,7 @@
     {
       "schritt": "Ablagegröße",
       "status": "ausgeführt",
-      "grund": "852 versionierte Dateien, 262 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen"
+      "grund": "1095 versionierte Dateien, 267 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen"
     },
     {
       "schritt": "Synchronisation",

@@ -1,6 +1,6 @@
 # Glide – Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung
 
-Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Analyse vom 08.10.2026, fortgeschrieben am 12.10.2026 nach Paket 2 und während der Paket-3-Neuabnahme (Code, Dokumente, Git-Historie, Plattformnachweise); Bestandsaufnahme und Gap-Analyse nach Wettbewerbs- und Codeabgleich am 13.10.2026 (§8)
+Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · Analyse vom 08.10.2026, fortgeschrieben am 12.10.2026 nach Paket 2 und während der Paket-3-Neuabnahme (Code, Dokumente, Git-Historie, Plattformnachweise); Bestandsaufnahme und Gap-Analyse nach Wettbewerbs- und Codeabgleich am 13.10.2026 (§8)
 
 Bestandsaufnahme im Auftrag vom 08.10.2026: lokale Ablage untersuchen, Dokumentation und Code abgleichen, daraus den Sprint ableiten. Dieses Dokument trägt die **Analyse** (Funktions-, Oberflächen-, Entscheidungs- und Nutzungsanalyse sowie den Abgleich Dokumentation ↔ Code). Der Wettbewerb steht in [Markt und Vorbilder](Glide_Markt_und_Vorbilder.md), die Entscheidungen selbst in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), die daraus abgeleiteten Aufgaben ausschließlich im [Entwicklungsplan, Abschnitt 14](Glide_Entwicklungsplan.md#14-sprint-ab-08102026-aufgabenkatalog). Erledigte Befunde werden hier als erledigt markiert, nicht gelöscht, bis die nächste Analyse sie ersetzt.
 
@@ -192,11 +192,12 @@ Auftrag des Inhabers vom 12./13.10.2026: vor Wettbewerbsrecherche und Feature-Pl
 | Vorlagen | Katalog mit Platzhaltern und Vorschau; Liste oder Ordner als Vorlage speichern | Implementiert | [Code] `save_list_as_template`, `TEMPLATE_FORMAT_VERSION = 2` | keine wiederkehrenden Vorlagen → WA-14 |
 | Austausch | CSV, Markdown, TXT, ICS, `.glidepage`, Druck/PDF je Liste/Ordner; KI-Austausch Stufe 1/2 | Implementiert | [Code] `export_list_as`, `export_folder_as`, `exchange_patch.py` | – |
 | | Gesamtexport als offener Dateibaum; Pinnwand als offenes Format | Nicht vorhanden | [Code] keine Fundstelle | FP-07 |
-| | Notion-Import mit Wiedererkennung; einzelne Seite aus Sicherung | Implementiert (3.41.0 Mac-vollgeprüft, native Matrix offen) | [Code] `notion_import.py`, `notion_reimport.py`, `page_restore.py`; [QA] Mac-vollgeprüft | Menschenabnahme offen |
+| | Notion-Import mit Wiedererkennung; einzelne Seite aus Sicherung | Implementiert (3.41.0 geliefert, Mac/Linux/Windows automatisch grün) | [Code] `notion_import.py`, `notion_reimport.py`, `page_restore.py`; [QA] native Liefernachweise | Menschenabnahme offen |
 | Sicherung | atomares Schreiben, Vorsicherung je Format, Sicherungen bei Änderung, 14 Tagesstände, Teil-/Komplett-/App-Backup, Vergleich | Implementiert | [Code] `write_json_atomic`, `migrate_on_start`, `schema_backups.py`, `backup_diff.py` | Pinnwandlayout und Einstellungen nur im App-Backup [Dok 06] |
 | Gestaltung | zehn Designs (`DESIGN_ORDER`: Pixel, Hell, Dunkel, Liquid Glass hell/dunkel, Minimal hell/dunkel, Dopamin, Kontrast hell/dunkel), automatisch hell/dunkel, Akzent, Verläufe, WCAG AA | Implementiert | [Code] `DESIGNS`, `contrast_ratio`; Rückfallwert ohne gültige Einstellung `DESIGN_DEFAULT = "glass_dark"` | – |
 | Pixel | Zeichnungen 16–128 Zellen, Paletten, PNG/ICO/SVG, Pixelsymbol | Implementiert; Animation implementiert (3.40.0 geliefert) | [Code] `drawing.py` | – |
-| Verteilung, Zugang | eigenständige Pakete (Paket 7), Screenreader-Kernablauf (Paket 8) | Geplant | [Dok] Plan §15.7 | – |
+| Verteilung | eigenständige Mac-/Windows-Pakete (Paket 7) | 3.42.0 geliefert | [Dok] QA-Bericht und Lieferabschluss | heutige lokale Paketvollständigkeit gesondert prüfen |
+| Zugang | Screenreader-Kernablauf (Paket 8) | Beauftragt/vorbereitet, nicht geliefert | [Dok] Plan §15.7 und aktueller Upstream-Abgleich | Menschen-/Readerabnahme offen |
 | Bekannte Befunde | W01 Seitenleistentitel unter Windows angeschnitten | Unklar | [Dok] eine Aufnahme vom 05.10.2026, Sichtprüfung offen | – |
 | | W07/W08 Windows-Dialogdarstellung | Unklar | [Dok] auf dem Mac nicht nachstellbar | – |
 | | W09 einmaliger Absturz von Python 3.14.8 unter Windows | Unklar | [Dok] 0 von 30 Wiederholungen | beobachten |

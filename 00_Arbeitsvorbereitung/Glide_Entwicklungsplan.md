@@ -1,6 +1,6 @@
 # Glide – Entwicklungsplan und Aufgabenstand
 
-Stand 15.10.2026 · Glide 3.42.0 · Aufgabenformat 25
+Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25
 
 Einziges Planungsdokument: alle Aufgaben mit Marke, Stufen, Ziele und was der Inhaber entscheidet. Erledigte Zwischenstände (Paketbeschreibungen, Messerzählungen, Aufgabenkarten) werden nach der Lieferung gelöscht; Ergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) und im [CHANGELOG](../01_Repository/Glide/CHANGELOG.md), Verhalten in den [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md), Vorfassungen in Git.
 
@@ -32,11 +32,11 @@ Reihenfolge der Stufen (Antwort des Inhabers vom 30.09.2026, bestätigt am 01.10
 | Stufe | Inhalt | Stand |
 |---|---|---|
 | 0 Fundament | Performance P01–P09, T2, CI | ◐ Ziele für Abhaken und Suche erreicht (3.33.19, 3.34.0); P03/E01 und Linux-Kalibrierung mit 3.36.0 geliefert; P05 im Sprint-Code fortsetzen |
-| 1 Klarer Alltag | Bereiche, Startseite, Eingabe, Eisenhower, Heute/Demnächst, UX1, Fokus, Komfort, Tag, Oberfläche Welle 1 | ◐ geliefert bis 3.33.21; Welle 2 nach I7 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen; AU03-Hinweise/AU07 mit 3.39.0 geliefert |
+| 1 Klarer Alltag | Bereiche, Startseite, Eingabe, Eisenhower, Heute/Demnächst, UX1, Fokus, Komfort, Tag, Oberfläche Welle 1 | ◐ geliefert bis 3.33.21; Welle 2 nach I7 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen; AU03-Hinweise/AU07 mit 3.39.0 geliefert; UI-/UX-Paket aus Nutzerbeobachtungen (§17) mit 3.43.0 |
 | 2 Wissen im Kontext | Suche, Verweise, Live-Liste, Titelbild, Kalender mit Wochenplanung, Bilder in Seiten, Filter erklären | ◐ geliefert 3.33.7–3.34.0; N05 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen |
 | 3 Pixel | Palettenbearbeitung, Symbolvorschau, Animation | ◐ G19, G-03 ✅ 3.35.0; G17 ✅ 3.40.0 geliefert |
 | 4 Austausch und Verteilung | KI-Austausch Stufe 2, Import, Sicherungsvergleich, Paket mit eigenem Python | ◐ G24, F-03 ✅ 3.35.0; G21 ✅ 3.41.0 geliefert; G26/D27 ✅ 3.42.0 geliefert |
-| 5 Zukunft (4.x) | Screenreader (Tk 9.1), Seitenversionen, SQLite nur nach D16-Neubewertung | ▶ N12 Aufgaben-Kernablauf durch D36/D44 für 4.0.0 beauftragt und vorbereitet; übrige Zukunftspunkte ◇ |
+| 5 Zukunft (4.x) | Screenreader (Tk 9.1), Seitenversionen, SQLite nur nach D16-Neubewertung | ◐ N12 Aufgaben-Kernablauf durch D36/D44 für 4.0.0 beauftragt und vorbereitet, seit D50 hinter dem UI-/UX-Paket pausiert; übrige Zukunftspunkte ◇ |
 
 ## 2. Erledigt seit 3.30
 
@@ -48,6 +48,7 @@ Reihenfolge der Stufen (Antwort des Inhabers vom 30.09.2026, bestätigt am 01.10
 | ✅ 3.33.7–3.33.12 | Inhaltssuche (G14), Windows-Formatsicherung; P08a, P09b, P08b; stabile Aktionskennungen, U03/U07; U10/U19, erste OB01-Übernahme |
 | ✅ 3.33.13–3.33.18 | KO01/AU02 Einplanen mit verfügbarer Zeit; Tagespaket AU01/AU03-Weg/G05/H-02; Aufgaben im Wissen G29/G31/G32 (Format 21); Bedienkomfort U01/U02/U13/U14/U16/U22/U24; Wissen und Woche N04/AU04, G08/G30 (Format 22); Seiten im Alltag G28/G09/U08 (Format 23) |
 | ✅ 3.33.19–3.35.0 | Sprint (§14): Tempo, Komfort, ruhige Oberfläche, Wissen und Seiten, Pixel und Austausch |
+| ◐ 3.43.0 | UI-/UX-Paket aus Nutzerbeobachtungen (§17, D50): B01–B20; automatisch geprüft und nach 07/05 geliefert, Mac-Vollprüfung und Bundle offen |
 | ✅ 01.–03.10.2026 | D09 Repository als Ablage, CI-Grundstufe, Ablagegröße, Bereinigung der Ablage und Dokumentation |
 
 ## 3. Performance (Stufe 0, beauftragt)
@@ -79,7 +80,7 @@ Messwerte je Version: [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)
 | ID | Befund (Prinzip) | Empfehlung | Stand |
 |---|---|---|---|
 | U01 = N03 | Kopfzeile mit acht Symbolknöpfen, zwei Suchen (P3, P5) | eine Befehlspalette (`Strg/Cmd+O`), Verlauf und Drucken ins Menü, Glocke nur bei Bedarf, ≤ 4 Symbolknöpfe | ✅ 3.33.16 |
-| U02 | Dauerhafte Hinweiszeilen (P1, P4) | „?“ klappt Hinweise ein/aus, Zustand gemerkt (D11) | ✅ 3.33.16 |
+| U02 | Dauerhafte Hinweiszeilen (P1, P4) | „?“ klappt Hinweise ein/aus, Zustand gemerkt (D11); seit B06 ein Schalter in den Einstellungen statt „?“ | ✅ 3.33.16; Fortschreibung §17 |
 | U03 | „Suche löschen“ auch bei leerer Suche | Löschkreuz nur bei Inhalt, `Esc` leert | ✅ 3.33.11 |
 | U04 | „Erweitert“/„Hinzufügen“ als Textknöpfe | Feldchips, „+“-Knopf, Umschalt+Enter | ✅ 3.33.3 / 3.33.20 |
 | U05 | Startseite überladen | sieben Kacheln (D12); Gismo-Pflege bei Bedarf | ✅ 3.33.2 / 3.33.21 |
@@ -107,7 +108,7 @@ Messwerte je Version: [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)
 | N08 | JPEG-Vorschau unter Linux über ein Systemwerkzeug | ✅ 3.34.0; Linux-Sichtprüfung offen |
 | U20 | Leerzustand ohne doppelten Anlegen-Knopf | ✅ 3.33.20 |
 | DOK2 | Kommentar AB06, Mindestversion Python/Tk (AB08) | ✅ 3.33.9 / 3.33.20 |
-| LG01 | Logo-Rückfall unter Tk 8.6 geglättet (Weg B der [Funktionsnachweis](../01_Repository/Glide/tests/qa-3.37.0/logo_symbole_2026-10-10/README.md)) | ✅ 3.37.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt |
+| LG01 | Logo-Rückfall unter Tk 8.6 geglättet (Weg B der [Funktionsnachweis](https://github.com/n05a-design/glide-to-do/blob/0e7b3583a9d7a53925e0b67053895718bbd1c6b6/01_Repository/Glide/tests/qa-3.37.0/logo_symbole_2026-10-10/README.md)) | ✅ 3.37.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt |
 | LG02 | App-Symbol in 16, 32, 64 und 256 px vorrechnen, unter Tk 8.6 direkt laden; `glide-logo.png` und Modulkopf von `logo.py` berichtigen (Wege C und F) | ✅ 3.37.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt |
 | LG03 | `test_logo330` verlangt Zwischentöne an der Logokante (Weg D) | ✅ 3.37.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt |
 | LG04 | Logo-Master überarbeiten (Weg E; [Befunde](../20_Grafik_Master/README.md#freigegebene-master-und-laufzeit-3370)) | ✅ 3.37.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt |
@@ -429,7 +430,7 @@ Die Karten tragen den vom Inhaber gewählten Umfang. Nur N12 und P05 sind erste 
 | S26-17 / N13 | Sicherungen nur insgesamt vergleichbar → einzelne Seite wiederherstellen | A/V nach D37: bestehender Sicherungsvergleich mit Vorschau; Text, Bilder/Anhänge, Aufgabenverweise, Live-Listen; L | Sicherungs-/Verweis-/Anhangsregeln; D37 | andere Seiten unverändert; IDs/Verweise konsistent; fehlende Ziele vorab; Vorsicherung und ein Undo; kein neues fortlaufendes Versionssystem | Tk-freie Wiederherstellungsplanung; Sicherungs-Fixtures mit Bildern/Live-Listen, fehlende Ziele, Neustart/Undo; Gegenprobe gegen Vorversion | ✅ 3.41.0 geliefert; Mac/Linux/Windows automatisch grün |
 | S26-18 / V01, neuer Vorschlag | Überplanung nur angezeigt → ausgewählte Aufgaben direkt entlastend umplanen | A/V nach D38: Heute, Woche, Tagesvorschlag; Auswahl, anderer Tag/Vorrat, Vorher-/Nachher-Bilanz mit ICS-Belegzeiten; M–L | planning_summary; S26-06; D38 | Nutzer wählt Aufgaben und Ziel; keine automatische Verteilung; Fälligkeiten bleiben; ein Undo | Tk-freie Bilanz-/Umplanungsregeln; Kapazität, ungeschätzte Aufgaben, Mehrfachauswahl, alle drei Kontexte, D02; Gegenprobe gegen Vorversion | ✅ 3.39.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt offen |
 | S26-19 / V02, neuer Vorschlag | erneuter Fremdimport kann Dubletten schaffen → Quellen wiedererkennen | A/V nach D39: unverändert/geändert/neu, eigene Änderungen als Konflikt, ausdrücklich gewählte Übernahme; L | S26-09; Datenformat-Tor für Quellenmetadaten; D39 | keine stillen Dubletten oder Überschreibungen; Verlustbericht; keine Live-Synchronisation; Zustände über Neustart erhalten | Tk-freie Zuordnungs-/Konflikttests; gleiche/geänderte Exporte, umbenannte Quellen, Konflikt/Abbruch/Undo, Migration/Altleser | ✅ 3.41.0 geliefert; Mac/Linux/Windows automatisch grün |
-| S26-20 / I6, W01/W02/W06–W08/N08 | Windows seit 3.33.18, Linux-Sicht und Menschenabnahme offen → belegter Plattformstand | A/V nach D42: native Windows-Vollprüfung je Lieferung; vorhandene Windows-/Linux-Sichtfälle nachführen; L + getrennte Abnahme | native Windows-/Linux-Runner; GitHub Actions aktiviert; Inhaber für Menschenabnahme | Mac/Linux/Windows-Ergebnisse getrennt; kein automatischer Lauf ersetzt Menschenbedienung/DPI/Screenreader; keine unbelegten Plattformfreigaben | native Vollprüfungen je Lieferung, vorhandene manuelle Prüfliste; konkrete Lauf-/Artefaktverweise; echte Readerproben getrennt von Attributtests | ◐ 3.36.0, 3.37.0 und 3.38.0 nativ Windows/Linux grün; weitere Lieferungen und Menschenabnahme bleiben Pflicht |
+| S26-20 / I6, W01/W02/W06–W08/N08 | Windows seit 3.33.18, Linux-Sicht und Menschenabnahme offen → belegter Plattformstand | A/V nach D42: native Windows-Vollprüfung je Lieferung; vorhandene Windows-/Linux-Sichtfälle nachführen; L + getrennte Abnahme | native Windows-/Linux-Runner; GitHub Actions aktiviert; Inhaber für Menschenabnahme | Mac/Linux/Windows-Ergebnisse getrennt; kein automatischer Lauf ersetzt Menschenbedienung/DPI/Screenreader; keine unbelegten Plattformfreigaben | native Vollprüfungen je Lieferung, vorhandene manuelle Prüfliste; konkrete Lauf-/Artefaktverweise; echte Readerproben getrennt von Attributtests | ◐ Gelieferte Pakete bis 3.42.0 einschließlich 3.39.1 nativ Windows/Linux grün; weitere Lieferungen und Menschenabnahme bleiben Pflicht |
 | S26-21 / P05 | gemeinsame Helfer nur teilweise → gezielte Vereinheitlichung | A/1 nach D40: nur nachweislich gleiche UI-Texte/Abläufe im angefassten Sprint-Code; S–M | kein Großumbau, D17; D40 | gleiche Bedeutung, keine stillen Aktions-/Begriffsänderungen; kein Gesamtabgleich | betroffene Aufrufer, Bindungen und bestehende Suites; Gegenprobe für jeweiliges Paketverhalten | ▶ erste Stufe ausgewählt 10.10.2026; Umsetzung nach D44 beauftragt |
 | S26-22 / LG04 | Knicke an Rundungsübergängen und enger Innenraum klein → sauberer Master | A/V nach D41: tangentiale Anschlüsse/Kurzsegment, zusätzliche Kleingrößenfassung 16/32; M–L | Vorher-/Nachher-Abnahme vor Übernahme; D28 unabhängig | Silhouette/Farbe erhalten; keine stille Masteränderung; Exporte nachvollziehbar | Vektor-/Rastervergleich, 16/32/54/512 px, Gestaltungsabnahme, App-Symbole/Lieferabgleich; Gegenprobe gegen Vorversion | ✅ 3.37.0 geliefert; Mac/Linux/Windows automatisch grün; Menschen-/DPI-Sichtprüfung getrennt offen |
 
@@ -885,4 +886,81 @@ Nur lesend, ohne Tk-Fenster, am Lieferstand `7995ecbc…`; Werkzeuge und Ergebni
 „Ab Erledigung“ und „pausieren“ sind keine RRULE-Teile; sie werden als eigene Felder neben der Regel geführt (FP-02 Stufe 2).
 
 
-**Abschlussauftrag 15.10.2026:** Der Inhaber möchte die nächsten Schritte und Pakete neu strukturieren. Zunächst die laufenden 4.0-Arbeiten samt notwendigen Korrekturen, Prüfungen und umsetzbaren Kernfunktionen zum gesicherten Abschluss bringen. Danach Übergabe mit tatsächlichem Lieferstand, umgesetztem Umfang, Prüfbelegen und ausdrücklich offenen Abnahmen; weitere Folgepakete erst aus der neuen Planung starten. D49-Auswahlinhalte bleiben erhalten, ihre Ausführungsfolge wird anschließend neu geordnet.
+**Abschlussauftrag 15.10.2026 (vormittags; Priorität seit D50 geändert, §17):** Der Inhaber möchte die nächsten Schritte und Pakete neu strukturieren. Zunächst die laufenden 4.0-Arbeiten samt notwendigen Korrekturen, Prüfungen und umsetzbaren Kernfunktionen zum gesicherten Abschluss bringen. Danach Übergabe mit tatsächlichem Lieferstand, umgesetztem Umfang, Prüfbelegen und ausdrücklich offenen Abnahmen; weitere Folgepakete erst aus der neuen Planung starten. D49-Auswahlinhalte bleiben erhalten, ihre Ausführungsfolge wird anschließend neu geordnet.
+
+## 17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)
+
+**Ausgangsreferenz:** Glide 3.42.0, 15.10.2026, 13:42 Uhr. **Auftrag:** am 15.10.2026 als vorrangig vor Paket 8 beauftragt (D50). Umgesetzt auf `claude/ui-ux-paket` (Basis `origin/main` `27bac83` mit der P8-Vorbereitung bis PR #26; deren additive Zugänglichkeitsanbindungen bleiben unverändert und reisen mit 3.43.0 mit, ohne Paket 8 zu liefern). **Geliefert als 3.43.0 am 16.10.2026** nach `07_Python-Versionen` und `05_Probelisten_Testdaten`; eingefrorene Windows-Vollprüfung und Punkt-für-Punkt-Matrix im [Nachweis](../01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md). Offen: Mac-Vollprüfung und Mac-Bundle (nur auf dem Referenz-Mac), eigenständige Pakete 3.43.0, Menschenabnahme, Produktentscheidungen E-U1–E-U3.
+
+[Vollständiger Ausführungsprompt](Featurepaket_UI_UX/PROMPT.md) · [unveränderter Originalauftrag](Featurepaket_UI_UX/AUFTRAG.md) · [Bildreferenzen S01–S28](Featurepaket_UI_UX/BILDREFERENZEN.md) · [Design Richtlinien](../01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) · [Prüfnachweis](../01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md).
+
+Die Kennungen bilden die Originalnummerierung ab (A01 = A.1, B01 = B.1 …). **Belege:** Pflichtsuite `tests/integration/test_uiux_paket.py` (17 Fälle, alle grün; dieselben 17 Fälle gegen den 3.42.0-Quellbaum alle rot mit dem jeweiligen Ursprungsfehler), 711 Unit-Tests, Vorher-/Nachher-Fensteraufnahmen desselben Kontexts (künstliche Showcase-Daten, Windows 11/Tk 9.0.4). Menschliche Sicht-, DPI- und Screenreaderabnahme bleibt für alle Punkte getrennt offen.
+
+| ID | Gegenstand | Status | Umsetzung / Beleg | Rest |
+|---|---|---|---|---|
+| A01 | Kompaktmodus, kleinere Mindestgröße | ◐ untersucht, Auswahl offen | Ursachen der Grenze 860 × 700 und Entwurf unten; Probe an echten Inhalten | Produktentscheidung E-U1 |
+| A02 | Zweitfenster oder geteilte Ansicht | ◐ untersucht, Auswahl offen | Optionen, Konflikt mit „eingebettet“, Aufwand unten | Produktentscheidung E-U2 |
+| A03 | Notion-Muster | ◐ untersucht, Auswahl offen | priorisierte Tabelle in [Markt und Vorbilder §10](Glide_Markt_und_Vorbilder.md#10-notion-muster-für-glide-a03-15102026) | Produktentscheidung E-U3 |
+| B01 | Startseite nach „Gelesen“ an den Anfang | ✅ 3.43.0 | `_refresh_home` setzt nach „Gelesen“ die Lage 0; Suite b01 (vorher 0,27) | Mac-Abnahme, Menschenabnahme |
+| B02 | „Startseite anpassen“ links | ✅ 3.43.0 | linke Rasterkante bei 860/1280/1600 px; b02 | Mac-Abnahme, Menschenabnahme |
+| B03 | Gismo fest, Spielereien aktiv | ✅ 3.43.0 | `home_tiles.retire_mascot_settings`, Sichtbarkeit nur über die Kachel; b03, Unit-Tests | Mac-Abnahme, Menschenabnahme |
+| B04 | Galeriebilder auf der Startseite | ✅ 3.43.0 | Kachel „Galeriebilder“ (Standard, eigene Auswahl bleibt), Vorschau im Leerlauf, Klick öffnet Bild; b04 | Mac-Abnahme, Menschenabnahme |
+| B05 | Logohöhe | ✅ 3.43.0 | Großbuchstabenhöhe bis Grundlinie der Unterzeile; b05 (vorher 6 px darunter) | Mac-Abnahme, DPI-Sichtprüfung |
+| B06 | Datum/„?“ weg, Hinweisschalter | ✅ 3.43.0 | Einstellung `show_hints`, Übernahme alter Wahl; Bedienwege in Textzeilen (Kopfnotiz, Werkzeugzeile, Kartenfuß, Papierkorb, Spaltenboard) folgen dem Schalter; Handbucheintrag; b06_b15, Unit-Tests; D11 fortgeschrieben | Mac-Abnahme, Menschenabnahme |
+| B07 | Menüs und Kopfsymbole ausgerichtet | ✅ 3.43.0 | eine Titelzeile, `HEADER_CONTROL_HEIGHT`; b07 (vorher 10 px Versatz) | Mac-Abnahme, DPI-Sichtprüfung |
+| B08 | Linke Flucht Fehlerprotokoll | ✅ 3.43.0 | Dialogüberschrift ohne Labelrand; b08 (vorher 3 px) | Mac-Abnahme, Menschenabnahme |
+| B09 | Pfeile/Papierkorb optisch zentriert | ✅ 3.43.0 | `glyph_metrics.py`: Bereichspfeile −0,3 px, Papierkorbsymbol +2 px auf Bezugsform; Pfadtrenner „›“ in Startseitenknöpfen (Kachel „Pinnwände“) einzeln auf die Großbuchstabenmitte (−0,05 statt +0,95 px), Schreibweise unverändert; b09 | Mac-Abnahme, DPI-Sichtprüfung |
+| B10 | Lupe statt „Su“ | ✅ 3.43.0 | ⌕ aus Segoe UI Symbol (Windows) nach `SYMBOL_FONT_FALLBACKS`; b10; D29 präzisiert | macOS/Linux nativ prüfen |
+| B11 | Informationspriorität, Titelbreite | ✅ 3.43.0 | Matrix je Ansicht in Design Richtlinien; Metadaten auf Inhaltsbreite (Labels 177 statt 281 px), bei Enge ganz ausgeblendet statt abgeschnitten; b11 prüft Labels, Heute und Liste | Sichtprüfung bei großer Schrift |
+| B12 | Eindeutige Pfeile in Heute | ✅ 3.43.0 | kein ▶/△ neben dem Aufklapppfeil; b12_b13 | Mac-Abnahme, Menschenabnahme |
+| B13 | Nächste Aufgabe nur Titel fett | ✅ 3.43.0 | Zelltag `today_next_title` in Zeilengröße; b12_b13; D22 präzisiert | Mac-Abnahme, Menschenabnahme |
+| B14 | Kein Kästchen vor „Aufgabe“ | ✅ 3.43.0 | Blockleiste; b14 | Mac-Abnahme, Menschenabnahme |
+| B15 | Papierkorbtext, Buttonschutz | ✅ 3.43.0 | kurzer Text, `_follow_empty_text`; 12 Kombinationen ohne Überdeckung (b06_b15); appweit jeder sichtbare Knopf in 7 Ansichten und 5 Dialogen (b15_appweit, gegen 3.42.0 rot mit S21); dabei „Nur offene“ im Spaltenboard behoben (Zeile bricht um); Regel in Design Richtlinien | Sichtprüfung seltener Dialoge, DPI |
+| B16 | Scrollsprung über Bildern | ✅ 3.43.0 | Rad über Bild pixelweise wie Text; größter Schritt 30 statt 389 px (b16) | Trackpad/macOS nativ |
+| B17 | Hintergrundkästen oberer Aktionen | ✅ 3.43.0 | Trägerfläche statt Fensterfarbe, konturlose Knöpfe in Ruhe durchsichtig; b17_b19 | alle Designs sichten |
+| B18 | Neuerungen unter „Über Glide“ | ✅ 3.43.0 | „Neuerungen …“ aus `release_notes.history_text`; b18; Pflegeverfahren in Veröffentlichung | Katalogeintrag der neuen Version beim Versionswechsel |
+| B19 | Hintergrundkästen Punktbearbeitung | ✅ 3.43.0 | `DueField.surface`, Kalenderknopf in `blend_embedded_editor`; b17_b19 | alle Designs sichten |
+| B20 | Skills neutral als Design Richtlinien | ✅ 3.43.0 | Skill `design-richtlinien`, Fremdtext mit Lizenz unter `referenzen/`; alle 15 Skills aus `skills-main/` begründet übernommen oder ausgeschlossen (Design Richtlinien); Prüfung `test_design_richtlinien.py` | – |
+| B21 | Verständliche Übergabe | ✅ 3.43.0 | über Übergabe, Arbeitsvorbereitungsindex und Plan auffindbar; Originalauftrag und Bilder getrennt von Regeln (Design Richtlinien) und Status (§17); Prüfmatrix im [Nachweis](../01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md#prüfung-aller-punkte-des-originalauftrags) | fortlaufende Pflege mit jeder Nutzeranweisung |
+| B22 | Dokumentation/Ablage/Projektauftritt zuletzt | ◐ 3.43.0 | Stand-, Versions-, Entscheidungs- und Archivangaben abgeglichen (u. a. D01–D50, Archiv-README, Showcase-README), Projekt-README aktualisiert; Ablage auf sieben Versionen gekürzt | Push, Pull Request und Merge nach Anmeldung des Inhabers bei GitHub; danach Projektseite und CI-Matrix nachtragen |
+
+**Status „✅ 3.43.0“** heißt hier: umgesetzt, automatisch geprüft (Windows lokal eingefroren, 110 Schritte ohne roten Schritt) und nach 07/05 geliefert. Abweichend von §Statusmarken fehlen noch die native Linux-/Windows-Matrix der GitHub-Prüfung (läuft mit dem Pull Request), die eingefrorene Mac-Vollprüfung und das Mac-Bundle; die beiden letzten werden auf dem Referenz-Mac nachgeholt.
+
+**Beobachtung außerhalb des Pakets:** `test_ui_followup36.py` bleibt auf diesem Windows-Rechner in `root.update()` hängen – identisch am unveränderten Stand `27bac83` (Gegenprobe). Kein Befund dieses Pakets; vor dem Volllauf auf dem Referenz-Mac bzw. in der nativen CI prüfen. Ebenso unverändert vorhanden: In der Showcase-Liste „Vermarktung · Umsetzung“ steht über der Pinnwand der Inhalt der Seite „Parkquartier · Briefing und Freigabe“ (gleiches Bild am Ausgangsstand).
+
+### 17.1 A01 – Kompaktmodus und kleinere Mindestgröße
+
+**Befund (Code):** Die Grenze 860 × 700 setzt `ListApp.__init__` fest (`root.minsize`). Was sie trägt: Seitenleiste rund 250 px (schmal 64 px, ausblendbar), Kopfzeile mit Titel ≥ 140 px, unter Windows vier Menüs (rund 300 px) und vier Kopfsymbole (rund 200 px), Aktionsreihen (`ACTION_DENSITY_MIN_WIDTH` 700 px) und Höhenstufen (`HEIGHT_DENSITY_*` 850/780 px). Darunter weichen bereits heute schrittweise Labelspalte (Baum < 636 px), Fälligkeit (< 400 px), Inspektor (Fenster < 980 px → Maske) und Druck/Einstellungen (Überlaufmenü). Die Grenze ist also keine einzelne Ansicht, sondern die Summe aus Seitenleiste, Kopf und Aktionsreihen.
+
+**Vergleich:** *Allgemeine Verkleinerung* des Normalfensters würde jede Ansicht unter 860 px testpflichtig machen (über 90 Suiten mit Mindestgrößenfällen) und Kernfunktionen in Überlaufmenüs drängen. *Ausdrücklich aktivierter Kompaktmodus* (Vorbild Microsoft To Do, S10/S11) blendet nur in diesem Zustand Seitenleiste, Menüband und Aktionsreihen aus und erlaubt eine kleinere Mindestgröße; der Normalmodus bleibt unverändert.
+
+**Entwurf:** Ansicht › „Kompaktmodus“ (Kürzel, Befehlspalette, Knopf im Kopf). Gezeigt werden nur Titel des geöffneten Inhalts, Lupe (Inhalt wechseln über die vorhandene Suche Strg/Cmd+O), Schnellerfassung und Rückweg („Kompaktmodus beenden“, auch Esc/Kürzel). Eingabezeile bleibt, Aktionsreihen weichen ins „…“-Menü, der Inspektor öffnet als vorhandene Maske, Hinweise folgen dem Schalter aus B06. Fensterlage und -größe beider Modi werden getrennt gemerkt. **Zielgröße:** Vorschlag 480 × 560 px als Untergrenze im Kompaktmodus; vor einer Festlegung mit echten Inhalten (Liste, Heute, Seite, Notiz, große Schrift, lange Titel) messen – die Mindestgröße wird erst nach Auswahl verbindlich.
+
+**Probe an echten Inhalten (15.10.2026, Windows 11/Tk 9.0.4, Showcase-Daten, Seitenleiste ausgeblendet, Mindestgröße nur für die Messung aufgehoben):** Bei 860 × 700, 640 × 620, 560 × 600, 480 × 560 und 420 × 520 blieben Liste, Heute und Seite ohne überlappende Knöpfe bedienbar; Inhalt und Eingabezeile bleiben sichtbar, die Metadatenspalten weichen planmäßig. Ab 560 px Breite wird jedoch der Kopf zum Engpass: Unter 560 px verschwinden Titel sowie die Windows-Menüs „Ansicht“ und „Hilfe“ (nur „Datei“ und „Bearbeiten“ bleiben), das Suchfeld wird auf wenige Zeichen gekürzt. Ergebnis: Eine allgemeine Verkleinerung würde Kernfunktionen verdecken (Regel B15); ein Kompaktmodus braucht einen eigenen, reduzierten Kopf (Menüs gebündelt in einem Knopf, Titel bleibt). Die Seite mit Blockleiste ist bei 480 × 560 vollständig nutzbar (Leiste bricht in zwei Zeilen um).
+
+**Grenzen/Aufwand:** Pinnwand und Pixel-Werkstatt bleiben im Kompaktmodus eingeschränkt nutzbar (Fläche zu klein) und öffnen auf Wunsch den Normalmodus. Aufwand M–L (Zustand, Kopfvariante, Größenstufen, Tests je Ansicht), Risiko mittel. **Empfehlung:** Kompaktmodus als eigenes Folgepaket statt allgemeiner Verkleinerung.
+
+### 17.2 A02 – Zwei Inhalte gleichzeitig
+
+**Befund (Code):** `ListApp` führt genau einen Ansichtszustand (`view_mode`, aktive Liste, ein Baum `self.tree`, ein Seiteneditor, eine Pinnwand). Alle Mutationen laufen über `item_change`/`sidebar_change`, Undo ist ein gemeinsamer Stapel, die Speichersperre gilt je Prozess. Funktionen leben nach den Produktgrenzen „eingebettet in der Ansicht, nicht in Zusatzfenstern“.
+
+| Option | Beschreibung | Nutzen | Aufwand/Risiko | Konflikt |
+|---|---|---|---|---|
+| A | Zweites Fenster derselben Sitzung mit gemeinsamem Datenmodell | zwei Bildschirme, freie Anordnung | L+: Ansichtsschicht muss mehrfach instanziierbar werden (Baum, Editor, Fokus, Undo-Ziel, Schließen eines Fensters); hohes Regressionsrisiko | widerspricht „keine Zusatzfenster“ |
+| B | Geteilte Inhaltsfläche in einem Fenster (verschiebbarer Trenner wie im Inspektor, S09) | zwei Listen/Seiten nebeneinander, ein Fenster | L: dieselbe Mehrfachinstanz der Inhaltsansicht, aber ein Fenster, ein Fokus-/Undo-Rahmen | passt zu „eingebettet“ |
+| C | Nebenansicht im vorhandenen Inspektorbereich: zweiter Inhalt lesend mit direkten Aktionen (abhaken, öffnen), bearbeitet wird im Hauptbereich | Nachschlagen und Abhaken nebenbei | M: baut auf Inspektor und Live-Liste auf; geringes Risiko | passt; deckt WA-11 (Seitenvorschau) mit ab |
+| D | Zweite unabhängige App-Instanz | – | ausgeschlossen: zweiter schreibender Prozess auf derselben Ablage | Speichersperre |
+
+**Abnahmekriterien für B/C:** gemeinsamer Bestand, sofortige Aktualisierung in beiden Bereichen, stabile IDs, getrennte Auswahl/Scrolllage, keine verlorenen Eingaben beim Wechsel, ein Undo-Stapel mit Zielhinweis, eindeutiger Fokus, Schließen eines Bereichs ohne Datenverlust, Speichersperre unverändert. **Empfehlung:** C als erste Stufe (geringes Risiko, deckt Nachschlagen/Abhaken), B als spätere Ausbaustufe nach Erfahrung; A und D nicht.
+
+### 17.3 Entscheidungsvorlagen für den Inhaber
+
+Kurzantwort wie bisher möglich, etwa „E-U1 A, E-U2 A, E-U3 A“. Neue Entscheidungen werden ab D51 eingetragen.
+
+| Nr. | Frage | A | B | C | Empfehlung |
+|---|---|---|---|---|---|
+| E-U1 | Kompaktmodus (A01) | Kompaktmodus als Folgepaket, Mindestgröße dort nach Messung (Vorschlag 480 × 560) | allgemeine Mindestgröße senken | nichts ändern | A |
+| E-U2 | Zwei Inhalte (A02) | Nebenansicht im Inspektorbereich (Option C) | geteilte Inhaltsfläche (Option B) | Zweitfenster (Option A) | A (= Option C), B später |
+| E-U3 | Notion-Muster (A03) | Rang 1–3 als kleines Folgepaket | zusätzlich Rang 4 | nichts übernehmen | A |
+
+Originalbilder sind unverändert und lokal vom Git-Upload ausgeschlossen; für einen anderen Dienst das Paket einschließlich `bilder/` mitgeben. Anforderungsdetails und Abnahmekriterien nur im Prompt pflegen, Gestaltungsvorgaben nur in Design Richtlinien, Ergebnisse im QA-Bericht. Die Dokumentationsprüfung der Vorbereitungsrunde steht im [Vorbereitungsnachweis](../01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/README.md).

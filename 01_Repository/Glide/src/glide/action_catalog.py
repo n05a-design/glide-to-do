@@ -22,7 +22,7 @@ GROUPS = {
     "show_daily_hints": "Planen und einordnen",
     "show_daily_hint_settings": "Ansichtseinstellungen",
     "show_busy_calendar_dialog": "Planen und einordnen",
-    "show_object_references": "Ansichten",'show_library_new_menu': 'Neu anlegen', 'show_library_import_menu': 'Import', 'toggle_view_hints': 'Ansichtseinstellungen', 'show_tasks_from_pages': 'Ansichten','show_quick_plan_menu': 'Planen und einordnen',
+    "show_object_references": "Ansichten",'show_library_new_menu': 'Neu anlegen', 'show_library_import_menu': 'Import', 'show_tasks_from_pages': 'Ansichten','show_quick_plan_menu': 'Planen und einordnen',
 'skip_repeat_selected': 'Planen und einordnen',
 'add_item_advanced': 'Neu anlegen',
 'skip_missed_repeats_selected': 'Planen und einordnen',

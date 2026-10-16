@@ -1,6 +1,6 @@
 # Entscheidung: tkinterdnd2 für das Ziehen aus Finder und Explorer
 
-Stand 13.10.2026 · Glide 3.42.0 · entschieden vom Inhaber am 27.09.2026
+Stand 16.10.2026 · Glide 3.43.0 · entschieden vom Inhaber am 27.09.2026
 
 AGENTS.md, Regel 4: keine neue Laufzeitabhängigkeit ohne dokumentierte
 Entscheidung. Dies ist sie.
@@ -45,7 +45,7 @@ legen“.
 - Unter macOS (Darwin 27) mit Python 3.14.5 und Tk 9.0.3 geladen (`tkdnd` 2.10.2),
   mit einer Galerie und einer Seite als Ziel.
 - Das echte Ziehen mit der Maus aus dem Finder ist eine manuelle Prüfung.
-- Windows und Linux sind ungeprüft.
+- Der isolierte Windows-Paketstart von 3.42.0 belegt das Laden der gebündelten DND-Bibliothek. Physisches Ziehen aus dem Explorer bleibt eine manuelle Abnahme. Für Linux wird hier kein unbelegter nativer DND-Ladenachweis abgeleitet; Plattform- und Paketbelege stehen im [QA-Bericht](../07_QA_BERICHT.md).
 - Für die Veröffentlichung müssen die nativen Bibliotheken mitsigniert und
   notarisiert werden. Die macOS-Bibliothek ist bisher nur ad hoc signiert.
 

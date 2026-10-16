@@ -124,6 +124,15 @@ with tempfile.TemporaryDirectory(prefix="glide-logo3370-") as data:
                 family=str(font.actual("family")).casefold()
                 for name,text in app.ICONS.items():
                     assert font.measure(text)>0,name
+                    # B10 (15.10.2026): Ein Zeichen darf gezielt aus einer einfarbigen
+                    # Systemschrift kommen, die es nachweislich selbst enthält.
+                    eigene=getattr(app,"_symbol_fonts",{}).get(name)
+                    if eigene:
+                        probe=mod.tkfont.Font(root=root,family=eigene,size=app.ui_font_size(1),weight=weight)
+                        assert eigene in mod.glide_symbols.SYMBOL_FONT_FAMILIES,(name,eigene)
+                        assert all(str(root.tk.call("font","actual",probe.name,"-family",char)).casefold()==eigene.casefold()
+                                   for char in text),("Systemschrift ohne Zeichen",name,text)
+                        continue
                     assert all(str(root.tk.call("font","actual",font.name,"-family",char)).casefold()==family for char in text),("Ersatzschrift",name,text)
             assert app.search_button.text==app.ICONS["search"]
             app.search_button.command();settle()

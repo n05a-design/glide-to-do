@@ -1,6 +1,6 @@
 # Vorlagen im Unternehmensalltag
 
-Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Vorlagenformat 2
+Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · Vorlagenformat 2
 
 3.28 ergänzt vier integrierte Tagebuchvorlagen: Tagesnotiz, Dankbarkeit,
 Wochenrückblick und Jahresordner mit Quartalen. Sie verwenden Notizseiten und
@@ -13,12 +13,12 @@ Projektseite und eigene Seiten) im „+“ neben „Seiten“.
 
 ## Die passende Datei
 
-- **Glide-Praxisvorlagen_3.30.0.glidetemplates**: 16 wiederverwendbare Vorlagen.
+- **[glide_vorlagen.glidetemplates](../src/glide/resources/templates/glide_vorlagen.glidetemplates)**: 16 wiederverwendbare portable Vorlagen; kanonischer aktueller Katalog im Ressourcenordner.
   Auf „Vorlagen“ unten „Vorlagen hinzufügen …“ wählen. Die Datei ergänzt den
   Katalog. Bei gleichem Vorlagen-ID wird eine unabhängige Kopie ergänzt.
-- **Glide-Funktionsvorschau_3.30.0.glidebackup**: künstlicher Aufgabenbestand zum
+- **[glide_beispieldaten.glidebackup](../tests/fixtures/beispiele/glide_beispieldaten.glidebackup)**: künstlicher Aufgabenbestand zum
   Ausprobieren von Ansichten, Wiederholungen, Labels und Anhängen. Die Liste „Kalender, Erinnerungen und Tagesplanung“ deckt zusätzlich Erinnerungen, Tagesplanung und den Kalenderrundlauf ab.
-- **Glide-Releaseplanung_3.30.0.glidebackup**: interne Aufgaben zur Veröffentlichung
+- **[glide_releaseplanung_3.42.0.glidebackup](../tests/fixtures/beispiele/glide_releaseplanung_3.42.0.glidebackup)**: interne Aufgaben zur Veröffentlichung
   von Glide. Dies ist keine allgemeine Unternehmensvorlage und keine Releasefreigabe.
 
 Die beiden `.glidebackup`-Dateien über **Listen/Ordner hinzufügen …** ergänzen.
@@ -86,7 +86,7 @@ Der Katalog zeigt alle vier Punktarten, Gruppen/Unterpunkte, Labels an Punkten,
 Listen und Ordnern, Farben, Wichtigkeit, Datum und Uhrzeit, Wiederholung,
 Beschreibungen, Anhänge auf allen drei Ebenen sowie leere Unterordner. Die
 Funktionsvorschau ergänzt erledigte/überfällige Punkte, Papierkorb, Kalender,
-Jahresraster, Tabellenansicht, „Mein Tag“, Reiter, Pinnwand und konkrete
+Jahresraster, Tabellenansicht, „Heute“, Reiter, Pinnwand und konkrete
 Prüfaufgaben für Scrollen und Vorlagenbearbeitung.
 
 Einstellungen, Kalender, Startseite, Suche, Undo und Datenordnerwahl sind
@@ -95,7 +95,7 @@ nicht und führt keine Veröffentlichung, Kontaktaufnahme oder Webaktion aus.
 
 [Daten und Backups](06_DATA_BACKUP_MIGRATION.md)
 
-Seit 3.14 übernehmen Vorlagen Bearbeitungstag und geschätzten Aufwand. Bei relativen Vorlagen verschiebt sich der Bearbeitungstag um denselben Abstand wie die Fälligkeit, auch ohne Frist am Punkt. Feste Vorlagen lassen die Daten unverändert. Der Aufwand bleibt konstant. Aktuelle Teilpayloads verwenden Aufgabenformat 18 und benötigen Glide 3.28 oder neuer; das Vorlagenformat selbst bleibt 2.
+Seit 3.14 übernehmen Vorlagen Bearbeitungstag und geschätzten Aufwand. Bei relativen Vorlagen verschiebt sich der Bearbeitungstag um denselben Abstand wie die Fälligkeit, auch ohne Frist am Punkt. Feste Vorlagen lassen die Daten unverändert. Der Aufwand bleibt konstant. Aktuelle mitgelieferte Teilpayloads verwenden Aufgabenformat 25; das Vorlagencontainerformat bleibt 2. Ältere importierte Teilpayloads werden nach den unterstützten Migrationsregeln behandelt, der aktuelle Katalog darf nicht in eine ältere Fassung zurückkopiert werden.
 
 ## Eingabefelder in Vorlagen (seit 3.30)
 

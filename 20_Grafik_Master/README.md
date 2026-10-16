@@ -1,6 +1,6 @@
 # Grafik-Master
 
-Stand 13.10.2026 · Glide 3.42.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+Stand 16.10.2026 · Glide 3.43.0 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
 
 Hier liegen die Quellen des Glide-Logos und alle freigegebenen Exporte. Glide
 selbst und die Paketierung arbeiten mit **Kopien** daraus (siehe unten). Wer
@@ -12,7 +12,7 @@ einen Master ändert, erneuert danach die Kopien.
 |---|---|---|
 | `01_Logo` | `Glide-Logo-01.svg` und `Glide-Logo.png`: das Zeichen allein, eine Fläche in Glide-Blau | Kopfzeile, „Über Glide“ und Startfenster, dort in der Akzentfarbe der Oberfläche |
 | `03_Fav-Icon` | `App-Icon-transparent-02.svg` und `App-Icon-transparent.png`: blaue Fläche mit ausgespartem Zeichen | aktuelles Programmsymbol, Basis für Dock, Taskleiste, Installer und Website |
-| `04_Affinity` | `Glide-Logo.af`: frühere binäre Arbeitsdatei, nicht auf D45 nachgeführt | reguläre SVGs sind seit 3.37.0 maßgeblich |
+| `04_Affinity` | überholte `Glide-Logo.af`, nicht auf D45 nachgeführt | zur Entfernung geprüft; lokale Ausführungsrichtlinie blockiert die Löschung, reguläre SVGs bleiben maßgeblich |
 | `05_Inspiration` | Stilvorlagen und Skizzen, darunter `Glide-Logo-Position.png` (Skizze der Logoposition vom 29.09.2026) und `Inspiration für Glide.png` | Belege, keine Programmdateien |
 | `06_Beispielbilder` | Motive für Showcase und Arbeitsdokumente | siehe unten |
 
@@ -40,9 +40,7 @@ bleiben der Abnahmebeleg; die übernommenen Entwurfs-SVGs entfallen.
 | `01_Logo/Glide-Logo.png` | `glide-logo.png` |
 | `03_Fav-Icon/App-Icon-transparent.png` | `glide-app-icon.png` |
 
-Die binäre Arbeitsdatei `04_Affinity/Glide-Logo.af` ist **nicht nachgeführt**.
-Für den freigegebenen Stand sind die vier regulären SVGs maßgeblich.
-Andere vorhandene Varianten sind keine aktuelle Laufzeitquelle.
+Für den freigegebenen Stand sind die vier regulären SVGs maßgeblich. Die doppelte alte SVG-Kopie im Affinity-Ordner wurde am 15.10.2026 entfernt. Der nicht auf D45 nachgeführte binäre Affinity-Stand ist als überholt geprüft; seine Löschung wurde von der lokalen Ausführungsrichtlinie blockiert und bleibt offen. Git hält seine Vorfassung vor. Andere vorhandene Varianten sind keine aktuelle Laufzeitquelle; `01_Logo/Glide-Logo.svg` bleibt zusätzlich als Sentinel der Synchronisationsprüfung erforderlich.
 
 - **Tk 9:** natives SVG, im Logo mit der aktuellen Akzentfarbe. Die Farbe
   `#0185e1` wird vor dem Rendern ersetzt; keine zusätzliche Bildbibliothek.
@@ -91,4 +89,4 @@ Programm verteilt werden.
 
 ## Beispielbilder für Arbeitsdokumente
 
-`06_Beispielbilder` enthält die vom Inhaber bereitgestellten Motive. Für den [aktiven Showcase](../05_Probelisten_Testdaten/Showcase/README.md) wurden sechs Originaldateien unverändert in die reproduzierbare Fixture-Ablage übernommen. Galerie, Seitenbilder und Aufgabenanhänge demonstrieren ihre Integration. Dateinamen, ursprüngliche Quelle und SHA-256 stehen im [Quellennachweis](../01_Repository/Glide/tests/fixtures/showcase/quellen.json). Die Grafikmaster werden durch Erzeugung und Prüfung nicht verändert.
+`06_Beispielbilder` enthält eigene aktuelle Referenzmotive für Arbeitsdokumente. Die sechs Originaldateien des [aktiven Showcase](../05_Probelisten_Testdaten/Showcase/README.md) lagen früher ebenfalls hier, sind seit 03.10.2026 aber ausschließlich in `01_Repository/Glide/tests/fixtures/showcase/bilder` abgelegt. Galerie, Seitenbilder und Aufgabenanhänge demonstrieren ihre Integration. Dateinamen, ursprüngliche Quelle und SHA-256 stehen im [Quellennachweis](../01_Repository/Glide/tests/fixtures/showcase/quellen.json). Die heutigen Motive in `06_Beispielbilder` sind andere Dateien und keine fehlenden Showcase-Originale.

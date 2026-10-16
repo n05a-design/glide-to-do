@@ -445,9 +445,9 @@ with tempfile.TemporaryDirectory(prefix="glide-features325-") as folder:
             figuren[0].set_state(name)
             root.update()
             assert figuren[0].find_all(), name
-        app.settings["mascot_name"] = "  Bo  "
-        assert app.normalize_personal_settings(dict(app.settings))["mascot_name"] == "Bo"
-        app.settings["mascot_name"] = ""
+        # B03 (15.10.2026): Frühere Namens- und Abschaltwerte entfallen beim Laden.
+        bereinigt = app.normalize_personal_settings(dict(app.settings, mascot_name="  Bo  ", mascot_playful=False))
+        assert "mascot_name" not in bereinigt and "mascot_playful" not in bereinigt
 
         # ================================================================
         # Punkt 5.2: Ein Fehler hält die Anwendung nicht an

@@ -7,7 +7,8 @@ from pathlib import Path
 import tempfile
 
 repo = Path(__file__).resolve().parents[2]
-D12 = ['mascot', 'today', 'week', 'recent', 'boardpreview', 'drawings', 'pinned']
+# D12, seit B04 (15.10.2026) mit „Galeriebilder“ als achter Standardkachel.
+D12 = ['mascot', 'today', 'week', 'recent', 'boardpreview', 'drawings', 'gallery', 'pinned']
 
 
 def descendants(widget):
@@ -67,7 +68,7 @@ with tempfile.TemporaryDirectory(prefix='glide-startseite-') as directory:
 
     try:
         idle()
-        # --- Neuer Bestand: Standard „Ruhig“ mit sieben Kacheln (D12) -------
+        # --- Neuer Bestand: Standard „Ruhig“ mit acht Kacheln (D12, B04) ----
         assert visible() == D12, visible()
         assert app.settings['home_tile_order'] == []
         liste = app.lists[0] if not app.is_inbox_list(app.lists[0]) else app.ensure_inbox_list()

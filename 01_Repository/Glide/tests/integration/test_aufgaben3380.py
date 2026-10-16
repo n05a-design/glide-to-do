@@ -447,7 +447,8 @@ def klicks(app_path, report, *, gross=False, tempo=False):
                     x = box[0] + 12
                     y = box[1] + box[3] // 2
                     if col == 'due' and field == 'planned' and (name != 'Tabelle'):
-                        font = app.measurement_font(m.app_font(m.glide_design.FONT_SIZES['section'], 'bold')) if 'today_next' in app.tree.item(row, 'tags') else app.task_row_font()
+                        # B13: nur die Titelzelle der nächsten Aufgabe ist fett, in Zeilengröße.
+                        font = app.tree_cell_font(row, 'due')
                         prefix = m.glide_interaction.date_text(app.format_due_column(task['due']), '', app.DUE_COLUMN_ICON, app.ICONS['today']) + ' · '
                         x = box[0] + 8 + font.measure(prefix) + 12
                     if col == '#0':
@@ -457,7 +458,7 @@ def klicks(app_path, report, *, gross=False, tempo=False):
                         idx = display.rfind(marker, 0, display.rfind(body))
                         assert idx >= 0, (name, display)
                         start = next((x for x in range(box[0], box[0] + box[2]) if app.tree.identify_element(x, y) == 'text'))
-                        font = app.measurement_font(m.app_font(m.glide_design.FONT_SIZES['section'], 'bold')) if 'today_next' in app.tree.item(row, 'tags') else app.task_row_font()
+                        font = app.tree_cell_font(row, '#0')
                         x = start + font.measure(display[:idx]) + font.measure(marker.rstrip()) / 2
                     assert x < box[0] + box[2] and x < app.tree.winfo_width(), (name, field, 'Pflichtfeld abgeschnitten')
                     print('Klick', name, field, x, y, flush=True)
