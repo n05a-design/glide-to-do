@@ -1,0 +1,66 @@
+{
+  "datum": "2026-10-17",
+  "gegenstand": "FP-01 Wiederholen nach Rückgängig, Stufe 1 und 2 (D49 E-W1 A/V)",
+  "stand": "Kandidat auf main 8eeff81 (3.43.1), Zweig claude/fp01-wiederholen; keine Lieferung, keine neue Version",
+  "plattform": "Windows 11 Pro, Python 3.14.7, Tk 9.0.4, künstliche Daten",
+  "unit": {
+    "test_undo_history": "12/12",
+    "alle_units": "726/726"
+  },
+  "werkzeugtests": "152/152",
+  "pflichtsuite": {
+    "test_wiederholen": "9/9 grün",
+    "gegenprobe_3_43_1": "9/9 rot"
+  },
+  "regression": {
+    "suiten": 57,
+    "gruen_im_ersten_lauf": 55,
+    "befunde": {
+      "test_wissen3340.py": "Attrappe von show_undo_toast ohne neuen Parameter; behoben durch eigene Methode show_redo_toast (Signatur von show_undo_toast unverändert), danach grün",
+      "test_features330.py": "Zeile 641 verlangte, dass der Hinweis nach Rückgängig verschwindet; nach FP-01 bietet er Wiederholen, Zusicherung an den Vertrag angepasst. Zeile 308 (Zoom der Zeichenfläche) scheitert auf diesem Rechner auch an main 8eeff81 in 2/2 Läufen; Diagnosekopie ohne diese Zusicherung vollständig grün"
+    },
+    "nach_umbau_des_hinweises": {
+      "test_austausch3350.py": 0,
+      "test_eisenhower3335.py": 0,
+      "test_komfort33320.py": 0,
+      "test_planen33313.py": 0,
+      "test_wiederholen.py": 0
+    }
+  },
+  "messung_abhaken_5000_item_change": {
+    "werkzeug": "scripts/pflege/messung_speicherweg.py --items 5000 --lokale-punktmutation",
+    "reihenfolge": "Kandidat, main, Kandidat, main",
+    "kandidat": [
+      {
+        "median_ms": 126.148,
+        "p95_ms": 156.458
+      },
+      {
+        "median_ms": 110.4,
+        "p95_ms": 145.636
+      }
+    ],
+    "main_3_43_1": [
+      {
+        "median_ms": 110.905,
+        "p95_ms": 124.963
+      },
+      {
+        "median_ms": 118.937,
+        "p95_ms": 152.511
+      }
+    ],
+    "befund": "kein Unterschied über der Streuung; beide um das Ziel 120 ms"
+  },
+  "zusatzspeicher_10000_punkte": {
+    "je_schritt_bytes": 414557,
+    "hoechstens_20_schritte_bytes": 8291140
+  },
+  "ci_grundstufe": "bestanden (Exit 0): Syntax, Versionen 3.43.1/Format 25, Dokumentation, Fixtures, 152 Werkzeugtests, 726 Units auch ohne Systemzeitzonen, fünf Analysen, Startprobe, Fremdcode, Datenschutz, Ablagegröße, Synchronisation; Lieferstand als zulässiger Hinweis (Hauptdatei, action_catalog.py, undo_history.py noch nicht in 07)",
+  "offen": [
+    "Versionswechsel, eingefrorene Vollprüfung und GitHub-Matrix mit der Lieferung",
+    "native Tastenwege macOS und Linux/X11 Tk 9.1",
+    "Mac-Bundle",
+    "Menschenabnahme nach Prüfliste"
+  ]
+}

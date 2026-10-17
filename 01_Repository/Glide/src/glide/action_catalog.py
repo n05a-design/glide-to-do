@@ -126,6 +126,7 @@ GROUPS = {
  'explain_saved_filter': 'Ansichten',
  'toggle_theme': 'Ansichtseinstellungen',
  'undo_last_change': 'Bearbeiten',
+ 'redo_last_change': 'Bearbeiten',
  'use_default_data_folder': 'Daten und Ablage',
  'workspace.close_tab': 'Ansichten',
  'workspace.open_tab': 'Ansichten',
@@ -212,6 +213,7 @@ LEGACY_GROUPS = {'show_library_new_menu': 'Neu anlegen', 'show_library_import_me
  'Reiter nach rechts': 'Ansichten',
  'Reiter schließen': 'Ansichten',
  'Rückgängig': 'Bearbeiten',
+ 'Wiederholen': 'Bearbeiten',
  'Schnellerfassung …': 'Neu anlegen',
  'Seite aus Zwischenablage': 'Import',
  'Seite, Punkt oder Aktion suchen …': 'Ansichten',
@@ -246,7 +248,8 @@ LEGACY_GROUPS = {'show_library_new_menu': 'Neu anlegen', 'show_library_import_me
 
 EDITOR_EVENTS = {
     "copy_selected_to_clipboard": "<<Copy>>", "paste_items_from_clipboard": "<<Paste>>",
-    "undo_last_change": "<<Undo>>", "select_all_items": "<<SelectAll>>",
+    "undo_last_change": "<<Undo>>", "redo_last_change": "<<Redo>>",
+    "select_all_items": "<<SelectAll>>",
 }
 
 

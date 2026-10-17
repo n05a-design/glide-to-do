@@ -157,6 +157,7 @@ import object_references as glide_objects
 import week_planning as glide_week
 import page_features as glide_pages
 import action_catalog as glide_actions  # noqa: E402
+import undo_history as glide_undo  # noqa: E402
 import ui_design as glide_design  # noqa: E402
 import planning as glide_planning  # noqa: E402
 import day_proposal as glide_day_proposal  # noqa: E402
@@ -6414,8 +6415,10 @@ class ItemWorkspace:
             stapel = self._view_undo = []
         stapel.append({"scope": scope, "board": vorher, "depth": len(self.app.undo_stack), "label": label})
         del stapel[:-self.VIEW_UNDO_LIMIT]
+        # Eine neue Flächenänderung verwirft Wiederholen wie jede neue Änderung (FP-01).
+        self.app.redo_steps().clear()
         self._signature = None
-        self.app.show_undo_toast(label, restore=self.undo_view_change)
+        self.app.show_undo_toast(label, restore=lambda: self.app.undo_board_view(self))
         return True
 
     def view_undo_pending(self):
@@ -6423,19 +6426,44 @@ class ItemWorkspace:
         return bool(stapel) and stapel[-1]["depth"] == len(self.app.undo_stack) \
             and stapel[-1]["scope"] == self.context() and self.visible and self.mode == "board"
 
+    def _set_stored_board(self, scope, board):
+        if board is None:
+            self.app.settings["pinboards"].pop(scope, None)
+        else:
+            self.app.settings["pinboards"][scope] = copy.deepcopy(board)
+
     def undo_view_change(self):
+        """Nimmt die letzte Flächenänderung zurück; liefert den Wiederholen-Schritt."""
         stapel = getattr(self, "_view_undo", None) or []
         if not stapel:
-            return False
+            return None
         eintrag = stapel.pop()
+        jetzt = copy.deepcopy(self.app.settings["pinboards"].get(eintrag["scope"]))
+        if not self.save_view_change(lambda: self._set_stored_board(eintrag["scope"], eintrag["board"])):
+            stapel.append(eintrag)
+            return None
+        self._signature = None
+        self.refresh()
+        return glide_undo.board_redo_entry(eintrag["scope"], copy.deepcopy(eintrag["board"]), jetzt,
+                                           eintrag["label"])
 
-        def change():
-            if eintrag["board"] is None:
-                self.app.settings["pinboards"].pop(eintrag["scope"], None)
-            else:
-                self.app.settings["pinboards"][eintrag["scope"]] = copy.deepcopy(eintrag["board"])
-        if not self.save_view_change(change):
+    def redo_view_change(self, entry):
+        """Wiederholt eine zurückgenommene Flächenänderung.
+
+        `None`: Die Fläche zeigt nicht mehr den Stand nach dem Rückgängig – sie
+        wurde inzwischen anders verändert. `False`: Speichern gescheitert.
+        """
+        scope = entry["scope"]
+        if self.app.settings["pinboards"].get(scope) != entry["restored"]:
+            return None
+        if not self.save_view_change(lambda: self._set_stored_board(scope, entry["board"])):
             return False
+        stapel = getattr(self, "_view_undo", None)
+        if stapel is None:
+            stapel = self._view_undo = []
+        stapel.append({"scope": scope, "board": copy.deepcopy(entry["restored"]),
+                       "depth": len(self.app.undo_stack), "label": entry["label"]})
+        del stapel[:-self.VIEW_UNDO_LIMIT]
         self._signature = None
         self.refresh()
         return True
@@ -14389,6 +14417,13 @@ class ListApp:
              "Umschalt+Enter in der Schnelleingabe · Datei › Neu anlegen"),
             ("Statuszeile", "Zahl der Punkte, Filterhinweis und Datum.",
              "Unten im Fenster"),
+            ("Rückgängig und Wiederholen", "Strg/Cmd+Z nimmt die letzte Änderung zurück, bis zu 20 Schritte. "
+                                           "Strg/Cmd+Umschalt+Z – unter Windows auch Strg+Y – holt sie wieder; "
+                                           "nach „Rückgängig“ im Hinweis bietet derselbe Hinweis „Wiederholen“. "
+                                           "Eine neue Änderung verwirft die Wiederholen-Schritte. In Texten und "
+                                           "auf der Zeichenfläche gelten deren eigene Schritte. Ältere Stände "
+                                           "zeigt „Sicherungen vergleichen“.",
+             "Bearbeiten › Rückgängig / Wiederholen · Änderungsverlauf"),
         )),
         ("Ansichten", (
             ("Startseite", "Kacheln mit Uhr, Begrüßung, Tagesziel, nächster Aufgabe, Woche, Zeichnungen, "
@@ -15746,6 +15781,8 @@ class ListApp:
         self.active_folder_id = None
         self.view_mode = "list"
         self.undo_stack = []
+        # Wiederholen nach Rückgängig (FP-01): gleiche Tiefe, nur im Arbeitsspeicher.
+        self.redo_history = glide_undo.RedoHistory(self.MAX_UNDO_STEPS)
         self.dirty = False
         self._after_ids = set()
         self._ui_transitions = glide_motion.Transitions(self.root.after, self.cancel_ui_after)
@@ -15873,6 +15910,10 @@ class ListApp:
         self.root.bind("<Control-s>", lambda e: self.save_items())
         self.root.bind("<Control-q>", lambda e: self.on_close())
         self.root.bind("<Control-z>", self.undo_last_change)
+        # Wiederholen (FP-01): Umschalt+Z überall, unter Windows zusätzlich
+        # Strg+Y. Kleines z deckt eine eingerastete Feststelltaste ab.
+        for sequence in ("<Control-Shift-Z>", "<Control-Shift-z>") + (("<Control-y>",) if IS_WINDOWS else ()):
+            self.root.bind(sequence, self.redo_last_change)
         self.root.bind("<Control-c>", self.copy_selected_to_clipboard)
         self.root.bind("<Control-v>", self.paste_items_from_clipboard)
         self.root.bind("<Control-a>", self.select_all_items)
@@ -15884,6 +15925,8 @@ class ListApp:
             self.root.bind("<Command-v>", self.paste_items_from_clipboard)
             self.root.bind("<Command-a>", self.select_all_items)
             self.root.bind("<Command-z>", self.undo_last_change)
+            self.root.bind("<Command-Shift-Z>", self.redo_last_change)
+            self.root.bind("<Command-Shift-z>", self.redo_last_change)
             self.root.bind("<Command-f>", self.focus_search)
             self.root.bind("<Command-F>", self.handle_control_f)
             self.root.bind("<Command-t>", self.set_due_date_selected)
@@ -17175,6 +17218,7 @@ class ListApp:
         "deleted": ("trash", "In den Papierkorb", "{n} in den Papierkorb"),
         "restored": ("check", "Wiederhergestellt", "{n} wiederhergestellt"),
         "undone": ("repeat", "Rückgängig", "Rückgängig"),
+        "redone": ("redo", "Wiederholt", "Wiederholt"),
         "grouped": ("group", "Gruppiert", "{n} Punkte gruppiert"),
         "duplicated": ("check", "Dupliziert", "{n} dupliziert"),
         "moved": ("list", "Verschoben", "{n} verschoben"),
@@ -17234,26 +17278,49 @@ class ListApp:
         Unabhängig von Animationen: Er ist Bedienung, nicht Dekoration. Er
         nimmt nur zurück, was er meldet – ist inzwischen eine weitere Änderung
         erfolgt, verschwindet er, statt eine andere Aktion rückgängig zu machen.
+        Danach bietet derselbe Hinweis „Wiederholen“ (FP-01).
         """
         if not hasattr(self, "main_area") or (restore is None and not self.undo_stack):
             return None
+        depth = len(self.undo_stack)
+
+        def undo():
+            # Eine eigene Wiederherstellung gilt für Ansichtsänderungen, die
+            # nicht im Rückgängig-Stapel stehen (etwa Pinnwandkarten).
+            self.hide_undo_toast()
+            redo = self.redo_steps()
+            vorher = redo.peek() if redo.validate(self.undo_stack) else None
+            if restore is not None:
+                restore()
+            elif len(self.undo_stack) == depth:
+                self.undo_last_change()
+            neu = redo.peek() if redo.validate(self.undo_stack) else None
+            if neu is not None and neu is not vorher:
+                self.show_redo_toast(neu)
+
+        return self._place_history_toast(text, "Rückgängig", undo)
+
+    def show_redo_toast(self, entry):
+        """Nach „Rückgängig“ im Hinweis: derselbe Platz bietet „Wiederholen“ für genau diesen Schritt."""
+        if not hasattr(self, "main_area"):
+            return None
+
+        def redo_step():
+            self.hide_undo_toast()
+            redo = self.redo_steps()
+            if redo.validate(self.undo_stack) and redo.peek() is entry:
+                self.redo_last_change()
+
+        return self._place_history_toast("Rückgängig gemacht", "Wiederholen", redo_step)
+
+    def _place_history_toast(self, text, label, command):
         self.hide_undo_toast()
         depth = len(self.undo_stack)
         toast = tk.Frame(self.main_area, bg=self.theme["card"], highlightthickness=1,
                          highlightbackground=self.theme["line"])
         tk.Label(toast, text=text, bg=self.theme["card"], fg=self.theme["text"], font=app_font(10)).pack(
             side="left", padx=(14, 10), pady=8)
-
-        def undo():
-            # Eine eigene Wiederherstellung gilt für Ansichtsänderungen, die
-            # nicht im Rückgängig-Stapel stehen (etwa Pinnwandkarten).
-            self.hide_undo_toast()
-            if restore is not None:
-                restore()
-            elif len(self.undo_stack) == depth:
-                self.undo_last_change()
-
-        button = self._make_dialog_button(toast, "Rückgängig", undo, "accent", width=110, height=30)
+        button = self._make_dialog_button(toast, label, command, "accent", width=110, height=30)
         button.pack(side="left", padx=(0, 8), pady=6)
         toast.place(relx=0.5, rely=1.0, anchor="s", y=-14)
         toast.lift()
@@ -17725,6 +17792,7 @@ class ListApp:
         self._templates_editing = False
         self.load_items()
         self.undo_stack.clear()
+        self.redo_steps().clear()
         self.update_sidebar_list()
         self.apply_theme()
         self.init_daily_planning()
@@ -39073,6 +39141,7 @@ class ListApp:
         menu.add_command(label="Löschen", command=self.delete_item)
         menu.add_command(label="Bearbeiten", command=self.edit_item)
         menu.add_command(label="Rückgängig", command=self.undo_last_change)
+        menu.add_command(label="Wiederholen", command=self.redo_last_change)
         menu.add_separator()
         menu.add_command(label="Alle Aktionen durchsuchen …", command=self.show_actions_dialog)
         knopf = getattr(self, "header_overflow_button", None)
@@ -42260,6 +42329,10 @@ class ListApp:
 
         self._saved_comparison_parts = comparison.parts
         self.remember_written_data_format()
+        if not getattr(self, "_autosave_unchanged", False):
+            # Jede gespeicherte Änderung, auch ein Zustellbeleg ohne
+            # Rückgängig-Punkt, macht „Wiederholen“ ungültig (FP-01).
+            self.redo_steps().note_write()
 
         # Aktivität und „zuletzt bearbeitet“ in einem Schreibvorgang (P06r).
         with self.settings_write_batch():
@@ -42942,6 +43015,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """
         self._after_ids.discard(self._autosave_id)
         self._autosave_id = None
+        # Ohne ausstehende Änderung ist das ein reiner Sicherheitspunkt; er
+        # verwirft „Wiederholen“ nicht, sonst ginge es nach Minuten verloren.
+        self._autosave_unchanged = not self.dirty
         try:
             self.refresh_data_lock()
             # Vollvergleich auch bei dirty=False: Sicherheitsnetz für einen
@@ -42950,6 +43026,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         except Exception:
             pass
         finally:
+            self._autosave_unchanged = False
             self.schedule_autosave()
 
     # -----------------------------
@@ -50003,41 +50080,52 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if (self.settings.get("time_booking") and not getattr(self, "_time_booking_recovering", False)
                 and not self.recover_time_booking()):
             raise glide_focus.PendingBookingError()
+        self.undo_stack.append(self.undo_state())
+        if trim:
+            self.trim_undo_stack()
+
+    def undo_state(self):
+        """Der aktuelle Stand im Format des Rückgängig-Stapels."""
         # Offene Zellstriche gehören in den Stand vor jeder weiteren Aktion –
         # sonst verlöre etwa ein sofortiges Löschen der Seite den letzten Zug.
         self.flush_drawing_editor()
         if self.active_list_id and self.lists:
             self.sync_current_list_reference()
-        self.undo_stack.append(
-            {
-                "sidebar_locations": copy.deepcopy(self.settings.get("sidebar_locations", {})),
-                "lists": PackedState(self.lists),
-                "folders": PackedState(self.folders),
-                "labels": PackedState(self.labels),
-                "trash": PackedState(self.trash),
-                "active_list_id": self.active_list_id,
-                "active_folder_id": self.active_folder_id if self.view_mode == "folder" else None,
-                "view_mode": self.view_mode,
-            }
-        )
-        if trim:
-            self.trim_undo_stack()
+        return {
+            "sidebar_locations": copy.deepcopy(self.settings.get("sidebar_locations", {})),
+            "lists": PackedState(self.lists),
+            "folders": PackedState(self.folders),
+            "labels": PackedState(self.labels),
+            "trash": PackedState(self.trash),
+            "active_list_id": self.active_list_id,
+            "active_folder_id": self.active_folder_id if self.view_mode == "folder" else None,
+            "view_mode": self.view_mode,
+        }
 
     def trim_undo_stack(self):
         """Hält den Rückgängig-Stapel auf seiner Höchstlänge."""
         while len(self.undo_stack) > self.MAX_UNDO_STEPS:
             self.undo_stack.pop(0)
 
-    def apply_snapshot(self, snapshot):
+    def redo_steps(self):
+        """Wiederholen-Stapel (FP-01); Prüfattrappen ohne `__init__` bekommen ihn bei Bedarf."""
+        history = getattr(self, "redo_history", None)
+        if history is None:
+            history = self.redo_history = glide_undo.RedoHistory(self.MAX_UNDO_STEPS)
+        return history
+
+    def apply_snapshot(self, snapshot, save=True):
         """Stellt einen Stand aus dem Rückgängig-Speicher vollständig her.
 
-        Gemeinsame Grundlage von „Rückgängig“ und vom Bestandswächter: beide
-        müssen denselben Weg zurückgehen, sonst driften sie auseinander.
+        Gemeinsame Grundlage von „Rückgängig“, „Wiederholen“ und vom
+        Bestandswächter: alle müssen denselben Weg gehen, sonst driften sie
+        auseinander. Liefert, ob gespeichert wurde. `save=False` stellt nur im
+        Arbeitsspeicher her – für den Rückweg, wenn das Speichern scheiterte.
         """
         with self.settings_write_batch():
-            self._apply_snapshot(snapshot)
+            return self._apply_snapshot(snapshot, save=save)
 
-    def _apply_snapshot(self, snapshot):
+    def _apply_snapshot(self, snapshot, save=True):
         self.settings["sidebar_locations"] = copy.deepcopy(snapshot.get("sidebar_locations", {}))
         self.save_settings(defer=True)
         self.lists = unpack_state(snapshot.get("lists"))
@@ -50062,11 +50150,19 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             # geöffneten Liste. Eine abgeleitete Ansicht bleibt jetzt stehen.
             self._activate_system_view(desired_view_mode, refresh=False)
         # Erfolgreiches Speichern baut die Seitenleiste bereits neu auf (P06r).
-        if not self.save_items():
+        saved = bool(save) and self.save_items()
+        if not saved:
             self.update_sidebar_list()
         self.refresh_tree()
+        return saved
 
-    def undo_last_change(self, event=None):
+    def history_step_blocked(self, event, editor_step):
+        """Gemeinsame Vorprüfung von Rückgängig und Wiederholen.
+
+        Liefert den Rückgabewert, wenn der Schritt nicht global ausgeführt
+        wird, sonst `False`. Textfelder und die Zeichenfläche behalten ihre
+        eigenen Stapel (FP-01, Kriterium 3).
+        """
         if self.settings.get("time_booking") and not self.recover_time_booking():
             return "break"
         if event is not None and isinstance(self.current_focus_widget(), (tk.Entry, tk.Text, ttk.Entry)):
@@ -50075,22 +50171,104 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         editor = self.current_drawing_editor()
         if event is not None and editor is not None and self.current_focus_widget() is editor.canvas:
             # Auf der Zeichenfläche gilt der eigene Zellpuffer.
-            return editor.undo()
+            return editor_step(editor)
         self.flush_drawing_editor()
+        return False
+
+    def undo_last_change(self, event=None):
+        blocked = self.history_step_blocked(event, lambda editor: editor.undo())
+        if blocked is not False:
+            return blocked
+        redo = self.redo_steps()
         workspace = getattr(self, "workspace", None)
         if workspace is not None and workspace.view_undo_pending():
             # Aufräumen und Bereichsänderungen der Pinnwand (3.30) sind je ein
             # Schritt – solange danach keine Punktänderung kam.
-            workspace.undo_view_change()
-            self.hide_undo_toast()
-            self.feedback("undone")
+            self.undo_board_view(workspace)
             return "break"
         if not self.undo_stack:
             self.show_info("Rückgängig", "Es gibt keine Änderung zum Rückgängigmachen.")
             return "break"
-        self.apply_snapshot(self.snapshot_keeping_drawings(self.undo_stack.pop()))
-        self.feedback("undone")
+        redo.validate(self.undo_stack)
+        current = self.undo_state()
+        snapshot = self.undo_stack.pop()
+        if snapshot.get("drawing_restore"):
+            # Wiederholen muss dieselbe Zeichnung wieder auf den Stand danach bringen.
+            current["drawing_restore"] = list(snapshot["drawing_restore"])
+        dirty = self.dirty
+        if self.apply_snapshot(self.snapshot_keeping_drawings(snapshot)):
+            redo.push(current, self.undo_stack)
+            self.feedback("undone")
+        else:
+            # Speichern gescheitert: Arbeitsspeicher wieder wie die Datei, beide
+            # Stapel unverändert. Die Fehlermeldung hat `save_items` gezeigt.
+            self.undo_stack.append(snapshot)
+            self.apply_snapshot(current, save=False)
+            self.dirty = dirty
         return "break"
+
+    def redo_last_change(self, event=None):
+        """Nimmt das letzte Rückgängig zurück (FP-01)."""
+        blocked = self.history_step_blocked(event, lambda editor: editor.redo())
+        if blocked is not False:
+            return blocked
+        redo = self.redo_steps()
+        if not redo.validate(self.undo_stack):
+            self.show_info("Wiederholen", "Es gibt keine Änderung zum Wiederholen.")
+            return "break"
+        entry = redo.pop()
+        if glide_undo.is_board_entry(entry):
+            self.redo_board_view(entry)
+            return "break"
+        before = self.undo_state()
+        if entry.get("drawing_restore"):
+            before["drawing_restore"] = list(entry["drawing_restore"])
+        self.undo_stack.append(before)
+        dirty = self.dirty
+        if self.apply_snapshot(self.snapshot_keeping_drawings(entry)):
+            self.trim_undo_stack()
+            redo.mark(self.undo_stack)
+            self.feedback("redone")
+        else:
+            self.undo_stack.pop()
+            self.apply_snapshot(before, save=False)
+            self.dirty = dirty
+            redo.restore(entry)
+        return "break"
+
+    def redo_available(self):
+        return self.redo_steps().validate(self.undo_stack)
+
+    def undo_board_view(self, workspace):
+        """Flächenänderung der Pinnwand zurücknehmen und als Wiederholen merken."""
+        redo = self.redo_steps()
+        redo.validate(self.undo_stack)
+        entry = workspace.undo_view_change()
+        self.hide_undo_toast()
+        if entry:
+            redo.push(entry, self.undo_stack)
+            self.feedback("undone")
+        return bool(entry)
+
+    def redo_board_view(self, entry):
+        """Eine zurückgenommene Flächenänderung der Pinnwand wiederholen."""
+        redo = self.redo_steps()
+        workspace = getattr(self, "workspace", None)
+        result = workspace.redo_view_change(entry) if workspace is not None else None
+        if result is False:
+            # Speichern gescheitert; die Meldung kam schon. Schritt bleibt.
+            redo.restore(entry)
+            return False
+        if result is None:
+            # Die Fläche wurde inzwischen anders verändert: kein stilles Überschreiben.
+            redo.clear()
+            self.show_info("Wiederholen", "Die Pinnwand wurde inzwischen verändert. "
+                           "Es gibt keine Änderung zum Wiederholen.")
+            return False
+        redo.mark(self.undo_stack)
+        self.hide_undo_toast()
+        self.feedback("redone")
+        return True
 
     # -----------------------------
     # Bestandswächter
@@ -50178,6 +50356,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return False
         snapshot = self.undo_stack[depth]
         del self.undo_stack[depth:]
+        # Ein Wächterabbruch ist kein Rückgängig; Wiederholen gilt danach nicht.
+        self.redo_steps().clear()
         self.apply_snapshot(snapshot)
         return True
 
@@ -59126,6 +59306,11 @@ Labels, Termine und Metadaten."""
         modifier = "Cmd" if IS_MACOS else "Strg"
         return "+".join([modifier] + [str(key) for key in keys])
 
+    @classmethod
+    def redo_accel(cls):
+        """Beschriftung für „Wiederholen“ nach Systemkonvention (Windows: Strg+Y)."""
+        return cls.accel("Y") if IS_WINDOWS else cls.accel("Shift", "Z")
+
     SIDEBAR_RAIL_WIDTH = 64
 
     def sidebar_narrow(self):
@@ -59435,6 +59620,16 @@ Labels, Termine und Metadaten."""
         flow.add(self._make_dialog_button(flow, "Zur Startseite" if embedded else "Schließen", self.set_home_view if embedded else dialog.destroy, "muted"))
         flow.add(self._make_dialog_button(flow, "Verlauf leeren", leeren, "delete", width=150))
         flow.add(self._make_dialog_button(flow, "Als TXT speichern", speichern, "export", width=178))
+
+        def sicherungen():
+            # FP-01 Stufe 2: Ältere Stände als die Rückgängig-Schritte liegen
+            # in den Sicherungen. Aus dem Fenster erst nach dem Schließen öffnen.
+            if embedded:
+                self.show_backup_compare_dialog()
+            else:
+                dialog.destroy()
+                self._register_after(self.root.after_idle(self.show_backup_compare_dialog))
+        flow.add(self._make_dialog_button(flow, "Sicherungen vergleichen …", sicherungen, "muted", width=222))
         dialog.bind("<Escape>", lambda _event: self.set_home_view() if embedded else dialog.destroy())
         aktualisiere()
         if not embedded:
@@ -59979,6 +60174,7 @@ Labels, Termine und Metadaten."""
             )),
             ("Bearbeiten", (
                 ("Rückgängig", self.undo_last_change, self.accel("Z")),
+                ("Wiederholen", self.redo_last_change, self.redo_accel()),
                 None,
                 ("Zwischenablage", (
                     ("Kopieren", self.copy_selected_to_clipboard, self.accel("C")),
@@ -60600,6 +60796,8 @@ Labels, Termine und Metadaten."""
             ("Allgemein", [
                 (self.accel("O"), "Seite, Punkt oder Aktion suchen (auch ⌕ in der Kopfzeile)"),
                 (self.accel("Z"), "Letzte Änderung rückgängig machen"),
+                (f"{self.accel('Shift', 'Z')}" + (f" / {self.accel('Y')}" if IS_WINDOWS else ""),
+                 "Rückgängig gemachte Änderung wiederholen"),
                 (self.accel("C"), "Ausgewählte Punkte kopieren"),
                 (self.accel("V"), "Punkte aus der Zwischenablage einfügen"),
                 (self.accel("F"), "Suche öffnen"),

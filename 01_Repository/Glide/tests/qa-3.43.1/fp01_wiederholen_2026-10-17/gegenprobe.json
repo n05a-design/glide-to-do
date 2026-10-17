@@ -1,0 +1,52 @@
+{
+  "app": "src/glide/app.pyw aus main 8eeff81 (3.43.1)",
+  "faelle": {
+    "matrix": {
+      "ok": false,
+      "befund": "AssertionError('anlegen: kein Wiederholen nach Rückgängig')"
+    },
+    "gueltigkeit": {
+      "ok": false,
+      "befund": "AssertionError('Vorbedingung: Wiederholen offen')"
+    },
+    "schreibfehler": {
+      "ok": false,
+      "befund": "AssertionError('Gescheitertes Rückgängig ändert den Bestand')"
+    },
+    "fokusbuchung": {
+      "ok": false,
+      "befund": "AssertionError('Vorbedingung: Wiederholen offen')"
+    },
+    "editoren": {
+      "ok": false,
+      "befund": "AssertionError('Vorbedingung: Wiederholen offen')"
+    },
+    "pinnwand": {
+      "ok": false,
+      "befund": "AssertionError('Kein Wiederholen nach Flächen-Rückgängig')"
+    },
+    "bedienwege": {
+      "ok": false,
+      "befund": "AssertionError('Bearbeiten › Wiederholen fehlt')"
+    },
+    "verlauf": {
+      "ok": false,
+      "befund": "AssertionError('Kein Verweis auf „Sicherungen vergleichen“ im Verlauf')"
+    },
+    "messung": {
+      "ok": false,
+      "befund": "AttributeError(\"'ListApp' object has no attribute 'redo_steps'\")"
+    }
+  },
+  "fehler": [
+    "matrix",
+    "gueltigkeit",
+    "schreibfehler",
+    "fokusbuchung",
+    "editoren",
+    "pinnwand",
+    "bedienwege",
+    "verlauf",
+    "messung"
+  ]
+}

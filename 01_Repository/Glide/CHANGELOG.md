@@ -1,5 +1,10 @@
 # Änderungsverlauf
 
+## In Arbeit – nächste Version (keine Lieferung)
+
+- **Wiederholen nach Rückgängig (FP-01, D49):** Bearbeiten › Wiederholen, Palette, Strg/Cmd+Umschalt+Z und unter Windows Strg+Y nehmen ein Rückgängig zurück, auch für Aufräumen und Bereiche der Pinnwand; nach „Rückgängig“ im Hinweis bietet derselbe Hinweis „Wiederholen“. Eine neue oder gespeicherte Änderung verwirft die Schritte. Scheitert beim Rückgängig das Speichern, bleibt jetzt alles wie vorher, statt den Bestand nur im Arbeitsspeicher zurückzunehmen. Der Änderungsverlauf verweist für ältere Stände auf „Sicherungen vergleichen …“. Neues Tk-freies Modul `undo_history.py`; Datenformat 25 und Einstellungen unverändert.
+- **Prüfung:** Unit-Tests `test_undo_history.py`; Pflichtsuite `test_wiederholen.py` (neun Fälle über echte Tastenwege mit Bytevergleich des Bestands, gegen 3.43.1 alle rot); `test_features330` erwartet nach „Rückgängig“ im Hinweis jetzt „Wiederholen“ statt eines verschwundenen Hinweises.
+
 ## 3.43.1 – Kürzel in Listen unter Linux/Tk 9.1 (16.10.2026)
 
 - **Linux (X11) ab Tk 9.1:** Strg+Umschalt+P öffnet „Einplanen“ wieder für die gewählten Aufgaben. Tk legt unter X11 Strg+A/B/E/F/N/P, mit Umschalt erweiternd, zusätzlich auf Emacs-Navigation, und die Treeview folgt dem seit Tk 9.1: Vor Glides Kürzel sprang die Auswahl eine Zeile höher, in „Heute“ auf die Abschnittszeile, und das Menü blieb zu. Glide nimmt diese Strg-Buchstaben-Auslöser beim Start aus der Treeview-Klassenbindung (`guard_x11_emacs_navigation`). Pfeiltasten, Text- und Eingabefelder unverändert; Windows und macOS nicht betroffen.
