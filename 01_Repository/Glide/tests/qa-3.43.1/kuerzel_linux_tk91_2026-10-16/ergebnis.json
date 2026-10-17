@@ -89,9 +89,17 @@
     "mac_bundle": "nicht gebaut (Windows)"
   },
   "offen": [
-    "GitHub-Bestätigung Linux-Vollprüfung und Kalibrierte Erwartungen nach Push",
-    "test_tag3390 bei aktivem Desktop bzw. in der GitHub-Windows-Vollprüfung",
+    "test_tag3390 und test_template_workflows lokal wackelig (PS-01), auf GitHub grün",
     "Mac-Vollprüfung und baue_app.py auf dem Referenz-Mac",
     "Linux-Tastaturabnahme D5 der Prüfliste"
-  ]
+  ],
+  "github_bestaetigung": {
+    "lauf": 38979558948,
+    "commit": "eb5658c",
+    "datum": "2026-10-17",
+    "grundstufe": "grün",
+    "vollpruefung_linux_tk91": "grün einschließlich Kalibrierte Erwartungen",
+    "vollpruefung_windows_tk91": "grün",
+    "paket_windows": "grün"
+  }
 }
