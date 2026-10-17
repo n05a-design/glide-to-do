@@ -139,6 +139,13 @@ def run(app_path, cases, report):
         click_time = [1000]
         def click(dialog, caption):
             target = button(dialog, caption)
+            # Die Aktion startet 80 ms nach dem Öffnen. Auf langsamen Runnern ist
+            # der Dialog dann noch nicht eingeblendet (GitHub 16.10.2026:
+            # „Speichern nicht sichtbar“, sonst grün). Geklickt wird wie von
+            # einer Person erst, wenn der Knopf sichtbar ist – höchstens 3 s.
+            until = time.monotonic()+3
+            while not target.winfo_ismapped() and time.monotonic() < until:
+                pump();time.sleep(.01)
             assert target.winfo_ismapped(), caption+' nicht sichtbar'
             target.focus_set();pump()
             click_time[0] += 1000
@@ -294,7 +301,10 @@ def run(app_path, cases, report):
                 assert "unbekannt" in app.planning_available_text(day)
                 assert wait_ready().status=="ready"
                 assert app._detail_state["fields"]["text"] is title and title.get()=="Noch ungespeicherter Kalenderentwurf"
-                assert root.focus_get() is title
+                # Tk-Fokus im Fenster, nicht der Fokus des Betriebssystems: Liegt ein
+                # anderes Fenster vorn, liefert focus_get() None, ohne dass Glide den
+                # Fokus verschoben hätte (lokal abwechselnd rot, 16.10.2026).
+                assert root.focus_get() is title or str(root.tk.call("focus", "-lastfor", title)) == str(title)
                 assert fresh(0)["text"]=="Geplant"
                 app.close_task_inspector(discard=True)
                 checks.append("Hintergrundladen: unbekannte Zwischenbilanz und unveränderter ungespeicherter Inspektor")
