@@ -37,6 +37,14 @@ Zwei voneinander unabhängige Prüfwerkzeugfehler. Glide verhält sich in beiden
 
 `src/glide`, `07_Python-Versionen` und `05_Probelisten_Testdaten` unverändert.
 
+## Zusammenführung mit PR #33
+
+Parallel entstand [PR #33](https://github.com/n05a-design/glide-to-do/pull/33) (`claude/tag3390-sichtbarkeit`, `e96f51e`/`c0252ba`, auf `main` nach PR #32) mit einer kleineren Korrektur derselben zwei Stellen in `test_tag3390`: `click` wartet bis zu 3 s auf den sichtbaren Knopf, die Fokusprüfung Zeile 297 nimmt `focus -lastfor`. Am 17.10.2026 in diesen Zweig zusammengeführt; behalten wurde die vollständigere Korrektur dieses Nachlaufs:
+
+- Das Warten auf den angeordneten Dialog in `modal()` deckt auch die Dialoggeometrie (Zeile 532, vier der sechs roten Wiederholungen) ab, die nicht über `click` läuft; `click` bleibt streng, ein später verschwindender Knopf wird nicht überwartet.
+- Die Fokusprüfung verlangt zusätzlich `focus_get()` als dieses Feld oder `None`; PR #33 nahm jeden gemeldeten Fokus hin, solange `focus -lastfor` stimmte, und hätte einen Wechsel in ein anderes Glide-Fenster übersehen. Dazu der Hinweisfall (Zeile 183) und `test_template_workflows`, die PR #33 nicht berührt.
+- Übernommen aus PR #33: der GitHub-Stand nach PR #32 (Grundstufe, Linux- und Windows-Vollprüfung mit eigener Tk 9.1 einschließlich „Kalibrierte Erwartungen“, eigenständiger Windows-Paketlauf grün) in QA-Bericht, Übergabe, Projekt-README und 3.43.1-Nachweis; die Läufe von PR #33 selbst waren grün.
+
 ## Gegenproben mit Sonde
 
 Eine lokale Sonde setzt jeden Zustand gezielt und unabhängig von der Bedienlage: `aufbau` verlängert jeden zentrierten Dialog um 120 ms, `desktop` lässt Tk dauerhaft keinen Fokus melden, `desktopwechsel` nimmt den Vordergrund mitten in der Hinweiszustellung weg. Drei Defektproben prüfen, dass die neuen Prüfungen echte Fehler weiter melden: `fokusdefekt` (Glide setzt nach dem Neuladen den Fokus auf die Eingabezeile), `hinweisdefekt` (die Zustellung setzt den Fokus in die Liste), `popupdefekt` (Tk meldet den Fokus bei offenem Popup im Hauptfenster). Alt = Prüfung aus `b2af7a7`, neu = korrigierte Prüfung; App jeweils 3.43.1, wo nicht anders genannt.
@@ -77,13 +85,14 @@ Zeile 532 ist eine dritte Erscheinungsform desselben Wettlaufs, zweimal einzeln 
 
 | Prüfung | Ergebnis |
 |---|---|
-| CI-Grundstufe Windows mit `--lieferstand-streng` | bestanden, Exit 0, alle 19 Schritte: Syntax (307 Quelldateien), Versionen 3.43.1/Format 25, 191 Dokumentlinks, 152 Werkzeugtests, 714 Units auch ohne Systemzeitzonen, fünf Analysen, Startprobe, Lieferstand bytegleich, Fremdcode, Datenschutz, Ablagegröße, Synchronisation ([Protokoll](grundstufe.json)) |
+| Nach der Zusammenführung mit PR #33 | `test_tag3390` und `test_template_workflows` je einmal grün (kurzer Pfad, Ausfuhr des zusammengeführten Baums) |
+| CI-Grundstufe Windows mit `--lieferstand-streng`, zusammengeführter Stand | bestanden, Exit 0, alle 19 Schritte: Syntax (307 Quelldateien), Versionen 3.43.1/Format 25, 191 Dokumentlinks, 152 Werkzeugtests, 714 Units auch ohne Systemzeitzonen, fünf Analysen, Startprobe, Lieferstand bytegleich, Fremdcode, Datenschutz, Ablagegröße, Synchronisation ([Protokoll](grundstufe.json)) |
 | Erster Grundstufenlauf | ebenfalls Exit 0, aber Lieferstand nur als Hinweis „67 Abweichungen“: Ursache war diese Arbeitskopie, in der 75 Dateien von `07_Python-Versionen` mit CRLF statt LF ausgecheckt lagen (Git führt sie als LF). Im Repository sind alle 212 gemeinsamen Dateien von `src/glide` und `07_Python-Versionen` in `b2af7a7` blobgleich (nur die beiden eigenständigen `README.md` verschieden). Dateien neu aus Git angelegt, danach der strenge Lauf oben |
 | App und Lieferstand | `src/glide`, `07_Python-Versionen` und `05_Probelisten_Testdaten` gegenüber `b2af7a7` unverändert; Apphash `ed2b7eb6` in `src/glide/app.pyw` und `07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.43.1.pyw` |
 
 ## Grenzen
 
-- Windows 11, Tk 9.0.4, künstliche Daten. Unter macOS (Hintergrundmodus, App bleibt aktiv) und Linux/Xvfb nicht ausgeführt; die GitHub-Vollprüfung bestätigt beide Suiten erst nach dem Push.
+- Windows 11, Tk 9.0.4, künstliche Daten. Unter macOS (Hintergrundmodus, App bleibt aktiv) und Linux/Xvfb nicht ausgeführt; die GitHub-Vollprüfung des zusammengeführten Stands steht aus (3.43.1 selbst ist nach PR #32 vollständig grün, [Lauf 38979558948](https://github.com/n05a-design/glide-to-do/actions/runs/38979558948)).
 - Die eingefrorene Vollprüfung vom 16.10. gilt für ihren Stand; sie wird nicht als Lauf mit den neuen Prüfwerkzeugen ausgegeben.
 - Dieselbe Abhängigkeit vom Desktop-Vordergrund ist an zwei weiteren Stellen möglich, aber nicht beobachtet und nicht geändert: `test_ui39` öffnet in seiner Dropdown-Grundprüfung 15-mal ein Popup und prüft es sofort, `test_planen33313` verlangt 30 ms nach dem Öffnen des Kalenders `focus_get()` im Dialog. Einen festen Takt vor dem Aufbau hat sonst keine Suite (`test_planen33313` plant ihn erst in `run_modal`, `test_aufgaben3380` prüft keine Sichtbarkeit).
-- Unverändert offen: GitHub-Bestätigung des Windows-Paketlaufs und der Linux-Vollprüfung nach 3.43.1, Mac-Vollprüfung und Mac-Bundle, Menschenabnahme.
+- Unverändert offen: Mac-Vollprüfung und Mac-Bundle, Menschenabnahme.

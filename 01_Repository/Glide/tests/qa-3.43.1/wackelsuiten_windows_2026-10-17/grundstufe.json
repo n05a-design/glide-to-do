@@ -1,5 +1,5 @@
 {
-  "zeitpunkt": "2026-10-17T16:20:02",
+  "zeitpunkt": "2026-10-17T20:19:22",
   "stufe": "CI-Grundstufe",
   "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
   "plattform": "win32",
@@ -93,7 +93,7 @@
     {
       "schritt": "Ablagegröße",
       "status": "ausgeführt",
-      "grund": "1153 versionierte Dateien, 267 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen"
+      "grund": "1154 versionierte Dateien, 267 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen"
     },
     {
       "schritt": "Synchronisation",

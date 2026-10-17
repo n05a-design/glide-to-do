@@ -48,7 +48,7 @@ Glide bindet weiterhin `<Button-4>`/`<Button-5>` für das Rad unter Tk 8. Unter 
 
 ## Offen
 
-- **`test_tag3390`:** in der eingefrorenen Vollprüfung und einzeln unter 3.43.1 und 3.43.0 gleich rot (siehe Prüfungen); bei aktivem Desktop bzw. in der GitHub-Windows-Vollprüfung bestätigen. Geklärt im [Nachlauf 17.10.2026](../wackelsuiten_windows_2026-10-17/README.md) zusammen mit `test_template_workflows`: beides Prüfwerkzeug, App unverändert.
-- **GitHub-Bestätigung:** Die Linux-Vollprüfung mit eigener Tk 9.1 und „Kalibrierte Erwartungen“ bestätigt erst der nächste Lauf nach dem Push (Push nur mit Freigabe). Lokal gibt es kein Linux: die X11-Wege sind aus dem Tk-Quelltext am Pin belegt und unter Windows nachgestellt, nicht nativ unter X11 ausgeführt.
+- **`test_tag3390`:** in der eingefrorenen Vollprüfung und einzeln unter 3.43.1 und 3.43.0 gleich rot (siehe Prüfungen). Auf GitHub nach PR #32 (`eb5658c`, Lauf 38979558948) grün, bei `5674936` rot mit „Speichern nicht sichtbar“ – also wechselnd bei gleichem Code. Geklärt im [Nachlauf 17.10.2026](../wackelsuiten_windows_2026-10-17/README.md) zusammen mit `test_template_workflows`: beides Prüfwerkzeug (fester 80-ms-Dialogtakt vor Tks Layout, Desktop-Vordergrund vorausgesetzt), App unverändert.
+- **GitHub-Bestätigung:** erledigt. **GitHub nach PR #32 (`eb5658c`, Lauf 38979558948):** Grundstufe, Vollprüfung Linux/Xvfb und Windows mit eigener Tk 9.1 einschließlich „Kalibrierte Erwartungen“ sowie der eigenständige Windows-Paketlauf (mit der ACL-Korrektur aus PR #31) grün – erstmals seit der Matrixumstellung durch PR #26 die ganze Prüfung.
 - **macOS:** Mac-Vollprüfung und `packaging/macos/baue_app.py` auf dem Referenz-Mac; Mac-Bundle und eigenständige Pakete tragen bis dahin 3.42.0.
 - **Menschenabnahme:** echte Tastatur unter Linux (Strg+Umschalt+P, Strg+N/P/A/E/F in Listen) nach der [Prüfliste](../../../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md).

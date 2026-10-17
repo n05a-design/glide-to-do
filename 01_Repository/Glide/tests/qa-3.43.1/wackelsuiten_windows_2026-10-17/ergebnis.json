@@ -102,7 +102,12 @@
       "units_ohne_systemzeitzonen": 714,
       "lieferstand_streng": "bytegleich",
       "datei": "grundstufe.json",
-      "erster_lauf": "Exit 0, Lieferstand-Hinweis 67 Abweichungen allein durch CRLF-Arbeitskopie von 07_Python-Versionen (75 Dateien); in b2af7a7 alle 212 gemeinsamen Dateien blobgleich (außer den eigenständigen README.md)"
+      "erster_lauf": "Exit 0, Lieferstand-Hinweis 67 Abweichungen allein durch CRLF-Arbeitskopie von 07_Python-Versionen (75 Dateien); in b2af7a7 alle 212 gemeinsamen Dateien blobgleich (außer den eigenständigen README.md)",
+      "stand": "nach Zusammenführung mit PR #33",
+      "suiten_nach_zusammenfuehrung": {
+        "test_tag3390": "grün",
+        "test_template_workflows": "grün"
+      }
     }
   },
   "lieferstand_unveraendert": {
@@ -111,13 +116,23 @@
     "05_Probelisten_Testdaten": "unverändert"
   },
   "grenzen": [
-    "Windows 11/Tk 9.0.4; macOS und Linux nicht ausgeführt, GitHub-Bestätigung nach dem Push",
+    "Windows 11/Tk 9.0.4; macOS und Linux nicht ausgeführt; 3.43.1 selbst nach PR #32 auf GitHub vollständig grün",
     "eingefrorene Vollprüfung 16.10. gilt für ihren Stand, nicht als Lauf mit neuen Prüfwerkzeugen ausgegeben",
     "test_ui39 hat dieselbe mögliche Abhängigkeit vom Desktop-Vordergrund, nicht beobachtet und nicht geändert"
   ],
+  "zusammenfuehrung": {
+    "pr": 33,
+    "zweig": "claude/tag3390-sichtbarkeit",
+    "commits": [
+      "e96f51e",
+      "c0252ba"
+    ],
+    "behalten": "Warten auf angeordneten Dialog in modal() (deckt auch Dialoggeometrie Zeile 532), strengere Fokusprüfung (focus_get() Feld oder None plus focus_lastfor), Hinweisfall und test_template_workflows",
+    "ersetzt": "Warten bis 3 s in click(); Fokusprüfung nur über focus -lastfor",
+    "uebernommen": "GitHub-Stand nach PR #32 (eb5658c, Lauf 38979558948: Grundstufe, Linux-/Windows-Vollprüfung Tk 9.1, Windows-Paketlauf grün)"
+  },
   "offen": [
-    "GitHub-Windows-Vollprüfung mit beiden Suiten nach dem Push",
-    "GitHub-Bestätigung Windows-Paketlauf und Linux-Vollprüfung nach 3.43.1",
+    "GitHub-Vollprüfung des zusammengeführten Stands",
     "Mac-Vollprüfung und Mac-Bundle 3.43.1, Menschenabnahme"
   ]
 }
