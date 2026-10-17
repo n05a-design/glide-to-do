@@ -638,7 +638,9 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         knopf.command()
         root.update()
         tief = next(value for value in app.lists if value["id"] == tief["id"])
-        assert tief["items"][0]["done"] is False and app._undo_toast is None
+        # FP-01: Danach bietet derselbe Hinweis „Wiederholen“ statt zu verschwinden.
+        assert tief["items"][0]["done"] is False and app._undo_toast is not None
+        assert app._undo_toast["button"].text == "Wiederholen"
         # Nach einer weiteren Änderung gilt der Hinweis nicht mehr.
         app.set_active_list(tief["id"])
         root.update()

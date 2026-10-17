@@ -387,3 +387,13 @@ Automatisch belegt mit `test_uiux_paket.py` (17 Fälle, Windows 11/Tk 9.0.4, kü
 - [ ] Labels/Heute: Titel deutlich länger lesbar, Datum mit Uhrzeit vollständig; „Nächste Aufgabe“ und „Verspätet“ ohne zweites Dreieck, nur der Titel der nächsten Aufgabe fett in normaler Größe.
 - [ ] Seite mit großem Bild: einzelne Mausrad-Rasten und Trackpad über dem Bild scrollen gleichmäßig, die erste Zeile nach dem Bild bleibt erreichbar; Blockleiste „Aufgabe“ ohne Kästchen.
 - [ ] Notiz-/Notizbuchaktionen (Favorit, Stimmung, Ort, Schreibimpuls) und Punktbearbeitung (Datum, Bearbeitungstag, Erinnerung, Labels): keine abweichenden Kästen in allen Designs und Verläufen; Fokus, Hover, deaktiviert weiter erkennbar.
+
+## Wiederholen nach Rückgängig (FP-01, in Arbeit)
+
+Automatisch belegt mit `test_wiederholen.py` (neun Fälle über echte Tastenwege, Bytevergleich des Bestands; Windows 11/Tk 9.0.4, künstliche Daten). Hier bleibt die Bedienung am echten Gerät, je Plattform mit echter Tastatur.
+
+- [ ] Mac: Cmd+Z, dann Cmd+Umschalt+Z nach Anlegen, Löschen, Verschieben, Einrücken und Gruppieren; Bearbeiten › Wiederholen zeigt „Cmd+Shift+Z“. Windows: zusätzlich Strg+Y. Linux: Strg+Umschalt+Z, Strg+Y bleibt ohne globale Wirkung.
+- [ ] Mit eingerasteter Feststelltaste wirkt Strg/Cmd+Umschalt+Z ebenso; in Schnelleingabe, Seiten- und Notiztext sowie auf der Zeichenfläche wiederholen die Kürzel nur dort.
+- [ ] Löschen → im Hinweis „Rückgängig“ → derselbe Hinweis zeigt „Wiederholen“ und holt die Löschung zurück; nach einer neuen Änderung gibt es nichts mehr zu wiederholen (Meldung „Wiederholen“).
+- [ ] Pinnwand: „Aufräumen“ und einen Bereich verschieben, beides zurücknehmen und in richtiger Folge wiederholen; eine Karte zwischendurch verschoben → kein stilles Überschreiben.
+- [ ] Änderungsverlauf als Seite und als Fenster: „Sicherungen vergleichen …“ öffnet den Vergleich, beim Fenster erst nach dessen Schließen.
