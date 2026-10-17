@@ -112,6 +112,16 @@ with tempfile.TemporaryDirectory(prefix='glide-template-qa-') as tmp:
             # Beide Plattformpfade: Windows behält den ursprünglichen Widgettyp.
             owner = mod.tk.Toplevel(root)
             owner.geometry('700x400+50+50')
+            # Prüfisolation (17.10.2026): Gibt der Desktop während des offenen
+            # Popups einem anderen Programm den Vordergrund – unter Windows bei
+            # jeder Eingabe des Inhabers während des Laufs –, bekommt das
+            # Prüffenster <FocusOut>, Tk meldet keinen Fokus mehr, und
+            # DropdownPopup schließt richtig. Diese Prüfung gilt der Bedienung
+            # des offenen Popups; das Schließen bei Fokusverlust prüft
+            # test_ui39. Ohne App-Fokus zählt deshalb der Fokus, den Tk für das
+            # Prüffenster hält; ein Wechsel in ein anderes Glide-Fenster wirkt.
+            desktop_focus = app.current_focus_widget
+            app.current_focus_widget = lambda: desktop_focus() or owner.focus_lastfor()
             variable = mod.tk.StringVar(value='Normal')
             choices = ['Normal', 'Wichtig'] + [f'Auswahl {i}' for i in range(20)]
             platform = mod.IS_MACOS
@@ -164,6 +174,7 @@ with tempfile.TemporaryDirectory(prefix='glide-template-qa-') as tmp:
                 assert not variable.trace_info()
                 if isinstance(field, mod.AppOptionMenu):
                     assert root.grab_current() is owner
+            del app.current_focus_widget
             owner.grab_release(); owner.destroy()
             with mod.TemplateDraft(app, template) as draft:
                 draft.ask_yes_no = lambda *args, **kw: True

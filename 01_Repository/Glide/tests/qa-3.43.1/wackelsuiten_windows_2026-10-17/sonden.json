@@ -1,0 +1,380 @@
+[
+  {
+    "fall": "tag3390 alt aufbau",
+    "baum": "3.43.1",
+    "suite": "test_tag3390.py",
+    "sonde": "aufbau",
+    "argumente": [
+      "--fall",
+      "kalender"
+    ],
+    "exit": 1,
+    "status": "rot",
+    "erwartet": "rot",
+    "passend": true,
+    "stelle": "Zeile 325 (calendar_save), Zeile 142 (click)",
+    "meldung": "AssertionError: Speichern nicht sichtbar",
+    "sekunden": 17.6,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 neu aufbau",
+    "baum": "3.43.1-neu",
+    "suite": "test_tag3390.py",
+    "sonde": "aufbau",
+    "argumente": [
+      "--fall",
+      "kalender"
+    ],
+    "exit": 0,
+    "status": "grün",
+    "erwartet": "grün",
+    "passend": true,
+    "stelle": "",
+    "meldung": "",
+    "sekunden": 21.4,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 alt desktop kalender",
+    "baum": "3.43.1",
+    "suite": "test_tag3390.py",
+    "sonde": "desktop",
+    "argumente": [
+      "--fall",
+      "kalender"
+    ],
+    "exit": 1,
+    "status": "rot",
+    "erwartet": "rot",
+    "passend": true,
+    "stelle": "Zeile 636 (main), Zeile 297 (run)",
+    "meldung": "AssertionError",
+    "sekunden": 9.6,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 neu desktop kalender",
+    "baum": "3.43.1-neu",
+    "suite": "test_tag3390.py",
+    "sonde": "desktop",
+    "argumente": [
+      "--fall",
+      "kalender"
+    ],
+    "exit": 0,
+    "status": "grün",
+    "erwartet": "grün",
+    "passend": true,
+    "stelle": "",
+    "meldung": "",
+    "sekunden": 17.9,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 alt desktop hinweise",
+    "baum": "3.43.1",
+    "suite": "test_tag3390.py",
+    "sonde": "desktop",
+    "argumente": [
+      "--fall",
+      "hinweise"
+    ],
+    "exit": 0,
+    "status": "grün",
+    "erwartet": "grün",
+    "passend": true,
+    "stelle": "",
+    "meldung": "",
+    "sekunden": 15.3,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 neu desktop hinweise",
+    "baum": "3.43.1-neu",
+    "suite": "test_tag3390.py",
+    "sonde": "desktop",
+    "argumente": [
+      "--fall",
+      "hinweise"
+    ],
+    "exit": 0,
+    "status": "grün",
+    "erwartet": "grün",
+    "passend": true,
+    "stelle": "",
+    "meldung": "",
+    "sekunden": 16.1,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 alt desktopwechsel hinweise",
+    "baum": "3.43.1",
+    "suite": "test_tag3390.py",
+    "sonde": "desktopwechsel",
+    "argumente": [
+      "--fall",
+      "hinweise"
+    ],
+    "exit": 1,
+    "status": "rot",
+    "erwartet": "rot",
+    "passend": true,
+    "stelle": "Zeile 636 (main), Zeile 183 (run)",
+    "meldung": "AssertionError",
+    "sekunden": 6.8,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 neu desktopwechsel hinweise",
+    "baum": "3.43.1-neu",
+    "suite": "test_tag3390.py",
+    "sonde": "desktopwechsel",
+    "argumente": [
+      "--fall",
+      "hinweise"
+    ],
+    "exit": 0,
+    "status": "grün",
+    "erwartet": "grün",
+    "passend": true,
+    "stelle": "",
+    "meldung": "",
+    "sekunden": 17.1,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 alt hinweisdefekt",
+    "baum": "3.43.1",
+    "suite": "test_tag3390.py",
+    "sonde": "hinweisdefekt",
+    "argumente": [
+      "--fall",
+      "hinweise"
+    ],
+    "exit": 1,
+    "status": "rot",
+    "erwartet": "rot",
+    "passend": true,
+    "stelle": "Zeile 636 (main), Zeile 183 (run)",
+    "meldung": "AssertionError",
+    "sekunden": 10.2,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 neu hinweisdefekt",
+    "baum": "3.43.1-neu",
+    "suite": "test_tag3390.py",
+    "sonde": "hinweisdefekt",
+    "argumente": [
+      "--fall",
+      "hinweise"
+    ],
+    "exit": 1,
+    "status": "rot",
+    "erwartet": "rot",
+    "passend": true,
+    "stelle": "Zeile 666 (main), Zeile 205 (run)",
+    "meldung": "AssertionError: (<tkinter.ttk.Treeview object .!frame.!frame2.!frame.!roundedcontainer.!frame.!frame3.!treeview>, <tkinter.ttk.Treeview object .!frame.!frame2.!frame.!roundedcontainer.!frame.!frame3.!treeview>, <tkinter.Entry object .!frame.!frame2.!frame.!frame.!frame.!roundedcontainer.!frame.!entr",
+    "sekunden": 10.9,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 alt fokusdefekt",
+    "baum": "3.43.1",
+    "suite": "test_tag3390.py",
+    "sonde": "fokusdefekt",
+    "argumente": [
+      "--fall",
+      "kalender"
+    ],
+    "exit": 1,
+    "status": "rot",
+    "erwartet": "rot",
+    "passend": true,
+    "stelle": "Zeile 636 (main), Zeile 297 (run)",
+    "meldung": "AssertionError",
+    "sekunden": 13.8,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 neu fokusdefekt",
+    "baum": "3.43.1-neu",
+    "suite": "test_tag3390.py",
+    "sonde": "fokusdefekt",
+    "argumente": [
+      "--fall",
+      "kalender"
+    ],
+    "exit": 1,
+    "status": "rot",
+    "erwartet": "rot",
+    "passend": true,
+    "stelle": "Zeile 666 (main), Zeile 326 (run)",
+    "meldung": "AssertionError: (<tkinter.Entry object .!frame.!frame2.!frame.!frame.!frame.!roundedcontainer.!frame.!entry>, <tkinter.Entry object .!frame.!frame2.!frame.!frame.!frame.!roundedcontainer.!frame.!entry>)",
+    "sekunden": 14.6,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 3.39.0 alt aufbau",
+    "baum": "3.39.0",
+    "suite": "test_tag3390.py",
+    "sonde": "aufbau",
+    "argumente": [
+      "--fall",
+      "kalender"
+    ],
+    "exit": 1,
+    "status": "rot",
+    "erwartet": "rot",
+    "passend": true,
+    "stelle": "Zeile 626 (main), Zeile 296 (run)",
+    "meldung": "AssertionError",
+    "sekunden": 14.8,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 3.43.0-App neu aufbau",
+    "baum": "3.43.0",
+    "suite": "test_tag3390_neu.py",
+    "sonde": "aufbau",
+    "argumente": [
+      "--fall",
+      "kalender"
+    ],
+    "exit": 0,
+    "status": "grün",
+    "erwartet": "grün",
+    "passend": true,
+    "stelle": "",
+    "meldung": "",
+    "sekunden": 24.7,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "vorlagen alt desktop",
+    "baum": "3.43.1",
+    "suite": "test_template_workflows.py",
+    "sonde": "desktop",
+    "argumente": [],
+    "exit": 1,
+    "status": "rot",
+    "erwartet": "rot",
+    "passend": true,
+    "stelle": "Zeile 150 (<module>)",
+    "meldung": "_tkinter.TclError: invalid command name \".!toplevel2.!dropdownpopup2.!frame.!optionrows.!frame.!frame2\"",
+    "sekunden": 12.8,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "vorlagen neu desktop",
+    "baum": "3.43.1-neu",
+    "suite": "test_template_workflows.py",
+    "sonde": "desktop",
+    "argumente": [],
+    "exit": 0,
+    "status": "grün",
+    "erwartet": "grün",
+    "passend": true,
+    "stelle": "",
+    "meldung": "",
+    "sekunden": 33.5,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "vorlagen alt popupdefekt",
+    "baum": "3.43.1",
+    "suite": "test_template_workflows.py",
+    "sonde": "popupdefekt",
+    "argumente": [],
+    "exit": 1,
+    "status": "rot",
+    "erwartet": "rot",
+    "passend": true,
+    "stelle": "Zeile 137 (<module>)",
+    "meldung": "AssertionError",
+    "sekunden": 10.4,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "vorlagen neu popupdefekt",
+    "baum": "3.43.1-neu",
+    "suite": "test_template_workflows.py",
+    "sonde": "popupdefekt",
+    "argumente": [],
+    "exit": 1,
+    "status": "rot",
+    "erwartet": "rot",
+    "passend": true,
+    "stelle": "Zeile 147 (<module>)",
+    "meldung": "AssertionError",
+    "sekunden": 10.2,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "vorlagen 3.43.0 alt desktop",
+    "baum": "3.43.0",
+    "suite": "test_template_workflows.py",
+    "sonde": "desktop",
+    "argumente": [],
+    "exit": 1,
+    "status": "rot",
+    "erwartet": "rot",
+    "passend": true,
+    "stelle": "Zeile 137 (<module>)",
+    "meldung": "AssertionError",
+    "sekunden": 7.7,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "vorlagen 3.43.0 neu desktop",
+    "baum": "3.43.0",
+    "suite": "test_template_workflows_neu.py",
+    "sonde": "desktop",
+    "argumente": [],
+    "exit": 0,
+    "status": "grün",
+    "erwartet": "grün",
+    "passend": true,
+    "stelle": "",
+    "meldung": "",
+    "sekunden": 26.7,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 alt aufbau dialoge",
+    "baum": "3.43.1",
+    "suite": "test_tag3390.py",
+    "sonde": "aufbau",
+    "argumente": [
+      "--fall",
+      "dialoge"
+    ],
+    "exit": 1,
+    "status": "rot",
+    "erwartet": "rot",
+    "passend": true,
+    "stelle": "Zeile 468 (settings), Zeile 142 (click)",
+    "meldung": "AssertionError: Speichern nicht sichtbar",
+    "sekunden": 7.4,
+    "sonde_aktiv": true
+  },
+  {
+    "fall": "tag3390 neu aufbau dialoge",
+    "baum": "3.43.1-neu",
+    "suite": "test_tag3390.py",
+    "sonde": "aufbau",
+    "argumente": [
+      "--fall",
+      "dialoge"
+    ],
+    "exit": 0,
+    "status": "grün",
+    "erwartet": "grün",
+    "passend": true,
+    "stelle": "",
+    "meldung": "",
+    "sekunden": 15.0,
+    "sonde_aktiv": true
+  }
+]
