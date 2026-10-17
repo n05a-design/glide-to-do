@@ -15,6 +15,6 @@ Planung, Übergabe und alles, was der Inhaber entscheidet oder von Hand prüft. 
 
 Zentrale Gestaltungsvorgaben: [Design Richtlinien](../01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md). Die Originalbilder im Feature-Paket enthalten teilweise Kontoangaben, bleiben lokal und müssen bei einer Agentenübergabe ausdrücklich mitgegeben werden.
 
-Entscheidungen D01–D50 (D49 als Auslegung mit Korrekturvorbehalt, D50 Vorrang des UI-/UX-Pakets) und frühere gültige Antworten stehen im Quellbaum in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md); neue Produktentscheidungen beginnen bei D51. Technische und fachliche Dokumente stehen im [Dokumentationsindex](../01_Repository/Glide/docs/00_INDEX.md).
+Entscheidungen D01–D51 (D49 als Auslegung mit Korrekturvorbehalt, D50 Vorrang des UI-/UX-Pakets, D51 phasenweise Prüfung) und frühere gültige Antworten stehen im Quellbaum in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md); neue Produktentscheidungen beginnen bei D51. Technische und fachliche Dokumente stehen im [Dokumentationsindex](../01_Repository/Glide/docs/00_INDEX.md).
 
 Eine erfolgreich geprüfte Python-Fassung ist noch kein signiertes Releasepaket.

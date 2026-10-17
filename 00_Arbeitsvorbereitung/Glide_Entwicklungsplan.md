@@ -813,7 +813,7 @@ Nummeriert nach dem bewährten Muster (Übergabe §4); Kurzantwort etwa „E-W7 
 
 ### 16.7 Empfohlene Reihenfolge
 
-Nach Abschluss des bestätigten Sprints (4.0.0), je Zeile eine Produktionsversion; Versionsnummern und Formatnummern vergibt der jeweilige Lieferweg.
+Nach Abschluss des bestätigten Sprints (4.0.0), je Zeile eine Produktionsversion; Versionsnummern und Formatnummern vergibt der jeweilige Lieferweg. **Seit 17.10.2026 als Phasen neu geordnet: [§18](#18-ausbauprogramm-in-phasen-vorschlag-17102026) (Vorschlag, Start mit E-P1).**
 
 | Folge | Inhalt | Prio | Abhängig von | Warum hier |
 |---|---|---|---|---|
@@ -886,7 +886,7 @@ Nur lesend, ohne Tk-Fenster, am Lieferstand `7995ecbc…`; Werkzeuge und Ergebni
 „Ab Erledigung“ und „pausieren“ sind keine RRULE-Teile; sie werden als eigene Felder neben der Regel geführt (FP-02 Stufe 2).
 
 
-**Abschlussauftrag 15.10.2026 (vormittags; Priorität seit D50 geändert, §17):** Der Inhaber möchte die nächsten Schritte und Pakete neu strukturieren. Zunächst die laufenden 4.0-Arbeiten samt notwendigen Korrekturen, Prüfungen und umsetzbaren Kernfunktionen zum gesicherten Abschluss bringen. Danach Übergabe mit tatsächlichem Lieferstand, umgesetztem Umfang, Prüfbelegen und ausdrücklich offenen Abnahmen; weitere Folgepakete erst aus der neuen Planung starten. D49-Auswahlinhalte bleiben erhalten, ihre Ausführungsfolge wird anschließend neu geordnet.
+**Abschlussauftrag 15.10.2026 (vormittags; Priorität seit D50 geändert, §17):** Der Inhaber möchte die nächsten Schritte und Pakete neu strukturieren. Zunächst die laufenden 4.0-Arbeiten samt notwendigen Korrekturen, Prüfungen und umsetzbaren Kernfunktionen zum gesicherten Abschluss bringen. Danach Übergabe mit tatsächlichem Lieferstand, umgesetztem Umfang, Prüfbelegen und ausdrücklich offenen Abnahmen; weitere Folgepakete erst aus der neuen Planung starten. D49-Auswahlinhalte bleiben erhalten, ihre Ausführungsfolge wird anschließend neu geordnet. Die neue Planung liegt seit 17.10.2026 als [§18](#18-ausbauprogramm-in-phasen-vorschlag-17102026) vor.
 
 ## 17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)
 
@@ -957,7 +957,7 @@ Die Kennungen bilden die Originalnummerierung ab (A01 = A.1, B01 = B.1 …). **B
 
 ### 17.3 Entscheidungsvorlagen für den Inhaber
 
-Kurzantwort wie bisher möglich, etwa „E-U1 A, E-U2 A, E-U3 A“. Neue Entscheidungen werden ab D51 eingetragen.
+Kurzantwort wie bisher möglich, etwa „E-U1 A, E-U2 A, E-U3 A“. Neue Entscheidungen werden ab D52 eingetragen (D51 seit 17.10.2026 vergeben).
 
 | Nr. | Frage | A | B | C | Empfehlung |
 |---|---|---|---|---|---|
@@ -966,3 +966,122 @@ Kurzantwort wie bisher möglich, etwa „E-U1 A, E-U2 A, E-U3 A“. Neue Entsche
 | E-U3 | Notion-Muster (A03) | Rang 1–3 als kleines Folgepaket | zusätzlich Rang 4 | nichts übernehmen | A |
 
 Originalbilder sind unverändert und lokal vom Git-Upload ausgeschlossen; für einen anderen Dienst das Paket einschließlich `bilder/` mitgeben. Anforderungsdetails und Abnahmekriterien nur im Prompt pflegen, Gestaltungsvorgaben nur in Design Richtlinien, Ergebnisse im QA-Bericht. Die Dokumentationsprüfung der Vorbereitungsrunde steht im [Vorbereitungsnachweis](../01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/README.md).
+
+## 18. Ausbauprogramm in Phasen (Vorschlag 17.10.2026)
+
+**Auftrag des Inhabers vom 17.10.2026** (Wortlaut): „bitte die weitere Feature-Umsetzung planen während die Tests gerade aktiv weiterlaufen. Bitte die Dokumentation analysieren, offene Punkte aus den Dokumenten ziehen prüfen und der Konkurrenz-Analyse gegenstellen. Weitere Punkte mitaufnehmen und weitgehende Pakete für die Feature-Umsetzung zusammenstellen, bitte umfangreiche Pakete zusammenstellen, dass nicht alle 5 Minuten alles nochmal geprüft wird. Mehr Features, Mehr Pakete und Phasenweise nur Prüfungen.“ Die Prüfregel daraus steht als D51 in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md); Umfang und Reihenfolge unten sind ein **Vorschlag**, der mit den Entscheidungsvorlagen in §18.6 startet.
+
+**Grundlage:** alle offenen Punkte dieses Plans (§3–§7, §11, §16, §17), [Analyse §8](Glide_Analyse.md#8-bestandsaufnahme-und-gap-analyse-13102026), [Markt und Vorbilder §1–§10](Glide_Markt_und_Vorbilder.md), [Funktionen §13](../01_Repository/Glide/docs/20_FUNKTIONEN.md#13-bekannte-grenzen), QA-Bericht und Prüfliste; jeder Funktionspunkt am Code 3.43.1 (`eb5658c`) nachgeprüft. Keine neue Herstellerrecherche: Wettbewerbsaussagen stammen aus den dort genannten Abrufen vom 01.–15.10.2026.
+
+### 18.1 Offene Punkte, am Code geprüft
+
+| ID | Punkt (Quelle) | Codebefund 3.43.1 | Zuordnung |
+|---|---|---|---|
+| FP-01 | Wiederholen nach Rückgängig (§16.3, D49 A/V) | kein Wiederholen in `ListApp`; 38 Aufrufe `snapshot_undo`, `MAX_UNDO_STEPS` 20 | Phase 1 |
+| WA-09 | Vorwärtsverträgliche Einstellungen (§16.4, vor FP-04) | `ItemWorkspace.prune` verwirft unbekannte Karten | Phase 1 |
+| E-U3 | Notion-Muster Rang 1–3 (+4) (§17.3, [Markt §10](Glide_Markt_und_Vorbilder.md#10-notion-muster-für-glide-a03-15102026)) | Kontextmenüs ohne Filterfeld, kein Blockgriff, Seitenkopf über Menüs | Phase 1, Auswahl offen |
+| E-U1 | Kompaktmodus (A01, §17.1) | Mindestgröße fest 860 × 700, kein Kompaktzustand | Phase 1, Auswahl offen |
+| WA-12 | Tagesvorschlag „gibt andere frei“ (§16.4) | `day_proposal.REASONS` ohne diesen Grund | Phase 1 |
+| W01, W06–W08 | Windows-Befunde (§4.2) | bisher nur Mac-Umgebung; jetzt am Windows-Rechner nachstellbar | Phase 0 prüfen, Behebung Phase 1 |
+| TK9-RAD | `<Button-4>`/`<Button-5>`-Bindungen treffen unter Tk 9 die Seitentasten 8/9 ([Nachweis 3.43.1](../01_Repository/Glide/tests/qa-3.43.1/kuerzel_linux_tk91_2026-10-16/README.md#nebenbefund-ohne-änderung)) | toter Bindungsweg, kein Fehlverhalten | Phase 1 (Aufräumen) |
+| FP-02 | Erweiterte Wiederholungsregeln (§16.3, D49 A/V) | `repeat_rules.KINDS` sechs Arten; `ics_recurrence` ungenutzt | Phase 2, Formattor |
+| WA-14 | Wiederkehrende Vorlagen (§16.4, ◇ nach FP-02) | Vorlagen nur von Hand | Phase 2 |
+| WA-08 | Zeitauswertung (§16.4, ◇ Auslöser) | Zeit nur je Aufgabe | Phase 2, Auswahl offen |
+| FP-03 | Gespeicherte Ansichten (§16.3, D49 A/V) | `SavedFilters` ohne Bearbeitungstag/Aufwand/Ausschluss, keine Darstellung | Phase 3 |
+| FP-04 | Seiten und Notizen als Pinnwandkarten (§16.3, D49 A/V nach WA-09) | `valid_pages` lässt nur Zeichnungen zu | Phase 3 |
+| FP-05 | Unverknüpfte Erwähnungen (§16.3, D49 A/V) | Rückverweise nur für echte Verweise | Phase 3 |
+| E-U2 / WA-11 | Nebenansicht im Inspektorbereich, Seitenvorschau (§17.2, §16.4) | Verweise navigieren, ein Ansichtszustand | Phase 3, Auswahl offen |
+| OB01-Rest | Abstandsskala in den übrigen Hauptansichten (§4.3, §10 ◐) | Startseite, Bibliothek, Einstellungen, Schnellerfassung umgestellt | Phase 3 (im angefassten Code, D40) |
+| T8-Messung | Tabellenansicht 5.000 Punkte neu messen (§10) | zuletzt 292 ms (Linux, vor P09a) | Phase 3 |
+| FP-06 | KI-Aufträge im Kontextpaket (§16.3, D49) | Feld `instructions` vorhanden, keine Aufträge | Phase 4 |
+| FP-07 | Gesamtausgabe Markdown-Ordner (A/1 nach D49), Stufe 2 JSON Canvas (P3) | Ausgabe nur je Liste/Ordner | Phase 4 |
+| N12 / Paket 8 | Zugänglicher Kernablauf 4.0.0 (§15.7, pausiert nach D50) | Vorprüfung grün; Orca-Absturz, Readerabläufe und Pakete offen | eigener Strang, E-P2 |
+| PS-01 | Wackelige Windows-Suiten `test_template_workflows`, `test_tag3390`, `test_ui_followup36` (§17, Nachweis 3.43.1) | in 3.43.0 und 3.43.1 gleich | Phase 0 |
+| PS-02 | Showcase „Vermarktung · Umsetzung“ zeigt über der Pinnwand den Inhalt einer anderen Seite (§17) | am Ausgangsstand gleich; Ursache unbekannt | Phase 0 prüfen, Behebung Phase 1 |
+| B1, W09, ZF-NOTES, ZF-LABEL, G18/G15/G10, WA-15 | Vorrat mit Auslöser (§7, §13, §16.4) | unverändert | bleiben ◇ |
+| I1–I11, OB06, Menschenabnahme | Inhaber- und Abnahmetore (§11, D42/D43) | – | gesammelt je Phase (§18.5) |
+
+**Bewusst nicht wieder vorgelegt** (Produktgrenzen, §7, Markt §9.5): Block-Editor-Neubau, Whiteboard-Engine, Datenbank-Baukasten, Unterseiten, Spalten, Sync/CRDT, eingebaute Cloud-KI, MCP, Spracherfassung, systemweiter Hotkey, Erinnerungen bei geschlossener App, Mobile, Gewohnheitsstatistik.
+
+### 18.2 Gegenüberstellung mit der Konkurrenzanalyse
+
+| Bereich (Markt §4/§9.4) | Maßstab im Feld | Glide 3.43.1 | Nach dem Programm |
+|---|---|---|---|
+| Bedienung | Wiederholen überall (alle Vergleichsprodukte); durchsuchbare Kontextaktionen (Notion S14/S16) | Rückgängig 20 Schritte, kein Wiederholen; native Kontextmenüs | Phase 1: Wiederholen in allen Rückgängig-Wegen, filterbare Seiten-/Blockaktionen, Kompaktmodus |
+| Planung | Intervalle, n-ter Wochentag, ab Erledigung, Ausnahmen (Super Productivity, Todoist, Things 3.23) | sechs Arten | Phase 2: RFC-5545-Rhythmen, Ausnahmen, Pause, wiederkehrende Vorlagen |
+| Ansichten | Ansicht = Filter + Darstellung (AFFiNE, Vikunja, Obsidian Bases) | gespeicherte Filter ohne Darstellung | Phase 3: gespeicherte Ansichten mit Bedingungen und Darstellung |
+| Wissen im Kontext | unverknüpfte Erwähnungen (Obsidian), Peek (AFFiNE), „wo liegt diese Karte“ (Heptabase) | Verweise mit Rückverweisen | Phase 3: Erwähnungen, Nebenansicht, Fundorte, Seitenkarten auf der Pinnwand |
+| Datensouveränität | Markdown-Export (Notion, Obsidian), JSON Canvas, Importer (AFFiNE 0.27) | Ausgabe je Liste/Ordner, Notion-Import | Phase 4: Gesamtausgabe, Canvas, weitere Importquellen |
+| KI | Agenten/MCP (Notion, Todoist) – für Glide gilt Q3 | Kontextpaket, geprüfte Änderungsvorschläge | Phase 4: mitgelieferte KI-Aufträge, weiter ohne Schnittstelle |
+| Tagesführung | Sunsama-Rituale, Wochenanalyse | Tagesbeginn/-abschluss, Wochenrückblick | Phase 4: geführter Wochenbeginn mit Wochenzielen (neu, Auswahl offen) |
+| Zugänglichkeit | Screenreader (Things, Apple) | Paket 8 vorbereitet | 4.0.0 nach Readertoren (E-P2) |
+
+Die Tagesführung bleibt der Unterscheidungskern (Markt §1, Analyse §8.3); das Programm vertieft Vorhandenes und baut keinen neuen Hauptbereich.
+
+### 18.3 Neu aufgenommene Punkte
+
+Prinzipien-Check in Kurzform nach §16.3 (Ort, was entfällt, Dauerfläche, Daten); alle ohne neue Laufzeitabhängigkeit, Fachlogik Tk-frei (D17).
+
+| ID | Punkt | Herkunft | Ort / Daten | Aufwand | Phase |
+|---|---|---|---|---|---|
+| WA-19 | Weitere Importquellen: Todoist- und TickTick-CSV, Markdown-/Obsidian-Ordner (Rückweg zu FP-07), mit Vorschau und Verlustbericht wie beim Notion-Import | Markt §4 „Import ◐“, AFFiNE 0.27 Importer | Datei › Import; kein Format, Quellenmetadaten wie Paket 6 | M–L | 4 |
+| WA-20 | Geführter Wochenbeginn und -abschluss mit bis zu drei Wochenzielen, Wochenbilanz aus vorhandener Kapazität | Sunsama (Wochenritual), TickTick | Heute/Woche; Ziele als Einstellung oder Notizbuchseite, kein Format | M | 4 |
+| WA-21 | Fundorte einer Aufgabe im Inspektor: Listen, Seiten, Live-Listen, Pinnwände, Verweise | Heptabase, Trello-Spiegelkarten | Inspektor, eingeklappt; nur lesend | S–M | 3 |
+| WA-22 | Pinnwandlayout reist im Komplettbackup und in Tagesständen mit | Analyse §8.3 (heute nur im App-Backup) | Sicherung; Einstellungsteil additiv | S | 4 |
+| WA-23 | Ausnahmen einzelner Serientermine: nur diesen Termin verschieben oder auslassen | Things 3.23 „Make Exception“, Super Productivity | Inspektor, Kontextmenü; im Formattor von FP-02 | M | 2 |
+| WA-24 | Erledigte Serientermine bleiben in Datumsansichten sichtbar | Todoist 09/2026 | Heute, Woche, Kalender; Ableitung, kein Format | S | 2 |
+| WA-25 | Relative Bearbeitungszeit „vor 22 Std.“ für Seiten (Notion-Rang 4) | Markt §10 | Seitenkopf, bei Überfahren | S | 1 |
+| TK9-RAD | Rad- und Zoombindungen auf den Tk-9-Weg vereinheitlichen | Nebenbefund 3.43.1 | Mausrad; Tk 8 behält Taste 4/5 | S | 1 |
+
+### 18.4 Phasen
+
+Jede Phase ist **eine** Produktionsversion mit mehreren Paketen. Innerhalb der Phase wird entwickelt, am Phasenende einmal vollständig geprüft und geliefert (D51, §18.5). Aufwand in Arbeitstagen (AT) ohne Prüfphase; Versionsnummern vergibt der Lieferweg.
+
+| Phase | Version (Vorschlag) | Pakete | Formattor | Aufwand | Abhängig von |
+|---|---|---|---|---|---|
+| 0 | ohne App-Version | PS-01 wackelige Windows-Suiten stabilisieren; PS-02 Showcase-Befund untersuchen; W01/W06–W08 am Windows-Rechner nachstellen; GitHub-Bestätigung 3.43.1; Mac-Vollprüfung/Bundle 3.43.1 auf dem Referenz-Mac (Inhaber) | nein | 2–3 | – |
+| 1 „Bedienung ohne Reue“ | 3.44.0 | FP-01 Wiederholen A/V (mit Pinnwandfläche und Verlaufshinweis) · WA-09 · Notion-Muster Rang 1–3 (+ WA-25) · Kompaktmodus (E-U1 A) · WA-12 · TK9-RAD · Behebungen aus Phase 0 | nein | 16–24 | E-U1, E-U3 |
+| 2 „Rhythmen und Routinen“ | 3.45.0 | FP-02 Stufe 1+2 · WA-23 Ausnahmen · WA-24 erledigte Serientermine · WA-14 wiederkehrende Vorlagen · WA-08 Zeitauswertung (falls gewählt) | **ja, ein Tor für alle** | 12–18 | FP-01 (Wiederholen deckt neue Mutationen mit ab) |
+| 3 „Ansichten und Wissen“ | 3.46.0 | FP-03 A/V · FP-04 · FP-05 · Nebenansicht im Inspektorbereich (E-U2 A, deckt WA-11) · WA-21 Fundorte · OB01-Rest · T8-Messung | nein (Einstellungen additiv) | 15–21 | WA-09 (Phase 1), E-U2 |
+| 4 „Austausch und Wochenführung“ | 3.47.0 | FP-06 · FP-07 Stufe 1 (+ Stufe 2 Canvas, falls gewählt) · WA-19 Importquellen · WA-22 · WA-20 Wochenritual | nein | 15–20 | Phase 3 (Seitenkarten für Canvas) |
+| P8 | 4.0.0 | Zugänglicher Kernablauf auf eigener Tk 9.1 (D36), eigenständige Pakete, auf den jeweils neuesten Phasenstand gebracht | nein | nach Readertoren | E-P2 |
+
+**Warum diese Schnitte:** Phase 1 sichert jede folgende Mutation mit Wiederholen und Vorwärtsverträglichkeit ab (§16.7 W1) und bündelt die Bedienpunkte, damit Oberflächensuiten nur einmal neu kalibriert werden. Phase 2 legt alle Wiederholungs- und Zeitdaten in **ein** Formattor statt in mehrere. Phase 3 berührt Filter, Pinnwand und Inspektor gemeinsam und misst das Tempo dort einmal. Phase 4 bündelt Datei › Import/Ausgabe/Austausch und den Wochenablauf, der auf den Ansichten aus Phase 3 aufbaut.
+
+**Je Paket in der Phase** bleiben die Abnahmekriterien aus §16.3, §17.1–§17.2 und den Zeilen oben verbindlich; der Umfang wird nicht still verkleinert.
+
+### 18.5 Prüfregel je Phase (D51)
+
+| Abschnitt | Was geprüft wird | Was entfällt |
+|---|---|---|
+| Entwicklung (je Paket) | Tk-freie Unit-Tests des neuen Moduls laufend; Pflichtsuite des Pakets und gezielte Suiten der **berührten** Bereiche, sobald das Paket fertig ist; Syntax- und Standprüfung vor dem Commit | kein Versionswechsel, keine Vollprüfung, keine Lieferung nach 07/05, keine GitHub-Matrix je Commit (der Arbeitszweig wird erst zur Prüfphase gepusht) |
+| Prüfphase (Phasenende, einmal) | Versionswechsel; alle Pflichtsuiten der Phase mit roter Gegenprobe gegen die Vorversion; kalibrierte Linux-Gegenproben; eingefrorene Windows-Vollprüfung; GitHub-Matrix Linux/Windows mit Tk 9.1; Messungen §10; bei Formattor Altleser-Kindprozess; `abgleich_07`, Showcase; Mac-Vollprüfung und Bundle auf dem Referenz-Mac | – |
+| Befund in der Prüfphase | betroffene Suiten und **ein** erneuter Volllauf | keine neue Zwischenversion |
+| Menschenabnahme | eine gesammelte Sitzung je Phase nach der [Prüfliste](Glide_Manuelle_Pruefung.md), neue Fälle je Paket dort ergänzt | keine Einzelsitzung je Paket |
+
+Gilt neben AGENTS.md: Datenformatänderungen bleiben an Migration, Vorsicherung und Altleser gebunden; D17, D42 (native Abnahmen getrennt) und D43 (Veröffentlichungstore) bleiben unverändert. Was die Prüfphase nicht abdeckt (Mac nur mit dem Inhaber, tatsächliche Reader), steht im Nachweis jeder Phase ausdrücklich offen.
+
+### 18.6 Entscheidungsvorlagen für den Inhaber
+
+Kurzantwort wie bisher, etwa „E-P1 A, E-P2 A, E-P3 A, E-P4 A, E-P5 A, E-U1 A, E-U2 A, E-U3 A“. Neue Entscheidungen werden ab D52 eingetragen.
+
+| Nr. | Frage | A | B | C | Empfehlung |
+|---|---|---|---|---|---|
+| E-P1 | Phasenplan §18.4 mit Prüfregel §18.5 | so starten, Phase 0 sofort | Phasen wie A, aber jedes Paket einzeln liefern (bisherige Regel §16.1) | eigene Zusammenstellung | A |
+| E-P2 | Stellung von Paket 8 / 4.0.0 | eigener Strang parallel; Lieferung 4.0.0, sobald Orca-, NVDA- und VoiceOver-Tore bestanden sind, auf dem dann neuesten Phasenstand | zuerst Paket 8 abschließen, Phasen danach (bisherige Folge D49/D50) | Paket 8 erst nach Phase 4 | A – die offenen Tore sind native Readerläufe, die die Featurearbeit nicht blockieren müssen |
+| E-P3 | Neue Punkte §18.3 | alle aufnehmen | nur ohne Datenwirkung (WA-21, WA-22, WA-24, WA-25, TK9-RAD) | keine | A |
+| E-P4 | WA-08 Zeitauswertung in Phase 2 | aufnehmen, weil das Formattor dort ohnehin anfällt | weiter ◇ bis zum belegten Bedarf | – | A |
+| E-P5 | FP-07 Stufe 2 (JSON Canvas) | in Phase 4 mitliefern | weiter P3 | – | A – geringer Aufwand nach Stufe 1 und FP-04 |
+| E-U1–E-U3 | Kompaktmodus, Nebenansicht, Notion-Muster (§17.3) | – | – | – | unverändert offen; die Einplanung in Phase 1/3 setzt jeweils A voraus |
+
+Ohne Antwort auf E-P1 beginnt nur Phase 0 (Prüfstand, ohne App-Version); Phasen 1–4 starten erst mit der Freigabe. Bereits durch D49 beauftragte Inhalte (FP-01–FP-07, WA-09, WA-12) brauchen keine erneute Auswahl, nur ihre Einordnung in Phasen.
+
+### 18.7 Risiken des Phasenvorgehens
+
+| Risiko | Gegenmaßnahme |
+|---|---|
+| Fehler aus frühen Paketen fallen erst in der Prüfphase auf | Pflichtsuite und gezielte Suiten je Paket bleiben Pflicht; Gegenproben laufen in der Prüfphase gesammelt |
+| Lange Zeit ohne Lieferung nach `07_Python-Versionen` | Phasen auf rund drei bis vier Wochen Arbeit begrenzt; dringende Fehler als eigene Fehlerbehebungsversion wie 3.39.1 und 3.43.1 |
+| Paket 8 driftet vom Phasenstand weg | Strang nach jeder Phase auf den neuen Stand bringen; Semantiktests laufen in jeder Prüfphase mit |
+| Mehr Funktionen in `ListApp` (`app.pyw` 61.256 Zeilen) | D17: neue Fachlogik nur als Tk-freies Modul; WA-16 (Kennzahl je Lieferung) in jeder Prüfphase |
+| Prüfstand wackelt (PS-01) und verdeckt echte Befunde | Phase 0 vor Phase 1; wackelige Suiten mit Ursache stabilisieren, Kriterien nicht lockern |
