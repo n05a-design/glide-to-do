@@ -1,0 +1,123 @@
+{
+  "datum": "2026-10-17",
+  "app_version": "3.43.1",
+  "app_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+  "datenformat": 25,
+  "gegenstand": "Prüfwerkzeugnachlauf: wackelnde Windows-Suiten test_tag3390 und test_template_workflows; Ursachen belegt, nur Suiten und Prüfplan geändert, keine App-Änderung",
+  "plattform": "Windows 11 Pro, Python 3.14.7, Tk 9.0.4, PYTHONUTF8=1, kurzer Pfad (git archive), künstliche Daten",
+  "anlass": {
+    "test_template_workflows": "Auswahl-Popup schließt sich von selbst: TclError invalid command name …dropdownpopup… in field._highlight(12) (Zeile 150) oder assert field._popup is not None (Zeile 137); 3.43.1 4/7, 3.43.0 5/6 grün",
+    "test_tag3390": "Speichern nicht sichtbar (Zeile 325/142) bzw. assert root.focus_get() is title (Zeile 297); nach Mitternacht je zweimal rot, eingefrorene 3.43.0-Vollprüfung 16.10. grün"
+  },
+  "ursachen": {
+    "dialogtakt": {
+      "art": "Prüfwerkzeug",
+      "suite": "test_tag3390",
+      "beleg": "modal() plant root.after(80, perform) vor dem Öffnen; Aufbau bis run_modal 50–96 ms (_center_dialog 40–55 ms); über 80 ms läuft der abgelaufene Zeitgeber in wait_window vor Tks Leerlauf-Layout: Dialog gemappt 820x786, äußerer Rahmen/Fuß/ButtonFlow 1x1 ungemappt; Aktion nach 86–100 ms rot, sonst nach 146–296 ms grün; dieselbe Ursache an Zeile 325 (Kalender), 468 (Hinweis-Einstellungen) und 532 (Dialoggeometrie: „Tag entlasten“ 820x702 gemappt, Fuß 1x1)"
+    },
+    "desktop_vordergrund": {
+      "art": "Prüfwerkzeug (Glide reagiert richtig)",
+      "suiten": [
+        "test_tag3390",
+        "test_template_workflows"
+      ],
+      "beleg": "Bei Eingabe in einem anderen Programm verliert der Prüfprozess den Vordergrund; focus_get() None, focus_lastfor() unverändert. 8 instrumentierte Läufe 15:23 (Leerlauf 0–1,75 s): 5x Vordergrund am Prüfpunkt fremd, davon 3x focus_get() None – genau diese an Zeile 297 rot, Inspektorfeld identisch, Text unverändert. 18 instrumentierte Vorlagenläufe: Lauf 12 Vordergrundwechsel 125 ms nach Eingabe, <FocusOut> am Prüffenster, DropdownPopup._check_focus schließt (beabsichtigt, geprüft in test_ui39); _owner_changed schloss nie"
+    },
+    "ausgeschlossen": {
+      "datum_uhrzeit": "keine Datumsabhängigkeit im Mechanismus; gleiche Fehler 01:08 (6/6 am Wettlauf rot) und 15:23",
+      "fenstergroesse": "Dialog 820x786 auf 2560x1440; kein Lage-/Größenwechsel schloss ein Popup",
+      "vordergrundsperre_allein": "ForegroundLockTimeout Registry 200000 ms, SPI_GETFOREGROUNDLOCKTIMEOUT (nur gelesen) 2147483647; ohne Bedienung hatte der Prüfprozess meist selbst den Vordergrund",
+      "version_3_43_1": "gleiche Fehler mit App 3.43.0 (5674936) und Prüfstand 3.39.0 (c38d960)"
+    }
+  },
+  "geaendert": [
+    "01_Repository/Glide/tests/integration/test_tag3390.py",
+    "01_Repository/Glide/tests/integration/test_template_workflows.py",
+    "01_Repository/Glide/docs/05_QA_TESTPLAN.md"
+  ],
+  "pruefungen": {
+    "sondenmatrix": {
+      "faelle": 22,
+      "wie_erwartet": 22,
+      "sonde_aktiv": 22,
+      "datei": "sonden.json"
+    },
+    "wiederholung_abwechselnd_3_43_1": {
+      "tag-alt": {
+        "laeufe": 6,
+        "gruen": 0,
+        "rot": 6,
+        "mit_eingabe_waehrend_lauf": 4,
+        "rote_stellen": {
+          "Zeile 325 (calendar_save), Zeile 142 (click) AssertionError: Speichern nicht sichtbar": 2,
+          "Zeile 111 (perform), Zeile 532 (geometry) AssertionError: {": 4
+        }
+      },
+      "tag-neu": {
+        "laeufe": 6,
+        "gruen": 6,
+        "rot": 0,
+        "mit_eingabe_waehrend_lauf": 5,
+        "rote_stellen": {}
+      },
+      "vorlagen-alt": {
+        "laeufe": 6,
+        "gruen": 5,
+        "rot": 1,
+        "mit_eingabe_waehrend_lauf": 5,
+        "rote_stellen": {
+          "Zeile 154 (<module>) _tkinter.TclError: invalid command name \".!toplevel7.!dropdownpopup8.!frame.!optionrows.!frame.!frame2\"": 1
+        }
+      },
+      "vorlagen-neu": {
+        "laeufe": 6,
+        "gruen": 6,
+        "rot": 0,
+        "mit_eingabe_waehrend_lauf": 4,
+        "rote_stellen": {}
+      }
+    },
+    "wiederholung_app_3_43_0_neue_pruefung": {
+      "tag-neu-430": {
+        "laeufe": 4,
+        "gruen": 4,
+        "rot": 0,
+        "mit_eingabe_waehrend_lauf": 3,
+        "rote_stellen": {}
+      },
+      "vorlagen-neu-430": {
+        "laeufe": 4,
+        "gruen": 4,
+        "rot": 0,
+        "mit_eingabe_waehrend_lauf": 2,
+        "rote_stellen": {}
+      }
+    },
+    "ci_grundstufe": {
+      "exitcode": 0,
+      "schritte": 19,
+      "ausgefuehrt": 19,
+      "werkzeugtests": 152,
+      "units": 714,
+      "units_ohne_systemzeitzonen": 714,
+      "lieferstand_streng": "bytegleich",
+      "datei": "grundstufe.json",
+      "erster_lauf": "Exit 0, Lieferstand-Hinweis 67 Abweichungen allein durch CRLF-Arbeitskopie von 07_Python-Versionen (75 Dateien); in b2af7a7 alle 212 gemeinsamen Dateien blobgleich (außer den eigenständigen README.md)"
+    }
+  },
+  "lieferstand_unveraendert": {
+    "src_glide": "unverändert gegenüber b2af7a7",
+    "07_Python-Versionen": "unverändert",
+    "05_Probelisten_Testdaten": "unverändert"
+  },
+  "grenzen": [
+    "Windows 11/Tk 9.0.4; macOS und Linux nicht ausgeführt, GitHub-Bestätigung nach dem Push",
+    "eingefrorene Vollprüfung 16.10. gilt für ihren Stand, nicht als Lauf mit neuen Prüfwerkzeugen ausgegeben",
+    "test_ui39 hat dieselbe mögliche Abhängigkeit vom Desktop-Vordergrund, nicht beobachtet und nicht geändert"
+  ],
+  "offen": [
+    "GitHub-Windows-Vollprüfung mit beiden Suiten nach dem Push",
+    "GitHub-Bestätigung Windows-Paketlauf und Linux-Vollprüfung nach 3.43.1",
+    "Mac-Vollprüfung und Mac-Bundle 3.43.1, Menschenabnahme"
+  ]
+}

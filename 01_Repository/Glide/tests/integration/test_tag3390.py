@@ -97,6 +97,10 @@ def run(app_path, cases, report):
                     "DTEND:"+stamp(start+timedelta(minutes=120))+"\nEND:VEVENT\n"
                     "END:VCALENDAR\n")
 
+        def laid_out(dialog):
+            footer = getattr(dialog, "_daily_footer", None)
+            return bool(dialog.winfo_ismapped() and (footer is None or footer.winfo_ismapped()))
+
         def modal(title, opener, action):
             failures, observed = [], []
             def perform():
@@ -107,6 +111,22 @@ def run(app_path, cases, report):
                     return
                 dialog = dialogs[-1]
                 observed.append(dialog)
+                # Der Takt von 80 ms belegt keine Sichtbarkeit (17.10.2026): Dauert
+                # der Aufbau länger – unter Windows 50–96 ms gemessen –, läuft der
+                # abgelaufene Zeitgeber in wait_window vor Tks Leerlauf, der den
+                # frisch gezeigten Dialog erst anordnet und seine Kinder mappt. Der
+                # Dialog steht dann mit 1x1-Inhalt da; „Speichern nicht sichtbar“
+                # war dieser Zustand, kein Glide-Fehler. Gewartet wird deshalb auf
+                # den angeordneten Dialog, höchstens drei Sekunden.
+                until = time.monotonic()+3
+                pump()
+                while not laid_out(dialog) and time.monotonic()<until:
+                    time.sleep(.01)
+                    pump()
+                if not laid_out(dialog):
+                    failures.append("Dialog nach drei Sekunden nicht angeordnet: "+title)
+                    dialog.destroy()
+                    return
                 try:
                     action(dialog)
                 except BaseException as exc:
@@ -173,14 +193,18 @@ def run(app_path, cases, report):
                 root.focus_force()
                 app.entry.focus_set()
                 pump()
-                focus, context = root.focus_get(), app.inspector_context()
+                kept, context = root.focus_lastfor(), app.inspector_context()
                 dialogs = {str(widget) for widget in root.winfo_children() if isinstance(widget, mod.tk.Toplevel)}
                 due = app.process_daily_hints()
                 assert len(due)==1 and due[0].kind=="start"
                 disk = json.loads(Path(mod.SETTINGS_FILE).read_text())
                 assert disk["daily_hint_state"]["receipts"][due[0].identity]["status"]=="presented"
                 assert app.process_daily_hints()==()
-                assert root.focus_get() is focus and app.inspector_context()==context
+                # Wie im Kalenderfall: Ohne Vordergrund meldet Tk None; der im
+                # Hauptfenster gehaltene Fokus muss bleiben.
+                assert root.focus_get() in (kept, None) and root.focus_lastfor() is kept, (
+                    root.focus_get(), root.focus_lastfor(), kept)
+                assert app.inspector_context()==context
                 assert dialogs=={str(widget) for widget in root.winfo_children() if isinstance(widget, mod.tk.Toplevel)}
                 assert app._daily_hint_count==1
                 checks.append("Tageshinweis: echter gespeicherter Beleg vor Anzeige, Glocke, keine Mehrfachzustellung/kein Zwangswechsel")
@@ -294,7 +318,13 @@ def run(app_path, cases, report):
                 assert "unbekannt" in app.planning_available_text(day)
                 assert wait_ready().status=="ready"
                 assert app._detail_state["fields"]["text"] is title and title.get()=="Noch ungespeicherter Kalenderentwurf"
-                assert root.focus_get() is title
+                # Gibt der Desktop einem anderen Programm den Vordergrund (unter
+                # Windows bei jeder Eingabe des Inhabers während des Laufs), meldet
+                # Tk keinen Fokus: focus_get() ist None. Maßgeblich ist der Fokus,
+                # den Glide im Hauptfenster hält; ein Wechsel in ein anderes
+                # Glide-Fenster bleibt über focus_get() sichtbar (17.10.2026).
+                assert root.focus_get() in (title, None) and title.focus_lastfor() is title, (
+                    root.focus_get(), title.focus_lastfor())
                 assert fresh(0)["text"]=="Geplant"
                 app.close_task_inspector(discard=True)
                 checks.append("Hintergrundladen: unbekannte Zwischenbilanz und unveränderter ungespeicherter Inspektor")
