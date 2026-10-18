@@ -1,0 +1,13 @@
+{
+  "vorher_objekte": 12213,
+  "nachher_objekte": 12213,
+  "objektbestand_identisch": true,
+  "refs_identisch": true,
+  "fsck_exitcode": 0,
+  "objektliste_sha256": "2d6735f0eec48436069de7996fd3e2c76335332b8f71306667d2a81d6ca0bfba",
+  "keine_objekte_verworfen": true,
+  "reflog_ablauf": "never",
+  "worktree_ablauf": "never",
+  "prune": false,
+  "statistik": "count: 0\nsize: 0 bytes\nin-pack: 12213\npacks: 2\nsize-pack: 611.64 MiB\nprune-packable: 0\ngarbage: 6\nsize-garbage: 98.19 MiB\n"
+}

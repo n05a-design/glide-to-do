@@ -62,6 +62,10 @@ Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · Vorl
 | `symbol_policy.py` | Vollständige Symbolauswahl nach tatsächlicher UI-Schriftabdeckung und lesbare Text-Rückfälle (Tk-frei) |
 | `glyph_metrics.py` | Optische Symbolmitte aus den Glyphenrahmen der mitgelieferten TrueType-Schrift; eine Regel statt Pixelversätzen (Tk-frei, B09) |
 | `undo_history.py` | Wiederholen nach Rückgängig: Stapel und Gültigkeitsregel (Tiefe, oberstes Objekt, Schreibzähler) neben dem Rückgängig-Stapel (Tk-frei, FP-01) |
+| `structural_guard.py` | Transaktion des Bestandswächters: Stapelmarke, Schreibprüfung, Rückwegergebnis und ehrliche Abbruchmeldung (Tk-frei, WA-27) |
+| `load_phases.py` | Ladeweg in zwei Phasen: Lese- gegen Darstellungsfehler, aktive Liste nach dem Laden (Tk-frei, WA-28) |
+| `editor_flush.py` | Ergebnisvertrag der Editorübernahme vor Navigation, Export und Ende (Tk-frei, WA-29) |
+| `data_lock.py` | Datensperre `glide.lock` ohne Fail-open: Lesen, Einordnung, exklusive Anlage (Tk-frei, WA-30) |
 | `motion.py` | Unterbrechbare zeitgesteuerte Übergänge mit vollständigem Abbau (Tk-frei) |
 | `task_editing.py` | Feldvertrag, Dreiwegevergleich und verständliche Bearbeitungskonflikte (Tk-frei) |
 | `daily_hints.py` | Optionale Tageshinweise, verpasste Tage, Später/Überspringen und persistente Zustellbelege ohne Tk |

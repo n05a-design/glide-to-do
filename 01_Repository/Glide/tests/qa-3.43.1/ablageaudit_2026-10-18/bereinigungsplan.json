@@ -1,0 +1,99 @@
+{
+  "datum": "2026-10-18",
+  "wurzel": "Projektablage",
+  "schritte": [
+    {
+      "art": "Git-Objekte verdichten",
+      "pfad": ".git/objects",
+      "voraussetzung": "fsck Exit 0; alle Objekt-IDs, Refs und Reflogs bleiben erhalten; --no-prune und Ablaufwerte never; keine History-Umschreibung"
+    },
+    {
+      "art": "Git-Fehlreste entfernen",
+      "dateien": [
+        {
+          "pfad": ".git/objects/19/tmp_obj_FgYIX5",
+          "bytes": 24756224,
+          "sha256": "730d26442546473560eef1849fab56d5ef5df9a2ced73968e6cdc010b2ec0595",
+          "gitobjekt": "f679ae1911b02362dd7c5a362ee459f17e710441",
+          "vollstaendiger_zlibstrom": false,
+          "objekt_bereits_vorhanden": false,
+          "typ": "blob 32970919",
+          "fehler": null
+        },
+        {
+          "pfad": ".git/objects/19/tmp_obj_r2S49d",
+          "bytes": 20639744,
+          "sha256": "711fbe16e854b2b37960cb81dd6e4107178e400d3d6973518c756e0b231659a4",
+          "gitobjekt": "af8ec478f8fc4f5c5ba42e248fff0cd49c0ca271",
+          "vollstaendiger_zlibstrom": false,
+          "objekt_bereits_vorhanden": false,
+          "typ": "blob 32970919",
+          "fehler": null
+        },
+        {
+          "pfad": ".git/objects/19/tmp_obj_vUoKoP",
+          "bytes": 24047616,
+          "sha256": "6be753d546c46e2a1d06ca12fa35b57e0b9e628743fde9bd0012e81cfc6f9afb",
+          "gitobjekt": "8d358d3b55d88dba9106b0452bcd17647bf4b0a1",
+          "vollstaendiger_zlibstrom": false,
+          "objekt_bereits_vorhanden": false,
+          "typ": "blob 32970919",
+          "fehler": null
+        },
+        {
+          "pfad": ".git/objects/26/tmp_obj_ZmHxyR",
+          "bytes": 409600,
+          "sha256": "cd9e92cefab78db04128a8c06dd2a69aa1f879634c730236373056b04e07623d",
+          "gitobjekt": "38bf298f1af12f94df074c9cf1f8c78ef5c32d36",
+          "vollstaendiger_zlibstrom": false,
+          "objekt_bereits_vorhanden": false,
+          "typ": "blob 6066577",
+          "fehler": null
+        },
+        {
+          "pfad": ".git/objects/94/tmp_obj_PQ2G9J",
+          "bytes": 131072,
+          "sha256": "cb03fecfa215791456485956b784456135122705fa5d62af32da7963505939f0",
+          "gitobjekt": "235ce0e3d765ee39c9bdfc2cabfb9238ac632ba6",
+          "vollstaendiger_zlibstrom": false,
+          "objekt_bereits_vorhanden": false,
+          "typ": "blob 37545574",
+          "fehler": null
+        },
+        {
+          "pfad": ".git/objects/a5/tmp_obj_Ug6lc1",
+          "bytes": 32971343,
+          "sha256": "7cbfb4885214c2bcd5209e2e0b7ca5aef86ae03dca443fcafeb84ded39388ed7",
+          "gitobjekt": "a52eceb87d2ce442f5a84145a2dbbdf945029938",
+          "vollstaendiger_zlibstrom": true,
+          "objekt_bereits_vorhanden": true,
+          "typ": "blob 32970935",
+          "fehler": null
+        }
+      ],
+      "voraussetzung": "keine Git-Schreibprozesse; Dateien unveraendert gegen Vollhash; fuenf unvollstaendige Streams und ein nachgewiesenes vorhandenes Objekt"
+    },
+    {
+      "art": "zusaetzliche Arbeitskopien aufloesen",
+      "pfade": [
+        ".claude/worktrees/beautiful-babbage-196492",
+        ".claude/worktrees/glide-weiterarbeiten-618cb4",
+        ".claude/worktrees/jolly-noether-593099",
+        ".claude/worktrees/review-outdated-content-511443",
+        ".claude/worktrees/untitled-session-954211"
+      ],
+      "voraussetzung": "gueltige einzigartige Inhalte integriert und geprueft, uncommittete Inhalte mit gepruefter Sicherung erhalten; Branchrefs bleiben; keine ignorierten einzigartigen Nachweise verwerfen"
+    }
+  ],
+  "geschuetzt": [
+    "Aktive Arbeitskopie einschliesslich aller aktuellen Originalgrafiken",
+    "28 Nutzerreferenzbilder und Originalauftraege",
+    "Alle sieben aktuellen QA-Versionen; Bilder der drei neuesten Versionspfade unabhaengig von Git-Ignore",
+    "Migrationsfixtures und durch Tests benutzte Referenzdaten",
+    "07-Python-Startfassung, Showcase und die einzigen aktuellen Pakete",
+    "Alle Git-Objekte und bestehenden Branch-/Tag-/Stash-/Reflog-Staende"
+  ],
+  "dateibasis": "inventar_vorher.json",
+  "vollhashbasis": "dateihashes_vorher.json",
+  "keine_pauschale_dublettenloeschung": true
+}

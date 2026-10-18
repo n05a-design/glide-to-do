@@ -1,0 +1,745 @@
+"""Schutzrunde WA-27 bis WA-30: Wächter, Laden, Editorübernahme, Datensperre.
+
+Die Fälle stammen aus den Proben der Standanalyse vom 18.10.2026 (A32, A34,
+A35, A36) und prüfen jetzt das richtige Verhalten: echte `ListApp` mit Tk,
+künstliche Daten in einem temporären Datenordner (vor dem Import gesetzt),
+gespeicherte Datei als Bytes. `--app` erlaubt die rote Gegenprobe gegen den
+Stand vor der Korrektur, `--fall` einzelne Fälle.
+"""
+import argparse
+import importlib.machinery
+import importlib.util
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import time
+import traceback
+from datetime import datetime, timedelta
+from pathlib import Path
+from types import SimpleNamespace
+
+REPO = Path(__file__).resolve().parents[2]
+FAELLE = ("waechter", "rueckweg", "laden", "flush", "editorwechsel", "sperre", "sperre_prozesse",
+          "ausgaben", "editor_offen", "rueckweg_bytes")
+FEHLERTITEL_OK = "Abgebrochen – keine Daten verloren"
+
+
+class Lauf:
+    def __init__(self, app_path, data):
+        self.app_path = Path(app_path)
+        os.environ["GLIDE_DATA_DIR"] = data
+        os.environ["GLIDE_TEST_MODE"] = "1"
+        sys.path.insert(0, str(self.app_path.parent))
+        loader = importlib.machinery.SourceFileLoader("glide_schutz_" + str(abs(hash(str(app_path)))),
+                                                      str(app_path))
+        self.mod = importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name, loader))
+        sys.modules[loader.name] = self.mod
+        loader.exec_module(self.mod)
+        self.data = data
+        self.errors = []
+        self.meldungen = []
+        self.start()
+
+    def start(self):
+        self.root = self.mod.tk.Tk()
+        self.root.geometry("1280x800+20+20")
+        self.root.report_callback_exception = lambda *e: self.errors.append(
+            "".join(traceback.format_exception(*e))[-600:])
+        self.app = self.mod.ListApp(self.root)
+        for name in ("show_info", "show_warning", "show_error"):
+            setattr(self.app, name, lambda *a, _n=name, **k: self.meldungen.append((_n, a[:2])))
+        self.app.ask_yes_no = lambda *a, **k: True
+        self.app.themed_input_dialog = lambda *a, **k: "Gruppe"
+        self.idle()
+
+    def neustart(self):
+        self.app.save_settings()
+        self.ende()
+        self.start()
+
+    def idle(self, runden=3):
+        for _ in range(runden):
+            self.root.update_idletasks()
+            self.root.update()
+
+    def ende(self):
+        try:
+            # Dieser Neustart ersetzt den gesamten Tcl-Interpreter. Vor dem
+            # Testabbau die Instanzbindungen lösen, damit nachlaufende
+            # Auswahl-/Configure-Ereignisse keine halb zerstörte Ansicht lesen.
+            def unbind_tree(widget):
+                for child in widget.winfo_children():
+                    unbind_tree(child)
+                for sequence in widget.bind():
+                    widget.unbind(sequence)
+            unbind_tree(self.root)
+            for sequence in self.root.tk.splitlist(self.root.tk.call("bind", "all")):
+                self.root.unbind_all(sequence)
+            self.app.cancel_pending_callbacks()
+            # Auch widgeteigene Jobs vor dem Abbau des Tcl-Interpreters
+            # entfernen; sonst treffen sie den Interpreter des nächsten Falls.
+            for job in self.root.tk.splitlist(self.root.tk.call("after", "info")):
+                self.root.after_cancel(job)
+            self.app.release_data_lock()
+            self.root.destroy()
+        except Exception:
+            pass
+
+    def datei(self):
+        return Path(self.mod.SAVE_FILE).read_bytes()
+
+    def datei_ids(self):
+        daten = json.loads(self.datei().decode("utf-8"))
+        ids = set()
+        for eintrag in daten.get("lists", []):
+            ids |= self.mod.ListApp.collect_item_ids(eintrag.get("items", []))
+        return ids
+
+    def fehlertitel(self):
+        return [meldung[1][0] for meldung in self.meldungen if meldung[0] == "show_error"]
+
+    def grundbestand(self):
+        app = self.app
+        punkte = [app.new_item(name) for name in "ABCDEFGH"]
+        liste = app.new_list_object("Arbeit", punkte)
+        ziel = app.new_list_object("Ziel", [app.new_item("Schon da")])
+        app.lists.extend([liste, ziel])
+        assert app.save_items()
+        app.set_active_list(liste["id"])
+        self.idle()
+        ids = {item["text"]: item["id"] for item in punkte}
+        ids.update(liste=liste["id"], ziel=ziel["id"])
+        return ids
+
+
+def volle_tiefe(app, tiefe):
+    app.undo_stack[:] = [app.undo_state() for _ in range(tiefe)]
+    return app.undo_stack[-1] if app.undo_stack else None
+
+
+# ------------------------------------------------------------------ WA-27
+def fall_waechter(lauf):
+    """A32: Tiefe 0/19/20, direkter Schnappschuss und `item_change`; Datei bytegleich."""
+    app = lauf.app
+    lauf.grundbestand()
+    rot = []  # alle Teilbefunde sammeln: Die Gegenprobe zeigt, welche Tiefe scheitert
+    for tiefe in (0, 19, app.MAX_UNDO_STEPS):
+        for variante in ("direkt", "rahmen"):
+            oben = volle_tiefe(app, tiefe)
+            vorher, ids_vorher = lauf.datei(), app.data_item_ids()
+            lauf.meldungen.clear()
+            with app.guarded_structural_change("Prüfverlust"):
+                if variante == "direkt":
+                    app.snapshot_undo()
+                    app.items.pop()
+                    app.save_items()
+                else:
+                    with app.item_change([], restore=False) as change:
+                        app.items.pop()
+                        change.mark()
+            lauf.idle(1)
+            fall = f"Tiefe {tiefe}/{variante}"
+            if not app.data_item_ids() >= ids_vorher:
+                rot.append(f"{fall}: Punkt fehlt nach dem Abbruch")
+            if lauf.datei() != vorher:
+                rot.append(f"{fall}: Datei nicht bytegleich")
+            if len(app.undo_stack) != tiefe or (oben is not None and app.undo_stack[-1] is not oben):
+                rot.append(f"{fall}: Rückgängig-Stapel {len(app.undo_stack)} statt {tiefe}")
+            if lauf.fehlertitel() != [FEHLERTITEL_OK]:
+                rot.append(f"{fall}: Meldung {lauf.fehlertitel()}")
+            if app.dirty:
+                rot.append(f"{fall}: ungespeicherte Änderung")
+    assert not rot, rot
+    # Ein gelungener Umbau bei vollem Stapel bleibt bei 20 Schritten.
+    volle_tiefe(app, app.MAX_UNDO_STEPS)
+    lauf.meldungen.clear()
+    with app.guarded_structural_change("Prüfumbau"):
+        with app.item_change([app.items[0]["id"]]) as change:
+            app.items.append(app.items.pop(0))
+            change.mark()
+    assert len(app.undo_stack) == app.MAX_UNDO_STEPS and not lauf.fehlertitel(), "Umbau bei vollem Stapel"
+    ids = app.data_item_ids()
+    lauf.neustart()
+    assert ids <= lauf.app.data_item_ids() and ids <= lauf.datei_ids(), "Neustart: Bestand unvollständig"
+    return "Tiefe 0/19/20 × Schnappschuss/Rahmen: Bestand, Datei bytegleich, Stapel, Meldung; Neustart"
+
+
+def fall_rueckweg(lauf):
+    """A32: Verlust nach dem Speichern, scheiterndes Zurückschreiben, Gruppieren bei vollem Stapel."""
+    app, mod = lauf.app, lauf.mod
+    ids = lauf.grundbestand()
+    befunde = []
+
+    # Verlust erst nach einem gelungenen Speichern im Wächter: Der Rückweg schreibt zurück.
+    volle_tiefe(app, app.MAX_UNDO_STEPS)
+    lauf.meldungen.clear()
+    with app.guarded_structural_change("Spätverlust"):
+        with app.item_change([ids["A"]]) as change:
+            app.find_item_in_lists(ids["A"])[0]["text"] = "A geändert"
+            change.mark()
+        app.items.pop()
+    assert app.find_item_in_lists(ids["A"])[0]["text"] == "A", "Rückweg nimmt die Änderung nicht zurück"
+    assert set(ids[k] for k in "ABCDEFGH") <= lauf.datei_ids(), "Datei ohne vollständigen Bestand"
+    assert lauf.fehlertitel() == [FEHLERTITEL_OK], lauf.meldungen
+    befunde.append("Verlust nach Speichern")
+
+    # Das Zurückschreiben scheitert: keine Rettungsmeldung.
+    volle_tiefe(app, app.MAX_UNDO_STEPS)
+    echt = app.write_json_atomic
+    zaehler = {"n": 0}
+
+    def schreiben(pfad, inhalt):
+        if pfad == mod.SAVE_FILE:
+            zaehler["n"] += 1
+            if zaehler["n"] > 1:
+                raise OSError("Datenträger voll (Prüfung)")
+        return echt(pfad, inhalt)
+
+    app.write_json_atomic = schreiben
+    lauf.meldungen.clear()
+    try:
+        with app.guarded_structural_change("Spätverlust"):
+            with app.item_change([ids["B"]]) as change:
+                app.find_item_in_lists(ids["B"])[0]["text"] = "B geändert"
+                change.mark()
+            app.items.pop()
+    finally:
+        del app.write_json_atomic
+    titel = lauf.fehlertitel()
+    assert FEHLERTITEL_OK not in titel, f"Rettungsmeldung trotz gescheitertem Zurückschreiben: {titel}"
+    assert "Abgebrochen – noch nicht gespeichert" in titel, titel
+    assert set(ids[k] for k in "ABCDEFGH") <= app.data_item_ids() and app.dirty
+    assert app.save_items() and set(ids[k] for k in "ABCDEFGH") <= lauf.datei_ids()
+    befunde.append("Zurückschreiben gescheitert")
+
+    # Selbst gemeldeter Verlust bei vollem Stapel.
+    volle_tiefe(app, app.MAX_UNDO_STEPS)
+    vorher = lauf.datei()
+    lauf.meldungen.clear()
+    with app.guarded_structural_change("Prüfmeldung"):
+        app.snapshot_undo()
+        app.items.pop()
+        raise mod.DataIntegrityError("Prüfung")
+    assert set(ids[k] for k in "ABCDEFGH") <= app.data_item_ids() and lauf.datei() == vorher
+    assert lauf.fehlertitel() == [FEHLERTITEL_OK] and "1 Punkt(e)" in lauf.meldungen[-1][1][1], lauf.meldungen
+    befunde.append("DataIntegrityError")
+
+    # Echtes Gruppieren, das einen Punkt verlöre, bei vollem Stapel.
+    volle_tiefe(app, app.MAX_UNDO_STEPS)
+    vorher = lauf.datei()
+    hinweise = []
+    app.show_undo_toast = lambda *a, **k: hinweise.append(a)
+    echt_new_item = app.new_item
+
+    def verlierend(*args, **kw):
+        if kw.get("kind") == app.ITEM_KIND_GROUP and kw.get("children"):
+            kw["children"] = kw["children"][:-1]
+        return echt_new_item(*args, **kw)
+
+    app.new_item = verlierend
+    lauf.meldungen.clear()
+    try:
+        auswahl = [app.items[0]["id"], app.items[1]["id"]]
+        app.tree.selection_set(auswahl)
+        app.tree.focus(auswahl[0])
+        lauf.idle(1)
+        app.group_selected_items()
+        lauf.idle(1)
+    finally:
+        del app.new_item
+        del app.show_undo_toast
+    assert set(ids[k] for k in "ABCDEFGH") <= app.data_item_ids(), "Gruppieren verliert einen Punkt"
+    assert lauf.datei() == vorher, "Gruppieren: Datei nicht bytegleich"
+    assert not hinweise, f"Erfolgshinweis trotz Abbruch: {hinweise}"
+    assert lauf.fehlertitel() == [FEHLERTITEL_OK], lauf.meldungen
+    assert len(app.undo_stack) == app.MAX_UNDO_STEPS and not app.redo_available()
+    befunde.append("Gruppieren")
+    return ", ".join(befunde)
+
+
+# ------------------------------------------------------------------ WA-28
+def fall_laden(lauf):
+    """A34: Darstellungsfehler nach gültigem Lesen; echte Lese- und Formatfehler wie bisher."""
+    app, mod = lauf.app, lauf.mod
+    ids = lauf.grundbestand()
+    sicherungen = Path(mod.BACKUP_DIR)
+
+    def kopien():
+        return set(sicherungen.glob("liste_unlesbar_*.json")) if sicherungen.is_dir() else set()
+
+    for methode, fehler in (("refresh_tree", mod.tk.TclError("Prüffehler beim Zeichnen")),
+                            ("update_sidebar_list", ValueError("Prüffehler in der Seitenleiste"))):
+        vorher, vorher_kopien = lauf.datei(), kopien()
+        def einmal(*a, _m=methode, _f=fehler, **k):
+            # Nur der erste Aufbau scheitert; was danach zeichnet, läuft echt.
+            app.__dict__.pop(_m, None)
+            raise _f
+
+        setattr(app, methode, einmal)
+        lauf.meldungen.clear()
+        try:
+            app.load_items()
+        finally:
+            app.__dict__.pop(methode, None)
+        texte = [meldung[1][1] for meldung in lauf.meldungen if meldung[0] == "show_error"]
+        assert not any("beschädigt" in text for text in texte), f"{methode}: als beschädigte Datei gemeldet"
+        assert texte and str(fehler) in texte[0], (methode, lauf.meldungen)
+        assert kopien() == vorher_kopien, f"{methode}: unnötige Kopie liste_unlesbar_*"
+        assert not getattr(app, "_data_read_only", False)
+        assert set(ids[k] for k in "ABCDEFGH") <= app.data_item_ids(), f"{methode}: Bestand leer"
+        assert lauf.datei() == vorher
+        app.refresh_tree()
+        assert app.save_items() and set(ids[k] for k in "ABCDEFGH") <= lauf.datei_ids(), \
+            f"{methode}: späteres Speichern schreibt nicht den gelesenen Bestand"
+        app.set_active_list(ids["liste"])
+        lauf.idle(1)
+    # Echter Lesefehler: wie bisher Kopie und leerer Start.
+    vorher_kopien = kopien()
+    Path(mod.SAVE_FILE).write_text("{kaputt", encoding="utf-8")
+    lauf.meldungen.clear()
+    app.load_items()
+    assert any("beschädigt" in meldung[1][1] for meldung in lauf.meldungen if meldung[0] == "show_error")
+    assert len(kopien() - vorher_kopien) == 1
+    # Neueres Format: schreibgeschützt.
+    Path(mod.SAVE_FILE).write_text(json.dumps({"version": 999, "lists": []}), encoding="utf-8")
+    lauf.meldungen.clear()
+    app.load_items()
+    assert app._data_read_only and app._read_only_reason == "newer_format"
+    return "TclError/ValueError in der Ansicht behalten den Bestand; JSON-Fehler und neueres Format wie bisher"
+
+
+# ------------------------------------------------------------------ WA-29
+def fall_flush(lauf):
+    """A35: Rückgabe für jede Editorkombination; Aufrufer mit `is False` halten an."""
+    app, mod = lauf.app, lauf.mod
+    ids = lauf.grundbestand()
+    seite = app.new_page_from_markdown("# Prüfseite\n\nText")
+    lauf.idle()
+    aufgabe = app.new_item("In der Seite")
+    seite["items"].append(aufgabe)
+    assert app.save_items()
+    echt_editor = app.rich_note_editor
+    try:
+        for note, zeichnung in ((True, True), (False, True), (True, False), (False, False), (None, True)):
+            app.rich_note_editor = SimpleNamespace(winfo_exists=lambda: True, flush=lambda n=note: n,
+                                                   entry_id=seite["id"])
+            app.flush_drawing_editor = lambda z=zeichnung: z
+            erwartet = not (note is False or zeichnung is False)
+            assert app.flush_rich_note() is erwartet, (note, zeichnung, app.flush_rich_note())
+        app.rich_note_editor = None
+        app.flush_drawing_editor = lambda: True
+        assert app.flush_rich_note() is True, "ohne Editor"
+        del app.flush_drawing_editor
+
+        app.rich_note_editor = SimpleNamespace(winfo_exists=lambda: True, flush=lambda: False,
+                                               entry_id=seite["id"])
+        listen = len(app.lists)
+        assert app.new_page_from_markdown("# Neu\n\nText") is None and len(app.lists) == listen, "Markdown"
+        assert app.change_page_feature(seite["id"], "live_lists", [ids["ziel"]]) is False
+        assert "live_lists" not in seite, "Seitenfunktion trotz gescheiterter Übernahme"
+        app.confirm_template_preview = lambda *a, **k: True
+        app.ask_template_fields = lambda *a, **k: {}
+        assert app.create_list_from_template("daily") is None and len(app.lists) == listen, "Vorlage"
+        assert app.apply_notion_selection(None, None, None, None, None) is False, "Notion"
+        assert app.apply_page_restore(None, None, None) is False, "Seitenrestore"
+        assert app.transfer_document_task(seite["id"], aufgabe["id"], ids["ziel"]) is False
+        assert app.find_item_in_lists(aufgabe["id"])[3]["id"] == seite["id"], "Aufgabe trotzdem verlegt"
+    finally:
+        app.rich_note_editor = echt_editor
+        for name in ("flush_drawing_editor", "confirm_template_preview", "ask_template_fields"):
+            app.__dict__.pop(name, None)
+    app._data_read_only = True
+    try:
+        assert app.flush_rich_note() is True, "unveränderter schreibgeschützter Editor meldet einen Fehler"
+        assert app.page_markdown(seite["id"]) and app.build_page_print_html(seite["id"]), \
+            "schreibgeschützter unveränderter Bestand darf nicht seine Ausgabewege verlieren"
+    finally:
+        app._data_read_only = False
+    return ("fünf Kombinationen, kein Editor; Markdown, Seitenfunktion, Vorlage, Notion, Restore, Aufgabe verlegen; "
+            "unverändert schreibgeschützt: Übernahme ohne Schreiben und Ausgabe erlaubt")
+
+
+def fall_editorwechsel(lauf):
+    """A35: Ein nicht übernommener Seitentext bleibt; Navigation, Anlegen und Beenden fragen."""
+    app, mod = lauf.app, lauf.mod
+    ids = lauf.grundbestand()
+    seite = app.new_page_from_markdown("# Prüfseite\n\nErster Absatz")
+    lauf.idle()
+    editor = app.rich_note_editor
+    assert isinstance(editor, mod.PageEditor)
+    grenze = mod.RichNoteEditor.MAX_TEXT
+    befunde = []
+    zerstoert = []
+    try:
+        mod.RichNoteEditor.MAX_TEXT = len(editor.text.get("1.0", "end-1c")) + 5
+        editor.text.insert("end", "\nNachtrag über der Grenze")
+        listen = len(app.lists)
+        lauf.meldungen.clear()
+        app.set_active_list(ids["ziel"])
+        lauf.idle()
+        assert app.active_list_id == seite["id"], "Wechsel trotz nicht übernommener Seite"
+        assert app.rich_note_editor is editor and editor.winfo_exists(), "Editor abgebaut"
+        assert "Nachtrag über der Grenze" in editor.text.get("1.0", "end-1c"), "Text verloren"
+        assert any(m[0] == "show_warning" for m in lauf.meldungen), lauf.meldungen
+        befunde.append("Navigation")
+        app.create_new_page()
+        lauf.idle()
+        assert len(app.lists) == listen and app.active_list_id == seite["id"], "Neue Seite trotz offenem Text"
+        befunde.append("Anlegen")
+        gefragt = []
+        app.ask_yes_no_cancel = lambda *a, **k: gefragt.append(a[0]) or None
+        app.root.destroy = lambda: zerstoert.append(True)
+        assert app._close_after_confirmation() is False and gefragt and not zerstoert, \
+            f"Beenden ohne Rückfrage: {gefragt} {zerstoert}"
+        befunde.append("Beenden fragt")
+        app._data_read_only = True
+        app.set_active_list(ids["ziel"])
+        lauf.idle()
+        assert app.active_list_id == ids["ziel"], "schreibgeschützt: Wechsel blockiert"
+        app._data_read_only = False
+        befunde.append("schreibgeschützt frei")
+        # Schreibfehler: Der Text steht im Arbeitsspeicher, der Wechsel bleibt frei.
+        mod.RichNoteEditor.MAX_TEXT = grenze
+        app.set_active_list(seite["id"])
+        lauf.idle()
+        editor = app.rich_note_editor
+        echt = app.write_json_atomic
+        app.write_json_atomic = lambda p, d: (_ for _ in ()).throw(OSError("voll")) if p == mod.SAVE_FILE \
+            else echt(p, d)
+        try:
+            editor.text.insert("end", "\nNachtrag im Speicher")
+            app.set_active_list(ids["ziel"])
+            lauf.idle()
+        finally:
+            del app.write_json_atomic
+        assert app.active_list_id == ids["ziel"] and app.dirty
+        assert "Nachtrag im Speicher" in seite["rich_note"]["text"]
+        assert app.save_items()
+        befunde.append("Schreibfehler frei")
+    finally:
+        mod.RichNoteEditor.MAX_TEXT = grenze
+        app._data_read_only = False
+        app.__dict__.pop("ask_yes_no_cancel", None)
+        app.root.__dict__.pop("destroy", None)
+    return ", ".join(befunde)
+
+
+# ------------------------------------------------------------------ WA-30
+def sperre_schreiben(pfad, **felder):
+    jetzt = datetime.now().astimezone()
+    inhalt = {"host": os.environ.get("COMPUTERNAME") or os.environ.get("HOSTNAME") or "unbekannt",
+              "pid": 4, "token": "fremd", "started_at": jetzt.isoformat(), "refreshed_at": jetzt.isoformat()}
+    inhalt.update(felder)
+    Path(pfad).write_text(json.dumps(inhalt), encoding="utf-8")
+    return inhalt
+
+
+def fall_sperre(lauf):
+    """A36 in einem Prozess: Probenfälle, Übernahme, Neuanlage, Verdrängung, Takt."""
+    app, mod = lauf.app, lauf.mod
+    lauf.grundbestand()
+    probe = Path(lauf.data) / "sperrproben"
+    probe.mkdir()
+    jetzt = datetime.now().astimezone()
+    alt = (jetzt - timedelta(hours=9)).isoformat()
+    kind = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(120)"])
+    befunde = []
+    try:
+        def lese(name, inhalt):
+            pfad = probe / name
+            pfad.write_text(inhalt, encoding="utf-8")
+            return app.read_foreign_lock(str(pfad))
+
+        assert lese("defekt.lock", "nicht json {"), "defekte Sperre gilt als frei"
+        assert lese("liste.lock", "[1,2]"), "JSON-Liste gilt als frei"
+        verzeichnis = probe / "verzeichnis.lock"
+        verzeichnis.mkdir()
+        assert app.read_foreign_lock(str(verzeichnis)), "unlesbarer Sperrpfad gilt als frei"
+        assert lese("fremd.lock", json.dumps({"host": "ANDERER", "pid": 4, "token": "x",
+                                              "started_at": jetzt.isoformat(), "refreshed_at": jetzt.isoformat()}))
+        assert lese("alt.lock", json.dumps({"host": "ANDERER", "pid": 4, "token": "x",
+                                            "started_at": alt, "refreshed_at": alt})) is None
+        sperre_schreiben(probe / "lebend.lock", pid=kind.pid)
+        assert app.read_foreign_lock(str(probe / "lebend.lock"))
+        sperre_schreiben(probe / "tot.lock", pid=999999)
+        assert app.read_foreign_lock(str(probe / "tot.lock")) is None
+        befunde.append("Lesen")
+
+        sperre = Path(mod.LOCK_FILE)
+        app.release_data_lock()
+        sperre.write_text("nicht json {", encoding="utf-8")
+        info = app.acquire_data_lock()
+        assert info and app._data_read_only, "defekte Sperre: Start schreibfähig"
+        assert sperre.read_text(encoding="utf-8") == "nicht json {", "defekte Sperre überschrieben"
+        assert app.save_items(show_error=False) is False
+        assert app.take_over_data_lock() and not app._data_read_only
+        assert json.loads(sperre.read_text(encoding="utf-8"))["token"] == app._lock_token["token"]
+        befunde.append("defekt: schreibgeschützt, bewusste Übernahme")
+
+        eigenes = dict(app._lock_token)
+        app.mark_lock_read_only({"defective": True, "detail": "alte Warnung"})
+        sperre_schreiben(sperre, pid=kind.pid, token="inzwischen-erworben")
+        inzwischen = sperre.read_bytes()
+        assert app.take_over_data_lock() is False and sperre.read_bytes() == inzwischen, \
+            "Bestätigung einer alten Warnung verdrängt inzwischen gültige Sperre"
+        sperre.write_text(json.dumps(eigenes), encoding="utf-8")
+        app._data_read_only = False
+        app._read_only_reason = "lock"
+        befunde.append("Übernahme prüft erneut")
+
+        sperre.unlink()
+        assert app.save_items(show_error=False), "Speichern nach verschwundener Sperre"
+        assert json.loads(sperre.read_text(encoding="utf-8"))["token"] == app._lock_token["token"], \
+            "verschwundene Sperre nicht neu angelegt"
+        befunde.append("Neuanlage")
+
+        einstellungen = Path(mod.SETTINGS_FILE)
+        app.save_settings()
+        vorher = einstellungen.read_bytes()
+        fenster = Path(mod.BASE_DIR) / "window.conf"
+        fenster.write_text("100x100+0+0", encoding="utf-8")
+        sperre_schreiben(sperre, pid=kind.pid, token="B")
+        app.settings["glide_pruefwert"] = 7
+        assert app.save_settings() is False, "verdrängte Instanz schreibt Einstellungen"
+        assert einstellungen.read_bytes() == vorher and app._data_read_only
+        app.save_window_geometry()
+        assert fenster.read_text(encoding="utf-8") == "100x100+0+0", "verdrängte Instanz schreibt Fenstergröße"
+        app.release_data_lock()
+        assert json.loads(sperre.read_text(encoding="utf-8"))["token"] == "B", "fremde Sperre gelöscht"
+        befunde.append("Verdrängung: Einstellungen, Fenster, Freigabe")
+    finally:
+        kind.kill()
+        kind.wait(timeout=10)
+    app.settings.pop("glide_pruefwert", None)
+    app._data_read_only = False
+    assert app.acquire_data_lock() is None and not app._data_read_only
+    # Takt: Das Autospeichern erneuert den Zeitstempel auch ohne Änderung (L3).
+    sperre = Path(mod.LOCK_FILE)
+    inhalt = json.loads(sperre.read_text(encoding="utf-8"))
+    inhalt["refreshed_at"] = alt
+    sperre.write_text(json.dumps(inhalt), encoding="utf-8")
+    app._lock_token = dict(app._lock_token, refreshed_at=alt)
+    app.autosave_tick()
+    erneuert = datetime.fromisoformat(json.loads(sperre.read_text(encoding="utf-8"))["refreshed_at"])
+    assert (datetime.now().astimezone() - erneuert).total_seconds() < 120, "Autospeichern erneuert nicht"
+    befunde.append("Takt")
+    return ", ".join(befunde)
+
+
+ERWERB = """
+import importlib.machinery, importlib.util, json, sys, time
+from pathlib import Path
+loader = importlib.machinery.SourceFileLoader('glide_erwerb', sys.argv[1])
+mod = importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name, loader))
+loader.exec_module(mod)
+app = mod.ListApp.__new__(mod.ListApp)
+gate = Path(sys.argv[2])
+gate.with_name(gate.name + sys.argv[3]).touch()
+deadline = time.monotonic() + 90
+while not gate.exists():
+    if time.monotonic() > deadline:
+        raise TimeoutError('Startfreigabe fehlt')
+    time.sleep(0.01)
+app.acquire_data_lock()
+print(json.dumps({"read_only": bool(app._data_read_only), "token": (app._lock_token or {}).get("token"),
+                  "ready": True}), flush=True)
+# Weiterlaufen, bis der andere Start sicher geprüft hat: Eine Sperre ohne
+# lebenden Prozess darf übernommen werden.
+while not gate.with_name(gate.name + '.ende').exists():
+    if time.monotonic() > deadline:
+        raise TimeoutError('Endfreigabe fehlt')
+    time.sleep(0.01)
+"""
+
+ZWEITSTART = """
+import importlib.machinery, importlib.util, json, sys
+loader = importlib.machinery.SourceFileLoader('glide_zweit', sys.argv[1])
+mod = importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name, loader))
+loader.exec_module(mod)
+root = mod.tk.Tk()
+app = mod.ListApp(root)
+for _ in range(3):
+    root.update()
+zustand = {"read_only": bool(app._data_read_only), "timer": bool(app.running_timer())}
+app.on_close()
+try:
+    zustand["closed"] = not root.winfo_exists()
+except Exception:
+    zustand["closed"] = True
+print("ERGEBNIS " + json.dumps(zustand))
+"""
+
+
+def fall_sperre_prozesse(lauf):
+    """A36 mit echten Prozessen: gleichzeitiger Erwerb; Zweitstart beendet sich bei laufendem Fokus."""
+    app, mod = lauf.app, lauf.mod
+    ids = lauf.grundbestand()
+    umgebung = dict(os.environ, PYTHONUTF8="1", PYTHONDONTWRITEBYTECODE="1", GLIDE_TEST_MODE="1")
+    besitzer = []
+    for runde in range(6):
+        ordner = Path(lauf.data).parent / f"{Path(lauf.data).name}-rennen{runde}"
+        ordner.mkdir()
+        if runde >= 3:
+            sperre_schreiben(ordner / 'glide.lock', pid=999999, token='verwaist')
+        gate = ordner / 'start'
+        prozesse = [subprocess.Popen([sys.executable, "-B", "-c", ERWERB, str(lauf.app_path), str(gate), str(i)],
+                                     env=dict(umgebung, GLIDE_DATA_DIR=str(ordner)), stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE, text=True, encoding="utf-8")
+                    for i in range(2)]
+        ergebnisse = []
+        try:
+            deadline = time.monotonic() + 90
+            while not all(gate.with_name(gate.name + str(i)).exists() for i in range(2)):
+                assert all(p.poll() is None for p in prozesse), 'Kind vor Startbereitschaft beendet'
+                assert time.monotonic() < deadline, 'Startbereitschaft fehlt'
+                time.sleep(0.02)
+            gate.touch()
+            # Beide bleiben am Leben, bis beide ihren Befund geliefert haben.
+            for prozess in prozesse:
+                ergebnisse.append(json.loads(prozess.stdout.readline()))
+            gate.with_name(gate.name + '.ende').touch()
+            for prozess in prozesse:
+                ausgabe, fehler = prozess.communicate(timeout=30)
+                assert prozess.returncode == 0, fehler[-800:]
+        finally:
+            for prozess in prozesse:
+                if prozess.poll() is None:
+                    prozess.kill()
+                prozess.wait(timeout=10)
+        frei = [eintrag for eintrag in ergebnisse if not eintrag["read_only"]]
+        datei = json.loads((ordner / "glide.lock").read_text(encoding="utf-8"))
+        besitzer.append(len(frei))
+        assert len(frei) == 1 and frei[0]["token"] == datei["token"], f"Runde {runde}: {ergebnisse}"
+
+    assert app.start_focus(ids["A"]), "Fokus startet nicht"
+    einstellungen = Path(mod.SETTINGS_FILE).read_bytes()
+    ergebnis = subprocess.run([sys.executable, "-B", "-c", ZWEITSTART, str(lauf.app_path)],
+                              env=dict(umgebung, GLIDE_DATA_DIR=lauf.data), capture_output=True, text=True,
+                              encoding="utf-8", errors="replace", timeout=180)
+    zeile = next((z for z in ergebnis.stdout.splitlines() if z.startswith("ERGEBNIS ")), None)
+    assert zeile, (ergebnis.returncode, ergebnis.stderr[-800:])
+    zustand = json.loads(zeile[len("ERGEBNIS "):])
+    assert zustand["read_only"] and zustand["timer"], zustand
+    assert zustand["closed"], "schreibgeschützter Zweitstart lässt sich mit laufendem Fokus nicht beenden"
+    assert Path(mod.SETTINGS_FILE).read_bytes() == einstellungen, "Zweitstart schreibt Einstellungen"
+    app.stop_time_tracking()
+    return (f"gleichzeitiger Erwerb mit Bereitschaftsschranke: fehlend/verwaist je 3 Runden {besitzer}; "
+            "Zweitstart beendet sich, schreibt nichts")
+
+
+def fall_ausgaben(lauf):
+    """Keine Ausgabe darf einen fehlgeschlagenen Flush still übergehen."""
+    app = lauf.app
+    ids = lauf.grundbestand()
+    seite = app.new_page_from_markdown("# Prüfseite\n\nText")
+    lauf.idle()
+    echt = app.rich_note_editor
+    app.rich_note_editor = SimpleNamespace(winfo_exists=lambda: True, flush=lambda: False,
+                                           entry_id=seite["id"])
+    rot = []
+    try:
+        for name, args in (("partial_backup_payload", ([seite["id"]],)),
+                           ("complete_backup_payload", ()), ("build_exchange_payload", ()),
+                           ("page_markdown", (seite["id"],)), ("read_backup_for_compare", (None,))):
+            try:
+                getattr(app, name)(*args)
+            except ValueError:
+                pass
+            else:
+                rot.append(name + ": liefert veralteten Inhalt")
+        if app.build_page_print_html(seite["id"]) is not None:
+            rot.append("Druckseite liefert veralteten Inhalt")
+        aufrufe = []
+        echt_dialog = lauf.mod.filedialog.asksaveasfilename
+        lauf.mod.filedialog.asksaveasfilename = lambda *a, **k: aufrufe.append(k.get("title")) or ""
+        try:
+            for name in ("export_as_txt", "export_as_markdown", "export_full_backup", "export_app_backup"):
+                getattr(app, name)()
+            app.export_page_markdown(seite["id"])
+        finally:
+            lauf.mod.filedialog.asksaveasfilename = echt_dialog
+        if aufrufe:
+            rot.append("Dateiauswahl trotz fehlender Übernahme: " + repr(aufrufe))
+    finally:
+        app.rich_note_editor = echt
+    assert not rot, rot
+    return "Teil-/Vollbackup, Austausch, Markdown, Vergleich, Drucken und fünf Exportwege halten an"
+
+
+def fall_editor_offen(lauf):
+    """Ein früherer Schreibfehler beweist nicht, dass neuer Text übernommen ist."""
+    app, mod = lauf.app, lauf.mod
+    ids = lauf.grundbestand()
+    seite = app.new_page_from_markdown("# Prüfseite\n\nText")
+    lauf.idle()
+    editor = app.rich_note_editor
+    grenze = mod.RichNoteEditor.MAX_TEXT
+    try:
+        mod.RichNoteEditor.MAX_TEXT = len(editor.text.get("1.0", "end-1c")) + 3
+        editor.text.insert("end", "\nNicht übernommener Nachtrag")
+        app.dirty = True  # vorheriger, unabhängiger Schreibfehler
+        app.set_active_list(ids["ziel"])
+        assert app.active_list_id == seite["id"], "dirty=True lässt nicht übernommenen Text verschwinden"
+        assert app.rich_note_editor is editor and editor.winfo_exists()
+        assert "Nicht übernommener Nachtrag" in editor.text.get("1.0", "end-1c")
+    finally:
+        mod.RichNoteEditor.MAX_TEXT = grenze
+    return "Navigation bewahrt nicht übernommenen Text auch bei vorheriger ungespeicherter Änderung"
+
+
+def fall_rueckweg_bytes(lauf):
+    """Auch ein später Abbruch nach erfolgreichem Zwischenspeichern bleibt bytegleich."""
+    app = lauf.app
+    ids = lauf.grundbestand()
+    volle_tiefe(app, app.MAX_UNDO_STEPS)
+    vorher = lauf.datei()
+    with app.guarded_structural_change("Später Abbruch"):
+        with app.item_change([ids["A"]]) as change:
+            app.find_item_in_lists(ids["A"])[0]["text"] = "Zwischenstand"
+            change.mark()
+        app.items.pop()
+    assert lauf.datei() == vorher, "Rückweg erzeugt neue Datei statt des bytegleichen Vorzustands"
+    assert app.find_item_in_lists(ids["A"])[0]["text"] == "A"
+    return "Nach erfolgreichem Zwischenspeichern stellt der Abbruch die ursprünglichen Dateibytes her"
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--app", type=Path, default=REPO / "src/glide/app.pyw")
+    parser.add_argument("--fall", choices=FAELLE + ("alle",), default="alle")
+    parser.add_argument("--report", type=Path)
+    args = parser.parse_args()
+    args.app = args.app.resolve()
+    import hashlib
+    ergebnis = {"app": "app.pyw", "app_sha256": hashlib.sha256(args.app.read_bytes()).hexdigest(),
+                "faelle": {}, "fehler": []}
+    for name in (FAELLE if args.fall == "alle" else (args.fall,)):
+        with tempfile.TemporaryDirectory(prefix=f"glide-schutz-{name}-") as daten:
+            lauf = None
+            try:
+                lauf = Lauf(args.app, str(Path(daten) / "daten"))
+                text = globals()["fall_" + name](lauf)
+                if lauf.errors:
+                    raise AssertionError(("Rückruffehler", lauf.errors[:2]))
+                ergebnis["faelle"][name] = {"ok": True, "befund": text}
+                print(f"OK {name}: {text}", flush=True)
+            except Exception as fehler:  # Bericht je Fall, Gesamtergebnis unten
+                detail = repr(fehler).replace(str(Path.home()).replace("\\", "\\\\"), "~")
+                detail = detail.replace(str(Path.home()), "~")
+                ergebnis["faelle"][name] = {"ok": False, "befund": detail[:600]}
+                ergebnis["fehler"].append(name)
+                print(f"ROT {name}: {fehler!r}"[:700], flush=True)
+            finally:
+                if lauf is not None:
+                    lauf.ende()
+    if args.report:
+        args.report.write_text(json.dumps(ergebnis, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(json.dumps({"gruen": len(ergebnis["faelle"]) - len(ergebnis["fehler"]), "rot": ergebnis["fehler"]},
+                     ensure_ascii=False))
+    return 1 if ergebnis["fehler"] else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

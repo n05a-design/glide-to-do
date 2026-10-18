@@ -1,0 +1,467 @@
+{
+  "erstellt": "2026-10-18T14:00:11",
+  "zweck": "Sicherung des uncommitteten Stands vor der Gegenpruefung und Ergaenzung vom 18.10.2026; Schutzmaterial, keine aktuelle Dokumentation",
+  "repository_head": "c0252bad69780c86b853f2653d5396e5256c0b32",
+  "branch": "claude/tag3390-sichtbarkeit",
+  "patch": {
+    "datei": "codex_aenderungen_gegen_c0252ba.patch",
+    "bytes": 529317,
+    "sha256": "e841f463dd14775b8b5da5c7d500b0fa46b44e61246706d774d04c8bd913de0a",
+    "inhalt": "git diff --binary aller geaenderten versionierten Dateien gegen HEAD"
+  },
+  "wiederherstellung": [
+    "Einzelne Datei: dateien/<Pfad> an denselben Pfad im Projekt kopieren und SHA-256 mit diesem Manifest vergleichen.",
+    "Alle versionierten Dateien: alternativ den Patch auf einen sauberen Stand von HEAD anwenden (git apply).",
+    "Neue QA-Nachweise: Ordner dateien/01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18 zurueckkopieren."
+  ],
+  "dateien": [
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "state": "modified",
+      "bytes": 81629,
+      "sha256": "775422bd4100a9c3ed7e0d5502450c4f1d7ed6c580051c679b76fabce55838a9",
+      "mtime": "2026-10-18T13:35:43",
+      "head_blob": "b6cb256ea3a852c43e3a9dbe059de47bfb669c25"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "state": "modified",
+      "bytes": 228793,
+      "sha256": "faa4f39bda57547a4b23b0a3bacfa5e22ed43cd9826a4d12ba2fa992ab0a16d7",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "5f6c0b3b0d54f5019c2db5f0ff61fd8900f5d6a1"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+      "state": "modified",
+      "bytes": 97914,
+      "sha256": "8d1dd383484f60ad8f2d31c7625d3aac380313e7be3f6858e8e69965ad205065",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "3e42680cc7bba1319dfd6595148c693766bd4b28"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "state": "modified",
+      "bytes": 11188,
+      "sha256": "5df8b3b31b86020540bd4d1fd751a2d483516020e0a2143481dd39366bc4b975",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "5d0c8eaf4118f44f548c1b4a77daeaf62d5f45fc"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/README.md",
+      "state": "modified",
+      "bytes": 2926,
+      "sha256": "b8fda1c654dc29c5018107d843a4aa368858bb189d52d0ab1b4a2877c1e0334a",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "49929beedf25abf9f856c01ff3197c95ded9eb51"
+    },
+    {
+      "path": "01_Repository/Glide/AGENTS.md",
+      "state": "modified",
+      "bytes": 5410,
+      "sha256": "7ced1e87191a4f3aeabb1a2ef35ddeb1d3280f778fda1163ce4735e3c630825d",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "bd53d0ccc4d9502a5be80eb61870c14c9ade0e6d"
+    },
+    {
+      "path": "01_Repository/Glide/docs/00_INDEX.md",
+      "state": "modified",
+      "bytes": 5621,
+      "sha256": "c51fa3621e5fea4be4e84068f5a2f406b2c7041c56fedc8c2b0113e88806ee39",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "92b6f3868a1451133438943b7fc1ac479dd7a268"
+    },
+    {
+      "path": "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+      "state": "modified",
+      "bytes": 11308,
+      "sha256": "0847158d79e01c44eec233229a7aab2ba672a735d85b989153559a243e0d32c2",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "2a2850bb2f34cdc8f25e18066edda52bce051f3e"
+    },
+    {
+      "path": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+      "state": "modified",
+      "bytes": 41092,
+      "sha256": "5c89946f215df9479bc5bfb16bcbe84da4b2b2eab9e0d767f3484a2488a3f0a3",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "f10a325f407105983f87dd3a510a512f8ea9e0c4"
+    },
+    {
+      "path": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+      "state": "modified",
+      "bytes": 36990,
+      "sha256": "438066063d0e1fc451d6ad5cdb2a98f9c3432e62469688f60b0cb4959f75b323",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "ec5b5e65944ca1ef6a80cb647d4c5018d319a21f"
+    },
+    {
+      "path": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+      "state": "modified",
+      "bytes": 30179,
+      "sha256": "e098f15adf112c642a4bfe56b17ff33921cdca4774b42de720301fe1ea2db751",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "7bc15ecb5945c4eae5ed8e6cc45e7d2ad760e663"
+    },
+    {
+      "path": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "state": "modified",
+      "bytes": 67833,
+      "sha256": "7aabf29a1d98d324e1af7b5ef81ad2c90084da6d6d0d325f917900c009f1599f",
+      "mtime": "2026-10-18T13:38:11",
+      "head_blob": "a87c9b004378bc3d7346de3acbc6a2b156622999"
+    },
+    {
+      "path": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+      "state": "modified",
+      "bytes": 18362,
+      "sha256": "9f92c7807483ad053f597f9a93a46daa3475ac6a4f45e985e33f2c37943dbd74",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "90a47d85e2889ae0e2b99a974c1ff3dfc7a3fcd1"
+    },
+    {
+      "path": "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+      "state": "modified",
+      "bytes": 95827,
+      "sha256": "ac60889966a183bd90b02cf8cbbcbddf55e2533ca6dc7cd4efbdc6181575859c",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "4b931cdea4b8dcbf5b919e7960892c8bc17b9f44"
+    },
+    {
+      "path": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+      "state": "modified",
+      "bytes": 39180,
+      "sha256": "12ec06ef8cd47462bf197690ccc7c59024f7d71e749444ea6ab72deff7d2bfa3",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "87ddfe67d49549524543bdd573cbafbcc885dc9e"
+    },
+    {
+      "path": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+      "state": "modified",
+      "bytes": 7443,
+      "sha256": "65cf28b25077c6f451f419cc6632e1882aaec69313c53051aa32357788be13b3",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "81a173567771fad16e547aad8bf37bdbeb948d1d"
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/ARBEITSBEGLEITER.md",
+      "state": "modified",
+      "bytes": 5844,
+      "sha256": "f9b637bd99d78567d49d8c86f960207f7a0b7ac364fde53847f0a09035a33b75",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "e8f888503582b6f7c322d7d6c586789663fc1bc0"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/README.md",
+      "state": "modified",
+      "bytes": 7786,
+      "sha256": "6bdb046f2263e8c7070ac0dbc2e7f5e210ccfd9a944f3887fb96baf224b25387",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "0e3cffad729ed31154ab54e906aab772ab992cd0"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/README.md",
+      "state": "modified",
+      "bytes": 5826,
+      "sha256": "cf759b800b9dbd27f71ff465151b745169e3c0d2d7d0f9ce117809fc9c62ebd4",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "8f9033de67a62532f406079ca5c690b948787e30"
+    },
+    {
+      "path": "01_Repository/Glide/tests/README.md",
+      "state": "modified",
+      "bytes": 2498,
+      "sha256": "459ce4c0cdda1938464e1bfce0d12629e010bc62e8f160e85275b7e856a077cc",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "7c45c3dfb691ed83d2af50bf2b69ef3bba756b0c"
+    },
+    {
+      "path": "CLAUDE.md",
+      "state": "modified",
+      "bytes": 5365,
+      "sha256": "b57d2fe3944e3b0f8c0503f86c326d684a049f30294b52bda2352c95a28be9f0",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "049f325eac1a5e3e4d6696f3a6b9986e91aa84ea"
+    },
+    {
+      "path": "README.md",
+      "state": "modified",
+      "bytes": 11404,
+      "sha256": "7501930a37e6eceb2443a6ddde68fbcf037c1820c9c80adee67b93440d2e46ce",
+      "mtime": "2026-10-18T13:32:02",
+      "head_blob": "0662a34e1a5dfd2d4586c3caf8a92fff53597d9d"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/README.md",
+      "state": "untracked",
+      "bytes": 6930,
+      "sha256": "95781ba0dd17e98480b53b9b89ced6afe9762a8b2f9d886731277d5d0cbb1bfb",
+      "mtime": "2026-10-18T13:38:11",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/abschluss_vorlauf.json",
+      "state": "untracked",
+      "bytes": 2351,
+      "sha256": "bbf86751acf2625691888533b894688f3ba66d4565e1a656d3877b59953dca63",
+      "mtime": "2026-10-18T13:28:22",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/aufbewahrung.json",
+      "state": "untracked",
+      "bytes": 544,
+      "sha256": "1660c4baefd739595ee18ec531b46a96e01329f20c76853a7a09a91380d36b33",
+      "mtime": "2026-10-18T00:47:19",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ausgangsstand.json",
+      "state": "untracked",
+      "bytes": 105384,
+      "sha256": "53e79e2f0e233d7e07f77a7c2d334e54ec512828055143a56b3ab6e9a4601f8c",
+      "mtime": "2026-10-18T00:47:19",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_abschluss/Fachlogik ohne Systemzeitzonen.log",
+      "state": "untracked",
+      "bytes": 987,
+      "sha256": "f2392f594e9a870ee859d8911713824b32ac0833a488b29ff12eb6b9393badaf",
+      "mtime": "2026-10-18T13:31:32",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_abschluss/Fachlogik-Unit-Tests.log",
+      "state": "untracked",
+      "bytes": 987,
+      "sha256": "01e9eebf11efc9f4e176cc90b2bb712712ddda1857367eadd459459997023178",
+      "mtime": "2026-10-18T13:30:55",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_abschluss/Startprobe.log",
+      "state": "untracked",
+      "bytes": 70,
+      "sha256": "8f2495093d5659162750f2a74d98d91d21c131712d92bac2119f9319a5136ef4",
+      "mtime": "2026-10-18T13:37:25",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_abschluss/Werkzeugtests.log",
+      "state": "untracked",
+      "bytes": 258,
+      "sha256": "2b3dd131cd89b5117cb2c8af2add64ad6d3acde22b6f09cbc136be91dd892852",
+      "mtime": "2026-10-18T13:30:15",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_abschluss/analyse_erreichbarkeit.log",
+      "state": "untracked",
+      "bytes": 10303,
+      "sha256": "007323c467faf3df4cd4cd71c3b1ccb680c0442e12c37969fd39138e982f1b6e",
+      "mtime": "2026-10-18T13:36:43",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_abschluss/analyse_statisch.log",
+      "state": "untracked",
+      "bytes": 5434,
+      "sha256": "67ab11bbd7573fc28753ce2c3ec8b5767095b12207e65c85c332dcd97d9da60d",
+      "mtime": "2026-10-18T13:36:28",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_abschluss/attributpruefung.log",
+      "state": "untracked",
+      "bytes": 108,
+      "sha256": "3f7a575beffbfa8f5db93945770dcc5784fac783b7dca481971253fd5ceeb2da",
+      "mtime": "2026-10-18T13:37:11",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_abschluss/dublettenpruefung.log",
+      "state": "untracked",
+      "bytes": 860,
+      "sha256": "6cbb448eb355ae9400aa6840fc84a63edca44cbe1ac2bb31f8d805568088794b",
+      "mtime": "2026-10-18T13:37:12",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_abschluss/ergebnis.json",
+      "state": "untracked",
+      "bytes": 3166,
+      "sha256": "ec1b9d592636bdfb620b9752d25fac9ba091f167b5e1b147822449f1b1e195ab",
+      "mtime": "2026-10-18T13:38:08",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_abschluss/standpruefung.log",
+      "state": "untracked",
+      "bytes": 257,
+      "sha256": "6daf66a4dbacf73f5de6b9bf964a7ec1481d2b9883f46506165dac8050e32418",
+      "mtime": "2026-10-18T13:36:54",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_ausgang/Fachlogik ohne Systemzeitzonen.log",
+      "state": "untracked",
+      "bytes": 987,
+      "sha256": "a5c96ff764c4b39e6b9e5c559eb9bbc62f3682497689715a7f0ac53c5046b4b9",
+      "mtime": "2026-10-18T00:45:53",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_ausgang/Fachlogik-Unit-Tests.log",
+      "state": "untracked",
+      "bytes": 987,
+      "sha256": "cf4c4ae69cfc33c9ae4d26335951198b9b47b510ea63344c951e09e882172336",
+      "mtime": "2026-10-18T00:45:31",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_ausgang/Startprobe.log",
+      "state": "untracked",
+      "bytes": 70,
+      "sha256": "8f2495093d5659162750f2a74d98d91d21c131712d92bac2119f9319a5136ef4",
+      "mtime": "2026-10-18T00:49:59",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_ausgang/Werkzeugtests.log",
+      "state": "untracked",
+      "bytes": 257,
+      "sha256": "2ec493764952914f791392729de8fded8cc0ef701789349c352b59565a64b1d5",
+      "mtime": "2026-10-18T00:45:08",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_ausgang/analyse_erreichbarkeit.log",
+      "state": "untracked",
+      "bytes": 10303,
+      "sha256": "007323c467faf3df4cd4cd71c3b1ccb680c0442e12c37969fd39138e982f1b6e",
+      "mtime": "2026-10-18T00:49:32",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_ausgang/analyse_statisch.log",
+      "state": "untracked",
+      "bytes": 5434,
+      "sha256": "67ab11bbd7573fc28753ce2c3ec8b5767095b12207e65c85c332dcd97d9da60d",
+      "mtime": "2026-10-18T00:49:23",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_ausgang/attributpruefung.log",
+      "state": "untracked",
+      "bytes": 108,
+      "sha256": "3f7a575beffbfa8f5db93945770dcc5784fac783b7dca481971253fd5ceeb2da",
+      "mtime": "2026-10-18T00:49:49",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_ausgang/dublettenpruefung.log",
+      "state": "untracked",
+      "bytes": 860,
+      "sha256": "6cbb448eb355ae9400aa6840fc84a63edca44cbe1ac2bb31f8d805568088794b",
+      "mtime": "2026-10-18T00:49:51",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_ausgang/ergebnis.json",
+      "state": "untracked",
+      "bytes": 3177,
+      "sha256": "1bc65764c44edb16ecbcb101e9be2877c50de13b70a3c4c2f852f787d31c8249",
+      "mtime": "2026-10-18T00:50:07",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_ausgang/standpruefung.log",
+      "state": "untracked",
+      "bytes": 257,
+      "sha256": "6daf66a4dbacf73f5de6b9bf964a7ec1481d2b9883f46506165dac8050e32418",
+      "mtime": "2026-10-18T00:49:39",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/dateiinventar.json",
+      "state": "untracked",
+      "bytes": 289149,
+      "sha256": "75f98479bfb4b017015b76a389b8bc420074c72a2ab15d67e2b0056c9d4d135d",
+      "mtime": "2026-10-18T00:47:19",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/dokumentinventar.json",
+      "state": "untracked",
+      "bytes": 21659,
+      "sha256": "b2ac7e78758fdc76094a9dac98e1e62c3f4a7dbfd866d1f0526a436aaca35977",
+      "mtime": "2026-10-18T00:47:19",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ergebnis.json",
+      "state": "untracked",
+      "bytes": 2100,
+      "sha256": "3f9017e3e202d7585d7f64efb9c9f911e4570499902173c16451154a4e5e736d",
+      "mtime": "2026-10-18T13:38:13",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ergebnis_codegrenzen.json",
+      "state": "untracked",
+      "bytes": 3812,
+      "sha256": "991e3b3fc237bb33df3d75c119fbdf538ee54e054727e86d171db56be15cb998",
+      "mtime": "2026-10-18T00:58:10",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/github_auftritt.json",
+      "state": "untracked",
+      "bytes": 2106,
+      "sha256": "79b2ce9d2af34f0e69246a421b923c34606a14732108083a261ac0340f3793b4",
+      "mtime": "2026-10-18T00:54:28",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/module-inventory.json",
+      "state": "untracked",
+      "bytes": 33570,
+      "sha256": "67186f7ab7cd46a680915fb2fa80ec1831633b539076bb3f9a6464cbaea0727a",
+      "mtime": "2026-10-18T00:48:15",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/nutzerreferenzen.json",
+      "state": "untracked",
+      "bytes": 5721,
+      "sha256": "205873446f8785acf5b74b7c0424063acbe44408a378997f2e0046789b046d98",
+      "mtime": "2026-10-18T00:47:19",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/probe_codegrenzen.py",
+      "state": "untracked",
+      "bytes": 6096,
+      "sha256": "d910b5abd377b4ad30d7f75b2f3d4672eca7467f28dbacf864ebb75fdf57f454",
+      "mtime": "2026-10-18T00:55:34",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/remote.json",
+      "state": "untracked",
+      "bytes": 987,
+      "sha256": "91e8544688e6cdec45dd9e9e9d448f8d70add8290c3759bd8173e694e8fc38de",
+      "mtime": "2026-10-18T00:53:59",
+      "head_blob": null
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/remote_abschluss.json",
+      "state": "untracked",
+      "bytes": 2335,
+      "sha256": "857edd8a4ddf11be1a64e3239342b8162e2b4ce7daca8180ca43f269e120a2d6",
+      "mtime": "2026-10-18T13:31:10",
+      "head_blob": null
+    }
+  ]
+}

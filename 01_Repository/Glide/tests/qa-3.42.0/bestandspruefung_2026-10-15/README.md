@@ -57,6 +57,8 @@ Erhalten bleiben:
 
 ## Abschlussprüfung und Ausführung
 
-Maschinenlesbare Zusammenfassung: [ergebnis.json](ergebnis.json). Die [CI-Grundstufe](grundstufe/ergebnis.json) wird nach den Korrekturen erneut ausgeführt, außerdem Stand-/Linkprüfung für neue und aktive Archivdokumente, unveränderte App-/Lieferhashes, Screenshotmanifest und Dateireste geprüft. Die vorherige rote Grundprüfung im Prompt-Nachweis bleibt als historischer Lauf erhalten.
+Maschinenlesbare Zusammenfassung: [ergebnis.json](ergebnis.json). Die CI-Grundstufe (`grundstufe/ergebnis.json`, lokal nicht vorhanden) wird nach den Korrekturen erneut ausgeführt, außerdem Stand-/Linkprüfung für neue und aktive Archivdokumente, unveränderte App-/Lieferhashes, Screenshotmanifest und Dateireste geprüft. Die vorherige rote Grundprüfung im Prompt-Nachweis bleibt als historischer Lauf erhalten.
 
 Nach Abschluss dieser Vorabprüfung wird der zusätzliche Claude-Startprompt im bestehenden UI-/UX-Paket abgelegt. Das Formulieren startet keine App-Umsetzung und führt keinen Commit/Push/Merge aus. Der spätere Ausführungsauftrag umfasst den vollständigen vorhandenen Prompt, die bereinigten Quellen und die hier ausdrücklich genannten Startbedingungen und Grenzen.
+
+Navigationskorrektur 18.10.2026: Der frühere Link auf `grundstufe/ergebnis.json` ist in dieser Ablage nicht auflösbar. Es wurde kein Ergebnis rekonstruiert; die historischen Prüfaussagen bleiben unverändert.

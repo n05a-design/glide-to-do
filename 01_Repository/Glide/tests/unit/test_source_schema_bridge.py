@@ -114,7 +114,7 @@ class SourceSchemaBridge(unittest.TestCase):
     def test_real_page_copy_is_an_independent_source_target(self):
         original=self.page();before=copy.deepcopy(original)
         self.app.lists=[original]
-        self.app.guarded_structural_change=lambda *_:nullcontext()
+        self.app.guarded_structural_change=lambda *_:nullcontext(SimpleNamespace(aborted=False))
         self.app.sidebar_change=lambda **_:nullcontext(SimpleNamespace(saved=True,mark=lambda:None))
         self.app.sync_current_list_reference=lambda:None
         self.app.set_active_list=lambda *_:None

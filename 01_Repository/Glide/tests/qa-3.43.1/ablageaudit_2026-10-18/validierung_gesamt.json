@@ -1,0 +1,120 @@
+{
+  "status": "Abschluss geprüft: 19 Schritte ohne offenen Fehler, Lieferstandhinweis absichtlich erhalten",
+  "kein_neuer_komplettlauf": true,
+  "schritte": [
+    {
+      "schritt": "Syntax",
+      "status": "ausgeführt",
+      "grund": "327 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt",
+      "nachweis": "ci_abschluss/ergebnis.json"
+    },
+    {
+      "schritt": "Versionskonsistenz",
+      "status": "ausgeführt",
+      "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.43.1; Datenformat 25",
+      "nachweis": "ci_abschluss/ergebnis.json"
+    },
+    {
+      "schritt": "Dokumentation",
+      "status": "ausgeführt",
+      "grund": "Alle Dokumente einschließlich Archiv im Index; 212 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell.",
+      "nachweis": "ci_abschluss/ergebnis.json"
+    },
+    {
+      "schritt": "Fixtures",
+      "status": "ausgeführt",
+      "grund": "20 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite",
+      "nachweis": "ci_integration/ergebnis.json"
+    },
+    {
+      "schritt": "Werkzeugtests",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0",
+      "nachweis": "ci_integration/ergebnis.json"
+    },
+    {
+      "schritt": "Fachlogik-Unit-Tests",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0",
+      "nachweis": "ci_integration/ergebnis.json"
+    },
+    {
+      "schritt": "Fachlogik ohne Systemzeitzonen",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0",
+      "nachweis": "ci_integration/ergebnis.json"
+    },
+    {
+      "schritt": "analyse_statisch",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0",
+      "nachweis": "ci_integration/ergebnis.json"
+    },
+    {
+      "schritt": "analyse_erreichbarkeit",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0",
+      "nachweis": "ci_integration/ergebnis.json"
+    },
+    {
+      "schritt": "standpruefung",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0",
+      "nachweis": "ci_abschluss/ergebnis.json"
+    },
+    {
+      "schritt": "attributpruefung",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0",
+      "nachweis": "ci_integration/ergebnis.json"
+    },
+    {
+      "schritt": "dublettenpruefung",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0",
+      "nachweis": "ci_integration/ergebnis.json"
+    },
+    {
+      "schritt": "Tk-Voraussetzung",
+      "status": "ausgeführt",
+      "grund": "Tk-Fenster im gewählten Python gestartet und geschlossen",
+      "nachweis": "ci_integration/ergebnis.json"
+    },
+    {
+      "schritt": "Startprobe",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0",
+      "nachweis": "ci_integration/ergebnis.json"
+    },
+    {
+      "schritt": "Lieferstand",
+      "status": "Hinweis",
+      "grund": "7 Abweichungen zwischen src/glide und 07_Python-Versionen: Glide-Aufgaben-und-Listen_v3.43.1.pyw, action_catalog.py, data_lock.py, editor_flush.py, load_phases.py, structural_guard.py, undo_history.py – zulässig zwischen Prüfkandidat und Auslieferung (abgleich_07.py)",
+      "nachweis": "ci_integration/ergebnis.json"
+    },
+    {
+      "schritt": "Fremdcode",
+      "status": "ausgeführt",
+      "grund": "tkinterdnd2 0.6.3: 116 Dateien bytegleich zum Originalpaket (SHA-256 50c738630210…)",
+      "nachweis": "ci_integration/ergebnis.json"
+    },
+    {
+      "schritt": "Datenschutz",
+      "status": "ausgeführt",
+      "grund": "Keine Benutzerpfade im vorgemerkten Gesamtumfang",
+      "nachweis": "ci_abschluss/ergebnis.json"
+    },
+    {
+      "schritt": "Ablagegröße",
+      "status": "ausgeführt",
+      "grund": "1258 versionierte Dateien, 291 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen",
+      "nachweis": "ci_abschluss/ergebnis.json"
+    },
+    {
+      "schritt": "Synchronisation",
+      "status": "ausgeführt",
+      "grund": "([], [])",
+      "nachweis": "ci_abschluss/ergebnis.json"
+    }
+  ]
+}

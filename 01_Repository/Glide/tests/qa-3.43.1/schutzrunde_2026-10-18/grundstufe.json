@@ -1,0 +1,17 @@
+{
+  "datum": "2026-10-18T16:03:41",
+  "gruppe": "grundstufe",
+  "plattform": "win32",
+  "python": "3.14.7",
+  "app_sha256": "30ad9ccf4a7ac2894b8d19132bebe3a702cd5a94e739bff37ac92c0fa44db94d",
+  "test_sha256": "9ab5e6a2a66a4e71a33ec6f212dc76c68b5e6674df5d976cdbdc737280878537",
+  "pruefungen": [
+    {
+      "name": "grundstufe",
+      "exitcode": 0,
+      "sekunden": 559.78,
+      "protokoll": "grundstufe.log"
+    }
+  ],
+  "quelle_unveraendert": true
+}

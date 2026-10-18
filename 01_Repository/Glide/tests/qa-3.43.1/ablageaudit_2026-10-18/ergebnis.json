@@ -1,0 +1,63 @@
+{
+  "datum": "2026-10-18",
+  "status": "abgeschlossen_mit_dokumentierten_Grenzen_und_blockierten_Loeschschritten",
+  "branch": "codex/ablageaudit-schutzrunde-2026-10-18",
+  "basis": "9ec474b9dcbd502efce8cb221e53e24c322f9a78",
+  "version": "3.43.1",
+  "datenformat": 25,
+  "app_sha256": "f74af723e3fe1fc18aae5beafcef3d026a3a9c39d8eb16c90b68fb3ae7ddec26",
+  "umfang": {
+    "ausgang_dateien": 17898,
+    "ausgang_ordner": 1325,
+    "dokumente": 594,
+    "verschiedene_dokumenttexte": 148,
+    "inventurfehler": 0
+  },
+  "bilanz": {
+    "bytes_vorher": 4204720865,
+    "bytes_nachher": 2531020407,
+    "netto_weniger_bytes": 1673700458,
+    "einsparung_gib": 1.559,
+    "messung": "Projektdateipfade vor Commit, einschließlich neuer Auditnachweise; keine NTFS-Verwaltungsdaten oder garantierte Laufwerksfreiraumänderung"
+  },
+  "geschuetzt": {
+    "hashgleiche_dateien": 783,
+    "originalreferenzen": 28,
+    "hauptdateien_fehlend": 0,
+    "vorherige_gitobjekte_erhalten": 12213,
+    "branch_tag_remote_refs_erhalten": true,
+    "code_dateien_bytegleich_zum_geprueften_kandidaten": 14
+  },
+  "pruefungen": {
+    "schutzfaelle": {
+      "gruen": 10,
+      "rot": 0,
+      "nachweis": "schutzrunde_integriert.json"
+    },
+    "fachtests": 754,
+    "fachtests_ohne_systemzeitzonen": 754,
+    "werkzeugtests": 152,
+    "analysen": 5,
+    "ci": "validierung_gesamt.json",
+    "git_fsck": "gitpruefung_abschluss.json",
+    "links": "links_abschluss.json",
+    "lokale_links": 872,
+    "markdown_dateien": 68,
+    "abschliessender_dokumentnachlauf": "ci_abschluss/ergebnis.json",
+    "git_diff_check": "vor Commit sauber"
+  },
+  "blockiert": {
+    "arbeitskopien": 5,
+    "arbeitskopien_bytes": 1402564202,
+    "git_tempdateien": 6,
+    "git_temp_bytes": 102955599,
+    "grund": "Git-Arbeitskopienentfernung: Permission denied; forcierte Windows-Löschschritte: automatische Freigabeprüfung blocked by policy; erhalten, keine Umgehung"
+  },
+  "grenzen": [
+    "Keine neue Version, kein Formatwechsel und keine neue Lieferung nach 07 oder in Pakete.",
+    "Quellkandidat und Lieferbestand sind weiterhin ausdrücklich verschieden.",
+    "Native Mac-/Reader-/menschliche Abnahmen und Produktionsphasenabschluss offen.",
+    "Dateivollinventur und Integritätsprüfung sind keine manuelle Zeilenprüfung jedes Codes oder vollständige Funktionsfreigabe aller Binärinhalte.",
+    "Commit/Push/Pull Request sind beauftragt; kein automatischer Merge oder Release."
+  ]
+}

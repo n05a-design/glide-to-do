@@ -1,0 +1,233 @@
+{
+  "status": "Bestandsabgleich bestanden; Löschschritte teilweise blockiert",
+  "ausgang_dateien": 17898,
+  "ausgang_ordner": 1325,
+  "nachher_dateien": 7942,
+  "nachher_ordner": 1166,
+  "bytes_vorher": 4204720865,
+  "bytes_nachher": 2531020407,
+  "belegung_dateipfade_vorher": 4204720865,
+  "belegung_dateipfade_nachher": 2531020407,
+  "disk_frei_vorher": 11148668928,
+  "disk_frei_nachher": 12197109760,
+  "main_hashgleich": 1624,
+  "main_hashgeaendert": [
+    {
+      "pfad": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "vorher_sha256": "1a3ff1eafdcce16275a2fa83a2f5d69bdbfd44ec624ea2a788973e8b36ccb5e5",
+      "nachher_sha256": "60a8fd2cd2b6d82da2e1b3e5effb29d15dde6f54f27bc58ea328468b07784f3f"
+    },
+    {
+      "pfad": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "vorher_sha256": "0b050905551e9353174ee1cb37fa5ccdf5911303f3b0e8d1d5cefd73dfa618b9",
+      "nachher_sha256": "0a8c3f1aa58982b86350f5f06de05885bf0dff92aa5b0abe04d022ac3f763928",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+      "vorher_sha256": "9f9149bfebcf450a088a19d4a995679f8040cb4a31bcec77fbe15e3ec2054134",
+      "nachher_sha256": "bee7013b8e903bcafad2780eb25463f873a7514a708792607b479c38ee011f57",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "vorher_sha256": "2d25714e8b6225899b3631804bbdbeb76afb38894c633b978f2d3be45e1323d5",
+      "nachher_sha256": "1048ea025225aa920bd0cae76253067e48f01b0447a149ee5e77d0fa60d45526",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/CHANGELOG.md",
+      "vorher_sha256": "12c43dca9ff50cb5c79dc17b951ffc68cce6bcc526b159aab9ee8529c388a281",
+      "nachher_sha256": "5bc46a0869f8712dad37296e36eb44645526a10a1f1d7ff7c4919be6a7f1da2a",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/README.md",
+      "vorher_sha256": "1084c26b25549031b1cd57713c01a60fe4a9cd64ee9cc2bbe305bb1d4a24f7bb",
+      "nachher_sha256": "b88410e441160ff349559a7d87550189f87b08a96316cda6482318cf14797418"
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/00_INDEX.md",
+      "vorher_sha256": "c51fa3621e5fea4be4e84068f5a2f406b2c7041c56fedc8c2b0113e88806ee39",
+      "nachher_sha256": "0874459404452aadbdb82ad08765907f2875df196abbff30926a00b79879c8bc"
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+      "vorher_sha256": "5c89946f215df9479bc5bfb16bcbe84da4b2b2eab9e0d767f3484a2488a3f0a3",
+      "nachher_sha256": "ce380a1e6bd35c8b6333f7c7800640bf8ea74dd0c26b3eca8b1806f3f399a08a",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+      "vorher_sha256": "438066063d0e1fc451d6ad5cdb2a98f9c3432e62469688f60b0cb4959f75b323",
+      "nachher_sha256": "e5601c55af3c3a17d22b533e4764cae6a9afb024e6981ea0fecdc9b55d7b93a9",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+      "vorher_sha256": "e098f15adf112c642a4bfe56b17ff33921cdca4774b42de720301fe1ea2db751",
+      "nachher_sha256": "b6185325329231f1206cb2fe9d55eb337d604df027111ddca2d21b5409b4a1b0"
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "vorher_sha256": "5296e1fd28939bcc269f647260f01eafb2e1fe042e77d0d282a39e5df2c17679",
+      "nachher_sha256": "08e4538458c1ee5808cce67fc88947478ec34cf73dd9d6403e8627174861fc84",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+      "vorher_sha256": "ac60889966a183bd90b02cf8cbbcbddf55e2533ca6dc7cd4efbdc6181575859c",
+      "nachher_sha256": "5b2832f654397d23808a5d2081fb74f40b9a4a565f0036a5bcce9e1efc95d89f",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+      "vorher_sha256": "12ec06ef8cd47462bf197690ccc7c59024f7d71e749444ea6ab72deff7d2bfa3",
+      "nachher_sha256": "3532ddde7e84258a509de7e23fda6144cc0dbae84dc1f16e89b3ebaa03df2ad1"
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+      "vorher_sha256": "65cf28b25077c6f451f419cc6632e1882aaec69313c53051aa32357788be13b3",
+      "nachher_sha256": "f115a4a3de6c5ff5bc902bfc1471ceab7da06d706edc51ea59888d5b36b03688"
+    },
+    {
+      "pfad": "01_Repository/Glide/packaging/README.md",
+      "vorher_sha256": "6bdb046f2263e8c7070ac0dbc2e7f5e210ccfd9a944f3887fb96baf224b25387",
+      "nachher_sha256": "1f8ea996508b19bc03b9fe9ab8b74790fd5d7dbae5e8dc77e66ac589e09f5b7f",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/packaging/macos/baue_app.py",
+      "vorher_sha256": "bfd598c7a404549cdc02889ea5c1d64a982af3d6ba9098e65b4f84b24be9cf32",
+      "nachher_sha256": "0bcdc1b365805ab0220d891e32200ed414119c5293a3da890857a03c5e5812e6",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/requirements/runtime.txt",
+      "vorher_sha256": "873c827839a6e0219be6ad476fdf1ae1588d92f1641e18ae984d60eb7cbd08c4",
+      "nachher_sha256": "c0a86c2100aac3df66e34b5d64f176ba5f98bda4f46b46d09c6e148ff952b8cc"
+    },
+    {
+      "pfad": "01_Repository/Glide/scripts/pflege/abgleich_07.py",
+      "vorher_sha256": "746509bab074db591183fd892a780395285457dd68bbb408beee931b52d4edea",
+      "nachher_sha256": "7e9d119dc3e63e245263ca1deb7c15dc8012fce59062d9680560a966f79b51a5",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/README.md",
+      "vorher_sha256": "01c088f41f98c226775a6182da618815180fe1b6d9a24e2f9a8d4229a5f01cfc",
+      "nachher_sha256": "8064d2290176925b0088985dcbbedb159a3193b3356d34bee9ef4e8ed81fb0fb",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/action_catalog.py",
+      "vorher_sha256": "8a3fa2ec45eae0cb638e16aaeedcd9e22558ee21dfa20e950a8087ebfc6ba927",
+      "nachher_sha256": "9b25d09f18ed786f49436a0a07e21869a9817e7dcdcdf518f84467bcbc144ac7",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/app.pyw",
+      "vorher_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+      "nachher_sha256": "f74af723e3fe1fc18aae5beafcef3d026a3a9c39d8eb16c90b68fb3ae7ddec26",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/README.md",
+      "vorher_sha256": "459ce4c0cdda1938464e1bfce0d12629e010bc62e8f160e85275b7e856a077cc",
+      "nachher_sha256": "9333086d8b191e4b29609c6255c572253d5bee20e6daf93494c098749d6de9d6",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/integration/test_features330.py",
+      "vorher_sha256": "e4225b17d5674c4f9eb0163d8f39b692098d2d98645081693e843288c4411e21",
+      "nachher_sha256": "08c021d1c3d78a718d114babba88d40ff184214ddff963909c79401a1d8f39ac",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/integration/test_tag3390.py",
+      "vorher_sha256": "95bef0f2982acc228c5f9a4611260af624221d2637776e1746cb6bc151708b15",
+      "nachher_sha256": "cea993d4ec7a7de58bcdedccfe597e39d0d6915d2270c0d420d20535c3f0d6cc",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/integration/test_template_workflows.py",
+      "vorher_sha256": "8cfec3de46b70401e74e235c6d1ff990f1cbdb5b10e5a2fa1ccd1161ad81dd58",
+      "nachher_sha256": "383357eaca44e33e3028cd123e20e2d5c1b70f8d47ecd898b30708b165b31dbd",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.42.0/bestandspruefung_2026-10-15/README.md",
+      "vorher_sha256": "c44d2a54b0fd9cdf531bb96711f64b18f9237c106b2ef1d497ab86adcd184a66",
+      "nachher_sha256": "2b2444ae6fac24c817766cb0313aa7ac24eb51c85fbba717a1d14c158983f3d0"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/inventarisieren.py",
+      "vorher_sha256": "5a8d447e86ed41c0ee1ebf181d42e7410985cb115ef4f3f3a09b9b6fc408213d",
+      "nachher_sha256": "48f4c907b3aac8eb83f57c9c9cfa7cc6d21990181295e2057e91202323e1fd5f"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.43.1/kuerzel_linux_tk91_2026-10-16/README.md",
+      "vorher_sha256": "5ebaded6ecca06bf6646b7c10c3404959b7a915281f0908e14d508a40ae06427",
+      "nachher_sha256": "9ccd345fa815aa23cfea3c7b4f088ffdac5ab4a3df9127a2106afc3aed7cb69f",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/github_auftritt.json",
+      "vorher_sha256": "79b2ce9d2af34f0e69246a421b923c34606a14732108083a261ac0340f3793b4",
+      "nachher_sha256": "67afbac4fd364829c8fd9df0efac0ccd37f8b5982a33e806a92fe0e0ebdd1b67",
+      "grund": "Nur LF/CRLF-Normalisierung durch Stash-Anwendung, gegen bytegesicherte Originaldatei geprüft"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/probe_codegrenzen.py",
+      "vorher_sha256": "d910b5abd377b4ad30d7f75b2f3d4672eca7467f28dbacf864ebb75fdf57f454",
+      "nachher_sha256": "082abec127bd1c6fd4853b1bc2e8b054a0d670851c60a7bf043a9921e7e10b37"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/probe_codegrenzen_upstream.py",
+      "vorher_sha256": "d21883aa44ca44e4cb1624f2d4bc0c4ee5eadfea6b9bd0c98d54b0c0d291ee6c",
+      "nachher_sha256": "b5ebc62b69ff44b7eddbe6a9e70469e2aa1ba0f60c5a1641ae9137b0c938037c"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/remote.json",
+      "vorher_sha256": "91e8544688e6cdec45dd9e9e9d448f8d70add8290c3759bd8173e694e8fc38de",
+      "nachher_sha256": "d1448c4ba2bd393a9d8dd76795a605ce4a747963bab29a57d8310831af589062",
+      "grund": "Nur LF/CRLF-Normalisierung durch Stash-Anwendung, gegen bytegesicherte Originaldatei geprüft"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/remote_abschluss.json",
+      "vorher_sha256": "857edd8a4ddf11be1a64e3239342b8162e2b4ce7daca8180ca43f269e120a2d6",
+      "nachher_sha256": "0070bb77f338756e90bca9d681356bb9207b3edbdb26667e0357a352630f15fc",
+      "grund": "Nur LF/CRLF-Normalisierung durch Stash-Anwendung, gegen bytegesicherte Originaldatei geprüft"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/tools/pruefen.py",
+      "vorher_sha256": "7638ec2438d8205d31cdea657fede45b7135823c02a191778057a8767aa07760",
+      "nachher_sha256": "41865b80647d601a9c83f816d03a054049f766fd644da53fd01875e7d183ecc9",
+      "grund": "Aktueller Upstream auf 9ec474b übernommen"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/test_source_schema_bridge.py",
+      "vorher_sha256": "16c18ad1cb86674d2d21521bfddc85b79c7968e98d637d32a5148bd96c68dee3",
+      "nachher_sha256": "e595beac291ec38508b398dec575d9c47daa807971800b67dce569fba2e2ce53"
+    },
+    {
+      "pfad": "README.md",
+      "vorher_sha256": "7501930a37e6eceb2443a6ddde68fbcf037c1820c9c80adee67b93440d2e46ce",
+      "nachher_sha256": "26fe449403ca540979373c60c2d8cb94e33b48784065fc5832b71501e418e661"
+    }
+  ],
+  "main_fehlend": [],
+  "geschuetzte_dateien_hashgleich": 783,
+  "ausgang_gitobjekte_erhalten": 12213,
+  "aktuelle_gitobjekte": 12382,
+  "alte_branch_tag_remote_refs_erhalten": true,
+  "dateibewertung_anzahl": 17898,
+  "ordnerbewertung_anzahl": 1325,
+  "originalreferenzen": 28,
+  "grenzen": [
+    "Bilanz vor anschließendem Commit und dessen neuen Git-Objekten; Nachweisdateien wachsen während der Prüfung.",
+    "Dateipfadbelegung ohne NTFS-Verwaltungsdaten; bei fehlender Dateiidentität keine Hardlink-Deduplizierung.",
+    "Laufwerksfreiraum kann auch durch parallele Prozesse beeinflusst werden.",
+    "Alle Dateien inventarisiert und klassifiziert; dies ist keine manuelle Zeile-für-Zeile-Prüfung jedes Quellcodes oder jedes Binärinhalts."
+  ]
+}

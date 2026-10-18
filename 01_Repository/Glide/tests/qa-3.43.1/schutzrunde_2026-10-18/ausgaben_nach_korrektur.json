@@ -1,0 +1,11 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "e14d2d832233efe8c17cd6daf24064d762fcb75c6a2a229e096b46356d170679",
+  "faelle": {
+    "ausgaben": {
+      "ok": true,
+      "befund": "Teil-/Vollbackup, Austausch, Markdown, Vergleich, Drucken und fünf Exportwege halten an"
+    }
+  },
+  "fehler": []
+}

@@ -1,0 +1,1472 @@
+[
+  {
+    "module": "accessibility.py",
+    "lines": 117,
+    "tk_import": false,
+    "production": true,
+    "role": "Deutsche Aufgabenwerte und Tk-9.1-Attribute ohne Import einer Tk-Laufzeit.",
+    "classes": [
+      {
+        "name": "Attributes",
+        "lines": 18,
+        "methods": 1
+      }
+    ],
+    "functions": 6,
+    "unit_references": [
+      "test_accessibility.py",
+      "test_accessibility_bindings.py"
+    ]
+  },
+  {
+    "module": "accessibility_bindings.py",
+    "lines": 95,
+    "tk_import": false,
+    "production": true,
+    "role": "Native Semantik an die Lebensdauer eines Widgets binden; kein Tk-Import.",
+    "classes": [
+      {
+        "name": "Binding",
+        "lines": 75,
+        "methods": 5
+      }
+    ],
+    "functions": 6,
+    "unit_references": [
+      "test_accessibility_bindings.py"
+    ]
+  },
+  {
+    "module": "action_catalog.py",
+    "lines": 281,
+    "tk_import": false,
+    "production": true,
+    "role": "Stabile Aktionskennungen, Gruppen und Editorbefehle ohne Tk.",
+    "classes": [],
+    "functions": 5,
+    "unit_references": [
+      "test_action_catalog.py"
+    ]
+  },
+  {
+    "module": "animation.py",
+    "lines": 329,
+    "tk_import": false,
+    "production": true,
+    "role": "Lokale Pixelbildfolgen, Zeitachse und PNG-Ausgabe ohne Tk.",
+    "classes": [
+      {
+        "name": "Frame",
+        "lines": 4,
+        "methods": 0
+      },
+      {
+        "name": "Playback",
+        "lines": 5,
+        "methods": 0
+      },
+      {
+        "name": "Animation",
+        "lines": 213,
+        "methods": 21
+      }
+    ],
+    "functions": 29,
+    "unit_references": [
+      "test_animation.py",
+      "test_animation_entry.py",
+      "test_animation_export.py",
+      "test_animation_snapshot.py",
+      "test_schema_bridge.py",
+      "test_source_schema_bridge.py"
+    ]
+  },
+  {
+    "module": "animation_export.py",
+    "lines": 82,
+    "tk_import": false,
+    "production": true,
+    "role": "Zusammengehörige PNG-/Manifestdateien mit rückrollbarem Dateiaustausch.",
+    "classes": [
+      {
+        "name": "ExportRecoveryError",
+        "lines": 2,
+        "methods": 0
+      }
+    ],
+    "functions": 1,
+    "unit_references": [
+      "test_animation_export.py"
+    ]
+  },
+  {
+    "module": "app.pyw",
+    "lines": 61256,
+    "tk_import": true,
+    "production": true,
+    "role": "Zentrale Tk-Oberflaeche, Daten-, Datei- und Mutationsadapter",
+    "classes": [
+      {
+        "name": "NewerDataError",
+        "lines": 7,
+        "methods": 0
+      },
+      {
+        "name": "DataIntegrityError",
+        "lines": 8,
+        "methods": 0
+      },
+      {
+        "name": "ChangeRecord",
+        "lines": 27,
+        "methods": 2
+      },
+      {
+        "name": "PackedState",
+        "lines": 17,
+        "methods": 2
+      },
+      {
+        "name": "LabelChip",
+        "lines": 116,
+        "methods": 4
+      },
+      {
+        "name": "ProgressBar",
+        "lines": 38,
+        "methods": 4
+      },
+      {
+        "name": "CompletionChart",
+        "lines": 62,
+        "methods": 2
+      },
+      {
+        "name": "MoonPhase",
+        "lines": 37,
+        "methods": 2
+      },
+      {
+        "name": "YearHeatmap",
+        "lines": 68,
+        "methods": 4
+      },
+      {
+        "name": "AnalogClock",
+        "lines": 96,
+        "methods": 6
+      },
+      {
+        "name": "MonogramTile",
+        "lines": 59,
+        "methods": 4
+      },
+      {
+        "name": "DeferredDrawCanvas",
+        "lines": 35,
+        "methods": 4
+      },
+      {
+        "name": "RoundedButton",
+        "lines": 295,
+        "methods": 18
+      },
+      {
+        "name": "ButtonFlow",
+        "lines": 76,
+        "methods": 5
+      },
+      {
+        "name": "ResponsiveColumns",
+        "lines": 74,
+        "methods": 4
+      },
+      {
+        "name": "BoardPreview",
+        "lines": 86,
+        "methods": 4
+      },
+      {
+        "name": "MascotCanvas",
+        "lines": 180,
+        "methods": 8
+      },
+      {
+        "name": "FieldPairGrid",
+        "lines": 79,
+        "methods": 5
+      },
+      {
+        "name": "RoundedContainer",
+        "lines": 180,
+        "methods": 7
+      },
+      {
+        "name": "CanvasLabel",
+        "lines": 162,
+        "methods": 10
+      },
+      {
+        "name": "ThemedAutoScrollbar",
+        "lines": 181,
+        "methods": 16
+      },
+      {
+        "name": "RoundedSurface",
+        "lines": 19,
+        "methods": 1
+      },
+      {
+        "name": "NaturalRoundedContainer",
+        "lines": 32,
+        "methods": 2
+      },
+      {
+        "name": "DueField",
+        "lines": 328,
+        "methods": 16
+      },
+      {
+        "name": "DropdownPopup",
+        "lines": 116,
+        "methods": 8
+      },
+      {
+        "name": "OptionRows",
+        "lines": 88,
+        "methods": 10
+      },
+      {
+        "name": "AppOptionMenu",
+        "lines": 177,
+        "methods": 17
+      },
+      {
+        "name": "LabelDropdown",
+        "lines": 335,
+        "methods": 21
+      },
+      {
+        "name": "FilterSelection",
+        "lines": 14,
+        "methods": 1
+      },
+      {
+        "name": "SavedFilters",
+        "lines": 373,
+        "methods": 17
+      },
+      {
+        "name": "SystemNavigation",
+        "lines": 62,
+        "methods": 5
+      },
+      {
+        "name": "ItemWorkspace",
+        "lines": 4589,
+        "methods": 177
+      },
+      {
+        "name": "RichNoteEditor",
+        "lines": 426,
+        "methods": 21
+      },
+      {
+        "name": "PageEditor",
+        "lines": 2128,
+        "methods": 118
+      },
+      {
+        "name": "NoteEditor",
+        "lines": 48,
+        "methods": 2
+      },
+      {
+        "name": "GalleryView",
+        "lines": 344,
+        "methods": 24
+      },
+      {
+        "name": "DrawingEditor",
+        "lines": 1979,
+        "methods": 126
+      },
+      {
+        "name": "ListApp",
+        "lines": 46929,
+        "methods": 1634
+      },
+      {
+        "name": "TemplateDraft",
+        "lines": 424,
+        "methods": 24
+      }
+    ],
+    "functions": 2846,
+    "unit_references": [
+      "test_core_accessibility.py",
+      "test_notion_import_bridge.py",
+      "test_page_restore_bridge.py",
+      "test_portable_source_bridge.py",
+      "test_preview_tools.py",
+      "test_schema_bridge.py",
+      "test_source_schema_bridge.py"
+    ]
+  },
+  {
+    "module": "appearance.py",
+    "lines": 80,
+    "tk_import": false,
+    "production": true,
+    "role": "Erscheinungsbild „Automatisch (hell/dunkel)“ ohne Tk (N01 seit 3.33.21).",
+    "classes": [],
+    "functions": 6,
+    "unit_references": [
+      "test_appearance.py"
+    ]
+  },
+  {
+    "module": "attachment_paths.py",
+    "lines": 29,
+    "tk_import": false,
+    "production": true,
+    "role": "Portable flache Anhangspfade, ohne Tk und ohne Dateizugriff.",
+    "classes": [],
+    "functions": 2,
+    "unit_references": [
+      "test_attachment_paths.py"
+    ]
+  },
+  {
+    "module": "backdrop.py",
+    "lines": 455,
+    "tk_import": false,
+    "production": true,
+    "role": "Hintergrundverläufe für Glide: Mesh, Aurora, Körnung und Pixelraster.",
+    "classes": [
+      {
+        "name": "Blob",
+        "lines": 9,
+        "methods": 0
+      },
+      {
+        "name": "Preset",
+        "lines": 11,
+        "methods": 0
+      }
+    ],
+    "functions": 20,
+    "unit_references": [
+      "test_action_catalog.py"
+    ]
+  },
+  {
+    "module": "backup_diff.py",
+    "lines": 116,
+    "tk_import": false,
+    "production": true,
+    "role": "Zwei Sicherungsstände vergleichen, ohne Tk und ohne Schreibzugriff (F-03 seit 3.35.0).",
+    "classes": [],
+    "functions": 8,
+    "unit_references": [
+      "test_backup_diff.py"
+    ]
+  },
+  {
+    "module": "backup_snapshot.py",
+    "lines": 127,
+    "tk_import": false,
+    "production": true,
+    "role": "Unveränderliche Datei-Quelle zwischen Restorevorschau und Übernahme.",
+    "classes": [
+      {
+        "name": "Snapshot",
+        "lines": 52,
+        "methods": 3
+      },
+      {
+        "name": "Assets",
+        "lines": 16,
+        "methods": 2
+      }
+    ],
+    "functions": 7,
+    "unit_references": [
+      "test_backup_snapshot.py"
+    ]
+  },
+  {
+    "module": "busy_calendar.py",
+    "lines": 166,
+    "tk_import": false,
+    "production": true,
+    "role": "Begrenzte, ausdrücklich geladene ICS-Quelle und unveränderliche Zeitfenster.",
+    "classes": [
+      {
+        "name": "SourceError",
+        "lines": 2,
+        "methods": 0
+      },
+      {
+        "name": "Source",
+        "lines": 6,
+        "methods": 0
+      },
+      {
+        "name": "Window",
+        "lines": 18,
+        "methods": 3
+      }
+    ],
+    "functions": 7,
+    "unit_references": [
+      "test_busy_calendar.py",
+      "test_calendar_service.py"
+    ]
+  },
+  {
+    "module": "calendar_service.py",
+    "lines": 181,
+    "tk_import": false,
+    "production": true,
+    "role": "Hintergrundarbeit für lokale Kalender; keine Tk-Aufrufe oder Nutzerdateischreibzugriffe.",
+    "classes": [
+      {
+        "name": "View",
+        "lines": 6,
+        "methods": 0
+      },
+      {
+        "name": "CalendarService",
+        "lines": 153,
+        "methods": 10
+      }
+    ],
+    "functions": 11,
+    "unit_references": [
+      "test_calendar_service.py"
+    ]
+  },
+  {
+    "module": "capture_parser.py",
+    "lines": 730,
+    "tk_import": false,
+    "production": true,
+    "role": "Deutsche Schnelleingabe ohne Tk (G01).",
+    "classes": [
+      {
+        "name": "Teil",
+        "lines": 7,
+        "methods": 0
+      },
+      {
+        "name": "Erfassung",
+        "lines": 4,
+        "methods": 0
+      },
+      {
+        "name": "_Wort",
+        "lines": 7,
+        "methods": 0
+      }
+    ],
+    "functions": 27,
+    "unit_references": [
+      "test_capture_parser.py",
+      "test_capture_reminder.py",
+      "test_capture_repeat_anchor.py",
+      "test_paket2_klein.py"
+    ]
+  },
+  {
+    "module": "content_search.py",
+    "lines": 118,
+    "tk_import": false,
+    "production": true,
+    "role": "Inhaltssuche ohne Tk, Datei-I/O oder dauerhaften Index (G14, erste Stufe).",
+    "classes": [],
+    "functions": 8,
+    "unit_references": [
+      "test_content_search.py"
+    ]
+  },
+  {
+    "module": "core_accessibility.py",
+    "lines": 393,
+    "tk_import": false,
+    "production": true,
+    "role": "Semantik des Aufgaben-Kernablaufs; Widgetadapter ohne Tk-Import.",
+    "classes": [
+      {
+        "name": "InspectorFocus",
+        "lines": 40,
+        "methods": 4
+      }
+    ],
+    "functions": 39,
+    "unit_references": [
+      "test_core_accessibility.py"
+    ]
+  },
+  {
+    "module": "daily_hints.py",
+    "lines": 227,
+    "tk_import": false,
+    "production": true,
+    "role": "Optionale Tageshinweise mit dauerhaften Zustellkennungen, ohne Tk.",
+    "classes": [
+      {
+        "name": "Hint",
+        "lines": 7,
+        "methods": 0
+      }
+    ],
+    "functions": 13,
+    "unit_references": [
+      "test_daily_hints.py"
+    ]
+  },
+  {
+    "module": "day_proposal.py",
+    "lines": 71,
+    "tk_import": false,
+    "production": true,
+    "role": "Erklärbare Tagesauswahl: reine Berechnung, stabile Quellen, keine Mutation.",
+    "classes": [],
+    "functions": 2,
+    "unit_references": [
+      "test_day_proposal.py"
+    ]
+  },
+  {
+    "module": "day_relief.py",
+    "lines": 129,
+    "tk_import": false,
+    "production": true,
+    "role": "Explizites Entlasten mit gemeinsamer Belegzeitbilanz; ohne Tk/Mutation.",
+    "classes": [
+      {
+        "name": "Move",
+        "lines": 5,
+        "methods": 0
+      },
+      {
+        "name": "Plan",
+        "lines": 5,
+        "methods": 0
+      }
+    ],
+    "functions": 7,
+    "unit_references": [
+      "test_day_relief.py"
+    ]
+  },
+  {
+    "module": "drawing.py",
+    "lines": 1445,
+    "tk_import": false,
+    "production": true,
+    "role": "Datenkern der Glide-Pixelzeichnung.",
+    "classes": [
+      {
+        "name": "DrawingFormatError",
+        "lines": 2,
+        "methods": 0
+      },
+      {
+        "name": "CellChange",
+        "lines": 4,
+        "methods": 0
+      },
+      {
+        "name": "DrawingAction",
+        "lines": 9,
+        "methods": 1
+      },
+      {
+        "name": "Region",
+        "lines": 6,
+        "methods": 0
+      },
+      {
+        "name": "SvgImportResult",
+        "lines": 4,
+        "methods": 0
+      },
+      {
+        "name": "PixelPerfectStroke",
+        "lines": 27,
+        "methods": 2
+      },
+      {
+        "name": "DrawingModel",
+        "lines": 584,
+        "methods": 56
+      }
+    ],
+    "functions": 91,
+    "unit_references": [
+      "test_animation.py",
+      "test_animation_entry.py",
+      "test_animation_snapshot.py",
+      "test_drawing_pixel35.py",
+      "test_page_features.py",
+      "test_save_comparison.py",
+      "test_schema_bridge.py",
+      "test_sidebar_policy.py",
+      "test_source_schema_bridge.py"
+    ]
+  },
+  {
+    "module": "drawing_image.py",
+    "lines": 310,
+    "tk_import": true,
+    "production": true,
+    "role": "Tk-Bildfunktionen der Glide-Zeichenfläche.",
+    "classes": [],
+    "functions": 9,
+    "unit_references": []
+  },
+  {
+    "module": "drawing_prototype.pyw",
+    "lines": 829,
+    "tk_import": true,
+    "production": false,
+    "role": "Isolierte Bedienprobe für Glides geplante Pixel-Zeichenfläche.",
+    "classes": [
+      {
+        "name": "TracePreviewDialog",
+        "lines": 104,
+        "methods": 5
+      },
+      {
+        "name": "ColorSpectrumDialog",
+        "lines": 101,
+        "methods": 6
+      },
+      {
+        "name": "ReferenceFrameDialog",
+        "lines": 124,
+        "methods": 8
+      },
+      {
+        "name": "DrawingPrototype",
+        "lines": 445,
+        "methods": 33
+      }
+    ],
+    "functions": 53,
+    "unit_references": []
+  },
+  {
+    "module": "eisenhower.py",
+    "lines": 81,
+    "tk_import": false,
+    "production": true,
+    "role": "Eisenhower-Einordnung ohne Tk (G02, Entscheidung D13).",
+    "classes": [],
+    "functions": 7,
+    "unit_references": [
+      "test_action_catalog.py",
+      "test_eisenhower.py"
+    ]
+  },
+  {
+    "module": "exchange_patch.py",
+    "lines": 210,
+    "tk_import": false,
+    "production": true,
+    "role": "KI-Austausch Stufe 2 ohne Tk: Kontextpaket und Änderungsvorschläge (G24 seit 3.35.0).",
+    "classes": [
+      {
+        "name": "PatchError",
+        "lines": 2,
+        "methods": 0
+      }
+    ],
+    "functions": 8,
+    "unit_references": [
+      "test_exchange_patch.py"
+    ]
+  },
+  {
+    "module": "filter_explain.py",
+    "lines": 110,
+    "tk_import": false,
+    "production": true,
+    "role": "Bedingungen gespeicherter Filter prüfen und erklären, ohne Tk (D-03 seit 3.34.0).",
+    "classes": [],
+    "functions": 6,
+    "unit_references": [
+      "test_filter_explain.py"
+    ]
+  },
+  {
+    "module": "focus_timer.py",
+    "lines": 89,
+    "tk_import": false,
+    "production": true,
+    "role": "Eine Zeiterfassung mit pausierbarer Fokussitzung und Buchungsjournal, ohne Tk.",
+    "classes": [
+      {
+        "name": "PendingBookingError",
+        "lines": 2,
+        "methods": 0
+      }
+    ],
+    "functions": 8,
+    "unit_references": [
+      "test_focus_timer.py"
+    ]
+  },
+  {
+    "module": "glide_start.py",
+    "lines": 63,
+    "tk_import": false,
+    "production": true,
+    "role": "Schnellstart für Glide: lädt die App als Modul und nutzt den Bytecode-Cache.",
+    "classes": [],
+    "functions": 3,
+    "unit_references": []
+  },
+  {
+    "module": "glyph_metrics.py",
+    "lines": 177,
+    "tk_import": false,
+    "production": true,
+    "role": "Optische Höhe von Symbolen neben Text, ohne Tk (B09, 15.10.2026).",
+    "classes": [
+      {
+        "name": "FontMetrics",
+        "lines": 105,
+        "methods": 9
+      }
+    ],
+    "functions": 13,
+    "unit_references": [
+      "test_glyph_metrics.py"
+    ]
+  },
+  {
+    "module": "home_tiles.py",
+    "lines": 161,
+    "tk_import": false,
+    "production": true,
+    "role": "Startseitenkacheln ohne Tk: Bestand, Standard, Sichtbarkeit und die zusammengeführte Kachel „Heute“.",
+    "classes": [],
+    "functions": 9,
+    "unit_references": [
+      "test_home_tiles.py"
+    ]
+  },
+  {
+    "module": "ics_busy.py",
+    "lines": 345,
+    "tk_import": false,
+    "production": true,
+    "role": "Lokale ICS-Belegzeiten ohne Aufgabenimport, Tk oder Datenmutation.",
+    "classes": [
+      {
+        "name": "Property",
+        "lines": 4,
+        "methods": 0
+      },
+      {
+        "name": "Span",
+        "lines": 7,
+        "methods": 1
+      },
+      {
+        "name": "Event",
+        "lines": 16,
+        "methods": 0
+      },
+      {
+        "name": "Calendar",
+        "lines": 3,
+        "methods": 0
+      },
+      {
+        "name": "Expansion",
+        "lines": 3,
+        "methods": 0
+      }
+    ],
+    "functions": 15,
+    "unit_references": [
+      "test_ics_busy.py",
+      "test_ics_edges.py",
+      "test_ics_timezone.py",
+      "test_timezones.py"
+    ]
+  },
+  {
+    "module": "ics_recurrence.py",
+    "lines": 239,
+    "tk_import": false,
+    "production": true,
+    "role": "Begrenzte übliche iCalendar-Serien nach RFC 5545 §3.3.10, ohne Tk.",
+    "classes": [
+      {
+        "name": "RuleError",
+        "lines": 2,
+        "methods": 0
+      },
+      {
+        "name": "ExpansionLimitError",
+        "lines": 2,
+        "methods": 0
+      },
+      {
+        "name": "Budget",
+        "lines": 8,
+        "methods": 1
+      },
+      {
+        "name": "Rule",
+        "lines": 10,
+        "methods": 0
+      }
+    ],
+    "functions": 8,
+    "unit_references": [
+      "test_busy_calendar.py",
+      "test_ics_edges.py",
+      "test_ics_recurrence.py",
+      "test_ics_timezone.py",
+      "test_repeat_ics.py"
+    ]
+  },
+  {
+    "module": "ics_timezone.py",
+    "lines": 177,
+    "tk_import": false,
+    "production": true,
+    "role": "Übliche eingebettete VTIMEZONE-Regeln ohne externe Laufzeitbibliothek.",
+    "classes": [
+      {
+        "name": "Observance",
+        "lines": 8,
+        "methods": 0
+      },
+      {
+        "name": "CalendarZone",
+        "lines": 99,
+        "methods": 8
+      }
+    ],
+    "functions": 12,
+    "unit_references": [
+      "test_ics_timezone.py"
+    ]
+  },
+  {
+    "module": "image_preview.py",
+    "lines": 337,
+    "tk_import": true,
+    "production": true,
+    "role": "Bildvorschauen für Galerie und Seiten mit den Mitteln von Tk 9 (27.09.2026).",
+    "classes": [
+      {
+        "name": "PreviewCache",
+        "lines": 229,
+        "methods": 19
+      }
+    ],
+    "functions": 26,
+    "unit_references": []
+  },
+  {
+    "module": "interaction_policy.py",
+    "lines": 135,
+    "tk_import": false,
+    "production": true,
+    "role": "Anzeige- und Bedienregeln für Palette, Hinweise, Termine und Tastenwege, ohne Tk oder Mutation.",
+    "classes": [],
+    "functions": 11,
+    "unit_references": [
+      "test_interaction_policy.py",
+      "test_paket2_klein.py"
+    ]
+  },
+  {
+    "module": "logo.py",
+    "lines": 185,
+    "tk_import": true,
+    "production": true,
+    "role": "Glide-Logo und App-Symbol aus freigegebenen SVG-Mastern.",
+    "classes": [],
+    "functions": 13,
+    "unit_references": []
+  },
+  {
+    "module": "logo_raster.py",
+    "lines": 86,
+    "tk_import": false,
+    "production": true,
+    "role": "Geglättete transparente Logo-Flächen und PNG-Ausgabe, ohne Tk.",
+    "classes": [],
+    "functions": 4,
+    "unit_references": [
+      "test_logo_raster.py"
+    ]
+  },
+  {
+    "module": "motion.py",
+    "lines": 78,
+    "tk_import": false,
+    "production": true,
+    "role": "Kurze, unterbrechbare Übergänge; Uhr und Zeitplanung werden injiziert.",
+    "classes": [
+      {
+        "name": "Flight",
+        "lines": 6,
+        "methods": 0
+      },
+      {
+        "name": "Transitions",
+        "lines": 58,
+        "methods": 5
+      }
+    ],
+    "functions": 6,
+    "unit_references": [
+      "test_motion.py"
+    ]
+  },
+  {
+    "module": "notion_archive.py",
+    "lines": 349,
+    "tk_import": false,
+    "production": true,
+    "role": "Begrenzte Notion-Markdown-/CSV-Archive lesen, ohne Entpacken oder Tk.",
+    "classes": [
+      {
+        "name": "NotionFormatError",
+        "lines": 2,
+        "methods": 0
+      },
+      {
+        "name": "Loss",
+        "lines": 4,
+        "methods": 0
+      },
+      {
+        "name": "Page",
+        "lines": 8,
+        "methods": 0
+      },
+      {
+        "name": "Export",
+        "lines": 4,
+        "methods": 0
+      }
+    ],
+    "functions": 12,
+    "unit_references": [
+      "test_notion_archive.py",
+      "test_notion_reimport.py",
+      "test_notion_task_binding.py"
+    ]
+  },
+  {
+    "module": "notion_hierarchy.py",
+    "lines": 112,
+    "tk_import": false,
+    "production": true,
+    "role": "Bestehende Glide-Ordner für die gewählten Notion-Unterseiten planen, ohne Tk.",
+    "classes": [
+      {
+        "name": "Folder",
+        "lines": 5,
+        "methods": 0
+      },
+      {
+        "name": "Plan",
+        "lines": 3,
+        "methods": 0
+      }
+    ],
+    "functions": 5,
+    "unit_references": [
+      "test_notion_hierarchy.py"
+    ]
+  },
+  {
+    "module": "notion_import.py",
+    "lines": 242,
+    "tk_import": false,
+    "production": true,
+    "role": "Ausdrücklich gewählte Notion-Seiten ohne Tk und ohne Bestandsmutation planen.",
+    "classes": [
+      {
+        "name": "Selection",
+        "lines": 10,
+        "methods": 0
+      },
+      {
+        "name": "Content",
+        "lines": 7,
+        "methods": 0
+      }
+    ],
+    "functions": 6,
+    "unit_references": [
+      "test_notion_import.py"
+    ]
+  },
+  {
+    "module": "notion_reimport.py",
+    "lines": 131,
+    "tk_import": false,
+    "production": true,
+    "role": "Quellenzustand mit dem zuletzt übernommenen und dem lokalen Stand vergleichen.",
+    "classes": [
+      {
+        "name": "SourceRecord",
+        "lines": 30,
+        "methods": 3
+      },
+      {
+        "name": "Comparison",
+        "lines": 4,
+        "methods": 0
+      },
+      {
+        "name": "ReimportPlan",
+        "lines": 3,
+        "methods": 0
+      }
+    ],
+    "functions": 8,
+    "unit_references": [
+      "test_notion_reimport.py",
+      "test_source_metadata.py"
+    ]
+  },
+  {
+    "module": "object_references.py",
+    "lines": 126,
+    "tk_import": false,
+    "production": true,
+    "role": "Typisierte lokale Verweise und abgeleitete Rückverweise (Format 22), ohne Tk.",
+    "classes": [],
+    "functions": 10,
+    "unit_references": [
+      "test_object_references.py",
+      "test_page_features.py"
+    ]
+  },
+  {
+    "module": "occupied_time.py",
+    "lines": 198,
+    "tk_import": false,
+    "production": true,
+    "role": "Überlappungsfreie Belegzeit und Tageskapazität, ohne Tk oder Datenmutation.",
+    "classes": [
+      {
+        "name": "Block",
+        "lines": 9,
+        "methods": 1
+      },
+      {
+        "name": "BlockIndex",
+        "lines": 23,
+        "methods": 2
+      },
+      {
+        "name": "GridSegment",
+        "lines": 6,
+        "methods": 0
+      }
+    ],
+    "functions": 13,
+    "unit_references": [
+      "test_busy_calendar.py",
+      "test_day_relief.py",
+      "test_ics_busy.py",
+      "test_occupied_grid.py",
+      "test_occupied_time.py"
+    ]
+  },
+  {
+    "module": "page_features.py",
+    "lines": 130,
+    "tk_import": false,
+    "production": true,
+    "role": "Live-Listen, Titelbilder und gefüllte Vorlagenvorschauen; ohne Tk (Format 23).",
+    "classes": [],
+    "functions": 8,
+    "unit_references": [
+      "test_page_features.py",
+      "test_save_comparison.py"
+    ]
+  },
+  {
+    "module": "page_markdown.py",
+    "lines": 613,
+    "tk_import": false,
+    "production": true,
+    "role": "Markdown ↔ Seitendokument für die Seitenart „Seite“ (26.09.2026).",
+    "classes": [
+      {
+        "name": "_Builder",
+        "lines": 101,
+        "methods": 4
+      }
+    ],
+    "functions": 21,
+    "unit_references": [
+      "test_page_markdown.py",
+      "test_page_print.py"
+    ]
+  },
+  {
+    "module": "page_restore.py",
+    "lines": 245,
+    "tk_import": false,
+    "production": true,
+    "role": "Selektive Seitenwiederherstellung planen, ohne Tk, Dateien oder Mutation.",
+    "classes": [
+      {
+        "name": "Plan",
+        "lines": 17,
+        "methods": 1
+      }
+    ],
+    "functions": 8,
+    "unit_references": [
+      "test_page_restore.py"
+    ]
+  },
+  {
+    "module": "planning.py",
+    "lines": 120,
+    "tk_import": false,
+    "production": true,
+    "role": "Bearbeitungstage und Aufwandsbilanz ohne Tk oder Datenmutation (KO01/AU02).",
+    "classes": [],
+    "functions": 8,
+    "unit_references": [
+      "test_planning.py",
+      "test_week_planning.py"
+    ]
+  },
+  {
+    "module": "preview_tools.py",
+    "lines": 77,
+    "tk_import": false,
+    "production": true,
+    "role": "Systemwerkzeuge für Bildvorschauen unter Linux, ohne Tk (N08 seit 3.34.0).",
+    "classes": [],
+    "functions": 3,
+    "unit_references": [
+      "test_preview_tools.py"
+    ]
+  },
+  {
+    "module": "release_notes.py",
+    "lines": 136,
+    "tk_import": false,
+    "production": true,
+    "role": "Einmalige Karte „Neu in …“ nach einem Update, ohne Tk (N07 seit 3.33.20).",
+    "classes": [],
+    "functions": 8,
+    "unit_references": [
+      "test_paket2_klein.py",
+      "test_release_notes.py"
+    ]
+  },
+  {
+    "module": "render_retention.py",
+    "lines": 137,
+    "tk_import": false,
+    "production": true,
+    "role": "Lebensdauer und Abgleich wiederverwendbarer Ansichtsbausteine, ohne Tk.",
+    "classes": [
+      {
+        "name": "RetainedWidgets",
+        "lines": 106,
+        "methods": 11
+      }
+    ],
+    "functions": 12,
+    "unit_references": [
+      "test_render_retention.py"
+    ]
+  },
+  {
+    "module": "repeat_ics.py",
+    "lines": 114,
+    "tk_import": false,
+    "production": true,
+    "role": "Glide-Wiederholungen ↔ iCalendar-RRULE ohne Tk (FP-00, A28).",
+    "classes": [],
+    "functions": 4,
+    "unit_references": [
+      "test_repeat_ics.py"
+    ]
+  },
+  {
+    "module": "repeat_rules.py",
+    "lines": 204,
+    "tk_import": false,
+    "production": true,
+    "role": "Wiederholungsregeln ohne Tk (Fachlogik nach D17, KO02 seit 3.33.20).",
+    "classes": [],
+    "functions": 7,
+    "unit_references": [
+      "test_repeat_ics.py",
+      "test_repeat_rules.py"
+    ]
+  },
+  {
+    "module": "restore_assets.py",
+    "lines": 120,
+    "tk_import": false,
+    "production": true,
+    "role": "Anhänge für einen selektiven Restore neu ablegen; keine Bestandsmutation, kein Tk.",
+    "classes": [
+      {
+        "name": "Staged",
+        "lines": 26,
+        "methods": 4
+      }
+    ],
+    "functions": 6,
+    "unit_references": [
+      "test_restore_assets.py"
+    ]
+  },
+  {
+    "module": "routines.py",
+    "lines": 115,
+    "tk_import": false,
+    "production": true,
+    "role": "Routinen in „Heute“ ohne Tk (AU06 seit 3.33.20).",
+    "classes": [],
+    "functions": 10,
+    "unit_references": [
+      "test_routines.py"
+    ]
+  },
+  {
+    "module": "runtime_check.py",
+    "lines": 63,
+    "tk_import": true,
+    "production": true,
+    "role": "Mindestlaufzeit prüfen, bevor Glide geladen wird (AB08 seit 3.33.20).",
+    "classes": [],
+    "functions": 4,
+    "unit_references": [
+      "test_runtime_check.py"
+    ]
+  },
+  {
+    "module": "save_comparison.py",
+    "lines": 156,
+    "tk_import": false,
+    "production": true,
+    "role": "Gemeinsamer Vergleichsstand für Verlauf und erfolgreich gespeicherte Aktivität.",
+    "classes": [
+      {
+        "name": "ListComparison",
+        "lines": 6,
+        "methods": 0
+      }
+    ],
+    "functions": 6,
+    "unit_references": [
+      "test_incremental_comparison.py",
+      "test_save_comparison.py"
+    ]
+  },
+  {
+    "module": "schema_backups.py",
+    "lines": 61,
+    "tk_import": false,
+    "production": true,
+    "role": "Bytegenaue Formatsicherungen mit einem JSON-Parse je Dateistand, ohne Tk.",
+    "classes": [
+      {
+        "name": "SchemaBackups",
+        "lines": 45,
+        "methods": 5
+      }
+    ],
+    "functions": 6,
+    "unit_references": [
+      "test_schema_backups.py"
+    ]
+  },
+  {
+    "module": "sidebar_policy.py",
+    "lines": 119,
+    "tk_import": false,
+    "production": true,
+    "role": "Zuordnung und Inhaltsgrenzen der vier Seitenleistenbereiche, ohne Tk.",
+    "classes": [
+      {
+        "name": "SidebarPolicy",
+        "lines": 51,
+        "methods": 3
+      }
+    ],
+    "functions": 8,
+    "unit_references": [
+      "test_sidebar_policy.py"
+    ]
+  },
+  {
+    "module": "source_metadata.py",
+    "lines": 241,
+    "tk_import": false,
+    "production": true,
+    "role": "Notion-Zuordnungen beim Lesen, Kopieren und Verlegen von Anhängen erhalten.",
+    "classes": [],
+    "functions": 13,
+    "unit_references": [
+      "test_source_metadata.py"
+    ]
+  },
+  {
+    "module": "svg_geometry.py",
+    "lines": 226,
+    "tk_import": false,
+    "production": true,
+    "role": "Geometrie der mitgelieferten SVG-Logos, ohne Tk oder Dateizugriffe.",
+    "classes": [],
+    "functions": 13,
+    "unit_references": [
+      "test_svg_geometry.py",
+      "test_svg_sampling.py"
+    ]
+  },
+  {
+    "module": "symbol_policy.py",
+    "lines": 91,
+    "tk_import": false,
+    "production": true,
+    "role": "Lesbare Oberflächenzeichen aus der tatsächlichen UI-Schrift, ohne Tk.",
+    "classes": [],
+    "functions": 3,
+    "unit_references": [
+      "test_symbol_policy.py"
+    ]
+  },
+  {
+    "module": "task_editing.py",
+    "lines": 65,
+    "tk_import": false,
+    "production": true,
+    "role": "Feldweises Zusammenführen einer Inspektoreingabe, ohne Tk oder Mutation.",
+    "classes": [
+      {
+        "name": "Conflict",
+        "lines": 4,
+        "methods": 1
+      },
+      {
+        "name": "Edit",
+        "lines": 4,
+        "methods": 0
+      }
+    ],
+    "functions": 2,
+    "unit_references": [
+      "test_task_editing.py"
+    ]
+  },
+  {
+    "module": "task_references.py",
+    "lines": 128,
+    "tk_import": false,
+    "production": true,
+    "role": "Aufgabenmarken, Heimat und Textquellen ohne Tk (Format 21).",
+    "classes": [],
+    "functions": 11,
+    "unit_references": [
+      "test_task_references.py"
+    ]
+  },
+  {
+    "module": "timezones.py",
+    "lines": 109,
+    "tk_import": false,
+    "production": true,
+    "role": "Lokale Zeitzonen und mitgelieferte IANA-Daten ohne Zusatzbibliothek.",
+    "classes": [
+      {
+        "name": "Resolver",
+        "lines": 34,
+        "methods": 3
+      }
+    ],
+    "functions": 6,
+    "unit_references": [
+      "test_busy_calendar.py",
+      "test_calendar_service.py",
+      "test_daily_hints.py",
+      "test_ics_busy.py",
+      "test_ics_edges.py",
+      "test_ics_timezone.py",
+      "test_occupied_grid.py",
+      "test_occupied_time.py",
+      "test_timezones.py"
+    ]
+  },
+  {
+    "module": "today_view.py",
+    "lines": 113,
+    "tk_import": false,
+    "production": true,
+    "role": "Abschnitte der Ansicht „Heute“ ohne Tk (Entscheidung D14).",
+    "classes": [],
+    "functions": 6,
+    "unit_references": [
+      "test_today_view.py"
+    ]
+  },
+  {
+    "module": "ui_design.py",
+    "lines": 47,
+    "tk_import": false,
+    "production": true,
+    "role": "Gemeinsame Gestaltungsskalen und reine Regeln für Titel und Herkunft.",
+    "classes": [],
+    "functions": 2,
+    "unit_references": [
+      "test_ui_design.py"
+    ]
+  },
+  {
+    "module": "view_metrics.py",
+    "lines": 80,
+    "tk_import": false,
+    "production": true,
+    "role": "Tk-freie Datums- und Bestandsauswertung für bestehende Ansichten (P09b).",
+    "classes": [
+      {
+        "name": "ItemMetrics",
+        "lines": 10,
+        "methods": 1
+      }
+    ],
+    "functions": 6,
+    "unit_references": [
+      "test_view_metrics.py"
+    ]
+  },
+  {
+    "module": "week_planning.py",
+    "lines": 57,
+    "tk_import": false,
+    "production": true,
+    "role": "Wochenbilanz und freie Zeitfenster aus derselben Tagesbilanz, ohne Tk.",
+    "classes": [],
+    "functions": 4,
+    "unit_references": [
+      "test_week_planning.py"
+    ]
+  }
+]

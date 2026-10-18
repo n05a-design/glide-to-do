@@ -1,0 +1,162 @@
+[
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "sha256": "60a8fd2cd2b6d82da2e1b3e5effb29d15dde6f54f27bc58ea328468b07784f3f",
+    "bytes": 95245
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "sha256": "0a8c3f1aa58982b86350f5f06de05885bf0dff92aa5b0abe04d022ac3f763928",
+    "bytes": 212832
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+    "sha256": "0ca7cc20553aff7cd76ddbd4ea31a5e5b5b85488d3e554916ab784463b31463b",
+    "bytes": 97952
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "sha256": "1048ea025225aa920bd0cae76253067e48f01b0447a149ee5e77d0fa60d45526",
+    "bytes": 7436
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/README.md",
+    "sha256": "b8fda1c654dc29c5018107d843a4aa368858bb189d52d0ab1b4a2877c1e0334a",
+    "bytes": 2926
+  },
+  {
+    "pfad": "01_Repository/Glide/AGENTS.md",
+    "sha256": "de4e4fe311f8b30a9787954dfce7d16ba51a95db3ff1cd92d0079908b8be236d",
+    "bytes": 5239
+  },
+  {
+    "pfad": "01_Repository/Glide/CHANGELOG.md",
+    "sha256": "5bc46a0869f8712dad37296e36eb44645526a10a1f1d7ff7c4919be6a7f1da2a",
+    "bytes": 46516
+  },
+  {
+    "pfad": "01_Repository/Glide/README.md",
+    "sha256": "b88410e441160ff349559a7d87550189f87b08a96316cda6482318cf14797418",
+    "bytes": 4513
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/00_INDEX.md",
+    "sha256": "0874459404452aadbdb82ad08765907f2875df196abbff30926a00b79879c8bc",
+    "bytes": 5629
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+    "sha256": "0847158d79e01c44eec233229a7aab2ba672a735d85b989153559a243e0d32c2",
+    "bytes": 11308
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+    "sha256": "ce380a1e6bd35c8b6333f7c7800640bf8ea74dd0c26b3eca8b1806f3f399a08a",
+    "bytes": 45669
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+    "sha256": "e5601c55af3c3a17d22b533e4764cae6a9afb024e6981ea0fecdc9b55d7b93a9",
+    "bytes": 37970
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+    "sha256": "b6185325329231f1206cb2fe9d55eb337d604df027111ddca2d21b5409b4a1b0",
+    "bytes": 30406
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "sha256": "08e4538458c1ee5808cce67fc88947478ec34cf73dd9d6403e8627174861fc84",
+    "bytes": 34317
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+    "sha256": "9f92c7807483ad053f597f9a93a46daa3475ac6a4f45e985e33f2c37943dbd74",
+    "bytes": 18362
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+    "sha256": "5b2832f654397d23808a5d2081fb74f40b9a4a565f0036a5bcce9e1efc95d89f",
+    "bytes": 96997
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "sha256": "3532ddde7e84258a509de7e23fda6144cc0dbae84dc1f16e89b3ebaa03df2ad1",
+    "bytes": 39704
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+    "sha256": "f115a4a3de6c5ff5bc902bfc1471ceab7da06d706edc51ea59888d5b36b03688",
+    "bytes": 8347
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/decisions/ARBEITSBEGLEITER.md",
+    "sha256": "f9b637bd99d78567d49d8c86f960207f7a0b7ac364fde53847f0a09035a33b75",
+    "bytes": 5844
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/README.md",
+    "sha256": "1f8ea996508b19bc03b9fe9ab8b74790fd5d7dbae5e8dc77e66ac589e09f5b7f",
+    "bytes": 7882
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/runtime/README.md",
+    "sha256": "cf759b800b9dbd27f71ff465151b745169e3c0d2d7d0f9ce117809fc9c62ebd4",
+    "bytes": 5826
+  },
+  {
+    "pfad": "01_Repository/Glide/requirements/runtime.txt",
+    "sha256": "c0a86c2100aac3df66e34b5d64f176ba5f98bda4f46b46d09c6e148ff952b8cc",
+    "bytes": 234
+  },
+  {
+    "pfad": "01_Repository/Glide/src/glide/README.md",
+    "sha256": "8064d2290176925b0088985dcbbedb159a3193b3356d34bee9ef4e8ed81fb0fb",
+    "bytes": 9376
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/README.md",
+    "sha256": "9333086d8b191e4b29609c6255c572253d5bee20e6daf93494c098749d6de9d6",
+    "bytes": 2498
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.42.0/bestandspruefung_2026-10-15/README.md",
+    "sha256": "2b2444ae6fac24c817766cb0313aa7ac24eb51c85fbba717a1d14c158983f3d0",
+    "bytes": 9098
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/README.md",
+    "sha256": "0239a7ba1fb25551974ce14c09386fc6c79da08f66737307cb8a6479b2f2d6a5",
+    "bytes": 6700
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/gitobjekte_vorher.txt",
+    "sha256": "1c058a4d4d61af804c92cd3bfe539cb776487311335c2efab6c5c6336999d39f",
+    "bytes": 637173
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/gitrefs_vorher.txt",
+    "sha256": "0847fd0d5905ad5a7e11e93efab221f80e17598d49f5275697550e702d55f670",
+    "bytes": 11911
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/README.md",
+    "sha256": "3b760ae2e39a1f3877b04aa93213c7fde86359194698432b317bd7cd0b02797e",
+    "bytes": 8168
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/README.md",
+    "sha256": "237234894dd9492e1249e3378b87b02ca5abd02e4f397f57f9cdf1685964bd29",
+    "bytes": 9363
+  },
+  {
+    "pfad": "CLAUDE.md",
+    "sha256": "069ecb1aa802af84059cf36e9009b904bfbab630dd7143485f3f2607c758b842",
+    "bytes": 5247
+  },
+  {
+    "pfad": "README.md",
+    "sha256": "26fe449403ca540979373c60c2d8cb94e33b48784065fc5832b71501e418e661",
+    "bytes": 11370
+  }
+]

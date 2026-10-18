@@ -1,0 +1,18 @@
+{
+  "syntax": {
+    "ok": true,
+    "ergebnis": "327 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+  },
+  "versionen": {
+    "ok": true,
+    "ergebnis": "VERSION, App, Hauptsuite und CHANGELOG: 3.43.1; Datenformat 25"
+  },
+  "dokumentation": {
+    "ok": true,
+    "ergebnis": "Alle Dokumente einschließlich Archiv im Index; 212 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+  },
+  "datenschutz": {
+    "ok": true,
+    "ergebnis": []
+  }
+}

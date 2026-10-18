@@ -1,8 +1,10 @@
 # Arbeitsrichtung, Entscheidungen und Abnahme
 
-Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25
+Stand 18.10.2026 · Glide 3.43.1 · Aufgabenformat 25
 
 Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Entscheidungsvorlage vom 01.10.2026 und den Entscheidungslisten vom 25.–30.09.2026 zusammengeführt; deren Wortlaut trägt Git. Am 06.10.2026 um die Leitgedanken des Inhabers aus dem nicht übernommenen Richtungsentwurf vom 03.10.2026 ergänzt. Aufgabenstand und Reihenfolge: [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Technische Regeln: [Architektur](02_ARCHITECTURE.md).
+
+**Historischer Analyseauftrag 18.10.2026:** Der Inhaber beauftragt die umfassende Standanalyse, Dokumentationsbereinigung, aktuelle Wettbewerbsrecherche, Codeuntersuchung und theoretische Weiterplanung. Produktionslogik, Datenformate und Lieferpakete gehören ausdrücklich in einen folgenden Umsetzungsauftrag. Dieser Umfang steuerte die damalige Analyserunde; frühere Umsetzungsaufträge werden dadurch weder als erledigt noch neue Empfehlungen als genehmigt erklärt. Ergebnisse: [Analyse](../../../00_Arbeitsvorbereitung/Glide_Analyse.md), [Markt](../../../00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md), [Plan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md).
 
 **Auftrag 05.10.2026, fortgesetzt am 06. und 07.10.2026:** Analyse, Recherche, Konkurrenz und Zukunftsperspektive einbeziehen, Features umsetzen. Umgesetzt und geliefert als 3.33.8–3.33.14 (Inhaltssuche, Performance, Titel/OB01, Einplanen, Tagespaket). D07, Importquelle, Bauwerkzeug und Veröffentlichungsfragen bleiben gesonderte Entscheidungen.
 
@@ -16,8 +18,8 @@ Verbindliches Entscheidungsregister und Arbeitsablauf. Am 03.10.2026 mit der Ent
 
 **Rückmeldung und Auswahl vom 10.10.2026 (Wortlaut):** „Das sind sehr langweilige Features aber gut setze sie um.“ Auf die Umfangsfrage wählte der Inhaber: „Empfehlungen der ersten Runde: Animation A/V, Referenzentwürfe B/V und Tageshinweise A/V; übrige Funktionen weiter gemeinsam auswählen.“ Damit wurden zunächst D18–D20 festgelegt; die anschließenden Runden haben alle übrigen Kandidaten als D21–D43 entschieden. Acht Produktionsversionen und Abnahmetore nach Entwicklungsplan §15.7/§15.8 sind durch D44 bestätigt (Wortlaut „ja“); Phase 2 beginnt. Der Wunsch nach spürbarerem Produktnutzen ist festgehalten; daraus werden keine zusätzlichen Funktionen ohne Auswahl abgeleitet.
 
-**Grundsatz:** Entschiedenes wird nicht erneut vorgelegt. Offen sind nur:
-- Tatsächliche Menschen-/Screenreader-Abnahme (I6); Logoentwürfe inzwischen durch D45 freigegeben
+**Grundsatz:** Entschiedenes wird nicht erneut vorgelegt. Offen bleiben, mit bereits beantworteten Fragen abgeglichen:
+- Tatsächliche Menschen-/Screenreader-Abnahme (I6), Auswahl E-U1–E-U3 und E-P1–E-P5; Logoentwürfe inzwischen durch D45 freigegeben
 - Veröffentlichungstore I1–I5 und I9–I11 bleiben nach D43 gesondert offen; keine neue Funktionsauswahl daraus ableiten
 
 Dieselben Punkte mit Stand und Empfehlung (E-S1–E-S8, I1–I11): [Entwicklungsplan §11](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber).
@@ -38,7 +40,7 @@ Wortlaute stehen in Anführungszeichen, alles andere ist Zusammenfassung. Was da
 
 ## Verbindliche Entscheidungen
 
-Neue Entscheidungen werden fortlaufend mit Datum und Wortlaut der Antwort eingetragen; nächste freie Nummer D51.
+Neue Entscheidungen werden fortlaufend mit Datum und Wortlaut der Antwort eingetragen; nächste freie Nummer D52.
 
 | Nr. | Entscheidung | Stand |
 |---|---|---|
@@ -96,6 +98,8 @@ Neue Entscheidungen werden fortlaufend mit Datum und Wortlaut der Antwort einget
 | D49 | **13.10.2026, Fortsetzungsauftrag:** Nach Vorlage der Wettbewerbsanalyse und der Entscheidungsvorlagen E-W1–E-W7 ([Entwicklungsplan §16](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#165-entscheidungsvorlagen-für-den-inhaber)) antwortete der Inhaber zweimal „weiter“ und dann: „bitte immer weiter machen bis alles umgesetzt ist.“ **Auslegung durch Claude, nicht je Frage beantwortet:** Abschluss 3.39.0, die bestätigten Pakete 5–8 (D44) und die Vorschläge aus §16 jeweils mit der dort empfohlenen Option – E-W7 A (FP-00 als eigene Fehlerbehebung nach 3.39.0, vor Paket 5), E-W6 A (übrige Vorschläge nach 4.0.0), E-W1 A/V, E-W2 A/V, E-W3 A (kein lokaler KI-Endpunkt), E-W4 A/V, E-W5 FP-05 A/V, FP-04 A/V nach WA-09, FP-07 A/1. P3-Einträge mit Auslöser (◇) bleiben bis zum Auslöser offen. Jeder Widerspruch des Inhabers hat Vorrang; Veröffentlichungstore D43 bleiben gesondert offen, Menschen-/Readerabnahme getrennt. | in Umsetzung; Auslegung jederzeit korrigierbar |
 | D50 | **15.10.2026, Ausführung und Vorrang des UI-/UX-Pakets:** Das [UI-/UX-Feature-Paket](../../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md) wird ausgeführt und geht dem Abschluss von Paket 8 / 4.0.0 vor. Wo Paket 8 oder ältere Vorgaben mit den Anforderungen A01–A03/B01–B22 unvereinbar sind, gilt das UI-/UX-Paket. Paket 8 bleibt auf seinem dokumentierten Vorbereitungsstand pausiert und wird danach auf den neuen Stand gebracht; D44/D49-Inhalte bleiben erhalten, nur ihre Reihenfolge ändert sich. Wortlaut: „Also das Paket von heute 15.10.2026 hat Priorität dem älteren Paket gegenüber […] dabei hat das neue Paket (15.10) bei allen Einschränkungen gegenüber Vorrang und mir ist wichtig dass das Paket so umgesetzt wird.“ | B01–B20 als 3.43.0 geliefert (Windows/Linux automatisch, 07/05); Mac-Vollprüfung/-Bundle und Auswahl A01–A03 offen; Paket 8 pausiert |
 
+| D51 | **17.10.2026, große Pakete und phasenweise Prüfung:** Mehrere Feature-Pakete bilden eine Phase und eine Produktionsversion; während der Entwicklung laufen Unit-Tests und gezielte Suiten der berührten Bereiche, Versionswechsel, eingefrorene Vollprüfung, native Matrix, Lieferung und gesammelte Menschenabnahme einmal am Phasenende. Datenformat-Tore, D17, D42 und D43 bleiben unverändert. Wortlaut: „bitte umfangreiche Pakete zusammenstellen, dass nicht alle 5 Minuten alles nochmal geprüft wird. Mehr Features, Mehr Pakete und Phasenweise nur Prüfungen.“ Ausgestaltung und Phasen als Vorschlag im [Entwicklungsplan §19/§20](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#19-paketgrenzen-ausbaustufen-und-aufwand); Start der Phasen 1–4 mit E-P1. | Prüfregel bestätigt; Phasenumfang und Folge E-P1–E-P5 offen. Aus getrenntem Planungsstand `7527e87` am 18.10.2026 konsolidiert |
+
 **Frühere Antworten, die weiter gelten:**
 
 | Herkunft | Inhalt |
@@ -110,6 +114,8 @@ Neue Entscheidungen werden fortlaufend mit Datum und Wortlaut der Antwort einget
 
 ## Beauftragt
 
+**Fortsetzung 18.10.2026:** Schutzrunde WA-27–WA-30 auf FP-01 prüfen und integrieren; anschließend jede Datei und Ablage im Projekt inventarisieren, Dokumentation aktualisieren und zusammenführen, belegbar entbehrliche Kopien entfernen, erneut validieren, Commit und GitHub-Pull-Request erstellen. Keine automatische Zusammenführung, neue Version oder Lieferung nach 07. Die frühere Analyse ist ein abgeschlossener Vorzustand; aktueller Status steht im QA-Bericht und im Entwicklungsplan.
+
 Fortlaufend (Wortlaut des Inhabers): „Ich habe Performance Probleme mit Glide, hilf mir die Code-Basis zu optimieren, mit Variabeln für die gleichen Funktionen, Streamlinen und optimieren.“
 
 Welche Pakete dazu offen sind, mit Status und Abnahme, steht nur im [Entwicklungsplan, Abschnitt 3](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#3-performance-stufe-0-beauftragt). Der Auftrag vom 05.10.2026 umfasst auch den Beginn der Feature-Arbeit; Umfang und nächste Schnitte stehen im Entwicklungsplan.
@@ -121,7 +127,7 @@ Welche Pakete dazu offen sind, mit Status und Abnahme, steht nur im [Entwicklung
 3. Ein zusammenhängendes Feature-Paket umsetzen; seit dem Auftrag vom 07.10.2026 mehrere Teilfunktionen und ihre gemeinsamen Bedienwege pro Produktionsversion bündeln ([Paketfolge](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#44-größere-umsetzungspakete-auftrag-07102026)). Fachlogik als Tk-freies Modul (D17). `item_change`, `sidebar_change`, `guarded_structural_change` und `run_modal` verwenden; atomare Speicherung, Sicherungen und Sperren bewahren.
 4. Wirkung messen: gleiche Fixtures, Aufwärmlauf, kalte und warme Werte getrennt, Median und p95, Rohwerte. Profiling erklärt Ursachen, belegt aber keinen Gewinn.
 5. Bedienweg und Invarianten über echte Bindungen prüfen: Callbackfehler, Undo, Auswahl/Fokus/Scrollen, Größen-, Design- und Schriftwechsel, Tageswechsel, Neustart. Neue Pflichtsuite mit Gegenprobe gegen die Vorversion.
-6. Nach gezielten Prüfungen der Teilfunktionen einmal den vollständigen Paketstand mit `versionswechsel.py` versionieren und Quell-/Prüfstand einfrieren, dann Vollprüfung ([Prüfplan](05_QA_TESTPLAN.md)); ändert sich danach ein ausführbarer Pfad oder entsteht ein tatsächlicher Fehlerbefund, betroffene Prüfungen und Volllauf wiederholen. Keine Zwischenversion und Gesamtprüfung je kleiner Teilfunktion.
+6. Nach D51 bilden mehrere zusammengehörige Pakete eine Phase. Gezielte Prüfungen laufen während der Entwicklung; am Phasenende einmal den vollständigen Phasenstand mit `versionswechsel.py` versionieren und Quell-/Prüfstand einfrieren, dann Vollprüfung ([Prüfplan](05_QA_TESTPLAN.md)); ändert sich danach ein ausführbarer Pfad oder entsteht ein tatsächlicher Fehlerbefund, betroffene Prüfungen und Volllauf wiederholen. Keine Zwischenversion und Gesamtprüfung je kleiner Teilfunktion.
 7. Nach grüner Vollprüfung `abgleich_07.py`, Bundle bauen, SHA-256 und Signatur prüfen, Showcase ausliefern. CHANGELOG, Funktionen, QA-Bericht, Entwicklungsplan und Übergabe nachführen. Manuelle Plattformabnahme bleibt ausdrücklich offen.
 
 **Abschluss:** Erledigt ist eine Änderung erst, wenn `07_Python-Versionen` und das Bundle den geprüften Stand tragen.
@@ -131,7 +137,7 @@ Welche Pakete dazu offen sind, mit Status und Abnahme, steht nur im [Entwicklung
 Reine Dokumentations-, Ablage- oder Werkzeugarbeit bekommt einen datierten Nachweis unter `tests/qa-<aktuelle Version>/<Thema>_<Datum>/` (README und `ergebnis.json`) und keine künstliche Produktionsversion. Geprüft werden CI-Grundstufe, Werkzeugtests und unveränderte App-/Lieferhashes; eine frühere Vollprüfung gilt für ihren eingefrorenen Stand und wird nicht als Lauf mit neuen Werkzeugen ausgegeben. Regeln für Dokumente: [Dokumentenpflege](DOKUMENTENPFLEGE.md).
 
 
-**Technischer P8-Nachlauf 15.10.2026:** 57 Semantikfälle, elf Runtimeverträge, 79 Paket-/zwölf Reader-Prüferfälle und drei Versionsvertragsfälle grün. Zehnter nativer Lauf 38741910227: Linux/Windows Runtime, Tcl4 und GUI10 grün; Linux Unicode/Caret/ACTIVE/Disabled und exklusiver Fokus extern grün. Orca-Erfassung/Suche gesprochen, danach nativer SIG11-Absturz. Callbackdatentypen und GObject-Lebensdauer im Anbieter korrigiert, externe Lebensdauerprobe und Crashdiagnose vorbereitet. NVDA meldet Arbeitsbereiche: Heute jetzt korrekt; weitere Aufgabenwahl braucht Navigation über Abschnittszeilen. Native MSAA-Probe auf tatsächlichen Tk-Client-HWND korrigiert. Windows-Paketprozess/Kernablauf grün; Gesamtstart wegen zweier abweichend restaurierter originaler CI-Symlinks rot, Linkhandle-Restaurierung am 16.10. korrigiert (Nachlauf 3.43.0), native Bestätigung offen. Native11 und vollständige Readerabläufe offen. Vollprüfstand91 mit verpflichtender eigener9.1 ab Version4 vorbereitet; finale eingefrorene Vollmatrix und Pakete offen. Abschlussauftrag15.10: laufendesP8 abschließen, Folgepakete fürNeuplanungoffenhalten; Root weiter geliefert3.42.0. [Nachweis](../tests/qa-3.42.0/zugang400_vorbereitung_2026-10-14/README.md).
+**Historischer technischer P8-Nachlauf 15.10.2026 (keine heutige Lieferstandzeile):** 57 Semantikfälle, elf Runtimeverträge, 79 Paket-/zwölf Reader-Prüferfälle und drei Versionsvertragsfälle grün. Zehnter nativer Lauf 38741910227: Linux/Windows Runtime, Tcl4 und GUI10 grün; Linux Unicode/Caret/ACTIVE/Disabled und exklusiver Fokus extern grün. Orca-Erfassung/Suche gesprochen, danach nativer SIG11-Absturz. Callbackdatentypen und GObject-Lebensdauer im Anbieter korrigiert, externe Lebensdauerprobe und Crashdiagnose vorbereitet. NVDA meldet Arbeitsbereiche: Heute jetzt korrekt; weitere Aufgabenwahl braucht Navigation über Abschnittszeilen. Native MSAA-Probe auf tatsächlichen Tk-Client-HWND korrigiert. Windows-Paketprozess/Kernablauf grün; Gesamtstart wegen zweier abweichend restaurierter originaler CI-Symlinks rot, Linkhandle-Restaurierung am 16.10. korrigiert (Nachlauf 3.43.0), native Bestätigung offen. Native 11 und vollständige Readerabläufe offen. Vollprüfstand 91 mit verpflichtender eigener 9.1 ab Version 4 vorbereitet; finale eingefrorene Vollmatrix und Pakete offen. Abschlussauftrag 15.10: laufendes P8 abschließen, Folgepakete für Neuplanung offenhalten; Damals Root3.42.0; heutiger Stand ausschließlich in [Analyse §9](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#9-gesamtanalyse-vom-18102026). [Nachweis](../tests/qa-3.42.0/zugang400_vorbereitung_2026-10-14/README.md).
 
 
 **Abschlussauftrag 15.10.2026:** Der Inhaber möchte die nächsten Schritte und Pakete neu strukturieren. Zunächst die laufenden 4.0-Arbeiten samt notwendigen Korrekturen, Prüfungen und umsetzbaren Kernfunktionen zum gesicherten Abschluss bringen. Danach Übergabe mit tatsächlichem Lieferstand, umgesetztem Umfang, Prüfbelegen und ausdrücklich offenen Abnahmen; weitere Folgepakete erst aus der neuen Planung starten. D49-Auswahlinhalte bleiben erhalten, ihre Ausführungsfolge wird anschließend neu geordnet.

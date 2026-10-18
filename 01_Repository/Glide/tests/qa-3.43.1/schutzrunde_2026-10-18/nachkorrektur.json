@@ -1,0 +1,26 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "e14d2d832233efe8c17cd6daf24064d762fcb75c6a2a229e096b46356d170679",
+  "faelle": {
+    "editor_offen": {
+      "ok": true,
+      "befund": "Navigation bewahrt nicht übernommenen Text auch bei vorheriger ungespeicherter Änderung"
+    },
+    "rueckweg_bytes": {
+      "ok": false,
+      "befund": "AssertionError('Rückweg erzeugt neue Datei statt des bytegleichen Vorzustands')"
+    },
+    "editorwechsel": {
+      "ok": true,
+      "befund": "Navigation, Anlegen, Beenden fragt, schreibgeschützt frei, Schreibfehler frei"
+    },
+    "rueckweg": {
+      "ok": false,
+      "befund": "AssertionError([('show_error', ('Abgebrochen – noch nicht gespeichert', '„Spätverlust“ wurde nicht ausgeführt.\\nDabei wären 1 Punkt(e) verloren gegangen.\\n\\nDer vorherige Stand steht wieder in Glide, ließ sich aber nicht speichern. Glide versucht es beim nächsten Speichern erneut und fragt beim Beenden nach.'))])"
+    }
+  },
+  "fehler": [
+    "rueckweg_bytes",
+    "rueckweg"
+  ]
+}

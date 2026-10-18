@@ -1,0 +1,1705 @@
+{
+  "date": "2026-10-18",
+  "branch": "claude/tag3390-sichtbarkeit",
+  "head": "c0252bad69780c86b853f2653d5396e5256c0b32",
+  "initial_worktree_clean": true,
+  "version": "3.43.1",
+  "app_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+  "schema": 25,
+  "source_delivery": [
+    {
+      "source": "accessibility.py",
+      "target": "accessibility.py",
+      "source_sha256": "d5b959172f536d2349ce55c2f20960650d73d3572052cf5bf496288cffa2a91b",
+      "target_sha256": "d5b959172f536d2349ce55c2f20960650d73d3572052cf5bf496288cffa2a91b"
+    },
+    {
+      "source": "accessibility_bindings.py",
+      "target": "accessibility_bindings.py",
+      "source_sha256": "57fca8a881a00ff1a12e4be3103ed58c610d1d1c0159b8d7faeb5cd0be49ffa6",
+      "target_sha256": "57fca8a881a00ff1a12e4be3103ed58c610d1d1c0159b8d7faeb5cd0be49ffa6"
+    },
+    {
+      "source": "action_catalog.py",
+      "target": "action_catalog.py",
+      "source_sha256": "8a3fa2ec45eae0cb638e16aaeedcd9e22558ee21dfa20e950a8087ebfc6ba927",
+      "target_sha256": "8a3fa2ec45eae0cb638e16aaeedcd9e22558ee21dfa20e950a8087ebfc6ba927"
+    },
+    {
+      "source": "animation.py",
+      "target": "animation.py",
+      "source_sha256": "a7f4fb2849da4dcc6831c28811a52de9e739a9d251e2a123fc5b2c09202c3006",
+      "target_sha256": "a7f4fb2849da4dcc6831c28811a52de9e739a9d251e2a123fc5b2c09202c3006"
+    },
+    {
+      "source": "animation_export.py",
+      "target": "animation_export.py",
+      "source_sha256": "a3f47a4e0e91462de11f4458c99dc1cb2d8580b02b7baa824817dd8d9be918bb",
+      "target_sha256": "a3f47a4e0e91462de11f4458c99dc1cb2d8580b02b7baa824817dd8d9be918bb"
+    },
+    {
+      "source": "app.pyw",
+      "target": "Glide-Aufgaben-und-Listen_v3.43.1.pyw",
+      "source_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+      "target_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3"
+    },
+    {
+      "source": "appearance.py",
+      "target": "appearance.py",
+      "source_sha256": "1366388cf453f9d5ddf11bbc47e43fdd796b750a3a26105623b539e0928a2ea8",
+      "target_sha256": "1366388cf453f9d5ddf11bbc47e43fdd796b750a3a26105623b539e0928a2ea8"
+    },
+    {
+      "source": "attachment_paths.py",
+      "target": "attachment_paths.py",
+      "source_sha256": "7c506fd2da19ec74513c4d64779e5add5129b91a5cbcd5afdf90b28ba5c329cc",
+      "target_sha256": "7c506fd2da19ec74513c4d64779e5add5129b91a5cbcd5afdf90b28ba5c329cc"
+    },
+    {
+      "source": "backdrop.py",
+      "target": "backdrop.py",
+      "source_sha256": "a45c04144b4366eb805aee56558005976f0e66d53032acb0b6aa37ee702689f8",
+      "target_sha256": "a45c04144b4366eb805aee56558005976f0e66d53032acb0b6aa37ee702689f8"
+    },
+    {
+      "source": "backup_diff.py",
+      "target": "backup_diff.py",
+      "source_sha256": "9913de3fed9297cdbe8ad706a9390188b7a6800ec995be6fd78c11e6600f63de",
+      "target_sha256": "9913de3fed9297cdbe8ad706a9390188b7a6800ec995be6fd78c11e6600f63de"
+    },
+    {
+      "source": "backup_snapshot.py",
+      "target": "backup_snapshot.py",
+      "source_sha256": "f724e53794dbc78b53be471c36a5edc2d19faddb1a38f1328332700f4742c995",
+      "target_sha256": "f724e53794dbc78b53be471c36a5edc2d19faddb1a38f1328332700f4742c995"
+    },
+    {
+      "source": "busy_calendar.py",
+      "target": "busy_calendar.py",
+      "source_sha256": "5de924eb3a584865702419e3036cef58a01e244ec34bf57bc42140dcdd9f192c",
+      "target_sha256": "5de924eb3a584865702419e3036cef58a01e244ec34bf57bc42140dcdd9f192c"
+    },
+    {
+      "source": "calendar_service.py",
+      "target": "calendar_service.py",
+      "source_sha256": "29d5f67a04cbfba1c5b778ef37770131f7c919dc882587366ff18c7614cc5789",
+      "target_sha256": "29d5f67a04cbfba1c5b778ef37770131f7c919dc882587366ff18c7614cc5789"
+    },
+    {
+      "source": "capture_parser.py",
+      "target": "capture_parser.py",
+      "source_sha256": "2bdc4f70522f1bc6d9fc66bc59e6123b071bb3a4b5fa406d1ac5c4c570887374",
+      "target_sha256": "2bdc4f70522f1bc6d9fc66bc59e6123b071bb3a4b5fa406d1ac5c4c570887374"
+    },
+    {
+      "source": "content_search.py",
+      "target": "content_search.py",
+      "source_sha256": "d2359609d6f574984527ad24b33a5ea2b85637330500f6eab23bab6f1f58d330",
+      "target_sha256": "d2359609d6f574984527ad24b33a5ea2b85637330500f6eab23bab6f1f58d330"
+    },
+    {
+      "source": "core_accessibility.py",
+      "target": "core_accessibility.py",
+      "source_sha256": "4764a2f13f626de1243bba17b2bb761ab497b8ee9ad1b64e668001f80c256bed",
+      "target_sha256": "4764a2f13f626de1243bba17b2bb761ab497b8ee9ad1b64e668001f80c256bed"
+    },
+    {
+      "source": "daily_hints.py",
+      "target": "daily_hints.py",
+      "source_sha256": "3d1436b64c4fd113b4cb0469b7cdc7db1eb2dc579bed5af262f21b58ddddb5f7",
+      "target_sha256": "3d1436b64c4fd113b4cb0469b7cdc7db1eb2dc579bed5af262f21b58ddddb5f7"
+    },
+    {
+      "source": "day_proposal.py",
+      "target": "day_proposal.py",
+      "source_sha256": "af212b221d7cd4221930b0cd72946c1b74a7e10b496709785c667a3b98fda4e9",
+      "target_sha256": "af212b221d7cd4221930b0cd72946c1b74a7e10b496709785c667a3b98fda4e9"
+    },
+    {
+      "source": "day_relief.py",
+      "target": "day_relief.py",
+      "source_sha256": "f889a85441e366e0ba9b614ac9d256db68ceceab57e75c623cd1f6f1bb649587",
+      "target_sha256": "f889a85441e366e0ba9b614ac9d256db68ceceab57e75c623cd1f6f1bb649587"
+    },
+    {
+      "source": "drawing.py",
+      "target": "drawing.py",
+      "source_sha256": "f6cb2386cf00676e5af19cca46bc354f4c2104f87f2a6d3ae85a281c2842712c",
+      "target_sha256": "f6cb2386cf00676e5af19cca46bc354f4c2104f87f2a6d3ae85a281c2842712c"
+    },
+    {
+      "source": "drawing_image.py",
+      "target": "drawing_image.py",
+      "source_sha256": "d1020a43175f251a5a59aa434ebbc5b4cb43d8e70fc9c245deaff2001bfa1ad9",
+      "target_sha256": "d1020a43175f251a5a59aa434ebbc5b4cb43d8e70fc9c245deaff2001bfa1ad9"
+    },
+    {
+      "source": "eisenhower.py",
+      "target": "eisenhower.py",
+      "source_sha256": "5f4386a5ff60371b2627e34612aadcfc7c64cad772a5dfb469dc94f22f2b0ca0",
+      "target_sha256": "5f4386a5ff60371b2627e34612aadcfc7c64cad772a5dfb469dc94f22f2b0ca0"
+    },
+    {
+      "source": "exchange_patch.py",
+      "target": "exchange_patch.py",
+      "source_sha256": "3b5bf73c253845110c867a3d1c9629137f9070e9a12c69ac0edcf970dc576e4e",
+      "target_sha256": "3b5bf73c253845110c867a3d1c9629137f9070e9a12c69ac0edcf970dc576e4e"
+    },
+    {
+      "source": "filter_explain.py",
+      "target": "filter_explain.py",
+      "source_sha256": "f581412f3d4c8136941518e0dbe516c44db7e1ba9fee87b47f3b347878c5245a",
+      "target_sha256": "f581412f3d4c8136941518e0dbe516c44db7e1ba9fee87b47f3b347878c5245a"
+    },
+    {
+      "source": "focus_timer.py",
+      "target": "focus_timer.py",
+      "source_sha256": "23199b0595e32770f388cf1f2a6dad8a383341893e02e9421b49c5428afb18d5",
+      "target_sha256": "23199b0595e32770f388cf1f2a6dad8a383341893e02e9421b49c5428afb18d5"
+    },
+    {
+      "source": "glide_start.py",
+      "target": "Schnellstart.pyw",
+      "source_sha256": "670aeeadde60dd81dd0d816ee1eba38ec3205f8af15902bfefd3e13aff6b79eb",
+      "target_sha256": "670aeeadde60dd81dd0d816ee1eba38ec3205f8af15902bfefd3e13aff6b79eb"
+    },
+    {
+      "source": "glyph_metrics.py",
+      "target": "glyph_metrics.py",
+      "source_sha256": "cc4e480be903d550c505774003223f801c237f5ce50e4328743c2416faced76d",
+      "target_sha256": "cc4e480be903d550c505774003223f801c237f5ce50e4328743c2416faced76d"
+    },
+    {
+      "source": "home_tiles.py",
+      "target": "home_tiles.py",
+      "source_sha256": "d05add8e3c09c62b2696db34bda851e3d84475182a038cd1800a051fe590e486",
+      "target_sha256": "d05add8e3c09c62b2696db34bda851e3d84475182a038cd1800a051fe590e486"
+    },
+    {
+      "source": "ics_busy.py",
+      "target": "ics_busy.py",
+      "source_sha256": "89f85e03a4b535eea3802294006ed31854c8907123db779aef8b02fe5360df67",
+      "target_sha256": "89f85e03a4b535eea3802294006ed31854c8907123db779aef8b02fe5360df67"
+    },
+    {
+      "source": "ics_recurrence.py",
+      "target": "ics_recurrence.py",
+      "source_sha256": "454bd59489eb404097b68437d62a1786f876388ae0e13ee03649cd30c254353b",
+      "target_sha256": "454bd59489eb404097b68437d62a1786f876388ae0e13ee03649cd30c254353b"
+    },
+    {
+      "source": "ics_timezone.py",
+      "target": "ics_timezone.py",
+      "source_sha256": "bf3fd6590f917ede7975542e267e5e41dce7c70b452a2c497c8d54894b8de2cd",
+      "target_sha256": "bf3fd6590f917ede7975542e267e5e41dce7c70b452a2c497c8d54894b8de2cd"
+    },
+    {
+      "source": "image_preview.py",
+      "target": "image_preview.py",
+      "source_sha256": "5c7f1ee252ad85b0f24c3932a1497b764fceae081ac297821e448ad6ad74d1d9",
+      "target_sha256": "5c7f1ee252ad85b0f24c3932a1497b764fceae081ac297821e448ad6ad74d1d9"
+    },
+    {
+      "source": "interaction_policy.py",
+      "target": "interaction_policy.py",
+      "source_sha256": "05baf1651eb4a9ab014c6086379fd791e2853495eac4e776bae21c2fb05da177",
+      "target_sha256": "05baf1651eb4a9ab014c6086379fd791e2853495eac4e776bae21c2fb05da177"
+    },
+    {
+      "source": "logo.py",
+      "target": "logo.py",
+      "source_sha256": "7dafc78697c33315d83dbbb0e16aa222068a123f6eba93d9126dc01150a61d4a",
+      "target_sha256": "7dafc78697c33315d83dbbb0e16aa222068a123f6eba93d9126dc01150a61d4a"
+    },
+    {
+      "source": "logo_raster.py",
+      "target": "logo_raster.py",
+      "source_sha256": "e594735d05b1e7c3be2ac73bfa7340d85444293bfc1c84e31dbd4cd7f63db47d",
+      "target_sha256": "e594735d05b1e7c3be2ac73bfa7340d85444293bfc1c84e31dbd4cd7f63db47d"
+    },
+    {
+      "source": "motion.py",
+      "target": "motion.py",
+      "source_sha256": "3f6aa78376bb05ff0fe498c16f1d9edf9292bf0e19bc984513d73e4ce10a9162",
+      "target_sha256": "3f6aa78376bb05ff0fe498c16f1d9edf9292bf0e19bc984513d73e4ce10a9162"
+    },
+    {
+      "source": "notion_archive.py",
+      "target": "notion_archive.py",
+      "source_sha256": "b75ed60bc52a728dd8f6e65cb5a87c06203b5d30949cae06b7406f11d3d9de1b",
+      "target_sha256": "b75ed60bc52a728dd8f6e65cb5a87c06203b5d30949cae06b7406f11d3d9de1b"
+    },
+    {
+      "source": "notion_hierarchy.py",
+      "target": "notion_hierarchy.py",
+      "source_sha256": "6148ad9d472c4dfea16300701021bd278d695d18481e08f081db9aa578c05a42",
+      "target_sha256": "6148ad9d472c4dfea16300701021bd278d695d18481e08f081db9aa578c05a42"
+    },
+    {
+      "source": "notion_import.py",
+      "target": "notion_import.py",
+      "source_sha256": "d0e7c074aef0ccfa4ae869a96e1bddf484f0b3f5aa45c593a81012a106e9688c",
+      "target_sha256": "d0e7c074aef0ccfa4ae869a96e1bddf484f0b3f5aa45c593a81012a106e9688c"
+    },
+    {
+      "source": "notion_reimport.py",
+      "target": "notion_reimport.py",
+      "source_sha256": "10f06f7dabf1eb2563b15bd887729a5e75d87d2b8459cbcad3654c9f67cc815a",
+      "target_sha256": "10f06f7dabf1eb2563b15bd887729a5e75d87d2b8459cbcad3654c9f67cc815a"
+    },
+    {
+      "source": "object_references.py",
+      "target": "object_references.py",
+      "source_sha256": "03172699718d4788d87702af64bd841016c9705d21f81ac0fa1ebefe7ab4d051",
+      "target_sha256": "03172699718d4788d87702af64bd841016c9705d21f81ac0fa1ebefe7ab4d051"
+    },
+    {
+      "source": "occupied_time.py",
+      "target": "occupied_time.py",
+      "source_sha256": "ba756252c2552a1c3abcbf99640be79c49f9286fd6131d509eb7bf83d6a170b0",
+      "target_sha256": "ba756252c2552a1c3abcbf99640be79c49f9286fd6131d509eb7bf83d6a170b0"
+    },
+    {
+      "source": "page_features.py",
+      "target": "page_features.py",
+      "source_sha256": "84281771585b033f18b0ff05a1ecc7d3f3e66ee796eb275491a95a942f2025fe",
+      "target_sha256": "84281771585b033f18b0ff05a1ecc7d3f3e66ee796eb275491a95a942f2025fe"
+    },
+    {
+      "source": "page_markdown.py",
+      "target": "page_markdown.py",
+      "source_sha256": "5805eab66689fbe2dac5c863adea3ff0e2e0157f979321606062aaa01fcbbb53",
+      "target_sha256": "5805eab66689fbe2dac5c863adea3ff0e2e0157f979321606062aaa01fcbbb53"
+    },
+    {
+      "source": "page_restore.py",
+      "target": "page_restore.py",
+      "source_sha256": "ba86f3e099acaaceb9de7677de6fe9638595d02f811bf557eb410353d6079b66",
+      "target_sha256": "ba86f3e099acaaceb9de7677de6fe9638595d02f811bf557eb410353d6079b66"
+    },
+    {
+      "source": "planning.py",
+      "target": "planning.py",
+      "source_sha256": "59b78be6d91da4adf31c2c401b0bdf1c10b6c97490a122f7f3420c20059ba0ad",
+      "target_sha256": "59b78be6d91da4adf31c2c401b0bdf1c10b6c97490a122f7f3420c20059ba0ad"
+    },
+    {
+      "source": "preview_tools.py",
+      "target": "preview_tools.py",
+      "source_sha256": "5fb18ce2df48c83b5c804ea862db9f3c798622457cd39ccde22be033401d9ba1",
+      "target_sha256": "5fb18ce2df48c83b5c804ea862db9f3c798622457cd39ccde22be033401d9ba1"
+    },
+    {
+      "source": "release_notes.py",
+      "target": "release_notes.py",
+      "source_sha256": "30e76b137734f03b1346be6317c23e01ee7b71d62bba3acdfde3b0e918b27ea9",
+      "target_sha256": "30e76b137734f03b1346be6317c23e01ee7b71d62bba3acdfde3b0e918b27ea9"
+    },
+    {
+      "source": "render_retention.py",
+      "target": "render_retention.py",
+      "source_sha256": "efec6647e1adfc237b9935426a91f58461e56c03935a35a082666bbd338a82e8",
+      "target_sha256": "efec6647e1adfc237b9935426a91f58461e56c03935a35a082666bbd338a82e8"
+    },
+    {
+      "source": "repeat_ics.py",
+      "target": "repeat_ics.py",
+      "source_sha256": "0af161308751777d014f0a71e23e5d1ecff308db813ffc58487136e4d99fd5fc",
+      "target_sha256": "0af161308751777d014f0a71e23e5d1ecff308db813ffc58487136e4d99fd5fc"
+    },
+    {
+      "source": "repeat_rules.py",
+      "target": "repeat_rules.py",
+      "source_sha256": "bbca01c9acd2b0a69c497ecf55e3048d97cb138be3d970828b7071144dcf05ba",
+      "target_sha256": "bbca01c9acd2b0a69c497ecf55e3048d97cb138be3d970828b7071144dcf05ba"
+    },
+    {
+      "source": "resources/fonts/DejaVuSans-Bold.ttf",
+      "target": "resources/fonts/DejaVuSans-Bold.ttf",
+      "source_sha256": "e6476c1b80502924294eed40894c5b18e06c181444ca953e5334262df9c27724",
+      "target_sha256": "e6476c1b80502924294eed40894c5b18e06c181444ca953e5334262df9c27724"
+    },
+    {
+      "source": "resources/fonts/DejaVuSans-BoldOblique.ttf",
+      "target": "resources/fonts/DejaVuSans-BoldOblique.ttf",
+      "source_sha256": "eb436dca0c2594b73d8b603b892e374fdfd8d885d25ffb4f18df4c4c0b49e50f",
+      "target_sha256": "eb436dca0c2594b73d8b603b892e374fdfd8d885d25ffb4f18df4c4c0b49e50f"
+    },
+    {
+      "source": "resources/fonts/DejaVuSans-Oblique.ttf",
+      "target": "resources/fonts/DejaVuSans-Oblique.ttf",
+      "source_sha256": "4af75fa16ee6d3ad43e1ecec41862c24954af26a55c6bb1ebb27bd486a50f5f4",
+      "target_sha256": "4af75fa16ee6d3ad43e1ecec41862c24954af26a55c6bb1ebb27bd486a50f5f4"
+    },
+    {
+      "source": "resources/fonts/DejaVuSans.ttf",
+      "target": "resources/fonts/DejaVuSans.ttf",
+      "source_sha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+      "target_sha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954"
+    },
+    {
+      "source": "resources/fonts/LICENSE",
+      "target": "resources/fonts/LICENSE",
+      "source_sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+      "target_sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93"
+    },
+    {
+      "source": "resources/fonts/OFL-PixelifySans.txt",
+      "target": "resources/fonts/OFL-PixelifySans.txt",
+      "source_sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+      "target_sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+    },
+    {
+      "source": "resources/fonts/PixelifySans-Bold.ttf",
+      "target": "resources/fonts/PixelifySans-Bold.ttf",
+      "source_sha256": "3c3c203a3f3b862b944e836e4ec0fce201eddc1952cbca0d682e382d668b293c",
+      "target_sha256": "3c3c203a3f3b862b944e836e4ec0fce201eddc1952cbca0d682e382d668b293c"
+    },
+    {
+      "source": "resources/fonts/PixelifySans-Regular.ttf",
+      "target": "resources/fonts/PixelifySans-Regular.ttf",
+      "source_sha256": "5436d485d1713afa376e1744911cbbcc0849eae1eb55ec9bc34c0753993ffef9",
+      "target_sha256": "5436d485d1713afa376e1744911cbbcc0849eae1eb55ec9bc34c0753993ffef9"
+    },
+    {
+      "source": "resources/fonts/provenance.json",
+      "target": "resources/fonts/provenance.json",
+      "source_sha256": "663fbc94179ae7e7a76e799783546d07a3826f931699be74ec0265acfb0cc08b",
+      "target_sha256": "663fbc94179ae7e7a76e799783546d07a3826f931699be74ec0265acfb0cc08b"
+    },
+    {
+      "source": "resources/logo/glide-app-icon-16.png",
+      "target": "resources/logo/glide-app-icon-16.png",
+      "source_sha256": "c94efbd749df756dc50932c464ee877f6c9f9ca2d04b08c581bae4af6c7f05c4",
+      "target_sha256": "c94efbd749df756dc50932c464ee877f6c9f9ca2d04b08c581bae4af6c7f05c4"
+    },
+    {
+      "source": "resources/logo/glide-app-icon-256.png",
+      "target": "resources/logo/glide-app-icon-256.png",
+      "source_sha256": "b3d7e0378e6e28bb93699f0952286478f8b392382d5d96a0db23e96b259acb5b",
+      "target_sha256": "b3d7e0378e6e28bb93699f0952286478f8b392382d5d96a0db23e96b259acb5b"
+    },
+    {
+      "source": "resources/logo/glide-app-icon-32.png",
+      "target": "resources/logo/glide-app-icon-32.png",
+      "source_sha256": "d6c7d6146c6ae6c604880e213321447febdc56ed1b998c153110649d1901345b",
+      "target_sha256": "d6c7d6146c6ae6c604880e213321447febdc56ed1b998c153110649d1901345b"
+    },
+    {
+      "source": "resources/logo/glide-app-icon-64.png",
+      "target": "resources/logo/glide-app-icon-64.png",
+      "source_sha256": "75cb0c88f228139918f20148f2128edc48cb23ea5bba7e41c1500e3d06644457",
+      "target_sha256": "75cb0c88f228139918f20148f2128edc48cb23ea5bba7e41c1500e3d06644457"
+    },
+    {
+      "source": "resources/logo/glide-app-icon-klein.svg",
+      "target": "resources/logo/glide-app-icon-klein.svg",
+      "source_sha256": "9d031380f07b77b49cd5056685fffff85024a659f827dfc434d98eadc59db4da",
+      "target_sha256": "9d031380f07b77b49cd5056685fffff85024a659f827dfc434d98eadc59db4da"
+    },
+    {
+      "source": "resources/logo/glide-app-icon-macos-16.png",
+      "target": "resources/logo/glide-app-icon-macos-16.png",
+      "source_sha256": "b98be87052da034db0c22dc414cb88a4cca16e1469f2dd884110fd70a73dade7",
+      "target_sha256": "b98be87052da034db0c22dc414cb88a4cca16e1469f2dd884110fd70a73dade7"
+    },
+    {
+      "source": "resources/logo/glide-app-icon-macos-256.png",
+      "target": "resources/logo/glide-app-icon-macos-256.png",
+      "source_sha256": "eb95fcbd1d5f827e29aedee1cece41f9c7580bae590543f56009f7570738679d",
+      "target_sha256": "eb95fcbd1d5f827e29aedee1cece41f9c7580bae590543f56009f7570738679d"
+    },
+    {
+      "source": "resources/logo/glide-app-icon-macos-32.png",
+      "target": "resources/logo/glide-app-icon-macos-32.png",
+      "source_sha256": "87158ff960dd36fbac7138823f6390e9012275702c2547380385eb816cb05a0a",
+      "target_sha256": "87158ff960dd36fbac7138823f6390e9012275702c2547380385eb816cb05a0a"
+    },
+    {
+      "source": "resources/logo/glide-app-icon-macos-64.png",
+      "target": "resources/logo/glide-app-icon-macos-64.png",
+      "source_sha256": "24cf64621e10e6e3ce51b04c03e3a800d58bcf2b13f9048522cd3e152820f716",
+      "target_sha256": "24cf64621e10e6e3ce51b04c03e3a800d58bcf2b13f9048522cd3e152820f716"
+    },
+    {
+      "source": "resources/logo/glide-app-icon.png",
+      "target": "resources/logo/glide-app-icon.png",
+      "source_sha256": "652e0bfab5500480bd523f31cc90254df3b0a111b24c21c57d8b7617b44d470a",
+      "target_sha256": "652e0bfab5500480bd523f31cc90254df3b0a111b24c21c57d8b7617b44d470a"
+    },
+    {
+      "source": "resources/logo/glide-app-icon.svg",
+      "target": "resources/logo/glide-app-icon.svg",
+      "source_sha256": "1db74addc3d038a7691c133d84162a999022ffdd95443d8df0cce55661c35cb8",
+      "target_sha256": "1db74addc3d038a7691c133d84162a999022ffdd95443d8df0cce55661c35cb8"
+    },
+    {
+      "source": "resources/logo/glide-logo-klein.svg",
+      "target": "resources/logo/glide-logo-klein.svg",
+      "source_sha256": "92a8eb73a1b42f6650776e9613ec8eeecedf46452a5a97c86d2d6cfe3722b2b6",
+      "target_sha256": "92a8eb73a1b42f6650776e9613ec8eeecedf46452a5a97c86d2d6cfe3722b2b6"
+    },
+    {
+      "source": "resources/logo/glide-logo.png",
+      "target": "resources/logo/glide-logo.png",
+      "source_sha256": "08c845e095bb7bcef4c2c9e56a1327e17cff1e5d6c1c2ff89ba04a50736b9b64",
+      "target_sha256": "08c845e095bb7bcef4c2c9e56a1327e17cff1e5d6c1c2ff89ba04a50736b9b64"
+    },
+    {
+      "source": "resources/logo/glide-logo.svg",
+      "target": "resources/logo/glide-logo.svg",
+      "source_sha256": "c734f1e43a39c7cce2ab81301784de0aee5a88943679e4266f002108658cba58",
+      "target_sha256": "c734f1e43a39c7cce2ab81301784de0aee5a88943679e4266f002108658cba58"
+    },
+    {
+      "source": "resources/templates/glide_vorlagen.glidetemplates",
+      "target": "resources/templates/glide_vorlagen.glidetemplates",
+      "source_sha256": "a1c43cc1fa98ac3248c1666ad1f30bd72e4ffc7ced4418d827f5d872bf6f74cb",
+      "target_sha256": "a1c43cc1fa98ac3248c1666ad1f30bd72e4ffc7ced4418d827f5d872bf6f74cb"
+    },
+    {
+      "source": "resources/timezones/LICENSE-CLDR.txt",
+      "target": "resources/timezones/LICENSE-CLDR.txt",
+      "source_sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6",
+      "target_sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+    },
+    {
+      "source": "resources/timezones/LICENSE-iana.txt",
+      "target": "resources/timezones/LICENSE-iana.txt",
+      "source_sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551",
+      "target_sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+    },
+    {
+      "source": "resources/timezones/iana-2026e.zip",
+      "target": "resources/timezones/iana-2026e.zip",
+      "source_sha256": "8754618b5e58bce763865aa1a748fe5d0f15908cae586ed45d929c9839b710e9",
+      "target_sha256": "8754618b5e58bce763865aa1a748fe5d0f15908cae586ed45d929c9839b710e9"
+    },
+    {
+      "source": "resources/timezones/provenance.json",
+      "target": "resources/timezones/provenance.json",
+      "source_sha256": "9d5079043d3bab1cf997fe3bb0ef859d100f01c2d6c5c0ce5a259b8042c99ff6",
+      "target_sha256": "9d5079043d3bab1cf997fe3bb0ef859d100f01c2d6c5c0ce5a259b8042c99ff6"
+    },
+    {
+      "source": "resources/timezones/windowsZones.xml",
+      "target": "resources/timezones/windowsZones.xml",
+      "source_sha256": "7df6edbf52213ad2571f7fe76c64fc3c38423326f0896e3dc7f52299024141a6",
+      "target_sha256": "7df6edbf52213ad2571f7fe76c64fc3c38423326f0896e3dc7f52299024141a6"
+    },
+    {
+      "source": "restore_assets.py",
+      "target": "restore_assets.py",
+      "source_sha256": "f3101e2dbff3fb38bee2f561888d484d9f73dd1ad533aef3955bac72feb85571",
+      "target_sha256": "f3101e2dbff3fb38bee2f561888d484d9f73dd1ad533aef3955bac72feb85571"
+    },
+    {
+      "source": "routines.py",
+      "target": "routines.py",
+      "source_sha256": "bb8bb35cc63f28542665eb3d144ef4bf5308fbd944c25711d4c04391a08a6bcb",
+      "target_sha256": "bb8bb35cc63f28542665eb3d144ef4bf5308fbd944c25711d4c04391a08a6bcb"
+    },
+    {
+      "source": "runtime_check.py",
+      "target": "runtime_check.py",
+      "source_sha256": "ea6ab0ec80b3944b6d05762e5ae100f63a2fa83bd2e31ca940f66b5166188f9c",
+      "target_sha256": "ea6ab0ec80b3944b6d05762e5ae100f63a2fa83bd2e31ca940f66b5166188f9c"
+    },
+    {
+      "source": "save_comparison.py",
+      "target": "save_comparison.py",
+      "source_sha256": "0e26d1bf018f0529c64414c45a2c23f016bbc8d59c636835b7a3a3abe977f6a1",
+      "target_sha256": "0e26d1bf018f0529c64414c45a2c23f016bbc8d59c636835b7a3a3abe977f6a1"
+    },
+    {
+      "source": "schema_backups.py",
+      "target": "schema_backups.py",
+      "source_sha256": "e97de0f11c8a53a05a71a176393b4ab8d1ddc3cbc08791b9a4ac837d1efbb4bf",
+      "target_sha256": "e97de0f11c8a53a05a71a176393b4ab8d1ddc3cbc08791b9a4ac837d1efbb4bf"
+    },
+    {
+      "source": "sidebar_policy.py",
+      "target": "sidebar_policy.py",
+      "source_sha256": "52215f7e9d860642b7ef46925a0666d84efb0eddcc4253e204be2204b8b7d763",
+      "target_sha256": "52215f7e9d860642b7ef46925a0666d84efb0eddcc4253e204be2204b8b7d763"
+    },
+    {
+      "source": "source_metadata.py",
+      "target": "source_metadata.py",
+      "source_sha256": "a123ec2c186fd927ebde2ee4c1beecc606830b85cd66961dff7f41318e437d1a",
+      "target_sha256": "a123ec2c186fd927ebde2ee4c1beecc606830b85cd66961dff7f41318e437d1a"
+    },
+    {
+      "source": "svg_geometry.py",
+      "target": "svg_geometry.py",
+      "source_sha256": "217bb988c16e2528901a6a550737b9525b1b288c76ddd8956d7beb0b0dc2b35e",
+      "target_sha256": "217bb988c16e2528901a6a550737b9525b1b288c76ddd8956d7beb0b0dc2b35e"
+    },
+    {
+      "source": "symbol_policy.py",
+      "target": "symbol_policy.py",
+      "source_sha256": "00acca5471dc69c19e9da39cc2cbd1cabc082cf7f6d54743eaea156f736c3548",
+      "target_sha256": "00acca5471dc69c19e9da39cc2cbd1cabc082cf7f6d54743eaea156f736c3548"
+    },
+    {
+      "source": "task_editing.py",
+      "target": "task_editing.py",
+      "source_sha256": "0665c4ee277e1564101c65db2af0149510f6a2ee1aa218091297d7411eb1c0f0",
+      "target_sha256": "0665c4ee277e1564101c65db2af0149510f6a2ee1aa218091297d7411eb1c0f0"
+    },
+    {
+      "source": "task_references.py",
+      "target": "task_references.py",
+      "source_sha256": "c27d8336c374ef9187058c84414d0077d328e5b04ec7c83f317e6aee0de0eb19",
+      "target_sha256": "c27d8336c374ef9187058c84414d0077d328e5b04ec7c83f317e6aee0de0eb19"
+    },
+    {
+      "source": "timezones.py",
+      "target": "timezones.py",
+      "source_sha256": "43f0b56987ac64fea922cdf4a71974b1ea060f62259f4cb8eeb8b5114d06d4ea",
+      "target_sha256": "43f0b56987ac64fea922cdf4a71974b1ea060f62259f4cb8eeb8b5114d06d4ea"
+    },
+    {
+      "source": "today_view.py",
+      "target": "today_view.py",
+      "source_sha256": "c9d12cbf24c809890ef17f952654a057d4229153dbc78591b33eb20043b4d917",
+      "target_sha256": "c9d12cbf24c809890ef17f952654a057d4229153dbc78591b33eb20043b4d917"
+    },
+    {
+      "source": "ui_design.py",
+      "target": "ui_design.py",
+      "source_sha256": "28e8a3b63b7875aab3e79215d89f78c8c75fcdf1ab008f0b07fd04cd04e4a0ae",
+      "target_sha256": "28e8a3b63b7875aab3e79215d89f78c8c75fcdf1ab008f0b07fd04cd04e4a0ae"
+    },
+    {
+      "source": "vendor/provenance.json",
+      "target": "vendor/provenance.json",
+      "source_sha256": "d88d2242930d3d946c357900899c548b7bc90548f2e8e4d549e8c80b2793c2e9",
+      "target_sha256": "d88d2242930d3d946c357900899c548b7bc90548f2e8e4d549e8c80b2793c2e9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/LICENSE",
+      "target": "vendor/tkinterdnd2/LICENSE",
+      "source_sha256": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+      "target_sha256": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05"
+    },
+    {
+      "source": "vendor/tkinterdnd2/TkinterDnD.py",
+      "target": "vendor/tkinterdnd2/TkinterDnD.py",
+      "source_sha256": "a5c23c0c9dbd1c1c9077809e5520b7edfed60986db7ebc1f7361a8f4c5bd6e29",
+      "target_sha256": "a5c23c0c9dbd1c1c9077809e5520b7edfed60986db7ebc1f7361a8f4c5bd6e29"
+    },
+    {
+      "source": "vendor/tkinterdnd2/__init__.py",
+      "target": "vendor/tkinterdnd2/__init__.py",
+      "source_sha256": "514ce83cf94762760ec0c38aa3a445c998ff4cc3bec2661d3c1c60b8c1033bf2",
+      "target_sha256": "514ce83cf94762760ec0c38aa3a445c998ff4cc3bec2661d3c1c60b8c1033bf2"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+      "source_sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9",
+      "target_sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/pkgIndex.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/pkgIndex.tcl",
+      "source_sha256": "0d3f23a06a3e08e896f7f6f5eade496967e449128f387b783414d0d75fcda90a",
+      "target_sha256": "0d3f23a06a3e08e896f7f6f5eade496967e449128f387b783414d0d75fcda90a"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd.tcl",
+      "source_sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+      "target_sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_compat.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_compat.tcl",
+      "source_sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+      "target_sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_generic.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_generic.tcl",
+      "source_sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+      "target_sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_macosx.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_macosx.tcl",
+      "source_sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+      "target_sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_unix.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_unix.tcl",
+      "source_sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+      "target_sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_utils.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_utils.tcl",
+      "source_sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+      "target_sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_windows.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_windows.tcl",
+      "source_sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+      "target_sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+      "source_sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486",
+      "target_sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64/pkgIndex.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64/pkgIndex.tcl",
+      "source_sha256": "6c5bc8d4b2506b03d4332dbd37f8497ca3ceb0b50d6ad90eac0afd33e94378c4",
+      "target_sha256": "6c5bc8d4b2506b03d4332dbd37f8497ca3ceb0b50d6ad90eac0afd33e94378c4"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd.tcl",
+      "source_sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+      "target_sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_compat.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_compat.tcl",
+      "source_sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+      "target_sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_generic.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_generic.tcl",
+      "source_sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+      "target_sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_macosx.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_macosx.tcl",
+      "source_sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+      "target_sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_unix.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_unix.tcl",
+      "source_sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+      "target_sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_utils.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_utils.tcl",
+      "source_sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+      "target_sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_windows.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_windows.tcl",
+      "source_sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+      "target_sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+      "source_sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be",
+      "target_sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/pkgIndex.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/pkgIndex.tcl",
+      "source_sha256": "0d3f23a06a3e08e896f7f6f5eade496967e449128f387b783414d0d75fcda90a",
+      "target_sha256": "0d3f23a06a3e08e896f7f6f5eade496967e449128f387b783414d0d75fcda90a"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd.tcl",
+      "source_sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+      "target_sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_compat.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_compat.tcl",
+      "source_sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+      "target_sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_generic.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_generic.tcl",
+      "source_sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+      "target_sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_macosx.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_macosx.tcl",
+      "source_sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+      "target_sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_unix.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_unix.tcl",
+      "source_sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+      "target_sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_utils.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_utils.tcl",
+      "source_sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+      "target_sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_windows.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_windows.tcl",
+      "source_sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+      "target_sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+      "source_sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8",
+      "target_sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64/pkgIndex.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64/pkgIndex.tcl",
+      "source_sha256": "6c5bc8d4b2506b03d4332dbd37f8497ca3ceb0b50d6ad90eac0afd33e94378c4",
+      "target_sha256": "6c5bc8d4b2506b03d4332dbd37f8497ca3ceb0b50d6ad90eac0afd33e94378c4"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd.tcl",
+      "source_sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+      "target_sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_compat.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_compat.tcl",
+      "source_sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+      "target_sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_generic.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_generic.tcl",
+      "source_sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+      "target_sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_macosx.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_macosx.tcl",
+      "source_sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+      "target_sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_unix.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_unix.tcl",
+      "source_sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+      "target_sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_utils.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_utils.tcl",
+      "source_sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+      "target_sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_windows.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_windows.tcl",
+      "source_sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+      "target_sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/libtcl9tkdnd2.10.2.dylib",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/libtcl9tkdnd2.10.2.dylib",
+      "source_sha256": "482da76e340f6ad63f969c655fb7e6940e4bbfc2c85d761f068da246acf5b30d",
+      "target_sha256": "482da76e340f6ad63f969c655fb7e6940e4bbfc2c85d761f068da246acf5b30d"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/pkgIndex.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/pkgIndex.tcl",
+      "source_sha256": "ea1db932b68c57df8327badce9e262c48675ade6b22a4c1a545a9568500da410",
+      "target_sha256": "ea1db932b68c57df8327badce9e262c48675ade6b22a4c1a545a9568500da410"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd.tcl",
+      "source_sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+      "target_sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_compat.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_compat.tcl",
+      "source_sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+      "target_sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_generic.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_generic.tcl",
+      "source_sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+      "target_sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_macosx.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_macosx.tcl",
+      "source_sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+      "target_sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_unix.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_unix.tcl",
+      "source_sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+      "target_sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_utils.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_utils.tcl",
+      "source_sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+      "target_sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_windows.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_windows.tcl",
+      "source_sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+      "target_sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64/libtkdnd2.10.2.dylib",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64/libtkdnd2.10.2.dylib",
+      "source_sha256": "a94be0fc0bfbeccdda03d3fd484300b740164367c49ede02b22bad012ad5c234",
+      "target_sha256": "a94be0fc0bfbeccdda03d3fd484300b740164367c49ede02b22bad012ad5c234"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64/pkgIndex.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64/pkgIndex.tcl",
+      "source_sha256": "837e4d08830b95302f972369d5a21999a351bdd59c7fd9afe1622c095637077b",
+      "target_sha256": "837e4d08830b95302f972369d5a21999a351bdd59c7fd9afe1622c095637077b"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd.tcl",
+      "source_sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+      "target_sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_compat.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_compat.tcl",
+      "source_sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+      "target_sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_generic.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_generic.tcl",
+      "source_sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+      "target_sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_macosx.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_macosx.tcl",
+      "source_sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+      "target_sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_unix.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_unix.tcl",
+      "source_sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+      "target_sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_utils.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_utils.tcl",
+      "source_sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+      "target_sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_windows.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_windows.tcl",
+      "source_sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+      "target_sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-x64/libtkdnd2.9.4.dylib",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-x64/libtkdnd2.9.4.dylib",
+      "source_sha256": "6e4f4fb171fde00d779cd69196b21c7ca12d0e2f9497ef1cc8f76050f2b4f2f6",
+      "target_sha256": "6e4f4fb171fde00d779cd69196b21c7ca12d0e2f9497ef1cc8f76050f2b4f2f6"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-x64/pkgIndex.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-x64/pkgIndex.tcl",
+      "source_sha256": "fb9bf10034b66ee8f8dd0a05fe7b254db6cae5d6b2ea7389d5a088f7db9f72b6",
+      "target_sha256": "fb9bf10034b66ee8f8dd0a05fe7b254db6cae5d6b2ea7389d5a088f7db9f72b6"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd.tcl",
+      "source_sha256": "24aee2d084581ae85cfe0efdc5c58493b14fea5c2a8d9adf3db8b2132f0d14a2",
+      "target_sha256": "24aee2d084581ae85cfe0efdc5c58493b14fea5c2a8d9adf3db8b2132f0d14a2"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_compat.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_compat.tcl",
+      "source_sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+      "target_sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_generic.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_generic.tcl",
+      "source_sha256": "3a4172b9c5150d537e1c271fdac1b472af2fad8fc6272c9cdbdef18ca0a8da99",
+      "target_sha256": "3a4172b9c5150d537e1c271fdac1b472af2fad8fc6272c9cdbdef18ca0a8da99"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_macosx.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_macosx.tcl",
+      "source_sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+      "target_sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_unix.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_unix.tcl",
+      "source_sha256": "4d8adba6618427d9ae6592e4070cfb65a25731fc15566d2657b20610a6a77bcb",
+      "target_sha256": "4d8adba6618427d9ae6592e4070cfb65a25731fc15566d2657b20610a6a77bcb"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_utils.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_utils.tcl",
+      "source_sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+      "target_sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_windows.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_windows.tcl",
+      "source_sha256": "7b7b522a769fcb5d1484891685bc3c0ee4967899317caa0547ab0e8d1d6e808f",
+      "target_sha256": "7b7b522a769fcb5d1484891685bc3c0ee4967899317caa0547ab0e8d1d6e808f"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-arm64/libtkdnd2.10.2.dll",
+      "target": "vendor/tkinterdnd2/tkdnd/win-arm64/libtkdnd2.10.2.dll",
+      "source_sha256": "b4076e7bbc107902ea3d4d1aa21cb8fc7b015a9ea88d3ea3d997c6d18751ed9f",
+      "target_sha256": "b4076e7bbc107902ea3d4d1aa21cb8fc7b015a9ea88d3ea3d997c6d18751ed9f"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-arm64/pkgIndex.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-arm64/pkgIndex.tcl",
+      "source_sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+      "target_sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd.tcl",
+      "source_sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+      "target_sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd2.10.2.lib",
+      "target": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd2.10.2.lib",
+      "source_sha256": "41744b1b3d217fbef855bd215f55194ea8c7e78db643497d8d6aa2f55fae2f17",
+      "target_sha256": "41744b1b3d217fbef855bd215f55194ea8c7e78db643497d8d6aa2f55fae2f17"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_compat.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_compat.tcl",
+      "source_sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+      "target_sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_generic.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_generic.tcl",
+      "source_sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+      "target_sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_macosx.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_macosx.tcl",
+      "source_sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+      "target_sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_unix.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_unix.tcl",
+      "source_sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+      "target_sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_utils.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_utils.tcl",
+      "source_sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+      "target_sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_windows.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_windows.tcl",
+      "source_sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+      "target_sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.2.dll",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.2.dll",
+      "source_sha256": "731e6fb6fd5585074588b16f5b8ad29029bc2a40c83d20b5937f8d1f1edaf82e",
+      "target_sha256": "731e6fb6fd5585074588b16f5b8ad29029bc2a40c83d20b5937f8d1f1edaf82e"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/pkgIndex.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/pkgIndex.tcl",
+      "source_sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+      "target_sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd.tcl",
+      "source_sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+      "target_sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd2.10.2.lib",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd2.10.2.lib",
+      "source_sha256": "79511b0e8820d16252ab3a846c610280f0d24cd0b30d294091869107cd72bc4d",
+      "target_sha256": "79511b0e8820d16252ab3a846c610280f0d24cd0b30d294091869107cd72bc4d"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_compat.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_compat.tcl",
+      "source_sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+      "target_sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_generic.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_generic.tcl",
+      "source_sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+      "target_sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_macosx.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_macosx.tcl",
+      "source_sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+      "target_sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_unix.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_unix.tcl",
+      "source_sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+      "target_sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_utils.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_utils.tcl",
+      "source_sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+      "target_sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_windows.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_windows.tcl",
+      "source_sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+      "target_sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64/libtkdnd2.10.2.dll",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64/libtkdnd2.10.2.dll",
+      "source_sha256": "ddf8b01276d9174a21666438caa97a4108b72ae50511506060ceafa9555cd6d4",
+      "target_sha256": "ddf8b01276d9174a21666438caa97a4108b72ae50511506060ceafa9555cd6d4"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64/pkgIndex.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64/pkgIndex.tcl",
+      "source_sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+      "target_sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd.tcl",
+      "source_sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+      "target_sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd2.10.2.lib",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd2.10.2.lib",
+      "source_sha256": "79511b0e8820d16252ab3a846c610280f0d24cd0b30d294091869107cd72bc4d",
+      "target_sha256": "79511b0e8820d16252ab3a846c610280f0d24cd0b30d294091869107cd72bc4d"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_compat.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_compat.tcl",
+      "source_sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+      "target_sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_generic.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_generic.tcl",
+      "source_sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+      "target_sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_macosx.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_macosx.tcl",
+      "source_sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+      "target_sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_unix.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_unix.tcl",
+      "source_sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+      "target_sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_utils.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_utils.tcl",
+      "source_sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+      "target_sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_windows.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_windows.tcl",
+      "source_sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+      "target_sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/libtkdnd2.10.2.dll",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/libtkdnd2.10.2.dll",
+      "source_sha256": "58bfe0747341ffc82a2ff841eabc7a03130161f73bac5f6a2c4b61526c4bd5c2",
+      "target_sha256": "58bfe0747341ffc82a2ff841eabc7a03130161f73bac5f6a2c4b61526c4bd5c2"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/pkgIndex.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/pkgIndex.tcl",
+      "source_sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+      "target_sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd.tcl",
+      "source_sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+      "target_sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd2.10.2.lib",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd2.10.2.lib",
+      "source_sha256": "dd06aaea3ea6f0ca0813fa344a4751cf75603a467b800803032950bededd8981",
+      "target_sha256": "dd06aaea3ea6f0ca0813fa344a4751cf75603a467b800803032950bededd8981"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_compat.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_compat.tcl",
+      "source_sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+      "target_sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_generic.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_generic.tcl",
+      "source_sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+      "target_sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_macosx.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_macosx.tcl",
+      "source_sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+      "target_sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_unix.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_unix.tcl",
+      "source_sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+      "target_sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_utils.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_utils.tcl",
+      "source_sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+      "target_sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_windows.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_windows.tcl",
+      "source_sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+      "target_sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86/libtkdnd2.10.2.dll",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86/libtkdnd2.10.2.dll",
+      "source_sha256": "f26bf8b64fb74e2891b7daf30ecfe60e06dc946de724acc5e000e262d55650fd",
+      "target_sha256": "f26bf8b64fb74e2891b7daf30ecfe60e06dc946de724acc5e000e262d55650fd"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86/pkgIndex.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86/pkgIndex.tcl",
+      "source_sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+      "target_sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd.tcl",
+      "source_sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+      "target_sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd2.10.2.lib",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd2.10.2.lib",
+      "source_sha256": "dd06aaea3ea6f0ca0813fa344a4751cf75603a467b800803032950bededd8981",
+      "target_sha256": "dd06aaea3ea6f0ca0813fa344a4751cf75603a467b800803032950bededd8981"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_compat.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_compat.tcl",
+      "source_sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+      "target_sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_generic.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_generic.tcl",
+      "source_sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+      "target_sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_macosx.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_macosx.tcl",
+      "source_sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+      "target_sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_unix.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_unix.tcl",
+      "source_sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+      "target_sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_utils.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_utils.tcl",
+      "source_sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+      "target_sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7"
+    },
+    {
+      "source": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_windows.tcl",
+      "target": "vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_windows.tcl",
+      "source_sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+      "target_sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4"
+    },
+    {
+      "source": "view_metrics.py",
+      "target": "view_metrics.py",
+      "source_sha256": "a5540e5b1d0f65c98fdfeab4ec3b5b1288e9b6e5ca4dd5e07fbf36f396bac276",
+      "target_sha256": "a5540e5b1d0f65c98fdfeab4ec3b5b1288e9b6e5ca4dd5e07fbf36f396bac276"
+    },
+    {
+      "source": "week_planning.py",
+      "target": "week_planning.py",
+      "source_sha256": "38ff18553d762946fa8c4fa857cdabb4d39a84cfc020f8fa157882b4066fe95b",
+      "target_sha256": "38ff18553d762946fa8c4fa857cdabb4d39a84cfc020f8fa157882b4066fe95b"
+    }
+  ],
+  "delivery_differences": [],
+  "code_files": 67,
+  "resource_vendor_files": 146,
+  "showcase": [
+    {
+      "file": "Glide-Showcase.glidebackup",
+      "source_sha256": "d851ec21041c4c3c6ba9e0411eac3776bbe1cb157d60cf83b03718005f597239",
+      "target_sha256": "d851ec21041c4c3c6ba9e0411eac3776bbe1cb157d60cf83b03718005f597239"
+    },
+    {
+      "file": "Glide-Showcase_App.glideapp",
+      "source_sha256": "dbb9382b3c9fa9ba903a830b26fb7716dc43b41545a0d8cf2a8b5c11812ea290",
+      "target_sha256": "dbb9382b3c9fa9ba903a830b26fb7716dc43b41545a0d8cf2a8b5c11812ea290"
+    },
+    {
+      "file": "Glide-Showcase.glidetemplates",
+      "source_sha256": "f9acde7debe775e35b42eff841ef6a109083bb5c17f4f7e2939ce70fff233977",
+      "target_sha256": "f9acde7debe775e35b42eff841ef6a109083bb5c17f4f7e2939ce70fff233977"
+    },
+    {
+      "file": "manifest.json",
+      "source_sha256": "e85b6e177516008562f2081a099d7de4da52316b0b6b2c7ca5da9660736b6ed6",
+      "target_sha256": "e85b6e177516008562f2081a099d7de4da52316b0b6b2c7ca5da9660736b6ed6"
+    },
+    {
+      "file": "Showcase_starten.pyw",
+      "source_sha256": "8273249a7f885b52f873da25490dc46c384fa09dedfb2166ec3fa3b1235be319",
+      "target_sha256": "8273249a7f885b52f873da25490dc46c384fa09dedfb2166ec3fa3b1235be319"
+    },
+    {
+      "file": "README.md",
+      "source_sha256": "72f13c4bba0255cbe0b506ee008be5cce46e3402592f2dd83de7130510f7084f",
+      "target_sha256": "72f13c4bba0255cbe0b506ee008be5cce46e3402592f2dd83de7130510f7084f"
+    }
+  ],
+  "builds": {
+    "windows": {
+      "manifest": "01_Repository/Glide/tests/qa-3.42.0/eigenstaendige_pakete_2026-10-13/windows_abschluss_bau.json",
+      "version": "3.42.0",
+      "files": 102,
+      "matched": 102,
+      "missing": [],
+      "different": [],
+      "native_start_or_signature_checked": false
+    },
+    "macos": {
+      "manifest": "01_Repository/Glide/tests/qa-3.42.0/eigenstaendige_pakete_2026-10-13/mac_abschluss_bau.json",
+      "version": "3.42.0",
+      "files": 330,
+      "matched": 327,
+      "missing": [
+        "Contents/Frameworks/Python.framework/Versions/3.14/Python",
+        "Contents/Frameworks/Python.framework/Versions/3.14/Resources/Info.plist",
+        "Contents/Frameworks/Python.framework/Versions/3.14/_CodeSignature/CodeResources"
+      ],
+      "different": [],
+      "native_start_or_signature_checked": false
+    }
+  },
+  "refs": [
+    {
+      "ref": "claude/ausbauprogramm-phasen",
+      "commit": "19c7df5b4a25228a1607a222abfd5ae02fe8a547",
+      "date": "2026-10-17T15:38:25+02:00"
+    },
+    {
+      "ref": "claude/beautiful-babbage-196492",
+      "commit": "b2af7a7e360764150c03e58321c96eb954398828",
+      "date": "2026-10-17T01:02:11+02:00"
+    },
+    {
+      "ref": "claude/fp00-entwurf",
+      "commit": "12425c52330ded362f6d97963d8b46868e288351",
+      "date": "2026-10-13T01:40:11+02:00"
+    },
+    {
+      "ref": "claude/fp01-wiederholen",
+      "commit": "4c15d71736b8cb75705f6a76b577c3f69256608a",
+      "date": "2026-10-17T23:03:33+02:00"
+    },
+    {
+      "ref": "claude/glide-sprint-2026-10-09",
+      "commit": "4b5b21e24d79528d5720d0879a872f9a15d4fd48",
+      "date": "2026-10-13T13:11:25+02:00"
+    },
+    {
+      "ref": "claude/glide-weiterarbeiten-618cb4",
+      "commit": "a21191557d37cc9c82a83a2d7e7ddfe4a93ea5cc",
+      "date": "2026-10-16T21:39:54+02:00"
+    },
+    {
+      "ref": "claude/paket5-entwurf",
+      "commit": "ba060bc5e0074c0f375b6da29b07450ab08b34be",
+      "date": "2026-10-13T09:54:26+02:00"
+    },
+    {
+      "ref": "claude/paket6-entwurf",
+      "commit": "4b5b21e24d79528d5720d0879a872f9a15d4fd48",
+      "date": "2026-10-13T13:11:25+02:00"
+    },
+    {
+      "ref": "claude/paket7-entwurf",
+      "commit": "0b8bd04568a9c11c9014f5b4a08a0097b789ed57",
+      "date": "2026-10-13T13:17:21+02:00"
+    },
+    {
+      "ref": "claude/review-outdated-content-511443",
+      "commit": "254541aeae4577c0529d1ef768846a5c4546e59f",
+      "date": "2026-10-05T19:11:23+02:00"
+    },
+    {
+      "ref": "claude/tag3390-sichtbarkeit",
+      "commit": "c0252bad69780c86b853f2653d5396e5256c0b32",
+      "date": "2026-10-17T02:20:23+02:00"
+    },
+    {
+      "ref": "claude/ui-ux-ci-ergebnis",
+      "commit": "6496eba3b398c18cca2bee142d5a9df4d9a44f59",
+      "date": "2026-10-16T19:49:31+02:00"
+    },
+    {
+      "ref": "claude/ui-ux-nachtrag-ci",
+      "commit": "ba3ea58019b3c275506fc3f013f4970273e62197",
+      "date": "2026-10-16T11:01:17+02:00"
+    },
+    {
+      "ref": "claude/ui-ux-paket",
+      "commit": "23175b7bbaea140087236d00668940f7d6c54333",
+      "date": "2026-10-16T09:29:59+02:00"
+    },
+    {
+      "ref": "claude/ui-ux-tk91-befunde",
+      "commit": "b063518be9611c7b22f450deb356dd18952c3cfe",
+      "date": "2026-10-16T17:54:56+02:00"
+    },
+    {
+      "ref": "claude/untitled-session-954211",
+      "commit": "de3a4f98984ac0ffe55e3003d4198a6c016c1055",
+      "date": "2026-10-07T19:34:46+02:00"
+    },
+    {
+      "ref": "claude/vigilant-galileo-851e60",
+      "commit": "3e8a71cfc5f5224c63a4b643100e3c97be7d77e8",
+      "date": "2026-10-17T20:20:07+02:00"
+    },
+    {
+      "ref": "codex/glide-fortsetzung-3410",
+      "commit": "05483a8c078bf669b09cb4a427f76c011ed828ec",
+      "date": "2026-10-14T15:59:39+02:00"
+    },
+    {
+      "ref": "codex/local-before-sync-20261004-103236",
+      "commit": "0486ccd485ed25b01bc61e11c442e22616294718",
+      "date": "2026-10-04T10:37:41+02:00"
+    },
+    {
+      "ref": "main",
+      "commit": "eb5658cd9c407f415ce3e3e8c439985e94dc4c4c",
+      "date": "2026-10-17T01:05:50+02:00"
+    },
+    {
+      "ref": "main-DESKTOP-6DNN9P3",
+      "commit": "5674936ee9fac941f5457d7922ed8d33dab54c50",
+      "date": "2026-10-16T22:18:29+02:00"
+    },
+    {
+      "ref": "origin",
+      "commit": "9ec474b9dcbd502efce8cb221e53e24c322f9a78",
+      "date": "2026-10-18T00:29:31+02:00"
+    },
+    {
+      "ref": "origin/claude/ausbauprogramm-phasen",
+      "commit": "19c7df5b4a25228a1607a222abfd5ae02fe8a547",
+      "date": "2026-10-17T15:38:25+02:00"
+    },
+    {
+      "ref": "origin/claude/fp01-wiederholen",
+      "commit": "4c15d71736b8cb75705f6a76b577c3f69256608a",
+      "date": "2026-10-17T23:03:33+02:00"
+    },
+    {
+      "ref": "origin/claude/tag3390-sichtbarkeit",
+      "commit": "c0252bad69780c86b853f2653d5396e5256c0b32",
+      "date": "2026-10-17T02:20:23+02:00"
+    },
+    {
+      "ref": "origin/claude/vigilant-galileo-851e60",
+      "commit": "3e8a71cfc5f5224c63a4b643100e3c97be7d77e8",
+      "date": "2026-10-17T20:20:07+02:00"
+    },
+    {
+      "ref": "origin/main",
+      "commit": "9ec474b9dcbd502efce8cb221e53e24c322f9a78",
+      "date": "2026-10-18T00:29:31+02:00"
+    }
+  ],
+  "production_files_before": {
+    "01_Repository/Glide/src/glide/app.pyw": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+    "01_Repository/Glide/src/glide/glide_start.py": "670aeeadde60dd81dd0d816ee1eba38ec3205f8af15902bfefd3e13aff6b79eb",
+    "01_Repository/Glide/src/glide/accessibility.py": "d5b959172f536d2349ce55c2f20960650d73d3572052cf5bf496288cffa2a91b",
+    "01_Repository/Glide/src/glide/accessibility_bindings.py": "57fca8a881a00ff1a12e4be3103ed58c610d1d1c0159b8d7faeb5cd0be49ffa6",
+    "01_Repository/Glide/src/glide/action_catalog.py": "8a3fa2ec45eae0cb638e16aaeedcd9e22558ee21dfa20e950a8087ebfc6ba927",
+    "01_Repository/Glide/src/glide/animation.py": "a7f4fb2849da4dcc6831c28811a52de9e739a9d251e2a123fc5b2c09202c3006",
+    "01_Repository/Glide/src/glide/animation_export.py": "a3f47a4e0e91462de11f4458c99dc1cb2d8580b02b7baa824817dd8d9be918bb",
+    "01_Repository/Glide/src/glide/appearance.py": "1366388cf453f9d5ddf11bbc47e43fdd796b750a3a26105623b539e0928a2ea8",
+    "01_Repository/Glide/src/glide/attachment_paths.py": "7c506fd2da19ec74513c4d64779e5add5129b91a5cbcd5afdf90b28ba5c329cc",
+    "01_Repository/Glide/src/glide/backdrop.py": "a45c04144b4366eb805aee56558005976f0e66d53032acb0b6aa37ee702689f8",
+    "01_Repository/Glide/src/glide/backup_diff.py": "9913de3fed9297cdbe8ad706a9390188b7a6800ec995be6fd78c11e6600f63de",
+    "01_Repository/Glide/src/glide/backup_snapshot.py": "f724e53794dbc78b53be471c36a5edc2d19faddb1a38f1328332700f4742c995",
+    "01_Repository/Glide/src/glide/busy_calendar.py": "5de924eb3a584865702419e3036cef58a01e244ec34bf57bc42140dcdd9f192c",
+    "01_Repository/Glide/src/glide/calendar_service.py": "29d5f67a04cbfba1c5b778ef37770131f7c919dc882587366ff18c7614cc5789",
+    "01_Repository/Glide/src/glide/capture_parser.py": "2bdc4f70522f1bc6d9fc66bc59e6123b071bb3a4b5fa406d1ac5c4c570887374",
+    "01_Repository/Glide/src/glide/content_search.py": "d2359609d6f574984527ad24b33a5ea2b85637330500f6eab23bab6f1f58d330",
+    "01_Repository/Glide/src/glide/core_accessibility.py": "4764a2f13f626de1243bba17b2bb761ab497b8ee9ad1b64e668001f80c256bed",
+    "01_Repository/Glide/src/glide/daily_hints.py": "3d1436b64c4fd113b4cb0469b7cdc7db1eb2dc579bed5af262f21b58ddddb5f7",
+    "01_Repository/Glide/src/glide/day_proposal.py": "af212b221d7cd4221930b0cd72946c1b74a7e10b496709785c667a3b98fda4e9",
+    "01_Repository/Glide/src/glide/day_relief.py": "f889a85441e366e0ba9b614ac9d256db68ceceab57e75c623cd1f6f1bb649587",
+    "01_Repository/Glide/src/glide/drawing.py": "f6cb2386cf00676e5af19cca46bc354f4c2104f87f2a6d3ae85a281c2842712c",
+    "01_Repository/Glide/src/glide/drawing_image.py": "d1020a43175f251a5a59aa434ebbc5b4cb43d8e70fc9c245deaff2001bfa1ad9",
+    "01_Repository/Glide/src/glide/eisenhower.py": "5f4386a5ff60371b2627e34612aadcfc7c64cad772a5dfb469dc94f22f2b0ca0",
+    "01_Repository/Glide/src/glide/exchange_patch.py": "3b5bf73c253845110c867a3d1c9629137f9070e9a12c69ac0edcf970dc576e4e",
+    "01_Repository/Glide/src/glide/filter_explain.py": "f581412f3d4c8136941518e0dbe516c44db7e1ba9fee87b47f3b347878c5245a",
+    "01_Repository/Glide/src/glide/focus_timer.py": "23199b0595e32770f388cf1f2a6dad8a383341893e02e9421b49c5428afb18d5",
+    "01_Repository/Glide/src/glide/glyph_metrics.py": "cc4e480be903d550c505774003223f801c237f5ce50e4328743c2416faced76d",
+    "01_Repository/Glide/src/glide/home_tiles.py": "d05add8e3c09c62b2696db34bda851e3d84475182a038cd1800a051fe590e486",
+    "01_Repository/Glide/src/glide/ics_busy.py": "89f85e03a4b535eea3802294006ed31854c8907123db779aef8b02fe5360df67",
+    "01_Repository/Glide/src/glide/ics_recurrence.py": "454bd59489eb404097b68437d62a1786f876388ae0e13ee03649cd30c254353b",
+    "01_Repository/Glide/src/glide/ics_timezone.py": "bf3fd6590f917ede7975542e267e5e41dce7c70b452a2c497c8d54894b8de2cd",
+    "01_Repository/Glide/src/glide/image_preview.py": "5c7f1ee252ad85b0f24c3932a1497b764fceae081ac297821e448ad6ad74d1d9",
+    "01_Repository/Glide/src/glide/interaction_policy.py": "05baf1651eb4a9ab014c6086379fd791e2853495eac4e776bae21c2fb05da177",
+    "01_Repository/Glide/src/glide/logo.py": "7dafc78697c33315d83dbbb0e16aa222068a123f6eba93d9126dc01150a61d4a",
+    "01_Repository/Glide/src/glide/logo_raster.py": "e594735d05b1e7c3be2ac73bfa7340d85444293bfc1c84e31dbd4cd7f63db47d",
+    "01_Repository/Glide/src/glide/motion.py": "3f6aa78376bb05ff0fe498c16f1d9edf9292bf0e19bc984513d73e4ce10a9162",
+    "01_Repository/Glide/src/glide/notion_archive.py": "b75ed60bc52a728dd8f6e65cb5a87c06203b5d30949cae06b7406f11d3d9de1b",
+    "01_Repository/Glide/src/glide/notion_hierarchy.py": "6148ad9d472c4dfea16300701021bd278d695d18481e08f081db9aa578c05a42",
+    "01_Repository/Glide/src/glide/notion_import.py": "d0e7c074aef0ccfa4ae869a96e1bddf484f0b3f5aa45c593a81012a106e9688c",
+    "01_Repository/Glide/src/glide/notion_reimport.py": "10f06f7dabf1eb2563b15bd887729a5e75d87d2b8459cbcad3654c9f67cc815a",
+    "01_Repository/Glide/src/glide/object_references.py": "03172699718d4788d87702af64bd841016c9705d21f81ac0fa1ebefe7ab4d051",
+    "01_Repository/Glide/src/glide/occupied_time.py": "ba756252c2552a1c3abcbf99640be79c49f9286fd6131d509eb7bf83d6a170b0",
+    "01_Repository/Glide/src/glide/page_features.py": "84281771585b033f18b0ff05a1ecc7d3f3e66ee796eb275491a95a942f2025fe",
+    "01_Repository/Glide/src/glide/page_markdown.py": "5805eab66689fbe2dac5c863adea3ff0e2e0157f979321606062aaa01fcbbb53",
+    "01_Repository/Glide/src/glide/page_restore.py": "ba86f3e099acaaceb9de7677de6fe9638595d02f811bf557eb410353d6079b66",
+    "01_Repository/Glide/src/glide/planning.py": "59b78be6d91da4adf31c2c401b0bdf1c10b6c97490a122f7f3420c20059ba0ad",
+    "01_Repository/Glide/src/glide/preview_tools.py": "5fb18ce2df48c83b5c804ea862db9f3c798622457cd39ccde22be033401d9ba1",
+    "01_Repository/Glide/src/glide/release_notes.py": "30e76b137734f03b1346be6317c23e01ee7b71d62bba3acdfde3b0e918b27ea9",
+    "01_Repository/Glide/src/glide/render_retention.py": "efec6647e1adfc237b9935426a91f58461e56c03935a35a082666bbd338a82e8",
+    "01_Repository/Glide/src/glide/repeat_ics.py": "0af161308751777d014f0a71e23e5d1ecff308db813ffc58487136e4d99fd5fc",
+    "01_Repository/Glide/src/glide/repeat_rules.py": "bbca01c9acd2b0a69c497ecf55e3048d97cb138be3d970828b7071144dcf05ba",
+    "01_Repository/Glide/src/glide/restore_assets.py": "f3101e2dbff3fb38bee2f561888d484d9f73dd1ad533aef3955bac72feb85571",
+    "01_Repository/Glide/src/glide/routines.py": "bb8bb35cc63f28542665eb3d144ef4bf5308fbd944c25711d4c04391a08a6bcb",
+    "01_Repository/Glide/src/glide/runtime_check.py": "ea6ab0ec80b3944b6d05762e5ae100f63a2fa83bd2e31ca940f66b5166188f9c",
+    "01_Repository/Glide/src/glide/save_comparison.py": "0e26d1bf018f0529c64414c45a2c23f016bbc8d59c636835b7a3a3abe977f6a1",
+    "01_Repository/Glide/src/glide/schema_backups.py": "e97de0f11c8a53a05a71a176393b4ab8d1ddc3cbc08791b9a4ac837d1efbb4bf",
+    "01_Repository/Glide/src/glide/sidebar_policy.py": "52215f7e9d860642b7ef46925a0666d84efb0eddcc4253e204be2204b8b7d763",
+    "01_Repository/Glide/src/glide/source_metadata.py": "a123ec2c186fd927ebde2ee4c1beecc606830b85cd66961dff7f41318e437d1a",
+    "01_Repository/Glide/src/glide/svg_geometry.py": "217bb988c16e2528901a6a550737b9525b1b288c76ddd8956d7beb0b0dc2b35e",
+    "01_Repository/Glide/src/glide/symbol_policy.py": "00acca5471dc69c19e9da39cc2cbd1cabc082cf7f6d54743eaea156f736c3548",
+    "01_Repository/Glide/src/glide/task_editing.py": "0665c4ee277e1564101c65db2af0149510f6a2ee1aa218091297d7411eb1c0f0",
+    "01_Repository/Glide/src/glide/task_references.py": "c27d8336c374ef9187058c84414d0077d328e5b04ec7c83f317e6aee0de0eb19",
+    "01_Repository/Glide/src/glide/timezones.py": "43f0b56987ac64fea922cdf4a71974b1ea060f62259f4cb8eeb8b5114d06d4ea",
+    "01_Repository/Glide/src/glide/today_view.py": "c9d12cbf24c809890ef17f952654a057d4229153dbc78591b33eb20043b4d917",
+    "01_Repository/Glide/src/glide/ui_design.py": "28e8a3b63b7875aab3e79215d89f78c8c75fcdf1ab008f0b07fd04cd04e4a0ae",
+    "01_Repository/Glide/src/glide/view_metrics.py": "a5540e5b1d0f65c98fdfeab4ec3b5b1288e9b6e5ca4dd5e07fbf36f396bac276",
+    "01_Repository/Glide/src/glide/week_planning.py": "38ff18553d762946fa8c4fa857cdabb4d39a84cfc020f8fa157882b4066fe95b",
+    "01_Repository/Glide/src/glide/resources/fonts/DejaVuSans-Bold.ttf": "e6476c1b80502924294eed40894c5b18e06c181444ca953e5334262df9c27724",
+    "01_Repository/Glide/src/glide/resources/fonts/DejaVuSans-BoldOblique.ttf": "eb436dca0c2594b73d8b603b892e374fdfd8d885d25ffb4f18df4c4c0b49e50f",
+    "01_Repository/Glide/src/glide/resources/fonts/DejaVuSans-Oblique.ttf": "4af75fa16ee6d3ad43e1ecec41862c24954af26a55c6bb1ebb27bd486a50f5f4",
+    "01_Repository/Glide/src/glide/resources/fonts/DejaVuSans.ttf": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+    "01_Repository/Glide/src/glide/resources/fonts/LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+    "01_Repository/Glide/src/glide/resources/fonts/OFL-PixelifySans.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+    "01_Repository/Glide/src/glide/resources/fonts/PixelifySans-Bold.ttf": "3c3c203a3f3b862b944e836e4ec0fce201eddc1952cbca0d682e382d668b293c",
+    "01_Repository/Glide/src/glide/resources/fonts/PixelifySans-Regular.ttf": "5436d485d1713afa376e1744911cbbcc0849eae1eb55ec9bc34c0753993ffef9",
+    "01_Repository/Glide/src/glide/resources/fonts/provenance.json": "663fbc94179ae7e7a76e799783546d07a3826f931699be74ec0265acfb0cc08b",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-16.png": "c94efbd749df756dc50932c464ee877f6c9f9ca2d04b08c581bae4af6c7f05c4",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-256.png": "b3d7e0378e6e28bb93699f0952286478f8b392382d5d96a0db23e96b259acb5b",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-32.png": "d6c7d6146c6ae6c604880e213321447febdc56ed1b998c153110649d1901345b",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-64.png": "75cb0c88f228139918f20148f2128edc48cb23ea5bba7e41c1500e3d06644457",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-klein.svg": "9d031380f07b77b49cd5056685fffff85024a659f827dfc434d98eadc59db4da",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-16.png": "b98be87052da034db0c22dc414cb88a4cca16e1469f2dd884110fd70a73dade7",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-256.png": "eb95fcbd1d5f827e29aedee1cece41f9c7580bae590543f56009f7570738679d",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-32.png": "87158ff960dd36fbac7138823f6390e9012275702c2547380385eb816cb05a0a",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-64.png": "24cf64621e10e6e3ce51b04c03e3a800d58bcf2b13f9048522cd3e152820f716",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon.png": "652e0bfab5500480bd523f31cc90254df3b0a111b24c21c57d8b7617b44d470a",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon.svg": "1db74addc3d038a7691c133d84162a999022ffdd95443d8df0cce55661c35cb8",
+    "01_Repository/Glide/src/glide/resources/logo/glide-logo-klein.svg": "92a8eb73a1b42f6650776e9613ec8eeecedf46452a5a97c86d2d6cfe3722b2b6",
+    "01_Repository/Glide/src/glide/resources/logo/glide-logo.png": "08c845e095bb7bcef4c2c9e56a1327e17cff1e5d6c1c2ff89ba04a50736b9b64",
+    "01_Repository/Glide/src/glide/resources/logo/glide-logo.svg": "c734f1e43a39c7cce2ab81301784de0aee5a88943679e4266f002108658cba58",
+    "01_Repository/Glide/src/glide/resources/templates/glide_vorlagen.glidetemplates": "a1c43cc1fa98ac3248c1666ad1f30bd72e4ffc7ced4418d827f5d872bf6f74cb",
+    "01_Repository/Glide/src/glide/resources/timezones/iana-2026e.zip": "8754618b5e58bce763865aa1a748fe5d0f15908cae586ed45d929c9839b710e9",
+    "01_Repository/Glide/src/glide/resources/timezones/LICENSE-CLDR.txt": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6",
+    "01_Repository/Glide/src/glide/resources/timezones/LICENSE-iana.txt": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551",
+    "01_Repository/Glide/src/glide/resources/timezones/provenance.json": "9d5079043d3bab1cf997fe3bb0ef859d100f01c2d6c5c0ce5a259b8042c99ff6",
+    "01_Repository/Glide/src/glide/resources/timezones/windowsZones.xml": "7df6edbf52213ad2571f7fe76c64fc3c38423326f0896e3dc7f52299024141a6",
+    "01_Repository/Glide/src/glide/vendor/provenance.json": "d88d2242930d3d946c357900899c548b7bc90548f2e8e4d549e8c80b2793c2e9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/LICENSE": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/TkinterDnD.py": "a5c23c0c9dbd1c1c9077809e5520b7edfed60986db7ebc1f7361a8f4c5bd6e29",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/__init__.py": "514ce83cf94762760ec0c38aa3a445c998ff4cc3bec2661d3c1c60b8c1033bf2",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/pkgIndex.tcl": "6c5bc8d4b2506b03d4332dbd37f8497ca3ceb0b50d6ad90eac0afd33e94378c4",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd.tcl": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_compat.tcl": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_generic.tcl": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_macosx.tcl": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_unix.tcl": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_utils.tcl": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_windows.tcl": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/pkgIndex.tcl": "0d3f23a06a3e08e896f7f6f5eade496967e449128f387b783414d0d75fcda90a",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd.tcl": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_compat.tcl": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_generic.tcl": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_macosx.tcl": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_unix.tcl": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_utils.tcl": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_windows.tcl": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/pkgIndex.tcl": "6c5bc8d4b2506b03d4332dbd37f8497ca3ceb0b50d6ad90eac0afd33e94378c4",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd.tcl": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_compat.tcl": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_generic.tcl": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_macosx.tcl": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_unix.tcl": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_utils.tcl": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_windows.tcl": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/pkgIndex.tcl": "0d3f23a06a3e08e896f7f6f5eade496967e449128f387b783414d0d75fcda90a",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd.tcl": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_compat.tcl": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_generic.tcl": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_macosx.tcl": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_unix.tcl": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_utils.tcl": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_windows.tcl": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/libtkdnd2.10.2.dylib": "a94be0fc0bfbeccdda03d3fd484300b740164367c49ede02b22bad012ad5c234",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/pkgIndex.tcl": "837e4d08830b95302f972369d5a21999a351bdd59c7fd9afe1622c095637077b",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd.tcl": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_compat.tcl": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_generic.tcl": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_macosx.tcl": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_unix.tcl": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_utils.tcl": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_windows.tcl": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/libtcl9tkdnd2.10.2.dylib": "482da76e340f6ad63f969c655fb7e6940e4bbfc2c85d761f068da246acf5b30d",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/pkgIndex.tcl": "ea1db932b68c57df8327badce9e262c48675ade6b22a4c1a545a9568500da410",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd.tcl": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_compat.tcl": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_generic.tcl": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_macosx.tcl": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_unix.tcl": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_utils.tcl": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_windows.tcl": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/libtkdnd2.9.4.dylib": "6e4f4fb171fde00d779cd69196b21c7ca12d0e2f9497ef1cc8f76050f2b4f2f6",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/pkgIndex.tcl": "fb9bf10034b66ee8f8dd0a05fe7b254db6cae5d6b2ea7389d5a088f7db9f72b6",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd.tcl": "24aee2d084581ae85cfe0efdc5c58493b14fea5c2a8d9adf3db8b2132f0d14a2",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_compat.tcl": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_generic.tcl": "3a4172b9c5150d537e1c271fdac1b472af2fad8fc6272c9cdbdef18ca0a8da99",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_macosx.tcl": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_unix.tcl": "4d8adba6618427d9ae6592e4070cfb65a25731fc15566d2657b20610a6a77bcb",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_utils.tcl": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_windows.tcl": "7b7b522a769fcb5d1484891685bc3c0ee4967899317caa0547ab0e8d1d6e808f",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/libtkdnd2.10.2.dll": "b4076e7bbc107902ea3d4d1aa21cb8fc7b015a9ea88d3ea3d997c6d18751ed9f",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/pkgIndex.tcl": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd.tcl": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd2.10.2.lib": "41744b1b3d217fbef855bd215f55194ea8c7e78db643497d8d6aa2f55fae2f17",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_compat.tcl": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_generic.tcl": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_macosx.tcl": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_unix.tcl": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_utils.tcl": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_windows.tcl": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/libtkdnd2.10.2.dll": "ddf8b01276d9174a21666438caa97a4108b72ae50511506060ceafa9555cd6d4",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/pkgIndex.tcl": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd.tcl": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd2.10.2.lib": "79511b0e8820d16252ab3a846c610280f0d24cd0b30d294091869107cd72bc4d",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_compat.tcl": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_generic.tcl": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_macosx.tcl": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_unix.tcl": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_utils.tcl": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_windows.tcl": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.2.dll": "731e6fb6fd5585074588b16f5b8ad29029bc2a40c83d20b5937f8d1f1edaf82e",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/pkgIndex.tcl": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd.tcl": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd2.10.2.lib": "79511b0e8820d16252ab3a846c610280f0d24cd0b30d294091869107cd72bc4d",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_compat.tcl": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_generic.tcl": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_macosx.tcl": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_unix.tcl": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_utils.tcl": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_windows.tcl": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/libtkdnd2.10.2.dll": "f26bf8b64fb74e2891b7daf30ecfe60e06dc946de724acc5e000e262d55650fd",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/pkgIndex.tcl": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd.tcl": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd2.10.2.lib": "dd06aaea3ea6f0ca0813fa344a4751cf75603a467b800803032950bededd8981",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_compat.tcl": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_generic.tcl": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_macosx.tcl": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_unix.tcl": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_utils.tcl": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_windows.tcl": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/libtkdnd2.10.2.dll": "58bfe0747341ffc82a2ff841eabc7a03130161f73bac5f6a2c4b61526c4bd5c2",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/pkgIndex.tcl": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd.tcl": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd2.10.2.lib": "dd06aaea3ea6f0ca0813fa344a4751cf75603a467b800803032950bededd8981",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_compat.tcl": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_generic.tcl": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_macosx.tcl": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_unix.tcl": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_utils.tcl": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+    "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_windows.tcl": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4"
+  },
+  "limits": [
+    "Windows package manifest check is not a new package start",
+    "Mac signature and native Mac start unavailable",
+    "Separate worktrees were inventoried as refs and not changed"
+  ]
+}

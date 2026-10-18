@@ -1,0 +1,66 @@
+{
+  "source_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+  "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+  "tests": [
+    {
+      "name": "read_foreign_lock:kein_lock",
+      "result_is_foreign": false
+    },
+    {
+      "name": "read_foreign_lock:defektes_json",
+      "result_is_foreign": false
+    },
+    {
+      "name": "read_foreign_lock:json_liste",
+      "result_is_foreign": false
+    },
+    {
+      "name": "read_foreign_lock:fremder_host_frisch",
+      "result_is_foreign": true
+    },
+    {
+      "name": "read_foreign_lock:fremder_host_9h",
+      "result_is_foreign": false
+    },
+    {
+      "name": "read_foreign_lock:gleicher_host_lebender_pid_frisch",
+      "result_is_foreign": true
+    },
+    {
+      "name": "read_foreign_lock:gleicher_host_lebender_pid_9h_ohne_schreiben",
+      "result_is_foreign": false
+    },
+    {
+      "name": "read_foreign_lock:gleicher_host_toter_pid",
+      "result_is_foreign": false
+    },
+    {
+      "name": "read_foreign_lock:lockpfad_unlesbar_verzeichnis",
+      "result_is_foreign": false
+    },
+    {
+      "name": "acquire:defekter_lock",
+      "foreign": false,
+      "read_only": false,
+      "lock_owned": true
+    },
+    {
+      "name": "refresh:lockdatei_entfernt",
+      "read_only": false,
+      "lock_recreated": false
+    },
+    {
+      "name": "refresh:fremder_token",
+      "read_only": true
+    },
+    {
+      "name": "verdraengung:A_flag_vor_naechstem_save_items",
+      "read_only_cached": false,
+      "note": "save_settings/save_window_geometry pruefen nur dieses Flag; erst save_items ruft refresh_data_lock"
+    },
+    {
+      "name": "release:fremder_lock_bleibt",
+      "lock_still_present": true
+    }
+  ]
+}

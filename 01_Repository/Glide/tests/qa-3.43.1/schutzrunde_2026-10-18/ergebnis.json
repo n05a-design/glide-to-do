@@ -1,0 +1,52 @@
+{
+  "datum": "2026-10-18",
+  "status": "abgeschlossen_als_gezielt_gepruefter_uncommitteter_kandidat",
+  "basis": "9ec474b9dcbd502efce8cb221e53e24c322f9a78",
+  "app_sha256": "f74af723e3fe1fc18aae5beafcef3d026a3a9c39d8eb16c90b68fb3ae7ddec26",
+  "test_sha256": "fa731b2a6857c3c1fba4ba0b5e6cb3debc94ec88a9392f9625e25a5efbfa4e45",
+  "pflichtsuite": {
+    "gruen": 10,
+    "rot": 0,
+    "nachweis": "pflichtsuite.json"
+  },
+  "gegenprobe_9ec474b": {
+    "erwartet_rot": 10,
+    "nachweis": "gegenprobe_9ec474b.json"
+  },
+  "units": {
+    "anzahl": 754,
+    "exitcode": 0,
+    "nachweis": "units.json"
+  },
+  "werkzeugtests": {
+    "anzahl": 152,
+    "exitcode": 0
+  },
+  "bereichssuiten": {
+    "gruen": 6,
+    "nachweis": "bereiche.json",
+    "einordnung": "Entwicklungszwischenpruefungen nach D51, keine eingefrorene Vollpruefung"
+  },
+  "ci_grundstufe": {
+    "exitcode": 0,
+    "schritte": 19,
+    "hinweise": [
+      "Lieferstand"
+    ],
+    "app_sha256": "30ad9ccf4a7ac2894b8d19132bebe3a702cd5a94e739bff37ac92c0fa44db94d",
+    "einordnung": "Vor der letzten begrenzten Flush-Praezisierung fuer unveraenderte schreibgeschuetzte Inhalte; danach Schutzsuite, Units und Formalpruefungen auf dem Endstand erneuert"
+  },
+  "hauptkopie": {
+    "head": "c0252bad69780c86b853f2653d5396e5256c0b32",
+    "unveraenderte_dateien": 44,
+    "dokumente": 22,
+    "neuer_qa_ordner": 1
+  },
+  "offen": [
+    "Zusammenfuehrung mit Hauptarbeitskopie",
+    "Versionswechsel und eingefrorene Vollpruefung am gesondert beauftragten Phasenende",
+    "Native Mac-/Linux-/Reader-/DPI-/Menschenabnahme",
+    "07-/Showcase-Abgleich und Paketlieferung"
+  ],
+  "commit_push_merge": false
+}

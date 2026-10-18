@@ -1,6 +1,6 @@
 # Prüfplan – Glide
 
-Stand 17.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
+Stand 18.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
 
 Wie Glide geprüft wird. Was tatsächlich geprüft wurde, steht im [QA-Bericht](07_QA_BERICHT.md). Am 03.10.2026 auf den gültigen Stand verdichtet; am 05.10.2026 um Nachweisregeln und Kontrollmatrix der Windows-Fassung ergänzt. Die Suitebeschreibungen je Einführungsversion trägt Git.
 
@@ -9,14 +9,14 @@ Wie Glide geprüft wird. Was tatsächlich geprüft wurde, steht im [QA-Bericht](
 | Stufe | Aufruf | Umfang | Wo |
 |---|---|---|---|
 | CI-Grundstufe | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` | Syntax, Version, Dokumentation, Fixtures, Werkzeugtests, Unit-Tests, fünf Analysen, Startprobe, Lieferstand, Fremdcode, Datenschutz, Ablagegröße, Synchronisation (seit 08.10.2026) | GitHub Actions (Linux, Python 3.14, Tk 8.6, Xvfb) und lokal |
-| Schnellprüfung | `python3 -B tests/tools/pruefen.py` | Syntax, Version, Dokumentation, Fixtures, Unit-Tests (lokale Lieferbasis 3.42.0: 638), Tk-Probe, Zeitzone, alle Integrationssuiten (3.42.0: 90), Showcase, fünf Analysen | Entwicklungsrechner |
+| Schnellprüfung | `python3 -B tests/tools/pruefen.py` | Syntax, Version, Dokumentation, Fixtures, Unit-Tests (lokaler Stand 3.43.1: 714), Tk-Probe, Zeitzone, alle Integrationssuiten (lokal 3.43.1: 92), Showcase, fünf Analysen | Entwicklungsrechner |
 | Vollprüfung | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-<Version>/<Name> --timeout 900` | zusätzlich Reproduktion von Beispiel- und Releasedaten, Fensterfotos; letzte Lieferung 3.42.0: Mac 107 ausgeführt/2 übersprungen, Linux/Windows je 108/1, je nach Rechner 15–60 Minuten | Referenz-Mac, Abnahme jeder Version auf einer eingefrorenen Kopie außerhalb der synchronisierten Ablage |
 | Windows | `tests/tools/windows_vollpruefung.cmd` | dieselbe Vollprüfung; verlangt Python 3.14 mit Tk 9 (sonst Exitcode 3) und prüft OneDrive-Platzhalter (Exitcode 4); Anleitung in der Prüfliste, B0 | Windows-PC des Inhabers |
 | Manuell | [Manuelle Prüfung](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md) | echte Bedienung, Plattformen, DPI, Screenreader | Inhaber |
 
 Maßgeblich sind `SUITEN` und `ANALYSEN` in `tests/tools/pruefen.py`. Einzelsuite: `python3 -B tests/integration/<suite>.py`, unter macOS im Hintergrund mit `GLIDE_QA_HINTERGRUND=1 PYTHONPATH=tests/tools/hintergrund`. Seit 3.36.0 laufen alle sachlich ausführbaren Integrationssuiten unter Linux/Xvfb verpflichtend; kalibrierte Erwartungen haben passende Defektgegenproben. Die Suiten sind auf den Referenz-Mac abgestimmt; Linux-Grundstufe und Windows-Lauf ersetzen keine Mac-Vollprüfung, und kein Windows-Nachweis wird aus einem Mac-Lauf abgeleitet. Laufzeit, Betriebssystem und tatsächlicher Umfang stehen in jedem `ergebnis.json`.
 
-**Private 4.0-Vorbereitung:** 91 Integrationssuiten einschließlich `test_zugang400`. Ab Version 4 verlangt dieser Einstieg die eigene native Tk-9.1-Laufzeit; in der Vorstufe erzwingt `--zugang-nativ` denselben Vertrag. Eigenen Erweiterungspfad vor dem Pythonstart über `PYTHONPATH` setzen. Native installierte Tcl-Bindungen werden zusätzlich geprüft. Standard-Linux-/Windows-Vollmatrix und Windows-Paketjob auf eigene gepinnte Runtime vorbereitet; die Grundstufe behält Tk 8.6 als bezeichneten Rückfall. Gezielter Mac-Hintergrundpfad grün, finale 4.0-Vollprüfung und vollständige Readerabläufe offen. [Runtimeweg](../packaging/runtime/README.md).
+**Paket-8-/4.0-Vorbereitung:** Die additive Zugänglichkeitsanbindung ist bereits im lokalen 3.43.1-Quellbaum enthalten; dessen aktuelle Prüfliste umfasst 94 Integrationssuiten einschließlich `test_zugang400`, `test_wiederholen` und `test_schutzrunde`. FP-01 und Schutzrunde sind im Quellkandidaten integriert; die Lieferung 07 bleibt auf dem vorherigen Stand. Ab Version 4 verlangt dieser Einstieg die eigene native Tk-9.1-Laufzeit; in der Vorstufe erzwingt `--zugang-nativ` denselben Vertrag. Eigenen Erweiterungspfad vor dem Pythonstart über `PYTHONPATH` setzen. Native installierte Tcl-Bindungen werden zusätzlich geprüft. Standard-Linux-/Windows-Vollmatrix und Windows-Paketjob auf eigene gepinnte Runtime vorbereitet; die Grundstufe behält Tk 8.6 als bezeichneten Rückfall. Gezielter Mac-Hintergrundpfad grün, finale 4.0-Vollprüfung und vollständige Readerabläufe offen. [Runtimeweg](../packaging/runtime/README.md).
 
 ## Regeln
 
@@ -37,7 +37,7 @@ Maßgeblich sind `SUITEN` und `ANALYSEN` in `tests/tools/pruefen.py`. Einzelsuit
 - **Sichtprüfung:** Aufnahmen und Fensterfotos sieht eine Person an; der Prüfstand meldet sie als übersprungen. Die Releaseplanung muss hell und dunkel verschieden aufgenommen sein.
 - **Lieferung erst nach grüner Vollprüfung:** `scripts/pflege/abgleich_07.py`, `packaging/macos/baue_app.py`, SHA-256 von 07 und Bundle gegen `src/glide`, `codesign --verify --deep --strict`, `scripts/pflege/showcase_abgleich.py`.
 
-**Größere Pakete (Auftrag 07.10.2026):** Bestand als Baseline → gezielte Paketprüfung einschließlich Fehler/Undo/Neustart → gemeinsamer eingefrorener Volllauf → Lieferung und strenge CI. Kein Volllauf je Teilfeature. `test_tagpaket33314.py` prüft Tagesvorschlag, Kapazität/Tageswechsel/Archiv, listenübergreifendes Undo, echte Kürzel und Rastertasten, Fokus/Pause/Wechsel, drei Schreibfehlergrenzen, beide Crashfenster und 16 Layoutkombinationen.
+**Größere Phasen (D51 vom 17.10.2026):** Mehrere zusammenhängende Pakete pro Phase; gezielte Prüfungen während der Entwicklung, Versionswechsel/eingefrorene Vollprüfung/native Matrix und Lieferung einmal am Phasenende. Die konkrete Phasenfolge ist eine offene Auswahl im Entwicklungsplan. Frühere Paketregel (Auftrag 07.10.2026): Bestand als Baseline → gezielte Paketprüfung einschließlich Fehler/Undo/Neustart → gemeinsamer eingefrorener Volllauf → Lieferung und strenge CI. Kein Volllauf je Teilfeature; D51 bündelt mehrere Pakete am Phasenende. `test_tagpaket33314.py` prüft Tagesvorschlag, Kapazität/Tageswechsel/Archiv, listenübergreifendes Undo, echte Kürzel und Rastertasten, Fokus/Pause/Wechsel, drei Schreibfehlergrenzen, beide Crashfenster und 16 Layoutkombinationen.
 
 ## Schritte der Prüfung
 

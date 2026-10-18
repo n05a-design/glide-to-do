@@ -1,2 +1,3 @@
-# Glide 3.28.0 verwendet ausschließlich die Python-Standardbibliothek.
+# Glide benötigt keine per pip nachzuinstallierende Python-Laufzeitabhängigkeit.
+# Der mitgelieferte tkinterdnd2-Fremdcode ist unter src/glide/vendor dokumentiert.
 # Tk/Tcl muss Bestandteil der verwendeten Python-Installation sein.

@@ -1,0 +1,53 @@
+{
+  "datum": "2026-10-18T15:58:25",
+  "gruppe": "bereiche",
+  "plattform": "win32",
+  "python": "3.14.7",
+  "app_sha256": "24e8fa0017a5b03e71a305490f010e46f716081e85591b266f7d00efb607eefb",
+  "test_sha256": "e4c67f1b07cbcf64dd61facc9055a680ab73ddc3f3b7a799437a6d14901c1bff",
+  "pruefungen": [
+    {
+      "name": "schutzrunde",
+      "exitcode": 1,
+      "sekunden": 146.69,
+      "protokoll": "schutzrunde.log"
+    },
+    {
+      "name": "wiederholen",
+      "exitcode": 0,
+      "sekunden": 183.39,
+      "protokoll": "wiederholen.log"
+    },
+    {
+      "name": "datenintegritaet",
+      "exitcode": 0,
+      "sekunden": 33.73,
+      "protokoll": "datenintegritaet.log"
+    },
+    {
+      "name": "editorabbau",
+      "exitcode": 0,
+      "sekunden": 27.23,
+      "protokoll": "editorabbau.log"
+    },
+    {
+      "name": "vorlagen",
+      "exitcode": 0,
+      "sekunden": 44.89,
+      "protokoll": "vorlagen.log"
+    },
+    {
+      "name": "notion_restore",
+      "exitcode": 0,
+      "sekunden": 55.26,
+      "protokoll": "notion_restore.log"
+    },
+    {
+      "name": "seiten",
+      "exitcode": 0,
+      "sekunden": 44.83,
+      "protokoll": "seiten.log"
+    }
+  ],
+  "quelle_unveraendert": false
+}

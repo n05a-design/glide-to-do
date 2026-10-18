@@ -1,0 +1,49 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "24e8fa0017a5b03e71a305490f010e46f716081e85591b266f7d00efb607eefb",
+  "faelle": {
+    "waechter": {
+      "ok": false,
+      "befund": "AssertionError(('Rückruffehler', ['c(*args)\\n           ~~~~~~~~~^^^^^^^\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\.claude\\\\worktrees\\\\jolly-noether-593099\\\\01_Repository\\\\Glide\\\\src\\\\glide\\\\app.pyw\", line 35002, in on_sidebar_select\\n    system_selection = self.system_listbox.selection()\\n  File \"~\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python314\\\\Lib\\\\tkinter\\\\ttk.py\", line 1422, in selection\\n    return self.tk.splitlist(self.tk.call(self._w, \"selection\"))\\n                             ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\\n_tkinter.TclError: invalid command name \".!"
+    },
+    "rueckweg": {
+      "ok": true,
+      "befund": "Verlust nach Speichern, Zurückschreiben gescheitert, DataIntegrityError, Gruppieren"
+    },
+    "laden": {
+      "ok": true,
+      "befund": "TclError/ValueError in der Ansicht behalten den Bestand; JSON-Fehler und neueres Format wie bisher"
+    },
+    "flush": {
+      "ok": true,
+      "befund": "fünf Kombinationen, kein Editor; Markdown, Seitenfunktion, Vorlage, Notion, Restore, Aufgabe verlegen"
+    },
+    "editorwechsel": {
+      "ok": true,
+      "befund": "Navigation, Anlegen, Beenden fragt, schreibgeschützt frei, Schreibfehler frei"
+    },
+    "sperre": {
+      "ok": true,
+      "befund": "Lesen, defekt: schreibgeschützt, bewusste Übernahme, Übernahme prüft erneut, Neuanlage, Verdrängung: Einstellungen, Fenster, Freigabe, Takt"
+    },
+    "sperre_prozesse": {
+      "ok": true,
+      "befund": "gleichzeitiger Erwerb mit Bereitschaftsschranke: fehlend/verwaist je 3 Runden [1, 1, 1, 1, 1, 1]; Zweitstart beendet sich, schreibt nichts"
+    },
+    "ausgaben": {
+      "ok": true,
+      "befund": "Teil-/Vollbackup, Austausch, Markdown, Vergleich, Drucken und fünf Exportwege halten an"
+    },
+    "editor_offen": {
+      "ok": true,
+      "befund": "Navigation bewahrt nicht übernommenen Text auch bei vorheriger ungespeicherter Änderung"
+    },
+    "rueckweg_bytes": {
+      "ok": true,
+      "befund": "Nach erfolgreichem Zwischenspeichern stellt der Abbruch die ursprünglichen Dateibytes her"
+    }
+  },
+  "fehler": [
+    "waechter"
+  ]
+}

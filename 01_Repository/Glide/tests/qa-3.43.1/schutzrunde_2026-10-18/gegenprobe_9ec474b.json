@@ -1,0 +1,58 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "61f7b96394f0ced51d343e07ce61544c523b22d80ffb8d72989831fb6b22603c",
+  "faelle": {
+    "waechter": {
+      "ok": false,
+      "befund": "AssertionError(['Tiefe 0/direkt: Datei nicht bytegleich', 'Tiefe 0/rahmen: Datei nicht bytegleich', 'Tiefe 19/direkt: Datei nicht bytegleich', 'Tiefe 19/rahmen: Datei nicht bytegleich', 'Tiefe 20/direkt: Punkt fehlt nach dem Abbruch', 'Tiefe 20/direkt: Datei nicht bytegleich', 'Tiefe 20/direkt: Rückgängig-Stapel 20 statt 20', 'Tiefe 20/rahmen: Punkt fehlt nach dem Abbruch', 'Tiefe 20/rahmen: Datei nicht bytegleich', 'Tiefe 20/rahmen: Rückgängig-Stapel 20 statt 20'])"
+    },
+    "rueckweg": {
+      "ok": false,
+      "befund": "AssertionError('Rückweg nimmt die Änderung nicht zurück')"
+    },
+    "laden": {
+      "ok": false,
+      "befund": "AssertionError('refresh_tree: als beschädigte Datei gemeldet')"
+    },
+    "flush": {
+      "ok": false,
+      "befund": "AssertionError((True, True, None))"
+    },
+    "editorwechsel": {
+      "ok": false,
+      "befund": "ValueError('Eine Notiz darf höchstens 1.000.000 Zeichen enthalten.')"
+    },
+    "sperre": {
+      "ok": false,
+      "befund": "AssertionError('defekte Sperre gilt als frei')"
+    },
+    "sperre_prozesse": {
+      "ok": false,
+      "befund": "AssertionError(\"Runde 0: [{'read_only': False, 'token': 'd6b0f3fa63d740a59112c4dc0fe317e6', 'ready': True}, {'read_only': False, 'token': '165cb00d92824462b5d9e2e5194f73e0', 'ready': True}]\")"
+    },
+    "ausgaben": {
+      "ok": false,
+      "befund": "AssertionError(['partial_backup_payload: liefert veralteten Inhalt', 'complete_backup_payload: liefert veralteten Inhalt', 'build_exchange_payload: liefert veralteten Inhalt', 'page_markdown: liefert veralteten Inhalt', 'read_backup_for_compare: liefert veralteten Inhalt', 'Druckseite liefert veralteten Inhalt', \"Dateiauswahl trotz fehlender Übernahme: ['Liste als TXT speichern', 'Liste als Markdown speichern', 'Aufgabensicherung speichern (alle Listen)', 'Vollständiges App-Sicherung speichern', 'Seite als Markdown speichern']\"])"
+    },
+    "editor_offen": {
+      "ok": false,
+      "befund": "ValueError('Eine Notiz darf höchstens 1.000.000 Zeichen enthalten.')"
+    },
+    "rueckweg_bytes": {
+      "ok": false,
+      "befund": "AssertionError('Rückweg erzeugt neue Datei statt des bytegleichen Vorzustands')"
+    }
+  },
+  "fehler": [
+    "waechter",
+    "rueckweg",
+    "laden",
+    "flush",
+    "editorwechsel",
+    "sperre",
+    "sperre_prozesse",
+    "ausgaben",
+    "editor_offen",
+    "rueckweg_bytes"
+  ]
+}

@@ -1,0 +1,642 @@
+{
+  "documents": [
+    {
+      "path": "CLAUDE.md",
+      "bytes": 5158,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "89c3bb9a1a711babfe47619ccedea37d91ddc6f3ba913d64d4458f8bb96ce6d3",
+      "active": true,
+      "heading": "# Arbeitsregeln für Claude Code – Glide",
+      "lines": 42
+    },
+    {
+      "path": "README.md",
+      "bytes": 10857,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "015e171c8d089dfac0c5e1ebab24ef83ec9cec2ffd7e580cd5c8e4ab3c431e54",
+      "active": true,
+      "heading": "# Glide – lokale Aufgaben, Notizen und Pinnwände",
+      "lines": 79
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 3049,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "1149298daf2411c96652d9a386954729c367630458f45bdf3e0c722e0129a7fa",
+      "active": true,
+      "heading": "# Sicherheitsrichtlinie",
+      "lines": 45
+    },
+    {
+      "path": ".claude/skills/design-richtlinien/SKILL.md",
+      "bytes": 1482,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "2a0ae9f873ccc5b13536bbedaaf892f1654afa2b3820cf9ae1e4efb9686833ae",
+      "active": true,
+      "heading": "# Design Richtlinien",
+      "lines": 16
+    },
+    {
+      "path": ".claude/skills/design-richtlinien/referenzen/bewegung-material-typografie.md",
+      "bytes": 22946,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "6193b76652dc73584c006a383209d71f5c61d03b42ee6dfb2ec10faa9a8ad2bd",
+      "active": true,
+      "heading": "# Apple Design",
+      "lines": 290
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "bytes": 45930,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "7d2ead255fb111560a90d76512d0785d2b832ee3b64f60d5c8825f44e6b64822",
+      "active": true,
+      "heading": "# Glide – Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung",
+      "lines": 258
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "bytes": 169097,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "055ea60311944f3b741bbe5b57b7c349bc7a2867b8b3450eaa4e1b987e0e5119",
+      "active": true,
+      "heading": "# Glide – Entwicklungsplan und Aufgabenstand",
+      "lines": 967
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+      "bytes": 37292,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "9f9149bfebcf450a088a19d4a995679f8040cb4a31bcec77fbe15e3ec2054134",
+      "active": true,
+      "heading": "# Manuelle Prüfung – Glide",
+      "lines": 389
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+      "bytes": 80916,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "281d64f3d97e1f877771415459e085880f2fa5f24db1a2ff372d7ac4bd802047",
+      "active": true,
+      "heading": "# Glide – Markt und Vorbilder",
+      "lines": 385
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "bytes": 21919,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "ce571421d81895eaf378ab35180a513ef5c939e006e01fbd4f209638a5433ac6",
+      "active": true,
+      "heading": "# Glide – Übergabe an eine neue Sitzung",
+      "lines": 95
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/README.md",
+      "bytes": 2465,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "fa669ddc812d2a5faa6396073afacfe05decba383d1aa8a8f9c920a6cb9da2e7",
+      "active": true,
+      "heading": "# Arbeitsvorbereitung",
+      "lines": 20
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/AUFTRAG.md",
+      "bytes": 8066,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "358eb33b61312271762b738a90e93638e14edad6ed38288a97923f523ba0f910",
+      "active": true,
+      "heading": "# Historischer Eingangsbeleg – Nutzerauftrag UI-/UX-Feature-Paket",
+      "lines": 42
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/BILDREFERENZEN.md",
+      "bytes": 6789,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "9a5a32f0afa4ee34c22eb486b9194d33e2872ed9c2e7dd8ae5a6592da39fe50d",
+      "active": true,
+      "heading": "# Bildreferenzen zum UI-/UX-Feature-Paket",
+      "lines": 44
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md",
+      "bytes": 28353,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "d17fc9557c9a4a796b74ec8aafbf01305fa6c6e99ddec00efee335d00e92cf20",
+      "active": true,
+      "heading": "# Glide – Ausführungsprompt für das Feature-Paket UI und UX",
+      "lines": 223
+    },
+    {
+      "path": "01_Repository/Glide/AGENTS.md",
+      "bytes": 4856,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "913a92e9fbc06c32190836b4eeef6c332b08ae05f703fc54ab63aa8988c449c6",
+      "active": true,
+      "heading": "# Glide – Arbeitsregeln",
+      "lines": 45
+    },
+    {
+      "path": "01_Repository/Glide/CHANGELOG.md",
+      "bytes": 42282,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "12c43dca9ff50cb5c79dc17b951ffc68cce6bcc526b159aab9ee8529c388a281",
+      "active": true,
+      "heading": "# Änderungsverlauf",
+      "lines": 233
+    },
+    {
+      "path": "01_Repository/Glide/LICENSE.md",
+      "bytes": 266,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
+      "active": true,
+      "heading": "# Lizenzstatus",
+      "lines": 3
+    },
+    {
+      "path": "01_Repository/Glide/README.md",
+      "bytes": 4495,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "1084c26b25549031b1cd57713c01a60fe4a9cd64ee9cc2bbe305bb1d4a24f7bb",
+      "active": true,
+      "heading": "# Glide – lokale Aufgaben, Notizen und Pinnwände",
+      "lines": 65
+    },
+    {
+      "path": "01_Repository/Glide/SECURITY.md",
+      "bytes": 2860,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "1533ce283a7809b269a2adb179e58b8089c4946571b162313e7a5f9866638983",
+      "active": true,
+      "heading": "# Sicherheit",
+      "lines": 32
+    },
+    {
+      "path": "01_Repository/Glide/assets/README.md",
+      "bytes": 1160,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "c1c1a28acdb0e09f1e067fcf39159f546578aca7fb7f6c1d67420610bd490fbe",
+      "active": true,
+      "heading": "# Assets",
+      "lines": 21
+    },
+    {
+      "path": "01_Repository/Glide/docs/00_INDEX.md",
+      "bytes": 5550,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "2381cd1bd6526daf856fb5e288c60d7390ce8cff8ecb807ca235e06a40aefcab",
+      "active": true,
+      "heading": "# Dokumentationsindex",
+      "lines": 56
+    },
+    {
+      "path": "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+      "bytes": 11214,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "4e9fde30b41b07b0fa9c3fb6cf512200d13b5db26e9a652118212da5a578dfda",
+      "active": true,
+      "heading": "# Produktgrenzen und Produktprinzipien",
+      "lines": 90
+    },
+    {
+      "path": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+      "bytes": 38921,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "b0671b78d5d9385fc345f6091ebc215d2873549a1d1cc29cb8ee698a1b6b1c5d",
+      "active": true,
+      "heading": "# Architektur – Glide",
+      "lines": 222
+    },
+    {
+      "path": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+      "bytes": 36440,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "5f781a2358fb554943b6c602f71a66ab987eedfd70ee0f9b43d20f52d0c43dad",
+      "active": true,
+      "heading": "# Prüfplan – Glide",
+      "lines": 148
+    },
+    {
+      "path": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+      "bytes": 29409,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "86b99e58275b6eeb20df21aead6d388bd5e47c5c8a510d1b41f74a9105fc7244",
+      "active": true,
+      "heading": "# Daten, Backups und Migration – Glide",
+      "lines": 216
+    },
+    {
+      "path": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "bytes": 62633,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "7debf13a067d08cbde88f4e644dbd3e5fdcd4c3196401f86fabe21b190b0f456",
+      "active": true,
+      "heading": "# QA-Bericht – Glide 3.43.1",
+      "lines": 132
+    },
+    {
+      "path": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+      "bytes": 17356,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "787d47195d99c38ca658b835d803352261cbaea5db00cacd3085fd0dc2ac52e1",
+      "active": true,
+      "heading": "# Veröffentlichung – Glide",
+      "lines": 144
+    },
+    {
+      "path": "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+      "bytes": 95057,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "1089c2284cd3c70648f06e8628b05c5514cd33374280aef7db5ef475a98a1b70",
+      "active": true,
+      "heading": "# Funktionen – Glide",
+      "lines": 399
+    },
+    {
+      "path": "01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md",
+      "bytes": 8320,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "90ee72b171cacebde480aaef59aa547a117aff66dcad476eba7664f79ad22d98",
+      "active": true,
+      "heading": "# Vorlagen im Unternehmensalltag",
+      "lines": 117
+    },
+    {
+      "path": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+      "bytes": 37270,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "654c79a80ffcfc490b697fb87cf4b9c87d87f8b4f332f0dcbf6d55209d7b8438",
+      "active": true,
+      "heading": "# Arbeitsrichtung, Entscheidungen und Abnahme",
+      "lines": 137
+    },
+    {
+      "path": "01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md",
+      "bytes": 18100,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "6b53d2faa8245c4c6d6c34791d3bc6196abc21978d216e8af51e92bab2dd3281",
+      "active": true,
+      "heading": "# Design Richtlinien",
+      "lines": 119
+    },
+    {
+      "path": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+      "bytes": 6990,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "1e1519b1f044c9c53dd29b26cc8841030e1601dfad58ae12db8fe698cba1fc38",
+      "active": true,
+      "heading": "# Regeln für die Dokumentenpflege",
+      "lines": 53
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/ABHAENGIGKEIT_TKDND.md",
+      "bytes": 2780,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "d32d8478e577a54304d7b398fda081a6c1a6b4591319edef2f892f34cd766eb3",
+      "active": true,
+      "heading": "# Entscheidung: tkinterdnd2 für das Ziehen aus Finder und Explorer",
+      "lines": 57
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/ARBEITSBEGLEITER.md",
+      "bytes": 5779,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "7e1e4f7c9a45af293419d51db7d533cbe790d0f8b185ef7a6e493bf953d5e678",
+      "active": true,
+      "heading": "# Arbeitsbegleiter und Markenfigur – Konzept und Formatentscheidung",
+      "lines": 52
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/GRUPPE_ORDNER_UEBERSCHRIFT.md",
+      "bytes": 5636,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "11865be2704a014a6db6703c03cc0d58896a79c121585d1bc4474c76a1c593a3",
+      "active": true,
+      "heading": "# Gruppe, Ordner oder Zwischenüberschrift?",
+      "lines": 119
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md",
+      "bytes": 7230,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "c0043ee50ec0a7f6209d848e852c6fdcc0035294c08dfd702832509a7c7b0e48",
+      "active": true,
+      "heading": "# Produkt- und Identitätsregister",
+      "lines": 90
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md",
+      "bytes": 11588,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "9e05eea9b8bd7198487bd9ecd9d3ab05a3ea5b150358ee27ad589ae703fec0f5",
+      "active": true,
+      "heading": "# Systembenachrichtigungen für Erinnerungen – Entscheidung",
+      "lines": 185
+    },
+    {
+      "path": "01_Repository/Glide/packaging/README.md",
+      "bytes": 7464,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "ada53240bef878be8e0584c95929d4a6e5af7ac4dc58bed587b748c6e6842026",
+      "active": true,
+      "heading": "# Paketierung Glide",
+      "lines": 94
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Glide-Lizenzstatus.md",
+      "bytes": 266,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
+      "active": true,
+      "heading": "# Lizenzstatus",
+      "lines": 3
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/README.md",
+      "bytes": 5602,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "33b1146cf24a1482bcf2e2b7538d3f62e88b38a10be21ac47b982d3e9faad699",
+      "active": true,
+      "heading": "# Eigene Tcl/Tk-9.1-Runtime",
+      "lines": 33
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/README.md",
+      "bytes": 8994,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "3b34351b23b29c666d6a25850732c1a70190e54583783a77f3124fecf1bf27e5",
+      "active": true,
+      "heading": "# Pflegewerkzeuge",
+      "lines": 55
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/README.md",
+      "bytes": 8700,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "01c088f41f98c226775a6182da618815180fe1b6d9a24e2f9a8d4229a5f01cfc",
+      "active": true,
+      "heading": "# Anwendungskern",
+      "lines": 84
+    },
+    {
+      "path": "01_Repository/Glide/tests/README.md",
+      "bytes": 2491,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "d11d2340090083490262124833a83ec19b8c48c470c8ec9d7bdf1b64aa3b28a3",
+      "active": true,
+      "heading": "# Prüfungen für Glide",
+      "lines": 32
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/README.md",
+      "bytes": 4055,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "a9cee88d692612fafae3f33508f7fe1d530b81e18abfdfb68670b87ccadac38c",
+      "active": false,
+      "heading": "# Referenzdaten und Beispiele",
+      "lines": 44
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/README.md",
+      "bytes": 6197,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "72f13c4bba0255cbe0b506ee008be5cce46e3402592f2dd83de7130510f7084f",
+      "active": false,
+      "heading": "# Glide · aktiver Showcase",
+      "lines": 52
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.39.0/tagesplanung_2026-10-12/README.md",
+      "bytes": 6267,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "dfccd2c6d08100ddbbe4031993625becb9a379bdf22cda938aba997f06543e66",
+      "active": false,
+      "heading": "# Tagesplanung – Nachweisrahmen",
+      "lines": 52
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.39.0/wettbewerbsanalyse_2026-10-13/README.md",
+      "bytes": 4740,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "af432d11f4d2416b1d2cf325a3ddcb850488d6e909c7929764314de673afa594",
+      "active": false,
+      "heading": "# Wettbewerbs- und Open-Source-Analyse (13.10.2026)",
+      "lines": 37
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/README.md",
+      "bytes": 2738,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "1e094e0402f4097316cfda6328587c439ed58c74cf6bbc894f8d32c0717d7d36",
+      "active": false,
+      "heading": "# Wiederholungen – Nachweisrahmen",
+      "lines": 26
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.40.0/pixelanimation_2026-10-13/README.md",
+      "bytes": 4629,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "2c61a54aef1904570453c457b00636cc9d327f15df2531c67a159b6a9cc63f72",
+      "active": false,
+      "heading": "# Pixelanimation – Nachweisrahmen",
+      "lines": 35
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.41.0/notion_wiederherstellung_2026-10-13/README.md",
+      "bytes": 6956,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "a6533a80d309925ca06677e37a334fd523e610b3206bbca3f75cf65b5a2e9f0c",
+      "active": false,
+      "heading": "# Notion-Import und Seitenwiederherstellung – Nachweisrahmen",
+      "lines": 45
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.42.0/bestandspruefung_2026-10-15/README.md",
+      "bytes": 8861,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "c44d2a54b0fd9cdf531bb96711f64b18f9237c106b2ef1d497ab86adcd184a66",
+      "active": false,
+      "heading": "# Bestands- und Dokumentationsprüfung vor dem UI-/UX-Paket",
+      "lines": 62
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.42.0/eigenstaendige_pakete_2026-10-13/README.md",
+      "bytes": 14302,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "6b530dae0f792d35a0628715565780e54190caa1a625e57f0caedbeacbfacc70",
+      "active": false,
+      "heading": "# Eigenständige Pakete 3.42.0",
+      "lines": 41
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/README.md",
+      "bytes": 3298,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "2c08229e3063dec51614037f1fde53c2416ac3fc101f47caa7f9a1500756eaba",
+      "active": false,
+      "heading": "# UI-/UX-Promptpaket – Dokumentationsnachlauf",
+      "lines": 21
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.42.0/zugang400_vorbereitung_2026-10-14/README.md",
+      "bytes": 25972,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "0ec88beef95360ae1b892dc8178ada8960aed675829be9ecb7cfb46c3f340e8f",
+      "active": false,
+      "heading": "# Zugangs-Vorbereitung für 4.0.0",
+      "lines": 102
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.0/acl_symlinks_2026-10-16/README.md",
+      "bytes": 4622,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "cc8521badd521952b78fa3f1ae0e20fcc1da1b25367b8a4984c3900ec8bea433",
+      "active": false,
+      "heading": "# Nachlauf 16.10.2026 – ACL-Restaurierung an Symlinks in der Windows-Paketprobe",
+      "lines": 37
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md",
+      "bytes": 15496,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "545f658fbd2024fc3bf73c5a1d60247a5a51f93d4e684608e269c8bed23c2fc5",
+      "active": false,
+      "heading": "# UI-/UX-Paket 3.43.0 – Lieferung und Prüfung",
+      "lines": 98
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/kuerzel_linux_tk91_2026-10-16/README.md",
+      "bytes": 9927,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "5ebaded6ecca06bf6646b7c10c3404959b7a915281f0908e14d508a40ae06427",
+      "active": false,
+      "heading": "# 3.43.1 – Kürzel in Listen unter Linux/Tk 9.1",
+      "lines": 54
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/README.md",
+      "bytes": 6233,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "9499f887562319f5c69b4147d702862b45fdecef80f7e001b6a893e67d0f9be5",
+      "active": true,
+      "heading": "# Prüfwerkzeuge für Glide",
+      "lines": 36
+    },
+    {
+      "path": "05_Probelisten_Testdaten/README.md",
+      "bytes": 2330,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "013b4cdd951643ea5fadb9a363f58170fa28e6f658622630eeab4e11b523186d",
+      "active": true,
+      "heading": "# Probedaten",
+      "lines": 22
+    },
+    {
+      "path": "05_Probelisten_Testdaten/Showcase/README.md",
+      "bytes": 6197,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "72f13c4bba0255cbe0b506ee008be5cce46e3402592f2dd83de7130510f7084f",
+      "active": true,
+      "heading": "# Glide · aktiver Showcase",
+      "lines": 52
+    },
+    {
+      "path": "07_Python-Versionen/README.md",
+      "bytes": 6351,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "f140054aad9c1e49d483671cfc115a1d8ed1a3e3c77105baa5cfbf157e4028fc",
+      "active": true,
+      "heading": "# Aktuelle startbare Python-Fassung",
+      "lines": 39
+    },
+    {
+      "path": "07_Python-Versionen/Archiv/README.md",
+      "bytes": 994,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "25bd71ae5f1af6d43113edeb7a98405c9e0e58867d23f16eb1eee48be7090bf2",
+      "active": false,
+      "heading": "# Archiv – Python-Versionen",
+      "lines": 9
+    },
+    {
+      "path": "20_Grafik_Master/README.md",
+      "bytes": 6882,
+      "tracked": true,
+      "symlink": false,
+      "sha256": "73340885c5cc96e754cda0536a4ba849565a692b28d56fcb48419ddf5b835955",
+      "active": true,
+      "heading": "# Grafik-Master",
+      "lines": 92
+    }
+  ],
+  "identical_active_markdown": [
+    [
+      "01_Repository/Glide/LICENSE.md",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/Glide-Lizenzstatus.md"
+    ]
+  ],
+  "conflict_candidates": [],
+  "limits": "Semantics checked in analysis document; generated package/vendor copies excluded; historical evidence unchanged."
+}

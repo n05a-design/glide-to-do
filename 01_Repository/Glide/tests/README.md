@@ -1,6 +1,6 @@
 # Prüfungen für Glide
 
-Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · 93 Suiten aus `pruefen.py` und fünf Analysen
+Stand 18.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · 94 Suiten aus `pruefen.py` und fünf Analysen
 
 Alle App-Tests setzen vor dem App-Import einen temporären `GLIDE_DATA_DIR`; echte Nutzerdaten sind ausgeschlossen. Was wann läuft, welche Regeln gelten und welche Suite welchen Bereich abdeckt, steht im [Prüfplan](../docs/05_QA_TESTPLAN.md); Ergebnisse im [QA-Bericht](../docs/07_QA_BERICHT.md).
 
@@ -23,10 +23,10 @@ Unter Windows die geprüfte Python-3.14-/Tk-9-Laufzeit oder `windows_vollpruefun
 
 | Ordner | Inhalt |
 |---|---|
-| `integration/` | 90 Integrationssuiten; Liste in `SUITEN` von `tools/pruefen.py` |
+| `integration/` | 94 lokale Integrationssuiten; Liste in `SUITEN` von `tools/pruefen.py` |
 | `unit/` | Unit-Tests der Tk-freien Fachmodule (D17) |
 | `tools/` | Prüfstand, Analysen, Erzeuger für Beispiel-, Release-, Rundgang- und Showcase-Daten, CI-Grundstufe, Ablagegröße ([Übersicht](tools/README.md)) |
-| `fixtures/` | Referenzformate 2 und 4–23, Beispiel- und Releasedaten, Rundgang, Showcase ([Übersicht](fixtures/README.md)) |
+| `fixtures/` | Referenzformate 2 und 4–25, Beispiel- und Releasedaten, Rundgang, Showcase ([Übersicht](fixtures/README.md)) |
 | `qa-<Version>/` | Nachweise der sieben neuesten Versionen: README, `ergebnis.json`, Quellstand, Lieferabgleich, Messwerte; Fensterbilder nur der drei neuesten; Rohprotokolle bleiben lokal und werden nicht versioniert |
 
 Regeln für die Prüfumgebung (Zeitzone, Termine in Suiten, Hintergrundmodus, Last): [Prüfplan](../docs/05_QA_TESTPLAN.md#regeln).

@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-18",
+  "read_only": true,
+  "head_unchanged": true,
+  "run": {
+    "id": 39075284901,
+    "status": "completed",
+    "conclusion": "success",
+    "head_sha": "9ec474b9dcbd502efce8cb221e53e24c322f9a78",
+    "updated_at": "2026-10-17T23:31:04Z",
+    "url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901"
+  },
+  "jobs": [
+    {
+      "id": 117521066889,
+      "name": "Grundstufe (Linux, Python 3.14, Tk 8.6)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901/job/117521066889"
+    },
+    {
+      "id": 117521067788,
+      "name": "Tk 9.1, AT-SPI und Orca (Linux x64)",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901/job/117521067788"
+    },
+    {
+      "id": 117521067991,
+      "name": "UI-Diagnose (Windows x64, Python 3.14)",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901/job/117521067991"
+    },
+    {
+      "id": 117521068055,
+      "name": "Tk 9.1 und NVDA (Windows x64)",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901/job/117521068055"
+    },
+    {
+      "id": 117521856468,
+      "name": "Vollprüfung (Linux/Xvfb, eigene Tk 9.1)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901/job/117521856468"
+    },
+    {
+      "id": 117525967841,
+      "name": "Vollprüfung (Windows x64, eigene Tk 9.1)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901/job/117525967841"
+    },
+    {
+      "id": 117532032610,
+      "name": "Eigenständiges Paket (Windows x64, PyInstaller 6.22.3)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901/job/117532032610"
+    }
+  ],
+  "limits": [
+    "Run success does not prove Mac/actual reader/human acceptance.",
+    "CI-created Windows artifact is not delivery into this local checkout or 07."
+  ]
+}

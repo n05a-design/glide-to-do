@@ -1,5 +1,7 @@
 # Glide – lokale Aufgaben, Notizen und Pinnwände
 
+Stand 18.10.2026 · Glide 3.43.1 · integrierter Prüfkandidat; getrennte Lieferung und Pakete im QA-Bericht
+
 [![Glide-Prüfung](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml)
 
 Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Seiten, Notizbücher, Pinnwände und Pixelzeichnungen. Sie läuft lokal mit Python und Tk, braucht weder Konto noch Cloud und hält alle Nutzerdaten außerhalb des Programmordners.
@@ -8,11 +10,11 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 
 ## Stand
 
-- **Entwicklungsstand 3.43.1 vom 16.10.2026**, Datenformat 25. Dies ist eine Entwicklungsfassung.
+- **Prüfkandidat 3.43.1 / Format 25 vom 18.10.2026:** FP-01 und WA-27–WA-30 sind im Quellbaum integriert und gezielt geprüft. Die Python-Lieferung 07 bleibt auf dem vorherigen 3.43.1-Stand, Pakete bleiben 3.42.0. [Aktuelle Prüf- und Liefermatrix](01_Repository/Glide/docs/07_QA_BERICHT.md). Dies ist eine Entwicklungsfassung.
 - **3.43.1 – Kürzel in Listen unter Linux/Tk 9.1:** Strg+Umschalt+P (Einplanen) und die übrigen Strg+Buchstaben-Kürzel verschieben unter Linux mit Tk 9.1 nicht mehr die Auswahl in Listen. Dazu erzeugen zwei Prüfungen die Tk-9.1-Ereignisse wie unter X11; damit sind die drei roten Linux-Suiten der GitHub-Vollmatrix behoben. Seit PR #32 ist die ganze GitHub-Prüfung grün: Linux und Windows mit eigener Tk 9.1 sowie das eigenständige Windows-Paket. Windows und macOS unverändert.
 - **3.43.0 – UI-/UX-Paket aus Nutzerbeobachtungen:** ruhigere Kopfzeile mit Lupe und Hinweisschalter, Galeriebilder auf der Startseite, fester Begleiter Gismo, Titel mit mehr Platz, geschützte Bedienelemente, gleichmäßiges Scrollen über Bildern und dauerhaft nachlesbare Neuerungen. Automatisch geprüft (Pflichtsuite mit roter Gegenprobe gegen 3.42.0, appweite Knopfschutzprüfung, eingefrorene Windows-Vollprüfung) und in die Python-Fassung übernommen; in `main` seit PR #27. Die GitHub-Vollmatrix mit eigener Tk 9.1 war seit der Vorbereitung von Paket 8 (PR #26) rot und ist mit 3.43.1 wieder vollständig grün; Mac-Vollprüfung, Mac-Bundle und eigenständige Pakete 3.43.0 stehen noch aus. Einzelheiten im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md).
 - **Zuletzt vollständig einschließlich Paketen geliefert:** eigenständige Mac-/Windows-Entwicklungspakete 3.42.0; davor Notion-Import und Seitenwiederherstellung 3.41.0, Pixelanimation 3.40.0, Wiederholungen 3.39.1, Tagesplanung 3.39.0 und Aufgabenoberfläche 3.38.0.
-- **Nächste Schritte:** Auswahl zu Kompaktmodus, zwei Inhalten gleichzeitig und Notion-Mustern (Entscheidungsvorlagen E-U1–E-U3), danach der pausierte zugängliche Aufgaben-Kernablauf 4.0.0 mit eigener Tk-9.1-Laufzeit.
+- **Nächste Schritte:** nach dem Analyseauftrag zunächst belegte Schutzfehler und getrennte Lieferstände schließen; offene Auswahl zu Kompaktmodus, Nebenansicht, Notion-Mustern und Phasenfolge im [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). D51 bestätigt die phasenweise Prüfung; Umfang und Stellung des noch offenen zugänglichen Kernablaufs bleiben getrennt.
 - **Offen:** manuelle Bedien-/DPI-/Mehrmonitor-/Screenreaderabnahme sowie die gesonderten Veröffentlichungstore (u. a. Lizenz, öffentliche Signatur und Marke). Status je Aufgabe im [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md), Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md), Gestaltungsregeln in den [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md).
 
 ## Schnellstart

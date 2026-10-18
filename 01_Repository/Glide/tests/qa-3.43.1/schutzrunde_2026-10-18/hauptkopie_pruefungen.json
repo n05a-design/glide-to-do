@@ -1,0 +1,8 @@
+{
+  "syntax": "310 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt",
+  "versionen": "VERSION, App, Hauptsuite und CHANGELOG: 3.43.1; Datenformat 25",
+  "dokumentation": "Alle Dokumente einschließlich Archiv im Index; 218 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell.",
+  "lieferabweichungen": [],
+  "app_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+  "bekannter_historischer_link_fehlt": true
+}

@@ -1,0 +1,179 @@
+{
+  "date": "2026-10-18",
+  "source": "01_Repository/Glide/src/glide/app.pyw",
+  "source_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+  "tests": [
+    {
+      "name": "guard_stack_boundary",
+      "initial_depth": 0,
+      "item_change_wrapper": false,
+      "remaining_ids": [
+        "a",
+        "b"
+      ],
+      "restored": true,
+      "reports": [
+        [
+          [
+            "injizierter Verlust",
+            1
+          ],
+          {}
+        ]
+      ],
+      "final_depth": 0
+    },
+    {
+      "name": "guard_stack_boundary",
+      "initial_depth": 0,
+      "item_change_wrapper": true,
+      "remaining_ids": [
+        "a",
+        "b"
+      ],
+      "restored": true,
+      "reports": [
+        [
+          [
+            "injizierter Verlust",
+            1
+          ],
+          {}
+        ]
+      ],
+      "final_depth": 0
+    },
+    {
+      "name": "guard_stack_boundary",
+      "initial_depth": 19,
+      "item_change_wrapper": false,
+      "remaining_ids": [
+        "a",
+        "b"
+      ],
+      "restored": true,
+      "reports": [
+        [
+          [
+            "injizierter Verlust",
+            1
+          ],
+          {}
+        ]
+      ],
+      "final_depth": 19
+    },
+    {
+      "name": "guard_stack_boundary",
+      "initial_depth": 19,
+      "item_change_wrapper": true,
+      "remaining_ids": [
+        "a",
+        "b"
+      ],
+      "restored": true,
+      "reports": [
+        [
+          [
+            "injizierter Verlust",
+            1
+          ],
+          {}
+        ]
+      ],
+      "final_depth": 19
+    },
+    {
+      "name": "guard_stack_boundary",
+      "initial_depth": 20,
+      "item_change_wrapper": false,
+      "remaining_ids": [
+        "a"
+      ],
+      "restored": false,
+      "reports": [
+        [
+          [
+            "injizierter Verlust",
+            1
+          ],
+          {}
+        ]
+      ],
+      "final_depth": 20
+    },
+    {
+      "name": "guard_stack_boundary",
+      "initial_depth": 20,
+      "item_change_wrapper": true,
+      "remaining_ids": [
+        "a"
+      ],
+      "restored": false,
+      "reports": [
+        [
+          [
+            "injizierter Verlust",
+            1
+          ],
+          {}
+        ]
+      ],
+      "final_depth": 20
+    },
+    {
+      "name": "undo_write_failure",
+      "remaining_undo_steps": 0,
+      "save_items_result": false,
+      "in_memory_title": "Vorher",
+      "feedback": [
+        [
+          "undone"
+        ]
+      ],
+      "production_apply_snapshot_used": true
+    },
+    {
+      "name": "load_ui_error",
+      "file_still_identical": true,
+      "in_memory_lists": [],
+      "read_only": false,
+      "errors": [
+        {
+          "title": "Fehler",
+          "misclassified_as_corrupt": true
+        }
+      ],
+      "backup_count": 1
+    },
+    {
+      "name": "flush_status",
+      "rich_note_ok": false,
+      "drawing_ok": true,
+      "returned": null,
+      "caller_would_stop": false
+    },
+    {
+      "name": "flush_status",
+      "rich_note_ok": true,
+      "drawing_ok": false,
+      "returned": null,
+      "caller_would_stop": false
+    },
+    {
+      "name": "flush_status",
+      "rich_note_ok": true,
+      "drawing_ok": true,
+      "returned": null,
+      "caller_would_stop": false
+    },
+    {
+      "name": "settings_forward_gate",
+      "input_version": 999,
+      "output_version": 2,
+      "future_top_retained": true,
+      "future_filter_field_retained": false
+    }
+  ],
+  "limits": "Keine Tk-Instanz; kuenstlicher Bestand; gezielte Fehlerinjektionen. Kein Beleg fuer natuerliche Haeufigkeit oder vollstaendige UI-Abnahme."
+}

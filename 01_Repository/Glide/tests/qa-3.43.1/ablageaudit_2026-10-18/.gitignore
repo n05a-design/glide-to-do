@@ -1,0 +1,3 @@
+# Sitzungsinterne Sicherungsorte und einmalige Integrationspatches bleiben lokal.
+*.local
+*.patch

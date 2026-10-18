@@ -1,0 +1,133 @@
+{
+  "date": "2026-10-18",
+  "stufe": "Gegenpruefung nach dem Abschluss der Standanalyse",
+  "status": "passed",
+  "grundlage": {
+    "lokal": "c0252bad69780c86b853f2653d5396e5256c0b32",
+    "upstream": "9ec474b9dcbd502efce8cb221e53e24c322f9a78",
+    "app_sha256_lokal": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+    "app_sha256_upstream": "61f7b96394f0ced51d343e07ce61544c523b22d80ffb8d72989831fb6b22603c"
+  },
+  "sicherung": {
+    "manifest": "sicherungsmanifest_gegenpruefung.json",
+    "dateien": 56,
+    "ort": "ausserhalb des Repositorys im Sitzungs-Arbeitsordner; Hashes im Manifest"
+  },
+  "proben": {
+    "codegrenzen_wiederholung_lokal": "Ergebnisdatei bytegleich zu ergebnis_codegrenzen.json (SHA-256 991e3b3f...)",
+    "codegrenzen_upstream": {
+      "ergebnis": "ergebnis_codegrenzen_9ec474b.json",
+      "A33": "behoben",
+      "A32_A34_A35_A27": "unveraendert"
+    },
+    "datensperre": {
+      "ergebnis": "ergebnis_datensperre.json",
+      "faelle": 14,
+      "fail_open": [
+        "defektes JSON",
+        "JSON-Liste",
+        "unlesbarer Lockpfad",
+        "8 h ohne Schreiben trotz lebendem Prozess",
+        "verschwundene Lockdatei wird nicht neu angelegt"
+      ],
+      "korrekt": [
+        "fremder Host frisch",
+        "gleicher Host lebende PID frisch",
+        "fremde Kennung fuehrt zu Schreibschutz",
+        "Freigabe laesst fremden Lock stehen"
+      ]
+    }
+  },
+  "lesend": {
+    "github_lauf_39075284901": "completed/success; Readerjobs uebersprungen; main unveraendert 9ec474b",
+    "paketmanifeste": "Windows 102/102; Mac 327/330, fehlend Python.framework/Versions/3.14/Python, Resources/Info.plist, _CodeSignature/CodeResources",
+    "teilbericht_gegen_analyse_11": "zeilengleich ohne Links und Ueberschriften"
+  },
+  "gezielte_ci_teilmenge": {
+    "exitcode": 0,
+    "schritte": [
+      {
+        "schritt": "Syntax",
+        "status": "ausgeführt",
+        "grund": "310 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+      },
+      {
+        "schritt": "Versionskonsistenz",
+        "status": "ausgeführt",
+        "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.43.1; Datenformat 25"
+      },
+      {
+        "schritt": "Dokumentation",
+        "status": "ausgeführt",
+        "grund": "Alle Dokumente einschließlich Archiv im Index; 218 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+      },
+      {
+        "schritt": "Werkzeugtests",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "standpruefung",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0"
+      },
+      {
+        "schritt": "Lieferstand",
+        "status": "ausgeführt",
+        "grund": "07_Python-Versionen ist bytegleich zu src/glide"
+      },
+      {
+        "schritt": "Datenschutz",
+        "status": "ausgeführt",
+        "grund": "keine Benutzerpfade in versionierten Textdateien"
+      },
+      {
+        "schritt": "Ablagegröße",
+        "status": "ausgeführt",
+        "grund": "1149 versionierte Dateien, 267 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen"
+      },
+      {
+        "schritt": "Synchronisation",
+        "status": "ausgeführt",
+        "grund": "keine Synchronisationskopien, kein Hauptdokument ohne Vermerk stark gekürzt"
+      }
+    ],
+    "ausgelassen": {
+      "Fachlogik-Units und Startprobe": "kein Code geaendert; Produktions-, 07- und Showcase-Diff leer",
+      "Fremdcode": "laedt das Originalpaket aus dem Netz; Vendor unveraendert"
+    }
+  },
+  "eigene_linkpruefung": {
+    "markdown_dateien": 62,
+    "lokale_dateilinks": 789,
+    "ankerlinks": 125,
+    "fehler": [
+      {
+        "quelle": "01_Repository/Glide/tests/qa-3.42.0/bestandspruefung_2026-10-15/README.md",
+        "ziel": "grundstufe/ergebnis.json",
+        "art": "Datei fehlt",
+        "einordnung": "vorbestehend seit 2e7d890 (15.10.), historischer Nachweis, nicht umgeschrieben"
+      }
+    ]
+  },
+  "weitere": {
+    "git_diff_check": "sauber",
+    "produktion_07_showcase_diff": "leer",
+    "benutzerpfade_neue_dateien": 0,
+    "git_aktionen": "keine; Reflog unveraendert seit 17.10. 02:20"
+  },
+  "limits": [
+    "Kein Rennen zweier echter Prozesse und kein Cloud-Abgleich zwischen zwei Rechnern fuer die Datensperre",
+    "Keine Paket-, Mac- oder Readerpruefung, keine Integrationsmatrix",
+    "Marktquellen nicht einzeln neu aufgerufen; Linkbilanz nur quantitativ",
+    "Deep-Research-Volltext nicht zugaenglich"
+  ],
+  "redaktion": {
+    "gegenstand": "zusammengezogene Woerter und fehlende Bindestriche aus der Codex-Fassung",
+    "plan_paragraph_18_bis_20": 157,
+    "markt": 13,
+    "analyse_paragraph_11": 33,
+    "verfahren": "kuratierte Ersetzungsliste mit exakter Trefferzahl je Stelle, Hash-Pruefung gegen die Sicherung; Paragraph 17 war unauffaellig",
+    "nachpruefung": "gezielte CI-Teilmenge 9/9 und eigene Linkpruefung erneut bestanden, nur der vorbestehende Fehler in qa-3.42.0"
+  }
+}

@@ -1,6 +1,6 @@
 # Eigene Tcl/Tk-9.1-Runtime
 
-Stand 16.10.2026 · Glide 3.43.1 · Vorbereitung von Paket 8 / 4.0.0, keine Lieferung
+Stand 18.10.2026 · Glide 3.43.1 · Vorbereitung von Paket 8 / 4.0.0, keine Lieferung
 
 `baue_runtime.py` exportiert saubere Git-Originale aus den Pins in `runtime_contract.py` und baut Tcl, Tk und die dazu passende CPython-3.14-Erweiterung `_tkinter` in einem neuen Ziel außerhalb von OneDrive. Installierte Python-Header und Quellheader müssen bytegleich sein. Native Ziele: macOS arm64, Windows x64 mit MSVC, Linux x64 mit verpflichtendem ATK/AT-SPI. Es gibt keine Systeminstallation.
 
@@ -26,8 +26,8 @@ Mac baut mit `--disable-framework --disable-zipfs --enable-aqua=yes`: getrennte 
 
 Patchprozesse erzwingen LF lokal und verändern keine globale Git-Konfiguration. Elf Runtimeverträge samt tatsächlichem Git-Gegenfall sind grün. Plattformgemeinsame Patches gehören zur verpflichtenden Runtimeherkunft. `baue_paket.py --runtime-bau <runtime-bau.json>` verlangt Interpreter, Pins, Patchsatz und vollständige unveränderte Runtime-Dateihashes. Lizenzwerkzeuge verwenden Originalbelege einschließlich utf8proc; Reader-Testhelfer werden niemals mitpaketiert.
 
-Standard-Vollmatrix und Windows-Paketjob sind auf eigene 9.1-Runtimes vorbereitet, Python-Pins Linux 3.14.8 / Windows 3.14.7. `pruefen.py` enthält 91 Integrationssuiten. `--zugang-nativ` erzwingt die native Kernprüfung in der Vorstufe; ab Version 4 ist sie ohne Option Pflicht. Native Tcl-Bindungen gehören dazu. Linux-Defektgegenproben bleiben erhalten. Gezielter Mac-Hintergrundpfad und drei Versionsvertragsfälle grün; finale eingefrorene Vollmatrix offen.
+Standard-Vollmatrix und Windows-Paketjob sind auf eigene 9.1-Runtimes vorbereitet, Python-Pins Linux 3.14.8 / Windows 3.14.7. Die lokale 3.43.1-Prüfliste enthält inzwischen 92 Integrationssuiten; der separate Upstream-FP-01-Kandidat ergänzt eine weitere. Der historische P8-Prüfstand bleibt davon getrennt. `--zugang-nativ` erzwingt die native Kernprüfung in der Vorstufe; ab Version 4 ist sie ohne Option Pflicht. Native Tcl-Bindungen gehören dazu. Linux-Defektgegenproben bleiben erhalten. Gezielter Mac-Hintergrundpfad und drei Versionsvertragsfälle grün; finale eingefrorene Vollmatrix offen.
 
-Vollständige tatsächliche VoiceOver-/NVDA-/Orca-Abläufe bleiben nach D36 Pflichtnachweise. Attribute, künstlich gesetzter Readerstatus im eigenen Tcl-Interpreter und direkte Tk-/spd-say-Ausgabe zählen dafür nicht. Menschen-/DPI-Abnahme nach D42 bleibt zusätzlich getrennt. Prototypen weiter Basisversion 3.42.0; Mac Ad-hoc-signiert, Windows unsigniert. Keine 4.0-Lieferung oder öffentliche Signaturfreigabe.
+Vollständige tatsächliche VoiceOver-/NVDA-/Orca-Abläufe bleiben nach D36 Pflichtnachweise. Attribute, künstlich gesetzter Readerstatus im eigenen Tcl-Interpreter und direkte Tk-/spd-say-Ausgabe zählen dafür nicht. Menschen-/DPI-Abnahme nach D42 bleibt zusätzlich getrennt. Die hier genannten P8-Prototypen tragen historisch Basisversion 3.42.0; der aktuelle lokale Python-Lieferstand ist 3.43.1; Mac Ad-hoc-signiert, Windows unsigniert. Keine 4.0-Lieferung oder öffentliche Signaturfreigabe.
 
 Aktuellster Nachlauf: [Native10](../../tests/qa-3.42.0/zugang400_vorbereitung_2026-10-14/native_vorlauf10.json), exklusiver Linux-Fokus grün, danach Orca-SIG11; Linux-Lebensdauer und native Probe vorbereitet. NVDA-Heute-Fokus repariert, weitere Readernavigation/MSAA-Prüfer und Reparse-ACL korrigiert; Native11 offen. Kein4.0-Liefernachweis.
