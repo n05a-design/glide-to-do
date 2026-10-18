@@ -1,0 +1,140 @@
+[
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "grund": "Historien zusammengeführt; alle Aufgaben-IDs und Überschriften erhalten; aktueller Prüfkandidat und Liefergrenzen abgeglichen.",
+    "vorher_bytes": 232385,
+    "nachher_bytes": 212965,
+    "vorher_sha256": "aaae8d828ff83f7255c7b90d383d7c6c013e949ef0e7f1cc92d19596f325fe85",
+    "nachher_sha256": "a223bffcdba4aed58577b64b4395f7794ff320d07bd6d1edafca284d60b2ebb5"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+    "grund": "Aktuellen Schutzvertrag vom historischen Fehlerbefund und von der noch älteren Lieferung getrennt.",
+    "vorher_bytes": 30179,
+    "nachher_bytes": 30406,
+    "vorher_sha256": "e098f15adf112c642a4bfe56b17ff33921cdca4774b42de720301fe1ea2db751",
+    "nachher_sha256": "b6185325329231f1206cb2fe9d55eb337d604df027111ddca2d21b5409b4a1b0"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+    "grund": "Aktuellen Schutzvertrag vom historischen Fehlerbefund und von der noch älteren Lieferung getrennt.",
+    "vorher_bytes": 96709,
+    "nachher_bytes": 96997,
+    "vorher_sha256": "4dad217a5af55cffcb374442ca285f7b500476fce0e9bade6351cc2babb337f9",
+    "nachher_sha256": "5b2832f654397d23808a5d2081fb74f40b9a4a565f0036a5bcce9e1efc95d89f"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+    "grund": "Vier Fachmodule, Editor- und Sperrverträge ergänzt; bestehende Ausnahmen an Mutationseinstiegen erhalten.",
+    "vorher_bytes": 42396,
+    "nachher_bytes": 45652,
+    "vorher_sha256": "5e0fd24f54699cbc8f9ac5cc17ac00b62e25d8124d9422b7730b559a8a4ed4f1",
+    "nachher_sha256": "86706e038660aafcc840b9df92e472fd936391eacfc67da4c0591378fe209f32"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "grund": "Doppelte Laufgeschichten durch aktuelle Standmatrix ersetzt; historische Versionstabelle und Rohbelege erhalten.",
+    "vorher_bytes": 73497,
+    "nachher_bytes": 34317,
+    "vorher_sha256": "380b5ffc1e656874610d3d2c61713eaec752a79bb9cb65118ebea300bb5555fa",
+    "nachher_sha256": "08e4538458c1ee5808cce67fc88947478ec34cf73dd9d6403e8627174861fc84"
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "grund": "Übergabe auf integrierten Kandidaten, aktuellen Auftrag und tatsächliche Liefergrenzen konzentriert.",
+    "vorher_bytes": 11759,
+    "nachher_bytes": 7218,
+    "vorher_sha256": "2d25714e8b6225899b3631804bbdbeb76afb38894c633b978f2d3be45e1323d5",
+    "nachher_sha256": "e6dfc08828ee635c8dd01cf4766de1a5bc23ad57e23bb89960bdd32d39c86a59"
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "grund": "Historischen Untersuchungsstand klar von aktueller Integration abgegrenzt.",
+    "vorher_bytes": 94619,
+    "nachher_bytes": 95241,
+    "vorher_sha256": "1a3ff1eafdcce16275a2fa83a2f5d69bdbfd44ec624ea2a788973e8b36ccb5e5",
+    "nachher_sha256": "906195f997defb218e36dbefffb25c94046817a360b51c1374dd2cb67fb72fc0"
+  },
+  {
+    "pfad": "README.md",
+    "grund": "Einstieg auf aktuellen Kandidaten beziehungsweise tatsächliche Suitezahl abgeglichen.",
+    "vorher_bytes": 11404,
+    "nachher_bytes": 11370,
+    "vorher_sha256": "7501930a37e6eceb2443a6ddde68fbcf037c1820c9c80adee67b93440d2e46ce",
+    "nachher_sha256": "26fe449403ca540979373c60c2d8cb94e33b48784065fc5832b71501e418e661"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/00_INDEX.md",
+    "grund": "Einstieg auf aktuellen Kandidaten beziehungsweise tatsächliche Suitezahl abgeglichen.",
+    "vorher_bytes": 5621,
+    "nachher_bytes": 5629,
+    "vorher_sha256": "c51fa3621e5fea4be4e84068f5a2f406b2c7041c56fedc8c2b0113e88806ee39",
+    "nachher_sha256": "0874459404452aadbdb82ad08765907f2875df196abbff30926a00b79879c8bc"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/README.md",
+    "grund": "Einstieg auf aktuellen Kandidaten beziehungsweise tatsächliche Suitezahl abgeglichen.",
+    "vorher_bytes": 2498,
+    "nachher_bytes": 2498,
+    "vorher_sha256": "459ce4c0cdda1938464e1bfce0d12629e010bc62e8f160e85275b7e856a077cc",
+    "nachher_sha256": "9333086d8b191e4b29609c6255c572253d5bee20e6daf93494c098749d6de9d6"
+  },
+  {
+    "pfad": "01_Repository/Glide/README.md",
+    "grund": "Einstieg auf aktuellen Kandidaten beziehungsweise tatsächliche Suitezahl abgeglichen.",
+    "vorher_bytes": 4495,
+    "nachher_bytes": 4513,
+    "vorher_sha256": "1084c26b25549031b1cd57713c01a60fe4a9cd64ee9cc2bbe305bb1d4a24f7bb",
+    "nachher_sha256": "b88410e441160ff349559a7d87550189f87b08a96316cda6482318cf14797418"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/README.md",
+    "grund": "Einstieg auf aktuellen Kandidaten beziehungsweise tatsächliche Suitezahl abgeglichen.",
+    "vorher_bytes": 7805,
+    "nachher_bytes": 7806,
+    "vorher_sha256": "1d70f12f36e98ce2d0bbb67f7b1ca0a6fa9464da629d2747839f3bd16c4f1302",
+    "nachher_sha256": "26e96edc2aecd77994cd04cbd6b963c6ea2055d2b0f79c76034a42b2f98bf739"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "grund": "Aktuellen Inhaberauftrag ergänzt; bestätigte Entscheidungen unverändert.",
+    "vorher_bytes": 39180,
+    "nachher_bytes": 39677,
+    "vorher_sha256": "12ec06ef8cd47462bf197690ccc7c59024f7d71e749444ea6ab72deff7d2bfa3",
+    "nachher_sha256": "dbdbb2361b8bbfb11e83cf5dde62b8dc3255c142972bd4297964cacaa91a4387"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+    "grund": "Nachweis und Aufbewahrungsgrenzen für globale Bereinigung ergänzt.",
+    "vorher_bytes": 7443,
+    "nachher_bytes": 8347,
+    "vorher_sha256": "65cf28b25077c6f451f419cc6632e1882aaec69313c53051aa32357788be13b3",
+    "nachher_sha256": "f115a4a3de6c5ff5bc902bfc1471ceab7da06d706edc51ea59888d5b36b03688"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.42.0/bestandspruefung_2026-10-15/README.md",
+    "grund": "Nicht vorhandenen historischen Zielbeleg als fehlend ausgewiesen statt gebrochen zu verlinken.",
+    "vorher_bytes": 8861,
+    "nachher_bytes": 9098,
+    "vorher_sha256": "c44d2a54b0fd9cdf531bb96711f64b18f9237c106b2ef1d497ab86adcd184a66",
+    "nachher_sha256": "2b2444ae6fac24c817766cb0313aa7ac24eb51c85fbba717a1d14c158983f3d0"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+    "grund": "Veraltete aktuelle Standangabe präzisiert",
+    "vorher_sha256": "c84ca2b8d8b18bc6bb875c8cf44349203a036af2acbaddc64c8045c3e939f110",
+    "nachher_sha256": "5e868da9598ff4fbcc19ac427f0b66db657280636a65902eff47a693e618f31c"
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "grund": "Veraltete aktuelle Standangabe präzisiert",
+    "vorher_sha256": "a223bffcdba4aed58577b64b4395f7794ff320d07bd6d1edafca284d60b2ebb5",
+    "nachher_sha256": "8ec7e90aac5c2f08f712ed851e31061be376d3de2ca0120b6480b46f277f1a54"
+  },
+  {
+    "pfad": "01_Repository/Glide/requirements/runtime.txt",
+    "grund": "Veraltete aktuelle Standangabe präzisiert",
+    "vorher_sha256": "873c827839a6e0219be6ad476fdf1ae1588d92f1641e18ae984d60eb7cbd08c4",
+    "nachher_sha256": "c0a86c2100aac3df66e34b5d64f176ba5f98bda4f46b46d09c6e148ff952b8cc"
+  }
+]

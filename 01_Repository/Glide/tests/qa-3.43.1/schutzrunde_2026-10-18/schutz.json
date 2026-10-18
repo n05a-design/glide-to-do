@@ -1,0 +1,17 @@
+{
+  "datum": "2026-10-18T16:15:05",
+  "gruppe": "schutz",
+  "plattform": "win32",
+  "python": "3.14.7",
+  "app_sha256": "f74af723e3fe1fc18aae5beafcef3d026a3a9c39d8eb16c90b68fb3ae7ddec26",
+  "test_sha256": "fa731b2a6857c3c1fba4ba0b5e6cb3debc94ec88a9392f9625e25a5efbfa4e45",
+  "pruefungen": [
+    {
+      "name": "schutzrunde",
+      "exitcode": 0,
+      "sekunden": 186.5,
+      "protokoll": "schutzrunde.log"
+    }
+  ],
+  "quelle_unveraendert": true
+}

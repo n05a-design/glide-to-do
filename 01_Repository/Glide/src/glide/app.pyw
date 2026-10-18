@@ -158,6 +158,10 @@ import week_planning as glide_week
 import page_features as glide_pages
 import action_catalog as glide_actions  # noqa: E402
 import undo_history as glide_undo  # noqa: E402
+import structural_guard as glide_guard  # noqa: E402
+import load_phases as glide_load  # noqa: E402
+import editor_flush as glide_flush  # noqa: E402
+import data_lock as glide_lock  # noqa: E402
 import ui_design as glide_design  # noqa: E402
 import planning as glide_planning  # noqa: E402
 import day_proposal as glide_day_proposal  # noqa: E402
@@ -9123,7 +9127,8 @@ class RichNoteEditor(tk.Frame):
             self.after_cancel(self._job)
             self._job = None
         if self._loading:
-            return
+            # Während des Ladens ist nichts offen; Vertrag True/False (WA-29).
+            return True
         self.refresh_fonts()
         try:
             value = self.document()
@@ -9988,7 +9993,11 @@ class PageEditor(RichNoteEditor):
                 self.app._task_editor_change = None
         if change.saved is False:
             self._save_failed = True
-            self.status.configure(text='Nicht gespeichert – erneut versuchen')
+            # Nach einem Schreibfehler kann das Neuzeichnen im Änderungsrahmen
+            # den Editor schon abgebaut haben (Seitenwechsel); der Inhalt steht
+            # dann im Bestand und ist als ungespeichert markiert (WA-29).
+            if self.winfo_exists():
+                self.status.configure(text='Nicht gespeichert – erneut versuchen')
 
     def flush(self):
         if self._loading or getattr(self, '_flushing_tasks', False):
@@ -9998,6 +10007,11 @@ class PageEditor(RichNoteEditor):
             return False
         self._flushing_tasks = True
         try:
+            # Vertrag True/False (WA-29): Ein ungültiger Text – etwa über der
+            # Größengrenze – wird nicht übernommen, sondern gemeldet; der
+            # Editor behält ihn. Vorher brach `sync_task_titles` mit der
+            # Ausnahme ab, mitten im Seitenwechsel.
+            self.document()
             with self.task_change() as change:
                 self.spread_line_tags()
                 self.bind_pending_tasks()
@@ -10011,6 +10025,9 @@ class PageEditor(RichNoteEditor):
                 self._known_items = current
                 result = RichNoteEditor.flush(self)
             return result is not False and change.saved is not False
+        except ValueError as exc:
+            self.status.configure(text=str(exc))
+            return False
         finally:
             self._flushing_tasks = False
 
@@ -17592,7 +17609,7 @@ class ListApp:
         return self.default_template_records()
 
     def save_templates(self):
-        if getattr(self, "_data_read_only", False):
+        if getattr(self, "_data_read_only", False) or self.verify_data_lock() is False:
             return False
         payload = {"format_version": self.TEMPLATE_FORMAT_VERSION,
                    "templates": self.normalize_template_records(getattr(self, "templates", []))}
@@ -17614,69 +17631,144 @@ class ListApp:
         return next((item for item in getattr(self, "templates", []) if item.get("id") == template_id), None)
 
     def read_foreign_lock(self, path=None):
-        """Lokale Prozesse ohne Signale prüfen; fremde Rechner per Heartbeat."""
-        try:
-            with open(path or LOCK_FILE, "r", encoding="utf-8") as file:
-                previous = json.load(file)
-            stamp = datetime.fromisoformat(str(previous.get("refreshed_at") or previous.get("started_at")))
-            if stamp.tzinfo is None:
-                stamp = stamp.astimezone()
-            if (datetime.now().astimezone() - stamp).total_seconds() > self.LOCK_MAX_AGE_HOURS * 3600:
-                return None
-            host = os.environ.get("COMPUTERNAME") or os.environ.get("HOSTNAME") or "unbekannt"
-            if previous.get("host") != host:
-                return previous
-            pid = int(previous.get("pid", 0))
-            if pid <= 0:
-                return None
-            if pid == os.getpid():
-                return None
-            if IS_WINDOWS:
-                kernel = ctypes.WinDLL("kernel32", use_last_error=True)
-                kernel.OpenProcess.argtypes = [ctypes.c_ulong, ctypes.c_bool, ctypes.c_ulong]
-                kernel.OpenProcess.restype = ctypes.c_void_p
-                kernel.GetExitCodeProcess.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_ulong)]
-                kernel.CloseHandle.argtypes = [ctypes.c_void_p]
-                handle = kernel.OpenProcess(0x1000, False, pid)
-                if not handle:
-                    return previous if ctypes.get_last_error() == 5 else None
-                try:
-                    code = ctypes.c_ulong()
-                    if kernel.GetExitCodeProcess(handle, ctypes.byref(code)) and code.value != 259:
-                        return None
-                finally:
-                    kernel.CloseHandle(handle)
-            else:
-                try:
-                    os.kill(pid, 0)
-                except ProcessLookupError:
-                    return None
-                except PermissionError:
-                    pass
-            return previous
-        except (OSError, ValueError, TypeError, AttributeError):
+        """Fremde Belegung des Datenordners – oder None, wenn er frei ist.
+
+        Lokale Prozesse ohne Signale prüfen; fremde Rechner über den
+        Zeitstempel (`data_lock.classify`). Seit WA-30 gilt eine defekte oder
+        unlesbare Sperre nicht mehr als frei: Rückgabe ist dann ein Eintrag
+        mit `defective`, der den Grund nennt.
+        """
+        return self.foreign_lock_info(glide_lock.read(path or LOCK_FILE))
+
+    def foreign_lock_info(self, state):
+        if state.kind == glide_lock.MISSING:
             return None
+        if state.kind != glide_lock.VALID:
+            return {"defective": True, "kind": state.kind, "detail": state.detail}
+        verdict = glide_lock.classify(state.record, host=glide_lock.host_name(), pid=os.getpid(),
+                                      now=datetime.now().astimezone(),
+                                      max_age_seconds=self.LOCK_MAX_AGE_HOURS * 3600)
+        return state.record if verdict == glide_lock.FOREIGN else None
+
+    def mark_lock_read_only(self, info, reason=None):
+        """Schreibschutz wegen der Datensperre; `info` erscheint in der Warnung."""
+        self._data_read_only = True
+        self._read_only_reason = reason or ("lock_defective" if (info or {}).get("defective") else "lock")
+        self.lock_info = info
+        return info
 
     def acquire_data_lock(self):
-        foreign = self.read_foreign_lock()
-        self._data_read_only = bool(foreign)
+        # Prüfen und Ersetzen müssen dieselbe Betriebssystemsperre halten;
+        # ein Kennungsvergleich nach dem Ersetzen allein schließt das Rennen
+        # zweier Starts an einer verwaisten Datei nicht.
+        try:
+            with glide_lock.acquisition(LOCK_FILE) as acquired:
+                if acquired:
+                    return self._acquire_data_lock()
+                self._lock_token = {}
+                return self.mark_lock_read_only({"host": "gleichzeitig startender Prozess"}, reason="lock")
+        except OSError as exc:
+            self._lock_token = {}
+            return self.mark_lock_read_only({"defective": True, "detail": str(exc)})
+
+    def _acquire_data_lock(self):
+        """Datensperre beim Start oder Ordnerwechsel erwerben (WA-30).
+
+        Fremd, defekt oder unlesbar: schreibgeschützt; eine defekte Sperre lässt
+        sich danach bewusst übernehmen (`take_over_data_lock`). Fehlt sie, legt
+        Glide sie exklusiv an. Ist sie frei, ersetzt Glide sie und prüft danach
+        die eigene Kennung – zwei gleichzeitige Starts halten sich so nicht
+        beide für den Besitzer.
+        """
+        self._data_read_only = False
         self._read_only_reason = "lock"
         self._lock_token = {}
-        if foreign:
-            return foreign
         now = datetime.now().astimezone().isoformat(timespec="seconds")
-        current = {"host": os.environ.get("COMPUTERNAME") or os.environ.get("HOSTNAME") or "unbekannt",
-                   "pid": os.getpid(), "token": uuid.uuid4().hex, "started_at": now, "refreshed_at": now}
+        current = glide_lock.new_record(glide_lock.host_name(), os.getpid(), now)
+        for _attempt in range(2):
+            state = glide_lock.read(LOCK_FILE)
+            if state.kind == glide_lock.MISSING:
+                try:
+                    created = glide_lock.create_exclusive(LOCK_FILE, current)
+                except OSError:
+                    self._data_read_only = True
+                    return None
+                if created:
+                    self._lock_token = current
+                    return None
+                # Ein anderer Start war schneller; dessen Sperre neu bewerten.
+                continue
+            foreign = self.foreign_lock_info(state)
+            if foreign:
+                return self.mark_lock_read_only(foreign)
+            try:
+                self.write_json_atomic(LOCK_FILE, current)
+            except OSError:
+                self._data_read_only = True
+                return None
+            check = glide_lock.read(LOCK_FILE)
+            if check.kind == glide_lock.VALID and check.record.get("token") == current["token"]:
+                self._lock_token = current
+                return None
+            break
+        state = glide_lock.read(LOCK_FILE)
+        info = self.foreign_lock_info(state) or state.record or {
+            "defective": True, "kind": state.kind, "detail": "Sperre gleichzeitig verändert"}
+        return self.mark_lock_read_only(info, reason="lock")
+
+    def take_over_data_lock(self):
+        try:
+            with glide_lock.acquisition(LOCK_FILE) as acquired:
+                if not acquired:
+                    return False
+                # Die Warnung kann lange offen stehen. Eine inzwischen gültige
+                # Sperre darf die Bestätigung der alten Warnung nicht verdrängen.
+                state = glide_lock.read(LOCK_FILE)
+                if state.kind == glide_lock.VALID:
+                    self.mark_lock_read_only(state.record, reason="lock")
+                    self.show_error("Datensperre übernehmen", glide_lock.takeover_failed(
+                        "Die Sperre wurde inzwischen von einer anderen Instanz erneuert."))
+                    return False
+                return self._take_over_data_lock()
+        except OSError as exc:
+            self.show_error("Datensperre übernehmen", glide_lock.takeover_failed(str(exc)))
+            return False
+
+    def _take_over_data_lock(self):
+        """Bewusste Übernahme einer defekten oder unlesbaren Sperre (WA-30).
+
+        Nur auf Wunsch des Nutzers aus der Warnung beim Start; danach prüft
+        Glide die eigene Kennung wie beim Erwerb.
+        """
+        if not getattr(self, "_data_read_only", False) or getattr(self, "_read_only_reason", None) != "lock_defective":
+            return False
+        now = datetime.now().astimezone().isoformat(timespec="seconds")
+        current = glide_lock.new_record(glide_lock.host_name(), os.getpid(), now)
         try:
             self.write_json_atomic(LOCK_FILE, current)
-            self._lock_token = current
-        except OSError:
-            self._data_read_only = True
-        return None
+        except OSError as exc:
+            self.show_error("Datensperre übernehmen", glide_lock.takeover_failed(str(exc)))
+            return False
+        check = glide_lock.read(LOCK_FILE)
+        if check.kind != glide_lock.VALID or check.record.get("token") != current["token"]:
+            self.mark_lock_read_only(self.foreign_lock_info(check) or check.record, reason="lock")
+            self.show_error("Datensperre übernehmen", glide_lock.takeover_failed("Eine andere Glide-Instanz hat "
+                                                                                 "die Sperre inzwischen belegt."))
+            return False
+        self._lock_token = current
+        self._data_read_only = False
+        self._read_only_reason = "lock"
+        self.lock_info = None
+        return True
 
     def show_data_lock_warning(self):
         info = getattr(self, "lock_info", None)
         if not info or not self.root.winfo_exists():
+            return
+        if info.get("defective"):
+            if self.ask_yes_no("Datensperre beschädigt", glide_lock.defective_question(info.get("detail"))) \
+                    and self.take_over_data_lock():
+                self.show_info("Datensperre übernommen", "Glide speichert in diesem Datenordner wieder.")
             return
         self.show_warning("Datenordner bereits geöffnet",
                           f"Der Datenordner ist seit {info.get('started_at', 'unbekannt')} auf "
@@ -17688,38 +17780,75 @@ class ListApp:
         token = getattr(self, "_lock_token", {})
         if not token:
             return
-        try:
-            with open(LOCK_FILE, "r", encoding="utf-8") as file:
-                current = json.load(file)
-            if current.get("token") == token.get("token"):
+        state = glide_lock.read(LOCK_FILE)
+        if state.kind == glide_lock.VALID and state.record.get("token") == token.get("token"):
+            try:
                 os.remove(LOCK_FILE)
-        except (OSError, ValueError, TypeError):
-            pass
+            except OSError:
+                pass
         self._lock_token = {}
 
     def refresh_data_lock(self):
+        """Gemeinsame Schreibschranke mit Erneuerung des Zeitstempels (WA-30).
+
+        `save_items` und die direkten Schreibaktionen rufen sie vor dem
+        Schreiben; das Autospeichern alle fünf Minuten hält den Zeitstempel
+        damit auch ohne Änderung frisch. Liefert, ob diese Instanz jetzt
+        schreiben darf.
+        """
+        return self.check_data_lock(renew=True)
+
+    def verify_data_lock(self):
+        """Dieselbe Schranke ohne Erneuerung – vor Einstellungen, Fenstergröße und Vorlagen."""
+        return self.check_data_lock(renew=False)
+
+    def check_data_lock(self, renew):
+        """Prüft die eigene Kennung in `glide.lock` (WA-30).
+
+        - eigene Kennung: schreiben erlaubt, mit `renew` höchstens einmal je
+          Sekunde neu gestempelt;
+        - Sperre verschwunden: exklusiv neu anlegen, sonst schreibgeschützt;
+        - fremde Kennung, defekte Datei: schreibgeschützt;
+        - vorübergehend nicht lesbar: dieses Schreiben unterbleibt, die
+          Sitzung bleibt schreibfähig.
+        """
+        if getattr(self, "_data_read_only", False):
+            return False
         token = getattr(self, "_lock_token", {})
-        if not token or getattr(self, "_data_read_only", False):
-            return
+        if not token:
+            # Prüfattrappen ohne erworbene Sperre und die kurze Spanne zwischen
+            # Freigabe und Neuerwerb beim Ordnerwechsel.
+            return True
+        state = glide_lock.read(LOCK_FILE)
+        if state.kind == glide_lock.MISSING:
+            try:
+                if glide_lock.create_exclusive(LOCK_FILE, token):
+                    return True
+            except OSError:
+                self.mark_lock_read_only(None, reason="lock_lost")
+                return False
+            state = glide_lock.read(LOCK_FILE)
+        if state.kind == glide_lock.UNREADABLE:
+            return False
+        if state.kind != glide_lock.VALID or state.record.get("token") != token.get("token"):
+            self.mark_lock_read_only(state.record if state.kind == glide_lock.VALID else {
+                "defective": True, "kind": state.kind, "detail": state.detail or "Sperre fehlt"})
+            return False
+        if not renew:
+            return True
+        jetzt = datetime.now().astimezone().isoformat(timespec="seconds")
+        if token.get("refreshed_at") == jetzt:
+            # Die Prüfung oben ist erfolgt; der Inhalt wäre bytegleich.
+            # Ein Speichervorgang rief das bis 08.10.2026 zweimal je
+            # Sekunde mit Schreiben und fsync auf (P06r).
+            return True
+        token = dict(token, refreshed_at=jetzt)
         try:
-            with open(LOCK_FILE, "r", encoding="utf-8") as file:
-                existing = json.load(file)
-            if existing.get("token") != token.get("token"):
-                self._data_read_only = True
-                self._read_only_reason = "lock"
-                self.lock_info = existing
-                return
-            jetzt = datetime.now().astimezone().isoformat(timespec="seconds")
-            if token.get("refreshed_at") == jetzt:
-                # Die Prüfung oben ist erfolgt; der Inhalt wäre bytegleich.
-                # Ein Speichervorgang rief das bis 08.10.2026 zweimal je
-                # Sekunde mit Schreiben und fsync auf (P06r).
-                return
-            token = dict(token, refreshed_at=jetzt)
             self.write_json_atomic(LOCK_FILE, token)
             self._lock_token = token
-        except (OSError, ValueError, TypeError):
+        except OSError:
             pass
+        return True
 
     def data_folder_path(self):
         return BASE_DIR
@@ -17734,7 +17863,8 @@ class ListApp:
         source = os.path.realpath(BASE_DIR)
         if os.path.normcase(target) == os.path.normcase(source):
             return True
-        if self.read_foreign_lock(os.path.join(target, "glide.lock")):
+        foreign = self.read_foreign_lock(os.path.join(target, "glide.lock"))
+        if foreign and not foreign.get("defective"):
             raise ValueError("Der Zielordner ist auf einem anderen Arbeitsplatz geöffnet.")
         os.makedirs(target, exist_ok=True)
         if move_existing and os.listdir(target):
@@ -17784,6 +17914,12 @@ class ListApp:
         os.makedirs(BACKUP_DIR, exist_ok=True)
         os.makedirs(ATTACHMENTS_DIR, exist_ok=True)
         self.lock_info = self.acquire_data_lock()
+        if self.lock_info and not os.environ.get("GLIDE_TEST_MODE"):
+            # Wie beim Start: fremd belegt oder Sperre defekt (dann mit Übernahme).
+            try:
+                self._register_after(self.root.after(250, self.show_data_lock_warning))
+            except tk.TclError:
+                pass
         self.settings = self.load_settings()
         self.theme_name = self.design_info()["base"]
         self._ui_font_family = None
@@ -17900,6 +18036,21 @@ class ListApp:
                     "active_folder_id": self.active_folder_id if self.view_mode == "folder" else None,
                     "view_mode": self.view_mode,
                 })
+            inhalt = self.settings_json_text(payload)
+            # Gleicher Inhalt und unveränderte Datei: nichts zu schreiben. Die
+            # Dateisignatur stellt sicher, dass eine inzwischen gelöschte oder
+            # fremd geänderte Datei trotzdem neu geschrieben wird.
+            geschrieben = getattr(self, "_settings_written", None)
+            if geschrieben is not None and geschrieben == (inhalt, self.file_signature(SETTINGS_FILE)):
+                self.settings = payload
+                return True
+            self._settings_written = None
+            # Gemeinsame Schreibschranke (WA-30): Eine verdrängte Instanz
+            # überschreibt keine Einstellungen der anderen.
+            if self.verify_data_lock() is False:
+                if getattr(self, "_data_read_only", False):
+                    return False
+                raise OSError("Die Datensperre (glide.lock) ließ sich gerade nicht lesen.")
             migration_backup = os.path.join(BASE_DIR, "settings.before-v1.json")
             if os.path.isfile(SETTINGS_FILE) and not os.path.exists(migration_backup):
                 with open(SETTINGS_FILE, "rb") as existing_file:
@@ -17919,15 +18070,6 @@ class ListApp:
                     finally:
                         if os.path.exists(migration_temp):
                             os.remove(migration_temp)
-            inhalt = self.settings_json_text(payload)
-            # Gleicher Inhalt und unveränderte Datei: nichts zu schreiben. Die
-            # Dateisignatur stellt sicher, dass eine inzwischen gelöschte oder
-            # fremd geänderte Datei trotzdem neu geschrieben wird.
-            geschrieben = getattr(self, "_settings_written", None)
-            if geschrieben is not None and geschrieben == (inhalt, self.file_signature(SETTINGS_FILE)):
-                self.settings = payload
-                return True
-            self._settings_written = None
             # Der Schreiber kodiert erneut: Prüfungen ersetzen ihn mit der
             # ursprünglichen Signatur (Pfad, Daten).
             self.write_json_atomic(SETTINGS_FILE, payload)
@@ -21342,10 +21484,15 @@ class ListApp:
             pass
         return "break"
 
-    def prepare_inspector_switch(self):
-        """Eine nicht gespeicherte Eingabe bleibt beim bisherigen Kontext."""
+    def prepare_inspector_switch(self, editors=True):
+        """Eine nicht gespeicherte Eingabe bleibt beim bisherigen Kontext.
+
+        Seit WA-29 gilt das auch für den offenen Notiz-, Seiten- oder
+        Zeichnungseditor (`editor_switch_allowed`); `editors=False` überlässt
+        ihn dem Aufrufer, etwa dem Beenden mit eigener Rückfrage.
+        """
         self.commit_detail_pane()
-        if not getattr(self, "_detail_commit_error", None):
+        if not getattr(self, "_detail_commit_error", None) and (not editors or self.editor_switch_allowed()):
             return True
         if hasattr(self, "sidebar_listbox"):
             self.update_sidebar_list()
@@ -26030,9 +26177,8 @@ class ListApp:
             return False
         if bool(holder.get("archived")) == archived:
             return False
-        if archived:
-            self.flush_rich_note()
-            self.flush_drawing_editor()
+        if archived and not self.editor_switch_allowed():
+            return False
         with self.sidebar_change(refresh_tree=True) as change:
             holder["archived"] = archived
             holder["archived_at"] = datetime.now().astimezone().isoformat(timespec="seconds") if archived else None
@@ -26616,7 +26762,8 @@ class ListApp:
             self.refresh_tree()
 
     def capture_template(self, list_id=None, folder_id=None):
-        self.flush_rich_note()
+        if not self.output_editor_ready():
+            return None
         holder = self.get_folder(folder_id) if folder_id else next(
             (entry for entry in self.lists if entry["id"] == list_id), None)
         if holder is None:
@@ -31143,10 +31290,13 @@ class ListApp:
             return False
         old = copy.deepcopy(self.lists)
         created = self.build_item_from_dialog(details)
-        with self.guarded_structural_change('Kalenderaufgabe anlegen'):
+        with self.guarded_structural_change('Kalenderaufgabe anlegen') as guard:
             with self.item_change([], update_sidebar=True) as change:
                 target.setdefault('items', []).append(created)
                 change.mark(created['id'])
+        if guard.aborted:
+            # Der Wächter hat Stand und Rückgängig-Stapel schon zurückgesetzt.
+            return False
         if not change.saved:
             self.lists = old
             self.sync_current_list_reference(); self.refresh_tree(); self.update_sidebar_list()
@@ -32737,7 +32887,12 @@ class ListApp:
         oder eben nicht, und dann verhält sich eine der vier Ansichten anders
         als die übrigen, ohne dass jemand es beabsichtigt hätte.
         """
-        self.flush_rich_note()
+        # Alle vier Wechsel prüfen vorher `prepare_inspector_switch`, das die
+        # Editoren schon übernommen hat; ein zweiter Durchlauf kostete bei
+        # Seiten einen weiteren Rückgängig-Schnappschuss.
+        if not getattr(self, "_switch_editor_flushed", False):
+            self.flush_rich_note()
+        self._switch_editor_flushed = False
         self.expanded_ids = set()
         self.restore_note_chrome()
         self.collapsed_item_ids = set()
@@ -34394,7 +34549,8 @@ class ListApp:
         if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "note"):
             self.show_info("Anlegen", "Diese Dokumentart gehört nicht in diesen Bereich.")
             return "break"
-        self.flush_rich_note()
+        if not self.editor_switch_allowed():
+            return "break"
         ordner = self.get_folder(folder_id) if folder_id else None
         if ordner is not None and ordner.get("folder_kind") == "journal":
             return self.create_journal_entry(folder_id)
@@ -35794,7 +35950,8 @@ class ListApp:
         if folder_id and not passt(folder_id):
             self.show_info("Anlegen", "Diese Dokumentart gehört nicht in diesen Bereich.")
             return "break"
-        self.flush_rich_note()
+        if not self.editor_switch_allowed():
+            return "break"
         if folder_id is None and not getattr(self, "_creating_sidebar_section", None) and self.view_mode == "folder" and self.get_folder(self.active_folder_id):
             folder_id = self.active_folder_id
         if folder_id and not passt(folder_id):
@@ -35907,7 +36064,7 @@ class ListApp:
         if getattr(self, '_data_read_only', False):
             return 'break'
         before = copy.deepcopy(self.lists)
-        with self.guarded_structural_change('Liste kopieren'):
+        with self.guarded_structural_change('Liste kopieren') as guard:
             # Kein Neuzeichnen im Rahmen: Nach Erfolg wechselt die Ansicht auf
             # die Kopie und zeichnet ohnehin neu, nach Fehlschlag der Rückweg unten (P06r).
             with self.sidebar_change(refresh_tree=False) as change:
@@ -35940,6 +36097,9 @@ class ListApp:
                 index = next((i for i, item in enumerate(self.lists) if item.get("id") == list_id), len(self.lists) - 1)
                 self.lists.insert(index + 1, new_entry)
                 change.mark()
+        if guard.aborted:
+            # Der Wächter hat Stand und Rückgängig-Stapel schon zurückgesetzt.
+            return 'break'
         if change.saved:
             self.set_active_list(new_entry['id'])
         else:
@@ -35958,7 +36118,10 @@ class ListApp:
         previous_mode = self.view_mode
         previous_folder_id = self.active_folder_id
         try:
-            self.set_active_list(list_id, refresh=False)
+            if self.set_active_list(list_id, refresh=False) == "break":
+                # Der Wechsel wurde verweigert (offene Eingabe); sonst
+                # exportierte das die bisher geöffnete Liste.
+                return "break"
             if fmt == "md":
                 self.export_as_markdown()
             elif fmt == "csv":
@@ -36028,8 +36191,8 @@ class ListApp:
         return "break"
 
     def partial_backup_payload(self, list_ids=None, folder_ids=None):
-        self.flush_rich_note()
         """Verlustfreies Teilbackup: Zweige einschließlich leerer Unterordner."""
+        self.require_editor_flush()
         self.sync_current_list_reference()
         chosen_folders = set(folder_ids or [])
         folder_set = {folder["id"] for fid in chosen_folders for folder in self.iter_folder_subtree(fid)}
@@ -40378,9 +40541,12 @@ class ListApp:
 
     def _close_after_confirmation(self):
         """Fragt offene Änderungen ab und schließt; False, wenn abgebrochen wurde."""
-        if not self.prepare_inspector_switch():
+        if not self.prepare_inspector_switch(editors=False):
             return False
-        self.flush_rich_note()
+        # Ein nicht übernommener Editor zählt wie eine ungespeicherte Änderung
+        # (WA-29): erneut versuchen oder bewusst ohne sie schließen. Ein
+        # schreibgeschützter Bestand speichert ohnehin nichts.
+        editor_pending = self.flush_rich_note() is False and not getattr(self, "_data_read_only", False)
         if (getattr(self, "_templates_editing", False) and
                 self.templates != getattr(self, "_templates_before_edit", self.templates)):
             answer = self.ask_yes_no_cancel("Vorlagen speichern", "Die bearbeiteten Vorlagen vor dem Schließen speichern?")
@@ -40389,7 +40555,7 @@ class ListApp:
             if answer and not self.save_templates():
                 self.show_error("Vorlagen speichern", "Die Vorlagen konnten nicht gespeichert werden.")
                 return False
-        if getattr(self, "dirty", False):
+        if getattr(self, "dirty", False) or editor_pending:
             retry = self.ask_yes_no_cancel(
                 "Ungespeicherte Änderungen",
                 "Die letzten Änderungen konnten noch nicht gespeichert werden.\n\n"
@@ -40398,7 +40564,7 @@ class ListApp:
             if retry is None:
                 return False
             if retry:
-                if not self.save_items():
+                if (editor_pending and self.flush_rich_note() is False) or not self.save_items():
                     return False
             elif not self.ask_yes_no(
                 "Ohne Speichern schließen",
@@ -40406,7 +40572,12 @@ class ListApp:
             ):
                 return False
         timer = self.running_timer()
-        if timer and timer.get("focus") and timer.get("started_at") and not self.settings.get("time_booking"):
+        # Erkennt eine Verdrängung vor dem Schreiben (WA-30). Ein
+        # schreibgeschützter Start gehört nicht zum laufenden Fokus; er schreibt
+        # dessen Zeit nicht und darf trotzdem schließen.
+        self.verify_data_lock()
+        if (timer and timer.get("focus") and timer.get("started_at") and not self.settings.get("time_booking")
+                and not getattr(self, "_data_read_only", False)):
             self.settings["time_tracking"] = glide_focus.pause(timer, datetime.now().astimezone())
             if not self.save_settings(show_error=True):
                 self.settings["time_tracking"] = timer
@@ -40419,7 +40590,7 @@ class ListApp:
 
     def save_window_geometry(self):
         """Fenstergröße für den nächsten Start sichern, ohne je eine leere Datei zu hinterlassen."""
-        if getattr(self, "_data_read_only", False):
+        if getattr(self, "_data_read_only", False) or self.verify_data_lock() is False:
             return
         try:
             geometry = self.root.geometry()
@@ -41971,52 +42142,93 @@ class ListApp:
             return
         self._clipped_titles = []
         self.remove_stale_temp_files()
+        # Phase 1 (WA-28): lesen und normalisieren. Nur ein Fehler hier
+        # bedeutet eine unlesbare, beschädigte oder neuere Datei.
         try:
-            with open(SAVE_FILE, "r", encoding="utf-8") as file:
-                data = json.load(file)
-                self._schema_backup_guard.observe(SAVE_FILE, data, os.fstat(file.fileno()))
-            self.lists, active_id_from_file = self.normalize_lists_data(data)
-            self.back_up_before_title_clipping()
-            self.history = list(getattr(self, "_loaded_history", []) or [])
-            if not self.lists:
-                self.lists = [self.new_list_object(self.app_title, [])]
-            self.ensure_inbox_list()
-            inbox_repaired = bool(getattr(self, "_last_inbox_repair", False))
-            requested_system_view = (
-                self.view_mode
-                if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW, self.TABLE_VIEW)
-                else None
-            )
-            requested_folder_id = self.active_folder_id
-            if not requested_folder_id and isinstance(data, dict):
-                saved_folder = data.get("active_folder_id")
-                requested_folder_id = saved_folder if isinstance(saved_folder, str) else None
-            preferred_active_id = self.active_list_id or active_id_from_file
-            if preferred_active_id not in [entry.get("id") for entry in self.lists]:
-                existing_ids = [entry.get("id") for entry in self.lists]
-                fallback = next((entry.get("id") for entry in self.lists if not self.is_inbox_list(entry)), self.lists[0]["id"])
-                preferred_active_id = active_id_from_file if active_id_from_file in existing_ids else fallback
-            self.active_list_id = None
-            self.active_folder_id = None
+            data, active_id_from_file = self.read_save_file()
+        except glide_load.READ_ERRORS as e:
+            message, newer = glide_load.read_failure(e, NewerDataError)
+            self.handle_unreadable_save_file(message, newer=newer)
+            return
+        # Phase 2: übernehmen und darstellen. Ein Fehler hier ist ein
+        # Darstellungsfehler; der gelesene Bestand bleibt erhalten und wird
+        # nie durch einen leeren ersetzt (Befund A34).
+        try:
+            self.present_loaded_dataset(data, active_id_from_file)
+        except glide_load.DISPLAY_ERRORS + (tk.TclError,) as e:
+            self.recover_from_load_display_error(e, active_id_from_file)
+
+    def read_save_file(self):
+        """Lesephase von `load_items`: Datei lesen und normalisieren, ohne Oberfläche."""
+        with open(SAVE_FILE, "r", encoding="utf-8") as file:
+            data = json.load(file)
+            self._schema_backup_guard.observe(SAVE_FILE, data, os.fstat(file.fileno()))
+        self.lists, active_id_from_file = self.normalize_lists_data(data)
+        return data, active_id_from_file
+
+    def present_loaded_dataset(self, data, active_id_from_file):
+        """Darstellungsphase von `load_items`: übernehmen, anzeigen, gegebenenfalls umstellen."""
+        self.back_up_before_title_clipping()
+        self.history = list(getattr(self, "_loaded_history", []) or [])
+        if not self.lists:
+            self.lists = [self.new_list_object(self.app_title, [])]
+        self.ensure_inbox_list()
+        inbox_repaired = bool(getattr(self, "_last_inbox_repair", False))
+        requested_system_view = (
+            self.view_mode
+            if self.view_mode in self.DERIVED_ITEM_VIEWS + ("trash", self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW, self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW, self.TABLE_VIEW)
+            else None
+        )
+        requested_folder_id = self.active_folder_id
+        if not requested_folder_id and isinstance(data, dict):
+            saved_folder = data.get("active_folder_id")
+            requested_folder_id = saved_folder if isinstance(saved_folder, str) else None
+        preferred_active_id = self.preferred_loaded_list_id(active_id_from_file)
+        self.active_list_id = None
+        self.active_folder_id = None
+        self.view_mode = "list"
+        self.set_active_list(preferred_active_id, refresh=False)
+        if requested_system_view:
+            self._activate_system_view(requested_system_view, refresh=False)
+        elif requested_folder_id and self.get_folder(requested_folder_id):
+            self.set_active_folder(requested_folder_id, refresh=False)
+        self.update_sidebar_list()
+        self.refresh_tree()
+        self.warn_if_saved_by_older_version(data)
+        if self.migrate_on_start(data):
+            inbox_repaired = False
+        if inbox_repaired:
+            self.save_items()
+
+    def preferred_loaded_list_id(self, active_id_from_file):
+        """Aktive Liste nach dem Laden (`load_phases.choose_active_list`)."""
+        return glide_load.choose_active_list(
+            [entry.get("id") for entry in self.lists],
+            [entry.get("id") for entry in self.lists if self.is_inbox_list(entry)],
+            current=self.active_list_id, from_file=active_id_from_file)
+
+    def recover_from_load_display_error(self, error, active_id_from_file):
+        """Darstellungsfehler nach erfolgreichem Lesen: Bestand behalten, richtig melden.
+
+        Die Datei wird weder als beschädigt gesichert noch durch einen leeren
+        Bestand ersetzt; der Schreibschutz bleibt, wie er war. Damit spätere
+        Speichervorgänge nicht den Punktspeicher einer anderen Liste
+        übernehmen (`sync_current_list_reference`), zeigt die aktive Liste
+        notfalls ohne Oberfläche auf einen Eintrag dieses Bestands.
+        """
+        self.log_error(self.format_error_report(type(error), error, error.__traceback__))
+        if not self.lists:
+            self.lists = [self.new_list_object(self.app_title, [])]
+        current = next((entry for entry in self.lists if entry.get("id") == self.active_list_id), None)
+        if current is None or current.get("items") is not getattr(self, "items", None):
+            target_id = self.preferred_loaded_list_id(active_id_from_file)
+            current = next(entry for entry in self.lists if entry.get("id") == target_id)
             self.view_mode = "list"
-            self.set_active_list(preferred_active_id, refresh=False)
-            if requested_system_view:
-                self._activate_system_view(requested_system_view, refresh=False)
-            elif requested_folder_id and self.get_folder(requested_folder_id):
-                self.set_active_folder(requested_folder_id, refresh=False)
-            self.update_sidebar_list()
-            self.refresh_tree()
-            self.warn_if_saved_by_older_version(data)
-            if self.migrate_on_start(data):
-                inbox_repaired = False
-            if inbox_repaired:
-                self.save_items()
-        except NewerDataError as e:
-            self.handle_unreadable_save_file(str(e), newer=True)
-        except (json.JSONDecodeError, ValueError, RecursionError, tk.TclError) as e:
-            self.handle_unreadable_save_file(f"Die Speicherdatei ist beschädigt oder ungültig:\n{e}")
-        except OSError as e:
-            self.handle_unreadable_save_file(f"Die Speicherdatei konnte nicht gelesen werden:\n{e}")
+            self.active_folder_id = None
+            self.active_list_id = current["id"]
+            self.items = current.setdefault("items", [])
+            self.app_title = str(current.get("title") or "Meine Liste").strip() or "Meine Liste"
+        self.show_error(*glide_load.display_failure(error))
 
     def start_with_empty_dataset(self):
         """Grundbestand aus einer leeren Liste und dem Eingang."""
@@ -42212,6 +42424,11 @@ class ListApp:
             return "Der Bestand stammt aus einer neueren Glide-Version und bleibt unverändert."
         if reason == "unreadable":
             return "Die Speicherdatei ist unlesbar und bleibt unverändert."
+        if reason == "lock_defective":
+            return ("Die Datensperre des Datenordners ist beschädigt oder unlesbar. Beim nächsten Start "
+                    "lässt sie sich bewusst übernehmen.")
+        if reason == "lock_lost":
+            return "Die Datensperre des Datenordners ließ sich nicht neu anlegen."
         return "Der Datenordner ist anderweitig geöffnet."
 
     def data_payload(self, lists=None, folders=None, active_list_id=None, active_folder_id=None,
@@ -42282,7 +42499,7 @@ class ListApp:
         # Aufbau. Dessen Lebensdauer bleibt erhalten; außerhalb eines
         # render_pass werden keine Kennzahlen gehalten.
         self.clear_render_cache()
-        self.refresh_data_lock()
+        lock_ok = self.refresh_data_lock()
         if getattr(self, "_data_read_only", False):
             if show_error:
                 hinweis = self.read_only_notice()
@@ -42290,10 +42507,19 @@ class ListApp:
                     hinweis += " Bitte Glide nach dem Ordnerabgleich erneut starten."
                 self.show_warning("Speichern gesperrt", hinweis)
             return False
+        if lock_ok is False:
+            # Sperre gerade nicht lesbar (WA-30): nicht schreiben, Änderung bleibt offen.
+            self.dirty = True
+            if show_error:
+                self.show_error("Fehler beim Speichern", "Die Datensperre (glide.lock) ließ sich gerade nicht "
+                                "lesen. Glide versucht es beim nächsten Speichern erneut.")
+            return False
+        if not self.guarded_save_allowed():
+            # Ein Bestandswächter vermisst Punkte: nicht schreiben (WA-27).
+            return False
         self.dirty = True
         backup_warning = None
         try:
-            self.refresh_data_lock()
             self.sync_current_list_reference()
             self.ensure_schema12_backup()
             self.ensure_schema13_backup()
@@ -42320,6 +42546,9 @@ class ListApp:
             self.history = self.normalize_history_entries(self.history)
             backup_warning = self.write_backup_copy(force=force_backup)
             self.write_json_atomic(SAVE_FILE, self.data_payload())
+            # Schreibzähler des Bestands; der Wächter erkennt daran, ob die
+            # Datei während seiner Laufzeit geschrieben wurde (WA-27).
+            self._data_writes = getattr(self, "_data_writes", 0) + 1
             self.dirty = False
         except Exception as e:
             self._saved_comparison_parts = None
@@ -44263,11 +44492,80 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         return result
 
     def flush_rich_note(self):
-        """Offene Notiz- und Zeichnungsänderungen vor Navigation, Export und Ende sichern."""
+        """Offene Notiz- und Zeichnungsänderungen vor Navigation, Export und Ende sichern.
+
+        Liefert True, wenn nichts offen ist oder beide Editoren übernommen und
+        gespeichert haben, sonst False (WA-29, `editor_flush.combine`). Beide
+        werden immer versucht; scheitert einer, hält das den anderen nicht auf.
+        """
         editor = getattr(self, "rich_note_editor", None)
-        if editor is not None and editor.winfo_exists():
-            editor.flush()
-        self.flush_drawing_editor()
+        note = editor.flush() if editor is not None and editor.winfo_exists() else True
+        flushed = glide_flush.combine(note, self.flush_drawing_editor())
+        # Schreibschutz soll lesende Ausgaben erhalten. Ein unveränderter,
+        # nachweislich übernommener Inhalt braucht dafür kein Schreibrecht.
+        if not flushed and getattr(self, "_data_read_only", False):
+            return self.open_editor_content_adopted()
+        return flushed
+
+    def editor_switch_allowed(self):
+        """Vor einem Kontextwechsel: Darf der offene Editor abgebaut werden? (WA-29)
+
+        Übernimmt beide Editoren. Nein nur, wenn ein Editor Inhalt hält, den
+        der Bestand nicht übernommen hat; dann bleibt Glide im bisherigen
+        Kontext und sagt das (`editor_flush.switch_allowed`).
+        """
+        self._switch_editor_flushed = True
+        flushed = self.flush_rich_note()
+        allowed = glide_flush.switch_allowed(
+            flushed, read_only=getattr(self, "_data_read_only", False), adopted=self.open_editor_content_adopted,
+            editor_in_dataset=self.open_editor_in_dataset)
+        if not allowed:
+            self.show_warning(*glide_flush.NOT_ADOPTED)
+        return allowed
+
+    def open_editor_in_dataset(self):
+        """Ob der offene Notiz- oder Zeichnungseditor zu einer Seite dieses Bestands gehört."""
+        ids = {entry.get("id") for entry in self.lists}
+        editor = getattr(self, "rich_note_editor", None)
+        try:
+            if editor is not None and editor.winfo_exists() and getattr(editor, "entry_id", None) in ids:
+                return True
+        except tk.TclError:
+            pass
+        drawing = self.current_drawing_editor()
+        return drawing is not None and drawing.list_id in ids
+
+    def open_editor_content_adopted(self):
+        """Ein Schreibfehler erlaubt den Wechsel nur bei vollständig übernommenem Inhalt."""
+        entries = {entry.get("id"): entry for entry in self.lists}
+        editor = getattr(self, "rich_note_editor", None)
+        try:
+            if editor is not None and editor.winfo_exists() and editor.entry_id in entries:
+                if editor.document() != entries[editor.entry_id].get("rich_note"):
+                    return False
+            drawing = self.current_drawing_editor()
+            if drawing is not None and drawing.list_id in entries:
+                entry = entries[drawing.list_id]
+                stored = (glide_animation.from_entry(entry).to_document() if drawing.animated
+                          else entry.get("drawing"))
+                if drawing._current_document() != stored:
+                    return False
+        except (ValueError, AttributeError, tk.TclError):
+            return False
+        return True
+
+    def require_editor_flush(self):
+        """Ausgaben dürfen bei fehlender Übernahme keinen alten Bestand ausgeben."""
+        if self.flush_rich_note() is False:
+            raise ValueError(glide_flush.NOT_ADOPTED[1])
+
+    def output_editor_ready(self):
+        try:
+            self.require_editor_flush()
+            return True
+        except ValueError as exc:
+            self.show_warning(glide_flush.NOT_ADOPTED[0], str(exc))
+            return False
 
     def store_rich_note(self, list_id, document):
         entry = next((entry for entry in self.lists if entry.get("id") == list_id), None)
@@ -44363,7 +44661,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         state, _, rows = glide_pages.live_rows(target, self.lists, self.trash, self.folders)
         if state != 'active' or item_id not in {row[0] for row in rows}:
             return False
-        self.flush_rich_note()
+        if not self.editor_switch_allowed():
+            return False
         before = copy.deepcopy((self.lists, self.trash, self.settings)); depth = len(self.undo_stack)
         if self.toggle_item_done_anywhere(item_id):
             return True
@@ -44582,7 +44881,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def transfer_document_task(self, document_id, item_id, target_id):
         """Heimat wechseln, dieselbe Aufgabe und einen Textverweis behalten."""
-        self.flush_rich_note()
+        if not self.editor_switch_allowed():
+            return False
         source = self.page_entry(document_id)
         target = next((entry for entry in self.lists if entry.get('id') == target_id), None)
         found = self.find_item_in_lists(item_id)
@@ -44798,7 +45098,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         entry = self.page_entry(list_id)
         if entry is None:
             return ""
-        self.flush_rich_note()
+        self.require_editor_flush()
 
         def zustand(item_id):
             found = self.find_item_in_lists(item_id)
@@ -44829,6 +45129,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         entry = self.page_entry(list_id)
         if entry is None:
             return "break"
+        if not self.output_editor_ready():
+            return "break"
         ziel = filedialog.asksaveasfilename(
             title="Seite als Markdown speichern", defaultextension=".md",
             initialfile=f"{self.safe_filename(str(entry.get('title') or 'seite'))}.md",
@@ -44839,8 +45141,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         ordnername = os.path.splitext(os.path.basename(ziel))[0] + " Bilder" if bilder else None
         try:
             self.validate_backup_target(ziel)
+            markdown = self.page_markdown(list_id, ordnername)
             with open(ziel, "w", encoding="utf-8") as datei:
-                datei.write(self.page_markdown(list_id, ordnername))
+                datei.write(markdown)
             # Bilder liegen neben der Datei, damit Markdown-Programme sie zeigen.
             if bilder:
                 ordner = os.path.join(os.path.dirname(ziel), ordnername)
@@ -44865,7 +45168,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         entry = self.page_entry(list_id)
         if entry is None:
             return None
-        self.flush_rich_note()
+        if not self.output_editor_ready():
+            return None
 
         def zustand(item_id):
             found = self.find_item_in_lists(item_id)
@@ -44919,10 +45223,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         return self.open_print_html(html, "glide_seite", "Seite drucken")
 
     def copy_page_markdown(self, list_id):
-        self.root.clipboard_clear()
+        if not self.output_editor_ready():
+            return "break"
         # B4: Kopiertes Markdown verweist auf die gespeicherten Bilddateien,
         # damit ein Markdown-Programm auf diesem Rechner sie zeigt.
-        self.root.clipboard_append(self.page_markdown(list_id, image_links="file"))
+        markdown = self.page_markdown(list_id, image_links="file")
+        self.root.clipboard_clear()
+        self.root.clipboard_append(markdown)
         self.show_undo_toast("Seite als Markdown kopiert")
         return "break"
 
@@ -45020,7 +45327,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "gallery"):
             self.show_info("Anlegen", "Diese Dokumentart gehört nicht in diesen Bereich.")
             return "break"
-        self.flush_rich_note()
+        if not self.editor_switch_allowed():
+            return "break"
         if folder_id is None and not getattr(self, "_creating_sidebar_section", None) and self.view_mode == "folder" and self.get_folder(self.active_folder_id):
             folder_id = self.active_folder_id
         if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "gallery"):
@@ -45038,7 +45346,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "page"):
             self.show_info("Anlegen", "Diese Dokumentart gehört nicht in diesen Bereich.")
             return "break"
-        self.flush_rich_note()
+        if not self.editor_switch_allowed():
+            return "break"
         if folder_id is None and not getattr(self, "_creating_sidebar_section", None) and self.view_mode == "folder" and self.get_folder(self.active_folder_id):
             folder_id = self.active_folder_id
         if folder_id and not glide_sidebar.accepts(self.sidebar_section_for("folder", folder_id), "list", "page"):
@@ -46966,7 +47275,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def import_drawing_as_new(self, event=None):
         """Standardweg: Eine Datei wird nach Vorschau als neue Zeichnungsseite angelegt."""
-        self.flush_rich_note()
+        if not self.editor_switch_allowed():
+            return "break"
         path = self.ask_drawing_file("Zeichnung importieren")
         if not path:
             return "break"
@@ -49992,6 +50302,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         Bestand kümmert sich darüber `guarded_structural_change`.
         """
         change = ChangeRecord(item_ids)
+        self.register_guarded_change(change)
         # Explizite Zusicherung geprüfter Aufrufer: nur diese Punkte/Teilbäume.
         # Unbekannte oder leere Auswahl bleibt ein Vollvergleich.
         affected_lists = self.changed_item_lists(item_ids) if local else None
@@ -50046,6 +50357,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         Ordner wechselt.
         """
         change = ChangeRecord(())
+        self.register_guarded_change(change)
         feedback_before = getattr(self, "_history_baseline", None)
         self.snapshot_undo(trim=False)
         with self.settings_write_batch():
@@ -50103,7 +50415,14 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         }
 
     def trim_undo_stack(self):
-        """Hält den Rückgängig-Stapel auf seiner Höchstlänge."""
+        """Hält den Rückgängig-Stapel auf seiner Höchstlänge.
+
+        Während eines Bestandswächters wird nicht gekürzt: Sein Rückweg braucht
+        den ersten Schritt ab der gemerkten Tiefe, auch bei vollem Stapel
+        (WA-27). Der Wächter holt das Kürzen an seinem Ende nach.
+        """
+        if getattr(self, "_integrity_guards", None):
+            return
         while len(self.undo_stack) > self.MAX_UNDO_STEPS:
             self.undo_stack.pop(0)
 
@@ -50328,50 +50647,146 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         allein leere Hüllen wie den Gruppen-Container beim Auflösen: Die Gruppe
         selbst verschwindet, ihre Punkte nicht. Alles, was nicht ausdrücklich
         hier steht, muss die Aktion überleben.
+
+        Seit WA-27 (18.10.2026) führt der Wächter eine eigene Transaktion
+        (`structural_guard.GuardTransaction`) und liefert sie: Der
+        Rückgängig-Stapel wird erst an seinem Ende gekürzt, damit der Rückweg
+        auch bei 20 Schritten den Stand davor findet; jedes Speichern im Wächter
+        prüft vorher den Bestand, ein Verlust erreicht die Datei also nicht; die
+        Meldung nennt den Stand „vollständig wiederhergestellt“ nur, wenn alle
+        IDs zurück sind und die Datei dem Stand davor entspricht. `aborted`
+        sagt Aufrufern mit eigenem Rückweg, dass der Wächter schon
+        zurückgenommen hat.
         """
         allowed = set(expected_removals or ())
-        before = self.data_item_ids() - allowed
-        depth_before = len(self.undo_stack)
+        guard = glide_guard.GuardTransaction(
+            action_name, self.data_item_ids() - allowed, len(self.undo_stack),
+            writes_before=getattr(self, "_data_writes", 0), dirty_before=getattr(self, "dirty", False))
+        guard.history_before = copy.deepcopy(getattr(self, "history", []))
         try:
-            yield
+            with open(SAVE_FILE, "rb") as file:
+                guard.file_before = file.read()
+        except FileNotFoundError:
+            pass
+        self.integrity_guards().append(guard)
+        crashed = reported = False
+        try:
+            yield guard
         except DataIntegrityError:
             # Eine Aktion hat selbst gemeldet, dass sie Punkte verlöre.
-            self.rollback_to_undo_depth(depth_before)
-            self.report_integrity_stop(action_name, len(before - self.data_item_ids()))
-            return
+            reported = True
         except Exception:
             # Ein echter Fehler: erst den Bestand retten, dann durchreichen.
-            self.rollback_to_undo_depth(depth_before)
-            self.report_integrity_stop(action_name, 0, crashed=True)
+            crashed = True
             raise
-        missing = before - self.data_item_ids()
-        if not missing:
-            return
-        self.rollback_to_undo_depth(depth_before)
-        self.report_integrity_stop(action_name, len(missing))
+        finally:
+            if any(entry is guard for entry in self.integrity_guards()):
+                self.finish_guard(guard, crashed=crashed, reported=reported)
 
-    def rollback_to_undo_depth(self, depth):
-        """Nimmt alle Schritte zurück, die seit dieser Stapeltiefe entstanden sind."""
+    def integrity_guards(self):
+        """Laufende Bestandswächter, der innerste zuletzt (WA-27)."""
+        guards = getattr(self, "_integrity_guards", None)
+        if guards is None:
+            guards = self._integrity_guards = []
+        return guards
+
+    def register_guarded_change(self, record):
+        """Ein Änderungsrahmen im Wächter erfährt dessen Abbruch über `saved`."""
+        guards = getattr(self, "_integrity_guards", None)
+        if guards:
+            guards[-1].records.append(record)
+
+    def guarded_save_allowed(self):
+        """Vor jedem Schreiben: Kein laufender Wächter vermisst einen Punkt.
+
+        Ein abgewehrter Schreibversuch bleibt still; der Wächter meldet ihn an
+        seinem Ende und stellt den Stand davor her. So bleibt die Datei nach
+        einem Abbruch bytegleich.
+        """
+        guards = getattr(self, "_integrity_guards", None)
+        if not guards:
+            return True
+        current = self.data_item_ids()
+        return all([guard.check_save(current) for guard in guards])
+
+    def finish_guard(self, guard, crashed=False, reported=False):
+        """Ende eines Wächters: prüfen, gegebenenfalls zurücknehmen, ehrlich melden."""
+        guards = self.integrity_guards()
+        guards[:] = [entry for entry in guards if entry is not guard]
+        missing = guard.missing(self.data_item_ids())
+        result = missing_after = None
+        if guard.needs_abort(missing, crashed=crashed, reported=reported):
+            guard.abort()
+            result, missing_after = self.roll_back_guard(guard)
+        if not guards:
+            self.trim_undo_stack()
+        if guard.aborted:
+            self.report_integrity_stop(guard.action_name, len(missing) or guard.blocked_missing,
+                                       crashed=crashed, outcome=result, missing_after=missing_after)
+
+    def roll_back_guard(self, guard):
+        """Stellt den Stand vor dem Wächter her; liefert (Ergebnis, noch fehlende IDs).
+
+        Wurde im Wächter nichts geschrieben, entspricht die Datei schon dem
+        Stand davor: Der Rückweg stellt nur den Arbeitsspeicher her und den
+        Merker für ungespeicherte Änderungen wie vorher. Sonst schreibt er den
+        Stand davor zurück und wertet das Speicherergebnis aus.
+        """
+        file_written = guard.file_written(getattr(self, "_data_writes", 0))
+        rollback_saved = None
+        try:
+            rollback_saved = self.rollback_to_undo_depth(guard.depth_before, save=file_written)
+            if file_written and rollback_saved is True and guard.file_before is not None:
+                # Normales Speichern erzeugt neue Verlaufs-/Zeitstempelwerte.
+                # Ein Abbruch stellt auch die ursprüngliche Dateidarstellung her.
+                if self.verify_data_lock() is False:
+                    rollback_saved = False
+                else:
+                    glide_guard.restore_bytes(SAVE_FILE, guard.file_before, self.replace_with_retry)
+                    rollback_saved = True
+                    self._saved_comparison_parts = None
+            if not file_written and rollback_saved is not None:
+                self.dirty = guard.dirty_before
+        except Exception:
+            # Der Rückweg selbst scheiterte; die Meldung beruht dann allein
+            # auf dem, was tatsächlich wieder im Bestand steht.
+            self.log_error(self.format_error_report(*sys.exc_info()))
+            rollback_saved = False
+        if file_written and rollback_saved is not True:
+            self.dirty = True
+        elif rollback_saved is not None:
+            self.history = guard.history_before
+            self.dirty = guard.dirty_before
+        missing_after = len(guard.missing(self.data_item_ids()))
+        return glide_guard.outcome(missing_after, file_written, rollback_saved, guard.dirty_before), missing_after
+
+    def rollback_to_undo_depth(self, depth, save=True):
+        """Nimmt alle Schritte zurück, die seit dieser Stapeltiefe entstanden sind.
+
+        Liefert None, wenn seit `depth` kein Schritt entstand, sonst das
+        Speicherergebnis von `apply_snapshot`. `save=False` stellt nur im
+        Arbeitsspeicher her und liefert dann True.
+        """
         if len(self.undo_stack) <= depth:
-            return False
+            return None
         snapshot = self.undo_stack[depth]
         del self.undo_stack[depth:]
         # Ein Wächterabbruch ist kein Rückgängig; Wiederholen gilt danach nicht.
         self.redo_steps().clear()
-        self.apply_snapshot(snapshot)
-        return True
+        if not save:
+            self.apply_snapshot(snapshot, save=False)
+            return True
+        return self.apply_snapshot(snapshot)
 
-    def report_integrity_stop(self, action_name, missing_count, crashed=False):
-        """Meldet einen abgewehrten Datenverlust – sichtbar, nicht im Log."""
-        if crashed:
-            detail = "Der Vorgang wurde abgebrochen."
-        else:
-            detail = f"Dabei wären {missing_count} Punkt(e) verloren gegangen."
-        self.show_error(
-            "Abgebrochen – keine Daten verloren",
-            f"„{action_name}“ wurde nicht ausgeführt.\n{detail}\n\n"
-            "Der vorherige Stand ist vollständig wiederhergestellt.",
-        )
+    def report_integrity_stop(self, action_name, missing_count, crashed=False, outcome=None, missing_after=0):
+        """Meldet einen abgewehrten Datenverlust – sichtbar, nicht im Log.
+
+        Den Wortlaut bestimmt `structural_guard.stop_message`: „vollständig
+        wiederhergestellt“ nur, wenn der Rückweg das belegt (WA-27).
+        """
+        title, text = glide_guard.stop_message(action_name, missing_count, outcome or glide_guard.RESTORED,
+                                               crashed=crashed, missing_after=missing_after or 0)
+        self.show_error(title, text)
 
     def format_item_lines(self, item, number_prefix, level=0):
         number_text = ".".join(str(part) for part in number_prefix)
@@ -51365,7 +51780,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.show_warning("Hinweis", "Bitte einen Titel eingeben.")
             return "break"
         insert_index = first_found[2]
-        with self.guarded_structural_change("Gruppieren"):
+        with self.guarded_structural_change("Gruppieren") as guard:
             self.snapshot_undo()
             moved = []
             for item_id in item_ids:
@@ -51374,8 +51789,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     moved.append(removed)
             if len(moved) != len(item_ids):
                 # Ein Punkt ließ sich nicht entfernen. Lieber gar nicht
-                # gruppieren als einen Teil der Auswahl zurücklassen.
-                self.rollback_to_undo_depth(len(self.undo_stack) - 1)
+                # gruppieren als einen Teil der Auswahl zurücklassen. Noch ist
+                # nichts gespeichert; die Datei bleibt, wie sie ist.
+                self.rollback_to_undo_depth(len(self.undo_stack) - 1, save=False)
                 self.show_warning(
                     "Gruppieren",
                     "Die Auswahl hat sich zwischenzeitlich verändert. Bitte erneut auswählen.",
@@ -51392,6 +51808,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             self.keep_branch_expanded(moved)
             self.save_items()
             self.refresh_tree(selected_id=group["id"])
+        if guard.aborted:
+            # Der Wächter hat zurückgenommen und gemeldet; keine Erfolgsmeldung.
+            return "break"
         self.feedback("grouped", len(moved))
         self.show_undo_toast(f"{len(moved)} Punkte gruppiert")
         return "break"
@@ -53632,9 +54051,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             "Die Punkte verlassen damit diese Liste. Rückgängig machen: Strg+Z.",
         ):
             return False
-        with self.guarded_structural_change("In andere Liste verschieben"):
+        with self.guarded_structural_change("In andere Liste verschieben") as guard:
             moved = self.move_items_to_list(movable, destination_id)
-        return moved
+        return moved and not guard.aborted
 
     def clear_drop_target_tags(self):
         if not hasattr(self, "tree"):
@@ -53728,7 +54147,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def export_as_txt(self):
         if not self.require_list_view():
             return
-        self.flush_rich_note()
+        if not self.output_editor_ready():
+            return
         note = "\n\n".join(value for value in (str(self.current_list().get("note") or "").strip(),
                            self.current_list().get("rich_note", {}).get("text", "")) if value)
         if not self.items and not note:
@@ -53821,7 +54241,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def export_as_markdown(self):
         if not self.require_list_view():
             return
-        self.flush_rich_note()
+        if not self.output_editor_ready():
+            return
         note = "\n\n".join(value for value in (str(self.current_list().get("note") or "").strip(),
                            self.current_list().get("rich_note", {}).get("text", "")) if value)
         if not self.items and not note:
@@ -54622,7 +55043,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def build_exchange_payload(self, lists=None, folders=None, include_done=True):
         """Baut die Austauschdarstellung des gewählten Bestands."""
-        self.flush_rich_note()
+        self.require_editor_flush()
         quellen = list(lists if lists is not None else self.lists)
         ordner = list(folders if folders is not None else [])
         benutzte_labels = {}
@@ -56036,7 +56457,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def read_backup_for_compare(self, pfad):
         """Datenteil einer Sicherung – nur lesend, mit den Grenzen des Imports."""
         if pfad is None:
-            self.flush_rich_note()
+            self.require_editor_flush()
             return {"lists": copy.deepcopy(self.lists)}
         if zipfile.is_zipfile(pfad):
             with zipfile.ZipFile(pfad, "r") as archive:
@@ -56469,7 +56890,7 @@ Labels, Termine und Metadaten."""
         return "break"
 
     def complete_backup_payload(self):
-        self.flush_rich_note()
+        self.require_editor_flush()
         payload = copy.deepcopy(self.data_payload())
         payload.update(
             {
@@ -56830,7 +57251,8 @@ Labels, Termine und Metadaten."""
 
     def export_full_backup(self):
         """Sichert Daten und alle referenzierten Anhänge gemeinsam und atomar."""
-        self.flush_rich_note()
+        if not self.output_editor_ready():
+            return
         self.sync_current_list_reference()
         default_filename = f"glide_backup_{datetime.now().strftime('%Y-%m-%d_%H-%M')}.glidebackup"
         path = filedialog.asksaveasfilename(
@@ -58303,7 +58725,8 @@ Labels, Termine und Metadaten."""
 
     def export_app_backup(self):
         """Schreibt Aufgaben, Anhänge, Einstellungen, Vorlagen und Aktivität."""
-        self.flush_rich_note()
+        if not self.output_editor_ready():
+            return
         self.sync_current_list_reference()
         default_filename = f"glide_app_{datetime.now().strftime('%Y-%m-%d_%H-%M')}{self.APP_BACKUP_EXTENSION}"
         path = filedialog.asksaveasfilename(

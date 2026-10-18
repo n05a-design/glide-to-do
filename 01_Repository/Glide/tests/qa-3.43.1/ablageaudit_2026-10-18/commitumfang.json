@@ -1,0 +1,486 @@
+[
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "bytes": 95245
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "bytes": 212992
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+    "bytes": 97952
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "bytes": 7218
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/README.md",
+    "bytes": 2926
+  },
+  {
+    "pfad": "01_Repository/Glide/AGENTS.md",
+    "bytes": 5239
+  },
+  {
+    "pfad": "01_Repository/Glide/CHANGELOG.md",
+    "bytes": 46516
+  },
+  {
+    "pfad": "01_Repository/Glide/README.md",
+    "bytes": 4513
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/00_INDEX.md",
+    "bytes": 5629
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+    "bytes": 11308
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+    "bytes": 45669
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+    "bytes": 37970
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+    "bytes": 30406
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "bytes": 34317
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+    "bytes": 18362
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+    "bytes": 96997
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "bytes": 39685
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+    "bytes": 8347
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/decisions/ARBEITSBEGLEITER.md",
+    "bytes": 5844
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/README.md",
+    "bytes": 7882
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/macos/baue_app.py",
+    "bytes": 9307
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/runtime/README.md",
+    "bytes": 5826
+  },
+  {
+    "pfad": "01_Repository/Glide/requirements/runtime.txt",
+    "bytes": 234
+  },
+  {
+    "pfad": "01_Repository/Glide/scripts/pflege/abgleich_07.py",
+    "bytes": 4351
+  },
+  {
+    "pfad": "01_Repository/Glide/src/glide/README.md",
+    "bytes": 9376
+  },
+  {
+    "pfad": "01_Repository/Glide/src/glide/app.pyw",
+    "bytes": 3182030
+  },
+  {
+    "pfad": "01_Repository/Glide/src/glide/data_lock.py",
+    "bytes": 9143
+  },
+  {
+    "pfad": "01_Repository/Glide/src/glide/editor_flush.py",
+    "bytes": 2031
+  },
+  {
+    "pfad": "01_Repository/Glide/src/glide/load_phases.py",
+    "bytes": 3009
+  },
+  {
+    "pfad": "01_Repository/Glide/src/glide/structural_guard.py",
+    "bytes": 5850
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/README.md",
+    "bytes": 2498
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/integration/test_schutzrunde.py",
+    "bytes": 35232
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.42.0/bestandspruefung_2026-10-15/README.md",
+    "bytes": 9098
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/.gitignore",
+    "bytes": 98
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/README.md",
+    "bytes": 4449
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/bereinigungsplan.json",
+    "bytes": 4256
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/bestand_validieren.py",
+    "bytes": 7573
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/bestandsvalidierung.json",
+    "bytes": 12734
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/dateibewertung.jsonl",
+    "bytes": 5234239
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/dateihashes_vorher.json",
+    "bytes": 2698360
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/dokumentaenderungen.json",
+    "bytes": 7179
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/dokumentbewertung.json",
+    "bytes": 243343
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/dokumente_aktualisieren.py",
+    "bytes": 7544
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/dokumente_endstand.json",
+    "bytes": 2923
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/dokumentregister.json",
+    "bytes": 931714
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/git_temp_geprueft.json",
+    "bytes": 2132
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/git_temp_journal.json",
+    "bytes": 3734
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/git_verdichtung.json",
+    "bytes": 504
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/gitobjekte_vorher.txt",
+    "bytes": 637173
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/gitpruefung_vorher.json",
+    "bytes": 155
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/gitrefs_vorher.txt",
+    "bytes": 11911
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/integration_konflikte.json",
+    "bytes": 1045
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/inventar_nachher.json",
+    "bytes": 4127855
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/inventar_vorher.json",
+    "bytes": 9940728
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/inventarisieren.py",
+    "bytes": 6406
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/links_vorpruefung.json",
+    "bytes": 40
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/ordnerbewertung.json",
+    "bytes": 257911
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/schutzrunde_integration.json",
+    "bytes": 1055
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/schutzrunde_integriert.json",
+    "bytes": 1901
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/sicherungsmanifest.json",
+    "bytes": 13584
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/stand_abgleichen.py",
+    "bytes": 16829
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/worktree_journal.json",
+    "bytes": 6884
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/worktree_vorpruefung.json",
+    "bytes": 5220
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/wortabstaende.json",
+    "bytes": 2565
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/README.md",
+    "bytes": 8168
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/abschluss_formal.json",
+    "bytes": 743
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/aufrufer.json",
+    "bytes": 8428
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/ausgaben_nach_korrektur.json",
+    "bytes": 300
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/ausgangsmanifest.json",
+    "bytes": 8819
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/baseline_claude.json",
+    "bytes": 1305
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/bereiche.json",
+    "bytes": 1258
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/ci/ergebnis.json",
+    "bytes": 3386
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/ergebnis.json",
+    "bytes": 1710
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/gegenprobe.json",
+    "bytes": 486
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/gegenprobe_9ec474b.json",
+    "bytes": 2644
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/grundstufe.json",
+    "bytes": 470
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/hauptkopie_links.json",
+    "bytes": 276
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/hauptkopie_pruefungen.json",
+    "bytes": 494
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/hauptkopie_unveraendert.json",
+    "bytes": 169
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/kandidat_manifest.json",
+    "bytes": 2111
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/nachkorrektur.json",
+    "bytes": 1045
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/nachpruefung_vor_korrektur.json",
+    "bytes": 1113
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/notion_restore.json",
+    "bytes": 1248
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/pflichtsuite.json",
+    "bytes": 1901
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/pflichtsuite_vorlauf.json",
+    "bytes": 2375
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/prueflauf.py",
+    "bytes": 5063
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/redaktion_stichprobe.json",
+    "bytes": 775
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/schreibschutz_ausgabe_vorlauf.json",
+    "bytes": 306
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/schutz.json",
+    "bytes": 467
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/units.json",
+    "bytes": 580
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/wiederholen.json",
+    "bytes": 1348
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/README.md",
+    "bytes": 9363
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/abschluss_vorlauf.json",
+    "bytes": 2351
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/aufbewahrung.json",
+    "bytes": 544
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ausgangsstand.json",
+    "bytes": 105384
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_abschluss/ergebnis.json",
+    "bytes": 3166
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ci_ausgang/ergebnis.json",
+    "bytes": 3177
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/dateiinventar.json",
+    "bytes": 289149
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/dokumentinventar.json",
+    "bytes": 21659
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ergebnis.json",
+    "bytes": 2100
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ergebnis_codegrenzen.json",
+    "bytes": 3812
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ergebnis_codegrenzen_9ec474b.json",
+    "bytes": 3771
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/ergebnis_datensperre.json",
+    "bytes": 1828
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/gegenpruefung.json",
+    "bytes": 5214
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/github_auftritt.json",
+    "bytes": 2167
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/module-inventory.json",
+    "bytes": 33570
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/nutzerreferenzen.json",
+    "bytes": 5721
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/probe_codegrenzen.py",
+    "bytes": 6092
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/probe_codegrenzen_upstream.py",
+    "bytes": 6452
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/probe_datensperre.py",
+    "bytes": 5508
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/remote.json",
+    "bytes": 1016
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/remote_abschluss.json",
+    "bytes": 2403
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/sicherungsmanifest_gegenpruefung.json",
+    "bytes": 18715
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/tools/pruefen.py",
+    "bytes": 34768
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/unit/test_data_lock.py",
+    "bytes": 8246
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/unit/test_editor_flush.py",
+    "bytes": 1852
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/unit/test_load_phases.py",
+    "bytes": 2402
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/unit/test_source_schema_bridge.py",
+    "bytes": 10771
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/unit/test_structural_guard.py",
+    "bytes": 4439
+  },
+  {
+    "pfad": "CLAUDE.md",
+    "bytes": 5247
+  },
+  {
+    "pfad": "README.md",
+    "bytes": 11370
+  }
+]

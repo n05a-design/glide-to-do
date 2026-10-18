@@ -1,0 +1,21 @@
+{
+  "basis": "9ec474b9dcbd502efce8cb221e53e24c322f9a78",
+  "ausfuehrbare_dateien_bytegleich": [
+    "01_Repository/Glide/src/glide/data_lock.py",
+    "01_Repository/Glide/src/glide/editor_flush.py",
+    "01_Repository/Glide/src/glide/load_phases.py",
+    "01_Repository/Glide/src/glide/structural_guard.py",
+    "01_Repository/Glide/tests/integration/test_schutzrunde.py",
+    "01_Repository/Glide/tests/unit/test_data_lock.py",
+    "01_Repository/Glide/tests/unit/test_editor_flush.py",
+    "01_Repository/Glide/tests/unit/test_load_phases.py",
+    "01_Repository/Glide/tests/unit/test_structural_guard.py",
+    "01_Repository/Glide/packaging/macos/baue_app.py",
+    "01_Repository/Glide/scripts/pflege/abgleich_07.py",
+    "01_Repository/Glide/src/glide/app.pyw",
+    "01_Repository/Glide/tests/tools/pruefen.py",
+    "01_Repository/Glide/tests/unit/test_source_schema_bridge.py"
+  ],
+  "app_sha256": "f74af723e3fe1fc18aae5beafcef3d026a3a9c39d8eb16c90b68fb3ae7ddec26",
+  "qa_vollstaendig_einschliesslich_lokaler_logs_kopiert": true
+}

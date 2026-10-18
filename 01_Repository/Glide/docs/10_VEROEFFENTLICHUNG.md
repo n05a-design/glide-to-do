@@ -51,6 +51,8 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 
 ## GitHub-Auftritt
 
+Lesender Neuabgleich am 18.10.2026: Repository öffentlich, Standardzweig `main`, Beschreibung weiterhin wie in der historischen Tabelle, keine Homepage/Topics, Issues/Wiki/Projects an, Pages/Discussions aus; keine Releases oder Tags. CodeQL-Standardeinrichtung hat für `9ec474b` einen erfolgreichen dynamischen Lauf erzeugt; der lokal deaktivierte eigene Workflow und die frühere Aussage zur KI-Prüfung sind davon zu trennen. Die Glide-Gesamtprüfung für diesen neueren FP-01-Kandidaten war beim ersten Abruf noch im Lauf; der Abschlussabruf bestätigt Lauf 39075284901 grün (Grundstufe, Linux-/Windows-Vollprüfung, Windows-Paketjob; spezielle Readerjobs ausgelassen). [Bereinigter API-Snapshot](../tests/qa-3.43.1/standanalyse_2026-10-18/github_auftritt.json), [laufende Prüfung](https://github.com/n05a-design/glide-to-do/actions/runs/39075284901). Einstellungen wurden nicht verändert. Die nachstehende Tabelle bleibt ein datierter älterer Befund; I11 enthält Vorschläge, keine Zustimmung.
+
 Stand am 06.10.2026, über die GitHub-Schnittstelle abgerufen:
 
 | Merkmal | Stand |

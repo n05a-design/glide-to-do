@@ -1,0 +1,104 @@
+{
+  "zeitpunkt": "2026-10-18T16:13:01",
+  "stufe": "CI-Grundstufe",
+  "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+  "plattform": "win32",
+  "exitcode": 0,
+  "schritte": [
+    {
+      "schritt": "Syntax",
+      "status": "ausgeführt",
+      "grund": "320 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+    },
+    {
+      "schritt": "Versionskonsistenz",
+      "status": "ausgeführt",
+      "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.43.1; Datenformat 25"
+    },
+    {
+      "schritt": "Dokumentation",
+      "status": "ausgeführt",
+      "grund": "Alle Dokumente einschließlich Archiv im Index; 193 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+    },
+    {
+      "schritt": "Fixtures",
+      "status": "ausgeführt",
+      "grund": "20 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite"
+    },
+    {
+      "schritt": "Werkzeugtests",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Fachlogik-Unit-Tests",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Fachlogik ohne Systemzeitzonen",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "analyse_statisch",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "analyse_erreichbarkeit",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "standpruefung",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "attributpruefung",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "dublettenpruefung",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Tk-Voraussetzung",
+      "status": "ausgeführt",
+      "grund": "Tk-Fenster im gewählten Python gestartet und geschlossen"
+    },
+    {
+      "schritt": "Startprobe",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Lieferstand",
+      "status": "Hinweis",
+      "grund": "7 Abweichungen zwischen src/glide und 07_Python-Versionen: Glide-Aufgaben-und-Listen_v3.43.1.pyw, action_catalog.py, data_lock.py, editor_flush.py, load_phases.py, structural_guard.py, undo_history.py – zulässig zwischen Prüfkandidat und Auslieferung (abgleich_07.py)"
+    },
+    {
+      "schritt": "Fremdcode",
+      "status": "ausgeführt",
+      "grund": "tkinterdnd2 0.6.3: 116 Dateien bytegleich zum Originalpaket (SHA-256 50c738630210…)"
+    },
+    {
+      "schritt": "Datenschutz",
+      "status": "ausgeführt",
+      "grund": "keine Benutzerpfade in versionierten Textdateien"
+    },
+    {
+      "schritt": "Ablagegröße",
+      "status": "ausgeführt",
+      "grund": "1162 versionierte Dateien, 267 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen"
+    },
+    {
+      "schritt": "Synchronisation",
+      "status": "ausgeführt",
+      "grund": "keine Synchronisationskopien, kein Hauptdokument ohne Vermerk stark gekürzt"
+    }
+  ]
+}

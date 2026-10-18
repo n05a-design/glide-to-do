@@ -1,0 +1,10 @@
+# Vollinventare sind generierte Nachweise; GitHub klappt sie im Review ein.
+# Alle Inhalte bleiben im Repository lesbar und abrufbar.
+inventar_*.json linguist-generated=true
+dateihashes_*.json linguist-generated=true
+dateibewertung.jsonl linguist-generated=true
+ordnerbewertung.json linguist-generated=true
+dokumentregister.json linguist-generated=true
+dokumentbewertung.json linguist-generated=true
+gitobjekte_vorher.txt linguist-generated=true
+gitrefs_vorher.txt linguist-generated=true

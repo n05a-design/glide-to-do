@@ -1,0 +1,23 @@
+{
+  "basis": "9ec474b9dcbd502efce8cb221e53e24c322f9a78",
+  "version": "3.43.1",
+  "datenformat": 25,
+  "dateien": {
+    "01_Repository/Glide/src/glide/data_lock.py": "b819027f86c58198a7410d6ca10adfef4045edb1bb2701d45c4030bee253b40e",
+    "01_Repository/Glide/src/glide/editor_flush.py": "192d8d9041842a67006b0296408596b602194c7e385357c7648b9a0e5c37417c",
+    "01_Repository/Glide/src/glide/load_phases.py": "6b7448c728de5d1342c9376b3b244a0f946100b84dc6c6d80d4aeae9b373a8e9",
+    "01_Repository/Glide/src/glide/structural_guard.py": "b834f48aaa6e948d484c5402de76d60c7a7327d86cbeaf8d9d1c1ae42d66a2f4",
+    "01_Repository/Glide/tests/integration/test_schutzrunde.py": "fa731b2a6857c3c1fba4ba0b5e6cb3debc94ec88a9392f9625e25a5efbfa4e45",
+    "01_Repository/Glide/tests/unit/test_data_lock.py": "45c36a496bae128a01a211c56855de98554bc32a03f918213019c7202e2ed2d3",
+    "01_Repository/Glide/tests/unit/test_editor_flush.py": "90d2826e8caa648b7ac4ab37886ae530bf30f24a7af072297bc70086ea60612d",
+    "01_Repository/Glide/tests/unit/test_load_phases.py": "9af6df18332a5beb538812a5ab2dad2e089079d37c2529ddb37a2892c72a9354",
+    "01_Repository/Glide/tests/unit/test_structural_guard.py": "8af7d97d326863a78c6bb9fe4aa260d7f8dada3e4833bdb087882731a76c0a1a",
+    "01_Repository/Glide/packaging/README.md": "e1a5b6897d4122b7493d1dd419f3167cdd6da938b9a58d162f320730608793fb",
+    "01_Repository/Glide/packaging/macos/baue_app.py": "0bcdc1b365805ab0220d891e32200ed414119c5293a3da890857a03c5e5812e6",
+    "01_Repository/Glide/scripts/pflege/abgleich_07.py": "7e9d119dc3e63e245263ca1deb7c15dc8012fce59062d9680560a966f79b51a5",
+    "01_Repository/Glide/src/glide/README.md": "8064d2290176925b0088985dcbbedb159a3193b3356d34bee9ef4e8ed81fb0fb",
+    "01_Repository/Glide/src/glide/app.pyw": "f74af723e3fe1fc18aae5beafcef3d026a3a9c39d8eb16c90b68fb3ae7ddec26",
+    "01_Repository/Glide/tests/tools/pruefen.py": "41865b80647d601a9c83f816d03a054049f766fd644da53fd01875e7d183ecc9",
+    "01_Repository/Glide/tests/unit/test_source_schema_bridge.py": "e595beac291ec38508b398dec575d9c47daa807971800b67dce569fba2e2ce53"
+  }
+}

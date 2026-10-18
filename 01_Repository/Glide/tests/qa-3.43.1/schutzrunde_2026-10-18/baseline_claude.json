@@ -1,0 +1,35 @@
+{
+  "app": "app.pyw",
+  "faelle": {
+    "waechter": {
+      "ok": true,
+      "befund": "Tiefe 0/19/20 × Schnappschuss/Rahmen: Bestand, Datei bytegleich, Stapel, Meldung; Neustart"
+    },
+    "rueckweg": {
+      "ok": true,
+      "befund": "Verlust nach Speichern, Zurückschreiben gescheitert, DataIntegrityError, Gruppieren"
+    },
+    "laden": {
+      "ok": true,
+      "befund": "TclError/ValueError in der Ansicht behalten den Bestand; JSON-Fehler und neueres Format wie bisher"
+    },
+    "flush": {
+      "ok": true,
+      "befund": "fünf Kombinationen, kein Editor; Markdown, Seitenfunktion, Vorlage, Notion, Restore, Aufgabe verlegen"
+    },
+    "editorwechsel": {
+      "ok": true,
+      "befund": "Navigation, Anlegen, Beenden fragt, schreibgeschützt frei, Schreibfehler frei"
+    },
+    "sperre": {
+      "ok": true,
+      "befund": "Lesen, defekt: schreibgeschützt, bewusste Übernahme, Neuanlage, Verdrängung: Einstellungen, Fenster, Freigabe, Takt"
+    },
+    "sperre_prozesse": {
+      "ok": true,
+      "befund": "gleichzeitiger Erwerb 3 Runden je ein Besitzer [1, 1, 1] (verspätete Starts: 0); Zweitstart beendet sich, schreibt nichts"
+    }
+  },
+  "fehler": [],
+  "app_sha256": "6c92bb6b06f1d17a80ca80531aa551dd04d773fe248e8b1122755957382ba2db"
+}

@@ -1,0 +1,342 @@
+[
+  {
+    "aufrufer": "save_view_change",
+    "zeile": 4627,
+    "aufruf": "app.prepare_inspector_switch()"
+  },
+  {
+    "aufrufer": "show_daily_hints.open_day",
+    "zeile": 19065,
+    "aufruf": "self.prepare_inspector_switch()"
+  },
+  {
+    "aufrufer": "show_day_relief",
+    "zeile": 19456,
+    "aufruf": "self.prepare_inspector_switch()"
+  },
+  {
+    "aufrufer": "set_group_value",
+    "zeile": 20893,
+    "aufruf": "self.guarded_structural_change('In andere Liste verschieben')"
+  },
+  {
+    "aufrufer": "prepare_inspector_switch",
+    "zeile": 21495,
+    "aufruf": "self.editor_switch_allowed()"
+  },
+  {
+    "aufrufer": "set_home_view",
+    "zeile": 24057,
+    "aufruf": "self.prepare_inspector_switch()"
+  },
+  {
+    "aufrufer": "set_archived",
+    "zeile": 26180,
+    "aufruf": "self.editor_switch_allowed()"
+  },
+  {
+    "aufrufer": "capture_template",
+    "zeile": 26765,
+    "aufruf": "self.output_editor_ready()"
+  },
+  {
+    "aufrufer": "calendar_add_task",
+    "zeile": 31293,
+    "aufruf": "self.guarded_structural_change('Kalenderaufgabe anlegen')"
+  },
+  {
+    "aufrufer": "_set_active_list",
+    "zeile": 32386,
+    "aufruf": "self.prepare_inspector_switch()"
+  },
+  {
+    "aufrufer": "set_table_view",
+    "zeile": 32403,
+    "aufruf": "self.prepare_inspector_switch()"
+  },
+  {
+    "aufrufer": "finish_page_switch",
+    "zeile": 32894,
+    "aufruf": "self.flush_rich_note()"
+  },
+  {
+    "aufrufer": "_set_active_folder",
+    "zeile": 32918,
+    "aufruf": "self.prepare_inspector_switch()"
+  },
+  {
+    "aufrufer": "set_plan_day_view",
+    "zeile": 33190,
+    "aufruf": "self.prepare_inspector_switch()"
+  },
+  {
+    "aufrufer": "shift_plan_day",
+    "zeile": 33197,
+    "aufruf": "self.prepare_inspector_switch()"
+  },
+  {
+    "aufrufer": "__activate_system_view",
+    "zeile": 33336,
+    "aufruf": "self.prepare_inspector_switch()"
+  },
+  {
+    "aufrufer": "create_new_note",
+    "zeile": 34552,
+    "aufruf": "self.editor_switch_allowed()"
+  },
+  {
+    "aufrufer": "create_new_drawing",
+    "zeile": 35953,
+    "aufruf": "self.editor_switch_allowed()"
+  },
+  {
+    "aufrufer": "duplicate_list",
+    "zeile": 36067,
+    "aufruf": "self.guarded_structural_change('Liste kopieren')"
+  },
+  {
+    "aufrufer": "partial_backup_payload",
+    "zeile": 36195,
+    "aufruf": "self.require_editor_flush()"
+  },
+  {
+    "aufrufer": "on_sidebar_drag_end",
+    "zeile": 37587,
+    "aufruf": "self.guarded_structural_change('Seitenleiste verschieben')"
+  },
+  {
+    "aufrufer": "on_sidebar_drag_end",
+    "zeile": 37596,
+    "aufruf": "self.guarded_structural_change('Seitenleiste verschieben')"
+  },
+  {
+    "aufrufer": "_close_after_confirmation",
+    "zeile": 40544,
+    "aufruf": "self.prepare_inspector_switch(editors=False)"
+  },
+  {
+    "aufrufer": "_close_after_confirmation",
+    "zeile": 40549,
+    "aufruf": "self.flush_rich_note()"
+  },
+  {
+    "aufrufer": "_close_after_confirmation",
+    "zeile": 40567,
+    "aufruf": "self.flush_rich_note()"
+  },
+  {
+    "aufrufer": "flush_rich_note",
+    "zeile": 44503,
+    "aufruf": "self.flush_drawing_editor()"
+  },
+  {
+    "aufrufer": "editor_switch_allowed",
+    "zeile": 44518,
+    "aufruf": "self.flush_rich_note()"
+  },
+  {
+    "aufrufer": "require_editor_flush",
+    "zeile": 44559,
+    "aufruf": "self.flush_rich_note()"
+  },
+  {
+    "aufrufer": "output_editor_ready",
+    "zeile": 44564,
+    "aufruf": "self.require_editor_flush()"
+  },
+  {
+    "aufrufer": "change_page_feature",
+    "zeile": 44605,
+    "aufruf": "self.flush_rich_note()"
+  },
+  {
+    "aufrufer": "toggle_live_task",
+    "zeile": 44664,
+    "aufruf": "self.editor_switch_allowed()"
+  },
+  {
+    "aufrufer": "create_list_from_template",
+    "zeile": 44852,
+    "aufruf": "self.flush_rich_note()"
+  },
+  {
+    "aufrufer": "transfer_document_task",
+    "zeile": 44884,
+    "aufruf": "self.editor_switch_allowed()"
+  },
+  {
+    "aufrufer": "transfer_document_task",
+    "zeile": 44893,
+    "aufruf": "self.guarded_structural_change('Aufgabe in Liste übernehmen')"
+  },
+  {
+    "aufrufer": "page_markdown",
+    "zeile": 45101,
+    "aufruf": "self.require_editor_flush()"
+  },
+  {
+    "aufrufer": "export_page_markdown",
+    "zeile": 45132,
+    "aufruf": "self.output_editor_ready()"
+  },
+  {
+    "aufrufer": "build_page_print_html",
+    "zeile": 45171,
+    "aufruf": "self.output_editor_ready()"
+  },
+  {
+    "aufrufer": "copy_page_markdown",
+    "zeile": 45226,
+    "aufruf": "self.output_editor_ready()"
+  },
+  {
+    "aufrufer": "new_page_from_markdown",
+    "zeile": 45239,
+    "aufruf": "self.flush_rich_note()"
+  },
+  {
+    "aufrufer": "create_new_gallery",
+    "zeile": 45330,
+    "aufruf": "self.editor_switch_allowed()"
+  },
+  {
+    "aufrufer": "create_new_page",
+    "zeile": 45349,
+    "aufruf": "self.editor_switch_allowed()"
+  },
+  {
+    "aufrufer": "apply_drawing_change",
+    "zeile": 46932,
+    "aufruf": "self.flush_drawing_editor()"
+  },
+  {
+    "aufrufer": "apply_drawing_change",
+    "zeile": 46934,
+    "aufruf": "self.guarded_structural_change('Zeichnung ändern')"
+  },
+  {
+    "aufrufer": "import_drawing_as_new",
+    "zeile": 47278,
+    "aufruf": "self.editor_switch_allowed()"
+  },
+  {
+    "aufrufer": "undo_state",
+    "zeile": 50403,
+    "aufruf": "self.flush_drawing_editor()"
+  },
+  {
+    "aufrufer": "history_step_blocked",
+    "zeile": 50494,
+    "aufruf": "self.flush_drawing_editor()"
+  },
+  {
+    "aufrufer": "roll_back_guard",
+    "zeile": 50738,
+    "aufruf": "self.rollback_to_undo_depth(guard.depth_before, save=file_written)"
+  },
+  {
+    "aufrufer": "group_selected_items",
+    "zeile": 51783,
+    "aufruf": "self.guarded_structural_change('Gruppieren')"
+  },
+  {
+    "aufrufer": "group_selected_items",
+    "zeile": 51794,
+    "aufruf": "self.rollback_to_undo_depth(len(self.undo_stack) - 1, save=False)"
+  },
+  {
+    "aufrufer": "dissolve_selected_group",
+    "zeile": 51847,
+    "aufruf": "self.guarded_structural_change('Gruppe auflösen', expected_removals={group.get('id')})"
+  },
+  {
+    "aufrufer": "on_drag_end",
+    "zeile": 53996,
+    "aufruf": "self.guarded_structural_change(action_name)"
+  },
+  {
+    "aufrufer": "drop_items_on_list",
+    "zeile": 54054,
+    "aufruf": "self.guarded_structural_change('In andere Liste verschieben')"
+  },
+  {
+    "aufrufer": "export_as_txt",
+    "zeile": 54150,
+    "aufruf": "self.output_editor_ready()"
+  },
+  {
+    "aufrufer": "export_as_markdown",
+    "zeile": 54244,
+    "aufruf": "self.output_editor_ready()"
+  },
+  {
+    "aufrufer": "build_exchange_payload",
+    "zeile": 55046,
+    "aufruf": "self.require_editor_flush()"
+  },
+  {
+    "aufrufer": "apply_exchange_patch",
+    "zeile": 55907,
+    "aufruf": "self.flush_rich_note()"
+  },
+  {
+    "aufrufer": "import_notion_archive",
+    "zeile": 56188,
+    "aufruf": "self.prepare_inspector_switch()"
+  },
+  {
+    "aufrufer": "import_notion_archive",
+    "zeile": 56188,
+    "aufruf": "self.flush_rich_note()"
+  },
+  {
+    "aufrufer": "apply_notion_selection",
+    "zeile": 56219,
+    "aufruf": "self.flush_rich_note()"
+  },
+  {
+    "aufrufer": "apply_notion_selection",
+    "zeile": 56265,
+    "aufruf": "self.guarded_structural_change('Notion-Export übernehmen')"
+  },
+  {
+    "aufrufer": "restore_page_from_backup",
+    "zeile": 56323,
+    "aufruf": "self.prepare_inspector_switch()"
+  },
+  {
+    "aufrufer": "restore_page_from_backup",
+    "zeile": 56325,
+    "aufruf": "self.flush_rich_note()"
+  },
+  {
+    "aufrufer": "apply_page_restore",
+    "zeile": 56367,
+    "aufruf": "self.flush_rich_note()"
+  },
+  {
+    "aufrufer": "apply_page_restore",
+    "zeile": 56414,
+    "aufruf": "self.guarded_structural_change('Einzelne Seite wiederherstellen')"
+  },
+  {
+    "aufrufer": "read_backup_for_compare",
+    "zeile": 56460,
+    "aufruf": "self.require_editor_flush()"
+  },
+  {
+    "aufrufer": "complete_backup_payload",
+    "zeile": 56893,
+    "aufruf": "self.require_editor_flush()"
+  },
+  {
+    "aufrufer": "export_full_backup",
+    "zeile": 57254,
+    "aufruf": "self.output_editor_ready()"
+  },
+  {
+    "aufrufer": "export_app_backup",
+    "zeile": 58728,
+    "aufruf": "self.output_editor_ready()"
+  }
+]

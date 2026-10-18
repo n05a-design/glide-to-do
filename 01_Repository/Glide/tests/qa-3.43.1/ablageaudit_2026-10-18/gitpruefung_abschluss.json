@@ -1,0 +1,5 @@
+{
+  "exitcode": 0,
+  "verfahren": "git fsck --full --no-reflogs",
+  "historie": "Keine Objekte verworfen; alter Objektbestand separat abgeglichen"
+}

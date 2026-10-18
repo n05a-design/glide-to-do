@@ -1,0 +1,23 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "6c92bb6b06f1d17a80ca80531aa551dd04d773fe248e8b1122755957382ba2db",
+  "faelle": {
+    "ausgaben": {
+      "ok": false,
+      "befund": "AssertionError(['partial_backup_payload: liefert veralteten Inhalt', 'complete_backup_payload: liefert veralteten Inhalt', 'build_exchange_payload: liefert veralteten Inhalt', 'page_markdown: liefert veralteten Inhalt', 'read_backup_for_compare: liefert veralteten Inhalt', 'Druckseite liefert veralteten Inhalt', \"Dateiauswahl trotz fehlender Übernahme: ['Liste als TXT speichern', 'Liste als Markdown speichern', 'Aufgabensicherung speichern (alle Listen)', 'Vollständiges App-Sicherung speichern', 'Seite als Markdown speichern']\"])"
+    },
+    "editor_offen": {
+      "ok": false,
+      "befund": "AssertionError('dirty=True lässt nicht übernommenen Text verschwinden')"
+    },
+    "rueckweg_bytes": {
+      "ok": false,
+      "befund": "AssertionError('Rückweg erzeugt neue Datei statt des bytegleichen Vorzustands')"
+    }
+  },
+  "fehler": [
+    "ausgaben",
+    "editor_offen",
+    "rueckweg_bytes"
+  ]
+}

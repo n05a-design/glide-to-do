@@ -1,0 +1,27 @@
+[
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "konflikte": 2,
+    "auswahl": "Juengere konsolidierte Analyse als Grundlage; aktueller Kandidatenstatus wird fachlich nachgefuehrt"
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "konflikte": 3,
+    "auswahl": "Juengere konsolidierte Analyse als Grundlage; aktueller Kandidatenstatus wird fachlich nachgefuehrt"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+    "konflikte": 1,
+    "auswahl": "Juengere konsolidierte Analyse als Grundlage; aktueller Kandidatenstatus wird fachlich nachgefuehrt"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "konflikte": 1,
+    "auswahl": "Juengere konsolidierte Analyse als Grundlage; aktueller Kandidatenstatus wird fachlich nachgefuehrt"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/README.md",
+    "konflikte": 1,
+    "auswahl": "Juengere konsolidierte Analyse als Grundlage; aktueller Kandidatenstatus wird fachlich nachgefuehrt"
+  }
+]

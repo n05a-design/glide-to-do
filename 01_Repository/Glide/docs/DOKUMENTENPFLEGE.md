@@ -1,8 +1,10 @@
 # Regeln für die Dokumentenpflege
 
-Stand 16.10.2026 · Glide 3.43.1 · Datenformat 25
+Stand 18.10.2026 · Glide 3.43.1 · Datenformat 25
 
 Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder gelöscht anstatt immer nur archiviert und `_Z` zu schreiben“) und ersetzt alle früheren Archivierungsregeln.
+
+Abgleich 18.10.2026: [Dokumentregister und konkrete Pflegeergebnisse](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#7-dokumentenpflege-und-zuständigkeit). Originalaufträge, D45-Tafeln, Migrationsfixtures und Paketlizenzkopien wurden von entbehrlichen Themendubletten unterschieden; ein erforderlicher Lieferbeleg ist kein zweites aktuelles Fachdokument. D51 bündelt mehrere Pakete in einer Prüfphase, ohne die Aufbewahrungsregeln zu verändern.
 
 ## Grundsätze
 
@@ -51,3 +53,9 @@ Neue Dokumente unter `docs/` nur, wenn kein bestehendes das Thema trägt; sie ge
 ## Was die Standprüfung erzwingt
 
 `tests/tools/standpruefung.py` (Regeln R1–R14) prüft alle aktiven Markdown-Dokumente: Standzeile mit der aktuellen Version, Formatstufen gegen den Code, bekannte überholte Aussagen, vollständige Modullisten, erreichbare relative Links, aktuelle Titel und erste Vollprüfungsaufrufe, Suitezahl in Standzeilen. Erzeugte Pakete unter `build/` sind Kopien, keine aktiven Dokumente. Dokumente mit Version oder Datum im Namen sowie der gehashte Mac-Paketlizenzbeleg gelten als festgeschrieben; seit 03.10.2026 gibt es unter den gepflegten Dokumenten keine mehr.
+
+## Ablageprüfung vom 18.10.2026
+
+Der [globale Nachweis](../tests/qa-3.43.1/ablageaudit_2026-10-18/README.md) erfasst Dateien, Ordner, vollständige Hashes und Dokumentzuständigkeiten einschließlich Git und lokaler Arbeitskopien. Ignorierte Dateien sind nicht automatisch entbehrlich. Originalreferenzen, aktuelle QA-Bilder, Migrationsfixtures und bestehende Lieferstände werden unabhängig vom Git-Status geschützt. Historische Rohbelege bleiben historisch; doppelte Erzählungen werden in der aktuellen Quelle zusammengeführt.
+
+Git-Objektverdichtung erfolgt ohne History-, Ref- oder Reflogverlust und mit Objektmengenvergleich. Arbeitskopien entfallen erst nach Prüfung ihrer eigenen Änderungen und lokalen Belege, Sicherung außerhalb der Projektwurzel und Integration; Branches und Stashes bleiben erhalten. Ein abgelehnter Löschschritt bleibt mit seinem tatsächlichen Ergebnis im Journal.

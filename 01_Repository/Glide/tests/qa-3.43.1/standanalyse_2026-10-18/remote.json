@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-18",
+  "commit": "9ec474b9dcbd502efce8cb221e53e24c322f9a78",
+  "runs": [
+    {
+      "id": 39075284986,
+      "name": "Push on main",
+      "head_sha": "9ec474b9dcbd502efce8cb221e53e24c322f9a78",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284986",
+      "updated_at": "2026-10-17T22:30:25Z"
+    },
+    {
+      "id": 39075284901,
+      "name": "Glide-Prüfung",
+      "head_sha": "9ec474b9dcbd502efce8cb221e53e24c322f9a78",
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901",
+      "updated_at": "2026-10-17T22:33:31Z"
+    }
+  ],
+  "releases": [],
+  "limits": [
+    "Commit-workflow helper liefert nur PR-getriggerte erste Seite und war leer; Actions-Collection GET separat benutzt.",
+    "Tag-Endpoint vom Connector nicht freigegeben; tags separat git ls-remote --tags prüfen."
+  ]
+}

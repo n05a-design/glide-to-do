@@ -1,6 +1,8 @@
 # Funktionen – Glide
 
-Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+Stand 18.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+
+**Prüfkandidat vom 18.10.2026:** FP-01 und WA-27–WA-30 sind im Quellbaum integriert (Version 3.43.1, Format 25). Die zuvor nachgestellten Grenzen A32/A33/A34/A35/A36 haben gezielte Schutzprüfungen und Gegenproben; die historische Analyse beschreibt den Zustand vor dieser Integration. [Schutznachweis](../tests/qa-3.43.1/schutzrunde_2026-10-18/README.md), [aktueller Prüf- und Lieferstand](07_QA_BERICHT.md). 07 und die eigenständigen Pakete sind noch nicht auf diesen Kandidaten aktualisiert. Native Abnahmen und Phasenabschluss bleiben offen.
 
 ## Aufgaben im Wissen (3.33.15: G29/G31/G32)
 
@@ -71,6 +73,7 @@ Die Entwicklungspakete für macOS arm64 und Windows x64 enthalten Python, Tcl/Tk
 - **Titel** von Listen, Seiten und Ordnern höchstens 40 Zeichen (`CONTAINER_TITLE_MAX`, Zähler im Feld); Aufgabentitel sind frei.
 - **Rückgängig** überall: Jede Aktion ist ein Schritt, auch Importe, Ziehen und Mehrfachänderungen. Der Hinweis nach Abhaken, Löschen oder Lösen nimmt nur zurück, was er meldet.
 - **Wiederholen (FP-01, in Arbeit):** Bearbeiten › Wiederholen, Palette, Strg/Cmd+Umschalt+Z, unter Windows zusätzlich Strg+Y, nimmt ein Rückgängig zurück – für alle Wege über den Rückgängig-Stapel und für Flächenänderungen der Pinnwand (Aufräumen, Bereiche), höchstens 20 Schritte, nur im Arbeitsspeicher. Nach „Rückgängig“ im Hinweis bietet derselbe Hinweis „Wiederholen“. Eine neue Änderung, jede gespeicherte Änderung (auch ein Zustellbeleg), ein Wächterabbruch, Laden und Neustart verwerfen die Schritte; ein Sicherheitspunkt des Autospeicherns ohne ausstehende Änderung nicht. Scheitert beim Rückgängig oder Wiederholen das Speichern, bleiben Bestand und beide Stapel wie vorher. In Textfeldern und auf der Zeichenfläche gelten deren eigene Schritte. Der Änderungsverlauf verweist für ältere Stände auf „Sicherungen vergleichen …“.
+- **Schutz vor nicht übernommenen Änderungen (WA-27–WA-30):** Umbauten bewahren ihren Vorzustand auch bei vollem Undo-Stapel; Darstellungsfehler machen gültige Dateien nicht zu beschädigten Dateien. Kontextwechsel und Ausgaben prüfen die tatsächliche Editorübernahme. Unveränderte, bereits übernommene Inhalte lassen sich auch schreibgeschützt exportieren; neue nicht übernommene Änderungen halten die Aktion an. Datensperren gelten für Aufgaben, Einstellungen, Vorlagen und Fensterzustand.
 - **Papierkorb:** Gelöschtes wandert dorthin und ist wiederherstellbar; „Erledigte Punkte löschen“ ebenso.
 
 ## 2. Seitenleiste und Navigation

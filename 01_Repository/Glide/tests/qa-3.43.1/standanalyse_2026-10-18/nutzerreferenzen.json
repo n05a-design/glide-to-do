@@ -1,0 +1,230 @@
+{
+  "screenshots": [
+    {
+      "id": "S01",
+      "file": "bilder/01-glide-startseite-vorher.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S02",
+      "file": "bilder/02-glide-menue-datum-hinweise.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S03",
+      "file": "bilder/03-glide-kopfzeile-suche.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S04",
+      "file": "bilder/04-glide-seiten-blockleiste.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S05",
+      "file": "bilder/05-glide-bildseite-vor-scrollen.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S06",
+      "file": "bilder/06-glide-bildseite-nach-scrollen.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S07",
+      "file": "bilder/07-glide-notiz-aktionshintergruende.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S08",
+      "file": "bilder/08-glide-logo-hoehe.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S09",
+      "file": "bilder/09-glide-punkteditor-geteilte-ansicht.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S10",
+      "file": "bilder/10-microsoft-to-do-kompakt.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S11",
+      "file": "bilder/11-microsoft-to-do-normal.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S12",
+      "file": "bilder/12-notion-fenster-tabs-leere-seite.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S13",
+      "file": "bilder/13-notion-ansichten-menue.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S14",
+      "file": "bilder/14-notion-seitenaktionen.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S15",
+      "file": "bilder/15-notion-seitenkopf.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S16",
+      "file": "bilder/16-notion-blockaktionen.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S17",
+      "file": "bilder/17-notion-blocktypen.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S18",
+      "file": "bilder/18-glide-heute-pfeile.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S19",
+      "file": "bilder/19-glide-naechste-aufgabe-metadaten.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S20",
+      "file": "bilder/20-glide-startseite-anpassen.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S21",
+      "file": "bilder/21-glide-papierkorb-ueberdeckung.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S22",
+      "file": "bilder/22-glide-labels-titel-abgeschnitten.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S23",
+      "file": "bilder/23-glide-fehlerprotokoll-flucht.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S24",
+      "file": "bilder/24-glide-seitenleiste-symbolhoehen.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S25",
+      "file": "bilder/25-github-projektuebersicht.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S26",
+      "file": "bilder/26-github-readme-funktionen.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S27",
+      "file": "bilder/27-github-readme-ablage-regeln.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    },
+    {
+      "id": "S28",
+      "file": "bilder/28-glide-startseite-kartenlayout.png",
+      "exists": true,
+      "size_matches": true,
+      "hash_matches": true,
+      "tracked": false
+    }
+  ],
+  "image_content_viewed": false,
+  "reason": "Inputs retained; metadata/hash verification only; original images may contain account data."
+}

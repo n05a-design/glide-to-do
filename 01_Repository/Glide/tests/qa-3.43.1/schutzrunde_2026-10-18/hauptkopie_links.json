@@ -1,0 +1,12 @@
+{
+  "markdown_dateien": 62,
+  "lokale_links": 795,
+  "ankerlinks": 125,
+  "fehler": [
+    {
+      "quelle": "01_Repository/Glide/tests/qa-3.42.0/bestandspruefung_2026-10-15/README.md",
+      "ziel": "grundstufe/ergebnis.json",
+      "art": "Datei fehlt"
+    }
+  ]
+}

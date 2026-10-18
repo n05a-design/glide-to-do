@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-18",
+  "app_version": "3.43.1",
+  "status": "failed",
+  "checks": {
+    "git_diff_check": {
+      "exitcode": 0,
+      "output": "",
+      "stderr": "warning: in the working copy of '00_Arbeitsvorbereitung/Glide_Uebergabe.md', CRLF will be replaced by LF the next time Git touches it"
+    },
+    "ignored_tracked": {
+      "exitcode": 0,
+      "output": "",
+      "stderr": ""
+    },
+    "production_git_diff": {
+      "exitcode": 0,
+      "output": "",
+      "stderr": ""
+    },
+    "stand": {
+      "exitcode": 0,
+      "output": "Standprüfung gegen VERSION 3.43.1 · Ablage einschließlich Repository · 62 aktive Dokumente (42 fortgeschrieben, 14 festgeschrieben, 6 ohne Standaussage)\nAlle Standangaben passen zur Version; kein historisches Dokument behauptet einen aktuellen Stand.",
+      "stderr": ""
+    },
+    "syntax": {
+      "exitcode": 0,
+      "output": "308 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+    },
+    "version": {
+      "exitcode": 0,
+      "output": "VERSION, App, Hauptsuite und CHANGELOG: 3.43.1; Datenformat 25"
+    },
+    "index_links": {
+      "exitcode": 0,
+      "output": "Alle Dokumente einschließlich Archiv im Index; 209 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+    },
+    "synchronisation": {
+      "exitcode": 0,
+      "result": [
+        [],
+        []
+      ]
+    }
+  },
+  "markdown_files": 49,
+  "local_links": 572,
+  "heading_links": 109,
+  "link_errors": [
+    {
+      "source": "00_Arbeitsvorbereitung\\Glide_Entwicklungsplan.md",
+      "target": "Glide_Markt_und_Vorbilder.md#7-recherche-08102026-für-den-sprint",
+      "kind": "missing_heading"
+    },
+    {
+      "source": "00_Arbeitsvorbereitung\\Glide_Entwicklungsplan.md",
+      "target": "Glide_Markt_und_Vorbilder.md#8-quellenabgleich-für-die-neue-planung-09102026",
+      "kind": "missing_heading"
+    }
+  ],
+  "new_evidence_privacy_errors": [],
+  "production_files_checked": 213,
+  "production_differences": [],
+  "delivery_differences": [],
+  "showcase_differences": [],
+  "limits": [
+    "No new full integration matrix",
+    "Native Mac/Linux/Tk9.1 and actual reader/human acceptance not performed",
+    "Historical and initial failing CI results retained unchanged"
+  ]
+}

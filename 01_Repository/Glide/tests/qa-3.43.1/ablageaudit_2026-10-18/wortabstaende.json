@@ -1,0 +1,98 @@
+[
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "vorher_sha256": "906195f997defb218e36dbefffb25c94046817a360b51c1374dd2cb67fb72fc0",
+    "nachher_sha256": "60a8fd2cd2b6d82da2e1b3e5effb29d15dde6f54f27bc58ea328468b07784f3f",
+    "ersetzungen": [
+      {
+        "vorher": "Herkunft116",
+        "nachher": "Herkunft 116",
+        "anzahl": 1
+      },
+      {
+        "vorher": "Lokale92",
+        "nachher": "Lokale 92",
+        "anzahl": 1
+      },
+      {
+        "vorher": "Format25",
+        "nachher": "Format 25",
+        "anzahl": 1
+      },
+      {
+        "vorher": "Format23",
+        "nachher": "Format 23",
+        "anzahl": 1
+      }
+    ]
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "vorher_sha256": "8ec7e90aac5c2f08f712ed851e31061be376d3de2ca0120b6480b46f277f1a54",
+    "nachher_sha256": "6fcd34efde285cbf3c044978c675b9b3b754ceb38276c5a22bd77af37b8def7b",
+    "ersetzungen": [
+      {
+        "vorher": "lokalen3.43",
+        "nachher": "lokalen 3.43",
+        "anzahl": 1
+      },
+      {
+        "vorher": "isolierter4.0",
+        "nachher": "isolierter 4.0",
+        "anzahl": 1
+      },
+      {
+        "vorher": "PrüfentscheidungD51",
+        "nachher": "Prüfentscheidung D51",
+        "anzahl": 1
+      },
+      {
+        "vorher": "Abschlussauftrag15.10",
+        "nachher": "Abschlussauftrag 15.10",
+        "anzahl": 2
+      }
+    ]
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "vorher_sha256": "dbdbb2361b8bbfb11e83cf5dde62b8dc3255c142972bd4297964cacaa91a4387",
+    "nachher_sha256": "e3083f52ad5b2beef65bc9be0ae164b68e382ff63333d70068b60145d14a9f08",
+    "ersetzungen": [
+      {
+        "vorher": "Abschlussauftrag15.10",
+        "nachher": "Abschlussauftrag 15.10",
+        "anzahl": 1
+      },
+      {
+        "vorher": "Native11",
+        "nachher": "Native 11",
+        "anzahl": 1
+      },
+      {
+        "vorher": "Vollprüfstand91",
+        "nachher": "Vollprüfstand 91",
+        "anzahl": 1
+      },
+      {
+        "vorher": "eigener9.1",
+        "nachher": "eigener 9.1",
+        "anzahl": 1
+      },
+      {
+        "vorher": "Version4",
+        "nachher": "Version 4",
+        "anzahl": 1
+      },
+      {
+        "vorher": "laufendesP8",
+        "nachher": "laufendes P8",
+        "anzahl": 1
+      },
+      {
+        "vorher": "fürNeuplanungoffenhalten",
+        "nachher": "für Neuplanung offenhalten",
+        "anzahl": 1
+      }
+    ]
+  }
+]

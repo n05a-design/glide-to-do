@@ -1,0 +1,10 @@
+{
+  "app_sha256": "f74af723e3fe1fc18aae5beafcef3d026a3a9c39d8eb16c90b68fb3ae7ddec26",
+  "syntax": "320 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt",
+  "versionen": "VERSION, App, Hauptsuite und CHANGELOG: 3.43.1; Datenformat 25",
+  "dokumentation": "Alle Dokumente einschließlich Archiv im Index; 194 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell.",
+  "standpruefung": {
+    "exitcode": 0,
+    "ausgabe": "Standprüfung gegen VERSION 3.43.1 · Ablage einschließlich Repository · 64 aktive Dokumente (42 fortgeschrieben, 16 festgeschrieben, 6 ohne Standaussage)\nAlle Standangaben passen zur Version; kein historisches Dokument behauptet einen aktuellen Stand.\n"
+  }
+}

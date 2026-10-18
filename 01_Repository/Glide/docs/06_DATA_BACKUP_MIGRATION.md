@@ -1,6 +1,8 @@
 # Daten, Backups und Migration – Glide
 
-Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
+Stand 18.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
+
+**Prüfkandidat vom 18.10.2026:** FP-01 und WA-27–WA-30 sind im Quellbaum integriert (Version 3.43.1, Format 25). Die zuvor nachgestellten Grenzen A32/A33/A34/A35/A36 haben gezielte Schutzprüfungen und Gegenproben; die historische Analyse beschreibt den Zustand vor dieser Integration. [Schutznachweis](../tests/qa-3.43.1/schutzrunde_2026-10-18/README.md), [aktueller Prüf- und Lieferstand](07_QA_BERICHT.md). 07 und die eigenständigen Pakete sind noch nicht auf diesen Kandidaten aktualisiert. Native Abnahmen und Phasenabschluss bleiben offen.
 
 Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag 52) ergänzt und um die Verweise auf gelöschte Einzelverträge bereinigt; die Vorfassungen trägt Git. Formate 4–25 und Legacy 2 bleiben lesbar.
 
@@ -16,7 +18,7 @@ Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag
 | `window.conf`, `glide.lock`, `datenordner.json` | Fenster, Belegung, gerätebezogener Ablagezeiger | nicht übertragen |
 
 - Der Datenordner liegt außerhalb des Programms. `GLIDE_DATA_DIR` hat Vorrang (Tests), sonst Plattformstandard und optional `datenordner.json`. Ein Wechsel kopiert in ein leeres Ziel oder öffnet einen vorhandenen Bestand; die Quelle bleibt.
-- `glide.lock` verhindert gleichzeitiges Schreiben zweier Instanzen; erkannte Fremdbelegung verhindert Speichern. Die Sperre ersetzt keinen Synchronisationsdienst.
+- `glide.lock` verhindert gleichzeitiges Schreiben zweier Instanzen; erkannte Fremdbelegung verhindert Speichern – der Aufgabendatei ebenso wie von Einstellungen, Fenstergröße und Vorlagen. Eine beschädigte oder unlesbare Sperre öffnet schreibgeschützt; die Warnung beim Start bietet an, sie bewusst zu übernehmen. Eine verschwundene Sperre legt Glide beim nächsten Schreiben neu an (Schutzrunde WA-30). Die Sperre ersetzt keinen Synchronisationsdienst. Die lokale OS-Sperre auf `glide.lock.acquire` schützt auch die Übernahme verwaister Sperren; sie ist kein verteilter Konsens zwischen Rechnern.
 - Gespeichert wird sofort und atomar (Temporärdatei, `replace_with_retry`; unter Windows bis 1,5 s Warten bei Dateisperren). Liegengebliebene `.glide-json-*.tmp`, älter als zehn Minuten, räumt der Start auf.
 
 ## Format 25

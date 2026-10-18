@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-18",
+  "repository": {
+    "full_name": "n05a-design/glide-to-do",
+    "description": "Glide is an offline desktop app for tasks, lists, notes, and journals, featuring daily planning, a calendar, pinboards, and local backups. No account or cloud service required. Built with Python and Tkinter.",
+    "homepage": "",
+    "visibility": "public",
+    "default_branch": "main",
+    "has_issues": true,
+    "has_wiki": true,
+    "has_projects": true,
+    "has_pages": false,
+    "has_discussions": false,
+    "open_issues_count": 0,
+    "size": 562527,
+    "license": null,
+    "topics": []
+  },
+  "actions": {
+    "jobs": [
+      {
+        "id": 117521066889,
+        "name": "Grundstufe (Linux, Python 3.14, Tk 8.6)",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901/job/117521066889"
+      },
+      {
+        "id": 117521067788,
+        "name": "Tk 9.1, AT-SPI und Orca (Linux x64)",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901/job/117521067788"
+      },
+      {
+        "id": 117521067991,
+        "name": "UI-Diagnose (Windows x64, Python 3.14)",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901/job/117521067991"
+      },
+      {
+        "id": 117521068055,
+        "name": "Tk 9.1 und NVDA (Windows x64)",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901/job/117521068055"
+      },
+      {
+        "id": 117521856468,
+        "name": "Vollprüfung (Linux/Xvfb, eigene Tk 9.1)",
+        "status": "in_progress",
+        "conclusion": null,
+        "html_url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901/job/117521856468"
+      }
+    ]
+  },
+  "tags": [],
+  "tag_check": "git ls-remote --tags origin: Exit 0, no refs",
+  "releases": []
+}

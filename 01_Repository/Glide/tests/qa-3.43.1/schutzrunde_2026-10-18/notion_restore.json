@@ -1,0 +1,21 @@
+{
+  "app_sha256": "30ad9ccf4a7ac2894b8d19132bebe3a702cd5a94e739bff37ac92c0fa44db94d",
+  "faelle": [
+    "import",
+    "vergleich",
+    "restore",
+    "fehler",
+    "geometrie",
+    "migration"
+  ],
+  "pruefungen": [
+    "Erstimport mit ausdrücklicher Auswahl/Abbruch, Vorschau/Verlustbericht, Original-ZIP, Bilder/Anhänge/Aufgaben/Seitenverweise/Unterordner; Neustart und ein echtes Undo",
+    "Wiederimport unverändert ohne Bericht/Undo; tatsächliche Quell-/Lokalvorschau; Konfliktablehnung erhält eigenen Stand, Freigabe erhält Identität und ist rückgängig",
+    "Echter selektiver Archivrestore mit Vergleich, Bild/Cover/Aufgaben/Live-Liste, unveränderter anderer Seite/Quelle, Vorsicherung und einem Undo",
+    "Vorsicherungsfehler und echter atomarer Schreibfehler nach GUI-Vorschau rollen Daten/Dateien/Undo zurück; Schreibschutz sperrt beide Einstiege",
+    "Beide Vorschauen in Hell/Dunkel, mittlerer/großer Schrift bei 860 × 700: scrollbarer Inhalt, vollständige feste Fußaktionen",
+    "Echter Neustart mit Quellenmetadaten; Format 24 → 25 mit bytegenauer Vorsicherung und verweigertem Kopieren; echte Vorversion schreibgeschützt gemäß Aufbewahrung"
+  ],
+  "callbackfehler": [],
+  "exitcode": 0
+}
