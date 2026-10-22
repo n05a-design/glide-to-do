@@ -23,20 +23,21 @@ erneut dekodieren. Nur Standardbibliothek und tkinter.
 """
 
 import collections
+import functools
 import hashlib
 import os
-import subprocess
 import sys
 import tkinter as tk
 
 import preview_tools as glide_preview_tools
+import image_conversion as glide_image_conversion
+from image_conversion import MAX_CONVERTED, windows_convert_command
 
 NATIVE = (".png", ".gif", ".ppm", ".pgm")
 VECTOR = (".svg",)
 CONVERTIBLE = (".jpg", ".jpeg", ".heic", ".heif", ".webp", ".tif", ".tiff", ".bmp")
 IMAGE_EXTENSIONS = NATIVE + VECTOR + CONVERTIBLE
 FILE_PATTERN = " ".join("*" + endung for endung in IMAGE_EXTENSIONS)
-MAX_CONVERTED = 1600
 
 
 def extension(path):
@@ -81,29 +82,6 @@ def rational_factor(faktor, max_nenner=12):
     return beste
 
 
-def windows_convert_command(quelle, ziel, max_kante=MAX_CONVERTED):
-    """PowerShell-Aufruf, der über WIC in ein PNG mit höchstens `max_kante` Pixeln wandelt."""
-    def pfad(wert):
-        return "'" + str(wert).replace("'", "''") + "'"
-    skript = (
-        "$ErrorActionPreference='Stop';"
-        "Add-Type -AssemblyName PresentationCore;"
-        f"$s=[System.IO.File]::OpenRead({pfad(quelle)});"
-        "try{"
-        "$d=[System.Windows.Media.Imaging.BitmapDecoder]::Create($s,"
-        "[System.Windows.Media.Imaging.BitmapCreateOptions]::PreservePixelFormat,"
-        "[System.Windows.Media.Imaging.BitmapCacheOption]::OnLoad);"
-        "$f=$d.Frames[0];"
-        f"$k=[Math]::Min(1.0,{int(max_kante)}/[Math]::Max($f.PixelWidth,$f.PixelHeight));"
-        "$b=New-Object System.Windows.Media.Imaging.TransformedBitmap($f,"
-        "(New-Object System.Windows.Media.ScaleTransform($k,$k)));"
-        "$e=New-Object System.Windows.Media.Imaging.PngBitmapEncoder;"
-        "$e.Frames.Add([System.Windows.Media.Imaging.BitmapFrame]::Create($b));"
-        f"$o=[System.IO.File]::Create({pfad(ziel)});"
-        "try{$e.Save($o)}finally{$o.Close()}"
-        "}finally{$s.Close()}"
-    )
-    return ["powershell", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", skript]
 
 
 class PreviewCache:
@@ -119,6 +97,11 @@ class PreviewCache:
         self._sizes = {}
         self._nsimage = None
         self._svg = None
+        self._conversions = None
+        self._requests = {}
+        self._observers = collections.Counter()
+        self._poll_root = None
+        self._poll_job = None
 
     # --- Werkzeuge -------------------------------------------------------
     def cache_dir(self):
@@ -176,7 +159,7 @@ class PreviewCache:
         endung = extension(path)
         if endung not in CONVERTIBLE or self.native_loader(master):
             return False
-        return bool(self.converted_base(path)) and not self.existing_conversion(path) and self.can_convert(path)
+        return bool(self.converted_base(path)) and not self.existing_conversion(path) and self.can_convert(path) and self.conversion_status(path) != 'failed'
 
     def can_convert(self, path=None):
         """Gibt es einen Umwandlungsweg? Unter Linux nur mit passendem Systemwerkzeug."""
@@ -187,35 +170,123 @@ class PreviewCache:
         return glide_preview_tools.linux_plan(path, "x") is not None
 
     def convert(self, path):
-        """Legt die PNG-Vorschau an (blockierend, mit Zeitlimit). Liefert den Pfad oder None."""
-        ziel = self.converted_path(path)
-        if not ziel:
-            return None
-        vorhanden = self.existing_conversion(path)
-        if vorhanden:
-            return vorhanden
+        """Blockierender Werkzeugweg; UI-Einstiege verwenden request_conversion."""
+        return glide_image_conversion.convert_file(path, self.cache_dir(), self.platform())
+
+    def conversion_key(self, path):
+        return (self.stamp(path), self.cache_dir(), self.platform())
+
+    def conversion_status(self, path):
+        return self._conversions.state(self.conversion_key(path))[0] if self._conversions else 'missing'
+
+    def request_conversion(self, master, path, callback, retry=False):
+        """Im Tk-Thread anmelden/abholen; Worker erhält ausschließlich Dateiparameter.
+
+        Ein Beobachter pro Host und Quellpfad. Hostabbau gibt Rückrufe frei und
+        bricht Aufträge ohne weitere Beobachter ab. Ein neuer Dateistand ersetzt
+        die alte Anmeldung, ohne deren Ergebnis in die neue Ansicht einzuspielen.
+        """
+        key = self.conversion_key(path)
+        if key[0] is None:
+            return 'failed'
+        if self._conversions is None:
+            self._conversions = glide_image_conversion.ConversionService()
+        if self._conversions.state(key)[0] == 'ready' and not self.existing_conversion(path):
+            self._conversions.forget(key)
+        observer = (id(master), os.path.normcase(os.path.abspath(path)))
+        previous = self._requests.get(observer)
+        if previous and previous['key'] == key and not retry:
+            return self._conversions.state(key)[0]
+        if previous:
+            previous['stop']()
+        work = functools.partial(glide_image_conversion.convert_file, path, key[1], key[2], key[0])
+        status = self._conversions.submit(key, work, retry=retry)
+        if status == 'closed':
+            return status
+        record = {'key': key, 'binding': None, 'master': master, 'path': path, 'callback': callback, 'work': work}
+
+        def stop(cancel=True):
+            if self._requests.get(observer) is not record:
+                return
+            self._requests.pop(observer, None)
+            self._observers[key] -= 1
+            if self._observers[key] <= 0:
+                del self._observers[key]
+                if cancel:
+                    self._conversions.cancel(key)
+            try:
+                if record['binding'] is not None:
+                    master.unbind('<Destroy>', record['binding'])
+            except tk.TclError:
+                pass
+            record['binding'] = None
+            record.pop('stop', None)
+            if not self._requests and self._poll_job is not None:
+                try:
+                    self._poll_root.after_cancel(self._poll_job)
+                except tk.TclError:
+                    pass
+                self._poll_job = None
+
+        def destroyed(event):
+            if event.widget is master:
+                stop()
+
+        record['stop'] = stop
+        self._requests[observer] = record
+        self._observers[key] += 1
         try:
-            os.makedirs(os.path.dirname(ziel), exist_ok=True)
-            plattform = self.platform()
-            optionen = {}
-            if plattform == "darwin":
-                befehl = ["sips", "-s", "format", "png", "-Z", str(MAX_CONVERTED), path, "--out", ziel]
-            elif plattform == "nt":
-                befehl = windows_convert_command(path, ziel)
-                optionen = {"creationflags": getattr(subprocess, "CREATE_NO_WINDOW", 0)}
-            else:
-                groesse = None
-                if extension(path) in glide_preview_tools.JPEG:
-                    with open(path, "rb") as datei:
-                        groesse = glide_preview_tools.jpeg_size(datei.read(256 * 1024))
-                plan = glide_preview_tools.linux_plan(path, ziel[:-4], groesse, MAX_CONVERTED)
-                if plan is None:
-                    return None
-                befehl, ziel = plan
-            subprocess.run(befehl, capture_output=True, timeout=45, check=False, **optionen)
-        except (OSError, subprocess.SubprocessError, ValueError):
-            return None
-        return ziel if os.path.isfile(ziel) and os.path.getsize(ziel) > 0 else None
+            record['binding'] = master.bind('<Destroy>', destroyed, add='+')
+            self._poll_root = master._root()
+            self._schedule_poll()
+        except tk.TclError:
+            stop()
+        return status
+
+    def _schedule_poll(self):
+        if self._requests and self._poll_job is None:
+            self._poll_job = self._poll_root.after(40, self._poll_conversions)
+
+    def _poll_conversions(self):
+        """Ein Tk-Timer, höchstens 64 Beobachter pro Schritt, unabhängig von der Bildzahl."""
+        self._poll_job = None
+        try:
+            for observer, record in list(self._requests.items())[:64]:
+                if self._requests.get(observer) is not record:
+                    continue
+                master, path, key = record['master'], record['path'], record['key']
+                callback = record['callback']
+                if not master.winfo_exists():
+                    record['stop']()
+                    continue
+                if self.conversion_key(path) != key:
+                    record['stop']()
+                    if self.stamp(path) is not None:
+                        self.request_conversion(master, path, callback)
+                    else:
+                        callback(None)
+                    continue
+                state, result = self._conversions.state(key)
+                if state in ('missing', 'cancelled'):
+                    state = self._conversions.submit(key, record['work'])
+                if state in ('queued', 'running', 'busy'):
+                    continue
+                record['stop'](cancel=False)
+                if state != 'closed':
+                    callback(result)
+        finally:
+            self._schedule_poll()
+
+    def cancel_requests(self, master):
+        for observer, record in list(self._requests.items()):
+            if observer[0] == id(master):
+                record['stop']()
+
+    def close(self):
+        for record in list(self._requests.values()):
+            record['stop']()
+        if self._conversions:
+            self._conversions.close()
 
     # --- Laden -----------------------------------------------------------
     def natural_size(self, master, path):
@@ -331,7 +402,11 @@ class PreviewCache:
         """Vergisst alle Bilder (oder die eines Pfads), etwa nach einem Designwechsel."""
         if path is None:
             self._images.clear()
+            if self._conversions:
+                self._conversions.forget()
             return
         stamp = self.stamp(path)
         for schluessel in [k for k in self._images if k[0] == stamp]:
             self._images.pop(schluessel, None)
+        if self._conversions:
+            self._conversions.forget(self.conversion_key(path))

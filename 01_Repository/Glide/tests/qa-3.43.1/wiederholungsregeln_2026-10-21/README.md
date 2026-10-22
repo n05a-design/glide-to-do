@@ -11,7 +11,7 @@ Das Paket umfasst jetzt zusammenhängend:
 - Deutsche Schnelleingabe mit erstem Termin und rücknehmbarem Chip, etwa „alle 3 Monate am 15.“, „jeden zweiten Dienstag im Monat“ und „drei Tage nach Erledigung insgesamt 3 Termine“.
 - Statische Kalender-RRULEs mit Intervall, Monatsposition und wirksamer Anzahl/Ende, passender Import und vollständiger App-Sicherungsrundweg.
 
-[Bedienung](../../../docs/20_FUNKTIONEN.md#erweiterte-wiederholungsrhythmen-fp-02-lokaler-kandidat), [Datenvertrag](../../../docs/06_DATA_BACKUP_MIGRATION.md#format-26-im-lokalen-prüfkandidaten-fp-02).
+[Bedienung](../../../docs/20_FUNKTIONEN.md#erweiterte-wiederholungsrhythmen-fp-02-3440), [Datenvertrag](../../../docs/06_DATA_BACKUP_MIGRATION.md#format-26-fp-02-seit-3440).
 
 ## Gebündelte Prüfung
 

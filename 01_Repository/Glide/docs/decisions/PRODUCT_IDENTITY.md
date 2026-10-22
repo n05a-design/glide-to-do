@@ -44,7 +44,7 @@ ersetzt werden.
 | Mitgelieferte Schriften | DejaVu Sans TTF (vier Schnitte) und Pixelify Sans TTF (Regular, Bold; SIL OFL 1.1, nur Überschriften im Design „Pixel“), private Registrierung | `register_private_fonts`, `app_font`, `pixel_heading_family`, `resources/fonts/provenance.json` |
 | macOS Bundle Identifier | `de.shaye.glide` (Inhaberentscheidung 26.09.2026) | `APP_BUNDLE_ID`, `packaging/macos/baue_app.py` |
 | Windows AppUserModelID | `Shaye.Glide` (Inhaberentscheidung 26.09.2026) | `APP_USER_MODEL_ID`, `set_windows_app_user_model_id`, `packaging/windows/verknuepfung_anlegen.ps1` |
-| Beispielbestand zum Einlesen | vorhandene Beispiel-/Lieferbackups unter `tests/fixtures/beispiele/` bleiben bewusst im Format 25; feste aktuelle Format-26-Referenz `current_v26`, ältere `current_v*` einschließlich `current_v25` bleiben Migrationsbelege | `pruefen.py`, `test_seiten33318.py`, [Fixture-Register](../../tests/fixtures/README.md) |
+| Beispielbestand zum Einlesen | Beispiel-, Rundgang- und Releasebackups unter `tests/fixtures/beispiele/` werden je Versionswechsel neu erzeugt und tragen seit 3.44.0 Format 26; ältere Releaseplanungen behalten ihr Format. Feste Format-26-Referenz `current_v26`, ältere `current_v*` einschließlich `current_v25` bleiben Migrationsbelege | `pruefen.py`, `test_seiten33318.py`, [Fixture-Register](../../tests/fixtures/README.md) |
 
 ## Offen – Entscheidung oder Plattformabnahme erforderlich
 

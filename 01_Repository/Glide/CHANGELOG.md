@@ -2,7 +2,11 @@
 
 ## 3.44.0 – Wiederholen, eigene Rhythmen, Ansichten, Seitenkarten, Erwähnungen, KI-Aufträge und Markdown-Export (22.10.2026)
 
-Phasenabschluss nach D51: Die seit 3.43.1 lokal entwickelten Pakete (FP-01 bis FP-07 Stufe 1, WA-26, Schutzrunde WA-27–WA-30 und Roadmap-Pakete 1–3) erhalten eine gemeinsame Versionsnummer, eine eingefrorene Windows-Vollprüfung und die Lieferung nach `07_Python-Versionen`. **Aufgabenformat 26** (seit FP-02) mit bytegleicher Vorsicherung `liste_vor_format26_<Zeitstempel>.json`; die unveränderte 3.43.1 öffnet den umgestellten Bestand schreibgeschützt. Neue Neuerungen-Karte „Neu in 3.44.0“. Eigenständige Pakete und Mac-Bundle bleiben bis zu ihrem eigenen Neubau 3.42.0. Einzelheiten der Teilpakete:
+Phasenabschluss nach D51: Die seit 3.43.1 lokal entwickelten Pakete (FP-01 bis FP-07 Stufe 1, WA-26, Schutzrunde WA-27–WA-30 und Roadmap-Pakete 1–3) erhalten eine gemeinsame Versionsnummer, eine eingefrorene Windows-Vollprüfung und die Lieferung nach `07_Python-Versionen`. **Aufgabenformat 26** (seit FP-02) mit bytegleicher Vorsicherung `liste_vor_format26_<Zeitstempel>.json`; die unveränderte 3.43.1 öffnet den umgestellten Bestand schreibgeschützt. Neue Neuerungen-Karte „Neu in 3.44.0“. Eigenständige Pakete und Mac-Bundle bleiben bis zu ihrem eigenen Neubau 3.42.0.
+
+- **Aus der eingefrorenen Vollprüfung behoben:** „Als Ansicht speichern …“ steht in Palette und Aktionssuche unter „Ansichten“ statt unter „Weitere Aktionen“ (Aktionskatalog, Unit-Test). Der Showcase zeigt zusätzlich eine Serie am letzten Werktag im Monat und damit alle sieben Wiederholungsarten. Prüferwartungen an Format 26, den FP-02-Kalenderimport und die seit WA-31 gehaltene Sperrdatei angepasst. [Phasennachweis](tests/qa-3.44.0/phasenabschluss_2026-10-22/README.md).
+
+Einzelheiten der Teilpakete:
 
 - **Roadmap-Paket 3 (22.10.2026):** Gruppieren/Auflösen, Ordnerpapierkorb/-auflösen, Einzelfarben und direkte Papierkorbwiederherstellung/-leerung nutzen die gemeinsamen Änderungsrahmen. Frische Objekte nach Dialog/Snapshot, kein Erfolgstoast bei Schreibfehler; offene Änderungen bleiben rücknehmbar. Vor dem Ordnerpapierkorb werden Editorinhalte übernommen. UI-Fehler nach erfolgreichem Schreiben werden als Folgefehler geführt und rollen die Hauptdatei nicht zurück. Der lokale Kalender überspringt nach einem überholten Leseauftrag dessen unnötige Expansion; eine laufende Expansion bleibt unabbrechbar. Version und Format bleiben unverändert; [Prüfnachweis](tests/qa-3.43.1/roadmap_paket3_2026-10-22/README.md).
 

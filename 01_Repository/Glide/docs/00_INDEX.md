@@ -19,7 +19,7 @@ Seit 03.10.2026 zwölf zentrale Dokumente und fünf Einzelentscheidungen statt d
 | [02 Architektur](02_ARCHITECTURE.md) | Module, Speicherweg, Bausteine der Oberfläche, Performance-Regeln, Tk-Fallstricke |
 | [05 Prüfplan](05_QA_TESTPLAN.md) | Prüfstufen, Regeln, Schritte, Integrationssuiten nach Bereich, manuelle Kontrollmatrix |
 | [06 Daten, Backups und Migration](06_DATA_BACKUP_MIGRATION.md) | Format 26, ältere Formatstufen, Startprüfung, Sicherungen, Einstellungen, Austauschformat |
-| [07 QA-Bericht](07_QA_BERICHT.md) | Integrierter 3.43.1-Prüfkandidat, Schutzrunde/Ablagenachlauf und getrennte Liefer-/Paketstände, historische Ergebnisse und offene Abnahmen |
+| [07 QA-Bericht](07_QA_BERICHT.md) | Phasenabschluss 3.44.0 mit eingefrorener Vollprüfung und Python-Lieferung, getrennte Paketstände, historische Ergebnisse und offene Abnahmen |
 | [10 Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben, Produktdatenblatt |
 | [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |

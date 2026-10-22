@@ -7,6 +7,18 @@ import drawing
 import object_references as objects
 
 
+def card_summary(entry):
+    """Lesender Kartenauszug und offene eigene Aufgaben; keine Objektkopie."""
+    doc = entry.get('rich_note') or {}
+    text = str(doc.get('text') or entry.get('note') or entry.get('description') or '')
+    text = re.sub(r'[\ufffc\u25be\u25b8]', ' ', text)
+    text = ' '.join(text.split())
+    excerpt = text[:157].rstrip()+'…' if len(text) > 160 else text
+    count = sum(item.get('kind', 'task') == 'task' and not item.get('done')
+                for item in objects.walk(entry.get('items', [])))
+    return excerpt, count
+
+
 def live_lists(values):
     if values is None:
         return []

@@ -6,9 +6,9 @@ Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierun
 
 ## Releasecheckliste
 
-**Je Version (zuletzt automatisch vollständig geliefert 3.42.0; menschliche Abnahme und Veröffentlichungstore getrennt offen):**
+**Je Version (zuletzt automatisch vollständig einschließlich Bundle und Paketen geliefert 3.42.0; 3.43.0, 3.43.1 und 3.44.0 bisher nur als Python-Fassung mit Windows-Vollprüfung; menschliche Abnahme und Veröffentlichungstore getrennt offen):**
 
-Die Haken beschreiben den zuletzt abgeschlossenen Lieferstand. Für den aktuellen Kandidaten gelten die offenen Schritte im [QA-Bericht](07_QA_BERICHT.md); ein früherer grüner Bundlebeleg ist keine Abnahme des geänderten Codes. Historisch wurden bis 3.33.6 und wieder seit 3.33.18 Mac-Bundle und Python-Fassung geliefert; 3.33.7–3.33.17 nur unter Windows ohne Bundle.
+Die Haken beschreiben den zuletzt vollständig abgeschlossenen Lieferstand 3.42.0. Für 3.44.0 gelten die offenen Schritte (Mac-Vollprüfung, Bundle, Pakete) im [QA-Bericht](07_QA_BERICHT.md); ein früherer grüner Bundlebeleg ist keine Abnahme des geänderten Codes. Historisch wurden bis 3.33.6 und wieder seit 3.33.18 Mac-Bundle und Python-Fassung geliefert; 3.33.7–3.33.17 nur unter Windows ohne Bundle.
 
 - [x] VERSION, `APP_VERSION`, Hauptsuite und CHANGELOG gleich; Datenformat geprüft.
 - [x] Eingefrorene Vollprüfung auf dem Referenz-Mac; seit D42 zusätzlich native Windows-Vollprüfung je Lieferung und seit D35 gesamte ausführbare Linux-Matrix, einschließlich passender Defektgegenproben. Ergebnisse getrennt im [QA-Bericht](07_QA_BERICHT.md).
