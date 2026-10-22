@@ -1,6 +1,6 @@
 # Glide – Entwicklungsplan und Aufgabenstand
 
-Stand 22.10.2026 · Glide 3.43.1 · Aufgabenformat 26
+Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26
 
 Einziges Planungsdokument: Aufgaben, Pakete, Reihenfolge und Entscheidungsvorlagen. Am 21.10.2026 folgen auf den Zweipaketstand FP-03 Stufe 1 und anschließend FP-02 mit beiden Ausbaustufen. Die ausdrückliche Rückmeldung des Inhabers bündelt mehr Funktionen pro Paket und begrenzt Zwischenprüfungen; breite CI/Vollmatrix folgen am gesammelten Phasenende. FP-03 Stufe 2 ist inzwischen im lokalen Kandidaten umgesetzt (aktueller Paketstand §21.9). Auf Standanalyse, Schutzintegration und Ablageprüfung folgt am 18.10.2026 der Fortsetzungsauftrag „Weiter mit der Feature Umsetzung“. WA-26, FP-05 und FP-06 sind im lokalen Quellkandidaten umgesetzt; der ausdrückliche Folgeauftrag vom 19.10.2026 ergänzt FP-07 Stufe 1 und FP-04 einschließlich eigenem Altleser-Namespace; weitere Phasen-/Produktoptionen werden dadurch nicht pauschal ausgewählt. Versionswechsel, eingefrorener Gesamtabschluss und Lieferung folgen D51. Ergebnisse stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Verhalten in den [Funktionen](../01_Repository/Glide/docs/20_FUNKTIONEN.md), Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Historische Paketbelege sind keine aktuelle Abnahme.
 
@@ -816,7 +816,7 @@ Es gelten Prüfplan, §15.3 und §15.8 unverändert: Tk-freie Unit-Tests (D17), 
 
 ### 16.10 Vorprüfungen zur Umsetzungsreife (13.10.2026)
 
-Nur lesend, ohne Tk-Fenster, am Lieferstand `7995ecbc…`; Werkzeuge und Ergebnisse im [Nachweis](../01_Repository/Glide/tests/qa-3.39.0/wettbewerbsanalyse_2026-10-13/README.md).
+Nur lesend, ohne Tk-Fenster, am Lieferstand `7995ecbc…`; Werkzeuge und Ergebnisse im [Nachweis](https://github.com/n05a-design/glide-to-do/blob/10427276b97e10528759cc42b0d23f757ca14843/01_Repository/Glide/tests/qa-3.39.0/wettbewerbsanalyse_2026-10-13/README.md).
 
 | Prüfung | Ergebnis | Folge |
 |---|---|---|

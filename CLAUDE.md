@@ -1,6 +1,6 @@
 # Arbeitsregeln für Claude Code – Glide
 
-Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · lokaler Prüfkandidat, getrennt vom Lieferstand
+Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · lokaler Prüfkandidat, getrennt vom Lieferstand
 
 Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf die verbindlichen Projektregeln und ergänzt, was für Claude-Code-Sitzungen im Repository gilt. Regeln nicht hier doppeln, sondern an der Quelle pflegen.
 

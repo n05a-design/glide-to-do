@@ -1,6 +1,6 @@
 # Prüfungen für Glide
 
-Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · 101 Suiten aus `pruefen.py` und fünf Analysen
+Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · 101 Suiten aus `pruefen.py` und fünf Analysen
 
 FP-02, beide Stufen: `test_wiederholungsregeln.py` ergänzt zwölf Fälle einschließlich Masken normal/groß, Formatmigration, Kopierfehler und Altleser. 30 unabhängige Referenzregeln mit 720 Folgeterminen; [aktueller Nachweis](qa-3.43.1/wiederholungsregeln_2026-10-21/README.md). Die 101 registrierten Suiten sind noch kein neuer Volllauf. Erledigungsbezug, Pause, Restanzahl, Chips und Kalender-Rundweg gehören jetzt zum selben Paket.
 
@@ -11,7 +11,7 @@ Alle App-Tests setzen vor dem App-Import einen temporären `GLIDE_DATA_DIR`; ech
 
 | Zweck | Aufruf |
 |---|---|
-| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.43.1/<Name> --timeout 900` |
+| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.44.0/<Name> --timeout 900` |
 | Schnellprüfung | `python3 -B tests/tools/pruefen.py` |
 | CI-Grundstufe (wie GitHub) | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` |
 | Windows | `tests/tools/windows_vollpruefung.cmd` (Anleitung in der [manuellen Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md)) |

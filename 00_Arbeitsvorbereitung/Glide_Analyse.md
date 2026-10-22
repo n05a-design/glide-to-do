@@ -4,7 +4,7 @@
 
 **Einordnung nach Integration am 18.10.2026:** Die folgende Gesamtanalyse bewahrt den untersuchten Vorzustand `c0252ba` / App-Hash `ed2b7eb…` sowie die damalige Upstream-Probe. FP-01 und WA-27–WA-30 sind inzwischen im lokalen Prüfkandidaten integriert. Aktuelle Quell-, Prüf- und Lieferstände stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Aufgaben nur im [Plan](Glide_Entwicklungsplan.md). Die vollständige Ablagenachprüfung steht im [Nachweis](../01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/README.md). Historische Befunde und Messergebnisse werden hier nicht umgedeutet.
 
-Stand 22.10.2026 · Glide 3.43.1 · Aufgabenformat 26 im aktuellen Kandidaten · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde
+Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 im aktuellen Kandidaten · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde
 
 Diese Fassung führt die Analysen seit 08.10.2026 in einer Quelle zusammen; die Abschnitte 1–12 bewahren den untersuchten Stand vom 18.10., §13 die neueren Befunde. Die Vorfassungen bleiben in Git. **Glide besitzt bereits einen breiten lokalen Arbeitsumfang; sein offener Kern ist inzwischen der gesicherte Phasen- und Lieferabschluss zusammenhängender Abläufe.** Die Bestands-/Dokumentationsrunden ließen Produktionslogik, Datenformat, echte Nutzerdaten und Lieferpakete unverändert. Der anschließende ausdrückliche Umsetzungsauftrag beginnt mit dem in §13.9 bezeichneten Quellpaket; Datenformat, echte Nutzerdaten und Lieferpakete bleiben auch darin unverändert.
 

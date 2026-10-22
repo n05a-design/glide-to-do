@@ -1,6 +1,6 @@
 # Glide – lokale Aufgaben, Notizen und Pinnwände
 
-Stand 22.10.2026 · Glide 3.43.1 · integrierter Prüfkandidat; getrennte Lieferung und Pakete im QA-Bericht
+Stand 22.10.2026 · Glide 3.44.0 · integrierter Prüfkandidat; getrennte Lieferung und Pakete im QA-Bericht
 
 [![Glide-Prüfung](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml)
 

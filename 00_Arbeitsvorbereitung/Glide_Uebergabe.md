@@ -1,6 +1,6 @@
 # Glide – Übergabe an eine neue Sitzung
 
-Stand 22.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · lokaler Featurekandidat, getrennte Lieferung
+Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · lokaler Featurekandidat, getrennte Lieferung
 
 **Aktuell nach Roadmap-Paket 3 (22.10.2026):** Quelle `604014f9a85e9c38a2d19141a3b1039a7a9f798c39d7dcbcb0387569b0f1f68f`, weiterhin 3.43.1 / Format 26. Sieben weitere Struktur-/Seitenleistenadapter verwenden die gemeinsamen Änderungsrahmen; aktuelle Referenzen nach Dialog/Snapshot, Editorübernahme vor Ordnerpapierkorb und ehrliche Schreib-/UI-Folgeergebnisse. Der Kalender überspringt überholte Expansion nach dem Lesen. 856 Fachtests, 16 abgedeckte Schutzfälle und passende Datenintegritäts-/Redo-/Appregressionen; neuer 5.000er-Leistungspunkt. [Plan §21.9](Glide_Entwicklungsplan.md#219-drittes-umsetzungspaket-strukturabschluss-und-kalenderwechsel), [Prüfstand](../01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/README.md). Kein neuer Gesamt-/Native-/Lieferabschluss.
 

@@ -2,7 +2,7 @@
 
 **Erweiterung 21.10.2026:** Die frische Konkurrenz-, Komponenten- und Integrationsuntersuchung steht in [§12](#12-erweiterte-recherche-vom-21102026). Die älteren Abschnitte behalten ihre Abrufdaten. Aktuelle Glide-Restlücken ergeben sich aus dem [Roadmap-Abgleich](Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026), nicht aus den historischen „fehlt“-Spalten des Vorzustands. Neue Integrationen werden auf ausdrücklichen Wunsch erneut bewertet; daraus folgt keine Aktivierung von Netzwerkzugriff oder eine stillschweigende Änderung der bisherigen Kernentscheidungen.
 
-Stand 21.10.2026 · Glide 3.43.1 · Markt- und Integrationsanalyse; ältere Untersuchungen mit eigenem Abrufdatum
+Stand 22.10.2026 · Glide 3.44.0 · Markt- und Integrationsanalyse; ältere Untersuchungen mit eigenem Abrufdatum
 
 Zusammengeführt am 18.10.2026. Dieses Dokument ist die einzige aktuelle Wettbewerbsquelle. Es konsolidiert die Hersteller-Matrix vom 01.10., die Vertiefungen vom 05.–13.10. und die Notion-Bildauswertung vom 15.10.2026. Frühere Fassungen liegen in Git. Aufgaben, Paketfolge und Auswahl stehen ausschließlich im [Entwicklungsplan](Glide_Entwicklungsplan.md), technische Befunde und Nutzungsszenarien in der [Analyse](Glide_Analyse.md); bestätigte Entscheidungen in der [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md). Dieser Analyseauftrag setzt keine neuen Produktentscheidungen um.
 

@@ -1,6 +1,6 @@
 # Paketierung Glide
 
-Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 Die eigenständigen Entwicklungspakete für macOS arm64 und Windows x64 wurden als 3.42.0 mit eigenem Python/Tcl-Tk geliefert und damals isoliert geprüft. Die aktuelle Python-Fassung ist 3.43.1; Pakete 3.43.x sind nicht geliefert. Bei der lesenden Manifestprüfung am 18.10.2026 stimmen Windows 102/102 und Mac327/330 Dateien; drei Mac-Frameworkdateien fehlen in dieser Windows-Kopie. Das ist keine neue native Start-/Signaturprüfung ([QA-Bericht](../docs/07_QA_BERICHT.md)). Mac ad hoc signiert, Windows unsigniert; öffentliche Signaturen, Installer und Store-Abnahme bleiben in der [Veröffentlichung](../docs/10_VEROEFFENTLICHUNG.md) offen.
 

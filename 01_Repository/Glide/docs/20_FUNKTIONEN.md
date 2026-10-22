@@ -1,6 +1,6 @@
 # Funktionen – Glide
 
-Stand 22.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 **Prüfkandidat vom 18.10.2026:** FP-01 und WA-27–WA-30 sind im Quellbaum integriert (Version 3.43.1, Format 25). Die zuvor nachgestellten Grenzen A32/A33/A34/A35/A36 haben gezielte Schutzprüfungen und Gegenproben; die historische Analyse beschreibt den Zustand vor dieser Integration. [Schutznachweis](../tests/qa-3.43.1/schutzrunde_2026-10-18/README.md), [aktueller Prüf- und Lieferstand](07_QA_BERICHT.md). 07 und die eigenständigen Pakete sind noch nicht auf diesen Kandidaten aktualisiert. Native Abnahmen und Phasenabschluss bleiben offen.
 
