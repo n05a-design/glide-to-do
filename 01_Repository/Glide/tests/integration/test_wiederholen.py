@@ -113,6 +113,13 @@ class Lauf:
         self.taste("<Control-y>" if windows_y else "<Control-Shift-Z>", widget)
 
 
+def abweichung(vor, ist, nach):
+    """Teile des Bestands, die nach Rückgängig weder dem Vorher- noch dem Nachher-Stand gleichen."""
+    alt, jetzt, danach = (json.loads(stand) for stand in (vor, ist, nach))
+    return {key: ("wie nach der Aktion" if jetzt[key] == danach[key] else "abweichend")
+            for key in alt if alt[key] != jetzt[key]}
+
+
 def redo_offen(lauf):
     app = lauf.app
     return bool(getattr(app, "redo_available", lambda: False)())
@@ -192,7 +199,11 @@ def fall_matrix(lauf):
         assert nach != vor, f"{name}: Aktion ohne Wirkung"
         tiefe = len(lauf.app.undo_stack)
         lauf.rueckgaengig()
-        assert lauf.bestand() == vor, f"{name}: Rückgängig stellt nicht her"
+        zurueck = lauf.bestand()
+        # Diagnose seit Lauf 03 der Vollprüfung 3.44.0 (einmal rot, einzeln
+        # 13/13 grün): abweichende Teile und Meldungen nennen.
+        assert zurueck == vor, (f"{name}: Rückgängig stellt nicht her", abweichung(vor, zurueck, nach),
+                                len(lauf.app.undo_stack), lauf.meldungen[-3:])
         assert redo_offen(lauf), f"{name}: kein Wiederholen nach Rückgängig"
         # Unter Windows wechselt die Prüfung zwischen Strg+Y und Strg+Umschalt+Z.
         lauf.wiederholen(windows_y=lauf.mod.IS_WINDOWS and nummer % 2 == 1)
