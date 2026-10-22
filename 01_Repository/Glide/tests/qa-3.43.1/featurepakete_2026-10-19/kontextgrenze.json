@@ -1,0 +1,11 @@
+{
+  "faelle": 5,
+  "vorher_exitcode": 1,
+  "nachher_exitcode": 0,
+  "gespeicherte_kontexte": 1001,
+  "wiederhergestellte_kontexte": 1001,
+  "originaleinstellungen_unveraendert": true,
+  "gespeicherte_einstellungen_unveraendert": true,
+  "modul_sha256": "fb81ff0b55012de45cbad39f433ee0916d4fb827348c5c65992c932e0dbdce22",
+  "test": "tests/unit/test_pinboard_pages.py::PageCardTests.test_roundtrip_preserves_more_than_one_thousand_scopes"
+}

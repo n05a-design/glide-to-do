@@ -10,6 +10,8 @@ wiederholen kann, und lehnt alles andere ab, statt die Folge still zu ändern.
 Quelle: https://www.rfc-editor.org/rfc/rfc5545#section-3.3.10
 """
 from datetime import date
+import ics_recurrence
+import repeat_rules
 
 DAILY, EVERY_N_DAYS, WEEKDAYS = "taeglich", "tage", "wochentage"
 WEEKLY, MONTHLY, YEARLY = "woechentlich", "monatlich", "jaehrlich"
@@ -29,7 +31,12 @@ def rule_parts(regel, anker):
     """
     if not isinstance(regel, dict):
         return None
+    if regel.get("pausiert") or regel.get("bezug") == "erledigt":
+        return None
     art = regel.get("art")
+    if art == repeat_rules.SERIES:
+        value = repeat_rules.normalize(regel)
+        return value["rrule"].split(";") if value else None
     if art == DAILY:
         return ["FREQ=DAILY"]
     if art == EVERY_N_DAYS:
@@ -64,7 +71,29 @@ def parse_parts(wert):
     return teile
 
 
-def from_parts(teile, start):
+def export_parts(rule, anchor, current):
+    """Export ab aktuellem Vorkommen; dynamische oder unpassende Serien sichtbar begrenzen."""
+    parts = rule_parts(rule, anchor)
+    if parts is None:
+        return None
+    if rule.get("art") == repeat_rules.SERIES:
+        if not isinstance(current, date) or not ics_recurrence.matches_start(current, rule["rrule"]):
+            return None
+    if rule.get("rest"):
+        count = rule["rest"]
+        if rule.get("ende"):
+            count = 1
+            value, day = rule, current
+            while count < rule["rest"]:
+                day, value = repeat_rules.advance_rule(value, day)
+                if day is None:
+                    break
+                count += 1
+        parts.append("COUNT=" + str(count))
+    return parts
+
+
+def _legacy_from_parts(teile, start):
     """Glide-Regel (ohne Start und Ende) aus RRULE-Teilen oder None.
 
     `start` ist der erste Termin (date) der Kalenderreihe. Erkannt werden nur
@@ -112,3 +141,37 @@ def from_parts(teile, start):
             return {"art": YEARLY}
         return None
     return None
+
+
+def from_parts(teile, start):
+    """Alte Abbildung erhalten, neue eindeutige Serien einschließlich COUNT ergänzen."""
+    if not isinstance(teile, dict):
+        return None
+    try:
+        parsed = ics_recurrence.parse_rule(";".join(f"{k}={v}" for k, v in teile.items()))
+    except ValueError:
+        return None
+    if parsed.count is not None and parsed.count > 10000:
+        return None
+    fields = dict(teile)
+    fields.pop("COUNT", None)
+    result = _legacy_from_parts(fields, start)
+    if result is None:
+        if fields.get("WKST", "MO") != "MO":
+            return None
+        fields.pop("WKST", None)
+        fields.pop("UNTIL", None)
+        if fields.get("FREQ") == "WEEKLY" and not fields.get("BYDAY"):
+            if not isinstance(start, date):
+                return None
+            fields["BYDAY"] = ICS_WEEKDAYS[start.weekday()]
+        try:
+            text = repeat_rules.series_rule(";".join(f"{k}={v}" for k, v in fields.items()))
+            if isinstance(start, date) and not ics_recurrence.matches_start(start, text):
+                return None
+        except ValueError:
+            return None
+        result = {"art": repeat_rules.SERIES, "rrule": text}
+    if parsed.count is not None:
+        result["rest"] = parsed.count
+    return result

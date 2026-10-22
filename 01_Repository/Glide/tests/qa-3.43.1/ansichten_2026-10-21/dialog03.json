@@ -1,0 +1,11 @@
+{
+  "app_sha256": "380cd3db62a0a67e0c0e0771c675f52971f796451e74ea14f46a2e3f6442d3db",
+  "faelle": {
+    "dialog": {
+      "ok": true,
+      "messung": {
+        "scrollbarer_dialog_fester_fuss": true
+      }
+    }
+  }
+}

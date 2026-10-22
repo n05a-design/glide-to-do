@@ -1,0 +1,435 @@
+## codex/bildvorschauen-wa26-2026-10-18...origin/main
+ M 00_Arbeitsvorbereitung/Glide_Analyse.md
+ M 00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md
+ M 00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md
+ M 00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md
+ M 00_Arbeitsvorbereitung/Glide_Uebergabe.md
+ M 00_Arbeitsvorbereitung/README.md
+ M 01_Repository/Glide/AGENTS.md
+ M 01_Repository/Glide/CHANGELOG.md
+ M 01_Repository/Glide/README.md
+ M 01_Repository/Glide/SECURITY.md
+ M 01_Repository/Glide/assets/README.md
+ M 01_Repository/Glide/docs/00_INDEX.md
+ M 01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md
+ M 01_Repository/Glide/docs/02_ARCHITECTURE.md
+ M 01_Repository/Glide/docs/05_QA_TESTPLAN.md
+ M 01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md
+ M 01_Repository/Glide/docs/07_QA_BERICHT.md
+ M 01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md
+ M 01_Repository/Glide/docs/20_FUNKTIONEN.md
+ M 01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md
+ M 01_Repository/Glide/docs/ARBEITSRICHTUNG.md
+ M 01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md
+ M 01_Repository/Glide/docs/DOKUMENTENPFLEGE.md
+ M 01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md
+ M 01_Repository/Glide/packaging/README.md
+ M 01_Repository/Glide/packaging/macos/baue_app.py
+ M 01_Repository/Glide/scripts/pflege/README.md
+ M 01_Repository/Glide/scripts/pflege/abgleich_07.py
+ M 01_Repository/Glide/src/glide/README.md
+ M 01_Repository/Glide/src/glide/action_catalog.py
+ M 01_Repository/Glide/src/glide/app.pyw
+ M 01_Repository/Glide/src/glide/calendar_service.py
+ M 01_Repository/Glide/src/glide/capture_parser.py
+ M 01_Repository/Glide/src/glide/data_lock.py
+ M 01_Repository/Glide/src/glide/image_preview.py
+ M 01_Repository/Glide/src/glide/object_references.py
+ M 01_Repository/Glide/src/glide/page_features.py
+ M 01_Repository/Glide/src/glide/repeat_ics.py
+ M 01_Repository/Glide/src/glide/repeat_rules.py
+ M 01_Repository/Glide/src/glide/task_editing.py
+ M 01_Repository/Glide/tests/README.md
+ M 01_Repository/Glide/tests/fixtures/README.md
+ M 01_Repository/Glide/tests/fixtures/showcase/README.md
+ M 01_Repository/Glide/tests/integration/test_features314.py
+ M 01_Repository/Glide/tests/integration/test_features315.py
+ M 01_Repository/Glide/tests/integration/test_features316.py
+ M 01_Repository/Glide/tests/integration/test_features319.py
+ M 01_Repository/Glide/tests/integration/test_features322.py
+ M 01_Repository/Glide/tests/integration/test_features326.py
+ M 01_Repository/Glide/tests/integration/test_features328.py
+ M 01_Repository/Glide/tests/integration/test_features329.py
+ M 01_Repository/Glide/tests/integration/test_features330.py
+ M 01_Repository/Glide/tests/integration/test_glide.py
+ M 01_Repository/Glide/tests/integration/test_import3410.py
+ M 01_Repository/Glide/tests/integration/test_release37.py
+ M 01_Repository/Glide/tests/integration/test_reminders.py
+ M 01_Repository/Glide/tests/integration/test_schutzrunde.py
+ M 01_Repository/Glide/tests/integration/test_seiten33318.py
+ M 01_Repository/Glide/tests/integration/test_uiux_paket.py
+ M 01_Repository/Glide/tests/integration/test_wiederholung3391.py
+ M 01_Repository/Glide/tests/integration/test_wissen33315.py
+ M 01_Repository/Glide/tests/integration/test_woche33317.py
+ M 01_Repository/Glide/tests/integration/vorversion.py
+ M 01_Repository/Glide/tests/tools/README.md
+ M 01_Repository/Glide/tests/tools/pruefen.py
+ M 01_Repository/Glide/tests/tools/releasedaten.py
+ M 01_Repository/Glide/tests/unit/test_calendar_service.py
+ M 01_Repository/Glide/tests/unit/test_capture_parser.py
+ M 01_Repository/Glide/tests/unit/test_capture_repeat_anchor.py
+ M 01_Repository/Glide/tests/unit/test_data_lock.py
+ M 01_Repository/Glide/tests/unit/test_repeat_ics.py
+ M 05_Probelisten_Testdaten/README.md
+ M 05_Probelisten_Testdaten/Showcase/README.md
+ M 07_Python-Versionen/README.md
+ M 20_Grafik_Master/README.md
+ M CLAUDE.md
+ M README.md
+?? 01_Repository/Glide/src/glide/exchange_recipes.py
+?? 01_Repository/Glide/src/glide/image_conversion.py
+?? 01_Repository/Glide/src/glide/item_index.py
+?? 01_Repository/Glide/src/glide/markdown_tree.py
+?? 01_Repository/Glide/src/glide/pinboard_pages.py
+?? 01_Repository/Glide/src/glide/resources/exchange_recipes.json
+?? 01_Repository/Glide/src/glide/save_result.py
+?? 01_Repository/Glide/src/glide/view_definition.py
+?? 01_Repository/Glide/tests/fixtures/current_v26/reference_v26.json
+?? 01_Repository/Glide/tests/fixtures/wiederholungsregeln_fp02.json
+?? 01_Repository/Glide/tests/integration/test_ansichten.py
+?? 01_Repository/Glide/tests/integration/test_auftraege.py
+?? 01_Repository/Glide/tests/integration/test_bildkonversion.py
+?? 01_Repository/Glide/tests/integration/test_erwaehnungen.py
+?? 01_Repository/Glide/tests/integration/test_markdownbaum.py
+?? 01_Repository/Glide/tests/integration/test_seitenkarten.py
+?? 01_Repository/Glide/tests/integration/test_wiederholungsregeln.py
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/.gitignore
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/README.md
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/ausgangsmanifest.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/ci_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/datenschutz_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/datenschutzbereinigung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/dialog03.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/dokumentverweise_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/gezielt.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/gezielt01.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/gezielt02.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/gezielt_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/gezielt_vorlauf01.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/gross_gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/inventur_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/kandidat_sicherung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/kandidat_sicherung_vorlauf01.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/persistenz03.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/pruefaufrufe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/pruefaufrufe_nachlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/pruefaufrufe_vorlauf01.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/quellstand.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/quellstand_vorlauf01.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/sicherung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/tempo04.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/tempo05.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/tempo06.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/tempo07.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/validierung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/README.md
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/ansichten_final.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/ergebnis.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/fachlogik.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/gegenprobe_ui_host.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/oberflaeche_regression.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/quellmanifest.json
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/dunkel_breit_columns.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/dunkel_breit_dialog.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/dunkel_breit_list.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/dunkel_breit_table.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/hell_eng_columns.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/hell_eng_dialog.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/hell_eng_list.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/hell_eng_table.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/verlauf_breit_columns.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/verlauf_breit_dialog.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/verlauf_breit_list.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/verlauf_breit_table.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/verlauf_eng_columns.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/verlauf_eng_dialog.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/verlauf_eng_list.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/sichtpruefung/verlauf_eng_table.png
+?? 01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/ui_isoliert.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/.gitignore
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/README.md
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/abschluss_nachpruefung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/ausgangsstand.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/dialog.png
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/dialog_abschluss.png
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/dialog_klein.png
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/dialog_klein_abschluss.png
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/eigener_vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/fachpruefung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/muster_nachpruefung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/pflichtsuite.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/pflichtsuite_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/pruefung2.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/pruefung3.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/quellstand.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/quellstand_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/quellstand_nachpruefung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/regression.json
+?? 01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/.gitignore
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/README.md
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/basis_github.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/datenschutz.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/ergebnis.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/formal_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/formal_vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/gegenprobe_adapter_1042727.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/gegenprobe_auswertung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/gegenprobe_final.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/kandidat_manifest.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/lieferstand_unveraendert.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/links_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/links_vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/pflichtsuite.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/pflichtsuite_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/pflichtsuite_final.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/quellstand.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/quellstand_abgleich.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/quellstand_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/quellstand_abschluss_abgleich.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/regression.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/regression_final.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/units.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/warteschlange_vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/werkzeugtests.json
+?? 01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/wic_windows.json
+?? 01_Repository/Glide/tests/qa-3.43.1/codevalidierung_2026-10-21/README.md
+?? 01_Repository/Glide/tests/qa-3.43.1/codevalidierung_2026-10-21/ausgangsstand.json
+?? 01_Repository/Glide/tests/qa-3.43.1/codevalidierung_2026-10-21/ci_ergebnis.json
+?? 01_Repository/Glide/tests/qa-3.43.1/codevalidierung_2026-10-21/ergebnis.json
+?? 01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/.gitignore
+?? 01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/README.md
+?? 01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/abschluss_nachpruefung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/bildregression.json
+?? 01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/fehler_vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/kleines_fenster.png
+?? 01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/pflichtsuite.json
+?? 01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/pruefung2.json
+?? 01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/quellstand.json
+?? 01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/regression.json
+?? 01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/.gitignore
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/02_bildkonversion_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/02_markdown_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/02_markdown_gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/02_seitenkarten_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/02_seitenkarten_gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/02_uiux_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/03_markdown_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/03_markdown_gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/03_seitenkarten_gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/04_markdown_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/04_markdown_gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/04_seitenkarten_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/04_seitenkarten_gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/05_markdown_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/05_markdown_gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/05_seitenkarten_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/05_seitenkarten_gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/README.md
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/ausgang_app.sha256
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/ci_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/ci_vorlauf04.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/datenschutz_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/datenschutzbereinigung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/dokumentstand_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/dokumentverweise_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/dokumentverweise_nachlauf01.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/dokumentverweise_vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/gezielte_pruefung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/gezielte_pruefung02.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/gezielte_pruefung03.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/gezielte_pruefung04.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/gezielte_pruefung_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/gezielte_pruefung_unterbrochen01.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/inventur_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/kontextgrenze.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/markdown_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/markdown_gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/markdown_nachpruefung04.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/markdown_nachpruefung05.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/markdown_vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/mausdruck_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/mausdruck_gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/namespace_grenze_vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/pruefwerkzeug_hinweise.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/quellstand.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/quellstand_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/quellstand_vorlauf04.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/seitenkarten_gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/seitenkarten_nachlauf01.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/seitenkarten_vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/showcase_hashdiagnose01.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/sicherung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/sicherung_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/sicherung_vorlauf04.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/tempo_nachlauf02.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/titelbild_vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/validierung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/vollpruefung_02_unvollstaendig.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/vollpruefung_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/vollpruefung_vorlauf04.json
+?? 01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/zeichen_pruefzeitpunkt.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/README.md
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/ausgangsmanifest.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/bereichspruefungen.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/bereinigung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/code_kennzahlen.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/design_inventar.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/dokumentabschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/dokumentabschluss_vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/dokumenthashes.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/ergebnis.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/fachlogik.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/inventar_code.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/methoden_statisch.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/nachweismanifest.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/nutzerreferenzen.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/probe_leistung_und_ui.py
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/probe_sichtpruefung.py
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/probe_sperruebergaenge.py
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/01_startseite_normal.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/02_heute_normal.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/03_labels_normal.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/04_vorlagen_normal.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/05_papierkorb_normal.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/06_liste_normal.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/07_seite_normal.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/08_pinnwand_normal.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/09_kalender_normal.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/10_startseite_eng_gross.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/11_heute_eng_gross.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/12_labels_eng_gross.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/13_vorlagen_eng_gross.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/14_papierkorb_eng_gross.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/15_liste_eng_gross.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/16_seite_eng_gross.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/17_pinnwand_eng_gross.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/18_kalender_eng_gross.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/19_einstellungen.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sichtpruefung/sichtpruefung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/sperruebergaenge.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/statische_analyse_vollstaendig.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/test_ansichten.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/test_auftraege.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/test_auftraege.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/test_bildkonversion.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/test_erwaehnungen.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/test_erwaehnungen.png
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/test_markdownbaum.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/test_schutzrunde.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/test_uiux_paket.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/ui_und_leistung/leistung_und_ui.json
+?? 01_Repository/Glide/tests/qa-3.43.1/gitauftrag_2026-10-21/README.md
+?? 01_Repository/Glide/tests/qa-3.43.1/gitauftrag_2026-10-21/ergebnis.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/README.md
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/abschluss_delta.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/abschluss_mehrfach.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/abschluss_ordnerwechsel.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/abschluss_sitzung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/abschluss_speicherergebnis.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/auftraege.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/ergebnis.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/ergebnis_zwischenstand.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/gegenprobe_freigabe_vor_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/gegenprobe_mehrfach.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/gegenprobe_ordnerwechsel_vor_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/gegenprobe_sitzung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/leistung_nachher.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/leistung_vorher.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/messung.py
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/pruefungen.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/quellmanifest.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/quellmanifest_zwischenstand.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/redo_bedienwege.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/redo_schreibfehler.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/schutzrunde.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/serien_schreibfehler.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/serien_vorruecken.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/README.md
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/app_pruefungen.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/baseline_speicherergebnis.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/ergebnis.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/fachlogik.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/fachlogik_ohne_utf8.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/gegenprobe_struktur_dialog.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/gegenprobe_struktur_editor.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/gegenprobe_struktur_ergebnis.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/gegenprobe_ui_folgefehler.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/inventar_vorher.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/kalender_messung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/kalender_messung.py
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/kalender_pruefungen.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/messung_mutationen.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/messung_mutationen.py
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/quellmanifest.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/redo_matrix.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/redo_schreibfehler.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/schutzrunde.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/struktur_dialog.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/struktur_editor.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/struktur_ergebnis.json
+?? 01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/struktur_ergebnis_final.json
+?? 01_Repository/Glide/tests/qa-3.43.1/standaufnahme_2026-10-21/README.md
+?? 01_Repository/Glide/tests/qa-3.43.1/standaufnahme_2026-10-21/ausgangsmanifest.json
+?? 01_Repository/Glide/tests/qa-3.43.1/standaufnahme_2026-10-21/ci_ergebnis.json
+?? 01_Repository/Glide/tests/qa-3.43.1/standaufnahme_2026-10-21/ergebnis.json
+?? 01_Repository/Glide/tests/qa-3.43.1/standaufnahme_2026-10-21/remote.json
+?? 01_Repository/Glide/tests/qa-3.43.1/standaufnahme_2026-10-21/stand.json
+?? 01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/.gitignore
+?? 01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/README.md
+?? 01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/ausgangsmanifest.json
+?? 01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/bildkonversion_nachpruefung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/gezielte_nachpruefung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/inventur.json
+?? 01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/pinnwand_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/pinnwand_gegenprobe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/sicherung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/.gitignore
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/README.md
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/ansichten_altfilter.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/ansichten_altleser.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/ansichten_regression.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/ausgangsmanifest.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/datenschutz_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/dokumentverweise_abschluss.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/gegenprobe_maske.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/gegenprobe_migration.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/gezielt.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/gezielt_vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/gezielt_vorlauf02.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/gezielt_vorlauf03.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/kandidat_sicherung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/kandidat_sicherung_vorlauf02.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/kandidat_sicherung_vorlauf03.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/maske_vorlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/pruefaufrufe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/pruefaufrufe_vorlauf02.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/pruefaufrufe_vorlauf03.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/quellstand.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/quellstand_vorlauf02.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/quellstand_vorlauf03.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/schreibfehler_nachlauf.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/sicherung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/stufe1_gezielt.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/stufe1_kandidat_sicherung.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/stufe1_pruefaufrufe.json
+?? 01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/stufe1_quellstand.json
+?? 01_Repository/Glide/tests/unit/test_exchange_recipes.py
+?? 01_Repository/Glide/tests/unit/test_image_conversion.py
+?? 01_Repository/Glide/tests/unit/test_item_index.py
+?? 01_Repository/Glide/tests/unit/test_markdown_tree.py
+?? 01_Repository/Glide/tests/unit/test_pinboard_pages.py
+?? 01_Repository/Glide/tests/unit/test_repeat_controls.py
+?? 01_Repository/Glide/tests/unit/test_repeat_series.py
+?? 01_Repository/Glide/tests/unit/test_save_result.py
+?? 01_Repository/Glide/tests/unit/test_unlinked_mentions.py
+?? 01_Repository/Glide/tests/unit/test_view_definition.py

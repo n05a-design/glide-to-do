@@ -1,6 +1,6 @@
 # Glide · aktiver Showcase
 
-Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25
+Stand 22.10.2026 · Glide 3.44.0 · Lieferdaten in Speicherstufe 26
 
 Das fiktive Projekt **Parkquartier** zeigt fertige, bearbeitbare Arbeitsdokumente: Briefing, Abstimmungsnotiz, Aufgabenliste, Bildgalerie, Pixelskizze, Routinen und Projekttagebuch. Die sechs Originalmotive liegen unverändert unter `tests/fixtures/showcase/bilder`; Herkunft und Prüfsummen stehen in `quellen.json`. Seit 03.10.2026 liegen sie ausschließlich in dieser Fixture-Ablage, zuvor zusätzlich im Grafikmaster. Sie illustrieren Themen; sie zeigen kein reales Verkaufsobjekt. Personen und Projektangaben sind fiktiv.
 
@@ -36,11 +36,11 @@ Die Wiederherstellung eines App-Backups ersetzt den gewählten Bestand und seine
 
 ## Abdeckung und Prüfgrenzen
 
-Alle fünf Dokumentarten, alle drei Ordnertypen, alle vier Punktarten, alle sechs Wiederholungsarten und beide Erinnerungsarten sind enthalten. Die App-Variante enthält 28 Punkte in elf Dokumenten einschließlich Eingang; das Teilbackup 26 Punkte in zehn Projektdokumenten. 15 Anhangdateien sind vollständig eingebettet, darunter JPEG, PNG, ICO, GPL, HEX, CSV und TXT. Das App-Backup ergänzt die globale Pinnwand und den Katalog mit 22 Vorlagen.
+Alle fünf Dokumentarten, alle drei Ordnertypen, alle vier Punktarten, alle sieben Wiederholungsarten (seit 3.44.0 einschließlich einer Serie am letzten Werktag im Monat) und beide Erinnerungsarten sind enthalten. Die App-Variante enthält 29 Punkte in elf Dokumenten einschließlich Eingang; das Teilbackup 27 Punkte in zehn Projektdokumenten. 15 Anhangdateien sind vollständig eingebettet, darunter JPEG, PNG, ICO, GPL, HEX, CSV und TXT. Das App-Backup ergänzt die globale Pinnwand und den Katalog mit 22 Vorlagen.
 
 Ein Showcase kann nicht jede Bedienhandlung als gespeicherten Inhalt darstellen. Automatisierte Prüfungen kontrollieren zusätzlich Import/Export, ID-Zuordnung, Bilder, Klappblock, Undo, Vorlagen und Neustart. Klappmechanismen, Drag-and-drop, Datumsaktionen, Pixel-/Palettenexport und Performance werden durch die vorhandenen Pflichtsuiten geprüft. OS-Druckdialog, physische Maus/Trackpad, Windows/Linux und Screenreader bleiben manuelle Abnahme.
 
-Backups behalten ihre konkreten Termine beim Import. Der Bearbeitungstag dieses Bestands ist gemäß `manifest.json` **13.10.2026**; später erscheinen alte Aufgaben überfällig. Zum Auffrischen aus `01_Repository/Glide`:
+Backups behalten ihre konkreten Termine beim Import. Der Bearbeitungstag dieses Bestands ist gemäß `manifest.json` **22.10.2026**; später erscheinen alte Aufgaben überfällig. Zum Auffrischen aus `01_Repository/Glide`:
 
 ```sh
 GLIDE_QA_HINTERGRUND=1 PYTHONPATH=tests/tools/hintergrund python3 -B tests/tools/showcase.py

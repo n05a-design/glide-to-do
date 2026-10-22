@@ -1,0 +1,9 @@
+{
+  "app_sha256": "ca2130336fe1a1f66341a4a995c4043da3373bd930ffe5579ae4d3fac09b0e2d",
+  "faelle": {
+    "showcase": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_markdownbaum.py\", line 130, in main\n    evidence=globals()['fall_'+name](run,Path(directory))\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_markdownbaum.py\", line 72, in fall_showcase\n    assert after==before,('Quelldateien durch Ausgabe verändert',[n for n in sorted(set(before)|set(after)) if before.get(n)!=after.get(n)])\n           ^^^^^^^^^^^^^\nAssertionError: ('Quelldateien durch Ausgabe verändert', ['cache\\\\galerie\\\\glide-vorschau-ye0a4gbc.png'])\n"
+    }
+  }
+}

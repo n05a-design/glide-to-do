@@ -1,9 +1,0 @@
-{
-  "commit": "609887723f54e69578095cc68ce09563f64ce0c1",
-  "bytegleich": true,
-  "sha256": {
-    "01_Repository/Glide/tests/qa-3.33.20/komfort_2026-10-09/README.md": "6c21760214a0536091937d0fd7a49befee9e021e1c79619b747d2f9492d822f7",
-    "01_Repository/Glide/tests/qa-3.33.20/komfort_2026-10-09/voll/ergebnis.json": "51cab1e2c00c636ae7be8c4cfe2d6df58d10879a7cc871fc8d8badcf871d3983",
-    "01_Repository/Glide/tests/qa-3.33.20/komfort_2026-10-09/bundle.json": "6b380ec63d1d382a71380c03ceaec0ae64b9f7d805d0d2b37093082f57e2eae3"
-  }
-}

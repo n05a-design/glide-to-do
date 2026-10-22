@@ -1,6 +1,6 @@
 # Produkt- und Identitätsregister
 
-Stand 16.10.2026 · App-Version 3.43.1 · Datenformat 25
+Stand 22.10.2026 · App-Version 3.44.0 · Datenformat 26
 
 Der obere Block ist durch den Quellcode belegt und muss nicht mehr entschieden
 werden. Der untere Block enthält Geschäfts- und Rechtsentscheidungen. Offene
@@ -13,9 +13,9 @@ ersetzt werden.
 |---|---|---|
 | Produktname | Glide | `APP_NAME` |
 | Langname | Glide – Aufgaben und Listen | `APP_PRODUCT_NAME` |
-| App-Version | 3.43.1 | `APP_VERSION`, `VERSION` |
-| Datenformat | 25 | `DATA_SCHEMA_VERSION` |
-| Unterstützte Backup-Formate | 4 bis 25 | `MIN_PORTABLE_BACKUP_SCHEMA_VERSION`, `DATA_SCHEMA_VERSION` |
+| App-Version | 3.44.0 | `APP_VERSION`, `VERSION` |
+| Datenformat | 26 | `DATA_SCHEMA_VERSION` |
+| Unterstützte Backup-Formate | 4 bis 26 | `MIN_PORTABLE_BACKUP_SCHEMA_VERSION`, `DATA_SCHEMA_VERSION` |
 | Laufzeit | Python 3.14 mit Tk 9 als Grundlage (27.09.2026); Tk 8.6 bleibt lauffähig, ohne Systemmitteilung und SVG-Vorschau. Sonst nur Standardbibliothek | Importliste in `app.pyw` |
 | Mitgelieferte Bibliothek | tkinterdnd2 0.6.3 (MIT) mit tkDnD für das Ziehen aus Finder/Explorer; optional, lädt beim ersten Gebrauch | `src/glide/vendor`, [Entscheidung](ABHAENGIGKEIT_TKDND.md) |
 | Prüflaufzeit | Dokumentierter Lieferstand 3.42.0: Referenz-Mac Python 3.14.5/Tk 9.0.3, Windows x64 Python 3.14.7/Tk 9.0.4 und Linux/Xvfb Python 3.14/Tk 8.6; native automatische Liefernachweise grün. Aktuelle lokale Paketvollständigkeit und offene Menschenabnahme getrennt im QA-Bericht prüfen | [QA-Bericht](../07_QA_BERICHT.md) |
@@ -44,7 +44,7 @@ ersetzt werden.
 | Mitgelieferte Schriften | DejaVu Sans TTF (vier Schnitte) und Pixelify Sans TTF (Regular, Bold; SIL OFL 1.1, nur Überschriften im Design „Pixel“), private Registrierung | `register_private_fonts`, `app_font`, `pixel_heading_family`, `resources/fonts/provenance.json` |
 | macOS Bundle Identifier | `de.shaye.glide` (Inhaberentscheidung 26.09.2026) | `APP_BUNDLE_ID`, `packaging/macos/baue_app.py` |
 | Windows AppUserModelID | `Shaye.Glide` (Inhaberentscheidung 26.09.2026) | `APP_USER_MODEL_ID`, `set_windows_app_user_model_id`, `packaging/windows/verknuepfung_anlegen.ps1` |
-| Beispielbestand zum Einlesen | aktuelle Backups unter `tests/fixtures/beispiele/` im Format 25; feste aktuelle Referenz `current_v25`, ältere `current_v*` als Migrationsbelege | `pruefen.py`, `test_seiten33318.py` |
+| Beispielbestand zum Einlesen | vorhandene Beispiel-/Lieferbackups unter `tests/fixtures/beispiele/` bleiben bewusst im Format 25; feste aktuelle Format-26-Referenz `current_v26`, ältere `current_v*` einschließlich `current_v25` bleiben Migrationsbelege | `pruefen.py`, `test_seiten33318.py`, [Fixture-Register](../../tests/fixtures/README.md) |
 
 ## Offen – Entscheidung oder Plattformabnahme erforderlich
 

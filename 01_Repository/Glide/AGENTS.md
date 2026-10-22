@@ -8,8 +8,8 @@ Glide ist eine lokale Desktop-Anwendung. Kernfunktionen müssen ohne Internet, B
 
 - Einstieg für jede neue Sitzung: `../../00_Arbeitsvorbereitung/Glide_Uebergabe.md` (Stand, Regeln, nächste Schritte)
 - Aufgaben mit Status: `../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md`
-- Entscheidungen D01–D51 (D49 als Auslegung mit Korrekturvorbehalt, D50 Vorrang des UI-/UX-Pakets, D51 phasenweise Prüfung), Auftrag und Arbeitsablauf: `docs/ARBEITSRICHTUNG.md`; neue Produktentscheidungen ab D52
-- Konkrete UI-/UX-Vorgaben: `docs/DESIGN_RICHTLINIEN.md`; neuer Auftrag: `../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md`
+- Entscheidungen D01–D54 (D49 als Auslegung mit Korrekturvorbehalt, D50 UI-/UX-Vorrang, D51 phasenweise Prüfung, D52–D54 zentrale Roadmap/Designgeltung/Integrationsbewertung/Pflege), Auftrag und Arbeitsablauf: `docs/ARBEITSRICHTUNG.md`; neue Produktentscheidungen ab D55
+- Appweiter Gestaltungsvertrag für jede neue oder angefasste Oberfläche: `docs/DESIGN_RICHTLINIEN.md` einschließlich Kontext-/Komponentenmatrix und Paketnachweis; Originalauftrag: `../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md`
 - Produkt, Grenzen und Prinzipien: `docs/01_PRODUCT_CONSTRAINTS.md`
 - Architektur, Performance-Regeln, Tk-Fallstricke: `docs/02_ARCHITECTURE.md`
 - Verhalten der Funktionen: `docs/20_FUNKTIONEN.md`
@@ -39,6 +39,8 @@ Glide ist eine lokale Desktop-Anwendung. Kernfunktionen müssen ohne Internet, B
 12. Caches nach stabilen IDs und Host-Lebensdauer führen, vollständig invalidieren; Undo kann Objekte ersetzen. Ersetzte Bindungen/after-Aufträge freigeben. Keine verschachtelten `update()`/`update_idletasks()` in selbstauslösenden Rückrufen. Details und Abnahme in `docs/ARBEITSRICHTUNG.md`.
 
 13. Nach D17 entsteht neue oder angefasste Fachlogik als Tk-freies Modul mit eigenen Unit-Tests; bestehende UI- und Mutationseinstiege bleiben erhalten. Seit D09 ist die Git-Arbeitskopie des gesamten Projektordners maßgeblich.
+
+14. Jede Entwicklungsrunde führt den vorhandenen `Glide_Entwicklungsplan.md` fort (aktueller Roadmap-Abgleich §21): Entscheidung/Auftrag und Implementierung/Prüfung/Lieferung/Menschenabnahme trennen, Restumfang und passende Belege nennen. Vor UI-Arbeit betroffene Designkontexte/Rollen festlegen, nachher echte Bedien-/Geometrie-/Sichtbelege bzw. offene native Grenzen dokumentieren. Neue Integrationsoptionen bleiben bis zur konkreten Auswahl Vorschläge; kein Hintergrundjob entscheidet Features oder pusht eigenständig.
 
 ## Prüfphasen
 

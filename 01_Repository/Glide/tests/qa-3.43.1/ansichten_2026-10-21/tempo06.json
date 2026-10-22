@@ -1,0 +1,9 @@
+{
+  "app_sha256": "380cd3db62a0a67e0c0e0771c675f52971f796451e74ea14f46a2e3f6442d3db",
+  "faelle": {
+    "tempo": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 243, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 223, in fall_tempo\n    assert len(entries)==10000, dict(treffer=len(entries),\n           ^^^^^^^^^^^^^^^^^^^\nAssertionError: {'treffer': 0, 'listen': [('Meine Liste', 0)], 'punkte': 0, 'beispiel': [{'key': 'planned', 'title': 'Bearbeitungstag', 'ok': True, 'detail': 'verlangt: 21.10.2026 bis 21.10.2026 · Punkt: 21.10.2026'}, {'key': 'effort', 'title': 'Aufwand', 'ok': True, 'detail': 'verlangt: höchstens 30 Minuten · Punkt: 20 Minuten'}, {'key': 'blocked', 'title': 'Wartet auf', 'ok': True, 'detail': 'verlangt: frei · Punkt: frei'}, {'key': 'importance_min', 'title': 'Mindestwichtigkeit', 'ok': True, 'detail': 'verlangt: mindestens 2 · Punkt: 3'}, {'key': 'exclude_labels', 'title': 'Labels ausschließen', 'ok': True, 'detail': 'verlangt: wait · Punkt: keines der ausgeschlossenen Labels'}]}\n"
+    }
+  }
+}

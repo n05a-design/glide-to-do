@@ -1,0 +1,50 @@
+{
+  "app_sha256": "f9be29c4a942c4f37a4832b232bea8be811d82609bfbc1abbfb80bef764dd708",
+  "faelle": {
+    "bedingungen": {
+      "ok": true,
+      "messung": {
+        "treffer": 1,
+        "erklaerte_bedingungen": 3
+      }
+    },
+    "oder": {
+      "ok": true,
+      "messung": {
+        "oder_ueber_listengrenzen": true,
+        "unbekannt_auch_bei_oder_ungueltig": true
+      }
+    },
+    "persistenz": {
+      "ok": true,
+      "messung": null
+    },
+    "fehler": {
+      "ok": true,
+      "messung": null
+    },
+    "altleser": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 199, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 123, in fall_altleser\n    assert app.saved_filters.save(value)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app.pyw\", line 4006, in save\n    app.settings.setdefault(glide_view_definition.KEY, {})[criteria['id']] = glide_view_definition.compact(definition)\n                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: module 'view_definition' has no attribute 'compact'\n"
+    },
+    "dialog": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 199, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 162, in fall_dialog\n    value=app.saved_filters.edit_dialog()\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app.pyw\", line 4278, in edit_dialog\n    update()\n    ~~~~~~^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app.pyw\", line 4241, in update\n    value = read()\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app.pyw\", line 4238, in read\n    result['_view'] = extra if glide_view_definition.errors(extra) else glide_view_definition.compact(extra)\n                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: module 'view_definition' has no attribute 'compact'\n"
+    },
+    "tempo": {
+      "ok": true,
+      "messung": {
+        "punkte": 10000,
+        "reine_auswertung_ms": [
+          34.81359999568667,
+          29.49879999505356,
+          38.19380000641104,
+          31.36209999502171,
+          32.497699998202734
+        ],
+        "median_ms": 32.497699998202734,
+        "grenze_ms": 100
+      }
+    }
+  }
+}

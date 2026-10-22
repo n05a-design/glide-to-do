@@ -1,0 +1,726 @@
+{
+  "app_sha256": "604014f9a85e9c38a2d19141a3b1039a7a9f798c39d7dcbcb0387569b0f1f68f",
+  "toggle_done_source_sha256": "61397e99a19c60cfe019b6a2061a827f0bfc15760d2d333272395e5fa31102d8",
+  "source_before": {
+    "app_sha256": "604014f9a85e9c38a2d19141a3b1039a7a9f798c39d7dcbcb0387569b0f1f68f",
+    "toggle_done_source_sha256": "61397e99a19c60cfe019b6a2061a827f0bfc15760d2d333272395e5fa31102d8"
+  },
+  "sizes": [
+    {
+      "items": 100,
+      "loaded_source": {
+        "app_sha256": "604014f9a85e9c38a2d19141a3b1039a7a9f798c39d7dcbcb0387569b0f1f68f",
+        "toggle_done_source_sha256": "61397e99a19c60cfe019b6a2061a827f0bfc15760d2d333272395e5fa31102d8"
+      },
+      "operations": [
+        {
+          "selected": 1,
+          "first_ms": 23.246,
+          "values_ms": [
+            17.553,
+            19.21,
+            17.942,
+            19.027,
+            16.79
+          ],
+          "median_ms": 17.942,
+          "minimum_ms": 16.79,
+          "maximum_ms": 19.21
+        },
+        {
+          "selected": 100,
+          "first_ms": 19.829,
+          "values_ms": [
+            17.343,
+            19.76,
+            17.305,
+            19.298,
+            17.629
+          ],
+          "median_ms": 17.629,
+          "minimum_ms": 17.305,
+          "maximum_ms": 19.76
+        }
+      ]
+    },
+    {
+      "items": 1000,
+      "loaded_source": {
+        "app_sha256": "604014f9a85e9c38a2d19141a3b1039a7a9f798c39d7dcbcb0387569b0f1f68f",
+        "toggle_done_source_sha256": "61397e99a19c60cfe019b6a2061a827f0bfc15760d2d333272395e5fa31102d8"
+      },
+      "operations": [
+        {
+          "selected": 1,
+          "first_ms": 51.624,
+          "values_ms": [
+            47.859,
+            50.534,
+            47.31,
+            50.649,
+            48.288
+          ],
+          "median_ms": 48.288,
+          "minimum_ms": 47.31,
+          "maximum_ms": 50.649
+        },
+        {
+          "selected": 100,
+          "first_ms": 52.339,
+          "values_ms": [
+            48.276,
+            52.323,
+            47.549,
+            51.754,
+            51.631
+          ],
+          "median_ms": 51.631,
+          "minimum_ms": 47.549,
+          "maximum_ms": 52.323
+        }
+      ]
+    },
+    {
+      "items": 5000,
+      "loaded_source": {
+        "app_sha256": "604014f9a85e9c38a2d19141a3b1039a7a9f798c39d7dcbcb0387569b0f1f68f",
+        "toggle_done_source_sha256": "61397e99a19c60cfe019b6a2061a827f0bfc15760d2d333272395e5fa31102d8"
+      },
+      "operations": [
+        {
+          "selected": 1,
+          "first_ms": 206.591,
+          "values_ms": [
+            191.885,
+            202.355,
+            187.097,
+            199.002,
+            211.403
+          ],
+          "median_ms": 199.002,
+          "minimum_ms": 187.097,
+          "maximum_ms": 211.403
+        },
+        {
+          "selected": 100,
+          "first_ms": 203.486,
+          "values_ms": [
+            189.894,
+            204.722,
+            189.62,
+            211.819,
+            190.418
+          ],
+          "median_ms": 190.418,
+          "minimum_ms": 189.62,
+          "maximum_ms": 211.819
+        }
+      ]
+    },
+    {
+      "items": 10000,
+      "loaded_source": {
+        "app_sha256": "604014f9a85e9c38a2d19141a3b1039a7a9f798c39d7dcbcb0387569b0f1f68f",
+        "toggle_done_source_sha256": "61397e99a19c60cfe019b6a2061a827f0bfc15760d2d333272395e5fa31102d8"
+      },
+      "operations": [
+        {
+          "selected": 1,
+          "first_ms": 397.377,
+          "values_ms": [
+            361.473,
+            389.924,
+            378.893,
+            389.456,
+            370.99
+          ],
+          "median_ms": 378.893,
+          "minimum_ms": 361.473,
+          "maximum_ms": 389.924
+        },
+        {
+          "selected": 100,
+          "first_ms": 438.683,
+          "values_ms": [
+            377.361,
+            438.889,
+            376.75,
+            408.701,
+            402.872
+          ],
+          "median_ms": 402.872,
+          "minimum_ms": 376.75,
+          "maximum_ms": 438.889
+        }
+      ]
+    }
+  ],
+  "repetitions": 5,
+  "warmups": 1,
+  "python": "3.14.7",
+  "platform": "Windows",
+  "started_utc": "2026-10-22T12:25:24.305806+00:00",
+  "one_python_process": true,
+  "fresh_tk_interpreter_per_size": true,
+  "sizes_planned": [
+    100,
+    1000,
+    5000,
+    10000
+  ],
+  "scope": "Synchroner echter toggle_done-Weg einschließlich Undo, Sofortspeicherung und Refresh; unprofiliert auf diesem Desktop. Auswahlsetzen außerhalb der Uhr. Nachlaufende Tk-Ereignisse sind nicht im Zeitwert enthalten.",
+  "sample_limit": "Je Aktion ein erster Aufruf und fünf warme Wiederholungen. Der erste Aufruf ist kein kalter Appstart. Kein p95 aus fünf Beobachtungen und keine allgemeine Leistungs-/Plattformzusage.",
+  "comparable_to": "roadmap_paket1_2026-10-21/messung.py: gleicher Ablauf, zusätzlich 5.000",
+  "complete": true,
+  "tk": "9.0.4",
+  "profile": {
+    "total_profiled_self_s": 1.207581,
+    "top_functions": [
+      {
+        "file": "app.pyw",
+        "line": 54258,
+        "function": "ListApp.toggle_done",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 0.000734,
+        "cumulative_s": 1.207567
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.next>",
+        "primitive_calls": 50012,
+        "total_calls": 100052,
+        "self_s": 0.005815,
+        "cumulative_s": 1.158176
+      },
+      {
+        "file": "app.pyw",
+        "line": 51324,
+        "function": "ListApp.item_change",
+        "primitive_calls": 2,
+        "total_calls": 2,
+        "self_s": 0.000142,
+        "cumulative_s": 1.155267
+      },
+      {
+        "file": "contextlib.py",
+        "line": 145,
+        "function": "__exit__",
+        "primitive_calls": 1,
+        "total_calls": 6,
+        "self_s": 8e-06,
+        "cumulative_s": 1.124676
+      },
+      {
+        "file": "app.pyw",
+        "line": 51458,
+        "function": "ListApp.finish_change_ui",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 5e-06,
+        "cumulative_s": 0.632354
+      },
+      {
+        "file": "app.pyw",
+        "line": 51406,
+        "function": "<lambda>",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 3e-06,
+        "cumulative_s": 0.585095
+      },
+      {
+        "file": "app.pyw",
+        "line": 45499,
+        "function": "ListApp.refresh_tree",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 1e-05,
+        "cumulative_s": 0.585092
+      },
+      {
+        "file": "app.pyw",
+        "line": 48683,
+        "function": "ListApp._refresh_tree",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 7.9e-05,
+        "cumulative_s": 0.585066
+      },
+      {
+        "file": "app.pyw",
+        "line": 49112,
+        "function": "ListApp._refresh_tree_contents",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 0.001486,
+        "cumulative_s": 0.544971
+      },
+      {
+        "file": "app.pyw",
+        "line": 43474,
+        "function": "ListApp.save_items",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 1.2e-05,
+        "cumulative_s": 0.463831
+      },
+      {
+        "file": "app.pyw",
+        "line": 43482,
+        "function": "ListApp.save_items_result",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 0.000313,
+        "cumulative_s": 0.463819
+      },
+      {
+        "file": "app.pyw",
+        "line": 50613,
+        "function": "ListApp.insert_tree_items",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 0.07906,
+        "cumulative_s": 0.421414
+      },
+      {
+        "file": "app.pyw",
+        "line": 43748,
+        "function": "ListApp.list_comparison",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 1.5e-05,
+        "cumulative_s": 0.253404
+      },
+      {
+        "file": "save_comparison.py",
+        "line": 22,
+        "function": "prepare_comparison",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 4e-05,
+        "cumulative_s": 0.253384
+      },
+      {
+        "file": "save_comparison.py",
+        "line": 101,
+        "function": "compare_lists",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 1.3e-05,
+        "cumulative_s": 0.253171
+      },
+      {
+        "file": "save_comparison.py",
+        "line": 113,
+        "function": "walk",
+        "primitive_calls": 1,
+        "total_calls": 10001,
+        "self_s": 0.050137,
+        "cumulative_s": 0.251431
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'get' of 'dict' objects>",
+        "primitive_calls": 1663115,
+        "total_calls": 1663115,
+        "self_s": 0.137689,
+        "cumulative_s": 0.137689
+      },
+      {
+        "file": "ttk.py",
+        "line": 1346,
+        "function": "insert",
+        "primitive_calls": 10007,
+        "total_calls": 10007,
+        "self_s": 0.005807,
+        "cumulative_s": 0.116424
+      },
+      {
+        "file": "ttk.py",
+        "line": 42,
+        "function": "_format_optdict",
+        "primitive_calls": 20045,
+        "total_calls": 20045,
+        "self_s": 0.028246,
+        "cumulative_s": 0.096136
+      },
+      {
+        "file": "save_comparison.py",
+        "line": 50,
+        "function": "history_value",
+        "primitive_calls": 200004,
+        "total_calls": 200004,
+        "self_s": 0.057282,
+        "cumulative_s": 0.09392
+      },
+      {
+        "file": "save_comparison.py",
+        "line": 67,
+        "function": "tree_signature",
+        "primitive_calls": 10001,
+        "total_calls": 10001,
+        "self_s": 0.02601,
+        "cumulative_s": 0.092078
+      },
+      {
+        "file": "app.pyw",
+        "line": 34203,
+        "function": "ListApp.render_cached",
+        "primitive_calls": 20,
+        "total_calls": 26,
+        "self_s": 3e-05,
+        "cumulative_s": 0.084806
+      },
+      {
+        "file": "__init__.py",
+        "line": 185,
+        "function": "dumps",
+        "primitive_calls": 10009,
+        "total_calls": 10009,
+        "self_s": 0.007468,
+        "cumulative_s": 0.081859
+      },
+      {
+        "file": "app.pyw",
+        "line": 34756,
+        "function": "ListApp.update_sidebar_list",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 2.1e-05,
+        "cumulative_s": 0.078953
+      },
+      {
+        "file": "app.pyw",
+        "line": 34764,
+        "function": "ListApp._update_sidebar_list",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 0.000113,
+        "cumulative_s": 0.078908
+      },
+      {
+        "file": "encoder.py",
+        "line": 185,
+        "function": "encode",
+        "primitive_calls": 10009,
+        "total_calls": 10009,
+        "self_s": 0.00656,
+        "cumulative_s": 0.073058
+      },
+      {
+        "file": "app.pyw",
+        "line": 43998,
+        "function": "ListApp.update_history",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 3e-05,
+        "cumulative_s": 0.070788
+      },
+      {
+        "file": "app.pyw",
+        "line": 43807,
+        "function": "ListApp.history_events",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 0.041347,
+        "cumulative_s": 0.070488
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'call' of '_tkinter.tkapp' objects>",
+        "primitive_calls": 60799,
+        "total_calls": 60799,
+        "self_s": 0.068306,
+        "cumulative_s": 0.068613
+      },
+      {
+        "file": "item_index.py",
+        "line": 10,
+        "function": "__init__",
+        "primitive_calls": 10,
+        "total_calls": 10,
+        "self_s": 0.042457,
+        "cumulative_s": 0.065248
+      },
+      {
+        "file": "encoder.py",
+        "line": 207,
+        "function": "iterencode",
+        "primitive_calls": 10009,
+        "total_calls": 10009,
+        "self_s": 0.063708,
+        "cumulative_s": 0.063709
+      },
+      {
+        "file": "ttk.py",
+        "line": 32,
+        "function": "_format_optvalue",
+        "primitive_calls": 40064,
+        "total_calls": 40064,
+        "self_s": 0.010516,
+        "cumulative_s": 0.055969
+      },
+      {
+        "file": "app.pyw",
+        "line": 42143,
+        "function": "ListApp.item_kind",
+        "primitive_calls": 130301,
+        "total_calls": 130301,
+        "self_s": 0.032661,
+        "cumulative_s": 0.053156
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'join' of 'str' objects>",
+        "primitive_calls": 60056,
+        "total_calls": 60056,
+        "self_s": 0.021092,
+        "cumulative_s": 0.051596
+      },
+      {
+        "file": "app.pyw",
+        "line": 51412,
+        "function": "<lambda>",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 6e-06,
+        "cumulative_s": 0.046924
+      },
+      {
+        "file": "app.pyw",
+        "line": 17740,
+        "function": "ListApp.animate_task_rows",
+        "primitive_calls": 1,
+        "total_calls": 1,
+        "self_s": 0.001338,
+        "cumulative_s": 0.046918
+      },
+      {
+        "file": "app.pyw",
+        "line": 44898,
+        "function": "ListApp.find_items_in_lists",
+        "primitive_calls": 7,
+        "total_calls": 7,
+        "self_s": 0.00016,
+        "cumulative_s": 0.046817
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.isinstance>",
+        "primitive_calls": 641864,
+        "total_calls": 641864,
+        "self_s": 0.046598,
+        "cumulative_s": 0.046604
+      },
+      {
+        "file": "app.pyw",
+        "line": 44864,
+        "function": "ListApp.walk_items",
+        "primitive_calls": 90022,
+        "total_calls": 180022,
+        "self_s": 0.036577,
+        "cumulative_s": 0.045742
+      },
+      {
+        "file": "app.pyw",
+        "line": 45243,
+        "function": "ListApp.item_visible_by_filter",
+        "primitive_calls": 10000,
+        "total_calls": 10000,
+        "self_s": 0.012377,
+        "cumulative_s": 0.044748
+      }
+    ],
+    "cost_categories": {
+      "snapshot": [
+        {
+          "file": "app.pyw",
+          "line": 51487,
+          "function": "ListApp.snapshot_undo",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_s": 4e-06,
+          "cumulative_s": 0.017014
+        },
+        {
+          "file": "app.pyw",
+          "line": 51503,
+          "function": "ListApp.undo_state",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_s": 2.2e-05,
+          "cumulative_s": 0.01701
+        },
+        {
+          "file": "app.pyw",
+          "line": 705,
+          "function": "PackedState.__init__",
+          "primitive_calls": 4,
+          "total_calls": 4,
+          "self_s": 0.0002,
+          "cumulative_s": 0.016967
+        }
+      ],
+      "json": [
+        {
+          "file": "__init__.py",
+          "line": 185,
+          "function": "dumps",
+          "primitive_calls": 10009,
+          "total_calls": 10009,
+          "self_s": 0.007468,
+          "cumulative_s": 0.081859
+        },
+        {
+          "file": "encoder.py",
+          "line": 185,
+          "function": "encode",
+          "primitive_calls": 10009,
+          "total_calls": 10009,
+          "self_s": 0.00656,
+          "cumulative_s": 0.073058
+        },
+        {
+          "file": "encoder.py",
+          "line": 207,
+          "function": "iterencode",
+          "primitive_calls": 10009,
+          "total_calls": 10009,
+          "self_s": 0.063708,
+          "cumulative_s": 0.063709
+        }
+      ],
+      "zlib": [
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method zlib.compress>",
+          "primitive_calls": 4,
+          "total_calls": 4,
+          "self_s": 0.002492,
+          "cumulative_s": 0.002492
+        }
+      ],
+      "backup": [
+        {
+          "file": "app.pyw",
+          "line": 44103,
+          "function": "ListApp.write_backup_copy",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_s": 3e-06,
+          "cumulative_s": 4.8e-05
+        }
+      ],
+      "atomic_write": [
+        {
+          "file": "app.pyw",
+          "line": 43450,
+          "function": "ListApp.write_json_atomic",
+          "primitive_calls": 2,
+          "total_calls": 2,
+          "self_s": 5.2e-05,
+          "cumulative_s": 0.037701
+        },
+        {
+          "file": "app.pyw",
+          "line": 18615,
+          "function": "ListApp.settings_json_text",
+          "primitive_calls": 3,
+          "total_calls": 3,
+          "self_s": 5e-06,
+          "cumulative_s": 0.016977
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<built-in method nt.fsync>",
+          "primitive_calls": 2,
+          "total_calls": 2,
+          "self_s": 0.009053,
+          "cumulative_s": 0.009053
+        },
+        {
+          "file": "app.pyw",
+          "line": 43434,
+          "function": "ListApp.replace_with_retry",
+          "primitive_calls": 2,
+          "total_calls": 2,
+          "self_s": 8e-06,
+          "cumulative_s": 0.001076
+        }
+      ],
+      "render": [
+        {
+          "file": "app.pyw",
+          "line": 45499,
+          "function": "ListApp.refresh_tree",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_s": 1e-05,
+          "cumulative_s": 0.585092
+        },
+        {
+          "file": "app.pyw",
+          "line": 48683,
+          "function": "ListApp._refresh_tree",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_s": 7.9e-05,
+          "cumulative_s": 0.585066
+        },
+        {
+          "file": "app.pyw",
+          "line": 49112,
+          "function": "ListApp._refresh_tree_contents",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_s": 0.001486,
+          "cumulative_s": 0.544971
+        },
+        {
+          "file": "app.pyw",
+          "line": 34756,
+          "function": "ListApp.update_sidebar_list",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_s": 2.1e-05,
+          "cumulative_s": 0.078953
+        }
+      ],
+      "comparison_history": [
+        {
+          "file": "app.pyw",
+          "line": 43748,
+          "function": "ListApp.list_comparison",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_s": 1.5e-05,
+          "cumulative_s": 0.253404
+        },
+        {
+          "file": "app.pyw",
+          "line": 43998,
+          "function": "ListApp.update_history",
+          "primitive_calls": 1,
+          "total_calls": 1,
+          "self_s": 3e-05,
+          "cumulative_s": 0.070788
+        }
+      ]
+    },
+    "interpretation": "cProfile-Kosten eines zusätzlichen Aufrufs mit 100 ausgewählten Aufgaben bei 10.000. Snapshot enthält JSON und zlib; atomarer Schreibweg enthält JSON/Dateisystem; Refresh kann Teilaufbauten enthalten. Kumulative Werte überlappen und sind nicht addierbar. self_s schließt Unteraufrufe aus. Backupkosten bedeuten die ausgeführte Prüfung bzw. Sicherung, nicht zwingend eine neu erzeugte Backupdatei. Profiling verursacht Zusatzlast und ist kein Latenz- oder Gewinnbeleg."
+  },
+  "source_after": {
+    "app_sha256": "604014f9a85e9c38a2d19141a3b1039a7a9f798c39d7dcbcb0387569b0f1f68f",
+    "toggle_done_source_sha256": "61397e99a19c60cfe019b6a2061a827f0bfc15760d2d333272395e5fa31102d8"
+  },
+  "source_unchanged_during_measurement": true,
+  "finished_utc": "2026-10-22T12:26:02.122683+00:00"
+}

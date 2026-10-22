@@ -1,0 +1,62 @@
+[
+  {
+    "schritt": "unit",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 32.84
+  },
+  {
+    "schritt": "gegenprobe_bedingungen",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 5.82
+  },
+  {
+    "schritt": "gegenprobe_oder",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 6.12
+  },
+  {
+    "schritt": "gegenprobe_persistenz",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 5.97
+  },
+  {
+    "schritt": "gegenprobe_fehler",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 8.06
+  },
+  {
+    "schritt": "gegenprobe_altleser",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 11.39
+  },
+  {
+    "schritt": "gegenprobe_dialog",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 6.02
+  },
+  {
+    "schritt": "gezielt",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 57.39
+  },
+  {
+    "schritt": "wissen_regression",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 19.17
+  },
+  {
+    "schritt": "ci",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 303.35
+  }
+]

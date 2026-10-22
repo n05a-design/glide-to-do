@@ -1,0 +1,5 @@
+{
+  "returncode": 1,
+  "seconds": 26.116,
+  "summary": "t\\test_portable_source_bridge.py\", line 60, in test_actual_portable_restore_reanchors_clean_images_cover_and_reimport_state\n    self.assertEqual(stored['lists'],self.a.lists)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Lists differ: [{'id[609 chars]ext\\nï¿¼', 'spans': [{'tag': 'img:aaaaaaaaaaaa[2429 chars]]}]}] != [{'id[609 chars]ext\\n￼', 'spans': [{'tag': 'img:aaaaaaaaaaaaaa[2427 chars]]}]}]\n\nFirst differing element 1:\n{'id'[137 chars]ext\\nï¿¼', 'spans': [{'tag': 'img:aaaaaaaaaaaa[1526 chars]md'}}\n{'id'[137 chars]ext\\n￼', 'spans': [{'tag': 'img:aaaaaaaaaaaaaa[1524 chars]md'}}\n\nDiff is 4712 characters long. Set self.maxDiff to None to see it.\n\n----------------------------------------------------------------------\nRan 856 tests in 19.256s\n\nFAILED (failures=5)\nentfernt: ../outside.json\nentfernt: link/data.json\nentfernt: old/x.json\n1 Dateien gekürzt\nentfernt: old/tracked.json\nentfernt: old/new.json\n2 Dateien gekürzt\n"
+}

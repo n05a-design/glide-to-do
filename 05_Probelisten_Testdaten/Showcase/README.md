@@ -1,7 +1,8 @@
 # Glide · aktiver Showcase
 
-Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25
+Stand 22.10.2026 · Glide 3.44.0 · Lieferdaten in Speicherstufe 25
 
+**Trennung zum Quellkandidaten:** Der aktuelle Quellkandidat nutzt Format 26. Die hier vorhandenen Liefer-/Beispieldateien bleiben unverändert in Speicherstufe 25; eine neue Lieferung wurde nicht erstellt.
 Das fiktive Projekt **Parkquartier** zeigt fertige, bearbeitbare Arbeitsdokumente: Briefing, Abstimmungsnotiz, Aufgabenliste, Bildgalerie, Pixelskizze, Routinen und Projekttagebuch. Die sechs Originalmotive liegen unverändert unter `tests/fixtures/showcase/bilder`; Herkunft und Prüfsummen stehen in `quellen.json`. Seit 03.10.2026 liegen sie ausschließlich in dieser Fixture-Ablage, zuvor zusätzlich im Grafikmaster. Sie illustrieren Themen; sie zeigen kein reales Verkaufsobjekt. Personen und Projektangaben sind fiktiv.
 
 ## Starten und weiterbenutzen

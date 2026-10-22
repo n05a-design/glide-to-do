@@ -1,0 +1,21 @@
+{
+  "app_sha256": "a042fcc2911ec6edd6507ce085a55c5db20b091e9e56c5e6f091e6a6c97f356c",
+  "faelle": {
+    "dateien": {
+      "ok": true
+    },
+    "kopieren_ohne_auftrag": {
+      "ok": true
+    },
+    "eigener_neustart_backup": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 213, in main\n    globals()['fall_' + name](run)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 124, in fall_eigener_neustart_backup\n    app.show_exchange_export_dialog()\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app.pyw\", line 56054, in show_exchange_export_dialog\n    self.run_modal(dialog)\n    ~~~~~~~~~~~~~~^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 119, in modal\n    button(dialog, 'Eigenen Auftrag bearbeiten').command()\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app.pyw\", line 55925, in own_recipe\n    recipe = self.edit_exchange_recipe(choices.get(auftrag.get()),\n        mode='create' if zweck.get() == zwecke[0][1] else 'patch')\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app.pyw\", line 55831, in edit_exchange_recipe\n    self.run_modal(dialog)\n    ~~~~~~~~~~~~~~^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 115, in modal\n    assert app.settings.get('exchange_recipes'), (\n           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('Eigener Auftrag nicht gespeichert', False, ['Eigener Auftrag', 'Titel', 'Zweck', '', '▾', 'Anweisung (höchstens 12.000 Zeichen)', 'Eigene Aufträge dürfen die neun vorhandenen Austauschfelder vorschlagen. Die Antwort wird vor Übernahme geprüft.', 'Ein Auftrag braucht einen Titel mit höchstens 80 Zeichen.'])\n"
+    },
+    "musterantworten": {
+      "ok": true
+    },
+    "fehler_scope": {
+      "ok": true
+    }
+  }
+}

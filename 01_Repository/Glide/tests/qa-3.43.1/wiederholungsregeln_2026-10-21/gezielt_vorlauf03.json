@@ -1,0 +1,83 @@
+{
+  "app_sha256": "84fbcb61d1805f2f3d69d967ddea8c45554051eb1d335f2343cae1ed881acfe7",
+  "faelle": {
+    "maske": {
+      "ok": true,
+      "messung": {
+        "fenster": [
+          [
+            860,
+            700
+          ]
+        ],
+        "menue_und_speicherknopf": true,
+        "neustart": true
+      }
+    },
+    "maske_gross": {
+      "ok": true,
+      "messung": {
+        "fenster": [
+          [
+            860,
+            700
+          ]
+        ],
+        "menue_und_speicherknopf": true,
+        "neustart": true
+      }
+    },
+    "inspektor": {
+      "ok": true,
+      "messung": {
+        "vorschau": true,
+        "echter_auswahlbefehl": true
+      }
+    },
+    "vorruecken": {
+      "ok": true,
+      "messung": {
+        "erledigen_ueberspringen_undo_redo_neustart": true
+      }
+    },
+    "migration": {
+      "ok": true,
+      "messung": {
+        "vorsicherung_bytegleich": true,
+        "alte_regel_unveraendert": true,
+        "schreibfehler_retry": false
+      }
+    },
+    "kopierfehler": {
+      "ok": true,
+      "messung": {
+        "vorsicherung_bytegleich": true,
+        "alte_regel_unveraendert": true,
+        "schreibfehler_retry": true
+      }
+    },
+    "altleser": {
+      "ok": true,
+      "messung": {
+        "altleser_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+        "datei_bytegleich": true
+      }
+    },
+    "altregeln": {
+      "ok": true,
+      "messung": {
+        "altregeln": 6,
+        "termine": 144,
+        "identisch": true
+      }
+    },
+    "schreibfehler": {
+      "ok": true,
+      "messung": {
+        "modell_datei_undo_bei_schreibfehler_erhalten": true,
+        "erneuter_versuch": true,
+        "formattor": true
+      }
+    }
+  }
+}

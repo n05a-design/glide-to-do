@@ -1,0 +1,11 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "45354b6350f09638b80fd5e5a9740f15c337c3c128a74a097d9a5e8949454519",
+  "faelle": {
+    "mehrfach": {
+      "ok": true,
+      "befund": "100 von 1.000 Aufgaben: 4 einzelne Suchstarts, ein Undo/Redo; neue Objekte nach Bestätigung aufgelöst"
+    }
+  },
+  "fehler": []
+}

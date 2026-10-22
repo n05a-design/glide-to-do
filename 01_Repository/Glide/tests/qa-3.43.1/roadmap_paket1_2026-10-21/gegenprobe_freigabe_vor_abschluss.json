@@ -1,0 +1,13 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "559c738d54d5e5323186715601f43498d2207b860893b2de207a5775aa872698",
+  "faelle": {
+    "sitzung": {
+      "ok": false,
+      "befund": "AssertionError('freigegebene Sitzung ohne Token schreibt erneut')"
+    }
+  },
+  "fehler": [
+    "sitzung"
+  ]
+}

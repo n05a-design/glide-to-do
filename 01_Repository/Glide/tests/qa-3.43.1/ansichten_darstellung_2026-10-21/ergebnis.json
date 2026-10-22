@@ -1,0 +1,34 @@
+{
+  "app_sha256": "fefde636c8b7a639adf4d86f7e8cac7567037a81b80b87d812f0d827bdc3a20e",
+  "ansichten": 15,
+  "ansichten_ok": true,
+  "fachlogik": {
+    "anzahl": 847,
+    "exitcode": 0,
+    "fachmodul_sha256": "116ad617934f8edbaab0377bbc89de669ea1f08ca97f6d5c42848fba2d1ee888",
+    "app_stand_waehrend_lauf": "c405e8ed8cd06da00fbc00ac3082490bde941d7b6d53764ecd95811a55841a56",
+    "hinweis": "Letzte App-Aenderung danach: expliziter Tk-Host im neuen Gruppierungsfeld. Tk-freies Fachmodul unveraendert."
+  },
+  "regression": {
+    "name": "bestehende_oberflaeche",
+    "exitcode": 0,
+    "sekunden": 14.6,
+    "app_sha256": "c405e8ed8cd06da00fbc00ac3082490bde941d7b6d53764ecd95811a55841a56",
+    "grenze": "Funktionspruefungen gruen; nach Fensterabbau Callbackmeldungen des aelteren Testaufbaus. Keine saubere native Gesamtabnahme."
+  },
+  "syntax_dateien": 4,
+  "dokumentation_links": 251,
+  "neue_datei_und_ankerlinks": 5,
+  "sichtpruefung": {
+    "aufnahmen": 16,
+    "repraesentativ_gesichtet": [
+      "hell_eng_columns.png",
+      "dunkel_breit_table.png",
+      "verlauf_eng_columns.png",
+      "verlauf_breit_dialog.png"
+    ],
+    "prozess": "Frischer Einzelstart; vier dokumentierte Konfigurationen."
+  },
+  "lieferung": "07 und Pakete nicht veraendert; keine neue Version, kein Commit/Push.",
+  "gesamtlauf": "Kein neuer CI-/101-Suiten-/Native-Gesamtlauf."
+}

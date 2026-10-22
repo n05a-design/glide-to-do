@@ -111,6 +111,18 @@ Aufgaben stehen bei einer Notiz oberhalb des freien Textes. Einzelne Aufgaben bl
 """
 
 
+def letzter_werktag(anchor):
+    """Letzter Montag–Freitag des Monats von `anchor`, sonst des Folgemonats."""
+    jahr, monat = anchor.year, anchor.month
+    while True:
+        tag = date(jahr + monat // 12, monat % 12 + 1, 1) - timedelta(days=1)
+        while tag.weekday() > 4:
+            tag -= timedelta(days=1)
+        if tag >= anchor:
+            return tag
+        jahr, monat = jahr + monat // 12, monat % 12 + 1
+
+
 def build(app, mod, root, anchor):
     """Zusammenhängende Dokumente; zurückgegeben wird die portable Projektwahl."""
     tag = lambda offset: (anchor + timedelta(days=offset)).isoformat()
@@ -214,11 +226,15 @@ def build(app, mod, root, anchor):
         ("Bildmaterial nachhalten", {"art":"tage", "abstand":14}, 2),
         ("Redaktionsplan aktualisieren", {"art":"wochentage", "tage":[0,4]}, 3),
         ("Ablage und Sicherungen prüfen", {"art":"monatlich"}, 5),
-        ("Jahresrückblick vorbereiten", {"art":"jaehrlich"}, 7)]:
+        ("Jahresrückblick vorbereiten", {"art":"jaehrlich"}, 7),
+        # Serie aus FP-02 (3.44.0): erster Termin ist der nächste letzte Werktag.
+        ("Monatsabschluss an den Vertrieb", {"art":"serie", "rrule":"FREQ=MONTHLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-1"},
+         (letzter_werktag(anchor) - anchor).days)]:
         repeats.append(task(title, due=tag(offset), repeat=rule, reminder={"mode":"relative", "minutes":30},
                             due_time="09:00", estimated_minutes=15))
     rhythm = app.new_list_object("Wiedervorlagen · Projektrhythmus", repeats, folder_id=project["id"],
-                                 note="Alle sechs Wiederholungsarten; Systembenachrichtigungen sind im Showcase ausgeschaltet.")
+                                 note="Alle sieben Wiederholungsarten einschließlich einer Serie am letzten Werktag; "
+                                      "Systembenachrichtigungen sind im Showcase ausgeschaltet.")
     app.lists.extend([routines, rhythm])
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
     inbox["items"] = [task("Neue Bildidee für die nächste Abstimmung sichten", labels=[labels["Gestaltung"]]),

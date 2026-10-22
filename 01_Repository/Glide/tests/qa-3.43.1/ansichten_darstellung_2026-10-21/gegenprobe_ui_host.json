@@ -1,0 +1,9 @@
+{
+  "app_sha256": "c405e8ed8cd06da00fbc00ac3082490bde941d7b6d53764ecd95811a55841a56",
+  "faelle": {
+    "darstellung_ui": {
+      "ok": false,
+      "fehler": "AssertionError: ('hell_eng', '', 'Liste', 217)"
+    }
+  }
+}

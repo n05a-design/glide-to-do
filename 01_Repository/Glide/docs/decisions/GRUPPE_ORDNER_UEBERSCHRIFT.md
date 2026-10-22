@@ -1,6 +1,6 @@
 # Gruppe, Ordner oder Zwischenüberschrift?
 
-Stand: 16.10.2026 · Glide 3.43.1 · Entscheidung unverändert gültig, ergänzt um die Abgrenzung zum Gruppieren nach Feld (3.30). Die Checkliste aus 3.22 ist kein viertes Mittel: Sie gliedert einen einzelnen Punkt in Schritte ohne eigene Termine, Labels oder Anhänge.
+Stand: 22.10.2026 · Glide 3.44.0 · Entscheidung unverändert gültig, ergänzt um die Abgrenzung zum Gruppieren nach Feld (3.30). Die Checkliste aus 3.22 ist kein viertes Mittel: Sie gliedert einen einzelnen Punkt in Schritte ohne eigene Termine, Labels oder Anhänge.
 
 Drei Mittel, um Ordnung zu schaffen, und die Frage, wann welches. Diese
 Entscheidung stand seit 2.11.0 aus; sie wurde nachgeholt, weil in der

@@ -1,0 +1,23 @@
+{
+  "einordnung": "Bestehende Tcl-after-Meldungen beim Zerstoeren bzw. Wechseln von Test-Interpretern; positive Suite-Ergebnisse bleiben erhalten. Keine menschliche Abnahme und keine Zusicherung eines meldungsfreien Gesamtlaufs.",
+  "suiten": [
+    {
+      "suite": "test_oberflaeche33321",
+      "meldungen_jetzt": 3,
+      "meldungen_vorlauf01": 3,
+      "pruefdatei_gegen_HEAD_unveraendert": true
+    },
+    {
+      "suite": "test_ui_updates",
+      "meldungen_jetzt": 1,
+      "meldungen_vorlauf01": 1,
+      "pruefdatei_gegen_HEAD_unveraendert": true
+    },
+    {
+      "suite": "test_wiederholen",
+      "meldungen_jetzt": 38,
+      "meldungen_vorlauf01": 38,
+      "pruefdatei_gegen_HEAD_unveraendert": true
+    }
+  ]
+}

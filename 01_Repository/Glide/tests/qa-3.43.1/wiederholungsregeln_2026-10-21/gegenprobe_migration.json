@@ -1,0 +1,9 @@
+{
+  "app_sha256": "7d0645b4a399d9deb10851e0d095d4da15c64b5033b3e3bd19b015c59dcb2769",
+  "faelle": {
+    "migration": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 281, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 179, in fall_migration\n    child(run,run.app_path,'kopierfehler' if copy_failure else 'migration')\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 171, in child\n    assert result.returncode==0,(result.stdout+result.stderr)[-1800:]\n           ^^^^^^^^^^^^^^^^^^^^\nAssertionError: Traceback (most recent call last):\n  File \"<string>\", line 19, in <module>\n    assert json.loads(disk.read_text(encoding='utf-8'))['version']==26\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n\n"
+    }
+  }
+}

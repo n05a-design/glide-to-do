@@ -1,0 +1,37 @@
+{
+  "auftrag": "Einmaliger Commit und Push 21.10.2026 ab 01:50 Europe/Berlin",
+  "heartbeat_empfangen": "2026-10-21T08:56:12.769+02:00",
+  "pruefung_beginn_utc": "2026-10-21T07:01:36.659645+00:00",
+  "pruefung_ende_utc": "2026-10-21T07:07:34.874864+00:00",
+  "branch": "codex/bildvorschauen-wa26-2026-10-18",
+  "remote": "https://github.com/n05a-design/glide-to-do.git",
+  "head_before": "10427276b97e10528759cc42b0d23f757ca14843",
+  "head_after": "10427276b97e10528759cc42b0d23f757ca14843",
+  "dateien_erfasst": 1493,
+  "ci_command": "python -B tests/tools/ci_grundstufe.py",
+  "ci_exit": 1,
+  "failed_steps": [
+    "Fachlogik-Unit-Tests",
+    "Fachlogik ohne Systemzeitzonen"
+  ],
+  "failed_tests": [
+    "test_month_end_and_leap_year_are_explicit (test_repeat_series.Serien.test_month_end_and_leap_year_are_explicit)",
+    "test_nicht_abbildbar (test_repeat_ics.RueckwegTests.test_nicht_abbildbar)",
+    "test_rfc_monatsreihe_am_monatsende_wird_abgelehnt (test_repeat_ics.RueckwegTests.test_rfc_monatsreihe_am_monatsende_wird_abgelehnt)",
+    "test_month_end_and_leap_year_are_explicit (test_repeat_series.Serien.test_month_end_and_leap_year_are_explicit)"
+  ],
+  "changed_during_check": [
+    "01_Repository/Glide/src/glide/app.pyw",
+    "01_Repository/Glide/src/glide/capture_parser.py",
+    "01_Repository/Glide/src/glide/repeat_ics.py",
+    "01_Repository/Glide/src/glide/repeat_rules.py",
+    "01_Repository/Glide/tests/integration/vorversion.py"
+  ],
+  "index_staged_files": [],
+  "commit_created": false,
+  "push_executed": false,
+  "automatic_retry": false,
+  "data": "Kuenstlicher temporaerer GLIDE_DATA_DIR",
+  "delivery": "19 Unterschiede zu 07 als vorgesehener Hinweis; keine strenge Lieferpruefung, kein Build",
+  "additional_gate": "FP-02-Abschlussbeleg meldete laufende Pruefungen statt fertigen Abschluss"
+}

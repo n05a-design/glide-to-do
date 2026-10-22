@@ -145,10 +145,8 @@ def process_alive(pid):
 
 def classify(record, *, host, pid, now, max_age_seconds, alive=process_alive):
     """FOREIGN oder FREE für eine gültige Sperre, die nicht die eigene Kennung trägt."""
-    if (now - stamp(record)).total_seconds() > max_age_seconds:
-        return FREE
     if record.get("host") != host:
-        return FOREIGN
+        return FREE if (now - stamp(record)).total_seconds() > max_age_seconds else FOREIGN
     try:
         other = int(record.get("pid", 0))
     except (TypeError, ValueError):
@@ -244,12 +242,50 @@ def acquisition(path):
             pass
         yield locked
     finally:
-        if locked:
-            os.lseek(fd, 0, os.SEEK_SET)
-            if sys.platform.startswith("win"):
-                import msvcrt
-                msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
-            else:
-                import fcntl
-                fcntl.flock(fd, fcntl.LOCK_UN)
-        os.close(fd)
+        try:
+            if locked:
+                os.lseek(fd, 0, os.SEEK_SET)
+                if sys.platform.startswith("win"):
+                    import msvcrt
+                    msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
+                else:
+                    import fcntl
+                    fcntl.flock(fd, fcntl.LOCK_UN)
+        finally:
+            os.close(fd)
+
+
+class DataLockSession:
+    """Hält den lokalen Erwerbsschutz bis zur Freigabe des Schreibbesitzes.
+
+    Die dauerhaft vorhandene .acquire-Datei bleibt dieselbe wie bei älteren
+    Erwerbswegen. Ein alter Zeitstempel hebt einen gehaltenen OS-Lock nicht auf.
+    JSON-Metadaten müssen zusätzlich vor jeder Speicherung geprüft werden:
+    Dateisynchronisation oder fremde Werkzeuge können sie unabhängig ändern.
+    """
+
+    def __init__(self, path):
+        self.path = os.path.abspath(os.fspath(path))
+        self._context = None
+        self._pid = None
+
+    @property
+    def held(self):
+        return self._context is not None and self._pid == os.getpid()
+
+    def acquire(self):
+        if self.held:
+            return True
+        context = acquisition(self.path)
+        if not context.__enter__():
+            context.__exit__(None, None, None)
+            return False
+        self._context = context
+        self._pid = os.getpid()
+        return True
+
+    def release(self):
+        context, self._context = self._context, None
+        self._pid = None
+        if context is not None:
+            context.__exit__(None, None, None)

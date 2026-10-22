@@ -1,0 +1,6 @@
+{
+  "returncode": 0,
+  "pythonutf8": true,
+  "seconds": 24.533,
+  "summary": "stinct_but_same_day_is_one_row) ... ok\ntest_shared_day_capacity_with_done_unknown_and_overload (test_week_planning.WeekPlanningTests.test_shared_day_capacity_with_done_unknown_and_overload) ... ok\ntest_slots_overlap_clip_and_unknown_are_explicit (test_week_planning.WeekPlanningTests.test_slots_overlap_clip_and_unknown_are_explicit) ... ok\n\n----------------------------------------------------------------------\nRan 856 tests in 18.099s\n\nOK\nentfernt: ../outside.json\nentfernt: link/data.json\nentfernt: old/x.json\n1 Dateien gekürzt\nentfernt: old/tracked.json\nentfernt: old/new.json\n2 Dateien gekürzt\n"
+}

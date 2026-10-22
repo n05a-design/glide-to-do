@@ -1,0 +1,13 @@
+# Einmaliger Git-Auftrag – 21.10.2026
+
+Der ausdrücklich freigegebene Auftrag für 01:50 Uhr Europe/Berlin wurde diesem Chat erst um **08:56:12 Uhr** zugestellt. Die Ursache der verspäteten Zustellung ist hier nicht geklärt. Die Prüfung lief ab 09:01 Uhr; sie ist **mit Hinderungsgrund beendet**. Es wurde nichts committed, gestaged oder gepusht. Keine automatische Wiederholung; der einmalige Zeitauftrag ist deaktiviert.
+
+Zielzweig `codex/bildvorschauen-wa26-2026-10-18` und Remote `https://github.com/n05a-design/glide-to-do.git` stimmen. HEAD blieb `10427276b97e10528759cc42b0d23f757ca14843`; der Index war und blieb leer, es gab keine ungelösten Konflikte. Der genannte Remotezweig existierte beim lesenden Abruf nicht. Gegen `origin/main` enthält dieser HEAD keine zusätzlichen Commits; ungepushte Commits anderer lokaler Zweige gehören nicht zum Auftrag.
+
+Vor der Prüfung wurden **1.493 nicht ignorierte Dateien** mit Größe und SHA-256 erfasst; Diff und Index sind außerhalb des Repositories gesichert. Die vollständigen lokalen Manifeste und das Rohlog bleiben lokal. Das öffentliche [Ergebnis](ergebnis.json) enthält die entscheidenden Prüf- und Änderungsangaben ohne Benutzerpfade.
+
+`python -B tests/tools/ci_grundstufe.py` lief im App-Verzeichnis mit künstlichem temporärem `GLIDE_DATA_DIR`, ohne strengen Lieferabgleich. **Exitcode 1:** Fachlogik und Fachlogik ohne Systemzeitzonen fehlgeschlagen. Im ersten Durchgang: 821 Tests, ein Fehler in `test_month_end_and_leap_year_are_explicit`: Vorschau Januar 31 → Februar 28 → März 28, erwartet März 31. Im zweiten Durchgang waren zusätzlich zwei `repeat_ics`-Rückwegtests rot. Diese Resultate stammen aus einer gleichzeitig weiterentwickelten Quelle und sind keine stabile Fehlerabgrenzung des späteren Kandidaten.
+
+Während der Prüfung veränderten sich `app.pyw`, `capture_parser.py`, `repeat_ics.py`, `repeat_rules.py` und `tests/integration/vorversion.py`. Außerdem erklärte der FP-02-Nachweis seinen gezielten Abschluss noch als laufend. Sowohl rote Pflichtprüfung als auch veränderte Quelle erfüllen ausdrücklich die Anhaltebedingungen des Auftrags. Die Quelle wurde für den Git-Auftrag nicht repariert und es wurde kein weiterer Lauf gestartet.
+
+Die übrigen Grundprüfungen einschließlich Syntax, Werkzeugtests, Analysen, Tk-Start, Fremdcode, Datenschutz, Ablage und Synchronisationskontrolle liefen durch. Die 19 Unterschiede zu 07 sind der dokumentierte Kandidaten-/Lieferunterschied und wurden als zulässiger Hinweis behandelt. Keine neue Version, Vollprüfung, Lieferung, Paketierung oder Releasefreigabe. Die konfigurierte Git-Identität wurde nicht geändert; der autorisierte Commit-Befehl mit N05A wurde mangels bestandenem Tor nicht ausgeführt.

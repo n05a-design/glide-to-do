@@ -1,0 +1,98 @@
+[
+  {
+    "suite": "test_schutzrunde",
+    "exit_code": 0,
+    "seconds": 82.434,
+    "cases": 10,
+    "passed": 10,
+    "tail": [
+      "OK editor_offen: Navigation bewahrt nicht übernommenen Text auch bei vorheriger ungespeicherter Änderung",
+      "OK rueckweg_bytes: Nach erfolgreichem Zwischenspeichern stellt der Abbruch die ursprünglichen Dateibytes her",
+      "{\"gruen\": 10, \"rot\": []}"
+    ]
+  },
+  {
+    "suite": "test_bildkonversion",
+    "exit_code": 0,
+    "seconds": 60.521,
+    "cases": 10,
+    "passed": 10,
+    "tail": [
+      "OK referenz",
+      "OK warteschlange",
+      "{\"gruen\": 10, \"rot\": []}"
+    ]
+  },
+  {
+    "suite": "test_erwaehnungen",
+    "exit_code": 0,
+    "seconds": 42.052,
+    "cases": 6,
+    "passed": 6,
+    "tail": [
+      "OK veraltet_schreibschutz_fehler ",
+      "OK oeffnen_fallen ",
+      "OK tempo {'seiten': 500, 'punkte': 10000, 'aufklappen_ms': [45.561700011603534, 99.93019999819808, 75.26509999297559, 77.94019998982549, 77.11699999345001], 'median_ms': 77.11699999345001}"
+    ]
+  },
+  {
+    "suite": "test_auftraege",
+    "exit_code": 0,
+    "seconds": 30.306,
+    "cases": 5,
+    "passed": 5,
+    "tail": [
+      "OK eigener_neustart_backup",
+      "OK musterantworten",
+      "OK fehler_scope"
+    ]
+  },
+  {
+    "suite": "test_markdownbaum",
+    "exit_code": 0,
+    "seconds": 16.774,
+    "cases": 3,
+    "passed": 3,
+    "tail": [
+      "OK showcase {'listen_seiten': 11, 'ordner': 4, 'aufgaben': 24, 'anhangverweise': 21, 'anhangdateien': 15, 'dateien': 40, 'relative_links': 55, 'checkboxen': 24}",
+      "OK abbruch_fehler ",
+      "OK flush_dialog "
+    ]
+  },
+  {
+    "suite": "test_seitenkarten",
+    "exit_code": 1,
+    "seconds": 112.503,
+    "cases": 0,
+    "passed": 0,
+    "tail": [
+      "    self.tk.call(what + (sequence, cmd))",
+      "    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^",
+      "_tkinter.TclError: cannot invoke \"bind\" command: application has been destroyed"
+    ]
+  },
+  {
+    "suite": "test_ansichten",
+    "exit_code": 1,
+    "seconds": 233.037,
+    "cases": 9,
+    "passed": 7,
+    "tail": [
+      "OK dialog {'scrollbarer_dialog_fester_fuss': True, 'abmessungen': [[780, 570]], 'schrift': 'mittel'}",
+      "OK dialog_gross {'scrollbarer_dialog_fester_fuss': True, 'abmessungen': [[780, 570]], 'schrift': 'gross'}",
+      "OK tempo {'punkte': 10000, 'reine_auswertung_ms': [21.790200000396, 24.532499999622814, 25.326899994979613, 21.823600007337518, 22.12850000069011], 'median_ms': 22.12850000069011, 'grenze_ms': 100, 'app_auswertung_ms': [104.62130000814795, 60.51990001287777, 65.25060000421945], 'app_quellen_unveraendert': True}"
+    ]
+  },
+  {
+    "suite": "test_uiux_paket",
+    "exit_code": 0,
+    "seconds": 186.54,
+    "cases": 17,
+    "passed": 17,
+    "tail": [
+      "OK b17_b19: Notizaktionen, Fälligkeitsfelder und Menüs ohne Fremdfläche (hell, Verlauf Morgenrot)",
+      "OK b18: Neuerungen nach „Gelesen“ und Neustart unter Über Glide",
+      "{\"gruen\": 17, \"rot\": []}"
+    ]
+  }
+]

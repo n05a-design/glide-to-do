@@ -62,6 +62,13 @@ class CalendarService:
                 continue
             try:
                 source = self.reader(*payload) if operation == "load" else payload
+                # Lesen kann bis nach Quellwechsel, Übernahme oder Schließen
+                # laufen. Überholte Arbeit vor der teureren Expansion beenden;
+                # eine bereits gestartete Expansion hat keinen Abbruchvertrag.
+                with self._lock:
+                    current = not self.closed and token == self.generation
+                if not current:
+                    continue
                 first, last = bounds(year)
                 # Floating-Termine werden in source.zone gelesen. Tagesgrenzen
                 # dürfen in einer anderen lokalen Zone liegen, auch am Jahresrand.

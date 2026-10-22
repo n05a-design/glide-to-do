@@ -1,0 +1,36 @@
+{
+  "method": "controlled two-process interleaving",
+  "source": "app.pyw",
+  "mock_boundary": "Only the timing of glide_lock.read; lock acquisition and release/renew methods are original.",
+  "natural_frequency": "not measured",
+  "cases": [
+    {
+      "action": "release",
+      "second_process_acquired": true,
+      "second_process_alive": true,
+      "return_value": null,
+      "file_missing": true,
+      "foreign_token_preserved": false,
+      "original_owner_replaced_foreign_token": false
+    },
+    {
+      "action": "renew",
+      "second_process_acquired": true,
+      "second_process_alive": true,
+      "return_value": true,
+      "file_missing": false,
+      "foreign_token_preserved": false,
+      "original_owner_replaced_foreign_token": true
+    },
+    {
+      "action": "control_foreign_before_read",
+      "bytes_preserved": true
+    },
+    {
+      "action": "renew_write_failure",
+      "write_allowed": true,
+      "read_only": false,
+      "lock_bytes_preserved": true
+    }
+  ]
+}

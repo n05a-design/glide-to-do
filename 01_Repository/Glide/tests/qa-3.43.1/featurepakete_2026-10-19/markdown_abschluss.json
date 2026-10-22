@@ -1,0 +1,17 @@
+{
+  "app_sha256": "990c8d6f364aea6e8162ca039a57bf1afadf4b99d3dc028ea766ea4456207ee8",
+  "faelle": {
+    "showcase": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_markdownbaum.py\", line 127, in main\n    evidence=globals()['fall_'+name](run,Path(directory))\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_markdownbaum.py\", line 71, in fall_showcase\n    assert filehashes(Path(run.data))==before,'Quelldateien durch Ausgabe verändert'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Quelldateien durch Ausgabe verändert\n"
+    },
+    "abbruch_fehler": {
+      "ok": true,
+      "messung": null
+    },
+    "flush_dialog": {
+      "ok": true,
+      "messung": null
+    }
+  }
+}

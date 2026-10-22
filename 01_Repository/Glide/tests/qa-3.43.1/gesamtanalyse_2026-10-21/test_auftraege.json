@@ -1,0 +1,20 @@
+{
+  "app_sha256": "916c77701bd645227a734a0f8a5f10be65046f0b5c6d29feeafac203debe72f2",
+  "faelle": {
+    "dateien": {
+      "ok": true
+    },
+    "kopieren_ohne_auftrag": {
+      "ok": true
+    },
+    "eigener_neustart_backup": {
+      "ok": true
+    },
+    "musterantworten": {
+      "ok": true
+    },
+    "fehler_scope": {
+      "ok": true
+    }
+  }
+}

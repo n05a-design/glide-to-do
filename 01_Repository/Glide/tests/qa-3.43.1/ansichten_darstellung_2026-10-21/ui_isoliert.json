@@ -1,0 +1,34 @@
+{
+  "app_sha256": "fefde636c8b7a639adf4d86f7e8cac7567037a81b80b87d812f0d827bdc3a20e",
+  "faelle": {
+    "darstellung_ui": {
+      "ok": true,
+      "messung": {
+        "konfigurationen": [
+          {
+            "konfiguration": "hell_eng",
+            "darstellungen": 3,
+            "dialog_fuss_und_ende_erreichbar": true
+          },
+          {
+            "konfiguration": "dunkel_breit",
+            "darstellungen": 3,
+            "dialog_fuss_und_ende_erreichbar": true
+          },
+          {
+            "konfiguration": "verlauf_eng",
+            "darstellungen": 3,
+            "dialog_fuss_und_ende_erreichbar": true
+          },
+          {
+            "konfiguration": "verlauf_breit",
+            "darstellungen": 3,
+            "dialog_fuss_und_ende_erreichbar": true
+          }
+        ],
+        "aufnahmen": 16,
+        "grenze": "Eigene Windows-Testfenster; keine physische DPI-, Reader- oder Mehrplattformabnahme."
+      }
+    }
+  }
+}

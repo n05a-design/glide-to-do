@@ -50,7 +50,7 @@ class Lauf:
 
     def neustart(self, geometry="1280x800+20+20"):
         self.app.save_settings()
-        self.root.destroy()
+        self.ende()
         self.start(geometry)
 
     def idle(self, runden=4):
@@ -65,8 +65,23 @@ class Lauf:
 
     def ende(self):
         try:
+            # Alle Fälle bauen ihren Tcl-Interpreter vollständig ab; ausstehende
+            # Timer dürfen nicht erst beim nächsten Fall als bgerror auflaufen.
+            def unbind_tree(widget):
+                for child in widget.winfo_children():
+                    unbind_tree(child)
+                for sequence in widget.bind():
+                    widget.unbind(sequence)
+            unbind_tree(self.root)
+            for sequence in self.root.tk.splitlist(self.root.tk.call("bind", "all")):
+                self.root.unbind_all(sequence)
+            self.app.previews.close()
+            self.app.cancel_pending_callbacks()
+            for job in self.root.tk.splitlist(self.root.tk.call("after", "info")):
+                self.root.after_cancel(job)
+            self.app.release_data_lock()
             self.root.destroy()
-        except Exception:
+        except self.mod.tk.TclError:
             pass
 
 

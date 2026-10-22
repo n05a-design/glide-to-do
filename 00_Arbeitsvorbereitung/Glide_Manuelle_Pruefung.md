@@ -1,16 +1,20 @@
 # Manuelle Prüfung – Glide
 
-Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · manuelle Sitzungen offen; B1 automatisch geprüft
+Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · manuelle Sitzungen offen; B1 automatisch geprüft
 
 Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt am 03.10.2026 aus der fortgeschriebenen Prüfliste (Ursprung 3.30.0, enthielt die Listen 3.28 und 3.29) und der Windows-Anleitung; die Zuordnung der 201 Ausgangspunkte trägt Git. Automatisch geprüft ist die Logik ([Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)); offen bleiben Handgefühl, Plattformen und fremde Programme.
 
 **Sitzungen:** A am Mac (etwa 60 Minuten), B am Windows-PC nach der Vollprüfung, C Bildschirmleser und Tastatur, D Linux (falls vorhanden), E nur durch den Inhaber.
+
+**FP-03 Stufe 1, manuelle Abnahme offen:** Im Quellkandidaten gespeicherte Filter bearbeiten, „Weitere Bedingungen“ öffnen und bei 860 × 700 mit großer Schrift sämtliche Felder per Tastatur und Mausrad erreichen; Speichern/Abbrechen bleiben am festen Fuß. Alle/Oder einschließlich Listenwahl und ausgeschlossener Labels anhand weniger sichtbarer Aufgaben nachvollziehen; „Warum?“ muss dieselbe Auswahl erklären. Auf Mac/Linux und bei physischer DPI-/Mehrmonitoränderung Fokus, Menüs und Schriftwechsel prüfen. Die automatisierte Windows-Probe mit mittlerer/großer Schrift bei 780 × 570 ist keine menschliche Abnahme. Eine ältere Fassung erhält die Definition, wendet aber nur ihre früheren Bedingungen an und kann mehr Treffer anzeigen. [Prüfnachweis](../01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/README.md).
 
 **Sprintnachlauf 3.36.0, getrennt offen:** Auf Mac, Windows und Linux jeweils Startseite öffnen → Liste → zurück, auch bei 860 × 700/großer Schrift und Hell/Dunkel: Scrollleiste sichtbar und mit Maus/Trackpad bedienbar. Bibliothek weit scrollen, Aufgabe in einer Karte ändern/Undo, Titel/Vorschautext ändern und Karten umordnen: Fokus/Scrollposition und Inhalte bleiben nachvollziehbar. Einstellungen öffnen, Kapazität ändern/Abbrechen, erneut öffnen (alter gespeicherter Wert); danach Design/Schrift ändern und erneut öffnen. Alle Vorschauen beim Scrollen erreichbar, Escape/Fenster-X beendet den Dialog. Windows zusätzlich vorhandene Fälle W01/W06–W08 (Titelkürzung, Dialogbreiten und Tabellenfeldabstände), Linux N08 (native Bildvorschau) nach der jeweiligen automatischen Vollprüfung durchführen. Diese Punkte sind durch Screenshots und CI noch nicht menschlich abgenommen.
 
 **Automatischer Stand 3.42.0:** Eingefrorene Mac-Vollprüfung 107/2, native Linux-/Windows-Vollmatrix je 108/1, beide eigenständigen Paketbauten und tatsächlichen isolierten Starts grün. Root-07 und Mac-Bundle abgeglichen, isolierter Start direkt aus dem gelieferten Mac-Bundle grün; Windows-Paket mit 102 Dateihashes bereitgestellt. Die folgenden Sitzungen einschließlich Clean-Machine-/Gatekeeper-/SmartScreen-/DPI-/Readerfällen bleiben ausdrücklich menschliche Abnahmen.
 
 **Sprintnachlauf 3.38.0, getrennt offen:** Auf Mac, Windows und Linux alle sechs Aufgaben-Kontexte mit echter Maus und Tastatur bedienen: gleiche Felder, direktes Datum/Labels/Wichtigkeit, Speichern/Verwerfen, Kontextmenü und Palette. Bei 860 × 700/großer Schrift Inspektor öffnen, alle Felder scrollen, Navigation und Zurückweg prüfen. Auf zwei Monitoren mit negativer Anordnung Popoverposition/Fokus; DPI 100/150/200 %. Unter Windows alle vier beschrifteten Menüs in der gemeinsamen Titelzeile, Alt-D/B/A/H und Popups prüfen; keine abgeschnittenen Knöpfe. Zeilenaktionen bei Hover und Tastaturauswahl, schnelle Ansichts-/Klapp-/Erledigtfolgen und Animationen aus prüfen. Eigene Agentenaufnahmen und grüne Automatiken ersetzen diese Sitzung nicht.
+
+**FP-02 Stufe 1 – offene Menschenabnahme:** Bei 860 × 700 und großer Schrift die sechs neuen Rhythmusformen in Anlegen-Maske und Inspektor prüfen, Intervall/Position/Serienende ändern und Vorschau kontrollieren. Monatsintervall ab 31.01. gegenüber „letzter Tag“ bewusst vergleichen. Vor Nutzung eines echten Bestands die Format-26-Vorsicherung und den notwendigen neueren Leser beachten. Automatische Prüfungen ersetzen diese Bedien-, DPI- und Plattformabnahme nicht. [Nachweis](../01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/README.md).
 
 ## Rahmen
 
@@ -167,7 +171,7 @@ Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt a
       hineinziehen; im Notizbuch eine datierte Zeichnung anlegen; gemischte
       Altordner erscheinen vollständig unter Listen. Neustart erhält die
       Sichtbarkeit. Dialog „Neu anlegen“ bei niedrigem Bildschirm zweispaltig.
-- [ ] **A23 Startseite „Ruhig“ (3.33.2):** sieben Kacheln; in „Heute“ stehen
+- [ ] **A23 Startseite „Ruhig“ (D12, ergänzt durch B04/D50 in 3.43.0):** acht Standardkacheln; in „Heute“ stehen
       Tagesziel und nächste Aufgabe genau einmal. Begrüßung oder Uhr über „+“
       einblenden, Glide neu starten: Auswahl bleibt. „Standard
       wiederherstellen“; Hover der Knöpfe.

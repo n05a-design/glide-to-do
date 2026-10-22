@@ -1,0 +1,92 @@
+{
+  "date": "2026-10-21",
+  "status": "abgeschlossen",
+  "errors": [],
+  "input_sha256": "c64bf44dd4535a835760f39eb3a07504d4d1ef4d23504357d67ea7b26424150c",
+  "source_sha256": "3b93a24a8584821d77f8ff0f74b0c681e1555dea4fe9953a7b54edf3d9fd65ac",
+  "syntax_compiled_in_memory": true,
+  "ast_metrics": "ausgangsstand.json",
+  "ci": {
+    "exitcode": 0,
+    "steps": 19,
+    "statuses": {
+      "Hinweis": 1,
+      "ausgeführt": 18
+    },
+    "summary": "ci_ergebnis.json",
+    "logs": "privat außerhalb des Projekts"
+  },
+  "document_check": "Alle Dokumente einschließlich Archiv im Index; 248 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell.",
+  "stand_check_exitcode": 0,
+  "local_links": {
+    "documents": 9,
+    "local_links": 297,
+    "heading_anchors": 67,
+    "errors": []
+  },
+  "whitespace_check_exitcode": 0,
+  "privacy_check_exitcode": 0,
+  "integrity": {
+    "protected_files": 440,
+    "protected_changes": [],
+    "original_files": 1538,
+    "changed_documents": [
+      "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "01_Repository/Glide/CHANGELOG.md",
+      "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+      "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+      "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "01_Repository/Glide/docs/ARBEITSRICHTUNG.md"
+    ],
+    "unexpected_changes": [],
+    "unrelated_files_added_during_round": [
+      "20_Grafik_Master/05_Inspiration/21638276-modern-blau-und-lila-sanft-gradient-hintergrund-elegant-sanft-verwischen-textur-dynamisch-abstrakt-startseite-minimalistisch-holographisch-flussigkeit-hintergrund-landung-seite-vorlage-abstrakt-verschwommen-hintergrund-vektor.jpg"
+    ],
+    "unrelated_files_note": "Während der Runde zusätzlich vorhanden; Herkunft nicht untersucht, nicht bearbeitet.",
+    "head_unchanged": true,
+    "staged_paths": []
+  },
+  "documents": [
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "sha256": "df6955192d504f220df4413076744dfb3b1f1a43ddf7ee50badc55b1a21bf6f2"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "sha256": "500f259fdcb50b00f80316201e3fd8d2a428da7e38712a189bde76b57fb8e10b"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "sha256": "909ec991060daf73ca04a1b4458bf11c649f163791ebc2fac39259555c0d3bf4"
+    },
+    {
+      "path": "01_Repository/Glide/CHANGELOG.md",
+      "sha256": "31db6f68050ebbd8b3099ab64c0d42f084da26959eb3980bc69daeddf386bb31"
+    },
+    {
+      "path": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+      "sha256": "1b5b2f9c694d65309f24b91d9f2a84292a46a99166d7cf220616cd352f025067"
+    },
+    {
+      "path": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+      "sha256": "607c8c09c11cb69131a701c92bd936eb4573e81ef4bc7b05f6328479f2a459b1"
+    },
+    {
+      "path": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "sha256": "ab985ddfbb37563a2c1e85f0bef0e7a859322aa4d17a5d1d2fba9b7953b30265"
+    },
+    {
+      "path": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+      "sha256": "bef2dafbee506b69d967693f13caf5a9d878164f8966f542b7765f34fc687d9f"
+    }
+  ],
+  "not_executed": [
+    "Integrationsvollmatrix",
+    "Ownership-Stresslauf",
+    "Performancebenchmark",
+    "native Reader-/DPI-/Menschenabnahme",
+    "Build/Lieferung"
+  ]
+}

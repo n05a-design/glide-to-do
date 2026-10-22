@@ -1,0 +1,87 @@
+{
+  "app_sha256": "7d0645b4a399d9deb10851e0d095d4da15c64b5033b3e3bd19b015c59dcb2769",
+  "faelle": {
+    "bedingungen": {
+      "ok": true,
+      "messung": {
+        "treffer": 1,
+        "erklaerte_bedingungen": 3
+      }
+    },
+    "oder": {
+      "ok": true,
+      "messung": {
+        "oder_ueber_listengrenzen": true,
+        "unbekannt_auch_bei_oder_ungueltig": true
+      }
+    },
+    "persistenz": {
+      "ok": true,
+      "messung": null
+    },
+    "fehler": {
+      "ok": true,
+      "messung": null
+    },
+    "altleser": {
+      "ok": true,
+      "messung": {
+        "altleser_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3"
+      }
+    },
+    "altfilter": {
+      "ok": true,
+      "messung": {
+        "alte_kombinationen": 30,
+        "identisch_zum_ausgelieferten_leser": true
+      }
+    },
+    "dialog": {
+      "ok": true,
+      "messung": {
+        "scrollbarer_dialog_fester_fuss": true,
+        "abmessungen": [
+          [
+            780,
+            570
+          ]
+        ],
+        "schrift": "mittel"
+      }
+    },
+    "dialog_gross": {
+      "ok": true,
+      "messung": {
+        "scrollbarer_dialog_fester_fuss": true,
+        "abmessungen": [
+          [
+            780,
+            570
+          ]
+        ],
+        "schrift": "gross"
+      }
+    },
+    "tempo": {
+      "ok": true,
+      "messung": {
+        "punkte": 10000,
+        "reine_auswertung_ms": [
+          29.705299995839596,
+          22.354300002916716,
+          21.673199997167103,
+          23.16909999353811,
+          26.75920000183396
+        ],
+        "median_ms": 23.16909999353811,
+        "grenze_ms": 100,
+        "app_auswertung_ms": [
+          58.64260000817012,
+          57.30020000191871,
+          56.138699990697205
+        ],
+        "app_quellen_unveraendert": true
+      }
+    }
+  }
+}

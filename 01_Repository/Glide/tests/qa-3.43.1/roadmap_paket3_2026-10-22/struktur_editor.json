@@ -1,0 +1,11 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "64d042d18f096b75c43bad349cb6247bcb5861f013cdc5bf494eadc740daa957",
+  "faelle": {
+    "struktur_editor": {
+      "ok": true,
+      "befund": "Nicht übernommener Text hält Ordnerpapierkorb an; erfolgreicher Flush bewahrt Text im Papierkorb und Undo; Sperrfehler verhindert Mutation"
+    }
+  },
+  "fehler": []
+}

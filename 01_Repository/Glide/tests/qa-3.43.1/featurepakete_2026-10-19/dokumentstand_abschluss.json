@@ -1,0 +1,9 @@
+{
+  "version": "3.43.1",
+  "aktive_dokumente": 67,
+  "fortgeschrieben": 42,
+  "festgeschrieben": 19,
+  "ohne_standaussage": 6,
+  "exitcode": 0,
+  "quelle": "tests/tools/standpruefung.py nach Dokumentnachlauf"
+}

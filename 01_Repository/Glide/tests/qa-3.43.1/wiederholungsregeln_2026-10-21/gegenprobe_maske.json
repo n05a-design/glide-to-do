@@ -1,0 +1,9 @@
+{
+  "app_sha256": "7d0645b4a399d9deb10851e0d095d4da15c64b5033b3e3bd19b015c59dcb2769",
+  "faelle": {
+    "maske": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 281, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 77, in fall_maske\n    assert not errors,errors\n           ^^^^^^^^^^\nAssertionError: ['Traceback (most recent call last):\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_wiederholungsregeln.py\", line 57, in act\\n    choice = next(w for w in menus if \\'alle N Wochen an Wochentagen\\' in w.options)\\nStopIteration\\n']\n"
+    }
+  }
+}

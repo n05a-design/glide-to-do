@@ -1,0 +1,11 @@
+{
+  "plattform": "Windows WIC über PowerShell",
+  "quelle": "tests/fixtures/showcase/bilder/Architektin-171340787.jpeg",
+  "png_abmessungen": [
+    1600,
+    1085
+  ],
+  "dauer_s": 3.143,
+  "ok": true,
+  "grenze": "Reale lokale Konversion; keine Mac-/Linux-Konverterabnahme und keine allgemeine Performanceaussage"
+}

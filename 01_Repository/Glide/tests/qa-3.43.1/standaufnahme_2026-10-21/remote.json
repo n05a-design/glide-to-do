@@ -1,0 +1,9 @@
+{
+  "ref": "main",
+  "sha": "10427276b97e10528759cc42b0d23f757ca14843",
+  "url": "https://github.com/n05a-design/glide-to-do/commit/10427276b97e10528759cc42b0d23f757ca14843",
+  "art": "verbundene GitHub-Schnittstelle; nur lesend",
+  "ci_status_nicht_abgerufen": true,
+  "abgerufen_am": "2026-10-21",
+  "abrufweg": "github_fetch_commit(ref=main)"
+}

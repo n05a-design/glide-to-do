@@ -1,0 +1,135 @@
+{
+  "status": "abgeschlossen",
+  "zeitpunkt_utc": "2026-10-21T14:15:48+00:00",
+  "auftrag": "Bestandsaufnahme und Konsolidierung bestehender Dokumente",
+  "ausgang": {
+    "dateien": 1533,
+    "geaenderte_versionierte_dateien": 70,
+    "unversionierte_statuseintraege": 32,
+    "head": "10427276b97e10528759cc42b0d23f757ca14843"
+  },
+  "ci": {
+    "exitcode": 0,
+    "schritte": 19,
+    "ausgefuehrt": 18,
+    "hinweise": [
+      "19 Abweichungen zwischen src/glide und 07_Python-Versionen: Glide-Aufgaben-und-Listen_v3.43.1.pyw, action_catalog.py, capture_parser.py, data_lock.py, editor_flush.py, exchange_recipes.py, image_conversion.py, image_preview.py … – zulässig zwischen Prüfkandidat und Auslieferung (abgleich_07.py)"
+    ],
+    "fachlogiktests": 831,
+    "fachlogiktests_ohne_systemzeitzonen": 831,
+    "werkzeugtests": 152,
+    "protokoll": "ci_ergebnis.json"
+  },
+  "abschluss": {
+    "standpruefung_dokumente": 67,
+    "stand_link_fehler": [],
+    "dokumentationsindex": "Alle Dokumente einschließlich Archiv im Index; 241 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell.",
+    "neue_anker_geprueft": 6,
+    "ankerfehler": [],
+    "git_diff_check_exitcode": 0,
+    "fehlende_ausgangsdateien": [],
+    "geaenderte_dokumente": [
+      "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+      "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+      "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "00_Arbeitsvorbereitung/README.md",
+      "01_Repository/Glide/docs/00_INDEX.md",
+      "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+      "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+      "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+      "01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md",
+      "CLAUDE.md",
+      "README.md"
+    ],
+    "geaenderte_dateien_ohne_markdown": [],
+    "geschuetzte_dateien": 904,
+    "geschuetzte_drift": [],
+    "head_unveraendert": true,
+    "index_leer": true,
+    "benutzerpfade_im_neuen_nachweis": [],
+    "json_fehler": [],
+    "dokumentstand": [
+      {
+        "pfad": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+        "sha256": "d2262ea8449f57a7bbad0aa49357f7f264a72b192f6a9637ab3a44b82c9be00a",
+        "bytes": 117945
+      },
+      {
+        "pfad": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+        "sha256": "b9376d5becb051537b2c37118492f1ed7fc75548b7bd482de72d527ad9cd85a5",
+        "bytes": 239521
+      },
+      {
+        "pfad": "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+        "sha256": "b25ed8e7faaa0d85e56000badcccc1355a803e3e7217410087793d70df3cae90",
+        "bytes": 40013
+      },
+      {
+        "pfad": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+        "sha256": "aa9721bb7e0d85eb3af0f28605c6cddb3e9b6aefdb7bfaa457d0b8aa739c3c6a",
+        "bytes": 115179
+      },
+      {
+        "pfad": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+        "sha256": "ea4fffbf0fd449178999f73734d02bf04021deae385ae28a7bb54b6d6689297e",
+        "bytes": 9549
+      },
+      {
+        "pfad": "00_Arbeitsvorbereitung/README.md",
+        "sha256": "0b216e1ef65ae6c767725fa68824ba693be2ed1feab663efa4e10d96b5efa8c6",
+        "bytes": 4103
+      },
+      {
+        "pfad": "01_Repository/Glide/docs/00_INDEX.md",
+        "sha256": "4906c44854f6714266585dd8e99185faeb025e52048175ffe986127136d2e5b2",
+        "bytes": 6076
+      },
+      {
+        "pfad": "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+        "sha256": "ede85b790f3d7386a266e056bca6372b7a5b0500d94e7f8fc143fee98aa7dbfe",
+        "bytes": 11820
+      },
+      {
+        "pfad": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+        "sha256": "cae29111a80f1f375dee7534c595f90c7c017adb3948219a4593b3ec38c3b43b",
+        "bytes": 40740
+      },
+      {
+        "pfad": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+        "sha256": "f29ef8076eef30ddc0a7b26629cb1154f95b02a59538677de3830943e847f07c",
+        "bytes": 18460
+      },
+      {
+        "pfad": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+        "sha256": "370f5d9cd9ba8b0e2536f3c5ba6e7e4f5b059316c776996e7d2dbba7e36c96be",
+        "bytes": 46334
+      },
+      {
+        "pfad": "01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md",
+        "sha256": "96f3aeedd428738ee8e4fc6db1715f0e0e780c80094bb58202e6b16be56ae38e",
+        "bytes": 7360
+      },
+      {
+        "pfad": "CLAUDE.md",
+        "sha256": "c7d9cabf1f08a87caec07d48924bda9833494acda7352bc3f2d84b3df9964eb8",
+        "bytes": 5493
+      },
+      {
+        "pfad": "README.md",
+        "sha256": "a5869c4132afa76aa213d87b0e5de17f5e43e08b70872098cf5627c83f057172",
+        "bytes": 14444
+      }
+    ]
+  },
+  "aussagegrenzen": [
+    "CI-Grundstufe ist keine 101-Suiten-Vollmatrix",
+    "Keine native Plattform-, Menschen-, Signatur- oder Releaseabnahme",
+    "Keine erneute Herstellerrecherche durch Dokumentkonsolidierung",
+    "Keine neue Version, Lieferung, Datei-Loeschung, Commit oder Push"
+  ],
+  "vorlaufhinweis": "Der reine Erfassungshelfer scheiterte einmal beim Lesen einer eingerueckten Klassenkonstante per Zeilenregex. Danach wurden Versionswerte mit dem vorhandenen AST-Leser aus pruefen.py erhoben; Produktionsdateien und Pruefprogramme blieben unveraendert.",
+  "exitcode": 0
+}

@@ -1,0 +1,95 @@
+{
+  "kind": "controlled_worker_trace_with_simulated_costs",
+  "native_latency_measurement": false,
+  "cost_unit": "simulated_work_unit_without_wall_time_claim",
+  "budget": {
+    "old_read_remaining": 40,
+    "old_expansion": 200,
+    "latest_read": 20,
+    "latest_expansion": 30
+  },
+  "before": {
+    "source_sha256": "29d5f67a04cbfba1c5b778ef37770131f7c919dc882587366ff18c7614cc5789",
+    "expansions": [
+      "old",
+      "latest"
+    ],
+    "obsolete_expansions": 1,
+    "latest_reader_start_simulated_units": 240,
+    "latest_ready_simulated_units": 290,
+    "latest_status": "ready",
+    "background_worker_count": 1,
+    "trace": [
+      {
+        "event": "read_old:start",
+        "simulated_units": 0
+      },
+      {
+        "event": "read_old:end",
+        "simulated_units": 40
+      },
+      {
+        "event": "expand_old:start",
+        "simulated_units": 40
+      },
+      {
+        "event": "expand_old:end",
+        "simulated_units": 240
+      },
+      {
+        "event": "read_latest:start",
+        "simulated_units": 240
+      },
+      {
+        "event": "read_latest:end",
+        "simulated_units": 260
+      },
+      {
+        "event": "expand_latest:start",
+        "simulated_units": 260
+      },
+      {
+        "event": "expand_latest:end",
+        "simulated_units": 290
+      }
+    ]
+  },
+  "after": {
+    "source_sha256": "13c8e3bd01f7dabda8a2101ec9250b970735de77e3a8fe33604db39ff0ab8943",
+    "expansions": [
+      "latest"
+    ],
+    "obsolete_expansions": 0,
+    "latest_reader_start_simulated_units": 40,
+    "latest_ready_simulated_units": 90,
+    "latest_status": "ready",
+    "background_worker_count": 1,
+    "trace": [
+      {
+        "event": "read_old:start",
+        "simulated_units": 0
+      },
+      {
+        "event": "read_old:end",
+        "simulated_units": 40
+      },
+      {
+        "event": "read_latest:start",
+        "simulated_units": 40
+      },
+      {
+        "event": "read_latest:end",
+        "simulated_units": 60
+      },
+      {
+        "event": "expand_latest:start",
+        "simulated_units": 60
+      },
+      {
+        "event": "expand_latest:end",
+        "simulated_units": 90
+      }
+    ]
+  },
+  "avoided_simulated_units": 200
+}

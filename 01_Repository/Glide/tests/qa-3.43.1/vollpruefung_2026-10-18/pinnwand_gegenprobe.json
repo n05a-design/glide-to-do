@@ -1,0 +1,11 @@
+{
+  "faelle": {
+    "pinnwand": {
+      "ok": false,
+      "fehler": "'ItemWorkspace' object has no attribute 'bind'"
+    }
+  },
+  "fehler": [
+    "pinnwand"
+  ]
+}

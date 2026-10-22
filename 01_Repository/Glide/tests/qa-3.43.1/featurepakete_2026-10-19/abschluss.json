@@ -1,0 +1,54 @@
+{
+  "vollpruefung_exitcode": 0,
+  "ci_exitcode": 0,
+  "status": {
+    "vollpruefung": {
+      "ausgeführt": 117,
+      "übersprungen": 1
+    },
+    "ci": {
+      "ausgeführt": 18,
+      "Hinweis": 1
+    }
+  },
+  "integrationssuiten": 99,
+  "unit_tests": 803,
+  "unit_tests_ohne_systemzeitzonen": 803,
+  "werkzeugtests": 152,
+  "app_sha256": "ca2130336fe1a1f66341a4a995c4043da3373bd930ffe5579ae4d3fac09b0e2d",
+  "hinweise": [
+    {
+      "schritt": "Lieferstand",
+      "status": "Hinweis",
+      "grund": "15 Abweichungen zwischen src/glide und 07_Python-Versionen: Glide-Aufgaben-und-Listen_v3.43.1.pyw, action_catalog.py, data_lock.py, editor_flush.py, exchange_recipes.py, image_conversion.py, image_preview.py, load_phases.py … – zulässig zwischen Prüfkandidat und Auslieferung (abgleich_07.py)"
+    }
+  ],
+  "grenzen": [
+    "Keine neue 07-/Paketlieferung",
+    "Keine native Mac-/Linux-/Screenreaderabnahme",
+    "Menschliche Sicht-/DPI-/Mehrmonitorabnahme offen"
+  ],
+  "pruefwerkzeug_hinweise": {
+    "einordnung": "Bestehende Tcl-after-Meldungen beim Zerstoeren bzw. Wechseln von Test-Interpretern; positive Suite-Ergebnisse bleiben erhalten. Keine menschliche Abnahme und keine Zusicherung eines meldungsfreien Gesamtlaufs.",
+    "suiten": [
+      {
+        "suite": "test_oberflaeche33321",
+        "meldungen_jetzt": 3,
+        "meldungen_vorlauf01": 3,
+        "pruefdatei_gegen_HEAD_unveraendert": true
+      },
+      {
+        "suite": "test_ui_updates",
+        "meldungen_jetzt": 1,
+        "meldungen_vorlauf01": 1,
+        "pruefdatei_gegen_HEAD_unveraendert": true
+      },
+      {
+        "suite": "test_wiederholen",
+        "meldungen_jetzt": 38,
+        "meldungen_vorlauf01": 38,
+        "pruefdatei_gegen_HEAD_unveraendert": true
+      }
+    ]
+  }
+}

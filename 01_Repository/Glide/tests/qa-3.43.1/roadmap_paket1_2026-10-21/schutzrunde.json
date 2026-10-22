@@ -1,0 +1,59 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "559c738d54d5e5323186715601f43498d2207b860893b2de207a5775aa872698",
+  "faelle": {
+    "waechter": {
+      "ok": true,
+      "befund": "Tiefe 0/19/20 × Schnappschuss/Rahmen: Bestand, Datei bytegleich, Stapel, Meldung; Neustart"
+    },
+    "rueckweg": {
+      "ok": true,
+      "befund": "Verlust nach Speichern, Zurückschreiben gescheitert, DataIntegrityError, Gruppieren"
+    },
+    "laden": {
+      "ok": true,
+      "befund": "TclError/ValueError in der Ansicht behalten den Bestand; JSON-Fehler und neueres Format wie bisher"
+    },
+    "flush": {
+      "ok": true,
+      "befund": "fünf Kombinationen, kein Editor; Markdown, Seitenfunktion, Vorlage, Notion, Restore, Aufgabe verlegen; unverändert schreibgeschützt: Übernahme ohne Schreiben und Ausgabe erlaubt"
+    },
+    "editorwechsel": {
+      "ok": true,
+      "befund": "Navigation, Anlegen, Beenden fragt, schreibgeschützt frei, Schreibfehler frei"
+    },
+    "sperre": {
+      "ok": true,
+      "befund": "Lesen, defekt: schreibgeschützt, bewusste Übernahme, Übernahme prüft erneut, Neuanlage, Verdrängung: Einstellungen, Fenster, Freigabe, Takt"
+    },
+    "sperre_prozesse": {
+      "ok": true,
+      "befund": "gleichzeitiger Erwerb mit Bereitschaftsschranke: fehlend/verwaist je 3 Runden [1, 1, 1, 1, 1, 1]; Zweitstart beendet sich, schreibt nichts"
+    },
+    "ausgaben": {
+      "ok": true,
+      "befund": "Teil-/Vollbackup, Austausch, Markdown, Vergleich, Drucken und fünf Exportwege halten an"
+    },
+    "editor_offen": {
+      "ok": true,
+      "befund": "Navigation bewahrt nicht übernommenen Text auch bei vorheriger ungespeicherter Änderung"
+    },
+    "rueckweg_bytes": {
+      "ok": true,
+      "befund": "Nach erfolgreichem Zwischenspeichern stellt der Abbruch die ursprünglichen Dateibytes her"
+    },
+    "sitzung": {
+      "ok": true,
+      "befund": "Lebender Besitzer trotz Zeitablauf geschützt; Erneuerungsfehler bricht ab; alte Tokens wirkungslos"
+    },
+    "speicherergebnis": {
+      "ok": true,
+      "befund": "Hauptdatei/Backup/Folgefehler/aufgeschobene Einstellungen unterschieden; ein Mutationsvertrag, Bool kompatibel"
+    },
+    "mehrfach": {
+      "ok": true,
+      "befund": "100 von 1.000 Aufgaben: 4 einzelne Suchstarts, ein Undo/Redo; neue Objekte nach Bestätigung aufgelöst"
+    }
+  },
+  "fehler": []
+}

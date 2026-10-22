@@ -1,0 +1,4014 @@
+{
+  "head": "10427276b97e10528759cc42b0d23f757ca14843",
+  "branch": "codex/bildvorschauen-wa26-2026-10-18",
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 3369,
+      "sha256": "cd8a968101ab213d6edae0c8134f6fcd762b1056e7deff9465f32cbb2a704c7c",
+      "live_equal": true
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/AUFTRAG.md",
+      "bytes": 8066,
+      "sha256": "358eb33b61312271762b738a90e93638e14edad6ed38288a97923f523ba0f910",
+      "live_equal": true
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/BILDREFERENZEN.md",
+      "bytes": 6789,
+      "sha256": "9a5a32f0afa4ee34c22eb486b9194d33e2872ed9c2e7dd8ae5a6592da39fe50d",
+      "live_equal": true
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md",
+      "bytes": 28353,
+      "sha256": "d17fc9557c9a4a796b74ec8aafbf01305fa6c6e99ddec00efee335d00e92cf20",
+      "live_equal": true
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/screenshots.json",
+      "bytes": 13187,
+      "sha256": "ea2abd44c49fc1ded76dbc8f5220b1338130144467b205a5ef7fe01bc53932ce",
+      "live_equal": true
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "bytes": 95245,
+      "sha256": "60a8fd2cd2b6d82da2e1b3e5effb29d15dde6f54f27bc58ea328468b07784f3f",
+      "live_equal": true
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "bytes": 218873,
+      "sha256": "f0da863255bc73d7f789dc2cfb0eb67a123ddc6322608b33fb3f4b8299a32969",
+      "live_equal": true
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+      "bytes": 39402,
+      "sha256": "4e8e09c6ea66fed2a4efb41e7d888b50ac2aff0216a1caf45341c64c20bec319",
+      "live_equal": true
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+      "bytes": 97952,
+      "sha256": "0ca7cc20553aff7cd76ddbd4ea31a5e5b5b85488d3e554916ab784463b31463b",
+      "live_equal": true
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "bytes": 11343,
+      "sha256": "53f929b704c9afcf9f2c01b82f726582c457fd7a3c6c004e98fc1b17dc48ff45",
+      "live_equal": true
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/README.md",
+      "bytes": 2926,
+      "sha256": "b8fda1c654dc29c5018107d843a4aa368858bb189d52d0ab1b4a2877c1e0334a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/AGENTS.md",
+      "bytes": 5239,
+      "sha256": "de4e4fe311f8b30a9787954dfce7d16ba51a95db3ff1cd92d0079908b8be236d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/CHANGELOG.md",
+      "bytes": 50887,
+      "sha256": "94c2fa3852dc630902bf6be90d5965bd8fac281c638dc0a7864d2f34748ebb7b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/00_INDEX.md",
+      "bytes": 5629,
+      "sha256": "0874459404452aadbdb82ad08765907f2875df196abbff30926a00b79879c8bc",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+      "bytes": 11790,
+      "sha256": "b162241d7dee034df9c696bc1483c1b6047faa19a92eb2c6b808f8a94568b2e7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+      "bytes": 47282,
+      "sha256": "244614d5c79bb31da76a2e531e5b0ae0042ccc519587a81a888981f8ee9babb1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+      "bytes": 40403,
+      "sha256": "f841a3bfed3cc893a0e6f959cf32f83f60612bd74b9caee5f1700e097325b6e7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+      "bytes": 34814,
+      "sha256": "985f8ca04dfae914107b7e589447589986cb33e3924b32b9a77ef0ff725c2b50",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "bytes": 38215,
+      "sha256": "d014aaa3613ebecccdf130d219b05753f27176d9fc3a7433284d0b9537abc1be",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+      "bytes": 18362,
+      "sha256": "9f92c7807483ad053f597f9a93a46daa3475ac6a4f45e985e33f2c37943dbd74",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+      "bytes": 107342,
+      "sha256": "85ef2b94de53b1e4043406b18dfc79d34f5241fc8d7d9f6b31c01b6ea5f998a4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md",
+      "bytes": 8320,
+      "sha256": "90ee72b171cacebde480aaef59aa547a117aff66dcad476eba7664f79ad22d98",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+      "bytes": 42176,
+      "sha256": "1c876fa0b5441d017768c75181869870a9bf01e6875f49102db4c61eda77a4f1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/ABHAENGIGKEIT_TKDND.md",
+      "bytes": 2780,
+      "sha256": "d32d8478e577a54304d7b398fda081a6c1a6b4591319edef2f892f34cd766eb3",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/ARBEITSBEGLEITER.md",
+      "bytes": 5844,
+      "sha256": "f9b637bd99d78567d49d8c86f960207f7a0b7ac364fde53847f0a09035a33b75",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/GRUPPE_ORDNER_UEBERSCHRIFT.md",
+      "bytes": 5636,
+      "sha256": "11865be2704a014a6db6703c03cc0d58896a79c121585d1bc4474c76a1c593a3",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md",
+      "bytes": 7230,
+      "sha256": "c0043ee50ec0a7f6209d848e852c6fdcc0035294c08dfd702832509a7c7b0e48",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md",
+      "bytes": 11588,
+      "sha256": "9e05eea9b8bd7198487bd9ecd9d3ab05a3ea5b150358ee27ad589ae703fec0f5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md",
+      "bytes": 18100,
+      "sha256": "6b53d2faa8245c4c6d6c34791d3bc6196abc21978d216e8af51e92bab2dd3281",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+      "bytes": 8347,
+      "sha256": "f115a4a3de6c5ff5bc902bfc1471ceab7da06d706edc51ea59888d5b36b03688",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/baue_symbole.py",
+      "bytes": 4513,
+      "sha256": "bfa007f2ccd8e00cbda72c00d263dc313773a75b3cedadc1173517ee93265594",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/macos/baue_app.py",
+      "bytes": 9591,
+      "sha256": "e744e6cb3738768acf27849f362c9764d1290b98e25420a113044be858063424",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/baue_paket.py",
+      "bytes": 13010,
+      "sha256": "b813b6f7ca2c18227d92337bb1729b008b2b940fd75db269246bc64a8292e016",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/compiled_contract.py",
+      "bytes": 1752,
+      "sha256": "f8fb9324e6f9d1e0d9734df55ea08a3bfef0b80dfe8115196db87da1344cd38f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/license_contract.py",
+      "bytes": 7767,
+      "sha256": "d5a36012b276445542ef95fece78585fa7ce6cec793dd51eedf9ffe9bff7c0fc",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/altgraph-LICENSE",
+      "bytes": 1002,
+      "sha256": "6c194d6db0c64d45535d10c95142b9b0cda7b7dcc7f1ddee302b3d536f3dbe46",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/CLDR-LICENSE.txt",
+      "bytes": 2033,
+      "sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/DejaVu-LICENSE",
+      "bytes": 8816,
+      "sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Glide-Lizenzstatus.md",
+      "bytes": 266,
+      "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Henry-Spencer-Regex-LICENSE.txt",
+      "bytes": 1455,
+      "sha256": "8efb2d7215828acd974545d4177cadc7239d676c9a2c1a9834cab33efe9967fe",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/IANA-LICENSE.txt",
+      "bytes": 252,
+      "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/libtommath-LICENSE.txt",
+      "bytes": 1257,
+      "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/macholib-LICENSE",
+      "bytes": 1113,
+      "sha256": "47082ab2bc0184123ec9f10fdf80c70723ee68f07d44382e17615c2a6ba70b09",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/manifest.json",
+      "bytes": 8242,
+      "sha256": "076641e0a0954616a7c3b604c15b557dd9efceea97de8aac340d01dd6a2f2cfe",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/nanosvg.h-LICENSE.txt",
+      "bytes": 1268,
+      "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/nanosvgrast.h-LICENSE.txt",
+      "bytes": 1037,
+      "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/OpenSSL-LICENSE.txt",
+      "bytes": 10175,
+      "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/packaging-LICENSE",
+      "bytes": 197,
+      "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/packaging-LICENSE.APACHE",
+      "bytes": 10174,
+      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/packaging-LICENSE.BSD",
+      "bytes": 1344,
+      "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/PixelifySans-OFL.txt",
+      "bytes": 4488,
+      "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/pyinstaller-COPYING.txt",
+      "bytes": 32604,
+      "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/pyinstaller-hooks-contrib-LICENSE",
+      "bytes": 27666,
+      "sha256": "91d0baaff00773038e72c0a1fc9d5d2d38706b7a2b9c04f34296608f931b9cd0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Python-LICENSE.txt",
+      "bytes": 13804,
+      "sha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Python-THIRD-PARTY-NOTICES.rst",
+      "bytes": 57595,
+      "sha256": "c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/setuptools-LICENSE",
+      "bytes": 1076,
+      "sha256": "5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/setuptools-LICENSE.APACHE",
+      "bytes": 10174,
+      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/setuptools-LICENSE.BSD",
+      "bytes": 1344,
+      "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/setuptools-LICENSE.txt",
+      "bytes": 1107,
+      "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/SQLite-Copyright.html",
+      "bytes": 8351,
+      "sha256": "44ca9f793055c8e32fc65f65a4f5bcf813a33f5bdaaa084067dd617a4ed3cc70",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Tcl-LICENSE.txt",
+      "bytes": 2255,
+      "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Tk-LICENSE.txt",
+      "bytes": 2267,
+      "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/tkdnd-LICENSE.txt",
+      "bytes": 1711,
+      "sha256": "3e752e3d3d249387b477e79e2566dfd076b706175129a1edee395ff66dad2641",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/tkinterdnd2-LICENSE",
+      "bytes": 1072,
+      "sha256": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/XZ-COPYING.txt",
+      "bytes": 2774,
+      "sha256": "c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Zstandard-LICENSE.txt",
+      "bytes": 1549,
+      "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen_vorbereiten_macos.py",
+      "bytes": 4987,
+      "sha256": "9423c4664b9c496c2c65fc4cd04e9f26a943ce5042579ff9f7e7269311044b3c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen_vorbereiten_windows.py",
+      "bytes": 13678,
+      "sha256": "0d789610941dae8dba1d42fc175557a4c7a766bfef2ba519fa996fc00d0e12f2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/package_sources.py",
+      "bytes": 3681,
+      "sha256": "9275840383a080f9d0a54c6fd8ccb238e959dc9c79304b7c83594107ca26e962",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/package_spec.py",
+      "bytes": 3876,
+      "sha256": "3814c2567026b7fa44551610221d5a729bb94fa17ae66b33bf315c97bbb287a1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/pruefe_macho.py",
+      "bytes": 3494,
+      "sha256": "c8e03695889c0a0a3b365a3e72881642db8d3e3902038b35302442cdef778384",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/pruefe_start_macos.py",
+      "bytes": 3997,
+      "sha256": "6fae7ac843487cccd0ae56e8acc323addea12bd4fdb5232750dbe44ad2c62c30",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/pruefe_start_windows.py",
+      "bytes": 11184,
+      "sha256": "08ebf20a1917f7d29a2e60d23d1d2daf8fa0e0292ccd4cc3d1ccdaf00ebb4c06",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/runtime_paths.py",
+      "bytes": 8962,
+      "sha256": "85e913601942e1dcf7011029c48e0c05cfbf5705447d5af7e2d8d46c548231f3",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/runtime_provenance.py",
+      "bytes": 2382,
+      "sha256": "1b5c835105299a88148b5a41f1236fbfb6cf36153760c87e2409824fa243692c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/start_glide.py",
+      "bytes": 15753,
+      "sha256": "4511b7166eb8f63dc084199769d1a2f970fad44f680fe72bc3a5a46bb7ae6b91",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/windows_acl.py",
+      "bytes": 6150,
+      "sha256": "b4d084c5d9c08022a83a3366db81696bdf4eccaf7e13e1a3a2e275b7169ff2b1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/windows_isolation.py",
+      "bytes": 5942,
+      "sha256": "e49fd74936e9305a0b177c7cd481ae243c5a8709c3b896c050ba53b893a52d96",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/windows_license_sources.py",
+      "bytes": 2798,
+      "sha256": "ec2222728eb271ff7efa32e2071a17611978661bb84e3c818f266665da3fb8f2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/windows_native.py",
+      "bytes": 4189,
+      "sha256": "672dd9bccc2c4a799902640496da3667f858223b1e8a7d3c5bf41a76234c8c5f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/README.md",
+      "bytes": 8085,
+      "sha256": "4645087d7bb27d916c91922ebcb4f9236f075e7989bf6ef5e610b2a6c813725b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/baue_runtime.py",
+      "bytes": 9034,
+      "sha256": "e620bee073adb1a928d935b7b8223c9f4177fcac7b931c776748023841ca66e8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/hole_runtimequellen.py",
+      "bytes": 2147,
+      "sha256": "b919494d64835d63d19719f9d809a581ad2242a912b1141f04d3b3dd96230bd9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/lizenzen_tk91_macos.py",
+      "bytes": 4002,
+      "sha256": "ec13f2afb8c8cf021b6dafdcc589cd2458e6c6703b2883f7db39f60adc0dc1ea",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/patches/common-accessibility-selection.patch",
+      "bytes": 818,
+      "sha256": "1b8c958d8dc225029e985bb725c59fd5705c3108a396e503c657b650332ea9f3",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/patches/linux-accessibility-focus.patch",
+      "bytes": 4044,
+      "sha256": "64f1bd6be862f6c932346d821f8a7b1576cfaa0497eb4823db77969ab6ab9f55",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/patches/linux-accessibility-lifetime.patch",
+      "bytes": 2292,
+      "sha256": "5f87b514dd14e3ea438d35745979ebeb5596f85fdd8e0c67232ac8ade00b4c81",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/patches/linux-accessibility-state.patch",
+      "bytes": 1693,
+      "sha256": "3553e888731bf351d6c768cc0830bfe604078c98bc7b7ec3951497d37ff39bcf",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/patches/linux-accessibility-text.patch",
+      "bytes": 4742,
+      "sha256": "cdf7b1a3e33472b1910a983ad24f320d16487fd225bb40bcf232e463498f17fc",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/patches/linux-accessibility-window.patch",
+      "bytes": 708,
+      "sha256": "931622a2b224518c96f183c0acc5f7f34211c07b56c72454bbd88b07e8bb1e24",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/patches/macos-accessibility-core.patch",
+      "bytes": 8858,
+      "sha256": "41189047d40fa3b9add1648adcc7cc907d63796b44d76a6d4944bc10e2e6eeba",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/patches/windows-accessibility-identity.patch",
+      "bytes": 5963,
+      "sha256": "0c2049e08fc2f4ce6b0f05cb4de42c89f7510cdb42a9b8b55dbda20101714613",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/patches/windows-accessibility-name.patch",
+      "bytes": 2057,
+      "sha256": "1f83a7e34c899a4454e462bf6ddd862b1667f42fc37523994c525a73f27e2ed0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/patches.json",
+      "bytes": 4265,
+      "sha256": "1917883db44fe61ae8b7969ab4ca14d2713c402198146dc996979a933d98a969",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/README.md",
+      "bytes": 5826,
+      "sha256": "cf759b800b9dbd27f71ff465151b745169e3c0d2d7d0f9ce117809fc9c62ebd4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/runtime_contract.py",
+      "bytes": 3411,
+      "sha256": "419ac5534cd2f1080a83653f0c90a78b4b552ba2ecfb0d0e44e2c480ce20ca77",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/runtime_patches.py",
+      "bytes": 1889,
+      "sha256": "ebc84622347865f20637b50fa04ae561ce031a42bab3d4dc7e324832f07bffb2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/packaging/windows/verknuepfung_anlegen.ps1",
+      "bytes": 6770,
+      "sha256": "0b9d581d287df84b2fa1d1ea281b46dc3027e3f884731977ee3be915b3c6303a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/_glide_laden.py",
+      "bytes": 2796,
+      "sha256": "7c21dbbc317833d629cfe0996d860494f7ec380661fc1370cba3cc2f07e7591b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/abgleich_07.py",
+      "bytes": 4529,
+      "sha256": "c5b9bdfcaba141f81e622cf151efa64ac9047e6a727bac7ae4425c0d2130e325",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/ablage_kuerzen.py",
+      "bytes": 4389,
+      "sha256": "d13bb98d486b1e2263320ac5da2ddfc43ac659b86aa6f8e21c238efd1ba8f06a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/analyse_codebasis.py",
+      "bytes": 3171,
+      "sha256": "aca02a395a63e5664984ef456923b58539a3ce35da7f7dea318221e567ac78f3",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_ansichtswechsel.py",
+      "bytes": 3404,
+      "sha256": "ffe907f00566e93d7e277761a9a64d0ea863d0e576de5daf892648fea7e89127",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_bildseite.py",
+      "bytes": 5935,
+      "sha256": "c8e0adc488abe09f8520f77388649058549b2a4344afe9871c045cfd576ffb04",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_fundament3360.py",
+      "bytes": 9305,
+      "sha256": "20f40fd3f34e8bee07acfa1037b7cd412320aa132f9e049e1dfc2d25fc6834b5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_performance.py",
+      "bytes": 6797,
+      "sha256": "06e7f26ca0bb59039e6e5098cf87304360997be4e26f084e7a2de3a5dccfd0c1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_speichervergleich.py",
+      "bytes": 5935,
+      "sha256": "f0ac23f2c241519dd5173929013b98f7baed8ad06c9a7b0309ad430bd8362058",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_speicherweg.py",
+      "bytes": 8825,
+      "sha256": "fbf0df33ba1107453240aa9d9f9d978e9fd510d95e6347d8e139ccec532b4c98",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_startseite.py",
+      "bytes": 8136,
+      "sha256": "e8120be16686a567c8da33d4a0be065108455469ae476fe1cbd1123013874ba8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/messung_suche.py",
+      "bytes": 5686,
+      "sha256": "ebd955b0c778221b33fedce6b9303a1e67b49b385071ac91feeb072d1d605846",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/pfade_bereinigen.py",
+      "bytes": 2503,
+      "sha256": "8a7fa483748dc3a46ba128ae6bfec7b997141004861972e322613d5d36324502",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/pruefaufrufe_probe.py",
+      "bytes": 7904,
+      "sha256": "ca46f9d0adfda3d1acf21673b48f0849bece15caff625fb7f92a847556c9ce90",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/README.md",
+      "bytes": 8994,
+      "sha256": "3b34351b23b29c666d6a25850732c1a70190e54583783a77f3124fecf1bf27e5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/showcase_abgleich.py",
+      "bytes": 1886,
+      "sha256": "84579eaff37ff00aef3b825a37a8b205d382b4c4f9441efa04d65c237e29579f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/versionswechsel.py",
+      "bytes": 3201,
+      "sha256": "41c6a6aa19c825f213111d3fff57c64cb57b549f8c87af63f64242a9af703a68",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/zaehlung_aktualisierungen.py",
+      "bytes": 6461,
+      "sha256": "8de189270b562d6ab96bd32e038a29941f069e6fb3722c97093852f02e1bdf4d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/scripts/test/run_core_tests.ps1",
+      "bytes": 479,
+      "sha256": "d54bb7531a28f1691817707d90b8671da98e0d4d2a08ad00238b76acd1f3b6d5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/accessibility.py",
+      "bytes": 5640,
+      "sha256": "d5b959172f536d2349ce55c2f20960650d73d3572052cf5bf496288cffa2a91b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/accessibility_bindings.py",
+      "bytes": 4125,
+      "sha256": "57fca8a881a00ff1a12e4be3103ed58c610d1d1c0159b8d7faeb5cd0be49ffa6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/action_catalog.py",
+      "bytes": 11511,
+      "sha256": "a274f67e1227199e2c8bbb398fc5d34e905682871dccd3e476ed36f284b09c85",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/animation.py",
+      "bytes": 14401,
+      "sha256": "a7f4fb2849da4dcc6831c28811a52de9e739a9d251e2a123fc5b2c09202c3006",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/animation_export.py",
+      "bytes": 3529,
+      "sha256": "a3f47a4e0e91462de11f4458c99dc1cb2d8580b02b7baa824817dd8d9be918bb",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/app.pyw",
+      "bytes": 3228507,
+      "sha256": "916c77701bd645227a734a0f8a5f10be65046f0b5c6d29feeafac203debe72f2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/appearance.py",
+      "bytes": 3038,
+      "sha256": "1366388cf453f9d5ddf11bbc47e43fdd796b750a3a26105623b539e0928a2ea8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/attachment_paths.py",
+      "bytes": 1326,
+      "sha256": "7c506fd2da19ec74513c4d64779e5add5129b91a5cbcd5afdf90b28ba5c329cc",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/backdrop.py",
+      "bytes": 23366,
+      "sha256": "a45c04144b4366eb805aee56558005976f0e66d53032acb0b6aa37ee702689f8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/backup_diff.py",
+      "bytes": 5590,
+      "sha256": "9913de3fed9297cdbe8ad706a9390188b7a6800ec995be6fd78c11e6600f63de",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/backup_snapshot.py",
+      "bytes": 5552,
+      "sha256": "f724e53794dbc78b53be471c36a5edc2d19faddb1a38f1328332700f4742c995",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/busy_calendar.py",
+      "bytes": 6844,
+      "sha256": "5de924eb3a584865702419e3036cef58a01e244ec34bf57bc42140dcdd9f192c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/calendar_service.py",
+      "bytes": 6852,
+      "sha256": "29d5f67a04cbfba1c5b778ef37770131f7c919dc882587366ff18c7614cc5789",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/capture_parser.py",
+      "bytes": 35298,
+      "sha256": "2bdc4f70522f1bc6d9fc66bc59e6123b071bb3a4b5fa406d1ac5c4c570887374",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/content_search.py",
+      "bytes": 4116,
+      "sha256": "d2359609d6f574984527ad24b33a5ea2b85637330500f6eab23bab6f1f58d330",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/core_accessibility.py",
+      "bytes": 18377,
+      "sha256": "4764a2f13f626de1243bba17b2bb761ab497b8ee9ad1b64e668001f80c256bed",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/daily_hints.py",
+      "bytes": 9325,
+      "sha256": "3d1436b64c4fd113b4cb0469b7cdc7db1eb2dc579bed5af262f21b58ddddb5f7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/data_lock.py",
+      "bytes": 9143,
+      "sha256": "b819027f86c58198a7410d6ca10adfef4045edb1bb2701d45c4030bee253b40e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/day_proposal.py",
+      "bytes": 3683,
+      "sha256": "af212b221d7cd4221930b0cd72946c1b74a7e10b496709785c667a3b98fda4e9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/day_relief.py",
+      "bytes": 5989,
+      "sha256": "f889a85441e366e0ba9b614ac9d256db68ceceab57e75c623cd1f6f1bb649587",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/drawing.py",
+      "bytes": 62175,
+      "sha256": "f6cb2386cf00676e5af19cca46bc354f4c2104f87f2a6d3ae85a281c2842712c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/drawing_image.py",
+      "bytes": 12515,
+      "sha256": "d1020a43175f251a5a59aa434ebbc5b4cb43d8e70fc9c245deaff2001bfa1ad9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/drawing_prototype.pyw",
+      "bytes": 33783,
+      "sha256": "d9a47685721448e56f25bf2c482c386f2acf7d7d1576afc3f567f3e421a823a9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/editor_flush.py",
+      "bytes": 2031,
+      "sha256": "192d8d9041842a67006b0296408596b602194c7e385357c7648b9a0e5c37417c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/eisenhower.py",
+      "bytes": 3237,
+      "sha256": "5f4386a5ff60371b2627e34612aadcfc7c64cad772a5dfb469dc94f22f2b0ca0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/exchange_patch.py",
+      "bytes": 10216,
+      "sha256": "3b5bf73c253845110c867a3d1c9629137f9070e9a12c69ac0edcf970dc576e4e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/exchange_recipes.py",
+      "bytes": 4714,
+      "sha256": "212026e66d1c8fb79302725efd80c96d361c940626cf6f4989e7d7599711ea8e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/filter_explain.py",
+      "bytes": 5416,
+      "sha256": "f581412f3d4c8136941518e0dbe516c44db7e1ba9fee87b47f3b347878c5245a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/focus_timer.py",
+      "bytes": 3222,
+      "sha256": "23199b0595e32770f388cf1f2a6dad8a383341893e02e9421b49c5428afb18d5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/glide_start.py",
+      "bytes": 2458,
+      "sha256": "670aeeadde60dd81dd0d816ee1eba38ec3205f8af15902bfefd3e13aff6b79eb",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/glyph_metrics.py",
+      "bytes": 8212,
+      "sha256": "cc4e480be903d550c505774003223f801c237f5ce50e4328743c2416faced76d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/home_tiles.py",
+      "bytes": 7689,
+      "sha256": "d05add8e3c09c62b2696db34bda851e3d84475182a038cd1800a051fe590e486",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/ics_busy.py",
+      "bytes": 16038,
+      "sha256": "89f85e03a4b535eea3802294006ed31854c8907123db779aef8b02fe5360df67",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/ics_recurrence.py",
+      "bytes": 10423,
+      "sha256": "454bd59489eb404097b68437d62a1786f876388ae0e13ee03649cd30c254353b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/ics_timezone.py",
+      "bytes": 7844,
+      "sha256": "bf3fd6590f917ede7975542e267e5e41dce7c70b452a2c497c8d54894b8de2cd",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/image_conversion.py",
+      "bytes": 8396,
+      "sha256": "f4b0ac08bde4e6ade47de874d46f3cc41ab4155f70409cdb42dbc4ce750279ad",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/image_preview.py",
+      "bytes": 16567,
+      "sha256": "88f63c61827320f7535cd90fac901f10b624fba9f35b72868707f15ce1a8d618",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/interaction_policy.py",
+      "bytes": 5918,
+      "sha256": "05baf1651eb4a9ab014c6086379fd791e2853495eac4e776bae21c2fb05da177",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/load_phases.py",
+      "bytes": 3009,
+      "sha256": "6b7448c728de5d1342c9376b3b244a0f946100b84dc6c6d80d4aeae9b373a8e9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/logo.py",
+      "bytes": 7388,
+      "sha256": "7dafc78697c33315d83dbbb0e16aa222068a123f6eba93d9126dc01150a61d4a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/logo_raster.py",
+      "bytes": 4085,
+      "sha256": "e594735d05b1e7c3be2ac73bfa7340d85444293bfc1c84e31dbd4cd7f63db47d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/markdown_tree.py",
+      "bytes": 21270,
+      "sha256": "44838e1af044f447c160fa866d30c83755858ec71ee269e91a3202b0156a2678",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/motion.py",
+      "bytes": 2400,
+      "sha256": "3f6aa78376bb05ff0fe498c16f1d9edf9292bf0e19bc984513d73e4ce10a9162",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/notion_archive.py",
+      "bytes": 17219,
+      "sha256": "b75ed60bc52a728dd8f6e65cb5a87c06203b5d30949cae06b7406f11d3d9de1b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/notion_hierarchy.py",
+      "bytes": 4713,
+      "sha256": "6148ad9d472c4dfea16300701021bd278d695d18481e08f081db9aa578c05a42",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/notion_import.py",
+      "bytes": 13227,
+      "sha256": "d0e7c074aef0ccfa4ae869a96e1bddf484f0b3f5aa45c593a81012a106e9688c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/notion_reimport.py",
+      "bytes": 5826,
+      "sha256": "10f06f7dabf1eb2563b15bd887729a5e75d87d2b8459cbcad3654c9f67cc815a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/object_references.py",
+      "bytes": 8353,
+      "sha256": "133b8c9f9e2dc5fa60a063971dc5396cf417f718d08ff65860e705241b890ee7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/occupied_time.py",
+      "bytes": 8014,
+      "sha256": "ba756252c2552a1c3abcbf99640be79c49f9286fd6131d509eb7bf83d6a170b0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/page_features.py",
+      "bytes": 6702,
+      "sha256": "f6d5a131aee8d87cc3be2f8c3a053bf20e43f668b2daacc2e64bb209a497ffcc",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/page_markdown.py",
+      "bytes": 26463,
+      "sha256": "5805eab66689fbe2dac5c863adea3ff0e2e0157f979321606062aaa01fcbbb53",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/page_restore.py",
+      "bytes": 13185,
+      "sha256": "ba86f3e099acaaceb9de7677de6fe9638595d02f811bf557eb410353d6079b66",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/pinboard_pages.py",
+      "bytes": 4060,
+      "sha256": "fb81ff0b55012de45cbad39f433ee0916d4fb827348c5c65992c932e0dbdce22",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/planning.py",
+      "bytes": 4758,
+      "sha256": "59b78be6d91da4adf31c2c401b0bdf1c10b6c97490a122f7f3420c20059ba0ad",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/preview_tools.py",
+      "bytes": 3065,
+      "sha256": "5fb18ce2df48c83b5c804ea862db9f3c798622457cd39ccde22be033401d9ba1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/README.md",
+      "bytes": 10230,
+      "sha256": "49c430015471eddc1481e87c5bfdf23350cc5425652cbc3bc6409825e3fba80d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/release_notes.py",
+      "bytes": 6808,
+      "sha256": "30e76b137734f03b1346be6317c23e01ee7b71d62bba3acdfde3b0e918b27ea9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/render_retention.py",
+      "bytes": 5624,
+      "sha256": "efec6647e1adfc237b9935426a91f58461e56c03935a35a082666bbd338a82e8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/repeat_ics.py",
+      "bytes": 5205,
+      "sha256": "0af161308751777d014f0a71e23e5d1ecff308db813ffc58487136e4d99fd5fc",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/repeat_rules.py",
+      "bytes": 16899,
+      "sha256": "adf198b072caa28b909d29450a9782ef42c3f276327ded7f1fb39766b49a6809",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/exchange_recipes.json",
+      "bytes": 2219,
+      "sha256": "5faea534c799ac0acc5f76072c31e15a08867e363728c9547f08369980c31978",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/fonts/DejaVuSans-Bold.ttf",
+      "bytes": 705684,
+      "sha256": "e6476c1b80502924294eed40894c5b18e06c181444ca953e5334262df9c27724",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/fonts/DejaVuSans-BoldOblique.ttf",
+      "bytes": 643292,
+      "sha256": "eb436dca0c2594b73d8b603b892e374fdfd8d885d25ffb4f18df4c4c0b49e50f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/fonts/DejaVuSans-Oblique.ttf",
+      "bytes": 635416,
+      "sha256": "4af75fa16ee6d3ad43e1ecec41862c24954af26a55c6bb1ebb27bd486a50f5f4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/fonts/DejaVuSans.ttf",
+      "bytes": 757076,
+      "sha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/fonts/LICENSE",
+      "bytes": 8816,
+      "sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/fonts/OFL-PixelifySans.txt",
+      "bytes": 4488,
+      "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/fonts/PixelifySans-Bold.ttf",
+      "bytes": 95056,
+      "sha256": "3c3c203a3f3b862b944e836e4ec0fce201eddc1952cbca0d682e382d668b293c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/fonts/PixelifySans-Regular.ttf",
+      "bytes": 93780,
+      "sha256": "5436d485d1713afa376e1744911cbbcc0849eae1eb55ec9bc34c0753993ffef9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/fonts/provenance.json",
+      "bytes": 1578,
+      "sha256": "663fbc94179ae7e7a76e799783546d07a3826f931699be74ec0265acfb0cc08b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-16.png",
+      "bytes": 436,
+      "sha256": "c94efbd749df756dc50932c464ee877f6c9f9ca2d04b08c581bae4af6c7f05c4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-256.png",
+      "bytes": 6883,
+      "sha256": "b3d7e0378e6e28bb93699f0952286478f8b392382d5d96a0db23e96b259acb5b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-32.png",
+      "bytes": 800,
+      "sha256": "d6c7d6146c6ae6c604880e213321447febdc56ed1b998c153110649d1901345b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-64.png",
+      "bytes": 1406,
+      "sha256": "75cb0c88f228139918f20148f2128edc48cb23ea5bba7e41c1500e3d06644457",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-klein.svg",
+      "bytes": 1956,
+      "sha256": "9d031380f07b77b49cd5056685fffff85024a659f827dfc434d98eadc59db4da",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-16.png",
+      "bytes": 398,
+      "sha256": "b98be87052da034db0c22dc414cb88a4cca16e1469f2dd884110fd70a73dade7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-256.png",
+      "bytes": 5818,
+      "sha256": "eb95fcbd1d5f827e29aedee1cece41f9c7580bae590543f56009f7570738679d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-32.png",
+      "bytes": 695,
+      "sha256": "87158ff960dd36fbac7138823f6390e9012275702c2547380385eb816cb05a0a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-64.png",
+      "bytes": 1211,
+      "sha256": "24cf64621e10e6e3ce51b04c03e3a800d58bcf2b13f9048522cd3e152820f716",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon.png",
+      "bytes": 34511,
+      "sha256": "652e0bfab5500480bd523f31cc90254df3b0a111b24c21c57d8b7617b44d470a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon.svg",
+      "bytes": 1958,
+      "sha256": "1db74addc3d038a7691c133d84162a999022ffdd95443d8df0cce55661c35cb8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-logo-klein.svg",
+      "bytes": 1710,
+      "sha256": "92a8eb73a1b42f6650776e9613ec8eeecedf46452a5a97c86d2d6cfe3722b2b6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-logo.png",
+      "bytes": 26157,
+      "sha256": "08c845e095bb7bcef4c2c9e56a1327e17cff1e5d6c1c2ff89ba04a50736b9b64",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-logo.svg",
+      "bytes": 1695,
+      "sha256": "c734f1e43a39c7cce2ab81301784de0aee5a88943679e4266f002108658cba58",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/templates/glide_vorlagen.glidetemplates",
+      "bytes": 385656,
+      "sha256": "a1c43cc1fa98ac3248c1666ad1f30bd72e4ffc7ced4418d827f5d872bf6f74cb",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/timezones/iana-2026e.zip",
+      "bytes": 244751,
+      "sha256": "8754618b5e58bce763865aa1a748fe5d0f15908cae586ed45d929c9839b710e9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/timezones/LICENSE-CLDR.txt",
+      "bytes": 2074,
+      "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/timezones/LICENSE-iana.txt",
+      "bytes": 257,
+      "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/timezones/provenance.json",
+      "bytes": 780,
+      "sha256": "9d5079043d3bab1cf997fe3bb0ef859d100f01c2d6c5c0ce5a259b8042c99ff6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/timezones/windowsZones.xml",
+      "bytes": 50172,
+      "sha256": "7df6edbf52213ad2571f7fe76c64fc3c38423326f0896e3dc7f52299024141a6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/restore_assets.py",
+      "bytes": 4923,
+      "sha256": "f3101e2dbff3fb38bee2f561888d484d9f73dd1ad533aef3955bac72feb85571",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/routines.py",
+      "bytes": 4485,
+      "sha256": "bb8bb35cc63f28542665eb3d144ef4bf5308fbd944c25711d4c04391a08a6bcb",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/runtime_check.py",
+      "bytes": 2543,
+      "sha256": "ea6ab0ec80b3944b6d05762e5ae100f63a2fa83bd2e31ca940f66b5166188f9c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/save_comparison.py",
+      "bytes": 7158,
+      "sha256": "0e26d1bf018f0529c64414c45a2c23f016bbc8d59c636835b7a3a3abe977f6a1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/schema_backups.py",
+      "bytes": 2598,
+      "sha256": "e97de0f11c8a53a05a71a176393b4ab8d1ddc3cbc08791b9a4ac837d1efbb4bf",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/sidebar_policy.py",
+      "bytes": 6224,
+      "sha256": "52215f7e9d860642b7ef46925a0666d84efb0eddcc4253e204be2204b8b7d763",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/source_metadata.py",
+      "bytes": 11634,
+      "sha256": "a123ec2c186fd927ebde2ee4c1beecc606830b85cd66961dff7f41318e437d1a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/structural_guard.py",
+      "bytes": 5850,
+      "sha256": "b834f48aaa6e948d484c5402de76d60c7a7327d86cbeaf8d9d1c1ae42d66a2f4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/svg_geometry.py",
+      "bytes": 9061,
+      "sha256": "217bb988c16e2528901a6a550737b9525b1b288c76ddd8956d7beb0b0dc2b35e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/symbol_policy.py",
+      "bytes": 4770,
+      "sha256": "00acca5471dc69c19e9da39cc2cbd1cabc082cf7f6d54743eaea156f736c3548",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/task_editing.py",
+      "bytes": 2992,
+      "sha256": "0665c4ee277e1564101c65db2af0149510f6a2ee1aa218091297d7411eb1c0f0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/task_references.py",
+      "bytes": 5241,
+      "sha256": "c27d8336c374ef9187058c84414d0077d328e5b04ec7c83f317e6aee0de0eb19",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/timezones.py",
+      "bytes": 4477,
+      "sha256": "43f0b56987ac64fea922cdf4a71974b1ea060f62259f4cb8eeb8b5114d06d4ea",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/today_view.py",
+      "bytes": 4929,
+      "sha256": "c9d12cbf24c809890ef17f952654a057d4229153dbc78591b33eb20043b4d917",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/ui_design.py",
+      "bytes": 1740,
+      "sha256": "28e8a3b63b7875aab3e79215d89f78c8c75fcdf1ab008f0b07fd04cd04e4a0ae",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/undo_history.py",
+      "bytes": 4027,
+      "sha256": "3595022982da1d7181ad0448ea6d80909f228c6c4d1eaa00926ad07216466609",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/provenance.json",
+      "bytes": 680,
+      "sha256": "d88d2242930d3d946c357900899c548b7bc90548f2e8e4d549e8c80b2793c2e9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/__init__.py",
+      "bytes": 463,
+      "sha256": "514ce83cf94762760ec0c38aa3a445c998ff4cc3bec2661d3c1c60b8c1033bf2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/LICENSE",
+      "bytes": 1072,
+      "sha256": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/libtkdnd2.10.2.so",
+      "bytes": 77008,
+      "sha256": "d8995f803239950de9cbec76da7345f77a3d4b05b89cc21f6d438bd6b0f04486",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/pkgIndex.tcl",
+      "bytes": 2028,
+      "sha256": "6c5bc8d4b2506b03d4332dbd37f8497ca3ceb0b50d6ad90eac0afd33e94378c4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd.tcl",
+      "bytes": 19109,
+      "sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_compat.tcl",
+      "bytes": 6231,
+      "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_generic.tcl",
+      "bytes": 25705,
+      "sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_macosx.tcl",
+      "bytes": 6318,
+      "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_unix.tcl",
+      "bytes": 38575,
+      "sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_utils.tcl",
+      "bytes": 10201,
+      "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64/tkdnd_windows.tcl",
+      "bytes": 7646,
+      "sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/libtcl9tkdnd2.10.2.so",
+      "bytes": 76992,
+      "sha256": "63184a95c6bce3b2c2a45d775f9eb61306ffa60c82a49a03ad3cbd72637169e9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/pkgIndex.tcl",
+      "bytes": 2032,
+      "sha256": "0d3f23a06a3e08e896f7f6f5eade496967e449128f387b783414d0d75fcda90a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd.tcl",
+      "bytes": 19109,
+      "sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_compat.tcl",
+      "bytes": 6231,
+      "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_generic.tcl",
+      "bytes": 25705,
+      "sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_macosx.tcl",
+      "bytes": 6318,
+      "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_unix.tcl",
+      "bytes": 38575,
+      "sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_utils.tcl",
+      "bytes": 10201,
+      "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-arm64-tcl9/tkdnd_windows.tcl",
+      "bytes": 7646,
+      "sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/libtkdnd2.10.2.so",
+      "bytes": 59296,
+      "sha256": "125196a6d505a126c0b5ca221bca15fc5213298783aaa72c906da489d8825fd8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/pkgIndex.tcl",
+      "bytes": 2028,
+      "sha256": "6c5bc8d4b2506b03d4332dbd37f8497ca3ceb0b50d6ad90eac0afd33e94378c4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd.tcl",
+      "bytes": 19109,
+      "sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_compat.tcl",
+      "bytes": 6231,
+      "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_generic.tcl",
+      "bytes": 25705,
+      "sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_macosx.tcl",
+      "bytes": 6318,
+      "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_unix.tcl",
+      "bytes": 38575,
+      "sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_utils.tcl",
+      "bytes": 10201,
+      "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64/tkdnd_windows.tcl",
+      "bytes": 7646,
+      "sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/libtcl9tkdnd2.10.2.so",
+      "bytes": 59280,
+      "sha256": "6061bf6c1914c6db33d865ca90ce816f6d5637fce6c52f339f63758c7580a8be",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/pkgIndex.tcl",
+      "bytes": 2032,
+      "sha256": "0d3f23a06a3e08e896f7f6f5eade496967e449128f387b783414d0d75fcda90a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd.tcl",
+      "bytes": 19109,
+      "sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_compat.tcl",
+      "bytes": 6231,
+      "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_generic.tcl",
+      "bytes": 25705,
+      "sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_macosx.tcl",
+      "bytes": 6318,
+      "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_unix.tcl",
+      "bytes": 38575,
+      "sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_utils.tcl",
+      "bytes": 10201,
+      "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/linux-x64-tcl9/tkdnd_windows.tcl",
+      "bytes": 7646,
+      "sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/libtkdnd2.10.2.dylib",
+      "bytes": 76520,
+      "sha256": "a94be0fc0bfbeccdda03d3fd484300b740164367c49ede02b22bad012ad5c234",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/pkgIndex.tcl",
+      "bytes": 2031,
+      "sha256": "837e4d08830b95302f972369d5a21999a351bdd59c7fd9afe1622c095637077b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd.tcl",
+      "bytes": 19109,
+      "sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_compat.tcl",
+      "bytes": 6231,
+      "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_generic.tcl",
+      "bytes": 25705,
+      "sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_macosx.tcl",
+      "bytes": 6318,
+      "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_unix.tcl",
+      "bytes": 38575,
+      "sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_utils.tcl",
+      "bytes": 10201,
+      "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64/tkdnd_windows.tcl",
+      "bytes": 7646,
+      "sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/libtcl9tkdnd2.10.2.dylib",
+      "bytes": 76584,
+      "sha256": "482da76e340f6ad63f969c655fb7e6940e4bbfc2c85d761f068da246acf5b30d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/pkgIndex.tcl",
+      "bytes": 2035,
+      "sha256": "ea1db932b68c57df8327badce9e262c48675ade6b22a4c1a545a9568500da410",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd.tcl",
+      "bytes": 19109,
+      "sha256": "d47acfd2e2d5426c40e8f5c11646c49a7ecdadc92c73f9c3f47eb0ea6fbba4b7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_compat.tcl",
+      "bytes": 6231,
+      "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_generic.tcl",
+      "bytes": 25705,
+      "sha256": "100d8b4199809f387b06cad1736f82536238c74ddbf7c6a87abbc1aa62cbbdf5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_macosx.tcl",
+      "bytes": 6318,
+      "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_unix.tcl",
+      "bytes": 38575,
+      "sha256": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_utils.tcl",
+      "bytes": 10201,
+      "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_windows.tcl",
+      "bytes": 7646,
+      "sha256": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/libtkdnd2.9.4.dylib",
+      "bytes": 31868,
+      "sha256": "6e4f4fb171fde00d779cd69196b21c7ca12d0e2f9497ef1cc8f76050f2b4f2f6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/pkgIndex.tcl",
+      "bytes": 2027,
+      "sha256": "fb9bf10034b66ee8f8dd0a05fe7b254db6cae5d6b2ea7389d5a088f7db9f72b6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd.tcl",
+      "bytes": 18666,
+      "sha256": "24aee2d084581ae85cfe0efdc5c58493b14fea5c2a8d9adf3db8b2132f0d14a2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_compat.tcl",
+      "bytes": 6231,
+      "sha256": "58b0aebd287df1d2cfe16231847b786ac9a3a2d18fff2a8a37955510221d10f5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_generic.tcl",
+      "bytes": 23763,
+      "sha256": "3a4172b9c5150d537e1c271fdac1b472af2fad8fc6272c9cdbdef18ca0a8da99",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_macosx.tcl",
+      "bytes": 6318,
+      "sha256": "8df2832dd834cd5347f42ef62a9fd8c14b6b473e2a9f8007db6c31a606ca4ab9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_unix.tcl",
+      "bytes": 36343,
+      "sha256": "4d8adba6618427d9ae6592e4070cfb65a25731fc15566d2657b20610a6a77bcb",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_utils.tcl",
+      "bytes": 10201,
+      "sha256": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/osx-x64/tkdnd_windows.tcl",
+      "bytes": 7644,
+      "sha256": "7b7b522a769fcb5d1484891685bc3c0ee4967899317caa0547ab0e8d1d6e808f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/libtkdnd2.10.2.dll",
+      "bytes": 145408,
+      "sha256": "b4076e7bbc107902ea3d4d1aa21cb8fc7b015a9ea88d3ea3d997c6d18751ed9f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/pkgIndex.tcl",
+      "bytes": 2112,
+      "sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd.tcl",
+      "bytes": 19663,
+      "sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd2.10.2.lib",
+      "bytes": 2078,
+      "sha256": "41744b1b3d217fbef855bd215f55194ea8c7e78db643497d8d6aa2f55fae2f17",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_compat.tcl",
+      "bytes": 6391,
+      "sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_generic.tcl",
+      "bytes": 26340,
+      "sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_macosx.tcl",
+      "bytes": 6462,
+      "sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_unix.tcl",
+      "bytes": 39528,
+      "sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_utils.tcl",
+      "bytes": 10457,
+      "sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-arm64/tkdnd_windows.tcl",
+      "bytes": 7813,
+      "sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/libtkdnd2.10.2.dll",
+      "bytes": 153600,
+      "sha256": "ddf8b01276d9174a21666438caa97a4108b72ae50511506060ceafa9555cd6d4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/pkgIndex.tcl",
+      "bytes": 2112,
+      "sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd.tcl",
+      "bytes": 19663,
+      "sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd2.10.2.lib",
+      "bytes": 2078,
+      "sha256": "79511b0e8820d16252ab3a846c610280f0d24cd0b30d294091869107cd72bc4d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_compat.tcl",
+      "bytes": 6391,
+      "sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_generic.tcl",
+      "bytes": 26340,
+      "sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_macosx.tcl",
+      "bytes": 6462,
+      "sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_unix.tcl",
+      "bytes": 39528,
+      "sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_utils.tcl",
+      "bytes": 10457,
+      "sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64/tkdnd_windows.tcl",
+      "bytes": 7813,
+      "sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.2.dll",
+      "bytes": 154624,
+      "sha256": "731e6fb6fd5585074588b16f5b8ad29029bc2a40c83d20b5937f8d1f1edaf82e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/pkgIndex.tcl",
+      "bytes": 2112,
+      "sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd.tcl",
+      "bytes": 19663,
+      "sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd2.10.2.lib",
+      "bytes": 2078,
+      "sha256": "79511b0e8820d16252ab3a846c610280f0d24cd0b30d294091869107cd72bc4d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_compat.tcl",
+      "bytes": 6391,
+      "sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_generic.tcl",
+      "bytes": 26340,
+      "sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_macosx.tcl",
+      "bytes": 6462,
+      "sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_unix.tcl",
+      "bytes": 39528,
+      "sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_utils.tcl",
+      "bytes": 10457,
+      "sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_windows.tcl",
+      "bytes": 7813,
+      "sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/libtkdnd2.10.2.dll",
+      "bytes": 116224,
+      "sha256": "f26bf8b64fb74e2891b7daf30ecfe60e06dc946de724acc5e000e262d55650fd",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/pkgIndex.tcl",
+      "bytes": 2112,
+      "sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd.tcl",
+      "bytes": 19663,
+      "sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd2.10.2.lib",
+      "bytes": 2082,
+      "sha256": "dd06aaea3ea6f0ca0813fa344a4751cf75603a467b800803032950bededd8981",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_compat.tcl",
+      "bytes": 6391,
+      "sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_generic.tcl",
+      "bytes": 26340,
+      "sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_macosx.tcl",
+      "bytes": 6462,
+      "sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_unix.tcl",
+      "bytes": 39528,
+      "sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_utils.tcl",
+      "bytes": 10457,
+      "sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86/tkdnd_windows.tcl",
+      "bytes": 7813,
+      "sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/libtkdnd2.10.2.dll",
+      "bytes": 117248,
+      "sha256": "58bfe0747341ffc82a2ff841eabc7a03130161f73bac5f6a2c4b61526c4bd5c2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/pkgIndex.tcl",
+      "bytes": 2112,
+      "sha256": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd.tcl",
+      "bytes": 19663,
+      "sha256": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd2.10.2.lib",
+      "bytes": 2082,
+      "sha256": "dd06aaea3ea6f0ca0813fa344a4751cf75603a467b800803032950bededd8981",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_compat.tcl",
+      "bytes": 6391,
+      "sha256": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_generic.tcl",
+      "bytes": 26340,
+      "sha256": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_macosx.tcl",
+      "bytes": 6462,
+      "sha256": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_unix.tcl",
+      "bytes": 39528,
+      "sha256": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_utils.tcl",
+      "bytes": 10457,
+      "sha256": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/tkdnd/win-x86-tcl9/tkdnd_windows.tcl",
+      "bytes": 7813,
+      "sha256": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/TkinterDnD.py",
+      "bytes": 14964,
+      "sha256": "a5c23c0c9dbd1c1c9077809e5520b7edfed60986db7ebc1f7361a8f4c5bd6e29",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/view_definition.py",
+      "bytes": 9094,
+      "sha256": "18c6bfe9c370084bf898738a888e9f2846e9e74c4d4949a470562848defa6f3b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/view_metrics.py",
+      "bytes": 2591,
+      "sha256": "a5540e5b1d0f65c98fdfeab4ec3b5b1288e9b6e5ca4dd5e07fbf36f396bac276",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/week_planning.py",
+      "bytes": 2284,
+      "sha256": "38ff18553d762946fa8c4fa857cdabb4d39a84cfc020f8fa157882b4066fe95b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_beispieldaten.glidebackup",
+      "bytes": 23696,
+      "sha256": "1ed4863365cd71f7f268ffbe8a6121ad31b939346026eecaa7b0f3cda5aef730",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.13.0.glidebackup",
+      "bytes": 25098,
+      "sha256": "f50bb0386077d18adf800edf3b949f2b8117e2cb9d94590fa47848727ca6fec6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.18.0.glidebackup",
+      "bytes": 27455,
+      "sha256": "8665cb426d345dbcf9b9f9f1396b686ba17054d1cff13f7cd0db3ad8de63acaa",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.21.4.glidebackup",
+      "bytes": 29228,
+      "sha256": "880b429d3c40f0ce421892511acf88a3dec8fcd6d2c5ebdedee0d17a93e11371",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.25.0.glidebackup",
+      "bytes": 29423,
+      "sha256": "fcb04751a6c34e512178eed0ba11b658c2e6aab3ea4492ad653f9080b082cbe5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.26.0.glidebackup",
+      "bytes": 29557,
+      "sha256": "eabaa7872ffcccadc2d3f215bea664cf6f17060b86014c73efc7b921f7f872d0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.28.0.glidebackup",
+      "bytes": 29839,
+      "sha256": "bf80c29ce779712b9c7224e70e3f4fe4fd5c5fac4ea80427ca73912625791a5e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.29.0.glidebackup",
+      "bytes": 30172,
+      "sha256": "59bb570599d58b490f9a03e0b69eeb42434b45c4df01c45bbf453329cd937f0e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.30.0.glidebackup",
+      "bytes": 32956,
+      "sha256": "dacc185823fc394609081171667212d1c89ec7836ed60e88d966afa67ddec609",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.39.0.glidebackup",
+      "bytes": 33045,
+      "sha256": "e0e0cd61e8793be0fb6171a62496593e2b80d9a94e9186a051f905f842a94a36",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.39.1.glidebackup",
+      "bytes": 33045,
+      "sha256": "38c1ff771db72fd2130149b59d480118c7e2fd519221187ff20c201736d4defa",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.40.0.glidebackup",
+      "bytes": 32997,
+      "sha256": "80460fe820fc4851e6e4ec7550747201c9b55e43845eaceb633155c472150bdb",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.41.0.glidebackup",
+      "bytes": 33050,
+      "sha256": "8aa1925c709ed71b12fe06d343127e6eef277af032861bcd8e8f1cdc46f3c302",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.42.0.glidebackup",
+      "bytes": 32996,
+      "sha256": "170769c24b9ef17012a1c95ad284da187c1ba99084dd9b7279dc5d279689418d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.43.0.glidebackup",
+      "bytes": 32511,
+      "sha256": "87a74635c115c1affbac822fc776e032f6b561bb44d4719249ef1202675dbe58",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.43.1.glidebackup",
+      "bytes": 32480,
+      "sha256": "570f3442ba10afef962d496c0f364fb8c36f9d2d967067ea931d6d6aa12383d9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.6.0.glidebackup",
+      "bytes": 23031,
+      "sha256": "ade48a4ece6db8a581251b7d5011bb0b145b633fef19d97fb0990a9447c26199",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.7.0.glidebackup",
+      "bytes": 24196,
+      "sha256": "672269d690d8efbc975d81f28adf46d6ba275ff4b3db4134dbd0238473a48625",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_rundgang.glidebackup",
+      "bytes": 1845233,
+      "sha256": "7a5373fe51af59b822a267ea6209fe176098734d20e2af76439c91899315ce96",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v10/reference_v10.json",
+      "bytes": 9475,
+      "sha256": "a95c05ada3a301dacf8ea278293cf32b945fdfee7ade14fe415d1260a144e86f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v11/reference_v11.json",
+      "bytes": 9622,
+      "sha256": "da1fe34562d14a346f724485270ed4f8cc9f916d6abfabc8a7ac03581a46f20f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v12/reference_v12.json",
+      "bytes": 9772,
+      "sha256": "362633ba8291d46552e76de82c2b85d9dbe4e34136b3145cace61e2bcf939766",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v13/reference_v13.json",
+      "bytes": 10218,
+      "sha256": "8b36c286dc307dc50f9693c1cf8c58e59e6723b80b466b31fbf46ec6e1d55a8f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v14/reference_v14.json",
+      "bytes": 11371,
+      "sha256": "6f5fda4583d59594f8770dafb51d07b88b1fce37f0716cc24f5cf29f670cc5ef",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v15/reference_v15.json",
+      "bytes": 17121,
+      "sha256": "2b6c12ba16af2af9c768da56b6853ed4de719132709b30965fcbde0a3e23e59a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v16/reference_v16.json",
+      "bytes": 13519,
+      "sha256": "e74837a767d42c1a213d06a7030af40672bea8caee1e1ff66f2f9fad253506ff",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v17/reference_v17.json",
+      "bytes": 14001,
+      "sha256": "5232b8b02bb20726e1a02fb868afeed3a9c2b2888b441153d6adea406894a6de",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v18/reference_v18.json",
+      "bytes": 1157,
+      "sha256": "97b8c3d46eae038843324407c2d4fb70b9c0f0d300b550ba363f474e4af20b41",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v19/reference_v19.json",
+      "bytes": 36792,
+      "sha256": "490ee64583c0f4f34bdcd21ed59e870a19ea67d41659ca1c58f75c679ec315e6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v20/reference_v20.json",
+      "bytes": 42708,
+      "sha256": "d7a49b258f92579852ab113c382b9090cad0513e2f5da812ae611cc7bb0c5183",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v21/reference_v21.json",
+      "bytes": 10125,
+      "sha256": "052767e6255d1b80687b99902accb8938b8ba1540ff41028d3b90365051edef0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v22/reference_v22.json",
+      "bytes": 10475,
+      "sha256": "6fcfd7be5efdd3a80b3667cd129ea642f46dabf959b32418f4030ccfc8bc2ca4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v23/reference_v23.json",
+      "bytes": 12762,
+      "sha256": "50a6c2950f528044af117c8083ea39770b9999d5db6b28872cf1efad73001b26",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v24/reference_v24.json",
+      "bytes": 19721,
+      "sha256": "f5e944a9cc5ee5e9442761743943adb80c7505f1bee6f7cef31c318afa5fcce8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v25/reference_v25.json",
+      "bytes": 21384,
+      "sha256": "aef9f5ab833323981c6b3d95b1229e045932e3dfd6c6a1b33dbd0ccbc1e48c3a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v4/reference_v4.json",
+      "bytes": 1583,
+      "sha256": "49f852e5dd511fdc5acb35b2003c68edac9baeed9a001aeac34a422abb085347",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v5/reference_v5.json",
+      "bytes": 1670,
+      "sha256": "86f0afcda82eb485c1dac495587ce0fd841c926fea2ab0a23e2dfc416934e2b8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v6/reference_v6.json",
+      "bytes": 3330,
+      "sha256": "6349bb6aa0ce2fc1f548dc40718a2fd17cdac65499aa92cd5608a22187c69967",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v7/reference_v7.json",
+      "bytes": 5416,
+      "sha256": "4c349eebe0c82a1854b1e11c882b2c056f7d5dc2ab70a07ce4cf12cf2241a6cf",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v8/reference_v8.json",
+      "bytes": 7407,
+      "sha256": "1e92d08b51ebb1587fb9c68123e5212b76e24679f5567e1937c4f6edcd529b89",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/current_v9/reference_v9.json",
+      "bytes": 8335,
+      "sha256": "f782d2eab642275d448b0122bc945cafdf6e7e23a584337d86e8b2fb6416f42f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/legacy_v2/probelisten_5_listen_v2.json",
+      "bytes": 22408,
+      "sha256": "f17ead3f99f86010dca86a5db28a69e4a5be94df4798f2a6a8022aa7c9f022b4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/mondphasen-usno-2026.json",
+      "bytes": 6881,
+      "sha256": "cc4b94736a9ffe3920e2c4c4b6f2c08d555dc66a9e60efbac933d2d6f0c63998",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/README.md",
+      "bytes": 4055,
+      "sha256": "a9cee88d692612fafae3f33508f7fe1d530b81e18abfdfb68670b87ccadac38c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/rundgang/liste.png",
+      "bytes": 357174,
+      "sha256": "74b61d67391be028d817b110c50b8081a8c9d14279bb558d526e7d803bd21cc4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/rundgang/mein_tag.png",
+      "bytes": 460319,
+      "sha256": "a8bbe38bd9cfdbe6772d47b7c9b0c7af0c509b5642740cd9ad6203b1f07208e6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/rundgang/pinnwand.png",
+      "bytes": 394459,
+      "sha256": "cae26a2fa580cee0f3f41bda38a56958a151844dba4ee852a7aa87dd199f2a92",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/rundgang/suche.png",
+      "bytes": 422436,
+      "sha256": "0c76c94c8b1dabd960635b224944df690027d414df972fc758deac50f0706b25",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/rundgang/zeichnung.png",
+      "bytes": 258046,
+      "sha256": "8d70491a0a0c396eb51817e3af1c4c17c925455973ed977fc19b908012241ca6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/bilder/Architektin-171340787.jpeg",
+      "bytes": 4537844,
+      "sha256": "c424e24ce120598f30ed08024063028fab9ccc50545daa6877f4f1940f2bb0fd",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/bilder/Haus-auf-Statistik-1172003382.jpeg",
+      "bytes": 1346115,
+      "sha256": "8e701d5aff6e052e87e4d54f9e2a25fb4133ee8706f1545a9d9e93867d39655d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/bilder/Haus-in-gelb-666269411.jpeg",
+      "bytes": 2702595,
+      "sha256": "94534b6f1a5d6e0de19eec5bcc4cb86833f5f18a5dee53122be9ca86c5935954",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/bilder/Haus-in-weiß-1114004174.jpeg",
+      "bytes": 1207542,
+      "sha256": "29a371d7a7a71e09e3b724828e2f06728c996173f0d889e958a126477dc02f55",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/bilder/Helm-auf-Zeichnung-23388604.jpeg",
+      "bytes": 5013479,
+      "sha256": "73b884312fa03a06a41c76284268824ae165b6bc9d1938ee9b14d69bc6092e9e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/bilder/Tipps-in-der-Einrichtung-02.png",
+      "bytes": 6493904,
+      "sha256": "f259f3fd910f6e3f0127480c81872c3cec20f728987cda7142593dbf10895720",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/Glide-Showcase.glidebackup",
+      "bytes": 32971220,
+      "sha256": "d851ec21041c4c3c6ba9e0411eac3776bbe1cb157d60cf83b03718005f597239",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/Glide-Showcase.glidetemplates",
+      "bytes": 6066589,
+      "sha256": "f9acde7debe775e35b42eff841ef6a109083bb5c17f4f7e2939ce70fff233977",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/Glide-Showcase_App.glideapp",
+      "bytes": 37545916,
+      "sha256": "dbb9382b3c9fa9ba903a830b26fb7716dc43b41545a0d8cf2a8b5c11812ea290",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/manifest.json",
+      "bytes": 1575,
+      "sha256": "e85b6e177516008562f2081a099d7de4da52316b0b6b2c7ca5da9660736b6ed6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/quellen.json",
+      "bytes": 1722,
+      "sha256": "145c480bdea9f200972c10f5bd9e34c29de95681015359ba53d8e6985bd955b1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/README.md",
+      "bytes": 6197,
+      "sha256": "72f13c4bba0255cbe0b506ee008be5cce46e3402592f2dd83de7130510f7084f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/Showcase_starten.pyw",
+      "bytes": 2104,
+      "sha256": "8273249a7f885b52f873da25490dc46c384fa09dedfb2166ec3fa3b1235be319",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/wiederholungsregeln_fp02.json",
+      "bytes": 22726,
+      "sha256": "34ee2396e02376a2e4873cb1783d79a61597e07c83a3052fc1ec2d7b631d86c0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/audit_app.py",
+      "bytes": 35262,
+      "sha256": "d6f17856b4577cb4829773902d06bcd858a5c2e9a165ad7c2e8a165774f4c065",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_animation3400.py",
+      "bytes": 27805,
+      "sha256": "56635d375a0d22e9062aec47cd78f7d65519053ffae370c84fdc21a9bfa2b130",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_ansichten.py",
+      "bytes": 14231,
+      "sha256": "4b536d55ec43ea25999b280e32f1cf12edc89a730a01d731d397992fb2f326d9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_aufgaben3380.py",
+      "bytes": 49126,
+      "sha256": "ceb85c8d4ad8b2d16dc176a49d1f4c3a14f25b2b28d78e7a09e56ad50b99790c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_aufraeumen330.py",
+      "bytes": 19458,
+      "sha256": "96ef408b4a7c200f1d7f031092cb73b34f0d1e44a0525f9b09211914a5859bbf",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_auftraege.py",
+      "bytes": 12740,
+      "sha256": "7300f8930e9d25c9daee1048e685588530f0302c965dcbb240537e03e9c17c46",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_austausch3350.py",
+      "bytes": 15911,
+      "sha256": "5525da3a441c2b2cab474b938b03a9f1c1bea45db2bd001a852e4b03e0a2d4ee",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_bedienung33316.py",
+      "bytes": 9510,
+      "sha256": "24b5e0695dd9a0bcf30a6a9f84ff7326e34b0047237fad73c99865ceb71eb11b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_befunde330.py",
+      "bytes": 21613,
+      "sha256": "379e833e7dea67ad6cffdcc523205c6e00f489fee830c098aa59caf34a982507",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_bereiche3331.py",
+      "bytes": 10608,
+      "sha256": "65831151e10a25637de8cfd007e2c98f71cdd88c0497ec94f0526254d9e918ee",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_bilder330.py",
+      "bytes": 18366,
+      "sha256": "70b2498f749e09f1c805c6250f3829ff2cfc106f4c455add0820e67ac041e751",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_bildkonversion.py",
+      "bytes": 11556,
+      "sha256": "9562ea2192758c45deb661cc173ad6c7d6f3204fae4c067eed470c4f7f193d6a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_datenintegritaet.py",
+      "bytes": 27173,
+      "sha256": "99ad048b4f1246fcac654c7c96f1a233a1170ea0c7638fbcd64bd39da516e4fa",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_dialog_theme.py",
+      "bytes": 8556,
+      "sha256": "936726a328706644cb825de8b4c5396081caf37379665c52270da3d53f6ac5f4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_drag_performance3322.py",
+      "bytes": 13347,
+      "sha256": "321a823cb82098c312b2b5d4d84428d295b72a864fdc06426484af0ca8c26e7b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_drawing.py",
+      "bytes": 7348,
+      "sha256": "146586f18738b3c83210b5fa0a8acf3f8b188423735eb8138758f49673486ef5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_drawing330.py",
+      "bytes": 12209,
+      "sha256": "b4171e4304fa1c17ba189d0a0c9a6be8cb80a1d8d3ca18939c52be90bba71887",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_drawing_prototype.py",
+      "bytes": 5756,
+      "sha256": "f3ec12ae4c0e12fdb227404d2dccff9041ae6f2543814023f55af874a604f373",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_editor3338.py",
+      "bytes": 3679,
+      "sha256": "f1503cd2244942320a302f31d452350df43231e6d9f91fd97beba65eb4d6e0c4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_eingabe3333.py",
+      "bytes": 9631,
+      "sha256": "d353b441de08fcd445a94640b619d7d4a80aa79be61d1f4e312c5bbb96e7f245",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_eisenhower3335.py",
+      "bytes": 5637,
+      "sha256": "be5b5d73d39c0cb8f5fa02b8b3e2d67187a442971d771ef44b6f5aac8922edb8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_erwaehnungen.py",
+      "bytes": 10524,
+      "sha256": "2ede62aadc27e9582128d6d01d8793781049790baaec0a2a0642b0aa4e3411d5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_etappe1_332.py",
+      "bytes": 14184,
+      "sha256": "1f41ae58e711d231ce220f9b9ed1914f296933f3f0e1cdfdb4f2c5ec9e0bb945",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features311.py",
+      "bytes": 4757,
+      "sha256": "f8f2f097e4fcbb778577da8e956fe350fa64cdac6d6a6c38b6ba07d04ef53d1a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features312.py",
+      "bytes": 6794,
+      "sha256": "e8a2c93bd7d52918c2f6fb6769ad82814819410368e86769512a91dee5973c6f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features313.py",
+      "bytes": 3856,
+      "sha256": "bef60fe4c64d3a6e3106ea1953f850fb5950d338f23ae3c8f894f5a7f83705c8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features314.py",
+      "bytes": 13068,
+      "sha256": "54b45bbe84b16af92d07dfe1eb9107bd7de9314e9da384d862d1209076114f7a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features315.py",
+      "bytes": 16247,
+      "sha256": "fd6828ae631029d4b9014a922c280f9dab84544c47553a0a50c875764fe3d606",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features316.py",
+      "bytes": 14398,
+      "sha256": "420dbb8d694ca88684c66f9c07afdd94aca614722b07fd014244ddf5dc31e644",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features317.py",
+      "bytes": 11324,
+      "sha256": "ca73ad0578132310463b51934196979c63ed5584934d336ea9c2d44d43405fd2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features318.py",
+      "bytes": 23068,
+      "sha256": "307ab5aa4861b5ef2a5dd8004378110b70d02d5841f3164f827e64ab4183fc1d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features319.py",
+      "bytes": 21294,
+      "sha256": "9282bc54171f381e0ea25f5d01d9bcfb32ada5f27ae4ae8afcd66d8f5a5d721c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features320.py",
+      "bytes": 18556,
+      "sha256": "4fddc796417af5222d007b02bb6d914f48c32a1f6b42ca309aaa0ecfd6ca20d9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features321.py",
+      "bytes": 25663,
+      "sha256": "c7d2403461c12bb967c0905fa4ae7b6ef2822ca1ece7f48bb68b3dcd11980cf8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features322.py",
+      "bytes": 24107,
+      "sha256": "8299baf8dd3a327a0e935fb021c30092d8e1c5ee9d7381a0fbfe997bef8315fd",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features323.py",
+      "bytes": 32417,
+      "sha256": "68fff582f07137f239e97592b94518421daf796bda4a9822c81f20aaa2e4b670",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features324.py",
+      "bytes": 25341,
+      "sha256": "66cc1a9ee379d91bcbc228751ec687c9e5b432a78f8d03e51eeeba7e5e8b5c06",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features325.py",
+      "bytes": 25018,
+      "sha256": "93f0c6af2d92caff43264fc96775f0a3925ded2798ebad02ec6acd1a7b7fd41e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features326.py",
+      "bytes": 14850,
+      "sha256": "7ef29beb2113d8def3b6b5039dda2c421a24eecbd6f451689c199bd80164be53",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features328.py",
+      "bytes": 6165,
+      "sha256": "fe9f46adb05e5cf7c70dbeade2e202d649feb304f35808c794ad779365292009",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features329.py",
+      "bytes": 31949,
+      "sha256": "c7877e91d7332d3d350c121c534bc31e133fc9b34c945b607ad8f8f8ee955c2a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_features330.py",
+      "bytes": 133761,
+      "sha256": "a69e4b6c6d0ee7b738cef34699632c41efd2e40adafc74f6de15cea451f2ef21",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_fenster330.py",
+      "bytes": 13990,
+      "sha256": "876396a40d1fbf31278f3631edc8f62aab3b48598851814236f614684e2687f4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_festlayout330.py",
+      "bytes": 7105,
+      "sha256": "773d895e7b8d3327a4fea1cd6f44bc48118c5dc1e27c23f462ed0fda696f3147",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_fortsetzung33311.py",
+      "bytes": 10479,
+      "sha256": "4d8575416485f3dbca1c16a90c4f688d7ce1d912d9fdff6ddaa7904cc9f595d9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_fundament333.py",
+      "bytes": 3157,
+      "sha256": "13a8b9e5bd9160e37a1fbddac86eb8a2dad6c4f8616aa709caa74d61c6af86c0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_fundament3360.py",
+      "bytes": 12292,
+      "sha256": "2f0672f179650a5324012ba6e7cbc9d37e725b4a520bda857077cb577b375f7d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_glide.py",
+      "bytes": 177563,
+      "sha256": "6df2f17361d03a974105c95bd674e2d16b63854b17818eb1655ae3d316f1b894",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_glide_36.py",
+      "bytes": 2398,
+      "sha256": "a8bed4fc5854272686c8969dd3e10939c8642e26d5c8720b867fe320bcabda81",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_heute3336.py",
+      "bytes": 10116,
+      "sha256": "29a87d395ad08a39ed68ff1aaa45a04b4f1c45c2aeeeb1c1d2885de90fe6e1b7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_hintergrund330.py",
+      "bytes": 15517,
+      "sha256": "b1df8147f43df966d515a37a47036be7fdc7deafc6083fb8e134b10626ef0139",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_import3410.py",
+      "bytes": 25037,
+      "sha256": "57a97937fbbaf958241fc443373a65effce09ab6dc89fe393067721e7c7a67d1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_kartenfuss330.py",
+      "bytes": 10391,
+      "sha256": "948caf34e8f8c6d09b8af8da129efead98d5d09953c4e557915a163dc701cc41",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_kennzahlen33310.py",
+      "bytes": 9705,
+      "sha256": "3ea589e569f0815c46d364c7756a15382a6238a7ae44f0eeec89577390d396ac",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_klappmechanismen3321.py",
+      "bytes": 17745,
+      "sha256": "6d9aa94d70dd815966582c310eec58f00f3825910a674d1c992d48eaaffc4073",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_komfort33320.py",
+      "bytes": 27416,
+      "sha256": "cb309490e7a704c4466fd7b452ae176241129a9994ae825fd034cb99c5137133",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_kompression330.py",
+      "bytes": 8835,
+      "sha256": "d221ed1922485c2a566d8e779bc2d5f2b6173d34667b1a7ee3855a5af94d1925",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_kontrast330.py",
+      "bytes": 6913,
+      "sha256": "820d8c3d9c876dc77f3caf13095dd1ecc79ed44791732cf0489ee3928a384e0c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_library_performance3323.py",
+      "bytes": 19361,
+      "sha256": "a1d2890fc3b008fffa2fa37712c6b4fe9b6809aa9c9c9d7790c8b00d62f9141b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_logo330.py",
+      "bytes": 12582,
+      "sha256": "bf0e35bbcb64a54a6b98b9f5116bf0d0e3afa5b635e7c4c8fdf3b4702d66a6b0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_logo3370.py",
+      "bytes": 9123,
+      "sha256": "7d2ed5f3eb8f106d24caed6bfce4af1b511fce16b7ad2399c32bdb753dbc86e7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_markdownbaum.py",
+      "bytes": 7147,
+      "sha256": "a6dc1a2b7814d9f1faf885a05285cef5851fdec94beef2b1a1ae8545b3d0cc6c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_mindestgroesse330.py",
+      "bytes": 13995,
+      "sha256": "3db24793f5afbff3287e4e4c57a2182bddbc941169efce232edbca360c8bbad2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_notizbereich330.py",
+      "bytes": 18620,
+      "sha256": "45ba9f452ec445c004d1ca9c648069e78356a7f3f366178efb73fb9bb7db94c0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_oberflaeche33321.py",
+      "bytes": 17692,
+      "sha256": "c1b830ceb622fdd9ba0c9ee182aa140535277c120e459137f11001c6773ea961",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_paket3420.py",
+      "bytes": 5565,
+      "sha256": "e179d9483e47c55d0f152c6c67cc780a9d88eba603249dd281c343ad229d1acf",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_paketierung330.py",
+      "bytes": 4988,
+      "sha256": "4fb0e3a252fb3db9882ed73ee0ef76d79b695f33af4d28cf4ee40c5ab5c6a79d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_pixel3350.py",
+      "bytes": 9759,
+      "sha256": "e7be275f13eacef3eb8734a37522ce828ab4686e50f98f08e91cbdef74f6ab6c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_planen33313.py",
+      "bytes": 19817,
+      "sha256": "a39c1e6c084f75920f65bc41983df53937eff9e39e549d50362f46d0e9d6a030",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_release36.py",
+      "bytes": 12091,
+      "sha256": "a71c0ce35e4d40c99c24daebf0deda25e580e2f40bba236c820d4a47af9cfb4d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_release37.py",
+      "bytes": 16478,
+      "sha256": "15e3079c9c42cfa78132683bf3f8c258321cd293304a379acb369f9329c397d6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_reminders.py",
+      "bytes": 22556,
+      "sha256": "1623223e19f406daad3d007785ba84ed686e054ecced2e015b756b66fd942ded",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_rueckmeldung330.py",
+      "bytes": 18259,
+      "sha256": "02a8f3a83269db9d02b723e863fbebcaa264382018b0929dba31fb8ee212d26e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_schutzrunde.py",
+      "bytes": 35232,
+      "sha256": "fa731b2a6857c3c1fba4ba0b5e6cb3debc94ec88a9392f9625e25a5efbfa4e45",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_seiten330.py",
+      "bytes": 10712,
+      "sha256": "74f85b5eab640bf846676ffb93cb2616199ee95d3b79fe97f8eb4d37e9b6c6d9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_seiten33318.py",
+      "bytes": 23986,
+      "sha256": "70717937aafc13eb1e507d6d086d9231b9d7f5f022016b0fb3f0710b2fc7339f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_seitenkarten.py",
+      "bytes": 12905,
+      "sha256": "ee6de52077321c098cc8b4b830de7abd670a54893040878b7b13927aa6883a4e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_speicherlast330.py",
+      "bytes": 26332,
+      "sha256": "ecd5741ac38fa2063ebca70eb8131a16f54ef9163c76e969977ef64b7445cba6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_speichervergleich3339.py",
+      "bytes": 9074,
+      "sha256": "273a84fa723a13f8ade3c128065e4c93946c0804fb16e24a744efc6c86bb52fd",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_startseite3332.py",
+      "bytes": 7557,
+      "sha256": "63e01745116d3acd18c19cbb15123ceb91250294e2a98443d361a518a562da15",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_suche3337.py",
+      "bytes": 5566,
+      "sha256": "7d2fcbc58001e7e01a75ae09260718cf8684cac302b1e4485ccf8c68f25122e6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_tag3390.py",
+      "bytes": 40673,
+      "sha256": "cea993d4ec7a7de58bcdedccfe597e39d0d6915d2270c0d420d20535c3f0d6cc",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_tagpaket33314.py",
+      "bytes": 23778,
+      "sha256": "65b28068c7ff750f0901413ebb3eb8f5424d39bb60660ec6488dd4d7c5591906",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_template_workflows.py",
+      "bytes": 19570,
+      "sha256": "383357eaca44e33e3028cd123e20e2d5c1b70f8d47ecd898b30708b165b31dbd",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_tempo330.py",
+      "bytes": 6835,
+      "sha256": "b40baf97e2bf2c6cc2e58fb41e27f72d778cdcf57349f2ab9bcea809534983e1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_tempo33319.py",
+      "bytes": 17248,
+      "sha256": "1901c9a50f1dd7b14f1a2bce0535f9d5d92f7ae8a4878703f615bcb78a5fb355",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_titel33312.py",
+      "bytes": 9801,
+      "sha256": "9d05e7048111b3b8c37e75c7603556852a185caed9271065381351893e0aec1b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_ui39.py",
+      "bytes": 11263,
+      "sha256": "9a30ec952d782a8d42884bec4346335dce49066384997a8fbd021a9acd70d34e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_ui_followup36.py",
+      "bytes": 22375,
+      "sha256": "28675e1deab6423648af2bb1ef99e7185fded0bfb33c777180ecc8a5911ed2e5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_ui_polish36.py",
+      "bytes": 13932,
+      "sha256": "a717160e1fe6c6ea36d8c7ee6f09fedbd8498e545c875e983bd879cd6e3f0820",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_ui_updates.py",
+      "bytes": 14004,
+      "sha256": "79fa629352e5910db4247ff92c8510d24d2b90ae97a18a1cc095111f50c2edf0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_uiux_paket.py",
+      "bytes": 39824,
+      "sha256": "c2728634b28fbb0fd5f5234b4485deb7460422810a5d8c1a92338144e557cd1f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_vollpruefung325.py",
+      "bytes": 13971,
+      "sha256": "382b13db6f7241cf710907ae332dcdfee583884bf42fd5829d791c3831650b00",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_wiederholen.py",
+      "bytes": 24388,
+      "sha256": "1bfc89e82811bb9c6f3f0dc8a674dad1b8ee324e422c65eb46f1bc32f210a516",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_wiederholung3391.py",
+      "bytes": 10279,
+      "sha256": "e00d051bfc7cacf16d1e12d9fd119a369aca7f264cee8ffe6e99d84ae47ffbe3",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_wissen33315.py",
+      "bytes": 23254,
+      "sha256": "1b2141cccf101253ddb1e468eacb6764ded2e0dc13129a652d5936f9fdb6ab83",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_wissen3340.py",
+      "bytes": 24147,
+      "sha256": "56eedf0f9e49669683a0bd90f9f6c8d0a7582bdfeaf30bf40f2388ed9e84d3a8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_woche33317.py",
+      "bytes": 20866,
+      "sha256": "2c08d65bb32d14057960d06b74341bc6e6a3aaefc16b89da2c50e3d6c7cfe0dd",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_workspace310.py",
+      "bytes": 14958,
+      "sha256": "b34b5e1191d0527e318a5228be86a69c93021bb53a59f249c4b98f1043c94f3b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/test_zugang400.py",
+      "bytes": 18330,
+      "sha256": "e9fedd06f609120ba51acc3ab1ca9b9115896adc65b62eb5fea7a92204f6bd4d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/integration/vorversion.py",
+      "bytes": 2097,
+      "sha256": "7713a767c132a9f5423d7306d7f590fde138da15794cf611b294ac232d4673d3",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/ablagegroesse.py",
+      "bytes": 7664,
+      "sha256": "1333d6efb29deabcd465697febecbde4f84b5ba068fe97f00cf6445e0fc275b3",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/analyse_erreichbarkeit.py",
+      "bytes": 9509,
+      "sha256": "aa62a28521fd28a0e03ba9704a8e923f7dfde5f2c5fb9b0db4faf831916c74e1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/analyse_statisch.py",
+      "bytes": 9647,
+      "sha256": "b0c795e7ab7e423048e16430dd8552ce60c514dc45803797b8dd03be10b82d2c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/attributpruefung.py",
+      "bytes": 6101,
+      "sha256": "09ce2a312e6abfaa0a0b61bafa205c2f4e74610b8c66f349dd57f480601f77e2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/beispieldaten.py",
+      "bytes": 46420,
+      "sha256": "81868e04885d16d4d0cc9a0ac36e4e9b06204f8b3d4e2e4c9e9c3c8bc6719743",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/ci_grundstufe.py",
+      "bytes": 15910,
+      "sha256": "caa5ee2b51abf87002d32af6f9a314f15bbeaad4ccf8625cde55952030bbd192",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/dauerlauf.py",
+      "bytes": 12446,
+      "sha256": "021e593b96f87be6501bb4bb1831635a2f881ebb516a7fffb082901717f51c7b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/design_inventory.py",
+      "bytes": 4523,
+      "sha256": "bc89caf4c382cad04d3a936e1d4ded3771d84c0cadfb31f2c1c1141dd1c4c3b3",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/dublettenpruefung.py",
+      "bytes": 4874,
+      "sha256": "a0e01552a5c45ad158c09d6858f38e55df4321a7389ec82c9373f3fdd90e3a12",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/hintergrund/sitecustomize.py",
+      "bytes": 3775,
+      "sha256": "8797e2f5a89cbbe48821229c25a3a0161516e2227fbb422a868b9e50c3de43f1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/leistungspruefung.py",
+      "bytes": 2715,
+      "sha256": "e76d21a08e3d599feb8d5660675ee2b6782d57deb5fe3c272216d305698babb9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/linux_gegenproben.py",
+      "bytes": 9936,
+      "sha256": "dbc63498192441716cd3864d593dcd392d808e80ff0c6473dfeacab73726fcd9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/macos_native_accessibility.py",
+      "bytes": 4977,
+      "sha256": "cf03256c22db54bbb0512feeae0510c2fe4c5009f012f7bd5e39893861248270",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_atspi_lifetime.py",
+      "bytes": 3579,
+      "sha256": "56641b4bedf32542b6b06938eacc9ef4edc5c47b0e8f1d02fd92c858fd3b626e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_linux_runtime.py",
+      "bytes": 7788,
+      "sha256": "1b1517491af6aa91c2df41437a64d1466d2c9a7d75b316497eb6525a913c8d30",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_native_accessibility_skript.py",
+      "bytes": 4354,
+      "sha256": "e99eace401e2d96b5e760bc63df7ecfd29d5f4913f9ec7767d8526413304c3cc",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_native_atspi.py",
+      "bytes": 6602,
+      "sha256": "f8cb499f206302b7ab210a86970cd53efcb82dac277dba97b2fd1d137c06a112",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_native_tk91_macos.py",
+      "bytes": 9199,
+      "sha256": "94df364897a31f80124d032c5c57692feb57f5ae5be4becacd50c12d21dbaa3d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_reader_nvda.py",
+      "bytes": 8745,
+      "sha256": "0decf8822f7e5ce562699cc6c22f4a8d087fdb88bed37caa41ff779859304d74",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_reader_orca.py",
+      "bytes": 12907,
+      "sha256": "2e548a05e24a9a24babbccfeecfd44c1059cf6bd6a8e5a8010d27cdb83f31913",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_showcase.py",
+      "bytes": 15662,
+      "sha256": "b5ed47edf9f5a37b18aff625dad48197351ecf3cf149c862807c8efd6dfeaafe",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_tk.py",
+      "bytes": 2538,
+      "sha256": "f8817d0010efe9566e10ad4e100c1bf6b25738f7aaee06c08482423b3a9e2177",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_windows_msaa.py",
+      "bytes": 8429,
+      "sha256": "82f65de0c030341d39ed3b2ded018d16d908520b59b8126b1765a540680684d7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefe_windows_signatur.py",
+      "bytes": 3314,
+      "sha256": "f596aeb33f93f18ef6ec4d428273ba9f05461bea7ddac9c408f6d8a020379713",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/pruefen.py",
+      "bytes": 34939,
+      "sha256": "13a805819ff59227acfb18eb308fa8a0fc6312603c20cd56b2b45e83714fe7f6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/reader_app400.py",
+      "bytes": 4858,
+      "sha256": "dc54eaad53a29a5741bb86d583922dd4a1078ab7d443b7616c2e83bdf7f6ce65",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/reader_navigation.py",
+      "bytes": 455,
+      "sha256": "7541004b443a6095e8b242c507035704e1972782f6a4fc0e0d3d623c656437a8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/reader_nvda.py",
+      "bytes": 6634,
+      "sha256": "21b347d8aeaa8dc38ef4528a5a2f086751762c2e096b58b614255dcc7966a6a1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/reader_nvda_lock.json",
+      "bytes": 2493,
+      "sha256": "2e11ff3eb130b70fee85934c3eb4aad425073d789df2068ed6b77a785c8bc93a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/reader_x11.py",
+      "bytes": 2840,
+      "sha256": "57a90be7c4a1644493c0faa21eacbe8d3c0132bd618f1099e0a376b48820dfb5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/README.md",
+      "bytes": 6233,
+      "sha256": "9499f887562319f5c69b4147d702862b45fdecef80f7e001b6a893e67d0f9be5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/releasedaten.py",
+      "bytes": 69084,
+      "sha256": "54cd216a3b1a291b2d0dd15ccff7b6f4326ad817bb1a0d88f9161707be83a1a8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/rundgang.py",
+      "bytes": 11067,
+      "sha256": "ad1327a1db0a99f05401238ed99189bf5f7bc7e742a49a32eca1d4d4f93a1f60",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/screenshots.py",
+      "bytes": 10797,
+      "sha256": "d6e94f1869fb4f437d73823cf7bf87c6d2f406d0293452f1e85087b6991ba414",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/showcase.py",
+      "bytes": 22835,
+      "sha256": "9162f2985255c33e6c2e2631d75d1fba747443574361df30c4585d4f35d215af",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/standpruefung.py",
+      "bytes": 31929,
+      "sha256": "0d6c9563e299e064285c39a67c41a4e0586c419bdb764dbfe40b2ced70386659",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/symbolpruefung.py",
+      "bytes": 3706,
+      "sha256": "c74cc45b0de36675d28dd6cb5ee9adf88fb55ad7043e4011dc3e7cc0d2da0a3c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/synchronisationswaechter.py",
+      "bytes": 5363,
+      "sha256": "da8c896748116ec9ec9dc1ed1e71268a2d2578c63fef6866bc19634ac8de5e61",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_ablagegroesse.py",
+      "bytes": 5977,
+      "sha256": "a59a77609ef760c5b4f0b5155aeea609b16cd22539caebcbb80ba3bc7b2eb223",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_datenschutz.py",
+      "bytes": 2479,
+      "sha256": "99e0e5da137f6242ecea51c5b8cec3cc866018abeb98bd2b41273a4befdf331a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_design_richtlinien.py",
+      "bytes": 3175,
+      "sha256": "be5a27e4e25d51d324915afc53fe15a69ba51f5e8ea152571e862270b8aec615",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_native_atspi_consumer.py",
+      "bytes": 1021,
+      "sha256": "f89705a927b91fa1f8c4b8dffe6cccf54f055a7f39d35b4b73975eeb47034ea9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_compiled_contract.py",
+      "bytes": 1324,
+      "sha256": "25c0e4d96fd0b254bc7ac8d69f716822913aca7f43027b6668984b494f3d06a6",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_license_contract.py",
+      "bytes": 8545,
+      "sha256": "ab4ee9cd5060eb4046ee74725344c5c69352d9a3ff32afb6650a798f0049a897",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_macos_licenses.py",
+      "bytes": 2950,
+      "sha256": "b690df05b55fea42f14be75300b12edb53aaf9ada5d1b2aa49b0641100c8cdc0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_package_sources.py",
+      "bytes": 4290,
+      "sha256": "eaab6a19ba9139be91567191d3255d721ed335e18e9f6f33d1438fbf206b00c0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_runtime_paths.py",
+      "bytes": 3165,
+      "sha256": "fc57f7855f82db0ab7300d933da5c63d77e58e1a99e48aa529a32729ba7c335b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_runtime_provenance.py",
+      "bytes": 3747,
+      "sha256": "08625927b7a8fa10ca795228fb5418a802fb44b956551998cf3785ac1dacddc4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_start_isolation.py",
+      "bytes": 1627,
+      "sha256": "59fb0e8cf9fd3572710c0cb1290db63f74500d7e2c2dc6df4399844d6280dc51",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_windows_isolation.py",
+      "bytes": 14094,
+      "sha256": "c52d5ca86ace3dcf7020343ef11e0e2853d01cb3569b8f6cbebf84f86adb5ef0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_windows_licenses.py",
+      "bytes": 3107,
+      "sha256": "b1e0a4fa47480e77b879b0c767a36d8b79c48330cd7ae57d0044e60bad5eca08",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_paket_windows_native.py",
+      "bytes": 7384,
+      "sha256": "b47cb134515e99adc7e8ad79d779160bacf777ee25118fa7290534b0603043c0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_reader_app400.py",
+      "bytes": 1310,
+      "sha256": "17e015e8c5123d1645f541a2e17a55c7db3739b124084e4df160d04e76a18f68",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_reader_navigation.py",
+      "bytes": 1030,
+      "sha256": "bfcb3973d73724beb768a1e6e6d8f234fb895e268c5d85f4a7516f2777178eea",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_reader_nvda.py",
+      "bytes": 1846,
+      "sha256": "2519b970ce41a849af025e5c41ee79d1f099290a62484f71a2837be7c14b234a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_reader_orca.py",
+      "bytes": 2540,
+      "sha256": "b9141420e8796225ef02ab018d5562331d17e9974aeb78335d77cc81c08c8654",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_runtime_contract.py",
+      "bytes": 3363,
+      "sha256": "933bb86b7d01c551b11f626896cd998b94cbf3b0625e69653d206b8d6c531c16",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_runtime_patches.py",
+      "bytes": 3849,
+      "sha256": "18e9ccb37a8f7df6fe61508923167e912a36b3f5a47065e93b289dc206763001",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_standpruefung.py",
+      "bytes": 9899,
+      "sha256": "68847fdda5127fa0d5773712f10771646664a289a32a5ad3ae2a6c55a81aa75b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_synchronisationswaechter.py",
+      "bytes": 3665,
+      "sha256": "b859d85fa212051370ed62e59cee8dc5c89506f0332e21f52d5a7dc7afac4693",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/test_zugang_pruefvertrag.py",
+      "bytes": 910,
+      "sha256": "e7207194bf92e22492dcb2667cdfffab118ff9ac8f54f0a9ebe61dc191fdb1ca",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/titelmessung.py",
+      "bytes": 3206,
+      "sha256": "872118d59c7b39fad7df6918c56aad3f2c38a01360edf0fb37843ba91d048753",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/vorlagendaten.py",
+      "bytes": 25639,
+      "sha256": "09c203166236f1d1989e875175a150b3640181ed254ae01756bb4f9029b627f5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/windows_desktop.py",
+      "bytes": 5746,
+      "sha256": "8d3f317e9542e7e9b7d1d306fd89418f9fecbbdb962e48cb61f0b1b5cfcb8f71",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/windows_vollpruefung.cmd",
+      "bytes": 203,
+      "sha256": "bf1fbf4d7a69a22a7303304350f97098763eedaa21b671e381923f8670d92aae",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/windows_vollpruefung.ps1",
+      "bytes": 3024,
+      "sha256": "b64bff0992a4436b3bb62bc325fd32adc3de41a7b351001e6c8ef808654503c9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/zugang_pruefvertrag.py",
+      "bytes": 364,
+      "sha256": "bac1b3ab3dac450fc5adad80f32a97ab6bb7b69fbca577d7f6799061a53be5bb",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_accessibility.py",
+      "bytes": 5918,
+      "sha256": "c33bb63c7109c9d29b9041ef9dc1e926845d34a85b4cc2a47418f8437d90646f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_accessibility_bindings.py",
+      "bytes": 7192,
+      "sha256": "503bf3da461ce42cd5f23a8ea39f1ee43eb5a12c2925441f7d72720d13bc8803",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_action_catalog.py",
+      "bytes": 1563,
+      "sha256": "9a251b683da113501af9223823815d956b540b7d127f44069de04c591dadcdd4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_animation.py",
+      "bytes": 11900,
+      "sha256": "23ec469fce3ab9c1f9128412476d788edc0bc619f528a944ebb196501624df03",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_animation_entry.py",
+      "bytes": 2881,
+      "sha256": "cdd1f4efe4c12530e5310500f12236ccea603b3364faf40641164ab72d1d88ee",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_animation_export.py",
+      "bytes": 5039,
+      "sha256": "b2db485ed9812287bcc5ce7bc5d0c347500de678a5b99843ed374253c072d37a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_animation_snapshot.py",
+      "bytes": 2887,
+      "sha256": "2b2b4603a98256a3c7707e9faa17fbf36fb67a5ef575e194e2affcb85a2539eb",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_appearance.py",
+      "bytes": 2966,
+      "sha256": "557b30f19588066ccd60cba74e7fd1540d58224f9bd5a9b936c719202ef29f9c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_attachment_paths.py",
+      "bytes": 1073,
+      "sha256": "e70652d8ecfe8a28da4af832f42975f9bbe2e20b704fb8f76194dc8bc39db041",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_backup_diff.py",
+      "bytes": 3422,
+      "sha256": "1aa5e275a58f23af55cb922c086653eac5a2253e9aa16d57b7a82b75164c9df2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_backup_snapshot.py",
+      "bytes": 4245,
+      "sha256": "c2a3e0a9be6766a166eadd3ada45c876609dd14254b652a2ccd218fc327d18b3",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_busy_calendar.py",
+      "bytes": 10055,
+      "sha256": "f26f7cb65b54795d25eb286ed03bcae6360a6aea5705c7029f078ce1f8ff3151",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_calendar_service.py",
+      "bytes": 8455,
+      "sha256": "72fe0c9945988352543b8619e192a80f7d371faf849bd591782df21e97e29d5d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_capture_parser.py",
+      "bytes": 6801,
+      "sha256": "472cd53c79655ff9c04b1420b1c3a85c5e269bc29e840327df93c3cab1670f30",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_capture_reminder.py",
+      "bytes": 3463,
+      "sha256": "06e7ffa205b498a88e16b57a5e383a509d72bb1cae6acb3d0d2ada82e51898b7",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_capture_repeat_anchor.py",
+      "bytes": 6226,
+      "sha256": "7e372910207c3272bf192fe836bad5718762167e30229767cbae7c86fc1b49f9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_content_search.py",
+      "bytes": 5700,
+      "sha256": "4fd7e0220263f4739e075c47290a320050cdc4564a21d18a57e67497d30c6b1c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_core_accessibility.py",
+      "bytes": 25997,
+      "sha256": "cefa9df042b018ff7e1c61a0debc424e76ab0ceecacd3169fc664e5319e91270",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_daily_hints.py",
+      "bytes": 11494,
+      "sha256": "48eceb4ce66c79cb4bf513c3514c6ecbe953d8df444acc3310544a92a772e7da",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_data_lock.py",
+      "bytes": 8246,
+      "sha256": "45c36a496bae128a01a211c56855de98554bc32a03f918213019c7202e2ed2d3",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_day_proposal.py",
+      "bytes": 4109,
+      "sha256": "24dd50bdd0a4d23595f851cc6581411efeb6ea1daa67d78fb17e4b5ddf77e75c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_day_relief.py",
+      "bytes": 7324,
+      "sha256": "5f360bbfc697b0b90ce9e03cada587652caf829e855b9fdec458958a100831b1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_drawing_pixel35.py",
+      "bytes": 4451,
+      "sha256": "d92e0e72c15be8fc9c2d8ccdd9daee89add540e24e698c19b0e080e327fd375d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_editor_flush.py",
+      "bytes": 1852,
+      "sha256": "90d2826e8caa648b7ac4ab37886ae530bf30f24a7af072297bc70086ea60612d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_eisenhower.py",
+      "bytes": 1976,
+      "sha256": "1ea850e46717dbf1bc68266a7b9a9e277fe8447e89dd6126abd4e276bc504ed8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_exchange_patch.py",
+      "bytes": 4881,
+      "sha256": "e673c6b5c6d9484b306adc0f9761a446970607dad6765dc200a422537f3bda99",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_exchange_recipes.py",
+      "bytes": 4510,
+      "sha256": "fe6e72d2dc985cb1634af6804bb69820bb379446930d3b53e28c0a520747d100",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_filter_explain.py",
+      "bytes": 3369,
+      "sha256": "ebdd8df3d07f270be072b705f593e3f58db312a14773588809b27fa3670a5401",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_focus_timer.py",
+      "bytes": 3303,
+      "sha256": "83dcc17216ec134dbf834c8c4789cf6856b07c024ef51daedda60d50ede2bb75",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_glyph_metrics.py",
+      "bytes": 2826,
+      "sha256": "389b4eface32bb63a6f3308c26832819eca7f16e1030e3c21de687061cab5e9b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_home_tiles.py",
+      "bytes": 4366,
+      "sha256": "c09a2c2045afe8574b96d50d255d1fd55f2da7dff5c2326f5d49cf8b7d8c51b8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_ics_busy.py",
+      "bytes": 8980,
+      "sha256": "52c6423d8d0a06f7ec5eda7df96ef5dc51a4966b8ace8318f89b2dadc07e9e01",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_ics_edges.py",
+      "bytes": 5018,
+      "sha256": "88154166d31f813df87804d591f57fcc47abe5226b74deee74a7b8545251f80c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_ics_recurrence.py",
+      "bytes": 4777,
+      "sha256": "772fd2a31f78e1ea6df5b4d02580bef92952adeab11e1270b3d25a43238e4665",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_ics_timezone.py",
+      "bytes": 4797,
+      "sha256": "967349240b9567f2569b2f0b8d6aee1c2e23624f3a16a3cc1df39042b74cef10",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_image_conversion.py",
+      "bytes": 7519,
+      "sha256": "f3880797fa2e5273e79f9cf3b8b8abc7131780118cb35aaa71b677f29d093bca",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_incremental_comparison.py",
+      "bytes": 4468,
+      "sha256": "59a8ed2db220ae53035ee1e1d884366583843647f0f18975b7d96a30f49a69cd",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_interaction_policy.py",
+      "bytes": 5033,
+      "sha256": "f01d3e4d35d33431bead671951b48859ce5c305a44625d66d8369619be8c572c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_load_phases.py",
+      "bytes": 2402,
+      "sha256": "9af6df18332a5beb538812a5ab2dad2e089079d37c2529ddb37a2892c72a9354",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_logo_raster.py",
+      "bytes": 3141,
+      "sha256": "d1e8c5f0cf4974d6206c5f99c001ef1806a1ed30c114b8bd152356ce0d89140f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_markdown_tree.py",
+      "bytes": 9916,
+      "sha256": "9d4bbc22243fd8afe2a0805f6f057874990922e599a86c71a756a27dae3e9294",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_motion.py",
+      "bytes": 4538,
+      "sha256": "a7a3b22f66cf611bd512c057208d8766d5d160c63e17b8f54135bbd326f3f508",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_notion_archive.py",
+      "bytes": 13012,
+      "sha256": "3ff4d650d364c8a42dd681a370f7d4b8e2a4d335231528a0978bd77ace2129c1",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_notion_hierarchy.py",
+      "bytes": 4140,
+      "sha256": "378503166d72919f1c5bff950424a5f9e25e37f574bf7a3417763d87eeb323f9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_notion_import.py",
+      "bytes": 11987,
+      "sha256": "9cb93a699592a4852a5243723b1f642384c4d529edcffc4c314297ff166fad40",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_notion_import_bridge.py",
+      "bytes": 10139,
+      "sha256": "f69caf8dbd68782ff44799fa3e9cb57267d8e3ee2050702abeb1a383fec5ddd3",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_notion_reimport.py",
+      "bytes": 5771,
+      "sha256": "3ed7895b26d01217c33d1b7c1787a6a9b75054d4b90b558393d551fde151b3aa",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_notion_task_binding.py",
+      "bytes": 2917,
+      "sha256": "5b138992aaa5bd9cf0fca6d85925ef7e16b20e6896c96dfeecc22384ceb1babc",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_object_references.py",
+      "bytes": 3037,
+      "sha256": "f2820f351c5ae8b4730bece041662922d62c21d86c451ab08a955a63402edd22",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_occupied_grid.py",
+      "bytes": 7634,
+      "sha256": "d5223136c3723ee1f762da881905861e7b280145ece4299fdf269194aa1eb490",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_occupied_time.py",
+      "bytes": 3367,
+      "sha256": "25f790d71e6b7538fe5c7ee91a53bb4d974bf2e9cc800257a30eb873ad8aa42e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_page_features.py",
+      "bytes": 4808,
+      "sha256": "fe43bfa1d4f034e065387743b7168c66959a200230d321cb86b12408a1ceb5eb",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_page_markdown.py",
+      "bytes": 5993,
+      "sha256": "f61b5cf489159f5270faed75beb9f36fe29f0a26e6dc6775d1b8743cc155613d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_page_print.py",
+      "bytes": 2536,
+      "sha256": "5a6519eb42cb297f678e868fce3ba56aa22b811c652d214957ea311ab9b39528",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_page_restore.py",
+      "bytes": 12331,
+      "sha256": "5e60e2063caf7de726e4d40d1b0e9459e2bd6b863085c87a09f20f1cd5cd111d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_page_restore_bridge.py",
+      "bytes": 10850,
+      "sha256": "36ca9805bee72761ed59bb400ac3ec8027a8ed29d8c1023ed48a3dcff76777a2",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_paket2_klein.py",
+      "bytes": 3899,
+      "sha256": "947c49f84031fed382a78eca3f669f98d48936046d0e82769520a5217ac9e1e8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_pinboard_pages.py",
+      "bytes": 2976,
+      "sha256": "36d3d91d8cbf926760e1c373f4f5b6fd7b8eb982107cdc92b6898dfbe034b7aa",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_planning.py",
+      "bytes": 5352,
+      "sha256": "ea2f1b5c5119fdb73b96af60b42fe84218dc5919165cabe99a10e06a74e25b13",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_portable_source_bridge.py",
+      "bytes": 7412,
+      "sha256": "2fd8405a4c0cf40f4be25565b990bd673f8abe04e1edf4ed0978e10428f8148a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_preview_tools.py",
+      "bytes": 2258,
+      "sha256": "a9986f2e47482b73619658858e38b4e801c9e3ec6ed6859acb9fd0a743b4f6b8",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_release_notes.py",
+      "bytes": 4054,
+      "sha256": "cdda1bd16f09fb224135f7c66e1d6cf10a280bd080b3b6b75c28879720ef5db9",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_render_retention.py",
+      "bytes": 5338,
+      "sha256": "4052dd4f14e1ccd713eba134b864599fa8ef24d0f32ce46eeccf9833b4e7ee46",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_repeat_ics.py",
+      "bytes": 4699,
+      "sha256": "d7ceda27f33eb7a102ded0801d044702016f50a760179b9bbc14d8d528d01f48",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_repeat_rules.py",
+      "bytes": 5125,
+      "sha256": "a84cbcaa04c29127c48d58755e7c172b27b8a0564b38fa48a788333b44ba893d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_repeat_series.py",
+      "bytes": 4506,
+      "sha256": "cafbf5699f0ab629607b464d9c55e7c05f4730aff7797e4b5eff2a008bade451",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_restore_assets.py",
+      "bytes": 5816,
+      "sha256": "68002e2ac90048772a22522a87d00fcae84de15e32e852cf0bae65c174bdb031",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_retention.py",
+      "bytes": 4750,
+      "sha256": "974bda078525f652c044e0c2f90b268f280e10426e7cd36067dfb8ea6f5a4d64",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_routines.py",
+      "bytes": 3465,
+      "sha256": "99f7f49843d49a4a8433908c4898707bba0f4028fc844f49c51a2c1fb2b09f1f",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_runtime_check.py",
+      "bytes": 1416,
+      "sha256": "ac9b2910f69f620363e7db939c8fc023a146499f0e5fd4a56d019386660d402b",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_save_comparison.py",
+      "bytes": 8610,
+      "sha256": "6885f899d1623e931f77e232ca81448d226552e940fbbe6e9c25d4e06bc63aad",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_schema_backups.py",
+      "bytes": 6855,
+      "sha256": "c814da87ba91cd40cb0fd24dc6ab23a47b14a7b9ad651927dbf09c4103608b6c",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_schema_bridge.py",
+      "bytes": 9580,
+      "sha256": "01c3897b4d003ad9df6477bb8b90dd1387c552b10c80d7c90508627286453acc",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_sidebar_policy.py",
+      "bytes": 5035,
+      "sha256": "a6000efea2855ba07b37ac7f61bdd1846cd643ee8d289aa8c0e4665c54761efc",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_source_metadata.py",
+      "bytes": 13779,
+      "sha256": "ff775c3a5452298cd9dd344be7e57f6cf26adc30ab799c477faa8998dbeff3c0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_source_schema_bridge.py",
+      "bytes": 10771,
+      "sha256": "e595beac291ec38508b398dec575d9c47daa807971800b67dce569fba2e2ce53",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_structural_guard.py",
+      "bytes": 4439,
+      "sha256": "8af7d97d326863a78c6bb9fe4aa260d7f8dada3e4833bdb087882731a76c0a1a",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_svg_geometry.py",
+      "bytes": 3182,
+      "sha256": "148159060be6a78d62cfa0d5f14f014314f7486c34d2cd913e6ea26447ecdace",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_svg_sampling.py",
+      "bytes": 795,
+      "sha256": "57aa31214ed23a08cc90652dd3d48a20ac0c18b4e9d8b6764cec096545e02c62",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_symbol_policy.py",
+      "bytes": 3196,
+      "sha256": "87846fc2f6edf13dcf5f840d1783afc705e8b417675831ea48660025c536fade",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_task_editing.py",
+      "bytes": 5621,
+      "sha256": "a07a93a277be73c7da24e3ab2317531a2467a4c79de095f418a57eaf06d8b77d",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_task_references.py",
+      "bytes": 5485,
+      "sha256": "c009071edd861fb895daed20393d34335e871ee9972c48446ec7637a539850b5",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_timezones.py",
+      "bytes": 6035,
+      "sha256": "61350f1cb4508ed7d41f2a79626f48d2b13ef41921b6fe4dd943bb36d671b793",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_today_view.py",
+      "bytes": 4677,
+      "sha256": "2ff9822ea746f4c1fb5c545e5f15fd7eb33907b304fbb5b7c09aa6deadc64345",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_ui_design.py",
+      "bytes": 2195,
+      "sha256": "dbbe746eef27068e1a619dca75078fcb968a2cfe7c6209f481d53d66ade7a401",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_undo_history.py",
+      "bytes": 5202,
+      "sha256": "ebaaad713cbd033f919dfa6d7acf27ecab43f55326595425145edc28030ad4e0",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_unlinked_mentions.py",
+      "bytes": 4714,
+      "sha256": "e5b8e30734a28a78f848675405cba488cd4034687222bddbc73b34643db9ddd4",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_view_definition.py",
+      "bytes": 6677,
+      "sha256": "0e8adf579b4832353543eb5df53bef2973672a4d9b6d12728ec944067087344e",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_view_metrics.py",
+      "bytes": 5350,
+      "sha256": "5cd388993d31465e26bb1e95f58fc7af8b5361462b33420f6588d8d95b742841",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/unit/test_week_planning.py",
+      "bytes": 3019,
+      "sha256": "b173c93a9a5ddae28b97da801970cf727e0fcadcaac8aad21030c2e12eae0402",
+      "live_equal": true
+    },
+    {
+      "path": "01_Repository/Glide/VERSION",
+      "bytes": 8,
+      "sha256": "8a6b22ddf6b5c0192c39dd38d8a2c26cd68b6ca28e7284f74a917263c8e8009f",
+      "live_equal": true
+    },
+    {
+      "path": "CLAUDE.md",
+      "bytes": 5247,
+      "sha256": "069ecb1aa802af84059cf36e9009b904bfbab630dd7143485f3f2607c758b842",
+      "live_equal": true
+    },
+    {
+      "path": "README.md",
+      "bytes": 13687,
+      "sha256": "2115aa3bad56a46f1486a48eb1b3c5bb62b4b3bd51f711641e671e325eb5a59d",
+      "live_equal": true
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 3049,
+      "sha256": "1149298daf2411c96652d9a386954729c367630458f45bdf3e0c722e0129a7fa",
+      "live_equal": true
+    }
+  ]
+}

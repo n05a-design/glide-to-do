@@ -1,0 +1,29 @@
+{
+  "app_sha256": "9241d8df1ef3a18c72450f8bb73a1d82cd7b0306f1857e9447b9236fdc6bfb99",
+  "faelle": {
+    "aufklappen": {
+      "ok": true,
+      "messung": null
+    },
+    "link_undo_neustart": {
+      "ok": false,
+      "fehler": "'ListApp' object has no attribute 'undo'"
+    },
+    "beschreibung_menu": {
+      "ok": true,
+      "messung": null
+    },
+    "veraltet_schreibschutz_fehler": {
+      "ok": false,
+      "fehler": "ziel"
+    },
+    "oeffnen_fallen": {
+      "ok": true,
+      "messung": null
+    },
+    "tempo": {
+      "ok": false,
+      "fehler": "Aufklappen Median 189.9 ms > 150 ms"
+    }
+  }
+}

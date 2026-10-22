@@ -14,6 +14,14 @@ class ActionCatalogTests(unittest.TestCase):
         self.assertEqual(actions.group_for("export_as_csv"), "Export")
         self.assertEqual(actions.group_for("show_about_dialog"), "Programm und Hilfe")
 
+    def test_saved_view_actions_share_the_view_group(self):
+        # FP-03 Stufe 2: „Als Ansicht speichern …“ steht neben den gespeicherten
+        # Filtern; ohne Eintrag landete es in „Weitere Aktionen“ (Vollprüfung 3.44.0).
+        for name in ("show_manager", "capture_current", "explain_saved_filter"):
+            self.assertEqual(actions.group_for(name), "Ansichten", name)
+        for label in ("Gespeicherte Filter …", "Als Ansicht speichern …"):
+            self.assertEqual(actions.legacy_group(label), "Ansichten", label)
+
     def test_dynamic_variants_are_grouped_by_id(self):
         for name in ("backdrop.none", "backdrop.pixel-night", "grouping.eisenhower"):
             self.assertEqual(actions.group_for(name), "Ansichtseinstellungen")

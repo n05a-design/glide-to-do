@@ -1,0 +1,10 @@
+{
+  "probe": "Reiner Namespace-Leser mit 1001 gueltig geformten Kontexten",
+  "gespeichert": 1001,
+  "gelesen": 1000,
+  "fehlende_kontexte": [
+    "list:000000000000000000000000000003e8"
+  ],
+  "modul_sha256": "aed61d03b8e4ba82cf5d9865d49022a5fc1036a566424b0194b5779d5b5ba5be",
+  "status": "Fehler reproduziert; noch unveraenderter eingefrorener Stand"
+}

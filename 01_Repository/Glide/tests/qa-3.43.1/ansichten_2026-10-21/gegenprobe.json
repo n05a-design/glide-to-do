@@ -1,0 +1,29 @@
+{
+  "app_sha256": "ca2130336fe1a1f66341a4a995c4043da3373bd930ffe5579ae4d3fac09b0e2d",
+  "faelle": {
+    "bedingungen": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 271, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 56, in fall_bedingungen\n    assert ids(app, value) == {a['id']}\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "oder": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 271, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 78, in fall_oder\n    assert ids(app,value)=={a['id'],b['id'],c['id']}\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "persistenz": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 271, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 92, in fall_persistenz\n    assert raw['saved_view_conditions_v1']['view']==value['_view']\n           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nKeyError: 'saved_view_conditions_v1'\n"
+    },
+    "fehler": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 271, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 124, in fall_fehler\n    assert not app.saved_filters.save(criterion(_view={'effort':'none'}))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "altleser": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 271, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 152, in fall_altleser\n    assert after['saved_view_conditions_v1']==raw['saved_view_conditions_v1']\n           ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nKeyError: 'saved_view_conditions_v1'\n"
+    },
+    "dialog": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 271, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 217, in fall_dialog\n    assert not failure,failure\n           ^^^^^^^^^^^\nAssertionError: ['Traceback (most recent call last):\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_ansichten.py\", line 201, in act\\n    click(button(\\'Weitere Bedingungen\\'));run.idle()\\n          ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_ansichten.py\", line 194, in button\\n    return next(w for w in descendants(dialog) if isinstance(w,run.mod.RoundedButton) and w.text==text)\\nStopIteration\\n']\n"
+    }
+  }
+}

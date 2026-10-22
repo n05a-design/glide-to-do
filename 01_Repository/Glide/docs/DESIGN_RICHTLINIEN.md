@@ -1,6 +1,6 @@
 # Design Richtlinien
 
-Stand 16.10.2026 · Glide 3.43.1 · zentrale UI-/UX-Vorgaben; UI-/UX-Paket mit 3.43.1 umgesetzt
+Stand 22.10.2026 · Glide 3.44.0 · appweiter Gestaltungsvertrag; bestehendes UI-/UX-Paket und fortlaufende Übertragung
 
 Dieses Dokument sammelt die belegten Gestaltungsvorgaben des Inhabers und ihre Konsequenzen für Glide. Es ist agentenunabhängig lesbar; der Claude-Code-Skill `design-richtlinien` (`.claude/skills/design-richtlinien/`) verweist nur hierher. Produktentscheidungen stehen weiterhin in [Arbeitsrichtung](ARBEITSRICHTUNG.md), Produktgrenzen in [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md), technische Umsetzung in [Architektur](02_ARCHITECTURE.md), Funktionsverhalten in [Funktionen](20_FUNKTIONEN.md) und Aufgabenstatus im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Diese Zuständigkeiten nicht durch Kopien ersetzen.
 
@@ -117,3 +117,46 @@ Neue direkte Nutzeranweisungen mit Datum, Quelle und betroffenem Kontext hier in
 Die passende Prüfung in [Prüfplan](05_QA_TESTPLAN.md) und [manueller Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md) pflegen. Layoutattribute und automatische QA ergänzen die tatsächliche Sichtprüfung; sie ersetzen keine optische, Bedien-, DPI- oder Screenreaderabnahme. Ergebnisse gehören in den [QA-Bericht](07_QA_BERICHT.md). Die Namens- und Verweisprüfung des Skills läuft als `tests/tools/test_design_richtlinien.py` in der CI-Grundstufe.
 
 Bei jedem Paketabschluss zuletzt Dokumentation, Ablage, aktive Referenzen und Projektauftritt abgleichen (B22). Originalauftrag und offene Bildreferenzen als Eingangsbelege erhalten; erledigte/überholte Arbeitsdokumente nach [Dokumentenpflege](DOKUMENTENPFLEGE.md) zusammenführen und bereinigen.
+
+## Appweite Übertragung und zukünftige Entwicklung
+
+Der neue Inhaberauftrag verlangt mehr Einfluss dieser Richtlinien auf die **gesamte App** und ihre künftige Entwicklung. Die Regeln gelten deshalb für neue und angefasste Oberflächen einschließlich Import/Export, Fehlermeldungen, Vorlagen, Zeichnungen, Einstellungen und optionaler Integrationen. Der dokumentierte Geltungsbereich ist verbindlich; die bestehenden Ansichten sind dadurch nicht pauschal neu abgenommen. Bestehende Abweichungen werden über WA-32 im einzigen Entwicklungsplan bearbeitet.
+
+### Gemeinsame Komponenten und semantische Rollen
+
+Gleiche Bedeutung verwendet dieselbe Rolle und denselben Baustein: Kontextkopf, Titel/Untertitel/Inhalt/Metadatum, Abschnitt, Feld mit Label/Hilfe/Fehler, primäre/sekundäre/destruktive Aktion, Aktionsüberlauf, Karte, Vorschau und Zustandsmeldung. `ui_design.py`, Rollenfarben, `ICONS`, Schriften und vorhandene `ButtonFlow`-/Feld-/Modalbausteine sind erste Anlaufstelle. Abstände, Radien und Schriftgrößen an semantischen Rollen ausrichten. Fachlich unterschiedliche Editor-/Zeichnungsrollen dürfen begründet abweichen; keine globale Zahlenersetzung und keine allein dekorative neue Komponente.
+
+Ein Kontextkopf nennt die aktuelle Arbeit und ihre relevanten Zustände, ohne die eigentliche Dokumentüberschrift unnötig zu verdrängen. Wiederholung von Titeln ist je Kontext zu prüfen; D22 bleibt, bis eine konkrete Ergänzung ausgewählt ist. Eine gemeinsame Aktionsleiste priorisiert die häufige Handlung und führt weitere Aktionen in einen lesbaren Überlauf. Kürzel und Palette öffnen dieselbe Aktion. Der aktive Editor und das Ziel jeder Mutation bleiben eindeutig.
+
+Feldzustände sind erkennbar: normal, Fokus, ungültig mit konkreter Korrektur, deaktiviert mit Grund, gespeichert bzw. fehlgeschlagen. Erfolg wird erst nach tatsächlicher Wirkung gemeldet. Leere Ansicht, keine Suchtreffer, Ladezustand, fehlendes Bild, Fehler, Schreibschutz und Offline-Cache sind verschiedene Zustände. Notwendige Rückmeldungen bleiben auch bei ausgeschalteten Bedienhinweisen sichtbar. Farbe unterstützt Bedeutung; Text, Symbol und Fokus dürfen sie nicht allein voraussetzen.
+
+Vorschauen zu Import, KI, Restore und Export zeigen gewählten Umfang, wirksame Anweisung bzw. Änderungen, Verluste, Ziel und Abbruchweg vollständig lesbar. Kein abgeschnittener Text als einzige Kontrollmöglichkeit. Bei einem späteren Netzweg ist vor Übertragung sichtbar, welche Daten an welchen Dienst gehen. Der Dateiaustausch verwendet denselben verständlichen Kontrollpunkt.
+
+### Kontextmatrix für die gesamte App
+
+| Kontext | Gestaltungsauftrag / wiederverwendbarer Baustein | Nötige Bereichsprüfung |
+|---|---|---|
+| Kopf, Menü, Seitenleiste | ruhige Hierarchie, optisch ausgerichtete Symbole, lesbarer aktiver Kontext | lange Namen, schmale/ausgeblendete Leiste, große Schrift, Menü/Kürzel/Fokus |
+| Startseite / Gismo / Kacheln | Inhalt vor Dauerbedienung, konsistentes Raster, Vorschau mit Status | leere/volle Kacheln, Umbruch, Anpassung, Bildfehler, Hinweise an/aus |
+| Heute / Demnächst / Tagesplan | Titel und relevante Zeitlage, echte Feldsemantik | überfällig/leer, Tageswechsel, Uhrzeit, lange Titel, Metadaten bei Enge |
+| Liste / Labels / Suche | Treffer und Originalidentität, Aktionen an Auswahl | Auswahl/Fokus/Scroll nach Mutation und Undo, Trefferlücke, große Bestände |
+| Tabelle / gespeicherte Ansicht | gleiche Feldrollen, erklärbare Filter-/Sortierwirkung | viele Spalten, kein Treffer, ungültige Bedingung, Größenwechsel, Altleser |
+| Kalender / Wochenrückblick | Zeitinformation vorrangig, Einplanen verändert benanntes Feld | Umbruch der Aktionsreihen, Wochen-/Tageswechsel, Kapazität, Belegzeiten |
+| Pinnwand / Spaltenboard | Inhalt und Beziehungen, sparsame Werkzeuge, Original öffnen | kleine Kartenhöhe, leere Spalten, Verbindungen, Tastatur, Hostabbau |
+| Seite / Blockeditor | Lesefluss, sichtbare Einfügestelle, Kontextaktionen | lange Titel, Bild-/Textscroll, Flushfehler, Aufgaben-/Verweisidentität |
+| Notiz / Notizbuch / Buch / Ordner | zeitliche bzw. strukturelle Herkunft, Inhalt zuerst | leere Sammlungen, Datumswechsel, Umbenennung, Fokus-/Editorwechsel |
+| Galerie / Cover / Anhänge | Seitenverhältnis und Original schützen; Laden/Fehler/Retry benennen | kalte/warme Vorschau, fehlende/ersetzte Datei, Größenwechsel, Abbruch |
+| Pixel / Bildfolge / Palette | Werkfläche zuerst, kontextbezogene Werkzeuge und prüfbare Ausgabe | Zoom/Framewechsel, kleine Größe, Palette, Fokus, Undo, Exportvorschau |
+| Inspektor / Punktmaske | gleiche Feld-/Fehler-/Rhythmusrollen, gesicherte Aktionen | große Schrift, scrollbarer Inhalt/fester Fuß, kleine Größe, Schreibfehler |
+| Vorlagen / Auftragsdialog | Verwendungszweck vor technischem Detail, effektiven Inhalt lesen | lange eigene Vorlage, leere Auswahl, Musterantwort, Kopieren/Dateiausgabe |
+| Import / Export / Restore / Vergleich | Vorschau, Umfang, Verlust und eindeutiger Rückweg | Abbruch, kaputte Quelle, fehlender Anhang, Pfadlänge, Schreibschutz |
+| Einstellungen / Hilfe / Neuerungen | klare Abschnitte und Fluchten, erreichbarer Abschluss | Umfang/Scroll, große Schrift, Modal-/Tabfokus, Neustart, Hinweise |
+| Papierkorb / Archiv / Fehlermeldungen | kurze Zustandsaussage, Wiederherstellen von Löschen unterscheiden | leer/voll, Umbruch, fehlerhafter Rückweg, keine überdeckten Knöpfe |
+| P8 / Reader / Betrieb | semantischer Name/Zustand, sichtbarer Fokus und Tastaturalternative | echte Reader-/native Tests; Screenshot/Attribute ersetzen diese nicht |
+| Optionale Integrationen | Quelle/Cachealter/Übertragung/Zustimmung verständlich | offline, fehlende Rechte, Ablauf/Retry/Abbruch, volle Datenvorschau |
+
+### Verbindlicher Nachweis je neuem oder angefasstem UI-Paket
+
+Vor der Umsetzung betroffene Zeilen dieser Matrix und bestehende B-/D-Regeln nennen. Danach tatsächliche Screenshots und Geometrie-/Funktionsprüfung mit künstlichen Daten: mindestens 860 × 700 und 1280 × 800, mittlere/große Schrift, betroffene helle/dunkle/Verlaufsdesigns, lange deutsche Inhalte, Hinweise an/aus und die relevanten Leer-/Fehler-/Schreibschutzzustände. Modal-/Tastaturfokus, Auswahl/Scroll, Undo/Redo und aktiver Host gehören zum Ablauf. Eine Abweichung braucht Grund und Entscheidung bzw. klar markierten Vorschlag; „sieht modern aus“ ist kein Abnahmekriterium.
+
+Der [frische Audit 21.10.](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#135-frische-designprüfung-und-vollständiger-geltungsbereich) hat Umbruch/Knopfschutz in konkreten Fenstern bestätigt und Verbesserungskandidaten bei Seitenhierarchie, Boardwerkzeughöhe und KI-Auftragsvorschau gezeigt. Er umfasst 19 gesichtete eigene Aufnahmen, weitere Bereiche nur strukturell bzw. über bestehende Funktionstests. Die volle Kontextmatrix ist daher Arbeitsvertrag und Prüfumfang für künftige Pakete, keine Behauptung einer bereits abgeschlossenen appweiten visuellen/native Abnahme.

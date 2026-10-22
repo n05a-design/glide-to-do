@@ -1,0 +1,11 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "45354b6350f09638b80fd5e5a9740f15c337c3c128a74a097d9a5e8949454519",
+  "faelle": {
+    "sitzung": {
+      "ok": true,
+      "befund": "Lebender Besitzer geschützt; Erneuerung/Freigabe strikt, alte Tokens wirkungslos; Kopieren/Ordnerwechsel/Rückwechsel mit neuem Erwerb"
+    }
+  },
+  "fehler": []
+}

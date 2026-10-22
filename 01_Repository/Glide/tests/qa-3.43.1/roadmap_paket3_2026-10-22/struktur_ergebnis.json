@@ -1,0 +1,11 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "64d042d18f096b75c43bad349cb6247bcb5861f013cdc5bf494eadc740daa957",
+  "faelle": {
+    "struktur_ergebnis": {
+      "ok": true,
+      "befund": "Gruppieren/Auflösen, Farbe, Ordnerpapierkorb, Restore/Leeren: ehrliche Ergebnisse, ein Undo/Redo, No-op, voller Stapel und Neustart"
+    }
+  },
+  "fehler": []
+}

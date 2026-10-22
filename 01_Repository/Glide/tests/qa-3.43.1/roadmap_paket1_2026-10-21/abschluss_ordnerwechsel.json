@@ -1,0 +1,11 @@
+{
+  "app_sha256": "45354b6350f09638b80fd5e5a9740f15c337c3c128a74a097d9a5e8949454519",
+  "ok": true,
+  "checks": [
+    "Kopieren in neuen Ordner ohne Sperr-Hilfsdatei",
+    "Erwerb am Ziel",
+    "alte Sperre freigegeben",
+    "Objekte erhalten",
+    "Rückwechsel und erneuter Erwerb"
+  ]
+}

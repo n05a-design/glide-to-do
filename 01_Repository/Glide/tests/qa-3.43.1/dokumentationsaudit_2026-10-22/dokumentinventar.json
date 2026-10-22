@@ -1,0 +1,1988 @@
+{
+  "summary": {
+    "documents": 166,
+    "by_kind": {
+      "Agenteneinstieg": 2,
+      "Fixierte Gestaltungsreferenz": 1,
+      "Nutzerauftrag und Eingangsreferenz": 3,
+      "Aktive Projektdokumentation": 39,
+      "Erzeugte Liefer-/Paketkopie": 49,
+      "Dritt-/Paketlizenz oder Fremdhinweis": 29,
+      "Technische Abhaengigkeitsdeklaration": 4,
+      "Fixture-/Showcase-Quellanleitung": 2,
+      "Datierter Pruef-/Eingangsbeleg": 33,
+      "Showcase-Lieferanleitung": 2,
+      "Lieferarchiv-Anleitung": 1,
+      "Lieferdokumentation": 1
+    },
+    "by_git": {
+      "tracked": 103,
+      "ignored": 49,
+      "untracked": 14
+    },
+    "markdown": 85,
+    "local_links": 1162,
+    "link_status": {
+      "ok": 1162
+    },
+    "excluded_trees": [
+      ".git",
+      ".claude/worktrees/beautiful-babbage-196492",
+      ".claude/worktrees/glide-weiterarbeiten-618cb4",
+      ".claude/worktrees/jolly-noether-593099",
+      ".claude/worktrees/review-outdated-content-511443",
+      ".claude/worktrees/untitled-session-954211",
+      "01_Repository/Glide/src/glide/__pycache__",
+      "01_Repository/Glide/tests/integration/__pycache__",
+      "01_Repository/Glide/tests/tools/__pycache__",
+      "01_Repository/Glide/tests/unit/__pycache__"
+    ],
+    "head": "10427276b97e10528759cc42b0d23f757ca14843"
+  },
+  "documents": [
+    {
+      "path": ".claude/skills/design-richtlinien/LICENSE",
+      "kind": "Agenteneinstieg",
+      "purpose": "Fuehrt auf die verbindlichen appweiten Gestaltungsregeln",
+      "git": "tracked",
+      "bytes": 1091,
+      "sha256": "d24da413cccbc3d844929a1cc08e5ba79385139c0c47c9d5bd0dd2df24ffe15c",
+      "title": "",
+      "stand": [],
+      "lines": 21
+    },
+    {
+      "path": ".claude/skills/design-richtlinien/referenzen/bewegung-material-typografie.md",
+      "kind": "Fixierte Gestaltungsreferenz",
+      "purpose": "Herkunft des Gestaltungsskills; appweite Regeln stehen zentral",
+      "git": "tracked",
+      "bytes": 22946,
+      "sha256": "6193b76652dc73584c006a383209d71f5c61d03b42ee6dfb2ec10faa9a8ad2bd",
+      "title": "# Apple Design",
+      "stand": [
+        "Stand 16.10.2026 · Glide 3.43.1 · Fremdreferenz zu den Design Richtlinien (B20), kein aktiver Skill."
+      ],
+      "lines": 290
+    },
+    {
+      "path": ".claude/skills/design-richtlinien/SKILL.md",
+      "kind": "Agenteneinstieg",
+      "purpose": "Fuehrt auf die verbindlichen appweiten Gestaltungsregeln",
+      "git": "tracked",
+      "bytes": 1482,
+      "sha256": "2a0ae9f873ccc5b13536bbedaaf892f1654afa2b3820cf9ae1e4efb9686833ae",
+      "title": "# Design Richtlinien",
+      "stand": [],
+      "lines": 16
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/AUFTRAG.md",
+      "kind": "Nutzerauftrag und Eingangsreferenz",
+      "purpose": "Originalumfang und Zuordnung lokaler Bilder fuer weitere Umsetzung/Abnahme erhalten",
+      "git": "tracked",
+      "bytes": 8066,
+      "sha256": "358eb33b61312271762b738a90e93638e14edad6ed38288a97923f523ba0f910",
+      "title": "# Historischer Eingangsbeleg – Nutzerauftrag UI-/UX-Feature-Paket",
+      "stand": [],
+      "lines": 42
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/BILDREFERENZEN.md",
+      "kind": "Nutzerauftrag und Eingangsreferenz",
+      "purpose": "Originalumfang und Zuordnung lokaler Bilder fuer weitere Umsetzung/Abnahme erhalten",
+      "git": "tracked",
+      "bytes": 6789,
+      "sha256": "9a5a32f0afa4ee34c22eb486b9194d33e2872ed9c2e7dd8ae5a6592da39fe50d",
+      "title": "# Bildreferenzen zum UI-/UX-Feature-Paket",
+      "stand": [
+        "Stand 16.10.2026 · Glide 3.43.1 · 28 unveränderte, vom Benutzer bereitgestellte Originalbilder"
+      ],
+      "lines": 44
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md",
+      "kind": "Nutzerauftrag und Eingangsreferenz",
+      "purpose": "Originalumfang und Zuordnung lokaler Bilder fuer weitere Umsetzung/Abnahme erhalten",
+      "git": "tracked",
+      "bytes": 28353,
+      "sha256": "d17fc9557c9a4a796b74ec8aafbf01305fa6c6e99ddec00efee335d00e92cf20",
+      "title": "# Glide – Ausführungsprompt für das Feature-Paket UI und UX",
+      "stand": [
+        "Stand 16.10.2026 · Glide 3.43.1 · Status: seit D50 beauftragt und vorrangig; Umsetzung und Status im Entwicklungsplan §17"
+      ],
+      "lines": 223
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 136330,
+      "sha256": "12213c935403163e1f3ec6cfdc1375d53a197d4e0220d8f22e74875d5f4cae27",
+      "title": "# Glide – Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung",
+      "stand": [
+        "Stand 22.10.2026 · Glide 3.43.1 · Aufgabenformat 26 im aktuellen Kandidaten · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde"
+      ],
+      "lines": 651
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 260069,
+      "sha256": "433207fdd15d6881dac6b317ab364ffaba23cc65977c1953150b6bd4af63ec5f",
+      "title": "# Glide – Entwicklungsplan und Aufgabenstand",
+      "stand": [
+        "Stand 22.10.2026 · Glide 3.43.1 · Aufgabenformat 26"
+      ],
+      "lines": 1345
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 40013,
+      "sha256": "b25ed8e7faaa0d85e56000badcccc1355a803e3e7217410087793d70df3cae90",
+      "title": "# Manuelle Prüfung – Glide",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · manuelle Sitzungen offen; B1 automatisch geprüft"
+      ],
+      "lines": 403
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 114773,
+      "sha256": "e9212a72ffb6897300b15e3962c2cc073b0dc889c9364c33395656db02d2deab",
+      "title": "# Glide – Markt und Vorbilder",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Markt- und Integrationsanalyse; ältere Untersuchungen mit eigenem Abrufdatum"
+      ],
+      "lines": 476
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 13179,
+      "sha256": "dcd77968c5446d6a64f8c2bd18bdc390289ad0cc0455645858971a82b0f11a1d",
+      "title": "# Glide – Übergabe an eine neue Sitzung",
+      "stand": [
+        "Stand 22.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · lokaler Featurekandidat, getrennte Lieferung"
+      ],
+      "lines": 72
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/README.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 4103,
+      "sha256": "0b216e1ef65ae6c767725fa68824ba693be2ed1feab663efa4e10d96b5efa8c6",
+      "title": "# Arbeitsvorbereitung",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26"
+      ],
+      "lines": 24
+    },
+    {
+      "path": "01_Repository/Glide/AGENTS.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 5937,
+      "sha256": "4184f69f76bc5944732919b3483b014419e90b5b952830557dcb19360a43aa8c",
+      "title": "# Glide – Arbeitsregeln",
+      "stand": [],
+      "lines": 51
+    },
+    {
+      "path": "01_Repository/Glide/assets/README.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 1160,
+      "sha256": "38618cd5fa3f2d150833d0338df7a03acbedf32c4c6f3ca4ef184bbda550041e",
+      "title": "# Assets",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+      ],
+      "lines": 21
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/CLDR-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 2033,
+      "sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b",
+      "title": "",
+      "stand": [],
+      "lines": 41
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Glide-Lizenzstatus.md",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 266,
+      "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
+      "title": "# Lizenzstatus",
+      "stand": [],
+      "lines": 3
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Henry-Spencer-Regex-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1455,
+      "sha256": "8efb2d7215828acd974545d4177cadc7239d676c9a2c1a9834cab33efe9967fe",
+      "title": "",
+      "stand": [],
+      "lines": 27
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/IANA-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 252,
+      "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf",
+      "title": "",
+      "stand": [],
+      "lines": 5
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/libtommath-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1257,
+      "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a",
+      "title": "",
+      "stand": [],
+      "lines": 26
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/nanosvg.h-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1268,
+      "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818",
+      "title": "",
+      "stand": [],
+      "lines": 27
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/nanosvgrast.h-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1037,
+      "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9",
+      "title": "",
+      "stand": [],
+      "lines": 23
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/OpenSSL-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 10175,
+      "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+      "title": "",
+      "stand": [],
+      "lines": 177
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/PixelifySans-OFL.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 4488,
+      "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+      "title": "",
+      "stand": [],
+      "lines": 93
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/pyinstaller-COPYING.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 32604,
+      "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64",
+      "title": "# Copyright (c) 2005-2023, PyInstaller Development Team.",
+      "stand": [],
+      "lines": 648
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Python-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 13804,
+      "sha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+      "title": "",
+      "stand": [],
+      "lines": 277
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Python-THIRD-PARTY-NOTICES.rst",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 57595,
+      "sha256": "c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd",
+      "title": "",
+      "stand": [],
+      "lines": 1171
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/setuptools-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1107,
+      "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654",
+      "title": "",
+      "stand": [],
+      "lines": 21
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/SQLite-Copyright.html",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 8351,
+      "sha256": "44ca9f793055c8e32fc65f65a4f5bcf813a33f5bdaaa084067dd617a4ed3cc70",
+      "title": "",
+      "stand": [],
+      "lines": 242
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Tcl-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 2255,
+      "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16",
+      "title": "",
+      "stand": [],
+      "lines": 40
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Tk-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 2267,
+      "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198",
+      "title": "",
+      "stand": [],
+      "lines": 40
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/tkdnd-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1711,
+      "sha256": "3e752e3d3d249387b477e79e2566dfd076b706175129a1edee395ff66dad2641",
+      "title": "# tkdnd.tcl --",
+      "stand": [],
+      "lines": 38
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/XZ-COPYING.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 2774,
+      "sha256": "c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8",
+      "title": "",
+      "stand": [],
+      "lines": 65
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Zstandard-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1549,
+      "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8",
+      "title": "",
+      "stand": [],
+      "lines": 30
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/resources/fonts/LICENSE",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 8816,
+      "sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+      "title": "",
+      "stand": [],
+      "lines": 187
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/resources/fonts/OFL-PixelifySans.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 4488,
+      "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+      "title": "",
+      "stand": [],
+      "lines": 93
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/resources/timezones/LICENSE-CLDR.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 2033,
+      "sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b",
+      "title": "",
+      "stand": [],
+      "lines": 41
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/resources/timezones/LICENSE-iana.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 252,
+      "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf",
+      "title": "",
+      "stand": [],
+      "lines": 5
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/CLDR-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 2074,
+      "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6",
+      "title": "",
+      "stand": [],
+      "lines": 41
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Glide-Lizenzstatus.md",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 266,
+      "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
+      "title": "# Lizenzstatus",
+      "stand": [],
+      "lines": 3
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Henry-Spencer-Regex-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1455,
+      "sha256": "8efb2d7215828acd974545d4177cadc7239d676c9a2c1a9834cab33efe9967fe",
+      "title": "",
+      "stand": [],
+      "lines": 27
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/IANA-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 257,
+      "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551",
+      "title": "",
+      "stand": [],
+      "lines": 5
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/libmpdec-COPYRIGHT.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1285,
+      "sha256": "2713324211652ce4a60e6e21e54f9dc3004299e591b0933a352f1a89c5fb53c2",
+      "title": "",
+      "stand": [],
+      "lines": 23
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/libtommath-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1257,
+      "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a",
+      "title": "",
+      "stand": [],
+      "lines": 26
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/nanosvg.h-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1268,
+      "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818",
+      "title": "",
+      "stand": [],
+      "lines": 27
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/nanosvgrast.h-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1037,
+      "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9",
+      "title": "",
+      "stand": [],
+      "lines": 23
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/OpenSSL-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 10175,
+      "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+      "title": "",
+      "stand": [],
+      "lines": 177
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/PixelifySans-OFL.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 4488,
+      "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+      "title": "",
+      "stand": [],
+      "lines": 93
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/pyinstaller-COPYING.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 32604,
+      "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64",
+      "title": "# Copyright (c) 2005-2023, PyInstaller Development Team.",
+      "stand": [],
+      "lines": 648
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Python-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 35407,
+      "sha256": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68",
+      "title": "",
+      "stand": [],
+      "lines": 676
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/pywin32-ctypes-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1644,
+      "sha256": "dfa83b3e2709adfcdb838d9ad55823ca674abb780e60563d9dd9544ccbf785e9",
+      "title": "",
+      "stand": [],
+      "lines": 28
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/setuptools-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1107,
+      "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654",
+      "title": "",
+      "stand": [],
+      "lines": 21
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/SQLite-Copyright.html",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 8351,
+      "sha256": "44ca9f793055c8e32fc65f65a4f5bcf813a33f5bdaaa084067dd617a4ed3cc70",
+      "title": "",
+      "stand": [],
+      "lines": 242
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Tcl-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 2255,
+      "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16",
+      "title": "",
+      "stand": [],
+      "lines": 40
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Tk-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 2267,
+      "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198",
+      "title": "",
+      "stand": [],
+      "lines": 40
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/tkdnd-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1749,
+      "sha256": "d4764f73ef60ec2f61a1bd677cbbf0a945ce69377903c1366b0c18a9ef60f268",
+      "title": "# tkdnd.tcl --",
+      "stand": [],
+      "lines": 38
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/XZ-COPYING.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 2775,
+      "sha256": "bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c",
+      "title": "",
+      "stand": [],
+      "lines": 65
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/zlib-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1002,
+      "sha256": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
+      "title": "",
+      "stand": [],
+      "lines": 22
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/zlib-ng-LICENSE.md",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 867,
+      "sha256": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee",
+      "title": "",
+      "stand": [],
+      "lines": 19
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Zstandard-LICENSE.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 1549,
+      "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8",
+      "title": "",
+      "stand": [],
+      "lines": 30
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/resources/fonts/LICENSE",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 8816,
+      "sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+      "title": "",
+      "stand": [],
+      "lines": 187
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/resources/fonts/OFL-PixelifySans.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 4488,
+      "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+      "title": "",
+      "stand": [],
+      "lines": 93
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/resources/timezones/LICENSE-CLDR.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 2074,
+      "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6",
+      "title": "",
+      "stand": [],
+      "lines": 41
+    },
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/resources/timezones/LICENSE-iana.txt",
+      "kind": "Erzeugte Liefer-/Paketkopie",
+      "purpose": "Nur aus Quell-/Paketbau erneuern; Hash-/Lizenzbeleg des gebauten Stands",
+      "git": "ignored",
+      "bytes": 257,
+      "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551",
+      "title": "",
+      "stand": [],
+      "lines": 5
+    },
+    {
+      "path": "01_Repository/Glide/CHANGELOG.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 55272,
+      "sha256": "47326a8d1ec38ca01dd3c84bfa1445e761ddf7a6304fd4d8cda4a6128c1e5a43",
+      "title": "# Änderungsverlauf",
+      "stand": [],
+      "lines": 271
+    },
+    {
+      "path": "01_Repository/Glide/docs/00_INDEX.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 6076,
+      "sha256": "4906c44854f6714266585dd8e99185faeb025e52048175ffe986127136d2e5b2",
+      "title": "# Dokumentationsindex",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2"
+      ],
+      "lines": 57
+    },
+    {
+      "path": "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 11820,
+      "sha256": "ede85b790f3d7386a266e056bca6372b7a5b0500d94e7f8fc143fee98aa7dbfe",
+      "title": "# Produktgrenzen und Produktprinzipien",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+      ],
+      "lines": 92
+    },
+    {
+      "path": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 54384,
+      "sha256": "a737d3040686ed4ee071540cba905b0ed8d085a938e7540dbd36d28980f0e2bd",
+      "title": "# Architektur – Glide",
+      "stand": [
+        "Stand 22.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+      ],
+      "lines": 260
+    },
+    {
+      "path": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 45646,
+      "sha256": "762013ddb7c9ffc08e304ac6dad61c925cdb9f9ca4ebf56d7989a85598c3df7a",
+      "title": "# Prüfplan – Glide",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`"
+      ],
+      "lines": 175
+    },
+    {
+      "path": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 38978,
+      "sha256": "9b1aed4378fe560c7a38e51a4d4d1ed9487e7c680a0d731000fa02146d8a767a",
+      "title": "# Daten, Backups und Migration – Glide",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)"
+      ],
+      "lines": 242
+    },
+    {
+      "path": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 45558,
+      "sha256": "77a1b7477dcb390e46ed2b78baae8522b32105ece103bad242585db5587d5a47",
+      "title": "# QA-Bericht – Glide 3.43.1",
+      "stand": [
+        "Stand 22.10.2026 · Glide 3.43.1 · integrierter Prüfkandidat, getrennte Python-Lieferung und eigenständige Pakete 3.42.0 · Datenformat 26"
+      ],
+      "lines": 153
+    },
+    {
+      "path": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 18460,
+      "sha256": "f29ef8076eef30ddc0a7b26629cb1154f95b02a59538677de3830943e847f07c",
+      "title": "# Veröffentlichung – Glide",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 26"
+      ],
+      "lines": 146
+    },
+    {
+      "path": "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 114835,
+      "sha256": "fd87673a25f26dacc87db66e96d8dcabc7a1dc5cd49a677fd6b18eb4f7a8490d",
+      "title": "# Funktionen – Glide",
+      "stand": [
+        "Stand 22.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+      ],
+      "lines": 460
+    },
+    {
+      "path": "01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 8320,
+      "sha256": "f363dbb12c6c6a10aee654ec48e8e6e7c4253972170b03b169b11c4895966ae6",
+      "title": "# Vorlagen im Unternehmensalltag",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Vorlagenformat 2"
+      ],
+      "lines": 117
+    },
+    {
+      "path": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 49436,
+      "sha256": "4460676f5de1b5a5ba5955da2e8ecc1825faab464df3a40796b3a167c6c354b0",
+      "title": "# Arbeitsrichtung, Entscheidungen und Abnahme",
+      "stand": [
+        "Stand 22.10.2026 · Glide 3.43.1 · Aufgabenformat 26"
+      ],
+      "lines": 177
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/ABHAENGIGKEIT_TKDND.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 2780,
+      "sha256": "d32d8478e577a54304d7b398fda081a6c1a6b4591319edef2f892f34cd766eb3",
+      "title": "# Entscheidung: tkinterdnd2 für das Ziehen aus Finder und Explorer",
+      "stand": [
+        "Stand 16.10.2026 · Glide 3.43.1 · entschieden vom Inhaber am 27.09.2026"
+      ],
+      "lines": 57
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/ARBEITSBEGLEITER.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 5844,
+      "sha256": "f9b637bd99d78567d49d8c86f960207f7a0b7ac364fde53847f0a09035a33b75",
+      "title": "# Arbeitsbegleiter und Markenfigur – Konzept und Formatentscheidung",
+      "stand": [
+        "Stand 18.10.2026 · Glide 3.43.1 · gezeichnete Figur vorhanden; B03 im Quellstand; neue Bildassets offen"
+      ],
+      "lines": 52
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/GRUPPE_ORDNER_UEBERSCHRIFT.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 5636,
+      "sha256": "11865be2704a014a6db6703c03cc0d58896a79c121585d1bc4474c76a1c593a3",
+      "title": "# Gruppe, Ordner oder Zwischenüberschrift?",
+      "stand": [
+        "Stand: 16.10.2026 · Glide 3.43.1 · Entscheidung unverändert gültig, ergänzt um die Abgrenzung zum Gruppieren nach Feld (3.30). Die Checkliste aus 3.22 ist kein viertes Mittel: Sie gliedert einen einzelnen Punkt in Schritte ohne eigene Termine, Labels oder Anhänge."
+      ],
+      "lines": 119
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 7360,
+      "sha256": "96f3aeedd428738ee8e4fc6db1715f0e0e780c80094bb58202e6b16be56ae38e",
+      "title": "# Produkt- und Identitätsregister",
+      "stand": [
+        "Stand 21.10.2026 · App-Version 3.43.1 · Datenformat 26"
+      ],
+      "lines": 90
+    },
+    {
+      "path": "01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 11588,
+      "sha256": "9e05eea9b8bd7198487bd9ecd9d3ab05a3ea5b150358ee27ad589ae703fec0f5",
+      "title": "# Systembenachrichtigungen für Erinnerungen – Entscheidung",
+      "stand": [
+        "Stand: 16.10.2026 · Glide 3.43.1, Stufe B als Option umgesetzt (Tk 9, standardmäßig aus) · Ausgangspunkt: Glide 3.8.0, erste lokale Erinnerungsstufe."
+      ],
+      "lines": 185
+    },
+    {
+      "path": "01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 25128,
+      "sha256": "1a5ed560a31541ca27f6c3290d6a7b78ea5b0e027d4c732469335503db3d5d92",
+      "title": "# Design Richtlinien",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · appweiter Gestaltungsvertrag; bestehendes UI-/UX-Paket und fortlaufende Übertragung"
+      ],
+      "lines": 162
+    },
+    {
+      "path": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 9026,
+      "sha256": "cb6a1e4b17ea8a16553b464267697a0fa1c4187f4008e5b41f9bc85f89cb5911",
+      "title": "# Regeln für die Dokumentenpflege",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Datenformat 26"
+      ],
+      "lines": 63
+    },
+    {
+      "path": "01_Repository/Glide/LICENSE.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 266,
+      "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
+      "title": "# Lizenzstatus",
+      "stand": [],
+      "lines": 3
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/CLDR-LICENSE.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 2033,
+      "sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b",
+      "title": "",
+      "stand": [],
+      "lines": 41
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Glide-Lizenzstatus.md",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 266,
+      "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
+      "title": "# Lizenzstatus",
+      "stand": [],
+      "lines": 3
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Henry-Spencer-Regex-LICENSE.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 1455,
+      "sha256": "8efb2d7215828acd974545d4177cadc7239d676c9a2c1a9834cab33efe9967fe",
+      "title": "",
+      "stand": [],
+      "lines": 27
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/IANA-LICENSE.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 252,
+      "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf",
+      "title": "",
+      "stand": [],
+      "lines": 5
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/libtommath-LICENSE.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 1257,
+      "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a",
+      "title": "",
+      "stand": [],
+      "lines": 26
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/nanosvg.h-LICENSE.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 1268,
+      "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818",
+      "title": "",
+      "stand": [],
+      "lines": 27
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/nanosvgrast.h-LICENSE.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 1037,
+      "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9",
+      "title": "",
+      "stand": [],
+      "lines": 23
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/OpenSSL-LICENSE.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 10175,
+      "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+      "title": "",
+      "stand": [],
+      "lines": 177
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/PixelifySans-OFL.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 4488,
+      "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+      "title": "",
+      "stand": [],
+      "lines": 93
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/pyinstaller-COPYING.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 32604,
+      "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64",
+      "title": "# Copyright (c) 2005-2023, PyInstaller Development Team.",
+      "stand": [],
+      "lines": 648
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Python-LICENSE.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 13804,
+      "sha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+      "title": "",
+      "stand": [],
+      "lines": 277
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Python-THIRD-PARTY-NOTICES.rst",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 57595,
+      "sha256": "c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd",
+      "title": "",
+      "stand": [],
+      "lines": 1171
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/setuptools-LICENSE.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 1107,
+      "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654",
+      "title": "",
+      "stand": [],
+      "lines": 21
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/SQLite-Copyright.html",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 8351,
+      "sha256": "44ca9f793055c8e32fc65f65a4f5bcf813a33f5bdaaa084067dd617a4ed3cc70",
+      "title": "",
+      "stand": [],
+      "lines": 242
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Tcl-LICENSE.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 2255,
+      "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16",
+      "title": "",
+      "stand": [],
+      "lines": 40
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Tk-LICENSE.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 2267,
+      "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198",
+      "title": "",
+      "stand": [],
+      "lines": 40
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/tkdnd-LICENSE.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 1711,
+      "sha256": "3e752e3d3d249387b477e79e2566dfd076b706175129a1edee395ff66dad2641",
+      "title": "# tkdnd.tcl --",
+      "stand": [],
+      "lines": 38
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/XZ-COPYING.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 2774,
+      "sha256": "c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8",
+      "title": "",
+      "stand": [],
+      "lines": 65
+    },
+    {
+      "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Zstandard-LICENSE.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 1549,
+      "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8",
+      "title": "",
+      "stand": [],
+      "lines": 30
+    },
+    {
+      "path": "01_Repository/Glide/packaging/README.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 8026,
+      "sha256": "95a2f0cf9438a4332e5574e22f18f17e1a8577cdc14bed9d4cf1ca7b4a2dc023",
+      "title": "# Paketierung Glide",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+      ],
+      "lines": 94
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/README.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 5826,
+      "sha256": "cf759b800b9dbd27f71ff465151b745169e3c0d2d7d0f9ce117809fc9c62ebd4",
+      "title": "# Eigene Tcl/Tk-9.1-Runtime",
+      "stand": [
+        "Stand 18.10.2026 · Glide 3.43.1 · Vorbereitung von Paket 8 / 4.0.0, keine Lieferung"
+      ],
+      "lines": 33
+    },
+    {
+      "path": "01_Repository/Glide/README.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 4513,
+      "sha256": "9e04baebc72e352857b729efb40ac95568eb287a38eb6800a3d067e26322f4d2",
+      "title": "# Glide – lokale Aufgaben, Notizen und Pinnwände",
+      "stand": [],
+      "lines": 65
+    },
+    {
+      "path": "01_Repository/Glide/requirements/build-macos.txt",
+      "kind": "Technische Abhaengigkeitsdeklaration",
+      "purpose": "Maschinenlesbare Bau-/Entwicklungsanforderungen; keine laufend formulierte Fachdokumentation",
+      "git": "tracked",
+      "bytes": 345,
+      "sha256": "0710a3c3d12f1f718668390c2908ff76416e94e2e8af7a667584fcc71074d4f5",
+      "title": "# Bauabhängigkeiten des eigenständigen macOS-Pakets (Paket 7, D27). PyInstaller fest gepinnt;",
+      "stand": [],
+      "lines": 8
+    },
+    {
+      "path": "01_Repository/Glide/requirements/build-windows.txt",
+      "kind": "Technische Abhaengigkeitsdeklaration",
+      "purpose": "Maschinenlesbare Bau-/Entwicklungsanforderungen; keine laufend formulierte Fachdokumentation",
+      "git": "tracked",
+      "bytes": 510,
+      "sha256": "8ae9fc1d5ece9b46417664b394a52c68141895d6d56067683c1931dbabaa67a9",
+      "title": "# Bauabhängigkeiten des eigenständigen Windows-Pakets (Paket 7, D27). PyInstaller fest gepinnt;",
+      "stand": [],
+      "lines": 12
+    },
+    {
+      "path": "01_Repository/Glide/requirements/dev.txt",
+      "kind": "Technische Abhaengigkeitsdeklaration",
+      "purpose": "Maschinenlesbare Bau-/Entwicklungsanforderungen; keine laufend formulierte Fachdokumentation",
+      "git": "tracked",
+      "bytes": 58,
+      "sha256": "443ca2055b3f23908c9fce87a9488cfddd65cc03835dcce861bcae1f4a769c51",
+      "title": "# Aktuell keine zusätzlichen Python-Testabhängigkeiten.",
+      "stand": [],
+      "lines": 1
+    },
+    {
+      "path": "01_Repository/Glide/requirements/runtime.txt",
+      "kind": "Technische Abhaengigkeitsdeklaration",
+      "purpose": "Maschinenlesbare Bau-/Entwicklungsanforderungen; keine laufend formulierte Fachdokumentation",
+      "git": "tracked",
+      "bytes": 234,
+      "sha256": "c0a86c2100aac3df66e34b5d64f176ba5f98bda4f46b46d09c6e148ff952b8cc",
+      "title": "# Glide benötigt keine per pip nachzuinstallierende Python-Laufzeitabhängigkeit.",
+      "stand": [],
+      "lines": 3
+    },
+    {
+      "path": "01_Repository/Glide/scripts/pflege/README.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 8994,
+      "sha256": "6bf3633f8011f84cd7bb6bdcdcca82f4f8c9ceeac017dcd715e5a95e3bf71f8f",
+      "title": "# Pflegewerkzeuge",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26"
+      ],
+      "lines": 55
+    },
+    {
+      "path": "01_Repository/Glide/SECURITY.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 2860,
+      "sha256": "353926fc2cd2ea8f83a89462bf0665d3d5dc1b4fe33e1ef6b9b0eb5b5493bdcc",
+      "title": "# Sicherheit",
+      "stand": [],
+      "lines": 32
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/README.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 10399,
+      "sha256": "b441a62c494f6af0eb39fc8c04aa5c7e28c6b009c851d64638b1930c3b9e808e",
+      "title": "# Anwendungskern",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+      ],
+      "lines": 96
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/fonts/LICENSE",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 8816,
+      "sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+      "title": "",
+      "stand": [],
+      "lines": 187
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/fonts/OFL-PixelifySans.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 4488,
+      "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+      "title": "",
+      "stand": [],
+      "lines": 93
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/timezones/LICENSE-CLDR.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 2074,
+      "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6",
+      "title": "",
+      "stand": [],
+      "lines": 41
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/timezones/LICENSE-iana.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 257,
+      "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551",
+      "title": "",
+      "stand": [],
+      "lines": 5
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/vendor/tkinterdnd2/LICENSE",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 1072,
+      "sha256": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+      "title": "",
+      "stand": [],
+      "lines": 21
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/README.md",
+      "kind": "Fixture-/Showcase-Quellanleitung",
+      "purpose": "Erklaert Migrationsbelege bzw. Erzeugung/Isolierung von Testdaten",
+      "git": "tracked",
+      "bytes": 4206,
+      "sha256": "6596c340b67c1a8d04865d6c00fb34b8b9886b543e984a4d75bae18d33558397",
+      "title": "# Referenzdaten und Beispiele",
+      "stand": [],
+      "lines": 44
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/README.md",
+      "kind": "Fixture-/Showcase-Quellanleitung",
+      "purpose": "Erklaert Migrationsbelege bzw. Erzeugung/Isolierung von Testdaten",
+      "git": "tracked",
+      "bytes": 6418,
+      "sha256": "ae4dfd3756c9eede9b0fd6d8cb530be14ed0041097a48de10f4ffff97f06c65a",
+      "title": "# Glide · aktiver Showcase",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Lieferdaten in Speicherstufe 25"
+      ],
+      "lines": 53
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.39.0/tagesplanung_2026-10-12/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 6267,
+      "sha256": "dfccd2c6d08100ddbbe4031993625becb9a379bdf22cda938aba997f06543e66",
+      "title": "# Tagesplanung – Nachweisrahmen",
+      "stand": [
+        "Stand 13.10.2026 · Glide 3.39.0 · Aufgabenformat 23"
+      ],
+      "lines": 52
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.39.0/wettbewerbsanalyse_2026-10-13/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 4740,
+      "sha256": "af432d11f4d2416b1d2cf325a3ddcb850488d6e909c7929764314de673afa594",
+      "title": "# Wettbewerbs- und Open-Source-Analyse (13.10.2026)",
+      "stand": [
+        "Stand 13.10.2026 · Glide 3.39.0 · Nachlauf ohne neue App-Version · Referenz-Mac, nur Lesen und Dokumentation, kein GUI-Lauf"
+      ],
+      "lines": 37
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 2738,
+      "sha256": "1e094e0402f4097316cfda6328587c439ed58c74cf6bbc894f8d32c0717d7d36",
+      "title": "# Wiederholungen – Nachweisrahmen",
+      "stand": [
+        "Stand 13.10.2026 · Glide 3.39.1 · Aufgabenformat 23"
+      ],
+      "lines": 26
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.40.0/pixelanimation_2026-10-13/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 4629,
+      "sha256": "2c61a54aef1904570453c457b00636cc9d327f15df2531c67a159b6a9cc63f72",
+      "title": "# Pixelanimation – Nachweisrahmen",
+      "stand": [
+        "Stand 13.10.2026 · Glide 3.40.0 · Aufgabenformat 24"
+      ],
+      "lines": 35
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.41.0/notion_wiederherstellung_2026-10-13/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 6956,
+      "sha256": "a6533a80d309925ca06677e37a334fd523e610b3206bbca3f75cf65b5a2e9f0c",
+      "title": "# Notion-Import und Seitenwiederherstellung – Nachweisrahmen",
+      "stand": [
+        "Stand 13.10.2026 · Glide 3.41.0 · Aufgabenformat 25"
+      ],
+      "lines": 45
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.42.0/bestandspruefung_2026-10-15/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 9098,
+      "sha256": "2b2444ae6fac24c817766cb0313aa7ac24eb51c85fbba717a1d14c158983f3d0",
+      "title": "# Bestands- und Dokumentationsprüfung vor dem UI-/UX-Paket",
+      "stand": [
+        "Stand 15.10.2026 · Glide 3.42.0 · lokale Lieferbasis `05483a8` · keine Feature-Umsetzung"
+      ],
+      "lines": 64
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.42.0/eigenstaendige_pakete_2026-10-13/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 14302,
+      "sha256": "6b530dae0f792d35a0628715565780e54190caa1a625e57f0caedbeacbfacc70",
+      "title": "# Eigenständige Pakete 3.42.0",
+      "stand": [],
+      "lines": 41
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 3298,
+      "sha256": "2c08229e3063dec51614037f1fde53c2416ac3fc101f47caa7f9a1500756eaba",
+      "title": "# UI-/UX-Promptpaket – Dokumentationsnachlauf",
+      "stand": [
+        "Stand 15.10.2026 · Glide 3.42.0 · App- und Datenformat unverändert"
+      ],
+      "lines": 21
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.42.0/zugang400_vorbereitung_2026-10-14/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 25972,
+      "sha256": "0ec88beef95360ae1b892dc8178ada8960aed675829be9ecb7cfb46c3f340e8f",
+      "title": "# Zugangs-Vorbereitung für 4.0.0",
+      "stand": [],
+      "lines": 102
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.0/acl_symlinks_2026-10-16/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 4622,
+      "sha256": "cc8521badd521952b78fa3f1ae0e20fcc1da1b25367b8a4984c3900ec8bea433",
+      "title": "# Nachlauf 16.10.2026 – ACL-Restaurierung an Symlinks in der Windows-Paketprobe",
+      "stand": [
+        "Stand 16.10.2026 · Glide 3.43.0 unverändert (Apphash `379e97e3`, Datenformat 25) · Prüfwerkzeugnachlauf ohne neue App-Version · Windows 11 Pro, Python 3.14.7, künstliche Daten"
+      ],
+      "lines": 37
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 15496,
+      "sha256": "545f658fbd2024fc3bf73c5a1d60247a5a51f93d4e684608e269c8bed23c2fc5",
+      "title": "# UI-/UX-Paket 3.43.0 – Lieferung und Prüfung",
+      "stand": [
+        "Stand 16.10.2026 · Glide 3.43.0 · Datenformat 25 · Apphash `379e97e32e3cc5e52eeb104ec23937df28081b45bd0e63582d5065cd61a2b172`"
+      ],
+      "lines": 98
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/gitobjekte_vorher.txt",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 637173,
+      "sha256": "1c058a4d4d61af804c92cd3bfe539cb776487311335c2efab6c5c6336999d39f",
+      "title": "",
+      "stand": [],
+      "lines": 12213
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/gitrefs_vorher.txt",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 11911,
+      "sha256": "0847fd0d5905ad5a7e11e93efab221f80e17598d49f5275697550e702d55f670",
+      "title": "",
+      "stand": [],
+      "lines": 88
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 6700,
+      "sha256": "0239a7ba1fb25551974ce14c09386fc6c79da08f66737307cb8a6479b2f2d6a5",
+      "title": "# Globale Ablage- und Dokumentationsprüfung vom 18.10.2026",
+      "stand": [],
+      "lines": 42
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "untracked",
+      "bytes": 4618,
+      "sha256": "cd461e8ea2b4ca4a19f29412eb3cf7ac91a48a0d42c2a501d24f7e4e5494bb92",
+      "title": "# FP-03 Stufe 1 – erweiterte gespeicherte Ansichten",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · lokaler Kandidat"
+      ],
+      "lines": 25
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "untracked",
+      "bytes": 4271,
+      "sha256": "1ac7a5966a28bc070ccdfb7e1df8bf8af6a68cc235062674fa7a6a1227e8ce25",
+      "title": "# FP-03 Stufe 2 – gespeicherte Darstellung",
+      "stand": [],
+      "lines": 26
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "untracked",
+      "bytes": 5695,
+      "sha256": "7e71ad39a5eb40ba643227ec5d20f4def6b67ae2fa0994475740c2abd4e5074e",
+      "title": "# FP-06 – Wiederverwendbare lokale KI-Aufträge, 18.10.2026",
+      "stand": [],
+      "lines": 40
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "untracked",
+      "bytes": 4417,
+      "sha256": "6f02ede7432b632365b4999436c2fd9847fc5c6e3b160ec9e84563c356824308",
+      "title": "# WA-26 – Bildvorschauen ohne blockierenden Konverter",
+      "stand": [
+        "Stand 18.10.2026 · lokaler Prüfkandidat 3.43.1 / Format 25 auf PR #37 (`1042727`). Keine neue Lieferung."
+      ],
+      "lines": 27
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/codevalidierung_2026-10-21/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "untracked",
+      "bytes": 4292,
+      "sha256": "37198c08a18f9dba40f8281a7d90b9644f9af939c8d3d960574851d2274c6685",
+      "title": "# Einarbeitung der Codevalidierung – 21.10.2026",
+      "stand": [],
+      "lines": 23
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "untracked",
+      "bytes": 4894,
+      "sha256": "5c46fad4eaa2ea2693076e0cf1b2ed9db51be2a70217c408f42ef57a100d8fab",
+      "title": "# FP-05 – Unverknüpfte Erwähnungen, 18.10.2026",
+      "stand": [],
+      "lines": 35
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "untracked",
+      "bytes": 9403,
+      "sha256": "5af60ab8de571b14f9b1293d753d52e73708bef2c7fb6480edd118c526c95267",
+      "title": "# FP-07 Stufe 1 und FP-04 – Umsetzung und gemeinsame Prüfung",
+      "stand": [
+        "Stand 19.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · lokaler Prüfkandidat, keine Lieferung"
+      ],
+      "lines": 52
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/fp01_wiederholen_2026-10-17/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 5257,
+      "sha256": "fdb297e57dcd0b41aafce580e2574b1df6eab6cf3b29f2470f1237e21ca87b5e",
+      "title": "# FP-01 Wiederholen nach Rückgängig – Kandidat 17.10.2026",
+      "stand": [
+        "Stand 17.10.2026 · Kandidat auf Glide 3.43.1 (keine Lieferung, keine neue Version) · Datenformat 25 · Windows 11 Pro, Python 3.14.7, Tk 9.0.4, künstliche Daten"
+      ],
+      "lines": 34
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "untracked",
+      "bytes": 7639,
+      "sha256": "907220b59ee81beca62c691582edb45ba80858c86340875f7b1f5057f6637e1e",
+      "title": "# Breite Gesamtanalyse – 21.10.2026",
+      "stand": [],
+      "lines": 38
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/gitauftrag_2026-10-21/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "untracked",
+      "bytes": 2761,
+      "sha256": "e69e75ea74156b7dc40fb417ef416d66cd63b2e2ccd39ca7548fc97a54f8c6d7",
+      "title": "# Einmaliger Git-Auftrag – 21.10.2026",
+      "stand": [],
+      "lines": 13
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/kuerzel_linux_tk91_2026-10-16/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 9723,
+      "sha256": "9ccd345fa815aa23cfea3c7b4f088ffdac5ab4a3df9127a2106afc3aed7cb69f",
+      "title": "# 3.43.1 – Kürzel in Listen unter Linux/Tk 9.1",
+      "stand": [
+        "Stand 16.10.2026 · Glide 3.43.1 · Datenformat 25 · Apphash `ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3` · Windows 11 Pro, Python 3.14.7, Tk 9.0.4, künstliche Daten"
+      ],
+      "lines": 54
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "untracked",
+      "bytes": 8422,
+      "sha256": "26067e0f127011e6de082fc0bb0f20a261bc05a1ad0f5b780a93bc439d9f90e3",
+      "title": "# Erstes Roadmap-Paket – 21.10.2026",
+      "stand": [],
+      "lines": 51
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "untracked",
+      "bytes": 6544,
+      "sha256": "5910185a6f22a9ca8d440d79b3f87df32cf38f475debc894b709523be0fbb76a",
+      "title": "# Roadmap-Paket 3 – Strukturabschluss und Kalenderwechsel",
+      "stand": [],
+      "lines": 50
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 8168,
+      "sha256": "3b760ae2e39a1f3877b04aa93213c7fde86359194698432b317bd7cd0b02797e",
+      "title": "# Schutzrunde WA-27–WA-30 – Nachprüfung und Fortsetzung",
+      "stand": [
+        "Stand 18.10.2026 · Entwicklungskandidat auf `9ec474b` mit FP-01 · Version 3.43.1 und Datenformat 25 unverändert · keine Lieferung"
+      ],
+      "lines": 65
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 9363,
+      "sha256": "237234894dd9492e1249e3378b87b02ca5abd02e4f397f57f9cdf1685964bd29",
+      "title": "# Standanalyse und Dokumentationsnachlauf vom 18.10.2026",
+      "stand": [
+        "Stand 18.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · keine Produktionsrunde"
+      ],
+      "lines": 81
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/standaufnahme_2026-10-21/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "untracked",
+      "bytes": 3520,
+      "sha256": "d583a057417f3f91627ae46b5a6365e5f1b130b0bf157fdf821c36097756fb9a",
+      "title": "# Bestandsaufnahme und Dokumentabgleich – 21.10.2026",
+      "stand": [],
+      "lines": 22
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "untracked",
+      "bytes": 1221,
+      "sha256": "74f0705e7e7c88d4bfbfbedfd535619bab761553482c7c34c5db1d691c711b64",
+      "title": "# Aktive Bestandsprüfung – Beginn 18.10.2026",
+      "stand": [],
+      "lines": 5
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/wackelsuiten_windows_2026-10-17/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "tracked",
+      "bytes": 14502,
+      "sha256": "4237f8496252e427ab7a99970cb9bdce9693642ac76d6dff4e8b767c0f236356",
+      "title": "# Nachlauf 17.10.2026 – wackelnde Windows-Suiten `test_tag3390` und `test_template_workflows`",
+      "stand": [
+        "Stand 17.10.2026 · Glide 3.43.1 unverändert (Apphash `ed2b7eb6`, Datenformat 25) · Prüfwerkzeugnachlauf ohne neue App-Version · Windows 11 Pro, Python 3.14.7, Tk 9.0.4, künstliche Daten"
+      ],
+      "lines": 98
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/README.md",
+      "kind": "Datierter Pruef-/Eingangsbeleg",
+      "purpose": "Provenienz des jeweiligen Pruefstands; innerhalb der Versionsaufbewahrung erhalten",
+      "git": "untracked",
+      "bytes": 4017,
+      "sha256": "a432459b16184105d04014eb74e3620693bb49f7980240e3527fc0498cbe6039",
+      "title": "# FP-02 – beide Ausbaustufen im lokalen Kandidaten",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2"
+      ],
+      "lines": 28
+    },
+    {
+      "path": "01_Repository/Glide/tests/README.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 3245,
+      "sha256": "ac8611da4d1d3791021e1343a34b9ed27667c8fd5db7b8795acd0de8912311cd",
+      "title": "# Prüfungen für Glide",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · 101 Suiten aus `pruefen.py` und fünf Analysen"
+      ],
+      "lines": 35
+    },
+    {
+      "path": "01_Repository/Glide/tests/tools/README.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 6233,
+      "sha256": "675bf3d40ae9566b4beebe1cd09f69c18d7e42f4454d810b25e3dc89b156f4a2",
+      "title": "# Prüfwerkzeuge für Glide",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+      ],
+      "lines": 36
+    },
+    {
+      "path": "05_Probelisten_Testdaten/README.md",
+      "kind": "Showcase-Lieferanleitung",
+      "purpose": "Erklaert separaten Start und Testdaten; Lieferkopien statt zweiter Fachvertrag",
+      "git": "tracked",
+      "bytes": 2551,
+      "sha256": "2d2c59a5f7dbfa0e7125349b9832fde1171852a24baba7ed9ba66e2397e148d2",
+      "title": "# Probedaten",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Lieferdaten in Speicherstufe 25 · Vorlagen 2"
+      ],
+      "lines": 23
+    },
+    {
+      "path": "05_Probelisten_Testdaten/Showcase/README.md",
+      "kind": "Showcase-Lieferanleitung",
+      "purpose": "Erklaert separaten Start und Testdaten; Lieferkopien statt zweiter Fachvertrag",
+      "git": "tracked",
+      "bytes": 6418,
+      "sha256": "ae4dfd3756c9eede9b0fd6d8cb530be14ed0041097a48de10f4ffff97f06c65a",
+      "title": "# Glide · aktiver Showcase",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Lieferdaten in Speicherstufe 25"
+      ],
+      "lines": 53
+    },
+    {
+      "path": "07_Python-Versionen/Archiv/README.md",
+      "kind": "Lieferarchiv-Anleitung",
+      "purpose": "Lesbarkeit der aufbewahrten Lieferfassungen; kein aktueller Quellvertrag",
+      "git": "tracked",
+      "bytes": 994,
+      "sha256": "25bd71ae5f1af6d43113edeb7a98405c9e0e58867d23f16eb1eee48be7090bf2",
+      "title": "# Archiv – Python-Versionen",
+      "stand": [
+        "Stand 16.10.2026 · aktuelle Python-Fassung 3.43.1"
+      ],
+      "lines": 9
+    },
+    {
+      "path": "07_Python-Versionen/README.md",
+      "kind": "Lieferdokumentation",
+      "purpose": "Beschreibt den getrennten startbaren Python-Lieferstand",
+      "git": "tracked",
+      "bytes": 6545,
+      "sha256": "aa1ad4a4cebd52f58b3d1914c878b2212fa1bb7db5490c1731ec0caa9af94f17",
+      "title": "# Aktuelle startbare Python-Fassung",
+      "stand": [
+        "Stand 16.10.2026 · Glide 3.43.1 · Speicherstufe 25 · Vorlagenformat 2"
+      ],
+      "lines": 40
+    },
+    {
+      "path": "07_Python-Versionen/resources/fonts/LICENSE",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 8816,
+      "sha256": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+      "title": "",
+      "stand": [],
+      "lines": 187
+    },
+    {
+      "path": "07_Python-Versionen/resources/fonts/OFL-PixelifySans.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 4488,
+      "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+      "title": "",
+      "stand": [],
+      "lines": 93
+    },
+    {
+      "path": "07_Python-Versionen/resources/timezones/LICENSE-CLDR.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 2074,
+      "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6",
+      "title": "",
+      "stand": [],
+      "lines": 41
+    },
+    {
+      "path": "07_Python-Versionen/resources/timezones/LICENSE-iana.txt",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 257,
+      "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551",
+      "title": "",
+      "stand": [],
+      "lines": 5
+    },
+    {
+      "path": "07_Python-Versionen/vendor/tkinterdnd2/LICENSE",
+      "kind": "Dritt-/Paketlizenz oder Fremdhinweis",
+      "purpose": "Herkunft und Weitergabe; keine entbehrliche Themendublette",
+      "git": "tracked",
+      "bytes": 1072,
+      "sha256": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+      "title": "",
+      "stand": [],
+      "lines": 21
+    },
+    {
+      "path": "20_Grafik_Master/README.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 6882,
+      "sha256": "27952c2135e9a085595f5df53bc26cd3de13f207d8f0b0d092a93b0e6532c152",
+      "title": "# Grafik-Master",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+      ],
+      "lines": 92
+    },
+    {
+      "path": "CLAUDE.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 5493,
+      "sha256": "c7d9cabf1f08a87caec07d48924bda9833494acda7352bc3f2d84b3df9964eb8",
+      "title": "# Arbeitsregeln für Claude Code – Glide",
+      "stand": [
+        "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · lokaler Prüfkandidat, getrennt vom Lieferstand"
+      ],
+      "lines": 42
+    },
+    {
+      "path": "README.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 14888,
+      "sha256": "f16e274bf37a788d716f7d9e3ab4ec345c263e7634076ce63fab20ca33773499",
+      "title": "# Glide – lokale Aufgaben, Notizen und Pinnwände",
+      "stand": [
+        "Stand 22.10.2026 · Glide 3.43.1 · integrierter Prüfkandidat; getrennte Lieferung und Pakete im QA-Bericht"
+      ],
+      "lines": 92
+    },
+    {
+      "path": "SECURITY.md",
+      "kind": "Aktive Projektdokumentation",
+      "purpose": "Gepflegte Quelle fuer Einstieg, Entscheidungen, Fachvertrag, Planung oder Betrieb",
+      "git": "tracked",
+      "bytes": 3049,
+      "sha256": "1149298daf2411c96652d9a386954729c367630458f45bdf3e0c722e0129a7fa",
+      "title": "# Sicherheitsrichtlinie",
+      "stand": [],
+      "lines": 45
+    }
+  ]
+}

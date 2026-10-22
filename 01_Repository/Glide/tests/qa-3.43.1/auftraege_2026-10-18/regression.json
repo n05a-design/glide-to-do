@@ -1,0 +1,12 @@
+{
+  "austausch": {
+    "exitcode": 0,
+    "sekunden": 15.71,
+    "ausgabe": "test_austausch3350: OK; G24: Kontextpaket der Auswahl über „Für KI bereitstellen …“ – vier Aufgaben mit Ausgangsstand, Verweise statt Kennungen, Labels mit Namen; G24: Änderungsvorschlag über „KI-Ergebnis importieren …“ – Feldvergleich, Konflikt, Wiederholung und Unbekanntes benannt, Abbrechen ändert nichts, Übernahme nur des Anwendbaren nach Vorsicherung, ein Rückgängig-Schritt; G24: Version 1 mit „patch“ abgewiesen; Formatbeschreibung nennt den Vorschlag; F-03: „Sicherungen vergleichen …“ – automatische Sicherung gegen den Bestand (neu, entfernt, verschoben, geändert mit Feldern), Sicherungsdatei gegen sich selbst ohne Unterschied; keine Datei geschrieben\n"
+  },
+  "app_sicherung": {
+    "exitcode": 0,
+    "sekunden": 12.97,
+    "ausgabe": "OK: App-Backup mit Einstellungen, Vorlagen und Aktivität, Teilbereiche, Vorschau, Grenzen und Dialoge\n"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "app_sha256": "559c738d54d5e5323186715601f43498d2207b860893b2de207a5775aa872698",
+  "faelle": {
+    "vorruecken": {
+      "ok": true,
+      "messung": {
+        "erledigen_ueberspringen_undo_redo_neustart": true
+      }
+    }
+  }
+}

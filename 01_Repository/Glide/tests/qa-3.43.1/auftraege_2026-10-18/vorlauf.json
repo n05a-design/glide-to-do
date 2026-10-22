@@ -1,0 +1,22 @@
+{
+  "app_sha256": "056458f38e4e8c392d53602322fded76100c5c3e0fea24ba084c1e778ff0011e",
+  "faelle": {
+    "dateien": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 206, in main\n    globals()['fall_' + name](run)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 74, in fall_dateien\n    assert run.datei() == before, 'Bereitstellen verändert Aufgabenbestand'\n           ^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Bereitstellen verändert Aufgabenbestand\n"
+    },
+    "kopieren_ohne_auftrag": {
+      "ok": true
+    },
+    "eigener_neustart_backup": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 206, in main\n    globals()['fall_' + name](run)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 117, in fall_eigener_neustart_backup\n    app.show_exchange_export_dialog()\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app.pyw\", line 56049, in show_exchange_export_dialog\n    self.run_modal(dialog)\n    ~~~~~~~~~~~~~~^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 114, in modal\n    assert 'Eigener · Meine Zusammenfassung' == menu.variable.get()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "musterantworten": {
+      "ok": true
+    },
+    "fehler_scope": {
+      "ok": true
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "faelle": {
+    "galerie": {
+      "ok": true
+    },
+    "seite": {
+      "ok": true
+    },
+    "startseite": {
+      "ok": true
+    },
+    "titelbild": {
+      "ok": true
+    },
+    "pinnwand": {
+      "ok": true
+    },
+    "retry": {
+      "ok": true
+    },
+    "hostwechsel": {
+      "ok": true
+    },
+    "generation": {
+      "ok": true
+    },
+    "referenz": {
+      "ok": true
+    },
+    "warteschlange": {
+      "ok": true
+    }
+  },
+  "fehler": []
+}

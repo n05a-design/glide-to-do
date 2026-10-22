@@ -1,0 +1,17 @@
+{
+  "zeit_utc": "2026-10-21T07:26:13.764633+00:00",
+  "dokumentscope": 16,
+  "datei_und_ankerlinks": 443,
+  "davon_anker": 85,
+  "linkfehler": [],
+  "benutzerpfade_in_neuen_nachweisen": [],
+  "probensyntaxfehler": [],
+  "design_regeltests": {
+    "tests": 4,
+    "exit": 0
+  },
+  "standpruefung_exit": 0,
+  "git_index": [],
+  "grundstufe": "Einmaliger Git-Auftrag Exit 1, keine Wiederholung; Dokumentpruefung ist keine gruene Gesamt-CI",
+  "vorlauf": "Zwei gueltige Verzeichnislinks wurden im ersten eigenen Pruefer als fehlende Dateien gewertet; Zielpruefung auf Datei oder Verzeichnis korrigiert. Kein Dokumentfehler."
+}

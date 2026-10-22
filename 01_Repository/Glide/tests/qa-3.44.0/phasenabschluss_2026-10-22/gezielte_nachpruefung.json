@@ -1,0 +1,57 @@
+{
+ "zeitpunkt": "2026-10-22T17:16:52+02:00",
+ "plattform": "Windows 11, Python 3.14.7, Tk 9.0.4, künstliche Daten, GLIDE_DATA_DIR temporär",
+ "vorlauf": "vollpruefung_vorlauf01.json: 120 Schritte, 109 ausgeführt, 10 fehlgeschlagen, 1 übersprungen",
+ "befunde": [
+  {
+   "schritt": "test_glide",
+   "ursache": "Erwartung festes Format 25 für Beispiel- und Releasedaten; der Versionswechsel erzeugt sie mit Format 26 neu. Folgefehler: Sperrdatei beim Aufräumen nach Abbruch noch offen",
+   "art": "Prüferwartung",
+   "korrektur": "wieder DATA_SCHEMA_VERSION wie vor dem Kandidaten",
+   "nachpruefung": "grün"
+  },
+  {
+   "schritt": "test_features322, test_features325, test_features330 (Zeile 690), test_fortsetzung33311, test_bedienung33316",
+   "ursache": "Menüeintrag „Als Ansicht speichern …“ (FP-03 Stufe 2) ohne Gruppe im Aktionskatalog, daher „Weitere Aktionen“",
+   "art": "Produktfehler",
+   "korrektur": "action_catalog.py: capture_current und Beschriftung unter „Ansichten“; neuer Unit-Test, Gegenprobe mit Katalog aus 1042727 rot",
+   "nachpruefung": "alle grün"
+  },
+  {
+   "schritt": "test_features330 (Zeile 2274, nach Katalogkorrektur sichtbar)",
+   "ursache": "Erwartung data_format_written == 25 nach dem Speichern; seit FP-02 schreibt die App Format 26",
+   "art": "Prüferwartung",
+   "korrektur": "DATA_SCHEMA_VERSION",
+   "nachpruefung": "grün"
+  },
+  {
+   "schritt": "test_features321",
+   "ursache": "ICS-Fälle COUNT, n-ter Wochentag und Jahresintervall als „nicht abbildbar“ erwartet; FP-02 bildet sie ausdrücklich ab",
+   "art": "Prüferwartung",
+   "korrektur": "abbildbare Fälle positiv geprüft (Anzahl 10 bleibt erhalten), unabbildbare Fälle und Verlustbericht mit FREQ=HOURLY",
+   "nachpruefung": "grün"
+  },
+  {
+   "schritt": "test_markdownbaum",
+   "ursache": "Bytevergleich des Datenordners las glide.lock.acquire, die seit WA-31 während der Sitzung per OS-Sperre gehalten wird (Windows: PermissionError)",
+   "art": "Prüfwerkzeug",
+   "korrektur": "Sperrdateien vom Vergleich ausgenommen, wie beim Kopieren eines Datenordners in der App",
+   "nachpruefung": "grün"
+  },
+  {
+   "schritt": "Showcase (pruefe_showcase.py)",
+   "ursache": "Showcase enthielt nur die sechs alten Wiederholungsarten; REPEAT_KINDS umfasst seit FP-02 auch „serie“",
+   "art": "Showcase-Lücke",
+   "korrektur": "showcase.py ergänzt „Monatsabschluss an den Vertrieb“ (letzter Werktag im Monat); Showcase neu erzeugt",
+   "nachpruefung": "grün"
+  },
+  {
+   "schritt": "test_ui39",
+   "ursache": "Dropdown im 14. Durchlauf (dunkel) sofort geschlossen; Code seit 1042727 unverändert. Nicht reproduzierbar: drei Einzelläufe grün (17/17/16 s). Bewertung: Vordergrundwechsel des Windows-Desktops während des Laufs (Prüfplanregel zu Fokus und Sichtbarkeit)",
+   "art": "Prüfumgebung",
+   "korrektur": "keine",
+   "nachpruefung": "3/3 grün"
+  }
+ ],
+ "zusaetzlich": "857 Fachtests und 152 Werkzeugtests am korrigierten Stand grün; pruefe_showcase.py am neu erzeugten Showcase grün"
+}

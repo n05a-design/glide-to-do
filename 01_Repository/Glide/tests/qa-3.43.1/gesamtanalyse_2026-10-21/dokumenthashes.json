@@ -1,0 +1,34 @@
+[
+  {
+    "path": "00_Arbeitsvorbereitung/README.md",
+    "sha256": "0ef09d45a1044900a08dfd5640d7cc2ad58913a1908095b7a4b2e4f130c9a550"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "sha256": "d810009bc617535d2d6feaf48d983e427cb126594edb74aab750ebc961411817"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "sha256": "3af384dd941b237f42439019fc5215bdd560977acbc563701dde7accfe5bf81e"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "sha256": "1b270521dfe9ba53738cbe0ac2602c3b577598d8c8bf831abdc46cc756f68f37"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+    "sha256": "d109cb30525ea73762398f649a1a7cbe716baeea6dd6b9aa9246cae79899889f"
+  },
+  {
+    "path": "01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md",
+    "sha256": "1a5ed560a31541ca27f6c3290d6a7b78ea5b0e027d4c732469335503db3d5d92"
+  },
+  {
+    "path": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "sha256": "81ea09103e2a6cb2a9d31c1c71d7892183c29fa2caa474d3f2f7d72aae9783e7"
+  },
+  {
+    "path": "01_Repository/Glide/AGENTS.md",
+    "sha256": "4184f69f76bc5944732919b3483b014419e90b5b952830557dcb19360a43aa8c"
+  }
+]

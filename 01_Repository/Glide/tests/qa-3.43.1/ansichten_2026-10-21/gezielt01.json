@@ -1,0 +1,41 @@
+{
+  "app_sha256": "6398758d4a8afe5fea8bc82872c6a0aedece90931929c31759e3d219f4731c30",
+  "faelle": {
+    "bedingungen": {
+      "ok": true,
+      "messung": {
+        "treffer": 1,
+        "erklaerte_bedingungen": 3
+      }
+    },
+    "oder": {
+      "ok": true,
+      "messung": {
+        "oder_ueber_listengrenzen": true,
+        "unbekannt_auch_bei_oder_ungueltig": true
+      }
+    },
+    "persistenz": {
+      "ok": true,
+      "messung": null
+    },
+    "fehler": {
+      "ok": true,
+      "messung": null
+    },
+    "altleser": {
+      "ok": true,
+      "messung": {
+        "altleser_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3"
+      }
+    },
+    "dialog": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 198, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 163, in fall_dialog\n    assert not failure,failure\n           ^^^^^^^^^^^\nAssertionError: ['Traceback (most recent call last):\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_ansichten.py\", line 147, in act\\n    button(\\'Weitere Bedingungen\\').invoke();run.idle()\\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_ansichten.py\", line 146, in button\\n    return next(w for w in descendants(dialog) if w.winfo_class()==\\'Button\\' and w.cget(\\'text\\')==text)\\nStopIteration\\n']\n"
+    },
+    "tempo": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 198, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 182, in fall_tempo\n    assert median<=100,values\n           ^^^^^^^^^^^\nAssertionError: [233.3107000013115, 219.9840000102995, 211.2691999936942, 237.25710000144318, 235.04070000490174, 225.35940000670962]\n"
+    }
+  }
+}

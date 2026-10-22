@@ -1,0 +1,42 @@
+{
+  "faelle": {
+    "galerie": {
+      "ok": false,
+      "fehler": "Konverter im Tk-Hauptthread"
+    },
+    "seite": {
+      "ok": false,
+      "fehler": "Konverter im Tk-Hauptthread"
+    },
+    "startseite": {
+      "ok": false,
+      "fehler": "Konverter im Tk-Hauptthread"
+    },
+    "titelbild": {
+      "ok": false,
+      "fehler": "Titelbild startet weiterhin eigenen Thread"
+    },
+    "retry": {
+      "ok": false,
+      "fehler": "Konverter im Tk-Hauptthread"
+    },
+    "hostwechsel": {
+      "ok": true
+    },
+    "generation": {
+      "ok": true
+    },
+    "referenz": {
+      "ok": false,
+      "fehler": "Konverter im Tk-Hauptthread"
+    }
+  },
+  "fehler": [
+    "galerie",
+    "seite",
+    "startseite",
+    "titelbild",
+    "retry",
+    "referenz"
+  ]
+}

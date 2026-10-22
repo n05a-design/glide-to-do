@@ -1,0 +1,13 @@
+{
+  "dokumente": 62,
+  "dateiverweise": 898,
+  "abschnittsverweise": 116,
+  "fehler": [
+    {
+      "datei": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/README.md",
+      "zeile": 21,
+      "ziel": "dokumentverweise_abschluss.json",
+      "grund": "Dateiziel fehlt"
+    }
+  ]
+}

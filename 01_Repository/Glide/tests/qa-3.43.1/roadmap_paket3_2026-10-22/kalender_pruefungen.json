@@ -1,0 +1,23 @@
+{
+  "baseline": {
+    "tests": 11,
+    "failures": 0,
+    "source_sha256": "29d5f67a04cbfba1c5b778ef37770131f7c919dc882587366ff18c7614cc5789"
+  },
+  "counterprobe": {
+    "tests": 16,
+    "failures": 4,
+    "failing_cases": [
+      "source_change",
+      "disable",
+      "close",
+      "adopt"
+    ]
+  },
+  "final": {
+    "tests": 19,
+    "failures": 0,
+    "source_sha256": "13c8e3bd01f7dabda8a2101ec9250b970735de77e3a8fe33604db39ff0ab8943"
+  },
+  "timing_claim": "Event barriers; no native latency claim"
+}

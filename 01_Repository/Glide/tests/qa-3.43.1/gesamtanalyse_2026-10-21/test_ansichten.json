@@ -1,0 +1,82 @@
+{
+  "app_sha256": "916c77701bd645227a734a0f8a5f10be65046f0b5c6d29feeafac203debe72f2",
+  "faelle": {
+    "bedingungen": {
+      "ok": true,
+      "messung": {
+        "treffer": 1,
+        "erklaerte_bedingungen": 3
+      }
+    },
+    "oder": {
+      "ok": true,
+      "messung": {
+        "oder_ueber_listengrenzen": true,
+        "unbekannt_auch_bei_oder_ungueltig": true
+      }
+    },
+    "persistenz": {
+      "ok": true,
+      "messung": null
+    },
+    "fehler": {
+      "ok": true,
+      "messung": null
+    },
+    "altleser": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\AppData\\Local\\Temp\\glide-gesamtanalyse-20261021-ooths3uz\\snapshot\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 281, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\AppData\\Local\\Temp\\glide-gesamtanalyse-20261021-ooths3uz\\snapshot\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 149, in fall_altleser\n    child=subprocess.run([sys.executable,'-B','-c',code,str(old),run.data,str(REPO/'tests/integration')],capture_output=True,text=True,timeout=90)\n  File \"~\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\subprocess.py\", line 557, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\subprocess.py\", line 1221, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\subprocess.py\", line 1664, in _communicate\n    raise TimeoutExpired(self.args, orig_timeout)\nsubprocess.TimeoutExpired: Command '['~\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python314\\\\python.exe', '-B', '-c', 'import sys;sys.path.insert(0,sys.argv[3]);from test_schutzrunde import Lauf\\nr=Lauf(sys.argv[1],sys.argv[2]);assert r.app.save_settings();r.ende()', '~\\\\AppData\\\\Local\\\\Temp\\\\glide-gesamtanalyse-20261021-ooths3uz\\\\snapshot\\\\07_Python-Versionen\\\\Glide-Aufgaben-und-Listen_v3.43.1.pyw', '~\\\\AppData\\\\Local\\\\Temp\\\\glide-ansichten-71tfwzgn\\\\daten', '~\\\\AppData\\\\Local\\\\Temp\\\\glide-gesamtanalyse-20261021-ooths3uz\\\\snapshot\\\\01_Repository\\\\Glide\\\\tests\\\\integration']' timed out after 90 seconds\n"
+    },
+    "altfilter": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\AppData\\Local\\Temp\\glide-gesamtanalyse-20261021-ooths3uz\\snapshot\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 281, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\AppData\\Local\\Temp\\glide-gesamtanalyse-20261021-ooths3uz\\snapshot\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 177, in fall_altfilter\n    child=subprocess.run([sys.executable,'-B','-c',code,str(old),run.data,str(REPO/'tests/integration'),str(request)],capture_output=True,text=True,timeout=90)\n  File \"~\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\subprocess.py\", line 557, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\subprocess.py\", line 1221, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\subprocess.py\", line 1664, in _communicate\n    raise TimeoutExpired(self.args, orig_timeout)\nsubprocess.TimeoutExpired: Command '['~\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python314\\\\python.exe', '-B', '-c', 'import sys,json;from pathlib import Path\\nsys.path.insert(0,sys.argv[3]);from test_schutzrunde import Lauf\\nr=Lauf(sys.argv[1],sys.argv[2]);values=json.loads(Path(sys.argv[4]).read_text(encoding=\"utf-8\"))\\nprint(\"ERGEBNIS \"+json.dumps([sorted(row[4][\"id\"] for row in r.app.saved_filters.entries(v)) for v in values]));r.ende()\\n', '~\\\\AppData\\\\Local\\\\Temp\\\\glide-gesamtanalyse-20261021-ooths3uz\\\\snapshot\\\\07_Python-Versionen\\\\Glide-Aufgaben-und-Listen_v3.43.1.pyw', '~\\\\AppData\\\\Local\\\\Temp\\\\glide-ansichten-b2fpucov\\\\daten', '~\\\\AppData\\\\Local\\\\Temp\\\\glide-gesamtanalyse-20261021-ooths3uz\\\\snapshot\\\\01_Repository\\\\Glide\\\\tests\\\\integration', '~\\\\AppData\\\\Local\\\\Temp\\\\glide-ansichten-b2fpucov\\\\altfilter.json']' timed out after 90 seconds\n"
+    },
+    "dialog": {
+      "ok": true,
+      "messung": {
+        "scrollbarer_dialog_fester_fuss": true,
+        "abmessungen": [
+          [
+            780,
+            570
+          ]
+        ],
+        "schrift": "mittel"
+      }
+    },
+    "dialog_gross": {
+      "ok": true,
+      "messung": {
+        "scrollbarer_dialog_fester_fuss": true,
+        "abmessungen": [
+          [
+            780,
+            570
+          ]
+        ],
+        "schrift": "gross"
+      }
+    },
+    "tempo": {
+      "ok": true,
+      "messung": {
+        "punkte": 10000,
+        "reine_auswertung_ms": [
+          21.790200000396,
+          24.532499999622814,
+          25.326899994979613,
+          21.823600007337518,
+          22.12850000069011
+        ],
+        "median_ms": 22.12850000069011,
+        "grenze_ms": 100,
+        "app_auswertung_ms": [
+          104.62130000814795,
+          60.51990001287777,
+          65.25060000421945
+        ],
+        "app_quellen_unveraendert": true
+      }
+    }
+  }
+}

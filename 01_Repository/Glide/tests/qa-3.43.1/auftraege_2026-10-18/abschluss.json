@@ -1,0 +1,80 @@
+{
+  "syntax": {
+    "ok": true,
+    "detail": "335 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+  },
+  "versionen": {
+    "ok": true,
+    "detail": "VERSION, App, Hauptsuite und CHANGELOG: 3.43.1; Datenformat 25"
+  },
+  "dokumentation": {
+    "ok": true,
+    "detail": "Alle Dokumente einschließlich Archiv im Index; 220 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+  },
+  "stand": {
+    "ok": true,
+    "ausgabe": "Standprüfung gegen VERSION 3.43.1 · Ablage einschließlich Repository · 67 aktive Dokumente (42 fortgeschrieben, 19 festgeschrieben, 6 ohne Standaussage)\nAlle Standangaben passen zur Version; kein historisches Dokument behauptet einen aktuellen Stand.\n"
+  },
+  "diff_check": {
+    "ok": true,
+    "ausgabe": ""
+  },
+  "synchronisation": {
+    "ok": true,
+    "detail": [
+      [],
+      []
+    ]
+  },
+  "quellstand": {
+    "ok": true,
+    "abweichungen": [],
+    "dateien": 81
+  },
+  "vorherige_features": {
+    "ok": true,
+    "geaenderte_vorhandene_laufzeitdateien": [
+      "src/glide/app.pyw"
+    ],
+    "detail": "WA-26-/FP-05-Fachmodule und vorhandene Ressourcen bytegleich; App um FP-06 ergaenzt."
+  },
+  "geschuetzter_bestand": {
+    "ok": true,
+    "dateien": 783,
+    "abweichungen": [],
+    "verfahren": "Vollstaendige SHA-256, erweiterte Windows-Pfade auch ueber 260 Zeichen"
+  },
+  "dateilinks": {
+    "ok": true,
+    "dokumente": 42,
+    "links": 613,
+    "fehlend": []
+  },
+  "anker": {
+    "ok": true,
+    "geprueft": 104,
+    "fehlend": []
+  },
+  "datenschutz": {
+    "ok": true,
+    "umfang": "versioniert und nicht ignorierte neue Dateien",
+    "dateien": []
+  },
+  "pflichtsuite": {
+    "ok": true,
+    "beleg": "pflichtsuite_abschluss.json"
+  },
+  "fachpruefung": {
+    "ok": true,
+    "beleg": "fachpruefung.json"
+  },
+  "regression": {
+    "ok": true,
+    "beleg": "regression.json"
+  },
+  "gegenprobe": {
+    "ok": true,
+    "erwartet_rot": 5,
+    "beleg": "gegenprobe.json"
+  }
+}

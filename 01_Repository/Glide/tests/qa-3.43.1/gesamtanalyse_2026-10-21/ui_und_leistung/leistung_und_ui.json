@@ -1,0 +1,867 @@
+{
+  "app_sha256": "916c77701bd645227a734a0f8a5f10be65046f0b5c6d29feeafac203debe72f2",
+  "python": "3.14.7",
+  "platform": "Windows 11",
+  "processes": [
+    {
+      "index": 1,
+      "startup_with_import_ms": 5154.822,
+      "scenarios": [
+        {
+          "name": "render",
+          "first_ms": 65.263,
+          "warm_ms": [
+            51.036,
+            44.381,
+            46.547,
+            47.516,
+            40.736,
+            23.378,
+            56.744
+          ],
+          "median_ms": 46.547,
+          "p95_ms": 56.744,
+          "items": 100
+        },
+        {
+          "name": "search",
+          "first_ms": 2.234,
+          "warm_ms": [
+            2.042,
+            2.529,
+            2.09,
+            1.954,
+            1.83,
+            1.944,
+            2.114
+          ],
+          "median_ms": 2.042,
+          "p95_ms": 2.529,
+          "items": 100
+        },
+        {
+          "name": "filter",
+          "first_ms": 1.734,
+          "warm_ms": [
+            1.203,
+            1.176,
+            0.968,
+            1.197,
+            0.969,
+            0.924,
+            1.226
+          ],
+          "median_ms": 1.176,
+          "p95_ms": 1.226,
+          "items": 100
+        },
+        {
+          "name": "save",
+          "first_ms": 55.2,
+          "warm_ms": [
+            80.34,
+            26.793,
+            14.231,
+            16.362,
+            13.785,
+            13.814,
+            14.015
+          ],
+          "median_ms": 14.231,
+          "p95_ms": 80.34,
+          "items": 100
+        },
+        {
+          "name": "toggle_real_adapter",
+          "first_ms": 118.491,
+          "warm_ms": [
+            48.504,
+            62.366,
+            46.486,
+            79.372,
+            61.016,
+            80.631,
+            63.032
+          ],
+          "median_ms": 62.366,
+          "p95_ms": 80.631,
+          "items": 100
+        },
+        {
+          "name": "render",
+          "first_ms": 63.806,
+          "warm_ms": [
+            43.648,
+            75.216,
+            70.111,
+            48.892,
+            49.251,
+            76.563,
+            70.227
+          ],
+          "median_ms": 70.111,
+          "p95_ms": 76.563,
+          "items": 1000
+        },
+        {
+          "name": "search",
+          "first_ms": 6.263,
+          "warm_ms": [
+            4.987,
+            5.322,
+            5.624,
+            5.263,
+            5.432,
+            5.157,
+            5.438
+          ],
+          "median_ms": 5.322,
+          "p95_ms": 5.624,
+          "items": 1000
+        },
+        {
+          "name": "filter",
+          "first_ms": 12.431,
+          "warm_ms": [
+            12.591,
+            13.284,
+            11.556,
+            12.928,
+            11.516,
+            7.557,
+            8.569
+          ],
+          "median_ms": 11.556,
+          "p95_ms": 13.284,
+          "items": 1000
+        },
+        {
+          "name": "save",
+          "first_ms": 46.946,
+          "warm_ms": [
+            63.8,
+            64.588,
+            44.917,
+            41.375,
+            40.815,
+            42.019,
+            46.683
+          ],
+          "median_ms": 44.917,
+          "p95_ms": 64.588,
+          "items": 1000
+        },
+        {
+          "name": "toggle_real_adapter",
+          "first_ms": 161.752,
+          "warm_ms": [
+            119.187,
+            118.177,
+            118.325,
+            170.605,
+            155.525,
+            114.767,
+            102.727
+          ],
+          "median_ms": 118.325,
+          "p95_ms": 170.605,
+          "items": 1000
+        },
+        {
+          "name": "render",
+          "first_ms": 429.504,
+          "warm_ms": [
+            454.097,
+            362.997,
+            321.181,
+            384.886,
+            545.941,
+            329.037,
+            329.089
+          ],
+          "median_ms": 362.997,
+          "p95_ms": 545.941,
+          "items": 10000
+        },
+        {
+          "name": "search",
+          "first_ms": 25.568,
+          "warm_ms": [
+            24.085,
+            25.068,
+            40.666,
+            42.491,
+            41.704,
+            40.457,
+            42.964
+          ],
+          "median_ms": 40.666,
+          "p95_ms": 42.964,
+          "items": 10000
+        },
+        {
+          "name": "filter",
+          "first_ms": 140.96,
+          "warm_ms": [
+            80.695,
+            83.004,
+            78.609,
+            78.967,
+            81.122,
+            76.851,
+            88.839
+          ],
+          "median_ms": 80.695,
+          "p95_ms": 88.839,
+          "items": 10000
+        },
+        {
+          "name": "save",
+          "first_ms": 455.79,
+          "warm_ms": [
+            503.017,
+            414.202,
+            377.413,
+            443.042,
+            319.635,
+            315.456,
+            360.425
+          ],
+          "median_ms": 377.413,
+          "p95_ms": 503.017,
+          "items": 10000
+        },
+        {
+          "name": "toggle_real_adapter",
+          "first_ms": 1072.745,
+          "warm_ms": [
+            875.154,
+            1078.032,
+            734.076,
+            885.176,
+            857.817,
+            759.513,
+            819.682
+          ],
+          "median_ms": 857.817,
+          "p95_ms": 1078.032,
+          "items": 10000
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "startup_with_import_ms": 6643.453,
+      "scenarios": [
+        {
+          "name": "render",
+          "first_ms": 34.68,
+          "warm_ms": [
+            30.379,
+            28.249,
+            30.188,
+            30.527,
+            28.038,
+            28.657,
+            31.491
+          ],
+          "median_ms": 30.188,
+          "p95_ms": 31.491,
+          "items": 100
+        },
+        {
+          "name": "search",
+          "first_ms": 2.151,
+          "warm_ms": [
+            1.87,
+            1.871,
+            1.905,
+            1.875,
+            1.895,
+            2.369,
+            1.885
+          ],
+          "median_ms": 1.885,
+          "p95_ms": 2.369,
+          "items": 100
+        },
+        {
+          "name": "filter",
+          "first_ms": 1.182,
+          "warm_ms": [
+            1.1,
+            1.077,
+            1.181,
+            1.116,
+            1.088,
+            1.136,
+            1.081
+          ],
+          "median_ms": 1.1,
+          "p95_ms": 1.181,
+          "items": 100
+        },
+        {
+          "name": "save",
+          "first_ms": 22.877,
+          "warm_ms": [
+            23.671,
+            17.466,
+            17.258,
+            16.579,
+            16.515,
+            17.083,
+            17.925
+          ],
+          "median_ms": 17.258,
+          "p95_ms": 23.671,
+          "items": 100
+        },
+        {
+          "name": "toggle_real_adapter",
+          "first_ms": 157.719,
+          "warm_ms": [
+            75.208,
+            79.658,
+            62.783,
+            79.469,
+            66.633,
+            95.887,
+            70.897
+          ],
+          "median_ms": 75.208,
+          "p95_ms": 95.887,
+          "items": 100
+        },
+        {
+          "name": "render",
+          "first_ms": 100.134,
+          "warm_ms": [
+            59.397,
+            64.985,
+            62.504,
+            70.848,
+            70.9,
+            65.676,
+            73.185
+          ],
+          "median_ms": 65.676,
+          "p95_ms": 73.185,
+          "items": 1000
+        },
+        {
+          "name": "search",
+          "first_ms": 5.509,
+          "warm_ms": [
+            5.143,
+            5.086,
+            5.011,
+            3.033,
+            3.286,
+            3.136,
+            4.856
+          ],
+          "median_ms": 4.856,
+          "p95_ms": 5.143,
+          "items": 1000
+        },
+        {
+          "name": "filter",
+          "first_ms": 11.132,
+          "warm_ms": [
+            12.198,
+            11.446,
+            12.541,
+            12.619,
+            11.739,
+            12.127,
+            11.826
+          ],
+          "median_ms": 12.127,
+          "p95_ms": 12.619,
+          "items": 1000
+        },
+        {
+          "name": "save",
+          "first_ms": 56.059,
+          "warm_ms": [
+            57.285,
+            60.293,
+            62.035,
+            62.972,
+            54.611,
+            59.939,
+            61.506
+          ],
+          "median_ms": 60.293,
+          "p95_ms": 62.972,
+          "items": 1000
+        },
+        {
+          "name": "toggle_real_adapter",
+          "first_ms": 225.851,
+          "warm_ms": [
+            147.075,
+            174.437,
+            141.461,
+            164.346,
+            132.607,
+            153.984,
+            156.494
+          ],
+          "median_ms": 153.984,
+          "p95_ms": 174.437,
+          "items": 1000
+        },
+        {
+          "name": "render",
+          "first_ms": 535.616,
+          "warm_ms": [
+            360.763,
+            362.473,
+            530.587,
+            354.839,
+            336.74,
+            458.427,
+            473.246
+          ],
+          "median_ms": 362.473,
+          "p95_ms": 530.587,
+          "items": 10000
+        },
+        {
+          "name": "search",
+          "first_ms": 44.228,
+          "warm_ms": [
+            39.993,
+            38.079,
+            41.43,
+            38.561,
+            31.635,
+            40.855,
+            43.856
+          ],
+          "median_ms": 39.993,
+          "p95_ms": 43.856,
+          "items": 10000
+        },
+        {
+          "name": "filter",
+          "first_ms": 149.316,
+          "warm_ms": [
+            121.483,
+            135.649,
+            133.017,
+            87.568,
+            117.225,
+            120.977,
+            102.537
+          ],
+          "median_ms": 120.977,
+          "p95_ms": 135.649,
+          "items": 10000
+        },
+        {
+          "name": "save",
+          "first_ms": 351.301,
+          "warm_ms": [
+            381.326,
+            362.255,
+            309.486,
+            318.54,
+            366.495,
+            387.181,
+            304.108
+          ],
+          "median_ms": 362.255,
+          "p95_ms": 387.181,
+          "items": 10000
+        },
+        {
+          "name": "toggle_real_adapter",
+          "first_ms": 943.304,
+          "warm_ms": [
+            648.034,
+            819.597,
+            657.667,
+            848.5,
+            832.126,
+            780.835,
+            775.893
+          ],
+          "median_ms": 780.835,
+          "p95_ms": 848.5,
+          "items": 10000
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "startup_with_import_ms": 4951.77,
+      "scenarios": [
+        {
+          "name": "render",
+          "first_ms": 32.398,
+          "warm_ms": [
+            25.152,
+            25.025,
+            24.639,
+            24.037,
+            26.604,
+            25.534,
+            25.42
+          ],
+          "median_ms": 25.152,
+          "p95_ms": 26.604,
+          "items": 100
+        },
+        {
+          "name": "search",
+          "first_ms": 1.618,
+          "warm_ms": [
+            1.244,
+            1.163,
+            1.232,
+            1.186,
+            1.533,
+            1.64,
+            1.159
+          ],
+          "median_ms": 1.232,
+          "p95_ms": 1.64,
+          "items": 100
+        },
+        {
+          "name": "filter",
+          "first_ms": 0.856,
+          "warm_ms": [
+            0.993,
+            0.663,
+            0.643,
+            0.644,
+            0.638,
+            0.637,
+            0.667
+          ],
+          "median_ms": 0.644,
+          "p95_ms": 0.993,
+          "items": 100
+        },
+        {
+          "name": "save",
+          "first_ms": 14.773,
+          "warm_ms": [
+            21.093,
+            20.276,
+            20.9,
+            20.123,
+            20.367,
+            20.475,
+            23.624
+          ],
+          "median_ms": 20.475,
+          "p95_ms": 23.624,
+          "items": 100
+        },
+        {
+          "name": "toggle_real_adapter",
+          "first_ms": 183.585,
+          "warm_ms": [
+            61.039,
+            81.635,
+            62.727,
+            68.698,
+            54.309,
+            69.85,
+            54.696
+          ],
+          "median_ms": 62.727,
+          "p95_ms": 81.635,
+          "items": 100
+        },
+        {
+          "name": "render",
+          "first_ms": 120.799,
+          "warm_ms": [
+            86.818,
+            67.257,
+            52.685,
+            52.775,
+            51.864,
+            54.666,
+            53.017
+          ],
+          "median_ms": 53.017,
+          "p95_ms": 86.818,
+          "items": 1000
+        },
+        {
+          "name": "search",
+          "first_ms": 3.254,
+          "warm_ms": [
+            3.077,
+            4.207,
+            3.201,
+            3.239,
+            3.246,
+            3.215,
+            3.01
+          ],
+          "median_ms": 3.215,
+          "p95_ms": 4.207,
+          "items": 1000
+        },
+        {
+          "name": "filter",
+          "first_ms": 7.723,
+          "warm_ms": [
+            7.728,
+            8.215,
+            7.161,
+            8.884,
+            8.839,
+            8.283,
+            8.376
+          ],
+          "median_ms": 8.283,
+          "p95_ms": 8.884,
+          "items": 1000
+        },
+        {
+          "name": "save",
+          "first_ms": 56.8,
+          "warm_ms": [
+            48.373,
+            43.801,
+            45.465,
+            41.815,
+            43.105,
+            47.049,
+            40.237
+          ],
+          "median_ms": 43.801,
+          "p95_ms": 48.373,
+          "items": 1000
+        },
+        {
+          "name": "toggle_real_adapter",
+          "first_ms": 265.936,
+          "warm_ms": [
+            158.067,
+            136.029,
+            139.029,
+            137.05,
+            116.726,
+            146.735,
+            114.394
+          ],
+          "median_ms": 137.05,
+          "p95_ms": 158.067,
+          "items": 1000
+        },
+        {
+          "name": "render",
+          "first_ms": 535.581,
+          "warm_ms": [
+            358.373,
+            329.14,
+            473.585,
+            332.59,
+            333.72,
+            351.171,
+            460.224
+          ],
+          "median_ms": 351.171,
+          "p95_ms": 473.585,
+          "items": 10000
+        },
+        {
+          "name": "search",
+          "first_ms": 26.072,
+          "warm_ms": [
+            24.345,
+            24.449,
+            23.626,
+            23.285,
+            23.056,
+            23.539,
+            24.204
+          ],
+          "median_ms": 23.626,
+          "p95_ms": 24.449,
+          "items": 10000
+        },
+        {
+          "name": "filter",
+          "first_ms": 80.06,
+          "warm_ms": [
+            78.312,
+            78.299,
+            78.611,
+            77.741,
+            84.212,
+            81.009,
+            83.324
+          ],
+          "median_ms": 78.611,
+          "p95_ms": 84.212,
+          "items": 10000
+        },
+        {
+          "name": "save",
+          "first_ms": 466.941,
+          "warm_ms": [
+            343.087,
+            294.106,
+            332.292,
+            420.187,
+            299.14,
+            329.975,
+            336.074
+          ],
+          "median_ms": 332.292,
+          "p95_ms": 420.187,
+          "items": 10000
+        },
+        {
+          "name": "toggle_real_adapter",
+          "first_ms": 910.307,
+          "warm_ms": [
+            818.418,
+            735.208,
+            1091.9,
+            854.959,
+            667.762,
+            852.986,
+            767.049
+          ],
+          "median_ms": 818.418,
+          "p95_ms": 1091.9,
+          "items": 10000
+        }
+      ]
+    }
+  ],
+  "screens": [],
+  "errors": [
+    "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\qa-3.43.1\\gesamtanalyse_2026-10-21\\probe_leistung_und_ui.py\", line 113, in main\n    ('pinnwand',app.open_global_board),('kalender',app.open_calendar_view)]\n                                                   ^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'open_calendar'\n"
+  ],
+  "limits": "Windows-Trend, drei frische Tk-Interpreter und Datenordner nacheinander in einem Python-Prozess; Importcache bleibt. Sieben warme Werte, p95 ist deren Maximum. Keine Mac-/Linux-, Langzeit-/RSS-/DPI-/Readerabnahme; tracemalloc ohne vollstaendige native Tk-Allokationen.",
+  "tk": "9.0.4",
+  "scaling": 1.3339898243886428,
+  "profile_search": [
+    {
+      "file": "app.pyw",
+      "line": 60890,
+      "function": "quick_open_results",
+      "calls": 5,
+      "cumulative_s": 0.556361
+    },
+    {
+      "file": "content_search.py",
+      "line": 76,
+      "function": "match_content",
+      "calls": 55015,
+      "cumulative_s": 0.39856
+    },
+    {
+      "file": "content_search.py",
+      "line": 12,
+      "function": "title_rank",
+      "calls": 55745,
+      "cumulative_s": 0.236898
+    },
+    {
+      "file": "content_search.py",
+      "line": 54,
+      "function": "content_excerpt",
+      "calls": 50000,
+      "cumulative_s": 0.125079
+    },
+    {
+      "file": "content_search.py",
+      "line": 4,
+      "function": "search_key",
+      "calls": 56415,
+      "cumulative_s": 0.122162
+    },
+    {
+      "file": "content_search.py",
+      "line": 29,
+      "function": "_normal",
+      "calls": 50000,
+      "cumulative_s": 0.065049
+    },
+    {
+      "file": "app.pyw",
+      "line": 44331,
+      "function": "walk_items",
+      "calls": 110015,
+      "cumulative_s": 0.045652
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'replace' of 'str' objects>",
+      "calls": 435660,
+      "cumulative_s": 0.043814
+    },
+    {
+      "file": "content_search.py",
+      "line": 16,
+      "function": "<genexpr>",
+      "calls": 152520,
+      "cumulative_s": 0.037117
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'get' of 'dict' objects>",
+      "calls": 195710,
+      "cumulative_s": 0.032618
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'split' of 'str' objects>",
+      "calls": 162255,
+      "cumulative_s": 0.026565
+    },
+    {
+      "file": "app.pyw",
+      "line": 32241,
+      "function": "list_path_title",
+      "calls": 5000,
+      "cumulative_s": 0.02352
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'startswith' of 'str' objects>",
+      "calls": 158190,
+      "cumulative_s": 0.016432
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<method 'join' of 'str' objects>",
+      "calls": 117080,
+      "cumulative_s": 0.014795
+    },
+    {
+      "file": "app.pyw",
+      "line": 32229,
+      "function": "folder_path_titles",
+      "calls": 5000,
+      "cumulative_s": 0.014332
+    }
+  ],
+  "python_memory_switches": {
+    "switches": 40,
+    "before": 32,
+    "after": 121470,
+    "peak": 1010899,
+    "interpretation": "Momentaufnahme; Wachstum allein beweist kein Leck und enthaelt initiale Caches."
+  },
+  "method_correction": "Die historische Feldbezeichnung processes meint drei sequenzielle Tk-Instanzen in einem OS-Prozess. Kein Drei-Prozess-Kaltstartbenchmark. Erster Screenshotabschnitt scheiterte nach allen Messungen; separate korrigierte Aufnahme siehe sichtpruefung/sichtpruefung.json."
+}

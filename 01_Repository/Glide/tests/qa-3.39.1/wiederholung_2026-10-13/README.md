@@ -2,7 +2,7 @@
 
 Stand 13.10.2026 · Glide 3.39.1 · Aufgabenformat 23
 
-FP-00 behebt drei Befunde aus der [Wettbewerbs- und Codeanalyse](../../qa-3.39.0/wettbewerbsanalyse_2026-10-13/README.md) als Fehlerbehebung ohne Produktentscheidung (Plan §16, E-W7 A, D49):
+FP-00 behebt drei Befunde aus der [Wettbewerbs- und Codeanalyse](https://github.com/n05a-design/glide-to-do/blob/10427276b97e10528759cc42b0d23f757ca14843/01_Repository/Glide/tests/qa-3.39.0/wettbewerbsanalyse_2026-10-13/README.md) als Fehlerbehebung ohne Produktentscheidung (Plan §16, E-W7 A, D49):
 
 - **A29 Schnelleingabe:** Ankertag und Wochentage gehören vollständig zur Regel; nicht Abbildbares bleibt vollständig Titel mit einem Hinweis ohne Wirkung.
 - **A28 Kalenderaustausch:** Monats- und Jahresreihen ab dem 29. bzw. am 29.02. tragen die Klemmform `BYMONTHDAY=…;BYSETPOS=-1`; der Import lehnt RFC-Reihen mit anderer Terminfolge sichtbar ab.

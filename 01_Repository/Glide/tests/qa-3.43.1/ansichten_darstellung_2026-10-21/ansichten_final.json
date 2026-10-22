@@ -1,0 +1,160 @@
+{
+  "app_sha256": "fefde636c8b7a639adf4d86f7e8cac7567037a81b80b87d812f0d827bdc3a20e",
+  "faelle": {
+    "bedingungen": {
+      "ok": true,
+      "messung": {
+        "treffer": 1,
+        "erklaerte_bedingungen": 3
+      }
+    },
+    "oder": {
+      "ok": true,
+      "messung": {
+        "oder_ueber_listengrenzen": true,
+        "unbekannt_auch_bei_oder_ungueltig": true
+      }
+    },
+    "persistenz": {
+      "ok": true,
+      "messung": null
+    },
+    "fehler": {
+      "ok": true,
+      "messung": null
+    },
+    "altleser": {
+      "ok": true,
+      "messung": {
+        "altleser_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3"
+      }
+    },
+    "altfilter": {
+      "ok": true,
+      "messung": {
+        "alte_kombinationen": 30,
+        "identisch_zum_ausgelieferten_leser": true
+      }
+    },
+    "dialog": {
+      "ok": true,
+      "messung": {
+        "scrollbarer_dialog_fester_fuss": true,
+        "abmessungen": [
+          [
+            780,
+            570
+          ]
+        ],
+        "schrift": "mittel"
+      }
+    },
+    "dialog_gross": {
+      "ok": true,
+      "messung": {
+        "scrollbarer_dialog_fester_fuss": true,
+        "abmessungen": [
+          [
+            780,
+            570
+          ]
+        ],
+        "schrift": "gross"
+      }
+    },
+    "tempo": {
+      "ok": true,
+      "messung": {
+        "punkte": 10000,
+        "reine_auswertung_ms": [
+          22.42720001959242,
+          21.001400018576533,
+          22.903400007635355,
+          23.273900005733594,
+          23.011900018900633
+        ],
+        "median_ms": 22.903400007635355,
+        "grenze_ms": 100,
+        "app_auswertung_ms": [
+          63.03489999845624,
+          63.286000018706545,
+          62.85980000393465
+        ],
+        "app_quellen_unveraendert": true
+      }
+    },
+    "darstellung": {
+      "ok": true,
+      "messung": {
+        "tabelle_liste_gruppen": true,
+        "echte_sortierueberschrift": true,
+        "label_mehrfachzeilen": true,
+        "originale_unveraendert": true
+      }
+    },
+    "darstellung_persistenz": {
+      "ok": true,
+      "messung": {
+        "neustart": true,
+        "app_sicherung": true,
+        "breiten_gesichert": true,
+        "schreibfehler_rueckweg": true,
+        "unbekannt_erhalten": true
+      }
+    },
+    "spaltenboard": {
+      "ok": true,
+      "messung": {
+        "original_mutation_ein_undo_redo": true,
+        "alt_pfeil": true,
+        "gruppen_optionen": true,
+        "keine_pin_kopien": true
+      }
+    },
+    "ansicht_speichern": {
+      "ok": true,
+      "messung": {
+        "tabelle_mit_suche_gruppe_sortierung": true,
+        "eigenstaendige_kopie": true,
+        "spaltenboard": true
+      }
+    },
+    "gruppenziehen": {
+      "ok": true,
+      "messung": {
+        "echte_zieheinstiege": true,
+        "eine_feldaenderung": true,
+        "ein_undo": true
+      }
+    },
+    "darstellung_ui": {
+      "ok": true,
+      "messung": {
+        "konfigurationen": [
+          {
+            "konfiguration": "hell_eng",
+            "darstellungen": 3,
+            "dialog_fuss_und_ende_erreichbar": true
+          },
+          {
+            "konfiguration": "dunkel_breit",
+            "darstellungen": 3,
+            "dialog_fuss_und_ende_erreichbar": true
+          },
+          {
+            "konfiguration": "verlauf_eng",
+            "darstellungen": 3,
+            "dialog_fuss_und_ende_erreichbar": true
+          },
+          {
+            "konfiguration": "verlauf_breit",
+            "darstellungen": 3,
+            "dialog_fuss_und_ende_erreichbar": true
+          }
+        ],
+        "aufnahmen": 16,
+        "grenze": "Eigene Windows-Testfenster; keine physische DPI-, Reader- oder Mehrplattformabnahme."
+      }
+    }
+  }
+}

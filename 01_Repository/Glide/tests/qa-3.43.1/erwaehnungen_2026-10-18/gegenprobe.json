@@ -1,0 +1,35 @@
+{
+  "app_sha256": "83d4d5773fc322873e9654184174b7052284699bf7a16f6c2110b98362a739aa",
+  "faelle": {
+    "aufklappen": {
+      "ok": false,
+      "fehler": "'PageEditor' object has no attribute '_mentions_button'",
+      "traceback": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_erwaehnungen.py\", line 201, in main\n    evidence = globals()['fall_' + name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_erwaehnungen.py\", line 48, in fall_aufklappen\n    editor._mentions_button.command(); run.idle()\n    ^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'PageEditor' object has no attribute '_mentions_button'\n"
+    },
+    "link_undo_neustart": {
+      "ok": false,
+      "fehler": "'PageEditor' object has no attribute 'toggle_mentions'",
+      "traceback": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_erwaehnungen.py\", line 201, in main\n    evidence = globals()['fall_' + name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_erwaehnungen.py\", line 70, in fall_link_undo_neustart\n    editor.toggle_mentions(); run.idle()\n    ^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'PageEditor' object has no attribute 'toggle_mentions'\n"
+    },
+    "beschreibung_menu": {
+      "ok": false,
+      "fehler": "",
+      "traceback": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_erwaehnungen.py\", line 201, in main\n    evidence = globals()['fall_' + name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_erwaehnungen.py\", line 98, in fall_beschreibung_menu\n    assert 'Erwähnt ohne Verweis …' in labels\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "veraltet_schreibschutz_fehler": {
+      "ok": false,
+      "fehler": "'ListApp' object has no attribute 'link_unlinked_mention'",
+      "traceback": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_erwaehnungen.py\", line 201, in main\n    evidence = globals()['fall_' + name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_erwaehnungen.py\", line 128, in fall_veraltet_schreibschutz_fehler\n    assert not app.link_unlinked_mention(target, hit), cause\n               ^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'link_unlinked_mention'\n"
+    },
+    "oeffnen_fallen": {
+      "ok": false,
+      "fehler": "'ListApp' object has no attribute 'open_mention'",
+      "traceback": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_erwaehnungen.py\", line 201, in main\n    evidence = globals()['fall_' + name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_erwaehnungen.py\", line 145, in fall_oeffnen_fallen\n    assert run.app.open_mention(hit)\n           ^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'open_mention'\n"
+    },
+    "tempo": {
+      "ok": false,
+      "fehler": "'PageEditor' object has no attribute 'toggle_mentions'",
+      "traceback": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_erwaehnungen.py\", line 201, in main\n    evidence = globals()['fall_' + name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_erwaehnungen.py\", line 176, in fall_tempo\n    start = time.perf_counter(); editor.toggle_mentions()\n                                 ^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'PageEditor' object has no attribute 'toggle_mentions'\n"
+    }
+  }
+}

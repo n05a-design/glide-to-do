@@ -1,0 +1,13 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "ffebfbbc5f528e3ec1cc1797f99eb7d387f0b11ee2a27b3c03925ec19e5d76f6",
+  "faelle": {
+    "struktur_ergebnis": {
+      "ok": false,
+      "befund": "RuntimeError('Inhaltsansicht')"
+    }
+  },
+  "fehler": [
+    "struktur_ergebnis"
+  ]
+}

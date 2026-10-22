@@ -1,0 +1,25 @@
+{
+  "app_sha256": "6fdeb763e042ba029d7cd8efbd76b8f549a8a7b60f946128a185fc7e25c43858",
+  "faelle": {
+    "dateien": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 219, in main\n    globals()['fall_' + name](run)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 46, in fall_dateien\n    presets = app.exchange_recipe_catalog()\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'exchange_recipe_catalog'\n"
+    },
+    "kopieren_ohne_auftrag": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 219, in main\n    globals()['fall_' + name](run)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 108, in fall_kopieren_ohne_auftrag\n    app.show_exchange_export_dialog()\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"tests\\qa-3.43.1\\auftraege_2026-10-18\\baseline.local\", line 55872, in show_exchange_export_dialog\n    self.run_modal(dialog)\n    ~~~~~~~~~~~~~~^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 91, in modal\n    menu = choice(run, dialog, 'Mitgeliefert')\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 29, in choice\n    return next(w for w in widgets(dialog) if isinstance(w, run.mod.AppOptionMenu)\n                and any(part in v for v in w.options))\nStopIteration\n"
+    },
+    "eigener_neustart_backup": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 219, in main\n    globals()['fall_' + name](run)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 130, in fall_eigener_neustart_backup\n    app.show_exchange_export_dialog()\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"tests\\qa-3.43.1\\auftraege_2026-10-18\\baseline.local\", line 55872, in show_exchange_export_dialog\n    self.run_modal(dialog)\n    ~~~~~~~~~~~~~~^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 125, in modal\n    button(dialog, 'Eigenen Auftrag bearbeiten').command()\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 25, in button\n    return next(w for w in widgets(dialog) if getattr(w, 'text', None) == label)\nStopIteration\n"
+    },
+    "musterantworten": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 219, in main\n    globals()['fall_' + name](run)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 158, in fall_musterantworten\n    for recipe in app.exchange_recipe_catalog():\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'exchange_recipe_catalog'\n"
+    },
+    "fehler_scope": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 219, in main\n    globals()['fall_' + name](run)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 185, in fall_fehler_scope\n    recipe = app.exchange_recipe_catalog()[2]\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'exchange_recipe_catalog'\n"
+    }
+  }
+}

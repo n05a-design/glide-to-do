@@ -1,0 +1,18 @@
+{
+  "ok": true,
+  "exitcode_der_defektgegenprobe": 1,
+  "erwartet_rot": [
+    "galerie",
+    "referenz",
+    "retry",
+    "seite",
+    "startseite",
+    "titelbild"
+  ],
+  "erwartet_gruen": [
+    "hostwechsel",
+    "generation",
+    "warteschlange"
+  ],
+  "methode": "Unveränderte App 1042727 mit aktuellen Hilfsmodulen; getrennte Adapter-Gegenprobe, keine vollständige Altmodulprüfung"
+}

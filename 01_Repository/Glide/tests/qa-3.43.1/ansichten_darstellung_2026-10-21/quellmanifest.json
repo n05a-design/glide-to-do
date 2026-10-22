@@ -1,0 +1,16 @@
+{
+  "01_Repository/Glide/src/glide/app.pyw": "fefde636c8b7a639adf4d86f7e8cac7567037a81b80b87d812f0d827bdc3a20e",
+  "01_Repository/Glide/src/glide/view_definition.py": "116ad617934f8edbaab0377bbc89de669ea1f08ca97f6d5c42848fba2d1ee888",
+  "01_Repository/Glide/tests/integration/test_ansichten.py": "6c875fe791a39cfe16d760aa99b6a011419fd9f0ecfd6816257dac981ad7dd18",
+  "01_Repository/Glide/tests/unit/test_view_definition.py": "12b445830cacfbcbebbcf9cfda11beb06a0a8611e8e4bc50de9dc7151e909fa3",
+  "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md": "7aab7847c35faac374e0d2e0a478162d02370100697aed718daa8f0c51cc584e",
+  "00_Arbeitsvorbereitung/Glide_Analyse.md": "7f277cfecc04ea158a6e51c512396a07373d065e25118dc60618661fe53394ad",
+  "00_Arbeitsvorbereitung/Glide_Uebergabe.md": "1d01556dc415b915c22e0fcf9d78e7be777e3571c5782cd3aac3b87d80143127",
+  "01_Repository/Glide/docs/20_FUNKTIONEN.md": "fead6af02cddbe398a66ac0ec3443e7dcf1f84e7dafb115f6737b013b4f9c070",
+  "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md": "9b1aed4378fe560c7a38e51a4d4d1ed9487e7c680a0d731000fa02146d8a767a",
+  "01_Repository/Glide/docs/02_ARCHITECTURE.md": "d109bd204b72fe1f55181f44226cdbdf99ffd1ae502f35a9f108c5bf5ffc4200",
+  "01_Repository/Glide/docs/ARBEITSRICHTUNG.md": "472eeaf86063d2d07545f305789c14d9c21a06667427c4e9180985b04108ae80",
+  "01_Repository/Glide/docs/05_QA_TESTPLAN.md": "762013ddb7c9ffc08e304ac6dad61c925cdb9f9ca4ebf56d7989a85598c3df7a",
+  "01_Repository/Glide/docs/07_QA_BERICHT.md": "59ff8d28fb3cb8ffc4455dc970c7c30fcbfbdbfedc20364bf48c7d45e1ff42ad",
+  "01_Repository/Glide/CHANGELOG.md": "fc025dc2ef14feb17bf72d34e2b4bb9e6d51a2c4ed2aed6c5d9bb83bcc259fcf"
+}

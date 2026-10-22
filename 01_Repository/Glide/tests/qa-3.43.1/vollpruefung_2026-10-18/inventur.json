@@ -1,0 +1,102 @@
+{
+  "dateien": 8261,
+  "ordner": 1259,
+  "bytes": 2542327876,
+  "bereiche": {
+    ".gitattributes": {
+      "dateien": 1,
+      "bytes": 1059
+    },
+    ".gitignore": {
+      "dateien": 1,
+      "bytes": 3369
+    },
+    "CLAUDE.md": {
+      "dateien": 1,
+      "bytes": 5247
+    },
+    "README.md": {
+      "dateien": 1,
+      "bytes": 12512
+    },
+    "SECURITY.md": {
+      "dateien": 1,
+      "bytes": 3049
+    },
+    "20_Grafik_Master": {
+      "dateien": 36,
+      "bytes": 56178343
+    },
+    "07_Python-Versionen": {
+      "dateien": 221,
+      "bytes": 28557125
+    },
+    "05_Probelisten_Testdaten": {
+      "dateien": 7,
+      "bytes": 76595931
+    },
+    "01_Repository": {
+      "dateien": 1571,
+      "bytes": 213286310
+    },
+    "00_Arbeitsvorbereitung": {
+      "dateien": 38,
+      "bytes": 5117502
+    },
+    ".github": {
+      "dateien": 4,
+      "bytes": 29159
+    },
+    ".git": {
+      "dateien": 547,
+      "bytes": 758871762
+    },
+    ".claude": {
+      "dateien": 5832,
+      "bytes": 1403666508
+    }
+  },
+  "verknuepfungen": [
+    ".git/objects/2a/159ab54881d25baa57b0192a4ec0dc4421a4a6",
+    ".git/objects/29/0cc5924508823fd0dd7fbe6e71ea4c8b720720",
+    ".git/objects/29/82108432f63b786a23660f5190cbb12302c942",
+    ".git/objects/28/ae4cf999e22039106dc84ca99837903f79c42f",
+    ".git/objects/25/ecf7898ccc7ba00584e253f6d502fae8e94985",
+    ".git/objects/22/6eae6a31ea4e4593fa99864924d5919036e34a",
+    ".git/objects/22/9f244718d1f9c7451aa917f6ff923b0e779f5b",
+    ".git/objects/22/e073201f5ef2621f8056e0cb89e896fb98d3b0",
+    ".git/objects/1d/c6163eee76b22254846c6d9a8b32043c4482b5",
+    ".git/objects/1c/3954765af7a5ec600094ae8222df076ddc4ba1",
+    ".git/objects/1b/70c1edb9fa1bf83008c61c4f4e2f883f3dc225",
+    ".git/objects/1b/ef44e803921a254446df4e4181b893f7b16be5",
+    ".git/objects/1a/12a995dac4a880579dccfbbd839aeb60712aff",
+    ".git/objects/1a/d4c9a059796a14ad6a785cf53d896959f3d266",
+    ".git/objects/18/7f0351f1d97606414d5ccb977e7d727cb1d87d",
+    ".git/objects/18/9816a01c754232e5249a71b7a665f6ec9b1e24",
+    ".git/objects/18/b7cb7cd547b1ca76189796eebcfd6726df0732",
+    ".git/objects/18/d4ff9cb71505405399e3491d8ebc43eed810cd",
+    ".git/objects/16/0a40f0278b4c85464bb9679e7cbc9c92379574",
+    ".git/objects/16/284ad971ceba0d20a030200eaf62ab983c3767",
+    ".git/objects/15/9ee2aacdc94f6ebd53e19b15001a4d245c3f09",
+    ".git/objects/13/2a7a1bfbac2bb84bd21441152e4d5aa73b2ecd",
+    ".git/objects/12/4f9601a8e06380f4e5e675d6bae4ca08f83b27",
+    ".git/objects/10/538bf022429dc8683142f6b769caf1fdc8d664",
+    ".git/objects/10/d1b13d7fe0bbbfb216f2777d6cc7aacbf963f2",
+    ".git/objects/0f/5066e63cedd507fbf9c96915a0af7c93156b44",
+    ".git/objects/0d/35addce1eee207743b650073cb56fff114ec9e",
+    ".git/objects/0b/f236a80e22c43c094c13a708f5556b0f63b34b",
+    ".git/objects/0a/f7f9e1c4e2cf756e9f5ba29c7972fdc26e94fc",
+    ".git/objects/09/6e8750bf931594f91b90067d775b61fb18af35",
+    ".git/objects/06/9792c7a797ce6477b6a27c75b9e2f85faec308",
+    ".git/objects/06/cec3debd7dae3c74241b749ff834a83a5a6455",
+    ".git/objects/04/10f71e44110ca7bcb86ddabe4ae1d45e8a46b6",
+    ".git/objects/04/6dad0ee25def13a1d26202730c3beceb450b5f",
+    ".git/objects/04/9fb0b5543dd0975d2fd42085280920ab121d8b",
+    ".git/objects/02/239eee921feac8aed0448cfd5a2ae6df7d11fb",
+    ".git/objects/02/3f1b78995e8525ed70b0ef6a25b9d6e0118048",
+    ".git/objects/02/81344f843f7968930a8e27aabfe00e12aae410",
+    ".git/objects/02/c7d835e5165abf86fdf85e6867dc775084dbe3",
+    ".git/objects/02/f153d74f6557a491ee3e2afca5e023f5f60dc6"
+  ],
+  "fehler": []
+}
