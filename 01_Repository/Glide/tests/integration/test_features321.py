@@ -251,12 +251,23 @@ with tempfile.TemporaryDirectory(prefix="glide-features321-") as folder:
         assert A.ics_repeat_from_rule("FREQ=DAILY;INTERVAL=3")["abstand"] == 3
         assert A.ics_repeat_from_rule("FREQ=WEEKLY;BYDAY=MO,WE")["tage"] == [0, 2]
         assert A.ics_repeat_from_rule("FREQ=DAILY;UNTIL=20270301T235959Z")["ende"] == "2027-03-01"
-        for nicht_abbildbar in ("FREQ=WEEKLY;COUNT=10", "FREQ=MONTHLY;BYMONTHDAY=15",
-                                "FREQ=WEEKLY;INTERVAL=2", "FREQ=MONTHLY;BYDAY=2MO",
-                                "FREQ=HOURLY", "", "FREQ=YEARLY;INTERVAL=4"):
+        # FP-02 (3.44.0): Anzahl, n-ter Wochentag und Jahresintervall sind jetzt
+        # genau abbildbar. Ohne Starttag bleiben Monatstag und zweiwöchentlicher
+        # Rhythmus unbestimmt; Stundenreihen kennt Glide nicht.
+        zehnmal_regel = A.ics_repeat_from_rule("FREQ=WEEKLY;COUNT=10")
+        assert zehnmal_regel == {"art": A.REPEAT_WEEKLY, "rest": 10}, zehnmal_regel
+        assert A.ics_repeat_from_rule("FREQ=MONTHLY;BYDAY=2MO")["art"] == "serie"
+        assert A.ics_repeat_from_rule("FREQ=YEARLY;INTERVAL=4")["art"] == "serie"
+        for nicht_abbildbar in ("FREQ=MONTHLY;BYMONTHDAY=15", "FREQ=WEEKLY;INTERVAL=2",
+                                "FREQ=HOURLY", ""):
             assert A.ics_repeat_from_rule(nicht_abbildbar) is None, nicht_abbildbar
-        verworfen = kalender(["UID:r-1", "SUMMARY:Zehnmal", "DTSTART;VALUE=DATE:20261005",
-                              "RRULE:FREQ=WEEKLY;COUNT=10"])
+        zehnmal = kalender(["UID:r-1", "SUMMARY:Zehnmal", "DTSTART;VALUE=DATE:20261005",
+                            "RRULE:FREQ=WEEKLY;COUNT=10"])
+        punkte, bericht = punkte_aus(zehnmal)
+        assert punkte[0]["repeat"] and punkte[0]["repeat"].get("rest") == 10, punkte[0]["repeat"]
+        assert not bericht["dropped"].get("rrule"), bericht["dropped"]
+        verworfen = kalender(["UID:r-2", "SUMMARY:Stündlich", "DTSTART;VALUE=DATE:20261005",
+                              "RRULE:FREQ=HOURLY"])
         punkte, bericht = punkte_aus(verworfen)
         assert punkte[0]["repeat"] is None and bericht["dropped"].get("rrule") == 1
         assert bericht["items"] == 1, "Die Aufgabe entsteht trotzdem – nur ohne Wiederholung."

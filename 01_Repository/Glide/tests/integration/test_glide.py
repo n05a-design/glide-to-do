@@ -3350,8 +3350,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
         app.inspect_backup_archive(beispiel_archiv)
         beispiel_daten = json.loads(beispiel_archiv.read("data.json").decode("utf-8"))
     app.validate_backup_schema(beispiel_daten)
-    # Festgeschriebene Lieferbeispiele bleiben Format 25; die App migriert auf 26.
-    assert beispiel_daten["version"] == 25
+    assert beispiel_daten["version"] == app.DATA_SCHEMA_VERSION
 
     beispiel_previous = (app.folders, app.labels, app.trash)
     try:
@@ -3417,7 +3416,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
         app.inspect_backup_archive(release_archive)
         release_data = json.loads(release_archive.read("data.json"))
     app.validate_backup_schema(release_data, portable=True)
-    assert release_data["version"] == 25
+    assert release_data["version"] == app.DATA_SCHEMA_VERSION
     assert release_data["app_version"] == mod.APP_VERSION
     release_previous = (app.folders, app.labels, app.trash)
     try:

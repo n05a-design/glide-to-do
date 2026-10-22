@@ -19,9 +19,15 @@ sys.path.insert(0, str(REPO/'tests/integration'))
 from test_schutzrunde import Lauf
 
 
+# Sperrdateien sind keine Nutzdaten: Seit WA-31 hält die Sitzung die
+# OS-Sperre auf glide.lock.acquire, unter Windows ist sie dann nicht lesbar.
+# Die App nimmt beide beim Kopieren eines Datenordners ebenso aus.
+SPERRDATEIEN = {'glide.lock', 'glide.lock.acquire'}
+
+
 def filehashes(directory):
     return {str(p.relative_to(directory)): hashlib.sha256(p.read_bytes()).hexdigest()
-            for p in Path(directory).rglob('*') if p.is_file()}
+            for p in Path(directory).rglob('*') if p.is_file() and p.name not in SPERRDATEIEN}
 
 
 def modal(run, dialog):

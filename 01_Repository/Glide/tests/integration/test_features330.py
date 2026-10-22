@@ -2271,7 +2271,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert app.save_items(show_error=False)
         speicher = Path(mod.SAVE_FILE)
         gueltig = speicher.read_bytes()
-        assert app.settings.get("data_format_written") == 25
+        assert app.settings.get("data_format_written") == app.DATA_SCHEMA_VERSION
 
         neuer = json.loads(gueltig)
         neuer["version"] = future_version
