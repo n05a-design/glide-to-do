@@ -1,0 +1,22 @@
+{
+  "zeit_utc": "2026-10-21T07:23:33.229275+00:00",
+  "dokumentscope": 13,
+  "datei_und_ankerlinks": 365,
+  "linkfehler": [
+    {
+      "file": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "target": "../01_Repository/Glide/src/glide",
+      "error": "Datei fehlt"
+    },
+    {
+      "file": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "target": "../01_Repository/Glide/tests/unit",
+      "error": "Datei fehlt"
+    }
+  ],
+  "benutzerpfade_in_neuen_nachweisen": [],
+  "probensyntaxfehler": [],
+  "git_index": [],
+  "grundstufe": "Einmaliger Git-Auftrag Exit 1, keine Wiederholung; spaetere Dokumentpruefung ist keine gruene Gesamt-CI",
+  "live_source_not_frozen": true
+}

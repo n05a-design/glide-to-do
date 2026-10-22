@@ -1,0 +1,47 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "916c77701bd645227a734a0f8a5f10be65046f0b5c6d29feeafac203debe72f2",
+  "faelle": {
+    "waechter": {
+      "ok": true,
+      "befund": "Tiefe 0/19/20 × Schnappschuss/Rahmen: Bestand, Datei bytegleich, Stapel, Meldung; Neustart"
+    },
+    "rueckweg": {
+      "ok": true,
+      "befund": "Verlust nach Speichern, Zurückschreiben gescheitert, DataIntegrityError, Gruppieren"
+    },
+    "laden": {
+      "ok": true,
+      "befund": "TclError/ValueError in der Ansicht behalten den Bestand; JSON-Fehler und neueres Format wie bisher"
+    },
+    "flush": {
+      "ok": true,
+      "befund": "fünf Kombinationen, kein Editor; Markdown, Seitenfunktion, Vorlage, Notion, Restore, Aufgabe verlegen; unverändert schreibgeschützt: Übernahme ohne Schreiben und Ausgabe erlaubt"
+    },
+    "editorwechsel": {
+      "ok": true,
+      "befund": "Navigation, Anlegen, Beenden fragt, schreibgeschützt frei, Schreibfehler frei"
+    },
+    "sperre": {
+      "ok": true,
+      "befund": "Lesen, defekt: schreibgeschützt, bewusste Übernahme, Übernahme prüft erneut, Neuanlage, Verdrängung: Einstellungen, Fenster, Freigabe, Takt"
+    },
+    "sperre_prozesse": {
+      "ok": true,
+      "befund": "gleichzeitiger Erwerb mit Bereitschaftsschranke: fehlend/verwaist je 3 Runden [1, 1, 1, 1, 1, 1]; Zweitstart beendet sich, schreibt nichts"
+    },
+    "ausgaben": {
+      "ok": true,
+      "befund": "Teil-/Vollbackup, Austausch, Markdown, Vergleich, Drucken und fünf Exportwege halten an"
+    },
+    "editor_offen": {
+      "ok": true,
+      "befund": "Navigation bewahrt nicht übernommenen Text auch bei vorheriger ungespeicherter Änderung"
+    },
+    "rueckweg_bytes": {
+      "ok": true,
+      "befund": "Nach erfolgreichem Zwischenspeichern stellt der Abbruch die ursprünglichen Dateibytes her"
+    }
+  },
+  "fehler": []
+}

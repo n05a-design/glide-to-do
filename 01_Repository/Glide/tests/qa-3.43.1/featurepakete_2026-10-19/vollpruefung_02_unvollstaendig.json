@@ -1,0 +1,225 @@
+{
+  "status": "nach_Befunden_beendet_unvollstaendig",
+  "schritte": [
+    {
+      "status": "ausgeführt",
+      "schritt": "Syntax",
+      "grund": "341 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "Versionskonsistenz",
+      "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.43.1; Datenformat 25"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "Dokumentation",
+      "grund": "Alle Dokumente einschließlich Archiv im Index; 222 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "Fixtures",
+      "grund": "20 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "Fachlogik-Unit-Tests",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "Tk-Voraussetzung",
+      "grund": "Tk-Fenster im gewählten Python gestartet und geschlossen"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "Zeitzone",
+      "grund": "W. Europe Daylight Time, Versatz +02:00, mit Sommerzeitregel; Zeitzonenfehler bleiben sichtbar"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_glide",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_datenintegritaet",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_drawing",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_drawing_prototype",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "audit_app",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_dialog_theme",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_ui_updates",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_glide_36",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_release36",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_ui_polish36",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_ui_followup36",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_release37",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_template_workflows",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_reminders",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_ui39",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_workspace310",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features311",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features312",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features313",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features314",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features315",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features316",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features317",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features318",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features319",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features320",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features321",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "fehlgeschlagen",
+      "schritt": "test_features322",
+      "grund": "Exitcode 1"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features323",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features324",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "fehlgeschlagen",
+      "schritt": "test_features325",
+      "grund": "Exitcode 1"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features326",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features328",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_features329",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "ausgeführt",
+      "schritt": "test_drawing330",
+      "grund": "Exitcode 0"
+    },
+    {
+      "status": "fehlgeschlagen",
+      "schritt": "test_features330",
+      "grund": "Exitcode 1"
+    }
+  ],
+  "fehler": [
+    "test_features322",
+    "test_features325",
+    "test_features330"
+  ]
+}

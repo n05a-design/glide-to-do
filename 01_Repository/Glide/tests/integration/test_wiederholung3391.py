@@ -123,8 +123,7 @@ with tempfile.TemporaryDirectory(prefix="glide-wiederholung3391-") as ordner:
         pruefungen.append("A29: Ankertag, Wochentage und Ordinal ohne „im Monat“ werden vollständig Teil der Regel")
 
         # --- A29: Nicht Abbildbares bleibt ganz Text, Hinweis ohne Wirkung ------
-        for text in ("Team jeden ersten Montag im Monat", "Jour fixe alle 2 Wochen montags und donnerstags",
-                     "Bericht alle 2 Monate"):
+        for text in ("Team jeden ersten Montag", "Zahltag jeden letzten Freitag"):
             neu, chips = eingeben(text)
             assert neu["text"] == text, neu["text"]
             assert not neu.get("repeat") and not neu.get("due") and not neu.get("planned_date"), neu
@@ -163,16 +162,16 @@ with tempfile.TemporaryDirectory(prefix="glide-wiederholung3391-") as ordner:
         _kopf, ereignisse = app.read_ics_file(datei)
         punkte, bericht = app.ics_events_to_items(ereignisse, None, "all", dry_run=True)
         nach_titel = {punkt["text"]: punkt for punkt in punkte}
-        assert nach_titel["RFC-Monatsreihe"]["repeat"] is None, nach_titel["RFC-Monatsreihe"]
-        assert nach_titel["Schalttag"]["repeat"] is None, nach_titel["Schalttag"]
+        assert nach_titel["RFC-Monatsreihe"]["repeat"]["art"] == "serie", nach_titel["RFC-Monatsreihe"]
+        assert nach_titel["Schalttag"]["repeat"]["art"] == "serie", nach_titel["Schalttag"]
         assert nach_titel["Klemmform"]["repeat"]["art"] == A.REPEAT_MONTHLY
         assert nach_titel["Mitte"]["repeat"]["art"] == A.REPEAT_MONTHLY
-        assert bericht["dropped"].get("rrule") == 2, bericht
+        assert bericht["dropped"].get("rrule",0) == 0, bericht
         for faellig, art in (("2027-01-31", A.REPEAT_MONTHLY), ("2028-02-29", A.REPEAT_YEARLY)):
             probe = app.new_item("Rundlauf", due=faellig, repeat={"art": art, "start": faellig})
             rueck = A.ics_repeat_from_rule(app.ics_repeat_rule(probe, ganztaegig=True), start=faellig)
             assert rueck == {"art": art}, (faellig, rueck)
-        pruefungen.append("A28: RFC-Reihen am Monatsende sichtbar verworfen (2), Klemmform und Rundlauf erkannt")
+        pruefungen.append("A28: RFC-Reihen am Monatsende als neue Serien erhalten, Klemmform und Rundlauf erkannt")
 
         # --- A30: Zeitzone des Aufgabenimports aus mitgelieferten Daten ---------
         assert A.ics_import_zone("W. Europe Standard Time").key == "Europe/Berlin"

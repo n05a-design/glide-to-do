@@ -1,0 +1,42 @@
+{
+  "datum": "2026-10-18",
+  "status": "umgesetzt_gezielt_gepruefter_lokaler_kandidat",
+  "basis": "10427276b97e10528759cc42b0d23f757ca14843",
+  "branch": "codex/bildvorschauen-wa26-2026-10-18",
+  "version": "3.43.1",
+  "format": 25,
+  "app_sha256": "83d4d5773fc322873e9654184174b7052284699bf7a16f6c2110b98362a739aa",
+  "pflichtsuite": {
+    "gruen": 9,
+    "rot": 0,
+    "nachweis": "pflichtsuite_abschluss.json"
+  },
+  "gegenprobe": {
+    "app_adapter_rot": 6,
+    "aktuelle_dienst_hostfaelle_gruen": 3,
+    "nachweis": "gegenprobe_auswertung.json",
+    "methode": "Unveränderte App mit aktuellen Hilfsmodulen, keine vollständige Altmodul-Gegenprobe"
+  },
+  "fachtests": 768,
+  "davon_neue_fachtests": 14,
+  "werkzeugtests": 152,
+  "bestehende_bereichssuiten": [
+    "test_bilder330.py",
+    "test_wissen3340.py"
+  ],
+  "quellstaende": "Serielle Bereichssuiten am ersten WA-26-Stand; nach Begrenzung der Statusbeschriftung auf Kachelbreite alle neun neuen UI-Fälle erneut bestanden. Beide Quellstände/Nachweise erhalten.",
+  "windows_wic": "wic_windows.json",
+  "geschuetzte_dateien_unveraendert": 783,
+  "grenzen": [
+    "Lokaler Kandidat ohne neue Zwischenversion oder Lieferung nach 07/Showcase/Paketen.",
+    "Keine neue eingefrorene Vollmatrix; D51-Phasenabschluss offen.",
+    "Native Mac-/Linux-Konverter und menschliche Sichtabnahme offen.",
+    "Native Tk-Dekodierung und Dateimetadatenzugriffe bleiben im Hauptthread; keine pauschale Performancegarantie.",
+    "Neue Änderungen nicht committet oder gepusht."
+  ],
+  "formal_abschluss": "formal_abschluss.json",
+  "links_abschluss": "links_abschluss.json",
+  "lokale_links": 891,
+  "syntax_python_dateien": 330,
+  "quellstand_abschluss_unveraendert": true
+}

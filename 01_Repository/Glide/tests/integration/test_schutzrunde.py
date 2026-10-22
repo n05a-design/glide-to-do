@@ -7,6 +7,7 @@ gespeicherte Datei als Bytes. `--app` erlaubt die rote Gegenprobe gegen den
 Stand vor der Korrektur, `--fall` einzelne Fälle.
 """
 import argparse
+import copy
 import importlib.machinery
 import importlib.util
 import json
@@ -19,10 +20,12 @@ import traceback
 from datetime import datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[2]
 FAELLE = ("waechter", "rueckweg", "laden", "flush", "editorwechsel", "sperre", "sperre_prozesse",
-          "ausgaben", "editor_offen", "rueckweg_bytes")
+          "ausgaben", "editor_offen", "rueckweg_bytes", "sitzung", "speicherergebnis", "mehrfach",
+          "struktur_ergebnis", "struktur_dialog", "struktur_editor")
 FEHLERTITEL_OK = "Abgebrochen – keine Daten verloren"
 
 
@@ -703,6 +706,354 @@ def fall_rueckweg_bytes(lauf):
     assert lauf.datei() == vorher, "Rückweg erzeugt neue Datei statt des bytegleichen Vorzustands"
     assert app.find_item_in_lists(ids["A"])[0]["text"] == "A"
     return "Nach erfolgreichem Zwischenspeichern stellt der Abbruch die ursprünglichen Dateibytes her"
+
+
+def fall_sitzung(lauf):
+    app, mod = lauf.app, lauf.mod
+    ids = lauf.grundbestand()
+    own = dict(app._lock_token)
+    old = (datetime.now().astimezone() - timedelta(hours=9)).isoformat()
+    lock = Path(mod.LOCK_FILE)
+    lock.write_text(json.dumps(dict(own, started_at=old, refreshed_at=old)), encoding='utf-8')
+    app._lock_token = dict(own, refreshed_at=old)
+    script = (
+        'import importlib.machinery,importlib.util,json,sys\n'
+        'from pathlib import Path\n'
+        'sys.path.insert(0,str(Path(sys.argv[1]).parent))\n'
+        "loader=importlib.machinery.SourceFileLoader('lock_competitor',sys.argv[1])\n"
+        'mod=importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name,loader))\n'
+        'sys.modules[loader.name]=mod;loader.exec_module(mod)\n'
+        'app=mod.ListApp.__new__(mod.ListApp);app.acquire_data_lock()\n'
+        "print(json.dumps({'read_only':app._data_read_only,'token':app._lock_token}),flush=True)\n"
+        'app.release_data_lock()\n')
+    result = subprocess.run([sys.executable, '-B', '-c', script, str(lauf.app_path)],
+                            capture_output=True, text=True, encoding='utf-8', timeout=30)
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)['read_only'], 'lebende Sitzung nach Zeitablauf verdrängt'
+    assert json.loads(lock.read_text(encoding='utf-8'))['token'] == own['token']
+    assert app.save_items(show_error=False)
+
+    before = lauf.datei(); writer = app.write_json_atomic
+    def fail_renew(path, payload):
+        if os.path.abspath(path) == os.path.abspath(mod.LOCK_FILE):
+            raise OSError('Erneuerung gesperrt')
+        return writer(path, payload)
+    app._lock_token['refreshed_at'] = old
+    with patch.object(app, 'write_json_atomic', side_effect=fail_renew):
+        assert app.save_items(show_error=False) is False
+        assert lauf.datei() == before and app.dirty
+        assert app._last_save_result.lock_verified is False
+        assert app.create_list_from_template('fehlt') is None, 'direkter Caller ignoriert Erneuerungsfehler'
+    assert app.save_items(show_error=False)
+
+    stale = dict(app._lock_token)
+    app.release_data_lock()
+    successor = mod.ListApp.__new__(mod.ListApp)
+    try:
+        successor.acquire_data_lock()
+        assert not successor._data_read_only
+        current = lock.read_bytes()
+        app._data_read_only = False
+        assert app.save_items(show_error=False) is False, 'freigegebene Sitzung ohne Token schreibt erneut'
+        assert lock.read_bytes() == current
+        app._lock_token = stale; app._data_read_only = False
+        assert app.check_data_lock(True) is False
+        app.release_data_lock()
+        assert lock.read_bytes() == current, 'alter Besitzer löscht/erneuert neue Sitzung'
+    finally:
+        successor.release_data_lock()
+        app.acquire_data_lock()
+    origin = Path(mod.BASE_DIR)
+    target = Path(lauf.data).parent / 'ordnerwechsel'
+    assert app.change_data_folder(str(target), move_existing=True)
+    assert app.verify_data_lock() is True and app._lock_session.held
+    assert app._lock_session.path == str(target / 'glide.lock')
+    assert not (origin / 'glide.lock').exists() and app.find_item_in_lists(ids['A'])
+    assert app.change_data_folder(str(origin))
+    assert app.verify_data_lock() is True and app._lock_session.path == str(origin / 'glide.lock')
+    assert not (target / 'glide.lock').exists()
+    return 'Lebender Besitzer geschützt; Erneuerung/Freigabe strikt, alte Tokens wirkungslos; Kopieren/Ordnerwechsel/Rückwechsel mit neuem Erwerb'
+
+
+def fall_speicherergebnis(lauf):
+    app = lauf.app; ids = lauf.grundbestand()
+    before = lauf.datei(); writer = app.write_json_atomic
+    app.find_item(ids['A'])[0]['text'] = 'Offene Änderung'
+    def fail_main(path, payload):
+        if os.path.abspath(path) == os.path.abspath(lauf.mod.SAVE_FILE): raise OSError('Datei gesperrt')
+        return writer(path, payload)
+    with patch.object(app, 'write_json_atomic', side_effect=fail_main):
+        assert app.save_items(show_error=False) is False
+    result = app._last_save_result
+    assert not result.data_written and result.lock_verified and result.error
+    assert lauf.datei() == before and app.dirty
+    with patch.object(app, 'write_backup_copy', return_value='Sicherung nicht erreichbar'):
+        assert app.save_items(show_error=False) is True
+        result = app._last_save_result
+        assert result.data_written and result.backup_warning and result.history_updated
+    with patch.object(app, 'update_sidebar_list', side_effect=RuntimeError('Anzeigeprobe')):
+        assert app.save_items(show_error=False) is True
+        assert app._last_save_result.data_written and app._last_save_result.followup_errors
+    with patch.object(app, 'write_backup_copy', return_value='Sicherung voll'), \
+            patch.object(app, 'show_warning', side_effect=lauf.mod.tk.TclError('Fenster geschlossen')):
+        assert app.save_items() is True, 'Meldungsfehler verwirft bereits gespeicherte Daten'
+        assert app._last_save_result.data_written and app._last_save_result.followup_errors
+    assert not app.dirty
+    depth = len(app.undo_stack)
+    with app.item_change([ids['A']], local=True) as no_change:
+        pass
+    assert len(app.undo_stack) == depth and no_change.saved is None
+    with app.item_change([ids['A']], local=True) as changed:
+        app.find_item(ids['A'])[0]['importance'] = 2; changed.mark(ids['A'])
+    assert changed.saved is True and changed.save_result.data_written
+    assert changed.changed_ids == {ids['A']} and changed.changed_lists == {ids['liste']}
+    assert changed.save_result.settings_pending is False
+    save_settings = app.save_settings
+    def failed_settings(**options):
+        return save_settings(**options) if options.get('defer') else False
+    with patch.object(app, 'save_settings', side_effect=failed_settings):
+        with app.item_change([ids['A']], local=True) as partial:
+            app.find_item(ids['A'])[0]['importance'] = 3; partial.mark(ids['A'])
+            app.settings['glide_pruefwert'] = 'offene Einstellung'
+            app.save_settings(defer=True)
+        assert partial.saved is True and partial.save_result.data_written
+        assert partial.save_result.settings_saved is False and partial.save_result.followup_errors
+    with patch.object(app, 'save_items', return_value=False):
+        with app.item_change([ids['A']], local=True) as failed:
+            app.find_item(ids['A'])[0]['importance'] = 1; failed.mark()
+        assert failed.saved is False and failed.save_result is None, 'veraltetes Speicherergebnis weitergegeben'
+    return 'Hauptdatei/Backup/Folgefehler/aufgeschobene Einstellungen unterschieden; ein Mutationsvertrag, Bool kompatibel'
+
+
+def fall_mehrfach(lauf):
+    app = lauf.app
+    tasks = [app.new_item('Aufgabe ' + str(i)) for i in range(1000)]
+    source = app.new_list_object('Mehrfachauswahl', tasks)
+    app.lists.append(source); assert app.save_items(); app.set_active_list(source['id']); lauf.idle()
+    selected = [item['id'] for item in tasks[-100:]]
+    app.tree.selection_set(selected)
+    before = len(app.undo_stack)
+    calls = 0; depth = 0; original = app.find_item
+    def count(*args, **kwargs):
+        nonlocal calls, depth
+        if not depth: calls += 1
+        depth += 1
+        try: return original(*args, **kwargs)
+        finally: depth -= 1
+    with patch.object(app, 'find_item', side_effect=count):
+        app.toggle_done()
+    assert all(app.find_item(identity)[0]['done'] for identity in selected)
+    assert len(app.undo_stack) == before + 1
+    assert calls < 50, ('wiederholte rekursive Suche bei Mehrfachaktion', calls)
+    app.undo_last_change(); lauf.idle()
+    assert all(not app.find_item(identity)[0]['done'] for identity in selected)
+    app.redo_last_change(); lauf.idle()
+    assert all(app.find_item(identity)[0]['done'] for identity in selected)
+    app.undo_last_change(); lauf.idle()
+    # Die Bestätigung tauscht Objekte bei gleichen IDs aus. Der Mutationskörper
+    # muss danach aktuelle Referenzen verwenden, nicht die vor dem Dialog.
+    def replace_during_confirm(_items):
+        app.items = copy.deepcopy(app.items)
+        app.sync_current_list_reference()
+        return True
+    app.tree.selection_set(selected)
+    with patch.object(app, 'confirm_complete_blocked', side_effect=replace_during_confirm):
+        app.toggle_done()
+    assert all(app.find_item(identity)[0]['done'] for identity in selected)
+    # Wiederholungsfehler bleibt eine offene, rücknehmbare Mutation.
+    app.tree.selection_set(selected)
+    disk = lauf.datei()
+    with patch.object(app, 'save_items', return_value=False):
+        app.toggle_done()
+    assert lauf.datei() == disk
+    return f'100 von 1.000 Aufgaben: {calls} einzelne Suchstarts, ein Undo/Redo; neue Objekte nach Bestätigung aufgelöst'
+
+
+def fall_struktur_ergebnis(lauf):
+    """Echte Strukturaufrufer: kein Erfolgsfeedback bei Hauptdateifehlern."""
+    app, mod = lauf.app, lauf.mod
+    ids = lauf.grundbestand()
+    app.tree.selection_set((ids['A'], ids['B']))
+    volle_tiefe(app, app.MAX_UNDO_STEPS)
+    vorher = lauf.datei()
+    with patch.object(app, 'write_json_atomic', side_effect=OSError('Hauptdatei gesperrt')), \
+            patch.object(app, 'show_undo_toast') as toast, patch.object(app, 'feedback') as feedback:
+        app.group_selected_items()
+    assert not toast.called and not feedback.called, 'Gruppieren meldet Erfolg trotz Schreibfehler'
+    assert lauf.datei() == vorher and app.dirty
+    assert len(app.undo_stack) == app.MAX_UNDO_STEPS
+    group = next(item for item in app.items if app.is_group_item(item))
+    assert {item['id'] for item in group['children']} == {ids['A'], ids['B']}
+    assert app._last_save_result.data_written is False
+    app.undo_last_change(); lauf.idle()
+    assert app.find_item(ids['A']) and app.find_item(ids['B'])
+
+    # Ein UI-Folgefehler nach dem Hauptdateischreiben ist kein Dateimisserfolg.
+    app.tree.selection_set((ids['A'], ids['B']))
+    with patch.object(app, 'update_sidebar_list', side_effect=RuntimeError('Anzeige')), \
+            patch.object(app, 'show_undo_toast') as toast:
+        app.group_selected_items()
+    assert toast.called and app._last_save_result.data_written
+    assert app._last_save_result.followup_errors
+    group = next(item for item in app.items if app.is_group_item(item))
+    group_id = group['id']
+    assert group_id in lauf.datei_ids()
+    app.tree.selection_set(group_id)
+    depth = len(app.undo_stack)
+    with patch.object(app, 'refresh_tree', side_effect=RuntimeError('Inhaltsansicht')), \
+            patch.object(app, 'show_warning', side_effect=RuntimeError('Warnungsfenster')):
+        app.dissolve_selected_group()
+    lauf.idle()
+    assert not app.find_item(group_id) and app.find_item(ids['A'])
+    assert group_id not in lauf.datei_ids(), 'UI-Folgefehler rollt geschriebenen Bestand zurück'
+    assert app._last_save_result.data_written and app._last_save_result.followup_errors
+    assert any('Fehlermeldung:' in detail for detail in app._last_save_result.followup_errors)
+    assert len(app.undo_stack) == min(depth + 1, app.MAX_UNDO_STEPS)
+    app.undo_last_change(); lauf.idle()
+    assert app.find_item(group_id)
+    app.redo_last_change(); lauf.idle()
+    assert not app.find_item(group_id)
+
+    folder = app.new_folder_object('Rahmenordner')
+    app.folders.append(folder)
+    app.lists.append(app.new_list_object('Im Ordner', [app.new_item('Erhalten')], folder_id=folder['id']))
+    assert app.save_items()
+    color = next(key for key in app.LIST_COLOR_KEYS if key)
+    snapshot = app.snapshot_undo
+    def neue_farbreferenzen(*args, **kwargs):
+        snapshot(*args, **kwargs)
+        app.folders = copy.deepcopy(app.folders)
+    with patch.object(app, 'snapshot_undo', side_effect=neue_farbreferenzen):
+        app.set_folder_color(folder['id'], color)
+    assert app.get_folder(folder['id'])['color'] == color
+    assert app._last_save_result.data_written
+    stable = list(app.undo_stack)
+    app.set_folder_color(folder['id'], color)
+    assert app.undo_stack == stable, 'Gleiche Farbe verbraucht Undo'
+    app.trash_folder(folder['id']); lauf.idle()
+    trash = next(entry for entry in app.trash if entry['kind'] == app.TRASH_KIND_FOLDER)
+    disk = lauf.datei()
+    with patch.object(app, 'write_json_atomic', side_effect=OSError('Hauptdatei gesperrt')):
+        assert app.restore_trash_entry(trash['id']) is False, 'Restore meldet ungespeicherten Erfolg'
+    assert lauf.datei() == disk and app.dirty
+    assert app.get_folder(folder['id']), 'Fehlgeschlagene Änderung bleibt offen und rücknehmbar'
+    assert app._last_save_result.data_written is False
+    app.undo_last_change(); lauf.idle()
+    assert not app.get_folder(folder['id']) and app.get_trash_entry(trash['id'])
+    assert app.restore_trash_entry(trash['id']) is True
+    app.empty_trash(); lauf.idle()
+    assert not app.trash
+    app.empty_trash()
+    app.set_folder_color('fehlt', 'red')
+    assert len(app.undo_stack) <= app.MAX_UNDO_STEPS
+    lauf.neustart()
+    assert app is not lauf.app and lauf.app.get_folder(folder['id'])
+    assert lauf.app.find_item_in_lists(ids['A'])
+    return 'Gruppieren/Auflösen, Farbe, Ordnerpapierkorb, Restore/Leeren: ehrliche Ergebnisse, ein Undo/Redo, No-op, voller Stapel und Neustart'
+
+
+def fall_struktur_dialog(lauf):
+    """Objekte und Reihenfolge dürfen sich während eines modalen Dialogs ändern."""
+    app = lauf.app
+    ids = lauf.grundbestand()
+    app.tree.selection_set((ids['A'], ids['B']))
+
+    def austausch(*_args, **_kwargs):
+        app.items = copy.deepcopy(app.items)
+        app.items.insert(0, app.items.pop())
+        app.sync_current_list_reference()
+        return 'Frische Gruppe'
+
+    with patch.object(app, 'themed_input_dialog', side_effect=austausch):
+        app.group_selected_items()
+    group = next((item for item in app.items if item.get('text') == 'Frische Gruppe'), None)
+    assert group and app.items.index(group) == 1, 'Gruppieren hält alte Geschwister/Position über den Dialog'
+    assert [item['id'] for item in group['children']] == [ids['A'], ids['B']]
+    app.undo_last_change(); lauf.idle()
+    assert [item['text'] for item in app.items[:3]] == ['H', 'A', 'B']
+    app.tree.selection_set((ids['A'], ids['B']))
+
+    def andere_ebene(*_args, **_kwargs):
+        first = app.find_item(ids['A'])[0]
+        second = app.remove_item_by_id(ids['B'])
+        first['children'].append(second)
+        return 'Veraltet'
+
+    depth = len(app.undo_stack)
+    with patch.object(app, 'themed_input_dialog', side_effect=andere_ebene):
+        app.group_selected_items()
+    assert not any(item.get('text') == 'Veraltet' for item in app.items)
+    assert len(app.undo_stack) == depth, 'Veränderte Ebene darf keinen Undo-Schritt verbrauchen'
+    folder = app.new_folder_object('Alt')
+    app.folders.append(folder)
+    assert app.save_items()
+
+    def neuer_ordner(*_args, **_kwargs):
+        app.folders = copy.deepcopy(app.folders)
+        app.get_folder(folder['id'])['title'] = 'Frischer Titel'
+        return True
+
+    with patch.object(app, 'ask_yes_no', side_effect=neuer_ordner):
+        app.delete_folder(folder['id'])
+    trashed = next(entry['folder'] for entry in app.trash if entry['kind'] == app.TRASH_KIND_FOLDER)
+    assert trashed['title'] == 'Frischer Titel', 'Ordnerauflösen archiviert veraltetes Dialogobjekt'
+    # Ein voller Papierkorb verdrängt regulär den ältesten Eintrag. Der neue
+    # Strukturwächter darf deshalb keine gültige Ordnerauflösung zurücknehmen.
+    app.trash = [app.new_trash_entry(app.TRASH_KIND_ITEM, app.new_item('Alte Ablage ' + str(i)))
+                 for i in range(app.MAX_TRASH_ENTRIES)]
+    oldest = app.trash[-1]['item']['id']
+    full_folder = app.new_folder_object('Bei vollem Papierkorb')
+    app.folders.append(full_folder)
+    child_list = app.new_list_object('Bleibt', [app.new_item('Bleibt auch')], folder_id=full_folder['id'])
+    app.lists.append(child_list)
+    assert app.save_items()
+    with patch.object(app, 'refresh_tree', side_effect=RuntimeError('Inhaltsansicht')):
+        app.delete_folder(full_folder['id'])
+    assert not app.get_folder(full_folder['id']), 'Voller Papierkorb verhindert reguläre Ordnerauflösung'
+    assert child_list['folder_id'] is None and child_list['items'][0]['id'] in lauf.datei_ids()
+    assert len(app.trash) == app.MAX_TRASH_ENTRIES and oldest not in app.data_item_ids()
+    app.undo_last_change(); lauf.idle()
+    assert app.get_folder(full_folder['id']) and oldest in app.data_item_ids()
+    return 'Gruppieren löst IDs/Geschwister/Position nach Dialog neu auf; geänderte Ebene bricht ohne Undo ab; Ordner verwendet frisches Objekt'
+
+
+def fall_struktur_editor(lauf):
+    """Ordnerpapierkorb übernimmt Seitentext, bevor der Container verschwindet."""
+    app, mod = lauf.app, lauf.mod
+    lauf.grundbestand()
+    folder = app.new_folder_object('Offene Seite')
+    app.folders.append(folder)
+    page = app.new_page_from_markdown('# Prüfseite\n\nAusgangstext', folder_id=folder['id'])
+    lauf.idle()
+    editor = app.rich_note_editor
+    limit = mod.RichNoteEditor.MAX_TEXT
+    disk = lauf.datei()
+    undo = list(app.undo_stack)
+    try:
+        mod.RichNoteEditor.MAX_TEXT = len(editor.text.get('1.0', 'end-1c')) + 3
+        editor.text.insert('end', '\nNicht übernommener Nachtrag')
+        app.trash_folder(folder['id'])
+        assert app.get_folder(folder['id']), 'Ordner entfernt, bevor offener Text übernommen ist'
+        assert app.active_list_id == page['id'] and app.rich_note_editor is editor
+        assert lauf.datei() == disk and app.undo_stack == undo
+        assert 'Nicht übernommener Nachtrag' in editor.text.get('1.0', 'end-1c')
+    finally:
+        mod.RichNoteEditor.MAX_TEXT = limit
+    app.trash_folder(folder['id']); lauf.idle()
+    assert not app.get_folder(folder['id'])
+    trashed = next(entry['list'] for entry in app.trash if entry['kind'] == app.TRASH_KIND_LIST
+                   and entry['list']['id'] == page['id'])
+    assert 'Nicht übernommener Nachtrag' in json.dumps(trashed, ensure_ascii=False)
+    app.undo_last_change(); lauf.idle()
+    assert app.get_folder(folder['id'])
+    assert 'Nicht übernommener Nachtrag' in app.page_markdown(page['id'])
+    readonly = copy.deepcopy(app.folders)
+    with patch.object(app, 'refresh_data_lock', return_value=False):
+        app.trash_folder(folder['id'])
+        app.delete_folder(folder['id'])
+        app.set_folder_color(folder['id'], 'red')
+    assert app.folders == readonly
+    return 'Nicht übernommener Text hält Ordnerpapierkorb an; erfolgreicher Flush bewahrt Text im Papierkorb und Undo; Sperrfehler verhindert Mutation'
 
 
 def main():

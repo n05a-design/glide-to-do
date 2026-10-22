@@ -1,0 +1,11 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "64d042d18f096b75c43bad349cb6247bcb5861f013cdc5bf494eadc740daa957",
+  "faelle": {
+    "struktur_dialog": {
+      "ok": true,
+      "befund": "Gruppieren löst IDs/Geschwister/Position nach Dialog neu auf; geänderte Ebene bricht ohne Undo ab; Ordner verwendet frisches Objekt"
+    }
+  },
+  "fehler": []
+}

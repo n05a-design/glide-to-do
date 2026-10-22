@@ -1,0 +1,175 @@
+"""Konversion, Workergrenzen und Abbruch ohne Tk oder echte Nutzerdaten."""
+from pathlib import Path
+import ast
+import sys
+import tempfile
+import threading
+import time
+import unittest
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'src/glide'))
+import image_conversion as conversion
+
+
+def wait_for(predicate, timeout=4):
+    deadline = time.monotonic()+timeout
+    while time.monotonic() < deadline:
+        if predicate():
+            return
+        time.sleep(.005)
+    raise AssertionError('Workerzustand nicht rechtzeitig erreicht')
+
+
+class Files(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix='glide-bildunit-')
+        self.addCleanup(self.temp.cleanup)
+        self.source = Path(self.temp.name)/'quelle.jpg'
+        self.source.write_bytes(b'Quelle')
+        self.cache = Path(self.temp.name)/'cache'
+
+    def convert(self, runner, **options):
+        return conversion.convert_file(str(self.source), str(self.cache), 'darwin', runner=runner, **options)
+
+    def test_atomic_success_and_reuse(self):
+        calls = []
+        def runner(command, cancel, **options):
+            calls.append(command)
+            Path(command[-1]).write_bytes(b'fertiges PNG')
+            return True
+        result = self.convert(runner)
+        self.assertEqual(Path(result).read_bytes(), b'fertiges PNG')
+        self.assertEqual(self.convert(runner), result)
+        self.assertEqual(len(calls), 1)
+        self.source.write_bytes(b'Neue Quelle mit anderer Groesse')
+        self.assertNotEqual(self.convert(runner), result)
+
+    def test_partial_output_is_not_published(self):
+        def runner(command, cancel, **options):
+            Path(command[-1]).write_bytes(b'unvollstaendig')
+            return False
+        self.assertIsNone(self.convert(runner))
+        self.assertEqual(list(self.cache.iterdir()), [])
+
+    def test_source_change_discards_conversion(self):
+        def runner(command, cancel, **options):
+            Path(command[-1]).write_bytes(b'alt')
+            self.source.write_bytes(b'Inzwischen geaendert')
+            return True
+        self.assertIsNone(self.convert(runner))
+        self.assertEqual(list(self.cache.iterdir()), [])
+
+    def test_cancel_discards_conversion(self):
+        cancel = threading.Event()
+        def runner(command, event, **options):
+            Path(command[-1]).write_bytes(b'alt')
+            event.set()
+            return True
+        self.assertIsNone(self.convert(runner, cancel=cancel))
+        self.assertEqual(list(self.cache.iterdir()), [])
+
+    def test_missing_or_already_cancelled_does_not_start(self):
+        cancel = threading.Event(); cancel.set()
+        def unexpected(*args, **kwargs):
+            self.fail('Konverter unnoetig gestartet')
+        self.assertIsNone(self.convert(unexpected, cancel=cancel))
+        self.source.unlink()
+        self.assertIsNone(self.convert(unexpected))
+
+    def test_actual_child_cancel_and_timeout(self):
+        for cancelled in (False, True):
+            cancel = threading.Event()
+            timer = threading.Timer(.1, cancel.set) if cancelled else None
+            if timer:
+                timer.start()
+            start = time.monotonic()
+            self.assertFalse(conversion.run_converter([sys.executable, '-c', 'import time;time.sleep(60)'],
+                                                     cancel, timeout=.2 if not cancelled else 10))
+            self.assertLess(time.monotonic()-start, 5)
+            if timer:
+                timer.join()
+
+    def test_nonzero_child_is_failure(self):
+        self.assertFalse(conversion.run_converter([sys.executable, '-c', 'raise SystemExit(7)'], threading.Event()))
+
+
+class Worker(unittest.TestCase):
+    def setUp(self):
+        self.service = conversion.ConversionService(capacity=1, history=4)
+        self.addCleanup(self.service.close)
+
+    def test_single_worker_deduplicates_and_bounds_queue(self):
+        entered = threading.Event(); release = threading.Event(); calls = []
+        self.addCleanup(release.set)
+        def work(cancel):
+            calls.append(threading.get_ident()); entered.set(); release.wait(3)
+            return 'fertig'
+        self.service.submit(('a',), work)
+        self.assertTrue(entered.wait(2))
+        self.assertEqual(self.service.submit(('a',), work), 'running')
+        self.assertEqual(self.service.submit(('b',), lambda c:'b'), 'queued')
+        self.assertEqual(self.service.submit(('c',), lambda c:'c'), 'busy')
+        release.set()
+        wait_for(lambda:self.service.state(('b',))[0]=='ready')
+        self.assertEqual(len(calls), 1)
+        self.assertNotEqual(calls[0], threading.get_ident())
+
+    def test_failure_is_cached_until_retry(self):
+        calls = []
+        def fail(cancel):
+            calls.append(1); return None
+        self.service.submit(('a',), fail)
+        wait_for(lambda:self.service.state(('a',))[0]=='failed')
+        self.assertEqual(self.service.submit(('a',), fail), 'failed')
+        self.assertEqual(len(calls), 1)
+        self.service.submit(('a',), lambda c:'neu', retry=True)
+        wait_for(lambda:self.service.state(('a',))==('ready','neu'))
+
+    def test_queued_cancellation_does_not_run(self):
+        entered=threading.Event(); release=threading.Event(); calls=[]
+        self.addCleanup(release.set)
+        self.service.submit(('a',),lambda c:(entered.set(), release.wait(3)))
+        self.assertTrue(entered.wait(2))
+        self.service.submit(('b',),lambda c:calls.append(1))
+        self.service.cancel(('b',)); release.set()
+        wait_for(lambda:self.service.state(('a',))[0]=='ready')
+        self.assertEqual(calls,[])
+        self.assertEqual(self.service.state(('b',))[0],'cancelled')
+
+    def test_cancelled_old_task_cannot_replace_new_generation(self):
+        entered=threading.Event(); release=threading.Event()
+        self.addCleanup(release.set)
+        def old(cancel):
+            entered.set(); release.wait(3); return 'alt'
+        self.service.submit(('a',),old); self.assertTrue(entered.wait(2))
+        self.service.cancel(('a',))
+        self.service.submit(('a',),lambda c:'neu'); release.set()
+        wait_for(lambda:self.service.state(('a',))==('ready','neu'))
+
+    def test_exceptions_do_not_kill_worker_and_history_is_bounded(self):
+        def broken(cancel):
+            raise ValueError('defektes Bild')
+        self.service.submit(('a',),broken)
+        wait_for(lambda:self.service.state(('a',))[0]=='failed')
+        for i in range(8):
+            self.service.submit((i,),lambda c:'ok')
+            wait_for(lambda:self.service.state((i,))[0]=='ready')
+        self.assertLessEqual(len(self.service._tasks),4)
+
+    def test_close_cancels_active_and_rejects_new_tasks(self):
+        entered=threading.Event(); stopped=threading.Event()
+        def work(cancel):
+            entered.set(); cancel.wait(3); stopped.set()
+        self.service.submit(('a',),work); self.assertTrue(entered.wait(2))
+        self.service.close(); self.assertTrue(stopped.wait(2))
+        self.assertEqual(self.service.submit(('b',),lambda c:'b'),'closed')
+
+    def test_module_has_no_tk_import(self):
+        tree=ast.parse(Path(conversion.__file__).read_text(encoding='utf-8'))
+        imports=[n.module for n in ast.walk(tree) if isinstance(n,ast.ImportFrom)]
+        imports += [a.name for n in ast.walk(tree) if isinstance(n,ast.Import) for a in n.names]
+        self.assertFalse(any('tkinter' in str(x) for x in imports))
+
+
+if __name__=='__main__':
+    unittest.main()

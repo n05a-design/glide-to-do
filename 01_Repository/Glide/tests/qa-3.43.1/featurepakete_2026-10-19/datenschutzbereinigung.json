@@ -1,0 +1,7 @@
+{
+  "datei": "02_uiux_abschluss.json",
+  "art": "Persoenlichen Benutzerpfad im alten QA-Nachweis maskiert; inhaltliche Testergebnisse unveraendert",
+  "sha256_vorher": "10c382110d0b88a9c54f4c22b690cb097a8dce1daa3ce0f39ca65737091246d1",
+  "sha256_nachher": "5c5625d51fefd3363e5b117c16f7fd2fefbf82ea7905e29494aca7544c8a7e2b",
+  "rohbeleg_lokal_erhalten": true
+}

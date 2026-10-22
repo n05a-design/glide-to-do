@@ -1,0 +1,44 @@
+[
+  {
+    "schritt": "02_markdown_gegenprobe",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 18.49
+  },
+  {
+    "schritt": "02_seitenkarten_gegenprobe",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 40.27
+  },
+  {
+    "schritt": "02_markdown_abschluss",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 18.68
+  },
+  {
+    "schritt": "02_seitenkarten_abschluss",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 51.26
+  },
+  {
+    "schritt": "02_bildkonversion_abschluss",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 55.93
+  },
+  {
+    "schritt": "02_uiux_abschluss",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 168.25
+  },
+  {
+    "schritt": "02_showcase_abschluss",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 30.48
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "schritt": "gegenprobe_maske",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 7.27
+  },
+  {
+    "schritt": "gegenprobe_migration",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 11.09
+  },
+  {
+    "schritt": "fachlogik",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 28.17
+  },
+  {
+    "schritt": "gezielt",
+    "exitcode": 1,
+    "erwartet": 0,
+    "sekunden": 80.47
+  }
+]

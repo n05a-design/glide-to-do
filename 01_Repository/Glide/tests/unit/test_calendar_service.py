@@ -108,25 +108,6 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual(list(self.service.windows), [2026])
         self.assertEqual(len(self.worker_ids), 3)
 
-    def test_old_load_result_is_ignored_after_source_change(self):
-        started, release = Event(), Event()
-        old_reader = self.service.reader
-        def reader(*args):
-            started.set()
-            self.assertTrue(release.wait(3))
-            return old_reader(*args)
-        self.service.reader = reader
-        token = self.service.load(self.path, timezone.utc, DAY)
-        self.assertTrue(started.wait(3))
-        self.service.disable()
-        release.set()
-        self.assertTrue(self.finished.wait(3))
-        result = self.service._results.get(timeout=3)
-        self.service._results.put(result)
-        self.assertFalse(self.service.poll())
-        self.assertGreater(self.service.generation, token)
-        self.assertEqual(self.service.view(DAY).status, "disabled")
-
     def test_adopt_only_matching_hash_and_closed_service_stays_closed(self):
         source = busy_calendar.read_source(self.path, timezone.utc)
         window = busy_calendar.expand_window(source, date(2026, 1, 1), date(2026, 12, 31))
@@ -170,6 +151,195 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual((current.status,len(current.blocks)),("ready",1))
         self.assertEqual(current.blocks[0].start.tzinfo,berlin)
         self.assertFalse(self.service.view(date(2026,10,12),berlin).blocks)
+
+
+class ObsoleteReadTests(unittest.TestCase):
+    """Ereignisse bestimmen die Reihenfolge, Zeitlimits erkennen nur Hänger."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix="glide-calendar-obsolete-")
+        self.addCleanup(self.temp.cleanup)
+        self.paths, self.sources = {}, {}
+        for name in ("old", "latest", "adopted"):
+            path = Path(self.temp.name) / (name + ".ics")
+            path.write_text("BEGIN:VCALENDAR\nBEGIN:VEVENT\nUID:" + name
+                            + "\nDTSTART:20261011T080000Z\nDURATION:PT1H\nEND:VEVENT\nEND:VCALENDAR\n")
+            self.paths[name] = path
+            self.sources[name] = busy_calendar.read_source(path, timezone.utc)
+        self.old_started, self.old_release = Event(), Event()
+        self.latest_started, self.latest_release = Event(), Event()
+        self.latest_release.set()
+        self.expansion_started, self.expansion_release = Event(), Event()
+        self.expansion_release.set()
+        self.old_read_error = self.old_expansion_error = None
+        self.block_old_expansion = False
+        self.reads, self.expanded = [], []
+
+        def reader(path, *args):
+            name = next(name for name, candidate in self.paths.items() if candidate == path)
+            self.reads.append(name)
+            if name == "old":
+                self.old_started.set()
+                if not self.old_release.wait(3):
+                    raise TimeoutError("Alter Leser wurde nicht freigegeben")
+                if self.old_read_error is not None:
+                    raise self.old_read_error
+            else:
+                self.latest_started.set()
+                if not self.latest_release.wait(3):
+                    raise TimeoutError("Neuer Leser wurde nicht freigegeben")
+            return self.sources[name]
+
+        def expander(source, *args):
+            self.expanded.append(source.sha256)
+            if source is self.sources["old"] and self.block_old_expansion:
+                self.expansion_started.set()
+                if not self.expansion_release.wait(3):
+                    raise TimeoutError("Alte Expansion wurde nicht freigegeben")
+                if self.old_expansion_error is not None:
+                    raise self.old_expansion_error
+            return busy_calendar.expand_window(source, *args)
+
+        self.service = CalendarService(reader=reader, expander=expander)
+        self.addCleanup(self.stop)
+
+    def stop(self):
+        self.old_release.set()
+        self.latest_release.set()
+        self.expansion_release.set()
+        self.service.close()
+        if self.service._thread is not None:
+            self.service._thread.join(3)
+            self.assertFalse(self.service._thread.is_alive(), "Kalenderarbeiter beendet sich nicht")
+
+    def start_old_read(self):
+        token = self.service.load(self.paths["old"], timezone.utc, DAY)
+        self.assertTrue(self.old_started.wait(3), "Alter Leser startet nicht")
+        return token
+
+    def finish_worker(self):
+        # Der vorhandene Endmarker steht hinter allen Testaufträgen. join()
+        # belegt ihren Abschluss auch dann, wenn ein veralteter Auftrag weder
+        # Expansion noch Ergebnis erzeugt. Kein Sleep und kein Pollingrennen.
+        self.service._jobs.put(None)
+        self.service._thread.join(3)
+        self.assertFalse(self.service._thread.is_alive(), "Kalenderarbeiter beendet sich nicht")
+        return self.service.poll()
+
+    def test_source_change_skips_obsolete_expansion_and_runs_latest_on_same_worker(self):
+        token = self.start_old_read()
+        worker = self.service._thread
+        self.service.load(self.paths["latest"], timezone.utc, DAY)
+        self.old_release.set()
+        self.assertTrue(self.finish_worker())
+        self.assertEqual(self.reads, ["old", "latest"])
+        self.assertEqual(self.expanded, [self.sources["latest"].sha256])
+        self.assertIs(self.service._thread, worker)
+        self.assertGreater(self.service.generation, token)
+        self.assertIs(self.service.source, self.sources["latest"])
+        self.assertEqual(self.service.view(DAY).status, "ready")
+        self.assertEqual(self.service.pending, set())
+
+    def test_disable_during_read_skips_expansion_and_keeps_disabled(self):
+        self.start_old_read()
+        self.service.disable()
+        self.old_release.set()
+        self.assertFalse(self.finish_worker())
+        self.assertEqual(self.expanded, [])
+        self.assertEqual(self.service.view(DAY).status, "disabled")
+        self.assertEqual((self.service.pending, self.service.failures), (set(), {}))
+        self.assertFalse(self.service.loading)
+
+    def test_same_source_reload_skips_old_year_and_keeps_latest_generation(self):
+        self.start_old_read()
+        self.service.load(self.paths["old"], timezone.utc, date(2027, 1, 1))
+        self.old_release.set()
+        self.assertTrue(self.finish_worker())
+        self.assertEqual(self.reads, ["old", "old"])
+        self.assertEqual(self.expanded, [self.sources["old"].sha256])
+        self.assertEqual(list(self.service.windows), [2027])
+        self.assertEqual(self.service.pending, set())
+
+    def test_queued_source_change_is_skipped_before_reading(self):
+        self.start_old_read()
+        self.service.load(self.paths["latest"], timezone.utc, DAY)
+        self.service.load(self.paths["adopted"], timezone.utc, DAY)
+        self.old_release.set()
+        self.assertTrue(self.finish_worker())
+        self.assertEqual(self.reads, ["old", "adopted"])
+        self.assertEqual(self.expanded, [self.sources["adopted"].sha256])
+        self.assertIs(self.service.source, self.sources["adopted"])
+
+    def test_close_during_read_skips_expansion_and_keeps_closed(self):
+        self.start_old_read()
+        self.service.close()
+        self.old_release.set()
+        self.assertFalse(self.finish_worker())
+        self.assertEqual(self.expanded, [])
+        self.assertEqual(self.service.view(DAY).status, "closed")
+        self.assertEqual(self.service.pending, set())
+
+    def test_adopt_during_read_skips_expansion_and_preserves_adopted_window(self):
+        source = self.sources["adopted"]
+        window = busy_calendar.expand_window(source, date(2026, 1, 1), date(2026, 12, 31))
+        self.start_old_read()
+        self.service.adopt(source, window)
+        self.old_release.set()
+        self.assertFalse(self.finish_worker())
+        self.assertEqual(self.expanded, [])
+        self.assertIs(self.service.source, source)
+        self.assertIs(self.service.windows[DAY.year], window)
+        self.assertEqual(self.service.view(DAY).status, "ready")
+
+    def assert_latest_waiting_after_old_completion(self):
+        self.assertTrue(self.latest_started.wait(3), "Neuer Leser startet nicht")
+        # Das alte Ergebnis liegt vor dem Start des nächsten Readers in _results.
+        self.assertFalse(self.service.poll())
+        self.assertTrue(self.service.loading)
+        self.assertEqual(self.service.pending, {DAY.year})
+        self.assertEqual((self.service.error, self.service.failures), ("", {}))
+        self.assertEqual(self.service.view(DAY).status, "loading")
+        self.latest_release.set()
+        self.assertTrue(self.finish_worker())
+        self.assertEqual(self.service.view(DAY).status, "ready")
+        self.assertIs(self.service.source, self.sources["latest"])
+
+    def test_obsolete_reader_error_does_not_clear_latest_loading_or_pending_state(self):
+        self.old_read_error = ValueError("Veralteter Lesefehler")
+        self.latest_release.clear()
+        self.start_old_read()
+        self.service.load(self.paths["latest"], timezone.utc, DAY)
+        self.old_release.set()
+        self.assert_latest_waiting_after_old_completion()
+        self.assertEqual(self.expanded, [self.sources["latest"].sha256])
+
+    def test_already_running_expansion_result_does_not_replace_latest_source(self):
+        self.block_old_expansion = True
+        self.expansion_release.clear()
+        self.latest_release.clear()
+        self.start_old_read()
+        self.old_release.set()
+        self.assertTrue(self.expansion_started.wait(3), "Alte Expansion startet nicht")
+        self.service.load(self.paths["latest"], timezone.utc, DAY)
+        self.expansion_release.set()
+        self.assert_latest_waiting_after_old_completion()
+        self.assertEqual(self.expanded, [self.sources["old"].sha256,
+                                        self.sources["latest"].sha256])
+
+    def test_already_running_expansion_finishes_and_its_old_error_stays_ignored(self):
+        self.block_old_expansion = True
+        self.old_expansion_error = ValueError("Veralteter Expansionsfehler")
+        self.expansion_release.clear()
+        self.latest_release.clear()
+        self.start_old_read()
+        self.old_release.set()
+        self.assertTrue(self.expansion_started.wait(3), "Alte Expansion startet nicht")
+        self.service.load(self.paths["latest"], timezone.utc, DAY)
+        self.assertFalse(self.latest_started.is_set())
+        self.expansion_release.set()
+        self.assert_latest_waiting_after_old_completion()
+        self.assertEqual(self.expanded, [self.sources["old"].sha256,
+                                        self.sources["latest"].sha256])
 
 if __name__ == "__main__":
     unittest.main()

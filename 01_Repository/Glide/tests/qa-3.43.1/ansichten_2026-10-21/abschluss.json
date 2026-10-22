@@ -1,0 +1,41 @@
+{
+  "app_sha256": "7d0645b4a399d9deb10851e0d095d4da15c64b5033b3e3bd19b015c59dcb2769",
+  "unit_tests": 812,
+  "unit_tests_ohne_systemzeitzonen": 812,
+  "werkzeugtests": 152,
+  "gezielte_faelle": 9,
+  "rote_adapter_gegenproben": 6,
+  "rote_layout_gegenproben": 1,
+  "alte_filterkombinationen": 30,
+  "ci_exitcode": 0,
+  "ci_status": {
+    "ausgeführt": 18,
+    "Hinweis": 1
+  },
+  "neuer_vollprueflauf": false,
+  "registrierte_integrationssuiten": 100,
+  "messung": {
+    "punkte": 10000,
+    "reine_auswertung_ms": [
+      29.705299995839596,
+      22.354300002916716,
+      21.673199997167103,
+      23.16909999353811,
+      26.75920000183396
+    ],
+    "median_ms": 23.16909999353811,
+    "grenze_ms": 100,
+    "app_auswertung_ms": [
+      58.64260000817012,
+      57.30020000191871,
+      56.138699990697205
+    ],
+    "app_quellen_unveraendert": true
+  },
+  "grenzen": [
+    "Stufe 2 nicht umgesetzt",
+    "Kein neuer 100-Suiten-Vollnachweis",
+    "Keine neue 07-/Paketlieferung",
+    "Native Mehrplattform-/Menschenabnahme offen"
+  ]
+}

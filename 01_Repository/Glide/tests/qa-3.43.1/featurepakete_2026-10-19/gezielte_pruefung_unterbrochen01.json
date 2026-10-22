@@ -1,0 +1,20 @@
+[
+  {
+    "schritt": "markdown_gegenprobe",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 16.85
+  },
+  {
+    "schritt": "seitenkarten_gegenprobe",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 38.73
+  },
+  {
+    "schritt": "markdown_abschluss",
+    "exitcode": 1,
+    "erwartet": 0,
+    "sekunden": 17.95
+  }
+]

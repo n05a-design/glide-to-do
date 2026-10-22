@@ -1,0 +1,12 @@
+{
+  "app_sha256": "3b93a24a8584821d77f8ff0f74b0c681e1555dea4fe9953a7b54edf3d9fd65ac",
+  "faelle": {
+    "altfilter": {
+      "ok": true,
+      "messung": {
+        "alte_kombinationen": 30,
+        "identisch_zum_ausgelieferten_leser": true
+      }
+    }
+  }
+}

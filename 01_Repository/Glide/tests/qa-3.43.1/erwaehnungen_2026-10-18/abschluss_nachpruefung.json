@@ -1,0 +1,82 @@
+{
+  "syntax": {
+    "ok": true,
+    "detail": "332 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+  },
+  "versionen": {
+    "ok": true,
+    "detail": "VERSION, App, Hauptsuite und CHANGELOG: 3.43.1; Datenformat 25"
+  },
+  "dokumentation": {
+    "ok": true,
+    "detail": "Alle Dokumente einschließlich Archiv im Index; 217 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+  },
+  "stand": {
+    "ok": true,
+    "ausgabe": "Standprüfung gegen VERSION 3.43.1 · Ablage einschließlich Repository · 67 aktive Dokumente (42 fortgeschrieben, 19 festgeschrieben, 6 ohne Standaussage)\nAlle Standangaben passen zur Version; kein historisches Dokument behauptet einen aktuellen Stand.\n"
+  },
+  "diff_check": {
+    "ok": true,
+    "ausgabe": ""
+  },
+  "synchronisation": {
+    "ok": true,
+    "detail": [
+      [],
+      []
+    ]
+  },
+  "quellstand": {
+    "ok": true,
+    "dateien": 77,
+    "abweichungen": []
+  },
+  "wa26_abgleich": {
+    "ok": true,
+    "geaenderte_laufzeitdateien": [
+      "src/glide/object_references.py",
+      "src/glide/app.pyw"
+    ]
+  },
+  "geschuetzter_bestand": {
+    "ok": true,
+    "dateien": 783,
+    "abweichungen": [],
+    "nachpruefung_langer_windows_pfade": [
+      {
+        "datei": "20_Grafik_Master/05_Inspiration/21638276-modern-blau-und-lila-sanft-gradient-hintergrund-elegant-sanft-verwischen-textur-dynamisch-abstrakt-startseite-minimalistisch-holographisch-flussigkeit-hintergrund-landung-seite-vorlage-abstrakt-verschwommen-hintergrund-vektor.jpg",
+        "sha256": "adaabd1a4fe20c825d631b9086fe2c80f84483d0f1933d1ece98af3ffcd43a36",
+        "pfadlaenge": 313
+      }
+    ],
+    "beleg": "782 Dateien im Abschlusslauf bestätigt; eine weitere über erweiterten Windows-Pfad vollständig nachgehasht."
+  },
+  "dateilinks": {
+    "ok": true,
+    "dokumente": 41,
+    "links": 598,
+    "fehlend": []
+  },
+  "datenschutz": {
+    "ok": true,
+    "umfang": "versioniert und nicht ignorierte neue Dateien",
+    "dateien": []
+  },
+  "vorlauf": "abschluss.json bleibt unverändert: normaler Windows-Pfad über 260 Zeichen und noch nicht geschriebener eigener Bericht als Prüfumgebungsbefunde.",
+  "regression": {
+    "ok": true,
+    "beleg": "regression.json",
+    "units": 773,
+    "werkzeugtests": 152,
+    "bildkonversion_faelle": 9,
+    "wissen": "grün; djpeg-Teil bezeichnet übersprungen",
+    "verweise_abschnitte": 11
+  },
+  "gegenprobe": {
+    "ok": true,
+    "beleg": "gegenprobe.json",
+    "rot": 6,
+    "gruen": 0,
+    "umfang": "Alte WA-26-App, aktuelle Hilfsmodule"
+  }
+}

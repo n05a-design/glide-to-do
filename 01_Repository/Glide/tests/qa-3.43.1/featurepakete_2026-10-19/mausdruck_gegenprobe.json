@@ -1,0 +1,9 @@
+{
+  "app_sha256": "990c8d6f364aea6e8162ca039a57bf1afadf4b99d3dc028ea766ea4456207ee8",
+  "faelle": {
+    "auswahl_ziehen": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 211, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 99, in fall_auswahl_ziehen\n    assert view.visible and view.mode=='board','Mausdruck baut die Zielpinnwand vor dem Ziehen ab'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Mausdruck baut die Zielpinnwand vor dem Ziehen ab\n"
+    }
+  }
+}

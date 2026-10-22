@@ -1,0 +1,333 @@
+{
+  "Versionen": {
+    "ok": true,
+    "detail": "VERSION, App, Hauptsuite und CHANGELOG: 3.43.1; Datenformat 26"
+  },
+  "Dokumentation_Index_Links": {
+    "ok": true,
+    "detail": "Alle Dokumente einschließlich Archiv im Index; 255 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+  },
+  "Fixtures": {
+    "ok": true,
+    "detail": "20 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite"
+  },
+  "Standpruefung_mit_unversionierten_Dokumenten": {
+    "ok": true,
+    "dokumente": 81,
+    "fortgeschrieben": 42,
+    "festgeschrieben": 33,
+    "ohne_stand": 6,
+    "zusaetzlich": 14,
+    "fehler": []
+  },
+  "Lieferabweichungen": [
+    "Glide-Aufgaben-und-Listen_v3.43.1.pyw",
+    "action_catalog.py",
+    "calendar_service.py",
+    "capture_parser.py",
+    "data_lock.py",
+    "editor_flush.py",
+    "exchange_recipes.py",
+    "image_conversion.py",
+    "image_preview.py",
+    "item_index.py",
+    "load_phases.py",
+    "markdown_tree.py",
+    "object_references.py",
+    "page_features.py",
+    "pinboard_pages.py",
+    "repeat_ics.py",
+    "repeat_rules.py",
+    "save_result.py",
+    "structural_guard.py",
+    "task_editing.py",
+    "undo_history.py",
+    "view_definition.py",
+    "resources\\exchange_recipes.json"
+  ],
+  "Quelle": {
+    "path": "01_Repository/Glide/src/glide/app.pyw",
+    "sha256": "604014f9a85e9c38a2d19141a3b1039a7a9f798c39d7dcbcb0387569b0f1f68f",
+    "version": "3.43.1",
+    "format": 26
+  },
+  "Python_Lieferung": {
+    "path": "07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.43.1.pyw",
+    "sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+    "version": "3.43.1",
+    "format": 25
+  },
+  "Laufzeitdateien": 79,
+  "registrierte_Integrationssuiten": 101,
+  "Originalbilder": {
+    "anzahl": 28,
+    "alle_hashgleich": true,
+    "bilder": [
+      {
+        "id": "S01",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S02",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S03",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S04",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S05",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S06",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S07",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S08",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S09",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S10",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S11",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S12",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S13",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S14",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S15",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S16",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S17",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S18",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S19",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S20",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S21",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S22",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S23",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S24",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S25",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S26",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S27",
+        "vorhanden": true,
+        "hash_ok": true
+      },
+      {
+        "id": "S28",
+        "vorhanden": true,
+        "hash_ok": true
+      }
+    ]
+  },
+  "Dokumentduplikate": [
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/CLDR-LICENSE.txt",
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/resources/timezones/LICENSE-CLDR.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/CLDR-LICENSE.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Glide-Lizenzstatus.md",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Glide-Lizenzstatus.md",
+      "01_Repository/Glide/LICENSE.md",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/Glide-Lizenzstatus.md"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Henry-Spencer-Regex-LICENSE.txt",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Henry-Spencer-Regex-LICENSE.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/Henry-Spencer-Regex-LICENSE.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/IANA-LICENSE.txt",
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/resources/timezones/LICENSE-iana.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/IANA-LICENSE.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/libtommath-LICENSE.txt",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/libtommath-LICENSE.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/libtommath-LICENSE.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/nanosvg.h-LICENSE.txt",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/nanosvg.h-LICENSE.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/nanosvg.h-LICENSE.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/nanosvgrast.h-LICENSE.txt",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/nanosvgrast.h-LICENSE.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/nanosvgrast.h-LICENSE.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/OpenSSL-LICENSE.txt",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/OpenSSL-LICENSE.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/OpenSSL-LICENSE.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/PixelifySans-OFL.txt",
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/resources/fonts/OFL-PixelifySans.txt",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/PixelifySans-OFL.txt",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/resources/fonts/OFL-PixelifySans.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/PixelifySans-OFL.txt",
+      "01_Repository/Glide/src/glide/resources/fonts/OFL-PixelifySans.txt",
+      "07_Python-Versionen/resources/fonts/OFL-PixelifySans.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/pyinstaller-COPYING.txt",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/pyinstaller-COPYING.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/pyinstaller-COPYING.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Python-LICENSE.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/Python-LICENSE.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Python-THIRD-PARTY-NOTICES.rst",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/Python-THIRD-PARTY-NOTICES.rst"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/setuptools-LICENSE.txt",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/setuptools-LICENSE.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/setuptools-LICENSE.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/SQLite-Copyright.html",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/SQLite-Copyright.html",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/SQLite-Copyright.html"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Tcl-LICENSE.txt",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Tcl-LICENSE.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/Tcl-LICENSE.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Tk-LICENSE.txt",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Tk-LICENSE.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/Tk-LICENSE.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/tkdnd-LICENSE.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/tkdnd-LICENSE.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/XZ-COPYING.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/XZ-COPYING.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Zstandard-LICENSE.txt",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Zstandard-LICENSE.txt",
+      "01_Repository/Glide/packaging/paket/lizenzen/macos/Zstandard-LICENSE.txt"
+    ],
+    [
+      "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/resources/fonts/LICENSE",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/resources/fonts/LICENSE",
+      "01_Repository/Glide/src/glide/resources/fonts/LICENSE",
+      "07_Python-Versionen/resources/fonts/LICENSE"
+    ],
+    [
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/CLDR-LICENSE.txt",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/resources/timezones/LICENSE-CLDR.txt",
+      "01_Repository/Glide/src/glide/resources/timezones/LICENSE-CLDR.txt",
+      "07_Python-Versionen/resources/timezones/LICENSE-CLDR.txt"
+    ],
+    [
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/IANA-LICENSE.txt",
+      "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/resources/timezones/LICENSE-iana.txt",
+      "01_Repository/Glide/src/glide/resources/timezones/LICENSE-iana.txt",
+      "07_Python-Versionen/resources/timezones/LICENSE-iana.txt"
+    ],
+    [
+      "01_Repository/Glide/src/glide/vendor/tkinterdnd2/LICENSE",
+      "07_Python-Versionen/vendor/tkinterdnd2/LICENSE"
+    ],
+    [
+      "01_Repository/Glide/tests/fixtures/showcase/README.md",
+      "05_Probelisten_Testdaten/Showcase/README.md"
+    ]
+  ],
+  "Git_remote_main": "10427276b97e10528759cc42b0d23f757ca14843\trefs/heads/main"
+}

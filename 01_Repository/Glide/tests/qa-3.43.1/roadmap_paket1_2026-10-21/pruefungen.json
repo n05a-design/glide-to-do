@@ -1,0 +1,57 @@
+{
+  "app_sha256": "559c738d54d5e5323186715601f43498d2207b860893b2de207a5775aa872698",
+  "results": [
+    {
+      "name": "fachlogik",
+      "exitcode": 0,
+      "seconds": 34.628,
+      "unit_count": 843
+    },
+    {
+      "name": "werkzeuge",
+      "exitcode": 0,
+      "seconds": 2.736,
+      "unit_count": 152
+    },
+    {
+      "name": "schutzrunde",
+      "exitcode": 0,
+      "seconds": 115.899,
+      "unit_count": null
+    },
+    {
+      "name": "auftraege",
+      "exitcode": 0,
+      "seconds": 37.73,
+      "unit_count": null
+    },
+    {
+      "name": "serien_vorruecken",
+      "exitcode": 0,
+      "seconds": 7.699,
+      "unit_count": null
+    },
+    {
+      "name": "serien_schreibfehler",
+      "exitcode": 0,
+      "seconds": 6.932,
+      "unit_count": null
+    },
+    {
+      "name": "redo_schreibfehler",
+      "exitcode": 0,
+      "seconds": 6.868,
+      "unit_count": null
+    },
+    {
+      "name": "redo_bedienwege",
+      "exitcode": 0,
+      "seconds": 7.58,
+      "unit_count": null
+    }
+  ],
+  "source_unchanged": true,
+  "exitcode": 0,
+  "manifest": "quellmanifest_zwischenstand.json",
+  "scope": "Gebündelter Zwischenstand 559c738d; finale Freigabeschranke/Ordnerwechsel separat"
+}

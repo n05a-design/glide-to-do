@@ -88,6 +88,11 @@ class Classify(unittest.TestCase):
             child.wait(timeout=10)
         self.assertFalse(dl.process_alive(child.pid))
 
+    def test_old_timestamp_does_not_displace_living_local_process(self):
+        old = (NOW - timedelta(hours=9)).isoformat()
+        self.assertEqual(self.verdict(record(refreshed_at=old)), dl.FOREIGN)
+        self.assertEqual(self.verdict(record(refreshed_at=old), alive=lambda pid: False), dl.FREE)
+
 
 class CreateExclusive(unittest.TestCase):
     def setUp(self):
@@ -177,6 +182,52 @@ class Acquisition(unittest.TestCase):
                 child.stdout.close()
             with dl.acquisition(path) as recovered:
                 self.assertTrue(recovered, "Prozessabbruch darf keine dauerhafte Erwerbssperre hinterlassen")
+
+
+class Sessions(unittest.TestCase):
+    def test_reentrant_owner_and_competitor(self):
+        with tempfile.TemporaryDirectory(prefix='glide-session-') as folder:
+            a = dl.DataLockSession(Path(folder) / 'glide.lock')
+            b = dl.DataLockSession(a.path)
+            try:
+                self.assertTrue(a.acquire()); self.assertTrue(a.acquire())
+                self.assertFalse(b.acquire()); self.assertTrue(a.held)
+                a.release(); a.release()
+                self.assertTrue(b.acquire())
+            finally:
+                a.release(); b.release()
+
+    def test_1000_real_process_handoffs_and_crash_recovery(self):
+        script = ("import sys\n"
+                  f"sys.path.insert(0, {str(SRC)!r})\n"
+                  "from data_lock import DataLockSession\n"
+                  "session=DataLockSession(sys.argv[1])\n"
+                  "for command in sys.stdin:\n"
+                  " if command.strip()=='acquire': print(session.acquire(),flush=True)\n"
+                  " elif command.strip()=='release': session.release(); print('released',flush=True)\n")
+        with tempfile.TemporaryDirectory(prefix='glide-session-handoffs-') as folder:
+            a = dl.DataLockSession(Path(folder) / 'glide.lock')
+            child = subprocess.Popen([sys.executable, '-B', '-c', script, a.path],
+                                     stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                     text=True)
+            def request(command):
+                child.stdin.write(command + '\n'); child.stdin.flush()
+                return child.stdout.readline().strip()
+            try:
+                for number in range(1000):
+                    self.assertTrue(a.acquire(), number)
+                    self.assertEqual(request('acquire'), 'False', number)
+                    a.release()
+                    self.assertEqual(request('acquire'), 'True', number)
+                    self.assertFalse(a.acquire(), number)
+                    self.assertEqual(request('release'), 'released', number)
+                self.assertEqual(request('acquire'), 'True')
+                child.kill(); child.wait(timeout=10)
+                self.assertTrue(a.acquire(), 'Prozessabbruch gibt die gehaltene Sitzung frei')
+            finally:
+                a.release()
+                if child.poll() is None: child.kill(); child.wait(timeout=10)
+                child.stdin.close(); child.stdout.close(); child.stderr.close()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,9 @@
+{
+  "app_sha256": "380cd3db62a0a67e0c0e0771c675f52971f796451e74ea14f46a2e3f6442d3db",
+  "faelle": {
+    "tempo": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 240, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 222, in fall_tempo\n    assert len(entries)==10000\n           ^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    }
+  }
+}

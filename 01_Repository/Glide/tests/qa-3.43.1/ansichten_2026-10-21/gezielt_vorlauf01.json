@@ -1,0 +1,67 @@
+{
+  "app_sha256": "380cd3db62a0a67e0c0e0771c675f52971f796451e74ea14f46a2e3f6442d3db",
+  "faelle": {
+    "bedingungen": {
+      "ok": true,
+      "messung": {
+        "treffer": 1,
+        "erklaerte_bedingungen": 3
+      }
+    },
+    "oder": {
+      "ok": true,
+      "messung": {
+        "oder_ueber_listengrenzen": true,
+        "unbekannt_auch_bei_oder_ungueltig": true
+      }
+    },
+    "persistenz": {
+      "ok": true,
+      "messung": null
+    },
+    "fehler": {
+      "ok": true,
+      "messung": null
+    },
+    "altleser": {
+      "ok": true,
+      "messung": {
+        "altleser_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3"
+      }
+    },
+    "altfilter": {
+      "ok": true,
+      "messung": {
+        "alte_kombinationen": 30,
+        "identisch_zum_ausgelieferten_leser": true
+      }
+    },
+    "dialog": {
+      "ok": true,
+      "messung": {
+        "scrollbarer_dialog_fester_fuss": true
+      }
+    },
+    "tempo": {
+      "ok": true,
+      "messung": {
+        "punkte": 10000,
+        "reine_auswertung_ms": [
+          21.08909998787567,
+          21.460199990542606,
+          21.226500000921078,
+          21.38330000161659,
+          22.23049999156501
+        ],
+        "median_ms": 21.38330000161659,
+        "grenze_ms": 100,
+        "app_auswertung_ms": [
+          130.27019999572076,
+          57.310099989990704,
+          55.96959999820683
+        ],
+        "app_quellen_unveraendert": true
+      }
+    }
+  }
+}

@@ -72,13 +72,13 @@ class RueckwegTests(unittest.TestCase):
                 teile = repeat_ics.rule_parts(regel, start)
                 self.assertEqual(self.r(";".join(teile), start), regel, (regel, start, teile))
 
-    def test_rfc_monatsreihe_am_monatsende_wird_abgelehnt(self):
-        self.assertIsNone(self.r("FREQ=MONTHLY", date(2026, 1, 31)))
-        self.assertIsNone(self.r("FREQ=MONTHLY", date(2026, 1, 29)))
-        self.assertIsNone(self.r("FREQ=YEARLY", date(2028, 2, 29)))
+    def test_rfc_monatsreihe_wird_als_echte_serie_erhalten(self):
+        self.assertEqual(self.r("FREQ=MONTHLY", date(2026, 1, 31)), {"art":"serie","rrule":"FREQ=MONTHLY;INTERVAL=1"})
+        self.assertEqual(self.r("FREQ=MONTHLY", date(2026, 1, 29)), {"art":"serie","rrule":"FREQ=MONTHLY;INTERVAL=1"})
+        self.assertEqual(self.r("FREQ=YEARLY", date(2028, 2, 29)), {"art":"serie","rrule":"FREQ=YEARLY;INTERVAL=1"})
         self.assertEqual(self.r("FREQ=MONTHLY", date(2026, 1, 28)), {"art": "monatlich"})
         self.assertEqual(self.r("FREQ=MONTHLY;BYMONTHDAY=-1", date(2026, 1, 31)), {"art": "monatlich"})
-        self.assertIsNone(self.r("FREQ=MONTHLY;BYMONTHDAY=-1", date(2026, 4, 30)))
+        self.assertEqual(self.r("FREQ=MONTHLY;BYMONTHDAY=-1", date(2026, 4, 30)), {"art":"serie","rrule":"FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=-1"})
         self.assertIsNone(self.r("FREQ=MONTHLY;BYMONTHDAY=28,29,30,31;BYSETPOS=-1", date(2026, 1, 30)))
 
     def test_ohne_starttag_bisherige_abbildung(self):
@@ -86,10 +86,14 @@ class RueckwegTests(unittest.TestCase):
         self.assertEqual(self.r("FREQ=YEARLY"), {"art": "jaehrlich"})
 
     def test_nicht_abbildbar(self):
-        for text in ("FREQ=WEEKLY;COUNT=10", "FREQ=MONTHLY;BYMONTHDAY=15", "FREQ=WEEKLY;INTERVAL=2",
-                     "FREQ=MONTHLY;BYDAY=2MO", "FREQ=HOURLY", "", "FREQ=YEARLY;INTERVAL=4",
-                     "FREQ=DAILY;BYHOUR=9", "FREQ=MONTHLY;INTERVAL=2"):
+        for text in ("FREQ=MONTHLY;BYMONTHDAY=15", "FREQ=MONTHLY;BYDAY=2MO", "FREQ=HOURLY", "",
+                     "FREQ=DAILY;BYHOUR=9", "FREQ=MONTHLY;COUNT=10001", "FREQ=MONTHLY;COUNT=3;UNTIL=20300101"):
             self.assertIsNone(self.r(text, date(2026, 10, 13)), text)
+
+    def test_neue_intervalle_und_anzahl(self):
+        self.assertEqual(self.r("FREQ=WEEKLY;COUNT=10", date(2026,10,13)),{'art':'woechentlich','rest':10})
+        for text in ('FREQ=WEEKLY;INTERVAL=2','FREQ=YEARLY;INTERVAL=4','FREQ=MONTHLY;INTERVAL=2'):
+            self.assertEqual(self.r(text,date(2026,10,13))['art'],'serie')
 
 
 if __name__ == "__main__":

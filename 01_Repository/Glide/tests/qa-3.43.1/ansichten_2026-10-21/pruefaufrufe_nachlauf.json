@@ -1,0 +1,26 @@
+[
+  {
+    "schritt": "gross_gegenprobe",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 5.9
+  },
+  {
+    "schritt": "layout_gezielt",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 63.53
+  },
+  {
+    "schritt": "layout_wissen_regression",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 18.88
+  },
+  {
+    "schritt": "layout_ci",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 300.18
+  }
+]

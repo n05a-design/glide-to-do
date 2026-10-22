@@ -70,18 +70,19 @@ class AnkerTests(unittest.TestCase):
 
 
 class GanzOderGarNichtTests(unittest.TestCase):
-    NICHT_ABBILDBAR = (
-        "Team jeden ersten Montag im Monat",
-        "Team jeden 2. Dienstag im Monat",
-        "Team jeden zweiten Dienstag des Monats",
-        "Zahltag jeden letzten Freitag",
-        "Abschluss monatlich am letzten Tag",
-        "Jour fixe alle 2 Wochen montags und donnerstags",
-        "Bericht alle 2 Monate",
-        "Wartung alle 2 Jahre",
-        "Steuer jedes Quartal",
-        "Sport jede zweite Woche montags und donnerstags",
-    )
+    NICHT_ABBILDBAR = ("Zahltag jeden letzten Freitag", "Team jeden ersten Montag")
+
+    def test_fp02_neue_formen_erzeugen_ankertag_und_einen_chip(self):
+        for text in ("Team jeden ersten Montag im Monat", "Team jeden 2. Dienstag im Monat",
+                     "Team jeden zweiten Dienstag des Monats", "Abschluss monatlich am letzten Tag",
+                     "Jour fixe alle 2 Wochen montags und donnerstags", "Bericht alle 2 Monate",
+                     "Wartung alle 2 Jahre", "Steuer jedes Quartal", "Sport jede zweite Woche montags und donnerstags"):
+            result=p(text)
+            self.assertEqual(result.felder['repeat']['art'],'serie',text)
+            self.assertEqual(len(result.teile),1,text)
+            self.assertIn('due',result.felder,text)
+            self.assertNotIn('planned_date',result.felder,text)
+            self.assertIn('erster Termin',result.teile[0].text,text)
 
     def test_nicht_abbildbar_bleibt_vollstaendig_text(self):
         for text in self.NICHT_ABBILDBAR:
@@ -98,8 +99,10 @@ class GanzOderGarNichtTests(unittest.TestCase):
 
     def test_andere_felder_bleiben_erkennbar(self):
         erfassung = p("Bericht alle 2 Monate !hoch 30 min")
-        self.assertEqual(erfassung.felder, {"importance": 3, "estimated_minutes": 30})
-        self.assertEqual(erfassung.titel, "Bericht alle 2 Monate")
+        self.assertEqual(erfassung.felder["importance"],3)
+        self.assertEqual(erfassung.felder["estimated_minutes"],30)
+        self.assertEqual(erfassung.felder["repeat"]["rrule"],"FREQ=MONTHLY;INTERVAL=2")
+        self.assertEqual(erfassung.titel, "Bericht")
 
     def test_gewoehnlicher_text_bleibt_ohne_hinweis(self):
         for text in ("alle Unterlagen sortieren", "jeden Kunden anrufen", "jede Woche zählt", "jeden Tag"):

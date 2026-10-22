@@ -1,0 +1,32 @@
+[
+  {
+    "schritt": "rhythmuslogik",
+    "exitcode": 0,
+    "sekunden": 0.65
+  },
+  {
+    "schritt": "schnelleingabe",
+    "exitcode": 0,
+    "sekunden": 0.26
+  },
+  {
+    "schritt": "paketwege",
+    "exitcode": 0,
+    "sekunden": 84.96
+  },
+  {
+    "schritt": "alter_wiederholungsweg",
+    "exitcode": 0,
+    "sekunden": 6.92
+  },
+  {
+    "schritt": "ansichten_altleser",
+    "exitcode": 0,
+    "sekunden": 11.08
+  },
+  {
+    "schritt": "ansichten_altfilter",
+    "exitcode": 0,
+    "sekunden": 11.13
+  }
+]

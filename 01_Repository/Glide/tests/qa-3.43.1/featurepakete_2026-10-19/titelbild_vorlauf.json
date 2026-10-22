@@ -1,0 +1,14 @@
+{
+  "app_sha256": "990c8d6f364aea6e8162ca039a57bf1afadf4b99d3dc028ea766ea4456207ee8",
+  "faelle": {
+    "titelbild_praesentation_sicherung": {
+      "ok": true,
+      "messung": {
+        "titelbild": true,
+        "praesentation": true,
+        "app_sicherung": true,
+        "tastatur": true
+      }
+    }
+  }
+}

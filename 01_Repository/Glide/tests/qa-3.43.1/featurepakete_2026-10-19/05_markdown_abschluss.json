@@ -1,0 +1,26 @@
+{
+  "app_sha256": "ca2130336fe1a1f66341a4a995c4043da3373bd930ffe5579ae4d3fac09b0e2d",
+  "faelle": {
+    "showcase": {
+      "ok": true,
+      "messung": {
+        "listen_seiten": 11,
+        "ordner": 4,
+        "aufgaben": 24,
+        "anhangverweise": 21,
+        "anhangdateien": 15,
+        "dateien": 40,
+        "relative_links": 55,
+        "checkboxen": 24
+      }
+    },
+    "abbruch_fehler": {
+      "ok": true,
+      "messung": null
+    },
+    "flush_dialog": {
+      "ok": true,
+      "messung": null
+    }
+  }
+}

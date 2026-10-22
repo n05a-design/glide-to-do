@@ -1,7 +1,8 @@
 # Probedaten
 
-Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Vorlagen 2
+Stand 21.10.2026 · Glide 3.43.1 · Lieferdaten in Speicherstufe 25 · Vorlagen 2
 
+**Trennung zum Quellkandidaten:** Der aktuelle Quellkandidat nutzt Format 26. Die hier vorhandenen Liefer-/Beispieldateien bleiben unverändert in Speicherstufe 25; eine neue Lieferung wurde nicht erstellt.
 Hier liegt nur noch der **[Showcase](Showcase/README.md)**: das fiktive Projekt „Parkquartier“ mit zehn bearbeitbaren Dokumenten in allen fünf Arten, sechs Originalmotiven aus der kanonischen Fixture-Ablage `01_Repository/Glide/tests/fixtures/showcase/bilder`, Projekt- und Demo-Pinnwand, Tagesplanung, Notizbuch, Archiv und zwei Vorlagen. Herkunft und Prüfsummen stehen in `showcase/quellen.json` des Quellbaums; die Motive lagen früher zusätzlich im Grafikmaster. `Showcase_starten.pyw` hält den Demobestand im eigenen Ordner `Arbeitsstand` (nicht versioniert) und öffnet nie den normalen Datenordner.
 
 Die Dateien sind bytegleiche Kopien von `01_Repository/Glide/tests/fixtures/showcase` (Abgleich `scripts/pflege/showcase_abgleich.py`, SHA-256 in `manifest.json`). Git speichert gleiche Inhalte nur einmal.

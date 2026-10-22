@@ -1,0 +1,10 @@
+{
+  "qa_nachweise": [
+    {
+      "datei": "gezielt01.json",
+      "sha256_original": "bfeab7b2d7901b5dcdfd198d8154a7c0461af872b7ab7bb103e9d114a715bb87",
+      "sha256_maskiert": "0843895991fc5d38304757945439d33adf5900ad112fb786181a82923c002237"
+    }
+  ],
+  "rohbelege_lokal_erhalten": true
+}

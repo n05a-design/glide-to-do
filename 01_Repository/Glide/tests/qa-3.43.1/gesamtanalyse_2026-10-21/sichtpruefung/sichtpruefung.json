@@ -1,0 +1,142 @@
+{
+  "app_sha256": "916c77701bd645227a734a0f8a5f10be65046f0b5c6d29feeafac203debe72f2",
+  "screens": [
+    {
+      "view": "startseite",
+      "configuration": "normal",
+      "file": "01_startseite_normal.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "heute",
+      "configuration": "normal",
+      "file": "02_heute_normal.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "labels",
+      "configuration": "normal",
+      "file": "03_labels_normal.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "vorlagen",
+      "configuration": "normal",
+      "file": "04_vorlagen_normal.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "papierkorb",
+      "configuration": "normal",
+      "file": "05_papierkorb_normal.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "liste",
+      "configuration": "normal",
+      "file": "06_liste_normal.png",
+      "captured": true,
+      "visually_reviewed": true,
+      "actual_view": "gespeichertes Spaltenboard; kein Foto der schlichten Liste"
+    },
+    {
+      "view": "seite",
+      "configuration": "normal",
+      "file": "07_seite_normal.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "pinnwand",
+      "configuration": "normal",
+      "file": "08_pinnwand_normal.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "kalender",
+      "configuration": "normal",
+      "file": "09_kalender_normal.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "startseite",
+      "configuration": "eng_gross",
+      "file": "10_startseite_eng_gross.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "heute",
+      "configuration": "eng_gross",
+      "file": "11_heute_eng_gross.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "labels",
+      "configuration": "eng_gross",
+      "file": "12_labels_eng_gross.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "vorlagen",
+      "configuration": "eng_gross",
+      "file": "13_vorlagen_eng_gross.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "papierkorb",
+      "configuration": "eng_gross",
+      "file": "14_papierkorb_eng_gross.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "liste",
+      "configuration": "eng_gross",
+      "file": "15_liste_eng_gross.png",
+      "captured": true,
+      "visually_reviewed": true,
+      "actual_view": "gespeichertes Spaltenboard; kein Foto der schlichten Liste"
+    },
+    {
+      "view": "seite",
+      "configuration": "eng_gross",
+      "file": "16_seite_eng_gross.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "pinnwand",
+      "configuration": "eng_gross",
+      "file": "17_pinnwand_eng_gross.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "kalender",
+      "configuration": "eng_gross",
+      "file": "18_kalender_eng_gross.png",
+      "captured": true,
+      "visually_reviewed": true
+    },
+    {
+      "view": "einstellungen",
+      "file": "19_einstellungen.png",
+      "captured": true,
+      "visually_reviewed": true
+    }
+  ],
+  "errors": [],
+  "limits": "Eigene Windows-Testfenster, synthetische Showcase; keine physische DPI-, Reader- oder Mehrplattformabnahme.",
+  "review_scope": "Alle 19 Einzelbilder gesichtet; Funktions-/Tastatur-/native Abnahmen separat. Weitere zwei Bereichsbilder ebenfalls gesichtet."
+}

@@ -1,6 +1,6 @@
 # Produktgrenzen und Produktprinzipien
 
-Stand 18.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 03.10.2026 mit der Produktprinzipien- und UX-Prüfung vom 01.10.2026 zusammengeführt; deren Befunde U01–U24 stehen mit Status im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt, am 06.10.2026 um die Ausschlüsse der Wettbewerbsrecherche vom 25.09.2026 ergänzt. Die Vorfassungen trägt Git.
 
@@ -45,7 +45,7 @@ Installer, Signatur, Store, Markenfreigabe und endgültige Lizenz sind gesondert
 | **P2 Form folgt Funktion** | Farbe = Rolle, Größe = Wichtigkeit, Position = Zusammenhang. | Würde die Funktion ohne dieses Element schlechter verstanden? | Jede Farbe mit genau einer Bedeutung; keine Dekoration im Standard |
 | **P3 Keine Funktion doppelt** | Jede Absicht hat einen primären Weg; Menü und Kürzel dürfen ihn spiegeln. | Gibt es eine zweite Oberfläche für dasselbe Ergebnis? | Je Absicht eine Bedienoberfläche |
 | **P4 Kein Platz verschwenden** | Inhalt vor Bedienung; Bedienelemente erscheinen dort und dann, wo sie gebraucht werden. | Wie viel Fläche zeigt Inhalt? | Bedienfläche über dem Inhalt ≤ 15 % bei 1280 × 800 |
-| **P5 Nur das Wesentliche** | Der Standard zeigt das für die Tagesarbeit Nötige, alles andere ist erreichbar. | Würde man das Element vermissen? | Startseite sieben Kacheln (D12); Kopfzeile ≤ 4 Symbolknöpfe |
+| **P5 Nur das Wesentliche** | Der Standard zeigt das für die Tagesarbeit Nötige, alles andere ist erreichbar. | Würde man das Element vermissen? | Startseite acht Standardkacheln (D12, ergänzt durch B04/D50); Kopfzeile ≤ 4 Symbolknöpfe |
 | **P6 Geringe Komplexität** | Wenige stabile Grundbegriffe (Aufgabe, Liste, Seite, Notiz, Ordner, Heute); neue Funktionen erweitern bestehende Orte. | Braucht es einen neuen Begriff, eine neue Ansicht, ein neues Fenster? | Neue Seitenleisteneinträge und Ansichten nur mit Entscheidung |
 
 **Hausregeln** (seit 26./29.09.2026, gelten weiter):
@@ -88,3 +88,5 @@ Vor der Umsetzung in den Abschnitt der Version (Funktionen, Entwicklungsplan) au
 | Änderungsverlauf | Aufgabenbestand, höchstens 15 Einträge und 15 Tage, abschaltbar; kein Wiederherstellen alter Werte |
 | Planung | Bearbeitungstag und Aufwand erzeugen keine Fälligkeit; Kapazität je Wochentag, keine automatische Terminverteilung und keine Bewertung der arbeitenden Person |
 | Gismo | spiegelt den Bestand, nie den Menschen; leitet aus Abschlüssen keine Bewertung ab |
+
+**Lokale KI-Aufträge FP-06:** Mitgelieferte und eigene Textaufträge ergänzen ausschließlich den dokumentbasierten Austausch. Glide ruft dabei weder Cloud- noch lokale KI-Dienste auf und benötigt keinen Schlüssel. Eine Weitergabe des gewählten Datei-/Zwischenablageinhalts erfolgt bewusst durch den Nutzer; die Antwort wird in den vorhandenen Importdialogen geprüft. Bedienung und Grenzen stehen im [Funktionsvertrag §11](20_FUNKTIONEN.md#11-import-ausgabe-und-austausch).

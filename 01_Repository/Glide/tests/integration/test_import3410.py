@@ -357,7 +357,7 @@ elif sys.argv[2]=='failure':
  with patch.object(m.shutil,'copy2',side_effect=OSError('synthetische Vorsicherung gesperrt')):
   a=m.ListApp(r);assert not a.save_items(show_error=False);assert p.read_bytes()==before
 else:
- a=m.ListApp(r);assert a.DATA_SCHEMA_VERSION==25 and json.loads(p.read_text())['version']==25
+ a=m.ListApp(r);assert a.DATA_SCHEMA_VERSION==26 and json.loads(p.read_text())['version']==26
  backups=list(pathlib.Path(m.BACKUP_DIR).glob('liste_vor_format25_*.json'))
  assert len(backups)==1 and backups[0].read_bytes()==before
  assert [v['id'] for v in json.loads(before)['lists']]==[v['id'] for v in a.lists]

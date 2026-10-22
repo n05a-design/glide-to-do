@@ -1,0 +1,40 @@
+{
+  "format_version": 1,
+  "recipes": [
+    {
+      "id": "split-note",
+      "title": "Notiz in Aufgaben zerlegen",
+      "mode": "create",
+      "instruction": "Zerlege den Notiz-/Seitentext und die Beschreibungen im gewählten Umfang in konkrete neue Aufgaben. Erhalte Sachverhalte und formuliere klare Titel. Kennzeichne Unklarheiten in der Beschreibung, statt Fakten oder Termine zu erfinden. Verändere die ursprüngliche Notiz nicht.",
+      "fields": ["title", "description"]
+    },
+    {
+      "id": "plan-project",
+      "title": "Projekt mit Aufwand planen",
+      "mode": "create",
+      "instruction": "Erstelle aus dem gewählten Projektkontext einen neuen Aufgabenplan mit sinnvollen Unteraufgaben und geschätzten Minuten. Nenne Annahmen und Unsicherheiten in den Beschreibungen. Erfinde keine verbindlichen Fristen.",
+      "fields": ["title", "description", "estimated_minutes"]
+    },
+    {
+      "id": "summarize",
+      "title": "Beschreibung zusammenfassen",
+      "mode": "patch",
+      "instruction": "Fasse die Beschreibung jeder gewählten Aufgabe knapp zusammen. Setze die Zusammenfassung vor den vollständigen unveränderten Originaltext, getrennt durch eine Leerzeile und die Zeile Originaltext:. Kürze oder ersetze den Originaltext nicht. Lasse leere Beschreibungen unverändert.",
+      "fields": ["description"]
+    },
+    {
+      "id": "prioritize",
+      "title": "Priorisierung mit Begründung vorschlagen",
+      "mode": "patch",
+      "instruction": "Schlage Wichtigkeit 0 bis 3 für die gewählten Aufgaben vor und begründe sie kurz. Ergänze die Begründung vor der unveränderten Originalbeschreibung. Beurteile nur die mitgegebenen Informationen; erfinde keine Termine oder Abhängigkeiten.",
+      "fields": ["importance", "description"]
+    },
+    {
+      "id": "suggest-labels",
+      "title": "Labels vorschlagen",
+      "mode": "patch",
+      "instruction": "Schlage passende Labels für die gewählten Aufgaben vor. Verwende ausschließlich Labelnamen, die bereits im Kontextpaket vorkommen. Erhalte vorhandene passende Labels. Wenn keine passenden bekannten Labels vorhanden sind, ändere nichts und erfinde keine neuen Namen.",
+      "fields": ["labels"]
+    }
+  ]
+}

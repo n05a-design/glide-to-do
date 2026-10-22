@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import struct
 import tempfile
+import time
 from types import SimpleNamespace
 import zlib
 
@@ -305,6 +306,15 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
             root.update()
             small = app.current_drawing_editor()
             assert small.model.width == size
+            # Configure passt den Zoom absichtlich 30 ms später an. update()
+            # verarbeitet nur bereits fällige Timer. Auch die unveränderte
+            # Vorfassung kann hier vor dem echten Rückruf noch 512 px in einer
+            # 481-px-Fläche melden; den tatsächlichen Rückruf begrenzt abwarten.
+            deadline = time.monotonic() + 2
+            while small._fit_job is not None and time.monotonic() < deadline:
+                root.update()
+                time.sleep(.005)
+            assert small._fit_job is None, "Automatische Größenanpassung blieb aus"
             assert small.zoom * size <= min(small._visible_size())
             assert app.current_list()["drawing"]["format_version"] == 2
         small_entry = app.current_list()
@@ -399,7 +409,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         # ================================================================
         # Format 20: Migration mit Vorsicherung, neue Felder, Bereinigung
         # ================================================================
-        assert app.DATA_SCHEMA_VERSION == 25
+        assert app.DATA_SCHEMA_VERSION == 26
         payload19 = app.data_payload()
         payload19["version"] = 19
         old_bytes = json.dumps(payload19, ensure_ascii=False, indent=4).encode("utf-8")
@@ -408,7 +418,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert app.save_items()
         backups20 = list(Path(mod.BACKUP_DIR).glob("liste_vor_format20_*.json"))
         assert len(backups20) == 1 and backups20[0].read_bytes() == old_bytes
-        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 25
+        assert json.loads(Path(mod.SAVE_FILE).read_text(encoding="utf-8"))["version"] == 26
         # Eine Datei aus einer späteren Glide-Fassung wird abgelehnt.
         future_version = app.DATA_SCHEMA_VERSION + 1
         try:
@@ -2284,7 +2294,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         assert len(kopien) == 1 and kopien[0].read_bytes() == kaputt
         assert not app._data_read_only
         assert app.save_items(show_error=False), "Nach der Kopie muss Speichern wieder gehen"
-        assert json.loads(speicher.read_text(encoding="utf-8"))["version"] == 25
+        assert json.loads(speicher.read_text(encoding="utf-8"))["version"] == 26
 
         aelter = json.loads(gueltig)
         aelter["version"] = 19

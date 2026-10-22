@@ -1,0 +1,155 @@
+{
+  "stand": "Glide 3.43.1, Analysezwischenstand 21.10.2026",
+  "zeit_utc": "2026-10-21T07:27:07.321443+00:00",
+  "scope": "Analyse, Recherche, QA-Proben, Dokumentation und Roadmap; keine Produktionsimplementierung durch diese Analyse",
+  "source_app_sha256": "916c77701bd645227a734a0f8a5f10be65046f0b5c6d29feeafac203debe72f2",
+  "live_app_sha256_bei_dokumentabschluss": "3b93a24a8584821d77f8ff0f74b0c681e1555dea4fe9953a7b54edf3d9fd65ac",
+  "methoden": [
+    {
+      "abschnitt": "01",
+      "methode": "Auftrag, Umfang, Evidenzgrenzen",
+      "status": "ausgefuehrt"
+    },
+    {
+      "abschnitt": "02",
+      "methode": "Entscheidungen und Quellenregister",
+      "status": "ausgefuehrt"
+    },
+    {
+      "abschnitt": "03",
+      "methode": "Methoden-/Abdeckungsregister",
+      "status": "ausgefuehrt"
+    },
+    {
+      "abschnitt": "04",
+      "methode": "Quell-/Remote-/Liefer-/Abnahmevarianten",
+      "status": "ausgefuehrt_mit_datierten_Lieferbelegen"
+    },
+    {
+      "abschnitt": "05",
+      "methode": "Dokumente, Zustandsangaben, Links, Originalreferenzen",
+      "status": "ausgefuehrt; fehlende historische Volltexte bleiben offen"
+    },
+    {
+      "abschnitt": "06",
+      "methode": "Delta frueherer Analysen",
+      "status": "ausgefuehrt"
+    },
+    {
+      "abschnitt": "07",
+      "methode": "Funktions-/Kennungsinventar mit getrennten Statusachsen",
+      "status": "bestehendes Inventar abgeglichen und aktueller Roadmap-Abgleich ergaenzt"
+    },
+    {
+      "abschnitt": "08",
+      "methode": "Primaerrecherche und gezielter Fremdcode",
+      "status": "ausgefuehrt; keine praktischen Fremdproduktversuche"
+    },
+    {
+      "abschnitt": "09",
+      "methode": "18 Szenarien und Bereichsuebergaenge",
+      "status": "Register abgeglichen; neue Teilpfade geprueft, keine 18 neuen Vollabnahmen"
+    },
+    {
+      "abschnitt": "10",
+      "methode": "14 Dimensionen der Paketgrenzen",
+      "status": "bestehende Pruefung aktualisiert, FP01-FP07 konkret nachgefuehrt"
+    },
+    {
+      "abschnitt": "11",
+      "methode": "AST, Erreichbarkeit, Caller, Fehler, Laufzeit, Speicher",
+      "status": "ausgefuehrt; einzelne Bereiche rot, native Grenzen offen"
+    },
+    {
+      "abschnitt": "12",
+      "methode": "Architekturvarianten und inkrementelle Grenzen",
+      "status": "ausgefuehrt als Planung"
+    },
+    {
+      "abschnitt": "13",
+      "methode": "Priorisierung und neue Chancen",
+      "status": "ausgefuehrt; WA31-WA36, bestehende IDs erhalten"
+    },
+    {
+      "abschnitt": "14",
+      "methode": "Kurze offene Entscheidungen",
+      "status": "E-I1 vorbereitet, alte Entscheidungen erhalten"
+    },
+    {
+      "abschnitt": "15",
+      "methode": "Kanonische Integration",
+      "status": "ausgefuehrt ohne zweite Roadmap"
+    },
+    {
+      "abschnitt": "16",
+      "methode": "Fortfuehrung",
+      "status": "Arbeitsablauf plus aktive zweiwoechentliche Recherche"
+    },
+    {
+      "abschnitt": "17",
+      "methode": "Abschlussabgleich",
+      "status": "Dokument-/Anker-/Datenschutzpruefung bestanden; Git-Grundstufe separat rot"
+    },
+    {
+      "abschnitt": "18",
+      "methode": "Ergebnis und Grenzen",
+      "status": "dokumentiert"
+    }
+  ],
+  "unit_tests": {
+    "tests": 820,
+    "exit": 0,
+    "scope": "eingefrorener Zwischenstand"
+  },
+  "bereichssuiten": {
+    "vollstaendig_gruen": 6,
+    "ausgefuehrt": 8,
+    "offen_rot": [
+      "test_seitenkarten",
+      "test_ansichten"
+    ],
+    "keine_gesamtfreigabe": true
+  },
+  "sichtpruefung": {
+    "einzelbilder_gesichtet": 19,
+    "zusaetzliche_bereichsbilder": 2,
+    "keine_reader_oder_native_abnahme": true
+  },
+  "dokumentabschluss": {
+    "zeit_utc": "2026-10-21T07:26:13.764633+00:00",
+    "dokumentscope": 16,
+    "datei_und_ankerlinks": 443,
+    "davon_anker": 85,
+    "linkfehler": [],
+    "benutzerpfade_in_neuen_nachweisen": [],
+    "probensyntaxfehler": [],
+    "design_regeltests": {
+      "tests": 4,
+      "exit": 0
+    },
+    "standpruefung_exit": 0,
+    "git_index": [],
+    "grundstufe": "Einmaliger Git-Auftrag Exit 1, keine Wiederholung; Dokumentpruefung ist keine gruene Gesamt-CI",
+    "vorlauf": "Zwei gueltige Verzeichnislinks wurden im ersten eigenen Pruefer als fehlende Dateien gewertet; Zielpruefung auf Datei oder Verzeichnis korrigiert. Kein Dokumentfehler."
+  },
+  "gitauftrag": {
+    "exit": 1,
+    "commit": false,
+    "push": false,
+    "wiederholung": false,
+    "nachweis": "../gitauftrag_2026-10-21/README.md"
+  },
+  "automationen": {
+    "einmaliger_push": "PAUSED, nach einem Durchlauf beendet",
+    "recherche": "ACTIVE, zweiwoechentlich Montag 09:00 Europe/Berlin",
+    "recherche_id": "glide-roadmap-und-konkurrenz-alle-zwei-wochen"
+  },
+  "limits": [
+    "kein aktueller 101-Suiten-Gesamtnachweis",
+    "kein neuer Build/Lieferabgleich/Versionswechsel",
+    "keine Mac-/Linux-/Reader-/DPI-/Mehrmonitor-/Menschenabnahme",
+    "keine praktische Konkurrenz-/Modellqualitaetsmessung",
+    "keine natuerliche Fehlerhaeufigkeit ermittelt",
+    "spaetere gezielte FP02-Ergebnisse sind gelesene Belege, kein erneut ausgefuehrter breiter Lauf"
+  ]
+}

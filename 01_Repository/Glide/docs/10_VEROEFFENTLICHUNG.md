@@ -1,6 +1,6 @@
 # Veröffentlichung – Glide
 
-Stand 16.10.2026 · Glide 3.43.1 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 25
+Stand 21.10.2026 · Glide 3.43.1 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
@@ -132,7 +132,7 @@ Technischer Entwurf zur gelieferten Basis 3.42.0, keine Veröffentlichungsfreiga
 4. Pinnwand als Board: Spalten nach Feldern, Eisenhower-Gruppierung, Bereiche, Verbindungen, Präsentation.
 5. Pixel-Werkstatt mit 16 bis 128 Zellen, Formen, Symmetrie, Mustern, Paletten, PNG- und ICO-Export.
 6. Seiten für lange Texte und KI-Berichte mit Markdown, Bildern und echten Aufgaben.
-7. Startseite „Ruhig“ mit sieben Kacheln, frei anpassbar.
+7. Startseite „Ruhig“ mit sieben Kacheln in der hier beschriebenen Paketbasis 3.42.0; seit B04/3.43.0 acht Standardkacheln im Python-Stand, frei anpassbar.
 8. Verknüpfte Punkte, „wartet auf“ mit Kreisprüfung und Zeiterfassung je Punkt.
 9. Wiederholungen, Erinnerungen, Systemmitteilungen und Kalenderaustausch per ICS.
 10. Vorlagen mit selbstfüllenden Platzhaltern wie {{Datum}} und Eingabefeldern wie {{Projektname}}.

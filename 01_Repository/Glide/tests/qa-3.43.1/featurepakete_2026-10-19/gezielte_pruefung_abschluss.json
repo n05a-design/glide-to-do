@@ -1,0 +1,44 @@
+[
+  {
+    "schritt": "05_markdown_gegenprobe",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 21.41
+  },
+  {
+    "schritt": "05_seitenkarten_gegenprobe",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 49.33
+  },
+  {
+    "schritt": "05_markdown_abschluss",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 21.36
+  },
+  {
+    "schritt": "05_seitenkarten_abschluss",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 62.23
+  },
+  {
+    "schritt": "05_katalog322",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 21.99
+  },
+  {
+    "schritt": "05_katalog325",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 9.64
+  },
+  {
+    "schritt": "05_ci_grundstufe",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 343.02
+  }
+]

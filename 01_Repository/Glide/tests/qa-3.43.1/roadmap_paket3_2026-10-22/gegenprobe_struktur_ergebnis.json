@@ -1,0 +1,13 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "fefde636c8b7a639adf4d86f7e8cac7567037a81b80b87d812f0d827bdc3a20e",
+  "faelle": {
+    "struktur_ergebnis": {
+      "ok": false,
+      "befund": "AssertionError('Gruppieren meldet Erfolg trotz Schreibfehler')"
+    }
+  },
+  "fehler": [
+    "struktur_ergebnis"
+  ]
+}

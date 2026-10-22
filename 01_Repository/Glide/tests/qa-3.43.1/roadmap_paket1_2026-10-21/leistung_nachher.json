@@ -1,0 +1,239 @@
+{
+  "app_sha256": "559c738d54d5e5323186715601f43498d2207b860893b2de207a5775aa872698",
+  "sizes": [
+    {
+      "items": 100,
+      "operations": [
+        {
+          "selected": 1,
+          "first_ms": 39.53,
+          "values_ms": [
+            32.27,
+            33.103,
+            27.257,
+            31.412,
+            25.545
+          ],
+          "median_ms": 31.412
+        },
+        {
+          "selected": 100,
+          "first_ms": 33.931,
+          "values_ms": [
+            28.024,
+            30.35,
+            27.716,
+            31.669,
+            27.711
+          ],
+          "median_ms": 28.024
+        }
+      ]
+    },
+    {
+      "items": 1000,
+      "operations": [
+        {
+          "selected": 1,
+          "first_ms": 94.812,
+          "values_ms": [
+            97.911,
+            137.105,
+            105.155,
+            99.419,
+            87.739
+          ],
+          "median_ms": 99.419
+        },
+        {
+          "selected": 100,
+          "first_ms": 100.153,
+          "values_ms": [
+            92.442,
+            100.477,
+            92.409,
+            98.602,
+            91.199
+          ],
+          "median_ms": 92.442
+        }
+      ]
+    },
+    {
+      "items": 10000,
+      "operations": [
+        {
+          "selected": 1,
+          "first_ms": 795.31,
+          "values_ms": [
+            709.036,
+            809.551,
+            678.033,
+            765.272,
+            746.202
+          ],
+          "median_ms": 746.202
+        },
+        {
+          "selected": 100,
+          "first_ms": 787.158,
+          "values_ms": [
+            800.215,
+            733.82,
+            807.288,
+            791.218,
+            739.393
+          ],
+          "median_ms": 791.218
+        }
+      ]
+    }
+  ],
+  "repetitions": 5,
+  "warmups": 1,
+  "isolated_python_process": true,
+  "scope": "Synchroner toggle_done-Weg einschließlich Undo, sofortigem Speichern und Refresh; unprofiliert, Desktoplast. Nachlaufende Tk-Ereignisse nicht im Zeitwert enthalten.",
+  "tk": "9.0.4",
+  "profile": [
+    {
+      "file": "app.pyw",
+      "function": "toggle_done",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "cumulative_s": 2.083614
+    },
+    {
+      "file": "~",
+      "function": "<built-in method builtins.next>",
+      "primitive_calls": 50012,
+      "total_calls": 100052,
+      "cumulative_s": 1.975
+    },
+    {
+      "file": "app.pyw",
+      "function": "item_change",
+      "primitive_calls": 2,
+      "total_calls": 2,
+      "cumulative_s": 1.970133
+    },
+    {
+      "file": "contextlib.py",
+      "function": "__exit__",
+      "primitive_calls": 1,
+      "total_calls": 6,
+      "cumulative_s": 1.922876
+    },
+    {
+      "file": "app.pyw",
+      "function": "refresh_tree",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "cumulative_s": 1.016666
+    },
+    {
+      "file": "app.pyw",
+      "function": "_refresh_tree",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "cumulative_s": 1.016627
+    },
+    {
+      "file": "app.pyw",
+      "function": "_refresh_tree_contents",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "cumulative_s": 0.953136
+    },
+    {
+      "file": "app.pyw",
+      "function": "save_items",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "cumulative_s": 0.793897
+    },
+    {
+      "file": "app.pyw",
+      "function": "save_items_result",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "cumulative_s": 0.79388
+    },
+    {
+      "file": "app.pyw",
+      "function": "insert_tree_items",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "cumulative_s": 0.765228
+    },
+    {
+      "file": "app.pyw",
+      "function": "list_comparison",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "cumulative_s": 0.489238
+    },
+    {
+      "file": "save_comparison.py",
+      "function": "prepare_comparison",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "cumulative_s": 0.489211
+    },
+    {
+      "file": "save_comparison.py",
+      "function": "compare_lists",
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "cumulative_s": 0.488857
+    },
+    {
+      "file": "save_comparison.py",
+      "function": "walk",
+      "primitive_calls": 1,
+      "total_calls": 10001,
+      "cumulative_s": 0.484735
+    },
+    {
+      "file": "~",
+      "function": "<method 'get' of 'dict' objects>",
+      "primitive_calls": 1663114,
+      "total_calls": 1663114,
+      "cumulative_s": 0.224341
+    },
+    {
+      "file": "ttk.py",
+      "function": "insert",
+      "primitive_calls": 10007,
+      "total_calls": 10007,
+      "cumulative_s": 0.218508
+    },
+    {
+      "file": "save_comparison.py",
+      "function": "tree_signature",
+      "primitive_calls": 10001,
+      "total_calls": 10001,
+      "cumulative_s": 0.191454
+    },
+    {
+      "file": "save_comparison.py",
+      "function": "history_value",
+      "primitive_calls": 200004,
+      "total_calls": 200004,
+      "cumulative_s": 0.171426
+    },
+    {
+      "file": "ttk.py",
+      "function": "_format_optdict",
+      "primitive_calls": 20045,
+      "total_calls": 20045,
+      "cumulative_s": 0.165103
+    },
+    {
+      "file": "__init__.py",
+      "function": "dumps",
+      "primitive_calls": 10009,
+      "total_calls": 10009,
+      "cumulative_s": 0.157199
+    }
+  ]
+}

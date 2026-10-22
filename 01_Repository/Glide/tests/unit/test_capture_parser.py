@@ -92,7 +92,7 @@ class CaptureTests(unittest.TestCase):
   self.assertEqual(e.felder,{'repeat':{'art':'jaehrlich','start':'2027-05-31'},'due':'2027-05-31'})
   self.assertEqual([t.text for t in e.teile],['Wiederholung jährlich ab der Fälligkeit','Fällig Mo 31.05.2027'])
  def test_repeat_not_in_ordinary_text(self):
-  for text in ('alle Unterlagen sortieren','jeden Kunden anrufen','Montagsrunde vorbereiten','alle 3 Monate prüfen','alle 400 Tage'):
+  for text in ('alle Unterlagen sortieren','jeden Kunden anrufen','Montagsrunde vorbereiten','alle 400 Tage'):
    e=p(text);self.assertNotIn('repeat',e.felder,text)
   self.assertEqual(p('Sport jeden Montag',ignore={'jeden montag'}).felder,{})
  def test_suggestions(self):

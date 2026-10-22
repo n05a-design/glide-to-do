@@ -1,0 +1,29 @@
+{
+  "app_sha256": "e57087e002e1650eaebb76ceb17a6c6e71e85e8b582ecf2c9486d3ae9eb51c01",
+  "faelle": {
+    "inhalt_undo": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 200, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 38, in fall_inhalt_undo\n    app.pin_page_on_board(page['id']);run.idle()\n    ^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'pin_page_on_board'\n"
+    },
+    "archiv_loeschen": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 200, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 64, in fall_archiv_loeschen\n    app.pin_page_on_board(page['id']);identity='page:'+page['id'];run.idle()\n    ^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'pin_page_on_board'\n"
+    },
+    "auswahl_ziehen": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 200, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 90, in fall_auswahl_ziehen\n    with patch.object(app,'run_modal',side_effect=choose):view.choose_cards()\n                                                          ~~~~~~~~~~~~~~~~~^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app_featuregegenprobe.pyw.local\", line 5122, in choose_cards\n    app.run_modal(dialog)\n    ~~~~~~~~~~~~~^^^^^^^^\n  File \"~\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\unittest\\mock.py\", line 1176, in __call__\n    return self._mock_call(*args, **kwargs)\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"~\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\unittest\\mock.py\", line 1180, in _mock_call\n    return self._execute_mock_call(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"~\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\unittest\\mock.py\", line 1247, in _execute_mock_call\n    result = effect(*args, **kwargs)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 81, in choose\n    assert tree is not None and selected in tree.get_children()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "altleser_backup": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 200, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 104, in fall_altleser_backup\n    app.pin_page_on_board(page['id']);view.pin([item['id']]);view.toggle_connection('page:'+page['id'],item['id']);run.idle()\n    ^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'pin_page_on_board'\n"
+    },
+    "titelbild_praesentation_sicherung": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 200, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 131, in fall_titelbild_praesentation_sicherung\n    assert len(indices)==1\n           ^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "druck_tempo": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 200, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 181, in fall_druck_tempo\n    assert len(view.card_ids)==200 and sum(v.startswith('page:') for v in view.card_ids)==50,(len(view.card_ids),len(view.board()['cards']))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: (150, 150)\n"
+    }
+  }
+}

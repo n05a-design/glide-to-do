@@ -1,6 +1,6 @@
 # Regeln für die Dokumentenpflege
 
-Stand 18.10.2026 · Glide 3.43.1 · Datenformat 25
+Stand 21.10.2026 · Glide 3.43.1 · Datenformat 26
 
 Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder gelöscht anstatt immer nur archiviert und `_Z` zu schreiben“) und ersetzt alle früheren Archivierungsregeln.
 
@@ -55,6 +55,8 @@ Neue Dokumente unter `docs/` nur, wenn kein bestehendes das Thema trägt; sie ge
 `tests/tools/standpruefung.py` (Regeln R1–R14) prüft alle aktiven Markdown-Dokumente: Standzeile mit der aktuellen Version, Formatstufen gegen den Code, bekannte überholte Aussagen, vollständige Modullisten, erreichbare relative Links, aktuelle Titel und erste Vollprüfungsaufrufe, Suitezahl in Standzeilen. Erzeugte Pakete unter `build/` sind Kopien, keine aktiven Dokumente. Dokumente mit Version oder Datum im Namen sowie der gehashte Mac-Paketlizenzbeleg gelten als festgeschrieben; seit 03.10.2026 gibt es unter den gepflegten Dokumenten keine mehr.
 
 ## Ablageprüfung vom 18.10.2026
+
+**Pflegevertrag seit D52–D54 (21.10.2026):** Jede Entwicklungsrunde führt den bestehenden Entwicklungsplan fort, insbesondere seinen aktuellen Roadmap-Abgleich, und trennt Auftrag/Entscheidung von Implementierung, Prüfung, Lieferung und menschlicher Abnahme. Gestaltung bleibt allein in den appweit geltenden Design Richtlinien, externe Fakten im Marktbericht, technische Befunde in der Analyse und Resultate im QA-Bericht. Die zweiwöchentliche Recherche darf belegte Fakten und markierte Vorschläge lokal aktualisieren; sie entscheidet keine Features und führt keine Git-/Releaseaktion aus. Keine parallele Roadmap oder wiederholte chronologische Aufgabenliste anlegen.
 
 Der [globale Nachweis](../tests/qa-3.43.1/ablageaudit_2026-10-18/README.md) erfasst Dateien, Ordner, vollständige Hashes und Dokumentzuständigkeiten einschließlich Git und lokaler Arbeitskopien. Ignorierte Dateien sind nicht automatisch entbehrlich. Originalreferenzen, aktuelle QA-Bilder, Migrationsfixtures und bestehende Lieferstände werden unabhängig vom Git-Status geschützt. Historische Rohbelege bleiben historisch; doppelte Erzählungen werden in der aktuellen Quelle zusammengeführt.
 

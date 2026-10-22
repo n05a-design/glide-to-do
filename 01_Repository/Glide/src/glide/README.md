@@ -1,6 +1,6 @@
 # Anwendungskern
 
-Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · Vorlagen 2
+Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 `app.pyw` ist die kanonische Anwendung (Klasse `ListApp`). Daneben liegen Module, die beim Start aus demselben Ordner geladen werden und beim Kopieren oder Paketieren immer mitgehen:
 
@@ -12,6 +12,7 @@ Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · Vorl
 | `backdrop.py` | Hintergrundverläufe |
 | `page_markdown.py` | Markdown ↔ Seitendokument |
 | `image_preview.py` | Bildvorschauen mit den Mitteln von Tk 9 |
+| `image_conversion.py` | Gemeinsamer Tk-freier Konversionsdienst: ein Worker, begrenzte Queue, atomarer Cache, Zeitlimit/Abbruch und negative Ergebnisse (WA-26) |
 | `logo.py` | Logo und App-Symbol aus den SVG-Mastern in der Akzentfarbe |
 | `schema_backups.py` | Formatsicherung vor Migrationen (Tk-frei) |
 | `sidebar_policy.py` | Regeln der vier Seitenleistenbereiche (Tk-frei) |
@@ -30,7 +31,7 @@ Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · Vorl
 | `focus_timer.py` | Pausierbarer Fokus und genau einmal gebuchte Zeit (Tk-frei, G05/AU05) |
 | `task_references.py` | Heimat und Textverweise, Quellenindex, Zielzustand, ID-Neuvergabe und bearbeitete Zeilentitel ohne Tk |
 | `interaction_policy.py` | Palettensuche, gemerkte Hinweise, getrennte Datumsanzeige und X11-Emacs-Auslöser in Listen (Tk-frei) |
-| `object_references.py` | Typisierte lokale Verweise, abgeleitete Rückverweise und Import-/Kopierregeln (Tk-frei) |
+| `object_references.py` | Typisierte lokale Verweise, abgeleitete Rückverweise, unverknüpfte Titelerwähnungen (FP-05) und Import-/Kopierregeln (Tk-frei) |
 | `week_planning.py` | Gemeinsame Wochenbilanz und Zeitfenster aus vorhandenen Glide-Blöcken (Tk-frei) |
 | `page_features.py` | Live-Listen, Titelbilder und gefüllte Vorlagenvorschau (Tk-frei) |
 | `repeat_rules.py` | Wiederholungsregeln, Termin überspringen, verpasste Termine überspringen (Tk-frei, KO02) |
@@ -56,6 +57,10 @@ Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · Vorl
 | `preview_tools.py` | Systemwerkzeuge für Bildvorschauen unter Linux, JPEG-Größe (Tk-frei, N08) |
 | `filter_explain.py` | Bedingungen gespeicherter Filter prüfen und erklären (Tk-frei, D-03) |
 | `exchange_patch.py` | KI-Austausch Stufe 2: Kontextpaket, Änderungsvorschlag prüfen, Konflikte (Tk-frei, G24) |
+| `exchange_recipes.py` | Lokale Auftragsvorlagen und Anweisungen für den bestehenden Datei-/Kontextaustausch, ohne Tk/Netz (FP-06) |
+| `markdown_tree.py` | Vollständiger Markdownbaum, relative Verweise, Anhangskopien, Inventar, Prüfsummen und atomarer Abschluss ohne Tk (FP-07/1) |
+| `pinboard_pages.py` | Getrennte Plattenablage für Seitenkarten und Kanten; Altleser-Rundlauf und begrenzte Druckbilder ohne Tk (FP-04) |
+| `view_definition.py` | Erweiterte Ansichtsbedingungen, Validierung, Alle-/Oder-Auswertung und Erklärungen ohne Tk (FP-03/1) |
 | `backup_diff.py` | Zwei Datenstände vergleichen, nur lesend (Tk-frei, F-03) |
 | `render_retention.py` | Inhaltsabgleich und Lebensdauer wiederverwendbarer Ansichtsbausteine (Tk-frei) |
 | `logo_raster.py` | Geglättete transparente Logo-Raster und PNG-Ausgabe ohne Zusatzbibliothek (Tk-frei) |
@@ -65,7 +70,9 @@ Stand 16.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · Vorl
 | `structural_guard.py` | Transaktion des Bestandswächters: Stapelmarke, Schreibprüfung, Rückwegergebnis und ehrliche Abbruchmeldung (Tk-frei, WA-27) |
 | `load_phases.py` | Ladeweg in zwei Phasen: Lese- gegen Darstellungsfehler, aktive Liste nach dem Laden (Tk-frei, WA-28) |
 | `editor_flush.py` | Ergebnisvertrag der Editorübernahme vor Navigation, Export und Ende (Tk-frei, WA-29) |
-| `data_lock.py` | Datensperre `glide.lock` ohne Fail-open: Lesen, Einordnung, exklusive Anlage (Tk-frei, WA-30) |
+| `data_lock.py` | Datensperre: Sitzungs-OS-Lock, Tokenprüfung, strikte Erneuerung und Freigabe (Tk-frei, WA-30/31) |
+| `item_index.py` | Kurzlebige ID-Projektion für Mehrfachaktionen mit Originalreferenzen und Listen-/Elternbezug (Tk-frei) |
+| `save_result.py` | Explizite Hauptdatei-/Sicherungs-/Folgeergebnisse mit Bool-Fassade und aufgeschobenen Einstellungen (Tk-frei) |
 | `motion.py` | Unterbrechbare zeitgesteuerte Übergänge mit vollständigem Abbau (Tk-frei) |
 | `task_editing.py` | Feldvertrag, Dreiwegevergleich und verständliche Bearbeitungskonflikte (Tk-frei) |
 | `daily_hints.py` | Optionale Tageshinweise, verpasste Tage, Später/Überspringen und persistente Zustellbelege ohne Tk |

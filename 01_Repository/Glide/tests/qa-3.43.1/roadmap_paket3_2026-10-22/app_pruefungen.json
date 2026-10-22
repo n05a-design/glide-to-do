@@ -1,0 +1,27 @@
+[
+  {
+    "name": "schutzrunde",
+    "returncode": 1,
+    "seconds": 83.53
+  },
+  {
+    "name": "datenintegritaet",
+    "returncode": 0,
+    "seconds": 10.316
+  },
+  {
+    "name": "redo_matrix",
+    "returncode": 0,
+    "seconds": 5.514
+  },
+  {
+    "name": "redo_schreibfehler",
+    "returncode": 0,
+    "seconds": 3.964
+  },
+  {
+    "name": "audit_app",
+    "returncode": 0,
+    "seconds": 6.539
+  }
+]

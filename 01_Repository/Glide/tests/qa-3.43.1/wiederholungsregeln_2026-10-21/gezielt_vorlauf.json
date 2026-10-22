@@ -1,0 +1,57 @@
+{
+  "app_sha256": "916c77701bd645227a734a0f8a5f10be65046f0b5c6d29feeafac203debe72f2",
+  "faelle": {
+    "maske": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 245, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 78, in fall_maske\n    assert details['repeat']['rrule']=='FREQ=MONTHLY;INTERVAL=2;BYDAY=2TU',details['repeat']\n           ~~~~~~~^^^^^^^^^^\nTypeError: 'NoneType' object is not subscriptable\n"
+    },
+    "maske_gross": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 245, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 88, in fall_maske_gross\n    return fall_maske(run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 78, in fall_maske\n    assert details['repeat']['rrule']=='FREQ=MONTHLY;INTERVAL=2;BYDAY=2TU',details['repeat']\n           ~~~~~~~^^^^^^^^^^\nTypeError: 'NoneType' object is not subscriptable\n"
+    },
+    "inspektor": {
+      "ok": true,
+      "messung": {
+        "vorschau": true,
+        "echter_auswahlbefehl": true
+      }
+    },
+    "vorruecken": {
+      "ok": true,
+      "messung": {
+        "erledigen_ueberspringen_undo_redo_neustart": true
+      }
+    },
+    "migration": {
+      "ok": true,
+      "messung": {
+        "vorsicherung_bytegleich": true,
+        "alte_regel_unveraendert": true,
+        "schreibfehler_retry": false
+      }
+    },
+    "kopierfehler": {
+      "ok": true,
+      "messung": {
+        "vorsicherung_bytegleich": true,
+        "alte_regel_unveraendert": true,
+        "schreibfehler_retry": true
+      }
+    },
+    "altleser": {
+      "ok": true,
+      "messung": {
+        "altleser_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+        "datei_bytegleich": true
+      }
+    },
+    "altregeln": {
+      "ok": true,
+      "messung": {
+        "altregeln": 6,
+        "termine": 144,
+        "identisch": true
+      }
+    }
+  }
+}

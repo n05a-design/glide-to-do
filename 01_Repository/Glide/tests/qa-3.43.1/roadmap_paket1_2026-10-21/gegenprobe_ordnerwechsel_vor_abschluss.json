@@ -1,0 +1,5 @@
+{
+  "app_sha256": "c11ddd25651e1b091c60ccf605b3cae9e981c8eb791957f53743a19d313b2db4",
+  "ok": false,
+  "error": "Traceback (most recent call last):\n  File \"<stdin>\", line 9, in <module>\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app.pyw\", line 18151, in change_data_folder\n    shutil.copy2(src, dst)\n    ~~~~~~~~~~~~^^^^^^^^^^\n  File \"~\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\shutil.py\", line 514, in copy2\n    _winapi.CopyFile2(src_, dst_, flags)\n    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\nPermissionError: [WinError 33] The process cannot access the file because another process has locked a portion of the file\n"
+}

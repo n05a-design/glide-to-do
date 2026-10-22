@@ -946,7 +946,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     normal_list["note"] = "Beschreibungstext"
     app.save_items()
     payload = json.loads(pathlib.Path(mod.SAVE_FILE).read_text(encoding="utf-8"))
-    assert payload["version"] == mod.ListApp.DATA_SCHEMA_VERSION == 25
+    assert payload["version"] == mod.ListApp.DATA_SCHEMA_VERSION == 26
     assert payload["lists"][0]["system_role"] == "inbox"
     # Format 7 und 8 ergänzen ausschließlich additive Felder.
     assert [entry["name"] for entry in payload["labels"]] == ["Langtext", "Zwischenüberschrift"]
@@ -2802,7 +2802,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     # Format 9: parent_id wird gespeichert, geprüft und beim Laden bereinigt.
     app.save_items()
     nested_payload = json.loads(pathlib.Path(mod.SAVE_FILE).read_text(encoding="utf-8"))
-    assert nested_payload["version"] == 25
+    assert nested_payload["version"] == 26
     assert all("parent_id" in folder for folder in nested_payload["folders"])
     assert app.validate_backup_schema(nested_payload) == set()
     broken_parent = json.loads(json.dumps(nested_payload))
@@ -3350,7 +3350,8 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
         app.inspect_backup_archive(beispiel_archiv)
         beispiel_daten = json.loads(beispiel_archiv.read("data.json").decode("utf-8"))
     app.validate_backup_schema(beispiel_daten)
-    assert beispiel_daten["version"] == app.DATA_SCHEMA_VERSION
+    # Festgeschriebene Lieferbeispiele bleiben Format 25; die App migriert auf 26.
+    assert beispiel_daten["version"] == 25
 
     beispiel_previous = (app.folders, app.labels, app.trash)
     try:

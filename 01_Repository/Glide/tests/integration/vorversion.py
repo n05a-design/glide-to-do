@@ -8,7 +8,37 @@ Version belegt, die den Formattor einführte. Fehlt eine Vorversion, die noch
 vorgehalten werden müsste, bleibt das ein Fehler.
 """
 from pathlib import Path
+import json
 import re
+
+
+def einstellungsprobe_format25(path):
+    """Nur künstliche Altleser-Fixtures ohne neue Serien auf Format 25 setzen.
+
+    Die Probe betrifft den obersten Einstellungs-Namespace von FP-03/04.
+    Format-26-Bestände müssen separat schreibgeschützt bleiben (FP-02).
+    Keine allgemeine Rückmigration: neue Serien werden ausdrücklich abgelehnt.
+    Aufruf erst nach Schließen des aktuellen Testlesers.
+    """
+    path = Path(path)
+    data = json.loads(path.read_text(encoding='utf-8'))
+    pending = [data]
+    while pending:
+        value = pending.pop()
+        if isinstance(value, list):
+            pending.extend(value)
+        elif isinstance(value, dict):
+            assert not (isinstance(value.get('repeat'), dict) and (value['repeat'].get('art') == 'serie' or any(k in value['repeat'] for k in ('bezug','pausiert','rest'))))
+            pending.extend(v for v in value.values() if isinstance(v, (dict, list)))
+    assert data['version'] in (25, 26)
+    data['version'] = 25
+    path.write_text(json.dumps(data, ensure_ascii=False), encoding='utf-8')
+    # Der rein künstliche Datenrücksatz darf nicht die echte Rückstufungswarnung auslösen.
+    settings = path.parent / 'settings.json'
+    if settings.exists():
+        value = json.loads(settings.read_text(encoding='utf-8'))
+        value['data_format_written'] = 25
+        settings.write_text(json.dumps(value, ensure_ascii=False), encoding='utf-8')
 
 AUFBEWAHRUNG = 7
 

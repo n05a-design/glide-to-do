@@ -1,0 +1,21 @@
+{
+  "app_sha256": "a042fcc2911ec6edd6507ce085a55c5db20b091e9e56c5e6f091e6a6c97f356c",
+  "faelle": {
+    "dateien": {
+      "ok": true
+    },
+    "kopieren_ohne_auftrag": {
+      "ok": true
+    },
+    "eigener_neustart_backup": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 210, in main\n    globals()['fall_' + name](run)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 121, in fall_eigener_neustart_backup\n    app.show_exchange_export_dialog()\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app.pyw\", line 56054, in show_exchange_export_dialog\n    self.run_modal(dialog)\n    ~~~~~~~~~~~~~~^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_auftraege.py\", line 118, in modal\n    assert 'Eigener · Meine Zusammenfassung' == menu.variable.get(), (menu.variable.get(), app.settings.get('exchange_recipes'), run.meldungen)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('Ohne Auftrag', None, [])\n"
+    },
+    "musterantworten": {
+      "ok": true
+    },
+    "fehler_scope": {
+      "ok": true
+    }
+  }
+}

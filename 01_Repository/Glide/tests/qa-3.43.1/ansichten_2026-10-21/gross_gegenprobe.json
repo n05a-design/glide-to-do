@@ -1,0 +1,9 @@
+{
+  "app_sha256": "380cd3db62a0a67e0c0e0771c675f52971f796451e74ea14f46a2e3f6442d3db",
+  "faelle": {
+    "dialog_gross": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 281, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 231, in fall_dialog_gross\n    return fall_dialog(run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_ansichten.py\", line 220, in fall_dialog\n    assert not failure,failure\n           ^^^^^^^^^^^\nAssertionError: ['Traceback (most recent call last):\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_ansichten.py\", line 195, in act\\n    assert size[-1][0]<=860 and size[-1][1]<=700,size\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError: [[980, 570]]\\n']\n"
+    }
+  }
+}

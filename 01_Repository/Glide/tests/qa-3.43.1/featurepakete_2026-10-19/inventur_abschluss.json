@@ -1,0 +1,62 @@
+{
+  "dateien": 9127,
+  "ordner": 1297,
+  "bytes": 2555497266,
+  "reparse_eintraege": 0,
+  "bereiche": {
+    ".gitattributes": {
+      "dateien": 1,
+      "bytes": 1059
+    },
+    ".gitignore": {
+      "dateien": 1,
+      "bytes": 3369
+    },
+    "CLAUDE.md": {
+      "dateien": 1,
+      "bytes": 5247
+    },
+    "README.md": {
+      "dateien": 1,
+      "bytes": 13238
+    },
+    "SECURITY.md": {
+      "dateien": 1,
+      "bytes": 3049
+    },
+    "20_Grafik_Master": {
+      "dateien": 36,
+      "bytes": 56178343
+    },
+    "07_Python-Versionen": {
+      "dateien": 221,
+      "bytes": 28557125
+    },
+    "05_Probelisten_Testdaten": {
+      "dateien": 7,
+      "bytes": 76595931
+    },
+    "01_Repository": {
+      "dateien": 2299,
+      "bytes": 224717178
+    },
+    "00_Arbeitsvorbereitung": {
+      "dateien": 38,
+      "bytes": 5122170
+    },
+    ".github": {
+      "dateien": 4,
+      "bytes": 29159
+    },
+    ".git": {
+      "dateien": 685,
+      "bytes": 760604890
+    },
+    ".claude": {
+      "dateien": 5832,
+      "bytes": 1403666508
+    }
+  },
+  "fehler": [],
+  "grenze": "Momentaufnahme vor Schreiben dieser Ergebnisdatei; Reparsepunkte nicht pauschal als Verknuepfungen eingestuft."
+}

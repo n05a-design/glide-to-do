@@ -1,0 +1,74 @@
+{
+  "app": "~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app.pyw",
+  "faelle": {
+    "b01": {
+      "ok": true,
+      "befund": "Gelesen → Seitenanfang; Aktualisierung behält Lage; Neustart ohne Karte"
+    },
+    "b02": {
+      "ok": true,
+      "befund": "linke Rasterkante bei 1280x800, 860x700, 1600x900"
+    },
+    "b03": {
+      "ok": true,
+      "befund": "Name fest, Altwerte entfernt, Pflege immer, Ausblenden über Kachel"
+    },
+    "b04": {
+      "ok": true,
+      "befund": "6 Vorschauen, 2 geladen, öffnet Detail, eigene Auswahl bleibt, fehlende Datei benannt"
+    },
+    "b05": {
+      "ok": true,
+      "befund": "Unterkante 107 ≈ Grundlinie 108, Seitenverhältnis 0.667"
+    },
+    "b06_b15": {
+      "ok": true,
+      "befund": "12 Kombinationen, nachträglich gewachsener Leertext und später Map ohne Überdeckung; Schalter gespeichert"
+    },
+    "b15_appweit": {
+      "ok": true,
+      "befund": "1268 Knopfprüfungen in 7 Ansichten und 5 Dialogen (2 Größen, 2 Schriftgrößen, Hinweise an/aus) ohne Befund"
+    },
+    "b07": {
+      "ok": true,
+      "befund": "4 Menüs auf der Mittellinie der 4 Kopfsymbole"
+    },
+    "b08": {
+      "ok": true,
+      "befund": "gemeinsame linke Textkante x=400"
+    },
+    "b09": {
+      "ok": true,
+      "befund": "Papierkorbsymbol +2 px, Pfeilabweichung -0.28 px, Pfadtrenner Startseite -0.05 px"
+    },
+    "b10": {
+      "ok": true,
+      "befund": "Lupe aus Segoe UI Symbol"
+    },
+    "b11": {
+      "ok": true,
+      "befund": "Datumsspalte Labels 177 px statt 281 px; Labels: Titel 492, Datum 177, Labels 133; Heute: Titel 341, Datum 281, Labels 0; Liste: Titel 625, Datum 177, Labels 0"
+    },
+    "b12_b13": {
+      "ok": true,
+      "befund": "keine doppelten Dreiecke; nur Titelzelle fett in Zeilengröße, Datum/Label/Herkunft normal"
+    },
+    "b14": {
+      "ok": true,
+      "befund": "Überschrift · Liste · Nummeriert · Aufgabe · Zitat · Code · Bild · Mehr"
+    },
+    "b16": {
+      "ok": true,
+      "befund": "79 Raststücke über Bildern, größter Schritt 31 px"
+    },
+    "b17_b19": {
+      "ok": true,
+      "befund": "Notizaktionen, Fälligkeitsfelder und Menüs ohne Fremdfläche (hell, Verlauf Morgenrot)"
+    },
+    "b18": {
+      "ok": true,
+      "befund": "Neuerungen nach „Gelesen“ und Neustart unter Über Glide"
+    }
+  },
+  "fehler": []
+}

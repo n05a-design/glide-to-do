@@ -1,0 +1,13 @@
+{
+  "app_sha256": "559c738d54d5e5323186715601f43498d2207b860893b2de207a5775aa872698",
+  "faelle": {
+    "schreibfehler": {
+      "ok": true,
+      "messung": {
+        "modell_datei_undo_bei_schreibfehler_erhalten": true,
+        "erneuter_versuch": true,
+        "formattor": true
+      }
+    }
+  }
+}

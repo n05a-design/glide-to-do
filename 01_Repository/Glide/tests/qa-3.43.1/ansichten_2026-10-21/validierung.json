@@ -1,0 +1,18 @@
+{
+  "eingefrorene_dateien": 664,
+  "fehlende_eingaben": [],
+  "geaenderte_ausfuehrbare_oder_ressourcen": [],
+  "dokumentnachlauf_nach_einfrieren": [
+    "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+    "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+    "README.md"
+  ],
+  "geschuetzte_dateien": 783,
+  "geschuetzte_dateien_abweichend": [],
+  "git_diff_check_exitcode": 0,
+  "git_fsck_exitcode": 0,
+  "app_sha256": "7d0645b4a399d9deb10851e0d095d4da15c64b5033b3e3bd19b015c59dcb2769"
+}

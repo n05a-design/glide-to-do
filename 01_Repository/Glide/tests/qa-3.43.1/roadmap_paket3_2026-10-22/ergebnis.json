@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-22",
+  "app_sha256": "604014f9a85e9c38a2d19141a3b1039a7a9f798c39d7dcbcb0387569b0f1f68f",
+  "version": "3.43.1",
+  "source_delta": [
+    "01_Repository/Glide/src/glide/app.pyw",
+    "01_Repository/Glide/src/glide/calendar_service.py",
+    "01_Repository/Glide/src/glide/save_result.py"
+  ],
+  "production_manifest_unchanged_during_checks": true,
+  "delivery_files_verified": 78,
+  "delivery_changed": [],
+  "checks": [
+    {
+      "name": "stand_und_links",
+      "returncode": 0,
+      "output": "Standprüfung gegen VERSION 3.43.1 · Ablage einschließlich Repository · 67 aktive Dokumente (42 fortgeschrieben, 19 festgeschrieben, 6 ohne Standaussage)\nAlle Standangaben passen zur Version; kein historisches Dokument behauptet einen aktuellen Stand.\n",
+      "stderr": ""
+    },
+    {
+      "name": "datenschutz",
+      "returncode": 0,
+      "output": "Keine Benutzerpfade gefunden.\n",
+      "stderr": ""
+    },
+    {
+      "name": "diff",
+      "returncode": 0,
+      "output": "",
+      "stderr": "warning: in the working copy of '00_Arbeitsvorbereitung/README.md', CRLF will be replaced by LF the next time Git touches it\n"
+    }
+  ],
+  "unit_tests": 856,
+  "schutzrunde": {
+    "collected_passed": 15,
+    "collected_failed": 1,
+    "only_test_correction": "invalid literal red replaced by actual palette key",
+    "targeted_final_passed": 1
+  },
+  "scope": "Gezieltes Paket; keine CI-/101-Suiten-/Native-/Lieferfreigabe"
+}

@@ -1,0 +1,250 @@
+{
+  "purpose": "Oeffentlicher Analysebeleg; Rohlogs ausgeschlossen",
+  "files": [
+    {
+      "path": "ausgangsmanifest.json",
+      "bytes": 152485,
+      "sha256": "1d1dfa4e199ed9c95aa7434073b9e6c5b83505106835f5c6ed4527b503e64dce"
+    },
+    {
+      "path": "bereichspruefungen.json",
+      "bytes": 3110,
+      "sha256": "aaf980688aebf3cec6b1d17c2f10e236b8dabc1b15969074c35cdd4fb907bf90"
+    },
+    {
+      "path": "bereinigung.json",
+      "bytes": 289,
+      "sha256": "302bbc1e2380f3e3112d06f910dafa4cba183225d94c05c17edc15fe17767bd4"
+    },
+    {
+      "path": "code_kennzahlen.json",
+      "bytes": 77958,
+      "sha256": "8e8d4bdab9a060ab03081ca681456d439340b046e3eb0bbf084b9d35b0528fa8"
+    },
+    {
+      "path": "design_inventar.json",
+      "bytes": 4753,
+      "sha256": "b876cb7a9dc0dcc64f9be1fe409284f2efe8a54682001f88bb9eb42dacb96c31"
+    },
+    {
+      "path": "dokumentabschluss.json",
+      "bytes": 640,
+      "sha256": "a9a3c059b317f29870cb41deb5d9c69136a7fc6af8a8652e0c685a3ace6b8bcf"
+    },
+    {
+      "path": "dokumentabschluss_vorlauf.json",
+      "bytes": 701,
+      "sha256": "076eefa615fdfe08b6049bb74095e5c60453ee606e86befea49bc5284edaf217"
+    },
+    {
+      "path": "dokumenthashes.json",
+      "bytes": 1214,
+      "sha256": "78a6f56722a399ed44c2993fef73c8e47dfb2970074fc0fcb66f5c1009aeca21"
+    },
+    {
+      "path": "ergebnis.json",
+      "bytes": 5259,
+      "sha256": "066b2b61d87102cf26d4478c331d8151807430bed97e5655924a6680ebbfd130"
+    },
+    {
+      "path": "fachlogik.json",
+      "bytes": 442,
+      "sha256": "272e9e08d1c03b32b29686dbf45badc5288ce3fc308289d112e80112048feafc"
+    },
+    {
+      "path": "inventar_code.json",
+      "bytes": 1613874,
+      "sha256": "d2f6034f9fcc3ab5a4e5da4f22ea31679ac2373ab9f9275ac84b7df9e1620ea2"
+    },
+    {
+      "path": "methoden_statisch.json",
+      "bytes": 1457,
+      "sha256": "8f63828cace4089728a7c7c1088c2e9987d930522ef7cd5069f04d9b97ad18cc"
+    },
+    {
+      "path": "nutzerreferenzen.json",
+      "bytes": 1993,
+      "sha256": "d8e5dbbd3fc82b8ca8b5350761ab28833f4151cd531ecdfcbfa63a76ce262cff"
+    },
+    {
+      "path": "probe_leistung_und_ui.py",
+      "bytes": 8192,
+      "sha256": "bf17ef4e838358c117fd4fb3c9fb5e18f810d63746441437169d308ba9f02f0e"
+    },
+    {
+      "path": "probe_sichtpruefung.py",
+      "bytes": 3486,
+      "sha256": "4a9481e05e6d25a00db1035e9bc7bf70ffbc2f02168d37e4f707e06673653cc5"
+    },
+    {
+      "path": "probe_sperruebergaenge.py",
+      "bytes": 6129,
+      "sha256": "1e0173f5a214232f486dce2210bba44368431aa0911a7e1a527884641909ae64"
+    },
+    {
+      "path": "README.md",
+      "bytes": 7639,
+      "sha256": "907220b59ee81beca62c691582edb45ba80858c86340875f7b1f5057f6637e1e"
+    },
+    {
+      "path": "sichtpruefung/01_startseite_normal.png",
+      "bytes": 65067,
+      "sha256": "96315fec5fbc996296b825d4e43b0a9e04418c37c6006414cfe5067a918c595c"
+    },
+    {
+      "path": "sichtpruefung/02_heute_normal.png",
+      "bytes": 64847,
+      "sha256": "f79e712c56c69fd5e6d5265b1c842b050d29dad0c579fc6a54562bd9dad1480f"
+    },
+    {
+      "path": "sichtpruefung/03_labels_normal.png",
+      "bytes": 58316,
+      "sha256": "6d62971804f15a3b051093f579454e9ee0fc9f7075806a71694e944a95a79f38"
+    },
+    {
+      "path": "sichtpruefung/04_vorlagen_normal.png",
+      "bytes": 60445,
+      "sha256": "706929f8614ac6d1411bebe15e933d95c140cbb2e977af73c7a05c96afdca37a"
+    },
+    {
+      "path": "sichtpruefung/05_papierkorb_normal.png",
+      "bytes": 29831,
+      "sha256": "714f97d66d949534188edc01a52c9b42de31dcaf74accb46f4b68c7245b73b61"
+    },
+    {
+      "path": "sichtpruefung/06_liste_normal.png",
+      "bytes": 80872,
+      "sha256": "740c576c332aa14a9565b955b9d3d393635d9c4a9c540340d2b624b65982c9ed"
+    },
+    {
+      "path": "sichtpruefung/07_seite_normal.png",
+      "bytes": 62546,
+      "sha256": "c6f41e7833a58aed5fcb0936982cd43ce432e1f8acaf9832346c3e1d4d46f83a"
+    },
+    {
+      "path": "sichtpruefung/08_pinnwand_normal.png",
+      "bytes": 133891,
+      "sha256": "468b550e0e40ebf382edf961edf2056907f57b799b1fa3e6586d661b44508cbb"
+    },
+    {
+      "path": "sichtpruefung/09_kalender_normal.png",
+      "bytes": 45126,
+      "sha256": "92201f96b98f2e6efb237fe3418eb0bc0ee63dd769dac5ba0ec325983f28dfbb"
+    },
+    {
+      "path": "sichtpruefung/10_startseite_eng_gross.png",
+      "bytes": 30345,
+      "sha256": "e000da093345ab68ed46b2e5392240c6583c3a593f311d2cfe23d242aeb8ee5b"
+    },
+    {
+      "path": "sichtpruefung/11_heute_eng_gross.png",
+      "bytes": 43881,
+      "sha256": "dbd64e0d9556322bd9a54bfda0cc1c4fb1d4155432db85adb44393fac178888d"
+    },
+    {
+      "path": "sichtpruefung/12_labels_eng_gross.png",
+      "bytes": 39919,
+      "sha256": "130acf9076d857e6a473804d2cf79951a91fe8a3719080eda5dddc0257c49633"
+    },
+    {
+      "path": "sichtpruefung/13_vorlagen_eng_gross.png",
+      "bytes": 38940,
+      "sha256": "9687c86cd1701749d5463c63367db26a3114fd1e49456e7b594671fceb54f974"
+    },
+    {
+      "path": "sichtpruefung/14_papierkorb_eng_gross.png",
+      "bytes": 25511,
+      "sha256": "70370acb0fadbfa6948541cb8d2d1a63f590e8eb26a96943a51337818f76aa2f"
+    },
+    {
+      "path": "sichtpruefung/15_liste_eng_gross.png",
+      "bytes": 41205,
+      "sha256": "03c7352f8cf027f0555b67071a63987f3b992d9af3a20e2fdb67427e20698168"
+    },
+    {
+      "path": "sichtpruefung/16_seite_eng_gross.png",
+      "bytes": 41179,
+      "sha256": "9200ad8c9afa42c5cd1197bdf43a51c1f72c3ce2869beec2f1f8924dcf3c6f3c"
+    },
+    {
+      "path": "sichtpruefung/17_pinnwand_eng_gross.png",
+      "bytes": 88749,
+      "sha256": "c38eebbff9d5df19236057097544c44345ba8eabcfe4f95c179bda6526de0af5"
+    },
+    {
+      "path": "sichtpruefung/18_kalender_eng_gross.png",
+      "bytes": 37742,
+      "sha256": "871122fd1c37e19ab94a083051583746043c016b6bc86ff7ad067620ace19a68"
+    },
+    {
+      "path": "sichtpruefung/19_einstellungen.png",
+      "bytes": 38355,
+      "sha256": "9f4cfe288e8bcb0c133e58f54088e252207b950bf05eef58cbe024605837cb12"
+    },
+    {
+      "path": "sichtpruefung/sichtpruefung.json",
+      "bytes": 3889,
+      "sha256": "1674edf9f36100d41bde18d16f9c4ba62d07c56fb1bc519e5fb499f199659409"
+    },
+    {
+      "path": "sperruebergaenge.json",
+      "bytes": 1042,
+      "sha256": "251f96f18124f11d2049bb3ded05675dbc1f0e1c8be2f7731f8ec8a0036e1662"
+    },
+    {
+      "path": "statische_analyse_vollstaendig.json",
+      "bytes": 422,
+      "sha256": "01a649c4675114fe00465d55482b4abc69a4ce36da1bd5659018e00d24428301"
+    },
+    {
+      "path": "test_ansichten.json",
+      "bytes": 5708,
+      "sha256": "ad9c0919351d4af8a30ca76df4c949110cd22fbd64cb79131efa0d205a4f9aaf"
+    },
+    {
+      "path": "test_auftraege.json",
+      "bytes": 373,
+      "sha256": "ded8f39803c99763ddec0c333fc0963226847122d9058483b39a6541b1f79ec9"
+    },
+    {
+      "path": "test_auftraege.png",
+      "bytes": 21514,
+      "sha256": "6469f0169b10d11d6d1ed9c9993acd085a6d3ebee80b5786ff35801d9da12bf1"
+    },
+    {
+      "path": "test_bildkonversion.json",
+      "bytes": 498,
+      "sha256": "6b728998b8f903b46fa8d036931574bb6e68562216f3dc33008d6d52497d995e"
+    },
+    {
+      "path": "test_erwaehnungen.json",
+      "bytes": 855,
+      "sha256": "c980a885f22e221526f264c4178fd5139d79195d2432c7743a45c794b4da4f67"
+    },
+    {
+      "path": "test_erwaehnungen.png",
+      "bytes": 29487,
+      "sha256": "9d0a3f8f6bcd1ad00627aec360baea955de450bc758195d9e1fb8a139f23b235"
+    },
+    {
+      "path": "test_markdownbaum.json",
+      "bytes": 552,
+      "sha256": "0b10a5a15696716a1d6c5061f19e40c6b916a4d65419c29d04714e82cb46fe0a"
+    },
+    {
+      "path": "test_schutzrunde.json",
+      "bytes": 1901,
+      "sha256": "2e0315c9472977750c82d58d06ae321929e4a4b86b619bd9b1c812db44cfe1ce"
+    },
+    {
+      "path": "test_uiux_paket.json",
+      "bytes": 2509,
+      "sha256": "63d5a4ab514c28e186fe0a74d203b1f3a70c5e9f1e064cdbaf7a44ee868c4580"
+    },
+    {
+      "path": "ui_und_leistung/leistung_und_ui.json",
+      "bytes": 20201,
+      "sha256": "24c5c3b8d09609b3fe766e5823c15af6946671ee94a7a57d281e9c080399ba60"
+    }
+  ]
+}

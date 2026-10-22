@@ -1,0 +1,27 @@
+{
+  "units": {
+    "exitcode": 0,
+    "sekunden": 52.44,
+    "ausgabe": "entfernt: ../outside.json\nentfernt: link/data.json\nentfernt: old/x.json\n1 Dateien gekürzt\nentfernt: old/tracked.json\nentfernt: old/new.json\n2 Dateien gekürzt\n.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................\n----------------------------------------------------------------------\nRan 773 tests in 34.704s\n\nOK\n"
+  },
+  "werkzeugtests": {
+    "exitcode": 0,
+    "sekunden": 4.92,
+    "ausgabe": "........................................................................................................................................................\n----------------------------------------------------------------------\nRan 152 tests in 3.786s\n\nOK\n"
+  },
+  "bildkonversion": {
+    "exitcode": 0,
+    "sekunden": 93.86,
+    "ausgabe": "OK galerie\nOK seite\nOK startseite\nOK titelbild\nOK retry\nOK hostwechsel\nOK generation\nOK referenz\nOK warteschlange\n{\"gruen\": 9, \"rot\": []}\n"
+  },
+  "wissen": {
+    "exitcode": 0,
+    "sekunden": 29.87,
+    "ausgabe": "test_wissen3340: OK; B4: drei Bilder in 5 Umflusskombinationen ohne Überlappung, Ausweichabstand nicht im Dokument; B4: „Drucken und PDF …“ bettet alle drei Bilder als Daten-URL ein, ohne Dateiverweis; B4: „Markdown kopieren“ verweist auf die Bilddateien; aus der Zwischenablage entsteht eine Seite mit denselben drei Bildern, ein Undo; B4: „Als Markdown speichern …“ legt die Bilder daneben, „Markdown als Seite öffnen“ holt sie als Seitenbilder zurück; relative Verweise ohne Ordner bleiben Text; G14h: Enter auf einem Inhaltstreffer markiert „Größe/GRÖSSE/groesse“, zeigt die erste Fundstelle; Esc und Tippen heben auf; nie gespeichert; D-03: „Warum steht das hier?“ mit ✓/✗ je Bedingung, Kopf „Ausgeblendet: 3“ mit echtem Menüpfad, „Filter erklären …“ nach erster verfehlter Bedingung, Daten unverändert; H-02r: Alt+↑/↓/→/← im Seitenbaum ordnen um, rücken in den Ordner und heraus, melden Ziel und Wirkung mit Rückgängig, Reihenfolge übersteht den Neustart; H-02r: Spaltenboard Alt+→ nach „Ohne Wichtigkeit“ mit Hinweis und einem Rückgängig; N08: übersprungen – djpeg oder JPEG-Erzeugung fehlt in dieser Umgebung\n"
+  },
+  "verweise": {
+    "exitcode": 0,
+    "sekunden": 59.89,
+    "ausgabe": "OK: Wissen und Woche, 11 gemeinsame Prüfabschnitte\n"
+  }
+}

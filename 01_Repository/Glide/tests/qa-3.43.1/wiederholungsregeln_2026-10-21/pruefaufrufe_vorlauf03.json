@@ -1,0 +1,62 @@
+[
+  {
+    "schritt": "gegenprobe_maske",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 6.5
+  },
+  {
+    "schritt": "gegenprobe_migration",
+    "exitcode": 1,
+    "erwartet": 1,
+    "sekunden": 10.73
+  },
+  {
+    "schritt": "fachlogik",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 29.45
+  },
+  {
+    "schritt": "gezielt",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 68.83
+  },
+  {
+    "schritt": "regression_wiederholung3391",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 6.86
+  },
+  {
+    "schritt": "regression_planen33313",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 15.16
+  },
+  {
+    "schritt": "regression_reminders",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 11.73
+  },
+  {
+    "schritt": "regression_datenintegritaet",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 15.56
+  },
+  {
+    "schritt": "regression_import3410",
+    "exitcode": 0,
+    "erwartet": 0,
+    "sekunden": 34.17
+  },
+  {
+    "schritt": "regression_glide",
+    "exitcode": 1,
+    "erwartet": 0,
+    "sekunden": 16.33
+  }
+]

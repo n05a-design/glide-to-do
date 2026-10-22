@@ -1,0 +1,30 @@
+{
+  "app_sha256": "990c8d6f364aea6e8162ca039a57bf1afadf4b99d3dc028ea766ea4456207ee8",
+  "faelle": {
+    "inhalt_undo": {
+      "ok": true,
+      "messung": {
+        "offene_aufgaben": 1,
+        "auszug_max": 160
+      }
+    },
+    "archiv_loeschen": {
+      "ok": true,
+      "messung": null
+    },
+    "auswahl_ziehen": {
+      "ok": true,
+      "messung": null
+    },
+    "altleser_backup": {
+      "ok": true,
+      "messung": {
+        "altleser_app_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3"
+      }
+    },
+    "druck_tempo": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 160, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_seitenkarten.py\", line 141, in fall_druck_tempo\n    assert len(view.card_ids)==200 and sum(v.startswith('page:') for v in view.card_ids)==50\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    }
+  }
+}

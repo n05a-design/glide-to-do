@@ -1,0 +1,40 @@
+{
+  "app_sha256": "b3bd6d5929c1d45de2c999e9096922bc56528a9604d3f159f58ac0a064d07a50",
+  "faelle": {
+    "aufklappen": {
+      "ok": true,
+      "messung": null
+    },
+    "link_undo_neustart": {
+      "ok": true,
+      "messung": null
+    },
+    "beschreibung_menu": {
+      "ok": true,
+      "messung": null
+    },
+    "veraltet_schreibschutz_fehler": {
+      "ok": true,
+      "messung": null
+    },
+    "oeffnen_fallen": {
+      "ok": true,
+      "messung": null
+    },
+    "tempo": {
+      "ok": true,
+      "messung": {
+        "seiten": 500,
+        "punkte": 10000,
+        "aufklappen_ms": [
+          83.03729999988718,
+          157.7832999992097,
+          93.89789999931963,
+          93.40520000023389,
+          98.0833999992683
+        ],
+        "median_ms": 93.89789999931963
+      }
+    }
+  }
+}

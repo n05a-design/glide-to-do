@@ -1,0 +1,10 @@
+{
+  "app_sha256": "79b07126ea4d55c167ac0db45692ee6319c4dae7035457e396f7e068f7af9042",
+  "faelle": {
+    "veraltet_schreibschutz_fehler": {
+      "ok": false,
+      "fehler": "ziel",
+      "traceback": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_erwaehnungen.py\", line 169, in main\n    evidence = globals()['fall_' + name](run)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_erwaehnungen.py\", line 115, in fall_veraltet_schreibschutz_fehler\n    assert not app.link_unlinked_mention(target, hit), cause\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ziel\n"
+    }
+  }
+}

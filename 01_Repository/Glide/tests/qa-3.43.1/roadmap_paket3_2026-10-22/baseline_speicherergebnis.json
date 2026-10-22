@@ -1,0 +1,11 @@
+{
+  "app": "app.pyw",
+  "app_sha256": "fefde636c8b7a639adf4d86f7e8cac7567037a81b80b87d812f0d827bdc3a20e",
+  "faelle": {
+    "speicherergebnis": {
+      "ok": true,
+      "befund": "Hauptdatei/Backup/Folgefehler/aufgeschobene Einstellungen unterschieden; ein Mutationsvertrag, Bool kompatibel"
+    }
+  },
+  "fehler": []
+}

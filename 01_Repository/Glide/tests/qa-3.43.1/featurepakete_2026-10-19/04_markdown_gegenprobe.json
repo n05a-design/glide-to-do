@@ -1,0 +1,17 @@
+{
+  "app_sha256": "e57087e002e1650eaebb76ceb17a6c6e71e85e8b582ecf2c9486d3ae9eb51c01",
+  "faelle": {
+    "showcase": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_markdownbaum.py\", line 140, in main\n    evidence=globals()['fall_'+name](run,Path(directory))\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_markdownbaum.py\", line 44, in fall_showcase\n    return showcase_export(run,directory)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_markdownbaum.py\", line 57, in showcase_export\n    export(run,target)\n    ~~~~~~^^^^^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_markdownbaum.py\", line 36, in export\n    run.app.export_all_markdown(str(target))\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'export_all_markdown'\n"
+    },
+    "abbruch_fehler": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_markdownbaum.py\", line 140, in main\n    evidence=globals()['fall_'+name](run,Path(directory))\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_markdownbaum.py\", line 104, in fall_abbruch_fehler\n    app.export_all_markdown(str(target))\n    ^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'export_all_markdown'\n"
+    },
+    "flush_dialog": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_markdownbaum.py\", line 140, in main\n    evidence=globals()['fall_'+name](run,Path(directory))\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_markdownbaum.py\", line 116, in fall_flush_dialog\n    app.export_all_markdown()\n    ^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'export_all_markdown'\n"
+    }
+  }
+}

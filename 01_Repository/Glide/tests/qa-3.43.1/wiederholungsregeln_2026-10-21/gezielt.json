@@ -1,0 +1,109 @@
+{
+  "app_sha256": "3b93a24a8584821d77f8ff0f74b0c681e1555dea4fe9953a7b54edf3d9fd65ac",
+  "faelle": {
+    "maske": {
+      "ok": true,
+      "messung": {
+        "fenster": [
+          [
+            860,
+            700
+          ]
+        ],
+        "menue_und_speicherknopf": true,
+        "neustart": true
+      }
+    },
+    "maske_gross": {
+      "ok": true,
+      "messung": {
+        "fenster": [
+          [
+            860,
+            700
+          ]
+        ],
+        "menue_und_speicherknopf": true,
+        "neustart": true
+      }
+    },
+    "inspektor": {
+      "ok": true,
+      "messung": {
+        "vorschau": true,
+        "echter_auswahlbefehl": true
+      }
+    },
+    "vorruecken": {
+      "ok": true,
+      "messung": {
+        "erledigen_ueberspringen_undo_redo_neustart": true
+      }
+    },
+    "migration": {
+      "ok": true,
+      "messung": {
+        "vorsicherung_bytegleich": true,
+        "alte_regel_unveraendert": true,
+        "schreibfehler_retry": false
+      }
+    },
+    "kopierfehler": {
+      "ok": true,
+      "messung": {
+        "vorsicherung_bytegleich": true,
+        "alte_regel_unveraendert": true,
+        "schreibfehler_retry": true
+      }
+    },
+    "altleser": {
+      "ok": true,
+      "messung": {
+        "altleser_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+        "datei_bytegleich": true
+      }
+    },
+    "altregeln": {
+      "ok": true,
+      "messung": {
+        "altregeln": 6,
+        "termine": 144,
+        "identisch": true
+      }
+    },
+    "schreibfehler": {
+      "ok": true,
+      "messung": {
+        "modell_datei_undo_bei_schreibfehler_erhalten": true,
+        "erneuter_versuch": true,
+        "formattor": true
+      }
+    },
+    "austausch": {
+      "ok": true,
+      "messung": {
+        "txt_regel_erhalten": true,
+        "kalender_rundweg": true,
+        "vollbackup_neustart": true
+      }
+    },
+    "steuerung": {
+      "ok": true,
+      "messung": {
+        "inspektor_alle_drei_steuerungen": true,
+        "pause_ohne_verbrauch": true,
+        "erledigungsbezug": true,
+        "endliche_serie_stoppt": true,
+        "undo_redo_neustart": true
+      }
+    },
+    "schnelleingabe": {
+      "ok": true,
+      "messung": {
+        "echte_chips": 3,
+        "undo_redo": true,
+        "chipruecknahme": true
+      }
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "app_sha256": "3b93a24a8584821d77f8ff0f74b0c681e1555dea4fe9953a7b54edf3d9fd65ac",
+  "sizes": [
+    {
+      "items": 100,
+      "operations": [
+        {
+          "selected": 1,
+          "first_ms": 32.574,
+          "values_ms": [
+            26.161,
+            36.398,
+            26.535,
+            28.342,
+            24.908
+          ],
+          "median_ms": 26.535
+        },
+        {
+          "selected": 100,
+          "first_ms": 50.517,
+          "values_ms": [
+            39.968,
+            53.543,
+            49.579,
+            59.693,
+            45.645
+          ],
+          "median_ms": 49.579
+        }
+      ]
+    },
+    {
+      "items": 1000,
+      "operations": [
+        {
+          "selected": 1,
+          "first_ms": 90.921,
+          "values_ms": [
+            81.712,
+            90.549,
+            90.282,
+            99.259,
+            77.872
+          ],
+          "median_ms": 90.282
+        },
+        {
+          "selected": 100,
+          "first_ms": 539.372,
+          "values_ms": [
+            294.978,
+            482.554,
+            292.981,
+            561.894,
+            285.991
+          ],
+          "median_ms": 294.978
+        }
+      ]
+    },
+    {
+      "items": 10000,
+      "operations": [
+        {
+          "selected": 1,
+          "first_ms": 816.369,
+          "values_ms": [
+            722.302,
+            818.853,
+            670.637,
+            800.037,
+            693.764
+          ],
+          "median_ms": 722.302
+        },
+        {
+          "selected": 100,
+          "first_ms": 4991.55,
+          "values_ms": [
+            3105.253,
+            5374.373,
+            2986.284,
+            5129.009,
+            2987.18
+          ],
+          "median_ms": 3105.253
+        }
+      ]
+    }
+  ],
+  "repetitions": 5,
+  "warmups": 1,
+  "isolated_python_process": true,
+  "scope": "Synchroner toggle_done-Weg einschließlich Undo, sofortigem Speichern und Refresh; unprofiliert, Desktoplast. Nachlaufende Tk-Ereignisse nicht im Zeitwert enthalten.",
+  "tk": "9.0.4"
+}

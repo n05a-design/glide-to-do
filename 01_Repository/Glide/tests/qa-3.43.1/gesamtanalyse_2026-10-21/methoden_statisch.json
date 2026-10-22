@@ -1,0 +1,53 @@
+[
+  {
+    "method": "statische_analyse",
+    "error": "TimeoutExpired(['<Benutzerordner>\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python314\\\\python.exe', '-B', 'tests/tools/analyse_statisch.py', '--grenze', '80'], 150)"
+  },
+  {
+    "method": "erreichbarkeit",
+    "exit_code": 0,
+    "seconds": 9.566,
+    "output_lines": 231,
+    "output_tail": [
+      "   r   self._glide_scroll_pending",
+      "   r   self._glide_tooltip",
+      "   r   self._glide_wheel_remainder",
+      "   r   self._glide_wheel_rest_x",
+      ""
+    ]
+  },
+  {
+    "method": "attribute",
+    "exit_code": 0,
+    "seconds": 10.779,
+    "output_lines": 3,
+    "output_tail": [
+      "Nicht geprüft (unbekannte Basisklasse): FLASHWINFO",
+      "Attributprüfung: keine Befunde in 40 von 41 Klassen.",
+      ""
+    ]
+  },
+  {
+    "method": "dubletten",
+    "exit_code": 0,
+    "seconds": 0.259,
+    "output_lines": 13,
+    "output_tail": [
+      "  2× 10 Zeilen  →  app.pyw:57025-57036, app.pyw:57170-57185",
+      "  2× 10 Zeilen  →  app.pyw:57446-57455, app.pyw:59236-59245",
+      "",
+      "Eine Wiederholung ist ein Hinweis, kein Befund. Ob daraus ein gemeinsamer Baustein wird, entscheidet der Inhalt.",
+      ""
+    ]
+  },
+  {
+    "method": "design_inventar",
+    "exit_code": 0,
+    "seconds": 4.79,
+    "output_lines": 2,
+    "output_tail": [
+      "Abstandsbestandsaufnahme gespeichert",
+      ""
+    ]
+  }
+]

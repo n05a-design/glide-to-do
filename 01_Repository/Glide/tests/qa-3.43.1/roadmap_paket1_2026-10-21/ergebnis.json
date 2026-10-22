@@ -1,0 +1,69 @@
+{
+  "status": "gezieltes Paket abgeschlossen",
+  "date": "2026-10-21",
+  "errors": [],
+  "app_sha256": "45354b6350f09638b80fd5e5a9740f15c337c3c128a74a097d9a5e8949454519",
+  "version": "3.43.1",
+  "data_format": 26,
+  "tests": {
+    "unit": 843,
+    "tools": 152,
+    "app_cases": 23,
+    "broad_source": "559c738d54d5e5323186715601f43498d2207b860893b2de207a5775aa872698",
+    "summary": "pruefungen.json",
+    "final_targeted_rechecks": {
+      "sitzung": true,
+      "speicherergebnis": true,
+      "mehrfach": true
+    },
+    "final_folder_check": true,
+    "unchanged_domain_and_tool_files": true,
+    "full_integration_matrix_executed": false,
+    "new_ci_executed": false
+  },
+  "checks": {
+    "syntax": "355 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt",
+    "version": "VERSION, App, Hauptsuite und CHANGELOG: 3.43.1; Datenformat 26",
+    "documentation": "Alle Dokumente einschließlich Archiv im Index; 252 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+  },
+  "stand_exitcode": 0,
+  "privacy_exitcode": 0,
+  "whitespace_exitcode": 0,
+  "links": {
+    "documents": 12,
+    "local_links": 382,
+    "anchors": 94,
+    "errors": []
+  },
+  "integrity": {
+    "frozen_files": 486,
+    "changed_files": [],
+    "delivery_files_checked": 214,
+    "delivery_changes": []
+  },
+  "delivery": {
+    "version": "3.43.1",
+    "data_format": 25,
+    "differences_to_source": 22,
+    "standalone_packages": "3.42.0; kein neuer Build/Start-/Signaturtest"
+  },
+  "negative_controls": {
+    "sitzung": {
+      "app_sha256": "3b93a24a8584821d77f8ff0f74b0c681e1555dea4fe9953a7b54edf3d9fd65ac",
+      "expected_failure": true
+    },
+    "mehrfach": {
+      "app_sha256": "3b93a24a8584821d77f8ff0f74b0c681e1555dea4fe9953a7b54edf3d9fd65ac",
+      "expected_failure": true
+    }
+  },
+  "head": "10427276b97e10528759cc42b0d23f757ca14843",
+  "staged_paths": [],
+  "limits": [
+    "Kein verteilter Cloud-Lock",
+    "Alte Clients ohne Erwerbsprotokoll nicht vollständig abgefangen",
+    "Leistungswerte ohne Tk-Ereignisnachlauf; Einzelaktionen nicht allgemein schneller",
+    "Keine neue Native-/Reader-/DPI-/Menschenabnahme",
+    "Kein Versionswechsel/Build/Lieferabgleich/Commit/Push"
+  ]
+}

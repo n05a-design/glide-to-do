@@ -1,0 +1,18 @@
+{
+  "app_sha256": "916c77701bd645227a734a0f8a5f10be65046f0b5c6d29feeafac203debe72f2",
+  "faelle": {
+    "maske": {
+      "ok": true,
+      "messung": {
+        "fenster": [
+          [
+            860,
+            700
+          ]
+        ],
+        "menue_und_speicherknopf": true,
+        "neustart": true
+      }
+    }
+  }
+}

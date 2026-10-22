@@ -1,0 +1,31 @@
+{
+  "zeicheneditor_ast_unveraendert": true,
+  "zeicheneditor_ast_sha256": "5806a53549062ec5c21ef14854fa0228cfde57bbfe0d17f8a636c6c1de7bff53",
+  "vor_app_sha256": "e57087e002e1650eaebb76ceb17a6c6e71e85e8b582ecf2c9486d3ae9eb51c01",
+  "kandidat_app_sha256": "ca2130336fe1a1f66341a4a995c4043da3373bd930ffe5579ae4d3fac09b0e2d",
+  "test_vorher_sha256": "08c021d1c3d78a718d114babba88d40ff184214ddff963909c79401a1d8f39ac",
+  "test_nachher_sha256": "6fca53c8e08c8a74761122c3fb03d041cc430cb2b4d74eb547956703267cf4e7",
+  "urspruenglicher_befund_beide_appstaende": {
+    "groesse": 32,
+    "zoom": 16,
+    "flaeche": [
+      908,
+      481
+    ],
+    "bildhoehe": 512
+  },
+  "korrigierter_test": {
+    "kandidat": "vollstaendige Suite Exit 0",
+    "vorfassung": "vollstaendige Suite Exit 0",
+    "regel": "Echten 30-ms-Configure-Rueckruf bis hoechstens 2 Sekunden abwarten; Groessenassertion unveraendert"
+  },
+  "defektprobe": {
+    "eingriff": "Naechste gueltige Zoomstufe oberhalb der sichtbaren Flaeche",
+    "ergebnis": "AssertionError der unveraenderten Groessenassertion",
+    "ausschnitt": "Originalsuite bis einschliesslich Groessenfaelle; danach normaler Testabbau"
+  },
+  "nicht_qualifizierte_vorproben": [
+    "AutoFit-Abschaltung: Exit 0, kein geeigneter Defektnachweis",
+    "Nichtdiskrete Zoomvorgabe: Exit 0, kein geeigneter Defektnachweis"
+  ]
+}

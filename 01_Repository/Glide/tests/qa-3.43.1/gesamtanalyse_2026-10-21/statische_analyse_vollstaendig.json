@@ -1,0 +1,9 @@
+{
+  "exit_code": 0,
+  "seconds": 5.348,
+  "original_tool_sha256": "b0c795e7ab7e423048e16430dd8552ce60c514dc45803797b8dd03be10b82d2c",
+  "adaptation": "Nur die Namenszaehlung im geladenen Analysemodul wird durch eine aequivalente Wortzaehlung in einem Durchlauf ersetzt. Quelldatei unveraendert. Vorlauf nach 150 s abgebrochen.",
+  "equivalence_crosschecks": 31,
+  "all_names_identifiers": true,
+  "names": 2912
+}

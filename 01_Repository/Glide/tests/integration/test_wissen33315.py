@@ -54,7 +54,7 @@ with tempfile.TemporaryDirectory(prefix='glide-wissen-') as directory:
     assert len(backups21) == 1 and backups21[0].read_bytes() == original20
     backups22 = list(Path(mod.BACKUP_DIR).glob('liste_vor_format22_*.json'))
     assert len(backups22) == 1 and backups22[0].read_bytes() == original20
-    assert json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))['version'] == 25
+    assert json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))['version'] == 26
     checks.append(f'Format 20 → {app.DATA_SCHEMA_VERSION}: Startmigration mit bytegenauen Vorsicherungen für Format 21 und 22')
 
     def idle():
@@ -312,7 +312,7 @@ with tempfile.TemporaryDirectory(prefix='glide-wissen-') as directory:
         script = '''import importlib.machinery,importlib.util,json,sys
 l=importlib.machinery.SourceFileLoader('restart',sys.argv[1]);m=importlib.util.module_from_spec(importlib.util.spec_from_loader(l.name,l));sys.modules[l.name]=m;l.exec_module(m)
 r=m.tk.Tk();r.withdraw();a=m.ListApp(r);a.show_info=lambda *x:None
-assert a.DATA_SCHEMA_VERSION== 25
+assert a.DATA_SCHEMA_VERSION== 26
 assert a.find_item_in_lists(sys.argv[2])
 page=next(e for e in a.lists if e['id']==sys.argv[3]);assert any(s['tag']=='taskref:'+sys.argv[2] for s in page['rich_note']['spans'])
 assert a.settings['saved_filters'];a.cancel_pending_callbacks();a.release_data_lock();r.destroy();print('restart OK')'''

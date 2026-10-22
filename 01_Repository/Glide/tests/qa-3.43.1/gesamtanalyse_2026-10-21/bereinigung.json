@@ -1,0 +1,7 @@
+{
+  "dateien": [
+    "methoden_statisch.json",
+    "test_uiux_paket.json"
+  ],
+  "verfahren": "Benutzerpfade in oeffentlichen JSON-Ableitungen ersetzt; Originale lokal ausserhalb Repository bewahrt. Resultate unveraendert; Methodengrenze und Sichtungsstatus separat praezisiert."
+}
