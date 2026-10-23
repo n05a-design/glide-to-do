@@ -42518,8 +42518,10 @@ class ListApp:
         try:
             # Unter Windows die Fläche aller Bildschirme: Ein Fenster auf einem
             # zweiten Bildschirm wurde bis 23.10.2026 an den Rand des
-            # Hauptbildschirms gezogen.
-            left, top, screen_w, screen_h = self.desktop_bounds()
+            # Hauptbildschirms gezogen. Über die Modulfunktion, weil
+            # `show_start_window` diese Methode vor dem Aufbau der App mit
+            # einem Ersatzobjekt aufruft, das nur `root` trägt.
+            left, top, screen_w, screen_h = desktop_bounds(self.root)
         except tk.TclError:
             return f"{width}x{height}"
         # Mindestens ein sichtbarer Fensterstreifen muss auf der Arbeitsfläche liegen.
@@ -62401,23 +62403,8 @@ Labels, Termine und Metadaten."""
         return "break"
 
     def desktop_bounds(self):
-        """(x, y, Breite, Höhe) der Arbeitsfläche für Fensterlagen (Start und Kompaktmodus).
-
-        Tk meldet unter Windows nur den Hauptbildschirm; ein Fenster auf einem
-        zweiten Bildschirm sprang sonst dorthin zurück. Windows liefert die
-        virtuelle Fläche über alle Bildschirme (SM_XVIRTUALSCREEN …
-        SM_CYVIRTUALSCREEN); andere Systeme behalten Tks Bildschirmmaß.
-        """
-        if IS_WINDOWS:
-            try:
-                import ctypes
-                messen = ctypes.windll.user32.GetSystemMetrics
-                breite, hoehe = int(messen(78)), int(messen(79))
-                if breite > 0 and hoehe > 0:
-                    return int(messen(76)), int(messen(77)), breite, hoehe
-            except (AttributeError, OSError, ValueError):
-                pass
-        return 0, 0, self.root.winfo_screenwidth(), self.root.winfo_screenheight()
+        """(x, y, Breite, Höhe) der Arbeitsfläche für Fensterlagen (Start und Kompaktmodus)."""
+        return desktop_bounds(self.root)
 
     def leave_compact_mode(self, event=None):
         state = getattr(self, "_compact", None)
@@ -64862,6 +64849,28 @@ def apply_window_icon(root):
         return True
     except (tk.TclError, ValueError, OSError):
         return False
+
+
+def desktop_bounds(root):
+    """(x, y, Breite, Höhe) der Arbeitsfläche für Fensterlagen (Start und Kompaktmodus).
+
+    Tk meldet unter Windows nur den Hauptbildschirm; ein Fenster auf einem
+    zweiten Bildschirm sprang sonst dorthin zurück. Windows liefert die
+    virtuelle Fläche über alle Bildschirme (SM_XVIRTUALSCREEN …
+    SM_CYVIRTUALSCREEN); andere Systeme behalten Tks Bildschirmmaß. Eine
+    Modulfunktion, weil das Startfenster sie vor dem Aufbau von `ListApp`
+    braucht.
+    """
+    if IS_WINDOWS:
+        try:
+            import ctypes
+            messen = ctypes.windll.user32.GetSystemMetrics
+            breite, hoehe = int(messen(78)), int(messen(79))
+            if breite > 0 and hoehe > 0:
+                return int(messen(76)), int(messen(77)), breite, hoehe
+        except (AttributeError, OSError, ValueError):
+            pass
+    return 0, 0, root.winfo_screenwidth(), root.winfo_screenheight()
 
 
 def show_start_window(root):

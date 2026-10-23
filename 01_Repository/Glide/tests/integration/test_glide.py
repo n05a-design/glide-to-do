@@ -1391,6 +1391,11 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     assert app.clamp_geometry(f"980x740+{left - 300}+{top + 10}") == f"980x740+{left - 300}+{top + 10}"
     assert app.clamp_geometry("980x740") == "980x740"
     assert app.clamp_geometry("unsinn") is None
+    # Das Startfenster klemmt vor dem Aufbau von ListApp mit einem Ersatzobjekt,
+    # das nur `root` trägt (`show_start_window`). Der D55-Kandidat brach dort
+    # bis 23.10.2026 mit AttributeError ab (GitHub #142, test_bilder330).
+    ersatz = type("Startfenster", (), {"root": app.root})()
+    assert mod.ListApp.clamp_geometry(ersatz,f"980x740+{left + 10}+{top + 10}") == f"980x740+{left + 10}+{top + 10}"
 
     # Wiederholte Listenaufbauten duerfen keine toten after-IDs ansammeln.
     app.cancel_pending_callbacks()
