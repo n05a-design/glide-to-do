@@ -16,7 +16,7 @@ from unittest.mock import patch
 REPO=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(REPO/'tests/integration'))
 from test_schutzrunde import Lauf
-from vorversion import einstellungsprobe_format25
+from vorversion import einstellungsprobe_format25, finden
 
 
 def seed(run):
@@ -122,7 +122,7 @@ def fall_altleser_backup(run):
     assert 'page_pinboards_v1' in payload['app_backup']['settings']
     app_path=Path(run.mod.__file__);data=run.data;run.ende()
     einstellungsprobe_format25(run.mod.SAVE_FILE)
-    old=REPO.parents[1]/'07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.43.1.pyw'
+    old=finden(REPO.parents[1],'3.43.1',REPO/'CHANGELOG.md');assert old is not None  # seit 3.44.0 im Archiv
     code="""import sys;sys.path.insert(0,sys.argv[3]);from test_schutzrunde import Lauf
 r=Lauf(sys.argv[1],sys.argv[2]);r.app.workspace.prune();assert r.app.save_settings();r.ende()
 """

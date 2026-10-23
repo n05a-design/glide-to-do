@@ -16,7 +16,7 @@ from unittest.mock import patch
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / 'tests/integration'))
 from test_schutzrunde import Lauf
-from vorversion import einstellungsprobe_format25
+from vorversion import einstellungsprobe_format25, finden
 
 
 def descendants(widget):
@@ -147,7 +147,7 @@ def fall_altleser(run):
     raw=json.loads(settings.read_text(encoding='utf-8'))
     run.ende()
     einstellungsprobe_format25(run.mod.SAVE_FILE)
-    old=REPO.parents[1]/'07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.43.1.pyw'
+    old=finden(REPO.parents[1],'3.43.1',REPO/'CHANGELOG.md');assert old is not None  # seit 3.44.0 im Archiv
     code='import sys;sys.path.insert(0,sys.argv[3]);from test_schutzrunde import Lauf\nr=Lauf(sys.argv[1],sys.argv[2]);assert r.app.save_settings();r.ende()'
     child=subprocess.run([sys.executable,'-B','-c',code,str(old),run.data,str(REPO/'tests/integration')],capture_output=True,text=True,timeout=90)
     assert child.returncode==0,(child.stdout+child.stderr)[-1200:]
@@ -173,7 +173,7 @@ def fall_altfilter(run):
     request.write_text(json.dumps(criteria),encoding='utf-8')
     run.ende()
     einstellungsprobe_format25(run.mod.SAVE_FILE)
-    old=REPO.parents[1]/'07_Python-Versionen/Glide-Aufgaben-und-Listen_v3.43.1.pyw'
+    old=finden(REPO.parents[1],'3.43.1',REPO/'CHANGELOG.md');assert old is not None  # seit 3.44.0 im Archiv
     code='''import sys,json;from pathlib import Path
 sys.path.insert(0,sys.argv[3]);from test_schutzrunde import Lauf
 r=Lauf(sys.argv[1],sys.argv[2]);values=json.loads(Path(sys.argv[4]).read_text(encoding="utf-8"))

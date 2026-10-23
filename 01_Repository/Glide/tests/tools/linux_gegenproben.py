@@ -39,9 +39,11 @@ CASES = (
      '"side": "top" if stacked else "left", "fill": "both", "expand": True',
      '"side": "bottom" if stacked else "right", "fill": "both", "expand": True',
      'assert (eingabe.winfo_rootx() + eingabe.winfo_width() <= suche.winfo_rootx() + 1', ('--werkzeugzeile',)),
+    # Seit D55 (23.10.2026) prüft die Nebenansicht dieselbe Mindestbreite; die
+    # Vorzeile beschränkt die Mutation auf den Aufgabeninspektor.
     ("inspektor-mindestgroesse", "test_aufgaben3380.py",
-     'narrow = self.root.winfo_width() < self.DETAIL_PANE_MIN_WINDOW',
-     'narrow = False', 'assert pane.winfo_ismapped() and app._inspector_narrow', ('--fall', 'inspektor')),
+     'parent = self.content_frame\n        narrow = self.root.winfo_width() < self.DETAIL_PANE_MIN_WINDOW',
+     'parent = self.content_frame\n        narrow = False','assert pane.winfo_ismapped() and app._inspector_narrow', ('--fall', 'inspektor')),
     ("feldtreffer", "test_aufgaben3380.py",
      'field={"due":"due","planned_date":"planned","importance":"importance","labels":"labels"}.get(key)',
      'field={"due":"planned","planned_date":"planned","importance":"importance","labels":"labels"}.get(key)',

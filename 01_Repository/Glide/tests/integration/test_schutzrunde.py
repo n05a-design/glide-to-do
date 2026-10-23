@@ -35,6 +35,10 @@ class Lauf:
         os.environ["GLIDE_DATA_DIR"] = data
         os.environ["GLIDE_TEST_MODE"] = "1"
         sys.path.insert(0, str(self.app_path.parent))
+        if self.app_path.parent.name == "Archiv":
+            # Archivierte Hauptdatei: Begleitmodule liegen eine Ebene höher
+            # (07_Python-Versionen/Archiv/README.md).
+            sys.path.append(str(self.app_path.parent.parent))
         loader = importlib.machinery.SourceFileLoader("glide_schutz_" + str(abs(hash(str(app_path)))),
                                                       str(app_path))
         self.mod = importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name, loader))
@@ -946,7 +950,16 @@ def fall_struktur_ergebnis(lauf):
     app.trash_folder(folder['id']); lauf.idle()
     trash = next(entry for entry in app.trash if entry['kind'] == app.TRASH_KIND_FOLDER)
     disk = lauf.datei()
-    with patch.object(app, 'write_json_atomic', side_effect=OSError('Hauptdatei gesperrt')):
+    # Nur die Hauptdatei sperren: `restore_trash_entry` erneuert vorher die
+    # Sperrdatei, höchstens einmal je Sekunde. Eine pauschale Sperre ließ die
+    # Wiederherstellung an einer Sekundengrenze schon vor jeder Änderung
+    # abbrechen (`app.dirty` blieb falsch; GitHub #141, Windows).
+    writer = app.write_json_atomic
+    def fail_main(path, payload):
+        if os.path.abspath(path) == os.path.abspath(mod.SAVE_FILE):
+            raise OSError('Hauptdatei gesperrt')
+        return writer(path, payload)
+    with patch.object(app, 'write_json_atomic', side_effect=fail_main):
         assert app.restore_trash_entry(trash['id']) is False, 'Restore meldet ungespeicherten Erfolg'
     assert lauf.datei() == disk and app.dirty
     assert app.get_folder(folder['id']), 'Fehlgeschlagene Änderung bleibt offen und rücknehmbar'
