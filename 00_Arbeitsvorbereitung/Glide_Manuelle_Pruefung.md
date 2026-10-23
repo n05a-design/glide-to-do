@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · manuelle Sitzungen offen; B1 automatisch geprüft
+Stand 23.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · manuelle Sitzungen offen; B1 automatisch geprüft
 
 Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt am 03.10.2026 aus der fortgeschriebenen Prüfliste (Ursprung 3.30.0, enthielt die Listen 3.28 und 3.29) und der Windows-Anleitung; die Zuordnung der 201 Ausgangspunkte trägt Git. Automatisch geprüft ist die Logik ([Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)); offen bleiben Handgefühl, Plattformen und fremde Programme.
 
@@ -240,6 +240,12 @@ Dieselbe Vollprüfung wie am Mac (`tests/tools/pruefen.py --modus voll`), gestar
 
 Während des Laufs öffnen und schließen sich Glide-Fenster im Vordergrund. Den Hintergrundmodus des Mac gibt es unter Windows nicht. Deshalb Maus und Tastatur nicht benutzen, den Rechner nicht sperren und keine rechenintensiven Programme starten: Einige Oberflächentests messen Layouts und reagieren auf Last.
 
+**Nebenher arbeiten – Lauf in der Windows-Sandbox (seit 23.10.2026):** Ein zweiter Bildschirm allein genügt nicht, weil Fokus, Tastatur und Zwischenablage zur ganzen Sitzung gehören. `windows_sandbox.cmd` (Doppelklick) bzw. `py -3.14 -B tests\tools\windows_sandbox.py --warten` friert das Projekt unter `%USERPROFILE%\GlidePruefung\lauf_<Zeit>` ein (außerhalb von OneDrive), startet die Windows-Sandbox mit der Prüflaufzeit (schreibgeschützt eingebunden), ohne Netz und ohne geteilte Zwischenablage, und legt ihr Fenster auf den zweiten Bildschirm. Dort läuft dieselbe Vollprüfung mit `--timeout 900`; gearbeitet wird auf dem ersten Bildschirm.
+  - Voraussetzung: Windows Pro, Enterprise oder Education; einmalig in PowerShell als Administrator `Enable-WindowsOptionalFeature -Online -FeatureName Containers-DisposableClientVM -All`, danach Neustart. Nur eine Sandbox zugleich.
+  - Das Sandbox-Fenster offen lassen und nicht minimieren; nicht hineinklicken oder darin tippen.
+  - Optionen: `--bildschirm 1` (Hauptbildschirm), `--speicher 8192`, `--schliessen` (Sandbox fährt nach der Prüfung herunter), `--python <Ordner>`.
+  - Ergebnis im Ordner `ergebnis`: `FERTIG.txt` (Exitcode wie oben), `konsole.txt`, `protokoll\ergebnis.json`, Fotos, `quellstand.json` (SHA-256 aller eingefrorenen Dateien) und `sandbox.json` (Python/Tk, Bildschirm, Speicher). Die Sandbox ist ein Windows-Lauf derselben Windows-Fassung; physische DPI-, Screenreader- und Menschenabnahme ersetzt sie nicht. Am echten Rechner noch nicht erprobt – beim ersten Lauf Startverhalten, Fensterlage und Fotos zurückmelden.
+
 **Ergebnis:**
 
 - Am Ende stehen **Exitcode** und Protokollordner, zum Beispiel
@@ -403,3 +409,15 @@ Automatisch belegt mit `test_wiederholen.py` (neun Fälle über echte Tastenwege
 - [ ] Löschen → im Hinweis „Rückgängig“ → derselbe Hinweis zeigt „Wiederholen“ und holt die Löschung zurück; nach einer neuen Änderung gibt es nichts mehr zu wiederholen (Meldung „Wiederholen“).
 - [ ] Pinnwand: „Aufräumen“ und einen Bereich verschieben, beides zurücknehmen und in richtiger Folge wiederholen; eine Karte zwischendurch verschoben → kein stilles Überschreiben.
 - [ ] Änderungsverlauf als Seite und als Fenster: „Sicherungen vergleichen …“ öffnet den Vergleich, beim Fenster erst nach dessen Schließen.
+
+## Arbeitsmodi und Seitenbedienung (D55, lokaler Kandidat auf 3.44.0)
+
+Automatisch belegt mit `test_arbeitsmodi.py` (zwölf Fälle über echte Tk-Wege, Knopfschutz B15; Linux/Xvfb mit Tk 8.6, künstliche Daten). Noch nicht versioniert oder geliefert; hier bleibt die Sicht- und Bedienabnahme am echten Gerät, je Plattform hell/dunkel, ein Verlaufsdesign, mittlere und große Schrift, Windows zusätzlich 100/150 % DPI.
+
+- [ ] Seite: „Mehr“ öffnet die Auswahl direkt unter dem Knopf; „mark“ oder „volle breite“ tippen filtert sofort, Enter führt aus, Esc schließt und die Schreibmarke steht wieder im Text; ein gesperrter Eintrag (z. B. „Kopieren“ ohne Markierung) nennt seinen Grund. Notiz: dieselbe Auswahl heißt „Notizaktionen“.
+- [ ] Strg/Cmd+/ in einer Aufzählung: Kopf „Blockaktionen · Aufzählung“, Häkchen an „Aufzählung“; „Überschrift 2“ wählen, ein Strg/Cmd+Z nimmt es zurück. Griff ⠿ links der Zeile beim Überfahren und an der Schreibmarke, auf Höhe der ersten Zeile eines umbrochenen Absatzes; verschwindet beim Tippen; keine Überdeckung des Texts, auch bei großer Schrift und nach Scrollen.
+- [ ] Seite ohne Symbol/Titelbild: Titel überfahren oder mit Tab fokussieren → „+ Symbol“/„+ Titelbild“ rechts in der Titelzeile, nichts verschiebt sich; bei langem Titel oder offener Nebenansicht erscheinen sie nicht, Mehr › Titelbild/Pixelsymbol … wirken. Symbol setzen → steht vor dem Titel, Klick darauf ändert es.
+- [ ] Nebenansicht: Rechtsklick auf eine Liste › „In Nebenansicht öffnen“ neben einer Seite; Kästchen abhaken, Strg/Cmd+Z/Umschalt+Z wirken nebenan; Breite am Trenner ziehen, Neustart behält die Breite (nicht die Nebenansicht). Suche: Umschalt+Enter auf einer Seite. Aufgabe im Hauptbereich öffnen (Inspektor) → Nebenansicht tritt zurück und kommt danach wieder. Fenster unter 980 px: Nebenansicht und Inspektor liegen über der Inhaltsfläche, Ansichtsumschalter und „☰“ bleiben frei.
+- [ ] Kompaktmodus mit Strg/Cmd+Umschalt+K neben einer anderen Anwendung: Kopf in einer Zeile, Titel gekürzt, Seitenleiste weg; auf 480 × 560 verkleinern und Liste, Heute, Seite und Startseite bedienen; Menüknopf findet jeden Menübefehl. „Normalansicht“ stellt die vorige Fensterlage her; nach erneutem Eintritt die gemerkte Kompaktlage; im Kompaktmodus beenden → Neustart normal und an der normalen Lage.
+- [ ] Screenreader (VoiceOver/NVDA/Orca): Auswahlfeld „Aktionen durchsuchen“, Trefferliste, Nebenansicht und Kompaktkopf werden mit Namen angesagt; Fokus ist nach Esc/Schließen wieder im Ausgangsfeld.
+- [ ] Windows mit zwei Bildschirmen: Glide auf den zweiten Bildschirm legen (rechts und, falls möglich, links vom Hauptbildschirm), beenden und neu starten → dieselbe Lage; dort den Kompaktmodus ein- und ausschalten → das Fenster bleibt auf diesem Bildschirm. Zweiten Bildschirm abziehen und starten → Glide erscheint sichtbar auf dem Hauptbildschirm.

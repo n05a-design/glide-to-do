@@ -61,6 +61,9 @@ Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorl
 | `markdown_tree.py` | Vollständiger Markdownbaum, relative Verweise, Anhangskopien, Inventar, Prüfsummen und atomarer Abschluss ohne Tk (FP-07/1) |
 | `pinboard_pages.py` | Getrennte Plattenablage für Seitenkarten und Kanten; Altleser-Rundlauf und begrenzte Druckbilder ohne Tk (FP-04) |
 | `view_definition.py` | Erweiterte Ansichtsbedingungen, Validierung, Alle-/Oder-Auswertung und Erklärungen ohne Tk (FP-03/1) |
+| `action_menu.py` | Durchsuchbare Seiten-, Block- und Menüaktionen: Abschnitte, Filter, Häkchen und Sperrgründe über den bestehenden Menüs; Kopfverweise der Seite (Tk-frei, E-U3 A) |
+| `side_view.py` | Lesende Nebenansicht: Ziel, Lesbarkeit, Listenzeilen, Seitenprojektion und Abgleichsignatur ohne Datenänderung (Tk-frei, E-U2 A) |
+| `compact_mode.py` | Kompaktmodus: Mindestmaße, getrennte Fensterlagen, Ableitung und Bildschirmgrenzen (Tk-frei, E-U1 A) |
 | `backup_diff.py` | Zwei Datenstände vergleichen, nur lesend (Tk-frei, F-03) |
 | `render_retention.py` | Inhaltsabgleich und Lebensdauer wiederverwendbarer Ansichtsbausteine (Tk-frei) |
 | `logo_raster.py` | Geglättete transparente Logo-Raster und PNG-Ausgabe ohne Zusatzbibliothek (Tk-frei) |

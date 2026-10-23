@@ -1,6 +1,6 @@
 # Architektur – Glide
 
-Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 23.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, Performance-Regeln und die teuer gelernten Tk-Fallstricke. Zusammengeführt aus Architektur, Projektübergabe, Entwicklungsnotizen und den technischen Teilen der Funktionsverträge 45–79 (03.10.2026); die Vorfassungen trägt Git. Verhalten der Funktionen: [Funktionen](20_FUNKTIONEN.md). Datenformat: [Daten und Migration](06_DATA_BACKUP_MIGRATION.md).
 
@@ -12,7 +12,7 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 - **Keine Laufzeitabhängigkeit** außer der Standardbibliothek. Einzige mitgelieferte Bibliothek: tkinterdnd2 unter `src/glide/vendor` (optional, beim ersten Ziehen aus Finder/Explorer geladen; [Entscheidung](decisions/ABHAENGIGKEIT_TKDND.md)).
 - **Ressourcen:** `src/glide/resources/` – Schriften (DejaVu, Pixelify Sans), Vorlagen, `logo/` (unveränderte Kopien aus `20_Grafik_Master`).
 
-**Strukturstand nach zweitem Roadmap-Paket am 21.10.2026:** 79 eigene Laufzeitdateien direkt unter `src/glide` einschließlich `app.pyw` und `glide_start.py`; dazu der getrennte Zeichenprototyp. Die Hauptdatei (`fefde636…`) umfasst 63.230 Zeilen nach `splitlines()`; `ListApp` davon 48.261 mit 1.684 direkten Methoden. `SavedViewWorkspace` adaptiert das vorhandene Spaltenboard für gespeicherte Ansichten; fachliche Darstellung. Sortierung und Gruppierung liegen im Tk-freien `view_definition.py`. Die große Integrationsklasse bleibt ein schrittweiser WA-32-/WA-39-Auftrag; kein Architekturabschluss.
+**Strukturstand des D55-Kandidaten am 23.10.2026:** 82 eigene Laufzeitdateien direkt unter `src/glide` einschließlich `app.pyw` und `glide_start.py` (3.44.0: 79); dazu der getrennte Zeichenprototyp. Die Hauptdatei umfasst 64.950 Zeilen nach `splitlines()` (3.44.0 `d0bf4142…`: 63.296); `ListApp` davon 49.526 mit 1.727 direkten Methoden (3.44.0: 48.327/1.685). Neu sind die Tk-freien `action_menu.py`, `side_view.py` und `compact_mode.py`; in `ListApp` die gemeinsame eingebettete Aktionsauswahl (`menu_rows`, `show_action_chooser` – liest den fertigen Menübaum und führt den gewählten Eintrag aus), Nebenansicht und Kompaktmodus. Aufgabeninspektor und Nebenansicht teilen `place_overlay_pane`: breit rechts an der Inhaltsfläche, schmal über einem leeren Platzhalter an ihrem Packplatz, beides per `place(in_=…)` an deren Lage gebunden. Editor-Leerlaufprüfungen laufen über `PageEditor.idle_check` am Hauptfenster und werden beim Abbau abgebrochen. Fensterlagen beim Start (`clamp_geometry`) und im Kompaktmodus rechnen über `desktop_bounds` – unter Windows die virtuelle Fläche aller Bildschirme – und lesen Tk-Geometrie einheitlich über `compact_mode.parse` („+-x“ links vom Hauptbildschirm, bloßes „-x“ vom rechten Rand). `SavedViewWorkspace` adaptiert das vorhandene Spaltenboard für gespeicherte Ansichten; fachliche Darstellung. Sortierung und Gruppierung liegen im Tk-freien `view_definition.py`. Die große Integrationsklasse bleibt ein schrittweiser WA-32-/WA-39-Auftrag; kein Architekturabschluss.
 
 ### Module neben `app.pyw`
 
@@ -58,6 +58,9 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 | `markdown_tree.py` | Vollständiger Markdownbaum, relative Verweise, Anhangskopien, Inventar, Prüfsummen und atomarer Abschluss ohne Tk (FP-07/1) | 3.44.0 (FP-07/FP-04) |
 | `pinboard_pages.py` | Getrennte Plattenablage für Seitenkarten und Kanten; Altleser-Rundlauf und begrenzte Druckbilder ohne Tk (FP-04) | 3.44.0 (FP-07/FP-04) |
 | `view_definition.py` | Ansichtsbedingungen, Validierung, Alle-/Oder-Erklärung sowie Darstellungsprüfung, stabile Sortierung und Gruppierungsprojektion ohne Tk; getrennte oberste Namespaces | 3.44.0 (FP-03) |
+| `action_menu.py` | Durchsuchbare Seiten-, Block- und Menüaktionen: liest Beschriftung, Pfad und Zustand der bestehenden Menüs, filtert mit der Suchsemantik der Palette, nennt Sperrgründe; Kopfverweise der Seite. Ausgeführt wird immer der Menüeintrag selbst (Tk-frei, E-U3 A) | lokaler Kandidat auf 3.44.0 (D55) |
+| `side_view.py` | Lesende Nebenansicht im Inspektorbereich: Ziel über stabile Listen-ID, Lesbarkeit (Papierkorb, Archiv, Zeichnung/Galerie), Listenzeilen, Seitenprojektion mit Blockarten/Einzügen/Aufgaben und Abgleichsignatur (Tk-frei, E-U2 A) | lokaler Kandidat auf 3.44.0 (D55) |
+| `compact_mode.py` | Kompaktmodus: Mindestmaße beider Modi, Ableitung und Klemmung der Fensterlage, getrennte Merklage in den Einstellungen (Tk-frei, E-U1 A) | lokaler Kandidat auf 3.44.0 (D55) |
 | `backup_diff.py` | Zwei Datenstände vergleichen, nur lesend (Tk-frei, F-03) | 3.35.0 |
 | `render_retention.py` | Lebensdauer, Inhaltsabgleich und stabile Bindungen wiederverwendbarer Ansichtsbausteine (Tk-frei) | 3.36.0 |
 | `logo_raster.py` | Geglättete transparente Logo-Raster und PNG-Ausgabe ohne Zusatzbibliothek (Tk-frei) | 3.37.0 |

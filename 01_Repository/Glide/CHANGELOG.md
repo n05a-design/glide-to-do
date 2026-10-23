@@ -1,10 +1,24 @@
 # Änderungsverlauf
 
+## In Arbeit – Arbeitsmodi und Seitenbedienung (D55, lokaler Kandidat auf 3.44.0, keine Lieferung)
+
+Auswahl des Inhabers vom 23.10.2026: E-U1 A, E-U2 A und E-U3 A ([Plan §21.11](../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2111-viertes-umsetzungspaket-arbeitsmodi-und-seitenbedienung-d55)). Quellbaum auf 3.44.0 / Aufgabenformat 26 ohne Versionswechsel; nicht in `07_Python-Versionen`, nicht committet. Keine Datenformatänderung, zwei additive Einstellungen (`compact_window`, `side_view_width`).
+
+- **Durchsuchbare Seiten- und Blockaktionen (E-U3 A):** „Mehr“ in Seiten und Notizen sowie Strg/Cmd+/ öffnen eine eingebettete Auswahl mit Filterfeld über denselben Menüeinträgen; gesperrte Einträge nennen ihren Grund, Esc gibt den Fokus an den Text zurück. Griff ⠿ links der Zeile unter Mauszeiger und Schreibmarke. „+ Symbol“/„+ Titelbild“ erscheinen bei Überfahren oder Fokus am Ende der Titelzeile, wenn der Titel Platz lässt – ohne zusätzliche Bedienzeile, sonst über „Mehr“.
+- **Nebenansicht (E-U2 A):** Liste, Seite oder Notiz lesend am Platz des Aufgabeninspektors; Abhaken mit einem Rückgängig-Schritt, „Öffnen“, „Schließen“/Esc. Einstiege über Seitenleiste, Suche (Umschalt+Enter), Ansicht › Oberfläche und Palette.
+- **Kompaktmodus (E-U1 A):** Strg/Cmd+Umschalt+K oder Ansicht › Oberfläche: einzeiliger Kopf mit Titel, Suche, Schnellerfassung, Menü und „Normalansicht“, keine Seitenleiste, Mindestgröße 480 × 560 nur in diesem Modus, getrennte Fensterlagen.
+- **Dabei behoben:** Der Aufgabeninspektor behielt beim Verkleinern unter 980 px die Oberkante des breiten Fensters und überdeckte Ansichtsumschalter und „☰“; Inspektor und Nebenansicht hängen jetzt am Platz der Inhaltsfläche.
+- **Zwei Bildschirme unter Windows:** Kompaktmodus und Start rechnen mit der Fläche aller Bildschirme; ein Fenster auf einem zweiten Bildschirm springt nicht mehr auf den Hauptbildschirm, Lagen links davon („+-x“) gehen nicht mehr verloren.
+- **Vollprüfung in der Windows-Sandbox:** `tests/tools/windows_sandbox.py` friert das Projekt ein und startet dieselbe Vollprüfung in eigener Sitzung auf dem zweiten Bildschirm, damit am Rechner weitergearbeitet werden kann (am Rechner noch nicht erprobt).
+- **Prüfung:** neue Pflichtsuite `test_arbeitsmodi.py` (zwölf Fälle), Fachmodule `action_menu.py`, `side_view.py`, `compact_mode.py` mit Unit-Tests; Linux/Tk 8.6 mit künstlichen Daten. Vollprüfung, Mac/Windows-Sicht und Menschenabnahme offen.
+
 ## 3.44.0 – Wiederholen, eigene Rhythmen, Ansichten, Seitenkarten, Erwähnungen, KI-Aufträge und Markdown-Export (22.10.2026)
 
 Phasenabschluss nach D51: Die seit 3.43.1 lokal entwickelten Pakete (FP-01 bis FP-07 Stufe 1, WA-26, Schutzrunde WA-27–WA-30 und Roadmap-Pakete 1–3) erhalten eine gemeinsame Versionsnummer, eine eingefrorene Windows-Vollprüfung und die Lieferung nach `07_Python-Versionen`. **Aufgabenformat 26** (seit FP-02) mit bytegleicher Vorsicherung `liste_vor_format26_<Zeitstempel>.json`; die unveränderte 3.43.1 öffnet den umgestellten Bestand schreibgeschützt. Neue Neuerungen-Karte „Neu in 3.44.0“. Eigenständige Pakete und Mac-Bundle bleiben bis zu ihrem eigenen Neubau 3.42.0.
 
 - **Aus der eingefrorenen Vollprüfung behoben:** „Als Ansicht speichern …“ steht in Palette und Aktionssuche unter „Ansichten“ statt unter „Weitere Aktionen“ (Aktionskatalog, Unit-Test). Der Showcase zeigt zusätzlich eine Serie am letzten Werktag im Monat und damit alle sieben Wiederholungsarten. Prüferwartungen an Format 26, den FP-02-Kalenderimport und die seit WA-31 gehaltene Sperrdatei angepasst. [Phasennachweis](tests/qa-3.44.0/phasenabschluss_2026-10-22/README.md).
+
+- **Prüfwerkzeugnachlauf 23.10.2026 (GitHub-Prüfung #138–#140):** Rot war nur die Windows-Vollprüfung, mit zwei Suitenfehlern, die lokal nicht auftraten. `test_schutzrunde` (Fall `sitzung`) verglich den Pfad der Sperrdatei nach einem Ordnerwechsel als Zeichenkette; der Runner liefert den Temp-Ordner als 8.3-Kurznamen, `change_data_folder` den langen Namen über `realpath`. Verglichen wird jetzt normalisiert, die Rot-Meldung nennt die Zeile. `test_uiux_paket` löschte den Datenordner, während ein PowerShell-Unterprozess noch ein Galeriebild wandelte (WinError 32); der Abbau wartet jetzt auf den Konversions-Worker. App und ausgelieferte Python-Fassung unverändert. [Nachweis](tests/qa-3.44.0/github_pruefung_2026-10-23/README.md).
 
 Einzelheiten der Teilpakete:
 

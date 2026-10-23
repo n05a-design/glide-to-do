@@ -182,6 +182,9 @@ import filter_explain as glide_filter_explain  # noqa: E402
 import view_definition as glide_view_definition  # noqa: E402
 import exchange_patch as glide_exchange_patch  # noqa: E402
 import backup_diff as glide_backup_diff  # noqa: E402
+import action_menu as glide_action_menu  # noqa: E402
+import side_view as glide_side_view  # noqa: E402
+import compact_mode as glide_compact  # noqa: E402
 from capture_parser import (SLASH_COMMANDS, SLASH_IMPORTANCE, parse_capture,  # noqa: E402,F401
                             parse_capture_due, slash_suggestions, split_capture_lines)
 from schema_backups import SchemaBackups  # noqa: E402
@@ -9890,9 +9893,13 @@ class PageEditor(RichNoteEditor):
         self.bind('<Destroy>', lambda e, w=toolbar: w.destroy() if e.widget is self and w.winfo_exists() else None,
                   add='+')
         self._format_bar = None
+        self._toolbar_buttons = {}
         for label, command in self.toolbar_items():
-            toolbar.add(app._make_dialog_button(toolbar, label, command, 'muted', height=30,
-                                                width=tkfont.Font(font=app_font(10, 'bold')).measure(label) + 26))
+            knopf = app._make_dialog_button(toolbar, label, command, 'muted', height=30,
+                                            width=tkfont.Font(font=app_font(10, 'bold')).measure(label) + 26)
+            self._toolbar_buttons[label] = knopf
+            toolbar.add(knopf)
+        app.add_tooltip(self._toolbar_buttons['Mehr'], 'Weitere Aktionen dieser Seite, durchsuchbar')
         self.status = tk.Label(self, text='', bg=theme['card'], fg=theme['muted'], font=app_font(9), anchor='w')
         self.status.pack(side='bottom', fill='x')
         self._cover_host = tk.Frame(self, bg=theme['card'])
@@ -9905,9 +9912,11 @@ class PageEditor(RichNoteEditor):
                                         font=app_font(glide_design.FONT_SIZES['title'], 'bold'), anchor='w',
                                         justify='left', cursor='hand2', takefocus=1, padx=0, pady=0)
             self.title_label.pack(fill='x', padx=28)
-            for sequenz in ('<Button-1>', '<Return>', '<space>'):
+            self.title_label.bind('<Button-1>', self.title_click)
+            for sequenz in ('<Return>', '<space>'):
                 self.title_label.bind(sequenz, lambda _event: self.rename_page() or 'break')
             app.add_tooltip(self.title_label, 'Seitentitel ändern')
+            self.create_page_head()
         self._live_host = tk.Frame(self, bg=theme['card'])
         self._live_host.pack(side='bottom', fill='x')
         self._mentions_host = tk.Frame(self, bg=theme['card'])
@@ -9931,8 +9940,9 @@ class PageEditor(RichNoteEditor):
         leiste = app._attach_field_scrollbar(area, self.text)
         # Bilder liegen über dem Text und wandern beim Scrollen mit.
         self.text.configure(yscrollcommand=lambda first, last: (leiste.set(first, last), self.place_images(),
-                                                                 self.hide_format_bar()))
+                                                                 self.hide_format_bar(), self.sync_block_handle()))
         self.text.pack(fill='both', expand=True)
+        self.create_block_handle()
         self._placeholder = None
         if self.SHOW_TITLE:
             # Der Hinweis liegt über dem leeren Text und wird nie gespeichert.
@@ -9952,6 +9962,10 @@ class PageEditor(RichNoteEditor):
             self.text.bind(f'<{modifier}-y>', self.redo)
             self.text.bind(f'<{modifier}-Shift-Z>', self.redo)
             self.text.bind(f'<{modifier}-v>', self.paste)
+            # E-U3 A: Blockaktionen per Tastatur (wie Notion); ersetzt Tks
+            # „Alles markieren“ auf Strg+/ – das bleibt über Strg+A erreichbar.
+            self.text.bind(f'<{modifier}-slash>', self.show_block_actions)
+            self.text.bind(f'<{modifier}-KP_Divide>', self.show_block_actions)
         self.text.bind('<<Paste>>', self.paste)
         self.text.bind('<space>', self.markdown_shortcut)
         self.text.bind('<Return>', self.newline)
@@ -9979,8 +9993,347 @@ class PageEditor(RichNoteEditor):
         # braucht eine eigene Bindung: Tk wählt die genauere `<Escape>`, nicht `<Key>`.
         self.text.bind('<Key>', self.clear_search_hits, add='+')
         self.text.bind('<Escape>', self.clear_search_hits, add='+')
+        # Blockgriff (E-U3 A): beim Mauszeiger über einer Zeile und, solange
+        # die Seite den Tastaturfokus hat, an der Schreibmarke.
+        self.text.bind('<Motion>', self.block_handle_hover, add='+')
+        self.text.bind('<Leave>', lambda _event: self.idle_check('handle', self.block_handle_pointer_check), add='+')
+        self.text.bind('<FocusIn>', lambda _event: self.show_block_handle('insert', 'focus'), add='+')
+        self.text.bind('<FocusOut>', lambda _event: self.idle_check('handle', self.block_handle_pointer_check), add='+')
+        self.text.bind('<KeyRelease>', self.block_handle_keys, add='+')
+        # Zeichen tragen nur Tastendrücke verlässlich (Windows/macOS liefern beim Loslassen kein %A).
+        self.text.bind('<KeyPress>', self.block_handle_typing, add='+')
+        self.text.bind('<Configure>', lambda _event: self.sync_block_handle(), add='+')
         self.bind('<Destroy>', self.destroyed, add='+')
+        self.bind('<Destroy>', lambda event: event.widget is self and self.cancel_idle_checks(), add='+')
         app.register_file_drop(self.text, self.drop_files)
+
+    def idle_check(self, key, action):
+        """Eine Prüfung nach dem Ereignis, je Schlüssel höchstens einmal vorgemerkt.
+
+        Am Hauptfenster vorgemerkt und in `_after_ids` geführt: Wird der Editor
+        vorher abgebaut (Seitenwechsel beim Fokusverlust), bricht er den Auftrag
+        ab, statt einen Rückruf auf ein gelöschtes Tcl-Kommando zu hinterlassen.
+        """
+        jobs = self.__dict__.setdefault('_idle_checks', {})
+        if key in jobs:
+            return
+        app = self.app
+
+        def run():
+            job = jobs.pop(key, None)
+            app._after_ids.discard(job)
+            try:
+                if self.winfo_exists():
+                    action()
+            except tk.TclError:
+                pass
+        try:
+            jobs[key] = app._register_after(app.root.after_idle(run))
+        except tk.TclError:
+            jobs.pop(key, None)
+
+    def cancel_idle_checks(self):
+        for job in self.__dict__.pop('_idle_checks', {}).values():
+            self.app._after_ids.discard(job)
+            try:
+                self.app.root.after_cancel(job)
+            except tk.TclError:
+                pass
+
+    # --- Blockgriff (E-U3 A, D55, 23.10.2026) -------------------------------
+    # Ein dezenter Griff links der Zeile öffnet dieselben Blockaktionen wie
+    # Strg/Cmd+/ und das Kontextmenü. Kein Ziehen (Stufe 2 nicht gewählt).
+    BLOCK_HANDLE_GAP = 6
+    BLOCK_HANDLE_KEYS = frozenset({'Up', 'Down', 'Prior', 'Next', 'Home', 'End', 'Left', 'Right',
+                                   'Return', 'KP_Enter'})
+
+    def create_block_handle(self):
+        theme = self.app.theme
+        griff = tk.Label(self.text, name='block_handle', text=self.app.ICONS['block_handle'], bg=theme['card'],
+                         fg=theme['muted'], font=app_font(12), cursor='hand2', bd=0, padx=3, pady=0, takefocus=0)
+        griff._accessible_name = 'Blockaktionen'
+        self.app.add_tooltip(griff, 'Blockaktionen · ' + self.app.accel('/'))
+        griff.bind('<Button-1>', self.block_handle_click)
+        griff.bind('<Enter>', lambda _event: griff.configure(bg=self.app.theme['hover'], fg=self.app.theme['text']))
+        griff.bind('<Leave>', lambda _event: (griff.configure(bg=self.app.theme['card'], fg=self.app.theme['muted']),
+                                              self.idle_check('handle', self.block_handle_pointer_check)))
+        self._block_handle = griff
+        self._block_handle_line = None
+        self._block_handle_source = None
+
+    def block_handle_visible(self):
+        griff = getattr(self, '_block_handle', None)
+        try:
+            return bool(griff is not None and griff.winfo_manager())
+        except tk.TclError:
+            return False
+
+    def show_block_handle(self, index='insert', source='focus'):
+        griff = getattr(self, '_block_handle', None)
+        if griff is None:
+            return
+        try:
+            if not self.winfo_exists():
+                return
+            zeile = int(self.text.index(index).split('.')[0])
+            start = f'{zeile}.0'
+            inhalt = self.text.get(start, f'{start} lineend')
+            if self.IMAGE_ANCHOR in inhalt or 'folded' in self.text.tag_names(start):
+                # Bilder haben ihr eigenes Menü; zugeklappte Zeilen sind unsichtbar.
+                self.hide_block_handle()
+                return
+            box = self.text.bbox(start) or self.text.dlineinfo(start)
+            if not box:
+                self.hide_block_handle()
+                return
+            x, y, _breite, hoehe = box[:4]
+            breite_griff, hoehe_griff = griff.winfo_reqwidth(), griff.winfo_reqheight()
+            links = max(0, x - breite_griff - self.BLOCK_HANDLE_GAP)
+            oben = y + max(0, (hoehe - hoehe_griff) // 2)
+            self.place_at(griff, links, oben)
+            griff.tk.call('raise', griff._w)
+            self._block_handle_line, self._block_handle_source = zeile, source
+        except tk.TclError:
+            self.hide_block_handle()
+
+    def hide_block_handle(self):
+        griff = getattr(self, '_block_handle', None)
+        self._block_handle_line = None
+        self._block_handle_source = None
+        if griff is not None:
+            try:
+                griff.place_forget()
+            except tk.TclError:
+                pass
+
+    def sync_block_handle(self):
+        """Nach Scrollen oder Größenwechsel an derselben Zeile neu ausrichten."""
+        zeile = getattr(self, '_block_handle_line', None)
+        if zeile is not None and self.block_handle_visible():
+            self.show_block_handle(f'{zeile}.0', self._block_handle_source or 'focus')
+
+    def block_handle_hover(self, event):
+        try:
+            zeile = int(self.text.index(f'@{event.x},{event.y}').split('.')[0])
+        except tk.TclError:
+            return None
+        if zeile != self._block_handle_line or not self.block_handle_visible():
+            self.show_block_handle(f'{zeile}.0', 'pointer')
+        return None
+
+    def block_handle_pointer_check(self):
+        """Griff bleibt unter dem Mauszeiger oder an der Schreibmarke, sonst verschwindet er."""
+        try:
+            if not self.winfo_exists():
+                return
+            unter = self.winfo_containing(self.winfo_pointerx(), self.winfo_pointery())
+        except (KeyError, tk.TclError):
+            unter = None
+        griff = getattr(self, '_block_handle', None)
+        if unter is griff or unter is self.text:
+            return
+        try:
+            fokus = self.focus_get()
+        except (KeyError, tk.TclError):
+            fokus = None
+        if fokus is self.text:
+            self.show_block_handle('insert', 'focus')
+        else:
+            self.hide_block_handle()
+
+    def block_handle_keys(self, event):
+        if event.keysym in self.BLOCK_HANDLE_KEYS:
+            self.show_block_handle('insert', 'focus')
+        return None
+
+    def block_handle_typing(self, event):
+        if event.char and event.char.isprintable() and not (event.state & 0x4):
+            # Beim Schreiben bleibt die Zeile ruhig; Pfeiltasten oder Maus zeigen den Griff wieder.
+            self.hide_block_handle()
+        return None
+
+    def block_handle_click(self, event=None):
+        zeile = getattr(self, '_block_handle_line', None)
+        if zeile is None:
+            return 'break'
+        try:
+            if int(self.text.index('insert').split('.')[0]) != zeile:
+                self.text.tag_remove('sel', '1.0', 'end')
+                self.text.mark_set('insert', f'{zeile}.0 lineend')
+            self.text.focus_set()
+        except tk.TclError:
+            return 'break'
+        return self.show_block_actions(anchor_widget=self._block_handle)
+
+    # --- Ruhiger Seitenkopf (E-U3 A, Rang 3) ---------------------------------
+    # „+ Symbol“ und „+ Titelbild“ (Symbol bzw. Titelbild hinzufügen) stehen
+    # zurückhaltend am rechten Ende der Titelzeile und erscheinen beim
+    # Überfahren oder mit dem Tastaturfokus. Sie belegen nur Platz, den der Titel ohnehin frei lässt:
+    # keine zusätzliche Bedienzeile über dem Inhalt (15-%-Regel aus 3.38.0),
+    # kein früherer Umbruch. Reicht der Platz nicht (langer Titel, schmale
+    # Spalte, Nebenansicht offen), weichen sie ganz und bleiben über „Mehr“
+    # (Titelbild, Pixelsymbol …) erreichbar. Ein vorhandenes Pixelsymbol steht
+    # vor dem Titel; ein Klick darauf ändert es.
+    HEAD_ACTION_HEIGHT = 26
+    HEAD_ACTION_GAP = 12
+
+    def create_page_head(self):
+        theme = self.app.theme
+        # Kind des Titels: Die Verweise gehören zur Titelzeile und überdecken keinen fremden Text.
+        self._head_row = tk.Frame(self.title_label, name='page_head_actions', bg=theme['card'], bd=0,
+                                  highlightthickness=0)
+        self._head_buttons = {}
+        self._head_signature = None
+        self._head_revealed = False
+        self._title_icon = None
+        self._head_watch(self.title_label)
+        self._head_watch(self._head_row)
+        self.refresh_page_head()
+
+    def _head_watch(self, widget):
+        widget.bind('<Enter>', lambda _event: self.reveal_page_head(True), add='+')
+        widget.bind('<Leave>', lambda _event: self.idle_check('head', self.page_head_check), add='+')
+        widget.bind('<FocusIn>', lambda _event: self.reveal_page_head(True), add='+')
+        widget.bind('<FocusOut>', lambda _event: self.idle_check('head', self.page_head_check), add='+')
+
+    def page_head_widgets(self):
+        return [w for w in (self.title_label, getattr(self, '_head_row', None), *getattr(self, '_head_buttons', {}).values())
+                if w is not None]
+
+    def page_head_check(self):
+        try:
+            if not self.winfo_exists():
+                return
+            unter = self.winfo_containing(self.winfo_pointerx(), self.winfo_pointery())
+            fokus = self.focus_get()
+        except (KeyError, tk.TclError):
+            unter = fokus = None
+        bereich = self.page_head_widgets()
+        self.reveal_page_head(unter in bereich or fokus in bereich)
+
+    def page_head_width(self):
+        """Reservierte Breite am Ende der Titelzeile (0 ohne Verweise)."""
+        knoepfe = list(getattr(self, '_head_buttons', {}).values())
+        if not knoepfe:
+            return 0
+        try:
+            return sum(int(float(k.cget('width'))) for k in knoepfe) + 6 * (len(knoepfe) - 1)
+        except tk.TclError:
+            return 0
+
+    def reveal_page_head(self, sichtbar):
+        self._head_revealed = bool(sichtbar)
+        zeile = getattr(self, '_head_row', None)
+        titel = getattr(self, 'title_label', None)
+        if zeile is None or titel is None:
+            return
+        try:
+            if sichtbar and self._head_buttons and titel.winfo_manager() and getattr(self, '_head_fits', False):
+                # Senkrecht auf der Mitte der ersten Titelzeile, rechtsbündig zur Lesespalte.
+                linie = tkfont.Font(font=titel.cget('font')).metrics('linespace')
+                if getattr(self, '_title_icon', None) is not None:
+                    linie = max(linie, self._title_icon.height())
+                oben = max(0, (linie - self.HEAD_ACTION_HEIGHT) // 2)
+                zeile.place(relx=1.0, x=0, y=oben, anchor='ne')
+                zeile.tk.call('raise', zeile._w)
+            elif zeile.winfo_manager():
+                zeile.place_forget()
+        except tk.TclError:
+            pass
+
+    def sync_page_head_row(self):
+        """Prüfen, ob die Kopfverweise neben dem Titel Platz finden; sonst weichen sie ganz."""
+        titel = getattr(self, 'title_label', None)
+        if titel is None:
+            return
+        text = getattr(self, 'text', None)
+        self._head_fits = False
+        try:
+            breite = text.winfo_width() if text is not None else 0
+            reserve = self.page_head_width()
+            if breite > 1 and reserve:
+                spalte = breite - 2 * (self._read_pad or 28)
+                bedarf = tkfont.Font(font=titel.cget('font')).measure(titel.cget('text'))
+                if getattr(self, '_title_icon', None) is not None:
+                    bedarf += self._title_icon.width()
+                self._head_fits = bedarf + self.HEAD_ACTION_GAP + reserve <= spalte
+        except tk.TclError:
+            pass
+        self.reveal_page_head(self._head_revealed)
+
+    def refresh_page_head(self):
+        titel = getattr(self, 'title_label', None)
+        if titel is None or getattr(self, '_head_row', None) is None:
+            return
+        entry = self.app.page_entry(self.entry_id) or {}
+        wanted = glide_action_menu.header_affordances(entry, bool(getattr(self.app, '_data_read_only', False)))
+        bild = None
+        if isinstance(entry.get('icon'), dict):
+            bild = self.app.page_icon_image(entry, scale=self.app.page_icon_scale() * 2)
+        self._title_icon = bild
+        try:
+            titel.configure(image=bild or '', compound='left' if bild else 'none')
+        except tk.TclError:
+            pass
+        self.refresh_title()
+        if wanted != self._head_signature:
+            for kind in self._head_row.winfo_children():
+                kind.destroy()
+            self._head_buttons = {}
+            # Kurze Beschriftung mit „+“ wie „Seiten +“: Je kürzer, desto öfter passen sie neben den Titel.
+            for schluessel, beschriftung, befehl, name in (
+                    ('icon', '+ Symbol', self.choose_page_icon, 'Symbol hinzufügen'),
+                    ('cover', '+ Titelbild', self.show_cover_choices, 'Titelbild hinzufügen')):
+                if schluessel not in wanted:
+                    continue
+                breite = tkfont.Font(font=app_font(9)).measure(beschriftung) + 28
+                # Wie alle Editorknöpfe nicht in app.buttons: der Kopf wird mit dem Editor neu gebaut,
+                # ein zerstörter Knopf in der Themenliste bräche den Designwechsel ab.
+                farbe = self.app.dialog_color(self.app.button_color_key('muted', beschriftung))
+                knopf = RoundedButton(self._head_row, text=beschriftung, command=befehl, border_color=farbe,
+                                      hover_fill=farbe, text_color=farbe, bg_color=self._head_row.cget('bg'),
+                                      width=breite, height=self.HEAD_ACTION_HEIGHT, radius=10, font=app_font(9),
+                                      outline=False)
+                knopf._fit_width()
+                knopf._draw()
+                knopf._accessible_name = name
+                glide_core_accessibility.refresh(knopf)
+                self.app.add_tooltip(knopf, name)
+                knopf.pack(side='left', padx=(6 if self._head_buttons else 0, 0))
+                self._head_watch(knopf)
+                self._head_buttons[schluessel] = knopf
+            self._head_signature = wanted
+        self.sync_page_head_row()
+
+    def show_cover_choices(self):
+        """Titelbild-Untermenü (Bilddatei, Pixelzeichnung) am Kopfverweis öffnen."""
+        if getattr(self.app, '_data_read_only', False):
+            return 'break'
+        self.flush()
+        menu = self.app.page_cover_menu(self.entry_id, self)
+        knopf = getattr(self, '_head_buttons', {}).get('cover')
+        try:
+            if knopf is not None and knopf.winfo_ismapped():
+                menu.tk_popup(knopf.winfo_rootx(), knopf.winfo_rooty() + knopf.winfo_height())
+            else:
+                menu.tk_popup(self.winfo_pointerx(), self.winfo_pointery())
+        finally:
+            try:
+                menu.grab_release()
+            except tk.TclError:
+                pass
+        return 'break'
+
+    def title_click(self, event):
+        """Klick auf das Pixelsymbol ändert es, Klick auf den Titel benennt um."""
+        bild = getattr(self, '_title_icon', None)
+        try:
+            if bild is not None and event.x <= int(bild.width()) + 4:
+                return self.choose_page_icon()
+        except (tk.TclError, ValueError):
+            pass
+        self.rename_page()
+        return 'break'
 
     def toggle_mentions(self):
         if self._mentions_open:
@@ -10091,7 +10444,8 @@ class PageEditor(RichNoteEditor):
     def refresh_page_features(self):
         if not hasattr(self, '_live_host'):
             return
-        self.refresh_title()
+        # Kopfverweise und Pixelsymbol folgen Titelbild und Symbol (E-U3 A).
+        self.refresh_page_head() if getattr(self, '_head_row', None) is not None else self.refresh_title()
         entry = self.app.page_entry(self.entry_id) or {}
         targets = entry.get('live_lists', [])
         rows = [(target, *glide_pages.live_rows(target, self.app.lists, self.app.trash, self.app.folders)) for target in targets]
@@ -10281,6 +10635,9 @@ class PageEditor(RichNoteEditor):
                     self.title_label.pack_configure(padx=rand)
                 self.title_label.configure(wraplength=max(120, breite - 2 * rand))
             self.sync_placeholder()
+        if getattr(self, '_head_row', None) is not None:
+            # Platz der Kopfverweise am Zeilenende freihalten – bei jeder Breite, auch in voller Breite.
+            self.sync_page_head_row()
         if self.images:
             # Beim ersten Aufbau sofort, danach gebündelt.
             self.schedule_image_layout(0 if not self._image_views else 120)
@@ -10338,8 +10695,10 @@ class PageEditor(RichNoteEditor):
             bedarf = titel.winfo_reqheight() + 18
             if titel.winfo_manager() and hoehe < self.TEXT_MIN_FOR_TITLE:
                 titel.pack_forget()
+                self.sync_page_head_row()
             elif not titel.winfo_manager() and hoehe - bedarf >= self.TEXT_MIN_FOR_TITLE:
                 titel.pack(fill='x', padx=self._read_pad or 28, pady=(18, 0), after=self._cover_host)
+                self.sync_page_head_row()
         except tk.TclError:
             pass
 
@@ -10357,9 +10716,14 @@ class PageEditor(RichNoteEditor):
             return
         entry = self.app.page_entry(self.entry_id) or {}
         titel = str(entry.get('title') or '')
+        if getattr(self, '_title_icon', None) is not None:
+            # Abstand zwischen Pixelsymbol und Titel; Label kennt keinen eigenen.
+            titel = '  ' + titel
         try:
             if self.title_label.cget('text') != titel:
                 self.title_label.configure(text=titel)
+                if getattr(self, '_head_row', None) is not None:
+                    self.sync_page_head_row()
         except tk.TclError:
             pass
 
@@ -10923,7 +11287,15 @@ class PageEditor(RichNoteEditor):
                              else (self.clear_line_block(), self.flush()))
         self.popup(menu)
 
+    # E-U3 A (D55): Abschnitte der durchsuchbaren Auswahl, je Trennlinie des Menüs.
+    PAGE_ACTION_TITLE = 'Seitenaktionen'
+    PAGE_ACTION_SECTIONS = ('Seite', 'Einfügen', 'Ausgabe', 'Verlauf')
+
     def show_page_menu(self):
+        """Natives Seitenmenü (bestehender Einstieg); „Mehr“ öffnet dieselben Einträge durchsuchbar."""
+        self.popup(self.build_page_menu())
+
+    def build_page_menu(self):
         menu = self.app._new_themed_popup_menu(self)
         favorit = self.entry_id in (self.app.settings.get('page_favorites') or [])
         menu.add_command(label=('Aus Favoriten entfernen' if favorit else 'Zu Favoriten hinzufügen'),
@@ -10935,6 +11307,8 @@ class PageEditor(RichNoteEditor):
         menu.add_separator()
         menu.add_command(label='Live-Liste einbetten …', command=lambda: self.app.choose_live_list(self.entry_id))
         menu.add_cascade(label='Titelbild', menu=self.app.page_cover_menu(self.entry_id, menu))
+        menu.add_command(label='Pixelsymbol …', command=self.choose_page_icon,
+                         state='disabled' if getattr(self.app, '_data_read_only', False) else 'normal')
         menu.add_command(label='Bild einfügen …', command=self.choose_images)
         menu.add_command(label='Trennlinie', command=self.insert_divider)
         menu.add_command(label='Link …', command=self.insert_link)
@@ -10949,7 +11323,41 @@ class PageEditor(RichNoteEditor):
         menu.add_separator()
         menu.add_command(label='Rückgängig', command=self.undo)
         menu.add_command(label='Wiederholen', command=self.redo)
-        self.popup(menu)
+        return menu
+
+    def show_page_actions(self, event=None):
+        """„Mehr“: die Einträge des Seitenmenüs als eingebettete Auswahl mit Filterfeld (E-U3 A)."""
+        self.hide_format_bar()
+        if self.app.action_chooser_open():
+            self.app.close_action_chooser()
+            return 'break'
+        menu = self.build_page_menu()
+        knopf = (getattr(self, '_toolbar_buttons', {}) or {}).get('Mehr')
+        self.app.show_action_chooser(
+            menu, title=self.PAGE_ACTION_TITLE, anchor=knopf if knopf is not None and knopf.winfo_ismapped() else None,
+            sections=self.PAGE_ACTION_SECTIONS, context=self.action_context(),
+            return_focus=self.text, on_close=lambda m=menu: self._discard_menu(m))
+        return 'break'
+
+    def action_context(self):
+        return {'read_only': bool(getattr(self.app, '_data_read_only', False))}
+
+    @staticmethod
+    def _discard_menu(menu):
+        try:
+            if menu.winfo_exists():
+                menu.destroy()
+        except tk.TclError:
+            pass
+
+    def choose_page_icon(self):
+        """Pixelsymbol der Seite zeichnen oder übernehmen (derselbe Dialog wie in der Seitenleiste)."""
+        if getattr(self.app, '_data_read_only', False) or self.app.page_entry(self.entry_id) is None:
+            return 'break'
+        self.flush()
+        self.app.page_icon_dialog('list', self.entry_id)
+        self.refresh_page_head()
+        return 'break'
 
     def toggle_width(self):
         self.app.settings['page_full_width'] = not self.app.settings.get('page_full_width')
@@ -10991,7 +11399,7 @@ class PageEditor(RichNoteEditor):
         eintraege += [('Zitat', lambda: self.set_block('quote')),
                       ('Code', lambda: self.set_block('codeblock')),
                       ('Bild', self.choose_images),
-                      ('Mehr', self.show_page_menu)]
+                      ('Mehr', self.show_page_actions)]
         return eintraege
 
     def convert_block(self, tag):
@@ -11144,6 +11552,50 @@ class PageEditor(RichNoteEditor):
                 self.text.tag_remove('sel', '1.0', 'end')
                 self.text.mark_set('insert', punkt)
         self.text.focus_set()
+        self.popup(self.build_context_menu())
+        return 'break'
+
+    # E-U3 A (D55): Blockaktionen durchsuchbar – Griff, Strg/Cmd+/ und Kontextmenü.
+    BLOCK_ACTION_SEARCH_LABEL = 'Blockaktionen suchen …'
+    BLOCK_ACTION_SECTIONS = ('Bearbeiten', 'Aufgabe', 'Formatieren', 'Zeile')
+    BLOCK_ACTION_ORDER = ('Umwandeln in', 'Zeile', 'Formatieren', 'Bearbeiten', 'Aufgabe')
+
+    def block_kind_label(self, index='insert'):
+        """Anzeigename der Blockart einer Zeile, etwa „Überschrift 2“ oder „Text“."""
+        bloecke = set(self.line_blocks(index))
+        if 'toggle' in bloecke and 'h2' in bloecke:
+            return 'Aufklappüberschrift'
+        return next((label for label, tag in self.BLOCK_CHOICES if tag in bloecke), 'Text')
+
+    def show_block_actions(self, event=None, anchor_widget=None):
+        """Die Blockaktionen der Zeile an der Schreibmarke als durchsuchbare Auswahl."""
+        self.hide_format_bar()
+        if self.app.action_chooser_open():
+            self.app.close_action_chooser()
+            return 'break'
+        x = y = None
+        try:
+            if anchor_widget is not None and anchor_widget.winfo_ismapped():
+                x = anchor_widget.winfo_rootx() + anchor_widget.winfo_width() + 6
+                y = anchor_widget.winfo_rooty()
+            else:
+                box = self.text.bbox('insert')
+                if box:
+                    x = self.text.winfo_rootx() + box[0]
+                    y = self.text.winfo_rooty() + box[1] + box[3] + 4
+        except tk.TclError:
+            x = y = None
+        if x is None:
+            x, y = self.text.winfo_rootx() + 40, self.text.winfo_rooty() + 40
+        menu = self.build_context_menu()
+        self.app.show_action_chooser(
+            menu, title='Blockaktionen · ' + self.block_kind_label(), x=x, y=y,
+            sections=self.BLOCK_ACTION_SECTIONS, order=self.BLOCK_ACTION_ORDER, context=self.action_context(),
+            skip={self.BLOCK_ACTION_SEARCH_LABEL}, return_focus=self.text,
+            on_close=lambda m=menu: self._discard_menu(m))
+        return 'break'
+
+    def build_context_menu(self):
         markiert = self.has_selection()
         zustand = 'normal' if markiert else 'disabled'
         menu = self.app._new_themed_popup_menu(self)
@@ -11175,8 +11627,9 @@ class PageEditor(RichNoteEditor):
         menu.add_command(label='Zeile nach unten', command=lambda: self.move_line(1), state=beweglich)
         menu.add_command(label='Zeile duplizieren', command=self.duplicate_line, state=beweglich)
         menu.add_command(label='Zeile löschen', command=self.delete_line, state=beweglich)
-        self.popup(menu)
-        return 'break'
+        menu.add_command(label=self.BLOCK_ACTION_SEARCH_LABEL, command=self.show_block_actions,
+                         accelerator=self.app.accel('/'))
+        return menu
 
     # Schwebende Formatleiste über einer Markierung, wie in Notion.
     FORMAT_BAR_ITEMS = (('B', 'bold'), ('I', 'italic'), ('U', 'underline'), ('S', 'strike'),
@@ -12071,8 +12524,10 @@ class NoteEditor(PageEditor):
     TOOLBAR_IN_BAND = False
     ALLOW_TASKS = True
     SHOW_TITLE = False
+    PAGE_ACTION_TITLE = 'Notizaktionen'
+    PAGE_ACTION_SECTIONS = ('Notiz', 'Einfügen', 'Präsentieren', 'Ansicht und Verlauf')
 
-    def show_page_menu(self):
+    def build_page_menu(self):
         menu = self.app._new_themed_popup_menu(self)
         menu.add_command(label='Zeitstempel', command=self.timestamp)
         menu.add_command(label='Tagesabschnitt', command=lambda: self.timestamp(section=True))
@@ -12093,7 +12548,7 @@ class NoteEditor(PageEditor):
                          command=self.toggle_width)
         menu.add_command(label='Rückgängig', command=self.undo)
         menu.add_command(label='Wiederholen', command=self.redo)
-        self.popup(menu)
+        return menu
 
     def insert_markdown(self, markdown):
         return super().insert_markdown(markdown)
@@ -14883,6 +15338,20 @@ class ListApp:
              "Formatleiste › Mehr › Präsentieren · Folien als PDF"),
         )),
         ("Seiten", (
+            ("Seitenaktionen", "„Mehr“ öffnet alle Befehle der Seite als durchsuchbare Liste: tippen filtert "
+             "(Umlaute wie ae/oe/ue/ss), Pfeile wählen, Enter führt aus, Esc schließt und kehrt in den Text "
+             "zurück. Gesperrte Einträge nennen ihren Grund, etwa „Zuerst Text markieren“. In Notizen heißt "
+             "dieselbe Liste „Notizaktionen“.", "Seite › Mehr · Notiz › Mehr"),
+            ("Blockaktionen", "Strg/Cmd+/ oder der Griff ⠿ links der Zeile öffnen die Aktionen der Zeile: oben "
+             "„Umwandeln in“ (Überschrift, Liste, Aufgabe, Zitat, Code …), darunter Zeile, Formatieren und "
+             "Verknüpfen. Der Griff erscheint unter dem Mauszeiger und an der Schreibmarke und verschwindet "
+             "beim Tippen. Eine Umwandlung ist ein Rückgängig-Schritt.",
+             "Seite oder Notiz › Strg/Cmd+/ · ⠿ links der Zeile · Rechtsklick › Blockaktionen suchen …"),
+            ("Symbol und Titelbild", "Fehlen Pixelsymbol oder Titelbild, stehen „+ Symbol“ und „+ Titelbild“ "
+             "zurückhaltend am rechten Ende der Titelzeile, wenn der Titel dort Platz lässt; sie erscheinen "
+             "beim Überfahren oder mit dem Tastaturfokus auf dem Titel, ohne dass sich etwas verschiebt. "
+             "Sonst bleiben beide über „Mehr“ erreichbar. Ein gesetztes Symbol steht vor dem Titel; ein "
+             "Klick darauf ändert es.", "Seitentitel · Seite › Mehr › Titelbild / Pixelsymbol …"),
             ("Bilder in Seiten", "„Bild“ in der Werkzeugleiste, „/“ › Bild oder ein Bild aus Finder/Explorer auf die "
              "Seite ziehen. Kleine Bilder stehen links und der Text fließt rechts vorbei, große füllen die Spalte. "
              "Ziehen verschiebt: links, mittig oder rechts in der Spalte ablegen. Die Ecke ziehen ändert die Größe. "
@@ -15269,6 +15738,18 @@ class ListApp:
              "Einstellungen › Darstellung › Farbmodus"),
             ("Schrift", "Familie und Grundgröße der gesamten Oberfläche.",
              "Einstellungen › Darstellung"),
+            ("Kompaktmodus", "Für ein schmales Glide-Fenster neben einer anderen Anwendung: Der Kopf zeigt nur "
+             "Titel, Suche, Schnellerfassung, Menü und „Normalansicht“, die Seitenleiste ist aus und das "
+             "Fenster lässt sich bis 480 × 560 verkleinern. Alle Menübefehle liegen im Menüknopf. Beide Modi "
+             "merken sich ihre Fensterlage getrennt; beim nächsten Start öffnet Glide normal.",
+             "Ansicht › Oberfläche › Kompaktmodus ein/aus · Strg/Cmd+Umschalt+K"),
+            ("Nebenansicht", "Eine Liste, Seite oder Notiz lesend rechts neben der Arbeit, am Platz des "
+             "Aufgabeninspektors. Aufgaben lassen sich dort abhaken (Kästchen oder Leertaste, ein "
+             "Rückgängig-Schritt); „Öffnen“ zeigt den Inhalt im Hauptbereich, „Schließen“ oder Esc beendet sie. "
+             "Öffnet man den Aufgabeninspektor, tritt sie zurück und kehrt danach wieder. Zeichnungen, "
+             "Galerien und Pinnwände öffnet man im Hauptbereich.",
+             "Rechtsklick auf Liste/Seite › In Nebenansicht öffnen · Suche › Umschalt+Enter · "
+             "Ansicht › Oberfläche › Nebenansicht öffnen …"),
             ("Bedienhinweise", "Ergänzende Hinweise in den Ansichten, etwa „Doppelklick öffnet“ oder die "
                                "Erklärung im Papierkorb. Standardmäßig aus; notwendige Meldungen erscheinen immer.",
              "Einstellungen › Darstellung und Bedienung"),
@@ -16047,6 +16528,9 @@ class ListApp:
         "overflow": "⋯",
         # Eine erkannte Angabe zurücknehmen (Feldchips der Eingabe, 3.33.3).
         "remove": "×",
+        # Blockgriff der Seiten (E-U3 A, D55): acht Punkte als Griff, wie das
+        # eingeführte Ziehzeichen; hier öffnet er nur die Blockaktionen.
+        "block_handle": "⠿",
     }
     # Begrüßungen der Startseite. `{name}` steht für „, Tim“ und bleibt leer,
     # solange kein Name eingetragen ist – deshalb gehört das Komma in den
@@ -16598,7 +17082,12 @@ class ListApp:
         self.root.bind("<Control-Shift-T>", self.choose_time_block)
         self.root.bind("<Control-Shift-F>", self.start_focus_selected)
         self.root.bind("<Control-h>", self.open_history_view)
+        # Kompaktmodus (E-U1 A); kleines k deckt eine eingerastete Feststelltaste ab.
+        for sequence in ("<Control-Shift-K>", "<Control-Shift-k>"):
+            self.root.bind(sequence, self.toggle_compact_mode)
         if IS_MACOS:
+            for sequence in ("<Command-Shift-K>", "<Command-Shift-k>"):
+                self.root.bind(sequence, self.toggle_compact_mode)
             self.root.bind("<Command-l>", self.open_label_manager)
             self.root.bind("<Command-k>", self.open_calendar_view)
             self.root.bind("<Command-o>", self.show_quick_open)
@@ -19084,6 +19573,12 @@ class ListApp:
         breite = result.get("detail_pane_width")
         result["detail_pane_width"] = (max(280, min(640, breite)) if isinstance(breite, int)
                                        and not isinstance(breite, bool) else 360)
+        # Kompaktmodus (E-U1 A, D55): eigene Fensterlage, nur gültige Werte.
+        result[glide_compact.SETTING] = glide_compact.normalize_saved(result.get(glide_compact.SETTING))
+        # Nebenansicht (E-U2 A, D55): eigene gezogene Breite, sonst wie der Inspektor.
+        breite = result.get("side_view_width")
+        result["side_view_width"] = (max(280, min(640, breite)) if isinstance(breite, int)
+                                     and not isinstance(breite, bool) else 360)
         # Hintergrundverlauf je Design (26.09.2026): nur bekannte Entwürfe.
         verlaeufe = result.get("backdrops")
         result["backdrops"] = {
@@ -21942,6 +22437,9 @@ class ListApp:
             if getattr(self, "_inspector_context", None) == self.inspector_context():
                 return self.find_item_in_lists(explicit) is not None
             self._inspector_item_id = None
+        if getattr(self, "_side_view", None):
+            # Eine geöffnete Nebenansicht hat Vorrang vor dem automatischen Inspektor.
+            return False
         if not self.detail_pane_enabled() or self.view_mode not in ("list", self.TABLE_VIEW):
             return False
         workspace = getattr(self, "workspace", None)
@@ -22045,6 +22543,56 @@ class ListApp:
         self.sync_detail_pane()
         return True
 
+    # --- Gemeinsamer Platz rechts (Inspektor und Nebenansicht) -------------
+    # Beide Flächen hängen am Packplatz der Inhaltsfläche statt an einmal
+    # gemessenen Koordinaten. Bis 23.10.2026 behielt der Inspektor beim
+    # Verkleinern unter 980 px die Oberkante aus dem breiten Fenster und lag
+    # dann über der umgebrochenen Titelzeile mit Ansichtsumschalter und „☰“.
+
+    def overlay_slot_enter(self, surface, options):
+        """Schmales Fenster: Die Inhaltsfläche weicht, ein leerer Platzhalter hält ihren Platz."""
+        slot = getattr(self, "_overlay_slot", None)
+        if slot is None or not slot.winfo_exists():
+            slot = self._overlay_slot = tk.Frame(surface.master, name="overlay_slot", bd=0, highlightthickness=0)
+        slot.configure(bg=self.theme["bg"])
+        if surface.winfo_manager() == "pack":
+            werte = {key: value for key, value in options.items() if key != "in"}
+            slot.pack(**dict(werte, before=surface))
+            surface.pack_forget()
+        elif slot.winfo_manager() != "pack":
+            slot.pack(**options)
+        return slot
+
+    def overlay_slot_leave(self, surface, options, **override):
+        """Inhaltsfläche an den Platz des Platzhalters zurück (oder nur neu packen)."""
+        slot = getattr(self, "_overlay_slot", None)
+        try:
+            belegt = slot is not None and slot.winfo_exists() and slot.winfo_manager() == "pack"
+        except tk.TclError:
+            belegt = False
+        if belegt:
+            werte = {key: value for key, value in options.items() if key != "in"}
+            surface.pack(**dict(werte, before=slot, **override))
+            slot.pack_forget()
+        else:
+            surface.pack(**dict(options, **override))
+
+    def place_overlay_pane(self, pane, sash, surface, options, width, narrow):
+        """Schmal über dem Platz der Inhaltsfläche, breit rechts daneben – beides folgt ihrer Lage."""
+        raw_padding = options.get("padx", 0)
+        padding = raw_padding if isinstance(raw_padding, (tuple, list)) else self.root.tk.splitlist(str(raw_padding))
+        left = int(padding[0]) if padding else 0
+        right = int(padding[-1]) if padding else 0
+        # `place` ergänzt bestehende Angaben; deshalb jede Angabe ausdrücklich (leer = nicht benutzt).
+        if narrow:
+            slot = self.overlay_slot_enter(surface, options)
+            sash.place_forget()
+            pane.place(in_=slot, x=0, y=0, relx=0, rely=0, width="", height="", relwidth=1, relheight=1)
+        else:
+            self.overlay_slot_leave(surface, options, padx=(left, right + width + 6))
+            pane.place(in_=surface, x=6, y=0, relx=1.0, rely=0, width=width, height="", relwidth="", relheight=1)
+            sash.place(in_=surface, x=0, y=0, relx=1.0, rely=0, width=6, height="", relwidth="", relheight=1)
+
     def restore_inspector_content(self):
         saved = getattr(self, "_inspector_surface", None)
         self._inspector_surface = None
@@ -22052,11 +22600,13 @@ class ListApp:
             widget,options,_top,_height = saved
             try:
                 if widget.winfo_exists():
-                    widget.pack(**options)
+                    self.overlay_slot_leave(widget, options)
             except tk.TclError:
                 pass
 
     def layout_task_inspector(self):
+        # Derselbe Platz wie die Nebenansicht (E-U2 A): sie tritt zurück und gibt ihre Fläche frei.
+        self.hide_side_view_pane()
         pane,sash = self.detail_pane,self.detail_sash
         parent = self.content_frame
         narrow = self.root.winfo_width() < self.DETAIL_PANE_MIN_WINDOW
@@ -22071,24 +22621,10 @@ class ListApp:
             options = surface.pack_info()
             top = surface.winfo_y()
             saved = self._inspector_surface = (surface,options,top,surface.winfo_height())
-        _widget,options,old_top,old_height = saved
-        raw_padding = options.get("padx",0)
-        padding = raw_padding if isinstance(raw_padding,(tuple,list)) else self.root.tk.splitlist(str(raw_padding))
-        left = int(padding[0]) if padding else 0
-        right = int(padding[-1]) if padding else 0
+        _widget,options,_old_top,_old_height = saved
         wanted = getattr(self,"_detail_pending_width",self.detail_pane_width()) if getattr(self,"_detail_drag",None) else self.detail_pane_width()
         width = min(wanted,max(280,parent.winfo_width()-320))
-        top = surface.winfo_y() if surface.winfo_manager() else old_top
-        height = max(1,surface.winfo_height() if surface.winfo_manager() else old_height)
-        if narrow:
-            surface.pack_forget()
-            sash.place_forget()
-            pane.place(x=left,y=top,width=max(280,parent.winfo_width()-left-right),height=height)
-        else:
-            surface.pack(**dict(options,padx=(left,right+width+6)))
-            x = max(0,parent.winfo_width()-right-width)
-            pane.place(x=x,y=top,width=width,height=height)
-            sash.place(x=x-6,y=top,width=6,height=height)
+        self.place_overlay_pane(pane,sash,surface,options,width,narrow)
         pane.configure(bg=self.theme["card"])
         sash.configure(bg=self.theme["line"])
         pane.lift()
@@ -22112,6 +22648,7 @@ class ListApp:
                 widget.place_forget()
         self.restore_inspector_content()
         self.refresh_tree()
+        self.sync_side_view(force=True)
         origin = getattr(self, "_inspector_origin_focus", None)
         try:
             if origin is not None and origin.winfo_exists() and origin.winfo_ismapped():
@@ -22121,6 +22658,533 @@ class ListApp:
         except tk.TclError:
             pass
         return "break"
+
+    # -----------------------------
+    # Nebenansicht im Inspektorbereich (E-U2 A, D55, 23.10.2026)
+    # -----------------------------
+    # Ein zweiter Inhalt – Liste, Seite oder Notiz – steht lesend neben der
+    # eigentlichen Arbeit. Bearbeitet wird im Hauptbereich; nebenan gibt es nur
+    # das Abhaken über den bestehenden Weg (ein Undo) und „Öffnen“. Derselbe
+    # Platz wie der Aufgabeninspektor: Ist dieser sichtbar, tritt die
+    # Nebenansicht zurück und erscheint danach wieder. Unter 980 Pixeln liegt
+    # sie wie der Inspektor über der Inhaltsfläche. Projektion: `side_view`.
+    SIDE_VIEW_WIDTH_DEFAULT = 360
+    SIDE_VIEW_WIDTH_RANGE = (280, 640)
+
+    def side_view_width(self):
+        wert = self.settings.get("side_view_width")
+        unten, oben = self.SIDE_VIEW_WIDTH_RANGE
+        if isinstance(wert, int) and not isinstance(wert, bool):
+            return max(unten, min(oben, wert))
+        return self.SIDE_VIEW_WIDTH_DEFAULT
+
+    def side_view_entry(self):
+        target = getattr(self, "_side_view", None)
+        if not target:
+            return None
+        return next((entry for entry in self.lists if entry.get("id") == target.get("id")), None)
+
+    def side_view_open(self):
+        return bool(getattr(self, "_side_view", None))
+
+    def open_side_view(self, list_id):
+        """Liste, Seite oder Notiz lesend neben der Arbeit zeigen."""
+        entry = next((value for value in self.lists if value.get("id") == list_id), None)
+        if entry is None:
+            return False
+        if getattr(self, "_compact", None):
+            self.show_info("Nebenansicht", "Im Kompaktmodus ist neben dem Inhalt kein Platz. "
+                                           "Mit „Normalansicht“ steht die Nebenansicht wieder zur Verfügung.")
+            return False
+        state, text = glide_side_view.availability(entry, list_id, self.trash)
+        if state == "unsupported":
+            self.show_info("Nebenansicht", text)
+            return False
+        self.commit_detail_pane()
+        if getattr(self, "_detail_commit_error", None):
+            return False
+        # Ein offener Aufgabeninspektor räumt den Platz; seine Eingaben sind übernommen.
+        if getattr(self, "_inspector_item_id", None):
+            self.close_task_inspector()
+        self._side_view = glide_side_view.target_for(entry)
+        self._side_view_signature = None
+        self._side_view_scroll = 0.0
+        self._side_view_selected = None
+        # Der automatische Inspektor tritt zurück, bevor die Nebenansicht seinen Platz einnimmt.
+        self.sync_detail_pane()
+        self.sync_side_view(force=True)
+        return True
+
+    def choose_side_view(self, event=None):
+        """Nebenansicht über die eingebettete Suche wählen (nur Listen, Seiten, Notizen)."""
+        return self.show_quick_open(side=True)
+
+    def close_side_view(self, event=None):
+        if not getattr(self, "_side_view", None):
+            return "break"
+        fokus_war_dort = self.side_view_has_focus()
+        self._side_view = None
+        self._side_view_signature = None
+        self.hide_side_view_pane()
+        if fokus_war_dort:
+            editor = getattr(self, "rich_note_editor", None)
+            try:
+                if editor is not None and editor.winfo_exists() and editor.winfo_ismapped():
+                    editor.text.focus_set()
+                elif self.tree.winfo_ismapped():
+                    self.tree.focus_set()
+            except tk.TclError:
+                pass
+        return "break"
+
+    def open_side_view_target(self):
+        """„Öffnen“: den Inhalt der Nebenansicht im Hauptbereich zeigen."""
+        target = getattr(self, "_side_view", None)
+        if not target:
+            return "break"
+        identity = target["id"]
+        self.close_side_view()
+        if next((entry for entry in self.lists if entry.get("id") == identity), None) is not None:
+            self.set_active_list(identity)
+        return "break"
+
+    def open_side_view_item(self, item_id):
+        """Eine Aufgabe der Nebenansicht im Hauptbereich zeigen und auswählen."""
+        target = getattr(self, "_side_view", None)
+        if not target or not item_id:
+            return "break"
+        self.close_side_view()
+        self.open_quick_result({"target": ("item", target["id"], item_id)})
+        return "break"
+
+    def toggle_side_view_task(self, item_id):
+        """Abhaken nebenan: derselbe Weg wie in einer Kachel, ein Rückgängig-Schritt."""
+        if getattr(self, "_data_read_only", False):
+            self.set_side_view_status("Schreibgeschützter Bestand · nur ansehen.")
+            return "break"
+        found = self.find_item_in_lists(item_id) if item_id else None
+        if not found or not self.is_schedulable_item(found[0]):
+            return "break"
+        self._side_view_selected = item_id
+        if not self.toggle_item_done_anywhere(item_id):
+            self.set_side_view_status("Die Änderung wurde nicht gespeichert.")
+        self.sync_side_view(force=True)
+        return "break"
+
+    def set_side_view_status(self, text, color_key="muted"):
+        status = getattr(self, "_side_view_status", None)
+        try:
+            if status is not None and status.winfo_exists():
+                status.configure(text=text, fg=self.theme[color_key])
+        except tk.TclError:
+            pass
+
+    def side_view_has_focus(self):
+        fokus = self.current_focus_widget()
+        pane = getattr(self, "side_pane", None)
+        return fokus is not None and pane is not None and str(fokus).startswith(str(pane))
+
+    def side_view_suppressed(self):
+        """Inspektor sichtbar oder Kompaktmodus: die Nebenansicht wartet."""
+        pane = getattr(self, "detail_pane", None)
+        try:
+            inspector = pane is not None and bool(pane.winfo_manager())
+        except tk.TclError:
+            inspector = False
+        return inspector or bool(getattr(self, "_compact", None))
+
+    def build_side_view_shell(self):
+        parent = self.content_frame
+        self.side_sash = tk.Frame(parent, width=6, cursor="sb_h_double_arrow", bg=self.theme["line"],
+                                  name="side_view_sash")
+        self.side_pane = tk.Frame(parent, bg=self.theme["card"], width=self.side_view_width(), name="side_view")
+        self.side_pane.pack_propagate(False)
+        self.side_sash.bind("<ButtonPress-1>", self._side_sash_press)
+        self.side_sash.bind("<B1-Motion>", self._side_sash_drag)
+        self.side_sash.bind("<ButtonRelease-1>", self._side_sash_release)
+        parent.bind("<Configure>", lambda _event: self.sync_side_view(layout_only=True), add="+")
+
+    def _side_sash_press(self, event):
+        self._side_drag = (event.x_root, self.side_pane.winfo_width())
+        return "break"
+
+    def _side_sash_drag(self, event):
+        start = getattr(self, "_side_drag", None)
+        if not start:
+            return "break"
+        unten, oben = self.SIDE_VIEW_WIDTH_RANGE
+        self._side_pending_width = int(max(unten, min(oben, start[1] - (event.x_root - start[0]))))
+        self.layout_side_view()
+        return "break"
+
+    def _side_sash_release(self, event):
+        if getattr(self, "_side_drag", None):
+            self._side_drag = None
+            breite = getattr(self, "_side_pending_width", None)
+            if breite is not None:
+                self.settings["side_view_width"] = breite
+                self.save_settings()
+        return "break"
+
+    def restore_side_surface(self):
+        saved = getattr(self, "_side_surface", None)
+        self._side_surface = None
+        if saved:
+            widget, options = saved
+            try:
+                if widget.winfo_exists():
+                    self.overlay_slot_leave(widget, options)
+            except tk.TclError:
+                pass
+
+    def hide_side_view_pane(self):
+        for widget in (getattr(self, "side_pane", None), getattr(self, "side_sash", None)):
+            if widget is not None:
+                try:
+                    widget.place_forget()
+                except tk.TclError:
+                    pass
+        self.restore_side_surface()
+
+    def layout_side_view(self):
+        """Wie der Aufgabeninspektor: rechts neben der Inhaltsfläche, schmal darüber."""
+        pane, sash, parent = self.side_pane, self.side_sash, self.content_frame
+        narrow = self.root.winfo_width() < self.DETAIL_PANE_MIN_WINDOW
+        surface = self.home_frame if self.home_frame.winfo_manager() == "pack" else self.list_frame_outer
+        saved = getattr(self, "_side_surface", None)
+        if saved and not saved[0].winfo_manager() and getattr(self, "_side_narrow", False):
+            surface = saved[0]
+        if saved and saved[0] is not surface:
+            self.restore_side_surface()
+            saved = None
+        if saved is None:
+            try:
+                options = surface.pack_info()
+            except tk.TclError:
+                return
+            saved = self._side_surface = (surface, options)
+        options = saved[1]
+        wanted = getattr(self, "_side_pending_width", self.side_view_width()) if getattr(self, "_side_drag", None) \
+            else self.side_view_width()
+        width = min(wanted, max(280, parent.winfo_width() - 320))
+        self.place_overlay_pane(pane, sash, surface, options, width, narrow)
+        pane.configure(bg=self.theme["card"])
+        sash.configure(bg=self.theme["line"])
+        pane.lift()
+        sash.lift()
+        if narrow != getattr(self, "_side_narrow", None):
+            self._side_view_signature = None
+        self._side_narrow = narrow
+
+    def sync_side_view(self, force=False, layout_only=False):
+        if not getattr(self, "_side_view", None) or not hasattr(self, "list_frame_outer"):
+            return
+        if getattr(self, "_side_syncing", False):
+            return
+        if self.side_view_suppressed():
+            self.hide_side_view_pane()
+            return
+        self._side_syncing = True
+        try:
+            if getattr(self, "side_pane", None) is None:
+                self.build_side_view_shell()
+            self.layout_side_view()
+            if layout_only and getattr(self, "_side_view_signature", None) is not None:
+                return
+            entry = self.side_view_entry()
+            identity = self._side_view["id"]
+            state, text = glide_side_view.availability(entry, identity, self.trash)
+            done = ()
+            if entry is not None and glide_side_view.content_kind(entry) in ("page", "note"):
+                projection_tasks = glide_task_refs.document_ids(entry.get("rich_note") or {})
+                done = tuple((value, bool((self.find_item_in_lists(value) or ({},))[0].get("done")))
+                             for value in projection_tasks)
+            signature = glide_side_view.signature(entry, done, (
+                state, tuple(sorted(self.theme.items())), self.settings.get("ui_font_size"),
+                glide_interaction.hints_visible(self.settings), bool(getattr(self, "_data_read_only", False)),
+                getattr(self, "_side_narrow", False)))
+            if not force and signature == getattr(self, "_side_view_signature", None):
+                return
+            self.render_side_view(entry, state, text)
+            self._side_view_signature = signature
+        finally:
+            self._side_syncing = False
+
+    def render_side_view(self, entry, state, state_text):
+        pane = self.side_pane
+        theme = self.theme
+        # Lage und Auswahl über den Neuaufbau retten (eigener Scrollzustand).
+        body = getattr(self, "_side_view_body", None)
+        try:
+            if body is not None and body.winfo_exists():
+                self._side_view_scroll = body.yview()[0]
+                if isinstance(body, ttk.Treeview) and body.selection():
+                    self._side_view_selected = body.selection()[0]
+        except tk.TclError:
+            pass
+        for kind in pane.winfo_children():
+            kind.destroy()
+        self._side_view_body = None
+        inhalt = tk.Frame(pane, bg=theme["card"])
+        inhalt.pack(fill="both", expand=True, padx=14, pady=12)
+        kopf = tk.Frame(inhalt, bg=theme["card"])
+        kopf.pack(fill="x", pady=(0, 6))
+        tk.Label(kopf, text="Nebenansicht", bg=theme["card"], fg=theme["text"],
+                 font=app_font(glide_design.FONT_SIZES["caption"], "bold"), anchor="w").pack(side="left", fill="x",
+                                                                                          expand=True)
+        schliessen = self._make_dialog_button(kopf, "Schließen", self.close_side_view, "muted", width=104, height=32)
+        schliessen.pack(side="right")
+        schliessen._accessible_name = "Nebenansicht schließen"
+        glide_core_accessibility.refresh(schliessen)
+        oeffnen = None
+        if state in ("ok", "archived"):
+            oeffnen = self._make_dialog_button(kopf, "Öffnen", self.open_side_view_target, "muted", width=96,
+                                               height=32)
+            oeffnen.pack(side="right", padx=(0, 6))
+            oeffnen._accessible_name = "Im Hauptbereich öffnen"
+            glide_core_accessibility.refresh(oeffnen)
+            self.add_tooltip(oeffnen, "Im Hauptbereich öffnen und bearbeiten")
+        breite = (max(280, self.list_frame_outer.inner.winfo_width()) if getattr(self, "_side_narrow", False)
+                  else self.side_view_width()) - 40
+        titel = str((entry or {}).get("title") or "Inhalt")
+        tk.Label(inhalt, text=titel, bg=theme["card"], fg=theme["text"],
+                 font=app_font(glide_design.FONT_SIZES["section"], "bold"), anchor="w", justify="left",
+                 wraplength=breite).pack(fill="x")
+        status = tk.Label(inhalt, text="", bg=theme["card"], fg=theme["muted"],
+                          font=app_font(glide_design.FONT_SIZES["caption"]), anchor="w", justify="left",
+                          wraplength=breite)
+        self._side_view_status = status
+        if state not in ("ok", "archived") or entry is None:
+            tk.Label(inhalt, text=state_text, bg=theme["card"], fg=theme["muted"],
+                     font=app_font(glide_design.FONT_SIZES["body"]), anchor="w", justify="left",
+                     wraplength=breite).pack(fill="x", pady=(10, 0))
+            self._bind_side_view_keys(pane)
+            return
+        art = glide_side_view.content_kind(entry)
+        teile = [{"page": "Seite", "note": "Notiz"}.get(art, "Liste")]
+        if entry.get("folder_id"):
+            teile.insert(0, " › ".join(self.folder_path_titles(entry.get("folder_id"))))
+        rows = glide_side_view.list_rows(entry.get("items", []))
+        if art == "tasks" or rows:
+            teile.append(glide_side_view.list_summary(rows))
+        if state == "archived":
+            teile.append(state_text)
+        tk.Label(inhalt, text=" · ".join(teil for teil in teile if teil), bg=theme["card"], fg=theme["muted"],
+                 font=app_font(glide_design.FONT_SIZES["caption"]), anchor="w", justify="left",
+                 wraplength=breite).pack(fill="x", pady=(2, 8))
+        if getattr(self, "_data_read_only", False):
+            status.configure(text="Schreibgeschützter Bestand · nur ansehen.")
+        status.pack(side="bottom", fill="x", pady=(6, 0))
+        if glide_interaction.hints_visible(self.settings):
+            hinweis = ("Klick auf das Kästchen oder Leertaste hakt ab · Doppelklick öffnet im Hauptbereich"
+                       if art == "tasks" else "Klick auf das Kästchen hakt ab · „Öffnen“ zum Bearbeiten")
+            tk.Label(inhalt, text=hinweis, bg=theme["card"], fg=theme["muted"],
+                     font=app_font(glide_design.FONT_SIZES["caption"]), anchor="w", justify="left",
+                     wraplength=breite).pack(side="bottom", fill="x", pady=(6, 0))
+        if art in ("page", "note"):
+            body = self._render_side_view_page(inhalt, entry)
+            if art == "note" and rows:
+                self._render_side_view_rows(inhalt, rows, height=min(6, len(rows)), fill=False)
+        else:
+            body = self._render_side_view_rows(inhalt, rows)
+        self._side_view_body = body
+        self._bind_side_view_keys(pane)
+        position = getattr(self, "_side_view_scroll", 0.0) or 0.0
+        if position and body is not None:
+            # Am Hauptfenster vorgemerkt: Ein Neuaufbau vor dem Leerlauf zerstört `body`.
+            holder = []
+
+            def zurueck():
+                self._after_ids.discard(holder[0] if holder else None)
+                try:
+                    if body.winfo_exists():
+                        body.yview_moveto(position)
+                except tk.TclError:
+                    pass
+            holder.append(self._register_after(self.root.after_idle(zurueck)))
+
+    def _bind_side_view_keys(self, pane):
+        """Esc schließt die Nebenansicht; die Fläche selbst wird nur einmal gebunden."""
+        ziele = list(self.iter_descendants(pane))
+        if not getattr(pane, "_side_escape_bound", False):
+            ziele.append(pane)
+            pane._side_escape_bound = True
+        for widget in ziele:
+            widget.bind("<Escape>", lambda _event: self.close_side_view(), add="+")
+
+    def _render_side_view_rows(self, parent, rows, height=None, fill=True):
+        theme = self.theme
+        rahmen = tk.Frame(parent, bg=theme["card"])
+        rahmen.pack(fill="both" if fill else "x", expand=fill, pady=(4, 0))
+        stil = "SideView.Dialog.Treeview"
+        zeile = max(26, tkfont.Font(root=self.root, font=app_font(11)).metrics("linespace") + 8)
+        self.style.configure(stil, rowheight=zeile)
+        baum = ttk.Treeview(rahmen, name="side_view_tree", columns=("due",), show="tree", selectmode="browse",
+                            style=stil, height=height or 10)
+        baum.column("#0", stretch=True, width=200)
+        baum.column("due", stretch=False, width=92, minwidth=70, anchor="e")
+        baum.tag_configure("done", foreground=theme["muted"])
+        baum.tag_configure("heading", font=app_font(11, "bold"))
+        baum.tag_configure("hover", background=theme["hover"])
+        leiste = ThemedAutoScrollbar(rahmen, bg_color=theme["card"], track_color=theme["card"],
+                                     thumb_color=theme["input_border"], active_thumb_color=theme["muted"],
+                                     width=10, radius=5)
+        leiste.configure(height=1)
+        leiste.pack(side="right", fill="y")
+        leiste.set_command(baum.yview)
+        baum.configure(yscrollcommand=leiste.set)
+        baum.pack(side="left", fill="both", expand=True)
+        schrift = tkfont.Font(root=self.root, font=app_font(11))
+        einrueckung = schrift.measure("    ")
+        zeilen = {}
+        for row in rows:
+            if not row["id"] or baum.exists(row["id"]):
+                continue
+            if row["toggle"]:
+                marke = self.ICONS["check" if row["done"] else "task_open"]
+            elif row["kind"] == "group":
+                marke = self.ICONS["group"]
+            else:
+                marke = ""
+            text = "    " * min(row["depth"], 8) + (marke + "  " if marke else "") + (row["text"] or "Ohne Titel")
+            tags = ("done",) if row["done"] else ("heading",) if row["kind"] == "heading" else ()
+            baum.insert("", "end", iid=row["id"], text=text,
+                        values=(self.format_due_display(row["due"]) if row["due"] else "",), tags=tags)
+            zeilen[row["id"]] = row
+        baum.configure(displaycolumns=("due",) if any(row["due"] for row in rows) else ())
+        if not zeilen:
+            baum.insert("", "end", iid="_empty", text="Noch keine Aufgaben.", tags=("done",))
+        gewaehlt = getattr(self, "_side_view_selected", None)
+        if gewaehlt and baum.exists(gewaehlt):
+            baum.selection_set(gewaehlt)
+            baum.focus(gewaehlt)
+            baum.see(gewaehlt)
+
+        def marke_getroffen(event):
+            iid = baum.identify_row(event.y)
+            row = zeilen.get(iid)
+            if not row or not row["toggle"]:
+                return None
+            links = einrueckung * min(row["depth"], 8)
+            if links - 4 <= event.x - 20 <= links + schrift.measure(self.ICONS["task_open"] + "  ") + 4:
+                return iid
+            return None
+
+        def klick(event):
+            iid = marke_getroffen(event)
+            if iid:
+                baum.selection_set(iid)
+                self.toggle_side_view_task(iid)
+                return "break"
+            return None
+
+        def taste(_event=None):
+            iid = baum.focus()
+            if zeilen.get(iid, {}).get("toggle"):
+                self.toggle_side_view_task(iid)
+            return "break"
+
+        def oeffnen(_event=None):
+            iid = baum.focus()
+            if iid in zeilen:
+                return self.open_side_view_item(iid)
+            return "break"
+
+        baum.bind("<Button-1>", klick)
+        baum.bind("<space>", taste)
+        baum.bind("<Return>", oeffnen)
+        baum.bind("<Double-Button-1>", oeffnen)
+        self.bind_hover_highlight(baum)
+        self.bind_mousewheel(baum, baum)
+        glide_core_accessibility.bind_focus_traversal(baum)
+        glide_core_accessibility.bind_control(baum, lambda: glide_core_accessibility.navigation_attributes(
+            baum, "Nebenansicht"))
+        return baum
+
+    def _render_side_view_page(self, parent, entry):
+        """Seite oder Notiz lesend: Blockarten, Einzüge, Hervorhebungen und echte Aufgabenkästchen."""
+        theme = self.theme
+        projection = glide_side_view.page_projection(entry.get("rich_note") or {})
+        rahmen = tk.Frame(parent, bg=theme["card"])
+        rahmen.pack(fill="both", expand=True, pady=(4, 0))
+        groessen = glide_design.FONT_SIZES
+        text = tk.Text(rahmen, name="side_view_text", wrap="word", bg=theme["card"], fg=theme["text"],
+                       relief="flat", bd=0, highlightthickness=0, padx=4, pady=4, cursor="arrow",
+                       font=app_font(groessen["body"]), spacing1=2, spacing2=3, spacing3=6,
+                       selectbackground=theme["selection"], selectforeground=theme["selection_text"],
+                       insertwidth=0, takefocus=1)
+        leiste = ThemedAutoScrollbar(rahmen, bg_color=theme["card"], track_color=theme["card"],
+                                     thumb_color=theme["input_border"], active_thumb_color=theme["muted"],
+                                     width=10, radius=5)
+        leiste.configure(height=1)
+        leiste.pack(side="right", fill="y")
+        leiste.set_command(text.yview)
+        text.configure(yscrollcommand=leiste.set)
+        text.pack(side="left", fill="both", expand=True)
+        # Nebenan eine Stufe kleiner als im Editor: lesbar, ohne die Spalte zu sprengen.
+        mono = ("Menlo" if IS_MACOS else "Consolas" if IS_WINDOWS else "DejaVu Sans Mono", groessen["body"] - 1)
+        text.tag_configure("h1", font=app_font(groessen["section"] + 2, "bold"), spacing1=10, spacing3=4)
+        text.tag_configure("h2", font=app_font(groessen["section"], "bold"), spacing1=8, spacing3=3)
+        text.tag_configure("h3", font=app_font(groessen["body"] + 2, "bold"), spacing1=6)
+        text.tag_configure("h4", font=app_font(groessen["body"], "bold"), spacing1=4)
+        text.tag_configure("quote", foreground=theme["muted"], lmargin1=14, lmargin2=14)
+        text.tag_configure("callout", background=theme["input"], lmargin1=8, lmargin2=8)
+        text.tag_configure("codeblock", font=mono, background=theme["input"])
+        text.tag_configure("divider", foreground=theme["line"], justify="center")
+        text.tag_configure("table", font=mono, wrap="none")
+        text.tag_configure("bullet", lmargin2=18)
+        text.tag_configure("number", lmargin2=22)
+        text.tag_configure("task_done", foreground=theme["muted"], overstrike=True)
+        text.tag_configure("bold", font=app_font(groessen["body"], "bold"))
+        text.tag_configure("italic", font=app_font(groessen["body"], "italic"))
+        text.tag_configure("underline", underline=True)
+        text.tag_configure("strike", overstrike=True)
+        text.tag_configure("code", font=mono, background=theme["input"])
+        text.tag_configure("highlight", background=theme["selection"], foreground=theme["selection_text"])
+        text.tag_configure("anchor", elide=True)
+        for stufe in (1, 2, 3):
+            text.tag_configure(f"indent{stufe}", lmargin1=24 * stufe, lmargin2=24 * stufe)
+        text.insert("1.0", projection["text"])
+        for zeile in projection["lines"]:
+            start = f"{zeile['line']}.0"
+            ende = f"{zeile['line']}.end"
+            if zeile["style"] not in ("body", "image", "task"):
+                text.tag_add(zeile["style"], start, ende)
+            if zeile["indent"]:
+                text.tag_add(f"indent{zeile['indent']}", start, ende)
+        for anfang, ende, art in projection["inline"]:
+            text.tag_add(art, f"1.0 + {anfang}c", f"1.0 + {ende}c")
+        nur_lesen = bool(getattr(self, "_data_read_only", False))
+        for zeile in reversed(projection["lines"]):
+            start = f"{zeile['line']}.0"
+            if zeile["style"] == "image":
+                inhalt = text.get(start, f"{start} lineend")
+                versatz = inhalt.find(glide_side_view.IMAGE_ANCHOR)
+                if versatz >= 0:
+                    text.tag_add("anchor", f"{start} + {versatz}c")
+                    bild = tk.Label(text, text="Bild · im Original sichtbar", bg=theme["input"], fg=theme["muted"],
+                                    font=app_font(groessen["caption"]), padx=6, pady=2)
+                    text.window_create(f"{start} + {versatz}c", window=bild, padx=2)
+            elif zeile["task"]:
+                gefunden = self.find_item_in_lists(zeile["task"])
+                erledigt = bool(gefunden and gefunden[0].get("done"))
+                marke = tk.Label(text, text=self.ICONS["check" if erledigt else "task_open"], bg=theme["card"],
+                                 fg=theme["confirm" if erledigt else "muted"], font=app_font(groessen["body"]),
+                                 cursor="arrow" if nur_lesen or not gefunden else "hand2", padx=2, pady=0)
+                if gefunden and not nur_lesen:
+                    marke.bind("<Button-1>", lambda _event, iid=zeile["task"]: self.toggle_side_view_task(iid))
+                    marke.bind("<Enter>", lambda _event, w=marke: w.configure(bg=self.theme["hover"]))
+                    marke.bind("<Leave>", lambda _event, w=marke: w.configure(bg=self.theme["card"]))
+                marke._accessible_name = ("Erledigt: " if erledigt else "Offen: ") + text.get(start, f"{start} lineend")
+                text.window_create(start, window=marke, padx=2)
+                if erledigt:
+                    text.tag_add("task_done", f"{start} + 1c", f"{start} lineend")
+        if projection["truncated"]:
+            text.insert("end", "\n…", ("divider",))
+        text.configure(state="disabled")
+        self.bind_mousewheel(text, text)
+        glide_core_accessibility.bind_focus_traversal(text)
+        return text
 
     def prepare_inspector_switch(self, editors=True):
         """Eine nicht gespeicherte Eingabe bleibt beim bisherigen Kontext.
@@ -22190,6 +23254,7 @@ class ListApp:
                     pane.place_forget(); self.detail_sash.place_forget()
                     self._detail_state.update(item_id=None, signature=None, baseline=None)
                     self.restore_inspector_content()
+                    self._side_view_signature = None
                 return
             if pane is None:
                 self.build_detail_pane_shell()
@@ -34759,6 +35824,9 @@ class ListApp:
             if self.sidebar_narrow():
                 self.refresh_sidebar_rail()
             glide_core_accessibility.bind_navigation(self)
+            # Umbenennen, Papierkorb oder Archiv einer Liste erreicht auch die
+            # Nebenansicht (E-U2 A); ohne Änderung bleibt sie dank Signatur stehen.
+            self.sync_side_view()
             return ergebnis
 
     def _update_sidebar_list(self, capture=True):
@@ -36356,6 +37424,9 @@ class ListApp:
         menu.add_command(label=self.ellipsize_sidebar_title(title), state="disabled")
         menu.add_separator()
         menu.add_command(label="Öffnen", command=lambda: self.set_active_list(list_id))
+        # E-U2 A: lesend neben der Arbeit; Zeichnung und Galerie nur über „Öffnen“.
+        menu.add_command(label="In Nebenansicht öffnen", command=lambda: self.open_side_view(list_id),
+                         state="disabled" if self.is_surface_list(entry) else "normal")
         if self.is_drawing_list(entry) or entry.get("list_kind") in ("page", "note"):
             menu.add_command(label="Auf Pinnwand anheften", command=lambda: self.pin_page_on_board(list_id))
         menu.add_command(
@@ -39886,6 +40957,7 @@ class ListApp:
         self.list_frame.pack(fill="both", expand=True)
         # Der Detailbereich (3.30) folgt der Breite: unter 980 Pixel bleibt die Maske.
         self.list_frame_outer.bind("<Configure>", lambda _event: self.sync_detail_pane(), add="+")
+        self.list_frame_outer.bind("<Configure>", lambda _event: self.sync_side_view(layout_only=True), add="+")
         self.list_frame_outer.bind("<Configure>", lambda _event: self.sync_plan_day_grid(), add="+")
 
         # Spaltenfolge: Text – Fälligkeit – Labels – rechter Innenabstand.
@@ -40597,6 +41669,7 @@ class ListApp:
         self.update_path_row()
         self.update_page_chips()
         self.fit_stats_text()
+        self.update_compact_title()
         label = getattr(self, "title_label", None)
         header = getattr(self, "header_frame", None)
         if label is None or header is None:
@@ -41433,24 +42506,26 @@ class ListApp:
         zeigt eine gespeicherte Position sonst auf einen Bereich, den es nicht
         mehr gibt; das Fenster wäre unsichtbar.
         """
-        match = re.match(r"^(\d+)x(\d+)(?:([+-]\d+)([+-]\d+))?$", str(geom or "").strip())
-        if not match:
+        # Dieselbe Lesart wie der Kompaktmodus: „+-300“ liegt links vom
+        # Hauptbildschirm (bis 23.10.2026 nicht erkannt, die Lage ging verloren),
+        # ein bloßes „-300“ zählt vom rechten Rand und bleibt dem System überlassen.
+        parsed = glide_compact.parse(geom)
+        if parsed is None:
             return None
-        width = int(match.group(1))
-        height = int(match.group(2))
-        if match.group(3) is None:
+        width, height, x, y = parsed
+        if x is None:
             return f"{width}x{height}"
-        x = int(match.group(3))
-        y = int(match.group(4))
         try:
-            screen_w = self.root.winfo_screenwidth()
-            screen_h = self.root.winfo_screenheight()
+            # Unter Windows die Fläche aller Bildschirme: Ein Fenster auf einem
+            # zweiten Bildschirm wurde bis 23.10.2026 an den Rand des
+            # Hauptbildschirms gezogen.
+            left, top, screen_w, screen_h = self.desktop_bounds()
         except tk.TclError:
             return f"{width}x{height}"
-        # Mindestens ein sichtbarer Fensterstreifen muss auf dem Bildschirm liegen.
+        # Mindestens ein sichtbarer Fensterstreifen muss auf der Arbeitsfläche liegen.
         visible_margin = 120
-        x = max(-(width - visible_margin), min(x, screen_w - visible_margin))
-        y = max(0, min(y, screen_h - visible_margin))
+        x = max(left - (width - visible_margin), min(x, left + screen_w - visible_margin))
+        y = max(top, min(y, top + screen_h - visible_margin))
         return f"{width}x{height}+{x}+{y}"
 
     def restore_window_position(self):
@@ -41557,6 +42632,11 @@ class ListApp:
             geometry = self.root.geometry()
         except tk.TclError:
             return
+        kompakt = getattr(self, "_compact", None)
+        if kompakt:
+            # window.conf trägt immer die Normallage; die Kompaktlage steht in den Einstellungen.
+            self.remember_compact_geometry()
+            geometry = glide_compact.normal_geometry(kompakt.get("normal_geometry"), geometry)
         temporary = None
         try:
             handle, temporary = tempfile.mkstemp(prefix=".glide-window-", suffix=".tmp", dir=BASE_DIR)
@@ -48701,6 +49781,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self.sync_drawing_view()
         self.sync_gallery_view()
         self.sync_detail_pane()
+        self.sync_side_view()
         self.sync_plan_day_grid()
         self.sync_focus_panel()
         # Zuletzt: Beim Verlassen einer Zeichnung packte `restore_drawing_chrome`
@@ -61161,6 +62242,12 @@ Labels, Termine und Metadaten."""
         visible = self.settings.get("sidebar_visible", True)
         schmal = self.sidebar_narrow()
         rail = getattr(self, "sidebar_rail", None)
+        if getattr(self, "_compact", None):
+            # Kompaktmodus (E-U1 A): nur der Inhalt; die Einstellung bleibt unberührt.
+            self.sidebar_shell.pack_forget()
+            if rail is not None:
+                rail.pack_forget()
+            return
         if visible and not schmal:
             if rail is not None:
                 rail.pack_forget()
@@ -61261,6 +62348,191 @@ Labels, Termine und Metadaten."""
         if old:
             self.tree.focus_set()
         self._apply_sidebar_visibility()
+        return "break"
+
+    # -----------------------------
+    # Kompaktmodus (E-U1 A, D55, 23.10.2026)
+    # -----------------------------
+    # Ausdrücklich eingeschaltet für ein schmales Fenster neben einer anderen
+    # Anwendung: Kopf mit Titel, Suche, Schnellerfassung, Menü und
+    # „Normalansicht“; keine Seitenleiste; Mindestgröße 480 × 560 nur hier.
+    # Der normale Modus bleibt unverändert, die Seitenleisteneinstellung auch.
+    # Esc beendet den Modus bewusst nicht: Esc schließt bereits Suche,
+    # Auswahl, Inspektor und Formatleiste (Design Richtlinien, vorhersehbar).
+    def compact_mode_active(self):
+        return bool(getattr(self, "_compact", None))
+
+    def toggle_compact_mode(self, event=None):
+        if getattr(self, "_compact", None):
+            return self.leave_compact_mode()
+        return self.enter_compact_mode()
+
+    def enter_compact_mode(self, event=None):
+        if getattr(self, "_compact", None) or not hasattr(self, "header_frame"):
+            return "break"
+        if not self.prepare_inspector_switch(editors=False):
+            return "break"
+        self.close_action_chooser(restore_focus=False)
+        if getattr(self, "_quick_open", None) is not None:
+            self.close_quick_open()
+        try:
+            gezoomt = self.root.state() == "zoomed"
+            if gezoomt:
+                self.root.state("normal")
+            self.root.update_idletasks()
+            normal = self.root.geometry()
+            kopf_info = self.header_frame.pack_info()
+            links, oben, breite, hoehe = self.desktop_bounds()
+        except tk.TclError:
+            return "break"
+        self._compact = {"normal_geometry": normal, "zoomed": gezoomt, "header": kopf_info}
+        self.hide_side_view_pane()
+        self.header_frame.pack_forget()
+        kopf = self.build_compact_header()
+        kopf.pack(fill="x", pady=(0, glide_design.SPACING[6]), before=self.shell.pack_slaves()[0]
+                  if self.shell.pack_slaves() else None)
+        # Weniger Seitenrand im schmalen Fenster; den Platz bekommt der Inhalt.
+        self.shell.pack_configure(padx=glide_design.SPACING[14])
+        self._apply_sidebar_visibility()
+        self.root.minsize(*glide_compact.COMPACT_MIN)
+        self.root.geometry(glide_compact.compact_geometry(normal, self.settings.get(glide_compact.SETTING),
+                                                          breite, hoehe, origin=(links, oben)))
+        self.update_compact_title()
+        return "break"
+
+    def desktop_bounds(self):
+        """(x, y, Breite, Höhe) der Arbeitsfläche für Fensterlagen (Start und Kompaktmodus).
+
+        Tk meldet unter Windows nur den Hauptbildschirm; ein Fenster auf einem
+        zweiten Bildschirm sprang sonst dorthin zurück. Windows liefert die
+        virtuelle Fläche über alle Bildschirme (SM_XVIRTUALSCREEN …
+        SM_CYVIRTUALSCREEN); andere Systeme behalten Tks Bildschirmmaß.
+        """
+        if IS_WINDOWS:
+            try:
+                import ctypes
+                messen = ctypes.windll.user32.GetSystemMetrics
+                breite, hoehe = int(messen(78)), int(messen(79))
+                if breite > 0 and hoehe > 0:
+                    return int(messen(76)), int(messen(77)), breite, hoehe
+            except (AttributeError, OSError, ValueError):
+                pass
+        return 0, 0, self.root.winfo_screenwidth(), self.root.winfo_screenheight()
+
+    def leave_compact_mode(self, event=None):
+        state = getattr(self, "_compact", None)
+        if not state:
+            return "break"
+        self.close_action_chooser(restore_focus=False)
+        if getattr(self, "_quick_open", None) is not None:
+            self.close_quick_open()
+        self.remember_compact_geometry()
+        self._compact = None
+        kopf = getattr(self, "compact_header", None)
+        if kopf is not None:
+            kopf.pack_forget()
+        info = dict(state.get("header") or {})
+        slaves = self.shell.pack_slaves()
+        if slaves:
+            info["before"] = slaves[0]
+        try:
+            self.header_frame.pack(**info)
+        except tk.TclError:
+            self.header_frame.pack(fill="x", before=slaves[0] if slaves else None)
+        self.shell.pack_configure(padx=glide_design.SPACING[28])
+        self._apply_sidebar_visibility()
+        self.root.minsize(*glide_compact.NORMAL_MIN)
+        try:
+            self.root.geometry(glide_compact.normal_geometry(state.get("normal_geometry"), self.root.geometry()))
+            if state.get("zoomed"):
+                self.root.state("zoomed")
+        except tk.TclError:
+            pass
+        self.update_header_title()
+        self.sync_side_view(force=True)
+        return "break"
+
+    def remember_compact_geometry(self):
+        """Kompaktlage additiv in den Einstellungen; der Normalmodus bleibt in window.conf."""
+        if not getattr(self, "_compact", None):
+            return
+        try:
+            wert = glide_compact.normalize_saved(self.root.geometry())
+        except tk.TclError:
+            return
+        if wert and self.settings.get(glide_compact.SETTING) != wert:
+            self.settings[glide_compact.SETTING] = wert
+            self.save_settings()
+
+    def build_compact_header(self):
+        kopf = getattr(self, "compact_header", None)
+        if kopf is not None and kopf.winfo_exists():
+            return kopf
+        theme = self.theme
+        hoehe = self.HEADER_CONTROL_HEIGHT
+        kopf = self.register_theme_widget(tk.Frame(self.shell, bg=theme["bg"], name="compact_header",
+                                                   height=hoehe), "bg")
+        self.compact_header = kopf
+        rechts = self.register_theme_widget(tk.Frame(kopf, bg=theme["bg"]), "bg")
+        rechts.pack(side="right")
+        beschriftung = "Normalansicht"
+        self.compact_exit_button = self.make_button(
+            rechts, beschriftung, self.leave_compact_mode, "muted",
+            width=tkfont.Font(font=app_font(9, "bold")).measure(beschriftung) + 30, height=hoehe,
+            font=app_font(9, "bold"))
+        self.compact_menu_button = self.make_button(rechts, self.ICONS["overflow"], self.show_compact_menu, "muted",
+                                                    width=42, height=hoehe, font=app_font(16))
+        self.compact_capture_button = self.make_button(rechts, self.ICONS["capture"], self.show_quick_capture,
+                                                       "muted", width=42, height=hoehe,
+                                                       font=self.symbol_font("capture", 16))
+        self.compact_search_button = self.make_button(rechts, self.ICONS["search"], self.show_quick_open, "muted",
+                                                      width=42, height=hoehe,
+                                                      font=self.symbol_font("search", self.SEARCH_SYMBOL_SIZE))
+        for knopf, rand in ((self.compact_exit_button, (0, 0)), (self.compact_menu_button, (0, 8)),
+                            (self.compact_capture_button, (0, 8)), (self.compact_search_button, (0, 8))):
+            knopf.pack(side="right", padx=rand)
+        self.add_tooltip(self.compact_exit_button, "Kompaktmodus beenden · " + self.accel("Shift", "K"))
+        self.add_tooltip(self.compact_menu_button, "Menü: alle Befehle durchsuchen")
+        self.add_tooltip(self.compact_capture_button, "Schnellerfassung · " + self.accel("Alt", "N"))
+        self.add_tooltip(self.compact_search_button, "Suchen und Inhalt wechseln · " + self.accel("O"))
+        for knopf, name in ((self.compact_menu_button, "Menü"), (self.compact_capture_button, "Schnellerfassung"),
+                            (self.compact_search_button, "Suchen und Inhalt wechseln")):
+            knopf._accessible_name = name
+            glide_core_accessibility.refresh(knopf)
+        self.compact_title = self.register_theme_widget(
+            tk.Label(kopf, text="", bg=theme["bg"], fg=theme["text"], name="compact_title",
+                     font=app_font(glide_design.FONT_SIZES["section"], "bold"), anchor="w", padx=0, pady=0),
+            "bg", "text")
+        self.compact_title.pack(side="left", fill="x", expand=True, padx=(0, glide_design.SPACING[12]))
+        self.compact_title.bind("<Configure>", lambda _event: self.update_compact_title(), add="+")
+        return kopf
+
+    def update_compact_title(self):
+        label = getattr(self, "compact_title", None)
+        if label is None or not getattr(self, "_compact", None):
+            return
+        try:
+            voll = self.get_display_title()
+            breite = label.winfo_width()
+            text = voll
+            if breite > 1:
+                text = self.shorten_to_width(voll, tkfont.Font(root=self.root, font=label.cget("font")), breite - 2)
+            if label.cget("text") != text:
+                label.configure(text=text)
+        except tk.TclError:
+            pass
+
+    def show_compact_menu(self, event=None):
+        """Die vier Menüs gebündelt hinter einem Knopf – als durchsuchbare Auswahl."""
+        if self.action_chooser_open():
+            self.close_action_chooser()
+            return "break"
+        menubar = getattr(self, "menubar", None)
+        if menubar is None:
+            return "break"
+        knopf = getattr(self, "compact_menu_button", None)
+        self.show_action_chooser(menubar, title="Menü", anchor=knopf if knopf is not None else None,
+                                 return_focus=self.current_focus_widget())
         return "break"
 
     def app_action_entries(self):
@@ -61683,11 +62955,18 @@ Labels, Termine und Metadaten."""
         elif kind == "action":
             self.invoke_app_action(target[1], previous_focus)
 
-    def show_quick_open(self, event=None, actions_only=False):
-        """Eingebettete Suche über Seiten, Punkte und Aktionen (kein Zusatzfenster)."""
+    def show_quick_open(self, event=None, actions_only=False, side=False):
+        """Eingebettete Suche über Seiten, Punkte und Aktionen (kein Zusatzfenster).
+
+        `side=True` wählt das Ziel der Nebenansicht (E-U2 A): nur Listen, Seiten
+        und Notizen. Im normalen Modus öffnet Umschalt+Enter eine gefundene
+        Liste oder Seite ebenfalls dort.
+        """
         if getattr(self, "_quick_open", None) is not None:
             self.close_quick_open()
             return "break"
+        if getattr(self, "_action_chooser", None):
+            self.close_action_chooser(restore_focus=False)
         previous_focus = getattr(self, "_actions_source_focus", None) or self.current_focus_widget()
         self._actions_source_focus = None
         theme = self.theme
@@ -61696,7 +62975,13 @@ Labels, Termine und Metadaten."""
         breite = min(680, max(420, self.root.winfo_width() - 80))
         buehne, panel = self.quick_open_stage(breite)
         flaeche = self.quick_open_surface()
-        tk.Label(panel, text="Suchen und Aktionen · > zeigt nur Aktionen", bg=flaeche, fg=theme["muted"],
+        if side:
+            kopftext = "Nebenansicht · Liste, Seite oder Notiz wählen"
+        else:
+            kopftext = "Suchen und Aktionen · > zeigt nur Aktionen"
+            if glide_interaction.hints_visible(self.settings):
+                kopftext += " · Umschalt+Enter: Nebenansicht"
+        tk.Label(panel, text=kopftext, bg=flaeche, fg=theme["muted"],
                  font=app_font(9), anchor="w").pack(fill="x", padx=4, pady=(2, 6))
         query = tk.StringVar(value="> " if actions_only else "")
         feld = self.make_rounded_container(panel, fill_key="input", outline_key="input_border", radius=14,
@@ -61721,7 +63006,10 @@ Labels, Termine und Metadaten."""
 
         def refresh(*_args):
             tree.delete(*tree.get_children())
-            results[:] = self.quick_open_results(query.get())
+            gefunden = self.quick_open_results(query.get())
+            if side:
+                gefunden = [value for value in gefunden if (value.get("target") or ("",))[0] == "list"]
+            results[:] = gefunden
             images.clear()
             current_group = None
             for index, result in enumerate(results):
@@ -61752,11 +63040,18 @@ Labels, Termine und Metadaten."""
             tree.see(target)
             return "break"
 
-        def submit(_event=None):
+        def submit(_event=None, beside=False):
             selected = [row for row in tree.selection() if not row.startswith("group:")]
             if not selected:
                 return "break"
             result = results[int(selected[0])]
+            target = result.get("target") or ()
+            if (side or beside) and target and target[0] == "list":
+                self.close_quick_open()
+                self.open_side_view(target[1])
+                return "break"
+            if side:
+                return "break"
             self.close_quick_open()
             self.open_quick_result(result, previous_focus)
             return "break"
@@ -61765,8 +63060,10 @@ Labels, Termine und Metadaten."""
         entry.bind("<Down>", lambda _event: move(1))
         entry.bind("<Up>", lambda _event: move(-1))
         entry.bind("<Return>", submit)
+        entry.bind("<Shift-Return>", lambda _event: submit(beside=True))
         entry.bind("<Escape>", lambda _event: self.close_quick_open() or "break")
         tree.bind("<Return>", submit)
+        tree.bind("<Shift-Return>", lambda _event: submit(beside=True))
         tree.bind("<Double-Button-1>", submit)
         tree.bind("<ButtonRelease-1>", lambda event: submit() if tree.identify_row(event.y) and not
                   tree.identify_row(event.y).startswith("group:") else None)
@@ -61890,6 +63187,352 @@ Labels, Termine und Metadaten."""
     def show_actions_dialog(self):
         """Kompatibler Aktionseinstieg in dieselbe eingebettete Palette."""
         return self.show_quick_open(actions_only=True)
+
+    # -----------------------------
+    # Durchsuchbare Kontextaktionen (E-U3 A, D55, 23.10.2026)
+    # -----------------------------
+    # Seite und Block behalten ihre Menüs. Die eingebettete Auswahl liest das
+    # fertige Menü, zeigt es mit Filterfeld, Abschnitten und Sperrgründen und
+    # führt beim Wählen genau dessen Eintrag aus (`action_menu`, Tk-frei).
+    ACTION_CHOOSER_WIDTH = 380
+    ACTION_CHOOSER_ROWS = 11
+    ACTION_CHOOSER_MAX_DEPTH = 3
+
+    def menu_rows(self, menu, path=(), key=(), depth=0, _group=None):
+        """Einträge eines Menübaums als Zeilen für `action_menu.entries`.
+
+        Untermenüs werden aufgelöst; eines mit `postcommand` füllt sich erst beim
+        Öffnen und erscheint deshalb als ein Eintrag, der es öffnet.
+        """
+        rows = []
+        group = _group if _group is not None else [0]
+        try:
+            last = menu.index("end")
+        except tk.TclError:
+            return rows
+        for index in range((last if last is not None else -1) + 1):
+            try:
+                kind = menu.type(index)
+            except tk.TclError:
+                continue
+            if kind == "separator":
+                if not path:
+                    group[0] += 1
+                continue
+            if kind == "tearoff":
+                continue
+            try:
+                label = str(menu.entrycget(index, "label"))
+                enabled = str(menu.entrycget(index, "state")) != "disabled"
+            except tk.TclError:
+                continue
+            if kind == "cascade":
+                try:
+                    child = menu.nametowidget(menu.entrycget(index, "menu"))
+                    lazy = bool(str(child.cget("postcommand") or "").strip())
+                except (KeyError, tk.TclError):
+                    continue
+                if not enabled or lazy or depth + 1 >= self.ACTION_CHOOSER_MAX_DEPTH:
+                    rows.append((key + (index,), label, path, enabled, group[0], "submenu"))
+                    continue
+                rows.extend(self.menu_rows(child, path + (label,), key + (index,), depth + 1, group))
+                continue
+            rows.append((key + (index,), label, path, enabled, group[0], "command"))
+        return rows
+
+    @staticmethod
+    def menu_at(menu, key):
+        """(Menü, Index) eines Eintrags nach seinem Schlüssel aus `menu_rows`."""
+        current = menu
+        for index in key[:-1]:
+            current = current.nametowidget(current.entrycget(index, "menu"))
+        return current, key[-1]
+
+    def action_chooser_open(self):
+        state = getattr(self, "_action_chooser", None)
+        try:
+            return bool(state and state["stage"].winfo_exists())
+        except tk.TclError:
+            return False
+
+    def show_action_chooser(self, menu, *, title, x=None, y=None, anchor=None, sections=(), order=(),
+                            context=None, skip=(), return_focus=None, on_close=None):
+        """Eingebettete, durchsuchbare Auswahl über den Einträgen von `menu`.
+
+        Lage: unter `anchor` (Widget) oder an den Bildschirmkoordinaten x/y.
+        Esc oder ein Klick daneben schließen ohne Wirkung; der Fokus geht an
+        `return_focus` zurück. Gesperrte Einträge nennen ihren Grund.
+        """
+        self.close_action_chooser(restore_focus=False)
+        if getattr(self, "_quick_open", None) is not None:
+            self.close_quick_open()
+        entries = glide_action_menu.entries(self.menu_rows(menu), sections, context=context, skip=skip)
+        theme = self.theme
+        flaeche = self.quick_open_surface()
+        breite = min(self.ACTION_CHOOSER_WIDTH, max(260, self.root.winfo_width() - 24))
+        buehne = tk.Frame(self.root, name="action_chooser", bg=flaeche, highlightthickness=2,
+                          highlightbackground=theme["ui_accent"], highlightcolor=theme["ui_accent"], bd=0)
+        panel = tk.Frame(buehne, bg=flaeche)
+        panel.pack(fill="both", expand=True, padx=10, pady=10)
+        kopf = tk.Label(panel, text=title, bg=flaeche, fg=theme["muted"], font=app_font(9, "bold"), anchor="w",
+                        padx=0, pady=0)
+        kopf.pack(fill="x", padx=2, pady=(0, 6))
+        query = tk.StringVar(value="")
+        feld = self.make_rounded_container(panel, fill_key="input", outline_key="input_border", radius=12,
+                                           padding=1, height=34, inner_pad_x=8, inner_pad_y=2, register=False)
+        feld.glass_mode = False
+        feld.set_theme(flaeche, theme["input"], theme["input_border"])
+        feld.pack(fill="x")
+        feld.pack_propagate(False)
+        eingabe = tk.Entry(feld.inner, textvariable=query, name="action_chooser_entry", bg=theme["input"],
+                           fg=theme["text"], insertbackground=theme["text"], font=app_font(11), relief="flat",
+                           bd=0, highlightthickness=0)
+        eingabe.pack(fill="both", expand=True)
+        platzhalter = tk.Label(feld.inner, text="Aktionen durchsuchen", bg=theme["input"], fg=theme["placeholder"],
+                               font=app_font(11), anchor="w", padx=0, pady=0, bd=0)
+        platzhalter.place(x=1, rely=0.5, anchor="w")
+        platzhalter.bind("<Button-1>", lambda _event: eingabe.focus_set() or "break")
+        glide_core_accessibility.bind_entry(eingabe, title + ": Aktionen durchsuchen",
+                                            help="Tippen filtert. Pfeil auf und ab wählt, Enter führt aus, Esc schließt.")
+        stil = "ActionChooser.Treeview"
+        zeile = max(26, tkfont.Font(root=self.root, font=app_font(10)).metrics("linespace") + 10)
+        try:
+            self.style.configure(stil, background=flaeche, fieldbackground=flaeche, foreground=theme["text"],
+                                 borderwidth=0, relief="flat", font=app_font(10), rowheight=zeile)
+            self.style.layout(stil, [("Treeview.treearea", {"sticky": "nswe"})])
+            self.style.map(stil, background=[("selected", theme["selection"])],
+                           foreground=[("selected", theme["selection_text"])])
+        except tk.TclError:
+            pass
+        rahmen = tk.Frame(panel, bg=flaeche)
+        rahmen.pack(fill="both", expand=True, pady=(8, 0))
+        # Häkchen in eigener schmaler Spalte: Beschriftungen beginnen an derselben Kante.
+        baum = ttk.Treeview(rahmen, name="action_chooser_tree", columns=("mark", "label", "where"), show=(),
+                            selectmode="browse", style=stil, height=self.ACTION_CHOOSER_ROWS)
+        schrift = tkfont.Font(root=self.root, font=app_font(10))
+        markenbreite = schrift.measure(self.ICONS["check"]) + 14
+        nutzbar = breite - 2 * 10 - 8 - 6
+        baum.column("mark", width=markenbreite, minwidth=markenbreite, stretch=False, anchor="center")
+        baum.column("label", width=nutzbar - markenbreite, stretch=True, anchor="w")
+        baum.column("where", width=0, minwidth=0, stretch=False, anchor="e")
+        baum.tag_configure("group", foreground=theme["accent"], font=app_font(9, "bold"))
+        baum.tag_configure("disabled", foreground=theme["muted"])
+        baum.tag_configure("hover", background=theme["hover"])
+        leiste = ThemedAutoScrollbar(rahmen, bg_color=flaeche, track_color=flaeche,
+                                     thumb_color=theme["input_border"], active_thumb_color=theme["muted"],
+                                     width=8, radius=4)
+        leiste.configure(height=1)
+        leiste.pack(side="right", fill="y")
+        leiste.set_command(baum.yview)
+        baum.configure(yscrollcommand=leiste.set)
+        baum.pack(side="left", fill="both", expand=True)
+        self.bind_hover_highlight(baum)
+        glide_core_accessibility.bind_focus_traversal(baum)
+        glide_core_accessibility.bind_control(baum, lambda: glide_core_accessibility.navigation_attributes(baum, title))
+        status = tk.Label(panel, text="", bg=flaeche, fg=theme["muted"], font=app_font(9), anchor="w",
+                          justify="left", wraplength=breite - 40, padx=2, pady=0)
+        status.pack(fill="x", pady=(6, 0))
+        treffer = {}
+
+        def zeige(*_args):
+            text = query.get()
+            if text:
+                platzhalter.place_forget()
+            else:
+                platzhalter.place(x=1, rely=0.5, anchor="w")
+            gefunden = glide_action_menu.search(entries, text)
+            baum.delete(*baum.get_children())
+            treffer.clear()
+            gruppen = (glide_action_menu.grouped(gefunden, order) if not text.strip()
+                       else [("Treffer", gefunden)] if gefunden else [])
+            orte = {id(wert): (wert.location if text.strip()
+                               else glide_action_menu.PATH_SEPARATOR.join(wert.path[1:])) for wert in gefunden}
+            # Ortsspalte nur so breit wie nötig (B11); den Rest bekommt die Beschriftung.
+            ortsbreite = min(150, max((schrift.measure(ort) for ort in orte.values() if ort), default=-16) + 16)
+            baum.column("where", width=max(0, ortsbreite))
+            beschriftungsbreite = max(80, nutzbar - markenbreite - max(0, ortsbreite))
+            baum.column("label", width=beschriftungsbreite)
+            for nummer, (abschnitt, werte) in enumerate(gruppen):
+                baum.insert("", "end", iid=f"group:{nummer}", values=("", abschnitt, ""), tags=("group",))
+                for wert in werte:
+                    iid = f"entry:{len(treffer)}"
+                    marke = self.ICONS["check"] if wert.checked else ""
+                    titel = self.shorten_to_width(wert.label, schrift, beschriftungsbreite - 10)
+                    ort = self.shorten_to_width(orte[id(wert)], schrift, max(0, ortsbreite - 10)) if ortsbreite > 0 else ""
+                    baum.insert("", "end", iid=iid, values=(marke, titel, ort),
+                                tags=() if wert.enabled else ("disabled",))
+                    treffer[iid] = wert
+            erster = next((iid for iid, wert in treffer.items() if wert.enabled), next(iter(treffer), None))
+            if erster:
+                baum.selection_set(erster)
+                baum.focus(erster)
+                # Die Abschnittsüberschrift über dem ersten Treffer bleibt sichtbar.
+                baum.yview_moveto(0)
+                baum.see(erster)
+            melde()
+
+        def melde(_event=None):
+            gewaehlt = next(iter(baum.selection()), None)
+            wert = treffer.get(gewaehlt)
+            if wert is not None and not wert.enabled:
+                status.configure(text=f"{wert.label}: {wert.reason}", fg=theme["muted"])
+            else:
+                status.configure(text=glide_action_menu.summary(list(treffer.values()), query.get()),
+                                 fg=theme["muted"])
+
+        def bewege(schritt):
+            reihen = [iid for iid in baum.get_children() if iid in treffer]
+            if not reihen:
+                return "break"
+            jetzt = next(iter(baum.selection()), reihen[0])
+            stelle = reihen.index(jetzt) if jetzt in reihen else 0
+            ziel = reihen[max(0, min(len(reihen) - 1, stelle + schritt))]
+            baum.selection_set(ziel)
+            baum.focus(ziel)
+            baum.see(ziel)
+            return "break"
+
+        def ausfuehren(_event=None, iid=None):
+            iid = iid or next(iter(baum.selection()), None)
+            wert = treffer.get(iid)
+            if wert is None:
+                return "break"
+            if not wert.enabled:
+                status.configure(text=f"{wert.label}: {wert.reason}", fg=theme["delete"])
+                return "break"
+            lage = (buehne.winfo_rootx(), buehne.winfo_rooty())
+            # Erst schließen und den Fokus zurückgeben, dann den Menüeintrag
+            # ausführen: Befehle wirken auf die Schreibmarke ihres Editors.
+            self.close_action_chooser(restore_focus=True, notify=False)
+            try:
+                ziel_menue, stelle = self.menu_at(menu, wert.key)
+                if wert.kind == "submenu":
+                    unter = ziel_menue.nametowidget(ziel_menue.entrycget(stelle, "menu"))
+                    try:
+                        unter.tk_popup(*lage)
+                    finally:
+                        unter.grab_release()
+                    # Das Untermenü bleibt geöffnet; sein Wurzelmenü lebt mit dem Editor.
+                    return "break"
+                ziel_menue.invoke(stelle)
+            except (KeyError, tk.TclError):
+                pass
+            if callable(on_close):
+                try:
+                    on_close()
+                except tk.TclError:
+                    pass
+            return "break"
+
+        def schliessen(_event=None):
+            self.close_action_chooser(restore_focus=True)
+            return "break"
+
+        def weiterreichen(event):
+            if event.char and event.char.isprintable() and not (event.state & 0x4):
+                eingabe.focus_set()
+                eingabe.insert("end", event.char)
+                return "break"
+            return None
+
+        query.trace_add("write", zeige)
+        eingabe.bind("<Down>", lambda _event: bewege(1))
+        eingabe.bind("<Up>", lambda _event: bewege(-1))
+        eingabe.bind("<Next>", lambda _event: bewege(self.ACTION_CHOOSER_ROWS))
+        eingabe.bind("<Prior>", lambda _event: bewege(-self.ACTION_CHOOSER_ROWS))
+        eingabe.bind("<Return>", ausfuehren)
+        eingabe.bind("<KP_Enter>", ausfuehren)
+        eingabe.bind("<Escape>", schliessen)
+        baum.bind("<<TreeviewSelect>>", melde)
+        baum.bind("<Return>", ausfuehren)
+        baum.bind("<space>", ausfuehren)
+        baum.bind("<Escape>", schliessen)
+        baum.bind("<Key>", weiterreichen, add="+")
+        baum.bind("<ButtonRelease-1>", lambda event: ausfuehren(iid=baum.identify_row(event.y))
+                  if baum.identify_row(event.y) in treffer else "break")
+        self._action_chooser = {"stage": buehne, "menu": menu, "entry": eingabe, "tree": baum, "status": status,
+                                "results": treffer, "entries": entries, "query": query,
+                                "return_focus": return_focus, "on_close": on_close}
+        zeige()
+        # Lage: unter dem Anker oder an x/y; immer ganz im Fenster.
+        buehne.update_idletasks()
+        hoehe = buehne.winfo_reqheight()
+        try:
+            if anchor is not None and anchor.winfo_ismapped():
+                x = anchor.winfo_rootx() + anchor.winfo_width() - breite
+                y = anchor.winfo_rooty() + anchor.winfo_height() + 4
+                oben_alternativ = anchor.winfo_rooty() - hoehe - 4
+            else:
+                x = self.root.winfo_pointerx() if x is None else x
+                y = self.root.winfo_pointery() if y is None else y
+                oben_alternativ = y - hoehe - 28
+            links = x - self.root.winfo_rootx()
+            oben = y - self.root.winfo_rooty()
+            fenster_b, fenster_h = self.root.winfo_width(), self.root.winfo_height()
+            if oben + hoehe > fenster_h - 8:
+                oben = max(8, min(oben_alternativ - self.root.winfo_rooty(), fenster_h - hoehe - 8))
+            links = max(8, min(links, fenster_b - breite - 8))
+        except tk.TclError:
+            links, oben = 24, 64
+        buehne.place(x=links, y=oben, width=breite)
+        buehne.tk.call("raise", buehne._w)
+        # Vor dem ersten Zeichnen kennt der Baum seine Höhe nicht; danach die
+        # erste Abschnittsüberschrift wieder oben zeigen.
+        baum.yview_moveto(0)
+        # Nur die eigene Klickbindung wieder lösen: die bisherige Bindung von „all“ bleibt erhalten.
+        self._action_chooser["click_before"] = str(self.root.tk.call("bind", "all", "<ButtonPress-1>"))
+        self._action_chooser["click"] = self.root.bind_all("<ButtonPress-1>", self.close_action_chooser_outside,
+                                                           add="+")
+        eingabe.focus_set()
+        return buehne
+
+    def close_action_chooser_outside(self, event=None):
+        state = getattr(self, "_action_chooser", None)
+        widget = getattr(event, "widget", None)
+        if not state or widget is None:
+            return None
+        try:
+            pfad = str(widget)
+            buehne = str(state["stage"])
+            if pfad == buehne or pfad.startswith(buehne + "."):
+                return None
+        except tk.TclError:
+            return None
+        # Nur diese Auswahl schließen: Öffnet der Klick sofort eine neue (Griff,
+        # „Mehr“), bleibt die neue stehen.
+        self.root.after_idle(lambda: self._action_chooser is state and self.close_action_chooser(restore_focus=False))
+        return None
+
+    def close_action_chooser(self, restore_focus=True, notify=True):
+        state = getattr(self, "_action_chooser", None)
+        self._action_chooser = None
+        if not state:
+            return
+        if not notify:
+            state["on_close"] = None
+        if state.get("click"):
+            try:
+                self.root.tk.call("bind", "all", "<ButtonPress-1>", state.get("click_before", ""))
+                self.root.deletecommand(state["click"])
+            except tk.TclError:
+                pass
+        try:
+            state["stage"].destroy()
+        except tk.TclError:
+            pass
+        ziel = state.get("return_focus")
+        if restore_focus and ziel is not None:
+            try:
+                if ziel.winfo_exists():
+                    ziel.focus_set()
+            except tk.TclError:
+                pass
+        callback = state.get("on_close")
+        if callable(callback):
+            try:
+                callback()
+            except tk.TclError:
+                pass
 
     def build_menu(self, parent, eintraege, tearoff=0):
         """Baut ein Menü aus einer Beschreibung und meldet es dem Theme an.
@@ -62123,6 +63766,9 @@ Labels, Termine und Metadaten."""
                 ("Oberfläche", (
                     ("Seitenleiste ein-/ausblenden", self.toggle_sidebar),
                     ("Seitenleiste schmal", self.toggle_sidebar_narrow),
+                    ("Kompaktmodus ein/aus", self.toggle_compact_mode, self.accel("Shift", "K")),
+                    ("Nebenansicht öffnen …", self.choose_side_view),
+                    ("Nebenansicht schließen", self.close_side_view),
                     ("Design wechseln (Hell/Dunkel)", self.toggle_theme, self.accel("D")),
                     ("Hintergrund", "backdrop_menu"),
                     None,
@@ -62632,11 +64278,19 @@ Labels, Termine und Metadaten."""
                 (f"{self.accel('Z')} / {self.accel('Y')}", "Aktion rückgängig / wiederherstellen"),
                 (f"{self.accel('C')} / {self.accel('X')} / {self.accel('V')}", "Auswahl kopieren / ausschneiden / einfügen"),
             ]),
+            ("Seiten und Notizen", [
+                ("„/“ am Zeilenanfang", "Block einfügen"),
+                (self.accel("/"), "Blockaktionen der Zeile suchen und ausführen (auch über ⠿ links der Zeile)"),
+                ("Mehr", "Seiten- bzw. Notizaktionen durchsuchen"),
+            ]),
             ("Startseite", [
                 ("Startseite anpassen: Alt + ↑ / ↓", "Kachel verschieben"),
             ]),
             ("Allgemein", [
                 (self.accel("O"), "Seite, Punkt oder Aktion suchen (auch ⌕ in der Kopfzeile)"),
+                ("Suche: Umschalt+Enter", "Gefundene Liste, Seite oder Notiz in der Nebenansicht öffnen"),
+                ("Nebenansicht: Leertaste / Esc", "Aufgabe abhaken / Nebenansicht schließen"),
+                (self.accel("Shift", "K"), "Kompaktmodus ein- oder ausschalten"),
                 (self.accel("Z"), "Letzte Änderung rückgängig machen"),
                 (f"{self.accel('Shift', 'Z')}" + (f" / {self.accel('Y')}" if IS_WINDOWS else ""),
                  "Rückgängig gemachte Änderung wiederholen"),

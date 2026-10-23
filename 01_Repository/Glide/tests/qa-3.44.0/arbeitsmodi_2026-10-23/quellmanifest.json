@@ -1,0 +1,95 @@
+{
+ "basis": "3.44.0, Commit 71854ec (Container-Checkpoint ea3500f, Quelltext unverändert)",
+ "dateien": [
+  {
+   "pfad": "src/glide/README.md",
+   "sha256": "816d461bf5a5c58d12e9ab3addeb608c5a238a47fbfba276f1bb82d32d81f4eb",
+   "vorher_sha256": "3d4cf6dede48c549aae8ce48e87911847d66fc9fc11f8b2c43fb3c94280d6bfa"
+  },
+  {
+   "pfad": "src/glide/action_catalog.py",
+   "sha256": "d5a1a61bd18860f9a9a24d312b57c89a4b607a4aaf909a348a3af42d7adf51de",
+   "vorher_sha256": "15f9f138a6dbbb262a9dc4fd1f308f472292ee99e4b347c5d8f02d48eea20f4a"
+  },
+  {
+   "pfad": "src/glide/app.pyw",
+   "sha256": "ff9b9cae0fc2c0cf3daf606fc3934e2efa2464b562fd250b3ddbb7abff823e45",
+   "vorher_sha256": "d0bf41427f85edd8ad3b5185310dc4879d175cf577677cb0050ba2dfa9490762"
+  },
+  {
+   "pfad": "src/glide/symbol_policy.py",
+   "sha256": "088b815f95e8070b450795af25556157e44984489c93c50309d79b110ddebc4b",
+   "vorher_sha256": "00acca5471dc69c19e9da39cc2cbd1cabc082cf7f6d54743eaea156f736c3548"
+  },
+  {
+   "pfad": "tests/integration/test_glide.py",
+   "sha256": "8cada9f4b9a17def06ae97b5c9df50539631106b382965be941ae08c13eb3517",
+   "vorher_sha256": "33dd29450481c8ca9715827f1872b176193d0b5f78483cf3e2b155e5a75cae36"
+  },
+  {
+   "pfad": "tests/tools/README.md",
+   "sha256": "8acff85748d7ad7d0c0d0f15f9a376738e3745f1ea18c732eef12720383964cd",
+   "vorher_sha256": "b0f24af09b56719e118d6f25372e02bc0d30e13d4c76d574fc68b86f28012ba0"
+  },
+  {
+   "pfad": "tests/tools/pruefen.py",
+   "sha256": "faf2462e5985f85a373b30341b8e3f203e0c1c8a211390bf64c49fe98b07329f",
+   "vorher_sha256": "04373ec515f7e1b3e3e6e144b0e9d94eaee1303ac6187946071b3eda6d3f03bb"
+  },
+  {
+   "pfad": "tests/unit/test_action_catalog.py",
+   "sha256": "faffbb82d713a354b8a9aeb94b377d315ad039b101adeab2cb01ce9f18f82484",
+   "vorher_sha256": "461c2e8b18e97f2197d84a3ba6e528e230149617600f2c04aa2716669b643777"
+  },
+  {
+   "pfad": "src/glide/action_menu.py",
+   "sha256": "12c6f8669df966735de7bfd6361758e9c9093bace5461b17901da99c9bfa9c4a",
+   "vorher_sha256": null
+  },
+  {
+   "pfad": "src/glide/compact_mode.py",
+   "sha256": "b9e9b0d75a15d3d66f65af7d7baf64f6f620e1d8790b22512c2abf635c1be09e",
+   "vorher_sha256": null
+  },
+  {
+   "pfad": "src/glide/side_view.py",
+   "sha256": "b2931728e6e4c05453d1253b9faf850ddac8474d77cabf0ad662c2b41e4c6d57",
+   "vorher_sha256": null
+  },
+  {
+   "pfad": "tests/integration/test_arbeitsmodi.py",
+   "sha256": "8738280e794c7c801485d38105f09fea0b1e2a3b964d563475a62bda74f77c8a",
+   "vorher_sha256": null
+  },
+  {
+   "pfad": "tests/tools/test_windows_sandbox.py",
+   "sha256": "821a8ac205a05de8cc9dc2bea0936645622be75e71ef33412e25ee550c719d6e",
+   "vorher_sha256": null
+  },
+  {
+   "pfad": "tests/tools/windows_sandbox.cmd",
+   "sha256": "d2992966f90ebe2065f3b415543590e130f878cd85ad9622a965c93948db03ef",
+   "vorher_sha256": null
+  },
+  {
+   "pfad": "tests/tools/windows_sandbox.py",
+   "sha256": "a64c9ac8d665c7598d005c2700ba5ad248483f71e0176ed8d143ca46a0517608",
+   "vorher_sha256": null
+  },
+  {
+   "pfad": "tests/unit/test_action_menu.py",
+   "sha256": "a6e387014a9a0a7f04fc306da219146e1234c093afa2824dcde14a275aa7fb39",
+   "vorher_sha256": null
+  },
+  {
+   "pfad": "tests/unit/test_compact_mode.py",
+   "sha256": "f987f0d825fab340365b3a02110acbe5330ab9d1aac874ed7bf0867513a2d60a",
+   "vorher_sha256": null
+  },
+  {
+   "pfad": "tests/unit/test_side_view.py",
+   "sha256": "cc819332b0873b1bef2b18a3596339cd806f7068aee78e59978959d0ffb0c546",
+   "vorher_sha256": null
+  }
+ ]
+}

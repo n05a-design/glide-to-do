@@ -22,6 +22,15 @@ class ActionCatalogTests(unittest.TestCase):
         for label in ("Gespeicherte Filter …", "Als Ansicht speichern …"):
             self.assertEqual(actions.legacy_group(label), "Ansichten", label)
 
+    def test_work_mode_actions_are_grouped(self):
+        # D55 (E-U1 A/E-U2 A): Kompaktmodus und Nebenansicht haben eigene Gruppen.
+        self.assertEqual(actions.group_for("toggle_compact_mode"), "Ansichtseinstellungen")
+        for name in ("choose_side_view", "close_side_view"):
+            self.assertEqual(actions.group_for(name), "Ansichten", name)
+        self.assertEqual(actions.legacy_group("Kompaktmodus ein/aus"), "Ansichtseinstellungen")
+        for label in ("Nebenansicht öffnen …", "Nebenansicht schließen"):
+            self.assertEqual(actions.legacy_group(label), "Ansichten", label)
+
     def test_dynamic_variants_are_grouped_by_id(self):
         for name in ("backdrop.none", "backdrop.pixel-night", "grouping.eisenhower"):
             self.assertEqual(actions.group_for(name), "Ansichtseinstellungen")

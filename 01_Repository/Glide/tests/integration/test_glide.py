@@ -1379,14 +1379,16 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     for mapped_storage in remapped.values():
         assert app.resolve_attachment_path({"storage": mapped_storage})
 
-    # Eine gespeicherte Fensterposition darf nie ausserhalb des Bildschirms liegen.
-    screen_width = root.winfo_screenwidth()
-    screen_height = root.winfo_screenheight()
-    clamped = app.clamp_geometry(f"980x740+{screen_width + 4000}+{screen_height + 3000}")
+    # Eine gespeicherte Fensterposition darf nie ausserhalb der Arbeitsfläche liegen
+    # (unter Windows die Fläche aller Bildschirme, sonst Tks Bildschirmmaß).
+    left, top, screen_width, screen_height = app.desktop_bounds()
+    clamped = app.clamp_geometry(f"980x740+{left + screen_width + 4000}+{top + screen_height + 3000}")
     clamped_match = re.match(r"^(\d+)x(\d+)\+(-?\d+)\+(-?\d+)$", clamped)
     assert clamped_match, clamped
-    assert int(clamped_match.group(3)) <= screen_width - 120
-    assert int(clamped_match.group(4)) <= screen_height - 120
+    assert int(clamped_match.group(3)) <= left + screen_width - 120
+    assert int(clamped_match.group(4)) <= top + screen_height - 120
+    # Links oder über dem Hauptbildschirm bleibt eine Lage als „+-x“ erhalten.
+    assert app.clamp_geometry(f"980x740+{left - 300}+{top + 10}") == f"980x740+{left - 300}+{top + 10}"
     assert app.clamp_geometry("980x740") == "980x740"
     assert app.clamp_geometry("unsinn") is None
 

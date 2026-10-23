@@ -22,7 +22,7 @@ TEXT_FALLBACKS = {
     "moon_full": "O", "moon_last": "(", "description": "Bs", "priority_low": "1",
     "priority_medium": "2", "priority_high": "3", "checklist": "[x]",
     "sort_ascending": "^", "sort_descending": "v", "print": "Dr", "overflow": "...",
-    "remove": "x",
+    "remove": "x", "block_handle": "::",
 }
 
 # Einige ältere Zeichen fehlen auch in der mitgelieferten UI-Schrift.

@@ -1,0 +1,54 @@
+{
+ "app_sha256": "ff9b9cae0fc2c0cf3daf606fc3934e2efa2464b562fd250b3ddbb7abff823e45",
+ "faelle": {
+  "seitenaktionen": {
+   "ok": true,
+   "befund": "21 aktive Seitenmenüeinträge auffindbar; Filter, Esc/Fokus, Ausführen, Gliederung, leere Treffer"
+  },
+  "blockaktionen": {
+   "ok": true,
+   "befund": "Strg+/, Griff an Schreibmarke und Mauszeiger, Umwandeln mit einem Undo, Sperrgründe, Rechtsklick nennt den Weg"
+  },
+  "schreibschutz": {
+   "ok": true,
+   "befund": "Lesbare Aktionen bleiben, Änderungen gesperrt mit Grund, keine Kopfverweise"
+  },
+  "kopfverweise": {
+   "ok": true,
+   "befund": "keine Zusatzzeile, Verweise am Titelende nur bei freiem Platz, Überfahren/Fokus/Tab, langer Titel und schmale Spalte weichen ganz (Mehr), Symbol vor dem Titel, 19 Knöpfe ohne Befund"
+  },
+  "notiz": {
+   "ok": true,
+   "befund": "Notizaktionen mit eigenen Abschnitten, Blockaktionen und Griff wie in Seiten"
+  },
+  "nebenansicht_liste": {
+   "ok": true,
+   "befund": "Abhaken per Kästchen/Leertaste mit einem Undo/Redo, Text klickt nicht, Umbenennen, Papierkorb, Öffnen"
+  },
+  "nebenansicht_seite": {
+   "ok": true,
+   "befund": "Blockarten, echtes Kästchen mit einem Undo, lesend gesperrt, Esc schließt"
+  },
+  "nebenansicht_inspektor": {
+   "ok": true,
+   "befund": "Vorrang und Rückkehr gegenüber dem Inspektor, schmal als Überlagerung, 15 Knöpfe ohne Befund"
+  },
+  "nebenansicht_einstiege": {
+   "ok": true,
+   "befund": "Kontextmenü, Zeichnung gesperrt, Umschalt+Enter, eigene Auswahl nur mit Listen/Seiten/Notizen"
+  },
+  "kompakt": {
+   "ok": true,
+   "befund": "Kürzel ein/aus, 480×560, getrennte Lagen über Neustart, Kopf B07, 26 Knöpfe ohne Befund"
+  },
+  "kompakt_ansichten": {
+   "ok": true,
+   "befund": "112 Knopfprüfungen in vier Ansichten bei 480×560 und großer Schrift; Menü mit allen Befehlen"
+  },
+  "gestaltung": {
+   "ok": true,
+   "befund": "202 Knopfprüfungen in fünf Konfigurationen ohne Befund"
+  }
+ },
+ "fehler": []
+}
