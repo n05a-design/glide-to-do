@@ -141,6 +141,7 @@ CHILD = '''import importlib.machinery,importlib.util,json,sys
 from pathlib import Path
 from unittest.mock import patch
 path=Path(sys.argv[1]);sys.path.insert(0,str(path.parent))
+if path.parent.name=='Archiv':sys.path.append(str(path.parent.parent))  # archivierte Hauptdatei: Begleitmodule der Lieferung
 loader=importlib.machinery.SourceFileLoader('fp02_reader',str(path))
 m=importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name,loader));sys.modules[loader.name]=m;loader.exec_module(m)
 m.ListApp.show_error=m.ListApp.show_warning=m.ListApp.show_info=lambda *a,**k:None
@@ -206,7 +207,9 @@ def fall_altregeln(run):
     code='''import importlib.machinery,importlib.util,json,sys
 from datetime import date
 from pathlib import Path
-p=Path(sys.argv[1]);sys.path.insert(0,str(p.parent));l=importlib.machinery.SourceFileLoader('oldrepeat',str(p));m=importlib.util.module_from_spec(importlib.util.spec_from_loader(l.name,l));sys.modules[l.name]=m;l.exec_module(m)
+p=Path(sys.argv[1]);sys.path.insert(0,str(p.parent))
+if p.parent.name=='Archiv':sys.path.append(str(p.parent.parent))  # archivierte Hauptdatei: Begleitmodule der Lieferung
+l=importlib.machinery.SourceFileLoader('oldrepeat',str(p));m=importlib.util.module_from_spec(importlib.util.spec_from_loader(l.name,l));sys.modules[l.name]=m;l.exec_module(m)
 out=[]
 for rule in json.loads(sys.argv[2]):
  anchor=current=date(2028,1,31);dates=[]

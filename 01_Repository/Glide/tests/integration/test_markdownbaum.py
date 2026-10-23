@@ -46,7 +46,12 @@ def fall_showcase(run, directory):
     # Vorschauen sind ein unabhängiger schreibender Cache-Dienst und haben eine
     # eigene Pflichtsuite. Für den Bytevergleich des Exportwegs pausieren wir
     # ihre Anforderung bereits vor dem Laden der künstlichen Showcase-Daten.
-    with patch.object(run.app.previews,'request_conversion',return_value='test-paused'):
+    # Ebenso die Erinnerungszustellung (alle 15 s, eigene Suiten): Der Showcase
+    # trägt Termine ab seinem Stichtag; ist eine Erinnerung fällig, speichert
+    # die Zustellung den Bestand. Fiel ein Takt in den Export, war der
+    # Bytevergleich rot (ab 23.10.2026, GitHub #141/#142 unter Linux).
+    with patch.object(run.app.previews,'request_conversion',return_value='test-paused'), \
+            patch.object(run.app,'process_reminders',return_value=0):
         return showcase_export(run,directory)
 
 
