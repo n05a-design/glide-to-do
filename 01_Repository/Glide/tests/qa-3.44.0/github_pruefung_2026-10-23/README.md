@@ -1,6 +1,6 @@
 # GitHub-Prüfung #138–#142 – Ursachen und Korrekturen
 
-23.10.2026 · Glide 3.44.0 mit D55-Kandidat · erste Runde gepusht, zweite Runde lokal, nicht committet
+23.10.2026 · Glide 3.44.0 mit D55-Kandidat · beide Runden auf Auftrag gepusht
 
 Aufträge des Inhabers: „Kannst du prüfen warum die Github Prüfung rot ist und das korrigieren?“; danach „du kannst jetzt auch alles pushen als Zwischenstand“.
 
@@ -62,6 +62,6 @@ Linux/Xvfb, Python 3.12, Tk 8.6.14, künstliche Daten:
 
 ## Grenzen
 
-Grün auf GitHub erst nach Commit und Push der zweiten Runde; beides nur auf neuen Auftrag. Windows-Ausführung der Korrekturen der zweiten Runde steht bis dahin aus.
+Die zweite Runde ist am 24.10.2026 auf Auftrag („pushen“) nachgepusht: `c40d431` in `claude/windows-pruefung-3.44.0`, `be849a1` (dieselben Testkorrekturen) und `d461f89` (Startfenster, Dokumente) in `claude/arbeitsstand-d55`. Vor dem Push auf dem `main`-Stand gezielt geprüft (`struktur_ergebnis`, `showcase`, drei Altleser-Fälle mit 3.43.1 noch im Hauptordner, Gegenprobe): grün. Windows-Ausführung und Tk 9.1 zeigen erst die neuen GitHub-Läufe.
 
 Nebenbefund ohne Änderung (aus dem Code abgeleitet, nicht beobachtet): Auch beim Beenden der App setzt `close()` nur das Abbruchsignal. Endet der Python-Prozess, bevor der Worker es bemerkt (bis 0,1 s), läuft ein PowerShell-Prozess bis zum Ende seiner Wandlung weiter und kann eine verwaiste `glide-vorschau-*.png` im Vorschaucache hinterlassen. Ohne Risiko für Nutzerdaten; eine Produktänderung gehört in eine Produktionsrunde.
