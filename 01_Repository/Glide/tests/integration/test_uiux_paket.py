@@ -14,6 +14,7 @@ import json
 import os
 import sys
 import tempfile
+import threading
 import time
 import traceback
 import zipfile
@@ -63,6 +64,23 @@ class Lauf:
             "tasks": True, "settings": True, "templates": True, "activity": True}, show_success=False)
         self.idle()
 
+    def vorschauen_beenden(self, frist=30):
+        """Vorschauen schließen und auf einen laufenden Konverter warten.
+
+        `close()` setzt nur das Abbruchsignal. Unter Windows wandelt ein
+        PowerShell-Unterprozess JPEG-Vorschauen und hält die Quelldatei offen,
+        bis der Worker ihn beendet und eingesammelt hat. Ohne dieses Warten
+        löschte `TemporaryDirectory` den Datenordner vorher und scheiterte an
+        WinError 32 (GitHub #138/#139, Fall b04 mit sechs Galeriebildern).
+        """
+        vorschau = getattr(self.app, "_previews", None)
+        if vorschau is None:
+            return
+        vorschau.close()
+        faden = getattr(getattr(vorschau, "_conversions", None), "_thread", None)
+        if faden is not None and faden is not threading.current_thread():
+            faden.join(frist)
+
     def ende(self):
         try:
             # Alle Fälle bauen ihren Tcl-Interpreter vollständig ab; ausstehende
@@ -75,7 +93,7 @@ class Lauf:
             unbind_tree(self.root)
             for sequence in self.root.tk.splitlist(self.root.tk.call("bind", "all")):
                 self.root.unbind_all(sequence)
-            self.app.previews.close()
+            self.vorschauen_beenden()
             self.app.cancel_pending_callbacks()
             for job in self.root.tk.splitlist(self.root.tk.call("after", "info")):
                 self.root.after_cancel(job)

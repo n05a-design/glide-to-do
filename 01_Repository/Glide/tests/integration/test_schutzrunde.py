@@ -117,6 +117,18 @@ class Lauf:
         return ids
 
 
+def gleicher_ort(a, b):
+    """Denselben Ort erkennen, auch wenn ihn zwei Schreibweisen bezeichnen.
+
+    `change_data_folder` legt den neuen Datenordner über `os.path.realpath` ab.
+    Liegt der Prüfordner hinter einem symbolischen Link oder unter Windows
+    hinter einem 8.3-Kurznamen (GitHub-Runner: Benutzerordner `RUNNER~1`), ergibt
+    das eine andere Zeichenkette für denselben Ordner. Ein reiner
+    Zeichenkettenvergleich war dort rot, bei kurzen Benutzernamen grün.
+    """
+    return os.path.normcase(os.path.realpath(a)) == os.path.normcase(os.path.realpath(b))
+
+
 def volle_tiefe(app, tiefe):
     app.undo_stack[:] = [app.undo_state() for _ in range(tiefe)]
     return app.undo_stack[-1] if app.undo_stack else None
@@ -767,10 +779,11 @@ def fall_sitzung(lauf):
     target = Path(lauf.data).parent / 'ordnerwechsel'
     assert app.change_data_folder(str(target), move_existing=True)
     assert app.verify_data_lock() is True and app._lock_session.held
-    assert app._lock_session.path == str(target / 'glide.lock')
+    assert gleicher_ort(app._lock_session.path, target / 'glide.lock'), (app._lock_session.path, str(target))
     assert not (origin / 'glide.lock').exists() and app.find_item_in_lists(ids['A'])
     assert app.change_data_folder(str(origin))
-    assert app.verify_data_lock() is True and app._lock_session.path == str(origin / 'glide.lock')
+    assert app.verify_data_lock() is True
+    assert gleicher_ort(app._lock_session.path, origin / 'glide.lock'), (app._lock_session.path, str(origin))
     assert not (target / 'glide.lock').exists()
     return 'Lebender Besitzer geschützt; Erneuerung/Freigabe strikt, alte Tokens wirkungslos; Kopieren/Ordnerwechsel/Rückwechsel mit neuem Erwerb'
 
@@ -1077,11 +1090,16 @@ def main():
                 ergebnis["faelle"][name] = {"ok": True, "befund": text}
                 print(f"OK {name}: {text}", flush=True)
             except Exception as fehler:  # Bericht je Fall, Gesamtergebnis unten
+                # Eine nackte Assertion meldet sonst nur „AssertionError()“; im
+                # CI-Protokoll wäre die Stelle ohne Zeilennummer nicht auffindbar.
+                eigene = [f for f in traceback.extract_tb(fehler.__traceback__)
+                          if Path(f.filename).resolve() == Path(__file__).resolve()]
+                ort = f" (Zeile {eigene[-1].lineno})" if eigene else ""
                 detail = repr(fehler).replace(str(Path.home()).replace("\\", "\\\\"), "~")
                 detail = detail.replace(str(Path.home()), "~")
-                ergebnis["faelle"][name] = {"ok": False, "befund": detail[:600]}
+                ergebnis["faelle"][name] = {"ok": False, "befund": (ort.strip(" ()") + ": " if ort else "") + detail[:600]}
                 ergebnis["fehler"].append(name)
-                print(f"ROT {name}: {fehler!r}"[:700], flush=True)
+                print(f"ROT {name}{ort}: {detail}"[:700], flush=True)
             finally:
                 if lauf is not None:
                     lauf.ende()
