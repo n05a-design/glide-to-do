@@ -1,6 +1,6 @@
 # GitHub-Prüfung #138–#142 – Ursachen und Korrekturen
 
-23.10.2026 · Glide 3.44.0 mit D55-Kandidat · beide Runden auf Auftrag gepusht
+23.10.2026 · Glide 3.44.0 mit D55-Kandidat · alle Runden auf Auftrag gepusht
 
 Aufträge des Inhabers: „Kannst du prüfen warum die Github Prüfung rot ist und das korrigieren?“; danach „du kannst jetzt auch alles pushen als Zwischenstand“.
 
@@ -59,6 +59,12 @@ Linux/Xvfb, Python 3.12, Tk 8.6.14, künstliche Daten:
 | `test_seitenkarten`, `test_ansichten`, `test_wiederholungsregeln` | grün einschließlich aller Altleser-Fälle |
 | `linux_gegenproben.py --fall inspektor-mindestgroesse` | „passend rot“ |
 | Vollständiger Prüflauf (`pruefen.py --modus voll`) an App `bd21317e…` mit allen Korrekturen ([Zusammenfassung](vollpruefung_linux_bd21317e.json)) | 121 Schritte: 114 ausgeführt, 6 rot, Sichtprüfung übersprungen. Rot nur unter Linux/Tk 8.6 bzw. im Container bekannte Fälle, auf 3.44.0 ebenso rot und in der GitHub-Linux-Vollprüfung mit Tk 9.1 grün: `test_uiux_paket` b12_b13/b16 (Tk 9), `test_aufgaben3380` (121 statt ≤ 120 px mit DejaVu), `test_erwaehnungen` `oeffnen_fallen`, `test_speicherlast330`, `test_features330` (Zeitgrenze 8 s, hier 14,5 s). Dazu einmal `test_hintergrund330` („sofort aus dem Zwischenspeicher“), einzeln danach 2/2 grün; der Hintergrundcode ist seit 3.44.0 unverändert. Mechanismus aus dem Code, nicht belegt: `wait_for_backdrop` wartet höchstens 30 s, ist der Verlauf unter Last bis dahin nicht gerechnet, fehlt die Cache-Datei für die spätere Sofortprüfung (Befundklasse WA-42). Alle in #141/#142 roten Suiten grün |
+
+## Dritte Runde: #145 und #146
+
+#146 (`1bc7d8e`, `claude/windows-pruefung-3.44.0`) und #145 (`805fa5c`, `claude/arbeitsstand-d55`): Grundstufe, Vollprüfung Linux und **Vollprüfung Windows grün**. Damit startete erstmals seit #137 der nachgelagerte Job „Eigenständiges Paket (Windows x64)“; er ist in beiden Läufen im Schritt „Nativer Paketbau“ rot (Exitcode 1 nach 36–38 s, #137 grün nach 35 s). Das Rohprotokoll war aus dieser Umgebung nicht abrufbar (Speicheradresse gesperrt bzw. zu lang); die Ursache ist aus dem Bauwerkzeug nachgestellt:
+
+`license_contract.resource_components` ordnet jede Ressource des Pakets einer belegten Lizenzkomponente zu und bricht bei unbekannten Pfaden ab. Die mit 3.44.0 (FP-06) hinzugekommene Ressource `resources/exchange_recipes.json` (eigene Auftragsvorlagen für lokale KI-Aufträge) fehlte darin. Der Abbruch geschieht nach dem PyInstaller-Lauf, daher die unveränderte Baudauer. Unter Linux mit dem Quellbestand von `main` (`2ac339e`): `ValueError: Ressource ohne belegte Herkunft: resources/exchange_recipes.json`. Korrektur: Die Datei gehört zur Komponente „Glide“ wie Logo und Vorlagen; Werkzeugtest ergänzt (unbekannte Ressourcen blockieren weiter). Danach für Windows und macOS alle 30 Ressourcen zugeordnet, 161 Werkzeugtests grün. Am 25.10.2026 auf Auftrag („weiter“) auf beide Zweige gepusht; den Paketbau selbst (PyInstaller, native Prüfung, Startprobe) zeigt der folgende GitHub-Lauf.
 
 ## Grenzen
 
