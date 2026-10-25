@@ -1,0 +1,19 @@
+{
+ "zeitpunkt": "2026-10-22T17:59:13+02:00",
+ "lauf03": "vollpruefung_lauf03.json: 120 Schritte, 117 ausgeführt, 2 fehlgeschlagen, 1 übersprungen; Quellmanifest quellstand_lauf03.json (Commit 3ca7f09)",
+ "befunde": [
+  {
+   "schritt": "test_speicherlast330",
+   "lauf03": "Exitcode 3221225477 (0xC0000005, Zugriffsverletzung), leeres Log, kein Eintrag im Windows-Ereignisprotokoll",
+   "nachpruefung": "einzeln 2/2 grün (je 129 s); im Vorlauf 01 grün",
+   "ursache": "nicht belegt; nativer Absturz ohne Python-Stack"
+  },
+  {
+   "schritt": "test_wiederholen, Fall matrix",
+   "lauf03": "AssertionError('einplanen: Rückgängig stellt nicht her'); übrige acht Fälle grün",
+   "nachpruefung": "ganze Suite einzeln grün (64 s), Fall matrix 10/10 grün, zusätzlich 3/3 grün unter künstlichem Fokusentzug durch einen zweiten Tk-Prozess; im Vorlauf 01 grün",
+   "ursache": "nicht belegt. Geprüfte Hypothese Vordergrundverlust beim Tastenereignis nicht reproduziert"
+  }
+ ],
+ "folge": "Assertion des Matrixfalls nennt künftig abweichende Bestandsteile, Undo-Tiefe und letzte Meldungen (keine Änderung der Prüflogik). Lauf 04 auf neu eingefrorenen Bytes mit PYTHONFAULTHANDLER=1, damit ein erneuter nativer Absturz einen Python-Stack hinterlässt."
+}

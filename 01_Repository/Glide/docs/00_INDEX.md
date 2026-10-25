@@ -1,6 +1,6 @@
 # Dokumentationsindex
 
-Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2
+Stand 25.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2
 
 Seit 03.10.2026 zwölf zentrale Dokumente und fünf Einzelentscheidungen statt der damaligen 53: Funktionsverträge 45–79, Projektübergabe, Startkontext, Entwicklungsnotizen, Sitzungsprotokoll, Releasecheckliste und Lizenz-, Signierungs- und Vertriebsentwürfe sind in die Dokumente unten eingegangen. Ältere Fassungen trägt Git (`git log --follow docs/<Datei>`). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt; deren Synchronisationskopien und die wiederaufgetauchte Projektübergabe sind aufgelöst. Regeln: [Dokumentenpflege](DOKUMENTENPFLEGE.md).
 
@@ -8,7 +8,7 @@ Seit 03.10.2026 zwölf zentrale Dokumente und fünf Einzelentscheidungen statt d
 
 - **Neue Sitzung:** [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md), dann [Arbeitsregeln](../AGENTS.md).
 - **Was als Nächstes ansteht:** [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md).
-- **Aktuelle Roadmap und Pflege:** [Plan §21](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026), neue Belege in [Analyse §13](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#13-neuuntersuchung-vom-21102026) und [Markt §12](../../../00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md#12-erweiterte-recherche-vom-21102026); appweiter Entwicklungsvertrag in [Design Richtlinien](DESIGN_RICHTLINIEN.md).
+- **Aktuelle Roadmap und Pflege:** [Plan §21](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026), technische Härtung aus dem Sicherheits- und Architekturgutachten in [Plan §21.12](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2112-technische-folge-aus-dem-sicherheits--und-architekturgutachten) mit Einordnung in [Analyse §13.12](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1312-sicherheits--und-architekturgutachten-vom-25102026); neue Belege in [Analyse §13](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#13-neuuntersuchung-vom-21102026) und [Markt §12](../../../00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md#12-erweiterte-recherche-vom-21102026); appweiter Entwicklungsvertrag in [Design Richtlinien](DESIGN_RICHTLINIEN.md).
 - **Was entschieden ist:** [Arbeitsrichtung](ARBEITSRICHTUNG.md).
 
 ## Dokumente
@@ -19,13 +19,13 @@ Seit 03.10.2026 zwölf zentrale Dokumente und fünf Einzelentscheidungen statt d
 | [02 Architektur](02_ARCHITECTURE.md) | Module, Speicherweg, Bausteine der Oberfläche, Performance-Regeln, Tk-Fallstricke |
 | [05 Prüfplan](05_QA_TESTPLAN.md) | Prüfstufen, Regeln, Schritte, Integrationssuiten nach Bereich, manuelle Kontrollmatrix |
 | [06 Daten, Backups und Migration](06_DATA_BACKUP_MIGRATION.md) | Format 26, ältere Formatstufen, Startprüfung, Sicherungen, Einstellungen, Austauschformat |
-| [07 QA-Bericht](07_QA_BERICHT.md) | Integrierter 3.43.1-Prüfkandidat, Schutzrunde/Ablagenachlauf und getrennte Liefer-/Paketstände, historische Ergebnisse und offene Abnahmen |
+| [07 QA-Bericht](07_QA_BERICHT.md) | Phasenabschluss 3.44.0 mit eingefrorener Vollprüfung und Python-Lieferung, getrennte Paketstände, historische Ergebnisse und offene Abnahmen |
 | [10 Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben, Produktdatenblatt |
 | [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
-| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D54 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
+| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D55 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Ein Thema, ein Dokument; Aufbewahrung; Zuständigkeiten |
-| [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; B01–B20 im Python-Stand umgesetzt; E-U1–E-U3 und Menschenabnahmen offen |
+| [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; B01–B20 im Python-Stand umgesetzt; E-U1–E-U3 A seit D55 als lokaler Kandidat umgesetzt; Menschenabnahmen offen |
 
 ## Einzelentscheidungen
 
@@ -49,7 +49,7 @@ Seit 03.10.2026 zwölf zentrale Dokumente und fünf Einzelentscheidungen statt d
 
 ## Weitere Orte
 
-- Arbeitsregeln: [AGENTS.md](../AGENTS.md) · Änderungsverlauf: [CHANGELOG.md](../CHANGELOG.md) · Sicherheit: [SECURITY.md](../SECURITY.md)
+- Arbeitsregeln: [AGENTS.md](../AGENTS.md) · Änderungsverlauf: [CHANGELOG.md](../CHANGELOG.md) · Sicherheit und Vertrauensgrenzen: [SECURITY.md](../SECURITY.md#vertrauensgrenzen)
 - Prüfwerkzeuge: [tests/README.md](../tests/README.md), [tests/tools/README.md](../tests/tools/README.md) · Pflegewerkzeuge: [scripts/pflege/README.md](../scripts/pflege/README.md)
 - Code: [src/glide/README.md](../src/glide/README.md) · Paketierung: [packaging/README.md](../packaging/README.md) · Lizenzstatus: [LICENSE.md](../LICENSE.md)
 - Showcase: [tests/fixtures/showcase/README.md](../tests/fixtures/showcase/README.md)

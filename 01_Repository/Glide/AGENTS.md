@@ -8,7 +8,7 @@ Glide ist eine lokale Desktop-Anwendung. Kernfunktionen müssen ohne Internet, B
 
 - Einstieg für jede neue Sitzung: `../../00_Arbeitsvorbereitung/Glide_Uebergabe.md` (Stand, Regeln, nächste Schritte)
 - Aufgaben mit Status: `../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md`
-- Entscheidungen D01–D54 (D49 als Auslegung mit Korrekturvorbehalt, D50 UI-/UX-Vorrang, D51 phasenweise Prüfung, D52–D54 zentrale Roadmap/Designgeltung/Integrationsbewertung/Pflege), Auftrag und Arbeitsablauf: `docs/ARBEITSRICHTUNG.md`; neue Produktentscheidungen ab D55
+- Entscheidungen D01–D55 (D49 als Auslegung mit Korrekturvorbehalt, D50 UI-/UX-Vorrang, D51 phasenweise Prüfung, D52–D54 zentrale Roadmap/Designgeltung/Integrationsbewertung/Pflege, D55 Auswahl E-U1 A/E-U2 A/E-U3 A), Auftrag und Arbeitsablauf: `docs/ARBEITSRICHTUNG.md`; neue Produktentscheidungen ab D56
 - Appweiter Gestaltungsvertrag für jede neue oder angefasste Oberfläche: `docs/DESIGN_RICHTLINIEN.md` einschließlich Kontext-/Komponentenmatrix und Paketnachweis; Originalauftrag: `../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md`
 - Produkt, Grenzen und Prinzipien: `docs/01_PRODUCT_CONSTRAINTS.md`
 - Architektur, Performance-Regeln, Tk-Fallstricke: `docs/02_ARCHITECTURE.md`

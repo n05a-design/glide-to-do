@@ -1,6 +1,6 @@
 # Design Richtlinien
 
-Stand 22.10.2026 · Glide 3.44.0 · appweiter Gestaltungsvertrag; bestehendes UI-/UX-Paket und fortlaufende Übertragung
+Stand 23.10.2026 · Glide 3.44.0 · appweiter Gestaltungsvertrag; bestehendes UI-/UX-Paket und fortlaufende Übertragung
 
 Dieses Dokument sammelt die belegten Gestaltungsvorgaben des Inhabers und ihre Konsequenzen für Glide. Es ist agentenunabhängig lesbar; der Claude-Code-Skill `design-richtlinien` (`.claude/skills/design-richtlinien/`) verweist nur hierher. Produktentscheidungen stehen weiterhin in [Arbeitsrichtung](ARBEITSRICHTUNG.md), Produktgrenzen in [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md), technische Umsetzung in [Architektur](02_ARCHITECTURE.md), Funktionsverhalten in [Funktionen](20_FUNKTIONEN.md) und Aufgabenstatus im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Diese Zuständigkeiten nicht durch Kopien ersetzen.
 
@@ -11,6 +11,7 @@ Dieses Dokument sammelt die belegten Gestaltungsvorgaben des Inhabers und ihre K
 | [Leitgedanken und frühere Antworten](ARBEITSRICHTUNG.md) vom 25.09.–01.10.2026 | Vorbilder, klare Formen, geringe Komplexität, zuverlässiger lokaler Ablauf | Bestehende Entscheidungen bleiben maßgeblich, soweit neuere direkte Anweisungen sie nicht gezielt ändern |
 | [Sechs Produktprinzipien und Hausregeln](01_PRODUCT_CONSTRAINTS.md) | Hierarchie, Rollenfarben, Fluchten, Inhalt vor Bedienung, Erreichbarkeit | Bestehende Quelle; technische Einzelregeln dort nachführen |
 | [Nutzerauftrag vom 15.10.2026](../../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/AUFTRAG.md) und [Ausführungsprompt](../../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md) | A01–A03 und B01–B22, 28 Bildreferenzen | Seit D50 (15.10.2026) beauftragt und vorrangig vor Paket 8; bei unvereinbaren älteren Vorgaben gilt dieses Paket |
+| Inhaberanweisung vom 23.10.2026 (Skill `design-richtlinien`, Wortlaut „für alle arbeiten in glide“) | Geltungsbereich dieser Richtlinien | Gilt für jede Arbeit an Glide – Oberfläche, Code, Tests, Prüfungen und Dokumente –, nicht nur für das UI-/UX-Paket; zuerst angewendet auf D55 |
 | Fremdreferenz im Skill `design-richtlinien/referenzen/` | Bewegung, Material, Typografie, Gestaltungsgrundsätze (MIT, Emil Kowalski, `emilkowalski/skills`) | Hintergrund; nur die unten übersetzten Grundsätze gelten |
 
 Die Projektbezeichnung lautet **Design Richtlinien**; der frühere markenbezogene Skillname ist seit B20 kein aktiver Projektname mehr. Quellnachweise und Lizenz-/Copyright-Angaben bleiben erhalten; die neutrale Benennung ist keine rechtliche Freigabe. Historische Zitate und Eingangsbelege werden nicht nachträglich umgeschrieben.
@@ -87,6 +88,20 @@ Kleine Scrollbewegungen dürfen nicht Bild und erste Textzeile unkontrolliert ü
 
 Gismo heißt fest Gismo und behält seine spielerischen Funktionen (Füttern, Spielen, Ruhen, Reaktionen), solange seine Kachel sichtbar ist. Wer ihn nicht möchte, blendet die Kachel unter „Startseite anpassen“ aus; dann erscheint er auch nicht neben Leerzuständen. Umbenennen und „Spielereien aus“ entfallen; frühere Werte werden beim Laden entfernt. Bewegungsreduktion nimmt nur die Bewegung, nicht die Funktionen. Die Zeichnungsvorschau bleibt; Galeriebilder haben eine eigene Kachel „Galeriebilder“. Neuerungen bleiben unter Hilfe › Über Glide › „Neuerungen …“ nachlesbar.
 
+### Arbeitsmodi und Seitenbedienung (D55, 23.10.2026)
+
+Gilt für die Auswahl E-U1 A, E-U2 A und E-U3 A und für jede künftige Fläche derselben Art.
+
+- **Eingebettete Aktionsauswahl:** Ein Baustein für „Mehr“ in Seiten und Notizen, die Blockaktionen und das Menü des Kompaktmodus. Er liest das bestehende Menü (Beschriftung, Pfad, Häkchen, Zustand) und führt genau diesen Eintrag aus – keine zweite Befehlsliste. Filterfeld oben, Abschnittsüberschriften in Akzentfarbe, Häkchen in eigener schmaler Spalte (Beschriftungen beginnen an einer Kante), Ortsspalte nur so breit wie nötig (B11). Überfahren hellblau (`hover`), Auswahl lila (`selection`). Gesperrte Einträge bleiben sichtbar und nennen in der Zustandszeile ihren Grund. Unter dem Auslöser rechtsbündig verankert, immer ganz im Fenster; Esc oder ein Klick daneben schließen ohne Wirkung und geben den Fokus zurück. Das native Rechtsklickmenü bleibt.
+- **Blockgriff:** `ICONS["block_handle"]` ⠿ (Textersatz „::“), gedämpft, beim Überfahren Hover-Fläche mit Textfarbe. Links neben dem Text mit 6 px Abstand, auf der Mittellinie der ersten Bildschirmzeile des Absatzes; er überdeckt nie Text, verschwindet beim Tippen und ist kein Ziehgriff.
+- **Ruhiger Seitenkopf:** Keine zusätzliche dauerhafte Bedienzeile über dem Inhalt – die 15-%-Regel der kompakten Inhaltsfläche (3.38.0) gilt auch hier. Optionale Kopfaktionen („+ Symbol“, „+ Titelbild“, kurz wie „Seiten +“, ausgeschriebener Name als Tooltip und Screenreadername) nutzen nur den Platz, den der Titel am Zeilenende frei lässt; sie erscheinen bei Überfahren oder Fokus und verschieben nichts. Reicht der Platz nicht, weichen sie ganz und bleiben über „Mehr“ erreichbar – kein früherer Titelumbruch. Gefunden mit `test_aufgaben3380` und der Sichtprüfung: Eine eigene Zeile über dem Titel schob die Seiteninhaltskante bei 1280 × 800 um 36 px nach unten; ein reservierter Platz brach Titel bei offener Nebenansicht in schmale Spalten.
+- **Nebenansicht:** Derselbe Platz wie der Aufgabeninspektor; beide hängen am Packplatz der Inhaltsfläche statt an einmal gemessenen Koordinaten (unter 980 px über der Inhaltsfläche). Kopf mit Bereichsname, Titel, Ort und Zählung; „Öffnen“ und „Schließen“ rechts in einer Reihe. Lesender Inhalt eine Stufe kleiner als der Editor; einzige Bedienung im Inhalt sind echte Aufgabenkästchen. Bedienwege als ergänzender Hinweis nur mit eingeschalteten Hinweisen (B06); Zustände (Papierkorb, Archiv, Schreibschutz, nicht gespeichert) immer.
+- **Kompaktmodus:** Kopf in einer Zeile, alle Kopfknöpfe gleich hoch auf einer Mittellinie (B07); der Titel wird gekürzt statt verdrängt. Die Mindestgröße 480 × 560 gilt nur in diesem Modus und ist mit großer Schrift und Hinweisen an geprüft (B15). Alle Menübefehle bleiben über den Menüknopf erreichbar. Esc beendet den Modus nicht, weil Esc überall Schließen von Suche, Auswahl und Dialogen bedeutet.
+
+### Begriffe: „Seite“ statt „Markdown“ (Inhaberanweisung 25.10.2026)
+
+„Markdown“ ist für Nutzer kein gängiges Wort. Formatierter Text heißt in der Oberfläche „Seite“: „Seite kopieren“ (Hinweis „Seite kopiert“), „Seite aus Zwischenablage einfügen“, „Seite aus Datei …“. „Markdown“ bleibt nur dort, wo ein Dateiformat neben anderen Formaten gewählt wird (Als TXT/Markdown/CSV …, Mehr › „Als Markdown speichern …“ neben PDF und Glide-Seite, „Alles als Markdown-Ordner …“, Dateityp im Dateidialog), im Namen des Notion-Exports („Markdown & CSV“), in Texten an ein Sprachmodell und in den Neuigkeiten früherer Versionen. Neue Texte folgen dieser Regel.
+
 ## Übernommene Grundsätze aus den Skillquellen, übersetzt nach Tk (B20)
 
 Ausgewählt aus dem Fremdtext unter `referenzen/` (Bewegung, Material, Typografie, Gestaltungsgrundsätze) und aus den übrigen Skills von `emilkowalski/skills` (MIT); nur, was zu einer lokalen Tk-Desktop-App passt. Web-Beispiele (CSS, JavaScript, Federanimationen) gelten nicht.
@@ -108,7 +123,7 @@ Ausgewählt aus dem Fremdtext unter `referenzen/` (Bewegung, Material, Typografi
 
 ## Offene Untersuchungen
 
-A01 (Kompaktmodus), A02 (zwei Inhalte gleichzeitig) und A03 (Notion-Muster) sind untersucht; Optionen, Empfehlungen und Aufwand stehen im [Entwicklungsplan §17](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#17-ui-ux-feature-paket-aus-nutzerbeobachtungen-15102026) bzw. für A03 in [Markt und Vorbilder §10](../../../00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md). Bis zur Auswahl gilt die Mindestgröße 860 × 700, und Funktionen leben eingebettet in der Ansicht.
+A01 (Kompaktmodus), A02 (zwei Inhalte gleichzeitig) und A03 (Notion-Muster) sind untersucht; Optionen, Empfehlungen und Aufwand stehen im [Entwicklungsplan §17](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#17-ui-ux-feature-paket-aus-nutzerbeobachtungen-15102026) bzw. für A03 in [Markt und Vorbilder §10](../../../00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md). Seit D55 (23.10.2026) ist jeweils Option A gewählt und als lokaler Kandidat umgesetzt (Regeln oben, [Plan §21.11](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2111-viertes-umsetzungspaket-arbeitsmodi-und-seitenbedienung-d55)); offen bleiben E-U1 B, E-U2 B/C, E-U3 B und Blockziehen. Außerhalb des Kompaktmodus gilt die Mindestgröße 860 × 700, und Funktionen leben eingebettet in der Ansicht.
 
 ## Pflege und Prüfung
 
@@ -148,6 +163,7 @@ Vorschauen zu Import, KI, Restore und Export zeigen gewählten Umfang, wirksame 
 | Galerie / Cover / Anhänge | Seitenverhältnis und Original schützen; Laden/Fehler/Retry benennen | kalte/warme Vorschau, fehlende/ersetzte Datei, Größenwechsel, Abbruch |
 | Pixel / Bildfolge / Palette | Werkfläche zuerst, kontextbezogene Werkzeuge und prüfbare Ausgabe | Zoom/Framewechsel, kleine Größe, Palette, Fokus, Undo, Exportvorschau |
 | Inspektor / Punktmaske | gleiche Feld-/Fehler-/Rhythmusrollen, gesicherte Aktionen | große Schrift, scrollbarer Inhalt/fester Fuß, kleine Größe, Schreibfehler |
+| Nebenansicht / Kompaktmodus (D55) | gemeinsamer Platz mit dem Inspektor, lesend mit Originalaktionen; reduzierter Kopf ohne verdeckte Befehle | unter 980 px, Inspektorwechsel, Papierkorb/Undo des Ziels, 480 × 560 mit großer Schrift, getrennte Fensterlagen, Neustart |
 | Vorlagen / Auftragsdialog | Verwendungszweck vor technischem Detail, effektiven Inhalt lesen | lange eigene Vorlage, leere Auswahl, Musterantwort, Kopieren/Dateiausgabe |
 | Import / Export / Restore / Vergleich | Vorschau, Umfang, Verlust und eindeutiger Rückweg | Abbruch, kaputte Quelle, fehlender Anhang, Pfadlänge, Schreibschutz |
 | Einstellungen / Hilfe / Neuerungen | klare Abschnitte und Fluchten, erreichbarer Abschluss | Umfang/Scroll, große Schrift, Modal-/Tabfokus, Neustart, Hinweise |

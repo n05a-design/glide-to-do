@@ -14,6 +14,13 @@ bleiben ohne Eintrag, nachträglich wird nichts erfunden.
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.44.0": (
+        "Wiederholen: Strg/Cmd+Umschalt+Z, unter Windows auch Strg+Y, nimmt ein Rückgängig zurück.",
+        "Eigene Rhythmen: mehrere Wochentage, n-ter Wochentag, Monatsende, Pause und begrenzte Anzahl.",
+        "Gespeicherte Ansichten mit mehr Bedingungen, als Liste, Tabelle oder Spaltenboard, gruppiert und sortiert.",
+        "Seiten und Notizen als Pinnwandkarten; unverknüpfte Erwähnungen zeigen vergessene Bezüge.",
+        "Alles als Markdown-Ordner exportieren; fünf fertige KI-Aufträge mit vollständiger Vorschau.",
+    ),
     "3.43.0": (
         "Startseite: neue Kachel Galeriebilder, „Startseite anpassen“ links, nach „Gelesen“ sofort oben.",
         "Gismo heißt fest Gismo und spielt immer mit; wer ihn nicht möchte, blendet seine Kachel aus.",

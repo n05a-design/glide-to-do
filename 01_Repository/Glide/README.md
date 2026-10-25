@@ -2,7 +2,7 @@
 
 Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Sie läuft lokal mit Python 3.14 und Tk 9 (Tk 8.6 eingeschränkt), braucht weder Konto noch Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
-> **Projektstatus:** interner Entwicklungsstand **3.44.0** · Datenformat 26 · keine veröffentlichte oder signierte Releasefassung. Der [QA-Bericht](docs/07_QA_BERICHT.md) nennt bestandene Prüfungen und offene Plattformtests.
+> **Projektstatus:** interner Entwicklungsstand **3.44.0** · Datenformat 26 · als Python-Fassung nach `07_Python-Versionen` geliefert, keine veröffentlichte oder signierte Releasefassung. Der [QA-Bericht](docs/07_QA_BERICHT.md) nennt bestandene Prüfungen und offene Plattformtests.
 
 Funktionsumfang im Überblick: [Projekt-README](../../README.md#was-glide-kann); Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md); Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 
@@ -14,7 +14,7 @@ Voraussetzung ist Python mit Tk; zusätzliche Laufzeitpakete sind nicht nötig.
 python3 src/glide/app.pyw          # Windows: python src\glide\app.pyw
 ```
 
-Gelieferte eigenständige Entwicklungspakete (noch 3.42.0; Neubau für den aktuellen Kandidaten offen) liegen unter `build/macos/Glide.app` und `build/windows/Glide-3.42.0/Glide.exe`; sie bündeln Python und Tcl/Tk; Bauanleitung und Prüfgrenzen stehen in der [Paketierung](packaging/README.md#eigenständige-entwicklungspakete-paket-7).
+Gelieferte eigenständige Entwicklungspakete (noch 3.42.0; Neubau für 3.44.0 offen) liegen unter `build/macos/Glide.app` und `build/windows/Glide-3.42.0/Glide.exe`; sie bündeln Python und Tcl/Tk; Bauanleitung und Prüfgrenzen stehen in der [Paketierung](packaging/README.md#eigenständige-entwicklungspakete-paket-7).
 
 Die Ressourcen unter `src/glide/resources` müssen neben der Anwendung liegen. Startbare Lieferfassung: `07_Python-Versionen/Schnellstart.pyw`. Unter macOS lässt sich ein Entwicklungsbundle bauen (nutzt das installierte Python, nicht zur Weitergabe):
 

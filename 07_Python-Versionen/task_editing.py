@@ -6,6 +6,29 @@ werden. Unberührte Felder bewahren deshalb den frischen Bestandswert.
 import copy
 from dataclasses import dataclass
 
+
+class ChangeRecord:
+    """Gemeinsamer Ergebniszustand vorhandener Punkt-/Seitenleistenmutationen."""
+
+    __slots__ = ('changed', 'focus_id', 'selection', 'saved', 'save_result', 'changed_ids', 'changed_lists')
+
+    def __init__(self, selection):
+        self.changed = False
+        self.saved = None
+        self.save_result = None
+        self.focus_id = None
+        self.selection = list(selection)
+        self.changed_ids = set()
+        self.changed_lists = set()
+
+    def mark(self, focus_id=None):
+        self.changed = True
+        if focus_id is not None:
+            self.focus_id = focus_id
+            self.changed_ids.add(focus_id)
+        else:
+            self.changed_ids.update(self.selection)
+
 FIELDS = frozenset(("text", "kind", "importance", "color", "due", "due_time", "repeat", "labels",
                     "description", "attachments", "reminder", "planned_date", "estimated_minutes",
                     "checklist", "links", "blocked_by", "planned_time", "time_spent_minutes"))

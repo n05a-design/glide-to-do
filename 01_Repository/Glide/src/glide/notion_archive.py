@@ -196,9 +196,9 @@ def inspect_export(source):
         try:
             text = raw.decode("utf-8-sig").replace("\r\n", "\n").replace("\r", "\n")
         except UnicodeError as exc:
-            raise NotionFormatError("Markdown enthält ungültiges UTF-8: " + path) from exc
+            raise NotionFormatError("Seite enthält ungültiges UTF-8: " + path) from exc
         if "\x00" in text:
-            raise NotionFormatError("Markdown enthält ein Nullzeichen: " + path)
+            raise NotionFormatError("Seite enthält ein Nullzeichen: " + path)
         semantic_path = path[len(wrapper) + 1:] if wrapper else path
         key = source_key(semantic_path)
         if key in identities:
@@ -252,7 +252,7 @@ def inspect_export(source):
         pages.append(Page(key, path, title[:200] or "Ohne Titel", tuple(folders), text,
                           digest.hexdigest(), tuple(sorted(assets))))
     if not pages:
-        raise NotionFormatError("Das Archiv enthält keine Markdown-Seiten.")
+        raise NotionFormatError("Das Archiv enthält keine Seiten.")
     return Export(tuple(pages), members, tuple(dict.fromkeys(losses)))
 
 

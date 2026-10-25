@@ -37,7 +37,8 @@ Nicht im Umfang: Schwachstellen in Python, Tk oder im Betriebssystem selbst; die
 | Maßnahme | Wo |
 |---|---|
 | CI-Grundstufe bei jedem Push und Pull Request: Prüfungen, Startprobe, Lieferstand, **Herkunft des Fremdcodes** gegen das Originalpaket, **keine Benutzerpfade** in versionierten Dateien | `.github/workflows/python-app.yml`, `01_Repository/Glide/tests/tools/ci_grundstufe.py` |
-| Wöchentliche Aktualisierung der verwendeten GitHub Actions | `.github/dependabot.yml` |
+| Wöchentliche Aktualisierung der verwendeten GitHub Actions; noch über Versionstags statt Commit-SHA eingebunden (WA-43) | `.github/dependabot.yml` |
+| Statische Analyse: CodeQL-Standardeinrichtung; der eigene Workflow mit Spiegelung der `.pyw`-Hauptdatei ist seit 01.10.2026 deaktiviert, die Hauptdatei wird deshalb voraussichtlich nicht analysiert (Einrichtung offen, I12) | `.github/workflows/codeql.yml` |
 | Keine Schlüssel, Zertifikate, Zugangsdaten oder Signing-Secrets im Repository; Secret Scanning ist aktiv | `.gitignore` (Abschnitt Sicherheit) |
 | Keine echten Nutzerbestände, Sicherungen oder Archivkopien; Archive und Nachweise nur der sieben neuesten Versionen | `.gitignore`, CI-Schritt „Ablagegröße“ |
 | Rohprotokolle (`*.log`) bleiben lokal; veröffentlichte Prüfergebnisse enthalten keine Benutzerpfade (vor dem Hochladen `python3 -B scripts/pflege/pfade_bereinigen.py <Ordner>`) | `.gitignore`, CI-Schritt „Datenschutz“ |

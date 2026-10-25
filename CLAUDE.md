@@ -1,6 +1,6 @@
 # Arbeitsregeln für Claude Code – Glide
 
-Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · lokaler Prüfkandidat, getrennt vom Lieferstand
+Stand 23.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Python-Lieferung 3.44.0, eigenständige Pakete 3.42.0
 
 Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf die verbindlichen Projektregeln und ergänzt, was für Claude-Code-Sitzungen im Repository gilt. Regeln nicht hier doppeln, sondern an der Quelle pflegen.
 
@@ -16,14 +16,14 @@ Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf 
 ## Lesereihenfolge
 
 1. [01_Repository/Glide/AGENTS.md](01_Repository/Glide/AGENTS.md) – verbindliche Arbeitsregeln und Abschlusskriterium
-2. [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) – Stand, Entscheidungen D01–D54 (D49 als Auslegung mit Korrekturvorbehalt), beauftragte Arbeit, Abnahme
+2. [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) – Stand, Entscheidungen D01–D55 (D49 als Auslegung mit Korrekturvorbehalt), beauftragte Arbeit, Abnahme
 3. [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) – Aufgaben mit Status, Stufen, Ziele; Verhalten der Funktionen in [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md)
 4. [Dokumentenpflege](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md) vor jeder Dokumentänderung: ein Thema, ein Dokument; zusammenführen und löschen statt archivieren (Auftrag vom 03.10.2026)
 5. Erst dann die betroffene Codestelle **und ihre Aufrufer** (Funktionsnamen suchen, nicht Zeilennummern)
 
 ## Ergänzungen für diese Umgebung
 
-- **Auftrag:** Den ausdrücklich beauftragten Schnitt vollständig umsetzen; offene Produktauswahl nicht selbst entscheiden. Bereits Entschiedenes (Q1–Q5, D01–D54, Produktgrenzen; D49 unter seinem dokumentierten Korrekturvorbehalt) nicht erneut vorlegen. Pakete 1–7 einschließlich FP-00 und das UI-/UX-Paket als 3.43.0 sind historisch geliefert (D50; Mac-Abnahme und Auswahl E-U1–E-U3 offen); Paket 8 / 4.0.0 ist vorbereitet und noch nicht geliefert. Der aktuelle Prüfkandidat ist davon getrennt; seine Prüf- und Lieferstände stehen im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md). Für das UI-/UX-Paket gelten [Ausführungsprompt](00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md) und [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md). Neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests (D17).
+- **Auftrag:** Den ausdrücklich beauftragten Schnitt vollständig umsetzen; offene Produktauswahl nicht selbst entscheiden. Bereits Entschiedenes (Q1–Q5, D01–D55, Produktgrenzen; D49 unter seinem dokumentierten Korrekturvorbehalt) nicht erneut vorlegen. Pakete 1–7 einschließlich FP-00 und das UI-/UX-Paket als 3.43.0 sind historisch geliefert (D50; Mac-Abnahme offen); Paket 8 / 4.0.0 ist vorbereitet und noch nicht geliefert. Die erste D51-Phase (FP-01–FP-07 Stufe 1, WA-26–WA-31/36–40) ist am 22.10.2026 als 3.44.0 nach `07_Python-Versionen` geliefert; Mac-Bundle, eigenständige Pakete 3.44.0 und Menschenabnahme sind offen. D55 (23.10.2026: Kompaktmodus E-U1 A, Nebenansicht E-U2 A, Seitenbedienung E-U3 A) ist als lokaler Kandidat auf 3.44.0 umgesetzt und gezielt geprüft, nicht versioniert und nicht geliefert ([Plan §21.11](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2111-viertes-umsetzungspaket-arbeitsmodi-und-seitenbedienung-d55)). Prüf- und Lieferstände stehen im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md). Für das UI-/UX-Paket gilt der [Ausführungsprompt](00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md); die [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) gelten seit der Inhaberanweisung vom 23.10.2026 für jede Arbeit an Glide. Neue oder angefasste Fachlogik als Tk-freies Modul mit Unit-Tests (D17).
 - **Daten:** Nie echte Nutzerdaten; `GLIDE_DATA_DIR` vor dem Import auf einen temporären Ordner setzen. Werkzeuge mit `python3 -B` starten.
 - **Skills:** Projekt-Skills liegen unter `.claude/skills/<Name>/SKILL.md` und werden in jeder Claude-Code-Sitzung erkannt, auch in der Cloud, aber nur bei passender Aufgabe geladen; lose `.md`-Dateien oder `skills-main/` im Projektordner erkennt Claude nicht. Fremdskills mit ihrer Lizenz ablegen und nicht um Glide-Regeln ergänzen; die bleiben in den verbindlichen Quellen. Aktiver Gestaltungsskill ist `design-richtlinien` (B20, 15.10.2026): ein Einstieg, der auf [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) verweist. Der frühere Fremdskill (MIT, `emilkowalski/skills`; Fassung des Inhabers ohne „Initial Response“) liegt unverändert mit Lizenz unter `referenzen/`; er ist für das Web geschrieben: Grundsätze übernehmen, CSS-/JS-Beispiele nicht auf Tk übertragen.
 - **Linux-Container:**

@@ -50,6 +50,7 @@ GROUPS = {
  'export_app_backup': 'Export',
  'export_as_csv': 'Export',
  'export_as_markdown': 'Export',
+ 'export_all_markdown': 'Export',
  'export_as_txt': 'Export',
  'export_full_backup': 'Export',
  'export_glide_pages': 'Export',
@@ -105,6 +106,7 @@ GROUPS = {
  'show_home_tiles_dialog': 'Ansichten',
  'show_ics_import_dialog': 'Import',
  'show_manager': 'Ansichten',
+ 'capture_current': 'Ansichten',
  'show_manual_dialog': 'Programm und Hilfe',
  'show_print_dialog': 'Export',
  'show_quick_capture': 'Neu anlegen',
@@ -126,6 +128,7 @@ GROUPS = {
  'explain_saved_filter': 'Ansichten',
  'toggle_theme': 'Ansichtseinstellungen',
  'undo_last_change': 'Bearbeiten',
+ 'redo_last_change': 'Bearbeiten',
  'use_default_data_folder': 'Daten und Ablage',
  'workspace.close_tab': 'Ansichten',
  'workspace.open_tab': 'Ansichten',
@@ -140,6 +143,7 @@ LEGACY_GROUPS = {'show_library_new_menu': 'Neu anlegen', 'show_library_import_me
  'Als CSV …': 'Export',
  'Als Glide-Seite …': 'Export',
  'Als Markdown …': 'Export',
+ 'Alles als Markdown-Ordner …': 'Export',
  'Als Reiter öffnen': 'Ansichten',
  'Als TXT …': 'Export',
  'App-Backup wiederherstellen …': 'Import',
@@ -166,6 +170,7 @@ LEGACY_GROUPS = {'show_library_new_menu': 'Neu anlegen', 'show_library_import_me
  'Fälligkeitsdatum …': 'Planen und einordnen',
  'Für KI bereitstellen …': 'Export',
  'Gespeicherte Filter …': 'Ansichten',
+ 'Als Ansicht speichern …': 'Ansichten',
  'Glide-Seiten importieren …': 'Import',
  'Globale Pinnwand öffnen': 'Ansichten',
  'Gruppe auflösen': 'Struktur und Gliederung',
@@ -212,6 +217,7 @@ LEGACY_GROUPS = {'show_library_new_menu': 'Neu anlegen', 'show_library_import_me
  'Reiter nach rechts': 'Ansichten',
  'Reiter schließen': 'Ansichten',
  'Rückgängig': 'Bearbeiten',
+ 'Wiederholen': 'Bearbeiten',
  'Schnellerfassung …': 'Neu anlegen',
  'Seite aus Zwischenablage': 'Import',
  'Seite, Punkt oder Aktion suchen …': 'Ansichten',
@@ -246,7 +252,8 @@ LEGACY_GROUPS = {'show_library_new_menu': 'Neu anlegen', 'show_library_import_me
 
 EDITOR_EVENTS = {
     "copy_selected_to_clipboard": "<<Copy>>", "paste_items_from_clipboard": "<<Paste>>",
-    "undo_last_change": "<<Undo>>", "select_all_items": "<<SelectAll>>",
+    "undo_last_change": "<<Undo>>", "redo_last_change": "<<Redo>>",
+    "select_all_items": "<<SelectAll>>",
 }
 
 

@@ -1,14 +1,14 @@
 # Veröffentlichung – Glide
 
-Stand 22.10.2026 · Glide 3.44.0 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 26
+Stand 25.10.2026 · Glide 3.44.0 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
-**Je Version (zuletzt automatisch vollständig geliefert 3.42.0; menschliche Abnahme und Veröffentlichungstore getrennt offen):**
+**Je Version (zuletzt automatisch vollständig einschließlich Bundle und Paketen geliefert 3.42.0; 3.43.0, 3.43.1 und 3.44.0 bisher nur als Python-Fassung mit Windows-Vollprüfung; menschliche Abnahme und Veröffentlichungstore getrennt offen):**
 
-Die Haken beschreiben den zuletzt abgeschlossenen Lieferstand. Für den aktuellen Kandidaten gelten die offenen Schritte im [QA-Bericht](07_QA_BERICHT.md); ein früherer grüner Bundlebeleg ist keine Abnahme des geänderten Codes. Historisch wurden bis 3.33.6 und wieder seit 3.33.18 Mac-Bundle und Python-Fassung geliefert; 3.33.7–3.33.17 nur unter Windows ohne Bundle.
+Die Haken beschreiben den zuletzt vollständig abgeschlossenen Lieferstand 3.42.0. Für 3.44.0 gelten die offenen Schritte (Mac-Vollprüfung, Bundle, Pakete) im [QA-Bericht](07_QA_BERICHT.md); ein früherer grüner Bundlebeleg ist keine Abnahme des geänderten Codes. Historisch wurden bis 3.33.6 und wieder seit 3.33.18 Mac-Bundle und Python-Fassung geliefert; 3.33.7–3.33.17 nur unter Windows ohne Bundle.
 
 - [x] VERSION, `APP_VERSION`, Hauptsuite und CHANGELOG gleich; Datenformat geprüft.
 - [x] Eingefrorene Vollprüfung auf dem Referenz-Mac; seit D42 zusätzlich native Windows-Vollprüfung je Lieferung und seit D35 gesamte ausführbare Linux-Matrix, einschließlich passender Defektgegenproben. Ergebnisse getrennt im [QA-Bericht](07_QA_BERICHT.md).
@@ -27,6 +27,9 @@ Die Haken beschreiben den zuletzt abgeschlossenen Lieferstand. Für den aktuelle
 - [ ] Clean-Machine-Test, Gatekeeper/SmartScreen, Update über eine vorhandene Installation, Datenordner in einem Cloudordner.
 - [ ] DPI/Mehrmonitor, Hochkontrast/RDP, Screenreader, nur Tastatur, Ruhezustand, Dauerlauf.
 - [ ] Inhaberangaben bestätigt (unten), Lizenz veröffentlicht, Markenprüfung abgeschlossen.
+- [ ] Lieferkette ([Plan §21.12](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2112-technische-folge-aus-dem-sicherheits--und-architekturgutachten)): GitHub Actions per vollständiger Commit-SHA (WA-43), Bauabhängigkeiten mit Hashes und `--require-hashes` (WA-45), Fremdcode auf neue Fassungen und Hinweise geprüft (WA-44), Release-Inventar (SBOM) mit SHA-256 aller Artefakte (WA-46), CodeQL-Analyse einschließlich der Hauptdatei ohne ungeklärte hohe oder kritische Funde (I12).
+- [ ] Nativer Windows-Absturz unter Last (WA-41) geklärt oder unter definierter Last wiederholt ausgeschlossen.
+- [ ] Umgang mit der Git-Historie entschieden (I10, unten).
 - [ ] Store-Texte und Screenshots vom realen Build; Hinweis „nach dem Update keine ältere Version starten“ in Neuerungen und Hilfe.
 
 Automatisch grüne Tests ersetzen keine Plattformabnahme. Erinnerungen werden nur bei laufender App verarbeitet.
@@ -51,7 +54,7 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 
 ## GitHub-Auftritt
 
-Lesender Neuabgleich am 18.10.2026: Repository öffentlich, Standardzweig `main`, Beschreibung weiterhin wie in der historischen Tabelle, keine Homepage/Topics, Issues/Wiki/Projects an, Pages/Discussions aus; keine Releases oder Tags. CodeQL-Standardeinrichtung hat für `9ec474b` einen erfolgreichen dynamischen Lauf erzeugt; der lokal deaktivierte eigene Workflow und die frühere Aussage zur KI-Prüfung sind davon zu trennen. Die Glide-Gesamtprüfung für diesen neueren FP-01-Kandidaten war beim ersten Abruf noch im Lauf; der Abschlussabruf bestätigt Lauf 39075284901 grün (Grundstufe, Linux-/Windows-Vollprüfung, Windows-Paketjob; spezielle Readerjobs ausgelassen). [Bereinigter API-Snapshot](../tests/qa-3.43.1/standanalyse_2026-10-18/github_auftritt.json), [laufende Prüfung](https://github.com/n05a-design/glide-to-do/actions/runs/39075284901). Einstellungen wurden nicht verändert. Die nachstehende Tabelle bleibt ein datierter älterer Befund; I11 enthält Vorschläge, keine Zustimmung.
+Lesender Neuabgleich am 18.10.2026: Repository öffentlich, Standardzweig `main`, Beschreibung weiterhin wie in der historischen Tabelle, keine Homepage/Topics, Issues/Wiki/Projects an, Pages/Discussions aus; keine Releases oder Tags. CodeQL-Standardeinrichtung hat für `9ec474b` einen erfolgreichen dynamischen Lauf erzeugt; der seit 01.10.2026 deaktivierte eigene Workflow und die frühere Aussage zur KI-Prüfung sind davon zu trennen. Folge laut [Analyse §13.12](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1312-sicherheits--und-architekturgutachten-vom-25102026): Nur der eigene Workflow spiegelt `.pyw` für den Python-Extraktor; die Standardeinrichtung analysiert die Hauptdatei `app.pyw` voraussichtlich nicht (Inhaberpunkt I12). Die Glide-Gesamtprüfung für diesen neueren FP-01-Kandidaten war beim ersten Abruf noch im Lauf; der Abschlussabruf bestätigt Lauf 39075284901 grün (Grundstufe, Linux-/Windows-Vollprüfung, Windows-Paketjob; spezielle Readerjobs ausgelassen). [Bereinigter API-Snapshot](../tests/qa-3.43.1/standanalyse_2026-10-18/github_auftritt.json), [laufende Prüfung](https://github.com/n05a-design/glide-to-do/actions/runs/39075284901). Einstellungen wurden nicht verändert. Die nachstehende Tabelle bleibt ein datierter älterer Befund; I11 enthält Vorschläge, keine Zustimmung.
 
 Stand am 06.10.2026, über die GitHub-Schnittstelle abgerufen:
 

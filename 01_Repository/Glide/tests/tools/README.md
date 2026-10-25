@@ -1,6 +1,6 @@
 # Prüfwerkzeuge für Glide
 
-Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 23.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 Alle Werkzeuge werden aus `01_Repository/Glide` gestartet. Werkzeuge, die echte Tk-Fenster prüfen, brauchen eine grafische Sitzung (unter Linux Xvfb; das ersetzt keine native Windows- oder macOS-Abnahme). Zahlen zu Suiten und Formaten stehen bewusst nicht hier, sondern im Quelltext (`SUITEN`, `ANALYSEN`, `APP_VERSION`, `DATA_SCHEMA_VERSION`) – bis 3.21.3 rotteten sie in dieser Datei. Was tatsächlich lief: [QA-Bericht](../../docs/07_QA_BERICHT.md).
 
@@ -26,6 +26,8 @@ Alle Werkzeuge werden aus `01_Repository/Glide` gestartet. Werkzeuge, die echte 
 | `vorlagendaten.py` | Vorlagenkatalog `resources/templates/glide_vorlagen.glidetemplates` |
 | `screenshots.py` | Linux/X11-Aufnahmen eigener Testfenster |
 | `windows_vollpruefung.cmd` / `.ps1` | Windows: verlangt Python ≥ 3.14/Tk ≥ 9, prüft OneDrive-Platzhalter, startet den Vollmodus in `tests/qa-<Version>/windows_<Zeitstempel>`; Anleitung in der [manuellen Prüfliste](../../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md) |
+| `windows_sandbox.py [--bildschirm N] [--speicher MB] [--warten] [--schliessen] [--nur-dateien]` / `windows_sandbox.cmd` | Windows: Projekt außerhalb von OneDrive einfrieren (ohne `.git`, `__pycache__`, `build`, `.claude/worktrees`, mit `quellstand.json`), Windows-Sandbox mit eingebundener Prüflaufzeit (schreibgeschützt), ohne Netz und geteilte Zwischenablage starten und ihr Fenster ohne Aktivierung auf den zweiten Bildschirm legen; darin `pruefen.py --modus voll --timeout 900`, Exitcode in `FERTIG.txt`. Prüflaufzeit wie beim Starter oben (Python ≥ 3.14, Tk ≥ 9). Werkzeugtest `test_windows_sandbox.py` |
+| `kandidat_starten.pyw [--neu]` | Sicht-/Bedienabnahme eines noch nicht gelieferten Quellstands (25.10.2026): startet `src/glide/app.pyw` mit dem Showcase in `<Benutzerordner>/GlidePruefung/kandidat_showcase` (außerhalb von OneDrive, getrennt von den echten Daten); erster Start lädt das Showcase-App-Backup, `--neu` legt den alten Prüfordner umbenannt beiseite. Der Showcase-Starter in `05_Probelisten_Testdaten` nimmt dagegen die gelieferte Fassung aus `07` |
 | `symbolpruefung.py` | Private App-Schrift registrieren und tatsächliche Glyphenfamilien messen |
 | `leistungspruefung.py --ziel DATEI.json` | Lokale synthetische Neudarstellungs- und Speichermessung |
 | `dauerlauf.py --minuten 10 --aufgaben 4000 --ziel DATEI.json` | Dauerlauf: wachsende Callbacks, Undo-Stände, Speicher, Unversehrtheit nach Neuladen. Nicht im Standardlauf; zehn Minuten sind das Minimum, damit der 15-Sekunden-Takt der Erinnerungen oft genug feuert |

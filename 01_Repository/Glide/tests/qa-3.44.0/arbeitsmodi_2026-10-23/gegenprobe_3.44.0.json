@@ -1,0 +1,67 @@
+{
+ "app_sha256": "d0bf41427f85edd8ad3b5185310dc4879d175cf577677cb0050ba2dfa9490762",
+ "faelle": {
+  "seitenaktionen": {
+   "ok": false,
+   "befund": "Traceback (most recent call last):\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 827, in main\n    text = globals()[\"fall_\" + name](lauf)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 122, in fall_seitenaktionen\n    nativ = editor.build_page_menu()\n            ^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'PageEditor' object has no attribute 'build_page_menu'. Did you mean: 'show_page_menu'?\n"
+  },
+  "blockaktionen": {
+   "ok": false,
+   "befund": "Traceback (most recent call last):\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 827, in main\n    text = globals()[\"fall_\" + name](lauf)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 187, in fall_blockaktionen\n    zustand = app._action_chooser\n              ^^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute '_action_chooser'\n"
+  },
+  "schreibschutz": {
+   "ok": false,
+   "befund": "Traceback (most recent call last):\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 827, in main\n    text = globals()[\"fall_\" + name](lauf)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 261, in fall_schreibschutz\n    editor.refresh_page_head()\n    ^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'PageEditor' object has no attribute 'refresh_page_head'. Did you mean: 'refresh_page_features'?\n"
+  },
+  "kopfverweise": {
+   "ok": false,
+   "befund": "Traceback (most recent call last):\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 827, in main\n    text = globals()[\"fall_\" + name](lauf)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 286, in fall_kopfverweise\n    zeile = editor._head_row\n            ^^^^^^^^^^^^^^^^\nAttributeError: 'PageEditor' object has no attribute '_head_row'\n"
+  },
+  "notiz": {
+   "ok": false,
+   "befund": "Traceback (most recent call last):\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 827, in main\n    text = globals()[\"fall_\" + name](lauf)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 387, in fall_notiz\n    editor.show_page_actions()\n    ^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'NoteEditor' object has no attribute 'show_page_actions'\n"
+  },
+  "nebenansicht_liste": {
+   "ok": false,
+   "befund": "Traceback (most recent call last):\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 827, in main\n    text = globals()[\"fall_\" + name](lauf)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 424, in fall_nebenansicht_liste\n    assert app.open_side_view(liste[\"id\"])\n           ^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'open_side_view'\n"
+  },
+  "nebenansicht_seite": {
+   "ok": false,
+   "befund": "Traceback (most recent call last):\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 827, in main\n    text = globals()[\"fall_\" + name](lauf)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 505, in fall_nebenansicht_seite\n    assert app.open_side_view(seite[\"id\"])\n           ^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'open_side_view'\n"
+  },
+  "nebenansicht_inspektor": {
+   "ok": false,
+   "befund": "Traceback (most recent call last):\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 827, in main\n    text = globals()[\"fall_\" + name](lauf)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 549, in fall_nebenansicht_inspektor\n    assert app.open_side_view(seite[\"id\"])\n           ^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'open_side_view'\n"
+  },
+  "nebenansicht_einstiege": {
+   "ok": false,
+   "befund": "Traceback (most recent call last):\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 827, in main\n    text = globals()[\"fall_\" + name](lauf)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 581, in fall_nebenansicht_einstiege\n    assert \"In Nebenansicht öffnen\" in labels\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+  },
+  "kompakt": {
+   "ok": false,
+   "befund": "Traceback (most recent call last):\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 827, in main\n    text = globals()[\"fall_\" + name](lauf)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 627, in fall_kompakt\n    app.open_side_view(liste[\"id\"])\n    ^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'open_side_view'\n"
+  },
+  "kompakt_ansichten": {
+   "ok": false,
+   "befund": "Traceback (most recent call last):\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 827, in main\n    text = globals()[\"fall_\" + name](lauf)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 683, in fall_kompakt_ansichten\n    app.enter_compact_mode()\n    ^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'enter_compact_mode'\n"
+  },
+  "gestaltung": {
+   "ok": false,
+   "befund": "Traceback (most recent call last):\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 827, in main\n    text = globals()[\"fall_\" + name](lauf)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<Quellbaum>/tests/integration/test_arbeitsmodi.py\", line 760, in fall_gestaltung\n    if not kompakt and app.compact_mode_active():\n                       ^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'compact_mode_active'\n"
+  }
+ },
+ "fehler": [
+  "seitenaktionen",
+  "blockaktionen",
+  "schreibschutz",
+  "kopfverweise",
+  "notiz",
+  "nebenansicht_liste",
+  "nebenansicht_seite",
+  "nebenansicht_inspektor",
+  "nebenansicht_einstiege",
+  "kompakt",
+  "kompakt_ansichten",
+  "gestaltung"
+ ]
+}

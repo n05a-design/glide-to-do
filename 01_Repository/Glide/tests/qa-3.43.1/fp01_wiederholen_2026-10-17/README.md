@@ -31,4 +31,4 @@ Fälle der Pflichtsuite: `matrix` (anlegen, löschen, verschieben, einrücken, g
 
 - Lieferung: Versionswechsel, eingefrorene Vollprüfung, GitHub-Matrix, `abgleich_07.py`, Mac-Bundle – mit der Lieferung.
 - Native Tastenwege unter macOS (Cmd+Umschalt+Z) und Linux/X11 mit Tk 9.1: erst die GitHub-Matrix und der Referenz-Mac belegen sie.
-- Menschenabnahme nach der [Prüfliste](../../../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md#wiederholen-nach-rückgängig-fp-01-in-arbeit).
+- Menschenabnahme nach der [Prüfliste](../../../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md#wiederholen-nach-rückgängig-fp-01-3440).

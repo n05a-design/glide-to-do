@@ -16,6 +16,7 @@ bleibt der Text stehen und der Chip sagt warum. Erinnerungen werden nur bei
 laufender Glide zugestellt (Produktgrenze); der Chip nennt das.
 """
 import re
+import repeat_rules as repeat_logic
 from datetime import date, datetime, timedelta
 from typing import NamedTuple
 
@@ -274,7 +275,116 @@ ORDINAL_FEMININE = {"zweite": 2, "dritte": 3, "vierte": 4}
 UNSUPPORTED_REPEAT = "wird noch nicht unterstützt – bleibt Text"
 
 
-def _wiederholung(woerter, i, today):
+def _extended_wiederholung(words, i, today):
+    tokens = words[i:i + 18]
+    w = [v.wort for v in tokens]
+    if not w:
+        return None
+
+    def number(word):
+        return NUMBER_WORDS.get(word) or (int(word) if re.fullmatch(r"[0-9]{1,3}", word) else None)
+
+    def first(rule):
+        if repeat_logic.ics_recurrence.matches_start(today, rule["rrule"]):
+            return today
+        return repeat_logic.next_date(rule, today, today)
+
+    def result(n, rule, day=None):
+        day = day or first(rule)
+        if day is None:
+            return None
+        return n, rule, day, repeat_logic.describe_series(rule)
+
+    def day_index(word):
+        name = word[:-1] if word.endswith("s") else word
+        return WEEKDAYS.index(name) if name in WEEKDAYS else None
+
+    def month_suffix(k):
+        return 2 if w[k:k+2] in (["im", "monat"], ["des", "monats"], ["jedes", "monats"]) else 0
+
+    # Ausdrückliche Monatsposition: ohne „im Monat“ bleibt „jeden zweiten
+    # Dienstag“ die bisherige Zweiwochenregel (FP-00).
+    k = 1 if w[0] in ("jeden", "am") else 2 if w[:2] == ["monatlich", "am"] else -1
+    if k >= 0 and k + 1 < len(w):
+        position = ORDINAL_WORDS.get(w[k])
+        if position is None and re.fullmatch(r"[1-5]", w[k]) and tokens[k].datum.endswith("."):
+            position = int(w[k])
+        end = k + 2
+        suffix = month_suffix(end)
+        monthly = bool(suffix or k == 2)
+        if position in (1, 2, 3, 4, 5, -1) and monthly:
+            weekday = day_index(w[k+1])
+            if weekday is not None:
+                return result(end+suffix, repeat_logic.from_series_fields("serie_position", 1,
+                              position=position, weekday=weekday))
+            if position == -1 and w[k+1] in ("tag", "werktag"):
+                return result(end+suffix, repeat_logic.from_series_fields(
+                    "serie_werktag" if w[k+1] == "werktag" else "serie_letzter", 1))
+
+    if len(w) >= 3 and w[0] in ("alle", "jede"):
+        n = number(w[1]) if w[0] == "alle" else ORDINAL_FEMININE.get(w[1])
+        if n is None or not 1 <= n <= 365:
+            return None
+        unit = w[2]
+        if unit in ("monat", "monate", "monaten", "jahr", "jahre", "jahren"):
+            kind = "serie_jahr" if unit.startswith("jahr") else "serie_monat"
+            end = 3; day = today
+            if len(w) > end and w[end] in ("am", "zum"):
+                end += 1
+                if end >= len(w):return None
+                if kind == "serie_monat" and re.fullmatch(r"[0-9]{1,2}", w[end]):
+                    target = int(w[end])
+                    if not 1 <= target <= 31:return None
+                    while day.day != target:day += timedelta(days=1)
+                elif kind == "serie_jahr":
+                    day = _tag(tokens[end], today)
+                    if day is None:return None
+                else:return None
+                end += 1
+            return result(end, repeat_logic.from_series_fields(kind, n), day)
+        if unit in ("woche", "wochen"):
+            end = 3
+            if len(w) > end and w[end] in ("am", "immer"):end += 1
+            days = []
+            while end < len(w):
+                day = day_index(w[end])
+                if day is None:break
+                days.append(day);end += 1
+                if end < len(w) and w[end] == "und":end += 1
+            if len(set(days)) > 1 and n > 1:
+                return result(end, repeat_logic.from_series_fields("serie_woche", n, sorted(set(days))))
+    if len(w) >= 4 and number(w[0]) and w[1] in ("tag", "tage", "tagen") and w[2:4] == ["nach", "erledigung"]:
+        n = number(w[0])
+        return 2, {"art": REPEAT_EVERY_N_DAYS, "abstand": n}, today, f"alle {n} Tage"
+    if w[:2] == ["jedes", "quartal"]:
+        return result(2, repeat_logic.from_series_fields("serie_monat", 3), today)
+    return None
+
+
+def _wiederholung(words, i, today):
+    value = _extended_wiederholung(words, i, today) or _base_wiederholung(words, i, today)
+    if value is None or value[1] is None:
+        return value
+    n, rule, first, text = value
+    w = [word.wort for word in words[i:]]
+    options = {}
+    if w[n:n+2] in (["nach", "erledigung"], ["ab", "erledigung"]):
+        options["bezug"] = "erledigt"; n += 2; text += " ab Erledigung"
+    if w[n:n+1] == ["pausiert"]:
+        options["pausiert"] = True; n += 1; text += " pausiert"
+    if n+2 < len(w) and w[n] == "insgesamt" and re.fullmatch(r"[0-9]{1,5}", w[n+1]) and w[n+2] in ("termin", "termine", "terminen"):
+        remaining = int(w[n+1])
+        if not 1 <= remaining <= 10000:
+            return n+3, None, None, "Wiederholung: Anzahl muss zwischen 1 und 10.000 liegen – bleibt Text"
+        options["rest"] = remaining;n += 3;text += f" · noch {remaining} Termine"
+    if options:
+        rule = dict(rule, **options)
+    if options or rule.get("art") == repeat_logic.SERIES:
+        text += f" · erster Termin {first:%d.%m.%Y}"
+    return n, rule, first, text
+
+
+def _base_wiederholung(woerter, i, today):
     """Wiederholung ab Wort i: (Anzahl Wörter, Regel ohne Start, erster Termin, Text) oder None.
 
     Eine Angabe wird ganz oder gar nicht gedeutet (A29): Folgt einem Rhythmus
