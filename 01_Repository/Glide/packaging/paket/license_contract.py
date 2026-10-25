@@ -75,6 +75,9 @@ def resource_components(names):
             raise ValueError('Ungültiger oder doppelter Ressourcenpfad: ' + name)
         if path.parts[:2] in (('resources', 'logo'), ('resources', 'templates')):
             components = ['Glide']
+        elif name == 'resources/exchange_recipes.json':
+            # Eigene Auftragsvorlagen für lokale KI-Aufträge (FP-06, seit 3.44.0).
+            components = ['Glide']
         elif path.parts[:2] == ('resources', 'fonts'):
             components = ['Glide-Schriften']
         elif name in ('resources/timezones/iana-2026e.zip', 'resources/timezones/LICENSE-iana.txt'):

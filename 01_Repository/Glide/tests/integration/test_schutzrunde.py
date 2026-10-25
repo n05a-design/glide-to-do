@@ -35,6 +35,10 @@ class Lauf:
         os.environ["GLIDE_DATA_DIR"] = data
         os.environ["GLIDE_TEST_MODE"] = "1"
         sys.path.insert(0, str(self.app_path.parent))
+        if self.app_path.parent.name == "Archiv":
+            # Archivierte Hauptdatei: Begleitmodule liegen eine Ebene höher
+            # (07_Python-Versionen/Archiv/README.md).
+            sys.path.append(str(self.app_path.parent.parent))
         loader = importlib.machinery.SourceFileLoader("glide_schutz_" + str(abs(hash(str(app_path)))),
                                                       str(app_path))
         self.mod = importlib.util.module_from_spec(importlib.util.spec_from_loader(loader.name, loader))
@@ -115,6 +119,18 @@ class Lauf:
         ids = {item["text"]: item["id"] for item in punkte}
         ids.update(liste=liste["id"], ziel=ziel["id"])
         return ids
+
+
+def gleicher_ort(a, b):
+    """Denselben Ort erkennen, auch wenn ihn zwei Schreibweisen bezeichnen.
+
+    `change_data_folder` legt den neuen Datenordner über `os.path.realpath` ab.
+    Liegt der Prüfordner hinter einem symbolischen Link oder unter Windows
+    hinter einem 8.3-Kurznamen (GitHub-Runner: Benutzerordner `RUNNER~1`), ergibt
+    das eine andere Zeichenkette für denselben Ordner. Ein reiner
+    Zeichenkettenvergleich war dort rot, bei kurzen Benutzernamen grün.
+    """
+    return os.path.normcase(os.path.realpath(a)) == os.path.normcase(os.path.realpath(b))
 
 
 def volle_tiefe(app, tiefe):
@@ -767,10 +783,11 @@ def fall_sitzung(lauf):
     target = Path(lauf.data).parent / 'ordnerwechsel'
     assert app.change_data_folder(str(target), move_existing=True)
     assert app.verify_data_lock() is True and app._lock_session.held
-    assert app._lock_session.path == str(target / 'glide.lock')
+    assert gleicher_ort(app._lock_session.path, target / 'glide.lock'), (app._lock_session.path, str(target))
     assert not (origin / 'glide.lock').exists() and app.find_item_in_lists(ids['A'])
     assert app.change_data_folder(str(origin))
-    assert app.verify_data_lock() is True and app._lock_session.path == str(origin / 'glide.lock')
+    assert app.verify_data_lock() is True
+    assert gleicher_ort(app._lock_session.path, origin / 'glide.lock'), (app._lock_session.path, str(origin))
     assert not (target / 'glide.lock').exists()
     return 'Lebender Besitzer geschützt; Erneuerung/Freigabe strikt, alte Tokens wirkungslos; Kopieren/Ordnerwechsel/Rückwechsel mit neuem Erwerb'
 
@@ -933,7 +950,16 @@ def fall_struktur_ergebnis(lauf):
     app.trash_folder(folder['id']); lauf.idle()
     trash = next(entry for entry in app.trash if entry['kind'] == app.TRASH_KIND_FOLDER)
     disk = lauf.datei()
-    with patch.object(app, 'write_json_atomic', side_effect=OSError('Hauptdatei gesperrt')):
+    # Nur die Hauptdatei sperren: `restore_trash_entry` erneuert vorher die
+    # Sperrdatei, höchstens einmal je Sekunde. Eine pauschale Sperre ließ die
+    # Wiederherstellung an einer Sekundengrenze schon vor jeder Änderung
+    # abbrechen (`app.dirty` blieb falsch; GitHub #141, Windows).
+    writer = app.write_json_atomic
+    def fail_main(path, payload):
+        if os.path.abspath(path) == os.path.abspath(mod.SAVE_FILE):
+            raise OSError('Hauptdatei gesperrt')
+        return writer(path, payload)
+    with patch.object(app, 'write_json_atomic', side_effect=fail_main):
         assert app.restore_trash_entry(trash['id']) is False, 'Restore meldet ungespeicherten Erfolg'
     assert lauf.datei() == disk and app.dirty
     assert app.get_folder(folder['id']), 'Fehlgeschlagene Änderung bleibt offen und rücknehmbar'
@@ -1077,11 +1103,16 @@ def main():
                 ergebnis["faelle"][name] = {"ok": True, "befund": text}
                 print(f"OK {name}: {text}", flush=True)
             except Exception as fehler:  # Bericht je Fall, Gesamtergebnis unten
+                # Eine nackte Assertion meldet sonst nur „AssertionError()“; im
+                # CI-Protokoll wäre die Stelle ohne Zeilennummer nicht auffindbar.
+                eigene = [f for f in traceback.extract_tb(fehler.__traceback__)
+                          if Path(f.filename).resolve() == Path(__file__).resolve()]
+                ort = f" (Zeile {eigene[-1].lineno})" if eigene else ""
                 detail = repr(fehler).replace(str(Path.home()).replace("\\", "\\\\"), "~")
                 detail = detail.replace(str(Path.home()), "~")
-                ergebnis["faelle"][name] = {"ok": False, "befund": detail[:600]}
+                ergebnis["faelle"][name] = {"ok": False, "befund": (ort.strip(" ()") + ": " if ort else "") + detail[:600]}
                 ergebnis["fehler"].append(name)
-                print(f"ROT {name}: {fehler!r}"[:700], flush=True)
+                print(f"ROT {name}{ort}: {detail}"[:700], flush=True)
             finally:
                 if lauf is not None:
                     lauf.ende()

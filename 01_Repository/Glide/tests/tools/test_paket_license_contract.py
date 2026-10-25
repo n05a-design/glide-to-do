@@ -73,7 +73,12 @@ class LicenseContractTests(unittest.TestCase):
     def test_unknown_or_ambiguous_resources_block_the_build(self):
         self.assertEqual(resource_components(['resources/fonts/DejaVuSans.ttf']),
                          {'resources/fonts/DejaVuSans.ttf':['Glide-Schriften']})
+        # Eigene KI-Auftragsvorlagen (FP-06); fehlten bis 24.10.2026 und brachen
+        # den Paketbau 3.44.0 nach PyInstaller ab (GitHub #145/#146).
+        self.assertEqual(resource_components(['resources/exchange_recipes.json']),
+                         {'resources/exchange_recipes.json':['Glide']})
         for names in (['resources/unknown/image.png'],['resources/timezones/iana-2027a.zip'],
+                      ['resources/exchange_recipes_extra.json'],
                       ['resources/../outside'],['resources/logo/icon.png','resources/logo/icon.png']):
             with self.subTest(names=names),self.assertRaises(ValueError):resource_components(names)
 
