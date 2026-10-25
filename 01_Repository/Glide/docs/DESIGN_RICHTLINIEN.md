@@ -98,6 +98,10 @@ Gilt für die Auswahl E-U1 A, E-U2 A und E-U3 A und für jede künftige Fläche 
 - **Nebenansicht:** Derselbe Platz wie der Aufgabeninspektor; beide hängen am Packplatz der Inhaltsfläche statt an einmal gemessenen Koordinaten (unter 980 px über der Inhaltsfläche). Kopf mit Bereichsname, Titel, Ort und Zählung; „Öffnen“ und „Schließen“ rechts in einer Reihe. Lesender Inhalt eine Stufe kleiner als der Editor; einzige Bedienung im Inhalt sind echte Aufgabenkästchen. Bedienwege als ergänzender Hinweis nur mit eingeschalteten Hinweisen (B06); Zustände (Papierkorb, Archiv, Schreibschutz, nicht gespeichert) immer.
 - **Kompaktmodus:** Kopf in einer Zeile, alle Kopfknöpfe gleich hoch auf einer Mittellinie (B07); der Titel wird gekürzt statt verdrängt. Die Mindestgröße 480 × 560 gilt nur in diesem Modus und ist mit großer Schrift und Hinweisen an geprüft (B15). Alle Menübefehle bleiben über den Menüknopf erreichbar. Esc beendet den Modus nicht, weil Esc überall Schließen von Suche, Auswahl und Dialogen bedeutet.
 
+### Begriffe: „Seite“ statt „Markdown“ (Inhaberanweisung 25.10.2026)
+
+„Markdown“ ist für Nutzer kein gängiges Wort. Formatierter Text heißt in der Oberfläche „Seite“: „Seite kopieren“ (Hinweis „Seite kopiert“), „Seite aus Zwischenablage einfügen“, „Seite aus Datei …“. „Markdown“ bleibt nur dort, wo ein Dateiformat neben anderen Formaten gewählt wird (Als TXT/Markdown/CSV …, Mehr › „Als Markdown speichern …“ neben PDF und Glide-Seite, „Alles als Markdown-Ordner …“, Dateityp im Dateidialog), im Namen des Notion-Exports („Markdown & CSV“), in Texten an ein Sprachmodell und in den Neuigkeiten früherer Versionen. Neue Texte folgen dieser Regel.
+
 ## Übernommene Grundsätze aus den Skillquellen, übersetzt nach Tk (B20)
 
 Ausgewählt aus dem Fremdtext unter `referenzen/` (Bewegung, Material, Typografie, Gestaltungsgrundsätze) und aus den übrigen Skills von `emilkowalski/skills` (MIT); nur, was zu einer lokalen Tk-Desktop-App passt. Web-Beispiele (CSS, JavaScript, Federanimationen) gelten nicht.

@@ -135,11 +135,11 @@ def fall_seitenaktionen(lauf):
     assert buehne.winfo_rooty() >= mehr.winfo_rooty() + mehr.winfo_height()
     assert buehne.winfo_rootx() + buehne.winfo_width() <= lauf.root.winfo_rootx() + lauf.root.winfo_width()
     assert lauf.root.focus_get() is zustand["entry"]
-    zustand["entry"].insert(0, "markdown")
+    # Inhaberentscheidung 25.10.2026: „Seite“ statt „Markdown“, außer in Formatlisten.
+    zustand["entry"].insert(0, "seite")
     idle(lauf)
     treffer = chooser_labels(app)
-    assert treffer[:3] == ["Markdown aus Zwischenablage einfügen", "Markdown kopieren", "Als Markdown speichern …"] \
-        or set(treffer) >= {"Markdown kopieren", "Als Markdown speichern …"}, treffer
+    assert treffer[:2] == ["Seite aus Zwischenablage einfügen", "Seite kopieren"], treffer
     # Esc schließt ohne Wirkung und gibt den Fokus an die Seite zurück.
     taste(zustand["entry"], "<Escape>", lauf)
     idle(lauf)

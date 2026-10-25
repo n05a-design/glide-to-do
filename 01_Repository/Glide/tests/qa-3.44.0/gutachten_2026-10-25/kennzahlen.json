@@ -1,0 +1,140 @@
+{
+  "datei": "app.pyw",
+  "bytes": 3357653,
+  "sha256": "bd21317e8ab5fbaf5530973cee664ed5bbe1bac89ce09f245863f3fdbe380e6a",
+  "zeilen_splitlines": 64959,
+  "funktionen": 3036,
+  "klassen": 41,
+  "listapp": {
+    "von": 14875,
+    "bis": 64387,
+    "zeilen": 49513,
+    "direkte_methoden": 1727
+  },
+  "funktionen_ab_zeilen": {
+    "50": 240,
+    "100": 72,
+    "200": 21,
+    "500": 4,
+    ">1000": 1
+  },
+  "groesste_zehn": [
+    {
+      "name": "_refresh_home",
+      "zeilen": 1053
+    },
+    {
+      "name": "item_form_dialog",
+      "zeilen": 761
+    },
+    {
+      "name": "create_ui",
+      "zeilen": 729
+    },
+    {
+      "name": "show_settings_dialog",
+      "zeilen": 640
+    },
+    {
+      "name": "render_detail_pane",
+      "zeilen": 400
+    },
+    {
+      "name": "refresh_task_overview",
+      "zeilen": 316
+    },
+    {
+      "name": "apply_theme",
+      "zeilen": 316
+    },
+    {
+      "name": "create_container_dialog",
+      "zeilen": 284
+    },
+    {
+      "name": "normalize_personal_settings",
+      "zeilen": 276
+    },
+    {
+      "name": "refresh_library_page",
+      "zeilen": 263
+    }
+  ],
+  "komplexitaet_regel": "McCabe-ähnlich: 1 + if/for/while/IfExp/except/assert + BoolOp-Operanden-1 + comprehension(+ifs) + match_case; with zählt nicht",
+  "komplexitaet_hoechste_zehn": [
+    {
+      "name": "_refresh_home",
+      "wert": 256,
+      "zeilen": 1053
+    },
+    {
+      "name": "item_form_dialog",
+      "wert": 148,
+      "zeilen": 761
+    },
+    {
+      "name": "validate_backup_schema",
+      "wert": 129,
+      "zeilen": 247
+    },
+    {
+      "name": "show_settings_dialog",
+      "wert": 120,
+      "zeilen": 640
+    },
+    {
+      "name": "normalize_personal_settings",
+      "wert": 112,
+      "zeilen": 276
+    },
+    {
+      "name": "refresh_library_page",
+      "wert": 112,
+      "zeilen": 263
+    },
+    {
+      "name": "refresh_task_overview",
+      "wert": 105,
+      "zeilen": 316
+    },
+    {
+      "name": "create_container_dialog",
+      "wert": 105,
+      "zeilen": 284
+    },
+    {
+      "name": "render_detail_pane",
+      "wert": 91,
+      "zeilen": 400
+    },
+    {
+      "name": "normalize_settings_330",
+      "wert": 83,
+      "zeilen": 120
+    }
+  ],
+  "komplexitaet_ueber_15": 299,
+  "komplexitaet_ueber_50": 25,
+  "handler": {
+    "gesamt": 753,
+    "nackt": 0,
+    "mit_einzigem_pass": 285,
+    "except_exception": 55,
+    "except_exception_mit_einzigem_pass": 5
+  },
+  "textmuster": {
+    "eval(": 0,
+    "exec(": 0,
+    "pickle": 0,
+    "yaml": 0,
+    "shell=True": 0,
+    "os.system": 0,
+    "extractall": 0,
+    "os.startfile": 1,
+    "subprocess.Popen(": 2,
+    "subprocess.run(": 1,
+    "ZipFile(": 7,
+    "json.load(": 12,
+    "json.loads(": 10
+  }
+}

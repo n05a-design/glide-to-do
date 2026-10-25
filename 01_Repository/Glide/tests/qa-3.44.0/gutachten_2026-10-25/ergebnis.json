@@ -1,0 +1,135 @@
+{
+  "datum": "2026-10-25",
+  "auftrag": "Bericht über die aktuelle Codebasis analysieren und einordnen, in die aktuelle Dokumentation einarbeiten und aufräumen",
+  "eingang": {
+    "bezeichnung": "Technisches Gutachten: Glide – Security, Architektur, Wartbarkeit und Roadmap-Gaps",
+    "bytes": 49035,
+    "sha256": "7f83b5b0bd0a2e48331021875bfa6993d41a078e3ddaeb03f69b83a03096ee79",
+    "nicht_mitgeliefert": [
+      "verlinkte PDF-/Markdown-Fassungen",
+      "Executive One-Pager",
+      "Quellen hinter den internen Zitatmarken"
+    ]
+  },
+  "quellstand": {
+    "app_pyw_sha256": "bd21317e8ab5fbaf5530973cee664ed5bbe1bac89ce09f245863f3fdbe380e6a",
+    "app_pyw_bytes": 3357653,
+    "entspricht": "lokaler D55-Kandidat; Lieferung 3.44.0 in 07_Python-Versionen unverändert (3.270.995 Byte)"
+  },
+  "produktionsdateien_geaendert": false,
+  "dokumente_bearbeitet": [
+    {
+      "pfad": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "sha256_vorher": "5623d305e649d32a69b5e99ed06a1159aee3542c455237201fb64fe48639086f",
+      "sha256_nachher": "ffb35acfbaaaaed747260970b3cc0f49b994e77eb0b7ceb5d606678da4983e02"
+    },
+    {
+      "pfad": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "sha256_vorher": "d6769114ac9a422cd9b53a4303d3c9c0540dfaacde16ea030bfc331d0cbba802",
+      "sha256_nachher": "b89105cfdfc3265a388206d76ff9c1e4168c88de74f4f25b0c75f85940cccb87"
+    },
+    {
+      "pfad": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "sha256_vorher": "09647a3bd0153676a47487958f5d02c394df067edb3e1dbcd42365f62c1efc46",
+      "sha256_nachher": "9284b7419bc21defb61e93204eccaec05b23544aaea66f80bf8a14cdc3e5a6ca"
+    },
+    {
+      "pfad": "00_Arbeitsvorbereitung/README.md",
+      "sha256_vorher": "1cb4d01d7d0190ab81d24fe07f4ae001987bd3e4c0032624fba8b3bd5baf4c7a",
+      "sha256_nachher": "cf45dc8ebb383116c7b0caffdf45320fb9fc01f5e7694cdadf4ffd6062e9902a"
+    },
+    {
+      "pfad": "01_Repository/Glide/CHANGELOG.md",
+      "sha256_vorher": "0d6b8a34ff9b14509f62619b084c6f48bb94e9dda1e422e3e7e11d5d50953c69",
+      "sha256_nachher": "a6df8fe760f56a4c0d8c2a8cdcd24528da15735c9189d9c79527dd16377c62b2"
+    },
+    {
+      "pfad": "01_Repository/Glide/SECURITY.md",
+      "sha256_vorher": "353926fc2cd2ea8f83a89462bf0665d3d5dc1b4fe33e1ef6b9b0eb5b5493bdcc",
+      "sha256_nachher": "0f956521cc831b6c01c9c072d9cc9a7c1e988d1e72e3a9b8887b7334e58aa53b"
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/00_INDEX.md",
+      "sha256_vorher": "b128a2c2ef6fe6eefb62b03cd62e723de19d33188c39ece43bafc36522142489",
+      "sha256_nachher": "50c76bd68d7f3ca9cd1f00cbb49fefe7a29629b8eab235185b900ed17ed502a0"
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+      "sha256_vorher": "4e685becb67375278e7b47100f1e2cf2b076d99662f3b6d16025fa56d544fa18",
+      "sha256_nachher": "4476a9cff77625c737062d51d0eb4eeb3e748f127d6e79d401c4faf53e0b8c84"
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+      "sha256_vorher": "2c2438c0dcda031631d8f0cba41854323c2a3f9ad227454a51a9e0e88bfa876c",
+      "sha256_nachher": "d416a722b262c4b6a15f16d4d12d734aac352072ab29a3421c8f6788c6d6ee2a"
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "sha256_vorher": "6fa30633ea9d4fb711a8e48b32c029085aaee73a89beaf46c59914fcfdec0b56",
+      "sha256_nachher": "634adde69a692dad204cde5946075cf4267a1e89766d964eab9e3d9a1d46836a"
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+      "sha256_vorher": "cecdde9e9a2309c14a527e94b65f980bcc3fc6557277b955173bf650f125cbbc",
+      "sha256_nachher": "60f4550c601f0fdc6f2c9f871aa5dd0ac63bc70021f8d3bb12ed8669149cdd4a"
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+      "sha256_vorher": "ebff0439990a402f5c37fb561a9fc501a50e5322be0573e8f70a959854aa533f",
+      "sha256_nachher": "2da8ed5467c324ff6f5e6782c54dd248eb1ffe17df0bdc9203c42222d3049515"
+    },
+    {
+      "pfad": "README.md",
+      "sha256_vorher": "da0a0cfaa38c18b59da5629080b1467cfbd436b2c5d66c0d44727fa395189397",
+      "sha256_nachher": "1cced369abac4d61698b658e117183d40b676b21a5021d761f753215e4871679"
+    },
+    {
+      "pfad": "SECURITY.md",
+      "sha256_vorher": "1149298daf2411c96652d9a386954729c367630458f45bdf3e0c722e0129a7fa",
+      "sha256_nachher": "f4c0a43638c151801e76abf9a011727f05d7c3eadf5ce2a728e966b3c1156cd6"
+    }
+  ],
+  "dateien_neu": [
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.44.0/gutachten_2026-10-25/README.md",
+      "sha256": "177b7ffd3a322d04fc1057a1f0e616926d061095133b9f61b7bf58e0d16c843e"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.44.0/gutachten_2026-10-25/kennzahlen.json",
+      "sha256": "bc7091531acd2befb1ff37adb2927dc72f6260d7c0c209a3e983ea9d32705e3b"
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.44.0/gutachten_2026-10-25/ergebnis.json",
+      "sha256": "(diese Datei)"
+    }
+  ],
+  "pruefungen": [
+    {
+      "name": "Standregeln R1–R9, R12–R14 (standpruefung.datei_pruefen) auf allen bearbeiteten und neuen Markdown-Dokumenten",
+      "umfang": 15,
+      "fehler": 0,
+      "gegenprobe": "falsche Formatstufe in einer Testzeile wird als R6 gemeldet"
+    },
+    {
+      "name": "relative Links und Überschriftenanker, die diese Runde neu setzt (GitHub-Ankerbildung)",
+      "geprueft": 51,
+      "fehlend": 0,
+      "hinweis": "ein Ziel (phasenabschluss_2026-10-22/README.md) über die Ordnerliste des Rechners bestätigt; übrige lokal"
+    },
+    {
+      "name": "Datenschutz: keine Benutzerpfade in bearbeiteten und neuen Dateien",
+      "fehler": 0
+    },
+    {
+      "name": "keine neuen Leerzeichen am Zeilenende",
+      "fehler": 0
+    }
+  ],
+  "nicht_ausgefuehrt": [
+    "CI-Grundstufe über den gesamten Baum",
+    "Integrations- oder Vollprüfung",
+    "native Plattform-, Reader- oder Menschenabnahme",
+    "Abruf der GitHub-Einstellungen und Code-Scanning-Ergebnisse",
+    "Commit oder Push"
+  ]
+}

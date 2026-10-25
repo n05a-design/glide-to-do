@@ -11313,11 +11313,11 @@ class PageEditor(RichNoteEditor):
         menu.add_command(label='Trennlinie', command=self.insert_divider)
         menu.add_command(label='Link …', command=self.insert_link)
         self.add_task_menu(menu)
-        menu.add_command(label='Markdown aus Zwischenablage einfügen', command=self.paste_markdown)
+        menu.add_command(label='Seite aus Zwischenablage einfügen', command=self.paste_markdown)
         menu.add_separator()
         menu.add_command(label='Drucken und PDF …', command=lambda: self.app.print_page(self.entry_id))
         menu.add_command(label='Als Markdown speichern …', command=lambda: self.app.export_page_markdown(self.entry_id))
-        menu.add_command(label='Markdown kopieren', command=lambda: self.app.copy_page_markdown(self.entry_id))
+        menu.add_command(label='Seite kopieren', command=lambda: self.app.copy_page_markdown(self.entry_id))
         menu.add_command(label='Als Glide-Seite exportieren …',
                          command=lambda: self.app.export_glide_pages([self.entry_id], []))
         menu.add_separator()
@@ -11775,7 +11775,7 @@ class PageEditor(RichNoteEditor):
         menu.add_command(label='Trennlinie', command=self.insert_divider)
         menu.add_command(label='Bild …', command=self.choose_images)
         menu.add_separator()
-        menu.add_command(label='Markdown einfügen', command=self.paste_markdown)
+        menu.add_command(label='Seite aus Zwischenablage einfügen', command=self.paste_markdown)
         try:
             x, y, _w, h = self.text.bbox('insert')
             menu.tk_popup(self.text.winfo_rootx() + x, self.text.winfo_rooty() + y + h)
@@ -12498,7 +12498,7 @@ class PageEditor(RichNoteEditor):
         finally:
             self._flushing_tasks = False
         if change.saved is not False:
-            self.status.configure(text='Markdown eingefügt')
+            self.status.configure(text='Aus Zwischenablage eingefügt')
         return 'break'
 
 
@@ -12539,7 +12539,7 @@ class NoteEditor(PageEditor):
         menu.add_command(label='Trennlinie', command=self.insert_divider)
         menu.add_command(label='Link …', command=self.insert_link)
         self.add_task_menu(menu)
-        menu.add_command(label='Markdown aus Zwischenablage einfügen', command=self.paste_markdown)
+        menu.add_command(label='Seite aus Zwischenablage einfügen', command=self.paste_markdown)
         menu.add_separator()
         menu.add_command(label='Präsentieren (Überschriften als Folien)', command=self.app.start_note_presentation)
         menu.add_command(label='Folien als PDF …', command=self.app.print_note_presentation)
@@ -15325,7 +15325,7 @@ class ListApp:
              "Notizen + · Neue Liste › Listenart"),
             ("Schreiben in Notizen", "Der Notiztext schreibt sich wie eine Seite: dieselben Kürzel, „/“, "
              "Bilder, Rechtsklick und schwebende Formatleiste. Aufgaben legt man in der Liste über dem Text an; "
-             "„- [ ]“ aus eingefügtem Markdown wird eine Aufzählung.", "Notiztext"),
+             "„- [ ]“ aus eingefügtem Text wird eine Aufzählung.", "Notiztext"),
             ("Formatieren", "Text markieren: Die schwebende Leiste bietet Blockart, B, I, U, S, Code, Markieren und "
              "Link. Strg+B/I/U formatiert, Strg+K fügt einen Link ein; Strg+Klick öffnet ihn.",
              "Formatleiste über der Markierung"),
@@ -15372,10 +15372,10 @@ class ListApp:
              "und Anhänge reisen mit. Beim Import kommen die Seiten hinzu, Labels werden zusammengeführt. "
              "Eine Datei mit gewöhnlichen Listen weist der Seitenimport ab.",
              "Seite › Mehr › Als Glide-Seite exportieren · Seiten + › Glide-Seiten importieren …"),
-            ("KI-Bericht übernehmen", "Markdown aus der Zwischenablage oder einer Datei wird zur Seite: "
+            ("KI-Bericht übernehmen", "Text aus der Zwischenablage oder einer Datei (.md, .txt) wird zur Seite: "
              "Überschriften, Listen, Tabellen, Zitate, Code und Links bleiben erhalten; „- [ ]“ wird eine "
-             "echte Aufgabe. In einer Seite fügt Einfügen Markdown ebenso ein.",
-             "Seiten › Aus Zwischenablage · Datei › Importieren › Markdown als Seite …"),
+             "echte Aufgabe. In einer Seite übernimmt Einfügen die Formatierung ebenso.",
+             "Seiten › Aus Zwischenablage · Datei › Importieren › Seite aus Datei …"),
             ("Schreiben", "Wie in Notion: „# “, „## “, „### “ für Überschriften, „- “ und „1. “ für Listen, "
              "„[] “ für eine Aufgabe, „> “ für ein Zitat, „```“ + Enter für Code, „---“ + Enter für eine "
              "Trennlinie. „/“ am Zeilenanfang öffnet die Blockauswahl; Enter setzt Listen und Aufgaben "
@@ -15395,7 +15395,7 @@ class ListApp:
              "auf den Titel öffnet alle Punktdetails, sie erscheint in „Heute“ und im Kalender. Eine "
              "gelöschte Aufgabenzeile legt den Punkt in den Papierkorb.", "Seite"),
             ("Lesen", "Endlos scrollend in einer ruhigen Lesespalte; „Mehr › Volle Breite“ schaltet um. "
-             "„Mehr“ speichert oder kopiert die Seite als Markdown und nimmt sie in die Favoriten.",
+             "„Mehr“ kopiert die Seite, speichert sie als Markdown und nimmt sie in die Favoriten.",
              "Seite › Mehr"),
             ("Favoriten und Zuletzt", "Nur für Seiten, getrennt von den Listen: in der Übersicht „Seiten“.",
              "Seitenleiste › Seiten"),
@@ -28365,7 +28365,7 @@ class ListApp:
         menu = self.build_menu(self.root, (("TXT als Liste …", self.import_txt_as_new_lists),
             ("Listen/Ordner hinzufügen …", self.import_partial_backup),
             ("Notion-Export übernehmen …", self.import_notion_archive),
-            ("Markdown als Seite …", self.import_markdown_page), ("Glide-Seiten …", self.import_glide_pages)))
+            ("Seite aus Datei …", self.import_markdown_page), ("Glide-Seiten …", self.import_glide_pages)))
         self._popup_at_widget(menu, self.template_actions)
         return "break"
 
@@ -36445,7 +36445,7 @@ class ListApp:
             "folder", parent_id=None, folder_kind="library", sidebar_section="pages"))
         menu.add_separator()
         menu.add_command(label="Seite aus Zwischenablage", command=self.new_page_from_clipboard)
-        menu.add_command(label="Markdown als Seite …", command=self.import_markdown_page)
+        menu.add_command(label="Seite aus Datei …", command=self.import_markdown_page)
         menu.add_command(label="Glide-Seiten importieren …", command=self.import_glide_pages)
         self._popup_at_widget(menu, self.add_pages_button)
         return "break"
@@ -42244,7 +42244,7 @@ class ListApp:
             self.set_note_preview(text="Die letzten Änderungen · Suche und Filter im Verlauf")
             return
         if self.view_mode == self.PAGES_VIEW:
-            self.set_note_preview(text="Favoriten, zuletzt geöffnete und alle Seiten · Markdown wird zur Seite")
+            self.set_note_preview(text="Favoriten, zuletzt geöffnete und alle Seiten · Zwischenablage oder Datei wird zur Seite")
             return
         if self.view_mode == self.DRAWINGS_VIEW:
             self.set_note_preview(text="Deine Zeichnungen · Zeile anklicken zum Öffnen")
@@ -47331,7 +47331,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         markdown = self.page_markdown(list_id, image_links="file")
         self.root.clipboard_clear()
         self.root.clipboard_append(markdown)
-        self.show_undo_toast("Seite als Markdown kopiert")
+        self.show_undo_toast("Seite kopiert")
         return "break"
 
     def new_page_from_markdown(self, markdown, title=None, folder_id=None, base_dir=None):
@@ -47342,7 +47342,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return None
         markdown = str(markdown or "")
         if not markdown.strip():
-            self.show_warning("Seite aus Markdown", "Es gibt keinen Text, aus dem eine Seite werden kann.")
+            self.show_warning("Neue Seite", "Es gibt keinen Text, aus dem eine Seite werden kann.")
             return None
         if not title:
             erste = next((zeile for zeile in markdown.splitlines() if zeile.strip()), "Neue Seite")
@@ -47380,7 +47380,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def import_markdown_page(self, event=None):
         pfad = filedialog.askopenfilename(
-            title="Markdown als Seite öffnen", parent=self.root,
+            title="Seite aus Datei öffnen", parent=self.root,
             filetypes=[("Markdown", "*.md *.markdown *.txt"), ("Alle Dateien", "*.*")])
         if not pfad:
             return "break"
@@ -47388,9 +47388,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             with open(pfad, "r", encoding="utf-8-sig") as datei:
                 inhalt = datei.read(5_000_000)
         except (OSError, UnicodeDecodeError) as fehler:
-            self.show_error("Markdown als Seite", str(fehler))
+            self.show_error("Seite aus Datei", str(fehler))
             return "break"
-        # Bilder neben der Datei (etwa „… Bilder/“ aus „Als Markdown speichern“) kommen mit.
+        # Bilder neben der Datei (etwa „… Bilder/“ aus „Als Markdown speichern …“) kommen mit.
         self.new_page_from_markdown(inhalt, base_dir=os.path.dirname(os.path.abspath(pfad)))
         return "break"
 
@@ -47516,7 +47516,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         leiste.add(self._make_dialog_button(leiste, "Neue Seite", self.create_new_page, "confirm", width=128))
         leiste.add(self._make_dialog_button(leiste, "Aus Zwischenablage", self.new_page_from_clipboard,
                                             "muted", width=168))
-        leiste.add(self._make_dialog_button(leiste, "Markdown-Datei …", self.import_markdown_page, "muted",
+        leiste.add(self._make_dialog_button(leiste, "Aus Datei …", self.import_markdown_page, "muted",
                                             width=152))
         alle = sorted(self.page_entries(), key=lambda entry: str(entry.get("updated_at") or ""), reverse=True)
         nach_id = {entry["id"]: entry for entry in alle}
@@ -47545,7 +47545,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self.render_overview_sections(innen, (
             ("Favoriten", zeilen(favoriten), "Noch keine Favoriten – in einer Seite unter „Mehr“ oder hier mit ☆."),
             ("Zuletzt geöffnet", zeilen(zuletzt), "Noch keine Seite geöffnet."),
-            ("Alle Seiten", zeilen(alle), "Noch keine Seiten. „Neue Seite“ oder einen KI-Bericht als Markdown "
+            ("Alle Seiten", zeilen(alle), "Noch keine Seiten. „Neue Seite“ oder einen KI-Bericht "
                                           "aus der Zwischenablage übernehmen.")))
         self._bind_home_wheel(karte)
 
@@ -63593,7 +63593,7 @@ Labels, Termine und Metadaten."""
                     ("CSV importieren …", self.show_csv_import_dialog),
                     ("Kalenderdatei (ICS) importieren …", self.show_ics_import_dialog),
                     ("Zeichnung (SVG/JSON) importieren …", self.import_drawing_as_new),
-                    ("Markdown als Seite …", self.import_markdown_page),
+                    ("Seite aus Datei …", self.import_markdown_page),
                     ("Notion-Export übernehmen …", self.import_notion_archive),
                     ("Seite aus Zwischenablage", self.new_page_from_clipboard),
                     ("Glide-Seiten importieren …", self.import_glide_pages),

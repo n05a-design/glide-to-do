@@ -2,9 +2,9 @@
 
 B4: Bilder auf aufeinanderfolgenden Absätzen überlappen in keiner Umflusskombination;
 „Drucken und PDF …“ aus dem Seitenmenü bettet die Bilder als Daten-URL ein;
-„Markdown kopieren“ verweist auf die gespeicherten Bilddateien, „Als Markdown
-speichern …“ legt sie daneben, und der Rückweg (Zwischenablage bzw. „Markdown als
-Seite öffnen“) macht daraus wieder Seitenbilder.
+„Seite kopieren“ (bis 25.10.2026 „Markdown kopieren“) verweist auf die gespeicherten
+Bilddateien, „Als Markdown speichern …“ legt sie daneben, und der Rückweg (Zwischenablage
+bzw. „Seite aus Datei …“) macht daraus wieder Seitenbilder.
 G14h: Ein Inhaltstreffer aus der Suche markiert nach Enter alle Fundstellen mit
 Umlautgleichheit; Tippen oder Esc hebt die Markierung auf, gespeichert wird sie nie.
 D-03: In einem gespeicherten Filter erklärt „Warum steht das hier?“ jede Bedingung,
@@ -157,12 +157,12 @@ with tempfile.TemporaryDirectory(prefix="glide-wissen-") as ordner:
         menu.destroy()
         pruefungen.append("B4: „Drucken und PDF …“ bettet alle drei Bilder als Daten-URL ein, ohne Dateiverweis")
 
-        # --- B4 (3): Markdown kopieren, speichern und zurück ------------------------
+        # --- B4 (3): Seite kopieren, als Markdown speichern und zurück ------------------------
         menues.clear()
         with patch.object(editor, "popup", side_effect=menues.append):
             editor.show_page_menu()
         menu = menues[-1]
-        menu.invoke(eintraege(menu)["Markdown kopieren"])
+        menu.invoke(eintraege(menu)["Seite kopieren"])
         ruhe()
         kopiert = root.clipboard_get()
         anhaenge = app.page_image_attachments(seite["id"])
@@ -170,7 +170,7 @@ with tempfile.TemporaryDirectory(prefix="glide-wissen-") as ordner:
         for anhang in anhaenge:
             uri = Path(app.resolve_attachment_path(anhang)).resolve().as_uri()
             assert f"]({uri})" in kopiert, (uri, kopiert[:400])
-        assert toasts[-1] == "Seite als Markdown kopiert"
+        assert toasts[-1] == "Seite kopiert"
         vorher = len(app.lists)
         tiefe = len(app.undo_stack)
         app.new_page_from_clipboard()
@@ -185,7 +185,7 @@ with tempfile.TemporaryDirectory(prefix="glide-wissen-") as ordner:
         app.undo_last_change()
         ruhe(0.2)
         assert len(app.lists) == vorher
-        pruefungen.append("B4: „Markdown kopieren“ verweist auf die Bilddateien; aus der Zwischenablage "
+        pruefungen.append("B4: „Seite kopieren“ verweist auf die Bilddateien; aus der Zwischenablage "
                           "entsteht eine Seite mit denselben drei Bildern, ein Undo")
 
         app.set_active_list(seite["id"])
@@ -215,7 +215,7 @@ with tempfile.TemporaryDirectory(prefix="glide-wissen-") as ordner:
         # Ohne Ordnerangabe bleiben relative Verweise benannte Textverweise (nichts wird gesucht).
         fremd = app.page_document_from_markdown("![Logo](Bild%20Seite%20Bilder/x.png)\n", rueck["id"])
         assert not fremd.get("images") and "Bild: Logo" in fremd["text"]
-        pruefungen.append("B4: „Als Markdown speichern …“ legt die Bilder daneben, „Markdown als Seite öffnen“ "
+        pruefungen.append("B4: „Als Markdown speichern …“ legt die Bilder daneben, „Seite aus Datei …“ "
                           "holt sie als Seitenbilder zurück; relative Verweise ohne Ordner bleiben Text")
 
         # --- G14h: Treffer hervorheben ---------------------------------------------

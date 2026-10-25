@@ -1,6 +1,6 @@
 # Daten, Backups und Migration – Glide
 
-Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
+Stand 25.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
 
 **3.44.0 (22.10.2026):** Aufgabenformat 26 (FP-02), FP-01 und die Schutzrunde WA-27–WA-30 sowie die neuen obersten Einstellungsnamespaces von FP-03/FP-04 sind als Python-Fassung geliefert. Die früher nachgestellten Grenzen A32/A33/A34/A35/A36 haben gezielte Schutzprüfungen und Gegenproben ([Schutznachweis](../tests/qa-3.43.1/schutzrunde_2026-10-18/README.md)); die historische Analyse beschreibt den Zustand davor. Eigenständige Pakete (3.42.0) lesen Format 26 nur schreibgeschützt; Mac-Bundle/Pakete 3.44.0 und native Abnahmen bleiben offen ([Prüf- und Lieferstand](07_QA_BERICHT.md)).
 
@@ -133,6 +133,7 @@ Referenz-Fixture: `tests/fixtures/current_v20/reference_v20.json`.
 ## Backups und Transportwege
 
 - **`.glidebackup`** ist ein ZIP aus `data.json` und den referenzierten Anhängen. Archivpfade, Größen, Symlinks, doppelte Namen und Kompressionsverhältnisse werden geprüft. Portable Backups werden ab Format 4 gelesen.
+- **Größengrenzen:** `data.json` höchstens 32 MiB (`MAX_BACKUP_DATA_BYTES`), lese- und schreibseitig gleich geprüft; Anhänge je 512 MiB, zusammen 2 GiB, höchstens 4.096 Einträge. `data.json` hat dieselbe Kodierung wie `liste_speicher.json`, die Grenze gilt deshalb praktisch auch für den Bestand: Darüber scheitern vollständige Sicherungen, App-Backups und die Vorab-Sicherung vor Importen, ohne vorherige Warnung. Die Speicherlastsuite (26.420 Punkte) schreibt 28,5 MB. Die Hauptdatei selbst, die Einstellungen und Vorlagen werden ohne Vorabgrenze vollständig gelesen; der Vorlagenimport prüft vorab nur 4 GiB. Gemeinsames Budget mit Frühwarnung: WA-47 im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#212-ergänztes-aufgabenregister-und-gemeinsame-komponenten).
 - **Komplettbackup laden** ersetzt erst nach Validierung und Sicherung (`vor_import_*.glidebackup`). **Teilbackup / Listen und Ordner hinzufügen** importiert additiv mit neuen Kennungen, vollständige Zweige einschließlich leerer Unterordner; Verweise (`links`, `blocked_by`, `references`, interne Textlinks, `item:<id>`, Bildanhänge, Zeichnungsreferenzen) ziehen nach.
 - **App-Backup** = Komplettbackup plus Abschnitt `app_backup` (`format_version`, `settings` ohne Tageshistorien, `templates`, `activity`); für ältere Fassungen bleibt es ein gültiges Aufgabenbackup. Wiederherstellen mit Inhaltsvorschau und wählbaren Bereichen. Pinnwände reisen mit und werden beim Import neu zugeordnet.
 - **`.glidepage`:** Teilbackup nur mit Seiten und Büchern (`"content": "pages"`); eine Datei mit Listen weist der Seitenimport ab.

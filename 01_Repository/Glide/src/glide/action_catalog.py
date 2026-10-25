@@ -205,7 +205,7 @@ LEGACY_GROUPS = {'show_library_new_menu': 'Neu anlegen', 'show_library_import_me
  'Labels verwalten …': 'Planen und einordnen',
  'Listen/Ordner hinzufügen …': 'Import',
  'Löschen': 'Bearbeiten',
- 'Markdown als Seite …': 'Import',
+ 'Seite aus Datei …': 'Import',
  'Nach Fälligkeit': 'Struktur und Gliederung',
  'Nach Wichtigkeit': 'Struktur und Gliederung',
  'Neue Galerie': 'Neu anlegen',

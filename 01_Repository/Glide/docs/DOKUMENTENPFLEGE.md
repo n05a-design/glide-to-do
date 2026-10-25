@@ -1,6 +1,6 @@
 # Regeln für die Dokumentenpflege
 
-Stand 22.10.2026 · Glide 3.44.0 · Datenformat 26
+Stand 25.10.2026 · Glide 3.44.0 · Datenformat 26
 
 Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder gelöscht anstatt immer nur archiviert und `_Z` zu schreiben“) und ersetzt alle früheren Archivierungsregeln.
 
@@ -38,6 +38,8 @@ Abgleich 18.10.2026: [Dokumentregister und konkrete Pflegeergebnisse](../../../0
 | Veröffentlichung, Lizenz, Signierung, Store, GitHub-Auftritt | [10_VEROEFFENTLICHUNG.md](10_VEROEFFENTLICHUNG.md) |
 | Verhalten der Funktionen | [20_FUNKTIONEN.md](20_FUNKTIONEN.md) |
 | Vorlagen in der Praxis | [27_VORLAGEN_PRAXISANLEITUNG.md](27_VORLAGEN_PRAXISANLEITUNG.md) |
+| Sicherheitsregeln und Vertrauensgrenzen der Anwendung | `SECURITY.md` im Quellbaum; Meldeweg und Schutz des öffentlichen Repositorys in `SECURITY.md` der Wurzel |
+| Eingereichte externe Analysen, Validierungen und Gutachten | kein eigenes Dokument: Einordnung in der Analyse (§13.8, §13.10, §13.12), Aufgaben im Entwicklungsplan, Eingangshash und Prüfprovenienz im QA-Nachweis der Runde |
 | Einzelentscheidungen mit eigenem Gegenstand | `decisions/` (Produktregister, tkdnd, Arbeitsbegleiter, Gruppe/Ordner/Überschrift, Systembenachrichtigungen) |
 | Änderungsverlauf | `CHANGELOG.md` (sieben neueste Versionen ausführlich, ältere als Zeile) |
 
