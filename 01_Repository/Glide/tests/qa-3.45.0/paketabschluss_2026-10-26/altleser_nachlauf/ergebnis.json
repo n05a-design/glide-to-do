@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "suite": "test_import3410",
+      "exitcode": 0,
+      "log": "test_import3410.log"
+    },
+    {
+      "suite": "test_seitenkarten",
+      "exitcode": 1,
+      "log": "test_seitenkarten.log"
+    },
+    {
+      "suite": "test_ansichten",
+      "exitcode": 0,
+      "log": "test_ansichten.log"
+    },
+    {
+      "suite": "test_wiederholungsregeln",
+      "exitcode": 0,
+      "log": "test_wiederholungsregeln.log"
+    }
+  ],
+  "ok": false
+}

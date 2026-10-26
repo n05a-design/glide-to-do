@@ -1,10 +1,10 @@
 # Glide – lokale Aufgaben, Notizen und Pinnwände
 
-Stand 26.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Quellkandidat mit gemeinsamem Startseitenmodell
+Stand 26.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Python- und Paketlieferung 3.45.0
 
 Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Sie läuft lokal mit Python 3.14 und Tk 9 (Tk 8.6 eingeschränkt), braucht weder Konto noch Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
-> **Projektstatus:** interner Quellkandidat auf **3.45.0** · Aufgabenformat 26 · Startseitenmodell WA-39/WA-36, WA-12 und Verweisvorschau D55/WA-11 umgesetzt. `07_Python-Versionen` bleibt beim vorherigen Lieferabschluss; `app.pyw`, `day_proposal.py`, `side_view.py` und das neue `home_dashboard.py` unterscheiden sich. [Aktueller Nachweis](tests/qa-3.45.0/startseitenmodell_2026-10-26/README.md), [QA-Bericht](docs/07_QA_BERICHT.md). Breite native Restprüfung und gemeinsamer Phasenabschluss offen; keine öffentliche Releasefassung.
+> **Projektstatus:** interner Entwicklungsstand **3.45.0**, Aufgabenformat 26. Quelle und Python-Lieferung sind bytegleich; Windows-Paket und natives Mac-arm64-Paket auf 3.45.0 gebaut und geprüft. Windows-Vollprüfung 104/104 Suiten grün; Mac-Paketbau, Signatur und isolierter Start grün. [Liefernachweis](tests/qa-3.45.0/paketabschluss_2026-10-26/README.md), [QA-Bericht](docs/07_QA_BERICHT.md). Menschliche und öffentliche Releaseabnahme bleiben getrennt offen.
 
 Funktionsumfang im Überblick: [Projekt-README](../../README.md#was-glide-kann); Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md); Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 
@@ -16,7 +16,7 @@ Voraussetzung ist Python mit Tk; zusätzliche Laufzeitpakete sind nicht nötig.
 python3 src/glide/app.pyw          # Windows: python src\glide\app.pyw
 ```
 
-Gelieferte eigenständige Entwicklungspakete (noch 3.42.0; Neubau für 3.44.0 offen) liegen unter `build/macos/Glide.app` und `build/windows/Glide-3.42.0/Glide.exe`; sie bündeln Python und Tcl/Tk; Bauanleitung und Prüfgrenzen stehen in der [Paketierung](packaging/README.md#eigenständige-entwicklungspakete-paket-7).
+Gelieferte eigenständige Entwicklungspakete 3.45.0: `build/windows/Glide-3.45.0/Glide.exe` und `build/macos/Glide-3.45.0-macos-arm64.tar.gz`. Das Mac-TAR nativ entpacken und die enthaltene `Glide.app` starten. `build/macos/Glide.app` ist auf diesem Windows-Rechner eine geprüfte Inspektionskopie mit NT-Linkzielen. Python/Tcl-Tk sind eingebettet; [Paketierung und Grenzen](packaging/README.md#eigenständige-entwicklungspakete-paket-7).
 
 Die Ressourcen unter `src/glide/resources` müssen neben der Anwendung liegen. Startbare Lieferfassung: `07_Python-Versionen/Schnellstart.pyw`. Unter macOS lässt sich ein Entwicklungsbundle bauen (nutzt das installierte Python, nicht zur Weitergabe):
 

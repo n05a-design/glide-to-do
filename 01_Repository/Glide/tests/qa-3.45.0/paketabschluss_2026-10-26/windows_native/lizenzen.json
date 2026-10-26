@@ -1,0 +1,1465 @@
+{
+  "pure": {
+    "zipfile": [
+      "Python"
+    ],
+    "zipfile._path": [
+      "Python"
+    ],
+    "zipfile._path.glob": [
+      "Python"
+    ],
+    "contextlib": [
+      "Python"
+    ],
+    "argparse": [
+      "Python"
+    ],
+    "difflib": [
+      "Python"
+    ],
+    "textwrap": [
+      "Python"
+    ],
+    "_colorize": [
+      "Python"
+    ],
+    "typing": [
+      "Python"
+    ],
+    "annotationlib": [
+      "Python"
+    ],
+    "ast": [
+      "Python"
+    ],
+    "_ast_unparse": [
+      "Python"
+    ],
+    "dataclasses": [
+      "Python"
+    ],
+    "copy": [
+      "Python"
+    ],
+    "gettext": [
+      "Python"
+    ],
+    "py_compile": [
+      "Python"
+    ],
+    "importlib.machinery": [
+      "Python"
+    ],
+    "importlib": [
+      "Python"
+    ],
+    "importlib._bootstrap": [
+      "Python"
+    ],
+    "importlib._bootstrap_external": [
+      "Python"
+    ],
+    "importlib.metadata": [
+      "Python"
+    ],
+    "csv": [
+      "Python"
+    ],
+    "importlib.metadata._adapters": [
+      "Python"
+    ],
+    "importlib.metadata._text": [
+      "Python"
+    ],
+    "email.message": [
+      "Python"
+    ],
+    "email.policy": [
+      "Python"
+    ],
+    "email.contentmanager": [
+      "Python"
+    ],
+    "email.quoprimime": [
+      "Python"
+    ],
+    "string": [
+      "Python"
+    ],
+    "email.headerregistry": [
+      "Python"
+    ],
+    "email._header_value_parser": [
+      "Python"
+    ],
+    "urllib": [
+      "Python"
+    ],
+    "email.iterators": [
+      "Python"
+    ],
+    "email.generator": [
+      "Python"
+    ],
+    "random": [
+      "Python"
+    ],
+    "statistics": [
+      "Python"
+    ],
+    "decimal": [
+      "Python"
+    ],
+    "_pydecimal": [
+      "Python"
+    ],
+    "contextvars": [
+      "Python"
+    ],
+    "fractions": [
+      "Python"
+    ],
+    "numbers": [
+      "Python"
+    ],
+    "bisect": [
+      "Python"
+    ],
+    "email._encoded_words": [
+      "Python"
+    ],
+    "base64": [
+      "Python"
+    ],
+    "getopt": [
+      "Python"
+    ],
+    "email.charset": [
+      "Python"
+    ],
+    "email.encoders": [
+      "Python"
+    ],
+    "email.base64mime": [
+      "Python"
+    ],
+    "email._policybase": [
+      "Python"
+    ],
+    "email.header": [
+      "Python"
+    ],
+    "email.errors": [
+      "Python"
+    ],
+    "email.utils": [
+      "Python"
+    ],
+    "socket": [
+      "Python"
+    ],
+    "selectors": [
+      "Python"
+    ],
+    "email._parseaddr": [
+      "Python"
+    ],
+    "calendar": [
+      "Python"
+    ],
+    "urllib.parse": [
+      "Python"
+    ],
+    "ipaddress": [
+      "Python"
+    ],
+    "datetime": [
+      "Python"
+    ],
+    "_pydatetime": [
+      "Python"
+    ],
+    "_strptime": [
+      "Python"
+    ],
+    "quopri": [
+      "Python"
+    ],
+    "importlib.abc": [
+      "Python"
+    ],
+    "importlib._abc": [
+      "Python"
+    ],
+    "importlib.metadata._itertools": [
+      "Python"
+    ],
+    "importlib.metadata._functools": [
+      "Python"
+    ],
+    "importlib.metadata._collections": [
+      "Python"
+    ],
+    "importlib.metadata._meta": [
+      "Python"
+    ],
+    "email": [
+      "Python"
+    ],
+    "email.parser": [
+      "Python"
+    ],
+    "email.feedparser": [
+      "Python"
+    ],
+    "__future__": [
+      "Python"
+    ],
+    "importlib.readers": [
+      "Python"
+    ],
+    "importlib.resources.readers": [
+      "Python"
+    ],
+    "importlib.resources._itertools": [
+      "Python"
+    ],
+    "importlib.resources.abc": [
+      "Python"
+    ],
+    "importlib.resources": [
+      "Python"
+    ],
+    "importlib.resources._functional": [
+      "Python"
+    ],
+    "importlib.resources._common": [
+      "Python"
+    ],
+    "importlib.resources._adapters": [
+      "Python"
+    ],
+    "tokenize": [
+      "Python"
+    ],
+    "token": [
+      "Python"
+    ],
+    "compression.zstd": [
+      "Python"
+    ],
+    "compression.zstd._zstdfile": [
+      "Python"
+    ],
+    "compression._common._streams": [
+      "Python"
+    ],
+    "compression._common": [
+      "Python"
+    ],
+    "compression": [
+      "Python"
+    ],
+    "lzma": [
+      "Python"
+    ],
+    "bz2": [
+      "Python"
+    ],
+    "threading": [
+      "Python"
+    ],
+    "_threading_local": [
+      "Python"
+    ],
+    "struct": [
+      "Python"
+    ],
+    "shutil": [
+      "Python"
+    ],
+    "tarfile": [
+      "Python"
+    ],
+    "gzip": [
+      "Python"
+    ],
+    "fnmatch": [
+      "Python"
+    ],
+    "importlib.util": [
+      "Python"
+    ],
+    "inspect": [
+      "Python"
+    ],
+    "dis": [
+      "Python"
+    ],
+    "opcode": [
+      "Python"
+    ],
+    "_opcode_metadata": [
+      "Python"
+    ],
+    "week_planning": [
+      "Glide"
+    ],
+    "view_metrics": [
+      "Glide"
+    ],
+    "view_definition": [
+      "Glide"
+    ],
+    "undo_history": [
+      "Glide"
+    ],
+    "ui_design": [
+      "Glide"
+    ],
+    "today_view": [
+      "Glide"
+    ],
+    "tkinterdnd2": [
+      "tkinterdnd2"
+    ],
+    "tkinterdnd2.TkinterDnD": [
+      "tkinterdnd2"
+    ],
+    "tkinter": [
+      "Python"
+    ],
+    "tkinter.filedialog": [
+      "Python"
+    ],
+    "tkinter.simpledialog": [
+      "Python"
+    ],
+    "tkinter.commondialog": [
+      "Python"
+    ],
+    "tkinter.dialog": [
+      "Python"
+    ],
+    "tkinter.messagebox": [
+      "Python"
+    ],
+    "tkinter.constants": [
+      "Python"
+    ],
+    "timezones": [
+      "Glide"
+    ],
+    "zoneinfo": [
+      "Python"
+    ],
+    "zoneinfo._zoneinfo": [
+      "Python"
+    ],
+    "pickle": [
+      "Python"
+    ],
+    "pprint": [
+      "Python"
+    ],
+    "_compat_pickle": [
+      "Python"
+    ],
+    "zoneinfo._common": [
+      "Python"
+    ],
+    "zoneinfo._tzpath": [
+      "Python"
+    ],
+    "sysconfig": [
+      "Python"
+    ],
+    "_aix_support": [
+      "Python"
+    ],
+    "subprocess": [
+      "Python"
+    ],
+    "signal": [
+      "Python"
+    ],
+    "xml.etree.ElementTree": [
+      "Python"
+    ],
+    "xml.etree.cElementTree": [
+      "Python"
+    ],
+    "xml.etree.ElementInclude": [
+      "Python"
+    ],
+    "xml.parsers.expat": [
+      "Python"
+    ],
+    "xml.parsers": [
+      "Python"
+    ],
+    "xml": [
+      "Python"
+    ],
+    "xml.sax.expatreader": [
+      "Python"
+    ],
+    "xml.sax.saxutils": [
+      "Python"
+    ],
+    "urllib.request": [
+      "Python"
+    ],
+    "ftplib": [
+      "Python"
+    ],
+    "netrc": [
+      "Python"
+    ],
+    "mimetypes": [
+      "Python"
+    ],
+    "http.cookiejar": [
+      "Python"
+    ],
+    "http": [
+      "Python"
+    ],
+    "logging": [
+      "Python"
+    ],
+    "ssl": [
+      "Python"
+    ],
+    "urllib.response": [
+      "Python"
+    ],
+    "urllib.error": [
+      "Python"
+    ],
+    "http.client": [
+      "Python"
+    ],
+    "xml.sax": [
+      "Python"
+    ],
+    "xml.sax.handler": [
+      "Python"
+    ],
+    "xml.sax._exceptions": [
+      "Python"
+    ],
+    "xml.sax.xmlreader": [
+      "Python"
+    ],
+    "xml.etree.ElementPath": [
+      "Python"
+    ],
+    "xml.etree": [
+      "Python"
+    ],
+    "task_references": [
+      "Glide"
+    ],
+    "task_editing": [
+      "Glide"
+    ],
+    "symbol_policy": [
+      "Glide"
+    ],
+    "svg_geometry": [
+      "Glide"
+    ],
+    "structural_guard": [
+      "Glide"
+    ],
+    "storage_health": [
+      "Glide"
+    ],
+    "source_metadata": [
+      "Glide"
+    ],
+    "sidebar_policy": [
+      "Glide"
+    ],
+    "side_view": [
+      "Glide"
+    ],
+    "schema_backups": [
+      "Glide"
+    ],
+    "save_result": [
+      "Glide"
+    ],
+    "save_comparison": [
+      "Glide"
+    ],
+    "runtime_check": [
+      "Glide"
+    ],
+    "routines": [
+      "Glide"
+    ],
+    "restore_assets": [
+      "Glide"
+    ],
+    "uuid": [
+      "Python"
+    ],
+    "repeat_rules": [
+      "Glide"
+    ],
+    "repeat_ics": [
+      "Glide"
+    ],
+    "render_retention": [
+      "Glide"
+    ],
+    "release_notes": [
+      "Glide"
+    ],
+    "preview_tools": [
+      "Glide"
+    ],
+    "planning": [
+      "Glide"
+    ],
+    "pinboard_pages": [
+      "Glide"
+    ],
+    "page_restore": [
+      "Glide"
+    ],
+    "page_markdown": [
+      "Glide"
+    ],
+    "page_features": [
+      "Glide"
+    ],
+    "occupied_time": [
+      "Glide"
+    ],
+    "object_references": [
+      "Glide"
+    ],
+    "notion_reimport": [
+      "Glide"
+    ],
+    "notion_import": [
+      "Glide"
+    ],
+    "notion_hierarchy": [
+      "Glide"
+    ],
+    "notion_archive": [
+      "Glide"
+    ],
+    "motion": [
+      "Glide"
+    ],
+    "markdown_tree": [
+      "Glide"
+    ],
+    "logo_raster": [
+      "Glide"
+    ],
+    "logo": [
+      "Glide"
+    ],
+    "load_phases": [
+      "Glide"
+    ],
+    "item_index": [
+      "Glide"
+    ],
+    "interaction_policy": [
+      "Glide"
+    ],
+    "image_preview": [
+      "Glide"
+    ],
+    "image_conversion": [
+      "Glide"
+    ],
+    "ics_timezone": [
+      "Glide"
+    ],
+    "ics_recurrence": [
+      "Glide"
+    ],
+    "ics_busy": [
+      "Glide"
+    ],
+    "home_tiles": [
+      "Glide"
+    ],
+    "home_dashboard": [
+      "Glide"
+    ],
+    "glyph_metrics": [
+      "Glide"
+    ],
+    "glide_start": [
+      "Glide"
+    ],
+    "focus_timer": [
+      "Glide"
+    ],
+    "filter_explain": [
+      "Glide"
+    ],
+    "exchange_recipes": [
+      "Glide"
+    ],
+    "exchange_patch": [
+      "Glide"
+    ],
+    "eisenhower": [
+      "Glide"
+    ],
+    "editor_flush": [
+      "Glide"
+    ],
+    "drawing_image": [
+      "Glide"
+    ],
+    "drawing": [
+      "Glide"
+    ],
+    "day_relief": [
+      "Glide"
+    ],
+    "day_proposal": [
+      "Glide"
+    ],
+    "data_lock": [
+      "Glide"
+    ],
+    "daily_hints": [
+      "Glide"
+    ],
+    "core_accessibility": [
+      "Glide"
+    ],
+    "content_search": [
+      "Glide"
+    ],
+    "compact_mode": [
+      "Glide"
+    ],
+    "capture_parser": [
+      "Glide"
+    ],
+    "calendar_service": [
+      "Glide"
+    ],
+    "queue": [
+      "Python"
+    ],
+    "busy_calendar": [
+      "Glide"
+    ],
+    "backup_snapshot": [
+      "Glide"
+    ],
+    "backup_diff": [
+      "Glide"
+    ],
+    "backup_catalog": [
+      "Glide"
+    ],
+    "backdrop": [
+      "Glide"
+    ],
+    "attachment_policy": [
+      "Glide"
+    ],
+    "attachment_paths": [
+      "Glide"
+    ],
+    "appearance": [
+      "Glide"
+    ],
+    "animation_export": [
+      "Glide"
+    ],
+    "animation": [
+      "Glide"
+    ],
+    "action_menu": [
+      "Glide"
+    ],
+    "action_catalog": [
+      "Glide"
+    ],
+    "accessibility_bindings": [
+      "Glide"
+    ],
+    "accessibility": [
+      "Glide"
+    ],
+    "_py_warnings": [
+      "Python"
+    ],
+    "tracemalloc": [
+      "Python"
+    ],
+    "stringprep": [
+      "Python"
+    ],
+    "_py_abc": [
+      "Python"
+    ],
+    "runtime_paths": [
+      "Glide"
+    ],
+    "platform": [
+      "Python"
+    ],
+    "glide_app": [
+      "Glide"
+    ],
+    "html": [
+      "Python"
+    ],
+    "html.entities": [
+      "Python"
+    ],
+    "webbrowser": [
+      "Python"
+    ],
+    "shlex": [
+      "Python"
+    ],
+    "tkinter.ttk": [
+      "Python"
+    ],
+    "tkinter.font": [
+      "Python"
+    ],
+    "colorsys": [
+      "Python"
+    ],
+    "ctypes.wintypes": [
+      "Python"
+    ],
+    "ctypes": [
+      "Python"
+    ],
+    "ctypes._endian": [
+      "Python"
+    ],
+    "ctypes._layout": [
+      "Python"
+    ],
+    "codeop": [
+      "Python"
+    ],
+    "tempfile": [
+      "Python"
+    ],
+    "hashlib": [
+      "Python"
+    ],
+    "json": [
+      "Python"
+    ],
+    "json.encoder": [
+      "Python"
+    ],
+    "json.decoder": [
+      "Python"
+    ],
+    "json.scanner": [
+      "Python"
+    ],
+    "pathlib": [
+      "Python"
+    ],
+    "pathlib._os": [
+      "Python"
+    ],
+    "glob": [
+      "Python"
+    ]
+  },
+  "base": {
+    "posixpath": [
+      "Python"
+    ],
+    "warnings": [
+      "Python"
+    ],
+    "keyword": [
+      "Python"
+    ],
+    "_collections_abc": [
+      "Python"
+    ],
+    "operator": [
+      "Python"
+    ],
+    "enum": [
+      "Python"
+    ],
+    "sre_parse": [
+      "Python"
+    ],
+    "re._parser": [
+      "Python"
+    ],
+    "re._constants": [
+      "Python"
+    ],
+    "re._compiler": [
+      "Python"
+    ],
+    "re._casefix": [
+      "Python"
+    ],
+    "re": [
+      "Python"
+    ],
+    "locale": [
+      "Python"
+    ],
+    "sre_constants": [
+      "Python"
+    ],
+    "_weakrefset": [
+      "Python"
+    ],
+    "weakref": [
+      "Python"
+    ],
+    "stat": [
+      "Python"
+    ],
+    "types": [
+      "Python"
+    ],
+    "genericpath": [
+      "Python"
+    ],
+    "codecs": [
+      "Python"
+    ],
+    "heapq": [
+      "Python"
+    ],
+    "sre_compile": [
+      "Python"
+    ],
+    "linecache": [
+      "Python"
+    ],
+    "functools": [
+      "Python"
+    ],
+    "copyreg": [
+      "Python"
+    ],
+    "collections": [
+      "Python"
+    ],
+    "io": [
+      "Python"
+    ],
+    "reprlib": [
+      "Python"
+    ],
+    "encodings.zlib_codec": [
+      "Python"
+    ],
+    "encodings.uu_codec": [
+      "Python"
+    ],
+    "encodings.utf_8_sig": [
+      "Python"
+    ],
+    "encodings.utf_8": [
+      "Python"
+    ],
+    "encodings.utf_7": [
+      "Python"
+    ],
+    "encodings.utf_32_le": [
+      "Python"
+    ],
+    "encodings.utf_32_be": [
+      "Python"
+    ],
+    "encodings.utf_32": [
+      "Python"
+    ],
+    "encodings.utf_16_le": [
+      "Python"
+    ],
+    "encodings.utf_16_be": [
+      "Python"
+    ],
+    "encodings.utf_16": [
+      "Python"
+    ],
+    "encodings.unicode_escape": [
+      "Python"
+    ],
+    "encodings.undefined": [
+      "Python"
+    ],
+    "encodings.tis_620": [
+      "Python"
+    ],
+    "encodings.shift_jisx0213": [
+      "Python"
+    ],
+    "encodings.shift_jis_2004": [
+      "Python"
+    ],
+    "encodings.shift_jis": [
+      "Python"
+    ],
+    "encodings.rot_13": [
+      "Python"
+    ],
+    "encodings.raw_unicode_escape": [
+      "Python"
+    ],
+    "encodings.quopri_codec": [
+      "Python"
+    ],
+    "encodings.punycode": [
+      "Python"
+    ],
+    "encodings.ptcp154": [
+      "Python"
+    ],
+    "encodings.palmos": [
+      "Python"
+    ],
+    "encodings.oem": [
+      "Python"
+    ],
+    "encodings.mbcs": [
+      "Python"
+    ],
+    "encodings.mac_turkish": [
+      "Python"
+    ],
+    "encodings.mac_romanian": [
+      "Python"
+    ],
+    "encodings.mac_roman": [
+      "Python"
+    ],
+    "encodings.mac_latin2": [
+      "Python"
+    ],
+    "encodings.mac_iceland": [
+      "Python"
+    ],
+    "encodings.mac_greek": [
+      "Python"
+    ],
+    "encodings.mac_farsi": [
+      "Python"
+    ],
+    "encodings.mac_cyrillic": [
+      "Python"
+    ],
+    "encodings.mac_croatian": [
+      "Python"
+    ],
+    "encodings.mac_arabic": [
+      "Python"
+    ],
+    "encodings.latin_1": [
+      "Python"
+    ],
+    "encodings.kz1048": [
+      "Python"
+    ],
+    "encodings.koi8_u": [
+      "Python"
+    ],
+    "encodings.koi8_t": [
+      "Python"
+    ],
+    "encodings.koi8_r": [
+      "Python"
+    ],
+    "encodings.johab": [
+      "Python"
+    ],
+    "encodings.iso8859_9": [
+      "Python"
+    ],
+    "encodings.iso8859_8": [
+      "Python"
+    ],
+    "encodings.iso8859_7": [
+      "Python"
+    ],
+    "encodings.iso8859_6": [
+      "Python"
+    ],
+    "encodings.iso8859_5": [
+      "Python"
+    ],
+    "encodings.iso8859_4": [
+      "Python"
+    ],
+    "encodings.iso8859_3": [
+      "Python"
+    ],
+    "encodings.iso8859_2": [
+      "Python"
+    ],
+    "encodings.iso8859_16": [
+      "Python"
+    ],
+    "encodings.iso8859_15": [
+      "Python"
+    ],
+    "encodings.iso8859_14": [
+      "Python"
+    ],
+    "encodings.iso8859_13": [
+      "Python"
+    ],
+    "encodings.iso8859_11": [
+      "Python"
+    ],
+    "encodings.iso8859_10": [
+      "Python"
+    ],
+    "encodings.iso8859_1": [
+      "Python"
+    ],
+    "encodings.iso2022_kr": [
+      "Python"
+    ],
+    "encodings.iso2022_jp_ext": [
+      "Python"
+    ],
+    "encodings.iso2022_jp_3": [
+      "Python"
+    ],
+    "encodings.iso2022_jp_2004": [
+      "Python"
+    ],
+    "encodings.iso2022_jp_2": [
+      "Python"
+    ],
+    "encodings.iso2022_jp_1": [
+      "Python"
+    ],
+    "encodings.iso2022_jp": [
+      "Python"
+    ],
+    "encodings.idna": [
+      "Python"
+    ],
+    "encodings.hz": [
+      "Python"
+    ],
+    "encodings.hp_roman8": [
+      "Python"
+    ],
+    "encodings.hex_codec": [
+      "Python"
+    ],
+    "encodings.gbk": [
+      "Python"
+    ],
+    "encodings.gb2312": [
+      "Python"
+    ],
+    "encodings.gb18030": [
+      "Python"
+    ],
+    "encodings.euc_kr": [
+      "Python"
+    ],
+    "encodings.euc_jp": [
+      "Python"
+    ],
+    "encodings.euc_jisx0213": [
+      "Python"
+    ],
+    "encodings.euc_jis_2004": [
+      "Python"
+    ],
+    "encodings.cp950": [
+      "Python"
+    ],
+    "encodings.cp949": [
+      "Python"
+    ],
+    "encodings.cp932": [
+      "Python"
+    ],
+    "encodings.cp875": [
+      "Python"
+    ],
+    "encodings.cp874": [
+      "Python"
+    ],
+    "encodings.cp869": [
+      "Python"
+    ],
+    "encodings.cp866": [
+      "Python"
+    ],
+    "encodings.cp865": [
+      "Python"
+    ],
+    "encodings.cp864": [
+      "Python"
+    ],
+    "encodings.cp863": [
+      "Python"
+    ],
+    "encodings.cp862": [
+      "Python"
+    ],
+    "encodings.cp861": [
+      "Python"
+    ],
+    "encodings.cp860": [
+      "Python"
+    ],
+    "encodings.cp858": [
+      "Python"
+    ],
+    "encodings.cp857": [
+      "Python"
+    ],
+    "encodings.cp856": [
+      "Python"
+    ],
+    "encodings.cp855": [
+      "Python"
+    ],
+    "encodings.cp852": [
+      "Python"
+    ],
+    "encodings.cp850": [
+      "Python"
+    ],
+    "encodings.cp775": [
+      "Python"
+    ],
+    "encodings.cp737": [
+      "Python"
+    ],
+    "encodings.cp720": [
+      "Python"
+    ],
+    "encodings.cp500": [
+      "Python"
+    ],
+    "encodings.cp437": [
+      "Python"
+    ],
+    "encodings.cp424": [
+      "Python"
+    ],
+    "encodings.cp273": [
+      "Python"
+    ],
+    "encodings.cp1258": [
+      "Python"
+    ],
+    "encodings.cp1257": [
+      "Python"
+    ],
+    "encodings.cp1256": [
+      "Python"
+    ],
+    "encodings.cp1255": [
+      "Python"
+    ],
+    "encodings.cp1254": [
+      "Python"
+    ],
+    "encodings.cp1253": [
+      "Python"
+    ],
+    "encodings.cp1252": [
+      "Python"
+    ],
+    "encodings.cp1251": [
+      "Python"
+    ],
+    "encodings.cp1250": [
+      "Python"
+    ],
+    "encodings.cp1140": [
+      "Python"
+    ],
+    "encodings.cp1125": [
+      "Python"
+    ],
+    "encodings.cp1026": [
+      "Python"
+    ],
+    "encodings.cp1006": [
+      "Python"
+    ],
+    "encodings.cp037": [
+      "Python"
+    ],
+    "encodings.charmap": [
+      "Python"
+    ],
+    "encodings.bz2_codec": [
+      "Python"
+    ],
+    "encodings.big5hkscs": [
+      "Python"
+    ],
+    "encodings.big5": [
+      "Python"
+    ],
+    "encodings.base64_codec": [
+      "Python"
+    ],
+    "encodings.ascii": [
+      "Python"
+    ],
+    "encodings.aliases": [
+      "Python"
+    ],
+    "encodings._win_cp_codecs": [
+      "Python"
+    ],
+    "encodings": [
+      "Python"
+    ],
+    "ntpath": [
+      "Python"
+    ],
+    "abc": [
+      "Python"
+    ],
+    "traceback": [
+      "Python"
+    ],
+    "os": [
+      "Python"
+    ]
+  },
+  "native": {
+    "_internal/_bz2.pyd": [
+      "Python"
+    ],
+    "_internal/_ctypes.pyd": [
+      "Python"
+    ],
+    "_internal/_decimal.pyd": [
+      "Python",
+      "libmpdec"
+    ],
+    "_internal/_elementtree.pyd": [
+      "Python"
+    ],
+    "_internal/_hashlib.pyd": [
+      "Python"
+    ],
+    "_internal/_lzma.pyd": [
+      "Python",
+      "liblzma"
+    ],
+    "_internal/_queue.pyd": [
+      "Python"
+    ],
+    "_internal/_socket.pyd": [
+      "Python"
+    ],
+    "_internal/_ssl.pyd": [
+      "Python"
+    ],
+    "_internal/_tkinter.pyd": [
+      "Python"
+    ],
+    "_internal/_uuid.pyd": [
+      "Python"
+    ],
+    "_internal/_wmi.pyd": [
+      "Python"
+    ],
+    "_internal/_zoneinfo.pyd": [
+      "Python"
+    ],
+    "_internal/_zstd.pyd": [
+      "Python",
+      "Zstandard"
+    ],
+    "_internal/libcrypto-3.dll": [
+      "OpenSSL"
+    ],
+    "_internal/libffi-8.dll": [
+      "libffi"
+    ],
+    "_internal/libssl-3.dll": [
+      "OpenSSL"
+    ],
+    "_internal/libtommath.dll": [
+      "libtommath"
+    ],
+    "_internal/pyexpat.pyd": [
+      "Python"
+    ],
+    "_internal/python314.dll": [
+      "Python",
+      "zlib-ng"
+    ],
+    "_internal/select.pyd": [
+      "Python"
+    ],
+    "_internal/tcl90.dll": [
+      "Tcl",
+      "Henry-Spencer-Regex"
+    ],
+    "_internal/tcl9tk90.dll": [
+      "Tk",
+      "NanoSVG"
+    ],
+    "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.2.dll": [
+      "tkdnd"
+    ],
+    "_internal/unicodedata.pyd": [
+      "Python"
+    ],
+    "_internal/VCRUNTIME140.dll": [
+      "Microsoft-VC-Runtime"
+    ],
+    "_internal/VCRUNTIME140_1.dll": [
+      "Microsoft-VC-Runtime"
+    ],
+    "_internal/zlib1.dll": [
+      "zlib"
+    ],
+    "Glide.exe": [
+      "PyInstaller"
+    ]
+  },
+  "resources": {
+    "resources/exchange_recipes.json": [
+      "Glide"
+    ],
+    "resources/fonts/DejaVuSans-Bold.ttf": [
+      "Glide-Schriften"
+    ],
+    "resources/fonts/DejaVuSans-BoldOblique.ttf": [
+      "Glide-Schriften"
+    ],
+    "resources/fonts/DejaVuSans-Oblique.ttf": [
+      "Glide-Schriften"
+    ],
+    "resources/fonts/DejaVuSans.ttf": [
+      "Glide-Schriften"
+    ],
+    "resources/fonts/LICENSE": [
+      "Glide-Schriften"
+    ],
+    "resources/fonts/OFL-PixelifySans.txt": [
+      "Glide-Schriften"
+    ],
+    "resources/fonts/PixelifySans-Bold.ttf": [
+      "Glide-Schriften"
+    ],
+    "resources/fonts/PixelifySans-Regular.ttf": [
+      "Glide-Schriften"
+    ],
+    "resources/fonts/provenance.json": [
+      "Glide-Schriften"
+    ],
+    "resources/logo/glide-app-icon-16.png": [
+      "Glide"
+    ],
+    "resources/logo/glide-app-icon-256.png": [
+      "Glide"
+    ],
+    "resources/logo/glide-app-icon-32.png": [
+      "Glide"
+    ],
+    "resources/logo/glide-app-icon-64.png": [
+      "Glide"
+    ],
+    "resources/logo/glide-app-icon-klein.svg": [
+      "Glide"
+    ],
+    "resources/logo/glide-app-icon-macos-16.png": [
+      "Glide"
+    ],
+    "resources/logo/glide-app-icon-macos-256.png": [
+      "Glide"
+    ],
+    "resources/logo/glide-app-icon-macos-32.png": [
+      "Glide"
+    ],
+    "resources/logo/glide-app-icon-macos-64.png": [
+      "Glide"
+    ],
+    "resources/logo/glide-app-icon.png": [
+      "Glide"
+    ],
+    "resources/logo/glide-app-icon.svg": [
+      "Glide"
+    ],
+    "resources/logo/glide-logo-klein.svg": [
+      "Glide"
+    ],
+    "resources/logo/glide-logo.png": [
+      "Glide"
+    ],
+    "resources/logo/glide-logo.svg": [
+      "Glide"
+    ],
+    "resources/templates/glide_vorlagen.glidetemplates": [
+      "Glide"
+    ],
+    "resources/timezones/iana-2026e.zip": [
+      "IANA-Zeitzonen"
+    ],
+    "resources/timezones/LICENSE-CLDR.txt": [
+      "Unicode-CLDR"
+    ],
+    "resources/timezones/LICENSE-iana.txt": [
+      "IANA-Zeitzonen"
+    ],
+    "resources/timezones/provenance.json": [
+      "IANA-Zeitzonen",
+      "Unicode-CLDR"
+    ],
+    "resources/timezones/windowsZones.xml": [
+      "Unicode-CLDR"
+    ]
+  },
+  "used_components": [
+    "Glide",
+    "Glide-Schriften",
+    "Henry-Spencer-Regex",
+    "IANA-Zeitzonen",
+    "Microsoft-VC-Runtime",
+    "NanoSVG",
+    "OpenSSL",
+    "PyInstaller",
+    "Python",
+    "Tcl",
+    "Tk",
+    "Unicode-CLDR",
+    "Zstandard",
+    "libffi",
+    "liblzma",
+    "libmpdec",
+    "libtommath",
+    "tkdnd",
+    "tkinterdnd2",
+    "zlib",
+    "zlib-ng"
+  ]
+}

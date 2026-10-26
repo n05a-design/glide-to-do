@@ -1,0 +1,12 @@
+{
+  "app_sha256": "4244e6109deb1f7385ba749e2bef5eec05063d40bb42a50b667e9841c0dbd1b9",
+  "faelle": {
+    "verweisvorschau_grenzen": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1177, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 763, in fall_verweisvorschau_grenzen\n    pruefe_rueckmeldung_ueber_rueckgaengig(lauf)\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 752, in pruefe_rueckmeldung_ueber_rueckgaengig\n    assert banner.winfo_rooty() + banner.winfo_height() <= toast.winfo_rooty() - 8, (\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('Laufende Rückmeldung überdeckt den späteren Rückgängig-Hinweis', 842, 38, 839)\n"
+    }
+  },
+  "fehler": [
+    "verweisvorschau_grenzen"
+  ]
+}

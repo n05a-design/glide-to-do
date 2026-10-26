@@ -1,0 +1,124 @@
+{
+  "exitcode": 0,
+  "version": "3.45.0",
+  "target": "macos-arm64",
+  "github_run": 40328682255,
+  "commit": "4e73220090fe467b277482c103dfe2c60e4cf724",
+  "zip_sha256": {
+    "macos-3.45.0-artefakt.zip": "7a32d5c7ce6ecd1003172fe41817bd8a546dde742e5ec2b63cd7a76f7f27982f",
+    "macos-3.45.0-belege.zip": "26fce19a47ce9089520c60f44e23921f35b1df1e84b7f93bf00f0c3e6b31752a"
+  },
+  "zip_crc_and_paths_verified": true,
+  "tar_sha256": "b6284197c62fddee1283207ead6680baed72bdf8826114e944316857284a7252",
+  "tar_data_filter_applied": true,
+  "tar_regular_files": 333,
+  "tar_symlinks": 29,
+  "all_native_package_hashes_match": true,
+  "all_links_internal_and_preserved": true,
+  "local_link_target_notation": "Windows separators in NT symlink targets; original portable POSIX targets unchanged in TAR",
+  "previously_missing_framework_files_present": [
+    "Contents/Frameworks/Python.framework/Versions/3.14/Python",
+    "Contents/Frameworks/Python.framework/Versions/3.14/Resources/Info.plist",
+    "Contents/Frameworks/Python.framework/Versions/3.14/_CodeSignature/CodeResources"
+  ],
+  "source_files_checked": 204,
+  "source_git_blobs_exact": 203,
+  "source_git_checkout_policy_eol": [
+    {
+      "path": "01_Repository/Glide/packaging/windows/verknuepfung_anlegen.ps1",
+      "policy": "*.ps1 text eol=crlf"
+    }
+  ],
+  "local_source_raw_hash_matches": 194,
+  "local_source_eol_only_differences": [
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-klein.svg",
+      "native_sha256": "a9266fb8559f3086c13c0b1844416775ec09e5fe948c56de73567c46d6daecf3",
+      "local_sha256": "9d031380f07b77b49cd5056685fffff85024a659f827dfc434d98eadc59db4da",
+      "difference": "local CRLF, native LF; all other bytes equal"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon.svg",
+      "native_sha256": "e35e51d07fffe4d87c4c98dfba42ebabb3d3a8b7b3de7b797d2f3b97e1fe8e46",
+      "local_sha256": "1db74addc3d038a7691c133d84162a999022ffdd95443d8df0cce55661c35cb8",
+      "difference": "local CRLF, native LF; all other bytes equal"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-logo-klein.svg",
+      "native_sha256": "6a214146dda487580d3edac4363e8095aba3e2ebb366f285f9ee828f2ff373ef",
+      "local_sha256": "92a8eb73a1b42f6650776e9613ec8eeecedf46452a5a97c86d2d6cfe3722b2b6",
+      "difference": "local CRLF, native LF; all other bytes equal"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/logo/glide-logo.svg",
+      "native_sha256": "0e770ea15a69d3e91f2e849f32468d4960edcf5d5f176f1bc628c7b7b79d5323",
+      "local_sha256": "c734f1e43a39c7cce2ab81301784de0aee5a88943679e4266f002108658cba58",
+      "difference": "local CRLF, native LF; all other bytes equal"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/timezones/LICENSE-CLDR.txt",
+      "native_sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b",
+      "local_sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6",
+      "difference": "local CRLF, native LF; all other bytes equal"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/timezones/LICENSE-iana.txt",
+      "native_sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf",
+      "local_sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551",
+      "difference": "local CRLF, native LF; all other bytes equal"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/timezones/provenance.json",
+      "native_sha256": "b67d230694331defdc94b639ca549ba4a0886848e8b7f2ed9f9182924c465057",
+      "local_sha256": "9d5079043d3bab1cf997fe3bb0ef859d100f01c2d6c5c0ce5a259b8042c99ff6",
+      "difference": "local CRLF, native LF; all other bytes equal"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/resources/timezones/windowsZones.xml",
+      "native_sha256": "9cf3db6a31fb382fee21b70be6feba1e82766b0fcd06e6261fb7936a73e537ff",
+      "local_sha256": "7df6edbf52213ad2571f7fe76c64fc3c38423326f0896e3dc7f52299024141a6",
+      "difference": "local CRLF, native LF; all other bytes equal"
+    },
+    {
+      "path": "01_Repository/Glide/requirements/build-macos.txt",
+      "native_sha256": "9abd239dccdf318418fba38f9df4fa0de4e190202391b5549b1717275f7b10ca",
+      "local_sha256": "0710a3c3d12f1f718668390c2908ff76416e94e2e8af7a667584fcc71074d4f5",
+      "difference": "local CRLF, native LF; all other bytes equal"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/patches.json",
+      "native_sha256": "7f4aace285b001ae671a4d54fb59b96498ad41bb953a95b7199b6b81cdd95dd1",
+      "local_sha256": "1917883db44fe61ae8b7969ab4ca14d2713c402198146dc996979a933d98a969",
+      "difference": "local CRLF, native LF; all other bytes equal"
+    }
+  ],
+  "package_source_files_checked": 129,
+  "local_package_source_raw_hash_matches": 121,
+  "local_package_source_eol_only_differences": [
+    "resources/logo/glide-app-icon-klein.svg",
+    "resources/logo/glide-app-icon.svg",
+    "resources/logo/glide-logo-klein.svg",
+    "resources/logo/glide-logo.svg",
+    "resources/timezones/LICENSE-CLDR.txt",
+    "resources/timezones/LICENSE-iana.txt",
+    "resources/timezones/provenance.json",
+    "resources/timezones/windowsZones.xml"
+  ],
+  "source_app_sha256": "d516ca67f6f6e5dbe46c52275a5ff965690a898ec99c45cf3a305d72a4c12ab8",
+  "source_home_dashboard_sha256": "ced120a5cd600d82d5b76e31c2faf2efddb46a10bcb51a7f526be43a1d0fc773",
+  "restored_bundle_relative_to_build": "mac-pruefung/unpacked/Glide.app",
+  "native_runtime": {
+    "python": "3.14.5",
+    "tcl": "9.0.3",
+    "tk_compiled": "9.0",
+    "platform": "darwin",
+    "machine": "arm64",
+    "pyinstaller": "6.22.3"
+  },
+  "native_start_exitcode": 0,
+  "native_external_python_counter_exitcode": 71,
+  "signature_evidence": "Native macOS workflow verified ad-hoc codesign; local Windows check verifies bytes only",
+  "codesign_locally_executed": false,
+  "posix_modes": "Preserved and checked in native TAR; Windows filesystem mode semantics not treated as a native Mac verification",
+  "developer_id_and_notarization": "Open; development artifact"
+}

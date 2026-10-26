@@ -1,0 +1,6 @@
+{
+  "eigenstaendiger_pruefstart": true,
+  "exitcode": 1,
+  "fehler": "['Geladene Bibliothek liegt außerhalb des Pakets und Windows-Systemordners: tv_x64.dll']",
+  "traceback": "Traceback (most recent call last):\n  File \"start_glide.py\", line 253, in smoke\nAssertionError: ['Geladene Bibliothek liegt außerhalb des Pakets und Windows-Systemordners: tv_x64.dll']\n"
+}

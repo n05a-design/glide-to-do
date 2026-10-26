@@ -1,6 +1,8 @@
 # Änderungsverlauf
 
-## In Arbeit – Tagesvorschlag, Verweisvorschau und Startseitenmodell (26.10.2026)
+## Ergänzungen und Lieferabschluss 3.45.0 (26.10.2026)
+
+- **Alle Lieferungen aktualisiert:** Python-Fassung sowie echte Windows-/Mac-Pakete 3.45.0 geliefert und hashgeprüft. 104 Windows-Suiten grün; nativer Macbau, Signatur und isolierter Start grün. Animations-/Undo-Überlagerung korrigiert; Altleser- und Stapelreihenfolgeprüfungen repariert. [Nachweis](tests/qa-3.45.0/paketabschluss_2026-10-26/README.md).
 
 - **Startseite:** Heute-Zahlen, nächste Aufgabe, Woche, Labels und nächster Termin werden beim Kachelaufbau gemeinsam ausgewertet. Die bisherigen Einstiege bleiben frisch; das Modell endet vor Ereignisnachläufen und auch bei Fehlern. Erledigen/Undo, Archivgrenze, Datumsabfragen und Objektwechsel gezielt geprüft. [Nachweis und Messwerte](tests/qa-3.45.0/startseitenmodell_2026-10-26/README.md). Quellkandidat auf 3.45.0, Lieferung nach dem gemeinsamen Phasenabschluss.
 

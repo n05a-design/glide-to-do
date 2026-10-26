@@ -1,0 +1,23 @@
+[
+  {
+    "context": "Verweisvorschau 860x700/mittel/light",
+    "button": ".!frame.!frame2.!frame3.!roundedbutton",
+    "button_rect": [
+      434,
+      686,
+      118,
+      30
+    ],
+    "label": ".!frame.!frame2.!frame.side_view.!frame12.!label2",
+    "label_text": "",
+    "label_rect": [
+      338,
+      691,
+      508,
+      20
+    ],
+    "label_parent": ".!frame.!frame2.!frame.side_view.!frame12",
+    "actual_hit": ".!frame.!frame2.!frame3.!roundedbutton",
+    "actual_hit_class": "RoundedButton"
+  }
+]

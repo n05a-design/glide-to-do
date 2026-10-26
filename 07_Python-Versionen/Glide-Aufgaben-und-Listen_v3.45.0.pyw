@@ -130,6 +130,7 @@ import image_preview as glide_image_preview  # noqa: E402
 import logo as glide_logo  # noqa: E402
 import sidebar_policy as glide_sidebar  # noqa: E402
 import home_tiles as glide_home  # noqa: E402
+import home_dashboard as glide_home_dashboard  # noqa: E402
 import motion as glide_motion
 import task_editing as glide_task_editing
 import core_accessibility as glide_core_accessibility
@@ -9532,8 +9533,10 @@ class RichNoteEditor(tk.Frame):
             self.text.bind(f'<{modifier}-y>', self.redo)
             self.text.bind(f'<{modifier}-Shift-Z>', self.redo)
         self.text.bind('<Control-Button-1>', self.open_link)
+        self.text.bind('<Control-Shift-Button-1>', self.open_link_side)
         if IS_MACOS:
             self.text.bind('<Command-Button-1>', self.open_link)
+            self.text.bind('<Command-Shift-Button-1>', self.open_link_side)
         self.text.bind('<at>', self.object_at_key)
         self.text.bind('<FocusOut>', lambda e: self.flush())
         self.bind('<Destroy>', self.destroyed, add='+')
@@ -9770,7 +9773,22 @@ class RichNoteEditor(tk.Frame):
             return None
         return self.insert_object_reference()
 
+    def add_object_reference_preview(self, menu):
+        value = next((self.links[tag] for tag in self.text.tag_names(
+            getattr(self, '_reference_menu_index', 'insert'))
+            if tag in self.links and glide_objects.parse(self.links[tag])), None)
+        if value is not None:
+            index, _, _ = self.app.object_graph()
+            enabled = (glide_side_view.reference_target(glide_objects.parse(value), index) is not None
+                       and not getattr(self.app, '_compact', None))
+            menu.add_command(label='Verweis in Nebenansicht öffnen', state='normal' if enabled else 'disabled',
+                             command=lambda target=value: self.app.open_object_reference(target, side=True))
+            return True
+        return False
+
     def add_object_reference_menu(self, menu):
+        if self.add_object_reference_preview(menu):
+            menu.add_separator()
         menu.add_command(label='@ Seite, Liste oder Aufgabe …', command=self.insert_object_reference)
         identity = getattr(self, 'entry_id', self.app.active_list_id)
         menu.add_cascade(label='Verweise und Rückverweise',
@@ -9798,12 +9816,20 @@ class RichNoteEditor(tk.Frame):
         self.flush()
         return 'break'
 
-    def open_link(self, event):
+    def open_link_side(self, event):
+        return self.open_link(event, side=True)
+
+    def open_link(self, event, *, side=False):
         for tag in self.text.tag_names(f'@{event.x},{event.y}'):
             if tag in self.links:
                 if glide_objects.parse(self.links[tag]):
-                    self.app.open_object_reference(self.links[tag])
+                    if side:
+                        self.app.open_object_reference(self.links[tag], side=True)
+                    else:
+                        self.app.open_object_reference(self.links[tag])
                     return 'break'
+                if side:
+                    return 'break'  # Der Vorschauweg öffnet keine externen Adressen.
                 import webbrowser
                 webbrowser.open(self.links[tag])
                 return 'break'
@@ -9975,8 +10001,10 @@ class PageEditor(RichNoteEditor):
         self.text.bind('<slash>', self.slash_menu)
         self.text.bind('<Double-Button-1>', self.open_task_at_pointer)
         self.text.bind('<Control-Button-1>', self.open_link)
+        self.text.bind('<Control-Shift-Button-1>', self.open_link_side)
         if IS_MACOS:
             self.text.bind('<Command-Button-1>', self.open_link)
+            self.text.bind('<Command-Shift-Button-1>', self.open_link_side)
         self.text.bind('<at>', self.object_at_key)
         self.text.bind('<Configure>', self.fit_read_width, add='+')
         self.text.bind('<Configure>', self.fit_title, add='+')
@@ -11555,7 +11583,12 @@ class PageEditor(RichNoteEditor):
                 self.text.tag_remove('sel', '1.0', 'end')
                 self.text.mark_set('insert', punkt)
         self.text.focus_set()
-        self.popup(self.build_context_menu())
+        self._reference_menu_index = punkt if event is not None else 'insert'
+        try:
+            menu = self.build_context_menu()
+        finally:
+            del self._reference_menu_index
+        self.popup(menu)
         return 'break'
 
     # E-U3 A (D55): Blockaktionen durchsuchbar – Griff, Strg/Cmd+/ und Kontextmenü.
@@ -11602,6 +11635,8 @@ class PageEditor(RichNoteEditor):
         markiert = self.has_selection()
         zustand = 'normal' if markiert else 'disabled'
         menu = self.app._new_themed_popup_menu(self)
+        if self.add_object_reference_preview(menu):
+            menu.add_separator()
         menu.add_command(label='Ausschneiden', command=lambda: self.copy_selection(cut=True), state=zustand)
         menu.add_command(label='Kopieren', command=self.copy_selection, state=zustand)
         menu.add_command(label='Einfügen', command=self.paste)
@@ -18564,18 +18599,21 @@ class ListApp:
         schritte = 18 if arcade else 14
         versatz = ((nummer % 2) * 2 - 1) * 0.045 * nummer if arcade else 0.0
         strecke = 60 if arcade else 36
-        hinweis = (getattr(self, "_undo_toast", None) or {}).get("frame")
-        try:
-            sockel = 14 + (hinweis.winfo_reqheight() + 10 if hinweis is not None and hinweis.winfo_exists() else 0)
-        except tk.TclError:
-            sockel = 14
-
         def zeichnen(schritt=0):
             if not banner.winfo_exists():
                 return
             if schritt >= schritte:
                 banner.destroy()
                 return
+            # Der Rückgängig-Hinweis kann erst nach dem ersten Bild entstehen
+            # oder durch einen höheren Hinweis ersetzt werden. Seine aktuelle
+            # Höhe gilt deshalb für jedes Bild, nicht nur beim Animationsstart.
+            hinweis = (getattr(self, "_undo_toast", None) or {}).get("frame")
+            try:
+                sockel = 14 + (hinweis.winfo_reqheight() + 10
+                               if hinweis is not None and hinweis.winfo_exists() else 0)
+            except tk.TclError:
+                sockel = 14
             anteil = schritt / schritte
             banner.place(relx=max(0.08, min(0.92, 0.5 + versatz)), rely=1.0,
                          y=-(sockel + round(anteil * strecke)), anchor="s")
@@ -19924,19 +19962,7 @@ class ListApp:
         gibt es die eigene Ansicht „Verspätet", und die Kopfzeile beantwortet
         die Frage nach dem Kommenden, nicht nach dem Liegengebliebenen.
         """
-        today_iso = (today or date.today()).isoformat()
-        bester = None
-        for entry in self.planning_lists():
-            for item in self.walk_items(entry.get("items", [])):
-                if item.get("done") or not self.is_schedulable_item(item):
-                    continue
-                faellig = self.normalize_due(item.get("due"))
-                if not faellig or faellig < today_iso:
-                    continue
-                schluessel = (faellig, self.normalize_due_time(item.get("due_time")) or "99:99")
-                if bester is None or schluessel < bester[0]:
-                    bester = (schluessel, item, entry)
-        return (bester[1], bester[2]) if bester else (None, None)
+        return self._home_dashboard("scheduled", today).next_scheduled
 
     def daily_now(self):
         return datetime.now(self._daily_zone)
@@ -21875,32 +21901,8 @@ class ListApp:
 
     def home_summary(self, today=None):
         """Lokale Bestandszahlen; erledigte und gelöschte Daten zählen nicht als fällig."""
-        today = today or date.today()
-        today_iso = today.isoformat()
-        total = done = overdue = due_today = 0
-        due_lists = []
-        for entry in self.planning_lists():
-            matching = 0
-            for item in self.walk_items(entry.get("items", [])):
-                if not self.is_schedulable_item(item):
-                    continue
-                total += 1
-                if item.get("done"):
-                    done += 1
-                    continue
-                due = self.normalize_due(item.get("due"))
-                if due == today_iso:
-                    due_today += 1
-                    matching += 1
-                elif due and due < today_iso:
-                    overdue += 1
-            if matching:
-                due_lists.append((entry, matching))
-        lookup = {entry["id"]: entry for entry in self.lists}
-        recent = [(lookup[value["id"]], value["edited_at"])
-                  for value in self.settings.get("recent_lists", []) if value["id"] in lookup]
-        return {"total": total, "done": done, "open": total - done, "overdue": overdue,
-                "due_today": due_today, "lists": len(self.lists), "due_lists": due_lists, "recent": recent}
+        return self._home_dashboard("summary", today).summary(
+            self.lists, self.settings.get("recent_lists", []))
 
     # -----------------------------
     # Gruppieren nach Feld (3.30, PW-010, AO-040, AO-030)
@@ -22805,7 +22807,7 @@ class ListApp:
     def side_view_open(self):
         return bool(getattr(self, "_side_view", None))
 
-    def open_side_view(self, list_id):
+    def open_side_view(self, list_id, *, item_id=None):
         """Liste, Seite oder Notiz lesend neben der Arbeit zeigen."""
         entry = next((value for value in self.lists if value.get("id") == list_id), None)
         if entry is None:
@@ -22827,7 +22829,7 @@ class ListApp:
         self._side_view = glide_side_view.target_for(entry)
         self._side_view_signature = None
         self._side_view_scroll = 0.0
-        self._side_view_selected = None
+        self._side_view_selected = item_id
         # Der automatische Inspektor tritt zurück, bevor die Nebenansicht seinen Platz einnimmt.
         self.sync_detail_pane()
         self.sync_side_view(force=True)
@@ -23177,6 +23179,9 @@ class ListApp:
             baum.selection_set(gewaehlt)
             baum.focus(gewaehlt)
             baum.see(gewaehlt)
+        elif gewaehlt:
+            self.set_side_view_status('Die verlinkte Aufgabe ist in dieser Vorschau nicht enthalten. '
+                                      '„Öffnen“ zeigt den ganzen Inhalt.')
 
         def marke_getroffen(event):
             iid = baum.identify_row(event.y)
@@ -23259,12 +23264,17 @@ class ListApp:
         text.tag_configure("strike", overstrike=True)
         text.tag_configure("code", font=mono, background=theme["input"])
         text.tag_configure("highlight", background=theme["selection"], foreground=theme["selection_text"])
+        text.tag_configure("reference_target", background=theme["selection"], foreground=theme["selection_text"])
         text.tag_configure("anchor", elide=True)
         for stufe in (1, 2, 3):
             text.tag_configure(f"indent{stufe}", lmargin1=24 * stufe, lmargin2=24 * stufe)
         text.insert("1.0", projection["text"])
+        reference_start = None
         for zeile in projection["lines"]:
             start = f"{zeile['line']}.0"
+            if zeile["task"] and zeile["task"] == getattr(self, '_side_view_selected', None):
+                text.tag_add('reference_target', start, f'{start} lineend')
+                reference_start = start
             ende = f"{zeile['line']}.end"
             if zeile["style"] not in ("body", "image", "task"):
                 text.tag_add(zeile["style"], start, ende)
@@ -23300,6 +23310,11 @@ class ListApp:
         if projection["truncated"]:
             text.insert("end", "\n…", ("divider",))
         text.configure(state="disabled")
+        if reference_start is not None:
+            text.see(reference_start)
+        elif getattr(self, '_side_view_selected', None) and entry.get('list_kind') == 'page':
+            self.set_side_view_status('Die verlinkte Aufgabe ist in dieser Vorschau nicht enthalten. '
+                                      '„Öffnen“ zeigt den ganzen Inhalt.')
         self.bind_mousewheel(text, text)
         glide_core_accessibility.bind_focus_traversal(text)
         return text
@@ -25746,7 +25761,9 @@ class ListApp:
         records = [dict(list_id=entry["id"], item=item, blocked=self.is_blocked(item, index))
                    for entry in self.planning_lists() for item in self.walk_items(entry.get("items", []))
                    if self.is_schedulable_item(item)]
-        return glide_day_proposal.propose(records, day, self.planning_available(day))
+        dependency_done = {identity: bool(item.get("done")) for identity, (_entry, item) in index.items()}
+        return glide_day_proposal.propose(records, day, self.planning_available(day),
+                                         dependency_done=dependency_done)
 
     def start_day_proposal(self, event=None):
         proposal = self.day_proposal()
@@ -25837,7 +25854,7 @@ class ListApp:
             source = next((entry for entry in self.lists if entry["id"] == row["list_id"]), None)
             title = self.normalize_item_text(row["title"], self.ITEM_KIND_TASK)
             suffix = "30 min angenommen" if row["assumed"] else glide_planning.duration(row["minutes"])
-            label = f"{title}\n{glide_day_proposal.REASONS[row['reason']]} · {suffix} · {source['title'] if source else ''}"
+            label = f"{title}\n{glide_day_proposal.reason_text(row)} · {suffix} · {source['title'] if source else ''}"
 
             def toggle(key=identity, value=variable):
                 selected.add(key) if value.get() else selected.discard(key)
@@ -26528,49 +26545,15 @@ class ListApp:
         fällig, danach nach Wichtigkeit und Termin. Ohne Treffer bleibt die
         Kachel leer statt eine Aufgabe zu erfinden.
         """
-        kandidaten = []
-        for entry in self.planning_lists():
-            for item in self.walk_items(entry.get("items", [])):
-                if not self.is_schedulable_item(item) or item.get("done"):
-                    continue
-                rang = self.task_urgency_rank(item)
-                if rang[0] > self.NEXT_TASK_TODAY_RANK:
-                    continue
-                kandidaten.append((rang, entry, item))
-        if not kandidaten:
-            return None, None
-        beste = min(kandidaten, key=lambda wert: wert[0])
-        return beste[2], beste[1]
+        return self._home_dashboard("focus").focus
 
     def home_week_overview(self, tage=7):
         """Offene Aufgaben je Tag der kommenden Woche, nach Fälligkeit."""
-        heute = date.today()
-        zaehler = {(heute + timedelta(days=schritt)).isoformat(): 0 for schritt in range(tage)}
-        for entry in self.planning_lists():
-            for item in self.walk_items(entry.get("items", [])):
-                if not self.is_schedulable_item(item) or item.get("done"):
-                    continue
-                faellig = self.normalize_due(item.get("due"))
-                if faellig in zaehler:
-                    zaehler[faellig] += 1
-        return [(tag, anzahl) for tag, anzahl in sorted(zaehler.items())]
+        return self._home_dashboard("week").week_overview(tage)
 
     def home_label_overview(self, grenze=6):
         """Die am häufigsten vergebenen Labels mit ihrer Anzahl offener Punkte."""
-        zaehler = {}
-        for entry in self.planning_lists():
-            for item in self.walk_items(entry.get("items", [])):
-                if not self.is_schedulable_item(item) or item.get("done"):
-                    continue
-                for label_id in item.get("labels", []) or ():
-                    zaehler[label_id] = zaehler.get(label_id, 0) + 1
-        treffer = []
-        for label_id, anzahl in zaehler.items():
-            label = self.get_label(label_id)
-            if label is not None:
-                treffer.append((label, anzahl))
-        treffer.sort(key=lambda wert: (-wert[1], str(wert[0].get("name", "")).lower()))
-        return treffer[:grenze]
+        return self._home_dashboard("labels").label_overview(self.get_label, grenze)
 
     def home_impulse(self):
         return self.HOME_IMPULSES[getattr(self, "_home_prompt_index", 0) % len(self.HOME_IMPULSES)]
@@ -26804,6 +26787,32 @@ class ListApp:
     # Navigationswerte in settings.json; keine Kachel liest sie (P03r).
     HOME_SIGNATURE_IGNORED = frozenset(("active_list_id", "active_folder_id", "view_mode", "title", "recent_pages"))
 
+    def _home_dashboard(self, projection, today=None):
+        """Fassaden bleiben frisch; nur der synchrone Kachelaufbau teilt Daten."""
+        today = today or date.today()
+        scope = getattr(self, "_home_dashboard_scope", None)
+        shared = scope is not None and scope["day"] == today and projection in scope["projections"]
+        projections = scope["projections"] if shared else (projection,)
+
+        def build():
+            return glide_home_dashboard.build(
+                self.planning_lists(), today, walk_items=self.walk_items,
+                is_schedulable=self.is_schedulable_item, normalize_due=self.normalize_due,
+                normalize_time=self.normalize_due_time, urgency_rank=self.task_urgency_rank,
+                max_focus_rank=self.NEXT_TASK_TODAY_RANK, projections=projections)
+
+        return self.render_cached(scope["key"], build) if shared else build()
+
+    def _home_dashboard_projections(self):
+        visible = {key for key in self.home_tile_order() if self.home_tile_visible(key)}
+        projections = {"summary"}
+        if "focus" in visible or ("today" in visible and glide_home.today_sections(visible)["next"]):
+            projections.add("focus")
+        for tile, projection in (("week", "week"), ("labels", "labels"), ("clock", "scheduled")):
+            if tile in visible:
+                projections.add(projection)
+        return frozenset(projections)
+
     def home_signature(self):
         """Eingangsgrößen der Startseite in der Kachelansicht (P03r).
 
@@ -26829,6 +26838,27 @@ class ListApp:
                 bool(getattr(self, "_settings_existed", True)))
 
     def _refresh_home(self):
+        """Begrenzt die gemeinsame Projektion auch bei Abbruch/Fehler auf diesen Aufbau."""
+        if not hasattr(self, "home_content"):
+            return
+        scope = None
+        if self.home_mode() == "tiles" and not getattr(self, "_home_editing", False):
+            scope = dict(day=date.today(), projections=self._home_dashboard_projections(),
+                         key=("home_dashboard", object()))
+        self._home_dashboard_scope = scope
+        try:
+            with self.render_pass():
+                return self._render_home()
+        finally:
+            # Kein Wiederherstellen eines älteren Scopes: ein verschachtelter
+            # Aufbau oder Ereignisnachlauf darf den Vorzustand bereits beendet haben.
+            if getattr(self, "_home_dashboard_scope", None) is scope:
+                self._home_dashboard_scope = None
+            cache = getattr(self, "_render_cache", None)
+            if scope is not None and cache is not None:
+                cache.pop(scope["key"], None)
+
+    def _render_home(self):
         if not hasattr(self, "home_content"):
             return
         signatur = self.home_signature() if self.home_mode() not in (
@@ -26893,6 +26923,7 @@ class ListApp:
             (self.render_calendar if mode == "calendar" else self.render_week_review if mode == "week_review" else
              self.render_day_proposal if mode == "day_proposal" else self.render_day_review)()
             self._bind_home_wheel(self.home_content)
+            self._home_dashboard_scope = None
             self.home_content.update_idletasks()
             self._layout_home_canvas()
             self.home_canvas.yview_moveto(0)
@@ -27800,6 +27831,7 @@ class ListApp:
             self.render_home_editor()
             for widget in (self.home_canvas, self.home_content):
                 self._bind_home_wheel(widget)
+            self._home_dashboard_scope = None
             self.home_content.update_idletasks()
             self.home_canvas.yview_moveto(scroll_position)
             return
@@ -27878,6 +27910,7 @@ class ListApp:
         for widget in (self.home_canvas, self.home_content):
             self._bind_home_wheel(widget)
         _ui.end()
+        self._home_dashboard_scope = None
         self.home_content.update_idletasks()
         self.home_canvas.yview_moveto(scroll_position)
         self._home_signature = signatur
@@ -32861,13 +32894,23 @@ class ListApp:
             choices.append((value, label))
         return sorted(choices, key=lambda pair: pair[1].casefold())
 
-    def open_object_reference(self, value):
+    def open_object_reference(self, value, *, side=False):
         key = glide_objects.parse(value)
         index, _, _ = self.object_graph()
         state, label = glide_objects.caption(key, index) if key else ('missing', 'Ungültiger Verweis')
         if state in ('missing', 'trash'):
             self.show_warning('Verweis', label)
             return False
+        if side:
+            target = glide_side_view.reference_target(key, index)
+            if target is None:
+                self.show_info('Nebenansicht', 'Dieses Verweisziel lässt sich nur im Hauptbereich öffnen.')
+                return False
+            opened = self.open_side_view(target['list_id'], item_id=target['item_id'])
+            body = getattr(self, '_side_view_body', None)
+            if opened and body is not None:
+                body.focus_set()  # Lesen, Esc und Undo beziehen sich jetzt auf die Vorschau.
+            return opened
         _, _, entry = index[key]
         if key[0] == 'list':
             self.set_active_list(key[1])
@@ -32930,6 +32973,17 @@ class ListApp:
             if not keys:
                 sub.add_command(label='Keine', state='disabled')
             menu.add_cascade(label=f'{label} ({len(keys)})', menu=sub)
+        targets = outgoing.get(source, set()) | incoming.get(source, set())
+        if targets:
+            preview = self._new_themed_popup_menu(menu)
+            for key in sorted(targets, key=lambda target: glide_objects.caption(target, index)[1].casefold()):
+                value = glide_objects.uri(*key)
+                enabled = (glide_side_view.reference_target(key, index) is not None
+                           and not getattr(self, '_compact', None))
+                preview.add_command(label=glide_objects.caption(key, index)[1],
+                                    state='normal' if enabled else 'disabled',
+                                    command=lambda target=value: self.open_object_reference(target, side=True))
+            menu.add_cascade(label='In Nebenansicht öffnen', menu=preview)
         explicit = index[source][1].get('references', [])
         if explicit and index[source][0] == 'active':
             remove = self._new_themed_popup_menu(menu)

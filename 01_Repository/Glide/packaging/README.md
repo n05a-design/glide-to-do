@@ -1,8 +1,14 @@
 # Paketierung Glide
 
-Stand 25.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 26.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-Die eigenständigen Entwicklungspakete für macOS arm64 und Windows x64 wurden als 3.42.0 mit eigenem Python/Tcl-Tk geliefert und damals isoliert geprüft. Die aktuelle Python-Fassung ist 3.44.0 (Aufgabenformat 26); Pakete 3.43.x/3.44.0 sind nicht gebaut, die Pakete 3.42.0 öffnen einen Format-26-Bestand nur schreibgeschützt. Bei der lesenden Manifestprüfung am 18.10.2026 stimmen Windows 102/102 und Mac327/330 Dateien; drei Mac-Frameworkdateien fehlen in dieser Windows-Kopie. Das ist keine neue native Start-/Signaturprüfung ([QA-Bericht](../docs/07_QA_BERICHT.md)). Mac ad hoc signiert, Windows unsigniert; öffentliche Signaturen, Installer und Store-Abnahme bleiben in der [Veröffentlichung](../docs/10_VEROEFFENTLICHUNG.md) offen.
+Die eigenständigen Entwicklungspakete für Windows x64 und macOS arm64 sind auf 3.45.0 neu gebaut und geprüft. Windows: 103 Dateien, Python 3.14.7/Tcl-Tk 9.0.4, kompilierter Quell-/PE-/Lizenzabgleich und lokale Startprobe grün. Mac: 333 Dateien und 29 interne Symlinks, Python 3.14.5/Tcl-Tk 9.0.3, nativer arm64-Bau, Mach-O-/Ad-hoc-Signaturprüfung und Prozesssandbox-Startprobe grün. Python-Lieferung bytegleich; alte aktive 3.42.0-Pakete liegen im jeweiligen `build/.../Archiv`. [Nachweise](../tests/qa-3.45.0/paketabschluss_2026-10-26/README.md). Windows bleibt unsigniert; öffentliche Signaturen, Installer und Menschenabnahme sind eigene Tore.
+
+## Aktuelle Lieferartefakte
+
+- Windows: `build/windows/Glide-3.45.0/Glide.exe` und `build/windows/Glide-3.45.0-windows-x64.zip`.
+- Mac: `build/macos/Glide-3.45.0-macos-arm64.tar.gz` nativ entpacken. Die lokale `build/macos/Glide.app` ist eine Windows-Inspektionskopie mit NT-Linkzielen; native Weitergabe über das unveränderte TAR.
+- Wiederholbarer nativer Mac-Bau: `sh packaging/paket/baue_und_pruefe_macos.sh --python /Pfad/python3`; neuer Bauordner außerhalb OneDrive, exakte Originalruntime gemäß Lizenzmanifest. `.github/workflows/macos-paket.yml` führt denselben Weg auf einem nativen arm64-Runner aus. [Grüner nativer Lauf](https://github.com/n05a-design/glide-to-do/actions/runs/40328682255).
 
 ## Inhalt eines Pakets
 
