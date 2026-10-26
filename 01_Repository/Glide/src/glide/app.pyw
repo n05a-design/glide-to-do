@@ -130,6 +130,7 @@ import image_preview as glide_image_preview  # noqa: E402
 import logo as glide_logo  # noqa: E402
 import sidebar_policy as glide_sidebar  # noqa: E402
 import home_tiles as glide_home  # noqa: E402
+import home_dashboard as glide_home_dashboard  # noqa: E402
 import motion as glide_motion
 import task_editing as glide_task_editing
 import core_accessibility as glide_core_accessibility
@@ -18598,18 +18599,21 @@ class ListApp:
         schritte = 18 if arcade else 14
         versatz = ((nummer % 2) * 2 - 1) * 0.045 * nummer if arcade else 0.0
         strecke = 60 if arcade else 36
-        hinweis = (getattr(self, "_undo_toast", None) or {}).get("frame")
-        try:
-            sockel = 14 + (hinweis.winfo_reqheight() + 10 if hinweis is not None and hinweis.winfo_exists() else 0)
-        except tk.TclError:
-            sockel = 14
-
         def zeichnen(schritt=0):
             if not banner.winfo_exists():
                 return
             if schritt >= schritte:
                 banner.destroy()
                 return
+            # Der Rückgängig-Hinweis kann erst nach dem ersten Bild entstehen
+            # oder durch einen höheren Hinweis ersetzt werden. Seine aktuelle
+            # Höhe gilt deshalb für jedes Bild, nicht nur beim Animationsstart.
+            hinweis = (getattr(self, "_undo_toast", None) or {}).get("frame")
+            try:
+                sockel = 14 + (hinweis.winfo_reqheight() + 10
+                               if hinweis is not None and hinweis.winfo_exists() else 0)
+            except tk.TclError:
+                sockel = 14
             anteil = schritt / schritte
             banner.place(relx=max(0.08, min(0.92, 0.5 + versatz)), rely=1.0,
                          y=-(sockel + round(anteil * strecke)), anchor="s")
@@ -19958,19 +19962,7 @@ class ListApp:
         gibt es die eigene Ansicht „Verspätet", und die Kopfzeile beantwortet
         die Frage nach dem Kommenden, nicht nach dem Liegengebliebenen.
         """
-        today_iso = (today or date.today()).isoformat()
-        bester = None
-        for entry in self.planning_lists():
-            for item in self.walk_items(entry.get("items", [])):
-                if item.get("done") or not self.is_schedulable_item(item):
-                    continue
-                faellig = self.normalize_due(item.get("due"))
-                if not faellig or faellig < today_iso:
-                    continue
-                schluessel = (faellig, self.normalize_due_time(item.get("due_time")) or "99:99")
-                if bester is None or schluessel < bester[0]:
-                    bester = (schluessel, item, entry)
-        return (bester[1], bester[2]) if bester else (None, None)
+        return self._home_dashboard("scheduled", today).next_scheduled
 
     def daily_now(self):
         return datetime.now(self._daily_zone)
@@ -21909,32 +21901,8 @@ class ListApp:
 
     def home_summary(self, today=None):
         """Lokale Bestandszahlen; erledigte und gelöschte Daten zählen nicht als fällig."""
-        today = today or date.today()
-        today_iso = today.isoformat()
-        total = done = overdue = due_today = 0
-        due_lists = []
-        for entry in self.planning_lists():
-            matching = 0
-            for item in self.walk_items(entry.get("items", [])):
-                if not self.is_schedulable_item(item):
-                    continue
-                total += 1
-                if item.get("done"):
-                    done += 1
-                    continue
-                due = self.normalize_due(item.get("due"))
-                if due == today_iso:
-                    due_today += 1
-                    matching += 1
-                elif due and due < today_iso:
-                    overdue += 1
-            if matching:
-                due_lists.append((entry, matching))
-        lookup = {entry["id"]: entry for entry in self.lists}
-        recent = [(lookup[value["id"]], value["edited_at"])
-                  for value in self.settings.get("recent_lists", []) if value["id"] in lookup]
-        return {"total": total, "done": done, "open": total - done, "overdue": overdue,
-                "due_today": due_today, "lists": len(self.lists), "due_lists": due_lists, "recent": recent}
+        return self._home_dashboard("summary", today).summary(
+            self.lists, self.settings.get("recent_lists", []))
 
     # -----------------------------
     # Gruppieren nach Feld (3.30, PW-010, AO-040, AO-030)
@@ -26577,49 +26545,15 @@ class ListApp:
         fällig, danach nach Wichtigkeit und Termin. Ohne Treffer bleibt die
         Kachel leer statt eine Aufgabe zu erfinden.
         """
-        kandidaten = []
-        for entry in self.planning_lists():
-            for item in self.walk_items(entry.get("items", [])):
-                if not self.is_schedulable_item(item) or item.get("done"):
-                    continue
-                rang = self.task_urgency_rank(item)
-                if rang[0] > self.NEXT_TASK_TODAY_RANK:
-                    continue
-                kandidaten.append((rang, entry, item))
-        if not kandidaten:
-            return None, None
-        beste = min(kandidaten, key=lambda wert: wert[0])
-        return beste[2], beste[1]
+        return self._home_dashboard("focus").focus
 
     def home_week_overview(self, tage=7):
         """Offene Aufgaben je Tag der kommenden Woche, nach Fälligkeit."""
-        heute = date.today()
-        zaehler = {(heute + timedelta(days=schritt)).isoformat(): 0 for schritt in range(tage)}
-        for entry in self.planning_lists():
-            for item in self.walk_items(entry.get("items", [])):
-                if not self.is_schedulable_item(item) or item.get("done"):
-                    continue
-                faellig = self.normalize_due(item.get("due"))
-                if faellig in zaehler:
-                    zaehler[faellig] += 1
-        return [(tag, anzahl) for tag, anzahl in sorted(zaehler.items())]
+        return self._home_dashboard("week").week_overview(tage)
 
     def home_label_overview(self, grenze=6):
         """Die am häufigsten vergebenen Labels mit ihrer Anzahl offener Punkte."""
-        zaehler = {}
-        for entry in self.planning_lists():
-            for item in self.walk_items(entry.get("items", [])):
-                if not self.is_schedulable_item(item) or item.get("done"):
-                    continue
-                for label_id in item.get("labels", []) or ():
-                    zaehler[label_id] = zaehler.get(label_id, 0) + 1
-        treffer = []
-        for label_id, anzahl in zaehler.items():
-            label = self.get_label(label_id)
-            if label is not None:
-                treffer.append((label, anzahl))
-        treffer.sort(key=lambda wert: (-wert[1], str(wert[0].get("name", "")).lower()))
-        return treffer[:grenze]
+        return self._home_dashboard("labels").label_overview(self.get_label, grenze)
 
     def home_impulse(self):
         return self.HOME_IMPULSES[getattr(self, "_home_prompt_index", 0) % len(self.HOME_IMPULSES)]
@@ -26853,6 +26787,32 @@ class ListApp:
     # Navigationswerte in settings.json; keine Kachel liest sie (P03r).
     HOME_SIGNATURE_IGNORED = frozenset(("active_list_id", "active_folder_id", "view_mode", "title", "recent_pages"))
 
+    def _home_dashboard(self, projection, today=None):
+        """Fassaden bleiben frisch; nur der synchrone Kachelaufbau teilt Daten."""
+        today = today or date.today()
+        scope = getattr(self, "_home_dashboard_scope", None)
+        shared = scope is not None and scope["day"] == today and projection in scope["projections"]
+        projections = scope["projections"] if shared else (projection,)
+
+        def build():
+            return glide_home_dashboard.build(
+                self.planning_lists(), today, walk_items=self.walk_items,
+                is_schedulable=self.is_schedulable_item, normalize_due=self.normalize_due,
+                normalize_time=self.normalize_due_time, urgency_rank=self.task_urgency_rank,
+                max_focus_rank=self.NEXT_TASK_TODAY_RANK, projections=projections)
+
+        return self.render_cached(scope["key"], build) if shared else build()
+
+    def _home_dashboard_projections(self):
+        visible = {key for key in self.home_tile_order() if self.home_tile_visible(key)}
+        projections = {"summary"}
+        if "focus" in visible or ("today" in visible and glide_home.today_sections(visible)["next"]):
+            projections.add("focus")
+        for tile, projection in (("week", "week"), ("labels", "labels"), ("clock", "scheduled")):
+            if tile in visible:
+                projections.add(projection)
+        return frozenset(projections)
+
     def home_signature(self):
         """Eingangsgrößen der Startseite in der Kachelansicht (P03r).
 
@@ -26878,6 +26838,27 @@ class ListApp:
                 bool(getattr(self, "_settings_existed", True)))
 
     def _refresh_home(self):
+        """Begrenzt die gemeinsame Projektion auch bei Abbruch/Fehler auf diesen Aufbau."""
+        if not hasattr(self, "home_content"):
+            return
+        scope = None
+        if self.home_mode() == "tiles" and not getattr(self, "_home_editing", False):
+            scope = dict(day=date.today(), projections=self._home_dashboard_projections(),
+                         key=("home_dashboard", object()))
+        self._home_dashboard_scope = scope
+        try:
+            with self.render_pass():
+                return self._render_home()
+        finally:
+            # Kein Wiederherstellen eines älteren Scopes: ein verschachtelter
+            # Aufbau oder Ereignisnachlauf darf den Vorzustand bereits beendet haben.
+            if getattr(self, "_home_dashboard_scope", None) is scope:
+                self._home_dashboard_scope = None
+            cache = getattr(self, "_render_cache", None)
+            if scope is not None and cache is not None:
+                cache.pop(scope["key"], None)
+
+    def _render_home(self):
         if not hasattr(self, "home_content"):
             return
         signatur = self.home_signature() if self.home_mode() not in (
@@ -26942,6 +26923,7 @@ class ListApp:
             (self.render_calendar if mode == "calendar" else self.render_week_review if mode == "week_review" else
              self.render_day_proposal if mode == "day_proposal" else self.render_day_review)()
             self._bind_home_wheel(self.home_content)
+            self._home_dashboard_scope = None
             self.home_content.update_idletasks()
             self._layout_home_canvas()
             self.home_canvas.yview_moveto(0)
@@ -27849,6 +27831,7 @@ class ListApp:
             self.render_home_editor()
             for widget in (self.home_canvas, self.home_content):
                 self._bind_home_wheel(widget)
+            self._home_dashboard_scope = None
             self.home_content.update_idletasks()
             self.home_canvas.yview_moveto(scroll_position)
             return
@@ -27927,6 +27910,7 @@ class ListApp:
         for widget in (self.home_canvas, self.home_content):
             self._bind_home_wheel(widget)
         _ui.end()
+        self._home_dashboard_scope = None
         self.home_content.update_idletasks()
         self.home_canvas.yview_moveto(scroll_position)
         self._home_signature = signatur

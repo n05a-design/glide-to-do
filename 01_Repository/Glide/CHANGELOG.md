@@ -1,6 +1,8 @@
 # Änderungsverlauf
 
-## In Arbeit – Tagesvorschlag und Verweisvorschau (26.10.2026)
+## In Arbeit – Tagesvorschlag, Verweisvorschau und Startseitenmodell (26.10.2026)
+
+- **Startseite:** Heute-Zahlen, nächste Aufgabe, Woche, Labels und nächster Termin werden beim Kachelaufbau gemeinsam ausgewertet. Die bisherigen Einstiege bleiben frisch; das Modell endet vor Ereignisnachläufen und auch bei Fehlern. Erledigen/Undo, Archivgrenze, Datumsabfragen und Objektwechsel gezielt geprüft. [Nachweis und Messwerte](tests/qa-3.45.0/startseitenmodell_2026-10-26/README.md). Quellkandidat auf 3.45.0, Lieferung nach dem gemeinsamen Phasenabschluss.
 
 - „Was passt heute?“ berücksichtigt Aufgaben, deren Abschluss andere Aufgaben freigibt, vor lediglich wichtigen Aufgaben. Die Zeile nennt die Zahl direkter Freigaben; weitere offene Voraussetzungen, erledigte und archivierte Folgen werden korrekt berücksichtigt.
 - Geänderte Freigaben verlangen eine neue Vorschau. Budget, ausdrückliche Übernahme und ein Undo/Redo bleiben; keine neue Formatstufe. Quellkandidat auf 3.45.0, die bisherige Python-Lieferung unverändert. [Paketnachweis](tests/qa-3.45.0/freigaben_2026-10-26/README.md).

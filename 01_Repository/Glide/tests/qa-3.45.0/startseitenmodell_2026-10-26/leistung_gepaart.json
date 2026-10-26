@@ -1,0 +1,467 @@
+{
+  "app_sha256": "4244e6109deb1f7385ba749e2bef5eec05063d40bb42a50b667e9841c0dbd1b9",
+  "runtime_sha256": {
+    "accessibility.py": "d5b959172f536d2349ce55c2f20960650d73d3572052cf5bf496288cffa2a91b",
+    "accessibility_bindings.py": "57fca8a881a00ff1a12e4be3103ed58c610d1d1c0159b8d7faeb5cd0be49ffa6",
+    "action_catalog.py": "4811bbd6abd3418bf7db9816d3c1fee3a00ab703d8f0cdf5e0cf0b82c753b0f6",
+    "action_menu.py": "12c6f8669df966735de7bfd6361758e9c9093bace5461b17901da99c9bfa9c4a",
+    "animation.py": "a7f4fb2849da4dcc6831c28811a52de9e739a9d251e2a123fc5b2c09202c3006",
+    "animation_export.py": "a3f47a4e0e91462de11f4458c99dc1cb2d8580b02b7baa824817dd8d9be918bb",
+    "app.pyw": "4244e6109deb1f7385ba749e2bef5eec05063d40bb42a50b667e9841c0dbd1b9",
+    "appearance.py": "1366388cf453f9d5ddf11bbc47e43fdd796b750a3a26105623b539e0928a2ea8",
+    "attachment_paths.py": "7c506fd2da19ec74513c4d64779e5add5129b91a5cbcd5afdf90b28ba5c329cc",
+    "attachment_policy.py": "94576db88247bebe05d57468b9d0729a4912df1df7fd58f2b43c0c28fe507018",
+    "backdrop.py": "a45c04144b4366eb805aee56558005976f0e66d53032acb0b6aa37ee702689f8",
+    "backup_catalog.py": "936d86a0e20bdcc252279de853d167152e121d4c4bed37a479dc0170a3f9294a",
+    "backup_diff.py": "9913de3fed9297cdbe8ad706a9390188b7a6800ec995be6fd78c11e6600f63de",
+    "backup_snapshot.py": "f724e53794dbc78b53be471c36a5edc2d19faddb1a38f1328332700f4742c995",
+    "busy_calendar.py": "5de924eb3a584865702419e3036cef58a01e244ec34bf57bc42140dcdd9f192c",
+    "calendar_service.py": "13c8e3bd01f7dabda8a2101ec9250b970735de77e3a8fe33604db39ff0ab8943",
+    "capture_parser.py": "7562b7d2fe6c38c2bb3011670d5caff578b971824996a7598b628ec46727f9a3",
+    "compact_mode.py": "b9e9b0d75a15d3d66f65af7d7baf64f6f620e1d8790b22512c2abf635c1be09e",
+    "content_search.py": "d2359609d6f574984527ad24b33a5ea2b85637330500f6eab23bab6f1f58d330",
+    "core_accessibility.py": "4764a2f13f626de1243bba17b2bb761ab497b8ee9ad1b64e668001f80c256bed",
+    "daily_hints.py": "3d1436b64c4fd113b4cb0469b7cdc7db1eb2dc579bed5af262f21b58ddddb5f7",
+    "data_lock.py": "3029bc8cfb0bf881e354ed962d3a7784f9e1c1fd861afb02acccec52a0e482ca",
+    "day_proposal.py": "136f768444b7da7605deb6562e3972dbcae27ac47cc7ba2ed126df74d2fb4abf",
+    "day_relief.py": "f889a85441e366e0ba9b614ac9d256db68ceceab57e75c623cd1f6f1bb649587",
+    "drawing.py": "f6cb2386cf00676e5af19cca46bc354f4c2104f87f2a6d3ae85a281c2842712c",
+    "drawing_image.py": "d1020a43175f251a5a59aa434ebbc5b4cb43d8e70fc9c245deaff2001bfa1ad9",
+    "drawing_prototype.pyw": "d9a47685721448e56f25bf2c482c386f2acf7d7d1576afc3f567f3e421a823a9",
+    "editor_flush.py": "192d8d9041842a67006b0296408596b602194c7e385357c7648b9a0e5c37417c",
+    "eisenhower.py": "5f4386a5ff60371b2627e34612aadcfc7c64cad772a5dfb469dc94f22f2b0ca0",
+    "exchange_patch.py": "3b5bf73c253845110c867a3d1c9629137f9070e9a12c69ac0edcf970dc576e4e",
+    "exchange_recipes.py": "640fe522f278cde07115293614d8fca16d0e819dbbad9e3a06a5a9a312ee4198",
+    "filter_explain.py": "f581412f3d4c8136941518e0dbe516c44db7e1ba9fee87b47f3b347878c5245a",
+    "focus_timer.py": "23199b0595e32770f388cf1f2a6dad8a383341893e02e9421b49c5428afb18d5",
+    "glide_start.py": "670aeeadde60dd81dd0d816ee1eba38ec3205f8af15902bfefd3e13aff6b79eb",
+    "glyph_metrics.py": "cc4e480be903d550c505774003223f801c237f5ce50e4328743c2416faced76d",
+    "home_dashboard.py": "ced120a5cd600d82d5b76e31c2faf2efddb46a10bcb51a7f526be43a1d0fc773",
+    "home_tiles.py": "d05add8e3c09c62b2696db34bda851e3d84475182a038cd1800a051fe590e486",
+    "ics_busy.py": "89f85e03a4b535eea3802294006ed31854c8907123db779aef8b02fe5360df67",
+    "ics_recurrence.py": "454bd59489eb404097b68437d62a1786f876388ae0e13ee03649cd30c254353b",
+    "ics_timezone.py": "bf3fd6590f917ede7975542e267e5e41dce7c70b452a2c497c8d54894b8de2cd",
+    "image_conversion.py": "5ab45b0efc21f5737e4f13b7d762dcef3d8515f52a7d94fe04c7f256ce99f8b3",
+    "image_preview.py": "88f63c61827320f7535cd90fac901f10b624fba9f35b72868707f15ce1a8d618",
+    "interaction_policy.py": "05baf1651eb4a9ab014c6086379fd791e2853495eac4e776bae21c2fb05da177",
+    "item_index.py": "a1c0297b8d77d2dd6b69e7be9287b5fdbc7f125658dea6a0626c55262c92128e",
+    "load_phases.py": "6b7448c728de5d1342c9376b3b244a0f946100b84dc6c6d80d4aeae9b373a8e9",
+    "logo.py": "7dafc78697c33315d83dbbb0e16aa222068a123f6eba93d9126dc01150a61d4a",
+    "logo_raster.py": "e594735d05b1e7c3be2ac73bfa7340d85444293bfc1c84e31dbd4cd7f63db47d",
+    "markdown_tree.py": "44838e1af044f447c160fa866d30c83755858ec71ee269e91a3202b0156a2678",
+    "motion.py": "3f6aa78376bb05ff0fe498c16f1d9edf9292bf0e19bc984513d73e4ce10a9162",
+    "notion_archive.py": "f08a04c8bb0be71b24e0313b72381c352c8fbbf851aabf53b64767b57a28d64c",
+    "notion_hierarchy.py": "6148ad9d472c4dfea16300701021bd278d695d18481e08f081db9aa578c05a42",
+    "notion_import.py": "d0e7c074aef0ccfa4ae869a96e1bddf484f0b3f5aa45c593a81012a106e9688c",
+    "notion_reimport.py": "10f06f7dabf1eb2563b15bd887729a5e75d87d2b8459cbcad3654c9f67cc815a",
+    "object_references.py": "133b8c9f9e2dc5fa60a063971dc5396cf417f718d08ff65860e705241b890ee7",
+    "occupied_time.py": "ba756252c2552a1c3abcbf99640be79c49f9286fd6131d509eb7bf83d6a170b0",
+    "page_features.py": "f6d5a131aee8d87cc3be2f8c3a053bf20e43f668b2daacc2e64bb209a497ffcc",
+    "page_markdown.py": "5805eab66689fbe2dac5c863adea3ff0e2e0157f979321606062aaa01fcbbb53",
+    "page_restore.py": "ba86f3e099acaaceb9de7677de6fe9638595d02f811bf557eb410353d6079b66",
+    "pinboard_pages.py": "fb81ff0b55012de45cbad39f433ee0916d4fb827348c5c65992c932e0dbdce22",
+    "planning.py": "59b78be6d91da4adf31c2c401b0bdf1c10b6c97490a122f7f3420c20059ba0ad",
+    "preview_tools.py": "5fb18ce2df48c83b5c804ea862db9f3c798622457cd39ccde22be033401d9ba1",
+    "release_notes.py": "71950e58a3bc57bc45c1e124f96b54867243f9bf4c24a75d1b81d3cec9f9dc6d",
+    "render_retention.py": "efec6647e1adfc237b9935426a91f58461e56c03935a35a082666bbd338a82e8",
+    "repeat_ics.py": "ffd2bfdae221ee4c3749c673b5f4a4d5cfeb64a78f060d502956abe582176237",
+    "repeat_rules.py": "fa78bb5887bec9c27fa4d77e03ed95e197931e54b2f0ab1f949b34d4f26e28a8",
+    "restore_assets.py": "f3101e2dbff3fb38bee2f561888d484d9f73dd1ad533aef3955bac72feb85571",
+    "routines.py": "bb8bb35cc63f28542665eb3d144ef4bf5308fbd944c25711d4c04391a08a6bcb",
+    "runtime_check.py": "ea6ab0ec80b3944b6d05762e5ae100f63a2fa83bd2e31ca940f66b5166188f9c",
+    "save_comparison.py": "0e26d1bf018f0529c64414c45a2c23f016bbc8d59c636835b7a3a3abe977f6a1",
+    "save_result.py": "9eb8ef11cbcce47e485e958b732c98a7996979bd15bde65f901ad4423dec8514",
+    "schema_backups.py": "3d07ef08791d7b46f47f75521e6152050ada2d1b256fc29abdd417c33c11a9ae",
+    "side_view.py": "5dc3d323f689899463d94ed0d483c8c8f84b2b45b7a10bba9e4084f44a6fa80c",
+    "sidebar_policy.py": "52215f7e9d860642b7ef46925a0666d84efb0eddcc4253e204be2204b8b7d763",
+    "source_metadata.py": "a123ec2c186fd927ebde2ee4c1beecc606830b85cd66961dff7f41318e437d1a",
+    "storage_health.py": "d9d04e139dece92211f635727e4e61055c268fdcadfb8ad61fbb67c6517f6a28",
+    "structural_guard.py": "b834f48aaa6e948d484c5402de76d60c7a7327d86cbeaf8d9d1c1ae42d66a2f4",
+    "svg_geometry.py": "217bb988c16e2528901a6a550737b9525b1b288c76ddd8956d7beb0b0dc2b35e",
+    "symbol_policy.py": "088b815f95e8070b450795af25556157e44984489c93c50309d79b110ddebc4b",
+    "task_editing.py": "eee8d12c5c3cd741c0144b02e8b241accb72e90119406671e118855784605e69",
+    "task_references.py": "c27d8336c374ef9187058c84414d0077d328e5b04ec7c83f317e6aee0de0eb19",
+    "timezones.py": "43f0b56987ac64fea922cdf4a71974b1ea060f62259f4cb8eeb8b5114d06d4ea",
+    "today_view.py": "c9d12cbf24c809890ef17f952654a057d4229153dbc78591b33eb20043b4d917",
+    "ui_design.py": "28e8a3b63b7875aab3e79215d89f78c8c75fcdf1ab008f0b07fd04cd04e4a0ae",
+    "undo_history.py": "3595022982da1d7181ad0448ea6d80909f228c6c4d1eaa00926ad07216466609",
+    "view_definition.py": "0dfffe15d7f5d7fd6a0f68e839b0120627b4fd64fe06b66fe4642d0cd2b57636",
+    "view_metrics.py": "a5540e5b1d0f65c98fdfeab4ec3b5b1288e9b6e5ca4dd5e07fbf36f396bac276",
+    "week_planning.py": "38ff18553d762946fa8c4fa857cdabb4d39a84cfc020f8fa157882b4066fe95b"
+  },
+  "python": "3.14.7",
+  "samples": {
+    "100": {
+      "helpers_fresh": {
+        "cold_ms": 0.35719998413696885,
+        "raw_ms": [
+          0.30590000096708536,
+          0.30519999563694,
+          0.2948999754153192,
+          0.30260003404691815,
+          0.30229997355490923,
+          0.30120002338662744,
+          0.30399998649954796
+        ],
+        "median_ms": 0.30260003404691815,
+        "p95_ms": 0.30590000096708536
+      },
+      "home_refresh_and_idle": {
+        "cold_ms": 114.31909998646006,
+        "raw_ms": [
+          7.117400004062802,
+          4.680900019593537,
+          5.607099970802665,
+          4.858500033151358,
+          4.69670002348721,
+          5.118299974128604,
+          4.742800025269389
+        ],
+        "median_ms": 4.858500033151358,
+        "p95_ms": 7.117400004062802
+      },
+      "geometry": [
+        1280,
+        860
+      ],
+      "paired": {
+        "reference_helpers": {
+          "raw_ms": [
+            0.3136000013910234,
+            0.3885000478476286,
+            0.3306999569758773,
+            0.40309998439624906,
+            0.33139996230602264,
+            0.4292000085115433,
+            0.36800000816583633,
+            0.3939999733120203
+          ],
+          "median_ms": 0.37825002800673246,
+          "p95_ms": 0.4292000085115433
+        },
+        "current_helpers": {
+          "raw_ms": [
+            0.43000001460313797,
+            0.3353999927639961,
+            0.3755999496206641,
+            0.33410004107281566,
+            0.3698000218719244,
+            0.3440000000409782,
+            0.38329995004460216,
+            0.3372000064700842
+          ],
+          "median_ms": 0.3569000109564513,
+          "p95_ms": 0.43000001460313797
+        },
+        "reference_refresh": {
+          "raw_ms": [
+            28.088800027035177,
+            4.942500032484531,
+            37.32170001603663,
+            5.5534999701194465,
+            35.44400003738701,
+            6.595299986656755,
+            31.635999970603734,
+            5.48629998229444
+          ],
+          "median_ms": 17.342050006845966,
+          "p95_ms": 37.32170001603663
+        },
+        "current_refresh": {
+          "raw_ms": [
+            5.328200000803918,
+            32.825500005856156,
+            5.070900020655245,
+            35.19500000402331,
+            5.331899970769882,
+            36.036300007253885,
+            7.5341000338085,
+            28.96389999659732
+          ],
+          "median_ms": 18.24900001520291,
+          "p95_ms": 36.036300007253885
+        }
+      }
+    },
+    "1000": {
+      "helpers_fresh": {
+        "cold_ms": 2.960600017104298,
+        "raw_ms": [
+          2.6230000075884163,
+          2.6390000130049884,
+          3.086000040639192,
+          2.8735000523738563,
+          2.611700037959963,
+          2.899100014474243,
+          2.6636000256985426
+        ],
+        "median_ms": 2.6636000256985426,
+        "p95_ms": 3.086000040639192
+      },
+      "home_refresh_and_idle": {
+        "cold_ms": 31.3552999868989,
+        "raw_ms": [
+          7.561500009614974,
+          7.498699997086078,
+          7.077499991282821,
+          7.671400031540543,
+          7.305500039365143,
+          7.922699966002256,
+          6.935000012163073
+        ],
+        "median_ms": 7.498699997086078,
+        "p95_ms": 7.922699966002256
+      },
+      "geometry": [
+        1280,
+        860
+      ],
+      "paired": {
+        "reference_helpers": {
+          "raw_ms": [
+            2.8025999781675637,
+            2.904499997384846,
+            2.7943000313825905,
+            3.0615999712608755,
+            2.966500003822148,
+            2.9873999883420765,
+            2.8945000376552343,
+            3.080399997998029
+          ],
+          "median_ms": 2.935500000603497,
+          "p95_ms": 3.080399997998029
+        },
+        "current_helpers": {
+          "raw_ms": [
+            2.8923999634571373,
+            2.66990001546219,
+            2.7982000028714538,
+            3.201599989552051,
+            3.029500017873943,
+            2.716600021813065,
+            2.909200033172965,
+            2.711100038141012
+          ],
+          "median_ms": 2.8452999831642956,
+          "p95_ms": 3.201599989552051
+        },
+        "reference_refresh": {
+          "raw_ms": [
+            32.75830001803115,
+            13.566699984949082,
+            37.9088000045158,
+            10.069800016935915,
+            37.50640002544969,
+            8.95780004793778,
+            39.18279998470098,
+            8.893700025510043
+          ],
+          "median_ms": 23.162500001490116,
+          "p95_ms": 39.18279998470098
+        },
+        "current_refresh": {
+          "raw_ms": [
+            7.625100028235465,
+            38.34660002030432,
+            8.256500004790723,
+            35.99260002374649,
+            8.298799977637827,
+            33.892700041178614,
+            7.740399974863976,
+            32.80000004451722
+          ],
+          "median_ms": 20.549400011077523,
+          "p95_ms": 38.34660002030432
+        }
+      }
+    },
+    "5000": {
+      "helpers_fresh": {
+        "cold_ms": 15.463799994904548,
+        "raw_ms": [
+          14.612599974498153,
+          14.512699970509857,
+          14.523899997584522,
+          14.445999986492097,
+          14.230400032829493,
+          14.932100020814687,
+          14.155399985611439
+        ],
+        "median_ms": 14.512699970509857,
+        "p95_ms": 14.932100020814687
+      },
+      "home_refresh_and_idle": {
+        "cold_ms": 42.0227000140585,
+        "raw_ms": [
+          19.319599959999323,
+          19.427900027949363,
+          20.59999998891726,
+          19.84749996336177,
+          19.349300011526793,
+          20.175800018478185,
+          19.43109999410808
+        ],
+        "median_ms": 19.43109999410808,
+        "p95_ms": 20.59999998891726
+      },
+      "geometry": [
+        1280,
+        860
+      ],
+      "paired": {
+        "reference_helpers": {
+          "raw_ms": [
+            14.951299992389977,
+            15.277099970262498,
+            14.329500030726194,
+            15.289700007997453,
+            14.90940002258867,
+            16.14390005124733,
+            15.44569997349754,
+            15.112199995201081
+          ],
+          "median_ms": 15.19464998273179,
+          "p95_ms": 16.14390005124733
+        },
+        "current_helpers": {
+          "raw_ms": [
+            14.462999999523163,
+            14.194299990776926,
+            15.024300024379045,
+            13.371900015044957,
+            15.796999970916659,
+            13.942799996584654,
+            15.19820000976324,
+            14.138099970296025
+          ],
+          "median_ms": 14.328649995150045,
+          "p95_ms": 15.796999970916659
+        },
+        "reference_refresh": {
+          "raw_ms": [
+            53.5451999749057,
+            23.95040000556037,
+            48.656600003596395,
+            24.000999983400106,
+            56.572999979835004,
+            24.751299992203712,
+            47.50049998983741,
+            33.04289997322485
+          ],
+          "median_ms": 40.27169998153113,
+          "p95_ms": 56.572999979835004
+        },
+        "current_refresh": {
+          "raw_ms": [
+            18.907400022726506,
+            40.82100000232458,
+            18.31850002054125,
+            42.303499998524785,
+            19.08920001005754,
+            48.3271999983117,
+            19.52300005359575,
+            56.904700002633035
+          ],
+          "median_ms": 30.172000027960166,
+          "p95_ms": 56.904700002633035
+        }
+      }
+    },
+    "10000": {
+      "helpers_fresh": {
+        "cold_ms": 32.153100008144975,
+        "raw_ms": [
+          33.152999996673316,
+          31.674499972723424,
+          32.95359999174252,
+          32.60009997757152,
+          31.22649999568239,
+          30.267100024502724,
+          32.017999968957156
+        ],
+        "median_ms": 32.017999968957156,
+        "p95_ms": 33.152999996673316
+      },
+      "home_refresh_and_idle": {
+        "cold_ms": 67.34310003230348,
+        "raw_ms": [
+          36.66540002450347,
+          34.352999995462596,
+          34.9230999709107,
+          34.43880000850186,
+          33.71699998388067,
+          33.80109998397529,
+          34.42169999470934
+        ],
+        "median_ms": 34.42169999470934,
+        "p95_ms": 36.66540002450347
+      },
+      "geometry": [
+        1280,
+        860
+      ],
+      "paired": {
+        "reference_helpers": {
+          "raw_ms": [
+            33.864400000311434,
+            33.15929998643696,
+            29.79189995676279,
+            33.893999992869794,
+            54.20479999156669,
+            45.48689996590838,
+            34.07549997791648,
+            34.95260002091527
+          ],
+          "median_ms": 33.98474998539314,
+          "p95_ms": 54.20479999156669
+        },
+        "current_helpers": {
+          "raw_ms": [
+            32.844899978954345,
+            28.78920000512153,
+            31.005900003947318,
+            32.13589999359101,
+            32.33119996730238,
+            39.929900027345866,
+            33.47700001904741,
+            29.026999953202903
+          ],
+          "median_ms": 32.233549980446696,
+          "p95_ms": 39.929900027345866
+        },
+        "reference_refresh": {
+          "raw_ms": [
+            74.82540002092719,
+            45.41079996852204,
+            68.40510002803057,
+            47.47490002773702,
+            176.72350001521409,
+            54.17669995222241,
+            85.49819997278973,
+            42.610400007106364
+          ],
+          "median_ms": 61.29089999012649,
+          "p95_ms": 176.72350001521409
+        },
+        "current_refresh": {
+          "raw_ms": [
+            35.511599970050156,
+            56.09359999652952,
+            32.65040001133457,
+            60.28889998560771,
+            350.10979999788105,
+            100.6995000061579,
+            34.710400039330125,
+            53.13519999617711
+          ],
+          "median_ms": 54.61439999635331,
+          "p95_ms": 350.10979999788105
+        }
+      }
+    }
+  },
+  "errors": [],
+  "reference_ref": "4f101cd",
+  "reference_app_sha256": "b53e6822b3f378119a9fc15cc1f2eac46fb2f2adb3a82a180f12834688ba5ad2",
+  "tk": "9.0.4"
+}

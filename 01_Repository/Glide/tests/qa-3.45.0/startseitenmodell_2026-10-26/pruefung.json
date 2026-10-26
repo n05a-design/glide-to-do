@@ -1,0 +1,92 @@
+{
+  "scope": "gezielte Paketprüfung WA-39/WA-36",
+  "steps": [
+    {
+      "command": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "test_home_dashboard.py",
+        "-v"
+      ],
+      "exitcode": 0,
+      "stdout": "",
+      "stderr": "test_counts_keep_structure_children_and_exclude_done_from_due (test_home_dashboard.DashboardTests.test_counts_keep_structure_children_and_exclude_done_from_due) ... ok\ntest_empty_inventory_and_ranges (test_home_dashboard.DashboardTests.test_empty_inventory_and_ranges) ... ok\ntest_errors_are_not_hidden_or_converted_to_partial_success (test_home_dashboard.DashboardTests.test_errors_are_not_hidden_or_converted_to_partial_success) ... ok\ntest_explicit_date_leap_day_and_long_week (test_home_dashboard.DashboardTests.test_explicit_date_leap_day_and_long_week) ... ok\ntest_focus_uses_rank_boundary_and_first_equal_original (test_home_dashboard.DashboardTests.test_focus_uses_rank_boundary_and_first_equal_original) ... ok\ntest_individual_queries_skip_unrelated_callbacks (test_home_dashboard.DashboardTests.test_individual_queries_skip_unrelated_callbacks) ... ok\ntest_labels_ignore_unknowns_and_keep_sort_and_slice_contract (test_home_dashboard.DashboardTests.test_labels_ignore_unknowns_and_keep_sort_and_slice_contract) ... ok\ntest_rebuild_keeps_replaced_objects_instead_of_previous_ids (test_home_dashboard.DashboardTests.test_rebuild_keeps_replaced_objects_instead_of_previous_ids) ... ok\ntest_scheduled_order_due_time_and_first_equal (test_home_dashboard.DashboardTests.test_scheduled_order_due_time_and_first_equal) ... ok\ntest_single_and_combined_queries_have_identical_results (test_home_dashboard.DashboardTests.test_single_and_combined_queries_have_identical_results) ... ok\ntest_single_walk_for_all_projections_and_no_input_mutation (test_home_dashboard.DashboardTests.test_single_walk_for_all_projections_and_no_input_mutation) ... ok\ntest_summary_keeps_all_lists_and_recent_originals (test_home_dashboard.DashboardTests.test_summary_keeps_all_lists_and_recent_originals) ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 0.004s\n\nOK\n"
+    },
+    {
+      "command": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "test_home_tiles.py",
+        "-v"
+      ],
+      "exitcode": 0,
+      "stdout": "",
+      "stderr": "test_gismo_name_and_retired_settings (test_home_tiles.B03B04Tests.test_gismo_name_and_retired_settings) ... ok\ntest_gismo_visibility_follows_only_his_tile (test_home_tiles.B03B04Tests.test_gismo_visibility_follows_only_his_tile) ... ok\ntest_own_selection_is_not_overwritten_by_the_new_gallery_tile (test_home_tiles.B03B04Tests.test_own_selection_is_not_overwritten_by_the_new_gallery_tile) ... ok\ntest_untouched_or_fresh_settings_only_get_the_marker (test_home_tiles.B03B04Tests.test_untouched_or_fresh_settings_only_get_the_marker) ... ok\ntest_untouched_start_page_shows_the_gallery_tile (test_home_tiles.B03B04Tests.test_untouched_start_page_shows_the_gallery_tile) ... ok\ntest_explicit_hides_and_stats_switch (test_home_tiles.HomeTileTests.test_explicit_hides_and_stats_switch) ... ok\ntest_new_and_untouched_start_page_get_standard (test_home_tiles.HomeTileTests.test_new_and_untouched_start_page_get_standard) ... ok\ntest_ordered_keeps_saved_order_and_appends_new (test_home_tiles.HomeTileTests.test_ordered_keeps_saved_order_and_appends_new) ... ok\ntest_own_selection_survives (test_home_tiles.HomeTileTests.test_own_selection_survives) ... ok\ntest_reset_restores_standard (test_home_tiles.HomeTileTests.test_reset_restores_standard) ... ok\ntest_showing_a_tile_is_kept_after_restart (test_home_tiles.HomeTileTests.test_showing_a_tile_is_kept_after_restart) ... ok\ntest_standard_is_d12 (test_home_tiles.HomeTileTests.test_standard_is_d12) ... ok\ntest_today_sections_avoid_duplicates (test_home_tiles.HomeTileTests.test_today_sections_avoid_duplicates) ... ok\n\n----------------------------------------------------------------------\nRan 13 tests in 0.000s\n\nOK\n"
+    },
+    {
+      "command": [
+        "tests/integration/test_startseite3332.py"
+      ],
+      "exitcode": 0,
+      "stdout": "test_startseite3332: OK; D12-Standard, zusammengeführte Kachel Heute, eigene Auswahl nach Neustart, Zurücksetzen, Größenfilter Hauptfenster, gebündeltes Zeichnen, Designwechsel; Startseitenmodell: Archiv, Datum, Gleichstände, Erledigen/Undo, Objektwechsel, Renderabbruch\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/integration/test_uiux_paket.py",
+        "--fall",
+        "b01",
+        "--report",
+        "~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\qa-3.45.0\\startseitenmodell_2026-10-26\\b01.json"
+      ],
+      "exitcode": 0,
+      "stdout": "OK b01: Gelesen → Seitenanfang; Aktualisierung behält Lage; Neustart ohne Karte\n{\"gruen\": 1, \"rot\": []}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/integration/test_uiux_paket.py",
+        "--fall",
+        "b02",
+        "--report",
+        "~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\qa-3.45.0\\startseitenmodell_2026-10-26\\b02.json"
+      ],
+      "exitcode": 0,
+      "stdout": "OK b02: linke Rasterkante bei 1280x800, 860x700, 1600x900\n{\"gruen\": 1, \"rot\": []}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/integration/test_uiux_paket.py",
+        "--fall",
+        "b04",
+        "--report",
+        "~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\qa-3.45.0\\startseitenmodell_2026-10-26\\b04.json"
+      ],
+      "exitcode": 0,
+      "stdout": "OK b04: 6 Vorschauen, 6 geladen, öffnet Detail, eigene Auswahl bleibt, fehlende Datei benannt\n{\"gruen\": 1, \"rot\": []}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "tests/tools/standpruefung.py"
+      ],
+      "exitcode": 1,
+      "stdout": "Standprüfung gegen VERSION 3.45.0 · Ablage einschließlich Repository · 89 aktive Dokumente (42 fortgeschrieben, 41 festgeschrieben, 6 ohne Standaussage)\nBEFUNDE (2)\n- 01_Repository/Glide/src/glide/README.md:1: Modul home_dashboard.py fehlt in der Aufzählung (R10)\n- 01_Repository/Glide/packaging/README.md:1: Modul home_dashboard.py fehlt in der Aufzählung (R10)\n",
+      "stderr": ""
+    }
+  ],
+  "ok": false,
+  "diff_check": {
+    "exitcode": 0,
+    "output": ""
+  }
+}

@@ -387,6 +387,25 @@ def knopf_befunde(fenster, mod, kontext):
     def verwandt(a, b):
         return str(a).startswith(str(b) + ".") or str(b).startswith(str(a) + ".") or a is b
 
+    def liegt_oberhalb(a, b):
+        # `winfo children` liefert Geschwister in Tk-Stapelreihenfolge.
+        # So hängt die Gegenprobe nicht davon ab, welches fremde Programm
+        # gerade vor dem Testfenster liegt (winfo_containing könnte None sein).
+        zweig_a, zweig_b = [], []
+        while a is not None:
+            zweig_a.append(a)
+            a = a.master
+        while b is not None:
+            zweig_b.append(b)
+            b = b.master
+        gemeinsam = next((widget for widget in zweig_a if widget in zweig_b), None)
+        if gemeinsam is None:
+            return False
+        kind_a = zweig_a[zweig_a.index(gemeinsam) - 1]
+        kind_b = zweig_b[zweig_b.index(gemeinsam) - 1]
+        geschwister = gemeinsam.winfo_children()
+        return geschwister.index(kind_a) > geschwister.index(kind_b)
+
     for knopf in knoepfe_hier:
         sicht = sichtbarer_ausschnitt(knopf, mod)
         if sicht is None:
@@ -416,6 +435,9 @@ def knopf_befunde(fenster, mod, kontext):
             breite = min(sicht[2], ihre[2]) - max(sicht[0], ihre[0])
             hoehe = min(sicht[3], ihre[3]) - max(sicht[1], ihre[1])
             if breite > 0 and hoehe > 0:
+                # Ein schwebender Knopf darf vor seiner Trägerfläche liegen.
+                if liegt_oberhalb(knopf, anderes):
+                    continue
                 art = type(anderes).__name__
                 was = getattr(anderes, "text", None) or (str(anderes.cget("text"))[:40] if "text" in anderes.keys() else "")
                 befunde.append(f"{kontext}: „{name}“ überlagert von {art} „{was}“ ({breite}×{hoehe} px)")
@@ -425,6 +447,26 @@ def knopf_befunde(fenster, mod, kontext):
 def fall_b15_appweit(lauf):
     """Buttonschutz in Hauptansichten und Dialogen, Mindest- und Referenzgröße, große Schrift."""
     app, mod = lauf.app, lauf.mod
+    lauf.idle()
+    # Echte Stapelreihenfolge: Hintergrund unter einem Knopf ist kein
+    # Bedienhindernis; derselbe Text darüber muss weiterhin rot werden.
+    probe = mod.tk.Frame(lauf.root, width=160, height=60)
+    probe.place(x=20, y=20)
+    background = mod.tk.Label(probe, text='Hintergrund', width=16)
+    background.place(x=0, y=0, width=150, height=40)
+    button = mod.RoundedButton(probe, 'Prüfknopf', lambda: None,
+                               app.theme['card'], app.theme['hover'], app.theme['text'],
+                               width=150, height=40)
+    button.place(x=0, y=0)
+    try:
+        lauf.root.tk.call('raise', str(button))
+        lauf.root.update_idletasks()
+        assert not knopf_befunde(probe, mod, 'Stapel Hintergrund')[1], 'Hintergrund wird als Überlagerung gewertet'
+        background.lift()
+        lauf.root.update_idletasks()
+        assert any('Hintergrund' in finding for finding in knopf_befunde(probe, mod, 'Stapel Vordergrund')[1]), 'Echte Überlagerung nicht erkannt'
+    finally:
+        probe.destroy()
     lauf.showcase()
     gesamt, befunde = 0, []
     for groesse in ("mittel", "gross"):

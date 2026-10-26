@@ -1,6 +1,8 @@
 # Prüfungen für Glide
 
-Stand 25.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · 104 Suiten aus `pruefen.py` und fünf Analysen
+Stand 26.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · 104 Suiten aus `pruefen.py` und fünf Analysen
+
+Startseitenmodell WA-39/WA-36 (26.10.2026): zwölf Fachfälle in `test_home_dashboard.py`; `test_startseite3332.py` ergänzt Archiv-/Datums-/Gleichstandsprüfung, genau einen Modellaufbau für die Bestandskacheln, echte Erledigen-/Undo-Aktion, aktuelle Objektauflösung und Renderfehler. Bestehende Standard-/Anpassungs-/Designprüfungen bleiben. [Nachweis und Leistung](qa-3.45.0/startseitenmodell_2026-10-26/README.md). Keine zusätzliche Suite und kein neuer Volllauf.
 
 WA-40/WA-47 (lokaler Kandidat 25.10.2026): `test_speicherstatus.py` prüft vier echte Bereiche – Autosave-Fehler/Retry-Dialog, getrennte Nebenwege, geschützte Größenüberschreitungen und Reserve/Importabbruch. `storage_health.py` hat acht Tk-freie Tests; Formatvorsicherungen bleiben bytegenau und parse-zwischengespeichert. [Paketnachweis](qa-3.44.0/speicherstatus_2026-10-25/README.md).
 

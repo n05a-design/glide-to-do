@@ -1,10 +1,10 @@
 # Glide – lokale Aufgaben, Notizen und Pinnwände
 
-Stand 26.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Quellkandidat mit direkten Freigaben im Tagesvorschlag
+Stand 26.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Quellkandidat mit gemeinsamem Startseitenmodell
 
 Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Sie läuft lokal mit Python 3.14 und Tk 9 (Tk 8.6 eingeschränkt), braucht weder Konto noch Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
-> **Projektstatus:** interner Quellkandidat auf **3.45.0** · Aufgabenformat 26 · WA-12 und Verweisvorschau D55/WA-11 lokal umgesetzt. `07_Python-Versionen` bleibt beim vorherigen Lieferabschluss; `app.pyw`, `day_proposal.py` und `side_view.py` unterscheiden sich. [Aktueller Nachweis](tests/qa-3.45.0/verweisvorschau_2026-10-26/README.md), [QA-Bericht](docs/07_QA_BERICHT.md). Breite native Restprüfung und gemeinsamer Phasenabschluss offen; keine öffentliche Releasefassung.
+> **Projektstatus:** interner Quellkandidat auf **3.45.0** · Aufgabenformat 26 · Startseitenmodell WA-39/WA-36, WA-12 und Verweisvorschau D55/WA-11 umgesetzt. `07_Python-Versionen` bleibt beim vorherigen Lieferabschluss; `app.pyw`, `day_proposal.py`, `side_view.py` und das neue `home_dashboard.py` unterscheiden sich. [Aktueller Nachweis](tests/qa-3.45.0/startseitenmodell_2026-10-26/README.md), [QA-Bericht](docs/07_QA_BERICHT.md). Breite native Restprüfung und gemeinsamer Phasenabschluss offen; keine öffentliche Releasefassung.
 
 Funktionsumfang im Überblick: [Projekt-README](../../README.md#was-glide-kann); Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md); Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 

@@ -17,6 +17,7 @@ REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / 'tests/integration'))
 from test_schutzrunde import Lauf
 from vorversion import einstellungsprobe_format25, finden
+from historical_runtime import historical_app
 
 
 def descendants(widget):
@@ -149,13 +150,14 @@ def fall_altleser(run):
     einstellungsprobe_format25(run.mod.SAVE_FILE)
     old=finden(REPO.parents[1],'3.43.1',REPO/'CHANGELOG.md');assert old is not None  # seit 3.44.0 im Archiv
     code='import sys;sys.path.insert(0,sys.argv[3]);from test_schutzrunde import Lauf\nr=Lauf(sys.argv[1],sys.argv[2]);assert r.app.save_settings();r.ende()'
-    child=subprocess.run([sys.executable,'-B','-c',code,str(old),run.data,str(REPO/'tests/integration')],capture_output=True,text=True,timeout=90)
+    with historical_app(REPO.parents[1],old) as old_runtime:
+        child=subprocess.run([sys.executable,'-B','-c',code,str(old_runtime),run.data,str(REPO/'tests/integration')],capture_output=True,text=True,timeout=90)
     assert child.returncode==0,(child.stdout+child.stderr)[-1200:]
     after=json.loads(settings.read_text(encoding='utf-8'))
     assert after['saved_view_conditions_v1']==raw['saved_view_conditions_v1']
     assert after['saved_view_layouts_v1']==raw['saved_view_layouts_v1']
     run.start();assert run.app.saved_filters.definition(criterion())==value['_view']
-    return {'altleser_sha256':hashlib.sha256(old.read_bytes()).hexdigest()}
+    return {'altleser_sha256':hashlib.sha256(old.read_bytes()).hexdigest(),'historische_begleitmodule':True}
 
 
 def fall_altfilter(run):
@@ -179,12 +181,13 @@ sys.path.insert(0,sys.argv[3]);from test_schutzrunde import Lauf
 r=Lauf(sys.argv[1],sys.argv[2]);values=json.loads(Path(sys.argv[4]).read_text(encoding="utf-8"))
 print("ERGEBNIS "+json.dumps([sorted(row[4]["id"] for row in r.app.saved_filters.entries(v)) for v in values]));r.ende()
 '''
-    child=subprocess.run([sys.executable,'-B','-c',code,str(old),run.data,str(REPO/'tests/integration'),str(request)],capture_output=True,text=True,timeout=90)
+    with historical_app(REPO.parents[1],old) as old_runtime:
+        child=subprocess.run([sys.executable,'-B','-c',code,str(old_runtime),run.data,str(REPO/'tests/integration'),str(request)],capture_output=True,text=True,timeout=90)
     assert child.returncode==0,(child.stdout+child.stderr)[-1200:]
     actual=json.loads(next(line[9:] for line in child.stdout.splitlines() if line.startswith('ERGEBNIS ')))
     assert actual==expected,(actual,expected)
     run.start()
-    return {'alte_kombinationen':len(criteria),'identisch_zum_ausgelieferten_leser':True}
+    return {'alte_kombinationen':len(criteria),'identisch_zum_ausgelieferten_leser':True,'historische_begleitmodule':True}
 
 
 def fall_dialog(run):
