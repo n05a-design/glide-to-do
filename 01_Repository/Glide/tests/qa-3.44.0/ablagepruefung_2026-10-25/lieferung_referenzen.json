@@ -1,0 +1,37 @@
+{
+  "windows": {
+    "manifest": "01_Repository/Glide/tests/qa-3.42.0/eigenstaendige_pakete_2026-10-13/windows_abschluss_bau.json",
+    "dateien": 102,
+    "hashgleich": 102,
+    "fehlt": [],
+    "abweichend": [],
+    "native_pruefung": false
+  },
+  "macos": {
+    "manifest": "01_Repository/Glide/tests/qa-3.42.0/eigenstaendige_pakete_2026-10-13/mac_abschluss_bau.json",
+    "dateien": 330,
+    "hashgleich": 327,
+    "fehlt": [
+      "Contents/Frameworks/Python.framework/Versions/3.14/Python",
+      "Contents/Frameworks/Python.framework/Versions/3.14/Resources/Info.plist",
+      "Contents/Frameworks/Python.framework/Versions/3.14/_CodeSignature/CodeResources"
+    ],
+    "abweichend": [],
+    "native_pruefung": false
+  },
+  "originalbilder": {
+    "anzahl": 28,
+    "abweichend": []
+  },
+  "quelle_07_unterschiede": [
+    "Glide-Aufgaben-und-Listen_v3.44.0.pyw",
+    "action_catalog.py",
+    "action_menu.py",
+    "compact_mode.py",
+    "notion_archive.py",
+    "schema_backups.py",
+    "side_view.py",
+    "storage_health.py",
+    "symbol_policy.py"
+  ]
+}

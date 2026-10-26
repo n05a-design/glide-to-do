@@ -1,0 +1,11 @@
+{
+  "stand": "2026-10-26",
+  "ziel": "Eigene eingefrorene Prüfkopie außerhalb des Projekts",
+  "dateien": 2650,
+  "bytes": 497350175,
+  "verweise": 0,
+  "status": "Automatische Freigabeprüfung abgelehnt",
+  "grund": "blocked by policy",
+  "ausgefuehrt": false,
+  "nachweise": "quellmanifest.json und windows_voll bleiben im Projekt erhalten; privater Prüfpfad nur in freeze_ort.log"
+}

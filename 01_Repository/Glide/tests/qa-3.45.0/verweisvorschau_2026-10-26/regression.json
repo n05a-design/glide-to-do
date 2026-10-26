@@ -1,0 +1,18 @@
+{
+  "app_sha256": "b53e6822b3f378119a9fc15cc1f2eac46fb2f2adb3a82a180f12834688ba5ad2",
+  "ergebnisse": [
+    {
+      "fall": "nebenansicht_liste",
+      "exitcode": 1
+    },
+    {
+      "fall": "nebenansicht_seite",
+      "exitcode": 1
+    },
+    {
+      "fall": "nebenansicht_inspektor",
+      "exitcode": 1
+    }
+  ],
+  "exitcode": 1
+}

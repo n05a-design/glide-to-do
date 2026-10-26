@@ -10,6 +10,7 @@ from types import SimpleNamespace
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'src/glide'))
 from schema_backups import SchemaBackups, file_signature
+from storage_health import MAX_JSON_BYTES, SizeLimitError, read_stream
 
 
 class SchemaBackupTests(unittest.TestCase):
@@ -41,8 +42,7 @@ class SchemaBackupTests(unittest.TestCase):
             with self.subTest(version=version):
                 original = self.write({'version': version, 'text': 'ä\nAltbestand'})
                 guard = SchemaBackups()
-                load = json.load
-                with patch('schema_backups.json.load', wraps=load) as calls:
+                with patch('schema_backups.read_stream', wraps=read_stream) as calls:
                     for target in range(12, 23):
                         backup = guard.ensure(self.source, self.backups, target)
                         self.assertEqual(bool(backup), version < target)
@@ -55,11 +55,22 @@ class SchemaBackupTests(unittest.TestCase):
         payload = {'version': 11}
         self.write(payload)
         self.guard.observe(self.source, payload, self.source.stat())
-        with patch('schema_backups.json.load', side_effect=AssertionError('Zusatz-Parse')):
+        with patch('schema_backups.read_stream', side_effect=AssertionError('Zusatz-Parse')):
             self.assertTrue(self.guard.ensure(self.source, self.backups, 20))
 
     def test_missing_file_needs_no_backup(self):
         self.assertIsNone(self.guard.ensure(self.source, self.backups, 20))
+
+    def test_oversized_source_is_rejected_before_hash_or_parse(self):
+        with self.source.open('wb') as stream:
+            stream.truncate(MAX_JSON_BYTES + 1)
+        with patch('schema_backups.hashlib.file_digest') as digest, \
+                patch('schema_backups.read_stream') as read:
+            with self.assertRaises(SizeLimitError):
+                self.guard.ensure(self.source, self.backups, 26)
+        digest.assert_not_called()
+        read.assert_not_called()
+        self.assertFalse(self.backups.exists())
 
     def test_scalar_missing_string_and_bool_version_are_backed_up(self):
         for payload in [[], {}, {'version': '20'}, {'version': True}]:
@@ -107,8 +118,7 @@ class SchemaBackupTests(unittest.TestCase):
 
     def test_windows_unchanged_content_still_parses_only_once(self):
         self.write({'version': 18})
-        load = json.load
-        with patch('schema_backups.os.name', 'nt'), patch('schema_backups.json.load', wraps=load) as calls:
+        with patch('schema_backups.os.name', 'nt'), patch('schema_backups.read_stream', wraps=read_stream) as calls:
             for _ in range(5):
                 self.assertTrue(self.guard.ensure(self.source, self.backups, 20))
             self.assertEqual(calls.call_count, 1)

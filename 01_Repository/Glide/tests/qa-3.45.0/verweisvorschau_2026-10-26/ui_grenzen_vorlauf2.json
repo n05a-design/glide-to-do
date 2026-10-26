@@ -1,0 +1,12 @@
+{
+  "app_sha256": "b53e6822b3f378119a9fc15cc1f2eac46fb2f2adb3a82a180f12834688ba5ad2",
+  "faelle": {
+    "verweisvorschau_grenzen": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1137, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 764, in fall_verweisvorschau_grenzen\n    assert not app.find_item_in_lists(punkte[1]['id'])[0]['done']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    }
+  },
+  "fehler": [
+    "verweisvorschau_grenzen"
+  ]
+}

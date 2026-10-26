@@ -54,6 +54,8 @@ def leere_ordner_entfernen(ordner):
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--anzeigen", action="store_true", help="nur auflisten, nichts entfernen")
+    parser.add_argument("--ohne-git-index", action="store_true",
+                        help="nur Arbeitsdateien entfernen; keine Änderungen am Git-Index")
     args = parser.parse_args()
     pfade = kandidaten()
     for pfad in pfade:
@@ -71,9 +73,10 @@ def main():
                    or (ablagegroesse.ABLAGE.joinpath(*glieder[:tiefe])).is_junction()
                    for tiefe in range(1, len(glieder) + 1)):
                 raise ValueError("Verknüpfung wird nicht gelöscht")
-        for start in range(0, len(pfade), 200):
-            subprocess.run(["git", "rm", "-q", "-f", "--ignore-unmatch", "--", *pfade[start:start + 200]],
-                           cwd=ablagegroesse.ABLAGE, check=True)
+        if not args.ohne_git_index:
+            for start in range(0, len(pfade), 200):
+                subprocess.run(["git", "rm", "-q", "-f", "--ignore-unmatch", "--", *pfade[start:start + 200]],
+                               cwd=ablagegroesse.ABLAGE, check=True)
         # Neue Nachweise sind häufig noch nicht im Index. Gleiche Regeln und
         # gleicher geprüfter Plan wie bei den bereits versionierten Dateien.
         for name in pfade:

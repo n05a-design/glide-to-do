@@ -1,0 +1,6 @@
+{
+  "textdateien": 1495,
+  "git_kandidat_dateien": 1668,
+  "befunde": [],
+  "grenze": "Erweiterung der CI-Pfadprüfung auf neue nicht ignorierte Dateien; begrenzte Token-/Privatschlüsselmuster, kein vollständiger Secret-Scanner."
+}

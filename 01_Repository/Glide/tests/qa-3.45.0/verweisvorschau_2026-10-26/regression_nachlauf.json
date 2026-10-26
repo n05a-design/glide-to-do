@@ -1,0 +1,26 @@
+[
+  {
+    "fall": "verweisvorschau_grenzen",
+    "app": "Quelle",
+    "report": "ui_grenzen_final.json",
+    "exitcode": 1
+  },
+  {
+    "fall": "nebenansicht_liste",
+    "app": "Quelle",
+    "report": "nebenansicht_liste_final.json",
+    "exitcode": 1
+  },
+  {
+    "fall": "nebenansicht_seite",
+    "app": "Quelle",
+    "report": "nebenansicht_seite_final.json",
+    "exitcode": 1
+  },
+  {
+    "fall": "nebenansicht_seite",
+    "app": "Lieferung",
+    "report": "nebenansicht_seite_liefergegenprobe.json",
+    "exitcode": 1
+  }
+]

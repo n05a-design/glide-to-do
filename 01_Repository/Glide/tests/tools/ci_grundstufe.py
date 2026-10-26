@@ -4,7 +4,7 @@
 Aufruf aus `01_Repository/Glide`:
     python3 -B tests/tools/ci_grundstufe.py [--protokoll ORDNER] [--lieferstand-streng]
 
-Läuft in GitHub Actions bei Push auf `main` und `claude/**`, bei Pull Requests
+Läuft in GitHub Actions bei Push auf `main`, `claude/**` und `codex/**`, bei Pull Requests
 auf `main` sowie lokal. Nutzt die Prüfungen aus `pruefen.py`, statt sie zu
 duplizieren:
 

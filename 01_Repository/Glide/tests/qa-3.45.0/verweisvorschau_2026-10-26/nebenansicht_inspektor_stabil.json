@@ -1,0 +1,12 @@
+{
+  "app_sha256": "0c606fba35f4529ea1115eb2078e2834db773ff0a15f99234366d64923d3b9d9",
+  "faelle": {
+    "nebenansicht_inspektor": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1165, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 564, in fall_nebenansicht_inspektor\n    assert app.detail_pane.winfo_ismapped(), \"automatischer Inspektor\"\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\nAssertionError: automatischer Inspektor\n"
+    }
+  },
+  "fehler": [
+    "nebenansicht_inspektor"
+  ]
+}

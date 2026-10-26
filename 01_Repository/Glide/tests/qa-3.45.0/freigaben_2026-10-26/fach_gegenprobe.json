@@ -1,0 +1,10 @@
+{
+  "stand": "Unveränderter 3.45.0-Lieferstand vor WA-12",
+  "exitcode": 1,
+  "erwartet_rot": true,
+  "befund": "Vier der fünf neuen Fälle sind erwartungsgemäß rot: Freigabegrund, letzte offene Voraussetzung, Reihenfolge/Text und externer Erledigungsstand. Der Ausschlussfall und die acht bestehenden Fälle bestehen.",
+  "tests": 13,
+  "fehlschlaege": 2,
+  "fehler": 2,
+  "gruen": 9
+}

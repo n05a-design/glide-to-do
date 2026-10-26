@@ -1,6 +1,11 @@
 """Konversion, Workergrenzen und Abbruch ohne Tk oder echte Nutzerdaten."""
 from pathlib import Path
 import ast
+import base64
+import os
+import re
+import struct
+import subprocess
 import sys
 import tempfile
 import threading
@@ -91,6 +96,30 @@ class Files(unittest.TestCase):
 
     def test_nonzero_child_is_failure(self):
         self.assertFalse(conversion.run_converter([sys.executable, '-c', 'raise SystemExit(7)'], threading.Event()))
+
+    def test_windows_paths_are_encoded_data_not_script_syntax(self):
+        source = "C:/Bilder/‘ ’ ‚ ‛ “ ” „ $ ; O'Brian/Quelle.bmp"
+        target = "C:/Cache/‘Neues’ Bild.png"
+        script = conversion.windows_convert_command(source, target)[-1]
+        encoded = re.findall(r"FromBase64String\('([^']+)'\)", script)
+        self.assertEqual([base64.b64decode(v).decode('utf-8') for v in encoded], [source, target])
+        self.assertNotIn(source, script)
+        self.assertNotIn(target, script)
+
+    @unittest.skipUnless(os.name == 'nt', 'Echte WIC-Wandlung braucht Windows')
+    def test_native_windows_conversion_with_unusual_paths(self):
+        folder = self.source.parent / "‘ ’ ‚ ‛ “ ” „ $ ; O'Brian"
+        folder.mkdir()
+        source, target = folder / 'Quelle.bmp', folder / 'Ergebnis.png'
+        pixels = b'\xff\x00\x00' * 2 + b'\0\0'
+        bitmap = (b'BM' + struct.pack('<IHHI', 70, 0, 0, 54)
+                  + struct.pack('<IiiHHIIiiII', 40, 2, 2, 1, 24, 0, 16, 0, 0, 0, 0)
+                  + pixels * 2)
+        source.write_bytes(bitmap)
+        self.assertTrue(conversion.run_converter(conversion.windows_convert_command(source, target),
+                                                 threading.Event(), timeout=20,
+                                                 creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0)))
+        self.assertEqual(target.read_bytes()[:8], b'\x89PNG\r\n\x1a\n')
 
 
 class Worker(unittest.TestCase):

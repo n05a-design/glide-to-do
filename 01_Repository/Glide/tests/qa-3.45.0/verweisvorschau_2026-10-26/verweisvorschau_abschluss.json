@@ -1,0 +1,10 @@
+{
+  "app_sha256": "0c606fba35f4529ea1115eb2078e2834db773ff0a15f99234366d64923d3b9d9",
+  "faelle": {
+    "verweisvorschau": {
+      "ok": true,
+      "befund": "Echter Strg+Umschalt-Klick, Kontext unter Auswahl, Verweis-/Rückverweismenü, frische IDs/Titel, Taskmarkierung in Liste/Seite, Haupteditor und offener Text erhalten; alter Strg-Klick bleibt"
+    }
+  },
+  "fehler": []
+}

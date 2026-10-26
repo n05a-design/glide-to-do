@@ -9,25 +9,48 @@ Archive und Nachweise auf die sieben neuesten Versionen und Fensterbilder auf
 die drei neuesten (Entscheidung des Inhabers vom 03.10.2026).
 """
 import pathlib
+import argparse
+import os
+import tempfile
 import re
 import subprocess
 import sys
 
-NEU, DATUM = sys.argv[1], sys.argv[2]
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("version")
+parser.add_argument("datum")
+parser.add_argument("--ohne-git-index", action="store_true",
+                    help="Aufbewahrung nur in Arbeitsdateien kürzen; den Git-Index nicht ändern")
+args = parser.parse_args()
+NEU, DATUM = args.version, args.datum
 # Ablage-Wurzel: scripts/pflege → Glide → 01_Repository → Ablage
 ABLAGE = pathlib.Path(__file__).resolve().parents[4]
 REPO = ABLAGE / "01_Repository/Glide"
 ALT = (REPO / "VERSION").read_text().strip()
 
 
+def schreibe(pfad, text):
+    """LF erhalten und einen Fehler beim Öffnen der Zieldatei nicht truncierend behandeln."""
+    fd, name = tempfile.mkstemp(prefix=".glide-version-", suffix=".tmp", dir=pfad.parent)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as file:
+            file.write(text)
+            file.flush()
+            os.fsync(file.fileno())
+        os.replace(name, pfad)
+    finally:
+        if os.path.exists(name):
+            os.unlink(name)
+
+
 def ersetze(pfad, alt, neu, anzahl=1):
     text = pfad.read_text(encoding="utf-8")
     assert text.count(alt) == anzahl, (pfad, alt, text.count(alt))
-    pfad.write_text(text.replace(alt, neu), encoding="utf-8")
+    schreibe(pfad, text.replace(alt, neu))
 
 
-(REPO / "VERSION").write_text(NEU + "\n")
 ersetze(REPO / "src/glide/app.pyw", f'APP_VERSION = "{ALT}"', f'APP_VERSION = "{NEU}"')
+schreibe(REPO / "VERSION", NEU + "\n")
 ersetze(REPO / "tests/tools/releasedaten.py", f'APP_VERSION = "{ALT}"', f'APP_VERSION = "{NEU}"')
 for name in ("test_glide.py", "test_glide_36.py", "test_features329.py"):
     ersetze(REPO / "tests/integration" / name, f'APP_VERSION == "{ALT}"', f'APP_VERSION == "{NEU}"')
@@ -55,9 +78,10 @@ for datei, zeilen in sorted(ziele.items()):
         z = re.sub(r"(Stand:? |Stand der Dokumentationspflege: |Stand der Ablagebeschreibung |Entwicklungsstand )"
                    r"\d\d\.\d\d\.2026", rf"\g<1>{DATUM}", z)
         text[nummer - 1] = z
-    pfad.write_text("\n".join(text), encoding="utf-8")
+    schreibe(pfad, "\n".join(text))
 print(f"{len(ziele)} Standangaben angepasst")
-kuerzen = subprocess.run([sys.executable, "-B", str(REPO / "scripts/pflege/ablage_kuerzen.py")],
+kuerzen = subprocess.run([sys.executable, "-B", str(REPO / "scripts/pflege/ablage_kuerzen.py"),
+                         *(["--ohne-git-index"] if args.ohne_git_index else [])],
                          capture_output=True, text=True, cwd=REPO)
 assert kuerzen.returncode == 0, kuerzen.stderr[-2000:]
 print(kuerzen.stdout.strip().splitlines()[-1])

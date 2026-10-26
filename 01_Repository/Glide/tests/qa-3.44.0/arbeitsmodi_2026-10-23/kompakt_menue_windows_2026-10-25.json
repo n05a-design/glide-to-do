@@ -1,0 +1,10 @@
+{
+  "app_sha256": "155d1a9b318f652fae6b0ad944dd4c1ddd3928c1d4c64bad76e797fa2c3f97f0",
+  "faelle": {
+    "kompakt": {
+      "ok": true,
+      "befund": "Kompaktmodus direkt als erster Menüeintrag; Kürzel mit Drücken/Loslassen und reinem Loslassen im Editor/Hauptfenster, keine Doppelwirkung; 480×560, getrennte Lagen über Neustart, Kopf B07, 26 Knöpfe ohne Befund"
+    }
+  },
+  "fehler": []
+}

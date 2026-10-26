@@ -1,0 +1,48 @@
+{
+  "version": "3.45.0",
+  "exitcode": 0,
+  "checks": [
+    "Vorschau, Gründe, Kapazität/Tageswechsel/Archiv, Mehrfachquellen, ein Undo",
+    "Kürzel, Kalender/Escape, Mehrfach-Zeitblöcke, Raster-Tab/Pfeile/Entf, Editorfokus",
+    "Fokusstart/Pause, Pause zählt nicht, genau einmal buchen, erledigen/weiter, gemeinsames Undo",
+    "Zeitobergrenze: Abschluss-Undo erhält den vorherigen unabhängigen Zeitblock",
+    "Schreibfehler an drei Grenzen, Retry, Mutationssperre, beide Crashfenster, Konflikt verweigert",
+    "Persistente Pause und Neustart ohne doppelte Buchung oder Pausenzeit",
+    "Intervallende/Pausenhinweis, Ansichtswechsel und schreibgeschützter Bestand",
+    "WA-12: echte direkte Freigaben, Archiv-/Erledigt-/Mehrfachgrenzen, veraltete Vorschau, echte Auswahl/Übernahme, ein Undo/Redo",
+    "16 Oberflächenkombinationen: Vorschlag/Fokus, Mindest-/Referenzgröße, Schrift, hell/dunkel",
+    "Echter Zeitblockdialog: Escape lässt Bestand und Undo unverändert"
+  ],
+  "app_sha256": "07fd279e5bb9e143d78b32cde6a8e3d12d82f0e1c27b5100a78bef5966c37a53",
+  "timings": [
+    {
+      "items": 1000,
+      "warm_ms": [
+        12.22759997472167,
+        12.989499955438077,
+        13.43230006750673,
+        14.662900008261204,
+        14.979600091464818
+      ],
+      "median_ms": 13.43230006750673,
+      "p95_ms": 14.979600091464818,
+      "candidates": 1005
+    },
+    {
+      "items": 10000,
+      "warm_ms": [
+        164.9097999325022,
+        153.20669999346137,
+        159.39950000029057,
+        158.4949999814853,
+        165.07879993878305
+      ],
+      "median_ms": 159.39950000029057,
+      "p95_ms": 165.07879993878305,
+      "candidates": 10005
+    }
+  ],
+  "callback_errors": [],
+  "data": "artificial; isolated GLIDE_DATA_DIR",
+  "manual_acceptance": "open"
+}

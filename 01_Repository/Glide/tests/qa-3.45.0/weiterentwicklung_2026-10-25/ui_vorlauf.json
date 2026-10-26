@@ -1,0 +1,34 @@
+{
+  "app_sha256": "7012940c707d35a9c35b5657d474dcce31d0b3bb9abef6711561f9b6bb5f0264",
+  "faelle": {
+    "uebersicht": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_sicherungszentrale.py\", line 212, in main\n    detail = globals()['fall_' + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_sicherungszentrale.py\", line 79, in fall_uebersicht\n    visit(lauf, 'Sicherungsübersicht', app.show_backup_catalog, action)\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_sicherungszentrale.py\", line 41, in visit\n    assert visited and not failures, failures\n           ^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ['Traceback (most recent call last):\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_sicherungszentrale.py\", line 30, in interact\\n    action(dialog)\\n    ~~~~~~^^^^^^^^\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_sicherungszentrale.py\", line 61, in action\\n    assert any(a[\\'action_id\\'] == \\'show_backup_catalog\\' for a in app.action_registry.values())\\n                                                                ^^^^^^^^^^^^^^^^^^^\\nAttributeError: \\'ListApp\\' object has no attribute \\'action_registry\\'\\n']\n"
+    },
+    "datei_fehler": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_sicherungszentrale.py\", line 212, in main\n    detail = globals()['fall_' + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_sicherungszentrale.py\", line 101, in fall_datei_fehler\n    visit(lauf, 'Sicherungsübersicht', app.show_backup_catalog, action)\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_sicherungszentrale.py\", line 41, in visit\n    assert visited and not failures, failures\n           ^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ['Traceback (most recent call last):\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_sicherungszentrale.py\", line 30, in interact\\n    action(dialog)\\n    ~~~~~~^^^^^^^^\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_sicherungszentrale.py\", line 93, in action\\n    button(dialog, mod, \\'Datei …\\').command()\\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_sicherungszentrale.py\", line 18, in button\\n    return next(b for b in knoepfe(dialog, mod.RoundedButton) if b.text == text)\\nStopIteration\\n']\n"
+    },
+    "vergleichen": {
+      "ok": true,
+      "befund": "Auswahl direkt zum Vergleich; gleichnamige Dateien aus verschiedenen Ordnern bleiben getrennt"
+    },
+    "wiederherstellen": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_sicherungszentrale.py\", line 212, in main\n    detail = globals()['fall_' + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_sicherungszentrale.py\", line 136, in fall_wiederherstellen\n    visit(lauf, 'Sicherungsübersicht', app.show_backup_catalog,\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n          lambda dialog: button(dialog, mod, 'Wiederherstellen …').command())\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_sicherungszentrale.py\", line 41, in visit\n    assert visited and not failures, failures\n           ^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ['Traceback (most recent call last):\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_sicherungszentrale.py\", line 30, in interact\\n    action(dialog)\\n    ~~~~~~^^^^^^^^\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_sicherungszentrale.py\", line 137, in <lambda>\\n    lambda dialog: button(dialog, mod, \\'Wiederherstellen …\\').command())\\n                   ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_sicherungszentrale.py\", line 18, in button\\n    return next(b for b in knoepfe(dialog, mod.RoundedButton) if b.text == text)\\nStopIteration\\n']\n"
+    },
+    "anhaenge": {
+      "ok": true,
+      "befund": "Abbruch verhindert OS-Aufruf, Zustimmung einmalig; echter Anhangseditor führt durch die Typregel"
+    },
+    "layout": {
+      "ok": true,
+      "befund": "24 Knopfprüfungen bei 600x480/800x600 und mittlerer/großer Schrift"
+    }
+  },
+  "fehler": [
+    "uebersicht",
+    "datei_fehler",
+    "wiederherstellen"
+  ]
+}

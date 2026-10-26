@@ -1,0 +1,11 @@
+{
+  "zeitpunkt": "2026-10-26T01:16:40",
+  "schritte": [
+    {
+      "schritt": "Showcase-Abgleich",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    }
+  ],
+  "exitcode": 0
+}

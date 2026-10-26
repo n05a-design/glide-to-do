@@ -120,6 +120,16 @@ class Einstiegspruefung(unittest.TestCase):
             self.assertEqual(list(stand.dokumente(root)),[active])
             self.assertEqual({path:path.read_bytes() for path in before},before)
 
+    def test_git_inventory_skips_document_deleted_from_working_tree(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            subprocess.run(['git', 'init', '-q', str(root)], check=True)
+            deleted = root / 'alter_beleg.md'
+            deleted.write_text('# Historisch', encoding='utf-8')
+            subprocess.run(['git', '-C', str(root), 'add', deleted.name], check=True)
+            deleted.unlink()
+            self.assertEqual(list(stand.dokumente(root)), [])
+
     def test_git_inventory_respects_requested_subdirectory_and_staged_new_document(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

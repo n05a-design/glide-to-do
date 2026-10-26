@@ -1,0 +1,157 @@
+{
+  "grund": "Mit 3.45.0 entfällt der älteste der acht vorhandenen Nachweisstände nach der Sieben-Versionen-Regel.",
+  "dateien": [
+    {
+      "pfad": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.39.1.glidebackup",
+      "bytes": 33045,
+      "sha256": "38c1ff771db72fd2130149b59d480118c7e2fd519221187ff20c201736d4defa",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": true,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/README.md",
+      "bytes": 2847,
+      "sha256": "6486dff07390f57240f0bfdde7df1ce9d40e492d305fb43cbbc4c712b27e1344",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": true,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/aufbewahrung33321.json",
+      "bytes": 1054,
+      "sha256": "45de2ccd922e7b2456c413c4d7a1113ed1178a499549a68d33b8637ae8d9359f",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/bundle.json",
+      "bytes": 12232,
+      "sha256": "8a17974ad1b077fd5d2d3cb29a4580dad548dfdc071c5b29982ab403f8930149",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/gegenprobe.py",
+      "bytes": 4181,
+      "sha256": "ec2d860b5ffcc3ef805c679bc0a717cf8c9f892d028a1761333b873fb644a596",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": true,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/gegenprobe_3390.json",
+      "bytes": 461,
+      "sha256": "4b50a328b7b1beff84be0a2d5d5f5f53fb97014cb7a67b78252657b19bb15ff0",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/gegenprobe_3391.json",
+      "bytes": 400,
+      "sha256": "4c0831afeed30848388a71d6cfa28c21cdbd99cfa2426564464ffaddbf9d9fdc",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/grundstufe_kandidat.json",
+      "bytes": 3294,
+      "sha256": "57d9fb4ba01331ae5ead2358b16c990ba8f10c9e317a0b89b8e5bc01d0b770f9",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/grundstufe_lieferung.json",
+      "bytes": 3294,
+      "sha256": "005bf02f33154a4521dfb80318df005efa736d48964420d911219ed57947fe5d",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/lieferabschluss.json",
+      "bytes": 735,
+      "sha256": "f7bb5dda0e62495de9a030d214669eccb9fa4e198a04be42c641148931894985",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/lieferung.json",
+      "bytes": 24381,
+      "sha256": "d1866342835137cc1b091339d15ff42d1a20f0de97a698afacdcf2267abd53c2",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/linux_defektgegenproben.json",
+      "bytes": 4041,
+      "sha256": "572d26e34e16bb3207ba37ba18a95f1a0d8ecdb00afd9170f7128bc41c87ba93",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/linux_voll.json",
+      "bytes": 13030,
+      "sha256": "2f58dd7758bd06d51d17e87b3d0846df3f3971bcc38778b89e2ea57e775f2848",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/mac_voll.json",
+      "bytes": 13141,
+      "sha256": "61d8418e043fbee9dc47a3048fd9899fad86803a0531fda7add6a626d853a857",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/native.json",
+      "bytes": 537,
+      "sha256": "110981f7cda34828959e82572b2b2029a5937ca90580e2e8578a5ff6ee3cb970",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/produktionsuebernahme.json",
+      "bytes": 645,
+      "sha256": "ce930c32530105bed7658dbfd2645020878a4d691e24e0cbef1137eeec6ecf96",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/windows_desktop.json",
+      "bytes": 1787,
+      "sha256": "85bc66fd210f4bdad0ec6a82e6d8b9421fcc277650624f229a0570fffd1d8e4b",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/windows_voll.json",
+      "bytes": 13080,
+      "sha256": "606d781b6b4bb738bcef30a216695383b7fa661c1671af93fd25d03683c4f225",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": false,
+      "text_zeilenendgleich_in_Git": true
+    },
+    {
+      "pfad": "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.39.1.pyw",
+      "bytes": 3049073,
+      "sha256": "b65b6974244e7cadc6089e6ae724c7808ea8b134bbcc4520db38e19d97139b70",
+      "HEAD_71854ec_wiederherstellbar": true,
+      "bytegleich_in_Git": true,
+      "text_zeilenendgleich_in_Git": true
+    }
+  ]
+}

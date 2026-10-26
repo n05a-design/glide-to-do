@@ -1,0 +1,21 @@
+{
+  "gepflegte_dateien": [
+    "README.md",
+    "CLAUDE.md",
+    "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "01_Repository/Glide/README.md",
+    "01_Repository/Glide/CHANGELOG.md",
+    "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+    "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+    "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+    "01_Repository/Glide/packaging/README.md",
+    "01_Repository/Glide/packaging/macos/baue_app.py",
+    "01_Repository/Glide/scripts/pflege/abgleich_07.py",
+    "01_Repository/Glide/src/glide/README.md",
+    "01_Repository/Glide/tests/README.md"
+  ],
+  "zeilenenden": "LF gemäß Attributen, nur angefasste Dokumente und Kopierwerkzeuge; App/Referenzen unverändert"
+}

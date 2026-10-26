@@ -1,0 +1,25 @@
+{
+  "app_sha256": "0aed9961ab3ad25446fc655ef2d3d9dd3e9481af52699dbb72a157318b98850d",
+  "faelle": {
+    "fehler_retry": {
+      "ok": true,
+      "befund": "Autosave-Fehler sichtbar und dedupliziert; echter Dialog/Retry, Originalbytes bis Erfolg erhalten, Fußknöpfe frei"
+    },
+    "nebenwege": {
+      "ok": true,
+      "befund": "Einstellungen, Vorlagen und Sicherung getrennt; kein falscher Datenfehler; Retry aller offenen Speicherwege"
+    },
+    "groessen": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_speicherstatus.py\", line 178, in main\n    detail = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_speicherstatus.py\", line 134, in fall_groessen\n    assert path.read_bytes() == raw\n           ^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "reserve_import": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_speicherstatus.py\", line 178, in main\n    detail = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_speicherstatus.py\", line 145, in fall_reserve_import\n    assert app.storage_notice.winfo_ismapped()\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\nAssertionError\n"
+    }
+  },
+  "fehler": [
+    "groessen",
+    "reserve_import"
+  ]
+}

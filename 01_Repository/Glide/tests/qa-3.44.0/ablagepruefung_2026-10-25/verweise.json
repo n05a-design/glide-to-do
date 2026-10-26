@@ -1,0 +1,1324 @@
+{
+  "markdown_dateien": 84,
+  "lokale_verweise": 1293,
+  "befunde": [],
+  "externe_urls": [
+    {
+      "url": "https://affine.pro/download",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://affine.pro/pricing",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://affinity.help/designer2ipad/English.lproj/pages/Introduction/about_Personas.html",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://akiflow.com/features",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://appflowy.com/guide/appflowy-local-ai-ollama",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://appflowy.com/pricing",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://asana.com/features",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://blink.new/p/ai-notion-clone-c2b1mv4v",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://blink.new/p/notion-ai-clone-4kzth6kt",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://buildin.ai",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://capacities.io/pricing",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://chatgpt.com/features/space/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://clickup.com/features",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://core.tcl-lang.org/tips/doc/main/tip/750.md",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://culturedcode.com/things/blog/2026/08/repeating-to-dos-refined/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://culturedcode.com/things/support/articles/2803564/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://culturedcode.com/things/support/articles/2803579/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://culturedcode.com/things/support/articles/2967034/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://culturedcode.com/things/support/articles/4001304/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://culturedcode.com/things/support/articles/9780167/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://developer.apple.com/documentation/security/customizing-the-notarization-workflow",
+      "quellen": [
+        "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md"
+      ]
+    },
+    {
+      "url": "https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution",
+      "quellen": [
+        "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md"
+      ]
+    },
+    {
+      "url": "https://developer.apple.com/library/archive/documentation/LanguagesUtilities/Conceptual/MacAutomationScriptingGuide/DisplayNotifications.html",
+      "quellen": [
+        "01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md"
+      ]
+    },
+    {
+      "url": "https://developers.google.com/workspace/calendar/api/auth",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://developers.notion.com/reference/request-limits",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://doc.anytype.io/anytype",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://doc.anytype.io/anytype/data/import-and-export.md",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://doc.anytype.io/anytype/data/sync-and-backup/local-only.md",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://docs.capacities.io/misc/offline-support",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://docs.capacities.io/reference/export",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://docs.ollama.com/api/introduction",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://docs.python.org/3.14/library/fcntl.html#fcntl.flock",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Analyse.md",
+        "01_Repository/Glide/docs/02_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "url": "https://docs.python.org/3.14/library/msvcrt.html#msvcrt.locking",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Analyse.md",
+        "01_Repository/Glide/docs/02_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "url": "https://docs.python.org/3.14/library/os.html#os.fsync",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Analyse.md",
+        "01_Repository/Glide/docs/02_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "url": "https://docs.python.org/3.14/library/os.html#os.replace",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Analyse.md",
+        "01_Repository/Glide/docs/02_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "url": "https://docs.python.org/3.14/library/tkinter.html#threading-model",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/AppFlowy-IO/AppFlowy",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/EduartePaiva/ai-notion-clone",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/GothenburgBitFactory/taskwarrior",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/Orama-Interactive/Pixelorama",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/Orama-Interactive/Pixelorama/blob/master/LICENSE",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/TriliumNext/Trilium",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/alainm23/planify",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/anyproto/anytype-ts",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/anyproto/anytype-ts/blob/main/LICENSE.md",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/aseprite/aseprite/blob/main/EULA.txt",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/go-vikunja/vikunja",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/go-vikunja/vikunja/blob/main/LICENSE",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/laurent22/joplin",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/logseq/logseq",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do",
+      "quellen": [
+        "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/38979558948",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Analyse.md",
+        "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/39075284901",
+      "quellen": [
+        "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main",
+      "quellen": [
+        "README.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/0e7b3583a9d7a53925e0b67053895718bbd1c6b6/01_Repository/Glide/tests/qa-3.37.0/logo_symbole_2026-10-10/README.md",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/10427276b97e10528759cc42b0d23f757ca14843/01_Repository/Glide/tests/qa-3.39.0/tagesplanung_2026-10-12/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/10427276b97e10528759cc42b0d23f757ca14843/01_Repository/Glide/tests/qa-3.39.0/wettbewerbsanalyse_2026-10-13/README.md",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/19c7df5/00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#18-ausbauprogramm-in-phasen-vorschlag-17102026",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.2/startseite_2026-10-02/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.2/startseite_2026-10-02/messung/zusammenfassung.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.2/startseite_2026-10-02/vollpruefung/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.3/eingabe_2026-10-02/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.3/eingabe_2026-10-02/auslieferung.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.3/eingabe_2026-10-02/vollpruefung/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.4/wiederholung_2026-10-02/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.4/wiederholung_2026-10-02/auslieferung.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.4/wiederholung_2026-10-02/vollpruefung/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.5/eisenhower_2026-10-02/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.5/eisenhower_2026-10-02/auslieferung.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.5/eisenhower_2026-10-02/vollpruefung/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.6/heute_2026-10-02/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.6/heute_2026-10-02/auslieferung.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.6/heute_2026-10-02/vollpruefung/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.7/abnahme_windows_2026-10-05/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.7/nachpruefung_windows_2026-10-05/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.7/suche_2026-10-05/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05/lieferabgleich.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05/prueflaufzeit.json",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05/voll_2/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/254541aeae4577c0529d1ef768846a5c4546e59f/01_Repository/Glide/tests/qa-3.33.8/windows_2026-10-05_1829/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/267baab914c5dee5bdd85e8556288e82a711b0ea/01_Repository/Glide/tests/qa-3.33.0/fundament_2026-10-01/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/267baab914c5dee5bdd85e8556288e82a711b0ea/01_Repository/Glide/tests/qa-3.33.0/fundament_2026-10-01/auslieferung.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/267baab914c5dee5bdd85e8556288e82a711b0ea/01_Repository/Glide/tests/qa-3.33.0/fundament_2026-10-01/vollpruefung/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/267baab914c5dee5bdd85e8556288e82a711b0ea/01_Repository/Glide/tests/qa-3.33.1/abschluss_2026-10-01/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/267baab914c5dee5bdd85e8556288e82a711b0ea/01_Repository/Glide/tests/qa-3.33.1/abschluss_2026-10-01/auslieferung.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/267baab914c5dee5bdd85e8556288e82a711b0ea/01_Repository/Glide/tests/qa-3.33.1/abschluss_2026-10-01/vollpruefung_3/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/2cbd561b289b549372e4ef0abb8aaa9405047fa4/01_Repository/Glide/tests/qa-3.34.0/wissen_2026-10-09/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/2cbd561b289b549372e4ef0abb8aaa9405047fa4/01_Repository/Glide/tests/qa-3.34.0/wissen_2026-10-09/voll/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/3e943ab%5E/00_Arbeitsvorbereitung/Glide_Funktionsrecherche_Ausbau_2026-09-30.md",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/3e943ab%5E/00_Arbeitsvorbereitung/Glide_Konkurrenz_und_Featurematrix_2026-10-01.md",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/3f75265429410ed186109626d4e0776d5dcc3438/01_Repository/Glide/tests/qa-3.36.0/fundament_2026-10-10/README.md",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/3f75265429410ed186109626d4e0776d5dcc3438/01_Repository/Glide/tests/qa-3.36.0/fundament_2026-10-10/native-final.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/3f75265429410ed186109626d4e0776d5dcc3438/01_Repository/Glide/tests/qa-3.36.0/fundament_vorher_nachher/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/20_FUNKTIONEN.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/5674936ee9fac941f5457d7922ed8d33dab54c50/01_Repository/Glide/tests/qa-3.38.0/auswahl_layout_2026-10-12/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/569020ef65880b28a50408e229a8027ba2a65898/00_Arbeitsvorbereitung/Archiv/Glide_KI_Austauschformat_und_Zukunftsarchitektur_Dublette_2026-09-18.md",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/609887723f54e69578095cc68ce09563f64ce0c1/01_Repository/Glide/tests/qa-3.33.17/wissen_woche_2026-10-07/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/609887723f54e69578095cc68ce09563f64ce0c1/01_Repository/Glide/tests/qa-3.33.17/wissen_woche_2026-10-07/voll/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/609887723f54e69578095cc68ce09563f64ce0c1/01_Repository/Glide/tests/qa-3.33.19/tempo_2026-10-09/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/609887723f54e69578095cc68ce09563f64ce0c1/01_Repository/Glide/tests/qa-3.33.19/tempo_2026-10-09/voll/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/609887723f54e69578095cc68ce09563f64ce0c1/01_Repository/Glide/tests/qa-3.33.20/komfort_2026-10-09/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/609887723f54e69578095cc68ce09563f64ce0c1/01_Repository/Glide/tests/qa-3.33.20/komfort_2026-10-09/voll/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/ba060bc5e0074c0f375b6da29b07450ab08b34be/01_Repository/Glide/tests/qa-3.35.0/austausch_2026-10-09/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/ba060bc5e0074c0f375b6da29b07450ab08b34be/01_Repository/Glide/tests/qa-3.35.0/austausch_2026-10-09/voll/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/ba060bc5e0074c0f375b6da29b07450ab08b34be/01_Repository/Glide/tests/qa-3.35.0/dokumentation_2026-10-09/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/ba060bc5e0074c0f375b6da29b07450ab08b34be/01_Repository/Glide/tests/qa-3.35.0/planung_2026-10-09/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/ba060bc5e0074c0f375b6da29b07450ab08b34be/01_Repository/Glide/tests/qa-3.35.0/planung_2026-10-10/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/ba060bc5e0074c0f375b6da29b07450ab08b34be/01_Repository/Glide/tests/qa-3.35.0/planung_fortsetzung_2026-10-10/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/cbd8939d718d1062cc6aad6c931717867ed98e63/01_Repository/Glide/tests/qa-3.33.18/dokumentation_2026-10-08/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md",
+        "01_Repository/Glide/tests/fixtures/README.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/cbd8939d718d1062cc6aad6c931717867ed98e63/01_Repository/Glide/tests/qa-3.33.18/seiten_2026-10-08/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/cbd8939d718d1062cc6aad6c931717867ed98e63/01_Repository/Glide/tests/qa-3.33.18/seiten_2026-10-08/voll/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/cc19f7b3dbc7bb6ae0c05807af9df2d7e2e189f9/01_Repository/Glide/tests/qa-3.33.21/oberflaeche_2026-10-09/README.md",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/n05a-design/glide-to-do/blob/cc19f7b3dbc7bb6ae0c05807af9df2d7e2e189f9/01_Repository/Glide/tests/qa-3.33.21/oberflaeche_2026-10-09/voll/ergebnis.json",
+      "quellen": [
+        "01_Repository/Glide/docs/07_QA_BERICHT.md"
+      ]
+    },
+    {
+      "url": "https://github.com/obsidianmd/jsoncanvas",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/obsidianmd/jsoncanvas/blob/main/LICENSE",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/pyinstaller/pyinstaller/blob/v6.22.3/PyInstaller/hooks/hook-_tkinter.py",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/siyuan-note/siyuan",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/super-productivity/super-productivity",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/super-productivity/super-productivity/blob/78139c531c808bab7c46ef96fd0fbb0a3b6f7d6d/src/app/features/task-repeat-cfg/task-repeat-cfg.model.ts",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/super-productivity/super-productivity/blob/master/LICENSE",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/super-productivity/super-productivity/blob/master/docs/wiki/4.24-Integrations.md",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/tcltk/tk/releases/tag/core-9-1-0",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/toeverything/AFFiNE",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/toeverything/AFFiNE/blob/canary/LICENSE",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://github.com/toeverything/blocksuite",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://help.evernote.com/hc/en-us/articles/209005107-Convert-local-notebooks",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://help.evernote.com/hc/en-us/articles/209005557-Export-Notes-and-Notebooks-as-ENEX-or-HTML",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://help.figma.com/hc/en-us/articles/15300412458647-Explore-FigJam-files",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://help.figma.com/hc/en-us/articles/4939765379351-Organize-your-FigJam-board-with-sections",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://help.miro.com/hc/en-us/articles/360017572754-How-to-export-your-board",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://help.sunsama.com/docs/settings/user-settings/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://help.sunsama.com/docs/usage-guides/daily-planning/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://help.ticktick.com/articles/7055781405648748544",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://help.ticktick.com/articles/7055792921664028672",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://joplinapp.org/help/api/references/rest_api/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://joplinapp.org/help/apps/import_export/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://joplinapp.org/help/apps/ocr/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://joplinapp.org/help/apps/whiteboard/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://jsoncanvas.org/spec/1.0/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://learn.chatgpt.com/docs/space/pages",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/graph/permissions-reference#calendarsread",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_quoting_rules?view=powershell-5.1",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Analyse.md"
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/seccrypto/signtool",
+      "quellen": [
+        "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md"
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/seccrypto/time-stamping-authenticode-signatures",
+      "quellen": [
+        "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md"
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/shell/appids",
+      "quellen": [
+        "01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md"
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/shell/enable-desktop-toast-with-appusermodelid",
+      "quellen": [
+        "01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md"
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/windows/win32/shell/quickstart-sending-desktop-toast",
+      "quellen": [
+        "01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md"
+      ]
+    },
+    {
+      "url": "https://milanote.com/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://monday.com/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://obsidian.md/help/Extending%2BObsidian/Obsidian%2BURI",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://obsidian.md/help/bases",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://obsidian.md/help/bases/syntax",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://obsidian.md/help/bases/views",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://obsidian.md/help/file-formats",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://obsidian.md/help/import",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://obsidian.md/help/plugins/canvas",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://pyinstaller.org/en/stable/feature-notes.html",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://pyinstaller.org/en/stable/license.html",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://pyinstaller.org/en/stable/operating-mode.html",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://pyinstaller.org/en/stable/requirements.html",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/AppFlowy-IO/AppFlowy/main/LICENSE",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/laurent22/joplin/dev/LICENSE",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/toeverything/AFFiNE/canary/packages/backend/server/LICENSE",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/toeverything/blocksuite/master/LICENSE",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://super-productivity.com/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://super-productivity.com/integrations/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.apple.com/guide/notes/import-export-and-print-notes-not201900c07/4.13/mac/26",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.atlassian.com/trello/docs/exporting-data-from-trello/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.craft.do/hc/en-us/articles/18345344453148-Using-Llama-3-2-in-Craft",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.google.com/keep/answer/6320648?hl=en",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.heptabase.com/en/articles/10364273-what-happens-to-my-notes-after-my-subscription-or-free-trial-ends",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.heptabase.com/en/articles/10364279-business-sustainability-and-data-portability",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.heptabase.com/en/articles/10448124-restore-from-version-history",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.heptabase.com/en/articles/11064116-how-does-auto-backup-work-in-heptabase",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.heptabase.com/en/articles/14715462-heptabase-cli",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.microsoft.com/en-gb/planner/export-a-plan-to-excel",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.microsoft.com/en-us/office/my-day-and-suggestions-fc09a1b9-0854-4906-b166-f480ee97a139",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.microsoft.com/en-us/onenote/export-and-import-onenote-notebooks",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.microsoft.com/en-us/onenote/onenote-platform-data-protection-recovery",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.microsoft.com/en-us/planner/compare-microsoft-planner-basic-vs-premium-plans",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://support.microsoft.com/en-us/todo/welcome-to-microsoft-to-do",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://taskwarrior.org/docs/urgency/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://ticktick.com/about/upgrade",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://ticktick.com/features",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://ticktick.com/windows",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://trello.com/pricing",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://vikunja.io/features/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.affinity.studio/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.aseprite.org/docs/animation/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.aseprite.org/docs/sprite-sheet/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.craft.do/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.craft.do/pricing",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.dpma.de/marken/markenrecherche/index.html",
+      "quellen": [
+        "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md"
+      ]
+    },
+    {
+      "url": "https://www.euipo.europa.eu/en/trade-marks/before-applying/availability",
+      "quellen": [
+        "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md"
+      ]
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/microsoft-loop",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.notion.com/help/custom-agents",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.notion.com/help/database-properties",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.notion.com/help/export-your-content",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.notion.com/help/guides/give-your-to-dos-a-home-with-task-databases",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.notion.com/help/guides/using-linked-databases",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.notion.com/help/layouts",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.notion.com/help/notion-mcp",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.notion.com/help/relations-and-rollups",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.notion.com/help/search",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.notion.com/help/use-notion-calendar-with-notion",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.notion.com/help/use-pages-offline",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.notion.com/pricing",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.python.org/downloads/windows/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md"
+      ]
+    },
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc4791.html",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.sqlite.org/fts5.html",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.sunsama.com/pricing",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.superlist.com/",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.tcl-lang.org/man/tcl9.0/TkCmd/ttk_treeview.html",
+      "quellen": [
+        "01_Repository/Glide/docs/02_ARCHITECTURE.md"
+      ]
+    },
+    {
+      "url": "https://www.tcl-lang.org/man/tcl9.1/TkCmd/accessible.html",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.todoist.com/help/articles/208821185-Project-templates",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.todoist.com/help/articles/use-the-calendar-integration-rCqwLCt3G",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.todoist.com/help/todoist/features/introduction-to-deadlines-in-todoist-uMqbSLM6U",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    },
+    {
+      "url": "https://www.todoist.com/pricing",
+      "quellen": [
+        "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md"
+      ]
+    }
+  ],
+  "grenze": "Markdown-Inline-Links und ATX-Überschriften; Ankerbefunde werden am Ziel manuell validiert."
+}

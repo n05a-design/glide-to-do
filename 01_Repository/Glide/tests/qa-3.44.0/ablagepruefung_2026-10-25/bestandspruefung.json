@@ -1,0 +1,99 @@
+{
+  "dateien": 10863,
+  "ordner": 1398,
+  "inventarfehler": [],
+  "bytes_gesamt": 2760145353,
+  "bytes_hauptbestand_ohne_git_arbeitskopien": 419049586,
+  "bereiche": {
+    "Code, Ressource oder Projektverwaltung": {
+      "dateien": 583,
+      "bytes": 15071506,
+      "belegt_bytes": 15071506
+    },
+    "Dokumentation oder Textressource": {
+      "dateien": 68,
+      "bytes": 1506733,
+      "belegt_bytes": 1506733
+    },
+    "Grafikquelle und Master": {
+      "dateien": 36,
+      "bytes": 56178343,
+      "belegt_bytes": 56178343
+    },
+    "Python-Lieferstand": {
+      "dateien": 234,
+      "bytes": 28889980,
+      "belegt_bytes": 28889980
+    },
+    "Showcase und Probedaten": {
+      "dateien": 7,
+      "bytes": 76596567,
+      "belegt_bytes": 76596567
+    },
+    "erzeugter Cache": {
+      "dateien": 117,
+      "bytes": 6568287,
+      "belegt_bytes": 6568287
+    },
+    "QA-Nachweis": {
+      "dateien": 1748,
+      "bytes": 63713235,
+      "belegt_bytes": 63713235
+    },
+    "Prüffixture und Migrationsreferenz": {
+      "dateien": 64,
+      "bytes": 102525614,
+      "belegt_bytes": 102525614
+    },
+    "Paket und Bauartefakt": {
+      "dateien": 429,
+      "bytes": 63396701,
+      "belegt_bytes": 63396701
+    },
+    "geschützte Nutzerreferenz": {
+      "dateien": 28,
+      "bytes": 4602620,
+      "belegt_bytes": 4602620
+    },
+    "Git-Verwaltung und Historie": {
+      "dateien": 1722,
+      "bytes": 938507528,
+      "belegt_bytes": 938507528
+    },
+    "separate Arbeitskopie: untitled-session-954211": {
+      "dateien": 1166,
+      "bytes": 280772917,
+      "belegt_bytes": 280772917
+    },
+    "separate Arbeitskopie: review-outdated-content-511443": {
+      "dateien": 1156,
+      "bytes": 279631660,
+      "belegt_bytes": 279631660
+    },
+    "separate Arbeitskopie: jolly-noether-593099": {
+      "dateien": 1186,
+      "bytes": 280783236,
+      "belegt_bytes": 280783236
+    },
+    "separate Arbeitskopie: glide-weiterarbeiten-618cb4": {
+      "dateien": 1166,
+      "bytes": 280750436,
+      "belegt_bytes": 280750436
+    },
+    "separate Arbeitskopie: beautiful-babbage-196492": {
+      "dateien": 1153,
+      "bytes": 280649990,
+      "belegt_bytes": 280649990
+    }
+  },
+  "vollstaendig_gehasht_hauptbestand": 3314,
+  "hashfehler": [],
+  "cloud_platzhalter_nicht_gehasht": [],
+  "geschuetzte_dateien": 798,
+  "kandidat_dateien": 1664,
+  "dubletten_gruppen": 380,
+  "dubletten_rohpotential_bytes": 94319324,
+  "aufbewahrung_befunde": 0,
+  "verweise_befunde": 0,
+  "dateien_ueber_50_MiB": []
+}

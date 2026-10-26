@@ -1,0 +1,48 @@
+{
+  "datum": "2026-10-25",
+  "system": "Windows 11",
+  "python": "3.14.7",
+  "tk": "9.0.4",
+  "werkzeug": "Computer Use @oai/sky",
+  "kontext": "Minimale Tk-Probe ohne Glide, künstlicher Text",
+  "eingabe": "Control_L+Shift_L+k",
+  "ereignisse": [
+    {
+      "type": "2",
+      "keysym": "Control_L",
+      "state": 8,
+      "keycode": 17,
+      "char": "''"
+    },
+    {
+      "type": "2",
+      "keysym": "Shift_L",
+      "state": 12,
+      "keycode": 16,
+      "char": "''"
+    },
+    {
+      "type": "3",
+      "keysym": "K",
+      "state": 13,
+      "keycode": 75,
+      "char": "''"
+    },
+    {
+      "type": "3",
+      "keysym": "Shift_L",
+      "state": 13,
+      "keycode": 16,
+      "char": "''"
+    },
+    {
+      "type": "3",
+      "keysym": "Control_L",
+      "state": 12,
+      "keycode": 17,
+      "char": "''"
+    }
+  ],
+  "befund": "KeyRelease-K beobachtet, kein KeyPress-K; Ursache des fehlenden KeyPress nicht bestimmt",
+  "native_gegenprobe_der_korrektur": "offen nach Esc-Stopp der Computerbedienung"
+}

@@ -1,9 +1,9 @@
 """Bytegenaue Formatsicherungen mit einem JSON-Parse je Dateistand, ohne Tk."""
 from datetime import datetime
 import hashlib
-import json
 import os
 import shutil
+from storage_health import check_size, read_stream
 
 
 def file_signature(stat):
@@ -23,6 +23,7 @@ class SchemaBackups:
 
     @staticmethod
     def _file_key(path, stat):
+        check_size(stat.st_size)
         signature = file_signature(stat)
         if os.name == 'nt':
             # Gleich große Überschreibungen innerhalb eines Windows-Ticks
@@ -42,7 +43,7 @@ class SchemaBackups:
         key = self._file_key(path, os.stat(path))
         if self._key != key:
             with open(path, 'r', encoding='utf-8') as source:
-                payload = json.load(source)
+                payload = read_stream(source)
                 self.observe(path, payload, os.fstat(source.fileno()))
         return self._version
 

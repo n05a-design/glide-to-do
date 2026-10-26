@@ -1,0 +1,224 @@
+{
+  "datum": "2026-10-25",
+  "status": "Prüfung abgeschlossen mit dokumentierten Git-, Liefer-, nativen und Bereinigungsgrenzen",
+  "version": "3.44.0",
+  "datenformat": 26,
+  "app_sha256": "2c274277d55b883e95dfa7b2d1b550e22e1764c81bd96ebb05319ec7993babf3",
+  "lokaler_zweig": "claude/phasenabschluss-3.44.0",
+  "lokaler_HEAD": "71854ec",
+  "eigene_git_schreibaktion": false,
+  "eigener_versionswechsel_oder_lieferabgleich": false,
+  "ci": {
+    "nachweis": "ci_abschluss/ergebnis.json",
+    "exitcode": 0,
+    "schritte": 19,
+    "ausgefuehrt_bestanden": 18,
+    "lieferhinweis": 9,
+    "werkzeugtests": 165,
+    "werkzeugtests_uebersprungen": 1,
+    "fachtests_je_tz_konfiguration": 896,
+    "konfigurationen": 2,
+    "eingefrorene_103_suiten_matrix": false
+  },
+  "dokumentnachlauf": {
+    "nachweis": "nachlauf.json",
+    "markdown_dateien": 85,
+    "datei_und_ankerverweise": 1310,
+    "upload_textdateien": 1515,
+    "befunde": [],
+    "bestanden": true
+  },
+  "inventar": {
+    "vorher_dateien": 10863,
+    "nachher_dateien": 10902,
+    "vorher_ordner": 1398,
+    "nachher_ordner": 1399,
+    "inventurfehler": [],
+    "vorher_bytes": 2760145353,
+    "nachher_snapshot_bytes": 2769703100,
+    "delta_snapshot_bytes": 9557747,
+    "messgrenze": "Dateipfadgrößen, mögliche Hardlinks nicht dedupliziert; Snapshot vor abschließendem Schreiben dieser Ergebnisdatei. Neue Auditbelege erhöhen den Bestand."
+  },
+  "erhaltung": {
+    "hauptbestand_ausgang": 3314,
+    "unveraendert": 3298,
+    "erwartet_geaendert": 16,
+    "fehlend": [],
+    "unerwartete_aenderungen": [],
+    "geschuetzte_dateien_hashgleich": 798,
+    "app_unveraendert": true
+  },
+  "referenzen_und_lieferung": {
+    "windows": {
+      "manifest": "01_Repository/Glide/tests/qa-3.42.0/eigenstaendige_pakete_2026-10-13/windows_abschluss_bau.json",
+      "dateien": 102,
+      "hashgleich": 102,
+      "fehlt": [],
+      "abweichend": [],
+      "native_pruefung": false
+    },
+    "macos": {
+      "manifest": "01_Repository/Glide/tests/qa-3.42.0/eigenstaendige_pakete_2026-10-13/mac_abschluss_bau.json",
+      "dateien": 330,
+      "hashgleich": 327,
+      "fehlt": [
+        "Contents/Frameworks/Python.framework/Versions/3.14/Python",
+        "Contents/Frameworks/Python.framework/Versions/3.14/Resources/Info.plist",
+        "Contents/Frameworks/Python.framework/Versions/3.14/_CodeSignature/CodeResources"
+      ],
+      "abweichend": [],
+      "native_pruefung": false
+    },
+    "originalbilder": {
+      "anzahl": 28,
+      "abweichend": []
+    },
+    "quelle_07_unterschiede": [
+      "Glide-Aufgaben-und-Listen_v3.44.0.pyw",
+      "action_catalog.py",
+      "action_menu.py",
+      "compact_mode.py",
+      "notion_archive.py",
+      "schema_backups.py",
+      "side_view.py",
+      "storage_health.py",
+      "symbol_policy.py"
+    ]
+  },
+  "aufbewahrung_befunde": [],
+  "git_integritaet": {
+    "befehl": "git fsck --full --no-reflogs",
+    "exitcode": 0,
+    "unreferenzierte_objekte": "als Wiederherstellungsbestand erhalten",
+    "git_tempdateien": 6,
+    "git_tempdateien_MiB": 98.19,
+    "indexsperre": {
+      "Bytes": 0,
+      "LastWriteTime": "2026-10-23T14:34:37.0184615+02:00",
+      "ExklusivesLesenMomentaufnahme": true,
+      "Entfernt": false
+    }
+  },
+  "bereinigung": {
+    "cacheplan_dateien": 117,
+    "cacheplan_bytes": 6568287,
+    "ergebnis": {
+      "status": "vor Ausführung durch automatische Freigabeprüfung abgelehnt",
+      "grund": "blocked by policy",
+      "entfernte_dateien": 0,
+      "eingesparte_bytes": 0,
+      "umgehung": false
+    },
+    "arbeitskopien": 5,
+    "arbeitskopien_bytes": 1402588239,
+    "arbeitskopien_sauber": true,
+    "arbeitskopie_mit_zwei_separaten_commits": "beautiful-babbage-196492",
+    "ignorierte_worktree_dateien_hashgleich_im_hauptbestand": 28,
+    "arbeitskopien_entfernt": 0,
+    "git_objekte_geloescht": false
+  },
+  "remote_abschluss": {
+    "datum": "2026-10-25",
+    "main": "291c393c4027f96864772031e9fbeaf0e858afdc",
+    "merge_pr": 40,
+    "parents": [
+      "d60ef81d31f1ef76740a7c3b0eb7cee446e7d3fb",
+      "facf61a1961f81e4c24370e176b5056d80dd175b"
+    ],
+    "merge_nachricht": "Merge pull request #40 from n05a-design/claude/arbeitsstand-d55\n\nClaude/arbeitsstand d55",
+    "d55_zweig_im_abschliessenden_ls_remote_nicht_vorhanden": true,
+    "main_dateien": 1631,
+    "blobunterschiede_gegen_D55": [],
+    "laeufe": [
+      {
+        "id": 40224330702,
+        "number": 156,
+        "branch": "main",
+        "sha": "291c393c4027f96864772031e9fbeaf0e858afdc",
+        "status": "in_progress",
+        "result": null,
+        "url": "https://github.com/n05a-design/glide-to-do/actions/runs/40224330702",
+        "updated": "2026-10-25T19:05:15Z"
+      },
+      {
+        "id": 40224330013,
+        "number": 55,
+        "branch": "main",
+        "sha": "291c393c4027f96864772031e9fbeaf0e858afdc",
+        "status": "completed",
+        "result": "success",
+        "url": "https://github.com/n05a-design/glide-to-do/actions/runs/40224330013",
+        "updated": "2026-10-25T19:06:04Z"
+      },
+      {
+        "id": 40224309571,
+        "number": 155,
+        "branch": "claude/arbeitsstand-d55",
+        "sha": "facf61a1961f81e4c24370e176b5056d80dd175b",
+        "status": "in_progress",
+        "result": null,
+        "url": "https://github.com/n05a-design/glide-to-do/actions/runs/40224309571",
+        "updated": "2026-10-25T19:05:01Z"
+      },
+      {
+        "id": 40224307083,
+        "number": 54,
+        "branch": "refs/pull/40/head",
+        "sha": "facf61a1961f81e4c24370e176b5056d80dd175b",
+        "status": "completed",
+        "result": "success",
+        "url": "https://github.com/n05a-design/glide-to-do/actions/runs/40224307083",
+        "updated": "2026-10-25T19:05:49Z"
+      },
+      {
+        "id": 40207783533,
+        "number": 154,
+        "branch": "claude/arbeitsstand-d55",
+        "sha": "facf61a1961f81e4c24370e176b5056d80dd175b",
+        "status": "completed",
+        "result": "success",
+        "url": "https://github.com/n05a-design/glide-to-do/actions/runs/40207783533",
+        "updated": "2026-10-25T17:12:28Z"
+      }
+    ],
+    "einordnung": "Externe Änderung während der lokalen Prüfung; keine eigene Git-Schreibaktion. Lauf #156 noch nicht abgeschlossen."
+  },
+  "offene_punkte": [
+    "Lokale Änderungen und neues main kontrolliert abgleichen; alte Indexsperre vor Git-Schreiben klären.",
+    "Glide-Prüfung #156 des extern gemergten PR #40 beim letzten Abruf noch laufend.",
+    "Jüngste Rechtsklick-/Kompakt-/Speicheränderungen und Dokumentnachlauf sind nicht im externen Merge enthalten.",
+    "D55-Punkt 5 und übrige native/menschliche Abnahmen offen; keine neue gemeinsame Version oder Lieferung.",
+    "EUIPO-Verweis aus dieser Umgebung durch 403 nicht abschließend prüfbar.",
+    "Geplante Cachebereinigung automatisch vor Ausführung abgelehnt; Worktrees und Git-Temporärdateien erhalten."
+  ],
+  "nachweisoptimierung": {
+    "methode": "Nur die in dieser Runde neu erzeugten großen JSON-Metadaten verlustfrei ohne Einrückung gespeichert; keine historischen Belege verändert.",
+    "dateien": [
+      {
+        "pfad": "inventar_vorher.json",
+        "vorher_bytes": 5697800,
+        "kompakt_bytes": 4051861,
+        "inhalt_semantisch_identisch": true
+      },
+      {
+        "pfad": "inventar_nachher.json",
+        "vorher_bytes": 5715443,
+        "kompakt_bytes": 4064044,
+        "inhalt_semantisch_identisch": true
+      },
+      {
+        "pfad": "dateihashes_vorher.json",
+        "vorher_bytes": 524222,
+        "kompakt_bytes": 501007,
+        "inhalt_semantisch_identisch": true
+      },
+      {
+        "pfad": "inhaltsdubletten.json",
+        "vorher_bytes": 182983,
+        "kompakt_bytes": 158960,
+        "inhalt_semantisch_identisch": true
+      }
+    ],
+    "weniger_bytes_durch_formatierung": 3344576
+  }
+}

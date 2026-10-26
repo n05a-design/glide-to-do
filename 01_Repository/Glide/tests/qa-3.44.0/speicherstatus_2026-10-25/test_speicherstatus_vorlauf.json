@@ -1,0 +1,26 @@
+{
+  "app_sha256": "5759a372e3fbef2bbb353f7f9505bae8b4a407b183b1caba1629624d3567cc46",
+  "faelle": {
+    "fehler_retry": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_speicherstatus.py\", line 178, in main\n    detail = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_speicherstatus.py\", line 37, in fall_fehler_retry\n    assert app.storage_notice.winfo_ismapped()\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\nAssertionError\n"
+    },
+    "nebenwege": {
+      "ok": true,
+      "befund": "Einstellungen, Vorlagen und Sicherung getrennt; kein falscher Datenfehler; Retry aller offenen Speicherwege"
+    },
+    "groessen": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_speicherstatus.py\", line 178, in main\n    detail = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_speicherstatus.py\", line 110, in fall_groessen\n    assert app.storage_notice.winfo_ismapped()\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\nAssertionError\n"
+    },
+    "reserve_import": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_speicherstatus.py\", line 178, in main\n    detail = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_speicherstatus.py\", line 145, in fall_reserve_import\n    assert app.storage_notice.winfo_ismapped()\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^\nAssertionError\n"
+    }
+  },
+  "fehler": [
+    "fehler_retry",
+    "groessen",
+    "reserve_import"
+  ]
+}

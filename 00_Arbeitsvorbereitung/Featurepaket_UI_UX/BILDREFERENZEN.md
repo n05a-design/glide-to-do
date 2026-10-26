@@ -1,6 +1,6 @@
 # Bildreferenzen zum UI-/UX-Feature-Paket
 
-Stand 22.10.2026 · Glide 3.44.0 · 28 unveränderte, vom Benutzer bereitgestellte Originalbilder
+Stand 25.10.2026 · Glide 3.45.0 · 28 unveränderte, vom Benutzer bereitgestellte Originalbilder
 
 Die IDs entsprechen exakt der Reihenfolge der 28 Bilder im Chat. Die Zuordnung ist redaktionell und benennt sichtbare Befunde oder Referenzen; nicht jedes Bild zeigt einen Fehler. [Auftrag](AUFTRAG.md), [Ausführungsprompt](PROMPT.md) und [Manifest](screenshots.json) bilden das zusammenhängende Paket.
 

@@ -12,11 +12,24 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import tempfile
 
 REPO = Path(__file__).resolve().parents[2]
 BASE = REPO.parents[1]
 SOURCE = REPO/"tests/fixtures/showcase"
 TARGET = BASE/"05_Probelisten_Testdaten/Showcase"
+
+
+def copy_atomic(source, target):
+    """Lieferdatei erst nach vollständiger Kopie ersetzen (auch bei Windows-Mapping)."""
+    fd, temporary = tempfile.mkstemp(prefix=f".{target.name}.", suffix=".tmp", dir=target.parent)
+    os.close(fd)
+    try:
+        shutil.copy2(source, temporary)
+        os.replace(temporary, target)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
 
 
 def main():
@@ -38,7 +51,7 @@ def main():
     for name in names:
         source, target = SOURCE/name, TARGET/name
         assert source.is_file(), source
-        shutil.copy2(source,target)
+        copy_atomic(source,target)
         sha = hashlib.sha256(source.read_bytes()).hexdigest()
         assert hashlib.sha256(target.read_bytes()).hexdigest() == sha
         records[name] = sha

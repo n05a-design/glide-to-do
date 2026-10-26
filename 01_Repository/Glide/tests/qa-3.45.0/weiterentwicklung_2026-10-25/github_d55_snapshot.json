@@ -1,0 +1,53 @@
+{
+  "abgerufen_fuer": "D55-Fehlerdiagnose am 25./26.10.2026",
+  "workflow_runs": [
+    {
+      "id": 40224330702,
+      "nummer": 156,
+      "name": "Glide-Prüfung",
+      "branch": "main",
+      "head_sha": "291c393c4027f96864772031e9fbeaf0e858afdc",
+      "status": "completed",
+      "ergebnis": "failure",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/40224330702",
+      "created_at": "2026-10-25T19:05:11Z",
+      "updated_at": "2026-10-25T20:24:52Z"
+    },
+    {
+      "id": 40224330013,
+      "nummer": 55,
+      "name": "Push on main",
+      "branch": "main",
+      "head_sha": "291c393c4027f96864772031e9fbeaf0e858afdc",
+      "status": "completed",
+      "ergebnis": "success",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/40224330013",
+      "created_at": "2026-10-25T19:05:11Z",
+      "updated_at": "2026-10-25T19:06:04Z"
+    },
+    {
+      "id": 40224309571,
+      "nummer": 155,
+      "name": "Glide-Prüfung",
+      "branch": "claude/arbeitsstand-d55",
+      "head_sha": "facf61a1961f81e4c24370e176b5056d80dd175b",
+      "status": "completed",
+      "ergebnis": "success",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/40224309571",
+      "created_at": "2026-10-25T19:04:57Z",
+      "updated_at": "2026-10-25T20:39:20Z"
+    },
+    {
+      "id": 40224307083,
+      "nummer": 54,
+      "name": "PR #40",
+      "branch": "refs/pull/40/head",
+      "head_sha": "facf61a1961f81e4c24370e176b5056d80dd175b",
+      "status": "completed",
+      "ergebnis": "success",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/40224307083",
+      "created_at": "2026-10-25T19:04:55Z",
+      "updated_at": "2026-10-25T19:05:49Z"
+    }
+  ]
+}

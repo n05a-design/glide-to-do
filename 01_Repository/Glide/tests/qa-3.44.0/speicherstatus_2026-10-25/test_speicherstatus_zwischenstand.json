@@ -1,0 +1,22 @@
+{
+  "app_sha256": "4cc798fb00df871a8e80f0f6743692d7f65e7056b48a75df6129693f103e54f8",
+  "faelle": {
+    "fehler_retry": {
+      "ok": true,
+      "befund": "Autosave-Fehler sichtbar und dedupliziert; echter Dialog/Retry, Originalbytes bis Erfolg erhalten, Fußknöpfe frei"
+    },
+    "nebenwege": {
+      "ok": true,
+      "befund": "Einstellungen, Vorlagen und Sicherung getrennt; kein falscher Datenfehler; Retry aller offenen Speicherwege"
+    },
+    "groessen": {
+      "ok": true,
+      "befund": "Zu große Aufgaben/Einstellungen/Vorlagen beim Start geschützt; atomare UTF-8-Schreibgrenze erhält Original"
+    },
+    "reserve_import": {
+      "ok": true,
+      "befund": "Reserve ab 80 % sichtbar; fehlgeschlagene Vorab-Sicherung stoppt Import ohne Datenänderung"
+    }
+  },
+  "fehler": []
+}

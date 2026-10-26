@@ -59,11 +59,11 @@ with tempfile.TemporaryDirectory(prefix='glide-fundament-') as directory:
         # Reload liefert den Formatwert bereits: erster anschließender Save ohne JSON-Parse.
         app.load_items()
         root.update()
-        original_load = mod.json.load
+        original_load = sys.modules['schema_backups'].read_stream
         def checked_load(file, *args, **kwargs):
             assert Path(file.name) != source, 'Zusatz-Parse der Datendatei'
             return original_load(file, *args, **kwargs)
-        with patch.object(sys.modules['schema_backups'].json, 'load', side_effect=checked_load):
+        with patch.object(sys.modules['schema_backups'], 'read_stream', side_effect=checked_load):
             assert app.save_items(show_error=False)
         assert not errors and not dialogs, (errors, dialogs)
         print('Formatsicherung, Fehler/Retry, Reload und Tabellen-/Listenbreiten: ok')

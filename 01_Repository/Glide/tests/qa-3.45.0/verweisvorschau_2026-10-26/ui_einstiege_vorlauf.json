@@ -1,0 +1,12 @@
+{
+  "app_sha256": "bed8bed701d9c846f13d2637907138e420c3d3fffffefb533b64a6f63ca8e57e",
+  "faelle": {
+    "verweisvorschau": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1134, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 681, in fall_verweisvorschau\n    menu.invoke(menustelle(menu, 'Verweis in Nebenansicht öffnen'))\n                ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 656, in menustelle\n    return next(i for i in range((menu.index('end') or 0) + 1)\n                if menu.type(i) in ('command', 'cascade') and menu.entrycget(i, 'label') == label)\nStopIteration\n"
+    }
+  },
+  "fehler": [
+    "verweisvorschau"
+  ]
+}

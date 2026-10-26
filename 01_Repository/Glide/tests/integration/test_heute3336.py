@@ -174,7 +174,7 @@ with tempfile.TemporaryDirectory(prefix='glide-heute-') as directory:
 
         # --- Wege und Texte -----------------------------------------------------
         aktionen = [text for gruppe in app.ACTION_GROUPS.values() for text in gruppe]
-        for text in ('Heute', 'Demnächst', 'Heute: Tag zurück', 'Heute: Tag vor', 'Heute: Stundenraster ein/aus'):
+        for text in ('Heute', 'Demnächst', 'Heute: Tag zurück', 'Heute: Tag vor', 'Heute: Stundenraster'):
             assert text in aktionen, text
         assert not any('Mein Tag' in text or 'In Bearbeitung' in text for text in aktionen)
         assert [name for name, _symbol, _befehl in app.quick_open_views()][1:3] == ['Heute', 'Demnächst']

@@ -1,0 +1,16 @@
+{
+  "zeitpunkt": "2026-10-26T01:13:56",
+  "schritte": [
+    {
+      "schritt": "Python-Lieferprobe",
+      "status": "ausgeführt",
+      "grund": "Exitcode 0"
+    },
+    {
+      "schritt": "Showcase-Abgleich",
+      "status": "fehlgeschlagen",
+      "grund": "Exitcode 1"
+    }
+  ],
+  "exitcode": 1
+}

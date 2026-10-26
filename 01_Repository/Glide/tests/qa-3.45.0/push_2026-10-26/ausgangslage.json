@@ -1,0 +1,15 @@
+{
+  "head": "71854ecef7dd73ca6619f85e153463b9e7cc7cd3",
+  "remote_main": "291c393c4027f96864772031e9fbeaf0e858afdc",
+  "anzahl_pfade": 299,
+  "ausgenommen": [
+    "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/screenshots/release_hell.png",
+    "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/screenshots/release_hell_dunkel.png",
+    "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/screenshots/release_hell.png",
+    "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/screenshots/release_hell_dunkel.png",
+    "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/screenshots/release_hell.png",
+    "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/screenshots/release_hell_dunkel.png",
+    "13_TK-Test-Umgebung/TK-9.1/tk910-src.zip"
+  ],
+  "unbeabsichtigt_fehlend_in_remote": []
+}

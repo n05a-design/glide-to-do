@@ -1,0 +1,473 @@
+{
+  "dateien": [
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/accessibility.cpython-314.pyc",
+      "bytes": 8985
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/accessibility_bindings.cpython-314.pyc",
+      "bytes": 7182
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/action_catalog.cpython-314.pyc",
+      "bytes": 13441
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/animation.cpython-314.pyc",
+      "bytes": 24250
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/animation_export.cpython-314.pyc",
+      "bytes": 5998
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/app.cpython-314.pyc",
+      "bytes": 4542131
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/appearance.cpython-314.pyc",
+      "bytes": 4131
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/attachment_paths.cpython-314.pyc",
+      "bytes": 2626
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/backup_diff.cpython-314.pyc",
+      "bytes": 8213
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/backup_snapshot.cpython-314.pyc",
+      "bytes": 10147
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/busy_calendar.cpython-314.pyc",
+      "bytes": 12069
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/calendar_service.cpython-314.pyc",
+      "bytes": 11886
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/capture_parser.cpython-314.pyc",
+      "bytes": 61602
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/content_search.cpython-314.pyc",
+      "bytes": 6998
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/core_accessibility.cpython-314.pyc",
+      "bytes": 31539
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/daily_hints.cpython-314.pyc",
+      "bytes": 15596
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/data_lock.cpython-314.pyc",
+      "bytes": 18683
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/day_proposal.cpython-314.pyc",
+      "bytes": 5476
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/day_relief.cpython-314.pyc",
+      "bytes": 10894
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/drawing.cpython-314.pyc",
+      "bytes": 109745
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/editor_flush.cpython-314.pyc",
+      "bytes": 2678
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/eisenhower.cpython-314.pyc",
+      "bytes": 5342
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/exchange_patch.cpython-314.pyc",
+      "bytes": 14936
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/exchange_recipes.cpython-314.pyc",
+      "bytes": 8410
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/filter_explain.cpython-314.pyc",
+      "bytes": 8007
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/focus_timer.cpython-314.pyc",
+      "bytes": 5503
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/glyph_metrics.cpython-314.pyc",
+      "bytes": 12728
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/home_tiles.cpython-314.pyc",
+      "bytes": 7139
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/ics_busy.cpython-314.pyc",
+      "bytes": 28042
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/ics_recurrence.cpython-314.pyc",
+      "bytes": 18819
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/ics_timezone.cpython-314.pyc",
+      "bytes": 15061
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/image_conversion.cpython-314.pyc",
+      "bytes": 16191
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/interaction_policy.cpython-314.pyc",
+      "bytes": 8952
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/item_index.cpython-314.pyc",
+      "bytes": 3132
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/load_phases.cpython-314.pyc",
+      "bytes": 3392
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/logo_raster.cpython-314.pyc",
+      "bytes": 8314
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/markdown_tree.cpython-314.pyc",
+      "bytes": 35029
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/motion.cpython-314.pyc",
+      "bytes": 5144
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/notion_archive.cpython-314.pyc",
+      "bytes": 29846
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/notion_hierarchy.cpython-314.pyc",
+      "bytes": 7869
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/notion_reimport.cpython-314.pyc",
+      "bytes": 11175
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/object_references.cpython-314.pyc",
+      "bytes": 16422
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/occupied_time.cpython-314.pyc",
+      "bytes": 15714
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/page_markdown.cpython-314.pyc",
+      "bytes": 44133
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/planning.cpython-314.pyc",
+      "bytes": 7890
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/preview_tools.cpython-314.pyc",
+      "bytes": 3884
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/repeat_rules.cpython-314.pyc",
+      "bytes": 30221
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/save_comparison.cpython-314.pyc",
+      "bytes": 10468
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/save_result.cpython-314.pyc",
+      "bytes": 2580
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/schema_backups.cpython-314.pyc",
+      "bytes": 4491
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/storage_health.cpython-314.pyc",
+      "bytes": 6640
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/structural_guard.cpython-314.pyc",
+      "bytes": 7628
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/task_editing.cpython-314.pyc",
+      "bytes": 6511
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/task_references.cpython-314.pyc",
+      "bytes": 9436
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/timezones.cpython-314.pyc",
+      "bytes": 8787
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/__pycache__/view_definition.cpython-314.pyc",
+      "bytes": 23407
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/integration/__pycache__/test_ansichten.cpython-314.pyc",
+      "bytes": 62538
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/integration/__pycache__/test_arbeitsmodi.cpython-314.pyc",
+      "bytes": 83191
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/integration/__pycache__/test_schutzrunde.cpython-314.pyc",
+      "bytes": 80873
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/integration/__pycache__/test_uiux_paket.cpython-314.pyc",
+      "bytes": 78354
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/integration/__pycache__/vorversion.cpython-314.pyc",
+      "bytes": 5563
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/tools/__pycache__/beispieldaten.cpython-314.pyc",
+      "bytes": 53682
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/tools/__pycache__/pruefen.cpython-314.pyc",
+      "bytes": 44373
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/tools/__pycache__/releasedaten.cpython-314.pyc",
+      "bytes": 88216
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/tools/__pycache__/zugang_pruefvertrag.cpython-314.pyc",
+      "bytes": 777
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_accessibility.cpython-314.pyc",
+      "bytes": 10918
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_accessibility_bindings.cpython-314.pyc",
+      "bytes": 18129
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_action_catalog.cpython-314.pyc",
+      "bytes": 5494
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_animation.cpython-314.pyc",
+      "bytes": 24708
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_animation_entry.cpython-314.pyc",
+      "bytes": 6311
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_animation_export.cpython-314.pyc",
+      "bytes": 11264
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_animation_snapshot.cpython-314.pyc",
+      "bytes": 6362
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_appearance.cpython-314.pyc",
+      "bytes": 6328
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_attachment_paths.cpython-314.pyc",
+      "bytes": 2414
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_backup_diff.cpython-314.pyc",
+      "bytes": 7172
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_backup_snapshot.cpython-314.pyc",
+      "bytes": 9909
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_busy_calendar.cpython-314.pyc",
+      "bytes": 23384
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_calendar_service.cpython-314.pyc",
+      "bytes": 36725
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_capture_parser.cpython-314.pyc",
+      "bytes": 14729
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_capture_reminder.cpython-314.pyc",
+      "bytes": 7326
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_capture_repeat_anchor.cpython-314.pyc",
+      "bytes": 12543
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_content_search.cpython-314.pyc",
+      "bytes": 11606
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_core_accessibility.cpython-314.pyc",
+      "bytes": 57049
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_daily_hints.cpython-314.pyc",
+      "bytes": 24341
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_data_lock.cpython-314.pyc",
+      "bytes": 24936
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_day_proposal.cpython-314.pyc",
+      "bytes": 8711
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_day_relief.cpython-314.pyc",
+      "bytes": 16396
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_drawing_pixel35.cpython-314.pyc",
+      "bytes": 9317
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_editor_flush.cpython-314.pyc",
+      "bytes": 3870
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_eisenhower.cpython-314.pyc",
+      "bytes": 4687
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_exchange_patch.cpython-314.pyc",
+      "bytes": 9163
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_exchange_recipes.cpython-314.pyc",
+      "bytes": 10946
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_filter_explain.cpython-314.pyc",
+      "bytes": 6094
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_focus_timer.cpython-314.pyc",
+      "bytes": 7437
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_glyph_metrics.cpython-314.pyc",
+      "bytes": 6748
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_home_tiles.cpython-314.pyc",
+      "bytes": 10486
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_ics_busy.cpython-314.pyc",
+      "bytes": 18222
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_ics_edges.cpython-314.pyc",
+      "bytes": 9918
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_ics_recurrence.cpython-314.pyc",
+      "bytes": 7643
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_ics_timezone.cpython-314.pyc",
+      "bytes": 9373
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_image_conversion.cpython-314.pyc",
+      "bytes": 20003
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_incremental_comparison.cpython-314.pyc",
+      "bytes": 8757
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_interaction_policy.cpython-314.pyc",
+      "bytes": 7846
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_item_index.cpython-314.pyc",
+      "bytes": 5523
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_load_phases.cpython-314.pyc",
+      "bytes": 5189
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_logo_raster.cpython-314.pyc",
+      "bytes": 6563
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_markdown_tree.cpython-314.pyc",
+      "bytes": 25434
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_motion.cpython-314.pyc",
+      "bytes": 12863
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_notion_archive.cpython-314.pyc",
+      "bytes": 29810
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_notion_hierarchy.cpython-314.pyc",
+      "bytes": 9402
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_notion_import.cpython-314.pyc",
+      "bytes": 28743
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_save_comparison.cpython-314.pyc",
+      "bytes": 14859
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_save_result.cpython-314.pyc",
+      "bytes": 5666
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_schema_backups.cpython-314.pyc",
+      "bytes": 16377
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_source_schema_bridge.cpython-314.pyc",
+      "bytes": 23139
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_storage_health.cpython-314.pyc",
+      "bytes": 8448
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/unit/__pycache__/test_view_definition.cpython-314.pyc",
+      "bytes": 15926
+    }
+  ],
+  "bytes": 6568287
+}

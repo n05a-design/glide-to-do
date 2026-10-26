@@ -1,0 +1,11 @@
+{
+  "syntax_gepruefte_dateien": [
+    "src/glide/app.pyw",
+    "src/glide/day_proposal.py",
+    "tests/unit/test_day_proposal.py",
+    "tests/integration/test_tagpaket33314.py"
+  ],
+  "hashes_unveraendert": true,
+  "versionen": "VERSION, App, Hauptsuite und CHANGELOG: 3.45.0; Datenformat 26",
+  "diff_check_exitcode": 0
+}

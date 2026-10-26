@@ -347,6 +347,62 @@ app.on_close()
             app._data_read_only = False
         checks.append("Intervallende/Pausenhinweis, Ansichtswechsel und schreibgeschützter Bestand")
 
+        # WA-12: echte Freigaben, auch wenn ein archivierter weiterer Blocker
+        # erst nach dem Öffnen der Vorschau erledigt wird.
+        release = app.new_item("Voraussetzung für den nächsten gemeinsamen Arbeitsschritt klären", estimated_minutes=20)
+        other = app.new_item("Weitere offene Voraussetzung")
+        archived_blocker = app.new_item("Archivierte Voraussetzung")
+        waits = [app.new_item("Kann danach beginnen", blocked_by=[release["id"]]),
+                 app.new_item("Zweiter direkter Folgeschritt", blocked_by=[release["id"]]),
+                 app.new_item("Wartet noch auf zwei", blocked_by=[release["id"], other["id"]]),
+                 app.new_item("Wartet auch im Archiv", blocked_by=[release["id"], archived_blocker["id"]]),
+                 app.new_item("Schon erledigte Folge", blocked_by=[release["id"]], done=True)]
+        release_source = app.new_list_object("Freigaben", [release, other])
+        following = app.new_list_object("Folgeaufgaben", waits)
+        archived_source = app.new_list_object("Freigabenarchiv", [archived_blocker,
+            app.new_item("Archivierte Folge", blocked_by=[release["id"]])])
+        archived_source["archived"] = True
+        app.lists.extend([release_source, following, archived_source])
+        app.settings.update(daily_capacity_minutes=720, daily_capacity_by_weekday=[720]*7)
+        assert app.save_items()
+        app.start_day_review(); idle()
+        press(button(app.home_content, "Was passt heute?"))
+        def release_row():
+            return next(r for r in app._day_proposal["proposal"]["rows"] if r["item_id"] == release["id"])
+        assert release_row()["reason"] == "unblocks" and release_row()["unblocks"] == 2
+        check = next(w for w in descendants(app.home_content) if getattr(w, "_proposal_identity", None) ==
+                     (release_source["id"], release["id"]))
+        assert "gibt 2 weitere Aufgaben frei" in check.cget("text")
+        before, depth = copy.deepcopy(app.lists), len(app.undo_stack)
+        archived_blocker["done"] = True
+        assert app.save_items()
+        changed = copy.deepcopy(app.lists)
+        disk = Path(mod.SAVE_FILE).read_bytes()
+        app.apply_day_proposal(); idle()
+        assert messages[-1][0] == "Tagesvorschlag aktualisiert"
+        assert app.lists == changed and Path(mod.SAVE_FILE).read_bytes() == disk
+        assert len(app.undo_stack) == depth and release_row()["unblocks"] == 3
+        for check in descendants(app.home_content):
+            identity = getattr(check, "_proposal_identity", None)
+            if identity is not None and ((identity in app._day_proposal["selected"]) !=
+                                         (identity == (release_source["id"], release["id"]))):
+                check.invoke()
+        idle()
+        assert app.lists == changed and Path(mod.SAVE_FILE).read_bytes() == disk
+        press(button(app.template_actions, "Übernehmen & Raster"))
+        assert fresh(release["id"])["planned_date"] == today
+        assert fresh(release["id"])["due"] is None and fresh(release["id"])["estimated_minutes"] == 20
+        assert all(fresh(item["id"])["planned_date"] is None for item in waits)
+        assert fresh(waits[0]["id"])["blocked_by"] == [release["id"]]
+        assert len(app.undo_stack) == depth + 1
+        press(app.plan_grid_canvas, "<Control-z>")
+        assert app.lists == changed
+        app.redo_last_change(); idle()
+        assert fresh(release["id"])["planned_date"] == today
+        app.undo_last_change(); idle()
+        assert app.lists == changed
+        checks.append("WA-12: echte direkte Freigaben, Archiv-/Erledigt-/Mehrfachgrenzen, veraltete Vorschau, echte Auswahl/Übernahme, ein Undo/Redo")
+
         # Real light/dark, font and geometry combinations; own-window captures only.
         for width,height in ((860,700),(1280,800)):
             for design in ("light","dark"):
@@ -360,6 +416,8 @@ app.on_close()
                     for check in descendants(app.home_content):
                         if isinstance(check,mod.tk.Checkbutton):
                             assert check.winfo_width()<=app.home_content.winfo_width()
+                    assert any("gibt 3 weitere Aufgaben frei" in w.cget("text")
+                               for w in descendants(app.home_content) if isinstance(w, mod.tk.Checkbutton))
                     if args.capture and size=="gross":
                         from releasedaten import save_windows_screenshot
                         args.capture.mkdir(parents=True,exist_ok=True)

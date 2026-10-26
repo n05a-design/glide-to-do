@@ -1,0 +1,14 @@
+{
+  "app_sha256": "b53e6822b3f378119a9fc15cc1f2eac46fb2f2adb3a82a180f12834688ba5ad2",
+  "faelle": {
+    "verweisvorschau": {
+      "ok": true,
+      "befund": "Echter Strg+Umschalt-Klick, Kontext unter Auswahl, Verweis-/Rückverweismenü, frische IDs/Titel, Taskmarkierung in Liste/Seite, Haupteditor und offener Text erhalten; alter Strg-Klick bleibt"
+    },
+    "verweisvorschau_grenzen": {
+      "ok": true,
+      "befund": "Notiz, kein externer Browser, Archiv/Schreibschutz, Undo/frische IDs, stale Menü/Papierkorb/fehlend/Zeichnung/Kompaktmodus; 204 Knopfprüfungen in acht Konfigurationen"
+    }
+  },
+  "fehler": []
+}
