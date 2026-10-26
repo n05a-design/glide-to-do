@@ -84,7 +84,10 @@ run_step 05-isolierter-start "$VENV_GLIDE" -B "$SCRIPT_GLIDE/pruefe_start_macos.
     --sperren "$BAU_GLIDE/bau/quelle" --sperren "$REPO_GLIDE"
 
 ARCHIV_GLIDE="$BAU_GLIDE/Glide-$VERSION_GLIDE-macos-arm64.tar.gz"
-run_step 06-archiv /usr/bin/tar -czf "$ARCHIV_GLIDE" -C "$BAU_GLIDE/bau/dist" Glide.app
+# bsdtar erzeugt sonst AppleDouble-Dateien für copyfile-/xattr-Metadaten.
+# Nur diese Metadatenbeigaben abschalten; Inhalte, Dateimodi und Links erhalten.
+run_step 06-archiv env COPYFILE_DISABLE=1 /usr/bin/tar --no-mac-metadata --no-xattrs \
+    -czf "$ARCHIV_GLIDE" -C "$BAU_GLIDE/bau/dist" Glide.app
 run_step 07-abschluss "$VENV_GLIDE" -B "$SCRIPT_GLIDE/macos_build_run.py" finish \
     --repo "$REPO_GLIDE" --ziel "$BAU_GLIDE" --archiv "$ARCHIV_GLIDE"
 printf 'Geprüftes Entwicklungsartefakt: %s\nSHA-256: %s.sha256\nBericht: %s/abschluss.json\n' \

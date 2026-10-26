@@ -1,5 +1,6 @@
 """Vorab- und Abschlussvertrag des nativen Mac-Baulaufs, ohne GUI."""
 import argparse
+from collections import Counter
 import hashlib
 import json
 import os
@@ -109,29 +110,81 @@ def verify_sources(repo, initial):
         raise ValueError("Bauquellen wurden seit Beginn verändert; kein gültiger Abschluss.")
 
 
-def verify_archive(archive, package, expected):
-    """Archivinhalt samt Symlinkzielen und Dateimodi gegen das native Paket prüfen."""
+def _archive_inventory(members, package, expected):
+    prefix = package.name + "/"
+    files = {member.name[len(prefix):]: member for member in members
+             if member.isfile() or member.islnk()}
+    links = {member.name[len(prefix):]: member.linkname for member in members if member.issym()}
+    counts = Counter(member.name for member in members)
+    report = dict(exitcode=1, expected_files=len(expected), archive_files=len(files),
+                  missing=sorted(set(expected) - set(files)), extra=sorted(set(files) - set(expected)),
+                  duplicates=sorted(name for name, count in counts.items() if count > 1),
+                  outside=[member.name for member in members
+                           if member.name != package.name and not member.name.startswith(prefix)],
+                  unsupported=[member.name for member in members
+                               if not (member.isfile() or member.islnk() or member.issym() or member.isdir())],
+                  members=[dict(name=member.name, type=member.type.decode("ascii", "backslashreplace"),
+                                size=member.size, mode=oct(member.mode), linkname=member.linkname)
+                           for member in members])
+    return report, files, links
+
+
+def _validate_archive_inventory(report):
+    for key, message in (("outside", "Archiv enthält Dateien außerhalb des gewählten App-Bundles"),
+                         ("duplicates", "Doppelte Archiveinträge"), ("unsupported", "Unzulässige Archiveinträge")):
+        if report[key]:
+            raise ValueError(message + ": " + repr(report[key][:12]))
+    if report["missing"] or report["extra"]:
+        raise ValueError("Dateimenge des Mac-Archivs entspricht nicht dem Baumanifest; "
+                         f"fehlend ({len(report['missing'])}): {report['missing'][:12]!r}; "
+                         f"zusätzlich ({len(report['extra'])}): {report['extra'][:12]!r}")
+
+
+def _check_archive_files(stream, files, package, expected, report):
+    issues = []
+    for name, member in files.items():
+        # extractfile löst auch tar-Hardlinks auf; Symlinks sind kein Dateiplatzhalter.
+        with stream.extractfile(member) as content:
+            actual = hashlib.sha256(content.read()).hexdigest()
+        mode_matches = member.mode & 0o7777 == (package / name).stat().st_mode & 0o7777
+        if actual != expected[name] or not mode_matches:
+            issues.append(dict(name=name, hash_matches=actual == expected[name], mode_matches=mode_matches))
+    report["file_issues"] = issues
+    report["checked_files"] = len(files)
+    if issues:
+        raise ValueError("Archivinhalt oder Dateimodus weicht ab: " + repr([issue["name"] for issue in issues]))
+
+
+def _check_archive_links(links, package, report):
+    actual = {path.relative_to(package).as_posix(): os.readlink(path)
+              for path in package.rglob("*") if path.is_symlink()}
+    report["symlink_missing"] = sorted(set(actual) - set(links))
+    report["symlink_extra"] = sorted(set(links) - set(actual))
+    report["symlink_changed"] = sorted(name for name in set(links) & set(actual) if links[name] != actual[name])
+    if links != actual:
+        raise ValueError("Symlinks des Mac-Archivs entsprechen nicht dem nativen Bundle: "
+                         + repr({key: value for key, value in report.items() if key.startswith("symlink_")}))
+
+
+def verify_archive(archive, package, expected, *, report=None):
+    """Strikter Archivvertrag; ein angeforderter Diagnosebericht entsteht auch bei Fehlern."""
     package = Path(package)
-    with tarfile.open(archive, "r:gz") as stream:
-        members = stream.getmembers()
-        prefix = package.name + "/"
-        if any(member.name != package.name and not member.name.startswith(prefix) for member in members):
-            raise ValueError("Archiv enthält Dateien außerhalb des gewählten App-Bundles.")
-        files = {member.name[len(prefix):]: member for member in members
-                 if member.isfile() or member.islnk()}
-        if set(files) != set(expected):
-            raise ValueError("Dateimenge des Mac-Archivs entspricht nicht dem Baumanifest.")
-        for name, member in files.items():
-            with stream.extractfile(member) as content:
-                actual = hashlib.sha256(content.read()).hexdigest()
-            if actual != expected[name] or member.mode & 0o7777 != (package / name).stat().st_mode & 0o7777:
-                raise ValueError("Archivinhalt oder Dateimodus weicht ab: " + name)
-        links = {member.name[len(prefix):]: member.linkname for member in members if member.issym()}
-        actual_links = {path.relative_to(package).as_posix(): os.readlink(path)
-                        for path in package.rglob("*") if path.is_symlink()}
-        if links != actual_links:
-            raise ValueError("Symlinks des Mac-Archivs entsprechen nicht dem nativen Bundle.")
-    return dict(files=len(files), symlinks=len(links), modes_preserved=True)
+    diagnostic = dict(exitcode=1, archive=Path(archive).name, members=[])
+    try:
+        with tarfile.open(archive, "r:gz") as stream:
+            diagnostic, files, links = _archive_inventory(stream.getmembers(), package, expected)
+            _validate_archive_inventory(diagnostic)
+            _check_archive_files(stream, files, package, expected, diagnostic)
+            _check_archive_links(links, package, diagnostic)
+        result = dict(files=len(files), symlinks=len(links), modes_preserved=True)
+        diagnostic.update(exitcode=0, result=result)
+        return result
+    except Exception as error:
+        diagnostic["error"] = str(error)
+        raise
+    finally:
+        if report is not None:
+            write(report, diagnostic)
 
 
 def finish(repo, build, archive):
@@ -149,7 +202,8 @@ def finish(repo, build, archive):
     if not smoke.get("nur_kindprozess_gesperrt") or not smoke.get("system_installationen_unveraendert"):
         raise ValueError("Nachweis des unveränderten Systems und Prozessschutzes fehlt.")
     package = build / "bau/dist/Glide.app"
-    archive_proof = verify_archive(archive, package, proof["package_sha256"])
+    archive_proof = verify_archive(archive, package, proof["package_sha256"],
+                                   report=build / "archiv-inventar.json")
     digest = sha(archive)
     archive.with_name(archive.name + ".sha256").write_text(digest + "  " + archive.name + "\n", encoding="utf-8")
     report = dict(exitcode=0, version=initial["version"], target="macos-arm64",
