@@ -93,9 +93,9 @@ Aufbau und Bausteine: [Architektur](02_ARCHITECTURE.md). Datenfelder und Formate
 
 ## 1. Grundbegriffe
 
-### Eigenständiger Start (3.42.0)
+### Eigenständiger Start (3.45.0)
 
-Die Entwicklungspakete für macOS arm64 und Windows x64 enthalten Python, Tcl/Tk, Glide-Module, Schriften, Logo, Vorlagen, Zeitzonen und Drag-and-drop-Bibliotheken samt Lizenztexten. Eine externe Python-Installation ist für diese Pakete nicht erforderlich. Nutzerdaten liegen weiterhin außerhalb des Pakets; vorhandene Daten und Aufgabenformat 25 bleiben erhalten. Die Python-Fassung mit Schnellstart bleibt als eigener Startweg verfügbar. Die Pakete sind Entwicklungsartefakte mit Mac-Ad-hoc-Signatur beziehungsweise ohne Windows-Zertifikat. Tatsächlich bestandene Bau- und Startprüfungen nennt der [QA-Bericht](07_QA_BERICHT.md), Bauanweisungen die [Paketierung](../packaging/README.md).
+Die Entwicklungspakete für macOS arm64 und Windows x64 enthalten Python, Tcl/Tk, Glide-Module, Schriften, Logo, Vorlagen, Zeitzonen und Drag-and-drop-Bibliotheken samt Lizenztexten. Eine externe Python-Installation ist für diese Pakete nicht erforderlich. Nutzerdaten liegen weiterhin außerhalb des Pakets; vorhandene Daten bleiben erhalten; aktuelles Aufgabenformat ist 26. Die Python-Fassung mit Schnellstart bleibt als eigener Startweg verfügbar. Die Pakete sind Entwicklungsartefakte mit Mac-Ad-hoc-Signatur beziehungsweise ohne Windows-Zertifikat. Tatsächlich bestandene Bau- und Startprüfungen nennt der [QA-Bericht](07_QA_BERICHT.md), Bauanweisungen die [Paketierung](../packaging/README.md).
 
 **Prinzipien-Check 3.33.11 (P08b, Aktionskennungen, U03/U07):** bestehender Performance- und Feature-Auftrag, Reihenfolge laut Entwicklungsplan. Absicht: gezielte Vergleichsarbeit und verlässliche Aktionen; Eingang bei Inhalt direkt erreichen, wirkungslose Suchelemente ausblenden. Ort: bestehender Speicherweg, Menü/Palette, Suchzeile und Systembereich. Dieselbe geschützte Eingangsliste, keine neue Ansicht. U03 entfernt Dauerfläche; U07 zeigt bedingt eine zusätzliche Zeile in der vorhandenen Zeilenhöhe, der leere Eingang bleibt verborgen. Tastatur, aktuelle Farbrollen und vorhandenes Eingangssymbol bleiben; Rücknahme über bestehendes Undo. Format 20, keine neuen Datenfelder oder Laufzeitabhängigkeiten. Tempo mit 1.000/10.000 synthetischen Aufgaben, Median/p95; manuelle Abnahme offen.
 

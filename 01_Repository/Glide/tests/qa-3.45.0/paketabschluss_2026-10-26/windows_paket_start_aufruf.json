@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "scope": "lokale Windows-Startprobe ohne ACL-Sperre",
+  "process_exitcode": 0,
+  "strict_acl_isolation_tested": false,
+  "executable_sha256": "4ce621b3eb6da09e01ab20a0449cfb6c1bb430504ad739389dc11b7e9014b548",
+  "report": "windows_paket_start.json",
+  "stdout": "",
+  "stderr": ""
+}

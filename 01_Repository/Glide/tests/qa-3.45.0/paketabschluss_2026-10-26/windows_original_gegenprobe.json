@@ -1,0 +1,377 @@
+{
+  "eigenstaendiger_pruefstart": true,
+  "exitcode": 0,
+  "app_version": "3.45.0",
+  "python": "3.14.7",
+  "tcl": "9.0.4",
+  "tk": "9.0.4",
+  "plattform": "win32",
+  "architektur": "AMD64",
+  "ansichten": 6,
+  "anlegen_abhaken_undo": true,
+  "dateilesen": true,
+  "app_backup_rundlauf": true,
+  "daten_isoliert": true,
+  "bibliotheken": {
+    "tcl": {
+      "modus": "eingebettetes-zip",
+      "ort": "//zipfs:/lib/tcl/tcl_library",
+      "anbieter": "_internal/tcl90.dll"
+    },
+    "tk": {
+      "modus": "eingebettetes-zip",
+      "ort": "//zipfs:/lib/tk/tk_library",
+      "anbieter": "_internal/tcl9tk90.dll"
+    }
+  },
+  "native_anbieter": {
+    "tcl": "_internal/tcl90.dll",
+    "tk": "_internal/tcl9tk90.dll"
+  },
+  "windows_geladene_bibliotheken": {
+    "bibliotheken": [
+      {
+        "bereich": "paket",
+        "datei": "Glide.exe"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/ntdll.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/KERNEL32.DLL"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/KERNELBASE.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/apphelp.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/USER32.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/win32u.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/GDI32.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/gdi32full.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/msvcp_win.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/ucrtbase.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/ADVAPI32.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/msvcrt.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/sechost.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "WinSxS/amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.26100.9711_none_3e07b8b0e334e825/COMCTL32.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/RPCRT4.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/IMM32.DLL"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/python314.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/WS2_32.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/VERSION.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/bcrypt.dll"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/VCRUNTIME140.dll"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/_ctypes.pyd"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/ole32.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/combase.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/OLEAUT32.dll"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/libffi-8.dll"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/_bz2.pyd"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/_lzma.pyd"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/_zstd.pyd"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/_hashlib.pyd"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/libcrypto-3.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/CRYPT32.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/bcryptprimitives.dll"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/_tkinter.pyd"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/libtommath.dll"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/tcl9tk90.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/SHELL32.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/COMDLG32.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/WINSPOOL.DRV"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/shcore.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/SHLWAPI.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/cfgmgr32.dll"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/tcl90.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/USERENV.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/NETAPI32.dll"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/zlib1.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/LOGONCLI.DLL"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/NETUTILS.DLL"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/SAMCLI.DLL"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/_uuid.pyd"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/_elementtree.pyd"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/pyexpat.pyd"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/unicodedata.pyd"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/_zoneinfo.pyd"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/_queue.pyd"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/_wmi.pyd"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/VCRUNTIME140_1.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/PROPSYS.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "system32/uxtheme.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/MSCTF.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/icu.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/TextShaping.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/kernel.appcore.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/textinputframework.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "System32/clbcatq.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "system32/explorerframe.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/powrprof.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/UMPDC.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/dwmapi.DLL"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/ntmarta.dll"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/_socket.pyd"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/IPHLPAPI.DLL"
+      },
+      {
+        "bereich": "windows",
+        "datei": "system32/wbem/wbemprox.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/wbemcomn.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "system32/wbem/wbemsvc.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "system32/wbem/fastprox.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/amsi.dll"
+      },
+      {
+        "bereich": "windows",
+        "datei": "SYSTEM32/profapi.dll"
+      },
+      {
+        "bereich": "windows-defender",
+        "datei": "4.18.26090.9-0/MpOav.dll",
+        "signatur": "Valid",
+        "herausgeber": "Microsoft Corporation"
+      },
+      {
+        "bereich": "paket",
+        "datei": "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.2.dll"
+      }
+    ],
+    "fehler": [],
+    "exitcode": 0
+  },
+  "ressourcen_sha256_geprueft": 30,
+  "lizenzdateien_sha256_geprueft": 34,
+  "logo_geladen": true,
+  "gebuendelte_schriften_verfuegbar": [
+    "DejaVu Sans",
+    "Pixelify Sans"
+  ],
+  "dnd_version": "2.10.2",
+  "native_dnd_bibliotheken": [
+    "_internal\\tkinterdnd2\\tkdnd\\win-x64-tcl9\\libtkdnd2.10.2.dll"
+  ],
+  "externe_python_suchpfade": [],
+  "callbackfehler": [],
+  "zugangs_kernablauf": null
+}

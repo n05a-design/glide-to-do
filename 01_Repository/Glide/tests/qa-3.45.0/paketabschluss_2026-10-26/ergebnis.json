@@ -1,0 +1,47 @@
+{
+  "exitcode": 0,
+  "scope": "Lieferabschluss Windows x64 und macOS arm64 sowie Python-Fassung",
+  "version": "3.45.0",
+  "schema": 26,
+  "app_sha256": "d516ca67f6f6e5dbe46c52275a5ff965690a898ec99c45cf3a305d72a4c12ab8",
+  "windows_full": {
+    "exitcode": 0,
+    "suites": 104,
+    "steps": 123,
+    "status_counts": {
+      "ausgeführt": 122,
+      "übersprungen": 1
+    }
+  },
+  "strict_ci": {
+    "exitcode": 0,
+    "steps": 19,
+    "tool_tests": 193,
+    "tool_skipped": 1,
+    "domain_tests_per_run": 932,
+    "domain_runs": 2
+  },
+  "python_delivery_equal": true,
+  "python_code_files": 86,
+  "resource_files": 147,
+  "windows_package_files": 103,
+  "mac_package_files": 333,
+  "mac_symlinks": 29,
+  "delivered_start_probes_green": true,
+  "showcase_import_restart_verified": true,
+  "windows_zip": "01_Repository/Glide/build/windows/Glide-3.45.0-windows-x64.zip",
+  "windows_zip_sha256": "47ff56183e48de0b196c7910b1393d4a1521f1d3afc9d7b7a483d436d7bdb7c9",
+  "mac_tar": "01_Repository/Glide/build/macos/Glide-3.45.0-macos-arm64.tar.gz",
+  "mac_tar_sha256": "b6284197c62fddee1283207ead6680baed72bdf8826114e944316857284a7252",
+  "mac_native_run": "https://github.com/n05a-design/glide-to-do/actions/runs/40328682255",
+  "remote_windows_full_and_acl_package_green": true,
+  "remote_windows_runtime": "separate eigene Tk-9.1-Laufzeit",
+  "all_platform_checks_green": false,
+  "open_findings": [
+    "Linux/Tk9.1: test_arbeitsmodi Fall kompakt rot",
+    "menschliche Reader-/DPI-/Mehrmonitor- und Mac-Vollabnahme offen",
+    "oeffentliche Signierung/Installer/Releasefreigabe offen"
+  ],
+  "release_approved": false,
+  "delivery_manifest": "lieferung.json"
+}

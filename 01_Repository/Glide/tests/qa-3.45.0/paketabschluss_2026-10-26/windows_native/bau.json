@@ -1,0 +1,2589 @@
+{
+  "version": "3.45.0",
+  "target": "windows-x64",
+  "runtime": {
+    "python": "3.14.7",
+    "tcl": "9.0.4",
+    "tk_compiled": "9.0",
+    "platform": "win32",
+    "machine": "x86_64",
+    "pyinstaller": "6.22.3"
+  },
+  "input": {
+    "version": "3.45.0",
+    "target": "windows-x64",
+    "product": {
+      "APP_NAME": "Glide",
+      "APP_VERSION": "3.45.0",
+      "APP_BUNDLE_ID": "de.shaye.glide",
+      "APP_USER_MODEL_ID": "Shaye.Glide"
+    },
+    "own_runtime": null,
+    "runtime": {
+      "python": "3.14.7",
+      "tcl": "9.0.4",
+      "tk_compiled": "9.0",
+      "platform": "win32",
+      "machine": "x86_64",
+      "pyinstaller": "6.22.3"
+    },
+    "sha256": {
+      "accessibility.py": "d5b959172f536d2349ce55c2f20960650d73d3572052cf5bf496288cffa2a91b",
+      "accessibility_bindings.py": "57fca8a881a00ff1a12e4be3103ed58c610d1d1c0159b8d7faeb5cd0be49ffa6",
+      "action_catalog.py": "4811bbd6abd3418bf7db9816d3c1fee3a00ab703d8f0cdf5e0cf0b82c753b0f6",
+      "action_menu.py": "12c6f8669df966735de7bfd6361758e9c9093bace5461b17901da99c9bfa9c4a",
+      "animation.py": "a7f4fb2849da4dcc6831c28811a52de9e739a9d251e2a123fc5b2c09202c3006",
+      "animation_export.py": "a3f47a4e0e91462de11f4458c99dc1cb2d8580b02b7baa824817dd8d9be918bb",
+      "app.pyw": "d516ca67f6f6e5dbe46c52275a5ff965690a898ec99c45cf3a305d72a4c12ab8",
+      "appearance.py": "1366388cf453f9d5ddf11bbc47e43fdd796b750a3a26105623b539e0928a2ea8",
+      "attachment_paths.py": "7c506fd2da19ec74513c4d64779e5add5129b91a5cbcd5afdf90b28ba5c329cc",
+      "attachment_policy.py": "94576db88247bebe05d57468b9d0729a4912df1df7fd58f2b43c0c28fe507018",
+      "backdrop.py": "a45c04144b4366eb805aee56558005976f0e66d53032acb0b6aa37ee702689f8",
+      "backup_catalog.py": "936d86a0e20bdcc252279de853d167152e121d4c4bed37a479dc0170a3f9294a",
+      "backup_diff.py": "9913de3fed9297cdbe8ad706a9390188b7a6800ec995be6fd78c11e6600f63de",
+      "backup_snapshot.py": "f724e53794dbc78b53be471c36a5edc2d19faddb1a38f1328332700f4742c995",
+      "busy_calendar.py": "5de924eb3a584865702419e3036cef58a01e244ec34bf57bc42140dcdd9f192c",
+      "calendar_service.py": "13c8e3bd01f7dabda8a2101ec9250b970735de77e3a8fe33604db39ff0ab8943",
+      "capture_parser.py": "7562b7d2fe6c38c2bb3011670d5caff578b971824996a7598b628ec46727f9a3",
+      "compact_mode.py": "b9e9b0d75a15d3d66f65af7d7baf64f6f620e1d8790b22512c2abf635c1be09e",
+      "content_search.py": "d2359609d6f574984527ad24b33a5ea2b85637330500f6eab23bab6f1f58d330",
+      "core_accessibility.py": "4764a2f13f626de1243bba17b2bb761ab497b8ee9ad1b64e668001f80c256bed",
+      "daily_hints.py": "3d1436b64c4fd113b4cb0469b7cdc7db1eb2dc579bed5af262f21b58ddddb5f7",
+      "data_lock.py": "3029bc8cfb0bf881e354ed962d3a7784f9e1c1fd861afb02acccec52a0e482ca",
+      "day_proposal.py": "136f768444b7da7605deb6562e3972dbcae27ac47cc7ba2ed126df74d2fb4abf",
+      "day_relief.py": "f889a85441e366e0ba9b614ac9d256db68ceceab57e75c623cd1f6f1bb649587",
+      "drawing.py": "f6cb2386cf00676e5af19cca46bc354f4c2104f87f2a6d3ae85a281c2842712c",
+      "drawing_image.py": "d1020a43175f251a5a59aa434ebbc5b4cb43d8e70fc9c245deaff2001bfa1ad9",
+      "editor_flush.py": "192d8d9041842a67006b0296408596b602194c7e385357c7648b9a0e5c37417c",
+      "eisenhower.py": "5f4386a5ff60371b2627e34612aadcfc7c64cad772a5dfb469dc94f22f2b0ca0",
+      "exchange_patch.py": "3b5bf73c253845110c867a3d1c9629137f9070e9a12c69ac0edcf970dc576e4e",
+      "exchange_recipes.py": "640fe522f278cde07115293614d8fca16d0e819dbbad9e3a06a5a9a312ee4198",
+      "filter_explain.py": "f581412f3d4c8136941518e0dbe516c44db7e1ba9fee87b47f3b347878c5245a",
+      "focus_timer.py": "23199b0595e32770f388cf1f2a6dad8a383341893e02e9421b49c5428afb18d5",
+      "glide_start.py": "670aeeadde60dd81dd0d816ee1eba38ec3205f8af15902bfefd3e13aff6b79eb",
+      "glyph_metrics.py": "cc4e480be903d550c505774003223f801c237f5ce50e4328743c2416faced76d",
+      "home_dashboard.py": "ced120a5cd600d82d5b76e31c2faf2efddb46a10bcb51a7f526be43a1d0fc773",
+      "home_tiles.py": "d05add8e3c09c62b2696db34bda851e3d84475182a038cd1800a051fe590e486",
+      "ics_busy.py": "89f85e03a4b535eea3802294006ed31854c8907123db779aef8b02fe5360df67",
+      "ics_recurrence.py": "454bd59489eb404097b68437d62a1786f876388ae0e13ee03649cd30c254353b",
+      "ics_timezone.py": "bf3fd6590f917ede7975542e267e5e41dce7c70b452a2c497c8d54894b8de2cd",
+      "image_conversion.py": "5ab45b0efc21f5737e4f13b7d762dcef3d8515f52a7d94fe04c7f256ce99f8b3",
+      "image_preview.py": "88f63c61827320f7535cd90fac901f10b624fba9f35b72868707f15ce1a8d618",
+      "interaction_policy.py": "05baf1651eb4a9ab014c6086379fd791e2853495eac4e776bae21c2fb05da177",
+      "item_index.py": "a1c0297b8d77d2dd6b69e7be9287b5fdbc7f125658dea6a0626c55262c92128e",
+      "load_phases.py": "6b7448c728de5d1342c9376b3b244a0f946100b84dc6c6d80d4aeae9b373a8e9",
+      "logo.py": "7dafc78697c33315d83dbbb0e16aa222068a123f6eba93d9126dc01150a61d4a",
+      "logo_raster.py": "e594735d05b1e7c3be2ac73bfa7340d85444293bfc1c84e31dbd4cd7f63db47d",
+      "markdown_tree.py": "44838e1af044f447c160fa866d30c83755858ec71ee269e91a3202b0156a2678",
+      "motion.py": "3f6aa78376bb05ff0fe498c16f1d9edf9292bf0e19bc984513d73e4ce10a9162",
+      "notion_archive.py": "f08a04c8bb0be71b24e0313b72381c352c8fbbf851aabf53b64767b57a28d64c",
+      "notion_hierarchy.py": "6148ad9d472c4dfea16300701021bd278d695d18481e08f081db9aa578c05a42",
+      "notion_import.py": "d0e7c074aef0ccfa4ae869a96e1bddf484f0b3f5aa45c593a81012a106e9688c",
+      "notion_reimport.py": "10f06f7dabf1eb2563b15bd887729a5e75d87d2b8459cbcad3654c9f67cc815a",
+      "object_references.py": "133b8c9f9e2dc5fa60a063971dc5396cf417f718d08ff65860e705241b890ee7",
+      "occupied_time.py": "ba756252c2552a1c3abcbf99640be79c49f9286fd6131d509eb7bf83d6a170b0",
+      "page_features.py": "f6d5a131aee8d87cc3be2f8c3a053bf20e43f668b2daacc2e64bb209a497ffcc",
+      "page_markdown.py": "5805eab66689fbe2dac5c863adea3ff0e2e0157f979321606062aaa01fcbbb53",
+      "page_restore.py": "ba86f3e099acaaceb9de7677de6fe9638595d02f811bf557eb410353d6079b66",
+      "pinboard_pages.py": "fb81ff0b55012de45cbad39f433ee0916d4fb827348c5c65992c932e0dbdce22",
+      "planning.py": "59b78be6d91da4adf31c2c401b0bdf1c10b6c97490a122f7f3420c20059ba0ad",
+      "preview_tools.py": "5fb18ce2df48c83b5c804ea862db9f3c798622457cd39ccde22be033401d9ba1",
+      "release_notes.py": "71950e58a3bc57bc45c1e124f96b54867243f9bf4c24a75d1b81d3cec9f9dc6d",
+      "render_retention.py": "efec6647e1adfc237b9935426a91f58461e56c03935a35a082666bbd338a82e8",
+      "repeat_ics.py": "ffd2bfdae221ee4c3749c673b5f4a4d5cfeb64a78f060d502956abe582176237",
+      "repeat_rules.py": "fa78bb5887bec9c27fa4d77e03ed95e197931e54b2f0ab1f949b34d4f26e28a8",
+      "resources/exchange_recipes.json": "5faea534c799ac0acc5f76072c31e15a08867e363728c9547f08369980c31978",
+      "resources/fonts/DejaVuSans-Bold.ttf": "e6476c1b80502924294eed40894c5b18e06c181444ca953e5334262df9c27724",
+      "resources/fonts/DejaVuSans-BoldOblique.ttf": "eb436dca0c2594b73d8b603b892e374fdfd8d885d25ffb4f18df4c4c0b49e50f",
+      "resources/fonts/DejaVuSans-Oblique.ttf": "4af75fa16ee6d3ad43e1ecec41862c24954af26a55c6bb1ebb27bd486a50f5f4",
+      "resources/fonts/DejaVuSans.ttf": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+      "resources/fonts/LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+      "resources/fonts/OFL-PixelifySans.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+      "resources/fonts/PixelifySans-Bold.ttf": "3c3c203a3f3b862b944e836e4ec0fce201eddc1952cbca0d682e382d668b293c",
+      "resources/fonts/PixelifySans-Regular.ttf": "5436d485d1713afa376e1744911cbbcc0849eae1eb55ec9bc34c0753993ffef9",
+      "resources/fonts/provenance.json": "663fbc94179ae7e7a76e799783546d07a3826f931699be74ec0265acfb0cc08b",
+      "resources/logo/glide-app-icon-16.png": "c94efbd749df756dc50932c464ee877f6c9f9ca2d04b08c581bae4af6c7f05c4",
+      "resources/logo/glide-app-icon-256.png": "b3d7e0378e6e28bb93699f0952286478f8b392382d5d96a0db23e96b259acb5b",
+      "resources/logo/glide-app-icon-32.png": "d6c7d6146c6ae6c604880e213321447febdc56ed1b998c153110649d1901345b",
+      "resources/logo/glide-app-icon-64.png": "75cb0c88f228139918f20148f2128edc48cb23ea5bba7e41c1500e3d06644457",
+      "resources/logo/glide-app-icon-klein.svg": "9d031380f07b77b49cd5056685fffff85024a659f827dfc434d98eadc59db4da",
+      "resources/logo/glide-app-icon-macos-16.png": "b98be87052da034db0c22dc414cb88a4cca16e1469f2dd884110fd70a73dade7",
+      "resources/logo/glide-app-icon-macos-256.png": "eb95fcbd1d5f827e29aedee1cece41f9c7580bae590543f56009f7570738679d",
+      "resources/logo/glide-app-icon-macos-32.png": "87158ff960dd36fbac7138823f6390e9012275702c2547380385eb816cb05a0a",
+      "resources/logo/glide-app-icon-macos-64.png": "24cf64621e10e6e3ce51b04c03e3a800d58bcf2b13f9048522cd3e152820f716",
+      "resources/logo/glide-app-icon.png": "652e0bfab5500480bd523f31cc90254df3b0a111b24c21c57d8b7617b44d470a",
+      "resources/logo/glide-app-icon.svg": "1db74addc3d038a7691c133d84162a999022ffdd95443d8df0cce55661c35cb8",
+      "resources/logo/glide-logo-klein.svg": "92a8eb73a1b42f6650776e9613ec8eeecedf46452a5a97c86d2d6cfe3722b2b6",
+      "resources/logo/glide-logo.png": "08c845e095bb7bcef4c2c9e56a1327e17cff1e5d6c1c2ff89ba04a50736b9b64",
+      "resources/logo/glide-logo.svg": "c734f1e43a39c7cce2ab81301784de0aee5a88943679e4266f002108658cba58",
+      "resources/templates/glide_vorlagen.glidetemplates": "273b2facc0008f5e39d47d4340013453064329425a587efe53f3bf2d56564e2c",
+      "resources/timezones/iana-2026e.zip": "8754618b5e58bce763865aa1a748fe5d0f15908cae586ed45d929c9839b710e9",
+      "resources/timezones/LICENSE-CLDR.txt": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6",
+      "resources/timezones/LICENSE-iana.txt": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551",
+      "resources/timezones/provenance.json": "9d5079043d3bab1cf997fe3bb0ef859d100f01c2d6c5c0ce5a259b8042c99ff6",
+      "resources/timezones/windowsZones.xml": "7df6edbf52213ad2571f7fe76c64fc3c38423326f0896e3dc7f52299024141a6",
+      "restore_assets.py": "f3101e2dbff3fb38bee2f561888d484d9f73dd1ad533aef3955bac72feb85571",
+      "routines.py": "bb8bb35cc63f28542665eb3d144ef4bf5308fbd944c25711d4c04391a08a6bcb",
+      "runtime_check.py": "ea6ab0ec80b3944b6d05762e5ae100f63a2fa83bd2e31ca940f66b5166188f9c",
+      "save_comparison.py": "0e26d1bf018f0529c64414c45a2c23f016bbc8d59c636835b7a3a3abe977f6a1",
+      "save_result.py": "9eb8ef11cbcce47e485e958b732c98a7996979bd15bde65f901ad4423dec8514",
+      "schema_backups.py": "3d07ef08791d7b46f47f75521e6152050ada2d1b256fc29abdd417c33c11a9ae",
+      "side_view.py": "5dc3d323f689899463d94ed0d483c8c8f84b2b45b7a10bba9e4084f44a6fa80c",
+      "sidebar_policy.py": "52215f7e9d860642b7ef46925a0666d84efb0eddcc4253e204be2204b8b7d763",
+      "source_metadata.py": "a123ec2c186fd927ebde2ee4c1beecc606830b85cd66961dff7f41318e437d1a",
+      "storage_health.py": "d9d04e139dece92211f635727e4e61055c268fdcadfb8ad61fbb67c6517f6a28",
+      "structural_guard.py": "b834f48aaa6e948d484c5402de76d60c7a7327d86cbeaf8d9d1c1ae42d66a2f4",
+      "svg_geometry.py": "217bb988c16e2528901a6a550737b9525b1b288c76ddd8956d7beb0b0dc2b35e",
+      "symbol_policy.py": "088b815f95e8070b450795af25556157e44984489c93c50309d79b110ddebc4b",
+      "task_editing.py": "eee8d12c5c3cd741c0144b02e8b241accb72e90119406671e118855784605e69",
+      "task_references.py": "c27d8336c374ef9187058c84414d0077d328e5b04ec7c83f317e6aee0de0eb19",
+      "timezones.py": "43f0b56987ac64fea922cdf4a71974b1ea060f62259f4cb8eeb8b5114d06d4ea",
+      "today_view.py": "c9d12cbf24c809890ef17f952654a057d4229153dbc78591b33eb20043b4d917",
+      "ui_design.py": "28e8a3b63b7875aab3e79215d89f78c8c75fcdf1ab008f0b07fd04cd04e4a0ae",
+      "undo_history.py": "3595022982da1d7181ad0448ea6d80909f228c6c4d1eaa00926ad07216466609",
+      "vendor/provenance.json": "d88d2242930d3d946c357900899c548b7bc90548f2e8e4d549e8c80b2793c2e9",
+      "vendor/tkinterdnd2/__init__.py": "514ce83cf94762760ec0c38aa3a445c998ff4cc3bec2661d3c1c60b8c1033bf2",
+      "vendor/tkinterdnd2/LICENSE": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+      "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.2.dll": "731e6fb6fd5585074588b16f5b8ad29029bc2a40c83d20b5937f8d1f1edaf82e",
+      "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/pkgIndex.tcl": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+      "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd.tcl": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+      "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd2.10.2.lib": "79511b0e8820d16252ab3a846c610280f0d24cd0b30d294091869107cd72bc4d",
+      "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_compat.tcl": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+      "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_generic.tcl": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+      "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_macosx.tcl": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+      "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_unix.tcl": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+      "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_utils.tcl": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+      "vendor/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_windows.tcl": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+      "vendor/tkinterdnd2/TkinterDnD.py": "a5c23c0c9dbd1c1c9077809e5520b7edfed60986db7ebc1f7361a8f4c5bd6e29",
+      "view_definition.py": "0dfffe15d7f5d7fd6a0f68e839b0120627b4fd64fe06b66fe4642d0cd2b57636",
+      "view_metrics.py": "a5540e5b1d0f65c98fdfeab4ec3b5b1288e9b6e5ca4dd5e07fbf36f396bac276",
+      "week_planning.py": "38ff18553d762946fa8c4fa857cdabb4d39a84cfc020f8fa157882b4066fe95b"
+    },
+    "bootstrap_sha256": "4511b7166eb8f63dc084199769d1a2f970fad44f680fe72bc3a5a46bb7ae6b91",
+    "runtime_contract_sha256": "85e913601942e1dcf7011029c48e0c05cfbf5705447d5af7e2d8d46c548231f3",
+    "licenses_sha256": {
+      "licenses/pyinstaller-COPYING.txt": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64",
+      "licenses/pyinstaller-hooks-contrib-LICENSE": "91d0baaff00773038e72c0a1fc9d5d2d38706b7a2b9c04f34296608f931b9cd0",
+      "licenses/altgraph-LICENSE": "6c194d6db0c64d45535d10c95142b9b0cda7b7dcc7f1ddee302b3d536f3dbe46",
+      "licenses/packaging-LICENSE": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+      "licenses/packaging-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+      "licenses/packaging-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+      "licenses/setuptools-LICENSE": "5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d",
+      "licenses/setuptools-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+      "licenses/setuptools-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+      "licenses/setuptools-LICENSE.txt": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654",
+      "licenses/pefile-LICENSE": "b44409c067c6da52bfb54bb6624fb11a7b52157c3a13ae1400232f8196e86ad3",
+      "licenses/pywin32-ctypes-LICENSE.txt": "dfa83b3e2709adfcdb838d9ad55823ca674abb780e60563d9dd9544ccbf785e9",
+      "licenses/Python-LICENSE.txt": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68",
+      "licenses/libmpdec-COPYRIGHT.txt": "2713324211652ce4a60e6e21e54f9dc3004299e591b0933a352f1a89c5fb53c2",
+      "licenses/zlib-ng-LICENSE.md": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee",
+      "licenses/zlib-LICENSE.txt": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
+      "licenses/Tcl-LICENSE.txt": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16",
+      "licenses/Tk-LICENSE.txt": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198",
+      "licenses/libtommath-LICENSE.txt": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a",
+      "licenses/Henry-Spencer-Regex-LICENSE.txt": "8efb2d7215828acd974545d4177cadc7239d676c9a2c1a9834cab33efe9967fe",
+      "licenses/nanosvg.h-LICENSE.txt": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818",
+      "licenses/nanosvgrast.h-LICENSE.txt": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9",
+      "licenses/OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+      "licenses/SQLite-Copyright.html": "44ca9f793055c8e32fc65f65a4f5bcf813a33f5bdaaa084067dd617a4ed3cc70",
+      "licenses/XZ-COPYING.txt": "bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c",
+      "licenses/Zstandard-LICENSE.txt": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8",
+      "licenses/Glide-Lizenzstatus.md": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
+      "licenses/tkinterdnd2-LICENSE": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+      "licenses/tkdnd-LICENSE.txt": "d4764f73ef60ec2f61a1bd677cbbf0a945ce69377903c1366b0c18a9ef60f268",
+      "licenses/DejaVu-LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+      "licenses/PixelifySans-OFL.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+      "licenses/IANA-LICENSE.txt": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551",
+      "licenses/CLDR-LICENSE.txt": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6",
+      "licenses/manifest.json": "45192789ebeedf75d4fcb6646df17503f769afd0646fa76d5972d8d8b223cddf"
+    },
+    "icon": {
+      "file": "assets/icons/glide.ico",
+      "sha256": "328103a3d4bce40ea62998c612c1547478d91d3076a9e90f9bfa62d523825808",
+      "generated_sha256": "328103a3d4bce40ea62998c612c1547478d91d3076a9e90f9bfa62d523825808"
+    }
+  },
+  "licenses": {
+    "components": [
+      {
+        "name": "PyInstaller",
+        "version": "6.22.3",
+        "source": "https://pypi.org/project/pyinstaller/6.22.3/",
+        "files": {
+          "pyinstaller-COPYING.txt": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+        }
+      },
+      {
+        "name": "PyInstaller-Hooks",
+        "version": "2026.8",
+        "source": "https://pypi.org/project/pyinstaller-hooks-contrib/2026.8/",
+        "files": {
+          "pyinstaller-hooks-contrib-LICENSE": "91d0baaff00773038e72c0a1fc9d5d2d38706b7a2b9c04f34296608f931b9cd0"
+        }
+      },
+      {
+        "name": "altgraph",
+        "version": "0.17.5",
+        "source": "https://pypi.org/project/altgraph/0.17.5/",
+        "files": {
+          "altgraph-LICENSE": "6c194d6db0c64d45535d10c95142b9b0cda7b7dcc7f1ddee302b3d536f3dbe46"
+        }
+      },
+      {
+        "name": "packaging",
+        "version": "26.3",
+        "source": "https://pypi.org/project/packaging/26.3/",
+        "files": {
+          "packaging-LICENSE": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+          "packaging-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+          "packaging-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5"
+        }
+      },
+      {
+        "name": "setuptools",
+        "version": "84.0.0",
+        "source": "https://pypi.org/project/setuptools/84.0.0/",
+        "files": {
+          "setuptools-LICENSE": "5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d",
+          "setuptools-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+          "setuptools-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+          "setuptools-LICENSE.txt": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+        }
+      },
+      {
+        "name": "pefile",
+        "version": "2024.8.26",
+        "source": "https://pypi.org/project/pefile/2024.8.26/",
+        "files": {
+          "pefile-LICENSE": "b44409c067c6da52bfb54bb6624fb11a7b52157c3a13ae1400232f8196e86ad3"
+        }
+      },
+      {
+        "name": "pywin32-ctypes",
+        "version": "0.2.3",
+        "source": "https://pypi.org/project/pywin32-ctypes/0.2.3/",
+        "files": {
+          "pywin32-ctypes-LICENSE.txt": "dfa83b3e2709adfcdb838d9ad55823ca674abb780e60563d9dd9544ccbf785e9"
+        }
+      },
+      {
+        "name": "Python",
+        "version": "3.14.7",
+        "source": "https://github.com/python/cpython/tree/v3.14.7",
+        "files": {
+          "Python-LICENSE.txt": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68"
+        }
+      },
+      {
+        "name": "libffi",
+        "version": "mit Python 3.14.7",
+        "source": "Python-LICENSE.txt (Windows-Ausgabe)",
+        "files": {
+          "Python-LICENSE.txt": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68"
+        }
+      },
+      {
+        "name": "Microsoft-VC-Runtime",
+        "version": "mit Python 3.14.7",
+        "source": "Abschnitt „Microsoft Distributable Code“ in Python-LICENSE.txt (Windows-Ausgabe)",
+        "files": {
+          "Python-LICENSE.txt": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68"
+        }
+      },
+      {
+        "name": "libmpdec",
+        "version": "4.0.0",
+        "source": "https://github.com/python/cpython-source-deps/tree/mpdecimal-4.0.0",
+        "files": {
+          "libmpdec-COPYRIGHT.txt": "2713324211652ce4a60e6e21e54f9dc3004299e591b0933a352f1a89c5fb53c2"
+        }
+      },
+      {
+        "name": "zlib-ng",
+        "version": "2.2.4",
+        "source": "https://github.com/python/cpython-source-deps/tree/zlib-ng-2.2.4",
+        "files": {
+          "zlib-ng-LICENSE.md": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee"
+        }
+      },
+      {
+        "name": "zlib",
+        "version": "1.3.2",
+        "source": "https://github.com/madler/zlib/tree/v1.3.2",
+        "files": {
+          "zlib-LICENSE.txt": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2"
+        }
+      },
+      {
+        "name": "Tcl",
+        "version": "9.0.4",
+        "source": "https://github.com/tcltk/tcl/tree/core-9-0-4",
+        "files": {
+          "Tcl-LICENSE.txt": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16"
+        }
+      },
+      {
+        "name": "Tk",
+        "version": "9.0.4",
+        "source": "https://github.com/tcltk/tk/tree/core-9-0-4",
+        "files": {
+          "Tk-LICENSE.txt": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198"
+        }
+      },
+      {
+        "name": "libtommath",
+        "version": "aus Tcl 9.0.4",
+        "source": "https://github.com/tcltk/tcl/tree/core-9-0-4/libtommath",
+        "files": {
+          "libtommath-LICENSE.txt": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a"
+        }
+      },
+      {
+        "name": "Henry-Spencer-Regex",
+        "version": "aus Tcl 9.0.4",
+        "source": "https://github.com/tcltk/tcl/tree/core-9-0-4/generic/regcustom.h",
+        "files": {
+          "Henry-Spencer-Regex-LICENSE.txt": "8efb2d7215828acd974545d4177cadc7239d676c9a2c1a9834cab33efe9967fe"
+        }
+      },
+      {
+        "name": "NanoSVG",
+        "version": "aus Tk 9.0.4",
+        "source": "https://github.com/tcltk/tk/tree/core-9-0-4/generic",
+        "files": {
+          "nanosvg.h-LICENSE.txt": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818",
+          "nanosvgrast.h-LICENSE.txt": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9"
+        }
+      },
+      {
+        "name": "OpenSSL",
+        "version": "3.5.7",
+        "source": "https://github.com/openssl/openssl/tree/openssl-3.5.7",
+        "files": {
+          "OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+        }
+      },
+      {
+        "name": "SQLite",
+        "version": "3.50.4",
+        "source": "https://www.sqlite.org/copyright.html",
+        "files": {
+          "SQLite-Copyright.html": "44ca9f793055c8e32fc65f65a4f5bcf813a33f5bdaaa084067dd617a4ed3cc70"
+        }
+      },
+      {
+        "name": "liblzma",
+        "version": "5.2.5",
+        "source": "https://github.com/tukaani-project/xz/tree/v5.2.5",
+        "files": {
+          "XZ-COPYING.txt": "bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c"
+        }
+      },
+      {
+        "name": "Zstandard",
+        "version": "1.5.7",
+        "source": "https://github.com/facebook/zstd/tree/v1.5.7",
+        "files": {
+          "Zstandard-LICENSE.txt": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+        }
+      },
+      {
+        "name": "Glide",
+        "version": "Entwicklungsstand; öffentliche Lizenz offen",
+        "source": "LICENSE.md",
+        "files": {
+          "Glide-Lizenzstatus.md": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e"
+        }
+      },
+      {
+        "name": "tkinterdnd2",
+        "version": "0.6.3",
+        "source": "https://pypi.org/project/tkinterdnd2/0.6.3/",
+        "files": {
+          "tkinterdnd2-LICENSE": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05"
+        }
+      },
+      {
+        "name": "tkdnd",
+        "version": "2.10.2",
+        "source": "https://pypi.org/project/tkinterdnd2/0.6.3/; unveränderter Kommentarblock aus tkdnd.tcl",
+        "files": {
+          "tkdnd-LICENSE.txt": "d4764f73ef60ec2f61a1bd677cbbf0a945ce69377903c1366b0c18a9ef60f268"
+        }
+      },
+      {
+        "name": "Glide-Schriften",
+        "version": "DejaVu 2.37 / Pixelify Sans 39df74a",
+        "source": "resources/fonts/provenance.json",
+        "files": {
+          "DejaVu-LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+          "PixelifySans-OFL.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+        }
+      },
+      {
+        "name": "IANA-Zeitzonen",
+        "version": "2026e",
+        "source": "resources/timezones/provenance.json",
+        "files": {
+          "IANA-LICENSE.txt": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+        }
+      },
+      {
+        "name": "Unicode-CLDR",
+        "version": "48.2",
+        "source": "resources/timezones/provenance.json",
+        "files": {
+          "CLDR-LICENSE.txt": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+        }
+      }
+    ],
+    "sha256": {
+      "pyinstaller-COPYING.txt": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64",
+      "pyinstaller-hooks-contrib-LICENSE": "91d0baaff00773038e72c0a1fc9d5d2d38706b7a2b9c04f34296608f931b9cd0",
+      "altgraph-LICENSE": "6c194d6db0c64d45535d10c95142b9b0cda7b7dcc7f1ddee302b3d536f3dbe46",
+      "packaging-LICENSE": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+      "packaging-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+      "packaging-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+      "setuptools-LICENSE": "5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d",
+      "setuptools-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+      "setuptools-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+      "setuptools-LICENSE.txt": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654",
+      "pefile-LICENSE": "b44409c067c6da52bfb54bb6624fb11a7b52157c3a13ae1400232f8196e86ad3",
+      "pywin32-ctypes-LICENSE.txt": "dfa83b3e2709adfcdb838d9ad55823ca674abb780e60563d9dd9544ccbf785e9",
+      "Python-LICENSE.txt": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68",
+      "libmpdec-COPYRIGHT.txt": "2713324211652ce4a60e6e21e54f9dc3004299e591b0933a352f1a89c5fb53c2",
+      "zlib-ng-LICENSE.md": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee",
+      "zlib-LICENSE.txt": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
+      "Tcl-LICENSE.txt": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16",
+      "Tk-LICENSE.txt": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198",
+      "libtommath-LICENSE.txt": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a",
+      "Henry-Spencer-Regex-LICENSE.txt": "8efb2d7215828acd974545d4177cadc7239d676c9a2c1a9834cab33efe9967fe",
+      "nanosvg.h-LICENSE.txt": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818",
+      "nanosvgrast.h-LICENSE.txt": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9",
+      "OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+      "SQLite-Copyright.html": "44ca9f793055c8e32fc65f65a4f5bcf813a33f5bdaaa084067dd617a4ed3cc70",
+      "XZ-COPYING.txt": "bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c",
+      "Zstandard-LICENSE.txt": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8",
+      "Glide-Lizenzstatus.md": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
+      "tkinterdnd2-LICENSE": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+      "tkdnd-LICENSE.txt": "d4764f73ef60ec2f61a1bd677cbbf0a945ce69377903c1366b0c18a9ef60f268",
+      "DejaVu-LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+      "PixelifySans-OFL.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+      "IANA-LICENSE.txt": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551",
+      "CLDR-LICENSE.txt": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+    }
+  },
+  "compiled_modules": {
+    "accessibility": "d5b959172f536d2349ce55c2f20960650d73d3572052cf5bf496288cffa2a91b",
+    "accessibility_bindings": "57fca8a881a00ff1a12e4be3103ed58c610d1d1c0159b8d7faeb5cd0be49ffa6",
+    "action_catalog": "4811bbd6abd3418bf7db9816d3c1fee3a00ab703d8f0cdf5e0cf0b82c753b0f6",
+    "action_menu": "12c6f8669df966735de7bfd6361758e9c9093bace5461b17901da99c9bfa9c4a",
+    "animation": "a7f4fb2849da4dcc6831c28811a52de9e739a9d251e2a123fc5b2c09202c3006",
+    "animation_export": "a3f47a4e0e91462de11f4458c99dc1cb2d8580b02b7baa824817dd8d9be918bb",
+    "appearance": "1366388cf453f9d5ddf11bbc47e43fdd796b750a3a26105623b539e0928a2ea8",
+    "attachment_paths": "7c506fd2da19ec74513c4d64779e5add5129b91a5cbcd5afdf90b28ba5c329cc",
+    "attachment_policy": "94576db88247bebe05d57468b9d0729a4912df1df7fd58f2b43c0c28fe507018",
+    "backdrop": "a45c04144b4366eb805aee56558005976f0e66d53032acb0b6aa37ee702689f8",
+    "backup_catalog": "936d86a0e20bdcc252279de853d167152e121d4c4bed37a479dc0170a3f9294a",
+    "backup_diff": "9913de3fed9297cdbe8ad706a9390188b7a6800ec995be6fd78c11e6600f63de",
+    "backup_snapshot": "f724e53794dbc78b53be471c36a5edc2d19faddb1a38f1328332700f4742c995",
+    "busy_calendar": "5de924eb3a584865702419e3036cef58a01e244ec34bf57bc42140dcdd9f192c",
+    "calendar_service": "13c8e3bd01f7dabda8a2101ec9250b970735de77e3a8fe33604db39ff0ab8943",
+    "capture_parser": "7562b7d2fe6c38c2bb3011670d5caff578b971824996a7598b628ec46727f9a3",
+    "compact_mode": "b9e9b0d75a15d3d66f65af7d7baf64f6f620e1d8790b22512c2abf635c1be09e",
+    "content_search": "d2359609d6f574984527ad24b33a5ea2b85637330500f6eab23bab6f1f58d330",
+    "core_accessibility": "4764a2f13f626de1243bba17b2bb761ab497b8ee9ad1b64e668001f80c256bed",
+    "daily_hints": "3d1436b64c4fd113b4cb0469b7cdc7db1eb2dc579bed5af262f21b58ddddb5f7",
+    "data_lock": "3029bc8cfb0bf881e354ed962d3a7784f9e1c1fd861afb02acccec52a0e482ca",
+    "day_proposal": "136f768444b7da7605deb6562e3972dbcae27ac47cc7ba2ed126df74d2fb4abf",
+    "day_relief": "f889a85441e366e0ba9b614ac9d256db68ceceab57e75c623cd1f6f1bb649587",
+    "drawing": "f6cb2386cf00676e5af19cca46bc354f4c2104f87f2a6d3ae85a281c2842712c",
+    "drawing_image": "d1020a43175f251a5a59aa434ebbc5b4cb43d8e70fc9c245deaff2001bfa1ad9",
+    "editor_flush": "192d8d9041842a67006b0296408596b602194c7e385357c7648b9a0e5c37417c",
+    "eisenhower": "5f4386a5ff60371b2627e34612aadcfc7c64cad772a5dfb469dc94f22f2b0ca0",
+    "exchange_patch": "3b5bf73c253845110c867a3d1c9629137f9070e9a12c69ac0edcf970dc576e4e",
+    "exchange_recipes": "640fe522f278cde07115293614d8fca16d0e819dbbad9e3a06a5a9a312ee4198",
+    "filter_explain": "f581412f3d4c8136941518e0dbe516c44db7e1ba9fee87b47f3b347878c5245a",
+    "focus_timer": "23199b0595e32770f388cf1f2a6dad8a383341893e02e9421b49c5428afb18d5",
+    "glide_app": "d516ca67f6f6e5dbe46c52275a5ff965690a898ec99c45cf3a305d72a4c12ab8",
+    "glide_start": "670aeeadde60dd81dd0d816ee1eba38ec3205f8af15902bfefd3e13aff6b79eb",
+    "glyph_metrics": "cc4e480be903d550c505774003223f801c237f5ce50e4328743c2416faced76d",
+    "home_dashboard": "ced120a5cd600d82d5b76e31c2faf2efddb46a10bcb51a7f526be43a1d0fc773",
+    "home_tiles": "d05add8e3c09c62b2696db34bda851e3d84475182a038cd1800a051fe590e486",
+    "ics_busy": "89f85e03a4b535eea3802294006ed31854c8907123db779aef8b02fe5360df67",
+    "ics_recurrence": "454bd59489eb404097b68437d62a1786f876388ae0e13ee03649cd30c254353b",
+    "ics_timezone": "bf3fd6590f917ede7975542e267e5e41dce7c70b452a2c497c8d54894b8de2cd",
+    "image_conversion": "5ab45b0efc21f5737e4f13b7d762dcef3d8515f52a7d94fe04c7f256ce99f8b3",
+    "image_preview": "88f63c61827320f7535cd90fac901f10b624fba9f35b72868707f15ce1a8d618",
+    "interaction_policy": "05baf1651eb4a9ab014c6086379fd791e2853495eac4e776bae21c2fb05da177",
+    "item_index": "a1c0297b8d77d2dd6b69e7be9287b5fdbc7f125658dea6a0626c55262c92128e",
+    "load_phases": "6b7448c728de5d1342c9376b3b244a0f946100b84dc6c6d80d4aeae9b373a8e9",
+    "logo": "7dafc78697c33315d83dbbb0e16aa222068a123f6eba93d9126dc01150a61d4a",
+    "logo_raster": "e594735d05b1e7c3be2ac73bfa7340d85444293bfc1c84e31dbd4cd7f63db47d",
+    "markdown_tree": "44838e1af044f447c160fa866d30c83755858ec71ee269e91a3202b0156a2678",
+    "motion": "3f6aa78376bb05ff0fe498c16f1d9edf9292bf0e19bc984513d73e4ce10a9162",
+    "notion_archive": "f08a04c8bb0be71b24e0313b72381c352c8fbbf851aabf53b64767b57a28d64c",
+    "notion_hierarchy": "6148ad9d472c4dfea16300701021bd278d695d18481e08f081db9aa578c05a42",
+    "notion_import": "d0e7c074aef0ccfa4ae869a96e1bddf484f0b3f5aa45c593a81012a106e9688c",
+    "notion_reimport": "10f06f7dabf1eb2563b15bd887729a5e75d87d2b8459cbcad3654c9f67cc815a",
+    "object_references": "133b8c9f9e2dc5fa60a063971dc5396cf417f718d08ff65860e705241b890ee7",
+    "occupied_time": "ba756252c2552a1c3abcbf99640be79c49f9286fd6131d509eb7bf83d6a170b0",
+    "page_features": "f6d5a131aee8d87cc3be2f8c3a053bf20e43f668b2daacc2e64bb209a497ffcc",
+    "page_markdown": "5805eab66689fbe2dac5c863adea3ff0e2e0157f979321606062aaa01fcbbb53",
+    "page_restore": "ba86f3e099acaaceb9de7677de6fe9638595d02f811bf557eb410353d6079b66",
+    "pinboard_pages": "fb81ff0b55012de45cbad39f433ee0916d4fb827348c5c65992c932e0dbdce22",
+    "planning": "59b78be6d91da4adf31c2c401b0bdf1c10b6c97490a122f7f3420c20059ba0ad",
+    "preview_tools": "5fb18ce2df48c83b5c804ea862db9f3c798622457cd39ccde22be033401d9ba1",
+    "release_notes": "71950e58a3bc57bc45c1e124f96b54867243f9bf4c24a75d1b81d3cec9f9dc6d",
+    "render_retention": "efec6647e1adfc237b9935426a91f58461e56c03935a35a082666bbd338a82e8",
+    "repeat_ics": "ffd2bfdae221ee4c3749c673b5f4a4d5cfeb64a78f060d502956abe582176237",
+    "repeat_rules": "fa78bb5887bec9c27fa4d77e03ed95e197931e54b2f0ab1f949b34d4f26e28a8",
+    "restore_assets": "f3101e2dbff3fb38bee2f561888d484d9f73dd1ad533aef3955bac72feb85571",
+    "routines": "bb8bb35cc63f28542665eb3d144ef4bf5308fbd944c25711d4c04391a08a6bcb",
+    "runtime_check": "ea6ab0ec80b3944b6d05762e5ae100f63a2fa83bd2e31ca940f66b5166188f9c",
+    "runtime_paths": "85e913601942e1dcf7011029c48e0c05cfbf5705447d5af7e2d8d46c548231f3",
+    "save_comparison": "0e26d1bf018f0529c64414c45a2c23f016bbc8d59c636835b7a3a3abe977f6a1",
+    "save_result": "9eb8ef11cbcce47e485e958b732c98a7996979bd15bde65f901ad4423dec8514",
+    "schema_backups": "3d07ef08791d7b46f47f75521e6152050ada2d1b256fc29abdd417c33c11a9ae",
+    "sidebar_policy": "52215f7e9d860642b7ef46925a0666d84efb0eddcc4253e204be2204b8b7d763",
+    "side_view": "5dc3d323f689899463d94ed0d483c8c8f84b2b45b7a10bba9e4084f44a6fa80c",
+    "source_metadata": "a123ec2c186fd927ebde2ee4c1beecc606830b85cd66961dff7f41318e437d1a",
+    "storage_health": "d9d04e139dece92211f635727e4e61055c268fdcadfb8ad61fbb67c6517f6a28",
+    "structural_guard": "b834f48aaa6e948d484c5402de76d60c7a7327d86cbeaf8d9d1c1ae42d66a2f4",
+    "svg_geometry": "217bb988c16e2528901a6a550737b9525b1b288c76ddd8956d7beb0b0dc2b35e",
+    "symbol_policy": "088b815f95e8070b450795af25556157e44984489c93c50309d79b110ddebc4b",
+    "task_editing": "eee8d12c5c3cd741c0144b02e8b241accb72e90119406671e118855784605e69",
+    "task_references": "c27d8336c374ef9187058c84414d0077d328e5b04ec7c83f317e6aee0de0eb19",
+    "timezones": "43f0b56987ac64fea922cdf4a71974b1ea060f62259f4cb8eeb8b5114d06d4ea",
+    "today_view": "c9d12cbf24c809890ef17f952654a057d4229153dbc78591b33eb20043b4d917",
+    "ui_design": "28e8a3b63b7875aab3e79215d89f78c8c75fcdf1ab008f0b07fd04cd04e4a0ae",
+    "undo_history": "3595022982da1d7181ad0448ea6d80909f228c6c4d1eaa00926ad07216466609",
+    "view_definition": "0dfffe15d7f5d7fd6a0f68e839b0120627b4fd64fe06b66fe4642d0cd2b57636",
+    "view_metrics": "a5540e5b1d0f65c98fdfeab4ec3b5b1288e9b6e5ca4dd5e07fbf36f396bac276",
+    "week_planning": "38ff18553d762946fa8c4fa857cdabb4d39a84cfc020f8fa157882b4066fe95b"
+  },
+  "package_sha256": {
+    "_internal/_bz2.pyd": "b938073c85cf6b9fe80556d7899ed1901e5e60b7adea2832442376239fb36b36",
+    "_internal/_ctypes.pyd": "408cc4e7a22ffa418ca52f5e13fe9268a3c50a2bc9de02b0530b555ef591bc5a",
+    "_internal/_decimal.pyd": "bc3a61685825ae37a4cd2b2b87fa27af12e01575c4f920788ea806e6781a2c79",
+    "_internal/_elementtree.pyd": "d8a17f9c831e313b440e19e0d26e6c0e7ed830ff1f657887cbc26664d6ef4973",
+    "_internal/_hashlib.pyd": "5933ef5eda7c0bca0b3874a6e2c5f13b91b8f2cfc29bc46160df3212a1dbee79",
+    "_internal/_lzma.pyd": "d2abf8db7fb0cf6285663b177991691a41b37e215c3d71fd087a98d8ec1bee63",
+    "_internal/_queue.pyd": "2fd8668f52b34d0e71ae48784bd2e7d35e5d99df6f641edb0fc279235a187c8e",
+    "_internal/_socket.pyd": "02265dd0d0287f3ffd287ea5d8e3c918a5a056e8ef2c4529857f5e84ec9e2519",
+    "_internal/_ssl.pyd": "4cfb154c7cc525d57020c0e64f2dd876a78b46cd38419446392478de6b7b13b8",
+    "_internal/_tkinter.pyd": "ee3eb2cdac591821cf71cda8035a6bc9b148d92996dd45b24e3ae3715613315d",
+    "_internal/_uuid.pyd": "fbfd7fe8583b346ba20b174b2510c0830237f5092bdf9fc26da9d6b25b018385",
+    "_internal/_wmi.pyd": "b6fd41f079da0c0054829855360e88b8b762f5c42bb474c2fa02eae367839ad2",
+    "_internal/_zoneinfo.pyd": "07469c7fc221663e423a2e6023a5b2ead3b10d0b40eb297887f4447a1ff1b2a3",
+    "_internal/_zstd.pyd": "33c6eca99470c3eb9d776b617c550ad41b002a668336f062a9ab7be677a7409a",
+    "_internal/base_library.zip": "0ad2c269ad1e01a97beecd8a722c449bdae56e95721cb3225007ebc5c56c0029",
+    "_internal/glide-input.json": "d06819889c6cb8e6a0b560ac01f212c730263d8785c59d50484d7a7395f95d12",
+    "_internal/libcrypto-3.dll": "53c529145339fb042a3dcd3a09c2d7753204f8b4fc79d99e0d31e69a33985958",
+    "_internal/libffi-8.dll": "eff52743773eb550fcc6ce3efc37c85724502233b6b002a35496d828bd7b280a",
+    "_internal/libssl-3.dll": "b17a87979862d19241edc4318f967e24c3ec356ed6c2368f561179fab2311001",
+    "_internal/libtommath.dll": "2d760fefb452665b6af8c8d9d29f3a8378f10fc0847cdd9938ea0cb5edf1d573",
+    "_internal/licenses/altgraph-LICENSE": "6c194d6db0c64d45535d10c95142b9b0cda7b7dcc7f1ddee302b3d536f3dbe46",
+    "_internal/licenses/CLDR-LICENSE.txt": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6",
+    "_internal/licenses/DejaVu-LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+    "_internal/licenses/Glide-Lizenzstatus.md": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
+    "_internal/licenses/Henry-Spencer-Regex-LICENSE.txt": "8efb2d7215828acd974545d4177cadc7239d676c9a2c1a9834cab33efe9967fe",
+    "_internal/licenses/IANA-LICENSE.txt": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551",
+    "_internal/licenses/libmpdec-COPYRIGHT.txt": "2713324211652ce4a60e6e21e54f9dc3004299e591b0933a352f1a89c5fb53c2",
+    "_internal/licenses/libtommath-LICENSE.txt": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a",
+    "_internal/licenses/manifest.json": "45192789ebeedf75d4fcb6646df17503f769afd0646fa76d5972d8d8b223cddf",
+    "_internal/licenses/nanosvg.h-LICENSE.txt": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818",
+    "_internal/licenses/nanosvgrast.h-LICENSE.txt": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9",
+    "_internal/licenses/OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+    "_internal/licenses/packaging-LICENSE": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+    "_internal/licenses/packaging-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+    "_internal/licenses/packaging-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+    "_internal/licenses/pefile-LICENSE": "b44409c067c6da52bfb54bb6624fb11a7b52157c3a13ae1400232f8196e86ad3",
+    "_internal/licenses/PixelifySans-OFL.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+    "_internal/licenses/pyinstaller-COPYING.txt": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64",
+    "_internal/licenses/pyinstaller-hooks-contrib-LICENSE": "91d0baaff00773038e72c0a1fc9d5d2d38706b7a2b9c04f34296608f931b9cd0",
+    "_internal/licenses/Python-LICENSE.txt": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68",
+    "_internal/licenses/pywin32-ctypes-LICENSE.txt": "dfa83b3e2709adfcdb838d9ad55823ca674abb780e60563d9dd9544ccbf785e9",
+    "_internal/licenses/setuptools-LICENSE": "5a57cb4db85e2a2dd88c290628908add57e3451449e0a9a71fdfb38776fd759d",
+    "_internal/licenses/setuptools-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+    "_internal/licenses/setuptools-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+    "_internal/licenses/setuptools-LICENSE.txt": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654",
+    "_internal/licenses/SQLite-Copyright.html": "44ca9f793055c8e32fc65f65a4f5bcf813a33f5bdaaa084067dd617a4ed3cc70",
+    "_internal/licenses/Tcl-LICENSE.txt": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16",
+    "_internal/licenses/Tk-LICENSE.txt": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198",
+    "_internal/licenses/tkdnd-LICENSE.txt": "d4764f73ef60ec2f61a1bd677cbbf0a945ce69377903c1366b0c18a9ef60f268",
+    "_internal/licenses/tkinterdnd2-LICENSE": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+    "_internal/licenses/XZ-COPYING.txt": "bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c",
+    "_internal/licenses/zlib-LICENSE.txt": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2",
+    "_internal/licenses/zlib-ng-LICENSE.md": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee",
+    "_internal/licenses/Zstandard-LICENSE.txt": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8",
+    "_internal/pyexpat.pyd": "e34347c4e11b2ecc57df2ce1627ba7f98fd076e9df59951e9034f5aa8e95a2fc",
+    "_internal/python314.dll": "0f9857ffdfe010fe6b99328d58c2e3c7472ce75f336bf9c2ad9bd5bca3bce700",
+    "_internal/resources/exchange_recipes.json": "5faea534c799ac0acc5f76072c31e15a08867e363728c9547f08369980c31978",
+    "_internal/resources/fonts/DejaVuSans-Bold.ttf": "e6476c1b80502924294eed40894c5b18e06c181444ca953e5334262df9c27724",
+    "_internal/resources/fonts/DejaVuSans-BoldOblique.ttf": "eb436dca0c2594b73d8b603b892e374fdfd8d885d25ffb4f18df4c4c0b49e50f",
+    "_internal/resources/fonts/DejaVuSans-Oblique.ttf": "4af75fa16ee6d3ad43e1ecec41862c24954af26a55c6bb1ebb27bd486a50f5f4",
+    "_internal/resources/fonts/DejaVuSans.ttf": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+    "_internal/resources/fonts/LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+    "_internal/resources/fonts/OFL-PixelifySans.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+    "_internal/resources/fonts/PixelifySans-Bold.ttf": "3c3c203a3f3b862b944e836e4ec0fce201eddc1952cbca0d682e382d668b293c",
+    "_internal/resources/fonts/PixelifySans-Regular.ttf": "5436d485d1713afa376e1744911cbbcc0849eae1eb55ec9bc34c0753993ffef9",
+    "_internal/resources/fonts/provenance.json": "663fbc94179ae7e7a76e799783546d07a3826f931699be74ec0265acfb0cc08b",
+    "_internal/resources/logo/glide-app-icon-16.png": "c94efbd749df756dc50932c464ee877f6c9f9ca2d04b08c581bae4af6c7f05c4",
+    "_internal/resources/logo/glide-app-icon-256.png": "b3d7e0378e6e28bb93699f0952286478f8b392382d5d96a0db23e96b259acb5b",
+    "_internal/resources/logo/glide-app-icon-32.png": "d6c7d6146c6ae6c604880e213321447febdc56ed1b998c153110649d1901345b",
+    "_internal/resources/logo/glide-app-icon-64.png": "75cb0c88f228139918f20148f2128edc48cb23ea5bba7e41c1500e3d06644457",
+    "_internal/resources/logo/glide-app-icon-klein.svg": "9d031380f07b77b49cd5056685fffff85024a659f827dfc434d98eadc59db4da",
+    "_internal/resources/logo/glide-app-icon-macos-16.png": "b98be87052da034db0c22dc414cb88a4cca16e1469f2dd884110fd70a73dade7",
+    "_internal/resources/logo/glide-app-icon-macos-256.png": "eb95fcbd1d5f827e29aedee1cece41f9c7580bae590543f56009f7570738679d",
+    "_internal/resources/logo/glide-app-icon-macos-32.png": "87158ff960dd36fbac7138823f6390e9012275702c2547380385eb816cb05a0a",
+    "_internal/resources/logo/glide-app-icon-macos-64.png": "24cf64621e10e6e3ce51b04c03e3a800d58bcf2b13f9048522cd3e152820f716",
+    "_internal/resources/logo/glide-app-icon.png": "652e0bfab5500480bd523f31cc90254df3b0a111b24c21c57d8b7617b44d470a",
+    "_internal/resources/logo/glide-app-icon.svg": "1db74addc3d038a7691c133d84162a999022ffdd95443d8df0cce55661c35cb8",
+    "_internal/resources/logo/glide-logo-klein.svg": "92a8eb73a1b42f6650776e9613ec8eeecedf46452a5a97c86d2d6cfe3722b2b6",
+    "_internal/resources/logo/glide-logo.png": "08c845e095bb7bcef4c2c9e56a1327e17cff1e5d6c1c2ff89ba04a50736b9b64",
+    "_internal/resources/logo/glide-logo.svg": "c734f1e43a39c7cce2ab81301784de0aee5a88943679e4266f002108658cba58",
+    "_internal/resources/templates/glide_vorlagen.glidetemplates": "273b2facc0008f5e39d47d4340013453064329425a587efe53f3bf2d56564e2c",
+    "_internal/resources/timezones/iana-2026e.zip": "8754618b5e58bce763865aa1a748fe5d0f15908cae586ed45d929c9839b710e9",
+    "_internal/resources/timezones/LICENSE-CLDR.txt": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6",
+    "_internal/resources/timezones/LICENSE-iana.txt": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551",
+    "_internal/resources/timezones/provenance.json": "9d5079043d3bab1cf997fe3bb0ef859d100f01c2d6c5c0ce5a259b8042c99ff6",
+    "_internal/resources/timezones/windowsZones.xml": "7df6edbf52213ad2571f7fe76c64fc3c38423326f0896e3dc7f52299024141a6",
+    "_internal/select.pyd": "722328e7fad8048057fc966474ba73966d2ceebaa32e7344cce09640ab4dc9bd",
+    "_internal/tcl90.dll": "a1fb45f963b05cb083a97df1449c2023b484eb921d40a463da7501b0f60e0f70",
+    "_internal/tcl9tk90.dll": "31f625c52e65d29d126e710ed8bab2ec964cb770e4fc59bc329dfff02cb6ddcf",
+    "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.2.dll": "731e6fb6fd5585074588b16f5b8ad29029bc2a40c83d20b5937f8d1f1edaf82e",
+    "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/pkgIndex.tcl": "e18e0587a7f93adaaccb3028024797542dcd1082d35948750901bb68dbbe1f71",
+    "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd.tcl": "0d857154d6a11a0a94a6ea7c480172fe81a3d6538acb821260fdc38f48b8ba44",
+    "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_compat.tcl": "87ce43002f60fb7c22c8ca6c17ed13151d21e48175048254c448ac774937b580",
+    "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_generic.tcl": "78a606df6864e72f1ff19aacbcee2c2559983f1a2aacad5cf21cce51ba7ec5db",
+    "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_macosx.tcl": "a102102f7fc23f8c401efad0c2877f1654b74365d11c3512721a79119b1071c2",
+    "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_unix.tcl": "cb30c5e4db20b2fc57e33b1fb02902ccde8136a28ed16017f7ff66ab7ad76f3f",
+    "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_utils.tcl": "5269a7682f3a9c4a78410844d614277b21e63ac69cd30d18d666ddc7191c74c7",
+    "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/tkdnd_windows.tcl": "5774188ca4b626a8ba243e860b04b198c12bbb61efa1896bfcf4eddc07399fe4",
+    "_internal/unicodedata.pyd": "280b09bd97b598d18c0ed9542dc18ed35fa57a16e84f8e65fd9c6e96516c28d6",
+    "_internal/VCRUNTIME140.dll": "d1f4225df2cd877dbf130d5668a021dce3f94118455ff5ec952061c30afc9ce7",
+    "_internal/VCRUNTIME140_1.dll": "a7146c08f89fe5b04541ab507cdb59ff7b44534d4ba3c668a426c6450a03434e",
+    "_internal/zlib1.dll": "f07195206534ebb1fe75093d4ec6c54a7a9227281b0c09d2113465b71da9e900",
+    "Glide.exe": "4ce621b3eb6da09e01ab20a0449cfb6c1bb430504ad739389dc11b7e9014b548"
+  },
+  "native": {
+    "dateien": [
+      {
+        "path": "_internal/_bz2.pyd",
+        "machine": 34404,
+        "sha256": "b938073c85cf6b9fe80556d7899ed1901e5e60b7adea2832442376239fb36b36",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/_ctypes.pyd",
+        "machine": 34404,
+        "sha256": "408cc4e7a22ffa418ca52f5e13fe9268a3c50a2bc9de02b0530b555ef591bc5a",
+        "imports": [
+          "KERNEL32.dll",
+          "OLEAUT32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "libffi-8.dll",
+          "ole32.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/_decimal.pyd",
+        "machine": 34404,
+        "sha256": "bc3a61685825ae37a4cd2b2b87fa27af12e01575c4f920788ea806e6781a2c79",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-convert-l1-1-0.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-locale-l1-1-0.dll",
+          "api-ms-win-crt-math-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/_elementtree.pyd",
+        "machine": 34404,
+        "sha256": "d8a17f9c831e313b440e19e0d26e6c0e7ed830ff1f657887cbc26664d6ef4973",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/_hashlib.pyd",
+        "machine": 34404,
+        "sha256": "5933ef5eda7c0bca0b3874a6e2c5f13b91b8f2cfc29bc46160df3212a1dbee79",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "libcrypto-3.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/_lzma.pyd",
+        "machine": 34404,
+        "sha256": "d2abf8db7fb0cf6285663b177991691a41b37e215c3d71fd087a98d8ec1bee63",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/_queue.pyd",
+        "machine": 34404,
+        "sha256": "2fd8668f52b34d0e71ae48784bd2e7d35e5d99df6f641edb0fc279235a187c8e",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/_socket.pyd",
+        "machine": 34404,
+        "sha256": "02265dd0d0287f3ffd287ea5d8e3c918a5a056e8ef2c4529857f5e84ec9e2519",
+        "imports": [
+          "IPHLPAPI.DLL",
+          "KERNEL32.dll",
+          "RPCRT4.dll",
+          "VCRUNTIME140.dll",
+          "WS2_32.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/_ssl.pyd",
+        "machine": 34404,
+        "sha256": "4cfb154c7cc525d57020c0e64f2dd876a78b46cd38419446392478de6b7b13b8",
+        "imports": [
+          "CRYPT32.dll",
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "WS2_32.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "libcrypto-3.dll",
+          "libssl-3.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/_tkinter.pyd",
+        "machine": 34404,
+        "sha256": "ee3eb2cdac591821cf71cda8035a6bc9b148d92996dd45b24e3ae3715613315d",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "libtommath.dll",
+          "python314.dll",
+          "tcl90.dll",
+          "tcl9tk90.dll"
+        ]
+      },
+      {
+        "path": "_internal/_uuid.pyd",
+        "machine": 34404,
+        "sha256": "fbfd7fe8583b346ba20b174b2510c0830237f5092bdf9fc26da9d6b25b018385",
+        "imports": [
+          "KERNEL32.dll",
+          "RPCRT4.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/_wmi.pyd",
+        "machine": 34404,
+        "sha256": "b6fd41f079da0c0054829855360e88b8b762f5c42bb474c2fa02eae367839ad2",
+        "imports": [
+          "KERNEL32.dll",
+          "OLEAUT32.dll",
+          "PROPSYS.dll",
+          "VCRUNTIME140.dll",
+          "VCRUNTIME140_1.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "ole32.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/_zoneinfo.pyd",
+        "machine": 34404,
+        "sha256": "07469c7fc221663e423a2e6023a5b2ead3b10d0b40eb297887f4447a1ff1b2a3",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/_zstd.pyd",
+        "machine": 34404,
+        "sha256": "33c6eca99470c3eb9d776b617c550ad41b002a668336f062a9ab7be677a7409a",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-time-l1-1-0.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/libcrypto-3.dll",
+        "machine": 34404,
+        "sha256": "53c529145339fb042a3dcd3a09c2d7753204f8b4fc79d99e0d31e69a33985958",
+        "imports": [
+          "ADVAPI32.dll",
+          "CRYPT32.dll",
+          "KERNEL32.dll",
+          "USER32.dll",
+          "VCRUNTIME140.dll",
+          "WS2_32.dll",
+          "api-ms-win-crt-convert-l1-1-0.dll",
+          "api-ms-win-crt-environment-l1-1-0.dll",
+          "api-ms-win-crt-filesystem-l1-1-0.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "api-ms-win-crt-time-l1-1-0.dll",
+          "api-ms-win-crt-utility-l1-1-0.dll"
+        ]
+      },
+      {
+        "path": "_internal/libffi-8.dll",
+        "machine": 34404,
+        "sha256": "eff52743773eb550fcc6ce3efc37c85724502233b6b002a35496d828bd7b280a",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll"
+        ]
+      },
+      {
+        "path": "_internal/libssl-3.dll",
+        "machine": 34404,
+        "sha256": "b17a87979862d19241edc4318f967e24c3ec356ed6c2368f561179fab2311001",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "WS2_32.dll",
+          "api-ms-win-crt-convert-l1-1-0.dll",
+          "api-ms-win-crt-environment-l1-1-0.dll",
+          "api-ms-win-crt-filesystem-l1-1-0.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "api-ms-win-crt-time-l1-1-0.dll",
+          "api-ms-win-crt-utility-l1-1-0.dll",
+          "libcrypto-3.dll"
+        ]
+      },
+      {
+        "path": "_internal/libtommath.dll",
+        "machine": 34404,
+        "sha256": "2d760fefb452665b6af8c8d9d29f3a8378f10fc0847cdd9938ea0cb5edf1d573",
+        "imports": [
+          "ADVAPI32.dll",
+          "KERNEL32.dll",
+          "api-ms-win-crt-environment-l1-1-0.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-private-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "api-ms-win-crt-time-l1-1-0.dll"
+        ]
+      },
+      {
+        "path": "_internal/pyexpat.pyd",
+        "machine": 34404,
+        "sha256": "e34347c4e11b2ecc57df2ce1627ba7f98fd076e9df59951e9034f5aa8e95a2fc",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-convert-l1-1-0.dll",
+          "api-ms-win-crt-environment-l1-1-0.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/python314.dll",
+        "machine": 34404,
+        "sha256": "0f9857ffdfe010fe6b99328d58c2e3c7472ce75f336bf9c2ad9bd5bca3bce700",
+        "imports": [
+          "ADVAPI32.dll",
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "VERSION.dll",
+          "WS2_32.dll",
+          "api-ms-win-core-path-l1-1-0.dll",
+          "api-ms-win-crt-conio-l1-1-0.dll",
+          "api-ms-win-crt-convert-l1-1-0.dll",
+          "api-ms-win-crt-environment-l1-1-0.dll",
+          "api-ms-win-crt-filesystem-l1-1-0.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-locale-l1-1-0.dll",
+          "api-ms-win-crt-math-l1-1-0.dll",
+          "api-ms-win-crt-process-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "api-ms-win-crt-time-l1-1-0.dll",
+          "bcrypt.dll"
+        ]
+      },
+      {
+        "path": "_internal/select.pyd",
+        "machine": 34404,
+        "sha256": "722328e7fad8048057fc966474ba73966d2ceebaa32e7344cce09640ab4dc9bd",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "WS2_32.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/tcl90.dll",
+        "machine": 34404,
+        "sha256": "a1fb45f963b05cb083a97df1449c2023b484eb921d40a463da7501b0f60e0f70",
+        "imports": [
+          "ADVAPI32.dll",
+          "KERNEL32.dll",
+          "NETAPI32.dll",
+          "USER32.dll",
+          "USERENV.dll",
+          "VCRUNTIME140.dll",
+          "WS2_32.dll",
+          "api-ms-win-crt-convert-l1-1-0.dll",
+          "api-ms-win-crt-environment-l1-1-0.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-math-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "api-ms-win-crt-time-l1-1-0.dll",
+          "api-ms-win-crt-utility-l1-1-0.dll",
+          "libtommath.dll",
+          "zlib1.dll"
+        ]
+      },
+      {
+        "path": "_internal/tcl9tk90.dll",
+        "machine": 34404,
+        "sha256": "31f625c52e65d29d126e710ed8bab2ec964cb770e4fc59bc329dfff02cb6ddcf",
+        "imports": [
+          "ADVAPI32.dll",
+          "COMCTL32.dll",
+          "COMDLG32.dll",
+          "GDI32.dll",
+          "IMM32.dll",
+          "KERNEL32.dll",
+          "SHELL32.dll",
+          "USER32.dll",
+          "VCRUNTIME140.dll",
+          "WINSPOOL.DRV",
+          "api-ms-win-crt-convert-l1-1-0.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-locale-l1-1-0.dll",
+          "api-ms-win-crt-math-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "api-ms-win-crt-time-l1-1-0.dll",
+          "api-ms-win-crt-utility-l1-1-0.dll",
+          "ole32.dll"
+        ]
+      },
+      {
+        "path": "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.2.dll",
+        "machine": 34404,
+        "sha256": "731e6fb6fd5585074588b16f5b8ad29029bc2a40c83d20b5937f8d1f1edaf82e",
+        "imports": [
+          "KERNEL32.dll",
+          "SHELL32.dll",
+          "USER32.dll",
+          "ole32.dll"
+        ]
+      },
+      {
+        "path": "_internal/unicodedata.pyd",
+        "machine": 34404,
+        "sha256": "280b09bd97b598d18c0ed9542dc18ed35fa57a16e84f8e65fd9c6e96516c28d6",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "python314.dll"
+        ]
+      },
+      {
+        "path": "_internal/VCRUNTIME140.dll",
+        "machine": 34404,
+        "sha256": "d1f4225df2cd877dbf130d5668a021dce3f94118455ff5ec952061c30afc9ce7",
+        "imports": [
+          "KERNEL32.dll",
+          "api-ms-win-crt-convert-l1-1-0.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll"
+        ]
+      },
+      {
+        "path": "_internal/VCRUNTIME140_1.dll",
+        "machine": 34404,
+        "sha256": "a7146c08f89fe5b04541ab507cdb59ff7b44534d4ba3c668a426c6450a03434e",
+        "imports": [
+          "KERNEL32.dll",
+          "VCRUNTIME140.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll"
+        ]
+      },
+      {
+        "path": "_internal/zlib1.dll",
+        "machine": 34404,
+        "sha256": "f07195206534ebb1fe75093d4ec6c54a7a9227281b0c09d2113465b71da9e900",
+        "imports": [
+          "KERNEL32.dll",
+          "api-ms-win-crt-convert-l1-1-0.dll",
+          "api-ms-win-crt-environment-l1-1-0.dll",
+          "api-ms-win-crt-heap-l1-1-0.dll",
+          "api-ms-win-crt-private-l1-1-0.dll",
+          "api-ms-win-crt-runtime-l1-1-0.dll",
+          "api-ms-win-crt-stdio-l1-1-0.dll",
+          "api-ms-win-crt-string-l1-1-0.dll",
+          "api-ms-win-crt-time-l1-1-0.dll"
+        ]
+      },
+      {
+        "path": "Glide.exe",
+        "machine": 34404,
+        "sha256": "4ce621b3eb6da09e01ab20a0449cfb6c1bb430504ad739389dc11b7e9014b548",
+        "imports": [
+          "ADVAPI32.dll",
+          "COMCTL32.dll",
+          "GDI32.dll",
+          "KERNEL32.dll",
+          "USER32.dll"
+        ]
+      }
+    ],
+    "fehler": [],
+    "exitcode": 0
+  },
+  "license_matrix": {
+    "pure": {
+      "zipfile": [
+        "Python"
+      ],
+      "zipfile._path": [
+        "Python"
+      ],
+      "zipfile._path.glob": [
+        "Python"
+      ],
+      "contextlib": [
+        "Python"
+      ],
+      "argparse": [
+        "Python"
+      ],
+      "difflib": [
+        "Python"
+      ],
+      "textwrap": [
+        "Python"
+      ],
+      "_colorize": [
+        "Python"
+      ],
+      "typing": [
+        "Python"
+      ],
+      "annotationlib": [
+        "Python"
+      ],
+      "ast": [
+        "Python"
+      ],
+      "_ast_unparse": [
+        "Python"
+      ],
+      "dataclasses": [
+        "Python"
+      ],
+      "copy": [
+        "Python"
+      ],
+      "gettext": [
+        "Python"
+      ],
+      "py_compile": [
+        "Python"
+      ],
+      "importlib.machinery": [
+        "Python"
+      ],
+      "importlib": [
+        "Python"
+      ],
+      "importlib._bootstrap": [
+        "Python"
+      ],
+      "importlib._bootstrap_external": [
+        "Python"
+      ],
+      "importlib.metadata": [
+        "Python"
+      ],
+      "csv": [
+        "Python"
+      ],
+      "importlib.metadata._adapters": [
+        "Python"
+      ],
+      "importlib.metadata._text": [
+        "Python"
+      ],
+      "email.message": [
+        "Python"
+      ],
+      "email.policy": [
+        "Python"
+      ],
+      "email.contentmanager": [
+        "Python"
+      ],
+      "email.quoprimime": [
+        "Python"
+      ],
+      "string": [
+        "Python"
+      ],
+      "email.headerregistry": [
+        "Python"
+      ],
+      "email._header_value_parser": [
+        "Python"
+      ],
+      "urllib": [
+        "Python"
+      ],
+      "email.iterators": [
+        "Python"
+      ],
+      "email.generator": [
+        "Python"
+      ],
+      "random": [
+        "Python"
+      ],
+      "statistics": [
+        "Python"
+      ],
+      "decimal": [
+        "Python"
+      ],
+      "_pydecimal": [
+        "Python"
+      ],
+      "contextvars": [
+        "Python"
+      ],
+      "fractions": [
+        "Python"
+      ],
+      "numbers": [
+        "Python"
+      ],
+      "bisect": [
+        "Python"
+      ],
+      "email._encoded_words": [
+        "Python"
+      ],
+      "base64": [
+        "Python"
+      ],
+      "getopt": [
+        "Python"
+      ],
+      "email.charset": [
+        "Python"
+      ],
+      "email.encoders": [
+        "Python"
+      ],
+      "email.base64mime": [
+        "Python"
+      ],
+      "email._policybase": [
+        "Python"
+      ],
+      "email.header": [
+        "Python"
+      ],
+      "email.errors": [
+        "Python"
+      ],
+      "email.utils": [
+        "Python"
+      ],
+      "socket": [
+        "Python"
+      ],
+      "selectors": [
+        "Python"
+      ],
+      "email._parseaddr": [
+        "Python"
+      ],
+      "calendar": [
+        "Python"
+      ],
+      "urllib.parse": [
+        "Python"
+      ],
+      "ipaddress": [
+        "Python"
+      ],
+      "datetime": [
+        "Python"
+      ],
+      "_pydatetime": [
+        "Python"
+      ],
+      "_strptime": [
+        "Python"
+      ],
+      "quopri": [
+        "Python"
+      ],
+      "importlib.abc": [
+        "Python"
+      ],
+      "importlib._abc": [
+        "Python"
+      ],
+      "importlib.metadata._itertools": [
+        "Python"
+      ],
+      "importlib.metadata._functools": [
+        "Python"
+      ],
+      "importlib.metadata._collections": [
+        "Python"
+      ],
+      "importlib.metadata._meta": [
+        "Python"
+      ],
+      "email": [
+        "Python"
+      ],
+      "email.parser": [
+        "Python"
+      ],
+      "email.feedparser": [
+        "Python"
+      ],
+      "__future__": [
+        "Python"
+      ],
+      "importlib.readers": [
+        "Python"
+      ],
+      "importlib.resources.readers": [
+        "Python"
+      ],
+      "importlib.resources._itertools": [
+        "Python"
+      ],
+      "importlib.resources.abc": [
+        "Python"
+      ],
+      "importlib.resources": [
+        "Python"
+      ],
+      "importlib.resources._functional": [
+        "Python"
+      ],
+      "importlib.resources._common": [
+        "Python"
+      ],
+      "importlib.resources._adapters": [
+        "Python"
+      ],
+      "tokenize": [
+        "Python"
+      ],
+      "token": [
+        "Python"
+      ],
+      "compression.zstd": [
+        "Python"
+      ],
+      "compression.zstd._zstdfile": [
+        "Python"
+      ],
+      "compression._common._streams": [
+        "Python"
+      ],
+      "compression._common": [
+        "Python"
+      ],
+      "compression": [
+        "Python"
+      ],
+      "lzma": [
+        "Python"
+      ],
+      "bz2": [
+        "Python"
+      ],
+      "threading": [
+        "Python"
+      ],
+      "_threading_local": [
+        "Python"
+      ],
+      "struct": [
+        "Python"
+      ],
+      "shutil": [
+        "Python"
+      ],
+      "tarfile": [
+        "Python"
+      ],
+      "gzip": [
+        "Python"
+      ],
+      "fnmatch": [
+        "Python"
+      ],
+      "importlib.util": [
+        "Python"
+      ],
+      "inspect": [
+        "Python"
+      ],
+      "dis": [
+        "Python"
+      ],
+      "opcode": [
+        "Python"
+      ],
+      "_opcode_metadata": [
+        "Python"
+      ],
+      "week_planning": [
+        "Glide"
+      ],
+      "view_metrics": [
+        "Glide"
+      ],
+      "view_definition": [
+        "Glide"
+      ],
+      "undo_history": [
+        "Glide"
+      ],
+      "ui_design": [
+        "Glide"
+      ],
+      "today_view": [
+        "Glide"
+      ],
+      "tkinterdnd2": [
+        "tkinterdnd2"
+      ],
+      "tkinterdnd2.TkinterDnD": [
+        "tkinterdnd2"
+      ],
+      "tkinter": [
+        "Python"
+      ],
+      "tkinter.filedialog": [
+        "Python"
+      ],
+      "tkinter.simpledialog": [
+        "Python"
+      ],
+      "tkinter.commondialog": [
+        "Python"
+      ],
+      "tkinter.dialog": [
+        "Python"
+      ],
+      "tkinter.messagebox": [
+        "Python"
+      ],
+      "tkinter.constants": [
+        "Python"
+      ],
+      "timezones": [
+        "Glide"
+      ],
+      "zoneinfo": [
+        "Python"
+      ],
+      "zoneinfo._zoneinfo": [
+        "Python"
+      ],
+      "pickle": [
+        "Python"
+      ],
+      "pprint": [
+        "Python"
+      ],
+      "_compat_pickle": [
+        "Python"
+      ],
+      "zoneinfo._common": [
+        "Python"
+      ],
+      "zoneinfo._tzpath": [
+        "Python"
+      ],
+      "sysconfig": [
+        "Python"
+      ],
+      "_aix_support": [
+        "Python"
+      ],
+      "subprocess": [
+        "Python"
+      ],
+      "signal": [
+        "Python"
+      ],
+      "xml.etree.ElementTree": [
+        "Python"
+      ],
+      "xml.etree.cElementTree": [
+        "Python"
+      ],
+      "xml.etree.ElementInclude": [
+        "Python"
+      ],
+      "xml.parsers.expat": [
+        "Python"
+      ],
+      "xml.parsers": [
+        "Python"
+      ],
+      "xml": [
+        "Python"
+      ],
+      "xml.sax.expatreader": [
+        "Python"
+      ],
+      "xml.sax.saxutils": [
+        "Python"
+      ],
+      "urllib.request": [
+        "Python"
+      ],
+      "ftplib": [
+        "Python"
+      ],
+      "netrc": [
+        "Python"
+      ],
+      "mimetypes": [
+        "Python"
+      ],
+      "http.cookiejar": [
+        "Python"
+      ],
+      "http": [
+        "Python"
+      ],
+      "logging": [
+        "Python"
+      ],
+      "ssl": [
+        "Python"
+      ],
+      "urllib.response": [
+        "Python"
+      ],
+      "urllib.error": [
+        "Python"
+      ],
+      "http.client": [
+        "Python"
+      ],
+      "xml.sax": [
+        "Python"
+      ],
+      "xml.sax.handler": [
+        "Python"
+      ],
+      "xml.sax._exceptions": [
+        "Python"
+      ],
+      "xml.sax.xmlreader": [
+        "Python"
+      ],
+      "xml.etree.ElementPath": [
+        "Python"
+      ],
+      "xml.etree": [
+        "Python"
+      ],
+      "task_references": [
+        "Glide"
+      ],
+      "task_editing": [
+        "Glide"
+      ],
+      "symbol_policy": [
+        "Glide"
+      ],
+      "svg_geometry": [
+        "Glide"
+      ],
+      "structural_guard": [
+        "Glide"
+      ],
+      "storage_health": [
+        "Glide"
+      ],
+      "source_metadata": [
+        "Glide"
+      ],
+      "sidebar_policy": [
+        "Glide"
+      ],
+      "side_view": [
+        "Glide"
+      ],
+      "schema_backups": [
+        "Glide"
+      ],
+      "save_result": [
+        "Glide"
+      ],
+      "save_comparison": [
+        "Glide"
+      ],
+      "runtime_check": [
+        "Glide"
+      ],
+      "routines": [
+        "Glide"
+      ],
+      "restore_assets": [
+        "Glide"
+      ],
+      "uuid": [
+        "Python"
+      ],
+      "repeat_rules": [
+        "Glide"
+      ],
+      "repeat_ics": [
+        "Glide"
+      ],
+      "render_retention": [
+        "Glide"
+      ],
+      "release_notes": [
+        "Glide"
+      ],
+      "preview_tools": [
+        "Glide"
+      ],
+      "planning": [
+        "Glide"
+      ],
+      "pinboard_pages": [
+        "Glide"
+      ],
+      "page_restore": [
+        "Glide"
+      ],
+      "page_markdown": [
+        "Glide"
+      ],
+      "page_features": [
+        "Glide"
+      ],
+      "occupied_time": [
+        "Glide"
+      ],
+      "object_references": [
+        "Glide"
+      ],
+      "notion_reimport": [
+        "Glide"
+      ],
+      "notion_import": [
+        "Glide"
+      ],
+      "notion_hierarchy": [
+        "Glide"
+      ],
+      "notion_archive": [
+        "Glide"
+      ],
+      "motion": [
+        "Glide"
+      ],
+      "markdown_tree": [
+        "Glide"
+      ],
+      "logo_raster": [
+        "Glide"
+      ],
+      "logo": [
+        "Glide"
+      ],
+      "load_phases": [
+        "Glide"
+      ],
+      "item_index": [
+        "Glide"
+      ],
+      "interaction_policy": [
+        "Glide"
+      ],
+      "image_preview": [
+        "Glide"
+      ],
+      "image_conversion": [
+        "Glide"
+      ],
+      "ics_timezone": [
+        "Glide"
+      ],
+      "ics_recurrence": [
+        "Glide"
+      ],
+      "ics_busy": [
+        "Glide"
+      ],
+      "home_tiles": [
+        "Glide"
+      ],
+      "home_dashboard": [
+        "Glide"
+      ],
+      "glyph_metrics": [
+        "Glide"
+      ],
+      "glide_start": [
+        "Glide"
+      ],
+      "focus_timer": [
+        "Glide"
+      ],
+      "filter_explain": [
+        "Glide"
+      ],
+      "exchange_recipes": [
+        "Glide"
+      ],
+      "exchange_patch": [
+        "Glide"
+      ],
+      "eisenhower": [
+        "Glide"
+      ],
+      "editor_flush": [
+        "Glide"
+      ],
+      "drawing_image": [
+        "Glide"
+      ],
+      "drawing": [
+        "Glide"
+      ],
+      "day_relief": [
+        "Glide"
+      ],
+      "day_proposal": [
+        "Glide"
+      ],
+      "data_lock": [
+        "Glide"
+      ],
+      "daily_hints": [
+        "Glide"
+      ],
+      "core_accessibility": [
+        "Glide"
+      ],
+      "content_search": [
+        "Glide"
+      ],
+      "compact_mode": [
+        "Glide"
+      ],
+      "capture_parser": [
+        "Glide"
+      ],
+      "calendar_service": [
+        "Glide"
+      ],
+      "queue": [
+        "Python"
+      ],
+      "busy_calendar": [
+        "Glide"
+      ],
+      "backup_snapshot": [
+        "Glide"
+      ],
+      "backup_diff": [
+        "Glide"
+      ],
+      "backup_catalog": [
+        "Glide"
+      ],
+      "backdrop": [
+        "Glide"
+      ],
+      "attachment_policy": [
+        "Glide"
+      ],
+      "attachment_paths": [
+        "Glide"
+      ],
+      "appearance": [
+        "Glide"
+      ],
+      "animation_export": [
+        "Glide"
+      ],
+      "animation": [
+        "Glide"
+      ],
+      "action_menu": [
+        "Glide"
+      ],
+      "action_catalog": [
+        "Glide"
+      ],
+      "accessibility_bindings": [
+        "Glide"
+      ],
+      "accessibility": [
+        "Glide"
+      ],
+      "_py_warnings": [
+        "Python"
+      ],
+      "tracemalloc": [
+        "Python"
+      ],
+      "stringprep": [
+        "Python"
+      ],
+      "_py_abc": [
+        "Python"
+      ],
+      "runtime_paths": [
+        "Glide"
+      ],
+      "platform": [
+        "Python"
+      ],
+      "glide_app": [
+        "Glide"
+      ],
+      "html": [
+        "Python"
+      ],
+      "html.entities": [
+        "Python"
+      ],
+      "webbrowser": [
+        "Python"
+      ],
+      "shlex": [
+        "Python"
+      ],
+      "tkinter.ttk": [
+        "Python"
+      ],
+      "tkinter.font": [
+        "Python"
+      ],
+      "colorsys": [
+        "Python"
+      ],
+      "ctypes.wintypes": [
+        "Python"
+      ],
+      "ctypes": [
+        "Python"
+      ],
+      "ctypes._endian": [
+        "Python"
+      ],
+      "ctypes._layout": [
+        "Python"
+      ],
+      "codeop": [
+        "Python"
+      ],
+      "tempfile": [
+        "Python"
+      ],
+      "hashlib": [
+        "Python"
+      ],
+      "json": [
+        "Python"
+      ],
+      "json.encoder": [
+        "Python"
+      ],
+      "json.decoder": [
+        "Python"
+      ],
+      "json.scanner": [
+        "Python"
+      ],
+      "pathlib": [
+        "Python"
+      ],
+      "pathlib._os": [
+        "Python"
+      ],
+      "glob": [
+        "Python"
+      ]
+    },
+    "base": {
+      "posixpath": [
+        "Python"
+      ],
+      "warnings": [
+        "Python"
+      ],
+      "keyword": [
+        "Python"
+      ],
+      "_collections_abc": [
+        "Python"
+      ],
+      "operator": [
+        "Python"
+      ],
+      "enum": [
+        "Python"
+      ],
+      "sre_parse": [
+        "Python"
+      ],
+      "re._parser": [
+        "Python"
+      ],
+      "re._constants": [
+        "Python"
+      ],
+      "re._compiler": [
+        "Python"
+      ],
+      "re._casefix": [
+        "Python"
+      ],
+      "re": [
+        "Python"
+      ],
+      "locale": [
+        "Python"
+      ],
+      "sre_constants": [
+        "Python"
+      ],
+      "_weakrefset": [
+        "Python"
+      ],
+      "weakref": [
+        "Python"
+      ],
+      "stat": [
+        "Python"
+      ],
+      "types": [
+        "Python"
+      ],
+      "genericpath": [
+        "Python"
+      ],
+      "codecs": [
+        "Python"
+      ],
+      "heapq": [
+        "Python"
+      ],
+      "sre_compile": [
+        "Python"
+      ],
+      "linecache": [
+        "Python"
+      ],
+      "functools": [
+        "Python"
+      ],
+      "copyreg": [
+        "Python"
+      ],
+      "collections": [
+        "Python"
+      ],
+      "io": [
+        "Python"
+      ],
+      "reprlib": [
+        "Python"
+      ],
+      "encodings.zlib_codec": [
+        "Python"
+      ],
+      "encodings.uu_codec": [
+        "Python"
+      ],
+      "encodings.utf_8_sig": [
+        "Python"
+      ],
+      "encodings.utf_8": [
+        "Python"
+      ],
+      "encodings.utf_7": [
+        "Python"
+      ],
+      "encodings.utf_32_le": [
+        "Python"
+      ],
+      "encodings.utf_32_be": [
+        "Python"
+      ],
+      "encodings.utf_32": [
+        "Python"
+      ],
+      "encodings.utf_16_le": [
+        "Python"
+      ],
+      "encodings.utf_16_be": [
+        "Python"
+      ],
+      "encodings.utf_16": [
+        "Python"
+      ],
+      "encodings.unicode_escape": [
+        "Python"
+      ],
+      "encodings.undefined": [
+        "Python"
+      ],
+      "encodings.tis_620": [
+        "Python"
+      ],
+      "encodings.shift_jisx0213": [
+        "Python"
+      ],
+      "encodings.shift_jis_2004": [
+        "Python"
+      ],
+      "encodings.shift_jis": [
+        "Python"
+      ],
+      "encodings.rot_13": [
+        "Python"
+      ],
+      "encodings.raw_unicode_escape": [
+        "Python"
+      ],
+      "encodings.quopri_codec": [
+        "Python"
+      ],
+      "encodings.punycode": [
+        "Python"
+      ],
+      "encodings.ptcp154": [
+        "Python"
+      ],
+      "encodings.palmos": [
+        "Python"
+      ],
+      "encodings.oem": [
+        "Python"
+      ],
+      "encodings.mbcs": [
+        "Python"
+      ],
+      "encodings.mac_turkish": [
+        "Python"
+      ],
+      "encodings.mac_romanian": [
+        "Python"
+      ],
+      "encodings.mac_roman": [
+        "Python"
+      ],
+      "encodings.mac_latin2": [
+        "Python"
+      ],
+      "encodings.mac_iceland": [
+        "Python"
+      ],
+      "encodings.mac_greek": [
+        "Python"
+      ],
+      "encodings.mac_farsi": [
+        "Python"
+      ],
+      "encodings.mac_cyrillic": [
+        "Python"
+      ],
+      "encodings.mac_croatian": [
+        "Python"
+      ],
+      "encodings.mac_arabic": [
+        "Python"
+      ],
+      "encodings.latin_1": [
+        "Python"
+      ],
+      "encodings.kz1048": [
+        "Python"
+      ],
+      "encodings.koi8_u": [
+        "Python"
+      ],
+      "encodings.koi8_t": [
+        "Python"
+      ],
+      "encodings.koi8_r": [
+        "Python"
+      ],
+      "encodings.johab": [
+        "Python"
+      ],
+      "encodings.iso8859_9": [
+        "Python"
+      ],
+      "encodings.iso8859_8": [
+        "Python"
+      ],
+      "encodings.iso8859_7": [
+        "Python"
+      ],
+      "encodings.iso8859_6": [
+        "Python"
+      ],
+      "encodings.iso8859_5": [
+        "Python"
+      ],
+      "encodings.iso8859_4": [
+        "Python"
+      ],
+      "encodings.iso8859_3": [
+        "Python"
+      ],
+      "encodings.iso8859_2": [
+        "Python"
+      ],
+      "encodings.iso8859_16": [
+        "Python"
+      ],
+      "encodings.iso8859_15": [
+        "Python"
+      ],
+      "encodings.iso8859_14": [
+        "Python"
+      ],
+      "encodings.iso8859_13": [
+        "Python"
+      ],
+      "encodings.iso8859_11": [
+        "Python"
+      ],
+      "encodings.iso8859_10": [
+        "Python"
+      ],
+      "encodings.iso8859_1": [
+        "Python"
+      ],
+      "encodings.iso2022_kr": [
+        "Python"
+      ],
+      "encodings.iso2022_jp_ext": [
+        "Python"
+      ],
+      "encodings.iso2022_jp_3": [
+        "Python"
+      ],
+      "encodings.iso2022_jp_2004": [
+        "Python"
+      ],
+      "encodings.iso2022_jp_2": [
+        "Python"
+      ],
+      "encodings.iso2022_jp_1": [
+        "Python"
+      ],
+      "encodings.iso2022_jp": [
+        "Python"
+      ],
+      "encodings.idna": [
+        "Python"
+      ],
+      "encodings.hz": [
+        "Python"
+      ],
+      "encodings.hp_roman8": [
+        "Python"
+      ],
+      "encodings.hex_codec": [
+        "Python"
+      ],
+      "encodings.gbk": [
+        "Python"
+      ],
+      "encodings.gb2312": [
+        "Python"
+      ],
+      "encodings.gb18030": [
+        "Python"
+      ],
+      "encodings.euc_kr": [
+        "Python"
+      ],
+      "encodings.euc_jp": [
+        "Python"
+      ],
+      "encodings.euc_jisx0213": [
+        "Python"
+      ],
+      "encodings.euc_jis_2004": [
+        "Python"
+      ],
+      "encodings.cp950": [
+        "Python"
+      ],
+      "encodings.cp949": [
+        "Python"
+      ],
+      "encodings.cp932": [
+        "Python"
+      ],
+      "encodings.cp875": [
+        "Python"
+      ],
+      "encodings.cp874": [
+        "Python"
+      ],
+      "encodings.cp869": [
+        "Python"
+      ],
+      "encodings.cp866": [
+        "Python"
+      ],
+      "encodings.cp865": [
+        "Python"
+      ],
+      "encodings.cp864": [
+        "Python"
+      ],
+      "encodings.cp863": [
+        "Python"
+      ],
+      "encodings.cp862": [
+        "Python"
+      ],
+      "encodings.cp861": [
+        "Python"
+      ],
+      "encodings.cp860": [
+        "Python"
+      ],
+      "encodings.cp858": [
+        "Python"
+      ],
+      "encodings.cp857": [
+        "Python"
+      ],
+      "encodings.cp856": [
+        "Python"
+      ],
+      "encodings.cp855": [
+        "Python"
+      ],
+      "encodings.cp852": [
+        "Python"
+      ],
+      "encodings.cp850": [
+        "Python"
+      ],
+      "encodings.cp775": [
+        "Python"
+      ],
+      "encodings.cp737": [
+        "Python"
+      ],
+      "encodings.cp720": [
+        "Python"
+      ],
+      "encodings.cp500": [
+        "Python"
+      ],
+      "encodings.cp437": [
+        "Python"
+      ],
+      "encodings.cp424": [
+        "Python"
+      ],
+      "encodings.cp273": [
+        "Python"
+      ],
+      "encodings.cp1258": [
+        "Python"
+      ],
+      "encodings.cp1257": [
+        "Python"
+      ],
+      "encodings.cp1256": [
+        "Python"
+      ],
+      "encodings.cp1255": [
+        "Python"
+      ],
+      "encodings.cp1254": [
+        "Python"
+      ],
+      "encodings.cp1253": [
+        "Python"
+      ],
+      "encodings.cp1252": [
+        "Python"
+      ],
+      "encodings.cp1251": [
+        "Python"
+      ],
+      "encodings.cp1250": [
+        "Python"
+      ],
+      "encodings.cp1140": [
+        "Python"
+      ],
+      "encodings.cp1125": [
+        "Python"
+      ],
+      "encodings.cp1026": [
+        "Python"
+      ],
+      "encodings.cp1006": [
+        "Python"
+      ],
+      "encodings.cp037": [
+        "Python"
+      ],
+      "encodings.charmap": [
+        "Python"
+      ],
+      "encodings.bz2_codec": [
+        "Python"
+      ],
+      "encodings.big5hkscs": [
+        "Python"
+      ],
+      "encodings.big5": [
+        "Python"
+      ],
+      "encodings.base64_codec": [
+        "Python"
+      ],
+      "encodings.ascii": [
+        "Python"
+      ],
+      "encodings.aliases": [
+        "Python"
+      ],
+      "encodings._win_cp_codecs": [
+        "Python"
+      ],
+      "encodings": [
+        "Python"
+      ],
+      "ntpath": [
+        "Python"
+      ],
+      "abc": [
+        "Python"
+      ],
+      "traceback": [
+        "Python"
+      ],
+      "os": [
+        "Python"
+      ]
+    },
+    "native": {
+      "_internal/_bz2.pyd": [
+        "Python"
+      ],
+      "_internal/_ctypes.pyd": [
+        "Python"
+      ],
+      "_internal/_decimal.pyd": [
+        "Python",
+        "libmpdec"
+      ],
+      "_internal/_elementtree.pyd": [
+        "Python"
+      ],
+      "_internal/_hashlib.pyd": [
+        "Python"
+      ],
+      "_internal/_lzma.pyd": [
+        "Python",
+        "liblzma"
+      ],
+      "_internal/_queue.pyd": [
+        "Python"
+      ],
+      "_internal/_socket.pyd": [
+        "Python"
+      ],
+      "_internal/_ssl.pyd": [
+        "Python"
+      ],
+      "_internal/_tkinter.pyd": [
+        "Python"
+      ],
+      "_internal/_uuid.pyd": [
+        "Python"
+      ],
+      "_internal/_wmi.pyd": [
+        "Python"
+      ],
+      "_internal/_zoneinfo.pyd": [
+        "Python"
+      ],
+      "_internal/_zstd.pyd": [
+        "Python",
+        "Zstandard"
+      ],
+      "_internal/libcrypto-3.dll": [
+        "OpenSSL"
+      ],
+      "_internal/libffi-8.dll": [
+        "libffi"
+      ],
+      "_internal/libssl-3.dll": [
+        "OpenSSL"
+      ],
+      "_internal/libtommath.dll": [
+        "libtommath"
+      ],
+      "_internal/pyexpat.pyd": [
+        "Python"
+      ],
+      "_internal/python314.dll": [
+        "Python",
+        "zlib-ng"
+      ],
+      "_internal/select.pyd": [
+        "Python"
+      ],
+      "_internal/tcl90.dll": [
+        "Tcl",
+        "Henry-Spencer-Regex"
+      ],
+      "_internal/tcl9tk90.dll": [
+        "Tk",
+        "NanoSVG"
+      ],
+      "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.2.dll": [
+        "tkdnd"
+      ],
+      "_internal/unicodedata.pyd": [
+        "Python"
+      ],
+      "_internal/VCRUNTIME140.dll": [
+        "Microsoft-VC-Runtime"
+      ],
+      "_internal/VCRUNTIME140_1.dll": [
+        "Microsoft-VC-Runtime"
+      ],
+      "_internal/zlib1.dll": [
+        "zlib"
+      ],
+      "Glide.exe": [
+        "PyInstaller"
+      ]
+    },
+    "resources": {
+      "resources/exchange_recipes.json": [
+        "Glide"
+      ],
+      "resources/fonts/DejaVuSans-Bold.ttf": [
+        "Glide-Schriften"
+      ],
+      "resources/fonts/DejaVuSans-BoldOblique.ttf": [
+        "Glide-Schriften"
+      ],
+      "resources/fonts/DejaVuSans-Oblique.ttf": [
+        "Glide-Schriften"
+      ],
+      "resources/fonts/DejaVuSans.ttf": [
+        "Glide-Schriften"
+      ],
+      "resources/fonts/LICENSE": [
+        "Glide-Schriften"
+      ],
+      "resources/fonts/OFL-PixelifySans.txt": [
+        "Glide-Schriften"
+      ],
+      "resources/fonts/PixelifySans-Bold.ttf": [
+        "Glide-Schriften"
+      ],
+      "resources/fonts/PixelifySans-Regular.ttf": [
+        "Glide-Schriften"
+      ],
+      "resources/fonts/provenance.json": [
+        "Glide-Schriften"
+      ],
+      "resources/logo/glide-app-icon-16.png": [
+        "Glide"
+      ],
+      "resources/logo/glide-app-icon-256.png": [
+        "Glide"
+      ],
+      "resources/logo/glide-app-icon-32.png": [
+        "Glide"
+      ],
+      "resources/logo/glide-app-icon-64.png": [
+        "Glide"
+      ],
+      "resources/logo/glide-app-icon-klein.svg": [
+        "Glide"
+      ],
+      "resources/logo/glide-app-icon-macos-16.png": [
+        "Glide"
+      ],
+      "resources/logo/glide-app-icon-macos-256.png": [
+        "Glide"
+      ],
+      "resources/logo/glide-app-icon-macos-32.png": [
+        "Glide"
+      ],
+      "resources/logo/glide-app-icon-macos-64.png": [
+        "Glide"
+      ],
+      "resources/logo/glide-app-icon.png": [
+        "Glide"
+      ],
+      "resources/logo/glide-app-icon.svg": [
+        "Glide"
+      ],
+      "resources/logo/glide-logo-klein.svg": [
+        "Glide"
+      ],
+      "resources/logo/glide-logo.png": [
+        "Glide"
+      ],
+      "resources/logo/glide-logo.svg": [
+        "Glide"
+      ],
+      "resources/templates/glide_vorlagen.glidetemplates": [
+        "Glide"
+      ],
+      "resources/timezones/iana-2026e.zip": [
+        "IANA-Zeitzonen"
+      ],
+      "resources/timezones/LICENSE-CLDR.txt": [
+        "Unicode-CLDR"
+      ],
+      "resources/timezones/LICENSE-iana.txt": [
+        "IANA-Zeitzonen"
+      ],
+      "resources/timezones/provenance.json": [
+        "IANA-Zeitzonen",
+        "Unicode-CLDR"
+      ],
+      "resources/timezones/windowsZones.xml": [
+        "Unicode-CLDR"
+      ]
+    },
+    "used_components": [
+      "Glide",
+      "Glide-Schriften",
+      "Henry-Spencer-Regex",
+      "IANA-Zeitzonen",
+      "Microsoft-VC-Runtime",
+      "NanoSVG",
+      "OpenSSL",
+      "PyInstaller",
+      "Python",
+      "Tcl",
+      "Tk",
+      "Unicode-CLDR",
+      "Zstandard",
+      "libffi",
+      "liblzma",
+      "libmpdec",
+      "libtommath",
+      "tkdnd",
+      "tkinterdnd2",
+      "zlib",
+      "zlib-ng"
+    ]
+  },
+  "signatur": "unsigniertes Windows-Entwicklungsartefakt",
+  "startprobe": "noch ausstehend"
+}

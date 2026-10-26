@@ -1,0 +1,12 @@
+{
+  "app_sha256": "d516ca67f6f6e5dbe46c52275a5ff965690a898ec99c45cf3a305d72a4c12ab8",
+  "faelle": {
+    "verweisvorschau_grenzen": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1177, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 837, in fall_verweisvorschau_grenzen\n    assert not errors, errors\n           ^^^^^^^^^^\nAssertionError: ['Verweisvorschau 860x700/mittel/light: „Rückgängig“ überlagert von Label „“ (118×20 px)']\n"
+    }
+  },
+  "fehler": [
+    "verweisvorschau_grenzen"
+  ]
+}

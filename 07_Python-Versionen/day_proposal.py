@@ -5,10 +5,44 @@ import json
 
 REASONS = {"overdue": "überfällig", "due_today": "heute fällig",
            "carried": "liegen geblieben", "due_soon": "in den nächsten zwei Tagen fällig",
-           "important": "wichtig"}
+           "unblocks": "gibt andere frei", "important": "wichtig"}
 
 
-def propose(records, day, summary, fallback=30):
+def release_counts(records, dependency_done=None):
+    """Direkte Freigaben: genau eine offene Voraussetzung pro aktiver Folgeaufgabe.
+
+    Die Statusprojektion umfasst auch archivierte Voraussetzungen. Fehlende
+    Ziele blockieren wie im bestehenden App-Vertrag nicht; Selbstbezüge und
+    doppelte Folgeaufgaben erzeugen keinen zusätzlichen Nutzen.
+    """
+    done = dependency_done if dependency_done is not None else {
+        record["item"]["id"]: bool(record["item"].get("done")) for record in records}
+    counts, seen = {}, set()
+    for record in records:
+        item = record["item"]
+        identity = (record["list_id"], item["id"])
+        if identity in seen or item.get("done"):
+            continue
+        seen.add(identity)
+        blockers = {key for key in item.get("blocked_by") or () if key in done and not done[key]}
+        if len(blockers) == 1:
+            blocker = next(iter(blockers))
+            if blocker != item["id"]:
+                counts[blocker] = counts.get(blocker, 0) + 1
+    return counts
+
+
+def reason_text(row):
+    """Grund und echte direkte Freigabezahl, auch neben höherer Dringlichkeit."""
+    reason = REASONS[row["reason"]]
+    count = row.get("unblocks", 0)
+    if not count:
+        return reason
+    release = f"gibt {count} weitere {'Aufgabe' if count == 1 else 'Aufgaben'} frei"
+    return release if row["reason"] == "unblocks" else f"{reason} · {release}"
+
+
+def propose(records, day, summary, fallback=30, *, dependency_done=None):
     """Greedy-Auswahl nach Dringlichkeit; spätere Pläne bleiben unangetastet.
 
     records enthalten list_id, item und blocked. Bereits geplante unbekannte
@@ -17,6 +51,7 @@ def propose(records, day, summary, fallback=30):
     """
     reference = date.fromisoformat(day)
     soon = (reference + timedelta(days=2)).isoformat()
+    releases = release_counts(records, dependency_done)
     rows, seen = [], set()
     for record in records:
         item = record["item"]
@@ -30,17 +65,21 @@ def propose(records, day, summary, fallback=30):
         reason = ("overdue" if due and due < day else "due_today" if due == day else
                   "carried" if planned and planned < day else
                   "due_soon" if due and due <= soon else
+                  "unblocks" if releases.get(item["id"]) else
                   "important" if item.get("importance", 0) else None)
         if reason is None:
             continue
         minutes = item.get("estimated_minutes")
         assumed = type(minutes) is not int or minutes <= 0
         rows.append(dict(list_id=identity[0], item_id=identity[1], reason=reason,
+                         unblocks=releases.get(item["id"], 0),
                          minutes=fallback if assumed else minutes, assumed=assumed,
                          title=str(item.get("text") or ""), due=due or "9999",
                          importance=item.get("importance", 0)))
     order = {name: position for position, name in enumerate(REASONS)}
-    rows.sort(key=lambda row: (order[row["reason"]], row["due"], -row["importance"],
+    rows.sort(key=lambda row: (order[row["reason"]],
+                               -row["unblocks"] if row["reason"] == "unblocks" else 0,
+                               row["due"], -row["importance"],
                                row["list_id"], row["item_id"]))
     remaining = summary["remaining"]
     budget = None if remaining is None else max(0, remaining - summary["without_estimate"] * fallback)
@@ -51,7 +90,7 @@ def propose(records, day, summary, fallback=30):
             rest -= row["minutes"]
     # Der komplette relevante Bestand ist Teil des Vorschauvertrags, auch
     # belegte Zeit und Aufgaben, die zwischenzeitlich aus der Auswahl fallen.
-    state = {"day": day, "summary": summary, "records": sorted(records,
+    state = {"day": day, "summary": summary, "unblocks": releases, "records": sorted(records,
              key=lambda record: (record["list_id"], record["item"]["id"]))}
     signature = hashlib.sha256(json.dumps(state, sort_keys=True, ensure_ascii=False,
                                          separators=(",", ":")).encode("utf-8")).hexdigest()

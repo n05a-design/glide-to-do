@@ -1,14 +1,14 @@
 # Veröffentlichung – Glide
 
-Stand 25.10.2026 · Glide 3.45.0 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 26
+Stand 26.10.2026 · Glide 3.45.0 · Entwicklungspakete geliefert, keine öffentliche Veröffentlichung · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
-**Je Version (zuletzt automatisch vollständig einschließlich Bundle und Paketen geliefert 3.42.0; 3.43.0, 3.43.1 und 3.44.0 bisher nur als Python-Fassung mit Windows-Vollprüfung; menschliche Abnahme und Veröffentlichungstore getrennt offen):**
+**Aktueller Lieferstand 3.45.0 (26.10.2026):** Python-Fassung bytegleich, Windows-Paket und natives Mac-arm64-Paket neu gebaut und startgeprüft; Windows-Vollprüfung mit allen 104 Suiten grün. Mac-Ad-hoc-Signatur und isolierter Macstart grün. [Liefernachweis](../tests/qa-3.45.0/paketabschluss_2026-10-26/README.md). Mac-/Linux-Vollmatrix und menschliche Releaseabnahme bleiben getrennt offen; die folgenden Haken bezeichnen den historischen Vollabschluss 3.42.0.
 
-Die Haken beschreiben den zuletzt vollständig abgeschlossenen Lieferstand 3.42.0. Für 3.44.0 gelten die offenen Schritte (Mac-Vollprüfung, Bundle, Pakete) im [QA-Bericht](07_QA_BERICHT.md); ein früherer grüner Bundlebeleg ist keine Abnahme des geänderten Codes. Historisch wurden bis 3.33.6 und wieder seit 3.33.18 Mac-Bundle und Python-Fassung geliefert; 3.33.7–3.33.17 nur unter Windows ohne Bundle.
+Die Haken dokumentieren den historischen vollständigen Plattformabschluss 3.42.0. Die aktuelle Lieferung 3.45.0 übernimmt keine ungetesteten Mac-/Linux-/Menschenfreigaben daraus; aktuelle Belege stehen oben und im [QA-Bericht](07_QA_BERICHT.md).
 
 - [x] VERSION, `APP_VERSION`, Hauptsuite und CHANGELOG gleich; Datenformat geprüft.
 - [x] Eingefrorene Vollprüfung auf dem Referenz-Mac; seit D42 zusätzlich native Windows-Vollprüfung je Lieferung und seit D35 gesamte ausführbare Linux-Matrix, einschließlich passender Defektgegenproben. Ergebnisse getrennt im [QA-Bericht](07_QA_BERICHT.md).
@@ -21,7 +21,7 @@ Die Haken beschreiben den zuletzt vollständig abgeschlossenen Lieferstand 3.42.
 **Vor der ersten Veröffentlichung (offen):**
 
 - [ ] Manuelle Prüfung auf macOS und Windows nach der [Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md), einschließlich Windows-Vollprüfung mit `tests/tools/windows_vollpruefung.cmd`.
-- [x] Eigenständige Entwicklungspakete mit Python 3.14/Tk 9 für macOS arm64 und Windows x64 (D15/D27, S26-10), PyInstaller 6.22.3 als reine Bauabhängigkeit. Beide nativen Bauten und tatsächlichen isolierten Starts grün; Mac/Linux/Windows automatisch geprüft und lokal geliefert. Mac ad hoc signiert, Windows unsigniert; öffentliche Signaturen/Installer und Menschenabnahme bleiben eigene offene Tore. [Nachweise](../tests/qa-3.42.0/eigenstaendige_pakete_2026-10-13/README.md).
+- [x] Eigenständige Entwicklungspakete 3.45.0 mit Python 3.14/Tk 9 für macOS arm64 und Windows x64. Natives Mac-Paket mit Prozesssandbox und Ad-hoc-Signatur, Windows-Paket mit lokaler Startprobe und Hash-/PE-Abgleich geprüft. Windows-ACL-Sperrprobe bleibt dem vergänglichen Hosted-CI-Runner vorbehalten. Öffentliche Signaturen/Installer und Menschenabnahme bleiben offen. [Aktuelle Nachweise](../tests/qa-3.45.0/paketabschluss_2026-10-26/README.md).
 - [ ] Developer-ID-Signatur und Notarisierung (macOS), Code-Signing und Installer (Windows, Inno Setup); tkDnD-Bibliothek mit signieren ([Entscheidung](decisions/ABHAENGIGKEIT_TKDND.md)).
 - [ ] Windows-Verknüpfung mit AppUserModelID prüfen (`packaging/windows/verknuepfung_anlegen.ps1`); Hintergrundverläufe unter Windows ohne Bildreste.
 - [ ] Clean-Machine-Test, Gatekeeper/SmartScreen, Update über eine vorhandene Installation, Datenordner in einem Cloudordner.

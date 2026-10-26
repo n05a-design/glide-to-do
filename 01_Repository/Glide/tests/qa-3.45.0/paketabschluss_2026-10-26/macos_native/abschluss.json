@@ -1,0 +1,17 @@
+{
+  "exitcode": 0,
+  "version": "3.45.0",
+  "target": "macos-arm64",
+  "archive": "Glide-3.45.0-macos-arm64.tar.gz",
+  "sha256": "b6284197c62fddee1283207ead6680baed72bdf8826114e944316857284a7252",
+  "archive_validation": {
+    "files": 333,
+    "symlinks": 29,
+    "modes_preserved": true
+  },
+  "source_files": 203,
+  "sources_unchanged": true,
+  "signature": "Ad-hoc-Signatur geprüft; Developer-ID bleibt offen",
+  "native_start_verified": true,
+  "developer_id_and_notarization": "offen; Entwicklungsartefakt"
+}

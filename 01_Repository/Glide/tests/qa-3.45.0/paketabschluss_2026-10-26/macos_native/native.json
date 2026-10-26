@@ -1,0 +1,832 @@
+{
+  "exitcode": 0,
+  "binaerdateien": 53,
+  "dateien": {
+    "Contents/Frameworks/Python.framework/Versions/3.14/Python": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [
+        "@rpath/Python"
+      ],
+      "imports": [
+        {
+          "name": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/Tcl": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [
+        "@rpath/Tcl"
+      ],
+      "imports": [
+        {
+          "name": "/usr/lib/libz.1.dylib",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/Tk": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [
+        "@rpath/Tk"
+      ],
+      "imports": [
+        {
+          "name": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/Security.framework/Versions/A/Security",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/UniformTypeIdentifiers.framework/Versions/A/UniformTypeIdentifiers",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/usr/lib/libz.1.dylib",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/usr/lib/libobjc.A.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/libcrypto.3.dylib": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [
+        "@rpath/libcrypto.3.dylib"
+      ],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/libssl.3.dylib": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [
+        "@rpath/libssl.3.dylib"
+      ],
+      "imports": [
+        {
+          "name": "@rpath/libcrypto.3.dylib",
+          "typ": "Paketbibliothek",
+          "ziel": "Contents/Frameworks/libcrypto.3.dylib"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/libzstd.1.dylib": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [
+        "@rpath/libzstd.1.dylib"
+      ],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_bisect.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_blake2.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_bz2.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libbz2.1.0.dylib",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_codecs_cn.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_codecs_hk.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_codecs_iso2022.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_codecs_jp.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_codecs_kr.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_codecs_tw.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_csv.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_ctypes.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libffi.dylib",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_decimal.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_elementtree.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_hashlib.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "@rpath/libcrypto.3.dylib",
+          "typ": "Paketbibliothek",
+          "ziel": "Contents/Frameworks/libcrypto.3.dylib"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_heapq.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_json.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_lzma.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_md5.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_multibytecodec.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_pickle.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_posixsubprocess.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_queue.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_random.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_scproxy.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_sha1.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_sha2.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_sha3.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_socket.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_ssl.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "@rpath/libssl.3.dylib",
+          "typ": "Paketbibliothek",
+          "ziel": "Contents/Frameworks/libssl.3.dylib"
+        },
+        {
+          "name": "@rpath/libcrypto.3.dylib",
+          "typ": "Paketbibliothek",
+          "ziel": "Contents/Frameworks/libcrypto.3.dylib"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_statistics.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_struct.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_tkinter.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "@rpath/Tcl",
+          "typ": "Paketbibliothek",
+          "ziel": "Contents/Frameworks/Tcl"
+        },
+        {
+          "name": "@rpath/Tk",
+          "typ": "Paketbibliothek",
+          "ziel": "Contents/Frameworks/Tk"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_uuid.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_zoneinfo.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/_zstd.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "@rpath/libzstd.1.dylib",
+          "typ": "Paketbibliothek",
+          "ziel": "Contents/Frameworks/libzstd.1.dylib"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/array.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/binascii.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libz.1.dylib",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/fcntl.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/grp.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/math.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/pyexpat.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/resource.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/select.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/unicodedata.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/python3__dot__14/lib-dynload/zlib.cpython-314-darwin.so": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/usr/lib/libz.1.dylib",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/Frameworks/tkinterdnd2/tkdnd/osx-arm64-tcl9/libtcl9tkdnd2.10.2.dylib": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [
+        "@rpath/libtcl9tkdnd2.10.2.dylib"
+      ],
+      "imports": [
+        {
+          "name": "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/usr/lib/libobjc.A.dylib",
+          "typ": "Systembibliothek"
+        }
+      ]
+    },
+    "Contents/MacOS/Glide": {
+      "architekturen": [
+        "arm64"
+      ],
+      "install_names": [],
+      "imports": [
+        {
+          "name": "/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/usr/lib/libSystem.B.dylib",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/usr/lib/libz.1.dylib",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+          "typ": "Systembibliothek"
+        },
+        {
+          "name": "/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices",
+          "typ": "Systembibliothek"
+        }
+      ]
+    }
+  },
+  "befunde": []
+}
