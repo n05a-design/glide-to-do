@@ -14,6 +14,12 @@ bleiben ohne Eintrag, nachträglich wird nichts erfunden.
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.45.0": (
+        "Kompaktmodus direkt oben im Menü Ansicht; Nebenansicht und durchsuchbare Seiten- und Blockaktionen.",
+        "Speicherstatus mit getrennten Fehlermeldungen, Erneut speichern und Sicherungsreserve.",
+        "Sicherungsübersicht: Dateien suchen, Größen sehen, Inhalte lesen, vergleichen und gezielt wiederherstellen.",
+        "Ausführbare Anhänge öffnen erst nach Rückfrage; Windows-Bildvorschauen vertragen ungewöhnliche Dateinamen.",
+    ),
     "3.44.0": (
         "Wiederholen: Strg/Cmd+Umschalt+Z, unter Windows auch Strg+Y, nimmt ein Rückgängig zurück.",
         "Eigene Rhythmen: mehrere Wochentage, n-ter Wochentag, Monatsende, Pause und begrenzte Anzahl.",

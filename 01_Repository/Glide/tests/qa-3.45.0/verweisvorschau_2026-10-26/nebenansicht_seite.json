@@ -1,0 +1,12 @@
+{
+  "app_sha256": "b53e6822b3f378119a9fc15cc1f2eac46fb2f2adb3a82a180f12834688ba5ad2",
+  "faelle": {
+    "nebenansicht_seite": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1142, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 530, in fall_nebenansicht_seite\n    assert app.find_item_in_lists(aufgabe)[0][\"done\"] and len(app.undo_stack) == tiefe + 1\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    }
+  },
+  "fehler": [
+    "nebenansicht_seite"
+  ]
+}

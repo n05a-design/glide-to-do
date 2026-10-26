@@ -1,0 +1,5 @@
+{
+  "befund": "Windows-Fokus-/Layoutprüfungen sind derzeit nicht verlässlich: root.focus_get() beim Tastenereignis None; angeforderte 1280x800+20+20 erscheinen als 1280x860+2580+20. Gleicher Seitenkästchenfehler und Inspektorgrenzen auch an unveränderter Lieferung. Ursache noch nicht abschließend zugeordnet.",
+  "lieferung_app_sha256": "2e69d8759d1c109c91bbed5662b10700368dc78a627545650c1046dc2c606dea",
+  "native_freigabe": false
+}

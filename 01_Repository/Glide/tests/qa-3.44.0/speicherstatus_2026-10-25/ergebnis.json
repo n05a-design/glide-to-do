@@ -1,0 +1,38 @@
+{
+  "datum": "2026-10-25",
+  "python": "3.14.7",
+  "system": "Windows-11-10.0.26300-SP0",
+  "tk": "9.0.4",
+  "app_sha256": "2c274277d55b883e95dfa7b2d1b550e22e1764c81bd96ebb05319ec7993babf3",
+  "integration_neu": {
+    "gruen": 4,
+    "rot": 0
+  },
+  "unit_tests": {
+    "storage_health": 8,
+    "schema_backups": 14,
+    "save_vertraege": 16,
+    "action_catalog": 6
+  },
+  "regression_gruen": [
+    "laden",
+    "speicherergebnis",
+    "kompakt_ansichten"
+  ],
+  "registrierte_suiten": 103,
+  "vollpruefung_ausgefuehrt": false,
+  "lieferung": false,
+  "commit_push": false,
+  "offen": [
+    "native Menschenabnahme",
+    "Mac",
+    "DPI/Screenreader/Mehrmonitor",
+    "eingefrorener Phasenabschluss"
+  ],
+  "regression_app_sha256": {
+    "laden": "ad72a761bb8586da6ad14ce773af59f1b2ae2663056a4d8886995f9a3a6bdf4d",
+    "speicherergebnis": "ad72a761bb8586da6ad14ce773af59f1b2ae2663056a4d8886995f9a3a6bdf4d",
+    "kompakt_ansichten": "ad72a761bb8586da6ad14ce773af59f1b2ae2663056a4d8886995f9a3a6bdf4d"
+  },
+  "regressionsgrenze": "Regressionsberichte vor reinem Autosave-Docstring-Nachtrag; abschließende neue Bereichssuite am dokumentierten Stand."
+}

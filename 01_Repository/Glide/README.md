@@ -1,8 +1,10 @@
 # Glide – lokale Aufgaben, Notizen und Pinnwände
 
+Stand 26.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Quellkandidat mit direkten Freigaben im Tagesvorschlag
+
 Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Sie läuft lokal mit Python 3.14 und Tk 9 (Tk 8.6 eingeschränkt), braucht weder Konto noch Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
-> **Projektstatus:** interner Entwicklungsstand **3.44.0** · Datenformat 26 · als Python-Fassung nach `07_Python-Versionen` geliefert, keine veröffentlichte oder signierte Releasefassung. Der [QA-Bericht](docs/07_QA_BERICHT.md) nennt bestandene Prüfungen und offene Plattformtests.
+> **Projektstatus:** interner Quellkandidat auf **3.45.0** · Aufgabenformat 26 · WA-12 und Verweisvorschau D55/WA-11 lokal umgesetzt. `07_Python-Versionen` bleibt beim vorherigen Lieferabschluss; `app.pyw`, `day_proposal.py` und `side_view.py` unterscheiden sich. [Aktueller Nachweis](tests/qa-3.45.0/verweisvorschau_2026-10-26/README.md), [QA-Bericht](docs/07_QA_BERICHT.md). Breite native Restprüfung und gemeinsamer Phasenabschluss offen; keine öffentliche Releasefassung.
 
 Funktionsumfang im Überblick: [Projekt-README](../../README.md#was-glide-kann); Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md); Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 
@@ -35,7 +37,7 @@ Das Repository ist öffentlich: Rohprotokolle (`*.log`) bleiben lokal, veröffen
 Vollprüfung auf dem Referenz-Mac (aus `01_Repository/Glide`):
 
 ```bash
-python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.44.0/lokaler_lauf --timeout 900
+python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.45.0/lokaler_lauf --timeout 900
 ```
 
 CI-Grundstufe, wie GitHub sie bei jedem Push und Pull Request auf `main` ausführt (Syntax, Versionen, Dokumentation, Unit- und Werkzeugtests, fünf Analysen, Startprobe, Lieferstand, Fremdcode, Datenschutz, Ablagegröße):

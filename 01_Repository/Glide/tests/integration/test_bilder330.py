@@ -2,7 +2,7 @@
 wiederkehrende Checklisten und Tempo (27.09.2026).
 
 - Vorschaumodul: rationale Skalierung, Formate, Größe, SVG unter Tk 9,
-  Windows-Befehl mit sicheren Anführungszeichen.
+  Windows-Befehl mit unveränderten, als Daten übergebenen Dateipfaden.
 - Seitendokument: `images` wird geprüft, verwaist Verweise fallen weg, Seiten
   ohne Bilder bleiben bytegleich.
 - Seitenbilder: einfügen, links/rechts umfließen, mittig, Breite ziehen,
@@ -19,9 +19,11 @@ wiederkehrende Checklisten und Tempo (27.09.2026).
 """
 import importlib.machinery
 import importlib.util
+import base64
 import io
 import json
 import os
+import re
 import sys
 import tempfile
 import zipfile
@@ -41,8 +43,11 @@ zoom, teiler = image_preview.rational_factor(0.47)
 assert zoom / teiler <= 0.47 and zoom / teiler > 0.4
 assert image_preview.is_image_name("Foto.JPEG") and image_preview.is_image_name("x.svg")
 assert not image_preview.is_image_name("bericht.pdf")
-befehl = image_preview.windows_convert_command("C:\\Bilder\\O'Neil.jpg", "C:\\t.png")
-assert befehl[0] == "powershell" and "'C:\\Bilder\\O''Neil.jpg'" in befehl[-1], "Anführungszeichen verdoppelt"
+quellpfad, zielpfad = "C:\\Bilder\\O'Neil ‘ ’ $ ;.jpg", "C:\\t.png"
+befehl = image_preview.windows_convert_command(quellpfad, zielpfad)
+pfade = re.findall(r"FromBase64String\('([^']+)'\)", befehl[-1])
+assert befehl[0] == "powershell" and [base64.b64decode(p).decode('utf-8') for p in pfade] == [quellpfad, zielpfad], \
+    "Pfadwerte werden unverändert außerhalb der PowerShell-Syntax transportiert"
 
 with tempfile.TemporaryDirectory(prefix="glide-bilder-") as ordner:
     os.environ["GLIDE_DATA_DIR"] = ordner

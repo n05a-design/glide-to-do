@@ -167,6 +167,9 @@ import editor_flush as glide_flush  # noqa: E402
 import data_lock as glide_lock  # noqa: E402
 from item_index import ItemIndex  # noqa: E402
 from save_result import SaveResult  # noqa: E402
+import storage_health as glide_storage
+import backup_catalog as glide_backup_catalog
+import attachment_policy as glide_attachment_policy
 import ui_design as glide_design  # noqa: E402
 import planning as glide_planning  # noqa: E402
 import day_proposal as glide_day_proposal  # noqa: E402
@@ -220,7 +223,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.44.0"
+APP_VERSION = "3.45.0"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
 # Einstellungen des Betriebssystems hängen daran.
@@ -356,7 +359,7 @@ def get_app_data_dir():
     if not os.environ.get("GLIDE_DATA_DIR") and os.path.isfile(pointer):
         try:
             with open(pointer, "r", encoding="utf-8") as file:
-                selected = json.load(file).get("path")
+                selected = glide_storage.read_stream(file).get("path")
             if isinstance(selected, str) and selected.strip():
                 path = os.path.abspath(os.path.expanduser(selected))
                 os.makedirs(path, exist_ok=True)
@@ -9529,8 +9532,10 @@ class RichNoteEditor(tk.Frame):
             self.text.bind(f'<{modifier}-y>', self.redo)
             self.text.bind(f'<{modifier}-Shift-Z>', self.redo)
         self.text.bind('<Control-Button-1>', self.open_link)
+        self.text.bind('<Control-Shift-Button-1>', self.open_link_side)
         if IS_MACOS:
             self.text.bind('<Command-Button-1>', self.open_link)
+            self.text.bind('<Command-Shift-Button-1>', self.open_link_side)
         self.text.bind('<at>', self.object_at_key)
         self.text.bind('<FocusOut>', lambda e: self.flush())
         self.bind('<Destroy>', self.destroyed, add='+')
@@ -9767,7 +9772,22 @@ class RichNoteEditor(tk.Frame):
             return None
         return self.insert_object_reference()
 
+    def add_object_reference_preview(self, menu):
+        value = next((self.links[tag] for tag in self.text.tag_names(
+            getattr(self, '_reference_menu_index', 'insert'))
+            if tag in self.links and glide_objects.parse(self.links[tag])), None)
+        if value is not None:
+            index, _, _ = self.app.object_graph()
+            enabled = (glide_side_view.reference_target(glide_objects.parse(value), index) is not None
+                       and not getattr(self.app, '_compact', None))
+            menu.add_command(label='Verweis in Nebenansicht öffnen', state='normal' if enabled else 'disabled',
+                             command=lambda target=value: self.app.open_object_reference(target, side=True))
+            return True
+        return False
+
     def add_object_reference_menu(self, menu):
+        if self.add_object_reference_preview(menu):
+            menu.add_separator()
         menu.add_command(label='@ Seite, Liste oder Aufgabe …', command=self.insert_object_reference)
         identity = getattr(self, 'entry_id', self.app.active_list_id)
         menu.add_cascade(label='Verweise und Rückverweise',
@@ -9795,12 +9815,20 @@ class RichNoteEditor(tk.Frame):
         self.flush()
         return 'break'
 
-    def open_link(self, event):
+    def open_link_side(self, event):
+        return self.open_link(event, side=True)
+
+    def open_link(self, event, *, side=False):
         for tag in self.text.tag_names(f'@{event.x},{event.y}'):
             if tag in self.links:
                 if glide_objects.parse(self.links[tag]):
-                    self.app.open_object_reference(self.links[tag])
+                    if side:
+                        self.app.open_object_reference(self.links[tag], side=True)
+                    else:
+                        self.app.open_object_reference(self.links[tag])
                     return 'break'
+                if side:
+                    return 'break'  # Der Vorschauweg öffnet keine externen Adressen.
                 import webbrowser
                 webbrowser.open(self.links[tag])
                 return 'break'
@@ -9972,8 +10000,10 @@ class PageEditor(RichNoteEditor):
         self.text.bind('<slash>', self.slash_menu)
         self.text.bind('<Double-Button-1>', self.open_task_at_pointer)
         self.text.bind('<Control-Button-1>', self.open_link)
+        self.text.bind('<Control-Shift-Button-1>', self.open_link_side)
         if IS_MACOS:
             self.text.bind('<Command-Button-1>', self.open_link)
+            self.text.bind('<Command-Shift-Button-1>', self.open_link_side)
         self.text.bind('<at>', self.object_at_key)
         self.text.bind('<Configure>', self.fit_read_width, add='+')
         self.text.bind('<Configure>', self.fit_title, add='+')
@@ -11552,7 +11582,12 @@ class PageEditor(RichNoteEditor):
                 self.text.tag_remove('sel', '1.0', 'end')
                 self.text.mark_set('insert', punkt)
         self.text.focus_set()
-        self.popup(self.build_context_menu())
+        self._reference_menu_index = punkt if event is not None else 'insert'
+        try:
+            menu = self.build_context_menu()
+        finally:
+            del self._reference_menu_index
+        self.popup(menu)
         return 'break'
 
     # E-U3 A (D55): Blockaktionen durchsuchbar – Griff, Strg/Cmd+/ und Kontextmenü.
@@ -11599,6 +11634,8 @@ class PageEditor(RichNoteEditor):
         markiert = self.has_selection()
         zustand = 'normal' if markiert else 'disabled'
         menu = self.app._new_themed_popup_menu(self)
+        if self.add_object_reference_preview(menu):
+            menu.add_separator()
         menu.add_command(label='Ausschneiden', command=lambda: self.copy_selection(cut=True), state=zustand)
         menu.add_command(label='Kopieren', command=self.copy_selection, state=zustand)
         menu.add_command(label='Einfügen', command=self.paste)
@@ -13762,7 +13799,7 @@ class DrawingEditor(tk.Frame):
         self.reference_colors = colors
         self._fade_reference()
         name = str(attachment.get("name") or "PNG")
-        self.reference_message = f"Referenz: {name} · nicht bemalbar · Taste R blendet sie ein oder aus"
+        self.reference_message = f"Referenz: {name} · nicht bemalbar · Taste R: Sichtbarkeit"
 
     def _fade_reference(self):
         """Blasse Darstellung trennt die Hilfsebene sichtbar von der Zeichnung.
@@ -15483,7 +15520,7 @@ class ListApp:
                              "Übersicht. Über Ordnern, Bibliotheken und Notizbüchern erscheinen „+“ und „…“; "
                              "ein zugeklappter Ordner bleibt zu. Auswahl mit Klick, Mehrfachauswahl im "
                              "Listenbereich mit Shift oder Strg.",
-             "Links · Ansicht › Oberfläche › Seitenleiste ein-/ausblenden"),
+             "Links · Ansicht › Oberfläche › Seitenleiste"),
             ("Eigenschaften", "Unter dem Titel kompakte Angaben wie offene Punkte, nächste Fälligkeit "
                               "und Labels; links daneben bei breitem Fenster das Logo in der Akzentfarbe.",
              "Kopf der Seite"),
@@ -15611,7 +15648,7 @@ class ListApp:
                               "Art, Farbe, Wiederholung, Erinnerung, Checkliste, Beziehungen, erfasste Zeit und "
                               "Anhänge. Änderungen gelten beim Verlassen eines Felds und sind rückgängig "
                               "machbar. Unter 980 Pixeln Breite bleibt die Punktmaske.",
-             "Ansicht › Liste › Detailbereich ein-/ausblenden"),
+             "Ansicht › Liste › Detailbereich"),
         )),
         ("Pinnwand", (
             ("Pinnwand einer Liste", "Die Punkte einer Liste als Karten auf einer Fläche. Verschieben mit "
@@ -15742,7 +15779,7 @@ class ListApp:
              "Titel, Suche, Schnellerfassung, Menü und „Normalansicht“, die Seitenleiste ist aus und das "
              "Fenster lässt sich bis 480 × 560 verkleinern. Alle Menübefehle liegen im Menüknopf. Beide Modi "
              "merken sich ihre Fensterlage getrennt; beim nächsten Start öffnet Glide normal.",
-             "Ansicht › Oberfläche › Kompaktmodus ein/aus · Strg/Cmd+Umschalt+K"),
+             "Ansicht › Kompaktmodus · Strg/Cmd+Umschalt+K"),
             ("Nebenansicht", "Eine Liste, Seite oder Notiz lesend rechts neben der Arbeit, am Platz des "
              "Aufgabeninspektors. Aufgaben lassen sich dort abhaken (Kästchen oder Leertaste, ein "
              "Rückgängig-Schritt); „Öffnen“ zeigt den Inhalt im Hauptbereich, „Schließen“ oder Esc beendet sie. "
@@ -16201,7 +16238,7 @@ class ListApp:
     # deshalb ist eine Leerzeile der kleinstmögliche Abstand.
     HEADING_GAP_ROWS = 1
     MAX_BACKUP_MEMBERS = 4096
-    MAX_BACKUP_DATA_BYTES = 32 * 1024 * 1024
+    MAX_BACKUP_DATA_BYTES = glide_storage.MAX_JSON_BYTES
     # --- Vollständiges App-Sicherung -------------------------------------------
     # Dasselbe Archiv wie ein Aufgabenbackup, ergänzt um persönliche
     # Einstellungen, Vorlagenkatalog und Aktivitätsdaten. Ältere Glide-Fassungen
@@ -16889,6 +16926,8 @@ class ListApp:
         self._scrollbar_refresh_id = None
 
         self._workspace_ready = False
+        self._storage_health = glide_storage.Health()
+        self._storage_blocked_files = set()
         self.settings = self.load_settings()
         self.saved_filters = SavedFilters(self)
         self._registered_fonts = register_private_fonts()
@@ -17084,10 +17123,12 @@ class ListApp:
         self.root.bind("<Control-h>", self.open_history_view)
         # Kompaktmodus (E-U1 A); kleines k deckt eine eingerastete Feststelltaste ab.
         for sequence in ("<Control-Shift-K>", "<Control-Shift-k>"):
-            self.root.bind(sequence, self.toggle_compact_mode)
+            self.root.bind(sequence, self.handle_compact_shortcut)
+        for sequence in ("<KeyRelease-K>", "<KeyRelease-k>"):
+            self.root.bind(sequence, self.handle_compact_shortcut)
         if IS_MACOS:
             for sequence in ("<Command-Shift-K>", "<Command-Shift-k>"):
-                self.root.bind(sequence, self.toggle_compact_mode)
+                self.root.bind(sequence, self.handle_compact_shortcut)
             self.root.bind("<Command-l>", self.open_label_manager)
             self.root.bind("<Command-k>", self.open_calendar_view)
             self.root.bind("<Command-o>", self.show_quick_open)
@@ -18598,7 +18639,7 @@ class ListApp:
         resource = os.path.join(os.path.dirname(__file__), "resources", "templates", "glide_vorlagen.glidetemplates")
         try:
             with open(resource, "r", encoding="utf-8") as file:
-                records = ListApp.normalize_template_records(json.load(file))
+                records = ListApp.normalize_template_records(glide_storage.read_stream(file))
             ids = {entry.get("id") for entry in records}
             for entry in ListApp.legacy_template_records():
                 if str(entry.get("id") or "").startswith("journal-") and entry.get("id") not in ids:
@@ -18670,8 +18711,8 @@ class ListApp:
     def load_templates(self):
         try:
             if os.path.isfile(TEMPLATES_FILE):
-                with open(TEMPLATES_FILE, "r", encoding="utf-8") as file:
-                    records = self.normalize_template_records(json.load(file))
+                records = self.normalize_template_records(
+                    glide_storage.read_json(TEMPLATES_FILE, self.MAX_BACKUP_DATA_BYTES))
                 if records == self.normalize_template_records(self.legacy_template_records()):
                     return self.default_template_records()
                 legacy = {entry["id"]: entry for entry in self.legacy_template_records()}
@@ -18694,11 +18735,15 @@ class ListApp:
                     if template_id in current and template_id not in ids:
                         records.append(copy.deepcopy(current[template_id]))
                 return records
+        except glide_storage.SizeLimitError as exc:
+            self.storage_load_blocked("templates", exc)
         except (OSError, ValueError, TypeError):
             pass
         return self.default_template_records()
 
     def save_templates(self):
+        if "templates" in getattr(self, "_storage_blocked_files", ()):
+            return False
         if getattr(self, "_data_read_only", False) or self.verify_data_lock() is False:
             return False
         payload = {"format_version": self.TEMPLATE_FORMAT_VERSION,
@@ -18706,15 +18751,16 @@ class ListApp:
         self.templates = payload["templates"]
         try:
             if os.path.isfile(TEMPLATES_FILE):
-                with open(TEMPLATES_FILE, "r", encoding="utf-8") as file:
-                    previous = json.load(file)
+                previous = glide_storage.read_json(TEMPLATES_FILE, self.MAX_BACKUP_DATA_BYTES)
                 if not isinstance(previous, dict) or previous.get("format_version", 1) == 1:
                     os.makedirs(BACKUP_DIR, exist_ok=True)
                     backup = os.path.join(BACKUP_DIR, "vorlagen_vor_format2_" + datetime.now().strftime("%Y%m%d_%H%M%S_%f") + ".json")
                     shutil.copy2(TEMPLATES_FILE, backup)
             self.write_json_atomic(TEMPLATES_FILE, payload)
+            self.storage_success("templates", TEMPLATES_FILE)
             return True
-        except (OSError, ValueError):
+        except (OSError, ValueError) as exc:
+            self.storage_failure("templates", exc)
             return False
 
     def template_by_id(self, template_id):
@@ -18998,7 +19044,7 @@ class ListApp:
         target_data = os.path.join(target, "liste_speicher.json")
         if not move_existing and os.path.isfile(target_data):
             with open(target_data, "r", encoding="utf-8") as file:
-                self.validate_backup_schema(json.load(file))
+                self.validate_backup_schema(glide_storage.read_stream(file))
         if not self.save_items():
             raise OSError("Der aktuelle Bestand konnte nicht gespeichert werden.")
         self.save_settings()
@@ -19093,10 +19139,11 @@ class ListApp:
         self._settings_existed = os.path.exists(SETTINGS_FILE)
         try:
             if os.path.exists(SETTINGS_FILE):
-                with open(SETTINGS_FILE, "r", encoding="utf-8") as file:
-                    data = json.load(file)
+                data = glide_storage.read_json(SETTINGS_FILE, self.MAX_BACKUP_DATA_BYTES)
                 if isinstance(data, dict):
                     return self.normalize_personal_settings(data)
+        except glide_storage.SizeLimitError as exc:
+            self.storage_load_blocked("settings", exc)
         except Exception:
             pass
         return self.normalize_personal_settings({})
@@ -19140,6 +19187,8 @@ class ListApp:
                 self._last_settings_batch_saved = True
 
     def save_settings(self, *, show_error=False, defer=False):
+        if "settings" in getattr(self, "_storage_blocked_files", ()):
+            return False
         if getattr(self, "_data_read_only", False):
             return False
         if defer and getattr(self, "_settings_defer_depth", 0):
@@ -19167,6 +19216,7 @@ class ListApp:
             geschrieben = getattr(self, "_settings_written", None)
             if geschrieben is not None and geschrieben == (inhalt, self.file_signature(SETTINGS_FILE)):
                 self.settings = payload
+                self.storage_success("settings", SETTINGS_FILE)
                 return True
             self._settings_written = None
             # Gemeinsame Schreibschranke (WA-30): Eine verdrängte Instanz
@@ -19178,7 +19228,9 @@ class ListApp:
             migration_backup = os.path.join(BASE_DIR, "settings.before-v1.json")
             if os.path.isfile(SETTINGS_FILE) and not os.path.exists(migration_backup):
                 with open(SETTINGS_FILE, "rb") as existing_file:
-                    existing_bytes = existing_file.read()
+                    glide_storage.check_size(os.fstat(existing_file.fileno()).st_size, self.MAX_BACKUP_DATA_BYTES)
+                    existing_bytes = existing_file.read(self.MAX_BACKUP_DATA_BYTES + 1)
+                    glide_storage.check_size(len(existing_bytes), self.MAX_BACKUP_DATA_BYTES)
                 try:
                     existing = json.loads(existing_bytes)
                 except (ValueError, UnicodeError):
@@ -19199,12 +19251,112 @@ class ListApp:
             self.write_json_atomic(SETTINGS_FILE, stored_payload)
             self._settings_written = (inhalt, self.file_signature(SETTINGS_FILE))
             self.settings = payload
+            self.storage_success("settings", SETTINGS_FILE)
             return True
         except Exception as exc:
             self._settings_written = None
+            self.storage_failure("settings", exc)
             if show_error:
                 self.show_error("Einstellungen nicht gespeichert", str(exc))
             return False
+
+    def storage_health(self):
+        if not hasattr(self, "_storage_health"):
+            self._storage_health = glide_storage.Health()
+        return self._storage_health
+
+    def storage_failure(self, kind, detail):
+        if self.storage_health().fail(kind, detail):
+            self.log_error(f"{glide_storage.LABELS.get(kind, kind)}: {detail}")
+        self.sync_storage_notice()
+
+    def storage_success(self, kind, path=None):
+        signature = self.file_signature(path) if path else None
+        self.storage_health().success(kind, signature[0] if signature else None)
+        self.sync_storage_notice()
+
+    def storage_load_blocked(self, kind, error):
+        if not hasattr(self, "_storage_blocked_files"):
+            self._storage_blocked_files = set()
+        self._storage_blocked_files.add(kind)
+        self.storage_failure(kind, str(error) + " Bitte die Datei außerhalb von Glide prüfen "
+                             "und Glide danach neu starten.")
+
+    def refresh_storage_sizes(self):
+        health = self.storage_health()
+        for kind, path in (("data", SAVE_FILE), ("settings", SETTINGS_FILE), ("templates", TEMPLATES_FILE)):
+            signature = self.file_signature(path)
+            if signature:
+                health.sizes[kind] = signature[0]
+            else:
+                health.sizes.pop(kind, None)
+        self.sync_storage_notice()
+
+    def sync_storage_notice(self):
+        button = getattr(self, "storage_notice", None)
+        if button is None:
+            return
+        try:
+            text = self.storage_health().notice(self.MAX_BACKUP_DATA_BYTES)
+            if text:
+                button.set_text(text)
+                if not button.winfo_manager():
+                    others = self.shell.pack_slaves()
+                    options = {"before": others[0]} if others else {}
+                    button.pack(side="bottom", fill="x", pady=(6, 0), **options)
+            else:
+                button.pack_forget()
+        except tk.TclError:
+            pass  # Eine geschlossene Anzeige ändert kein Speicherergebnis.
+
+    def retry_storage(self):
+        if not self.prepare_inspector_switch():
+            return False
+        data_saved = self.save_items(show_error=False, force_backup=True)
+        settings_saved = self.save_settings()
+        templates_saved = True
+        if "templates" in self.storage_health().failures:
+            templates_saved = self.save_templates()
+        self.refresh_storage_sizes()
+        return bool(data_saved and settings_saved and templates_saved and not self.storage_health().failures)
+
+    def show_storage_status(self, event=None):
+        self.refresh_storage_sizes()
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Speicherstatus")
+        dialog.geometry("680x480")
+        dialog.minsize(480, 360)
+        outer = tk.Frame(dialog, bg=self.theme["bg"])
+        outer.pack(fill="both", expand=True, padx=20, pady=20)
+        tk.Label(outer, text="Speicherstatus", bg=self.theme["bg"], fg=self.theme["text"],
+                 font=app_font(17, "bold"), anchor="w").pack(fill="x", pady=(0, 12))
+        footer = ButtonFlow(outer, bg=self.theme["bg"])
+        footer.pack(side="bottom", fill="x", pady=(12, 0))
+        body = tk.Frame(outer, bg=self.theme["bg"])
+        body.pack(fill="both", expand=True)
+        text = tk.Text(body, wrap="word", font=app_font(10), bg=self.theme["card"],
+                       fg=self.theme["text"], relief="flat", padx=12, pady=12)
+        bar = ttk.Scrollbar(body, orient="vertical", command=text.yview)
+        bar.pack(side="right", fill="y")
+        text.pack(fill="both", expand=True)
+        text.configure(yscrollcommand=bar.set)
+
+        def refresh():
+            text.configure(state="normal")
+            text.delete("1.0", "end")
+            text.insert("1.0", self.storage_health().report(self.MAX_BACKUP_DATA_BYTES))
+            text.configure(state="disabled")
+
+        def retry():
+            self.retry_storage()
+            refresh()
+
+        footer.add(self._make_dialog_button(footer, "Erneut speichern", retry, "export"))
+        footer.add(self._make_dialog_button(footer, "Schließen", dialog.destroy, "muted"))
+        dialog.bind("<Escape>", lambda _event: dialog.destroy())
+        refresh()
+        self.run_modal(dialog)
+        return "break"
 
     @classmethod
     def normalize_personal_settings(cls, data):
@@ -22687,7 +22839,7 @@ class ListApp:
     def side_view_open(self):
         return bool(getattr(self, "_side_view", None))
 
-    def open_side_view(self, list_id):
+    def open_side_view(self, list_id, *, item_id=None):
         """Liste, Seite oder Notiz lesend neben der Arbeit zeigen."""
         entry = next((value for value in self.lists if value.get("id") == list_id), None)
         if entry is None:
@@ -22709,7 +22861,7 @@ class ListApp:
         self._side_view = glide_side_view.target_for(entry)
         self._side_view_signature = None
         self._side_view_scroll = 0.0
-        self._side_view_selected = None
+        self._side_view_selected = item_id
         # Der automatische Inspektor tritt zurück, bevor die Nebenansicht seinen Platz einnimmt.
         self.sync_detail_pane()
         self.sync_side_view(force=True)
@@ -23059,6 +23211,9 @@ class ListApp:
             baum.selection_set(gewaehlt)
             baum.focus(gewaehlt)
             baum.see(gewaehlt)
+        elif gewaehlt:
+            self.set_side_view_status('Die verlinkte Aufgabe ist in dieser Vorschau nicht enthalten. '
+                                      '„Öffnen“ zeigt den ganzen Inhalt.')
 
         def marke_getroffen(event):
             iid = baum.identify_row(event.y)
@@ -23141,12 +23296,17 @@ class ListApp:
         text.tag_configure("strike", overstrike=True)
         text.tag_configure("code", font=mono, background=theme["input"])
         text.tag_configure("highlight", background=theme["selection"], foreground=theme["selection_text"])
+        text.tag_configure("reference_target", background=theme["selection"], foreground=theme["selection_text"])
         text.tag_configure("anchor", elide=True)
         for stufe in (1, 2, 3):
             text.tag_configure(f"indent{stufe}", lmargin1=24 * stufe, lmargin2=24 * stufe)
         text.insert("1.0", projection["text"])
+        reference_start = None
         for zeile in projection["lines"]:
             start = f"{zeile['line']}.0"
+            if zeile["task"] and zeile["task"] == getattr(self, '_side_view_selected', None):
+                text.tag_add('reference_target', start, f'{start} lineend')
+                reference_start = start
             ende = f"{zeile['line']}.end"
             if zeile["style"] not in ("body", "image", "task"):
                 text.tag_add(zeile["style"], start, ende)
@@ -23182,6 +23342,11 @@ class ListApp:
         if projection["truncated"]:
             text.insert("end", "\n…", ("divider",))
         text.configure(state="disabled")
+        if reference_start is not None:
+            text.see(reference_start)
+        elif getattr(self, '_side_view_selected', None) and entry.get('list_kind') == 'page':
+            self.set_side_view_status('Die verlinkte Aufgabe ist in dieser Vorschau nicht enthalten. '
+                                      '„Öffnen“ zeigt den ganzen Inhalt.')
         self.bind_mousewheel(text, text)
         glide_core_accessibility.bind_focus_traversal(text)
         return text
@@ -25628,7 +25793,9 @@ class ListApp:
         records = [dict(list_id=entry["id"], item=item, blocked=self.is_blocked(item, index))
                    for entry in self.planning_lists() for item in self.walk_items(entry.get("items", []))
                    if self.is_schedulable_item(item)]
-        return glide_day_proposal.propose(records, day, self.planning_available(day))
+        dependency_done = {identity: bool(item.get("done")) for identity, (_entry, item) in index.items()}
+        return glide_day_proposal.propose(records, day, self.planning_available(day),
+                                         dependency_done=dependency_done)
 
     def start_day_proposal(self, event=None):
         proposal = self.day_proposal()
@@ -25719,7 +25886,7 @@ class ListApp:
             source = next((entry for entry in self.lists if entry["id"] == row["list_id"]), None)
             title = self.normalize_item_text(row["title"], self.ITEM_KIND_TASK)
             suffix = "30 min angenommen" if row["assumed"] else glide_planning.duration(row["minutes"])
-            label = f"{title}\n{glide_day_proposal.REASONS[row['reason']]} · {suffix} · {source['title'] if source else ''}"
+            label = f"{title}\n{glide_day_proposal.reason_text(row)} · {suffix} · {source['title'] if source else ''}"
 
             def toggle(key=identity, value=variable):
                 selected.add(key) if value.get() else selected.discard(key)
@@ -26546,7 +26713,7 @@ class ListApp:
 
         aktionen = ButtonFlow(outer, bg=self.theme["bg"])
         aktionen.pack(fill="x", pady=(10, 0))
-        for text, befehl, farbe in (("Ein-/Ausschalten", umschalten, "confirm"),
+        for text, befehl, farbe in (("Sichtbarkeit", umschalten, "confirm"),
                                     ("▲ Nach oben", lambda: verschieben(-1), "accent"),
                                     ("▼ Nach unten", lambda: verschieben(1), "accent"),
                                     ("Standard wiederherstellen", standard, "muted")):
@@ -28680,7 +28847,7 @@ class ListApp:
             if os.path.getsize(path) > self.MAX_BACKUP_TOTAL_BYTES * 2:
                 raise ValueError("Die Vorlagendatei ist zu groß.")
             with open(path, "r", encoding="utf-8-sig") as file:
-                incoming = self.normalize_template_records(json.load(file))
+                incoming = self.normalize_template_records(glide_storage.read_stream(file))
             for record in incoming:
                 if "payload" in record:
                     self.validate_template_payload(record)
@@ -31326,6 +31493,10 @@ class ListApp:
             if not path or not os.path.exists(path):
                 self.show_warning("Datei öffnen", "Die Datei ist nicht mehr vorhanden.")
                 return False
+            question = glide_attachment_policy.question(
+                path, origin=glide_attachment_policy.origin_text(path, BASE_DIR))
+            if question and not self.ask_yes_no("Ausführbaren Anhang öffnen?", question, default="no"):
+                return False
             if IS_WINDOWS:
                 os.startfile(path)  # type: ignore[attr-defined]
             elif IS_MACOS:
@@ -32739,13 +32910,23 @@ class ListApp:
             choices.append((value, label))
         return sorted(choices, key=lambda pair: pair[1].casefold())
 
-    def open_object_reference(self, value):
+    def open_object_reference(self, value, *, side=False):
         key = glide_objects.parse(value)
         index, _, _ = self.object_graph()
         state, label = glide_objects.caption(key, index) if key else ('missing', 'Ungültiger Verweis')
         if state in ('missing', 'trash'):
             self.show_warning('Verweis', label)
             return False
+        if side:
+            target = glide_side_view.reference_target(key, index)
+            if target is None:
+                self.show_info('Nebenansicht', 'Dieses Verweisziel lässt sich nur im Hauptbereich öffnen.')
+                return False
+            opened = self.open_side_view(target['list_id'], item_id=target['item_id'])
+            body = getattr(self, '_side_view_body', None)
+            if opened and body is not None:
+                body.focus_set()  # Lesen, Esc und Undo beziehen sich jetzt auf die Vorschau.
+            return opened
         _, _, entry = index[key]
         if key[0] == 'list':
             self.set_active_list(key[1])
@@ -32808,6 +32989,17 @@ class ListApp:
             if not keys:
                 sub.add_command(label='Keine', state='disabled')
             menu.add_cascade(label=f'{label} ({len(keys)})', menu=sub)
+        targets = outgoing.get(source, set()) | incoming.get(source, set())
+        if targets:
+            preview = self._new_themed_popup_menu(menu)
+            for key in sorted(targets, key=lambda target: glide_objects.caption(target, index)[1].casefold()):
+                value = glide_objects.uri(*key)
+                enabled = (glide_side_view.reference_target(key, index) is not None
+                           and not getattr(self, '_compact', None))
+                preview.add_command(label=glide_objects.caption(key, index)[1],
+                                    state='normal' if enabled else 'disabled',
+                                    command=lambda target=value: self.open_object_reference(target, side=True))
+            menu.add_cascade(label='In Nebenansicht öffnen', menu=preview)
         explicit = index[source][1].get('references', [])
         if explicit and index[source][0] == 'active':
             remove = self._new_themed_popup_menu(menu)
@@ -35343,6 +35535,7 @@ class ListApp:
         self.system_listbox.column("count", anchor="e", stretch=False,
                                    width=self.SIDEBAR_COUNT_MIN_WIDTH, minwidth=0)
         self.system_listbox.bind("<<TreeviewSelect>>", self.on_system_select)
+        self.system_listbox.bind("<Button-1>", self.clear_sidebar_context_selection)
         self.system_listbox.bind("<Button-3>", self.show_sidebar_context_menu)
         if IS_MACOS:
             self.system_listbox.bind("<Button-2>", self.show_sidebar_context_menu)
@@ -36733,7 +36926,7 @@ class ListApp:
         """Eine Zeile im Seiten- oder Notizbereich öffnet ihre Liste oder ihren Ordner."""
         if getattr(self, "_sidebar_board_drag", None):
             return
-        if getattr(self, "_updating_sidebar", False):
+        if getattr(self, "_updating_sidebar", False) or self.is_sidebar_context_selection(baum):
             return
         auswahl = baum.selection()
         if not auswahl:
@@ -36930,7 +37123,8 @@ class ListApp:
         return None
 
     def on_system_select(self, event=None):
-        if getattr(self, "_updating_sidebar", False):
+        if (getattr(self, "_updating_sidebar", False)
+                or self.is_sidebar_context_selection(self.system_listbox)):
             return
         selection = self.system_listbox.selection()
         if not selection:
@@ -36963,9 +37157,12 @@ class ListApp:
     def on_sidebar_select(self, event=None):
         if getattr(self, "_sidebar_board_drag", None):
             return
-        if getattr(self, "_updating_sidebar", False):
+        if (getattr(self, "_updating_sidebar", False)
+                or self.is_sidebar_context_selection(self.sidebar_listbox)):
             return
         selection = self.sidebar_listbox.selection()
+        if not selection:
+            return
         if selection and hasattr(self, "system_listbox"):
             system_selection = self.system_listbox.selection()
             if system_selection:
@@ -37652,7 +37849,7 @@ class ListApp:
             menu.add_command(label="Tageshinweise …", command=self.show_daily_hints)
             menu.add_command(label="Tag zurück", command=self.plan_day_backward)
             menu.add_command(label="Tag vor", command=self.plan_day_forward)
-            menu.add_command(label="Stundenraster ein/aus", command=self.toggle_plan_day_grid)
+            menu.add_command(label="Stundenraster", command=self.toggle_plan_day_grid)
             menu.add_command(label="Tag leeren", command=self.clear_today_plan,
                              state="normal" if count else "disabled")
             menu.add_separator()
@@ -37768,6 +37965,19 @@ class ListApp:
         state = getattr(event, "state", 0) or 0
         return bool(state & (0x0008 if IS_MACOS else 0x0004))
 
+    def is_sidebar_context_selection(self, tree):
+        """Die Auswahl des Menüziels allein öffnet keinen Hauptinhalt."""
+        context = getattr(self, "_sidebar_context_selection", None)
+        if context is None or context[0] is not tree:
+            return False
+        if context[1] == tuple(tree.selection()):
+            return True
+        self.clear_sidebar_context_selection()
+        return False
+
+    def clear_sidebar_context_selection(self, event=None):
+        self._sidebar_context_selection = None
+
     def show_sidebar_context_menu(self, event):
         """Rechtsklick auf Liste/Ordner: Bearbeiten, Farbe, Verschieben, Papierkorb."""
         bereiche = [baum for baum in self.sidebar_trees() if baum is not self.sidebar_listbox]
@@ -37776,6 +37986,7 @@ class ListApp:
         iid = tree.identify_row(event.y)
         if not iid:
             return "break"
+        self.cancel_sidebar_rename()
         for anderer in [getattr(self, "system_listbox", None)] + self.sidebar_trees():
             if anderer is not None and anderer is not tree and anderer.selection():
                 anderer.selection_remove(*anderer.selection())
@@ -37790,6 +38001,10 @@ class ListApp:
             if iid not in tree.selection():
                 tree.selection_set(iid)
         tree.focus(iid)
+        # selection_set erzeugt <<TreeviewSelect>> zeitversetzt, auch innerhalb
+        # der nativen Menüsitzung. Diese Auswahl bleibt ein Menüziel, bis ein
+        # Linksklick oder eine geänderte Tastaturauswahl den Inhalt öffnet.
+        self._sidebar_context_selection = (tree, tuple(tree.selection()))
         row = self.sidebar_iid_to_row.get(iid)
         if not row:
             return "break"
@@ -39504,6 +39719,7 @@ class ListApp:
         tree = getattr(event, "widget", self.sidebar_listbox)
         if tree not in self.sidebar_trees():
             return
+        self.clear_sidebar_context_selection()
         tree.focus_set()
         iid = tree.identify_row(event.y)
         # Vor dem Setzen der Auswahl festhalten, was vorher ausgewählt war: Ein
@@ -40424,6 +40640,9 @@ class ListApp:
     def create_ui(self):
         self.shell = self.register_theme_widget(tk.Frame(self.root, bg=self.theme["bg"]), "bg")
         self.shell.pack(fill="both", expand=True, padx=glide_design.SPACING[28], pady=(glide_design.SPACING[4], glide_design.SPACING[14]))
+        self.storage_notice = self.make_button(self.shell, "Speicherstatus", self.show_storage_status,
+                                              "muted", height=32, font=app_font(9), bg_key="bg")
+        self.refresh_storage_sizes()
 
         # Kopfbereich über die volle Fensterbreite: Titel wieder ganz links.
         top_frame = self.register_theme_widget(tk.Frame(self.shell, bg=self.theme["bg"]), "bg")
@@ -40546,7 +40765,7 @@ class ListApp:
         self.sidebar_toggle_button = self.make_button(self.header_controls, self.ICONS["sidebar"],
                                                       self.toggle_sidebar, "muted", width=42, height=self.HEADER_CONTROL_HEIGHT, font=self.symbol_font("sidebar", 16))
         self.sidebar_toggle_button.pack(side="right", padx=(glide_design.SPACING[0], glide_design.SPACING[8]))
-        self.add_tooltip(self.sidebar_toggle_button, "Listen- und Ordnerleiste ein-/ausblenden")
+        self.add_tooltip(self.sidebar_toggle_button, "Listen- und Ordnerleiste")
 
         # Die Druckausgabe gibt es seit 3.17, aber sie lag
         # ausschließlich im Menü „Datei" und hinter Strg+P. Wer beides nicht
@@ -43022,6 +43241,7 @@ class ListApp:
         self._autosave_id = None
         self._search_refresh_after = None
 
+        self._sidebar_context_selection = None
         self._sidebar_heights_after = None
         self._sidebar_heights_pending = False
 
@@ -44204,6 +44424,12 @@ class ListApp:
         # bedeutet eine unlesbare, beschädigte oder neuere Datei.
         try:
             data, active_id_from_file = self.read_save_file()
+        except glide_storage.SizeLimitError as exc:
+            self._data_read_only = True
+            self._read_only_reason = "capacity"
+            self.storage_load_blocked("data", exc)
+            self.start_with_empty_dataset()
+            return
         except glide_load.READ_ERRORS as e:
             message, newer = glide_load.read_failure(e, NewerDataError)
             self.handle_unreadable_save_file(message, newer=newer)
@@ -44218,8 +44444,8 @@ class ListApp:
 
     def read_save_file(self):
         """Lesephase von `load_items`: Datei lesen und normalisieren, ohne Oberfläche."""
-        with open(SAVE_FILE, "r", encoding="utf-8") as file:
-            data = json.load(file)
+        with open(SAVE_FILE, "rb") as file:
+            data = glide_storage.read_stream(file, self.MAX_BACKUP_DATA_BYTES)
             self._schema_backup_guard.observe(SAVE_FILE, data, os.fstat(file.fileno()))
         self.lists, active_id_from_file = self.normalize_lists_data(data)
         return data, active_id_from_file
@@ -44312,7 +44538,7 @@ class ListApp:
         """Datenformat der Speicherdatei, soweit sie sich lesen lässt – sonst None."""
         try:
             with open(SAVE_FILE, "r", encoding="utf-8") as file:
-                data = json.load(file)
+                data = glide_storage.read_stream(file)
         except (OSError, ValueError, RecursionError):
             return None
         version = data.get("version") if isinstance(data, dict) else None
@@ -44484,6 +44710,8 @@ class ListApp:
             return "Der Bestand stammt aus einer neueren Glide-Version und bleibt unverändert."
         if reason == "unreadable":
             return "Die Speicherdatei ist unlesbar und bleibt unverändert."
+        if reason == "capacity":
+            return "Die Speicherdatei überschreitet die unterstützte JSON-Größe und bleibt unverändert."
         if reason == "lock_defective":
             return ("Die Datensperre des Datenordners ist beschädigt oder unlesbar. Beim nächsten Start "
                     "lässt sie sich bewusst übernehmen.")
@@ -44532,6 +44760,12 @@ class ListApp:
     @staticmethod
     def write_json_atomic(path, payload):
         """Schreibt JSON vollständig und ersetzt die Zieldatei erst am Ende."""
+        # Eine zu große bestehende Datei niemals durch einen kleineren,
+        # gegebenenfalls nur unvollständig geladenen Stand ersetzen.
+        if os.path.isfile(path):
+            glide_storage.check_size(os.path.getsize(path), ListApp.MAX_BACKUP_DATA_BYTES)
+        inhalt = ListApp.settings_json_text(payload)
+        glide_storage.check_size(glide_storage.json_size(inhalt), ListApp.MAX_BACKUP_DATA_BYTES)
         directory = os.path.dirname(os.path.abspath(path))
         os.makedirs(directory, exist_ok=True)
         fd, temp_file = tempfile.mkstemp(prefix=".glide-json-", suffix=".tmp", dir=directory)
@@ -44539,7 +44773,6 @@ class ListApp:
             # `dumps` in einem Stück statt `dump` in Häppchen: dieselben Bytes,
             # ab Python 3.14 der C-Kodierer statt der Python-Schleife – bei 2.000 Punkten
             # rund 110 statt 25 ms je Datei (Messung 27.09.2026).
-            inhalt = ListApp.settings_json_text(payload)
             with os.fdopen(fd, "w", encoding="utf-8") as file:
                 file.write(inhalt)
                 file.flush()
@@ -44556,9 +44789,18 @@ class ListApp:
     def save_items(self, *, show_error=True, force_backup=False, record_activity=True,
                    changed_list_ids=None):
         """Kompatible Bool-Fassade; Teilwirkungen stehen in `_last_save_result`."""
+        force_backup = force_backup or "backup" in self.storage_health().failures
         result = self.save_items_result(show_error=show_error, force_backup=force_backup,
                                         record_activity=record_activity, changed_list_ids=changed_list_ids)
         self._last_save_result = result
+        if result.data_written:
+            self.storage_success("data", SAVE_FILE)
+        elif not getattr(self, "_data_read_only", False):
+            self.storage_failure("data", result.error or "Der Bestand wurde nicht gespeichert.")
+        if result.backup_warning:
+            self.storage_failure("backup", result.backup_warning)
+        elif result.backup_checked:
+            self.storage_success("backup")
         return result.success
 
     def save_items_result(self, *, show_error=True, force_backup=False, record_activity=True,
@@ -45335,9 +45577,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """Sichert regelmäßig, ohne den Nutzer mit Dialogen zu unterbrechen.
 
         Ein noch nicht gespeicherter Stand wird erneut geschrieben; andernfalls
-        entsteht ein garantierter Sicherungspunkt. Fehler bleiben still, weil
-        ein modaler Dialog im Hintergrund die Arbeit unterbrechen würde – der
-        nächste manuelle Speichervorgang meldet das Problem sichtbar.
+        entsteht ein garantierter Sicherungspunkt. Fehler erscheinen im
+        Speicherstatus und Protokoll; ein modaler Dialog unterbricht die
+        Hintergrundspeicherung nicht.
         """
         self._after_ids.discard(self._autosave_id)
         self._autosave_id = None
@@ -45348,8 +45590,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             # Vollvergleich auch bei dirty=False: Sicherheitsnetz für einen
             # noch nicht deklarierten Änderungsweg. Schreiben bleibt atomar.
             self.save_items(show_error=False, force_backup=True)
-        except Exception:
-            pass
+        except Exception as exc:
+            self.storage_failure("data", exc)
         finally:
             self._autosave_unchanged = False
             self.schedule_autosave()
@@ -57820,7 +58062,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def exchange_recipe_catalog(self):
         path = os.path.join(os.path.dirname(__file__), 'resources', 'exchange_recipes.json')
         with open(path, encoding='utf-8') as source:
-            resource = json.load(source)
+            resource = glide_storage.read_stream(source)
         return glide_recipes.catalog(resource, self.settings.get('exchange_recipes', []))
 
     def save_exchange_recipe(self, recipe, remove=False):
@@ -58936,6 +59178,162 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self.show_undo_toast('Seite wiederhergestellt · Vorsicherung angelegt')
         return True
 
+    def show_backup_catalog(self, event=None):
+        """Sicherungen finden, lesend prüfen und bestehende Vergleichs-/Restorewege öffnen."""
+        theme = self.theme
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Sicherungsübersicht")
+        dialog.configure(bg=theme["bg"])
+        dialog.transient(self.root)
+        dialog.geometry("800x600")
+        dialog.minsize(600, 480)
+        outer = tk.Frame(dialog, bg=theme["bg"])
+        outer.pack(fill="both", expand=True, padx=20, pady=16)
+        self.dialog_label(outer, "Sicherungsübersicht", bold=True, size=16)
+        self.dialog_label(outer, "Automatische Sicherungen und selbst gewählte Dateien. "
+                          "Die Übersicht verändert keine Sicherung.", color="muted", pady=(4, 10))
+        footer = ButtonFlow(outer, bg=theme["bg"])
+        footer.pack(side="bottom", fill="x", pady=(12, 0))
+        detail = tk.Label(outer, name="backup_detail", text="", anchor="w", justify="left",
+                          bg=theme["bg"], fg=theme["muted"], font=app_font(10))
+        detail.pack(side="bottom", fill="x", pady=(6, 0))
+        detail.bind("<Configure>", lambda event: detail.configure(wraplength=max(100, event.width)))
+        summary = tk.Label(outer, text="", anchor="w", bg=theme["bg"],
+                           fg=theme["muted"], font=app_font(9))
+        summary.pack(side="bottom", fill="x", pady=(6, 0))
+        search = tk.Frame(outer, bg=theme["bg"])
+        search.pack(fill="x", pady=(0, 10))
+        tk.Label(search, text="Suchen", bg=theme["bg"], fg=theme["muted"],
+                 font=app_font(10)).pack(side="left", padx=(0, 8))
+        query = tk.StringVar(dialog)
+        frame, field = self._make_field(search)
+        frame.pack(side="left", fill="x", expand=True)
+        entry = tk.Entry(field, name="backup_filter", textvariable=query, font=app_font(10),
+                         bg=theme["input"], fg=theme["text"], insertbackground=theme["text"],
+                         relief="flat", bd=0, highlightthickness=0)
+        entry.pack(fill="x", padx=self.FIELD_PAD_X, pady=self.FIELD_PAD_Y)
+        area = tk.Frame(outer, bg=theme["bg"])
+        area.pack(fill="both", expand=True)
+        tree = ttk.Treeview(area, name="backup_files", columns=("date", "size", "kind"),
+                            show="tree headings", selectmode="browse", height=7)
+        tree.heading("#0", text="Datei")
+        tree.column("#0", width=260, minwidth=110, stretch=True)
+        for key, title, width in (("date", "Geändert", 128), ("size", "Größe", 86),
+                                  ("kind", "Dateityp", 140)):
+            tree.heading(key, text=title)
+            tree.column(key, width=width, minwidth=width, stretch=False)
+        bar = ttk.Scrollbar(area, orient="vertical", command=tree.yview)
+        bar.pack(side="right", fill="y")
+        horizontal = ttk.Scrollbar(area, orient="horizontal", command=tree.xview)
+        horizontal.pack(side="bottom", fill="x")
+        tree.pack(fill="both", expand=True)
+        tree.configure(yscrollcommand=bar.set, xscrollcommand=horizontal.set)
+        state = {"entries": [], "rows": {}, "extra": [], "errors": []}
+        dialog._glide_backup_catalog = state
+
+        def selected():
+            ids = tree.selection()
+            return state["rows"].get(ids[0]) if ids else None
+
+        def selection_changed(_event=None):
+            row = selected()
+            for button in selection_buttons:
+                button.configure(state="normal" if row else "disabled")
+            detail.configure(text=(f"{row.name}\n{row.kind} · {row.date_text} · {row.size_text}"
+                                   if row else "Keine Sicherung ausgewählt."))
+
+        def render(*_args):
+            old = selected()
+            old_path = old.path if old else None
+            tree.delete(*tree.get_children())
+            rows = glide_backup_catalog.filtered(state["entries"], query.get())
+            state["rows"] = {str(index): row for index, row in enumerate(rows)}
+            for identity, row in state["rows"].items():
+                tree.insert("", "end", iid=identity, text=row.name,
+                            values=(row.date_text, row.size_text, row.kind))
+            summary.configure(text=f"{len(rows)} von {len(state['entries'])} Sicherungen")
+            if rows:
+                identity = next((key for key, row in state["rows"].items() if row.path == old_path), "0")
+                tree.selection_set(identity)
+                tree.focus(identity)
+            selection_changed()
+            if state["errors"]:
+                detail.configure(text="\n".join(state["errors"][:2]))
+
+        def refresh():
+            state["entries"], state["errors"] = glide_backup_catalog.scan(BACKUP_DIR, state["extra"])
+            render()
+
+        def choose_file():
+            path = filedialog.askopenfilename(parent=dialog, title="Sicherung zur Übersicht hinzufügen",
+                filetypes=[("Glide-Sicherungen", "*.glidebackup *.glideapp *.json"), ("Alle Dateien", "*.*")])
+            if path:
+                state["extra"].append(path)
+                query.set("")
+                refresh()
+                for identity, row in state["rows"].items():
+                    if os.path.normcase(row.path) == os.path.normcase(os.path.abspath(path)):
+                        tree.selection_set(identity)
+                        tree.see(identity)
+                        break
+
+        def read_selected():
+            row = selected()
+            if row is None:
+                return
+            try:
+                data = self.read_backup_for_compare(row.path)
+                detail.configure(text="Datenteil gelesen: " + glide_backup_catalog.describe(data))
+            except (OSError, ValueError, TypeError, zipfile.BadZipFile) as exc:
+                detail.configure(text=f"Lesen fehlgeschlagen: {exc}")
+
+        def open_action(kind):
+            row = selected()
+            if row is None:
+                return "break"
+            path = row.path
+            dialog.destroy()
+            if kind == "compare":
+                command = lambda: self.show_backup_compare_dialog(older_path=path)
+            elif os.path.splitext(path)[1].lower() == self.APP_BACKUP_EXTENSION:
+                command = lambda: self.restore_app_backup(path=path)
+            else:
+                command = lambda: self.import_full_backup(path=path)
+            self._register_after(self.root.after_idle(command))
+            return "break"
+
+        self._make_dialog_button(search, "Aktualisieren", refresh, "muted", width=126).pack(
+            side="left", padx=(8, 0))
+        selection_buttons = []
+        footer.add(self._make_dialog_button(footer, "Datei …", choose_file, "import", width=100))
+        for text, command, role, width in (
+                ("Lesen", read_selected, "muted", 90),
+                ("Vergleichen", lambda: open_action("compare"), "export", 126),
+                ("Wiederherstellen …", lambda: open_action("restore"), "muted", 170)):
+            button = self._make_dialog_button(footer, text, command, role, width=width)
+            selection_buttons.append(button)
+            footer.add(button)
+        footer.add(self._make_dialog_button(footer, "Schließen", dialog.destroy, "muted", width=100))
+        query_trace = query.trace_add("write", render)
+
+        def release_query_trace(event):
+            if event.widget is dialog:
+                try:
+                    query.trace_remove("write", query_trace)
+                except tk.TclError:
+                    pass  # Der Interpreter kann bereits im Abbau sein.
+
+        dialog.bind("<Destroy>", release_query_trace, add="+")
+        tree.bind("<<TreeviewSelect>>", selection_changed)
+        tree.bind("<Return>", lambda _event: open_action("compare"))
+        tree.bind("<Double-Button-1>", lambda _event: open_action("compare"))
+        dialog.bind("<Escape>", lambda _event: dialog.destroy())
+        refresh()
+        entry.focus_set()
+        self._schedule_windows_chrome_theme(dialog)
+        self.run_modal(dialog)
+        return "break"
+
     def backup_compare_sources(self):
         """[(Name, Pfad)] – der aktuelle Bestand (Pfad None), dann die automatischen Sicherungen, neueste zuerst."""
         quellen = [("Aktueller Bestand", None)]
@@ -58947,7 +59345,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             pfade = []
         for pfad in pfade[:self.BACKUP_COMPARE_LIMIT]:
             stempel = datetime.fromtimestamp(os.path.getmtime(pfad)).strftime("%d.%m.%Y %H:%M:%S")
-            quellen.append((f"Automatische Sicherung vom {stempel}", pfad))
+            name = f"Automatische Sicherung vom {stempel}"
+            if any(label == name for label, _ in quellen):
+                name += f" · {os.path.basename(pfad)}"
+            quellen.append((name, pfad))
         return quellen
 
     def read_backup_for_compare(self, pfad):
@@ -58961,10 +59362,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 roh = self.read_zip_member_limited(archive, data_info, self.MAX_BACKUP_DATA_BYTES)
             data = json.loads(roh.decode("utf-8"))
         else:
-            if os.path.getsize(pfad) > self.MAX_BACKUP_DATA_BYTES:
-                raise ValueError("Die Sicherung ist größer als 32 MB.")
-            with open(pfad, "rb") as datei:
-                data = json.loads(datei.read(self.MAX_BACKUP_DATA_BYTES + 1).decode("utf-8-sig"))
+            data = glide_storage.read_json(pfad, self.MAX_BACKUP_DATA_BYTES)
         if isinstance(data, list):
             data = {"lists": data}
         if not isinstance(data, dict) or not isinstance(data.get("lists"), list):
@@ -59000,7 +59398,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 zeilen.append((f"   … und {len(eintraege) - self.BACKUP_COMPARE_LINES} weitere", "hinweis"))
         return zeilen
 
-    def show_backup_compare_dialog(self, event=None):
+    def show_backup_compare_dialog(self, event=None, *, older_path=None, newer_path=None):
         """Zwei Stände nebeneinanderlegen: Listen und Aufgaben neu, entfernt, verschoben, geändert.
 
         Liest nur; keine Datei wird geschrieben, der Bestand bleibt unberührt.
@@ -59009,8 +59407,18 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         quellen = self.backup_compare_sources()
         pfade = dict(quellen)
         namen = [name for name, _pfad in quellen]
+        for path in (older_path, newer_path):
+            if path is not None:
+                name = glide_backup_catalog.choice_label(list(pfade.items()), path)
+                pfade[name] = path
+                if name not in namen:
+                    namen.append(name)
         alt_var = tk.StringVar(value=namen[1] if len(namen) > 1 else namen[0])
         neu_var = tk.StringVar(value=namen[0])
+        if older_path is not None:
+            alt_var.set(glide_backup_catalog.choice_label(list(pfade.items()), older_path))
+        if newer_path is not None:
+            neu_var.set(glide_backup_catalog.choice_label(list(pfade.items()), newer_path))
         dialog = tk.Toplevel(self.root)
         dialog.title("Sicherungen vergleichen")
         dialog.configure(bg=theme["bg"])
@@ -59033,10 +59441,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             def datei(variable=variable):
                 pfad = filedialog.askopenfilename(
                     title="Sicherung wählen", parent=dialog,
-                    filetypes=[("Glide-Sicherung", "*.glidebackup *.json"), ("Alle Dateien", "*.*")])
+                    filetypes=[("Glide-Sicherung", "*.glidebackup *.glideapp *.json"), ("Alle Dateien", "*.*")])
                 if not pfad:
                     return "break"
-                name = f"Datei: {os.path.basename(pfad)}"
+                name = glide_backup_catalog.choice_label(list(pfade.items()), pfad)
                 pfade[name] = pfad
                 if name not in namen:
                     namen.append(name)
@@ -62364,6 +62772,22 @@ Labels, Termine und Metadaten."""
     def compact_mode_active(self):
         return bool(getattr(self, "_compact", None))
 
+    def handle_compact_shortcut(self, event):
+        """Tk/Windows kann für Strg+Shift+K nur das Loslassen melden."""
+        if event.type == tk.EventType.KeyRelease:
+            gedrueckt = getattr(self, "_compact_shortcut_down", False)
+            self._compact_shortcut_down = False
+            if gedrueckt:
+                return "break"  # Das Drücken hat bereits umgeschaltet.
+            modifier = 0x0004 | (0x0008 if IS_MACOS else 0)
+            if not event.state & 0x0001 or not event.state & modifier:
+                return None
+        else:
+            if getattr(self, "_compact_shortcut_down", False):
+                return "break"  # Gedrückthalten schaltet nicht wiederholt um.
+            self._compact_shortcut_down = True
+        return self.toggle_compact_mode(event)
+
     def toggle_compact_mode(self, event=None):
         if getattr(self, "_compact", None):
             return self.leave_compact_mode()
@@ -63618,6 +64042,9 @@ Labels, Termine und Metadaten."""
                 )),
                 None,
                 ("Sicherung", (
+                    ("Speicherstatus …", self.show_storage_status),
+                    ("Sicherungsübersicht …", self.show_backup_catalog),
+                    None,
                     ("Aufgabensicherung speichern …", self.export_full_backup),
                     ("Aufgabensicherung laden …", self.import_full_backup),
                     None,
@@ -63680,6 +64107,8 @@ Labels, Termine und Metadaten."""
                 ("Einstellungen …", self.show_settings_dialog),
             )),
             ("Ansicht", (
+                ("Kompaktmodus", self.toggle_compact_mode, self.accel("Shift", "K")),
+                None,
                 ("Ansichten", (
                     ("Seite, Punkt oder Aktion suchen …", self.show_quick_open, self.accel("O")),
                     None,
@@ -63709,7 +64138,7 @@ Labels, Termine und Metadaten."""
                 ("Heute", (
                     ("Heute: Tag zurück", self.plan_day_backward),
                     ("Heute: Tag vor", self.plan_day_forward),
-                    ("Heute: Stundenraster ein/aus", self.toggle_plan_day_grid),
+                    ("Heute: Stundenraster", self.toggle_plan_day_grid),
                     ("Zeitblock festlegen …", self.choose_time_block, self.accel("Shift+T")),
                 )),
                 None,
@@ -63721,7 +64150,7 @@ Labels, Termine und Metadaten."""
                     ("Tabellenansicht", self.set_table_view),
                     ("Tabellenspalten …", self.show_table_columns_dialog),
                     ("Gruppieren nach", self.group_menu_entries()),
-                    ("Detailbereich ein-/ausblenden", self.toggle_detail_pane),
+                    ("Detailbereich", self.toggle_detail_pane),
                     ("Tabelle: Unterpunkte verschachtelt", lambda: self.set_table_nested(True), "", 'set_table_nested.true'),
                     ("Tabelle: Unterpunkte flach", lambda: self.set_table_nested(False), "", 'set_table_nested.false'),
                     None,
@@ -63751,9 +64180,8 @@ Labels, Termine und Metadaten."""
                 )),
                 None,
                 ("Oberfläche", (
-                    ("Seitenleiste ein-/ausblenden", self.toggle_sidebar),
+                    ("Seitenleiste", self.toggle_sidebar),
                     ("Seitenleiste schmal", self.toggle_sidebar_narrow),
-                    ("Kompaktmodus ein/aus", self.toggle_compact_mode, self.accel("Shift", "K")),
                     ("Nebenansicht öffnen …", self.choose_side_view),
                     ("Nebenansicht schließen", self.close_side_view),
                     ("Design wechseln (Hell/Dunkel)", self.toggle_theme, self.accel("D")),
@@ -64277,7 +64705,7 @@ Labels, Termine und Metadaten."""
                 (self.accel("O"), "Seite, Punkt oder Aktion suchen (auch ⌕ in der Kopfzeile)"),
                 ("Suche: Umschalt+Enter", "Gefundene Liste, Seite oder Notiz in der Nebenansicht öffnen"),
                 ("Nebenansicht: Leertaste / Esc", "Aufgabe abhaken / Nebenansicht schließen"),
-                (self.accel("Shift", "K"), "Kompaktmodus ein- oder ausschalten"),
+                (self.accel("Shift", "K"), "Kompaktmodus"),
                 (self.accel("Z"), "Letzte Änderung rückgängig machen"),
                 (f"{self.accel('Shift', 'Z')}" + (f" / {self.accel('Y')}" if IS_WINDOWS else ""),
                  "Rückgängig gemachte Änderung wiederholen"),
@@ -64885,7 +65313,7 @@ def show_start_window(root):
     grund, schrift = ListApp.THEMES["light"]["bg"], ListApp.THEMES["light"]["muted"]
     try:
         with open(SETTINGS_FILE, "r", encoding="utf-8") as datei:
-            design = json.load(datei).get("design")
+            design = glide_storage.read_stream(datei).get("design")
         basis = ListApp.DESIGNS.get(design, {}).get("base", "light")
         grund = ListApp.THEMES.get(basis, ListApp.THEMES["light"])["bg"]
         schrift = ListApp.THEMES.get(basis, ListApp.THEMES["light"])["muted"]
@@ -64910,7 +65338,7 @@ def show_start_window(root):
     akzent = glide_logo.BRAND_BLUE
     try:
         with open(SETTINGS_FILE, "r", encoding="utf-8") as datei:
-            schluessel = json.load(datei).get("accent_color", "accent")
+            schluessel = glide_storage.read_stream(datei).get("accent_color", "accent")
         basis_farben = ListApp.THEMES.get(basis, ListApp.THEMES["light"])
         akzent = basis_farben.get(schluessel, basis_farben["accent"])
     except (OSError, ValueError, AttributeError, KeyError, TypeError, NameError):

@@ -1,6 +1,6 @@
 # Dokumentationsindex
 
-Stand 25.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2
+Stand 25.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2
 
 Seit 03.10.2026 zwölf zentrale Dokumente und fünf Einzelentscheidungen statt der damaligen 53: Funktionsverträge 45–79, Projektübergabe, Startkontext, Entwicklungsnotizen, Sitzungsprotokoll, Releasecheckliste und Lizenz-, Signierungs- und Vertriebsentwürfe sind in die Dokumente unten eingegangen. Ältere Fassungen trägt Git (`git log --follow docs/<Datei>`). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt; deren Synchronisationskopien und die wiederaufgetauchte Projektübergabe sind aufgelöst. Regeln: [Dokumentenpflege](DOKUMENTENPFLEGE.md).
 
@@ -23,7 +23,7 @@ Seit 03.10.2026 zwölf zentrale Dokumente und fünf Einzelentscheidungen statt d
 | [10 Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben, Produktdatenblatt |
 | [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
-| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D55 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
+| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D56 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Ein Thema, ein Dokument; Aufbewahrung; Zuständigkeiten |
 | [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; B01–B20 im Python-Stand umgesetzt; E-U1–E-U3 A seit D55 als lokaler Kandidat umgesetzt; Menschenabnahmen offen |
 

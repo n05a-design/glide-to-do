@@ -1,0 +1,22 @@
+{
+  "ergebnisse": [
+    {
+      "modul": "test_side_view.py",
+      "tests": 12,
+      "exitcode": 0
+    },
+    {
+      "modul": "test_object_references.py",
+      "tests": 3,
+      "exitcode": 0
+    },
+    {
+      "modul": "test_day_proposal.py",
+      "tests": 14,
+      "exitcode": 0
+    }
+  ],
+  "faelle": 29,
+  "neue_faelle": 3,
+  "fach_sha256": "5dc3d323f689899463d94ed0d483c8c8f84b2b45b7a10bba9e4084f44a6fa80c"
+}

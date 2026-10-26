@@ -1,6 +1,6 @@
 # Anwendungskern
 
-Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 25.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 `app.pyw` ist die kanonische Anwendung (Klasse `ListApp`). Daneben liegen Module, die beim Start aus demselben Ordner geladen werden und beim Kopieren oder Paketieren immer mitgehen:
 
@@ -64,6 +64,9 @@ Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorl
 | `action_menu.py` | Durchsuchbare Seiten-, Block- und Menüaktionen: Abschnitte, Filter, Häkchen und Sperrgründe über den bestehenden Menüs; Kopfverweise der Seite (Tk-frei, E-U3 A) |
 | `side_view.py` | Lesende Nebenansicht: Ziel, Lesbarkeit, Listenzeilen, Seitenprojektion und Abgleichsignatur ohne Datenänderung (Tk-frei, E-U2 A) |
 | `compact_mode.py` | Kompaktmodus: Mindestmaße, getrennte Fensterlagen, Ableitung und Bildschirmgrenzen (Tk-frei, E-U1 A) |
+| `storage_health.py` | Speicherstatus je Bereich, gezählte Fehler, 32-MiB-JSON-Budget, begrenztes Einlesen und Sicherungsreserve (Tk-frei) |
+| `backup_catalog.py` | Metadateninventar, Suche, eindeutige Dateiauswahl und lesende Inhaltszusammenfassung von Sicherungen (Tk-frei) |
+| `attachment_policy.py` | Aktive Dateitypen und tatsächlicher Ablageort für die Rückfrage vor dem Öffnen (Tk-frei) |
 | `backup_diff.py` | Zwei Datenstände vergleichen, nur lesend (Tk-frei, F-03) |
 | `render_retention.py` | Inhaltsabgleich und Lebensdauer wiederverwendbarer Ansichtsbausteine (Tk-frei) |
 | `logo_raster.py` | Geglättete transparente Logo-Raster und PNG-Ausgabe ohne Zusatzbibliothek (Tk-frei) |

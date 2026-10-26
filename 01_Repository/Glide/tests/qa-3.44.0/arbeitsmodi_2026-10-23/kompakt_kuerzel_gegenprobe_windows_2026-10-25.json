@@ -1,0 +1,12 @@
+{
+  "app_sha256": "a60d7d17cc14af4f659b33a4b90f91bad41a3ffc68f69358ef37688db053614d",
+  "faelle": {
+    "kompakt": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 945, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 773, in fall_kompakt\n    assert app.compact_mode_active(), \"Reines Loslassen schaltet nicht ein\"\n           ~~~~~~~~~~~~~~~~~~~~~~~^^\nAssertionError: Reines Loslassen schaltet nicht ein\n"
+    }
+  },
+  "fehler": [
+    "kompakt"
+  ]
+}

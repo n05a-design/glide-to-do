@@ -1,0 +1,10 @@
+[
+  {
+    "fall": "nebenansicht_liste",
+    "exitcode": 0
+  },
+  {
+    "fall": "nebenansicht_inspektor",
+    "exitcode": 1
+  }
+]

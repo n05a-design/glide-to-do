@@ -1,0 +1,36 @@
+{
+  "app_sha256": "3a5c3a3c652ea42dd963ecdaf3233867709b66a8ff2768203b424189fef8d07c",
+  "faelle": {
+    "uebersicht": {
+      "ok": true,
+      "befund": "Echter Menü-/Katalogeintrag, Filter, Metadaten, lesende Inhaltsprüfung und Leerzustand"
+    },
+    "datei_fehler": {
+      "ok": true,
+      "befund": "Externe Datei ausdrücklich aufgenommen, defekten Inhalt sichtbar gemeldet und unverändert erhalten"
+    },
+    "vergleichen": {
+      "ok": true,
+      "befund": "Auswahl direkt zum Vergleich; gleichnamige Dateien aus verschiedenen Ordnern bleiben getrennt"
+    },
+    "wiederherstellen": {
+      "ok": true,
+      "befund": "Bestehender Importweg mit Bestätigung; Ablehnen erhält Listen und Hauptdatei unverändert"
+    },
+    "anhaenge": {
+      "ok": true,
+      "befund": "Abbruch verhindert OS-Aufruf, Zustimmung einmalig; echter Anhangseditor führt durch die Typregel"
+    },
+    "layout": {
+      "ok": true,
+      "befund": "24 Knopfprüfungen bei 600x480/800x600 und mittlerer/großer Schrift"
+    },
+    "lebensdauer": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_sicherungszentrale.py\", line 245, in main\n    detail = globals()['fall_' + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_sicherungszentrale.py\", line 226, in fall_lebensdauer\n    assert not retained, f'Geschlossene Dialoge behalten {len(retained)} Suchrückrufe'\n           ^^^^^^^^^^^^\nAssertionError: Geschlossene Dialoge behalten 5 Suchrückrufe\n"
+    }
+  },
+  "fehler": [
+    "lebensdauer"
+  ]
+}

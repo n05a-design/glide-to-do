@@ -1,0 +1,12 @@
+{
+  "app_sha256": "209b43db0c1cdb0eabf24b7a9f69ca0a6b44b9c722555c18f22d9688ca77e122",
+  "faelle": {
+    "lebensdauer": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_sicherungszentrale.py\", line 245, in main\n    detail = globals()['fall_' + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_sicherungszentrale.py\", line 226, in fall_lebensdauer\n    assert not retained, f'Geschlossene Dialoge behalten {len(retained)} Suchrückrufe'\n           ^^^^^^^^^^^^\nAssertionError: Geschlossene Dialoge behalten 5 Suchrückrufe\n"
+    }
+  },
+  "fehler": [
+    "lebensdauer"
+  ]
+}

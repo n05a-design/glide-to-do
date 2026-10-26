@@ -1,0 +1,24 @@
+{
+  "version": "3.45.0",
+  "datenformat": 26,
+  "status": "Lokaler Fortsetzungsstand WA-12 plus Verweisvorschau D55/WA-11",
+  "sha256": {
+    "src/glide/app.pyw": "b53e6822b3f378119a9fc15cc1f2eac46fb2f2adb3a82a180f12834688ba5ad2",
+    "src/glide/day_proposal.py": "136f768444b7da7605deb6562e3972dbcae27ac47cc7ba2ed126df74d2fb4abf",
+    "src/glide/side_view.py": "5dc3d323f689899463d94ed0d483c8c8f84b2b45b7a10bba9e4084f44a6fa80c",
+    "tests/unit/test_side_view.py": "930802162be8cbed1a38c3e8022d6c228689249f74435a3d55ea0c9a79ab460f",
+    "tests/integration/test_arbeitsmodi.py": "e3cbec5373564384b024a870073d046a9bf47e15326352a1a2abc9aa53413329"
+  },
+  "app_zeilen": 65387,
+  "listapp_zeilen": 49904,
+  "listapp_methoden": 1739,
+  "laufzeitdateien": 85,
+  "integrationssuiten": 104,
+  "arbeitsmodi_faelle": 15,
+  "liefer_app_sha256": "2e69d8759d1c109c91bbed5662b10700368dc78a627545650c1046dc2c606dea",
+  "laufzeitabweichungen": [
+    "app.pyw",
+    "day_proposal.py",
+    "side_view.py"
+  ]
+}

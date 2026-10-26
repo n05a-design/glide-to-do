@@ -1,0 +1,10 @@
+{
+  "src/glide/app.pyw": "2c274277d55b883e95dfa7b2d1b550e22e1764c81bd96ebb05319ec7993babf3",
+  "src/glide/storage_health.py": "d9d04e139dece92211f635727e4e61055c268fdcadfb8ad61fbb67c6517f6a28",
+  "src/glide/schema_backups.py": "3d07ef08791d7b46f47f75521e6152050ada2d1b256fc29abdd417c33c11a9ae",
+  "src/glide/action_catalog.py": "30236c63e2d73da1b1f74e5852b6637b8d9d0b1aaf55e48fb272dcf3866b160b",
+  "tests/integration/test_speicherstatus.py": "056f4c092001c8cd44a54e59aadc18f4a1bb31ce42638eaf78414ab9afae20da",
+  "tests/unit/test_storage_health.py": "fefa3d222ada56e1bba63078658ef963ca41e799af81d8ded410172cfd2ff459",
+  "tests/unit/test_schema_backups.py": "2bb67986419546480af71fdba05fd47ed08fea9fd28b0e31f3074af1435a7a75",
+  "tests/tools/pruefen.py": "d3db589055b8f4fa9b08577a717ab86043f931222a6826d292a35887cc6c1f47"
+}

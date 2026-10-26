@@ -893,11 +893,25 @@ def fall_struktur_ergebnis(lauf):
     app.tree.selection_set((ids['A'], ids['B']))
     volle_tiefe(app, app.MAX_UNDO_STEPS)
     vorher = lauf.datei()
-    with patch.object(app, 'write_json_atomic', side_effect=OSError('Hauptdatei gesperrt')), \
+    # Gruppieren erneuert vor der Änderung die Datensperre, höchstens einmal
+    # pro Sekunde. Die pauschale Fehlerinjektion traf an einer Sekundengrenze
+    # schon diese Sperrdatei (GitHub #156) und verhinderte die beabsichtigte
+    # Mutation. Nur die Hauptdatei sperren; die Erneuerung immer erzwingen.
+    writer = app.write_json_atomic
+    writes = []
+    def fail_main(path, payload):
+        writes.append(path)
+        if gleicher_ort(path, mod.SAVE_FILE):
+            raise OSError('Hauptdatei gesperrt')
+        return writer(path, payload)
+    app._lock_token = dict(app._lock_token, refreshed_at='')
+    with patch.object(app, 'write_json_atomic', side_effect=fail_main), \
             patch.object(app, 'show_undo_toast') as toast, patch.object(app, 'feedback') as feedback:
         app.group_selected_items()
+    assert any(gleicher_ort(path, mod.LOCK_FILE) for path in writes), 'Sperrerneuerung nicht geprüft'
+    assert any(gleicher_ort(path, mod.SAVE_FILE) for path in writes), 'Hauptdateifehler nicht erreicht'
     assert not toast.called and not feedback.called, 'Gruppieren meldet Erfolg trotz Schreibfehler'
-    assert lauf.datei() == vorher and app.dirty
+    assert lauf.datei() == vorher and app.dirty, 'Hauptdatei muss erhalten und Mutation offen bleiben'
     assert len(app.undo_stack) == app.MAX_UNDO_STEPS
     group = next(item for item in app.items if app.is_group_item(item))
     assert {item['id'] for item in group['children']} == {ids['A'], ids['B']}
@@ -950,17 +964,13 @@ def fall_struktur_ergebnis(lauf):
     app.trash_folder(folder['id']); lauf.idle()
     trash = next(entry for entry in app.trash if entry['kind'] == app.TRASH_KIND_FOLDER)
     disk = lauf.datei()
-    # Nur die Hauptdatei sperren: `restore_trash_entry` erneuert vorher die
-    # Sperrdatei, höchstens einmal je Sekunde. Eine pauschale Sperre ließ die
-    # Wiederherstellung an einer Sekundengrenze schon vor jeder Änderung
-    # abbrechen (`app.dirty` blieb falsch; GitHub #141, Windows).
-    writer = app.write_json_atomic
-    def fail_main(path, payload):
-        if os.path.abspath(path) == os.path.abspath(mod.SAVE_FILE):
-            raise OSError('Hauptdatei gesperrt')
-        return writer(path, payload)
+    # Dasselbe auch für den Restore-Aufrufer (früher GitHub #141, Windows).
+    writes.clear()
+    app._lock_token = dict(app._lock_token, refreshed_at='')
     with patch.object(app, 'write_json_atomic', side_effect=fail_main):
         assert app.restore_trash_entry(trash['id']) is False, 'Restore meldet ungespeicherten Erfolg'
+    assert any(gleicher_ort(path, mod.LOCK_FILE) for path in writes), 'Restore ohne Sperrerneuerung'
+    assert any(gleicher_ort(path, mod.SAVE_FILE) for path in writes), 'Restore ohne Hauptdateifehler'
     assert lauf.datei() == disk and app.dirty
     assert app.get_folder(folder['id']), 'Fehlgeschlagene Änderung bleibt offen und rücknehmbar'
     assert app._last_save_result.data_written is False

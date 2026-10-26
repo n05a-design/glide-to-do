@@ -1,0 +1,66 @@
+{
+  "datum": "2026-10-25",
+  "main": "291c393c4027f96864772031e9fbeaf0e858afdc",
+  "merge_pr": 40,
+  "parents": [
+    "d60ef81d31f1ef76740a7c3b0eb7cee446e7d3fb",
+    "facf61a1961f81e4c24370e176b5056d80dd175b"
+  ],
+  "merge_nachricht": "Merge pull request #40 from n05a-design/claude/arbeitsstand-d55\n\nClaude/arbeitsstand d55",
+  "d55_zweig_im_abschliessenden_ls_remote_nicht_vorhanden": true,
+  "main_dateien": 1631,
+  "blobunterschiede_gegen_D55": [],
+  "laeufe": [
+    {
+      "id": 40224330702,
+      "number": 156,
+      "branch": "main",
+      "sha": "291c393c4027f96864772031e9fbeaf0e858afdc",
+      "status": "in_progress",
+      "result": null,
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/40224330702",
+      "updated": "2026-10-25T19:05:15Z"
+    },
+    {
+      "id": 40224330013,
+      "number": 55,
+      "branch": "main",
+      "sha": "291c393c4027f96864772031e9fbeaf0e858afdc",
+      "status": "completed",
+      "result": "success",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/40224330013",
+      "updated": "2026-10-25T19:06:04Z"
+    },
+    {
+      "id": 40224309571,
+      "number": 155,
+      "branch": "claude/arbeitsstand-d55",
+      "sha": "facf61a1961f81e4c24370e176b5056d80dd175b",
+      "status": "in_progress",
+      "result": null,
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/40224309571",
+      "updated": "2026-10-25T19:05:01Z"
+    },
+    {
+      "id": 40224307083,
+      "number": 54,
+      "branch": "refs/pull/40/head",
+      "sha": "facf61a1961f81e4c24370e176b5056d80dd175b",
+      "status": "completed",
+      "result": "success",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/40224307083",
+      "updated": "2026-10-25T19:05:49Z"
+    },
+    {
+      "id": 40207783533,
+      "number": 154,
+      "branch": "claude/arbeitsstand-d55",
+      "sha": "facf61a1961f81e4c24370e176b5056d80dd175b",
+      "status": "completed",
+      "result": "success",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/40207783533",
+      "updated": "2026-10-25T17:12:28Z"
+    }
+  ],
+  "einordnung": "Externe Änderung während der lokalen Prüfung; keine eigene Git-Schreibaktion. Lauf #156 noch nicht abgeschlossen."
+}

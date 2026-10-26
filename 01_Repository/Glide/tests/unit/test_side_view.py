@@ -21,6 +21,35 @@ def page_document():
 
 
 class AvailabilityTests(unittest.TestCase):
+    def test_reference_target_uses_typed_ids_and_owning_container(self):
+        entry = {'id': 'same', 'list_kind': 'page'}
+        task = {'id': 'same', 'text': 'Aufgabe'}
+        index = {('list', 'same'): ('active', entry, entry),
+                 ('item', 'same'): ('active', task, entry)}
+        self.assertEqual(side_view.reference_target(('list', 'same'), index),
+                         {'list_id': 'same', 'item_id': None})
+        self.assertEqual(side_view.reference_target(('item', 'same'), index),
+                         {'list_id': 'same', 'item_id': 'same'})
+
+    def test_reference_target_accepts_archive_but_not_deleted_or_unsupported(self):
+        for state in ('active', 'archived'):
+            entry = {'id': 'l', 'list_kind': 'note'}
+            self.assertEqual(side_view.reference_target(('list', 'l'), {('list', 'l'): (state, entry, entry)}),
+                             {'list_id': 'l', 'item_id': None})
+        for state, kind in (('trash', 'page'), ('missing', 'tasks'), ('active', 'drawing'), ('active', 'gallery')):
+            entry = {'id': 'l', 'list_kind': kind}
+            self.assertIsNone(side_view.reference_target(('list', 'l'), {('list', 'l'): (state, entry, entry)}))
+        self.assertIsNone(side_view.reference_target(None, {}))
+        self.assertIsNone(side_view.reference_target(('item', 'gone'), {}))
+
+    def test_reference_target_is_fresh_and_does_not_mutate(self):
+        old = {'id': 'old', 'list_kind': 'tasks'}
+        new = {'id': 'new', 'list_kind': 'tasks'}
+        task = {'id': 'task'}
+        self.assertEqual(side_view.reference_target(('item', 'task'), {('item', 'task'): ('active', task, old)})['list_id'], 'old')
+        self.assertEqual(side_view.reference_target(('item', 'task'), {('item', 'task'): ('active', task, new)})['list_id'], 'new')
+        self.assertEqual(task, {'id': 'task'})
+
     def test_states(self):
         self.assertEqual(side_view.availability({'id': 'l', 'list_kind': 'tasks'}), ('ok', ''))
         self.assertEqual(side_view.availability({'id': 'p', 'list_kind': 'page'})[0], 'ok')

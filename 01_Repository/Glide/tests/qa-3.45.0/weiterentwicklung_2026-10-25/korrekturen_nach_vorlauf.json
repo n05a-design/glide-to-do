@@ -1,0 +1,21 @@
+{
+  "befunde": [
+    {
+      "fall": "test_bilder330",
+      "art": "alte Prüferwartung",
+      "behandlung": "Pfadwerte außerhalb der PowerShell-Syntax prüfen; Bildersuite vollständig nachprüfen"
+    },
+    {
+      "fall": "test_befunde330 R8",
+      "art": "Produktkorrektur",
+      "behandlung": "Statuszugang neutral statt Löschrolle; Farbprüfung und Speicherbereich nachprüfen"
+    },
+    {
+      "fall": "Dialoglebensdauer",
+      "art": "zu prüfende Lebensdauergrenze",
+      "behandlung": "Tcl-Mechanismus ohne GUI reproduziert: fünf von fünf Variablen bleiben ohne trace_remove gebunden, nach Freigabe null; echte Dialoggegenprobe nach Ende der GUI-Matrix"
+    }
+  ],
+  "app_sha256_nach_farbkorrektur": "209b43db0c1cdb0eabf24b7a9f69ca0a6b44b9c722555c18f22d9688ca77e122",
+  "eingefrorener_vorlauf_unveraendert": true
+}

@@ -1,0 +1,12 @@
+{
+  "app_sha256": "0c606fba35f4529ea1115eb2078e2834db773ff0a15f99234366d64923d3b9d9",
+  "faelle": {
+    "verweisvorschau": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1165, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 682, in fall_verweisvorschau\n    assert not app.side_view_open() and app.active_list_id == quelle['id']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    }
+  },
+  "fehler": [
+    "verweisvorschau"
+  ]
+}

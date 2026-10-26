@@ -303,6 +303,8 @@ def dokumente(wurzel: Path):
     else:
         candidates = wurzel.rglob('*.md')
     for pfad in sorted(candidates):
+        if not pfad.is_file():
+            continue  # Beabsichtigte Löschung in der Arbeitskopie, noch nicht im Index.
         teile = pfad.relative_to(wurzel).parts
         # Gebaute Pakete enthalten Lizenz-/Ressourcenkopien ihres Quellstands;
         # sie sind keine zweite gepflegte Dokumentation der Arbeitskopie.

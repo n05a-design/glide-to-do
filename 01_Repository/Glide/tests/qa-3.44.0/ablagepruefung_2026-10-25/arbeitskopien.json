@@ -1,0 +1,88 @@
+[
+  {
+    "name": "fp00",
+    "head": "12425c52330ded362f6d97963d8b46868e288351",
+    "branch": "refs/heads/claude/fp00-entwurf",
+    "vorhanden": false,
+    "prunable": true
+  },
+  {
+    "name": "p5",
+    "head": "ba060bc5e0074c0f375b6da29b07450ab08b34be",
+    "branch": "refs/heads/claude/paket5-entwurf",
+    "vorhanden": false,
+    "prunable": true
+  },
+  {
+    "name": "p6",
+    "head": "4b5b21e24d79528d5720d0879a872f9a15d4fd48",
+    "branch": "refs/heads/claude/paket6-entwurf",
+    "vorhanden": false,
+    "prunable": true
+  },
+  {
+    "name": "p7",
+    "head": "0b8bd04568a9c11c9014f5b4a08a0097b789ed57",
+    "branch": "refs/heads/claude/paket7-entwurf",
+    "vorhanden": false,
+    "prunable": true
+  },
+  {
+    "name": "beautiful-babbage-196492",
+    "head": "19c7df5b4a25228a1607a222abfd5ae02fe8a547",
+    "branch": "refs/heads/claude/ausbauprogramm-phasen",
+    "vorhanden": true,
+    "prunable": false,
+    "status_exitcode": 0,
+    "aenderungen": [],
+    "commits_nicht_in_lokalem_HEAD": "2",
+    "patchvergleich_zum_lokalen_HEAD": [
+      "+ 7527e87c6ab13aaaabf4e71b18e4020d61cf9e87",
+      "+ 19c7df5b4a25228a1607a222abfd5ae02fe8a547"
+    ]
+  },
+  {
+    "name": "glide-weiterarbeiten-618cb4",
+    "head": "4c15d71736b8cb75705f6a76b577c3f69256608a",
+    "branch": "refs/heads/claude/fp01-wiederholen",
+    "vorhanden": true,
+    "prunable": false,
+    "status_exitcode": 0,
+    "aenderungen": [],
+    "commits_nicht_in_lokalem_HEAD": "0",
+    "patchvergleich_zum_lokalen_HEAD": []
+  },
+  {
+    "name": "jolly-noether-593099",
+    "head": "9ec474b9dcbd502efce8cb221e53e24c322f9a78",
+    "branch": "refs/heads/claude/jolly-noether-593099",
+    "vorhanden": true,
+    "prunable": false,
+    "status_exitcode": 0,
+    "aenderungen": [],
+    "commits_nicht_in_lokalem_HEAD": "0",
+    "patchvergleich_zum_lokalen_HEAD": []
+  },
+  {
+    "name": "review-outdated-content-511443",
+    "head": "3e8a71cfc5f5224c63a4b643100e3c97be7d77e8",
+    "branch": "refs/heads/claude/vigilant-galileo-851e60",
+    "vorhanden": true,
+    "prunable": false,
+    "status_exitcode": 0,
+    "aenderungen": [],
+    "commits_nicht_in_lokalem_HEAD": "0",
+    "patchvergleich_zum_lokalen_HEAD": []
+  },
+  {
+    "name": "untitled-session-954211",
+    "head": "9ec474b9dcbd502efce8cb221e53e24c322f9a78",
+    "branch": "refs/heads/claude/glide-version-delivery-status-7d7f61",
+    "vorhanden": true,
+    "prunable": false,
+    "status_exitcode": 0,
+    "aenderungen": [],
+    "commits_nicht_in_lokalem_HEAD": "0",
+    "patchvergleich_zum_lokalen_HEAD": []
+  }
+]

@@ -84,6 +84,21 @@ def content_kind(entry):
     return kind if kind in ("page", "note") else "tasks"
 
 
+def reference_target(key, index):
+    """Aktuelles, lesbares Verweisziel samt Heimatcontainer; keine gespeicherte Kopie."""
+    if not isinstance(key, tuple) or len(key) != 2 or key[0] not in ("list", "item"):
+        return None
+    found = index.get(key)
+    if found is None:
+        return None
+    state, _holder, entry = found
+    if state not in ("active", "archived") or not isinstance(entry, dict):
+        return None
+    if availability(entry)[0] == "unsupported":
+        return None
+    return {"list_id": entry["id"], "item_id": key[1] if key[0] == "item" else None}
+
+
 def list_rows(items, limit=MAX_ROWS):
     """Punkte einer Liste als flache Zeilen in Anzeigereihenfolge.
 

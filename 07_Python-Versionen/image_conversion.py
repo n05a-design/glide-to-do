@@ -2,6 +2,7 @@
 from collections import OrderedDict, deque
 from dataclasses import dataclass, field
 import hashlib
+import base64
 import os
 import subprocess
 import tempfile
@@ -22,11 +23,15 @@ def stamp(path):
 
 
 def windows_convert_command(source, target, max_kante=MAX_CONVERTED):
-    def quote(value):
-        return "'" + str(value).replace("'", "''") + "'"
+    # Ungeprüfte Pfade dürfen nicht Bestandteil von PowerShell-Quelltext sein.
+    # UTF-8/Base64 transportiert Unicode und alle Anführungszeichen unverändert.
+    def encoded(value):
+        return base64.b64encode(os.fspath(value).encode('utf-8')).decode('ascii')
     script = (
         "$ErrorActionPreference='Stop';Add-Type -AssemblyName PresentationCore;"
-        f"$s=[System.IO.File]::OpenRead({quote(source)});try{{"
+        f"$src=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('{encoded(source)}'));"
+        f"$dst=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('{encoded(target)}'));"
+        "$s=[System.IO.File]::OpenRead($src);try{"
         "$d=[System.Windows.Media.Imaging.BitmapDecoder]::Create($s,"
         "[System.Windows.Media.Imaging.BitmapCreateOptions]::PreservePixelFormat,"
         "[System.Windows.Media.Imaging.BitmapCacheOption]::OnLoad);$f=$d.Frames[0];"
@@ -35,7 +40,7 @@ def windows_convert_command(source, target, max_kante=MAX_CONVERTED):
         "(New-Object System.Windows.Media.ScaleTransform($k,$k)));"
         "$e=New-Object System.Windows.Media.Imaging.PngBitmapEncoder;"
         "$e.Frames.Add([System.Windows.Media.Imaging.BitmapFrame]::Create($b));"
-        f"$o=[System.IO.File]::Create({quote(target)});"
+        "$o=[System.IO.File]::Create($dst);"
         "try{$e.Save($o)}finally{$o.Close()}}finally{$s.Close()}"
     )
     return ["powershell", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", script]

@@ -1,6 +1,6 @@
 # Daten, Backups und Migration – Glide
 
-Stand 25.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
+Stand 25.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
 
 **3.44.0 (22.10.2026):** Aufgabenformat 26 (FP-02), FP-01 und die Schutzrunde WA-27–WA-30 sowie die neuen obersten Einstellungsnamespaces von FP-03/FP-04 sind als Python-Fassung geliefert. Die früher nachgestellten Grenzen A32/A33/A34/A35/A36 haben gezielte Schutzprüfungen und Gegenproben ([Schutznachweis](../tests/qa-3.43.1/schutzrunde_2026-10-18/README.md)); die historische Analyse beschreibt den Zustand davor. Eigenständige Pakete (3.42.0) lesen Format 26 nur schreibgeschützt; Mac-Bundle/Pakete 3.44.0 und native Abnahmen bleiben offen ([Prüf- und Lieferstand](07_QA_BERICHT.md)).
 
@@ -20,6 +20,14 @@ Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag
 - Der Datenordner liegt außerhalb des Programms. `GLIDE_DATA_DIR` hat Vorrang (Tests), sonst Plattformstandard und optional `datenordner.json`. Ein Wechsel kopiert in ein leeres Ziel oder öffnet einen vorhandenen Bestand; die Quelle bleibt.
 - `glide.lock` verhindert gleichzeitiges Schreiben zweier Instanzen; erkannte Fremdbelegung verhindert Speichern – der Aufgabendatei ebenso wie von Einstellungen, Fenstergröße und Vorlagen. Eine beschädigte oder unlesbare Sperre öffnet schreibgeschützt; die Warnung beim Start bietet an, sie bewusst zu übernehmen. Eine verschwundene Sperre legt Glide beim nächsten Schreiben neu an (Schutzrunde WA-30). Die Sperre ersetzt keinen Synchronisationsdienst. Die lokale OS-Sperre auf `glide.lock.acquire` schützt auch die Übernahme verwaister Sperren; sie ist kein verteilter Konsens zwischen Rechnern.
 - Gespeichert wird sofort und atomar (Temporärdatei, `replace_with_retry`; unter Windows bis 1,5 s Warten bei Dateisperren). Liegengebliebene `.glide-json-*.tmp`, älter als zehn Minuten, räumt der Start auf.
+
+## Größenbudget und Speicherstatus (lokaler Kandidat)
+
+WA-40/WA-47, Quellkandidat 25.10.2026, noch keine Lieferung: Das gemeinsame JSON-Budget beträgt **32 MiB** wie die bestehende Grenze für `data.json` in vollständigen Sicherungen. Aufgaben, Einstellungen, Vorlagen, ihre Import-/Startleser und die Formatvorsicherung prüfen die Dateigröße vor dem JSON-Parse. Der begrenzte Leseweg prüft zusätzlich die tatsächlich gelesenen Bytes; Wachstum nach der ersten Dateiprüfung wird abgefangen. UTF-8 und vorhandene BOM werden gelesen; der Schreiber zählt UTF-8 einschließlich der Windows-Zeilenenden. Alte Dateibytes, atomarer Austausch, Formatsicherungen und deren Cache bleiben erhalten.
+
+Eine Überschreitung der Hauptdatei führt zu einem leeren, ausdrücklich schreibgeschützten Start mit Speicherhinweis; die Originaldatei wird weder als beschädigt umkopiert noch überschrieben. Bei zu großen Einstellungen oder Vorlagen verwendet die Oberfläche ihre Vorgaben, schützt aber die betroffene Datei bis zum Neustart gegen Schreiben. Auch eine nach dem Laden gewachsene Zieldatei wird vom atomaren Schreiber geschützt. Eine zu große neue Kodierung ersetzt keine bestehende Datei. Ein Retry hebt weder Größen- noch Sperrschranken auf.
+
+Der Speicherstatus hält Aufgaben-, Einstellungs-, Vorlagen- und Sicherungsfehler getrennt im Arbeitsspeicher; Erfolg löscht nur den passenden Fehler. Fehlgeschlagene stille Speicherungen werden protokolliert und mit einem nicht modalen Hinweis zugänglich. Die Reserveanzeige verwendet die Summe der drei gespeicherten JSON-Dateien als Frühwarnung ab 80 % des Budgets. Die tatsächlichen Sicherungsbytes bleiben beim Export maßgeblich; Anhänge haben weiterhin ihre eigenen Archivgrenzen. Ein Import ohne erfolgreiche Vorab-Sicherung ändert den Bestand nicht. Keine neue Formatnummer, Einstellung oder Laufzeitabhängigkeit. [Verhalten](20_FUNKTIONEN.md#speicherstatus-und-sicherungsreserve-wa-40wa-47-lokaler-kandidat), [Prüfgrenzen und Belege](../tests/qa-3.44.0/speicherstatus_2026-10-25/README.md).
 
 ## Format 26 (FP-02, seit 3.44.0)
 

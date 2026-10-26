@@ -27,7 +27,8 @@ class ActionCatalogTests(unittest.TestCase):
         self.assertEqual(actions.group_for("toggle_compact_mode"), "Ansichtseinstellungen")
         for name in ("choose_side_view", "close_side_view"):
             self.assertEqual(actions.group_for(name), "Ansichten", name)
-        self.assertEqual(actions.legacy_group("Kompaktmodus ein/aus"), "Ansichtseinstellungen")
+        for label in ("Kompaktmodus", "Seitenleiste", "Detailbereich"):
+            self.assertEqual(actions.legacy_group(label), "Ansichtseinstellungen", label)
         for label in ("Nebenansicht öffnen …", "Nebenansicht schließen"):
             self.assertEqual(actions.legacy_group(label), "Ansichten", label)
 

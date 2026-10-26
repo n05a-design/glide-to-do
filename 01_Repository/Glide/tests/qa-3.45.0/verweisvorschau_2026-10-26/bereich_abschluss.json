@@ -1,0 +1,27 @@
+[
+  {
+    "fall": "verweisvorschau",
+    "report": "verweisvorschau_abschluss.json",
+    "exitcode": 0
+  },
+  {
+    "fall": "verweisvorschau_grenzen",
+    "report": "verweisvorschau_grenzen_abschluss.json",
+    "exitcode": 1
+  },
+  {
+    "fall": "nebenansicht_liste",
+    "report": "nebenansicht_liste_abschluss.json",
+    "exitcode": 1
+  },
+  {
+    "fall": "nebenansicht_seite",
+    "report": "nebenansicht_seite_abschluss.json",
+    "exitcode": 1
+  },
+  {
+    "fall": "nebenansicht_inspektor",
+    "report": "nebenansicht_inspektor_abschluss.json",
+    "exitcode": 1
+  }
+]

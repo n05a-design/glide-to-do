@@ -8,6 +8,7 @@ versioniert). Eine menschliche Sicht-, DPI- und Screenreaderabnahme ersetzt
 das nicht.
 """
 import argparse
+import copy
 import hashlib
 import json
 from pathlib import Path
@@ -15,6 +16,8 @@ import subprocess
 import sys
 import tempfile
 import traceback
+from types import SimpleNamespace
+from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / "tests/integration"))
@@ -617,6 +620,277 @@ def fall_nebenansicht_einstiege(lauf):
     return "Kontextmenü, Zeichnung gesperrt, Umschalt+Enter, eigene Auswahl nur mit Listen/Seiten/Notizen"
 
 
+def verweisbestand(lauf):
+    app, mod = lauf.app, lauf.mod
+    liste, punkte, zielseite = bestand(lauf)
+    editor = app.rich_note_editor
+    editor.text.insert('end', '\nVerlinkte Seitenaufgabe')
+    editor.text.mark_set('insert', 'end-1c')
+    editor.set_block('task')
+    assert editor.flush()
+    idle(lauf)
+    page_task = next(iter(mod.glide_task_refs.document_ids(app.page_entry(zielseite['id'])['rich_note'])))
+    quelle, editor = seite_anlegen(lauf, '# Hauptarbeit\n\nDieser Kontext bleibt offen.\n')
+    values = [mod.glide_objects.uri('list', zielseite['id']),
+              mod.glide_objects.uri('item', punkte[1]['id']), mod.glide_objects.uri('item', page_task)]
+    for value in values:
+        editor.text.mark_set('insert', 'end-1c')
+        editor.text.insert('insert', '\n')
+        editor.insert_object_reference(value)
+    idle(lauf)
+    assert app.save_items()
+    return liste, punkte, zielseite, page_task, quelle, editor, values
+
+
+def verweis_position(editor, value, lauf):
+    tag = next(tag for tag, target in editor.links.items() if target == value)
+    position = editor.text.tag_ranges(tag)[0]
+    editor.text.see(position)
+    idle(lauf)
+    box = editor.text.bbox(position)
+    assert box, (value, position)
+    return box[0] + 2, box[1] + 2
+
+
+def menustelle(menu, label):
+    return next(i for i in range((menu.index('end') or 0) + 1)
+                if menu.type(i) in ('command', 'cascade') and menu.entrycget(i, 'label') == label)
+
+
+def fall_verweisvorschau(lauf):
+    app, mod = lauf.app, lauf.mod
+    liste, punkte, zielseite, page_task, quelle, editor, values = verweisbestand(lauf)
+    before, disk, depth = copy.deepcopy(app.lists), Path(mod.SAVE_FILE).read_bytes(), len(app.undo_stack)
+    editor.text.focus_force(); idle(lauf)
+    x, y = verweis_position(editor, values[0], lauf)
+    editor.text.event_generate('<Control-Shift-Button-1>', x=x, y=y)
+    idle(lauf, 5)
+    assert app.side_view_entry()['id'] == zielseite['id']
+    assert app.active_list_id == quelle['id'] and app.rich_note_editor is editor
+    assert app.lists == before and Path(mod.SAVE_FILE).read_bytes() == disk and len(app.undo_stack) == depth
+    taste(seitenbaum(app), '<Escape>', lauf)
+    assert not app.side_view_open() and app.active_list_id == quelle['id']
+
+    # Ein Rechtsklick innerhalb einer Auswahl verwendet das Ziel unter dem
+    # Zeiger, auch wenn die Einfügemarke auf einer anderen Zeile steht.
+    x, y = verweis_position(editor, values[1], lauf)
+    editor.text.tag_add('sel', '1.0', 'end-1c')
+    editor.text.mark_set('insert', '1.0')
+    menus = []
+    with patch.object(editor, 'popup', side_effect=menus.append):
+        editor.show_context_menu(SimpleNamespace(x=x, y=y))
+    menu = menus[-1]
+    menu.invoke(menustelle(menu, 'Verweis in Nebenansicht öffnen'))
+    idle(lauf, 5)
+    tree = seitenbaum(app)
+    assert isinstance(tree, mod.ttk.Treeview) and tree.selection() == (punkte[1]['id'],)
+    assert app.active_list_id == quelle['id'] and app.rich_note_editor is editor
+    assert app.lists == before and len(app.undo_stack) == depth
+
+    # Das vorhandene Verweismenü enthält ausgehende und eingehende Ziele;
+    # sein alter Callback löst nach Objektaustausch die aktuelle ID auf.
+    app.page_entry(zielseite['id'])['references'] = [mod.glide_objects.uri('list', quelle['id'])]
+    graph_menu = app.build_object_reference_menu(('list', quelle['id']))
+    preview = graph_menu.nametowidget(graph_menu.entrycget(menustelle(graph_menu, 'In Nebenansicht öffnen'), 'menu'))
+    target_index = menustelle(preview, mod.glide_objects.caption(('list', zielseite['id']), app.object_graph()[0])[1])
+    replacement = copy.deepcopy(app.page_entry(zielseite['id']))
+    replacement['title'] = 'Aktueller Titel nach Objektaustausch'
+    app.lists = [replacement if entry['id'] == zielseite['id'] else entry for entry in app.lists]
+    preview.invoke(target_index)
+    idle(lauf, 5)
+    assert app.side_view_entry() is replacement
+    assert any(w.cget('text') == replacement['title'] for w in knoepfe(app.side_pane, mod.tk.Label))
+    assert app.active_list_id == quelle['id']
+    assert app.open_object_reference(values[2], side=True)
+    idle(lauf, 4)
+    text = seitenbaum(app)
+    ranges = text.tag_ranges('reference_target')
+    assert ranges and 'Verlinkte Seitenaufgabe' in text.get(*ranges[:2])
+    assert str(text.cget('state')) == 'disabled'
+
+    # Vorhandener Haupteditor samt noch nicht übernommenem Text bleibt.
+    editor.text.tag_remove('sel', '1.0', 'end')
+    editor.text.insert('end-1c', '\nNoch nicht abgeschlossener Absatz')
+    assert app.open_object_reference(values[0], side=True)
+    assert app.rich_note_editor is editor and 'Noch nicht abgeschlossener Absatz' in editor.text.get('1.0', 'end')
+    idle(lauf)
+    # Der bisherige Strg-Klick öffnet weiter im Hauptbereich.
+    app.close_side_view()
+    x, y = verweis_position(editor, values[0], lauf)
+    with patch.object(app, 'open_object_reference', wraps=app.open_object_reference) as opened:
+        editor.text.event_generate('<Control-Button-1>', x=x, y=y)
+        idle(lauf, 5)
+        assert app.active_list_id == zielseite['id'], (app.active_list_id, zielseite['id'], opened.call_args)
+    return 'Echter Strg+Umschalt-Klick, Kontext unter Auswahl, Verweis-/Rückverweismenü, frische IDs/Titel, Taskmarkierung in Liste/Seite, Haupteditor und offener Text erhalten; alter Strg-Klick bleibt'
+
+
+def fall_verweisvorschau_grenzen(lauf):
+    app, mod = lauf.app, lauf.mod
+    liste, punkte, zielseite, page_task, quelle, editor, values = verweisbestand(lauf)
+    # Derselbe neue Textweg funktioniert im Notizeditor.
+    note = app.new_list_object('Notiz mit Verweis', [])
+    note['list_kind'] = app.LIST_KIND_NOTE
+    note['rich_note'] = {'text': 'Nachschlagen', 'links': {'link:probe': values[0]},
+                         'spans': [{'tag': 'link:probe', 'start': 0, 'end': 12}]}
+    app.lists.append(note); assert app.save_items()
+    app.set_active_list(note['id']); idle(lauf, 5)
+    editor = app.rich_note_editor
+    x, y = verweis_position(editor, values[0], lauf)
+    editor.text.event_generate('<Control-Shift-Button-1>', x=x, y=y)
+    idle(lauf)
+    assert app.active_list_id == note['id'] and app.side_view_entry()['id'] == zielseite['id']
+    # Externe Adressen werden vom Vorschaukürzel nicht geöffnet.
+    editor.text.configure(state='normal')
+    editor.text.insert('end-1c', '\nExtern', ('link:extern',))
+    editor.links['link:extern'] = 'https://example.invalid/'
+    assert editor.flush()  # Fixture abschließen, bevor Undo der Aufgabenaktion geprüft wird.
+    idle(lauf)
+    x, y = verweis_position(editor, editor.links['link:extern'], lauf)
+    with patch('webbrowser.open') as browser:
+        editor.text.event_generate('<Control-Shift-Button-1>', x=x, y=y)
+        idle(lauf)
+        browser.assert_not_called()
+    app.page_entry(zielseite['id'])['archived'] = True
+    app._data_read_only = True
+    try:
+        assert app.open_object_reference(values[0], side=True)
+        idle(lauf)
+        assert str(seitenbaum(app).cget('state')) == 'disabled'
+        assert app.active_list_id == note['id']
+    finally:
+        app._data_read_only = False
+    app.open_object_reference(values[1], side=True); idle(lauf)
+    app.toggle_side_view_task(punkte[1]['id']); idle(lauf)
+    assert app.find_item_in_lists(punkte[1]['id'])[0]['done']
+    app.undo_last_change(); idle(lauf)
+    assert not app.find_item_in_lists(punkte[1]['id'])[0]['done']
+    assert app.open_object_reference(values[1], side=True)
+    assert seitenbaum(app).selection() == (punkte[1]['id'],)
+    # Bereits gebautes Menü, danach Papierkorb: Callback muss erneut prüfen.
+    menu = app.build_object_reference_menu(('list', quelle['id']))
+    preview = menu.nametowidget(menu.entrycget(menustelle(menu, 'In Nebenansicht öffnen'), 'menu'))
+    label = mod.glide_objects.caption(('list', zielseite['id']), app.object_graph()[0])[1]
+    stale_index = menustelle(preview, label)
+    deleted = app.page_entry(zielseite['id'])
+    app.lists = [entry for entry in app.lists if entry['id'] != zielseite['id']]
+    app.trash.append(app.new_trash_entry(app.TRASH_KIND_LIST, deleted))
+    with patch.object(app, 'show_warning') as warning:
+        preview.invoke(stale_index)
+        idle(lauf, 4)
+        assert warning.called, (preview.entrycget(stale_index, 'state'),
+                                mod.glide_objects.caption(('list', zielseite['id']), app.object_graph()[0]),
+                                lauf.errors)
+    assert app.side_view_entry()['id'] == liste['id']
+    for value in (mod.glide_objects.uri('list', 'fehlt'), mod.glide_objects.uri('item', 'fehlt')):
+        with patch.object(app, 'show_warning'):
+            assert app.open_object_reference(value, side=True) is False
+    drawing = app.new_list_object('Kein Vorschauziel', []); drawing['list_kind'] = 'drawing'; app.lists.append(drawing)
+    assert app.open_object_reference(mod.glide_objects.uri('list', drawing['id']), side=True) is False
+    app.toggle_compact_mode(); idle(lauf)
+    assert app.open_object_reference(values[1], side=True) is False
+    app.toggle_compact_mode(); idle(lauf)
+    count = 0
+    for geometry in ('860x700', '1280x800'):
+        for font in ('mittel', 'gross'):
+            for design in ('light', 'dark'):
+                app.settings['ui_font_size'] = font
+                app.set_design(design, apply_now=False); app.apply_ui_font(); app.apply_theme()
+                lauf.root.geometry(geometry); idle(lauf)
+                assert app.open_object_reference(values[1], side=True)
+                idle(lauf)
+                n, errors = befunde_b15(lauf, f'Verweisvorschau {geometry}/{font}/{design}')
+                assert not errors, errors
+                count += n
+    return f'Notiz, kein externer Browser, Archiv/Schreibschutz, Undo/frische IDs, stale Menü/Papierkorb/fehlend/Zeichnung/Kompaktmodus; {count} Knopfprüfungen in acht Konfigurationen'
+
+
+def fall_seitenleiste_kontext(lauf):
+    """Rechtsklick wählt das Menü-Ziel, ohne den Hauptinhalt auszutauschen."""
+    app = lauf.app
+    liste, _punkte, seite = bestand(lauf)
+    zweite = app.new_list_object("Zweite Bauliste", [])
+    notiz = app.new_list_object("Baunotiz", [], list_kind="note")
+    zeichnung = app.new_list_object("Bauskizze", [], list_kind="drawing")
+    ordner = app.new_folder_object("Bauordner")
+    app.lists.extend((zweite, notiz, zeichnung))
+    app.folders.append(ordner)
+    assert app.save_items()
+    app.update_sidebar_list()
+    idle(lauf)
+
+    def kontext(row):
+        iid = app.get_sidebar_iid_for_row(row)
+        baum = app.get_sidebar_tree_for_iid(iid)
+        baum.see(iid)
+        idle(lauf)
+        x, y, breite, hoehe = baum.bbox(iid)
+        vorher = (app.view_mode, app.active_list_id, app.active_folder_id)
+        waehrend = []
+
+        def zeigen(menu, *_args):
+            # Die native Windows-Menüsitzung ist nicht per Tk-after steuerbar.
+            # Nur die Darstellung ersetzen; echte Auswahlereignisse verarbeiten.
+            idle(lauf)
+            waehrend.append((app.view_mode, app.active_list_id, app.active_folder_id))
+
+        original = lauf.mod.tk.Menu.tk_popup
+        lauf.mod.tk.Menu.tk_popup = zeigen
+        try:
+            baum.event_generate("<Button-3>", x=x + min(60, breite // 2), y=y + hoehe // 2)
+        finally:
+            lauf.mod.tk.Menu.tk_popup = original
+        idle(lauf)
+        assert waehrend == [vorher], ("Rechtsklick öffnet den Hauptinhalt", row, vorher, waehrend)
+        assert (app.view_mode, app.active_list_id, app.active_folder_id) == vorher
+        assert iid in baum.selection(), ("Menüziel nicht ausgewählt", row)
+        assert baum.focus() == iid
+        menu = app._sidebar_context_menu
+        assert menu is not None, ("Kontextmenü fehlt", row)
+        return baum, iid, menu
+
+    # Gerade dieser Weg darf die offene Seite und ihren Editor nicht ersetzen.
+    editor = app.rich_note_editor
+    baum, iid, menu = kontext(("list", liste["id"]))
+    assert app.rich_note_editor is editor and editor.winfo_ismapped()
+    stelle = next(i for i in range(menu.index("end") + 1) if menu.type(i) == "command"
+                  and menu.entrycget(i, "label") == "In Nebenansicht öffnen")
+    menu.invoke(stelle)
+    idle(lauf)
+    assert app.active_list_id == seite["id"] and app._side_view["id"] == liste["id"]
+    app.close_side_view()
+    # Ein Linksklick auf dieselbe, bereits per Rechtsklick ausgewählte Zeile öffnet.
+    x, y, breite, hoehe = baum.bbox(iid)
+    klick(baum, lauf, x=x + min(60, breite // 2), y=y + hoehe // 2)
+    assert app.active_list_id == liste["id"], "Linksklick nach Kontextmenü öffnet nicht"
+    app.cancel_sidebar_rename()
+    # Pfeiltasten bleiben ein gleichwertiger Öffnungsweg.
+    taste(baum, "<Down>", lauf)
+    assert app.active_list_id == zweite["id"], "Tastaturnavigation öffnet nicht"
+    app.set_active_list(seite["id"])
+    idle(lauf)
+    baum, _iid, _menu = kontext(("list", liste["id"]))
+    taste(baum, "<Down>", lauf)
+    assert app.active_list_id == zweite["id"], "Pfeiltaste nach Rechtsklick öffnet nicht"
+    taste(baum, "<Up>", lauf)
+    assert app.active_list_id == liste["id"], "Rückkehr zum früheren Menüziel öffnet nicht"
+
+    for row in (("list", seite["id"]), ("list", notiz["id"]), ("list", zeichnung["id"]),
+                ("folder", ordner["id"]), ("view", "trash")):
+        kontext(row)
+    # Rechtsklick in eine Mehrfachauswahl behält sie und ihre gemeinsamen Aktionen.
+    app.set_active_list(seite["id"])
+    idle(lauf)
+    baum = app.sidebar_listbox
+    ids = tuple(app.get_sidebar_iid_for_row(("list", eintrag["id"])) for eintrag in (liste, zweite))
+    baum.selection_set(ids)
+    idle(lauf)
+    _baum, _iid, menu = kontext(("list", liste["id"]))
+    assert set(baum.selection()) == set(ids)
+    assert str(menu.entrycget(0, "label")).startswith("Auswahl: 2 Liste(n)")
+    app._destroy_sidebar_context_menu()
+    return "Rechtsklick auf Liste/Seite/Notiz/Zeichnung/Ordner/Systemzeile ohne Öffnen; Nebenansicht, Linksklick, Pfeiltaste und Mehrfachauswahl erhalten"
+
+
 def kompakt_knoepfe(app):
     return [app.compact_search_button, app.compact_capture_button, app.compact_menu_button, app.compact_exit_button]
 
@@ -631,8 +905,9 @@ def fall_kompakt(lauf):
     idle(lauf, 4)
     normal = lauf.root.geometry()
     taste(lauf.root, "<Control-Shift-K>", lauf)
+    lauf.root.event_generate("<Control-Shift-KeyRelease-K>")
     idle(lauf, 6)
-    assert app.compact_mode_active(), "Kürzel schaltet ein"
+    assert app.compact_mode_active(), "Drücken und Loslassen schalten genau einmal ein"
     assert tuple(lauf.root.minsize()) == (480, 560)
     breite, hoehe, x, y = lauf.mod.glide_compact.parse(lauf.root.geometry())
     assert breite == 480 and hoehe == 800 and x == 40 + 1280 - 480, lauf.root.geometry()
@@ -654,6 +929,7 @@ def fall_kompakt(lauf):
     anzahl2, befunde = befunde_b15(lauf, "Kompakt 480x560")
     assert not befunde, befunde[:4]
     taste(lauf.root, "<Control-Shift-K>", lauf)
+    lauf.root.event_generate("<Control-Shift-KeyRelease-K>")
     idle(lauf, 6)
     assert not app.compact_mode_active() and tuple(lauf.root.minsize()) == (860, 700)
     assert lauf.root.geometry() == normal, (lauf.root.geometry(), normal)
@@ -672,7 +948,42 @@ def fall_kompakt(lauf):
     app = lauf.app
     assert not app.compact_mode_active() and tuple(lauf.root.minsize()) == (860, 700)
     assert app.settings["compact_window"].startswith("480x560")
-    return f"Kürzel ein/aus, 480×560, getrennte Lagen über Neustart, Kopf B07, {anzahl + anzahl2} Knöpfe ohne Befund"
+    # Unter Windows/Tk 9.0.4 kam nativ nur KeyRelease-K mit Strg+Shift an.
+    # Die alte Prüfung erzeugte nur KeyPress am Hauptfenster und übersah das.
+    app.set_active_list(seite["id"])
+    idle(lauf)
+    text = app.rich_note_editor.text
+    vorher = text.get("1.0", "end-1c")
+    for widget in (text, lauf.root):
+        for key in ("K", "k"):
+            taste(widget, f"<Control-Shift-KeyRelease-{key}>", lauf)
+            assert app.compact_mode_active(), "Reines Loslassen schaltet nicht ein"
+            taste(widget, f"<Control-Shift-KeyRelease-{key}>", lauf)
+            assert not app.compact_mode_active(), "Reines Loslassen schaltet nicht aus"
+    # Auch beim vollständigen Ereignispaar im Editor darf nichts doppelt wirken.
+    taste(text, "<Control-Shift-K>", lauf)
+    text.event_generate("<Control-Shift-KeyRelease-K>")
+    idle(lauf)
+    assert app.compact_mode_active(), "Editor-Ereignispaar schaltet doppelt"
+    taste(text, "<Control-Shift-K>", lauf)
+    # Werden die Modifiertasten zuerst losgelassen, muss die Merkung trotzdem enden.
+    text.event_generate("<KeyRelease-k>")
+    idle(lauf)
+    assert not app.compact_mode_active()
+    for sequence in ("<KeyRelease-k>", "<Shift-KeyRelease-K>", "<Control-KeyRelease-k>"):
+        taste(text, sequence, lauf)
+        assert not app.compact_mode_active(), ("Falsche Modifiertasten schalten um", sequence)
+    assert text.get("1.0", "end-1c") == vorher, "Kürzel verändert den Seitentext"
+    ansicht = next(menu for titel, menu in app.action_menus if titel == "Ansicht")
+    assert ansicht.type(0) == "command" and ansicht.entrycget(0, "label") == "Kompaktmodus", \
+        "Kompaktmodus muss im Menü Ansicht direkt an erster Stelle stehen"
+    ansicht.invoke(0)
+    idle(lauf)
+    assert app.compact_mode_active(), "Menüeintrag schaltet nicht in den Kompaktmodus"
+    ansicht.invoke(0)
+    idle(lauf)
+    assert not app.compact_mode_active(), "Menüeintrag kehrt nicht zur Normalansicht zurück"
+    return f"Kompaktmodus direkt als erster Menüeintrag; Kürzel mit Drücken/Loslassen und reinem Loslassen im Editor/Hauptfenster, keine Doppelwirkung; 480×560, getrennte Lagen über Neustart, Kopf B07, {anzahl + anzahl2} Knöpfe ohne Befund"
 
 
 def fall_kompakt_ansichten(lauf):
@@ -809,7 +1120,8 @@ def fall_gestaltung(lauf):
 
 
 FAELLE = ("seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
-          "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "kompakt",
+          "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
+          "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
           "kompakt_ansichten", "gestaltung")
 
 

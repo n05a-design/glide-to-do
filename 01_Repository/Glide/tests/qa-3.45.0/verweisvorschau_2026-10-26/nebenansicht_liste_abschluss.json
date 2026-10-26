@@ -1,0 +1,12 @@
+{
+  "app_sha256": "0c606fba35f4529ea1115eb2078e2834db773ff0a15f99234366d64923d3b9d9",
+  "faelle": {
+    "nebenansicht_liste": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1170, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 445, in fall_nebenansicht_liste\n    assert app.side_pane.winfo_ismapped() and app.side_pane.winfo_width() == app.side_view_width()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    }
+  },
+  "fehler": [
+    "nebenansicht_liste"
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "ausgang_dateien": 3314,
+  "hashgleich": 3298,
+  "geaendert": [
+    {
+      "pfad": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "vorher_sha256": "ffb35acfbaaaaed747260970b3cc0f49b994e77eb0b7ceb5d606678da4983e02",
+      "nachher_sha256": "325d1fa327c9eb0f69b0e5065faaf2bfdf362177570e18d36771153758c017c9",
+      "erwartet": true
+    },
+    {
+      "pfad": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "vorher_sha256": "46f6eeffcb4916bb4383a90a0ff47cb8b88a5abea25edc9e354a7a9068793209",
+      "nachher_sha256": "4caa157aca0c1bb6dba38fec0f319fbf1bc82cff2f6cea72713f185215cc3024",
+      "erwartet": true
+    },
+    {
+      "pfad": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "vorher_sha256": "4fbd4039d97a95ae8237ae27cd393bee61747511f3338fd93838154783edde11",
+      "nachher_sha256": "028be25582db91d4d0bb468c5e1180e7e44ca6c4ba255f8140bd065932258b30",
+      "erwartet": true
+    },
+    {
+      "pfad": "01_Repository/Glide/CHANGELOG.md",
+      "vorher_sha256": "2314c9215a3b5ad12ef9939344ecf8d66f9d162973be0943e53ae3bfb69ee46f",
+      "nachher_sha256": "d731c8025361c4f4bd0b8d8631d7cba1beaa8ce891e86e9c7d1e9fcd276bc6c5",
+      "erwartet": true
+    },
+    {
+      "pfad": "01_Repository/Glide/README.md",
+      "vorher_sha256": "cb6053321d1382566715e73df60fc899356ea5cc45405c2a9970226ce723d0e8",
+      "nachher_sha256": "37174d1ef7447c0f92e843daa5515f13614aba11c4df6f1b8636ecbd465d08e2",
+      "erwartet": true
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+      "vorher_sha256": "4476a9cff77625c737062d51d0eb4eeb3e748f127d6e79d401c4faf53e0b8c84",
+      "nachher_sha256": "47b949adecb4b48748a071bd481219a590b0805f764dcda0d292991228f2f2de",
+      "erwartet": true
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "vorher_sha256": "12aed5ebcc21f3fa8721d158ece69efc6f0e76fe97742d4ff11607e44281f6a5",
+      "nachher_sha256": "15f556130e931757263b4abe2fba6554d43e8dadcc61b09719a198c4d9a85e6f",
+      "erwartet": true
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+      "vorher_sha256": "92453cb1ed7c34505b5c0eb38b906d2ec1a7fa3b75a64ab93709d18528afa1e9",
+      "nachher_sha256": "9302b362bf5280355e980f2822a4b8db1d4ba3558ac90011ae83d65c66c1736e",
+      "erwartet": true
+    },
+    {
+      "pfad": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+      "vorher_sha256": "2da8ed5467c324ff6f5e6782c54dd248eb1ffe17df0bdc9203c42222d3049515",
+      "nachher_sha256": "4f4a826ac0af8f17783472c64837cdcb15c0eda6998660041b4f5849e8de6c50",
+      "erwartet": true
+    },
+    {
+      "pfad": "01_Repository/Glide/packaging/README.md",
+      "vorher_sha256": "cae8d5a3a70691b651d868cea01c69c628000c69d14edfcbfef0cdb570b9da11",
+      "nachher_sha256": "b9d70d90db579be7af6ed9d895ec2e9c33fb71d5164fb49a55ca787a61b68150",
+      "erwartet": true
+    },
+    {
+      "pfad": "01_Repository/Glide/packaging/macos/baue_app.py",
+      "vorher_sha256": "682a0939e2f256a03305f7e387d4b5929d2ee6b0c04ae444e016a71b9e7f3c68",
+      "nachher_sha256": "c92a6d3b2f0851af65d172a402b07f5b1faad58d5bbcdfa3284c3fc66b903fa6",
+      "erwartet": true
+    },
+    {
+      "pfad": "01_Repository/Glide/scripts/pflege/abgleich_07.py",
+      "vorher_sha256": "da82805fbbc33dcbbb08f1560e4eb2b5c7b6a819b1bc1a99822798ff5878b465",
+      "nachher_sha256": "6ef639b22eae11a20c2a39c45ec2e437214a7c67e3860edb1855b79456ac409c",
+      "erwartet": true
+    },
+    {
+      "pfad": "01_Repository/Glide/src/glide/README.md",
+      "vorher_sha256": "816d461bf5a5c58d12e9ab3addeb608c5a238a47fbfba276f1bb82d32d81f4eb",
+      "nachher_sha256": "c40811e253b8ebb7c88998fb296db09b5565f5f1ef1b463d785df54680b9267c",
+      "erwartet": true
+    },
+    {
+      "pfad": "01_Repository/Glide/tests/README.md",
+      "vorher_sha256": "b9aad3c7df9e6eda43a43d5cc45b26309efdb5370763472ac87e36a9645bfceb",
+      "nachher_sha256": "a0fcf3209636b97fdaddcdfa913129a8520d81ad60f9c2aa296f878fab894ab2",
+      "erwartet": true
+    },
+    {
+      "pfad": "CLAUDE.md",
+      "vorher_sha256": "8b861261de85703f2c780256ac3cc8eae66545af1034863cf28f60db86b7c3a6",
+      "nachher_sha256": "7fd6f239286ebf86c2afa08d793de23714b64446d2a01ac6daf05b62db29cf9e",
+      "erwartet": true
+    },
+    {
+      "pfad": "README.md",
+      "vorher_sha256": "1cced369abac4d61698b658e117183d40b676b21a5021d761f753215e4871679",
+      "nachher_sha256": "4c72fb079d0516eed5cd1242a79626c8350be1ccfd732480b8be705c2265c406",
+      "erwartet": true
+    }
+  ],
+  "fehlt": [],
+  "unerwartet_geaendert": [],
+  "app_sha256": "2c274277d55b883e95dfa7b2d1b550e22e1764c81bd96ebb05319ec7993babf3",
+  "app_seit_pruefbeginn_unveraendert": true,
+  "geschuetzt": {
+    "dateien": 798,
+    "hashgleich": 798,
+    "abweichend": []
+  }
+}

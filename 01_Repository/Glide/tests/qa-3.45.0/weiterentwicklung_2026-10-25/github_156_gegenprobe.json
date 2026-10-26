@@ -1,0 +1,10 @@
+{
+  "anlass": "GitHub Windows #156, struktur_ergebnis Zeile 900",
+  "app_sha256": "2e69d8759d1c109c91bbed5662b10700368dc78a627545650c1046dc2c606dea",
+  "test_sha256": "d76154f9bb65f21035760a2854146bc5b88f164937cfb7ae9b0e2346b37624e2",
+  "rote_gegenprobe": true,
+  "dirty": false,
+  "gruppen": 0,
+  "sperrfehler": "Hauptdatei gesperrt",
+  "stelle": 900
+}

@@ -1,0 +1,12 @@
+{
+  "app_sha256": "14a0eecdba333154d45a82e4e5254ca220639004c52937fab379d5da2986b874",
+  "faelle": {
+    "seitenleiste_kontext": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 910, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 666, in fall_seitenleiste_kontext\n    baum, iid, menu = kontext((\"list\", liste[\"id\"]))\n                      ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 656, in kontext\n    assert waehrend == [vorher], (\"Rechtsklick öffnet den Hauptinhalt\", row, vorher, waehrend)\n           ^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('Rechtsklick öffnet den Hauptinhalt', ('list', 'a6bc4cf45e2f4522899fa672c5da706e'), ('list', '87b3af0bca2b457f950f761dc7a2330b', None), [('list', 'a6bc4cf45e2f4522899fa672c5da706e', None)])\n"
+    }
+  },
+  "fehler": [
+    "seitenleiste_kontext"
+  ]
+}

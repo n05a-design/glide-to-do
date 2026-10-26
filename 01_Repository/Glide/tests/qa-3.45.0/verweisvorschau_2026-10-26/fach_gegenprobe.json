@@ -1,0 +1,8 @@
+{
+  "exitcode": 1,
+  "erwartet_rot": true,
+  "tests": 12,
+  "fehler": 3,
+  "baseline_gruen": 9,
+  "befund": "Drei neue Zielauflösungsfälle fehlen am unveränderten WA-12-Stand; reference_target noch nicht vorhanden."
+}

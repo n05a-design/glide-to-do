@@ -1,0 +1,1451 @@
+[
+  {
+    "pfad": ".claude/skills/design-richtlinien/SKILL.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "---",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": ".claude/skills/design-richtlinien/referenzen/bewegung-material-typografie.md",
+    "rolle": "Fremdcode/Lizenzreferenz",
+    "titel": "<!--",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Fremdreferenz zu den Design Richtlinien (B20), kein aktiver Skill.",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/AUFTRAG.md",
+    "rolle": "geschützter Originalauftrag",
+    "titel": "# Historischer Eingangsbeleg – Nutzerauftrag UI-/UX-Feature-Paket",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/BILDREFERENZEN.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Bildreferenzen zum UI-/UX-Feature-Paket",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · 28 unveränderte, vom Benutzer bereitgestellte Originalbilder",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Glide – Ausführungsprompt für das Feature-Paket UI und UX",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Status: seit D50 beauftragt und vorrangig; Umsetzung und Status im Entwicklungsplan §17",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Glide – Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung",
+    "standzeile": "Stand 25.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Glide – Entwicklungsplan und Aufgabenstand",
+    "standzeile": "Stand 25.10.2026 · Glide 3.44.0 · Aufgabenformat 26",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Manuelle Prüfung – Glide",
+    "standzeile": "Stand 23.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · manuelle Sitzungen offen; B1 automatisch geprüft",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Glide – Markt und Vorbilder",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Markt- und Integrationsanalyse; ältere Untersuchungen mit eigenem Abrufdatum",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Glide – Übergabe an eine neue Sitzung",
+    "standzeile": "Stand 25.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Python-Lieferung 3.44.0, eigenständige Pakete 3.42.0",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "00_Arbeitsvorbereitung/README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Arbeitsvorbereitung",
+    "standzeile": "Stand 25.10.2026 · Glide 3.44.0 · Aufgabenformat 26",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/AGENTS.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Glide – Arbeitsregeln",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/CHANGELOG.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Änderungsverlauf",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/LICENSE.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Lizenzstatus",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Glide – lokale Aufgaben, Notizen und Pinnwände",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/SECURITY.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Sicherheit",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/assets/README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Assets",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/CLDR-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "UNICODE LICENSE V3",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Glide-Lizenzstatus.md",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "# Lizenzstatus",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Henry-Spencer-Regex-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "/*",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/IANA-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "Unless specified below, all files in the tz code and data (including",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/OpenSSL-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "                                 Apache License",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/PixelifySans-OFL.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "Copyright 2021 The Pixelify Sans Project Authors (https://github.com/eifetx/Pixelify-Sans)",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Python-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "A. HISTORY OF THE SOFTWARE",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Python-THIRD-PARTY-NOTICES.rst",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": ".. highlight:: none",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Tcl-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "This software is copyrighted by the Regents of the University of",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Tk-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "This software is copyrighted by the Regents of the University of",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/XZ-COPYING.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "XZ Utils Licensing",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/Zstandard-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "BSD License",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/libtommath-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "                          The LibTom license",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/nanosvg.h-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "/*",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/nanosvgrast.h-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "/*",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/pyinstaller-COPYING.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "================================",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/setuptools-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "MIT License",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/licenses/tkdnd-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "#",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/resources/fonts/OFL-PixelifySans.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "Copyright 2021 The Pixelify Sans Project Authors (https://github.com/eifetx/Pixelify-Sans)",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/resources/timezones/LICENSE-CLDR.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "UNICODE LICENSE V3",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/resources/timezones/LICENSE-iana.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "Unless specified below, all files in the tz code and data (including",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/CLDR-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "UNICODE LICENSE V3",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Glide-Lizenzstatus.md",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "# Lizenzstatus",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Henry-Spencer-Regex-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "/*",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/IANA-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "Unless specified below, all files in the tz code and data (including",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/OpenSSL-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "                                 Apache License",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/PixelifySans-OFL.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "Copyright 2021 The Pixelify Sans Project Authors (https://github.com/eifetx/Pixelify-Sans)",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Python-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "A. HISTORY OF THE SOFTWARE",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Tcl-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "This software is copyrighted by the Regents of the University of",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Tk-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "This software is copyrighted by the Regents of the University of",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/XZ-COPYING.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "XZ Utils Licensing",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/Zstandard-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "BSD License",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/libmpdec-COPYRIGHT.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "Copyright (c) 2008-2024 Stefan Krah. All rights reserved.",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/libtommath-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "                          The LibTom license",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/nanosvg.h-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "/*",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/nanosvgrast.h-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "/*",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/pyinstaller-COPYING.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "================================",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/pywin32-ctypes-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "This software is OSI Certified Open Source Software.",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/setuptools-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "MIT License",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/tkdnd-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "#",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/zlib-LICENSE.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "Copyright notice:",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/licenses/zlib-ng-LICENSE.md",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "(C) 1995-2024 Jean-loup Gailly and Mark Adler",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/resources/fonts/OFL-PixelifySans.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "Copyright 2021 The Pixelify Sans Project Authors (https://github.com/eifetx/Pixelify-Sans)",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/resources/timezones/LICENSE-CLDR.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "UNICODE LICENSE V3",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/build/windows/Glide-3.42.0/_internal/resources/timezones/LICENSE-iana.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "Unless specified below, all files in the tz code and data (including",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": true,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/00_INDEX.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Dokumentationsindex",
+    "standzeile": "Stand 25.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Produktgrenzen und Produktprinzipien",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Architektur – Glide",
+    "standzeile": "Stand 25.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Prüfplan – Glide",
+    "standzeile": "Stand 23.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Daten, Backups und Migration – Glide",
+    "standzeile": "Stand 25.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# QA-Bericht – Glide 3.44.0",
+    "standzeile": "Stand 25.10.2026 · Glide 3.44.0 · Phasenabschluss mit eingefrorener Windows-Vollprüfung und Python-Lieferung; D55-Kandidat lokal gezielt geprüft; GitHub-Prüfung #147/#148 vollständig grün; eigenständige Pakete 3.42.0 · Datenformat 26",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Veröffentlichung – Glide",
+    "standzeile": "Stand 25.10.2026 · Glide 3.44.0 · interner Entwicklungsstand, keine Veröffentlichung · Aufgabenformat 26",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Funktionen – Glide",
+    "standzeile": "Stand 25.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Vorlagen im Unternehmensalltag",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Vorlagenformat 2",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Arbeitsrichtung, Entscheidungen und Abnahme",
+    "standzeile": "Stand 23.10.2026 · Glide 3.44.0 · Aufgabenformat 26",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Design Richtlinien",
+    "standzeile": "Stand 23.10.2026 · Glide 3.44.0 · appweiter Gestaltungsvertrag; bestehendes UI-/UX-Paket und fortlaufende Übertragung",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Regeln für die Dokumentenpflege",
+    "standzeile": "Stand 25.10.2026 · Glide 3.44.0 · Datenformat 26",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/decisions/ABHAENGIGKEIT_TKDND.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Entscheidung: tkinterdnd2 für das Ziehen aus Finder und Explorer",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · entschieden vom Inhaber am 27.09.2026",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/decisions/ARBEITSBEGLEITER.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Arbeitsbegleiter und Markenfigur – Konzept und Formatentscheidung",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · gezeichnete Figur vorhanden; B03 im Quellstand; neue Bildassets offen",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/decisions/GRUPPE_ORDNER_UEBERSCHRIFT.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Gruppe, Ordner oder Zwischenüberschrift?",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Produkt- und Identitätsregister",
+    "standzeile": "Stand 22.10.2026 · App-Version 3.44.0 · Datenformat 26",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Systembenachrichtigungen für Erinnerungen – Entscheidung",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Paketierung Glide",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/CLDR-LICENSE.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "UNICODE LICENSE V3",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/Glide-Lizenzstatus.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Lizenzstatus",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/Henry-Spencer-Regex-LICENSE.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "/*",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/IANA-LICENSE.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "Unless specified below, all files in the tz code and data (including",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/OpenSSL-LICENSE.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "                                 Apache License",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/PixelifySans-OFL.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "Copyright 2021 The Pixelify Sans Project Authors (https://github.com/eifetx/Pixelify-Sans)",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/Python-LICENSE.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "A. HISTORY OF THE SOFTWARE",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/Python-THIRD-PARTY-NOTICES.rst",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": ".. highlight:: none",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/Tcl-LICENSE.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "This software is copyrighted by the Regents of the University of",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/Tk-LICENSE.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "This software is copyrighted by the Regents of the University of",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/XZ-COPYING.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "XZ Utils Licensing",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/Zstandard-LICENSE.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "BSD License",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/libtommath-LICENSE.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "                          The LibTom license",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/nanosvg.h-LICENSE.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "/*",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/nanosvgrast.h-LICENSE.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "/*",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/pyinstaller-COPYING.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "================================",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/setuptools-LICENSE.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "MIT License",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/paket/lizenzen/macos/tkdnd-LICENSE.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "#",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/packaging/runtime/README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Eigene Tcl/Tk-9.1-Runtime",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Vorbereitung von Paket 8 / 4.0.0, keine Lieferung",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/requirements/build-macos.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Bauabhängigkeiten des eigenständigen macOS-Pakets (Paket 7, D27). PyInstaller fest gepinnt;",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/requirements/build-windows.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Bauabhängigkeiten des eigenständigen Windows-Pakets (Paket 7, D27). PyInstaller fest gepinnt;",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/requirements/dev.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Aktuell keine zusätzlichen Python-Testabhängigkeiten.",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/requirements/runtime.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Glide benötigt keine per pip nachzuinstallierende Python-Laufzeitabhängigkeit.",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/scripts/pflege/README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Pflegewerkzeuge",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/src/glide/README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Anwendungskern",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/src/glide/resources/fonts/OFL-PixelifySans.txt",
+    "rolle": "Fremdcode/Lizenzreferenz",
+    "titel": "Copyright 2021 The Pixelify Sans Project Authors (https://github.com/eifetx/Pixelify-Sans)",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/src/glide/resources/timezones/LICENSE-CLDR.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "UNICODE LICENSE V3",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/src/glide/resources/timezones/LICENSE-iana.txt",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "Unless specified below, all files in the tz code and data (including",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Prüfungen für Glide",
+    "standzeile": "Stand 25.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · 103 Suiten aus `pruefen.py` und fünf Analysen",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/fixtures/README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Referenzdaten und Beispiele",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/fixtures/showcase/README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Glide · aktiver Showcase",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Lieferdaten in Speicherstufe 26",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Wiederholungen – Nachweisrahmen",
+    "standzeile": "Stand 13.10.2026 · Glide 3.39.1 · Aufgabenformat 23",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.40.0/pixelanimation_2026-10-13/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Pixelanimation – Nachweisrahmen",
+    "standzeile": "Stand 13.10.2026 · Glide 3.40.0 · Aufgabenformat 24",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.41.0/notion_wiederherstellung_2026-10-13/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Notion-Import und Seitenwiederherstellung – Nachweisrahmen",
+    "standzeile": "Stand 13.10.2026 · Glide 3.41.0 · Aufgabenformat 25",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.42.0/bestandspruefung_2026-10-15/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Bestands- und Dokumentationsprüfung vor dem UI-/UX-Paket",
+    "standzeile": "Stand 15.10.2026 · Glide 3.42.0 · lokale Lieferbasis `05483a8` · keine Feature-Umsetzung",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.42.0/eigenstaendige_pakete_2026-10-13/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Eigenständige Pakete 3.42.0",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# UI-/UX-Promptpaket – Dokumentationsnachlauf",
+    "standzeile": "Stand 15.10.2026 · Glide 3.42.0 · App- und Datenformat unverändert",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.42.0/zugang400_vorbereitung_2026-10-14/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Zugangs-Vorbereitung für 4.0.0",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.0/acl_symlinks_2026-10-16/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Nachlauf 16.10.2026 – ACL-Restaurierung an Symlinks in der Windows-Paketprobe",
+    "standzeile": "Stand 16.10.2026 · Glide 3.43.0 unverändert (Apphash `379e97e3`, Datenformat 25) · Prüfwerkzeugnachlauf ohne neue App-Version · Windows 11 Pro, Python 3.14.7, künstliche Daten",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# UI-/UX-Paket 3.43.0 – Lieferung und Prüfung",
+    "standzeile": "Stand 16.10.2026 · Glide 3.43.0 · Datenformat 25 · Apphash `379e97e32e3cc5e52eeb104ec23937df28081b45bd0e63582d5065cd61a2b172`",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Globale Ablage- und Dokumentationsprüfung vom 18.10.2026",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/gitobjekte_vorher.txt",
+    "rolle": "historischer QA-Beleg",
+    "titel": "0000ccc8705ed97cf72a5f27ccac470524a95cf5 tree 1458",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/gitrefs_vorher.txt",
+    "rolle": "historischer QA-Beleg",
+    "titel": "refs/codex/turn-diffs/captures/1792333907213/fd3c1f00-9479-4597-a9f3-5a4daa2ca0e0/base 877ca8089ee9d4bd7c7db2545770b55cc9b3f8c6",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# FP-03 Stufe 1 – erweiterte gespeicherte Ansichten",
+    "standzeile": "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · lokaler Kandidat",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# FP-03 Stufe 2 – gespeicherte Darstellung",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# FP-06 – Wiederverwendbare lokale KI-Aufträge, 18.10.2026",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# WA-26 – Bildvorschauen ohne blockierenden Konverter",
+    "standzeile": "Stand 18.10.2026 · lokaler Prüfkandidat 3.43.1 / Format 25 auf PR #37 (`1042727`). Keine neue Lieferung.",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/codevalidierung_2026-10-21/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Einarbeitung der Codevalidierung – 21.10.2026",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/dokumentationsaudit_2026-10-22/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Dokumentationsaudit – Vorinventar vom 22.10.2026",
+    "standzeile": "Stand 22.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · festgeschriebener Vorzustand vor dem Phasenabschluss 3.44.0",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/dokumentationsaudit_2026-10-22/gitstatus_vorher.txt",
+    "rolle": "historischer QA-Beleg",
+    "titel": "## codex/bildvorschauen-wa26-2026-10-18...origin/main",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# FP-05 – Unverknüpfte Erwähnungen, 18.10.2026",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# FP-07 Stufe 1 und FP-04 – Umsetzung und gemeinsame Prüfung",
+    "standzeile": "Stand 19.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · lokaler Prüfkandidat, keine Lieferung",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/fp01_wiederholen_2026-10-17/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# FP-01 Wiederholen nach Rückgängig – Kandidat 17.10.2026",
+    "standzeile": "Stand 17.10.2026 · Kandidat auf Glide 3.43.1 (keine Lieferung, keine neue Version) · Datenformat 25 · Windows 11 Pro, Python 3.14.7, Tk 9.0.4, künstliche Daten",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Breite Gesamtanalyse – 21.10.2026",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/gitauftrag_2026-10-21/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Einmaliger Git-Auftrag – 21.10.2026",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/kuerzel_linux_tk91_2026-10-16/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# 3.43.1 – Kürzel in Listen unter Linux/Tk 9.1",
+    "standzeile": "Stand 16.10.2026 · Glide 3.43.1 · Datenformat 25 · Apphash `ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3` · Windows 11 Pro, Python 3.14.7, Tk 9.0.4, künstliche Daten",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Erstes Roadmap-Paket – 21.10.2026",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Roadmap-Paket 3 – Strukturabschluss und Kalenderwechsel",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Schutzrunde WA-27–WA-30 – Nachprüfung und Fortsetzung",
+    "standzeile": "Stand 18.10.2026 · Entwicklungskandidat auf `9ec474b` mit FP-01 · Version 3.43.1 und Datenformat 25 unverändert · keine Lieferung",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Standanalyse und Dokumentationsnachlauf vom 18.10.2026",
+    "standzeile": "Stand 18.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · keine Produktionsrunde",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/standaufnahme_2026-10-21/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Bestandsaufnahme und Dokumentabgleich – 21.10.2026",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Aktive Bestandsprüfung – Beginn 18.10.2026",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/wackelsuiten_windows_2026-10-17/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Nachlauf 17.10.2026 – wackelnde Windows-Suiten `test_tag3390` und `test_template_workflows`",
+    "standzeile": "Stand 17.10.2026 · Glide 3.43.1 unverändert (Apphash `ed2b7eb6`, Datenformat 25) · Prüfwerkzeugnachlauf ohne neue App-Version · Windows 11 Pro, Python 3.14.7, Tk 9.0.4, künstliche Daten",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# FP-02 – beide Ausbaustufen im lokalen Kandidaten",
+    "standzeile": "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.44.0/arbeitsmodi_2026-10-23/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# D55 – Arbeitsmodi und Seitenbedienung",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.44.0/github_pruefung_2026-10-23/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# GitHub-Prüfung #138–#142 – Ursachen und Korrekturen",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.44.0/gutachten_2026-10-25/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Einordnung des Sicherheits- und Architekturgutachtens – 25.10.2026",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.44.0/phasenabschluss_2026-10-22/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Phasenabschluss 3.44.0 – Versionswechsel, eingefrorene Vollprüfung und Lieferung",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Windows 11, Python 3.14.7 / Tk 9.0.4, künstliche Daten",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/qa-3.44.0/speicherstatus_2026-10-25/README.md",
+    "rolle": "historischer QA-Beleg",
+    "titel": "# Speicherstatus und Sicherungsreserve – WA-40/WA-47",
+    "standzeile": null,
+    "versioniert": false,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "01_Repository/Glide/tests/tools/README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Prüfwerkzeuge für Glide",
+    "standzeile": "Stand 23.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "05_Probelisten_Testdaten/README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Probedaten",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Lieferdaten in Speicherstufe 26 · Vorlagen 2",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "05_Probelisten_Testdaten/Showcase/README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Glide · aktiver Showcase",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Lieferdaten in Speicherstufe 26",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "07_Python-Versionen/Archiv/README.md",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "# Archiv – Python-Versionen",
+    "standzeile": "Stand 22.10.2026 · aktuelle Python-Fassung 3.44.0",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "07_Python-Versionen/README.md",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "# Aktuelle startbare Python-Fassung",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Speicherstufe 26 · Vorlagenformat 2",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "07_Python-Versionen/resources/fonts/OFL-PixelifySans.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "Copyright 2021 The Pixelify Sans Project Authors (https://github.com/eifetx/Pixelify-Sans)",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "07_Python-Versionen/resources/timezones/LICENSE-CLDR.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "UNICODE LICENSE V3",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "07_Python-Versionen/resources/timezones/LICENSE-iana.txt",
+    "rolle": "eingefrorene Liefer-/Lizenzkopie",
+    "titel": "Unless specified below, all files in the tz code and data (including",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "20_Grafik_Master/README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Grafik-Master",
+    "standzeile": "Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "CLAUDE.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Arbeitsregeln für Claude Code – Glide",
+    "standzeile": "Stand 25.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Python-Lieferung 3.44.0, eigenständige Pakete 3.42.0",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "README.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Glide – lokale Aufgaben, Notizen und Pinnwände",
+    "standzeile": "Stand 25.10.2026 · Glide 3.44.0 · Python-Lieferung 3.44.0 in `07_Python-Versionen`; eigenständige Pakete weiterhin 3.42.0",
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  },
+  {
+    "pfad": "SECURITY.md",
+    "rolle": "aktive Dokumentation oder Textressource",
+    "titel": "# Sicherheitsrichtlinie",
+    "standzeile": null,
+    "versioniert": true,
+    "ignoriert": false,
+    "entscheidung": "erhalten; aktueller Status an kanonischer Quelle, historische Belege ihrem Prüfstand zugeordnet"
+  }
+]

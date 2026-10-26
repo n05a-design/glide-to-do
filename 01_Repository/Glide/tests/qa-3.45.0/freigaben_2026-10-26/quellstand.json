@@ -1,0 +1,19 @@
+{
+  "version": "3.45.0",
+  "datenformat": 26,
+  "status": "lokaler Fortsetzungsstand WA-12, keine neue Lieferung",
+  "sha256": {
+    "src/glide/app.pyw": "07fd279e5bb9e143d78b32cde6a8e3d12d82f0e1c27b5100a78bef5966c37a53",
+    "src/glide/day_proposal.py": "136f768444b7da7605deb6562e3972dbcae27ac47cc7ba2ed126df74d2fb4abf",
+    "tests/unit/test_day_proposal.py": "a7b093d147845502f03d1f6084a546011e463f76ab8f1d02fa0d385791ebad57",
+    "tests/integration/test_tagpaket33314.py": "94243bf755b2fac782ade648ca46d7aa2e190a194d8437ae62dc8769846c07e2"
+  },
+  "app_zeilen": 65319,
+  "listapp_zeilen": 49870,
+  "listapp_methoden": 1739,
+  "liefer_app_sha256": "2e69d8759d1c109c91bbed5662b10700368dc78a627545650c1046dc2c606dea",
+  "laufzeitabweichungen": [
+    "app.pyw",
+    "day_proposal.py"
+  ]
+}

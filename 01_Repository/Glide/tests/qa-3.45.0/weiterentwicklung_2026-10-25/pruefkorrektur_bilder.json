@@ -1,0 +1,8 @@
+{
+  "art": "Prüfkorrektur nach dem eingefrorenen Vorlauf; Produktionscode unverändert",
+  "datei": "01_Repository/Glide/tests/integration/test_bilder330.py",
+  "vorher_sha256": "70b2498f749e09f1c805c6250f3829ff2cfc106f4c455add0820e67ac041e751",
+  "nachher_sha256": "fb2cb2c127666be47af769b0af6b04be0bb0801b75e6b93fd5d3380812b57595",
+  "befund": "Der alte Test verlangte den rohen maskierten Pfad im PowerShell-Quelltext. Die neue Datenübergabe ist durch Fachtest und echte Windows-WIC-Probe bereits geprüft.",
+  "nachlauf": "Vollständige korrigierte Bildersuite nach Ende der laufenden GUI-Matrix, keine parallelen GUI-Prüfungen."
+}

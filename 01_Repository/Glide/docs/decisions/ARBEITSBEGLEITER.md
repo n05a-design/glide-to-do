@@ -1,6 +1,6 @@
 # Arbeitsbegleiter und Markenfigur – Konzept und Formatentscheidung
 
-Stand 22.10.2026 · Glide 3.44.0 · gezeichnete Figur vorhanden; B03 im Quellstand; neue Bildassets offen
+Stand 25.10.2026 · Glide 3.45.0 · gezeichnete Figur vorhanden; B03 im Quellstand; neue Bildassets offen
 
 Fortgeschriebene Gestaltungsidee aus den Aufträgen vom 18./19.09.2026. Am 15.10.2026 wurden die doppelten Asset-Lieferlisten und die überholten Tk-8.6-/Ein-Datei-Einbauprompts zusammengeführt. Vorfassungen trägt Git. Die Bereinigung ändert keine App-Funktion und beauftragt keine neuen Assets.
 
