@@ -2,7 +2,7 @@
 
 Stand 26.10.2026 · Glide 3.45.0 · Python-Lieferung 3.45.0 in `07_Python-Versionen`; eigenständige Pakete weiterhin 3.42.0
 
-**Aktuell: Verweisvorschau im Quellkandidaten ergänzt (D55 / WA-11).** Lokale Links über Strg/Cmd+Umschalt+Klick, Textkontext und Verweismenü neben der Hauptarbeit lesen; WA-12 ist ebenfalls enthalten. 29 passende Fachfälle und zwei neue Bedienfälle grün, breite native Fokus-/Inspektorprüfung offen. [Nachweis](01_Repository/Glide/tests/qa-3.45.0/verweisvorschau_2026-10-26/README.md). Die Python-Lieferung bleibt beim vorherigen Abschluss 3.45.0 `2e69d875…`; drei Laufzeitdateien unterscheiden sich.
+**Aktuell: gemeinsame Bestandsauswertung der Startseite (WA-39/WA-36).** Heute-Zahlen, nächste Aufgabe, Wochenübersicht, Labels und nächster Termin teilen ein kurzlebiges Tk-freies Modell. Bedienung und Darstellung bleiben erhalten; WA-12 und Verweisvorschau sind enthalten. [Prüfung und Leistungsmessung](01_Repository/Glide/tests/qa-3.45.0/startseitenmodell_2026-10-26/README.md). Die Python-Lieferung bleibt beim vorherigen Abschluss 3.45.0 `2e69d875…`; vier Laufzeitdateien unterscheiden sich einschließlich des neuen Moduls. Breite native Abnahme und gemeinsamer Phasenabschluss bleiben offen.
 
 [![Glide-Prüfung](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml)
 

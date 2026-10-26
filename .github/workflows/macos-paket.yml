@@ -1,0 +1,139 @@
+# Eigenständiges Mac-Entwicklungspaket; kein Release und keine Veröffentlichung.
+# Verifiziert am 26.10.2026:
+# https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job
+# macos-15 ist der Standard-arm64-Runner; macos-15-intel wäre eine andere Architektur.
+# https://www.python.org/downloads/release/python-3145/
+# Originalinstaller samt veröffentlichter SHA-256; enthält Tcl/Tk 9.0.3.
+name: Glide-Paket macOS arm64
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["codex/glide-paketabschluss-3.45.0"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: glide-macos-paket-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+  PYTHONUTF8: "1"
+  MAC_PYTHON: /Library/Frameworks/Python.framework/Versions/3.14/bin/python3.14
+  MAC_PYTHON_PKG_URL: https://www.python.org/ftp/python/3.14.5/python-3.14.5-macos11.pkg
+  MAC_PYTHON_PKG_SHA256: b28a8dc33c456dd06c97024697d63ca916cfb494594c06fa3e4ef4d41fa82335
+
+jobs:
+  paket-macos:
+    name: Nativer Bau und isolierter Start (macOS arm64)
+    runs-on: macos-15
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+        working-directory: 01_Repository/Glide
+    steps:
+      - name: Unveränderten Commit auschecken
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Offiziellen Python-Installer prüfen und im vergänglichen Runner installieren
+        run: |
+          test "$(uname -m)" = arm64
+          mkdir "$RUNNER_TEMP/glide-macos-runtime"
+          pkg="$RUNNER_TEMP/glide-macos-runtime/python-3.14.5-macos11.pkg"
+          curl --fail --show-error --location --retry 3 --proto '=https' --tlsv1.2 \
+            "$MAC_PYTHON_PKG_URL" --output "$pkg"
+          printf '%s  %s\n' "$MAC_PYTHON_PKG_SHA256" "$pkg" | shasum -a 256 -c -
+          printf '%s  %s\n' "$MAC_PYTHON_PKG_SHA256" "python-3.14.5-macos11.pkg" \
+            > "$RUNNER_TEMP/glide-macos-runtime/installer.sha256"
+          pkgutil --check-signature "$pkg" > "$RUNNER_TEMP/glide-macos-runtime/installer-signatur.txt"
+          sudo installer -pkg "$pkg" -target / > "$RUNNER_TEMP/glide-macos-runtime/installation.log" 2>&1
+          "$MAC_PYTHON" -B -c 'import platform,sys; assert sys.version_info[:3] == (3,14,5); assert platform.machine() == "arm64"'
+
+      - name: Originalruntime und konkrete Bauquellen einfrieren
+        run: |
+          "$MAC_PYTHON" -B - <<'PY'
+          import json, os, subprocess, sys
+          from pathlib import Path
+          repo = Path.cwd()
+          outer = repo.parents[1]
+          sys.path.insert(0, str(repo / "packaging/paket"))
+          import macos_build_run as runner
+          runtime = runner.native_runtime()
+          basis = json.loads((repo / "packaging/paket/lizenzen/macos/manifest.json").read_text(encoding="utf-8"))
+          runner.validate_runtime(basis["runtime"], runtime)
+          runner.native_tools()
+          commit = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+          if commit != os.environ["GITHUB_SHA"]:
+              raise SystemExit("Checkout und angeforderter Commit unterscheiden sich")
+          prefix = repo.relative_to(outer).as_posix() + "/"
+          hashes = {prefix + name: digest for name, digest in runner.source_inventory(repo).items()}
+          workflow = ".github/workflows/macos-paket.yml"
+          hashes[workflow] = runner.sha(outer / workflow)
+          proof = dict(commit=commit, runtime=runtime, sha256=hashes,
+                       installer_url=os.environ["MAC_PYTHON_PKG_URL"],
+                       installer_sha256=os.environ["MAC_PYTHON_PKG_SHA256"],
+                       image_os=os.environ.get("ImageOS"), image_version=os.environ.get("ImageVersion"))
+          runner.write(Path(os.environ["RUNNER_TEMP"]) / "glide-macos-runtime/quellstand.json", proof)
+          print("Eingefroren:", commit, len(hashes), "Bauquellen;", runtime)
+          PY
+
+      - name: Nativen Paketbau und Prozesssandbox-Startprüfung ausführen
+        run: |
+          sh packaging/paket/baue_und_pruefe_macos.sh \
+            --python "$MAC_PYTHON" --ziel "$RUNNER_TEMP/glide-macos-bau"
+
+      - name: Eingefrorenen Stand nach Archiv- und Startprüfung erneut abgleichen
+        run: |
+          "$MAC_PYTHON" -B - <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          repo = Path.cwd()
+          sys.path.insert(0, str(repo / "packaging/paket"))
+          import macos_build_run as runner
+          proof = json.loads((Path(os.environ["RUNNER_TEMP"]) / "glide-macos-runtime/quellstand.json").read_text(encoding="utf-8"))
+          changed = [name for name, digest in proof["sha256"].items()
+                     if runner.sha(repo.parents[1] / name) != digest]
+          if changed:
+              raise SystemExit("Bauquellen wurden verändert: " + ", ".join(changed))
+          completion = json.loads((Path(os.environ["RUNNER_TEMP"]) / "glide-macos-bau/abschluss.json").read_text(encoding="utf-8"))
+          if completion.get("exitcode") != 0:
+              raise SystemExit("Kein grüner nativer Paketabschluss")
+          print("Paket, Archiv und eingefrorene Quellen bestätigt:", completion["version"], proof["commit"])
+          PY
+
+      - name: Bau- und Startbelege sichern
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: paket-macos-arm64-belege
+          path: |
+            ${{ runner.temp }}/glide-macos-runtime/*.json
+            ${{ runner.temp }}/glide-macos-runtime/*.sha256
+            ${{ runner.temp }}/glide-macos-runtime/*.txt
+            ${{ runner.temp }}/glide-macos-runtime/*.log
+            ${{ runner.temp }}/glide-macos-bau/*.json
+            ${{ runner.temp }}/glide-macos-bau/*.log
+            ${{ runner.temp }}/glide-macos-bau/*.sha256
+            ${{ runner.temp }}/glide-macos-bau/lizenzen/manifest.json
+            ${{ runner.temp }}/glide-macos-bau/bau/*.json
+            ${{ runner.temp }}/glide-macos-bau/bau/bau.log
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Geprüftes Mac-Archiv mit erhaltenen Dateimodi und Symlinks sichern
+        if: success()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: paket-macos-arm64-glide
+          path: |
+            ${{ runner.temp }}/glide-macos-bau/Glide-*-macos-arm64.tar.gz
+            ${{ runner.temp }}/glide-macos-bau/Glide-*-macos-arm64.tar.gz.sha256
+            ${{ runner.temp }}/glide-macos-bau/abschluss.json
+          compression-level: 0
+          retention-days: 14
+          if-no-files-found: error

@@ -1,0 +1,6 @@
+{
+  "command": "python -B tests/tools/standpruefung.py",
+  "exitcode": 0,
+  "stdout": "Standprüfung gegen VERSION 3.45.0 · Ablage einschließlich Repository · 89 aktive Dokumente (42 fortgeschrieben, 41 festgeschrieben, 6 ohne Standaussage)\nAlle Standangaben passen zur Version; kein historisches Dokument behauptet einen aktuellen Stand.\n",
+  "stderr": ""
+}

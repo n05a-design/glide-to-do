@@ -17,6 +17,7 @@ REPO=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(REPO/'tests/integration'))
 from test_schutzrunde import Lauf
 from vorversion import einstellungsprobe_format25, finden
+from historical_runtime import historical_app
 
 
 def seed(run):
@@ -126,13 +127,14 @@ def fall_altleser_backup(run):
     code="""import sys;sys.path.insert(0,sys.argv[3]);from test_schutzrunde import Lauf
 r=Lauf(sys.argv[1],sys.argv[2]);r.app.workspace.prune();assert r.app.save_settings();r.ende()
 """
-    child=subprocess.run([sys.executable,'-B','-c',code,str(old),data,str(REPO/'tests/integration')],capture_output=True,text=True,timeout=90)
+    with historical_app(REPO.parents[1],old) as old_runtime:
+        child=subprocess.run([sys.executable,'-B','-c',code,str(old_runtime),data,str(REPO/'tests/integration')],capture_output=True,text=True,timeout=90)
     assert child.returncode==0,(child.stdout+child.stderr)[-1800:]
     assert json.loads(Path(run.mod.SETTINGS_FILE).read_text(encoding='utf-8'))['page_pinboards_v1']==raw['page_pinboards_v1']
     run.start();run.app.set_active_list(entry['id']);run.app.workspace.set_mode('board');run.idle()
     after=run.app.workspace.board()
     assert after['cards']==before['cards'] and after['connections']==before['connections'],(before,after)
-    return {'altleser_app_sha256':hashlib.sha256(old.read_bytes()).hexdigest()}
+    return {'altleser_app_sha256':hashlib.sha256(old.read_bytes()).hexdigest(),'historische_begleitmodule':True}
 
 
 def fall_titelbild_praesentation_sicherung(run):
@@ -228,7 +230,11 @@ def main():
                 error=traceback.format_exc().replace(str(Path.home()),'~')[-3000:]
                 report['faelle'][name]={'ok':False,'fehler':error};print('ROT',name,error,flush=True)
             finally:
-                if run is not None:run.app.previews.close();run.ende()
+                if run is not None:
+                    previews = getattr(run.app, '_previews', None)
+                    if previews is not None:
+                        previews.close()
+                    run.ende()
     if args.report:args.report.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     return int(any(not v['ok'] for v in report['faelle'].values()))
 

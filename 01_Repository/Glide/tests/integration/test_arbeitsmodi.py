@@ -724,8 +724,43 @@ def fall_verweisvorschau(lauf):
     return 'Echter Strg+Umschalt-Klick, Kontext unter Auswahl, Verweis-/Rückverweismenü, frische IDs/Titel, Taskmarkierung in Liste/Seite, Haupteditor und offener Text erhalten; alter Strg-Klick bleibt'
 
 
+def pruefe_rueckmeldung_ueber_rueckgaengig(lauf):
+    """Ein später erscheinender Verlaufshinweis bleibt unter der laufenden Fahne."""
+    app, root, mod = lauf.app, lauf.root, lauf.mod
+    app.hide_undo_toast()
+    scheduled = []
+    original_after = root.after
+
+    def remember(delay, callback=None, *args):
+        identity = original_after(delay, callback, *args)
+        if delay == 38:
+            scheduled.append((identity, callback))
+        return identity
+
+    banner = None
+    try:
+        with patch.object(root, 'after', side_effect=remember):
+            app._draw_celebration('Geprüfte Rückmeldung')
+            banner = next(widget for widget in app.main_area.winfo_children()
+                          if isinstance(widget, mod.tk.Label) and widget.cget('text') == 'Geprüfte Rückmeldung')
+            toast = app._place_history_toast('Geprüfte Änderung', 'Rückgängig', lambda: None)
+            root.update_idletasks()
+            identity, advance = scheduled[0]
+            root.after_cancel(identity)
+            advance()
+            root.update_idletasks()
+            assert banner.winfo_rooty() + banner.winfo_height() <= toast.winfo_rooty() - 8, (
+                'Laufende Rückmeldung überdeckt den späteren Rückgängig-Hinweis',
+                banner.winfo_rooty(), banner.winfo_height(), toast.winfo_rooty())
+    finally:
+        app.hide_undo_toast()
+        if banner is not None and banner.winfo_exists():
+            banner.destroy()
+
+
 def fall_verweisvorschau_grenzen(lauf):
     app, mod = lauf.app, lauf.mod
+    pruefe_rueckmeldung_ueber_rueckgaengig(lauf)
     liste, punkte, zielseite, page_task, quelle, editor, values = verweisbestand(lauf)
     # Derselbe neue Textweg funktioniert im Notizeditor.
     note = app.new_list_object('Notiz mit Verweis', [])

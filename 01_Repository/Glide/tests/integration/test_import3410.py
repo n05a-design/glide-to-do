@@ -16,6 +16,9 @@ from unittest.mock import patch
 from urllib.parse import quote
 import zipfile
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from historical_runtime import historical_app
+
 CASES = ('import', 'vergleich', 'restore', 'fehler', 'geometrie', 'migration')
 
 
@@ -364,8 +367,11 @@ else:
 a.dirty=False;a.cancel_pending_callbacks();a.release_data_lock();r.destroy()
 '''
                 if previous is not None:
-                    outcome = subprocess.run([sys.executable, '-B', '-c', child, str(previous), 'old'],
-                                             capture_output=True, text=True, timeout=90)
+                    # Eine archivierte Hauptdatei allein ist keine echte Vorversion:
+                    # auch Fachmodule und Ressourcen müssen aus ihrem Lieferstand stammen.
+                    with historical_app(Path(__file__).resolve().parents[4], previous) as old_runtime:
+                        outcome = subprocess.run([sys.executable, '-B', '-c', child, str(old_runtime), 'old'],
+                                                 capture_output=True, text=True, timeout=90)
                     assert outcome.returncode == 0, outcome.stdout+outcome.stderr
                     assert disk.read_bytes() == data
                 else:

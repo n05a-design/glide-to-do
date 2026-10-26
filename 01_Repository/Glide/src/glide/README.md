@@ -18,6 +18,7 @@ Stand 25.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Einstellungen 2 · Vorl
 | `sidebar_policy.py` | Regeln der vier Seitenleistenbereiche (Tk-frei) |
 | `svg_geometry.py` | SVG-Pfade und Farben für den Logo-Rückfall (Tk-frei) |
 | `home_tiles.py` | Startseitenkacheln und Standard D12 (Tk-frei) |
+| `home_dashboard.py` | Gemeinsame kurzlebige Bestandsauswertung der Startseitenkacheln; frische Einzelprojektionen (Tk-frei) |
 | `capture_parser.py` | Deutsche Schnelleingabe mit Feldchips (Tk-frei) |
 | `eisenhower.py` | Quadranten „Dringlichkeit × Wichtigkeit“ (Tk-frei) |
 | `today_view.py` | Aufteilung der Ansicht „Heute“ (Tk-frei) |

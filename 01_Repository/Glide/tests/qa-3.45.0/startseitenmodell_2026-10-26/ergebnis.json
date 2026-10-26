@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-26",
+  "version": "3.45.0",
+  "schema": 26,
+  "status": "lokaler Quellkandidat umgesetzt, gezielte Pruefung gruen",
+  "ok": true,
+  "unit_tests": 25,
+  "tk_suites": [
+    "test_startseite3332",
+    "test_uiux_paket:b01",
+    "test_uiux_paket:b02",
+    "test_uiux_paket:b04"
+  ],
+  "proof": "pruefung.json",
+  "initial_doc_findings": 2,
+  "final_doc_check": "stand_abschluss.json",
+  "final_doc_exitcode": 0,
+  "source_hashes_verified": true,
+  "benchmark_source_hashes_verified": true,
+  "quality": {
+    "no_tk_import": true,
+    "max_function_lines": 32,
+    "function_lines": {
+      "_best": 3,
+      "_count_due": 7,
+      "_count_labels": 4,
+      "_record_open": 18,
+      "_collect_summary": 20,
+      "_collect_focus": 12,
+      "_collect_week": 10,
+      "_collect_labels": 8,
+      "_collect_scheduled": 15,
+      "build": 32,
+      "__post_init__": 3,
+      "focus": 2,
+      "next_scheduled": 2,
+      "summary": 8,
+      "week_overview": 4,
+      "label_overview": 8
+    }
+  },
+  "performance": {
+    "sequential": "leistung_nachher.json",
+    "paired": "leistung_gepaart.json",
+    "median_gain_confirmed": true,
+    "p95_gain_confirmed": false
+  },
+  "delivery_changed": false,
+  "version_changed": false,
+  "git_mutation": false,
+  "limitations": [
+    "kein neuer Gesamt-/CI-/Lieferlauf",
+    "native Mac-/Reader-/DPI-/Mehrmonitor-/Menschenabnahme offen",
+    "keine allgemeine p95-Freigabe"
+  ],
+  "source_manifest": "quellstand.json"
+}

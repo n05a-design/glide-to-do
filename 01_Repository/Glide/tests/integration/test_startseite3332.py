@@ -2,9 +2,11 @@
 import importlib.machinery
 import importlib.util
 import os
-from datetime import date
+import copy
+from datetime import date, timedelta
 from pathlib import Path
 import tempfile
+from unittest.mock import patch
 
 repo = Path(__file__).resolve().parents[2]
 # D12, seit B04 (15.10.2026) mit „Galeriebilder“ als achter Standardkachel.
@@ -18,6 +20,93 @@ def descendants(widget):
         result.append(current)
         stack.extend(current.winfo_children())
     return result
+
+
+def check_dashboard_lifetime(app, mod, idle):
+    """WA-39: aktuelle Objekte, Archivgrenze und fehlerfester Renderkontext."""
+    today = date.today()
+    day = today.isoformat()
+    tomorrow = (today + timedelta(days=1)).isoformat()
+    source = app.new_list_object('Modellprüfung', list_id='home-model-active')
+    child = app.new_item('Kind', item_id='home-model-child', due=tomorrow)
+    first = app.new_item('Erster Gleichstand', item_id='home-model-first', due=day, planned_date=day)
+    second = app.new_item('Zweiter Gleichstand', item_id='home-model-second', due=day, planned_date=day)
+    source['items'] = [first, second, app.new_item('Struktur', kind=app.ITEM_KIND_GROUP, children=[child])]
+    archived_folder = app.new_folder_object('Archiv', folder_id='home-model-archive', archived=True)
+    archived = app.new_list_object('Im Archiv', list_id='home-model-hidden', folder_id=archived_folder['id'])
+    archived['items'] = [app.new_item('Nicht mitzählen', due=day)]
+    app.lists = [source, archived]
+    app.folders = [archived_folder]
+    app.labels = []
+    app.items = source['items']
+    app.active_list_id = source['id']
+    app.settings['recent_lists'] = [{'id': archived['id'], 'edited_at': '2026-10-26T12:00:00'}]
+    app.clear_render_cache()
+    summary = app.home_summary()
+    assert (summary['total'], summary['open'], summary['due_today'], summary['lists']) == (3, 3, 2, 2), summary
+    assert summary['due_lists'] == [(source, 2)]
+    assert summary['recent'][0][0] is archived
+    assert app.home_focus_candidate()[0] is first
+    assert app.next_scheduled_item()[0] is first
+    assert app.home_summary(today + timedelta(days=1))['due_today'] == 1
+    assert app.next_scheduled_item(today + timedelta(days=1))[0] is child
+    assert app.home_week_overview(0) == []
+    assert len(app.home_week_overview(14)) == 14
+
+    app.set_active_list(source['id'])
+    app.save_items()
+    app.set_home_view()
+    idle()
+    # Die echte Erledigenaktion und Undo ersetzen Objekte: kein alter Dictcache.
+    assert app.update_in_progress_item(first['id'], 'done', True) is not False
+    idle()
+    assert app.home_focus_candidate()[0]['id'] == second['id']
+    app.undo_last_change()
+    idle()
+    current = app.home_focus_candidate()[0]
+    assert current['id'] == first['id'] and current is not first
+    assert app.next_scheduled_item()[0] is current
+    assert app.home_summary()['due_today'] == 2
+
+    # Sämtliche Bestandskacheln teilen genau einen Aufbau; kein Cache nach Rückkehr.
+    visible = {'today', 'week', 'focus', 'labels', 'clock'}
+    app.settings['home_tiles_hidden'] = [key for key in mod.glide_home.KEYS if key not in visible]
+    app._home_signature = None
+    with patch.object(mod.glide_home_dashboard, 'build', wraps=mod.glide_home_dashboard.build) as builds:
+        app._refresh_home()
+        assert builds.call_count == 1, builds.call_count
+    assert app._home_dashboard_scope is None
+
+    # Fehler nach Modellaufbau darf den Snapshot nicht in spätere Aufrufe tragen.
+    original_summary = app.home_summary
+    marker = RuntimeError('gezielter Renderabbruch')
+
+    def failing_summary(*args, **kwargs):
+        original_summary(*args, **kwargs)
+        raise marker
+
+    app._home_signature = None
+    try:
+        with patch.object(app, 'home_summary', side_effect=failing_summary):
+            app._refresh_home()
+    except RuntimeError as error:
+        assert error is marker
+    else:
+        raise AssertionError('Renderabbruch nicht erreicht')
+    current['done'] = True
+    assert app.home_summary()['due_today'] == 1
+    assert app.home_focus_candidate()[0]['id'] == second['id']
+    # Auch reine Objektablösung mit gleicher ID/Revision muss frisch auflösen.
+    source_index = next(index for index, entry in enumerate(app.lists) if entry['id'] == source['id'])
+    replacement = copy.deepcopy(app.lists[source_index])
+    replacement['items'][1]['text'] = 'Aktuelles Objekt nach Austausch'
+    app.lists[source_index] = replacement
+    app.items = replacement['items']
+    app.clear_render_cache()
+    assert app.home_focus_candidate()[0] is replacement['items'][1]
+    app._home_signature = None
+    app._refresh_home()
+    idle()
 
 
 with tempfile.TemporaryDirectory(prefix='glide-startseite-') as directory:
@@ -163,8 +252,10 @@ with tempfile.TemporaryDirectory(prefix='glide-startseite-') as directory:
             idle()
             assert app.home_canvas.cget('bg') == app.theme['bg'] == app.home_content.cget('bg')
             assert app.home_scrollbar.bg_color == app.theme['bg']
+        check_dashboard_lifetime(app, mod, idle)
         assert not errors, errors
         print('test_startseite3332: OK; D12-Standard, zusammengeführte Kachel Heute, eigene Auswahl nach Neustart, '
-              'Zurücksetzen, Größenfilter Hauptfenster, gebündeltes Zeichnen, Designwechsel')
+              'Zurücksetzen, Größenfilter Hauptfenster, gebündeltes Zeichnen, Designwechsel; '
+              'Startseitenmodell: Archiv, Datum, Gleichstände, Erledigen/Undo, Objektwechsel, Renderabbruch')
     finally:
         root.destroy()

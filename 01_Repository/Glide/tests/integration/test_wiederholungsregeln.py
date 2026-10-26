@@ -1,6 +1,7 @@
 """FP-02/1: echte Masken, Vorrücken, Formatmigration und unveränderter Altleser."""
 import argparse
 import copy
+from contextlib import nullcontext
 from datetime import date, timedelta
 import hashlib
 import json
@@ -15,6 +16,7 @@ REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / 'tests/integration'))
 from test_schutzrunde import Lauf
 from vorversion import finden
+from historical_runtime import historical_app
 
 
 def descendants(widget):
@@ -167,8 +169,10 @@ print('OK',mode)
 
 def child(run,path,mode):
     import os
-    env=dict(os.environ,GLIDE_DATA_DIR=run.data)
-    result=subprocess.run([sys.executable,'-B','-c',CHILD,str(path),mode],env=env,capture_output=True,text=True,timeout=90)
+    env=dict(os.environ,GLIDE_DATA_DIR=run.data,GLIDE_TEST_MODE='1')
+    runtime = historical_app(REPO.parents[1],path) if mode=='alt' else nullcontext(path)
+    with runtime as child_app:
+        result=subprocess.run([sys.executable,'-B','-c',CHILD,str(child_app),mode],env=env,capture_output=True,text=True,timeout=90)
     assert result.returncode==0,(result.stdout+result.stderr)[-1800:]
 
 
@@ -196,7 +200,7 @@ def fall_altleser(run):
     assert disk.read_bytes()==before
     run.start()
     assert run.app.lists[-1]['items'][0]['repeat']['art']=='serie'
-    return dict(altleser_sha256=hashlib.sha256(old.read_bytes()).hexdigest(),datei_bytegleich=True)
+    return dict(altleser_sha256=hashlib.sha256(old.read_bytes()).hexdigest(),datei_bytegleich=True,historische_begleitmodule=True)
 
 
 def fall_altregeln(run):
@@ -218,7 +222,8 @@ for rule in json.loads(sys.argv[2]):
  out.append(dates)
 print('ERGEBNIS '+json.dumps(out))
 '''
-    result=subprocess.run([sys.executable,'-B','-c',code,str(old),json.dumps(rules)],capture_output=True,text=True,timeout=90)
+    with historical_app(REPO.parents[1],old) as old_runtime:
+        result=subprocess.run([sys.executable,'-B','-c',code,str(old_runtime),json.dumps(rules)],capture_output=True,text=True,timeout=90)
     assert result.returncode==0,result.stderr
     expected=json.loads(next(v[9:] for v in result.stdout.splitlines() if v.startswith('ERGEBNIS ')))
     for rule,dates in zip(rules,expected):
