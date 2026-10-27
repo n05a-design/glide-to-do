@@ -90,7 +90,7 @@ class PreviewCache:
     # Plattform für Umwandlung; Prüfungen erzwingen so den Linux-Weg (N08).
     PLATFORM = None
 
-    def __init__(self, cache_dir=None, limit=160):
+    def __init__(self, cache_dir=None, limit=160, diagnostic=None):
         self._cache_dir = cache_dir
         self._limit = limit
         self._images = collections.OrderedDict()
@@ -102,6 +102,8 @@ class PreviewCache:
         self._observers = collections.Counter()
         self._poll_root = None
         self._poll_job = None
+        self._diagnostic = diagnostic
+        self._reported_conversion_errors = ()
 
     # --- Werkzeuge -------------------------------------------------------
     def cache_dir(self):
@@ -251,6 +253,13 @@ class PreviewCache:
         """Ein Tk-Timer, höchstens 64 Beobachter pro Schritt, unabhängig von der Bildzahl."""
         self._poll_job = None
         try:
+            if self._conversions is not None and self._diagnostic is not None:
+                kinds = tuple(kind for kind, count in self._conversions.diagnostics())
+                new = [kind for kind in kinds if kind not in self._reported_conversion_errors]
+                self._reported_conversion_errors = kinds
+                for kind in new:
+                    self._diagnostic(f'Bildvorschau: unerwarteter Workerfehler ({kind}). '
+                                     'Dateipfad und Fehlerinhalt werden nicht protokolliert.')
             for observer, record in list(self._requests.items())[:64]:
                 if self._requests.get(observer) is not record:
                     continue

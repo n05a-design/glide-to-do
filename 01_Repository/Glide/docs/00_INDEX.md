@@ -1,6 +1,6 @@
 # Dokumentationsindex
 
-Stand 25.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2
+Stand 27.10.2026 · Glide 3.47.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2
 
 Seit 03.10.2026 zwölf zentrale Dokumente und fünf Einzelentscheidungen statt der damaligen 53: Funktionsverträge 45–79, Projektübergabe, Startkontext, Entwicklungsnotizen, Sitzungsprotokoll, Releasecheckliste und Lizenz-, Signierungs- und Vertriebsentwürfe sind in die Dokumente unten eingegangen. Ältere Fassungen trägt Git (`git log --follow docs/<Datei>`). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt; deren Synchronisationskopien und die wiederaufgetauchte Projektübergabe sind aufgelöst. Regeln: [Dokumentenpflege](DOKUMENTENPFLEGE.md).
 
@@ -8,6 +8,9 @@ Seit 03.10.2026 zwölf zentrale Dokumente und fünf Einzelentscheidungen statt d
 
 - **Neue Sitzung:** [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md), dann [Arbeitsregeln](../AGENTS.md).
 - **Was als Nächstes ansteht:** [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md).
+- **Aktuelle Folgepakete auf 3.47.0:** [Mehrfachplanung und Nebenansichtsverlauf, Plan §21.24](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2124-folgepakete-mehrfachplanung-und-nebenansichtsverlauf-3470), [Prüf-/Liefernachweis](../tests/qa-3.47.0/folgepakete_2026-10-27/README.md).
+- **Vorherige zwei Featurepakete auf 3.46.0:** [Tagessteuerung und Nebenansicht, Plan §21.23](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2123-zwei-featurepakete-und-versionsfortschritt-3460), [Prüf-/Liefernachweis](../tests/qa-3.46.0/zweierpaket_2026-10-27/README.md).
+- **Vertiefte Codebasisprüfung und lokaler Techniknachlauf:** [Einordnung Analyse §13.15](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1315-vertiefte-codebasisprüfung-vom-26102026), [Umsetzung und Restumfang Plan §21.21](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2121-vertiefte-codebasisprüfung-und-technikpaket), [gezielter Nachweis](../tests/qa-3.45.0/codebasis_2026-10-26/README.md); frühere Liefer-/Vollprüfungen bleiben an ihre Bytes gebunden.
 - **Aktuelle Roadmap und Pflege:** [Plan §21](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026), technische Härtung aus dem Sicherheits- und Architekturgutachten in [Plan §21.12](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2112-technische-folge-aus-dem-sicherheits--und-architekturgutachten) mit Einordnung in [Analyse §13.12](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1312-sicherheits--und-architekturgutachten-vom-25102026); neue Belege in [Analyse §13](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#13-neuuntersuchung-vom-21102026) und [Markt §12](../../../00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md#12-erweiterte-recherche-vom-21102026); appweiter Entwicklungsvertrag in [Design Richtlinien](DESIGN_RICHTLINIEN.md).
 - **Was entschieden ist:** [Arbeitsrichtung](ARBEITSRICHTUNG.md).
 
@@ -23,7 +26,7 @@ Seit 03.10.2026 zwölf zentrale Dokumente und fünf Einzelentscheidungen statt d
 | [10 Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben, Produktdatenblatt |
 | [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
-| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D56 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
+| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D57 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Ein Thema, ein Dokument; Aufbewahrung; Zuständigkeiten |
 | [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; B01–B20 im Python-Stand umgesetzt; E-U1–E-U3 A seit D55 als lokaler Kandidat umgesetzt; Menschenabnahmen offen |
 

@@ -22,6 +22,12 @@ def build(lists, **kwargs):
                                     drawing_hash=lambda entry: None, **kwargs)
 
 
+def prepare_save(lists, **kwargs):
+    return comparison.prepare_save_comparison(
+        lists, item_fields=FIELDS, schedulable=schedulable,
+        drawing_hash=lambda entry: None, baseline=kwargs.pop('baseline', None), **kwargs)
+
+
 def fixture():
     return [{"id": "l1", "title": "Änderungen ☑", "items": [
         {"id": "a", "text": "Elternaufgabe", "kind": "long", "done": False, "children": [
@@ -145,11 +151,11 @@ class SaveComparisonTests(unittest.TestCase):
         baseline = {"items": build(lists).items}
         item = lists[0]["items"][0]
         item["done"] = True
-        result = build(lists, baseline=baseline, completed_at="2026-10-05T20:00:00+02:00")
+        result = prepare_save(lists, baseline=baseline, completed_at="2026-10-05T20:00:00+02:00")
         self.assertEqual(item["done_at"], "2026-10-05T20:00:00+02:00")
         self.assertEqual(result, build(lists))
         item["done_at"] = None
-        build(lists, baseline={"items": result.items}, completed_at="2026-10-06T20:00:00+02:00")
+        prepare_save(lists, baseline={"items": result.items}, completed_at="2026-10-06T20:00:00+02:00")
         self.assertIsNone(item["done_at"])
 
     def test_reopen_clears_stamp_and_structural_items_are_not_stamped(self):
@@ -157,9 +163,35 @@ class SaveComparisonTests(unittest.TestCase):
         parent, group = lists[0]["items"]
         parent["done_at"] = "2026-10-04T20:00:00+02:00"
         group["done"] = True
-        build(lists, completed_at="2026-10-05T20:00:00+02:00")
+        prepare_save(lists, completed_at="2026-10-05T20:00:00+02:00")
         self.assertIsNone(parent["done_at"])
         self.assertNotIn("done_at", group)
+
+    def test_reading_a_completed_or_reopened_tree_never_mutates_it(self):
+        lists = fixture()
+        lists[0]['items'][0]['done_at'] = 'Bestehender Abschluss'
+        lists[0]['items'][0]['children'][0]['done'] = True
+        original = copy.deepcopy(lists)
+        for edits in (True, False):
+            build(lists, include_edits=edits)
+            comparison.prepare_comparison(lists, item_fields=FIELDS,
+                                          schedulable=schedulable, drawing_hash=lambda e: None,
+                                          include_edits=edits)
+            self.assertEqual(lists, original)
+
+    def test_save_stamps_only_reread_lists_and_also_handles_duplicate_ids(self):
+        lists = fixture()
+        before = prepare_save(lists, completed_at='Erster Stand')
+        lists[0]['items'][0]['done'] = True
+        prepare_save(lists, previous_parts=before.parts, changed_ids=set(), completed_at='Nicht lesen')
+        self.assertNotIn('done_at', lists[0]['items'][0])
+        after = prepare_save(lists, previous_parts=before.parts, changed_ids={'l1'}, completed_at='Abschluss')
+        self.assertEqual(lists[0]['items'][0]['done_at'], 'Abschluss')
+        self.assertEqual(after, build(lists))
+        lists[1] = copy.deepcopy(lists[0])
+        lists[1]['items'][0]['done_at'] = None
+        prepare_save(lists, previous_parts=before.parts, changed_ids=set(), completed_at='Doppelte ID')
+        self.assertEqual(lists[1]['items'][0]['done_at'], 'Doppelte ID')
 
     def test_history_field_privacy_and_normalization(self):
         value = comparison.history_value

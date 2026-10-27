@@ -6,6 +6,22 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'src/glide'))
 import compact_mode
 
 
+class ShortcutTests(unittest.TestCase):
+    def test_pair_and_repeated_press_toggle_once(self):
+        step = compact_mode.shortcut_transition
+        self.assertEqual(step(False, released=False, modifiers=5), (True, 'toggle'))
+        self.assertEqual(step(True, released=False, modifiers=5), (True, 'consume'))
+        self.assertEqual(step(True, released=True, modifiers=0), (False, 'consume'))
+
+    def test_release_fallback_requires_both_modifiers(self):
+        for macos in (True, False):
+            for state in range(16):
+                valid = bool(state & 1 and state & (12 if macos else 4))
+                self.assertEqual(compact_mode.shortcut_transition(
+                    False, released=True, modifiers=state, macos=macos),
+                    (False, 'toggle' if valid else 'pass'))
+
+
 class ParseTests(unittest.TestCase):
     def test_parse_and_format(self):
         self.assertEqual(compact_mode.parse('1280x800+20+30'), (1280, 800, 20, 30))

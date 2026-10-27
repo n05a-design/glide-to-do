@@ -1,6 +1,6 @@
 # Regeln für die Dokumentenpflege
 
-Stand 25.10.2026 · Glide 3.45.0 · Datenformat 26
+Stand 27.10.2026 · Glide 3.47.0 · Datenformat 26
 
 Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder gelöscht anstatt immer nur archiviert und `_Z` zu schreiben“) und ersetzt alle früheren Archivierungsregeln.
 
@@ -66,4 +66,8 @@ Git-Objektverdichtung erfolgt ohne History-, Ref- oder Reflogverlust und mit Obj
 
 ## Ablageprüfung vor Push und Merge vom 25.10.2026
 
-Der [aktuelle Nachweis](../tests/qa-3.44.0/ablagepruefung_2026-10-25/README.md) prüft den gesamten tatsächlichen Bestand einschließlich ignorierter QA-Dateien, Git und separater Arbeitskopien. Die Aufbewahrungsgrenzen sind eingehalten; Originalbilder, Fixtures und Lizenz-/Lieferkopien bleiben erhalten. Identischer Inhalt ist bei Showcase-/Fixture-Spiegeln und eigenständigen Lieferressourcen beabsichtigt. Die geplante Cachebereinigung wurde von der automatischen Freigabeprüfung vor Ausführung blockiert; keine Einsparung behaupten. Git-Historie, Stashes und die fünf Worktrees bleiben erhalten. Gegenwärtige Mergegrenzen stehen im Entwicklungsplan, technische Einzelbefunde im datierten Nachweis.
+Der [Nachweis vom 25.10.2026](../tests/qa-3.44.0/ablagepruefung_2026-10-25/README.md) prüfte den gesamten tatsächlichen Bestand einschließlich ignorierter QA-Dateien, Git und separater Arbeitskopien. Die Aufbewahrungsgrenzen sind eingehalten; Originalbilder, Fixtures und Lizenz-/Lieferkopien bleiben erhalten. Identischer Inhalt ist bei Showcase-/Fixture-Spiegeln und eigenständigen Lieferressourcen beabsichtigt. Die geplante Cachebereinigung wurde von der automatischen Freigabeprüfung vor Ausführung blockiert; keine Einsparung behaupten. Git-Historie, Stashes und die fünf Worktrees bleiben erhalten. Gegenwärtige Mergegrenzen stehen im Entwicklungsplan, technische Einzelbefunde im datierten Nachweis.
+
+## Dokumentabgleich vor Push vom 27.10.2026
+
+Der erneute Auftrag prüft das Dokumentregister gegen Quelle 3.47.0 / Format 26, die gezielten Paketfälle und tatsächliche Python-/Showcase-Lieferung. Inhaltliche Befunde und Korrekturen stehen allein in [Analyse §13.16](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1316-dokumentabgleich-vor-dem-push-am-27102026), Gitauftrag/Aufgaben im [Plan §21.25](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2125-dokumentabgleich-und-pushauftrag-vom-27102026); vollständiges Register/Links/Anker und CI im [Nachweis](../tests/qa-3.47.0/folgepakete_2026-10-27/README.md). Historische Ergebnisse bleiben unverändert. Präzise Ignore-Regeln halten neue QA-Screenshots und die lokale Tk-Prüfumgebung vom Gittransport fern; sie löschen keine lokalen Dateien.

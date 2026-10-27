@@ -1,0 +1,15 @@
+{
+  "app_sha256": "d5316c9a8c14c24e61f0bf6e9ae40d4c6be743c2c93a047e738796c10671eced",
+  "faelle": {
+    "tagessteuerung": {
+      "ok": true,
+      "befund": "Mehr-Menü mit Kapazität, Morgen/Datum/Abbruch/ohne Tag, Fälligkeit erhalten, Undo, Sperre/Blockierung, Fokusfehler und echter gespeicherter Fokusstart",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": []
+}

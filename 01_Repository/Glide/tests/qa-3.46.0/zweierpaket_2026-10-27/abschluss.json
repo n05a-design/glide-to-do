@@ -1,0 +1,86 @@
+{
+  "version": "3.46.0",
+  "errors": [],
+  "links_checked": 891,
+  "anchors_checked": 231,
+  "runtime_files": 88,
+  "interrupted_full": {
+    "status": "unvollständig",
+    "prozess_exitcode": 1073807364,
+    "abschlussbericht_vorhanden": false,
+    "letzte_bestaetigte_suite": "test_bildkonversion",
+    "abbruch_waehrend": "test_erwaehnungen",
+    "fortsetzung_ab": "test_erwaehnungen",
+    "rest_suiten": [
+      "test_erwaehnungen.py",
+      "test_auftraege.py",
+      "test_markdownbaum.py",
+      "test_seitenkarten.py",
+      "test_ansichten.py",
+      "test_arbeitsmodi.py",
+      "test_speicherstatus.py",
+      "test_sicherungszentrale.py",
+      "test_wiederholungsregeln.py",
+      "test_vollpruefung325.py"
+    ],
+    "hinweis": "Ursache des Prozess-/Werkzeugabbruchs nicht belegt; kein grüner Gesamtvolllauf."
+  },
+  "remaining_full": {
+    "exitcode": 0,
+    "steps": 29,
+    "passed": 28,
+    "skipped": [
+      "Sichtprüfung"
+    ],
+    "failed": []
+  },
+  "single_complete_full_run": false,
+  "ci": {
+    "exitcode": 0,
+    "steps": 19,
+    "passed": 19,
+    "skipped": [],
+    "failed": []
+  },
+  "python_delivery_differences": [],
+  "native_package_version": "3.45.0",
+  "showcase_sha256": {
+    "Glide-Showcase.glidebackup": "5518f52da88055b2e7125bd52715e237799d00bcc54df231c65a1732e22d1121",
+    "Glide-Showcase_App.glideapp": "6c5b39a9402534feb9b0d716e0a0e80f39b5ff4f3499419da35305151d10da01",
+    "Glide-Showcase.glidetemplates": "5629e57b62e7ed3171bc38c1363a9c4dd36b64440e9bd95d781eb097f3d390f9",
+    "manifest.json": "b4e9c5cce650cf9b8e5ee4e9cf3d55dce88680cfea9a6f92e3f7a904e26231f5",
+    "Showcase_starten.pyw": "8273249a7f885b52f873da25490dc46c384fa09dedfb2166ec3fa3b1235be319",
+    "README.md": "bdc895593ec1fae0b9c06dcb648f74d892117ea24cfe79d635c4efad54818a98"
+  },
+  "work_modes": {
+    "cases": 19,
+    "failed": [],
+    "app_sha256": "d5316c9a8c14c24e61f0bf6e9ae40d4c6be743c2c93a047e738796c10671eced"
+  },
+  "repeat_invalid_command_errors": 0,
+  "delivery_probe": {
+    "version": "3.46.0",
+    "schema": 26,
+    "data_isolated": true,
+    "callback_errors": [],
+    "exitcode": 0,
+    "runtime_modules_from_delivery": true,
+    "plan_undo": true,
+    "done_undo": true,
+    "side_search": true,
+    "views": 6
+  },
+  "geometry": {
+    "zweierpaket_gestaltung": {
+      "ok": true,
+      "befund": "393 Knopfprüfungen; Tagessteuerung in vier Größen-/Schrift-/Designkonfigurationen und drei Scrolllagen, Nebenansicht mit Suche an Mindestbreite in drei Konfigurationen",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "git_diff_check_exitcode": 0,
+  "ok": true
+}

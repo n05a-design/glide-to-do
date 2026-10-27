@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 25.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · manuelle Sitzungen offen; B1 automatisch geprüft
+Stand 27.10.2026 · Glide 3.47.0 · Aufgabenformat 26 · manuelle Sitzungen offen; B1 automatisch geprüft
 
 Einzige Prüfliste für alles, was nur am echten Gerät geht. Zusammengeführt am 03.10.2026 aus der fortgeschriebenen Prüfliste (Ursprung 3.30.0, enthielt die Listen 3.28 und 3.29) und der Windows-Anleitung; die Zuordnung der 201 Ausgangspunkte trägt Git. Automatisch geprüft ist die Logik ([Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md)); offen bleiben Handgefühl, Plattformen und fremde Programme.
 

@@ -13,6 +13,7 @@ Oberfläche löst die ID deshalb bei jedem Abgleich neu auf.
 import bisect
 import hashlib
 import re
+from dataclasses import dataclass, replace
 
 IMAGE_ANCHOR = "￼"
 LINE_STYLES = ("h1", "h2", "h3", "h4", "codeblock", "quote", "callout", "table", "divider",
@@ -22,6 +23,57 @@ INDENT_TAGS = {"indent1": 1, "indent2": 2, "indent3": 3}
 TASK_TAG = re.compile(r"^(item|taskref):(.+)$")
 MAX_ROWS = 2000
 MAX_LINES = 5000
+MAX_MATCHES = 500
+
+
+@dataclass(frozen=True, slots=True)
+class Location:
+    list_id: str
+    item_id: str | None = None
+    query: str = ''
+    search_open: bool = False
+    match_index: int = -1
+    scroll: float = 0.0
+
+
+@dataclass(frozen=True, slots=True)
+class History:
+    entries: tuple = ()
+    index: int = -1
+
+
+def remember_location(history, location):
+    """Nur die aktuelle Position aktualisieren, keine zusätzliche Station."""
+    if 0 <= history.index < len(history.entries) and history.entries[history.index].list_id == location.list_id:
+        entries = list(history.entries)
+        entries[history.index] = location
+        return replace(history, entries=tuple(entries))
+    return history
+
+
+def visit_location(history, location, limit=30):
+    """Sitzungsverlauf: Duplikat ersetzen, Vorwärtszweig abschneiden, begrenzen."""
+    if 0 <= history.index < len(history.entries):
+        current = history.entries[history.index]
+        if (current.list_id, current.item_id) == (location.list_id, location.item_id):
+            return remember_location(history, location)
+    entries = history.entries[:history.index + 1] + (location,)
+    entries = entries[-max(1, limit):]
+    return History(entries, len(entries) - 1)
+
+
+def history_step(history, step, available):
+    """Gelöschte/nicht lesbare Stationen überspringen, ohne Historie umzuschreiben."""
+    if not step:
+        return history
+    step = 1 if step > 0 else -1
+    allowed = set(available)
+    position = history.index + step
+    while 0 <= position < len(history.entries):
+        if history.entries[position].list_id in allowed:
+            return replace(history, index=position)
+        position += step
+    return history
 
 UNSUPPORTED_KINDS = {"drawing": "Zeichnungen", "gallery": "Galerien"}
 
@@ -29,6 +81,72 @@ STATE_TEXT = {
     "missing": "Dieser Inhalt ist nicht mehr vorhanden.",
     "trash": "Dieser Inhalt liegt im Papierkorb. Über den Papierkorb lässt er sich wiederherstellen.",
 }
+
+
+def literal_matches(text, query, limit=MAX_MATCHES):
+    """Lesende Unicode-Suche mit Originalversätzen, auch bei ß -> ss.
+
+    Keine regulären Ausdrücke; Sonderzeichen bleiben wörtlich. Die Oberfläche
+    markiert ausschließlich den bereits sichtbaren Text. Das Budget begrenzt
+    Ergebnislisten; der weitere Treffer wird als solcher ausgewiesen.
+    """
+    if not isinstance(text, str) or not isinstance(query, str) or not query or limit <= 0:
+        return [], False
+    offsets, folded = [], []
+    for position, char in enumerate(text):
+        part = char.casefold()
+        folded.append(part)
+        offsets.extend([position] * len(part))
+    haystack, needle = ''.join(folded), query.casefold()
+    matches, position = [], 0
+    while needle:
+        found = haystack.find(needle, position)
+        if found < 0:
+            break
+        match = (offsets[found], offsets[found + len(needle) - 1] + 1)
+        position = found + len(needle)
+        if matches and match == matches[-1]:
+            continue
+        if len(matches) >= limit:
+            return matches, True
+        matches.append(match)
+    return matches, False
+
+
+def matching_rows(rows, query, limit=MAX_MATCHES):
+    """Eine Trefferzeile je ID; keine Filterung oder Änderung des Originals."""
+    if not isinstance(query, str) or not query:
+        return [], False
+    needle = query.casefold()
+    found = []
+    for identity, text in rows:
+        if needle in str(text).casefold():
+            if len(found) >= limit:
+                return found, True
+            found.append(identity)
+    return found, False
+
+
+def match_index(current, count, step=1):
+    if count <= 0:
+        return -1
+    if current < 0:
+        return count - 1 if step < 0 else 0
+    return (current + step) % count
+
+
+def sections(entry, limit=200):
+    """Überschriften bzw. Gruppen als lesende Sprungziele, ohne zweite Ablage."""
+    if not isinstance(entry, dict):
+        return []
+    if content_kind(entry) == 'tasks':
+        return [dict(key=row['id'], title=row['text'] or 'Ohne Titel', depth=row['depth'])
+                for row in list_rows(entry.get('items', [])) if row['kind'] in ('heading', 'group')][:limit]
+    projection = page_projection(entry.get('rich_note') or {})
+    lines = projection['text'].split('\n')
+    return [dict(key=row['line'], title=lines[row['line']-1].strip() or 'Ohne Titel',
+                 depth=int(row['style'][1:])-1)
+            for row in projection['lines'] if row['style'] in ('h1', 'h2', 'h3', 'h4')][:limit]
 
 
 def target_for(entry):

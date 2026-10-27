@@ -106,3 +106,8 @@ skills-main/
 
 # Mitgelieferte tkdnd-Bibliotheken gehören zum Laufzeitstand (SHA-256-Abgleich).
 !**/vendor/tkinterdnd2/**/*.so
+
+# Lokale native Tk-Prüfumgebung; keine Projektquelle oder Lieferressource.
+13_TK-Test-Umgebung/
+# Neue QA-Fensterbilder bleiben nach D09 lokal; bestehende Git-Belege bleiben.
+01_Repository/Glide/tests/qa-*/**/screenshots*/

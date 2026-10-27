@@ -1,0 +1,251 @@
+{
+  "app_sha256": "9deb57952a7c4c691b3253bc4a82492758f99bad750a758eb3e77581707ac4af",
+  "faelle": {
+    "kompakt_verlorenes_loslassen": {
+      "ok": true,
+      "befund": "Fehlendes K-Loslassen blockiert nach Modifierende/Fensterfokusverlust nicht das nächste Kürzel; interner Fokuswechsel erhält das Paar",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "event_trace": [
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<KeyRelease-Control_L>",
+          "before": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<KeyRelease-Control_L>",
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 0,
+          "key": "k",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 0,
+          "key": "k",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        }
+      ]
+    }
+  },
+  "fehler": []
+}

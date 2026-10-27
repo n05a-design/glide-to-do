@@ -23,6 +23,22 @@ SETTING = "compact_window"
 _GEOMETRY = re.compile(r"^(\d{2,5})x(\d{2,5})(?:([+-])(-?\d{1,5})([+-])(-?\d{1,5}))?$")
 
 
+def shortcut_transition(down, *, released, modifiers, macos=False):
+    """(Tastenzustand, Aktion) für das Kürzel; keine Uhr- oder Tk-Abhängigkeit.
+
+    Vollständiges Paar und Wiederholung des Drückens wirken einmal. Fehlt der
+    Tastendruck, gilt Loslassen nur mit Umschalt plus Strg bzw. Cmd als Ersatz.
+    Modifierloslassen/Fensterfokusverlust setzen den Zustand im UI-Adapter zurück.
+    """
+    if not released:
+        return True, 'consume' if down else 'toggle'
+    if down:
+        return False, 'consume'
+    modifier = 0x0004 | (0x0008 if macos else 0)
+    valid = bool(modifiers & 0x0001 and modifiers & modifier)
+    return False, 'toggle' if valid else 'pass'
+
+
 def parse(geometry):
     """(Breite, Höhe, x, y) aus einem Tk-Geometrietext; x/y None ohne Lage. None bei Unsinn.
 

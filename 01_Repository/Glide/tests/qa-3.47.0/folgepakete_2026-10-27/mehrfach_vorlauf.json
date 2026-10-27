@@ -1,0 +1,15 @@
+{
+  "app_sha256": "a303fe8c2537257e4a7abe33d72d7a57b2167ce7cd2344174b1c418c8f86a6d1",
+  "faelle": {
+    "home_mehrfachplanung": {
+      "ok": true,
+      "befund": "21 offene Aufgaben aus zwei Listen über drei Seiten; Auswahl ohne Schreiben/Erledigen, Morgen/ohne Tag mit einem Undo/Redo, Fälligkeit, Dialogabbruch/Alterung, Sperre, Tageswechsel und readonly grün",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": []
+}

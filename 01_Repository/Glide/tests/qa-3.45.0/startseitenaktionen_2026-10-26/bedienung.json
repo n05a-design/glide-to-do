@@ -1,0 +1,34 @@
+{
+  "open_preview": 5,
+  "undo_redo": true,
+  "stale_callback": true,
+  "write_failure": true,
+  "read_only": true,
+  "configurations": [
+    {
+      "design": "light",
+      "geometry": "860x700",
+      "font": "mittel",
+      "compact": false
+    },
+    {
+      "design": "dark",
+      "geometry": "1280x800",
+      "font": "gross",
+      "compact": false
+    },
+    {
+      "design": "glass_light",
+      "geometry": "860x700",
+      "font": "gross",
+      "compact": false
+    },
+    {
+      "design": "light",
+      "geometry": "480x560",
+      "font": "gross",
+      "compact": true
+    }
+  ],
+  "button_checks": 300
+}

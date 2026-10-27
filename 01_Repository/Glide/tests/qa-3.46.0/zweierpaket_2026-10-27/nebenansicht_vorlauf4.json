@@ -1,0 +1,17 @@
+{
+  "app_sha256": "2e9bb935858164e1a9f094a6da81de955958a7428a30b4716b99c949a00cc9b6",
+  "faelle": {
+    "nebenansicht_navigation": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1479, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1349, in fall_nebenansicht_navigation\n    outline = next(w for w in knoepfe(app.side_pane, mod.RoundedButton) if w.text == 'Abschnitte …')\n              ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nStopIteration\n",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": [
+    "nebenansicht_navigation"
+  ]
+}

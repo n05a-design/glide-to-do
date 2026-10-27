@@ -1,0 +1,1328 @@
+{
+  "app_sha256": "dd26a038f430860e41cfb2e703689ea0c4dd7bcacbc753277be89ade23c1f014",
+  "faelle": {
+    "seitenaktionen": {
+      "ok": true,
+      "befund": "21 aktive Seitenmenüeinträge auffindbar; Filter, Esc/Fokus, Ausführen, Gliederung, leere Treffer",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "blockaktionen": {
+      "ok": true,
+      "befund": "Strg+/, Griff an Schreibmarke und Mauszeiger, Umwandeln mit einem Undo, Sperrgründe, Rechtsklick nennt den Weg",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "schreibschutz": {
+      "ok": true,
+      "befund": "Lesbare Aktionen bleiben, Änderungen gesperrt mit Grund, keine Kopfverweise",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "kopfverweise": {
+      "ok": true,
+      "befund": "keine Zusatzzeile, Verweise am Titelende nur bei freiem Platz, Überfahren/Fokus/Tab, langer Titel und schmale Spalte weichen ganz (Mehr), Symbol vor dem Titel, 23 Knöpfe ohne Befund",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "notiz": {
+      "ok": true,
+      "befund": "Notizaktionen mit eigenen Abschnitten, Blockaktionen und Griff wie in Seiten",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "nebenansicht_liste": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1667, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 518, in fall_nebenansicht_liste\n    assert beschriftungen == [\"Schließen\"], beschriftungen\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ['Zurück', 'Vorwärts', 'Verlauf', 'Schließen']\n",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "nebenansicht_seite": {
+      "ok": true,
+      "befund": "Blockarten, echtes Kästchen mit einem Undo, lesend gesperrt, Esc schließt",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "nebenansicht_inspektor": {
+      "ok": true,
+      "befund": "Vorrang und Rückkehr gegenüber dem Inspektor, schmal als Überlagerung, 24 Knöpfe ohne Befund",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "nebenansicht_einstiege": {
+      "ok": true,
+      "befund": "Kontextmenü, Zeichnung gesperrt, Umschalt+Enter, eigene Auswahl nur mit Listen/Seiten/Notizen",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "verweisvorschau": {
+      "ok": true,
+      "befund": "Echter Strg+Umschalt-Klick, Kontext unter Auswahl, Verweis-/Rückverweismenü, frische IDs/Titel, Taskmarkierung in Liste/Seite, Haupteditor und offener Text erhalten; alter Strg-Klick bleibt",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "verweisvorschau_grenzen": {
+      "ok": true,
+      "befund": "Notiz, kein externer Browser, Archiv/Schreibschutz, Undo/frische IDs, stale Menü/Papierkorb/fehlend/Zeichnung/Kompaktmodus; 244 Knopfprüfungen in acht Konfigurationen",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "seitenleiste_kontext": {
+      "ok": true,
+      "befund": "Rechtsklick auf Liste/Seite/Notiz/Zeichnung/Ordner/Systemzeile ohne Öffnen; Nebenansicht, Linksklick, Pfeiltaste und Mehrfachauswahl erhalten",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "kompakt": {
+      "ok": true,
+      "befund": "Kompaktmodus direkt als erster Menüeintrag; Kürzel mit Drücken/Loslassen und reinem Loslassen im Editor/Hauptfenster, keine Doppelwirkung; 480×560, getrennte Lagen über Neustart, Kopf B07, 26 Knöpfe ohne Befund",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "event_trace": [
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-K>",
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-KeyRelease-k>",
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 0,
+          "key": "k",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<KeyRelease-k>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 0,
+          "key": "k",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<KeyRelease-k>",
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Shift-KeyRelease-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 1,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Shift-KeyRelease-K>",
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-KeyRelease-k>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "type": "3",
+          "state": 4,
+          "key": "k",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        },
+        {
+          "synthetic": "<Control-KeyRelease-k>",
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".!frame.!frame2.!frame.!roundedcontainer.!frame.!pageeditor.!frame4.page_text",
+            "focus_class": "Text"
+          }
+        }
+      ]
+    },
+    "kompakt_ansichten": {
+      "ok": true,
+      "befund": "126 Knopfprüfungen in vier Ansichten bei 480×560 und großer Schrift; Menü mit allen Befehlen",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "kompakt_verlorenes_loslassen": {
+      "ok": true,
+      "befund": "Fehlendes K-Loslassen blockiert nach Modifierende/Fensterfokusverlust nicht das nächste Kürzel; interner Fokuswechsel erhält das Paar",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "event_trace": [
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<KeyRelease-Control_L>",
+          "before": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<KeyRelease-Control_L>",
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 0,
+          "key": "k",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 0,
+          "key": "k",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        }
+      ]
+    },
+    "gestaltung": {
+      "ok": true,
+      "befund": "244 Knopfprüfungen in fünf Konfigurationen ohne Befund · Aufnahmen gespeichert",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "tagessteuerung": {
+      "ok": true,
+      "befund": "Mehr-Menü mit Kapazität, Morgen/Datum/Abbruch/ohne Tag, Fälligkeit erhalten, Undo, Sperre/Blockierung, Fokusfehler und echter gespeicherter Fokusstart",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "nebenansicht_navigation": {
+      "ok": true,
+      "befund": "Wörtliche Unicode-Suche, Trefferwechsel/Tasten, kein Treffer, Neuaufbau, Überschriften/Gruppen, readonly und dreistufiges Esc; Haupteditor und offene Eingaben erhalten",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "zweierpaket_gestaltung": {
+      "ok": true,
+      "befund": "414 Knopfprüfungen; Tagessteuerung in vier Größen-/Schrift-/Designkonfigurationen und drei Scrolllagen, Nebenansicht mit Suche an Mindestbreite in drei Konfigurationen",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "home_mehrfachplanung": {
+      "ok": true,
+      "befund": "21 offene Aufgaben aus zwei Listen über drei Seiten; Auswahl ohne Schreiben/Erledigen, Morgen/ohne Tag mit einem Undo/Redo, Fälligkeit, Dialogabbruch/Alterung, Sperre, Tageswechsel und readonly grün",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "side_history": {
+      "ok": true,
+      "befund": "Zurück/Vorwärts/Alt-Pfeile, Suchbegriff/aktiver Treffer, Leseposition und Zeilenauswahl, aktueller Verlauf/Inhaltswechsel, gelöschte Ziele, fehlender Inhalt, readonly und Bestandsgrenze; Hauptentwurf und Dateibytes erhalten",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "folgepaket_gestaltung": {
+      "ok": true,
+      "befund": "606 Knopfprüfungen; Tagessteuerung in vier Größen-/Schrift-/Designkonfigurationen und drei Scrolllagen, Nebenansicht mit Suche an Mindestbreite in drei Konfigurationen",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": [
+    "nebenansicht_liste"
+  ]
+}

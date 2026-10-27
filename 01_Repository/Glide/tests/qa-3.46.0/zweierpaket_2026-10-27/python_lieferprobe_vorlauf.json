@@ -1,0 +1,7 @@
+{
+  "status": "Prüfaufbau korrigiert",
+  "version": "3.46.0",
+  "fehler": "DATA_SCHEMA_VERSION irrtümlich am Modul statt an ListApp abgefragt; Probe brach vor Featureprüfung ab.",
+  "abbau": "TclError beim Löschen bereits entfernter Tk-Kommandos; Fensterabbau wie im bestehenden Harness ergänzt.",
+  "produktionsaenderung": false
+}

@@ -1,6 +1,8 @@
 # Anwendungskern
 
-Stand 25.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 27.10.2026 · Glide 3.47.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+
+Lokaler Quellstand 3.47.0: Mehrfachplanung auf der Startseite und flüchtiger Nebenansichtsverlauf vertiefen die Tagessteuerung/Suche aus 3.46.0. 88 Laufzeitdateien plus separater Zeichenprototyp, Aufgabenformat 26 unverändert. [Gezielte Prüfung und tatsächliche Lieferstände](../../tests/qa-3.47.0/folgepakete_2026-10-27/README.md).
 
 `app.pyw` ist die kanonische Anwendung (Klasse `ListApp`). Daneben liegen Module, die beim Start aus demselben Ordner geladen werden und beim Kopieren oder Paketieren immer mitgehen:
 
@@ -19,11 +21,13 @@ Stand 25.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Einstellungen 2 · Vorl
 | `svg_geometry.py` | SVG-Pfade und Farben für den Logo-Rückfall (Tk-frei) |
 | `home_tiles.py` | Startseitenkacheln und Standard D12 (Tk-frei) |
 | `home_dashboard.py` | Gemeinsame kurzlebige Bestandsauswertung der Startseitenkacheln; frische Einzelprojektionen (Tk-frei) |
+| `home_task_tiles.py` | Renderer für Heute/Nächste Aufgabe mit expliziten Anzeigedaten und UI-/Aktionsports; kein Zugriff auf ListApp oder Tk, IDs in Callbacks |
 | `capture_parser.py` | Deutsche Schnelleingabe mit Feldchips (Tk-frei) |
 | `eisenhower.py` | Quadranten „Dringlichkeit × Wichtigkeit“ (Tk-frei) |
 | `today_view.py` | Aufteilung der Ansicht „Heute“ (Tk-frei) |
 | `content_search.py` | Inhaltssuche und Trefferausschnitte (Tk-frei) |
-| `save_comparison.py` | Gemeinsamer Vergleich für Verlauf, Listenänderung und Aktivität (Tk-frei, P08a) |
+| `save_comparison.py` | Lesender Vergleich für Verlauf, Listenänderung und Aktivität; ausdrücklich getrennte Abschlusszeitübernahme vor Speicherung (Tk-frei, P08a) |
+| `persistence.py` | Koordiniert Vorbereitung, Sicherung, atomaren Schreibaufruf und Nachlauf mit bestehendem `SaveResult`; kein eigener Dateischreiber (Tk-frei, WA-38) |
 | `view_metrics.py` | Datumslesen, Fälligkeitsstatus, Fortschritt und Kennzahlen sowie Zeilenhöhenformel (Tk-frei, P09b) |
 | `action_catalog.py` | Stabile Aktionskennungen, Gruppen und virtuelle Editorbefehle (Tk-frei) |
 | `ui_design.py` | Gemeinsame Abstände, Radien, Schriftgrößen und Zeilenhöhen; Titel-/Herkunftsbreiten (Tk-frei, OB01/U10/U19) |

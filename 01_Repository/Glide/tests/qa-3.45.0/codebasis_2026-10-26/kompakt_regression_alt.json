@@ -1,0 +1,97 @@
+{
+  "app_sha256": "d516ca67f6f6e5dbe46c52275a5ff965690a898ec99c45cf3a305d72a4c12ab8",
+  "faelle": {
+    "kompakt_verlorenes_loslassen": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1242, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1069, in fall_kompakt_verlorenes_loslassen\n    assert not getattr(app, '_compact_shortcut_down', False), compact_snapshot(lauf)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'compact': True, 'down': True, 'minsize': [480, 560], 'focus': '.', 'focus_class': 'Tk'}\n",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "event_trace": [
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<KeyRelease-Control_L>",
+          "before": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<KeyRelease-Control_L>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        }
+      ]
+    }
+  },
+  "fehler": [
+    "kompakt_verlorenes_loslassen"
+  ]
+}
