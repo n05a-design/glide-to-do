@@ -1,10 +1,10 @@
 # Glide – lokale Aufgaben, Notizen und Pinnwände
 
-Stand 26.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Python- und Paketlieferung 3.45.0
+Stand 27.10.2026 · Glide 3.47.0 · Aufgabenformat 26 · Quelle/Python-Lieferung 3.47.0; eigenständige Pakete 3.45.0
 
 Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Sie läuft lokal mit Python 3.14 und Tk 9 (Tk 8.6 eingeschränkt), braucht weder Konto noch Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
-> **Projektstatus:** interner Entwicklungsstand **3.45.0**, Aufgabenformat 26. Quelle und Python-Lieferung sind bytegleich; Windows-Paket und natives Mac-arm64-Paket auf 3.45.0 gebaut und geprüft. Windows-Vollprüfung 104/104 Suiten grün; Mac-Paketbau, Signatur und isolierter Start grün. [Liefernachweis](tests/qa-3.45.0/paketabschluss_2026-10-26/README.md), [QA-Bericht](docs/07_QA_BERICHT.md). Menschliche und öffentliche Releaseabnahme bleiben getrennt offen.
+> **Projektstatus:** lokaler Entwicklungsstand **3.47.0**, Aufgabenformat 26. Zwei Folgepakete: Mehrfachplanung auf der Startseite und Nebenansichtsverlauf. Python-Lieferung 3.47.0 bytegleich zur Quelle, eigenständige Windows-/Mac-Pakete 3.45.0. [Gezielte Prüfung und Liefergrenzen](tests/qa-3.47.0/folgepakete_2026-10-27/README.md).
 
 Funktionsumfang im Überblick: [Projekt-README](../../README.md#was-glide-kann); Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md); Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 
@@ -37,7 +37,7 @@ Das Repository ist öffentlich: Rohprotokolle (`*.log`) bleiben lokal, veröffen
 Vollprüfung auf dem Referenz-Mac (aus `01_Repository/Glide`):
 
 ```bash
-python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.45.0/lokaler_lauf --timeout 900
+python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.47.0/lokaler_lauf --timeout 900
 ```
 
 CI-Grundstufe, wie GitHub sie bei jedem Push und Pull Request auf `main` ausführt (Syntax, Versionen, Dokumentation, Unit- und Werkzeugtests, fünf Analysen, Startprobe, Lieferstand, Fremdcode, Datenschutz, Ablagegröße):

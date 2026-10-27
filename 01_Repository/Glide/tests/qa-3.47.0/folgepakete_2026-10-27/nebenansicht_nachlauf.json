@@ -1,0 +1,15 @@
+{
+  "app_sha256": "dd26a038f430860e41cfb2e703689ea0c4dd7bcacbc753277be89ade23c1f014",
+  "faelle": {
+    "nebenansicht_liste": {
+      "ok": true,
+      "befund": "Abhaken per Kästchen/Leertaste mit einem Undo/Redo, Text klickt nicht, Umbenennen, Papierkorb, Öffnen",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": []
+}

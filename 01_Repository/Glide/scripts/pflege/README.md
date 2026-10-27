@@ -1,6 +1,6 @@
 # Pflegewerkzeuge
 
-Stand 25.10.2026 · Glide 3.45.0 · Aufgabenformat 26
+Stand 27.10.2026 · Glide 3.47.0 · Aufgabenformat 26
 
 Werkzeuge für jede Arbeitsrunde und für Messungen. Sie legen keine
 Archivkopien an: Vorfassungen von Fixtures, Showcase, Vorlagen und Dokumenten
@@ -40,8 +40,11 @@ Releaseplanungen gelten ebenfalls für sieben Versionen, Fensterbilder für drei
    README die neue Hauptdatei nicht nennt.
 4. Vollprüfung: `python3 -B tests/tools/pruefen.py --modus voll --protokoll
    tests/qa-<Version>/<Name> --timeout 900` (unter macOS im Hintergrund).
-5. `abgleich_07.py`, `python3 packaging/macos/baue_app.py --ziel build/macos`
-   und `showcase_abgleich.py`.
+5. `abgleich_07.py` und `showcase_abgleich.py`; eigenständige Pakete nativ
+   nach [Paketierung](../../packaging/README.md) bauen und prüfen.
+   `packaging/macos/baue_app.py` erzeugt nur eine Vorstufe mit externem
+   Python: ausschließlich ein eigenes Ziel wie `build/macos-vorstufe`
+   verwenden, niemals damit das eigenständige `build/macos/Glide.app` ersetzen.
 6. QA-Bericht, Index, Entwicklungsplan und Übergabe nachführen.
 
 Erst nach Schritt 5 trägt die Glide-Fassung des Inhabers den Stand.

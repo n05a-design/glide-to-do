@@ -1,0 +1,12 @@
+{
+  "version": "3.46.0",
+  "schema": 26,
+  "data_isolated": true,
+  "callback_errors": [],
+  "exitcode": 0,
+  "runtime_modules_from_delivery": true,
+  "plan_undo": true,
+  "done_undo": true,
+  "side_search": true,
+  "views": 6
+}

@@ -193,6 +193,43 @@ class Worker(unittest.TestCase):
         self.service.close(); self.assertTrue(stopped.wait(2))
         self.assertEqual(self.service.submit(('b',),lambda c:'b'),'closed')
 
+    def test_diagnostics_are_bounded_and_do_not_contain_private_error_details(self):
+        for number in range(19):
+            exception = type(f'ConversionFailure{number}', (Exception,), {})
+
+            def fail(cancel, exception=exception):
+                raise exception('C:/Privat/Mein Bild.jpg: geheimer Inhalt')
+
+            self.service.submit(('Privater Pfad', number), fail)
+            wait_for(lambda:self.service.state(('Privater Pfad', number))[0]=='failed')
+        diagnostics = self.service.diagnostics()
+        self.assertEqual(len(diagnostics), 16)
+        self.assertEqual(diagnostics[-1], ('ConversionFailure18', 1))
+        self.assertNotIn('Privat', repr(diagnostics))
+        self.assertNotIn('geheimer Inhalt', repr(diagnostics))
+        self.service.submit(('nochmals',), fail)
+        wait_for(lambda:self.service.state(('nochmals',))[0]=='failed')
+        self.assertEqual(self.service.diagnostics()[-1], ('ConversionFailure18', 2))
+
+    def test_expected_failure_and_cancelled_exception_do_not_add_diagnostics(self):
+        self.service.submit(('negative',), lambda cancel: None)
+        wait_for(lambda:self.service.state(('negative',))[0]=='failed')
+        entered, release = threading.Event(), threading.Event()
+        self.addCleanup(release.set)
+
+        def cancelled(cancel):
+            entered.set()
+            release.wait(3)
+            raise ValueError('abgebrochen')
+
+        self.service.submit(('cancelled',), cancelled)
+        self.assertTrue(entered.wait(2))
+        self.service.cancel(('cancelled',))
+        release.set()
+        self.service.submit(('after',), lambda cancel: 'ok')
+        wait_for(lambda:self.service.state(('after',))[0]=='ready')
+        self.assertEqual(self.service.diagnostics(), ())
+
     def test_module_has_no_tk_import(self):
         tree=ast.parse(Path(conversion.__file__).read_text(encoding='utf-8'))
         imports=[n.module for n in ast.walk(tree) if isinstance(n,ast.ImportFrom)]

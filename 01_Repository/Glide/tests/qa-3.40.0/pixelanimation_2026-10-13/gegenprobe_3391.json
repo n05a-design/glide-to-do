@@ -1,8 +1,0 @@
-{
-  "vorversion": "3.39.1",
-  "vorversion_sha256": "b65b6974244e7cadc6089e6ae724c7808ea8b134bbcc4520db38e19d97139b70",
-  "exitcode": 1,
-  "passend_rot": true,
-  "beobachtung": "AssertionError: Bildfolgenaktionen fehlen",
-  "einordnung": "Die Vorversion kennt keine Bildfolgenaktionen; die fachliche Trennschärfe der Fälle belegen die Defektgegenproben."
-}

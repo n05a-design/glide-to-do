@@ -293,7 +293,7 @@ class Prueflauf:
         self.gui_prefix = []
         self.gui_problem = None
         self.zone_problem = None
-        self.env = dict(os.environ, PYTHONUTF8="1", PYTHONDONTWRITEBYTECODE="1")
+        self.env = dict(os.environ, PYTHONUTF8="1", PYTHONDONTWRITEBYTECODE="1", PYTHONFAULTHANDLER="1")
         # Suiten laufen absichtlich in einer Zone mit Versatz, wenn der
         # Aufrufer keine vorgibt. In UTC ist jeder Zeitzonenfehler unsichtbar,
         # weil der Versatz null ist: Der UNTIL-Fehler aus 3.21.0 war in einer
@@ -492,6 +492,8 @@ def main():
                 command.append("--nativ")
             if logdir:
                 command.extend(["--report", str(logdir / "zugang-kern.json")])
+        if name == "test_arbeitsmodi.py" and logdir:
+            command.extend(["--report", str(logdir / "arbeitsmodi.json")])
         run.prozess(Path(name).stem, command, gui=True)
     run.prozess("Showcase", [sys.executable, str(REPO / "tests/tools/pruefe_showcase.py")], gui=True)
     for name in ANALYSEN:

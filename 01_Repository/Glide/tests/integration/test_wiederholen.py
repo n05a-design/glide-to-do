@@ -52,7 +52,7 @@ class Lauf:
 
     def neustart(self):
         self.app.save_settings()
-        self.root.destroy()
+        self.ende()
         self.start()
 
     def idle(self, runden=3):
@@ -62,8 +62,12 @@ class Lauf:
 
     def ende(self):
         try:
+            self.app.cancel_pending_callbacks()
+            for job in self.root.tk.splitlist(self.root.tk.call("after", "info")):
+                self.root.after_cancel(job)
+            self.app.release_data_lock()
             self.root.destroy()
-        except Exception:
+        except self.mod.tk.TclError:
             pass
 
     # ------------------------------------------------------------ Bestand

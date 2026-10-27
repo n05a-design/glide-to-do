@@ -50,6 +50,8 @@ def converter(run, directory, fail=False):
                 cancelled.append(path);return None
         if event.is_set():
             cancelled.append(path);return None
+        if mode.get('unexpected'):
+            raise ValueError('C:/Privat/Bild.jpg: geheimer Inhalt')
         if mode['fail']:
             return None
         result=cache.converted_path(path, expected)
@@ -226,7 +228,29 @@ def fall_warteschlange(run,path,control):
     host.destroy()
 
 
-FAELLE=('galerie','seite','startseite','titelbild','pinnwand','retry','hostwechsel','generation','referenz','warteschlange')
+def fall_diagnose(run, path, control):
+    cache, release, entered, calls, cancelled, mode = control
+    mode['unexpected'] = True
+    host = run.mod.tk.Frame(run.root)
+    host.pack()
+    messages, results = [], []
+    with patch.object(run.app, 'log_error', side_effect=lambda text: messages.append((text, threading.get_ident()))):
+        cache.request_conversion(host, str(path), lambda value: results.append(value))
+        assert_responsive(run, entered, calls)
+        release.set()
+        pump(run, lambda: len(results) == 1)
+        assert len(messages) == 1 and 'ValueError' in messages[0][0], messages
+        assert messages[0][1] == threading.get_ident(), 'Diagnose aus dem Worker'
+        assert 'Privat' not in messages[0][0] and 'geheimer Inhalt' not in messages[0][0]
+        cache._conversions.submit(('retry-diagnose',), lambda cancel: (_ for _ in ()).throw(ValueError('Privat')))
+        pump(run, lambda: cache._conversions.state(('retry-diagnose',))[0] == 'failed')
+        cache._poll_conversions()
+        assert len(messages) == 1, 'Gleiche Fehlerklasse flutet das Protokoll'
+    assert results == [None]
+    host.destroy()
+
+
+FAELLE=('galerie','seite','startseite','titelbild','pinnwand','retry','hostwechsel','generation','referenz','warteschlange','diagnose')
 
 
 def main():

@@ -1,0 +1,21 @@
+{
+  "exitcode": 0,
+  "version": "3.46.0",
+  "tk": "9.0.4",
+  "native_backend": false,
+  "checks": [
+    "Echte Erfassung mit Enter: genau eine Aufgabe; Eingabe und Suche eindeutig benannt",
+    "Suche und echte Zeilenauswahl: aktueller Aufgabentext, Status und getrennte Datumsarten",
+    "Strg+Tab verlässt Aufgaben-/Listenbaum vorwärts und zurück ohne Daten-/Undoänderung; Tab-Einrücken bleibt erhalten",
+    "Heute-Planungsaktion und gemeinsamer Inspektor: Fälligkeit getrennt, Unicode/Absätze gespeichert",
+    "Echte Checkbox per Leertaste: kanonische 0/1-Variable, ein Undo, frische Objekte nach Undo",
+    "Echter Dateischreibfehler und nachträglicher Schreibschutz: Modell, Datei, Undo und Haken unverändert",
+    "Eigener Anhang mit Enter/Leertaste erreichbar; aktueller Dateiname und entfernte Zielprüfung ohne externes Öffnen",
+    "Schreibschutz auch während offener Auswahl: Wichtigkeit/Labels verweigern Tastatur- und native Aktionen ohne Modell-/Undoänderung",
+    "Ausgeblendeter Inspektor verweigert Aktionen; Neuaufbau gibt alte Bindungen, Aufträge und Tcl-Kommandos frei",
+    "860×700/große Schrift: Strg+Tab vor/zurück hält fokussierte Inspektorfelder sichtbar; Modell/Undo unverändert, alter Scrollauftrag freigegeben"
+  ],
+  "callback_errors": [],
+  "app_sha256": "d5316c9a8c14c24e61f0bf6e9ae40d4c6be743c2c93a047e738796c10671eced",
+  "reader_abnahme": "offen; Attribut-/Tastaturprüfung ersetzt keine tatsächliche Readerausgabe"
+}

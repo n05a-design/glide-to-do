@@ -1,6 +1,24 @@
 # Änderungsverlauf
 
+## 3.47.0 (27.10.2026) – Mehrfachplanung und Nebenansichtsverlauf
+
+- **Tagessteuerung – Mehrfachplanung:** Auswahlmodus in der Heute-Kachel, zehn Vorschauzeilen je Seite, seitenübergreifende Auswahl, alle offenen Tagesaufgaben auswählen, leeren/beenden. Kästchen wählen in diesem Modus aus und erledigen keine Aufgabe. Gemeinsam planen oder entplanen über bestehende Kapazitäts-/Datumsvorschau; ein Undo/Redo, Fälligkeiten unverändert, frische IDs und Besitzprüfung vor/nach Dialogen. Erledigte, archivierte, entfernte oder inzwischen anders geplante Ziele werden nicht still übernommen.
+- **Nebenansicht – Verlauf:** Bis zu 30 Stationen je Sitzung, Zurück/Vorwärts und Alt+Pfeil mit Suchbegriff/aktivem Treffer, Zeilenauswahl und Leseposition. Vorwärtszweige werden beim neuen Navigieren ersetzt, gelöschte Ziele übersprungen, Titel aktuell aufgelöst. „Verlauf“ bietet auch den bestehenden Inhaltswähler. Keine Speicherung der Historie, Bestandsgrenze bei Ordnerwechsel.
+- **Prüfung und Lieferung:** Gezielte Paket-/Regressionsprüfung und Lieferstand im [Folgepaketnachweis](tests/qa-3.47.0/folgepakete_2026-10-27/README.md). Aufgabenformat bleibt 26; native Pakete, breite Endmatrix und Menschenabnahme getrennt.
+
+## 3.46.0 (27.10.2026) – Tagessteuerung und Nachschlagen
+
+- **Paket 1 – Tagessteuerung:** „Mehr“ an Tagesaufgaben mit Heute/Morgen/Wochenende/nächster Woche/Datum/ohne Tag und bestehender Kapazitätsvorschau. Direkter Fokus-/Planungseinstieg bei „Nächste Aufgabe“ und Tagesvorschlag auf der Startseite. Stabile IDs, aktuelle Besitzprüfung vor und nach Dialogen, bestehender Ein-Undo-/Fälligkeitsvertrag. Die lokalen Startseitenaktionen und Technikverbesserungen nach dem letzten Lieferabschluss sind mit enthalten.
+- **Paket 2 – Nebenansicht:** wörtliche Unicode-Suche mit Trefferzahl, Hervorhebung und Vor-/Zurückwechsel, Strg/Cmd+F und Enter/Umschalt+Enter; Überschriften-/Gruppensprünge und abgestuftes Esc. Haupteditor und offene Eingaben bleiben erhalten. Suchzustand über Neuaufbau; Zeichenpositionen auch nach eingebetteten Kästchen/Bildern korrekt. Suchvariablenspur wird beim Hostabbau entfernt.
+- **Kleine Breite:** Nebenansichtskopf mit geschützten, bei Bedarf umbrechenden Öffnen-/Schließen-Aktionen; vier neue Größen-/Designkonfigurationen geprüft.
+- **Prüfdiagnostik:** Vollprüfung sichert Arbeitsmodi-JSON und aktiviert Faulthandler; Wiederholen-Testfenster melden vor Neustart alle Tk-after-Aufträge ab. Keine behauptete Behebung des historischen Linux-/Tk-9.1-Fehlers oder nativen Absturzes.
+- **Version und Format:** 3.46.0, Aufgabenformat weiterhin 26; keine neue Laufzeitabhängigkeit. Aktueller Prüf-/Lieferstand im [Zweierpaketnachweis](tests/qa-3.46.0/zweierpaket_2026-10-27/README.md).
+
 ## Ergänzungen und Lieferabschluss 3.45.0 (26.10.2026)
+
+- **Startseitenaktionen, lokaler Featurekandidat:** Eingeplante Aufgaben direkt in der Heute-Kachel erledigen; ein Rückgängig-Schritt, bestehende Serien-/Blockierlogik und Sofortspeicherung. Vorschau zeigt fünf offene Aufgaben statt erledigter Platzhalter. Heute-/Nächste-Aufgabe-Renderer über explizite Daten/Ports ausgelagert; stabile IDs, Retention und Schreibschutz erhalten. [Prüfung und noch offene Lieferung](tests/qa-3.45.0/startseitenaktionen_2026-10-26/README.md).
+
+- **Späterer lokaler Technikkandidat, noch nicht geliefert:** Vertiefte Codebasisprüfung in Analyse/Architektur und vorhandene WA-Roadmap eingearbeitet. Tk-freier Speicherkoordinator erhält Bool-/SaveResult-, Undo- und Fehlerverträge; lesender Vergleich von Abschlusszeitübernahme getrennt. Fehlendes K-Loslassen blockiert nach Modifierende/Fensterfokusverlust nicht mehr das nächste Kompaktkürzel; Ereignisspuren für die offene Linux-Gegenprobe. Konverterdiagnose begrenzt und ohne private Fehlerinhalte im Hauptthread. [Gezielte Prüfungen und Liefergrenze](tests/qa-3.45.0/codebasis_2026-10-26/README.md).
 
 - **Alle Lieferungen aktualisiert:** Python-Fassung sowie echte Windows-/Mac-Pakete 3.45.0 geliefert und hashgeprüft. 104 Windows-Suiten grün; nativer Macbau, Signatur und isolierter Start grün. Animations-/Undo-Überlagerung korrigiert; Altleser- und Stapelreihenfolgeprüfungen repariert. [Nachweis](tests/qa-3.45.0/paketabschluss_2026-10-26/README.md).
 

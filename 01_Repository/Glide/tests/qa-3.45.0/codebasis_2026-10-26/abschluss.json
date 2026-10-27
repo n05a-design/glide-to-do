@@ -1,0 +1,21 @@
+{
+  "source_manifest_matches": true,
+  "links_checked": 613,
+  "anchors_checked": 166,
+  "errors": [],
+  "delivery_differences": [
+    "app.pyw",
+    "compact_mode.py",
+    "image_conversion.py",
+    "image_preview.py",
+    "persistence.py",
+    "save_comparison.py"
+  ],
+  "coordinator_functions": {
+    "save": 38,
+    "attempt": 5
+  },
+  "documentation_check": "Alle Dokumente einschließlich Archiv im Index; 328 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell.",
+  "git_diff_check_exitcode": 0,
+  "ok": true
+}

@@ -12,6 +12,23 @@ import home_dashboard as dashboard
 TODAY = date(2026, 10, 26)
 
 
+class PlannedPreviewTests(unittest.TestCase):
+    def test_done_entries_do_not_use_any_of_the_five_slots(self):
+        entries = [(None, 0, n, {'id': 'source'}, {'id': str(n), 'done': n < 6}) for n in range(14)]
+        before = copy.deepcopy(entries)
+        preview = dashboard.planned_preview(entries)
+        self.assertEqual([row[-1]['id'] for row in preview], ['6', '7', '8', '9', '10'])
+        self.assertIs(preview[0], entries[6])
+        self.assertEqual(entries, before)
+
+    def test_empty_done_only_and_explicit_limit(self):
+        self.assertEqual(dashboard.planned_preview([]), [])
+        self.assertEqual(dashboard.planned_preview([(None, 0, 0, {}, {'done': True})]), [])
+        entries = [(None, 0, n, {}, {'done': False}) for n in range(4)]
+        self.assertEqual(dashboard.planned_preview(iter(entries), 2), entries[:2])
+        self.assertEqual(dashboard.planned_preview(entries, 0), [])
+
+
 def walk(items):
     for item in items:
         yield item

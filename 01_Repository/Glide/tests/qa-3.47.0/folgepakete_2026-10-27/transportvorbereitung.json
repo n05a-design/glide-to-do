@@ -1,0 +1,9 @@
+{
+  "branch": "codex/glide-3.47-folgepakete",
+  "base": "1f4dbf8",
+  "new_project_files": 79,
+  "reviewed_proofs": 54,
+  "sanitized_proof_files": 4,
+  "excluded_local_environment": true,
+  "excluded_qa_screenshots": true
+}

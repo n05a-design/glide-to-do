@@ -1,0 +1,15 @@
+{
+  "app_sha256": "c128faa543513c156fe5c396d4bfa7dae74e2938643ac9739c6a6be812f6d5c8",
+  "faelle": {
+    "kompakt_ansichten": {
+      "ok": true,
+      "befund": "112 Knopfprüfungen in vier Ansichten bei 480×560 und großer Schrift; Menü mit allen Befehlen",
+      "runtime": {
+        "python": "3.15.1",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": []
+}

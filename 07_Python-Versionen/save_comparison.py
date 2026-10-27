@@ -19,6 +19,52 @@ class ListComparison:
     parts: dict = field(default_factory=dict, compare=False)
 
 
+def comparison_parts(entries, previous_parts, changed_ids):
+    """Aktuelle Listen mit wiederverwendbarem Teilstand; doppelte IDs nie cachen."""
+    entries = list(entries or ())
+    previous_parts = previous_parts or {}
+    ids = [entry.get("id") for entry in entries if isinstance(entry, dict)]
+    duplicate_ids = {value for value, count in Counter(ids).items() if count > 1}
+    for entry in entries:
+        if isinstance(entry, dict):
+            list_id = entry.get("id")
+            part = (previous_parts.get(list_id)
+                    if changed_ids is not None and list_id not in changed_ids
+                    and list_id not in duplicate_ids else None)
+            yield entry, part
+
+
+def stamp_completion_times(entries, *, baseline, completed_at, schedulable):
+    """Explizite Mutation vor dem Vergleich, einschließlich verborgener Kinder."""
+    before = baseline.get("items", {}) if isinstance(baseline, dict) else {}
+
+    def walk(points):
+        for item in points or ():
+            if isinstance(item, dict):
+                stamp_done_time(item, before, completed_at, schedulable)
+                walk(item.get("children"))
+
+    for entry in entries or ():
+        if isinstance(entry, dict):
+            walk(entry.get("items"))
+
+
+def prepare_save_comparison(entries, *, baseline, completed_at,
+                            previous_parts=None, changed_ids=None, **options):
+    """Speichervorbereitung: erst Abschlussdaten übernehmen, dann rein vergleichen.
+
+    Nur neu zu lesende Listen ändern; derselbe Scope wie beim Teilvergleich.
+    Der lesende compare_lists-/prepare_comparison-Vertrag hat keine Mutationsoption.
+    """
+    entries = list(entries or ())
+    for entry, part in comparison_parts(entries, previous_parts, changed_ids):
+        if part is None:
+            stamp_completion_times([entry], baseline=baseline, completed_at=completed_at,
+                                   schedulable=options["schedulable"])
+    return prepare_comparison(entries, previous_parts=previous_parts,
+                              changed_ids=changed_ids, **options)
+
+
 def prepare_comparison(entries, *, previous_parts=None, changed_ids=None, **options):
     """P08b: deklarierte Listen neu lesen, sonst vollständig vergleichen.
 
@@ -28,17 +74,8 @@ def prepare_comparison(entries, *, previous_parts=None, changed_ids=None, **opti
     oder Verschieben. Die Daten und Vergleichswerte werden nicht verändert.
     """
     result = ListComparison({}, {}, {}, {})
-    previous_parts = previous_parts or {}
-    entries = list(entries or ())
-    ids = [entry.get("id") for entry in entries if isinstance(entry, dict)]
-    duplicate_ids = {value for value, count in Counter(ids).items() if count > 1}
-    for entry in entries:
-        if not isinstance(entry, dict):
-            continue
+    for entry, part in comparison_parts(entries, previous_parts, changed_ids):
         list_id = entry.get("id")
-        part = (previous_parts.get(list_id)
-                if changed_ids is not None and list_id not in changed_ids
-                and list_id not in duplicate_ids else None)
         if part is None:
             part = compare_lists([entry], **options)
         for name in ("items", "lists", "list_signatures", "item_signatures"):
@@ -98,17 +135,14 @@ def stamp_done_time(item, before, completed_at, schedulable):
         item["done_at"] = None
 
 
-def compare_lists(entries, *, item_fields, schedulable, drawing_hash,
-                  baseline=None, completed_at=None, include_edits=True):
+def compare_lists(entries, *, item_fields, schedulable, drawing_hash, include_edits=True):
     """Neue Vergleichswerte ohne Cache nach Objektidentität aufbauen.
 
-    Nur completed_at erlaubt das bisherige Setzen/Leeren von done_at. Reine
-    Verlaufsabfragen bleiben lesend. include_edits=False spart dort sämtliche
+    Der Vergleich verändert keine Aufgaben. include_edits=False spart sämtliche
     Aktivitäts-Prüfsummen. Der Aufrufer übernimmt sie erst nach erfolgreichem
     Dateischreiben; nach Undo/Import wird jeder ersetzte Baum neu gelesen.
     """
     result = ListComparison({}, {}, {}, {})
-    before = baseline.get("items", {}) if isinstance(baseline, dict) else {}
 
     def walk(points, list_id, title, parent_id, visible=True):
         signatures = []
@@ -121,8 +155,6 @@ def compare_lists(entries, *, item_fields, schedulable, drawing_hash,
                 continue
             item_id = item.get("id")
             valid = visible and isinstance(item_id, str) and bool(item_id)
-            if completed_at is not None:
-                stamp_done_time(item, before, completed_at, schedulable)
             if valid:
                 result.items[item_id] = {
                     "list": list_id, "list_title": title, "parent": parent_id,

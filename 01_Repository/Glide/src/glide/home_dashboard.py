@@ -11,6 +11,23 @@ from datetime import date, timedelta
 PROJECTIONS = frozenset(("summary", "focus", "week", "labels", "scheduled"))
 
 
+def planned_preview(entries, limit=5):
+    """Die ersten offenen Planeinträge, in Originalreihenfolge und mit Originalen.
+
+    Erledigte verbrauchen keinen Vorschauplatz. Die Zeit-/Archiv-/Planregeln
+    bleiben Sache des bestehenden plan_day_entries-Aufrufers.
+    """
+    result = []
+    if limit <= 0:
+        return result
+    for entry in entries:
+        if not entry[-1].get("done"):
+            result.append(entry)
+            if len(result) >= limit:
+                break
+    return result
+
+
 @dataclass
 class Dashboard:
     day: date

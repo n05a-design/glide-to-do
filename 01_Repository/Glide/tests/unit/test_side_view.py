@@ -7,6 +7,47 @@ import page_markdown
 import side_view
 
 
+class NavigationTests(unittest.TestCase):
+    def test_unicode_offsets_refer_to_original_text(self):
+        text = '🎵 Straße und STRASSE, Straße.'
+        matches, more = side_view.literal_matches(text, 'strasse')
+        self.assertEqual([text[a:b] for a,b in matches], ['Straße', 'STRASSE', 'Straße'])
+        self.assertFalse(more)
+        self.assertEqual(side_view.literal_matches('ß', 's'), ([(0, 1)], False))
+
+    def test_literal_query_and_budget(self):
+        self.assertEqual(side_view.literal_matches('[x] a.b [x]', '[x]'), ([(0, 3), (8, 11)], False))
+        self.assertEqual(side_view.literal_matches('aaaa', 'a', 2), ([(0, 1), (1, 2)], True))
+        self.assertEqual(side_view.literal_matches('abc', ''), ([], False))
+        self.assertEqual(side_view.literal_matches('abc', 'z'), ([], False))
+
+    def test_matching_rows_preserve_ids_and_order(self):
+        rows = [('one', 'Straße'), ('two', 'Straße Straße'), ('three', 'Anders')]
+        self.assertEqual(side_view.matching_rows(rows, 'STRASSE'), (['one', 'two'], False))
+        self.assertEqual(side_view.matching_rows(rows, 'STRASSE', 1), (['one'], True))
+
+    def test_match_navigation_wraps_both_directions(self):
+        self.assertEqual(side_view.match_index(-1, 3), 0)
+        self.assertEqual(side_view.match_index(-1, 3, -1), 2)
+        self.assertEqual(side_view.match_index(2, 3), 0)
+        self.assertEqual(side_view.match_index(0, 3, -1), 2)
+        self.assertEqual(side_view.match_index(0, 0), -1)
+
+    def test_page_sections_are_projection_headings(self):
+        entry = {'list_kind': 'page', 'rich_note': page_markdown.markdown_to_page('# Start\n\nText\n\n## Weiter\n')}
+        before = repr(entry)
+        sections = side_view.sections(entry)
+        self.assertEqual([section['title'] for section in sections], ['Start', 'Weiter'])
+        self.assertEqual([section['depth'] for section in sections], [0, 1])
+        self.assertEqual(repr(entry), before)
+
+    def test_list_sections_use_real_group_ids(self):
+        entry = {'items': [{'id': 'g', 'kind': 'group', 'text': 'Abschnitt', 'children': [
+            {'id': 'h', 'kind': 'heading', 'text': 'Unterabschnitt'}, {'id': 'a', 'text': 'Aufgabe'}]}]}
+        self.assertEqual(side_view.sections(entry), [dict(key='g', title='Abschnitt', depth=0),
+                                                     dict(key='h', title='Unterabschnitt', depth=1)])
+
+
 def page_document():
     document = page_markdown.markdown_to_page(
         '# Wochenplan\n\nAbsatz mit **fett** und *kursiv*.\n\n- Grundriss prüfen\n- Muster bestellen\n\n'

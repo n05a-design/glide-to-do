@@ -14,6 +14,20 @@ bleiben ohne Eintrag, nachträglich wird nichts erfunden.
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.47.0": (
+        "Startseite: mehrere Tagesaufgaben auswählen und gemeinsam planen oder den Bearbeitungstag entfernen.",
+        "Die Auswahl bleibt über Vorschauseiten erhalten; Alle auswählen umfasst alle offenen Tagesaufgaben.",
+        "Gemeinsame Planung mit Kapazitätsvorschau, unveränderter Fälligkeit und einem Rückgängig-Schritt.",
+        "Nebenansicht: Zurück und Vorwärts, auch mit Alt+Pfeil, stellen Suche und Leseposition wieder her.",
+        "Verlauf zeigt besuchte Inhalte mit aktuellen Titeln und bietet den direkten Inhaltswechsel.",
+    ),
+    "3.46.0": (
+        "Startseite: Tagesaufgaben direkt abhaken; die Vorschau zeigt fünf wirklich offene Aufgaben.",
+        "Mehr an jeder Tagesaufgabe: mit Kapazitätsvorschau einplanen, umplanen oder den Bearbeitungstag entfernen.",
+        "Nächste Aufgabe: Fokus und Planung direkt starten; der Tagesvorschlag ist auf der Startseite erreichbar.",
+        "Nebenansicht: Inhalt durchsuchen, Treffer markieren und mit Enter oder Umschalt+Enter wechseln.",
+        "Über Abschnitte zu Überschriften oder Aufgabengruppen springen, während die Hauptarbeit offen bleibt.",
+    ),
     "3.45.0": (
         "Kompaktmodus direkt oben im Menü Ansicht; Nebenansicht und durchsuchbare Seiten- und Blockaktionen.",
         "Speicherstatus mit getrennten Fehlermeldungen, Erneut speichern und Sicherungsreserve.",

@@ -3,6 +3,9 @@ import importlib.machinery
 import importlib.util
 import os
 import copy
+import json
+import sys
+import time
 from datetime import date, timedelta
 from pathlib import Path
 import tempfile
@@ -107,6 +110,163 @@ def check_dashboard_lifetime(app, mod, idle):
     app._home_signature = None
     app._refresh_home()
     idle()
+
+
+def check_task_tile_actions(app, mod, idle, errors):
+    """Offene Vorschau, echte Kästchen, aktuelle IDs, Undo/Redo und B15."""
+    sys.path.insert(0, str(repo / 'tests/integration'))
+    from test_uiux_paket import knopf_befunde
+    root = app.root
+    today = date.today().isoformat()
+    source = app.new_list_object('Tagesaufgaben', list_id='home-actions')
+    for number in range(13):
+        item = app.new_item(f'{"A erledigt" if number < 6 else "B offen"} {number:02}',
+                            item_id=f'home-action-{number}', planned_date=today)
+        item['done'] = number < 6
+        source['items'].append(item)
+    app.lists = [source]
+    app.folders, app.labels, app.trash = [], [], []
+    app.items, app.active_list_id = source['items'], source['id']
+    app.settings['home_tile_order'] = ['today', 'focus']
+    app.settings['home_tiles_hidden'] = [key for key in app.HOME_TILE_KEYS if key not in ('today', 'focus')]
+    app.settings['release_notes_seen'] = mod.APP_VERSION
+    app.settings['daily_goal'] = 0
+    app.clear_render_cache()
+    assert app.save_items()
+    app.undo_stack.clear()
+    app.set_home_view()
+    idle()
+
+    def checks():
+        return [w for w in descendants(app.home_content) if isinstance(w, mod.RoundedButton)
+                and getattr(w, '_home_task_id', None) and w.text == app.ICONS['task_open']]
+
+    def check(identity):
+        return next(w for w in checks() if w._home_task_id == identity)
+
+    def click(widget):
+        widget.event_generate('<ButtonPress-1>', x=6, y=6)
+        widget.event_generate('<ButtonRelease-1>', x=6, y=6)
+        idle()
+
+    assert {w._home_task_id for w in checks()} == {f'home-action-{n}' for n in range(6, 11)}
+    retained = check('home-action-6')
+    for _ in range(3):
+        app._home_signature = None
+        app.refresh_home()
+        idle()
+        assert check('home-action-6') is retained, 'Renderer verliert die bestehenden Knöpfe'
+    original = app.find_item_in_lists('home-action-6')[0]
+    old_command = check(original['id']).command
+    click(check(original['id']))
+    assert app.view_mode == app.HOME_VIEW and len(app.undo_stack) == 1
+    assert app.find_item_in_lists(original['id'])[0]['done']
+    saved = json.loads(Path(mod.SAVE_FILE).read_text(encoding='utf-8'))
+    assert next(item for item in saved['lists'][0]['items'] if item['id'] == original['id'])['done']
+    assert {w._home_task_id for w in checks()} == {f'home-action-{n}' for n in range(7, 12)}
+    old_command()
+    idle()
+    assert len(app.undo_stack) == 1, 'Zweiter veralteter Klick öffnet den Punkt wieder'
+    app.undo_last_change()
+    idle()
+    current = app.find_item_in_lists(original['id'])[0]
+    assert not current['done'] and current is not original
+    app.redo_last_change()
+    idle()
+    assert app.find_item_in_lists(original['id'])[0]['done']
+    app.undo_last_change()
+    idle()
+    old_command()
+    idle()
+    assert app.find_item_in_lists(original['id'])[0]['done'], 'Callback hält das Objekt vor Undo'
+    app.undo_last_change()
+    idle()
+
+    # Derselbe stabile-ID-Weg öffnet weiterhin die Originalaufgabe.
+    title = next(w for w in descendants(app.home_content) if isinstance(w, mod.RoundedButton)
+                 and getattr(w, '_home_task_id', None) == original['id'] and w.text != app.ICONS['task_open'])
+    click(title)
+    assert app.active_list_id == source['id'] and original['id'] in app.tree.selection()
+    app.set_home_view()
+    idle()
+    callback = check('home-action-7').command
+    before, depth = copy.deepcopy(app.lists), len(app.undo_stack)
+    with patch.object(app, 'refresh_data_lock', return_value=False):
+        callback()
+    assert app.lists == before and len(app.undo_stack) == depth
+    app._data_read_only = True
+    with patch.object(app, 'refresh_data_lock', return_value=True):
+        callback()
+        app.refresh_home()
+        idle()
+        assert not checks()
+        assert not any(w.text.endswith('Erledigt') for w in descendants(app.home_content)
+                       if isinstance(w, mod.RoundedButton))
+        assert app.lists == before and len(app.undo_stack) == depth
+    app._data_read_only = False
+    app.refresh_home()
+    idle()
+
+    # Der echte neue Knopf unter Schreibfehler: Originaldatei und ein Undo bleiben.
+    data_before = Path(mod.SAVE_FILE).read_bytes()
+    writer = app.write_json_atomic
+
+    def fail_data(path, payload):
+        if str(path) == str(mod.SAVE_FILE):
+            raise OSError('Startseiten-Schreibprobe')
+        return writer(path, payload)
+
+    with patch.object(app, 'write_json_atomic', side_effect=fail_data), \
+            patch.object(app, 'show_error'), patch.object(app, 'show_undo_toast') as toast:
+        click(check('home-action-7'))
+        assert app.dirty and Path(mod.SAVE_FILE).read_bytes() == data_before
+        assert len(app.undo_stack) == depth + 1 and not toast.called
+    assert app.save_items()
+    app.undo_last_change()
+    idle()
+
+    # Geometrie der ruhenden Ansicht: vorhandene zeitlich begrenzte
+    # Erledigungsfahnen natürlich auslaufen lassen und den Undo-Hinweis schließen.
+    app.hide_undo_toast()
+    deadline = time.monotonic() + 1.1
+    while time.monotonic() < deadline:
+        idle()
+        time.sleep(.02)
+    configurations = [('light', '860x700', 'mittel', False), ('dark', '1280x800', 'gross', False),
+                      ('glass_light', '860x700', 'gross', False), ('light', '480x560', 'gross', True)]
+    count, evidence = 0, []
+    for design, geometry, font, compact in configurations:
+        app.settings['ui_font_size'] = font
+        app.apply_ui_font()
+        app.set_design(design)
+        if design.startswith('glass'):
+            app.set_backdrop_choice(mod.glide_backdrop.presets_for(design)[0].key)
+        if compact:
+            app.enter_compact_mode()
+        root.geometry(geometry + '+20+20')
+        app._home_signature = None
+        app.refresh_home()
+        idle()
+        for position in (0, 0.5, 1):
+            app.home_canvas.yview_moveto(position)
+            idle()
+            tested, findings = knopf_befunde(root, mod, f'Heute-Aktionen {design} {geometry} {position}')
+            count += tested
+            assert not findings, findings[:5]
+        evidence.append(dict(design=design, geometry=geometry, font=font, compact=compact))
+        if os.environ.get('GLIDE_HOME_CAPTURE'):
+            sys.path.insert(0, str(repo / 'tests/tools'))
+            from releasedaten import save_windows_screenshot
+            app.home_canvas.yview_moveto(0)
+            idle()
+            target = Path(os.environ['GLIDE_HOME_CAPTURE']) / f'{design}-{geometry}.png'
+            target.parent.mkdir(parents=True, exist_ok=True)
+            save_windows_screenshot(root, target)
+        if compact:
+            app.leave_compact_mode()
+    assert not errors, errors
+    return dict(open_preview=5, undo_redo=True, stale_callback=True, write_failure=True,
+                read_only=True, configurations=evidence, button_checks=count)
 
 
 with tempfile.TemporaryDirectory(prefix='glide-startseite-') as directory:
@@ -253,6 +413,10 @@ with tempfile.TemporaryDirectory(prefix='glide-startseite-') as directory:
             assert app.home_canvas.cget('bg') == app.theme['bg'] == app.home_content.cget('bg')
             assert app.home_scrollbar.bg_color == app.theme['bg']
         check_dashboard_lifetime(app, mod, idle)
+        actions = check_task_tile_actions(app, mod, idle, errors)
+        if os.environ.get('GLIDE_HOME_ACTION_REPORT'):
+            Path(os.environ['GLIDE_HOME_ACTION_REPORT']).write_text(
+                json.dumps(actions, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         assert not errors, errors
         print('test_startseite3332: OK; D12-Standard, zusammengeführte Kachel Heute, eigene Auswahl nach Neustart, '
               'Zurücksetzen, Größenfilter Hauptfenster, gebündeltes Zeichnen, Designwechsel; '

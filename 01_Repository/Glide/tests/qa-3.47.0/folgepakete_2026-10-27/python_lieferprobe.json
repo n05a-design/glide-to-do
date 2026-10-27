@@ -1,0 +1,24 @@
+{
+  "app_sha256": "dd26a038f430860e41cfb2e703689ea0c4dd7bcacbc753277be89ade23c1f014",
+  "faelle": {
+    "home_mehrfachplanung": {
+      "ok": true,
+      "befund": "21 offene Aufgaben aus zwei Listen über drei Seiten; Auswahl ohne Schreiben/Erledigen, Morgen/ohne Tag mit einem Undo/Redo, Fälligkeit, Dialogabbruch/Alterung, Sperre, Tageswechsel und readonly grün",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "side_history": {
+      "ok": true,
+      "befund": "Zurück/Vorwärts/Alt-Pfeile, Suchbegriff/aktiver Treffer, Leseposition und Zeilenauswahl, aktueller Verlauf/Inhaltswechsel, gelöschte Ziele, fehlender Inhalt, readonly und Bestandsgrenze; Hauptentwurf und Dateibytes erhalten",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": []
+}

@@ -1,0 +1,15 @@
+{
+  "app_sha256": "a303fe8c2537257e4a7abe33d72d7a57b2167ce7cd2344174b1c418c8f86a6d1",
+  "faelle": {
+    "folgepaket_gestaltung": {
+      "ok": true,
+      "befund": "606 Knopfprüfungen; Tagessteuerung in vier Größen-/Schrift-/Designkonfigurationen und drei Scrolllagen, Nebenansicht mit Suche an Mindestbreite in drei Konfigurationen",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": []
+}

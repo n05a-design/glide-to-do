@@ -1,6 +1,8 @@
 # Prüfungen für Glide
 
-Stand 26.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · 104 Suiten aus `pruefen.py` und fünf Analysen
+Stand 27.10.2026 · Glide 3.47.0 · Aufgabenformat 26 · 104 Suiten aus `pruefen.py` und fünf Analysen
+
+Aktuell 3.47.0: `test_arbeitsmodi.py` enthält 22 echte Bedien-/Geometriefälle, einschließlich seitenübergreifender Tagesauswahl, gemeinsamer Planung und Nebenansichtsverlauf. 13 neue reine Auswahl-/Verlaufstests ergänzen die Home-/Side-Gruppen; Quellmanifest, eingefrorener Lauf und gezielte Erwartungskorrektur stehen im [Nachweis](qa-3.47.0/folgepakete_2026-10-27/README.md). Die 104 registrierten Suiten sind weiterhin kein neuer bestandener Volllauf.
 
 Startseitenmodell WA-39/WA-36 (26.10.2026): zwölf Fachfälle in `test_home_dashboard.py`; `test_startseite3332.py` ergänzt Archiv-/Datums-/Gleichstandsprüfung, genau einen Modellaufbau für die Bestandskacheln, echte Erledigen-/Undo-Aktion, aktuelle Objektauflösung und Renderfehler. Bestehende Standard-/Anpassungs-/Designprüfungen bleiben. [Nachweis und Leistung](qa-3.45.0/startseitenmodell_2026-10-26/README.md). Keine zusätzliche Suite und kein neuer Volllauf.
 
@@ -19,7 +21,7 @@ Die neue Pflichtsuite `test_sicherungszentrale.py` prüft Übersicht/Filter, ext
 
 | Zweck | Aufruf |
 |---|---|
-| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.45.0/<Name> --timeout 900` |
+| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.47.0/<Name> --timeout 900` |
 | Schnellprüfung | `python3 -B tests/tools/pruefen.py` |
 | CI-Grundstufe (wie GitHub) | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` |
 | Windows | `tests/tools/windows_vollpruefung.cmd` (Anleitung in der [manuellen Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md)) |

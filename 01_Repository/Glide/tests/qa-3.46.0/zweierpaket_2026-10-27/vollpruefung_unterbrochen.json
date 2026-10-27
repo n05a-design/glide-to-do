@@ -1,0 +1,21 @@
+{
+  "status": "unvollständig",
+  "prozess_exitcode": 1073807364,
+  "abschlussbericht_vorhanden": false,
+  "letzte_bestaetigte_suite": "test_bildkonversion",
+  "abbruch_waehrend": "test_erwaehnungen",
+  "fortsetzung_ab": "test_erwaehnungen",
+  "rest_suiten": [
+    "test_erwaehnungen.py",
+    "test_auftraege.py",
+    "test_markdownbaum.py",
+    "test_seitenkarten.py",
+    "test_ansichten.py",
+    "test_arbeitsmodi.py",
+    "test_speicherstatus.py",
+    "test_sicherungszentrale.py",
+    "test_wiederholungsregeln.py",
+    "test_vollpruefung325.py"
+  ],
+  "hinweis": "Ursache des Prozess-/Werkzeugabbruchs nicht belegt; kein grüner Gesamtvolllauf."
+}

@@ -75,8 +75,43 @@ def taste(widget, sequenz, lauf):
     """
     widget.focus_force()
     idle(lauf, 2)
+    if hasattr(lauf, 'compact_trace'):
+        lauf.compact_trace.append({'synthetic': sequenz, 'before': compact_snapshot(lauf)})
     widget.event_generate(sequenz)
     idle(lauf, 3)
+    if hasattr(lauf, 'compact_trace'):
+        lauf.compact_trace.append({'synthetic': sequenz, 'after': compact_snapshot(lauf)})
+
+
+def compact_snapshot(lauf):
+    focus = lauf.root.focus_get()
+    return {'compact': lauf.app.compact_mode_active(),
+            'down': bool(getattr(lauf.app, '_compact_shortcut_down', False)),
+            'minsize': list(lauf.root.minsize()),
+            'focus': str(focus) if focus is not None else None,
+            'focus_class': focus.winfo_class() if focus is not None else None}
+
+
+def trace_compact_events(lauf):
+    """Beobachtete Ereignisse ohne Textinhalte; bei roten CI-Fällen im JSON behalten."""
+    if not hasattr(lauf, 'compact_trace'):
+        lauf.compact_trace = []
+    handler = lauf.app.handle_compact_shortcut
+
+    def observe(event):
+        row = {'type': str(event.type), 'state': int(event.state), 'key': event.keysym,
+               'time': event.time, 'before': compact_snapshot(lauf)}
+        lauf.compact_trace.append(row)
+        try:
+            return handler(event)
+        finally:
+            row['after'] = compact_snapshot(lauf)
+
+    for sequence in ('<Control-Shift-K>', '<Control-Shift-k>', '<KeyRelease-K>', '<KeyRelease-k>'):
+        lauf.root.bind(sequence, observe)
+    if lauf.mod.IS_MACOS:
+        for sequence in ('<Command-Shift-K>', '<Command-Shift-k>'):
+            lauf.root.bind(sequence, observe)
 
 
 def klick(widget, lauf, x=4, y=4):
@@ -84,7 +119,8 @@ def klick(widget, lauf, x=4, y=4):
     widget.event_generate("<ButtonPress-1>", x=x, y=y)
     widget.event_generate("<ButtonRelease-1>", x=x, y=y)
     # Wie die echte Maus: Verlassen beendet auch den vorgemerkten Tooltip.
-    widget.event_generate("<Leave>", x=x, y=y)
+    if widget.winfo_exists():
+        widget.event_generate("<Leave>", x=x, y=y)
     idle(lauf, 3)
 
 
@@ -479,7 +515,8 @@ def fall_nebenansicht_liste(lauf):
     texte = " ".join(w.cget("text") for w in knoepfe(app.side_pane, lauf.mod.tk.Label))
     assert "Papierkorb" in texte, texte
     beschriftungen = [k.text for k in knoepfe(app.side_pane, lauf.mod.RoundedButton)]
-    assert beschriftungen == ["Schließen"], beschriftungen
+    # Auch bei fehlendem Inhalt bleibt die neue lesende Rücknavigation offen.
+    assert beschriftungen == ["Zurück", "Vorwärts", "Verlauf", "Schließen"], beschriftungen
     app.undo_last_change()
     idle(lauf, 5)
     beschriftungen = [k.text for k in knoepfe(app.side_pane, lauf.mod.RoundedButton)]
@@ -933,6 +970,7 @@ def kompakt_knoepfe(app):
 def fall_kompakt(lauf):
     """Ein und aus per Kürzel, Mindestmaß, getrennte Fensterlagen, Neustart, Nebenansicht wartet."""
     app = lauf.app
+    trace_compact_events(lauf)
     liste, punkte, seite = bestand(lauf)
     lauf.root.geometry("1280x800+40+30")
     idle(lauf, 6)
@@ -966,7 +1004,8 @@ def fall_kompakt(lauf):
     taste(lauf.root, "<Control-Shift-K>", lauf)
     lauf.root.event_generate("<Control-Shift-KeyRelease-K>")
     idle(lauf, 6)
-    assert not app.compact_mode_active() and tuple(lauf.root.minsize()) == (860, 700)
+    assert not app.compact_mode_active(), compact_snapshot(lauf)
+    assert tuple(lauf.root.minsize()) == (860, 700), compact_snapshot(lauf)
     assert lauf.root.geometry() == normal, (lauf.root.geometry(), normal)
     assert app.header_frame.winfo_ismapped() and app.sidebar_shell.winfo_ismapped()
     assert app.side_pane.winfo_ismapped(), "Nebenansicht kehrt zurück"
@@ -981,6 +1020,7 @@ def fall_kompakt(lauf):
     assert gespeichert == normal, (gespeichert, normal)
     lauf.neustart()
     app = lauf.app
+    trace_compact_events(lauf)
     assert not app.compact_mode_active() and tuple(lauf.root.minsize()) == (860, 700)
     assert app.settings["compact_window"].startswith("480x560")
     # Unter Windows/Tk 9.0.4 kam nativ nur KeyRelease-K mit Strg+Shift an.
@@ -1019,6 +1059,33 @@ def fall_kompakt(lauf):
     idle(lauf)
     assert not app.compact_mode_active(), "Menüeintrag kehrt nicht zur Normalansicht zurück"
     return f"Kompaktmodus direkt als erster Menüeintrag; Kürzel mit Drücken/Loslassen und reinem Loslassen im Editor/Hauptfenster, keine Doppelwirkung; 480×560, getrennte Lagen über Neustart, Kopf B07, {anzahl + anzahl2} Knöpfe ohne Befund"
+
+
+def fall_kompakt_verlorenes_loslassen(lauf):
+    """Fehlendes K-Loslassen, Modifierende und Fensterfokusverlust über echte Bindungen."""
+    app = lauf.app
+    trace_compact_events(lauf)
+    taste(lauf.root, '<Control-Shift-K>', lauf)
+    assert app.compact_mode_active(), compact_snapshot(lauf)
+    taste(lauf.root, '<KeyRelease-Control_L>', lauf)
+    assert not getattr(app, '_compact_shortcut_down', False), compact_snapshot(lauf)
+    taste(lauf.root, '<Control-Shift-K>', lauf)
+    assert not app.compact_mode_active(), compact_snapshot(lauf)
+    lauf.root.event_generate('<KeyRelease-k>')
+    idle(lauf)
+    # Interner Fokuswechsel erhält die Paarzuordnung; nur das Hauptfensterende setzt zurück.
+    app._compact_shortcut_down = True
+    app.entry.event_generate('<FocusOut>')
+    idle(lauf)
+    assert app._compact_shortcut_down, 'Interner Fokuswechsel verliert das Ereignispaar'
+    lauf.root.event_generate('<FocusOut>')
+    idle(lauf)
+    assert not app._compact_shortcut_down, compact_snapshot(lauf)
+    taste(lauf.root, '<Control-Shift-K>', lauf)
+    assert app.compact_mode_active(), compact_snapshot(lauf)
+    lauf.root.event_generate('<KeyRelease-k>')
+    idle(lauf)
+    return 'Fehlendes K-Loslassen blockiert nach Modifierende/Fensterfokusverlust nicht das nächste Kürzel; interner Fokuswechsel erhält das Paar'
 
 
 def fall_kompakt_ansichten(lauf):
@@ -1154,10 +1221,432 @@ def fall_gestaltung(lauf):
     return f"{gesamt} Knopfprüfungen in fünf Konfigurationen ohne Befund" + (" · Aufnahmen gespeichert" if capture else "")
 
 
+def fall_tagessteuerung(lauf):
+    """Neue Startseitenaktionen über echte Knöpfe/Menüs und vorhandene Mutationswege."""
+    from datetime import date, timedelta
+    app, mod = lauf.app, lauf.mod
+    today = date.today().isoformat()
+    tomorrow = (date.today() + timedelta(days=1)).isoformat()
+    source = app.new_list_object('Tagessteuerung')
+    task = app.new_item('Angebot prüfen', due=today, planned_date=today, estimated_minutes=30)
+    blocker = app.new_item('Freigabe abwarten', planned_date=today)
+    blocked = app.new_item('Noch blockiert', planned_date=today, blocked_by=[blocker['id']])
+    source['items'] = [task, blocker, blocked]
+    app.lists, app.folders, app.labels, app.trash = [source], [], [], []
+    app.items, app.active_list_id = source['items'], source['id']
+    app.settings['home_tile_order'] = ['today', 'focus']
+    app.settings['home_tiles_hidden'] = [key for key in app.HOME_TILE_KEYS if key not in ('today', 'focus')]
+    app.settings['release_notes_seen'] = mod.APP_VERSION
+    app.settings['daily_capacity_minutes'] = 60
+    app.settings.pop('daily_capacity_by_weekday', None)
+    app.clear_render_cache()
+    assert app.save_items()
+    app.undo_stack.clear()
+    app.set_home_view()
+    idle(lauf)
+    more = next(w for w in knoepfe(app.home_content, mod.RoundedButton)
+                if getattr(w, '_home_task_actions_id', None) == task['id'])
+    choices = [key for key, text in mod.glide_planning.CHOICES]
+    selected = []
+
+    def choose_tomorrow(menu, x, y):
+        try:
+            plan = menu.nametowidget(menu.entrycget(0, 'menu'))
+            assert 'frei' in plan.entrycget(0, 'label') or 'verplant' in plan.entrycget(0, 'label')
+            plan.invoke(choices.index('tomorrow'))
+            selected.append(True)
+        finally:
+            menu.unpost()
+
+    # Menüobjekt und Tcl-Befehl bleiben echt; nur die modale OS-Menüschleife
+    # wird durch die konkrete Auswahl ersetzt, ohne fremde Fenstereingaben.
+    with patch.object(mod.tk.Menu, 'tk_popup', new=choose_tomorrow):
+        klick(more, lauf)
+    assert selected, lauf.errors
+    idle(lauf)
+    current = app.find_item_in_lists(task['id'])[0]
+    assert current['planned_date'] == tomorrow and current['due'] == today
+    assert len(app.undo_stack) == 1 and app.view_mode == app.HOME_VIEW
+    app.undo_last_change()
+    idle(lauf)
+    assert app.find_item_in_lists(task['id'])[0]['planned_date'] == today
+    depth = len(app.undo_stack)
+    with patch.object(app, 'themed_due_dialog', return_value=None):
+        app.choose_home_plan('date', (task['id'],))
+    assert len(app.undo_stack) == depth
+    with patch.object(app, 'themed_due_dialog', return_value=(tomorrow, None)) as dialog:
+        app.choose_home_plan('date', (task['id'],))
+    assert dialog.call_args.kwargs['planning_preview_ids'] == (task['id'],)
+    assert app.find_item_in_lists(task['id'])[0]['planned_date'] == tomorrow
+    app.choose_home_plan('unplan', (task['id'],))
+    assert app.find_item_in_lists(task['id'])[0]['planned_date'] is None
+    depth = len(app.undo_stack)
+    with patch.object(app, 'refresh_data_lock', return_value=False):
+        app.choose_home_plan('today', (task['id'],))
+        assert not app.start_home_focus(task['id'])
+    assert len(app.undo_stack) == depth
+    blocked_menu = app.build_home_task_menu(blocked['id'])
+    assert blocked_menu.entrycget(1, 'state') == 'disabled'
+    blocked_menu.destroy()
+    with patch.object(app, 'save_settings', return_value=False):
+        assert not app.start_home_focus(task['id'])
+    assert not app.running_timer()
+    app.choose_home_plan('today', (task['id'],))
+    focus = next(w for w in knoepfe(app.home_content, mod.RoundedButton) if w.text == 'Fokus starten')
+    klick(focus, lauf)
+    assert app.running_timer()['item_id'] == task['id'] and app.running_timer()['focus']
+    saved = json.loads(Path(mod.SETTINGS_FILE).read_text(encoding='utf-8'))
+    assert saved['time_tracking']['item_id'] == task['id']
+    return 'Mehr-Menü mit Kapazität, Morgen/Datum/Abbruch/ohne Tag, Fälligkeit erhalten, Undo, Sperre/Blockierung, Fokusfehler und echter gespeicherter Fokusstart'
+
+
+def fall_nebenansicht_navigation(lauf):
+    """Such-/Abschnittswege erhalten Haupteditor, Modell und gespeicherte Bytes."""
+    app, mod = lauf.app, lauf.mod
+    main, editor = seite_anlegen(lauf, '# Hauptarbeit\n\nOffener Entwurf\n')
+    other = app.new_page_from_markdown('# Überblick\n\n🎵 Straße und STRASSE. [x]\n\n'
+        + '\n\n'.join(f'Absatz {number}' for number in range(35))
+        + '\n\n## Abschluss\n\nEine weitere Straße.\n\n- [ ] Straße-Aufgabe\n')
+    app.set_active_list(main['id'])
+    idle(lauf)
+    editor = app.rich_note_editor
+    assert app.open_side_view(other['id'])
+    idle(lauf)
+    editor.text.insert('end-1c', '\nNoch nicht verlassen')
+    idle(lauf, 1)
+    if editor._job is not None:
+        editor.after_cancel(editor._job)
+        editor._job = None  # Nur Navigationswirkung messen; normaler Autosave separat.
+    draft = editor.text.get('1.0', 'end-1c')
+    model = copy.deepcopy(app.lists)
+    written = Path(mod.SAVE_FILE).read_bytes()
+    depth = len(app.undo_stack)
+    search = next(w for w in knoepfe(app.side_pane, mod.RoundedButton) if w.text == 'Suchen')
+    klick(search, lauf)
+    field = app._side_search_entry
+    field.insert(0, 'STRASSE')
+    taste(field, '<KeyRelease-e>', lauf)
+    assert len(app._side_search_matches) == 4, app._side_search_matches
+    assert app._side_search_counter.cget('text') == '1 / 4 Treffer'
+    body = app._side_view_body
+    ranges = body.tag_ranges('search_current')
+    assert body.get(*ranges) == 'Straße'
+    app.move_side_search(-1)
+    assert body.get(*body.tag_ranges('search_current')) == 'Straße', 'Versatz nach eingebettetem Kästchen'
+    app.move_side_search(1)
+    taste(field, '<Return>', lauf)
+    assert app._side_search_index == 1
+    taste(field, '<Shift-Return>', lauf)
+    assert app._side_search_index == 0
+    field.delete(0, 'end'); field.insert(0, '[x]')
+    app.update_side_search()
+    assert len(app._side_search_matches) == 1
+    field.delete(0, 'end'); field.insert(0, 'Nicht vorhanden')
+    app.update_side_search()
+    assert app._side_search_counter.cget('text') == 'Keine Treffer.'
+    field.delete(0, 'end'); field.insert(0, 'STRASSE')
+    app.update_side_search()
+    app.sync_side_view(force=True)
+    idle(lauf)
+    assert app._side_search_entry.get() == 'STRASSE' and len(app._side_search_matches) == 4
+    assert app._side_search_entry is not field
+    section = mod.glide_side_view.sections(other)[-1]
+    outline = next(w for w in knoepfe(app.side_pane, mod.RoundedButton)
+                   if w.text == mod.RoundedButton.action_text('Abschnitte …'))
+
+    def choose_section(menu, x, y):
+        try:
+            assert menu.entrycget('end', 'label').strip() == section['title']
+            menu.invoke('end')
+        finally:
+            menu.unpost()
+
+    with patch.object(mod.tk.Menu, 'tk_popup', new=choose_section):
+        klick(outline, lauf)
+    idle(lauf)
+    assert app._side_view_body.yview()[0] > 0
+    assert app.active_list_id == main['id'] and app.rich_note_editor is editor
+    assert editor.text.get('1.0', 'end-1c') == draft
+    assert app.lists == model and Path(mod.SAVE_FILE).read_bytes() == written and len(app.undo_stack) == depth
+    # Escape: Suchtext, Suchzeile, dann Nebenansicht; Hauptinhalt bleibt.
+    taste(app._side_search_entry, '<Escape>', lauf)
+    assert app.side_view_open() and app._side_search_entry.get() == ''
+    taste(app._side_search_entry, '<Escape>', lauf)
+    assert app.side_view_open() and not app._side_search_open
+    taste(app._side_view_body, '<Control-f>', lauf)
+    assert app._side_search_open
+    taste(app._side_search_entry, '<Escape>', lauf)
+    taste(app._side_view_body, '<Escape>', lauf)
+    assert not app.side_view_open()
+    listing = app.new_list_object('Nachschlageliste')
+    group = app.new_item('Abschnitt Nord', kind=app.ITEM_KIND_GROUP)
+    a, b = app.new_item('Straße prüfen'), app.new_item('STRASSE messen')
+    group['children'] = [a, b]
+    listing['items'] = [group]
+    app.lists.append(listing)
+    app.open_side_view(listing['id'])
+    app.open_side_search()
+    field = app._side_search_entry
+    field.insert(0, 'strasse'); app.update_side_search()
+    assert len(app._side_search_matches) == 2
+    app.move_side_search(1)
+    assert app._side_view_body.selection() == (b['id'],)
+    app.jump_side_section(listing['id'], mod.glide_side_view.sections(listing)[0])
+    assert app._side_view_body.selection() == (group['id'],)
+    app._data_read_only = True
+    app.sync_side_view(force=True)
+    assert app._side_search_entry.get() == 'strasse' and len(app._side_search_matches) == 2
+    app._data_read_only = False
+    app.close_side_view()
+    assert app.rich_note_editor is editor and editor.text.get('1.0', 'end-1c') == draft
+    return 'Wörtliche Unicode-Suche, Trefferwechsel/Tasten, kein Treffer, Neuaufbau, Überschriften/Gruppen, readonly und dreistufiges Esc; Haupteditor und offene Eingaben erhalten'
+
+
+def fall_home_mehrfachplanung(lauf):
+    """Auswahl über Seiten und Listen, ein Planungs-Undo, frische Ziele nach Dialogen."""
+    from datetime import date, timedelta
+    app, mod = lauf.app, lauf.mod
+    today, tomorrow = date.today().isoformat(), (date.today()+timedelta(days=1)).isoformat()
+    tasks = [app.new_item(f'Tagesaufgabe {n:02}', planned_date=today, due=today, estimated_minutes=15)
+             for n in range(23)]
+    tasks[0]['done'] = tasks[1]['done'] = True
+    first, second = app.new_list_object('Erste Quelle', tasks[:12]), app.new_list_object('Zweite Quelle', tasks[12:])
+    archived = app.new_list_object('Archiv', [app.new_item('Nicht auswählen', planned_date=today)])
+    archived['archived'] = True
+    app.lists, app.items, app.active_list_id = [first, second, archived], first['items'], first['id']
+    app.settings['home_tile_order'] = ['today']
+    app.settings['home_tiles_hidden'] = [key for key in app.HOME_TILE_KEYS if key != 'today']
+    app.settings['release_notes_seen'] = mod.APP_VERSION
+    app.settings['daily_capacity_minutes'] = 480
+    app.settings.pop('daily_capacity_by_weekday', None)
+    assert app.save_items()
+    app.undo_stack.clear()
+    app.set_home_view(); idle(lauf)
+
+    def button(title):
+        return next(w for w in knoepfe(app.home_content, mod.RoundedButton)
+                    if w.text.rstrip(' .…') == title.rstrip(' .…'))
+
+    before = Path(mod.SAVE_FILE).read_bytes()
+    klick(button('Mehrere auswählen'), lauf)
+    checks = [w for w in knoepfe(app.home_content, mod.RoundedButton) if hasattr(w, '_home_selection_id')]
+    assert len(checks) == 10
+    klick(checks[0], lauf)
+    selected = set(app.home_selection_projection()['selected'])
+    klick(button('Weitere Seite'), lauf)
+    checks = [w for w in knoepfe(app.home_content, mod.RoundedButton) if hasattr(w, '_home_selection_id')]
+    klick(checks[0], lauf)
+    assert len(app.home_selection_projection()['selected']) == 2
+    assert selected < set(app.home_selection_projection()['selected'])
+    assert Path(mod.SAVE_FILE).read_bytes() == before and not app.undo_stack
+    assert sum(item['done'] for item in tasks) == 2
+    klick(button('Alle auswählen'), lauf)
+    identities = app.home_selection_projection()['selected']
+    assert len(identities) == 21 and app.home_selection_projection()['pages'] == 3
+    assert archived['items'][0]['id'] not in identities
+
+    labels = []
+    def choose(menu, *args, **kwargs):
+        labels.extend(menu.entrycget(n, 'label') for n in range(menu.index('end')+1))
+        menu.invoke(next(n for n, text in enumerate(labels) if text.startswith('Morgen')))
+    with patch.object(mod.tk.Menu, 'tk_popup', choose):
+        klick(button('Auswahl planen'), lauf)
+    assert len(app.undo_stack) == 1
+    assert all(app.find_item_in_lists(identity)[0]['planned_date'] == tomorrow for identity in identities)
+    assert all(app.find_item_in_lists(identity)[0]['due'] == today for identity in identities)
+    assert not app.home_selection_projection()['selected']
+    assert any('Morgen' in text and '·' in text for text in labels)
+    app.undo_last_change(); idle(lauf)
+    assert all(app.find_item_in_lists(identity)[0]['planned_date'] == today for identity in identities)
+    app.redo_last_change(); idle(lauf)
+    assert all(app.find_item_in_lists(identity)[0]['planned_date'] == tomorrow for identity in identities)
+    app.undo_last_change(); idle(lauf)
+
+    app.change_home_selection('all')
+    identities = app.home_selection_projection()['selected']
+    depth = len(app.undo_stack)
+    with patch.object(app, 'themed_due_dialog', return_value=None) as dialog:
+        app.choose_home_selection_plan('date', identities)
+        assert dialog.call_args.kwargs['planning_preview_ids'] == identities
+    assert len(app.undo_stack) == depth
+    with patch.object(app, 'refresh_data_lock', return_value=False):
+        app.choose_home_selection_plan('tomorrow', identities)
+    assert all(app.find_item_in_lists(identity)[0]['planned_date'] == today for identity in identities)
+    def change_during_dialog(*args, **kwargs):
+        app.find_item_in_lists(identities[0])[0]['done'] = True
+        return (tomorrow, None)
+    with patch.object(app, 'themed_due_dialog', side_effect=change_during_dialog):
+        app.choose_home_selection_plan('date', identities)
+    assert all(app.find_item_in_lists(identity)[0]['planned_date'] == today for identity in identities)
+    assert len(app.undo_stack) == depth
+    app.find_item_in_lists(identities[0])[0]['done'] = False
+    app.change_home_selection('clear')
+    app.choose_home_selection_plan('tomorrow', identities)  # altes Menü nach neuer Auswahl
+    assert len(app.undo_stack) == depth
+    app.change_home_selection('all')
+    app.choose_home_selection_plan('unplan', app.home_selection_projection()['selected'])
+    assert all(app.find_item_in_lists(identity)[0]['planned_date'] is None for identity in identities)
+    app.undo_last_change(); idle(lauf)
+    app._home_plan_selection['day'] = (date.today()-timedelta(days=1)).isoformat()
+    app.refresh_home(); idle(lauf)
+    assert app._home_plan_selection is None
+    app.change_home_selection('start')
+    app._data_read_only = True
+    app.refresh_home(); idle(lauf)
+    assert app._home_plan_selection is None
+    assert not any(hasattr(w, '_home_selection_id') for w in knoepfe(app.home_content, mod.RoundedButton))
+    app._data_read_only = False
+    return '21 offene Aufgaben aus zwei Listen über drei Seiten; Auswahl ohne Schreiben/Erledigen, Morgen/ohne Tag mit einem Undo/Redo, Fälligkeit, Dialogabbruch/Alterung, Sperre, Tageswechsel und readonly grün'
+
+
+def fall_side_history(lauf):
+    """Echter Sitzungsverlauf mit Suche, Scrollen, Tastatur und erhaltenem Hauptentwurf."""
+    app, mod = lauf.app, lauf.mod
+    source, tasks, main = bestand(lauf)
+    page = app.new_list_object('Nachschlagen', [])
+    page['list_kind'] = 'page'
+    page['rich_note'] = {'text':'Straße zuerst\n' + '\n'.join(f'Zeile {n}' for n in range(100))+'\nStraße zuletzt', 'spans':[]}
+    other = app.new_list_object('Weiterlesen', [])
+    other['list_kind'] = 'page'
+    other['rich_note'] = {'text':'\n'.join(f'Absatz {n}' for n in range(160)), 'spans':[]}
+    app.lists.extend([page, other]); assert app.save_items()
+    app.set_active_list(main['id']); idle(lauf)
+    editor = app.rich_note_editor
+    assert app.open_side_view(page['id']); idle(lauf)
+    editor.text.insert('end-1c', '\nOffener Hauptentwurf')
+    idle(lauf, 1)
+    # Die vorhandene 400-ms-Notizspeicherung separat halten: Hier messen wir,
+    # ob Navigation einen offenen Hauptentwurf zwangsweise übernimmt.
+    if editor._job is not None:
+        editor.after_cancel(editor._job)
+        editor._job = None
+    draft = editor.text.get('1.0','end-1c')
+    before, depth = Path(mod.SAVE_FILE).read_bytes(), len(app.undo_stack)
+    app.open_side_search()
+    app._side_search_entry.insert(0,'STRASSE'); app.move_side_search(1); idle(lauf)
+    assert app._side_search_index == 1
+    assert app.open_side_view(source['id'],item_id=tasks[1]['id']); idle(lauf)
+    assert app.open_side_view(other['id']); idle(lauf)
+    app._side_view_body.yview_moveto(0.65); idle(lauf)
+    scroll = app._side_view_body.yview()[0]
+    app.move_side_history(-1); idle(lauf)
+    assert app.side_view_entry()['id'] == source['id']
+    assert app._side_view_body.selection() == (tasks[1]['id'],)
+    app.move_side_history(-1); idle(lauf)
+    assert app.side_view_entry()['id'] == page['id']
+    assert app._side_search_query == 'STRASSE' and app._side_search_index == 1
+    assert app._side_view_body.get(*app._side_view_body.tag_ranges('search_current')) == 'Straße'
+    taste(app._side_view_body,'<Alt-Right>',lauf)
+    assert app.side_view_entry()['id'] == source['id']
+    app.move_side_history(1); idle(lauf)
+    assert app.side_view_entry()['id'] == other['id']
+    assert abs(app._side_view_body.yview()[0]-scroll) < 0.05
+    assert app.rich_note_editor is editor and editor.text.get('1.0','end-1c') == draft
+    assert Path(mod.SAVE_FILE).read_bytes() == before and len(app.undo_stack) == depth
+    page['title'] = 'Aktueller Titel'
+    labels = []
+    def inspect(menu,*args,**kwargs):
+        labels.extend(menu.entrycget(n,'label') for n in range(menu.index('end')+1) if menu.type(n)=='command')
+    with patch.object(mod.tk.Menu,'tk_popup',inspect): app.show_side_history()
+    assert labels[0] == 'Inhalt wechseln …' and any('Aktueller Titel' in label for label in labels)
+    old_choose = app.choose_side_view
+    called = []
+    app.choose_side_view = lambda: called.append(True)
+    with patch.object(mod.tk.Menu,'tk_popup',lambda menu,*a,**k:menu.invoke(0)): app.show_side_history()
+    idle(lauf)
+    app.choose_side_view = old_choose
+    assert called == [True]
+    app.lists.remove(source)
+    app.move_side_history(-1); idle(lauf)
+    assert app.side_view_entry()['id'] == page['id'], 'Gelöschte Station wird übersprungen'
+    assert app.open_side_view(other['id']); idle(lauf)
+    assert app.side_history().index == len(app.side_history().entries)-1
+    app.lists.remove(other)
+    app.sync_side_view(force=True); idle(lauf)
+    back = next(w for w in knoepfe(app.side_pane,mod.RoundedButton) if w.text=='Zurück')
+    klick(back,lauf)
+    assert app.side_view_entry()['id'] == page['id'], 'Auch aus fehlendem Inhalt zurück'
+    app._data_read_only = True
+    app.close_side_view(); assert app.open_side_view(page['id']); idle(lauf)
+    assert app.side_history().entries
+    with patch.object(mod,'SAVE_FILE',Path(lauf.mod.SAVE_FILE).with_name('anderer-bestand.json')):
+        assert app.side_history() == mod.glide_side_view.History()
+    app._data_read_only = False
+    return 'Zurück/Vorwärts/Alt-Pfeile, Suchbegriff/aktiver Treffer, Leseposition und Zeilenauswahl, aktueller Verlauf/Inhaltswechsel, gelöschte Ziele, fehlender Inhalt, readonly und Bestandsgrenze; Hauptentwurf und Dateibytes erhalten'
+
+
+def fall_folgepaket_gestaltung(lauf):
+    return fall_zweierpaket_gestaltung(lauf, selecting=True)
+
+
+def fall_zweierpaket_gestaltung(lauf, selecting=False):
+    """Neue Tagessteuerung/Suchnavigation bei kleiner Breite, großer Schrift und Verlauf."""
+    from datetime import date
+    app, mod = lauf.app, lauf.mod
+    source, points, page = bestand(lauf)
+    for point in points:
+        point['planned_date'] = date.today().isoformat()
+    if selecting:
+        source['items'].extend(app.new_item(f'Weitere Tagesaufgabe {n}', planned_date=date.today().isoformat())
+                               for n in range(11))
+    points[0]['text'] = 'Lange Tagesaufgabe für die Abstimmung mit Planung und Projektleitung'
+    app.settings['home_tile_order'] = ['today', 'focus']
+    app.settings['home_tiles_hidden'] = [key for key in app.HOME_TILE_KEYS if key not in ('today', 'focus')]
+    app.settings['release_notes_seen'] = mod.APP_VERSION
+    assert app.save_items()
+    configurations = [('light', '860x700', 'gross', False), ('dark', '1280x800', 'mittel', False),
+                      ('glass_light', '1280x800', 'gross', False), ('light', '480x560', 'gross', True)]
+    checked = 0
+
+    def inspect(name):
+        nonlocal checked
+        count, findings = befunde_b15(lauf, name)
+        checked += count
+        assert not findings, findings[:6]
+        if getattr(lauf, 'capture', None) is not None and sys.platform == 'win32':
+            sys.path.insert(0, str(REPO / 'tests/tools'))
+            from releasedaten import save_windows_screenshot
+            lauf.capture.mkdir(parents=True, exist_ok=True)
+            save_windows_screenshot(lauf.root, lauf.capture / (name + '.png'))
+
+    for design, geometry, font, compact in configurations:
+        app.settings['ui_font_size'] = font
+        app.apply_ui_font()
+        app.set_design(design)
+        if design.startswith('glass'):
+            app.set_backdrop_choice(mod.glide_backdrop.presets_for(design)[0].key)
+        if compact:
+            app.enter_compact_mode()
+        lauf.root.geometry(geometry + '+20+20')
+        app.set_home_view()
+        if selecting:
+            app.change_home_selection('start')
+            app.change_home_selection('all')
+        idle(lauf, 8)
+        for position in (0, 0.5, 1):
+            app.home_canvas.yview_moveto(position)
+            idle(lauf)
+            inspect(f'Tagessteuerung-{design}-{geometry}-{position}')
+        if compact:
+            app.leave_compact_mode()
+        else:
+            app.set_active_list(source['id'])
+            app.settings['side_view_width'] = 280
+            assert app.open_side_view(page['id'])
+            app.open_side_search()
+            app._side_search_entry.insert(0, 'Muster')
+            app.update_side_search()
+            idle(lauf, 6)
+            inspect(f'Nebenansicht-{design}-{geometry}')
+            app.close_side_view()
+    return f'{checked} Knopfprüfungen; Tagessteuerung in vier Größen-/Schrift-/Designkonfigurationen und drei Scrolllagen, Nebenansicht mit Suche an Mindestbreite in drei Konfigurationen'
+
+
 FAELLE = ("seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
-          "kompakt_ansichten", "gestaltung")
+          "kompakt_ansichten", "kompakt_verlorenes_loslassen", "gestaltung", "tagessteuerung", "nebenansicht_navigation",
+          "zweierpaket_gestaltung", "home_mehrfachplanung", "side_history", "folgepaket_gestaltung")
 
 
 def main():
@@ -1173,6 +1662,8 @@ def main():
             lauf = None
             try:
                 lauf = Lauf(args.app, daten)
+                lauf.runtime = {'python': sys.version.split()[0], 'platform': sys.platform,
+                                'tk': str(lauf.root.tk.call('package', 'provide', 'Tk'))}
                 lauf.capture = args.capture
                 text = globals()["fall_" + name](lauf)
                 if lauf.errors:
@@ -1186,6 +1677,9 @@ def main():
                 print(f"ROT {name}: {fehler}", flush=True)
             finally:
                 if lauf is not None:
+                    ergebnis['faelle'][name]['runtime'] = getattr(lauf, 'runtime', {})
+                    if hasattr(lauf, 'compact_trace'):
+                        ergebnis['faelle'][name]['event_trace'] = lauf.compact_trace[-256:]
                     abbauen(lauf)
     if args.report:
         args.report.write_text(json.dumps(ergebnis, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

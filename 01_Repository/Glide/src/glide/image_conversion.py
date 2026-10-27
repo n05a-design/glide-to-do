@@ -140,6 +140,16 @@ class ConversionService:
         self._tasks = OrderedDict()
         self._thread = None
         self._closed = False
+        self._diagnostics = OrderedDict()
+
+    def diagnostics(self):
+        """Höchstens 16 Fehlerklassen mit Anzahl, ohne Pfad, Schlüssel oder Fehlertext.
+
+        Abfrage im Hauptthread möglich; keine UI-Rückrufe aus dem Worker.
+        Erwartete negative Konvertierungsergebnisse erzeugen keinen Eintrag.
+        """
+        with self._condition:
+            return tuple(self._diagnostics.items())
 
     def submit(self, key, work, retry=False):
         with self._condition:
@@ -198,13 +208,21 @@ class ConversionService:
                     return
                 task = self._queue.popleft()
                 task.status = 'running'
+            error_kind = None
             try:
                 result = task.work(task.cancel)
-            except Exception:
+            except Exception as exc:
                 # Ein defektes Bild beendet nicht den gemeinsamen Worker.
+                # Nur der Klassenname, niemals Dateinamen oder private Meldungen.
+                error_kind = type(exc).__name__[:80]
                 result = None
             with self._condition:
                 if self._tasks.get(task.key) is task and not task.cancel.is_set():
+                    if error_kind:
+                        count = self._diagnostics.pop(error_kind, 0)
+                        self._diagnostics[error_kind] = min(count + 1, 1000000)
+                        while len(self._diagnostics) > 16:
+                            self._diagnostics.popitem(last=False)
                     task.result = result
                     task.status = 'ready' if result else 'failed'
                 for key in list(self._tasks):

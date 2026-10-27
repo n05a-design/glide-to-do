@@ -1,0 +1,15 @@
+{
+  "app_sha256": "d5316c9a8c14c24e61f0bf6e9ae40d4c6be743c2c93a047e738796c10671eced",
+  "faelle": {
+    "nebenansicht_navigation": {
+      "ok": true,
+      "befund": "Wörtliche Unicode-Suche, Trefferwechsel/Tasten, kein Treffer, Neuaufbau, Überschriften/Gruppen, readonly und dreistufiges Esc; Haupteditor und offene Eingaben erhalten",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": []
+}

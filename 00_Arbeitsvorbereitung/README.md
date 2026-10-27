@@ -1,6 +1,6 @@
 # Arbeitsvorbereitung
 
-Stand 26.10.2026 · Glide 3.45.0 · Aufgabenformat 26
+Stand 27.10.2026 · Glide 3.47.0 · Aufgabenformat 26
 
 Planung, Übergabe und alles, was der Inhaber entscheidet oder von Hand prüft. Seit 03.10.2026 zusammengeführte Übergaben, Planungen, Auswahl- und Entscheidungsvorlagen, Recherchen und Checklisten; seit 08.10.2026 dazu die Analyse. Die Vorfassungen trägt Git. Das UI-/UX-Paket vom 15.10.2026 ist ein zusätzlicher ausführbarer Auftrag mit eigenen Eingangsbelegen, kein paralleles Backlog.
 

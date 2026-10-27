@@ -1,6 +1,6 @@
 # Daten, Backups und Migration – Glide
 
-Stand 25.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
+Stand 27.10.2026 · Glide 3.47.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
 
 **3.44.0 (22.10.2026):** Aufgabenformat 26 (FP-02), FP-01 und die Schutzrunde WA-27–WA-30 sowie die neuen obersten Einstellungsnamespaces von FP-03/FP-04 sind als Python-Fassung geliefert. Die früher nachgestellten Grenzen A32/A33/A34/A35/A36 haben gezielte Schutzprüfungen und Gegenproben ([Schutznachweis](../tests/qa-3.43.1/schutzrunde_2026-10-18/README.md)); die historische Analyse beschreibt den Zustand davor. Eigenständige Pakete (3.42.0) lesen Format 26 nur schreibgeschützt; Mac-Bundle/Pakete 3.44.0 und native Abnahmen bleiben offen ([Prüf- und Lieferstand](07_QA_BERICHT.md)).
 

@@ -1,12 +1,14 @@
 # Veröffentlichung – Glide
 
-Stand 26.10.2026 · Glide 3.45.0 · Entwicklungspakete geliefert, keine öffentliche Veröffentlichung · Aufgabenformat 26
+Stand 27.10.2026 · Glide 3.47.0 · Quellstand 3.47.0, native Pakete 3.45.0, keine öffentliche Veröffentlichung · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
-**Aktueller Lieferstand 3.45.0 (26.10.2026):** Python-Fassung bytegleich, Windows-Paket und natives Mac-arm64-Paket neu gebaut und startgeprüft; Windows-Vollprüfung mit allen 104 Suiten grün. Mac-Ad-hoc-Signatur und isolierter Macstart grün. [Liefernachweis](../tests/qa-3.45.0/paketabschluss_2026-10-26/README.md). Mac-/Linux-Vollmatrix und menschliche Releaseabnahme bleiben getrennt offen; die folgenden Haken bezeichnen den historischen Vollabschluss 3.42.0.
+**Aktueller Entwicklungsstand 3.47.0:** Mehrfachplanung und Nebenansichtsverlauf, Aufgabenformat 26. Python-/Showcase-Abgleich und gezielte Prüfung im [Nachweis](../tests/qa-3.47.0/folgepakete_2026-10-27/README.md). Eigenständige Windows-/Mac-Pakete bleiben 3.45.0; keine neue breite Endmatrix oder öffentliche/native/menschliche Releasefreigabe. Der Auftrag vom 27.10. autorisiert nach Dokumentabgleich/CI den Gittransport der Projektänderungen, keine öffentliche Produktveröffentlichung.
+
+**Vorheriger vollständiger Paketlieferstand 3.45.0 (26.10.2026):** Python-Fassung bytegleich, Windows-Paket und natives Mac-arm64-Paket neu gebaut und startgeprüft; Windows-Vollprüfung mit allen 104 Suiten grün. Mac-Ad-hoc-Signatur und isolierter Macstart grün. [Liefernachweis](../tests/qa-3.45.0/paketabschluss_2026-10-26/README.md). Mac-/Linux-Vollmatrix und menschliche Releaseabnahme bleiben getrennt offen; die folgenden Haken bezeichnen den historischen Vollabschluss 3.42.0.
 
 Die Haken dokumentieren den historischen vollständigen Plattformabschluss 3.42.0. Die aktuelle Lieferung 3.45.0 übernimmt keine ungetesteten Mac-/Linux-/Menschenfreigaben daraus; aktuelle Belege stehen oben und im [QA-Bericht](07_QA_BERICHT.md).
 
