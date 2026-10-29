@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-27",
+  "application_tests_started": false,
+  "originals_unchanged": true,
+  "private_local_only": true,
+  "full_memory_dumps": 0,
+  "files": [
+    {
+      "path": "lokale_belege/minidumps/python.exe.66596.dmp",
+      "bytes": 1976482,
+      "sha256": "6b8fe21cdb6c34653bc25221eb5e06a47f124c69e2f12e515d34ec438d20b233",
+      "source": "%LOCALAPPDATA%/CrashDumps/python.exe.66596.dmp"
+    },
+    {
+      "path": "lokale_belege/minidumps/python.exe.42824.dmp",
+      "bytes": 1977555,
+      "sha256": "9afe7296384c16180be48f4877b95b6b6c93fc09e7351580c1444bd954b7da14",
+      "source": "%LOCALAPPDATA%/CrashDumps/python.exe.42824.dmp"
+    },
+    {
+      "path": "lokale_belege/minidumps/python.exe.66960.dmp",
+      "bytes": 1973107,
+      "sha256": "d3bc619d6445bc3bad1332f65d6263392780da0688dca2d2fb180d06a6757a34",
+      "source": "%LOCALAPPDATA%/CrashDumps/python.exe.66960.dmp"
+    },
+    {
+      "path": "lokale_belege/minidumps/python.exe.34580.dmp",
+      "bytes": 1996972,
+      "sha256": "d390c1e2ddecb24908525e5d8d858690f7bd71e464bc78778d2b8e0cff686d54",
+      "source": "%LOCALAPPDATA%/CrashDumps/python.exe.34580.dmp"
+    },
+    {
+      "path": "lokale_belege/minidumps/python.exe.57356.dmp",
+      "bytes": 2142527,
+      "sha256": "389710f359f31f2d3cce1a7eaa1bb6a6e8c26e464b310cf11b9a394e5d453f16",
+      "source": "%LOCALAPPDATA%/CrashDumps/python.exe.57356.dmp"
+    },
+    {
+      "path": "lokale_belege/minidumps/python.exe.46332.dmp",
+      "bytes": 2155796,
+      "sha256": "cea70eb76134bc62acd129425981ab7eb5c5d11e66600ea17cc9d460d3a3acfa",
+      "source": "%LOCALAPPDATA%/CrashDumps/python.exe.46332.dmp"
+    },
+    {
+      "path": "lokale_belege/minidumps/python.exe.66932.dmp",
+      "bytes": 2180524,
+      "sha256": "c3482fefd7fddadf71d5abcbe12d442975377604124ce8792704f346ffa508ab",
+      "source": "%LOCALAPPDATA%/CrashDumps/python.exe.66932.dmp"
+    },
+    {
+      "path": "lokale_belege/minidumps/python.exe.64880.dmp",
+      "bytes": 2133739,
+      "sha256": "d589f2306568d6a6f276acb1f90d12a98c4bf3a7b40726c083226b0b3fc7222d",
+      "source": "%LOCALAPPDATA%/CrashDumps/python.exe.64880.dmp"
+    },
+    {
+      "path": "lokale_belege/eingang/initial.json",
+      "bytes": 28548872,
+      "sha256": "a3b8c0cac4c72e1820e71730ad78e312f2a30338678fbcfe2a2b6d91dae081f4",
+      "source": "%TEMP%/glide-wa41-payload-x1yjbvw8/initial.json"
+    }
+  ],
+  "bytes": 45085574
+}

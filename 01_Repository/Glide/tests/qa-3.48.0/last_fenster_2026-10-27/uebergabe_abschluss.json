@@ -1,0 +1,19 @@
+{
+  "handoff": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+  "handoff_sha256": "7c1e69698fed39e15bfcf36a8a92db3ff87010c59a5f25d36113c60e318f1384",
+  "source_files": 470,
+  "changed_source": {
+    "worktree": [],
+    "frozen": []
+  },
+  "local_links_checked": 70,
+  "missing_links": [],
+  "documents": 89,
+  "documentation": "Alle Dokumente einschließlich Archiv im Index; 365 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell.",
+  "unchanged_delivery_files": 235,
+  "dump_files": 8,
+  "dump_hash_errors": [],
+  "full_memory_dumps": 0,
+  "application_tests_started": false,
+  "errors": []
+}

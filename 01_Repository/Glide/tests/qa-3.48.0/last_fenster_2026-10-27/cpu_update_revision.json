@@ -1,0 +1,6 @@
+{
+  "RegistryValue": "Update Revision",
+  "RawType": "System.Byte[]",
+  "RawHex": "2B-01-00-00",
+  "ParsedLittleEndianUInt32": "0x12B"
+}

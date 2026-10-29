@@ -1,0 +1,61 @@
+[
+  {
+    "case": "pure_py3148",
+    "exitcode": 0,
+    "seconds": 21.81,
+    "last_events": []
+  },
+  {
+    "case": "py3148_nogc",
+    "exitcode": 1,
+    "seconds": 11.96,
+    "last_events": [
+      {
+        "event": "round",
+        "seconds": 10.768,
+        "iteration": 5
+      },
+      {
+        "event": "exception",
+        "seconds": 11.069,
+        "error_type": "AssertionError",
+        "message": "(5, [('Fehler beim Speichern', \"name 'isinstance' is not defined\")], 'lock')"
+      }
+    ]
+  },
+  {
+    "case": "py3148_malloc",
+    "exitcode": 1,
+    "seconds": 30.72,
+    "last_events": [
+      {
+        "event": "round",
+        "seconds": 28.319,
+        "iteration": 12
+      },
+      {
+        "event": "exception",
+        "seconds": 29.81,
+        "error_type": "TypeError",
+        "message": "'tuple' object is not an iterator"
+      }
+    ]
+  },
+  {
+    "case": "py3148_clean_path",
+    "exitcode": 3221225477,
+    "seconds": 26.84,
+    "last_events": [
+      {
+        "event": "round",
+        "seconds": 22.395,
+        "iteration": 11
+      },
+      {
+        "event": "round",
+        "seconds": 24.19,
+        "iteration": 12
+      }
+    ]
+  }
+]

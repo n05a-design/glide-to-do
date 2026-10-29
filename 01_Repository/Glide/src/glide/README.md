@@ -1,8 +1,10 @@
 # Anwendungskern
 
-Stand 27.10.2026 · Glide 3.47.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 29.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-Lokaler Quellstand 3.47.0: Mehrfachplanung auf der Startseite und flüchtiger Nebenansichtsverlauf vertiefen die Tagessteuerung/Suche aus 3.46.0. 88 Laufzeitdateien plus separater Zeichenprototyp, Aufgabenformat 26 unverändert. [Gezielte Prüfung und tatsächliche Lieferstände](../../tests/qa-3.47.0/folgepakete_2026-10-27/README.md).
+**Neuer Quellkandidat 3.49.0:** lokale Sitzungsprüfung/Originalvorsicherung und begrenzte Prozessdiagnose; die drei 3.48.0-Bedienpakete bleiben enthalten. [Prüfung und unveränderte Liefergrenzen](../../tests/qa-3.49.0/robustheit_2026-10-28/README.md).
+
+Bestandsumfang aus 3.48.0: Tagesnavigation, gemeinsame Wichtigkeit/Labels und Verweisnavigation; 3.49.0 ergänzt Wochenwahl, Fälligkeit/Aufwand, Verweisaktionen und Schutzmodule. Aktuell 91 Laufzeitdateien plus separater Zeichenprototyp, Format 26 unverändert. Python/Showcase 3.47.0, native Pakete 3.45.0; FP-01-Prüfadapter und gestoppte Folge gezielt abgeschlossen; WA-41 und aktueller Liefer-/Abnahmeabschluss offen. [Abnahmebericht](../../tests/qa-3.49.0/abnahme_2026-10-28/README.md).
 
 `app.pyw` ist die kanonische Anwendung (Klasse `ListApp`). Daneben liegen Module, die beim Start aus demselben Ordner geladen werden und beim Kopieren oder Paketieren immer mitgehen:
 
@@ -64,12 +66,15 @@ Lokaler Quellstand 3.47.0: Mehrfachplanung auf der Startseite und flüchtiger Ne
 | `exchange_patch.py` | KI-Austausch Stufe 2: Kontextpaket, Änderungsvorschlag prüfen, Konflikte (Tk-frei, G24) |
 | `exchange_recipes.py` | Lokale Auftragsvorlagen und Anweisungen für den bestehenden Datei-/Kontextaustausch, ohne Tk/Netz (FP-06) |
 | `markdown_tree.py` | Vollständiger Markdownbaum, relative Verweise, Anhangskopien, Inventar, Prüfsummen und atomarer Abschluss ohne Tk (FP-07/1) |
+| `settings_compat.py` | Unbekannte Zusatzfelder gültiger Filter-/Pinnwandstrukturen tief kopieren und fremde Karten ohne Auswertung bewahren; bekannte Werte und Grenzen bleiben streng (Tk-frei, WA-09) |
 | `pinboard_pages.py` | Getrennte Plattenablage für Seitenkarten und Kanten; Altleser-Rundlauf und begrenzte Druckbilder ohne Tk (FP-04) |
 | `view_definition.py` | Erweiterte Ansichtsbedingungen, Validierung, Alle-/Oder-Auswertung und Erklärungen ohne Tk (FP-03/1) |
 | `action_menu.py` | Durchsuchbare Seiten-, Block- und Menüaktionen: Abschnitte, Filter, Häkchen und Sperrgründe über den bestehenden Menüs; Kopfverweise der Seite (Tk-frei, E-U3 A) |
 | `side_view.py` | Lesende Nebenansicht: Ziel, Lesbarkeit, Listenzeilen, Seitenprojektion und Abgleichsignatur ohne Datenänderung (Tk-frei, E-U2 A) |
 | `compact_mode.py` | Kompaktmodus: Mindestmaße, getrennte Fensterlagen, Ableitung und Bildschirmgrenzen (Tk-frei, E-U1 A) |
 | `storage_health.py` | Speicherstatus je Bereich, gezählte Fehler, 32-MiB-JSON-Budget, begrenztes Einlesen und Sicherungsreserve (Tk-frei) |
+| `session_guard.py` | Lokaler Sitzungsabschluss, lesende Bestandsprüfung, bewusste Freigabe und Originalvorsicherung (Tk-frei) |
+| `runtime_diagnostics.py` | Begrenzte lokale Metadaten-/Phasenprotokolle und begleiteter Prozess-Exitstatus (Tk-frei) |
 | `backup_catalog.py` | Metadateninventar, Suche, eindeutige Dateiauswahl und lesende Inhaltszusammenfassung von Sicherungen (Tk-frei) |
 | `attachment_policy.py` | Aktive Dateitypen und tatsächlicher Ablageort für die Rückfrage vor dem Öffnen (Tk-frei) |
 | `backup_diff.py` | Zwei Datenstände vergleichen, nur lesend (Tk-frei, F-03) |
@@ -78,14 +83,14 @@ Lokaler Quellstand 3.47.0: Mehrfachplanung auf der Startseite und flüchtiger Ne
 | `symbol_policy.py` | Vollständige Symbolauswahl nach tatsächlicher UI-Schriftabdeckung und lesbare Text-Rückfälle (Tk-frei) |
 | `glyph_metrics.py` | Optische Symbolmitte aus den Glyphenrahmen der mitgelieferten TrueType-Schrift; eine Regel statt Pixelversätzen (Tk-frei, B09) |
 | `undo_history.py` | Wiederholen nach Rückgängig: Stapel und Gültigkeitsregel (Tiefe, oberstes Objekt, Schreibzähler) neben dem Rückgängig-Stapel (Tk-frei, FP-01) |
-| `structural_guard.py` | Transaktion des Bestandswächters: Stapelmarke, Schreibprüfung, Rückwegergebnis und ehrliche Abbruchmeldung (Tk-frei, WA-27) |
+| `structural_guard.py` | Transaktion des Bestandswächters: Stapelmarke, vollständige Punktprojektion einschließlich Listenpapierkorb, Schreibprüfung, Rückwegergebnis und ehrliche Abbruchmeldung (Tk-frei, WA-27) |
 | `load_phases.py` | Ladeweg in zwei Phasen: Lese- gegen Darstellungsfehler, aktive Liste nach dem Laden (Tk-frei, WA-28) |
 | `editor_flush.py` | Ergebnisvertrag der Editorübernahme vor Navigation, Export und Ende (Tk-frei, WA-29) |
 | `data_lock.py` | Datensperre: Sitzungs-OS-Lock, Tokenprüfung, strikte Erneuerung und Freigabe (Tk-frei, WA-30/31) |
 | `item_index.py` | Kurzlebige ID-Projektion für Mehrfachaktionen mit Originalreferenzen und Listen-/Elternbezug (Tk-frei) |
 | `save_result.py` | Explizite Hauptdatei-/Sicherungs-/Folgeergebnisse mit Bool-Fassade und aufgeschobenen Einstellungen (Tk-frei) |
 | `motion.py` | Unterbrechbare zeitgesteuerte Übergänge mit vollständigem Abbau (Tk-frei) |
-| `task_editing.py` | Feldvertrag, Dreiwegevergleich und verständliche Bearbeitungskonflikte (Tk-frei) |
+| `task_editing.py` | Feldvertrag/Dreiwegevergleich, Mehrfachänderungen, Labelprüfung und reiner Entnahme-/Retentionsplan für erledigte Aufgaben (Tk-frei) |
 | `daily_hints.py` | Optionale Tageshinweise, verpasste Tage, Später/Überspringen und persistente Zustellbelege ohne Tk |
 | `ics_recurrence.py` | Begrenzte tägliche/wöchentliche/monatliche/jährliche Serien ohne Tk |
 | `occupied_time.py` | Vereinigung belegter Zeit und lokale Tages-/Rasterprojektion ohne Tk |

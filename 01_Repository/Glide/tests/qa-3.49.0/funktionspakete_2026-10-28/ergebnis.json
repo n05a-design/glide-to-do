@@ -1,0 +1,118 @@
+{
+  "version": "3.49.0",
+  "data_format": 26,
+  "scope": "Funktionaler Ausbau der ursprünglichen drei Pakete, Plan21.26/D57 und21.28",
+  "features": [
+    "Wochen-Schnellwahl",
+    "Mehrfach-Faelligkeit/Aufwand",
+    "Verweisaktionen und gezieltes Verknuepfen"
+  ],
+  "source_sha256": {
+    "src/glide/app.pyw": "5e93aeff9373727b90bc1d57bc280b149f62ffdc41ea055fe4b534776f79e74a",
+    "src/glide/home_task_tiles.py": "357de25f557bcc52e0d9be83219aceaa23809edb34a3b8c69cdbad25c22a31d0",
+    "src/glide/task_editing.py": "5656f652bab497fc3841be6f692874276751953aa10690f7b6ee4873ed237c38",
+    "src/glide/side_view.py": "4e1ebd3ffb6c8012222fa9eb7d1074dd03ecb7fbf93c76c3bceadda1565b0dbf",
+    "src/glide/release_notes.py": "f22f543c022eb1162cfc60c7f5c685b97f0f2d721283afc7fc79960de7bc7ac9",
+    "tests/unit/test_featurepakete349.py": "21bd3e3576498a368fb2f08d1252fdbd1f23064fbfdc997070fa634162b9eef6",
+    "tests/integration/test_arbeitsmodi.py": "218c2360dd738bc5155f4dc90399aae64f09470ab586b58399413d0370f54456"
+  },
+  "checks": {
+    "wochenwahl_final": {
+      "ok": true,
+      "sha256": "243eb682ed82094d896c3ed96ab5e3a5db83a4d2871195e1de63ee5af6b0de71",
+      "faelle": {
+        "home_wochenwahl": {
+          "ok": true,
+          "befund": "Echter Wochenknopf/Suchauswahl und Datumsmenü, Auswahlreset, alte Menüs wirkungslos, readonly lesend ohne Schreib-/Undo-Effekt",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.0.4"
+          }
+        }
+      }
+    },
+    "mehrfachfelder_final": {
+      "ok": true,
+      "sha256": "ec8e894a06412f86bc0683b3953730dcda291851c0c4e9ff7d6e3d3fceae57f7",
+      "faelle": {
+        "home_faelligkeit_aufwand": {
+          "ok": true,
+          "befund": "12 Aufgaben: echte Aufwandmenüaktion, ein Undo/Redo, Fälligkeit getrennt vom Bearbeitungstag, eigene Dauer, Abbruch/stale/Serien/readonly/Schreibfehler geschützt",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.0.4"
+          }
+        }
+      }
+    },
+    "verweisaktionen_final": {
+      "ok": true,
+      "sha256": "6100fc742be0a3f0383d8fa4c12d1c14b9dfb24d70470e969d7e36aca543c361",
+      "faelle": {
+        "side_verweisaktionen": {
+          "ok": true,
+          "befund": "Echte Verweisaktionen: Kopieren ohne Mutation, Hauptbereich öffnen, gezielt verknüpfen mit einem Undo/Redo, readonly und Dialog-/Beziehungswechsel geschützt",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.0.4"
+          }
+        }
+      }
+    }
+  },
+  "unit_tests": {
+    "all": 1060,
+    "new": 12,
+    "baseline": 21,
+    "release_notes_after_text_change": 9,
+    "passed": true
+  },
+  "geometry": {
+    "button_checks": 384,
+    "configurations": 4,
+    "compact_included": true,
+    "scroll_positions": 3,
+    "report_sha256": "2db123e74849d2e2e2741027d2b11fecd60e89fbb489b3e4111e62e9293fe522"
+  },
+  "regression": {
+    "old_packages_passed": 3,
+    "final_side_recheck_passed": true
+  },
+  "formal": {
+    "syntax": "438 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt",
+    "versionen": "VERSION, App, Hauptsuite und CHANGELOG: 3.49.0; Datenformat 26",
+    "dokumentation": "Alle Dokumente einschließlich Archiv im Index; 411 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell.",
+    "datenschutz_befunde": []
+  },
+  "screenshots": {
+    "files": {
+      "Tagesauswahl-dark-1280x800.png": "ed7c8c2e37ef887c0ee3b98ccc3532e3eff9140e1c98f29a9b0ad287aaa560c0",
+      "Tagesauswahl-glass_light-860x700.png": "279d4d1606eebe98bd6c93d16e3fc54028b83a88680a9fd4ba57a83b8b3a6b82",
+      "Tagesauswahl-light-480x560.png": "a1ed0085cded762b40edb822f12b32878c740054c62407f406b4b7cd81d2122e",
+      "Tagesauswahl-light-860x700.png": "eda8252760900669620de9533063fdf32288d20d68511bed986c25f4cf843189",
+      "Verweise-dark-1280x800.png": "059840555d6d6d89f57219d1dfd1a66021f3af8173a7ba2665d7d280d20b70e4",
+      "Verweise-glass_light-860x700.png": "3bdc8955d78bc49d9390bb3828cdb4a8fa27c8dd6da16ee4ac577c128b275bf5",
+      "Verweise-light-860x700.png": "7a689e406fb603a30c0274155d20e244f12faa98f033b487587e38d9c80c95f7"
+    },
+    "inspected": [
+      "Tagesauswahl-light-860x700.png",
+      "Tagesauswahl-dark-1280x800.png",
+      "Tagesauswahl-glass_light-860x700.png",
+      "Tagesauswahl-light-480x560.png"
+    ],
+    "native_human_acceptance": false
+  },
+  "delivery_python": "3.47.0",
+  "delivery_native": "3.45.0",
+  "full_ci_rerun": false,
+  "full_native_matrix": false,
+  "release_ready": false,
+  "open": [
+    "WA-41A/B",
+    "breite eingefrorene Vollmatrix",
+    "Lieferung und native/menschliche Abnahme"
+  ]
+}

@@ -160,6 +160,7 @@ import exchange_recipes as glide_recipes
 import week_planning as glide_week
 import markdown_tree as glide_markdown_tree
 import pinboard_pages as glide_pinboard_pages
+import settings_compat as glide_settings_compat
 import page_features as glide_pages
 import action_catalog as glide_actions  # noqa: E402
 import undo_history as glide_undo  # noqa: E402
@@ -171,6 +172,8 @@ from item_index import ItemIndex  # noqa: E402
 from save_result import SaveResult  # noqa: E402
 from persistence import PersistenceCoordinator, PersistencePlan  # noqa: E402
 import storage_health as glide_storage
+import session_guard as glide_session
+import runtime_diagnostics as glide_diagnostics
 import backup_catalog as glide_backup_catalog
 import attachment_policy as glide_attachment_policy
 import ui_design as glide_design  # noqa: E402
@@ -226,7 +229,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.47.0"
+APP_VERSION = "3.49.0"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
 # Einstellungen des Betriebssystems hängen daran.
@@ -3835,7 +3838,7 @@ class SavedFilters:
                                           ("source", cls.SOURCE, "all")):
                 option = value.get(key)
                 entry[key] = option if isinstance(option, str) and option in choices.values() else default
-            cleaned.append(entry)
+            cleaned.append(glide_settings_compat.preserve(value, entry, glide_settings_compat.FILTER_FIELDS))
             seen.add(identity)
             if len(cleaned) >= cls.MAX_FILTERS:
                 break
@@ -4159,7 +4162,7 @@ class SavedFilters:
         if index is None:
             values.append(criteria)
         else:
-            values[index] = criteria
+            values[index] = glide_settings_compat.preserve(values[index], criteria, glide_settings_compat.FILTER_FIELDS)
         if not self._persist(before):
             return False
         if app.view_mode == "saved_filter":
@@ -4662,8 +4665,9 @@ class ItemWorkspace:
                 continue
             list_id, item_id = identity(raw.get("list_id")), identity(raw.get("item_id"))
             if list_id and item_id and item_id not in seen:
-                tabs.append({"list_id": list_id, "item_id": item_id,
-                             "used": number(raw.get("used"), 0, 0, 10**15)})
+                tabs.append(glide_settings_compat.preserve(raw, {
+                    "list_id": list_id, "item_id": item_id,
+                    "used": number(raw.get("used"), 0, 0, 10**15)}, glide_settings_compat.TAB_FIELDS))
                 seen.add(item_id)
             if len(tabs) == ItemWorkspace.MAX_TABS:
                 break
@@ -4699,8 +4703,10 @@ class ItemWorkspace:
                 if isinstance(zeigen, dict):
                     eigen = {schluessel: wert for schluessel, wert in zeigen.items()
                              if schluessel in ItemWorkspace.CARD_SHOW_KEYS and isinstance(wert, bool)}
+                    eigen = glide_settings_compat.preserve(zeigen, eigen, ItemWorkspace.CARD_SHOW_KEYS)
                     if eigen:
                         cards[-1]["show"] = eigen
+                cards[-1] = glide_settings_compat.preserve(card, cards[-1], glide_settings_compat.CARD_FIELDS)
                 seen.add(item_id)
                 if len(cards) == ItemWorkspace.MAX_CARDS:
                     break
@@ -4757,6 +4763,7 @@ class ItemWorkspace:
                     verbindungen[-1]["dash"] = True
                 if roh.get("color") in ItemWorkspace.CONNECTION_COLOR_KEYS and roh.get("color") != "muted":
                     verbindungen[-1]["color"] = roh["color"]
+                verbindungen[-1] = glide_settings_compat.preserve(roh, verbindungen[-1], glide_settings_compat.EDGE_FIELDS)
                 if len(verbindungen) == ItemWorkspace.MAX_CONNECTIONS:
                     break
             verbindungsart = raw.get("connection_style")
@@ -4774,6 +4781,7 @@ class ItemWorkspace:
                     "color": roh.get("color") if roh.get("color") in ItemWorkspace.AREA_COLOR_KEYS else "clear",
                     "x": number(roh.get("x"), 16, 0, 20000), "y": number(roh.get("y"), 16, 0, 20000),
                     "w": number(roh.get("w"), 480, 120, 20000), "h": number(roh.get("h"), 320, 80, 20000)})
+                bereiche[-1] = glide_settings_compat.preserve(roh, bereiche[-1], glide_settings_compat.AREA_FIELDS)
                 gesehene_bereiche.add(kennung)
                 if len(bereiche) == ItemWorkspace.MAX_AREAS:
                     break
@@ -4819,6 +4827,7 @@ class ItemWorkspace:
                            "background": raw.get("background")
                            if raw.get("background") in ItemWorkspace.BOARD_BACKGROUND_KEYS else "none",
                            "print_background": raw.get("print_background") is True}
+            boards[key] = glide_settings_compat.preserve(raw, boards[key], glide_settings_compat.BOARD_FIELDS)
         data["pinboards"] = boards
         return data
 
@@ -4918,22 +4927,15 @@ class ItemWorkspace:
         for key, board in list(app.settings["pinboards"].items()):
             if key == self.GLOBAL_SCOPE:
                 valid = self.valid_cards(key)
-                board["cards"][:] = [card for card in board["cards"] if card["item_id"] in valid]
-                for card in board["cards"]:
-                    card["list_id"] = valid[card["item_id"]][0]["id"]
-                board["connections"] = [eintrag for eintrag in board.get("connections", [])
-                                        if eintrag["from"] in valid and eintrag["to"] in valid]
+                cards, edges = glide_settings_compat.prune_cards(board, valid)
+                board["cards"][:], board["connections"] = cards, edges
                 continue
             if not self.eligible_lists(key) and not (key.startswith("folder:") and app.get_folder(key[7:])):
                 del app.settings["pinboards"][key]
                 continue
             valid = self.valid_cards(key)
-            board["cards"][:] = [card for card in board["cards"] if card["item_id"] in valid]
-            for card in board["cards"]:
-                card["list_id"] = valid[card["item_id"]][0]["id"]
-            gueltig = {card["item_id"] for card in board["cards"]}
-            board["connections"] = [eintrag for eintrag in board.get("connections", [])
-                                    if eintrag["from"] in gueltig and eintrag["to"] in gueltig]
+            cards, edges = glide_settings_compat.prune_cards(board, valid)
+            board["cards"][:], board["connections"] = cards, edges
         for key, value in list(app.settings["active_tab"].items()):
             if value not in ("list", "board") and not any(
                     key == "list:" + tab["list_id"] and value == tab["item_id"] for tab in tabs):
@@ -5686,6 +5688,8 @@ class ItemWorkspace:
         if self.mode == "board":
             aktionen = self.board_action_buttons(self.bar)
             schalter = self.board_controls(self.bar)
+            aktionsfluss = ButtonFlow(line, bg=app.theme["card"], gap=6)
+            schalterfluss = ButtonFlow(zeile2, bg=app.theme["card"], gap=6)
             # Nach den Zeilen erzeugt stehen sie ohnehin darüber; `raise` hält
             # das auch für „Reiter“ fest (`Canvas.lift` hebt nur Zeichenelemente).
             for button in aktionen + schalter + [overview]:
@@ -5758,16 +5762,34 @@ class ItemWorkspace:
                 ziel = line if einzeilig else zeile2
                 try:
                     overview.pack_forget()
+                    overview.grid_forget()
+                    for fluss in (aktionsfluss, schalterfluss):
+                        fluss.entries = []
+                        fluss._layout_signature = None
+                        fluss.reflow()
+                        fluss.pack_forget()
                     for knopf in aktionen + schalter:
                         knopf.pack_forget()
-                    for index, knopf in enumerate(sichtbare_aktionen):
-                        knopf.pack(in_=line, side="left",
-                                   padx=(0, 16 if einzeilig and index == len(sichtbare_aktionen) - 1 else 6))
-                    for knopf in schalter:
-                        if stufe == 0 or knopf not in zweitrangig:
+                        knopf.grid_forget()
+                    sichtbare_schalter = [knopf for knopf in schalter if stufe == 0 or knopf not in zweitrangig]
+                    if not einzeilig:
+                        # Auch die Hauptaktionen können bei einer offenen
+                        # Nebenansicht mehr als eine volle Zeile benötigen.
+                        # Ihre gemessenen Breiten bleiben beim Umbruch erhalten.
+                        aktionsfluss.pack(side="left", fill="x", expand=True)
+                        schalterfluss.pack(fill="x")
+                        for knopf in sichtbare_aktionen:
+                            aktionsfluss.add(knopf)
+                        for knopf in sichtbare_schalter + ([overview] if stufe < 2 else []):
+                            schalterfluss.add(knopf)
+                    else:
+                        for index, knopf in enumerate(sichtbare_aktionen):
+                            knopf.pack(in_=line, side="left",
+                                       padx=(0, 16 if index == len(sichtbare_aktionen) - 1 else 6))
+                        for knopf in sichtbare_schalter:
                             knopf.pack(in_=ziel, side="left", padx=(0, 6))
-                    if stufe < 2:
-                        overview.pack(in_=ziel, side="left", padx=(2, 0))
+                        if stufe < 2:
+                            overview.pack(in_=ziel, side="left", padx=(2, 0))
                     if einzeilig:
                         zeile2.pack_forget()
                     else:
@@ -16936,6 +16958,9 @@ class ListApp:
         self._registered_fonts = register_private_fonts()
         self.templates = self.load_templates()
         self.lock_info = self.acquire_data_lock()
+        self.init_recovery_session()
+        if glide_diagnostics.warning():
+            self.storage_health().fail('diagnostics', glide_diagnostics.warning())
         self.root.bind('<Destroy>', lambda event: self.release_data_lock()
                        if event.widget is self.root else None, add='+')
         if self.lock_info and not os.environ.get("GLIDE_TEST_MODE"):
@@ -18885,13 +18910,14 @@ class ListApp:
                 return False
             if self._take_over_data_lock():
                 self._lock_session = session
+                self.init_recovery_session()
                 return True
             return False
         except OSError as exc:
             self.show_error("Datensperre übernehmen", glide_lock.takeover_failed(str(exc)))
             return False
         finally:
-            if getattr(self, '_lock_session', None) is not session or getattr(self, '_data_read_only', False):
+            if getattr(self, '_lock_session', None) is not session:
                 session.release()
 
     def _take_over_data_lock(self):
@@ -18928,7 +18954,11 @@ class ListApp:
         if info.get("defective"):
             if self.ask_yes_no("Datensperre beschädigt", glide_lock.defective_question(info.get("detail"))) \
                     and self.take_over_data_lock():
-                self.show_info("Datensperre übernommen", "Glide speichert in diesem Datenordner wieder.")
+                if getattr(self, '_data_read_only', False):
+                    self.show_warning("Datensperre übernommen", self.read_only_notice())
+                    self.sync_storage_notice()
+                else:
+                    self.show_info("Datensperre übernommen", "Glide speichert in diesem Datenordner wieder.")
             return
         self.show_warning("Datenordner bereits geöffnet",
                           f"Der Datenordner ist seit {info.get('started_at', 'unbekannt')} auf "
@@ -19070,6 +19100,7 @@ class ListApp:
         if not os.environ.get("GLIDE_DATA_DIR"):
             self.write_json_atomic(DATA_POINTER_FILE, {"version": self.DATA_POINTER_VERSION, "path": target})
         self.close_daily_planning()
+        self.finish_recovery_session()
         self.release_data_lock()
         BASE_DIR = target
         SAVE_FILE = target_data
@@ -19088,6 +19119,7 @@ class ListApp:
         os.makedirs(BACKUP_DIR, exist_ok=True)
         os.makedirs(ATTACHMENTS_DIR, exist_ok=True)
         self.lock_info = self.acquire_data_lock()
+        self.init_recovery_session()
         if self.lock_info and not os.environ.get("GLIDE_TEST_MODE"):
             # Wie beim Start: fremd belegt oder Sperre defekt (dann mit Übernahme).
             try:
@@ -19274,6 +19306,75 @@ class ListApp:
             self._storage_health = glide_storage.Health()
         return self._storage_health
 
+    def init_recovery_session(self):
+        """Sitzungsnachweis erst unter der bestehenden Datensperre eröffnen."""
+        self._recovery_loaded = False
+        self._recovery_guard = None
+        self._recovery_assessment = None
+        if getattr(self, '_data_read_only', False) or not getattr(self, '_lock_token', None):
+            return
+        guard = glide_session.SessionGuard(BASE_DIR, SAVE_FILE, schema_version=self.DATA_SCHEMA_VERSION)
+        result = guard.begin(lock_owned=True, validate_data=self.validate_backup_schema)
+        self._recovery_guard, self._recovery_assessment = guard, result
+        if not result.writable:
+            self._data_read_only = True
+            self._read_only_reason = 'recovery'
+            self.storage_health().fail('recovery', result.detail)
+
+    def finish_recovery_session(self):
+        guard = getattr(self, '_recovery_guard', None)
+        if guard is None:
+            return
+        saved = (getattr(self, '_recovery_loaded', False) and not getattr(self, 'dirty', True)
+                 and not getattr(self, '_data_read_only', False)
+                 and 'data' not in self.storage_health().failures
+                 and 'data' not in getattr(self, '_storage_blocked_files', set()))
+        result = guard.finish(saved=saved)
+        if result is False and saved:
+            self.storage_health().fail('recovery', 'Der saubere Sitzungsabschluss konnte nicht bestätigt werden.')
+
+    def resume_recovery_session(self):
+        """Bewusste Freigabe gültiger Originaldaten; vor jeder Migration vorsichern."""
+        result = getattr(self, '_recovery_assessment', None)
+        guard = getattr(self, '_recovery_guard', None)
+        if guard is None or result is None or not result.needs_recovery:
+            return False
+        if not self.ask_yes_no('Bestand nach Prüfung freigeben',
+                'Die letzte Sitzung hat keinen sauberen Abschlussnachweis. Die lesende Prüfung '
+                'hat keine Unstimmigkeiten gefunden.\n\nVor der Freigabe wird die Originaldatei '
+                'bytegleich separat gesichert und erneut geprüft. Danach wird genau dieser '
+                'Bestand geladen.\n\nWeiterarbeiten?'):
+            return False
+        result = guard.resume(lock_owned=self.recovery_lock_owned(), expected_sha256=result.sha256,
+                              validate_data=self.validate_backup_schema)
+        if not result.writable:
+            self._recovery_assessment = guard.assess(validate_data=self.validate_backup_schema)
+            self.storage_failure('recovery', result.detail)
+            self.show_error('Freigabe nicht möglich', result.detail)
+            return False
+        self._recovery_assessment = result
+        self._data_read_only = False
+        self._read_only_reason = 'lock'
+        self.storage_health().success('recovery')
+        self.load_items()
+        self.undo_stack.clear()
+        self.redo_history = glide_undo.RedoHistory(self.MAX_UNDO_STEPS)
+        self.refresh_storage_sizes()
+        return not self._data_read_only
+
+    def recovery_lock_owned(self):
+        """Besitz für eine gezielte Wiederherstellung trotz aktivem Schreibschutz."""
+        token = getattr(self, '_lock_token', {})
+        session = getattr(self, '_lock_session', None)
+        try:
+            if not token or session is None or not session.acquire():
+                return False
+            state = glide_lock.read(LOCK_FILE)
+            return (state.kind == glide_lock.VALID
+                    and state.record.get('token') == token.get('token'))
+        except OSError:
+            return False
+
     def storage_failure(self, kind, detail):
         if self.storage_health().fail(kind, detail):
             self.log_error(f"{glide_storage.LABELS.get(kind, kind)}: {detail}")
@@ -19344,7 +19445,7 @@ class ListApp:
         body = tk.Frame(outer, bg=self.theme["bg"])
         body.pack(fill="both", expand=True)
         text = tk.Text(body, wrap="word", font=app_font(10), bg=self.theme["card"],
-                       fg=self.theme["text"], relief="flat", padx=12, pady=12)
+                       fg=self.theme["text"], relief="flat", padx=12, pady=12, width=1, height=1)
         bar = ttk.Scrollbar(body, orient="vertical", command=text.yview)
         bar.pack(side="right", fill="y")
         text.pack(fill="both", expand=True)
@@ -19354,13 +19455,30 @@ class ListApp:
             text.configure(state="normal")
             text.delete("1.0", "end")
             text.insert("1.0", self.storage_health().report(self.MAX_BACKUP_DATA_BYTES))
+            result = getattr(self, '_recovery_assessment', None)
+            if result is not None and result.preserved_path:
+                text.insert('end', '\n\nOriginalvorsicherung:\n' + result.preserved_path)
+            diagnostic_warning = glide_diagnostics.warning()
+            if diagnostic_warning:
+                text.insert('end', '\n\nLokale Diagnose:\n' + diagnostic_warning)
             text.configure(state="disabled")
 
         def retry():
             self.retry_storage()
             refresh()
 
-        footer.add(self._make_dialog_button(footer, "Erneut speichern", retry, "export"))
+        result = getattr(self, '_recovery_assessment', None)
+        if result is not None and result.needs_recovery:
+            def resume():
+                if self.resume_recovery_session():
+                    dialog.destroy()
+                else:
+                    refresh()
+            footer.add(self._make_dialog_button(footer, 'Bestand freigeben', resume, 'muted'))
+        if getattr(self, '_read_only_reason', None) == 'recovery':
+            footer.add(self._make_dialog_button(footer, 'Sicherungen …', self.show_backup_catalog, 'muted'))
+        else:
+            footer.add(self._make_dialog_button(footer, "Erneut speichern", retry, "export"))
         footer.add(self._make_dialog_button(footer, "Schließen", dialog.destroy, "muted"))
         dialog.bind("<Escape>", lambda _event: dialog.destroy())
         refresh()
@@ -23062,8 +23180,10 @@ class ListApp:
         commands = [("Suchen", self.open_side_search)]
         if glide_side_view.sections(entry):
             commands.append(("Abschnitte …", self.show_side_sections))
+        commands.append(("Verweise …", self.show_side_references))
         for title, command in commands:
-            button = self._make_dialog_button(row, title, command, "muted", width=84, height=32)
+            button = self._make_dialog_button(row, title, command, "muted",
+                width=max(84, tkfont.Font(font=app_font(10, "bold")).measure(title) + 24), height=32)
             row.add(button)
         self._side_search_entry = None
         self._side_search_counter = None
@@ -23446,7 +23566,7 @@ class ListApp:
         baum = ttk.Treeview(rahmen, name="side_view_tree", columns=("due",), show="tree", selectmode="browse",
                             style=stil, height=height or 10)
         baum.column("#0", stretch=True, width=200)
-        baum.column("due", stretch=False, width=92, minwidth=70, anchor="e")
+        baum.column("due", stretch=False, width=92, minwidth=92, anchor="e")
         baum.tag_configure("done", foreground=theme["muted"])
         baum.tag_configure("heading", font=app_font(11, "bold"))
         baum.tag_configure("hover", background=theme["hover"])
@@ -23475,7 +23595,21 @@ class ListApp:
             baum.insert("", "end", iid=row["id"], text=text,
                         values=(self.format_due_display(row["due"]) if row["due"] else "",), tags=tags)
             zeilen[row["id"]] = row
-        baum.configure(displaycolumns=("due",) if any(row["due"] for row in rows) else ())
+        due_width = max((schrift.measure(self.format_due_display(row["due"])) + 18
+                         for row in rows if row["due"]), default=0)
+        if due_width:
+            baum.column("due", width=due_width, minwidth=due_width)
+
+        def fit_columns(event):
+            # B11: ganze Datumswerte oder keine Spalte; der Titel behält Vorrang.
+            show_due = bool(due_width and event.width >= due_width + 180)
+            columns = ("due",) if show_due else ()
+            if tuple(baum["displaycolumns"]) != columns:
+                baum.configure(displaycolumns=columns)
+            baum.column("#0", width=max(140, event.width - (due_width if show_due else 0) - 4), minwidth=140)
+
+        baum.configure(displaycolumns=())
+        baum.bind("<Configure>", fit_columns, add="+")
         if not zeilen:
             baum.insert("", "end", iid="_empty", text="Noch keine Aufgaben.", tags=("done",))
         gewaehlt = getattr(self, "_side_view_selected", None)
@@ -23528,6 +23662,112 @@ class ListApp:
             baum, "Nebenansicht"))
         self._side_search_bodies.append(baum)
         return baum
+
+    def follow_side_reference(self, value, source, *, action='side'):
+        """Nur aktuelle Beziehungen im Nebenhost verfolgen; alte Menüs bleiben wirkungslos."""
+        entry = self.side_view_entry()
+        if entry is None:
+            return False
+        current = ("list", entry["id"])
+        selected = ("item", getattr(self, "_side_view_selected", None))
+        body = getattr(self, '_side_view_body', None)
+        if isinstance(body, ttk.Treeview):
+            selected = ('item', body.selection()[0] if body.selection() else None)
+        if source != current and source != selected:
+            return False
+        index, outgoing, incoming = self.object_graph()
+        if source not in index or index[source][2] is None or index[source][2].get("id") != entry["id"]:
+            return False
+        target = glide_objects.parse(value)
+        if target not in (outgoing.get(source, set()) | incoming.get(source, set())):
+            self.set_side_view_status("Dieser Verweis ist inzwischen nicht mehr vorhanden.")
+            return False
+        if action == 'copy':
+            self.root.clipboard_clear()
+            self.root.clipboard_append(glide_objects.uri(*target))
+            self.set_side_view_status('Verweis kopiert.')
+            return True
+        if action not in ('side', 'main'):
+            return False
+        if action == 'side' and glide_side_view.reference_target(target, index) is None:
+            self.set_side_view_status("Das Verweisziel ist nicht mehr in der Nebenansicht verfügbar.")
+            return False
+        return self.open_object_reference(value, side=action == 'side')
+
+    def link_side_reference(self, source):
+        owner = str(SAVE_FILE)
+        def current():
+            entry = self.side_view_entry()
+            if entry is None or getattr(self, '_data_read_only', False) or str(SAVE_FILE) != owner:
+                return False
+            holder = self.object_graph()[0].get(source)
+            if not holder or holder[0] != 'active' or not holder[2] or holder[2].get('id') != entry['id']:
+                return False
+            selected = getattr(self, '_side_view_selected', None)
+            body = getattr(self, '_side_view_body', None)
+            if isinstance(body, ttk.Treeview):
+                selected = body.selection()[0] if body.selection() else None
+            return source == ('list', entry['id']) or source == ('item', selected)
+        if not current():
+            return False
+        value = self.themed_choice_dialog('Verknüpfen', 'Seite, Liste oder Aufgabe auswählen:',
+                                         self.object_reference_choices(source))
+        if value is None or not current():
+            return False
+        return self.change_object_reference(source, value)
+
+    def build_side_references_menu(self):
+        menu = self._new_themed_popup_menu()
+        entry = self.side_view_entry()
+        if entry is None:
+            menu.add_command(label="Inhalt nicht mehr vorhanden", state="disabled")
+            return menu
+        body = getattr(self, "_side_view_body", None)
+        if isinstance(body, ttk.Treeview) and body.selection():
+            self._side_view_selected = body.selection()[0]
+        index, outgoing, incoming = self.object_graph()
+        groups = glide_side_view.reference_groups(entry["id"], getattr(self, "_side_view_selected", None),
+                                                   index, outgoing, incoming)
+        action_rows = []
+        for title, rows in groups:
+            group = self._new_themed_popup_menu(menu)
+            for row in rows:
+                action_rows.append((title, row))
+                label = row["title"] + (" · " + row["reason"] if row["reason"] else "")
+                group.add_command(label=label, state="normal" if row["enabled"] else "disabled",
+                    command=lambda value=row["value"], source=row["source"]:
+                        self.follow_side_reference(value, source))
+            if not rows:
+                group.add_command(label="Keine Verweise" if title.endswith("· Verweise") else "Keine Rückverweise",
+                                  state="disabled")
+            menu.add_cascade(label=f"{title} ({len(rows)})", menu=group)
+        if action_rows:
+            actions = self._new_themed_popup_menu(menu)
+            for title, row in action_rows:
+                target = self._new_themed_popup_menu(actions)
+                for action, label, enabled in glide_side_view.reference_actions(row):
+                    target.add_command(label=label, state='normal' if enabled else 'disabled',
+                        command=lambda a=action, value=row['value'], source=row['source']:
+                            self.follow_side_reference(value, source, action=a))
+                actions.add_cascade(label=title + ' · ' + row['title'], menu=target)
+            menu.add_cascade(label='Verweisaktionen', menu=actions)
+        if not getattr(self, '_data_read_only', False) and index.get(('list', entry['id']), ('missing',))[0] == 'active':
+            menu.add_command(label='Inhalt verknüpfen …',
+                             command=lambda source=('list', entry['id']): self.link_side_reference(source))
+            selected = getattr(self, '_side_view_selected', None)
+            holder = index.get(('item', selected))
+            if holder and holder[0] == 'active' and holder[2] and holder[2].get('id') == entry['id']:
+                menu.add_command(label='Ausgewählte Aufgabe verknüpfen …',
+                                 command=lambda source=('item', selected): self.link_side_reference(source))
+        return menu
+
+    def show_side_references(self):
+        self._destroy_item_context_menu()
+        menu = self.build_side_references_menu()
+        self._item_context_menu = menu
+        self.show_action_chooser(menu, title="Verweise in der Nebenansicht",
+                                 anchor=self.current_focus_widget() or self.side_pane)
+        return "break"
 
     def _render_side_view_page(self, parent, entry):
         """Seite oder Notiz lesend: Blockarten, Einzüge, Hervorhebungen und echte Aufgabenkästchen."""
@@ -23587,6 +23827,18 @@ class ListApp:
                 text.tag_add(f"indent{zeile['indent']}", start, ende)
         for anfang, ende, art in projection["inline"]:
             text.tag_add(art, f"1.0 + {anfang}c", f"1.0 + {ende}c")
+        # Vor eingebetteten Fenstern setzen: Tk verschiebt die Originalspannen mit.
+        links = glide_side_view.page_links(entry.get("rich_note") or {}, len(projection["text"]))
+        for number, (start, end, value) in enumerate(links):
+            tag = f"side_link_{number}"
+            text.tag_configure(tag, foreground=theme["ui_accent"], underline=True)
+            text.tag_add(tag, f"1.0 + {start}c", f"1.0 + {end}c")
+            def follow(_event, target=value, source=("list", entry["id"])):
+                self.follow_side_reference(target, source)
+                return "break"
+            text.tag_bind(tag, "<Button-1>", follow)
+            text.tag_bind(tag, "<Enter>", lambda _event, widget=text: widget.configure(cursor="hand2"))
+            text.tag_bind(tag, "<Leave>", lambda _event, widget=text: widget.configure(cursor="arrow"))
         nur_lesen = bool(getattr(self, "_data_read_only", False))
         for zeile in reversed(projection["lines"]):
             start = f"{zeile['line']}.0"
@@ -27135,7 +27387,7 @@ class ListApp:
             einstellungen_text = json.dumps(einstellungen, sort_keys=True, ensure_ascii=False, default=str)
         except (TypeError, ValueError):
             return None
-        kalender = self.busy_view(date.today().isoformat())
+        kalender = self.busy_view(self.home_day())
         kalenderstand = (kalender.status, kalender.sha256, kalender.message, kalender.issues)
         selection = getattr(self, "_home_plan_selection", None)
         selection_signature = (selection["day"], selection["page"], tuple(sorted(selection["selected"]))) if selection else None
@@ -27144,7 +27396,69 @@ class ListApp:
                 self.home_mode(), bool(getattr(self, "_home_editing", False)), self.view_mode,
                 bool(getattr(self, "_timer_indicator_visible", False)), self.is_pixel_design(),
                 bool(getattr(self, "_settings_existed", True)), bool(getattr(self, "_data_read_only", False)),
-                selection_signature)
+                selection_signature, self.home_day())
+
+    def home_day(self):
+        """Flüchtige Tagesnavigation bleibt an den aktuellen Datenbestand gebunden."""
+        owner = str(SAVE_FILE)
+        if getattr(self, "_home_day_owner", None) != owner:
+            self._home_day_owner, self._home_day_value = owner, None
+            self._home_plan_selection = None
+        return self.normalize_due(getattr(self, "_home_day_value", None)) or date.today().isoformat()
+
+    def change_home_day(self, value=None, *, step=0):
+        current = self.home_day()
+        target = (glide_task_tiles.shift_day(current, step) if step else
+                  self.normalize_due(value) or date.today().isoformat())
+        stored = target if target != date.today().isoformat() else None
+        if target != current or stored != getattr(self, "_home_day_value", None):
+            self._home_day_value = stored
+            self._home_plan_selection = None
+            self.refresh_home()
+        return "break"
+
+    def choose_home_day(self):
+        owner, current = str(SAVE_FILE), self.home_day()
+        value = self.themed_due_dialog(current, title="Tag auf der Startseite", show_time=False)
+        if value is not None and value[0] and owner == str(SAVE_FILE) and current == self.home_day():
+            self.change_home_day(value[0])
+        return "break"
+
+    def open_home_day(self):
+        self.set_plan_day_view(day=self.home_day())
+        return "break"
+
+    def choose_home_week_day(self, value, owner, origin):
+        if str(SAVE_FILE) != owner or self.home_day() != origin:
+            return False
+        self.change_home_day(value)
+        return True
+
+    def build_home_week_menu(self):
+        menu = self._new_themed_popup_menu()
+        owner, origin = str(SAVE_FILE), self.home_day()
+        for offset, title in ((-1, 'Vorige Woche'), (0, 'Betrachtete Woche'), (1, 'Nächste Woche')):
+            days = self._new_themed_popup_menu(menu)
+            choices = glide_task_tiles.week_choices(origin, offset)
+            for value, label in choices:
+                if value == origin:
+                    label += ' (ausgewählt)'
+                if value == date.today().isoformat():
+                    label += ' · Heute'
+                days.add_command(label=label, command=lambda selected=value:
+                    self.choose_home_week_day(selected, owner, origin))
+            if not choices:
+                days.add_command(label='Außerhalb des Kalenderbereichs', state='disabled')
+            menu.add_cascade(label=title, menu=days)
+        return menu
+
+    def show_home_week_menu(self):
+        self._destroy_item_context_menu()
+        menu = self.build_home_week_menu()
+        self._item_context_menu = menu
+        self.show_action_chooser(menu, title='Woche auf der Startseite',
+                                 anchor=self.current_focus_widget() or self.home_canvas)
+        return 'break'
 
     def home_task_link(self, item, source, list_color, selected=False):
         """Nur Anzeige und stabile IDs an die Kachel geben, keine Modellreferenz."""
@@ -27152,12 +27466,15 @@ class ListApp:
                                          source["id"], item["id"], list_color(source), selected)
 
     def home_today_content(self, visible, summary, list_color):
-        day = date.today().isoformat()
+        day = self.home_day()
+        is_today = day == date.today().isoformat()
+        if not is_today:
+            summary = self._home_dashboard("summary", date.fromisoformat(day)).summary(self.lists, ())
         entries = self.plan_day_entries(apply_filters=False, day=day)
         sections = glide_home.today_sections(visible)
-        next_item, next_source = self.home_focus_candidate() if sections["next"] else (None, None)
+        next_item, next_source = self.home_focus_candidate() if sections["next"] and is_today else (None, None)
         planning = self.format_planning_summary(
-            self.planning_summary([entry[-1] for entry in entries], day=day)) if entries else ""
+            self.planning_summary([entry[-1] for entry in entries], day=day))
         state = getattr(self, "_home_plan_selection", None)
         if state and (state["day"] != day or getattr(self, "_data_read_only", False)):
             self._home_plan_selection = state = None
@@ -27171,18 +27488,19 @@ class ListApp:
                 selected=selection is not None and item["id"] in state["selected"])
                 for _due, _list, _index, source, item in rows),
             next_task=self.home_task_link(next_item, next_source, list_color) if next_item is not None else None,
-            show_goal=sections["goal"], inbox_total=len(self.plan_inbox_items(apply_filters=False)),
+            show_goal=sections["goal"] and is_today, inbox_total=len(self.plan_inbox_items(apply_filters=False)),
             due_lists=tuple((f"{self.list_path_title(entry)}  ·  {count} offen", entry["id"], list_color(entry))
                             for entry, count in summary["due_lists"]),
             writable=not getattr(self, "_data_read_only", False), selecting=selection is not None,
             selected_total=len(selection["selected"]) if selection is not None else 0,
             available_total=len(selection["available"]) if selection is not None else 0,
             page=selection["page"] if selection is not None else 0,
-            pages=selection["pages"] if selection is not None else 1)
+            pages=selection["pages"] if selection is not None else 1,
+            day_title=glide_task_tiles.day_title(day, date.today()), is_today=is_today)
 
     def home_selection_projection(self):
         state = getattr(self, "_home_plan_selection", None)
-        if not state or state["day"] != date.today().isoformat() or getattr(self, "_data_read_only", False):
+        if not state or state["day"] != self.home_day() or getattr(self, "_data_read_only", False):
             return None
         entries = self.plan_day_entries(apply_filters=False, day=state["day"])
         return glide_task_tiles.planning_selection(entries, state["selected"], state["page"])
@@ -27191,7 +27509,7 @@ class ListApp:
         if action == "end":
             self._home_plan_selection = None
         elif action == "start" and not getattr(self, "_data_read_only", False):
-            self._home_plan_selection = dict(day=date.today().isoformat(), selected=set(), page=0)
+            self._home_plan_selection = dict(day=self.home_day(), selected=set(), page=0)
         else:
             projection = self.home_selection_projection()
             if projection is None:
@@ -27211,7 +27529,142 @@ class ListApp:
 
     def home_selection_matches(self, identities):
         projection = self.home_selection_projection()
-        return projection is not None and bool(identities) and tuple(identities) == projection["selected"]
+        return projection is not None and bool(identities) and set(identities) == set(projection["selected"])
+
+    def home_batch_targets(self, identities, day):
+        if day != self.home_day() or not self.home_selection_matches(identities):
+            return None
+        if self.refresh_data_lock() is False or getattr(self, "_data_read_only", False):
+            return None
+        index = ItemIndex(lists=self.lists)
+        found = [index.in_list(identity) for identity in identities]
+        if not all(row and self.is_schedulable_item(row[0]) and not row[0].get("done")
+                   and not self.is_archived_entry(row[3]) and row[0].get("planned_date") == day for row in found):
+            return None
+        return [row[0] for row in found]
+
+    def apply_home_batch(self, identities, day, operation, value):
+        items = self.home_batch_targets(identities, day)
+        if items is None:
+            return False
+        if operation.startswith("label_"):
+            label = self.get_label(value)
+            if label is None or self.is_system_label(label):
+                return False
+        try:
+            plan = glide_task_editing.batch_plan(items, operation, value, max_labels=self.MAX_LABELS_PER_ITEM)
+        except ValueError as error:
+            self.show_warning("Auswahl bearbeiten", str(error))
+            return False
+        if not plan:
+            return False
+        with self.item_change(tuple(identities), restore=False, local=True) as change:
+            # Snapshot/Editorübernahme kann Objekte ersetzen; keine alten Referenzen verwenden.
+            items = self.home_batch_targets(identities, day)
+            if items is None:
+                return False
+            if operation.startswith("label_"):
+                label = self.get_label(value)
+                if label is None or self.is_system_label(label):
+                    return False
+            try:
+                plan = glide_task_editing.batch_plan(items, operation, value, max_labels=self.MAX_LABELS_PER_ITEM)
+            except ValueError as error:
+                self.show_warning("Auswahl bearbeiten", str(error))
+                return False
+            for item in items:
+                if item["id"] in plan:
+                    item.update(plan[item["id"]])
+                    change.mark(item["id"])
+        if change.changed and change.saved:
+            self.show_undo_toast(f"{len(plan)} Aufgaben geändert")
+            return True
+        return False
+
+    def build_home_batch_menu(self):
+        menu = self._new_themed_popup_menu()
+        projection = self.home_selection_projection()
+        if projection is None or not projection["selected"]:
+            menu.add_command(label="Keine offenen Aufgaben ausgewählt", state="disabled")
+            return menu
+        identities, day = projection["selected"], self.home_day()
+        importance = self._new_themed_popup_menu(menu)
+        items = self.home_batch_targets(identities, day) or []
+        values = {self.clamp_importance(item.get("importance", 0)) for item in items}
+        for value, title in ((0, "Keine"), (1, "Niedrig"), (2, "Mittel"), (3, "Hoch")):
+            importance.add_command(label=("✓ " if values == {value} else "") + title,
+                foreground=self.theme[self.importance_color_key(value)],
+                command=lambda selected=value: self.apply_home_batch(identities, day, "importance", selected))
+        menu.add_cascade(label="Wichtigkeit", menu=importance)
+        for operation, title in (("label_add", "Label hinzufügen"), ("label_remove", "Label entfernen")):
+            labels = self._new_themed_popup_menu(menu)
+            regular = [label for label in self.labels if not self.is_system_label(label)]
+            for label in regular:
+                labels.add_command(label=label.get("name", "Label"),
+                    foreground=self.theme[self.label_color_key(label)],
+                    command=lambda op=operation, identity=label["id"]:
+                        self.apply_home_batch(identities, day, op, identity))
+            if not regular:
+                labels.add_command(label="Keine eigenen Labels vorhanden", state="disabled")
+            menu.add_cascade(label=title, menu=labels)
+        due = self._new_themed_popup_menu(menu)
+        for title, value in (('Heute', date.today().isoformat()),
+                             ('Morgen', glide_task_tiles.shift_day(date.today().isoformat(), 1)),
+                             ('Keine Fälligkeit', None)):
+            due.add_command(label=title, command=lambda chosen=value:
+                self.apply_home_batch(identities, day, 'due', chosen))
+        due.add_command(label='Datum …', command=lambda: self.choose_home_batch_value(identities, day, 'due'))
+        series = any(item.get('repeat') for item in items)
+        menu.add_cascade(label='Fälligkeit' + (' (Serien einzeln bearbeiten)' if series else ''),
+                         menu=due, state='disabled' if series else 'normal')
+        effort = self._new_themed_popup_menu(menu)
+        for minutes in (15, 30, 45, 60, 90, 120):
+            effort.add_command(label=self.format_estimated_minutes(minutes), command=lambda chosen=minutes:
+                self.apply_home_batch(identities, day, 'estimated_minutes', chosen))
+        effort.add_command(label='Eigener Aufwand …', command=lambda:
+            self.choose_home_batch_value(identities, day, 'estimated_minutes'))
+        effort.add_command(label='Schätzung entfernen', command=lambda:
+            self.apply_home_batch(identities, day, 'estimated_minutes', None))
+        menu.add_cascade(label='Aufwand je Aufgabe', menu=effort)
+        return menu
+
+    def choose_home_batch_value(self, identities, day, operation):
+        owner = str(SAVE_FILE)
+        items = self.home_batch_targets(identities, day)
+        if not items:
+            return False
+        if operation == 'due':
+            result = self.themed_due_dialog(items[0].get('due'), title='Fälligkeit für Auswahl', show_time=False)
+            if result is None:
+                return False
+            value = result[0]
+        elif operation == 'estimated_minutes':
+            entered = self.themed_input_dialog('Aufwand für Auswahl',
+                'Aufwand je Aufgabe, z. B. 45 min oder 1,5 h. Leer entfernt die Schätzung.',
+                initial=str(items[0].get('estimated_minutes') or ''))
+            if entered is None:
+                return False
+            try:
+                value = self.parse_csv_minutes(entered) if entered.strip() else None
+            except (ValueError, OverflowError):
+                value = None
+            if entered.strip() and value is None:
+                self.show_warning('Aufwand für Auswahl',
+                                  f'Bitte eine Dauer von 1 bis {self.MAX_ESTIMATED_MINUTES} Minuten eingeben.')
+                return False
+        else:
+            return False
+        if owner != str(SAVE_FILE):
+            return False
+        return self.apply_home_batch(identities, day, operation, value)
+
+    def show_home_batch_menu(self):
+        self._destroy_item_context_menu()
+        menu = self.build_home_batch_menu()
+        self._item_context_menu = menu
+        anchor = self.current_focus_widget() or self.home_canvas
+        self.show_action_chooser(menu, title="Ausgewählte Tagesaufgaben bearbeiten", anchor=anchor)
+        return "break"
 
     def choose_home_selection_plan(self, choice, item_ids, review=False, shown_day=None):
         return self.choose_home_plan(choice, item_ids, review, shown_day, selection=True)
@@ -28267,7 +28720,11 @@ class ListApp:
                 selection_clear=lambda: self.change_home_selection("clear"),
                 selection_plan=self.show_home_selection_plan,
                 selection_end=lambda: self.change_home_selection("end"),
-                selection_page=lambda step: self.change_home_selection("page", step=step)),
+                selection_page=lambda step: self.change_home_selection("page", step=step),
+                selection_edit=self.show_home_batch_menu,
+                day_shift=lambda step: self.change_home_day(step=step), day_choose=self.choose_home_day,
+                day_today=self.change_home_day, day_open=self.open_home_day,
+                day_week=self.show_home_week_menu),
             self.ICONS, glide_design.SPACING)
 
         bauer = {"boardpreview": kachel_boardpreview, "mascot": kachel_mascot,
@@ -31084,46 +31541,42 @@ class ListApp:
             pass
 
     def create_label_interactively(self, parent=None):
-        """Legt ein Label über Namens- und Farbabfrage an.
-
-        Eine Stelle für beide Wege – die Labelverwaltung und das Aufklappfeld in
-        der Eingabemaske. Rückgabe ist das neue Label oder None bei Abbruch.
-        """
+        """Label anlegen; None bei Abbruch/Schreibfehler, Fehler bleibt rücknehmbar."""
         owner = parent if isinstance(parent, (tk.Toplevel, tk.Tk)) else self.root
+        if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
+            self.show_warning('Label anlegen', self.read_only_notice(), parent=owner)
+            return None
         if len(self.labels) >= self.MAX_LABELS:
-            self.show_info(
-                "Labels", f"Es sind höchstens {self.MAX_LABELS} Labels möglich.", parent=owner
-            )
+            self.show_info('Labels', f'Es sind höchstens {self.MAX_LABELS} Labels möglich.', parent=owner)
             return None
         with self.modal_over(parent):
-            name = self.themed_input_dialog("Neues Label", "Name des Labels:", ok_text="Anlegen")
+            name = self.themed_input_dialog('Neues Label', 'Name des Labels:', ok_text='Anlegen')
         if name is None:
             return None
-        name = name.strip()
-        if len(name) > self.LABEL_NAME_INPUT_LIMIT:
-            self.show_warning(
-                "Hinweis",
-                f"Labelnamen dürfen höchstens {self.LABEL_NAME_INPUT_LIMIT} Zeichen lang sein "
-                "– so viel zeigt die Labelspalte einer Liste.",
-                parent=owner,
-            )
-            return None
-        if not name:
-            self.show_warning("Hinweis", "Bitte einen Namen eingeben.", parent=owner)
-            return None
-        if self.get_label_by_name(name):
-            self.show_warning(
-                "Hinweis", "Es gibt bereits ein Label mit diesem Namen.", parent=owner
-            )
+        try:
+            name = glide_task_editing.new_label_name(self.labels, name,
+                max_labels=self.MAX_LABELS, max_length=self.LABEL_NAME_INPUT_LIMIT)
+        except ValueError as exc:
+            self.show_warning('Hinweis', str(exc), parent=owner)
             return None
         with self.modal_over(parent):
             color = self.choose_label_color(preview_name=name)
-        self.snapshot_undo()
+        if color is None:
+            return None
+        if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
+            self.show_warning('Label anlegen', self.read_only_notice(), parent=owner)
+            return None
+        try:
+            name = glide_task_editing.new_label_name(self.labels, name,
+                max_labels=self.MAX_LABELS, max_length=self.LABEL_NAME_INPUT_LIMIT)
+        except ValueError as exc:
+            self.show_warning('Hinweis', str(exc), parent=owner)
+            return None
         label = self.new_label_object(name, None, color)
-        self.labels.append(label)
-        self.save_items()
-        self.refresh_tree()
-        return label
+        with self.sidebar_change(refresh_tree=True, feedback=False) as change:
+            self.labels.append(label)
+            change.mark()
+        return label if change.saved else None
 
     def themed_input_dialog(self, title, prompt="", initial="", ok_text="OK", accent_key="confirm"):
         """Modaler, an Hell-/Dunkelmodus angepasster Texteingabe-Dialog.
@@ -33406,6 +33859,19 @@ class ListApp:
         before = copy.deepcopy(self.lists)
         manager = self.item_change([source[1]], local=True) if source[0] == 'item' else self.sidebar_change(refresh_tree=True)
         with manager as change:
+            # Editorübernahme/Snapshot kann Objekte ersetzen. Erst hier die Ziel-ID erneut auflösen.
+            index, _, _ = self.object_graph()
+            if getattr(self, '_data_read_only', False) or source not in index or index[source][0] != 'active':
+                return False
+            if not remove and (target == source or target not in index or index[target][0] != 'active'):
+                return False
+            holder = index[source][1]
+            old = list(holder.get('references', []))
+            if not remove and len(old) >= 200 and value not in old:
+                return False
+            new = [entry for entry in old if entry != value] if remove else glide_objects.normalize(old + [value])
+            if new == old:
+                return False
             holder['references'] = new
             change.mark()
         if not change.saved:
@@ -37801,30 +38267,30 @@ class ListApp:
         return None
 
     def apply_sidebar_rename(self, row, new_title):
-        """Übernimmt einen neuen Titel für eine Liste oder einen Ordner."""
+        """Frisches Ziel umbenennen; Speicherergebnis und UI-Nachlauf unterscheiden."""
+        if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
+            return False
         row_type, row_id = tuple(row)
-        holder = (
-            self.get_folder(row_id) if row_type == "folder"
-            else next((item for item in self.lists if item.get("id") == row_id), None)
-        )
+        if row_type not in ('folder', 'list'):
+            return False
+        holder = (self.get_folder(row_id) if row_type == 'folder'
+                  else next((entry for entry in self.lists if entry.get('id') == row_id), None))
         if holder is None:
-            return
+            return False
         new_title = self.clip_container_title(new_title)
-        if str(holder.get("title") or "") == new_title:
-            return
-        self.snapshot_undo()
-        holder["title"] = new_title
-        open_list = row_type == "list" and row_id == self.active_list_id and self.view_mode == "list"
-        open_folder = row_type == "folder" and row_id == self.active_folder_id and self.view_mode == "folder"
-        if open_list:
-            self.app_title = new_title
+        if str(holder.get('title') or '') == new_title:
+            return False
+        open_list = row_type == 'list' and row_id == self.active_list_id and self.view_mode == 'list'
+        open_folder = row_type == 'folder' and row_id == self.active_folder_id and self.view_mode == 'folder'
+        with self.sidebar_change(refresh_tree=True, feedback=False) as change:
+            holder['title'] = new_title
+            if open_list:
+                self.app_title = new_title
+            change.mark()
         if open_list or open_folder:
-            self.update_header_title()
-            self.update_window_title()
-        # Erfolgreiches Speichern baut die Seitenleiste bereits neu auf (P06r).
-        if not self.save_items():
-            self.update_sidebar_list()
-        self.refresh_tree()
+            self.finish_change_ui(change, [('Überschrift', self.update_header_title),
+                                          ('Fenstertitel', self.update_window_title)])
+        return bool(change.saved)
 
     def _cancel_sidebar_rename_timer(self):
         timer = getattr(self, "_sidebar_rename_timer", None)
@@ -38937,67 +39403,70 @@ class ListApp:
         return lists, folders, merged_labels
 
     def remove_done_items(self, list_id=None):
-        """Entfernt alle erledigten Aufgaben einer Liste; Gruppen bleiben erhalten.
-
-        Seit dem 26.09.2026 auch über „Bearbeiten“, das Kontextmenü der Liste
-        und die Aktionssuche erreichbar (vorher nur per Rechtsklick in der
-        Seitenleiste). Die Punkte wandern in den Papierkorb und lassen sich von
-        dort wiederherstellen – vorher waren sie nach einem Neustart fort.
-        """
+        """Bestätigte erledigte Aufgaben einmalig und rücknehmbar entfernen."""
+        if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
+            return 'break'
         if list_id is None:
             if not self.require_list_view():
-                return "break"
+                return 'break'
             list_id = self.active_list_id
-        entry = next((item for item in self.lists if item.get("id") == list_id), None)
+        entry = next((value for value in self.lists if value.get('id') == list_id), None)
         if entry is None:
-            return "break"
-        if entry.get("id") == self.active_list_id:
+            return 'break'
+        if list_id == self.active_list_id:
             self.sync_current_list_reference()
-        entfernt = []
-
-        def prune(items, eltern=None):
-            kept = []
-            removed = 0
-            for index, item in enumerate(items):
-                child_kept, child_removed = prune(item.get("children", []), item)
-                removed += child_removed
-                if self.is_schedulable_item(item) and item.get("done") and not child_kept:
-                    removed += 1
-                    entfernt.append((item, eltern.get("id") if eltern else None, index))
-                    continue
-                item["children"] = child_kept
-                kept.append(item)
-            return kept, removed
-
-        pruned, removed = prune(copy.deepcopy(entry.get("items", [])))
-        entfernt.clear()
-        if not removed:
-            self.show_info("Erledigte entfernen", "In dieser Liste ist nichts als erledigt markiert.")
-            return "break"
-        title = str(entry.get("title") or "Liste").strip() or "Liste"
-        if not self.ask_yes_no(
-            "Erledigte entfernen",
-            f"{removed} erledigte Aufgabe(n) aus '{title}' entfernen?\n\n"
-            "Erledigte Punkte mit noch offenen Unterpunkten bleiben erhalten.",
-        ):
-            return "break"
-        self.snapshot_undo()
-        pruned, removed = prune(entry.get("items", []))
-        entry["items"] = pruned
-        herkunft = {"list_id": entry.get("id"), "list_title": str(entry.get("title") or "")}
-        for item, eltern_id, index in entfernt:
-            self.push_trash_entry(self.new_trash_entry(
-                self.TRASH_KIND_ITEM, copy.deepcopy(item),
-                origin=dict(herkunft, parent_item_id=eltern_id, index=index)))
-        if entry.get("id") == self.active_list_id:
-            self.items = entry["items"]
-        self.save_items()
-        self.refresh_tree()
-        self.show_undo_toast(f"{removed} erledigte Aufgabe(n) in den Papierkorb gelegt")
-        return "break"
+        identities = glide_task_editing.completed_ids(entry.get('items', []), self.is_schedulable_item)
+        if not identities:
+            self.show_info('Erledigte entfernen', 'In dieser Liste ist nichts als erledigt markiert.')
+            return 'break'
+        title = str(entry.get('title') or 'Liste').strip() or 'Liste'
+        message = (f"{len(identities)} erledigte Aufgabe(n) aus '{title}' entfernen?\n\n"
+                   'Erledigte Punkte mit noch offenen Unterpunkten bleiben erhalten.')
+        if len(self.trash) + len(identities) > self.MAX_TRASH_ENTRIES:
+            message += (f'\n\nDer Papierkorb behält höchstens {self.MAX_TRASH_ENTRIES} Einträge; '
+                        'ältere Einträge werden verdrängt. Auch von dieser Aktion bleiben '
+                        f'höchstens {self.MAX_TRASH_ENTRIES} Einträge im Papierkorb erhalten.')
+        if not self.ask_yes_no('Erledigte entfernen', message):
+            return 'break'
+        if (self.refresh_data_lock() is False or getattr(self, '_data_read_only', False)
+                or not self.prepare_inspector_switch()):
+            return 'break'
+        entry = next((value for value in self.lists if value.get('id') == list_id), None)
+        if entry is None:
+            return 'break'
+        current = glide_task_editing.completed_ids(entry.get('items', []), self.is_schedulable_item)
+        if set(current) != set(identities):
+            self.show_warning('Erledigte entfernen',
+                'Die erledigten Aufgaben haben sich inzwischen verändert. Bitte die Aktion erneut aufrufen.')
+            return 'break'
+        identities = current
+        kept, removed = glide_task_editing.remove_planned(entry.get('items', []), identities)
+        origin = {'list_id': list_id, 'list_title': str(entry.get('title') or '')}
+        incoming = [self.new_trash_entry(self.TRASH_KIND_ITEM, item,
+                    origin=dict(origin, parent_item_id=parent_id, index=index))
+                    for item, parent_id, index in removed]
+        displaced = glide_task_editing.displaced_payloads(self.trash, incoming, self.MAX_TRASH_ENTRIES)
+        evicted = glide_guard.trash_item_ids(displaced)
+        if list_id == self.active_list_id:
+            self.items = entry['items']
+        with self.guarded_structural_change('Erledigte entfernen', expected_removals=evicted), \
+                self.item_change(identities, update_sidebar=True, restore=False) as change:
+            entry['items'] = kept
+            for record in incoming:
+                self.push_trash_entry(record)
+            if list_id == self.active_list_id:
+                self.items = kept
+            change.mark()
+        if change.saved:
+            text = (f'{len(removed)} erledigte Aufgabe(n) in den Papierkorb gelegt' if len(removed) <= self.MAX_TRASH_ENTRIES
+                    else f'{len(removed)} erledigte Aufgabe(n) entfernt · Papierkorbgrenze berücksichtigt')
+            self.finish_change_ui(change, [('Rückgängig-Hinweis', lambda: self.show_undo_toast(text))])
+        return 'break'
 
     def clear_list_by_id(self, list_id):
         """Leert eine beliebige Liste, auch wenn sie gerade nicht geöffnet ist."""
+        if self.refresh_data_lock() is False or getattr(self, '_data_read_only', False):
+            return "break"
         entry = next((item for item in self.lists if item.get("id") == list_id), None)
         if entry is None:
             return "break"
@@ -39007,14 +39476,29 @@ class ListApp:
             self.show_info("Liste leeren", "Diese Liste ist bereits leer.")
             return "break"
         title = str(entry.get("title") or "Liste").strip() or "Liste"
+        identities = self.collect_item_ids(entry['items'])
         if not self.ask_yes_no("Liste leeren", f"Alle Punkte aus '{title}' wirklich löschen?"):
             return "break"
-        self.snapshot_undo()
-        entry["items"] = []
-        if entry.get("id") == self.active_list_id:
-            self.items = entry["items"]
-        self.save_items()
-        self.refresh_tree()
+        if (self.refresh_data_lock() is False or getattr(self, '_data_read_only', False)
+                or not self.prepare_inspector_switch()):
+            return "break"
+        entry = next((item for item in self.lists if item.get('id') == list_id), None)
+        if entry is None:
+            return "break"
+        if self.collect_item_ids(entry.get('items', [])) != identities:
+            self.show_warning('Liste leeren',
+                'Die Punkte haben sich inzwischen verändert. Bitte die Aktion erneut aufrufen.')
+            return "break"
+        if list_id == self.active_list_id:
+            self.items = entry['items']
+        # Bestehendes direktes Leeren bleibt rücknehmbar. Nur die ausdrücklich
+        # bestätigten Punkte dürfen entfallen; andere Listen/Papierkörbe nicht.
+        with self.guarded_structural_change('Liste leeren', expected_removals=identities), \
+                self.item_change(identities, update_sidebar=True, restore=False) as change:
+            entry['items'] = []
+            if list_id == self.active_list_id:
+                self.items = entry['items']
+            change.mark()
         return "break"
 
     def delete_list_by_id(self, list_id):
@@ -39982,10 +40466,7 @@ class ListApp:
             return "break"
         # Die vorhandene Papierkorbgrenze darf den ältesten Eintrag verdrängen;
         # nur diese bereits gelöschten Punkte sind vom Bestandswächter ausgenommen.
-        evicted = self.collect_item_ids([
-            payload for entry in self.trash[self.MAX_TRASH_ENTRIES - 1:]
-            if isinstance(payload := self.trash_entry_payload(entry), dict)
-        ])
+        evicted = glide_guard.trash_item_ids(self.trash[self.MAX_TRASH_ENTRIES - 1:])
         with self.guarded_structural_change("Ordner auflösen", expected_removals=evicted), \
                 self.sidebar_change(refresh_tree=True) as change:
             folder = self.get_folder(folder_id)
@@ -43286,6 +43767,8 @@ class ListApp:
                 return False
         self.save_window_geometry()
         self.cancel_pending_callbacks()
+        self.finish_recovery_session()
+        glide_diagnostics.record_phase('closed')
         self.release_data_lock()
         self.root.destroy()
         return True
@@ -44846,6 +45329,13 @@ class ListApp:
         return normalized
 
     def load_items(self):
+        self._recovery_loaded = False
+        recovery = getattr(self, '_recovery_assessment', None)
+        if (getattr(self, '_read_only_reason', None) == 'recovery'
+                and recovery is not None and not recovery.needs_recovery):
+            # Kein Normalisieren/Reparieren eines beim Wiederanlauf beanstandeten Originals.
+            self.start_with_empty_dataset()
+            return
         self._time_booking_checked = False
         self._saved_comparison_parts = None
         self._schema_backup_guard = SchemaBackups()
@@ -44862,6 +45352,7 @@ class ListApp:
         if not os.path.exists(SAVE_FILE):
             self.start_with_empty_dataset()
             self.save_items()
+            self._recovery_loaded = not self.dirty
             return
         self._clipped_titles = []
         self.remove_stale_temp_files()
@@ -44884,6 +45375,8 @@ class ListApp:
         # nie durch einen leeren ersetzt (Befund A34).
         try:
             self.present_loaded_dataset(data, active_id_from_file)
+            self._recovery_loaded = True
+            glide_diagnostics.record_phase('data_loaded')
         except glide_load.DISPLAY_ERRORS + (tk.TclError,) as e:
             self.recover_from_load_display_error(e, active_id_from_file)
 
@@ -45157,6 +45650,9 @@ class ListApp:
             return "Die Speicherdatei ist unlesbar und bleibt unverändert."
         if reason == "capacity":
             return "Die Speicherdatei überschreitet die unterstützte JSON-Größe und bleibt unverändert."
+        if reason == 'recovery':
+            return ('Der Wiederanlauf schützt den Originalbestand. Prüfung und bewusste Freigabe '
+                    'stehen im Speicherstatus; die Datei bleibt bis dahin unverändert.')
         if reason == "lock_defective":
             return ("Die Datensperre des Datenordners ist beschädigt oder unlesbar. Beim nächsten Start "
                     "lässt sie sich bewusst übernehmen.")
@@ -45308,6 +45804,7 @@ class ListApp:
             self._data_writes = getattr(self, "_data_writes", 0) + 1
             self.dirty = False
             self._saved_comparison_parts = comparison.parts
+            glide_diagnostics.record_phase('data_saved')
 
         def reject():
             self._saved_comparison_parts = None
@@ -53471,41 +53968,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     # -----------------------------
     @classmethod
     def collect_item_ids(cls, items, into=None):
-        """Alle Punkt-IDs eines Zweigs, Unterpunkte eingeschlossen."""
-        found = set() if into is None else into
-        for item in items or []:
-            if not isinstance(item, dict):
-                continue
-            item_id = item.get("id")
-            if item_id:
-                found.add(item_id)
-            cls.collect_item_ids(item.get("children", []), found)
-        return found
+        return glide_guard.item_ids(items, into)
 
     def data_item_ids(self):
-        """Jede Punkt-ID in allen Listen und im Papierkorb.
-
-        Grundlage des Bestandswächters: Was hier vor einer Umbauaktion steht,
-        muss danach noch stehen – in einer Liste oder im Papierkorb.
-        """
+        """Alle Punkt-IDs einschließlich Aufgaben in gelöschten Listen."""
         if self.active_list_id and self.lists:
             self.sync_current_list_reference()
-        found = set()
-        for entry in self.lists:
-            self.collect_item_ids(entry.get("items", []), found)
-        for entry in self.trash:
-            payload = entry.get("payload")
-            if isinstance(payload, dict):
-                self.collect_item_ids([payload], found)
-            elif isinstance(payload, list):
-                self.collect_item_ids(payload, found)
-            for key in ("items", "item"):
-                nested = entry.get(key)
-                if isinstance(nested, dict):
-                    self.collect_item_ids([nested], found)
-                elif isinstance(nested, list):
-                    self.collect_item_ids(nested, found)
-        return found
+        return glide_guard.data_item_ids(self.lists, self.trash)
 
     @contextlib.contextmanager
     def guarded_structural_change(self, action_name, expected_removals=None):
@@ -54925,11 +55394,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
     def clear_list(self):
         if not self.require_list_view():
             return
-        if self.ask_yes_no("Löschen", "Alle Punkte wirklich löschen?"):
-            self.snapshot_undo()
-            self.items.clear()
-            self.save_items()
-            self.refresh_tree()
+        return self.clear_list_by_id(self.active_list_id)
 
     def edit_item(self):
         if not self.require_list_view():
@@ -62307,6 +62772,16 @@ Labels, Termine und Metadaten."""
 
     def import_full_backup(self, additive=False, path=None, show_success=True, confirm=True, target_folder_id=None):
         """Ersetzt den Bestand erst nach vollständiger Prüfung und Sicherung."""
+        recovering = (getattr(self, '_data_read_only', False)
+                      and getattr(self, '_read_only_reason', None) == 'recovery')
+        recovery_guard = getattr(self, '_recovery_guard', None) if recovering else None
+        if getattr(self, '_data_read_only', False) and not recovering:
+            self.show_warning('Wiederherstellen gesperrt', self.read_only_notice())
+            return
+        if recovering and (additive or recovery_guard is None):
+            self.show_warning('Wiederherstellen gesperrt',
+                              'Im geschützten Wiederanlauf kann nur ein vollständiger, geprüfter Bestand übernommen werden.')
+            return
         if target_folder_id and (not additive or not self.get_folder(target_folder_id) or self.is_archived_folder(target_folder_id)):
             return None
         path = path or filedialog.askopenfilename(
@@ -62319,7 +62794,16 @@ Labels, Termine und Metadaten."""
         )
         if not path:
             return
-        if not additive and confirm and not self.ask_yes_no(
+        if recovering and not self.ask_yes_no(
+                'Sicherung im geschützten Start wiederherstellen',
+                'Die ausgewählte Sicherung wird vollständig geprüft. Vor der Übernahme werden '
+                'die vorhandenen Originalbytes unverändert separat gesichert; eine fehlende '
+                'Originaldatei wird ausdrücklich dokumentiert.\n\n'
+                'Danach ersetzt dieser Sicherungsstand den geschützten Bestand. '
+                'Die Wiederherstellung kann nicht auf den leeren Fehlerstart rückgängig gemacht werden.\n\n'
+                'Ausgewählte Sicherung wiederherstellen?'):
+            return
+        if not recovering and not additive and confirm and not self.ask_yes_no(
             "Backup importieren",
             "Beim Import werden alle aktuell vorhandenen Listen ersetzt.\n\n"
             "Vom aktuellen Stand wird vorher automatisch ein vollständiges Sicherungsbackup angelegt.\n\n"
@@ -62332,6 +62816,7 @@ Labels, Termine und Metadaten."""
         created_paths = []
         undo_size = len(self.undo_stack)
         committed = False
+        replacement = None
         try:
             is_portable = zipfile.is_zipfile(path)
             attachment_infos = {}
@@ -62431,24 +62916,6 @@ Labels, Termine und Metadaten."""
                         "Bitte stattdessen das zugehörige .glidebackup verwenden."
                     )
 
-            # Der aktuelle Zustand muss speicherbar sein, bevor er als vollständige
-            # Rückfallebene gesichert und anschließend ersetzt wird.
-            if not self.save_items():
-                return
-            pre_import_path = os.path.join(
-                BACKUP_DIR,
-                f"vor_import_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.glidebackup",
-            )
-            self.write_complete_backup(pre_import_path, self.complete_backup_payload())
-            self.snapshot_undo()
-
-            for new_storage, staged_path in staged_files.items():
-                final_path = self.resolve_attachment_path({"storage": new_storage})
-                if not final_path or os.path.exists(final_path):
-                    raise OSError("Ein sicherer Zielpfad für einen importierten Anhang konnte nicht erstellt werden.")
-                os.replace(staged_path, final_path)
-                created_paths.append(final_path)
-
             imported_count = len(new_lists)
             if additive:
                 new_lists = self.lists + new_lists
@@ -62474,6 +62941,49 @@ Labels, Termine und Metadaten."""
                 "trash": new_trash,
                 "history": new_history,
             }
+            if recovering:
+                assessment = getattr(self, '_recovery_assessment', None)
+                replacement = recovery_guard.begin_replacement(
+                    lock_owned=self.recovery_lock_owned(), replacement_data=imported_payload,
+                    validate_data=self.validate_backup_schema,
+                    expected_sha256=getattr(assessment, 'sha256', '') or None)
+                if not replacement.writable:
+                    self.storage_failure('recovery', replacement.detail)
+                    self.show_error('Wiederherstellen gesperrt', replacement.detail)
+                    return
+                pre_import_path = replacement.preserved_path
+            else:
+                # Ein normaler Import benötigt den speicherbaren aktuellen
+                # Bestand als vollständige Rückfallebene. Ein Fehlerstart darf
+                # seinen leeren Darstellungsbestand dagegen niemals speichern.
+                if not self.save_items():
+                    return
+                pre_import_path = os.path.join(
+                    BACKUP_DIR,
+                    f"vor_import_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}.glidebackup",
+                )
+                self.write_complete_backup(pre_import_path, self.complete_backup_payload())
+                self.snapshot_undo()
+                if additive:
+                    new_history = getattr(self, 'history', []) or []
+                    imported_payload['history'] = new_history
+
+            for new_storage, staged_path in staged_files.items():
+                final_path = self.resolve_attachment_path({"storage": new_storage})
+                if not final_path or os.path.exists(final_path):
+                    raise OSError("Ein sicherer Zielpfad für einen importierten Anhang konnte nicht erstellt werden.")
+                os.replace(staged_path, final_path)
+                created_paths.append(final_path)
+
+            if recovering:
+                if not self.recovery_lock_owned():
+                    raise OSError('Die Datensperre gehört nicht mehr dieser Wiederherstellung.')
+                if replacement.original_missing:
+                    if os.path.lexists(SAVE_FILE):
+                        raise OSError('Am zuvor fehlenden Originalpfad ist inzwischen eine Datei erschienen.')
+                elif hashlib.sha256(glide_backup_snapshot.regular_bytes(
+                        SAVE_FILE, self.MAX_BACKUP_DATA_BYTES)).hexdigest() != replacement.sha256:
+                    raise OSError('Die Originaldatei wurde nach ihrer Vorsicherung verändert.')
             self.write_json_atomic(SAVE_FILE, imported_payload)
             committed = True
 
@@ -62486,6 +62996,25 @@ Labels, Termine und Metadaten."""
             self.active_folder_id = None
             self.items = []
             self.view_mode = "list"
+            if recovering:
+                selected = next(entry for entry in new_lists if entry['id'] == preferred)
+                self.active_list_id = preferred
+                self.items = selected['items']
+                # Zuerst den gespeicherten Bestand konsistent im Modell
+                # übernehmen. Schlägt danach eine Metadaten-/UI-Prüfung fehl,
+                # bleibt ein erneuter Schreibschutz ohne leeren Altbestand.
+                self._recovery_assessment = replacement
+                self.undo_stack.clear()
+                self.redo_history = glide_undo.RedoHistory(self.MAX_UNDO_STEPS)
+                self._schema_backup_guard = SchemaBackups()
+                self._schema_backup_guard.observe(SAVE_FILE, imported_payload, os.stat(SAVE_FILE))
+                self._saved_comparison_parts = None
+                self._storage_blocked_files.discard('data')
+                self._recovery_loaded = True
+                self._data_read_only = False
+                self._read_only_reason = 'lock'
+                self.storage_health().success('recovery')
+                self.storage_health().success('data')
             self.set_active_list(preferred, refresh=False)
             if requested_folder_id:
                 self.set_active_folder(requested_folder_id, refresh=False)
@@ -62497,7 +63026,8 @@ Labels, Termine und Metadaten."""
             else:
                 self._history_baseline = None
                 self._history_replacement = f"Backup {os.path.basename(path)}"
-            self.save_items(show_error=False)
+            if not self.save_items(show_error=False) and recovering:
+                raise OSError('Der Wiederherstellungsstand ist gespeichert; der Speichernachlauf ist fehlgeschlagen.')
             # Erst nachdem die Aufgaben stehen, bekommen die
             # Pinnwände ihre Karten – vorher gäbe es nichts, worauf sie zeigen
             # könnten, und `prune` würde sie sofort wieder leeren.
@@ -62523,6 +63053,16 @@ Labels, Termine und Metadaten."""
         except (json.JSONDecodeError, UnicodeDecodeError):
             self.show_error("Fehler", "Die Datei ist kein gültiges Glide-Backup.")
         except Exception as e:
+            if recovering and committed:
+                self._data_read_only = True
+                self._read_only_reason = 'recovery'
+                self._recovery_loaded = False
+                self._recovery_assessment = glide_session.Assessment(
+                    'replacement_error', False,
+                    'Der Wiederherstellungsstand wurde gespeichert. Der weitere Aufbau ist '
+                    'fehlgeschlagen; der Bestand bleibt bis zu einer erneuten Prüfung geschützt.',
+                    marker_kind='owned', preserved_path=replacement.preserved_path)
+                self.storage_health().fail('recovery', self._recovery_assessment.detail)
             if not committed:
                 for created_path in reversed(created_paths):
                     try:
@@ -65811,19 +66351,27 @@ def show_start_window(root):
 
 def main():
     """Startet Glide – direkt oder über `glide_start.py` (mit Bytecode-Cache)."""
-    set_windows_app_user_model_id()
-    root = tk.Tk()
-    # Tk älter als 8.6: verständlich abweisen, bevor Daten geöffnet werden (AB08).
-    stufe, meldung = glide_runtime.tk_status(tk.TkVersion)
-    if stufe == "zu_alt":
-        root.withdraw()
-        messagebox.showerror("Glide kann nicht starten", meldung, parent=root)
-        root.destroy()
-        raise SystemExit(1)
-    platzhalter = show_start_window(root)
-    ListApp(root)
-    platzhalter.destroy()
-    root.mainloop()
+    glide_diagnostics.start_session(APP_VERSION)
+    try:
+        set_windows_app_user_model_id()
+        root = tk.Tk()
+        # Mindestversion vor dem Öffnen eines Bestands bewahren.
+        stufe, meldung = glide_runtime.tk_status(tk.TkVersion)
+        if stufe == "zu_alt":
+            root.withdraw()
+            messagebox.showerror("Glide kann nicht starten", meldung, parent=root)
+            root.destroy()
+            raise SystemExit(1)
+        platzhalter = show_start_window(root)
+        ListApp(root)
+        platzhalter.destroy()
+        glide_diagnostics.record_phase('ui_ready', tk_version=root.tk.call('package', 'provide', 'Tk'))
+        root.mainloop()
+    except BaseException as error:
+        code = (0 if error.code is None else error.code if isinstance(error.code, int) else 1) if isinstance(error, SystemExit) else 1
+        glide_diagnostics.finish(code)
+        raise
+    glide_diagnostics.finish(0)
 
 
 if __name__ == "__main__":

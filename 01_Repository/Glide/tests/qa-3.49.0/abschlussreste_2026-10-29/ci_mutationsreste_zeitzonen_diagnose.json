@@ -1,0 +1,32 @@
+{
+  "schritt": "Fachlogik ohne Systemzeitzonen",
+  "status": "fehlgeschlagen",
+  "systemkontext": {
+    "runner_python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+    "implementierung": "CPython",
+    "plattform": "win32",
+    "systemversion": "10.0.26300",
+    "architektur": "AMD64",
+    "cpu": "Intel(R) Core(TM) i9-14900K",
+    "logische_prozessoren": 32,
+    "cpu_hersteller": "GenuineIntel",
+    "board_hersteller": "Gigabyte Technology Co., Ltd.",
+    "board": "B760M DS3H DDR4",
+    "bios": "F19",
+    "bios_datum": "09/27/2024",
+    "app_sha256": "9e7e4e2c8fc94817959be05dec46a8883ee867fae9d73e290a677e7c28f54364"
+  },
+  "diagnose": {
+    "kategorie": "prozessabbruch",
+    "spur": "Prozessdiagnose",
+    "exitcode": 3221226505,
+    "signaturen": [
+      "0xC0000409"
+    ],
+    "ursache_bewiesen": false,
+    "hinweis": "Mögliche Ursachen: Software, Python/native Bibliotheken oder instabile CPU-/Firmware-/RAM-Umgebung. Die Signatur beweist keine Hardwareursache. Intel-Prüfplatz: vorhandene WHEA-/Dumpbelege und Firmwarestand abgleichen.",
+    "naechster_schritt": "Rohlog und vorhandene Dumps sichern; WHEA-Ereignisse zeitlich getrennt bewerten. Bei Bedarf kontrollierte Gegenprobe mit gleichem Quell-/Datenhash und passenden Python-/Paketversionen. Keine automatische Wiederholung, Affinitäts-, BIOS- oder CPU-Änderung.",
+    "start": "2026-10-29T09:33:57+01:00",
+    "ende": "2026-10-29T09:34:28+01:00"
+  }
+}

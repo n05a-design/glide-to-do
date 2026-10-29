@@ -1,8 +1,8 @@
 ﻿# Glide – Vollprüfung unter Windows
 #
 # Startet dieselbe Vollprüfung wie auf dem Entwicklungs-Mac (tests/tools/pruefen.py
-# im Vollmodus) und legt das Protokoll unter tests/qa-<Version>/windows_<Zeitstempel>
-# ab. Die Suiten isolieren ihre Daten selbst über GLIDE_DATA_DIR; der echte
+# im Vollmodus) in einer lokalen eingefrorenen Prüfkopie außerhalb von
+# OneDrive/System-Temp. Die Suiten isolieren ihre Daten über GLIDE_DATA_DIR; der echte
 # Datenordner unter %APPDATA%\Glide wird nicht berührt.
 #
 # Aufruf: Doppelklick auf windows_vollpruefung.cmd oder
@@ -10,7 +10,8 @@
 
 param(
     [int]$Timeout = 900,
-    [string]$PythonExecutable
+    [string]$PythonExecutable,
+    [string]$Arbeitsablage
 )
 
 $ErrorActionPreference = "Stop"
@@ -50,13 +51,11 @@ if ($offline) {
     exit 4
 }
 
-$version = (Get-Content -Raw -Path (Join-Path $repo "VERSION")).Trim()
-$stempel = Get-Date -Format "yyyy-MM-dd_HHmm"
-$ziel = "tests/qa-$version/windows_$stempel"
-
-& $python @pyArgs -B tests/tools/pruefen.py --modus voll --protokoll $ziel --timeout $Timeout
+$pruefArgumente = @('-B', 'tests/tools/gesichert_pruefen.py', '--art', 'voll', '--timeout', "$Timeout")
+if ($Arbeitsablage) { $pruefArgumente += @('--arbeitsablage', $Arbeitsablage) }
+& $python @pyArgs @pruefArgumente
 $code = $LASTEXITCODE
 Write-Host ""
 Write-Host "Exitcode: $code"
-Write-Host "Protokoll: $ziel (ergebnis.json, Logs und release_hell.png zur Sichtprüfung)"
+Write-Host "Prüfkopie, Hashnachweise und Protokoll: im oben ausgegebenen lokalen Prüfordner (Standard: ~/GlidePruefung)."
 exit $code

@@ -1,0 +1,745 @@
+[
+  {
+    "path": ".claude/skills/design-richtlinien/SKILL.md",
+    "sha256": "2a0ae9f873ccc5b13536bbedaaf892f1654afa2b3820cf9ae1e4efb9686833ae",
+    "historical": false,
+    "stand": []
+  },
+  {
+    "path": ".claude/skills/design-richtlinien/referenzen/bewegung-material-typografie.md",
+    "sha256": "e6f6baae13ddfee940fb314a774d46860f00926f8c497c5e639abbbe88d95738",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Fremdreferenz zu den Design Richtlinien (B20), kein aktiver Skill."
+    ]
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/AUFTRAG.md",
+    "sha256": "358eb33b61312271762b738a90e93638e14edad6ed38288a97923f523ba0f910",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/BILDREFERENZEN.md",
+    "sha256": "84a28a1af43fa89d6bf3a3ffc6f318fd36f08d3b8f2e3bfadb2a0a8c3c4c037b",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · 28 unveränderte, vom Benutzer bereitgestellte Originalbilder"
+    ]
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md",
+    "sha256": "87912dda3ad3807e710c7318a373bf3bc10819c203b4967bc5bfa081d0e4245a",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Status: seit D50 beauftragt und vorrangig; Umsetzung und Status im Entwicklungsplan §17"
+    ]
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "sha256": "838de158a515acc14863e5c98313a31e3c58d57fd35c7ba9369501f12f2fe1b1",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde"
+    ]
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "sha256": "085b7b6564c3c8dcc62e52c9ec2fe526eece6ffa8d25e15e7bbedc91c241125a",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+    "sha256": "d5605596948af62cdaa83552cd044c088b7c23c1f07728918f247212b224163c",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · manuelle Sitzungen offen; B1 automatisch geprüft"
+    ]
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+    "sha256": "6cc8cb52add2a01914e22728e4bcb1b44c45a8a6129fa46a79c26253092d0756",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Markt- und Integrationsanalyse; ältere Untersuchungen mit eigenem Abrufdatum"
+    ]
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "sha256": "f7d6fc51873ab8c1e1a76c77c04767f30344ce9e8a001865a6aaf6584dfded15",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Quelle 3.49.0 (Prüfkandidat); Python-Lieferung 3.47.0; eigenständige Pakete 3.45.0"
+    ]
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/README.md",
+    "sha256": "829f192c760439fa21523397e976750e1c8f3b424f27fc7f09ad7df9f3968ae7",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/AGENTS.md",
+    "sha256": "d5d15aa76174c24ccba35a5af7af59c17a5c280b556fffb2f00f1048a76646d2",
+    "historical": false,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/CHANGELOG.md",
+    "sha256": "717ac10adfbeafa06adfed47b26e3eaf3b90f75be2577cc6e902c50f44465b45",
+    "historical": false,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/LICENSE.md",
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
+    "historical": false,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/README.md",
+    "sha256": "9c730f28c8878a64cc318b720e14dde383abccdfb81ee0f2053a409574440f8f",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Quelle 3.49.0 (Prüfkandidat); Python-Lieferung 3.47.0; eigenständige Pakete 3.45.0"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/SECURITY.md",
+    "sha256": "0f956521cc831b6c01c9c072d9cc9a7c1e988d1e72e3a9b8887b7334e58aa53b",
+    "historical": false,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/assets/README.md",
+    "sha256": "541e84878ffddb10eb86817b0c0de5712944d4d3b5f5211b4fdd14ddea4e8560",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/00_INDEX.md",
+    "sha256": "4462d9b9f4313241e2a446d690e1617ff375f07ac3de6a768d768a889277559b",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+    "sha256": "6abf5f106aa590fa1680323f2446f256b2442003dffe80cbf3c8b6b3232bdbf8",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+    "sha256": "0f7364c4b7175562bdd976d31b7bc475f2851dbd73c30a8131e7c749727f867c",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+    "sha256": "45072a59b5060d4679f75fab5c36a175bc77b074f132ef0220a3db0bdf533f0e",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+    "sha256": "3285576d3a98ea53ba0a62d0c6c79d5705085c94d989c1615df5380f3b6ad6e4",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "sha256": "89ad9a979433969a263ed8281f2729f3c31faa33148f9e7ce6ec505ec7633610",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Quelle 3.49.0 (Prüfkandidat); Python-Lieferung 3.47.0; eigenständige Pakete 3.45.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+    "sha256": "3e6c21d764cdb3df9e5debc869a1fac11a246d1d12c9cb8542cae89f4feb6f85",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Quellstand 3.49.0, native Pakete 3.45.0, keine öffentliche Veröffentlichung · Aufgabenformat 26",
+      "Stand am 06.10.2026, über die GitHub-Schnittstelle abgerufen:"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+    "sha256": "ef2864c28d7ce14cc5272c89e52cd54e194337db5ff4fbdaba73982c18d842fb",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md",
+    "sha256": "ac3c74dfc6c3d145f881dd00873bc9367c42a03d1b065b0484133099eb0ec8e7",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Vorlagenformat 2"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "sha256": "b450be035f8c921e374c73e294ec1806cc40675aabdda98f238ecbdbc6178873",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md",
+    "sha256": "7b80cbb10632dc6b2fbfae7534e6491cc4849b7e0fb00af948b09e9e665aff7f",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · appweiter Gestaltungsvertrag; bestehendes UI-/UX-Paket und fortlaufende Übertragung"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+    "sha256": "2c9d7268388e3d33b6860e172351552f72c5bc093aa36b5d4c52524f9820d51b",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Datenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/ABHAENGIGKEIT_TKDND.md",
+    "sha256": "c4b33c2feb85c26ba462af990d8550572209a8b94691349c4e939c11a585006b",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · entschieden vom Inhaber am 27.09.2026"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/ARBEITSBEGLEITER.md",
+    "sha256": "30a784534e1415f72bacef3246016e9fbea21823f69cfd9c34ae592197c4b3f9",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · gezeichnete Figur vorhanden; B03 im Quellstand; neue Bildassets offen"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/GRUPPE_ORDNER_UEBERSCHRIFT.md",
+    "sha256": "69f7b363217f708088806f86abb62f68bb0b252e51d1f4b1e6e654f267b363fe",
+    "historical": false,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md",
+    "sha256": "c290eccc6c95579fbba8fc9add200ae02c3af97b75e31c57cbc58ac82b21d8ea",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · App-Version 3.49.0 · Datenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md",
+    "sha256": "480de2a361b2dfcdb00d4b45b8fd35c8c445881d81567a49dbb63b812636ba54",
+    "historical": false,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/packaging/README.md",
+    "sha256": "cb48faf4fe2bb2a4d8375d3fbec60559220e5feabf8faa74746bc475adaecc3c",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Glide-Lizenzstatus.md",
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/packaging/runtime/README.md",
+    "sha256": "17f352960182269b295305afa8e17f59eaa2f6d450bbf2c9c23dc395f51ac963",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Vorbereitung von Paket 8 / 4.0.0, keine Lieferung"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/scripts/pflege/README.md",
+    "sha256": "b45ea626f3454601d40741dfb36fbaebb407f2ed361a3166d8cf236d92d873fe",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/src/glide/README.md",
+    "sha256": "8bceedd2b1a76d2e100e14c574341674c4bd0ce69ce26ff9a213841515ddbd6f",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/README.md",
+    "sha256": "4170bd6d7a1abc5261a1d6af6d64e91a5ebd849f81f048aa05ad6eb045693ba1",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · 105 Suiten aus `pruefen.py` und fünf Analysen"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/fixtures/README.md",
+    "sha256": "6019e9dd97bb158e47884f3fb0b3c67dc424f7f994ccbaf8d4ef00562833259d",
+    "historical": false,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/fixtures/showcase/README.md",
+    "sha256": "e37decabcea203726000a14ae7336cb012889fcbd11ae8e95f8055debf2cf36e",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Quellfixtures in Speicherstufe 26; Showcase-Lieferung separat 3.47.0"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.0/acl_symlinks_2026-10-16/README.md",
+    "sha256": "cc8521badd521952b78fa3f1ae0e20fcc1da1b25367b8a4984c3900ec8bea433",
+    "historical": true,
+    "stand": [
+      "Stand 16.10.2026 · Glide 3.43.0 unverändert (Apphash `379e97e3`, Datenformat 25) · Prüfwerkzeugnachlauf ohne neue App-Version · Windows 11 Pro, Python 3.14.7, künstliche Daten"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md",
+    "sha256": "545f658fbd2024fc3bf73c5a1d60247a5a51f93d4e684608e269c8bed23c2fc5",
+    "historical": true,
+    "stand": [
+      "Stand 16.10.2026 · Glide 3.43.0 · Datenformat 25 · Apphash `379e97e32e3cc5e52eeb104ec23937df28081b45bd0e63582d5065cd61a2b172`"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/README.md",
+    "sha256": "0239a7ba1fb25551974ce14c09386fc6c79da08f66737307cb8a6479b2f2d6a5",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/README.md",
+    "sha256": "5786fa4a75aba7029b2975110cd9e4211fc148692a9a8d9a356d35a70fd21e74",
+    "historical": true,
+    "stand": [
+      "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · lokaler Kandidat"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/README.md",
+    "sha256": "b4ae6549b19c67a5d0109bd1a5ff3f0494f691836391e90583d5736cf10224cf",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/README.md",
+    "sha256": "7e71ad39a5eb40ba643227ec5d20f4def6b67ae2fa0994475740c2abd4e5074e",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/README.md",
+    "sha256": "6f02ede7432b632365b4999436c2fd9847fc5c6e3b160ec9e84563c356824308",
+    "historical": true,
+    "stand": [
+      "Stand 18.10.2026 · lokaler Prüfkandidat 3.43.1 / Format 25 auf PR #37 (`1042727`). Keine neue Lieferung."
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/codevalidierung_2026-10-21/README.md",
+    "sha256": "37198c08a18f9dba40f8281a7d90b9644f9af939c8d3d960574851d2274c6685",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/dokumentationsaudit_2026-10-22/README.md",
+    "sha256": "14271932d9e36b9183cc65905fa25affeab944275e1a0ce381b91047725f41f6",
+    "historical": true,
+    "stand": [
+      "Stand 22.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · festgeschriebener Vorzustand vor dem Phasenabschluss 3.44.0"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/README.md",
+    "sha256": "5c46fad4eaa2ea2693076e0cf1b2ed9db51be2a70217c408f42ef57a100d8fab",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/README.md",
+    "sha256": "f1feca132efcd179215ae287f4829ec90a7e33583561016185d750d9426c0404",
+    "historical": true,
+    "stand": [
+      "Stand 19.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · lokaler Prüfkandidat, keine Lieferung"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/fp01_wiederholen_2026-10-17/README.md",
+    "sha256": "f79a146c7d322034ace2e6f60c99dd43762ca596d9cdfcda398711dc621db473",
+    "historical": true,
+    "stand": [
+      "Stand 17.10.2026 · Kandidat auf Glide 3.43.1 (keine Lieferung, keine neue Version) · Datenformat 25 · Windows 11 Pro, Python 3.14.7, Tk 9.0.4, künstliche Daten"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/README.md",
+    "sha256": "907220b59ee81beca62c691582edb45ba80858c86340875f7b1f5057f6637e1e",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/gitauftrag_2026-10-21/README.md",
+    "sha256": "e69e75ea74156b7dc40fb417ef416d66cd63b2e2ccd39ca7548fc97a54f8c6d7",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/kuerzel_linux_tk91_2026-10-16/README.md",
+    "sha256": "9ccd345fa815aa23cfea3c7b4f088ffdac5ab4a3df9127a2106afc3aed7cb69f",
+    "historical": true,
+    "stand": [
+      "Stand 16.10.2026 · Glide 3.43.1 · Datenformat 25 · Apphash `ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3` · Windows 11 Pro, Python 3.14.7, Tk 9.0.4, künstliche Daten"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/README.md",
+    "sha256": "26067e0f127011e6de082fc0bb0f20a261bc05a1ad0f5b780a93bc439d9f90e3",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/README.md",
+    "sha256": "5910185a6f22a9ca8d440d79b3f87df32cf38f475debc894b709523be0fbb76a",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/README.md",
+    "sha256": "3b760ae2e39a1f3877b04aa93213c7fde86359194698432b317bd7cd0b02797e",
+    "historical": true,
+    "stand": [
+      "Stand 18.10.2026 · Entwicklungskandidat auf `9ec474b` mit FP-01 · Version 3.43.1 und Datenformat 25 unverändert · keine Lieferung"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/README.md",
+    "sha256": "237234894dd9492e1249e3378b87b02ca5abd02e4f397f57f9cdf1685964bd29",
+    "historical": true,
+    "stand": [
+      "Stand 18.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · keine Produktionsrunde"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/standaufnahme_2026-10-21/README.md",
+    "sha256": "d583a057417f3f91627ae46b5a6365e5f1b130b0bf157fdf821c36097756fb9a",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/README.md",
+    "sha256": "ffb3124be6ca57a3c642ff519637933a2d703b9d8fd506a7ce8a1b5dd3022bdf",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/wackelsuiten_windows_2026-10-17/README.md",
+    "sha256": "4237f8496252e427ab7a99970cb9bdce9693642ac76d6dff4e8b767c0f236356",
+    "historical": true,
+    "stand": [
+      "Stand 17.10.2026 · Glide 3.43.1 unverändert (Apphash `ed2b7eb6`, Datenformat 25) · Prüfwerkzeugnachlauf ohne neue App-Version · Windows 11 Pro, Python 3.14.7, Tk 9.0.4, künstliche Daten"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/README.md",
+    "sha256": "c99cee685bc9f34f3d14c7537e3bfd35187fc5924ae8af95f291758316408943",
+    "historical": true,
+    "stand": [
+      "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.44.0/ablagepruefung_2026-10-25/README.md",
+    "sha256": "66e6bf8fd2abd77740db64881b8ecc1643da35ff9eb0ff54460ab367849806d0",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.44.0/arbeitsmodi_2026-10-23/README.md",
+    "sha256": "87efb7c74c8ee199efeebb439d511a9a8e08f1e186f19e6d4b15305e91ddecff",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.44.0/github_pruefung_2026-10-23/README.md",
+    "sha256": "dc55c190d9931581d415c2be3586de2fac3eb68d3a5dc88e558ebe296ffe2c7f",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.44.0/gutachten_2026-10-25/README.md",
+    "sha256": "177b7ffd3a322d04fc1057a1f0e616926d061095133b9f61b7bf58e0d16c843e",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.44.0/phasenabschluss_2026-10-22/README.md",
+    "sha256": "dd23dc1d27ba08e3da9d4a9b07621631a31897dac3ee7991a1ca541e45754667",
+    "historical": true,
+    "stand": [
+      "Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Windows 11, Python 3.14.7 / Tk 9.0.4, künstliche Daten"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.44.0/speicherstatus_2026-10-25/README.md",
+    "sha256": "9ec90b9d718af61add4906c1d767d5036120858aa2b14bda22e13903a17cd404",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/codebasis_2026-10-26/README.md",
+    "sha256": "2608abd841a033e80292f52944c6214b17b052bd9be001293b554671eb14de8b",
+    "historical": true,
+    "stand": [
+      "Stand 26.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Python 3.15.1 / Windows / Tk 9.0.4"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/freigaben_2026-10-26/README.md",
+    "sha256": "486261bb9100c91650a61321443eb3a310ab589e8fc13071a3d1c9a41b1702bd",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/README.md",
+    "sha256": "7e07c2feca79fe3db22bf51ed70b77fb8dfb1b6503e05296f94fa245b5c92091",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/push_2026-10-26/README.md",
+    "sha256": "483a073d7b0ef880fece0fd22c054b58a5b5e989a0889251b2a725cfb3434d38",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/startseitenaktionen_2026-10-26/README.md",
+    "sha256": "0d354f5f2391ff4830ee0aff4562163bdd4269f30d5a2f09fc109e8133f93a9a",
+    "historical": true,
+    "stand": [
+      "Stand 26.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · lokaler Featurekandidat"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/startseitenmodell_2026-10-26/README.md",
+    "sha256": "ee5b40fd106158104ba869a32fd1a7ef335c29164dac18dd0bd90051c2053543",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/verweisvorschau_2026-10-26/README.md",
+    "sha256": "55e4a4bf3b69c96840eb1ab8dc7599302164c88ed2b7cedfb2b9286ee1228ff5",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/README.md",
+    "sha256": "ee969b7c2ae4108d98d004a294578c0e6a0be4ef81141876ac1260300c480e92",
+    "historical": true,
+    "stand": []
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/README.md",
+    "sha256": "7b01bf93bdbe85f3c891a5d81739f523f5acf6b0ef46939b4e7248f92342daac",
+    "historical": true,
+    "stand": [
+      "Stand 27.10.2026 · Glide 3.46.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/README.md",
+    "sha256": "11a5658e952291efe8606fdddce4815b04b11cb4a773b3895f5a96dcaf2ff12f",
+    "historical": true,
+    "stand": [
+      "Stand 27.10.2026 · Glide 3.47.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/amd_vergleich_2026-10-27/README.md",
+    "sha256": "cb307c7e7e28768e8cb915a4826d7cd923200368e10642b804830914dbe7dbbe",
+    "historical": true,
+    "stand": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md",
+    "sha256": "447247088fb02ad63f957a21a1f50bed9c388f09ab37d9ce6b14e97570578432",
+    "historical": true,
+    "stand": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Dokumentationsabschluss, keine Appprüfung"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/README.md",
+    "sha256": "6bc2c0717f9ded923e24859be8463c636736c26db93778f4915cc64f52510eb6",
+    "historical": true,
+    "stand": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/README.md",
+    "sha256": "5f20243fc3aa749f967e2370e7395b865e6a124cfa36b476a74773653a9b1621",
+    "historical": true,
+    "stand": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/prozessdiagnose_2026-10-28/README.md",
+    "sha256": "4bb029d5f6d7cd6d8f38db29d59b000c5c12b8c36685813560a871816ad3f302",
+    "historical": true,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/README.md",
+    "sha256": "ab4fd31b842f18b8ed8c54c6e614c3e398135038faa04cd394d17c4b527d7b32",
+    "historical": true,
+    "stand": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/WA-41-Python-Fehler-Analyse.md",
+    "sha256": "ab4fd31b842f18b8ed8c54c6e614c3e398135038faa04cd394d17c4b527d7b32",
+    "historical": true,
+    "stand": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/README.md",
+    "sha256": "e6e236a4449119476adb8cb399753840c1067c223f754c55f3b21e8ed813fe4e",
+    "historical": true,
+    "stand": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/abnahme_2026-10-28/README.md",
+    "sha256": "ace346f565b1e963c04d5eb275780d3f2297bcc14a16dff76a1a2c1eafcdaccd",
+    "historical": true,
+    "stand": [
+      "Stand 28.10.2026 · datierter Prüfbeleg · Aufgabenformat 26 · Bericht und Dokumentverweise am 29.10.2026 abgeschlossen"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/funktionspakete_2026-10-28/README.md",
+    "sha256": "b5d73d23b144254a07d685d8bb4b589f268ab907075d217722f973ed9f620e53",
+    "historical": true,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · lokaler Quellkandidat"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/robustheit_2026-10-28/README.md",
+    "sha256": "edee61d7b03b167e9d23ace740232863f77abbe5fa41915b9670a79d59f6e765",
+    "historical": true,
+    "stand": [
+      "Stand 28.10.2026 Ã‚Â· Quellkandidat 3.49.0 Ã‚Â· Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "01_Repository/Glide/tests/tools/README.md",
+    "sha256": "e6ede7f0e661296a9df4827099d5b6491ae8fb35bd0cff1140972d83335d1275",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ]
+  },
+  {
+    "path": "05_Probelisten_Testdaten/README.md",
+    "sha256": "47ec7107a505a6a7f92f510456e44ca271a3f81442b1a735d6482270862c1ef9",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Quellkandidat Glide 3.49.0; Showcase-Lieferung unverändert 3.47.0 · Lieferdaten in Speicherstufe 26 · Vorlagen 2"
+    ]
+  },
+  {
+    "path": "05_Probelisten_Testdaten/Showcase/README.md",
+    "sha256": "5c766ab2e27afd08211e350674553632989b9ab5343fbc66816756b6d285c141",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Quellkandidat Glide 3.49.0; Showcase-Lieferung unverändert 3.47.0 · Lieferdaten in Speicherstufe 26"
+    ]
+  },
+  {
+    "path": "07_Python-Versionen/Archiv/README.md",
+    "sha256": "04355c8d30fa5637195d3157cdcd82bd46578439ad8b81935160cd05403e88b8",
+    "historical": true,
+    "stand": [
+      "Stand 22.10.2026 · aktuelle Python-Fassung 3.44.0"
+    ]
+  },
+  {
+    "path": "07_Python-Versionen/README.md",
+    "sha256": "4f68c3674b1770af1a512025b31b116b141e4671ae065bba9be49c25eca81382",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Python-Lieferfassung 3.47.0 · Quelle 3.49.0 als noch nicht gelieferter Prüfkandidat · Speicherstufe 26 · Vorlagenformat 2"
+    ]
+  },
+  {
+    "path": "20_Grafik_Master/README.md",
+    "sha256": "9c6770f2c615d8b72c14a511039486a120849cdecc8d52a128e3747c99ccb714",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ]
+  },
+  {
+    "path": "CLAUDE.md",
+    "sha256": "0608919810c9d969e88ab0da447c7e48bb478d4975d70b80fa9546bf4ba1649c",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Python-Lieferung 3.47.0, eigenständige Pakete 3.45.0"
+    ]
+  },
+  {
+    "path": "README.md",
+    "sha256": "2883bbcd7c0e7817953847e21f040b9e96cbd53be32fafad0817659671ab718d",
+    "historical": false,
+    "stand": [
+      "Stand 28.10.2026 · Glide 3.49.0 · Quelle 3.49.0 (Prüfkandidat); Python-Lieferung 3.47.0; eigenständige Pakete 3.45.0 · Aufgabenformat 26"
+    ]
+  },
+  {
+    "path": "SECURITY.md",
+    "sha256": "f4c0a43638c151801e76abf9a011727f05d7c3eadf5ce2a728e966b3c1156cd6",
+    "historical": false,
+    "stand": []
+  }
+]

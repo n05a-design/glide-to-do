@@ -1,0 +1,9 @@
+{
+  "renderer": "Microsoft Word COM",
+  "visible": false,
+  "source_readonly": true,
+  "pages": 13,
+  "pdfa1": true,
+  "structure_tags": false,
+  "fallback_reason": "Packaged render_docx requires LibreOffice; soffice.exe unavailable."
+}

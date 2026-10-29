@@ -1,0 +1,12 @@
+{
+  "app": "%USERPROFILE%\\GlidePruefung\\pruefkopie-qy3x5ykl\\projekt\\01_Repository\\Glide\\src\\glide\\app.pyw",
+  "faelle": {
+    "gueltigkeit": {
+      "ok": false,
+      "befund": "TclError('Item 167049c4bbd248c1b179e11b31fd0a4e not found')"
+    }
+  },
+  "fehler": [
+    "gueltigkeit"
+  ]
+}

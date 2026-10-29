@@ -111,12 +111,18 @@ class FontMetrics:
         stelle = self._glyf + start
         return struct.unpack(">hhhh", self._data[stelle + 2:stelle + 10])
 
-    def ink_center(self, char):
-        """Senkrechte Mitte der sichtbaren Form über der Grundlinie, in Em."""
-        rahmen = self.bbox(char)
-        if rahmen is None:
+    def ink_center(self, text):
+        """Senkrechte Mitte der sichtbaren Form über der Grundlinie, in Em.
+
+        Mehrzeichige Symbole wie ``⚑⚑`` (hohe Wichtigkeit) zählen mit der
+        gemeinsamen Höhe aller Zeichen mit Umriss; Leerzeichen bleiben außen vor.
+        """
+        rahmen = [box for box in map(self.bbox, str(text)) if box is not None]
+        if not rahmen:
             return None
-        return (rahmen[1] + rahmen[3]) / 2 / self.units_per_em
+        unten = min(box[1] for box in rahmen)
+        oben = max(box[3] for box in rahmen)
+        return (unten + oben) / 2 / self.units_per_em
 
     def cap_center(self):
         """Mitte der Großbuchstabenhöhe über der Grundlinie, in Em."""

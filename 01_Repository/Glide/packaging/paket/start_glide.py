@@ -293,9 +293,25 @@ def smoke(report_path):
 def main():
     if len(sys.argv) == 3 and sys.argv[1] == "--paket-pruefen":
         raise SystemExit(smoke(sys.argv[2]))
-    import glide_app
-    glide_app.main()
+    import runtime_diagnostics as diagnostic
+    if diagnostic.consume_child_flag():
+        diagnostic.start_session()
+        import glide_app
+        diagnostic.record_phase('imported')
+        return glide_app.main()
+    command = [sys.executable]
+    if not getattr(sys, 'frozen', False):
+        command.append(str(Path(__file__).resolve()))
+    try:
+        input_path = Path(getattr(sys, '_MEIPASS', Path(__file__).parent)) / 'glide-input.json'
+        metadata = json.loads(input_path.read_text(encoding='utf-8'))
+        version = metadata.get('version', '')
+        build = metadata.get('sha256', {}).get('app.pyw', '')
+    except (OSError, ValueError, TypeError, AttributeError):
+        version = build = ''
+    return diagnostic.supervise([*command, diagnostic.CHILD_FLAG, *sys.argv[1:]],
+                                version=version, build=build)
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

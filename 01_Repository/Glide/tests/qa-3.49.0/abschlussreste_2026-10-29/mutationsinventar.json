@@ -1,0 +1,1581 @@
+[
+  {
+    "method": "__init__",
+    "line": 16880,
+    "calls": {
+      "load_items": 1,
+      "save_items": 2
+    }
+  },
+  {
+    "method": "set_backdrop_choice",
+    "line": 17198,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "set_design",
+    "line": 18131,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "change_data_folder",
+    "line": 19040,
+    "calls": {
+      "save_settings": 1,
+      "load_items": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "settings_write_batch",
+    "line": 19187,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "resume_recovery_session",
+    "line": 19316,
+    "calls": {
+      "load_items": 1
+    }
+  },
+  {
+    "method": "retry_storage",
+    "line": 19402,
+    "calls": {
+      "save_items": 1,
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "record_recent_list_edits",
+    "line": 19935,
+    "calls": {
+      "save_settings": 2
+    }
+  },
+  {
+    "method": "book_completions",
+    "line": 19989,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "save_daily_state",
+    "line": 20198,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "show_daily_hint_settings",
+    "line": 20464,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "show_busy_calendar_dialog",
+    "line": 20528,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "apply_day_relief",
+    "line": 20788,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "apply_time_plan",
+    "line": 21112,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "apply_clock_assignments",
+    "line": 21138,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "toggle_plan_day_grid",
+    "line": 21350,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "skip_repeat_occurrences",
+    "line": 21652,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "apply_quick_plan",
+    "line": 21734,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "set_group_value",
+    "line": 22135,
+    "calls": {
+      "item_change": 6,
+      "guarded_structural_change": 1
+    }
+  },
+  {
+    "method": "set_list_group",
+    "line": 22266,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "set_table_nested",
+    "line": 22284,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "toggle_detail_pane",
+    "line": 22642,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "build_side_history_navigation",
+    "line": 23140,
+    "calls": {
+      "refresh": 1
+    }
+  },
+  {
+    "method": "_side_sash_release",
+    "line": 23326,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "render_side_view",
+    "line": 23419,
+    "calls": {
+      "refresh": 2
+    }
+  },
+  {
+    "method": "_detail_sash_release",
+    "line": 23904,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "render_detail_pane",
+    "line": 23958,
+    "calls": {
+      "refresh": 6
+    }
+  },
+  {
+    "method": "apply_task_edit",
+    "line": 24781,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "toggle_detail_pane_done",
+    "line": 25008,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "set_pinned",
+    "line": 25222,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "move_pinned",
+    "line": 25243,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "set_sidebar_section_open",
+    "line": 25364,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "pin_home_filter",
+    "line": 25733,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "toggle_item_done_anywhere",
+    "line": 25749,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "set_recurring_checklist",
+    "line": 25775,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "toggle_today_routine",
+    "line": 25793,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "remember_routine_completion",
+    "line": 25816,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "reset_checklist",
+    "line": 25844,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "_home_tile_settings_changed",
+    "line": 25874,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "write_day_close_note",
+    "line": 26132,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "day_review_decide",
+    "line": 26160,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "open_day_grid",
+    "line": 26336,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "care_for_mascot",
+    "line": 26962,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "show_home_tiles_dialog",
+    "line": 27099,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "refresh_home",
+    "line": 27235,
+    "calls": {
+      "_refresh_home": 1
+    }
+  },
+  {
+    "method": "apply_home_batch",
+    "line": 27526,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "_render_home",
+    "line": 27785,
+    "calls": {
+      "save_settings": 2,
+      "refresh": 1
+    }
+  },
+  {
+    "method": "page_icon_dialog",
+    "line": 28930,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "set_archived",
+    "line": 29051,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "cycle_library_card_size",
+    "line": 29104,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "add_tooltip",
+    "line": 29506,
+    "calls": {
+      "refresh": 2
+    }
+  },
+  {
+    "method": "_create_list_from_template",
+    "line": 29931,
+    "calls": {
+      "save_settings": 3,
+      "sidebar_change": 4
+    }
+  },
+  {
+    "method": "show_settings_dialog",
+    "line": 30076,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "save_theme_setting",
+    "line": 30717,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "create_label_interactively",
+    "line": 31523,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "open_label_manager",
+    "line": 32089,
+    "calls": {
+      "snapshot_undo": 3,
+      "save_items": 3
+    }
+  },
+  {
+    "method": "remember_recent_target",
+    "line": 32299,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "_toggle_label_on_selected_items",
+    "line": 32316,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "clear_labels_on_selected_items",
+    "line": 32352,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "make_reminder_editor",
+    "line": 32459,
+    "calls": {
+      "refresh": 1
+    }
+  },
+  {
+    "method": "apply_planning_selected",
+    "line": 32658,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "change_object_reference",
+    "line": 33818,
+    "calls": {
+      "item_change": 1,
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "link_unlinked_mention",
+    "line": 33951,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "calendar_free_slot",
+    "line": 34118,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "calendar_add_task",
+    "line": 34313,
+    "calls": {
+      "guarded_structural_change": 1,
+      "item_change": 1
+    }
+  },
+  {
+    "method": "add_task_with_due",
+    "line": 34364,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "open_task_in_source_list",
+    "line": 34427,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "set_list_detail_mode",
+    "line": 35505,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "remember_table_column_widths",
+    "line": 35669,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "reset_table_columns",
+    "line": 35702,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "sort_table_by",
+    "line": 35724,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "show_table_columns_dialog",
+    "line": 35861,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "finish_page_switch",
+    "line": 35928,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "update_today_plan",
+    "line": 36073,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "clear_today_plan",
+    "line": 36106,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "migrate_today_plan_setting",
+    "line": 36119,
+    "calls": {
+      "save_settings": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "create_new_note",
+    "line": 37601,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "begin_item_rename",
+    "line": 38138,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "apply_sidebar_rename",
+    "line": 38253,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "toggle_page_label",
+    "line": 38371,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "clear_page_labels",
+    "line": 38398,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "_apply_entry_color",
+    "line": 38938,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "_apply_page_details",
+    "line": 38956,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "create_template_in_section",
+    "line": 39014,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "create_new_drawing",
+    "line": 39039,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "create_journal_entry",
+    "line": 39089,
+    "calls": {
+      "save_settings": 1,
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "move_list_to_folder_dialog",
+    "line": 39118,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "detach_list_from_folder",
+    "line": 39143,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "duplicate_list",
+    "line": 39153,
+    "calls": {
+      "guarded_structural_change": 1,
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "remove_done_items",
+    "line": 39389,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "clear_list_by_id",
+    "line": 39449,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "delete_list_by_id",
+    "line": 39470,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "trash_folder",
+    "line": 39594,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "trash_selected_sidebar_entries",
+    "line": 39654,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "restore_trash_entry",
+    "line": 39719,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "restore_selected_trash_entries",
+    "line": 39829,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "purge_selected_trash_entries",
+    "line": 39874,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "empty_trash",
+    "line": 39892,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "create_container_dialog",
+    "line": 39952,
+    "calls": {
+      "sidebar_change": 1,
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "move_selected_lists_to_folder",
+    "line": 40283,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "set_selected_sidebar_color",
+    "line": 40304,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "move_sidebar_selection",
+    "line": 40360,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "delete_folder",
+    "line": 40415,
+    "calls": {
+      "guarded_structural_change": 1,
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "toggle_sidebar_indent",
+    "line": 40477,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1,
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "indent_selected_sidebar_folder",
+    "line": 40534,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "outdent_selected_sidebar_folder",
+    "line": 40567,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "outdent_selected_sidebar_list",
+    "line": 40585,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "on_sidebar_drag_end",
+    "line": 40675,
+    "calls": {
+      "guarded_structural_change": 2,
+      "sidebar_change": 2
+    }
+  },
+  {
+    "method": "move_selected_folders_to_folder",
+    "line": 40981,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "_close_after_confirmation",
+    "line": 43692,
+    "calls": {
+      "save_settings": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "load_items",
+    "line": 45300,
+    "calls": {
+      "save_items": 1
+    }
+  },
+  {
+    "method": "present_loaded_dataset",
+    "line": 45360,
+    "calls": {
+      "save_items": 1
+    }
+  },
+  {
+    "method": "migrate_on_start",
+    "line": 45494,
+    "calls": {
+      "save_items": 1
+    }
+  },
+  {
+    "method": "remember_written_data_format",
+    "line": 45596,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "save_items",
+    "line": 45699,
+    "calls": {
+      "save_items_result": 1
+    }
+  },
+  {
+    "method": "show_title_clip_notice",
+    "line": 45892,
+    "calls": {
+      "save_items": 1
+    }
+  },
+  {
+    "method": "record_data_operation",
+    "line": 46175,
+    "calls": {
+      "save_items": 1
+    }
+  },
+  {
+    "method": "clear_history",
+    "line": 46317,
+    "calls": {
+      "save_items": 1
+    }
+  },
+  {
+    "method": "autosave_tick",
+    "line": 46481,
+    "calls": {
+      "save_items": 1
+    }
+  },
+  {
+    "method": "process_reminders",
+    "line": 46618,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "change_reminder",
+    "line": 46914,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "update_in_progress_item",
+    "line": 47138,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "edit_in_progress_item",
+    "line": 47179,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "on_filter_changed",
+    "line": 47484,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "refresh_tree",
+    "line": 47728,
+    "calls": {
+      "refresh": 1
+    }
+  },
+  {
+    "method": "store_rich_note",
+    "line": 47824,
+    "calls": {
+      "sidebar_change": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "change_page_feature",
+    "line": 47853,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "toggle_live_task",
+    "line": 47909,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "create_list_from_template",
+    "line": 48071,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "page_task_change",
+    "line": 48115,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "mark_page_task_change",
+    "line": 48123,
+    "calls": {
+      "save_items": 1
+    }
+  },
+  {
+    "method": "transfer_document_task",
+    "line": 48130,
+    "calls": {
+      "guarded_structural_change": 1,
+      "item_change": 1
+    }
+  },
+  {
+    "method": "edit_page_task",
+    "line": 48274,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "new_page_from_markdown",
+    "line": 48484,
+    "calls": {
+      "sidebar_change": 1,
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "create_new_gallery",
+    "line": 48572,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "create_new_page",
+    "line": 48591,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "remember_recent_page",
+    "line": 48699,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "toggle_page_favorite",
+    "line": 48704,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "update_current_journal",
+    "line": 48757,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "sync_rich_note_view",
+    "line": 48814,
+    "calls": {
+      "save_items": 1
+    }
+  },
+  {
+    "method": "_save_drawing_tools",
+    "line": 48942,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "drawing_snapshot_save",
+    "line": 49126,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "drawing_snapshot_dialog",
+    "line": 49200,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "create_drawing_from_model",
+    "line": 49283,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "store_drawing",
+    "line": 49795,
+    "calls": {
+      "save_items": 1
+    }
+  },
+  {
+    "method": "add_gallery_images",
+    "line": 50073,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "add_page_images",
+    "line": 50107,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "remove_gallery_image",
+    "line": 50138,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "set_gallery_caption",
+    "line": 50152,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "apply_drawing_change",
+    "line": 50171,
+    "calls": {
+      "guarded_structural_change": 1,
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "_refresh_tree",
+    "line": 50913,
+    "calls": {
+      "refresh": 1
+    }
+  },
+  {
+    "method": "toggle_view_hints",
+    "line": 51000,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "move_item_to_label_group",
+    "line": 52049,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "edit_moment_date",
+    "line": 52608,
+    "calls": {
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "set_overview_section_open",
+    "line": 52684,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "remember_tree_open_states",
+    "line": 52716,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "open_in_progress_source_item",
+    "line": 52772,
+    "calls": {
+      "save_settings": 2
+    }
+  },
+  {
+    "method": "toggle_checklist_row",
+    "line": 53086,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "item_change",
+    "line": 53556,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "sidebar_change",
+    "line": 53647,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1,
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "_apply_snapshot",
+    "line": 53784,
+    "calls": {
+      "save_settings": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "paste_items_from_clipboard",
+    "line": 54185,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "set_sidebar_open_state",
+    "line": 54335,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "paste_into_entry",
+    "line": 54412,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "add_item",
+    "line": 54550,
+    "calls": {
+      "snapshot_undo": 2,
+      "save_items": 2
+    }
+  },
+  {
+    "method": "capture_item",
+    "line": 54673,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "add_item_advanced",
+    "line": 54896,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 2
+    }
+  },
+  {
+    "method": "delete_item",
+    "line": 54948,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "add_child_item",
+    "line": 55008,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "add_sibling_item",
+    "line": 55033,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 2
+    }
+  },
+  {
+    "method": "convert_selected_kind",
+    "line": 55081,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "group_selected_items",
+    "line": 55095,
+    "calls": {
+      "guarded_structural_change": 1,
+      "item_change": 1
+    }
+  },
+  {
+    "method": "dissolve_selected_group",
+    "line": 55178,
+    "calls": {
+      "guarded_structural_change": 1,
+      "item_change": 1
+    }
+  },
+  {
+    "method": "duplicate_selected_items",
+    "line": 55319,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "move_selected_items",
+    "line": 55340,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "clear_list",
+    "line": 55391,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "edit_item",
+    "line": 55400,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "toggle_in_progress_label",
+    "line": 55829,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "set_item_color_selected",
+    "line": 55942,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "add_item_relation",
+    "line": 56129,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "start_time_tracking",
+    "line": 56192,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "stop_time_tracking",
+    "line": 56213,
+    "calls": {
+      "save_settings": 2
+    }
+  },
+  {
+    "method": "recover_time_booking",
+    "line": 56246,
+    "calls": {
+      "save_settings": 1,
+      "item_change": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "start_focus",
+    "line": 56309,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "toggle_focus_pause",
+    "line": 56332,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "finish_focus",
+    "line": 56344,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "update_timer_indicator",
+    "line": 56444,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "toggle_done",
+    "line": 56489,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "set_importance_selected",
+    "line": 56589,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "cycle_importance_selected",
+    "line": 56602,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "set_due_value_selected",
+    "line": 56722,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "toggle_indent_selected",
+    "line": 56836,
+    "calls": {
+      "item_change": 2
+    }
+  },
+  {
+    "method": "indent_selected",
+    "line": 56862,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "outdent_selected",
+    "line": 56879,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "on_folder_overview_drag_end",
+    "line": 57090,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "move_items_to_list",
+    "line": 57208,
+    "calls": {
+      "item_change": 1
+    }
+  },
+  {
+    "method": "on_drag_end",
+    "line": 57278,
+    "calls": {
+      "guarded_structural_change": 1,
+      "item_change": 1
+    }
+  },
+  {
+    "method": "drop_items_on_list",
+    "line": 57393,
+    "calls": {
+      "guarded_structural_change": 1
+    }
+  },
+  {
+    "method": "import_txt_as_new_lists",
+    "line": 57443,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "import_csv_table",
+    "line": 58267,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "apply_exchange_payload",
+    "line": 58803,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "save_exchange_recipe",
+    "line": 58974,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "apply_exchange_patch",
+    "line": 59543,
+    "calls": {
+      "item_change": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "import_notion_archive",
+    "line": 59831,
+    "calls": {
+      "save_items": 1
+    }
+  },
+  {
+    "method": "apply_notion_selection",
+    "line": 59864,
+    "calls": {
+      "save_settings": 1,
+      "guarded_structural_change": 1,
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "restore_page_from_backup",
+    "line": 59964,
+    "calls": {
+      "save_items": 1
+    }
+  },
+  {
+    "method": "apply_page_restore",
+    "line": 60008,
+    "calls": {
+      "guarded_structural_change": 1,
+      "sidebar_change": 1
+    }
+  },
+  {
+    "method": "import_ics_events",
+    "line": 62229,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "restore_app_backup_extras",
+    "line": 62582,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "import_full_backup",
+    "line": 62774,
+    "calls": {
+      "save_settings": 1,
+      "snapshot_undo": 1,
+      "save_items": 2
+    }
+  },
+  {
+    "method": "sort_current_list",
+    "line": 63082,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "import_from_txt",
+    "line": 63118,
+    "calls": {
+      "snapshot_undo": 1,
+      "save_items": 1
+    }
+  },
+  {
+    "method": "toggle_sidebar_narrow",
+    "line": 63661,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "toggle_sidebar",
+    "line": 63733,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "remember_compact_geometry",
+    "line": 63850,
+    "calls": {
+      "save_settings": 1
+    }
+  },
+  {
+    "method": "build_compact_header",
+    "line": 63862,
+    "calls": {
+      "refresh": 1
+    }
+  },
+  {
+    "method": "_save_recent_pages",
+    "line": 64192,
+    "calls": {
+      "save_settings": 1
+    }
+  }
+]

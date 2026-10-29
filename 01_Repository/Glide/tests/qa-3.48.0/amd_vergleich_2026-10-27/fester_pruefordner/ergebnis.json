@@ -1,0 +1,276 @@
+{
+  "started": "2026-10-27T18:27:54.106197+00:00",
+  "version": "3.48.0",
+  "schema": 26,
+  "source_files": 470,
+  "source_before": [],
+  "frozen_before": [],
+  "frozen_root": "%USERPROFILE%\\GlidePruefung\\amd-wa41-ysgejg8u\\projekt",
+  "execution": "sequential",
+  "workspace_policy": "Feste lokale Pruefablage ausserhalb OneDrive und System-TEMP; TMP/TEMP nur fuer Kinder umgeleitet.",
+  "plan": [
+    {
+      "case": "3147_core_1",
+      "runtime": "3147",
+      "kind": "core"
+    },
+    {
+      "case": "3147_full_1",
+      "runtime": "3147",
+      "kind": "full"
+    },
+    {
+      "case": "3147_pure_1",
+      "runtime": "3147",
+      "kind": "pure"
+    },
+    {
+      "case": "3147_full_2",
+      "runtime": "3147",
+      "kind": "full"
+    },
+    {
+      "case": "3147_import_1",
+      "runtime": "3147",
+      "kind": "import"
+    },
+    {
+      "case": "3147_core_2",
+      "runtime": "3147",
+      "kind": "core"
+    },
+    {
+      "case": "3147_full_3",
+      "runtime": "3147",
+      "kind": "full"
+    },
+    {
+      "case": "3151_full_1",
+      "runtime": "3151",
+      "kind": "full"
+    }
+  ],
+  "original_intel_payload_available": false,
+  "original_intel_payload_sha256": "a3b8c0cac4c72e1820e71730ad78e312f2a30338678fbcfe2a2b6d91dae081f4",
+  "full_suite_input": "Original erzeugt selbst; UUIDs/Zeitstempel nicht bytegleich zu Intel.",
+  "runtime_info": {
+    "3147": {
+      "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+      "executable": "%USERPROFILE%\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "tk": "9.0.4",
+      "tcl": "9.0.4",
+      "gil_disabled": 0,
+      "jit_enabled": false,
+      "packages": {
+        "pip": "26.2.1"
+      },
+      "binaries": {
+        "python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+        "python3.dll": "6c45910e7c82617ca6360820de861699cc99f9efee434df290aa4c6e38f39886",
+        "python314.dll": "0f9857ffdfe010fe6b99328d58c2e3c7472ce75f336bf9c2ad9bd5bca3bce700",
+        "_tkinter.pyd": "ee3eb2cdac591821cf71cda8035a6bc9b148d92996dd45b24e3ae3715613315d",
+        "tcl90.dll": "a1fb45f963b05cb083a97df1449c2023b484eb921d40a463da7501b0f60e0f70",
+        "tcl9tk90.dll": "31f625c52e65d29d126e710ed8bab2ec964cb770e4fc59bc329dfff02cb6ddcf"
+      }
+    },
+    "3151": {
+      "python": "3.15.1 (tags/v3.15.1:c37e74c, Oct 21 2026, 06:24:08) [MSC v.1951 64 bit (AMD64)]",
+      "executable": "%USERPROFILE%\\AppData\\Local\\Python\\pythoncore-3.15-64\\python.exe",
+      "platform": "Windows-11-10.0.26300-SP0",
+      "tk": "9.0.4",
+      "tcl": "9.0.4",
+      "gil_disabled": 0,
+      "jit_enabled": false,
+      "packages": {
+        "pip": "26.2.2"
+      },
+      "binaries": {
+        "python.exe": "ea34f2b17bafae58479d70d99d55cb01df65400ded3a9465ba7f1c6637adf8bc",
+        "python3.dll": "03538664aa98aea3732c8345f8229e9c5deb26532b3e652fa3d9f757b867e46c",
+        "python315.dll": "62507168f11f1a9bb6c6982322e0320477cf703a7382bdbe608a124a457126b1",
+        "python3t.dll": "d996e71c3aea06e48c060c86ce2a8593862e44365220b89619ebe7cb865c49ea",
+        "_tkinter.pyd": "da22665d0646e9feac392ccb20564bb5d0c3824d33e1d172bdb529503e5de176",
+        "tcl90.dll": "cda1b48dc20237331ab85a3739c29f3624df19423ccbf7734e4838c824e6b8c2",
+        "tcl9tk90.dll": "e40a3addcec2ce8751fddf4475e0db1a6cdf8c86dace37bac2e5119156a1b143"
+      }
+    }
+  },
+  "cases": [
+    {
+      "case": "3147_core_1",
+      "runtime": "3147",
+      "kind": "core",
+      "pid": 13816,
+      "exitcode": 0,
+      "seconds": 149.96,
+      "timed_out": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "error_messages": [],
+      "frozen_after": [],
+      "core_pass": true,
+      "last_started_iteration": 39,
+      "data_differences": [],
+      "trace_sha256": "719150a4ce7528dff18d5fb3aecbcfa1fa8e6e23bb78955c340427c7c0d564bc",
+      "passed": true,
+      "summary": "core_pass im Trace"
+    },
+    {
+      "case": "3147_full_1",
+      "runtime": "3147",
+      "kind": "full",
+      "pid": 22972,
+      "exitcode": 0,
+      "seconds": 221.33,
+      "timed_out": false,
+      "stdout_sha256": "1ac9188544a28da8ef31a15a2382d04dc9881e1648dad9159f367dabf258f6f6",
+      "error_messages": [],
+      "frozen_after": [],
+      "passed": true,
+      "summary": "test_speicherlast330: OK; 26420 Punkte (28.5 MB) gespeichert in 0.99 s und geladen in 0.92 s, 40 Änderungsrunden verlustfrei (Papierkorb übergelaufen: ja), 6 harte Abbrüche und 242 Lesezugriffe ohne halbe Datei, 261 Lesezugriffe bei zwei Schreibern, Sperre, Sicherungen nur bei Änderung mit Tagesständen (25 nach Rotation), Startprüfung, Schreibrechte."
+    },
+    {
+      "case": "3147_pure_1",
+      "runtime": "3147",
+      "kind": "pure",
+      "pid": 30332,
+      "exitcode": 0,
+      "seconds": 25.47,
+      "timed_out": false,
+      "stdout_sha256": "580b413aa60ad64d152ad53d2ff0e88c7f80157faf02ca198e76ba9dd9418da9",
+      "error_messages": [],
+      "frozen_after": [],
+      "passed": true,
+      "rounds_completed": 20,
+      "summary": "PASS pure 3.14.7 20"
+    },
+    {
+      "case": "3147_full_2",
+      "runtime": "3147",
+      "kind": "full",
+      "pid": 40264,
+      "exitcode": 0,
+      "seconds": 204.82,
+      "timed_out": false,
+      "stdout_sha256": "6b34d1e0e4fe8001387d23d8e19b73f49631f2242942bc2db2914f7625e02fd1",
+      "error_messages": [],
+      "frozen_after": [],
+      "passed": true,
+      "summary": "test_speicherlast330: OK; 26420 Punkte (28.5 MB) gespeichert in 0.97 s und geladen in 0.92 s, 40 Änderungsrunden verlustfrei (Papierkorb übergelaufen: ja), 6 harte Abbrüche und 239 Lesezugriffe ohne halbe Datei, 261 Lesezugriffe bei zwei Schreibern, Sperre, Sicherungen nur bei Änderung mit Tagesständen (25 nach Rotation), Startprüfung, Schreibrechte."
+    },
+    {
+      "case": "3147_import_1",
+      "runtime": "3147",
+      "kind": "import",
+      "pid": 40612,
+      "exitcode": 0,
+      "seconds": 30.9,
+      "timed_out": false,
+      "stdout_sha256": "580b413aa60ad64d152ad53d2ff0e88c7f80157faf02ca198e76ba9dd9418da9",
+      "error_messages": [],
+      "frozen_after": [],
+      "passed": true,
+      "rounds_completed": 20,
+      "summary": "PASS pure 3.14.7 20"
+    },
+    {
+      "case": "3147_core_2",
+      "runtime": "3147",
+      "kind": "core",
+      "pid": 33760,
+      "exitcode": 0,
+      "seconds": 138.28,
+      "timed_out": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "error_messages": [],
+      "frozen_after": [],
+      "core_pass": true,
+      "last_started_iteration": 39,
+      "data_differences": [],
+      "trace_sha256": "871facd2f21c21386503d507e6c7abdb2bc49990657b0f62c7e5c65f2b20b8b4",
+      "passed": true,
+      "summary": "core_pass im Trace"
+    },
+    {
+      "case": "3147_full_3",
+      "runtime": "3147",
+      "kind": "full",
+      "pid": 39004,
+      "exitcode": 0,
+      "seconds": 201.48,
+      "timed_out": false,
+      "stdout_sha256": "542e7d67f0496f73520237329c4344ee960e9d418890cdf3b4aef507ee99a594",
+      "error_messages": [],
+      "frozen_after": [],
+      "passed": true,
+      "summary": "test_speicherlast330: OK; 26420 Punkte (28.5 MB) gespeichert in 0.97 s und geladen in 0.9 s, 40 Änderungsrunden verlustfrei (Papierkorb übergelaufen: ja), 6 harte Abbrüche und 244 Lesezugriffe ohne halbe Datei, 261 Lesezugriffe bei zwei Schreibern, Sperre, Sicherungen nur bei Änderung mit Tagesständen (25 nach Rotation), Startprüfung, Schreibrechte."
+    },
+    {
+      "case": "3151_full_1",
+      "runtime": "3151",
+      "kind": "full",
+      "pid": 21164,
+      "exitcode": 0,
+      "seconds": 160.69,
+      "timed_out": false,
+      "stdout_sha256": "462fdaf5bea383bac8dfafd25a0b28ff26671a2ef873ada6cd3cf3827eafd427",
+      "error_messages": [],
+      "frozen_after": [],
+      "passed": true,
+      "summary": "test_speicherlast330: OK; 26420 Punkte (28.5 MB) gespeichert in 0.89 s und geladen in 0.86 s, 40 Änderungsrunden verlustfrei (Papierkorb übergelaufen: ja), 6 harte Abbrüche und 245 Lesezugriffe ohne halbe Datei, 243 Lesezugriffe bei zwei Schreibern, Sperre, Sicherungen nur bei Änderung mit Tagesständen (25 nach Rotation), Startprüfung, Schreibrechte."
+    }
+  ],
+  "completed": true,
+  "cause_confirmed": false,
+  "release_ready": false,
+  "production_changed": false,
+  "helper_sha256": {
+    "01_Repository\\Glide\\tests\\qa-3.48.0\\amd_vergleich_2026-10-27\\pruefen.py": "1f23b98d6550eb20b4c7d1665f3527bfa58a29ac983c4318a37a521434cfe846",
+    "01_Repository\\Glide\\tests\\qa-3.48.0\\wa41_2026-10-27\\probe.py": "ce4e5cee2451c499f007b2982c4e75ae520155d5ef00b07bad2f9b9aa7d8e492",
+    "01_Repository\\Glide\\tests\\qa-3.48.0\\wa41_2026-10-27\\pure_probe.py": "6fc82b01692fcbdf18702cd2822083e8a6716e2ae828680e6cd6c15bd231d469"
+  },
+  "machine": {
+    "cpu": [
+      {
+        "Name": "AMD Ryzen 7 5800X3D 8-Core Processor           ",
+        "Manufacturer": "AuthenticAMD",
+        "NumberOfCores": 8,
+        "NumberOfLogicalProcessors": 16
+      }
+    ],
+    "os": {
+      "Caption": "Microsoft Windows 11 Pro",
+      "Version": "10.0.26300",
+      "BuildNumber": "26300",
+      "TotalVisibleMemorySize": 33478528,
+      "FreePhysicalMemory": 11132472
+    },
+    "board": {
+      "Manufacturer": "Micro-Star International Co., Ltd.",
+      "Product": "B550M PRO-VDH WIFI (MS-7C95)",
+      "Version": "1.0"
+    },
+    "bios": {
+      "SMBIOSBIOSVersion": "2.L0",
+      "ReleaseDate": "2024-07-18T02:00:00+02:00"
+    }
+  },
+  "payload_path": "%USERPROFILE%\\GlidePruefung\\amd-wa41-ysgejg8u\\initial_amd.json",
+  "payload_sha256": "6b6979ab5b9a3288720fd42dfbcd326caa6c964346bee67d2c547c870eec5e68",
+  "payload_bytes": 28548872,
+  "finished": "2026-10-27T18:46:57.048405+00:00",
+  "source_after": [
+    "01_Repository/Glide/tests/fixtures/showcase/README.md"
+  ],
+  "frozen_after": [],
+  "summary": {
+    "3147": {
+      "passed": 7,
+      "failed": 0
+    },
+    "3151": {
+      "passed": 1,
+      "failed": 0
+    }
+  }
+}

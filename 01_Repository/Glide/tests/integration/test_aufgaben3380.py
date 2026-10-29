@@ -340,6 +340,7 @@ def inspektor(app_path, report, *, gross=False, tempo=False):
             expected_model = copy.deepcopy(item())
             assert app.save_items()
             app.cancel_pending_callbacks()
+            getattr(app, "finish_recovery_session", lambda: None)()
             app.release_data_lock()
             for job in root.tk.call('after', 'info'):
                 root.tk.call('after', 'cancel', job)
@@ -356,6 +357,7 @@ def inspektor(app_path, report, *, gross=False, tempo=False):
             assert not errors, errors
         finally:
             app.cancel_pending_callbacks()
+            getattr(app, "finish_recovery_session", lambda: None)()
             app.release_data_lock()
             for job in root.tk.call('after', 'info'):
                 root.tk.call('after', 'cancel', job)
@@ -584,6 +586,7 @@ def klicks(app_path, report, *, gross=False, tempo=False):
         finally:
             app.edit_task_field = original
             app.cancel_pending_callbacks()
+            getattr(app, "finish_recovery_session", lambda: None)()
             app.release_data_lock()
             for job in root.tk.call('after', 'info'):
                 root.tk.call('after', 'cancel', job)
@@ -746,6 +749,7 @@ def bewegung(app_path, report, *, gross=False, tempo=False):
             checks.append('Schließen entfernt alle Übergangsrückrufe')
         finally:
             app.cancel_pending_callbacks()
+            getattr(app, "finish_recovery_session", lambda: None)()
             app.release_data_lock()
             for job in root.tk.call('after', 'info'):
                 root.tk.call('after', 'cancel', job)
@@ -837,6 +841,7 @@ def flaeche(app_path, report, *, gross=False, tempo=False):
             assert not errors, errors
         finally:
             app.cancel_pending_callbacks()
+            getattr(app, "finish_recovery_session", lambda: None)()
             app.release_data_lock()
             for job in root.tk.call('after', 'info'):
                 root.tk.call('after', 'cancel', job)

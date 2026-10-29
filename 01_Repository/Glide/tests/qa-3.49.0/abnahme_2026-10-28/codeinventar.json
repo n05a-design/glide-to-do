@@ -1,0 +1,7292 @@
+{
+  "version": "3.49.0",
+  "app_sha256": "5e93aeff9373727b90bc1d57bc280b149f62ffdc41ea055fe4b534776f79e74a",
+  "app_lines": 66379,
+  "listapp_methods": {
+    "__init__": {
+      "line": 16880,
+      "end": 17151
+    },
+    "guard_x11_emacs_navigation": {
+      "line": 17153,
+      "end": 17175
+    },
+    "backdrop_choice": {
+      "line": 17193,
+      "end": 17196
+    },
+    "set_backdrop_choice": {
+      "line": 17198,
+      "end": 17209
+    },
+    "backdrop_cache_dir": {
+      "line": 17212,
+      "end": 17222
+    },
+    "backdrop_request": {
+      "line": 17224,
+      "end": 17243
+    },
+    "backdrop_signature": {
+      "line": 17246,
+      "end": 17249
+    },
+    "compute_backdrop": {
+      "line": 17252,
+      "end": 17261
+    },
+    "refresh_backdrop": {
+      "line": 17263,
+      "end": 17313
+    },
+    "wait_for_backdrop": {
+      "line": 17315,
+      "end": 17325
+    },
+    "_store_backdrop_cache": {
+      "line": 17327,
+      "end": 17339
+    },
+    "_install_backdrop": {
+      "line": 17341,
+      "end": 17352
+    },
+    "schedule_backdrop_sync": {
+      "line": 17354,
+      "end": 17361
+    },
+    "schedule_backdrop_sync_soon": {
+      "line": 17374,
+      "end": 17384
+    },
+    "_backdrop_settled": {
+      "line": 17386,
+      "end": 17398
+    },
+    "note_scrolling": {
+      "line": 17400,
+      "end": 17402
+    },
+    "backdrop_excluded": {
+      "line": 17404,
+      "end": 17409
+    },
+    "sync_backdrop_surfaces": {
+      "line": 17411,
+      "end": 17478
+    },
+    "_clear_backdrop_surface": {
+      "line": 17480,
+      "end": 17499
+    },
+    "_frame_backdrop": {
+      "line": 17501,
+      "end": 17535
+    },
+    "_rect_minus": {
+      "line": 17538,
+      "end": 17554
+    },
+    "_exposed_rects": {
+      "line": 17558,
+      "end": 17604
+    },
+    "_backdrop_pieces": {
+      "line": 17606,
+      "end": 17639
+    },
+    "active_backdrop": {
+      "line": 17655,
+      "end": 17662
+    },
+    "frost_strength": {
+      "line": 17664,
+      "end": 17667
+    },
+    "backdrop_area_average": {
+      "line": 17669,
+      "end": 17684
+    },
+    "frosted_color": {
+      "line": 17686,
+      "end": 17698
+    },
+    "_recolor_tree": {
+      "line": 17700,
+      "end": 17744
+    },
+    "_frost_tree": {
+      "line": 17746,
+      "end": 17766
+    },
+    "sync_frosted_cards": {
+      "line": 17768,
+      "end": 17815
+    },
+    "_on_widget_map": {
+      "line": 17817,
+      "end": 17843
+    },
+    "install_backdrop_forwarding": {
+      "line": 17847,
+      "end": 17873
+    },
+    "backdrop_pill_color": {
+      "line": 17875,
+      "end": 17883
+    },
+    "backdrop_extremes": {
+      "line": 17885,
+      "end": 17906
+    },
+    "backdrop_needs_halo": {
+      "line": 17908,
+      "end": 17915
+    },
+    "fit_label_to_backdrop": {
+      "line": 17917,
+      "end": 17941
+    },
+    "rebuild_backdrop_menu": {
+      "line": 17943,
+      "end": 17963
+    },
+    "legible_text_roles": {
+      "line": 17973,
+      "end": 17986
+    },
+    "active_theme": {
+      "line": 17988,
+      "end": 17990
+    },
+    "glass_backdrop_tint": {
+      "line": 18002,
+      "end": 18015
+    },
+    "_compose_theme": {
+      "line": 18017,
+      "end": 18097
+    },
+    "with_active_role": {
+      "line": 18103,
+      "end": 18115
+    },
+    "design_name": {
+      "line": 18117,
+      "end": 18125
+    },
+    "design_info": {
+      "line": 18127,
+      "end": 18129
+    },
+    "set_design": {
+      "line": 18131,
+      "end": 18154
+    },
+    "system_is_dark": {
+      "line": 18158,
+      "end": 18186
+    },
+    "schedule_appearance_check": {
+      "line": 18188,
+      "end": 18190
+    },
+    "_appearance_tick": {
+      "line": 18192,
+      "end": 18197
+    },
+    "sync_system_appearance": {
+      "line": 18199,
+      "end": 18208
+    },
+    "color_mode": {
+      "line": 18210,
+      "end": 18216
+    },
+    "glass_enabled": {
+      "line": 18218,
+      "end": 18220
+    },
+    "animations_enabled": {
+      "line": 18222,
+      "end": 18230
+    },
+    "cancel_ui_after": {
+      "line": 18232,
+      "end": 18236
+    },
+    "cancel_ui_transitions": {
+      "line": 18238,
+      "end": 18245
+    },
+    "animate_area_change": {
+      "line": 18247,
+      "end": 18279
+    },
+    "animate_task_rows": {
+      "line": 18281,
+      "end": 18332
+    },
+    "arcade_mode": {
+      "line": 18334,
+      "end": 18336
+    },
+    "is_pixel_design": {
+      "line": 18338,
+      "end": 18340
+    },
+    "thumbnail_frame_options": {
+      "line": 18342,
+      "end": 18347
+    },
+    "action_feedback_level": {
+      "line": 18403,
+      "end": 18410
+    },
+    "feedback": {
+      "line": 18412,
+      "end": 18430
+    },
+    "show_undo_toast": {
+      "line": 18434,
+      "end": 18460
+    },
+    "show_redo_toast": {
+      "line": 18462,
+      "end": 18473
+    },
+    "_place_history_toast": {
+      "line": 18475,
+      "end": 18501
+    },
+    "hide_undo_toast": {
+      "line": 18503,
+      "end": 18516
+    },
+    "undo_toast_valid": {
+      "line": 18518,
+      "end": 18521
+    },
+    "feedback_for_changes": {
+      "line": 18523,
+      "end": 18544
+    },
+    "play_celebration": {
+      "line": 18556,
+      "end": 18583
+    },
+    "_draw_celebration": {
+      "line": 18585,
+      "end": 18649
+    },
+    "default_template_records": {
+      "line": 18652,
+      "end": 18664
+    },
+    "legacy_template_records": {
+      "line": 18667,
+      "end": 18690
+    },
+    "normalize_template_records": {
+      "line": 18693,
+      "end": 18723
+    },
+    "load_templates": {
+      "line": 18725,
+      "end": 18756
+    },
+    "save_templates": {
+      "line": 18758,
+      "end": 18778
+    },
+    "template_by_id": {
+      "line": 18780,
+      "end": 18781
+    },
+    "read_foreign_lock": {
+      "line": 18783,
+      "end": 18791
+    },
+    "foreign_lock_info": {
+      "line": 18793,
+      "end": 18801
+    },
+    "mark_lock_read_only": {
+      "line": 18803,
+      "end": 18811
+    },
+    "acquire_data_lock": {
+      "line": 18813,
+      "end": 18831
+    },
+    "_acquire_data_lock": {
+      "line": 18833,
+      "end": 18876
+    },
+    "take_over_data_lock": {
+      "line": 18878,
+      "end": 18901
+    },
+    "_take_over_data_lock": {
+      "line": 18903,
+      "end": 18928
+    },
+    "show_data_lock_warning": {
+      "line": 18930,
+      "end": 18947
+    },
+    "release_data_lock": {
+      "line": 18949,
+      "end": 18963
+    },
+    "refresh_data_lock": {
+      "line": 18965,
+      "end": 18973
+    },
+    "verify_data_lock": {
+      "line": 18975,
+      "end": 18977
+    },
+    "check_data_lock": {
+      "line": 18979,
+      "end": 19035
+    },
+    "data_folder_path": {
+      "line": 19037,
+      "end": 19038
+    },
+    "change_data_folder": {
+      "line": 19040,
+      "end": 19121
+    },
+    "show_data_folder_dialog": {
+      "line": 19123,
+      "end": 19135
+    },
+    "use_default_data_folder": {
+      "line": 19137,
+      "end": 19156
+    },
+    "load_settings": {
+      "line": 19158,
+      "end": 19170
+    },
+    "settings_json_text": {
+      "line": 19173,
+      "end": 19175
+    },
+    "file_signature": {
+      "line": 19178,
+      "end": 19184
+    },
+    "settings_write_batch": {
+      "line": 19187,
+      "end": 19208
+    },
+    "save_settings": {
+      "line": 19210,
+      "end": 19282
+    },
+    "storage_health": {
+      "line": 19284,
+      "end": 19287
+    },
+    "init_recovery_session": {
+      "line": 19289,
+      "end": 19302
+    },
+    "finish_recovery_session": {
+      "line": 19304,
+      "end": 19314
+    },
+    "resume_recovery_session": {
+      "line": 19316,
+      "end": 19343
+    },
+    "recovery_lock_owned": {
+      "line": 19345,
+      "end": 19356
+    },
+    "storage_failure": {
+      "line": 19358,
+      "end": 19361
+    },
+    "storage_success": {
+      "line": 19363,
+      "end": 19366
+    },
+    "storage_load_blocked": {
+      "line": 19368,
+      "end": 19373
+    },
+    "refresh_storage_sizes": {
+      "line": 19375,
+      "end": 19383
+    },
+    "sync_storage_notice": {
+      "line": 19385,
+      "end": 19400
+    },
+    "retry_storage": {
+      "line": 19402,
+      "end": 19411
+    },
+    "show_storage_status": {
+      "line": 19413,
+      "end": 19466
+    },
+    "normalize_personal_settings": {
+      "line": 19469,
+      "end": 19744
+    },
+    "normalize_drawing_tools": {
+      "line": 19751,
+      "end": 19807
+    },
+    "normalize_settings_330": {
+      "line": 19810,
+      "end": 19929
+    },
+    "list_edit_signatures": {
+      "line": 19931,
+      "end": 19933
+    },
+    "record_recent_list_edits": {
+      "line": 19935,
+      "end": 19961
+    },
+    "done_item_ids": {
+      "line": 19963,
+      "end": 19966
+    },
+    "record_completions": {
+      "line": 19968,
+      "end": 19987
+    },
+    "book_completions": {
+      "line": 19989,
+      "end": 20015
+    },
+    "register_completion_combo": {
+      "line": 20023,
+      "end": 20033
+    },
+    "completions_today": {
+      "line": 20035,
+      "end": 20036
+    },
+    "completion_chart": {
+      "line": 20038,
+      "end": 20046
+    },
+    "yearly_activity_history": {
+      "line": 20048,
+      "end": 20058
+    },
+    "next_scheduled_item": {
+      "line": 20060,
+      "end": 20068
+    },
+    "daily_now": {
+      "line": 20070,
+      "end": 20071
+    },
+    "_daily_after": {
+      "line": 20074,
+      "end": 20088
+    },
+    "_cancel_daily_jobs": {
+      "line": 20091,
+      "end": 20100
+    },
+    "init_daily_planning": {
+      "line": 20102,
+      "end": 20125
+    },
+    "close_daily_planning": {
+      "line": 20128,
+      "end": 20141
+    },
+    "busy_zone": {
+      "line": 20144,
+      "end": 20151
+    },
+    "busy_view": {
+      "line": 20154,
+      "end": 20170
+    },
+    "poll_daily_planning": {
+      "line": 20173,
+      "end": 20188
+    },
+    "daily_hint_pending": {
+      "line": 20191,
+      "end": 20195
+    },
+    "save_daily_state": {
+      "line": 20198,
+      "end": 20205
+    },
+    "process_daily_hints": {
+      "line": 20208,
+      "end": 20236
+    },
+    "refresh_daily_hint_indicator": {
+      "line": 20239,
+      "end": 20246
+    },
+    "_daily_toggle": {
+      "line": 20249,
+      "end": 20253
+    },
+    "_daily_label": {
+      "line": 20256,
+      "end": 20262
+    },
+    "_daily_dialog": {
+      "line": 20265,
+      "end": 20339
+    },
+    "_daily_fit_columns": {
+      "line": 20342,
+      "end": 20349
+    },
+    "_dialog_scrollbar": {
+      "line": 20352,
+      "end": 20356
+    },
+    "_daily_horizontal": {
+      "line": 20358,
+      "end": 20365
+    },
+    "show_daily_hints": {
+      "line": 20368,
+      "end": 20460
+    },
+    "show_daily_hint_settings": {
+      "line": 20464,
+      "end": 20525
+    },
+    "show_busy_calendar_dialog": {
+      "line": 20528,
+      "end": 20705
+    },
+    "calendar_grid_blocks": {
+      "line": 20709,
+      "end": 20719
+    },
+    "mark_calendar_overlaps": {
+      "line": 20722,
+      "end": 20736
+    },
+    "calendar_grid_caption": {
+      "line": 20739,
+      "end": 20753
+    },
+    "calendar_free_slots": {
+      "line": 20756,
+      "end": 20764
+    },
+    "relief_items": {
+      "line": 20767,
+      "end": 20770
+    },
+    "relief_blocks": {
+      "line": 20773,
+      "end": 20777
+    },
+    "relief_plan": {
+      "line": 20780,
+      "end": 20785
+    },
+    "apply_day_relief": {
+      "line": 20788,
+      "end": 20818
+    },
+    "relief_summary_text": {
+      "line": 20821,
+      "end": 20824
+    },
+    "show_day_relief": {
+      "line": 20827,
+      "end": 21030
+    },
+    "daily_goal": {
+      "line": 21034,
+      "end": 21036
+    },
+    "daily_capacity_minutes": {
+      "line": 21038,
+      "end": 21041
+    },
+    "time_blocks": {
+      "line": 21043,
+      "end": 21074
+    },
+    "block_minutes": {
+      "line": 21079,
+      "end": 21082
+    },
+    "clock_text": {
+      "line": 21085,
+      "end": 21087
+    },
+    "time_plan_section_of": {
+      "line": 21089,
+      "end": 21100
+    },
+    "time_plan_items": {
+      "line": 21102,
+      "end": 21110
+    },
+    "apply_time_plan": {
+      "line": 21112,
+      "end": 21136
+    },
+    "apply_clock_assignments": {
+      "line": 21138,
+      "end": 21163
+    },
+    "choose_time_block": {
+      "line": 21165,
+      "end": 21192
+    },
+    "move_plan_grid_focus": {
+      "line": 21194,
+      "end": 21208
+    },
+    "shift_plan_grid_focus": {
+      "line": 21210,
+      "end": 21221
+    },
+    "clear_plan_grid_focus": {
+      "line": 21223,
+      "end": 21227
+    },
+    "time_plan_drop": {
+      "line": 21229,
+      "end": 21269
+    },
+    "shift_time_plan_selection": {
+      "line": 21271,
+      "end": 21283
+    },
+    "on_time_plan_drag_start": {
+      "line": 21285,
+      "end": 21297
+    },
+    "on_time_plan_drag_motion": {
+      "line": 21299,
+      "end": 21317
+    },
+    "on_time_plan_drag_end": {
+      "line": 21319,
+      "end": 21334
+    },
+    "plan_grid_enabled": {
+      "line": 21347,
+      "end": 21348
+    },
+    "toggle_plan_day_grid": {
+      "line": 21350,
+      "end": 21357
+    },
+    "plan_grid_applicable": {
+      "line": 21359,
+      "end": 21360
+    },
+    "plan_grid_replaces_list": {
+      "line": 21362,
+      "end": 21371
+    },
+    "_restore_plan_list": {
+      "line": 21373,
+      "end": 21381
+    },
+    "sync_plan_day_grid": {
+      "line": 21383,
+      "end": 21417
+    },
+    "build_plan_grid": {
+      "line": 21419,
+      "end": 21444
+    },
+    "plan_grid_y": {
+      "line": 21446,
+      "end": 21447
+    },
+    "draw_plan_grid": {
+      "line": 21449,
+      "end": 21524
+    },
+    "plan_grid_block_at": {
+      "line": 21526,
+      "end": 21530
+    },
+    "select_plan_grid_row": {
+      "line": 21532,
+      "end": 21540
+    },
+    "plan_grid_press": {
+      "line": 21542,
+      "end": 21553
+    },
+    "plan_grid_motion": {
+      "line": 21555,
+      "end": 21566
+    },
+    "plan_grid_release": {
+      "line": 21568,
+      "end": 21579
+    },
+    "plan_grid_minutes_at": {
+      "line": 21581,
+      "end": 21597
+    },
+    "show_plan_grid_drop_preview": {
+      "line": 21599,
+      "end": 21613
+    },
+    "plan_grid_drop": {
+      "line": 21615,
+      "end": 21628
+    },
+    "plan_grid_double": {
+      "line": 21630,
+      "end": 21635
+    },
+    "quick_plan_selection": {
+      "line": 21637,
+      "end": 21650
+    },
+    "skip_repeat_occurrences": {
+      "line": 21652,
+      "end": 21692
+    },
+    "skip_repeat_selected": {
+      "line": 21694,
+      "end": 21696
+    },
+    "skip_missed_repeats_selected": {
+      "line": 21698,
+      "end": 21700
+    },
+    "add_repeat_skip_entries": {
+      "line": 21702,
+      "end": 21713
+    },
+    "quick_plan_items": {
+      "line": 21715,
+      "end": 21721
+    },
+    "planning_available": {
+      "line": 21723,
+      "end": 21729
+    },
+    "planning_available_text": {
+      "line": 21731,
+      "end": 21732
+    },
+    "apply_quick_plan": {
+      "line": 21734,
+      "end": 21763
+    },
+    "choose_quick_plan": {
+      "line": 21765,
+      "end": 21782
+    },
+    "build_quick_plan_menu": {
+      "line": 21784,
+      "end": 21802
+    },
+    "show_quick_plan_menu": {
+      "line": 21804,
+      "end": 21820
+    },
+    "hide_quick_plan_row": {
+      "line": 21822,
+      "end": 21827
+    },
+    "show_quick_plan_row": {
+      "line": 21829,
+      "end": 21858
+    },
+    "leave_quick_plan_row": {
+      "line": 21860,
+      "end": 21870
+    },
+    "row_action_target": {
+      "line": 21872,
+      "end": 21876
+    },
+    "quick_plan_row_action": {
+      "line": 21878,
+      "end": 21884
+    },
+    "row_due_action": {
+      "line": 21886,
+      "end": 21891
+    },
+    "row_overflow_action": {
+      "line": 21893,
+      "end": 21903
+    },
+    "task_field_at_pointer": {
+      "line": 21905,
+      "end": 21961
+    },
+    "planning_summary": {
+      "line": 21963,
+      "end": 21979
+    },
+    "format_planning_summary": {
+      "line": 21981,
+      "end": 22004
+    },
+    "home_summary": {
+      "line": 22006,
+      "end": 22009
+    },
+    "date_group_bounds": {
+      "line": 22023,
+      "end": 22026
+    },
+    "date_group_key": {
+      "line": 22028,
+      "end": 22040
+    },
+    "date_group_target": {
+      "line": 22042,
+      "end": 22059
+    },
+    "entry_color_value": {
+      "line": 22061,
+      "end": 22063
+    },
+    "group_columns": {
+      "line": 22065,
+      "end": 22110
+    },
+    "regular_label_ids": {
+      "line": 22112,
+      "end": 22113
+    },
+    "item_group_keys": {
+      "line": 22115,
+      "end": 22133
+    },
+    "set_group_value": {
+      "line": 22135,
+      "end": 22253
+    },
+    "list_group_field": {
+      "line": 22255,
+      "end": 22264
+    },
+    "set_list_group": {
+      "line": 22266,
+      "end": 22278
+    },
+    "table_nested": {
+      "line": 22280,
+      "end": 22282
+    },
+    "set_table_nested": {
+      "line": 22284,
+      "end": 22296
+    },
+    "see_unless_folded": {
+      "line": 22298,
+      "end": 22313
+    },
+    "is_group_section_row": {
+      "line": 22315,
+      "end": 22316
+    },
+    "group_section_iid": {
+      "line": 22318,
+      "end": 22319
+    },
+    "group_section_key": {
+      "line": 22321,
+      "end": 22322
+    },
+    "group_section_of_row": {
+      "line": 22324,
+      "end": 22333
+    },
+    "grouped_top_entries": {
+      "line": 22335,
+      "end": 22343
+    },
+    "list_view_number_paths": {
+      "line": 22345,
+      "end": 22359
+    },
+    "grouped_top_items": {
+      "line": 22361,
+      "end": 22369
+    },
+    "insert_group_section": {
+      "line": 22371,
+      "end": 22382
+    },
+    "insert_grouped_tree_items": {
+      "line": 22384,
+      "end": 22423
+    },
+    "note_group_section_state": {
+      "line": 22425,
+      "end": 22429
+    },
+    "table_tree_entries": {
+      "line": 22431,
+      "end": 22451
+    },
+    "table_row_tag": {
+      "line": 22453,
+      "end": 22468
+    },
+    "insert_table_rows": {
+      "line": 22470,
+      "end": 22493
+    },
+    "fit_table_columns": {
+      "line": 22495,
+      "end": 22531
+    },
+    "table_heading_of_items": {
+      "line": 22533,
+      "end": 22545
+    },
+    "fill_table_rows": {
+      "line": 22547,
+      "end": 22559
+    },
+    "fill_grouped_table_rows": {
+      "line": 22561,
+      "end": 22594
+    },
+    "group_drop": {
+      "line": 22596,
+      "end": 22612
+    },
+    "group_menu_entries": {
+      "line": 22614,
+      "end": 22618
+    },
+    "detail_pane_enabled": {
+      "line": 22632,
+      "end": 22633
+    },
+    "detail_pane_width": {
+      "line": 22635,
+      "end": 22640
+    },
+    "toggle_detail_pane": {
+      "line": 22642,
+      "end": 22652
+    },
+    "inspector_context": {
+      "line": 22654,
+      "end": 22656
+    },
+    "detail_pane_applicable": {
+      "line": 22658,
+      "end": 22676
+    },
+    "detail_pane_item": {
+      "line": 22678,
+      "end": 22681
+    },
+    "open_task_inspector": {
+      "line": 22683,
+      "end": 22707
+    },
+    "sync_task_inspector_selection": {
+      "line": 22709,
+      "end": 22736
+    },
+    "save_task_inspector": {
+      "line": 22738,
+      "end": 22747
+    },
+    "skip_detail_pane_repeat": {
+      "line": 22749,
+      "end": 22753
+    },
+    "retarget_task_inspector": {
+      "line": 22755,
+      "end": 22768
+    },
+    "overlay_slot_enter": {
+      "line": 22776,
+      "end": 22788
+    },
+    "overlay_slot_leave": {
+      "line": 22790,
+      "end": 22802
+    },
+    "place_overlay_pane": {
+      "line": 22804,
+      "end": 22818
+    },
+    "restore_inspector_content": {
+      "line": 22820,
+      "end": 22829
+    },
+    "layout_task_inspector": {
+      "line": 22831,
+      "end": 22856
+    },
+    "close_task_inspector": {
+      "line": 22858,
+      "end": 22884
+    },
+    "side_view_width": {
+      "line": 22898,
+      "end": 22903
+    },
+    "side_view_entry": {
+      "line": 22905,
+      "end": 22909
+    },
+    "side_view_open": {
+      "line": 22911,
+      "end": 22912
+    },
+    "side_history": {
+      "line": 22914,
+      "end": 22920
+    },
+    "remember_side_history": {
+      "line": 22922,
+      "end": 22937
+    },
+    "side_history_available": {
+      "line": 22939,
+      "end": 22941
+    },
+    "move_side_history": {
+      "line": 22943,
+      "end": 22948
+    },
+    "jump_side_history": {
+      "line": 22950,
+      "end": 22960
+    },
+    "show_side_history": {
+      "line": 22962,
+      "end": 22986
+    },
+    "open_side_view": {
+      "line": 22988,
+      "end": 23027
+    },
+    "choose_side_view": {
+      "line": 23029,
+      "end": 23031
+    },
+    "close_side_view": {
+      "line": 23033,
+      "end": 23053
+    },
+    "open_side_view_target": {
+      "line": 23055,
+      "end": 23064
+    },
+    "open_side_view_item": {
+      "line": 23066,
+      "end": 23073
+    },
+    "toggle_side_view_task": {
+      "line": 23075,
+      "end": 23087
+    },
+    "set_side_view_status": {
+      "line": 23089,
+      "end": 23095
+    },
+    "side_view_has_focus": {
+      "line": 23097,
+      "end": 23100
+    },
+    "side_view_suppressed": {
+      "line": 23102,
+      "end": 23109
+    },
+    "open_side_search": {
+      "line": 23111,
+      "end": 23121
+    },
+    "side_search_escape": {
+      "line": 23123,
+      "end": 23138
+    },
+    "build_side_history_navigation": {
+      "line": 23140,
+      "end": 23155
+    },
+    "build_side_navigation": {
+      "line": 23157,
+      "end": 23201
+    },
+    "update_side_search": {
+      "line": 23203,
+      "end": 23240
+    },
+    "move_side_search": {
+      "line": 23242,
+      "end": 23265
+    },
+    "show_side_sections": {
+      "line": 23267,
+      "end": 23283
+    },
+    "jump_side_section": {
+      "line": 23285,
+      "end": 23300
+    },
+    "build_side_view_shell": {
+      "line": 23302,
+      "end": 23311
+    },
+    "_side_sash_press": {
+      "line": 23313,
+      "end": 23315
+    },
+    "_side_sash_drag": {
+      "line": 23317,
+      "end": 23324
+    },
+    "_side_sash_release": {
+      "line": 23326,
+      "end": 23333
+    },
+    "restore_side_surface": {
+      "line": 23335,
+      "end": 23344
+    },
+    "hide_side_view_pane": {
+      "line": 23346,
+      "end": 23353
+    },
+    "layout_side_view": {
+      "line": 23355,
+      "end": 23383
+    },
+    "sync_side_view": {
+      "line": 23385,
+      "end": 23417
+    },
+    "render_side_view": {
+      "line": 23419,
+      "end": 23524
+    },
+    "_bind_side_view_keys": {
+      "line": 23526,
+      "end": 23537
+    },
+    "_render_side_view_rows": {
+      "line": 23539,
+      "end": 23644
+    },
+    "follow_side_reference": {
+      "line": 23646,
+      "end": 23675
+    },
+    "link_side_reference": {
+      "line": 23677,
+      "end": 23697
+    },
+    "build_side_references_menu": {
+      "line": 23699,
+      "end": 23742
+    },
+    "show_side_references": {
+      "line": 23744,
+      "end": 23750
+    },
+    "_render_side_view_page": {
+      "line": 23752,
+      "end": 23858
+    },
+    "prepare_inspector_switch": {
+      "line": 23860,
+      "end": 23872
+    },
+    "detail_pane_has_focus": {
+      "line": 23874,
+      "end": 23877
+    },
+    "build_detail_pane_shell": {
+      "line": 23879,
+      "end": 23888
+    },
+    "_detail_sash_press": {
+      "line": 23890,
+      "end": 23892
+    },
+    "_detail_sash_drag": {
+      "line": 23894,
+      "end": 23902
+    },
+    "_detail_sash_release": {
+      "line": 23904,
+      "end": 23911
+    },
+    "sync_detail_pane": {
+      "line": 23913,
+      "end": 23956
+    },
+    "render_detail_pane": {
+      "line": 23958,
+      "end": 24357
+    },
+    "iter_descendants": {
+      "line": 24360,
+      "end": 24365
+    },
+    "blend_embedded_editor": {
+      "line": 24367,
+      "end": 24388
+    },
+    "detail_pane_kind_changed": {
+      "line": 24390,
+      "end": 24412
+    },
+    "make_repeat_position_editor": {
+      "line": 24414,
+      "end": 24434
+    },
+    "repeat_position_values": {
+      "line": 24437,
+      "end": 24440
+    },
+    "repeat_preview_text": {
+      "line": 24443,
+      "end": 24457
+    },
+    "make_repeat_options_editor": {
+      "line": 24459,
+      "end": 24487
+    },
+    "repeat_option_values": {
+      "line": 24490,
+      "end": 24492
+    },
+    "read_repeat_rule": {
+      "line": 24494,
+      "end": 24525
+    },
+    "add_relation_targets": {
+      "line": 24527,
+      "end": 24536
+    },
+    "add_detail_pane_relation": {
+      "line": 24538,
+      "end": 24560
+    },
+    "add_detail_pane_attachments": {
+      "line": 24562,
+      "end": 24596
+    },
+    "remove_detail_pane_attachment": {
+      "line": 24598,
+      "end": 24610
+    },
+    "open_detail_pane_attachment": {
+      "line": 24612,
+      "end": 24621
+    },
+    "remove_detail_pane_relation": {
+      "line": 24623,
+      "end": 24632
+    },
+    "save_detail_pane_checklist": {
+      "line": 24634,
+      "end": 24650
+    },
+    "add_detail_pane_step": {
+      "line": 24652,
+      "end": 24670
+    },
+    "remove_detail_pane_step": {
+      "line": 24672,
+      "end": 24683
+    },
+    "detail_pane_values": {
+      "line": 24685,
+      "end": 24763
+    },
+    "item_details_snapshot": {
+      "line": 24765,
+      "end": 24779
+    },
+    "apply_task_edit": {
+      "line": 24781,
+      "end": 24811
+    },
+    "edit_task_field": {
+      "line": 24813,
+      "end": 24947
+    },
+    "reload_task_inspector": {
+      "line": 24949,
+      "end": 24955
+    },
+    "commit_detail_pane": {
+      "line": 24957,
+      "end": 25006
+    },
+    "toggle_detail_pane_done": {
+      "line": 25008,
+      "end": 25028
+    },
+    "toggle_detail_pane_step": {
+      "line": 25030,
+      "end": 25042
+    },
+    "open_full_item_mask": {
+      "line": 25044,
+      "end": 25046
+    },
+    "note_slides": {
+      "line": 25052,
+      "end": 25074
+    },
+    "open_print_html": {
+      "line": 25076,
+      "end": 25090
+    },
+    "build_note_slides_html": {
+      "line": 25092,
+      "end": 25119
+    },
+    "print_note_presentation": {
+      "line": 25121,
+      "end": 25133
+    },
+    "start_note_presentation": {
+      "line": 25135,
+      "end": 25166
+    },
+    "show_note_slide": {
+      "line": 25168,
+      "end": 25179
+    },
+    "note_presentation_step": {
+      "line": 25181,
+      "end": 25185
+    },
+    "end_note_presentation": {
+      "line": 25187,
+      "end": 25195
+    },
+    "pinned_pages": {
+      "line": 25204,
+      "end": 25216
+    },
+    "is_pinned": {
+      "line": 25218,
+      "end": 25220
+    },
+    "set_pinned": {
+      "line": 25222,
+      "end": 25241
+    },
+    "move_pinned": {
+      "line": 25243,
+      "end": 25256
+    },
+    "glyph_metrics_for": {
+      "line": 25283,
+      "end": 25293
+    },
+    "font_pixels": {
+      "line": 25295,
+      "end": 25298
+    },
+    "align_symbol_to_heading": {
+      "line": 25300,
+      "end": 25339
+    },
+    "symbol_row_shift": {
+      "line": 25341,
+      "end": 25355
+    },
+    "sidebar_section_open": {
+      "line": 25359,
+      "end": 25362
+    },
+    "set_sidebar_section_open": {
+      "line": 25364,
+      "end": 25373
+    },
+    "toggle_sidebar_section": {
+      "line": 25375,
+      "end": 25376
+    },
+    "apply_sidebar_sections": {
+      "line": 25378,
+      "end": 25423
+    },
+    "build_sidebar_quick_actions": {
+      "line": 25425,
+      "end": 25457
+    },
+    "sidebar_quick_pair": {
+      "line": 25459,
+      "end": 25462
+    },
+    "on_sidebar_quick_motion": {
+      "line": 25464,
+      "end": 25501
+    },
+    "hide_sidebar_quick_actions": {
+      "line": 25503,
+      "end": 25512
+    },
+    "hide_sidebar_quick_actions_unless_hovered": {
+      "line": 25514,
+      "end": 25524
+    },
+    "folder_quick_add_menu": {
+      "line": 25526,
+      "end": 25567
+    },
+    "show_sidebar_add_menu": {
+      "line": 25569,
+      "end": 25573
+    },
+    "sidebar_quick_add": {
+      "line": 25575,
+      "end": 25581
+    },
+    "sidebar_quick_more": {
+      "line": 25583,
+      "end": 25597
+    },
+    "_popup_at_widget": {
+      "line": 25599,
+      "end": 25606
+    },
+    "render_pinned_sidebar": {
+      "line": 25608,
+      "end": 25681
+    },
+    "toggle_pinned_sidebar": {
+      "line": 25683,
+      "end": 25686
+    },
+    "open_pinned_page": {
+      "line": 25688,
+      "end": 25694
+    },
+    "show_pinned_menu": {
+      "line": 25696,
+      "end": 25711
+    },
+    "show_filter_pin_menu": {
+      "line": 25713,
+      "end": 25731
+    },
+    "pin_home_filter": {
+      "line": 25733,
+      "end": 25747
+    },
+    "toggle_item_done_anywhere": {
+      "line": 25749,
+      "end": 25770
+    },
+    "set_recurring_checklist": {
+      "line": 25775,
+      "end": 25791
+    },
+    "toggle_today_routine": {
+      "line": 25793,
+      "end": 25808
+    },
+    "today_routine_rows": {
+      "line": 25810,
+      "end": 25814
+    },
+    "remember_routine_completion": {
+      "line": 25816,
+      "end": 25823
+    },
+    "checklist_complete": {
+      "line": 25825,
+      "end": 25830
+    },
+    "schedule_checklist_reset": {
+      "line": 25832,
+      "end": 25842
+    },
+    "reset_checklist": {
+      "line": 25844,
+      "end": 25867
+    },
+    "toggle_home_editing": {
+      "line": 25869,
+      "end": 25872
+    },
+    "_home_tile_settings_changed": {
+      "line": 25874,
+      "end": 25876
+    },
+    "move_home_tile": {
+      "line": 25878,
+      "end": 25896
+    },
+    "move_home_tile_to": {
+      "line": 25898,
+      "end": 25902
+    },
+    "set_home_tile_hidden": {
+      "line": 25904,
+      "end": 25909
+    },
+    "set_home_tile_span": {
+      "line": 25911,
+      "end": 25918
+    },
+    "render_home_editor": {
+      "line": 25920,
+      "end": 26027
+    },
+    "home_mode": {
+      "line": 26037,
+      "end": 26039
+    },
+    "_open_home_mode": {
+      "line": 26041,
+      "end": 26051
+    },
+    "day_review_queue": {
+      "line": 26053,
+      "end": 26080
+    },
+    "day_close_queue": {
+      "line": 26087,
+      "end": 26102
+    },
+    "done_today_items": {
+      "line": 26104,
+      "end": 26108
+    },
+    "start_day_close": {
+      "line": 26110,
+      "end": 26113
+    },
+    "day_close_summary": {
+      "line": 26115,
+      "end": 26130
+    },
+    "write_day_close_note": {
+      "line": 26132,
+      "end": 26149
+    },
+    "start_day_review": {
+      "line": 26151,
+      "end": 26154
+    },
+    "next_week_start": {
+      "line": 26156,
+      "end": 26158
+    },
+    "day_review_decide": {
+      "line": 26160,
+      "end": 26193
+    },
+    "render_day_review": {
+      "line": 26195,
+      "end": 26294
+    },
+    "day_proposal": {
+      "line": 26296,
+      "end": 26304
+    },
+    "start_day_proposal": {
+      "line": 26306,
+      "end": 26310
+    },
+    "apply_day_proposal": {
+      "line": 26312,
+      "end": 26334
+    },
+    "open_day_grid": {
+      "line": 26336,
+      "end": 26341
+    },
+    "render_day_proposal": {
+      "line": 26343,
+      "end": 26430
+    },
+    "week_days": {
+      "line": 26432,
+      "end": 26437
+    },
+    "week_review_data": {
+      "line": 26439,
+      "end": 26470
+    },
+    "show_week_review": {
+      "line": 26472,
+      "end": 26474
+    },
+    "render_week_review": {
+      "line": 26476,
+      "end": 26543
+    },
+    "set_home_view": {
+      "line": 26545,
+      "end": 26549
+    },
+    "set_template_view": {
+      "line": 26551,
+      "end": 26552
+    },
+    "apply_startup_view": {
+      "line": 26554,
+      "end": 26579
+    },
+    "set_library_view": {
+      "line": 26581,
+      "end": 26582
+    },
+    "home_greeting": {
+      "line": 26584,
+      "end": 26589
+    },
+    "advance_home_greeting": {
+      "line": 26591,
+      "end": 26598
+    },
+    "home_prompt": {
+      "line": 26600,
+      "end": 26603
+    },
+    "home_template_keys": {
+      "line": 26605,
+      "end": 26619
+    },
+    "schedule_home_day_check": {
+      "line": 26621,
+      "end": 26626
+    },
+    "home_day_tick": {
+      "line": 26628,
+      "end": 26636
+    },
+    "update_home_visibility": {
+      "line": 26638,
+      "end": 26668
+    },
+    "create_home_panel": {
+      "line": 26670,
+      "end": 26687
+    },
+    "_layout_home_canvas": {
+      "line": 26689,
+      "end": 26709
+    },
+    "_sync_home_scrollbar": {
+      "line": 26711,
+      "end": 26723
+    },
+    "_bind_home_wheel": {
+      "line": 26725,
+      "end": 26733
+    },
+    "_bind_canvas_wheel": {
+      "line": 26735,
+      "end": 26736
+    },
+    "home_tile_order": {
+      "line": 26797,
+      "end": 26799
+    },
+    "home_calendar_mode": {
+      "line": 26801,
+      "end": 26804
+    },
+    "home_density": {
+      "line": 26806,
+      "end": 26809
+    },
+    "home_row_limit": {
+      "line": 26811,
+      "end": 26812
+    },
+    "home_calendar_days": {
+      "line": 26814,
+      "end": 26830
+    },
+    "home_next_events": {
+      "line": 26832,
+      "end": 26844
+    },
+    "home_overdue_entries": {
+      "line": 26846,
+      "end": 26853
+    },
+    "home_tile_visible": {
+      "line": 26855,
+      "end": 26862
+    },
+    "home_column_count": {
+      "line": 26864,
+      "end": 26880
+    },
+    "task_urgency_rank": {
+      "line": 26886,
+      "end": 26914
+    },
+    "mascot_state": {
+      "line": 26931,
+      "end": 26946
+    },
+    "mascot_name": {
+      "line": 26948,
+      "end": 26950
+    },
+    "mascot_visible": {
+      "line": 26952,
+      "end": 26954
+    },
+    "mascot_care": {
+      "line": 26956,
+      "end": 26960
+    },
+    "care_for_mascot": {
+      "line": 26962,
+      "end": 26986
+    },
+    "home_primary_actions": {
+      "line": 26988,
+      "end": 26995
+    },
+    "home_more_actions": {
+      "line": 26997,
+      "end": 27014
+    },
+    "show_home_more_menu": {
+      "line": 27016,
+      "end": 27029
+    },
+    "global_board_preview": {
+      "line": 27031,
+      "end": 27076
+    },
+    "home_focus_candidate": {
+      "line": 27078,
+      "end": 27086
+    },
+    "home_week_overview": {
+      "line": 27088,
+      "end": 27090
+    },
+    "home_label_overview": {
+      "line": 27092,
+      "end": 27094
+    },
+    "home_impulse": {
+      "line": 27096,
+      "end": 27097
+    },
+    "show_home_tiles_dialog": {
+      "line": 27099,
+      "end": 27233
+    },
+    "refresh_home": {
+      "line": 27235,
+      "end": 27237
+    },
+    "show_home_gallery_thumbnail": {
+      "line": 27242,
+      "end": 27260
+    },
+    "_load_home_gallery_thumbnail": {
+      "line": 27262,
+      "end": 27301
+    },
+    "_home_gallery_conversion_ready": {
+      "line": 27303,
+      "end": 27312
+    },
+    "open_gallery_image": {
+      "line": 27314,
+      "end": 27323
+    },
+    "_home_dashboard": {
+      "line": 27328,
+      "end": 27342
+    },
+    "_home_dashboard_projections": {
+      "line": 27344,
+      "end": 27352
+    },
+    "home_signature": {
+      "line": 27354,
+      "end": 27379
+    },
+    "home_day": {
+      "line": 27381,
+      "end": 27387
+    },
+    "change_home_day": {
+      "line": 27389,
+      "end": 27398
+    },
+    "choose_home_day": {
+      "line": 27400,
+      "end": 27405
+    },
+    "open_home_day": {
+      "line": 27407,
+      "end": 27409
+    },
+    "choose_home_week_day": {
+      "line": 27411,
+      "end": 27415
+    },
+    "build_home_week_menu": {
+      "line": 27417,
+      "end": 27433
+    },
+    "show_home_week_menu": {
+      "line": 27435,
+      "end": 27441
+    },
+    "home_task_link": {
+      "line": 27443,
+      "end": 27446
+    },
+    "home_today_content": {
+      "line": 27448,
+      "end": 27479
+    },
+    "home_selection_projection": {
+      "line": 27481,
+      "end": 27486
+    },
+    "change_home_selection": {
+      "line": 27488,
+      "end": 27508
+    },
+    "home_selection_matches": {
+      "line": 27510,
+      "end": 27512
+    },
+    "home_batch_targets": {
+      "line": 27514,
+      "end": 27524
+    },
+    "apply_home_batch": {
+      "line": 27526,
+      "end": 27562
+    },
+    "build_home_batch_menu": {
+      "line": 27564,
+      "end": 27609
+    },
+    "choose_home_batch_value": {
+      "line": 27611,
+      "end": 27639
+    },
+    "show_home_batch_menu": {
+      "line": 27641,
+      "end": 27647
+    },
+    "choose_home_selection_plan": {
+      "line": 27649,
+      "end": 27650
+    },
+    "show_home_selection_plan": {
+      "line": 27652,
+      "end": 27664
+    },
+    "home_focus_content": {
+      "line": 27666,
+      "end": 27677
+    },
+    "complete_home_task": {
+      "line": 27679,
+      "end": 27683
+    },
+    "writable_home_task": {
+      "line": 27685,
+      "end": 27693
+    },
+    "start_home_focus": {
+      "line": 27695,
+      "end": 27696
+    },
+    "choose_home_plan": {
+      "line": 27698,
+      "end": 27730
+    },
+    "build_home_task_menu": {
+      "line": 27732,
+      "end": 27746
+    },
+    "show_home_task_menu": {
+      "line": 27748,
+      "end": 27759
+    },
+    "show_home_plan_menu": {
+      "line": 27761,
+      "end": 27762
+    },
+    "_refresh_home": {
+      "line": 27764,
+      "end": 27783
+    },
+    "_render_home": {
+      "line": 27785,
+      "end": 28814
+    },
+    "refresh_template_page": {
+      "line": 28816,
+      "end": 28896
+    },
+    "page_icon_scale": {
+      "line": 28899,
+      "end": 28905
+    },
+    "page_icon_image": {
+      "line": 28907,
+      "end": 28928
+    },
+    "page_icon_dialog": {
+      "line": 28930,
+      "end": 29018
+    },
+    "is_archived_folder": {
+      "line": 29021,
+      "end": 29029
+    },
+    "is_archived_entry": {
+      "line": 29031,
+      "end": 29035
+    },
+    "planning_lists": {
+      "line": 29037,
+      "end": 29044
+    },
+    "archived_entries": {
+      "line": 29046,
+      "end": 29049
+    },
+    "set_archived": {
+      "line": 29051,
+      "end": 29074
+    },
+    "library_entries": {
+      "line": 29076,
+      "end": 29097
+    },
+    "toggle_library_archive": {
+      "line": 29099,
+      "end": 29102
+    },
+    "cycle_library_card_size": {
+      "line": 29104,
+      "end": 29110
+    },
+    "library_card_preview": {
+      "line": 29112,
+      "end": 29139
+    },
+    "refresh_library_page": {
+      "line": 29141,
+      "end": 29403
+    },
+    "show_library_new_menu": {
+      "line": 29405,
+      "end": 29411
+    },
+    "show_library_import_menu": {
+      "line": 29413,
+      "end": 29419
+    },
+    "refresh_template_actions": {
+      "line": 29421,
+      "end": 29429
+    },
+    "refresh_page_actions": {
+      "line": 29431,
+      "end": 29504
+    },
+    "add_tooltip": {
+      "line": 29506,
+      "end": 29593
+    },
+    "_install_tooltip_guard": {
+      "line": 29595,
+      "end": 29607
+    },
+    "toggle_template_editing": {
+      "line": 29609,
+      "end": 29618
+    },
+    "edit_template": {
+      "line": 29620,
+      "end": 29634
+    },
+    "delete_template": {
+      "line": 29636,
+      "end": 29641
+    },
+    "capture_template": {
+      "line": 29643,
+      "end": 29668
+    },
+    "template_from_current_list": {
+      "line": 29670,
+      "end": 29671
+    },
+    "save_list_as_template": {
+      "line": 29673,
+      "end": 29680
+    },
+    "save_folder_as_template": {
+      "line": 29682,
+      "end": 29689
+    },
+    "export_templates_file": {
+      "line": 29691,
+      "end": 29703
+    },
+    "validate_template_payload": {
+      "line": 29705,
+      "end": 29722
+    },
+    "import_templates_file": {
+      "line": 29724,
+      "end": 29750
+    },
+    "template_field_name": {
+      "line": 29765,
+      "end": 29766
+    },
+    "template_fields": {
+      "line": 29769,
+      "end": 29785
+    },
+    "fill_template_text": {
+      "line": 29788,
+      "end": 29790
+    },
+    "fill_template_rich_note": {
+      "line": 29793,
+      "end": 29834
+    },
+    "fill_template_value": {
+      "line": 29837,
+      "end": 29852
+    },
+    "template_auto_value": {
+      "line": 29861,
+      "end": 29878
+    },
+    "template_field_default": {
+      "line": 29880,
+      "end": 29885
+    },
+    "ask_template_fields": {
+      "line": 29887,
+      "end": 29929
+    },
+    "_create_list_from_template": {
+      "line": 29931,
+      "end": 30074
+    },
+    "show_settings_dialog": {
+      "line": 30076,
+      "end": 30715
+    },
+    "save_theme_setting": {
+      "line": 30717,
+      "end": 30718
+    },
+    "update_window_title": {
+      "line": 30720,
+      "end": 30721
+    },
+    "get_folder": {
+      "line": 30723,
+      "end": 30724
+    },
+    "get_folder_lists": {
+      "line": 30726,
+      "end": 30727
+    },
+    "get_display_title": {
+      "line": 30729,
+      "end": 30764
+    },
+    "get_active_page": {
+      "line": 30766,
+      "end": 30772
+    },
+    "require_list_view": {
+      "line": 30774,
+      "end": 30807
+    },
+    "kind_color_key": {
+      "line": 30809,
+      "end": 30812
+    },
+    "ui_font_family": {
+      "line": 30814,
+      "end": 30832
+    },
+    "ui_font_size": {
+      "line": 30834,
+      "end": 30837
+    },
+    "sidebar_section_font": {
+      "line": 30839,
+      "end": 30840
+    },
+    "tree_font": {
+      "line": 30842,
+      "end": 30843
+    },
+    "apply_ui_font": {
+      "line": 30845,
+      "end": 30857
+    },
+    "resolve_ui_symbols": {
+      "line": 30859,
+      "end": 30894
+    },
+    "symbol_font": {
+      "line": 30900,
+      "end": 30907
+    },
+    "available_font_families": {
+      "line": 30909,
+      "end": 30917
+    },
+    "heaviest_font": {
+      "line": 30919,
+      "end": 30958
+    },
+    "header_title_font": {
+      "line": 30960,
+      "end": 30964
+    },
+    "pixel_heading_family": {
+      "line": 30968,
+      "end": 30989
+    },
+    "reapply_heading_fonts": {
+      "line": 30991,
+      "end": 31002
+    },
+    "pixel_heading_font": {
+      "line": 31004,
+      "end": 31008
+    },
+    "group_row_font": {
+      "line": 31010,
+      "end": 31012
+    },
+    "heading_row_font": {
+      "line": 31014,
+      "end": 31016
+    },
+    "prepare_table": {
+      "line": 31029,
+      "end": 31051
+    },
+    "bind_hover_highlight": {
+      "line": 31053,
+      "end": 31061
+    },
+    "hover_row_ids": {
+      "line": 31063,
+      "end": 31086
+    },
+    "on_tree_hover": {
+      "line": 31088,
+      "end": 31097
+    },
+    "set_hover_rows": {
+      "line": 31099,
+      "end": 31114
+    },
+    "_tree_tag_add": {
+      "line": 31117,
+      "end": 31121
+    },
+    "_tree_tag_remove": {
+      "line": 31124,
+      "end": 31128
+    },
+    "register_theme_widget": {
+      "line": 31130,
+      "end": 31132
+    },
+    "bind_optional": {
+      "line": 31135,
+      "end": 31141
+    },
+    "make_rounded_container": {
+      "line": 31143,
+      "end": 31172
+    },
+    "button_role": {
+      "line": 31201,
+      "end": 31212
+    },
+    "button_color_key": {
+      "line": 31214,
+      "end": 31235
+    },
+    "make_button": {
+      "line": 31237,
+      "end": 31269
+    },
+    "_center_dialog": {
+      "line": 31274,
+      "end": 31317
+    },
+    "_make_field": {
+      "line": 31319,
+      "end": 31330
+    },
+    "_make_calendar_surface": {
+      "line": 31332,
+      "end": 31338
+    },
+    "_make_field_label": {
+      "line": 31340,
+      "end": 31356
+    },
+    "surface_key": {
+      "line": 31358,
+      "end": 31374
+    },
+    "_make_dialog_button": {
+      "line": 31376,
+      "end": 31392
+    },
+    "dialog_color": {
+      "line": 31394,
+      "end": 31409
+    },
+    "modal_over": {
+      "line": 31412,
+      "end": 31451
+    },
+    "ensure_dialog_min_width": {
+      "line": 31453,
+      "end": 31469
+    },
+    "run_modal": {
+      "line": 31471,
+      "end": 31507
+    },
+    "bring_dialog_to_front": {
+      "line": 31509,
+      "end": 31521
+    },
+    "create_label_interactively": {
+      "line": 31523,
+      "end": 31563
+    },
+    "themed_input_dialog": {
+      "line": 31565,
+      "end": 31651
+    },
+    "_make_attachment_editor": {
+      "line": 31653,
+      "end": 31744
+    },
+    "_make_checklist_editor": {
+      "line": 31746,
+      "end": 31863
+    },
+    "themed_page_details_dialog": {
+      "line": 31865,
+      "end": 31981
+    },
+    "format_file_size": {
+      "line": 31984,
+      "end": 31996
+    },
+    "themed_choice_dialog": {
+      "line": 31998,
+      "end": 32084
+    },
+    "open_label_manager": {
+      "line": 32089,
+      "end": 32280
+    },
+    "choose_label_color": {
+      "line": 32282,
+      "end": 32297
+    },
+    "remember_recent_target": {
+      "line": 32299,
+      "end": 32305
+    },
+    "toggle_label_on_selected_items": {
+      "line": 32307,
+      "end": 32314
+    },
+    "_toggle_label_on_selected_items": {
+      "line": 32316,
+      "end": 32350
+    },
+    "clear_labels_on_selected_items": {
+      "line": 32352,
+      "end": 32371
+    },
+    "open_external_path": {
+      "line": 32373,
+      "end": 32391
+    },
+    "_make_option_menu": {
+      "line": 32393,
+      "end": 32450
+    },
+    "importance_choice_text": {
+      "line": 32452,
+      "end": 32453
+    },
+    "importance_color_key": {
+      "line": 32456,
+      "end": 32457
+    },
+    "make_reminder_editor": {
+      "line": 32459,
+      "end": 32548
+    },
+    "_make_planning_editor": {
+      "line": 32551,
+      "end": 32606
+    },
+    "set_planning_selected": {
+      "line": 32608,
+      "end": 32656
+    },
+    "apply_planning_selected": {
+      "line": 32658,
+      "end": 32670
+    },
+    "item_form_dialog": {
+      "line": 32672,
+      "end": 33432
+    },
+    "_store_pending_attachments": {
+      "line": 33435,
+      "end": 33474
+    },
+    "new_item_dialog": {
+      "line": 33476,
+      "end": 33504
+    },
+    "themed_item_details_dialog": {
+      "line": 33507,
+      "end": 33513
+    },
+    "apply_item_details": {
+      "line": 33515,
+      "end": 33577
+    },
+    "build_item_from_dialog": {
+      "line": 33580,
+      "end": 33610
+    },
+    "_attach_field_scrollbar": {
+      "line": 33613,
+      "end": 33645
+    },
+    "_make_scroll_area": {
+      "line": 33647,
+      "end": 33689
+    },
+    "calendar_week_start": {
+      "line": 33703,
+      "end": 33707
+    },
+    "calendar_month_grid": {
+      "line": 33709,
+      "end": 33721
+    },
+    "shift_month": {
+      "line": 33724,
+      "end": 33726
+    },
+    "collect_due_tasks_by_date": {
+      "line": 33728,
+      "end": 33757
+    },
+    "object_graph": {
+      "line": 33759,
+      "end": 33764
+    },
+    "current_object_key": {
+      "line": 33766,
+      "end": 33776
+    },
+    "object_reference_choices": {
+      "line": 33778,
+      "end": 33793
+    },
+    "open_object_reference": {
+      "line": 33795,
+      "end": 33816
+    },
+    "change_object_reference": {
+      "line": 33818,
+      "end": 33868
+    },
+    "build_object_reference_menu": {
+      "line": 33870,
+      "end": 33909
+    },
+    "fill_mentions_menu": {
+      "line": 33911,
+      "end": 33926
+    },
+    "open_mention": {
+      "line": 33928,
+      "end": 33949
+    },
+    "link_unlinked_mention": {
+      "line": 33951,
+      "end": 33990
+    },
+    "show_object_references": {
+      "line": 33992,
+      "end": 33996
+    },
+    "open_calendar_view": {
+      "line": 33998,
+      "end": 34003
+    },
+    "calendar_change_view": {
+      "line": 34005,
+      "end": 34016
+    },
+    "calendar_choose_day": {
+      "line": 34018,
+      "end": 34029
+    },
+    "calendar_footer_actions": {
+      "line": 34031,
+      "end": 34037
+    },
+    "calendar_plan_selection": {
+      "line": 34039,
+      "end": 34056
+    },
+    "calendar_stop_drag_scroll": {
+      "line": 34058,
+      "end": 34066
+    },
+    "calendar_drag_start": {
+      "line": 34068,
+      "end": 34072
+    },
+    "calendar_drag_motion": {
+      "line": 34074,
+      "end": 34105
+    },
+    "calendar_drag_end": {
+      "line": 34107,
+      "end": 34116
+    },
+    "calendar_free_slot": {
+      "line": 34118,
+      "end": 34170
+    },
+    "calendar_open_week_review": {
+      "line": 34172,
+      "end": 34175
+    },
+    "calendar_from_week_review": {
+      "line": 34177,
+      "end": 34180
+    },
+    "render_calendar": {
+      "line": 34182,
+      "end": 34301
+    },
+    "calendar_show_day": {
+      "line": 34304,
+      "end": 34311
+    },
+    "calendar_add_task": {
+      "line": 34313,
+      "end": 34345
+    },
+    "calendar_day_menu": {
+      "line": 34347,
+      "end": 34356
+    },
+    "calendar_pool_press": {
+      "line": 34358,
+      "end": 34363
+    },
+    "add_task_with_due": {
+      "line": 34364,
+      "end": 34410
+    },
+    "calendar_target_list": {
+      "line": 34412,
+      "end": 34425
+    },
+    "open_task_in_source_list": {
+      "line": 34427,
+      "end": 34436
+    },
+    "_list_timestamp": {
+      "line": 34442,
+      "end": 34451
+    },
+    "_german_note_date": {
+      "line": 34454,
+      "end": 34467
+    },
+    "journal_note_document": {
+      "line": 34470,
+      "end": 34487
+    },
+    "normalize_journal": {
+      "line": 34490,
+      "end": 34515
+    },
+    "clip_container_title": {
+      "line": 34524,
+      "end": 34528
+    },
+    "_clip_and_note_title": {
+      "line": 34530,
+      "end": 34534
+    },
+    "limit_title_entry": {
+      "line": 34536,
+      "end": 34576
+    },
+    "new_list_object": {
+      "line": 34578,
+      "end": 34667
+    },
+    "normalize_page_icon": {
+      "line": 34670,
+      "end": 34684
+    },
+    "normalize_list_kind": {
+      "line": 34687,
+      "end": 34689
+    },
+    "check_list_kind": {
+      "line": 34692,
+      "end": 34703
+    },
+    "list_kind_label": {
+      "line": 34706,
+      "end": 34708
+    },
+    "is_drawing_list": {
+      "line": 34711,
+      "end": 34712
+    },
+    "is_gallery_list": {
+      "line": 34715,
+      "end": 34716
+    },
+    "is_surface_list": {
+      "line": 34719,
+      "end": 34721
+    },
+    "drawing_summary": {
+      "line": 34724,
+      "end": 34734
+    },
+    "list_accepts_items": {
+      "line": 34737,
+      "end": 34742
+    },
+    "normalize_drawing_document": {
+      "line": 34745,
+      "end": 34753
+    },
+    "normalize_animation_fields": {
+      "line": 34756,
+      "end": 34764
+    },
+    "normalize_drawing_reference": {
+      "line": 34767,
+      "end": 34795
+    },
+    "new_folder_object": {
+      "line": 34797,
+      "end": 34819
+    },
+    "folder_path_titles": {
+      "line": 34822,
+      "end": 34832
+    },
+    "list_path_title": {
+      "line": 34834,
+      "end": 34847
+    },
+    "get_child_folders": {
+      "line": 34849,
+      "end": 34855
+    },
+    "folder_parent_id": {
+      "line": 34857,
+      "end": 34859
+    },
+    "folder_ancestor_ids": {
+      "line": 34861,
+      "end": 34870
+    },
+    "folder_depth": {
+      "line": 34872,
+      "end": 34873
+    },
+    "folder_is_descendant": {
+      "line": 34875,
+      "end": 34879
+    },
+    "iter_folder_subtree": {
+      "line": 34881,
+      "end": 34896
+    },
+    "folder_subtree_height": {
+      "line": 34898,
+      "end": 34903
+    },
+    "get_folder_lists_recursive": {
+      "line": 34905,
+      "end": 34908
+    },
+    "can_move_folder_into": {
+      "line": 34910,
+      "end": 34928
+    },
+    "normalize_folder_parents": {
+      "line": 34930,
+      "end": 34962
+    },
+    "new_label_object": {
+      "line": 34967,
+      "end": 34976
+    },
+    "system_label_role": {
+      "line": 34979,
+      "end": 34984
+    },
+    "is_system_label": {
+      "line": 34987,
+      "end": 34988
+    },
+    "get_system_label": {
+      "line": 34990,
+      "end": 34991
+    },
+    "ensure_system_labels": {
+      "line": 34993,
+      "end": 35029
+    },
+    "sync_all_item_kind_labels": {
+      "line": 35031,
+      "end": 35047
+    },
+    "resolve_label_color": {
+      "line": 35050,
+      "end": 35054
+    },
+    "get_label": {
+      "line": 35056,
+      "end": 35059
+    },
+    "get_label_by_name": {
+      "line": 35061,
+      "end": 35068
+    },
+    "label_color_key": {
+      "line": 35070,
+      "end": 35071
+    },
+    "label_color": {
+      "line": 35073,
+      "end": 35075
+    },
+    "label_chip_colors": {
+      "line": 35077,
+      "end": 35093
+    },
+    "monogram_colors": {
+      "line": 35095,
+      "end": 35107
+    },
+    "pack_label_chips": {
+      "line": 35109,
+      "end": 35160
+    },
+    "make_label_chip": {
+      "line": 35162,
+      "end": 35173
+    },
+    "item_labels": {
+      "line": 35175,
+      "end": 35185
+    },
+    "column_labels": {
+      "line": 35187,
+      "end": 35199
+    },
+    "shorten_label_name": {
+      "line": 35201,
+      "end": 35211
+    },
+    "format_item_labels": {
+      "line": 35213,
+      "end": 35239
+    },
+    "format_item_label_names": {
+      "line": 35241,
+      "end": 35243
+    },
+    "normalize_labels_data": {
+      "line": 35245,
+      "end": 35276
+    },
+    "normalize_item_labels": {
+      "line": 35278,
+      "end": 35293
+    },
+    "prune_unknown_item_labels": {
+      "line": 35295,
+      "end": 35318
+    },
+    "iter_live_and_trashed": {
+      "line": 35320,
+      "end": 35332
+    },
+    "iter_all_list_objects": {
+      "line": 35334,
+      "end": 35336
+    },
+    "iter_all_folder_objects": {
+      "line": 35338,
+      "end": 35340
+    },
+    "iter_label_holders": {
+      "line": 35342,
+      "end": 35349
+    },
+    "count_label_usage": {
+      "line": 35351,
+      "end": 35358
+    },
+    "is_inbox_list": {
+      "line": 35360,
+      "end": 35365
+    },
+    "ensure_inbox_list": {
+      "line": 35367,
+      "end": 35389
+    },
+    "current_list": {
+      "line": 35391,
+      "end": 35399
+    },
+    "sync_current_list_reference": {
+      "line": 35401,
+      "end": 35407
+    },
+    "set_active_list": {
+      "line": 35409,
+      "end": 35411
+    },
+    "_set_active_list": {
+      "line": 35413,
+      "end": 35437
+    },
+    "set_table_view": {
+      "line": 35439,
+      "end": 35460
+    },
+    "open_board_view": {
+      "line": 35462,
+      "end": 35466
+    },
+    "open_list_view": {
+      "line": 35468,
+      "end": 35477
+    },
+    "toggle_table_view": {
+      "line": 35479,
+      "end": 35481
+    },
+    "sync_view_switch_buttons": {
+      "line": 35483,
+      "end": 35497
+    },
+    "list_detail_mode": {
+      "line": 35499,
+      "end": 35503
+    },
+    "set_list_detail_mode": {
+      "line": 35505,
+      "end": 35517
+    },
+    "detail_mode_name": {
+      "line": 35519,
+      "end": 35522
+    },
+    "show_option_panel": {
+      "line": 35524,
+      "end": 35610
+    },
+    "show_detail_mode_menu": {
+      "line": 35612,
+      "end": 35618
+    },
+    "sync_detail_button": {
+      "line": 35620,
+      "end": 35627
+    },
+    "is_saved_table_view": {
+      "line": 35629,
+      "end": 35631
+    },
+    "table_columns_for_list": {
+      "line": 35633,
+      "end": 35644
+    },
+    "table_widths_for_list": {
+      "line": 35646,
+      "end": 35652
+    },
+    "note_table_separator_press": {
+      "line": 35654,
+      "end": 35667
+    },
+    "remember_table_column_widths": {
+      "line": 35669,
+      "end": 35700
+    },
+    "reset_table_columns": {
+      "line": 35702,
+      "end": 35714
+    },
+    "table_sort_for_list": {
+      "line": 35716,
+      "end": 35722
+    },
+    "sort_table_by": {
+      "line": 35724,
+      "end": 35745
+    },
+    "table_sort_value": {
+      "line": 35747,
+      "end": 35777
+    },
+    "table_entries": {
+      "line": 35779,
+      "end": 35800
+    },
+    "table_column_values": {
+      "line": 35802,
+      "end": 35825
+    },
+    "dialog_label": {
+      "line": 35829,
+      "end": 35859
+    },
+    "show_table_columns_dialog": {
+      "line": 35861,
+      "end": 35926
+    },
+    "finish_page_switch": {
+      "line": 35928,
+      "end": 35961
+    },
+    "set_active_folder": {
+      "line": 35963,
+      "end": 35965
+    },
+    "_set_active_folder": {
+      "line": 35967,
+      "end": 35978
+    },
+    "today_plan_ids": {
+      "line": 35980,
+      "end": 35987
+    },
+    "today_plan_entries": {
+      "line": 35989,
+      "end": 35991
+    },
+    "count_today_plan": {
+      "line": 35993,
+      "end": 35994
+    },
+    "set_today_view": {
+      "line": 35996,
+      "end": 35998
+    },
+    "plan_inbox_items": {
+      "line": 36000,
+      "end": 36024
+    },
+    "today_view_pool": {
+      "line": 36026,
+      "end": 36036
+    },
+    "_collect_today_view_pool": {
+      "line": 36038,
+      "end": 36055
+    },
+    "plan_day_sections": {
+      "line": 36057,
+      "end": 36071
+    },
+    "update_today_plan": {
+      "line": 36073,
+      "end": 36104
+    },
+    "clear_today_plan": {
+      "line": 36106,
+      "end": 36117
+    },
+    "migrate_today_plan_setting": {
+      "line": 36119,
+      "end": 36142
+    },
+    "plan_day": {
+      "line": 36144,
+      "end": 36147
+    },
+    "plan_day_entries": {
+      "line": 36149,
+      "end": 36162
+    },
+    "_collect_plan_day_entries": {
+      "line": 36164,
+      "end": 36185
+    },
+    "count_plan_day": {
+      "line": 36187,
+      "end": 36188
+    },
+    "plan_day_items": {
+      "line": 36190,
+      "end": 36192
+    },
+    "format_plan_day": {
+      "line": 36194,
+      "end": 36204
+    },
+    "plan_day_title": {
+      "line": 36206,
+      "end": 36212
+    },
+    "count_today_view": {
+      "line": 36214,
+      "end": 36221
+    },
+    "show_plan_day_mode_menu": {
+      "line": 36223,
+      "end": 36239
+    },
+    "set_plan_day_view": {
+      "line": 36241,
+      "end": 36246
+    },
+    "shift_plan_day": {
+      "line": 36248,
+      "end": 36263
+    },
+    "plan_day_backward": {
+      "line": 36265,
+      "end": 36266
+    },
+    "plan_day_forward": {
+      "line": 36268,
+      "end": 36269
+    },
+    "set_in_progress_view": {
+      "line": 36271,
+      "end": 36273
+    },
+    "set_overdue_view": {
+      "line": 36275,
+      "end": 36277
+    },
+    "open_global_board": {
+      "line": 36279,
+      "end": 36290
+    },
+    "open_inbox_list": {
+      "line": 36292,
+      "end": 36304
+    },
+    "set_labels_view": {
+      "line": 36306,
+      "end": 36308
+    },
+    "count_labelled_items": {
+      "line": 36310,
+      "end": 36317
+    },
+    "render_pass": {
+      "line": 36344,
+      "end": 36353
+    },
+    "render_cached": {
+      "line": 36355,
+      "end": 36362
+    },
+    "clear_render_cache": {
+      "line": 36364,
+      "end": 36374
+    },
+    "count_due_tasks": {
+      "line": 36376,
+      "end": 36378
+    },
+    "set_trash_view": {
+      "line": 36380,
+      "end": 36382
+    },
+    "_activate_system_view": {
+      "line": 36384,
+      "end": 36386
+    },
+    "__activate_system_view": {
+      "line": 36388,
+      "end": 36399
+    },
+    "create_list_sidebar": {
+      "line": 36401,
+      "end": 36585
+    },
+    "_capture_sidebar_folder_open_states": {
+      "line": 36587,
+      "end": 36605
+    },
+    "sidebar_trees": {
+      "line": 36607,
+      "end": 36610
+    },
+    "reveal_sidebar_row": {
+      "line": 36612,
+      "end": 36634
+    },
+    "ellipsize_sidebar_title": {
+      "line": 36637,
+      "end": 36642
+    },
+    "format_sidebar_preview": {
+      "line": 36645,
+      "end": 36647
+    },
+    "cached_font": {
+      "line": 36649,
+      "end": 36662
+    },
+    "measurement_font_key": {
+      "line": 36664,
+      "end": 36670
+    },
+    "measurement_font": {
+      "line": 36672,
+      "end": 36682
+    },
+    "measurement_linespace": {
+      "line": 36684,
+      "end": 36693
+    },
+    "sidebar_row_font": {
+      "line": 36695,
+      "end": 36697
+    },
+    "sidebar_available_text_width": {
+      "line": 36699,
+      "end": 36715
+    },
+    "system_row_depth": {
+      "line": 36727,
+      "end": 36738
+    },
+    "sidebar_row_text": {
+      "line": 36740,
+      "end": 36772
+    },
+    "folder_task_count": {
+      "line": 36774,
+      "end": 36779
+    },
+    "sync_sidebar_count_columns": {
+      "line": 36781,
+      "end": 36796
+    },
+    "sidebar_row_icon": {
+      "line": 36798,
+      "end": 36817
+    },
+    "sidebar_display_title": {
+      "line": 36819,
+      "end": 36829
+    },
+    "refresh_sidebar_row_texts": {
+      "line": 36831,
+      "end": 36839
+    },
+    "_refresh_sidebar_row_texts": {
+      "line": 36841,
+      "end": 36907
+    },
+    "update_sidebar_list": {
+      "line": 36909,
+      "end": 36918
+    },
+    "_update_sidebar_list": {
+      "line": 36920,
+      "end": 37144
+    },
+    "create_pages_sidebar": {
+      "line": 37150,
+      "end": 37162
+    },
+    "create_notes_sidebar": {
+      "line": 37164,
+      "end": 37174
+    },
+    "create_drawings_sidebar": {
+      "line": 37176,
+      "end": 37180
+    },
+    "sidebar_policy": {
+      "line": 37182,
+      "end": 37185
+    },
+    "sidebar_section_for": {
+      "line": 37187,
+      "end": 37188
+    },
+    "sidebar_section_for_tree": {
+      "line": 37190,
+      "end": 37192
+    },
+    "locate_sidebar_root": {
+      "line": 37194,
+      "end": 37197
+    },
+    "sidebar_accepts": {
+      "line": 37199,
+      "end": 37206
+    },
+    "sidebar_section_visible": {
+      "line": 37208,
+      "end": 37209
+    },
+    "apply_sidebar_visibility": {
+      "line": 37211,
+      "end": 37226
+    },
+    "show_drawings_add_menu": {
+      "line": 37228,
+      "end": 37234
+    },
+    "set_drawings_view": {
+      "line": 37236,
+      "end": 37238
+    },
+    "render_drawings_page": {
+      "line": 37240,
+      "end": 37254
+    },
+    "build_sidebar_section": {
+      "line": 37256,
+      "end": 37326
+    },
+    "is_pages_sidebar_entry": {
+      "line": 37328,
+      "end": 37330
+    },
+    "is_pages_sidebar_folder": {
+      "line": 37332,
+      "end": 37335
+    },
+    "is_notes_sidebar_entry": {
+      "line": 37337,
+      "end": 37340
+    },
+    "is_notes_sidebar_folder": {
+      "line": 37342,
+      "end": 37345
+    },
+    "sidebar_tree_for_entry": {
+      "line": 37347,
+      "end": 37350
+    },
+    "sidebar_tree_for_folder": {
+      "line": 37352,
+      "end": 37355
+    },
+    "sidebar_section_trees": {
+      "line": 37359,
+      "end": 37365
+    },
+    "visible_tree_rows": {
+      "line": 37368,
+      "end": 37376
+    },
+    "sidebar_tree_row_budget": {
+      "line": 37378,
+      "end": 37398
+    },
+    "sync_pages_sidebar_height": {
+      "line": 37400,
+      "end": 37461
+    },
+    "repaint_sidebar": {
+      "line": 37463,
+      "end": 37477
+    },
+    "schedule_sidebar_heights": {
+      "line": 37479,
+      "end": 37494
+    },
+    "update_section_heading": {
+      "line": 37496,
+      "end": 37501
+    },
+    "update_pages_heading": {
+      "line": 37503,
+      "end": 37504
+    },
+    "update_drawings_heading": {
+      "line": 37506,
+      "end": 37507
+    },
+    "update_notes_heading": {
+      "line": 37509,
+      "end": 37510
+    },
+    "_paint_section_heading": {
+      "line": 37512,
+      "end": 37522
+    },
+    "show_pages_add_menu": {
+      "line": 37524,
+      "end": 37539
+    },
+    "page_template_menu": {
+      "line": 37541,
+      "end": 37558
+    },
+    "active_journal_folder_id": {
+      "line": 37561,
+      "end": 37569
+    },
+    "note_templates": {
+      "line": 37571,
+      "end": 37573
+    },
+    "show_notes_add_menu": {
+      "line": 37575,
+      "end": 37599
+    },
+    "create_new_note": {
+      "line": 37601,
+      "end": 37626
+    },
+    "note_entries": {
+      "line": 37628,
+      "end": 37631
+    },
+    "notebook_folders": {
+      "line": 37633,
+      "end": 37637
+    },
+    "set_notes_view": {
+      "line": 37639,
+      "end": 37641
+    },
+    "render_notes_page": {
+      "line": 37645,
+      "end": 37688
+    },
+    "page_templates": {
+      "line": 37705,
+      "end": 37707
+    },
+    "templates_of_list_kind": {
+      "line": 37709,
+      "end": 37719
+    },
+    "create_page_from_template": {
+      "line": 37721,
+      "end": 37739
+    },
+    "export_glide_pages": {
+      "line": 37747,
+      "end": 37777
+    },
+    "read_glide_page_file": {
+      "line": 37779,
+      "end": 37792
+    },
+    "import_glide_pages": {
+      "line": 37794,
+      "end": 37814
+    },
+    "on_pages_select": {
+      "line": 37816,
+      "end": 37818
+    },
+    "on_section_select": {
+      "line": 37820,
+      "end": 37839
+    },
+    "update_sidebar_heading": {
+      "line": 37841,
+      "end": 37850
+    },
+    "_insert_sidebar_folder_rows": {
+      "line": 37852,
+      "end": 37896
+    },
+    "_insert_sidebar_list_row": {
+      "line": 37898,
+      "end": 37924
+    },
+    "get_selected_sidebar_row": {
+      "line": 37926,
+      "end": 37928
+    },
+    "get_selected_sidebar_rows": {
+      "line": 37930,
+      "end": 37960
+    },
+    "get_selected_sidebar_list_ids": {
+      "line": 37962,
+      "end": 37972
+    },
+    "select_all_sidebar_lists": {
+      "line": 37974,
+      "end": 37983
+    },
+    "get_sidebar_iid_for_row": {
+      "line": 37999,
+      "end": 38006
+    },
+    "get_sidebar_tree_for_iid": {
+      "line": 38008,
+      "end": 38018
+    },
+    "on_system_select": {
+      "line": 38020,
+      "end": 38050
+    },
+    "on_sidebar_select": {
+      "line": 38052,
+      "end": 38081
+    },
+    "edit_selected_sidebar_title": {
+      "line": 38083,
+      "end": 38092
+    },
+    "sidebar_rename_row": {
+      "line": 38097,
+      "end": 38111
+    },
+    "sidebar_row_title": {
+      "line": 38113,
+      "end": 38119
+    },
+    "find_sidebar_iid": {
+      "line": 38121,
+      "end": 38126
+    },
+    "cancel_item_rename": {
+      "line": 38128,
+      "end": 38136
+    },
+    "begin_item_rename": {
+      "line": 38138,
+      "end": 38166
+    },
+    "begin_sidebar_rename": {
+      "line": 38168,
+      "end": 38224
+    },
+    "finish_sidebar_rename": {
+      "line": 38226,
+      "end": 38245
+    },
+    "cancel_sidebar_rename": {
+      "line": 38247,
+      "end": 38251
+    },
+    "apply_sidebar_rename": {
+      "line": 38253,
+      "end": 38277
+    },
+    "_cancel_sidebar_rename_timer": {
+      "line": 38279,
+      "end": 38287
+    },
+    "on_sidebar_release_for_rename": {
+      "line": 38289,
+      "end": 38320
+    },
+    "_add_color_menu": {
+      "line": 38322,
+      "end": 38336
+    },
+    "_add_page_label_menu": {
+      "line": 38338,
+      "end": 38365
+    },
+    "find_label_holder": {
+      "line": 38367,
+      "end": 38369
+    },
+    "toggle_page_label": {
+      "line": 38371,
+      "end": 38396
+    },
+    "clear_page_labels": {
+      "line": 38398,
+      "end": 38407
+    },
+    "build_sidebar_context_menu": {
+      "line": 38409,
+      "end": 38427
+    },
+    "build_sidebar_multi_menu": {
+      "line": 38429,
+      "end": 38505
+    },
+    "build_list_menu": {
+      "line": 38507,
+      "end": 38636
+    },
+    "build_folder_menu": {
+      "line": 38638,
+      "end": 38698
+    },
+    "_add_folder_move_menu": {
+      "line": 38700,
+      "end": 38731
+    },
+    "build_smart_view_menu": {
+      "line": 38733,
+      "end": 38787
+    },
+    "build_folder_overview_menu": {
+      "line": 38789,
+      "end": 38830
+    },
+    "bind_context_menu_modifier": {
+      "line": 38835,
+      "end": 38846
+    },
+    "selection_modifier_name": {
+      "line": 38849,
+      "end": 38851
+    },
+    "selection_modifier_pressed": {
+      "line": 38854,
+      "end": 38861
+    },
+    "is_sidebar_context_selection": {
+      "line": 38863,
+      "end": 38871
+    },
+    "clear_sidebar_context_selection": {
+      "line": 38873,
+      "end": 38874
+    },
+    "show_sidebar_context_menu": {
+      "line": 38876,
+      "end": 38918
+    },
+    "_destroy_sidebar_context_menu": {
+      "line": 38920,
+      "end": 38928
+    },
+    "set_list_color": {
+      "line": 38930,
+      "end": 38932
+    },
+    "set_folder_color": {
+      "line": 38934,
+      "end": 38936
+    },
+    "_apply_entry_color": {
+      "line": 38938,
+      "end": 38954
+    },
+    "_apply_page_details": {
+      "line": 38956,
+      "end": 38980
+    },
+    "edit_list_details": {
+      "line": 38982,
+      "end": 38991
+    },
+    "edit_folder_details": {
+      "line": 38993,
+      "end": 39000
+    },
+    "sidebar_template_allowed": {
+      "line": 39002,
+      "end": 39004
+    },
+    "run_sidebar_creation": {
+      "line": 39006,
+      "end": 39012
+    },
+    "create_template_in_section": {
+      "line": 39014,
+      "end": 39028
+    },
+    "create_in_sidebar_section": {
+      "line": 39030,
+      "end": 39037
+    },
+    "create_new_drawing": {
+      "line": 39039,
+      "end": 39076
+    },
+    "create_list_in_folder": {
+      "line": 39078,
+      "end": 39087
+    },
+    "create_journal_entry": {
+      "line": 39089,
+      "end": 39116
+    },
+    "move_list_to_folder_dialog": {
+      "line": 39118,
+      "end": 39141
+    },
+    "detach_list_from_folder": {
+      "line": 39143,
+      "end": 39151
+    },
+    "duplicate_list": {
+      "line": 39153,
+      "end": 39204
+    },
+    "export_list_as": {
+      "line": 39206,
+      "end": 39236
+    },
+    "export_folder_as": {
+      "line": 39238,
+      "end": 39285
+    },
+    "partial_backup_payload": {
+      "line": 39287,
+      "end": 39312
+    },
+    "export_partial_backup": {
+      "line": 39314,
+      "end": 39335
+    },
+    "import_partial_backup": {
+      "line": 39337,
+      "end": 39338
+    },
+    "prepare_additive_import": {
+      "line": 39340,
+      "end": 39387
+    },
+    "remove_done_items": {
+      "line": 39389,
+      "end": 39447
+    },
+    "clear_list_by_id": {
+      "line": 39449,
+      "end": 39468
+    },
+    "delete_list_by_id": {
+      "line": 39470,
+      "end": 39493
+    },
+    "new_trash_entry": {
+      "line": 39498,
+      "end": 39524
+    },
+    "get_trash_entry": {
+      "line": 39526,
+      "end": 39527
+    },
+    "trash_entry_payload": {
+      "line": 39529,
+      "end": 39537
+    },
+    "trash_entry_title": {
+      "line": 39539,
+      "end": 39546
+    },
+    "push_trash_entry": {
+      "line": 39548,
+      "end": 39553
+    },
+    "drop_dangling_references": {
+      "line": 39555,
+      "end": 39563
+    },
+    "_move_lists_to_trash": {
+      "line": 39565,
+      "end": 39592
+    },
+    "trash_folder": {
+      "line": 39594,
+      "end": 39623
+    },
+    "_move_folder_to_trash": {
+      "line": 39625,
+      "end": 39652
+    },
+    "trash_selected_sidebar_entries": {
+      "line": 39654,
+      "end": 39674
+    },
+    "restore_item_from_trash": {
+      "line": 39676,
+      "end": 39717
+    },
+    "restore_trash_entry": {
+      "line": 39719,
+      "end": 39817
+    },
+    "collect_existing_item_ids": {
+      "line": 39819,
+      "end": 39827
+    },
+    "restore_selected_trash_entries": {
+      "line": 39829,
+      "end": 39872
+    },
+    "purge_selected_trash_entries": {
+      "line": 39874,
+      "end": 39890
+    },
+    "empty_trash": {
+      "line": 39892,
+      "end": 39911
+    },
+    "trash_id_from_iid": {
+      "line": 39914,
+      "end": 39918
+    },
+    "get_selected_trash_ids": {
+      "line": 39920,
+      "end": 39928
+    },
+    "set_folder_open": {
+      "line": 39930,
+      "end": 39943
+    },
+    "assignable_labels_for_page": {
+      "line": 39945,
+      "end": 39946
+    },
+    "create_container_dialog": {
+      "line": 39952,
+      "end": 40235
+    },
+    "create_new_folder": {
+      "line": 40237,
+      "end": 40251
+    },
+    "delete_selected_sidebar_entry": {
+      "line": 40253,
+      "end": 40281
+    },
+    "move_selected_lists_to_folder": {
+      "line": 40283,
+      "end": 40302
+    },
+    "set_selected_sidebar_color": {
+      "line": 40304,
+      "end": 40319
+    },
+    "sidebar_row_place": {
+      "line": 40321,
+      "end": 40331
+    },
+    "keyboard_sidebar_move": {
+      "line": 40333,
+      "end": 40358
+    },
+    "move_sidebar_selection": {
+      "line": 40360,
+      "end": 40389
+    },
+    "swap_folder_with_sibling": {
+      "line": 40391,
+      "end": 40413
+    },
+    "delete_folder": {
+      "line": 40415,
+      "end": 40459
+    },
+    "get_sidebar_visible_iids": {
+      "line": 40461,
+      "end": 40475
+    },
+    "toggle_sidebar_indent": {
+      "line": 40477,
+      "end": 40532
+    },
+    "indent_selected_sidebar_folder": {
+      "line": 40534,
+      "end": 40565
+    },
+    "outdent_selected_sidebar_folder": {
+      "line": 40567,
+      "end": 40583
+    },
+    "outdent_selected_sidebar_list": {
+      "line": 40585,
+      "end": 40600
+    },
+    "bind_sidebar_drag": {
+      "line": 40602,
+      "end": 40606
+    },
+    "sidebar_event_y": {
+      "line": 40608,
+      "end": 40611
+    },
+    "on_sidebar_drag_start": {
+      "line": 40613,
+      "end": 40650
+    },
+    "on_sidebar_drag_motion": {
+      "line": 40652,
+      "end": 40673
+    },
+    "on_sidebar_drag_end": {
+      "line": 40675,
+      "end": 40745
+    },
+    "drop_sidebar_list": {
+      "line": 40747,
+      "end": 40772
+    },
+    "drop_sidebar_folder": {
+      "line": 40774,
+      "end": 40825
+    },
+    "sidebar_drop_zone": {
+      "line": 40827,
+      "end": 40849
+    },
+    "clear_sidebar_drop_target_tags": {
+      "line": 40851,
+      "end": 40864
+    },
+    "ensure_journal_moment": {
+      "line": 40866,
+      "end": 40884
+    },
+    "move_sidebar_list_into_folder": {
+      "line": 40886,
+      "end": 40898
+    },
+    "move_sidebar_list_relative": {
+      "line": 40900,
+      "end": 40919
+    },
+    "move_sidebar_list_to_top_level_end": {
+      "line": 40921,
+      "end": 40928
+    },
+    "move_sidebar_folder_relative": {
+      "line": 40930,
+      "end": 40955
+    },
+    "move_sidebar_folder_into_folder": {
+      "line": 40957,
+      "end": 40969
+    },
+    "move_sidebar_folder_to_end": {
+      "line": 40971,
+      "end": 40979
+    },
+    "move_selected_folders_to_folder": {
+      "line": 40981,
+      "end": 41004
+    },
+    "report_blocked_folder_move": {
+      "line": 41006,
+      "end": 41012
+    },
+    "create_new_list": {
+      "line": 41014,
+      "end": 41015
+    },
+    "delete_current_list": {
+      "line": 41017,
+      "end": 41020
+    },
+    "validate_backup_schema": {
+      "line": 41022,
+      "end": 41268
+    },
+    "normalize_lists_data": {
+      "line": 41270,
+      "end": 41394
+    },
+    "check_stored_list_kinds": {
+      "line": 41396,
+      "end": 41431
+    },
+    "normalize_trash_data": {
+      "line": 41433,
+      "end": 41530
+    },
+    "create_ui": {
+      "line": 41535,
+      "end": 42266
+    },
+    "height_density": {
+      "line": 42298,
+      "end": 42307
+    },
+    "bind_main_window_resize": {
+      "line": 42309,
+      "end": 42320
+    },
+    "sync_height_density": {
+      "line": 42322,
+      "end": 42337
+    },
+    "header_density": {
+      "line": 42339,
+      "end": 42350
+    },
+    "sync_header_density": {
+      "line": 42352,
+      "end": 42373
+    },
+    "pack_header_controls": {
+      "line": 42375,
+      "end": 42408
+    },
+    "explain_saved_filter_item": {
+      "line": 42410,
+      "end": 42423
+    },
+    "explain_saved_filter": {
+      "line": 42425,
+      "end": 42438
+    },
+    "show_header_overflow_menu": {
+      "line": 42440,
+      "end": 42463
+    },
+    "sync_action_density": {
+      "line": 42465,
+      "end": 42505
+    },
+    "selection_bar_ids": {
+      "line": 42512,
+      "end": 42521
+    },
+    "sync_selection_bar": {
+      "line": 42523,
+      "end": 42538
+    },
+    "show_selection_labels_menu": {
+      "line": 42540,
+      "end": 42547
+    },
+    "update_path_row": {
+      "line": 42549,
+      "end": 42576
+    },
+    "board_return_target": {
+      "line": 42578,
+      "end": 42582
+    },
+    "return_to_board": {
+      "line": 42584,
+      "end": 42598
+    },
+    "relative_day_text": {
+      "line": 42600,
+      "end": 42617
+    },
+    "page_chips": {
+      "line": 42619,
+      "end": 42625
+    },
+    "list_metrics": {
+      "line": 42627,
+      "end": 42635
+    },
+    "_page_chips": {
+      "line": 42637,
+      "end": 42684
+    },
+    "update_page_chips": {
+      "line": 42686,
+      "end": 42721
+    },
+    "fit_page_chips": {
+      "line": 42723,
+      "end": 42760
+    },
+    "packed_width": {
+      "line": 42763,
+      "end": 42776
+    },
+    "update_header_title": {
+      "line": 42778,
+      "end": 42834
+    },
+    "apply_theme": {
+      "line": 42836,
+      "end": 43151
+    },
+    "_on_windows_window_map": {
+      "line": 43153,
+      "end": 43155
+    },
+    "_schedule_windows_chrome_theme": {
+      "line": 43157,
+      "end": 43184
+    },
+    "_apply_windows_chrome_theme": {
+      "line": 43186,
+      "end": 43244
+    },
+    "theme_button_text": {
+      "line": 43246,
+      "end": 43255
+    },
+    "toggle_theme": {
+      "line": 43257,
+      "end": 43271
+    },
+    "edit_title": {
+      "line": 43276,
+      "end": 43301
+    },
+    "update_page_labels": {
+      "line": 43303,
+      "end": 43338
+    },
+    "header_label_row_height": {
+      "line": 43340,
+      "end": 43352
+    },
+    "update_page_note_preview": {
+      "line": 43354,
+      "end": 43415
+    },
+    "set_note_preview": {
+      "line": 43421,
+      "end": 43423
+    },
+    "header_note_text": {
+      "line": 43425,
+      "end": 43432
+    },
+    "shorten_to_width": {
+      "line": 43435,
+      "end": 43445
+    },
+    "edit_page_note": {
+      "line": 43447,
+      "end": 43454
+    },
+    "update_entry_mode": {
+      "line": 43456,
+      "end": 43552
+    },
+    "sync_view_chrome": {
+      "line": 43554,
+      "end": 43608
+    },
+    "safe_filename": {
+      "line": 43611,
+      "end": 43614
+    },
+    "clamp_geometry": {
+      "line": 43616,
+      "end": 43645
+    },
+    "restore_window_position": {
+      "line": 43647,
+      "end": 43670
+    },
+    "on_close": {
+      "line": 43672,
+      "end": 43690
+    },
+    "_close_after_confirmation": {
+      "line": 43692,
+      "end": 43743
+    },
+    "save_window_geometry": {
+      "line": 43745,
+      "end": 43772
+    },
+    "current_focus_widget": {
+      "line": 43774,
+      "end": 43783
+    },
+    "install_error_reporting": {
+      "line": 43801,
+      "end": 43815
+    },
+    "report_callback_exception": {
+      "line": 43817,
+      "end": 43841
+    },
+    "format_error_report": {
+      "line": 43844,
+      "end": 43867
+    },
+    "_show_error_notice": {
+      "line": 43869,
+      "end": 43878
+    },
+    "log_error": {
+      "line": 43881,
+      "end": 43894
+    },
+    "open_error_log": {
+      "line": 43896,
+      "end": 43903
+    },
+    "_register_after": {
+      "line": 43905,
+      "end": 43908
+    },
+    "schedule_scrollbar_refresh": {
+      "line": 43910,
+      "end": 43926
+    },
+    "active_label_column_width": {
+      "line": 43928,
+      "end": 43940
+    },
+    "active_due_column_width": {
+      "line": 43942,
+      "end": 43944
+    },
+    "fitted_column_width": {
+      "line": 43946,
+      "end": 43955
+    },
+    "has_visible_labels": {
+      "line": 43957,
+      "end": 43964
+    },
+    "task_tree_column_widths": {
+      "line": 43966,
+      "end": 43996
+    },
+    "sync_task_tree_columns": {
+      "line": 43998,
+      "end": 44053
+    },
+    "fit_today_sources": {
+      "line": 44055,
+      "end": 44067
+    },
+    "advanced_button_min_width": {
+      "line": 44069,
+      "end": 44090
+    },
+    "update_advanced_button_visibility": {
+      "line": 44092,
+      "end": 44100
+    },
+    "update_hint_visibility": {
+      "line": 44102,
+      "end": 44120
+    },
+    "cancel_pending_callbacks": {
+      "line": 44122,
+      "end": 44143
+    },
+    "clamp_importance": {
+      "line": 44148,
+      "end": 44153
+    },
+    "new_item": {
+      "line": 44155,
+      "end": 44231
+    },
+    "normalize_item_references": {
+      "line": 44234,
+      "end": 44244
+    },
+    "normalize_time_spent": {
+      "line": 44247,
+      "end": 44250
+    },
+    "normalize_checklist": {
+      "line": 44253,
+      "end": 44279
+    },
+    "checklist_progress": {
+      "line": 44282,
+      "end": 44288
+    },
+    "format_checklist_progress": {
+      "line": 44291,
+      "end": 44294
+    },
+    "normalize_planning": {
+      "line": 44297,
+      "end": 44307
+    },
+    "format_estimated_minutes": {
+      "line": 44310,
+      "end": 44311
+    },
+    "normalize_item_text": {
+      "line": 44314,
+      "end": 44330
+    },
+    "item_display_text": {
+      "line": 44333,
+      "end": 44340
+    },
+    "item_kind": {
+      "line": 44343,
+      "end": 44350
+    },
+    "is_group_item": {
+      "line": 44353,
+      "end": 44354
+    },
+    "is_long_item": {
+      "line": 44357,
+      "end": 44359
+    },
+    "is_heading_item": {
+      "line": 44362,
+      "end": 44364
+    },
+    "is_structural_item": {
+      "line": 44367,
+      "end": 44369
+    },
+    "is_schedulable_item": {
+      "line": 44372,
+      "end": 44374
+    },
+    "set_item_kind": {
+      "line": 44376,
+      "end": 44404
+    },
+    "sync_item_kind_label": {
+      "line": 44406,
+      "end": 44432
+    },
+    "validate_attachment_storage": {
+      "line": 44435,
+      "end": 44455
+    },
+    "normalize_attachments": {
+      "line": 44457,
+      "end": 44491
+    },
+    "resolve_attachment_path": {
+      "line": 44493,
+      "end": 44510
+    },
+    "store_attachment": {
+      "line": 44512,
+      "end": 44556
+    },
+    "normalize_due": {
+      "line": 44559,
+      "end": 44563
+    },
+    "normalize_due_time": {
+      "line": 44566,
+      "end": 44576
+    },
+    "parse_due_time_input": {
+      "line": 44579,
+      "end": 44591
+    },
+    "format_due_full": {
+      "line": 44594,
+      "end": 44600
+    },
+    "parse_due_input": {
+      "line": 44603,
+      "end": 44619
+    },
+    "format_due_display": {
+      "line": 44622,
+      "end": 44626
+    },
+    "format_due_column": {
+      "line": 44629,
+      "end": 44643
+    },
+    "label_column_width": {
+      "line": 44645,
+      "end": 44664
+    },
+    "tree_cell_padding": {
+      "line": 44666,
+      "end": 44678
+    },
+    "due_column_width": {
+      "line": 44680,
+      "end": 44699
+    },
+    "content_column_widths": {
+      "line": 44701,
+      "end": 44760
+    },
+    "fit_tree_columns_to_content": {
+      "line": 44762,
+      "end": 44779
+    },
+    "finish_tree_refresh": {
+      "line": 44781,
+      "end": 44791
+    },
+    "entry_line_visible": {
+      "line": 44798,
+      "end": 44810
+    },
+    "empty_state_action": {
+      "line": 44812,
+      "end": 44845
+    },
+    "reset_filters_for_empty_state": {
+      "line": 44847,
+      "end": 44853
+    },
+    "focus_new_item_entry": {
+      "line": 44855,
+      "end": 44859
+    },
+    "empty_state_mascot": {
+      "line": 44863,
+      "end": 44879
+    },
+    "sync_empty_state_action": {
+      "line": 44881,
+      "end": 44937
+    },
+    "empty_state_top": {
+      "line": 44939,
+      "end": 44955
+    },
+    "sync_empty_text": {
+      "line": 44957,
+      "end": 44994
+    },
+    "_place_empty_text": {
+      "line": 44996,
+      "end": 45017
+    },
+    "_follow_empty_text": {
+      "line": 45019,
+      "end": 45036
+    },
+    "normalize_repeat": {
+      "line": 45042,
+      "end": 45049
+    },
+    "add_months": {
+      "line": 45052,
+      "end": 45054
+    },
+    "next_repeat_date": {
+      "line": 45057,
+      "end": 45059
+    },
+    "describe_repeat": {
+      "line": 45062,
+      "end": 45090
+    },
+    "parse_repeat_text": {
+      "line": 45093,
+      "end": 45143
+    },
+    "advance_repeating_items": {
+      "line": 45145,
+      "end": 45196
+    },
+    "repeat_anchor_date": {
+      "line": 45199,
+      "end": 45204
+    },
+    "due_status": {
+      "line": 45206,
+      "end": 45208
+    },
+    "normalize_items": {
+      "line": 45210,
+      "end": 45298
+    },
+    "load_items": {
+      "line": 45300,
+      "end": 45350
+    },
+    "read_save_file": {
+      "line": 45352,
+      "end": 45358
+    },
+    "present_loaded_dataset": {
+      "line": 45360,
+      "end": 45392
+    },
+    "preferred_loaded_list_id": {
+      "line": 45394,
+      "end": 45399
+    },
+    "recover_from_load_display_error": {
+      "line": 45401,
+      "end": 45422
+    },
+    "start_with_empty_dataset": {
+      "line": 45424,
+      "end": 45442
+    },
+    "stored_data_version": {
+      "line": 45444,
+      "end": 45452
+    },
+    "handle_unreadable_save_file": {
+      "line": 45454,
+      "end": 45492
+    },
+    "migrate_on_start": {
+      "line": 45494,
+      "end": 45524
+    },
+    "show_format_migration_notice": {
+      "line": 45526,
+      "end": 45538
+    },
+    "remove_stale_temp_files": {
+      "line": 45545,
+      "end": 45563
+    },
+    "preserve_unreadable_save_file": {
+      "line": 45565,
+      "end": 45574
+    },
+    "warn_if_saved_by_older_version": {
+      "line": 45576,
+      "end": 45594
+    },
+    "remember_written_data_format": {
+      "line": 45596,
+      "end": 45609
+    },
+    "read_only_notice": {
+      "line": 45611,
+      "end": 45630
+    },
+    "data_payload": {
+      "line": 45632,
+      "end": 45646
+    },
+    "replace_with_retry": {
+      "line": 45655,
+      "end": 45668
+    },
+    "write_json_atomic": {
+      "line": 45671,
+      "end": 45697
+    },
+    "save_items": {
+      "line": 45699,
+      "end": 45714
+    },
+    "save_items_result": {
+      "line": 45716,
+      "end": 45824
+    },
+    "ensure_schema_backup": {
+      "line": 45826,
+      "end": 45834
+    },
+    "ensure_schema12_backup": {
+      "line": 45836,
+      "end": 45838
+    },
+    "ensure_schema13_backup": {
+      "line": 45840,
+      "end": 45842
+    },
+    "ensure_schema15_backup": {
+      "line": 45844,
+      "end": 45846
+    },
+    "ensure_schema17_backup": {
+      "line": 45848,
+      "end": 45850
+    },
+    "ensure_schema18_backup": {
+      "line": 45852,
+      "end": 45854
+    },
+    "ensure_schema19_backup": {
+      "line": 45857,
+      "end": 45862
+    },
+    "back_up_before_title_clipping": {
+      "line": 45864,
+      "end": 45890
+    },
+    "show_title_clip_notice": {
+      "line": 45892,
+      "end": 45903
+    },
+    "ensure_schema21_backup": {
+      "line": 45905,
+      "end": 45907
+    },
+    "ensure_schema20_backup": {
+      "line": 45909,
+      "end": 45914
+    },
+    "ensure_schema16_backup": {
+      "line": 45916,
+      "end": 45918
+    },
+    "normalize_history_entries": {
+      "line": 45923,
+      "end": 45966
+    },
+    "history_enabled": {
+      "line": 45968,
+      "end": 45970
+    },
+    "history_value": {
+      "line": 45973,
+      "end": 45975
+    },
+    "list_comparison": {
+      "line": 45977,
+      "end": 45991
+    },
+    "history_snapshot": {
+      "line": 45993,
+      "end": 46020
+    },
+    "drawing_history_hash": {
+      "line": 46023,
+      "end": 46034
+    },
+    "history_events": {
+      "line": 46036,
+      "end": 46150
+    },
+    "group_history_events": {
+      "line": 46152,
+      "end": 46173
+    },
+    "record_data_operation": {
+      "line": 46175,
+      "end": 46182
+    },
+    "record_history_events": {
+      "line": 46184,
+      "end": 46204
+    },
+    "coalesce_history_event": {
+      "line": 46206,
+      "end": 46225
+    },
+    "update_history": {
+      "line": 46227,
+      "end": 46244
+    },
+    "stamp_done_times": {
+      "line": 46246,
+      "end": 46257
+    },
+    "reset_history_baseline": {
+      "line": 46259,
+      "end": 46268
+    },
+    "history_entry_line": {
+      "line": 46270,
+      "end": 46281
+    },
+    "format_history_time": {
+      "line": 46284,
+      "end": 46288
+    },
+    "filtered_history": {
+      "line": 46290,
+      "end": 46315
+    },
+    "clear_history": {
+      "line": 46317,
+      "end": 46326
+    },
+    "ensure_schema14_backup": {
+      "line": 46328,
+      "end": 46330
+    },
+    "write_backup_copy": {
+      "line": 46332,
+      "end": 46369
+    },
+    "latest_backup_digest": {
+      "line": 46371,
+      "end": 46390
+    },
+    "monotonic_seconds": {
+      "line": 46393,
+      "end": 46395
+    },
+    "prune_backups": {
+      "line": 46397,
+      "end": 46466
+    },
+    "schedule_autosave": {
+      "line": 46471,
+      "end": 46479
+    },
+    "autosave_tick": {
+      "line": 46481,
+      "end": 46502
+    },
+    "reminder_utc": {
+      "line": 46508,
+      "end": 46518
+    },
+    "local_reminder_time": {
+      "line": 46521,
+      "end": 46533
+    },
+    "normalize_reminder": {
+      "line": 46536,
+      "end": 46561
+    },
+    "reminder_config": {
+      "line": 46564,
+      "end": 46566
+    },
+    "reminder_event": {
+      "line": 46569,
+      "end": 46595
+    },
+    "reminder_rows": {
+      "line": 46597,
+      "end": 46616
+    },
+    "process_reminders": {
+      "line": 46618,
+      "end": 46657
+    },
+    "reminder_attention_backend": {
+      "line": 46659,
+      "end": 46729
+    },
+    "request_reminder_attention": {
+      "line": 46731,
+      "end": 46745
+    },
+    "system_notification_backend": {
+      "line": 46748,
+      "end": 46779
+    },
+    "tk_has_sysnotify": {
+      "line": 46782,
+      "end": 46788
+    },
+    "app_icon_photo": {
+      "line": 46790,
+      "end": 46804
+    },
+    "bring_to_front": {
+      "line": 46806,
+      "end": 46812
+    },
+    "send_system_notification": {
+      "line": 46814,
+      "end": 46827
+    },
+    "reminder_notification_text": {
+      "line": 46830,
+      "end": 46838
+    },
+    "send_reminder_notification": {
+      "line": 46840,
+      "end": 46843
+    },
+    "test_system_notification": {
+      "line": 46845,
+      "end": 46856
+    },
+    "schedule_reminder_check": {
+      "line": 46858,
+      "end": 46859
+    },
+    "reminder_tick": {
+      "line": 46861,
+      "end": 46875
+    },
+    "refresh_reminder_status": {
+      "line": 46877,
+      "end": 46888
+    },
+    "apply_reminder_badge": {
+      "line": 46890,
+      "end": 46908
+    },
+    "update_reminder_badge": {
+      "line": 46910,
+      "end": 46912
+    },
+    "change_reminder": {
+      "line": 46914,
+      "end": 46950
+    },
+    "open_reminders": {
+      "line": 46952,
+      "end": 47090
+    },
+    "walk_items": {
+      "line": 47093,
+      "end": 47098
+    },
+    "find_item": {
+      "line": 47100,
+      "end": 47111
+    },
+    "find_item_in_lists": {
+      "line": 47113,
+      "end": 47125
+    },
+    "find_items_in_lists": {
+      "line": 47127,
+      "end": 47136
+    },
+    "update_in_progress_item": {
+      "line": 47138,
+      "end": 47177
+    },
+    "edit_in_progress_item": {
+      "line": 47179,
+      "end": 47193
+    },
+    "item_contains_id": {
+      "line": 47195,
+      "end": 47199
+    },
+    "remove_item_by_id": {
+      "line": 47201,
+      "end": 47206
+    },
+    "is_mouse_event": {
+      "line": 47208,
+      "end": 47213
+    },
+    "get_item_number_path": {
+      "line": 47215,
+      "end": 47228
+    },
+    "on_tree_scroll": {
+      "line": 47233,
+      "end": 47253
+    },
+    "refresh_scrollbar_state": {
+      "line": 47255,
+      "end": 47257
+    },
+    "remember_expanded_state": {
+      "line": 47259,
+      "end": 47278
+    },
+    "set_entry_placeholder": {
+      "line": 47283,
+      "end": 47290
+    },
+    "clear_entry_placeholder": {
+      "line": 47292,
+      "end": 47298
+    },
+    "get_entry_text": {
+      "line": 47300,
+      "end": 47311
+    },
+    "set_search_placeholder": {
+      "line": 47313,
+      "end": 47319
+    },
+    "clear_search_placeholder": {
+      "line": 47321,
+      "end": 47327
+    },
+    "update_responsive_filter_visibility": {
+      "line": 47329,
+      "end": 47357
+    },
+    "pack_relative": {
+      "line": 47360,
+      "end": 47375
+    },
+    "search_row_anchor": {
+      "line": 47377,
+      "end": 47390
+    },
+    "sync_clear_search_visibility": {
+      "line": 47392,
+      "end": 47411
+    },
+    "current_search_query": {
+      "line": 47413,
+      "end": 47425
+    },
+    "item_text_matches_query": {
+      "line": 47427,
+      "end": 47446
+    },
+    "list_text_matches_query": {
+      "line": 47449,
+      "end": 47455
+    },
+    "get_filter_mode": {
+      "line": 47457,
+      "end": 47459
+    },
+    "item_matches_status_filter": {
+      "line": 47461,
+      "end": 47470
+    },
+    "item_visible_by_filter": {
+      "line": 47472,
+      "end": 47476
+    },
+    "has_active_filter": {
+      "line": 47478,
+      "end": 47479
+    },
+    "on_open_only_changed": {
+      "line": 47481,
+      "end": 47482
+    },
+    "on_filter_changed": {
+      "line": 47484,
+      "end": 47486
+    },
+    "clear_search": {
+      "line": 47488,
+      "end": 47494
+    },
+    "focus_search": {
+      "line": 47496,
+      "end": 47503
+    },
+    "focus_entry": {
+      "line": 47505,
+      "end": 47511
+    },
+    "handle_control_n": {
+      "line": 47513,
+      "end": 47520
+    },
+    "handle_control_f": {
+      "line": 47522,
+      "end": 47526
+    },
+    "handle_escape": {
+      "line": 47528,
+      "end": 47539
+    },
+    "compute_stats": {
+      "line": 47541,
+      "end": 47546
+    },
+    "_set_stats_text": {
+      "line": 47548,
+      "end": 47552
+    },
+    "fit_stats_text": {
+      "line": 47554,
+      "end": 47575
+    },
+    "update_stats_label": {
+      "line": 47577,
+      "end": 47715
+    },
+    "schedule_search_refresh": {
+      "line": 47717,
+      "end": 47721
+    },
+    "_flush_search_refresh": {
+      "line": 47723,
+      "end": 47726
+    },
+    "refresh_tree": {
+      "line": 47728,
+      "end": 47746
+    },
+    "flush_rich_note": {
+      "line": 47748,
+      "end": 47762
+    },
+    "editor_switch_allowed": {
+      "line": 47764,
+      "end": 47778
+    },
+    "open_editor_in_dataset": {
+      "line": 47780,
+      "end": 47790
+    },
+    "open_editor_content_adopted": {
+      "line": 47792,
+      "end": 47809
+    },
+    "require_editor_flush": {
+      "line": 47811,
+      "end": 47814
+    },
+    "output_editor_ready": {
+      "line": 47816,
+      "end": 47822
+    },
+    "store_rich_note": {
+      "line": 47824,
+      "end": 47844
+    },
+    "is_page_list": {
+      "line": 47850,
+      "end": 47851
+    },
+    "change_page_feature": {
+      "line": 47853,
+      "end": 47879
+    },
+    "choose_live_list": {
+      "line": 47881,
+      "end": 47901
+    },
+    "remove_live_list": {
+      "line": 47903,
+      "end": 47907
+    },
+    "toggle_live_task": {
+      "line": 47909,
+      "end": 47926
+    },
+    "page_cover_menu": {
+      "line": 47928,
+      "end": 47940
+    },
+    "choose_page_cover": {
+      "line": 47942,
+      "end": 47971
+    },
+    "make_page_cover": {
+      "line": 47973,
+      "end": 47999
+    },
+    "request_cover_conversion": {
+      "line": 48001,
+      "end": 48011
+    },
+    "choose_creation_template": {
+      "line": 48013,
+      "end": 48018
+    },
+    "confirm_template_preview": {
+      "line": 48020,
+      "end": 48069
+    },
+    "create_list_from_template": {
+      "line": 48071,
+      "end": 48108
+    },
+    "page_entry": {
+      "line": 48110,
+      "end": 48112
+    },
+    "page_task_change": {
+      "line": 48115,
+      "end": 48121
+    },
+    "mark_page_task_change": {
+      "line": 48123,
+      "end": 48128
+    },
+    "transfer_document_task": {
+      "line": 48130,
+      "end": 48149
+    },
+    "preserve_task_text": {
+      "line": 48151,
+      "end": 48154
+    },
+    "task_text_sources": {
+      "line": 48156,
+      "end": 48158
+    },
+    "open_task_text_source": {
+      "line": 48160,
+      "end": 48173
+    },
+    "show_tasks_from_pages": {
+      "line": 48175,
+      "end": 48184
+    },
+    "page_task_hint": {
+      "line": 48186,
+      "end": 48197
+    },
+    "create_page_task": {
+      "line": 48199,
+      "end": 48213
+    },
+    "rename_page_tasks": {
+      "line": 48215,
+      "end": 48226
+    },
+    "_pop_item": {
+      "line": 48228,
+      "end": 48235
+    },
+    "remove_page_tasks": {
+      "line": 48237,
+      "end": 48255
+    },
+    "restore_page_task": {
+      "line": 48257,
+      "end": 48272
+    },
+    "edit_page_task": {
+      "line": 48274,
+      "end": 48286
+    },
+    "page_document_from_markdown": {
+      "line": 48290,
+      "end": 48341
+    },
+    "page_markdown": {
+      "line": 48343,
+      "end": 48368
+    },
+    "page_image_attachments": {
+      "line": 48370,
+      "end": 48374
+    },
+    "export_page_markdown": {
+      "line": 48376,
+      "end": 48408
+    },
+    "build_page_print_html": {
+      "line": 48414,
+      "end": 48464
+    },
+    "print_page": {
+      "line": 48466,
+      "end": 48471
+    },
+    "copy_page_markdown": {
+      "line": 48473,
+      "end": 48482
+    },
+    "new_page_from_markdown": {
+      "line": 48484,
+      "end": 48518
+    },
+    "new_page_from_clipboard": {
+      "line": 48520,
+      "end": 48526
+    },
+    "import_markdown_page": {
+      "line": 48528,
+      "end": 48542
+    },
+    "append_unlisted_page_tasks": {
+      "line": 48544,
+      "end": 48562
+    },
+    "page_entries": {
+      "line": 48564,
+      "end": 48566
+    },
+    "set_pages_view": {
+      "line": 48568,
+      "end": 48570
+    },
+    "create_new_gallery": {
+      "line": 48572,
+      "end": 48589
+    },
+    "create_new_page": {
+      "line": 48591,
+      "end": 48613
+    },
+    "render_overview_sections": {
+      "line": 48615,
+      "end": 48649
+    },
+    "render_pages_page": {
+      "line": 48651,
+      "end": 48697
+    },
+    "remember_recent_page": {
+      "line": 48699,
+      "end": 48702
+    },
+    "toggle_page_favorite": {
+      "line": 48704,
+      "end": 48714
+    },
+    "sync_note_date_header": {
+      "line": 48716,
+      "end": 48755
+    },
+    "update_current_journal": {
+      "line": 48757,
+      "end": 48770
+    },
+    "toggle_journal_favorite": {
+      "line": 48772,
+      "end": 48775
+    },
+    "choose_journal_mood": {
+      "line": 48777,
+      "end": 48785
+    },
+    "edit_journal_location": {
+      "line": 48787,
+      "end": 48796
+    },
+    "insert_journal_prompt": {
+      "line": 48798,
+      "end": 48810
+    },
+    "sync_rich_note_view": {
+      "line": 48814,
+      "end": 48902
+    },
+    "drawing_view_state": {
+      "line": 48905,
+      "end": 48910
+    },
+    "drawing_tool_settings": {
+      "line": 48916,
+      "end": 48924
+    },
+    "remember_drawing_tools": {
+      "line": 48926,
+      "end": 48940
+    },
+    "_save_drawing_tools": {
+      "line": 48942,
+      "end": 48944
+    },
+    "drawing_palette": {
+      "line": 48946,
+      "end": 48954
+    },
+    "show_drawing_palette_menu": {
+      "line": 48956,
+      "end": 48986
+    },
+    "_add_drawing_palette": {
+      "line": 48988,
+      "end": 48995
+    },
+    "drawing_save_palette": {
+      "line": 48997,
+      "end": 49009
+    },
+    "drawing_import_palette": {
+      "line": 49011,
+      "end": 49034
+    },
+    "drawing_export_palette": {
+      "line": 49036,
+      "end": 49053
+    },
+    "drawing_delete_palette": {
+      "line": 49055,
+      "end": 49063
+    },
+    "drawing_title": {
+      "line": 49065,
+      "end": 49067
+    },
+    "drawing_replace_color": {
+      "line": 49070,
+      "end": 49104
+    },
+    "drawing_compact_palette": {
+      "line": 49106,
+      "end": 49120
+    },
+    "drawing_snapshots": {
+      "line": 49123,
+      "end": 49124
+    },
+    "drawing_snapshot_save": {
+      "line": 49126,
+      "end": 49184
+    },
+    "read_drawing_animation_snapshot": {
+      "line": 49187,
+      "end": 49193
+    },
+    "read_drawing_snapshot": {
+      "line": 49196,
+      "end": 49198
+    },
+    "drawing_snapshot_dialog": {
+      "line": 49200,
+      "end": 49281
+    },
+    "create_drawing_from_model": {
+      "line": 49283,
+      "end": 49298
+    },
+    "drawing_export_png": {
+      "line": 49301,
+      "end": 49322
+    },
+    "drawing_icon_preview": {
+      "line": 49328,
+      "end": 49383
+    },
+    "drawing_export_ico": {
+      "line": 49385,
+      "end": 49416
+    },
+    "write_bytes_atomic": {
+      "line": 49418,
+      "end": 49438
+    },
+    "parse_drawing_text": {
+      "line": 49441,
+      "end": 49449
+    },
+    "drawing_import_preview_dialog": {
+      "line": 49451,
+      "end": 49487
+    },
+    "drawing_paste_text": {
+      "line": 49489,
+      "end": 49510
+    },
+    "current_drawing_editor": {
+      "line": 49512,
+      "end": 49519
+    },
+    "flush_drawing_editor": {
+      "line": 49521,
+      "end": 49526
+    },
+    "set_drawing_frame": {
+      "line": 49528,
+      "end": 49546
+    },
+    "change_animation_frames": {
+      "line": 49548,
+      "end": 49601
+    },
+    "drawing_animation_dialog": {
+      "line": 49603,
+      "end": 49733
+    },
+    "drawing_animation_export": {
+      "line": 49735,
+      "end": 49792
+    },
+    "store_drawing": {
+      "line": 49795,
+      "end": 49824
+    },
+    "reference_png_path": {
+      "line": 49826,
+      "end": 49856
+    },
+    "read_reference_png": {
+      "line": 49858,
+      "end": 49871
+    },
+    "hide_drawing_chrome": {
+      "line": 49873,
+      "end": 49889
+    },
+    "restore_drawing_chrome": {
+      "line": 49891,
+      "end": 49920
+    },
+    "sync_drawing_view": {
+      "line": 49922,
+      "end": 49972
+    },
+    "gallery_cache_dir": {
+      "line": 49974,
+      "end": 49984
+    },
+    "previews": {
+      "line": 49987,
+      "end": 49994
+    },
+    "file_drop_support": {
+      "line": 49996,
+      "end": 50027
+    },
+    "register_file_drop": {
+      "line": 50029,
+      "end": 50048
+    },
+    "sync_gallery_view": {
+      "line": 50050,
+      "end": 50071
+    },
+    "add_gallery_images": {
+      "line": 50073,
+      "end": 50097
+    },
+    "page_attachment": {
+      "line": 50099,
+      "end": 50105
+    },
+    "add_page_images": {
+      "line": 50107,
+      "end": 50136
+    },
+    "remove_gallery_image": {
+      "line": 50138,
+      "end": 50150
+    },
+    "set_gallery_caption": {
+      "line": 50152,
+      "end": 50169
+    },
+    "apply_drawing_change": {
+      "line": 50171,
+      "end": 50189
+    },
+    "snapshot_keeping_drawings": {
+      "line": 50191,
+      "end": 50209
+    },
+    "drawing_entry": {
+      "line": 50211,
+      "end": 50213
+    },
+    "show_drawing_menu": {
+      "line": 50215,
+      "end": 50284
+    },
+    "drawing_load_reference": {
+      "line": 50287,
+      "end": 50312
+    },
+    "_drawing_load_reference_ready": {
+      "line": 50314,
+      "end": 50334
+    },
+    "drawing_reframe_reference": {
+      "line": 50336,
+      "end": 50355
+    },
+    "_apply_reference_choice": {
+      "line": 50357,
+      "end": 50399
+    },
+    "drawing_remove_reference": {
+      "line": 50401,
+      "end": 50416
+    },
+    "drawing_reset_trace": {
+      "line": 50418,
+      "end": 50436
+    },
+    "drawing_clear": {
+      "line": 50438,
+      "end": 50450
+    },
+    "read_drawing_file": {
+      "line": 50453,
+      "end": 50462
+    },
+    "drawing_export": {
+      "line": 50464,
+      "end": 50486
+    },
+    "write_text_atomic": {
+      "line": 50488,
+      "end": 50508
+    },
+    "ask_drawing_file": {
+      "line": 50510,
+      "end": 50513
+    },
+    "drawing_import_replace": {
+      "line": 50515,
+      "end": 50541
+    },
+    "import_drawing_as_new": {
+      "line": 50543,
+      "end": 50565
+    },
+    "_drawing_dialog": {
+      "line": 50568,
+      "end": 50578
+    },
+    "_drawing_scale": {
+      "line": 50580,
+      "end": 50603
+    },
+    "drawing_reference_frame_dialog": {
+      "line": 50605,
+      "end": 50705
+    },
+    "drawing_trace_preview_dialog": {
+      "line": 50707,
+      "end": 50789
+    },
+    "drawing_color_dialog": {
+      "line": 50791,
+      "end": 50911
+    },
+    "_refresh_tree": {
+      "line": 50913,
+      "end": 50942
+    },
+    "on_hint_configure": {
+      "line": 50956,
+      "end": 50961
+    },
+    "hint_line_height": {
+      "line": 50963,
+      "end": 50967
+    },
+    "fit_label_lines": {
+      "line": 50969,
+      "end": 50987
+    },
+    "fit_hint_text": {
+      "line": 50989,
+      "end": 50998
+    },
+    "toggle_view_hints": {
+      "line": 51000,
+      "end": 51007
+    },
+    "apply_hint_setting": {
+      "line": 51009,
+      "end": 51016
+    },
+    "item_date_text": {
+      "line": 51018,
+      "end": 51021
+    },
+    "card_foot_height": {
+      "line": 51023,
+      "end": 51026
+    },
+    "card_foot_mode": {
+      "line": 51028,
+      "end": 51050
+    },
+    "sync_card_foot": {
+      "line": 51052,
+      "end": 51112
+    },
+    "surface_hint_text": {
+      "line": 51114,
+      "end": 51129
+    },
+    "sync_tool_band_hint": {
+      "line": 51131,
+      "end": 51150
+    },
+    "schedule_fixed_layout_sync": {
+      "line": 51152,
+      "end": 51165
+    },
+    "tool_band_host": {
+      "line": 51167,
+      "end": 51169
+    },
+    "sync_header_height": {
+      "line": 51172,
+      "end": 51201
+    },
+    "header_logo_color": {
+      "line": 51210,
+      "end": 51215
+    },
+    "header_logo_height": {
+      "line": 51217,
+      "end": 51231
+    },
+    "header_logo_top_inset": {
+      "line": 51233,
+      "end": 51241
+    },
+    "sync_header_logo": {
+      "line": 51243,
+      "end": 51268
+    },
+    "draw_logo": {
+      "line": 51270,
+      "end": 51287
+    },
+    "sync_tool_band": {
+      "line": 51289,
+      "end": 51334
+    },
+    "restore_note_chrome": {
+      "line": 51336,
+      "end": 51341
+    },
+    "_refresh_tree_contents": {
+      "line": 51343,
+      "end": 51454
+    },
+    "refresh_table_view": {
+      "line": 51456,
+      "end": 51510
+    },
+    "get_in_progress_items": {
+      "line": 51512,
+      "end": 51519
+    },
+    "_collect_in_progress_items": {
+      "line": 51521,
+      "end": 51538
+    },
+    "get_overdue_items": {
+      "line": 51540,
+      "end": 51556
+    },
+    "current_task_overview_items": {
+      "line": 51558,
+      "end": 51566
+    },
+    "inherited_list_color": {
+      "line": 51568,
+      "end": 51588
+    },
+    "refresh_task_overview": {
+      "line": 51590,
+      "end": 51905
+    },
+    "label_view_groups": {
+      "line": 51907,
+      "end": 51945
+    },
+    "label_view_row_text": {
+      "line": 51947,
+      "end": 51966
+    },
+    "refresh_label_overview": {
+      "line": 51968,
+      "end": 52039
+    },
+    "label_group_key_from_iid": {
+      "line": 52041,
+      "end": 52047
+    },
+    "move_item_to_label_group": {
+      "line": 52049,
+      "end": 52098
+    },
+    "on_label_view_drag_start": {
+      "line": 52100,
+      "end": 52116
+    },
+    "on_label_view_drag_motion": {
+      "line": 52118,
+      "end": 52134
+    },
+    "on_label_view_drag_end": {
+      "line": 52136,
+      "end": 52149
+    },
+    "refresh_trash_overview": {
+      "line": 52151,
+      "end": 52219
+    },
+    "format_trash_timestamp": {
+      "line": 52222,
+      "end": 52227
+    },
+    "build_trash_context_menu": {
+      "line": 52229,
+      "end": 52265
+    },
+    "refresh_folder_overview": {
+      "line": 52267,
+      "end": 52415
+    },
+    "library_row_values": {
+      "line": 52425,
+      "end": 52446
+    },
+    "is_library_view": {
+      "line": 52448,
+      "end": 52450
+    },
+    "sort_library_by": {
+      "line": 52452,
+      "end": 52455
+    },
+    "refresh_library_table": {
+      "line": 52457,
+      "end": 52490
+    },
+    "journal_sort_key": {
+      "line": 52492,
+      "end": 52494
+    },
+    "journal_kind_name": {
+      "line": 52496,
+      "end": 52507
+    },
+    "journal_filter_range": {
+      "line": 52509,
+      "end": 52512
+    },
+    "journal_in_range": {
+      "line": 52514,
+      "end": 52518
+    },
+    "set_journal_filter": {
+      "line": 52520,
+      "end": 52532
+    },
+    "journal_filter_text": {
+      "line": 52534,
+      "end": 52542
+    },
+    "sync_journal_filter_button": {
+      "line": 52544,
+      "end": 52547
+    },
+    "show_journal_filter_dialog": {
+      "line": 52549,
+      "end": 52606
+    },
+    "edit_moment_date": {
+      "line": 52608,
+      "end": 52623
+    },
+    "folder_list_id_from_iid": {
+      "line": 52626,
+      "end": 52630
+    },
+    "folder_folder_id_from_iid": {
+      "line": 52633,
+      "end": 52638
+    },
+    "get_selected_folder_list_id": {
+      "line": 52640,
+      "end": 52646
+    },
+    "activate_tree_row": {
+      "line": 52648,
+      "end": 52678
+    },
+    "overview_section_open": {
+      "line": 52680,
+      "end": 52682
+    },
+    "set_overview_section_open": {
+      "line": 52684,
+      "end": 52695
+    },
+    "note_overview_section_state": {
+      "line": 52697,
+      "end": 52714
+    },
+    "remember_tree_open_states": {
+      "line": 52716,
+      "end": 52740
+    },
+    "toggle_tree_row_open": {
+      "line": 52742,
+      "end": 52750
+    },
+    "open_next_task": {
+      "line": 52752,
+      "end": 52770
+    },
+    "open_in_progress_source_item": {
+      "line": 52772,
+      "end": 52814
+    },
+    "reveal_tree_row": {
+      "line": 52816,
+      "end": 52842
+    },
+    "insert_tree_items": {
+      "line": 52844,
+      "end": 53016
+    },
+    "insert_detail_rows": {
+      "line": 53018,
+      "end": 53084
+    },
+    "toggle_checklist_row": {
+      "line": 53086,
+      "end": 53102
+    },
+    "insert_heading_row": {
+      "line": 53104,
+      "end": 53131
+    },
+    "task_row_font": {
+      "line": 53134,
+      "end": 53136
+    },
+    "next_task_title_font": {
+      "line": 53138,
+      "end": 53140
+    },
+    "mark_next_task_title": {
+      "line": 53142,
+      "end": 53150
+    },
+    "tree_cell_font": {
+      "line": 53152,
+      "end": 53157
+    },
+    "task_text_available_width": {
+      "line": 53159,
+      "end": 53172
+    },
+    "wrap_long_task_text": {
+      "line": 53174,
+      "end": 53264
+    },
+    "schedule_long_task_reflow": {
+      "line": 53266,
+      "end": 53303
+    },
+    "is_synthetic_row": {
+      "line": 53311,
+      "end": 53313
+    },
+    "owner_row_id": {
+      "line": 53316,
+      "end": 53323
+    },
+    "checklist_row_index": {
+      "line": 53326,
+      "end": 53333
+    },
+    "get_visible_tree_iids": {
+      "line": 53335,
+      "end": 53359
+    },
+    "move_tree_focus": {
+      "line": 53361,
+      "end": 53384
+    },
+    "tree_row_at": {
+      "line": 53386,
+      "end": 53401
+    },
+    "get_selected_item_ids": {
+      "line": 53403,
+      "end": 53417
+    },
+    "get_selected_item_id": {
+      "line": 53419,
+      "end": 53430
+    },
+    "iter_tree_ids": {
+      "line": 53432,
+      "end": 53445
+    },
+    "select_all_items": {
+      "line": 53447,
+      "end": 53460
+    },
+    "select_range_from_click": {
+      "line": 53462,
+      "end": 53481
+    },
+    "filter_top_level_selection": {
+      "line": 53483,
+      "end": 53501
+    },
+    "clear_tree_selection": {
+      "line": 53503,
+      "end": 53506
+    },
+    "selected_items_for_change": {
+      "line": 53511,
+      "end": 53540
+    },
+    "changed_item_lists": {
+      "line": 53542,
+      "end": 53553
+    },
+    "item_change": {
+      "line": 53556,
+      "end": 53644
+    },
+    "sidebar_change": {
+      "line": 53647,
+      "end": 53687
+    },
+    "finish_change_ui": {
+      "line": 53689,
+      "end": 53713
+    },
+    "snapshot_undo": {
+      "line": 53718,
+      "end": 53732
+    },
+    "undo_state": {
+      "line": 53734,
+      "end": 53752
+    },
+    "trim_undo_stack": {
+      "line": 53754,
+      "end": 53764
+    },
+    "redo_steps": {
+      "line": 53766,
+      "end": 53771
+    },
+    "apply_snapshot": {
+      "line": 53773,
+      "end": 53782
+    },
+    "_apply_snapshot": {
+      "line": 53784,
+      "end": 53819
+    },
+    "history_step_blocked": {
+      "line": 53821,
+      "end": 53838
+    },
+    "undo_last_change": {
+      "line": 53840,
+      "end": 53870
+    },
+    "redo_last_change": {
+      "line": 53872,
+      "end": 53899
+    },
+    "redo_available": {
+      "line": 53901,
+      "end": 53902
+    },
+    "undo_board_view": {
+      "line": 53904,
+      "end": 53913
+    },
+    "redo_board_view": {
+      "line": 53915,
+      "end": 53933
+    },
+    "collect_item_ids": {
+      "line": 53939,
+      "end": 53949
+    },
+    "data_item_ids": {
+      "line": 53951,
+      "end": 53974
+    },
+    "guarded_structural_change": {
+      "line": 53977,
+      "end": 54027
+    },
+    "integrity_guards": {
+      "line": 54029,
+      "end": 54034
+    },
+    "register_guarded_change": {
+      "line": 54036,
+      "end": 54040
+    },
+    "guarded_save_allowed": {
+      "line": 54042,
+      "end": 54053
+    },
+    "finish_guard": {
+      "line": 54055,
+      "end": 54068
+    },
+    "roll_back_guard": {
+      "line": 54070,
+      "end": 54104
+    },
+    "rollback_to_undo_depth": {
+      "line": 54106,
+      "end": 54122
+    },
+    "report_integrity_stop": {
+      "line": 54124,
+      "end": 54132
+    },
+    "format_item_lines": {
+      "line": 54134,
+      "end": 54155
+    },
+    "copy_selected_to_clipboard": {
+      "line": 54157,
+      "end": 54183
+    },
+    "paste_items_from_clipboard": {
+      "line": 54185,
+      "end": 54233
+    },
+    "parse_clipboard_items": {
+      "line": 54235,
+      "end": 54299
+    },
+    "expand_all": {
+      "line": 54301,
+      "end": 54304
+    },
+    "collapse_all": {
+      "line": 54306,
+      "end": 54309
+    },
+    "active_folder_chain": {
+      "line": 54311,
+      "end": 54333
+    },
+    "set_sidebar_open_state": {
+      "line": 54335,
+      "end": 54353
+    },
+    "set_tree_open_state": {
+      "line": 54355,
+      "end": 54365
+    },
+    "on_entry_return": {
+      "line": 54370,
+      "end": 54372
+    },
+    "slash_word": {
+      "line": 54375,
+      "end": 54382
+    },
+    "update_slash_hint": {
+      "line": 54384,
+      "end": 54410
+    },
+    "paste_into_entry": {
+      "line": 54412,
+      "end": 54470
+    },
+    "capture_item_fields": {
+      "line": 54472,
+      "end": 54488
+    },
+    "capture_ignored": {
+      "line": 54490,
+      "end": 54494
+    },
+    "ignore_capture_part": {
+      "line": 54496,
+      "end": 54499
+    },
+    "fill_capture_chips": {
+      "line": 54501,
+      "end": 54525
+    },
+    "hide_slash_hint": {
+      "line": 54527,
+      "end": 54534
+    },
+    "complete_slash_command": {
+      "line": 54536,
+      "end": 54548
+    },
+    "add_item": {
+      "line": 54550,
+      "end": 54602
+    },
+    "clear_entry_text": {
+      "line": 54604,
+      "end": 54609
+    },
+    "attach_calendar_picker": {
+      "line": 54611,
+      "end": 54652
+    },
+    "_capture_text_field": {
+      "line": 54654,
+      "end": 54671
+    },
+    "capture_item": {
+      "line": 54673,
+      "end": 54712
+    },
+    "show_quick_capture": {
+      "line": 54714,
+      "end": 54864
+    },
+    "advanced_entry_context": {
+      "line": 54866,
+      "end": 54894
+    },
+    "add_item_advanced": {
+      "line": 54896,
+      "end": 54946
+    },
+    "delete_item": {
+      "line": 54948,
+      "end": 54977
+    },
+    "move_item_to_trash": {
+      "line": 54979,
+      "end": 55003
+    },
+    "add_child_item": {
+      "line": 55008,
+      "end": 55031
+    },
+    "add_sibling_item": {
+      "line": 55033,
+      "end": 55079
+    },
+    "convert_selected_kind": {
+      "line": 55081,
+      "end": 55093
+    },
+    "group_selected_items": {
+      "line": 55095,
+      "end": 55163
+    },
+    "keep_branch_expanded": {
+      "line": 55165,
+      "end": 55176
+    },
+    "dissolve_selected_group": {
+      "line": 55178,
+      "end": 55210
+    },
+    "copy_items_with_new_ids": {
+      "line": 55212,
+      "end": 55250
+    },
+    "remap_rich_note_items": {
+      "line": 55253,
+      "end": 55261
+    },
+    "remap_item_references": {
+      "line": 55263,
+      "end": 55271
+    },
+    "clean_item_references": {
+      "line": 55273,
+      "end": 55317
+    },
+    "duplicate_selected_items": {
+      "line": 55319,
+      "end": 55338
+    },
+    "move_selected_items": {
+      "line": 55340,
+      "end": 55362
+    },
+    "move_selected_to_list_dialog": {
+      "line": 55364,
+      "end": 55389
+    },
+    "clear_list": {
+      "line": 55391,
+      "end": 55398
+    },
+    "edit_item": {
+      "line": 55400,
+      "end": 55418
+    },
+    "_new_themed_popup_menu": {
+      "line": 55420,
+      "end": 55433
+    },
+    "_add_importance_cascade": {
+      "line": 55435,
+      "end": 55451
+    },
+    "_add_due_cascade": {
+      "line": 55453,
+      "end": 55474
+    },
+    "_add_color_cascade": {
+      "line": 55476,
+      "end": 55493
+    },
+    "_add_label_cascade": {
+      "line": 55495,
+      "end": 55527
+    },
+    "build_item_context_menu": {
+      "line": 55529,
+      "end": 55688
+    },
+    "build_tree_background_menu": {
+      "line": 55690,
+      "end": 55726
+    },
+    "build_in_progress_context_menu": {
+      "line": 55728,
+      "end": 55827
+    },
+    "toggle_in_progress_label": {
+      "line": 55829,
+      "end": 55846
+    },
+    "_popup_item_menu": {
+      "line": 55848,
+      "end": 55857
+    },
+    "show_item_context_menu": {
+      "line": 55859,
+      "end": 55924
+    },
+    "_destroy_item_context_menu": {
+      "line": 55926,
+      "end": 55935
+    },
+    "_restore_item_selection": {
+      "line": 55937,
+      "end": 55940
+    },
+    "set_item_color_selected": {
+      "line": 55942,
+      "end": 55953
+    },
+    "is_tree_indicator_click": {
+      "line": 55955,
+      "end": 55977
+    },
+    "item_index": {
+      "line": 55982,
+      "end": 55992
+    },
+    "relation_index": {
+      "line": 55994,
+      "end": 55996
+    },
+    "item_backlinks": {
+      "line": 55998,
+      "end": 56001
+    },
+    "item_dependents": {
+      "line": 56003,
+      "end": 56006
+    },
+    "open_blockers": {
+      "line": 56008,
+      "end": 56012
+    },
+    "is_blocked": {
+      "line": 56014,
+      "end": 56015
+    },
+    "dependency_creates_cycle": {
+      "line": 56017,
+      "end": 56033
+    },
+    "relation_label": {
+      "line": 56035,
+      "end": 56040
+    },
+    "confirm_complete_blocked": {
+      "line": 56042,
+      "end": 56055
+    },
+    "choose_items_dialog": {
+      "line": 56057,
+      "end": 56127
+    },
+    "add_item_relation": {
+      "line": 56129,
+      "end": 56156
+    },
+    "link_selected_items": {
+      "line": 56158,
+      "end": 56168
+    },
+    "add_blockers_selected": {
+      "line": 56170,
+      "end": 56182
+    },
+    "running_timer": {
+      "line": 56185,
+      "end": 56187
+    },
+    "timer_minutes": {
+      "line": 56189,
+      "end": 56190
+    },
+    "start_time_tracking": {
+      "line": 56192,
+      "end": 56211
+    },
+    "stop_time_tracking": {
+      "line": 56213,
+      "end": 56244
+    },
+    "recover_time_booking": {
+      "line": 56246,
+      "end": 56287
+    },
+    "focus_candidate": {
+      "line": 56289,
+      "end": 56295
+    },
+    "start_focus_selected": {
+      "line": 56297,
+      "end": 56307
+    },
+    "start_focus": {
+      "line": 56309,
+      "end": 56330
+    },
+    "toggle_focus_pause": {
+      "line": 56332,
+      "end": 56342
+    },
+    "finish_focus": {
+      "line": 56344,
+      "end": 56374
+    },
+    "sync_focus_panel": {
+      "line": 56376,
+      "end": 56424
+    },
+    "stop_time_tracking_from_header": {
+      "line": 56426,
+      "end": 56430
+    },
+    "toggle_time_tracking_selected": {
+      "line": 56432,
+      "end": 56442
+    },
+    "update_timer_indicator": {
+      "line": 56444,
+      "end": 56487
+    },
+    "toggle_done": {
+      "line": 56489,
+      "end": 56584
+    },
+    "set_importance_selected": {
+      "line": 56589,
+      "end": 56600
+    },
+    "cycle_importance_selected": {
+      "line": 56602,
+      "end": 56614
+    },
+    "set_due_date_selected": {
+      "line": 56619,
+      "end": 56641
+    },
+    "themed_due_dialog": {
+      "line": 56643,
+      "end": 56720
+    },
+    "set_due_value_selected": {
+      "line": 56722,
+      "end": 56745
+    },
+    "make_subitem": {
+      "line": 56750,
+      "end": 56803
+    },
+    "move_item_relative_to_target": {
+      "line": 56805,
+      "end": 56834
+    },
+    "toggle_indent_selected": {
+      "line": 56836,
+      "end": 56860
+    },
+    "indent_selected": {
+      "line": 56862,
+      "end": 56877
+    },
+    "outdent_selected": {
+      "line": 56879,
+      "end": 56896
+    },
+    "lift_item_to_parent_level": {
+      "line": 56898,
+      "end": 56917
+    },
+    "on_drag_start": {
+      "line": 56922,
+      "end": 57041
+    },
+    "on_folder_overview_drag_start": {
+      "line": 57043,
+      "end": 57057
+    },
+    "on_folder_overview_drag_motion": {
+      "line": 57059,
+      "end": 57088
+    },
+    "on_folder_overview_drag_end": {
+      "line": 57090,
+      "end": 57125
+    },
+    "identify_sidebar_drop_row": {
+      "line": 57127,
+      "end": 57147
+    },
+    "pointer_is_over_widget": {
+      "line": 57149,
+      "end": 57160
+    },
+    "identify_tree_drop_row": {
+      "line": 57162,
+      "end": 57178
+    },
+    "resolve_task_drop_destination": {
+      "line": 57180,
+      "end": 57206
+    },
+    "move_items_to_list": {
+      "line": 57208,
+      "end": 57232
+    },
+    "on_drag_motion": {
+      "line": 57234,
+      "end": 57276
+    },
+    "on_drag_end": {
+      "line": 57278,
+      "end": 57387
+    },
+    "plan_items_for_day": {
+      "line": 57389,
+      "end": 57391
+    },
+    "drop_items_on_list": {
+      "line": 57393,
+      "end": 57423
+    },
+    "clear_drop_target_tags": {
+      "line": 57425,
+      "end": 57429
+    },
+    "clear_drop_target_tags_recursive": {
+      "line": 57431,
+      "end": 57438
+    },
+    "import_txt_as_new_lists": {
+      "line": 57443,
+      "end": 57485
+    },
+    "extract_txt_list_title": {
+      "line": 57487,
+      "end": 57497
+    },
+    "extract_txt_note": {
+      "line": 57500,
+      "end": 57512
+    },
+    "export_as_txt": {
+      "line": 57514,
+      "end": 57546
+    },
+    "write_items_to_txt": {
+      "line": 57548,
+      "end": 57606
+    },
+    "pin_page_on_board": {
+      "line": 57608,
+      "end": 57616
+    },
+    "export_all_markdown": {
+      "line": 57618,
+      "end": 57669
+    },
+    "export_as_markdown": {
+      "line": 57671,
+      "end": 57700
+    },
+    "write_items_to_markdown": {
+      "line": 57702,
+      "end": 57749
+    },
+    "export_as_csv": {
+      "line": 57751,
+      "end": 57781
+    },
+    "safe_csv_cell": {
+      "line": 57784,
+      "end": 57789
+    },
+    "write_items_to_csv": {
+      "line": 57791,
+      "end": 57813
+    },
+    "normalize_csv_header": {
+      "line": 57818,
+      "end": 57827
+    },
+    "clean_csv_cell": {
+      "line": 57830,
+      "end": 57835
+    },
+    "detect_csv_encoding": {
+      "line": 57838,
+      "end": 57851
+    },
+    "decode_csv_bytes": {
+      "line": 57854,
+      "end": 57869
+    },
+    "detect_csv_delimiter": {
+      "line": 57872,
+      "end": 57892
+    },
+    "guess_csv_header": {
+      "line": 57895,
+      "end": 57914
+    },
+    "read_csv_table": {
+      "line": 57917,
+      "end": 57982
+    },
+    "csv_auto_mapping": {
+      "line": 57985,
+      "end": 58004
+    },
+    "parse_csv_flag": {
+      "line": 58007,
+      "end": 58016
+    },
+    "parse_csv_importance": {
+      "line": 58019,
+      "end": 58023
+    },
+    "csv_kind_words": {
+      "line": 58026,
+      "end": 58040
+    },
+    "parse_csv_kind": {
+      "line": 58043,
+      "end": 58047
+    },
+    "parse_csv_minutes": {
+      "line": 58050,
+      "end": 58067
+    },
+    "parse_csv_level": {
+      "line": 58070,
+      "end": 58083
+    },
+    "csv_labels_from_cell": {
+      "line": 58086,
+      "end": 58102
+    },
+    "csv_rows_to_items": {
+      "line": 58104,
+      "end": 58228
+    },
+    "csv_preview_text": {
+      "line": 58230,
+      "end": 58265
+    },
+    "import_csv_table": {
+      "line": 58267,
+      "end": 58309
+    },
+    "csv_import_summary": {
+      "line": 58311,
+      "end": 58324
+    },
+    "calendar_export_for_list": {
+      "line": 58326,
+      "end": 58331
+    },
+    "import_csv_into_list": {
+      "line": 58333,
+      "end": 58338
+    },
+    "exchange_capabilities": {
+      "line": 58387,
+      "end": 58422
+    },
+    "exchange_manifest": {
+      "line": 58424,
+      "end": 58434
+    },
+    "exchange_item_payload": {
+      "line": 58439,
+      "end": 58472
+    },
+    "build_exchange_payload": {
+      "line": 58474,
+      "end": 58536
+    },
+    "parse_exchange_document": {
+      "line": 58570,
+      "end": 58737
+    },
+    "read_exchange_file": {
+      "line": 58739,
+      "end": 58747
+    },
+    "exchange_minutes": {
+      "line": 58752,
+      "end": 58762
+    },
+    "exchange_item_from_payload": {
+      "line": 58764,
+      "end": 58801
+    },
+    "apply_exchange_payload": {
+      "line": 58803,
+      "end": 58873
+    },
+    "exchange_payload_from_markdown": {
+      "line": 58894,
+      "end": 58963
+    },
+    "exchange_recipe_catalog": {
+      "line": 58968,
+      "end": 58972
+    },
+    "save_exchange_recipe": {
+      "line": 58974,
+      "end": 58994
+    },
+    "build_recipe_exchange": {
+      "line": 58996,
+      "end": 59008
+    },
+    "edit_exchange_recipe": {
+      "line": 59010,
+      "end": 59062
+    },
+    "show_exchange_export_dialog": {
+      "line": 59064,
+      "end": 59324
+    },
+    "show_exchange_import_dialog": {
+      "line": 59326,
+      "end": 59430
+    },
+    "show_exchange_spec_dialog": {
+      "line": 59432,
+      "end": 59471
+    },
+    "exchange_label_names": {
+      "line": 59487,
+      "end": 59488
+    },
+    "exchange_context_entries": {
+      "line": 59490,
+      "end": 59504
+    },
+    "build_exchange_context": {
+      "line": 59506,
+      "end": 59510
+    },
+    "exchange_patch_index": {
+      "line": 59512,
+      "end": 59521
+    },
+    "check_exchange_patch": {
+      "line": 59523,
+      "end": 59541
+    },
+    "apply_exchange_patch": {
+      "line": 59543,
+      "end": 59584
+    },
+    "show_exchange_patch_dialog": {
+      "line": 59586,
+      "end": 59652
+    },
+    "page_restore_preview": {
+      "line": 59660,
+      "end": 59723
+    },
+    "notion_import_preview": {
+      "line": 59725,
+      "end": 59829
+    },
+    "import_notion_archive": {
+      "line": 59831,
+      "end": 59862
+    },
+    "apply_notion_selection": {
+      "line": 59864,
+      "end": 59938
+    },
+    "read_page_restore_backup": {
+      "line": 59940,
+      "end": 59962
+    },
+    "restore_page_from_backup": {
+      "line": 59964,
+      "end": 60006
+    },
+    "apply_page_restore": {
+      "line": 60008,
+      "end": 60085
+    },
+    "show_backup_catalog": {
+      "line": 60087,
+      "end": 60241
+    },
+    "backup_compare_sources": {
+      "line": 60243,
+      "end": 60258
+    },
+    "read_backup_for_compare": {
+      "line": 60260,
+      "end": 60276
+    },
+    "backup_compare_text": {
+      "line": 60278,
+      "end": 60305
+    },
+    "show_backup_compare_dialog": {
+      "line": 60307,
+      "end": 60405
+    },
+    "exchange_prompt_text": {
+      "line": 60407,
+      "end": 60486
+    },
+    "show_csv_import_dialog": {
+      "line": 60488,
+      "end": 60700
+    },
+    "complete_backup_payload": {
+      "line": 60702,
+      "end": 60725
+    },
+    "exportable_pinboards": {
+      "line": 60727,
+      "end": 60730
+    },
+    "pinboards_from_backup": {
+      "line": 60732,
+      "end": 60795
+    },
+    "attachment_owners": {
+      "line": 60797,
+      "end": 60813
+    },
+    "collect_attachment_sources": {
+      "line": 60815,
+      "end": 60840
+    },
+    "validate_backup_target": {
+      "line": 60842,
+      "end": 60857
+    },
+    "write_complete_backup": {
+      "line": 60859,
+      "end": 60892
+    },
+    "inspect_backup_archive": {
+      "line": 60894,
+      "end": 60939
+    },
+    "read_zip_member_limited": {
+      "line": 60941,
+      "end": 60955
+    },
+    "copy_zip_member_limited": {
+      "line": 60957,
+      "end": 60972
+    },
+    "safe_attachment_filename": {
+      "line": 60975,
+      "end": 60999
+    },
+    "remap_import_attachments": {
+      "line": 61001,
+      "end": 61047
+    },
+    "ensure_inbox_in_collection": {
+      "line": 61049,
+      "end": 61060
+    },
+    "export_full_backup": {
+      "line": 61062,
+      "end": 61085
+    },
+    "escape_print_text": {
+      "line": 61090,
+      "end": 61095
+    },
+    "print_default_options": {
+      "line": 61097,
+      "end": 61099
+    },
+    "print_document_sections": {
+      "line": 61101,
+      "end": 61152
+    },
+    "flatten_print_items": {
+      "line": 61154,
+      "end": 61162
+    },
+    "print_item_details": {
+      "line": 61164,
+      "end": 61191
+    },
+    "build_print_html": {
+      "line": 61193,
+      "end": 61290
+    },
+    "write_print_document": {
+      "line": 61292,
+      "end": 61313
+    },
+    "show_print_dialog": {
+      "line": 61315,
+      "end": 61401
+    },
+    "escape_ics_text": {
+      "line": 61406,
+      "end": 61411
+    },
+    "fold_ics_line": {
+      "line": 61414,
+      "end": 61437
+    },
+    "ics_utc_stamp": {
+      "line": 61440,
+      "end": 61450
+    },
+    "ics_local_stamp": {
+      "line": 61453,
+      "end": 61459
+    },
+    "ics_date_stamp": {
+      "line": 61462,
+      "end": 61464
+    },
+    "ics_repeat_rule": {
+      "line": 61467,
+      "end": 61501
+    },
+    "ics_event_lines": {
+      "line": 61503,
+      "end": 61575
+    },
+    "ics_alarm_lines": {
+      "line": 61577,
+      "end": 61595
+    },
+    "ics_default_options": {
+      "line": 61597,
+      "end": 61599
+    },
+    "ics_sources": {
+      "line": 61601,
+      "end": 61624
+    },
+    "build_ics_document": {
+      "line": 61626,
+      "end": 61659
+    },
+    "write_ics_document": {
+      "line": 61661,
+      "end": 61682
+    },
+    "ics_summary": {
+      "line": 61684,
+      "end": 61691
+    },
+    "show_calendar_export_dialog": {
+      "line": 61693,
+      "end": 61785
+    },
+    "unescape_ics_text": {
+      "line": 61790,
+      "end": 61804
+    },
+    "unfold_ics_lines": {
+      "line": 61807,
+      "end": 61816
+    },
+    "parse_ics_property": {
+      "line": 61819,
+      "end": 61841
+    },
+    "parse_ics_events": {
+      "line": 61844,
+      "end": 61879
+    },
+    "ics_property": {
+      "line": 61882,
+      "end": 61886
+    },
+    "ics_import_zone": {
+      "line": 61891,
+      "end": 61899
+    },
+    "parse_ics_moment": {
+      "line": 61902,
+      "end": 61934
+    },
+    "parse_ics_duration": {
+      "line": 61937,
+      "end": 61946
+    },
+    "ics_repeat_from_rule": {
+      "line": 61949,
+      "end": 61972
+    },
+    "parse_ics_until": {
+      "line": 61975,
+      "end": 61992
+    },
+    "ics_importance_from_priority": {
+      "line": 61995,
+      "end": 62002
+    },
+    "ics_import_default_options": {
+      "line": 62004,
+      "end": 62005
+    },
+    "read_ics_file": {
+      "line": 62007,
+      "end": 62044
+    },
+    "known_glide_item_ids": {
+      "line": 62046,
+      "end": 62050
+    },
+    "ics_events_to_items": {
+      "line": 62052,
+      "end": 62202
+    },
+    "ics_preview_text": {
+      "line": 62204,
+      "end": 62227
+    },
+    "import_ics_events": {
+      "line": 62229,
+      "end": 62268
+    },
+    "ics_import_summary": {
+      "line": 62270,
+      "end": 62283
+    },
+    "show_ics_import_dialog": {
+      "line": 62285,
+      "end": 62416
+    },
+    "ics_import_into_list": {
+      "line": 62418,
+      "end": 62423
+    },
+    "app_backup_payload": {
+      "line": 62427,
+      "end": 62449
+    },
+    "app_backup_section": {
+      "line": 62451,
+      "end": 62474
+    },
+    "describe_app_backup": {
+      "line": 62476,
+      "end": 62522
+    },
+    "format_app_backup_preview": {
+      "line": 62524,
+      "end": 62538
+    },
+    "export_app_backup": {
+      "line": 62540,
+      "end": 62567
+    },
+    "read_app_backup_file": {
+      "line": 62569,
+      "end": 62580
+    },
+    "restore_app_backup_extras": {
+      "line": 62582,
+      "end": 62642
+    },
+    "restore_app_backup": {
+      "line": 62644,
+      "end": 62699
+    },
+    "ask_app_backup_sections": {
+      "line": 62701,
+      "end": 62772
+    },
+    "import_full_backup": {
+      "line": 62774,
+      "end": 63080
+    },
+    "sort_current_list": {
+      "line": 63082,
+      "end": 63091
+    },
+    "_sort_items_recursive": {
+      "line": 63093,
+      "end": 63116
+    },
+    "import_from_txt": {
+      "line": 63118,
+      "end": 63164
+    },
+    "parse_txt_items": {
+      "line": 63166,
+      "end": 63332
+    },
+    "ensure_label_by_name": {
+      "line": 63334,
+      "end": 63349
+    },
+    "count_items": {
+      "line": 63351,
+      "end": 63358
+    },
+    "bind_mousewheel": {
+      "line": 63363,
+      "end": 63369
+    },
+    "_scroll_text_like_class": {
+      "line": 63371,
+      "end": 63388
+    },
+    "_on_mousewheel": {
+      "line": 63390,
+      "end": 63448
+    },
+    "_queue_canvas_scroll": {
+      "line": 63450,
+      "end": 63464
+    },
+    "_apply_canvas_scroll": {
+      "line": 63467,
+      "end": 63485
+    },
+    "_scroll_horizontal_precise": {
+      "line": 63488,
+      "end": 63508
+    },
+    "bind_horizontal_wheel": {
+      "line": 63510,
+      "end": 63541
+    },
+    "bind_drag_scroll": {
+      "line": 63543,
+      "end": 63610
+    },
+    "accel": {
+      "line": 63613,
+      "end": 63619
+    },
+    "redo_accel": {
+      "line": 63622,
+      "end": 63624
+    },
+    "sidebar_narrow": {
+      "line": 63628,
+      "end": 63630
+    },
+    "_apply_sidebar_visibility": {
+      "line": 63632,
+      "end": 63659
+    },
+    "toggle_sidebar_narrow": {
+      "line": 63661,
+      "end": 63670
+    },
+    "refresh_sidebar_rail": {
+      "line": 63672,
+      "end": 63731
+    },
+    "toggle_sidebar": {
+      "line": 63733,
+      "end": 63742
+    },
+    "compact_mode_active": {
+      "line": 63753,
+      "end": 63754
+    },
+    "handle_compact_shortcut": {
+      "line": 63756,
+      "end": 63764
+    },
+    "reset_compact_shortcut": {
+      "line": 63766,
+      "end": 63768
+    },
+    "reset_compact_shortcut_on_focus_out": {
+      "line": 63770,
+      "end": 63773
+    },
+    "toggle_compact_mode": {
+      "line": 63775,
+      "end": 63778
+    },
+    "enter_compact_mode": {
+      "line": 63780,
+      "end": 63811
+    },
+    "desktop_bounds": {
+      "line": 63813,
+      "end": 63815
+    },
+    "leave_compact_mode": {
+      "line": 63817,
+      "end": 63848
+    },
+    "remember_compact_geometry": {
+      "line": 63850,
+      "end": 63860
+    },
+    "build_compact_header": {
+      "line": 63862,
+      "end": 63903
+    },
+    "update_compact_title": {
+      "line": 63905,
+      "end": 63918
+    },
+    "show_compact_menu": {
+      "line": 63920,
+      "end": 63931
+    },
+    "app_action_entries": {
+      "line": 63933,
+      "end": 63957
+    },
+    "app_action_group": {
+      "line": 63960,
+      "end": 63962
+    },
+    "invoke_app_action": {
+      "line": 63964,
+      "end": 63977
+    },
+    "open_history_view": {
+      "line": 63979,
+      "end": 63983
+    },
+    "show_history_dialog": {
+      "line": 63985,
+      "end": 64147
+    },
+    "search_key": {
+      "line": 64156,
+      "end": 64158
+    },
+    "note_page_opened": {
+      "line": 64160,
+      "end": 64179
+    },
+    "_cancel_recent_pages_job": {
+      "line": 64181,
+      "end": 64190
+    },
+    "_save_recent_pages": {
+      "line": 64192,
+      "end": 64194
+    },
+    "recent_pages": {
+      "line": 64196,
+      "end": 64206
+    },
+    "quick_open_views": {
+      "line": 64208,
+      "end": 64223
+    },
+    "quick_open_results": {
+      "line": 64225,
+      "end": 64306
+    },
+    "_quick_page_result": {
+      "line": 64308,
+      "end": 64320
+    },
+    "open_quick_result": {
+      "line": 64322,
+      "end": 64351
+    },
+    "show_quick_open": {
+      "line": 64353,
+      "end": 64473
+    },
+    "quick_open_stage": {
+      "line": 64479,
+      "end": 64505
+    },
+    "quick_open_surface": {
+      "line": 64509,
+      "end": 64528
+    },
+    "size_quick_open_stage": {
+      "line": 64530,
+      "end": 64538
+    },
+    "theme_is_dark": {
+      "line": 64540,
+      "end": 64544
+    },
+    "close_quick_open_outside": {
+      "line": 64546,
+      "end": 64564
+    },
+    "close_quick_open": {
+      "line": 64566,
+      "end": 64580
+    },
+    "show_actions_dialog": {
+      "line": 64582,
+      "end": 64584
+    },
+    "menu_rows": {
+      "line": 64596,
+      "end": 64636
+    },
+    "menu_at": {
+      "line": 64639,
+      "end": 64644
+    },
+    "action_chooser_open": {
+      "line": 64646,
+      "end": 64651
+    },
+    "show_action_chooser": {
+      "line": 64653,
+      "end": 64882
+    },
+    "close_action_chooser_outside": {
+      "line": 64884,
+      "end": 64899
+    },
+    "close_action_chooser": {
+      "line": 64901,
+      "end": 64930
+    },
+    "build_menu": {
+      "line": 64932,
+      "end": 64968
+    },
+    "menubar_structure": {
+      "line": 64970,
+      "end": 65192
+    },
+    "create_menubar": {
+      "line": 65194,
+      "end": 65236
+    },
+    "_post_custom_menu": {
+      "line": 65238,
+      "end": 65249
+    },
+    "open_backup_folder": {
+      "line": 65251,
+      "end": 65252
+    },
+    "themed_message_dialog": {
+      "line": 65254,
+      "end": 65375
+    },
+    "show_info": {
+      "line": 65377,
+      "end": 65378
+    },
+    "show_warning": {
+      "line": 65380,
+      "end": 65381
+    },
+    "show_error": {
+      "line": 65383,
+      "end": 65384
+    },
+    "ask_yes_no": {
+      "line": 65386,
+      "end": 65387
+    },
+    "ask_yes_no_cancel": {
+      "line": 65389,
+      "end": 65390
+    },
+    "restore_focus": {
+      "line": 65392,
+      "end": 65402
+    },
+    "about_text": {
+      "line": 65404,
+      "end": 65419
+    },
+    "about_actions": {
+      "line": 65421,
+      "end": 65435
+    },
+    "show_release_notes_dialog": {
+      "line": 65439,
+      "end": 65446
+    },
+    "show_about_dialog": {
+      "line": 65448,
+      "end": 65452
+    },
+    "manual_html": {
+      "line": 65454,
+      "end": 65466
+    },
+    "export_manual": {
+      "line": 65468,
+      "end": 65488
+    },
+    "show_manual_dialog": {
+      "line": 65490,
+      "end": 65600
+    },
+    "manual_entries": {
+      "line": 65603,
+      "end": 65613
+    },
+    "show_shortcuts_dialog": {
+      "line": 65615,
+      "end": 65799
+    }
+  },
+  "direct_python_modules": {
+    "accessibility.py": "d5b959172f536d2349ce55c2f20960650d73d3572052cf5bf496288cffa2a91b",
+    "accessibility_bindings.py": "57fca8a881a00ff1a12e4be3103ed58c610d1d1c0159b8d7faeb5cd0be49ffa6",
+    "action_catalog.py": "4811bbd6abd3418bf7db9816d3c1fee3a00ab703d8f0cdf5e0cf0b82c753b0f6",
+    "action_menu.py": "12c6f8669df966735de7bfd6361758e9c9093bace5461b17901da99c9bfa9c4a",
+    "animation.py": "a7f4fb2849da4dcc6831c28811a52de9e739a9d251e2a123fc5b2c09202c3006",
+    "animation_export.py": "a3f47a4e0e91462de11f4458c99dc1cb2d8580b02b7baa824817dd8d9be918bb",
+    "appearance.py": "1366388cf453f9d5ddf11bbc47e43fdd796b750a3a26105623b539e0928a2ea8",
+    "attachment_paths.py": "7c506fd2da19ec74513c4d64779e5add5129b91a5cbcd5afdf90b28ba5c329cc",
+    "attachment_policy.py": "94576db88247bebe05d57468b9d0729a4912df1df7fd58f2b43c0c28fe507018",
+    "backdrop.py": "a45c04144b4366eb805aee56558005976f0e66d53032acb0b6aa37ee702689f8",
+    "backup_catalog.py": "936d86a0e20bdcc252279de853d167152e121d4c4bed37a479dc0170a3f9294a",
+    "backup_diff.py": "9913de3fed9297cdbe8ad706a9390188b7a6800ec995be6fd78c11e6600f63de",
+    "backup_snapshot.py": "f724e53794dbc78b53be471c36a5edc2d19faddb1a38f1328332700f4742c995",
+    "busy_calendar.py": "5de924eb3a584865702419e3036cef58a01e244ec34bf57bc42140dcdd9f192c",
+    "calendar_service.py": "13c8e3bd01f7dabda8a2101ec9250b970735de77e3a8fe33604db39ff0ab8943",
+    "capture_parser.py": "7562b7d2fe6c38c2bb3011670d5caff578b971824996a7598b628ec46727f9a3",
+    "compact_mode.py": "427cd067e40270ab8ce08e8d40ba10d521baa3259ed57f4686becb285993c1ba",
+    "content_search.py": "d2359609d6f574984527ad24b33a5ea2b85637330500f6eab23bab6f1f58d330",
+    "core_accessibility.py": "4764a2f13f626de1243bba17b2bb761ab497b8ee9ad1b64e668001f80c256bed",
+    "daily_hints.py": "3d1436b64c4fd113b4cb0469b7cdc7db1eb2dc579bed5af262f21b58ddddb5f7",
+    "data_lock.py": "3029bc8cfb0bf881e354ed962d3a7784f9e1c1fd861afb02acccec52a0e482ca",
+    "day_proposal.py": "136f768444b7da7605deb6562e3972dbcae27ac47cc7ba2ed126df74d2fb4abf",
+    "day_relief.py": "f889a85441e366e0ba9b614ac9d256db68ceceab57e75c623cd1f6f1bb649587",
+    "drawing.py": "f6cb2386cf00676e5af19cca46bc354f4c2104f87f2a6d3ae85a281c2842712c",
+    "drawing_image.py": "d1020a43175f251a5a59aa434ebbc5b4cb43d8e70fc9c245deaff2001bfa1ad9",
+    "editor_flush.py": "192d8d9041842a67006b0296408596b602194c7e385357c7648b9a0e5c37417c",
+    "eisenhower.py": "5f4386a5ff60371b2627e34612aadcfc7c64cad772a5dfb469dc94f22f2b0ca0",
+    "exchange_patch.py": "3b5bf73c253845110c867a3d1c9629137f9070e9a12c69ac0edcf970dc576e4e",
+    "exchange_recipes.py": "640fe522f278cde07115293614d8fca16d0e819dbbad9e3a06a5a9a312ee4198",
+    "filter_explain.py": "f581412f3d4c8136941518e0dbe516c44db7e1ba9fee87b47f3b347878c5245a",
+    "focus_timer.py": "23199b0595e32770f388cf1f2a6dad8a383341893e02e9421b49c5428afb18d5",
+    "glide_start.py": "6cf7507d3f3c85d8b0bbd30072cb9482f49d3628b22b561057ffb3df08ae7498",
+    "glyph_metrics.py": "cc4e480be903d550c505774003223f801c237f5ce50e4328743c2416faced76d",
+    "home_dashboard.py": "59c9540698df4788eaf76eaeff464c66b5558c518dd6ba45e6faf9fb8ceb9755",
+    "home_task_tiles.py": "357de25f557bcc52e0d9be83219aceaa23809edb34a3b8c69cdbad25c22a31d0",
+    "home_tiles.py": "d05add8e3c09c62b2696db34bda851e3d84475182a038cd1800a051fe590e486",
+    "ics_busy.py": "89f85e03a4b535eea3802294006ed31854c8907123db779aef8b02fe5360df67",
+    "ics_recurrence.py": "454bd59489eb404097b68437d62a1786f876388ae0e13ee03649cd30c254353b",
+    "ics_timezone.py": "bf3fd6590f917ede7975542e267e5e41dce7c70b452a2c497c8d54894b8de2cd",
+    "image_conversion.py": "768bbec18aa0463b5fc0d6a65590d1bf87d6ac94115564aceb2af14fd2f2772b",
+    "image_preview.py": "7e266418b278cb4d3e7033861da36bb9f753eb325916f3bf1706f6cfb451ad18",
+    "interaction_policy.py": "05baf1651eb4a9ab014c6086379fd791e2853495eac4e776bae21c2fb05da177",
+    "item_index.py": "a1c0297b8d77d2dd6b69e7be9287b5fdbc7f125658dea6a0626c55262c92128e",
+    "load_phases.py": "6b7448c728de5d1342c9376b3b244a0f946100b84dc6c6d80d4aeae9b373a8e9",
+    "logo.py": "7dafc78697c33315d83dbbb0e16aa222068a123f6eba93d9126dc01150a61d4a",
+    "logo_raster.py": "e594735d05b1e7c3be2ac73bfa7340d85444293bfc1c84e31dbd4cd7f63db47d",
+    "markdown_tree.py": "44838e1af044f447c160fa866d30c83755858ec71ee269e91a3202b0156a2678",
+    "motion.py": "3f6aa78376bb05ff0fe498c16f1d9edf9292bf0e19bc984513d73e4ce10a9162",
+    "notion_archive.py": "f08a04c8bb0be71b24e0313b72381c352c8fbbf851aabf53b64767b57a28d64c",
+    "notion_hierarchy.py": "6148ad9d472c4dfea16300701021bd278d695d18481e08f081db9aa578c05a42",
+    "notion_import.py": "d0e7c074aef0ccfa4ae869a96e1bddf484f0b3f5aa45c593a81012a106e9688c",
+    "notion_reimport.py": "10f06f7dabf1eb2563b15bd887729a5e75d87d2b8459cbcad3654c9f67cc815a",
+    "object_references.py": "133b8c9f9e2dc5fa60a063971dc5396cf417f718d08ff65860e705241b890ee7",
+    "occupied_time.py": "ba756252c2552a1c3abcbf99640be79c49f9286fd6131d509eb7bf83d6a170b0",
+    "page_features.py": "f6d5a131aee8d87cc3be2f8c3a053bf20e43f668b2daacc2e64bb209a497ffcc",
+    "page_markdown.py": "5805eab66689fbe2dac5c863adea3ff0e2e0157f979321606062aaa01fcbbb53",
+    "page_restore.py": "ba86f3e099acaaceb9de7677de6fe9638595d02f811bf557eb410353d6079b66",
+    "persistence.py": "9611042ee5a81ad26f6eb0aba4642e9c39c3caf8cfb9d4dba8bb59b07e6ba463",
+    "pinboard_pages.py": "fb81ff0b55012de45cbad39f433ee0916d4fb827348c5c65992c932e0dbdce22",
+    "planning.py": "59b78be6d91da4adf31c2c401b0bdf1c10b6c97490a122f7f3420c20059ba0ad",
+    "preview_tools.py": "5fb18ce2df48c83b5c804ea862db9f3c798622457cd39ccde22be033401d9ba1",
+    "release_notes.py": "f22f543c022eb1162cfc60c7f5c685b97f0f2d721283afc7fc79960de7bc7ac9",
+    "render_retention.py": "efec6647e1adfc237b9935426a91f58461e56c03935a35a082666bbd338a82e8",
+    "repeat_ics.py": "ffd2bfdae221ee4c3749c673b5f4a4d5cfeb64a78f060d502956abe582176237",
+    "repeat_rules.py": "fa78bb5887bec9c27fa4d77e03ed95e197931e54b2f0ab1f949b34d4f26e28a8",
+    "restore_assets.py": "f3101e2dbff3fb38bee2f561888d484d9f73dd1ad533aef3955bac72feb85571",
+    "routines.py": "bb8bb35cc63f28542665eb3d144ef4bf5308fbd944c25711d4c04391a08a6bcb",
+    "runtime_check.py": "ea6ab0ec80b3944b6d05762e5ae100f63a2fa83bd2e31ca940f66b5166188f9c",
+    "runtime_diagnostics.py": "8474e7234412dbc78a32e2e5971cb65a188f384b7bac17b46eb785d13d21a7a0",
+    "save_comparison.py": "d7cf31f001a20ef32c1e7860b5cde54f0947a2b952b7298443e332e4ba4260b5",
+    "save_result.py": "9eb8ef11cbcce47e485e958b732c98a7996979bd15bde65f901ad4423dec8514",
+    "schema_backups.py": "3d07ef08791d7b46f47f75521e6152050ada2d1b256fc29abdd417c33c11a9ae",
+    "session_guard.py": "6515d08fdc32e5875f1953aeb39bd7202691cd8a69a126dffaee2e7e401251d0",
+    "sidebar_policy.py": "52215f7e9d860642b7ef46925a0666d84efb0eddcc4253e204be2204b8b7d763",
+    "side_view.py": "4e1ebd3ffb6c8012222fa9eb7d1074dd03ecb7fbf93c76c3bceadda1565b0dbf",
+    "source_metadata.py": "a123ec2c186fd927ebde2ee4c1beecc606830b85cd66961dff7f41318e437d1a",
+    "storage_health.py": "22fce4eb46b705bf332b10ef141e3f052b045c5cb2bec2b0338ecf301957d07d",
+    "structural_guard.py": "b834f48aaa6e948d484c5402de76d60c7a7327d86cbeaf8d9d1c1ae42d66a2f4",
+    "svg_geometry.py": "217bb988c16e2528901a6a550737b9525b1b288c76ddd8956d7beb0b0dc2b35e",
+    "symbol_policy.py": "088b815f95e8070b450795af25556157e44984489c93c50309d79b110ddebc4b",
+    "task_editing.py": "5656f652bab497fc3841be6f692874276751953aa10690f7b6ee4873ed237c38",
+    "task_references.py": "c27d8336c374ef9187058c84414d0077d328e5b04ec7c83f317e6aee0de0eb19",
+    "timezones.py": "43f0b56987ac64fea922cdf4a71974b1ea060f62259f4cb8eeb8b5114d06d4ea",
+    "today_view.py": "c9d12cbf24c809890ef17f952654a057d4229153dbc78591b33eb20043b4d917",
+    "ui_design.py": "28e8a3b63b7875aab3e79215d89f78c8c75fcdf1ab008f0b07fd04cd04e4a0ae",
+    "undo_history.py": "3595022982da1d7181ad0448ea6d80909f228c6c4d1eaa00926ad07216466609",
+    "view_definition.py": "0dfffe15d7f5d7fd6a0f68e839b0120627b4fd64fe06b66fe4642d0cd2b57636",
+    "view_metrics.py": "a5540e5b1d0f65c98fdfeab4ec3b5b1288e9b6e5ca4dd5e07fbf36f396bac276",
+    "week_planning.py": "38ff18553d762946fa8c4fa857cdabb4d39a84cfc020f8fa157882b4066fe95b"
+  },
+  "missing_legacy_module_references": [
+    {
+      "name": "template_helpers.py",
+      "line": 971,
+      "section": "18.2 Bestehende Funktionen und ihre Restumfänge"
+    },
+    {
+      "name": "drawing_import.py",
+      "line": 975,
+      "section": "18.2 Bestehende Funktionen und ihre Restumfänge"
+    },
+    {
+      "name": "drawing_palette.py",
+      "line": 975,
+      "section": "18.2 Bestehende Funktionen und ihre Restumfänge"
+    },
+    {
+      "name": "drawing_animation.py",
+      "line": 976,
+      "section": "18.2 Bestehende Funktionen und ihre Restumfänge"
+    }
+  ]
+}

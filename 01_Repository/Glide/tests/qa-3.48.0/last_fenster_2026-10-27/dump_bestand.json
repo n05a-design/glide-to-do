@@ -1,0 +1,74 @@
+[
+  {
+    "Name": "python.exe.66596.dmp",
+    "Bytes": 1976482,
+    "Modified": "2026-10-27T14:58:12.6866876+01:00",
+    "Signature": "MDMP",
+    "Flags": "0x200121",
+    "FullMemoryFlag": false,
+    "SHA256": "6b8fe21cdb6c34653bc25221eb5e06a47f124c69e2f12e515d34ec438d20b233"
+  },
+  {
+    "Name": "python.exe.42824.dmp",
+    "Bytes": 1977555,
+    "Modified": "2026-10-27T14:57:28.5025021+01:00",
+    "Signature": "MDMP",
+    "Flags": "0x200121",
+    "FullMemoryFlag": false,
+    "SHA256": "9afe7296384c16180be48f4877b95b6b6c93fc09e7351580c1444bd954b7da14"
+  },
+  {
+    "Name": "python.exe.66960.dmp",
+    "Bytes": 1973107,
+    "Modified": "2026-10-27T14:55:46.674219+01:00",
+    "Signature": "MDMP",
+    "Flags": "0x200121",
+    "FullMemoryFlag": false,
+    "SHA256": "d3bc619d6445bc3bad1332f65d6263392780da0688dca2d2fb180d06a6757a34"
+  },
+  {
+    "Name": "python.exe.34580.dmp",
+    "Bytes": 1996972,
+    "Modified": "2026-10-27T14:55:22.7296557+01:00",
+    "Signature": "MDMP",
+    "Flags": "0x200121",
+    "FullMemoryFlag": false,
+    "SHA256": "d390c1e2ddecb24908525e5d8d858690f7bd71e464bc78778d2b8e0cff686d54"
+  },
+  {
+    "Name": "python.exe.57356.dmp",
+    "Bytes": 2142527,
+    "Modified": "2026-10-27T14:54:16.550017+01:00",
+    "Signature": "MDMP",
+    "Flags": "0x200121",
+    "FullMemoryFlag": false,
+    "SHA256": "389710f359f31f2d3cce1a7eaa1bb6a6e8c26e464b310cf11b9a394e5d453f16"
+  },
+  {
+    "Name": "python.exe.46332.dmp",
+    "Bytes": 2155796,
+    "Modified": "2026-10-27T14:23:40.3675867+01:00",
+    "Signature": "MDMP",
+    "Flags": "0x200121",
+    "FullMemoryFlag": false,
+    "SHA256": "cea70eb76134bc62acd129425981ab7eb5c5d11e66600ea17cc9d460d3a3acfa"
+  },
+  {
+    "Name": "python.exe.66932.dmp",
+    "Bytes": 2180524,
+    "Modified": "2026-10-27T14:22:33.641578+01:00",
+    "Signature": "MDMP",
+    "Flags": "0x200121",
+    "FullMemoryFlag": false,
+    "SHA256": "c3482fefd7fddadf71d5abcbe12d442975377604124ce8792704f346ffa508ab"
+  },
+  {
+    "Name": "python.exe.64880.dmp",
+    "Bytes": 2133739,
+    "Modified": "2026-10-27T14:18:21.7447193+01:00",
+    "Signature": "MDMP",
+    "Flags": "0x200121",
+    "FullMemoryFlag": false,
+    "SHA256": "d589f2306568d6a6f276acb1f90d12a98c4bf3a7b40726c083226b0b3fc7222d"
+  }
+]

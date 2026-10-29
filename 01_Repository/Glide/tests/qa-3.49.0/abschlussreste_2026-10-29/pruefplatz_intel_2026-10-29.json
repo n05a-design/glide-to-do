@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-29",
+  "systemkontext": {
+    "runner_python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+    "implementierung": "CPython",
+    "plattform": "win32",
+    "systemversion": "10.0.26300",
+    "architektur": "AMD64",
+    "cpu": "Intel(R) Core(TM) i9-14900K",
+    "logische_prozessoren": 32,
+    "cpu_hersteller": "GenuineIntel",
+    "board_hersteller": "Gigabyte Technology Co., Ltd.",
+    "board": "B760M DS3H DDR4",
+    "bios": "F19",
+    "bios_datum": "09/27/2024"
+  },
+  "pruefplatz": {
+    "cpu_familie": "intel",
+    "hardwareprofil_sha256": "87202e54b537142a560071f5f56e27dc83d7ab89cb751d580b2072ad85b16fe4",
+    "grenze": "Hardwareprofil ohne Rechner-/Benutzerkennung; keine eindeutig bestimmte physische Maschine."
+  },
+  "app_sha256": "2f5556f71c01f22f7991733af6eb004a7af57d8b2b0c63ac21272f34abe014ee",
+  "tool_tests": {
+    "pruefablauf": 12,
+    "prozessdiagnose": 19,
+    "green": true
+  },
+  "new_amd_report_status": "angekuendigt; kein neuer Vollpruefbeleg in diesem Chat oder dem lokalen QA-Eingang vorgefunden",
+  "new_heavy_tests_started": false,
+  "cpu_cause_proven": false
+}

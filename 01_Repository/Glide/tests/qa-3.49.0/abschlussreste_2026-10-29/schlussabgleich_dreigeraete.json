@@ -1,0 +1,24 @@
+{
+  "scope": "Nur abschliessende Ergebnisdokumentation; kein neuer App-/Voll-/M2-Lauf",
+  "results": {
+    "version": {
+      "ok": true,
+      "result": "VERSION, App, Hauptsuite und CHANGELOG: 3.49.0; Datenformat 26"
+    },
+    "documentation": {
+      "ok": true,
+      "result": "Alle Dokumente einschließlich Archiv im Index; 434 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+    },
+    "privacy": {
+      "ok": true,
+      "result": []
+    }
+  },
+  "app_sha256": "39499ab3b784199c5f39a0f836d494b159203b89ec0d37f24fac9a14231aa729",
+  "app_equal_to_40_cases": true,
+  "last_verified_code_inputs_equal": true,
+  "only_expected_tool_changes_since_40_cases": true,
+  "comparison_git_ignored": true,
+  "global_acceptance": false,
+  "ok": true
+}

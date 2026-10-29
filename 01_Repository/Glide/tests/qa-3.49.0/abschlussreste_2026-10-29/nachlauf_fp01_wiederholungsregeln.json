@@ -1,0 +1,68 @@
+{
+  "app_sha256": "5e93aeff9373727b90bc1d57bc280b149f62ffdc41ea055fe4b534776f79e74a",
+  "faelle": {
+    "maske": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 347, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 84, in fall_maske\n    assert run.app.find_item_in_lists(identity)[0]['repeat']==expected\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^\nTypeError: 'NoneType' object is not subscriptable\n"
+    },
+    "maske_gross": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 347, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 90, in fall_maske_gross\n    return fall_maske(run)\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 84, in fall_maske\n    assert run.app.find_item_in_lists(identity)[0]['repeat']==expected\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^\nTypeError: 'NoneType' object is not subscriptable\n"
+    },
+    "inspektor": {
+      "ok": true,
+      "messung": {
+        "vorschau": true,
+        "echter_auswahlbefehl": true
+      }
+    },
+    "vorruecken": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 347, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 138, in fall_vorruecken\n    run.neustart();assert run.app.find_item_in_lists(identity)[0]['repeat']['art']=='serie'\n                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^\nTypeError: 'NoneType' object is not subscriptable\n"
+    },
+    "migration": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 347, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 184, in fall_migration\n    child(run,run.app_path,'kopierfehler' if copy_failure else 'migration')\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 176, in child\n    assert result.returncode==0,(result.stdout+result.stderr)[-1800:]\n           ^^^^^^^^^^^^^^^^^^^^\nAssertionError: Traceback (most recent call last):\n  File \"<string>\", line 20, in <module>\n    assert json.loads(disk.read_text(encoding='utf-8'))['version']==26\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n\n"
+    },
+    "kopierfehler": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 347, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 190, in fall_kopierfehler\n    return fall_migration(run,True)\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 184, in fall_migration\n    child(run,run.app_path,'kopierfehler' if copy_failure else 'migration')\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 176, in child\n    assert result.returncode==0,(result.stdout+result.stderr)[-1800:]\n           ^^^^^^^^^^^^^^^^^^^^\nAssertionError: Traceback (most recent call last):\n  File \"<string>\", line 14, in <module>\n    assert app.save_items(show_error=False)\n           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^\nAssertionError\n\n"
+    },
+    "altleser": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 347, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 202, in fall_altleser\n    assert run.app.lists[-1]['items'][0]['repeat']['art']=='serie'\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^\nIndexError: list index out of range\n"
+    },
+    "altregeln": {
+      "ok": true,
+      "messung": {
+        "altregeln": 6,
+        "termine": 144,
+        "identisch": true
+      }
+    },
+    "schreibfehler": {
+      "ok": true,
+      "messung": {
+        "modell_datei_undo_bei_schreibfehler_erhalten": true,
+        "erneuter_versuch": true,
+        "formattor": true
+      }
+    },
+    "austausch": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 347, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 272, in fall_austausch\n    assert run.app.find_item_in_lists(identity)[0]['repeat']==expected\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^\nTypeError: 'NoneType' object is not subscriptable\n"
+    },
+    "steuerung": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 347, in main\n    evidence=globals()['fall_'+name](run)\n  File \"~\\GlidePruefung\\pruefkopie-c7a_qfj8\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholungsregeln.py\", line 290, in fall_steuerung\n    current=app.find_item_in_lists(identity)[0];assert current['repeat']==saved\n            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^\nTypeError: 'NoneType' object is not subscriptable\n"
+    },
+    "schnelleingabe": {
+      "ok": true,
+      "messung": {
+        "echte_chips": 3,
+        "undo_redo": true,
+        "chipruecknahme": true
+      }
+    }
+  }
+}

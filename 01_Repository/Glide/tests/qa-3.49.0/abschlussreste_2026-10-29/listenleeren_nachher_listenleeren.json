@@ -1,0 +1,54 @@
+{
+  "app_sha256": "39499ab3b784199c5f39a0f836d494b159203b89ec0d37f24fac9a14231aa729",
+  "faelle": {
+    "schreibschutz": {
+      "ok": true,
+      "messung": {
+        "beide_einstiege_ohne_ram_mutation": true
+      }
+    },
+    "frischer_bestand": {
+      "ok": true,
+      "messung": {
+        "beide_einstiege_frisch": true,
+        "umordnung_und_undo_erhalten": true
+      }
+    },
+    "auswahl_veraendert": {
+      "ok": true,
+      "messung": {
+        "neue_ids_nicht_mit_geloescht": true,
+        "kein_neuer_undo_oder_schreibversuch": true
+      }
+    },
+    "dialogsperre": {
+      "ok": true,
+      "messung": {
+        "beide_einstiege_sperrwechsel_und_editorabbruch": true
+      }
+    },
+    "nachlauf": {
+      "ok": true,
+      "messung": {
+        "beide_einstiege_commit_erhalten": true,
+        "ui_fehler_gemeldet_und_undo": true
+      }
+    },
+    "speicherfehler": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-3j3pftr6\\projekt\\01_Repository\\Glide\\tests\\integration\\test_listenleeren.py\", line 168, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-3j3pftr6\\projekt\\01_Repository\\Glide\\tests\\integration\\test_listenleeren.py\", line 111, in fall_speicherfehler\n    assert run.datei() == disk and app.dirty and len(app.undo_stack) == 1\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "regulaer": {
+      "ok": true,
+      "messung": {
+        "hintergrund_ohne_ansichtswechsel": true,
+        "verschachtelt_undo_redo_neustart": true,
+        "direktloeschen_ohne_papierkorb": true,
+        "leerer_noop": true
+      }
+    }
+  },
+  "fehler": [
+    "speicherfehler"
+  ]
+}

@@ -52,7 +52,7 @@ with tempfile.TemporaryDirectory(prefix='glide-woche-') as directory:
     def idle():
         for _ in range(3):root.update_idletasks();root.update()
     def stop():
-        app.cancel_pending_callbacks();app.release_data_lock()
+        app.cancel_pending_callbacks();getattr(app,"finish_recovery_session",lambda:None)();app.release_data_lock()
         for job in root.tk.call('after','info'):root.tk.call('after','cancel',job)
         root.destroy()
     def task(identity):return app.find_item_in_lists(identity)[0]
@@ -247,7 +247,7 @@ m.ListApp.show_error=m.ListApp.show_warning=m.ListApp.show_info=lambda *a,**kw:N
 r=m.tk.Tk();r.withdraw();before=pathlib.Path(m.SAVE_FILE).read_bytes()
 with patch.object(m.shutil,'copy2',side_effect=OSError('synthetic backup failure')):
  a=m.ListApp(r);assert not a.save_items(show_error=False);assert pathlib.Path(m.SAVE_FILE).read_bytes()==before
-a.dirty=False;a.cancel_pending_callbacks();a.release_data_lock();r.destroy()'''
+a.dirty=False;a.cancel_pending_callbacks();getattr(a,"finish_recovery_session",lambda:None)();a.release_data_lock();r.destroy()'''
             result=subprocess.run([sys.executable,'-B','-c',failure_script,str(args.app.resolve())],env=dict(os.environ,GLIDE_DATA_DIR=failure_dir),capture_output=True,text=True,timeout=90)
             assert result.returncode==0,(result.stdout,result.stderr)
             checks.append('Format-22-Vorsicherung: Kopierfehler verhindert Überschreiben der alten Datei')
@@ -263,7 +263,7 @@ m.ListApp.show_error=m.ListApp.show_info=m.ListApp.show_warning=lambda *a,**kw:N
 p=Path(m.SAVE_FILE);before=p.read_bytes();r=m.tk.Tk();a=m.ListApp(r)
 assert a.DATA_SCHEMA_VERSION==21 and a._data_read_only
 assert not a.save_items() and p.read_bytes()==before
-a.cancel_pending_callbacks();a.release_data_lock();r.destroy()
+a.cancel_pending_callbacks();getattr(a,"finish_recovery_session",lambda:None)();a.release_data_lock();r.destroy()
 print('Vorversion Format 21 liest neueres Format schreibgeschützt; unveränderte Bytes')
 """
             result=subprocess.run([sys.executable,'-B','-c',script,str(args.previous.resolve())],capture_output=True,text=True,timeout=90)

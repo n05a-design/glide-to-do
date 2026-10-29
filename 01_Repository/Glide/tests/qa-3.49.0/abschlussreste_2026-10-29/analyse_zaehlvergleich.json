@@ -1,0 +1,15 @@
+{
+  "scope": "Zaehlungsvergleich aller App-Bezeichner auf 50.000 echten Quellzeichen; kein App-/Lasttest",
+  "names": 3082,
+  "source_characters": 50000,
+  "counts_equal": true,
+  "old_seconds": 1.9812766999239102,
+  "new_seconds": 0.0039293000008910894,
+  "old_tool_sha256": "b0c795e7ab7e423048e16430dd8552ce60c514dc45803797b8dd03be10b82d2c",
+  "new_tool_sha256": "6c2c989ae86ba41cd8602e3371a3a8bce884680574ac867c0c57ac92bc682fe5",
+  "full_analysis_before": {
+    "timeout_seconds": 120,
+    "completed": false
+  },
+  "global_acceptance": false
+}

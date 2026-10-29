@@ -1,0 +1,43 @@
+[
+  {
+    "case": "py3148_no_ui",
+    "exitcode": 1,
+    "seconds": 4.77,
+    "last_events": [
+      {
+        "event": "round",
+        "seconds": 3.61,
+        "iteration": 1
+      },
+      {
+        "event": "exception",
+        "seconds": 4.224,
+        "error_type": "AssertionError",
+        "message": "(1, [('Fehler beim Speichern', \"'cell' object is not an iterator\")], 'lock')"
+      }
+    ]
+  },
+  {
+    "case": "py3147_repeat",
+    "exitcode": 3221225477,
+    "seconds": 12.38,
+    "last_events": [
+      {
+        "event": "round",
+        "seconds": 7.7,
+        "iteration": 3
+      },
+      {
+        "event": "round",
+        "seconds": 9.445,
+        "iteration": 4
+      }
+    ]
+  },
+  {
+    "case": "py3147_original_full",
+    "exitcode": 0,
+    "seconds": 102.1,
+    "last_events": []
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "app_sha256": "39499ab3b784199c5f39a0f836d494b159203b89ec0d37f24fac9a14231aa729",
+  "faelle": {
+    "speicherfehler": {
+      "ok": true,
+      "messung": {
+        "beide_einstiege_datei_erhalten_und_undo": true
+      }
+    }
+  },
+  "fehler": []
+}

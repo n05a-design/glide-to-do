@@ -1,6 +1,6 @@
 # Grafik-Master
 
-Stand 27.10.2026 · Glide 3.47.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 Hier liegen die Quellen des Glide-Logos und alle freigegebenen Exporte. Glide
 selbst und die Paketierung arbeiten mit **Kopien** daraus (siehe unten). Wer

@@ -1,0 +1,114 @@
+{
+  "scope": "A01-Pflichtfolge nach Adapter- und Prüfplatzkorrekturen, vor WA-09",
+  "suites": [
+    {
+      "suite": "fp01",
+      "report": "nachlauf_fp01_wiederholen.json",
+      "sha256": "7756eaeb55e37d9e5a16963a2e0ca6fad1ca15e2d7dbcf7f053ef0c9e9c24f2d",
+      "app_sha256": null,
+      "cases": 9,
+      "all_passed": true
+    },
+    {
+      "suite": "wiederholungsregeln",
+      "report": "nachlauf_fp02_wiederholungsregeln.json",
+      "sha256": "f4ff059886b236655587096273a041657ebd881a4c4247ca2bf2666390c4bd9e",
+      "app_sha256": "5e93aeff9373727b90bc1d57bc280b149f62ffdc41ea055fe4b534776f79e74a",
+      "cases": 12,
+      "all_passed": true
+    },
+    {
+      "suite": "ansichten",
+      "report": "nachlauf_fp02_ansichten.json",
+      "sha256": "52fc7edb1b786523899d7f596b872b5dddb6f5094619e5b00b502e6b3b206538",
+      "app_sha256": "5e93aeff9373727b90bc1d57bc280b149f62ffdc41ea055fe4b534776f79e74a",
+      "cases": 15,
+      "all_passed": true
+    },
+    {
+      "suite": "seitenkarten",
+      "report": "nachlauf_fp02_seitenkarten.json",
+      "sha256": "9cb838f2f25758e2eaf450fc2928f1f5178a77159b0a31aafc07182399ab291c",
+      "app_sha256": "5e93aeff9373727b90bc1d57bc280b149f62ffdc41ea055fe4b534776f79e74a",
+      "cases": 6,
+      "all_passed": true
+    },
+    {
+      "suite": "erwaehnungen",
+      "report": "nachlauf_fp02_erwaehnungen.json",
+      "sha256": "b130d437f857a2bc5b0bdc7839a5ec0d80e4d231df7cced85d5e8ec52da4ae95",
+      "app_sha256": "5e93aeff9373727b90bc1d57bc280b149f62ffdc41ea055fe4b534776f79e74a",
+      "cases": 6,
+      "all_passed": true
+    },
+    {
+      "suite": "auftraege",
+      "report": "nachlauf_fp02_auftraege.json",
+      "sha256": "3cdfb349c56a659c2d0029067c6e7dac1f5afd4988cb9c3d9f9d9c361831f591",
+      "app_sha256": "5e93aeff9373727b90bc1d57bc280b149f62ffdc41ea055fe4b534776f79e74a",
+      "cases": 6,
+      "all_passed": true
+    },
+    {
+      "suite": "markdownbaum",
+      "report": "nachlauf_fp02_markdownbaum.json",
+      "sha256": "f5a40c21e9463220fd922cb3d115838fac991e24909f7aa888892cd7099b47f2",
+      "app_sha256": "5e93aeff9373727b90bc1d57bc280b149f62ffdc41ea055fe4b534776f79e74a",
+      "cases": 3,
+      "all_passed": true
+    },
+    {
+      "suite": "arbeitsmodi",
+      "report": "nachlauf_intel_morgen_v2_arbeitsmodi.json",
+      "sha256": "8ac96c3309cf5bbadd2d07d30f48901033ce986de0e164706067f1942ee42b98",
+      "app_sha256": "2f5556f71c01f22f7991733af6eb004a7af57d8b2b0c63ac21272f34abe014ee",
+      "cases": 29,
+      "all_passed": true
+    },
+    {
+      "suite": "wiederanlauf",
+      "report": "nachlauf_intel_morgen_v2_wiederanlauf.json",
+      "sha256": "8d6c6b0deb55d16881553fa99500e15b1921991320a3fe3e50664ea8c98537aa",
+      "app_sha256": "2f5556f71c01f22f7991733af6eb004a7af57d8b2b0c63ac21272f34abe014ee",
+      "cases": 12,
+      "all_passed": true
+    },
+    {
+      "suite": "speicherstatus",
+      "report": "nachlauf_intel_morgen_v2_speicherstatus.json",
+      "sha256": "dbcebd6a7ead54f0e94579a8099d2f36727b812efef6f7de14ea03e6af7b8aea",
+      "app_sha256": "2f5556f71c01f22f7991733af6eb004a7af57d8b2b0c63ac21272f34abe014ee",
+      "cases": 4,
+      "all_passed": true
+    },
+    {
+      "suite": "sicherungszentrale",
+      "report": "nachlauf_intel_morgen_v2_sicherungszentrale.json",
+      "sha256": "9622df2f45d61bbd47678b54a08ef9f308aab008012881e21bcca6e49946dc41",
+      "app_sha256": "2f5556f71c01f22f7991733af6eb004a7af57d8b2b0c63ac21272f34abe014ee",
+      "cases": 7,
+      "all_passed": true
+    },
+    {
+      "suite": "schutzrunde",
+      "report": "nachlauf_sperre_intel_schutzrunde.json",
+      "sha256": "d423f0ab01224a1c1472ce80eb9f9d543420ff8aaa26817951d1edef842c97e0",
+      "app_sha256": "2f5556f71c01f22f7991733af6eb004a7af57d8b2b0c63ac21272f34abe014ee",
+      "cases": 16,
+      "all_passed": true
+    },
+    {
+      "suite": "bildkonversion",
+      "report": "nachlauf_sperre_intel_bildkonversion.json",
+      "sha256": "7ce3d78e0290dd2cb76809a72a764929a463ca1e063d5f06a8b5865c4c51922a",
+      "app_sha256": null,
+      "cases": 11,
+      "all_passed": true
+    }
+  ],
+  "suite_count": 13,
+  "case_count": 136,
+  "global_acceptance": false,
+  "delivery_unchanged": true,
+  "limitation": "Zusammenstellung der tatsächlich grünen Bereichsläufe; kein einzelner Volllauf und keine Mehrplattformfreigabe."
+}

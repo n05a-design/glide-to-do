@@ -1,9 +1,0 @@
-{
-  "version": "3.42.0",
-  "typ": "privater 4.0-Bauprototyp, keine Lieferung",
-  "exitcode": 1,
-  "lizenzbasis_komponenten": 24,
-  "runtime": "eigene Python3.14.5/Tcl-Tk9.1.0",
-  "fehler": "PyInstaller install_name_tool: __LINKEDIT deckt wegen angehängtem ZipFS-Archiv nicht das Dateiende ab",
-  "nachlauf": "Mac-Tcl und Tk mit --disable-zipfs, Skriptdaten werden separat paketiert; neuer nativer Bau und Start offen"
-}

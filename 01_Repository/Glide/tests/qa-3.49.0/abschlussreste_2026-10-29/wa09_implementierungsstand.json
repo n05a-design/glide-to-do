@@ -1,0 +1,31 @@
+{
+  "scope": "WA-09 lokaler Implementierungsstand, nach gezielter Prüfung",
+  "files": {
+    "src/glide/app.pyw": "8025a20ce47e82a880f6328aa64c2eacbc86e5c8f1bb74ed86a0e8a0e80922e8",
+    "src/glide/settings_compat.py": "54d2139ab0d68134dfa91438c402ac99fe69c1dcd00abb892aa5bb331602241f",
+    "tests/integration/test_zukunftsfelder.py": "3cd8b4d8ad5fda84947dbe1235429050f7f7f20606cade411dc511889f7316bf",
+    "tests/unit/test_settings_compat.py": "0e9ca89d443a1086048695bebf37307b46a718c41f8f75c327fd39301e64e3c7"
+  },
+  "schema": 26,
+  "settings_schema": 2,
+  "pure_tests": 4,
+  "unit_total": 1064,
+  "tool_total": 224,
+  "tool_skips": 1,
+  "focused_app_cases": 5,
+  "regression_cases": 21,
+  "global_acceptance": false,
+  "ListApp": {
+    "before_lines": 50883,
+    "after_lines": 50883,
+    "before_methods": 1793,
+    "after_methods": 1793
+  },
+  "runtime_files_without_prototype": 91,
+  "limitations": [
+    "Keine Auswertung unbekannter Semantik",
+    "Bereits ausgelieferte Altleser unverändert",
+    "Fremde Pinnwand-Kontextarten nicht unterstützt",
+    "Native Lieferung und Menschenabnahme offen"
+  ]
+}

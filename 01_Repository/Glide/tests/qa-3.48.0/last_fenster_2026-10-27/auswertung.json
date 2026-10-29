@@ -1,0 +1,122 @@
+{
+  "completed": true,
+  "source_files_verified": 470,
+  "changed_source_files": [],
+  "diagnostic_processes": 15,
+  "scale_passed": 8,
+  "scale_total": 8,
+  "dev_failures": [
+    [
+      "TypeError: 'dict_valueiterator' object is not callable"
+    ],
+    [
+      "TypeError: 'list' object is not callable"
+    ]
+  ],
+  "exception_capture": {
+    "type": "TypeError",
+    "message": "'dict_valueiterator' object is not callable"
+  },
+  "builtins_intact": true,
+  "code_matches_source": true,
+  "venv_full": {
+    "exitcode": 1,
+    "classification": "PermissionError in Phase 3, kein WA-41-Nachweis",
+    "resource_counters": "Nur Launcher erfasst; vom Appvergleich ausgeschlossen"
+  },
+  "affinity": [
+    {
+      "case": "cpu0_1",
+      "affinity": {
+        "before": "0xffffffff",
+        "after": "0x1",
+        "system": "0xffffffff",
+        "verified": true
+      },
+      "exitcode": 0,
+      "seconds": 70.62
+    },
+    {
+      "case": "default_control",
+      "affinity": {
+        "before": "0xffffffff",
+        "after": "0xffffffff",
+        "system": "0xffffffff",
+        "verified": true
+      },
+      "exitcode": 1,
+      "seconds": 25.64
+    },
+    {
+      "case": "cpu0_2",
+      "affinity": {
+        "before": "0xffffffff",
+        "after": "0x1",
+        "system": "0xffffffff",
+        "verified": true
+      },
+      "exitcode": 0,
+      "seconds": 69.19
+    }
+  ],
+  "peak_private_mib": 679.6,
+  "peak_working_set_mib": 617.7,
+  "minimum_available_gib": 31.7,
+  "peak_handles": 230,
+  "peak_gdi": 90,
+  "peak_user": 132,
+  "files_observed": 7,
+  "scheduled_callbacks_observed": 13,
+  "foreground_samples": 0,
+  "whea": {
+    "Days": 7,
+    "Fetched": 25,
+    "Limit": 1000,
+    "Truncated": false,
+    "Newest": "2026-10-26T18:37:46.6254839+01:00",
+    "Oldest": "2026-10-26T18:04:03.6892363+01:00",
+    "ById": [
+      {
+        "Name": "19",
+        "Count": 25
+      }
+    ],
+    "ByDay": [
+      {
+        "Name": "2026-10-26",
+        "Count": 25
+      }
+    ],
+    "Recent": [
+      {
+        "Id": 19,
+        "TimeCreated": "2026-10-26T18:37:46.6254839+01:00",
+        "Message": "Behobener Hardwarefehler.\r\n\r\nGemeldet von Komponente: Prozessorkern\r\nFehlerquelle: Corrected Machine Check\r\nFehlertyp: Internal parity error\r\nProzessor-APIC-ID: 41\r\n\r\nDie Detailansicht dieses Eintrags beinhaltet weitere Informationen."
+      },
+      {
+        "Id": 19,
+        "TimeCreated": "2026-10-26T18:36:46.3988538+01:00",
+        "Message": "Behobener Hardwarefehler.\r\n\r\nGemeldet von Komponente: Prozessorkern\r\nFehlerquelle: Corrected Machine Check\r\nFehlertyp: Internal parity error\r\nProzessor-APIC-ID: 40\r\n\r\nDie Detailansicht dieses Eintrags beinhaltet weitere Informationen."
+      },
+      {
+        "Id": 19,
+        "TimeCreated": "2026-10-26T18:35:56.2627912+01:00",
+        "Message": "Behobener Hardwarefehler.\r\n\r\nGemeldet von Komponente: Prozessorkern\r\nFehlerquelle: Corrected Machine Check\r\nFehlertyp: Internal parity error\r\nProzessor-APIC-ID: 41\r\n\r\nDie Detailansicht dieses Eintrags beinhaltet weitere Informationen."
+      },
+      {
+        "Id": 19,
+        "TimeCreated": "2026-10-26T18:35:56.2626859+01:00",
+        "Message": "Behobener Hardwarefehler.\r\n\r\nGemeldet von Komponente: Prozessorkern\r\nFehlerquelle: Corrected Machine Check\r\nFehlertyp: Internal parity error\r\nProzessor-APIC-ID: 41\r\n\r\nDie Detailansicht dieses Eintrags beinhaltet weitere Informationen."
+      }
+    ]
+  },
+  "cpu_update_revision": {
+    "RegistryValue": "Update Revision",
+    "RawType": "System.Byte[]",
+    "RawHex": "2B-01-00-00",
+    "ParsedLittleEndianUInt32": "0x12B"
+  },
+  "cause_confirmed": false,
+  "release_ready": false,
+  "errors": []
+}

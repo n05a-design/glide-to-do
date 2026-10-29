@@ -1,0 +1,68 @@
+{
+  "scope": "Formaler Nachlauf nach Dokumentfortschreibung, keine Vollmatrix",
+  "checks": {
+    "syntax": {
+      "ok": true,
+      "result": "461 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+    },
+    "version": {
+      "ok": true,
+      "result": "VERSION, App, Hauptsuite und CHANGELOG: 3.49.0; Datenformat 26"
+    },
+    "documentation": {
+      "ok": true,
+      "result": "Alle Dokumente einschließlich Archiv im Index; 434 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+    },
+    "privacy": {
+      "ok": true,
+      "result": []
+    },
+    "analyse_statisch.py": {
+      "ok": true,
+      "returncode": 0,
+      "seconds": 4.453317999956198,
+      "summary": "n 20830, 49195, 49618\n   3× ab Zeilen 20831, 49196, 49619\n   3× ab Zeilen 30119, 60511, 62305\n\nMUSTER\n       0  bare except\n      53  except Exception (breit)\n     290  pass als einziger Rumpf\n       0  TODO/FIXME/HACK\n       2  auskommentierter Code\n       0  print im Quelltext\n       4  doppelte Leerzeilen (3+)\n\nALTDATEN  6 Zeilen prüfen auf Formatversionen, 46 Nennungen von Migration/Legacy\n   Zeilen: 41080, 41318, 41443, 41451, 41460, 58594\n\n"
+    },
+    "analyse_erreichbarkeit.py": {
+      "ok": true,
+      "returncode": 0,
+      "seconds": 7.7933950000442564,
+      "summary": " r   self._fit_sig\n   r   self._frost\n   r   self._frost_base_style\n   r   self._glide_aufgeschoben\n   r   self._glide_chrome_jobs\n   r   self._glide_defers_windows\n   r   self._glide_icons\n   r   self._glide_layout_measured\n   r   self._glide_modal_active\n   r   self._glide_modal_finished\n   r   self._glide_scroll_job\n   r   self._glide_scroll_pending\n   r   self._glide_tooltip\n   r   self._glide_wheel_remainder\n   r   self._glide_wheel_rest_x\n\n"
+    },
+    "standpruefung.py": {
+      "ok": true,
+      "returncode": 0,
+      "seconds": 4.082137900055386,
+      "summary": "Standprüfung gegen VERSION 3.49.0 · Ablage einschließlich Repository · 89 aktive Dokumente (42 fortgeschrieben, 41 festgeschrieben, 6 ohne Standaussage)\nAlle Standangaben passen zur Version; kein historisches Dokument behauptet einen aktuellen Stand.\n\n"
+    },
+    "attributpruefung.py": {
+      "ok": true,
+      "returncode": 0,
+      "seconds": 7.919103999971412,
+      "summary": "Nicht geprüft (unbekannte Basisklasse): FLASHWINFO\nAttributprüfung: keine Befunde in 40 von 41 Klassen.\n\n"
+    },
+    "dublettenpruefung.py": {
+      "ok": true,
+      "returncode": 0,
+      "seconds": 0.17259900004137307,
+      "summary": "w:33636-33648, app.pyw:33677-33686\n  2× 10 Zeilen  →  app.pyw:37663-37672, app.pyw:48684-48693\n  2× 10 Zeilen  →  app.pyw:41822-41831, app.pyw:42016-42025\n  2× 10 Zeilen  →  app.pyw:54276-54285, app.pyw:63287-63296\n  2× 10 Zeilen  →  app.pyw:59921-59932, app.pyw:60064-60079\n  2× 10 Zeilen  →  app.pyw:60506-60515, app.pyw:62300-62309\n\nEine Wiederholung ist ein Hinweis, kein Befund. Ob daraus ein gemeinsamer Baustein wird, entscheidet der Inhalt.\n\n"
+    }
+  },
+  "inputs_unchanged": true,
+  "app_sha256": "39499ab3b784199c5f39a0f836d494b159203b89ec0d37f24fac9a14231aa729",
+  "app_unchanged_since_40_cases": true,
+  "changed_non_markdown_since_40_cases": [
+    "01_Repository/Glide/tests/tools/analyse_statisch.py",
+    "01_Repository/Glide/tests/tools/prozessdiagnose.py",
+    "01_Repository/Glide/tests/tools/test_analyse_statisch.py",
+    "01_Repository/Glide/tests/tools/test_prozessdiagnose.py"
+  ],
+  "only_expected_tool_changes": true,
+  "app_methods_changed_since_previous_mutation_stage": [
+    "clear_list",
+    "clear_list_by_id"
+  ],
+  "suite_count": 108,
+  "global_acceptance": false,
+  "ok": true
+}

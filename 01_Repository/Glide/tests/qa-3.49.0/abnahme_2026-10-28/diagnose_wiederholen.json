@@ -1,0 +1,44 @@
+{
+  "app_sha256": "5e93aeff9373727b90bc1d57bc280b149f62ffdc41ea055fe4b534776f79e74a",
+  "original_suite_unchanged": true,
+  "assertions_unchanged": true,
+  "diagnosis_only": true,
+  "cases": [
+    {
+      "clean_teardown_in_memory": false,
+      "observations": [
+        {
+          "step": "before_restart",
+          "readonly": false
+        },
+        {
+          "step": "after_restart",
+          "readonly": true,
+          "reason": "recovery",
+          "assessment": "active"
+        }
+      ],
+      "passed": false,
+      "traceback": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\qa-3.49.0\\abnahme_2026-10-28\\diagnose_wiederholen.py\", line 47, in main\n    row['result'] = suite.fall_gueltigkeit(lauf)\n                    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-hlf12c9o\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholen.py\", line 293, in fall_gueltigkeit\n    nach_rueckgaengig(lauf, ids, \"G\")\n    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-hlf12c9o\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholen.py\", line 232, in nach_rueckgaengig\n    lauf.waehle(ids[name])\n    ~~~~~~~~~~~^^^^^^^^^^^\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-hlf12c9o\\projekt\\01_Repository\\Glide\\tests\\integration\\test_wiederholen.py\", line 101, in waehle\n    tree.selection_set(item_ids)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^\n  File \"%USERPROFILE%\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\tkinter\\ttk.py\", line 1434, in selection_set\n    self._selection(\"set\", items)\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^\n  File \"%USERPROFILE%\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\tkinter\\ttk.py\", line 1429, in _selection\n    self.tk.call(self._w, \"selection\", selop, items)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_tkinter.TclError: Item 96a4df81834541539d689ee6e7d2c34f not found\n",
+      "readonly": true,
+      "reason": "recovery"
+    },
+    {
+      "clean_teardown_in_memory": true,
+      "observations": [
+        {
+          "step": "before_restart",
+          "readonly": false
+        },
+        {
+          "step": "after_restart",
+          "readonly": false,
+          "reason": "lock",
+          "assessment": "started"
+        }
+      ],
+      "result": "wirkungslos bleibt, Autospeichern, neue Änderung, Zustellbeleg, Wächterabbruch, Neustart, Laden",
+      "passed": true
+    }
+  ]
+}

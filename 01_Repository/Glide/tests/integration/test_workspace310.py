@@ -34,6 +34,7 @@ with tempfile.TemporaryDirectory(prefix="glide-workspace310-") as folder:
 
     def stop(app):
         app.cancel_pending_callbacks()
+        getattr(app, "finish_recovery_session", lambda: None)()
         app.release_data_lock()
         app.root.destroy()
 

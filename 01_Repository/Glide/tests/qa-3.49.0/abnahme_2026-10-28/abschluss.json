@@ -1,0 +1,176 @@
+{
+  "completed_on": "2026-10-29",
+  "audit_cutoff": "2026-10-28",
+  "formal_artifact_checks_ok": true,
+  "global_acceptance": false,
+  "pages": 13,
+  "acceptance_units": {
+    "legacy": 16,
+    "fp": 8,
+    "current": 12,
+    "safeguards": 7,
+    "remaining": 9
+  },
+  "ui_requirements": 22,
+  "inventoried_input_files": 1005,
+  "input_changes_after_testing": [
+    "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "01_Repository/Glide/docs/ARBEITSRICHTUNG.md"
+  ],
+  "input_changes_are_only_document_pointers": true,
+  "app_unchanged": true,
+  "app_sha256": "5e93aeff9373727b90bc1d57bc280b149f62ffdc41ea055fe4b534776f79e74a",
+  "original_repetition_suite_green": false,
+  "not_executed": [
+    "wiederholungsregeln",
+    "ansichten",
+    "seitenkarten",
+    "erwaehnungen",
+    "auftraege",
+    "markdownbaum",
+    "arbeitsmodi",
+    "wiederanlauf",
+    "speicherstatus",
+    "sicherungszentrale",
+    "schutzrunde",
+    "bildkonversion"
+  ],
+  "standpruefung": "Standprüfung gegen VERSION 3.49.0 · Ablage einschließlich Repository · 89 aktive Dokumente (42 fortgeschrieben, 41 festgeschrieben, 6 ohne Standaussage)\nAlle Standangaben passen zur Version; kein historisches Dokument behauptet einen aktuellen Stand.",
+  "git_diff_check": true,
+  "new_local_file_links_checked": 17,
+  "broken_links": [],
+  "word_table_rows": [
+    8,
+    6,
+    9,
+    9,
+    9,
+    7,
+    7,
+    8,
+    10,
+    23,
+    6,
+    13
+  ],
+  "rendering": "Word PDF/A-1 export option; PDFium scale 1.6; all 13 pages visually inspected",
+  "render_checks": {
+    "1": {
+      "sha256": "51dcc9ceefb2e6e92bc26b8d28b9af9e872c2356f6b92c0f3fda5bfc3422b1ac",
+      "size": [
+        953,
+        1348
+      ]
+    },
+    "2": {
+      "sha256": "23c25abd6406f05bd8063bd1a5806df6d7830750fe61f61b2102bd5f44e87796",
+      "size": [
+        953,
+        1348
+      ]
+    },
+    "3": {
+      "sha256": "85ab08a3c6b795e731d25b982b804028bfc654f8cde138a355ec57784661e546",
+      "size": [
+        953,
+        1348
+      ]
+    },
+    "4": {
+      "sha256": "07c6b0e109664ab0cfe7bb8a1423c80c9812599f1cfbb422ae29306a76a35fc0",
+      "size": [
+        953,
+        1348
+      ]
+    },
+    "5": {
+      "sha256": "8d27ba03fa46ef2eb12c23caeb7b3eb733cc285c8f501f15b6c3d0e5a04bea6f",
+      "size": [
+        953,
+        1348
+      ]
+    },
+    "6": {
+      "sha256": "9f4946b25115a58c2bc06acc8685f342ab188aec932134900bda46f03322e818",
+      "size": [
+        953,
+        1348
+      ]
+    },
+    "7": {
+      "sha256": "98823d9ef6c7da5c568f0cde685722af5e46c9536e90ce710b5caf0af57643cc",
+      "size": [
+        953,
+        1348
+      ]
+    },
+    "8": {
+      "sha256": "dee8039f87fc1fcc6f87cfbfc6220e8ae3dd876975f6844e5739697796e30515",
+      "size": [
+        953,
+        1348
+      ]
+    },
+    "9": {
+      "sha256": "4317fc65705a9e50082c5f4adc37abfddbeba89cce54beb3d7ca3c1712128846",
+      "size": [
+        953,
+        1348
+      ]
+    },
+    "10": {
+      "sha256": "9ddf8d3bb130aaf73f1e703ed2f38be27186b60cc5e0e04013475568940fbb0f",
+      "size": [
+        953,
+        1348
+      ]
+    },
+    "11": {
+      "sha256": "5f4ed4848f579106ea45a9443283ae6652f34116dc0ebb388be90d08e40c4f38",
+      "size": [
+        953,
+        1348
+      ]
+    },
+    "12": {
+      "sha256": "021998bc5f46857e4808d790cf0f035b188da0da04b87d5d0b4445bd70009df8",
+      "size": [
+        953,
+        1348
+      ]
+    },
+    "13": {
+      "sha256": "80199ce1fa8f6b9dd7ccf62c5dcbff90f26085bcc4075452e7ff8f836c0518cc",
+      "size": [
+        953,
+        1348
+      ]
+    }
+  },
+  "deliverables": {
+    "Glide_Abnahmebericht_3.49.0_2026-10-28.docx": {
+      "sha256": "cbcbe6c75c46f984269298a4332538c1b5188d0147728e2567e66afc466880c9",
+      "bytes": 52993
+    },
+    "Glide_Abnahmebericht_3.49.0_2026-10-28.pdf": {
+      "sha256": "a116f1555c67d3bb484c0c67006f4d4b99efd2ceb1c592e16204bc4410893039",
+      "bytes": 381910
+    }
+  },
+  "evidence_sha256": {
+    "codeinventar.json": "148c7f39c44c59295790c0d7f3101e1829377e2a9c671fbb39bdebbc4f762f17",
+    "diagnose_wiederholen.json": "6b7a5ab1f717a514077a4e92e2a0cb81322c9887be5788c6c86cf02212cca712",
+    "eingefroren.json": "314678d436b79ceff6ae0d08d35de3eabdb671aba535e9a1dd06a309ea52b433",
+    "lauf_CI-Grundstufe.json": "055068ac9ec8f97426bb8d7e1eb665777065f24d6d18a036613dfd85d69c24e8",
+    "lauf_wiederholen.json": "fe5353ad09f35306bd5b6a4148a4e339a96f674482b10137d3266937e3c4385d",
+    "lieferstand.json": "5815b03c583909faf6fa1d21f6479a0939417750af3d9c3fbbdc0b2546cc2f4a",
+    "paketmatrix.json": "effb98e45332d8880c2a6f4c4f93a623f9a3cc65fb53405d49b7715438bf46e9",
+    "planregister.json": "f8babeb5b238a9a6df8ad925c6297ed72dfbfe113ccce97f72f773dc06168159",
+    "renderverfahren.json": "9c0de47241c5edeb71f4b27c33502caf71dda762c849cb4ff407319ffffa153a",
+    "testergebnis.json": "15a82bfbf923c068f867864330d4064de5bbd686ba13df93181bd9eafc59d9a2",
+    "testzaehlung.json": "c397e870d4764d30383845aa1a5e86686f723a047b02d655aa47e2ab755a5937"
+  },
+  "limits": "No application fixes, native starts, signature verification, full stress rerun, commit, push or release."
+}

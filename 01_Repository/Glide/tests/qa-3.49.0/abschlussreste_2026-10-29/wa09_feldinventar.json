@@ -1,0 +1,68 @@
+[
+  {
+    "line": 4786,
+    "keys": [
+      "cards",
+      "connections",
+      "connection_style",
+      "layout",
+      "snap",
+      "object_snap",
+      "navigator",
+      "zoom",
+      "preview",
+      "auto",
+      "width",
+      "group_by",
+      "collapsed",
+      "hide_empty",
+      "only_open",
+      "show_description",
+      "show_checklist",
+      "color_mode",
+      "color_source",
+      "areas",
+      "auto_connect",
+      "background",
+      "print_background"
+    ]
+  },
+  {
+    "line": 4667,
+    "keys": [
+      "list_id",
+      "item_id",
+      "used"
+    ]
+  },
+  {
+    "line": 4690,
+    "keys": [
+      "list_id",
+      "item_id",
+      "x",
+      "y",
+      "scale"
+    ]
+  },
+  {
+    "line": 4747,
+    "keys": [
+      "from",
+      "to",
+      "style"
+    ]
+  },
+  {
+    "line": 4773,
+    "keys": [
+      "id",
+      "name",
+      "color",
+      "x",
+      "y",
+      "w",
+      "h"
+    ]
+  }
+]

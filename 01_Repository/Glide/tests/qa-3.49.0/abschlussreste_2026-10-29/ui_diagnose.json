@@ -1,0 +1,26 @@
+[
+  {
+    "case": "kopfverweise",
+    "app_sha256": "2f5556f71c01f22f7991733af6eb004a7af57d8b2b0c63ac21272f34abe014ee",
+    "result": "keine Zusatzzeile, Verweise am Titelende nur bei freiem Platz, Überfahren/Fokus/Tab, langer Titel und schmale Spalte weichen ganz (Mehr), Symbol vor dem Titel, 23 Knöpfe ohne Befund",
+    "passed": true
+  },
+  {
+    "case": "nebenansicht_seite",
+    "app_sha256": "2f5556f71c01f22f7991733af6eb004a7af57d8b2b0c63ac21272f34abe014ee",
+    "result": "Blockarten, echtes Kästchen mit einem Undo, lesend gesperrt, Esc schließt",
+    "passed": true
+  },
+  {
+    "case": "kompakt",
+    "app_sha256": "2f5556f71c01f22f7991733af6eb004a7af57d8b2b0c63ac21272f34abe014ee",
+    "result": "Kompaktmodus direkt als erster Menüeintrag; Kürzel mit Drücken/Loslassen und reinem Loslassen im Editor/Hauptfenster, keine Doppelwirkung; 480×560, getrennte Lagen über Neustart, Kopf B07, 26 Knöpfe ohne Befund",
+    "passed": true
+  },
+  {
+    "case": "gestaltung",
+    "app_sha256": "2f5556f71c01f22f7991733af6eb004a7af57d8b2b0c63ac21272f34abe014ee",
+    "result": "232 Knopfprüfungen in fünf Konfigurationen ohne Befund",
+    "passed": true
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1001,
+    "time": "2026-10-29T09:34:27.4017821+01:00",
+    "provider": "Windows Error Reporting",
+    "message": "Fehlerbucket 1642018128861653023, Typ 5\r\nEreignisname: BEX64\r\nAntwort: Nicht verfügbar\r\nCAB-Datei-ID: 0\r\n\r\nProblemsignatur:\r\nP1: python.exe\r\nP2: 3.14.7150.1013\r\nP3: 6a731759\r\nP4: ucrtbase.dll\r\nP5: 10.0.26100.9711\r\nP6: 3f426c5b\r\nP7: 00000000000a527e\r\nP8: c0000409\r\nP9: 0000000000000007\r\nP10: \r\n\r\nAngefügte Dateien:\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.e96e5176-f23a-42a3-a9f8-d222acd35916.tmp.dmp\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.4afd2467-3275-4cec-9c75-b232ff4a47a2.tmp.WERInternalMetadata.xml\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.0424af47-2f17-4d05-8853-1b6e2ec28f9c.tmp.csv\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.c281e970-ad4c-475c-8bce-1727073d1e33.tmp.txt\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\Temp\\WER.17f35817-0c7e-444e-a344-798d5b85decf.tmp.xml\r\n\r\nDiese Dateien befinden sich möglicherweise hier:\r\n\\\\?\\C:\\ProgramData\\Microsoft\\Windows\\WER\\ReportArchive\\AppCrash_python.exe_eb86694dfbbfb717bcd2d3b6d3cf3135ed397c2_9958a714_501736c1-f6d6-4613-8127-01a88050f14b\r\n\r\nAnalysesymbol: \r\nEs wird erneut nach einer Lösung gesucht: 0\r\nBerichts-ID: 45f3c830-cd14-4b22-9120-cf69e4619da8\r\nBerichtstatus: 268435456\r\nBucket mit Hash: 6309f1a6f1e8000b06c99ec9d58ce81f\r\nCAB-Datei-Guid: 0"
+  },
+  {
+    "id": 1000,
+    "time": "2026-10-29T09:34:25.0474580+01:00",
+    "provider": "Application Error",
+    "message": "Fehlerhafter Anwendungsname: python.exe, Version: 3.14.7150.1013, Zeitstempel: 0x6a731759\r\nFehlerhafter Modulname: ucrtbase.dll, Version: 10.0.26100.9711, Zeitstempel: 0x3f426c5b\r\nAusnahmecode: 0xc0000409\r\nFehleroffset: 0x00000000000a527e\r\nFehlerhafte Prozess-ID: 0xF88C\r\nFehlerhafte Anwendungsstartzeit: 0x1DD67803DA6C136\r\nFehlerhafter Anwendungspfad: %USERPROFILE%\\AppData\\Local\\Programs\\Python\\Python314\\python.exe\r\nFehlerhafter Modulpfad: C:\\WINDOWS\\System32\\ucrtbase.dll\r\nBerichts-ID: 45f3c830-cd14-4b22-9120-cf69e4619da8\r\nVollständiger Name des fehlerhaften Pakets: \r\nFehlerhafte paketbezogene Anwendungs-ID: "
+  }
+]

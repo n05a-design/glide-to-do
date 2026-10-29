@@ -1,0 +1,121 @@
+[
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/README.md",
+    "before_sha256": "43a7dd7fa374a26483dbc38c99cb82ca0189827e5934071229041d5706f593e3",
+    "after_sha256": "5f20243fc3aa749f967e2370e7395b865e6a124cfa36b476a74773653a9b1621",
+    "old": "B760M-DS3H-DD3H-DDR4-rev-1x",
+    "new": "B760M-DS3H-DDR4-rev-1x"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/README.md",
+    "before_sha256": "9a975935b7685a0ac76ed2ab39b5cc15b180c625ba24edd506e97c0af4f0258e",
+    "after_sha256": "6dbcba57df0e1808399ccfbaa779a2623c7a8bba8aa2b492b88f3cc32176244a",
+    "old": "**Aktueller Quellkandidat 3.47.0:** Mehrfachplanung und Nebenansichtsverlauf ergänzen Tagessteuerung/Suche und die vorherigen Technik-/Startseitenpakete. Kopier-/Baulisten enthalten alle 88 Laufzeitdateien, auch `persistence.py` und `home_task_tiles.py`. Die bestehenden Windows-/Mac-Pakete bleiben beim eingefrorenen 3.45.0-Abschluss `d516ca67…`; neue Funktionen oder eine Versionszeile ersetzen keinen Paketneubau. [Gemeinsamer Quell-/Prüf-/Lieferstand](../tests/qa-3.46.0/zweierpaket_2026-10-27/README.md).",
+    "new": "**Aktueller Quellkandidat 3.48.0:** Tagesnavigation, gemeinsame Wichtigkeit/Labels und Verweisnavigation ergänzen die bisherigen Tages-/Nebenansichtspakete. Kopier-/Baulisten enthalten alle 88 Laufzeitdateien, auch `persistence.py` und `home_task_tiles.py`. Python-Lieferung 3.47.0; Windows-/Mac-Pakete bleiben beim eingefrorenen 3.45.0-Abschluss `d516ca67…`. WA-41 und Lieferabschluss sind offen; neue Funktionen oder eine Versionszeile ersetzen keinen Paketneubau. [Aktueller Quell-/Prüf-/Lieferstand](../tests/qa-3.48.0/dreierpaket_2026-10-27/README.md)."
+  },
+  {
+    "path": "01_Repository/Glide/tests/README.md",
+    "before_sha256": "bfe28bfdbdc90ba2be88981339244554f6529de6a6642f7da359b6f51ea207ed",
+    "after_sha256": "226b63b2e1535a6bfcdabbec06914d08a2804afbd4498ae32700460932bcee00",
+    "old": "Aktuell 3.47.0: `test_arbeitsmodi.py` enthält 22 echte Bedien-/Geometriefälle, einschließlich seitenübergreifender Tagesauswahl, gemeinsamer Planung und Nebenansichtsverlauf. 13 neue reine Auswahl-/Verlaufstests ergänzen die Home-/Side-Gruppen; Quellmanifest, eingefrorener Lauf und gezielte Erwartungskorrektur stehen im [Nachweis](qa-3.47.0/folgepakete_2026-10-27/README.md). Die 104 registrierten Suiten sind weiterhin kein neuer bestandener Volllauf.",
+    "new": "Aktuell 3.48.0: `test_arbeitsmodi.py` enthält 26 echte Bedien-/Geometriefälle, einschließlich Tagesnavigation, gemeinsamer Wichtigkeit/Labels und interner Verweisnavigation. `test_featurephase348.py` ergänzt die reinen Fachgrenzen. 986 Fachtests und die 26 Arbeitsmodifälle sind grün; der breite Windows-Lauf bleibt wegen WA-41 ohne grünen Gesamtabschluss ([Nachweis](qa-3.48.0/dreierpaket_2026-10-27/README.md)). Python-Lieferung 3.47.0, native Pakete 3.45.0. [Datei-/Dokumentaudit](qa-3.48.0/dokumentationsaudit_2026-10-27/README.md) startet keine App-/Lasttests. Vorheriger gezielter Stand 3.47.0: 22 Arbeitsmodifälle und 13 neue reine Auswahl-/Verlaufsfälle ([historischer Nachweis](qa-3.47.0/folgepakete_2026-10-27/README.md)). Die 104 registrierten Suiten sind weiterhin kein neuer bestandener Volllauf."
+  },
+  {
+    "path": "01_Repository/Glide/tests/README.md",
+    "before_sha256": "226b63b2e1535a6bfcdabbec06914d08a2804afbd4498ae32700460932bcee00",
+    "after_sha256": "c0c08d2bec110963d37c2118fd68324d3c17e1f2873095af682eeeb64a8bdc76",
+    "old": "D55 (lokaler Kandidat auf 3.44.0):",
+    "new": "D55 (historischer Einführungsnachweis mit 13 Fällen; seit 3.45.0 geliefert):"
+  },
+  {
+    "path": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+    "before_sha256": "01f1a9f6f7144a861f9e5efd96d47b4c6510c688875967512ed523bb09a32441",
+    "after_sha256": "aace40af7fe4f99d63ae4bbe31811819ea5df21ec0725247207e05ba0e658a9b",
+    "old": "**D55 – Arbeitsmodi und Seitenbedienung (lokaler Kandidat):** `test_arbeitsmodi.py` gehört mit zwölf Appfällen zur Pflichtmatrix:",
+    "new": "**D55 – Arbeitsmodi und Seitenbedienung (seit 3.45.0 geliefert):** Der ursprüngliche D55-Schnitt von `test_arbeitsmodi.py` gehört zur Pflichtmatrix (13 Fälle einschließlich Kontextmenünachlauf; heute 26 Fälle mit Folgepaketen):"
+  },
+  {
+    "path": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+    "before_sha256": "aace40af7fe4f99d63ae4bbe31811819ea5df21ec0725247207e05ba0e658a9b",
+    "after_sha256": "56ea1e379bdaa81ccabed400f6c71724737602275aebfded63d0a03e0f670e43",
+    "old": "Bisher nur Linux/Tk 8.6; Windows-/Mac-Lauf am nächsten Phasenende.",
+    "new": "Windows-Funktions-/Geometrienachweise liegen inzwischen vor; aktuelle Ergebnisse und offene native Mac-/Linux-/Reader-/Menschenabnahmen stehen getrennt im [QA-Bericht](07_QA_BERICHT.md)."
+  },
+  {
+    "path": "01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md",
+    "before_sha256": "e2d1ccbb251a43d3216f27a38e19b41c2118773bde18295acdee7847765f6245",
+    "after_sha256": "0271f6f49b6064b6b4d3860bd3a44ed5331a51b8531071cb2a04778c1f35199f",
+    "old": "Seit D55 (23.10.2026) ist jeweils Option A gewählt und als lokaler Kandidat umgesetzt",
+    "new": "Seit D55 (23.10.2026) ist jeweils Option A gewählt, seit 3.45.0 geliefert und in 3.48.0 weiter ergänzt"
+  },
+  {
+    "path": "05_Probelisten_Testdaten/README.md",
+    "before_sha256": "3d05a0895d81fa8848681095f14fe69724c19092893556920dd5fc3d32e6cab0",
+    "after_sha256": "b82486db267a1206f73268ab0488df119458df58005fd1b461763ee06e5edd63",
+    "old": "Die Dateien sind bytegleiche Kopien von `01_Repository/Glide/tests/fixtures/showcase` (Abgleich `scripts/pflege/showcase_abgleich.py`, SHA-256 in `manifest.json`). Git speichert gleiche Inhalte nur einmal.",
+    "new": "Die gelieferte Showcase-Basis bleibt 3.47.0; ihre Dateihashes stehen in `manifest.json`. Die Quellfixtures wurden bereits auf Kandidat 3.48.0 angehoben und sind deshalb derzeit nicht insgesamt bytegleich zur Lieferung. Der nächste freigegebene Abgleich erfolgt mit `scripts/pflege/showcase_abgleich.py`; WA-41 verhindert aktuell diesen Lieferabschluss."
+  },
+  {
+    "path": "05_Probelisten_Testdaten/README.md",
+    "before_sha256": "b82486db267a1206f73268ab0488df119458df58005fd1b461763ee06e5edd63",
+    "after_sha256": "e4567c6cd4bffd5b870f22bf1c03975679fd59851e0c36e7a8b8456e3cee0786",
+    "old": "glide_releaseplanung_3.47.0.glidebackup",
+    "new": "glide_releaseplanung_3.48.0.glidebackup"
+  },
+  {
+    "path": "01_Repository/Glide/tests/fixtures/showcase/README.md",
+    "before_sha256": "08cfb3d85e085349060375aacf903135ad39e609226727cade6faeaffb1f1138",
+    "after_sha256": "77ac0a3825586db371d9961d5b1325951a6bd36e5f28f3b14fd2fa15d727a898",
+    "old": "die aktuelle Arbeitsrichtung mit D01–D50 (D49 mit Korrekturvorbehalt)",
+    "new": "die aktuelle Arbeitsrichtung mit D01–D57 (D49 mit Korrekturvorbehalt)"
+  },
+  {
+    "path": "05_Probelisten_Testdaten/Showcase/README.md",
+    "before_sha256": "55a5c064897fef14ee2c322453f9f403f580a8a5fb7164bd205fe60d110729ad",
+    "after_sha256": "0d4c52afe24df9338028c332a35ff09dde1b1cd9801571fb4442ca9081710bd2",
+    "old": "die aktuelle Arbeitsrichtung mit D01–D50 (D49 mit Korrekturvorbehalt)",
+    "new": "die aktuelle Arbeitsrichtung mit D01–D57 (D49 mit Korrekturvorbehalt)"
+  },
+  {
+    "path": "01_Repository/Glide/tests/fixtures/showcase/README.md",
+    "before_sha256": "77ac0a3825586db371d9961d5b1325951a6bd36e5f28f3b14fd2fa15d727a898",
+    "after_sha256": "dfa35d3a836391bd23f7788640034fd09a45467f6338f72a2e5915382de1412b",
+    "old": "Stand 27.10.2026 · Glide 3.48.0 · Lieferdaten in Speicherstufe 26",
+    "new": "Stand 27.10.2026 · Glide 3.48.0 · Quellfixtures in Speicherstufe 26; Showcase-Lieferung separat 3.47.0"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "before_sha256": "3ac4df90afa6e10322147928c8147c03ba0780714e8dcc6b8a809dc36c5c97d5",
+    "after_sha256": "fc3bf37833617370b4fc72667ad045c23d8c05b504fd5c887e6e2932ea999dbd",
+    "old": "D01–D56 mit D49-Korrekturvorbehalt erhalten; neue Entscheidungen ab D57",
+    "new": "D01–D57 mit D49-Korrekturvorbehalt erhalten; neue Entscheidungen ab D58"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "before_sha256": "fc3bf37833617370b4fc72667ad045c23d8c05b504fd5c887e6e2932ea999dbd",
+    "after_sha256": "0c1b5b567d06ac0ceb9d65aa622fd01ca3e380f02ccfa8800a366c9c93ae23c1",
+    "old": "D56 beauftragt die lokale Weiterentwicklung zu 3.45.0; nächste freie Entscheidungsnummer D58.",
+    "new": "D56 beauftragt die lokale Weiterentwicklung zu 3.45.0, D57 wählt Tagessteuerung und Nebenansicht; nächste freie Entscheidungsnummer D58."
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "before_sha256": "0c1b5b567d06ac0ceb9d65aa622fd01ca3e380f02ccfa8800a366c9c93ae23c1",
+    "after_sha256": "0137ca236a0cd0057e65952c7d2919027a435bfe3b81b7c907653048d78861ea",
+    "old": "| **WA-41 – unerklärter Ausfall der Speicherlastsuite unter Windows (P1, Untersuchung)**; Befund aus dem Phasenabschluss 3.44.0 | `test_speicherlast330` (26.420 Punkte, 40 Änderungs-/Laderunden, sechs harte Schreiberabbrüche) scheiterte in zwei von drei eingefrorenen Windows-Vollprüfungen dieser Phase: einmal nativer Absturz 0xC0000005 ohne Log, einmal `save_items` mit `name 'isinstance' is not defined` in Runde 1. Einzeln 2/2, dreifach parallel 3/3 und im Vorlauf grün; Linux-Matrix grün. Beide Bilder passen zu Speicherbeschädigung im Prozess, eine Ursache ist nicht belegt | Reproduktion im Vollprüfkontext mit `PYTHONFAULTHANDLER=1` und vollständigem Traceback des Speicherfehlers (Fehlerprotokoll sichern), Gegenprobe mit 3.43.1 im selben Kontext, Python 3.14.x/Tk 9.0.4 gegen eigene Tk 9.1 vergleichen, native Aufrufe (`ctypes`, Tk) im Speicherweg ausschließen. Bis zur Klärung offener Risikopunkt; keine Datenverlustaussage ableiten (Hauptdatei wird atomar geschrieben). **Stand 25.10.2026:** seit Lauf 04 nicht erneut aufgetreten (Windows-Vollprüfungen GitHub #145–#148, lokaler Windows-Lauf 25.10.); der rote GitHub-Lauf #140 hatte andere Ursachen. Bleibt Release-Tor, bis die Ursache belegt oder unter definierter Last wiederholt ausgeschlossen ist; blockiert keine Weiterentwicklung  **Nachtrag 27.10.2026, Dreipaketphase 3.48.0:** In der eingefrorenen Windows-Matrix erneut 0xC0000005 im Speichervergleich; isoliert ein vollständiger grüner Lauf, ein Vergleichsfehler nach Laden und ein interner Laufzeitfehler bei unveränderten Quellen. Keine Ursache belegt; kein grüner Gesamt-/Releaseabschluss. Einzelbelege im aktuellen Dreierpaketnachweis. |",
+    "new": "| **WA-41 – unerklärter Speicherlast-/Interpreterausfall (P1, Untersuchung)**; Ausgang 3.44.0, erneut unter 3.48.0 | **WA-41A:** Sporadische native Abbrüche 0xC0000005/0xC0000409, interne Cacheausführung und wechselnde Typfehler unter Python 3.14.7/3.14.8/3.15.2. **WA-41B:** Ein isolierter Vergleichsfehler nach Laden in Runde 5; konkrete abweichende Felder noch offen. Die ursprüngliche Suite behält 26.420 Punkte/40 Runden und alle Assertions. Spätere grüne Läufe erklären frühere rote nicht; keine Ursache und kein Datenverlust im echten Bestand belegt | Vorrangig [Übergabe Abschnitt 0](Glide_Uebergabe.md#0-sofortübergabe-wa-41--zuerst-lesen) übernehmen: acht vorhandene Minidumps und feste Eingangsdatei lokal gesichert, 470-Dateien-Referenz und uncommitteten 3.48.0-Kandidaten erhalten. WHEA-/CPU-Spur ist eine Hypothese. Nutzer möchte vorerst keine BIOS-/CPU-Änderungen oder unnötigen Intel-Lastläufe; später bei konkretem Auftrag kontrollierter AMD-Vergleich. Fehlender externer Export bleibt als nicht bestätigt markiert. A/B getrennt klären, Datenkonsistenz bleibt eigenständiges Release-Tor; kein Abschwächen der Kriterien, keine Lieferung/Freigabe. Befundgeschichte und Gegenproben in §21.26 und dessen Nachweisen |"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "before_sha256": "0137ca236a0cd0057e65952c7d2919027a435bfe3b81b7c907653048d78861ea",
+    "after_sha256": "d4874f789d9c10d64925859e0146d46f8d350ae4d3757184c613075fde28aee6",
+    "old": "Prüfplatz und Wartebedingungen mit Diagnose bleiben wichtig |",
+    "new": "Prüfplatz und Wartebedingungen mit Diagnose bleiben wichtig. Neuer gesonderter Befund 27.10.: frische 3.15-venv nach 40 erfolgreichen Runden mit `PermissionError` beim Lesen nach hartem Testschreiberabbruch rot (Originalsuite Zeile 282). Kein nativer WA-41-Beleg oder bestätigter Produktfehler; Prozess-/Dateibesitz unter venv bei späterem Auftrag separat untersuchen ([Nachweis](../01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/README.md)) |"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/runtime/README.md",
+    "before_sha256": "c76ab2d80d97e722076b384afaf31ed5867c0a9da6909be1c0ed2e8d9c5acd1c",
+    "after_sha256": "c757e24dfabd9a71b340bb964aff3f8d16ef298609f2f9b3e59522d684d91871",
+    "old": "der aktuelle lokale Python-Lieferstand ist 3.43.1;",
+    "new": "der aktuelle lokale Python-Lieferstand ist 3.47.0, die nativen Pakete sind 3.45.0 und der Quellkandidat 3.48.0;"
+  }
+]

@@ -89,6 +89,9 @@ class Lauf:
             # entfernen; sonst treffen sie den Interpreter des nächsten Falls.
             for job in self.root.tk.splitlist(self.root.tk.call("after", "info")):
                 self.root.after_cancel(job)
+            finish_session = getattr(self.app, "finish_recovery_session", None)
+            if finish_session is not None:
+                finish_session()
             self.app.release_data_lock()
             self.root.destroy()
         except Exception:
@@ -487,6 +490,13 @@ def fall_sperre(lauf):
         befunde.append("Lesen")
 
         sperre = Path(mod.LOCK_FILE)
+        # Dieser Fall simuliert eine regulär freigegebene Datensperre, keinen
+        # Prozessabbruch. Den unabhängigen Sitzungsnachweis vorher abschließen;
+        # echte ungeklärte Enden prüft test_wiederanlauf.fall_lockuebernahme.
+        finish_session = getattr(app, "finish_recovery_session", None)
+        if finish_session is not None:
+            finish_session()
+            assert json.loads(app._recovery_guard.marker_path.read_text(encoding="utf-8"))["state"] == "clean"
         app.release_data_lock()
         sperre.write_text("nicht json {", encoding="utf-8")
         info = app.acquire_data_lock()

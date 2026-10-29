@@ -1,0 +1,41 @@
+{
+  "app_sha256": "e6f4aeadb6e094770a3934836ed7f8cac8d3fb4657c0881fd3e7ef4e5c119363",
+  "session_guard_sha256": "7b4fb6e30206ba4cddb19b92f0c190fbe07aaad6638ba316017cf8dee8befc79",
+  "test_sha256": "aa7f112e614beabc302b5b9b95bfbab8dd8c58496a13af50a750364f79d054bd",
+  "faelle": {
+    "sauber": {
+      "ok": true,
+      "befund": "Echtes on_close vermerkt clean; Neustart lädt dieselben IDs ohne Wiederanlaufsperre"
+    },
+    "freigabe": {
+      "ok": true,
+      "befund": "Schreibschutz und Abbruch erhalten Original; echte Freigabe sichert bytegleich, Ändern/Undo/Sofortspeicherung funktionieren"
+    },
+    "fehler": {
+      "ok": true,
+      "befund": "Kopierfehler und geänderte Eingangsbytes verhindern Freigabe; Original und Altsitzung bleiben erhalten"
+    },
+    "ungueltig": {
+      "ok": true,
+      "befund": "Ungültiges JSON bleibt bytegleich; kein Leerspeichern, keine Freigabe, kein stiller Backupimport"
+    },
+    "fehlend": {
+      "ok": true,
+      "befund": "Nach ungeklärtem Ende fehlende Hauptdatei wird nicht leer neu angelegt"
+    },
+    "layout": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"tests/integration/test_wiederanlauf.py\", line 244, in main\n    result = globals()[\"fall_\" + name](lauf)\n  File \"tests/integration/test_wiederanlauf.py\", line 181, in fall_layout\n    visit(lauf, \"Speicherstatus\", app.show_storage_status, inspect)\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_sicherungszentrale.py\", line 43, in visit\n    assert visited and not failures, failures\n           ^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ['Traceback (most recent call last):\\n  File \"~\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\tests\\\\integration\\\\test_sicherungszentrale.py\", line 32, in interact\\n    action(dialog)\\n    ~~~~~~^^^^^^^^\\n  File \"tests/integration/test_wiederanlauf.py\", line 174, in inspect\\n    assert {\"Bestand freigeben\", \"Sicherungen …\", \"Schließen\"} <= labels, labels\\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\nAssertionError: {\\'Sicherungen\\', \\'Bestand freigeben\\', \\'Schließen\\'}\\n']\n"
+    },
+    "restore": {
+      "ok": true,
+      "befund": "Regulärer portabler Restore erhält IDs, Wiederholungen, Verweise, Anhangbytes und Format; Originalvorsicherung vor Import bestätigt"
+    }
+  },
+  "fehler": [
+    "layout"
+  ],
+  "limitations": [
+    "Hardware-Stromausfall, native Mac-/Linux-/DPI-/Reader- und Menschenabnahme ungeprüft."
+  ]
+}

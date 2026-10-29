@@ -1,0 +1,22 @@
+[
+  {
+    "case": "pure_import_app",
+    "exitcode": 1,
+    "seconds": 2.16
+  },
+  {
+    "case": "pure_minimal_tk",
+    "exitcode": 0,
+    "seconds": 23.82
+  },
+  {
+    "case": "pure_initialized_app",
+    "exitcode": 0,
+    "seconds": 23.86
+  },
+  {
+    "case": "py315_normal",
+    "exitcode": 0,
+    "seconds": 93.45
+  }
+]

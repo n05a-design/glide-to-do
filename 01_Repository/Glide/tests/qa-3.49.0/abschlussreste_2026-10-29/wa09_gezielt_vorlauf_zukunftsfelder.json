@@ -1,0 +1,37 @@
+{
+  "app_sha256": "8025a20ce47e82a880f6328aa64c2eacbc86e5c8f1bb74ed86a0e8a0e80922e8",
+  "faelle": {
+    "normalisierung": {
+      "ok": true,
+      "messung": {
+        "kontexte": 2,
+        "fremde_karte_erhalten": true,
+        "bekannte_geloeschte_entfernt": true
+      }
+    },
+    "persistenz": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-psm9hqbb\\projekt\\01_Repository\\Glide\\tests\\integration\\test_zukunftsfelder.py\", line 168, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-psm9hqbb\\projekt\\01_Repository\\Glide\\tests\\integration\\test_zukunftsfelder.py\", line 87, in fall_persistenz\n    with app.item_change(refresh=False):\n         ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^\n  File \"%USERPROFILE%\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\contextlib.py\", line 305, in helper\n    return _GeneratorContextManager(func, args, kwds)\n  File \"%USERPROFILE%\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\contextlib.py\", line 109, in __init__\n    self.gen = func(*args, **kwds)\n               ~~~~^^^^^^^^^^^^^^^\nTypeError: ListApp.item_change() got an unexpected keyword argument 'refresh'\n"
+    },
+    "bearbeitung": {
+      "ok": true,
+      "messung": {
+        "bearbeiten_ohne_zukunftsfeldverlust": true,
+        "schreibfehler_und_sperre": true,
+        "loeschen_bleibt_wirksam": true
+      }
+    },
+    "grenzen": {
+      "ok": true,
+      "messung": {
+        "kartenlimit": 500,
+        "filterlimit": 100,
+        "bekannte_felder_streng": true,
+        "keine_neue_semantik": true
+      }
+    }
+  },
+  "fehler": [
+    "persistenz"
+  ]
+}

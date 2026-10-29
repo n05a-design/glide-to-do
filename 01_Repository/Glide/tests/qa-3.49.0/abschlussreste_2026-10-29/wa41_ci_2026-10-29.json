@@ -1,0 +1,35 @@
+{
+  "scope": "Neuer Intel-CI-Abbruch, WA-41A",
+  "app_sha256": "9e7e4e2c8fc94817959be05dec46a8883ee867fae9d73e290a677e7c28f54364",
+  "source_unchanged": true,
+  "frozen_integrity": {
+    "source": [],
+    "documents": []
+  },
+  "log_sha256": "12d689c3c659f89b678bcaebeb654b5fc5ca45c8a0fa8ed86b780afa5bb04ee5",
+  "log_bytes": 3744,
+  "ignored_raw_log": "ci_mutationsreste_zeitzonen_abbruch.log",
+  "diagnosis": "ci_mutationsreste_zeitzonen_diagnose.json",
+  "exitcode": 3221226505,
+  "hex": "0xC0000409",
+  "fatal_message": "_PyEval_EvalFrameDefault: Executing a cache.",
+  "test": "test_timezones.test_every_packaged_zone_readable",
+  "stack": [
+    "encodings/cp437.py:decode",
+    "zipfile:_RealGetContents",
+    "timezones.py:__call__"
+  ],
+  "first_full_unit_run": {
+    "passed": true,
+    "tests": 1074
+  },
+  "second_no_system_zones_run": {
+    "passed": false,
+    "completed_test_count": null
+  },
+  "cause_proven": false,
+  "hardware_cause_proven": false,
+  "native_stress_repeated": false,
+  "platform_gate_open": true,
+  "global_acceptance": false
+}

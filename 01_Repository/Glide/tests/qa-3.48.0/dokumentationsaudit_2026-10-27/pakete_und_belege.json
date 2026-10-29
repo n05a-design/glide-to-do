@@ -1,0 +1,36 @@
+{
+  "application_tests_started": false,
+  "errors": [],
+  "native_version": "3.45.0",
+  "package_execution": false,
+  "package_build": false,
+  "windows_zip": {
+    "path": "01_Repository/Glide/build/windows/Glide-3.45.0-windows-x64.zip",
+    "sha256": "47ff56183e48de0b196c7910b1393d4a1521f1d3afc9d7b7a483d436d7bdb7c9",
+    "matches": true
+  },
+  "mac_tar": {
+    "path": "01_Repository/Glide/build/macos/Glide-3.45.0-macos-arm64.tar.gz",
+    "sha256": "b6284197c62fddee1283207ead6680baed72bdf8826114e944316857284a7252",
+    "matches": true
+  },
+  "windows_files": 103,
+  "mac_files": 333,
+  "mac_links": 29,
+  "showcase": [
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase",
+      "app_version": "3.48.0",
+      "schema": 26,
+      "files": 3
+    },
+    {
+      "path": "05_Probelisten_Testdaten/Showcase",
+      "app_version": "3.47.0",
+      "schema": 26,
+      "files": 3
+    }
+  ],
+  "saved_evidence_files": 9,
+  "reported_external_backup_exists": false
+}

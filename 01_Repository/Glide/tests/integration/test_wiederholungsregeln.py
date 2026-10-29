@@ -162,7 +162,10 @@ else:
  backups=list(Path(m.BACKUP_DIR).glob('liste_vor_format26_*.json'))
  assert len(backups)==1 and backups[0].read_bytes()==before
  assert [v['repeat'] for v in json.loads(before)['lists'][-1]['items']]==[v['repeat'] for v in app.lists[-1]['items']]
-app.cancel_pending_callbacks();app.release_data_lock();root.destroy()
+app.cancel_pending_callbacks()
+finish_session=getattr(app,'finish_recovery_session',None)
+if finish_session is not None:finish_session()
+app.release_data_lock();root.destroy()
 print('OK',mode)
 '''
 

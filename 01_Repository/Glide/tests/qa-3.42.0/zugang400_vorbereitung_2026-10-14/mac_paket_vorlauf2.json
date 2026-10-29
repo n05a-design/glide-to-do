@@ -1,7 +1,0 @@
-{
-  "exitcode": 1,
-  "typ": "privater 4.0-Bauprototyp, keine Lieferung",
-  "bau": "PyInstaller und Mach-O-Prüfung grün",
-  "fehler": "Native Datei ohne belegte Lizenzzuordnung: Contents/Frameworks/_tkinter.cpython-314-darwin.so",
-  "nachlauf": "Eigene 9.1-Dateinamen gezielt zugeordnet, Tcl mit utf8proc; Quellpins/Patches und sämtliche eigenen Runtimebytes vor dem Bau geprüft. Fremde Anbieter und fehlende Lizenzen bleiben rot."
-}

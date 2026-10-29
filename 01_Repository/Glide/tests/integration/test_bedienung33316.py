@@ -48,7 +48,7 @@ with tempfile.TemporaryDirectory(prefix='glide-bedienung-') as data:
         for _ in range(3):
             root.update_idletasks(); root.update()
     def stop():
-        app.cancel_pending_callbacks(); app.release_data_lock()
+        app.cancel_pending_callbacks(); getattr(app,"finish_recovery_session",lambda:None)();app.release_data_lock()
         for job in root.tk.call('after', 'info'):
             root.tk.call('after', 'cancel', job)
         root.destroy()

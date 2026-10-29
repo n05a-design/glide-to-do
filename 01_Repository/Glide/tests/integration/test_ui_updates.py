@@ -238,16 +238,29 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-updates-') as tmp:
         assert app.save_items()
         assert not reported_errors, reported_errors
         app.cancel_pending_callbacks()
-        root.destroy()
+        # Widgeteigene Jobs gehören zum alten Tk-Interpreter. Der Test erzeugt
+        # gleich einen zweiten im selben Prozess; keine alten Tcl-Jobs übernehmen.
+        for job in root.tk.splitlist(root.tk.call('after', 'info')):
+            # Nur den Auftrag abbrechen. Den Tcl-Befehl löscht sein Widget;
+            # root.after_cancel würde fremde Widgetbefehle doppelt freigeben.
+            root.tk.call('after', 'cancel', job)
+        session_marker = app._recovery_guard.marker_path
+        app.on_close()
+        assert json.loads(session_marker.read_text(encoding='utf-8'))['state'] == 'clean'
         root=mod.tk.Tk()
         app=mod.ListApp(root)
         root.update()
+        assert not app._data_read_only and app._recovery_assessment.writable
         assert app.view_mode==app.HOME_VIEW and app.home_frame.winfo_ismapped()
         assert app.settings['profile_name']=='Tim' and app.settings['profile_logo']=='TV'
         assert app.home_summary()['total']==3
         assert app.settings['recent_lists']
     finally:
         app.cancel_pending_callbacks()
+        for job in root.tk.splitlist(root.tk.call('after', 'info')):
+            root.tk.call('after', 'cancel', job)
+        app.finish_recovery_session()
+        app.release_data_lock()
         root.destroy()
 
 print('UI-Erweiterungen: OK (Farben, Artwechsel, Abstände, Startseite, Vorlagen, Einstellungen und Neustart)')

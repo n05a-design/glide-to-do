@@ -14,6 +14,7 @@ import bisect
 import hashlib
 import re
 from dataclasses import dataclass, replace
+import object_references as objects
 
 IMAGE_ANCHOR = "￼"
 LINE_STYLES = ("h1", "h2", "h3", "h4", "codeblock", "quote", "callout", "table", "divider",
@@ -24,6 +25,63 @@ TASK_TAG = re.compile(r"^(item|taskref):(.+)$")
 MAX_ROWS = 2000
 MAX_LINES = 5000
 MAX_MATCHES = 500
+
+
+def page_links(document, text_length):
+    """Nur gültige interne Verweise im tatsächlich sichtbaren Originaltext."""
+    if not isinstance(document, dict):
+        return ()
+    links = document.get('links') or {}
+    if not isinstance(links, dict):
+        return ()
+    result = []
+    for span in document.get('spans') or ():
+        if not isinstance(span, dict):
+            continue
+        tag, start, end = span.get('tag'), span.get('start'), span.get('end')
+        if not isinstance(tag, str) or not tag.startswith('link:'):
+            continue
+        value = links.get(tag)
+        if objects.parse(value) is None or type(start) is not int or type(end) is not int:
+            continue
+        if 0 <= start < end and start < text_length:
+            result.append((start, min(end, text_length), value))
+    return tuple(result)
+
+
+def reference_groups(list_id, item_id, index, outgoing, incoming):
+    """Aktuelle Verweise/Rückverweise als lesende, sortierte Navigation.
+
+    Fehlende/gelöschte Ziele bleiben benannt. Die aufrufende Oberfläche darf
+    nur erreichbare Heimatcontainer öffnen, ohne Hauptkontextwechsel.
+    """
+    sources = [(('list', list_id), 'Inhalt')]
+    selected = index.get(('item', item_id))
+    if selected and selected[2] and selected[2].get('id') == list_id:
+        sources.append((('item', item_id), 'Ausgewählte Aufgabe'))
+    groups = []
+    for source, label in sources:
+        for direction, graph in (('Verweise', outgoing), ('Rückverweise', incoming)):
+            rows = []
+            for target in graph.get(source, ()):
+                state, title = objects.caption(target, index)
+                destination = reference_target(target, index)
+                reason = ('Im Papierkorb' if state == 'trash' else 'Ziel fehlt' if state == 'missing'
+                          else 'Nur im Hauptbereich darstellbar' if destination is None else '')
+                rows.append(dict(source=source, value=objects.uri(*target), title=title,
+                                 reason=reason, enabled=destination is not None, state=state))
+            rows.sort(key=lambda row: (row['title'].casefold(), row['value']))
+            groups.append((label + ' · ' + direction, tuple(rows)))
+    return tuple(groups)
+
+
+def reference_actions(row):
+    """Gezielte Originalaktionen; eine fehlende Beziehung darf noch kopierbar bleiben."""
+    valid = objects.parse(row.get('value')) is not None
+    available = valid and row.get('state') not in ('trash', 'missing')
+    return (('side', 'In Nebenansicht öffnen', valid and bool(row.get('enabled'))),
+            ('main', 'Im Hauptbereich öffnen', available),
+            ('copy', 'Verweis kopieren', valid))
 
 
 @dataclass(frozen=True, slots=True)

@@ -1,5 +1,39 @@
 # Änderungsverlauf
 
+## 3.49.0 (28.10.2026) – Tagesplanung, Verweise und geschützter Wiederanlauf
+
+- Gerätevergleich 29.10.: Symbole mit mehreren Zeichen wie `⚑⚑` (hohe Wichtigkeit) werden in Baumzeilen wieder mittig ausgerichtet, statt die Messung im Zeichenrückruf abzubrechen. Prüfsuiten schließen beim simulierten regulären Neustart die Sitzung ab; die JPEG-Probe fordert die Umwandlung wie die Oberfläche vorher an. [Einordnung und gezielte Prüfung](tests/qa-3.49.0/geraetevergleich_2026-10-29/README.md).
+
+- AMD-Prüffortsetzung 29.10.: regulären Neustart der älteren UI-Suite über den echten App-Schließweg mit sauberem Sitzungsmarker prüfen; widgeteigene Tcl-Zeitaufträge vor dem testinternen Interpreterwechsel ohne doppelte Befehlsfreigabe abbauen. Vorhandene Fachassertions und echter unsauberer Wiederanlauf bleiben erhalten. [Prüfkorrektur und getrennte Vollversuche](tests/qa-3.49.0/amd_voll_2026-10-29/README.md).
+
+- Statische Prüfnamenszählung mit unveränderten Wortgrenzen in einem Textdurchlauf statt je Bezeichner; Nichtwortnamen behalten literalen Fallback. Bestehende Befundkriterien erhalten.
+
+- Beide Wege „Liste leeren“ vereinheitlicht: Schreibbesitz, aktuelle bestätigte IDs und Editorübernahme vor Mutation; ein Undo/Redo, No-op bei leerer Liste und geschützter UI-Nachlauf. Bestehendes Direktleeren ohne Papierkorb erhalten. Apple-Silicon-/Rosetta-Profil in Prüfwerkzeugen ergänzt; native M2-Prüfung getrennt offen.
+
+- Mutations-/Speicherreste: Labelanlage beachtet Farbabbruch, erneute Namen-/Grenz-/Sperrprüfung und Hauptdateifehler; Erledigte entfernen arbeitet nach Bestätigung mit frischen IDs, legt verschachtelte Punkte nicht doppelt im Papierkorb ab und meldet Schreibfehler ehrlich. Inline-Umbenennen nutzt den gemeinsamen Änderungsrahmen mit explizitem Speicherergebnis. Der Bestandswächter erfasst zusätzlich Aufgaben in gelöschten Listen; bestehende Retention und Undo/Redo bleiben erhalten.
+
+- WA-09-Abschlussrest: unbekannte Zusatzfelder gültiger Filter, Reiter, Pinnwände, Karten, Anzeigeoptionen, Kanten und Bereiche beim Normalisieren erhalten; Bearbeiten bekannter Filterwerte bewahrt fremde Felder. Unverstandene Karten bleiben mit ihren Kanten bis zu bestehenden Grenzen erhalten und werden nicht als Aufgaben gerendert. Entfernte bekannte Aufgaben/Seiten und ungültige bekannte Felder werden weiterhin bereinigt. Kein Formatwechsel und keine Reparatur bereits ausgelieferter Leser.
+
+- **Abschlussnachlauf 29.10.2026:** Regulären Sitzungsabschluss in älteren Prüfadaptern nachgeführt; Pinnwand-Werkzeuge umbrechen auch in schmaler Nebenansicht ohne gequetschte Knöpfe. Prüfplatzannahmen an tatsächliche Titelbreite, Sichtbarkeit und Arbeitsfläche gebunden. CPU-/Board-/BIOS-Profil für jeden neuen Prüfablauf ergänzt, damit Intel- und AMD-Belege vergleichbar zugeordnet werden. Aktuelle Rot-/Folgegrenzen im [Nachweis](tests/qa-3.49.0/abschlussreste_2026-10-29/README.md).
+
+- **Dokumentpflege 29.10.2026:** Abnahmeaudit lokal eingearbeitet, überholte Modul-/Versions-/Lieferangaben und drei Wiederanlauf-Abschnittsverweise korrigiert; aktuelle Statusmatrizen und manuelle Prüfliste nachgeführt. Datierter Bericht unverändert, FP-01-Prüfadapter und weitere Abnahmetore offen. [Datei-/Dokumentnachweis](tests/qa-3.49.0/dokumentabgleich_2026-10-29/README.md). Keine Laufzeitänderung oder neue Lieferung.
+
+- **Funktionaler Ausbau der ursprünglichen drei Pakete:** Wochen-Schnellwahl, gemeinsame Fälligkeit und Aufwand je Tagesaufgabe sowie Verweisaktionen/Kopieren/Hauptöffnen/gezieltes Verknüpfen in der Nebenansicht. Ein Undo/Redo, aktueller Kontext und bestehende Mutationseinstiege erhalten. [Gezielter Nachweis](tests/qa-3.49.0/funktionspakete_2026-10-28/README.md).
+- **Vorherige technische Robustheitsrunde:** WA-42 mit eingefrorener lokaler Prüfkopie, Prozessisolierung, Laufzeit-/Eingangshashes und Integritätsstopp; WA-40/WA-41B mit lokalem Sitzungsabschluss, lesender Bestandsprüfung, geschütztem Start und bewusster Freigabe nach bytegleicher Originalvorsicherung; WA-41A/WA-40 mit begrenzten lokalen Metadaten-/Phasenprotokollen und Prozessbegleitung des Schnell-/Paketstarters.
+- Bestehende Datensperre, atomare Speicherung, Formate/Migrationen und Undo bleiben maßgeblich; keine neue Laufzeitabhängigkeit, Aufgabenformat 26. Der Versionspfleger kann ältere lokale Nachweise ausdrücklich erhalten (`--ohne-ablagekuerzung`).
+- [Gezielte Prüfung und Grenzen](tests/qa-3.49.0/robustheit_2026-10-28/README.md). WA-41-Ursache, breite/native Phasenmatrix und Lieferung bleiben offen: Python/Showcase 3.47.0, eigenständige Pakete 3.45.0.
+
+## 3.48.0 (27.10.2026) – Tagesnavigation, Mehrfachfelder und Verweise
+
+- **Prüfwerkzeugnachlauf 28.10.2026:** Gemeinsamer Prüfungsstarter sichert CPU-/BIOS-/Python-Kontext und ergänzt passende native/Interpreterabbrüche um eine mögliche Software-/Systemursache (WA-41A); konkrete Datenabweichungen bleiben WA-41B. Originalstatus, Exitcode, Lastumfang und Datenvergleich unverändert. Kein CPU-Defektnachweis, keine App-/Liefer-/Versionsänderung. [Prüfnachweis](tests/qa-3.48.0/prozessdiagnose_2026-10-28/README.md).
+
+- **Dokumentationsnachlauf zur Vorbeugung:** AMD-Gegenlauf und vorhandene Datensicherungen von geplanten Prüfablauf-, Absturzdiagnose- und Wiederanlaufmaßnahmen getrennt; Reihenfolge und Abnahmekriterien in [Plan §21.27](../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2127-vorbeugung-absturzdiagnose-und-abgesicherter-wiederanlauf). Reine Dokumentation/Planung, keine neue Schutzfunktion oder Lieferung aus diesem Nachlauf.
+
+- **Tage auf der Startseite:** Voriger/nächster Tag, Datum wählen, zu Heute zurück und den angezeigten Tagesplan öffnen. Planung/Kapazität und Fälligkeiten beziehen sich auf denselben gewählten Tag, ohne Aufgaben zu verschieben. Ziel, nächste Aufgabe und Tagesvorschlag bleiben bei Heute. Auswahl endet bei Tages-/Bestandswechsel; Navigation ist flüchtig.
+- **Auswahl bearbeiten:** Wichtigkeit gemeinsam setzen, reguläre Labels ausdrücklich hinzufügen oder entfernen; auch über Vorschauseiten und Quelllisten. Vorhandene unterschiedliche Labels bleiben erhalten. No-op ohne Undo, eine gemeinsame Rücknahme, frische Ziele nach dem Snapshot, keine Teiländerung bei Labelgrenze und kein Erfolg nach Schreibfehler.
+- **Verknüpfte Nebenansicht:** Interne Textlinks folgen dem bisherigen Vorschauweg. Verweise/Rückverweise von Inhalt und ausgewählter Aufgabe sind durchsuchbar; der Sitzungsverlauf bleibt nutzbar. Entfernte Beziehungen und Ziele werden erneut geprüft. Haupteditor/offene Eingabe bleiben erhalten. Datumsmetadaten der Nebenansicht werden auf volle Textbreite bemessen und bei Enge ganz ausgeblendet.
+- **Prüfphase:** Alle drei Pakete gemäß Auftrag vor den Routinetests implementiert; Ergebnisse und Liefergrenzen im [Dreierpaketnachweis](tests/qa-3.48.0/dreierpaket_2026-10-27/README.md). Format bleibt 26, keine neue Abhängigkeit oder Integration.
+
 ## 3.47.0 (27.10.2026) – Mehrfachplanung und Nebenansichtsverlauf
 
 - **Tagessteuerung – Mehrfachplanung:** Auswahlmodus in der Heute-Kachel, zehn Vorschauzeilen je Seite, seitenübergreifende Auswahl, alle offenen Tagesaufgaben auswählen, leeren/beenden. Kästchen wählen in diesem Modus aus und erledigen keine Aufgabe. Gemeinsam planen oder entplanen über bestehende Kapazitäts-/Datumsvorschau; ein Undo/Redo, Fälligkeiten unverändert, frische IDs und Besitzprüfung vor/nach Dialogen. Erledigte, archivierte, entfernte oder inzwischen anders geplante Ziele werden nicht still übernommen.

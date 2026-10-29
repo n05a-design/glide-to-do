@@ -65,6 +65,11 @@ class Lauf:
             self.app.cancel_pending_callbacks()
             for job in self.root.tk.splitlist(self.root.tk.call("after", "info")):
                 self.root.after_cancel(job)
+            # Der simulierte reguläre Neustart beendet auch den Sitzungsnachweis.
+            # Ältere --app-Gegenproben kennen den Wiederanlaufvertrag noch nicht.
+            finish_session = getattr(self.app, "finish_recovery_session", None)
+            if finish_session is not None:
+                finish_session()
             self.app.release_data_lock()
             self.root.destroy()
         except self.mod.tk.TclError:

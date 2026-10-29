@@ -21,6 +21,8 @@ parser.add_argument("version")
 parser.add_argument("datum")
 parser.add_argument("--ohne-git-index", action="store_true",
                     help="Aufbewahrung nur in Arbeitsdateien kürzen; den Git-Index nicht ändern")
+parser.add_argument("--ohne-ablagekuerzung", action="store_true",
+                    help="Versionswechsel ohne Löschen älterer lokaler Nachweise; separat prüfen")
 args = parser.parse_args()
 NEU, DATUM = args.version, args.datum
 # Ablage-Wurzel: scripts/pflege → Glide → 01_Repository → Ablage
@@ -80,8 +82,11 @@ for datei, zeilen in sorted(ziele.items()):
         text[nummer - 1] = z
     schreibe(pfad, "\n".join(text))
 print(f"{len(ziele)} Standangaben angepasst")
-kuerzen = subprocess.run([sys.executable, "-B", str(REPO / "scripts/pflege/ablage_kuerzen.py"),
-                         *(["--ohne-git-index"] if args.ohne_git_index else [])],
-                         capture_output=True, text=True, cwd=REPO)
-assert kuerzen.returncode == 0, kuerzen.stderr[-2000:]
-print(kuerzen.stdout.strip().splitlines()[-1])
+if not args.ohne_ablagekuerzung:
+    kuerzen = subprocess.run([sys.executable, "-B", str(REPO / "scripts/pflege/ablage_kuerzen.py"),
+                             *(["--ohne-git-index"] if args.ohne_git_index else [])],
+                             capture_output=True, text=True, cwd=REPO)
+    assert kuerzen.returncode == 0, kuerzen.stderr[-2000:]
+    print(kuerzen.stdout.strip().splitlines()[-1])
+else:
+    print("Ablagekürzung ausgelassen; ältere Nachweise bleiben erhalten.")

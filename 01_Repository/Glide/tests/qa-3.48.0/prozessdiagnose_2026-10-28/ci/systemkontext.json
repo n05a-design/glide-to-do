@@ -1,0 +1,14 @@
+{
+  "runner_python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+  "implementierung": "CPython",
+  "plattform": "win32",
+  "systemversion": "10.0.26300",
+  "architektur": "AMD64",
+  "cpu": "Intel(R) Core(TM) i9-14900K",
+  "cpu_hersteller": "GenuineIntel",
+  "board_hersteller": "Gigabyte Technology Co., Ltd.",
+  "board": "B760M DS3H DDR4",
+  "bios": "F19",
+  "bios_datum": "09/27/2024",
+  "app_sha256": "12ae541bb0aaa0873674d9be6f05f49c2fa6802ea255d45ccdaee458c9a717d2"
+}

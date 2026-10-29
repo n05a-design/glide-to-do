@@ -1,0 +1,36 @@
+{
+  "packages": [
+    {
+      "kind": "windows",
+      "path": "01_Repository/Glide/build/windows/Glide-3.45.0-windows-x64.zip",
+      "exists": true,
+      "sha256": "47ff56183e48de0b196c7910b1393d4a1521f1d3afc9d7b7a483d436d7bdb7c9",
+      "historical_sha256": "47ff56183e48de0b196c7910b1393d4a1521f1d3afc9d7b7a483d436d7bdb7c9",
+      "historical_bytes_equal": true,
+      "embedded_versions": [
+        "3.45.0"
+      ]
+    },
+    {
+      "kind": "macos",
+      "path": "01_Repository/Glide/build/macos/Glide-3.45.0-macos-arm64.tar.gz",
+      "exists": true,
+      "sha256": "b6284197c62fddee1283207ead6680baed72bdf8826114e944316857284a7252",
+      "historical_sha256": "b6284197c62fddee1283207ead6680baed72bdf8826114e944316857284a7252",
+      "historical_bytes_equal": true,
+      "embedded_versions": [
+        "3.45.0"
+      ]
+    }
+  ],
+  "python": [
+    {
+      "path": "07_Python-Versionen\\Glide-Aufgaben-und-Listen_v3.47.0.pyw",
+      "sha256": "dd26a038f430860e41cfb2e703689ea0c4dd7bcacbc753277be89ade23c1f014",
+      "version": "3.47.0",
+      "schema": "26"
+    }
+  ],
+  "native_signatures_rechecked": false,
+  "native_starts_rechecked": false
+}

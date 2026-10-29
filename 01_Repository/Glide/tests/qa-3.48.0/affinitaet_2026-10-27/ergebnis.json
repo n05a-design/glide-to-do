@@ -1,0 +1,100 @@
+{
+  "started": "2026-10-27T14:22:40.421416+00:00",
+  "source_before": [],
+  "frozen_before": [],
+  "cases": [
+    {
+      "case": "cpu0_1",
+      "pinned_to_logical_cpu0": true,
+      "affinity": {
+        "before": "0xffffffff",
+        "after": "0x1",
+        "system": "0xffffffff",
+        "verified": true
+      },
+      "exitcode": 0,
+      "seconds": 70.62,
+      "timed_out": false,
+      "core_pass": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trace_sha256": "cea030dd5112c644f430db766139182389682c865f2e6e46fcafa61bd3d0d8e5",
+      "last_events": [
+        {
+          "event": "round",
+          "seconds": 67.964,
+          "iteration": 39
+        },
+        {
+          "event": "core_pass",
+          "seconds": 69.922,
+          "tasks": 26420,
+          "iterations": 40
+        }
+      ]
+    },
+    {
+      "case": "default_control",
+      "pinned_to_logical_cpu0": false,
+      "affinity": {
+        "before": "0xffffffff",
+        "after": "0xffffffff",
+        "system": "0xffffffff",
+        "verified": true
+      },
+      "exitcode": 1,
+      "seconds": 25.64,
+      "timed_out": false,
+      "core_pass": false,
+      "stdout_sha256": "3ae6fbbb63d8e12a8a813d73196255384445019e2808b6e4871993fb7d549da2",
+      "trace_sha256": "909e8e234decf4ac71cb35c61c3fe97d7069cab660b217498203af744a1ef371",
+      "last_events": [
+        {
+          "event": "round",
+          "seconds": 24.692,
+          "iteration": 13
+        },
+        {
+          "event": "exception",
+          "seconds": 25.202,
+          "error_type": "AssertionError",
+          "message": "(13, [('Fehler beim Speichern', \"'str' object has no attribute 'get'\")], 'lock')"
+        }
+      ]
+    },
+    {
+      "case": "cpu0_2",
+      "pinned_to_logical_cpu0": true,
+      "affinity": {
+        "before": "0xffffffff",
+        "after": "0x1",
+        "system": "0xffffffff",
+        "verified": true
+      },
+      "exitcode": 0,
+      "seconds": 69.19,
+      "timed_out": false,
+      "core_pass": true,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trace_sha256": "2c5a6b575c191d8f75df20a0dc7395cd9cddc907a43da050841dfc839479e371",
+      "last_events": [
+        {
+          "event": "round",
+          "seconds": 66.507,
+          "iteration": 39
+        },
+        {
+          "event": "core_pass",
+          "seconds": 68.488,
+          "tasks": 26420,
+          "iterations": 40
+        }
+      ]
+    }
+  ],
+  "completed": true,
+  "cause_confirmed": false,
+  "release_ready": false,
+  "finished": "2026-10-27T14:25:26.121994+00:00",
+  "source_after": [],
+  "frozen_after": []
+}

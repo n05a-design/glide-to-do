@@ -1,0 +1,84 @@
+{
+  "zeitpunkt": "2026-10-28T10:51:58.089608+01:00",
+  "version": "3.48.0",
+  "umfang": "Pruefwerkzeuge und Dokumentation",
+  "gezielte_tests": {
+    "anzahl": 16,
+    "fehler": 0,
+    "werkzeughashes_vor_nach_gleich": true,
+    "sha256": {
+      "prozessdiagnose.py": "f6ac02e97a166eacae891329ce4930ced52a5b46a3c65e7bec876cf0d410a904",
+      "test_prozessdiagnose.py": "1f7f59c3852221ec8e8b2cbd163bd63d61ab8b4474de6a7c0bae22e376a53c59",
+      "pruefen.py": "fb5d77b6a502d67bff7038098fd491940323b0d5c94ca66753b5c14307786e1d"
+    }
+  },
+  "historische_signaturgegenprobe": {
+    "rot_erkannt": 5,
+    "gruen_ohne_fehlalarm": 5,
+    "tests_neu_ausgefuehrt": false
+  },
+  "baseline_geprueft": 481,
+  "parallele_fremdaenderungen": [
+    {
+      "datei": "01_Repository/Glide/src/glide/app.pyw",
+      "vorher": "f57daadfbb59831a89666434f8d7d69e6c5e4b2042aaa3f14a6b156285dbe24e",
+      "nachher": "d8d216fd36af722077d0476254c1da5393ee2d993b5793d7c533bcf0bcca67a7"
+    },
+    {
+      "datei": "01_Repository/Glide/src/glide/glide_start.py",
+      "vorher": "670aeeadde60dd81dd0d816ee1eba38ec3205f8af15902bfefd3e13aff6b79eb",
+      "nachher": "6cf7507d3f3c85d8b0bbd30072cb9482f49d3628b22b561057ffb3df08ae7498"
+    },
+    {
+      "datei": "01_Repository/Glide/src/glide/README.md",
+      "vorher": "b120835a93213b04c2a05072799c776496f1011bda1ae30d8a9064eca6454971",
+      "nachher": "a98506db252ac3e44b03e29cc3e876b6bc66f0b6998eaa8c91318e3629eef338"
+    },
+    {
+      "datei": "01_Repository/Glide/src/glide/storage_health.py",
+      "vorher": "d9d04e139dece92211f635727e4e61055c268fdcadfb8ad61fbb67c6517f6a28",
+      "nachher": "22fce4eb46b705bf332b10ef141e3f052b045c5cb2bec2b0338ecf301957d07d"
+    },
+    {
+      "datei": "01_Repository/Glide/src/glide/resources/templates/glide_vorlagen.glidetemplates",
+      "vorher": "c680bcab9010fd3ca3d261dca6ded8bbdfb28adb013cb77cabbb18fed26505a5",
+      "nachher": "04b6ee3343b6efc4fcffe72e189f1f2d618a04867c75c18ec07ad027a8a8d32a"
+    },
+    {
+      "datei": "07_Python-Versionen/README.md",
+      "vorher": "6187e76a88d80a2da1611423fa99feb434b584b03430b0fe9ca947370c5bc3a9",
+      "nachher": "4f68c3674b1770af1a512025b31b116b141e4671ae065bba9be49c25eca81382"
+    },
+    {
+      "datei": "01_Repository/Glide/VERSION",
+      "vorher": "45cfa99814e74690d677173ae67cf6638e588c24b46743e93884639443ee9558",
+      "nachher": "837ef541c550b3f797efc3049a46eb7c00e00823c3d279281312472698ee2538"
+    },
+    {
+      "datei": "01_Repository/Glide/src/glide/runtime_diagnostics.py",
+      "vorher": null,
+      "nachher": "8474e7234412dbc78a32e2e5971cb65a188f384b7bac17b46eb785d13d21a7a0"
+    },
+    {
+      "datei": "01_Repository/Glide/src/glide/session_guard.py",
+      "vorher": null,
+      "nachher": "7b4fb6e30206ba4cddb19b92f0c190fbe07aaad6638ba316017cf8dee8befc79"
+    }
+  ],
+  "originalsuite_unveraendert": true,
+  "ci_grundstufe": {
+    "status": "abgebrochen_wegen_paralleler_quell_und_versionsaenderungen",
+    "eingefrorener_gesamtstand": false,
+    "werkzeugtests_begleitlauf": 208,
+    "skips_begleitlauf": 1,
+    "werkzeugfehler_begleitlauf": 0,
+    "keine_vollstaendige_ci_abnahme": true
+  },
+  "lasttest_neu_ausgefuehrt": false,
+  "releasefreigabe": false,
+  "version_bei_abschluss": "3.49.0",
+  "lokale_dateilinks": {
+    "geprueft": 373,
+    "fehler": []
+  }
+}

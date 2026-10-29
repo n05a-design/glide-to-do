@@ -1,0 +1,15 @@
+{
+  "app_sha256": "604c5434b70696591bd5c3caabb5f486b6b44458fae3bb81d04ec1439f4ed2d6",
+  "faelle": {
+    "side_verweisnavigation": {
+      "ok": true,
+      "befund": "Echter Textlink, Rückverweis, Suchauswahl, Verlauf, readonly und veralteter Link; Hauptentwurf/Datei/Undo unverändert",
+      "runtime": {
+        "python": "3.14.8",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": []
+}

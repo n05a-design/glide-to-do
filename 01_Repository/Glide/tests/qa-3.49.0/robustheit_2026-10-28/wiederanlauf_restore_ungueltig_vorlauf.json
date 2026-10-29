@@ -1,0 +1,17 @@
+{
+  "app_sha256": "7e5b1e50bcf42af433b1258bedd39ec79ef0acb265cd4178cf288a1b06b04f58",
+  "session_guard_sha256": "a2d267060419c874c82680a873d06c29f6704cc014b5cf8d6e3912e933791df0",
+  "test_sha256": "01c4fa6785edab0f1bdff960623feb69466fa1b8bdd3c60aa7a822e761fdc4cd",
+  "faelle": {
+    "restore_ungueltig": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_wiederanlauf.py\", line 463, in main\n    result = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_wiederanlauf.py\", line 365, in fall_restore_ungueltig\n    return restore_recovery(lauf, missing=False)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_wiederanlauf.py\", line 349, in restore_recovery\n    assert_portable_restored(lauf, expected, attachments)\n    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_wiederanlauf.py\", line 330, in assert_portable_restored\n    assert not app.undo_stack and not app.redo_stack, \"Wiederanlauf darf kein Undo zum leeren Fehlerstart anbieten\"\n                                      ^^^^^^^^^^^^^^\nAttributeError: 'ListApp' object has no attribute 'redo_stack'\n"
+    }
+  },
+  "fehler": [
+    "restore_ungueltig"
+  ],
+  "limitations": [
+    "Hardware-Stromausfall, native Mac-/Linux-/DPI-/Reader- und Menschenabnahme ungeprüft."
+  ]
+}

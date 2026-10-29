@@ -1,8 +1,0 @@
-{
-  "exitcode": 0,
-  "gegenfall": "vererbtes autocrlf=true/apply.whitespace=fix, globaler Inhaberbestand unverändert",
-  "patch": "windows-accessibility-name",
-  "original_sha256": "a81918f91245de9d1c5f74efe722e40ae4cfb83e49481412377ce5b7b7b3a91e",
-  "ergebnis_sha256": "1ddea5947df51ff3f0efead484223833d97722dd06b832a9e4e2e789b12b9a12",
-  "native_c_abnahme": "offen"
-}

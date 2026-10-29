@@ -81,9 +81,13 @@ def usage_counts(names):
     haystack = "\n".join(
         path.read_text(encoding="utf-8") for path in USAGE_SEARCH if path.is_file()
     )
+    # Dieselben Wortgrenzen und dieselbe Suche auch in Kommentaren/Strings,
+    # aber nur ein Textdurchlauf statt eines Vollscans je Bezeichner (WA-36).
+    words = collections.Counter(match.group(0) for match in re.finditer(r'\w+', haystack))
     counts = {}
     for name in names:
-        counts[name] = len(re.findall(rf"\b{re.escape(name)}\b", haystack))
+        counts[name] = (words[name] if re.fullmatch(r'\w+', name) else
+                        len(re.findall(rf"\b{re.escape(name)}\b", haystack)))
     return counts
 
 
