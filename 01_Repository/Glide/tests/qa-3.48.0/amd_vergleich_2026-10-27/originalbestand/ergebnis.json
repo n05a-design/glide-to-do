@@ -1,0 +1,73 @@
+{
+  "started": "2026-10-27T18:48:07.277835+00:00",
+  "source_files": 470,
+  "frozen_before": [],
+  "source_before": [
+    "01_Repository/Glide/tests/fixtures/showcase/README.md"
+  ],
+  "original_path": "%USERPROFILE%\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\qa-3.48.0\\lokale_belege\\eingang\\initial.json",
+  "payload_path": "%USERPROFILE%\\GlidePruefung\\amd-wa41-ysgejg8u\\initial_intel.json",
+  "payload_sha256": "a3b8c0cac4c72e1820e71730ad78e312f2a30338678fbcfe2a2b6d91dae081f4",
+  "payload_bytes": 28548872,
+  "input_byte_identical_to_intel": true,
+  "execution": "sequential",
+  "runtime": {
+    "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+    "executable": "%USERPROFILE%\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "tk": "9.0.4",
+    "tcl": "9.0.4",
+    "gil_disabled": 0,
+    "jit_enabled": false,
+    "packages": {
+      "pip": "26.2.1"
+    },
+    "binaries": {
+      "python.exe": "4942b86a6597e5aee0128daa00050ed79bc21f6e709a78eb19cbfeb0c2f39ac9",
+      "python3.dll": "6c45910e7c82617ca6360820de861699cc99f9efee434df290aa4c6e38f39886",
+      "python314.dll": "0f9857ffdfe010fe6b99328d58c2e3c7472ce75f336bf9c2ad9bd5bca3bce700",
+      "_tkinter.pyd": "ee3eb2cdac591821cf71cda8035a6bc9b148d92996dd45b24e3ae3715613315d",
+      "tcl90.dll": "a1fb45f963b05cb083a97df1449c2023b484eb921d40a463da7501b0f60e0f70",
+      "tcl9tk90.dll": "31f625c52e65d29d126e710ed8bab2ec964cb770e4fc59bc329dfff02cb6ddcf"
+    }
+  },
+  "cases": [
+    {
+      "case": "original_pure",
+      "bootstrap": "none",
+      "pid": 31288,
+      "exitcode": 0,
+      "seconds": 26.15,
+      "rounds_completed": 20,
+      "timed_out": false,
+      "frozen_after": [],
+      "payload_sha256_after": "a3b8c0cac4c72e1820e71730ad78e312f2a30338678fbcfe2a2b6d91dae081f4",
+      "stdout_sha256": "580b413aa60ad64d152ad53d2ff0e88c7f80157faf02ca198e76ba9dd9418da9",
+      "passed": true
+    },
+    {
+      "case": "original_import",
+      "bootstrap": "import",
+      "pid": 9844,
+      "exitcode": 0,
+      "seconds": 28.69,
+      "rounds_completed": 20,
+      "timed_out": false,
+      "frozen_after": [],
+      "payload_sha256_after": "a3b8c0cac4c72e1820e71730ad78e312f2a30338678fbcfe2a2b6d91dae081f4",
+      "stdout_sha256": "580b413aa60ad64d152ad53d2ff0e88c7f80157faf02ca198e76ba9dd9418da9",
+      "passed": true
+    }
+  ],
+  "completed": true,
+  "helper_sha256": {
+    "originalbestand.py": "9674a9ffec6fc5b34dcca4e8967e818d026f28eddc525c2da7b67a195ba1b522",
+    "pure_probe.py": "6fc82b01692fcbdf18702cd2822083e8a6716e2ae828680e6cd6c15bd231d469"
+  },
+  "finished": "2026-10-27T18:49:03.232342+00:00",
+  "frozen_after": [],
+  "source_after": [
+    "01_Repository/Glide/tests/fixtures/showcase/README.md"
+  ],
+  "original_sha256_after": "a3b8c0cac4c72e1820e71730ad78e312f2a30338678fbcfe2a2b6d91dae081f4"
+}

@@ -1,0 +1,3089 @@
+{
+  "stand": "vorher",
+  "date": "2026-10-27",
+  "version": "3.48.0",
+  "schema": {
+    "DATA_SCHEMA_VERSION": 26,
+    "MIN_PORTABLE_BACKUP_SCHEMA_VERSION": 4
+  },
+  "git_head": "2b1ee0fedc32acb3ae1feff26d8848c26a457be6",
+  "branch": "codex/glide-3.47-folgepakete",
+  "files": 5532,
+  "bytes": 591571695,
+  "hashed": 5513,
+  "cloud_placeholders": [],
+  "categories": {
+    "Quelle/Ressource/Projektverwaltung": 629,
+    "Dokumentation/Arbeitsregeln": 44,
+    "geschuetzte Originalreferenz": 28,
+    "Paket/Bauartefakt": 888,
+    "erzeugter Cache": 118,
+    "Prueffixture/Migrationsbeleg": 64,
+    "QA-Beleg": 3475,
+    "Showcase/Probedaten": 7,
+    "Python-Lieferstand/Archiv": 242,
+    "lokale Tk-Pruefumgebung": 1,
+    "Grafikmaster": 36
+  },
+  "tracked_present": 1755,
+  "ignored_present": 3713,
+  "documentation_files": 95,
+  "active_documentation_files": 48,
+  "registered_stand_documents": 89,
+  "stand_errors": [],
+  "documentation": "Alle Dokumente einschließlich Archiv im Index; 365 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell.",
+  "fixtures": "20 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite",
+  "local_links": 1431,
+  "active_link_findings": [],
+  "historical_link_findings": [],
+  "python_syntax_files": 462,
+  "python_syntax_errors": [],
+  "json_files": 691,
+  "json_errors": [],
+  "source_files": 470,
+  "changed_source": {
+    "worktree": [],
+    "frozen": []
+  },
+  "delivery_files": 235,
+  "delivery_errors": [],
+  "delivery_differences": [
+    "Glide-Aufgaben-und-Listen_v3.48.0.pyw",
+    "home_task_tiles.py",
+    "release_notes.py",
+    "side_view.py",
+    "task_editing.py",
+    "resources\\templates\\glide_vorlagen.glidetemplates"
+  ],
+  "reference_images": 28,
+  "reference_image_errors": [],
+  "retention_findings": [
+    [
+      "Archivalter",
+      "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/Fachlogik ohne Systemzeitzonen.log",
+      "3.42.0 liegt vor den 7 neuesten Versionen"
+    ],
+    [
+      "Archivalter",
+      "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/Fachlogik-Unit-Tests.log",
+      "3.42.0 liegt vor den 7 neuesten Versionen"
+    ],
+    [
+      "Archivalter",
+      "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/Startprobe.log",
+      "3.42.0 liegt vor den 7 neuesten Versionen"
+    ],
+    [
+      "Archivalter",
+      "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/Werkzeugtests.log",
+      "3.42.0 liegt vor den 7 neuesten Versionen"
+    ],
+    [
+      "Archivalter",
+      "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/analyse_erreichbarkeit.log",
+      "3.42.0 liegt vor den 7 neuesten Versionen"
+    ],
+    [
+      "Archivalter",
+      "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/analyse_statisch.log",
+      "3.42.0 liegt vor den 7 neuesten Versionen"
+    ],
+    [
+      "Archivalter",
+      "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/attributpruefung.log",
+      "3.42.0 liegt vor den 7 neuesten Versionen"
+    ],
+    [
+      "Archivalter",
+      "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/dublettenpruefung.log",
+      "3.42.0 liegt vor den 7 neuesten Versionen"
+    ],
+    [
+      "Archivalter",
+      "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/standpruefung.log",
+      "3.42.0 liegt vor den 7 neuesten Versionen"
+    ],
+    [
+      "Archivalter",
+      "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/head_werkzeuggegenprobe.log",
+      "3.42.0 liegt vor den 7 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/001_Schnellerfassung.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/002_Neuer_Punkt.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/003_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/004_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/005_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/006_Für_KI_bereitstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/007_Austauschformat_anzeigen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/008_Sicherungen_vergleichen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/009_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/010_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/011_Einstellungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/012_Tag_entlasten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/013_Tageshinweise.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/014_Tageshinweise_einstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/015_Kalender_als_Belegzeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/016_Tabellenspalten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/017_Startseite_einrichten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/018_Gespeicherte_Filter.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/019_Benachrichtigungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/020_Handbuch.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/021_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/022_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/023_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/024_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/025_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/026_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/027_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/028_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/029_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/030_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/031_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/032_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/033_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/034_Verknüpfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/035_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/036_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/037_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/038_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/039_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/040_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/041_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/042_In_Ordner_verschieben.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/043_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/044_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/045_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/046_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/047_Ordner_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/048_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/049_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/050_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/051_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/052_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/053_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/054_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/055_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/056_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/057_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/058_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/059_Zwischenstand_merken.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/060_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/061_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/screenshots/release_hell.png",
+      "3.43.1 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/screenshots/release_hell_dunkel.png",
+      "3.43.1 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/001_Schnellerfassung.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/002_Neuer_Punkt.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/003_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/004_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/005_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/006_Für_KI_bereitstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/007_Austauschformat_anzeigen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/008_Sicherungen_vergleichen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/009_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/010_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/011_Einstellungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/012_Tag_entlasten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/013_Tageshinweise.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/014_Tageshinweise_einstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/015_Kalender_als_Belegzeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/016_Tabellenspalten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/017_Startseite_einrichten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/018_Gespeicherte_Filter.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/019_Benachrichtigungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/020_Handbuch.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/021_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/022_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/023_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/024_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/025_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/026_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/027_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/028_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/029_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/030_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/031_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/032_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/033_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/034_Verknüpfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/035_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/036_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/037_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/038_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/039_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/040_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/041_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/042_In_Ordner_verschieben.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/043_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/044_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/045_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/046_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/047_Ordner_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/048_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/049_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/050_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/051_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/052_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/053_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/054_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/055_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/056_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/057_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/058_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/059_Zwischenstand_merken.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/060_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/061_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/screenshots/release_hell.png",
+      "3.43.1 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/screenshots/release_hell_dunkel.png",
+      "3.43.1 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/001_Schnellerfassung.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/002_Neuer_Punkt.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/003_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/004_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/005_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/006_Für_KI_bereitstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/007_Austauschformat_anzeigen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/008_Sicherungen_vergleichen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/009_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/010_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/011_Einstellungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/012_Tag_entlasten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/013_Tageshinweise.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/014_Tageshinweise_einstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/015_Kalender_als_Belegzeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/016_Tabellenspalten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/017_Startseite_einrichten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/018_Gespeicherte_Filter.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/019_Benachrichtigungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/020_Handbuch.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/021_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/022_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/023_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/024_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/025_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/026_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/027_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/028_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/029_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/030_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/031_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/032_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/033_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/034_Verknüpfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/035_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/036_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/037_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/038_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/039_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/040_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/041_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/042_In_Ordner_verschieben.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/043_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/044_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/045_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/046_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/047_Ordner_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/048_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/049_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/050_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/051_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/052_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/053_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/054_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/055_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/056_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/057_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/058_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/059_Zwischenstand_merken.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/060_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/061_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/screenshots/release_hell.png",
+      "3.43.1 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/screenshots/release_hell_dunkel.png",
+      "3.43.1 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/001_Schnellerfassung.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/002_Neuer_Punkt.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/003_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/004_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/005_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/006_Für_KI_bereitstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/007_Austauschformat_anzeigen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/008_Sicherungen_vergleichen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/009_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/010_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/011_Einstellungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/012_Tag_entlasten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/013_Tageshinweise.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/014_Tageshinweise_einstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/015_Kalender_als_Belegzeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/016_Tabellenspalten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/017_Startseite_einrichten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/018_Gespeicherte_Filter.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/019_Filter_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/020_Benachrichtigungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/021_Handbuch.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/022_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/023_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/024_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/025_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/026_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/027_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/028_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/029_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/030_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/031_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/032_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/033_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/034_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/035_Verknüpfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/036_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/037_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/038_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/039_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/040_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/041_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/042_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/043_In_Ordner_verschieben.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/044_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/045_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/046_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/047_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/048_Ordner_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/049_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/050_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/051_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/052_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/053_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/054_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/055_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/056_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/057_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/058_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/059_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/060_Zwischenstand_merken.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/061_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/062_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/001_Schnellerfassung.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/002_Neuer_Punkt.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/003_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/004_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/005_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/006_Für_KI_bereitstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/007_Austauschformat_anzeigen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/008_Speicherstatus.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/009_Sicherungsübersicht.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/010_Sicherungen_vergleichen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/011_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/012_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/013_Einstellungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/014_Tag_entlasten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/015_Tageshinweise.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/016_Tageshinweise_einstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/017_Kalender_als_Belegzeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/018_Tabellenspalten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/019_Startseite_einrichten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/020_Gespeicherte_Filter.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/021_Filter_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/022_Benachrichtigungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/023_Handbuch.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/024_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/025_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/026_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/027_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/028_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/029_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/030_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/031_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/032_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/033_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/034_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/035_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/036_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/037_Verknüpfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/038_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/039_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/040_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/041_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/042_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/043_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/044_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/045_In_Ordner_verschieben.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/046_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/047_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/048_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/049_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/050_Ordner_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/051_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/052_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/053_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/054_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/055_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/056_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/057_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/058_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/059_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/060_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/061_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/062_Zwischenstand_merken.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/063_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/064_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/screenshots/release_hell.png",
+      "3.45.0 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/screenshots/release_hell_dunkel.png",
+      "3.45.0 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/001_Schnellerfassung.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/002_Neuer_Punkt.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/003_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/004_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/005_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/006_Für_KI_bereitstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/007_Austauschformat_anzeigen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/008_Speicherstatus.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/009_Sicherungsübersicht.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/010_Sicherungen_vergleichen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/011_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/012_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/013_Einstellungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/014_Tag_entlasten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/015_Tageshinweise.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/016_Tageshinweise_einstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/017_Kalender_als_Belegzeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/018_Tabellenspalten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/019_Startseite_einrichten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/020_Gespeicherte_Filter.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/021_Filter_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/022_Benachrichtigungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/023_Handbuch.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/024_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/025_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/026_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/027_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/028_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/029_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/030_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/031_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/032_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/033_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/034_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/035_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/036_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/037_Verknüpfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/038_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/039_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/040_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/041_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/042_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/043_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/044_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/045_In_Ordner_verschieben.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/046_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/047_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/048_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/049_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/050_Ordner_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/051_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/052_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/053_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/054_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/055_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/056_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/057_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/058_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/059_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/060_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/061_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/062_Zwischenstand_merken.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/063_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/064_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/screenshots/release_hell.png",
+      "3.45.0 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/screenshots/release_hell_dunkel.png",
+      "3.45.0 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/startseitenaktionen_2026-10-26/screenshots/dark-1280x800.png",
+      "3.45.0 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/startseitenaktionen_2026-10-26/screenshots/glass_light-860x700.png",
+      "3.45.0 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/startseitenaktionen_2026-10-26/screenshots/light-480x560.png",
+      "3.45.0 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/startseitenaktionen_2026-10-26/screenshots/light-860x700.png",
+      "3.45.0 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/001_Schnellerfassung.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/002_Neuer_Punkt.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/003_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/004_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/005_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/006_Für_KI_bereitstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/007_Austauschformat_anzeigen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/008_Speicherstatus.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/009_Sicherungsübersicht.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/010_Sicherungen_vergleichen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/011_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/012_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/013_Einstellungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/014_Tag_entlasten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/015_Tageshinweise.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/016_Tageshinweise_einstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/017_Kalender_als_Belegzeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/018_Tabellenspalten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/019_Startseite_einrichten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/020_Gespeicherte_Filter.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/021_Filter_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/022_Benachrichtigungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/023_Handbuch.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/024_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/025_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/026_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/027_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/028_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/029_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/030_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/031_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/032_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/033_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/034_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/035_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/036_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/037_Verknüpfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/038_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/039_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/040_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/041_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/042_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/043_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/044_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/045_In_Ordner_verschieben.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/046_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/047_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/048_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/049_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/050_Ordner_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/051_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/052_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/053_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/054_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/055_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/056_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/057_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/058_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/059_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/060_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/061_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/062_Zwischenstand_merken.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/063_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/064_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/screenshots/release_hell.png",
+      "3.45.0 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/screenshots/release_hell_dunkel.png",
+      "3.45.0 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/001_Schnellerfassung.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/002_Neuer_Punkt.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/003_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/004_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/005_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/006_Für_KI_bereitstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/007_Austauschformat_anzeigen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/008_Speicherstatus.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/009_Sicherungsübersicht.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/010_Sicherungen_vergleichen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/011_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/012_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/013_Einstellungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/014_Tag_entlasten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/015_Tageshinweise.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/016_Tageshinweise_einstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/017_Kalender_als_Belegzeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/018_Tabellenspalten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/019_Startseite_einrichten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/020_Gespeicherte_Filter.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/021_Filter_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/022_Benachrichtigungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/023_Handbuch.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/024_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/025_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/026_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/027_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/028_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/029_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/030_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/031_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/032_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/033_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/034_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/035_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/036_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/037_Verknüpfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/038_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/039_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/040_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/041_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/042_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/043_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/044_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/045_In_Ordner_verschieben.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/046_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/047_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/048_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/049_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/050_Ordner_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/051_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/052_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/053_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/054_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/055_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/056_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/057_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/058_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/059_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/060_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/061_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/062_Zwischenstand_merken.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/063_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/064_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/screenshots/release_hell.png",
+      "3.45.0 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/screenshots/release_hell_dunkel.png",
+      "3.45.0 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/001_Schnellerfassung.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/002_Neuer_Punkt.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/003_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/004_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/005_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/006_Für_KI_bereitstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/007_Austauschformat_anzeigen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/008_Speicherstatus.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/009_Sicherungsübersicht.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/010_Sicherungen_vergleichen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/011_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/012_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/013_Einstellungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/014_Tag_entlasten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/015_Tageshinweise.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/016_Tageshinweise_einstellen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/017_Kalender_als_Belegzeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/018_Tabellenspalten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/019_Startseite_einrichten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/020_Gespeicherte_Filter.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/021_Filter_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/022_Benachrichtigungen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/023_Handbuch.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/024_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/025_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/026_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/027_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/028_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/029_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/030_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/031_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/032_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/033_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/034_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/035_Liste_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/036_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/037_Verknüpfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/038_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/039_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/040_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/041_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/042_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/043_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/044_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/045_In_Ordner_verschieben.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/046_Drucken_und_PDF.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/047_CSV_importieren.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/048_Kalenderdatei__ICS_.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/049_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/050_Ordner_bearbeiten.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/051_Labels.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/052_Aus_Vorlage_anlegen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/053_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/054_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/055_Neue_Liste.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/056_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/057_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/058_Neuer_Ordner.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/059_Pixelsymbol.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/060_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/061_PNG_auf_128___128_einpassen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/062_Zwischenstand_merken.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/063_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/064_Symbol_vor_dem_Export_prüfen.png",
+      "Bildschirmfotos der Vollprüfung bleiben lokal"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/screenshots/release_hell.png",
+      "3.45.0 liegt vor den 3 neuesten Versionen"
+    ],
+    [
+      "Fensterbilder",
+      "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/screenshots/release_hell_dunkel.png",
+      "3.45.0 liegt vor den 3 neuesten Versionen"
+    ]
+  ],
+  "errors": [
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Frameworks/licenses",
+      "error": "PermissionError",
+      "message": "[WinError 5] Zugriff verweigert: 'C:\\\\Users\\\\vontrostorff\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\build\\\\macos\\\\Glide.app\\\\Contents\\\\Frameworks\\\\licenses'"
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Frameworks/python3.14",
+      "error": "PermissionError",
+      "message": "[WinError 5] Zugriff verweigert: 'C:\\\\Users\\\\vontrostorff\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\build\\\\macos\\\\Glide.app\\\\Contents\\\\Frameworks\\\\python3.14'"
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Frameworks/resources",
+      "error": "PermissionError",
+      "message": "[WinError 5] Zugriff verweigert: 'C:\\\\Users\\\\vontrostorff\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\build\\\\macos\\\\Glide.app\\\\Contents\\\\Frameworks\\\\resources'"
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Frameworks/tcl9",
+      "error": "PermissionError",
+      "message": "[WinError 5] Zugriff verweigert: 'C:\\\\Users\\\\vontrostorff\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\build\\\\macos\\\\Glide.app\\\\Contents\\\\Frameworks\\\\tcl9'"
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Frameworks/_tcl_data",
+      "error": "PermissionError",
+      "message": "[WinError 5] Zugriff verweigert: 'C:\\\\Users\\\\vontrostorff\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\build\\\\macos\\\\Glide.app\\\\Contents\\\\Frameworks\\\\_tcl_data'"
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Frameworks/_tk_data",
+      "error": "PermissionError",
+      "message": "[WinError 5] Zugriff verweigert: 'C:\\\\Users\\\\vontrostorff\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\build\\\\macos\\\\Glide.app\\\\Contents\\\\Frameworks\\\\_tk_data'"
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Frameworks/Python.framework/Resources",
+      "error": "PermissionError",
+      "message": "[WinError 5] Zugriff verweigert: 'C:\\\\Users\\\\vontrostorff\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\build\\\\macos\\\\Glide.app\\\\Contents\\\\Frameworks\\\\Python.framework\\\\Resources'"
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/python3.14",
+      "error": "PermissionError",
+      "message": "[WinError 5] Zugriff verweigert: 'C:\\\\Users\\\\vontrostorff\\\\OneDrive\\\\Github\\\\glide-to-do\\\\01_Repository\\\\Glide\\\\build\\\\macos\\\\Glide.app\\\\Contents\\\\Resources\\\\python3.14'"
+    }
+  ],
+  "application_tests_started": false,
+  "native_dump_analysis_performed": false,
+  "release_ready": false,
+  "limitations": [
+    "Metadaten und Hashes fuer alle lesbaren lokalen Hauptcheckoutdateien; Git-Interna und separate Checkouts abgegrenzt.",
+    "Private Arbeitsdaten nur Metadaten; Cloud-Platzhalter nicht nachgeladen.",
+    "Syntax/JSON/Links/Versionen sind keine vollstaendige semantische Neuanalyse jeder Codezeile oder jedes Altprotokolls.",
+    "Externe Webseiten und Marktfakten nicht neu recherchiert; datierte Quellen bleiben datiert.",
+    "Keine Anwendung, GUI, Lastsuite oder Produktionsmutation ausgefuehrt."
+  ]
+}

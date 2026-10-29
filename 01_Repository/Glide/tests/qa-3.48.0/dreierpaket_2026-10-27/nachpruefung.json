@@ -1,0 +1,62 @@
+{
+  "altleser": [
+    {
+      "suite": "test_seitenkarten",
+      "exitcode": 0,
+      "seconds": 14.59,
+      "history": "read-only Git access to existing pinned commits"
+    },
+    {
+      "suite": "test_ansichten",
+      "exitcode": 0,
+      "seconds": 30.74,
+      "history": "read-only Git access to existing pinned commits"
+    },
+    {
+      "suite": "test_wiederholungsregeln",
+      "exitcode": 0,
+      "seconds": 21.16,
+      "history": "read-only Git access to existing pinned commits"
+    }
+  ],
+  "wa41": [
+    {
+      "case": "3.48.0_isoliert_1",
+      "exitcode": 0,
+      "seconds": 100.54,
+      "python": "3.14.8"
+    },
+    {
+      "case": "3.47.0_unveraendert",
+      "exitcode": 1,
+      "seconds": 0.09,
+      "python": "3.14.8"
+    },
+    {
+      "case": "3.48.0_isoliert_2",
+      "exitcode": 1,
+      "seconds": 13.19,
+      "python": "3.14.8"
+    },
+    {
+      "case": "3.47.0_gleiche_fixture",
+      "exitcode": 1,
+      "seconds": 102.86,
+      "python": "3.14.8",
+      "note": "Identische 3.48.0-Pruefdatei; initiale fehlende Fixture ergaenzt, Appquelle unveraendert"
+    },
+    {
+      "case": "3.48.0_felddiagnose",
+      "exitcode": 1,
+      "seconds": 27.07,
+      "python": "3.14.8"
+    },
+    {
+      "case": "3.47.0_vollstaendige_fixtures",
+      "exitcode": 0,
+      "seconds": 102.61,
+      "python": "3.14.8"
+    }
+  ],
+  "app_source_changed": false
+}

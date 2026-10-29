@@ -320,7 +320,9 @@ def fall_schreibschutz(lauf):
 def fall_kopfverweise(lauf):
     """Ruhiger Seitenkopf: reservierter Platz am Ende der Titelzeile, Überfahren/Fokus, Symbol vor dem Titel."""
     app, mod = lauf.app, lauf.mod
-    seite, editor = seite_anlegen(lauf)
+    # Der tatsächliche Fenstermanager kann 1280 px auf einem kleineren
+    # Prüfmonitor begrenzen. Dieser Teil braucht ausdrücklich einen kurzen Titel.
+    seite, editor = seite_anlegen(lauf, SEITE_MD.replace("# Wochenplanung Parkquartier", "# Notiz", 1))
     titel = editor.title_label
     zeile = editor._head_row
     assert editor._head_signature == ("icon", "cover")
@@ -562,6 +564,9 @@ def fall_nebenansicht_seite(lauf):
               and w.cget("text") in (app.ICONS["task_open"], app.ICONS["check"])]
     assert len(marken) == 1
     tiefe = len(app.undo_stack)
+    text.see(marken[0]._w)
+    idle(lauf, 5)
+    assert marken[0].winfo_ismapped(), "Das echte Kästchen ist vor dem Klick sichtbar"
     marken[0].event_generate("<Button-1>")
     idle(lauf, 5)
     assert app.find_item_in_lists(aufgabe)[0]["done"] and len(app.undo_stack) == tiefe + 1
@@ -983,7 +988,14 @@ def fall_kompakt(lauf):
     assert app.compact_mode_active(), "Drücken und Loslassen schalten genau einmal ein"
     assert tuple(lauf.root.minsize()) == (480, 560)
     breite, hoehe, x, y = lauf.mod.glide_compact.parse(lauf.root.geometry())
-    assert breite == 480 and hoehe == 800 and x == 40 + 1280 - 480, lauf.root.geometry()
+    normal_breite, normal_hoehe, normal_x, normal_y = lauf.mod.glide_compact.parse(normal)
+    _links, _oben, _desktop_breite, desktop_hoehe = app.desktop_bounds()
+    assert breite == 480 and x + breite == normal_x + normal_breite, lauf.root.geometry()
+    assert 560 <= hoehe <= normal_hoehe and y == normal_y, lauf.root.geometry()
+    if normal_hoehe <= desktop_hoehe - lauf.mod.glide_compact.SCREEN_RESERVE:
+        assert hoehe == normal_hoehe, "Bei ausreichender Arbeitsfläche bleibt die Höhe erhalten"
+    else:
+        assert hoehe == max(560, desktop_hoehe - lauf.mod.glide_compact.SCREEN_RESERVE), lauf.root.geometry()
     assert not app.header_frame.winfo_ismapped() and app.compact_header.winfo_ismapped()
     assert not app.sidebar_shell.winfo_ismapped() and not app.sidebar_rail.winfo_ismapped()
     assert app.settings.get("sidebar_visible", True), "Seitenleisteneinstellung unberührt"
@@ -1642,11 +1654,389 @@ def fall_zweierpaket_gestaltung(lauf, selecting=False):
     return f'{checked} Knopfprüfungen; Tagessteuerung in vier Größen-/Schrift-/Designkonfigurationen und drei Scrolllagen, Nebenansicht mit Suche an Mindestbreite in drei Konfigurationen'
 
 
+def phase348_bestand(lauf):
+    from datetime import date, timedelta
+    app, mod = lauf.app, lauf.mod
+    today = date.today().isoformat()
+    tomorrow = (date.today() + timedelta(days=1)).isoformat()
+    tasks = [app.new_item(f'Aufgabe {n:02}', planned_date=today, due=tomorrow, estimated_minutes=15)
+             for n in range(12)]
+    future = app.new_item('Morgen geplant, heute fällig', planned_date=tomorrow, due=today, estimated_minutes=30)
+    first, second = app.new_list_object('Erste Quelle', tasks[:6]), app.new_list_object('Zweite Quelle', tasks[6:] + [future])
+    app.lists, app.folders, app.trash = [first, second], [], []
+    app.items, app.active_list_id = first['items'], first['id']
+    app.settings['home_tile_order'] = ['today']
+    app.settings['home_tiles_hidden'] = [key for key in app.HOME_TILE_KEYS if key != 'today']
+    app.settings['release_notes_seen'] = mod.APP_VERSION
+    app.settings['daily_capacity_minutes'] = 240
+    app.settings.pop('daily_capacity_by_weekday', None)
+    assert app.save_items()
+    app.undo_stack.clear()
+    app.set_home_view(); idle(lauf)
+    return today, tomorrow, first, second, tasks, future
+
+
+def phase348_button(lauf, title):
+    return next(w for w in knoepfe(lauf.app.home_content, lauf.mod.RoundedButton)
+                if w.text.rstrip(' .…').endswith(title.rstrip(' .…')))
+
+
+def fall_home_tagesnavigation(lauf):
+    app, mod = lauf.app, lauf.mod
+    today, tomorrow, first, second, tasks, future = phase348_bestand(lauf)
+    disk, depth = Path(mod.SAVE_FILE).read_bytes(), len(app.undo_stack)
+    klick(phase348_button(lauf, 'Nächster Tag'), lauf)
+    assert app.home_day() == tomorrow
+    rows = [w for w in knoepfe(app.home_content, mod.RoundedButton) if hasattr(w, '_home_task_actions_id')]
+    assert [w._home_task_actions_id for w in rows] == [future['id']]
+    content = app.home_today_content({'today'}, app.home_summary(), lambda _: 'accent')
+    assert not content.is_today and content.next_task is None and not content.show_goal
+    assert content.open_total == 1 and 'Morgen' in content.day_title
+    assert '30' in content.planning
+    assert sum('12 offen' in row[0] for row in content.due_lists) == 0
+    assert sum(int(row[0].rsplit('·', 1)[1].strip().split()[0]) for row in content.due_lists) == 12
+    klick(phase348_button(lauf, 'Mehrere auswählen'), lauf)
+    app.change_home_selection('all'); idle(lauf)
+    assert app.home_selection_projection()['selected'] == (future['id'],)
+    stale = app.build_home_batch_menu()
+    klick(phase348_button(lauf, 'Heute'), lauf)
+    assert app.home_day() == today and app.home_selection_projection() is None
+    child = stale.nametowidget(stale.entrycget(0, 'menu'))
+    child.invoke(3); idle(lauf)
+    stale.destroy()
+    assert app.find_item_in_lists(future['id'])[0]['importance'] == 0
+    with patch.object(app, 'themed_due_dialog', return_value=None):
+        app.choose_home_day()
+    assert app.home_day() == today
+    with patch.object(app, 'themed_due_dialog', return_value=(tomorrow, None)):
+        klick(phase348_button(lauf, 'Datum'), lauf)
+    assert app.home_day() == tomorrow
+    assert Path(mod.SAVE_FILE).read_bytes() == disk and len(app.undo_stack) == depth
+    klick(phase348_button(lauf, 'Tagesplan öffnen'), lauf)
+    assert app.plan_day() == tomorrow and app.view_mode == app.PLAN_DAY_VIEW
+    app.set_home_view(); app.change_home_day(); idle(lauf)
+    app._data_read_only = True
+    app.change_home_day(tomorrow); idle(lauf)
+    assert app.home_day() == tomorrow and not app.home_today_content({'today'}, app.home_summary(), lambda _: 'accent').writable
+    app._data_read_only = False
+    # Datenpfadgrenze ohne Dateizugriff an einem fremden Ort.
+    with patch.object(mod, 'SAVE_FILE', Path(lauf.data) / 'other' / 'liste.json'):
+        assert app.home_day() == today
+    return 'Tag vor/zurück/Datum/Heute, separate Plan-/Fälligkeitsbilanz, Auswahlgrenze, Abbruch, readonly und Bestandswechsel ohne Aufgaben-/Undo-Wirkung'
+
+
+def fall_home_mehrfachfelder(lauf):
+    app, mod = lauf.app, lauf.mod
+    today, tomorrow, first, second, tasks, future = phase348_bestand(lauf)
+    label = app.new_label_object('Gemeinsam')
+    own = app.new_label_object('Bleibt bestehen')
+    app.labels.extend([label, own])
+    tasks[0]['labels'] = [own['id']]
+    assert app.save_items()
+    app.undo_stack.clear()
+    klick(phase348_button(lauf, 'Mehrere auswählen'), lauf)
+    klick(phase348_button(lauf, 'Alle auswählen'), lauf)
+    identities = app.home_selection_projection()['selected']
+    assert len(identities) == 12
+    menu = app.build_home_batch_menu()
+    importance = menu.nametowidget(menu.entrycget(0, 'menu'))
+    importance.invoke(3); idle(lauf)
+    menu.destroy()
+    assert len(app.undo_stack) == 1
+    assert all(app.find_item_in_lists(value)[0]['importance'] == 3 for value in identities)
+    assert all(app.find_item_in_lists(value)[0]['due'] == tomorrow for value in identities)
+    assert len(app.home_selection_projection()['selected']) == 12
+    assert not app.apply_home_batch(identities, today, 'importance', 3)
+    assert len(app.undo_stack) == 1
+    app.undo_last_change(); idle(lauf)
+    assert all(app.find_item_in_lists(value)[0]['importance'] == 0 for value in identities)
+    app.redo_last_change(); idle(lauf)
+    assert all(app.find_item_in_lists(value)[0]['importance'] == 3 for value in identities)
+    depth = len(app.undo_stack)
+    assert app.apply_home_batch(identities, today, 'label_add', label['id'])
+    idle(lauf)
+    assert len(app.undo_stack) == depth + 1
+    assert own['id'] in app.find_item_in_lists(tasks[0]['id'])[0]['labels']
+    assert all(label['id'] in app.find_item_in_lists(value)[0]['labels'] for value in identities)
+    assert not app.apply_home_batch(identities, today, 'label_add', label['id'])
+    assert app.apply_home_batch(identities, today, 'label_remove', label['id'])
+    assert own['id'] in app.find_item_in_lists(tasks[0]['id'])[0]['labels']
+    depth, disk = len(app.undo_stack), Path(mod.SAVE_FILE).read_bytes()
+    with patch.object(app, 'refresh_data_lock', return_value=False):
+        assert not app.apply_home_batch(identities, today, 'importance', 1)
+    app._data_read_only = True
+    assert not app.apply_home_batch(identities, today, 'importance', 1)
+    app._data_read_only = False
+    app.change_home_selection('clear')
+    assert not app.apply_home_batch(identities, today, 'importance', 1)
+    assert Path(mod.SAVE_FILE).read_bytes() == disk and len(app.undo_stack) == depth
+    app.change_home_selection('all')
+    with patch.object(app, 'save_items', return_value=False), patch.object(app, 'show_undo_toast') as feedback:
+        assert not app.apply_home_batch(identities, today, 'importance', 1)
+        feedback.assert_not_called()
+    assert Path(mod.SAVE_FILE).read_bytes() == disk
+    app.undo_last_change(); idle(lauf)
+    klick(phase348_button(lauf, 'Auswahl bearbeiten'), lauf)
+    assert app._action_chooser is not None
+    app.close_action_chooser()
+    assert not lauf.errors
+    return '12 Aufgaben aus zwei Listen: Wichtigkeit/Labels, vorhandene Labels, No-op, ein Undo/Redo, stale Auswahl, Sperre/readonly und Schreibfehler ohne Erfolg'
+
+
+def fall_side_verweisnavigation(lauf):
+    app, mod = lauf.app, lauf.mod
+    source, tasks, main = bestand(lauf)
+    first = app.new_list_object('Quelle zum Nachschlagen', [])
+    first['list_kind'] = 'page'
+    target = app.new_list_object('Ziel mit Rückverweis', [])
+    target['list_kind'] = 'page'
+    value = mod.glide_objects.uri('list', target['id'])
+    first['rich_note'] = {'text': 'Ziel öffnen\nWeiterer Text',
+                         'spans': [{'tag':'link:ziel', 'start':0, 'end':11}], 'links': {'link:ziel':value}}
+    app.lists.extend([first, target]); assert app.save_items()
+    app.set_active_list(main['id']); idle(lauf)
+    editor = app.rich_note_editor
+    assert app.open_side_view(first['id']); idle(lauf)
+    editor.text.insert('end-1c', '\nUnveränderter Hauptentwurf')
+    # Das noch wartende <<Modified>> synchron verarbeiten, bevor sein
+    # 400-ms-Schreibauftrag angehalten wird. Sonst entsteht der Auftrag erst
+    # im nächsten idle() und schreibt bei langsamer Navigation im Hintergrund.
+    editor.modified()
+    assert editor._job is not None, "Die Textänderung hat ihren regulären Schreibauftrag angelegt"
+    if editor._job is not None:
+        editor.after_cancel(editor._job); editor._job = None
+    assert 'Unveränderter Hauptentwurf' not in str(app.page_entry(main['id']).get('rich_note'))
+    draft = editor.text.get('1.0', 'end-1c')
+    disk, depth = Path(mod.SAVE_FILE).read_bytes(), len(app.undo_stack)
+    body = app._side_view_body
+    assert body.get(*body.tag_ranges('side_link_0')) == 'Ziel öffnen'
+    box = body.bbox('1.2'); assert box
+    body.event_generate('<Motion>', x=box[0]+2, y=box[1]+2)
+    body.event_generate('<Button-1>', x=box[0]+2, y=box[1]+2)
+    idle(lauf)
+    assert app.side_view_entry()['id'] == target['id']
+    assert app.active_list_id == main['id'] and app.rich_note_editor is editor
+    menu = app.build_side_references_menu()
+    incoming = menu.nametowidget(menu.entrycget(1, 'menu'))
+    assert first['title'] in incoming.entrycget(0, 'label')
+    incoming.invoke(0); idle(lauf); menu.destroy()
+    assert app.side_view_entry()['id'] == first['id']
+    app.move_side_history(-1); idle(lauf)
+    assert app.side_view_entry()['id'] == target['id']
+    app.move_side_history(1); idle(lauf)
+    app.show_side_references(); idle(lauf)
+    assert app._action_chooser is not None
+    app.close_action_chooser()
+    assert editor.text.get('1.0','end-1c') == draft
+    assert Path(mod.SAVE_FILE).read_bytes() == disk and len(app.undo_stack) == depth
+    app._data_read_only = True
+    assert app.follow_side_reference(value, ('list', first['id']))
+    app.move_side_history(-1); idle(lauf)
+    app._data_read_only = False
+    first['rich_note']['links'] = {}; app.clear_render_cache()
+    assert not app.follow_side_reference(value, ('list', first['id']))
+    assert app.side_view_entry()['id'] == first['id']
+    assert Path(mod.SAVE_FILE).read_bytes() == disk
+    return 'Echter Textlink, Rückverweis, Suchauswahl, Verlauf, readonly und veralteter Link; Hauptentwurf/Datei/Undo unverändert'
+
+
+def fall_dreierpaket_gestaltung(lauf):
+    app, mod = lauf.app, lauf.mod
+    today, tomorrow, first, second, tasks, future = phase348_bestand(lauf)
+    checked = 0
+    for design, geometry, font in [('light', '860x700', 'mittel'), ('dark', '1280x800', 'gross'),
+                                   ('glass_light', '860x700', 'gross'), ('light', '480x560', 'gross')]:
+        app.settings['ui_font_size'] = font; app.apply_ui_font(); app.set_design(design)
+        if design.startswith('glass'):
+            app.set_backdrop_choice(mod.glide_backdrop.presets_for(design)[0].key)
+        app.settings[mod.glide_interaction.HINTS_SETTING] = geometry != '860x700'
+        compact = geometry == '480x560'
+        if compact:
+            app.enter_compact_mode()
+        lauf.root.geometry(geometry + '+20+20')
+        app.set_home_view(); app.change_home_day(tomorrow); idle(lauf, 8)
+        app.change_home_selection('start'); app.change_home_selection('all'); idle(lauf, 8)
+        for scroll in (0, 0.5, 1):
+            app.home_canvas.yview_moveto(scroll); idle(lauf)
+            count, findings = befunde_b15(lauf, f'dreierpaket-{design}-{geometry}-{scroll}')
+            checked += count
+            assert not findings, findings[:6]
+            if scroll == 0 and lauf.capture is not None and sys.platform == 'win32':
+                sys.path.insert(0, str(REPO / 'tests/tools'))
+                from releasedaten import save_windows_screenshot
+                lauf.capture.mkdir(parents=True, exist_ok=True)
+                save_windows_screenshot(lauf.root, lauf.capture / (f'Tagesauswahl-{design}-{geometry}.png'))
+        if compact:
+            app.leave_compact_mode()
+            continue
+        app.set_active_list(first['id']); app.settings['side_view_width'] = 280
+        assert app.open_side_view(second['id']); idle(lauf, 8)
+        tree = app._side_view_body
+        if 'due' in tree['displaycolumns']:
+            assert tree.column('due', 'width') >= max(
+                mod.tkfont.Font(font=mod.app_font(11)).measure(str(tree.item(i, 'values')[0])) + 18
+                for i in tree.get_children())
+        count, findings = befunde_b15(lauf, f'verweise-{design}-{geometry}')
+        checked += count; assert not findings, findings[:6]
+        if lauf.capture is not None and sys.platform == 'win32':
+            sys.path.insert(0, str(REPO / 'tests/tools'))
+            from releasedaten import save_windows_screenshot
+            lauf.capture.mkdir(parents=True, exist_ok=True)
+            save_windows_screenshot(lauf.root, lauf.capture / (f'Verweise-{design}-{geometry}.png'))
+        app.close_side_view()
+    return f'{checked} Knopfprüfungen; vier Größen-/Schrift-/Designkonfigurationen einschließlich Kompaktmodus, drei Scrolllagen, Nebenansicht 280 px und vollständige Datumswerte'
+
+
+def fall_home_wochenwahl(lauf):
+    app, mod = lauf.app, lauf.mod
+    today, tomorrow, first, second, tasks, future = phase348_bestand(lauf)
+    before, depth = Path(mod.SAVE_FILE).read_bytes(), len(app.undo_stack)
+    klick(phase348_button(lauf, 'Woche'), lauf)
+    assert app._action_chooser is not None
+    app.close_action_chooser()
+    menu = app.build_home_week_menu()
+    days = menu.nametowidget(menu.entrycget(1, 'menu'))
+    choices = mod.glide_task_tiles.week_choices(today)
+    chosen = next(i for i, (value, _) in enumerate(choices) if value != today)
+    app.change_home_selection('start'); app.change_home_selection('all')
+    days.invoke(chosen); idle(lauf)
+    assert app.home_day() == choices[chosen][0] and app.home_selection_projection() is None
+    # Ein altes Menü darf nach dem Kontextwechsel keinen weiteren Tag setzen.
+    days.invoke((chosen + 1) % len(choices)); idle(lauf)
+    assert app.home_day() == choices[chosen][0]
+    menu.destroy()
+    app._data_read_only = True
+    menu = app.build_home_week_menu()
+    days = menu.nametowidget(menu.entrycget(2, 'menu')); days.invoke(0); idle(lauf)
+    assert app.home_day() == mod.glide_task_tiles.week_choices(choices[chosen][0], 1)[0][0]
+    menu.destroy(); app._data_read_only = False
+    assert Path(mod.SAVE_FILE).read_bytes() == before and len(app.undo_stack) == depth
+    return 'Echter Wochenknopf/Suchauswahl und Datumsmenü, Auswahlreset, alte Menüs wirkungslos, readonly lesend ohne Schreib-/Undo-Effekt'
+
+
+def fall_home_faelligkeit_aufwand(lauf):
+    app, mod = lauf.app, lauf.mod
+    today, tomorrow, first, second, tasks, future = phase348_bestand(lauf)
+    app.change_home_selection('start'); app.change_home_selection('all')
+    identities = app.home_selection_projection()['selected']
+    due = mod.glide_task_tiles.shift_day(tomorrow, 7)
+    menu = app.build_home_batch_menu()
+    effort = menu.nametowidget(menu.entrycget(menustelle(menu, 'Aufwand je Aufgabe'), 'menu'))
+    effort.invoke(2); idle(lauf); menu.destroy()
+    assert all(app.find_item_in_lists(i)[0]['estimated_minutes'] == 45 for i in identities)
+    labels = [str(widget.cget('text')) for widget in knoepfe(app.home_content, mod.tk.Label)]
+    assert any(app.format_estimated_minutes(12 * 45) in label for label in labels), labels
+    assert len(app.undo_stack) == 1
+    app.undo_last_change(); idle(lauf)
+    assert all(app.find_item_in_lists(i)[0]['estimated_minutes'] == 15 for i in identities)
+    app.redo_last_change(); idle(lauf)
+    with patch.object(app, 'themed_due_dialog', return_value=(due, None)):
+        assert app.choose_home_batch_value(identities, today, 'due')
+    assert all(app.find_item_in_lists(i)[0]['due'] == due and
+               app.find_item_in_lists(i)[0]['planned_date'] == today for i in identities)
+    with patch.object(app, 'themed_input_dialog', return_value='1,5 h'):
+        assert app.choose_home_batch_value(identities, today, 'estimated_minutes')
+    assert all(app.find_item_in_lists(i)[0]['estimated_minutes'] == 90 for i in identities)
+    saved, depth = Path(mod.SAVE_FILE).read_bytes(), len(app.undo_stack)
+    with patch.object(app, 'themed_input_dialog', return_value=None):
+        assert not app.choose_home_batch_value(identities, today, 'estimated_minutes')
+    with patch.object(app, 'themed_due_dialog', return_value=None):
+        assert not app.choose_home_batch_value(identities, today, 'due')
+    assert Path(mod.SAVE_FILE).read_bytes() == saved and len(app.undo_stack) == depth
+    def stale(*a, **kw):
+        app.change_home_selection('clear')
+        return '30'
+    with patch.object(app, 'themed_input_dialog', side_effect=stale):
+        assert not app.choose_home_batch_value(identities, today, 'estimated_minutes')
+    assert Path(mod.SAVE_FILE).read_bytes() == saved
+    app.change_home_selection('all')
+    task = app.find_item_in_lists(identities[0])[0]
+    task['repeat'] = {'art': 'taeglich'}
+    before = copy.deepcopy(app.lists)
+    assert not app.apply_home_batch(identities, today, 'due', tomorrow)
+    assert app.lists == before
+    menu = app.build_home_batch_menu()
+    pos = next(i for i in range(menu.index('end') + 1) if menu.entrycget(i, 'label').startswith('Fälligkeit'))
+    assert menu.entrycget(pos, 'state') == 'disabled'; menu.destroy()
+    task['repeat'] = None
+    app._data_read_only = True
+    assert not app.apply_home_batch(identities, today, 'estimated_minutes', None)
+    app._data_read_only = False
+    with patch.object(app, 'save_items', return_value=False), patch.object(app, 'show_undo_toast') as success:
+        assert not app.apply_home_batch(identities, today, 'estimated_minutes', 120)
+        success.assert_not_called()
+    assert Path(mod.SAVE_FILE).read_bytes() == saved
+    app.undo_last_change(); idle(lauf)
+    return '12 Aufgaben: echte Aufwandmenüaktion, ein Undo/Redo, Fälligkeit getrennt vom Bearbeitungstag, eigene Dauer, Abbruch/stale/Serien/readonly/Schreibfehler geschützt'
+
+
+def fall_side_verweisaktionen(lauf):
+    app, mod = lauf.app, lauf.mod
+    source, tasks, main = bestand(lauf)
+    first = app.new_list_object('Nachschlageliste', [])
+    target = app.new_list_object('Verweisziel', [])
+    other = app.new_list_object('Weiteres Ziel', [])
+    value = mod.glide_objects.uri('list', target['id'])
+    extra = mod.glide_objects.uri('list', other['id'])
+    first['references'] = [value]
+    fresh = lambda: next(entry for entry in app.lists if entry['id'] == first['id'])
+    app.lists.extend([first, target, other]); assert app.save_items()
+    app.set_active_list(main['id']); assert app.open_side_view(first['id']); idle(lauf)
+    before, depth = Path(mod.SAVE_FILE).read_bytes(), len(app.undo_stack)
+    menu = app.build_side_references_menu()
+    actions = menu.nametowidget(menu.entrycget(menustelle(menu, 'Verweisaktionen'), 'menu'))
+    row = actions.nametowidget(actions.entrycget(0, 'menu'))
+    row.invoke(menustelle(row, 'Verweis kopieren')); idle(lauf)
+    assert lauf.root.clipboard_get() == value and app.active_list_id == main['id']
+    assert Path(mod.SAVE_FILE).read_bytes() == before and len(app.undo_stack) == depth
+    menu.destroy()
+    snapshot = app.snapshot_undo
+    def replace_objects(*args, **kwargs):
+        result = snapshot(*args, **kwargs)
+        app.lists = copy.deepcopy(app.lists)
+        app.sync_current_list_reference()
+        return result
+    with patch.object(app, 'themed_choice_dialog', return_value=extra), patch.object(app, 'snapshot_undo', side_effect=replace_objects):
+        assert app.link_side_reference(('list', first['id']))
+    idle(lauf)
+    assert extra in fresh()['references'] and app.active_list_id == main['id']
+    assert len(app.undo_stack) == depth + 1
+    app.undo_last_change(); idle(lauf)
+    assert extra not in fresh()['references']
+    app.redo_last_change(); idle(lauf)
+    assert extra in fresh()['references']
+    fresh()['archived'] = True
+    with patch.object(app, 'themed_choice_dialog') as choice:
+        assert not app.link_side_reference(('list', first['id']))
+        choice.assert_not_called()
+    fresh()['archived'] = False
+    app._data_read_only = True
+    with patch.object(app, 'themed_choice_dialog') as choice:
+        assert not app.link_side_reference(('list', first['id']))
+        choice.assert_not_called()
+    assert app.follow_side_reference(value, ('list', first['id']), action='copy')
+    app._data_read_only = False
+    def context_changed(*args, **kwargs):
+        app.open_side_view(other['id'])
+        return extra
+    with patch.object(app, 'themed_choice_dialog', side_effect=context_changed):
+        assert not app.link_side_reference(('list', first['id']))
+    assert app.open_side_view(first['id']); idle(lauf)
+    assert app.follow_side_reference(value, ('list', first['id']), action='main')
+    assert app.active_list_id == target['id']
+    app.open_side_view(first['id']); idle(lauf)
+    fresh()['references'] = []
+    assert not app.follow_side_reference(value, ('list', first['id']), action='copy')
+    return 'Echte Verweisaktionen: Kopieren ohne Mutation, Hauptbereich öffnen, gezielt verknüpfen mit einem Undo/Redo, readonly und Dialog-/Beziehungswechsel geschützt'
+
+
 FAELLE = ("seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
           "kompakt_ansichten", "kompakt_verlorenes_loslassen", "gestaltung", "tagessteuerung", "nebenansicht_navigation",
-          "zweierpaket_gestaltung", "home_mehrfachplanung", "side_history", "folgepaket_gestaltung")
+          "zweierpaket_gestaltung", "home_mehrfachplanung", "side_history", "folgepaket_gestaltung",
+          "home_tagesnavigation", "home_mehrfachfelder", "side_verweisnavigation", "dreierpaket_gestaltung",
+          "home_wochenwahl", "home_faelligkeit_aufwand", "side_verweisaktionen")
 
 
 def main():

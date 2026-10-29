@@ -1,0 +1,46 @@
+{
+  "event_delay_ms": 450,
+  "delay_executed": true,
+  "writes_with_open_draft": [
+    [
+      {
+        "function": "wait_variable",
+        "line": 749
+      },
+      {
+        "function": "__call__",
+        "line": 2114
+      },
+      {
+        "function": "callit",
+        "line": 885
+      },
+      {
+        "function": "flush",
+        "line": 11021
+      },
+      {
+        "function": "__exit__",
+        "line": 148
+      },
+      {
+        "function": "task_change",
+        "line": 10992
+      },
+      {
+        "function": "__exit__",
+        "line": 148
+      },
+      {
+        "function": "item_change",
+        "line": 53633
+      },
+      {
+        "function": "save",
+        "line": 32
+      }
+    ]
+  ],
+  "passed": false,
+  "error": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\qa-3.49.0\\abschlussreste_2026-10-29\\side_timer_diagnose.py\", line 44, in <module>\n    result['result'] = suite.fall_side_verweisnavigation(run)\n                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"%USERPROFILE%\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1825, in fall_side_verweisnavigation\n    assert Path(mod.SAVE_FILE).read_bytes() == disk and len(app.undo_stack) == depth\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+}

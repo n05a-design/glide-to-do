@@ -1,0 +1,29 @@
+{
+  "file": "Glide_Gesamtbericht_2026-10-28.docx",
+  "sha256": "8d0c53dafca8a08236e58dd8ffcb124e0aad9e5a56f5a0da3a35eaafb4fe6330",
+  "paragraphs": 265,
+  "kind": "Konsolidierte Zusammenfassung; kein neuer Codeaudit/Testlauf",
+  "source_unchanged": true,
+  "accepted": [
+    "D17 Modularisierung",
+    "WA-41A/B getrennt offen",
+    "gezielte Pruefung != Voll-/Native-/Menschenfreigabe",
+    "bestehende Roadmap statt Zweitbacklog"
+  ],
+  "hypotheses": [
+    "Race Conditions",
+    "Widgetbindung/Renderingengpaesse",
+    "Lieferkettenluecken ohne konkreten Codebeleg"
+  ],
+  "current_verification": [
+    "Versions-/Lieferstand lokal abgeglichen",
+    "Module und Automatisierung vorhanden",
+    "Restore- und Lockuebernahmegegenproben im neuen Paket"
+  ],
+  "not_authorized_by_document": [
+    "Hardwareaenderung",
+    "Cloud/SQL-Neubau",
+    "Gittransport",
+    "Releasefreigabe"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "scope": "Mutationsschnitt §21.31",
+  "sha256": {
+    "src/glide/app.pyw": "9e7e4e2c8fc94817959be05dec46a8883ee867fae9d73e290a677e7c28f54364",
+    "src/glide/task_editing.py": "8dc7ef2fe75f5620f8f5cae2f8e0b50e77fd2998ea93ef80b78bd8b392eddbb9",
+    "src/glide/structural_guard.py": "3885074fab32299b98160c8d557e066814c85ccb937ac80cc16d6310c815373b",
+    "tests/integration/test_mutationsreste.py": "89c3e7a2d12cc8c32e77d313bc5b543a40fc352cf0a127908d5795bb3cc56f58",
+    "tests/unit/test_bulk_changes.py": "97d20a11a0eed1ac9b3e2277fd75bf519be53cd11c808ba32abee434d28c10ad",
+    "tests/unit/test_guard_inventory.py": "327e9d29d994ce7b19dabb806f00885e050b6a01ef1344e526d8a97ced2b9d2d"
+  },
+  "app_cases": 17,
+  "protection_cases": 16,
+  "new_pure_tests": 10,
+  "registered_suites": 107,
+  "global_acceptance": false,
+  "delivery_unchanged": true
+}

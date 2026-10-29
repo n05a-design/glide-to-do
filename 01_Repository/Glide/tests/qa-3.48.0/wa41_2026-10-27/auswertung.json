@@ -1,0 +1,382 @@
+{
+  "version": "3.48.0",
+  "schema": 26,
+  "cause_confirmed": false,
+  "release_ready": false,
+  "diagnostic_processes": 24,
+  "passed": 15,
+  "failed": 9,
+  "native_failures": 4,
+  "python_failures": 5,
+  "source_files_verified": 470,
+  "changed_source_files": [],
+  "cases": [
+    {
+      "matrix": "matrix.json",
+      "case": "py3148_normal",
+      "exitcode": 3221226505,
+      "seconds": 20.66,
+      "last_events": [
+        {
+          "event": "round",
+          "seconds": 14.957,
+          "iteration": 7
+        },
+        {
+          "event": "round",
+          "seconds": 16.718,
+          "iteration": 8
+        }
+      ]
+    },
+    {
+      "matrix": "matrix.json",
+      "case": "py3148_debug",
+      "exitcode": 1,
+      "seconds": 27.56,
+      "last_events": [
+        {
+          "event": "round",
+          "seconds": 24.816,
+          "iteration": 9
+        },
+        {
+          "event": "exception",
+          "seconds": 26.743,
+          "error_type": "TypeError",
+          "message": "'bool' object is not an iterator"
+        }
+      ]
+    },
+    {
+      "matrix": "matrix.json",
+      "case": "py3147_normal",
+      "exitcode": 0,
+      "seconds": 74.81,
+      "last_events": [
+        {
+          "event": "round",
+          "seconds": 71.91,
+          "iteration": 39
+        },
+        {
+          "event": "core_pass",
+          "seconds": 73.919,
+          "tasks": 26420,
+          "iterations": 40
+        }
+      ]
+    },
+    {
+      "matrix": "matrix.json",
+      "case": "py3148_no_chrome",
+      "exitcode": 3221225477,
+      "seconds": 19.69,
+      "last_events": [
+        {
+          "event": "round",
+          "seconds": 14.875,
+          "iteration": 7
+        },
+        {
+          "event": "round",
+          "seconds": 16.64,
+          "iteration": 8
+        }
+      ]
+    },
+    {
+      "matrix": "matrix2.json",
+      "case": "pure_py3148",
+      "exitcode": 0,
+      "seconds": 21.81,
+      "last_events": []
+    },
+    {
+      "matrix": "matrix2.json",
+      "case": "py3148_nogc",
+      "exitcode": 1,
+      "seconds": 11.96,
+      "last_events": [
+        {
+          "event": "round",
+          "seconds": 10.768,
+          "iteration": 5
+        },
+        {
+          "event": "exception",
+          "seconds": 11.069,
+          "error_type": "AssertionError",
+          "message": "(5, [('Fehler beim Speichern', \"name 'isinstance' is not defined\")], 'lock')"
+        }
+      ]
+    },
+    {
+      "matrix": "matrix2.json",
+      "case": "py3148_malloc",
+      "exitcode": 1,
+      "seconds": 30.72,
+      "last_events": [
+        {
+          "event": "round",
+          "seconds": 28.319,
+          "iteration": 12
+        },
+        {
+          "event": "exception",
+          "seconds": 29.81,
+          "error_type": "TypeError",
+          "message": "'tuple' object is not an iterator"
+        }
+      ]
+    },
+    {
+      "matrix": "matrix2.json",
+      "case": "py3148_clean_path",
+      "exitcode": 3221225477,
+      "seconds": 26.84,
+      "last_events": [
+        {
+          "event": "round",
+          "seconds": 22.395,
+          "iteration": 11
+        },
+        {
+          "event": "round",
+          "seconds": 24.19,
+          "iteration": 12
+        }
+      ]
+    },
+    {
+      "matrix": "matrix3.json",
+      "case": "py3148_no_ui",
+      "exitcode": 1,
+      "seconds": 4.77,
+      "last_events": [
+        {
+          "event": "round",
+          "seconds": 3.61,
+          "iteration": 1
+        },
+        {
+          "event": "exception",
+          "seconds": 4.224,
+          "error_type": "AssertionError",
+          "message": "(1, [('Fehler beim Speichern', \"'cell' object is not an iterator\")], 'lock')"
+        }
+      ]
+    },
+    {
+      "matrix": "matrix3.json",
+      "case": "py3147_repeat",
+      "exitcode": 3221225477,
+      "seconds": 12.38,
+      "last_events": [
+        {
+          "event": "round",
+          "seconds": 7.7,
+          "iteration": 3
+        },
+        {
+          "event": "round",
+          "seconds": 9.445,
+          "iteration": 4
+        }
+      ]
+    },
+    {
+      "matrix": "matrix3.json",
+      "case": "py3147_original_full",
+      "exitcode": 0,
+      "seconds": 102.1,
+      "last_events": []
+    },
+    {
+      "matrix": "matrix4.json",
+      "case": "pure_import_app",
+      "exitcode": 1,
+      "seconds": 2.16
+    },
+    {
+      "matrix": "matrix4.json",
+      "case": "pure_minimal_tk",
+      "exitcode": 0,
+      "seconds": 23.82
+    },
+    {
+      "matrix": "matrix4.json",
+      "case": "pure_initialized_app",
+      "exitcode": 0,
+      "seconds": 23.86
+    },
+    {
+      "matrix": "matrix4.json",
+      "case": "py315_normal",
+      "exitcode": 0,
+      "seconds": 93.45
+    },
+    {
+      "matrix": "matrix5.json",
+      "case": "pure_compile_only",
+      "exitcode": 0,
+      "seconds": 27.93
+    },
+    {
+      "matrix": "matrix5.json",
+      "case": "pure_only_imports",
+      "exitcode": 0,
+      "seconds": 23.96
+    },
+    {
+      "matrix": "matrix5.json",
+      "case": "pure_without_listapp",
+      "exitcode": 0,
+      "seconds": 25.74
+    },
+    {
+      "matrix": "matrix5.json",
+      "case": "pure_import_fresh_cache",
+      "exitcode": 0,
+      "seconds": 24.76
+    },
+    {
+      "matrix": "matrix6.json",
+      "case": "import_cached_repeat1",
+      "source_mode": "loader",
+      "exitcode": 0,
+      "seconds": 19.66
+    },
+    {
+      "matrix": "matrix6.json",
+      "case": "import_fresh_main1",
+      "source_mode": "compiled",
+      "exitcode": 0,
+      "seconds": 13.59
+    },
+    {
+      "matrix": "matrix6.json",
+      "case": "import_cached_fresh_deps",
+      "source_mode": "cached_main_fresh_deps",
+      "exitcode": 0,
+      "seconds": 13.1
+    },
+    {
+      "matrix": "matrix6.json",
+      "case": "import_cached_repeat2",
+      "source_mode": "loader",
+      "exitcode": 0,
+      "seconds": 13.09
+    },
+    {
+      "matrix": "matrix6.json",
+      "case": "import_fresh_main2",
+      "source_mode": "compiled",
+      "exitcode": 0,
+      "seconds": 13.54
+    }
+  ],
+  "native_events": [
+    {
+      "time": "2026-10-27T14:23:37.9694626+01:00",
+      "app_version": "3.14.7150.1013",
+      "module": "python314.dll",
+      "module_version": "3.14.7150.1013",
+      "code": "c0000005",
+      "offset": "00000000001d5791",
+      "pid": "0xb4fc"
+    },
+    {
+      "time": "2026-10-27T14:22:31.5166745+01:00",
+      "app_version": "3.14.8150.1013",
+      "module": "python314.dll",
+      "module_version": "3.14.8150.1013",
+      "code": "c0000005",
+      "offset": "0000000000052086",
+      "pid": "0x10574"
+    },
+    {
+      "time": "2026-10-27T14:18:19.2906945+01:00",
+      "app_version": "3.14.8150.1013",
+      "module": "python314.dll",
+      "module_version": "3.14.8150.1013",
+      "code": "c0000005",
+      "offset": "00000000000497ab",
+      "pid": "0xfd70"
+    },
+    {
+      "time": "2026-10-27T14:16:17.5450488+01:00",
+      "app_version": "3.14.8150.1013",
+      "module": "ucrtbase.dll",
+      "module_version": "10.0.26100.9711",
+      "code": "c0000409",
+      "offset": "00000000000a527e",
+      "pid": "0x9b1c"
+    },
+    {
+      "time": "2026-10-27T13:00:35.8656002+01:00",
+      "app_version": "3.14.8150.1013",
+      "module": "python314.dll",
+      "module_version": "3.14.8150.1013",
+      "code": "c0000005",
+      "offset": "00000000000497ab",
+      "pid": "0xe7d0"
+    }
+  ],
+  "limitations": [
+    "Adaptive Gegenproben unterschiedlicher Umfaenge; keine statistische Ausfallrate.",
+    "Kernprobe prueft Phasen 1/2; kein Ersatz fuer die originale Gesamtsuite.",
+    "Nur ein gruener Python-3.15-Kernlauf; kein Freigabe- oder Reparaturnachweis.",
+    "Importfehler einmal aufgetreten, Folgewiederholungen gruen; kein stabiler Minimalreproducer.",
+    "Keine nativen Speicherabbilder oder symbolisierte Absturzstacks vorhanden."
+  ],
+  "evidence_sha256": {
+    "auswertung.py": "ace911bbaac7d61a19848bc86064f37b21253632951db4a0bcc464b8ea6a2e03",
+    "dokumentnachlauf.stdout.log": "790245150344f38f5da7ec060de3aa0ef40310a6ebb2718f2832238447d4080d",
+    "dokumentpruefung.json": "fd081a6b37151649d30129cab9f31a7fc63493fc491f24121dfbeacceb80090b",
+    "import_cached_fresh_deps.stdout.log": "14633528863f22b2ae42ac609ecdac8beac2f3d99106f286cb1d582cd290cdf1",
+    "import_cached_repeat1.stdout.log": "14633528863f22b2ae42ac609ecdac8beac2f3d99106f286cb1d582cd290cdf1",
+    "import_cached_repeat2.stdout.log": "14633528863f22b2ae42ac609ecdac8beac2f3d99106f286cb1d582cd290cdf1",
+    "import_fresh_main1.stdout.log": "14633528863f22b2ae42ac609ecdac8beac2f3d99106f286cb1d582cd290cdf1",
+    "import_fresh_main2.stdout.log": "14633528863f22b2ae42ac609ecdac8beac2f3d99106f286cb1d582cd290cdf1",
+    "matrix.json": "7a0603cf96d8ea282fcf00196a041810bb3b86d91db0818d071efcc364beb1a5",
+    "matrix2.json": "8318ac1e1f32480c17ac5b3ab2ae77c3d13bc04cb5bec4d43d8af122a94c0852",
+    "matrix3.json": "3dcbba7353cc1a11b1d2cdbcac43a42e9961db9b0bead87ea0d0d1a48bb46d5b",
+    "matrix4.json": "d980bc3c6e61eddbea912784bd9c4b0e9d211fc6a96b780e32e349a14bca5a93",
+    "matrix5.json": "dc7377f4450b9da49d9a62f46f869bea9aa720a718372b9b76061841ad77dc99",
+    "matrix6.json": "e4f7d3ae6a48ba0bc9478ab3af36800c3a5bafd83becdf64f33caa196834e467",
+    "native_events.json": "f4cf55e37d268fad6ef96b516f523591edf50d0c663060dbf3cb795509844c19",
+    "probe.py": "ce4e5cee2451c499f007b2982c4e75ae520155d5ef00b07bad2f9b9aa7d8e492",
+    "pure_compile_only.stdout.log": "14633528863f22b2ae42ac609ecdac8beac2f3d99106f286cb1d582cd290cdf1",
+    "pure_import_app.stdout.log": "8af1c1f086d72a6cbefabd4e43721503933fa584e7c6611f592c85b50764411e",
+    "pure_import_fresh_cache.stdout.log": "14633528863f22b2ae42ac609ecdac8beac2f3d99106f286cb1d582cd290cdf1",
+    "pure_initialized_app.stdout.log": "14633528863f22b2ae42ac609ecdac8beac2f3d99106f286cb1d582cd290cdf1",
+    "pure_minimal_tk.stdout.log": "14633528863f22b2ae42ac609ecdac8beac2f3d99106f286cb1d582cd290cdf1",
+    "pure_only_imports.stdout.log": "14633528863f22b2ae42ac609ecdac8beac2f3d99106f286cb1d582cd290cdf1",
+    "pure_probe.py": "6fc82b01692fcbdf18702cd2822083e8a6716e2ae828680e6cd6c15bd231d469",
+    "pure_py3148.stdout.log": "14633528863f22b2ae42ac609ecdac8beac2f3d99106f286cb1d582cd290cdf1",
+    "pure_without_listapp.stdout.log": "14633528863f22b2ae42ac609ecdac8beac2f3d99106f286cb1d582cd290cdf1",
+    "py3147_normal.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "py3147_normal.trace.log": "8c38294ff4031ed5debe3b6725c57d3ab082bced71fe9bb41851b0080ba87651",
+    "py3147_original_full.stdout.log": "be70c169e25711308c001f08bf030cd7e4bc97ec1915704ed29509da817d132c",
+    "py3147_repeat.stdout.log": "bbb8e51175e0508120a396e9ac42877198636dcc9de5c97207cea859a080f155",
+    "py3147_repeat.trace.log": "788963a33467e123111ea66d9444e17b7f3e9c0185c7013b3641d66cec37cc18",
+    "py3148_clean_path.stdout.log": "ba3c051b2bb441c467a96f41f8210755ed6f074cba7773e7870901541a5858bb",
+    "py3148_clean_path.trace.log": "fb5462e68c6efbf16cafa9fbfa9a8c9a182dd94a6cf16b636eaf15b48a72620e",
+    "py3148_debug.stdout.log": "5c56edcc4f9cdf4af9b3aa9e642e659c9e6798756134b74a7507daed794f4a5b",
+    "py3148_debug.trace.log": "141e676166eed2571d50ae2f11144600cdcb3d397635eff93bc6e44a53e67f9b",
+    "py3148_malloc.stdout.log": "7e0fffa13e72a7e17f9047aecee1f525870558428a6dc47def31aefc37bf81f8",
+    "py3148_malloc.trace.log": "111c3166e052f812389de307e09dbb5a243d4e78ff33c04bb71bb200c847f8d1",
+    "py3148_no_chrome.stdout.log": "960cba15b3b10544093838be3d817fcc9944aaab5b515c678766102bbe553898",
+    "py3148_no_chrome.trace.log": "0e6e4634b02919caf478def140b55c8e695ddc1a65d1be079e90bccf7d8312dc",
+    "py3148_no_ui.stdout.log": "2c28cb0022f21c8a5f6730732882d546c8171cef87bf13fe8ee72e1ee520c082",
+    "py3148_no_ui.trace.log": "ff243006121d7352e07e3666d013104d11bbc5d3d5475f0639ea01e8c292f01c",
+    "py3148_nogc.stdout.log": "9650d559642b8ff7349203d7bf27134de2142725ccad18c26ad20db3d7bacba9",
+    "py3148_nogc.trace.log": "150089ec945a048441dd280e42f3b7f4653af449c73d80f562382c33715d059b",
+    "py3148_normal.stdout.log": "b6d338083521fae6d2e065caeb0e197b76b461d0c7a782099e047ed8a30a8577",
+    "py3148_normal.trace.log": "12949f7527ca3698006d9d90a980e19fe4a306d0739e80dcc2862d53bb69d5ef",
+    "py315_normal.stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "py315_normal.trace.log": "38c867bcd9793f5a74ac8650859a0c9580828e73cdd2d18e0de85aac8dda5254",
+    "README.md": "285d7726c0c772650f0e145fd7c898e418f9d50bb7a1c35c1821f030a30dfcc3"
+  }
+}

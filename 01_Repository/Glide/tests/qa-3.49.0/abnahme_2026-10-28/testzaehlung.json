@@ -1,0 +1,17 @@
+{
+  "Werkzeugtests": {
+    "count": 220,
+    "skipped": 1,
+    "ok": true
+  },
+  "Fachlogik-Unit-Tests": {
+    "count": 1060,
+    "skipped": 0,
+    "ok": true
+  },
+  "Fachlogik ohne Systemzeitzonen": {
+    "count": 1060,
+    "skipped": 0,
+    "ok": true
+  }
+}

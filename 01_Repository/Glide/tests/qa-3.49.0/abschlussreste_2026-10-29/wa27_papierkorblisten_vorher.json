@@ -1,0 +1,9 @@
+{
+  "expected_point_ids": [
+    "child-id",
+    "task-id"
+  ],
+  "observed_point_ids": [],
+  "complete": false,
+  "application_window_created": false
+}

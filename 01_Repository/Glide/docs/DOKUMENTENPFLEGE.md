@@ -1,6 +1,8 @@
 # Regeln für die Dokumentenpflege
 
-Stand 27.10.2026 · Glide 3.47.0 · Datenformat 26
+Stand 29.10.2026 · Glide 3.49.0 · Datenformat 26
+
+**Lokaler Abgleich 29.10.2026:** Abnahmebefunde in den zuständigen Quellen eingearbeitet; [Analyse §13.20](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1320-einarbeitung-des-abnahmeaudits-und-dateiabgleich-vom-29102026), [Dateiinventar/Dokumentregister/Schlusskontrollen](../tests/qa-3.49.0/dokumentabgleich_2026-10-29/README.md). Der Word-/PDF-Bericht bleibt ein unveränderter datierter Prüfbeleg. Historische QA-Rohdaten, Originalreferenzen und Lieferstände werden nicht umetikettiert oder aus diesem Abgleich gelöscht.
 
 Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder gelöscht anstatt immer nur archiviert und `_Z` zu schreiben“) und ersetzt alle früheren Archivierungsregeln.
 
@@ -71,3 +73,9 @@ Der [Nachweis vom 25.10.2026](../tests/qa-3.44.0/ablagepruefung_2026-10-25/READM
 ## Dokumentabgleich vor Push vom 27.10.2026
 
 Der erneute Auftrag prüft das Dokumentregister gegen Quelle 3.47.0 / Format 26, die gezielten Paketfälle und tatsächliche Python-/Showcase-Lieferung. Inhaltliche Befunde und Korrekturen stehen allein in [Analyse §13.16](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1316-dokumentabgleich-vor-dem-push-am-27102026), Gitauftrag/Aufgaben im [Plan §21.25](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2125-dokumentabgleich-und-pushauftrag-vom-27102026); vollständiges Register/Links/Anker und CI im [Nachweis](../tests/qa-3.47.0/folgepakete_2026-10-27/README.md). Historische Ergebnisse bleiben unverändert. Präzise Ignore-Regeln halten neue QA-Screenshots und die lokale Tk-Prüfumgebung vom Gittransport fern; sie löschen keine lokalen Dateien.
+
+## Erneuter Datei- und Dokumentabgleich für 3.48.0
+
+Auftrag vom 27.10.2026: alle Dateien nach Inhalt, Stand und Version prüfen. Aktuelle Korrekturen in [Analyse §13.17](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1317-datei--und-dokumentationsaudit-vom-27102026); Inventar/Hashes, Register und Grenzen im [Audit](../tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md). Historische Rohbelege behalten ihre damaligen Angaben; spätere Korrekturen stehen als Nachtrag davor. Die 470-Dateien-Referenz des Featurelaufs bleibt erhalten, obwohl eine enthaltene README anschließend berichtigt wurde. Den neuen Dokumentabschluss mit dessen Auditnachweis beurteilen, den alten Hashabschluss nicht umetikettieren.
+
+595 lokale QA-Dateien liegen außerhalb der aktuellen Aufbewahrung: zehn Rohlogs 3.42.0 und 585 Fensterbilder 3.43.1–3.45.0. Einzelpfad/Hash/Grund sind erfasst, Status **offene Bereinigungskandidaten**; aus dem Prüfauftrag keine Sammellöschung vorgenommen. Die 28 Original-Nutzerbilder bleiben unabhängig davon geschützt. Zusätzliche WA-41-Sicherung mit Dumps/Anfangsbestand explizit Git-ausgeschlossen; kein öffentliches Uploadpaket.

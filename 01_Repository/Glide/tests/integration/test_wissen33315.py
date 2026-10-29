@@ -307,7 +307,7 @@ with tempfile.TemporaryDirectory(prefix='glide-wissen-') as directory:
             checks.append('16 Fensterzustände: Notiz/Seite, Mindest-/Referenzgröße, mittel/groß, hell/dunkel')
         app.flush_rich_note(); app.save_items(); app.save_settings()
         assert not errors, errors
-        app.cancel_pending_callbacks(); app.release_data_lock(); root.destroy(); destroyed = True
+        app.cancel_pending_callbacks(); getattr(app,"finish_recovery_session",lambda:None)();app.release_data_lock(); root.destroy(); destroyed = True
         # Frischer Prozess: keine importierten Objekt- oder Rendercaches.
         script = '''import importlib.machinery,importlib.util,json,sys
 l=importlib.machinery.SourceFileLoader('restart',sys.argv[1]);m=importlib.util.module_from_spec(importlib.util.spec_from_loader(l.name,l));sys.modules[l.name]=m;l.exec_module(m)
@@ -315,7 +315,7 @@ r=m.tk.Tk();r.withdraw();a=m.ListApp(r);a.show_info=lambda *x:None
 assert a.DATA_SCHEMA_VERSION== 26
 assert a.find_item_in_lists(sys.argv[2])
 page=next(e for e in a.lists if e['id']==sys.argv[3]);assert any(s['tag']=='taskref:'+sys.argv[2] for s in page['rich_note']['spans'])
-assert a.settings['saved_filters'];a.cancel_pending_callbacks();a.release_data_lock();r.destroy();print('restart OK')'''
+assert a.settings['saved_filters'];a.cancel_pending_callbacks();getattr(a,"finish_recovery_session",lambda:None)();a.release_data_lock();r.destroy();print('restart OK')'''
         run = subprocess.run([sys.executable, '-B', '-c', script, str(args.app.resolve()), copied_task, copied['id']],
                              capture_output=True, text=True, timeout=60)
         assert run.returncode == 0, run.stderr
@@ -330,7 +330,7 @@ m.ListApp.show_error=m.ListApp.show_warning=m.ListApp.show_info=lambda *x,**kw:N
 r=m.tk.Tk();r.withdraw();before=pathlib.Path(m.SAVE_FILE).read_bytes()
 with patch.object(m.shutil,'copy2',side_effect=OSError('synthetic backup failure')):
  a=m.ListApp(r);assert not a.save_items(show_error=False);assert pathlib.Path(m.SAVE_FILE).read_bytes()==before
-a.dirty=False;a.cancel_pending_callbacks();a.release_data_lock();r.destroy()'''
+a.dirty=False;a.cancel_pending_callbacks();getattr(a,"finish_recovery_session",lambda:None)();a.release_data_lock();r.destroy()'''
             env = dict(os.environ, GLIDE_DATA_DIR=failure_dir)
             failed = subprocess.run([sys.executable, '-B', '-c', failure_script, str(args.app.resolve())],
                                     env=env, capture_output=True, text=True, timeout=60)
@@ -347,7 +347,7 @@ m.ListApp.show_error=m.ListApp.show_warning=m.ListApp.show_info=lambda *x,**kw:N
 r=m.tk.Tk();r.withdraw();before=pathlib.Path(m.SAVE_FILE).read_bytes();a=m.ListApp(r)
 assert m.ListApp.DATA_SCHEMA_VERSION==20 and a._data_read_only
 assert not a.save_items(show_error=False) and pathlib.Path(m.SAVE_FILE).read_bytes()==before
-a.cancel_pending_callbacks();a.release_data_lock();r.destroy()'''
+a.cancel_pending_callbacks();getattr(a,"finish_recovery_session",lambda:None)();a.release_data_lock();r.destroy()'''
             old_read = subprocess.run([sys.executable, '-B', '-c', old_script, str(previous.resolve()),
                                       str((REPO.parent.parent / '07_Python-Versionen').resolve())],
                                      capture_output=True, text=True, timeout=60)
@@ -361,4 +361,4 @@ a.cancel_pending_callbacks();a.release_data_lock();r.destroy()'''
         print('test_wissen33315: OK; ' + '; '.join(checks))
     finally:
         if not destroyed:
-            app.cancel_pending_callbacks(); app.release_data_lock(); root.destroy()
+            app.cancel_pending_callbacks(); getattr(app,"finish_recovery_session",lambda:None)();app.release_data_lock(); root.destroy()

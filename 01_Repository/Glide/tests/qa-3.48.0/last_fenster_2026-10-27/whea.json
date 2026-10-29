@@ -1,0 +1,42 @@
+{
+  "Days": 7,
+  "Fetched": 25,
+  "Limit": 1000,
+  "Truncated": false,
+  "Newest": "2026-10-26T18:37:46.6254839+01:00",
+  "Oldest": "2026-10-26T18:04:03.6892363+01:00",
+  "ById": [
+    {
+      "Name": "19",
+      "Count": 25
+    }
+  ],
+  "ByDay": [
+    {
+      "Name": "2026-10-26",
+      "Count": 25
+    }
+  ],
+  "Recent": [
+    {
+      "Id": 19,
+      "TimeCreated": "2026-10-26T18:37:46.6254839+01:00",
+      "Message": "Behobener Hardwarefehler.\r\n\r\nGemeldet von Komponente: Prozessorkern\r\nFehlerquelle: Corrected Machine Check\r\nFehlertyp: Internal parity error\r\nProzessor-APIC-ID: 41\r\n\r\nDie Detailansicht dieses Eintrags beinhaltet weitere Informationen."
+    },
+    {
+      "Id": 19,
+      "TimeCreated": "2026-10-26T18:36:46.3988538+01:00",
+      "Message": "Behobener Hardwarefehler.\r\n\r\nGemeldet von Komponente: Prozessorkern\r\nFehlerquelle: Corrected Machine Check\r\nFehlertyp: Internal parity error\r\nProzessor-APIC-ID: 40\r\n\r\nDie Detailansicht dieses Eintrags beinhaltet weitere Informationen."
+    },
+    {
+      "Id": 19,
+      "TimeCreated": "2026-10-26T18:35:56.2627912+01:00",
+      "Message": "Behobener Hardwarefehler.\r\n\r\nGemeldet von Komponente: Prozessorkern\r\nFehlerquelle: Corrected Machine Check\r\nFehlertyp: Internal parity error\r\nProzessor-APIC-ID: 41\r\n\r\nDie Detailansicht dieses Eintrags beinhaltet weitere Informationen."
+    },
+    {
+      "Id": 19,
+      "TimeCreated": "2026-10-26T18:35:56.2626859+01:00",
+      "Message": "Behobener Hardwarefehler.\r\n\r\nGemeldet von Komponente: Prozessorkern\r\nFehlerquelle: Corrected Machine Check\r\nFehlertyp: Internal parity error\r\nProzessor-APIC-ID: 41\r\n\r\nDie Detailansicht dieses Eintrags beinhaltet weitere Informationen."
+    }
+  ]
+}

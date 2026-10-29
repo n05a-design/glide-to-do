@@ -90,6 +90,7 @@ with tempfile.TemporaryDirectory(prefix="glide-wissen-") as ordner:
 
     def beenden():
         app.cancel_pending_callbacks()
+        getattr(app, "finish_recovery_session", lambda: None)()
         app.release_data_lock()
         for job in root.tk.call("after", "info"):
             root.tk.call("after", "cancel", job)

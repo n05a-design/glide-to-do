@@ -1,0 +1,212 @@
+{
+  "app_sha256": "8025a20ce47e82a880f6328aa64c2eacbc86e5c8f1bb74ed86a0e8a0e80922e8",
+  "future_filter_key_retained": true,
+  "future_board_key_retained": true,
+  "future_card_key_retained": true,
+  "unknown_card_retained_after_prune": true,
+  "normalization_mutated_source": false,
+  "normalized_before_prune": {
+    "saved_filters": [
+      {
+        "future_condition": {
+          "nested": [
+            1,
+            false
+          ]
+        },
+        "id": "f",
+        "name": "Test",
+        "query": "",
+        "list_ids": [],
+        "label_ids": [],
+        "status": "open",
+        "importance": "all",
+        "due": "any",
+        "label_mode": "any",
+        "source": "all"
+      }
+    ],
+    "pinboards": {
+      "global": {
+        "future_board": {
+          "nested": [
+            1,
+            false
+          ]
+        },
+        "cards": [
+          {
+            "future_card": {
+              "nested": [
+                1,
+                false
+              ]
+            },
+            "list_id": "l",
+            "item_id": "t",
+            "x": 17,
+            "y": 16,
+            "scale": "normal"
+          },
+          {
+            "kind": "future",
+            "payload": {
+              "text": "bewahren"
+            },
+            "list_id": "l",
+            "item_id": "embed:future",
+            "x": 16,
+            "y": 16,
+            "scale": "normal"
+          }
+        ],
+        "connections": [],
+        "connection_style": "line",
+        "layout": "free",
+        "snap": true,
+        "object_snap": false,
+        "navigator": false,
+        "zoom": 100,
+        "preview": true,
+        "auto": false,
+        "width": 300,
+        "group_by": "due",
+        "collapsed": [],
+        "hide_empty": false,
+        "only_open": false,
+        "show_description": true,
+        "show_checklist": false,
+        "color_mode": "stripe",
+        "color_source": "item",
+        "areas": [],
+        "auto_connect": false,
+        "background": "none",
+        "print_background": false
+      }
+    },
+    "settings_version": 2,
+    "profile_name": "",
+    "profile_logo": "G",
+    "profile_logo_color": "accent",
+    "start_on_home": false,
+    "show_home_stats": true,
+    "mascot_care": {
+      "satiety": 70,
+      "energy": 70,
+      "affection": 60,
+      "day": "2026-10-29"
+    },
+    "action_feedback": "auto",
+    "overview_sections_closed": [],
+    "label_sections_closed": [],
+    "home_tile_order": [],
+    "home_tiles_hidden": [
+      "clock",
+      "welcome",
+      "focus",
+      "labels",
+      "templates",
+      "impulse",
+      "calendar",
+      "overdue",
+      "progress",
+      "boards",
+      "filters",
+      "stats"
+    ],
+    "home_columns": "auto",
+    "home_calendar_mode": "month",
+    "home_density": "normal",
+    "animations_enabled": true,
+    "list_detail_mode": "standard",
+    "startup_view": "last",
+    "startup_list_id": "",
+    "sidebar_visible": true,
+    "sidebar_narrow": false,
+    "show_moon_phase": true,
+    "show_yearly_stats": true,
+    "show_seconds": true,
+    "reminder_attention": true,
+    "history_enabled": true,
+    "system_notifications": false,
+    "week_start": "monday",
+    "ui_font_size": "mittel",
+    "ui_font_family": "",
+    "accent_color": "accent",
+    "design": "glass_light",
+    "theme": "light",
+    "color_mode": "standard",
+    "glass_mode": true,
+    "daily_goal": 5,
+    "daily_capacity_minutes": 0,
+    "today_plan_migrated": false,
+    "today_plan": {
+      "date": "2026-10-29",
+      "item_ids": []
+    },
+    "table_columns": {},
+    "table_column_widths": {},
+    "table_sort": {},
+    "completion_history": {},
+    "activity_history": {},
+    "recent_lists": [],
+    "show_hints": false,
+    "drawing_tools": {
+      "secondary_color": "#FFFFFF",
+      "recent_colors": [],
+      "pixel_perfect": false,
+      "preview": false,
+      "reference_opacity": 33,
+      "palette": "drawing",
+      "palettes": []
+    },
+    "pinned_pages": [],
+    "sidebar_sections_visible": {
+      "pages": true,
+      "lists": true,
+      "notes": true,
+      "drawings": true
+    },
+    "sidebar_locations": {},
+    "sidebar_sections_closed": [],
+    "detail_pane": false,
+    "detail_pane_width": 360,
+    "compact_window": "",
+    "side_view_width": 360,
+    "backdrops": {},
+    "page_favorites": [],
+    "page_recent": [],
+    "page_full_width": false,
+    "gallery_tile_size": {},
+    "list_group_by": {},
+    "table_nesting": {},
+    "group_sections_closed": [],
+    "home_filter_tiles": [],
+    "home_tile_span": {},
+    "home_tiles_330": true,
+    "home_tiles_gallery": true,
+    "daily_capacity_by_weekday": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "recent_pages": [],
+    "library_card_size": "medium",
+    "time_tracking": null,
+    "time_booking": null,
+    "recent_labels": [],
+    "recent_move_targets": [],
+    "today_routines": [],
+    "routine_done_days": {},
+    "open_tabs": [],
+    "active_tab": {},
+    "saved_view_conditions_v1": {},
+    "saved_view_layouts_v1": {},
+    "active_saved_filter": null
+  },
+  "application_window_created": false
+}

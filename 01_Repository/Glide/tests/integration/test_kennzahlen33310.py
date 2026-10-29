@@ -193,6 +193,7 @@ with tempfile.TemporaryDirectory(prefix="glide-kennzahlen-") as folder:
         if second_root is not None:
             second_root.destroy()
         app.cancel_pending_callbacks()
+        getattr(app, "finish_recovery_session", lambda: None)()
         app.release_data_lock()
         root.destroy()
     # Neustart lädt denselben gespeicherten Bestand ohne alte Kennzahlencaches.
@@ -207,5 +208,6 @@ with tempfile.TemporaryDirectory(prefix="glide-kennzahlen-") as folder:
         assert not errors, errors
     finally:
         restarted.cancel_pending_callbacks()
+        getattr(restarted, "finish_recovery_session", lambda: None)()
         restarted.release_data_lock()
         restarted_root.destroy()

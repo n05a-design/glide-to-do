@@ -1,0 +1,8 @@
+{
+  "status": "abgebrochen_wegen_paralleler_quell_und_versionsaenderungen",
+  "eingefrorener_gesamtstand": false,
+  "werkzeugtests_begleitlauf": 208,
+  "skips_begleitlauf": 1,
+  "werkzeugfehler_begleitlauf": 0,
+  "keine_vollstaendige_ci_abnahme": true
+}

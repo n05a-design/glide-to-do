@@ -1,16 +1,16 @@
 # Veröffentlichung – Glide
 
-Stand 27.10.2026 · Glide 3.47.0 · Quellstand 3.47.0, native Pakete 3.45.0, keine öffentliche Veröffentlichung · Aufgabenformat 26
+Stand 29.10.2026 · Glide 3.49.0 · Quellstand 3.49.0, native Pakete 3.45.0, keine öffentliche Veröffentlichung · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
-**Aktueller Entwicklungsstand 3.47.0:** Mehrfachplanung und Nebenansichtsverlauf, Aufgabenformat 26. Python-/Showcase-Abgleich und gezielte Prüfung im [Nachweis](../tests/qa-3.47.0/folgepakete_2026-10-27/README.md). Eigenständige Windows-/Mac-Pakete bleiben 3.45.0; keine neue breite Endmatrix oder öffentliche/native/menschliche Releasefreigabe. Der Auftrag vom 27.10. autorisiert nach Dokumentabgleich/CI den Gittransport der Projektänderungen, keine öffentliche Produktveröffentlichung.
+**Aktueller Entwicklungsstand 3.49.0:** Prüfabläufe, abgesicherter Wiederanlauf und lokale Diagnose; Aufgabenformat 26. [Gezielte Prüfung und Liefergrenzen](../tests/qa-3.49.0/robustheit_2026-10-28/README.md). Python/Showcase bleiben 3.47.0, eigenständige Pakete 3.45.0. WA-41, breite/native Matrix und menschliche Releasefreigabe sind offen; kein neuer Gittransport aus dieser Featurefortsetzung.
 
 **Vorheriger vollständiger Paketlieferstand 3.45.0 (26.10.2026):** Python-Fassung bytegleich, Windows-Paket und natives Mac-arm64-Paket neu gebaut und startgeprüft; Windows-Vollprüfung mit allen 104 Suiten grün. Mac-Ad-hoc-Signatur und isolierter Macstart grün. [Liefernachweis](../tests/qa-3.45.0/paketabschluss_2026-10-26/README.md). Mac-/Linux-Vollmatrix und menschliche Releaseabnahme bleiben getrennt offen; die folgenden Haken bezeichnen den historischen Vollabschluss 3.42.0.
 
-Die Haken dokumentieren den historischen vollständigen Plattformabschluss 3.42.0. Die aktuelle Lieferung 3.45.0 übernimmt keine ungetesteten Mac-/Linux-/Menschenfreigaben daraus; aktuelle Belege stehen oben und im [QA-Bericht](07_QA_BERICHT.md).
+Die Haken dokumentieren den historischen vollständigen Plattformabschluss 3.42.0. Die native Paketlieferung 3.45.0 übernimmt keine ungetesteten Mac-/Linux-/Menschenfreigaben daraus; Python-Lieferung 3.47.0 und Quellkandidat 3.49.0 sind getrennt. Aktuelle Belege stehen oben und im [QA-Bericht](07_QA_BERICHT.md); der [Abnahmebericht](../tests/qa-3.49.0/abnahme_2026-10-28/README.md) stellt die Gesamtabnahme zurück.
 
 - [x] VERSION, `APP_VERSION`, Hauptsuite und CHANGELOG gleich; Datenformat geprüft.
 - [x] Eingefrorene Vollprüfung auf dem Referenz-Mac; seit D42 zusätzlich native Windows-Vollprüfung je Lieferung und seit D35 gesamte ausführbare Linux-Matrix, einschließlich passender Defektgegenproben. Ergebnisse getrennt im [QA-Bericht](07_QA_BERICHT.md).

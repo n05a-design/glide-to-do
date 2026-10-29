@@ -37,6 +37,7 @@ with tempfile.TemporaryDirectory(prefix='glide-suche3337-') as folder:
 
     def stop(app):
         app.cancel_pending_callbacks()
+        getattr(app, "finish_recovery_session", lambda: None)()
         app.release_data_lock()
         # Tk-Aufträge der Editor-Kinder gehören zum gerade geprüften
         # Interpreter und dürfen nicht in den Neustartlauf hineinreichen.

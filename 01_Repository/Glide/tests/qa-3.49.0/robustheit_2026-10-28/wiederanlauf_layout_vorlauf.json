@@ -1,0 +1,75 @@
+{
+  "app_sha256": "9be2fd649d0ff13d717a3511ccafddbd57f5bf7a77f0adec5f8bceafe90d87c0",
+  "session_guard_sha256": "ef532279333345362b7c248a41dbba6c83948856e8037c65d2422307e01a829d",
+  "test_sha256": "f0d792d0f781d854c703f7b9405e7e3e3b8098c882c6a25ca83dd6ef368477be",
+  "faelle": {
+    "layout": {
+      "ok": true,
+      "befund": {
+        "button_checks": 72,
+        "contexts": [
+          "light/mittel/False/860x700",
+          "light/mittel/False/1280x800",
+          "light/mittel/True/860x700",
+          "light/mittel/True/1280x800",
+          "light/gross/False/860x700",
+          "light/gross/False/1280x800",
+          "light/gross/True/860x700",
+          "light/gross/True/1280x800",
+          "dark/mittel/False/860x700",
+          "dark/mittel/False/1280x800",
+          "dark/mittel/True/860x700",
+          "dark/mittel/True/1280x800",
+          "dark/gross/False/860x700",
+          "dark/gross/False/1280x800",
+          "dark/gross/True/860x700",
+          "dark/gross/True/1280x800",
+          "glass_dark/mittel/False/860x700",
+          "glass_dark/mittel/False/1280x800",
+          "glass_dark/mittel/True/860x700",
+          "glass_dark/mittel/True/1280x800",
+          "glass_dark/gross/False/860x700",
+          "glass_dark/gross/False/1280x800",
+          "glass_dark/gross/True/860x700",
+          "glass_dark/gross/True/1280x800"
+        ],
+        "screenshots": [
+          {
+            "file": "wiederanlauf_light_gross_status.png",
+            "sha256": "630e67c6124cb741091391be702b4d5d1024011d927d1da1666ad9d8a9c8b343",
+            "width": 739,
+            "height": 399,
+            "method": "PrintWindow; ausschließlich eigenes Tk-Fenster"
+          },
+          {
+            "file": "wiederanlauf_dark_gross_status.png",
+            "sha256": "c0889e9e892005c08e2942933c5b747037b9e7893e93b6cdf1115f67eebc164d",
+            "width": 739,
+            "height": 399,
+            "method": "PrintWindow; ausschließlich eigenes Tk-Fenster"
+          },
+          {
+            "file": "wiederanlauf_dark_gross_hauptfenster.png",
+            "sha256": "7347ceed8208ad2bc2c0f3650e72f68f8c6fe72a90230177f376b757962fdcc1",
+            "width": 876,
+            "height": 739,
+            "method": "PrintWindow; ausschließlich eigenes Tk-Fenster"
+          },
+          {
+            "file": "wiederanlauf_glass_dark_gross_status.png",
+            "sha256": "7e564b6531703b89f676ea96014f61a7b226fc3463d3e5930448210b32bb2aec",
+            "width": 739,
+            "height": 399,
+            "method": "PrintWindow; ausschließlich eigenes Tk-Fenster"
+          }
+        ],
+        "capture_unavailable": [],
+        "result": "Freigabe/Sicherungen/Schließen erreichbar bei 480x360; 24 Design-/Schrift-/Hinweis-/Hauptgrößenkombinationen"
+      }
+    }
+  },
+  "fehler": [],
+  "limitations": [
+    "Hardware-Stromausfall, native Mac-/Linux-/DPI-/Reader- und Menschenabnahme ungeprüft."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "app_sha256": "5e93aeff9373727b90bc1d57bc280b149f62ffdc41ea055fe4b534776f79e74a",
+  "faelle": {
+    "home_faelligkeit_aufwand": {
+      "ok": true,
+      "befund": "12 Aufgaben: echte Aufwandmenüaktion, ein Undo/Redo, Fälligkeit getrennt vom Bearbeitungstag, eigene Dauer, Abbruch/stale/Serien/readonly/Schreibfehler geschützt",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": []
+}

@@ -1,0 +1,124 @@
+{
+  "historische_signaturgegenprobe": true,
+  "tests_neu_ausgefuehrt": false,
+  "quellbericht_sha256": "777ede152f91cff7e7e1dd895c343adc1ade953fcafbcfcc4e98682c46a988d9",
+  "faelle": [
+    {
+      "fall": "315_full_1",
+      "exitcode_original": 0,
+      "diagnose": null,
+      "log_sha256": "f73e0bfce84eda0b5dd595915855467f0998e4069414a85a950a7aa05616e33d"
+    },
+    {
+      "fall": "314_core_1",
+      "exitcode_original": 3221225477,
+      "diagnose": {
+        "kategorie": "prozessabbruch",
+        "spur": "Prozessdiagnose",
+        "exitcode": 3221225477,
+        "signaturen": [
+          "0xC0000005",
+          "Windows fatal exception: access violation"
+        ],
+        "ursache_bewiesen": false,
+        "hinweis": "Mögliche Ursachen: Software, Python/native Bibliotheken oder instabile CPU-/Firmware-/RAM-Umgebung. Die Signatur beweist keine Hardwareursache. Intel-Prüfplatz: vorhandene WHEA-/Dumpbelege und Firmwarestand abgleichen.",
+        "naechster_schritt": "Rohlog und vorhandene Dumps sichern; WHEA-Ereignisse zeitlich getrennt bewerten. Bei Bedarf kontrollierte Gegenprobe mit gleichem Quell-/Datenhash und passenden Python-/Paketversionen. Keine automatische Wiederholung, Affinitäts-, BIOS- oder CPU-Änderung."
+      },
+      "log_sha256": "de3b133930c8ed892bf590fc3d4a7a3c3d8d5860531884cf164449f4bcf6e718"
+    },
+    {
+      "fall": "315_core_1",
+      "exitcode_original": 3221225477,
+      "diagnose": {
+        "kategorie": "prozessabbruch",
+        "spur": "Prozessdiagnose",
+        "exitcode": 3221225477,
+        "signaturen": [
+          "0xC0000005",
+          "Windows fatal exception: access violation"
+        ],
+        "ursache_bewiesen": false,
+        "hinweis": "Mögliche Ursachen: Software, Python/native Bibliotheken oder instabile CPU-/Firmware-/RAM-Umgebung. Die Signatur beweist keine Hardwareursache. Intel-Prüfplatz: vorhandene WHEA-/Dumpbelege und Firmwarestand abgleichen.",
+        "naechster_schritt": "Rohlog und vorhandene Dumps sichern; WHEA-Ereignisse zeitlich getrennt bewerten. Bei Bedarf kontrollierte Gegenprobe mit gleichem Quell-/Datenhash und passenden Python-/Paketversionen. Keine automatische Wiederholung, Affinitäts-, BIOS- oder CPU-Änderung."
+      },
+      "log_sha256": "0484434e4d6058f51a7debf980109a1ae4da6d992d49e0a7aeb6e53d3b51e52c"
+    },
+    {
+      "fall": "315_import_1",
+      "exitcode_original": 0,
+      "diagnose": null,
+      "log_sha256": "ed17806471640bb749f16e10b90e7356dc4c602cd745c32bce676730669a0525"
+    },
+    {
+      "fall": "315_full_2",
+      "exitcode_original": 3221225477,
+      "diagnose": {
+        "kategorie": "prozessabbruch",
+        "spur": "WA-41A",
+        "exitcode": 3221225477,
+        "signaturen": [
+          "0xC0000005",
+          "Windows fatal exception: access violation"
+        ],
+        "ursache_bewiesen": false,
+        "hinweis": "Mögliche Ursachen: Software, Python/native Bibliotheken oder instabile CPU-/Firmware-/RAM-Umgebung. Die Signatur beweist keine Hardwareursache. Vergleichsfall WA-41: auf i9-14900K sporadisch rot, zehn ausgewertete AMD-Prozesse grün. Das stützt einen Systemunterschied; ein Intel-/CPU-Defekt ist damit nicht isoliert bewiesen. Intel-Prüfplatz: vorhandene WHEA-/Dumpbelege und Firmwarestand abgleichen.",
+        "naechster_schritt": "Rohlog und vorhandene Dumps sichern; WHEA-Ereignisse zeitlich getrennt bewerten. Bei Bedarf kontrollierte Gegenprobe mit gleichem Quell-/Datenhash und passenden Python-/Paketversionen. Keine automatische Wiederholung, Affinitäts-, BIOS- oder CPU-Änderung."
+      },
+      "log_sha256": "d1150aa8ea40789c34eba5d61dd30eab45a224a7bcf5416057868f292fffab62"
+    },
+    {
+      "fall": "314_core_2",
+      "exitcode_original": 0,
+      "diagnose": null,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "fall": "315_core_2",
+      "exitcode_original": 3221225477,
+      "diagnose": {
+        "kategorie": "prozessabbruch",
+        "spur": "Prozessdiagnose",
+        "exitcode": 3221225477,
+        "signaturen": [
+          "0xC0000005",
+          "Windows fatal exception: access violation"
+        ],
+        "ursache_bewiesen": false,
+        "hinweis": "Mögliche Ursachen: Software, Python/native Bibliotheken oder instabile CPU-/Firmware-/RAM-Umgebung. Die Signatur beweist keine Hardwareursache. Intel-Prüfplatz: vorhandene WHEA-/Dumpbelege und Firmwarestand abgleichen.",
+        "naechster_schritt": "Rohlog und vorhandene Dumps sichern; WHEA-Ereignisse zeitlich getrennt bewerten. Bei Bedarf kontrollierte Gegenprobe mit gleichem Quell-/Datenhash und passenden Python-/Paketversionen. Keine automatische Wiederholung, Affinitäts-, BIOS- oder CPU-Änderung."
+      },
+      "log_sha256": "66f2de5af9b63dbe6310b25bdde66d8aa4a129641ab49f6e93e955a8757f82ec"
+    },
+    {
+      "fall": "315_import_2",
+      "exitcode_original": 0,
+      "diagnose": null,
+      "log_sha256": "ed17806471640bb749f16e10b90e7356dc4c602cd745c32bce676730669a0525"
+    },
+    {
+      "fall": "315_full_3",
+      "exitcode_original": 3221226505,
+      "diagnose": {
+        "kategorie": "prozessabbruch",
+        "spur": "WA-41A",
+        "exitcode": 3221226505,
+        "signaturen": [
+          "0xC0000409",
+          "Fatal Python error: _TAIL_CALL_CACHE: Executing a cache."
+        ],
+        "ursache_bewiesen": false,
+        "hinweis": "Mögliche Ursachen: Software, Python/native Bibliotheken oder instabile CPU-/Firmware-/RAM-Umgebung. Die Signatur beweist keine Hardwareursache. Vergleichsfall WA-41: auf i9-14900K sporadisch rot, zehn ausgewertete AMD-Prozesse grün. Das stützt einen Systemunterschied; ein Intel-/CPU-Defekt ist damit nicht isoliert bewiesen. Intel-Prüfplatz: vorhandene WHEA-/Dumpbelege und Firmwarestand abgleichen.",
+        "naechster_schritt": "Rohlog und vorhandene Dumps sichern; WHEA-Ereignisse zeitlich getrennt bewerten. Bei Bedarf kontrollierte Gegenprobe mit gleichem Quell-/Datenhash und passenden Python-/Paketversionen. Keine automatische Wiederholung, Affinitäts-, BIOS- oder CPU-Änderung."
+      },
+      "log_sha256": "09b93936d681eb87665f7fcf1d463009c2ff6e17560ecce73011170a2864e12d"
+    },
+    {
+      "fall": "315_import_3",
+      "exitcode_original": 0,
+      "diagnose": null,
+      "log_sha256": "ed17806471640bb749f16e10b90e7356dc4c602cd745c32bce676730669a0525"
+    }
+  ],
+  "erkannt_rot": 5,
+  "ohne_fehlalarm_gruen": 5
+}

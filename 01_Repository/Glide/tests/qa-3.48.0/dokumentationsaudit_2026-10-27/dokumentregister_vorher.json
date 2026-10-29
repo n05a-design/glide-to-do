@@ -1,0 +1,3216 @@
+[
+  {
+    "path": ".claude/skills/design-richtlinien/SKILL.md",
+    "sha256": "2a0ae9f873ccc5b13536bbedaaf892f1654afa2b3820cf9ae1e4efb9686833ae",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Design Richtlinien"
+    ],
+    "version_mentions": [],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": ".claude/skills/design-richtlinien/referenzen/bewegung-material-typografie.md",
+    "sha256": "1b9f01af7950e9d3aeb14d42b91dd9803f7d63065c86dc94c030d463d284b90d",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Fremdreferenz zu den Design Richtlinien (B20), kein aktiver Skill."
+    ],
+    "headings": [
+      "Apple Design",
+      "The Core Idea",
+      "1. Response — kill latency",
+      "2. Direct manipulation — 1:1 tracking",
+      "3. Interruptibility — the single most important principle",
+      "4. Behavior over animation — use springs",
+      "5. Velocity handoff — the seam between drag and animation",
+      "6. Momentum projection — animate to where the gesture is *going*",
+      "7. Spatial consistency — symmetric paths, anchored origins",
+      "8. Hint in the direction of the gesture",
+      "9. Rubber-banding — soft boundaries",
+      "10. Gesture design details (the \"feel\" checklist)",
+      "11. Frame-level smoothness",
+      "12. Materials & depth — translucency conveys hierarchy",
+      "13. Multimodal feedback — motion + sound + haptics",
+      "14. Reduced motion & accessibility",
+      "15. Typography — optical sizing, tracking, leading",
+      "16. Design foundations — the eight principles",
+      "17. Process",
+      "Quick Reference"
+    ],
+    "version_mentions": [
+      "12.10.2026",
+      "15.10.2026",
+      "27.10.2026",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/AUFTRAG.md",
+    "sha256": "358eb33b61312271762b738a90e93638e14edad6ed38288a97923f523ba0f910",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Historischer Eingangsbeleg – Nutzerauftrag UI-/UX-Feature-Paket",
+      "A. Allgemeine Fragen und Anmerkungen:",
+      "B. Erweiterungen, Probleme und Änderungen zum Feature-Paket:"
+    ],
+    "version_mentions": [
+      "15.10.2026",
+      "3.42.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/BILDREFERENZEN.md",
+    "sha256": "e5c34d434af33888ae03ab6dd37ea2211e17a1b10adf7665a513251f38c42966",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · 28 unveränderte, vom Benutzer bereitgestellte Originalbilder"
+    ],
+    "headings": [
+      "Bildreferenzen zum UI-/UX-Feature-Paket"
+    ],
+    "version_mentions": [
+      "15.10.2026",
+      "27.10.2026",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md",
+    "sha256": "72768e5e66c94e35f5a6d32608c6190b0260610925e101d37a7f09953180873d",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Status: seit D50 beauftragt und vorrangig; Umsetzung und Status im Entwicklungsplan §17"
+    ],
+    "headings": [
+      "Glide – Ausführungsprompt für das Feature-Paket UI und UX",
+      "Auftrag und Quellen",
+      "Einstieg und Arbeitsweise",
+      "A. Untersuchungen und Empfehlungen",
+      "A01 – Kompaktmodus und kleinere Mindestgröße",
+      "A02 – Zwei Inhalte gleichzeitig bearbeiten",
+      "A03 – Notion-Muster sinnvoll auf Glide übertragen",
+      "B. Verbindliche Änderungen mit Abnahme",
+      "B01 – Startseite nach dem Lesen der Neuerungen nach oben setzen",
+      "B02 – „Startseite anpassen“ links ausrichten",
+      "B03 – Gismo mit festem Namen und aktiven Spielereien",
+      "B04 – Eigene Galerie-Bildvorschau auf der Startseite",
+      "B05 – Logo optisch niedriger skalieren",
+      "B06 – Kopfdatum und Fragezeichen entfernen; Hinweise in Einstellungen",
+      "B07 – Menü und Kopfsymbole optisch ausrichten",
+      "B08 – Linke Flucht im Fehlerprotokoll",
+      "B09 – Pfeile und Papierkorbsymbol optisch zentrieren",
+      "B10 – Lupe statt „Su“",
+      "B11 – Informationspriorität je Ansicht und Platz für Titel",
+      "B12 – Eindeutige Pfeilbedeutung in „Heute“",
+      "B13 – „Nächste Aufgabe“ nur über fetten Titel hervorheben",
+      "B14 – Checkbox vor „Aufgabe“ in der Seiten-Blockleiste entfernen",
+      "B15 – Kurzer Papierkorb-Leertext und appweiter Buttonschutz",
+      "B16 – Übermäßigen Scrollsprung über Bilder beheben",
+      "B17 – Abweichende Hintergründe oberer Aktionen korrigieren",
+      "B18 – Neuerungen dauerhaft unter „Hilfe → Über Glide“",
+      "B19 – Hintergrundkästen in der Punktbearbeitung korrigieren",
+      "B20 – Skills neutral unter „Design Richtlinien“ integrieren",
+      "B21 – Verständliche, dauerhaft pflegbare Übergabe",
+      "B22 – Dokumentation, Ablage und Projektauftritt als letzter Schritt",
+      "Gemeinsame Prüf- und Lieferkriterien",
+      "Erwartetes Ergebnis des ausführenden Agenten"
+    ],
+    "version_mentions": [
+      "15.10.2026",
+      "27.10.2026",
+      "3.42.0",
+      "3.48.0",
+      "4.0.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "sha256": "7fa2af2d7047d89d6b7936a2eadfdd3d0a5f6334ce77d9ca6249f9486fd285b7",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde"
+    ],
+    "headings": [
+      "Glide – Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung",
+      "1. Untersuchter Bestand",
+      "2. Funktionsanalyse",
+      "3. Abgleich Dokumentation ↔ Implementierung",
+      "4. Oberflächenanalyse",
+      "5. Entscheidungsanalyse",
+      "6. Erkenntnisgewinn gegenüber früheren Analysen",
+      "7. Dokumentenpflege und Zuständigkeit",
+      "8. Bestandsaufnahme und Gap-Analyse (13.10.2026)",
+      "8.1 Funktionsinventar",
+      "8.2 Technische Einschränkungen",
+      "8.3 Gap-Analyse",
+      "9. Gesamtanalyse vom 18.10.2026",
+      "9.1 Arbeitsstruktur und belegte Stände",
+      "9.2 Betriebs- und Datenfolgen",
+      "10. Nutzungsszenarien und Bereichsübergänge",
+      "11. Systematische Codeanalyse",
+      "11.1 Geltungsbereich und Belegstärke",
+      "11.2 Abdeckungsregister aller eigenen Laufzeitmodule",
+      "11.3 Vertiefte Aufruf- und Datenflüsse",
+      "11.4 Neue konkrete Befunde und Gegenprüfungen",
+      "11.5 Tragfähige technische Entwicklungsmöglichkeiten",
+      "11.6 Prüfgrenzen und nächste eindeutige Nachweise",
+      "12. Abdeckung und Abschlussabgleich",
+      "12.1 Folgefragen und eindeutige Ablage",
+      "12.2 Quellen und Rekonstruktionsbilanz der Gegenprüfung",
+      "13. Neuuntersuchung vom 21.10.2026",
+      "13.1 Umfang, Standtrennung und methodische Abdeckung",
+      "13.2 Struktur, Kopplung und unabhängige Gegenprüfung",
+      "13.3 Schutzverträge, neue Grenze und tatsächliche Tests",
+      "13.4 Leistung: reale Bedienkosten statt Übertragung alter Suchzeiten",
+      "13.5 Frische Designprüfung und vollständiger Geltungsbereich",
+      "13.6 Szenarien, Architektur und offene Aussagen",
+      "13.7 Konsolidierte Bestandsaufnahme und Dokumentabgleich",
+      "13.8 Abgleich der eingereichten Codevalidierung",
+      "13.9 Erste Roadmap-Umsetzung und Wirkungsbeleg",
+      "13.10 Nachgereichter technischer Audit und Fortsetzung",
+      "13.11 Strukturabschluss und gemessene Restkosten vom 22.10.2026",
+      "13.12 Sicherheits- und Architekturgutachten vom 25.10.2026",
+      "13.13 Ablageprüfung vor Push und Merge vom 25.10.2026",
+      "13.14 Featurefortsetzung zu 3.45.0",
+      "13.15 Vertiefte Codebasisprüfung vom 26.10.2026",
+      "13.16 Dokumentabgleich vor dem Push am 27.10.2026"
+    ],
+    "version_mentions": [
+      "0.6.3",
+      "0.6.4",
+      "01.10.2026",
+      "08.10.2026",
+      "11.10.2026",
+      "12.09.2026",
+      "13.10.2026",
+      "17.10.2026",
+      "18.10.2026",
+      "21.10.2026",
+      "22.10.2026",
+      "25.10.2026",
+      "26.10.2026",
+      "27.10.2026",
+      "3.14.7",
+      "3.270.995",
+      "3.33.18",
+      "3.33.20",
+      "3.34.0",
+      "3.35.0",
+      "3.357.653",
+      "3.39.0",
+      "3.39.1",
+      "3.40.0",
+      "3.41.0",
+      "3.42.0",
+      "3.43.0",
+      "3.43.1",
+      "3.44.0",
+      "3.45.0",
+      "3.47.0",
+      "3.48.0",
+      "4.0.0",
+      "6.22.3",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "sha256": "3ac4df90afa6e10322147928c8147c03ba0780714e8dcc6b8a809dc36c5c97d5",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26",
+      "**Stand 3.48.0 nach diesem Featurepaket, vor dem Lieferauftrag §21.20:** 86 Laufzeitdateien; `07_Python-Versionen` unverändert beim Lieferabschluss `2e69d875…`. Vier Laufzeitunterschiede: `app.pyw`, `day_proposal.py`, `side_view.py` und das neue `home_dashboard.py`. Dieser Featureauftrag erzeugte keinen Commit/Push/Merge, Versionswechsel oder Voll-/Lieferabschluss. Native Mac-/Reader-/DPI-/Mehrmonitor- und Menschenabnahmen bleiben eigene Tore. Weitere Presenter-/View-/Themeauslagerungen und WA-36-Restkosten nur nach konkretem Nutzen; WA-37/38 sowie WA-43 bleiben eigene Folgeschnitte.",
+      "**Stand und Rest:** Quelle weiter 3.48.0 / Format 26; 88 Laufzeitdateien. `_render_home` 1.056 → 1.005 Zeilen, Hauptdatei 65.373 → 65.364; `ListApp` weiter groß (1.748 Methoden). Der erste begrenzte Widgetpilotschnitt aus §21.21 ist damit umgesetzt; weitere Kachel-/Dialog-/Themeauslagerungen nur nach Nutzen. Linux-/Tk-9.1-Kompaktursache, RuntimePaths/-Config, weitere Caller und echte WA-36-Gesamtprofile bleiben getrennt offen. Acht Laufzeitunterschiede zur abgeschlossenen Lieferung `d516ca67…`; kein Versionswechsel, kein neuer Voll-/07-/Paketabschluss, kein Commit/Push/Merge. Gemeinsamer Abschluss nach D51."
+    ],
+    "headings": [
+      "Glide – Entwicklungsplan und Aufgabenstand",
+      "Statusmarken",
+      "1. Leitsatz und Reihenfolge",
+      "2. Erledigt seit 3.30",
+      "3. Performance (Stufe 0, beauftragt)",
+      "4. Klarer Alltag (Stufe 1)",
+      "4.1 UX1 „Weniger Oberfläche“",
+      "4.2 Weitere Arbeiten der Stufe 1",
+      "4.3 Ausbauprogramm Alltag, Komfort und Oberfläche",
+      "A. Moderne, ruhige Oberfläche",
+      "B. Komfort im täglichen Gebrauch",
+      "C. Unterstützung im Alltag",
+      "4.4 Größere Umsetzungspakete (Auftrag 07.10.2026)",
+      "5. Wissen im Kontext (Stufe 2)",
+      "6. Pixel, Austausch, Verteilung (Stufen 3–4)",
+      "7. Zukunft und bewusst nicht",
+      "8. Abhängigkeiten und Regeln",
+      "9. Risiken",
+      "10. Messbare Ziele",
+      "11. Nur durch den Inhaber",
+      "12. Pflege",
+      "13. Abgleich mit dem ursprünglichen Zukunftsdokument",
+      "14. Sprint ab 08.10.2026: Aufgabenkatalog",
+      "14.1 Übersicht",
+      "14.2 Abschlussabgleich ABS (09.10.2026)",
+      "15. Neuer Feature-Sprint ab 09.10.2026: gemeinsame Planung",
+      "15.1 Ausgewählte Aufgaben",
+      "15.2 Entscheidungsrunden und Gesprächsstand",
+      "15.3 Verbindlicher Lieferrahmen nach Bestätigung",
+      "15.4 Referenzentwürfe und zweite Auswahlrunde (10.10.2026)",
+      "15.5 Dritte Auswahlrunde und Quellenbindung (10.10.2026)",
+      "15.6 Fünfte Auswahlrunde (10.10.2026)",
+      "15.7 Bestätigter Gesamtplan: acht Produktionsversionen",
+      "15.8 Gemeinsame Prüfungen, Abnahmetore und Abschluss",
+      "16. Vorschläge aus Wettbewerbs- und Open-Source-Analyse (13.10.2026)",
+      "16.1 Priorisierung",
+      "16.2 Feature-Backlog",
+      "16.3 Feature-Pakete",
+      "FP-00 Wiederholungen richtig erfassen und austauschen (WA-17, WA-18)",
+      "FP-01 Wiederholen nach Rückgängig (WA-01)",
+      "FP-02 Erweiterte Wiederholungsregeln (WA-02)",
+      "FP-03 Gespeicherte Ansichten (WA-03, eigener Altleser-Namespace)",
+      "FP-04 Seiten und Notizen als Pinnwandkarten (WA-04, Altleser-Namespace statt stiller Kartenverluste)",
+      "FP-05 Unverknüpfte Erwähnungen (WA-05)",
+      "FP-06 Wiederverwendbare KI-Aufträge im Austauschformat (WA-06)",
+      "FP-07 Offene Ausgabeformate (WA-07)",
+      "16.4 Übrige Backlogpunkte",
+      "16.5 Entscheidungsvorlagen für den Inhaber",
+      "16.6 Architekturentscheidungen: geprüfte Alternativen",
+      "16.7 Empfohlene Reihenfolge",
+      "16.8 Umsetzungsreife",
+      "16.9 QA-Strategie für die Vorschläge",
+      "16.10 Vorprüfungen zur Umsetzungsreife (13.10.2026)",
+      "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+      "17.1 A01 – Kompaktmodus und kleinere Mindestgröße",
+      "17.2 A02 – Zwei Inhalte gleichzeitig",
+      "17.3 Entscheidungsvorlagen für den Inhaber",
+      "18. Konsolidiertes Funktions- und Aufgabeninventar",
+      "18.1 Statusachsen, Quellen und Abdeckung",
+      "18.2 Bestehende Funktionen und ihre Restumfänge",
+      "18.3 Offene Aufgaben, Schutzmaßnahmen und kleine Reste",
+      "18.4 Zurückstellungen und bewusste Ausschlüsse",
+      "19. Paketgrenzen, Ausbaustufen und Aufwand",
+      "19.1 Prüfmaßstab für sämtliche vorhandenen Pakete",
+      "19.2 Bestehende Pakete: Abschluss und Zuschnitt",
+      "19.3 Erste nützliche Stufe, vollständiges Ziel und Option",
+      "19.4 Konsolidierte Phasenfolge und Abhängigkeiten",
+      "19.5 D51: phasenweise prüfen, Belege nicht vermischen",
+      "20. Vollständiges Entscheidungsregister",
+      "20.1 Was bereits feststeht",
+      "20.2 E-P1–E-P5: Phasen und zusätzliche Funktionen",
+      "20.3 E-U1–E-U3: konkreter Arbeitsmodus und Seitenbedienung",
+      "20.4 Veröffentlichungstore, Menschenabnahme und bewusst keine neue Frage",
+      "20.5 Zweiter Abgleich gegen Auftrag und Eingangsquellen",
+      "21. Roadmap-Abgleich vom 21.10.2026",
+      "21.1 Tatsächlicher Fortschritt und neue Prioritäten",
+      "21.2 Ergänztes Aufgabenregister und gemeinsame Komponenten",
+      "21.3 Paketprüfung nach allen 14 Dimensionen",
+      "21.4 Empfohlene nächste Lieferbündel und Entscheidungsvorlagen",
+      "21.5 Pflegevertrag für jede Entwicklungsrunde",
+      "21.6 Technische Folge aus der Codevalidierung",
+      "21.7 Erstes Umsetzungspaket: Schreibbesitz, Mehrfachaktionen und KI-Vorschau",
+      "21.8 Zweites Umsetzungspaket: gespeicherte Darstellung und zusätzlicher Audit",
+      "21.9 Drittes Umsetzungspaket: Strukturabschluss und Kalenderwechsel",
+      "21.10 Phasenabschluss 3.44.0",
+      "21.11 Viertes Umsetzungspaket: Arbeitsmodi und Seitenbedienung (D55)",
+      "21.12 Technische Folge aus dem Sicherheits- und Architekturgutachten",
+      "21.13 Fünftes Umsetzungspaket: Speicherstatus und Sicherungsreserve",
+      "21.14 Ablage- und Dokumentationsprüfung vor dem Git-Abschluss",
+      "21.15 Weiterentwicklung zu 3.45.0: Sicherungen und Anhänge",
+      "21.16 Tagesvorschlag: Aufgaben, die andere freigeben (WA-12)",
+      "21.17 Verweise in der Nebenansicht nachschlagen (WA-11)",
+      "21.18 Git-Auftrag: Push des 3.45.0-Kandidaten",
+      "21.19 Startseitenmodell und gemeinsame Bestandsauswertung",
+      "21.20 Lieferabschluss und Paketbau 3.45.0",
+      "21.21 Vertiefte Codebasisprüfung und Technikpaket",
+      "21.22 Startseitenaufgaben direkt erledigen",
+      "21.23 Zwei Featurepakete und Versionsfortschritt 3.46.0",
+      "21.24 Folgepakete Mehrfachplanung und Nebenansichtsverlauf 3.47.0",
+      "21.25 Dokumentabgleich und Pushauftrag vom 27.10.2026",
+      "21.26 Drei Featurepakete: Tagesnavigation, Mehrfachfelder und Verweise (3.48.0)"
+    ],
+    "version_mentions": [
+      "0.6.3",
+      "0.6.4",
+      "01.01.2027",
+      "01.10.2026",
+      "01.12.2026",
+      "03.10.2026",
+      "04.01.2027",
+      "05.10.2026",
+      "07.10.2026",
+      "07.12.2026",
+      "08.10.2026",
+      "08.12.2026",
+      "09.10.2026",
+      "10.10.2026",
+      "11.10.2026",
+      "12.10.2026",
+      "13.02.2027",
+      "13.04.2027",
+      "13.10.2026",
+      "13.10.2028",
+      "13.12.2026",
+      "15.04.2027",
+      "15.10.2026",
+      "16.10.2026",
+      "17.10.2026",
+      "18.10.2026",
+      "19.10.2026",
+      "21.10.2026",
+      "22.10.2026",
+      "23.10.2026",
+      "25.09.2026",
+      "25.10.2026",
+      "25.12.2026",
+      "26.10.2026",
+      "27.10.2026",
+      "29.10.2026",
+      "3.14.5",
+      "3.14.7",
+      "3.14.8",
+      "3.15.2",
+      "3.30.0",
+      "3.31.0",
+      "3.32.0",
+      "3.32.2",
+      "3.32.3",
+      "3.33.0",
+      "3.33.10",
+      "3.33.11",
+      "3.33.12",
+      "3.33.13",
+      "3.33.14",
+      "3.33.15",
+      "3.33.16",
+      "3.33.17",
+      "3.33.18",
+      "3.33.19",
+      "3.33.2",
+      "3.33.20",
+      "3.33.21",
+      "3.33.3",
+      "3.33.6",
+      "3.33.7",
+      "3.33.8",
+      "3.33.9",
+      "3.34.0",
+      "3.35.0",
+      "3.36.0",
+      "3.37.0",
+      "3.38.0",
+      "3.39.0",
+      "3.39.1",
+      "3.40.0",
+      "3.41.0",
+      "3.42.0",
+      "3.43.0",
+      "3.43.1",
+      "3.44.0",
+      "3.45.0",
+      "3.46.0",
+      "3.47.0",
+      "3.48.0",
+      "30.09.2026",
+      "31.12.2026",
+      "4.0.0",
+      "6.22.3",
+      "8.6.14",
+      "9.0.3",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+    "sha256": "bc72440daa7a73016d94466b96d83ec5209de6aad9ab85b8e8bd687a3b23842d",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · manuelle Sitzungen offen; B1 automatisch geprüft"
+    ],
+    "headings": [
+      "Manuelle Prüfung – Glide",
+      "Rahmen",
+      "A. Mac (etwa 60 Minuten)",
+      "B. Windows-PC (nach der Vollprüfung)",
+      "C. Bildschirmleser und Tastatur (VoiceOver, NVDA, Linux/Orca)",
+      "D. Linux (falls vorhanden)",
+      "E. Nur durch den Inhaber",
+      "Sprintnachlauf Tagesplanung 3.39.0",
+      "UI-/UX-Paket 15.10.2026 (B01–B19)",
+      "Wiederholen nach Rückgängig (FP-01, 3.44.0)",
+      "Arbeitsmodi und Seitenbedienung (D55, lokaler Kandidat auf 3.44.0)",
+      "Speicherstatus und Sicherungsreserve (WA-40/WA-47, lokaler Kandidat)"
+    ],
+    "version_mentions": [
+      "03.10.2026",
+      "05.10.2026",
+      "10.10.2026",
+      "13.10.2026",
+      "15.10.2026",
+      "23.10.2026",
+      "25.10.2026",
+      "27.10.2026",
+      "29.09.2026",
+      "3.14.7",
+      "3.14.8",
+      "3.30.0",
+      "3.32.0",
+      "3.33.1",
+      "3.33.12",
+      "3.33.13",
+      "3.33.14",
+      "3.33.15",
+      "3.33.16",
+      "3.33.17",
+      "3.33.18",
+      "3.33.19",
+      "3.33.20",
+      "3.33.21",
+      "3.33.3",
+      "3.33.4",
+      "3.33.5",
+      "3.33.6",
+      "3.33.8",
+      "3.34.0",
+      "3.35.0",
+      "3.36.0",
+      "3.37.0",
+      "3.38.0",
+      "3.39.0",
+      "3.42.0",
+      "3.43.0",
+      "3.43.1",
+      "3.44.0",
+      "3.45.0",
+      "3.48.0",
+      "30.09.2026",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+    "sha256": "84b48987966eaa1c32613d4beaa13377318b0f9e5f63785023ee61a154e2e629",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Markt- und Integrationsanalyse; ältere Untersuchungen mit eigenem Abrufdatum"
+    ],
+    "headings": [
+      "Glide – Markt und Vorbilder",
+      "1. Ergebnis",
+      "1.1 Kurzfassung: Glide, ChatGPT Space und Notion",
+      "2. Vorbilder des Inhabers",
+      "3. Vergleichsfeld und Untersuchungstiefe",
+      "3.1 Aufgaben, Tagesplanung und Fokus",
+      "3.2 Seiten, Wissen und lokale Arbeitsbereiche",
+      "3.3 Boards, Whiteboards und visuelle Projekte",
+      "3.4 Pixelwerkzeuge und kreative Ausgabe",
+      "3.5 Zusätzliche lokale und öffentliche Kontrastprojekte",
+      "4. Featurematrix",
+      "4.1 Vergleich nach Dimensionen",
+      "5. Positionierung",
+      "6. Notion vertieft",
+      "7. Alltagsabläufe und Konsequenzen für Glide",
+      "8. Daten, Offline und KI",
+      "8.1 Portabilitätsmatrix und Prüftiefe",
+      "8.2 Offline ist kein einzelnes Ja/Nein",
+      "8.3 Externe KI: Kontrollpunkt statt Featurehäkchen",
+      "9. Wettbewerbs- und Open-Source-Analyse (13.10.2026)",
+      "9.1 Steckbriefe der primär untersuchten Projekte",
+      "9.2 Weitere Projekte und Produkte",
+      "9.3 Technische Code-Analyse: übertragbare Implementierungen",
+      "9.4 Featurematrix nach Funktionsbereichen (13.10.2026)",
+      "9.5 Bewertung der Entwicklungsrichtungen",
+      "9.6 Quellen, Fassungen und Lizenzgrenzen",
+      "9.7 Erhaltene technische Recherchebezüge",
+      "10. Notion-Muster für Glide (A03, 15.10.2026)",
+      "11. Erkenntnisgewinn, Abdeckung und Fortsetzung",
+      "11.1 Was gegenüber der früheren Analyse neu oder anders belastbar ist",
+      "11.2 Abdeckungsübersicht",
+      "11.3 Präziser Fortsetzungspunkt",
+      "12. Erweiterte Recherche vom 21.10.2026",
+      "12.1 Untersuchungsweise und tatsächlicher Erkenntnisgewinn",
+      "12.2 Integrationen neu bewerten: getrennte Ausbaustufen",
+      "12.3 Komponenten, Übernahmegrenzen und Fortführung"
+    ],
+    "version_mentions": [
+      "0.11.4",
+      "0.14.2",
+      "0.27.0",
+      "0.27.5",
+      "0.7.0",
+      "01.01.2025",
+      "01.09.2026",
+      "05.10.2026",
+      "10.09.2026",
+      "10.10.2026",
+      "11.10.2026",
+      "12.10.2026",
+      "13.10.2026",
+      "15.10.2026",
+      "17.09.2026",
+      "18.10.2026",
+      "19.2.0",
+      "2026.10.12",
+      "21.10.2026",
+      "23.10.2026",
+      "25.09.2026",
+      "26.06.2026",
+      "26.09.2026",
+      "27.10.2026",
+      "3.35.0",
+      "3.38.0",
+      "3.39.0",
+      "3.39.1",
+      "3.40.0",
+      "3.41.0",
+      "3.43.1",
+      "3.48.0",
+      "9.0.3"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "sha256": "7c1e69698fed39e15bfcf36a8a92db3ff87010c59a5f25d36113c60e318f1384",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Quelle 3.48.0 (Prüfkandidat); Python-Lieferung 3.47.0; eigenständige Pakete 3.45.0"
+    ],
+    "headings": [
+      "Glide – Übergabe an eine neue Sitzung",
+      "0. Sofortübergabe WA-41 – zuerst lesen",
+      "Arbeitsgrenze und nächste Priorität",
+      "Zwei getrennte Fehlerbilder unter WA-41",
+      "Verbindliche Belege und Fortsetzungsdateien",
+      "Beweissicherung und Crashdumps – aktueller Prüfstand",
+      "Späterer AMD-Vergleich – Voraussetzungen, kein Sofortauftrag",
+      "Vorangegangene Zusammenfassungen und Versionshistorie",
+      "1. Tatsächlicher Stand",
+      "2. Zuständige Dokumente",
+      "3. Auftrag und Bereinigung",
+      "4. Nächste Arbeit und offene Entscheidungen",
+      "5. Arbeits- und Prüfregeln",
+      "6. Bewusste Grenzen"
+    ],
+    "version_mentions": [
+      "0.6.4",
+      "22.10.2026",
+      "25.10.2026",
+      "26.10.2026",
+      "27.09.2024",
+      "27.10.2026",
+      "28.548.872",
+      "3.14.7",
+      "3.14.8",
+      "3.15.2",
+      "3.42.0",
+      "3.43.1",
+      "3.44.0",
+      "3.45.0",
+      "3.46.0",
+      "3.47.0",
+      "3.48.0",
+      "4.0.0",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/README.md",
+    "sha256": "aa22899d9b86f52c38df4bfb064b2d02be066a0eb15404ce3b3c246585145096",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ],
+    "headings": [
+      "Arbeitsvorbereitung"
+    ],
+    "version_mentions": [
+      "03.10.2026",
+      "08.10.2026",
+      "15.10.2026",
+      "18.10.2026",
+      "21.10.2026",
+      "25.10.2026",
+      "26.10.2026",
+      "27.10.2026",
+      "3.42.0",
+      "3.43.0",
+      "3.43.1",
+      "3.44.0",
+      "3.45.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/AGENTS.md",
+    "sha256": "d5d15aa76174c24ccba35a5af7af59c17a5c280b556fffb2f00f1048a76646d2",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Glide – Arbeitsregeln",
+      "Produktgrenzen",
+      "Verbindliche Quellen",
+      "Entwicklungsregeln",
+      "Prüfphasen",
+      "Abschlusskriterium"
+    ],
+    "version_mentions": [
+      "03.10.2026",
+      "29.09.2026"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/CHANGELOG.md",
+    "sha256": "9c889a679036f8a672d389c28d11092a00c9409e1cddbc953a2ab9e687be26a0",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Änderungsverlauf",
+      "3.48.0 (27.10.2026) – Tagesnavigation, Mehrfachfelder und Verweise",
+      "3.47.0 (27.10.2026) – Mehrfachplanung und Nebenansichtsverlauf",
+      "3.46.0 (27.10.2026) – Tagessteuerung und Nachschlagen",
+      "Ergänzungen und Lieferabschluss 3.45.0 (26.10.2026)",
+      "3.45.0 – Sicherungsübersicht, Arbeitsmodi und Speicherstatus (25.10.2026)",
+      "3.44.0 – Wiederholen, eigene Rhythmen, Ansichten, Seitenkarten, Erwähnungen, KI-Aufträge und Markdown-Export (22.10.2026)",
+      "3.43.1 – Kürzel in Listen unter Linux/Tk 9.1 (16.10.2026)",
+      "3.43.0 – UI-/UX-Paket aus Nutzerbeobachtungen (16.10.2026)",
+      "In Vorbereitung – 4.0.0 (keine Lieferung)",
+      "3.42.0 – Eigenständige Entwicklungspakete (13.10.2026)",
+      "3.41.0 – Notion-Import und Seitenwiederherstellung (13.10.2026)",
+      "3.40.0 – Pixelanimation (13.10.2026)",
+      "3.39.1 – Wiederholungen richtig erfassen und austauschen (13.10.2026)",
+      "3.39.0 – Tagesplanung mit belegter Zeit (12.10.2026)",
+      "3.38.0 – Aufgaben unmittelbar bearbeiten (11.10.2026)",
+      "3.37.0 – Logo und Symbole (10.10.2026)",
+      "3.36.0 – Fundament und Tempo (10.10.2026)",
+      "3.35.0 – Pixel und Austausch (09.10.2026)",
+      "3.34.0 – Wissen und Seiten (09.10.2026)",
+      "3.33.21 – Ruhige Oberfläche (09.10.2026)",
+      "3.33.20 – Komfort im Alltag (09.10.2026)",
+      "3.33.19 – Tempo (09.10.2026)",
+      "3.33.18 – 08.10.2026",
+      "Frühere Versionen (verdichtet)"
+    ],
+    "version_mentions": [
+      "01.09.2026",
+      "01.10.2026",
+      "02.09.2026",
+      "02.10.2026",
+      "03.09.2026",
+      "03.10.2026",
+      "04.09.2026",
+      "05.09.2026",
+      "05.10.2026",
+      "06.09.2026",
+      "06.10.2026",
+      "07.10.2026",
+      "08.10.2026",
+      "09.10.2026",
+      "10.10.2026",
+      "11.10.2026",
+      "12.09.2026",
+      "12.10.2026",
+      "13.09.2026",
+      "13.10.2026",
+      "14.09.2026",
+      "14.10.2026",
+      "16.10.2026",
+      "17.09.2026",
+      "17.10.2026",
+      "18.09.2026",
+      "18.10.2026",
+      "19.09.2026",
+      "2.10.0",
+      "2.11.0",
+      "2.12.0",
+      "2.4.1",
+      "2.5.0",
+      "2.5.1",
+      "2.5.5",
+      "2.6.0",
+      "2.7.0",
+      "2.7.2",
+      "2.8.0",
+      "2.9.0",
+      "21.09.2026",
+      "21.10.2026",
+      "22.10.2026",
+      "23.09.2026",
+      "23.10.2026",
+      "24.09.2026",
+      "25.10.2026",
+      "26.10.2026",
+      "27.10.2026",
+      "29.09.2026",
+      "3.0.0",
+      "3.0.2",
+      "3.1.0",
+      "3.10.0",
+      "3.11.0",
+      "3.12.0",
+      "3.13.0",
+      "3.14.0",
+      "3.15.0",
+      "3.16.0",
+      "3.17.0",
+      "3.18.0",
+      "3.19.0",
+      "3.2.0",
+      "3.20.0",
+      "3.21.0",
+      "3.21.4",
+      "3.22.0",
+      "3.23.0",
+      "3.24.0",
+      "3.25.0",
+      "3.26.0",
+      "3.28.0",
+      "3.29.0",
+      "3.3.0",
+      "3.30.0",
+      "3.31.0",
+      "3.32.0",
+      "3.32.1",
+      "3.32.2",
+      "3.32.3",
+      "3.33.0",
+      "3.33.1",
+      "3.33.10",
+      "3.33.11",
+      "3.33.12",
+      "3.33.13",
+      "3.33.14",
+      "3.33.15",
+      "3.33.16",
+      "3.33.17",
+      "3.33.18",
+      "3.33.19",
+      "3.33.2",
+      "3.33.20",
+      "3.33.21",
+      "3.33.3",
+      "3.33.4",
+      "3.33.5",
+      "3.33.6",
+      "3.33.7",
+      "3.33.8",
+      "3.33.9",
+      "3.34.0",
+      "3.35.0",
+      "3.36.0",
+      "3.37.0",
+      "3.38.0",
+      "3.39.0",
+      "3.39.1",
+      "3.4.0",
+      "3.40.0",
+      "3.41.0",
+      "3.42.0",
+      "3.43.0",
+      "3.43.1",
+      "3.44.0",
+      "3.45.0",
+      "3.46.0",
+      "3.47.0",
+      "3.48.0",
+      "3.5.0",
+      "3.6.0",
+      "3.7.0",
+      "3.8.0",
+      "3.9.0",
+      "30.09.2026",
+      "31.08.2026",
+      "4.0.0",
+      "6.22.3"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/LICENSE.md",
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Lizenzstatus"
+    ],
+    "version_mentions": [],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/README.md",
+    "sha256": "38ccbc4308d9dbeae1ea4b390c006e54cacf298e9f158c27d7ed31b998318325",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Quelle 3.48.0 (Prüfkandidat); Python-Lieferung 3.47.0; eigenständige Pakete 3.45.0"
+    ],
+    "headings": [
+      "Glide – lokale Aufgaben, Notizen und Pinnwände",
+      "Schnellstart aus dem Quellstand",
+      "Daten und Datenschutz",
+      "Entwicklung und Prüfung",
+      "Struktur",
+      "Mitwirken und Lizenz"
+    ],
+    "version_mentions": [
+      "27.10.2026",
+      "3.45.0",
+      "3.47.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/SECURITY.md",
+    "sha256": "0f956521cc831b6c01c9c072d9cc9a7c1e988d1e72e3a9b8887b7334e58aa53b",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Sicherheit",
+      "Grundregeln",
+      "Vertrauensgrenzen",
+      "Mitgelieferter nativer Code",
+      "Testläufe",
+      "Meldung und öffentliches Repository"
+    ],
+    "version_mentions": [
+      "2.5.5",
+      "25.10.2026",
+      "27.09.2026",
+      "3.2.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/assets/README.md",
+    "sha256": "4cddec0a7aa4356dedea3715fb3c931f4799c0c239960c193b3f87bc5d444893",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ],
+    "headings": [
+      "Assets"
+    ],
+    "version_mentions": [
+      "27.10.2026",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/00_INDEX.md",
+    "sha256": "92c1011c3ea8232f05f3fe75d144e06f098e1a1154b83d4d28259f43708e2eb5",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2"
+    ],
+    "headings": [
+      "Dokumentationsindex",
+      "Einstieg",
+      "Dokumente",
+      "Einzelentscheidungen",
+      "Begriffe",
+      "Weitere Orte"
+    ],
+    "version_mentions": [
+      "03.10.2026",
+      "05.10.2026",
+      "27.10.2026",
+      "3.33.15",
+      "3.44.0",
+      "3.45.0",
+      "3.46.0",
+      "3.47.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+    "sha256": "aebbf085c44e9f1ee71a47701c190a60d8681334a6d2589e63dbaccd644967a4",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ],
+    "headings": [
+      "Produktgrenzen und Produktprinzipien",
+      "Was Glide ist",
+      "Was Glide nicht wird",
+      "Sechs Produktprinzipien (Auftrag des Inhabers vom 01.10.2026)",
+      "Prinzipien-Check für neue Funktionen",
+      "Grenzen einzelner Funktionen"
+    ],
+    "version_mentions": [
+      "01.10.2026",
+      "03.10.2026",
+      "05.10.2026",
+      "06.10.2026",
+      "25.09.2026",
+      "27.09.2026",
+      "27.10.2026",
+      "29.09.2026",
+      "3.33.16",
+      "3.34.0",
+      "3.39.0",
+      "3.48.0",
+      "30.09.2026"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+    "sha256": "415001c5f413f8fa4eb8ff090e86ef982d3f99191ad262c2a6e5395be37acdcd",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ],
+    "headings": [
+      "Architektur – Glide",
+      "1. Aufbau",
+      "Module neben `app.pyw`",
+      "Eigenständige Pakete",
+      "2. Nutzdaten und Speicherweg",
+      "3. Oberfläche",
+      "Ansichtsaufbau",
+      "Bausteine",
+      "4. Performance-Regeln",
+      "Zustands- und Abhängigkeitsinventar",
+      "Ausstehende Architekturgrenzen aus der Codevalidierung",
+      "Messung und bestehende Regeln",
+      "5. Tk-Fallstricke (teuer gelernt)",
+      "Ereignisse, Menüs, macOS",
+      "Layout und Pack",
+      "Text-Widget",
+      "Zeichnen und Bilder",
+      "Daten und Objekte",
+      "Tests"
+    ],
+    "version_mentions": [
+      "03.10.2026",
+      "05.10.2026",
+      "18.10.2026",
+      "21.10.2026",
+      "24.10.2026",
+      "25.10.2026",
+      "26.10.2026",
+      "27.10.2026",
+      "3.14.5",
+      "3.33.0",
+      "3.33.1",
+      "3.33.10",
+      "3.33.11",
+      "3.33.12",
+      "3.33.13",
+      "3.33.14",
+      "3.33.15",
+      "3.33.16",
+      "3.33.17",
+      "3.33.18",
+      "3.33.19",
+      "3.33.2",
+      "3.33.20",
+      "3.33.21",
+      "3.33.3",
+      "3.33.5",
+      "3.33.6",
+      "3.33.7",
+      "3.33.9",
+      "3.34.0",
+      "3.35.0",
+      "3.36.0",
+      "3.37.0",
+      "3.38.0",
+      "3.39.0",
+      "3.39.1",
+      "3.40.0",
+      "3.41.0",
+      "3.43.0",
+      "3.43.1",
+      "3.44.0",
+      "3.45.0",
+      "3.46.0",
+      "3.47.0",
+      "3.48.0",
+      "30.09.2026",
+      "4.0.0",
+      "6.22.3",
+      "9.0.3",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+    "sha256": "01f1a9f6f7144a861f9e5efd96d47b4c6510c688875967512ed523bb09a32441",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`"
+    ],
+    "headings": [
+      "Prüfplan – Glide",
+      "Prüfstufen",
+      "Regeln",
+      "Schritte der Prüfung",
+      "Integrationssuiten nach Bereich",
+      "Geplante Vertragsprüfungen aus der Codevalidierung",
+      "Was nur manuell geht"
+    ],
+    "version_mentions": [
+      "03.10.2026",
+      "05.10.2026",
+      "07.10.2026",
+      "08.10.2026",
+      "15.10.2026",
+      "17.10.2026",
+      "23.10.2026",
+      "27.10.2026",
+      "3.32.0",
+      "3.32.1",
+      "3.32.2",
+      "3.32.3",
+      "3.33.0",
+      "3.33.1",
+      "3.33.10",
+      "3.33.11",
+      "3.33.13",
+      "3.33.15",
+      "3.33.16",
+      "3.33.17",
+      "3.33.18",
+      "3.33.19",
+      "3.33.2",
+      "3.33.20",
+      "3.33.21",
+      "3.33.3",
+      "3.33.5",
+      "3.33.6",
+      "3.33.7",
+      "3.33.8",
+      "3.33.9",
+      "3.34.0",
+      "3.35.0",
+      "3.36.0",
+      "3.37.0",
+      "3.38.0",
+      "3.39.0",
+      "3.39.1",
+      "3.40.0",
+      "3.41.0",
+      "3.42.0",
+      "3.43.1",
+      "3.44.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+    "sha256": "ebc018755b5a46301571544b6b9748796138f4e31073d009e4849bbb8b237e7e",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)"
+    ],
+    "headings": [
+      "Daten, Backups und Migration – Glide",
+      "Ablage",
+      "Größenbudget und Speicherstatus (lokaler Kandidat)",
+      "Format 26 (FP-02, seit 3.44.0)",
+      "Format 25",
+      "Format 24",
+      "Format 23",
+      "Format 22",
+      "Format 21",
+      "Format 20",
+      "Formatstufen",
+      "Migration und Startprüfung",
+      "Automatische Sicherungen",
+      "Backups und Transportwege",
+      "Einstellungen",
+      "Tagesplanung seit 3.39.0",
+      "Austauschformat (`.glideexchange`)",
+      "Stufe 2: Kontextpaket und Änderungsvorschlag (seit 3.35.0, G24)"
+    ],
+    "version_mentions": [
+      "03.10.2026",
+      "1.000.000",
+      "15.10.2026",
+      "2.11.0",
+      "22.10.2026",
+      "25.09.2026",
+      "25.10.2026",
+      "27.09.2026",
+      "27.10.2026",
+      "29.09.2026",
+      "3.14.0",
+      "3.19.0",
+      "3.22.0",
+      "3.26.0",
+      "3.28.0",
+      "3.29.0",
+      "3.30.0",
+      "3.33.13",
+      "3.33.14",
+      "3.33.15",
+      "3.33.16",
+      "3.33.17",
+      "3.33.18",
+      "3.33.20",
+      "3.33.21",
+      "3.35.0",
+      "3.39.0",
+      "3.39.1",
+      "3.40.0",
+      "3.41.0",
+      "3.42.0",
+      "3.43.1",
+      "3.44.0",
+      "3.48.0",
+      "3.5.0",
+      "3.7.0",
+      "3.8.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "sha256": "1324130a7faf7cf4e0bb88f49879e2712b551814a777ab700d7075971adaaa49",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Quelle 3.48.0 (Prüfkandidat); Python-Lieferung 3.47.0; eigenständige Pakete 3.45.0 · Aufgabenformat 26"
+    ],
+    "headings": [
+      "QA-Bericht – Glide 3.48.0",
+      "Standanalyse und Dokumentationsnachlauf 18.10.2026",
+      "Aktuelle Prüfstände",
+      "Versionen seit 3.33.0",
+      "Nachläufe ohne neue App-Version",
+      "Ältere Versionen",
+      "Offen und nur manuell prüfbar"
+    ],
+    "version_mentions": [
+      "01.10.2026",
+      "02.10.2026",
+      "05.10.2026",
+      "06.10.2026",
+      "07.10.2026",
+      "08.10.2026",
+      "09.10.2026",
+      "10.10.2026",
+      "11.10.2026",
+      "12.10.2026",
+      "13.10.2026",
+      "15.10.2026",
+      "16.10.2026",
+      "18.10.2026",
+      "19.09.2026",
+      "19.10.2026",
+      "21.09.2026",
+      "21.10.2026",
+      "22.10.2026",
+      "23.09.2026",
+      "23.10.2026",
+      "24.09.2026",
+      "24.10.2026",
+      "25.10.2026",
+      "26.10.2026",
+      "27.10.2026",
+      "29.09.2026",
+      "3.12.10",
+      "3.13.15",
+      "3.14.7",
+      "3.14.8",
+      "3.15.2",
+      "3.25.0",
+      "3.26.0",
+      "3.28.0",
+      "3.29.0",
+      "3.30.0",
+      "3.31.0",
+      "3.32.0",
+      "3.32.1",
+      "3.32.2",
+      "3.32.3",
+      "3.33.0",
+      "3.33.1",
+      "3.33.10",
+      "3.33.11",
+      "3.33.12",
+      "3.33.13",
+      "3.33.14",
+      "3.33.15",
+      "3.33.16",
+      "3.33.17",
+      "3.33.18",
+      "3.33.19",
+      "3.33.2",
+      "3.33.20",
+      "3.33.21",
+      "3.33.3",
+      "3.33.4",
+      "3.33.5",
+      "3.33.6",
+      "3.33.7",
+      "3.33.8",
+      "3.33.9",
+      "3.34.0",
+      "3.35.0",
+      "3.36.0",
+      "3.37.0",
+      "3.38.0",
+      "3.39.0",
+      "3.39.1",
+      "3.40.0",
+      "3.41.0",
+      "3.42.0",
+      "3.43.0",
+      "3.43.1",
+      "3.44.0",
+      "3.45.0",
+      "3.46.0",
+      "3.47.0",
+      "3.48.0",
+      "30.09.2026",
+      "8.6.14",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+    "sha256": "1cce2acb2a662909e9ac210796e161977848104ab1514b76b2deb0d6bc0ad7cb",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Quellstand 3.48.0, native Pakete 3.45.0, keine öffentliche Veröffentlichung · Aufgabenformat 26",
+      "Stand am 06.10.2026, über die GitHub-Schnittstelle abgerufen:"
+    ],
+    "headings": [
+      "Veröffentlichung – Glide",
+      "Releasecheckliste",
+      "Signierung und Notarisierung",
+      "Vertrieb und Marke",
+      "GitHub-Auftritt",
+      "Lizenzentwurf",
+      "Inhaberangaben",
+      "Produktdatenblatt (Entwurf)"
+    ],
+    "version_mentions": [
+      "01.10.2026",
+      "03.10.2026",
+      "04.09.2026",
+      "06.10.2026",
+      "12.10.2026",
+      "15.10.2026",
+      "18.10.2026",
+      "21.09.2026",
+      "24.09.2026",
+      "26.09.2026",
+      "26.10.2026",
+      "27.09.2026",
+      "27.10.2026",
+      "3.37.0",
+      "3.42.0",
+      "3.43.0",
+      "3.43.1",
+      "3.45.0",
+      "3.47.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+    "sha256": "d7af30251d982b7c19f4a4b62eeb2d535527e7234c5c65eca54ff3db2367bd83",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ],
+    "headings": [
+      "Funktionen – Glide",
+      "Sicherungsübersicht und Anhangsrückfrage (3.45.0)",
+      "Speicherstatus und Sicherungsreserve (WA-40/WA-47, lokaler Kandidat)",
+      "Schreibbesitz und Mehrfachaktionen (Roadmap-Paket 1)",
+      "Strukturaktionen und Kalenderwechsel (Roadmap-Paket 3)",
+      "Vollständige KI-Auftragsvorschau (FP-06, Roadmap-Paket 1)",
+      "Bildvorschauen im Hintergrund (WA-26, 3.44.0)",
+      "Arbeitsmodi und Seitenbedienung (D55, lokaler Kandidat auf 3.44.0)",
+      "Aufgaben im Wissen (3.33.15: G29/G31/G32)",
+      "1. Grundbegriffe",
+      "Eigenständiger Start (3.45.0)",
+      "2. Seitenleiste und Navigation",
+      "Erweiterte Wiederholungsrhythmen (FP-02, 3.44.0)",
+      "3. Erfassen",
+      "4. Heute, Demnächst und Planung",
+      "Tagespaket 3.33.14 (AU01, AU03, G05/AU05, H-02)",
+      "Tagesplanung 3.39.0",
+      "5. Liste, Tabelle, Gruppierung",
+      "6. Pinnwand",
+      "7. Startseite",
+      "8. Seiten, Notizen, Notizbuch, Galerie",
+      "9. Pixel-Werkstatt",
+      "Bildfolgen seit 3.40.0",
+      "10. Suche, Aktionen, Erinnerungen",
+      "11. Import, Ausgabe und Austausch",
+      "12. Erscheinungsbild und Fenster",
+      "13. Bekannte Grenzen",
+      "Bedienkomfort 3.33.16 (U01/U02/U13/U14/U16/U22/U24)",
+      "Seiten im Alltag 3.33.18 (G28/G09/U08)",
+      "Tempo 3.33.19 (P06r, P04, P03r, E01)",
+      "Fundament und Tempo 3.36.0 (P03, E01)",
+      "Logo und Oberflächensymbole 3.37.0",
+      "UI-/UX-Paket 3.43.0 (B01–B20, D50)",
+      "Kürzel in Listen unter Linux 3.43.1"
+    ],
+    "version_mentions": [
+      "03.10.2026",
+      "05.10.2026",
+      "07.10.2026",
+      "12.10.2026",
+      "15.10.2026",
+      "22.10.2026",
+      "23.10.2026",
+      "24.12.2026",
+      "25.10.2026",
+      "26.10.2026",
+      "27.10.2026",
+      "29.09.2026",
+      "3.14.5",
+      "3.14.7",
+      "3.14.8",
+      "3.32.0",
+      "3.32.1",
+      "3.32.2",
+      "3.33.1",
+      "3.33.10",
+      "3.33.11",
+      "3.33.12",
+      "3.33.13",
+      "3.33.14",
+      "3.33.15",
+      "3.33.16",
+      "3.33.17",
+      "3.33.18",
+      "3.33.19",
+      "3.33.2",
+      "3.33.20",
+      "3.33.21",
+      "3.33.3",
+      "3.33.4",
+      "3.33.5",
+      "3.33.6",
+      "3.33.7",
+      "3.33.9",
+      "3.34.0",
+      "3.35.0",
+      "3.36.0",
+      "3.37.0",
+      "3.38.0",
+      "3.39.0",
+      "3.39.1",
+      "3.40.0",
+      "3.41.0",
+      "3.43.0",
+      "3.43.1",
+      "3.44.0",
+      "3.45.0",
+      "3.46.0",
+      "3.47.0",
+      "3.48.0",
+      "4.0.0",
+      "9.0.3",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md",
+    "sha256": "c75759248cca372ced3d7788866230c4c7342a1aca2a61601e98a43e07ab0b2d",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Vorlagenformat 2"
+    ],
+    "headings": [
+      "Vorlagen im Unternehmensalltag",
+      "Die passende Datei",
+      "Katalog",
+      "Empfohlener Ablauf",
+      "Bedienung des überarbeiteten Editors",
+      "Funktionsabdeckung",
+      "Eingabefelder in Vorlagen (seit 3.30)"
+    ],
+    "version_mentions": [
+      "27.09.2026",
+      "27.10.2026",
+      "3.33.18",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "sha256": "6ec7bb339b5520421b35f266093567ed22fda568e0cb82566a7cfae266640f92",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ],
+    "headings": [
+      "Arbeitsrichtung, Entscheidungen und Abnahme",
+      "Leitgedanken des Inhabers",
+      "Verbindliche Entscheidungen",
+      "Beauftragt",
+      "Arbeitsablauf einer Implementierung",
+      "Nachläufe ohne neue App-Version",
+      "Dreipaketfortsetzung vom 27.10.2026"
+    ],
+    "version_mentions": [
+      "01.10.2026",
+      "02.10.2026",
+      "03.10.2026",
+      "05.10.2026",
+      "06.10.2026",
+      "07.10.2026",
+      "08.10.2026",
+      "09.10.2026",
+      "10.10.2026",
+      "12.10.2026",
+      "13.10.2026",
+      "15.10.2026",
+      "17.10.2026",
+      "18.10.2026",
+      "19.09.2026",
+      "19.10.2026",
+      "21.10.2026",
+      "22.10.2026",
+      "23.10.2026",
+      "25.09.2026",
+      "25.10.2026",
+      "26.09.2026",
+      "26.10.2026",
+      "27.09.2026",
+      "27.10.2026",
+      "29.09.2026",
+      "3.15.2",
+      "3.32.1",
+      "3.32.2",
+      "3.33.14",
+      "3.33.15",
+      "3.33.16",
+      "3.33.17",
+      "3.33.18",
+      "3.33.19",
+      "3.33.2",
+      "3.33.3",
+      "3.33.4",
+      "3.33.5",
+      "3.33.6",
+      "3.33.8",
+      "3.34.0",
+      "3.35.0",
+      "3.36.0",
+      "3.37.0",
+      "3.38.0",
+      "3.39.0",
+      "3.39.1",
+      "3.40.0",
+      "3.41.0",
+      "3.42.0",
+      "3.43.0",
+      "3.43.1",
+      "3.44.0",
+      "3.45.0",
+      "3.46.0",
+      "3.47.0",
+      "3.48.0",
+      "30.09.2026",
+      "4.0.0",
+      "6.22.3"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md",
+    "sha256": "e2d1ccbb251a43d3216f27a38e19b41c2118773bde18295acdee7847765f6245",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · appweiter Gestaltungsvertrag; bestehendes UI-/UX-Paket und fortlaufende Übertragung"
+    ],
+    "headings": [
+      "Design Richtlinien",
+      "Quellen und Geltung",
+      "Verbindliche Gestaltungsvorgaben",
+      "Bedienelemente schützen (B15, 15.10.2026)",
+      "Informationshierarchie vor starrer Metadatenbreite (B11)",
+      "Fluchten und optische Zentrierung (B02, B05, B07–B09)",
+      "Klare Formen und stabile Symbolbedeutung (B10, B12, B14)",
+      "Typografie gezielt einsetzen (B13)",
+      "Ruhige, zusammenhängende Flächen (B17, B19)",
+      "Hinweise bei Bedarf (B06, B15)",
+      "Vorhersehbar reagieren und scrollen (B01, B16)",
+      "Gismo und Vorschauen (B03, B04, B18)",
+      "Arbeitsmodi und Seitenbedienung (D55, 23.10.2026)",
+      "Kurze Umschaltbefehle (Inhaberanweisung 25.10.2026)",
+      "Begriffe: „Seite“ statt „Markdown“ (Inhaberanweisung 25.10.2026)",
+      "Übernommene Grundsätze aus den Skillquellen, übersetzt nach Tk (B20)",
+      "Offene Untersuchungen",
+      "Pflege und Prüfung",
+      "Appweite Übertragung und zukünftige Entwicklung",
+      "Gemeinsame Komponenten und semantische Rollen",
+      "Kontextmatrix für die gesamte App",
+      "Verbindlicher Nachweis je neuem oder angefasstem UI-Paket"
+    ],
+    "version_mentions": [
+      "01.10.2026",
+      "15.10.2026",
+      "16.10.2026",
+      "23.10.2026",
+      "25.10.2026",
+      "26.10.2026",
+      "27.10.2026",
+      "3.38.0",
+      "3.42.0",
+      "3.45.0",
+      "3.46.0",
+      "3.47.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+    "sha256": "e3b05c976dae3e2abe9204cebc448c5f4a1f8c622a995d4b4ec3c287f00d24fd",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Datenformat 26"
+    ],
+    "headings": [
+      "Regeln für die Dokumentenpflege",
+      "Grundsätze",
+      "Dokumente und ihre Zuständigkeit",
+      "Pflege bei jeder Runde",
+      "Was die Standprüfung erzwingt",
+      "Ablageprüfung vom 18.10.2026",
+      "Ablageprüfung vor Push und Merge vom 25.10.2026",
+      "Dokumentabgleich vor Push vom 27.10.2026"
+    ],
+    "version_mentions": [
+      "03.10.2026",
+      "15.10.2026",
+      "18.10.2026",
+      "21.10.2026",
+      "25.10.2026",
+      "27.10.2026",
+      "3.43.1",
+      "3.44.0",
+      "3.47.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/ABHAENGIGKEIT_TKDND.md",
+    "sha256": "94f1e3c0c94e345bd182a6e94fa305b7b62decfaa2f08d5878b243c6542d2dea",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · entschieden vom Inhaber am 27.09.2026"
+    ],
+    "headings": [
+      "Entscheidung: tkinterdnd2 für das Ziehen aus Finder und Explorer",
+      "Anlass",
+      "Was im Projekt liegt",
+      "Wie Glide es nutzt",
+      "Geprüft und offen",
+      "Aktualisieren"
+    ],
+    "version_mentions": [
+      "0.6.3",
+      "04.09.2026",
+      "2.10.2",
+      "27.09.2026",
+      "27.10.2026",
+      "3.14.5",
+      "3.42.0",
+      "3.48.0",
+      "9.0.3"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/ARBEITSBEGLEITER.md",
+    "sha256": "309f78f286f28bedb5ffb40f926b1d98ad0f74a7f822eaca63bc0a512f4354f1",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · gezeichnete Figur vorhanden; B03 im Quellstand; neue Bildassets offen"
+    ],
+    "headings": [
+      "Arbeitsbegleiter und Markenfigur – Konzept und Formatentscheidung",
+      "Implementierter Stand und neuer Auftrag",
+      "Rolle und Grenzen",
+      "Technische Grundlage",
+      "Zusammengeführte Assetoption für eine spätere Gestaltungsrunde",
+      "Was offen bleibt"
+    ],
+    "version_mentions": [
+      "15.10.2026",
+      "19.09.2026",
+      "27.10.2026",
+      "3.26.0",
+      "3.30.0",
+      "3.42.0",
+      "3.43.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/GRUPPE_ORDNER_UEBERSCHRIFT.md",
+    "sha256": "9c99b5cd62a51182b6c164a9baea27a8017f3a818564586560f23f4bbc93e30a",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand: 27.10.2026 · Glide 3.48.0 · Entscheidung unverändert gültig, ergänzt um die Abgrenzung zum Gruppieren nach Feld (3.30). Die Checkliste aus 3.22 ist kein viertes Mittel: Sie gliedert einen einzelnen Punkt in Schritte ohne eigene Termine, Labels oder Anhänge."
+    ],
+    "headings": [
+      "Gruppe, Ordner oder Zwischenüberschrift?",
+      "Die kurze Antwort",
+      "Zwischenüberschrift",
+      "Gruppe",
+      "Ordner",
+      "Warum es bei drei Mitteln bleibt",
+      "Was daraus folgt",
+      "Gruppieren nach Feld ist Ansicht (seit 3.30)"
+    ],
+    "version_mentions": [
+      "2.11.0",
+      "27.10.2026",
+      "3.0.1",
+      "3.0.2",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md",
+    "sha256": "09dde2707decb5d3280aa88414a95740750fcb8e8f3f587132ecd00c85b2aba5",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · App-Version 3.48.0 · Datenformat 26"
+    ],
+    "headings": [
+      "Produkt- und Identitätsregister",
+      "Technisch belegt",
+      "Offen – Entscheidung oder Plattformabnahme erforderlich",
+      "Pflege dieser Datei"
+    ],
+    "version_mentions": [
+      "0.6.3",
+      "26.09.2026",
+      "27.09.2026",
+      "27.10.2026",
+      "29.09.2026",
+      "3.14.5",
+      "3.14.7",
+      "3.26.0",
+      "3.42.0",
+      "3.44.0",
+      "3.48.0",
+      "9.0.3",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md",
+    "sha256": "39002bc39c612167f62276833c427d10261f3e92deb393f5348c9f3f4e5640b6",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand: 27.10.2026 · Glide 3.48.0, Stufe B als Option umgesetzt (Tk 9, standardmäßig aus) · Ausgangspunkt: Glide 3.8.0, erste lokale Erinnerungsstufe.",
+      "**Stand der Voraussetzungen (26.09.2026):**"
+    ],
+    "headings": [
+      "Systembenachrichtigungen für Erinnerungen – Entscheidung",
+      "Die kurze Antwort",
+      "Warum der naheliegende Weg nicht trägt",
+      "Was die Plattformen tatsächlich verlangen",
+      "Entscheidung",
+      "Stufe A – Aufmerksamkeit ohne Paketierung (umgesetzt am 12.09.2026)",
+      "Stufe B – Echte Systembenachrichtigung (an Paketierung gekoppelt)",
+      "Stufe C – Zustellung bei beendetem Programm (bewusst nicht)",
+      "Keine neue Laufzeitabhängigkeit",
+      "Auswirkung auf die Reihenfolge",
+      "Prüfkriterien",
+      "Quellen"
+    ],
+    "version_mentions": [
+      "12.09.2026",
+      "26.09.2026",
+      "27.09.2026",
+      "27.10.2026",
+      "3.10.0",
+      "3.48.0",
+      "3.8.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/README.md",
+    "sha256": "9a975935b7685a0ac76ed2ab39b5cc15b180c625ba24edd506e97c0af4f0258e",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ],
+    "headings": [
+      "Paketierung Glide",
+      "Aktuelle Lieferartefakte",
+      "Inhalt eines Pakets",
+      "Kennungen (26.09.2026, nie ändern)",
+      "Werkzeuge",
+      "Eigenständige Entwicklungspakete (Paket 7)"
+    ],
+    "version_mentions": [
+      "26.09.2026",
+      "27.10.2026",
+      "3.14.5",
+      "3.14.7",
+      "3.42.0",
+      "3.45.0",
+      "3.46.0",
+      "3.47.0",
+      "3.48.0",
+      "6.22.3",
+      "9.0.3",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Glide-Lizenzstatus.md",
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Lizenzstatus"
+    ],
+    "version_mentions": [],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/runtime/README.md",
+    "sha256": "c76ab2d80d97e722076b384afaf31ed5867c0a9da6909be1c0ed2e8d9c5acd1c",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Vorbereitung von Paket 8 / 4.0.0, keine Lieferung"
+    ],
+    "headings": [
+      "Eigene Tcl/Tk-9.1-Runtime"
+    ],
+    "version_mentions": [
+      "14.10.2026",
+      "27.10.2026",
+      "3.14.7",
+      "3.14.8",
+      "3.42.0",
+      "3.43.1",
+      "3.48.0",
+      "4.0.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/scripts/pflege/README.md",
+    "sha256": "d1f0f5d12cf0785c384c95760a634c945b6ef8462107cee16ea92bec9d89c422",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ],
+    "headings": [
+      "Pflegewerkzeuge"
+    ],
+    "version_mentions": [
+      "01.10.2026",
+      "03.10.2026",
+      "27.10.2026",
+      "3.33.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/src/glide/README.md",
+    "sha256": "9dc6fe24416862909c8f05e1d0acaa143af9becc09f6d221f2d5351d1715ae75",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ],
+    "headings": [
+      "Anwendungskern"
+    ],
+    "version_mentions": [
+      "27.10.2026",
+      "3.39.1",
+      "3.40.0",
+      "3.41.0",
+      "3.46.0",
+      "3.47.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/README.md",
+    "sha256": "bfe28bfdbdc90ba2be88981339244554f6529de6a6642f7da359b6f51ea207ed",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · 104 Suiten aus `pruefen.py` und fünf Analysen"
+    ],
+    "headings": [
+      "Prüfungen für Glide",
+      "Aufrufe (aus `01_Repository/Glide`)",
+      "Aufbau"
+    ],
+    "version_mentions": [
+      "25.10.2026",
+      "26.10.2026",
+      "27.10.2026",
+      "3.43.1",
+      "3.44.0",
+      "3.45.0",
+      "3.47.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/fixtures/README.md",
+    "sha256": "37d78fd44062a7cf9fcc951b5540f21037e5e079e22f594361cce129c90a0960",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Referenzdaten und Beispiele",
+      "Releaseplanungen",
+      "Umgang mit den Beispielen"
+    ],
+    "version_mentions": [
+      "03.10.2026",
+      "3.13.0",
+      "3.18.0",
+      "3.21.4",
+      "3.25.0",
+      "3.26.0",
+      "3.28.0",
+      "3.29.0",
+      "3.30.0",
+      "3.33.15",
+      "3.33.18",
+      "3.48.0",
+      "3.6.0",
+      "3.7.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/fixtures/showcase/README.md",
+    "sha256": "08cfb3d85e085349060375aacf903135ad39e609226727cade6faeaffb1f1138",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Lieferdaten in Speicherstufe 26"
+    ],
+    "headings": [
+      "Glide · aktiver Showcase",
+      "Starten und weiterbenutzen",
+      "Die Dateien",
+      "Rundgang durch einen Arbeitstag",
+      "Abdeckung und Prüfgrenzen"
+    ],
+    "version_mentions": [
+      "03.10.2026",
+      "22.10.2026",
+      "27.10.2026",
+      "3.44.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.0/acl_symlinks_2026-10-16/README.md",
+    "sha256": "cc8521badd521952b78fa3f1ae0e20fcc1da1b25367b8a4984c3900ec8bea433",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 16.10.2026 · Glide 3.43.0 unverändert (Apphash `379e97e3`, Datenformat 25) · Prüfwerkzeugnachlauf ohne neue App-Version · Windows 11 Pro, Python 3.14.7, künstliche Daten"
+    ],
+    "headings": [
+      "Nachlauf 16.10.2026 – ACL-Restaurierung an Symlinks in der Windows-Paketprobe",
+      "Anlass",
+      "Ursache",
+      "Korrektur",
+      "Prüfung",
+      "Grenzen"
+    ],
+    "version_mentions": [
+      "16.10.2026",
+      "3.14.7",
+      "3.43.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md",
+    "sha256": "545f658fbd2024fc3bf73c5a1d60247a5a51f93d4e684608e269c8bed23c2fc5",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 16.10.2026 · Glide 3.43.0 · Datenformat 25 · Apphash `379e97e32e3cc5e52eeb104ec23937df28081b45bd0e63582d5065cd61a2b172`"
+    ],
+    "headings": [
+      "UI-/UX-Paket 3.43.0 – Lieferung und Prüfung",
+      "Gezielte Prüfungen (Windows 11, Python 3.14.7, Tk 9.0.4)",
+      "Eingefrorene Vollprüfung (Windows)",
+      "Prüfung aller Punkte des Originalauftrags",
+      "GitHub",
+      "Lieferabgleich",
+      "Offen"
+    ],
+    "version_mentions": [
+      "15.10.2026",
+      "16.10.2026",
+      "3.14.7",
+      "3.37.0",
+      "3.42.0",
+      "3.43.0",
+      "9.0.4",
+      "9.1.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/README.md",
+    "sha256": "0239a7ba1fb25551974ce14c09386fc6c79da08f66737307cb8a6479b2f2d6a5",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Globale Ablage- und Dokumentationsprüfung vom 18.10.2026",
+      "Umfang und Verfahren",
+      "Nachweise",
+      "Aufbewahrung und Grenzen",
+      "Primärquellen zur Bereinigung",
+      "Nicht ausführbare Bereinigung",
+      "Abschluss und Validierung"
+    ],
+    "version_mentions": [
+      "1.673.700",
+      "18.10.2026",
+      "2.531.020",
+      "3.42.0",
+      "3.43.1",
+      "4.204.720"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/ansichten_2026-10-21/README.md",
+    "sha256": "5786fa4a75aba7029b2975110cd9e4211fc148692a9a8d9a356d35a70fd21e74",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · Einstellungen 2 · lokaler Kandidat"
+    ],
+    "headings": [
+      "FP-03 Stufe 1 – erweiterte gespeicherte Ansichten",
+      "Prüfung und Grenzen",
+      "Abschließende Validierung"
+    ],
+    "version_mentions": [
+      "21.10.2026",
+      "3.43.1"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/ansichten_darstellung_2026-10-21/README.md",
+    "sha256": "b4ae6549b19c67a5d0109bd1a5ff3f0494f691836391e90583d5736cf10224cf",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "FP-03 Stufe 2 – gespeicherte Darstellung",
+      "Umgesetzt",
+      "Gezielte Prüfungen",
+      "Zusatz-Audit und Grenzen"
+    ],
+    "version_mentions": [
+      "21.10.2026",
+      "3.43.1"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/auftraege_2026-10-18/README.md",
+    "sha256": "7e71ad39a5eb40ba643227ec5d20f4def6b67ae2fa0994475740c2abd4e5074e",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "FP-06 – Wiederverwendbare lokale KI-Aufträge, 18.10.2026",
+      "Tatsächlich geprüft",
+      "Vorläufe und Grenzen",
+      "Bild und Wiederholung"
+    ],
+    "version_mentions": [
+      "18.10.2026",
+      "3.43.1",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/bildkonversion_2026-10-18/README.md",
+    "sha256": "6f02ede7432b632365b4999436c2fd9847fc5c6e3b160ec9e84563c356824308",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 18.10.2026 · lokaler Prüfkandidat 3.43.1 / Format 25 auf PR #37 (`1042727`). Keine neue Lieferung."
+    ],
+    "headings": [
+      "WA-26 – Bildvorschauen ohne blockierenden Konverter",
+      "Änderung",
+      "Prüfung und Gegenprobe",
+      "Grenzen und Lieferung",
+      "Abschlussbilanz"
+    ],
+    "version_mentions": [
+      "18.10.2026",
+      "3.43.1"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/codevalidierung_2026-10-21/README.md",
+    "sha256": "37198c08a18f9dba40f8281a7d90b9644f9af939c8d3d960574851d2274c6685",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Einarbeitung der Codevalidierung – 21.10.2026",
+      "Eingang und Abgleich",
+      "Aufnahme und unveränderte Bereiche",
+      "Tatsächliche Abschlussprüfung"
+    ],
+    "version_mentions": [
+      "21.10.2026",
+      "3.42.0",
+      "3.43.1"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/dokumentationsaudit_2026-10-22/README.md",
+    "sha256": "14271932d9e36b9183cc65905fa25affeab944275e1a0ce381b91047725f41f6",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 22.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · festgeschriebener Vorzustand vor dem Phasenabschluss 3.44.0"
+    ],
+    "headings": [
+      "Dokumentationsaudit – Vorinventar vom 22.10.2026"
+    ],
+    "version_mentions": [
+      "22.10.2026",
+      "3.43.1",
+      "3.44.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/erwaehnungen_2026-10-18/README.md",
+    "sha256": "5c46fad4eaa2ea2693076e0cf1b2ed9db51be2a70217c408f42ef57a100d8fab",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "FP-05 – Unverknüpfte Erwähnungen, 18.10.2026",
+      "Gezielte Prüfung",
+      "Bildnachweis",
+      "Wiederholen"
+    ],
+    "version_mentions": [
+      "18.10.2026",
+      "3.43.1",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/README.md",
+    "sha256": "f1feca132efcd179215ae287f4829ec90a7e33583561016185d750d9426c0404",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 19.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · lokaler Prüfkandidat, keine Lieferung"
+    ],
+    "headings": [
+      "FP-07 Stufe 1 und FP-04 – Umsetzung und gemeinsame Prüfung",
+      "Gezielte Nachweise",
+      "Abschließender Gesamtstand",
+      "Vorläufe und gefundene Korrekturen",
+      "Einfrieren und verbleibende Tore"
+    ],
+    "version_mentions": [
+      "19.10.2026",
+      "3.43.1"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/fp01_wiederholen_2026-10-17/README.md",
+    "sha256": "f79a146c7d322034ace2e6f60c99dd43762ca596d9cdfcda398711dc621db473",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 17.10.2026 · Kandidat auf Glide 3.43.1 (keine Lieferung, keine neue Version) · Datenformat 25 · Windows 11 Pro, Python 3.14.7, Tk 9.0.4, künstliche Daten"
+    ],
+    "headings": [
+      "FP-01 Wiederholen nach Rückgängig – Kandidat 17.10.2026",
+      "Umfang",
+      "Prüfung",
+      "Offen"
+    ],
+    "version_mentions": [
+      "17.10.2026",
+      "3.14.7",
+      "3.43.1",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/gesamtanalyse_2026-10-21/README.md",
+    "sha256": "907220b59ee81beca62c691582edb45ba80858c86340875f7b1f5057f6637e1e",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Breite Gesamtanalyse – 21.10.2026",
+      "Untersuchungsstand und Wiederholbarkeit",
+      "Tatsächlich ausgeführte Methoden",
+      "Wichtigste Folgerungen"
+    ],
+    "version_mentions": [
+      "21.10.2026",
+      "3.14.7",
+      "3.43.1",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/gitauftrag_2026-10-21/README.md",
+    "sha256": "e69e75ea74156b7dc40fb417ef416d66cd63b2e2ccd39ca7548fc97a54f8c6d7",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Einmaliger Git-Auftrag – 21.10.2026"
+    ],
+    "version_mentions": [
+      "21.10.2026"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/kuerzel_linux_tk91_2026-10-16/README.md",
+    "sha256": "9ccd345fa815aa23cfea3c7b4f088ffdac5ab4a3df9127a2106afc3aed7cb69f",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 16.10.2026 · Glide 3.43.1 · Datenformat 25 · Apphash `ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3` · Windows 11 Pro, Python 3.14.7, Tk 9.0.4, künstliche Daten"
+    ],
+    "headings": [
+      "3.43.1 – Kürzel in Listen unter Linux/Tk 9.1",
+      "Fehlermeldungen aus der CI",
+      "Ursachen und Entscheidung je Suite",
+      "Prüfungen",
+      "Wackelige Suite `test_template_workflows` (vorbestehend)",
+      "Nebenbefund (ohne Änderung)",
+      "Offen"
+    ],
+    "version_mentions": [
+      "16.10.2026",
+      "17.10.2026",
+      "3.14.7",
+      "3.42.0",
+      "3.43.0",
+      "3.43.1",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/roadmap_paket1_2026-10-21/README.md",
+    "sha256": "26067e0f127011e6de082fc0bb0f20a261bc05a1ad0f5b780a93bc439d9f90e3",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Erstes Roadmap-Paket – 21.10.2026",
+      "Quelle und Umfang",
+      "Gebündelte Prüfung",
+      "Frische Leistungsprobe",
+      "Abschlussgrenze"
+    ],
+    "version_mentions": [
+      "21.10.2026",
+      "3.14.7",
+      "3.42.0",
+      "3.43.1",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/README.md",
+    "sha256": "5910185a6f22a9ca8d440d79b3f87df32cf38f475debc894b709523be0fbb76a",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Roadmap-Paket 3 – Strukturabschluss und Kalenderwechsel",
+      "Quelle und Umfang",
+      "Ausgeführte Prüfungen",
+      "Leistung und Grenzen",
+      "Abschlussgrenze"
+    ],
+    "version_mentions": [
+      "22.10.2026",
+      "3.42.0",
+      "3.43.1",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/README.md",
+    "sha256": "3b760ae2e39a1f3877b04aa93213c7fde86359194698432b317bd7cd0b02797e",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 18.10.2026 · Entwicklungskandidat auf `9ec474b` mit FP-01 · Version 3.43.1 und Datenformat 25 unverändert · keine Lieferung"
+    ],
+    "headings": [
+      "Schutzrunde WA-27–WA-30 – Nachprüfung und Fortsetzung",
+      "Gefundener Ausgangsstand",
+      "Fertiggestellte Korrekturen",
+      "Prüfungen",
+      "Gegenprüfung der Hauptarbeitskopie",
+      "Offene Tore"
+    ],
+    "version_mentions": [
+      "18.10.2026",
+      "3.14.7",
+      "3.42.0",
+      "3.43.1"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/README.md",
+    "sha256": "237234894dd9492e1249e3378b87b02ca5abd02e4f397f57f9cdf1685964bd29",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 18.10.2026 · Glide 3.43.1 · Aufgabenformat 25 · keine Produktionsrunde"
+    ],
+    "headings": [
+      "Standanalyse und Dokumentationsnachlauf vom 18.10.2026",
+      "Untersuchungsgegenstand und Grenzen",
+      "Dateien und Belegfunktion",
+      "Reproduktion der Schutzbefunde",
+      "Aktuelle Ausführung und verbleibende Tore",
+      "Gegenprüfung 18.10.2026"
+    ],
+    "version_mentions": [
+      "18.10.2026",
+      "3.14.7",
+      "3.42.0",
+      "3.43.1",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/standaufnahme_2026-10-21/README.md",
+    "sha256": "d583a057417f3f91627ae46b5a6365e5f1b130b0bf157fdf821c36097756fb9a",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Bestandsaufnahme und Dokumentabgleich – 21.10.2026",
+      "Ausgang und Umfang",
+      "Beleggrenzen",
+      "Tatsächliche Nachprüfung"
+    ],
+    "version_mentions": [
+      "21.10.2026",
+      "3.14.7",
+      "3.42.0",
+      "3.43.1"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/README.md",
+    "sha256": "ffb3124be6ca57a3c642ff519637933a2d703b9d8fd506a7ce8a1b5dd3022bdf",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Aktive Bestandsprüfung – Beginn 18.10.2026"
+    ],
+    "version_mentions": [
+      "18.10.2026",
+      "19.10.2026",
+      "3.43.1"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/wackelsuiten_windows_2026-10-17/README.md",
+    "sha256": "4237f8496252e427ab7a99970cb9bdce9693642ac76d6dff4e8b767c0f236356",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 17.10.2026 · Glide 3.43.1 unverändert (Apphash `ed2b7eb6`, Datenformat 25) · Prüfwerkzeugnachlauf ohne neue App-Version · Windows 11 Pro, Python 3.14.7, Tk 9.0.4, künstliche Daten"
+    ],
+    "headings": [
+      "Nachlauf 17.10.2026 – wackelnde Windows-Suiten `test_tag3390` und `test_template_workflows`",
+      "Anlass",
+      "Ursachen",
+      "Korrektur (nur Prüfwerkzeug)",
+      "Zusammenführung mit PR #33",
+      "Gegenproben mit Sonde",
+      "Wiederholte Läufe unter Windows",
+      "Weitere Prüfungen",
+      "Grenzen"
+    ],
+    "version_mentions": [
+      "17.10.2026",
+      "3.14.7",
+      "3.39.0",
+      "3.43.0",
+      "3.43.1",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.1/wiederholungsregeln_2026-10-21/README.md",
+    "sha256": "c99cee685bc9f34f3d14c7537e3bfd35187fc5924ae8af95f291758316408943",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 21.10.2026 · Glide 3.43.1 · Aufgabenformat 26 · Einstellungen 2"
+    ],
+    "headings": [
+      "FP-02 – beide Ausbaustufen im lokalen Kandidaten",
+      "Gebündelte Prüfung",
+      "Grenzen und Schutz"
+    ],
+    "version_mentions": [
+      "21.10.2026",
+      "3.43.1"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.44.0/ablagepruefung_2026-10-25/README.md",
+    "sha256": "66e6bf8fd2abd77740db64881b8ecc1643da35ff9eb0ff54460ab367849806d0",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Ablage- und Dokumentationsprüfung vor Push und Merge",
+      "Umfang",
+      "Korrekturen",
+      "Quellen, Nachweise und Aufbewahrung",
+      "Speicher und Bereinigung",
+      "Push-/Mergegrenzen",
+      "Abschluss"
+    ],
+    "version_mentions": [
+      "1.402.588",
+      "2.760.145",
+      "23.10.2026",
+      "25.10.2026",
+      "3.14.7",
+      "3.39.1",
+      "3.42.0",
+      "3.43.0",
+      "3.43.1",
+      "3.44.0",
+      "419.049.586",
+      "6.568.287",
+      "9.0.4",
+      "938.507.528"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.44.0/arbeitsmodi_2026-10-23/README.md",
+    "sha256": "87efb7c74c8ee199efeebb439d511a9a8e08f1e186f19e6d4b15305e91ddecff",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "D55 – Arbeitsmodi und Seitenbedienung",
+      "Quelle",
+      "Ausgeführte Prüfungen",
+      "Befunde und Korrekturen",
+      "Rot ohne Bezug zu D55",
+      "Windows-Vollprüfung am 25.10.2026",
+      "Menschenabnahme Windows am 25.10.2026 (begonnen)",
+      "Abnahmekorrektur Seitenleisten-Rechtsklick am 25.10.2026",
+      "Kompaktmodus und kurze Umschaltbefehle am 25.10.2026",
+      "Offen"
+    ],
+    "version_mentions": [
+      "23.10.2026",
+      "25.10.2026",
+      "3.14.7",
+      "3.43.1",
+      "3.44.0",
+      "8.6.14",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.44.0/github_pruefung_2026-10-23/README.md",
+    "sha256": "dc55c190d9931581d415c2be3586de2fac3eb68d3a5dc88e558ebe296ffe2c7f",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "GitHub-Prüfung #138–#142 – Ursachen und Korrekturen",
+      "Erste Runde: #138–#140",
+      "Zweite Runde: #141 und #142",
+      "Nachstellung und Prüfung der zweiten Runde",
+      "Dritte Runde: #145 und #146",
+      "Grenzen"
+    ],
+    "version_mentions": [
+      "22.10.2026",
+      "23.10.2026",
+      "24.10.2026",
+      "25.10.2026",
+      "3.43.1",
+      "3.44.0",
+      "8.6.14"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.44.0/gutachten_2026-10-25/README.md",
+    "sha256": "177b7ffd3a322d04fc1057a1f0e616926d061095133b9f61b7bf58e0d16c843e",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Einordnung des Sicherheits- und Architekturgutachtens – 25.10.2026",
+      "Eingang",
+      "Gegenprobe",
+      "Ergebnis der Einarbeitung"
+    ],
+    "version_mentions": [
+      "0.6.3",
+      "0.6.4",
+      "11.10.2026",
+      "12.09.2026",
+      "18.10.2026",
+      "25.10.2026",
+      "3.44.0",
+      "6.22.3"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.44.0/phasenabschluss_2026-10-22/README.md",
+    "sha256": "dd23dc1d27ba08e3da9d4a9b07621631a31897dac3ee7991a1ca541e45754667",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 22.10.2026 · Glide 3.44.0 · Aufgabenformat 26 · Windows 11, Python 3.14.7 / Tk 9.0.4, künstliche Daten"
+    ],
+    "headings": [
+      "Phasenabschluss 3.44.0 – Versionswechsel, eingefrorene Vollprüfung und Lieferung",
+      "Ablauf",
+      "Grenzen"
+    ],
+    "version_mentions": [
+      "22.10.2026",
+      "23.10.2026",
+      "3.14.7",
+      "3.39.0",
+      "3.43.1",
+      "3.44.0",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.44.0/speicherstatus_2026-10-25/README.md",
+    "sha256": "9ec90b9d718af61add4906c1d767d5036120858aa2b14bda22e13903a17cd404",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Speicherstatus und Sicherungsreserve – WA-40/WA-47",
+      "Umgesetzt",
+      "Quelle und gezielte Prüfung",
+      "Grenzen"
+    ],
+    "version_mentions": [
+      "25.10.2026",
+      "3.14.7",
+      "3.44.0",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/codebasis_2026-10-26/README.md",
+    "sha256": "2608abd841a033e80292f52944c6214b17b052bd9be001293b554671eb14de8b",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 26.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · Python 3.15.1 / Windows / Tk 9.0.4"
+    ],
+    "headings": [
+      "Vertiefte Codebasisprüfung – lokaler Techniknachlauf 3.45.0",
+      "Basis und Änderungen",
+      "Ausgeführte Prüfung",
+      "Begrenzte Teilmessung",
+      "Abschlussgrenze"
+    ],
+    "version_mentions": [
+      "26.10.2026",
+      "3.15.1",
+      "3.45.0",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/freigaben_2026-10-26/README.md",
+    "sha256": "486261bb9100c91650a61321443eb3a310ab589e8fc13071a3d1c9a41b1702bd",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Tagesvorschlag mit direkten Freigaben (WA-12)",
+      "Prüfung",
+      "Quell- und Liefergrenze"
+    ],
+    "version_mentions": [
+      "26.10.2026",
+      "3.14.7",
+      "3.45.0",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/README.md",
+    "sha256": "7e07c2feca79fe3db22bf51ed70b77fb8dfb1b6503e05296f94fa245b5c92091",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Aktualisierung aller Lieferungen und eigenständigen Pakete",
+      "Bestand und Ziel",
+      "Plattformen",
+      "Belegter Zwischenstand",
+      "Tatsächliche Lieferung",
+      "Zusätzliche GitHub-Matrix"
+    ],
+    "version_mentions": [
+      "26.10.2026",
+      "3.14.5",
+      "3.14.7",
+      "3.42.0",
+      "3.45.0",
+      "9.0.3",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/push_2026-10-26/README.md",
+    "sha256": "483a073d7b0ef880fece0fd22c054b58a5b5e989a0889251b2a725cfb3434d38",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Push des vorhandenen Glide-3.45.0-Kandidaten",
+      "Abgleich und Uploadumfang",
+      "Prüfung",
+      "Grenzen"
+    ],
+    "version_mentions": [
+      "26.10.2026",
+      "3.14.7",
+      "3.42.0",
+      "3.44.0",
+      "3.45.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/startseitenaktionen_2026-10-26/README.md",
+    "sha256": "0d354f5f2391ff4830ee0aff4562163bdd4269f30d5a2f09fc109e8133f93a9a",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 26.10.2026 · Glide 3.45.0 · Aufgabenformat 26 · lokaler Featurekandidat"
+    ],
+    "headings": [
+      "Startseite – Tagesaufgaben direkt erledigen",
+      "Umsetzung und Prüfung",
+      "Sichtbelege und Grenzen"
+    ],
+    "version_mentions": [
+      "26.10.2026",
+      "3.45.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/startseitenmodell_2026-10-26/README.md",
+    "sha256": "ee5b40fd106158104ba869a32fd1a7ef335c29164dac18dd0bd90051c2053543",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Startseitenmodell und gemeinsame Bestandsauswertung",
+      "Bestand vor Produktionsänderungen",
+      "Zuschnitt und Abnahme",
+      "Ergebnis und geprüfter Stand",
+      "Leistung und Grenzen",
+      "Lieferung und Fortsetzung"
+    ],
+    "version_mentions": [
+      "26.10.2026",
+      "3.14.7",
+      "3.45.0",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/verweisvorschau_2026-10-26/README.md",
+    "sha256": "55e4a4bf3b69c96840eb1ab8dc7599302164c88ed2b7cedfb2b9286ee1228ff5",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Lokale Verweise in der Nebenansicht nachschlagen",
+      "Nachweise und Grenzen",
+      "Liefergrenze"
+    ],
+    "version_mentions": [
+      "26.10.2026",
+      "3.45.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/README.md",
+    "sha256": "ee969b7c2ae4108d98d004a294578c0e6a0be4ef81141876ac1260300c480e92",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Weiterentwicklung zu Glide 3.45.0",
+      "Quellstand und Prüfbilanz",
+      "Befunde und Korrekturen",
+      "GitHub-D55-Fehler #156",
+      "Lieferung, Dokumente und Aufbewahrung",
+      "Offene Abnahmen"
+    ],
+    "version_mentions": [
+      "26.10.2026",
+      "3.14.7",
+      "3.42.0",
+      "3.44.0",
+      "3.45.0",
+      "497.350.175",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/README.md",
+    "sha256": "7b01bf93bdbe85f3c891a5d81739f523f5acf6b0ef46939b4e7248f92342daac",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.46.0 · Aufgabenformat 26"
+    ],
+    "headings": [
+      "Zwei Featurepakete – Glide 3.46.0",
+      "Gezielte Prüfung und Vorläufe",
+      "Übernommene Prüfdiagnostik",
+      "Gemeinsamer Abschluss",
+      "Python-Lieferung und Schlusskontrolle"
+    ],
+    "version_mentions": [
+      "27.10.2026",
+      "3.14.7",
+      "3.15.1",
+      "3.45.0",
+      "3.46.0",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/README.md",
+    "sha256": "11a5658e952291efe8606fdddce4815b04b11cb4a773b3895f5a96dcaf2ff12f",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.47.0 · Aufgabenformat 26"
+    ],
+    "headings": [
+      "Folgepakete – Mehrfachplanung und Nebenansichtsverlauf",
+      "Umfang und Vorläufe",
+      "Versions- und Prüfgrenze",
+      "Endgültige gezielte Prüfung und Lieferung",
+      "Dokumentabgleich und CI vor dem Push"
+    ],
+    "version_mentions": [
+      "27.10.2026",
+      "3.45.0",
+      "3.46.0",
+      "3.47.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/README.md",
+    "sha256": "6bc2c0717f9ded923e24859be8463c636736c26db93778f4915cc64f52510eb6",
+    "historical": true,
+    "tracked": false,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ],
+    "headings": [
+      "Drei Featurepakete: Tagesnavigation, Mehrfachfelder und Verweise",
+      "Umfang und Prüfvertrag",
+      "Ausgangsstand und Reihenfolge",
+      "Ergebnisse",
+      "Gezielte Ergebnisse und gefundene Korrekturen",
+      "Breite Windows-Prüfung und WA-41",
+      "Abgeschlossener breiter Versuch und gezielte Nachprüfung",
+      "Lieferentscheidung und Abschlussgrenze"
+    ],
+    "version_mentions": [
+      "27.10.2026",
+      "3.42.0",
+      "3.45.0",
+      "3.47.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/README.md",
+    "sha256": "efa6787a268c7bf72d9b8f13efb8bf517516a9f57ed3a59fd3bd43fe7e32dccf",
+    "historical": true,
+    "tracked": false,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ],
+    "headings": [
+      "WA-41: Internetansätze, Testlast und CPU-/Firmwarebefund",
+      "Wichtigster neuer Befund",
+      "Auftrag und geprüfte Internetfälle",
+      "Neue Ausnahmeinformationen durch Entwicklungsmodus",
+      "Testgröße, Dateien, Fenster und Ereignisverarbeitung",
+      "Bewertung und nächster Schritt"
+    ],
+    "version_mentions": [
+      "14.51.36247",
+      "2.7.11",
+      "26.10.2026",
+      "27.09.2024",
+      "27.10.2026",
+      "29.09.2026",
+      "3.14.7",
+      "3.14.8",
+      "3.15.2",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/README.md",
+    "sha256": "ab4fd31b842f18b8ed8c54c6e614c3e398135038faa04cd394d17c4b527d7b32",
+    "historical": true,
+    "tracked": false,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ],
+    "headings": [
+      "WA-41: wiederholter Vergleich mit Python 3.15.2",
+      "Prüfaufbau",
+      "Ergebnisse",
+      "Reproduktion"
+    ],
+    "version_mentions": [
+      "27.10.2026",
+      "28.548.872",
+      "3.14.8",
+      "3.15.2",
+      "3.48.0",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/WA-41-Python-Fehler-Analyse.md",
+    "sha256": "ab4fd31b842f18b8ed8c54c6e614c3e398135038faa04cd394d17c4b527d7b32",
+    "historical": true,
+    "tracked": false,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ],
+    "headings": [
+      "WA-41: wiederholter Vergleich mit Python 3.15.2",
+      "Prüfaufbau",
+      "Ergebnisse",
+      "Reproduktion"
+    ],
+    "version_mentions": [
+      "27.10.2026",
+      "28.548.872",
+      "3.14.8",
+      "3.15.2",
+      "3.48.0",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/README.md",
+    "sha256": "629b20f936a3097f1a90e72922ff6433fd41b608f372767ebf3b206c7fca75dc",
+    "historical": true,
+    "tracked": false,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26"
+    ],
+    "headings": [
+      "WA-41: gezielte Ursachenanalyse",
+      "Ergebnis",
+      "Kleinster beobachteter Auslöser",
+      "Gegenproben und Aussagegrenzen",
+      "Bedeutung des internen Cachefehlers",
+      "Native Befunde und verworfene Verdachtsmomente",
+      "Bewertung der Ursachen",
+      "Nächster entscheidender Untersuchungsschritt",
+      "Reproduktion und Grenzen"
+    ],
+    "version_mentions": [
+      "27.10.2026",
+      "3.14.7",
+      "3.14.8",
+      "3.15.2",
+      "3.44.0",
+      "3.47.0",
+      "3.48.0",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "01_Repository/Glide/tests/tools/README.md",
+    "sha256": "2a2016b4fc0d762663d1dbeff39f06f4996518d2d6ded55d9c37a6b73bbc2db5",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ],
+    "headings": [
+      "Prüfwerkzeuge für Glide"
+    ],
+    "version_mentions": [
+      "08.10.2026",
+      "25.10.2026",
+      "27.10.2026",
+      "3.14.8",
+      "3.21.3",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "05_Probelisten_Testdaten/README.md",
+    "sha256": "3d05a0895d81fa8848681095f14fe69724c19092893556920dd5fc3d32e6cab0",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Quellkandidat Glide 3.48.0; Showcase-Lieferung unverändert 3.47.0 · Lieferdaten in Speicherstufe 26 · Vorlagen 2"
+    ],
+    "headings": [
+      "Probedaten",
+      "Weitere Probebestände (Quelle im Repository)",
+      "Umgang mit echten Daten"
+    ],
+    "version_mentions": [
+      "02.10.2026",
+      "27.10.2026",
+      "3.30.0",
+      "3.47.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "05_Probelisten_Testdaten/Showcase/README.md",
+    "sha256": "55a5c064897fef14ee2c322453f9f403f580a8a5fb7164bd205fe60d110729ad",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Quellkandidat Glide 3.48.0; Showcase-Lieferung unverändert 3.47.0 · Lieferdaten in Speicherstufe 26"
+    ],
+    "headings": [
+      "Glide · aktiver Showcase",
+      "Starten und weiterbenutzen",
+      "Die Dateien",
+      "Rundgang durch einen Arbeitstag",
+      "Abdeckung und Prüfgrenzen"
+    ],
+    "version_mentions": [
+      "03.10.2026",
+      "22.10.2026",
+      "27.10.2026",
+      "3.44.0",
+      "3.47.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "07_Python-Versionen/Archiv/README.md",
+    "sha256": "04355c8d30fa5637195d3157cdcd82bd46578439ad8b81935160cd05403e88b8",
+    "historical": true,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 22.10.2026 · aktuelle Python-Fassung 3.44.0"
+    ],
+    "headings": [
+      "Archiv – Python-Versionen"
+    ],
+    "version_mentions": [
+      "22.10.2026",
+      "3.39.0",
+      "3.39.1",
+      "3.40.0",
+      "3.41.0",
+      "3.42.0",
+      "3.43.0",
+      "3.43.1",
+      "3.44.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "07_Python-Versionen/README.md",
+    "sha256": "6187e76a88d80a2da1611423fa99feb434b584b03430b0fe9ca947370c5bc3a9",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Python-Lieferfassung 3.47.0 · Quelle 3.48.0 als noch nicht gelieferter Prüfkandidat · Speicherstufe 26 · Vorlagenformat 2"
+    ],
+    "headings": [
+      "Aktuelle startbare Python-Fassung",
+      "Windows mit der geprüften Laufzeit starten",
+      "Bytecode",
+      "Datenformat und frühere Fassungen"
+    ],
+    "version_mentions": [
+      "27.10.2026",
+      "3.14.7",
+      "3.14.8",
+      "3.33.8",
+      "3.41.0",
+      "3.42.0",
+      "3.43.1",
+      "3.44.0",
+      "3.45.0",
+      "3.47.0",
+      "3.48.0",
+      "9.0.4"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "20_Grafik_Master/README.md",
+    "sha256": "a3bdc7ed2a0a822c431d9c936b437a464412eee2f1b76bfb8785925377e48dfc",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2"
+    ],
+    "headings": [
+      "Grafik-Master",
+      "Struktur",
+      "Freigegebene Master und Laufzeit (3.37.0)",
+      "Master und Exporte nachführen",
+      "Hinweis zur Typografie",
+      "Beispielbilder für Arbeitsdokumente"
+    ],
+    "version_mentions": [
+      "03.10.2026",
+      "10.10.2026",
+      "15.10.2026",
+      "27.10.2026",
+      "29.09.2026",
+      "3.37.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "CLAUDE.md",
+    "sha256": "2963304ccc247a800359508a75ea2506a743b09c0f60f7ba086587d6c2285808",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Aufgabenformat 26 · Python-Lieferung 3.47.0, eigenständige Pakete 3.45.0"
+    ],
+    "headings": [
+      "Arbeitsregeln für Claude Code – Glide",
+      "Struktur",
+      "Lesereihenfolge",
+      "Ergänzungen für diese Umgebung"
+    ],
+    "version_mentions": [
+      "03.10.2026",
+      "07.10.2026",
+      "15.10.2026",
+      "27.10.2026",
+      "3.45.0",
+      "3.47.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "README.md",
+    "sha256": "0abb31187cbcc19a59a4ed21250bab71245f71944a4402487358782db172ce3f",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [
+      "Stand 27.10.2026 · Glide 3.48.0 · Quelle 3.48.0 (Prüfkandidat); Python-Lieferung 3.47.0; eigenständige Pakete 3.45.0 · Aufgabenformat 26"
+    ],
+    "headings": [
+      "Glide – lokale Aufgaben, Notizen und Pinnwände",
+      "Stand",
+      "Schnellstart",
+      "Was Glide kann",
+      "Ablage",
+      "Arbeitsweise mit dem Repository",
+      "Qualität und Sicherheit",
+      "Weitere Unterlagen",
+      "Lizenz"
+    ],
+    "version_mentions": [
+      "01.10.2026",
+      "03.10.2026",
+      "22.10.2026",
+      "25.10.2026",
+      "26.10.2026",
+      "27.10.2026",
+      "3.38.0",
+      "3.39.0",
+      "3.39.1",
+      "3.40.0",
+      "3.41.0",
+      "3.42.0",
+      "3.43.0",
+      "3.43.1",
+      "3.44.0",
+      "3.45.0",
+      "3.46.0",
+      "3.47.0",
+      "3.48.0"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  },
+  {
+    "path": "SECURITY.md",
+    "sha256": "f4c0a43638c151801e76abf9a011727f05d7c3eadf5ce2a728e966b3c1156cd6",
+    "historical": false,
+    "tracked": true,
+    "stand_lines": [],
+    "headings": [
+      "Sicherheitsrichtlinie",
+      "Unterstützte Fassungen",
+      "Schwachstelle melden",
+      "Im Umfang",
+      "Schutzmaßnahmen im Repository"
+    ],
+    "version_mentions": [
+      "01.10.2026"
+    ],
+    "review": "Inhaltsabgleich der aktuellen Standaussagen; historische Einzelbefunde bleiben datiert"
+  }
+]

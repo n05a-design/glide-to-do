@@ -1,0 +1,206 @@
+{
+  "scope": "Gerätevergleich PC-01/PC-02/MacBook M2 eingeordnet; drei gemeinsame Fehlerursachen korrigiert und gezielt geprüft.",
+  "pruefplatz": "PC-02 Intel Core i9-14900K, Windows 11 Build 26300, Python 3.14.7 (823f032), Tk 9.0.4",
+  "pruefplatz_hinweis": "Instabiler Prüfplatz (WA-41A, Befund 13 der lokalen Vergleichsablage); grüne Läufe hier ersetzen keine Gegenprüfung auf PC-01 oder M2.",
+  "app_sha256": "39499ab3b784199c5f39a0f836d494b159203b89ec0d37f24fac9a14231aa729",
+  "app_unveraendert_seit": "39499ab3… (Mutations-/Leerenstufe)",
+  "glyph_metrics_sha256_vorher": "cc4e480be903d550c505774003223f801c237f5ce50e4328743c2416faced76d",
+  "glyph_metrics_sha256_nachher": "69c7baa7911e3de1d3b2576dff5998f5e58f35184163010e1dca09029f026d2c",
+  "geaenderte_dateien": {
+    "src/glide/glyph_metrics.py": "69c7baa7911e3de1d3b2576dff5998f5e58f35184163010e1dca09029f026d2c",
+    "tests/unit/test_glyph_metrics.py": "3a1d7b38f001c12adf17818d6c87079a7925faf4412066c68341be69c44a4b65",
+    "tests/integration/test_befunde330.py": "98a5cca024f94c2bc22ac41dbae24195e2ac93028af16190d9f1f924ef7ba1f6",
+    "tests/integration/test_oberflaeche33321.py": "5bc934873fb5d7f3317fcf0249e5c07fa4dcd70551cac65e4c5870c9b657fa2c",
+    "tests/integration/test_ui_followup36.py": "76400455f14c3b1de8c6227efaf3d4cbc457a3648241f53b7b72b80dd436f909",
+    "tests/integration/test_workspace310.py": "206a71a6d083560d4e4367e5f75044bef80669a319101d6f499113b9e513e6a0",
+    "tests/integration/test_suche3337.py": "b724e96e7dec231edd6abe561971f701f41e9d9e05109a1316f57df3e55aef46",
+    "tests/integration/test_kennzahlen33310.py": "6fece33ba6adfcf233a7aa49d6fb200b8beb5450c0375e04e6cbbf302e6a3bf8",
+    "tests/integration/test_tagpaket33314.py": "6e173be2df9f3bd1ecff893b8affbc0075629f6b71336ee4c404e689a6534c8a",
+    "tests/integration/test_wissen33315.py": "34118c083b0937c661914f2badb2dff0a899773b6ef4c0b7b541336ccd9579cb",
+    "tests/integration/test_bedienung33316.py": "0d9608fc77093fb8d171da9822e3e3ced8fe24ea913771cbf73e551d6a264341",
+    "tests/integration/test_woche33317.py": "f9d70c7a95f19a62c4f099e2047dd893117269c25a0a9ec81392f1e45de75944",
+    "tests/integration/test_seiten33318.py": "8c37e91bfe02c0afa62f1837a1ae477dd89a874d873ef3d094f69e11d6e66b00",
+    "tests/integration/test_komfort33320.py": "ef850b0d5863a444521c0213cccd0f083762d49e20b052cbcce1b65ad1f1c599",
+    "tests/integration/test_wissen3340.py": "e48de6e0b71e4aef8a538a5d4661fdd47667f97e5ad100abb6bc12bf954d502f",
+    "tests/integration/test_aufgaben3380.py": "7aad8d74ef71a0dcce29050eef55d12bda5d133667b88a9d2bf1efbc4fcc09c8",
+    "tests/integration/test_animation3400.py": "2a818b21f4e8a24e71b8e38114a41b3f97175ef77f01383d187834d8a150a47b",
+    "tests/integration/test_import3410.py": "173ec20219705df4e4381ab061bc34f2c8aaf77a935379dd44bdc85aacd3cdb0"
+  },
+  "lauf_korrigiert": [
+    {
+      "fall": "Fachlogik-Unit-Tests",
+      "exitcode": 0,
+      "sekunden": 30.59
+    },
+    {
+      "fall": "test_features315",
+      "exitcode": 0,
+      "sekunden": 7.42
+    },
+    {
+      "fall": "test_mindestgroesse330",
+      "exitcode": 0,
+      "sekunden": 50.62
+    },
+    {
+      "fall": "test_oberflaeche33321",
+      "exitcode": 1,
+      "sekunden": 6.36
+    },
+    {
+      "fall": "test_befunde330",
+      "exitcode": 0,
+      "sekunden": 7.63
+    },
+    {
+      "fall": "test_ui_followup36",
+      "exitcode": 0,
+      "sekunden": 168.58
+    },
+    {
+      "fall": "test_workspace310",
+      "exitcode": 0,
+      "sekunden": 16.47
+    },
+    {
+      "fall": "test_suche3337",
+      "exitcode": 0,
+      "sekunden": 5.46
+    },
+    {
+      "fall": "test_kennzahlen33310",
+      "exitcode": 0,
+      "sekunden": 5.62
+    },
+    {
+      "fall": "test_tagpaket33314",
+      "exitcode": 0,
+      "sekunden": 25.91
+    },
+    {
+      "fall": "test_wissen33315",
+      "exitcode": 0,
+      "sekunden": 17.99
+    },
+    {
+      "fall": "test_bedienung33316",
+      "exitcode": 0,
+      "sekunden": 13.07
+    },
+    {
+      "fall": "test_woche33317",
+      "exitcode": 0,
+      "sekunden": 25.86
+    },
+    {
+      "fall": "test_seiten33318",
+      "exitcode": 0,
+      "sekunden": 18.25
+    },
+    {
+      "fall": "test_komfort33320",
+      "exitcode": 0,
+      "sekunden": 18.0
+    },
+    {
+      "fall": "test_wissen3340",
+      "exitcode": 0,
+      "sekunden": 17.6
+    },
+    {
+      "fall": "test_aufgaben3380",
+      "exitcode": 0,
+      "sekunden": 43.43
+    },
+    {
+      "fall": "test_animation3400",
+      "exitcode": 0,
+      "sekunden": 23.16
+    },
+    {
+      "fall": "test_import3410",
+      "exitcode": 0,
+      "sekunden": 24.79
+    }
+  ],
+  "lauf_korrigiert_hinweis": "test_oberflaeche33321 war hier noch rot: eigener Neustarthelfer ohne Sitzungsabschluss, auf dem Mac zuvor vom Glyphenfehler verdeckt. Danach korrigiert und einzeln grün (siehe nachpruefung).",
+  "gegenproben_vorher": [
+    {
+      "fall": "glyph_metrics_vorher",
+      "rot": true,
+      "fehler": "ord() expected a character, but string of length 2 found"
+    },
+    {
+      "fall": "vorher_test_workspace310",
+      "exitcode": 1,
+      "sekunden": 13.45,
+      "rot": true
+    },
+    {
+      "fall": "vorher_test_suche3337",
+      "exitcode": 1,
+      "sekunden": 4.82,
+      "rot": true
+    }
+  ],
+  "nachpruefung": [
+    {
+      "fall": "test_oberflaeche33321",
+      "exitcode": 0,
+      "sekunden": 13.76,
+      "gruen": true
+    }
+  ],
+  "fachtests": 1075,
+  "nicht_ausgefuehrt": [
+    "Speicherlastsuite",
+    "Volllauf",
+    "eingefrorene Prüfkopie",
+    "Mac-Gegenlauf",
+    "JPEG-Zweig (nur unter macOS mit sips aktiv)"
+  ],
+  "release_ready": false,
+  "cause_proven_wa41a": false,
+  "speicherlast_serie": {
+    "starter": "tests/tools/gesichert_pruefen.py --art speicherlast --timeout 900",
+    "python": "3.14.7 (823f032)",
+    "start": "2026-10-29T17:26:31+01:00",
+    "ende": "2026-10-29T17:39:56+01:00",
+    "laeufe": [
+      {
+        "lauf": 1,
+        "start": "2026-10-29T17:26:31+01:00",
+        "exitcode": 0,
+        "sekunden": 169.2
+      },
+      {
+        "lauf": 2,
+        "start": "2026-10-29T17:29:20+01:00",
+        "exitcode": 0,
+        "sekunden": 161.0
+      },
+      {
+        "lauf": 3,
+        "start": "2026-10-29T17:32:01+01:00",
+        "exitcode": 0,
+        "sekunden": 157.3
+      },
+      {
+        "lauf": 4,
+        "start": "2026-10-29T17:34:38+01:00",
+        "exitcode": 0,
+        "sekunden": 158.3
+      },
+      {
+        "lauf": 5,
+        "start": "2026-10-29T17:37:17+01:00",
+        "exitcode": 0,
+        "sekunden": 159.7
+      }
+    ],
+    "gruen": 5,
+    "whea_waehrenddessen": 0,
+    "anwendungsabstuerze_waehrenddessen": 0,
+    "hinweis": "Sporadisches WA-41A; fünf grüne Läufe sind kein Behebungs- oder Stabilitätsnachweis."
+  }
+}

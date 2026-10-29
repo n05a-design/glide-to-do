@@ -1,0 +1,107 @@
+{
+  "app_sha256": "a17c136f3fbd5e2cb22892dd670bfe345361dbf5405febc8765c303606a0825a",
+  "faelle": {
+    "label_fehler": {
+      "ok": true,
+      "messung": {
+        "kein_erfolgswert": true,
+        "ram_undo_erhalten": true,
+        "datei_unveraendert": true
+      }
+    },
+    "label_dialoggrenze": {
+      "ok": true,
+      "messung": {
+        "duplikat_nach_farbabfrage_abgewehrt": true
+      }
+    },
+    "schreibschutz": {
+      "ok": true,
+      "messung": {
+        "drei_einstiege_ohne_mutation": true
+      }
+    },
+    "entfernen_frische_ids": {
+      "ok": true,
+      "messung": {
+        "frischer_dialogstand": true,
+        "papierkorb_und_ein_undo": true
+      }
+    },
+    "entfernen_sperrwechsel": {
+      "ok": true,
+      "messung": {
+        "sperre_nach_bestaetigung": true
+      }
+    },
+    "entfernen_fehler": {
+      "ok": true,
+      "messung": {
+        "kein_erfolgstoast": true,
+        "ram_undo_und_papierkorb_erhalten": true
+      }
+    },
+    "umbenennen_nachlauf": {
+      "ok": true,
+      "messung": {
+        "commit_bleibt_erfolgreich": true,
+        "nachlauffehler_gemeldet": true,
+        "undo": true
+      }
+    },
+    "umbenennen_fehler_noop": {
+      "ok": true,
+      "messung": {
+        "noop_ohne_undo": true,
+        "expliziter_schreibfehler": true,
+        "ruecknehmbar": true
+      }
+    },
+    "label_abbruch": {
+      "ok": true,
+      "messung": {
+        "farbabbruch_ohne_mutation": true
+      }
+    },
+    "entfernen_verschachtelt": {
+      "ok": true,
+      "messung": {
+        "keine_doppelten_ids_im_papierkorb": true,
+        "neustart": true
+      }
+    },
+    "label_regulaer": {
+      "ok": true,
+      "messung": {
+        "anlegen_undo_redo_neustart": true
+      }
+    },
+    "label_sperre_limit": {
+      "ok": true,
+      "messung": {
+        "sperre_und_limit_nach_dialog": true
+      }
+    },
+    "entfernen_veraendert": {
+      "ok": true,
+      "messung": {
+        "veraenderte_bestaetigte_auswahl_abgebrochen": true
+      }
+    },
+    "entfernen_papierkorbgrenze": {
+      "ok": true,
+      "messung": {
+        "bestehende_verdrängung_erlaubt": true,
+        "ueberlauf_vorher_benannt": true,
+        "ein_undo_erhaelt_original": true
+      }
+    },
+    "umbenennen_ordner": {
+      "ok": true,
+      "messung": {
+        "ordner_undo_redo_neustart": true
+      }
+    }
+  },
+  "fehler": []
+}

@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-29",
+  "errors": [],
+  "package_build": false,
+  "package_execution": false,
+  "windows_zip": {
+    "path": "01_Repository/Glide/build/windows/Glide-3.45.0-windows-x64.zip",
+    "sha256": "47ff56183e48de0b196c7910b1393d4a1521f1d3afc9d7b7a483d436d7bdb7c9",
+    "matches": true
+  },
+  "mac_tar": {
+    "path": "01_Repository/Glide/build/macos/Glide-3.45.0-macos-arm64.tar.gz",
+    "sha256": "b6284197c62fddee1283207ead6680baed72bdf8826114e944316857284a7252",
+    "matches": true
+  },
+  "windows_files": 103,
+  "mac_files": 333,
+  "mac_links": 29,
+  "python_delivery_files": 235,
+  "python_delivery_version": "3.47.0",
+  "native_delivery_version": "3.45.0",
+  "showcases": [
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase",
+      "version": "3.49.0",
+      "schema": 26,
+      "files": 3
+    },
+    {
+      "path": "05_Probelisten_Testdaten/Showcase",
+      "version": "3.47.0",
+      "schema": 26,
+      "files": 3
+    }
+  ],
+  "runtime_files": 90,
+  "package_source_manifests": {
+    "windows-x64": {
+      "files": 134,
+      "runtime_files": 90,
+      "sha256": "30719c3884cc4b5c254550a92ad16a96eab75438d135dec985d9db92d474d5a8"
+    },
+    "macos-arm64": {
+      "files": 133,
+      "runtime_files": 90,
+      "sha256": "1521a88d1e217f174c040b67aee0646a4d6ec2afdb6ac9575e7e4d4c1e3e7110"
+    }
+  },
+  "protected_wa41_files": 9,
+  "native_signatures_rechecked": false,
+  "native_starts_rechecked": false
+}

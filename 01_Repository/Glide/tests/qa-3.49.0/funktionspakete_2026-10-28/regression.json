@@ -1,0 +1,26 @@
+[
+  {
+    "case": "home_tagesnavigation",
+    "returncode": 0,
+    "stdout": "OK home_tagesnavigation: Tag vor/zurück/Datum/Heute, separate Plan-/Fälligkeitsbilanz, Auswahlgrenze, Abbruch, readonly und Bestandswechsel ohne Aufgaben-/Undo-Wirkung\n{\"gruen\": 1, \"rot\": []}\n",
+    "stderr": ""
+  },
+  {
+    "case": "home_mehrfachfelder",
+    "returncode": 0,
+    "stdout": "OK home_mehrfachfelder: 12 Aufgaben aus zwei Listen: Wichtigkeit/Labels, vorhandene Labels, No-op, ein Undo/Redo, stale Auswahl, Sperre/readonly und Schreibfehler ohne Erfolg\n{\"gruen\": 1, \"rot\": []}\n",
+    "stderr": ""
+  },
+  {
+    "case": "side_verweisnavigation",
+    "returncode": 0,
+    "stdout": "OK side_verweisnavigation: Echter Textlink, Rückverweis, Suchauswahl, Verlauf, readonly und veralteter Link; Hauptentwurf/Datei/Undo unverändert\n{\"gruen\": 1, \"rot\": []}\n",
+    "stderr": ""
+  },
+  {
+    "case": "side_verweisaktionen",
+    "returncode": 0,
+    "stdout": "OK side_verweisaktionen: Echte Verweisaktionen: Kopieren ohne Mutation, Hauptbereich öffnen, gezielt verknüpfen mit einem Undo/Redo, readonly und Dialog-/Beziehungswechsel geschützt\n{\"gruen\": 1, \"rot\": []}\n",
+    "stderr": ""
+  }
+]

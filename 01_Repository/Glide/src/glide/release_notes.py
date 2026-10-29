@@ -14,6 +14,20 @@ bleiben ohne Eintrag, nachträglich wird nichts erfunden.
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.49.0": (
+        "Startseite: über Woche direkt einen Tag der betrachteten, vorherigen oder nächsten Woche wählen.",
+        "Ausgewählte Tagesaufgaben gemeinsam in Fälligkeit und Aufwand ändern, mit einem Rückgängig-Schritt.",
+        "Nebenansicht: Verweise kopieren, Ziele im Hauptbereich öffnen und Inhalte gezielt verknüpfen.",
+        "Nach ungeklärtem Programmende bleibt der Bestand bis zur bewussten Freigabe mit Originalvorsicherung geschützt.",
+        "Lokale Start- und Abschlussprotokolle dokumentieren Betriebsphasen ohne Aufgabeninhalte.",
+    ),
+    "3.48.0": (
+        "Startseite: zwischen Tagen wechseln oder ein Datum wählen und den passenden Tagesplan öffnen.",
+        "Planung, freie Zeit und Fälligkeiten bleiben für den angezeigten Tag getrennt nachvollziehbar.",
+        "Ausgewählte Tagesaufgaben gemeinsam priorisieren und eigene Labels hinzufügen oder entfernen.",
+        "Interne Textlinks in der Nebenansicht öffnen weitere Inhalte, ohne die Hauptarbeit zu wechseln.",
+        "Verweise und Rückverweise in der Nebenansicht durchsuchen und mit dem Verlauf zurückkehren.",
+    ),
     "3.47.0": (
         "Startseite: mehrere Tagesaufgaben auswählen und gemeinsam planen oder den Bearbeitungstag entfernen.",
         "Die Auswahl bleibt über Vorschauseiten erhalten; Alle auswählen umfasst alle offenen Tagesaufgaben.",

@@ -1,0 +1,22 @@
+[
+  {
+    "case": "pure_compile_only",
+    "exitcode": 0,
+    "seconds": 27.93
+  },
+  {
+    "case": "pure_only_imports",
+    "exitcode": 0,
+    "seconds": 23.96
+  },
+  {
+    "case": "pure_without_listapp",
+    "exitcode": 0,
+    "seconds": 25.74
+  },
+  {
+    "case": "pure_import_fresh_cache",
+    "exitcode": 0,
+    "seconds": 24.76
+  }
+]

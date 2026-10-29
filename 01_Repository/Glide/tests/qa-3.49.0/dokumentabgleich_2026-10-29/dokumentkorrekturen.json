@@ -1,0 +1,227 @@
+[
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "before_sha256": "085b7b6564c3c8dcc62e52c9ec2fe526eece6ffa8d25e15e7bbedc91c241125a",
+    "after_sha256": "a72347b4c0d7251dcd7370e4dd6475616e7698c35813b0e33e55b2f472598769",
+    "reasons": [
+      "Nicht existentes template_helpers.py durch den vorhandenen Einstieg ersetzen",
+      "Nicht existente Import-/Palettenmodule durch tatsächliche Zuständigkeit ersetzen",
+      "Nicht existentes Animationsmodul durch aktuelle Module ersetzen",
+      "P8-Abgleich auf den tatsächlichen Kandidaten beziehen",
+      "Pausierung und Abnahmetor von einer unmittelbaren Startfolge trennen",
+      "Historische Tabellenwerte von aktuellem Liefer- und Abnahmestand abgrenzen",
+      "WA-12-Auswahl und Lieferung in Bestandszeile nachziehen",
+      "WA-12-Lieferwiderspruch A05 gegen den späteren Liefernachweis berichtigen",
+      "Operative Statusmatrix mit Lieferungen und aktuellem FP-01-Rotbefund abgleichen",
+      "Aktuelle Roadmap führt den neuen Pflichtbefund statt ausschließlich früherer grüner Tests",
+      "Paketlieferung und native Abnahme unterscheiden",
+      "Überholte Startfolge eindeutig als historischen Kontext markieren",
+      "Drei defekte Abschnittsverweise auf den bestehenden Wiederanlaufvertrag korrigieren",
+      "Aktuellen Pflegeauftrag und Abgleichstand an der zuständigen Quelle eintragen"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "01_Repository/Glide/docs/00_INDEX.md",
+    "before_sha256": "4462d9b9f4313241e2a446d690e1617ff375f07ac3de6a768d768a889277559b",
+    "after_sha256": "c4761c7dd7c7938b8f54d3e6f173474600d48dec7184330934eb11a5a20ec38c",
+    "reasons": [
+      "Drei defekte Abschnittsverweise auf den bestehenden Wiederanlaufvertrag korrigieren",
+      "Index auf aktuellen Quell-, Prüf- und Lieferstand stellen",
+      "Planung, Umsetzung und noch offene Abnahme konsistent trennen",
+      "Beschreibung des QA-Berichts aktualisieren",
+      "Aktuellen Pflegeauftrag und Abgleichstand an der zuständigen Quelle eintragen"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+    "before_sha256": "0f7364c4b7175562bdd976d31b7bc475f2851dbd73c30a8131e7c749727f867c",
+    "after_sha256": "e6d6b4a1ffb1f9ed1078fc10ef9f471c9feb9d617419e6c4e4988603c1f0ec96",
+    "reasons": [
+      "Drei defekte Abschnittsverweise auf den bestehenden Wiederanlaufvertrag korrigieren",
+      "Bereits implementierte Architektur nicht weiter als unbegonnen führen"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+    "before_sha256": "d5605596948af62cdaa83552cd044c088b7c23c1f07728918f247212b224163c",
+    "after_sha256": "c551618bcc3a8545664d7f3a422187216be575c61bfe58f0105a9d7f4ba66bf4",
+    "reasons": [
+      "A05: Prüfgrenze auf tatsächliche Version und Auditbefund nachführen",
+      "Aktuellen Pflegeauftrag und Abgleichstand an der zuständigen Quelle eintragen"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+    "before_sha256": "3285576d3a98ea53ba0a62d0c6c79d5705085c94d989c1615df5380f3b6ad6e4",
+    "after_sha256": "9978d8eec2045d11211ccea1bdae6bf9be9b8e0aa815e6e4ed9f38eaff4a0cbd",
+    "reasons": [
+      "Historische Altlesergrenze nicht als gegenwärtigen Paketstand darstellen",
+      "Speicherstatus-Liefergrenze gegen späteren Lieferabschluss berichtigen"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "before_sha256": "838de158a515acc14863e5c98313a31e3c58d57fd35c7ba9369501f12f2fe1b1",
+    "after_sha256": "ae0171a048e60e1bbe04301efc81f033a7019fa34a7937e1746f2b3968dd69cd",
+    "reasons": [
+      "Neueste Analyse auf tatsächlichen Stand und Bericht beziehen"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/README.md",
+    "before_sha256": "829f192c760439fa21523397e976750e1c8f3b424f27fc7f09ad7df9f3968ae7",
+    "after_sha256": "820f3d04e160f6431912e0b5d441b1fc60473f24dab5ebda2ac00552878dbc19",
+    "reasons": [
+      "Einstieg auf den aktuellen Dokument-/Abnahmestand bringen",
+      "Veraltete aktuelle Versionsgegenüberstellung korrigieren"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "01_Repository/Glide/packaging/README.md",
+    "before_sha256": "cb48faf4fe2bb2a4d8375d3fbec60559220e5feabf8faa74746bc475adaecc3c",
+    "after_sha256": "cd473e652b7f326c7665eb98295fd75845bfc9df934fbf7ba9ab8998d4e259a4",
+    "reasons": [
+      "Aktuelle Paketquelle, Dateizahl und Liefergrenzen korrekt beschreiben"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "01_Repository/Glide/src/glide/README.md",
+    "before_sha256": "8bceedd2b1a76d2e100e14c574341674c4bd0ce69ce26ff9a213841515ddbd6f",
+    "after_sha256": "37185fe4a7b7356834be8510049a4da482a2c9bbde01392f47b3bc5fcb88a011",
+    "reasons": [
+      "Aktuelle Quellstruktur und Abnahmegrenzen aktualisieren"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "01_Repository/Glide/tests/README.md",
+    "before_sha256": "4170bd6d7a1abc5261a1d6af6d64e91a5ebd849f81f048aa05ad6eb045693ba1",
+    "after_sha256": "269549891ebfd59a67b5f250bda6fb124c24bbef69d062e0a45dae8be83bec5c",
+    "reasons": [
+      "Aktuelle Testzahlen und roten Originalbefund statt alter grüner Teilmenge nennen"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "before_sha256": "f7d6fc51873ab8c1e1a76c77c04767f30344ce9e8a001865a6aaf6584dfded15",
+    "after_sha256": "d994adf65768f8bb056ee6ca4e951ef35c8aebda29b7136a8d2ac9d56e1b6f8e",
+    "reasons": [
+      "Aktuellen Pflegeauftrag und Abgleichstand an der zuständigen Quelle eintragen",
+      "Alte Auftragsgrenze nicht als aktuellen Implementierungsstatus stehen lassen",
+      "Bereits implementierten Wiederanlauf nicht erneut als Entwurf beauftragen",
+      "Sofortübergabe auf aktuelle Quellversion beziehen"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "before_sha256": "b450be035f8c921e374c73e294ec1806cc40675aabdda98f238ecbdbc6178873",
+    "after_sha256": "8ba387a7a39361ffa7aae7f334833377a623125b0817da6a0d559dc11dec8dce",
+    "reasons": [
+      "Aktuellen Pflegeauftrag und Abgleichstand an der zuständigen Quelle eintragen"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "before_sha256": "89ad9a979433969a263ed8281f2729f3c31faa33148f9e7ce6ec505ec7633610",
+    "after_sha256": "6db9b6cd3ff645e57f48dc9c184282074604c1f116e86e88af00c89dc3fac2e6",
+    "reasons": [
+      "Aktuellen Pflegeauftrag und Abgleichstand an der zuständigen Quelle eintragen"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "01_Repository/Glide/CHANGELOG.md",
+    "before_sha256": "717ac10adfbeafa06adfed47b26e3eaf3b90f75be2577cc6e902c50f44465b45",
+    "after_sha256": "bde8aa4146e2425408326a0564d0f1d61e0925017c276d59f77169336c1e1996",
+    "reasons": [
+      "Dokumentnachlauf ohne Versionswechsel im Änderungsverlauf verzeichnen"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+    "before_sha256": "2c9d7268388e3d33b6860e172351552f72c5bc093aa36b5d4c52524f9820d51b",
+    "after_sha256": "5d767a03f18dee0da70979f83f3048d8f104b8b8179afafce561800a92080fb6",
+    "reasons": [
+      "Aktuellen Pflegeauftrag und Abgleichstand an der zuständigen Quelle eintragen"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "README.md",
+    "before_sha256": "2883bbcd7c0e7817953847e21f040b9e96cbd53be32fafad0817659671ab718d",
+    "after_sha256": "e1ab564e902bafd817dd2cba086ffc136f6576ebf21ec98dae2032db9dd20442",
+    "reasons": [
+      "Projektstart auf tatsächlichen aktuellen Arbeits-/Abnahmestand bringen"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": null
+  },
+  {
+    "path": "01_Repository/Glide/scripts/pflege/abgleich_07.py",
+    "before_sha256": "b6b40101c41deddb9e5a84fbca96e83ffbabbf52dd4965663afb398ef1353d16",
+    "after_sha256": "5a3dc9ced5c9adecb4756890f2ca96f1d61cdb492a6904f803666f76a809340e",
+    "reasons": [
+      "Veralteten Mac-Bauhinweis im Werkzeugdocstring an den verbindlichen Paketvertrag anpassen"
+    ],
+    "runtime_ast_unchanged_except_module_docstring": true
+  },
+  {
+    "path": "01_Repository/Glide/README.md",
+    "before_sha256": "9c730f28c8878a64cc318b720e14dde383abccdfb81ee0f2053a409574440f8f",
+    "reasons": [
+      "Weitere aktuelle Liefer-/Prüfeinstiege mit Quelle 3.49.0 und Abnahmebefund abgeglichen"
+    ],
+    "after_sha256": "cd8fab19c7f3cbd163081785c1336348bef609458ccaeb0a63551dbdd945756d"
+  },
+  {
+    "path": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+    "before_sha256": "3e6c21d764cdb3df9e5debc869a1fac11a246d1d12c9cb8542cae89f4feb6f85",
+    "reasons": [
+      "Weitere aktuelle Liefer-/Prüfeinstiege mit Quelle 3.49.0 und Abnahmebefund abgeglichen"
+    ],
+    "after_sha256": "7b7c0731a161e87b51737e79c56e0540d29b39ae8aa9dc6fc9d4d48557a7b5cf"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/runtime/README.md",
+    "before_sha256": "17f352960182269b295305afa8e17f59eaa2f6d450bbf2c9c23dc395f51ac963",
+    "reasons": [
+      "Weitere aktuelle Liefer-/Prüfeinstiege mit Quelle 3.49.0 und Abnahmebefund abgeglichen"
+    ],
+    "after_sha256": "98ca0e9934664f64e3882dc20e337a4bc878b93d9dc08bce32428d2c91aea39e"
+  },
+  {
+    "path": "05_Probelisten_Testdaten/README.md",
+    "before_sha256": "47ec7107a505a6a7f92f510456e44ca271a3f81442b1a735d6482270862c1ef9",
+    "reasons": [
+      "Weitere aktuelle Liefer-/Prüfeinstiege mit Quelle 3.49.0 und Abnahmebefund abgeglichen"
+    ],
+    "after_sha256": "37814bde2b48c2fd10c7d63b8311bf79c9775a483434806565f748f777b249bc"
+  },
+  {
+    "path": "07_Python-Versionen/README.md",
+    "before_sha256": "4f68c3674b1770af1a512025b31b116b141e4671ae065bba9be49c25eca81382",
+    "reasons": [
+      "Weitere aktuelle Liefer-/Prüfeinstiege mit Quelle 3.49.0 und Abnahmebefund abgeglichen"
+    ],
+    "after_sha256": "e10e0370b6dedf5f7bc24009ab29f6e09ae8d0710c4b7d09273a005002990982"
+  },
+  {
+    "path": "CLAUDE.md",
+    "before_sha256": "0608919810c9d969e88ab0da447c7e48bb478d4975d70b80fa9546bf4ba1649c",
+    "reasons": [
+      "Weitere aktuelle Liefer-/Prüfeinstiege mit Quelle 3.49.0 und Abnahmebefund abgeglichen"
+    ],
+    "after_sha256": "985629431078f820480b6ba83ee631540fbec3529617f49389e718cbfce72225"
+  }
+]

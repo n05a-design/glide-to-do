@@ -1,0 +1,6 @@
+{
+  "privacy_findings": [],
+  "privacy": "green",
+  "reason": "Nur Dokumentation geändert; keine ausführbare Änderung seit CI",
+  "full_ci_rerun": false
+}

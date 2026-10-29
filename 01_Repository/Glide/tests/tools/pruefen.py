@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import ast
 from datetime import date, datetime
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -23,12 +24,14 @@ from urllib.parse import unquote, urlsplit
 import zipfile
 
 from zugang_pruefvertrag import native_zugangspruefung
+from pruefablauf import Pruefablauf
+from prozessdiagnose import prozessdiagnose, systemkontext
 
 REPO = Path(__file__).resolve().parents[2]
 APP = REPO / "src/glide/app.pyw"
 SUITEN = ("test_glide.py", "test_datenintegritaet.py", "test_drawing.py", "test_drawing_prototype.py", "audit_app.py",
           "test_dialog_theme.py", "test_ui_updates.py", "test_glide_36.py", "test_release36.py", "test_ui_polish36.py",
-          "test_ui_followup36.py", "test_release37.py", "test_template_workflows.py", "test_reminders.py", "test_ui39.py", "test_workspace310.py", "test_features311.py", "test_features312.py", "test_features313.py", "test_features314.py", "test_features315.py", "test_features316.py", "test_features317.py", "test_features318.py", "test_features319.py", "test_features320.py", "test_features321.py", "test_features322.py", "test_features323.py", "test_features324.py", "test_features325.py", "test_features326.py", "test_features328.py", "test_features329.py", "test_drawing330.py", "test_features330.py", "test_mindestgroesse330.py", "test_kontrast330.py", "test_paketierung330.py", "test_hintergrund330.py", "test_rueckmeldung330.py", "test_seiten330.py", "test_aufraeumen330.py", "test_kompression330.py", "test_bilder330.py", "test_festlayout330.py", "test_logo330.py", "test_kartenfuss330.py", "test_speicherlast330.py", "test_notizbereich330.py", "test_befunde330.py", "test_fenster330.py", "test_tempo330.py", "test_etappe1_332.py", "test_klappmechanismen3321.py", "test_drag_performance3322.py", "test_library_performance3323.py", "test_fundament333.py", "test_bereiche3331.py", "test_startseite3332.py", "test_eingabe3333.py", "test_eisenhower3335.py", "test_heute3336.py", "test_suche3337.py", "test_editor3338.py", "test_speichervergleich3339.py", "test_kennzahlen33310.py", "test_fortsetzung33311.py", "test_titel33312.py", "test_planen33313.py", "test_tagpaket33314.py", "test_wissen33315.py", "test_bedienung33316.py", "test_woche33317.py", "test_seiten33318.py", "test_tempo33319.py", "test_komfort33320.py", "test_oberflaeche33321.py", "test_wissen3340.py", "test_pixel3350.py", "test_austausch3350.py", "test_fundament3360.py", "test_logo3370.py", "test_aufgaben3380.py", "test_tag3390.py", "test_wiederholung3391.py", "test_animation3400.py", "test_import3410.py", "test_paket3420.py", "test_zugang400.py", "test_uiux_paket.py", "test_wiederholen.py", "test_schutzrunde.py", "test_bildkonversion.py", "test_erwaehnungen.py", "test_auftraege.py", "test_markdownbaum.py", "test_seitenkarten.py", "test_ansichten.py", "test_arbeitsmodi.py", "test_speicherstatus.py", "test_sicherungszentrale.py", "test_wiederholungsregeln.py", "test_vollpruefung325.py")
+          "test_ui_followup36.py", "test_release37.py", "test_template_workflows.py", "test_reminders.py", "test_ui39.py", "test_workspace310.py", "test_features311.py", "test_features312.py", "test_features313.py", "test_features314.py", "test_features315.py", "test_features316.py", "test_features317.py", "test_features318.py", "test_features319.py", "test_features320.py", "test_features321.py", "test_features322.py", "test_features323.py", "test_features324.py", "test_features325.py", "test_features326.py", "test_features328.py", "test_features329.py", "test_drawing330.py", "test_features330.py", "test_mindestgroesse330.py", "test_kontrast330.py", "test_paketierung330.py", "test_hintergrund330.py", "test_rueckmeldung330.py", "test_seiten330.py", "test_aufraeumen330.py", "test_kompression330.py", "test_bilder330.py", "test_festlayout330.py", "test_logo330.py", "test_kartenfuss330.py", "test_speicherlast330.py", "test_notizbereich330.py", "test_befunde330.py", "test_fenster330.py", "test_tempo330.py", "test_etappe1_332.py", "test_klappmechanismen3321.py", "test_drag_performance3322.py", "test_library_performance3323.py", "test_fundament333.py", "test_bereiche3331.py", "test_startseite3332.py", "test_eingabe3333.py", "test_eisenhower3335.py", "test_heute3336.py", "test_suche3337.py", "test_editor3338.py", "test_speichervergleich3339.py", "test_kennzahlen33310.py", "test_fortsetzung33311.py", "test_titel33312.py", "test_planen33313.py", "test_tagpaket33314.py", "test_wissen33315.py", "test_bedienung33316.py", "test_woche33317.py", "test_seiten33318.py", "test_tempo33319.py", "test_komfort33320.py", "test_oberflaeche33321.py", "test_wissen3340.py", "test_pixel3350.py", "test_austausch3350.py", "test_fundament3360.py", "test_logo3370.py", "test_aufgaben3380.py", "test_tag3390.py", "test_wiederholung3391.py", "test_animation3400.py", "test_import3410.py", "test_paket3420.py", "test_zugang400.py", "test_uiux_paket.py", "test_wiederholen.py", "test_schutzrunde.py", "test_bildkonversion.py", "test_erwaehnungen.py", "test_auftraege.py", "test_markdownbaum.py", "test_seitenkarten.py", "test_ansichten.py", "test_arbeitsmodi.py", "test_speicherstatus.py", "test_sicherungszentrale.py", "test_wiederanlauf.py", "test_wiederholungsregeln.py", "test_zukunftsfelder.py", "test_mutationsreste.py", "test_listenleeren.py", "test_vollpruefung325.py")
 # standpruefung.py ist seit 3.21.3 dabei: Sieben Dokumente standen zwei
 # Versionssprünge lang auf 3.21.0, weil nichts die Standzeilen gegen VERSION
 # geprüft hat. Index- und Linkprüfung finden das nicht – ein Dokument kann
@@ -286,13 +289,16 @@ def fundstellen(fixture, erzeugt, grenze=5):
 
 
 class Prueflauf:
-    def __init__(self, logdir, timeout):
+    def __init__(self, logdir, timeout, *, waechter=None):
         self.results = []
         self.logdir = logdir
         self.timeout = timeout
         self.gui_prefix = []
         self.gui_problem = None
         self.zone_problem = None
+        self.waechter = waechter
+        self.systemkontext = systemkontext()
+        self.systemkontext["app_sha256"] = hashlib.sha256(APP.read_bytes()).hexdigest()
         self.env = dict(os.environ, PYTHONUTF8="1", PYTHONDONTWRITEBYTECODE="1", PYTHONFAULTHANDLER="1")
         # Suiten laufen absichtlich in einer Zone mit Versatz, wenn der
         # Aufrufer keine vorgibt. In UTC ist jeder Zeitzonenfehler unsichtbar,
@@ -313,30 +319,53 @@ class Prueflauf:
             self.env.setdefault("TZ", "Europe/Berlin")
         if logdir:
             logdir.mkdir(parents=True, exist_ok=True)
+            (logdir / "systemkontext.json").write_text(
+                json.dumps(self.systemkontext, ensure_ascii=False, indent=2), encoding="utf-8")
 
     def meldung(self, name, state, reason):
         self.results.append({"schritt": name, "status": state, "grund": reason})
         print(f"[{state}] {name}: {reason}", flush=True)
 
     def funktion(self, name, action):
+        if self.waechter and self.waechter.before(name, self.env) is None:
+            self.meldung(name, "übersprungen", "Prüffolge nach Fehler/Integritätsbefund gestoppt")
+            return False
         try:
             reason = action()
         except (OSError, ValueError, SyntaxError, KeyError, zipfile.BadZipFile) as exc:
+            if self.waechter:
+                self.waechter.after(ok=False, error=type(exc).__name__)
             self.meldung(name, "fehlgeschlagen", str(exc))
+            return False
         else:
+            if self.waechter and not self.waechter.after(ok=True):
+                self.meldung(name, "fehlgeschlagen", "Eingabebestand während des Falls verändert")
+                return False
             self.meldung(name, "ausgeführt", reason)
+            return True
 
     def prozess(self, name, command, gui=False, umgebung=None):
+        if self.waechter and self.waechter.stopped:
+            self.meldung(name, "übersprungen", "Prüffolge nach Fehler/Integritätsbefund gestoppt")
+            return False
         if gui and self.gui_problem:
             self.meldung(name, "übersprungen", self.gui_problem)
             return False
         # `umgebung` ergänzt einzelne Variablen nur für diesen Schritt.
         env = self.env if umgebung is None else {**(self.env or os.environ), **umgebung}
+        started = datetime.now().astimezone().isoformat(timespec="seconds")
         try:
-            result = subprocess.run((self.gui_prefix if gui else []) + command,
-                                    cwd=REPO, env=env, capture_output=True,
-                                    text=True, encoding="utf-8", errors="replace",
-                                    timeout=self.timeout)
+            cmd = (self.gui_prefix if gui else []) + command
+            if self.waechter:
+                result = self.waechter.command(name, cmd, timeout=self.timeout,
+                                              environment=env, cwd=REPO)
+                if result is None:
+                    self.meldung(name, "fehlgeschlagen", "Eingabebestand vor dem Fall verändert")
+                    return False
+            else:
+                result = subprocess.run(cmd, cwd=REPO, env=env, capture_output=True,
+                                        text=True, encoding="utf-8", errors="replace",
+                                        timeout=self.timeout)
         except (OSError, subprocess.TimeoutExpired) as exc:
             self.meldung(name, "fehlgeschlagen", str(exc))
             return False
@@ -345,16 +374,40 @@ class Prueflauf:
             (self.logdir / f"{name}.log").write_text(output, encoding="utf-8")
         # Frühere Auditfassungen konnten Befunde trotz Exitcode 0 melden.
         has_findings = name == "audit_app" and re.search(r"(?m)^BEFUNDE\s*\([1-9]\d*\)", output)
-        ok = result.returncode == 0 and not has_findings
+        ok = result.returncode == 0 and not has_findings and not (
+            self.waechter and self.waechter.stopped)
+        if has_findings and self.waechter:
+            self.waechter.stopped = True
+            self.waechter.rows[-1]["passed"] = False
+            self.waechter.rows[-1]["error"] = "Audit meldet Befunde"
+            self.waechter.report["stopped"] = True
+            self.waechter.save()
         if not ok:
             print(output[-8000:], flush=True)
         elif not self.logdir:
             print(output.rstrip(), flush=True)
         self.meldung(name, "ausgeführt" if ok else "fehlgeschlagen",
                      f"Exitcode {result.returncode}" + ("; Audit meldet Befunde" if has_findings else ""))
+        self.results[-1]["exitcode"] = result.returncode
+        diagnosis = prozessdiagnose(name, result.returncode, output, kontext=self.systemkontext)
+        if diagnosis:
+            diagnosis.update({"start": started,
+                              "ende": datetime.now().astimezone().isoformat(timespec="seconds")})
+            self.results[-1]["diagnose"] = diagnosis
+            if self.logdir:
+                (self.logdir / f"{name}.diagnose.json").write_text(
+                    json.dumps({"schritt": name, "status": "fehlgeschlagen",
+                                "systemkontext": self.systemkontext, "diagnose": diagnosis},
+                               ensure_ascii=False, indent=2), encoding="utf-8")
+            print(f"[Diagnosehinweis {diagnosis['spur']}] {diagnosis['hinweis']} "
+                  f"{diagnosis['naechster_schritt']} Test bleibt fehlgeschlagen.", flush=True)
         return ok
 
     def gui_pruefen(self):
+        if self.waechter and self.waechter.stopped:
+            self.gui_problem = "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+            self.meldung("Tk-Voraussetzung", "übersprungen", self.gui_problem)
+            return
         if sys.platform.startswith("linux") and not os.environ.get("DISPLAY"):
             executable = shutil.which("xvfb-run")
             if executable:
@@ -363,9 +416,14 @@ class Prueflauf:
                 self.gui_problem = "Kein DISPLAY und xvfb-run nicht vorhanden"
         if not self.gui_problem:
             try:
-                result = subprocess.run(self.gui_prefix + [sys.executable, "-B", str(REPO / "tests/tools/pruefe_tk.py")],
-                    env=self.env, capture_output=True, text=True, encoding="utf-8",
-                    errors="replace", timeout=30)
+                command = self.gui_prefix + [sys.executable, "-B", str(REPO / "tests/tools/pruefe_tk.py")]
+                result = (self.waechter.command("Tk-Voraussetzung", command, timeout=30, environment=self.env)
+                          if self.waechter else subprocess.run(command, env=self.env, capture_output=True,
+                              text=True, encoding="utf-8", errors="replace", timeout=30))
+                if result is None:
+                    self.gui_problem = "Eingabebestand vor der Tk-Probe verändert"
+                    self.meldung("Tk-Voraussetzung", "fehlgeschlagen", self.gui_problem)
+                    return
                 if result.returncode:
                     self.gui_problem = "Tk nicht betriebsbereit: " + (result.stderr.strip().splitlines()[-1] if result.stderr else str(result.returncode))
             except (OSError, subprocess.TimeoutExpired) as exc:
@@ -393,15 +451,22 @@ class Prueflauf:
         einen Tag verschiebt – hängt genau daran, und eine Zone ohne diese
         Regel kann sie nicht zeigen.
         """
+        if self.waechter and self.waechter.stopped:
+            self.zone_problem = "Prüffolge nach Fehler/Integritätsbefund gestoppt"
+            self.meldung("Zeitzone", "übersprungen", self.zone_problem)
+            return
         code = ("import datetime;m=datetime.datetime.now().astimezone();"
                 "o=m.utcoffset();print(int(o.total_seconds()) if o else 0);"
                 "print(1 if datetime.datetime(m.year, 1, 15).astimezone().utcoffset()"
                 " != datetime.datetime(m.year, 7, 15).astimezone().utcoffset() else 0);"
                 "print(m.tzname() or '?')")
         try:
-            result = subprocess.run([sys.executable, "-c", code], env=self.env,
-                                    capture_output=True, text=True, encoding="utf-8",
-                                    errors="replace", timeout=30)
+            command = [sys.executable, "-B", "-c", code]
+            result = (self.waechter.command("Zeitzone", command, timeout=30, environment=self.env)
+                      if self.waechter else subprocess.run(command, env=self.env, capture_output=True,
+                          text=True, encoding="utf-8", errors="replace", timeout=30))
+            if result is None:
+                raise ValueError("Eingabebestand vor der Zeitzonenprobe verändert")
             if result.returncode:
                 raise ValueError(result.stderr.strip().splitlines()[-1] if result.stderr
                                  else f"Exitcode {result.returncode}")
@@ -448,6 +513,8 @@ def main():
     parser.add_argument("--protokoll", type=Path, help="Ordner für vollständige Logs und ergebnis.json")
     parser.add_argument("--screenshots", type=Path, help="Bildordner im Vollmodus; Standard: Protokollordner/screenshots")
     parser.add_argument("--timeout", type=int, default=300, help="Zeitlimit je Suite/Werkzeug in Sekunden")
+    parser.add_argument("--arbeitsablage", type=Path,
+                        help="Lokale Prozess-/Belegablage außerhalb OneDrive und System-Temp; Standard: ~/GlidePruefung")
     parser.add_argument("--vordergrund", action="store_true",
                         help="macOS: Prüffenster dürfen Fokus und Vordergrund nehmen (Standard: Hintergrund)")
     parser.add_argument("--zugang-nativ", action="store_true",
@@ -456,7 +523,10 @@ def main():
     if args.timeout < 1:
         parser.error("--timeout muss positiv sein")
     logdir = args.protokoll.expanduser().resolve() if args.protokoll else None
-    run = Prueflauf(logdir, args.timeout)
+    waechter = Pruefablauf(REPO, args.arbeitsablage)
+    logdir = logdir or waechter.root / "protokoll"
+    run = Prueflauf(logdir, args.timeout, waechter=waechter)
+    print(f"Dauerhafter WA-42-Nachweis: {waechter.root}", flush=True)
     if sys.platform == "darwin" and not args.vordergrund:
         # Seit 30.09.2026 laufen die Prüffenster im Hintergrund: Sie holen
         # sich nicht den Vordergrund und nehmen keine Maus. Die Tastatur ist
@@ -478,9 +548,10 @@ def main():
     run.prozess("Fachlogik-Unit-Tests", [sys.executable, "-B", "-m", "unittest", "discover", "-s", str(REPO / "tests/unit")])
     run.gui_pruefen()
     run.zone_pruefen()
-    zugang_nativ = native_zugangspruefung(quelltext(REPO / "VERSION").strip(), angefordert=args.zugang_nativ)
+    zugang_nativ = not waechter.stopped and native_zugangspruefung(
+        quelltext(REPO / "VERSION").strip(), angefordert=args.zugang_nativ)
     if zugang_nativ:
-        with tempfile.TemporaryDirectory(prefix="glide-tcl-pruefbericht-") as temporary:
+        with tempfile.TemporaryDirectory(prefix="glide-tcl-pruefbericht-", dir=waechter.root) as temporary:
             script_report = (logdir or Path(temporary)) / "zugang-skript.json"
             run.prozess("Native Tcl-Zugangsbindungen", [sys.executable, "-B",
                 str(REPO / "tests/tools/pruefe_native_accessibility_skript.py"),
@@ -498,9 +569,9 @@ def main():
     run.prozess("Showcase", [sys.executable, str(REPO / "tests/tools/pruefe_showcase.py")], gui=True)
     for name in ANALYSEN:
         run.prozess(Path(name).stem, [sys.executable, str(REPO / "tests/tools" / name)])
-    if args.modus == "voll":
+    if args.modus == "voll" and not waechter.stopped:
         target = args.screenshots or (logdir / "screenshots" if logdir else None)
-        with tempfile.TemporaryDirectory(prefix="glide-reproduktion-") as tempdir:
+        with tempfile.TemporaryDirectory(prefix="glide-reproduktion-", dir=waechter.root) as tempdir:
             generated = Path(tempdir) / "beispieldaten.glidebackup"
             if run.prozess("Beispieldaten-erzeugen", [sys.executable, str(REPO / "tests/tools/beispieldaten.py"), "--ziel", str(generated)], gui=True):
                 def vergleichen():
@@ -521,7 +592,7 @@ def main():
                 run.funktion("Beispieldaten-Abgleich", vergleichen)
             # Der Planungsstichtag ist Bestandteil des Release-Inhalts. Anders
             # als bei allgemeinen Beispielen muss genau dieser Tag wieder gelten.
-            version = quelltext(REPO / "VERSION").strip()
+            version = quelltext(REPO / "VERSION").strip() if not waechter.stopped else "gestoppt"
             release_path = REPO / f"tests/fixtures/beispiele/glide_releaseplanung_{version}.glidebackup"
             try:
                 release_payload = backup_lesen(release_path)
@@ -560,15 +631,19 @@ def main():
         else:
             run.prozess("Screenshots", [sys.executable, str(REPO / "tests/tools/screenshots.py"), "--out", str(target.resolve())], gui=True)
     else:
-        run.meldung("Beispieldaten-Reproduktion", "übersprungen", "Schnellmodus; für Erzeugerabgleich --modus voll verwenden")
-        run.meldung("Screenshots", "übersprungen", "Schnellmodus; für Bilder --modus voll verwenden")
+        reason = ("Prüffolge nach Fehler/Integritätsbefund gestoppt" if waechter.stopped else
+                  "Schnellmodus; für Erzeugerabgleich und Bilder --modus voll verwenden")
+        run.meldung("Beispieldaten-Reproduktion", "übersprungen", reason)
+        run.meldung("Screenshots", "übersprungen", reason)
     run.meldung("Sichtprüfung", "übersprungen", "Bilder müssen von einer Person angesehen werden; native Plattformprüfung bleibt offen")
-    failed = any(row["status"] == "fehlgeschlagen" for row in run.results)
+    failed = waechter.stopped or any(row["status"] == "fehlgeschlagen" for row in run.results)
     exitcode = 1 if failed else 2 if run.gui_problem or run.zone_problem else 0
     if logdir:
         (logdir / "ergebnis.json").write_text(json.dumps({"zeitpunkt": datetime.now().isoformat(timespec="seconds"),
             "modus": args.modus, "python": sys.version, "plattform": sys.platform,
-            "exitcode": exitcode, "schritte": run.results}, ensure_ascii=False, indent=2), encoding="utf-8")
+            "systemkontext": run.systemkontext,
+            "exitcode": exitcode, "pruefablauf": str(waechter.root / "pruefablauf.json"),
+            "schritte": run.results}, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Ergebnis: {'FEHLGESCHLAGEN' if exitcode == 1 else 'UNVOLLSTÄNDIG' if exitcode == 2 else 'automatisierte Prüfungen erfolgreich'}; manuelle Restprüfung siehe oben.", flush=True)
     return exitcode
 

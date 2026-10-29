@@ -1,0 +1,47 @@
+[
+  {
+    "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.43.0.glidebackup",
+    "sha256": "87a74635c115c1affbac822fc776e032f6b561bb44d4719249ef1202675dbe58",
+    "status": "erhalten; ausserhalb Aufbewahrung, Abgleich/Bereinigung offen"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.0/acl_symlinks_2026-10-16/README.md",
+    "sha256": "cc8521badd521952b78fa3f1ae0e20fcc1da1b25367b8a4984c3900ec8bea433",
+    "status": "erhalten; ausserhalb Aufbewahrung, Abgleich/Bereinigung offen"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.0/acl_symlinks_2026-10-16/ergebnis.json",
+    "sha256": "968db914ad4c9d8b260f4ff6ef3bee28a5776c069c25923d06d997047662ae04",
+    "status": "erhalten; ausserhalb Aufbewahrung, Abgleich/Bereinigung offen"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.0/acl_symlinks_2026-10-16/grundstufe.json",
+    "sha256": "d97d69b1572c00b1b16b2298022a433132dc6f1a09751faf615ed8fddb1f3b63",
+    "status": "erhalten; ausserhalb Aufbewahrung, Abgleich/Bereinigung offen"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md",
+    "sha256": "545f658fbd2024fc3bf73c5a1d60247a5a51f93d4e684608e269c8bed23c2fc5",
+    "status": "erhalten; ausserhalb Aufbewahrung, Abgleich/Bereinigung offen"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/ergebnis.json",
+    "sha256": "22753635d9050e968f3446617d8828d880edd049e48df9d62d38ac54f8f57474",
+    "status": "erhalten; ausserhalb Aufbewahrung, Abgleich/Bereinigung offen"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/gegenprobe_3.42.0.json",
+    "sha256": "6e8e8b5eabc603f3f9a6188669c997d27d2bf6a1d7d4128e6e04f91df5354bbc",
+    "status": "erhalten; ausserhalb Aufbewahrung, Abgleich/Bereinigung offen"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/pflichtsuite_3.43.0.json",
+    "sha256": "0594cdc12bc0e27611b424c79a26d10557eb771ecf8486e34f6f3d47a2a53f56",
+    "status": "erhalten; ausserhalb Aufbewahrung, Abgleich/Bereinigung offen"
+  },
+  {
+    "path": "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.43.0.pyw",
+    "sha256": "379e97e32e3cc5e52eeb104ec23937df28081b45bd0e63582d5065cd61a2b172",
+    "status": "erhalten; ausserhalb Aufbewahrung, Abgleich/Bereinigung offen"
+  }
+]

@@ -373,7 +373,7 @@ def run(app_path, cases, report, previous):
                 assert editor().flush() and app.save_items()
                 full = document()
                 data = saved_path.read_bytes()
-                app.cancel_pending_callbacks();app.release_data_lock();root.destroy()
+                app.cancel_pending_callbacks();getattr(app,"finish_recovery_session",lambda:None)();app.release_data_lock();root.destroy()
                 script = '''import hashlib,importlib.machinery,importlib.util,os,pathlib,sys
 p=pathlib.Path(os.environ['GLIDE_DATA_DIR'])/'liste_speicher.json';before=p.read_bytes()
 sys.path.insert(0,str(pathlib.Path(sys.argv[1]).parent))
@@ -383,7 +383,7 @@ m.ListApp.show_error=m.ListApp.show_warning=m.ListApp.show_info=lambda *a,**kw:N
 r=m.tk.Tk();r.withdraw();a=m.ListApp(r)
 assert a.DATA_SCHEMA_VERSION==23 and a._data_read_only
 assert not a.save_items() and p.read_bytes()==before
-a.cancel_pending_callbacks();a.release_data_lock();r.destroy()
+a.cancel_pending_callbacks();getattr(a,"finish_recovery_session",lambda:None)();a.release_data_lock();r.destroy()
 print('Format 24: unveraenderte Vorversion schreibgeschuetzt, Dateibytes unveraendert')
 '''
                 if previous is not None:
@@ -420,7 +420,7 @@ else:
  for v in a.lists:
   if v.get('list_kind')=='drawing':
    assert len(v['animation']['frames'])==1 and v['drawing']==old_drawings[v['id']]
-a.dirty=False;a.cancel_pending_callbacks();a.release_data_lock();r.destroy()
+a.dirty=False;a.cancel_pending_callbacks();getattr(a,"finish_recovery_session",lambda:None)();a.release_data_lock();r.destroy()
 print('Format-24-Startmigration '+sys.argv[2]+': Dateivertrag gruen')
 '''
                 for mode in ('failure', 'success'):
@@ -434,7 +434,7 @@ print('Format-24-Startmigration '+sys.argv[2]+': Dateivertrag gruen')
         finally:
             try:
                 app.dirty = False
-                app.cancel_pending_callbacks();app.release_data_lock();root.destroy()
+                app.cancel_pending_callbacks();getattr(app,"finish_recovery_session",lambda:None)();app.release_data_lock();root.destroy()
             except mod.tk.TclError:
                 pass
         if report:

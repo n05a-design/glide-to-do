@@ -344,7 +344,7 @@ def run(app_path, cases, report=None, previous=None):
                     previous = vorversion.finden(repo.parent.parent, '3.40.0', repo/'CHANGELOG.md')
                 assert app.save_items()
                 data = disk.read_bytes()
-                app.cancel_pending_callbacks();app.release_data_lock();root.destroy()
+                app.cancel_pending_callbacks();getattr(app,"finish_recovery_session",lambda:None)();app.release_data_lock();root.destroy()
                 child = '''import importlib.machinery,importlib.util,json,os,pathlib,sys
 from unittest.mock import patch
 p=pathlib.Path(os.environ['GLIDE_DATA_DIR'])/'liste_speicher.json';before=p.read_bytes()
@@ -364,7 +364,7 @@ else:
  backups=list(pathlib.Path(m.BACKUP_DIR).glob('liste_vor_format25_*.json'))
  assert len(backups)==1 and backups[0].read_bytes()==before
  assert [v['id'] for v in json.loads(before)['lists']]==[v['id'] for v in a.lists]
-a.dirty=False;a.cancel_pending_callbacks();a.release_data_lock();r.destroy()
+a.dirty=False;a.cancel_pending_callbacks();getattr(a,"finish_recovery_session",lambda:None)();a.release_data_lock();r.destroy()
 '''
                 if previous is not None:
                     # Eine archivierte Hauptdatei allein ist keine echte Vorversion:
@@ -400,7 +400,7 @@ a.dirty=False;a.cancel_pending_callbacks();a.release_data_lock();r.destroy()
         finally:
             try:
                 app.dirty = False
-                app.cancel_pending_callbacks();app.release_data_lock();root.destroy()
+                app.cancel_pending_callbacks();getattr(app,"finish_recovery_session",lambda:None)();app.release_data_lock();root.destroy()
             except mod.tk.TclError:
                 pass
         payload = dict(app_sha256=hashlib.sha256(app_path.read_bytes()).hexdigest(), faelle=cases,

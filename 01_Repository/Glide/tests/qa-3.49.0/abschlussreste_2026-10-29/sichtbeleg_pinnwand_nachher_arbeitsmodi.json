@@ -1,0 +1,15 @@
+{
+  "app_sha256": "2f5556f71c01f22f7991733af6eb004a7af57d8b2b0c63ac21272f34abe014ee",
+  "faelle": {
+    "gestaltung": {
+      "ok": true,
+      "befund": "226 Knopfprüfungen in fünf Konfigurationen ohne Befund · Aufnahmen gespeichert",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": []
+}

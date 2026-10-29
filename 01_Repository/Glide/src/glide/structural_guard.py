@@ -30,6 +30,47 @@ UNSAVED = "unsaved"
 INCOMPLETE = "incomplete"
 
 
+def item_ids(items, into=None):
+    """Punktbäume lesen; Listen-/Ordnerkennungen sind keine Punktkennungen."""
+    found = set() if into is None else into
+    for item in items or []:
+        if not isinstance(item, dict):
+            continue
+        if item.get('id'):
+            found.add(item['id'])
+        item_ids(item.get('children', []), found)
+    return found
+
+
+def trash_item_ids(records):
+    """Aktueller typisierter Papierkorb und bestehende ältere Payloadformen."""
+    found = set()
+    for record in records:
+        if not isinstance(record, dict):
+            continue
+        point = record.get('item')
+        if isinstance(point, dict):
+            item_ids([point], found)
+        container = record.get('list')
+        if isinstance(container, dict):
+            item_ids(container.get('items', []), found)
+        for key in ('payload', 'items'):
+            legacy = record.get(key)
+            if isinstance(legacy, list):
+                item_ids(legacy, found)
+            elif isinstance(legacy, dict):
+                item_ids(legacy['items'] if isinstance(legacy.get('items'), list) else [legacy], found)
+    return found
+
+
+def data_item_ids(lists, trash):
+    """Vollständige Punktprojektion für den Wächter, ohne Modellmutation."""
+    found = trash_item_ids(trash)
+    for entry in lists:
+        item_ids(entry.get('items', []), found)
+    return found
+
+
 class GuardTransaction:
     """Zustand eines laufenden Bestandswächters."""
 

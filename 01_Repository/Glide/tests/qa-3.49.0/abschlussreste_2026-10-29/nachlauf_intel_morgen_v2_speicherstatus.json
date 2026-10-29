@@ -1,0 +1,28 @@
+{
+  "app_sha256": "2f5556f71c01f22f7991733af6eb004a7af57d8b2b0c63ac21272f34abe014ee",
+  "modules_sha256": {
+    "storage_health.py": "22fce4eb46b705bf332b10ef141e3f052b045c5cb2bec2b0338ecf301957d07d",
+    "schema_backups.py": "3d07ef08791d7b46f47f75521e6152050ada2d1b256fc29abdd417c33c11a9ae",
+    "action_catalog.py": "4811bbd6abd3418bf7db9816d3c1fee3a00ab703d8f0cdf5e0cf0b82c753b0f6"
+  },
+  "test_sha256": "056f4c092001c8cd44a54e59aadc18f4a1bb31ce42638eaf78414ab9afae20da",
+  "faelle": {
+    "fehler_retry": {
+      "ok": true,
+      "befund": "Autosave-Fehler sichtbar und dedupliziert; echter Dialog/Retry, Originalbytes bis Erfolg erhalten, Fußknöpfe frei"
+    },
+    "nebenwege": {
+      "ok": true,
+      "befund": "Einstellungen, Vorlagen und Sicherung getrennt; kein falscher Datenfehler; Retry aller offenen Speicherwege"
+    },
+    "groessen": {
+      "ok": true,
+      "befund": "Zu große Aufgaben/Einstellungen/Vorlagen beim Start geschützt; atomare UTF-8-Schreibgrenze erhält Original"
+    },
+    "reserve_import": {
+      "ok": true,
+      "befund": "Reserve ab 80 % sichtbar; fehlgeschlagene Vorab-Sicherung stoppt Import ohne Datenänderung"
+    }
+  },
+  "fehler": []
+}

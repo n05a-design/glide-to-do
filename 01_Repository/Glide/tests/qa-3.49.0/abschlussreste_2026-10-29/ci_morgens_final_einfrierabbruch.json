@@ -1,0 +1,7 @@
+{
+  "phase": "einfrieren",
+  "started_ci": false,
+  "success": false,
+  "reason": "Während des Einfrierens wurde der neue QA-Quellnachweis wa09_implementierungsstand.json angelegt; die Eingangsmengenprüfung brach deshalb korrekt ab. Kein App-/Unit-/CI-Fall ausgeführt.",
+  "next": "Neue Kopie erst nach abgeschlossener Dateianlage, keine Änderung während des Kopierens."
+}

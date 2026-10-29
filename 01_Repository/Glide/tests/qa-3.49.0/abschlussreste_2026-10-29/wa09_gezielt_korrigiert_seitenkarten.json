@@ -1,0 +1,56 @@
+{
+  "app_sha256": "8025a20ce47e82a880f6328aa64c2eacbc86e5c8f1bb74ed86a0e8a0e80922e8",
+  "faelle": {
+    "inhalt_undo": {
+      "ok": true,
+      "messung": {
+        "offene_aufgaben": 1,
+        "auszug_max": 160
+      }
+    },
+    "archiv_loeschen": {
+      "ok": true,
+      "messung": null
+    },
+    "auswahl_ziehen": {
+      "ok": true,
+      "messung": null
+    },
+    "altleser_backup": {
+      "ok": true,
+      "messung": {
+        "altleser_app_sha256": "ed2b7eb64cc3fc14f00a4e909c7693c34102e46e393b5937158bb7d7e25176d3",
+        "historische_begleitmodule": true
+      }
+    },
+    "titelbild_praesentation_sicherung": {
+      "ok": true,
+      "messung": {
+        "titelbild": true,
+        "praesentation": true,
+        "app_sicherung": true,
+        "tastatur": true
+      }
+    },
+    "druck_tempo": {
+      "ok": true,
+      "messung": {
+        "aufgaben_ms": [
+          138.73240002430975,
+          141.46519999485463,
+          137.9120999481529,
+          139.33789997827262,
+          156.00680001080036
+        ],
+        "gemischt_ms": [
+          150.9800999192521,
+          145.50500002223998,
+          139.0242000343278,
+          137.02649995684624,
+          142.0753999846056
+        ],
+        "verhaeltnis": 1.0196464853192122
+      }
+    }
+  }
+}

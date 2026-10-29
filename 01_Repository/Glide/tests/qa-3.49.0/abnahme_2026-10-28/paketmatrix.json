@@ -1,0 +1,903 @@
+{
+  "definition": "Abnahmeeinheiten, keine addierbare Anzahl unabhängiger Features; Kennungen überlappen fachlich.",
+  "legacy": [
+    {
+      "id": "G01 / U04 / KO03/05",
+      "title": "Schnellerfassung und deutsche Chips",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "bis 3.45",
+      "rest": "Aktuelle native Bedienabnahme",
+      "modules": [
+        "capture_parser.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "capture_parser.py": "7562b7d2fe6c38c2bb3011670d5caff578b971824996a7598b628ec46727f9a3"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "G02 / AU01–07 / KO01/02/06",
+      "title": "Heute, Demnächst, Planung und Kapazität",
+      "implementation": "I",
+      "test": "Historisch + E09",
+      "delivery": "Kern bis 3.45",
+      "rest": "Neuere Tagesaktionen separat unten",
+      "modules": [
+        "planning.py",
+        "day_proposal.py",
+        "week_planning.py",
+        "routines.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "planning.py": "59b78be6d91da4adf31c2c401b0bdf1c10b6c97490a122f7f3420c20059ba0ad",
+        "day_proposal.py": "136f768444b7da7605deb6562e3972dbcae27ac47cc7ba2ed126df74d2fb4abf",
+        "week_planning.py": "38ff18553d762946fa8c4fa857cdabb4d39a84cfc020f8fa157882b4066fe95b",
+        "routines.py": "bb8bb35cc63f28542665eb3d144ef4bf5308fbd944c25711d4c04391a08a6bcb"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "G03/04 / N04 / AU04",
+      "title": "Tagesabschluss und Stundenraster",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "bis 3.45",
+      "rest": "Aktuelle native Bedienabnahme",
+      "modules": [
+        "week_planning.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "week_planning.py": "38ff18553d762946fa8c4fa857cdabb4d39a84cfc020f8fa157882b4066fe95b"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "G05 / H-02 / H-02r",
+      "title": "Fokus und Tastaturwege",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "bis 3.45",
+      "rest": "Reader/Tastatur; Zielhinweis erst nach Aktion",
+      "modules": [
+        "focus_timer.py",
+        "interaction_policy.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "focus_timer.py": "23199b0595e32770f388cf1f2a6dad8a383341893e02e9421b49c5428afb18d5",
+        "interaction_policy.py": "05baf1651eb4a9ab014c6086379fd791e2853495eac4e776bae21c2fb05da177"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "G29/31/32 / G08/30",
+      "title": "Aufgaben in Seiten und Objektverweise",
+      "implementation": "I",
+      "test": "Historisch + E09",
+      "delivery": "Kern bis 3.45",
+      "rest": "Neue Verweisaktionen separat unten",
+      "modules": [
+        "task_references.py",
+        "object_references.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "task_references.py": "c27d8336c374ef9187058c84414d0077d328e5b04ec7c83f317e6aee0de0eb19",
+        "object_references.py": "133b8c9f9e2dc5fa60a063971dc5396cf417f718d08ff65860e705241b890ee7"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "G28/G09/U08 / U18",
+      "title": "Seiten, Bilder, Live-Listen und Vorlagen",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "bis 3.45",
+      "rest": "Enge/lange Inhalte, native Bedienung",
+      "modules": [
+        "page_features.py",
+        "page_markdown.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "page_features.py": "f6d5a131aee8d87cc3be2f8c3a053bf20e43f668b2daacc2e64bb209a497ffcc",
+        "page_markdown.py": "5805eab66689fbe2dac5c863adea3ff0e2e0157f979321606062aaa01fcbbb53"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "G11",
+      "title": "Vorlagen mit Datum und Platzhaltern",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "bis 3.45",
+      "rest": "Automatische Vorlagenwiederholung nicht gewählt",
+      "modules": [],
+      "evidence": "E01, E03",
+      "module_proofs": {},
+      "missing_module_proofs": []
+    },
+    {
+      "id": "G14 / U01/03/07 / D-03",
+      "title": "Inhaltssuche, Palette, Filtererklärung",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "bis 3.45",
+      "rest": "Kein zusätzlicher Suchindex geschuldet",
+      "modules": [
+        "content_search.py",
+        "action_catalog.py",
+        "filter_explain.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "content_search.py": "d2359609d6f574984527ad24b33a5ea2b85637330500f6eab23bab6f1f58d330",
+        "action_catalog.py": "4811bbd6abd3418bf7db9816d3c1fee3a00ab703d8f0cdf5e0cf0b82c753b0f6",
+        "filter_explain.py": "f581412f3d4c8136941518e0dbe516c44db7e1ba9fee87b47f3b347878c5245a"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "N05 / U12 / KO04 / OB02–04",
+      "title": "Gemeinsamer Aufgabeninspektor",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "bis 3.45",
+      "rest": "DPI/Mehrmonitor und native Bedienung",
+      "modules": [
+        "ui_design.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "ui_design.py": "28e8a3b63b7875aab3e79215d89f78c8c75fcdf1ab008f0b07fd04cd04e4a0ae"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "UX1 / U02–24 / OB01/05/06",
+      "title": "Alltagskomfort und ruhige Oberfläche",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "bis 3.45",
+      "rest": "OB06/native Sicht; fortlaufende Designübertragung",
+      "modules": [
+        "appearance.py",
+        "home_tiles.py",
+        "release_notes.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "appearance.py": "1366388cf453f9d5ddf11bbc47e43fdd796b750a3a26105623b539e0928a2ea8",
+        "home_tiles.py": "d05add8e3c09c62b2696db34bda851e3d84475182a038cd1800a051fe590e486",
+        "release_notes.py": "f22f543c022eb1162cfc60c7f5c685b97f0f2d721283afc7fc79960de7bc7ac9"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "G16/19/20",
+      "title": "Pixelwerkstatt, Paletten und Symbolexport",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "bis 3.45",
+      "rest": "Native Sicht/Nischeneignung",
+      "modules": [
+        "drawing.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "drawing.py": "f6cb2386cf00676e5af19cca46bc354f4c2104f87f2a6d3ae85a281c2842712c"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "G17 / D18 / S26-08",
+      "title": "Animation mit Frames und PNG-Ausgabe",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "ab 3.40",
+      "rest": "GIF/Zwiebelhaut waren nicht gewählt",
+      "modules": [
+        "animation.py",
+        "animation_export.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "animation.py": "a7f4fb2849da4dcc6831c28811a52de9e739a9d251e2a123fc5b2c09202c3006",
+        "animation_export.py": "a3f47a4e0e91462de11f4458c99dc1cb2d8580b02b7baa824817dd8d9be918bb"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "G24 / F-01/03",
+      "title": "KI-Austausch und Sicherungsvergleich",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "bis 3.45",
+      "rest": "Realer externer Dateirundlauf",
+      "modules": [
+        "exchange_patch.py",
+        "backup_diff.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "exchange_patch.py": "3b5bf73c253845110c867a3d1c9629137f9070e9a12c69ac0edcf970dc576e4e",
+        "backup_diff.py": "9913de3fed9297cdbe8ad706a9390188b7a6800ec995be6fd78c11e6600f63de"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "G21 / V02 / N13",
+      "title": "Notion-Import, Konflikte und Seitenrestore",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "ab 3.41",
+      "rest": "Reale Importe/Restore, Plattformen",
+      "modules": [
+        "notion_import.py",
+        "notion_reimport.py",
+        "page_restore.py",
+        "restore_assets.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "notion_import.py": "d0e7c074aef0ccfa4ae869a96e1bddf484f0b3f5aa45c593a81012a106e9688c",
+        "notion_reimport.py": "10f06f7dabf1eb2563b15bd887729a5e75d87d2b8459cbcad3654c9f67cc815a",
+        "page_restore.py": "ba86f3e099acaaceb9de7677de6fe9638595d02f811bf557eb410353d6079b66",
+        "restore_assets.py": "f3101e2dbff3fb38bee2f561888d484d9f73dd1ad533aef3955bac72feb85571"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "G26 / H-03 / N11 / S26-10",
+      "title": "Eigenständige Pakete und Bauweg",
+      "implementation": "I",
+      "test": "Archive E05 gleich",
+      "delivery": "native 3.45",
+      "rest": "Aktueller 3.49-Stand noch nicht paketiert",
+      "modules": [],
+      "evidence": "E01, E03",
+      "module_proofs": {},
+      "missing_module_proofs": []
+    },
+    {
+      "id": "LG01–04 / D45 / S26-11/12/22",
+      "title": "Logo, Symbolrollen und Tk-Rückfall",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "ab 3.37",
+      "rest": "Logoentwurf freigegeben; keine appweite DPI-Freigabe",
+      "modules": [
+        "logo.py",
+        "glyph_metrics.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "logo.py": "7dafc78697c33315d83dbbb0e16aa222068a123f6eba93d9126dc01150a61d4a",
+        "glyph_metrics.py": "cc4e480be903d550c505774003223f801c237f5ce50e4328743c2416faced76d"
+      },
+      "missing_module_proofs": []
+    }
+  ],
+  "fp": [
+    {
+      "id": "FP-00 / WA-17/18",
+      "title": "Wiederholungseingabe und Kalenderparser",
+      "implementation": "I",
+      "test": "Historisch + E06 Units",
+      "delivery": "ab 3.39.1",
+      "rest": "Keine offene Erstimplementierung",
+      "modules": [
+        "capture_parser.py",
+        "repeat_rules.py",
+        "repeat_ics.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "capture_parser.py": "7562b7d2fe6c38c2bb3011670d5caff578b971824996a7598b628ec46727f9a3",
+        "repeat_rules.py": "fa78bb5887bec9c27fa4d77e03ed95e197931e54b2f0ab1f949b34d4f26e28a8",
+        "repeat_ics.py": "ffd2bfdae221ee4c3749c673b5f4a4d5cfeb64a78f060d502956abe582176237"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "FP-01 / WA-01",
+      "title": "Wiederholen nach Rückgängig",
+      "implementation": "I",
+      "test": "ROT: 8/9",
+      "delivery": "ab 3.44",
+      "rest": "Prüfadapter/Sitzungsabschluss korrigieren; Suite neu bestehen",
+      "modules": [
+        "undo_history.py"
+      ],
+      "evidence": "E07, E08",
+      "module_proofs": {
+        "undo_history.py": "3595022982da1d7181ad0448ea6d80909f228c6c4d1eaa00926ad07216466609"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "FP-02 / WA-02",
+      "title": "Erweiterte Rhythmen, beide Stufen",
+      "implementation": "I",
+      "test": "Historisch; frisch nicht gestartet",
+      "delivery": "ab 3.44",
+      "rest": "Native Bedienung/Kalenderaustausch",
+      "modules": [
+        "repeat_rules.py",
+        "repeat_ics.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "repeat_rules.py": "fa78bb5887bec9c27fa4d77e03ed95e197931e54b2f0ab1f949b34d4f26e28a8",
+        "repeat_ics.py": "ffd2bfdae221ee4c3749c673b5f4a4d5cfeb64a78f060d502956abe582176237"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "FP-03 / WA-03",
+      "title": "Gespeicherte Filter und Darstellungen",
+      "implementation": "I",
+      "test": "Historisch; frisch nicht gestartet",
+      "delivery": "ab 3.44",
+      "rest": "Keine offenen Kernstufen; native Abnahme",
+      "modules": [
+        "view_definition.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "view_definition.py": "0dfffe15d7f5d7fd6a0f68e839b0120627b4fd64fe06b66fe4642d0cd2b57636"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "FP-04 / WA-04",
+      "title": "Seiten-/Notizkarten auf Pinnwänden",
+      "implementation": "I",
+      "test": "Historisch; frisch nicht gestartet",
+      "delivery": "ab 3.44",
+      "rest": "Namespace erfüllt; allgemeines WA-09 bleibt separat",
+      "modules": [
+        "pinboard_pages.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "pinboard_pages.py": "fb81ff0b55012de45cbad39f433ee0916d4fb827348c5c65992c932e0dbdce22"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "FP-05 / WA-05",
+      "title": "Unverknüpfte Titelerwähnungen",
+      "implementation": "I",
+      "test": "Historisch; frisch nicht gestartet",
+      "delivery": "ab 3.44",
+      "rest": "Keine semantische KI-Verknüpfung geschuldet",
+      "modules": [
+        "object_references.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "object_references.py": "133b8c9f9e2dc5fa60a063971dc5396cf417f718d08ff65860e705241b890ee7"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "FP-06 / WA-06",
+      "title": "Fünf KI-Dateiaufträge und volle Vorschau",
+      "implementation": "I",
+      "test": "Historisch; frisch nicht gestartet",
+      "delivery": "ab 3.44, später ergänzt",
+      "rest": "Provider/Netzendpunkt nicht gewählt",
+      "modules": [
+        "exchange_recipes.py",
+        "exchange_patch.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "exchange_recipes.py": "640fe522f278cde07115293614d8fca16d0e819dbbad9e3a06a5a9a312ee4198",
+        "exchange_patch.py": "3b5bf73c253845110c867a3d1c9629137f9070e9a12c69ac0edcf970dc576e4e"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "FP-07 / WA-07 Stufe 1",
+      "title": "Lesbarer Markdownbaum mit Medien",
+      "implementation": "I",
+      "test": "Historisch; frisch nicht gestartet",
+      "delivery": "ab 3.44",
+      "rest": "Canvas Stufe 2 optional; kein Wiederimportversprechen",
+      "modules": [
+        "markdown_tree.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "markdown_tree.py": "44838e1af044f447c160fa866d30c83755858ec71ee269e91a3202b0156a2678"
+      },
+      "missing_module_proofs": []
+    }
+  ],
+  "current": [
+    {
+      "id": "A01 / E-U1 A / D55",
+      "title": "Kompaktmodus 480 × 560",
+      "implementation": "I",
+      "test": "Historisch + E09",
+      "delivery": "Kern ab 3.45",
+      "rest": "Windows Kürzel/Mehrmonitor und Mac/Reader offen",
+      "modules": [
+        "compact_mode.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "compact_mode.py": "427cd067e40270ab8ce08e8d40ba10d521baa3259ed57f4686becb285993c1ba"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "A02 / E-U2 A / D55",
+      "title": "Lesende Nebenansicht",
+      "implementation": "I",
+      "test": "Historisch + E09",
+      "delivery": "Kern ab 3.45",
+      "rest": "Zwei schreibende Editoren sind kein Rest",
+      "modules": [
+        "side_view.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "side_view.py": "4e1ebd3ffb6c8012222fa9eb7d1074dd03ecb7fbf93c76c3bceadda1565b0dbf"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "A03 / E-U3 A / D55",
+      "title": "Seiten-/Blockaktionen und Kopfbedienung",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "Kern ab 3.45",
+      "rest": "Windows Teilabnahme Punkte1–4, große Schrift/Mac offen",
+      "modules": [
+        "action_menu.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "action_menu.py": "12c6f8669df966735de7bfd6361758e9c9093bace5461b17901da99c9bfa9c4a"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "B01–B22 / D50",
+      "title": "UI-/UX-Paket aus Nutzerbeobachtungen",
+      "implementation": "I",
+      "test": "Historisch; Einzelmatrix im Anhang",
+      "delivery": "Kern ab 3.43",
+      "rest": "Menschliche Gesamtfreigabe nicht dokumentiert",
+      "modules": [
+        "ui_design.py",
+        "release_notes.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "ui_design.py": "28e8a3b63b7875aab3e79215d89f78c8c75fcdf1ab008f0b07fd04cd04e4a0ae",
+        "release_notes.py": "f22f543c022eb1162cfc60c7f5c685b97f0f2d721283afc7fc79960de7bc7ac9"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "WA-11 / §21.17",
+      "title": "Verweisvorschau ohne Hauptwechsel",
+      "implementation": "I",
+      "test": "Historisch + E09",
+      "delivery": "ab 3.45",
+      "rest": "Native Fokus-/Readerabnahme",
+      "modules": [
+        "side_view.py",
+        "object_references.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "side_view.py": "4e1ebd3ffb6c8012222fa9eb7d1074dd03ecb7fbf93c76c3bceadda1565b0dbf",
+        "object_references.py": "133b8c9f9e2dc5fa60a063971dc5396cf417f718d08ff65860e705241b890ee7"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "WA-12 / §21.16",
+      "title": "Vorschlag mit direkten Freigaben",
+      "implementation": "I",
+      "test": "Historisch",
+      "delivery": "ab 3.45 laut §21.20",
+      "rest": "Menschenabnahme; ältere Lieferzeile widersprüchlich",
+      "modules": [
+        "day_proposal.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "day_proposal.py": "136f768444b7da7605deb6562e3972dbcae27ac47cc7ba2ed126df74d2fb4abf"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "§21.19/22 / WA-39",
+      "title": "Startseitenmodell und direktes Erledigen",
+      "implementation": "I",
+      "test": "Historisch + E09",
+      "delivery": "Basis3.45; Aktionen später",
+      "rest": "Quelle/Lieferung auseinanderhalten",
+      "modules": [
+        "home_dashboard.py",
+        "home_task_tiles.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "home_dashboard.py": "59c9540698df4788eaf76eaeff464c66b5558c518dd6ba45e6faf9fb8ceb9755",
+        "home_task_tiles.py": "357de25f557bcc52e0d9be83219aceaa23809edb34a3b8c69cdbad25c22a31d0"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "§21.23 / D57",
+      "title": "Direkte Tagesplanung und Fokus",
+      "implementation": "I",
+      "test": "E09 gleicher Apphash",
+      "delivery": "Python ab 3.46",
+      "rest": "Keine native aktuelle Paketabnahme",
+      "modules": [
+        "home_task_tiles.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "home_task_tiles.py": "357de25f557bcc52e0d9be83219aceaa23809edb34a3b8c69cdbad25c22a31d0"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "§21.23 / D57",
+      "title": "Suche und Abschnittssprünge nebenan",
+      "implementation": "I",
+      "test": "E09 gleicher Apphash",
+      "delivery": "Python ab 3.46",
+      "rest": "Native/Reader-/DPI-Abnahme",
+      "modules": [
+        "side_view.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "side_view.py": "4e1ebd3ffb6c8012222fa9eb7d1074dd03ecb7fbf93c76c3bceadda1565b0dbf"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "§21.24 / D57",
+      "title": "Mehrfachplanung und Nebenansichtsverlauf",
+      "implementation": "I",
+      "test": "E09 gleicher Apphash",
+      "delivery": "Python ab 3.47",
+      "rest": "Native/Reader-/DPI-Abnahme",
+      "modules": [
+        "home_task_tiles.py",
+        "side_view.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "home_task_tiles.py": "357de25f557bcc52e0d9be83219aceaa23809edb34a3b8c69cdbad25c22a31d0",
+        "side_view.py": "4e1ebd3ffb6c8012222fa9eb7d1074dd03ecb7fbf93c76c3bceadda1565b0dbf"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "§21.26 / D57",
+      "title": "Tagesnavigation, Wichtigkeit/Labels, interne Links",
+      "implementation": "I",
+      "test": "E09 gleicher Apphash",
+      "delivery": "nur Quelle ab 3.48",
+      "rest": "Lieferung und breite Abnahme fehlen",
+      "modules": [
+        "task_editing.py",
+        "home_task_tiles.py",
+        "side_view.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "task_editing.py": "5656f652bab497fc3841be6f692874276751953aa10690f7b6ee4873ed237c38",
+        "home_task_tiles.py": "357de25f557bcc52e0d9be83219aceaa23809edb34a3b8c69cdbad25c22a31d0",
+        "side_view.py": "4e1ebd3ffb6c8012222fa9eb7d1074dd03ecb7fbf93c76c3bceadda1565b0dbf"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "§21.28 / D57",
+      "title": "Wochenwahl, Fälligkeit/Aufwand, Verweisaktionen",
+      "implementation": "I",
+      "test": "E09 gleicher Apphash",
+      "delivery": "nur Quelle3.49",
+      "rest": "Lieferung und breite Abnahme fehlen",
+      "modules": [
+        "task_editing.py",
+        "home_task_tiles.py",
+        "side_view.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "task_editing.py": "5656f652bab497fc3841be6f692874276751953aa10690f7b6ee4873ed237c38",
+        "home_task_tiles.py": "357de25f557bcc52e0d9be83219aceaa23809edb34a3b8c69cdbad25c22a31d0",
+        "side_view.py": "4e1ebd3ffb6c8012222fa9eb7d1074dd03ecb7fbf93c76c3bceadda1565b0dbf"
+      },
+      "missing_module_proofs": []
+    }
+  ],
+  "safeguards": [
+    {
+      "id": "WA-26",
+      "title": "Gemeinsame Bildkonversion im Hintergrund",
+      "implementation": "I",
+      "test": "Historisch + E06 Units",
+      "delivery": "ab 3.44",
+      "rest": "Native Konverter/Sicht",
+      "modules": [
+        "image_conversion.py",
+        "image_preview.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "image_conversion.py": "768bbec18aa0463b5fc0d6a65590d1bf87d6ac94115564aceb2af14fd2f2772b",
+        "image_preview.py": "7e266418b278cb4d3e7033861da36bb9f753eb325916f3bf1706f6cfb451ad18"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "WA-27–31",
+      "title": "Bestandswächter, Laden, Flush und Datensperre",
+      "implementation": "I",
+      "test": "Historisch + E06 Units",
+      "delivery": "ab 3.44",
+      "rest": "Native/Cloud-Abgleich getrennt",
+      "modules": [
+        "structural_guard.py",
+        "load_phases.py",
+        "editor_flush.py",
+        "data_lock.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "structural_guard.py": "b834f48aaa6e948d484c5402de76d60c7a7327d86cbeaf8d9d1c1ae42d66a2f4",
+        "load_phases.py": "6b7448c728de5d1342c9376b3b244a0f946100b84dc6c6d80d4aeae9b373a8e9",
+        "editor_flush.py": "192d8d9041842a67006b0296408596b602194c7e385357c7648b9a0e5c37417c",
+        "data_lock.py": "3029bc8cfb0bf881e354ed962d3a7784f9e1c1fd861afb02acccec52a0e482ca"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "WA-40/47",
+      "title": "Speicherstatus, Grenzen und Retry",
+      "implementation": "I",
+      "test": "E10; frisch nicht gestartet",
+      "delivery": "Basis ab 3.45",
+      "rest": "Appweite Fehlerklassifikation separat offen",
+      "modules": [
+        "storage_health.py",
+        "persistence.py",
+        "save_result.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "storage_health.py": "22fce4eb46b705bf332b10ef141e3f052b045c5cb2bec2b0338ecf301957d07d",
+        "persistence.py": "9611042ee5a81ad26f6eb0aba4642e9c39c3caf8cfb9d4dba8bb59b07e6ba463",
+        "save_result.py": "9eb8ef11cbcce47e485e958b732c98a7996979bd15bde65f901ad4423dec8514"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "WA-48/51 / §21.15",
+      "title": "Sicherungsübersicht und Anhangsschutz",
+      "implementation": "I",
+      "test": "Historisch + E06 Units",
+      "delivery": "ab 3.45",
+      "rest": "Native Warnungen/Mac offen",
+      "modules": [
+        "backup_catalog.py",
+        "attachment_policy.py",
+        "image_conversion.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "backup_catalog.py": "936d86a0e20bdcc252279de853d167152e121d4c4bed37a479dc0170a3f9294a",
+        "attachment_policy.py": "94576db88247bebe05d57468b9d0729a4912df1df7fd58f2b43c0c28fe507018",
+        "image_conversion.py": "768bbec18aa0463b5fc0d6a65590d1bf87d6ac94115564aceb2af14fd2f2772b"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "§21.27 / WA-42",
+      "title": "Gesicherte Prüfabläufe",
+      "implementation": "I",
+      "test": "E06 Werkzeugtests",
+      "delivery": "nur Quelle3.49",
+      "rest": "Kein allgemeiner Stabilitätsnachweis",
+      "modules": [],
+      "evidence": "E01, E03",
+      "module_proofs": {},
+      "missing_module_proofs": []
+    },
+    {
+      "id": "§21.27 / WA-40/41B",
+      "title": "Sitzungsnachweis, Freigabe und Restore",
+      "implementation": "I",
+      "test": "E10; aktueller Prüferkonflikt E08",
+      "delivery": "nur Quelle3.49",
+      "rest": "Rückweg gezielt geprüft; kein WA-41B-Ursachenfix",
+      "modules": [
+        "session_guard.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "session_guard.py": "6515d08fdc32e5875f1953aeb39bd7202691cd8a69a126dffaee2e7e401251d0"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "§21.27 / WA-41A/40",
+      "title": "Lokale Diagnose und Prozessbegleitung",
+      "implementation": "I",
+      "test": "E06 Units / E10",
+      "delivery": "nur Quelle3.49",
+      "rest": "Native Builds/Startvarianten aktuell abnehmen",
+      "modules": [
+        "runtime_diagnostics.py",
+        "glide_start.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "runtime_diagnostics.py": "8474e7234412dbc78a32e2e5971cb65a188f384b7bac17b46eb785d13d21a7a0",
+        "glide_start.py": "6cf7507d3f3c85d8b0bbd30072cb9482f49d3628b22b561057ffb3df08ae7498"
+      },
+      "missing_module_proofs": []
+    }
+  ],
+  "remaining": [
+    {
+      "id": "P8 / N12 / U23 / S26-16",
+      "title": "Zugänglicher Aufgaben-Kernablauf für4.0",
+      "implementation": "P",
+      "test": "Vorbereitung/Einzelbelege",
+      "delivery": "keine4.0-Lieferung",
+      "rest": "Readerketten, Orca-Absturz, aktuelle UI, native Matrix; D50 pausiert",
+      "modules": [
+        "accessibility.py",
+        "core_accessibility.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "accessibility.py": "d5b959172f536d2349ce55c2f20960650d73d3572052cf5bf496288cffa2a91b",
+        "core_accessibility.py": "4764a2f13f626de1243bba17b2bb761ab497b8ee9ad1b64e668001f80c256bed"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "WA-09 / A27",
+      "title": "Allgemeine Zukunftsfeldtoleranz",
+      "implementation": "T",
+      "test": "Namespaces gezielt geprüft",
+      "delivery": "teilweise",
+      "rest": "Unbekannte Unterfelder nicht allgemein erhalten",
+      "modules": [],
+      "evidence": "E01, E03",
+      "module_proofs": {},
+      "missing_module_proofs": []
+    },
+    {
+      "id": "P05 / G27 / WA-32",
+      "title": "Wartbarkeit und appweite Designübertragung",
+      "implementation": "T",
+      "test": "Piloten/Einzelansichten",
+      "delivery": "teilweise",
+      "rest": "Appweite Kontext-/Komponentenabdeckung offen",
+      "modules": [
+        "ui_design.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "ui_design.py": "28e8a3b63b7875aab3e79215d89f78c8c75fcdf1ab008f0b07fd04cd04e4a0ae"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "WA-36",
+      "title": "Mutations-, Snapshot- und Refreshkosten",
+      "implementation": "T",
+      "test": "Datierte Messungen",
+      "delivery": "teilweise",
+      "rest": "Übrige Render-/Snapshotwege und native Leistung",
+      "modules": [
+        "item_index.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "item_index.py": "a1c0297b8d77d2dd6b69e7be9287b5fdbc7f125658dea6a0626c55262c92128e"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "WA-37/38",
+      "title": "Mutationsvertrag und Speicherergebnis",
+      "implementation": "T",
+      "test": "Kern-/Callerfälle",
+      "delivery": "teilweise",
+      "rest": "Übrige direkte Struktur-/Importcaller",
+      "modules": [
+        "task_editing.py",
+        "persistence.py",
+        "save_result.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "task_editing.py": "5656f652bab497fc3841be6f692874276751953aa10690f7b6ee4873ed237c38",
+        "persistence.py": "9611042ee5a81ad26f6eb0aba4642e9c39c3caf8cfb9d4dba8bb59b07e6ba463",
+        "save_result.py": "9eb8ef11cbcce47e485e958b732c98a7996979bd15bde65f901ad4423dec8514"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "WA-39",
+      "title": "Ansichts-/Dialog-/Themeauslagerung",
+      "implementation": "T",
+      "test": "Startseitenpilot",
+      "delivery": "teilweise",
+      "rest": "Weitere Presenter/Settings/Detail/Theme nur schrittweise",
+      "modules": [
+        "home_dashboard.py",
+        "home_task_tiles.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "home_dashboard.py": "59c9540698df4788eaf76eaeff464c66b5558c518dd6ba45e6faf9fb8ceb9755",
+        "home_task_tiles.py": "357de25f557bcc52e0d9be83219aceaa23809edb34a3b8c69cdbad25c22a31d0"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "WA-40",
+      "title": "Fehlerbehandlung nach Wirkung appweit",
+      "implementation": "T",
+      "test": "Kritische Speicherpfade",
+      "delivery": "teilweise",
+      "rest": "Übrige OS-/UI-/Teardownhandler systematisch prüfen",
+      "modules": [
+        "storage_health.py"
+      ],
+      "evidence": "E01, E03",
+      "module_proofs": {
+        "storage_health.py": "22fce4eb46b705bf332b10ef141e3f052b045c5cb2bec2b0338ecf301957d07d"
+      },
+      "missing_module_proofs": []
+    },
+    {
+      "id": "WA-41A/B",
+      "title": "Prozessstabilität und Datenkonsistenz",
+      "implementation": "T",
+      "test": "Widersprüchliche Lastbefunde",
+      "delivery": "Freigabe blockiert",
+      "rest": "A-Ursache ungeklärt; B-Felddifferenz nicht aufgelöst",
+      "modules": [],
+      "evidence": "E01, E03",
+      "module_proofs": {},
+      "missing_module_proofs": []
+    },
+    {
+      "id": "WA-42 / PS-01/02",
+      "title": "Prüfstabilität und Einzelbefunde",
+      "implementation": "T",
+      "test": "Neue Wächter/Kernfälle",
+      "delivery": "teilweise",
+      "rest": "Originale Pflichtsuite jetzt rot; weitere Fokus-/Showcasebefunde offen",
+      "modules": [],
+      "evidence": "E01, E03",
+      "module_proofs": {},
+      "missing_module_proofs": []
+    }
+  ]
+}

@@ -1,6 +1,8 @@
 # Pflegewerkzeuge
 
-Stand 27.10.2026 · Glide 3.47.0 · Aufgabenformat 26
+Stand 28.10.2026 · Glide 3.49.0 · Aufgabenformat 26
+
+**Versionspflege 3.49.0:** `versionswechsel.py --ohne-ablagekuerzung` erhält ältere lokale Nachweise bei einem Versionswechsel; der Schalter ersetzt die gesonderte Ablageprüfung nicht. In dieser Featurephase bleiben alte WA-41-Referenzen und tatsächliche Lieferungen erhalten. Allgemeine eingefrorene Voll-/Lastläufe starten über `python -B tests/tools/gesichert_pruefen.py --art voll` bzw. `--art speicherlast`, siehe [Werkzeuge](../../tests/tools/README.md).
 
 Werkzeuge für jede Arbeitsrunde und für Messungen. Sie legen keine
 Archivkopien an: Vorfassungen von Fixtures, Showcase, Vorlagen und Dokumenten

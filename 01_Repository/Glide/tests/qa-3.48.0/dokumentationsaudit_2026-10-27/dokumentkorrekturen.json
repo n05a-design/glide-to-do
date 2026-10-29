@@ -1,0 +1,316 @@
+{
+  "changed_files": [
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+      "before_sha256": "7fa2af2d7047d89d6b7936a2eadfdd3d0a5f6334ce77d9ca6249f9486fd285b7",
+      "after_sha256": "a574941163a88eac51dbeb370e9dab5f784f3d90f186ef9a4820661f3868f62d",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "before_sha256": "3ac4df90afa6e10322147928c8147c03ba0780714e8dcc6b8a809dc36c5c97d5",
+      "after_sha256": "88dfa72ae52b19b9007749c59519beacac6b324fe5aa17febb3bcc8863d9e166",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+      "before_sha256": "bc72440daa7a73016d94466b96d83ec5209de6aad9ab85b8e8bd687a3b23842d",
+      "after_sha256": "1960b7adb03cba0fba1258fa9de24f1a5b759892993f349b09d4e5209e5be6c3",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+      "before_sha256": "7c1e69698fed39e15bfcf36a8a92db3ff87010c59a5f25d36113c60e318f1384",
+      "after_sha256": "8d6543e164193fdfe195030fa37e07e9d5559b57b89f1dcafd068bad54d7a7e4",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "00_Arbeitsvorbereitung/README.md",
+      "before_sha256": "aa22899d9b86f52c38df4bfb064b2d02be066a0eb15404ce3b3c246585145096",
+      "after_sha256": "ec559480eb261d5408dede3397682f176035797a32cce5cc5dacd3081bbfdddd",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "01_Repository/Glide/docs/00_INDEX.md",
+      "before_sha256": "92c1011c3ea8232f05f3fe75d144e06f098e1a1154b83d4d28259f43708e2eb5",
+      "after_sha256": "d16743c961f7fa8a184ff369a3601d43ea2be457ed6b003df884cea0eb3c7d94",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+      "before_sha256": "01f1a9f6f7144a861f9e5efd96d47b4c6510c688875967512ed523bb09a32441",
+      "after_sha256": "56ea1e379bdaa81ccabed400f6c71724737602275aebfded63d0a03e0f670e43",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+      "before_sha256": "1324130a7faf7cf4e0bb88f49879e2712b551814a777ab700d7075971adaaa49",
+      "after_sha256": "e7ee5f40743c928ad2773cf7e647164a7d5893a12a78f665d6de26cb3ecb01a0",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+      "before_sha256": "1cce2acb2a662909e9ac210796e161977848104ab1514b76b2deb0d6bc0ad7cb",
+      "after_sha256": "6509b8b7daa3ac467a608c9e561328b68162196ab237daffe90565d555150ac7",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+      "before_sha256": "6ec7bb339b5520421b35f266093567ed22fda568e0cb82566a7cfae266640f92",
+      "after_sha256": "74be87f4f95c683b054145cc1742dd73b2addb862ee0ffb8837173669f27914a",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md",
+      "before_sha256": "e2d1ccbb251a43d3216f27a38e19b41c2118773bde18295acdee7847765f6245",
+      "after_sha256": "0271f6f49b6064b6b4d3860bd3a44ed5331a51b8531071cb2a04778c1f35199f",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+      "before_sha256": "e3b05c976dae3e2abe9204cebc448c5f4a1f8c622a995d4b4ec3c287f00d24fd",
+      "after_sha256": "97b74c96e3a5b5abb01b6107f05065bd5588800ddaa9e55b49b7dd20b28a152b",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/README.md",
+      "before_sha256": "9a975935b7685a0ac76ed2ab39b5cc15b180c625ba24edd506e97c0af4f0258e",
+      "after_sha256": "6dbcba57df0e1808399ccfbaa779a2623c7a8bba8aa2b492b88f3cc32176244a",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "01_Repository/Glide/packaging/runtime/README.md",
+      "before_sha256": "c76ab2d80d97e722076b384afaf31ed5867c0a9da6909be1c0ed2e8d9c5acd1c",
+      "after_sha256": "c757e24dfabd9a71b340bb964aff3f8d16ef298609f2f9b3e59522d684d91871",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "01_Repository/Glide/src/glide/README.md",
+      "before_sha256": "9dc6fe24416862909c8f05e1d0acaa143af9becc09f6d221f2d5351d1715ae75",
+      "after_sha256": "b120835a93213b04c2a05072799c776496f1011bda1ae30d8a9064eca6454971",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "01_Repository/Glide/tests/README.md",
+      "before_sha256": "bfe28bfdbdc90ba2be88981339244554f6529de6a6642f7da359b6f51ea207ed",
+      "after_sha256": "9daf136531440e118928130b72764861897c53a57ec586ad0b5c8f379ce45e6c",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "01_Repository/Glide/tests/fixtures/showcase/README.md",
+      "before_sha256": "08cfb3d85e085349060375aacf903135ad39e609226727cade6faeaffb1f1138",
+      "after_sha256": "dfa35d3a836391bd23f7788640034fd09a45467f6338f72a2e5915382de1412b",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/README.md",
+      "before_sha256": "efa6787a268c7bf72d9b8f13efb8bf517516a9f57ed3a59fd3bd43fe7e32dccf",
+      "after_sha256": "5f20243fc3aa749f967e2370e7395b865e6a124cfa36b476a74773653a9b1621",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/README.md",
+      "before_sha256": "629b20f936a3097f1a90e72922ff6433fd41b608f372767ebf3b206c7fca75dc",
+      "after_sha256": "e6e236a4449119476adb8cb399753840c1067c223f754c55f3b21e8ed813fe4e",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "05_Probelisten_Testdaten/README.md",
+      "before_sha256": "3d05a0895d81fa8848681095f14fe69724c19092893556920dd5fc3d32e6cab0",
+      "after_sha256": "e4567c6cd4bffd5b870f22bf1c03975679fd59851e0c36e7a8b8456e3cee0786",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "05_Probelisten_Testdaten/Showcase/README.md",
+      "before_sha256": "55a5c064897fef14ee2c322453f9f403f580a8a5fb7164bd205fe60d110729ad",
+      "after_sha256": "0d4c52afe24df9338028c332a35ff09dde1b1cd9801571fb4442ca9081710bd2",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "CLAUDE.md",
+      "before_sha256": "2963304ccc247a800359508a75ea2506a743b09c0f60f7ba086587d6c2285808",
+      "after_sha256": "424b093abc1abdece5a7a3a669391c4b62a75646449d34a92ac0ae16ffab1c81",
+      "kind": "Dokumentkorrektur"
+    },
+    {
+      "path": "README.md",
+      "before_sha256": "0abb31187cbcc19a59a4ed21250bab71245f71944a4402487358782db172ce3f",
+      "after_sha256": "7835ce80ef57e73b7531000ef54b4f1f10ab0a2d009a9a8c846ad9f8c39815f6",
+      "kind": "Dokumentkorrektur"
+    }
+  ],
+  "new_files": [
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Frameworks/Python.framework/Resources",
+      "bytes": 0,
+      "mtime_utc": "2026-10-26T13:38:19.431559+00:00",
+      "category": "Paket/Bauartefakt",
+      "cloud_placeholder": false,
+      "attributes": 525344,
+      "link_target": "Versions\\Current\\Resources",
+      "link_target_sha256": "54d727bdfc4e831c0459f23f31e6a3b9a4ddd839db6e24fe810facd4591cdd82"
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Frameworks/_tcl_data",
+      "bytes": 0,
+      "mtime_utc": "2026-10-26T13:38:19.469006+00:00",
+      "category": "Paket/Bauartefakt",
+      "cloud_placeholder": false,
+      "attributes": 525344,
+      "link_target": "..\\Resources\\_tcl_data",
+      "link_target_sha256": "501ce13afb04a9b495f8071c8dbef34e3fa94f115306bd86d78493d3ce2ae6e1"
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Frameworks/_tk_data",
+      "bytes": 0,
+      "mtime_utc": "2026-10-26T13:38:19.470006+00:00",
+      "category": "Paket/Bauartefakt",
+      "cloud_placeholder": false,
+      "attributes": 525344,
+      "link_target": "..\\Resources\\_tk_data",
+      "link_target_sha256": "0bd3e490a8cc021016574c098e5e9cae2d6570623a456685d58afd6de86ee51b"
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Frameworks/licenses",
+      "bytes": 0,
+      "mtime_utc": "2026-10-26T13:38:19.430559+00:00",
+      "category": "Paket/Bauartefakt",
+      "cloud_placeholder": false,
+      "attributes": 525344,
+      "link_target": "..\\Resources\\licenses",
+      "link_target_sha256": "4216d07ca603df18ce2f918f3ded6b8a4017b39af6cd27934f88b55cd652c3d0"
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Frameworks/python3.14",
+      "bytes": 0,
+      "mtime_utc": "2026-10-26T13:38:19.437560+00:00",
+      "category": "Paket/Bauartefakt",
+      "cloud_placeholder": false,
+      "attributes": 525344,
+      "link_target": "python3__dot__14",
+      "link_target_sha256": "711d6c5c4c4157992b802685476928a8b39f47fe14ba895f02e5680c10f4432a"
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Frameworks/resources",
+      "bytes": 0,
+      "mtime_utc": "2026-10-26T13:38:19.462007+00:00",
+      "category": "Paket/Bauartefakt",
+      "cloud_placeholder": false,
+      "attributes": 525344,
+      "link_target": "..\\Resources\\resources",
+      "link_target_sha256": "86524ea2cb435aadd83e263db6a559413b45c8a85e633235a631d621c1b92dbb"
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Frameworks/tcl9",
+      "bytes": 0,
+      "mtime_utc": "2026-10-26T13:38:19.464008+00:00",
+      "category": "Paket/Bauartefakt",
+      "cloud_placeholder": false,
+      "attributes": 525344,
+      "link_target": "..\\Resources\\tcl9",
+      "link_target_sha256": "c622998491f7cd139128f489d6b38d22ef15ecc3075dd03a8923477ce29c7864"
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide.app/Contents/Resources/python3.14",
+      "bytes": 0,
+      "mtime_utc": "2026-10-26T13:38:19.489011+00:00",
+      "category": "Paket/Bauartefakt",
+      "cloud_placeholder": false,
+      "attributes": 525344,
+      "link_target": "..\\Frameworks\\python3.14",
+      "link_target_sha256": "c4291c9e955ffcb372ecc569ff4b89883481daaa8f40bf4e182b62fac1399fc3"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/lokale_belege/.gitignore",
+      "bytes": 16,
+      "mtime_utc": "2026-10-27T18:21:27.732455+00:00",
+      "category": "QA-Beleg",
+      "cloud_placeholder": false,
+      "attributes": 524320,
+      "sha256": "4bb38be6d6d9ef0d2f9bcc339850ff48d821eccfa739369402b354c9ba946ea2"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/lokale_belege/eingang/initial.json",
+      "bytes": 28548872,
+      "mtime_utc": "2026-10-27T13:16:00.742948+00:00",
+      "category": "QA-Beleg",
+      "cloud_placeholder": false,
+      "attributes": 524320,
+      "sha256": "a3b8c0cac4c72e1820e71730ad78e312f2a30338678fbcfe2a2b6d91dae081f4"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/lokale_belege/minidumps/python.exe.34580.dmp",
+      "bytes": 1996972,
+      "mtime_utc": "2026-10-27T13:55:22.729656+00:00",
+      "category": "QA-Beleg",
+      "cloud_placeholder": false,
+      "attributes": 524320,
+      "sha256": "d390c1e2ddecb24908525e5d8d858690f7bd71e464bc78778d2b8e0cff686d54"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/lokale_belege/minidumps/python.exe.42824.dmp",
+      "bytes": 1977555,
+      "mtime_utc": "2026-10-27T13:57:28.502502+00:00",
+      "category": "QA-Beleg",
+      "cloud_placeholder": false,
+      "attributes": 524320,
+      "sha256": "9afe7296384c16180be48f4877b95b6b6c93fc09e7351580c1444bd954b7da14"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/lokale_belege/minidumps/python.exe.46332.dmp",
+      "bytes": 2155796,
+      "mtime_utc": "2026-10-27T13:23:40.367587+00:00",
+      "category": "QA-Beleg",
+      "cloud_placeholder": false,
+      "attributes": 524320,
+      "sha256": "cea70eb76134bc62acd129425981ab7eb5c5d11e66600ea17cc9d460d3a3acfa"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/lokale_belege/minidumps/python.exe.57356.dmp",
+      "bytes": 2142527,
+      "mtime_utc": "2026-10-27T13:54:16.550017+00:00",
+      "category": "QA-Beleg",
+      "cloud_placeholder": false,
+      "attributes": 524320,
+      "sha256": "389710f359f31f2d3cce1a7eaa1bb6a6e8c26e464b310cf11b9a394e5d453f16"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/lokale_belege/minidumps/python.exe.64880.dmp",
+      "bytes": 2133739,
+      "mtime_utc": "2026-10-27T13:18:21.744719+00:00",
+      "category": "QA-Beleg",
+      "cloud_placeholder": false,
+      "attributes": 524320,
+      "sha256": "d589f2306568d6a6f276acb1f90d12a98c4bf3a7b40726c083226b0b3fc7222d"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/lokale_belege/minidumps/python.exe.66596.dmp",
+      "bytes": 1976482,
+      "mtime_utc": "2026-10-27T13:58:12.686688+00:00",
+      "category": "QA-Beleg",
+      "cloud_placeholder": false,
+      "attributes": 524320,
+      "sha256": "6b8fe21cdb6c34653bc25221eb5e06a47f124c69e2f12e515d34ec438d20b233"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/lokale_belege/minidumps/python.exe.66932.dmp",
+      "bytes": 2180524,
+      "mtime_utc": "2026-10-27T13:22:33.641578+00:00",
+      "category": "QA-Beleg",
+      "cloud_placeholder": false,
+      "attributes": 524320,
+      "sha256": "c3482fefd7fddadf71d5abcbe12d442975377604124ce8792704f346ffa508ab"
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/lokale_belege/minidumps/python.exe.66960.dmp",
+      "bytes": 1973107,
+      "mtime_utc": "2026-10-27T13:55:46.674219+00:00",
+      "category": "QA-Beleg",
+      "cloud_placeholder": false,
+      "attributes": 524320,
+      "sha256": "d3bc619d6445bc3bad1332f65d6263392780da0688dca2d2fb180d06a6757a34"
+    }
+  ],
+  "own_audit_directory_excluded": true,
+  "executable_or_data_changes": false
+}

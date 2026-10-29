@@ -469,6 +469,7 @@ with tempfile.TemporaryDirectory(prefix="glide-komfort-") as ordner:
         ruhe()
         assert not fehler, fehler
         app.cancel_pending_callbacks()
+        getattr(app, "finish_recovery_session", lambda: None)()
         app.release_data_lock()
         root.destroy()
         root = mod.tk.Tk()
@@ -503,6 +504,7 @@ with tempfile.TemporaryDirectory(prefix="glide-komfort-") as ordner:
     finally:
         try:
             app.cancel_pending_callbacks()
+            getattr(app, "finish_recovery_session", lambda: None)()
             app.release_data_lock()
         except Exception:
             pass

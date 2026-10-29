@@ -1,0 +1,11 @@
+{
+  "completed": false,
+  "failure": "TimeoutExpired",
+  "step": "analyse_statisch.py",
+  "limit_seconds": 120,
+  "returncode": 1,
+  "following_analyses_executed": false,
+  "prior_check_details_preserved": false,
+  "app_unchanged": true,
+  "global_acceptance": false
+}

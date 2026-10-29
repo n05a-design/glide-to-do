@@ -1,0 +1,425 @@
+{
+  "python": "3.15.2 (tags/v3.15.2:5e58eaa, Oct 25 2026, 17:27:03) [MSC v.1951 64 bit (AMD64)]",
+  "dev_mode": true,
+  "completed": true,
+  "exception": {
+    "type": "TypeError",
+    "message": "'dict_valueiterator' object is not callable"
+  },
+  "frames": [
+    {
+      "file": "exception_probe.py",
+      "function": "<module>",
+      "line": 34,
+      "last_instruction": 656
+    },
+    {
+      "file": "<frozen runpy>",
+      "function": "run_path",
+      "line": 292,
+      "last_instruction": 230
+    },
+    {
+      "file": "<frozen runpy>",
+      "function": "_run_module_code",
+      "line": 97,
+      "last_instruction": 182
+    },
+    {
+      "file": "<frozen runpy>",
+      "function": "_run_code",
+      "line": 87,
+      "last_instruction": 230
+    },
+    {
+      "file": "probe.py",
+      "function": "<module>",
+      "line": 121,
+      "last_instruction": 1530
+    },
+    {
+      "file": "test_speicherlast330.py",
+      "function": "<module>",
+      "line": 207,
+      "last_instruction": 4714
+    },
+    {
+      "file": "app.pyw",
+      "function": "load_items",
+      "line": 45076,
+      "last_instruction": 422
+    },
+    {
+      "file": "app.pyw",
+      "function": "read_save_file",
+      "line": 45100,
+      "last_instruction": 292
+    },
+    {
+      "file": "app.pyw",
+      "function": "normalize_lists_data",
+      "line": 41051,
+      "last_instruction": 728
+    },
+    {
+      "file": "repeat_rules.py",
+      "function": "check_stored_series",
+      "line": 196,
+      "last_instruction": 634,
+      "bindings": {
+        "isinstance": {
+          "global_present": false,
+          "resolved_is_original": true,
+          "builtin_is_original": true,
+          "builtin_type": "builtin_function_or_method"
+        },
+        "dict": {
+          "global_present": false,
+          "resolved_is_original": true,
+          "builtin_is_original": true,
+          "builtin_type": "type"
+        },
+        "list": {
+          "global_present": false,
+          "resolved_is_original": true,
+          "builtin_is_original": true,
+          "builtin_type": "type"
+        }
+      },
+      "local_types": {
+        "data": "dict",
+        "version": "int",
+        "pending": "list",
+        "value": "dict",
+        "repeat": "NoneType"
+      },
+      "co_code_sha256": "40f72264809acfb3c14c7b7e292328045579a1e9d20e1481f222eb32e3f8c907"
+    },
+    {
+      "file": "repeat_rules.py",
+      "function": "<genexpr>",
+      "line": 196,
+      "last_instruction": 26,
+      "bindings": {
+        "isinstance": {
+          "global_present": false,
+          "resolved_is_original": true,
+          "builtin_is_original": true,
+          "builtin_type": "builtin_function_or_method"
+        },
+        "dict": {
+          "global_present": false,
+          "resolved_is_original": true,
+          "builtin_is_original": true,
+          "builtin_type": "type"
+        },
+        "list": {
+          "global_present": false,
+          "resolved_is_original": true,
+          "builtin_is_original": true,
+          "builtin_type": "type"
+        }
+      },
+      "local_types": {
+        ".0": "dict_values",
+        "v": "list"
+      },
+      "co_code_sha256": "30fd2e5cad107995853052955b301d5dad05e5e9b07a64d643b734b7213b740d",
+      "normal": [
+        {
+          "offset": 0,
+          "operation": "RESUME",
+          "argument": ""
+        },
+        {
+          "offset": 4,
+          "operation": "LOAD_FAST",
+          "argument": ".0"
+        },
+        {
+          "offset": 6,
+          "operation": "GET_ITER",
+          "argument": ""
+        },
+        {
+          "offset": 10,
+          "operation": "RETURN_GENERATOR",
+          "argument": ""
+        },
+        {
+          "offset": 12,
+          "operation": "POP_TOP",
+          "argument": ""
+        },
+        {
+          "offset": 14,
+          "operation": "RESUME",
+          "argument": ""
+        },
+        {
+          "offset": 18,
+          "operation": "FOR_ITER",
+          "argument": "to L3"
+        },
+        {
+          "offset": 22,
+          "operation": "STORE_FAST",
+          "argument": "v"
+        },
+        {
+          "offset": 24,
+          "operation": "LOAD_GLOBAL",
+          "argument": "isinstance + NULL"
+        },
+        {
+          "offset": 34,
+          "operation": "LOAD_FAST_BORROW",
+          "argument": "v"
+        },
+        {
+          "offset": 36,
+          "operation": "LOAD_GLOBAL",
+          "argument": "dict"
+        },
+        {
+          "offset": 46,
+          "operation": "LOAD_GLOBAL",
+          "argument": "list"
+        },
+        {
+          "offset": 56,
+          "operation": "BUILD_TUPLE",
+          "argument": ""
+        },
+        {
+          "offset": 58,
+          "operation": "CALL",
+          "argument": ""
+        },
+        {
+          "offset": 66,
+          "operation": "TO_BOOL",
+          "argument": ""
+        },
+        {
+          "offset": 74,
+          "operation": "POP_JUMP_IF_TRUE",
+          "argument": "to L2"
+        },
+        {
+          "offset": 78,
+          "operation": "NOT_TAKEN",
+          "argument": ""
+        },
+        {
+          "offset": 80,
+          "operation": "JUMP_BACKWARD",
+          "argument": "to L1"
+        },
+        {
+          "offset": 84,
+          "operation": "LOAD_FAST_BORROW",
+          "argument": "v"
+        },
+        {
+          "offset": 86,
+          "operation": "YIELD_VALUE",
+          "argument": ""
+        },
+        {
+          "offset": 88,
+          "operation": "RESUME",
+          "argument": ""
+        },
+        {
+          "offset": 92,
+          "operation": "POP_TOP",
+          "argument": ""
+        },
+        {
+          "offset": 94,
+          "operation": "JUMP_BACKWARD",
+          "argument": "to L1"
+        },
+        {
+          "offset": 98,
+          "operation": "END_FOR",
+          "argument": ""
+        },
+        {
+          "offset": 100,
+          "operation": "POP_ITER",
+          "argument": ""
+        },
+        {
+          "offset": 102,
+          "operation": "LOAD_COMMON_CONSTANT",
+          "argument": "None"
+        },
+        {
+          "offset": 104,
+          "operation": "RETURN_VALUE",
+          "argument": ""
+        },
+        {
+          "offset": 106,
+          "operation": "CALL_INTRINSIC_1",
+          "argument": "INTRINSIC_STOPITERATION_ERROR"
+        },
+        {
+          "offset": 108,
+          "operation": "RERAISE",
+          "argument": ""
+        }
+      ],
+      "adaptive": [
+        {
+          "offset": 0,
+          "operation": "RESUME_CHECK",
+          "argument": ""
+        },
+        {
+          "offset": 4,
+          "operation": "LOAD_FAST",
+          "argument": ".0"
+        },
+        {
+          "offset": 6,
+          "operation": "GET_ITER",
+          "argument": ""
+        },
+        {
+          "offset": 10,
+          "operation": "RETURN_GENERATOR",
+          "argument": ""
+        },
+        {
+          "offset": 12,
+          "operation": "POP_TOP",
+          "argument": ""
+        },
+        {
+          "offset": 14,
+          "operation": "RESUME_CHECK",
+          "argument": ""
+        },
+        {
+          "offset": 18,
+          "operation": "FOR_ITER",
+          "argument": "to L3"
+        },
+        {
+          "offset": 22,
+          "operation": "STORE_FAST",
+          "argument": "v"
+        },
+        {
+          "offset": 24,
+          "operation": "LOAD_GLOBAL_BUILTIN",
+          "argument": "isinstance + NULL"
+        },
+        {
+          "offset": 34,
+          "operation": "LOAD_FAST_BORROW",
+          "argument": "v"
+        },
+        {
+          "offset": 36,
+          "operation": "LOAD_GLOBAL_BUILTIN",
+          "argument": "dict"
+        },
+        {
+          "offset": 46,
+          "operation": "LOAD_GLOBAL_BUILTIN",
+          "argument": "list"
+        },
+        {
+          "offset": 56,
+          "operation": "BUILD_TUPLE",
+          "argument": ""
+        },
+        {
+          "offset": 58,
+          "operation": "CALL_ISINSTANCE",
+          "argument": ""
+        },
+        {
+          "offset": 66,
+          "operation": "TO_BOOL_BOOL",
+          "argument": ""
+        },
+        {
+          "offset": 74,
+          "operation": "POP_JUMP_IF_TRUE",
+          "argument": "to L2"
+        },
+        {
+          "offset": 78,
+          "operation": "NOT_TAKEN",
+          "argument": ""
+        },
+        {
+          "offset": 80,
+          "operation": "JUMP_BACKWARD_NO_JIT",
+          "argument": "to L1"
+        },
+        {
+          "offset": 84,
+          "operation": "LOAD_FAST_BORROW",
+          "argument": "v"
+        },
+        {
+          "offset": 86,
+          "operation": "YIELD_VALUE",
+          "argument": ""
+        },
+        {
+          "offset": 88,
+          "operation": "RESUME_CHECK",
+          "argument": ""
+        },
+        {
+          "offset": 92,
+          "operation": "POP_TOP",
+          "argument": ""
+        },
+        {
+          "offset": 94,
+          "operation": "JUMP_BACKWARD_NO_JIT",
+          "argument": "to L1"
+        },
+        {
+          "offset": 98,
+          "operation": "END_FOR",
+          "argument": ""
+        },
+        {
+          "offset": 100,
+          "operation": "POP_ITER",
+          "argument": ""
+        },
+        {
+          "offset": 102,
+          "operation": "LOAD_COMMON_CONSTANT",
+          "argument": "None"
+        },
+        {
+          "offset": 104,
+          "operation": "RETURN_VALUE",
+          "argument": ""
+        },
+        {
+          "offset": 106,
+          "operation": "CALL_INTRINSIC_1",
+          "argument": "INTRINSIC_STOPITERATION_ERROR"
+        },
+        {
+          "offset": 108,
+          "operation": "RERAISE",
+          "argument": ""
+        }
+      ],
+      "matches_fresh_source": true
+    }
+  ]
+}

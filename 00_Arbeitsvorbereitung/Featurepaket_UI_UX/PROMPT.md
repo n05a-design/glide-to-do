@@ -1,6 +1,6 @@
 # Glide – Ausführungsprompt für das Feature-Paket UI und UX
 
-Stand 27.10.2026 · Glide 3.47.0 · Status: seit D50 beauftragt und vorrangig; Umsetzung und Status im Entwicklungsplan §17
+Stand 28.10.2026 · Glide 3.49.0 · Status: seit D50 beauftragt und vorrangig; Umsetzung und Status im Entwicklungsplan §17
 
 Beobachtungsreferenz des Benutzers: **Version 3.42.0, 15.10.2026, 13:42 Uhr (Europe/Berlin)**. Diese Angabe bezeichnet den gemeldeten Ausgangspunkt, nicht automatisch den bei einer späteren Ausführung vorliegenden Code.
 

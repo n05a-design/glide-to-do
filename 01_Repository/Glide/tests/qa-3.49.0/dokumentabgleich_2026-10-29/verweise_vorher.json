@@ -1,0 +1,26 @@
+{
+  "local_links": 1600,
+  "findings": [
+    {
+      "source": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+      "filtered_line": 1677,
+      "target": "../01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md#abgesicherter-wiederanlauf-nach-absturz-geplant",
+      "historical": false,
+      "issue": "Anker fehlt"
+    },
+    {
+      "source": "01_Repository/Glide/docs/00_INDEX.md",
+      "filtered_line": 13,
+      "target": "06_DATA_BACKUP_MIGRATION.md#abgesicherter-wiederanlauf-nach-absturz-geplant",
+      "historical": false,
+      "issue": "Anker fehlt"
+    },
+    {
+      "source": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+      "filtered_line": 7,
+      "target": "06_DATA_BACKUP_MIGRATION.md#abgesicherter-wiederanlauf-nach-absturz-geplant",
+      "historical": false,
+      "issue": "Anker fehlt"
+    }
+  ]
+}

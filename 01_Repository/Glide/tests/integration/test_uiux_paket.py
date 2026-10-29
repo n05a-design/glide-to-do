@@ -97,6 +97,8 @@ class Lauf:
             self.app.cancel_pending_callbacks()
             for job in self.root.tk.splitlist(self.root.tk.call("after", "info")):
                 self.root.after_cancel(job)
+            if hasattr(self.app, 'finish_recovery_session'):
+                self.app.finish_recovery_session()
             self.app.release_data_lock()
             self.root.destroy()
         except self.mod.tk.TclError:

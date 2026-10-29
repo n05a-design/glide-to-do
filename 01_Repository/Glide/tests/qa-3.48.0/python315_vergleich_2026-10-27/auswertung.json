@@ -1,0 +1,267 @@
+{
+  "completed": true,
+  "summary": {
+    "315": {
+      "passed": 4,
+      "failed": 4
+    },
+    "314": {
+      "passed": 1,
+      "failed": 1
+    }
+  },
+  "cases": [
+    {
+      "case": "315_full_1",
+      "runtime": "315",
+      "kind": "full",
+      "exitcode": 0,
+      "seconds": 96.55,
+      "native_access_violation": false,
+      "frames": []
+    },
+    {
+      "case": "314_core_1",
+      "runtime": "314",
+      "kind": "core",
+      "exitcode": 3221225477,
+      "seconds": 39.33,
+      "native_access_violation": true,
+      "frames": [
+        {
+          "file": "repeat_rules.py",
+          "line": 196,
+          "function": "<genexpr>"
+        },
+        {
+          "file": "repeat_rules.py",
+          "line": 196,
+          "function": "check_stored_series"
+        },
+        {
+          "file": "app.pyw",
+          "line": 41051,
+          "function": "normalize_lists_data"
+        },
+        {
+          "file": "app.pyw",
+          "line": 45100,
+          "function": "read_save_file"
+        },
+        {
+          "file": "app.pyw",
+          "line": 45076,
+          "function": "load_items"
+        },
+        {
+          "file": "test_speicherlast330.py",
+          "line": 207,
+          "function": "<module>"
+        },
+        {
+          "file": "probe.py",
+          "line": 121,
+          "function": "<module>"
+        }
+      ],
+      "signature": "c0000005|repeat_rules.py:196:<genexpr>"
+    },
+    {
+      "case": "315_core_1",
+      "runtime": "315",
+      "kind": "core",
+      "exitcode": 3221225477,
+      "seconds": 66.18,
+      "native_access_violation": true,
+      "frames": [
+        {
+          "file": "repeat_rules.py",
+          "line": 196,
+          "function": "<genexpr>"
+        },
+        {
+          "file": "repeat_rules.py",
+          "line": 196,
+          "function": "check_stored_series"
+        },
+        {
+          "file": "app.pyw",
+          "line": 41051,
+          "function": "normalize_lists_data"
+        },
+        {
+          "file": "app.pyw",
+          "line": 45100,
+          "function": "read_save_file"
+        },
+        {
+          "file": "app.pyw",
+          "line": 45076,
+          "function": "load_items"
+        },
+        {
+          "file": "test_speicherlast330.py",
+          "line": 207,
+          "function": "<module>"
+        },
+        {
+          "file": "probe.py",
+          "line": 121,
+          "function": "<module>"
+        }
+      ],
+      "signature": "c0000005|repeat_rules.py:196:<genexpr>"
+    },
+    {
+      "case": "315_import_1",
+      "runtime": "315",
+      "kind": "import",
+      "exitcode": 0,
+      "seconds": 12.52,
+      "native_access_violation": false,
+      "frames": []
+    },
+    {
+      "case": "315_full_2",
+      "runtime": "315",
+      "kind": "full",
+      "exitcode": 3221225477,
+      "seconds": 11.4,
+      "native_access_violation": true,
+      "frames": [
+        {
+          "file": "repeat_rules.py",
+          "line": 196,
+          "function": "<genexpr>"
+        },
+        {
+          "file": "repeat_rules.py",
+          "line": 196,
+          "function": "check_stored_series"
+        },
+        {
+          "file": "app.pyw",
+          "line": 41051,
+          "function": "normalize_lists_data"
+        },
+        {
+          "file": "app.pyw",
+          "line": 45100,
+          "function": "read_save_file"
+        },
+        {
+          "file": "app.pyw",
+          "line": 45076,
+          "function": "load_items"
+        },
+        {
+          "file": "test_speicherlast330.py",
+          "line": 204,
+          "function": "<module>"
+        }
+      ],
+      "signature": "c0000005|repeat_rules.py:196:<genexpr>"
+    },
+    {
+      "case": "314_core_2",
+      "runtime": "314",
+      "kind": "core",
+      "exitcode": 0,
+      "seconds": 75.12,
+      "native_access_violation": false,
+      "frames": []
+    },
+    {
+      "case": "315_core_2",
+      "runtime": "315",
+      "kind": "core",
+      "exitcode": 3221225477,
+      "seconds": 26.7,
+      "native_access_violation": true,
+      "frames": [
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 491,
+          "function": "_call_with_frames_removed"
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 810,
+          "function": "source_to_code"
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 881,
+          "function": "get_code"
+        },
+        {
+          "file": "<frozen importlib._bootstrap_external>",
+          "line": 747,
+          "function": "exec_module"
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 857,
+          "function": "_load_unlocked"
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 1249,
+          "function": "_find_and_load_unlocked"
+        },
+        {
+          "file": "<frozen importlib._bootstrap>",
+          "line": 1353,
+          "function": "_find_and_load"
+        },
+        {
+          "file": "traceback.py",
+          "line": 60,
+          "function": "_safe_can_colorize"
+        },
+        {
+          "file": "traceback.py",
+          "line": 184,
+          "function": "_print_exception_bltin"
+        }
+      ],
+      "signature": "c0000005|<frozen importlib._bootstrap>:491:_call_with_frames_removed"
+    },
+    {
+      "case": "315_import_2",
+      "runtime": "315",
+      "kind": "import",
+      "exitcode": 0,
+      "seconds": 12.44,
+      "native_access_violation": false,
+      "frames": []
+    },
+    {
+      "case": "315_full_3",
+      "runtime": "315",
+      "kind": "full",
+      "exitcode": 3221226505,
+      "seconds": 31.74,
+      "native_access_violation": false,
+      "frames": []
+    },
+    {
+      "case": "315_import_3",
+      "runtime": "315",
+      "kind": "import",
+      "exitcode": 0,
+      "seconds": 12.43,
+      "native_access_violation": false,
+      "frames": []
+    }
+  ],
+  "common_fault_signatures": [
+    "c0000005|repeat_rules.py:196:<genexpr>"
+  ],
+  "wa41_reproduced_on_315": true,
+  "production_files_unchanged": 470,
+  "frozen_files_unchanged": 470,
+  "errors": [],
+  "cause_confirmed": false,
+  "release_ready": false
+}

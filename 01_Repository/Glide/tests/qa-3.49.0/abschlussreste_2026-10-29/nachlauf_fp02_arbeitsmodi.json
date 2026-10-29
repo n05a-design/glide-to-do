@@ -1,0 +1,588 @@
+{
+  "app_sha256": "5e93aeff9373727b90bc1d57bc280b149f62ffdc41ea055fe4b534776f79e74a",
+  "faelle": {
+    "seitenaktionen": {
+      "ok": true,
+      "befund": "21 aktive Seitenmenüeinträge auffindbar; Filter, Esc/Fokus, Ausführen, Gliederung, leere Treffer",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "blockaktionen": {
+      "ok": true,
+      "befund": "Strg+/, Griff an Schreibmarke und Mauszeiger, Umwandeln mit einem Undo, Sperrgründe, Rechtsklick nennt den Weg",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "schreibschutz": {
+      "ok": true,
+      "befund": "Lesbare Aktionen bleiben, Änderungen gesperrt mit Grund, keine Kopfverweise",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "kopfverweise": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\GlidePruefung\\pruefkopie-3skjzya6\\projekt\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 2040, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\GlidePruefung\\pruefkopie-3skjzya6\\projekt\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 332, in fall_kopfverweise\n    assert editor._head_fits, \"kurzer Titel lässt Platz für die Verweise\"\n           ^^^^^^^^^^^^^^^^^\nAssertionError: kurzer Titel lässt Platz für die Verweise\n",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "notiz": {
+      "ok": true,
+      "befund": "Notizaktionen mit eigenen Abschnitten, Blockaktionen und Griff wie in Seiten",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "nebenansicht_liste": {
+      "ok": true,
+      "befund": "Abhaken per Kästchen/Leertaste mit einem Undo/Redo, Text klickt nicht, Umbenennen, Papierkorb, Öffnen",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "nebenansicht_seite": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\GlidePruefung\\pruefkopie-3skjzya6\\projekt\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 2040, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\GlidePruefung\\pruefkopie-3skjzya6\\projekt\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 567, in fall_nebenansicht_seite\n    assert app.find_item_in_lists(aufgabe)[0][\"done\"] and len(app.undo_stack) == tiefe + 1\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "nebenansicht_inspektor": {
+      "ok": true,
+      "befund": "Vorrang und Rückkehr gegenüber dem Inspektor, schmal als Überlagerung, 25 Knöpfe ohne Befund",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "nebenansicht_einstiege": {
+      "ok": true,
+      "befund": "Kontextmenü, Zeichnung gesperrt, Umschalt+Enter, eigene Auswahl nur mit Listen/Seiten/Notizen",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "verweisvorschau": {
+      "ok": true,
+      "befund": "Echter Strg+Umschalt-Klick, Kontext unter Auswahl, Verweis-/Rückverweismenü, frische IDs/Titel, Taskmarkierung in Liste/Seite, Haupteditor und offener Text erhalten; alter Strg-Klick bleibt",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "verweisvorschau_grenzen": {
+      "ok": true,
+      "befund": "Notiz, kein externer Browser, Archiv/Schreibschutz, Undo/frische IDs, stale Menü/Papierkorb/fehlend/Zeichnung/Kompaktmodus; 252 Knopfprüfungen in acht Konfigurationen",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "seitenleiste_kontext": {
+      "ok": true,
+      "befund": "Rechtsklick auf Liste/Seite/Notiz/Zeichnung/Ordner/Systemzeile ohne Öffnen; Nebenansicht, Linksklick, Pfeiltaste und Mehrfachauswahl erhalten",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "kompakt": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\GlidePruefung\\pruefkopie-3skjzya6\\projekt\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 2040, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\GlidePruefung\\pruefkopie-3skjzya6\\projekt\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 986, in fall_kompakt\n    assert breite == 480 and hoehe == 800 and x == 40 + 1280 - 480, lauf.root.geometry()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 480x688+588+30\n",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "event_trace": [
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        }
+      ]
+    },
+    "kompakt_ansichten": {
+      "ok": true,
+      "befund": "132 Knopfprüfungen in vier Ansichten bei 480×560 und großer Schrift; Menü mit allen Befehlen",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "kompakt_verlorenes_loslassen": {
+      "ok": true,
+      "befund": "Fehlendes K-Loslassen blockiert nach Modifierende/Fensterfokusverlust nicht das nächste Kürzel; interner Fokuswechsel erhält das Paar",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      },
+      "event_trace": [
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<KeyRelease-Control_L>",
+          "before": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<KeyRelease-Control_L>",
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 0,
+          "key": "k",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": true,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "2",
+          "state": 5,
+          "key": "K",
+          "time": 0,
+          "before": {
+            "compact": false,
+            "down": false,
+            "minsize": [
+              860,
+              700
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "synthetic": "<Control-Shift-K>",
+          "after": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        },
+        {
+          "type": "3",
+          "state": 0,
+          "key": "k",
+          "time": 0,
+          "before": {
+            "compact": true,
+            "down": true,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          },
+          "after": {
+            "compact": true,
+            "down": false,
+            "minsize": [
+              480,
+              560
+            ],
+            "focus": ".",
+            "focus_class": "Tk"
+          }
+        }
+      ]
+    },
+    "gestaltung": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\GlidePruefung\\pruefkopie-3skjzya6\\projekt\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 2040, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\GlidePruefung\\pruefkopie-3skjzya6\\projekt\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1220, in fall_gestaltung\n    assert not befunde, (len(befunde), befunde[:6])\n           ^^^^^^^^^^^\nAssertionError: (3, ['dunkel_breit Liste mit Nebenansicht: Beschriftung „Aktionen“ breiter als Knopf', 'dunkel_breit Liste mit Nebenansicht: Beschriftung „Mehr“ breiter als Knopf', 'verlauf_breit Liste mit Nebenansicht: Beschriftung „Mehr“ breiter als Knopf'])\n",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "tagessteuerung": {
+      "ok": true,
+      "befund": "Mehr-Menü mit Kapazität, Morgen/Datum/Abbruch/ohne Tag, Fälligkeit erhalten, Undo, Sperre/Blockierung, Fokusfehler und echter gespeicherter Fokusstart",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "nebenansicht_navigation": {
+      "ok": true,
+      "befund": "Wörtliche Unicode-Suche, Trefferwechsel/Tasten, kein Treffer, Neuaufbau, Überschriften/Gruppen, readonly und dreistufiges Esc; Haupteditor und offene Eingaben erhalten",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "zweierpaket_gestaltung": {
+      "ok": true,
+      "befund": "465 Knopfprüfungen; Tagessteuerung in vier Größen-/Schrift-/Designkonfigurationen und drei Scrolllagen, Nebenansicht mit Suche an Mindestbreite in drei Konfigurationen",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "home_mehrfachplanung": {
+      "ok": true,
+      "befund": "21 offene Aufgaben aus zwei Listen über drei Seiten; Auswahl ohne Schreiben/Erledigen, Morgen/ohne Tag mit einem Undo/Redo, Fälligkeit, Dialogabbruch/Alterung, Sperre, Tageswechsel und readonly grün",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "side_history": {
+      "ok": true,
+      "befund": "Zurück/Vorwärts/Alt-Pfeile, Suchbegriff/aktiver Treffer, Leseposition und Zeilenauswahl, aktueller Verlauf/Inhaltswechsel, gelöschte Ziele, fehlender Inhalt, readonly und Bestandsgrenze; Hauptentwurf und Dateibytes erhalten",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "folgepaket_gestaltung": {
+      "ok": true,
+      "befund": "669 Knopfprüfungen; Tagessteuerung in vier Größen-/Schrift-/Designkonfigurationen und drei Scrolllagen, Nebenansicht mit Suche an Mindestbreite in drei Konfigurationen",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "home_tagesnavigation": {
+      "ok": true,
+      "befund": "Tag vor/zurück/Datum/Heute, separate Plan-/Fälligkeitsbilanz, Auswahlgrenze, Abbruch, readonly und Bestandswechsel ohne Aufgaben-/Undo-Wirkung",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "home_mehrfachfelder": {
+      "ok": true,
+      "befund": "12 Aufgaben aus zwei Listen: Wichtigkeit/Labels, vorhandene Labels, No-op, ein Undo/Redo, stale Auswahl, Sperre/readonly und Schreibfehler ohne Erfolg",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "side_verweisnavigation": {
+      "ok": true,
+      "befund": "Echter Textlink, Rückverweis, Suchauswahl, Verlauf, readonly und veralteter Link; Hauptentwurf/Datei/Undo unverändert",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "dreierpaket_gestaltung": {
+      "ok": true,
+      "befund": "384 Knopfprüfungen; vier Größen-/Schrift-/Designkonfigurationen einschließlich Kompaktmodus, drei Scrolllagen, Nebenansicht 280 px und vollständige Datumswerte",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "home_wochenwahl": {
+      "ok": true,
+      "befund": "Echter Wochenknopf/Suchauswahl und Datumsmenü, Auswahlreset, alte Menüs wirkungslos, readonly lesend ohne Schreib-/Undo-Effekt",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "home_faelligkeit_aufwand": {
+      "ok": true,
+      "befund": "12 Aufgaben: echte Aufwandmenüaktion, ein Undo/Redo, Fälligkeit getrennt vom Bearbeitungstag, eigene Dauer, Abbruch/stale/Serien/readonly/Schreibfehler geschützt",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    },
+    "side_verweisaktionen": {
+      "ok": true,
+      "befund": "Echte Verweisaktionen: Kopieren ohne Mutation, Hauptbereich öffnen, gezielt verknüpfen mit einem Undo/Redo, readonly und Dialog-/Beziehungswechsel geschützt",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": [
+    "kopfverweise",
+    "nebenansicht_seite",
+    "kompakt",
+    "gestaltung"
+  ]
+}

@@ -91,6 +91,7 @@ with tempfile.TemporaryDirectory(prefix="glide-tagpaket-") as folder:
 
     def restart_check(identity, expected, journal=False):
         app.cancel_pending_callbacks()
+        getattr(app, "finish_recovery_session", lambda: None)()
         app.release_data_lock()
         root.withdraw()
         code = """
@@ -115,6 +116,9 @@ app.on_close()
                                 capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=90)
         assert result.returncode == 0, result.stderr
         assert app.acquire_data_lock() is None and not app._data_read_only, "Test muss seine isolierte Ablage wieder belegen"
+        # Nach dem regulären Abschluss vor dem Kindprozess eine neue eigene Sitzung eröffnen.
+        getattr(app, "init_recovery_session", lambda: None)()
+        assert not app._data_read_only, "Sitzung nach dem Neustart des Kindprozesses nicht wieder eröffnet"
         app.settings = app.load_settings()
         app.load_items()
         root.deiconify()
@@ -482,6 +486,7 @@ app.on_close()
         print("test_tagpaket33314: OK; "+"; ".join(checks))
     finally:
         app.cancel_pending_callbacks()
+        getattr(app, "finish_recovery_session", lambda: None)()
         app.release_data_lock()
         try: root.destroy()
         except mod.tk.TclError: pass

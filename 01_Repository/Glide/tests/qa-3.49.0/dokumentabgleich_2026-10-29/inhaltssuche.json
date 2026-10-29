@@ -1,0 +1,187 @@
+[
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "line": 7,
+    "text": "**Neuester Datei-/Dokumentabgleich 29.10.2026:** [§13.20](#1320-einarbeitung-des-abnahmeaudits-und-dateiabgleich-vom-29102026) führt den Abnahmebericht lokal ein und berichtigt Status-/Modul-/Abschnittsverweise. Quelle 3.49.0, Python/Showcase 3.47.0, native Pakete 3.45.0. Historische Befunde, einschließlich §13.17 zu 3.48.0, bleiben an ihre damaligen Bytes gebunden. Der Dokumentabschluss ersetzt keine neue Funktions-, Markt- oder Releasefreigabe."
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "line": 753,
+    "text": "Auftrag: „Ist alles abgelegt in der Dokumentation? bitte alle Dateien nach Inhalt, Stand und Version prüfen.“ Die erste Bestandsaufnahme erfasst 5.532 Hauptcheckout-Dateien vor neuen Sicherungskopien, einschließlich ignorierter QA-/Builddateien. Git-Interna und separate Checkouts sind abgegrenzt. Aktuelle Standaussagen, Quell-/Liefergrenzen, Entscheidungsnummern und Übernahmepfade wurden inhaltlich abgeglichen; lesbare Hauptdateien gehasht, Projekt-/QA-Texte und strukturierte Daten zusätzlich syntaktisch geprüft. Einzelinventar, Register, Nachlauf und Grenzen im [Audit](../01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md)."
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "line": 757,
+    "text": "| Wurzel-README nennt Python 3.45.0; Paketierungs-/Quell-/Testeinstiege nennen 3.47.0 als aktuelle Quelle | Quelle 3.48.0 als lokaler uncommitteter Kandidat, Python 3.47.0 und native Pakete 3.45.0 getrennt. 235 Python-Dateihashes stimmen; native Archive und Inspektionskopien ebenfalls passend. |"
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "line": 761,
+    "text": "| Probedaten behaupten komplette Bytegleichheit zum Quell-Showcase; aktuelle Releaseplanung nennt 3.47.0 | Quellfixtures 3.48.0 und gelieferter Showcase 3.47.0 getrennt; beide eigenen Manifeste gültig. Releaseplanungsfixture 3.48.0 vermerkt. |"
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "line": 9,
+    "text": "**Aktuelle Featurefortsetzung 28.10.2026:** „weiter mit den nächsten 3 Feature-Pakete.“ Die nächsten drei geordneten Pakete aus [§21.27](#2127-vorbeugung-absturzdiagnose-und-abgesicherter-wiederanlauf) werden gemeinsam als **3.49.0 / Format 26** umgesetzt: WA-42 Prüfabläufe, WA-40/WA-41B Wiederanlauf und WA-41A/WA-40 lokale Diagnose. Vorhandene 3.48.0-Features und historische Befunde bleiben erhalten. Gezielter Funktionsabschluss, breite/native Phasenmatrix, Lieferung und Menschenabnahme bleiben getrennt."
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "line": 1633,
+    "text": "**Neuester Dokumentations-/Ablageauftrag 27.10.2026:** Alle Dateien nach Inhalt, Stand und Version prüfen. Aktuelle Quellen berichtigt, Datei-/Dokumentregister samt Einzelhashes und offenen Ablagepunkten im [Audit](../01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md), inhaltliche Korrekturen in [Analyse §13.17](Glide_Analyse.md#1317-datei--und-dokumentationsaudit-vom-27102026). Acht vorhandene Minidumps und fester künstlicher Eingang zusätzlich lokal/Git-ausgeschlossen gesichert; externer gemeldeter Export weiterhin nicht auffindbar. 595 lokale Aufbewahrungsbefunde als Bereinigungskandidaten erfasst, nicht gelöscht. Gegen die eingefrorene 470-Dateien-Referenz nur eine README berichtigt; ausführbare Quelle/Tests/Daten unverändert. Keine App-/Lasttests, BIOS-/CPU-, Liefer- oder Gitaktion. WA-41A/B und übrige Tore bleiben offen; derzeitiger Folgeeinstieg ist [Übergabe Abschnitt 0](Glide_Uebergabe.md#0-sofortübergabe-wa-41--zuerst-lesen)."
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "line": 1635,
+    "text": "**Auftrag 27.10.2026:** Drei Pakete gemeinsam umsetzen, großer Fortschritt, Routinetests erst danach; Skill Design Richtlinien ausdrücklich einbeziehen. Der lokale Schnitt vertieft D57 und die bestehenden Alltags-/Verweisfunktionen: (1) Tagesnavigation in der Startseitenkachel mit eigener Plan-/Fälligkeits-/Kapazitätsbilanz; (2) Mehrfachbearbeitung von Wichtigkeit und regulären Labels über alle ausgewählten Tagesaufgaben; (3) interne Textlinks und aktuelle Verweise/Rückverweise direkt in der Nebenansicht mit vorhandenem Verlauf. Keine neue Produktart, Integration oder Laufzeitabhängigkeit; Aufgabenformat bleibt 26. Neue gemeinsame Version 3.48.0. Der konkrete Dreierschnitt wurde innerhalb der bestehenden Bereichsauswahl durch den Agenten festgelegt."
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "line": 1651,
+    "text": "**WA-41-Internet-/Last-/CPU-Nachdiagnose zu §21.26, 27.10.2026:** Auf Nutzerhinweise 15 weitere Prozesse: zwei dev-Proben plus Ausnahmeaufnahme rot mit Python-Typfehlern und intakten Builtins/quellgleichem Bytecode; acht skalierte Last-/Fensterproben grün; venv-Vollversuch nach 40 Runden an gesondertem PermissionError im harten Schreiberabbruchtest rot; zwei an logischen Prozessor 0 gebundene 26.420-Punkte-Kernläufe grün, normale Affinitätsgegenprobe rot. 25 korrigierte WHEA-19-Kern-Paritätsfehler vom 26.10. bei i9-14900K/BIOS F19/CPU-Registryrevision 0x12B: CPU-/Firmwarestabilität jetzt vorrangig prüfen. Intel empfiehlt aktuelle passende Firmware mit 0x12F oder neuer und Intel Default Settings; genaue PCB-Revision/aktive BIOS-Einstellungen nicht bestätigt, keine BIOSänderung. Kein gemessener RAM-/Handleengpass; echter aktiver Vordergrund nicht erreicht. Alle 470 Dateien unverändert. [Quellen, Bilanz und Grenzen](../01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/README.md). Keine bewiesene Ursache oder CPU-Defektdiagnose; WA-41 offen, keine abgeschwächte Originalsuite, Lieferung oder Releasefreigabe. Separaten venv-Dateizugriffsbefund bei WA-42 weiter einordnen, nicht als WA-41 oder bestätigten Produktfehler behandeln."
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "line": 1687,
+    "text": "**Auftrag:** Die ursprünglichen Funktionsbereiche Tagesnavigation, Mehrfachbearbeitung und Verweise fortsetzen. Erste Stufe 3.48.0 ist im aktuellen Kandidaten enthalten; sie wird nicht erneut als Neubau gezählt. Nach der technischen Robustheitsrunde folgt jetzt sichtbarer Funktionsausbau im gemeinsamen 3.49.0-Kandidaten. D57/D17/D51, Offline/JSON, eine Mutation/ein Undo und die bestehenden UI-/Modalwege bleiben. Keine neue Produktart, Integration, Laufzeitabhängigkeit oder Datenformatänderung."
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+    "line": 431,
+    "text": "Historischer D55-Nachweis: `test_arbeitsmodi.py` mit 13 echten Tk-Fällen und Knopfschutz B15 unter Linux/Xvfb/Tk 8.6. D55 ist inzwischen seit 3.45.0 geliefert; die aktuelle 3.48.0-Erweiterung zählt 26 automatisch geprüfte Fälle ([Nachweis](../01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/README.md)). Hier bleibt die Sicht- und Bedienabnahme am echten Gerät, je Plattform hell/dunkel, ein Verlaufsdesign, mittlere/große Schrift und Windows 100/150 % DPI. Der Showcase-Starter verwendet die Lieferung 3.47.0 einschließlich D55. `01_Repository/Glide/tests/tools/kandidat_starten.pyw` verwendet dagegen die noch nicht gelieferte Quelle 3.48.0 mit separatem künstlichem Showcase unter `GlidePruefung/kandidat_showcase`; Start nur im jeweils beauftragten Prüfumfang."
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "line": 31,
+    "text": "- **Quelle 3.49.0 einschließlich der 3.48.0-Funktionen ist nicht aktuell geliefert oder freigegeben.** Startbare Python-/Showcase-Lieferung bleibt 3.47.0, eigenständige Pakete 3.45.0. Auch ein stabiler AMD-Lauf oder das Ausbleiben eines nativen Absturzes wäre keine Releasefreigabe."
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "line": 50,
+    "text": "| Neuester Gesamtbefund, Internetansätze, Last, WHEA und Grenzen | [last_fenster_2026-10-27/README.md](../01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/README.md), [geprüfte Bilanz](../01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/auswertung.json) |"
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "line": 56,
+    "text": "| Historischer WA-41-Quellstand 3.48.0 | [quellstand.json](../01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/quellstand.json) – eingefrorene 470-Dateien-Referenz. Davon beim Dokumentaudit nur `tests/fixtures/showcase/README.md` fortgeschrieben; ausführbare Quelle/Tests/Daten/Ressourcen unverändert. Referenz erhalten; [aktueller Abgleich](../01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/ergebnis_nachher.json). App-SHA-256 `f57daadfbb59831a89666434f8d7d69e6c5e4b2042aaa3f14a6b156285dbe24e` |"
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "line": 108,
+    "text": "**Aktueller WA-41-Versionsvergleich, 27.10.2026:** Auf Auftrag mit Python 3.15.2 wiederholt: vier von acht Prozessen rot, darunter zwei originale vollständige Speicherlastläufe. Gleiche Zugriffsverletzung in `repeat_rules.py:196` wie unter 3.14 und erneut interner Cacheabbruch; Update ist kein Fix. Zwei neue 3.14.8-Kerngegenproben: eine grün/eine rot. 470 Dateien in Arbeitskopie und eingefrorener Quelle vor/nachher unverändert. [Vergleichsnachweis](../01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/README.md). WA-41 bleibt offen, kein Produktions-/Liefer-/Releasewechsel."
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "line": 112,
+    "text": "**Aktueller Auftrag 3.48.0 (27.10.2026):** Drei Featurepakete implementiert: Tagesnavigation auf der Startseite, gemeinsame Wichtigkeit/Labelaktionen und interne Verweis-/Rückverweisnavigation in der Nebenansicht. Skill Design Richtlinien angewendet, Routinetests wie beauftragt erst nach gemeinsamer Umsetzung. 986 Fachtests, 26 Arbeitsmodifälle und 372 neue Knopfprüfungen grün; breiter eingefrorener Versuch abgeschlossen, WA-41 erneut offen. Quelle 3.48.0 als lokaler Featurekandidat, Python-Lieferung bewusst 3.47.0; eigenständige Pakete weiterhin 3.45.0. [Plan 21.26](Glide_Entwicklungsplan.md#2126-drei-featurepakete-tagesnavigation-mehrfachfelder-und-verweise-3480), [Prüf-/Liefernachweis](../01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/README.md). Keine neue Git-/Integrations-/Veröffentlichungsentscheidung."
+  },
+  {
+    "file": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "line": 183,
+    "text": "5. **Offene native Lieferung/Abnahme nach D51:** Quelle ist 3.48.0; Python-/Prüfabschluss im aktuellen Dreierpaketnachweis; eigenständige Windows-/Mac-Pakete bleiben 3.45.0. Neue native Paketbauten, Linux-/Mac-Matrix und Menschenabnahme bleiben getrennte offene Tore. Der unterbrochene Volllauf bleibt erhalten. Kein automatischer Commit/Push/Merge aus dem Featureauftrag."
+  },
+  {
+    "file": "01_Repository/Glide/docs/00_INDEX.md",
+    "line": 14,
+    "text": "- **Aktuelle Fehlerübergabe und Dateiablage:** [Übergabe Abschnitt 0](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md#0-sofortübergabe-wa-41--zuerst-lesen), [Datei-/Dokumentaudit](../tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md), [abgeschlossener AMD-Gegenlauf](../tests/qa-3.48.0/amd_vergleich_2026-10-27/README.md). Zehn AMD-Prozesse grün, WA-41-Ursache offen; BIOS-/CPU-Verzicht bleibt bestehen."
+  },
+  {
+    "file": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+    "line": 9,
+    "text": "**Fortsetzung 3.48.0:** Tagesnavigation ist flüchtiger Zustand mit SAVE_FILE-Besitzgrenze. Bestehendes home_dashboard liefert tagbezogene Fälligkeit, planning_summary die Kapazität. home_task_tiles enthält reine Datumsregeln und explizite Navigationsports. task_editing.batch_plan plant idempotente Wichtigkeits-/Labeländerungen ohne Mutation; der Appadapter löst vor und nach item_change die aktuelle Auswahl auf. side_view.page_links/reference_groups projizieren lokale Originalverweise und Graphbeziehungen; UI öffnet über den vorhandenen side=True-Pfad. Keine neuen Module, Laufzeitabhängigkeiten, Worker oder Formate. [Prüf-/Lieferstand](../tests/qa-3.48.0/dreierpaket_2026-10-27/README.md)."
+  },
+  {
+    "file": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "line": 21,
+    "text": "**Datei-/Dokumentaudit 27.10.2026:** Tatsächlicher Hauptcheckout einschließlich ignorierter Belege inventarisiert/gehasht; aktuelle Quell-, Liefer-, Test- und Entscheidungsangaben inhaltlich abgeglichen. 235 Python-Lieferdateien unverändert; Archive 3.45.0 hashgleich, 103 Windows- und 333 Mac-Dateien sowie 29 Mac-Linkziele passend. Beide Showcase-Manifeste korrekt, Quelle 3.48.0 und Lieferung 3.47.0 ausdrücklich verschieden. Acht Minidumps und fester Eingang zusätzlich lokal gesichert (neun Dateien/45.085.574 Bytes). Gegen die eingefrorene 470-Dateien-Referenz nur die Showcase-Fixture-README fortgeschrieben; App, Tests, Daten und Ressourcen unverändert. Register, Zählungen und offene 595 lokale Aufbewahrungsbefunde im [Audit](../tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md). Keine Anwendung oder Lastsuite gestartet, kein neuer Plattform-/Releaseabschluss. Ältere Vollprüfergebnisse bleiben historische Nachweise."
+  },
+  {
+    "file": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "line": 23,
+    "text": "**Übergabe-/Dumpnachtrag, 27.10.2026:** Keine weiteren Anwendungstests aus dem Übergabeauftrag gestartet. Acht vorhandene Python-Minidumps (MDMP, Flags 0x200121, kein FullMemory-Flag) inklusive SHA-256 inventarisiert; frühere pauschale Dump-Abwesenheitsaussage korrigiert. Aktuelle WER-Schlüssel für python.exe/pythonw.exe mit DumpType 2/Count 3 lesend bestätigt, erfolgreiche neue Vollaufnahme noch nicht nachgewiesen. Gemeldeter externer Sicherungsordner lokal nicht gefunden. Nutzer möchte BIOS/CPU vorerst nicht verändern, späteren AMD-Vergleich bei Bedarf; WA-41A/B und Voraussetzungen in [Übergabe Abschnitt 0](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md#0-sofortübergabe-wa-41--zuerst-lesen), [Dumpinventar](../tests/qa-3.48.0/last_fenster_2026-10-27/dump_bestand.json). Keine Releasefreigabe."
+  },
+  {
+    "file": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "line": 31,
+    "text": "**Aktueller CI-Abschluss 3.48.0:** Grundstufe bestanden, 19 Schritte/18 ausgeführt und ein erwarteter Lieferhinweis. 193 Werkzeugtests (ein Skip), zweimal 986 Fachtests, fünf Analysen und Startprobe grün. Schlusskontrolle: 470 Prüfbytes unverändert, 235 alte Lieferdateien bytegleich zum historischen SHA-256-Nachweis, 89 Dokumente ohne Stand-/Linkbefund. Lokaler Featurekandidat geprüft; wegen WA-41 keine neue 07-/Showcase-/Paketlieferung und keine Releasefreigabe."
+  },
+  {
+    "file": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "line": 33,
+    "text": "**Dreipaketphase 3.48.0 (27.10.2026):** Gemäß Auftrag alle drei Pakete vor Routinetests implementiert. 986 Fachtests, 26 echte Arbeitsmodifälle und 372 neue Knopfprüfungen grün; die neue Sichtprüfung hat die abgeschnittene Datumsspalte der Nebenansicht gefunden und gezielt behoben. Breiter eingefrorener Windows-Versuch abgeschlossen: 123 Schritte, 116 grün, sechs rot, eine menschliche Sichtprüfung offen. Drei Altlesersuiten mit korrigiertem rein lesendem Historiezugriff grün nachgeprüft. Dokumente gezielt korrigiert/grün; WA-41 mit gemischten isolierten Ergebnissen weiter offen. Deshalb kein 07-/Showcase-Abgleich oder neuer Paketbau; aktuelle Ergebnisse und Liefergrenzen ausschließlich im [Dreierpaketnachweis](../tests/qa-3.48.0/dreierpaket_2026-10-27/README.md). Historische Nachweise bleiben ihren Versionen zugeordnet; native Pakete weiterhin 3.45.0."
+  },
+  {
+    "file": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+    "line": 13,
+    "text": "Die Haken dokumentieren den historischen vollständigen Plattformabschluss 3.42.0. Die native Paketlieferung 3.45.0 übernimmt keine ungetesteten Mac-/Linux-/Menschenfreigaben daraus; Python-Lieferung 3.47.0 und Quellkandidat 3.48.0 sind getrennt. Aktuelle Belege stehen oben und im [QA-Bericht](07_QA_BERICHT.md)."
+  },
+  {
+    "file": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "line": 17,
+    "text": "**Aktueller Prüfauftrag 27.10.2026 (Wortlaut):** „Bei meinem Pc 2 mit Intel CPU gab es Probleme bei Tests, kannst du diese bei diesem Pc wiederholen? Dieser hat eine AMD CPU.“ Abgeschlossen auf Ryzen 7 5800X3D: zehn ausgewertete Prozesse grün, davon neun mit Python 3.14.7 und eine zusätzliche Vollsuite mit 3.15.1. Vier unveränderte Originalvollsuiten, zwei normale Kernproben, vier reine Daten-/Importproben (zwei mit bytegleichem Intel-Anfangsbestand). 240 Änderungs-/Speicher-/Laderunden und 80 Daten-/Importdurchgänge ohne Abweichung oder unerwarteten Interpreterabbruch. 470 eingefrorene Dateien unverändert, Arbeitskopie nur Showcase-README aus dem zwischenzeitlichen Dokumentationsaudit abweichend. [Nachweis mit gesondertem Temp-Vorlauf und Laufzeit-/Eingangsgrenzen](../tests/qa-3.48.0/amd_vergleich_2026-10-27/README.md). WA-41A/B hier nicht reproduziert, Systemunterschied stärker gestützt; Ursache/CPU-Defekt nicht bewiesen. Keine Produktions-, BIOS-/CPU-, Liefer-, Git- oder Releaseänderung."
+  },
+  {
+    "file": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "line": 19,
+    "text": "**Neuester Dokumentationsauftrag 27.10.2026 (Wortlaut):** „Ist alles abgelegt in der Dokumentation? bitte alle Dateien nach Inhalt, Stand und Version prüfen.“ Tatsächlichen Hauptbestand einschließlich ignorierter Dateien inventarisieren, aktuelle Standaussagen mit Quelle/Prüfung/Lieferungen abgleichen, Widersprüche gezielt berichtigen und Übernahmegrenzen nennen. [Analyse §13.17](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1317-datei--und-dokumentationsaudit-vom-27102026), [Nachweis](../tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md). Acht Minidumps und feste künstliche Eingangsdatei zusätzlich lokal und Git-ausgeschlossen gesichert. Keine App-/Lasttests, Produktionsänderung, Versionsanhebung, BIOS-/CPU-Änderung oder Gitaktion aus diesem Auftrag; keine pauschale Inhaltsfreigabe allein aus Hash-/Syntaxkontrollen."
+  },
+  {
+    "file": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "line": 23,
+    "text": "**Neuester WA-41-Diagnosenachtrag, 27.10.2026:** Nutzerhinweise zu Tracebacks, Entwicklungsmodus, Internetfällen, Lastmenge und Fensterlage gezielt geprüft. Neuer vorrangiger Verdacht: lokale CPU-/Firmwarestabilität (25 historische WHEA-19-Kern-Paritätsfehler, i9-14900K/F19/0x12B; zweimal CPU-0-Kernprobe grün, normale Gegenprobe rot). Kein gemessener Ressourcenengpass, Fokusgrenze ausdrücklich offen; venv-Dateizugriffsfehler getrennt von WA-41. [Belege und Herstellerempfehlung](../tests/qa-3.48.0/last_fenster_2026-10-27/README.md). Nur eigene Prüfprozesse kurz an CPU 0 gebunden; keine globalen CPU-/BIOS-/Sicherheitsänderungen oder Produktionsreparatur. WA-41 und Release-Tore bleiben offen."
+  },
+  {
+    "file": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "line": 25,
+    "text": "**Aktueller Diagnoseauftrag WA-41, 27.10.2026:** „benutze die Version und teste ob das Problem dort auch gleich auftritt“ (Python 3.15.2). Wiederholter Vergleich mit eingefrorener unveränderter Quelle und temporären künstlichen Daten: vier von acht 3.15-Prozessen rot, darunter zwei originale Vollsuiten; gleiche Zugriffsverletzung wie unter 3.14 und interner Cacheabbruch. Versionswechsel ist kein Fix. [Nachweis](../tests/qa-3.48.0/python315_vergleich_2026-10-27/README.md); keine Produktions-/Standardlaufzeit-/Lieferänderung, WA-41 und Release-Tore bleiben offen. Der vorherige 3.47.0-Transportauftrag unten ist abgeschlossen; diese Diagnose enthält keinen neuen Gittransport."
+  },
+  {
+    "file": "01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md",
+    "line": 9,
+    "text": "**Dreipaketphase 3.48.0 (27.10.2026):** Betroffen sind Startseite/Kacheln, Tagesplanung, Auswahl und Nebenansicht. Tagesnavigation neutral und umbrechend innerhalb der scrollenden Kachel; andere Tage ausdrücklich datiert, heutige Ziele/Vorschläge nur bei Heute. Auswahl bearbeiten in der bestehenden durchsuchbaren Aktionsauswahl; Wichtigkeits-/Labelrollen und vorhandene Quellfarben erhalten, keine Typumwandlung über Systemlabels. Interne Links mit Akzent und Unterstreichung, Tastaturalternative über Verweise; Rückverweise nach Herkunft getrennt und fehlende/gelöschte/nicht darstellbare Ziele mit Grund. B11: Datumsspalte nach Textbreite, bei Enge vollständig ausgeblendet, Titel erhält rund 180 px Mindestplatz. Keine neue Dauerleiste im Hauptbereich. [Prüfung, Aufnahmen und offene native Grenzen](../tests/qa-3.48.0/dreierpaket_2026-10-27/README.md)."
+  },
+  {
+    "file": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+    "line": 79,
+    "text": "Auftrag vom 27.10.2026: alle Dateien nach Inhalt, Stand und Version prüfen. Aktuelle Korrekturen in [Analyse §13.17](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1317-datei--und-dokumentationsaudit-vom-27102026); Inventar/Hashes, Register und Grenzen im [Audit](../tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md). Historische Rohbelege behalten ihre damaligen Angaben; spätere Korrekturen stehen als Nachtrag davor. Die 470-Dateien-Referenz des Featurelaufs bleibt erhalten, obwohl eine enthaltene README anschließend berichtigt wurde. Den neuen Dokumentabschluss mit dessen Auditnachweis beurteilen, den alten Hashabschluss nicht umetikettieren."
+  },
+  {
+    "file": "01_Repository/Glide/packaging/README.md",
+    "line": 7,
+    "text": "**Aktueller Quellkandidat 3.49.0:** Die 3.48.0-Bereiche sind um Wochenwahl, gemeinsame Fälligkeit/Aufwand, Verweisaktionen und die Schutzmodule ergänzt. Kopier-/Baulisten führen alle 90 Laufzeitdateien, einschließlich `session_guard.py` und `runtime_diagnostics.py`. Python/Showcase 3.47.0; native Pakete bleiben 3.45.0. Neue CI-Grundstufe grün, Originalsuite FP-01 8/9 und zwölf Folgesuiten gestoppt; WA-41 und aktuelle Lieferung/Abnahme bleiben offen. [Abnahmebericht](../tests/qa-3.49.0/abnahme_2026-10-28/README.md)."
+  },
+  {
+    "file": "01_Repository/Glide/packaging/runtime/README.md",
+    "line": 31,
+    "text": "Vollständige tatsächliche VoiceOver-/NVDA-/Orca-Abläufe bleiben nach D36 Pflichtnachweise. Attribute, künstlich gesetzter Readerstatus im eigenen Tcl-Interpreter und direkte Tk-/spd-say-Ausgabe zählen dafür nicht. Menschen-/DPI-Abnahme nach D42 bleibt zusätzlich getrennt. Die hier genannten P8-Prototypen tragen historisch Basisversion 3.42.0; der aktuelle lokale Python-Lieferstand ist 3.47.0, die nativen Pakete sind 3.45.0 und der Quellkandidat 3.48.0; Mac Ad-hoc-signiert, Windows unsigniert. Keine 4.0-Lieferung oder öffentliche Signaturfreigabe."
+  },
+  {
+    "file": "01_Repository/Glide/src/glide/README.md",
+    "line": 7,
+    "text": "Bestandsumfang aus 3.48.0: Tagesnavigation, gemeinsame Wichtigkeit/Labels und Verweisnavigation; 3.49.0 ergänzt Wochenwahl, Fälligkeit/Aufwand, Verweisaktionen und Schutzmodule. Aktuell 90 Laufzeitdateien plus separater Zeichenprototyp, Format 26 unverändert. Python/Showcase 3.47.0, native Pakete 3.45.0; WA-41, FP-01-Prüfadapter und aktueller Liefer-/Abnahmeabschluss offen. [Abnahmebericht](../../tests/qa-3.49.0/abnahme_2026-10-28/README.md)."
+  },
+  {
+    "file": "01_Repository/Glide/tests/README.md",
+    "line": 7,
+    "text": "**Aktuell 3.49.0:** [Abnahmeaudit](qa-3.49.0/abnahme_2026-10-28/README.md) auf eingefrorener Quelle: 220 Werkzeugtests (ein Skip), zweimal 1060 Fachtests und fünf Analysen grün; originale Wiederholen-Suite 8/9, zwölf Folgesuiten nach Fehlerstopp nicht ausgeführt. Korrektur des Prüf-Sitzungsabschlusses und erneuter Original-/Folgenachweis offen. Die 105 registrierten Suiten sind kein neuer bestandener Volllauf. Die 3.48.0-Belege mit 986 Fachtests/26 Arbeitsmodifällen bleiben [historisch](qa-3.48.0/dreierpaket_2026-10-27/README.md). Python/Showcase 3.47.0, native Pakete 3.45.0."
+  },
+  {
+    "file": "05_Probelisten_Testdaten/README.md",
+    "line": 7,
+    "text": "Die gelieferte Showcase-Basis bleibt 3.47.0; ihre Dateihashes stehen in `manifest.json`. Die Quellfixtures wurden bereits auf Kandidat 3.48.0 angehoben und sind deshalb derzeit nicht insgesamt bytegleich zur Lieferung. Der nächste freigegebene Abgleich erfolgt mit `scripts/pflege/showcase_abgleich.py`; WA-41 verhindert aktuell diesen Lieferabschluss."
+  },
+  {
+    "file": "05_Probelisten_Testdaten/README.md",
+    "line": 15,
+    "text": "| Releaseplanung der aktuellen Version | `…/beispiele/glide_releaseplanung_3.48.0.glidebackup` | `tests/tools/releasedaten.py` |"
+  },
+  {
+    "file": "07_Python-Versionen/README.md",
+    "line": 5,
+    "text": "**Quellkandidat 3.48.0 noch nicht geliefert:** Drei neue Featurepakete sind lokal implementiert und gezielt grün geprüft. Der breite Windows-Lauf hat den offenen Speicherlastbefund WA-41 erneut gezeigt; deshalb bleibt diese startbare Fassung bewusst auf 3.47.0. [Aktueller Prüfstand und Liefergrenze](../01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/README.md)."
+  },
+  {
+    "file": "CLAUDE.md",
+    "line": 5,
+    "text": "Aktueller Auftrag 27.10.2026: Dokumentation und tatsächlichen Dateibestand nach Inhalt, Stand und Version prüfen. Die vorangegangenen drei Featurepakete stehen als lokaler Kandidat 3.48.0 / Format 26; WA-41 ist offen. Maßgeblich sind [Übergabe Abschnitt 0](00_Arbeitsvorbereitung/Glide_Uebergabe.md#0-sofortübergabe-wa-41--zuerst-lesen), [Plan §21.26](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2126-drei-featurepakete-tagesnavigation-mehrfachfelder-und-verweise-3480) und [Datei-/Dokumentaudit](01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md). BIOS-/CPU-Einstellungen vorerst unverändert; keine weiteren Intel-Lastläufe aus diesem Auftrag. Der vorherige 3.47.0-Push ist abgeschlossen, 3.48.0 ist lokal uncommittet. Python-Lieferung 3.47.0, native Pakete 3.45.0; keine neue Git-, Test- oder Releasefreigabe aus der Ablageprüfung."
+  }
+]

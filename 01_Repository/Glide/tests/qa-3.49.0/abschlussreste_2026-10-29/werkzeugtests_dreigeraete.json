@@ -1,0 +1,16 @@
+{
+  "scope": "Werkzeugvollsatz nach Apple-Silicon-Profil, kein nativer M2-Lauf",
+  "returncode": 0,
+  "input_sha256": {
+    "src/glide/app.pyw": "39499ab3b784199c5f39a0f836d494b159203b89ec0d37f24fac9a14231aa729",
+    "tests/tools/prozessdiagnose.py": "318c351ee42eaf5dc4b323e117724853052ff4a315196b508c083e40ab24c2c5",
+    "tests/tools/test_prozessdiagnose.py": "d41403b4fdbd50d5451bb1147925ffb9d9785951b7a28f30a9cc3bd8551d162a",
+    "tests/tools/pruefen.py": "02397c09674c7ad2c8bf3a4a582e8aeae274cc2fd80fec91947d6f05847871e6",
+    "tests/integration/test_listenleeren.py": "3b22fd44d7cf1f4858ae2276150642726f2ee32537e41aef683279b968a24f17"
+  },
+  "inputs_unchanged": true,
+  "log_sha256": "c7589d69927be40947c17a55dedf0673a97f942ee8cef973d783643ce01862c9",
+  "summary": "emd.json\n\n.............................................................................................................................................................................................................................s......\n----------------------------------------------------------------------\nRan 228 tests in 7.570s\n\nOK (skipped=1)\n",
+  "native_m2_test": false,
+  "global_acceptance": false
+}

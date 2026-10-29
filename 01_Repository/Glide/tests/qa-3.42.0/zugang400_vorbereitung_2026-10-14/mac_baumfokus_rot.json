@@ -1,7 +1,0 @@
-{
-  "exitcode": 1,
-  "nur_kuenstliche_daten": true,
-  "tk": "9.1.0",
-  "befund": "Strg+Tab lässt Fokus im Aufgabenbaum; generische Tab-Einrückbindung fängt Bereichswechsel ab",
-  "task_tree_left": false
-}

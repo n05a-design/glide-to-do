@@ -360,6 +360,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-followup36-') as tmp:
         assert app.view_mode == app.LIBRARY_VIEW
         assert (app.lists, app.folders) == data_before
         app.cancel_pending_callbacks()
+        getattr(app, "finish_recovery_session", lambda: None)()
         app.release_data_lock()
         root.destroy()
         root = mod.tk.Tk()
@@ -383,6 +384,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-followup36-') as tmp:
         if errors:
             print('Tk-Fehler:', errors)
         app.cancel_pending_callbacks()
+        getattr(app, "finish_recovery_session", lambda: None)()
         app.release_data_lock()
         if root.winfo_exists():
             root.destroy()

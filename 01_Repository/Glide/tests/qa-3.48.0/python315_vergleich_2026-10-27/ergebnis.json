@@ -1,0 +1,237 @@
+{
+  "started": "2026-10-27T13:52:00.124789+00:00",
+  "version": "3.48.0",
+  "schema": 26,
+  "execution": "sequential",
+  "plan": [
+    {
+      "case": "315_full_1",
+      "runtime": "315",
+      "kind": "full"
+    },
+    {
+      "case": "314_core_1",
+      "runtime": "314",
+      "kind": "core"
+    },
+    {
+      "case": "315_core_1",
+      "runtime": "315",
+      "kind": "core"
+    },
+    {
+      "case": "315_import_1",
+      "runtime": "315",
+      "kind": "import"
+    },
+    {
+      "case": "315_full_2",
+      "runtime": "315",
+      "kind": "full"
+    },
+    {
+      "case": "314_core_2",
+      "runtime": "314",
+      "kind": "core"
+    },
+    {
+      "case": "315_core_2",
+      "runtime": "315",
+      "kind": "core"
+    },
+    {
+      "case": "315_import_2",
+      "runtime": "315",
+      "kind": "import"
+    },
+    {
+      "case": "315_full_3",
+      "runtime": "315",
+      "kind": "full"
+    },
+    {
+      "case": "315_import_3",
+      "runtime": "315",
+      "kind": "import"
+    }
+  ],
+  "runtime_info": {
+    "315": {
+      "python": "3.15.2 (tags/v3.15.2:5e58eaa, Oct 25 2026, 17:27:03) [MSC v.1951 64 bit (AMD64)]",
+      "tk": "9.0.4",
+      "gil_disabled": 0,
+      "jit_enabled": false,
+      "binaries": {
+        "python3.dll": "e394c32bb9e2f0d813f4ed5b858ba717e54e3e6547cd36a8d8aaee66b9ca347f",
+        "python315.dll": "9862572fd449f32a62c1eaec2c6750a9c9fa512f4c9c2ea0e66776cf9212b7c2",
+        "python3t.dll": "c4c1db006228553e4b728b7856b74a007384e608c7b07e6ae8e0d8251d077e5b",
+        "_tkinter.pyd": "3b4e3ba215fef3521fc72293afe52aa209e981c32e55ee94427032dcaecc26b7",
+        "tcl90.dll": "b7466b74e0bf656074364dccc965579c2eda3d734f09b326c51a296638c26b2c",
+        "tcl9tk90.dll": "4c80618f6fc81a0dc00f8e426695a93feb3c470961e1d690200daadd8781f0d7"
+      }
+    },
+    "314": {
+      "python": "3.14.8 (tags/v3.14.8:8e6e75d, Sep 30 2026, 18:19:33) [MSC v.1944 64 bit (AMD64)]",
+      "tk": "9.0.4",
+      "gil_disabled": 0,
+      "jit_enabled": false,
+      "binaries": {
+        "python3.dll": "f9acdbcf3383a52353f8d7db3cbda3d3701b1cf7ac3053985fdac766c29e7808",
+        "python314.dll": "854fe7549eb4b2ac478935a38ae2ca1b774c6fdc3d87f0263fbd697ff86d7149",
+        "_tkinter.pyd": "36675f9038cc1f1fea08b68ef38c5da94b41efbcd3a421421198f49f01afd8d0",
+        "tcl90.dll": "4ea18c5f4f977b827c5d6e3894328105a4c2838d3f3f927b33f96578daa15271",
+        "tcl9tk90.dll": "6a480fc83fba6e6a5ccc5979ba00313a1ac1d2a987cc764c4f5982895b18b00c"
+      }
+    }
+  },
+  "cases": [
+    {
+      "case": "315_full_1",
+      "runtime": "315",
+      "kind": "full",
+      "exitcode": 0,
+      "seconds": 96.55,
+      "timed_out": false,
+      "stdout_sha256": "f73e0bfce84eda0b5dd595915855467f0998e4069414a85a950a7aa05616e33d",
+      "error_messages": [],
+      "summary": "test_speicherlast330: OK; 26420 Punkte (28.5 MB) gespeichert in 0.53 s und geladen in 0.48 s, 40 Änderungsrunden verlustfrei (Papierkorb übergelaufen: ja), 6 harte Abbrüche und 243 Lesezugriffe ohne halbe Datei, 252 Lesezugriffe bei zwei Schreibern, Sperre, Sicherungen nur bei Änderung mit Tagesständen (25 nach Rotation), Startprüfung, Schreibrechte."
+    },
+    {
+      "case": "314_core_1",
+      "runtime": "314",
+      "kind": "core",
+      "exitcode": 3221225477,
+      "seconds": 39.33,
+      "timed_out": false,
+      "stdout_sha256": "de3b133930c8ed892bf590fc3d4a7a3c3d8d5860531884cf164449f4bcf6e718",
+      "error_messages": [],
+      "core_pass": false,
+      "last_started_iteration": 18,
+      "trace_sha256": "d41c94c6702fd2ab8901a8c5b898d4092cc6c6986a9faaf18aca068bef435fd6"
+    },
+    {
+      "case": "315_core_1",
+      "runtime": "315",
+      "kind": "core",
+      "exitcode": 3221225477,
+      "seconds": 66.18,
+      "timed_out": false,
+      "stdout_sha256": "0484434e4d6058f51a7debf980109a1ae4da6d992d49e0a7aeb6e53d3b51e52c",
+      "error_messages": [],
+      "core_pass": false,
+      "last_started_iteration": 37,
+      "trace_sha256": "71bcca15db9dd0a5b021701c4dbf1ed7ec65bf02dd923149466af187bab61a41"
+    },
+    {
+      "case": "315_import_1",
+      "runtime": "315",
+      "kind": "import",
+      "exitcode": 0,
+      "seconds": 12.52,
+      "timed_out": false,
+      "stdout_sha256": "ed17806471640bb749f16e10b90e7356dc4c602cd745c32bce676730669a0525",
+      "error_messages": [],
+      "rounds_completed": 20,
+      "summary": "PASS pure 3.15.2 20"
+    },
+    {
+      "case": "315_full_2",
+      "runtime": "315",
+      "kind": "full",
+      "exitcode": 3221225477,
+      "seconds": 11.4,
+      "timed_out": false,
+      "stdout_sha256": "d1150aa8ea40789c34eba5d61dd30eab45a224a7bcf5416057868f292fffab62",
+      "error_messages": []
+    },
+    {
+      "case": "314_core_2",
+      "runtime": "314",
+      "kind": "core",
+      "exitcode": 0,
+      "seconds": 75.12,
+      "timed_out": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "error_messages": [],
+      "core_pass": true,
+      "last_started_iteration": 39,
+      "trace_sha256": "8b5a6809c07b5b782058f2d2a602e98e96d2d6b4273f9a44468ad31152170469",
+      "summary": "core_pass im Trace"
+    },
+    {
+      "case": "315_core_2",
+      "runtime": "315",
+      "kind": "core",
+      "exitcode": 3221225477,
+      "seconds": 26.7,
+      "timed_out": false,
+      "stdout_sha256": "66f2de5af9b63dbe6310b25bdde66d8aa4a129641ab49f6e93e955a8757f82ec",
+      "error_messages": [],
+      "core_pass": false,
+      "last_started_iteration": 13,
+      "trace_sha256": "10f5f47aa145f910732fb3675ba79a068c09431e312bdf9900d3d4a29875f13f"
+    },
+    {
+      "case": "315_import_2",
+      "runtime": "315",
+      "kind": "import",
+      "exitcode": 0,
+      "seconds": 12.44,
+      "timed_out": false,
+      "stdout_sha256": "ed17806471640bb749f16e10b90e7356dc4c602cd745c32bce676730669a0525",
+      "error_messages": [],
+      "rounds_completed": 20,
+      "summary": "PASS pure 3.15.2 20"
+    },
+    {
+      "case": "315_full_3",
+      "runtime": "315",
+      "kind": "full",
+      "exitcode": 3221226505,
+      "seconds": 31.74,
+      "timed_out": false,
+      "stdout_sha256": "09b93936d681eb87665f7fcf1d463009c2ff6e17560ecce73011170a2864e12d",
+      "error_messages": [
+        "Fatal Python error: _TAIL_CALL_CACHE: Executing a cache."
+      ]
+    },
+    {
+      "case": "315_import_3",
+      "runtime": "315",
+      "kind": "import",
+      "exitcode": 0,
+      "seconds": 12.43,
+      "timed_out": false,
+      "stdout_sha256": "ed17806471640bb749f16e10b90e7356dc4c602cd745c32bce676730669a0525",
+      "error_messages": [],
+      "rounds_completed": 20,
+      "summary": "PASS pure 3.15.2 20"
+    }
+  ],
+  "source_files": 470,
+  "source_before": [],
+  "frozen_before": [],
+  "payload_sha256": "a3b8c0cac4c72e1820e71730ad78e312f2a30338678fbcfe2a2b6d91dae081f4",
+  "payload_bytes": 28548872,
+  "script_sha256": {
+    "pruefen.py": "2faa0b2c7786f978f40e3e658183962e001455deafe2de9778ba1b43391745e9",
+    "probe.py": "ce4e5cee2451c499f007b2982c4e75ae520155d5ef00b07bad2f9b9aa7d8e492",
+    "pure_probe.py": "6fc82b01692fcbdf18702cd2822083e8a6716e2ae828680e6cd6c15bd231d469"
+  },
+  "cause_confirmed": false,
+  "release_ready": false,
+  "completed": true,
+  "finished": "2026-10-27T13:58:25.185921+00:00",
+  "source_after": [],
+  "frozen_after": [],
+  "summary": {
+    "315": {
+      "passed": 4,
+      "failed": 4
+    },
+    "314": {
+      "passed": 1,
+      "failed": 1
+    }
+  }
+}

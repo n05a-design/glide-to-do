@@ -1,0 +1,32 @@
+[
+  {
+    "case": "import_cached_repeat1",
+    "source_mode": "loader",
+    "exitcode": 0,
+    "seconds": 19.66
+  },
+  {
+    "case": "import_fresh_main1",
+    "source_mode": "compiled",
+    "exitcode": 0,
+    "seconds": 13.59
+  },
+  {
+    "case": "import_cached_fresh_deps",
+    "source_mode": "cached_main_fresh_deps",
+    "exitcode": 0,
+    "seconds": 13.1
+  },
+  {
+    "case": "import_cached_repeat2",
+    "source_mode": "loader",
+    "exitcode": 0,
+    "seconds": 13.09
+  },
+  {
+    "case": "import_fresh_main2",
+    "source_mode": "compiled",
+    "exitcode": 0,
+    "seconds": 13.54
+  }
+]

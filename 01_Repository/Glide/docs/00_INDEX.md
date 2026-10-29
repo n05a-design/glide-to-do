@@ -1,6 +1,8 @@
 # Dokumentationsindex
 
-Stand 27.10.2026 · Glide 3.47.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2
+Stand 29.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2
+
+**Lokaler Standabgleich 29.10.2026:** [Dokument-/Dateinachweis](../tests/qa-3.49.0/dokumentabgleich_2026-10-29/README.md); [Abnahmebericht zum 28.10.2026](../tests/qa-3.49.0/abnahme_2026-10-28/README.md) mit weiter offenen Funktions-/Liefer-/Abnahmetoren.
 
 Seit 03.10.2026 zwölf zentrale Dokumente und fünf Einzelentscheidungen statt der damaligen 53: Funktionsverträge 45–79, Projektübergabe, Startkontext, Entwicklungsnotizen, Sitzungsprotokoll, Releasecheckliste und Lizenz-, Signierungs- und Vertriebsentwürfe sind in die Dokumente unten eingegangen. Ältere Fassungen trägt Git (`git log --follow docs/<Datei>`). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt; deren Synchronisationskopien und die wiederaufgetauchte Projektübergabe sind aufgelöst. Regeln: [Dokumentenpflege](DOKUMENTENPFLEGE.md).
 
@@ -8,7 +10,10 @@ Seit 03.10.2026 zwölf zentrale Dokumente und fünf Einzelentscheidungen statt d
 
 - **Neue Sitzung:** [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md), dann [Arbeitsregeln](../AGENTS.md).
 - **Was als Nächstes ansteht:** [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md).
-- **Aktuelle Folgepakete auf 3.47.0:** [Mehrfachplanung und Nebenansichtsverlauf, Plan §21.24](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2124-folgepakete-mehrfachplanung-und-nebenansichtsverlauf-3470), [Prüf-/Liefernachweis](../tests/qa-3.47.0/folgepakete_2026-10-27/README.md).
+- **Aktueller Quellkandidat 3.49.0:** [Funktionsausbau §21.28](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2128-funktionaler-ausbau-der-ursprünglichen-drei-pakete), [Schutzpakete §21.27](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2127-vorbeugung-absturzdiagnose-und-abgesicherter-wiederanlauf), [Abnahmebericht](../tests/qa-3.49.0/abnahme_2026-10-28/README.md). A01-Pflichtfolge in 13 Bereichssuiten/136 Fällen grün; WA-09 lokal umgesetzt und gezielt geprüft. Abschließender CI-Nachlauf siehe QA-Bericht. WA-41, aktuelle Lieferung und native/Menschenabnahmen offen; Python/Showcase 3.47.0, native Pakete 3.45.0.
+- **Aktuelle Fehlerübergabe und Dateiablage:** [Übergabe Abschnitt 0](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md#0-sofortübergabe-wa-41--zuerst-lesen), [Datei-/Dokumentaudit](../tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md), [abgeschlossener AMD-Gegenlauf](../tests/qa-3.48.0/amd_vergleich_2026-10-27/README.md). Zehn AMD-Prozesse grün, WA-41-Ursache offen; BIOS-/CPU-Verzicht bleibt bestehen.
+- **Vorbeugung und Wiederanlauf, implementiert mit offenen Abnahmetoren:** [Plan §21.27](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2127-vorbeugung-absturzdiagnose-und-abgesicherter-wiederanlauf), [Datenvertrag](06_DATA_BACKUP_MIGRATION.md#abgesicherter-wiederanlauf-nach-absturz-lokaler-kandidat-3490), [Prüfziele](05_QA_TESTPLAN.md#vorbeugung-und-wiederanlauf-geplante-abnahme). Gezielte Prüfungen liegen vor; Ursachenklärung, vollständige Matrix und aktuelle Lieferung sind offen.
+- **Vorherige Folgepakete auf 3.47.0:** [Mehrfachplanung und Nebenansichtsverlauf, Plan §21.24](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2124-folgepakete-mehrfachplanung-und-nebenansichtsverlauf-3470), [Prüf-/Liefernachweis](../tests/qa-3.47.0/folgepakete_2026-10-27/README.md).
 - **Vorherige zwei Featurepakete auf 3.46.0:** [Tagessteuerung und Nebenansicht, Plan §21.23](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2123-zwei-featurepakete-und-versionsfortschritt-3460), [Prüf-/Liefernachweis](../tests/qa-3.46.0/zweierpaket_2026-10-27/README.md).
 - **Vertiefte Codebasisprüfung und lokaler Techniknachlauf:** [Einordnung Analyse §13.15](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1315-vertiefte-codebasisprüfung-vom-26102026), [Umsetzung und Restumfang Plan §21.21](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2121-vertiefte-codebasisprüfung-und-technikpaket), [gezielter Nachweis](../tests/qa-3.45.0/codebasis_2026-10-26/README.md); frühere Liefer-/Vollprüfungen bleiben an ihre Bytes gebunden.
 - **Aktuelle Roadmap und Pflege:** [Plan §21](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026), technische Härtung aus dem Sicherheits- und Architekturgutachten in [Plan §21.12](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2112-technische-folge-aus-dem-sicherheits--und-architekturgutachten) mit Einordnung in [Analyse §13.12](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1312-sicherheits--und-architekturgutachten-vom-25102026); neue Belege in [Analyse §13](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#13-neuuntersuchung-vom-21102026) und [Markt §12](../../../00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md#12-erweiterte-recherche-vom-21102026); appweiter Entwicklungsvertrag in [Design Richtlinien](DESIGN_RICHTLINIEN.md).
@@ -22,13 +27,13 @@ Seit 03.10.2026 zwölf zentrale Dokumente und fünf Einzelentscheidungen statt d
 | [02 Architektur](02_ARCHITECTURE.md) | Module, Speicherweg, Bausteine der Oberfläche, Performance-Regeln, Tk-Fallstricke |
 | [05 Prüfplan](05_QA_TESTPLAN.md) | Prüfstufen, Regeln, Schritte, Integrationssuiten nach Bereich, manuelle Kontrollmatrix |
 | [06 Daten, Backups und Migration](06_DATA_BACKUP_MIGRATION.md) | Format 26, ältere Formatstufen, Startprüfung, Sicherungen, Einstellungen, Austauschformat |
-| [07 QA-Bericht](07_QA_BERICHT.md) | Phasenabschluss 3.44.0 mit eingefrorener Vollprüfung und Python-Lieferung, getrennte Paketstände, historische Ergebnisse und offene Abnahmen |
+| [07 QA-Bericht](07_QA_BERICHT.md) | Prüfkandidat 3.49.0, A01-Fortsetzung, WA-09, ursprüngliches Abnahmeaudit, WA-41-Diagnose, Liefergrenzen und Datei-/Dokumentabgleich; historische Ergebnisse und offene Abnahmen |
 | [10 Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben, Produktdatenblatt |
 | [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
 | [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D57 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Ein Thema, ein Dokument; Aufbewahrung; Zuständigkeiten |
-| [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; B01–B20 im Python-Stand umgesetzt; E-U1–E-U3 A seit D55 als lokaler Kandidat umgesetzt; Menschenabnahmen offen |
+| [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; B01–B20 und D55 in der Lieferung enthalten, 3.48.0 ergänzt; offene Menschenabnahmen gesondert |
 
 ## Einzelentscheidungen
 

@@ -1,0 +1,15 @@
+{
+  "app_sha256": "58f3a82c88e95fdea26e74a1f1faeae04947ffa625d04d9b2d45d41328746764",
+  "faelle": {
+    "home_mehrfachfelder": {
+      "ok": true,
+      "befund": "12 Aufgaben aus zwei Listen: Wichtigkeit/Labels, vorhandene Labels, No-op, ein Undo/Redo, stale Auswahl, Sperre/readonly und Schreibfehler ohne Erfolg",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": []
+}

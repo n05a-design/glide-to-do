@@ -1,0 +1,15 @@
+{
+  "app_sha256": "e6f4aeadb6e094770a3934836ed7f8cac8d3fb4657c0881fd3e7ef4e5c119363",
+  "session_guard_sha256": "7b4fb6e30206ba4cddb19b92f0c190fbe07aaad6638ba316017cf8dee8befc79",
+  "test_sha256": "aa7f112e614beabc302b5b9b95bfbab8dd8c58496a13af50a750364f79d054bd",
+  "faelle": {
+    "sauber": {
+      "ok": true,
+      "befund": "Echtes on_close vermerkt clean; Neustart lädt dieselben IDs ohne Wiederanlaufsperre"
+    }
+  },
+  "fehler": [],
+  "limitations": [
+    "Hardware-Stromausfall, native Mac-/Linux-/DPI-/Reader- und Menschenabnahme ungeprüft."
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "app_sha256": "8025a20ce47e82a880f6328aa64c2eacbc86e5c8f1bb74ed86a0e8a0e80922e8",
+  "faelle": {
+    "normalisierung": {
+      "ok": true,
+      "messung": {
+        "kontexte": 2,
+        "fremde_karte_erhalten": true,
+        "bekannte_geloeschte_entfernt": true
+      }
+    },
+    "persistenz": {
+      "ok": true,
+      "messung": {
+        "neustarts": 2,
+        "app_sicherung_restore": true,
+        "undo": true,
+        "fremde_karte_nicht_gerendert": true
+      }
+    },
+    "bearbeitung": {
+      "ok": true,
+      "messung": {
+        "bearbeiten_ohne_zukunftsfeldverlust": true,
+        "schreibfehler_und_sperre": true,
+        "loeschen_bleibt_wirksam": true
+      }
+    },
+    "grenzen": {
+      "ok": true,
+      "messung": {
+        "kartenlimit": 500,
+        "filterlimit": 100,
+        "bekannte_felder_streng": true,
+        "keine_neue_semantik": true
+      }
+    }
+  },
+  "fehler": []
+}

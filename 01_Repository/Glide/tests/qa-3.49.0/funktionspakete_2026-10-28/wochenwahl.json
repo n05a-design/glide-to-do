@@ -1,0 +1,15 @@
+{
+  "app_sha256": "55d5d6183026dfd7d8cf591515ed0662487de4804d8560784395584ff808adab",
+  "faelle": {
+    "home_wochenwahl": {
+      "ok": true,
+      "befund": "Echter Wochenknopf/Suchauswahl und Datumsmenü, Auswahlreset, alte Menüs wirkungslos, readonly lesend ohne Schreib-/Undo-Effekt",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": []
+}

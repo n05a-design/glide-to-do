@@ -1,0 +1,23 @@
+[
+  {
+    "File": "VCRUNTIME140.dll",
+    "Group": "315",
+    "FileVersion": "14.51.36247.0",
+    "Signature": "Valid",
+    "Signer": "CN=Microsoft Windows Software Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+  },
+  {
+    "File": "VCRUNTIME140.dll",
+    "Group": "314",
+    "FileVersion": "14.51.36247.0",
+    "Signature": "Valid",
+    "Signer": "CN=Microsoft Windows Software Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+  },
+  {
+    "File": "ucrtbase.dll",
+    "Group": "System",
+    "FileVersion": "10.0.26100.9711 (WinBuild.160101.0800)",
+    "Signature": "Valid",
+    "Signer": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+  }
+]

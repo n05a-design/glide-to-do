@@ -1,0 +1,57 @@
+{
+  "app_sha256": "8025a20ce47e82a880f6328aa64c2eacbc86e5c8f1bb74ed86a0e8a0e80922e8",
+  "faelle": {
+    "label_fehler": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 208, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 42, in fall_label_fehler\n    assert result is None, 'Nicht gespeichertes Label als erfolgreicher Rückgabewert'\n           ^^^^^^^^^^^^^^\nAssertionError: Nicht gespeichertes Label als erfolgreicher Rückgabewert\n"
+    },
+    "label_dialoggrenze": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 208, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 58, in fall_label_dialoggrenze\n    assert app.create_label_interactively() is None\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "schreibschutz": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 208, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 72, in fall_schreibschutz\n    assert app.create_label_interactively() is None\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "entfernen_frische_ids": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 208, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 95, in fall_entfernen_frische_ids\n    assert {v['id'] for v in fresh['items']} == {opened['id'], extra['id']}, 'Gehaltenes Objekt überschreibt frischen Dialogstand'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Gehaltenes Objekt überschreibt frischen Dialogstand\n"
+    },
+    "entfernen_sperrwechsel": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 208, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 114, in fall_entfernen_sperrwechsel\n    assert app.lists == before and run.datei() == disk and not app.undo_stack\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "entfernen_fehler": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 208, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 127, in fall_entfernen_fehler\n    assert not toast.called, 'Erfolgstoast trotz fehlgeschlagenem Schreiben'\n           ^^^^^^^^^^^^^^^^\nAssertionError: Erfolgstoast trotz fehlgeschlagenem Schreiben\n"
+    },
+    "umbenennen_nachlauf": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 208, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 139, in fall_umbenennen_nachlauf\n    assert app.apply_sidebar_rename(('list', entry['id']), 'Gespeicherter Titel') is True\n           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\src\\glide\\app.pyw\", line 38297, in apply_sidebar_rename\n    self.refresh_tree()\n    ~~~~~~~~~~~~~~~~~^^\n  File \"%USERPROFILE%\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\unittest\\mock.py\", line 1176, in __call__\n    return self._mock_call(*args, **kwargs)\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"%USERPROFILE%\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\unittest\\mock.py\", line 1180, in _mock_call\n    return self._execute_mock_call(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"%USERPROFILE%\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\unittest\\mock.py\", line 1241, in _execute_mock_call\n    raise effect\n_tkinter.TclError: künstlicher UI-Nachlauffehler\n"
+    },
+    "umbenennen_fehler_noop": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 208, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 156, in fall_umbenennen_fehler_noop\n    assert app.apply_sidebar_rename(('list', entry['id']), 'Noch ungespeichert') is False\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "label_abbruch": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 208, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 168, in fall_label_abbruch\n    assert app.create_label_interactively() is None\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+    },
+    "entfernen_verschachtelt": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 208, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-mpzm6z6d\\projekt\\01_Repository\\Glide\\tests\\integration\\test_mutationsreste.py\", line 184, in fall_entfernen_verschachtelt\n    assert payload_ids.count(child['id']) == 1 and payload_ids.count(done['id']) == 1, 'Doppelte IDs in Eltern-/Kindpapierkorb'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Doppelte IDs in Eltern-/Kindpapierkorb\n"
+    }
+  },
+  "fehler": [
+    "label_fehler",
+    "label_dialoggrenze",
+    "schreibschutz",
+    "entfernen_frische_ids",
+    "entfernen_sperrwechsel",
+    "entfernen_fehler",
+    "umbenennen_nachlauf",
+    "umbenennen_fehler_noop",
+    "label_abbruch",
+    "entfernen_verschachtelt"
+  ]
+}

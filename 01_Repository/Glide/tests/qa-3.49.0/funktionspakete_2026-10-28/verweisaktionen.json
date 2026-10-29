@@ -1,0 +1,15 @@
+{
+  "app_sha256": "68b9e6bf56adfeb48b4a26c5de804494bb94680dbbeaffe1aa3d57a23f4ef5be",
+  "faelle": {
+    "side_verweisaktionen": {
+      "ok": true,
+      "befund": "Echte Verweisaktionen: Kopieren ohne Mutation, Hauptbereich öffnen, gezielt verknüpfen mit einem Undo/Redo, readonly und Dialog-/Beziehungswechsel geschützt",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": []
+}

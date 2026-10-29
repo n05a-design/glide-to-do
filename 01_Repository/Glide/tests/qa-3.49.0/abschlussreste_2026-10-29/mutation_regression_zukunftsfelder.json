@@ -1,0 +1,48 @@
+{
+  "app_sha256": "a17c136f3fbd5e2cb22892dd670bfe345361dbf5405febc8765c303606a0825a",
+  "faelle": {
+    "normalisierung": {
+      "ok": true,
+      "messung": {
+        "kontexte": 2,
+        "fremde_karte_erhalten": true,
+        "bekannte_geloeschte_entfernt": true
+      }
+    },
+    "persistenz": {
+      "ok": true,
+      "messung": {
+        "neustarts": 2,
+        "app_sicherung_restore": true,
+        "undo": true,
+        "fremde_karte_nicht_gerendert": true
+      }
+    },
+    "bearbeitung": {
+      "ok": true,
+      "messung": {
+        "bearbeiten_ohne_zukunftsfeldverlust": true,
+        "schreibfehler_und_sperre": true,
+        "loeschen_bleibt_wirksam": true
+      }
+    },
+    "grenzen": {
+      "ok": true,
+      "messung": {
+        "kartenlimit": 500,
+        "filterlimit": 100,
+        "bekannte_felder_streng": true,
+        "keine_neue_semantik": true
+      }
+    },
+    "seitennamespace": {
+      "ok": true,
+      "messung": {
+        "seitennamespace_felder_und_kanten": true,
+        "loeschen_undo": true,
+        "neustarts": 2
+      }
+    }
+  },
+  "fehler": []
+}

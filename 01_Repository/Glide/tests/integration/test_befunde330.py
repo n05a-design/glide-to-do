@@ -239,6 +239,15 @@ with tempfile.TemporaryDirectory(prefix="glide-befunde-") as ordner:
                 subprocess.run(["sips", "-s", "format", "jpeg", str(LOGO / "glide-app-icon.png"), "--out", jpeg],
                                capture_output=True, check=False)
             if os.path.isfile(jpeg):
+                # Wie der echte Einstieg drawing_load_reference: zuerst die Umwandlung
+                # anfordern; reference_png_path liest danach nur den fertigen Cache.
+                fertig = []
+                app.previews.request_conversion(root, jpeg, fertig.append)
+                frist = time.monotonic() + 30
+                while not (fertig or app.previews.existing_conversion(jpeg)) and time.monotonic() < frist:
+                    ruhe(1)
+                    time.sleep(0.02)
+                assert app.previews.existing_conversion(jpeg), f"JPEG-Umwandlung nicht fertig: {fertig}"
                 umgewandelt = app.reference_png_path(jpeg)
                 assert umgewandelt.endswith(".png") and app.read_reference_png(umgewandelt).width() > 0
         try:

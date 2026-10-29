@@ -1,0 +1,45 @@
+{
+  "app_sha256": "9e7e4e2c8fc94817959be05dec46a8883ee867fae9d73e290a677e7c28f54364",
+  "faelle": {
+    "schreibschutz": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-93bt2moj\\projekt\\01_Repository\\Glide\\tests\\integration\\test_listenleeren.py\", line 168, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-93bt2moj\\projekt\\01_Repository\\Glide\\tests\\integration\\test_listenleeren.py\", line 26, in fall_schreibschutz\n    assert app.lists == before and run.datei() == disk and not app.undo_stack, 'Liste trotz Schreibschutz im RAM geleert'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Liste trotz Schreibschutz im RAM geleert\n"
+    },
+    "frischer_bestand": {
+      "ok": true,
+      "messung": {
+        "beide_einstiege_frisch": true,
+        "umordnung_und_undo_erhalten": true
+      }
+    },
+    "auswahl_veraendert": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-93bt2moj\\projekt\\01_Repository\\Glide\\tests\\integration\\test_listenleeren.py\", line 168, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-93bt2moj\\projekt\\01_Repository\\Glide\\tests\\integration\\test_listenleeren.py\", line 64, in fall_auswahl_veraendert\n    assert {v['id'] for v in app.current_list()['items']} == {done['id'], opened['id'], extra['id']}, 'Neue unbestätigte Punkte mit gelöscht'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Neue unbestätigte Punkte mit gelöscht\n"
+    },
+    "dialogsperre": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-93bt2moj\\projekt\\01_Repository\\Glide\\tests\\integration\\test_listenleeren.py\", line 168, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-93bt2moj\\projekt\\01_Repository\\Glide\\tests\\integration\\test_listenleeren.py\", line 84, in fall_dialogsperre\n    assert app.lists == before and run.datei() == disk and not app.undo_stack, 'Dialog-Sperrwechsel oder fehlgeschlagene Editorübernahme übergangen'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Dialog-Sperrwechsel oder fehlgeschlagene Editorübernahme übergangen\n"
+    },
+    "nachlauf": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-93bt2moj\\projekt\\01_Repository\\Glide\\tests\\integration\\test_listenleeren.py\", line 168, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-93bt2moj\\projekt\\01_Repository\\Glide\\tests\\integration\\test_listenleeren.py\", line 95, in fall_nachlauf\n    leeren(app, entry, active)\n    ~~~~~~^^^^^^^^^^^^^^^^^^^^\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-93bt2moj\\projekt\\01_Repository\\Glide\\tests\\integration\\test_listenleeren.py\", line 15, in leeren\n    return app.clear_list() if active else app.clear_list_by_id(entry['id'])\n                                           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-93bt2moj\\projekt\\01_Repository\\Glide\\src\\glide\\app.pyw\", line 39484, in clear_list_by_id\n    self.refresh_tree()\n    ~~~~~~~~~~~~~~~~~^^\n  File \"%USERPROFILE%\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\unittest\\mock.py\", line 1176, in __call__\n    return self._mock_call(*args, **kwargs)\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"%USERPROFILE%\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\unittest\\mock.py\", line 1180, in _mock_call\n    return self._execute_mock_call(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"%USERPROFILE%\\AppData\\Local\\Programs\\Python\\Python314\\Lib\\unittest\\mock.py\", line 1241, in _execute_mock_call\n    raise effect\n_tkinter.TclError: künstlicher UI-Nachlauffehler\n"
+    },
+    "speicherfehler": {
+      "ok": true,
+      "messung": {
+        "beide_einstiege_datei_erhalten_und_undo": true
+      }
+    },
+    "regulaer": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-93bt2moj\\projekt\\01_Repository\\Glide\\tests\\integration\\test_listenleeren.py\", line 168, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%\\GlidePruefung\\pruefkopie-93bt2moj\\projekt\\01_Repository\\Glide\\tests\\integration\\test_listenleeren.py\", line 144, in fall_regulaer\n    assert not confirm.called and not app.undo_stack, 'Leere Liste erzeugt Bestätigung und Undo'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Leere Liste erzeugt Bestätigung und Undo\n"
+    }
+  },
+  "fehler": [
+    "schreibschutz",
+    "auswahl_veraendert",
+    "dialogsperre",
+    "nachlauf",
+    "regulaer"
+  ]
+}

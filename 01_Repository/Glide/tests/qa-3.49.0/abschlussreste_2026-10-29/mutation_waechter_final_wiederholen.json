@@ -1,0 +1,42 @@
+{
+  "app": "%USERPROFILE%\\GlidePruefung\\pruefkopie-aqwdpzep\\projekt\\01_Repository\\Glide\\src\\glide\\app.pyw",
+  "faelle": {
+    "matrix": {
+      "ok": true,
+      "befund": "9 Aktionen bytegleich wiederholt, dazu drei Schritte in Folge"
+    },
+    "gueltigkeit": {
+      "ok": true,
+      "befund": "wirkungslos bleibt, Autospeichern, neue Änderung, Zustellbeleg, Wächterabbruch, Neustart, Laden"
+    },
+    "schreibfehler": {
+      "ok": true,
+      "befund": "Rückgängig und Wiederholen je einmal gescheitert und danach gelungen"
+    },
+    "fokusbuchung": {
+      "ok": true,
+      "befund": "Sperre bei offener Buchung, danach wirksam"
+    },
+    "editoren": {
+      "ok": true,
+      "befund": "Textfeld und Zeichenfläche ohne globale Wirkung"
+    },
+    "pinnwand": {
+      "ok": true,
+      "befund": "Fläche wiederholt, neue Fläche verwirft, gemischte Folge richtig"
+    },
+    "bedienwege": {
+      "ok": true,
+      "befund": "Menü, Palette, Kürzel, Hinweis und Überlaufmenü über redo_last_change"
+    },
+    "verlauf": {
+      "ok": true,
+      "befund": "Knopf vorhanden und wirksam"
+    },
+    "messung": {
+      "ok": true,
+      "befund": "10001 Punkte: Zusatz je Schritt 405 KiB, bei 20 Schritten 7.9 MiB; 20 zurück und 20 vor"
+    }
+  },
+  "fehler": []
+}

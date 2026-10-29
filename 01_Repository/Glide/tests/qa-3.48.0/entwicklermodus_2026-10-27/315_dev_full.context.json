@@ -1,0 +1,47 @@
+{
+  "before": {
+    "python": "3.15.2 (tags/v3.15.2:5e58eaa, Oct 25 2026, 17:27:03) [MSC v.1951 64 bit (AMD64)]",
+    "dev_mode": true,
+    "faulthandler": true,
+    "xoptions": {
+      "dev": true,
+      "faulthandler": true
+    },
+    "trace_hook": null,
+    "profile_hook": null,
+    "monitoring_tools": {
+      "0": null,
+      "1": null,
+      "2": null,
+      "3": null,
+      "4": null,
+      "5": null
+    },
+    "debugger_modules": [],
+    "debugger_environment_names": [],
+    "malloc_override": null
+  },
+  "completed": true,
+  "after": {
+    "python": "3.15.2 (tags/v3.15.2:5e58eaa, Oct 25 2026, 17:27:03) [MSC v.1951 64 bit (AMD64)]",
+    "dev_mode": true,
+    "faulthandler": true,
+    "xoptions": {
+      "dev": true,
+      "faulthandler": true
+    },
+    "trace_hook": null,
+    "profile_hook": null,
+    "monitoring_tools": {
+      "0": null,
+      "1": null,
+      "2": null,
+      "3": null,
+      "4": null,
+      "5": null
+    },
+    "debugger_modules": [],
+    "debugger_environment_names": [],
+    "malloc_override": null
+  }
+}

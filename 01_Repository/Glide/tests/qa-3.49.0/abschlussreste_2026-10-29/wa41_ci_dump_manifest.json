@@ -1,0 +1,29 @@
+{
+  "scope": "WA-41A lokaler Intel-Abbruch 29.10.2026 09:34",
+  "pid": 63628,
+  "source": "%USERPROFILE%/AppData/Local/CrashDumps/python.exe.63628.dmp",
+  "protected_copy": "%USERPROFILE%/GlidePruefung/beweissicherung/2026-10-29/python.exe.63628.dmp",
+  "bytes": 168998364,
+  "sha256": "9d85a84e8ee75fd770bf4a26e7e7b59286ac0e732aeba54f8615479ceca1b266",
+  "copy_verified": true,
+  "signature": "MDMP",
+  "minidump_flags_hex": "0x221826",
+  "with_full_memory": true,
+  "application_event": {
+    "id": 1000,
+    "time": "2026-10-29T09:34:25.0474580+01:00",
+    "module": "ucrtbase.dll",
+    "code": "0xc0000409",
+    "offset": "0xa527e"
+  },
+  "wer_event": {
+    "id": 1001,
+    "time": "2026-10-29T09:34:27.4017821+01:00",
+    "event": "BEX64",
+    "P9": "0000000000000007"
+  },
+  "report_id": "45f3c830-cd14-4b22-9120-cf69e4619da8",
+  "cause_proven": false,
+  "privacy": "Prozessspeicher nur lokal ausserhalb OneDrive/Git; kein Upload, keine Dump-Inhaltsausgabe.",
+  "policy_changed": false
+}

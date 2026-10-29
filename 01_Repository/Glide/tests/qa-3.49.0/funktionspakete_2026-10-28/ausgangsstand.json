@@ -1,0 +1,21 @@
+{
+  "version": "3.49.0",
+  "baseline": {
+    "featurephase348": 14,
+    "home_task_tiles": 7
+  },
+  "sha256": {
+    "00_Arbeitsvorbereitung/Glide_Uebergabe.md": "93efc0d33c40a1d03f2200b99ed78ca989450d2d6e49757f57ebcfe5cacaccdd",
+    "01_Repository/Glide/tests/README.md": "4170bd6d7a1abc5261a1d6af6d64e91a5ebd849f81f048aa05ad6eb045693ba1",
+    "01_Repository/Glide/src/glide/app.pyw": "0335e526d7cc5579b1ae9aa74b949d496b5a7fa9f6c9e20a20e2974720c8125f",
+    "01_Repository/Glide/src/glide/home_task_tiles.py": "5dfeeb8f4132edde149d28bdf52f5ac362e7c1025539cdd5658bab761a78ecab",
+    "01_Repository/Glide/src/glide/task_editing.py": "5d947cf53ec7743a76bc8f66c79e4dbe3ec6443f3931c3fe6b549f4cf0b3cb0a",
+    "01_Repository/Glide/src/glide/side_view.py": "46a2971ea40d86af8976716ff03c394d4cce879299f9ef5b5a985d871a5694b3"
+  },
+  "scope": [
+    "Wochen-Schnellwahl",
+    "Mehrfach-Faelligkeit/Aufwand",
+    "Verweisaktionen"
+  ],
+  "source": "Plan21.26/D57; funktionale Fortsetzung nach Nutzerkorrektur"
+}

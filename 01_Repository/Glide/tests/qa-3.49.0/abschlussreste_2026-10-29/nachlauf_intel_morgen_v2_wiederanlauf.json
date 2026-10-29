@@ -1,0 +1,391 @@
+{
+  "app_sha256": "2f5556f71c01f22f7991733af6eb004a7af57d8b2b0c63ac21272f34abe014ee",
+  "session_guard_sha256": "6515d08fdc32e5875f1953aeb39bd7202691cd8a69a126dffaee2e7e401251d0",
+  "test_sha256": "e9598504acde19fbc275221aad8d73420f35c87209596702ef9d4b655b1f626e",
+  "faelle": {
+    "sauber": {
+      "ok": true,
+      "befund": "Echtes on_close vermerkt clean; Neustart lädt dieselben IDs ohne Wiederanlaufsperre"
+    },
+    "freigabe": {
+      "ok": true,
+      "befund": "Schreibschutz und Abbruch erhalten Original; echte Freigabe sichert bytegleich, Ändern/Undo/Sofortspeicherung funktionieren"
+    },
+    "fehler": {
+      "ok": true,
+      "befund": "Kopierfehler und geänderte Eingangsbytes verhindern Freigabe; Original und Altsitzung bleiben erhalten"
+    },
+    "ungueltig": {
+      "ok": true,
+      "befund": "Ungültiges JSON bleibt bytegleich; kein Leerspeichern, keine Freigabe, kein stiller Backupimport"
+    },
+    "fehlend": {
+      "ok": true,
+      "befund": "Nach ungeklärtem Ende fehlende Hauptdatei wird nicht leer neu angelegt"
+    },
+    "layout": {
+      "ok": true,
+      "befund": {
+        "button_checks": 72,
+        "contexts": [
+          "light/mittel/False/860x700",
+          "light/mittel/False/1280x800",
+          "light/mittel/True/860x700",
+          "light/mittel/True/1280x800",
+          "light/gross/False/860x700",
+          "light/gross/False/1280x800",
+          "light/gross/True/860x700",
+          "light/gross/True/1280x800",
+          "dark/mittel/False/860x700",
+          "dark/mittel/False/1280x800",
+          "dark/mittel/True/860x700",
+          "dark/mittel/True/1280x800",
+          "dark/gross/False/860x700",
+          "dark/gross/False/1280x800",
+          "dark/gross/True/860x700",
+          "dark/gross/True/1280x800",
+          "glass_dark/mittel/False/860x700",
+          "glass_dark/mittel/False/1280x800",
+          "glass_dark/mittel/True/860x700",
+          "glass_dark/mittel/True/1280x800",
+          "glass_dark/gross/False/860x700",
+          "glass_dark/gross/False/1280x800",
+          "glass_dark/gross/True/860x700",
+          "glass_dark/gross/True/1280x800"
+        ],
+        "screenshots": [
+          {
+            "file": "wiederanlauf_light_gross_status.png",
+            "sha256": "dc130d7e4b8f31eaf87ffe8dbcf3520cd9183196d957757664ba95fd52f64639",
+            "width": 496,
+            "height": 399,
+            "method": "PrintWindow; ausschließlich eigenes Tk-Fenster"
+          },
+          {
+            "file": "wiederanlauf_glass_dark_gross_status.png",
+            "sha256": "78c7153b4fd38640904e2510b3b53631d9ad17b96293740e743452f20ecde11f",
+            "width": 496,
+            "height": 399,
+            "method": "PrintWindow; ausschließlich eigenes Tk-Fenster"
+          }
+        ],
+        "capture_unavailable": [
+          "dark/gross/True/860x700: TypeError"
+        ],
+        "dialog_sizes": [
+          {
+            "context": "light/mittel/False/860x700",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "light/mittel/False/1280x800",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "light/mittel/True/860x700",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "light/mittel/True/1280x800",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "light/gross/False/860x700",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "light/gross/False/1280x800",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "light/gross/True/860x700",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "light/gross/True/1280x800",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "dark/mittel/False/860x700",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "dark/mittel/False/1280x800",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "dark/mittel/True/860x700",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "dark/mittel/True/1280x800",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "dark/gross/False/860x700",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "dark/gross/False/1280x800",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "dark/gross/True/860x700",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "dark/gross/True/1280x800",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "glass_dark/mittel/False/860x700",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "glass_dark/mittel/False/1280x800",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "glass_dark/mittel/True/860x700",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "glass_dark/mittel/True/1280x800",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "glass_dark/gross/False/860x700",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "glass_dark/gross/False/1280x800",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "glass_dark/gross/True/860x700",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          },
+          {
+            "context": "glass_dark/gross/True/1280x800",
+            "requested": [
+              480,
+              360
+            ],
+            "actual_client": [
+              480,
+              360
+            ]
+          }
+        ],
+        "result": "Freigabe/Sicherungen/Schließen bei angeforderten 480x360 und tatsächlichen Dialogmindestmaßen erreichbar; 24 Design-/Schrift-/Hinweis-/Hauptgrößenkombinationen"
+      }
+    },
+    "restore": {
+      "ok": true,
+      "befund": "Regulärer portabler Restore erhält IDs, Wiederholungen, Verweise, Anhangbytes und Format; Originalvorsicherung vor Import bestätigt"
+    },
+    "restore_ungueltig": {
+      "ok": true,
+      "befund": {
+        "original_missing": false,
+        "ids": 2,
+        "attachments": 1,
+        "result": "Bewusste portable Wiederherstellung aus geschütztem Fehlerstart; Original-/Abwesenheitsnachweis, IDs/Serie/Verweise/Anhänge/Format erhalten, kein Undo zum Leeren"
+      }
+    },
+    "restore_fehlend": {
+      "ok": true,
+      "befund": {
+        "original_missing": true,
+        "ids": 2,
+        "attachments": 1,
+        "result": "Bewusste portable Wiederherstellung aus geschütztem Fehlerstart; Original-/Abwesenheitsnachweis, IDs/Serie/Verweise/Anhänge/Format erhalten, kein Undo zum Leeren"
+      }
+    },
+    "restore_fehler": {
+      "ok": true,
+      "befund": {
+        "checked": [
+          "fehlender_anhang",
+          "kaputte_sicherung",
+          "vorsicherung",
+          "commit"
+        ],
+        "result": "Alle vier Fehler erhalten Originalbytes, Anhänge und Schreibschutz; bewusste Wiederholung danach erfolgreich"
+      }
+    },
+    "lockuebernahme": {
+      "ok": true,
+      "befund": "Defekte Sperre bewusst übernommen; anschließende Sitzungsprüfung erhält Original und erzwingt Wiederanlauffreigabe"
+    },
+    "restore_nachlauf": {
+      "ok": true,
+      "befund": "Nach Commit fehlgeschlagener Speichernachlauf meldet keinen Erfolg; importierter Bestand bleibt geschützt"
+    }
+  },
+  "fehler": [],
+  "limitations": [
+    "Hardware-Stromausfall, native Mac-/Linux-/DPI-/Reader- und Menschenabnahme ungeprüft."
+  ]
+}

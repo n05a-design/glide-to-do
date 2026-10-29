@@ -1,0 +1,7 @@
+{
+  "event_delay_ms": 450,
+  "delay_executed": false,
+  "writes_with_open_draft": [],
+  "passed": false,
+  "error": "Traceback (most recent call last):\n  File \"%USERPROFILE%\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\qa-3.49.0\\abschlussreste_2026-10-29\\side_timer_diagnose.py\", line 44, in <module>\n    result['result'] = suite.fall_side_verweisnavigation(run)\n                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^\n  File \"%USERPROFILE%\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1807, in fall_side_verweisnavigation\n    assert editor._dirty, \"Die Probe hält einen tatsächlich ungespeicherten Hauptentwurf\"\n           ^^^^^^^^^^^^^\nAttributeError: 'PageEditor' object has no attribute '_dirty'\n"
+}

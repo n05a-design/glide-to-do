@@ -1,0 +1,72 @@
+[
+  {
+    "case": "py3148_normal",
+    "exitcode": 3221226505,
+    "seconds": 20.66,
+    "last_events": [
+      {
+        "event": "round",
+        "seconds": 14.957,
+        "iteration": 7
+      },
+      {
+        "event": "round",
+        "seconds": 16.718,
+        "iteration": 8
+      }
+    ]
+  },
+  {
+    "case": "py3148_debug",
+    "exitcode": 1,
+    "seconds": 27.56,
+    "last_events": [
+      {
+        "event": "round",
+        "seconds": 24.816,
+        "iteration": 9
+      },
+      {
+        "event": "exception",
+        "seconds": 26.743,
+        "error_type": "TypeError",
+        "message": "'bool' object is not an iterator"
+      }
+    ]
+  },
+  {
+    "case": "py3147_normal",
+    "exitcode": 0,
+    "seconds": 74.81,
+    "last_events": [
+      {
+        "event": "round",
+        "seconds": 71.91,
+        "iteration": 39
+      },
+      {
+        "event": "core_pass",
+        "seconds": 73.919,
+        "tasks": 26420,
+        "iterations": 40
+      }
+    ]
+  },
+  {
+    "case": "py3148_no_chrome",
+    "exitcode": 3221225477,
+    "seconds": 19.69,
+    "last_events": [
+      {
+        "event": "round",
+        "seconds": 14.875,
+        "iteration": 7
+      },
+      {
+        "event": "round",
+        "seconds": 16.64,
+        "iteration": 8
+      }
+    ]
+  }
+]

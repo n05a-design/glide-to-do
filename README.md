@@ -1,8 +1,14 @@
 # Glide – lokale Aufgaben, Notizen und Pinnwände
 
-Stand 27.10.2026 · Glide 3.47.0 · Quelle/Python-Lieferung 3.47.0; eigenständige Pakete 3.45.0 · Aufgabenformat 26
+Stand 29.10.2026 · Glide 3.49.0 · Quelle 3.49.0 (Prüfkandidat); Python-Lieferung 3.47.0; eigenständige Pakete 3.45.0 · Aufgabenformat 26
 
-**Aktuell: Folgepakete auf 3.47.0 umgesetzt.** Mehrere Tagesaufgaben seitenübergreifend auswählen und gemeinsam planen; Nebenansicht mit Zurück/Vorwärts, Verlauf und direktem Inhaltswechsel. [Umfang und Prüf-/Liefergrenzen](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2124-folgepakete-mehrfachplanung-und-nebenansichtsverlauf-3470).
+**Fortsetzung 29.10.2026:** Mutationsreste einschließlich „Liste leeren“ gezielt geschlossen (40 Appfälle grün); PC-01 AMD, PC-02 Intel und MacBook M2 mit getrennten Quell-/Prüfständen vergleichen. Erster M2-Lauf ausgewertet, drei gemeinsame Fehlerursachen korrigiert, WA-41A nur auf PC-02 ([Gerätevergleich](01_Repository/Glide/tests/qa-3.49.0/geraetevergleich_2026-10-29/README.md)); native Mac-Abnahme offen. Letzte breite Intel-CI rot; Gesamtauftrag und Liefer-/Abnahmetore bleiben offen. [Aktueller Nachweis](01_Repository/Glide/tests/qa-3.49.0/abschlussreste_2026-10-29/README.md).
+
+**Aktuell funktional erweitert (3.49.0-Kandidat):** Wochenwahl in der Tageskachel, gemeinsame Fälligkeit/Aufwand und Kopieren/Hauptöffnen/Verknüpfen von Verweisen in der Nebenansicht. [Tatsächlicher Umfang und Prüfstand](01_Repository/Glide/tests/qa-3.49.0/funktionspakete_2026-10-28/README.md). Lieferung weiterhin Python 3.47.0/native 3.45.0; WA-41 und vollständige Endabnahme offen.
+
+**Aktuell: Drei Robustheitspakete als Prüfkandidat 3.49.0.** Abgesicherte Prüfabläufe, geschützter Wiederanlauf mit Originalvorsicherung und begrenzte lokale Absturzdiagnose. [Umfang und Prüf-/Liefergrenzen](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2127-vorbeugung-absturzdiagnose-und-abgesicherter-wiederanlauf).
+
+**Aktueller Arbeitsstand 29.10.2026:** Quelle 3.49.0 mit Funktionsausbau und Schutzpaketen; Python/Showcase 3.47.0, native Pakete 3.45.0. [Abnahmebericht](01_Repository/Glide/tests/qa-3.49.0/abnahme_2026-10-28/README.md) lokal eingearbeitet; [Dokument-/Dateiabgleich](01_Repository/Glide/tests/qa-3.49.0/dokumentabgleich_2026-10-29/README.md). A01-Pflichtfolge nach Korrekturen in 13 Bereichssuiten/136 Fällen grün; danach WA-09-Unterfelder und fremde Karten lokal umgesetzt, fünf Appfälle und 21 Regressionen grün. [Fortsetzung und aktueller Prüfstand](01_Repository/Glide/tests/qa-3.49.0/abschlussreste_2026-10-29/README.md). Nicht alle begonnenen Arbeiten abgeschlossen: WA-41 und technische Restumfänge sowie aktuelle Lieferung/native/Menschenabnahme offen. BIOS-/CPU-Einstellungen unverändert.
 
 **Vorheriger Gesamtlieferabschluss: alle Lieferungen auf 3.45.0 aktualisiert.** Python-Fassung beim Abschluss bytegleich zur damaligen Quelle (86 Code-Dateien und 147 Ressourcen); Windows-Paket neu gebaut und gestartet, Mac-arm64-Paket nativ über GitHub Actions gebaut, signatur- und startgeprüft. Die Windows-Vollprüfung ist mit allen 104 Suiten grün. Startseitenmodell, Tagesvorschlag und Verweisvorschau sind enthalten. [Liefer-/Paketnachweis](01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/README.md). Öffentliche Release- und menschliche Abnahmetore bleiben getrennt offen.
 
@@ -31,7 +37,7 @@ Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wur
 
 ## Schnellstart
 
-Die gelieferten Entwicklungspakete 3.45.0 starten unter Windows aus `01_Repository/Glide/build/windows/Glide-3.45.0/Glide.exe`. Für macOS das native `01_Repository/Glide/build/macos/Glide-3.45.0-macos-arm64.tar.gz` entpacken und dessen `Glide.app` öffnen; so bleiben POSIX-Verknüpfungen und Dateimodi erhalten. Die lokale Windows-Inspektionskopie liegt unter `01_Repository/Glide/build/macos/Glide.app`. Beide Pakete enthalten Python/Tcl-Tk; die separate Python-Fassung trägt ebenfalls 3.45.0. [Paketierung](01_Repository/Glide/packaging/README.md#eigenständige-entwicklungspakete-paket-7).
+Die gelieferten Entwicklungspakete 3.45.0 starten unter Windows aus `01_Repository/Glide/build/windows/Glide-3.45.0/Glide.exe`. Für macOS das native `01_Repository/Glide/build/macos/Glide-3.45.0-macos-arm64.tar.gz` entpacken und dessen `Glide.app` öffnen; so bleiben POSIX-Verknüpfungen und Dateimodi erhalten. Die lokale Windows-Inspektionskopie liegt unter `01_Repository/Glide/build/macos/Glide.app`. Beide Pakete enthalten Python/Tcl-Tk; die separate Python-Fassung trägt 3.47.0. [Paketierung](01_Repository/Glide/packaging/README.md#eigenständige-entwicklungspakete-paket-7).
 
 Für den weiterhin verfügbaren Python-Startweg ist Python mit Tk erforderlich, empfohlen Python 3.14 mit Tk 9. Mit Tk 8.6 startet Glide ebenfalls, nur ohne Systemmitteilungen und SVG-Vorschau. Zusätzliche Pakete sind nicht nötig.
 

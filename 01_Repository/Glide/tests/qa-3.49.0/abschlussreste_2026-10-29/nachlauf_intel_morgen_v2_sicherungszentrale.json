@@ -1,0 +1,34 @@
+{
+  "app_sha256": "2f5556f71c01f22f7991733af6eb004a7af57d8b2b0c63ac21272f34abe014ee",
+  "faelle": {
+    "uebersicht": {
+      "ok": true,
+      "befund": "Echter Menü-/Katalogeintrag, Filter, Metadaten, lesende Inhaltsprüfung und Leerzustand"
+    },
+    "datei_fehler": {
+      "ok": true,
+      "befund": "Externe Datei ausdrücklich aufgenommen, defekten Inhalt sichtbar gemeldet und unverändert erhalten"
+    },
+    "vergleichen": {
+      "ok": true,
+      "befund": "Auswahl direkt zum Vergleich; gleichnamige Dateien aus verschiedenen Ordnern bleiben getrennt"
+    },
+    "wiederherstellen": {
+      "ok": true,
+      "befund": "Bestehender Importweg mit Bestätigung; Ablehnen erhält Listen und Hauptdatei unverändert"
+    },
+    "anhaenge": {
+      "ok": true,
+      "befund": "Abbruch verhindert OS-Aufruf, Zustimmung einmalig; echter Anhangseditor führt durch die Typregel"
+    },
+    "layout": {
+      "ok": true,
+      "befund": "24 Knopfprüfungen bei 600x480/800x600 und mittlerer/großer Schrift"
+    },
+    "lebensdauer": {
+      "ok": true,
+      "befund": "Fünfmal öffnen/schließen: keine Suchrückrufe an zerstörten Dialogen erhalten"
+    }
+  },
+  "fehler": []
+}

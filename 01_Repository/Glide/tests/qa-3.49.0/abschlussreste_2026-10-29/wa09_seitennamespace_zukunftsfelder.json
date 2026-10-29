@@ -1,0 +1,14 @@
+{
+  "app_sha256": "8025a20ce47e82a880f6328aa64c2eacbc86e5c8f1bb74ed86a0e8a0e80922e8",
+  "faelle": {
+    "seitennamespace": {
+      "ok": true,
+      "messung": {
+        "seitennamespace_felder_und_kanten": true,
+        "loeschen_undo": true,
+        "neustarts": 2
+      }
+    }
+  },
+  "fehler": []
+}

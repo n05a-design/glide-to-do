@@ -1,6 +1,6 @@
 # Glide · aktiver Showcase
 
-Stand 27.10.2026 · Glide 3.47.0 · Lieferdaten in Speicherstufe 26
+Stand 28.10.2026 · Quellkandidat Glide 3.49.0; Showcase-Lieferung unverändert 3.47.0 · Lieferdaten in Speicherstufe 26
 
 Das fiktive Projekt **Parkquartier** zeigt fertige, bearbeitbare Arbeitsdokumente: Briefing, Abstimmungsnotiz, Aufgabenliste, Bildgalerie, Pixelskizze, Routinen und Projekttagebuch. Die sechs Originalmotive liegen unverändert unter `tests/fixtures/showcase/bilder`; Herkunft und Prüfsummen stehen in `quellen.json`. Seit 03.10.2026 liegen sie ausschließlich in dieser Fixture-Ablage, zuvor zusätzlich im Grafikmaster. Sie illustrieren Themen; sie zeigen kein reales Verkaufsobjekt. Personen und Projektangaben sind fiktiv.
 
@@ -49,4 +49,4 @@ python3 -B scripts/pflege/showcase_abgleich.py
 
 Der Abgleich prüft die Demo vor der Auslieferung und ersetzt die Basisdateien; frühere Fassungen hält Git vor. Dein bearbeiteter `Arbeitsstand` bleibt erhalten. Für eine neue Demo den bisherigen Arbeitsstand bei geschlossener App umbenennen und den Starter erneut öffnen.
 
-Mobile Nutzung, GIF-Animationsexport und allgemeine Typkonvertierung gehören nicht zur aktuellen App. Maßgeblich sind die aktuelle Arbeitsrichtung mit D01–D50 (D49 mit Korrekturvorbehalt) und der Entwicklungsplan; Menschen-/Readerabnahmen bleiben getrennt offen.
+Mobile Nutzung, GIF-Animationsexport und allgemeine Typkonvertierung gehören nicht zur aktuellen App. Maßgeblich sind die aktuelle Arbeitsrichtung mit D01–D57 (D49 mit Korrekturvorbehalt) und der Entwicklungsplan; Menschen-/Readerabnahmen bleiben getrennt offen.

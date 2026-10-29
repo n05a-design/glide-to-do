@@ -1,0 +1,24 @@
+{
+  "scope": "Dokumentfortschreibung nach grüner eingefrorener CI-Grundstufe",
+  "stand": {
+    "exitcode": 0,
+    "output": "Standprüfung gegen VERSION 3.49.0 · Ablage einschließlich Repository · 89 aktive Dokumente (42 fortgeschrieben, 41 festgeschrieben, 6 ohne Standaussage)\nAlle Standangaben passen zur Version; kein historisches Dokument behauptet einen aktuellen Stand.\n"
+  },
+  "links": "Alle Dokumente einschließlich Archiv im Index; 428 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell.",
+  "versions": "VERSION, App, Hauptsuite und CHANGELOG: 3.49.0; Datenformat 26",
+  "privacy_findings": [],
+  "changed_since_ci": [
+    "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+    "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "01_Repository/Glide/packaging/README.md",
+    "CLAUDE.md"
+  ],
+  "source_code_unchanged_since_ci": true,
+  "global_acceptance": false,
+  "delivery_unchanged": true,
+  "automation_continues": true,
+  "remaining": "WA-36–40/42, WA-32, P8-Plattformreste, WA-41A/B, Lieferung und native/Menschenabnahmen; neuer AMD-Eingang fehlt."
+}

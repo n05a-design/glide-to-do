@@ -1,0 +1,806 @@
+[
+  {
+    "method": "__init__",
+    "line": 17059,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "__init__",
+    "line": 17082,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "set_backdrop_choice",
+    "line": 17206,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "set_design",
+    "line": 18152,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "change_data_folder",
+    "line": 19069,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "change_data_folder",
+    "line": 19067,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "settings_write_batch",
+    "line": 19206,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "retry_storage",
+    "line": 19405,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "retry_storage",
+    "line": 19406,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "record_recent_list_edits",
+    "line": 19961,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "record_recent_list_edits",
+    "line": 19949,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "book_completions",
+    "line": 20004,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "save_daily_state",
+    "line": 20201,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "show_daily_hint_settings",
+    "line": 20506,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "show_busy_calendar_dialog",
+    "line": 20672,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "toggle_plan_day_grid",
+    "line": 21352,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "set_list_group",
+    "line": 22276,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "set_table_nested",
+    "line": 22294,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "toggle_detail_pane",
+    "line": 22647,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "_side_sash_release",
+    "line": 23332,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "_detail_sash_release",
+    "line": 23910,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "set_pinned",
+    "line": 25237,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "move_pinned",
+    "line": 25254,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "set_sidebar_section_open",
+    "line": 25371,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "pin_home_filter",
+    "line": 25744,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "toggle_today_routine",
+    "line": 25801,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "remember_routine_completion",
+    "line": 25823,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "_home_tile_settings_changed",
+    "line": 25875,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "open_day_grid",
+    "line": 26338,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "care_for_mascot",
+    "line": 26983,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "show_home_tiles_dialog",
+    "line": 27215,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "_render_home",
+    "line": 28761,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "_render_home",
+    "line": 28773,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "cycle_library_card_size",
+    "line": 29108,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "_create_list_from_template",
+    "line": 30073,
+    "call": "save_settings",
+    "in_mutation_context": true
+  },
+  {
+    "method": "_create_list_from_template",
+    "line": 29950,
+    "call": "save_settings",
+    "in_mutation_context": true
+  },
+  {
+    "method": "_create_list_from_template",
+    "line": 29985,
+    "call": "save_settings",
+    "in_mutation_context": true
+  },
+  {
+    "method": "show_settings_dialog",
+    "line": 30624,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "save_theme_setting",
+    "line": 30718,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "create_label_interactively",
+    "line": 31561,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "open_label_manager",
+    "line": 32211,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "open_label_manager",
+    "line": 32227,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "open_label_manager",
+    "line": 32255,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "remember_recent_target",
+    "line": 32305,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "add_task_with_due",
+    "line": 34407,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "open_task_in_source_list",
+    "line": 34435,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "set_list_detail_mode",
+    "line": 35512,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "remember_table_column_widths",
+    "line": 35699,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "reset_table_columns",
+    "line": 35710,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "sort_table_by",
+    "line": 35741,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "show_table_columns_dialog",
+    "line": 35910,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "finish_page_switch",
+    "line": 35961,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "migrate_today_plan_setting",
+    "line": 36139,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "migrate_today_plan_setting",
+    "line": 36141,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "apply_sidebar_rename",
+    "line": 38275,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "toggle_page_label",
+    "line": 38393,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "clear_page_labels",
+    "line": 38404,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "create_template_in_section",
+    "line": 39026,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "create_journal_entry",
+    "line": 39115,
+    "call": "save_settings",
+    "in_mutation_context": true
+  },
+  {
+    "method": "remove_done_items",
+    "line": 39444,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "clear_list_by_id",
+    "line": 39466,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "create_container_dialog",
+    "line": 40200,
+    "call": "save_settings",
+    "in_mutation_context": true
+  },
+  {
+    "method": "toggle_sidebar_indent",
+    "line": 40530,
+    "call": "save_items",
+    "in_mutation_context": true
+  },
+  {
+    "method": "_close_after_confirmation",
+    "line": 43734,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "_close_after_confirmation",
+    "line": 43717,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "load_items",
+    "line": 45323,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "present_loaded_dataset",
+    "line": 45392,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "migrate_on_start",
+    "line": 45511,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "remember_written_data_format",
+    "line": 45609,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "show_title_clip_notice",
+    "line": 45898,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "record_data_operation",
+    "line": 46180,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "clear_history",
+    "line": 46325,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "autosave_tick",
+    "line": 46497,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "update_in_progress_item",
+    "line": 47175,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "on_filter_changed",
+    "line": 47485,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "store_rich_note",
+    "line": 47843,
+    "call": "save_items",
+    "in_mutation_context": true
+  },
+  {
+    "method": "toggle_live_task",
+    "line": 47924,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "create_list_from_template",
+    "line": 48106,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "mark_page_task_change",
+    "line": 48128,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "new_page_from_markdown",
+    "line": 48515,
+    "call": "save_settings",
+    "in_mutation_context": true
+  },
+  {
+    "method": "remember_recent_page",
+    "line": 48702,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "toggle_page_favorite",
+    "line": 48711,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "sync_rich_note_view",
+    "line": 48844,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "_save_drawing_tools",
+    "line": 48944,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "store_drawing",
+    "line": 49821,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "toggle_view_hints",
+    "line": 51004,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "set_overview_section_open",
+    "line": 52695,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "remember_tree_open_states",
+    "line": 52740,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "open_in_progress_source_item",
+    "line": 52813,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "open_in_progress_source_item",
+    "line": 52803,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "item_change",
+    "line": 53613,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "sidebar_change",
+    "line": 53668,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "sidebar_change",
+    "line": 53670,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "_apply_snapshot",
+    "line": 53792,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "_apply_snapshot",
+    "line": 53815,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "paste_items_from_clipboard",
+    "line": 54230,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "set_sidebar_open_state",
+    "line": 54353,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "paste_into_entry",
+    "line": 54461,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "add_item",
+    "line": 54598,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "add_item",
+    "line": 54580,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "add_item_advanced",
+    "line": 54943,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "add_item_advanced",
+    "line": 54936,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "add_child_item",
+    "line": 55029,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "add_sibling_item",
+    "line": 55076,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "add_sibling_item",
+    "line": 55063,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "clear_list",
+    "line": 55397,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "toggle_in_progress_label",
+    "line": 55844,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "start_time_tracking",
+    "line": 56206,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "stop_time_tracking",
+    "line": 56228,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "stop_time_tracking",
+    "line": 56237,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "recover_time_booking",
+    "line": 56282,
+    "call": "save_settings",
+    "in_mutation_context": true
+  },
+  {
+    "method": "recover_time_booking",
+    "line": 56278,
+    "call": "save_items",
+    "in_mutation_context": true
+  },
+  {
+    "method": "start_focus",
+    "line": 56325,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "toggle_focus_pause",
+    "line": 56339,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "update_timer_indicator",
+    "line": 56459,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "import_txt_as_new_lists",
+    "line": 57482,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "import_csv_table",
+    "line": 58301,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "apply_exchange_payload",
+    "line": 58863,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "save_exchange_recipe",
+    "line": 58991,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "apply_exchange_patch",
+    "line": 59555,
+    "call": "save_items",
+    "in_mutation_context": true
+  },
+  {
+    "method": "import_notion_archive",
+    "line": 59835,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "apply_notion_selection",
+    "line": 59907,
+    "call": "save_settings",
+    "in_mutation_context": true
+  },
+  {
+    "method": "restore_page_from_backup",
+    "line": 59970,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "import_ics_events",
+    "line": 62260,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "restore_app_backup_extras",
+    "line": 62622,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "import_full_backup",
+    "line": 63045,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "import_full_backup",
+    "line": 62960,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "import_full_backup",
+    "line": 63030,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "sort_current_list",
+    "line": 63090,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "import_from_txt",
+    "line": 63145,
+    "call": "save_items",
+    "in_mutation_context": false
+  },
+  {
+    "method": "toggle_sidebar_narrow",
+    "line": 63666,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "toggle_sidebar",
+    "line": 63736,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "remember_compact_geometry",
+    "line": 63860,
+    "call": "save_settings",
+    "in_mutation_context": false
+  },
+  {
+    "method": "_save_recent_pages",
+    "line": 64194,
+    "call": "save_settings",
+    "in_mutation_context": false
+  }
+]

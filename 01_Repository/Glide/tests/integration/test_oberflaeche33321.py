@@ -62,6 +62,7 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
     def neu_starten():
         global root, app
         app.cancel_pending_callbacks()
+        getattr(app, "finish_recovery_session", lambda: None)()
         app.release_data_lock()
         root.destroy()
         root = mod.tk.Tk()
@@ -329,6 +330,7 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
     finally:
         try:
             app.cancel_pending_callbacks()
+            getattr(app, "finish_recovery_session", lambda: None)()
             app.release_data_lock()
         except Exception:
             pass

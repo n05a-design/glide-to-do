@@ -1,0 +1,17 @@
+{
+  "app_sha256": "604c5434b70696591bd5c3caabb5f486b6b44458fae3bb81d04ec1439f4ed2d6",
+  "faelle": {
+    "home_tagesnavigation": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1879, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1703, in fall_home_tagesnavigation\n    klick(phase348_button(lauf, 'Tagesplan öffnen'), lauf)\n          ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"~\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\tests\\integration\\test_arbeitsmodi.py\", line 1668, in phase348_button\n    return next(w for w in knoepfe(lauf.app.home_content, lauf.mod.RoundedButton)\n           ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                if w.text.rstrip(' .…') == title.rstrip(' .…'))\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nStopIteration\n",
+      "runtime": {
+        "python": "3.14.8",
+        "platform": "win32",
+        "tk": "9.0.4"
+      }
+    }
+  },
+  "fehler": [
+    "home_tagesnavigation"
+  ]
+}
