@@ -4,7 +4,7 @@ Eine gehaltene Eingabefläche darf während einer Änderung nicht neu gebaut
 werden. Unberührte Felder bewahren deshalb den frischen Bestandswert.
 """
 import copy
-from datetime import date
+from datetime import date, datetime
 from dataclasses import dataclass
 
 
@@ -43,6 +43,17 @@ FIELD_NAMES = {
     "checklist": "Checkliste", "links": "Verknüpfungen", "blocked_by": "Voraussetzungen",
     "planned_time": "Geplante Uhrzeit", "time_spent_minutes": "Erfasste Zeit",
 }
+
+
+def creation_target(lists, identity, allowed_kinds):
+    """Nach einer Dialog-/Snapshotgrenze genau die weiterhin gültige Zielliste."""
+    matches = [entry for entry in lists if isinstance(entry, dict) and entry.get('id') == identity]
+    if not isinstance(identity, str) or not identity or len(matches) != 1:
+        return None
+    entry = matches[0]
+    if entry.get('archived') or entry.get('list_kind', 'tasks') not in allowed_kinds:
+        return None
+    return entry
 
 
 def new_label_name(labels, name, *, max_labels, max_length):
@@ -205,3 +216,57 @@ def merge(baseline, entered, current):
     details = copy.deepcopy(current)
     details.update({key:copy.deepcopy(entered[key]) for key in changed})
     return Edit(details, changed, copy.deepcopy(entered))
+
+
+def toggle_labels(assigned, identity, limit):
+    """Labelzuweisung planen; None bei erreichtem Limit, ohne Seiteneffekte."""
+    values = list(assigned or ())
+    if identity in values:
+        return [value for value in values if value != identity]
+    if len(values) >= limit:
+        return None
+    return values + [identity]
+
+
+def overview_change(item, field, value, *, normalize_date, normalize_importance, colors, schedulable):
+    """Direkte Übersichtsfelder planen; Datumsarten bleiben unabhängig."""
+    if field in ('due', 'planned_date'):
+        normalized = normalize_date(value) if value else None
+        if value and normalized is None:
+            raise ValueError('Das Fälligkeitsdatum ist ungültig.' if field == 'due' else 'Das Bearbeitungsdatum ist ungültig.')
+        if field == 'planned_date' and not schedulable:
+            return {}
+    elif field == 'importance':
+        normalized = normalize_importance(value)
+    elif field == 'color':
+        normalized = value if value in colors else None
+    else:
+        return {}
+    return {field:normalized} if item.get(field) != normalized else {}
+
+
+def sort_items(items, key, *, normalize_time, normalize_importance):
+    """Stabile rekursive Sortierung erhält die ursprünglichen Punktobjekte."""
+    if key not in ('due', 'importance', 'alpha'):
+        return False
+    before = tuple(map(id, items))
+    if key == 'due':
+        def order(item):
+            try:
+                parsed = datetime.strptime(item.get('due'), '%Y-%m-%d').date() if item.get('due') else None
+            except ValueError:
+                parsed = None
+            time = normalize_time(item.get('due_time')) or ''
+            return bool(item.get('done')), parsed is None, parsed or datetime.max.date(), time or '00:00'
+    elif key == 'importance':
+        def order(item):
+            return bool(item.get('done')), -normalize_importance(item.get('importance', 0))
+    else:
+        def order(item):
+            return str(item.get('text', '')).lower()
+    items.sort(key=order)
+    changed = before != tuple(map(id, items))
+    for item in items:
+        changed |= sort_items(item.get('children', []), key,
+                              normalize_time=normalize_time, normalize_importance=normalize_importance)
+    return changed

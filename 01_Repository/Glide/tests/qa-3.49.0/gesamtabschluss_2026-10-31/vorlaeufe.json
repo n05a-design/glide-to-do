@@ -1,0 +1,19 @@
+{
+  "own_partial_runs": [
+    {
+      "run": "vorlauf",
+      "status": "von der Abschlussfortsetzung bewusst abgebrochen, kein vollständiger Erfolg",
+      "reason": "CSV/ICS-Nachlauf nach Commit noch ungeschützt",
+      "completed_green_steps": 18
+    },
+    {
+      "run": "zweiter_vorlauf",
+      "status": "von der Abschlussfortsetzung bewusst abgebrochen, kein vollständiger Erfolg",
+      "reason": "Gruppen-Dialoge und voller Undo-Stapel beim mehrzeiligen Paste",
+      "completed_green_steps": 56
+    }
+  ],
+  "old_native_signal_teardown": "Der eigene zweite Vorlauf lauf-s4y_mu2b wurde für weitere Codekorrekturen von dieser Abschlussfortsetzung gezielt mit SIGTERM auf Koordinator und Kindprozessbaum beendet. Der anschließend von der anderen Sitzung dokumentierte Tk-9.1-Abbauabsturz nach Signal ist deshalb kein spontaner WA-41A-Beleg. Die native Signal-Abbaugrenze ist getrennt vom normalen App-Schließweg zu bewerten. Keine Behauptung einer behobenen Runtime-Signalursache.",
+  "current_native_matrix": "t1031-164116: 126 ausgeführt, zwei native/manuelle Bildertore übersprungen; alle 707 relevanten Eingaben aktuell bytegleich.",
+  "release_ready": false
+}

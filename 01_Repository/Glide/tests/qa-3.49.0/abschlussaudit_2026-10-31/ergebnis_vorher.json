@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-31",
+  "phase": "vorher",
+  "version": "3.49.0",
+  "head": "577e37c37baed6260cac241baa024b5e681b3b6c",
+  "app_sha256": "39499ab3b784199c5f39a0f836d494b159203b89ec0d37f24fac9a14231aa729",
+  "glyph_metrics_sha256": "69c7baa7911e3de1d3b2576dff5998f5e58f35184163010e1dca09029f026d2c",
+  "python_delivery_version": "3.47.0",
+  "python_delivery_sha256": "dd26a038f430860e41cfb2e703689ea0c4dd7bcacbc753277be89ade23c1f014",
+  "packages": [
+    {
+      "path": "01_Repository/Glide/build/windows/Glide-3.45.0-windows-x64.zip",
+      "version": [
+        "3.45.0"
+      ],
+      "sha256": "47ff56183e48de0b196c7910b1393d4a1521f1d3afc9d7b7a483d436d7bdb7c9",
+      "matches_prior_delivery": true
+    },
+    {
+      "path": "01_Repository/Glide/build/macos/Glide-3.45.0-macos-arm64.tar.gz",
+      "version": [
+        "3.45.0"
+      ],
+      "sha256": "b6284197c62fddee1283207ead6680baed72bdf8826114e944316857284a7252",
+      "matches_prior_delivery": true
+    }
+  ],
+  "delivery_differences": [
+    "Glide-Aufgaben-und-Listen_v3.49.0.pyw",
+    "Schnellstart.pyw",
+    "glyph_metrics.py",
+    "home_task_tiles.py",
+    "release_notes.py",
+    "runtime_diagnostics.py",
+    "session_guard.py",
+    "settings_compat.py",
+    "side_view.py",
+    "storage_health.py",
+    "structural_guard.py",
+    "task_editing.py",
+    "resources/templates/glide_vorlagen.glidetemplates"
+  ],
+  "documents": 105,
+  "active_documents": 47,
+  "local_links": 1747,
+  "active_link_findings": [],
+  "historical_link_findings": [],
+  "roadmap_status_rows": 272,
+  "completed_mark_rows": 208,
+  "inventory_module_references": 39,
+  "missing_inventory_modules": [],
+  "registered_suites": 108,
+  "missing_registered_suites": [],
+  "working_mode_cases": 29,
+  "protected_files": 507,
+  "changed_protected_files": [],
+  "release_ready": false,
+  "all_started_work_complete": false,
+  "scope": "Dokumentations-/Abschlussaudit; statische Belegprüfung und neue CI-Grundstufe separat. Keine aktuelle Voll-/Liefer-/Menschenabnahme."
+}

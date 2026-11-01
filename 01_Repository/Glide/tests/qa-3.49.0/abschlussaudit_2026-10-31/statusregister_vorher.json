@@ -1,0 +1,1362 @@
+[
+  {
+    "line": 27,
+    "section": "Statusmarken",
+    "claim": "| ✅ | erledigt, mit Version |"
+  },
+  {
+    "line": 28,
+    "section": "Statusmarken",
+    "claim": "| ◐ | teilweise erledigt; der offene Rest steht dabei |"
+  },
+  {
+    "line": 29,
+    "section": "Statusmarken",
+    "claim": "| ▶ | beauftragt, als Nächstes |"
+  },
+  {
+    "line": 31,
+    "section": "Statusmarken",
+    "claim": "| ◇ | Zukunft, wartet auf einen Auslöser |"
+  },
+  {
+    "line": 32,
+    "section": "Statusmarken",
+    "claim": "| ✕ | bewusst nicht (Produktgrenze oder Entscheidung) |"
+  },
+  {
+    "line": 50,
+    "section": "1. Leitsatz und Reihenfolge",
+    "claim": "| 0 Fundament | Performance P01–P09, T2, CI | ◐ Ziele für Abhaken und Suche erreicht (3.33.19, 3.34.0); P03/E01 und Linux-Kalibrierung mit 3.36.0 geliefert; P05 nur bei künftig tatsächlich angefasstem Code; aktuelle Schutzpunkte §18 |"
+  },
+  {
+    "line": 51,
+    "section": "1. Leitsatz und Reihenfolge",
+    "claim": "| 1 Klarer Alltag | Bereiche, Startseite, Eingabe, Eisenhower, Heute/Demnächst, UX1, Fokus, Komfort, Tag, Oberfläche Welle 1 | ◐ geliefert bis 3.33.21; Welle 2 nach I7 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen; AU03-Hinweise/AU07 mit 3.39.0 geliefert; UI-/UX-Paket aus Nutzerbeobachtungen (§17) mit 3.43.0 |"
+  },
+  {
+    "line": 52,
+    "section": "1. Leitsatz und Reihenfolge",
+    "claim": "| 2 Wissen im Kontext | Suche, Verweise, Live-Liste, Titelbild, Kalender mit Wochenplanung, Bilder in Seiten, Filter erklären | ◐ geliefert 3.33.7–3.34.0; N05 in 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen |"
+  },
+  {
+    "line": 53,
+    "section": "1. Leitsatz und Reihenfolge",
+    "claim": "| 3 Pixel | Palettenbearbeitung, Symbolvorschau, Animation | ◐ G19, G-03 ✅ 3.35.0; G17 ✅ 3.40.0 geliefert |"
+  },
+  {
+    "line": 54,
+    "section": "1. Leitsatz und Reihenfolge",
+    "claim": "| 4 Austausch und Verteilung | KI-Austausch Stufe 2, Import, Sicherungsvergleich, Paket mit eigenem Python | ◐ G24, F-03 ✅ 3.35.0; G21 ✅ 3.41.0 geliefert; G26/D27 ✅ 3.42.0 geliefert |"
+  },
+  {
+    "line": 55,
+    "section": "1. Leitsatz und Reihenfolge",
+    "claim": "| 5 Zukunft (4.x) | Screenreader (Tk 9.1), Seitenversionen, SQLite nur nach D16-Neubewertung | ◐ N12 Aufgaben-Kernablauf durch D36/D44 für 4.0.0 beauftragt und vorbereitet, seit D50 hinter dem UI-/UX-Paket pausiert; übrige Zukunftspunkte ◇ |"
+  },
+  {
+    "line": 61,
+    "section": "2. Erledigt seit 3.30",
+    "claim": "| ✅ 3.30.0–3.31.0 | Modernisierung: Pinnwand-Board, Ordnertypen, Seiten und Galerie, Pixel-Werkstatt mit Größen 16–128, Format 20, Bilder in Seiten, Tk 9, Ziehen aus Finder/Explorer, Systemmitteilungen (Option), Logo, Sicherungen nur bei Änderung, Startprüfung, Notizbereich, gemeinsamer Editor, Inhaltsverzeichnis, Aufklapp- und Hinweisblöcke |"
+  },
+  {
+    "line": 62,
+    "section": "2. Erledigt seit 3.30",
+    "claim": "| ✅ 3.32.0–3.32.3 | Symbol-Export (ICO), Paletten aus Aseprite/Adobe, Platzhalter, Tagesabschluss; Klappkontrolle (D08); Ziehen in Bereichsbäumen (D04); Schriftcache; Bibliothekskarten erhalten; Showcase |"
+  },
+  {
+    "line": 63,
+    "section": "2. Erledigt seit 3.30",
+    "claim": "| ✅ 3.33.0–3.33.6 | Formatsicherung T2, P09a; vier Seitenleistenbereiche; Startseite „Ruhig“ (D12); Schnelleingabe mit Feldchips (D10) und Wiederholungen; Eisenhower als Gruppierung (D13); „Heute“ und „Demnächst“ (D14) |"
+  },
+  {
+    "line": 64,
+    "section": "2. Erledigt seit 3.30",
+    "claim": "| ✅ 3.33.7–3.33.12 | Inhaltssuche (G14), Windows-Formatsicherung; P08a, P09b, P08b; stabile Aktionskennungen, U03/U07; U10/U19, erste OB01-Übernahme |"
+  },
+  {
+    "line": 65,
+    "section": "2. Erledigt seit 3.30",
+    "claim": "| ✅ 3.33.13–3.33.18 | KO01/AU02 Einplanen mit verfügbarer Zeit; Tagespaket AU01/AU03-Weg/G05/H-02; Aufgaben im Wissen G29/G31/G32 (Format 21); Bedienkomfort U01/U02/U13/U14/U16/U22/U24; Wissen und Woche N04/AU04, G08/G30 (Format 22); Seiten im Alltag G28/G09/U08 (Format 23) |"
+  },
+  {
+    "line": 66,
+    "section": "2. Erledigt seit 3.30",
+    "claim": "| ✅ 3.33.19–3.35.0 | Sprint (§14): Tempo, Komfort, ruhige Oberfläche, Wissen und Seiten, Pixel und Austausch |"
+  },
+  {
+    "line": 67,
+    "section": "2. Erledigt seit 3.30",
+    "claim": "| ◐ 3.43.0 | UI-/UX-Paket aus Nutzerbeobachtungen (§17, D50): B01–B20; automatisch geprüft und nach 07/05 geliefert, Mac-Vollprüfung und Bundle offen |"
+  },
+  {
+    "line": 68,
+    "section": "2. Erledigt seit 3.30",
+    "claim": "| ◐ 3.44.0 | Erste D51-Phase (§21.10): FP-01–FP-06, FP-07 Stufe 1, WA-26, Schutzrunde WA-27–WA-30 und Roadmap-Pakete 1–3 (WA-31, WA-36–WA-40), Aufgabenformat 26; eingefrorene Windows-Vollprüfung, nach 07/05 geliefert; Mac-Vollprüfung, Bundle und Pakete offen |"
+  },
+  {
+    "line": 69,
+    "section": "2. Erledigt seit 3.30",
+    "claim": "| ✅ 01.–03.10.2026 | D09 Repository als Ablage, CI-Grundstufe, Ablagegröße, Bereinigung der Ablage und Dokumentation |"
+  },
+  {
+    "line": 77,
+    "section": "3. Performance (Stufe 0, beauftragt)",
+    "claim": "| P01 | Messbasis: unprofilierte Serien mit 100/1.000/10.000 Punkten, Notiz, Bildseite, Verlaufvarianten, Speicherentwicklung | ✅ 3.33.19 (P01r) |"
+  },
+  {
+    "line": 78,
+    "section": "3. Performance (Stufe 0, beauftragt)",
+    "claim": "| P02 | Schriftcache je Tk-Interpreter | ✅ 3.32.2 |"
+  },
+  {
+    "line": 79,
+    "section": "3. Performance (Stufe 0, beauftragt)",
+    "claim": "| P03 | Aufbau und Layout | ✅ 3.36.0: geänderte Karten und Startseite abgeglichen, viele Karten geprüft; Tempoausnahmen D46 und Messnachweis in §15.7 |"
+  },
+  {
+    "line": 80,
+    "section": "3. Performance (Stufe 0, beauftragt)",
+    "claim": "| P04 = A-02 | Bildlayout nur bei geänderter Geometrie, Platzieren beim Scrollen | ✅ 3.33.19 |"
+  },
+  {
+    "line": 81,
+    "section": "3. Performance (Stufe 0, beauftragt)",
+    "claim": "| P05 | Gemeinsame Helfer | ◐ Hover 3.32.2; gezielt gleiche Texte/Abläufe im Sprint-Code gewählt (D40 A/1) |"
+  },
+  {
+    "line": 82,
+    "section": "3. Performance (Stufe 0, beauftragt)",
+    "claim": "| P06r = A-03 | Doppelte Refresh-/Schreibanforderungen je Aktion | ✅ 3.33.19 |"
+  },
+  {
+    "line": 83,
+    "section": "3. Performance (Stufe 0, beauftragt)",
+    "claim": "| P07 | Volltextsuche als ersetzbarer FTS5-Cache | ✕ nach Messung 3.34.0: 66,6 ms Median bei 10.000 Punkten (Regel: unter 100 ms kein Index) |"
+  },
+  {
+    "line": 84,
+    "section": "3. Performance (Stufe 0, beauftragt)",
+    "claim": "| P08a/P08b | Ein Vergleichsdurchlauf für Verlauf und Aktivität; nur geänderte Listen vergleichen, Vollvergleich im Autosave | ✅ 3.33.9 / 3.33.11 |"
+  },
+  {
+    "line": 85,
+    "section": "3. Performance (Stufe 0, beauftragt)",
+    "claim": "| P08c | Abhaken bei 5.000 Punkten ≤ 120 ms | ✅ gemessen 3.33.19: 61 ms |"
+  },
+  {
+    "line": 86,
+    "section": "3. Performance (Stufe 0, beauftragt)",
+    "claim": "| P09a/P09b | Tabelle ohne Listenspaltenmessung; Kennzahlen, Datum und Schriftmaße einmal je Aufbau | ✅ 3.33.0 / 3.33.10 |"
+  },
+  {
+    "line": 87,
+    "section": "3. Performance (Stufe 0, beauftragt)",
+    "claim": "| T2 | Gemeinsame Formatsicherung | ✅ 3.33.0; Windows-Signatur 3.33.7, Inhaltsvergleich 3.33.8 |"
+  },
+  {
+    "line": 88,
+    "section": "3. Performance (Stufe 0, beauftragt)",
+    "claim": "| E01 | Einblendung des Einstellungsfensters | ✅ 3.36.0: erste Anzeige ≤ 250 ms, erneut Median ≤ 150/p95 ≤ 190 ms nach D48; sichere Wiederverwendung |"
+  },
+  {
+    "line": 89,
+    "section": "3. Performance (Stufe 0, beauftragt)",
+    "claim": "| CI | CI-Grundstufe (Linux/Xvfb) | ✅ 01.10.2026; gesamte ausführbare Linux-Matrix seit 3.36.0 verpflichtend und nativ grün (D35/S26-15) |"
+  },
+  {
+    "line": 99,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U01 = N03 | Kopfzeile mit acht Symbolknöpfen, zwei Suchen (P3, P5) | eine Befehlspalette (`Strg/Cmd+O`), Verlauf und Drucken ins Menü, Glocke nur bei Bedarf, ≤ 4 Symbolknöpfe | ✅ 3.33.16 |"
+  },
+  {
+    "line": 100,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U02 | Dauerhafte Hinweiszeilen (P1, P4) | „?“ klappt Hinweise ein/aus, Zustand gemerkt (D11); seit B06 ein Schalter in den Einstellungen statt „?“ | ✅ 3.33.16; Fortschreibung §17 |"
+  },
+  {
+    "line": 101,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U03 | „Suche löschen“ auch bei leerer Suche | Löschkreuz nur bei Inhalt, `Esc` leert | ✅ 3.33.11 |"
+  },
+  {
+    "line": 102,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U04 | „Erweitert“/„Hinzufügen“ als Textknöpfe | Feldchips, „+“-Knopf, Umschalt+Enter | ✅ 3.33.3 / 3.33.20 |"
+  },
+  {
+    "line": 103,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U05 | Startseite überladen | ursprünglich sieben Kacheln (D12), seit B04/D50 acht Standardkacheln; Gismo-Pflege bei Bedarf | ✅ 3.33.2 / 3.33.21, ergänzt 3.43.0 |"
+  },
+  {
+    "line": 104,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U06 | Überlappende Ansichten | Heute und Demnächst (D14) | ✅ 3.33.6 |"
+  },
+  {
+    "line": 105,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U07 = N02 | Eingang nicht in der Seitenleiste | Zeile „Eingang (n)“ nur solange er Einträge hat | ✅ 3.33.11 |"
+  },
+  {
+    "line": 106,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U10 | Kopfzeile kürzt den Titel zugunsten der Kennzahlen | Titel hat Vorrang, Kennzahlen in der Unterzeile | ✅ 3.33.12 |"
+  },
+  {
+    "line": 107,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U13 | Bibliothek mit doppelten Wegen | Kachelklick öffnet; eine Fußleiste | ✅ 3.33.16 |"
+  },
+  {
+    "line": 108,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U14 | Menüeinträge am falschen Ort, drei Sicherungsbegriffe | Einträge umsortiert, ein Sicherungsbegriff | ✅ 3.33.16 |"
+  },
+  {
+    "line": 109,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U16 | Begriffe uneinheitlich | Glossar: Aufgabe, Langtext, Zwischenüberschrift, Gruppe | ✅ 3.33.16 |"
+  },
+  {
+    "line": 110,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U17/N01 | Kein „wie System“ | „Automatisch hell/dunkel“, Signaturdesign vorn | ✅ 3.33.21 |"
+  },
+  {
+    "line": 111,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U19 | Quellliste und Nummer vor jedem Titel in „Heute“ | Titel zuerst, Quelle gedämpft rechts | ✅ 3.33.12 |"
+  },
+  {
+    "line": 112,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U22 | Bearbeitungstag in Listenzeilen unsichtbar | Symbol ◉ + Tag in der Datumsspalte | ✅ 3.33.16 |"
+  },
+  {
+    "line": 113,
+    "section": "4.1 UX1 „Weniger Oberfläche“",
+    "claim": "| U24 | Symbole mit mehreren Bedeutungen | eigene Zeichen, Doppelungsregel in der Symbolprüfung | ✅ 3.33.16 |"
+  },
+  {
+    "line": 121,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| G05 = B-02 | Fokus mit Timer an der vorhandenen Zeiterfassung, Zeit genau einmal gebucht | ✅ 3.33.14 |"
+  },
+  {
+    "line": 122,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| H-02 | Tastaturwege für alles, was sich ziehen lässt, mit sichtbarem Ziel und einem Undo-Schritt | ✅ Zeitblöcke 3.33.14, Pinnwand und Bereichsbäume 3.34.0 (H-02r) |"
+  },
+  {
+    "line": 123,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| G29/G31/G32 = C-01–C-03 | Aufgaben im Notiztext mit gleicher ID, Seitenaufgabe in eine Liste, Filter „aus Seiten“ | ✅ 3.33.15 |"
+  },
+  {
+    "line": 124,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| N07 = U21 | Einmalige Karte „Neu in …“ nach einem Update | ✅ 3.33.20 |"
+  },
+  {
+    "line": 125,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| N08 | JPEG-Vorschau unter Linux über ein Systemwerkzeug | ✅ 3.34.0; Linux-Sichtprüfung offen |"
+  },
+  {
+    "line": 126,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| U20 | Leerzustand ohne doppelten Anlegen-Knopf | ✅ 3.33.20 |"
+  },
+  {
+    "line": 127,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| DOK2 | Kommentar AB06, Mindestversion Python/Tk (AB08) | ✅ 3.33.9 / 3.33.20 |"
+  },
+  {
+    "line": 128,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| LG01 | Logo-Rückfall unter Tk 8.6 geglättet (Weg B der [Funktionsnachweis](https://github.com/n05a-design/glide-to-do/blob/0e7b3583a9d7a53925e0b67053895718bbd1c6b6/01_Repository/Glide/tests/qa-3.37.0/logo_symbole_2026-10-10/README.md)) | ✅ 3.37.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt |"
+  },
+  {
+    "line": 129,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| LG02 | App-Symbol in 16, 32, 64 und 256 px vorrechnen, unter Tk 8.6 direkt laden; `glide-logo.png` und Modulkopf von `logo.py` berichtigen (Wege C und F) | ✅ 3.37.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt |"
+  },
+  {
+    "line": 130,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| LG03 | `test_logo330` verlangt Zwischentöne an der Logokante (Weg D) | ✅ 3.37.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt |"
+  },
+  {
+    "line": 131,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| LG04 | Logo-Master überarbeiten (Weg E; [Befunde](../20_Grafik_Master/README.md#freigegebene-master-und-laufzeit-3370)) | ✅ 3.37.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt |"
+  },
+  {
+    "line": 133,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| W02 | Dunkeltests über `set_design` statt `theme_name` | ✅ umgestellt 08.10.2026; Mac und native Windows-Vollprüfung 3.36.0 grün, menschliche Sichtprüfung offen |"
+  },
+  {
+    "line": 135,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| W07 | „PNG auf 128 × 128 einpassen“ nach „Ganzes Bild zeigen“: Hinweistext doppelt | ◇ auf dem Mac nicht nachstellbar; Sichtprüfung B1a |"
+  },
+  {
+    "line": 136,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| W08 | „Pixelsymbol“: Raster nur rund 60 px groß | ◇ auf dem Mac nicht nachstellbar; Sichtprüfung B1a |"
+  },
+  {
+    "line": 137,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| W09 | Einmaliger Absturz von Python 3.14.8 unter Windows in `attributpruefung` (0 von 30 Wiederholungen) | ◇ beobachten; bei Wiederholung an CPython melden |"
+  },
+  {
+    "line": 138,
+    "section": "4.2 Weitere Arbeiten der Stufe 1",
+    "claim": "| W03, W04, W05, W10–W15 | Zeilenenden, Synchronisationswächter, Dialogbreite, Aufbewahrung, Kommentare, Lieferabsatz, Standprüfung, Vorversionen, Sperrzählung | ✅ 08./09.10.2026 bzw. 3.33.21 (W05; Bestätigung in der Windows-Sichtprüfung B1a) |"
+  },
+  {
+    "line": 150,
+    "section": "A. Moderne, ruhige Oberfläche",
+    "claim": "| OB01 | Gestaltungsskala für Abstände, Radien, Schriftgrößen und Zeilenhöhen (`ui_design.py`) | ohne sichtbare Änderung; Abstandswerte je Ansicht gemessen | M | ✅ 3.33.12 / 3.33.21 (Startseite, Bibliothek, Einstellungen, Schnellerfassung: direkte Zahlen 134 → 3); weitere Ansichten bei Gelegenheit |"
+  },
+  {
+    "line": 151,
+    "section": "A. Moderne, ruhige Oberfläche",
+    "claim": "| OB02 | Vier Textstufen; Kopf von „Heute“ zeigt nächste Aufgabe, verfügbare Zeit und Fortschritt als stärkstes Element | 860 × 700, große Schrift; jede Angabe genau einmal | M | ✅ 3.38.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 152,
+    "section": "A. Moderne, ruhige Oberfläche",
+    "claim": "| OB03 | Zeilenaktionen nur bei Bedarf (Einplanen, Termin, „…“ beim Überfahren und bei Auswahl) | jede Aktion auch über Tastatur, Kontextmenü, Palette; Bedienfläche ≤ 15 % | M | ✅ 3.38.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 153,
+    "section": "A. Moderne, ruhige Oberfläche",
+    "claim": "| OB04 | Dezente Bewegung beim Abhaken, Klappen und Bereichswechsel (≤ 150 ms), nur mit Animationen | keine messbare Verschlechterung der Ziele aus §10 | M | ✅ 3.38.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 154,
+    "section": "A. Moderne, ruhige Oberfläche",
+    "claim": "| OB05 | Schmale Seitenleiste mit Symbolen | Zustand gemerkt; Tastatur; 860 × 700 | M | ✅ 3.33.21 |"
+  },
+  {
+    "line": 155,
+    "section": "A. Moderne, ruhige Oberfläche",
+    "claim": "| OB06 | Gestaltungsabnahme je Paket: Vorher-/Nachher-Fensterbilder, vom Inhaber bewertet; Bilder lokal und unversioniert | Entscheidung im QA-Bericht vermerkt | S je Paket | ◐ Bewertung durch den Inhaber offen |"
+  },
+  {
+    "line": 161,
+    "section": "B. Komfort im täglichen Gebrauch",
+    "claim": "| KO01 | Ein Menü „Einplanen“ (Heute, Morgen, Wochenende, Nächste Woche, Datum …, Ohne Tag) für die Mehrfachauswahl | ein Undo-Schritt; Fälligkeit bleibt | S–M | ✅ 3.33.13 |"
+  },
+  {
+    "line": 162,
+    "section": "B. Komfort im täglichen Gebrauch",
+    "claim": "| KO02 | Wiederholungen: Termin überspringen, verpasste Termine überspringen | Serie bleibt; ein Undo-Schritt | S | ✅ 3.33.20 |"
+  },
+  {
+    "line": 163,
+    "section": "B. Komfort im täglichen Gebrauch",
+    "claim": "| KO03 | Erinnerungen in der Schnelleingabe als Chip | Chip nennt „nur bei laufender App“ | S | ✅ 3.33.20 |"
+  },
+  {
+    "line": 164,
+    "section": "B. Komfort im täglichen Gebrauch",
+    "claim": "| KO04 | Felder am Objekt: Klick auf Termin, Wichtigkeit oder Label öffnet die kleine Auswahl dort | ein Undo-Schritt; einheitlich mit N05 | M | ✅ 3.38.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 165,
+    "section": "B. Komfort im täglichen Gebrauch",
+    "claim": "| KO05 | Mehrzeiliges Einfügen in die Eingabezeile nach Rückfrage | ein Undo-Schritt | S | ✅ 3.33.20 |"
+  },
+  {
+    "line": 166,
+    "section": "B. Komfort im täglichen Gebrauch",
+    "claim": "| KO06 | Zuletzt benutzte Ziele zuerst bei „Verschieben nach …“ und Labels | keine neue Einstellung | S | ✅ 3.33.20 |"
+  },
+  {
+    "line": 172,
+    "section": "C. Unterstützung im Alltag",
+    "claim": "| AU01 | Tagesvorschlag „Was passt heute?“ mit Grund je Zeile | deterministisch; nichts ohne Bestätigung; ein Undo-Schritt | M | ✅ 3.33.14 |"
+  },
+  {
+    "line": 173,
+    "section": "C. Unterstützung im Alltag",
+    "claim": "| AU02 | Verfügbare Zeit in allen Planungswegen | eine Rechenstelle (`planning_summary`) | S–M | ✅ 3.33.13 |"
+  },
+  {
+    "line": 174,
+    "section": "C. Unterstützung im Alltag",
+    "claim": "| AU03 | Geführter Tagesbeginn (Rückblick → Vorschlag → Zeitblöcke) und optionaler Hinweis zu Tagesbeginn/-abschluss | Hinweise nach D20 | M | ✅ 3.39.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 175,
+    "section": "C. Unterstützung im Alltag",
+    "claim": "| AU04 | Wochenplanung im eingebetteten Kalender mit Kapazitätsbalken | Teil von N04 | M | ✅ 3.33.17 |"
+  },
+  {
+    "line": 176,
+    "section": "C. Unterstützung im Alltag",
+    "claim": "| AU05 | Fokussitzung mit nächster Aufgabe (= G05) | Zeit genau einmal gebucht | M | ✅ 3.33.14 |"
+  },
+  {
+    "line": 177,
+    "section": "C. Unterstützung im Alltag",
+    "claim": "| AU06 | Routinen als Abschnitt in „Heute“ | kein Formatwechsel | M | ✅ 3.33.20 |"
+  },
+  {
+    "line": 178,
+    "section": "C. Unterstützung im Alltag",
+    "claim": "| AU07 | Termine aus einer ICS-Datei als belegte Zeit im Stundenraster | berührt die Produktgrenze „ICS ist Dateiaustausch“ | M–L | ✅ 3.39.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 192,
+    "section": "5. Wissen im Kontext (Stufe 2)",
+    "claim": "| N05 = U12 | Ein Inspektor statt Maske + Detailbereich | ✅ 3.38.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 193,
+    "section": "5. Wissen im Kontext (Stufe 2)",
+    "claim": "| G14 = D-01 | Inhaltssuche, gemeinsame Befehlspalette, Treffer im Dokument hervorheben | ✅ 3.33.7 / 3.33.16 / 3.34.0; FTS5 nach Messung nicht nötig (P07) |"
+  },
+  {
+    "line": 194,
+    "section": "5. Wissen im Kontext (Stufe 2)",
+    "claim": "| D-03 | Erklären, warum ein Filter einen Punkt zeigt oder ausblendet | ✅ 3.34.0 (gespeicherte Filter) |"
+  },
+  {
+    "line": 195,
+    "section": "5. Wissen im Kontext (Stufe 2)",
+    "claim": "| G08/G30 = D-02 | Seiten-, Listen- und Aufgabenverweise mit Rückverweisen (Format 22) | ✅ 3.33.17 |"
+  },
+  {
+    "line": 196,
+    "section": "5. Wissen im Kontext (Stufe 2)",
+    "claim": "| G28 = E-01 | Live-Liste in einer Seite (Originalaufgaben) | ✅ 3.33.18 |"
+  },
+  {
+    "line": 197,
+    "section": "5. Wissen im Kontext (Stufe 2)",
+    "claim": "| G09 = E-02 | Titelbild für Seiten und Bibliothekskarten, auch als Pixelzeichnung | ✅ 3.33.18 |"
+  },
+  {
+    "line": 198,
+    "section": "5. Wissen im Kontext (Stufe 2)",
+    "claim": "| U08 = E-03 | Vorlagen im Anlegen-Weg mit gefüllter Vorschau | ✅ 3.33.18 |"
+  },
+  {
+    "line": 199,
+    "section": "5. Wissen im Kontext (Stufe 2)",
+    "claim": "| N04 = U11 + B-03 | Kalender als eingebettete Ansicht, Ziehen auf Tage, freie Zeitfenster | ✅ 3.33.17 |"
+  },
+  {
+    "line": 200,
+    "section": "5. Wissen im Kontext (Stufe 2)",
+    "claim": "| U09, U15, U18 | Kompakte Pinnwandleiste, Lila nur für Hinzufügen, Seitentitel im Dokument | ✅ 3.33.21 |"
+  },
+  {
+    "line": 201,
+    "section": "5. Wissen im Kontext (Stufe 2)",
+    "claim": "| B4 | Bilder in Seiten: keine Überlappung, Bilder in Druck/PDF und Markdown | ✅ 3.34.0 |"
+  },
+  {
+    "line": 207,
+    "section": "6. Pixel, Austausch, Verteilung (Stufen 3–4)",
+    "claim": "| G19 = G-01 | Paletteneintrag ändern färbt die Zeichnung um, mit Vorschau und Undo | ✅ 3.35.0 |"
+  },
+  {
+    "line": 208,
+    "section": "6. Pixel, Austausch, Verteilung (Stufen 3–4)",
+    "claim": "| G-03 | Symbolvorschau in 16/32/48 px vor dem Export | ✅ 3.35.0 |"
+  },
+  {
+    "line": 209,
+    "section": "6. Pixel, Austausch, Verteilung (Stufen 3–4)",
+    "claim": "| G17 = G-02 | Animation: Frames, Dauer, Vorschau | ✅ E-S1 A/V durch D18; 3.40.0 geliefert |"
+  },
+  {
+    "line": 210,
+    "section": "6. Pixel, Austausch, Verteilung (Stufen 3–4)",
+    "claim": "| G24 = F-01 | KI-Austausch Stufe 2: Kontextpaket, Änderungsvorschläge mit Feldvergleich (Q3) | ✅ 3.35.0 |"
+  },
+  {
+    "line": 211,
+    "section": "6. Pixel, Austausch, Verteilung (Stufen 3–4)",
+    "claim": "| G21 = F-02 | Begrenzter Notion-Import mit Verlustbericht und Wiedererkennung | ✅ 3.41.0 im damaligen Lieferumfang; D26/D39, I6 offen |"
+  },
+  {
+    "line": 212,
+    "section": "6. Pixel, Austausch, Verteilung (Stufen 3–4)",
+    "claim": "| F-03 | Zwei Sicherungsstände lesbar vergleichen | ✅ 3.35.0 |"
+  },
+  {
+    "line": 213,
+    "section": "6. Pixel, Austausch, Verteilung (Stufen 3–4)",
+    "claim": "| G26 = H-03 = N11 | Paket mit eingebettetem Python 3.14 + Tk 9 je Plattform (D15) | ✅ 3.42.0; neuere Python-Fassung und vorhandene Pakete getrennt, aktueller Lieferabgleich §18 |"
+  },
+  {
+    "line": 221,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| N12 = U23 | Screenreader und beschriftete Canvas-Bedienung über Tk 9.1 `tk accessible` | ▶ | Aufgaben-Kernablauf als erste Stufe gewählt (D36); G26 und tatsächliche Readerabnahme erforderlich |"
+  },
+  {
+    "line": 222,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| N13 | Einzelne Seite aus vorhandener Sicherung wiederherstellen | ✅ 3.41.0 | vollständig gewählt (D37); Text, Bilder/Anhänge, Aufgabenverweise, Live-Listen; kein fortlaufendes Versionssystem; I6 offen |"
+  },
+  {
+    "line": 223,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| – | SQLite als Hauptspeicher | ◇ | nur bei realen Beständen über 20.000 Punkten (D16) |"
+  },
+  {
+    "line": 224,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| G25, Mobile | Toolkit-Probe, iPhone/iPad | ◇ | D03 aufheben |"
+  },
+  {
+    "line": 225,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| G18, G15, G10 | Kachelsatz, Filter in Alltagssprache, Registerkarten-Block | ◇ | Vorrat |"
+  },
+  {
+    "line": 226,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| G06 | Gewohnheiten | ◇ | vorerst nicht; Routinen in „Heute“ (AU06) seit 3.33.20 decken den Alltagsbedarf ohne Statistik |"
+  },
+  {
+    "line": 227,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| B1 | Seitenleiste als Ganzes scrollen | ◇ | wenn die kleinen Bereiche im Alltag stören |"
+  },
+  {
+    "line": 229,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| N09 | Erinnerungen bei geschlossener App (Stufe C) | ✕ | Produktgrenze |"
+  },
+  {
+    "line": 230,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| N10 | Lokaler MCP-Server | ✕ | Q3: Dokumente statt Schnittstelle |"
+  },
+  {
+    "line": 231,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| N14 = G07 | Systemweiter Erfassungs-Hotkey | ✕ | nur plattformeigen lösbar (Q2) |"
+  },
+  {
+    "line": 232,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| N06 | „Erste Schritte“-Seite, Einstieg für neue Nutzer | ✕ | bewusst nicht gewählt; Rundgang und Showcase vorhanden |"
+  },
+  {
+    "line": 233,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| G23 | Gleichzeitige Bearbeitung auf zwei Geräten | ✕ | Produktgrenze |"
+  },
+  {
+    "line": 234,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| G22 | Verschlüsselte Ablage | ✕ | keine Priorität |"
+  },
+  {
+    "line": 235,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| G12, G13 | Spalten in Seiten, Graph | ✕ | Entscheidungen 29./30.09.2026 |"
+  },
+  {
+    "line": 236,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| ZF-200 | Eigene Felder je Liste | ✕ | am 25.09.2026 nicht gewählt |"
+  },
+  {
+    "line": 237,
+    "section": "7. Zukunft und bewusst nicht",
+    "claim": "| N15–N20 | N15 Sprache, N16 Gewohnheitsstatistik (=G06, vorerst), N17 Team, N18 freie Felder, N19 Unterseiten/Graph, N20 Web Clipper | ✕ bzw. zurückgestellt N16 | konkrete Produktgrenzen; Cloud-KI separat durch Q3 ausgeschlossen |"
+  },
+  {
+    "line": 267,
+    "section": "10. Messbare Ziele",
+    "claim": "| Abhaken 1.000 / 5.000 / 10.000 Punkte | ≤ 50 / 120 / 200 ms | ✅ 17 / 61 / 118 ms (Referenz-Mac, 3.33.19) |"
+  },
+  {
+    "line": 268,
+    "section": "10. Messbare Ziele",
+    "claim": "| Suche bis zur gezeichneten Trefferliste, 10.000 Punkte | ≤ 100 ms | ✅ 66,6 ms Median, p95 73,1 ms (Referenz-Mac, 3.34.0) |"
+  },
+  {
+    "line": 269,
+    "section": "10. Messbare Ziele",
+    "claim": "| Erstes Speichern, 10 MB | ≤ Folgespeichern + 50 ms | ✅ ohne Zusatz-Parse seit 3.33.0 |"
+  },
+  {
+    "line": 270,
+    "section": "10. Messbare Ziele",
+    "claim": "| Startseite aufbauen | warm ≤ 150 ms; kalt direkt ≤ 300/Kindprozess ≤ 500 ms (D46) | ✅ 3.36.0: direkt kalt 266/282 ms, warm 75/88; Kindprozess 483/493 und 75/90 (Median/p95) |"
+  },
+  {
+    "line": 272,
+    "section": "10. Messbare Ziele",
+    "claim": "| Kopfzeilen-Symbolknöpfe | ≤ 4 | ✅ seit 3.33.16 |"
+  },
+  {
+    "line": 273,
+    "section": "10. Messbare Ziele",
+    "claim": "| Bedienfläche über Inhalt (1280 × 800; 840 zusätzlich) | ≤ 15 % | ✅ 3.38.0: sechs Ansichten 14,125–14,625 %, Mac/Linux/Windows automatisch grün; Menschenabnahme getrennt offen |"
+  },
+  {
+    "line": 275,
+    "section": "10. Messbare Ziele",
+    "claim": "| Symbole mit mehreren Bedeutungen | 0 (Bewegungspfeile ausgenommen) | ✅ seit 3.33.16 |"
+  },
+  {
+    "line": 276,
+    "section": "10. Messbare Ziele",
+    "claim": "| Tag aus „Heute“ planen (Tagesbeginn → Vorschlag → Zeitblöcke) | ≤ 3 Schritte | ✅ 3.33.14 (automatisch geprüft; menschliche Abnahme I6) |"
+  },
+  {
+    "line": 277,
+    "section": "10. Messbare Ziele",
+    "claim": "| Verfügbare Zeit beim Einplanen sichtbar | in allen Planungswegen | ✅ 3.33.13 |"
+  },
+  {
+    "line": 278,
+    "section": "10. Messbare Ziele",
+    "claim": "| Abstandswerte in den Hauptansichten | nur Werte der Skala aus OB01 | ◐ Startseite, Bibliothek, Einstellungen, Schnellerfassung 134 → 3 direkte Zahlen (3.33.21) |"
+  },
+  {
+    "line": 288,
+    "section": "11. Nur durch den Inhaber",
+    "claim": "| I5 | Aktuelles Python auf dem Mac installieren | ◐ Referenz-Mac mit Python 3.14.5/Tk 9.0.3 trägt die Volläufe; python.org führt 3.14.8 (Windows-Absturz W09 beobachten); Installation braucht das Passwort des Inhabers |"
+  },
+  {
+    "line": 289,
+    "section": "11. Nur durch den Inhaber",
+    "claim": "| I6 | Windows-Vollprüfung des aktuellen Stands und manuelle Prüfsitzungen | ▶ Windows je neuer Lieferung gewählt (D42); native Vollprüfungen 3.36.0–3.38.0 grün; Folgepakete jeweils erneut prüfen. Tatsächliche Sicht-/Bedien-/Readerabnahme getrennt nach der [Prüfliste](Glide_Manuelle_Pruefung.md) |"
+  },
+  {
+    "line": 290,
+    "section": "11. Nur durch den Inhaber",
+    "claim": "| I7 | Referenzentwürfe für „Heute“, Liste, Seite und Inspektor | ✅ Bild 1 gewählt (D19/D21); vier Funktionen D22–D25 vollständig mit 3.38.0 geliefert, Mac/Linux/Windows automatisch grün; Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 291,
+    "section": "11. Nur durch den Inhaber",
+    "claim": "| I8 | Lösungsweg für das Logo unter Tk 8.6 (LG01–LG04) | ✅ technische Wege D28 und Master/Kleingrößen D41/D45 in 3.37.0 geliefert; Menschen-/DPI-Abnahme getrennt |"
+  },
+  {
+    "line": 323,
+    "section": "13. Abgleich mit dem ursprünglichen Zukunftsdokument",
+    "claim": "| Internes Format, Exchange und KI-Beschreibung trennen | aktueller Kandidat `DATA_SCHEMA_VERSION = 26` durch FP-02; `EXCHANGE_FORMAT_VERSION = 2` (Erstellen 1 weiter lesbar, Änderungsvorschläge 2), `exchange_manifest`, erzeugte Spezifikation vorhanden | ✅ Grundlage erhalten; neue interne Funktionen nicht automatisch zum Exchange-Vertrag erklären; Quell-/Lieferstände getrennt in §21 und QA |"
+  },
+  {
+    "line": 324,
+    "section": "13. Abgleich mit dem ursprünglichen Zukunftsdokument",
+    "claim": "| Create mit freien Schlüsseln statt erfundener UUIDs | `parse_exchange_document`, Preview und Import; echte IDs werden von Glide vergeben | ✅ kein neuer Importweg nötig |"
+  },
+  {
+    "line": 325,
+    "section": "13. Abgleich mit dem ursprünglichen Zukunftsdokument",
+    "claim": "| Capability Registry, unbekannte Felder sichtbar | `exchange_capabilities`, Feldlisten, Importbericht; Anhänge/Repeat/Reminder bewusst Stufe 0, `patch_mode` 1 seit 3.35.0 | ✅ Registry, Spezifikation und Verlustbericht mit G24 weitergeführt |"
+  },
+  {
+    "line": 326,
+    "section": "13. Abgleich mit dem ursprünglichen Zukunftsdokument",
+    "claim": "| `.glidecontext` plus geprüfte Patch-Operationen | Kontextpaket und Änderungsvorschlag seit 3.35.0 (`exchange_patch.py`) | ✅ G24: Auswahlumfang, Prüfsummen, Ausgangsstand, Feldvergleich, Vorsicherung, ein Undo-Schritt; Konflikte nie still überschrieben |"
+  },
+  {
+    "line": 327,
+    "section": "13. Abgleich mit dem ursprünglichen Zukunftsdokument",
+    "claim": "| Echte Notizen je Aufgabe, getrennt von Beschreibung | Eigenständige Notizlisten/Seiten vorhanden; kein datiertes `item.notes[]`-Modell | ◇ ZF-NOTES: optionaler Wissensausbau nach G29/Verweisen; erst konkreten Bediennutzen, Migration, Lösch- und Exchange-Regeln definieren. Keine zweite Beschreibung ergänzen |"
+  },
+  {
+    "line": 328,
+    "section": "13. Abgleich mit dem ursprünglichen Zukunftsdokument",
+    "claim": "| Unteraufgaben mit `children`, keine zweite `subtasks`-Struktur | rekursive Aufgaben, Klappkontrolle und Strukturmutationen vorhanden | ✅ Datenstruktur behalten; H-02 prüft die verbleibenden Tastaturwege |"
+  },
+  {
+    "line": 329,
+    "section": "13. Abgleich mit dem ursprünglichen Zukunftsdokument",
+    "claim": "| Dynamische Pinnwand statt Aufgabenkopien | vorhandenes Board nutzt echte Aufgaben, Quellen/Filter/Gruppierung | ◐ ursprüngliches Ziel weitgehend erreicht; kein zweiter Board-Inhaltstyp |"
+  },
+  {
+    "line": 330,
+    "section": "13. Abgleich mit dem ursprünglichen Zukunftsdokument",
+    "claim": "| Allgemeines ViewDefinition-Modell | FP-03 erweitert feste Bedingungen und gespeicherte Darstellung über `view_definition.py`; beide Stufen im lokalen Kandidaten (§21.8) | vorhandene Projektion weiterverwenden; weitergehendes allgemeines Modell bleibt ◇ und braucht gemessenen Nutzen; D17 verbietet den Großumbau |"
+  },
+  {
+    "line": 331,
+    "section": "13. Abgleich mit dem ursprünglichen Zukunftsdokument",
+    "claim": "| Tabellenbreiten und gemeinsame UI-Bausteine | `table_column_widths`, `table_sort`, `ThemedAutoScrollbar`, `DropdownPopup` vorhanden | ◐ vorhandene Bausteine weiterverwenden; Fokus/Trackpad/Kontrast über echte Bedienwege prüfen |"
+  },
+  {
+    "line": 332,
+    "section": "13. Abgleich mit dem ursprünglichen Zukunftsdokument",
+    "claim": "| Labelbeschreibungen und eigene Felder | Label-Felder derzeit key/name/color; eigene Felder je Liste später bewusst nicht gewählt | ◇ ZF-LABEL: Beschreibungen nur mit belegtem Bedarf; ✕ eigene Datenbankfelder gemäß Produktgrenze. Historische Vorschläge überschreiben keine spätere Entscheidung |"
+  },
+  {
+    "line": 343,
+    "section": "14.1 Übersicht",
+    "claim": "| 0 ohne App-Version | A01 | Dokumentinhalte aus `main` (PR #15) in den Arbeitsstand übernehmen | P1 | – | ✅ 08.10.2026 |"
+  },
+  {
+    "line": 344,
+    "section": "14.1 Übersicht",
+    "claim": "| 0 | PR01 | Native Mac-Vollprüfung 3.33.18 und Bundle 3.33.18 | P1 | – | ✅ 09.10.2026 Exitcode 0 (93/95, 2 übersprungen), Bundle 3.33.18 signiert und SHA-256-gleich; menschliche Abnahme I6 offen |"
+  },
+  {
+    "line": 345,
+    "section": "14.1 Übersicht",
+    "claim": "| 0 | W10 | Aufbewahrungswerkzeug: Verknüpfungsprüfung nur innerhalb der Ablage | P1 | – | ✅ 08.10.2026 |"
+  },
+  {
+    "line": 346,
+    "section": "14.1 Übersicht",
+    "claim": "| 0 | W11 | Kommentare zur Tastaturabschirmung in `pruefen.py`/`sitecustomize.py` berichtigen | P3 | – | ✅ 08.10.2026 |"
+  },
+  {
+    "line": 347,
+    "section": "14.1 Übersicht",
+    "claim": "| 0 | W02 | Tests auf `set_design` umstellen (Dunkelfälle wirklich dunkel) | P2 | – | ✅ Mac und native Windows-Vollprüfung 3.36.0 grün; Dunkelfall mit Luminanzprüfung, menschliche Sicht offen |"
+  },
+  {
+    "line": 348,
+    "section": "14.1 Übersicht",
+    "claim": "| 0 | W03 | Zeilenenden für die ganze Ablage festlegen | P3 | – | ✅ 08.10.2026 |"
+  },
+  {
+    "line": 349,
+    "section": "14.1 Übersicht",
+    "claim": "| 0 | W04 | CI-Wächter gegen Synchronisationskopien und geschrumpfte Hauptdokumente | P2 | – | ✅ 08.10.2026 |"
+  },
+  {
+    "line": 350,
+    "section": "14.1 Übersicht",
+    "claim": "| 0 | W12 | Lieferabsatz in `07_Python-Versionen/README.md` nicht vergessen (Befund A15) | P3 | – | ✅ 09.10.2026: `abgleich_07.py` bricht ab, solange die README die gelieferte Hauptdatei nicht nennt; Reihenfolge in `scripts/pflege/README.md` |"
+  },
+  {
+    "line": 351,
+    "section": "14.1 Übersicht",
+    "claim": "| 0 | W13 | Standprüfung R10: die README in `07_Python-Versionen` folgt den Modulen dieses Ordners, nicht dem Quellbaum (CI zwischen zwei Lieferungen sonst rot) | P2 | – | ✅ 09.10.2026, Werkzeugtest ergänzt |"
+  },
+  {
+    "line": 352,
+    "section": "14.1 Übersicht",
+    "claim": "| 0 | W14 | Altleser-Proben mit Vorversionen außerhalb der Aufbewahrung (Befund A18) | P1 | – | ✅ 09.10.2026 `tests/integration/vorversion.py` |"
+  },
+  {
+    "line": 353,
+    "section": "14.1 Übersicht",
+    "claim": "| 0 | W15 | Sperrdatei-Zählung in `test_tempo33319` unabhängig vom Sekundenwechsel (Befund A19) | P2 | – | ✅ 09.10.2026 |"
+  },
+  {
+    "line": 354,
+    "section": "14.1 Übersicht",
+    "claim": "| 0 | DOK3 | Dokumentation inhaltlich nachführen (Analyse A02–A13) | P2 | A01 | ✅ 09.10.2026 (A02–A13 erledigt, laufend mit A15–A22; A14 in 3.37.0 umgesetzt, native Menschen-/DPI-Sichtprüfung getrennt) |"
+  },
+  {
+    "line": 355,
+    "section": "14.1 Übersicht",
+    "claim": "| 1 → 3.33.19 Tempo | P04 | Bildlayout nur bei geänderter Geometrie, Platzieren beim Scrollen | P1 | PR01 | ✅ 09.10.2026 3.33.19: 30 Bilder, Tippen fern 267–273 → 2,5–3,9 ms, im Umfluss 275 → 22–43 ms |"
+  },
+  {
+    "line": 356,
+    "section": "14.1 Übersicht",
+    "claim": "| 1 | P06r | Doppelte Aktualisierungs-/Schreibanforderungen je Aktion beseitigen | P1 | PR01 | ✅ 09.10.2026 3.33.19: je Aktion ein Seitenleistenaufbau und ein Einstellungsschreiben (Duplizieren zwei) |"
+  },
+  {
+    "line": 357,
+    "section": "14.1 Übersicht",
+    "claim": "| 1 | P03r | Unveränderte Startseitenkacheln behalten statt neu bauen | P2 | PR01 | ✅ 09.10.2026 3.33.19: ohne Änderung 502–517 → 0,2–0,3 ms, Wechsel 543–561 → 273–297 ms |"
+  },
+  {
+    "line": 358,
+    "section": "14.1 Übersicht",
+    "claim": "| 1 | E01 | Einstellungsfenster schneller einblenden (heute ≈ 2,1 s) | P2 | PR01 | ✅ 09.10.2026 3.33.19: Mac 677 → ≈ 560 ms; Rest Tk-Zeichnen, als Grenze dokumentiert |"
+  },
+  {
+    "line": 359,
+    "section": "14.1 Übersicht",
+    "claim": "| 1 | P08c | Abhaken bei 5.000 Punkten messen und dem Ziel 120 ms nähern | P2 | PR01 | ✅ 09.10.2026 gemessen: 61 ms (Sprint) bzw. 112–119 ms (Akku, Hintergrund); Ziel erreicht, keine Änderung nötig |"
+  },
+  {
+    "line": 360,
+    "section": "14.1 Übersicht",
+    "claim": "| 1 | P01r | Messbasis um Verlaufsvarianten und Speicherentwicklung ergänzen | P3 | – | ✅ 09.10.2026: Verlauf an/aus, Arbeitsspeicher, 1.000/5.000/10.000 Punkte im Nachweis 3.33.19 |"
+  },
+  {
+    "line": 361,
+    "section": "14.1 Übersicht",
+    "claim": "| 2 → 3.33.20 Komfort und Alltag | KO02 | Wiederholungen: Termin überspringen, verpasste Termine überspringen, frühes Erledigen | P2 | – | ✅ 09.10.2026 3.33.20 (Kontextmenü, Detailbereich, Menü, Palette; Befund „Als erledigt markieren“ in Übersichten behoben) |"
+  },
+  {
+    "line": 362,
+    "section": "14.1 Übersicht",
+    "claim": "| 2 | KO03 | Erinnerung in der Schnelleingabe als Chip | P2 | – | ✅ 09.10.2026 3.33.20 |"
+  },
+  {
+    "line": 363,
+    "section": "14.1 Übersicht",
+    "claim": "| 2 | KO05 | Mehrzeiliges Einfügen in die Eingabezeile mit Rückfrage | P2 | – | ✅ 09.10.2026 3.33.20 |"
+  },
+  {
+    "line": 364,
+    "section": "14.1 Übersicht",
+    "claim": "| 2 | KO06 | Zuletzt benutzte Ziele zuerst (Verschieben, Labels) | P3 | – | ✅ 09.10.2026 3.33.20 |"
+  },
+  {
+    "line": 365,
+    "section": "14.1 Übersicht",
+    "claim": "| 2 | U04 | „+“-Knopf und Umschalt+Enter statt zweier Textknöpfe | P3 | – | ✅ 09.10.2026 3.33.20 (Menüweg „Neuer Punkt mit allen Angaben …“ neu (fehlte bisher)) |"
+  },
+  {
+    "line": 366,
+    "section": "14.1 Übersicht",
+    "claim": "| 2 | U20 | Leerzustand ohne doppelten Anlegen-Knopf | P3 | – | ✅ 09.10.2026 3.33.20 |"
+  },
+  {
+    "line": 367,
+    "section": "14.1 Übersicht",
+    "claim": "| 2 | N07 | Einmalige Karte „Neu in …“ nach einem Update | P3 | – | ✅ 09.10.2026 3.33.20 |"
+  },
+  {
+    "line": 368,
+    "section": "14.1 Übersicht",
+    "claim": "| 2 | AB08 | Mindestversion Python/Tk beim Start prüfen | P2 | – | ✅ 09.10.2026 3.33.20 (Startprobe mit Python 3.9 grün) |"
+  },
+  {
+    "line": 369,
+    "section": "14.1 Übersicht",
+    "claim": "| 2 | AU06 | Routinen als Abschnitt in „Heute“ | P2 | G05 ✅ | ✅ 09.10.2026 3.33.20 |"
+  },
+  {
+    "line": 370,
+    "section": "14.1 Übersicht",
+    "claim": "| 3 → 3.33.21 Ruhige Oberfläche | N01 | „Automatisch (hell/dunkel)“ nach System, Signaturdesign vorn | P2 | – (A04) | ✅ 09.10.2026 3.33.21 (Paar aus dem gewählten Design, Erkennung je System, Pixel vorn) |"
+  },
+  {
+    "line": 371,
+    "section": "14.1 Übersicht",
+    "claim": "| 3 | U15 | Lila nur für Hinzufügen, aktiver Zustand neutral | P3 | – | ✅ 09.10.2026 3.33.21 (neutrale Rolle `active`) |"
+  },
+  {
+    "line": 372,
+    "section": "14.1 Übersicht",
+    "claim": "| 3 | U05r | Gismo-Kachel kompakter, Pflegeknöpfe bei Bedarf | P3 | – | ✅ 09.10.2026 3.33.21 |"
+  },
+  {
+    "line": 373,
+    "section": "14.1 Übersicht",
+    "claim": "| 3 | U09 | Kompakte Pinnwandleiste | P3 | – | ✅ 09.10.2026 3.33.21 (eine Werkzeugzeile, Menü „…“) |"
+  },
+  {
+    "line": 374,
+    "section": "14.1 Übersicht",
+    "claim": "| 3 | U18 | Seitentitel im Dokument, Schreibhinweis in leerer Seite | P3 | – | ✅ 09.10.2026 3.33.21 |"
+  },
+  {
+    "line": 375,
+    "section": "14.1 Übersicht",
+    "claim": "| 3 | OB05 | Schmale Seitenleiste mit Symbolen | P3 | UX1 | ✅ 09.10.2026 3.33.21 |"
+  },
+  {
+    "line": 376,
+    "section": "14.1 Übersicht",
+    "claim": "| 3 | OB01r | Gestaltungsskala in weiteren Ansichten | P3 | OB01 | ✅ 09.10.2026 3.33.21 (Startseite, Bibliothek, Einstellungen, Schnellerfassung wertgleich auf `SPACING`, direkte Zahlen 134 → 3) |"
+  },
+  {
+    "line": 377,
+    "section": "14.1 Übersicht",
+    "claim": "| 3 | W05 | Breite Dialoge, Knopfreihe rechts | P3 | – | ✅ 09.10.2026 3.33.21 (auf dem Mac bestätigt mit 1251/1504 px, jetzt 520/620 px, Knöpfe rechts) |"
+  },
+  {
+    "line": 378,
+    "section": "14.1 Übersicht",
+    "claim": "| 3 | W07 | Doppelter Hinweis nach „Ganzes Bild zeigen“ | P3 | – | ◇ auf dem Mac nicht nachstellbar (ein Hinweis); bleibt für die Windows-Sichtprüfung B1a |"
+  },
+  {
+    "line": 379,
+    "section": "14.1 Übersicht",
+    "claim": "| 3 | W08 | Pixelsymbol-Raster füllt den Dialog | P3 | – | ◇ auf dem Mac nicht nachstellbar (Raster füllt den Dialog, Zoom 32×); bleibt für die Windows-Sichtprüfung B1a |"
+  },
+  {
+    "line": 380,
+    "section": "14.1 Übersicht",
+    "claim": "| 4 → 3.34.0 Wissen und Seiten | B4 | Bilder in Seiten: keine Überlappung, Bilder in Druck/PDF und Markdown | P2 | – | ✅ 09.10.2026 3.34.0 (Bilder weichen vorigen aus; Druckseite mit Daten-URL; Markdown mit Bildverweisen und Rückweg als Seitenbilder) |"
+  },
+  {
+    "line": 381,
+    "section": "14.1 Übersicht",
+    "claim": "| 4 | G14h | Suchtreffer im Dokument hervorheben | P2 | G14 | ✅ 09.10.2026 3.34.0 (alle Fundstellen markiert, Esc/Tippen hebt auf, nie gespeichert) |"
+  },
+  {
+    "line": 382,
+    "section": "14.1 Übersicht",
+    "claim": "| 4 | P07 | FTS5-Cache nur nach gemessener Suchlatenz | P3 | G14h | ✕ 09.10.2026 nach Messung: Median 66,6 ms, p95 73,1 ms (3.33.21: 100,8 ms); kein FTS5-Index |"
+  },
+  {
+    "line": 383,
+    "section": "14.1 Übersicht",
+    "claim": "| 4 | D-03 | Erklären, warum ein Filter einen Punkt zeigt oder ausblendet | P3 | – | ✅ 09.10.2026 3.34.0 („Warum steht das hier?“, „Ausgeblendet: N“, „Filter erklären …“; einfache Listensuche ohne Erklärdialog) |"
+  },
+  {
+    "line": 384,
+    "section": "14.1 Übersicht",
+    "claim": "| 4 | H-02r | Tastaturwege für Pinnwand und Seitenbäume | P2 | – | ✅ 09.10.2026 3.34.0 (Bereichsbäume wie Listenbaum, lose Seiten in den Ordner darunter; Hinweis mit Rückgängig. Abweichung von der Karte: Wirkung erscheint beim Ausführen statt vorher, und Pfeile ohne Alt wählen weiter Karten – Alt+Pfeile bewegen) |"
+  },
+  {
+    "line": 385,
+    "section": "14.1 Übersicht",
+    "claim": "| 4 | N08 | JPEG-Vorschau unter Linux über ein Systemwerkzeug | P4 | – | ✅ 09.10.2026 3.34.0 (Mac mit erzwungenem Linux-Weg; Linux-Sichtprüfung offen) |"
+  },
+  {
+    "line": 386,
+    "section": "14.1 Übersicht",
+    "claim": "| 5 → 3.35.0 Pixel | G19 | Palettenfarbe ändern färbt die Zeichnung um | P3 | – | ✅ 09.10.2026 3.35.0 (Doppelklick oder Umschalt+Klick, Vorschau vor dem Bestätigen, Ablehnen ohne Spur; Dreifachklick abgefangen) |"
+  },
+  {
+    "line": 387,
+    "section": "14.1 Übersicht",
+    "claim": "| 5 | G-03 | Symbolvorschau 16/32/48 px vor dem Export | P3 | – | ✅ 09.10.2026 3.35.0 (hell/dunkel, Original und doppelt, pixelgleich zur ICO-Datei) |"
+  },
+  {
+    "line": 388,
+    "section": "14.1 Übersicht",
+    "claim": "| 6 → 3.35.0 Austausch (mit Paket 5) | G24 | KI-Austausch Stufe 2: Kontextpaket und geprüfte Änderungsvorschläge | P2 | – | ✅ 09.10.2026 3.35.0 (Kontextpaket auch der Auswahl, Prüfdialog mit Konflikten, Vorsicherung, ein Undo; Spezifikation im Datenvertrag) |"
+  },
+  {
+    "line": 389,
+    "section": "14.1 Übersicht",
+    "claim": "| 6 | F-03 | Zwei Sicherungsstände lesbar vergleichen | P3 | – | ✅ 09.10.2026 3.35.0 (Bestand, automatische Sicherungen, Dateien; nur lesend) |"
+  },
+  {
+    "line": 390,
+    "section": "14.1 Übersicht",
+    "claim": "| Abschluss | ABS | Abgleich Aufgabendokument ↔ Code ↔ Prüfergebnisse | P1 | alle | ✅ 09.10.2026 (§14.2: Abweichungen benannt, Offenes aufgelistet) |"
+  },
+  {
+    "line": 401,
+    "section": "14.2 Abschlussabgleich ABS (09.10.2026)",
+    "claim": "| 3.34.0 Wissen und Seiten | B4, G14h, D-03, H-02r, N08; P07 ✕ | `image_push`, `build_page_print_html`, `page_document_from_markdown`, `highlight_matches`, `filter_explain.py`, `keyboard_sidebar_move`, `preview_tools.py`, `content_search._original_index` | `test_wissen3340`, gegen 3.33.21 rot | Exit 0, 97 ausgeführt; gleich geliefert |"
+  },
+  {
+    "line": 431,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-01 / OB02, E-S2 | Heute ohne ausgeprägte Hierarchie → nächste Aufgabe, Zeit und Fortschritt schnell erfassen | vollständig nach D22: Heute-Kopf und vier Textstufen in Heute, Listen, Seiten und Inspektor; M–L | Bild 1 (D21); N05 für Inspektor | jede Angabe einmal, feste Kanten; 860 × 700 und große Schrift; alle gewählten Ansichten erfasst | echte Bedienwege, Geometrie, Kontrast, Vorher/Nachher; Gegenprobe gegen Vorversion | ✅ 3.38.0 geliefert; Mac/Linux/Windows automatisch grün, Tempo D46/D48 erfüllt; Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 432,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-02 / OB03, E-S2 | nur Einplanen bedarfsabhängig → weitere Zeilenaktionen erreichbar und ruhig | vollständig nach D23: Einplanen, Fälligkeit und „…“ bei Hover/Auswahl in Liste, Tabelle, Heute und Demnächst; M–L | Bild 1; S26-13 gemeinsam ausgewählt | Tastatur, Kontextmenü und Palette gleichwertig; keine Fokusverluste; alle vier Ansichten | Hover/Auswahl/Fokus, Aktion über stabile ID, Flächenmessung; Gegenprobe gegen Vorversion | ✅ 3.38.0 geliefert; Mac/Linux/Windows automatisch grün, Tempo D46/D48 erfüllt; Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 433,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-03 / N05, E-S2 | Maske und Detailbereich doppelt → eine verlässliche Bearbeitungsfläche | vollständig nach D24: gemeinsamer Inspektor in Liste, Tabelle, Heute, Demnächst, Pinnwand und Dokumentverweisen; bei schmalem Fenster in Inhaltsfläche; L | Bild 1; Grundlage für KO04 | alle bisherigen Felder und Einstiege erhalten; ein primärer Editor; Undo, Abbruch, Auswahl und Schreibschutz konsistent | Feld-/Einstiegsmatrix aller Kontexte, Fokus, Neustart, große Schrift; Gegenprobe gegen Vorversion | ✅ 3.38.0 geliefert; Mac/Linux/Windows automatisch grün, Tempo D46/D48 erfüllt; Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 434,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-04 / KO04, E-S2 | häufige Felder erfordern Umweg → direkt am Objekt bearbeiten | vollständig nach D25: Bearbeitungstag, Fälligkeit, Wichtigkeit und Labels im Inspektor und an sichtbaren Aufgabenfeldern in Liste, Tabelle, Heute, Demnächst, Pinnwand und Dokumentverweisen; L | S26-03 (D24) | identische Fachlogik; D01/D02; je Änderung ein Undo; Positionierung, Fokus und Abbruch konsistent | Maus/Tastatur, alle Kontexte und Felder, Abbruch, Neustart; Gegenprobe gegen Vorversion | ✅ 3.38.0 geliefert; Mac/Linux/Windows automatisch grün, Tempo D46/D48 erfüllt; Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 435,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-05 / AU03, E-S3 | Tagesbeginn/-abschluss nur manuell → optional rechtzeitig erinnern | A/V nach D20: Vorgabe aus, 08:30/17:30; Uhrzeiten/Wochentage, später erinnern, heute überspringen, gesammelte verpasste Hinweise; M | D20 entschieden; Gesamtplan D44 bestätigt | nur bei laufender App; kein Zwangswechsel, keine Mehrfachzustellung je Termin; Einstellungen und Zustellzustand bleiben über Neustart erhalten | Tk-freie Zeit-/Zustelltests mit künstlicher Uhr; Tageswechsel, Neustart, modaler Zustand; echte Bindungen; Gegenprobe gegen Vorversion | ✅ 3.39.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 436,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-06 / AU07, E-S8a | freie Fenster berücksichtigen nur Glide → lokale Termine als Belegzeiten berücksichtigen | A/V nach D30: gewählte ICS-Datei lesend; Einzel-/ganztägige Termine, übliche tägliche/wöchentliche/monatliche/jährliche Serien und Ausnahmen, Zeitzonen/Sommerzeit, transparent/storniert; L | begrenzte ICS-Erweiterung durch D30; planning_summary | Überlappungen nicht doppelt zählen; keine Aufgaben/Synchronisation; nicht unterstützte Regeln sichtbar melden; alle Planungswege verwenden gleiche Bilanz | Tk-freie ICS-/Serien-/Zeitzonentests; Fixtures, Randtage, Sommerzeit, Überlappung, Ausnahmen; echte Planungswege; Gegenprobe gegen Vorversion | ✅ 3.39.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 437,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-07 / OB04, E-S8b | Zustandswechsel abrupt → dezente optionale Rückmeldung | A/V nach D31: Abhaken, Klappen, Bereichswechsel bis 150 ms, unterbrechbar; M–L | D31; Tempoziel vor/nach | Animationsoption beachten; keine zurückbleibenden after-Aufträge; schnelle Folgen sauber abbrechen; keine Zielverschlechterung | Zeit-/Abbruchlogik Tk-frei; echte schnelle Folgeaktionen, Fokus, Messen, Animationen aus; Gegenprobe gegen Vorversion | ✅ 3.38.0 geliefert; Mac/Linux/Windows automatisch grün, Tempo D46/D48 erfüllt; Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 438,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-08 / G17, E-S1/D07 | statische Zeichnungen → begrenzte Pixelanimation | A/V nach D18: Frames anlegen/duplizieren/löschen/umordnen, gemeinsame und einzelne Dauer, Vorschau, PNG-Spritesheet und Einzelbildfolge; kein GIF; L | D18 entschieden; nächstes Datenformat-Tor; Gesamtplan D44 bestätigt | Altzeichnungen erhalten; Vorsicherung/Migration/Altleser; Vorschau und Exporte entsprechen den Frames; jede Bearbeitung rücknehmbar; Reihenfolge und Dauer über Neustart erhalten | Tk-freie Frame-/Exporttests; echte Werkzeuge, Exportdateien, Undo, Altleser; Gegenprobe gegen Vorversion | ✅ 3.40.0 geliefert |"
+  },
+  {
+    "line": 439,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-09 / G21, E-S4 | generischer Dateiimport → erste Fremdquelle kontrolliert übernehmen | Notion A/V nach D26: ZIP, Text/Überschriften/Listen, lokale Bilder/Anhänge, Aufgaben-Kästchen und interne Seitenverweise; Vorschau und Verlustbericht; L | D26; vorhandener Markdown-Import und lokale Verweise | nichts still verlieren oder überschreiben; keine Notion-Datenbank; Unterseiten in bestehende Ordner/Seiten; sichere Größen-/Pfadgrenzen; ein Undo und Vorsicherung | Tk-freie Parser-/Archivtests; künstliche Exportpakete, fehlerhafte Archive, Quellverluste, Abbruch, Undo, Neustart; Gegenprobe gegen Vorversion | ✅ 3.41.0 geliefert; Mac/Linux/Windows automatisch grün |"
+  },
+  {
+    "line": 440,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-10 / G26, E-S5/D15 | installiertes Python nötig → eigenständig startende Pakete | A/V nach D27: PyInstaller 6.22.3 nur zum Bauen; Python 3.14/Tk 9; macOS arm64 und Windows x64, vollständige Ressourcen, Lizenzbelege und Bauanweisungen; L | native Mac-/Windows-Bau- und Prüfumgebung; I3 für öffentliche Signatur | Start ohne externes Python; Daten außerhalb Paket; Ressourcen/vendor vollständig; Version/Architektur nachvollziehbar; Signaturstatus ehrlich ausgewiesen | native isolierte Start-/Ressourcen-/Datenproben, Hash und Signatur; Gegenprobe: Vorversion benötigt externes Python | ✅ 3.42.0 geliefert; beide native Pakete/isolierte Starts und Vollprüfungen grün; Menschenabnahme getrennt |"
+  },
+  {
+    "line": 441,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-11 / LG01–LG03, E-S6/I8 | Tk-8.6-Logo treppig und großes PNG → geglätteter Rückfall und richtige Symbolgrößen | A/V nach D28: Wege B+C+D+F; Glättung, App-Symbole 16/32/64/256, Tests und Dokumentation; M–L | D28; Master LG04 nach D41, Gestaltungsabnahme D45 erfüllt | Zwischentöne und korrekte Größen bei wechselndem DPI/Akzent; Tk 9 bleibt erhalten; kein großes PNG im Startweg | Tk-freie Raster-/PNGtests; Bildwerte, Tk 8.6/9, Startmessung, native Sichtprüfung; Gegenprobe gegen Vorversion | ✅ 3.37.0 geliefert; Mac/Linux/Windows automatisch grün; Menschen-/DPI-Sichtprüfung getrennt offen |"
+  },
+  {
+    "line": 442,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-12 / A14, E-S7 | Ersatzschriften für einige Symbole → einheitliche und eindeutige Zeichen | A/V nach D29: gesamte ICONS-Tabelle mit Zeichen aus tatsächlich verwendeter UI-Schrift; Größe/Ausrichtung/Bedeutung; M | D29; native Plattformprüfung | nur ICONS; keine zusätzliche Symbolschrift; keine Mehrfachbedeutung; Beschriftung und Tastaturwege erhalten | Symbolprüfung je Plattform, Schrift-/DPI-Wechsel, Kontrast und Sichtabnahme; Gegenprobe für belegte Ersatzschriftfehler | ✅ 3.37.0 geliefert; Mac/Linux/Windows automatisch grün; Menschen-/DPI-Sichtprüfung getrennt offen |"
+  },
+  {
+    "line": 443,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-13 / Bedienfläche ≤ 15 % | zuletzt ≈ 27 %, seit U09/OB05 ungemessen → Inhalt gewinnt Fläche | A/V nach D32: Liste, Heute, Tabelle, Demnächst, Seiten, Pinnwand messen und dauerhafte Bedienfläche über Inhalt reduzieren; M–L | OB02/OB03/N05; D32 | ≤ 15 % bei 1280 × 800 nach P4; 840 zusätzlich berichten; alle Wege erhalten; 860 × 700/große Schrift erreichbar und lesbar | nachvollziehbare Geometriemessung je Ansicht; große Schrift, Tastatur und Auffindbarkeit; Gegenprobe gegen Vorversion | ✅ 3.38.0 geliefert; Mac/Linux/Windows automatisch grün, Tempo D46/D48 erfüllt; Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 444,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-14 / P03-Rest | geänderte Karten teuer, Startseite 270–300 ms → weniger Aufbau | A/V nach D33: Teilaktualisierung geänderter Karten, viele Karten und Startseiten-Neuaufbau; L | gemessene Baseline; D33 | unveränderte Widgets erhalten; Auswahl/Fokus/Scrollen stabil; Startseite warm ≤ 150 ms; Kalt-Ausnahme D46 ≤ 300 ms direkt/≤ 500 ms Kindprozess, Messbeleg | warm/kalt, Median/p95, 1.000/10.000 Punkte, Widget-/Speicherentwicklung; Gegenprobe gegen Vorversion | ✅ 3.36.0 geliefert; D46/D47 eingehalten, Mac/Linux/Windows automatisch grün, Menschenabnahme getrennt |"
+  },
+  {
+    "line": 445,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-14b / E01-Rest | Einstellungen ≈ 560 ms → schnellerer erster/wiederholter Zugang | A/V nach D34: sichtbare Bereiche zuerst, wiederverwendbare Bereiche erhalten; M–L | eigene Baseline; D34 | erste Anzeige ≤ 250 ms, erneut Median ≤ 150 ms/p95 ≤ 190 ms nach D48 (12.10.2026; ersetzt die bisherige p95-Grenze 170 ms aus D47); Werte aktuell; keine Rückrufe nach Schließen; Abweichungen ausdrücklich klären | getrennte Erst-/Folgeserien, Median/p95, Themen-/Schriftwechsel, Schließen/Öffnen, Fokus und Lebensdauer; Gegenprobe gegen Vorversion | ✅ 3.36.0 geliefert; D46/D47 eingehalten, Mac/Linux/Windows automatisch grün, Menschenabnahme getrennt |"
+  },
+  {
+    "line": 446,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-15 / Linux-CI | nur Grundstufe verpflichtend → kalibrierte Integrationssuiten | A/V nach D35: gesamte sachlich ausführbare Linux-Matrix verpflichtend; L | Linux mit tkinter/Xvfb; native CI-Ausführung | echte Befunde nicht wegkalibrieren; Plattformfälle ausdrücklich benennen; neue Sprintwege eingeschlossen | native Linux-Läufe, absichtlich fehlerhafte Gegenfälle, CI-Nachweis und rote Vorversion für neue Pflichtsuiten | ✅ 3.36.0: gesamte ausführbare Matrix und sieben passende Defektgegenproben an `3f267a2` grün; neue Sprint-Suiten je Folgepaket ergänzen |"
+  },
+  {
+    "line": 447,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-16 / N12 | Screenreader-Kernabläufe fehlen → Tk-9.1-Zugänglichkeit | A/1 nach D36: Aufgaben erfassen, suchen, Heute planen, Inspektor; L | S26-10; eigens geprüfte Tk-9.1-Laufzeit; native Screenreader | Rollen/Namen/Werte/Zustände; Auswahl/Fokus; kompletter gewählter Kernablauf tatsächlich bedienbar; übrige Arbeitsbereiche ausdrücklich außerhalb | Tk-9.1-Proben plus VoiceOver/NVDA/Linux-Screenreader-Abnahme; Tastatur/Undo/Neustart; Gegenprobe gegen Vorversion | ▶ erste Stufe ausgewählt 10.10.2026; Umsetzung nach D44 beauftragt |"
+  },
+  {
+    "line": 448,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-17 / N13 | Sicherungen nur insgesamt vergleichbar → einzelne Seite wiederherstellen | A/V nach D37: bestehender Sicherungsvergleich mit Vorschau; Text, Bilder/Anhänge, Aufgabenverweise, Live-Listen; L | Sicherungs-/Verweis-/Anhangsregeln; D37 | andere Seiten unverändert; IDs/Verweise konsistent; fehlende Ziele vorab; Vorsicherung und ein Undo; kein neues fortlaufendes Versionssystem | Tk-freie Wiederherstellungsplanung; Sicherungs-Fixtures mit Bildern/Live-Listen, fehlende Ziele, Neustart/Undo; Gegenprobe gegen Vorversion | ✅ 3.41.0 geliefert; Mac/Linux/Windows automatisch grün |"
+  },
+  {
+    "line": 449,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-18 / V01, neuer Vorschlag | Überplanung nur angezeigt → ausgewählte Aufgaben direkt entlastend umplanen | A/V nach D38: Heute, Woche, Tagesvorschlag; Auswahl, anderer Tag/Vorrat, Vorher-/Nachher-Bilanz mit ICS-Belegzeiten; M–L | planning_summary; S26-06; D38 | Nutzer wählt Aufgaben und Ziel; keine automatische Verteilung; Fälligkeiten bleiben; ein Undo | Tk-freie Bilanz-/Umplanungsregeln; Kapazität, ungeschätzte Aufgaben, Mehrfachauswahl, alle drei Kontexte, D02; Gegenprobe gegen Vorversion | ✅ 3.39.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 450,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-19 / V02, neuer Vorschlag | erneuter Fremdimport kann Dubletten schaffen → Quellen wiedererkennen | A/V nach D39: unverändert/geändert/neu, eigene Änderungen als Konflikt, ausdrücklich gewählte Übernahme; L | S26-09; Datenformat-Tor für Quellenmetadaten; D39 | keine stillen Dubletten oder Überschreibungen; Verlustbericht; keine Live-Synchronisation; Zustände über Neustart erhalten | Tk-freie Zuordnungs-/Konflikttests; gleiche/geänderte Exporte, umbenannte Quellen, Konflikt/Abbruch/Undo, Migration/Altleser | ✅ 3.41.0 geliefert; Mac/Linux/Windows automatisch grün |"
+  },
+  {
+    "line": 451,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-20 / I6, W01/W02/W06–W08/N08 | Windows seit 3.33.18, Linux-Sicht und Menschenabnahme offen → belegter Plattformstand | A/V nach D42: native Windows-Vollprüfung je Lieferung; vorhandene Windows-/Linux-Sichtfälle nachführen; L + getrennte Abnahme | native Windows-/Linux-Runner; GitHub Actions aktiviert; Inhaber für Menschenabnahme | Mac/Linux/Windows-Ergebnisse getrennt; kein automatischer Lauf ersetzt Menschenbedienung/DPI/Screenreader; keine unbelegten Plattformfreigaben | native Vollprüfungen je Lieferung, vorhandene manuelle Prüfliste; konkrete Lauf-/Artefaktverweise; echte Readerproben getrennt von Attributtests | ◐ Gelieferte Pakete bis 3.42.0 einschließlich 3.39.1 nativ Windows/Linux grün; weitere Lieferungen und Menschenabnahme bleiben Pflicht |"
+  },
+  {
+    "line": 452,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-21 / P05 | gemeinsame Helfer nur teilweise → gezielte Vereinheitlichung | A/1 nach D40: nur nachweislich gleiche UI-Texte/Abläufe im angefassten Sprint-Code; S–M | kein Großumbau, D17; D40 | gleiche Bedeutung, keine stillen Aktions-/Begriffsänderungen; kein Gesamtabgleich | betroffene Aufrufer, Bindungen und bestehende Suites; Gegenprobe für jeweiliges Paketverhalten | ▶ erste Stufe ausgewählt 10.10.2026; Umsetzung nach D44 beauftragt |"
+  },
+  {
+    "line": 453,
+    "section": "15.1 Ausgewählte Aufgaben",
+    "claim": "| S26-22 / LG04 | Knicke an Rundungsübergängen und enger Innenraum klein → sauberer Master | A/V nach D41: tangentiale Anschlüsse/Kurzsegment, zusätzliche Kleingrößenfassung 16/32; M–L | Vorher-/Nachher-Abnahme vor Übernahme; D28 unabhängig | Silhouette/Farbe erhalten; keine stille Masteränderung; Exporte nachvollziehbar | Vektor-/Rastervergleich, 16/32/54/512 px, Gestaltungsabnahme, App-Symbole/Lieferabgleich; Gegenprobe gegen Vorversion | ✅ 3.37.0 geliefert; Mac/Linux/Windows automatisch grün; Menschen-/DPI-Sichtprüfung getrennt offen |"
+  },
+  {
+    "line": 494,
+    "section": "15.7 Bestätigter Gesamtplan: acht Produktionsversionen",
+    "claim": "| 1 / **3.36.0** | Fundament und Tempo: P03-Rest S26-14, E01-Rest S26-14b, gesamte ausführbare Linux-Matrix S26-15; native Windows-Vollprüfung S26-20 ab dieser Lieferung | belastbare Prüfstände und Tempo vor dem breiten Oberflächenumbau | ✅ 10.10.2026 geliefert; Mac/Linux/Windows automatisch grün |"
+  },
+  {
+    "line": 495,
+    "section": "15.7 Bestätigter Gesamtplan: acht Produktionsversionen",
+    "claim": "| 2 / **3.37.0** | Logo und Symbole: Tk-8.6-Rückfall/App-Symbole S26-11, gesamte ICONS-Tabelle S26-12, Logo-Master und Kleingrößen S26-22 | Grafikgrundlagen vor neuen Oberflächenaufnahmen; Gestaltungsabnahme vor Masterübernahme | ✅ geliefert 11.10.2026: Mac/Linux/Windows automatisch grün, 07/05/Bundle bytegleich, Signaturen grün; Menschenabnahme getrennt |"
+  },
+  {
+    "line": 496,
+    "section": "15.7 Bestätigter Gesamtplan: acht Produktionsversionen",
+    "claim": "| 3 / **3.38.0** | Aufgabenoberfläche nach Bild 1: OB02 S26-01, OB03 S26-02, gemeinsamer Inspektor S26-03, direkte Felder S26-04, Bewegung S26-07, Bedienfläche S26-13 | einheitliche Bearbeitungsfläche als Grundlage für folgende Planungs- und Zugänglichkeitswege | ✅ 12.10.2026 geliefert; Hash bcdbc4da, Mac/Linux/Windows-Vollprüfung und 18 Defektgegenproben grün; Tempo D46/D48 erfüllt, Lieferdateien/Signaturen erneut geprüft; Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 497,
+    "section": "15.7 Bestätigter Gesamtplan: acht Produktionsversionen",
+    "claim": "| 4 / **3.39.0** | Tagesplanung: Tageshinweise S26-05, ICS-Belegzeiten S26-06, Tag entlasten S26-18 | alle Kapazitätswege teilen dieselbe Bilanz; Entlasten berücksichtigt die neuen Belegzeiten | ✅ 3.39.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/DPI-Abnahme getrennt offen |"
+  },
+  {
+    "line": 498,
+    "section": "15.7 Bestätigter Gesamtplan: acht Produktionsversionen",
+    "claim": "| 5 / **3.40.0** | Pixelanimation S26-08 vollständig mit PNG-Spritesheet/Einzelbildfolge | eigenes Datenformat- und Exportpaket, getrennt vom folgenden Import | ✅ 3.40.0 geliefert |"
+  },
+  {
+    "line": 499,
+    "section": "15.7 Bestätigter Gesamtplan: acht Produktionsversionen",
+    "claim": "| 6 / **3.41.0** | Notion-Import S26-09, Wiedererkennung/Konfliktvergleich S26-19, einzelne Seite aus Sicherung S26-17 | Quellenzuordnung und Wiederherstellung gemeinsam gegen Verweis-/Anhangsregeln prüfen | ✅ 3.41.0 geliefert; Mac/Linux/Windows automatisch grün |"
+  },
+  {
+    "line": 500,
+    "section": "15.7 Bestätigter Gesamtplan: acht Produktionsversionen",
+    "claim": "| 7 / **3.42.0** | Eigenständige Pakete S26-10: PyInstaller 6.22.3, macOS arm64 und Windows x64, Python 3.14/Tk 9 | vollständigen Funktionsstand samt Ressourcen bündeln; Bauweg vor Tk-9.1-Wechsel festigen | ✅ 3.42.0 geliefert; Mac/Linux/Windows automatisch grün, Menschen-/Releaseabnahme getrennt |"
+  },
+  {
+    "line": 501,
+    "section": "15.7 Bestätigter Gesamtplan: acht Produktionsversionen",
+    "claim": "| 8 / **4.0.0** | Zugänglicher Aufgaben-Kernablauf S26-16 A/1 mit eigener geprüfter Tk-9.1-Laufzeit und tatsächlichen Readerproben | baut auf gemeinsamem Inspektor und eigenständigen Paketen auf; nach D50 auf aktuellen UI-Stand abgleichen | ◐ separate Vorbereitung, keine Lieferung: gezielte automatische Verträge vorhanden; vollständige native Readerabläufe, eingefrorene Endmatrix und Pakete offen (§18/§19) |"
+  },
+  {
+    "line": 532,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-01 | Wiederholen nach Rückgängig | ursprüngliche Redo-Lücke geschlossen: FP-01 über PR #37 integriert, mit 3.44.0 geliefert; Abnahmerest §21.10 | Systemkonvention (P1); alle Vergleichsprodukte | hoch | M (ursprünglich) | mittel | gut | P1 | ✅ 3.44.0 (Python), Mac/Pakete/Abnahme offen | FP-01 |"
+  },
+  {
+    "line": 533,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-02 | Erweiterte Wiederholungsregeln | beide Stufen umgesetzt und mit 3.44.0 geliefert, Aufgabenformat 26; frühere Sechs-Regeln-Lücke ist Ausgangslage der Karte, aktueller Rest §21.1 | Super Productivity, Todoist, RFC 5545 | hoch | M–L (ursprünglich) | mittel (Formattor) | gemeinsame Fassade | P1 | ◐ gezielt geprüft, Phasenabschluss offen | FP-02 |"
+  },
+  {
+    "line": 534,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-03 | Gespeicherte Ansichten | Erweiterte feste Bedingungen und gespeicherte Darstellung, geliefert 3.44.0 (§21.8) [Code `SavedFilters` / `view_definition.py`] | AFFiNE, Vikunja, Obsidian Bases | mittel–hoch | M–L | mittel | gut (eine Auswertung) | P2 | ✅ 3.44.0 (Python) | FP-03 |"
+  },
+  {
+    "line": 535,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-04 | Seiten und Notizen als Pinnwandkarten | Seiten-/Notizkarten mit 3.44.0 geliefert; eigener oberster Namespace schützt vor älteren Lesern, Rest §21.10 | AFFiNE, Milanote, FigJam | mittel–hoch | M (ursprünglich) | gering–mittel | gut | P2 | ✅ 3.44.0 (Python) | FP-04 |"
+  },
+  {
+    "line": 536,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-05 | Unverknüpfte Erwähnungen | FP-05 mit 3.44.0 geliefert: Fundstellen, Öffnen, Verknüpfen und Undo | Obsidian; Buildin (Dritte) | mittel | S–M | gering | gut | P2 | ✅ 3.44.0 (Python) | FP-05 |"
+  },
+  {
+    "line": 537,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-06 | Wiederverwendbare KI-Aufträge | FP-06 mit 3.44.0 geliefert: fünf Aufträge, eigene Vorlagen, gemeinsamer Datei-/Kopierweg und vollständige Vorschau | Notion, AFFiNE, Buildin (Bedienidee); Q3 | mittel–hoch | S–M | gering | gut | P2 | ✅ 3.44.0 (Python) | FP-06 |"
+  },
+  {
+    "line": 538,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-07 | Offene Ausgabeformate | erste Stufe als lesbarer Markdownbaum mit 3.44.0 geliefert; Canvas und garantierter Wiederimport nicht enthalten, Rest §21.10 | Obsidian, JSON Canvas | mittel | M (ursprünglich) | gering | gut | P2/P3 | ◐ Stufe 1 in 3.44.0, Canvas offen | FP-07 |"
+  },
+  {
+    "line": 539,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-08 | Zeitauswertung je Tag, Liste, Label | Zeit nur als Summe je Aufgabe; Wochenrückblick summiert erledigte Aufgaben [Code `week_review_data`] | Super Productivity (Arbeitsprotokoll) | mittel | M–L | mittel (Formattor) | mittel | P3 | ◇ Auslöser: Bedarf an Zeitnachweis | – |"
+  },
+  {
+    "line": 540,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-09 | Vorwärtsverträgliche Einstellungen | Filter-/Pinnwand-Unterfelder und fremde Karten lokal umgesetzt, fünf Appfälle und 21 Regressionen grün (§21.30); tatsächliche Lieferung und Phasenabnahme offen | Lehre 3.29/3.30 (Übergabe §4) | Schutz, keine sichtbare Funktion | S–M | gering | besser | P1 allgemein | ◐ lokal umgesetzt, gezielt geprüft | Lieferung/Phasenabnahme offen; kein FP-04-Blocker |"
+  },
+  {
+    "line": 541,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-10 | Optionaler lokaler KI-Endpunkt | Q3 erlaubt nur Dokumente | AppFlowy (Ollama), AFFiNE (BYOK) | unbelegt | M | mittel | mittel | P3 | ✕ E-W3 A (D49) | – |"
+  },
+  {
+    "line": 542,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-11 | Seitenvorschau für Verweise | Verweis navigiert, Kontext geht verloren [Code] | AFFiNE „Peek“ | mittel | M | gering | gut | P3 | ◐ Quellkandidat 26.10.2026 | §21.17 |"
+  },
+  {
+    "line": 543,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-12 | Tagesvorschlag: Grund „gibt andere frei“ | Vorschlag kennt blockierte, nicht blockierende Aufgaben [Code `day_proposal.py`] | Taskwarrior (Gewicht 8) | gering–mittel | S | gering | gut | P3 | ◐ Quellkandidat 26.10.2026 | §21.16 |"
+  },
+  {
+    "line": 544,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-13 | Dokumentabgleich A24/A25 | veraltete Plattform- und Statusangaben [Dok] | eigene Prüfung | Verlässlichkeit | S | – | – | P0 | ✅ 13.10.2026 | – |"
+  },
+  {
+    "line": 545,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-14 | Wiederkehrende Vorlagen | Vorlagen nur von Hand [Code] | Notion-Wiederholvorlagen | mittel | M | mittel | mittel | P3 | ◇ nach FP-02 | – |"
+  },
+  {
+    "line": 546,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-15 | Rangfolge der Inhaltstreffer | Titelrang, keine Relevanzformel [Code `content_search.py`] | AFFiNE BM25+ | gering | S | gering | gut | P3 | ◇ nur nach belegter schlechter Rangfolge | – |"
+  },
+  {
+    "line": 548,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-17 | ICS-Austausch von Monats- und Jahresserien am Monatsende | Ausgabe `FREQ=MONTHLY`/`FREQ=YEARLY` für Termine am 29.–31. bzw. 29.02. ergibt in Kalenderprogrammen andere Termine als in Glide; Import einer Monatsserie am 31. legt zusätzliche Termine auf Monatsenden (A28) [Code][Probe] | eigene Vorprüfung | Korrektheit des Austauschs | S | gering | gut | P0 (Fehler, Randfall) | ✅ 3.39.1 geliefert | FP-00 |"
+  },
+  {
+    "line": 549,
+    "section": "16.2 Feature-Backlog",
+    "claim": "| WA-18 | Wiederholungsangaben in der Schnelleingabe vollständig oder gar nicht erkennen | „monatlich am 15.“, „wöchentlich montags“, „alle 2 Wochen montags“ u. a. ergeben Serien ab heute, der Rest bleibt Titeltext; „jeden zweiten Dienstag“ ergibt nur einen Bearbeitungstag (A29) [Code][Probe] | eigene Vorprüfung | Korrektheit einer Kernfunktion | S–M | gering | gut | P0 (Fehler) | ✅ 3.39.1 geliefert | FP-00 |"
+  },
+  {
+    "line": 562,
+    "section": "16.3 Feature-Pakete",
+    "claim": "| FP-03 | gespeicherte Filter bestehen; eigene Felder ✕ bleibt | Filterdialog, Kachel, Palette | Bedingungen in einem Modul | 0 px | ein Undo je Ziehen | Einstellungen additiv, eigener Schlüssel auf oberster Ebene | ≤ 100 ms bei 10.000 |"
+  },
+  {
+    "line": 563,
+    "section": "16.3 Feature-Pakete",
+    "claim": "| FP-04 | Seiten-/Notizkarten im Prüfkandidaten; freie Zettel ✕ bleibt | Pinnwand, Seitenleisten-Kontextmenü | keine neue Art | 0 px | Flächenstapel | eigener oberster Altleser-Namespace | Auszug je Aufbau gecacht |"
+  },
+  {
+    "line": 588,
+    "section": "FP-00 Wiederholungen richtig erfassen und austauschen (WA-17, WA-18)",
+    "claim": "| Umsetzungsstand | ✅ 3.39.1 geliefert: `repeat_ics.py`, Erkennung in `capture_parser.py`, Import-Zeitzonen über `timezones` (A30); 19 Unit-Tests, `test_wiederholung3391`, getrennte Gegenprobe gegen 3.39.0 ([Nachweise](https://github.com/n05a-design/glide-to-do/tree/291c393c4027f96864772031e9fbeaf0e858afdc/01_Repository/Glide/tests/qa-3.39.1/wiederholung_2026-10-13/README.md)). |"
+  },
+  {
+    "line": 716,
+    "section": "FP-06 Wiederverwendbare KI-Aufträge im Austauschformat (WA-06)",
+    "claim": "| Abhängigkeiten | G24 (✅ 3.35.0) |"
+  },
+  {
+    "line": 781,
+    "section": "16.6 Architekturentscheidungen: geprüfte Alternativen",
+    "claim": "| AE-5 | Lokale KI | (a) eingebettetes Modell über native Bindung · (b) externer Dienst über HTTP auf `localhost` · (c) Dateiaustausch | jetzt (c); (b) nur nach E-W3; (a) ✕ | (a) native Abhängigkeit und GB-große Modelle im Paket; (b) berührt Q3 |"
+  },
+  {
+    "line": 783,
+    "section": "16.6 Architekturentscheidungen: geprüfte Alternativen",
+    "claim": "| AE-7 | Speicher | JSON (D16) · SQLite · CRDT (Yjs/yrs) | JSON | CRDT dient bei AFFiNE/AppFlowy der Synchronisation (G23 ✕); Logseq-Beta zeigt das Risiko eines Speicherwechsels |"
+  },
+  {
+    "line": 791,
+    "section": "16.7 Empfohlene Reihenfolge",
+    "claim": "| W0 (ohne App-Version) | WA-13 Dokumentabgleich ✅; Vorprüfungen §16.10 ✅; Entscheidungsvorlagen E-W1–E-W7 | P0/– | – | erledigt bzw. Voraussetzung jeder Auswahl |"
+  },
+  {
+    "line": 792,
+    "section": "16.7 Empfohlene Reihenfolge",
+    "claim": "| W0b | FP-00 Fehlerbehebung Wiederholungen | P0 | – | ✅ 3.39.1 geliefert; ohne Formatwechsel, mit A30 |"
+  },
+  {
+    "line": 872,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| A01 | Kompaktmodus, kleinere Mindestgröße | ◐ E-U1 A gewählt (D55), lokaler Kandidat | Kompaktmodus mit 480 × 560 nur in diesem Modus, §21.11 | Versionswechsel, Vollprüfung, Lieferung, Mac-/Menschenabnahme; E-U1 B offen |"
+  },
+  {
+    "line": 873,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| A02 | Zweitfenster oder geteilte Ansicht | ◐ E-U2 A gewählt (D55), lokaler Kandidat | lesende Nebenansicht im Inspektorbereich, §21.11 | wie A01; E-U2 B/C offen |"
+  },
+  {
+    "line": 874,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| A03 | Notion-Muster | ◐ E-U3 A gewählt (D55), lokaler Kandidat | Rang 1–3 aus [Markt und Vorbilder §10](Glide_Markt_und_Vorbilder.md#10-notion-muster-für-glide-a03-15102026) umgesetzt, §21.11 | wie A01; E-U3 B (WA-25) und Blockziehen offen |"
+  },
+  {
+    "line": 875,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B01 | Startseite nach „Gelesen“ an den Anfang | ✅ 3.43.0 | `_refresh_home` setzt nach „Gelesen“ die Lage 0; Suite b01 (vorher 0,27) | Mac-Abnahme, Menschenabnahme |"
+  },
+  {
+    "line": 876,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B02 | „Startseite anpassen“ links | ✅ 3.43.0 | linke Rasterkante bei 860/1280/1600 px; b02 | Mac-Abnahme, Menschenabnahme |"
+  },
+  {
+    "line": 877,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B03 | Gismo fest, Spielereien aktiv | ✅ 3.43.0 | `home_tiles.retire_mascot_settings`, Sichtbarkeit nur über die Kachel; b03, Unit-Tests | Mac-Abnahme, Menschenabnahme |"
+  },
+  {
+    "line": 878,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B04 | Galeriebilder auf der Startseite | ✅ 3.43.0 | Kachel „Galeriebilder“ (Standard, eigene Auswahl bleibt), Vorschau im Leerlauf, Klick öffnet Bild; b04 | Mac-Abnahme, Menschenabnahme |"
+  },
+  {
+    "line": 879,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B05 | Logohöhe | ✅ 3.43.0 | Großbuchstabenhöhe bis Grundlinie der Unterzeile; b05 (vorher 6 px darunter) | Mac-Abnahme, DPI-Sichtprüfung |"
+  },
+  {
+    "line": 880,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B06 | Datum/„?“ weg, Hinweisschalter | ✅ 3.43.0 | Einstellung `show_hints`, Übernahme alter Wahl; Bedienwege in Textzeilen (Kopfnotiz, Werkzeugzeile, Kartenfuß, Papierkorb, Spaltenboard) folgen dem Schalter; Handbucheintrag; b06_b15, Unit-Tests; D11 fortgeschrieben | Mac-Abnahme, Menschenabnahme |"
+  },
+  {
+    "line": 881,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B07 | Menüs und Kopfsymbole ausgerichtet | ✅ 3.43.0 | eine Titelzeile, `HEADER_CONTROL_HEIGHT`; b07 (vorher 10 px Versatz) | Mac-Abnahme, DPI-Sichtprüfung |"
+  },
+  {
+    "line": 882,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B08 | Linke Flucht Fehlerprotokoll | ✅ 3.43.0 | Dialogüberschrift ohne Labelrand; b08 (vorher 3 px) | Mac-Abnahme, Menschenabnahme |"
+  },
+  {
+    "line": 883,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B09 | Pfeile/Papierkorb optisch zentriert | ✅ 3.43.0 | `glyph_metrics.py`: Bereichspfeile −0,3 px, Papierkorbsymbol +2 px auf Bezugsform; Pfadtrenner „›“ in Startseitenknöpfen (Kachel „Pinnwände“) einzeln auf die Großbuchstabenmitte (−0,05 statt +0,95 px), Schreibweise unverändert; b09 | Mac-Abnahme, DPI-Sichtprüfung |"
+  },
+  {
+    "line": 884,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B10 | Lupe statt „Su“ | ✅ 3.43.0 | ⌕ aus Segoe UI Symbol (Windows) nach `SYMBOL_FONT_FALLBACKS`; b10; D29 präzisiert | macOS/Linux nativ prüfen |"
+  },
+  {
+    "line": 885,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B11 | Informationspriorität, Titelbreite | ✅ 3.43.0 | Matrix je Ansicht in Design Richtlinien; Metadaten auf Inhaltsbreite (Labels 177 statt 281 px), bei Enge ganz ausgeblendet statt abgeschnitten; b11 prüft Labels, Heute und Liste | Sichtprüfung bei großer Schrift |"
+  },
+  {
+    "line": 886,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B12 | Eindeutige Pfeile in Heute | ✅ 3.43.0 | kein ▶/△ neben dem Aufklapppfeil; b12_b13 | Mac-Abnahme, Menschenabnahme |"
+  },
+  {
+    "line": 887,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B13 | Nächste Aufgabe nur Titel fett | ✅ 3.43.0 | Zelltag `today_next_title` in Zeilengröße; b12_b13; D22 präzisiert | Mac-Abnahme, Menschenabnahme |"
+  },
+  {
+    "line": 888,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B14 | Kein Kästchen vor „Aufgabe“ | ✅ 3.43.0 | Blockleiste; b14 | Mac-Abnahme, Menschenabnahme |"
+  },
+  {
+    "line": 889,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B15 | Papierkorbtext, Buttonschutz | ✅ 3.43.0 | kurzer Text, `_follow_empty_text`; 12 Kombinationen ohne Überdeckung (b06_b15); appweit jeder sichtbare Knopf in 7 Ansichten und 5 Dialogen (b15_appweit, gegen 3.42.0 rot mit S21); dabei „Nur offene“ im Spaltenboard behoben (Zeile bricht um); unter Tk 9.1 (GitHub, Linux und Windows) Leertextüberdeckung gefunden und behoben (platzierter statt gemappter Leertext, Map/Configure ziehen nach); Regel in Design Richtlinien | Sichtprüfung seltener Dialoge, DPI |"
+  },
+  {
+    "line": 890,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B16 | Scrollsprung über Bildern | ✅ 3.43.0 | Rad über Bild pixelweise wie Text; größter Schritt 30 statt 389 px (b16) | Trackpad/macOS nativ |"
+  },
+  {
+    "line": 891,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B17 | Hintergrundkästen oberer Aktionen | ✅ 3.43.0 | Trägerfläche statt Fensterfarbe, konturlose Knöpfe in Ruhe durchsichtig; b17_b19 | alle Designs sichten |"
+  },
+  {
+    "line": 892,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B18 | Neuerungen unter „Über Glide“ | ✅ 3.43.0 | „Neuerungen …“ aus `release_notes.history_text`; b18; Pflegeverfahren in Veröffentlichung | Katalogeintrag der neuen Version beim Versionswechsel |"
+  },
+  {
+    "line": 893,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B19 | Hintergrundkästen Punktbearbeitung | ✅ 3.43.0 | `DueField.surface`, Kalenderknopf in `blend_embedded_editor`; b17_b19 | alle Designs sichten |"
+  },
+  {
+    "line": 894,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B20 | Skills neutral als Design Richtlinien | ✅ 3.43.0 | Skill `design-richtlinien`, Fremdtext mit Lizenz unter `referenzen/`; alle 15 Skills aus `skills-main/` begründet übernommen oder ausgeschlossen (Design Richtlinien); Prüfung `test_design_richtlinien.py` | – |"
+  },
+  {
+    "line": 895,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B21 | Verständliche Übergabe | ✅ 3.43.0 | über Übergabe, Arbeitsvorbereitungsindex und Plan auffindbar; Originalauftrag und Bilder getrennt von Regeln (Design Richtlinien) und Status (§17); Prüfmatrix im [Nachweis](../01_Repository/Glide/tests/qa-3.43.0/ui_ux_paket_2026-10-16/README.md#prüfung-aller-punkte-des-originalauftrags) | fortlaufende Pflege mit jeder Nutzeranweisung |"
+  },
+  {
+    "line": 896,
+    "section": "17. UI-/UX-Feature-Paket aus Nutzerbeobachtungen (15.10.2026)",
+    "claim": "| B22 | Dokumentation/Ablage/Projektauftritt zuletzt | ✅ 3.43.0 | Stand-, Versions-, Entscheidungs- und Archivangaben abgeglichen (u. a. D01–D50, Archiv-README, Showcase-README), Projekt-README aktualisiert; Ablage auf sieben Versionen gekürzt; Push und Merge über PR #27 (`fe9366c`) | GitHub nach PR #32 (`eb5658c`, [Lauf 38979558948](https://github.com/n05a-design/glide-to-do/actions/runs/38979558948)) vollständig grün: Grundstufe, Linux- und Windows-Vollprüfung mit eigener Tk 9.1 einschließlich der drei Linux-Suiten aus PR #26, eigenständiger Windows-Paketlauf mit der ACL-Restaurierung aus dem [Nachlauf 16.10.](../01_Repository/Glide/tests/qa-3.43.0/acl_symlinks_2026-10-16/README.md) |"
+  },
+  {
+    "line": 1162,
+    "section": "20.2 E-P1–E-P5: Phasen und zusätzliche Funktionen",
+    "claim": "| **E-P4 – WA-08 Zeitauswertung jetzt oder bedarfsgebunden?** Vor Modellabschluss der Serienphase | derzeit nur Summe je Aufgabe; Nutzerbedarf an Zeitnachweis nicht belegt. D49 ließ P3-Auslöser offen; ein ohnehin anstehendes Formattor ist kein Nutzennachweis | **A**: tageweise Zeitprotokolle und Wochen-/Monatsauswertung nach Liste/Label einschließlich CSV mitplanen. **B**: weiter zurückstellen bis belegter Zeitnachweisbedarf. **Empfehlung B**; bei regelmäßigem eigenen Nachweisbedarf A | A verlangt Einträge mit stabiler Aufgabe, Datum/Dauer/Korrektur, Fokus-/Handbuchung, Migration alter Summen ohne erfundene Tagesdaten und Retention. Grob 5–10 Tage plus Prüfung, höheres Datenrisiko. B vermeidet zweite Zeitdarstellung und schränkt vorhandenen Fokustimer nicht ein. Vertagen hält WA-08 als ◇; FP-02 läuft unabhängig. Quellen WA-08, `week_review_data`, Markt Super Productivity |"
+  },
+  {
+    "line": 1394,
+    "section": "21.10 Phasenabschluss 3.44.0",
+    "claim": "| 2 | ✅ GitHub-Vollmatrix (Linux/Tk 9.1, Windows, Windows-Paket) nach dem Merge lesen und rote Fälle nachstellen | erledigt: Prüffehler des Windows-Runners und Paketlizenzzuordnung korrigiert, #147/#148 am 25.10.2026 vollständig grün ([Nachweis](../01_Repository/Glide/tests/qa-3.44.0/github_pruefung_2026-10-23/README.md)) |"
+  }
+]

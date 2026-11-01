@@ -1,12 +1,8 @@
 # Glide – lokale Aufgaben, Notizen und Pinnwände
 
-Stand 29.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Quelle 3.49.0 (Prüfkandidat); Python-Lieferung 3.47.0; eigenständige Pakete 3.45.0
+Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26 · Quelle 3.50.0; Python/Showcase und macOS 3.49.0; Windows-Paket 3.45.0 · keine Gesamtabnahme
 
-**Fortsetzung 29.10.2026:** Mutationsreste einschließlich „Liste leeren“ gezielt geschlossen (40 Appfälle grün); PC-01 AMD, PC-02 Intel und MacBook M2 mit getrennten Quell-/Prüfständen vergleichen. Erster M2-Lauf ausgewertet, drei gemeinsame Fehlerursachen korrigiert, WA-41A nur auf PC-02 ([Gerätevergleich](tests/qa-3.49.0/geraetevergleich_2026-10-29/README.md)); native Mac-Abnahme offen. Letzte breite Intel-CI rot; Gesamtauftrag und Liefer-/Abnahmetore bleiben offen. [Aktueller Nachweis](tests/qa-3.49.0/abschlussreste_2026-10-29/README.md).
-
-**Abnahme und Dokumentstand 29.10.2026:** [Abnahmebericht](tests/qa-3.49.0/abnahme_2026-10-28/README.md) lokal eingearbeitet; [Datei-/Dokumentabgleich](tests/qa-3.49.0/dokumentabgleich_2026-10-29/README.md). A01-Pflichtfolge nach begründeten Adapter-/Prüfplatzkorrekturen in 13 Bereichssuiten/136 Fällen grün; danach WA-09-Unterfelder und fremde Karten lokal umgesetzt, fünf Appfälle und 21 Regressionen grün. [Fortsetzung und aktueller Prüfstand](tests/qa-3.49.0/abschlussreste_2026-10-29/README.md). Nicht alle begonnenen Arbeiten abgeschlossen. Technische Restumfänge, WA-41 und aktuelle Lieferung/native/Menschenabnahme bleiben offen.
-
-**Aktuell funktional erweitert (3.49.0-Kandidat):** Wochenwahl in der Tageskachel, gemeinsame Fälligkeit/Aufwand und Kopieren/Hauptöffnen/Verknüpfen von Verweisen in der Nebenansicht. [Tatsächlicher Umfang und Prüfstand](tests/qa-3.49.0/funktionspakete_2026-10-28/README.md). Lieferung weiterhin Python 3.47.0/native 3.45.0; WA-41 und vollständige Endabnahme offen.
+**Abschlussfortsetzung 31.10.2026:** Python/Showcase und eigenständiges macOS-arm64-Paket 3.49.0 geliefert, Windows-Paket weiterhin 3.45.0. Native Tk-9.1-Matrix: 126 Schritte einschließlich aller 108 Integrationssuiten grün; Programm-, Test-, Fixture- und Ressourcenstand entsprechen dem eingefrorenen Nachweis; anschließende Anleitungspflege separat geprüft. Neue Grundstufe mit 235 Werkzeugtests und zweimal 1.082 Fachtests grün. 56 Mutationsfälle und zwölf native Accessibility-Proben grün. WA-41A/B, Windows-/Linux-Endmatrix, echte Readerketten, übrige appweite Architektur-/Performanceumfänge und Menschenabnahme bleiben offen. [Prüf- und Liefernachweis](tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md), [aktueller Rest in §21.37](../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2137-abschlussfortsetzung-mutationen-prüfablauf-tk-91-und-lieferung). Frühere datierte Absätze bewahren ihren damaligen Stand.
 
 Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Sie läuft lokal mit Python 3.14 und Tk 9 (Tk 8.6 eingeschränkt), braucht weder Konto noch Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
@@ -43,7 +39,7 @@ Das Repository ist öffentlich: Rohprotokolle (`*.log`) bleiben lokal, veröffen
 Vollprüfung auf dem Referenz-Mac (aus `01_Repository/Glide`):
 
 ```bash
-python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.49.0/lokaler_lauf --timeout 900
+python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.50.0/lokaler_lauf --timeout 900
 ```
 
 CI-Grundstufe, wie GitHub sie bei jedem Push und Pull Request auf `main` ausführt (Syntax, Versionen, Dokumentation, Unit- und Werkzeugtests, fünf Analysen, Startprobe, Lieferstand, Fremdcode, Datenschutz, Ablagegröße):

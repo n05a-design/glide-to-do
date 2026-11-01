@@ -1,0 +1,9 @@
+{
+  "reason": "Bereits vollständig grüne native Tk-9.1-Matrix t1031-164116; alle 707 ausführbaren/Fixture-/Ressourcen-/Bau-Eingaben identisch zum aktuellen Stand. Kein erneuter Durchlauf erforderlich.",
+  "no_gui_child_signalled": true,
+  "partial_run": "redundanz_voll_final",
+  "used_report_sha256": "7cef898783414423b9dff2e67276997ab831994427d4bd9edd5df7e8b5e92669",
+  "partial_run_is_not_a_full_success": true,
+  "child_ended_before_coordinator_stop": true,
+  "child_exitcode_collected": false
+}

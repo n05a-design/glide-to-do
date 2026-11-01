@@ -1,0 +1,291 @@
+{
+  "date": "2026-10-31",
+  "version": "3.49.0",
+  "format": 26,
+  "geraet": {
+    "cpu": "Apple M2",
+    "modell": "Mac14,2",
+    "ram_gib": 8,
+    "macos": "27.2 (26B123)",
+    "architektur": "arm64",
+    "python": "3.14.5",
+    "tk": "9.0.3",
+    "strom": "Akku"
+  },
+  "gegenlaeufe_2026_10_29": {
+    "m1029-215410": {
+      "app_sha256": "39499ab3b784199c5f39a0f836d494b159203b89ec0d37f24fac9a14231aa729",
+      "schritte": 16,
+      "gruen": 15,
+      "rot": [
+        "test_release36"
+      ],
+      "einordnung": "vermutlich fokusabhaengig, nicht bewiesen"
+    },
+    "m1029-221858": {
+      "app_sha256": "39499ab3b784199c5f39a0f836d494b159203b89ec0d37f24fac9a14231aa729",
+      "schritte": 105,
+      "gruen": 104,
+      "suiten_erreicht": 98,
+      "suiten_gruen": 97,
+      "rot": {
+        "test_seitenkarten": "titelbild_praesentation_sicherung: AttributeError 'Image' object has no attribute 'zoom'"
+      },
+      "nicht_erreicht": [
+        "test_ansichten",
+        "test_arbeitsmodi",
+        "test_speicherstatus",
+        "test_sicherungszentrale",
+        "test_wiederanlauf",
+        "test_wiederholungsregeln",
+        "test_zukunftsfelder",
+        "test_mutationsreste",
+        "test_listenleeren",
+        "test_vollpruefung325",
+        "Showcase",
+        "Analysen",
+        "Reproduktionen"
+      ]
+    }
+  },
+  "korrektur": {
+    "dateien": [
+      "src/glide/app.pyw",
+      "src/glide/pinboard_pages.py",
+      "tests/unit/test_pinboard_pages.py"
+    ],
+    "app_sha256_hauptordner_crlf": "ce4fe362ee640c7803fc25234eb8d5bd4c4dad24022459480893449ad5404e0e",
+    "app_sha256_worktree_lf": "4f0b6b150bfe545a3990cd406aebd27fb3b8b8bd557344fa7f0c81af9b361ab2",
+    "pinboard_pages_sha256": "7c495aaa697872c5cdb22eab0d6a912386d2758fd3039b1d86b715ea4333ed2c",
+    "test_pinboard_pages_sha256": "c2c7cbf9adf60e275191d61e91d55cd5a9b1988f9de880b33cfc1771b102a2d3"
+  },
+  "pruefung": {
+    "vorher_rot": [
+      "test_seitenkarten --fall titelbild_praesentation_sicherung",
+      "zoomprobe 50 %"
+    ],
+    "zoomprobe_nachher": {
+      "100": [
+        "nsimage",
+        24,
+        16
+      ],
+      "50": [
+        "nsimage",
+        12,
+        8
+      ],
+      "150": [
+        "nsimage",
+        36,
+        24
+      ],
+      "200": [
+        "nsimage",
+        48,
+        32
+      ]
+    },
+    "fachtests": {
+      "run": 1076,
+      "skipped": 1,
+      "failures": 0
+    },
+    "fachtests_erster_lauf_umgebung": "14 Fehler test_markdown_tree: Temp-Pfad ueber 130 Zeichen, mit ~/gq gruen",
+    "suiten": {
+      "test_seitenkarten": [
+        0,
+        487
+      ],
+      "test_bilder330": [
+        0,
+        7
+      ],
+      "test_wissen3340": [
+        0,
+        16
+      ],
+      "test_paketierung330": [
+        0,
+        1
+      ],
+      "test_features326": [
+        0,
+        2
+      ],
+      "test_features330": [
+        0,
+        77
+      ],
+      "test_oberflaeche33321": [
+        0,
+        13
+      ]
+    },
+    "suiten_format": "[exitcode, sekunden]",
+    "druck_tempo_ms": {
+      "aufgaben": [
+        21304.1,
+        24877.5,
+        26202.3,
+        30353.2,
+        31200.8
+      ],
+      "gemischt": [
+        20619.3,
+        21676.5,
+        26057.6,
+        26704.0,
+        29733.8
+      ],
+      "verhaeltnis": 0.994
+    },
+    "hauptordner_nach_uebernahme": [
+      "test_pinboard_pages OK",
+      "titelbild_praesentation_sicherung OK",
+      "zoomprobe gruen"
+    ],
+    "ci_grundstufe_hauptordner": {
+      "exitcode": 0,
+      "ausgefuehrt": 17,
+      "hinweise": [
+        "Lieferstand: 14 Abweichungen src/glide gegen 07 (neu pinboard_pages.py)",
+        "Fremdcode tkinterdnd2: TLS-Zertifikatsfehler, ohne Netz nicht pruefbar"
+      ]
+    }
+  },
+  "betroffen": {
+    "python_lieferung_3_47_0": "enthaelt Fehlerstelle",
+    "mac_paket_3_45_0": "nach Quellstand betroffen, nicht ausgefuehrt"
+  },
+  "release_ready": false,
+  "volllauf": true,
+  "volllauf_2026_10_31": {
+    "ablage": "13_TK-Test-Umgebung/Macbook-M2/m1031-141726",
+    "start": "14:17",
+    "ende": "15:06",
+    "app_sha256": "a6a78c41690cd11f3bfea845ad16307effeb6326549cf049e37d83be66316845",
+    "python": "3.14.5",
+    "tk": "9.0.3",
+    "strom": "Akku",
+    "exitcode": 0,
+    "schritte": 125,
+    "gruen": 125,
+    "integrationssuiten": 108,
+    "fachtests": {
+      "run": 1081,
+      "skipped": 1
+    },
+    "quelle_unveraendert": true,
+    "kopie_gleich": true,
+    "dateien": 2107,
+    "druck_tempo_ms": {
+      "aufgaben": [
+        21480.8,
+        25078.8,
+        26273.1,
+        29782.2,
+        30850.3
+      ],
+      "gemischt": [
+        20782.5,
+        21850.0,
+        25210.6,
+        26247.8,
+        29399.0
+      ],
+      "verhaeltnis": 0.96
+    },
+    "release_ready": false
+  },
+  "codex_lauf_v31": {
+    "ende": "13:49 in test_speicherlast330 ohne Ergebnis",
+    "tk": "9.1 (eigene Laufzeit)",
+    "absturzbericht": "SIGSEGV nach Signal in time.sleep; TkMacOSXSignalHandler -> Tcl_Exit -> Python-Rueckruf ohne Threadzustand; Elternprozess bereits beendet",
+    "einordnung": "Abbruch von aussen wahrscheinlich, nicht WA-41A; nicht bewiesen"
+  },
+  "seitenkarten_tempo_eingrenzung": {
+    "druck_tempo_allein_ms": 62,
+    "wiederholt_gleiche_app_ms": 60,
+    "nach_anderen_faellen_ms": [
+      59.3,
+      59.9
+    ],
+    "nach_titelbild_fall_ms": 26775.9,
+    "nach_nur_startseite_ms": 16784.5,
+    "nach_nur_titelbild_ms": 26751.0,
+    "nach_nur_praesentation_ms": 26519.6,
+    "gleiche_app_startseite_dann_pinnwand_ms": {
+      "vorher": [
+        60.3,
+        61.3
+      ],
+      "nachher": [
+        70.9,
+        61.9
+      ]
+    },
+    "schrift": "DejaVu Sans (CoreText, Prozessumfang)",
+    "nativ": "Tk_AllocFontFromObj -> NSFont fontWithName:size: -> CoreText-Matching",
+    "reine_tk_reproduktion": "nicht reproduziert (12-14 ms)",
+    "nutzerbetrieb": "nicht belegt: eine Tk-Instanz je Prozess",
+    "ausloeser_in_startseite": "nicht isoliert",
+    "aenderung": "Pruefadapter: druck_tempo im Gesamtlauf in eigenem Prozess; App unveraendert"
+  },
+  "seitenkarten_umstellung": {
+    "suite_sha256": "a8d7ce6ffb748d4b330a75106fabedcd5f5a7331a07fd3bfee54d9fce18b6925",
+    "laeufe": [
+      {
+        "exitcode": 0,
+        "sekunden": 26
+      },
+      {
+        "exitcode": 0,
+        "sekunden": 24
+      },
+      {
+        "exitcode": 0,
+        "sekunden": 24
+      }
+    ],
+    "vorher_sekunden_volllauf": 485,
+    "druck_tempo_ms": [
+      60.0,
+      66.3
+    ],
+    "verhaeltnis": 0.992,
+    "fehlerweg_rot": true
+  },
+  "tk91_volllauf": {
+    "laufzeit": "python.org 3.14.5 + eigene _tkinter fuer Tcl/Tk 9.1.0",
+    "zugang_nativ": true,
+    "erster_lauf": {
+      "ablage": "t1031-162149",
+      "app_sha256": "a6a78c41690cd11f3bfea845ad16307effeb6326549cf049e37d83be66316845",
+      "schritte": 78,
+      "gruen": 77,
+      "rot": "test_planen33313: Einplanen-Menue nicht geoeffnet"
+    },
+    "ursache": "aqua legt <<SelectPrevLine>> auf Control-Shift-P; Tk 9.1 Treeview KeyNav verschiebt Auswahl; Schutz galt nur x11",
+    "korrektur": {
+      "app_sha256": "1fabf883d14ff7bb576803b90ac565fc18d5fcf32b79a53a9f8ce036de7bbbeb",
+      "interaction_policy_sha256": "7181b254762ebd880d7fafbafcbd517b1370329dea4c1c0d1bd24f24fb5809f4",
+      "test_interaction_policy_sha256": "75316235b500cf321555507e8781970d7c4f192692e9d7cc3910d17692c6c8fa"
+    },
+    "zweiter_lauf": {
+      "ablage": "t1031-164116",
+      "start": "16:41",
+      "ende": "17:11",
+      "exitcode": 0,
+      "schritte": 126,
+      "gruen": 126,
+      "integrationssuiten": 108,
+      "fachtests": {
+        "run": 1082,
+        "skipped": 1
+      },
+      "quelle_unveraendert": true,
+      "kopie_gleich": true
+    }
+  }
+}

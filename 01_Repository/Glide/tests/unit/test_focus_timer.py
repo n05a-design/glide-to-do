@@ -39,6 +39,37 @@ class TimerTest(unittest.TestCase):
         self.assertEqual(resumed["goal_seconds"], 3000)
         self.assertEqual(f.minutes(resumed, START + timedelta(days=1, minutes=5)), 30)
 
+    def test_chosen_duration_is_kept_and_used_for_the_next_interval(self):
+        self.assertEqual([f.normalize_minutes(v) for v in (15, 25, 50, 30, '15', True, None)], [15, 25, 50, 25, 25, 25, 25])
+        kurz = dict(timer(), goal_seconds=900, interval_seconds=900)
+        self.assertEqual(f.normalize(kurz)["interval_seconds"], 900)
+        self.assertEqual(f.interval_minutes(kurz), 15)
+        self.assertEqual(f.minutes(kurz, START + timedelta(hours=2)), 15)
+        weiter = f.resume(f.pause(kurz, START + timedelta(hours=2)), START + timedelta(hours=2))
+        self.assertEqual(weiter["goal_seconds"], 1800)
+        self.assertNotIn("interval_seconds", f.normalize(dict(timer(), interval_seconds=1234)))
+        self.assertNotIn("interval_seconds", f.normalize(dict(timer(), interval_seconds=181 * 60)))
+        self.assertEqual(f.normalize(dict(timer(), goal_seconds=5400, interval_seconds=5400))["interval_seconds"], 5400)
+        self.assertEqual(f.interval_minutes(dict(timer(), interval_seconds=5400)), 90)
+        self.assertEqual([f.estimate_option(v) for v in (30, 90, 25, 4, 181, None, True)], [30, 90, None, None, None, None, None])
+        self.assertEqual(f.interval_minutes(timer()), 25)
+        self.assertEqual(f.interval_minutes(None), 25)
+
+    def test_extend_adds_five_minutes_and_resumes_only_at_interval_end(self):
+        laufend = f.extend(timer(), START + timedelta(minutes=10))
+        self.assertEqual(laufend["goal_seconds"], 1800)
+        self.assertIsNotNone(laufend["started_at"])
+        ende = f.pause(timer(), START + timedelta(minutes=30))
+        weiter = f.extend(ende, START + timedelta(minutes=31))
+        self.assertEqual(weiter["goal_seconds"], 1800)
+        self.assertEqual(f.minutes(weiter, START + timedelta(minutes=33)), 27)
+        pause = f.pause(timer(), START + timedelta(minutes=5))
+        verlaengert = f.extend(pause, START + timedelta(minutes=8))
+        self.assertIsNone(verlaengert["started_at"])
+        self.assertEqual(verlaengert["goal_seconds"], 1800)
+        with self.assertRaises(ValueError):
+            f.extend(dict(item_id="x", started_at=START.isoformat()), START)
+
     def test_clock_backwards_and_changed_timezone(self):
         self.assertEqual(f.elapsed(timer(), START - timedelta(hours=1)), 0)
         self.assertEqual(f.elapsed(timer(), (START + timedelta(minutes=5)).astimezone(timezone.utc)), 300)
@@ -55,6 +86,29 @@ class TimerTest(unittest.TestCase):
         self.assertEqual(f.booking_action(booking, 10), "apply")
         self.assertEqual(f.booking_action(booking, 13), "committed")
         self.assertEqual(f.booking_action(booking, 18), "conflict")
+
+    def test_next_candidates_keep_rank_order_and_first_choice(self):
+        rows = [((2, 0), "c", "C"), ((1, 5), "b", "B"), ((1, 5), "a", "A"), ((0, 9), "z", "Z")]
+        self.assertEqual(f.next_candidates(rows), ["Z", "A", "B", "C"])
+        self.assertEqual(f.next_candidates(rows, limit=2), ["Z", "A"])
+        self.assertEqual(f.next_candidates(rows, limit=1), [min(rows, key=lambda r: (r[0], r[1]))[2]])
+        self.assertEqual(f.next_candidates([], limit=5), [])
+        self.assertEqual(f.next_candidates(rows, limit=0), [])
+        self.assertEqual(f.SWITCH_LIMIT, 5)
+
+    def test_switch_label_is_single_line_and_bounded(self):
+        self.assertEqual(f.switch_label("  Bericht\n schreiben "), "Bericht schreiben")
+        self.assertEqual(f.switch_label(""), "Ohne Titel")
+        self.assertEqual(f.switch_label(None), "Ohne Titel")
+        lang = f.switch_label("Wort " * 30)
+        self.assertTrue(lang.endswith("…") and len(lang) <= f.SWITCH_TITLE_LIMIT, lang)
+        self.assertEqual(f.switch_label("x" * f.SWITCH_TITLE_LIMIT), "x" * f.SWITCH_TITLE_LIMIT)
+
+    def test_next_label_names_following_task_or_none(self):
+        self.assertEqual(f.next_label("Angebot  prüfen"), "Als Nächstes: Angebot prüfen")
+        self.assertEqual(f.next_label(""), "Als Nächstes: Ohne Titel")
+        self.assertEqual(f.next_label(None), "Danach keine weitere Aufgabe für heute")
+        self.assertTrue(f.next_label("Wort " * 30).endswith("…"))
 
     def test_booking_validation(self):
         for value in (None, {}, dict(item_id="a", before=13, after=10),

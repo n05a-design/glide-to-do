@@ -59,5 +59,13 @@ class PageCardTests(unittest.TestCase):
             result = pages.restore({pages.KEY:value, 'pinboards':{}})
             self.assertIsInstance(result['pinboards'], dict)
 
+    def test_zoomed_image_by_type(self):
+        # macOS lädt Vorschauen als nsimage: kein zoom/subsample, sondern neu in Zielgröße.
+        self.assertEqual(pages.zoomed_image('photo', 120, 80, 1.5), ('photo', 6, 4))
+        self.assertEqual(pages.zoomed_image('photo', 120, 80, 0.75), ('photo', 3, 4))
+        self.assertEqual(pages.zoomed_image('nsimage', 120, 80, 1.5), ('nsimage', 180, 120))
+        self.assertEqual(pages.zoomed_image('nsimage', 3, 1, 0.25), ('nsimage', 1, 1))
+        self.assertIsNone(pages.zoomed_image('bitmap', 10, 10, 2))
+
 
 if __name__ == '__main__':unittest.main()

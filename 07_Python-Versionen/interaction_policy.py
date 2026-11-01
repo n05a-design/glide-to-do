@@ -94,7 +94,18 @@ NAVIGATION_EVENTS = frozenset(f'<<{name}>>' for name in (
     'PrevChar', 'NextChar', 'SelectPrevChar', 'SelectNextChar',
     'PrevLine', 'NextLine', 'SelectPrevLine', 'SelectNextLine',
     'LineStart', 'LineEnd', 'SelectLineStart', 'SelectLineEnd'))
-EMACS_GUARD_MARK = '# Glide: Strg+Buchstabe bleibt Glide-Kürzel (X11)'
+EMACS_GUARD_MARK = '# Glide: Strg+Buchstabe bleibt Glide-Kürzel (X11/macOS)'
+# Fenstersysteme, deren Navigationsereignisse Tk auch auf Strg+Buchstabe legt.
+EMACS_GUARD_SYSTEMS = ('x11', 'aqua')
+
+
+def emacs_guard_applies(windowing_system):
+    """Ob Glide die Klassennavigation vor Strg+Buchstabe schützt.
+
+    X11 und macOS (`aqua`) legen etwa <<SelectPrevLine>> auch auf Strg+Umschalt+P;
+    seit Tk 9.1 bindet die Treeview daran. Unter Windows bleibt es bei Pfeiltasten.
+    """
+    return str(windowing_system or '') in EMACS_GUARD_SYSTEMS
 
 
 def is_emacs_trigger(sequence):

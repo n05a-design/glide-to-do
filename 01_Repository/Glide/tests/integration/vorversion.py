@@ -55,11 +55,34 @@ def vorgehalten(version, changelog):
     return version in liste[:AUFBEWAHRUNG]
 
 
+def aus_git(ablage, version, name):
+    """Gepinnte Altleser-Hauptdatei bytegleich aus der Git-Historie (31.10.2026).
+
+    Nach der Aufbewahrungsregel verschwindet eine alte Hauptdatei aus
+    07_Python-Versionen; Vorfassungen trägt Git. Für die in
+    `historical_runtime.SNAPSHOTS` gepinnten Altleser wird sie aus dem
+    gepinnten Liefercommit in einen kurzlebigen Ordner gelegt; sonst None.
+    """
+    import atexit
+    import shutil
+    import tempfile
+    from historical_runtime import DELIVERY, SNAPSHOTS, _git
+    if version not in SNAPSHOTS:
+        return None
+    daten = _git(Path(ablage), "show", f"{SNAPSHOTS[version]}:{DELIVERY}/{name}")
+    ordner = Path(tempfile.mkdtemp(prefix="glide-altleser-git-"))
+    atexit.register(shutil.rmtree, ordner, True)
+    pfad = ordner / name
+    pfad.write_bytes(daten)
+    return pfad
+
+
 def finden(ablage, version, changelog, ausdruecklich=None):
     """Pfad der Vorversion oder None, wenn sie außerhalb der Aufbewahrung liegt.
 
     `ausdruecklich` ist ein über die Befehlszeile gesetzter Pfad; er muss
-    existieren. Sonst wird zuerst `07_Python-Versionen`, dann `Archiv` gesucht.
+    existieren. Sonst wird zuerst `07_Python-Versionen`, dann `Archiv`, zuletzt
+    für gepinnte Altleser die Git-Historie gesucht (`aus_git`).
     """
     if ausdruecklich is not None:
         pfad = Path(ausdruecklich)
@@ -70,6 +93,9 @@ def finden(ablage, version, changelog, ausdruecklich=None):
     for pfad in (ordner / name, ordner / "Archiv" / name):
         if pfad.exists():
             return pfad
+    pfad = aus_git(ablage, version, name)
+    if pfad is not None:
+        return pfad
     if vorgehalten(version, changelog):
         raise AssertionError(f"Vorversion {version} fehlt in 07_Python-Versionen, obwohl sie vorgehalten wird")
     return None

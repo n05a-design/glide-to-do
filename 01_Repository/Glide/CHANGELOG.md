@@ -1,6 +1,36 @@
 # Änderungsverlauf
 
+## 3.50.0 (31.10.2026) – Nachschlagen, Fokusdauer und schnelleres Speichern
+
+- Nebenansicht: „Treffer …“ zeigt bei offener Suche alle Fundstellen mit Abschnitt und Textausschnitt; ein Eintrag steuert die Stelle direkt an. Höchstens 50 Einträge, darüber ein Hinweis zum Verfeinern; veraltete Einträge bewirken nichts. „Abschnitte …“ nennt bei aktiver Suche die Treffer je Abschnitt.
+
+- Seiten und Notizen: „Markierung in Nebenansicht suchen“ im Kontextmenü und in den Blockaktionen sucht den markierten Begriff in der geöffneten Nebenansicht, ohne die Hauptarbeit zu ändern; auch im Schreibschutz. Bei offener Nebenansicht bietet das Kontextmenü einer einzelnen Aufgabe „Titel in Nebenansicht suchen“.
+
+- Fokus: „Fokus für“ im Mehr-Menü der Tagesaufgaben startet eine Sitzung mit 15, 25 oder 50 Minuten und merkt die Wahl als Vorgabe für „Fokus starten“; nach dem Intervall verlängert Fortsetzen um dieselbe Dauer. Hat die Aufgabe einen anderen geschätzten Aufwand (5–180 Minuten), bietet das Menü zusätzlich „Aufwand · N Minuten“ nur für diese Sitzung. Das Aufgaben-Kontextmenü (Beziehungen und Zeit) bietet „Fokus starten · N Minuten“ und gegebenenfalls „Fokus nach Aufwand“. Im Fokusfeld verlängert „+5 Minuten“ das laufende Intervall; am Intervallende läuft die Sitzung damit weiter, eine bewusste Pause bleibt bestehen. Einstellung `focus_minutes` additiv, ältere Fassungen nutzen weiter 25 Minuten.
+
+- Fokus 01.11.: „Wechseln zu …“ im Fokusfeld bietet bis zu fünf nächste Aufgaben für heute in der Reihenfolge von „Nächste Aufgabe“; die Wahl bucht die erfasste Zeit und fokussiert die gewählte Aufgabe. Ist sie inzwischen erledigt oder blockiert, bleibt die Sitzung unverändert. Unter der Uhr steht „Als Nächstes: …“ mit der Aufgabe, die „Nächste Aufgabe“ wählen würde. Pause, +5 Minuten, Wechseln und Beenden sind auch über „Ansicht › Ansichten“ und die Aktionsauswahl erreichbar. Die Startseitenkachel „Nächste Aufgabe“ nennt eine laufende Fokussitzung und bietet dann „Fokus anzeigen“. [Nachweis](tests/qa-3.50.0/featurepaket_2026-10-31/README.md)
+
+- Nebenansicht 01.11.: „Letzte Suchen …“ bei offener Suche bietet bis zu acht zuletzt genutzte Suchbegriffe dieser Sitzung; ein Eintrag sucht erneut, im Suchfeld blättern Pfeil hoch/runter durch die Liste, „Liste leeren“ verwirft sie. Gemerkt werden nur Suchen mit Treffer, die über Weiter/Zurück, Trefferübersicht oder Nachschlagen genutzt wurden; nichts wird gespeichert, ein anderer Datenordner beginnt neu.
+
+- Speichern 31.10.: Anlegen, Löschen, Verschieben, Sortieren, Gruppe auflösen, Zeitplan, Erinnerung, Label-Gruppe und Ziehen in der Ordnerübersicht vergleichen beim Speichern nur noch die berührten Listen statt aller; der Verlaufsabgleich überspringt unveränderte Aufgaben. Bei 10.000 Aufgaben Anlegen/Löschen/Verschieben etwa 42–50 % und Abhaken 11 % schneller, Verlauf unverändert. [Messung und Test](tests/qa-3.49.0/leistung_wege_2026-10-31/README.md)
+
+- Speichern 01.11.: Nach jedem Speichern zählen Seitenleiste und Erinnerungsstatus ohne überflüssige Durchläufe; Zahlen und Anzeige unverändert. Bei 10.000 Aufgaben Seitenleiste 16 → 6 ms bzw. 26 → 19 ms mit Terminen und Labels, Abhaken 8–12 % schneller. [Messung und Differential](tests/qa-3.50.0/leistung_seitenleiste_2026-11-01/README.md)
+
+- Prüfung 01.11.: Die native Zugangssuite verwechselt ein neu vergebenes Tcl-Kommando des wieder aufgebauten Inspektors nicht mehr mit einem nicht freigegebenen alten; App unverändert. [Einordnung](tests/qa-3.50.0/featurepaket_2026-10-31/README.md)
+
 ## 3.49.0 (28.10.2026) – Tagesplanung, Verweise und geschützter Wiederanlauf
+
+- Abschlussfortsetzung 31.10.: Anlege-/Kalender-/Unterpunkt-/Einfügewege, direkte Felder, Labels und Sortierung mit aktuellem Schreibbesitz, frischen Dialogzielen und gemeinsamen Undo-/Speicherrahmen abgesichert. Fehlgeschlagene CSV-/ICS-/TXT-/Austauschimporte stellen den ganzen Vorzustand und Undo wieder her. CI stoppt nach dem ersten Fehler mit erhaltenem Diagnosebeleg. 751 inventarisierte alte lokale QA-Dateien entfernt. [Prüfung, Lieferung und offene Freigabetore](tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md).
+
+- Tk 9.1 unter macOS 31.10.: Strg+Umschalt+P (Einplanen) und die übrigen Strg-Kürzel verschieben in Listen nicht mehr vorher die Auswahl; der Schutz vor den Emacs-Auslösern der Treeview gilt jetzt auch unter macOS, nicht nur unter X11. [Tk-9.1-Lauf](tests/qa-3.49.0/mac_gegenlauf_2026-10-31/README.md)
+
+- Seitenkarten-Prüfung 31.10.: Die Druck- und Tempoprobe misst im Gesamtlauf in einem eigenen Prozess, weil frühere Tk-Instanzen im selben Prüfprozess unter macOS die Schriftanlage stark verlangsamen; Kriterien unverändert. [Eingrenzung](tests/qa-3.49.0/mac_gegenlauf_2026-10-31/README.md)
+
+- M2-Gegenlauf 31.10.: Pinnwand und Präsentation zoomen unter macOS auch Karten mit Bildvorschau oder Titelbild, statt die Darstellung abzubrechen; macOS-Vorschauen (`nsimage`) werden dafür in Zielgröße neu gezeichnet. [Gegenlauf und Prüfung](tests/qa-3.49.0/mac_gegenlauf_2026-10-31/README.md)
+
+- Dokumentationsaudit 31.10.: D55-/Speicherstatus-Lieferung, WA-09-/FP-06-Status, Mutationsgrenzen, Suite-/Fallzahlen und Geräteabschluss mit vorhandenen Belegen abgeglichen. Aktuelle Restarbeiten und Abschlusskriterien im bestehenden Entwicklungsplan; App und aktive Lieferstände unverändert. Zwei Mac-Testwurzeln kanonisiert, neun überalterte Git-Dateien regelkonform entfernt und nötige Beleglinks auf Git-Historie umgestellt; Archivübersicht berichtigt. [Nachweis](tests/qa-3.49.0/abschlussaudit_2026-10-31/README.md).
+
+- AMD-Volllauf 29.10. abends: Die Showcase-Prüfung schließt vor ihrem Neustart im zweiten Prozess die Sitzung regulär ab, wie die übrigen Prüfsuiten; Fachassertions unverändert. [Volllauf und Gegenprobe](tests/qa-3.49.0/amd_voll_2026-10-29/README.md).
 
 - Gerätevergleich 29.10.: Symbole mit mehreren Zeichen wie `⚑⚑` (hohe Wichtigkeit) werden in Baumzeilen wieder mittig ausgerichtet, statt die Messung im Zeichenrückruf abzubrechen. Prüfsuiten schließen beim simulierten regulären Neustart die Sitzung ab; die JPEG-Probe fordert die Umwandlung wie die Oberfläche vorher an. [Einordnung und gezielte Prüfung](tests/qa-3.49.0/geraetevergleich_2026-10-29/README.md).
 
@@ -86,7 +116,7 @@ Phasenabschluss nach D51: Die seit 3.43.1 lokal entwickelten Pakete (FP-01 bis F
 
 Einzelheiten der Teilpakete:
 
-- **Roadmap-Paket 3 (22.10.2026):** Gruppieren/Auflösen, Ordnerpapierkorb/-auflösen, Einzelfarben und direkte Papierkorbwiederherstellung/-leerung nutzen die gemeinsamen Änderungsrahmen. Frische Objekte nach Dialog/Snapshot, kein Erfolgstoast bei Schreibfehler; offene Änderungen bleiben rücknehmbar. Vor dem Ordnerpapierkorb werden Editorinhalte übernommen. UI-Fehler nach erfolgreichem Schreiben werden als Folgefehler geführt und rollen die Hauptdatei nicht zurück. Der lokale Kalender überspringt nach einem überholten Leseauftrag dessen unnötige Expansion; eine laufende Expansion bleibt unabbrechbar. Version und Format bleiben unverändert; [Prüfnachweis](tests/qa-3.43.1/roadmap_paket3_2026-10-22/README.md).
+- **Roadmap-Paket 3 (22.10.2026):** Gruppieren/Auflösen, Ordnerpapierkorb/-auflösen, Einzelfarben und direkte Papierkorbwiederherstellung/-leerung nutzen die gemeinsamen Änderungsrahmen. Frische Objekte nach Dialog/Snapshot, kein Erfolgstoast bei Schreibfehler; offene Änderungen bleiben rücknehmbar. Vor dem Ordnerpapierkorb werden Editorinhalte übernommen. UI-Fehler nach erfolgreichem Schreiben werden als Folgefehler geführt und rollen die Hauptdatei nicht zurück. Der lokale Kalender überspringt nach einem überholten Leseauftrag dessen unnötige Expansion; eine laufende Expansion bleibt unabbrechbar. Version und Format bleiben unverändert; [Prüfnachweis](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/roadmap_paket3_2026-10-22/README.md).
 
 - **Gespeicherte Darstellung (FP-03 Stufe 2):** Eigene Liste, Tabelle oder Spaltenboard je Ansicht; Gruppierung, Sortierung, Tabellenspalten einschließlich Herkunft und gespeicherte Breiten. „Als Ansicht speichern …“ übernimmt die aktuelle Sicht oder kopiert einen Filter als neue Kennung. Originalaufgaben und gemeinsamer Gruppen-/Undo-Weg bleiben. Eigener oberster Einstellungsnamespace mit Altleser- und Sicherungsrundweg; Aufgabenformat und Version unverändert.
 

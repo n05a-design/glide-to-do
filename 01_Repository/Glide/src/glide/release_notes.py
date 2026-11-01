@@ -14,6 +14,13 @@ bleiben ohne Eintrag, nachträglich wird nichts erfunden.
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.50.0": (
+        "Nebenansicht: alle Treffer mit Abschnitt und Ausschnitt sehen, Trefferzahl je Abschnitt, letzte Suchen erneut aufrufen.",
+        "Markierten Text aus einer Seite oder Notiz direkt in der Nebenansicht nachschlagen.",
+        "Fokus für 15, 25, 50 Minuten oder den geschätzten Aufwand starten; die Vorgabe gilt auch für „Fokus starten“.",
+        "Anlegen, Löschen und Verschieben speichern bei großen Beständen deutlich schneller.",
+        "Im Fokusfeld verlängert „+5 Minuten“ das Intervall; „Wechseln zu …“ fokussiert direkt eine andere Tagesaufgabe.",
+    ),
     "3.49.0": (
         "Startseite: über Woche direkt einen Tag der betrachteten, vorherigen oder nächsten Woche wählen.",
         "Ausgewählte Tagesaufgaben gemeinsam in Fälligkeit und Aufwand ändern, mit einem Rückgängig-Schritt.",

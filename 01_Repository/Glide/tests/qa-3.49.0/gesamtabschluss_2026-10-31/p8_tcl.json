@@ -1,0 +1,13 @@
+{
+  "exitcode": 0,
+  "nur_kuenstliche_daten": true,
+  "readerstatus": "nur im eigenen Interpreter simuliert",
+  "tk": "9.1.0",
+  "skript_sha256": "4bdba04e1d9def7d0dece0d9243543c0599d7b8ae5b4f8829b79fb5afd9bbc2d",
+  "checks": [
+    "Frühe Auswahl vor Map ohne Fehler",
+    "Map initialisiert native Attribute und aktuelle Auswahl",
+    "Baum ohne Zusatzspalten initialisiert",
+    "Entferntes Widget ohne verspäteten Setter"
+  ]
+}

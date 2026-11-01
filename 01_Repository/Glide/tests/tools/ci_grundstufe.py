@@ -215,16 +215,62 @@ def fremdcode_pruefen():
     return "ausgeführt", "; ".join(berichte)
 
 
+def lieferstand_pruefen(streng=False):
+    differences = lieferstand_abweichungen()
+    if not differences:
+        return "ausgeführt", "07_Python-Versionen ist bytegleich zu src/glide"
+    message = (f"{len(differences)} Abweichungen zwischen src/glide und 07_Python-Versionen: "
+               + ", ".join(differences[:8]) + (" …" if len(differences) > 8 else ""))
+    return (("fehlgeschlagen", message) if streng else ("Hinweis", message
+            + " – zulässig zwischen Prüfkandidat und Auslieferung (abgleich_07.py)"))
+
+
+def datenschutz_pruefen():
+    findings = benutzerpfade()
+    if findings is None:
+        return "Hinweis", "kein Git-Arbeitsstand; versionierte Dateien nicht ermittelbar"
+    if findings:
+        return "fehlgeschlagen", (f"{len(findings)} versionierte Dateien mit Benutzerpfad: "
+            + ", ".join(f"{name} ({match})" for name, match in findings[:5])
+            + ". Pfade durch ~ bzw. %USERPROFILE% ersetzen; Rohprotokolle nicht versionieren")
+    return "ausgeführt", "keine Benutzerpfade in versionierten Textdateien"
+
+
+def ablage_pruefen():
+    entries = ablagegroesse.versionierte_dateien()
+    if entries is None:
+        return "Hinweis", "kein Git-Arbeitsstand; versionierte Dateien nicht ermittelbar"
+    findings = ablagegroesse.befunde(entries, ablagegroesse.aktuelle_version())
+    return ("fehlgeschlagen" if findings else "ausgeführt"), ablagegroesse.zusammenfassung(entries, findings)
+
+
+def synchronisation_pruefen():
+    result = synchronisationswaechter.arbeitsstand_pruefen(ABLAGE)
+    if result is None:
+        return "Hinweis", "kein Git-Arbeitsstand; Dateien nicht ermittelbar"
+    copies, reduced = result
+    findings = ([f"Konfliktkopie {copy} neben {original}" for copy, original in copies]
+                + [f"{path}: {before} → {after} Zeilen ohne Vermerk" for path, before, after in reduced])
+    message = (("; ".join(findings[:6]) + (" …" if len(findings) > 6 else "")) if findings else
+               "keine Synchronisationskopien, kein Hauptdokument ohne Vermerk stark gekürzt")
+    return ("fehlgeschlagen" if findings else "ausgeführt"), message
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--protokoll", type=Path, help="Ordner für Logs und ergebnis.json")
     parser.add_argument("--timeout", type=int, default=600, help="Zeitlimit je Schritt in Sekunden")
+    parser.add_argument("--arbeitsablage", type=Path, help="Kurze lokale Prüfablage außerhalb OneDrive/System-Temp")
     parser.add_argument("--lieferstand-streng", action="store_true",
                         help="Abweichungen zwischen src/glide und 07_Python-Versionen als Fehler werten")
     args = parser.parse_args()
-    logdir = args.protokoll.expanduser().resolve() if args.protokoll else None
-    run = pruefen.Prueflauf(logdir, args.timeout)
+    if args.timeout < 1:
+        parser.error("--timeout muss positiv sein")
+    guard = pruefen.Pruefablauf(REPO, args.arbeitsablage)
+    logdir = args.protokoll.expanduser().resolve() if args.protokoll else guard.root / "protokoll"
+    run = pruefen.Prueflauf(logdir, args.timeout, waechter=guard)
     print(f"Glide-CI-Grundstufe · Python {sys.version.split()[0]} · {sys.platform}", flush=True)
+    print(f"Dauerhafter WA-42-Nachweis: {guard.root}", flush=True)
 
     run.funktion("Syntax", pruefen.syntax_pruefen)
     run.funktion("Versionskonsistenz", pruefen.versionen_pruefen)
@@ -233,80 +279,34 @@ def main():
     run.prozess("Werkzeugtests", [sys.executable, "-B", "-m", "unittest", "discover", "-s", str(REPO / "tests/tools"),
                                   "-p", "test_*.py"])
     run.prozess("Fachlogik-Unit-Tests", [sys.executable, "-B", "-m", "unittest", "discover", "-s", str(REPO / "tests/unit")])
-    # Windows bringt keine IANA-Datenbank mit (3.39.0: 35 Unit-Fehler nur dort).
-    # Ein leerer TZPATH stellt das unter Linux und macOS nach; Glide und seine
-    # Tests müssen mit den mitgelieferten Zeitzonen auskommen.
+    # Zusätzlich die Windows-Situation ohne System-IANA-Daten nachstellen.
     run.prozess("Fachlogik ohne Systemzeitzonen", [sys.executable, "-B", "-m", "unittest", "discover", "-s",
                                                    str(REPO / "tests/unit")], umgebung={"PYTHONTZPATH": ""})
     for name in pruefen.ANALYSEN:
         run.prozess(Path(name).stem, [sys.executable, "-B", str(REPO / "tests/tools" / name)])
-
     run.gui_pruefen()
-    if run.gui_problem:
+    if guard.stopped:
+        run.meldung("Startprobe", "übersprungen", "Prüffolge nach Fehler/Integritätsbefund gestoppt")
+    elif run.gui_problem:
         run.meldung("Startprobe", "fehlgeschlagen", f"nicht ausführbar: {run.gui_problem}")
     else:
         run.prozess("Startprobe", [sys.executable, "-B", "-c", STARTPROBE], gui=True)
-
-    abweichungen = lieferstand_abweichungen()
-    if not abweichungen:
-        run.meldung("Lieferstand", "ausgeführt", "07_Python-Versionen ist bytegleich zu src/glide")
-    else:
-        text = (f"{len(abweichungen)} Abweichungen zwischen src/glide und 07_Python-Versionen: "
-                + ", ".join(abweichungen[:8]) + (" …" if len(abweichungen) > 8 else ""))
-        if args.lieferstand_streng:
-            run.meldung("Lieferstand", "fehlgeschlagen", text)
-        else:
-            run.meldung("Lieferstand", "Hinweis",
-                        text + " – zulässig zwischen Prüfkandidat und Auslieferung (abgleich_07.py)")
-            if os.environ.get("GITHUB_ACTIONS"):
-                print(f"::warning title=Lieferstand::{text}", flush=True)
-
-    status, text = fremdcode_pruefen()
-    run.meldung("Fremdcode", status, text)
-    if status == "Hinweis" and os.environ.get("GITHUB_ACTIONS"):
-        print(f"::warning title=Fremdcode::{text}", flush=True)
-
-    funde = benutzerpfade()
-    if funde is None:
-        run.meldung("Datenschutz", "Hinweis", "kein Git-Arbeitsstand; versionierte Dateien nicht ermittelbar")
-    elif funde:
-        run.meldung("Datenschutz", "fehlgeschlagen",
-                    f"{len(funde)} versionierte Dateien mit Benutzerpfad: "
-                    + ", ".join(f"{datei} ({stelle})" for datei, stelle in funde[:5])
-                    + ". Pfade durch ~ bzw. %USERPROFILE% ersetzen; Rohprotokolle nicht versionieren")
-    else:
-        run.meldung("Datenschutz", "ausgeführt", "keine Benutzerpfade in versionierten Textdateien")
-
-    eintraege = ablagegroesse.versionierte_dateien()
-    if eintraege is None:
-        run.meldung("Ablagegröße", "Hinweis", "kein Git-Arbeitsstand; versionierte Dateien nicht ermittelbar")
-    else:
-        funde = ablagegroesse.befunde(eintraege, ablagegroesse.aktuelle_version())
-        run.meldung("Ablagegröße", "fehlgeschlagen" if funde else "ausgeführt",
-                    ablagegroesse.zusammenfassung(eintraege, funde))
-
-    ergebnis = synchronisationswaechter.arbeitsstand_pruefen(ABLAGE)
-    if ergebnis is None:
-        run.meldung("Synchronisation", "Hinweis", "kein Git-Arbeitsstand; Dateien nicht ermittelbar")
-    else:
-        kopien, geschrumpft = ergebnis
-        befunde = ([f"Konfliktkopie {kopie} neben {original}" for kopie, original in kopien]
-                   + [f"{pfad}: {vorher} → {jetzt} Zeilen ohne Vermerk" for pfad, vorher, jetzt in geschrumpft])
-        run.meldung("Synchronisation", "fehlgeschlagen" if befunde else "ausgeführt",
-                    "; ".join(befunde[:6]) + (" …" if len(befunde) > 6 else "") if befunde else
-                    "keine Synchronisationskopien, kein Hauptdokument ohne Vermerk stark gekürzt")
-
-    fehlgeschlagen = [zeile["schritt"] for zeile in run.results if zeile["status"] == "fehlgeschlagen"]
-    exitcode = 1 if fehlgeschlagen else 0
-    if logdir:
-        logdir.mkdir(parents=True, exist_ok=True)
-        (logdir / "ergebnis.json").write_text(json.dumps({
-            "zeitpunkt": datetime.now().isoformat(timespec="seconds"), "stufe": "CI-Grundstufe",
-            "python": sys.version, "plattform": sys.platform, "exitcode": exitcode,
-            "schritte": run.results}, ensure_ascii=False, indent=2), encoding="utf-8")
-    print("Ergebnis: " + (f"FEHLGESCHLAGEN ({', '.join(fehlgeschlagen)})" if fehlgeschlagen
-                          else "CI-Grundstufe bestanden; Vollprüfung auf dem Referenz-Mac bleibt maßgeblich"),
-          flush=True)
+    for name, action in (("Lieferstand", lambda: lieferstand_pruefen(args.lieferstand_streng)),
+                         ("Fremdcode", fremdcode_pruefen), ("Datenschutz", datenschutz_pruefen),
+                         ("Ablagegröße", ablage_pruefen), ("Synchronisation", synchronisation_pruefen)):
+        run.funktion(name, action)
+        if run.results[-1]["status"] == "Hinweis" and os.environ.get("GITHUB_ACTIONS"):
+            print(f"::warning title={name}::{run.results[-1]['grund']}", flush=True)
+    failed = [row['schritt'] for row in run.results if row['status'] == 'fehlgeschlagen']
+    exitcode = int(bool(failed or guard.stopped))
+    logdir.mkdir(parents=True, exist_ok=True)
+    (logdir / "ergebnis.json").write_text(json.dumps({
+        "zeitpunkt": datetime.now().isoformat(timespec="seconds"), "stufe": "CI-Grundstufe",
+        "python": sys.version, "plattform": sys.platform, "exitcode": exitcode,
+        "pruefablauf": str(guard.root / "pruefablauf.json"), "schritte": run.results},
+        ensure_ascii=False, indent=2), encoding="utf-8")
+    print("Ergebnis: " + (f"FEHLGESCHLAGEN ({', '.join(failed)})" if exitcode else
+          "CI-Grundstufe bestanden; Vollprüfung auf dem Referenz-Mac bleibt maßgeblich"), flush=True)
     return exitcode
 
 

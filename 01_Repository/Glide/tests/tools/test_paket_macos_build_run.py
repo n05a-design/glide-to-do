@@ -36,7 +36,7 @@ class MacBuildRunTests(unittest.TestCase):
 
     def test_existing_source_and_onedrive_destinations_are_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
+            root = Path(directory).resolve()
             repo = root / "repo"
             repo.mkdir()
             for target in (repo, repo / "build", root, root / "OneDrive" / "build"):

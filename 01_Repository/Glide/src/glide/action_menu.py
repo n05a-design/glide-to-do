@@ -35,6 +35,8 @@ NO_COVER_REASON = "Die Seite hat kein Titelbild"
 NO_HEADINGS_REASON = "Die Seite hat noch keine Überschriften"
 EMPTY_REASON = "Keine Einträge vorhanden"
 DEFAULT_REASON = "Gerade nicht verfügbar"
+SIDE_VIEW_REASON = "Zuerst eine Nebenansicht öffnen"
+SIDE_LOOKUP_LABEL = "Markierung in Nebenansicht suchen"
 
 # Reine Platzhalter eines leeren Untermenüs sind keine Aktion und entfallen.
 PLACEHOLDER_LABELS = frozenset({"Keine", "Kein Objekt ausgewählt"})
@@ -78,6 +80,9 @@ def reason_for(label, path, context=None):
     path = tuple(path or ())
     if label in ("Keine", "Kein Objekt ausgewählt"):
         return EMPTY_REASON
+    if label == SIDE_LOOKUP_LABEL:
+        # Lesend, deshalb auch im Schreibschutz; gesperrt nur ohne Nebenansicht oder Markierung.
+        return SELECTION_REASON if context.get("side_view") else SIDE_VIEW_REASON
     if context.get("read_only") and (label in _WRITE_LABELS or label in _LINE_LABELS or
                                       label == "Titelbild entfernen"):
         return READ_ONLY_REASON

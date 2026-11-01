@@ -1,0 +1,17 @@
+{
+  "tested_run": "t1031-164116",
+  "tested_report_sha256": "7cef898783414423b9dff2e67276997ab831994427d4bd9edd5df7e8b5e92669",
+  "checked_inputs": 707,
+  "differences": {},
+  "equal": true,
+  "scope": "Alle ausführbaren Quellen, Tests, Fixtures, Pflege-/Paketwerkzeuge, Ressourcen und Vendor-Dateien in den genannten Eingabewurzeln; VERSION plus mitgefrorene Assets/Workflows. Dokumentfortschreibung separat.",
+  "app_sha256": "1fabf883d14ff7bb576803b90ac565fc18d5fcf32b79a53a9f8ce036de7bbbeb",
+  "later_documentation_changes": {
+    "01_Repository/Glide/packaging/runtime/README.md": {
+      "tested": "98ca0e9934664f64e3882dc20e337a4bc878b93d9dc08bce32428d2c91aea39e",
+      "current": "6d3e9528eb1f894163a5f648123ae632aee27dff0a9ef503412cd0a89ba442ce"
+    }
+  },
+  "unexpected_runtime_test_or_resource_changes": [],
+  "current_runtime_test_resource_equivalent": true
+}

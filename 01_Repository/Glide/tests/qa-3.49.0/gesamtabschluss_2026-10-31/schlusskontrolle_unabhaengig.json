@@ -1,0 +1,38 @@
+{
+  "datum": "2026-10-31",
+  "pruefer": "Claude-Code-Sitzung am MacBook M2 (unabhaengig von Codex)",
+  "ci_grundstufe_streng": {
+    "exitcode": 0,
+    "ausgefuehrt": 19,
+    "hinweise": 0,
+    "lieferstand": "07 bytegleich zu src/glide",
+    "fremdcode": "tkinterdnd2 0.6.3: 116 Dateien bytegleich (mit SSL_CERT_FILE=/etc/ssl/cert.pem)"
+  },
+  "lieferung": {
+    "app_sha256_quelle_und_07": "1fabf883d14ff7bb576803b90ac565fc18d5fcf32b79a53a9f8ce036de7bbbeb",
+    "macos_archiv_sha256": "74dda534ab2e7847ae1ed3d2ace8b2a66d580657bd22adc049f9a14e59fbb36d",
+    "sha256_datei_passt": true,
+    "bundle_glide_input_app_sha256": "1fabf883d14ff7bb576803b90ac565fc18d5fcf32b79a53a9f8ce036de7bbbeb"
+  },
+  "paketprobe_frisch_entpackt": {
+    "codesign_verify_deep_strict": true,
+    "exitcode": 0,
+    "externes_python_gegenprobe_exitcode": 71,
+    "app_version": "3.49.0",
+    "python": "3.14.5",
+    "tcl": "9.1.0",
+    "tk": "9.1.0",
+    "ansichten": 6,
+    "anlegen_abhaken_undo": true,
+    "app_backup_rundlauf": true,
+    "daten_isoliert": true,
+    "ressourcen_sha256_geprueft": 30,
+    "lizenzdateien_sha256_geprueft": 32
+  },
+  "geraeteanleitung": {
+    "werkzeugoptionen_vorhanden": true,
+    "abschnittsanker_geprueft": 93,
+    "anker_fehlend": 0
+  },
+  "hinweis": "paketbau.json nennt startprobe 'noch ausstehend' aus der Bauphase; durch paket_start_lieferung.json und diese Probe ueberholt."
+}

@@ -56,6 +56,7 @@ with tempfile.TemporaryDirectory(prefix="glide-fortsetzung-") as directory:
         assert point["done_at"]
         assert app.history_snapshot() == app.history_snapshot(app.list_comparison())
 
+
         # Gescheiterte Speicherung: keine Cacheübernahme; Retry liest alle Listen.
         point["text"] = "Retry"
         written = Path(mod.SAVE_FILE).read_bytes()
@@ -202,7 +203,128 @@ with tempfile.TemporaryDirectory(prefix="glide-fortsetzung-") as directory:
         assert app.find_item_in_lists(hidden["id"])[0]["description"] == "Autosave-Sicherheitsnetz"
         root.update()
         assert not errors, errors
-        print(f"OK: P08b lokale Liste/Retry/Autosave/Undo/Reload, Aktions-ID/Editorfokus, U03/U07; {differential} Differenzfälle")
+        # WA-36 (31.10.2026): Anlegen, Verschieben, Löschen und weitere Wege nennen
+        # ihre Listen ausdrücklich; unberührte Listen behalten ihren Vergleichsteil.
+        # Am Ende der Suite, damit nachlaufende Hinweise/Animationen die Originalprüfungen nicht berühren.
+        # Laden und Undo haben die Objekte ersetzt: die Listen über ihre IDs auflösen.
+        quelle, ziel, fremd = (next(e for e in app.lists if e["id"] == entries[k]["id"]) for k in (2, 3, 4))
+        app.set_active_list(quelle["id"]); root.update()
+        assert app.save_items(record_activity=False)
+
+        vergleichsklasse = load(args.baseline_app, "glide_fortsetzung_wa36").ListApp if args.baseline_app else None
+
+        def nur_gelesen(erwartet, aktion, text, ereignis=None):
+            alt = app._saved_comparison_parts
+            stand_vorher = app._history_baseline
+            with patch.object(mod.glide_comparison, "compare_lists", wraps=mod.glide_comparison.compare_lists) as build:
+                aktion()
+            assert not errors, errors
+            assert build.call_count == erwartet, (text + ": gelesene Listen", build.call_count, erwartet)
+            assert app._saved_comparison_parts[fremd["id"]] is alt[fremd["id"]], text + ": fremde Liste neu gelesen"
+            assert app.history_snapshot() == app.history_snapshot(app.list_comparison()), text + ": Vollvergleich weicht ab"
+            assert not app.dirty, text
+            ereignisse = app.history_events(stand_vorher, app._history_baseline)
+            if ereignis:
+                assert any(e["action"] == ereignis for e in ereignisse), (text, ereignisse)
+            if vergleichsklasse is not None:
+                # Verlaufsereignisse wie in der ausgelieferten Klasse (WA-36-Abkürzung in history_events).
+                assert object.__new__(vergleichsklasse).history_events(stand_vorher, app._history_baseline) == ereignisse, text
+
+        def anlegen():
+            app.entry.delete(0, "end"); app.entry.insert(0, "WA-36 neu"); app.entry_placeholder_active = False
+            app.add_item(); root.update()
+        nur_gelesen(1, anlegen, "Anlegen", "created")
+        neu = next(item for item in quelle["items"] if item["text"] == "WA-36 neu")
+        nur_gelesen(2, lambda: app.move_items_to_list([neu["id"]], ziel["id"]), "Verschieben", "moved")
+        assert any(item["id"] == neu["id"] for item in ziel["items"])
+
+        def loeschen():
+            alt_id = quelle["items"][0]["id"]
+            app.tree.selection_set(alt_id); app.tree.focus(alt_id); app.delete_item(); root.update()
+            assert app.find_item_in_lists(alt_id) is None
+        nur_gelesen(1, loeschen, "Löschen", "trashed")
+
+        # Weitere Wege mit ausdrücklichen Listen: Sortieren, Gruppe auflösen,
+        # listenübergreifender Zeitplan und Erinnerung (Aufbau außerhalb der Messung).
+        gruppe = app.new_item("Gruppe", kind=app.ITEM_KIND_GROUP, children=[app.new_item("Kind")])
+        quelle["items"][:] = [app.new_item("b"), app.new_item("a"), gruppe]
+        # Zukünftiger Zeitpunkt: Die Hintergrundzustellung darf den Bestand nicht
+        # zeitabhängig zwischen den Prüfungen ändern.
+        erinnerung = app.new_item("Erinnerung", due="2090-09-14", due_time="12:00",
+                                  reminder={"mode": "fixed", "at": "2090-09-14T08:00:00+00:00"})
+        ziel["items"].append(erinnerung)
+        assert app.save_items(record_activity=False); app.set_active_list(quelle["id"]); root.update()
+        nur_gelesen(1, lambda: app.sort_current_list("alpha"), "Sortieren")
+        def aufloesen():
+            app.tree.selection_set(gruppe["id"]); app.tree.focus(gruppe["id"]); app.dissolve_selected_group(); root.update()
+            assert not any(app.is_group_item(item) for item in quelle["items"])
+        nur_gelesen(1, aufloesen, "Gruppe auflösen")
+        nur_gelesen(2, lambda: app.apply_time_plan([(quelle["items"][0], "09:30"), (erinnerung, "10:00")]), "Zeitplan")
+        spaeter = "2090-09-14T10:00:00+00:00"
+        # Erinnerung liegt in der Zielliste; die aktive Liste liest der Vergleich immer mit.
+        nur_gelesen(2, lambda: app.change_reminder(erinnerung["id"], "snooze", spaeter), "Erinnerung")
+        app.undo_last_change(); root.update()
+        assert app.history_snapshot() == app.history_snapshot(app.list_comparison())
+        assert not errors, errors
+        # WA-36 Seitenleiste (01.11.2026): Baumdurchlauf ohne Generator für
+        # kinderlose Punkte, Rohwert-Vorprüfung in Heute-/Labelzählern und
+        # ein Listenzähler je Aufbau. Referenz ist der ungekürzte Durchlauf.
+        def ref_walk(items):
+            for item in items:
+                yield item
+                yield from ref_walk(item.get("children", []))
+        heute_iso = mod.date.today().isoformat()
+        label = app.new_label_object("WA36", label_id="wa36-label")
+        app.labels.append(label)
+        werte = [None, "", "  ", "kein Datum", "2026-13-40", heute_iso, heute_iso + " ", "2000-01-01", "2090-01-01"]
+        def baum(tiefe, n):
+            punkte = []
+            for k in range(n):
+                p = app.new_item(f"WA36 {tiefe}.{k}")
+                p["kind"] = app.ITEM_KINDS[k % len(app.ITEM_KINDS)]
+                p["done"] = k % 5 == 0
+                p["due"] = werte[k % len(werte)]
+                p["planned_date"] = werte[(k * 3) % len(werte)]
+                p["labels"] = [None, [], ["unbekannt"], [label["id"]], [app.SYSTEM_LABEL_LONG]][k % 5]
+                p["children"] = baum(tiefe + 1, 3) if tiefe < 2 and k % 3 == 0 else []
+                punkte.append(p)
+            return punkte
+        # Undo hat die Objekte ersetzt: die Liste über ihre ID auflösen.
+        fremd = next(e for e in app.lists if e["id"] == entries[4]["id"])
+        fremd["items"][:] = baum(0, 12)
+        assert app.save_items(record_activity=False); app.update_sidebar_list(); root.update()
+        planung = app.planning_lists()
+        for entry in app.lists:
+            assert [i["id"] for i in app.walk_items(entry["items"])] == [i["id"] for i in ref_walk(entry["items"])]
+            assert app.count_items(entry["items"]) == sum(1 for i in ref_walk(entry["items"]) if app.is_schedulable_item(i))
+        ref_pool = [i["id"] for e in planung for i in ref_walk(e["items"])
+                    if app.is_schedulable_item(i) and not i.get("done")
+                    and (app.normalize_due(i.get("due")) or app.normalize_due(i.get("planned_date")))]
+        ref_plan = [i["id"] for e in planung for i in ref_walk(e["items"])
+                    if app.is_schedulable_item(i) and app.normalize_due(i.get("planned_date")) == heute_iso]
+        ref_labels = sum(1 for e in planung for i in ref_walk(e["items"]) if app.column_labels(i))
+        with app.render_pass():
+            assert sorted(t[4]["id"] for t in app.today_view_pool(apply_filters=False)) == sorted(ref_pool)
+            assert sorted(t[4]["id"] for t in app.plan_day_entries(apply_filters=False, day=heute_iso)) == sorted(ref_plan)
+            assert app.count_labelled_items() == ref_labels and ref_labels > 0, (app.count_labelled_items(), ref_labels)
+            with patch.object(app, "count_items", wraps=app.count_items) as zaehlen:
+                assert app.list_item_count(fremd) == app.list_item_count(fremd) == sum(
+                    1 for i in ref_walk(fremd["items"]) if app.is_schedulable_item(i))
+                # Rekursive Aufrufe zählen Unterpunkte; die Liste selbst wird einmal gezählt.
+                oben = [c for c in zaehlen.call_args_list if c.args and c.args[0] is fremd["items"]]
+                assert len(oben) == 1, len(oben)
+        zeile = app.get_sidebar_iid_for_row(("list", fremd["id"]))
+        baumansicht = app.get_sidebar_tree_for_iid(zeile)
+        assert f"({app.count_items(fremd['items'])})" in baumansicht.item(zeile, "values"), baumansicht.item(zeile, "values")
+        # Erinnerungsstatus: Vorprüfung auf das Feld; Referenz ohne Abkürzung über alle Arten/Zustände.
+        for punkt in fremd["items"]:
+            punkt["reminder"] = {"mode": "fixed", "at": "2090-01-01T08:00:00+00:00"}
+        assert app.save_items(record_activity=False)
+        jetzt = mod.datetime.now(mod.timezone.utc)
+        ref_erinnerungen = [i["id"] for e in app.planning_lists() for i in ref_walk(e["items"]) if app.reminder_event(i)]
+        assert ref_erinnerungen and sorted(r["item"]["id"] for r in app.reminder_rows(jetzt)) == sorted(ref_erinnerungen)
+        assert not errors, errors
+        print(f"OK: P08b lokale Liste/Retry/Autosave/Undo/Reload, Aktions-ID/Editorfokus, U03/U07, WA-36-Listenumfang/Seitenleiste/Erinnerungen; {differential} Differenzfälle")
     finally:
         app.cancel_pending_callbacks()
         app.release_data_lock()

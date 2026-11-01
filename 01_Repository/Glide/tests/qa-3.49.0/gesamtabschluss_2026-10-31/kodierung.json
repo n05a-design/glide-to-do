@@ -1,0 +1,7 @@
+{
+  "file": "tests/qa-3.49.0/robustheit_2026-10-28/README.md",
+  "scope": "Ausschließlich aus der UTF-8/Windows-1252-/Latin1-Kodierungsfolge rekonstruierte Zeichen. Aussagen, Zahlen und datierte Ergebnisse unverändert.",
+  "before_sha256": "edee61d7b03b167e9d23ace740232863f77abbe5fa41915b9670a79d59f6e765",
+  "after_sha256": "e8297ad6404554ecb1ed7041ee10435ee64accd61a693edff112b76eec09aa93",
+  "replacements": 49
+}

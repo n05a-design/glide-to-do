@@ -1,8 +1,10 @@
 # Design Richtlinien
 
-Stand 28.10.2026 · Glide 3.49.0 · appweiter Gestaltungsvertrag; bestehendes UI-/UX-Paket und fortlaufende Übertragung
+Stand 31.10.2026 · Glide 3.50.0 · appweiter Gestaltungsvertrag; bestehendes UI-/UX-Paket und fortlaufende Übertragung
 
 **Mutationsfortsetzung 29.10.2026:** „Liste leeren“ verwendet für beide bestehenden Bedienwege die vorhandene Bestätigung mit Listenname und vorhandene Warn-/Speicherfehlerrollen; keine zusätzliche Dauerfläche, Farbe oder Symbolrolle. Frische ID-Prüfung nach Dialog, Rückweg über einen Undo-Schritt. Automatisierte App-/Datei-/Fehlernachweise im [Abschlussnachlauf](../tests/qa-3.49.0/abschlussreste_2026-10-29/README.md); native DPI-/Reader-/Menschenabnahme weiterhin offen. Gerätevergleich/Prüfprofil schafft keine neue Produktoberfläche.
+
+**Featurepaket 3.50.0 (31.10.2026):** Kontexte Nebenansicht und Tagesplanung/Startseite. „Treffer …“ neutral in der vorhandenen umbrechenden Navigationszeile, nicht im engen Suchfeld (B15); Menüs nach dem Muster „Abschnitte …“ bzw. „Umwandeln in“ mit ✓-Spalte; „Markierung in Nebenansicht suchen“ als gewöhnlicher Kontextmenüeintrag mit Sperrgrund in den Blockaktionen (D55). Keine neue Dauerleiste oder Farbe. Geprüft mit 82 Knopfprüfungen in drei Größen-/Schrift-/Designkonfigurationen bei 280 px Nebenansicht; Sicht-/Readerabnahme offen. [Nachweis](../tests/qa-3.50.0/featurepaket_2026-10-31/README.md).
 
 **Funktionaler Dreierausbau (28.10.2026):** Bestehende Kontexte Startseite/Tagesplanung/Auswahl/Nebenansicht. „Woche“ neutral in der vorhandenen umbrechenden Tagesnavigation, zusätzliche Aktionen in der vorhandenen durchsuchbaren Aktionsauswahl. Fälligkeit und Aufwand mit ihren vorhandenen Dialogen; keine neue Dauerfläche und kein zweiter Editor. Neue Verknüpfungsaktionen nur bei Schreibbesitz; vorhandene Quellen-/Label-/Wichtigkeitsrollen bleiben. [384 Knopfprüfungen, echte Bedienung und lokale Sichtbelege](../tests/qa-3.49.0/funktionspakete_2026-10-28/README.md); native Reader-/DPI-/Menschenabnahme offen.
 
