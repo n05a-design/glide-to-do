@@ -314,6 +314,30 @@ def section_counts(sections_, positions, order=None):
     return counts
 
 
+def section_step(sections_, position, step, order=None):
+    """Nächster (`step` 1) oder vorheriger (-1) Abschnitt ab einer Stelle; None am Rand.
+
+    Seiten: `position` ist die aktuelle Zeile. Listen: `order` ist die
+    Zeilen-ID-Folge der Anzeige; ohne bekannte Stelle führt „weiter“ zum
+    ersten Abschnitt. Ein Abschnitt auf der Stelle selbst zählt in keine
+    Richtung, damit wiederholtes Drücken weiterspringt.
+    """
+    sections_ = list(sections_ or ())
+    if order is None:
+        rang = position if isinstance(position, int) else 0
+        stellen = [section.get('key') for section in sections_]
+    else:
+        index = {identity: n for n, identity in enumerate(order)}
+        rang = index.get(position, -1)
+        stellen = [index.get(section.get('key'), -1) for section in sections_]
+    gueltig = [(stelle, section) for stelle, section in zip(stellen, sections_)
+               if isinstance(stelle, int) and stelle >= 0]
+    if step > 0:
+        return next((section for stelle, section in gueltig if stelle > rang), None)
+    vorher = [section for stelle, section in gueltig if stelle < rang]
+    return vorher[-1] if vorher else None
+
+
 def overview_label(section, snippet, limit=90):
     """Menüzeile der Trefferübersicht: „Abschnitt · Ausschnitt“, gekürzt."""
     text = f'{section} · {snippet}' if section else (snippet or '')

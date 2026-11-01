@@ -110,6 +110,23 @@ class TimerTest(unittest.TestCase):
         self.assertEqual(f.next_label(None), "Danach keine weitere Aufgabe für heute")
         self.assertTrue(f.next_label("Wort " * 30).endswith("…"))
 
+    def test_more_label_only_beyond_limit(self):
+        self.assertEqual(f.more_label(2), "… und 2 weitere für heute")
+        self.assertEqual(f.more_label(1), "… und 1 weitere für heute")
+        self.assertEqual(f.more_label(0), "")
+        self.assertEqual(f.more_label(-1), "")
+        self.assertEqual(f.more_label(None), "")
+
+    def test_next_label_counts_remaining_tasks(self):
+        self.assertEqual(f.next_label("Angebot", 1), "Als Nächstes: Angebot · danach noch 1 Aufgabe")
+        self.assertEqual(f.next_label("Angebot", 3), "Als Nächstes: Angebot · danach noch 3 Aufgaben")
+        self.assertEqual(f.next_label("Angebot", 0), "Als Nächstes: Angebot")
+        self.assertEqual(f.next_label("Angebot", -2), "Als Nächstes: Angebot")
+        self.assertEqual(f.next_label("Angebot", None), "Als Nächstes: Angebot")
+        self.assertEqual(f.next_label(None, 4), "Danach keine weitere Aufgabe für heute")
+        lang = f.next_label("Wort " * 30, 2)
+        self.assertTrue(lang.endswith("· danach noch 2 Aufgaben") and "…" in lang)
+
     def test_booking_validation(self):
         for value in (None, {}, dict(item_id="a", before=13, after=10),
                       dict(item_id="a", before=True, after=10)):

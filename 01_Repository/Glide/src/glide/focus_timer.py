@@ -49,17 +49,29 @@ def next_candidates(rows, limit=None):
     return [row[2] for row in (order if limit is None else order[:max(0, limit)])]
 
 
+def more_label(count):
+    """Gesperrter Schlusseintrag von „Wechseln zu …“ für Aufgaben jenseits der Grenze; leer ohne Rest."""
+    if not isinstance(count, int) or count <= 0:
+        return ""
+    return f"… und {count} weitere für heute"
+
+
 def switch_label(title, limit=SWITCH_TITLE_LIMIT):
     """Einzeiliger Menütitel; lange Titel enden an der Grenze mit „…“."""
     clean = " ".join(str(title or "").split()) or "Ohne Titel"
     return clean if len(clean) <= limit else clean[:limit - 1].rstrip() + "…"
 
 
-def next_label(title):
-    """Zeile „Als Nächstes“ im Fokusfeld; `None` heißt: keine weitere Aufgabe für heute."""
+def next_label(title, remaining=0):
+    """Zeile „Als Nächstes“ im Fokusfeld; `None` heißt: keine weitere Aufgabe für heute.
+
+    `remaining` zählt die Tagesaufgaben nach der genannten (3.50.0).
+    """
     if title is None:
         return "Danach keine weitere Aufgabe für heute"
-    return "Als Nächstes: " + switch_label(title)
+    rest = remaining if isinstance(remaining, int) and remaining > 0 else 0
+    suffix = "" if not rest else f" · danach noch {rest} Aufgabe{'' if rest == 1 else 'n'}"
+    return "Als Nächstes: " + switch_label(title) + suffix
 
 
 class PendingBookingError(RuntimeError):

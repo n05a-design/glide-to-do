@@ -162,6 +162,23 @@ class TreeTests(unittest.TestCase):
         self.assertEqual(result['zaehlung']['anhangdateien'], 0)
         self.assertTrue(any('Symlink' in v['detail'] for v in result['hinweise']))
 
+    def test_linked_data_root_still_exports(self):
+        link = self.root/'verlinkt'
+        try:link.symlink_to(self.data, target_is_directory=True)
+        except OSError as e:self.skipTest(str(e))
+        result = export.write_tree(self.snapshot, self.root/'ausgabe', link)
+        self.assertEqual(result['zaehlung']['anhangdateien'], 1)
+        self.assertFalse(any(v['art'] == 'anhang' for v in result['hinweise']), result['hinweise'])
+
+    def test_linked_attachment_folder_is_reported(self):
+        (self.root/'extern').mkdir();(self.root/'extern/a.png').write_bytes(b'extern')
+        (self.data/'attachments/a.png').unlink();(self.data/'attachments').rmdir()
+        try:(self.data/'attachments').symlink_to(self.root/'extern', target_is_directory=True)
+        except OSError as e:self.skipTest(str(e))
+        result = self.run_export()
+        self.assertEqual(result['zaehlung']['anhangdateien'], 0)
+        self.assertTrue(any('Symlink' in v['detail'] for v in result['hinweise']))
+
     def test_deep_paths_collisions_and_windows_limit(self):
         self.snapshot['folders'] = [{'id': str(i), 'title': 'Ordner'*20, 'parent_id': str(i-1) if i else None} for i in range(20)]
         self.snapshot['lists'][0]['folder_id'] = '19'

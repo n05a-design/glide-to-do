@@ -75,7 +75,11 @@ CASES = (
      'def _on_mousewheel(self, event, widget, precise=False):\n        return "break"\n        self.note_scrolling()',
      'Scrollereignisse bewegen die lange Prüfansicht nicht'),
     ("datum", "test_planen33313.py",
-     'day = value[0]\n        else:', 'day = self.plan_day()\n        else:',
+     # Kontext bis „if review:“: dieselbe Zeile steht seit 3.47.0 auch im Startseiten-Einplanen.
+     'day = value[0]\n        else:\n            day = shown_day or glide_planning.target_day(choice, date.today(), '
+     'self.settings.get("week_start"))\n        if review:',
+     'day = self.plan_day()\n        else:\n            day = shown_day or glide_planning.target_day(choice, date.today(), '
+     'self.settings.get("week_start"))\n        if review:',
      'assert fresh(a["id"])["planned_date"] == chosen'),
     ("hintergrundvorschau", "test_hintergrund330.py",
      'def hintergrund_sichtbar(*_args):\n            if not backdrop_dirty[0]',

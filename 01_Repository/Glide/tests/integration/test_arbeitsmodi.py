@@ -1369,7 +1369,7 @@ def fall_nebenansicht_navigation(lauf):
     def choose_section(menu, x, y):
         try:
             # Seit 3.50.0 nennt die Abschnittsauswahl bei aktiver Suche die Treffer je Abschnitt.
-            assert menu.entrycget('end', 'label').strip() == section['title'] + ' · 2 Treffer'
+            assert menu.entrycget('end', 'label').lstrip('✓ ') == section['title'] + ' · 2 Treffer'
             menu.invoke('end')
         finally:
             menu.unpost()
@@ -2079,7 +2079,7 @@ def fall_side_trefferuebersicht(lauf):
     abschnitte = []
 
     def abschnitte_lesen(menu, x, y):
-        abschnitte.extend(menu.entrycget(i, 'label').strip() for i in range(menu.index('end') + 1))
+        abschnitte.extend(menu.entrycget(i, 'label').lstrip('✓ ') for i in range(menu.index('end') + 1))
         menu.unpost()
     with patch.object(mod.tk.Menu, 'tk_popup', new=abschnitte_lesen):
         klick(next(w for w in knoepfe(app.side_pane, mod.RoundedButton)
@@ -2427,9 +2427,20 @@ def fall_fokus_wechseln(lauf):
     app.stop_time_tracking()
     # Ohne laufenden Fokus bewirkt ein Wechsel nichts.
     assert app.switch_focus(normal['id']) == 'break' and app.running_timer() is None
+    # Mehr als fünf Kandidaten: fünf wählbar, danach gesperrt die Zahl der übrigen.
+    source['items'].extend(app.new_item(f'Weitere Aufgabe {n}', planned_date=today) for n in range(7))
+    app.clear_render_cache(); assert app.save_items(); idle(lauf)
+    assert app.start_focus(aktuell['id']); idle(lauf)
+    menu = app.build_focus_switch_menu()
+    labels = [menu.entrycget(i, 'label') for i in range(menu.index('end') + 1)]
+    assert len(labels) == 1 + mod.glide_focus.SWITCH_LIMIT + 1, labels
+    assert labels[-1].strip() == '… und 2 weitere für heute' and menu.entrycget('end', 'state') == 'disabled', labels
+    assert all(menu.entrycget(i, 'state') == 'normal' for i in range(1, 1 + mod.glide_focus.SWITCH_LIMIT))
+    menu.destroy()
+    app.stop_time_tracking()
     return ('Fokusfeld „Wechseln zu …“: Knopf öffnet Menü, bis zu fünf Tagesaufgaben in Rangfolge von „Nächste Aufgabe“ '
             'ohne Blockierte/Erledigte/andere Tage, gekürzte Titel, Wechsel bucht Zeit, veraltete Wahl mit Warnung, '
-            'Speicherfehler, leere Wahl')
+            'Speicherfehler, leere Wahl, Zahl der übrigen jenseits der Grenze')
 
 
 def fall_side_suchverlauf(lauf):
@@ -2556,10 +2567,10 @@ def fall_fokus_als_naechstes(lauf):
     assert app.start_focus(aktuell['id']); idle(lauf)
     app.sync_focus_panel(); idle(lauf)
     text = lambda: app.focus_next_label.cget('text')
-    assert text() == 'Als Nächstes: Angebot prüfen', text()
+    assert text() == 'Als Nächstes: Angebot prüfen · danach noch 1 Aufgabe', text()
     assert app.focus_next_label.winfo_viewable()
     # Sekundentakt ohne Bestandsänderung bestimmt nichts neu.
-    with patch.object(app, 'focus_candidate', wraps=app.focus_candidate) as bestimmen:
+    with patch.object(app, 'focus_candidates', wraps=app.focus_candidates) as bestimmen:
         app.sync_focus_panel(); app.update_timer_indicator(); app.sync_focus_panel()
     assert bestimmen.call_count == 0, bestimmen.call_count
     # Bestandsänderung: die wichtigere Aufgabe ist erledigt.
@@ -2579,7 +2590,7 @@ def fall_fokus_als_naechstes(lauf):
     anzahl, befunde = befunde_b15(lauf, 'Fokusfeld Als Nächstes')
     assert anzahl and not befunde, befunde[:4]
     app.stop_time_tracking()
-    return ('Fokusfeld „Als Nächstes: …“: Aufgabe von „Nächste Aufgabe“, folgt Erledigen/Wechsel/Undo, '
+    return ('Fokusfeld „Als Nächstes: …“: Aufgabe von „Nächste Aufgabe“ mit Zahl der übrigen, folgt Erledigen/Wechsel/Undo, '
             'keine Neubestimmung im Sekundentakt, leerer Zustand, Knopfprüfung')
 
 
@@ -2673,6 +2684,94 @@ def fall_home_fokus_laeuft(lauf):
     return 'Kachel „Nächste Aufgabe“: laufender Fokus benannt, „Fokus anzeigen“ öffnet Heute ohne Neustart, danach wieder „Fokus starten“'
 
 
+def fall_side_abschnitte(lauf):
+    """Alt+Pfeil springt in der Nebenansicht zum nächsten/vorherigen Abschnitt, Ränder melden, lesend (01.11.2026)."""
+    app, mod = lauf.app, lauf.mod
+    main, editor = seite_anlegen(lauf, '# Hauptarbeit\n\nOffener Entwurf\n')
+    fuell = lambda name: '\n\n'.join(f'{name} {number}' for number in range(40))
+    other = app.new_page_from_markdown('# Überblick\n\n## Einleitung\n\n' + fuell('Absatz') + '\n\n## Mitte\n\n'
+                                       + fuell('Zeile') + '\n\n## Abschluss\n\nEnde.\n')
+    gruppen = [app.new_item('Vorab'),
+               app.new_item('Planung', kind=app.ITEM_KIND_GROUP, children=[app.new_item('Entwurf')]),
+               app.new_item('Zwischen'),
+               app.new_item('Bau', kind=app.ITEM_KIND_GROUP, children=[app.new_item('Rohbau')])]
+    liste = app.new_list_object('Projektphasen', gruppen)
+    flach = app.new_list_object('Ohne Gliederung', [app.new_item('Einzeln')])
+    app.lists.extend([liste, flach])
+    assert app.save_items()
+    app.set_active_list(main['id']); idle(lauf)
+    editor = app.rich_note_editor
+    draft = editor.text.get('1.0', 'end-1c')
+    model = copy.deepcopy(app.lists)
+    written = Path(mod.SAVE_FILE).read_bytes()
+    depth = len(app.undo_stack)
+
+    def status():
+        return app._side_view_status.cget('text')
+
+    # Seite: Abschnitte über die Einfügemarke, sichtbar angesteuert.
+    assert app.open_side_view(other['id']); idle(lauf)
+    abschnitte = {section['title']: section['key'] for section in mod.glide_side_view.sections(other)}
+    assert list(abschnitte)[-3:] == ['Einleitung', 'Mitte', 'Abschluss'], abschnitte
+    body = app._side_view_body
+    # Ohne sichtbare Einfügemarke zählt die oberste sichtbare Zeile.
+    assert isinstance(body, mod.tk.Text) and body.index('@0,0') == '1.0'
+    vorwaerts = [titel for titel, zeile in abschnitte.items() if zeile > 1]
+    for titel in vorwaerts:
+        taste(body, '<Alt-Down>', lauf)
+        assert status() == f'Abschnitt: {titel}', status()
+        assert body.index('insert') == f'{abschnitte[titel]}.0' and body.bbox('insert'), (titel, body.index('insert'))
+    taste(body, '<Alt-Down>', lauf)
+    assert status() == 'Kein weiterer Abschnitt.' and body.index('insert') == f"{abschnitte['Abschluss']}.0"
+    # „Abschnitte …“ markiert dieselbe Lesestelle mit ✓, nur einmal.
+    menues = []
+
+    def lesen(menu, x, y):
+        menues.append([menu.entrycget(i, 'label') for i in range(menu.index('end') + 1)])
+        menu.unpost()
+    with patch.object(mod.tk.Menu, 'tk_popup', new=lesen):
+        klick(next(w for w in knoepfe(app.side_pane, mod.RoundedButton)
+                   if w.text == mod.RoundedButton.action_text('Abschnitte …')), lauf)
+    markiert = [label for label in menues[-1] if label.startswith('✓ ')]
+    assert len(markiert) == 1 and markiert[0].strip().endswith('Abschluss'), menues[-1]
+    for titel in reversed(list(abschnitte)[:-1]):
+        taste(body, '<Alt-Up>', lauf)
+        assert status() == f'Abschnitt: {titel}', status()
+        assert body.index('insert') == f'{abschnitte[titel]}.0' and body.bbox('insert')
+    taste(body, '<Alt-Up>', lauf)
+    assert status() == 'Kein vorheriger Abschnitt.'
+    # Liste: Gruppen in Anzeigereihenfolge; ohne Fokus führt „weiter“ zur ersten Gruppe.
+    assert app.open_side_view(liste['id']); idle(lauf)
+    baum = seitenbaum(app)
+    assert not baum.focus()
+    erwartet = [gruppen[1]['id'], gruppen[3]['id']]
+    for ziel in erwartet:
+        taste(baum, '<Alt-Down>', lauf)
+        baum = seitenbaum(app)
+        assert baum.focus() == ziel and baum.selection() == (ziel,), (baum.focus(), ziel)
+    taste(baum, '<Alt-Down>', lauf)
+    assert status() == 'Kein weiterer Abschnitt.' and seitenbaum(app).focus() == erwartet[-1]
+    with patch.object(mod.tk.Menu, 'tk_popup', new=lesen):
+        klick(next(w for w in knoepfe(app.side_pane, mod.RoundedButton)
+                   if w.text == mod.RoundedButton.action_text('Abschnitte …')), lauf)
+    assert [label for label in menues[-1] if label.startswith('✓ ')] == ['✓ Bau'], menues[-1]
+    taste(seitenbaum(app), '<Alt-Up>', lauf)
+    assert seitenbaum(app).focus() == erwartet[0] and status() == 'Abschnitt: Planung'
+    taste(seitenbaum(app), '<Alt-Up>', lauf)
+    assert status() == 'Kein vorheriger Abschnitt.' and seitenbaum(app).focus() == erwartet[0]
+    # Ohne Überschriften/Gruppen: Hinweis statt Sprung.
+    assert app.open_side_view(flach['id']); idle(lauf)
+    taste(seitenbaum(app), '<Alt-Down>', lauf)
+    assert status() == 'Diese Ansicht hat keine Abschnitte.'
+    # Lesend: Hauptarbeit, Modell, Datei und Undo unverändert.
+    assert app.active_list_id == main['id'] and app.rich_note_editor is editor
+    assert editor.text.get('1.0', 'end-1c') == draft
+    assert app.lists == model and Path(mod.SAVE_FILE).read_bytes() == written and len(app.undo_stack) == depth
+    app.close_side_view()
+    return ('Nebenansicht Alt+Pfeil runter/hoch: Seite über Einfügemarke und Liste über Gruppen in Anzeigereihenfolge, '
+            'sichtbar angesteuert, ✓ am aktuellen Abschnitt, Ränder und fehlende Abschnitte gemeldet, lesend')
+
+
 FAELLE = ("seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
@@ -2681,7 +2780,7 @@ FAELLE = ("seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "n
           "home_tagesnavigation", "home_mehrfachfelder", "side_verweisnavigation", "dreierpaket_gestaltung",
           "home_wochenwahl", "home_faelligkeit_aufwand", "side_verweisaktionen", "side_trefferuebersicht", "side_nachschlagen", "home_fokusdauer",
           "fokus_wechseln", "side_suchverlauf", "fokus_als_naechstes",
-          "fokus_menue", "home_fokus_laeuft")
+          "fokus_menue", "home_fokus_laeuft", "side_abschnitte")
 
 
 def main():

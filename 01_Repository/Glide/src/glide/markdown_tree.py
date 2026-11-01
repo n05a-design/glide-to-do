@@ -182,7 +182,10 @@ def write_tree(snapshot, target, data_root, *, cancel=None):
                 note('anhang', owner, str(value.get('id')), 'Ungültiger Ablagepfad.')
                 return None
             source = data_root.joinpath(*parts)
-            if any(p.is_symlink() or p.is_junction() for p in (source, *source.parents)):
+            # Gesperrt sind Verknüpfungen innerhalb des Datenordners; der Weg zum
+            # Datenordner selbst darf verlinkt sein (macOS: /var → /private/var).
+            inside = [data_root.joinpath(*parts[:depth]) for depth in range(1, len(parts) + 1)]
+            if any(p.is_symlink() or p.is_junction() for p in inside):
                 note('anhang', owner, str(value.get('id')), 'Symlink/Junction wird nicht verfolgt.')
                 return None
             if not source.is_file():

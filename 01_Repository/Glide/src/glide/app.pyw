@@ -23286,6 +23286,8 @@ class ListApp:
                 button._accessible_name = "Letzte Suchbegriffe der Nebenansicht"
                 glide_core_accessibility.refresh(button)
                 self.add_tooltip(button, "Einen zuletzt genutzten Suchbegriff erneut suchen · im Suchfeld auch Pfeil hoch/runter")
+            elif command == self.show_side_sections:
+                self.add_tooltip(button, "Zu einer Überschrift springen · Alt+Pfeil runter/hoch: nächster/vorheriger Abschnitt")
             row.add(button)
         self._side_search_entry = None
         self._side_search_counter = None
@@ -23483,9 +23485,12 @@ class ListApp:
         identity = entry["id"]
         abschnitte = glide_side_view.sections(entry)
         zaehlung = self.side_section_match_counts(entry, abschnitte)
-        for section, anzahl in zip(abschnitte, zaehlung):
+        # ✓ am Abschnitt der aktuellen Lesestelle, dieselbe Stelle wie Alt+Pfeil (3.50.0).
+        stelle, folge = self.side_view_position()
+        aktuell = glide_side_view.section_counts(abschnitte, [] if stelle is None else [stelle], folge)
+        for section, anzahl, hier in zip(abschnitte, zaehlung, aktuell):
             # Bei aktiver Suche zeigt die Auswahl, wo der Begriff steht (3.50.0).
-            menu.add_command(label="  " * min(section["depth"], 6) + section["title"][:90]
+            menu.add_command(label=("✓ " if hier else "   ") + "  " * min(section["depth"], 6) + section["title"][:90]
                              + (f" · {anzahl} Treffer" if anzahl else ""),
                              command=lambda value=section: self.jump_side_section(identity, value))
         self._item_context_menu = menu
@@ -23507,11 +23512,42 @@ class ListApp:
         if body is not None and body.winfo_exists():
             if isinstance(body, tk.Text):
                 body.see(f"{section['key']}.0")
+                # Die Einfügemarke merkt sich die Stelle für Alt+Pfeil (3.50.0).
+                body.mark_set("insert", f"{section['key']}.0")
             elif body.exists(section['key']):
                 body.selection_set(section['key'])
                 body.focus(section['key'])
                 body.see(section['key'])
         return "break"
+
+    def side_view_position(self):
+        """Lesestelle der Nebenansicht: (Zeile, None) bei Seiten, (Zeilen-ID, Anzeigefolge) bei Listen."""
+        body = getattr(self, "_side_view_body", None)
+        if body is None or not body.winfo_exists():
+            return None, None
+        if isinstance(body, tk.Text):
+            # Sichtbare Einfügemarke (letzter Sprung) vor der obersten sichtbaren Zeile.
+            stelle = body.index("insert") if body.bbox("insert") else body.index("@0,0")
+            return int(stelle.split(".")[0]), None
+        return body.focus() or None, list(body.get_children(""))
+
+    def step_side_section(self, step):
+        """Alt+Pfeil runter/hoch: zum nächsten bzw. vorherigen Abschnitt der Nebenansicht."""
+        entry = self.side_view_entry()
+        body = getattr(self, "_side_view_body", None)
+        if entry is None or body is None or not body.winfo_exists():
+            return "break"
+        abschnitte = glide_side_view.sections(entry)
+        if not abschnitte:
+            self.set_side_view_status("Diese Ansicht hat keine Abschnitte.")
+            return "break"
+        stelle, folge = self.side_view_position()
+        ziel = glide_side_view.section_step(abschnitte, stelle, step, folge)
+        if ziel is None:
+            self.set_side_view_status("Kein weiterer Abschnitt." if step > 0 else "Kein vorheriger Abschnitt.")
+            return "break"
+        self.set_side_view_status(f"Abschnitt: {ziel['title'][:90]}")
+        return self.jump_side_section(entry["id"], ziel)
 
     def build_side_view_shell(self):
         parent = self.content_frame
@@ -23749,6 +23785,8 @@ class ListApp:
                 widget.bind(sequence, self.open_side_search, add="+")
             widget.bind("<Alt-Left>", lambda _event: self.move_side_history(-1), add="+")
             widget.bind("<Alt-Right>", lambda _event: self.move_side_history(1), add="+")
+            widget.bind("<Alt-Down>", lambda _event: self.step_side_section(1), add="+")
+            widget.bind("<Alt-Up>", lambda _event: self.step_side_section(-1), add="+")
 
     def _render_side_view_rows(self, parent, rows, height=None, fill=True):
         theme = self.theme
@@ -56695,8 +56733,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """Bis zu fünf nächste Aufgaben für heute, in der Reihenfolge von „Nächste Aufgabe“."""
         menu = self._new_themed_popup_menu()
         timer = self.running_timer()
-        candidates = (self.focus_candidates(exclude=timer["item_id"], limit=glide_focus.SWITCH_LIMIT)
-                      if timer and timer.get("focus") else [])
+        alle = self.focus_candidates(exclude=timer["item_id"]) if timer and timer.get("focus") else []
+        candidates = alle[:glide_focus.SWITCH_LIMIT]
         if not candidates:
             menu.add_command(label="Keine weitere offene Aufgabe für heute", state="disabled")
             return menu
@@ -56704,6 +56742,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         for item in candidates:
             title = glide_focus.switch_label(self.normalize_item_text(item.get("text", ""), self.ITEM_KIND_TASK))
             menu.add_command(label="   " + title, command=lambda value=item["id"]: self.switch_focus(value))
+        # Jenseits der Grenze nur die Zahl; dieselbe Rangfolge wie „Als Nächstes“ (3.50.0).
+        rest = glide_focus.more_label(len(alle) - len(candidates))
+        if rest:
+            menu.add_command(label="   " + rest, state="disabled")
         return menu
 
     def show_focus_switch_menu(self):
@@ -56787,9 +56829,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         key = (getattr(self, "_data_revision", 0), date.today().isoformat(), timer["item_id"])
         if key != getattr(self, "_focus_next_key", None):
             self._focus_next_key = key
-            following = self.focus_candidate(exclude=timer["item_id"])
+            # Eine Rangfolge für Name und Rest: „danach noch N Aufgaben“ (3.50.0).
+            folgende = self.focus_candidates(exclude=timer["item_id"])
             self.focus_next_label.configure(text=glide_focus.next_label(
-                None if following is None else self.normalize_item_text(following.get("text", ""), self.ITEM_KIND_TASK)))
+                self.normalize_item_text(folgende[0].get("text", ""), self.ITEM_KIND_TASK) if folgende else None,
+                len(folgende) - 1))
 
     def stop_time_tracking_from_header(self):
         minutes = self.stop_time_tracking()
