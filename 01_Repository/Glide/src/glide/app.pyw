@@ -56733,8 +56733,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """Bis zu fünf nächste Aufgaben für heute, in der Reihenfolge von „Nächste Aufgabe“."""
         menu = self._new_themed_popup_menu()
         timer = self.running_timer()
-        candidates = (self.focus_candidates(exclude=timer["item_id"], limit=glide_focus.SWITCH_LIMIT)
-                      if timer and timer.get("focus") else [])
+        alle = self.focus_candidates(exclude=timer["item_id"]) if timer and timer.get("focus") else []
+        candidates = alle[:glide_focus.SWITCH_LIMIT]
         if not candidates:
             menu.add_command(label="Keine weitere offene Aufgabe für heute", state="disabled")
             return menu
@@ -56742,6 +56742,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         for item in candidates:
             title = glide_focus.switch_label(self.normalize_item_text(item.get("text", ""), self.ITEM_KIND_TASK))
             menu.add_command(label="   " + title, command=lambda value=item["id"]: self.switch_focus(value))
+        # Jenseits der Grenze nur die Zahl; dieselbe Rangfolge wie „Als Nächstes“ (3.50.0).
+        rest = glide_focus.more_label(len(alle) - len(candidates))
+        if rest:
+            menu.add_command(label="   " + rest, state="disabled")
         return menu
 
     def show_focus_switch_menu(self):
@@ -56825,9 +56829,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         key = (getattr(self, "_data_revision", 0), date.today().isoformat(), timer["item_id"])
         if key != getattr(self, "_focus_next_key", None):
             self._focus_next_key = key
-            following = self.focus_candidate(exclude=timer["item_id"])
+            # Eine Rangfolge für Name und Rest: „danach noch N Aufgaben“ (3.50.0).
+            folgende = self.focus_candidates(exclude=timer["item_id"])
             self.focus_next_label.configure(text=glide_focus.next_label(
-                None if following is None else self.normalize_item_text(following.get("text", ""), self.ITEM_KIND_TASK)))
+                self.normalize_item_text(folgende[0].get("text", ""), self.ITEM_KIND_TASK) if folgende else None,
+                len(folgende) - 1))
 
     def stop_time_tracking_from_header(self):
         minutes = self.stop_time_tracking()

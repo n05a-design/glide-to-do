@@ -2427,9 +2427,20 @@ def fall_fokus_wechseln(lauf):
     app.stop_time_tracking()
     # Ohne laufenden Fokus bewirkt ein Wechsel nichts.
     assert app.switch_focus(normal['id']) == 'break' and app.running_timer() is None
+    # Mehr als fünf Kandidaten: fünf wählbar, danach gesperrt die Zahl der übrigen.
+    source['items'].extend(app.new_item(f'Weitere Aufgabe {n}', planned_date=today) for n in range(7))
+    app.clear_render_cache(); assert app.save_items(); idle(lauf)
+    assert app.start_focus(aktuell['id']); idle(lauf)
+    menu = app.build_focus_switch_menu()
+    labels = [menu.entrycget(i, 'label') for i in range(menu.index('end') + 1)]
+    assert len(labels) == 1 + mod.glide_focus.SWITCH_LIMIT + 1, labels
+    assert labels[-1].strip() == '… und 2 weitere für heute' and menu.entrycget('end', 'state') == 'disabled', labels
+    assert all(menu.entrycget(i, 'state') == 'normal' for i in range(1, 1 + mod.glide_focus.SWITCH_LIMIT))
+    menu.destroy()
+    app.stop_time_tracking()
     return ('Fokusfeld „Wechseln zu …“: Knopf öffnet Menü, bis zu fünf Tagesaufgaben in Rangfolge von „Nächste Aufgabe“ '
             'ohne Blockierte/Erledigte/andere Tage, gekürzte Titel, Wechsel bucht Zeit, veraltete Wahl mit Warnung, '
-            'Speicherfehler, leere Wahl')
+            'Speicherfehler, leere Wahl, Zahl der übrigen jenseits der Grenze')
 
 
 def fall_side_suchverlauf(lauf):
@@ -2556,10 +2567,10 @@ def fall_fokus_als_naechstes(lauf):
     assert app.start_focus(aktuell['id']); idle(lauf)
     app.sync_focus_panel(); idle(lauf)
     text = lambda: app.focus_next_label.cget('text')
-    assert text() == 'Als Nächstes: Angebot prüfen', text()
+    assert text() == 'Als Nächstes: Angebot prüfen · danach noch 1 Aufgabe', text()
     assert app.focus_next_label.winfo_viewable()
     # Sekundentakt ohne Bestandsänderung bestimmt nichts neu.
-    with patch.object(app, 'focus_candidate', wraps=app.focus_candidate) as bestimmen:
+    with patch.object(app, 'focus_candidates', wraps=app.focus_candidates) as bestimmen:
         app.sync_focus_panel(); app.update_timer_indicator(); app.sync_focus_panel()
     assert bestimmen.call_count == 0, bestimmen.call_count
     # Bestandsänderung: die wichtigere Aufgabe ist erledigt.
@@ -2579,7 +2590,7 @@ def fall_fokus_als_naechstes(lauf):
     anzahl, befunde = befunde_b15(lauf, 'Fokusfeld Als Nächstes')
     assert anzahl and not befunde, befunde[:4]
     app.stop_time_tracking()
-    return ('Fokusfeld „Als Nächstes: …“: Aufgabe von „Nächste Aufgabe“, folgt Erledigen/Wechsel/Undo, '
+    return ('Fokusfeld „Als Nächstes: …“: Aufgabe von „Nächste Aufgabe“ mit Zahl der übrigen, folgt Erledigen/Wechsel/Undo, '
             'keine Neubestimmung im Sekundentakt, leerer Zustand, Knopfprüfung')
 
 

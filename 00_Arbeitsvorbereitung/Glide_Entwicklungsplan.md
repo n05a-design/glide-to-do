@@ -1888,8 +1888,8 @@ Verbindliche Vertiefung: [Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.
 | Trefferübersicht | „Treffer …“ bei offener Suche: Abschnitt · Ausschnitt je Fundstelle, höchstens 50, Ansteuern über den Suchweg; „Abschnitte …“ mit Trefferzahl je Abschnitt | lesend, veraltete Einträge wirkungslos |
 | Markierung nachschlagen | Kontextmenü/Blockaktionen von Seiten und Notizen öffnen die Nebenansichtssuche mit dem markierten Begriff; Aufgaben-Kontextmenü „Titel in Nebenansicht suchen“ | lesend auch im Schreibschutz; Sperrgründe |
 | Fokusdauer | „Fokus für“ 15/25/50 Minuten im Mehr-Menü, Wahl wird Vorgabe; Aufwand 5–180 Minuten nur für die Sitzung; Intervall je Sitzung; Fokusstart auch im Aufgaben-Kontextmenü; Fokusfeld „+5 Minuten“ | additive Einstellung, ältere Fassungen 25 Minuten |
-| Wechseln zu … (01.11.) | Fokusfeld: bis zu fünf nächste Tagesaufgaben in der Rangfolge von „Nächste Aufgabe“; Wahl bucht und fokussiert | veraltete Wahl wirkungslos mit Hinweis |
-| Als Nächstes (01.11.) | Fokusfeld nennt die Aufgabe, die „Nächste Aufgabe“ wählen würde | neu bestimmt nur bei Bestandsänderung/Tageswechsel |
+| Wechseln zu … (01.11.) | Fokusfeld: bis zu fünf nächste Tagesaufgaben in der Rangfolge von „Nächste Aufgabe“, darüber hinaus deren Zahl; Wahl bucht und fokussiert | veraltete Wahl wirkungslos mit Hinweis |
+| Als Nächstes (01.11.) | Fokusfeld nennt die Aufgabe, die „Nächste Aufgabe“ wählen würde, und die Zahl der übrigen Tagesaufgaben | neu bestimmt nur bei Bestandsänderung/Tageswechsel |
 | Fokusbefehle im Menü (01.11.) | Pause, +5 Minuten, Wechseln und Beenden unter „Ansichten“ und in der Aktionsauswahl | Hinweis ohne laufende Sitzung |
 | Kachel bei laufendem Fokus (01.11.) | „Nächste Aufgabe“ nennt laufenden Fokus, Knopf „Fokus anzeigen“ | kein zweiter Start |
 | Letzte Suchen … (01.11.) | Nebenansicht: bis zu acht zuletzt genutzte Suchbegriffe mit Treffer, Wahl sucht erneut; Pfeil hoch/runter im Suchfeld, „Liste leeren“ | flüchtig je Datenordner, lesend, nicht beim Tippen |
