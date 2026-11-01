@@ -79,6 +79,8 @@ Alle folgenden Pfade sind relativ zum Projekt, außer den ausdrücklich absolute
 | Vollständiger Datei-/Dokumentabgleich | [Audit](../01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md) mit Inventar/Hashes, Register, Versionen, Links, Syntax/JSON, Lieferarchiven und offenen Ablagepunkten; keine neuen Appprüfungen |
 | Gesonderter venv-Befund | Im neuesten Nachweis: große Daten-/40-Runden-Phase passiert, danach `PermissionError` beim Dateilesen nach hartem Schreiberabbruch (Originalsuite Zeile 282). Kein nativer WA-41-Nachweis, keine bestätigte Reparatur; eigener Dateizugriffsbefund unter WA-42 weiter einordnen. Venv-Ressourcenzähler erfassten nur den Launcher. |
 
+**Git-Stand 01.11.2026:** Auf Nutzerauftrag „bitte einen Push und alles comitten“ Commit `8601a05` (3.49.0-Lieferung, Featurepaket 3.50.0, WA-36-Seitenleiste, Ablagekürzung) auf `codex/glide-3.47-folgepakete` und zu `origin` gepusht; Basis `577e37c` ist über PR #45 bereits in `main`. Kein neuer PR, kein Merge. Lokale Reste unter `tests/qa-3.43.1/` (`*.local`, `laeufe/`) bewusst nicht versioniert.
+
 **Git-Stand 29.10.2026:** Auf Nutzerauftrag „alle Änderungen commiten“ nach grüner CI-Grundstufe lokal committet: Zweig `codex/glide-3.47-folgepakete`, Commit `27a2b27` auf der 3.47.0-Basis `2b1ee0f`, mit den 3.48.0-/3.49.0-Änderungen einschließlich Tests, Fixtures, Dokumenten und beabsichtigter Aufbewahrungslöschungen. **Nicht gepusht**, kein Merge. Rohlogs, `13_TK-Test-Umgebung` und `lokale_belege` bleiben Git-ausgeschlossen und reisen nur über OneDrive. Eine Prüfkopie aus `2b1ee0f` allein ist weiterhin nicht der getestete 3.48.0-Stand.
 
 **Bisher verwendete Laufzeiten:**
