@@ -270,6 +270,11 @@ def check(fixture, images=None, restart_dir=None):
             with zipfile.ZipFile(roundtrip) as archive:
                 assert archive.testzip() is None
             assert not errors, errors
+            # Regulärer Sitzungsabschluss vor dem Neustart im zweiten Prozess (§21.34):
+            # Ohne ihn erkennt der Kindprozess den noch lebenden Vorgänger und startet
+            # korrekt geschützt mit leerem Bestand.
+            getattr(app, "finish_recovery_session", lambda: None)()
+            app.release_data_lock()
             root.destroy()
             root = None
             child = subprocess.run([sys.executable,"-B",__file__,"--fixture",str(fixture),"--neustart",temporary],

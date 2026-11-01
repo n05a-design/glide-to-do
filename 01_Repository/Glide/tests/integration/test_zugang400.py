@@ -153,6 +153,8 @@ def run(app_path, report=None, *, native=False):
             assert not checkbox._accessible_variable.get()
             depth = len(app.undo_stack)
             checkbox.focus_force()
+            pump()
+            assert root.focus_get() is checkbox, 'Checkbox muss vor der Tastenaktion den Fokus haben'
             checkbox.event_generate('<space>')
             pump()
             assert fresh()['checklist'][0]['done'] and len(app.undo_stack) == depth+1
@@ -274,7 +276,13 @@ def run(app_path, report=None, *, native=False):
                 assert app.open_task_inspector(identity)
                 pump()
                 assert old.closed and old.job is None and old.command is None
-                assert not root.tk.call('info', 'commands', command)
+                # tkinter benennt Kommandos nach id(Funktion): Nach der Freigabe darf eine neue
+                # Bindung des Neuaufbaus denselben Namen erhalten (Gesamtlauf 01.11.2026). Bestehen
+                # darf der Name deshalb nur, wenn ihn eine aktuelle, offene Bindung trägt.
+                lebend = {getattr(getattr(w, '_glide_accessibility', None), 'command', None)
+                          for w in app.iter_descendants(root)
+                          if not getattr(getattr(w, '_glide_accessibility', None), 'closed', True)}
+                assert not root.tk.call('info', 'commands', command) or command in lebend, command
             checks.append('Ausgeblendeter Inspektor verweigert Aktionen; Neuaufbau gibt alte Bindungen, Aufträge und Tcl-Kommandos frei')
             app.close_task_inspector(discard=True)
             app.settings['ui_font_size'] = 'gross'

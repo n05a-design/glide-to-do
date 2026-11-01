@@ -8,7 +8,7 @@ import tempfile
 import traceback
 from unittest.mock import patch
 
-from test_mutationsreste import REPO, Lauf, seed
+from test_mutationsreste import REPO, Lauf, seed, hauptdateifehler
 
 
 def leeren(app, entry, active):
@@ -106,7 +106,7 @@ def fall_speicherfehler(run):
         entry, done, opened = seed(run)
         app = run.app
         disk = run.datei()
-        with patch.object(app, 'write_json_atomic', side_effect=OSError('künstlicher Schreibfehler')):
+        with hauptdateifehler(run):
             leeren(app, entry, active)
         assert run.datei() == disk and app.dirty and len(app.undo_stack) == 1, {
             'active': active, 'file_equal': run.datei() == disk, 'dirty': app.dirty,

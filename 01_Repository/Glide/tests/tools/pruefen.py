@@ -324,6 +324,11 @@ class Prueflauf:
 
     def meldung(self, name, state, reason):
         self.results.append({"schritt": name, "status": state, "grund": reason})
+        if state == "fehlgeschlagen" and self.waechter:
+            self.waechter.stopped = True
+            self.waechter.report["stopped"] = True
+            self.waechter.report["reported_failure"] = {"step": name, "reason": reason}
+            self.waechter.save()
         print(f"[{state}] {name}: {reason}", flush=True)
 
     def funktion(self, name, action):
@@ -331,18 +336,20 @@ class Prueflauf:
             self.meldung(name, "übersprungen", "Prüffolge nach Fehler/Integritätsbefund gestoppt")
             return False
         try:
-            reason = action()
+            result = action()
+            state, reason = result if isinstance(result, tuple) and len(result) == 2 else ("ausgeführt", result)
         except (OSError, ValueError, SyntaxError, KeyError, zipfile.BadZipFile) as exc:
             if self.waechter:
                 self.waechter.after(ok=False, error=type(exc).__name__)
             self.meldung(name, "fehlgeschlagen", str(exc))
             return False
         else:
-            if self.waechter and not self.waechter.after(ok=True):
+            ok = state != "fehlgeschlagen"
+            if self.waechter and not self.waechter.after(ok=ok) and ok:
                 self.meldung(name, "fehlgeschlagen", "Eingabebestand während des Falls verändert")
                 return False
-            self.meldung(name, "ausgeführt", reason)
-            return True
+            self.meldung(name, state, reason)
+            return ok
 
     def prozess(self, name, command, gui=False, umgebung=None):
         if self.waechter and self.waechter.stopped:

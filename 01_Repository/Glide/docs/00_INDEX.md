@@ -1,6 +1,8 @@
 # Dokumentationsindex
 
-Stand 29.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2
+Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2
+
+**Abschlussfortsetzung 31.10.2026:** Python/Showcase und eigenständiges macOS-arm64-Paket 3.49.0 geliefert, Windows-Paket weiterhin 3.45.0. Native Tk-9.1-Matrix: 126 Schritte einschließlich aller 108 Integrationssuiten grün; Programm-, Test-, Fixture- und Ressourcenstand entsprechen dem eingefrorenen Nachweis; anschließende Anleitungspflege separat geprüft. Neue Grundstufe mit 235 Werkzeugtests und zweimal 1.082 Fachtests grün. 56 Mutationsfälle und zwölf native Accessibility-Proben grün. WA-41A/B, Windows-/Linux-Endmatrix, echte Readerketten, übrige appweite Architektur-/Performanceumfänge und Menschenabnahme bleiben offen. [Prüf- und Liefernachweis](../tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md), [aktueller Rest in §21.37](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2137-abschlussfortsetzung-mutationen-prüfablauf-tk-91-und-lieferung). Frühere datierte Absätze bewahren ihren damaligen Stand.
 
 **Lokaler Standabgleich 29.10.2026:** [Dokument-/Dateinachweis](../tests/qa-3.49.0/dokumentabgleich_2026-10-29/README.md); [Abnahmebericht zum 28.10.2026](../tests/qa-3.49.0/abnahme_2026-10-28/README.md) mit weiter offenen Funktions-/Liefer-/Abnahmetoren.
 

@@ -1,0 +1,223 @@
+{
+  "app_sha256": "1fabf883d14ff7bb576803b90ac565fc18d5fcf32b79a53a9f8ce036de7bbbeb",
+  "scope": "AST-Inventar direkter self.save_items-Aufrufe in ListApp; keine Vollständigkeitsbehauptung für indirekte Aufrufe/andere Speicher-APIs oder bloße Fachlogik.",
+  "methods": [
+    {
+      "method": "__init__",
+      "line": 16908,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "change_data_folder",
+      "line": 19069,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "retry_storage",
+      "line": 19431,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "migrate_today_plan_setting",
+      "line": 36152,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "_close_after_confirmation",
+      "line": 43737,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "load_items",
+      "line": 45345,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "present_loaded_dataset",
+      "line": 45405,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "migrate_on_start",
+      "line": 45539,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "show_title_clip_notice",
+      "line": 45937,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "record_data_operation",
+      "line": 46220,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "clear_history",
+      "line": 46362,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "autosave_tick",
+      "line": 46526,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "store_rich_note",
+      "line": 47870,
+      "snapshot": false,
+      "shared_frame": [
+        "sidebar_change"
+      ],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "mark_page_task_change",
+      "line": 48169,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "sync_rich_note_view",
+      "line": 48851,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "store_drawing",
+      "line": 49832,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "item_change",
+      "line": 53593,
+      "snapshot": true,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "sidebar_change",
+      "line": 53684,
+      "snapshot": true,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "_apply_snapshot",
+      "line": 53821,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "paste_into_entry",
+      "line": 54418,
+      "snapshot": true,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "recover_time_booking",
+      "line": 56257,
+      "snapshot": false,
+      "shared_frame": [
+        "item_change"
+      ],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "import_txt_as_new_lists",
+      "line": 57454,
+      "snapshot": true,
+      "shared_frame": [],
+      "checkpoint_rollback": true
+    },
+    {
+      "method": "import_csv_table",
+      "line": 58296,
+      "snapshot": true,
+      "shared_frame": [],
+      "checkpoint_rollback": true
+    },
+    {
+      "method": "apply_exchange_payload",
+      "line": 58835,
+      "snapshot": true,
+      "shared_frame": [],
+      "checkpoint_rollback": true
+    },
+    {
+      "method": "apply_exchange_patch",
+      "line": 59569,
+      "snapshot": false,
+      "shared_frame": [
+        "item_change"
+      ],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "import_notion_archive",
+      "line": 59857,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "restore_page_from_backup",
+      "line": 59990,
+      "snapshot": false,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "import_ics_events",
+      "line": 62255,
+      "snapshot": true,
+      "shared_frame": [],
+      "checkpoint_rollback": true
+    },
+    {
+      "method": "import_full_backup",
+      "line": 62803,
+      "snapshot": true,
+      "shared_frame": [],
+      "checkpoint_rollback": false
+    },
+    {
+      "method": "import_from_txt",
+      "line": 63125,
+      "snapshot": true,
+      "shared_frame": [],
+      "checkpoint_rollback": true
+    }
+  ],
+  "review": "Direkte Snapshot-/Save-Wege: Rahmen selbst; geprüfter mehrzeiliger Paste-Rückweg; CSV/ICS/TXT/Austausch-Rücksetzpunkte; vollständiger Backuprestore mit eigener Datei-/Anhangs-/Einstellungs-Transaktion. Weitere direkte Save-Aufrufe gehören zu Start/Laden/Migration, Recovery, Historie, Autosave, Rich-Note-/Zeichnungs-Editorübernahme, Snapshotanwendung, Notionimport und Seitenrestore. Kein pauschales Wrapping dieser bestehenden Transaktionen."
+}

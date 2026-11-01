@@ -1,12 +1,12 @@
 # Veröffentlichung – Glide
 
-Stand 29.10.2026 · Glide 3.49.0 · Quellstand 3.49.0, native Pakete 3.45.0, keine öffentliche Veröffentlichung · Aufgabenformat 26
+Stand 31.10.2026 · Glide 3.50.0 · Quelle 3.50.0; Python/macOS 3.49.0, Windows-Paket 3.45.0 · keine öffentliche Veröffentlichung · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
-**Aktueller Entwicklungsstand 3.49.0:** Prüfabläufe, abgesicherter Wiederanlauf und lokale Diagnose; Aufgabenformat 26. [Gezielte Prüfung und Liefergrenzen](../tests/qa-3.49.0/robustheit_2026-10-28/README.md). Python/Showcase bleiben 3.47.0, eigenständige Pakete 3.45.0. WA-41, breite/native Matrix und menschliche Releasefreigabe sind offen; kein neuer Gittransport aus dieser Featurefortsetzung.
+**Lieferstand 3.49.0 (31.10.2026; Quelle inzwischen 3.50.0, nicht geliefert):** Python/Showcase und eigenständiges Mac-arm64-Paket geliefert. Der Mac-Bau verwendet die eigene Tcl/Tk-9.1-Laufzeit. Modul-, Datei- und Lizenzinventar, Ad-hoc-Signatur sowie isolierter Start direkt aus der Lieferung sind geprüft. Windows-Paket bleibt 3.45.0. Native Mac-Matrix mit allen 108 Suiten grün, neue Windows-/Linux-Endmatrix und Reader-/Menschenfreigaben fehlen. WA-41 und übrige dokumentierte Tore bleiben offen, keine öffentliche Veröffentlichung oder neuer Gittransport. [Prüf- und Liefernachweis](../tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md).
 
 **Vorheriger vollständiger Paketlieferstand 3.45.0 (26.10.2026):** Python-Fassung bytegleich, Windows-Paket und natives Mac-arm64-Paket neu gebaut und startgeprüft; Windows-Vollprüfung mit allen 104 Suiten grün. Mac-Ad-hoc-Signatur und isolierter Macstart grün. [Liefernachweis](../tests/qa-3.45.0/paketabschluss_2026-10-26/README.md). Mac-/Linux-Vollmatrix und menschliche Releaseabnahme bleiben getrennt offen; die folgenden Haken bezeichnen den historischen Vollabschluss 3.42.0.
 
@@ -56,7 +56,7 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 
 ## GitHub-Auftritt
 
-Lesender Neuabgleich am 18.10.2026: Repository öffentlich, Standardzweig `main`, Beschreibung weiterhin wie in der historischen Tabelle, keine Homepage/Topics, Issues/Wiki/Projects an, Pages/Discussions aus; keine Releases oder Tags. CodeQL-Standardeinrichtung hat für `9ec474b` einen erfolgreichen dynamischen Lauf erzeugt; der seit 01.10.2026 deaktivierte eigene Workflow und die frühere Aussage zur KI-Prüfung sind davon zu trennen. Folge laut [Analyse §13.12](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1312-sicherheits--und-architekturgutachten-vom-25102026): Nur der eigene Workflow spiegelt `.pyw` für den Python-Extraktor; die Standardeinrichtung analysiert die Hauptdatei `app.pyw` voraussichtlich nicht (Inhaberpunkt I12). Die Glide-Gesamtprüfung für diesen neueren FP-01-Kandidaten war beim ersten Abruf noch im Lauf; der Abschlussabruf bestätigt Lauf 39075284901 grün (Grundstufe, Linux-/Windows-Vollprüfung, Windows-Paketjob; spezielle Readerjobs ausgelassen). [Bereinigter API-Snapshot](../tests/qa-3.43.1/standanalyse_2026-10-18/github_auftritt.json), [laufende Prüfung](https://github.com/n05a-design/glide-to-do/actions/runs/39075284901). Einstellungen wurden nicht verändert. Die nachstehende Tabelle bleibt ein datierter älterer Befund; I11 enthält Vorschläge, keine Zustimmung.
+Lesender Neuabgleich am 18.10.2026: Repository öffentlich, Standardzweig `main`, Beschreibung weiterhin wie in der historischen Tabelle, keine Homepage/Topics, Issues/Wiki/Projects an, Pages/Discussions aus; keine Releases oder Tags. CodeQL-Standardeinrichtung hat für `9ec474b` einen erfolgreichen dynamischen Lauf erzeugt; der seit 01.10.2026 deaktivierte eigene Workflow und die frühere Aussage zur KI-Prüfung sind davon zu trennen. Folge laut [Analyse §13.12](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1312-sicherheits--und-architekturgutachten-vom-25102026): Nur der eigene Workflow spiegelt `.pyw` für den Python-Extraktor; die Standardeinrichtung analysiert die Hauptdatei `app.pyw` voraussichtlich nicht (Inhaberpunkt I12). Die Glide-Gesamtprüfung für diesen neueren FP-01-Kandidaten war beim ersten Abruf noch im Lauf; der Abschlussabruf bestätigt Lauf 39075284901 grün (Grundstufe, Linux-/Windows-Vollprüfung, Windows-Paketjob; spezielle Readerjobs ausgelassen). [Bereinigter API-Snapshot](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/github_auftritt.json), [laufende Prüfung](https://github.com/n05a-design/glide-to-do/actions/runs/39075284901). Einstellungen wurden nicht verändert. Die nachstehende Tabelle bleibt ein datierter älterer Befund; I11 enthält Vorschläge, keine Zustimmung.
 
 Stand am 06.10.2026, über die GitHub-Schnittstelle abgerufen:
 
@@ -149,3 +149,21 @@ Technischer Entwurf zur gelieferten Basis 3.42.0, keine Veröffentlichungsfreiga
 16. Pixel-Bildfolgen und Animationsvorschau innerhalb der Pixel-Werkstatt.
 
 **Daten und Grenzen für Store-Texte:** Datenordner frei wählbar, auch synchronisiert; Glide synchronisiert nicht selbst, Fremdbelegung führt zum Schreibschutz. Ein Bestand aus einer neueren Version öffnet schreibgeschützt; **Glide 3.29 und älter nach der Umstellung nicht mehr starten**. Erinnerungen und Systemmitteilungen nur bei laufender App. Schriften DejaVu Sans und Pixelify Sans (SIL OFL 1.1) mit Lizenztexten.
+
+## Windows-Entwicklungsbau auf eigenem Gerät (3.49.0)
+
+Nach grüner Windows-Matrix und mit der [eigenen geprüften Tcl/Tk-9.1-Runtime](../packaging/runtime/README.md#eigene-prüfgeräte--bau-und-auswahl-der-runtime) aus `01_Repository/Glide`. Die Konsole verwendet dieselbe reguläre x64-Python-Patchversion wie beim Runtimebau. Neue Zielordner, keine vorhandene Lieferung überschreiben:
+
+```powershell
+python -B -m venv C:\gq\bau349-venv
+$PythonGlideBau = 'C:\gq\bau349-venv\Scripts\python.exe'
+$env:PYTHONPATH = 'C:\gq\runtime91\python-extension'
+& $PythonGlideBau -B -m pip install -r requirements/build-windows.txt
+& $PythonGlideBau -B packaging/paket/lizenzen_vorbereiten_windows.py --quelle src/glide --repo . --ziel C:/gq/p349/lizenzen --runtime-bau C:/gq/runtime91/runtime-bau.json
+& $PythonGlideBau -B packaging/paket/baue_paket.py --quelle src/glide --version 3.49.0 --ziel C:/gq/p349/bau --plattform windows-x64 --lizenzen C:/gq/p349/lizenzen --runtime-bau C:/gq/runtime91/runtime-bau.json
+& 'C:\gq\p349\bau\dist\Glide\Glide.exe' --paket-pruefen C:/gq/p349/start.json
+```
+
+Jeden Aufruf nur nach Exitcode 0 des vorherigen ausführen. Die Paketprobe isoliert ihre synthetischen Nutzdaten. `runtime-bau.json`, `bau-ergebnis.json`, PE-/Lizenzinventar, `start.json` und alle Bau-/Startlogs mitgeben. Das Artefakt bleibt bis zur Auswertung Entwicklungsbau, keine öffentliche Windows-Signatur oder Menschenfreigabe.
+
+Dieser normale Start auf dem eigenen Gerät ersetzt die ausdrücklich an Hosted-CI gebundene externe Python-/Quellen-ACL-Isolationsprobe **nicht**. `pruefe_start_windows.py` und `windows_isolation.plan` lassen persönliche Installationen dafür nicht zu. Diese Grenze bleibt bestehen; keine fremden oder eigenen Inhaberinstallationen für eine Prüfung sperren und keine Hosted-Marker vortäuschen. Die aktuelle bereits geprüfte Mac-Lieferung und die frühere Windows-Lieferung bleiben bis zum tatsächlichen Windows-Abgleich erhalten.

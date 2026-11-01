@@ -1,0 +1,13 @@
+{
+  "exitcode": 1,
+  "checks": [
+    "Echte Erfassung mit Enter: genau eine Aufgabe; Eingabe und Suche eindeutig benannt",
+    "Suche und echte Zeilenauswahl: aktueller Aufgabentext, Status und getrennte Datumsarten",
+    "Strg+Tab verlässt Aufgaben-/Listenbaum vorwärts und zurück ohne Daten-/Undoänderung; Tab-Einrücken bleibt erhalten",
+    "Heute-Planungsaktion und gemeinsamer Inspektor: Fälligkeit getrennt, Unicode/Absätze gespeichert"
+  ],
+  "fehler": "AssertionError",
+  "ort": "test_zugang400.py:158",
+  "callback_errors": [],
+  "app_sha256": "42047d9f0d827d0f67f38c9def0611fd801317150be46605e3d9e45821eb1835"
+}

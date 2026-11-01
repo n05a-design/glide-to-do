@@ -33,6 +33,57 @@ class NavigationTests(unittest.TestCase):
         self.assertEqual(side_view.match_index(0, 3, -1), 2)
         self.assertEqual(side_view.match_index(0, 0), -1)
 
+    def test_match_snippet_is_one_line_with_line_number(self):
+        text = 'Erste Zeile\nZweite mit Straße und\n\ufffc Bild danach'
+        start = text.index('Straße')
+        line, snippet = side_view.match_snippet(text, start, start + 6, width=10)
+        self.assertEqual(line, 2)
+        self.assertNotIn('\n', snippet)
+        self.assertTrue(snippet.startswith('…') and snippet.endswith('…'))
+        self.assertIn('Straße', snippet)
+        self.assertEqual(side_view.match_snippet('kurz', 0, 4), (1, 'kurz'))
+        self.assertEqual(side_view.match_snippet('kurz', 3, 9), (0, ''))
+        self.assertNotIn('\ufffc', side_view.match_snippet(text, len(text) - 5, len(text), width=40)[1])
+
+    def test_section_at_for_pages_and_lists(self):
+        seite = [dict(key=2, title='Einleitung', depth=0), dict(key=6, title='Ergebnis', depth=1)]
+        self.assertEqual(side_view.section_at(seite, 1), '')
+        self.assertEqual(side_view.section_at(seite, 2), 'Einleitung')
+        self.assertEqual(side_view.section_at(seite, 5), 'Einleitung')
+        self.assertEqual(side_view.section_at(seite, 9), 'Ergebnis')
+        liste = [dict(key='g1', title='Gruppe A', depth=0), dict(key='g2', title='Gruppe B', depth=0)]
+        order = ['a', 'g1', 'b', 'g2', 'c']
+        self.assertEqual(side_view.section_at(liste, 'a', order), '')
+        self.assertEqual(side_view.section_at(liste, 'g1', order), 'Gruppe A')
+        self.assertEqual(side_view.section_at(liste, 'b', order), 'Gruppe A')
+        self.assertEqual(side_view.section_at(liste, 'c', order), 'Gruppe B')
+        self.assertEqual(side_view.section_at(liste, 'fehlt', order), '')
+
+    def test_lookup_query_from_selection(self):
+        self.assertEqual(side_view.lookup_query('  Straße\n und\tSTRASSE '), 'Straße und STRASSE')
+        self.assertEqual(side_view.lookup_query('\ufffc Bild'), 'Bild')
+        self.assertEqual(side_view.lookup_query('   '), '')
+        self.assertEqual(side_view.lookup_query(None), '')
+        lang = side_view.lookup_query('Wort ' * 30, limit=22)
+        self.assertEqual(lang, 'Wort Wort Wort Wort')
+        self.assertEqual(side_view.lookup_query('x' * 30, limit=10), 'x' * 10)
+
+    def test_section_counts_follow_section_at(self):
+        seite = [dict(key=2, title='Einleitung', depth=0), dict(key=6, title='Ergebnis', depth=1)]
+        self.assertEqual(side_view.section_counts(seite, [1, 3, 5, 6, 9, 9]), [2, 3])
+        self.assertEqual(side_view.section_counts(seite, []), [0, 0])
+        liste = [dict(key='g1', title='A', depth=0), dict(key='g2', title='B', depth=0)]
+        order = ['a', 'g1', 'b', 'g2', 'c']
+        self.assertEqual(side_view.section_counts(liste, ['a', 'b', 'g2', 'c', 'fehlt'], order), [1, 2])
+        self.assertEqual(side_view.section_counts([], [1, 2]), [])
+
+    def test_overview_label_joins_and_truncates(self):
+        self.assertEqual(side_view.overview_label('Kapitel', '…Treffer…'), 'Kapitel · …Treffer…')
+        self.assertEqual(side_view.overview_label('', 'nur Text'), 'nur Text')
+        lang = side_view.overview_label('Abschnitt', 'x' * 200, limit=40)
+        self.assertEqual(len(lang), 40)
+        self.assertTrue(lang.endswith('…'))
+
     def test_page_sections_are_projection_headings(self):
         entry = {'list_kind': 'page', 'rich_note': page_markdown.markdown_to_page('# Start\n\nText\n\n## Weiter\n')}
         before = repr(entry)
@@ -179,6 +230,43 @@ class ProjectionTests(unittest.TestCase):
         document = {'text': 'Fremde Aufgabe', 'spans': [{'tag': 'taskref:z9', 'start': 0, 'end': 14}]}
         line = side_view.page_projection(document)['lines'][0]
         self.assertEqual((line['style'], line['task'], line['reference']), ('task', 'z9', True))
+
+
+class RecentSearchTests(unittest.TestCase):
+    def test_remember_query_moves_used_term_to_front_without_duplicates(self):
+        history = side_view.remember_query([], 'Angebot')
+        history = side_view.remember_query(history, 'Termin')
+        history = side_view.remember_query(history, 'Angebot')
+        self.assertEqual(history, ['Angebot', 'Termin'])
+        # Wörtlich: andere Schreibweise oder Leerraum ist ein eigener Begriff.
+        self.assertEqual(side_view.remember_query(history, 'angebot'), ['angebot', 'Angebot', 'Termin'])
+        self.assertEqual(side_view.remember_query(history, '   '), history)
+        self.assertEqual(side_view.remember_query(history, None), history)
+        self.assertEqual(side_view.remember_query(['a', 3, None], 'b'), ['b', 'a'])
+
+    def test_remember_query_keeps_limit(self):
+        history = []
+        for n in range(12):
+            history = side_view.remember_query(history, f'Begriff {n}')
+        self.assertEqual(len(history), side_view.RECENT_LIMIT)
+        self.assertEqual(history[0], 'Begriff 11')
+        self.assertEqual(history[-1], f'Begriff {12 - side_view.RECENT_LIMIT}')
+
+    def test_recent_step_walks_older_and_newer_terms(self):
+        history = ['neu', 'mittel', 'alt']
+        self.assertEqual(side_view.recent_step(history, 'getippt', 1), 'neu')
+        self.assertIsNone(side_view.recent_step(history, 'getippt', -1))
+        self.assertEqual(side_view.recent_step(history, 'neu', 1), 'mittel')
+        self.assertEqual(side_view.recent_step(history, 'mittel', 1), 'alt')
+        self.assertIsNone(side_view.recent_step(history, 'alt', 1))
+        self.assertEqual(side_view.recent_step(history, 'alt', -1), 'mittel')
+        self.assertIsNone(side_view.recent_step(history, 'neu', -1))
+        self.assertIsNone(side_view.recent_step([], 'x', 1))
+
+    def test_recent_label_is_single_line_and_bounded(self):
+        self.assertEqual(side_view.recent_label(' Plan\n  B '), 'Plan B')
+        label = side_view.recent_label('Wort ' * 40)
+        self.assertTrue(label.endswith('…') and len(label) <= side_view.RECENT_LABEL_LIMIT, label)
 
 
 class SignatureTests(unittest.TestCase):

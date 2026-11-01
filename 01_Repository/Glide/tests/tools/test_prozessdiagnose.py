@@ -162,7 +162,7 @@ class ProzessdiagnoseTests(unittest.TestCase):
 
 class PrueflaufDiagnoseTests(unittest.TestCase):
     def test_integrity_guard_failure_keeps_diagnosis_for_failed_step(self):
-        guard = Mock(stopped=False)
+        guard = Mock(stopped=False, report={})
 
         def fail(*args, **kwargs):
             guard.stopped = True
@@ -176,6 +176,8 @@ class PrueflaufDiagnoseTests(unittest.TestCase):
         self.assertEqual(run.results[-1]["status"], "fehlgeschlagen")
         self.assertEqual(run.results[-1]["diagnose"]["spur"], "WA-41A")
         self.assertEqual(guard.command.call_count, 1)
+        self.assertTrue(guard.report["stopped"])
+        self.assertEqual(guard.report["reported_failure"]["step"], "test_speicherlast330")
 
     def test_runner_keeps_native_failure_and_persists_raw_log(self):
         text = "Fatal Python error: _TAIL_CALL_CACHE: Executing a cache\n"

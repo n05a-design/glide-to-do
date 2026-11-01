@@ -43,6 +43,8 @@ class FocusContent:
     task: TaskLink | None
     details: str = ''
     writable: bool = True
+    # Diese Aufgabe läuft bereits im Fokus: „Fokus anzeigen“ statt eines zweiten Starts.
+    focused: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -241,6 +243,8 @@ class HomeTaskTiles:
             return tile
         ui.label(tile, task.title, 12, True)
         ui.label(tile, content.details, color='muted')
+        if content.focused:
+            ui.label(tile, 'Läuft gerade im Fokus.', color='muted')
         if not content.writable:
             ui.label(tile, 'Schreibgeschützt · Aufgaben lassen sich öffnen.', color='muted')
         row = ui.flow(tile, pady=(self.spacing[4], self.spacing[0]))
@@ -250,7 +254,8 @@ class HomeTaskTiles:
             ui.action(row, f"{self.icons['check']}  Erledigt", lambda iid=task.item_id: complete(iid), 'confirm', side='left')
             focus, plan = self.commands.focus, self.commands.plan
             if focus is not None:
-                ui.action(row, 'Fokus starten', lambda iid=task.item_id: focus(iid), 'due_action', side='left')
+                ui.action(row, 'Fokus anzeigen' if content.focused else 'Fokus starten',
+                          lambda iid=task.item_id: focus(iid), 'due_action', side='left')
             if plan is not None:
                 ui.action(row, 'Einplanen …', lambda iid=task.item_id: plan(iid), 'muted', side='left')
         ui.action(row, f"{self.icons['next']}  Im Abschnitt zeigen", self.commands.next_task, 'due_action', side='left')

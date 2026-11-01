@@ -71,6 +71,10 @@ class EntryTests(unittest.TestCase):
         self.assertEqual(action_menu.reason_for('Gliederung', ()), action_menu.NO_HEADINGS_REASON)
         self.assertEqual(action_menu.reason_for('Titelbild entfernen', ('Titelbild',)), action_menu.NO_COVER_REASON)
         self.assertEqual(action_menu.reason_for('Irgendwas', ()), action_menu.DEFAULT_REASON)
+        label = action_menu.SIDE_LOOKUP_LABEL
+        self.assertEqual(action_menu.reason_for(label, (), {'side_view': False}), action_menu.SIDE_VIEW_REASON)
+        self.assertEqual(action_menu.reason_for(label, (), {'side_view': True, 'read_only': True}),
+                         action_menu.SELECTION_REASON)
 
 
 class SearchTests(unittest.TestCase):

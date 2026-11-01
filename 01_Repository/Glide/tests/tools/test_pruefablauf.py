@@ -112,6 +112,60 @@ class PruefablaufTests(unittest.TestCase):
                          ["fehlgeschlagen", "übersprungen", "übersprungen"])
         self.assertEqual(len(self.guard.rows), 1)
 
+    def test_failed_result_stops_before_later_checks(self):
+        run = pruefen.Prueflauf(None, 10, waechter=self.guard)
+        called = []
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertFalse(run.funktion('rot', lambda: ('fehlgeschlagen', 'Konkreter Fehler')))
+            self.assertFalse(run.funktion('folge', lambda: called.append(True)))
+        self.assertEqual(called, [])
+        self.assertEqual([r['status'] for r in run.results], ['fehlgeschlagen','übersprungen'])
+
+    def test_hint_does_not_stop_and_stays_a_hint(self):
+        run = pruefen.Prueflauf(None, 10, waechter=self.guard)
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertTrue(run.funktion('hinweis', lambda: ('Hinweis', 'Alter Lieferstand')))
+            self.assertTrue(run.funktion('folge', lambda: 'Geprüft'))
+        self.assertFalse(self.guard.stopped)
+        self.assertEqual([r['status'] for r in run.results], ['Hinweis','ausgeführt'])
+
+    def test_reported_failure_prevents_additional_process(self):
+        run = pruefen.Prueflauf(None, 10, waechter=self.guard)
+        with contextlib.redirect_stdout(io.StringIO()):
+            run.meldung('Voraussetzung', 'fehlgeschlagen', 'Kein Display')
+            self.assertFalse(run.prozess('folge', [sys.executable,'-B','-c','raise SystemExit(3)']))
+        self.assertEqual(len(self.guard.rows), 0)
+        self.assertEqual(run.results[-1]['status'], 'übersprungen')
+
+    def test_ci_uses_guard_and_does_not_launch_after_failed_child(self):
+        import ci_grundstufe as ci
+        real_run = pruefen.Prueflauf
+        started = []
+        def create(logdir, timeout, *, waechter=None):
+            self.assertIsNotNone(waechter, 'CI benötigt denselben Prozess-/Integritätswächter')
+            run = real_run(logdir, timeout, waechter=waechter)
+            process = run.prozess
+            def child(name, command, **kwargs):
+                if not waechter.stopped:
+                    started.append(name)
+                return process(name, [sys.executable,'-B','-c','raise SystemExit(7)'], **kwargs)
+            run.prozess = child
+            return run
+        args = ['ci_grundstufe.py','--protokoll',str(self.root/'ci'),
+                '--arbeitsablage',str(self.root/'ci-arbeit')]
+        with patch.object(sys,'argv',args), patch.object(ci,'REPO',self.repo), \
+                patch.object(ci.pruefen,'Prueflauf',side_effect=create), \
+                patch.object(ci.pruefen,'syntax_pruefen',return_value='ok'), \
+                patch.object(ci.pruefen,'versionen_pruefen',return_value='ok'), \
+                patch.object(ci.pruefen,'dokumentation_pruefen',return_value='ok'), \
+                patch.object(ci.pruefen,'fixtures_pruefen',return_value='ok'), \
+                patch.object(ci,'fremdcode_pruefen') as vendor, contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(ci.main(), 1)
+        report = json.loads((self.root/'ci/ergebnis.json').read_text())
+        self.assertEqual(started,['Werkzeugtests'])
+        self.assertEqual([r['schritt'] for r in report['schritte'] if r['status']=='fehlgeschlagen'], ['Werkzeugtests'])
+        self.assertFalse(vendor.called, 'Kein Netz-/Folgecheck nach rotem Kind')
+
     def test_unsichere_ablagen_werden_abgelehnt(self):
         for path in (self.root / "OneDrive", Path(tempfile.gettempdir()) / "glide"):
             with self.assertRaises(ValueError):

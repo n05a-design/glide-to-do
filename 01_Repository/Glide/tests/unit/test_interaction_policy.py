@@ -57,6 +57,13 @@ class InteractionTests(unittest.TestCase):
                         '<Alt-Control-p>', '<Control-F10>', '<<PrevLine>>', 'Control-p', '', None):
             self.assertFalse(policy.is_emacs_trigger(sequenz), sequenz)
 
+    def test_emacs_guard_applies_on_x11_and_macos(self):
+        # Tk 9.1 legt <<SelectPrevLine>> auch unter macOS auf Strg+Umschalt+P.
+        self.assertTrue(policy.emacs_guard_applies('x11'))
+        self.assertTrue(policy.emacs_guard_applies('aqua'))
+        self.assertFalse(policy.emacs_guard_applies('win32'))
+        self.assertFalse(policy.emacs_guard_applies(None))
+
     def test_only_navigation_events_with_emacs_trigger_are_guarded(self):
         # Ausschnitt aus Tk 9.1 unter X11: Treeview-Klasse und `event info`.
         klasse = ['<<PrevLine>>', '<<SelectPrevLine>>', '<<PrevWord>>', '<<Copy>>', '<Prior>', '<<LineStart>>']

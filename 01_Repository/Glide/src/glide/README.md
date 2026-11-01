@@ -1,6 +1,6 @@
 # Anwendungskern
 
-Stand 29.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 **Neuer Quellkandidat 3.49.0:** lokale Sitzungsprüfung/Originalvorsicherung und begrenzte Prozessdiagnose; die drei 3.48.0-Bedienpakete bleiben enthalten. [Prüfung und unveränderte Liefergrenzen](../../tests/qa-3.49.0/robustheit_2026-10-28/README.md).
 

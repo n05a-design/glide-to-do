@@ -5,7 +5,8 @@ import os
 MAX_JSON_BYTES = 32 * 1024 * 1024
 WARNING_RATIO = 0.8
 LABELS = {"data": "Aufgaben", "settings": "Einstellungen", "templates": "Vorlagen",
-          "backup": "Automatische Sicherung"}
+          "backup": "Automatische Sicherung", "recovery": "Wiederanlauf",
+          "diagnostics": "Lokale Diagnose"}
 
 
 class SizeLimitError(ValueError):

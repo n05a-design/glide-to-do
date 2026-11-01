@@ -32,6 +32,11 @@ class ActionCatalogTests(unittest.TestCase):
         for label in ("Nebenansicht öffnen …", "Nebenansicht schließen"):
             self.assertEqual(actions.legacy_group(label), "Ansichten", label)
 
+    def test_focus_commands_are_planning_actions(self):
+        # D57 (01.11.2026): Fokusfeld-Befehle auch über Menü und Aktionsauswahl.
+        for name in ("focus_pause", "focus_extend", "focus_switch", "focus_finish", "start_focus_selected"):
+            self.assertEqual(actions.group_for(name), "Planen und einordnen", name)
+
     def test_dynamic_variants_are_grouped_by_id(self):
         for name in ("backdrop.none", "backdrop.pixel-night", "grouping.eisenhower"):
             self.assertEqual(actions.group_for(name), "Ansichtseinstellungen")

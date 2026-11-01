@@ -129,6 +129,21 @@ class HomeTaskTilesTests(unittest.TestCase):
         record.actions[0][1]()
         self.assertEqual(record.calls, [('upcoming',)])
 
+    def test_focus_tile_names_a_running_session(self):
+        from dataclasses import replace
+        task = TaskLink('Aufgabe', 'l', 'x', 'accent')
+        for focused, label in ((False, 'Fokus starten'), (True, 'Fokus anzeigen')):
+            record = Recorder()
+            renderer = record.renderer()
+            renderer = replace(renderer, commands=replace(renderer.commands,
+                               focus=lambda iid, r=record: r.calls.append(('focus', iid))))
+            renderer.render_focus(None, FocusContent(task, 'Quelle', focused=focused))
+            texts = [text for text, command, color in record.actions]
+            self.assertIn(label, texts)
+            self.assertEqual('Läuft gerade im Fokus.' in record.labels, focused)
+            next(command for text, command, color in record.actions if text == label)()
+            self.assertEqual(record.calls, [('focus', 'x')])
+
     def test_focus_read_only_and_recreated_renderer_keep_stable_commands(self):
         record = Recorder()
         content = FocusContent(TaskLink('Aufgabe', 'l', 'x', 'accent'), writable=False)

@@ -1,6 +1,6 @@
 # Prüfwerkzeuge für Glide
 
-Stand 29.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 **Intel-/AMD-Prüfplätze:** Jeder neue WA-42-Prüfablauf erfasst CPU-Modell/-Hersteller, logische Prozessorzahl, Board-/BIOS-Kontext und Laufzeit bereits am Anfang, auch bei grünen Läufen. `runtime.pruefplatz` führt die ermittelte CPU-Familie und einen Hardwareprofil-Hash ohne Rechner-/Benutzerkennung; er ist keine eindeutige physische Rechner-ID. Intel- und AMD-Ergebnisse getrennt zuordnen, zusätzlich App-/Suite-/Fixturehashes und Python/Tk vergleichen. Ein angekündigter AMD-Bericht bleibt bis zum tatsächlichen Eingang offen. Weder Hardwareprofil noch grüner Gegenlauf beweisen eine CPU-Ursache. Aktueller Intel-Eingang und Nachweise im [Abschlussnachlauf](../qa-3.49.0/abschlussreste_2026-10-29/README.md).
 

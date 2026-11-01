@@ -1,0 +1,992 @@
+{
+  "datum": "2026-10-31",
+  "geraet": "MacBook Air M2, macOS 27.2, Retina 2560x1664",
+  "app_sha256": "1fabf883d14ff7bb576803b90ac565fc18d5fcf32b79a53a9f8ce036de7bbbeb",
+  "messung": {
+    "100": {
+      "fixture_sha256": "abaf0767730a2ce4a70e52bd9623abf2bed0f274b7264a13042aec5d2c0a58d4",
+      "bulk": 2,
+      "wege": {
+        "abhaken": {
+          "gesamt": {
+            "median_ms": 8.47,
+            "p95_ms": 12.66,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 894.99,
+            "p95_ms": 900.24,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 0.38,
+              "p95_ms": 0.4,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 3.86,
+              "p95_ms": 4.25,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 2.18,
+              "p95_ms": 7.56,
+              "n": 9
+            }
+          }
+        },
+        "anlegen": {
+          "gesamt": {
+            "median_ms": 8.07,
+            "p95_ms": 8.9,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 310.41,
+            "p95_ms": 313.09,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 0.39,
+              "p95_ms": 0.43,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 4.67,
+              "p95_ms": 5.55,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 2.03,
+              "p95_ms": 2.18,
+              "n": 9
+            }
+          }
+        },
+        "loeschen": {
+          "gesamt": {
+            "median_ms": 9.73,
+            "p95_ms": 15.33,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 93.71,
+            "p95_ms": 94.05,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 0.4,
+              "p95_ms": 0.42,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 5.5,
+              "p95_ms": 5.88,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 1.98,
+              "p95_ms": 2.83,
+              "n": 9
+            }
+          }
+        },
+        "verschieben_einzeln": {
+          "gesamt": {
+            "median_ms": 10.48,
+            "p95_ms": 16.05,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 93.74,
+            "p95_ms": 94.4,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 0.4,
+              "p95_ms": 0.42,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 4.8,
+              "p95_ms": 8.71,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 1.95,
+              "p95_ms": 5.24,
+              "n": 9
+            }
+          }
+        },
+        "verschieben_mehrfach": {
+          "gesamt": {
+            "median_ms": 8.42,
+            "p95_ms": 11.52,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 93.13,
+            "p95_ms": 93.67,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 0.4,
+              "p95_ms": 0.46,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 4.73,
+              "p95_ms": 4.92,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 1.93,
+              "p95_ms": 5.29,
+              "n": 9
+            }
+          }
+        }
+      }
+    },
+    "1000": {
+      "fixture_sha256": "0f67131963065ae48e547c4c079adc23b6134a4cb7505429eb802063c5fd4d90",
+      "bulk": 21,
+      "wege": {
+        "abhaken": {
+          "gesamt": {
+            "median_ms": 20.57,
+            "p95_ms": 23.72,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 914.94,
+            "p95_ms": 930.18,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 2.92,
+              "p95_ms": 3.08,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 11.22,
+              "p95_ms": 11.62,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 3.82,
+              "p95_ms": 7.63,
+              "n": 9
+            }
+          }
+        },
+        "anlegen": {
+          "gesamt": {
+            "median_ms": 29.56,
+            "p95_ms": 32.59,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 320.05,
+            "p95_ms": 369.83,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 3.0,
+              "p95_ms": 3.12,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 21.32,
+              "p95_ms": 21.75,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 3.85,
+              "p95_ms": 7.65,
+              "n": 9
+            }
+          }
+        },
+        "loeschen": {
+          "gesamt": {
+            "median_ms": 30.02,
+            "p95_ms": 42.27,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 96.2,
+            "p95_ms": 98.38,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 3.03,
+              "p95_ms": 3.22,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 21.26,
+              "p95_ms": 29.72,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 3.69,
+              "p95_ms": 7.43,
+              "n": 9
+            }
+          }
+        },
+        "verschieben_einzeln": {
+          "gesamt": {
+            "median_ms": 32.41,
+            "p95_ms": 33.74,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 95.75,
+            "p95_ms": 96.49,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 3.05,
+              "p95_ms": 3.22,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 21.7,
+              "p95_ms": 22.1,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 3.69,
+              "p95_ms": 6.4,
+              "n": 9
+            }
+          }
+        },
+        "verschieben_mehrfach": {
+          "gesamt": {
+            "median_ms": 30.07,
+            "p95_ms": 30.88,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 96.69,
+            "p95_ms": 99.19,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 3.07,
+              "p95_ms": 3.17,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 21.62,
+              "p95_ms": 22.09,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 3.32,
+              "p95_ms": 4.15,
+              "n": 9
+            }
+          }
+        }
+      }
+    },
+    "5000": {
+      "fixture_sha256": "2577baf451915fa42a249ccafce0a03d5c804189e612693ad9f24f141a19e8f6",
+      "bulk": 50,
+      "wege": {
+        "abhaken": {
+          "gesamt": {
+            "median_ms": 73.53,
+            "p95_ms": 77.51,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 935.99,
+            "p95_ms": 958.17,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 14.39,
+              "p95_ms": 14.78,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 45.6,
+              "p95_ms": 45.81,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 11.4,
+              "p95_ms": 13.01,
+              "n": 9
+            }
+          }
+        },
+        "anlegen": {
+          "gesamt": {
+            "median_ms": 124.91,
+            "p95_ms": 135.17,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 283.3,
+            "p95_ms": 320.7,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 14.63,
+              "p95_ms": 15.12,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 95.58,
+              "p95_ms": 101.77,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 13.06,
+              "p95_ms": 16.8,
+              "n": 9
+            }
+          }
+        },
+        "loeschen": {
+          "gesamt": {
+            "median_ms": 126.17,
+            "p95_ms": 139.0,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 96.67,
+            "p95_ms": 99.42,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 14.66,
+              "p95_ms": 15.14,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 95.5,
+              "p95_ms": 106.43,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 11.77,
+              "p95_ms": 14.81,
+              "n": 9
+            }
+          }
+        },
+        "verschieben_einzeln": {
+          "gesamt": {
+            "median_ms": 126.08,
+            "p95_ms": 132.07,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 96.53,
+            "p95_ms": 97.4,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 14.57,
+              "p95_ms": 15.07,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 95.19,
+              "p95_ms": 97.67,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 13.35,
+              "p95_ms": 15.05,
+              "n": 9
+            }
+          }
+        },
+        "verschieben_mehrfach": {
+          "gesamt": {
+            "median_ms": 131.18,
+            "p95_ms": 134.34,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 96.39,
+            "p95_ms": 100.67,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 14.5,
+              "p95_ms": 14.7,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 93.43,
+              "p95_ms": 96.27,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 13.02,
+              "p95_ms": 14.58,
+              "n": 9
+            }
+          }
+        }
+      }
+    },
+    "10000": {
+      "fixture_sha256": "e590c00cc4301db44df4ec64c363018090e1b75e8f11db4abb285cddd4f12754",
+      "bulk": 50,
+      "wege": {
+        "abhaken": {
+          "gesamt": {
+            "median_ms": 140.52,
+            "p95_ms": 152.83,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 914.24,
+            "p95_ms": 937.67,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 28.57,
+              "p95_ms": 29.54,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 84.4,
+              "p95_ms": 85.73,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 21.29,
+              "p95_ms": 34.23,
+              "n": 9
+            }
+          }
+        },
+        "anlegen": {
+          "gesamt": {
+            "median_ms": 238.36,
+            "p95_ms": 245.08,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 317.93,
+            "p95_ms": 325.23,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 29.0,
+              "p95_ms": 30.47,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 183.76,
+              "p95_ms": 186.98,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 23.81,
+              "p95_ms": 25.31,
+              "n": 9
+            }
+          }
+        },
+        "loeschen": {
+          "gesamt": {
+            "median_ms": 243.97,
+            "p95_ms": 260.92,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 96.55,
+            "p95_ms": 99.56,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 29.3,
+              "p95_ms": 29.79,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 184.72,
+              "p95_ms": 203.86,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 21.92,
+              "p95_ms": 25.15,
+              "n": 9
+            }
+          }
+        },
+        "verschieben_einzeln": {
+          "gesamt": {
+            "median_ms": 243.77,
+            "p95_ms": 262.84,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 96.47,
+            "p95_ms": 101.02,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 28.94,
+              "p95_ms": 30.59,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 185.64,
+              "p95_ms": 187.04,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 23.68,
+              "p95_ms": 41.52,
+              "n": 9
+            }
+          }
+        },
+        "verschieben_mehrfach": {
+          "gesamt": {
+            "median_ms": 255.36,
+            "p95_ms": 257.71,
+            "n": 9
+          },
+          "tk_nachlauf": {
+            "median_ms": 96.53,
+            "p95_ms": 97.32,
+            "n": 9
+          },
+          "phasen": {
+            "snapshot": {
+              "median_ms": 29.75,
+              "p95_ms": 30.48,
+              "n": 9
+            },
+            "save": {
+              "median_ms": 185.13,
+              "p95_ms": 185.72,
+              "n": 9
+            },
+            "render": {
+              "median_ms": 20.86,
+              "p95_ms": 23.27,
+              "n": 9
+            }
+          }
+        }
+      }
+    }
+  },
+  "python": "3.14.5",
+  "tk": "9.0.3",
+  "nachlauf_tk90_vs_tk91_ms": {
+    "abhaken": {
+      "tk_9_0_3": [
+        962,
+        898,
+        905
+      ],
+      "tk_9_1_0": [
+        170,
+        132,
+        134
+      ]
+    },
+    "anlegen": {
+      "tk_9_0_3": [
+        207,
+        197,
+        195
+      ],
+      "tk_9_1_0": [
+        157,
+        93,
+        92
+      ]
+    }
+  },
+  "reine_tk_bildprobe_ms_je_bild": {
+    "1280x800": {
+      "tk_9_0_3": 37.0,
+      "tk_9_1_0": 5.3
+    },
+    "640x400": {
+      "tk_9_0_3": 10.5,
+      "tk_9_1_0": 1.9
+    }
+  },
+  "nativ": "Tk 9.0.3: CA::Transaction commit -> CA::Render::copy_image -> CGColorTransformConvertUsingCMSConverter/vImageConvert_AnyToAny je Fensterupdate",
+  "speichern_scope": "Abhaken nutzt item_change(local=True) -> changed_list_ids; Anlegen/Loeschen/Verschieben laufen mit leerer Auswahl -> Vollvergleich (list_comparison)",
+  "codeaenderung": true,
+  "umsetzung_2026_10_31": {
+    "aenderung": "item_change(lists=...) fuer add_item, delete_item, move_items_to_list, sort_current_list, dissolve_selected_group, apply_time_plan, change_reminder, move_item_to_label_group, on_folder_overview_drag_end",
+    "app_sha256_crlf": "f6cd2dd6ab10ccd8088984bb0c1ffa2e1a3939d9c41b0fd6616e42010f26e0e1",
+    "test": {
+      "suite": "test_fortsetzung33311",
+      "sha256": "fe96ba4a399d003accf4af3be05c6c3f8eaa5fb223fae7a7b120e3771d9ed886",
+      "gruen_neu": "8/8 Standard, 3/3 mit --baseline-app (120 Differenzfaelle)",
+      "rot_gelieferte_app": "Anlegen: 8 statt 1 Liste gelesen",
+      "vorlaeufe_rot": [
+        "1x unklarer Fehlschlag ohne gesicherten Traceback (Testblock mitten in der Suite)",
+        "2/6 Zeile 122 Retry-Pruefung, verursacht durch nachlaufende Tk-Auftraege des Testblocks; Block ans Suitenende verlegt"
+      ]
+    },
+    "bereichssuiten": "1.082 Fachtests und 16 betroffene Suiten gruen",
+    "messung_vorher_nachher": {
+      "1000": {
+        "bestand_ohne_zeit_gleich": true,
+        "vorher_app": "1fabf883d14ff7bb576803b90ac565fc18d5fcf32b79a53a9f8ce036de7bbbeb",
+        "nachher_app": "c1f2fae89626f3405a13d19869486ee2cbd633c5dd8eb54b3b03ad5cc95f3964",
+        "wege": {
+          "abhaken": {
+            "vorher": {
+              "median_ms": 20.88,
+              "p95_ms": 25.59,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 20.04,
+              "p95_ms": 23.12,
+              "n": 9
+            },
+            "speichern_vorher_ms": 11.52,
+            "speichern_nachher_ms": 10.98
+          },
+          "anlegen": {
+            "vorher": {
+              "median_ms": 29.37,
+              "p95_ms": 32.28,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 18.65,
+              "p95_ms": 23.43,
+              "n": 9
+            },
+            "speichern_vorher_ms": 21.4,
+            "speichern_nachher_ms": 10.79
+          },
+          "loeschen": {
+            "vorher": {
+              "median_ms": 29.96,
+              "p95_ms": 33.59,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 21.67,
+              "p95_ms": 23.62,
+              "n": 9
+            },
+            "speichern_vorher_ms": 21.14,
+            "speichern_nachher_ms": 10.88
+          },
+          "verschieben_einzeln": {
+            "vorher": {
+              "median_ms": 29.06,
+              "p95_ms": 31.45,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 22.5,
+              "p95_ms": 23.17,
+              "n": 9
+            },
+            "speichern_vorher_ms": 20.84,
+            "speichern_nachher_ms": 11.75
+          },
+          "verschieben_mehrfach": {
+            "vorher": {
+              "median_ms": 29.43,
+              "p95_ms": 31.41,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 24.42,
+              "p95_ms": 24.93,
+              "n": 9
+            },
+            "speichern_vorher_ms": 20.97,
+            "speichern_nachher_ms": 12.0
+          }
+        }
+      },
+      "10000": {
+        "bestand_ohne_zeit_gleich": true,
+        "vorher_app": "1fabf883d14ff7bb576803b90ac565fc18d5fcf32b79a53a9f8ce036de7bbbeb",
+        "nachher_app": "c1f2fae89626f3405a13d19869486ee2cbd633c5dd8eb54b3b03ad5cc95f3964",
+        "wege": {
+          "abhaken": {
+            "vorher": {
+              "median_ms": 139.99,
+              "p95_ms": 144.72,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 140.7,
+              "p95_ms": 144.98,
+              "n": 9
+            },
+            "speichern_vorher_ms": 84.61,
+            "speichern_nachher_ms": 84.54
+          },
+          "anlegen": {
+            "vorher": {
+              "median_ms": 247.26,
+              "p95_ms": 265.49,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 143.84,
+              "p95_ms": 147.91,
+              "n": 9
+            },
+            "speichern_vorher_ms": 189.16,
+            "speichern_nachher_ms": 88.74
+          },
+          "loeschen": {
+            "vorher": {
+              "median_ms": 251.68,
+              "p95_ms": 258.54,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 151.54,
+              "p95_ms": 153.0,
+              "n": 9
+            },
+            "speichern_vorher_ms": 191.07,
+            "speichern_nachher_ms": 92.28
+          },
+          "verschieben_einzeln": {
+            "vorher": {
+              "median_ms": 240.67,
+              "p95_ms": 245.0,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 154.09,
+              "p95_ms": 155.99,
+              "n": 9
+            },
+            "speichern_vorher_ms": 182.74,
+            "speichern_nachher_ms": 97.91
+          },
+          "verschieben_mehrfach": {
+            "vorher": {
+              "median_ms": 262.96,
+              "p95_ms": 277.42,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 170.26,
+              "p95_ms": 180.43,
+              "n": 9
+            },
+            "speichern_vorher_ms": 186.3,
+            "speichern_nachher_ms": 96.25
+          }
+        }
+      }
+    },
+    "volllauf_tk91": {
+      "ablage": "13_TK-Test-Umgebung/Macbook-M2/t1031-215331",
+      "schritte": 126,
+      "gruen": 126,
+      "app": "f6cd2dd6",
+      "integritaet": true,
+      "dateien": 2140
+    },
+    "lieferung": "offen: 07 und Mac-Paket tragen 1fabf883 (Codex-Lieferung); neuer Stand nicht geliefert"
+  },
+  "verlaufsabkuerzung_2026_10_31": {
+    "aenderung": "history_events ueberspringt unveraenderte Punkte (gleiches Objekt oder gleiche Lage/Werte)",
+    "app_sha256_crlf": "28f02f746ecb198e90353c5d7783f42acfb8c7357789a9803518c62a27005cf3",
+    "test_sha256": "511a0ffaacc7d4b4e2b8d00b9f601cc447eb1476e4117289060003629f358ebf",
+    "profil_10000_ms_je_speicherung": {
+      "vorher": 228,
+      "nachher": 152
+    },
+    "tests": "1.082 Fachtests, 28 Verlaufs-/Bereichssuiten, Differential 120 Faelle, Ereignisvergleich mit gelieferter Klasse fuer alle WA-36-Wege",
+    "messung_gesamt_gegen_lieferung": {
+      "1000": {
+        "bestand_ohne_zeit_gleich": true,
+        "app": "28f02f746ecb198e90353c5d7783f42acfb8c7357789a9803518c62a27005cf3",
+        "wege": {
+          "abhaken": {
+            "vorher": {
+              "median_ms": 20.88,
+              "p95_ms": 25.59,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 18.87,
+              "p95_ms": 23.32,
+              "n": 9
+            },
+            "speichern_nachher_ms": 9.77
+          },
+          "anlegen": {
+            "vorher": {
+              "median_ms": 29.37,
+              "p95_ms": 32.28,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 18.02,
+              "p95_ms": 21.13,
+              "n": 9
+            },
+            "speichern_nachher_ms": 9.89
+          },
+          "loeschen": {
+            "vorher": {
+              "median_ms": 29.96,
+              "p95_ms": 33.59,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 19.66,
+              "p95_ms": 22.42,
+              "n": 9
+            },
+            "speichern_nachher_ms": 9.94
+          },
+          "verschieben_einzeln": {
+            "vorher": {
+              "median_ms": 29.06,
+              "p95_ms": 31.45,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 20.51,
+              "p95_ms": 22.36,
+              "n": 9
+            },
+            "speichern_nachher_ms": 10.58
+          },
+          "verschieben_mehrfach": {
+            "vorher": {
+              "median_ms": 29.43,
+              "p95_ms": 31.41,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 19.13,
+              "p95_ms": 25.96,
+              "n": 9
+            },
+            "speichern_nachher_ms": 10.45
+          }
+        }
+      },
+      "10000": {
+        "bestand_ohne_zeit_gleich": true,
+        "app": "28f02f746ecb198e90353c5d7783f42acfb8c7357789a9803518c62a27005cf3",
+        "wege": {
+          "abhaken": {
+            "vorher": {
+              "median_ms": 139.99,
+              "p95_ms": 144.72,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 123.95,
+              "p95_ms": 127.17,
+              "n": 9
+            },
+            "speichern_nachher_ms": 68.67
+          },
+          "anlegen": {
+            "vorher": {
+              "median_ms": 247.26,
+              "p95_ms": 265.49,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 124.41,
+              "p95_ms": 127.05,
+              "n": 9
+            },
+            "speichern_nachher_ms": 70.93
+          },
+          "loeschen": {
+            "vorher": {
+              "median_ms": 251.68,
+              "p95_ms": 258.54,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 127.86,
+              "p95_ms": 134.21,
+              "n": 9
+            },
+            "speichern_nachher_ms": 70.61
+          },
+          "verschieben_einzeln": {
+            "vorher": {
+              "median_ms": 240.67,
+              "p95_ms": 245.0,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 135.27,
+              "p95_ms": 136.97,
+              "n": 9
+            },
+            "speichern_nachher_ms": 79.17
+          },
+          "verschieben_mehrfach": {
+            "vorher": {
+              "median_ms": 262.96,
+              "p95_ms": 277.42,
+              "n": 9
+            },
+            "nachher": {
+              "median_ms": 152.02,
+              "p95_ms": 155.41,
+              "n": 9
+            },
+            "speichern_nachher_ms": 79.95
+          }
+        }
+      }
+    },
+    "volllauf_tk91": {
+      "ablage": "13_TK-Test-Umgebung/Macbook-M2/t1031-224726",
+      "schritte": 126,
+      "gruen": 126,
+      "integritaet": true
+    }
+  }
+}

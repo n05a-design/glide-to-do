@@ -84,3 +84,17 @@ def persist(settings, lists):
     else:
         result.pop(KEY, None)
     return result
+
+
+def zoomed_image(kind, width, height, factor):
+    """Wie ein Kartenbild beim Pinnwandzoom mitwächst (31.10.2026).
+
+    `photo` skaliert in Vierteln über zoom/subsample. `nsimage` (macOS) kennt
+    beides nicht und wird aus derselben Quelle in Zielgröße neu gezeichnet.
+    Andere Bildtypen bleiben unskaliert stehen, statt die Zeichnung abzubrechen.
+    """
+    if kind == 'photo':
+        return ('photo', int(round(factor*4)), 4)
+    if kind == 'nsimage':
+        return ('nsimage', max(1, round(width*factor)), max(1, round(height*factor)))
+    return None

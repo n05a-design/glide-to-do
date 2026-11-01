@@ -1,6 +1,6 @@
 # Glide · aktiver Showcase
 
-Stand 28.10.2026 · Glide 3.49.0 · Quellfixtures in Speicherstufe 26; Showcase-Lieferung separat 3.47.0
+Stand 31.10.2026 · Glide 3.50.0 · Quellfixtures in Speicherstufe 26; Showcase-Lieferung separat 3.49.0
 
 Das fiktive Projekt **Parkquartier** zeigt fertige, bearbeitbare Arbeitsdokumente: Briefing, Abstimmungsnotiz, Aufgabenliste, Bildgalerie, Pixelskizze, Routinen und Projekttagebuch. Die sechs Originalmotive liegen unverändert unter `tests/fixtures/showcase/bilder`; Herkunft und Prüfsummen stehen in `quellen.json`. Seit 03.10.2026 liegen sie ausschließlich in dieser Fixture-Ablage, zuvor zusätzlich im Grafikmaster. Sie illustrieren Themen; sie zeigen kein reales Verkaufsobjekt. Personen und Projektangaben sind fiktiv.
 

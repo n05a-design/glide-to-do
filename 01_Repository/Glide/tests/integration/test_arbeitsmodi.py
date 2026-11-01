@@ -1368,7 +1368,8 @@ def fall_nebenansicht_navigation(lauf):
 
     def choose_section(menu, x, y):
         try:
-            assert menu.entrycget('end', 'label').strip() == section['title']
+            # Seit 3.50.0 nennt die Abschnittsauswahl bei aktiver Suche die Treffer je Abschnitt.
+            assert menu.entrycget('end', 'label').strip() == section['title'] + ' · 2 Treffer'
             menu.invoke('end')
         finally:
             menu.unpost()
@@ -2030,13 +2031,657 @@ def fall_side_verweisaktionen(lauf):
     return 'Echte Verweisaktionen: Kopieren ohne Mutation, Hauptbereich öffnen, gezielt verknüpfen mit einem Undo/Redo, readonly und Dialog-/Beziehungswechsel geschützt'
 
 
+def fall_side_trefferuebersicht(lauf):
+    """Trefferübersicht der Nebenansicht: Abschnitt/Ausschnitt, Ansteuern, veraltete Einträge, Grenzen (31.10.2026)."""
+    app, mod = lauf.app, lauf.mod
+    main, editor = seite_anlegen(lauf, '# Hauptarbeit\n\nOffener Entwurf\n')
+    other = app.new_page_from_markdown('# Überblick\n\n🎵 Straße und STRASSE. [x]\n\n'
+        + '\n\n'.join(f'Absatz {number}' for number in range(35))
+        + '\n\n## Abschluss\n\nEine weitere Straße.\n\n- [ ] Straße-Aufgabe\n')
+    app.set_active_list(main['id']); idle(lauf)
+    editor = app.rich_note_editor
+    assert app.open_side_view(other['id']); idle(lauf)
+    draft = editor.text.get('1.0', 'end-1c')
+    model = copy.deepcopy(app.lists)
+    written = Path(mod.SAVE_FILE).read_bytes()
+    depth = len(app.undo_stack)
+    klick(next(w for w in knoepfe(app.side_pane, mod.RoundedButton) if w.text == 'Suchen'), lauf)
+    app._side_search_entry.insert(0, 'STRASSE'); app.update_side_search(); idle(lauf)
+    assert len(app._side_search_matches) == 4
+
+    def treffer_knopf():
+        return next(w for w in knoepfe(app.side_pane, mod.RoundedButton)
+                    if w.text == mod.RoundedButton.action_text('Treffer …'))
+    menues = []
+
+    def abfangen(menu, x, y):
+        menues.append([(menu.type(i), menu.entrycget(i, 'label') if menu.type(i) != 'separator' else '',
+                        menu.entrycget(i, 'state') if menu.type(i) != 'separator' else '')
+                       for i in range(menu.index('end') + 1)])
+        try:
+            menu.invoke(2)
+        finally:
+            menu.unpost()
+
+    with patch.object(mod.tk.Menu, 'tk_popup', new=abfangen):
+        klick(treffer_knopf(), lauf)
+    idle(lauf)
+    eintraege = menues[-1]
+    assert len(eintraege) == 4 and all(art == 'command' for art, _l, _s in eintraege), eintraege
+    # Die erste Überschrift ist Seitentitel; Treffer davor tragen nur den Ausschnitt.
+    assert ' · ' not in eintraege[0][1] and 'Straße' in eintraege[0][1], eintraege
+    assert eintraege[3][1].startswith('Abschluss · '), eintraege
+    assert all(len(label) <= 90 and '\n' not in label for _a, label, _s in eintraege)
+    assert app._side_search_index == 2 and app._side_search_counter.cget('text') == '3 / 4 Treffer'
+    body = app._side_view_body
+    assert body.get(*body.tag_ranges('search_current')).casefold() == 'strasse'
+    # Abschnittsauswahl nennt bei aktiver Suche die Treffer je Abschnitt (vor dem ersten Abschnitt keine Zeile).
+    abschnitte = []
+
+    def abschnitte_lesen(menu, x, y):
+        abschnitte.extend(menu.entrycget(i, 'label').strip() for i in range(menu.index('end') + 1))
+        menu.unpost()
+    with patch.object(mod.tk.Menu, 'tk_popup', new=abschnitte_lesen):
+        klick(next(w for w in knoepfe(app.side_pane, mod.RoundedButton)
+                   if w.text == mod.RoundedButton.action_text('Abschnitte …')), lauf)
+    assert abschnitte == ['Abschluss · 2 Treffer'], abschnitte
+    # Veralteter Eintrag: Suchtext geändert, Index bleibt, Zustand wird benannt.
+    app._side_search_entry.delete(0, 'end'); app._side_search_entry.insert(0, 'Absatz 3'); app.update_side_search()
+    vorher = app._side_search_index
+    app.jump_side_match(other['id'], 'STRASSE', 1)
+    assert app._side_search_index == vorher
+    # Ohne Treffer kein Menü, Statuszeile bleibt maßgeblich.
+    app._side_search_entry.delete(0, 'end'); app._side_search_entry.insert(0, 'Nicht vorhanden'); app.update_side_search()
+    anzahl = len(menues)
+    with patch.object(mod.tk.Menu, 'tk_popup', new=abfangen):
+        klick(treffer_knopf(), lauf)
+    assert len(menues) == anzahl and app._side_search_counter.cget('text') == 'Keine Treffer.'
+    assert app.active_list_id == main['id'] and app.rich_note_editor is editor
+    assert editor.text.get('1.0', 'end-1c') == draft
+    assert app.lists == model and Path(mod.SAVE_FILE).read_bytes() == written and len(app.undo_stack) == depth
+    app.close_side_view()
+    # Viele Treffer: höchstens 50 Einträge, danach gesperrter Hinweis.
+    viel = app.new_page_from_markdown('# Viele\n\n' + '\n\n'.join(f'Treffer {n}' for n in range(60)) + '\n')
+    assert app.open_side_view(viel['id']); app.open_side_search(); idle(lauf)
+    app._side_search_entry.insert(0, 'Treffer'); app.update_side_search()
+
+    def nur_lesen(menu, x, y):
+        menues.append([(menu.type(i), menu.entrycget(i, 'label') if menu.type(i) != 'separator' else '',
+                        menu.entrycget(i, 'state') if menu.type(i) != 'separator' else '')
+                       for i in range(menu.index('end') + 1)])
+        menu.unpost()
+    with patch.object(mod.tk.Menu, 'tk_popup', new=nur_lesen):
+        klick(treffer_knopf(), lauf)
+    eintraege = menues[-1]
+    befehle = [e for e in eintraege if e[0] == 'command' and e[2] != 'disabled']
+    assert len(befehle) == 50 and eintraege[-1][2] == 'disabled' and '10 weitere Treffer' in eintraege[-1][1], eintraege[-3:]
+    app.close_side_view()
+    # Liste: Gruppen sind Abschnitte, Treffer zeigen den Aufgabentitel.
+    listing = app.new_list_object('Nachschlageliste')
+    group = app.new_item('Abschnitt Nord', kind=app.ITEM_KIND_GROUP)
+    group['children'] = [app.new_item('Straße prüfen'), app.new_item('STRASSE messen')]
+    listing['items'] = [app.new_item('Vor der Gruppe Straße'), group]
+    app.lists.append(listing)
+    assert app.open_side_view(listing['id']); app.open_side_search(); idle(lauf)
+    app._side_search_entry.insert(0, 'strasse'); app.update_side_search()
+    with patch.object(mod.tk.Menu, 'tk_popup', new=nur_lesen):
+        klick(treffer_knopf(), lauf)
+    # Beschriftung wie die sichtbare Zeile, einschließlich Kästchenzeichen.
+    labels = [label.replace(app.ICONS['task_open'] + ' ', '') for art, label, _s in menues[-1] if art == 'command']
+    assert labels == ['Vor der Gruppe Straße', 'Abschnitt Nord · Straße prüfen', 'Abschnitt Nord · STRASSE messen'], labels
+    # B15: Knopfzeile mit offener Suche in schmaler Nebenansicht.
+    geprueft = 0
+    app.set_active_list(main['id'])
+    for design, geometry, font in [('light', '860x700', 'mittel'), ('dark', '1280x800', 'gross'),
+                                   ('glass_light', '860x700', 'gross')]:
+        app.settings['ui_font_size'] = font; app.apply_ui_font(); app.set_design(design)
+        if design.startswith('glass'):
+            app.set_backdrop_choice(mod.glide_backdrop.presets_for(design)[0].key)
+        lauf.root.geometry(geometry + '+20+20'); app.settings['side_view_width'] = 280
+        assert app.open_side_view(other['id']); app.open_side_search(); idle(lauf, 8)
+        app._side_search_entry.insert(0, 'Straße'); app.update_side_search(); idle(lauf)
+        treffer_knopf()
+        count, findings = befunde_b15(lauf, f'trefferuebersicht-{design}-{geometry}')
+        geprueft += count
+        assert not findings, findings[:6]
+        app.close_side_view()
+    return (f'Abschnitt/Ausschnitt je Treffer, Ansteuern über den Suchweg, veraltete Einträge und kein Treffer wirkungslos, '
+            f'50er-Grenze, Listengruppen; Modell/Datei/Undo/Haupteditor unverändert; {geprueft} Knopfprüfungen')
+
+
+def fall_side_nachschlagen(lauf):
+    """Markierung im Haupteditor in der Nebenansicht nachschlagen: Sperrgrund, Suche, readonly, nichts geändert."""
+    app, mod = lauf.app, lauf.mod
+    main, editor = seite_anlegen(lauf, '# Hauptarbeit\n\nBitte die Straße prüfen.\n')
+    other = app.new_page_from_markdown('# Überblick\n\nStraße und STRASSE.\n\n## Abschluss\n\nEine weitere Straße.\n')
+    app.set_active_list(main['id']); idle(lauf)
+    editor = app.rich_note_editor
+    start = editor.text.search('Straße', '1.0', 'end')
+    editor.text.tag_add('sel', start, f'{start}+6c'); idle(lauf, 1)
+    label = mod.glide_action_menu.SIDE_LOOKUP_LABEL
+
+    def eintrag(menu):
+        return next(i for i in range(menu.index('end') + 1)
+                    if menu.type(i) == 'command' and menu.entrycget(i, 'label') == label)
+    menu = editor.build_context_menu()
+    assert menu.entrycget(eintrag(menu), 'state') == 'disabled', 'ohne Nebenansicht gesperrt'
+    assert mod.glide_action_menu.reason_for(label, (), editor.action_context()) == mod.glide_action_menu.SIDE_VIEW_REASON
+    menu.destroy()
+    assert app.open_side_view(other['id']); idle(lauf)
+    draft = editor.text.get('1.0', 'end-1c')
+    model = copy.deepcopy(app.lists)
+    written = Path(mod.SAVE_FILE).read_bytes()
+    depth = len(app.undo_stack)
+    menu = editor.build_context_menu()
+    assert menu.entrycget(eintrag(menu), 'state') == 'normal'
+    menu.invoke(eintrag(menu)); menu.destroy(); idle(lauf)
+    assert app._side_search_open and app._side_search_entry.get() == 'Straße'
+    assert len(app._side_search_matches) == 3 and app._side_search_counter.cget('text') == '1 / 3 Treffer'
+    body = app._side_view_body
+    assert body.get(*body.tag_ranges('search_current')) == 'Straße'
+    assert app.active_list_id == main['id'] and app.rich_note_editor is editor
+    assert editor.text.get('1.0', 'end-1c') == draft
+    assert app.lists == model and Path(mod.SAVE_FILE).read_bytes() == written and len(app.undo_stack) == depth
+    # Ohne Markierung gesperrt mit Markierungsgrund; im Schreibschutz weiter verfügbar.
+    editor.text.tag_remove('sel', '1.0', 'end')
+    menu = editor.build_context_menu()
+    assert menu.entrycget(eintrag(menu), 'state') == 'disabled'
+    assert mod.glide_action_menu.reason_for(label, (), editor.action_context()) == mod.glide_action_menu.SELECTION_REASON
+    menu.destroy()
+    app._data_read_only = True
+    try:
+        bitte = editor.text.search('Bitte', '1.0', 'end')
+        editor.text.tag_add('sel', bitte, f'{bitte}+5c')
+        menu = editor.build_context_menu()
+        assert menu.entrycget(eintrag(menu), 'state') == 'normal', 'lesend auch im Schreibschutz'
+        menu.destroy()
+        assert editor.search_selection_in_side_view() == 'break' and app._side_search_entry.get() == 'Bitte'
+    finally:
+        app._data_read_only = False
+    # Durchsuchbare Blockaktionen enthalten denselben Eintrag aus dem Kontextmenü.
+    zeilen = editor.build_context_menu()
+    try:
+        assert label in [zeilen.entrycget(i, 'label') for i in range(zeilen.index('end') + 1) if zeilen.type(i) == 'command']
+    finally:
+        zeilen.destroy()
+    app.close_side_view()
+    # Aufgaben-Kontextmenü: Titel einer Zeile nachschlagen, nur mit offener Nebenansicht.
+    liste = app.new_list_object('Nachschlagen aus Liste')
+    aufgabe = app.new_item('Straße')
+    liste['items'] = [aufgabe]; app.lists.append(liste); assert app.save_items()
+    app.set_active_list(liste['id']); idle(lauf)
+    app.tree.selection_set(aufgabe['id']); app.tree.focus(aufgabe['id'])
+    kontext = app.build_item_context_menu()
+    assert 'Titel in Nebenansicht suchen' not in [kontext.entrycget(i, 'label') for i in range(kontext.index('end') + 1)
+                                                if kontext.type(i) == 'command']
+    kontext.destroy()
+    assert app.open_side_view(other['id']); idle(lauf)
+    app.tree.selection_set(aufgabe['id']); app.tree.focus(aufgabe['id'])
+    model = copy.deepcopy(app.lists); written = Path(mod.SAVE_FILE).read_bytes(); depth = len(app.undo_stack)
+    kontext = app.build_item_context_menu()
+    index = next(i for i in range(kontext.index('end') + 1)
+                 if kontext.type(i) == 'command' and kontext.entrycget(i, 'label') == 'Titel in Nebenansicht suchen')
+    kontext.invoke(index); idle(lauf); kontext.destroy()
+    assert app._side_search_entry.get() == 'Straße' and len(app._side_search_matches) == 3
+    assert app.lists == model and Path(mod.SAVE_FILE).read_bytes() == written and len(app.undo_stack) == depth
+    app.close_side_view()
+    return ('Sperrgrund ohne Nebenansicht/Markierung, Suche mit erstem Treffer, readonly verfügbar, Blockaktionen, '
+            'Aufgabentitel aus dem Kontextmenü; Modell/Datei/Undo/Haupteditor unverändert')
+
+
+def fall_home_fokusdauer(lauf):
+    """Fokusdauer 15/25/50 Minuten: Mehr-Menü startet und merkt die Vorgabe, Intervall, Sperre, Fehler, Neustart."""
+    from datetime import date, datetime, timedelta
+    app, mod = lauf.app, lauf.mod
+    today = date.today().isoformat()
+    source = app.new_list_object('Fokusdauer')
+    task = app.new_item('Konzept schreiben', planned_date=today, estimated_minutes=30)
+    weitere = app.new_item('Antwort formulieren', planned_date=today)
+    blocker = app.new_item('Freigabe abwarten', planned_date=today)
+    blocked = app.new_item('Noch blockiert', planned_date=today, blocked_by=[blocker['id']])
+    source['items'] = [task, weitere, blocker, blocked]
+    app.lists, app.folders, app.labels, app.trash = [source], [], [], []
+    app.items, app.active_list_id = source['items'], source['id']
+    app.settings['release_notes_seen'] = mod.APP_VERSION
+    app.settings.pop('focus_minutes', None)
+    app.clear_render_cache(); assert app.save_items(); app.set_home_view(); idle(lauf)
+
+    def dauer_menue(item_id):
+        menu = app.build_home_task_menu(item_id)
+        index = next(i for i in range(menu.index('end') + 1)
+                     if menu.type(i) == 'cascade' and menu.entrycget(i, 'label') == 'Fokus für')
+        unter = menu.nametowidget(menu.entrycget(index, 'menu'))
+        return menu, index, unter
+    menu, index, unter = dauer_menue(task['id'])
+    labels = [unter.entrycget(i, 'label') for i in range(unter.index('end') + 1) if unter.type(i) == 'command']
+    # Aufwand 30 Minuten der Aufgabe als eigene Sitzungsdauer, keine Vorgabe.
+    assert [l.strip() for l in labels] == ['15 Minuten', '✓ 25 Minuten', '50 Minuten', 'Aufwand · 30 Minuten'], labels
+    assert menu.entrycget(1, 'label') == 'Fokus starten' and menu.entrycget(index, 'state') == 'normal'
+    # Speicherfehler: kein Timer, Vorgabe unverändert. Menübefehle laufen unter macOS über after_idle,
+    # deshalb den Leerlauf noch innerhalb des simulierten Fehlers abarbeiten.
+    with patch.object(app, 'save_settings', return_value=False):
+        unter.invoke(0); idle(lauf)
+    assert not app.running_timer() and app.settings.get('focus_minutes') == 25
+    menu.destroy()
+    menu, index, unter = dauer_menue(task['id'])
+    unter.invoke(0); idle(lauf); menu.destroy()
+    timer = app.running_timer()
+    assert timer['item_id'] == task['id'] and timer['goal_seconds'] == 900 and timer['interval_seconds'] == 900
+    saved = json.loads(Path(mod.SETTINGS_FILE).read_text(encoding='utf-8'))
+    assert saved['focus_minutes'] == 15 and saved['time_tracking']['interval_seconds'] == 900
+    menu, index, unter = dauer_menue(task['id'])
+    assert unter.entrycget(0, 'label').startswith('✓'), 'neue Vorgabe markiert'
+    menu.destroy()
+    app.stop_time_tracking()
+    # „Fokus starten“ nutzt jetzt 15 Minuten; nach Intervallende verlängert Fortsetzen um 15.
+    start = datetime.now().astimezone() - timedelta(minutes=16)
+    assert app.start_focus(weitere['id'], now=start); idle(lauf)
+    assert app.running_timer()['goal_seconds'] == 900 and app.timer_minutes() == 15
+    app.toggle_focus_pause(); app.toggle_focus_pause()
+    assert app.running_timer()['goal_seconds'] == 1800, app.running_timer()
+    app.stop_time_tracking()
+    # +5 Minuten im Fokusfeld: am Intervallende weiter um fünf Minuten; Speicherfehler ändert nichts.
+    assert app.start_focus(weitere['id'], now=datetime.now().astimezone() - timedelta(minutes=16)); idle(lauf)
+    app.update_timer_indicator()
+    assert app.running_timer()['started_at'] is None and app.running_timer()['goal_seconds'] == 900
+    vorher = app.running_timer()
+    with patch.object(app, 'save_settings', return_value=False):
+        app.extend_focus()
+    assert app.running_timer() == vorher
+    app.sync_focus_panel(); idle(lauf)
+    klick(next(w for w in knoepfe(app.focus_panel, mod.RoundedButton) if w.text == '+5 Minuten'), lauf)
+    timer = app.running_timer()
+    assert timer['goal_seconds'] == 1200 and timer['started_at'] is not None, timer
+    assert app.focus_clock_label.cget('text').startswith('Noch 0'), app.focus_clock_label.cget('text')
+    app.stop_time_tracking()
+    # Aufwand: 30 Minuten nur für diese Sitzung; die Vorgabe bleibt 15.
+    app.set_home_view(); idle(lauf)
+    menu, index, unter = dauer_menue(task['id'])
+    unter.invoke(unter.index('end')); idle(lauf); menu.destroy()
+    assert app.running_timer()['interval_seconds'] == 1800 and app.running_timer()['goal_seconds'] == 1800
+    assert app.settings['focus_minutes'] == 15
+    app.stop_time_tracking()
+    # Ohne Aufwand oder mit einer Vorgabedauer als Aufwand kein Zusatzeintrag.
+    app.set_home_view(); idle(lauf)
+    menu, index, unter = dauer_menue(weitere['id'])
+    assert [unter.entrycget(i, 'label').strip() for i in range(unter.index('end') + 1) if unter.type(i) == 'command'] == \
+        ['✓ 15 Minuten', '25 Minuten', '50 Minuten']
+    menu.destroy()
+    # Blockierte Aufgabe: Untermenü gesperrt.
+    app.set_home_view(); idle(lauf)
+    menu, index, unter = dauer_menue(blocked['id'])
+    assert menu.entrycget(index, 'state') == 'disabled'
+    menu.destroy()
+    # Aufgaben-Kontextmenü › Beziehungen und Zeit: Fokus mit Vorgabe bzw. nach Aufwand.
+    app.set_active_list(source['id']); idle(lauf)
+
+    def zeitmenue(item_id):
+        app.tree.selection_set(item_id); app.tree.focus(item_id)
+        kontext = app.build_item_context_menu()
+        index = next(i for i in range(kontext.index('end') + 1)
+                     if kontext.type(i) == 'cascade' and kontext.entrycget(i, 'label') == 'Beziehungen und Zeit')
+        return kontext, kontext.nametowidget(kontext.entrycget(index, 'menu'))
+    kontext, zeit = zeitmenue(task['id'])
+    eintraege = {zeit.entrycget(i, 'label'): i for i in range(zeit.index('end') + 1) if zeit.type(i) == 'command'}
+    assert 'Fokus starten · 15 Minuten' in eintraege and 'Fokus nach Aufwand · 30 Minuten' in eintraege, eintraege
+    zeit.invoke(eintraege['Fokus nach Aufwand · 30 Minuten']); idle(lauf); kontext.destroy()
+    assert app.running_timer()['interval_seconds'] == 1800 and app.settings['focus_minutes'] == 15
+    app.stop_time_tracking()
+    app.set_active_list(source['id']); idle(lauf)
+    kontext, zeit = zeitmenue(task['id'])
+    eintraege = {zeit.entrycget(i, 'label'): i for i in range(zeit.index('end') + 1) if zeit.type(i) == 'command'}
+    zeit.invoke(eintraege['Fokus starten · 15 Minuten']); idle(lauf); kontext.destroy()
+    assert app.running_timer()['interval_seconds'] == 900
+    app.stop_time_tracking()
+    app.set_active_list(source['id']); idle(lauf)
+    kontext, zeit = zeitmenue(blocked['id'])
+    zustand = {zeit.entrycget(i, 'label'): zeit.entrycget(i, 'state') for i in range(zeit.index('end') + 1) if zeit.type(i) == 'command'}
+    assert zustand['Fokus starten · 15 Minuten'] == 'disabled', zustand
+    kontext.destroy()
+    # Neustart: Vorgabe bleibt, laufende 50-Minuten-Sitzung behält ihr Intervall.
+    app.set_home_view(); idle(lauf)  # Fokusstart wechselt nach Heute; das Mehr-Menü gehört zur Startseite.
+    menu, index, unter = dauer_menue(task['id'])
+    unter.invoke(2); idle(lauf); menu.destroy()
+    assert app.running_timer()['interval_seconds'] == 3000 and app.settings['focus_minutes'] == 50
+    lauf.neustart(); app, mod = lauf.app, lauf.mod
+    assert app.settings['focus_minutes'] == 50 and app.running_timer()['interval_seconds'] == 3000
+    app.stop_time_tracking()
+    return ('Mehr-Menü „Fokus für“ mit Vorgabe-Häkchen, Start 15/50 min, Aufwand 30 min ohne Vorgabe, gespeicherte Vorgabe, '
+            'Intervall/Fortsetzen, +5 Minuten, Sperre, Speicherfehler, Neustart, Aufgaben-Kontextmenü')
+
+
+def fall_fokus_wechseln(lauf):
+    """Fokusfeld „Wechseln zu …“: nächste Tagesaufgaben in Rangfolge, Wechsel bucht, veraltete Wahl wirkungslos."""
+    from datetime import date, datetime, timedelta
+    from unittest.mock import MagicMock
+    app, mod = lauf.app, lauf.mod
+    today = date.today().isoformat()
+    source = app.new_list_object('Fokuswechsel')
+    aktuell = app.new_item('Konzept schreiben', planned_date=today)
+    wichtig = app.new_item('Angebot prüfen', planned_date=today, importance=3)
+    normal = app.new_item('Antwort formulieren', planned_date=today)
+    blocker = app.new_item('Freigabe abwarten', planned_date=today)
+    blockiert = app.new_item('Noch blockiert', planned_date=today, blocked_by=[blocker['id']])
+    erledigt = app.new_item('Schon erledigt', planned_date=today, done=True)
+    morgen = app.new_item('Erst morgen', planned_date=(date.today() + timedelta(days=1)).isoformat())
+    lang = app.new_item('Sehr langer Aufgabentitel ' * 5, planned_date=today)
+    source['items'] = [aktuell, wichtig, normal, blocker, blockiert, erledigt, morgen, lang]
+    app.lists, app.folders, app.labels, app.trash = [source], [], [], []
+    app.items, app.active_list_id = source['items'], source['id']
+    app.settings['release_notes_seen'] = mod.APP_VERSION
+    app.clear_render_cache(); assert app.save_items(); app.set_home_view(); idle(lauf)
+    aufgabe = lambda item: app.find_item_in_lists(item['id'])[0]
+
+    assert app.start_focus(aktuell['id'], now=datetime.now().astimezone() - timedelta(minutes=3)); idle(lauf)
+    app.sync_focus_panel(); idle(lauf)
+    knopf = next(w for w in knoepfe(app.focus_panel, mod.RoundedButton)
+                 if w.text in ('Wechseln zu …', mod.RoundedButton.action_text('Wechseln zu …')))
+    assert app.focus_switch_button is knopf
+    assert knopf._accessible_name == 'Fokus zu einer anderen Tagesaufgabe wechseln'
+    # Der Knopf öffnet das Menü (Popup als Attrappe, damit der Lauf nicht modal hängt).
+    attrappe = MagicMock()
+    with patch.object(app, 'build_focus_switch_menu', return_value=attrappe):
+        klick(knopf, lauf)
+    assert attrappe.tk_popup.called and attrappe.grab_release.called
+    kandidaten = app.focus_candidates(exclude=aktuell['id'])
+    ids = [item['id'] for item in kandidaten]
+    assert set(ids) == {wichtig['id'], normal['id'], blocker['id'], lang['id']}, ids
+    assert ids[0] == wichtig['id'] == app.focus_candidate(exclude=aktuell['id'])['id']
+    menu = app.build_focus_switch_menu()
+    labels = [menu.entrycget(i, 'label') for i in range(menu.index('end') + 1)]
+    assert labels[0] == 'Zeit buchen und wechseln zu' and menu.entrycget(0, 'state') == 'disabled', labels
+    assert [l.strip() for l in labels[1:]] == [mod.glide_focus.switch_label(item['text']) for item in kandidaten], labels
+    assert all(len(l.strip()) <= mod.glide_focus.SWITCH_TITLE_LIMIT for l in labels[1:])
+    assert any(l.endswith('…') for l in labels), labels
+    # Wechsel: laufende Zeit gebucht, gewählte Aufgabe im Fokus.
+    menu.invoke(1 + ids.index(normal['id'])); idle(lauf); menu.destroy()
+    assert app.running_timer()['item_id'] == normal['id'] and app.running_timer().get('focus')
+    assert (aufgabe(aktuell).get('time_spent_minutes') or 0) >= 3, aufgabe(aktuell)
+    # Veraltete Wahl: Ziel inzwischen erledigt – Warnung, Sitzung bleibt.
+    menu = app.build_focus_switch_menu()
+    eintrag = next(i for i in range(menu.index('end') + 1)
+                   if menu.entrycget(i, 'label').strip() == mod.glide_focus.switch_label(wichtig['text']))
+    assert app.toggle_item_done_anywhere(wichtig['id']); idle(lauf)
+    vorher = app.running_timer()
+    with patch.object(app, 'show_warning') as warnung:
+        menu.invoke(eintrag); idle(lauf)
+    menu.destroy()
+    assert warnung.called and 'erneut öffnen' in warnung.call_args.args[1], warnung.call_args
+    assert app.running_timer() == vorher
+    # Speicherfehler beim Start: nichts gewechselt, keine Buchung verloren.
+    menu = app.build_focus_switch_menu()
+    with patch.object(app, 'save_settings', return_value=False):
+        menu.invoke(1); idle(lauf)
+    menu.destroy()
+    assert app.running_timer() is None or app.running_timer()['item_id'] == normal['id'], app.running_timer()
+    app.stop_time_tracking()
+    # Keine weitere Aufgabe: einziger, gesperrter Hinweis.
+    for item in (normal, blocker, blockiert, lang):
+        aufgabe(item)['done'] = True
+    app.clear_render_cache(); assert app.save_items(); idle(lauf)
+    assert app.start_focus(aktuell['id']); idle(lauf)
+    menu = app.build_focus_switch_menu()
+    assert menu.index('end') == 0 and menu.entrycget(0, 'label') == 'Keine weitere offene Aufgabe für heute'
+    assert menu.entrycget(0, 'state') == 'disabled'
+    menu.destroy()
+    app.stop_time_tracking()
+    # Ohne laufenden Fokus bewirkt ein Wechsel nichts.
+    assert app.switch_focus(normal['id']) == 'break' and app.running_timer() is None
+    return ('Fokusfeld „Wechseln zu …“: Knopf öffnet Menü, bis zu fünf Tagesaufgaben in Rangfolge von „Nächste Aufgabe“ '
+            'ohne Blockierte/Erledigte/andere Tage, gekürzte Titel, Wechsel bucht Zeit, veraltete Wahl mit Warnung, '
+            'Speicherfehler, leere Wahl')
+
+
+def fall_side_suchverlauf(lauf):
+    """Letzte Suchen der Nebenansicht: nur bewusst genutzte Suchen mit Treffer, erneut suchen, Grenze, lesend (01.11.2026)."""
+    app, mod = lauf.app, lauf.mod
+    main, editor = seite_anlegen(lauf, '# Hauptarbeit\n\nOffener Entwurf\n')
+    other = app.new_page_from_markdown('# Überblick\n\nAngebot und Termin.\n\nNoch ein Angebot.\n\n'
+                                       '## Abschluss\n\nTermin bestätigt.\n')
+    app.set_active_list(main['id']); idle(lauf)
+    editor = app.rich_note_editor
+    assert app.open_side_view(other['id']); idle(lauf)
+    draft = editor.text.get('1.0', 'end-1c')
+    model = copy.deepcopy(app.lists)
+    written = Path(mod.SAVE_FILE).read_bytes()
+    depth = len(app.undo_stack)
+    klick(next(w for w in knoepfe(app.side_pane, mod.RoundedButton) if w.text == 'Suchen'), lauf)
+
+    def knopf(text):
+        return next(w for w in knoepfe(app.side_pane, mod.RoundedButton)
+                    if w.text in (text, mod.RoundedButton.action_text(text)))
+
+    def suchen(text):
+        feld = app._side_search_entry
+        feld.delete(0, 'end'); feld.insert(0, text); app.update_side_search()
+    menues = []
+
+    def lesen(menu, x, y):
+        menues.append([('—', '') if menu.type(i) == 'separator' else (menu.entrycget(i, 'label'), menu.entrycget(i, 'state'))
+                       for i in range(menu.index('end') + 1)])
+        menu.unpost()
+    with patch.object(mod.tk.Menu, 'tk_popup', new=lesen):
+        klick(knopf('Letzte Suchen …'), lauf)
+    assert menues[-1] == [('Noch keine Suche in dieser Sitzung', 'disabled')], menues
+    # Tippen allein merkt nichts; „Weiter“ merkt die genutzte Suche mit Treffer.
+    for teil in ('A', 'An', 'Angebot'):
+        suchen(teil)
+    assert app.side_recent_searches() == []
+    klick(knopf('Weiter'), lauf)
+    assert app.side_recent_searches() == ['Angebot']
+    # Ohne Treffer wird nichts gemerkt.
+    suchen('Nicht vorhanden'); klick(knopf('Weiter'), lauf)
+    assert app.side_recent_searches() == ['Angebot']
+    suchen('Termin'); klick(knopf('Zurück'), lauf)
+    assert app.side_recent_searches() == ['Termin', 'Angebot']
+    # Nachschlagen aus der Markierung zählt als Nutzung.
+    app.search_side_view('Abschluss'); idle(lauf)
+    assert app.side_recent_searches() == ['Abschluss', 'Termin', 'Angebot']
+    with patch.object(mod.tk.Menu, 'tk_popup', new=lesen):
+        klick(knopf('Letzte Suchen …'), lauf)
+    assert [label for label, _s in menues[-1]] == ['✓ Abschluss', '   Termin', '   Angebot', '—', '   Liste leeren'], menues[-1]
+    # Wahl sucht den Begriff erneut und zeigt den ersten Treffer.
+
+    def waehlen(menu, x, y):
+        try:
+            menu.invoke(2)
+        finally:
+            menu.unpost()
+    with patch.object(mod.tk.Menu, 'tk_popup', new=waehlen):
+        klick(knopf('Letzte Suchen …'), lauf)
+    idle(lauf)
+    assert app._side_search_entry.get() == 'Angebot' and app._side_search_query == 'Angebot'
+    assert app._side_search_counter.cget('text') == '1 / 2 Treffer', app._side_search_counter.cget('text')
+    assert app.side_recent_searches() == ['Angebot', 'Abschluss', 'Termin']
+    # Grenze: höchstens acht Begriffe, der zuletzt genutzte vorn.
+    for teil in ('An', 'Ang', 'Ange', 'Angeb', 'Angebo', 'Ter', 'Term', 'Termi'):
+        app.search_side_view(teil)
+    assert len(app.side_recent_searches()) == mod.glide_side_view.RECENT_LIMIT
+    assert app.side_recent_searches()[0] == 'Termi'
+    # Pfeil hoch/runter im Suchfeld blättert, ohne die Liste zu ändern; die Suche folgt.
+    stand = list(app.side_recent_searches())
+    feld = app._side_search_entry
+    feld.delete(0, 'end'); feld.insert(0, 'getippt'); feld.focus_force(); idle(lauf)
+    for taste, erwartet in (('<Up>', stand[0]), ('<Up>', stand[1]), ('<Down>', stand[0]), ('<Down>', stand[0])):
+        feld.event_generate(taste); idle(lauf)
+        assert feld.get() == erwartet, (taste, feld.get(), erwartet)
+    assert app._side_search_query == stand[0] and app.side_recent_searches() == stand
+    # „Liste leeren“ als letzter Eintrag verwirft die Begriffe; Suchfeld und Treffer bleiben.
+    feld_vorher, treffer_vorher = app._side_search_entry.get(), len(app._side_search_matches)
+
+    def leeren(menu, x, y):
+        letzte = menu.index('end')
+        assert menu.type(letzte - 1) == 'separator' and menu.entrycget(letzte, 'label').strip() == 'Liste leeren'
+        try:
+            menu.invoke(letzte)
+        finally:
+            menu.unpost()
+    with patch.object(mod.tk.Menu, 'tk_popup', new=leeren):
+        klick(knopf('Letzte Suchen …'), lauf)
+    idle(lauf)
+    assert app.side_recent_searches() == []
+    assert app._side_search_entry.get() == feld_vorher and len(app._side_search_matches) == treffer_vorher
+    with patch.object(mod.tk.Menu, 'tk_popup', new=lesen):
+        klick(knopf('Letzte Suchen …'), lauf)
+    assert menues[-1] == [('Noch keine Suche in dieser Sitzung', 'disabled')], menues[-1]
+    app.search_side_view('Termi')
+    # Anderer Datenordner: keine Begriffe aus einem anderen Bestand.
+    with patch.object(mod, 'SAVE_FILE', Path(mod.SAVE_FILE).with_name('anderer.json')):
+        assert app.side_recent_searches() == []
+    # Lesend: Hauptarbeit, Modell, Datei und Undo unverändert.
+    assert app.active_list_id == main['id'] and app.rich_note_editor is editor
+    assert editor.text.get('1.0', 'end-1c') == draft
+    assert app.lists == model and Path(mod.SAVE_FILE).read_bytes() == written and len(app.undo_stack) == depth
+    anzahl, befunde = befunde_b15(lauf, 'Nebenansicht Letzte Suchen')
+    assert anzahl and not befunde, befunde[:4]
+    app.close_side_view()
+    return ('Nebenansicht „Letzte Suchen …“: leer gesperrt, Tippen merkt nichts, Weiter/Zurück/Nachschlagen merken nur '
+            'Suchen mit Treffer, ✓ am aktuellen Begriff, Wahl sucht erneut, Grenze 8, Pfeiltasten, Liste leeren, Datenordnergrenze, lesend, Knopfprüfung')
+
+
+def fall_fokus_als_naechstes(lauf):
+    """Fokusfeld „Als Nächstes: …“: dieselbe Aufgabe wie „Nächste Aufgabe“, folgt Änderungen und Undo, kein Sekundentakt-Scan."""
+    from datetime import date
+    app, mod = lauf.app, lauf.mod
+    today = date.today().isoformat()
+    source = app.new_list_object('Als Nächstes')
+    aktuell = app.new_item('Konzept schreiben', planned_date=today)
+    wichtig = app.new_item('Angebot prüfen', planned_date=today, importance=3)
+    normal = app.new_item('Antwort formulieren', planned_date=today)
+    source['items'] = [aktuell, wichtig, normal]
+    app.lists, app.folders, app.labels, app.trash = [source], [], [], []
+    app.items, app.active_list_id = source['items'], source['id']
+    app.settings['release_notes_seen'] = mod.APP_VERSION
+    app.clear_render_cache(); assert app.save_items(); app.set_home_view(); idle(lauf)
+    assert app.start_focus(aktuell['id']); idle(lauf)
+    app.sync_focus_panel(); idle(lauf)
+    text = lambda: app.focus_next_label.cget('text')
+    assert text() == 'Als Nächstes: Angebot prüfen', text()
+    assert app.focus_next_label.winfo_viewable()
+    # Sekundentakt ohne Bestandsänderung bestimmt nichts neu.
+    with patch.object(app, 'focus_candidate', wraps=app.focus_candidate) as bestimmen:
+        app.sync_focus_panel(); app.update_timer_indicator(); app.sync_focus_panel()
+    assert bestimmen.call_count == 0, bestimmen.call_count
+    # Bestandsänderung: die wichtigere Aufgabe ist erledigt.
+    assert app.toggle_item_done_anywhere(wichtig['id']); idle(lauf); app.sync_focus_panel(); idle(lauf)
+    assert text() == 'Als Nächstes: Antwort formulieren', text()
+    # „Nächste Aufgabe“ nimmt genau die angezeigte; danach steht die übrige da.
+    klick(next(w for w in knoepfe(app.focus_panel, mod.RoundedButton)
+               if w.text in ('Nächste Aufgabe', mod.RoundedButton.action_text('Nächste Aufgabe'))), lauf)
+    idle(lauf)
+    assert app.running_timer()['item_id'] == normal['id'], app.running_timer()
+    app.sync_focus_panel(); idle(lauf)
+    assert text() == 'Als Nächstes: Konzept schreiben', text()
+    assert app.toggle_item_done_anywhere(aktuell['id']); idle(lauf); app.sync_focus_panel(); idle(lauf)
+    assert text() == 'Danach keine weitere Aufgabe für heute', text()
+    app.undo_last_change(); idle(lauf); app.sync_focus_panel(); idle(lauf)
+    assert text() == 'Als Nächstes: Konzept schreiben', text()
+    anzahl, befunde = befunde_b15(lauf, 'Fokusfeld Als Nächstes')
+    assert anzahl and not befunde, befunde[:4]
+    app.stop_time_tracking()
+    return ('Fokusfeld „Als Nächstes: …“: Aufgabe von „Nächste Aufgabe“, folgt Erledigen/Wechsel/Undo, '
+            'keine Neubestimmung im Sekundentakt, leerer Zustand, Knopfprüfung')
+
+
+def fall_fokus_menue(lauf):
+    """Fokusfeld-Befehle über Menü „Ansichten“ und Aktionsauswahl: Hinweis ohne Sitzung, Pause, +5, Wechseln, Beenden."""
+    from datetime import date, datetime, timedelta
+    app, mod = lauf.app, lauf.mod
+    today = date.today().isoformat()
+    source = app.new_list_object('Fokusmenü')
+    aktuell = app.new_item('Konzept schreiben', planned_date=today)
+    weitere = app.new_item('Antwort formulieren', planned_date=today)
+    source['items'] = [aktuell, weitere]
+    app.lists, app.folders, app.labels, app.trash = [source], [], [], []
+    app.items, app.active_list_id = source['items'], source['id']
+    app.settings['release_notes_seen'] = mod.APP_VERSION
+    app.clear_render_cache(); assert app.save_items(); app.set_home_view(); idle(lauf)
+    namen = {'focus_pause': 'Fokus pausieren oder fortsetzen', 'focus_extend': 'Fokus um 5 Minuten verlängern',
+             'focus_switch': 'Fokus wechseln zu …', 'focus_finish': 'Fokus beenden und Zeit buchen'}
+    eintraege = {e['id']: e for e in app.app_action_entries()}
+    for kennung, label in namen.items():
+        e = eintraege[kennung]
+        assert e['label'] == label and e['group'] == 'Planen und einordnen' and 'Ansichten' in e['path'], e
+    gefunden = {r['title'] for r in app.quick_open_results('> Fokus')}
+    assert set(namen.values()) <= gefunden, gefunden
+
+    def ausfuehren(kennung):
+        assert app.invoke_app_action(eintraege[kennung]) is not False
+        idle(lauf)
+    # Ohne Sitzung: Hinweis statt stiller Wirkungslosigkeit, nichts gestartet.
+    for kennung in namen:
+        with patch.object(app, 'show_info') as hinweis:
+            ausfuehren(kennung)
+        assert hinweis.called and 'keine Fokussitzung' in hinweis.call_args.args[1], (kennung, hinweis.call_args)
+        assert app.running_timer() is None
+    assert app.start_focus(aktuell['id'], now=datetime.now().astimezone() - timedelta(minutes=3)); idle(lauf)
+    ausfuehren('focus_pause')
+    assert app.running_timer()['started_at'] is None
+    ausfuehren('focus_pause')
+    assert app.running_timer()['started_at'] is not None
+    ziel = app.running_timer()['goal_seconds']
+    ausfuehren('focus_extend')
+    assert app.running_timer()['goal_seconds'] > ziel, app.running_timer()
+    menues = []
+
+    def lesen(menu, x, y):
+        menues.append([menu.entrycget(i, 'label').strip() for i in range(menu.index('end') + 1)])
+        menu.unpost()
+    with patch.object(mod.tk.Menu, 'tk_popup', new=lesen):
+        ausfuehren('focus_switch')
+    assert menues and menues[-1] == ['Zeit buchen und wechseln zu', 'Antwort formulieren'], menues
+    ausfuehren('focus_finish')
+    assert app.running_timer() is None
+    assert (app.find_item_in_lists(aktuell['id'])[0].get('time_spent_minutes') or 0) >= 3
+    return ('Menü „Ansichten“/Aktionsauswahl: vier Fokusbefehle mit Gruppe „Planen und einordnen“, Hinweis ohne Sitzung, '
+            'Pause/Fortsetzen, +5 Minuten, Wechseln zu …, Beenden und Buchen')
+
+
+def fall_home_fokus_laeuft(lauf):
+    """Startseitenkachel „Nächste Aufgabe“: laufende Fokussitzung benannt, „Fokus anzeigen“ ohne Neustart."""
+    from datetime import date, datetime, timedelta
+    app, mod = lauf.app, lauf.mod
+    today = date.today().isoformat()
+    source = app.new_list_object('Kachelfokus')
+    task = app.new_item('Konzept schreiben', planned_date=today, importance=3)
+    source['items'] = [task, app.new_item('Antwort formulieren', planned_date=today)]
+    app.lists, app.folders, app.labels, app.trash = [source], [], [], []
+    app.items, app.active_list_id = source['items'], source['id']
+    app.settings['release_notes_seen'] = mod.APP_VERSION
+    # Eigene Auswahl mit der Kachel „Nächste Aufgabe“ (die Standardauswahl zeigt sie nicht).
+    app.settings['home_tile_order'] = ['focus', 'today']
+    app.settings['home_tiles_hidden'] = [key for key in app.HOME_TILE_KEYS if key not in ('today', 'focus')]
+    app.clear_render_cache(); assert app.save_items(); app.set_home_view(); idle(lauf)
+
+    def knoepfe_texte():
+        return [w.text for w in knoepfe(app.home_content, mod.RoundedButton)]
+
+    def texte():
+        return [w.cget('text') for w in knoepfe(app.home_content, mod.tk.Label)]
+    assert 'Fokus starten' in knoepfe_texte() and 'Läuft gerade im Fokus.' not in texte(), knoepfe_texte()
+    start = datetime.now().astimezone() - timedelta(minutes=2)
+    assert app.start_focus(task['id'], now=start); idle(lauf)
+    app.set_home_view(); idle(lauf)
+    assert 'Fokus anzeigen' in knoepfe_texte() and 'Fokus starten' not in knoepfe_texte(), knoepfe_texte()
+    assert 'Läuft gerade im Fokus.' in texte()
+    vorher = app.running_timer()
+    klick(next(w for w in knoepfe(app.home_content, mod.RoundedButton) if w.text == 'Fokus anzeigen'), lauf)
+    idle(lauf)
+    assert app.view_mode == app.PLAN_DAY_VIEW and app.running_timer() == vorher
+    app.stop_time_tracking(); app.set_home_view(); idle(lauf)
+    assert 'Fokus starten' in knoepfe_texte() and 'Läuft gerade im Fokus.' not in texte()
+    return 'Kachel „Nächste Aufgabe“: laufender Fokus benannt, „Fokus anzeigen“ öffnet Heute ohne Neustart, danach wieder „Fokus starten“'
+
+
 FAELLE = ("seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
           "kompakt_ansichten", "kompakt_verlorenes_loslassen", "gestaltung", "tagessteuerung", "nebenansicht_navigation",
           "zweierpaket_gestaltung", "home_mehrfachplanung", "side_history", "folgepaket_gestaltung",
           "home_tagesnavigation", "home_mehrfachfelder", "side_verweisnavigation", "dreierpaket_gestaltung",
-          "home_wochenwahl", "home_faelligkeit_aufwand", "side_verweisaktionen")
+          "home_wochenwahl", "home_faelligkeit_aufwand", "side_verweisaktionen", "side_trefferuebersicht", "side_nachschlagen", "home_fokusdauer",
+          "fokus_wechseln", "side_suchverlauf", "fokus_als_naechstes",
+          "fokus_menue", "home_fokus_laeuft")
 
 
 def main():

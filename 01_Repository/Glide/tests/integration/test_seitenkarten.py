@@ -212,6 +212,26 @@ def fall_druck_tempo(run):
 
 
 CASES=('inhalt_undo','archiv_loeschen','auswahl_ziehen','altleser_backup','titelbild_praesentation_sicherung','druck_tempo')
+# Unter macOS verlangsamt eine frühere Tk-Instanz desselben Prozesses, die die
+# Startseite zeigte, jede spätere Schriftanlage um ein Vielfaches (§21.36). Glide
+# selbst hat je Prozess nur eine Instanz; die Tempoprobe misst deshalb im
+# Gesamtlauf in einem eigenen Prozess. Kriterien unverändert.
+EIGENER_PROZESS=('druck_tempo',)
+
+
+def fall_im_eigenen_prozess(app,name):
+    with tempfile.TemporaryDirectory(prefix='glide-fp04-kind-') as directory:
+        report=Path(directory)/'bericht.json'
+        try:
+            child=subprocess.run([sys.executable,'-B',str(Path(__file__).resolve()),'--app',str(app),'--fall',name,
+                                  '--report',str(report)],capture_output=True,text=True,timeout=840)
+        except subprocess.TimeoutExpired:
+            return {'ok':False,'fehler':'Kindprozess nach 840 s abgebrochen'}
+        try:
+            return json.loads(report.read_text(encoding='utf-8'))['faelle'][name]
+        except (OSError,ValueError,KeyError):
+            return {'ok':False,'fehler':('Kindprozess %s ohne Bericht\n' % child.returncode
+                                         + (child.stdout+child.stderr).replace(str(Path.home()),'~'))[-3000:]}
 
 
 def main():
@@ -219,6 +239,11 @@ def main():
     parser.add_argument('--report',type=Path);parser.add_argument('--fall',choices=CASES)
     args=parser.parse_args();report={'app_sha256':hashlib.sha256(args.app.read_bytes()).hexdigest(),'faelle':{}}
     for name in ([args.fall] if args.fall else CASES):
+        if not args.fall and name in EIGENER_PROZESS:
+            ergebnis=report['faelle'][name]=fall_im_eigenen_prozess(args.app,name)
+            if ergebnis['ok']:print('OK',name,ergebnis.get('messung') or '','(eigener Prozess)',flush=True)
+            else:print('ROT',name,ergebnis.get('fehler',''),flush=True)
+            continue
         run=None
         with tempfile.TemporaryDirectory(prefix='glide-fp04-') as directory:
             try:

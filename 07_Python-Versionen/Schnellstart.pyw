@@ -16,6 +16,7 @@ versionierte Datei.
 
 import importlib.machinery
 import importlib.util
+import hashlib
 import os
 import sys
 
@@ -40,7 +41,7 @@ def app_datei():
     return os.path.join(HIER, "app.pyw" if "app.pyw" in kandidaten else kandidaten[-1])
 
 
-def main():
+def run_application():
     # Zuerst den Cache umlenken: Schon die Prüfung unten wird übersetzt, und
     # im signierten Bundle darf neben den Quellen nichts entstehen.
     if not getattr(sys, "pycache_prefix", None):
@@ -51,13 +52,42 @@ def main():
     # bekommt eine verständliche Meldung statt eines Syntaxfehlers.
     import runtime_check
     runtime_check.pruefen_oder_beenden()
+    import runtime_diagnostics as diagnostic
+    diagnostic.start_session()
+    diagnostic.record_phase("runtime_checked")
     loader = importlib.machinery.SourceFileLoader("glide_app", app_datei())
     spec = importlib.util.spec_from_loader(loader.name, loader)
     modul = importlib.util.module_from_spec(spec)
     sys.modules[loader.name] = modul
-    loader.exec_module(modul)
-    modul.main()
+    try:
+        loader.exec_module(modul)
+        diagnostic.start_session(getattr(modul, "APP_VERSION", ""))
+        diagnostic.record_phase("imported")
+        modul.main()
+    except BaseException as error:
+        code = (0 if error.code is None else error.code if isinstance(error.code, int) else 1) if isinstance(error, SystemExit) else 1
+        diagnostic.finish(code)
+        raise
+    diagnostic.finish(0)
+    return 0
+
+
+def main():
+    # Mindestversion vor Diagnoseimport und jedem neuen Datenzugriff halten.
+    if HIER not in sys.path:
+        sys.path.insert(0, HIER)
+    if not getattr(sys, "pycache_prefix", None):
+        sys.pycache_prefix = cache_ordner()
+    import runtime_check
+    runtime_check.pruefen_oder_beenden()
+    import runtime_diagnostics as diagnostic
+    if diagnostic.consume_child_flag():
+        return run_application()
+    with open(app_datei(), "rb") as source:
+        build = hashlib.sha256(source.read()).hexdigest()
+    return diagnostic.supervise([sys.executable, os.path.abspath(__file__), diagnostic.CHILD_FLAG,
+                                 *sys.argv[1:]], build=build)
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -1,0 +1,4515 @@
+{
+  "scope": "Tatsächliche QA-, Pythonarchiv- und Beispielfixture-Dateien einschließlich ignorierter Dateien; nur Metadaten, keine Löschung",
+  "files": [
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Nebenansicht-light-860x700.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 34484
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Nebenansicht-dark-1280x800.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 44709
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Tagessteuerung-dark-1280x800-0.5.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 39432
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Tagessteuerung-light-480x560-1.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 15351
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Tagessteuerung-light-480x560-0.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 15663
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Nebenansicht-glass_light-1280x800.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 108812
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Tagessteuerung-glass_light-1280x800-0.5.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 230795
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Tagessteuerung-light-860x700-0.5.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 32474
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Tagessteuerung-dark-1280x800-1.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 39432
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Tagessteuerung-light-480x560-0.5.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 15368
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Tagessteuerung-dark-1280x800-0.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 39432
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Tagessteuerung-glass_light-1280x800-1.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 231715
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Tagessteuerung-glass_light-1280x800-0.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 229935
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Tagessteuerung-light-860x700-1.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 32474
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/screenshots/Tagessteuerung-light-860x700-0.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 30934
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/006_Für_KI_bereitstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19535
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/025_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13396
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/003_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18469
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/041_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13818
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/054_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13712
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/022_Benachrichtigungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20653
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/020_Gespeicherte_Filter.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10644
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/035_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19081
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/031_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11926
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/053_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13917
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/063_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11118
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/021_Filter_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13718
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/045_In_Ordner_verschieben.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 7406
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/023_Handbuch.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 35895
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/016_Tageshinweise_einstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11990
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/044_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12120
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/055_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13818
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/040_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13712
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/017_Kalender_als_Belegzeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19292
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/039_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13917
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/007_Austauschformat_anzeigen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23824
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/026_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13614
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/009_Sicherungsübersicht.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16721
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/061_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20492
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/019_Startseite_einrichten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 28108
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/030_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12024
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/034_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12024
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/011_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19081
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/047_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18629
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/015_Tageshinweise.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13319
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/027_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13718
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/052_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8804
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/005_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17105
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/033_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11926
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/051_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20305
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/056_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12024
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/008_Speicherstatus.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10073
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/064_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12113
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/004_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18000
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/042_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11268
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/060_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20492
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/002_Neuer_Punkt.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 40850
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/013_Einstellungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 37086
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/050_Ordner_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16368
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/059_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23243
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/036_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20305
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/028_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11926
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/057_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11946
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/032_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11848
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/046_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17105
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/010_Sicherungen_vergleichen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 14075
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/018_Tabellenspalten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 14988
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/038_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5862
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/043_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11946
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/024_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8804
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/048_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18000
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/037_Verknüpfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5183
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/014_Tag_entlasten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 29826
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/058_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12120
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/012_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20305
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/029_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11848
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/001_Schnellerfassung.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13747
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/049_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17430
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_voll/fenster/062_Zwischenstand_merken.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5407
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_restlauf/screenshots/release_hell.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 67819
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/windows_restlauf/screenshots/release_hell_dunkel.png",
+      "reason": "3.46.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 67887
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/006_Für_KI_bereitstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19334
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/025_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13675
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/003_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18439
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/041_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13680
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/054_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13570
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/022_Benachrichtigungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20577
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/020_Gespeicherte_Filter.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10501
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/035_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18812
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/031_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11778
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/053_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13780
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/063_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10819
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/021_Filter_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13604
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/045_In_Ordner_verschieben.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 7379
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/023_Handbuch.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 35822
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/016_Tageshinweise_einstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11894
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/044_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11981
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/055_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13680
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/040_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13570
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/017_Kalender_als_Belegzeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19235
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/039_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13780
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/007_Austauschformat_anzeigen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23515
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/026_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13467
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/009_Sicherungsübersicht.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16627
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/061_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20239
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/019_Startseite_einrichten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 28058
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/030_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11875
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/034_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11875
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/011_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18812
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/047_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18597
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/015_Tageshinweise.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13079
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/027_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13572
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/052_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8814
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/005_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17053
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/033_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11778
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/051_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19981
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/056_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11883
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/008_Speicherstatus.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10502
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/064_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11805
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/004_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17855
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/042_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11883
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/060_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20239
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/002_Neuer_Punkt.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 26448
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/013_Einstellungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 37055
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/050_Ordner_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16090
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/059_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17183
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/036_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19981
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/028_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11778
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/057_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11805
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/032_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11700
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/046_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17053
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/010_Sicherungen_vergleichen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13943
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/018_Tabellenspalten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 14774
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/038_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8814
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/043_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11805
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/024_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8814
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/048_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17855
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/037_Verknüpfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13893
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/014_Tag_entlasten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 29771
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/058_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11981
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/012_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19981
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/029_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11700
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/001_Schnellerfassung.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13614
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/049_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17242
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/fenster/062_Zwischenstand_merken.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5362
+    },
+    {
+      "rule": "Archivalter",
+      "path": "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/head_werkzeuggegenprobe.log",
+      "reason": "3.42.0 liegt vor den 7 neuesten Versionen",
+      "bytes": 1709
+    },
+    {
+      "rule": "Archivalter",
+      "path": "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/Fachlogik ohne Systemzeitzonen.log",
+      "reason": "3.42.0 liegt vor den 7 neuesten Versionen",
+      "bytes": 911
+    },
+    {
+      "rule": "Archivalter",
+      "path": "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/dublettenpruefung.log",
+      "reason": "3.42.0 liegt vor den 7 neuesten Versionen",
+      "bytes": 860
+    },
+    {
+      "rule": "Archivalter",
+      "path": "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/attributpruefung.log",
+      "reason": "3.42.0 liegt vor den 7 neuesten Versionen",
+      "bytes": 108
+    },
+    {
+      "rule": "Archivalter",
+      "path": "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/Werkzeugtests.log",
+      "reason": "3.42.0 liegt vor den 7 neuesten Versionen",
+      "bytes": 1828
+    },
+    {
+      "rule": "Archivalter",
+      "path": "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/analyse_erreichbarkeit.log",
+      "reason": "3.42.0 liegt vor den 7 neuesten Versionen",
+      "bytes": 9930
+    },
+    {
+      "rule": "Archivalter",
+      "path": "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/standpruefung.log",
+      "reason": "3.42.0 liegt vor den 7 neuesten Versionen",
+      "bytes": 257
+    },
+    {
+      "rule": "Archivalter",
+      "path": "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/analyse_statisch.log",
+      "reason": "3.42.0 liegt vor den 7 neuesten Versionen",
+      "bytes": 5360
+    },
+    {
+      "rule": "Archivalter",
+      "path": "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/Fachlogik-Unit-Tests.log",
+      "reason": "3.42.0 liegt vor den 7 neuesten Versionen",
+      "bytes": 911
+    },
+    {
+      "rule": "Archivalter",
+      "path": "01_Repository/Glide/tests/qa-3.42.0/ui_ux_prompt_2026-10-15/grundstufe/Startprobe.log",
+      "reason": "3.42.0 liegt vor den 7 neuesten Versionen",
+      "bytes": 70
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/screenshots/release_hell.png",
+      "reason": "3.45.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 67678
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/screenshots/release_hell_dunkel.png",
+      "reason": "3.45.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 67699
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/006_Für_KI_bereitstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19334
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/025_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13675
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/003_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18439
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/041_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13680
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/054_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13570
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/022_Benachrichtigungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20721
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/020_Gespeicherte_Filter.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10501
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/035_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18812
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/031_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11778
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/053_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13780
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/063_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10819
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/021_Filter_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13604
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/045_In_Ordner_verschieben.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 7379
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/023_Handbuch.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 35822
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/016_Tageshinweise_einstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11894
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/044_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11981
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/055_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13680
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/040_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13570
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/017_Kalender_als_Belegzeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19235
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/039_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13780
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/007_Austauschformat_anzeigen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23515
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/026_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13467
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/009_Sicherungsübersicht.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16728
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/061_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20239
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/019_Startseite_einrichten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 28058
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/030_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11875
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/034_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11875
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/011_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18812
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/047_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18597
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/015_Tageshinweise.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13079
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/027_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13572
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/052_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8814
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/005_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17053
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/033_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11778
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/051_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19981
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/056_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11883
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/008_Speicherstatus.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10502
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/064_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11805
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/004_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17855
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/042_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11883
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/060_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20239
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/002_Neuer_Punkt.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 26448
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/013_Einstellungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 37055
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/050_Ordner_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16090
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/059_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17183
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/036_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19981
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/028_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11778
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/057_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11805
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/032_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11700
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/046_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17053
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/010_Sicherungen_vergleichen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17292
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/018_Tabellenspalten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 14774
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/038_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8814
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/043_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11805
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/024_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8814
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/048_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17855
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/037_Verknüpfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13893
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/014_Tag_entlasten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 21961
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/058_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11981
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/012_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19981
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/029_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11700
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/001_Schnellerfassung.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13614
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/049_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17242
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_1856/fenster/062_Zwischenstand_merken.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5378
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/screenshots/release_hell.png",
+      "reason": "3.45.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 67644
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/screenshots/release_hell_dunkel.png",
+      "reason": "3.45.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 68627
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/006_Für_KI_bereitstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19308
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/025_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13640
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/003_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18414
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/041_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13651
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/054_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13541
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/022_Benachrichtigungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20536
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/020_Gespeicherte_Filter.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10471
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/035_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18777
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/031_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11684
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/053_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13749
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/063_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10793
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/021_Filter_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13571
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/045_In_Ordner_verschieben.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 7357
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/023_Handbuch.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 35790
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/016_Tageshinweise_einstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11874
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/044_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11947
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/055_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13651
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/040_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13541
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/017_Kalender_als_Belegzeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19201
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/039_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13749
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/007_Austauschformat_anzeigen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23489
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/026_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13438
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/009_Sicherungsübersicht.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16674
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/061_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20212
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/019_Startseite_einrichten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 28019
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/030_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11842
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/034_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11842
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/011_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18777
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/047_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18572
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/015_Tageshinweise.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13048
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/027_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13543
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/052_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8789
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/005_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16964
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/033_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11744
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/051_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19957
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/056_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11849
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/008_Speicherstatus.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10488
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/064_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11777
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/004_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17834
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/042_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11849
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/060_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20212
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/002_Neuer_Punkt.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 40809
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/013_Einstellungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 37027
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/050_Ordner_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16053
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/059_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23017
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/036_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19957
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/028_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11744
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/057_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11772
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/032_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11666
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/046_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17031
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/010_Sicherungen_vergleichen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13895
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/018_Tabellenspalten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 14753
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/038_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8789
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/043_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11772
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/024_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8789
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/048_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17834
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/037_Verknüpfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13868
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/014_Tag_entlasten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 29880
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/058_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11947
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/012_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19957
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/029_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11666
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/001_Schnellerfassung.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13581
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/049_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23070
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/windows_voll/fenster/062_Zwischenstand_merken.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5405
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/startseitenaktionen_2026-10-26/screenshots/dark-1280x800.png",
+      "reason": "3.45.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 34191
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/startseitenaktionen_2026-10-26/screenshots/light-860x700.png",
+      "reason": "3.45.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 25350
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/startseitenaktionen_2026-10-26/screenshots/light-480x560.png",
+      "reason": "3.45.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 13106
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/startseitenaktionen_2026-10-26/screenshots/glass_light-860x700.png",
+      "reason": "3.45.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 71597
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/screenshots/release_hell.png",
+      "reason": "3.45.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 67611
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/screenshots/release_hell_dunkel.png",
+      "reason": "3.45.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 68590
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/006_Für_KI_bereitstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19549
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/025_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13861
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/003_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18719
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/041_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13862
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/054_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13751
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/022_Benachrichtigungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20625
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/020_Gespeicherte_Filter.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10643
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/035_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18956
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/031_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11937
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/053_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13962
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/063_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11013
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/021_Filter_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13824
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/045_In_Ordner_verschieben.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 7416
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/023_Handbuch.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 35884
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/016_Tageshinweise_einstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12053
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/044_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12131
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/055_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13862
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/040_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13751
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/017_Kalender_als_Belegzeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19309
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/039_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13962
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/007_Austauschformat_anzeigen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23664
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/026_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13658
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/009_Sicherungsübersicht.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16847
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/061_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20541
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/019_Startseite_einrichten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 28153
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/030_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12035
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/034_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12035
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/011_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18956
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/047_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18879
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/015_Tageshinweise.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13201
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/027_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13762
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/052_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8821
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/005_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17336
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/033_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11937
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/051_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20203
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/056_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12035
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/008_Speicherstatus.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10471
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/064_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12014
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/004_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17997
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/042_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12035
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/060_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20541
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/002_Neuer_Punkt.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 40973
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/013_Einstellungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 37224
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/050_Ordner_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16239
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/059_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23240
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/036_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20203
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/028_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11937
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/057_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11957
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/032_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11860
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/046_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17336
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/010_Sicherungen_vergleichen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 14055
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/018_Tabellenspalten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 14884
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/038_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8821
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/043_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11957
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/024_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8821
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/048_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17997
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/037_Verknüpfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13912
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/014_Tag_entlasten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 21949
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/058_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12131
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/012_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20203
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/029_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11860
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/001_Schnellerfassung.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13815
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/049_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23288
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/windows_2026-10-26_0019/fenster/062_Zwischenstand_merken.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5453
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/screenshots/release_hell.png",
+      "reason": "3.45.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 67639
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/screenshots/release_hell_dunkel.png",
+      "reason": "3.45.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 67685
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/006_Für_KI_bereitstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19305
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/025_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13635
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/003_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18409
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/041_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13646
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/054_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13537
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/022_Benachrichtigungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20688
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/020_Gespeicherte_Filter.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10467
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/035_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18772
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/031_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11740
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/053_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13745
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/063_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10788
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/021_Filter_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13568
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/045_In_Ordner_verschieben.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 7352
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/023_Handbuch.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 35787
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/016_Tageshinweise_einstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11868
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/044_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11944
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/055_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13646
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/040_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13537
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/017_Kalender_als_Belegzeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19199
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/039_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13745
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/007_Austauschformat_anzeigen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23486
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/026_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13433
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/009_Sicherungsübersicht.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16590
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/061_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20209
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/019_Startseite_einrichten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 28016
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/030_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11838
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/034_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11838
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/011_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18772
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/047_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18567
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/015_Tageshinweise.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13043
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/027_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13538
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/052_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 2486
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/005_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17027
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/033_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11740
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/051_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19954
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/056_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11846
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/008_Speicherstatus.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10480
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/064_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11773
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/004_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17829
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/042_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11846
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/060_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20209
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/002_Neuer_Punkt.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 26406
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/013_Einstellungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 37020
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/050_Ordner_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16050
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/059_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17150
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/036_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19954
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/028_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11740
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/057_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11768
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/032_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11662
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/046_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17027
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/010_Sicherungen_vergleichen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17189
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/018_Tabellenspalten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 14749
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/038_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8784
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/043_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11768
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/024_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8784
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/048_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17829
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/037_Verknüpfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13865
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/014_Tag_entlasten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 21928
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/058_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11944
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/012_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19954
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/029_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11662
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/001_Schnellerfassung.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13578
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/049_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17210
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll_abschluss/fenster/062_Zwischenstand_merken.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5351
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/screenshots/release_hell.png",
+      "reason": "3.45.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 67639
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/screenshots/release_hell_dunkel.png",
+      "reason": "3.45.0 liegt vor den 3 neuesten Versionen",
+      "bytes": 67685
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/006_Für_KI_bereitstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19305
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/025_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13054
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/003_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18409
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/041_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13646
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/054_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13537
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/022_Benachrichtigungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20688
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/020_Gespeicherte_Filter.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10467
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/035_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18772
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/031_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11740
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/053_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13745
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/063_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10788
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/021_Filter_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13568
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/045_In_Ordner_verschieben.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 7352
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/023_Handbuch.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 35787
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/016_Tageshinweise_einstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11577
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/044_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11944
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/055_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13646
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/040_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13537
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/017_Kalender_als_Belegzeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19199
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/039_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13682
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/007_Austauschformat_anzeigen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23486
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/026_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13433
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/009_Sicherungsübersicht.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16554
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/061_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20209
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/019_Startseite_einrichten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 28016
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/030_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11838
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/034_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11780
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/011_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18006
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/047_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18567
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/015_Tageshinweise.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13043
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/027_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13538
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/052_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8784
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/005_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17027
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/033_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11740
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/051_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19954
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/056_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11846
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/008_Speicherstatus.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10480
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/064_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11773
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/004_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17829
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/042_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11846
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/060_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20209
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/002_Neuer_Punkt.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 26406
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/013_Einstellungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 37020
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/050_Ordner_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16050
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/059_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17150
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/036_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19954
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/028_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11740
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/057_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11768
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/032_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11662
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/046_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17027
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/010_Sicherungen_vergleichen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17247
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/018_Tabellenspalten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 14749
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/038_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8784
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/043_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11768
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/024_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8784
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/048_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17829
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/037_Verknüpfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13865
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/014_Tag_entlasten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 21928
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/058_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11944
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/012_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19954
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/029_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11662
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/001_Schnellerfassung.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13578
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/049_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17210
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/windows_voll/fenster/062_Zwischenstand_merken.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5267
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/006_Für_KI_bereitstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19549
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/019_Filter_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13824
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/038_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13751
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/025_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13704
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/003_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18719
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/059_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20541
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/040_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12035
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/013_Tageshinweise.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13201
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/054_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12035
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/049_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20203
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/031_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11937
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/037_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13962
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/061_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11013
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/053_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13803
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/023_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13861
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/052_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13751
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/060_Zwischenstand_merken.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5475
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/035_Verknüpfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13912
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/024_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13658
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/039_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13862
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/022_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8821
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/007_Austauschformat_anzeigen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23664
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/041_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11957
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/020_Benachrichtigungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20741
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/050_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8821
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/009_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18956
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/046_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17997
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/030_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11860
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/055_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11957
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/062_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12014
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/051_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13962
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/045_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18879
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/036_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8821
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/047_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23288
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/005_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17336
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/056_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12131
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/027_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11860
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/004_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17997
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/042_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12072
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/017_Startseite_einrichten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 28230
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/012_Tag_entlasten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 21570
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/002_Neuer_Punkt.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 40973
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/010_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20203
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/016_Tabellenspalten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 14884
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/008_Sicherungen_vergleichen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17466
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/028_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12035
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/032_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12035
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/048_Ordner_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16239
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/057_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23240
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/021_Handbuch.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 36083
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/058_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20541
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/026_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11937
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/044_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17336
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/033_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18956
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/043_In_Ordner_verschieben.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 7416
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/015_Kalender_als_Belegzeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19309
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/011_Einstellungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 37224
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/029_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11937
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/034_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20203
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/014_Tageshinweise_einstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12053
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/001_Schnellerfassung.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13815
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.44.0/windows_2026-10-25_1345/fenster/018_Gespeicherte_Filter.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10643
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/screenshots/release_hell.png",
+      "reason": "3.43.1 liegt vor den 3 neuesten Versionen",
+      "bytes": 67985
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/screenshots/release_hell_dunkel.png",
+      "reason": "3.43.1 liegt vor den 3 neuesten Versionen",
+      "bytes": 68056
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/006_Für_KI_bereitstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18640
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/019_Benachrichtigungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20632
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/038_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13651
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/003_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18414
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/035_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8789
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/040_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11772
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/025_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11744
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/013_Tageshinweise.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13048
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/054_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11772
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/031_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11842
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/042_In_Ordner_verschieben.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5080
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/037_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13541
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/022_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13640
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/061_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11777
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/023_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13438
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/036_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13749
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/045_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17834
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/052_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13651
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/024_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13543
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/047_Ordner_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16053
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/007_Austauschformat_anzeigen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23489
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/041_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11889
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/009_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18777
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/021_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8789
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/034_Verknüpfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13868
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/050_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13749
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/030_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11744
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/060_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10793
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/057_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20212
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/055_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11889
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/044_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18572
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/051_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13541
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/005_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17031
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/033_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19957
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/027_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11842
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/004_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17834
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/017_Startseite_einrichten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 28096
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/012_Tag_entlasten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 21530
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/002_Neuer_Punkt.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 40809
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/010_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19957
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/016_Tabellenspalten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 14753
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/008_Sicherungen_vergleichen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17207
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/056_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17152
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/048_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19957
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/032_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18777
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/028_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11744
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/049_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8789
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/039_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11849
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/058_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20212
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/026_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11666
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/020_Handbuch.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 35994
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/059_Zwischenstand_merken.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5376
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/015_Kalender_als_Belegzeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19201
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/046_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17212
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/011_Einstellungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 37027
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/043_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17031
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/029_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11666
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/014_Tageshinweise_einstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11874
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/001_Schnellerfassung.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13581
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/018_Gespeicherte_Filter.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10377
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_05/fenster/053_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11849
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/screenshots/release_hell.png",
+      "reason": "3.43.1 liegt vor den 3 neuesten Versionen",
+      "bytes": 67985
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/screenshots/release_hell_dunkel.png",
+      "reason": "3.43.1 liegt vor den 3 neuesten Versionen",
+      "bytes": 68056
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/006_Für_KI_bereitstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18640
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/019_Benachrichtigungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20632
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/038_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13651
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/003_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18414
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/035_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5812
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/040_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11772
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/025_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11744
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/013_Tageshinweise.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13048
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/054_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11772
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/031_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11842
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/042_In_Ordner_verschieben.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 7357
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/037_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13541
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/022_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13640
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/061_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11777
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/023_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13438
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/036_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13749
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/045_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17834
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/052_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13651
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/024_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13543
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/047_Ordner_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16053
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/007_Austauschformat_anzeigen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23489
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/041_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11947
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/009_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18777
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/021_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8789
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/034_Verknüpfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13868
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/050_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13749
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/030_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11744
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/060_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10793
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/057_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20212
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/055_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11447
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/044_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18572
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/051_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13541
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/005_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17031
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/033_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19957
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/027_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11842
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/004_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17834
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/017_Startseite_einrichten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 28096
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/012_Tag_entlasten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 21530
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/002_Neuer_Punkt.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 40809
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/010_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19957
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/016_Tabellenspalten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 14753
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/008_Sicherungen_vergleichen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17343
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/056_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17152
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/048_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19957
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/032_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18777
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/028_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11744
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/049_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8789
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/039_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11849
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/058_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20212
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/026_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11666
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/020_Handbuch.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 35994
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/059_Zwischenstand_merken.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5374
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/015_Kalender_als_Belegzeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19201
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/046_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17212
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/011_Einstellungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 36963
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/043_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17031
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/029_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11666
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/014_Tageshinweise_einstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11874
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/001_Schnellerfassung.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13581
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/018_Gespeicherte_Filter.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10471
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/featurepakete_2026-10-19/laeufe/vollpruefung_04/fenster/053_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11849
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/screenshots/release_hell.png",
+      "reason": "3.43.1 liegt vor den 3 neuesten Versionen",
+      "bytes": 67722
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/screenshots/release_hell_dunkel.png",
+      "reason": "3.43.1 liegt vor den 3 neuesten Versionen",
+      "bytes": 68588
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/006_Für_KI_bereitstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18907
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/019_Benachrichtigungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20736
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/038_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13235
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/003_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18469
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/035_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 8804
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/040_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11222
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/025_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11926
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/013_Tageshinweise.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13319
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/054_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11946
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/031_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12024
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/042_In_Ordner_verschieben.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 7406
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/037_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13712
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/022_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13818
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/061_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12113
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/023_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13614
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/036_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13917
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/045_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18000
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/052_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13818
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/024_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13718
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/047_Ordner_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16368
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/007_Austauschformat_anzeigen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 23824
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/041_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12120
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/009_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19081
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/021_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5862
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/034_Verknüpfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5183
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/050_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13917
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/030_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11926
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/060_Symbol_vor_dem_Export_prüfen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11118
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/057_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20492
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/055_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12120
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/044_CSV_importieren.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18629
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/051_Neue_Liste.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13712
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/005_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17105
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/033_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20305
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/027_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12024
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/004_Kalenderdatei__ICS_.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 18000
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/017_Startseite_einrichten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 28184
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/012_Tag_entlasten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20335
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/002_Neuer_Punkt.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 40850
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/010_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20305
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/016_Tabellenspalten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 14988
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/008_Sicherungen_vergleichen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17390
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/056_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17368
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/048_Labels.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20305
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/032_Liste_bearbeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19081
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/028_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11926
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/049_Aus_Vorlage_anlegen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5862
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/039_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 12024
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/058_PNG_auf_128___128_einpassen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 20492
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/026_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11848
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/020_Handbuch.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 36096
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/059_Zwischenstand_merken.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 5418
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/015_Kalender_als_Belegzeiten.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 19292
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/046_Pixelsymbol.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17430
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/011_Einstellungen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 37086
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/043_Drucken_und_PDF.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 17105
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/029_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11790
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/014_Tageshinweise_einstellen.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11990
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/001_Schnellerfassung.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 13747
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/018_Gespeicherte_Filter.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10644
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.43.1/vollpruefung_2026-10-18/vorlauf_01/fenster/053_Neuer_Ordner.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11964
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.49.0/robustheit_2026-10-28/fenster/wiederanlauf_glass_dark_gross_status.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10957
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.49.0/robustheit_2026-10-28/fenster/wiederanlauf_light_gross_status.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 11007
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.49.0/robustheit_2026-10-28/fenster/wiederanlauf_dark_gross_hauptfenster.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 24691
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.49.0/robustheit_2026-10-28/fenster/wiederanlauf_dark_gross_status.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 10940
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.49.0/funktionspakete_2026-10-28/fenster/Verweise-glass_light-860x700.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 79008
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.49.0/funktionspakete_2026-10-28/fenster/Tagesauswahl-dark-1280x800.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 38518
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.49.0/funktionspakete_2026-10-28/fenster/Tagesauswahl-light-860x700.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 30249
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.49.0/funktionspakete_2026-10-28/fenster/Tagesauswahl-glass_light-860x700.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 75492
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.49.0/funktionspakete_2026-10-28/fenster/Verweise-dark-1280x800.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 47484
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.49.0/funktionspakete_2026-10-28/fenster/Verweise-light-860x700.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 30488
+    },
+    {
+      "rule": "Fensterbilder",
+      "path": "01_Repository/Glide/tests/qa-3.49.0/funktionspakete_2026-10-28/fenster/Tagesauswahl-light-480x560.png",
+      "reason": "Bildschirmfotos der Vollprüfung bleiben lokal",
+      "bytes": 16963
+    }
+  ],
+  "rules": {
+    "Fensterbilder": 741,
+    "Archivalter": 10
+  }
+}

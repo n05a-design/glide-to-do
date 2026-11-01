@@ -1,0 +1,12 @@
+{
+  "app_sha256": "9f6db22c18c6490e45921897c3fde0917767010741b111b967973d085a0c5cb1",
+  "faelle": {
+    "einfuegen_voller_undo_fehler": {
+      "ok": false,
+      "fehler": "Traceback (most recent call last):\n  File \"%USERPROFILE%/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_mutationsreste.py\", line 817, in main\n    evidence = globals()['fall_'+name](run)\n  File \"%USERPROFILE%/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_mutationsreste.py\", line 734, in fall_einfuegen_voller_undo_fehler\n    assert tuple(app.undo_stack)==stack and app.dirty==dirty,'Mehrzeiliges Einfügen verliert ältesten Undo-Schritt oder Dirty-Zustand'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Mehrzeiliges Einfügen verliert ältesten Undo-Schritt oder Dirty-Zustand\n"
+    }
+  },
+  "fehler": [
+    "einfuegen_voller_undo_fehler"
+  ]
+}

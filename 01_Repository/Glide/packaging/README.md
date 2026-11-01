@@ -1,6 +1,6 @@
 # Paketierung Glide
 
-Stand 29.10.2026 · Glide 3.49.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 **Starter 3.49.0:** normaler Paketstart erhält Prozessbegleitung für lokale technische Diagnose und tatsächlichen Exitstatus; `--paket-pruefen` bleibt der direkte isolierte Prüfweg. Neue Module gehen mit jeder Lieferung mit. Änderungen am Bootstrap sind gezielt im Quellstand geprüft; vorhandene native Pakete bleiben 3.45.0 bis zu einem belegten Neubau. [Grenzen](../tests/qa-3.49.0/robustheit_2026-10-28/README.md).
 
