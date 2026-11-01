@@ -77,6 +77,29 @@ class NavigationTests(unittest.TestCase):
         self.assertEqual(side_view.section_counts(liste, ['a', 'b', 'g2', 'c', 'fehlt'], order), [1, 2])
         self.assertEqual(side_view.section_counts([], [1, 2]), [])
 
+    def test_section_step_for_pages(self):
+        seite = [dict(key=2, title='Einleitung', depth=0), dict(key=6, title='Ergebnis', depth=1)]
+        self.assertEqual(side_view.section_step(seite, 1, 1)['title'], 'Einleitung')
+        self.assertEqual(side_view.section_step(seite, 2, 1)['title'], 'Ergebnis')
+        self.assertIsNone(side_view.section_step(seite, 6, 1))
+        self.assertIsNone(side_view.section_step(seite, 2, -1))
+        self.assertEqual(side_view.section_step(seite, 6, -1)['title'], 'Einleitung')
+        self.assertEqual(side_view.section_step(seite, 9, -1)['title'], 'Ergebnis')
+        self.assertIsNone(side_view.section_step([], 3, 1))
+        self.assertEqual(side_view.section_step(seite, None, 1)['title'], 'Einleitung')
+
+    def test_section_step_for_lists(self):
+        liste = [dict(key='g1', title='A', depth=0), dict(key='g2', title='B', depth=0),
+                 dict(key='weg', title='Veraltet', depth=0)]
+        order = ['a', 'g1', 'b', 'g2', 'c']
+        self.assertEqual(side_view.section_step(liste, 'a', 1, order)['title'], 'A')
+        self.assertEqual(side_view.section_step(liste, 'b', 1, order)['title'], 'B')
+        self.assertIsNone(side_view.section_step(liste, 'c', 1, order))
+        self.assertEqual(side_view.section_step(liste, 'c', -1, order)['title'], 'B')
+        self.assertEqual(side_view.section_step(liste, 'g2', -1, order)['title'], 'A')
+        self.assertEqual(side_view.section_step(liste, None, 1, order)['title'], 'A')
+        self.assertIsNone(side_view.section_step(liste, None, -1, order))
+
     def test_overview_label_joins_and_truncates(self):
         self.assertEqual(side_view.overview_label('Kapitel', '…Treffer…'), 'Kapitel · …Treffer…')
         self.assertEqual(side_view.overview_label('', 'nur Text'), 'nur Text')

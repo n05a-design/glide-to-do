@@ -15,7 +15,7 @@ bleiben ohne Eintrag, nachträglich wird nichts erfunden.
 # Eintrag zeigt keine Karte.
 CATALOG = {
     "3.50.0": (
-        "Nebenansicht: alle Treffer mit Abschnitt und Ausschnitt sehen, Trefferzahl je Abschnitt, letzte Suchen erneut aufrufen.",
+        "Nebenansicht: alle Treffer mit Abschnitt sehen, letzte Suchen erneut aufrufen, mit Alt+Pfeil von Abschnitt zu Abschnitt springen.",
         "Markierten Text aus einer Seite oder Notiz direkt in der Nebenansicht nachschlagen.",
         "Fokus für 15, 25, 50 Minuten oder den geschätzten Aufwand starten; die Vorgabe gilt auch für „Fokus starten“.",
         "Anlegen, Löschen und Verschieben speichern bei großen Beständen deutlich schneller.",
