@@ -1,6 +1,6 @@
 # Regeln für die Dokumentenpflege
 
-Stand 31.10.2026 · Glide 3.50.0 · Datenformat 26
+Stand 01.11.2026 · Glide 3.50.0 · Datenformat 26
 
 **Aufbewahrung 31.10.2026:** Zusätzlich zu den neun überalterten Git-Dateien alle 751 im Audit inventarisierten ignorierten QA-Reste entfernt; 28 Original-Nutzerbilder erhalten. Einzelpfade und Hashes im [Prüf- und Liefernachweis](../tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md). Die beschädigte Zeichencodierung der datierten Robustheits-README wurde an 49 Zeichen rekonstruiert; Zahlenfolgen und Aussagen unverändert, Vorher-/Nachherhash dokumentiert. Historische Messergebnisse/JSON-Berichte bleiben datiert.
 
@@ -85,6 +85,6 @@ Auftrag vom 27.10.2026: alle Dateien nach Inhalt, Stand und Version prüfen. Akt
 
 ## Abschlussstatus nach Dokumentationsaudits
 
-Aktueller tatsächlicher Ablagebefund 31.10.2026: neun überalterte Git-Dateien regelkonform entfernt; darüber hinaus 751 lokale, ignorierte Reste (741 alte QA-Bilder und zehn alte Rohlogs) als offen erfasst. Ein grüner CI-Schritt „Ablagegröße“ bezieht sich auf den versionierten Bestand. [Metadateninventar](../tests/qa-3.49.0/abschlussaudit_2026-10-31/lokale_ablagereste.json). Die datierten 595 Kandidaten vom 27.10. oben sind der frühere Stand, keine heutige Bestandszahl.
+Ablagebefund des Audits 31.10.2026: neun überalterte Git-Dateien regelkonform entfernt; darüber hinaus 751 lokale, ignorierte Reste (741 alte QA-Bilder und zehn alte Rohlogs) erfasst und noch am selben Tag entfernt (siehe Aufbewahrung oben, Plan §21.37). Ein grüner CI-Schritt „Ablagegröße“ bezieht sich auf den versionierten Bestand. [Metadateninventar](../tests/qa-3.49.0/abschlussaudit_2026-10-31/lokale_ablagereste.json). Die datierten 595 Kandidaten vom 27.10. oben sind der frühere Stand, keine heutige Bestandszahl.
 
 Der [Abschlussabgleich vom 31.10.2026](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1321-abschlussabgleich-von-roadmap-featurelisten-und-dokumentation) korrigiert Widersprüche zwischen aktuellen Tabellen und späteren Prüf-/Lieferbelegen. Der jeweils neueste Abschlussrest steht im bestehenden Entwicklungsplan; datierte Umsetzungsprotokolle und eingefrorene Nachweise werden nicht nachträglich umbewertet. Die aktuelle README im Python-Archiv ist trotz ihres Ablageorts eine gepflegte Übersicht; ihre Versionsliste gegen die tatsächlichen Dateien prüfen. Beim Kürzen belegte historische Referenzen auf die unveränderliche, lokal geprüfte Git-Fassung umstellen. Eine vorhandene Datei, registrierte Suite, grüne Grundprüfung oder ✅-Marke ersetzt keine vollständige Abnahme. Bereits erfüllte Einführungs-/Lieferteile nicht erneut als offen anbieten, appweite Reste und nicht ausgeführte native/Menschenprüfungen ausdrücklich offen lassen. Bei präziseren Überschriften bisherige Linkanker als Alias erhalten.

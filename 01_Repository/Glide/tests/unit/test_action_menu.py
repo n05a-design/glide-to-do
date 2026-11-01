@@ -62,6 +62,12 @@ class EntryTests(unittest.TestCase):
         self.assertEqual(values[0].section, action_menu.FALLBACK_SECTION)
         self.assertEqual(values[0].kind, 'command')
 
+    def test_check_label_keeps_one_edge(self):
+        gewaehlt, frei = action_menu.check_label("25 Minuten", True), action_menu.check_label("50 Minuten", False)
+        self.assertEqual((gewaehlt, frei), ("✓ 25 Minuten", "    50 Minuten"))
+        self.assertEqual(action_menu.clean_label(gewaehlt), ("25 Minuten", True))
+        self.assertEqual(action_menu.clean_label(frei), ("50 Minuten", False))
+
     def test_entry_limit(self):
         many = [((index,), f'Eintrag {index}', (), True, 0, 'command') for index in range(500)]
         self.assertEqual(len(action_menu.entries(many)), action_menu.MAX_ENTRIES)

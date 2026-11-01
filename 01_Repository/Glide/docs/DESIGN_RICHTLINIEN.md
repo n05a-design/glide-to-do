@@ -1,6 +1,6 @@
 # Design Richtlinien
 
-Stand 31.10.2026 · Glide 3.50.0 · appweiter Gestaltungsvertrag; bestehendes UI-/UX-Paket und fortlaufende Übertragung
+Stand 01.11.2026 · Glide 3.50.0 · appweiter Gestaltungsvertrag; bestehendes UI-/UX-Paket und fortlaufende Übertragung
 
 **Mutationsfortsetzung 29.10.2026:** „Liste leeren“ verwendet für beide bestehenden Bedienwege die vorhandene Bestätigung mit Listenname und vorhandene Warn-/Speicherfehlerrollen; keine zusätzliche Dauerfläche, Farbe oder Symbolrolle. Frische ID-Prüfung nach Dialog, Rückweg über einen Undo-Schritt. Automatisierte App-/Datei-/Fehlernachweise im [Abschlussnachlauf](../tests/qa-3.49.0/abschlussreste_2026-10-29/README.md); native DPI-/Reader-/Menschenabnahme weiterhin offen. Gerätevergleich/Prüfprofil schafft keine neue Produktoberfläche.
 
@@ -75,6 +75,8 @@ Zusammengehörige Texte und Aktionen teilen erkennbare Kanten, Abstände und Hö
 ### Klare Formen und stabile Symbolbedeutung (B10, B12, B14)
 
 Ein Symbol hat eine nachvollziehbare Bedeutung. Abschnittsköpfe mit Aufklapppfeil tragen kein zweites Dreieck oder Pfeilzeichen; ▶/◀ blättern, ▿/▷ klappen. Die Lupe ⌕ kennzeichnet die Suche. Die Seiten-Blockleiste trägt keine Symbole vor einzelnen Beschriftungen. Plattformweite Glyphenabdeckung, zugängliche Benennung und Fokus mitprüfen. Zentrale `ICONS`- und Rollenfarbregeln an ihrer Quelle pflegen.
+
+**Häkchenspalte in Menüs (Gesamtprüfung 01.11.2026):** Ein Auswahlmenü, dessen Einträge einen Zustand zeigen, setzt jede Beschriftung über `action_menu.check_label`: „✓ “ oder vier Leerzeichen. Beide sind in der macOS-Menüschrift gleich breit (15 px), in DejaVu Sans 19 bzw. 18 px; so beginnen alle Beschriftungen an einer Kante (B02). Vorher standen drei, vier oder keine Leerzeichen, Beschriftungen waren auf dem Mac um 4 bzw. 15 px versetzt. `test_arbeitsmodi` (Fall `side_suchverlauf`) misst den Versatz in der tatsächlichen Menüschrift. Nicht übertragen: die eingerückten Pinnwandmenüs mit eigener Spalte („   ✓ “) und einzelne Schalter in gemischten Menüs („Wiederkehrende Checkliste“), die das Häkchen nur im eingeschalteten Zustand tragen; Rest in [Analyse §13.22](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1322-gesamtprüfung-vom-01112026).
 
 **Symbolschrift (B10, präzisiert D29):** Zeichen kommen aus der tatsächlich verwendeten UI-Schrift (mitgelieferte DejaVu Sans). Fehlt ein bedeutungstragendes Zeichen dort, darf es gezielt aus einer einfarbigen Systemschrift des Betriebssystems kommen, wenn diese das Zeichen nachweislich selbst enthält (`SYMBOL_FONT_FALLBACKS` in `symbol_policy.py`, derzeit nur die Lupe: Segoe UI Symbol, Apple Symbols, Noto Sans Symbols, DejaVu Sans Mono). Keine Emoji-, Icon- oder mitgelieferte Zusatzschrift. Fehlt jede, bleibt der lesbare Textrückfall („Su“).
 

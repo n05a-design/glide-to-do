@@ -63,6 +63,10 @@ R13 Der erste Vollprüfungsaufruf eines fortgeschriebenen Dokuments verwendet
 R14 Nennt eine fortgeschriebene Standzeile die Zahl der Integrationssuiten,
     stimmt sie mit SUITEN im Prüfstand überein. Historische Laufzahlen bleiben
     als Belege erlaubt.
+R15 Ein fortgeschriebener Absatz, der sich als aktuell ausweist („**Aktuell …**“,
+    „**Aktueller Quellkandidat …**“, „> **Projektstatus:**“), nennt als Quelle,
+    Quellstand oder Prüfkandidat die aktuelle Version. Ein Satz mit „damals“,
+    „historisch“, „vorherig“ oder „früher“ bleibt Herkunft.
 
 R6 bis R8 kamen mit 3.21.4 dazu, R9 bis R11 am 29.09.2026. Anlass: Fünf fortgeschriebene Dokumente
 trugen eine überholte Formatstufe – `SECURITY.md` „Formate 4 bis 12",
@@ -136,6 +140,13 @@ AKTUELL = re.compile(
     r"|Der\s+aktuelle\s+Stand\s+ist)",
     re.I,
 )
+
+# R15: Absätze, die sich selbst als aktuell ausweisen. Anlass 01.11.2026: Zwölf
+# Absätze hießen nach Rundenwechseln weiter „Aktuell“ mit Quelle 3.49.0, während
+# die Standzeile darüber 3.50.0 nannte; R3 erfasst nur die älteren Bannerformen.
+AKTUELLER_ABSATZ = re.compile(r"^\s*(?:[->]\s*)?\*\*(?:Aktuell|Projektstatus|Neuer\s+Quellkandidat)", re.I)
+QUELLANGABE = re.compile(r"(?:Quelle|Quellkandidat(?:en)?|Quellstand|Prüfkandidat(?:en)?)\s+(?:\*\*)?(\d+\.\d+\.\d+)")
+HERKUNFT = re.compile(r"damal|histor|vorherig|früher", re.I)
 
 VERSION_MUSTER = re.compile(r"(?<![\w.])(\d+\.\d+(?:\.\d+)?)(?![\w.])")
 
@@ -401,6 +412,16 @@ def datei_pruefen(befund: Befund, kurz: str, text: str) -> None:
 
     if not fest:
         formate_pruefen(befund, kurz, zeilen, standzeilen)
+        for nr, zeile in enumerate(zeilen, 1):
+            if not AKTUELLER_ABSATZ.match(zeile):
+                continue
+            for satz in saetze(zeile):
+                if HERKUNFT.search(satz):
+                    continue
+                for wert in QUELLANGABE.findall(satz):
+                    if als_tupel(wert) != als_tupel(befund.version):
+                        befund.melden(kurz, nr, f"aktueller Absatz nennt Quelle {wert}, "
+                                                f"aktuell ist {befund.version} (R15)")
     # R9 auch für Verträge der laufenden Version („…_3.30.0.md“): Sie werden
     # fortgeschrieben, solange die Version gilt. Datierte Belege bleiben frei.
     lebend = not fest or (name_version and als_tupel(name_version) == als_tupel(befund.version)

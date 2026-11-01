@@ -1,8 +1,8 @@
 # Daten, Backups und Migration – Glide
 
-Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
+Stand 01.11.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
 
-**Historischer Formatwechsel 3.44.0 (22.10.2026):** Aufgabenformat 26 (FP-02), FP-01 und WA-27–WA-30 sowie die obersten Einstellungsnamespaces von FP-03/FP-04 wurden als Python-Fassung geliefert. [Datierter Schutznachweis](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/README.md). Damals konnten Pakete 3.42.0 Format 26 nur lesend öffnen. **Heute unterstützen die gelieferten nativen 3.45.0-Pakete und Python 3.47.0 Format 26; Quelle 3.49.0 ist noch nicht geliefert.** Aktuelle native/Menschenabnahmen und FP-01-Prüfadapterbefund getrennt im [QA-Bericht](07_QA_BERICHT.md).
+**Historischer Formatwechsel 3.44.0 (22.10.2026):** Aufgabenformat 26 (FP-02), FP-01 und WA-27–WA-30 sowie die obersten Einstellungsnamespaces von FP-03/FP-04 wurden als Python-Fassung geliefert. [Datierter Schutznachweis](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/README.md). Damals konnten Pakete 3.42.0 Format 26 nur lesend öffnen. **Heute unterstützen das Windows-Paket 3.45.0, Python/Showcase und das macOS-Paket 3.49.0 Format 26; die nicht gelieferte Quelle 3.50.0 ändert das Format nicht.** Aktuelle native/Menschenabnahmen und FP-01-Prüfadapterbefund getrennt im [QA-Bericht](07_QA_BERICHT.md).
 
 Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag 52) ergänzt und um die Verweise auf gelöschte Einzelverträge bereinigt; die Vorfassungen trägt Git. Formate 4–26 und Legacy 2 bleiben lesbar.
 

@@ -2490,7 +2490,14 @@ def fall_side_suchverlauf(lauf):
     assert app.side_recent_searches() == ['Abschluss', 'Termin', 'Angebot']
     with patch.object(mod.tk.Menu, 'tk_popup', new=lesen):
         klick(knopf('Letzte Suchen …'), lauf)
-    assert [label for label, _s in menues[-1]] == ['✓ Abschluss', '   Termin', '   Angebot', '—', '   Liste leeren'], menues[-1]
+    assert [label for label, _s in menues[-1]] == ['✓ Abschluss', '    Termin', '    Angebot', '—', '    Liste leeren'], menues[-1]
+    # Häkchenspalte: „✓ “ und die Leerstelle sind in der Menüschrift fast gleich breit (Design Richtlinien, 01.11.2026).
+    import tkinter.font as tkfont
+    probe = app._new_themed_popup_menu()
+    schrift = tkfont.Font(root=app.root, font=probe.cget('font'))
+    versatz = abs(schrift.measure('✓ ') - schrift.measure(mod.glide_action_menu.CHECK_PAD))
+    probe.destroy()
+    assert versatz <= 2, (schrift.actual(), versatz)
     # Wahl sucht den Begriff erneut und zeigt den ersten Treffer.
 
     def waehlen(menu, x, y):
@@ -2768,8 +2775,22 @@ def fall_side_abschnitte(lauf):
     assert editor.text.get('1.0', 'end-1c') == draft
     assert app.lists == model and Path(mod.SAVE_FILE).read_bytes() == written and len(app.undo_stack) == depth
     app.close_side_view()
+    # Hilfe › Tastenkürzel nennt die Kürzel der Nebenansicht (Gesamtprüfung 01.11.2026).
+    texte = []
+    def sammeln(dialog, parent=None):
+        stapel = [dialog]
+        while stapel:
+            widget = stapel.pop()
+            stapel.extend(widget.winfo_children())
+            if 'text' in widget.keys():
+                texte.append(str(widget.cget('text')))
+        dialog.destroy()
+    with patch.object(app, 'run_modal', sammeln):
+        app.show_shortcuts_dialog()
+    for kuerzel in ('Nebenansicht: Alt + ↑ / ↓', 'Nebenansicht: Alt + ← / →', 'Nächster / vorheriger Abschnitt'):
+        assert kuerzel in texte, (kuerzel, [x for x in texte if 'Nebenansicht' in x])
     return ('Nebenansicht Alt+Pfeil runter/hoch: Seite über Einfügemarke und Liste über Gruppen in Anzeigereihenfolge, '
-            'sichtbar angesteuert, ✓ am aktuellen Abschnitt, Ränder und fehlende Abschnitte gemeldet, lesend')
+            'sichtbar angesteuert, ✓ am aktuellen Abschnitt, Ränder und fehlende Abschnitte gemeldet, lesend, in Hilfe › Tastenkürzel')
 
 
 FAELLE = ("seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",

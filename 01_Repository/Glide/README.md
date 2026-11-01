@@ -1,12 +1,12 @@
 # Glide – lokale Aufgaben, Notizen und Pinnwände
 
-Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26 · Quelle 3.50.0; Python/Showcase und macOS 3.49.0; Windows-Paket 3.45.0 · keine Gesamtabnahme
+Stand 01.11.2026 · Glide 3.50.0 · Aufgabenformat 26 · Quelle 3.50.0; Python/Showcase und macOS 3.49.0; Windows-Paket 3.45.0 · keine Gesamtabnahme
 
 **Abschlussfortsetzung 31.10.2026:** Python/Showcase und eigenständiges macOS-arm64-Paket 3.49.0 geliefert, Windows-Paket weiterhin 3.45.0. Native Tk-9.1-Matrix: 126 Schritte einschließlich aller 108 Integrationssuiten grün; Programm-, Test-, Fixture- und Ressourcenstand entsprechen dem eingefrorenen Nachweis; anschließende Anleitungspflege separat geprüft. Neue Grundstufe mit 235 Werkzeugtests und zweimal 1.082 Fachtests grün. 56 Mutationsfälle und zwölf native Accessibility-Proben grün. WA-41A/B, Windows-/Linux-Endmatrix, echte Readerketten, übrige appweite Architektur-/Performanceumfänge und Menschenabnahme bleiben offen. [Prüf- und Liefernachweis](tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md), [aktueller Rest in §21.37](../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2137-abschlussfortsetzung-mutationen-prüfablauf-tk-91-und-lieferung). Frühere datierte Absätze bewahren ihren damaligen Stand.
 
 Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Sie läuft lokal mit Python 3.14 und Tk 9 (Tk 8.6 eingeschränkt), braucht weder Konto noch Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
-> **Projektstatus:** lokaler Prüfkandidat **3.49.0**, Aufgabenformat 26: gemeinsame abgesicherte Prüfabläufe, geschützter Wiederanlauf und lokale Absturzdiagnose. Die 3.48.0-Tages-/Nebenansichtsfeatures bleiben enthalten. Python/Showcase 3.47.0, eigenständige Pakete 3.45.0; WA-41 und breite/native Abnahme offen. [Prüfung und Liefergrenzen](tests/qa-3.49.0/robustheit_2026-10-28/README.md).
+> **Projektstatus:** Quellstand **3.50.0**, Aufgabenformat 26: Nachschlagen in der Nebenansicht (Treffer, Markierung, letzte Suchen, Abschnittssprung), Fokusdauer und Fokusfeld, schnelleres Speichern. Geliefert sind Python/Showcase und das macOS-arm64-Paket 3.49.0 sowie das Windows-Paket 3.45.0; 3.50.0 ist nicht geliefert. WA-41 und native/menschliche Abnahme offen. [Prüfung 3.50.0](tests/qa-3.50.0/featurepaket_2026-10-31/README.md).
 
 Funktionsumfang im Überblick: [Projekt-README](../../README.md#was-glide-kann); Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md); Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 

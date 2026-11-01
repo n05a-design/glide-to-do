@@ -1,6 +1,6 @@
 # Arbeitsvorbereitung
 
-Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26
+Stand 01.11.2026 · Glide 3.50.0 · Aufgabenformat 26
 
 **Abschlussfortsetzung 31.10.2026:** Python/Showcase und eigenständiges macOS-arm64-Paket 3.49.0 geliefert, Windows-Paket weiterhin 3.45.0. Native Tk-9.1-Matrix: 126 Schritte einschließlich aller 108 Integrationssuiten grün; Programm-, Test-, Fixture- und Ressourcenstand entsprechen dem eingefrorenen Nachweis; anschließende Anleitungspflege separat geprüft. Neue Grundstufe mit 235 Werkzeugtests und zweimal 1.082 Fachtests grün. 56 Mutationsfälle und zwölf native Accessibility-Proben grün. WA-41A/B, Windows-/Linux-Endmatrix, echte Readerketten, übrige appweite Architektur-/Performanceumfänge und Menschenabnahme bleiben offen. [Prüf- und Liefernachweis](../01_Repository/Glide/tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md), [aktueller Rest in §21.37](Glide_Entwicklungsplan.md#2137-abschlussfortsetzung-mutationen-prüfablauf-tk-91-und-lieferung). Frühere datierte Absätze bewahren ihren damaligen Stand.
 
@@ -8,7 +8,9 @@ Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26
 
 Planung, Übergabe und alles, was der Inhaber entscheidet oder von Hand prüft. Seit 03.10.2026 zusammengeführte Übergaben, Planungen, Auswahl- und Entscheidungsvorlagen, Recherchen und Checklisten; seit 08.10.2026 dazu die Analyse. Die Vorfassungen trägt Git. Das UI-/UX-Paket vom 15.10.2026 ist ein zusätzlicher ausführbarer Auftrag mit eigenen Eingangsbelegen, kein paralleles Backlog.
 
-**Aktuell 29.10.2026:** Quelle 3.49.0 als lokal committeter, nicht gepushter Prüfkandidat (`27a2b27`), Python/Showcase 3.47.0, native Pakete 3.45.0. [Abnahmeaudit](../01_Repository/Glide/tests/qa-3.49.0/abnahme_2026-10-28/README.md) und [lokaler Dokumentabgleich](../01_Repository/Glide/tests/qa-3.49.0/dokumentabgleich_2026-10-29/README.md): historischer Abnahmestand. [Fortsetzung](../01_Repository/Glide/tests/qa-3.49.0/abschlussreste_2026-10-29/README.md): A01-Pflichtfolge in 13 Bereichssuiten/136 Fällen grün; WA-09 lokal umgesetzt, fünf Appfälle und 21 Regressionen grün. Gesamtauftrag weiterhin offen. Einstieg [Übergabe](Glide_Uebergabe.md), aktueller Rest [Plan §21.30](Glide_Entwicklungsplan.md#2130-gesamtabschluss-begonnener-arbeiten). Die folgenden datierten Abschlüsse sind historisch.
+**Aktuell 01.11.2026:** Quelle 3.50.0 in `main`, nicht geliefert; Python/Showcase und macOS-Paket 3.49.0, Windows-Paket 3.45.0; keine Gesamtabnahme. Einstieg [Übergabe](Glide_Uebergabe.md), aktueller Rest [Plan §21.37](Glide_Entwicklungsplan.md#2137-abschlussfortsetzung-mutationen-prüfablauf-tk-91-und-lieferung) und [§21.40](Glide_Entwicklungsplan.md#2140-wa-36-seitenleisteerinnerungen-und-featurenachtrag-3500).
+
+**Rückblick 29.10.2026:** Quelle 3.49.0 als damals lokal committeter Prüfkandidat (`27a2b27`), Python/Showcase 3.47.0, native Pakete 3.45.0. [Abnahmeaudit](../01_Repository/Glide/tests/qa-3.49.0/abnahme_2026-10-28/README.md) und [lokaler Dokumentabgleich](../01_Repository/Glide/tests/qa-3.49.0/dokumentabgleich_2026-10-29/README.md): historischer Abnahmestand. [Fortsetzung](../01_Repository/Glide/tests/qa-3.49.0/abschlussreste_2026-10-29/README.md): A01-Pflichtfolge in 13 Bereichssuiten/136 Fällen grün; WA-09 lokal umgesetzt, fünf Appfälle und 21 Regressionen grün. Gesamtauftrag weiterhin offen. Einstieg [Übergabe](Glide_Uebergabe.md), aktueller Rest [Plan §21.30](Glide_Entwicklungsplan.md#2130-gesamtabschluss-begonnener-arbeiten). Die folgenden datierten Abschlüsse sind historisch.
 
 | Dokument | Wozu |
 |---|---|
