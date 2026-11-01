@@ -19,6 +19,8 @@
 
 - Markdown-Export 01.11.: Anhänge werden auch dann exportiert, wenn der Weg zum Datenordner über einen Symlink führt (unter macOS etwa jeder Ordner unter `/var`, oder ein bewusst verlinkter Datenordner). Gesperrt bleiben Verknüpfungen innerhalb des Datenordners; bisher fehlten in diesem Fall alle Anhänge mit dem Hinweis „Symlink/Junction wird nicht verfolgt“. Gefunden über `test_markdownbaum` mit Temp-Ordner unter `/var`.
 
+- Prüfung 01.11. abends: Die Linux-Vollprüfung auf GitHub brach im Schritt „Kalibrierte Erwartungen gegen Defekte prüfen“ mit Exitcode 1 ab, weil die Gegenprobe `datum` seit 3.47.0 zweimal in `app.pyw` passt (Einplanen per Datum auch auf der Startseite). Die Mutation trifft jetzt über mehr Kontext eindeutig `choose_quick_plan`; ein neuer Werkzeugtest der Grundstufe prüft die Eindeutigkeit aller Gegenproben schon lokal. App unverändert. Der zugleich rote Code-Scan scheiterte am ausgeschöpften Copilot-Monatskontingent, nicht am Code.
+
 - Prüfung 01.11.: Die native Zugangssuite verwechselt ein neu vergebenes Tcl-Kommando des wieder aufgebauten Inspektors nicht mehr mit einem nicht freigegebenen alten; App unverändert. [Einordnung](tests/qa-3.50.0/featurepaket_2026-10-31/README.md)
 
 ## 3.49.0 (28.10.2026) – Tagesplanung, Verweise und geschützter Wiederanlauf
