@@ -6623,7 +6623,7 @@ class ItemWorkspace:
         def wahl(titel, optionen, aktuell, setzen):
             unter = app._new_themed_popup_menu(menu)
             for name, wert in optionen:
-                unter.add_command(label=("✓ " if wert == aktuell else "    ") + name,
+                unter.add_command(label=glide_action_menu.check_label(name, wert == aktuell),
                                   command=lambda w=wert: setzen(w))
             menu.add_cascade(label=titel, menu=unter)
 
@@ -6645,7 +6645,7 @@ class ItemWorkspace:
         menu.add_separator()
         for titel, key in (("Navigator", "navigator"), ("Bildvorschau auf Karten", "preview"),
                            ("Neue Punkte automatisch anheften", "auto")):
-            menu.add_command(label=("✓ " if board.get(key) else "    ") + titel,
+            menu.add_command(label=glide_action_menu.check_label(titel, bool(board.get(key))),
                              command=lambda k=key: self.configure_board(k, not self.board().get(k)))
         return menu
 
@@ -7029,8 +7029,7 @@ class ItemWorkspace:
         menu.add_command(label="   Umbenennen …", command=lambda: self.rename_area(area["id"]))
         farben = app._new_themed_popup_menu(menu)
         for name, key in self.AREA_COLORS:
-            marke = "✓ " if area["color"] == key else "    "
-            farben.add_command(label=marke + name, command=lambda value=key: self.set_area_color(area["id"], value))
+            farben.add_command(label=glide_action_menu.check_label(name, area["color"] == key), command=lambda value=key: self.set_area_color(area["id"], value))
         menu.add_cascade(label="   Farbe", menu=farben)
         menu.add_command(label="   Bereich entfernen (Karten bleiben)", command=lambda: self.delete_area(area["id"]))
         self._popup(menu, event)
@@ -7382,13 +7381,11 @@ class ItemWorkspace:
                          command=lambda: self.update_connection(pair, dash=not entry.get("dash")))
         farben = app._new_themed_popup_menu(menu)
         for name, key in self.CONNECTION_COLORS:
-            marke = "✓ " if entry.get("color", "muted") == key else "    "
-            farben.add_command(label=marke + name, command=lambda value=key: self.update_connection(pair, color=value))
+            farben.add_command(label=glide_action_menu.check_label(name, entry.get("color", "muted") == key), command=lambda value=key: self.update_connection(pair, color=value))
         menu.add_cascade(label="   Farbe", menu=farben)
         richtungen = app._new_themed_popup_menu(menu)
         for key, name in self.CONNECTION_STYLES:
-            marke = "✓ " if entry.get("style") == key else "    "
-            richtungen.add_command(label=marke + name, command=lambda value=key: self.update_connection(pair, style=value))
+            richtungen.add_command(label=glide_action_menu.check_label(name, entry.get("style") == key), command=lambda value=key: self.update_connection(pair, style=value))
         menu.add_cascade(label="   Richtung", menu=richtungen)
         menu.add_separator()
         menu.add_command(label="   Verbindung entfernen", command=lambda: self.toggle_connection(*pair))
@@ -7504,10 +7501,9 @@ class ItemWorkspace:
         board = self.board()
         menu = app._new_themed_popup_menu()
         for key, name in self.BOARD_BACKGROUNDS:
-            marke = "✓ " if board.get("background") == key else "    "
-            menu.add_command(label=marke + name, command=lambda value=key: self.configure_board("background", value))
+            menu.add_command(label=glide_action_menu.check_label(name, board.get("background") == key), command=lambda value=key: self.configure_board("background", value))
         menu.add_separator()
-        menu.add_command(label=("✓ " if board.get("print_background") else "    ") + "Hintergrund mitdrucken",
+        menu.add_command(label=glide_action_menu.check_label("Hintergrund mitdrucken", bool(board.get("print_background"))),
                          command=lambda: self.configure_board("print_background",
                                                               not self.board().get("print_background")))
         self._popup(menu, event)
@@ -11697,7 +11693,7 @@ class PageEditor(RichNoteEditor):
         aktuell = set(self.line_blocks())
         for label, tag in self.block_choices():
             gewaehlt = (tag in aktuell) or (tag == 'text' and not aktuell & {t for _l, t in self.BLOCK_CHOICES})
-            umwandeln.add_command(label=('✓ ' if gewaehlt else '   ') + label,
+            umwandeln.add_command(label=glide_action_menu.check_label(label, gewaehlt),
                                   command=lambda t=tag: self.convert_block(t))
         menu.add_cascade(label='Umwandeln in', menu=umwandeln)
         menu.add_separator()
@@ -12453,7 +12449,7 @@ class PageEditor(RichNoteEditor):
         modus = self.images[key]['mode']
         for label, wert in (('Links, Text fließt rechts vorbei', 'left'), ('Rechts, Text fließt links vorbei', 'right'),
                             ('Eigene Zeile, mittig', 'center')):
-            menu.add_command(label=('✓ ' if wert == modus else '   ') + label,
+            menu.add_command(label=glide_action_menu.check_label(label, wert == modus),
                              command=lambda w=wert: self.set_image_mode(key, w))
         menu.add_separator()
         links, spalte = self.column_bounds()
@@ -23217,11 +23213,11 @@ class ListApp:
         if not recent:
             menu.add_command(label="Noch keine Suche in dieser Sitzung", state="disabled")
         for query in recent:
-            menu.add_command(label=("✓ " if query == current else "   ") + glide_side_view.recent_label(query),
+            menu.add_command(label=glide_action_menu.check_label(glide_side_view.recent_label(query), query == current),
                              command=lambda value=query: self.search_side_view(value))
         if recent:
             menu.add_separator()
-            menu.add_command(label="   Liste leeren", command=self.clear_side_recent_searches)
+            menu.add_command(label=glide_action_menu.check_label("Liste leeren", False), command=self.clear_side_recent_searches)
         self._item_context_menu = menu
         anchor = self.current_focus_widget() or self.side_pane
         try:
@@ -23490,8 +23486,8 @@ class ListApp:
         aktuell = glide_side_view.section_counts(abschnitte, [] if stelle is None else [stelle], folge)
         for section, anzahl, hier in zip(abschnitte, zaehlung, aktuell):
             # Bei aktiver Suche zeigt die Auswahl, wo der Begriff steht (3.50.0).
-            menu.add_command(label=("✓ " if hier else "   ") + "  " * min(section["depth"], 6) + section["title"][:90]
-                             + (f" · {anzahl} Treffer" if anzahl else ""),
+            menu.add_command(label=glide_action_menu.check_label("  " * min(section["depth"], 6) + section["title"][:90]
+                                                       + (f" · {anzahl} Treffer" if anzahl else ""), hier),
                              command=lambda value=section: self.jump_side_section(identity, value))
         self._item_context_menu = menu
         anchor = self.current_focus_widget() or self.side_pane
@@ -25972,7 +25968,7 @@ class ListApp:
                              command=self.saved_filters.show_manager)
         for saved in filter_liste:
             dran = saved["id"] in angeheftet
-            menu.add_command(label=("✓ " if dran else "    ") + saved["name"],
+            menu.add_command(label=glide_action_menu.check_label(saved["name"], dran),
                              command=lambda value=saved["id"], on=dran: self.pin_home_filter(value, not on))
         try:
             menu.tk_popup(anchor.winfo_rootx() + 20, anchor.winfo_rooty() + 20)
@@ -27824,7 +27820,7 @@ class ListApp:
         items = self.home_batch_targets(identities, day) or []
         values = {self.clamp_importance(item.get("importance", 0)) for item in items}
         for value, title in ((0, "Keine"), (1, "Niedrig"), (2, "Mittel"), (3, "Hoch")):
-            importance.add_command(label=("✓ " if values == {value} else "") + title,
+            importance.add_command(label=glide_action_menu.check_label(title, values == {value}),
                 foreground=self.theme[self.importance_color_key(value)],
                 command=lambda selected=value: self.apply_home_batch(identities, day, "importance", selected))
         menu.add_cascade(label="Wichtigkeit", menu=importance)
@@ -28002,7 +27998,7 @@ class ListApp:
         dauern = self._new_themed_popup_menu(menu)
         vorgabe = glide_focus.normalize_minutes(self.settings.get("focus_minutes"))
         for wert in glide_focus.FOCUS_MINUTES:
-            dauern.add_command(label=("✓ " if wert == vorgabe else "   ") + f"{wert} Minuten",
+            dauern.add_command(label=glide_action_menu.check_label(f"{wert} Minuten", wert == vorgabe),
                                command=lambda value=wert: self.start_home_focus(item_id, minutes=value))
         aufwand = glide_focus.estimate_option(item.get("estimated_minutes")) if found else None
         if aufwand is not None:
@@ -66100,6 +66096,9 @@ Labels, Termine und Metadaten."""
                 (self.accel("O"), "Seite, Punkt oder Aktion suchen (auch ⌕ in der Kopfzeile)"),
                 ("Suche: Umschalt+Enter", "Gefundene Liste, Seite oder Notiz in der Nebenansicht öffnen"),
                 ("Nebenansicht: Leertaste / Esc", "Aufgabe abhaken / Nebenansicht schließen"),
+                ("Nebenansicht: " + self.accel("F"), "Suchen; Enter / Umschalt+Enter: nächster / vorheriger Treffer, ↑ / ↓: letzte Suchen"),
+                ("Nebenansicht: Alt + ← / →", "Zurück / vorwärts"),
+                ("Nebenansicht: Alt + ↑ / ↓", "Nächster / vorheriger Abschnitt"),
                 (self.accel("Shift", "K"), "Kompaktmodus"),
                 (self.accel("Z"), "Letzte Änderung rückgängig machen"),
                 (f"{self.accel('Shift', 'Z')}" + (f" / {self.accel('Y')}" if IS_WINDOWS else ""),

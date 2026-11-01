@@ -1,10 +1,12 @@
 # Paketierung Glide
 
-Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 01.11.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 **Starter 3.49.0:** normaler Paketstart erhält Prozessbegleitung für lokale technische Diagnose und tatsächlichen Exitstatus; `--paket-pruefen` bleibt der direkte isolierte Prüfweg. Neue Module gehen mit jeder Lieferung mit. Änderungen am Bootstrap sind gezielt im Quellstand geprüft; vorhandene native Pakete bleiben 3.45.0 bis zu einem belegten Neubau. [Grenzen](../tests/qa-3.49.0/robustheit_2026-10-28/README.md).
 
-**Aktueller Quellkandidat 3.49.0:** Die 3.48.0-Bereiche sind um Wochenwahl, gemeinsame Fälligkeit/Aufwand, Verweisaktionen und die Schutzmodule ergänzt. Kopier-/Baulisten führen alle 91 Laufzeitdateien, einschließlich `session_guard.py`, `runtime_diagnostics.py` und `settings_compat.py`. Python/Showcase 3.47.0; native Pakete bleiben 3.45.0. Neue CI-Grundstufe grün; A01-Pflichtfolge in 13 Bereichssuiten/136 Fällen sowie WA-09 gezielt grün; WA-41 und aktuelle Lieferung/Abnahme bleiben offen. [Abnahmebericht](../tests/qa-3.49.0/abnahme_2026-10-28/README.md).
+**Aktueller Quellstand 3.50.0:** keine neue Moduldatei gegenüber der Lieferung 3.49.0; Kopier-/Baulisten unverändert, nicht geliefert.
+
+**Quellkandidat 3.49.0 (28.10.2026, inzwischen als Python/Showcase und macOS-Paket geliefert):** Die 3.48.0-Bereiche sind um Wochenwahl, gemeinsame Fälligkeit/Aufwand, Verweisaktionen und die Schutzmodule ergänzt. Kopier-/Baulisten führen alle 91 Laufzeitdateien, einschließlich `session_guard.py`, `runtime_diagnostics.py` und `settings_compat.py`. Python/Showcase 3.47.0; native Pakete bleiben 3.45.0. Neue CI-Grundstufe grün; A01-Pflichtfolge in 13 Bereichssuiten/136 Fällen sowie WA-09 gezielt grün; WA-41 und aktuelle Lieferung/Abnahme bleiben offen. [Abnahmebericht](../tests/qa-3.49.0/abnahme_2026-10-28/README.md).
 
 Die eigenständigen Entwicklungspakete für Windows x64 und macOS arm64 sind auf 3.45.0 neu gebaut und geprüft. Windows: 103 Dateien, Python 3.14.7/Tcl-Tk 9.0.4, kompilierter Quell-/PE-/Lizenzabgleich und lokale Startprobe grün. Mac: 333 Dateien und 29 interne Symlinks, Python 3.14.5/Tcl-Tk 9.0.3, nativer arm64-Bau, Mach-O-/Ad-hoc-Signaturprüfung und Prozesssandbox-Startprobe grün. Beim damaligen Abschluss war auch die Python-Lieferung bytegleich; alte aktive 3.42.0-Pakete liegen im jeweiligen `build/.../Archiv`. [Nachweise](../tests/qa-3.45.0/paketabschluss_2026-10-26/README.md). Windows bleibt unsigniert; öffentliche Signaturen, Installer und Menschenabnahme sind eigene Tore.
 

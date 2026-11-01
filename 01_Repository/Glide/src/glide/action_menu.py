@@ -21,6 +21,9 @@ from dataclasses import dataclass
 import content_search
 
 CHECK_MARK = "✓"
+# Vier Leerzeichen sind in der macOS-Menüschrift genau so breit wie „✓ “
+# (15 px), in DejaVu Sans 1 px schmaler; so beginnen alle Beschriftungen an einer Kante.
+CHECK_PAD = "    "
 PATH_SEPARATOR = " › "
 FALLBACK_SECTION = "Weitere"
 MAX_ENTRIES = 240
@@ -62,6 +65,11 @@ class Entry:
     def location(self):
         """Pfad unterhalb des Abschnitts, etwa „Gliederung“ in einer flachen Trefferliste."""
         return PATH_SEPARATOR.join(self.path)
+
+
+def check_label(label, checked):
+    """Menübeschriftung mit Häkchenspalte: „✓ “ oder gleich breite Leerstelle davor."""
+    return (CHECK_MARK + " " if checked else CHECK_PAD) + label
 
 
 def clean_label(raw):

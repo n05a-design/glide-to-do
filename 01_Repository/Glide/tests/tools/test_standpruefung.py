@@ -165,6 +165,19 @@ class Einstiegspruefung(unittest.TestCase):
         self.assertEqual(stand.fehlende_module("`a.py`", ["a.py", "b.py"]), ["b.py"])
         self.assertEqual(stand.fehlende_module("`Schnellstart.pyw`", ["glide_start.py"]), [])
 
+    def test_current_paragraph_names_current_source(self):
+        kopf = "# Glide\nStand 01.10.2026 · Glide 3.32.3\n"
+        for zeile in ("**Aktuell 29.09.2026:** Quelle 3.32.2, Python 3.31.0.",
+                      "> **Projektstatus:** lokaler Prüfkandidat **3.32.2**, Format 20.",
+                      "- **Aktueller Quellkandidat 3.32.2:** neue Funktionen."):
+            with self.subTest(zeile=zeile):
+                self.assertTrue(any("(R15)" in f for f in self.check("README.md", kopf + zeile + "\n").fehler))
+        gut = self.check("README.md", kopf + "**Aktuell 01.10.2026:** Quelle 3.32.3, Python/Showcase 3.32.2. "
+                                             "Damals Quelle 3.32.2.\n**Stand 29.09.2026:** Quelle 3.32.2.\n")
+        self.assertEqual(gut.fehler, [])
+        beleg = self.check("tests/qa-3.32.2/lauf/README.md", "# Lauf\n**Aktuell:** Quelle 3.32.2.\n")
+        self.assertFalse(any("(R15)" in f for f in beleg.fehler))
+
     def test_current_stand_line_uses_actual_suite_count(self):
         old = self.check("tests/README.md",
                          "# Prüfungen\nStand 01.10.2026 · Glide 3.32.3 · 55 Suiten\n")

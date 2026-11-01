@@ -1,6 +1,6 @@
 # Veröffentlichung – Glide
 
-Stand 31.10.2026 · Glide 3.50.0 · Quelle 3.50.0; Python/macOS 3.49.0, Windows-Paket 3.45.0 · keine öffentliche Veröffentlichung · Aufgabenformat 26
+Stand 01.11.2026 · Glide 3.50.0 · Quelle 3.50.0; Python/macOS 3.49.0, Windows-Paket 3.45.0 · keine öffentliche Veröffentlichung · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
@@ -10,7 +10,7 @@ Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierun
 
 **Vorheriger vollständiger Paketlieferstand 3.45.0 (26.10.2026):** Python-Fassung bytegleich, Windows-Paket und natives Mac-arm64-Paket neu gebaut und startgeprüft; Windows-Vollprüfung mit allen 104 Suiten grün. Mac-Ad-hoc-Signatur und isolierter Macstart grün. [Liefernachweis](../tests/qa-3.45.0/paketabschluss_2026-10-26/README.md). Mac-/Linux-Vollmatrix und menschliche Releaseabnahme bleiben getrennt offen; die folgenden Haken bezeichnen den historischen Vollabschluss 3.42.0.
 
-Die Haken dokumentieren den historischen vollständigen Plattformabschluss 3.42.0. Die native Paketlieferung 3.45.0 übernimmt keine ungetesteten Mac-/Linux-/Menschenfreigaben daraus; Python-Lieferung 3.47.0 und Quellkandidat 3.49.0 sind getrennt. Aktuelle Belege stehen oben und im [QA-Bericht](07_QA_BERICHT.md); der [Abnahmebericht](../tests/qa-3.49.0/abnahme_2026-10-28/README.md) stellt die Gesamtabnahme zurück.
+Die Haken dokumentieren den historischen vollständigen Plattformabschluss 3.42.0. Die native Paketlieferung 3.45.0 übernimmt keine ungetesteten Mac-/Linux-/Menschenfreigaben daraus; Python/Showcase- und macOS-Lieferung 3.49.0 und Quellstand 3.50.0 sind getrennt. Aktuelle Belege stehen oben und im [QA-Bericht](07_QA_BERICHT.md); der [Abnahmebericht](../tests/qa-3.49.0/abnahme_2026-10-28/README.md) stellt die Gesamtabnahme zurück.
 
 - [x] VERSION, `APP_VERSION`, Hauptsuite und CHANGELOG gleich; Datenformat geprüft.
 - [x] Eingefrorene Vollprüfung auf dem Referenz-Mac; seit D42 zusätzlich native Windows-Vollprüfung je Lieferung und seit D35 gesamte ausführbare Linux-Matrix, einschließlich passender Defektgegenproben. Ergebnisse getrennt im [QA-Bericht](07_QA_BERICHT.md).
