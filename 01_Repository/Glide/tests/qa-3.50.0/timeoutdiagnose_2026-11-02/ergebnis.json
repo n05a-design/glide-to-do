@@ -15,8 +15,11 @@
     "laufender_fall": null,
     "dauer_s": 5.578
   },
-  "linux_timeout_ursache": "noch offen; Instrumentierung für kontrollierten Nachlauf",
+  "linux_timeout_ursache": "ermittelt: Textumbruch/Rasterbreite bilden einen 1-px-Zyklus, behoben und nativ gegengeprüft im Startseitenlayout-Nachlauf",
   "timeout_s": 900,
   "stacktrace_nach_s": 120,
-  "app_geaendert": false
+  "app_geaendert": false,
+  "layout_root_cause": "Frischer Linux-Readonly-Tageswechsel: 10000 Configure-Ereignisse; Karte/Spalte 322↔323 px, Label-Umbruch wirkt auf natürliche Breitenanforderung des Rasters zurück.",
+  "linux_layout_run": "https://github.com/n05a-design/glide-to-do/actions/runs/41522743003",
+  "nachlauf": "../startseitenlayout_2026-11-02/README.md"
 }

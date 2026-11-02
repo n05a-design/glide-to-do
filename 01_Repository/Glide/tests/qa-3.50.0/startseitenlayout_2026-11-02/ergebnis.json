@@ -5,8 +5,14 @@
   "baseline": "Frischer Einzelprozess; 10000 Configure-Ereignisse, Karte pendelt 322↔323 px; Diagnoseabbruch Exit88. Vorheriger uninstrumentierter Gesamtlauf Timeout900s.",
   "change": "Umbrechende Startseitenlabels fordern eine feste minimale Breite an (width=1) und erhalten ihre wirkliche Breite weiter vom fill=x-Layout. wraplength folgt weiterhin der verfügbaren Breite; natürliche Texthöhe bleibt erhalten. Kein Daten-/Versionswechsel.",
   "mac_target_exitcode": 0,
-  "linux_fix_status": "native Gegenprobe ausstehend",
+  "linux_fix_status": "success",
   "full_matrix_status": "neuer Stand, alte Paket-/Vollbelege nicht übernehmen",
   "local_ci_exitcode": 0,
-  "local_ci_steps": 19
+  "local_ci_steps": 19,
+  "linux_fix_run": "https://github.com/n05a-design/glide-to-do/actions/runs/41523735634",
+  "linux_single_case_seconds": 2.503,
+  "linux_single_case_configure_events": 35,
+  "linux_working_modes_cases": 43,
+  "linux_working_modes_failed": [],
+  "linux_working_modes_seconds": 112.216
 }

@@ -2,7 +2,7 @@
 
 Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Aktueller Auftrag 02.11.2026 nach Claudes UI-Runde:** Funktionen/Features, Codebasis und Dokumentation vollständig gegen den tatsächlichen Stand validieren, anschließend committen und pushen. Keine neue Produktwahl oder Version. [Plan §21.51](Glide_Entwicklungsplan.md#2151-gesamtvalidierung-nach-claudes-ui-runde), [aktueller Prüf-/Liefernachweis](../01_Repository/Glide/tests/qa-3.50.0/gesamtvalidierung_2026-11-02/README.md).
+**Aktueller Auftrag 02.11.2026 nach Claudes UI-Runde:** Funktionen/Features, Codebasis und Dokumentation vollständig gegen den tatsächlichen Stand validiert, committet und gepusht; GitHub-Matrix 41525034740 vollständig grün, Mac-App und Windows-Kandidat auf Quelle `067e683b…`. Keine neue Produktwahl oder Version. [Plan §21.51](Glide_Entwicklungsplan.md#2151-gesamtvalidierung-nach-claudes-ui-runde), [aktueller Prüf-/Liefernachweis](../01_Repository/Glide/tests/qa-3.50.0/gesamtvalidierung_2026-11-02/README.md).
 
 **Funktionaler Stand:** UI-Nachläufe §§21.45–21.50 einschließlich kleinerer Titel, Block-Einfügemarke, Symbolbuttons/Zeilenaktionen, Ecklabels, schmaler Hinweisflächen, Werkzeugabstand, Pinnwandgrund und Seitenfuß implementiert. Python bytegleich; Mac-App mit Quellhash `672ffadd…` und 463 Paketdateien abgeglichen. Native Windows-Lieferung nach Quellhash im aktuellen Nachweis prüfen. Ursprüngliche öffentliche Archive sind historische Lieferungen desselben Versionsnamens.
 

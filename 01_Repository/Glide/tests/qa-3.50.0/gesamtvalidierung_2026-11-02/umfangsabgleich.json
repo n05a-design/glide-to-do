@@ -1,6 +1,6 @@
 {
-  "app_sha256": "672ffadd1bf2ba0d630c4b999158935c261aecd808c49816a890f21edc02f72c",
-  "umfang": "Gewählte UI-Nachläufe 21.45–21.50; FP-/D55-/D57-/D58-Kerne aus §21.44 unverändert, vollständige Regression separat.",
+  "app_sha256": "067e683bd37ac7a1974a9991f82e37195a90f62b501342626404bd9c629d9267",
+  "umfang": "Gewählte UI-Nachläufe 21.45–21.50; FP-/D55-/D57-/D58-Kerne aus §21.44 unverändert, vollständige Regression separat. Zusätzlich bestätigter Startseiten-Layoutfix aus der Linux-Validierung.",
   "features": [
     {
       "feature": "Außenabstände",
@@ -12,6 +12,14 @@
       ],
       "vorhanden": true,
       "nachweis": "aussenabstaende_2026-11-02"
+    },
+    {
+      "feature": "Kleinere große Überschriften bei allen Fensterbreiten",
+      "modul": "ui_design.py",
+      "konstante": "FONT_SIZES[title]=22; NoteEditor übernimmt denselben Titelwert",
+      "vorhanden": true,
+      "nachweis": "oberflaeche_2026-11-02",
+      "test": "test_ui_design; aktuelle Logo-/Kopf-/Seitenfälle"
     },
     {
       "feature": "Pixelsymbole und feste Titelkante",
@@ -101,6 +109,16 @@
       ],
       "vorhanden": true,
       "nachweis": "werkzeugzeile_2026-11-02"
+    },
+    {
+      "feature": "Startseiten-Tageswechsel ohne Breitenzyklus im Schreibschutz",
+      "klasse": "ListApp",
+      "methoden": [
+        "_render_home"
+      ],
+      "vorhanden": true,
+      "nachweis": "startseitenlayout_2026-11-02",
+      "status": "Native Linux-Gegenprobe und frische Vollmatrix noch ausstehend"
     }
   ],
   "offene_technische_vorhaben": {

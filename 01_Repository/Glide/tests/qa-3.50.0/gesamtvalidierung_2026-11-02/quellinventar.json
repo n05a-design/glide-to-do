@@ -44,8 +44,8 @@
     },
     {
       "file": "app.pyw",
-      "sha256": "672ffadd1bf2ba0d630c4b999158935c261aecd808c49816a890f21edc02f72c",
-      "lines": 67314,
+      "sha256": "067e683bd37ac7a1974a9991f82e37195a90f62b501342626404bd9c629d9267",
+      "lines": 67316,
       "functions": 3170,
       "classes": 41
     },

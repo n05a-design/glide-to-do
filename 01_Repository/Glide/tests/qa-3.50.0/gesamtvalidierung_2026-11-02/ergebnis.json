@@ -1,1 +1,16 @@
-{"status":"Laufende Validierung; Ergebnis wird nach tatsächlichem Abschluss ergänzt"}
+{
+  "status": "abgeschlossen",
+  "app_sha256": "067e683bd37ac7a1974a9991f82e37195a90f62b501342626404bd9c629d9267",
+  "commit_code": "47bfced (Code wie eda9278)",
+  "github": "Lauf 41525034740 vollständig grün",
+  "mac_nativ": "21 betroffene Suiten auf 067e683b grün (Startseite, Tag, Woche, Logo, Kopf, Arbeitsmodi 43 Fälle, UI-Paket, Fläche); eingefrorener Volllauf 126/126 auf 672ffadd vor dem Startseitenfix",
+  "linux_ursache": "1-px-Zyklus Textumbruch/Rasterbreite der Startseite beim schreibgeschützten Tageswechsel; behoben (width=1 bei umbrechenden Labels)",
+  "grundstufe": "grundstufe.json bestanden",
+  "lieferung": "lieferstand.json",
+  "offen": [
+    "menschliche Bedien-/DPI-/Mehrmonitorabnahme",
+    "technische Restvorhaben WA-32/36/37/38/39/40/41/46/49/50 laut §21.44",
+    "Abhängigkeitsupdates hooks-contrib 2026.9, setuptools 84.2.1, tkinterdnd2 0.7.0 als eigener Bauschnitt"
+  ],
+  "oeffentliches_release": false
+}

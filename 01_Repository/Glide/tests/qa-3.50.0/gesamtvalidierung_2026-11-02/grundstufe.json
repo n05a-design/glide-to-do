@@ -1,15 +1,15 @@
 {
-  "zeitpunkt": "2026-11-02T20:19:10",
+  "zeitpunkt": "2026-11-02T23:05:53",
   "stufe": "CI-Grundstufe",
   "python": "3.14.5 (v3.14.5:5607950ef23, May 10 2026, 07:38:09) [Clang 21.0.0 (clang-2100.0.123.102)]",
   "plattform": "darwin",
   "exitcode": 0,
-  "pruefablauf": "~/GlidePruefung/lauf-jwma_q92/pruefablauf.json",
+  "pruefablauf": "~/GlidePruefung/lauf-ior1dkbj/pruefablauf.json",
   "schritte": [
     {
       "schritt": "Syntax",
       "status": "ausgeführt",
-      "grund": "465 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+      "grund": "466 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
     },
     {
       "schritt": "Versionskonsistenz",
@@ -92,8 +92,8 @@
     },
     {
       "schritt": "Fremdcode",
-      "status": "ausgeführt",
-      "grund": "tkinterdnd2 0.6.3: 116 Dateien bytegleich zum Originalpaket (SHA-256 50c738630210…)"
+      "status": "Hinweis",
+      "grund": "tkinterdnd2: Originalpaket nicht abrufbar (<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>); Prüfung ohne Netz nicht möglich"
     },
     {
       "schritt": "Datenschutz",
@@ -103,7 +103,7 @@
     {
       "schritt": "Ablagegröße",
       "status": "ausgeführt",
-      "grund": "1870 versionierte Dateien, 304 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen"
+      "grund": "1901 versionierte Dateien, 305 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen"
     },
     {
       "schritt": "Synchronisation",

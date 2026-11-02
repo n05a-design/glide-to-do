@@ -6,7 +6,7 @@ Intern: öffentliche erste Beta. Die Änderungen vom 31.10. und 01.11. sind in d
 
 - Linux-Startseite: Endlosschleife beim Tageswechsel in schreibgeschütztem Bestand korrigiert. Umbruchtexte beeinflussen die Kartenhöhe, ohne die Rasterbreite wiederholt zu verändern. [Reproduktion und Prüfung](tests/qa-3.50.0/startseitenlayout_2026-11-02/README.md).
 
-- Prüfdiagnose: Suite-Timeouts verlieren ihre Teilprotokolle nicht mehr; Arbeitsmodi schreiben Einzelfall/Phase/Dauer fortlaufend und sichern Stacktraces, ohne Grenzen oder Assertions zu ändern. Linux-Hänger noch in Diagnose. [Nachweis](tests/qa-3.50.0/timeoutdiagnose_2026-11-02/README.md).
+- Prüfdiagnose: Suite-Timeouts verlieren ihre Teilprotokolle nicht mehr; Arbeitsmodi schreiben Einzelfall/Phase/Dauer fortlaufend und sichern Stacktraces, ohne Grenzen oder Assertions zu ändern. Der dabei lokalisierte Linux-Layoutfehler ist im Startseiten-Nachlauf unten korrigiert. [Nachweis](tests/qa-3.50.0/timeoutdiagnose_2026-11-02/README.md).
 
 - Bestandsvalidierung nach Claudes UI-Runde: aktuelles Handbuch und Einstiege auf Ecklabels, Hinweisplatz, Werkzeugzeile/Pinnwandgrund und Seitenfuß abgeglichen; gestartete technische Restvorhaben, neuere Pins und echte Lieferstände getrennt erfasst. Eingefrorene Code-/Vollprüfung und Gittransport im [Nachweis](tests/qa-3.50.0/gesamtvalidierung_2026-11-02/README.md). Keine neue Produktversion.
 
