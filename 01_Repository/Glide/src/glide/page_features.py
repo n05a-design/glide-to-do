@@ -65,22 +65,31 @@ def move_document_block(document, first, last, target):
         offset += len(row) + 1
     result = copy.deepcopy(document)
     result['text'] = '\n'.join(rows[i] for i in order)
-    mapped, position = {}, 0
+    mapped, position, segments = {}, 0, []
     for index in order:
         mapped[index] = position
+        end = starts[index] + len(rows[index]) + 1
+        if segments and segments[-1][1] == starts[index]:
+            segments[-1][1] = end
+        else:
+            segments.append([starts[index], end, position])
         position += len(rows[index]) + 1
     result['spans'] = []
     for span in document.get('spans', ()):
-        low_row = max(0, bisect_right(starts, span['start']) - 1)
-        high_row = bisect_left(starts, span['end'])
-        for index in range(low_row, high_row):
-            low = max(span['start'], starts[index])
-            high = min(span['end'], starts[index] + len(rows[index]) + 1)
-            a = mapped[index] + low - starts[index]
-            b = min(len(result['text']), mapped[index] + high - starts[index])
+        for start, end, destination in segments:
+            low = max(span['start'], start)
+            high = min(span['end'], end)
+            a = destination + low - start
+            b = min(len(result['text']), destination + high - start)
             if low < high and a < b:
                 result['spans'].append(dict(span, start=a, end=b))
-    result['spans'].sort(key=lambda s: (s['start'], s['end'], s['tag']))
+    merged = []
+    for span in sorted(result['spans'], key=lambda s: (s['tag'], s['start'], s['end'])):
+        if merged and merged[-1]['tag'] == span['tag'] and span['start'] <= merged[-1]['end']:
+            merged[-1]['end'] = max(merged[-1]['end'], span['end'])
+        else:
+            merged.append(span)
+    result['spans'] = sorted(merged, key=lambda s: (s['start'], s['end'], s['tag']))
     return result, mapped[first]
 
 

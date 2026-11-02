@@ -10340,11 +10340,18 @@ class PageEditor(RichNoteEditor):
         if not drag['active']:
             return self.block_handle_click()
         if (drag['target'] is None or getattr(self.app, '_data_read_only', False)
-                or self.app.page_entry(self.entry_id) is None or self.document() != drag['document']):
+                or self.app.page_entry(self.entry_id) is None):
             return 'break'
-        first, last = glide_pages.block_lines(drag['document'], drag['line'] - 1)
-        document, position = glide_pages.move_document_block(
-            drag['document'], first, last, drag['target'])
+        try:
+            if self.document() != drag['document']:
+                return 'break'
+            first, last = glide_pages.block_lines(drag['document'], drag['line'] - 1)
+            document, position = glide_pages.move_document_block(
+                drag['document'], first, last, drag['target'])
+            document = self.normalize(document)
+        except ValueError as exc:
+            self.status.configure(text=str(exc))
+            return 'break'
         if document != drag['document']:
             self.load(document)
             prefix = document['text'][:position]
@@ -18178,7 +18185,7 @@ class ListApp:
         """Liefert die aktuell gewählte Oberfläche – mit lesbaren Schriftrollen."""
         theme = self.glass_backdrop_tint(self._compose_theme())
         return self.legible_text_roles(glide_appearance.with_background(
-            theme, self.settings.get("background_color")))
+            theme, self.settings.get("background_color"), self.THEMES[self.theme_name]))
 
     # Mit Verlauf passt das ganze Design zu ihm: Grund und Karten nehmen seine
     # mittlere Farbe auf. Im Hauptfenster liegt über dem Grund ohnehin der

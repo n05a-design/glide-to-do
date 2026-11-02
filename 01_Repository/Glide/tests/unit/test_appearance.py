@@ -66,6 +66,12 @@ class Erkennung(unittest.TestCase):
 
 
 class BackgroundTests(unittest.TestCase):
+    def test_fixed_palette_can_color_a_monochrome_design(self):
+        theme = {'bg': '#FFFFFF', 'card': '#FFFFFF', 'clear': '#444444'}
+        result = a.with_background(theme, 'clear', {'clear': '#0077CC'})
+        self.assertGreater(int(result['bg'][5:7], 16), int(result['bg'][1:3], 16))
+        self.assertEqual(result['card'], '#FFFFFF')
+
     def test_background_selection_and_flat_surfaces(self):
         self.assertEqual(a.background_choice({}), 'default')
         self.assertEqual(a.background_choice('unknown'), 'default')

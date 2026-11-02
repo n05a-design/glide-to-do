@@ -91,7 +91,7 @@ def background_choice(value):
     return value if isinstance(value, str) and value in BACKGROUND_KEYS else 'default'
 
 
-def with_background(theme, choice):
+def with_background(theme, choice, palette=None):
     """Nur den Hintergrund färben; Arbeitsflächen und Rollen bleiben erhalten."""
     from backdrop import hex_rgb, rgb_hex, mix, luminance
     result = dict(theme)
@@ -104,5 +104,5 @@ def with_background(theme, choice):
         # Ruhige Töne derselben festen Palette erhalten den Schriftkontrast.
         base = hex_rgb(result['bg'])
         share = 0.16 if luminance(base) < 0.2 else 0.08
-        result['bg'] = rgb_hex(mix(base, hex_rgb(result[choice]), share))
+        result['bg'] = rgb_hex(mix(base, hex_rgb((palette or theme)[choice]), share))
     return result

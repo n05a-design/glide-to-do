@@ -58,6 +58,12 @@ class PageFeaturesTests(unittest.TestCase):
         moved, _ = pages.move_document_block(doc, *pages.block_lines(doc, 0), 4)
         self.assertEqual(moved['text'], 'Danach\nElternblock\nKind\nEnkel')
 
+    def test_long_format_ranges_are_not_split_for_every_untouched_line(self):
+        text = '\n'.join('Zeile ' + str(i) for i in range(1000))
+        doc = {'text': text, 'spans': [{'tag': 'bold', 'start': 0, 'end': len(text)}], 'links': {}}
+        moved, _ = pages.move_document_block(doc, 10, 11, 800)
+        self.assertEqual(moved['spans'], [{'tag': 'bold', 'start': 0, 'end': len(text)}])
+
     def test_live_validation_and_real_home_states(self):
         self.assertEqual(pages.live_lists(['glide://list/a'] * 2), ['glide://list/a'])
         for value in (['glide://item/a'], ['glide://list/a?x'], ['glide://list/a'] * 21, {}):

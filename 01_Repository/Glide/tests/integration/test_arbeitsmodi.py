@@ -2812,6 +2812,10 @@ def fall_beta350(lauf):
         assert not app.glass_enabled() and not app.theme['glass_gradient']
         assert not app.backdrop_request()
         assert all(not box.glass_mode for box in app.rounded_containers if box.winfo_exists())
+    app.set_design('minimal_light')
+    app.settings['background_color'] = 'clear'
+    blue = app.active_theme()['bg']
+    assert int(blue[5:7], 16) > int(blue[1:3], 16), blue
     app.set_design('light')
     app.set_background_color('clear')
     idle(lauf)
@@ -2929,6 +2933,18 @@ def fall_beta350(lauf):
     assert editor.document()['text'].startswith(app.ICONS['bullet'] + ' Eltern\n' + app.ICONS['bullet'] + ' Kind')
     assert any(span['tag'] == 'indent1' for span in editor.document()['spans'])
     assert editor.document() == app.page_entry(page['id'])['rich_note']
+    before = editor.document()
+    saved = Path(mod.SAVE_FILE).read_bytes()
+    undo_depth = len(editor._undo)
+    normalize = editor.normalize
+    def limited(value):
+        if value.get('text') != before['text']:
+            raise ValueError('Zu viele Formatierungen.')
+        return normalize(value)
+    with patch.object(editor, 'normalize', side_effect=limited):
+        drag_to_top(zeile_mit(editor.text, 'Start'))
+    assert editor.document() == before and Path(mod.SAVE_FILE).read_bytes() == saved
+    assert len(editor._undo) == undo_depth and 'Zu viele Formatierungen' in editor.status.cget('text')
     return 'Hintergrundfarben in zehn Designs, Speicherung/Neustart, drei Größen, volle Seitenleiste, Blockziehen/Undo/Redo/Abbruch/Schreibschutz'
 
 
