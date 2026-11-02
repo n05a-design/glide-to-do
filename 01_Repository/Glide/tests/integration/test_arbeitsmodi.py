@@ -162,6 +162,10 @@ def fall_seitenaktionen(lauf):
     erwartet = native_blaetter(lauf, nativ)
     nativ.destroy()
     mehr = editor._toolbar_buttons["Mehr"]
+    # Ein echter Klick aktiviert das Fenster; der synthetische nicht. Ohne
+    # Vordergrund meldet Windows sonst keinen Fokus für das Suchfeld.
+    editor.text.focus_force()
+    idle(lauf)
     klick(mehr, lauf, 10, 10)
     zustand = app._action_chooser
     assert zustand and app.action_chooser_open(), "Auswahl nicht geöffnet"
@@ -2954,7 +2958,9 @@ def fall_beta350(lauf):
     return 'Hintergrundfarben in zehn Designs, Speicherung/Neustart, drei Größen, volle Seitenleiste, Blockziehen/Undo/Redo/Abbruch/Schreibschutz'
 
 
-FAELLE = ("beta350", "seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
+# beta350 zuletzt: Nach seinem Neustart erhält unter Windows das nächste frische
+# Fenster keinen Vordergrund, und `focus_set` der Aktionsauswahl griffe nicht.
+FAELLE = ("seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
           "kompakt_ansichten", "kompakt_verlorenes_loslassen", "gestaltung", "tagessteuerung", "nebenansicht_navigation",
@@ -2962,7 +2968,7 @@ FAELLE = ("beta350", "seitenaktionen", "blockaktionen", "schreibschutz", "kopfve
           "home_tagesnavigation", "home_mehrfachfelder", "side_verweisnavigation", "dreierpaket_gestaltung",
           "home_wochenwahl", "home_faelligkeit_aufwand", "side_verweisaktionen", "side_trefferuebersicht", "side_nachschlagen", "home_fokusdauer",
           "fokus_wechseln", "side_suchverlauf", "fokus_als_naechstes",
-          "fokus_menue", "home_fokus_laeuft", "side_abschnitte")
+          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "beta350")
 
 
 def main():

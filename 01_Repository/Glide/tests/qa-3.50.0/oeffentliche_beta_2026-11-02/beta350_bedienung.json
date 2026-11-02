@@ -1,0 +1,15 @@
+{
+  "app_sha256": "8b11c8cb70f83affefcb1f7819bbe02d552ba6c682360dccbcf01bead4eaa64f",
+  "faelle": {
+    "beta350": {
+      "ok": true,
+      "befund": "Hintergrundfarben in zehn Designs, Speicherung/Neustart, drei Größen, volle Seitenleiste, Blockziehen/Undo/Redo/Abbruch/Schreibschutz",
+      "runtime": {
+        "python": "3.14.5",
+        "platform": "darwin",
+        "tk": "9.1.0"
+      }
+    }
+  },
+  "fehler": []
+}

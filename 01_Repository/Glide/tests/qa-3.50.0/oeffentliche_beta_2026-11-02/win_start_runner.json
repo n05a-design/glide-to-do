@@ -1,0 +1,646 @@
+{
+  "plattform": "Windows x64",
+  "nur_vergaenglicher_hosted_ci_runner": true,
+  "inhaber_installationen_unveraendert": true,
+  "exitcode": 0,
+  "externe_quellen_lesegegenproben": [
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "externes_python_gegenprobe": "OS-Zugriff verweigert: 5",
+  "paketprozess_exitcode": 0,
+  "ausgabe": "",
+  "paket": {
+    "eigenstaendiger_pruefstart": true,
+    "exitcode": 0,
+    "app_version": "3.50.0",
+    "python": "3.14.7",
+    "tcl": "9.1.0",
+    "tk": "9.1.0",
+    "plattform": "win32",
+    "architektur": "AMD64",
+    "ansichten": 6,
+    "anlegen_abhaken_undo": true,
+    "dateilesen": true,
+    "app_backup_rundlauf": true,
+    "daten_isoliert": true,
+    "bibliotheken": {
+      "tcl": {
+        "modus": "eingebettetes-zip",
+        "ort": "//zipfs:/lib/tcl/tcl_library",
+        "anbieter": "_internal/tcl91.dll"
+      },
+      "tk": {
+        "modus": "eingebettetes-zip",
+        "ort": "//zipfs:/lib/tk/tk_library",
+        "anbieter": "_internal/tcl9tk91.dll"
+      }
+    },
+    "native_anbieter": {
+      "tcl": "_internal/tcl91.dll",
+      "tk": "_internal/tcl9tk91.dll"
+    },
+    "windows_geladene_bibliotheken": {
+      "bibliotheken": [
+        {
+          "bereich": "paket",
+          "datei": "Glide.exe"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/ntdll.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/KERNEL32.DLL"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/KERNELBASE.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/USER32.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/win32u.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/GDI32.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/gdi32full.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/msvcp_win.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/ucrtbase.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/ADVAPI32.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/msvcrt.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "WinSxS/amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.26100.33648_none_ee38cd5ddaee2cd9/COMCTL32.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/sechost.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/RPCRT4.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/IMM32.DLL"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/python314.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/WS2_32.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/VERSION.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/bcrypt.dll"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/VCRUNTIME140.dll"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/_ctypes.pyd"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/ole32.dll"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/libffi-8.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/combase.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/OLEAUT32.dll"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/_bz2.pyd"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/_lzma.pyd"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/_zstd.pyd"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/_hashlib.pyd"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/libcrypto-3.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/CRYPT32.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/bcryptprimitives.dll"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/_tkinter.cp314-win_amd64.pyd"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/libtommath.dll"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/tcl91.dll"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/tcl9tk91.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/SHELL32.dll"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/zlib1.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/NETAPI32.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/USERENV.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/wintypes.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/WINSPOOL.DRV"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/COMDLG32.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/shcore.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/SAMCLI.DLL"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/SHLWAPI.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/USP10.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/OLEACC.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/dwmapi.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/cfgmgr32.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/MSIMG32.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/UxTheme.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/LOGONCLI.DLL"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/NETUTILS.DLL"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/_uuid.pyd"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/_elementtree.pyd"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/pyexpat.pyd"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/unicodedata.pyd"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/_zoneinfo.pyd"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/_queue.pyd"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/_wmi.pyd"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/VCRUNTIME140_1.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/PROPSYS.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/MSCTF.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/icu.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/TextShaping.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/kernel.appcore.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/textinputframework.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/CoreMessaging.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/CoreUIComponents.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/CRYPTBASE.DLL"
+        },
+        {
+          "bereich": "windows",
+          "datei": "System32/clbcatq.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "system32/explorerframe.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/ntmarta.dll"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/_socket.pyd"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/IPHLPAPI.DLL"
+        },
+        {
+          "bereich": "windows",
+          "datei": "system32/wbem/wbemprox.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/wbemcomn.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "system32/wbem/wbemsvc.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "system32/wbem/fastprox.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/amsi.dll"
+        },
+        {
+          "bereich": "windows",
+          "datei": "SYSTEM32/profapi.dll"
+        },
+        {
+          "bereich": "windows-defender",
+          "datei": "4.18.26100.4-0/MpOav.dll",
+          "signatur": "Valid",
+          "herausgeber": "Microsoft Corporation"
+        },
+        {
+          "bereich": "paket",
+          "datei": "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.2.dll"
+        }
+      ],
+      "fehler": [],
+      "exitcode": 0
+    },
+    "ressourcen_sha256_geprueft": 30,
+    "lizenzdateien_sha256_geprueft": 35,
+    "logo_geladen": true,
+    "gebuendelte_schriften_verfuegbar": [
+      "DejaVu Sans",
+      "Pixelify Sans"
+    ],
+    "dnd_version": "2.10.2",
+    "native_dnd_bibliotheken": [
+      "_internal\\tkinterdnd2\\tkdnd\\win-x64-tcl9\\libtkdnd2.10.2.dll"
+    ],
+    "externe_python_suchpfade": [],
+    "callbackfehler": [],
+    "zugangs_kernablauf": {
+      "native_backend": true,
+      "erfassen_suchen_heute_inspektor": true,
+      "unicode_titel_gespeichert": true,
+      "checkbox_leertaste_undo": true,
+      "reader_abnahme": "separat offen; tatsächlicher Paketablauf ohne Reader"
+    }
+  },
+  "acl_entsperrung_exitcodes": [
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "acl_restaurierung_exitcodes": [
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "acl_native_restaurierung_exitcodes": [
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "acl_originale_wiederhergestellt": [
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "acl_zugriffsregeln_wiederhergestellt": [
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "acl_modellmarker_ai_abweichend_zulaessig": true,
+  "acl_restaurierung_details": [
+    {
+      "entsperren": "Successfully processed 1 files; Failed processing 0 files\n",
+      "restaurieren": "Successfully processed 1990 files; Failed processing 0 files\n",
+      "native_originalrestaurierung": {
+        "dateien": 1990,
+        "reparsepunkte": [],
+        "fehler": [],
+        "exitcode": 0
+      },
+      "nachpruefen": "Successfully processed 0 files; Failed processing 0 files\n",
+      "acl_vergleich": {
+        "vorher": 1990,
+        "nachher": 1990,
+        "fehlend": 0,
+        "neu": 0,
+        "geaendert": 1765,
+        "fehlende_beispiele": [],
+        "neue_beispiele": [],
+        "beispiele": [
+          {
+            "datei": "glide-to-do\\.claude\\skills\\design-richtlinien\\LICENSE",
+            "vorher": "D:P(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)",
+            "nachher": "D:PAI(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)"
+          },
+          {
+            "datei": "glide-to-do\\.claude\\skills\\design-richtlinien\\SKILL.md",
+            "vorher": "D:P(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)",
+            "nachher": "D:PAI(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)"
+          },
+          {
+            "datei": "glide-to-do\\.claude\\skills\\design-richtlinien\\referenzen\\bewegung-material-typografie.md",
+            "vorher": "D:P(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)",
+            "nachher": "D:PAI(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)"
+          }
+        ]
+      }
+    },
+    {
+      "entsperren": "Successfully processed 1 files; Failed processing 0 files\n",
+      "restaurieren": "Successfully processed 186 files; Failed processing 0 files\n",
+      "native_originalrestaurierung": {
+        "dateien": 186,
+        "reparsepunkte": [],
+        "fehler": [],
+        "exitcode": 0
+      },
+      "nachpruefen": "Successfully processed 0 files; Failed processing 0 files\n",
+      "acl_vergleich": {
+        "vorher": 186,
+        "nachher": 186,
+        "fehlend": 0,
+        "neu": 0,
+        "geaendert": 175,
+        "fehlende_beispiele": [],
+        "neue_beispiele": [],
+        "beispiele": [
+          {
+            "datei": "quelle\\Glide.ico",
+            "vorher": "D:P(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)",
+            "nachher": "D:PAI(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)"
+          },
+          {
+            "datei": "quelle\\accessibility.py",
+            "vorher": "D:P(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)",
+            "nachher": "D:PAI(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)"
+          },
+          {
+            "datei": "quelle\\accessibility_bindings.py",
+            "vorher": "D:P(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)",
+            "nachher": "D:PAI(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)"
+          }
+        ]
+      }
+    },
+    {
+      "entsperren": "Successfully processed 1 files; Failed processing 0 files\n",
+      "restaurieren": "Successfully processed 10670 files; Failed processing 0 files\n",
+      "native_originalrestaurierung": {
+        "dateien": 10670,
+        "reparsepunkte": [
+          "D:\\a\\_temp\\paket-runtime\\quellen\\python\\Misc\\mypy\\_colorize.py",
+          "D:\\a\\_temp\\paket-runtime\\quellen\\python\\Misc\\mypy\\_pyrepl",
+          "D:\\a\\_temp\\paket-runtime\\quellen\\python\\Misc\\mypy\\token.py",
+          "D:\\a\\_temp\\paket-runtime\\quellen\\python\\Misc\\mypy\\tomllib"
+        ],
+        "fehler": [],
+        "exitcode": 0
+      },
+      "nachpruefen": "Successfully processed 0 files; Failed processing 0 files\n",
+      "acl_vergleich": {
+        "vorher": 10670,
+        "nachher": 10670,
+        "fehlend": 0,
+        "neu": 0,
+        "geaendert": 10023,
+        "fehlende_beispiele": [],
+        "neue_beispiele": [],
+        "beispiele": [
+          {
+            "datei": "paket-runtime\\protokolle\\tcl-install.log",
+            "vorher": "D:P(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)",
+            "nachher": "D:PAI(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)"
+          },
+          {
+            "datei": "paket-runtime\\protokolle\\tcl-make.log",
+            "vorher": "D:P(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)",
+            "nachher": "D:PAI(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)"
+          },
+          {
+            "datei": "paket-runtime\\protokolle\\tk-install.log",
+            "vorher": "D:P(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)",
+            "nachher": "D:PAI(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)"
+          }
+        ]
+      }
+    },
+    {
+      "entsperren": "Successfully processed 1 files; Failed processing 0 files\n",
+      "restaurieren": "Successfully processed 4504 files; Failed processing 0 files\n",
+      "native_originalrestaurierung": {
+        "dateien": 4504,
+        "reparsepunkte": [],
+        "fehler": [],
+        "exitcode": 0
+      },
+      "nachpruefen": "Successfully processed 0 files; Failed processing 0 files\n",
+      "acl_vergleich": {
+        "vorher": 4504,
+        "nachher": 4504,
+        "fehlend": 0,
+        "neu": 0,
+        "geaendert": 4204,
+        "fehlende_beispiele": [],
+        "neue_beispiele": [],
+        "beispiele": [
+          {
+            "datei": "bau-venv\\.gitignore",
+            "vorher": "D:P(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)",
+            "nachher": "D:PAI(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)"
+          },
+          {
+            "datei": "bau-venv\\Lib\\site-packages\\PyInstaller\\__init__.py",
+            "vorher": "D:P(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)",
+            "nachher": "D:PAI(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)"
+          },
+          {
+            "datei": "bau-venv\\Lib\\site-packages\\PyInstaller\\__main__.py",
+            "vorher": "D:P(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)",
+            "nachher": "D:PAI(A;;FA;;;BA)(A;;FA;;;SY)(A;;0x1200a9;;;BU)"
+          }
+        ]
+      }
+    },
+    {
+      "entsperren": "Successfully processed 1 files; Failed processing 0 files\n",
+      "restaurieren": "Successfully processed 5081 files; Failed processing 0 files\n",
+      "native_originalrestaurierung": {
+        "dateien": 5081,
+        "reparsepunkte": [
+          "C:\\hostedtoolcache\\windows\\Python\\3.14.7\\x64\\python3.exe"
+        ],
+        "fehler": [],
+        "exitcode": 0
+      },
+      "nachpruefen": "Successfully processed 0 files; Failed processing 0 files\n",
+      "acl_vergleich": {
+        "vorher": 5081,
+        "nachher": 5081,
+        "fehlend": 0,
+        "neu": 0,
+        "geaendert": 5081,
+        "fehlende_beispiele": [],
+        "neue_beispiele": [],
+        "beispiele": [
+          {
+            "datei": "x64",
+            "vorher": "D:AI(A;ID;0x1301bf;;;AU)(A;OICIIOID;SDGXGWGR;;;AU)(A;OICIID;FA;;;SY)(A;OICIID;FA;;;BA)(A;OICIID;0x1200a9;;;BU)",
+            "nachher": "D:(A;ID;0x1301bf;;;AU)(A;OICIIOID;SDGXGWGR;;;AU)(A;OICIID;FA;;;SY)(A;OICIID;FA;;;BA)(A;OICIID;0x1200a9;;;BU)"
+          },
+          {
+            "datei": "x64\\DLLs",
+            "vorher": "D:AI(A;ID;0x1301bf;;;AU)(A;OICIIOID;SDGXGWGR;;;AU)(A;OICIID;FA;;;SY)(A;OICIID;FA;;;BA)(A;OICIID;0x1200a9;;;BU)",
+            "nachher": "D:(A;ID;0x1301bf;;;AU)(A;OICIIOID;SDGXGWGR;;;AU)(A;OICIID;FA;;;SY)(A;OICIID;FA;;;BA)(A;OICIID;0x1200a9;;;BU)"
+          },
+          {
+            "datei": "x64\\DLLs\\_asyncio.pyd",
+            "vorher": "D:AI(A;ID;0x1301bf;;;AU)(A;ID;FA;;;SY)(A;ID;FA;;;BA)(A;ID;0x1200a9;;;BU)",
+            "nachher": "D:(A;ID;0x1301bf;;;AU)(A;ID;FA;;;SY)(A;ID;FA;;;BA)(A;ID;0x1200a9;;;BU)"
+          }
+        ]
+      }
+    }
+  ],
+  "externes_python_nach_restaurierung_exitcode": 0
+}

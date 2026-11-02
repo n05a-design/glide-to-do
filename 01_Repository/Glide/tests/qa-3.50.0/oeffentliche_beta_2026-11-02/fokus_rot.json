@@ -1,0 +1,17 @@
+{
+  "app_sha256": "1ccc2991902a7a7f3cfb6ea0c11b094182321d153ff14a75dc579c6230225144",
+  "faelle": {
+    "beta350": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_arbeitsmodi.py\", line 2984, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"~/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_arbeitsmodi.py\", line 2877, in fall_beta350\n    assert lauf.root.focus_get() is editor.text, 'Ein Griffzug übernimmt den Textfokus für Escape'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Ein Griffzug übernimmt den Textfokus für Escape\n",
+      "runtime": {
+        "python": "3.14.5",
+        "platform": "darwin",
+        "tk": "9.1.0"
+      }
+    }
+  },
+  "fehler": [
+    "beta350"
+  ]
+}

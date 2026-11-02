@@ -277,7 +277,7 @@ Eigene Aufträge liegen additiv im Einstellungsschlüssel `exchange_recipes` (Ei
 
 `background_color` ist ein optionaler Einstellungsschlüssel (Einstellungen 2). Zulässig sind `default`, `surface`, `accent`, `clear`, `due_action`, `export`, `flag`, `delete`, `import`, `muted`; fehlende oder ungültige Werte werden `default`. `surface` bedeutet die tatsächliche Design-Kartenfarbe ohne Materialschatten. Die gespeicherten `backdrops` bleiben erhalten; eine neue Verlaufswahl setzt die Hintergrundfarbe auf `default`. App-Backup und Einstellungsnormalisierung führen den Schlüssel mit. Keine Änderung an Aufgabenformat 26.
 
-Das Ziehen eines Seitenblocks ordnet den bestehenden Text mit seinen Formatbereichen neu. Zeichenversätze, Bild-/Linkmetadaten und stabile Aufgaben-IDs werden neu zugeordnet, nicht neu erzeugt. Es entstehen keine zusätzlichen gespeicherten Blockobjekte. Tabellen, Codebereiche und eingerückte Kinder von Aufklappblöcken werden zusammen verschoben. Undo verwendet den vorhandenen Dokumentverlauf.
+Das Ziehen eines Seitenblocks ordnet den bestehenden Text mit seinen Formatbereichen neu. Zeichenversätze, Bild-/Linkmetadaten und stabile Aufgaben-IDs werden neu zugeordnet, nicht neu erzeugt. Es entstehen keine zusätzlichen gespeicherten Blockobjekte. Tabellen, Codebereiche und Elternblöcke mit ihren eingerückten Kindzeilen werden zusammen verschoben. Undo verwendet den vorhandenen Dokumentverlauf.
 
 ## Vorbereitung der nächsten Aufgabenformatstufe
 

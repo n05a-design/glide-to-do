@@ -5,6 +5,8 @@ Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentl
 **3.50-Fertigstellung, 02.11.2026:** Erster öffentlicher Stand (intern öffentliche erste Beta). Neue UI-Funktionen, Python-Abgleich und tatsächliche Paket-/Prüfergebnisse im [aktuellen Nachweis](../01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Frühere datierte Absätze beschreiben ihren damaligen Stand. Screenreader-Abnahme ist bis Bedarf zurückgestellt; menschliche Prüfung folgt anschließend.
 
 
+**Datierte Vorgeschichte:** Die folgenden früheren Sitzungsstände und Restangaben werden durch den aktuellen 3.50-Nachweis und Plan §21.43 fortgeschrieben. Sie sind keine zusätzliche aktive Aufgabenliste.
+
 **Windows-Abnahme PC-01, 02.11.2026 (§21.42):** Eigene Tcl/Tk-9.1-Laufzeit mit Windows-Bedienungshilfe-Patches gebaut. Eingefrorener Volllauf mit nativer Zugangsprüfung auf `main` `c24d2d42` (App `1582c600…`): 127 von 128 Schritten grün, nur die menschliche Sichtprüfung offen. Windows-Paket 3.50.0 mit Tk 9.1 nach PR #49 gebaut, Startprobe grün, `Glide.exe` `4d818e4e…` (Entwicklungsbau, nicht geliefert). Menschliche Abnahme vom Inhaber auf nach weiteren Änderungen verschoben; danach Volllauf und Paket erneut. [Nachweis](../01_Repository/Glide/tests/qa-3.50.0/windows_abnahme_2026-11-02/README.md).
 
 **Gesamtprüfung 01.11.2026 abends:** Dokumentation, Roadmap, Stand, Features, Marktbericht und Gestaltung geprüft. Veraltete „aktuell“-Angaben (Quelle 3.49.0, Python 3.47.0) in 13 Dokumenten berichtigt, neue Standregel R15 verhindert das künftig; Roadmap §2 um 3.45.0–3.50.0, Backlog WA-09/11/12, QA-Bericht um 01.11. ergänzt; Featurematrix des Marktberichts von 3.43.1 auf 3.50.0. Gestaltung: ✓-Spalte der Menüs über `action_menu.check_label` vereinheitlicht (vorher auf dem Mac bis 15 px versetzt). Regression, CI und eingefrorener Tk-9.1-Volllauf 126/126 grün auf App `1582c600…` (`t1101-225816`); nicht committet. Befunde und offene Punkte in [Analyse §13.22](Glide_Analyse.md#1322-gesamtprüfung-vom-01112026).
@@ -152,6 +154,8 @@ Am 25.10.2026 zusammengeführt und gekürzt: aktuelle Standmatrix anstelle mehre
 
 ## 1. Tatsächlicher Stand
 
+**Aktuell 02.11.2026:** Quelle, Python-Fassung `07_Python-Versionen` und Showcase 3.50.0 / Format 26 bytegleich; eigenständige Pakete 3.50.0 für macOS arm64 (`~/Applications/Glide.app`, Verweis `build/macos/Glide.app`, TAR) und Windows x64 (`build/windows/Glide-3.50.0`, ZIP) geliefert und isoliert gestartet. Endstand `b2b54e7`: Mac-Tk-9.1-Vollprüfung 125/127, GitHub-Grundstufe sowie Linux-/Windows-Vollprüfung mit eigener Tk 9.1 grün. Offen ist die menschliche Prüfung durch den Inhaber. Einzelheiten im [Nachweis](../01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md) und in [Plan §21.43](Glide_Entwicklungsplan.md#2143-erster-öffentlicher-stand-3500). Die folgende Tabelle ist der datierte Stand vom 27.10.2026.
+
 **Vorheriger Lieferauftrag 26.10.2026:** „eigenständige Pakete sollen nicht weiterhin 3.42.0 sein, alles aktualisieren und prüfen.“ Danach ausdrücklich GitHub Actions mit macOS-Runner und „weiter“ beauftragt. Native Bauten und Lieferabgleich sind abgeschlossen; strenge CI-Abschlusswerte stehen im Paketnachweis. Quell-/Workflowtransport auf `codex/glide-paketabschluss-3.45.0`, kein Merge oder öffentliche Veröffentlichung.
 
 | Ebene | Tatsächlicher Stand am 27.10.2026 |
@@ -201,17 +205,15 @@ Der [UI-/UX-Originalauftrag](Featurepaket_UI_UX/AUFTRAG.md), [Ausführungsprompt
 
 ## 4. Nächste Arbeit und offene Entscheidungen
 
-Die aktuelle Dreipaketphase steht in [Plan §21.26](Glide_Entwicklungsplan.md#2126-drei-featurepakete-tagesnavigation-mehrfachfelder-und-verweise-3480); die vorherigen Folgepakete stehen in [Plan §21.24](Glide_Entwicklungsplan.md#2124-folgepakete-mehrfachplanung-und-nebenansichtsverlauf-3470), der Dokumentations-/Pushauftrag in §21.25; der vorherige Abschluss steht in [Plan §21.23](Glide_Entwicklungsplan.md#2123-zwei-featurepakete-und-versionsfortschritt-3460), der vorherige Techniknachlauf in §21.21, der abgeschlossene Liefer-/Paketauftrag in [§21.20](Glide_Entwicklungsplan.md#2120-lieferabschluss-und-paketbau-3450). Nächste Arbeit:
+Maßgeblich ist [Plan §21.43](Glide_Entwicklungsplan.md#2143-erster-öffentlicher-stand-3500) mit dem [3.50-Prüf- und Liefernachweis](../01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Ältere Übergabeprioritäten sind durch D58 ersetzt.
 
-Aktuell ist nur die Übergabe beauftragt. Die folgende Reihenfolge gilt für eine später ausdrücklich fortgesetzte Arbeit, nicht als automatischer Startauftrag:
+1. Nach technischem Abschluss prüft der Inhaber die tatsächlich gelieferten 3.50-Pakete anhand der [manuellen Prüfliste](Glide_Manuelle_Pruefung.md). Screenreader ist bis Bedarf zurückgestellt.
+2. Historische WA-41A/B-Belege erhalten; keine neue Stressserie am instabilen PC-02, keine spekulativen BIOS-/CPU-Eingriffe. Grüne Gegenläufe sind keine Ursachenklärung.
+3. Weitere appweite Komponenten-/Theme-/Performancearbeit WA-32/39/36 und zusätzliche Produktoptionen im Entwicklungsplan anhand konkreter Engpässe priorisieren. Bereits gelieferte 3.50-Teilabschlüsse nicht erneut als fehlende Features führen.
+4. Öffentliche Signatur/Notarisierung, Lizenz, Marke und weitere Vertriebskanäle bleiben gesonderte Inhaberentscheidungen.
 
-1. **WA-41 gemäß Abschnitt 0 übernehmen:** vorhandene Minidumps/Quellnachweise sichern und bei gesondertem Auftrag auswerten; BIOS-/CPU-Verzicht beachten, AMD-Vergleich vorbereiten statt unnötiger weiterer Intel-Stresstests. Interpreter- und Konsistenzbefund getrennt führen.
-2. **Linux-/Tk-9.1-Kompaktfall gezielt nachprüfen:** Neue Ereignisspur und getrennte Assertions auswerten. Der lokal behobene fehlende-Release-Fall beweist noch nicht die Ursache des damaligen CI-Fehlers; keine spekulative Geometriekorrektur.
-3. **Technische Folge konsolidiert fortsetzen:** Speicherkoordinator/lesenden Vergleich erhalten; der erste Widgetbereich (Heute/Nächste Aufgabe) ist unter WA-39/32 ausgelagert. Weitere Kachel-/Dialog-/Themebereiche nur bei konkretem Nutzen, bestehendes Startseitenmodell weiterverwenden. RuntimePaths/-Config und weitere Zustands-/Callergrenzen nach WA-49/37/38; reale Refreshkosten nach WA-36 messen. Phasen und Abschlusskriterien ausschließlich §21.21, keine parallelen Kennungen.
-4. **Menschenabnahme fortsetzen:** D55-Punkt 5, Sicherungsübersicht/Anhangsrückfrage sowie Reader-, Schrift-, DPI- und Mehrmonitorfälle der [Prüfliste](Glide_Manuelle_Pruefung.md); Punkte 1–4 bleiben abgenommen. Native Bedienung nach Esc-Stopp nur auf neuen konkreten Bedienauftrag.
-5. **Offene native Lieferung/Abnahme nach D51:** Quelle ist 3.49.0; Python-Lieferung 3.47.0, aktuelle Funktions-/Abnahmebelege oben; eigenständige Windows-/Mac-Pakete bleiben 3.45.0. Neue native Paketbauten, Linux-/Mac-Matrix und Menschenabnahme bleiben getrennte offene Tore. Der unterbrochene Volllauf bleibt erhalten. Kein automatischer Commit/Push/Merge aus dem Featureauftrag.
+Commit und Push des beauftragten Abschlusses sind autorisiert. Die neue Versionsbezeichnung ersetzt keine menschliche Produktfreigabe. E-U3-Blockziehen ist in 3.50 gewählt und umgesetzt; Paket 8/4.0-Reader-Abnahme bleibt bis Bedarf zurückgestellt.
 
-Offen beim Inhaber: I12 (CodeQL-Einrichtung), Übernahme von tkinterdnd2 0.6.4 (WA-44), E-U1 B, E-U2 B/C, E-U3 B (WA-25) und Blockziehen, E-P1–E-P5, Integrationsrichtung E-I1, WA-23/24, FP-07 Stufe 2 (Canvas); E-U1 A–E-U3 A sind seit D55 gewählt. Paket 8 / 4.0.0 bleibt vorbereitet und pausiert. D53 erlaubt Neubewertungen, aktiviert keinen Anbieter; D52–D54 verlangen zentrale Roadmap, appweite Designgeltung und Pflege ohne automatische Feature-/Git-/Releaseentscheidung.
 
 ## 5. Arbeits- und Prüfregeln
 
