@@ -2923,6 +2923,12 @@ def fall_beta350(lauf):
     assert set(editor.item_ids(owned=True)) == identities
     assert editor.document()['text'].lstrip().startswith('Aufgabe behalten'), repr(editor.document())
     assert editor.document() == app.page_entry(page['id'])['rich_note']
+    page, editor = seite_anlegen(lauf, '# Struktur\n\nStart\n\n- Eltern\n  - Kind\n\nSchluss')
+    parent_line = zeile_mit(editor.text, app.ICONS['bullet'] + ' Eltern')
+    drag_to_top(parent_line)
+    assert editor.document()['text'].startswith(app.ICONS['bullet'] + ' Eltern\n' + app.ICONS['bullet'] + ' Kind')
+    assert any(span['tag'] == 'indent1' for span in editor.document()['spans'])
+    assert editor.document() == app.page_entry(page['id'])['rich_note']
     return 'Hintergrundfarben in zehn Designs, Speicherung/Neustart, drei Größen, volle Seitenleiste, Blockziehen/Undo/Redo/Abbruch/Schreibschutz'
 
 

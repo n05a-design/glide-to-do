@@ -11,8 +11,8 @@ import object_references as objects
 def block_lines(document, line):
     """Halboffenes Zeilenintervall eines Blocks (nullbasiert), mit Kindzeilen.
 
-    Tabellen und mehrzeilige Codebereiche bleiben zusammen. Eine Aufklappzeile
-    nimmt ihre eingerückten Kinder mit, auch wenn diese gerade verborgen sind.
+    Tabellen und mehrzeilige Codebereiche bleiben zusammen. Eingerückte
+    Kindblöcke folgen ihrem Elternblock, auch wenn sie gerade verborgen sind.
     """
     rows = document.get('text', '').split('\n')
     starts, offset = [], 0
@@ -28,9 +28,7 @@ def block_lines(document, line):
             b = bisect_right(starts, max(span['start'], span['end'] - 1))
             if a <= line < b:
                 first, last = min(first, a), max(last, b)
-    def tags(row):
-        return {s['tag'] for s in spans if s['start'] <= starts[row] < s['end']}
-    if 'toggle' in tags(first):
+    if any(s['tag'].startswith('indent') for s in spans):
         levels = [0] * len(rows)
         for span in spans:
             tag = span['tag']

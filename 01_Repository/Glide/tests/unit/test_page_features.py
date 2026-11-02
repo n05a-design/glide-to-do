@@ -49,6 +49,15 @@ class PageFeaturesTests(unittest.TestCase):
         doc['spans'][-1]['tag'] = 'table'
         self.assertEqual(pages.block_lines(doc, 2), (2, 4))
 
+    def test_indented_children_follow_a_plain_parent_block(self):
+        doc = {'text': 'Elternblock\nKind\nEnkel\nDanach', 'spans': [
+            {'tag': 'indent1', 'start': 12, 'end': 17},
+            {'tag': 'indent2', 'start': 17, 'end': 23}]}
+        self.assertEqual(pages.block_lines(doc, 0), (0, 3))
+        self.assertEqual(pages.block_lines(doc, 1), (1, 3))
+        moved, _ = pages.move_document_block(doc, *pages.block_lines(doc, 0), 4)
+        self.assertEqual(moved['text'], 'Danach\nElternblock\nKind\nEnkel')
+
     def test_live_validation_and_real_home_states(self):
         self.assertEqual(pages.live_lists(['glide://list/a'] * 2), ['glide://list/a'])
         for value in (['glide://item/a'], ['glide://list/a?x'], ['glide://list/a'] * 21, {}):

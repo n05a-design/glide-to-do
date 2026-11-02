@@ -4,7 +4,7 @@
   "python": "3.14.5",
   "plattform": "darwin",
   "maschine": "arm64",
-  "modul_sha256": "e7661b82b58c40228b0fb30d8de0c2337444e0a1fe877dfc57abc7f92946f0f8",
+  "modul_sha256": "36ce1c6bd938b46e65053809ec221b0826c5a1949e5604f9d540fd7999090722",
   "kuenstliche_daten": true,
   "messungen": [
     {
@@ -12,9 +12,9 @@
       "spans": 100,
       "zeichen": 4399,
       "proben": 9,
-      "median_ms": 0.172,
-      "p95_ms": 0.176,
-      "aufklappgruppe_ms": 0.028,
+      "median_ms": 0.156,
+      "p95_ms": 0.161,
+      "aufklappgruppe_ms": 0.023,
       "format_link_text_erhalten": true
     },
     {
@@ -22,9 +22,9 @@
       "spans": 1000,
       "zeichen": 43999,
       "proben": 9,
-      "median_ms": 1.659,
-      "p95_ms": 1.736,
-      "aufklappgruppe_ms": 0.198,
+      "median_ms": 1.544,
+      "p95_ms": 1.571,
+      "aufklappgruppe_ms": 0.18,
       "format_link_text_erhalten": true
     },
     {
@@ -32,9 +32,9 @@
       "spans": 5000,
       "zeichen": 219999,
       "proben": 9,
-      "median_ms": 9.222,
-      "p95_ms": 9.978,
-      "aufklappgruppe_ms": 1.049,
+      "median_ms": 8.769,
+      "p95_ms": 9.161,
+      "aufklappgruppe_ms": 0.937,
       "format_link_text_erhalten": true
     },
     {
@@ -42,9 +42,9 @@
       "spans": 10000,
       "zeichen": 439999,
       "proben": 9,
-      "median_ms": 18.647,
-      "p95_ms": 22.229,
-      "aufklappgruppe_ms": 1.969,
+      "median_ms": 18.197,
+      "p95_ms": 21.713,
+      "aufklappgruppe_ms": 1.912,
       "format_link_text_erhalten": true
     }
   ],
