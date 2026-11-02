@@ -1,0 +1,62 @@
+{
+  "datum": "2026-11-02",
+  "version": "3.50.0",
+  "aufgabenformat": 26,
+  "app_sha256": "672ffadd1bf2ba0d630c4b999158935c261aecd808c49816a890f21edc02f72c",
+  "python_fassung_bytegleich": true,
+  "integrationssuiten_endstand": {
+    "test_glide": 0,
+    "test_titel33312": 0,
+    "test_aufgaben3380": 0,
+    "test_uiux_paket": 0,
+    "test_arbeitsmodi": 0,
+    "test_features322": 0,
+    "test_oberflaeche33321": 0,
+    "test_seitenkarten": 0,
+    "test_ansichten": 0,
+    "test_seiten330": 0,
+    "test_seiten33318": 0,
+    "test_festlayout330": 0,
+    "test_kartenfuss330": 0,
+    "test_notizbereich330": 0,
+    "test_pixel3350": 0,
+    "test_wiederanlauf": 0,
+    "test_aufraeumen330": 0,
+    "test_bedienung33316": 0,
+    "test_features326": 0,
+    "test_features330": 0,
+    "test_rueckmeldung330": 0,
+    "test_ui39": 0,
+    "test_workspace310": 0,
+    "test_mindestgroesse330": 0,
+    "test_features324": 0,
+    "test_features325": 0,
+    "test_features328": 0,
+    "test_features329": 0,
+    "test_klappmechanismen3321": 0,
+    "test_eingabe3333": 0,
+    "test_erwaehnungen": 0
+  },
+  "messung": {
+    "suchfeld_zu_karte_px": {
+      "vorher": 1,
+      "nachher": 11
+    },
+    "seitenwerkzeug_zu_karte_px": {
+      "vorher": 0,
+      "nachher": 10
+    },
+    "inhaltskante_1280x800_px": 128
+  },
+  "ui39_wackelig": "lokal zeitweise rot (Dropdown-Fokus), vorherige Fassung 1 von 3 rot; im Endlauf grün",
+  "mac_startprobe": {
+    "bauordner": "1 von 1 grün",
+    "installiert": "3 von 3 grün"
+  },
+  "mac_lieferung": {
+    "dateien": 463,
+    "abweichungen": 0,
+    "codesign": 0
+  },
+  "windows_exe_aktualisiert": false
+}

@@ -1,0 +1,29 @@
+{
+ "bg": "muted",
+ "liste": {
+  "suchfeld_unten_zu_karte": 1,
+  "rechts_vom_umschalter": [
+   ".!frame.!frame2.!frame.!frame.!frame2.!roundedbutton4"
+  ],
+  "umschalter_rechtskante": -52
+ },
+ "tabelle": {
+  "suchfeld_unten_zu_karte": 1,
+  "rechts_vom_umschalter": [
+   ".!frame.!frame2.!frame.!frame.!frame2.!roundedbutton2"
+  ],
+  "umschalter_rechtskante": -98
+ },
+ "pinnwand": {
+  "suchfeld_unten_zu_karte": 1,
+  "rechts_vom_umschalter": [],
+  "umschalter_rechtskante": 0
+ },
+ "pinnwand_grund": [
+  "#28282B",
+  "#1C1C1E",
+  "#28282B"
+ ],
+ "seite_werkzeug_zu_karte": 0,
+ "errors": []
+}
