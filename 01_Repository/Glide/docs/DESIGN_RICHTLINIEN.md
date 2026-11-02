@@ -1,6 +1,9 @@
 # Design Richtlinien
 
-Stand 01.11.2026 · Glide 3.50.0 · appweiter Gestaltungsvertrag; bestehendes UI-/UX-Paket und fortlaufende Übertragung
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+
+**3.50-Beta-Auftrag 02.11.2026 (D58):** Kontexte Hauptfenster, Seitenleiste/Kopf, Einstellungen/Ansichtsmenü und Seiteneditor. Vorhandene Farben und Abstände behalten; Hintergrundpalette separat vom Design, Fensterflächenmodus ohne Materialschatten. Seitenleiste bis nach oben, Kopf auf Inhaltsflucht. Blockgriff mit zurückhaltender Einfügelinie, Randscrollen, Abbruch und unveränderten Rechtsklick-/Tastaturaktionen. Keine zusätzliche Dauerwerkzeugleiste. Prüfkriterien: 860 × 700, 1280 × 800, große Schrift, zehn Designs, ausgeblendete/schmale Seitenleiste, Kompaktmodus, Speichern/Neustart, Undo und Schreibschutz. Menschliche Sichtprüfung folgt; Screenreader ist bis Bedarf zurückgestellt.
+
 
 **Mutationsfortsetzung 29.10.2026:** „Liste leeren“ verwendet für beide bestehenden Bedienwege die vorhandene Bestätigung mit Listenname und vorhandene Warn-/Speicherfehlerrollen; keine zusätzliche Dauerfläche, Farbe oder Symbolrolle. Frische ID-Prüfung nach Dialog, Rückweg über einen Undo-Schritt. Automatisierte App-/Datei-/Fehlernachweise im [Abschlussnachlauf](../tests/qa-3.49.0/abschlussreste_2026-10-29/README.md); native DPI-/Reader-/Menschenabnahme weiterhin offen. Gerätevergleich/Prüfprofil schafft keine neue Produktoberfläche.
 

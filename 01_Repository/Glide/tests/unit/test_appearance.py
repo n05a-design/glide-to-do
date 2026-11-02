@@ -65,5 +65,22 @@ class Erkennung(unittest.TestCase):
         self.assertIsNone(a.tk_is_dark("vielleicht"))
 
 
+class BackgroundTests(unittest.TestCase):
+    def test_background_selection_and_flat_surfaces(self):
+        self.assertEqual(a.background_choice({}), 'default')
+        self.assertEqual(a.background_choice('unknown'), 'default')
+        for base, card in (('#F7F6FA', '#FFFFFF'), ('#15171C', '#202226')):
+            theme = {'bg': base, 'card': card, 'accent': '#8C60CD'}
+            before = dict(theme)
+            flat = a.with_background(theme, 'surface')
+            self.assertEqual(flat['bg'], card)
+            self.assertEqual(flat['glass_shadow'], card)
+            self.assertEqual(flat['glass_gradient'], '')
+            color = a.with_background(theme, 'accent')
+            self.assertNotEqual(color['bg'], base)
+            self.assertEqual(color['card'], card)
+            self.assertEqual(theme, before)
+
+
 if __name__ == "__main__":
     unittest.main()

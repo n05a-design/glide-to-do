@@ -1,6 +1,14 @@
 # Änderungsverlauf
 
-## 3.50.0 (31.10.2026) – Nachschlagen, Fokusdauer und schnelleres Speichern
+## 3.50.0 (02.11.2026) – Erster öffentlicher Stand
+
+Intern: öffentliche erste Beta. Die Änderungen vom 31.10. und 01.11. sind in diesem Stand enthalten.
+
+- Hintergrundfarbe unabhängig von Design und Verlauf: feste Palette sowie „Wie die Fensterfläche“. Diese Option nutzt im hellen Design Weiß und im dunklen Design die Kartenfläche, ohne Materialschatten. Die Wahl wird gespeichert und über Einstellungen, Ansichtsmenü und Aktionssuche erreicht.
+- Logo, Titel und Untertitel fluchten mit dem Inhaltsbereich; die Seitenleiste nutzt die volle Höhe einschließlich des bisherigen Kopfbereichs. Breite, schmale und ausgeblendete Seitenleiste sowie Kompaktmodus bleiben erhalten.
+- Seitenblöcke lassen sich am Sechspunktgriff ziehen. Einfügelinie, Randscrollen und Escape-Abbruch; Formatierungen, Links, Bilder und Aufgabenbezüge bleiben erhalten. Tabellen, mehrzeiliger Code und Aufklappblöcke mit Kindzeilen bleiben zusammen. Ein Verschieben ist ein Rückgängig-Schritt; Rechtsklick und Tastatur-Blockaktionen bleiben verfügbar.
+- README für Erstbesucher mit vollständiger Featureübersicht überarbeitet; Sicherheitsrichtlinien und GitHub-Konfiguration aktualisiert. Actions mit Commit-SHA, Bauabhängigkeiten mit erzwungenen Originalhashes. Screenreader-Abnahme nach Inhaberentscheidung bis Bedarf zurückgestellt.
+
 
 - Nebenansicht: „Treffer …“ zeigt bei offener Suche alle Fundstellen mit Abschnitt und Textausschnitt; ein Eintrag steuert die Stelle direkt an. Höchstens 50 Einträge, darüber ein Hinweis zum Verfeinern; veraltete Einträge bewirken nichts. „Abschnitte …“ nennt bei aktiver Suche die Treffer je Abschnitt.
 

@@ -7,6 +7,12 @@
 *.pyw text eol=lf
 *.sh text eol=lf
 *.md text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
 *.ps1 text eol=crlf
 *.cmd text eol=crlf
 *.png binary
@@ -35,3 +41,13 @@
 # SHA-256 wird gegen src/glide, das Bundle und die Herkunftsangaben geprüft.
 **/vendor/** -text
 **/resources/fonts/** -text
+
+# Paketartefakte und native Bibliotheken bytegleich behandeln.
+*.tar.gz binary
+*.dll binary
+*.pyd binary
+*.so binary
+*.dylib binary
+*.exe binary
+*.woff2 binary
+*.tiff binary

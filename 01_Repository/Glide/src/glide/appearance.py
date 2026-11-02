@@ -78,3 +78,31 @@ def tk_is_dark(answer):
     if text in ("0", "false", "no"):
         return False
     return None
+BACKGROUND_CHOICES = (
+    ('Designvorgabe', 'default'), ('Wie die Fensterfläche · ohne Schatten', 'surface'),
+    ('Lila', 'accent'), ('Blau', 'clear'), ('Türkis', 'due_action'),
+    ('Grün', 'export'), ('Gelb', 'flag'), ('Rot', 'delete'),
+    ('Braun', 'import'), ('Kontrastgrau', 'muted'),
+)
+BACKGROUND_KEYS = frozenset(key for _label, key in BACKGROUND_CHOICES)
+
+
+def background_choice(value):
+    return value if isinstance(value, str) and value in BACKGROUND_KEYS else 'default'
+
+
+def with_background(theme, choice):
+    """Nur den Hintergrund färben; Arbeitsflächen und Rollen bleiben erhalten."""
+    from backdrop import hex_rgb, rgb_hex, mix, luminance
+    result = dict(theme)
+    choice = background_choice(choice)
+    if choice == 'surface':
+        result['bg'] = result['card']
+        result['glass_shadow'] = result['card']
+        result['glass_gradient'] = ''
+    elif choice != 'default':
+        # Ruhige Töne derselben festen Palette erhalten den Schriftkontrast.
+        base = hex_rgb(result['bg'])
+        share = 0.16 if luminance(base) < 0.2 else 0.08
+        result['bg'] = rgb_hex(mix(base, hex_rgb(result[choice]), share))
+    return result

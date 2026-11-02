@@ -1,91 +1,86 @@
-# Glide – lokale Aufgaben, Notizen und Pinnwände
+# Glide
 
-Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26 · Quelle 3.50.0; Python/Showcase und macOS 3.49.0; Windows-Paket 3.45.0 · keine Gesamtabnahme
+**Dein Tag. Deine Gedanken. Dein eigener Arbeitsplatz.**
 
-**Abschlussfortsetzung 31.10.2026:** Python/Showcase und eigenständiges macOS-arm64-Paket 3.49.0 geliefert, Windows-Paket weiterhin 3.45.0. Native Tk-9.1-Matrix: 126 Schritte einschließlich aller 108 Integrationssuiten grün; Programm-, Test-, Fixture- und Ressourcenstand entsprechen dem eingefrorenen Nachweis; anschließende Anleitungspflege separat geprüft. Neue Grundstufe mit 235 Werkzeugtests und zweimal 1.082 Fachtests grün. 56 Mutationsfälle und zwölf native Accessibility-Proben grün. WA-41A/B, Windows-/Linux-Endmatrix, echte Readerketten, übrige appweite Architektur-/Performanceumfänge und Menschenabnahme bleiben offen. [Prüf- und Liefernachweis](01_Repository/Glide/tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md), [aktueller Rest in §21.37](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2137-abschlussfortsetzung-mutationen-prüfablauf-tk-91-und-lieferung). Frühere datierte Absätze bewahren ihren damaligen Stand.
+Aufgaben planen, Wissen sammeln, Ideen verbinden und den Alltag festhalten: Glide vereint Aufgabenmanagement, Seiten, Notizen, Pinnwände, Tagebuch und eine Pixel-Werkstatt in einer deutschsprachigen Desktop-App. Deine Inhalte bleiben bei dir – lokal, ohne Konto, ohne Cloudzwang und ohne Telemetrie.
 
-[![Glide-Prüfung](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml)
+**3.50.0 · Erster öffentlicher Stand**
 
-Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Seiten, Notizbücher, Pinnwände und Pixelzeichnungen. Sie läuft lokal mit Python und Tk, braucht weder Konto noch Cloud und hält alle Nutzerdaten außerhalb des Programmordners.
+[Loslegen](#loslegen) · [Was Glide kann](#was-glide-kann) · [Handbuch](01_Repository/Glide/docs/20_FUNKTIONEN.md) · [Änderungen](01_Repository/Glide/CHANGELOG.md)
 
-Dieses Repository ist die maßgebliche Projektablage (Entscheidung D09): Die Wurzel ist der Projektordner, der Quellcode liegt in [`01_Repository/Glide`](01_Repository/Glide/README.md).
+## Was Glide kann
 
-## Stand
+### Den Tag planen und Aufgaben erledigen
 
-- **3.47.0 – Mehrfachplanung und Verlauf (27.10.2026):** Auswahl über Tagesvorschauseiten und aktive Listen mit einem Planungs-Undo; lesender Sitzungsverlauf mit Suche/Leseposition und vorhandener Inhaltsauswahl. Aufgabenformat 26, native Pakete weiterhin 3.45.0. [Nachweis](01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/README.md).
-- **3.46.0 – Tagessteuerung und Nebenansicht (27.10.2026):** Direkt planen/fokussieren, Inhalte durchsuchen und Abschnitte nachschlagen; Aufgabenformat bleibt 26. Damals Quelle und Python-Lieferung 3.46.0, native Pakete separat 3.45.0. [Prüf- und Liefergrenzen](01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/README.md).
-- **3.45.0 – Sicherungen, Arbeitsmodi und Speicherstatus (25.–26.10.2026):** Sicherungsübersicht mit Suche, Inhaltsprüfung, Vergleich und bestätigtem Wiederherstellungsweg; Rückfrage vor aktiven Anhangstypen und robuste Windows-Bildpfade. D55 und Speicherpaket sind darin gebündelt. Python-Lieferung bytegleich; Prüfbilanz einschließlich GitHub-#156-Korrektur im [Nachweis](01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/README.md). D55-Punkte 1–4 menschlich abgenommen; Kompaktmodus-Gegenprobe und übrige native Tore offen.
-- **3.44.0 – Phasenabschluss (22.10.2026):** Die seit 3.43.1 entwickelten Pakete sind gemeinsam versioniert, eingefroren mit dokumentierten Restbefunden geprüft und als Python-Fassung nach `07_Python-Versionen` geliefert ([Phasennachweis](01_Repository/Glide/tests/qa-3.44.0/phasenabschluss_2026-10-22/README.md)). Neu für Nutzer:
-  - **Wiederholen nach Rückgängig** (FP-01) über Menü, Palette, Strg/Cmd+Umschalt+Z und unter Windows Strg+Y.
-  - **Eigene Rhythmen** (FP-02): mehrere Wochentage, Monats-/Jahresintervalle, n-ter oder letzter Wochentag, Monatsende, Vorschau, Erledigungsbezug, Pause, begrenzte Anzahl, deutsche Chips und Kalender-Rundweg. **Aufgabenformat 26** mit Vorsicherung; die alte 3.43.1 öffnet den umgestellten Bestand nur schreibgeschützt.
-  - **Gespeicherte Ansichten** (FP-03): zusätzliche Bedingungen mit Alle/Oder sowie eigene Darstellung als Liste, Tabelle oder Spaltenboard mit Gruppierung, Sortierung und Spaltenbreiten; „Als Ansicht speichern …“.
-  - **Seiten und Notizen als Pinnwandkarten** (FP-04), **unverknüpfte Erwähnungen** (FP-05), **fünf lokale KI-Aufträge mit vollständiger Vorschau** (FP-06) und **Alles als Markdown-Ordner exportieren** (FP-07 Stufe 1).
-  - **Verlässlicher und schneller:** Bildvorschauen im Hintergrund (WA-26), Schutzrunde gegen Bestandsverlust (WA-27–WA-30), lokaler Schreibbesitz (WA-31), schnellere Mehrfachaktionen (WA-36), ehrliche Speicher-/Folgefehlerergebnisse (WA-37/38/40) und Kalender ohne überholte Auswertung.
-- **Weiterhin offen:** native Linux-/Mac-Vollmatrix sowie menschliche Bedien-, DPI-, Mehrmonitor- und Screenreaderabnahme. Beide eigenständigen Pakete sind 3.45.0. [Aktuelle Prüf- und Liefermatrix](01_Repository/Glide/docs/07_QA_BERICHT.md).
-- **3.43.0 und 3.43.1:** UI-/UX-Paket aus Nutzerbeobachtungen sowie Kürzelkorrektur unter Linux/Tk 9.1; Einzelheiten im [Änderungsverlauf](01_Repository/Glide/CHANGELOG.md).
-- **Letzter gemeinsamer Paketlieferstand:** eigenständige Mac-/Windows-Entwicklungspakete 3.45.0; davor Notion-Import und Seitenwiederherstellung 3.41.0, Pixelanimation 3.40.0, Wiederholungen 3.39.1, Tagesplanung 3.39.0 und Aufgabenoberfläche 3.38.0.
-- **Zentrale Roadmap:** Der [aktuelle Entwicklungsplan §21](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026) trennt Umsetzung, Prüf-/Lieferabschlüsse und neue Vorschläge; der Abschluss von 3.44.0 und die nächsten Schritte stehen in [§21.10](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2110-phasenabschluss-3440), die technische Härtung aus dem Sicherheits- und Architekturgutachten vom 25.10.2026 in [§21.12](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2112-technische-folge-aus-dem-sicherheits--und-architekturgutachten). Neue Leistungs-, Schutz-, Design- und Integrationsbelege stehen in Analyse/Markt; die appweiten [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md) führen jede neue oder angefasste Oberfläche. Pflege je Entwicklungsrunde und zusätzlich zweiwöchentlich; keine automatische Feature- oder Releasefreigabe.
-- **Offen:** manuelle Bedien-/DPI-/Mehrmonitor-/Screenreaderabnahme sowie die gesonderten Veröffentlichungstore (u. a. Lizenz, öffentliche Signatur und Marke). Status je Aufgabe im [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md), Entscheidungen in der [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md), Gestaltungsregeln in den [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md).
+- **Schnell erfassen:** Aufgaben in Alltagssprache eingeben, erkannte Termine und Eigenschaften vor dem Anlegen als Feldchips prüfen; Schnellerfassung auch per Tastenkürzel.
+- **Aufgaben strukturieren:** Listen, Ordner, Gruppen, Zwischenüberschriften, Unteraufgaben und Checklisten; Wichtigkeit, Labels, eigene Farben, Fälligkeit und Bearbeitungstag getrennt verwalten, Aufwand schätzen und Zeit erfassen.
+- **Eigene Rhythmen:** täglich, wöchentlich, mehrere Wochentage, Monatsende, n-ter oder letzter Wochentag sowie Monats- und Jahresintervalle; Wiederholung ab Erledigung, Pause, begrenzte Anzahl, Vorschau und Termin überspringen.
+- **Heute und Demnächst:** Tagesvorschlag, nächste Aufgabe, Routinen, Tagesziel, Fortschritt, Stundenraster, Wochen- und Monatsplanung sowie Kapazität je Wochentag. Tagesbeginn, Tagesabschluss und Wochenrückblick helfen beim Einordnen.
+- **Fokus halten:** Fokusintervalle mit 15, 25 oder 50 Minuten und eigenem Aufwand; pausieren, fortsetzen, um fünf Minuten verlängern, zur nächsten Aufgabe wechseln und erfasste Zeit buchen.
+- **Mehrere Aufgaben bearbeiten:** Auswahl planen, verschieben, einordnen, mit Labels versehen, Fälligkeit und Aufwand ändern; zusammenhängende Aktionen wieder rückgängig machen.
+- **Erinnerungen:** Hinweise in Glide, auf Wunsch Systemmitteilungen und Hervorhebung von Taskleiste bzw. Dock. Die App muss dafür laufen; [Zustellverhalten](01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md).
 
-## Schnellstart
+### Aufgaben aus der passenden Perspektive sehen
 
-Die gelieferten Entwicklungspakete 3.45.0 starten unter Windows aus `01_Repository/Glide/build/windows/Glide-3.45.0/Glide.exe`. Für macOS das native `01_Repository/Glide/build/macos/Glide-3.45.0-macos-arm64.tar.gz` entpacken und dessen `Glide.app` öffnen; so bleiben POSIX-Verknüpfungen und Dateimodi erhalten. Die lokale Windows-Inspektionskopie liegt unter `01_Repository/Glide/build/macos/Glide.app`. Beide Pakete enthalten Python/Tcl-Tk; die separate Python-Fassung trägt 3.47.0. [Paketierung](01_Repository/Glide/packaging/README.md#eigenständige-entwicklungspakete-paket-7).
+- **Liste, Tabelle, Kalender, Karten und Spaltenboard** arbeiten mit denselben Inhalten. Gruppieren, sortieren, Spalten anpassen und Wichtigkeit mit der Eisenhower-Darstellung einordnen.
+- **Eigene Ansichten speichern:** Filter mit Alle-/Oder-Bedingungen, Gruppierung, Sortierung, Darstellung und Spaltenbreiten. Glide erklärt, warum eine Aufgabe im Filter erscheint.
+- **Startseite einrichten:** Begrüßung, Uhr, Tagesübersicht, nächste sieben Tage, zuletzt bearbeitete Inhalte, angeheftete Einträge, Zeichnungen und Pinnwand; Kacheln nach Bedarf zusammenstellen.
+- **Nebenansicht und Kompaktmodus:** Inhalte parallel nachschlagen oder mit einer kleinen Arbeitsansicht fokussieren. Suchtreffer, Abschnitte, Zurück/Vorwärts, Sitzungsverlauf und letzte Suchen erleichtern die Navigation.
 
-Für den weiterhin verfügbaren Python-Startweg ist Python mit Tk erforderlich, empfohlen Python 3.14 mit Tk 9. Mit Tk 8.6 startet Glide ebenfalls, nur ohne Systemmitteilungen und SVG-Vorschau. Zusätzliche Pakete sind nicht nötig.
+### Gedanken, Wissen und Erinnerungen festhalten
+
+- **Seiten mit Blöcken:** Überschriften, Listen, nummerierte Listen, Zitate, Code, Tabellen, Hinweise, Trennlinien und aufklappbare Bereiche; Formatierung, Links, Bilder, Titelbilder und Pixelsymbole. Blöcke am Sechspunktgriff ziehen; Rechtsklick öffnet die Blockaktionen.
+- **Aufgaben direkt auf Seiten:** echte Aufgaben und Verknüpfungen statt isolierter Kästchen; Live-Listen zeigen den aktuellen Inhalt ihrer Quelle.
+- **Notizen, Notizbücher und Bücher:** kurze Gedanken und längere Texte sammeln, gliedern und durchsuchen. Tagebuch mit datierten Einträgen und Galerien für bildbetonte Sammlungen.
+- **Wissen vernetzen:** lokale Verweise auf Seiten, Listen und Aufgaben, Rückverweise und unverknüpfte Erwähnungen. Markierten Text direkt in der Nebenansicht nachschlagen.
+- **Gemeinsam suchen:** Inhalte und Aktionen über die Suche und die Befehlspalette erreichen, Fundstellen markieren und zu Abschnitten springen.
+
+### Ideen sichtbar machen
+
+- **Pinnwände:** Karten frei anordnen, Bereiche und Verbindungen anlegen, zoomen und präsentieren. Aufgaben, Seiten und Notizen lassen sich miteinander verbinden; Karten zeigen ihre Originalinhalte.
+- **Pixel-Werkstatt:** Zeichnungen mit 16 bis 128 Zellen, Formen, Symmetrie, Muster, Farbpaletten und Umfärben; PNG- und ICO-Export mit Symbolvorschau. Bildfolgen erstellen, abspielen und als Einzelbilder bzw. Sprite-Sheet ausgeben.
+- **Persönliche Oberfläche:** zehn Designs, automatische Hell-/Dunkelumschaltung, Akzentfarben, Hintergrundverläufe und getrennte Hintergrundfarben. „Wie die Fensterfläche“ verbindet den Hintergrund mit den Arbeitsflächen und deaktiviert deren Materialschatten.
+- **Dein Arbeitsstil:** Schrift und Größe wählen, Seitenleiste vollständig, schmal oder ausgeblendet nutzen, Bereiche einblenden, Lesebreite ändern und zusätzliche Bedienhinweise oder Animationen abschalten.
+
+### Inhalte mitnehmen und sicher aufbewahren
+
+- **Importieren und ausgeben:** CSV mit Spaltenzuordnung, Markdown, Kalenderdateien (ICS), Notion-Archive mit Quellenvergleich und vollständige Bestände als Markdown-Ordner. Druck und PDF über eine lokale Druckansicht.
+- **Vorlagen:** mitgelieferte und eigene Vorlagen, Vorschau vor dem Übernehmen, Aufgaben- und Ordnerstrukturen sowie passende Datumsverschiebung.
+- **Lokaler KI-Austausch:** fünf vorbereitete sowie eigene Textaufträge, vollständige Vorschau des Kontextpakets und geprüfte Änderungsvorschläge. Die Weitergabe erfolgt bewusst durch dich; Glide verbindet sich dabei mit keinem KI-Dienst.
+- **Sichern und wiederherstellen:** atomare Speicherung, automatische Sicherungen bei Änderungen, Tagesstände, Voll-, Teil- und App-Backups. Sicherungen durchsuchen, Inhalte prüfen, vergleichen und einzelne Seiten wiederherstellen.
+- **Kontrolle behalten:** Papierkorb, Archiv, Rückgängig und Wiederholen, Änderungsverlauf, Speicherstatus und Schutz vor gleichzeitigem Schreiben zweier lokaler Instanzen. Nutzerdaten liegen außerhalb des Programmordners.
+
+Die [Funktionsübersicht](01_Repository/Glide/docs/20_FUNKTIONEN.md) beschreibt Bedienung und Grenzen. Diese Featureliste wird bei jeder Funktionsänderung mit dem Handbuch und den Neuerungen abgeglichen.
+
+## Loslegen
+
+Glide ist für **Windows, macOS und Linux** vorgesehen. Eigenständige Pakete enthalten Python und Tcl/Tk; die Python-Fassung lässt sich auf allen drei Plattformen verwenden.
+
+- **Pakete und Downloads:** [Veröffentlichungen](https://github.com/n05a-design/glide-to-do/releases). Verfügbare Artefakte und ihr tatsächlicher Prüfstand stehen im [Liefernachweis](01_Repository/Glide/docs/07_QA_BERICHT.md).
+- **Python-Fassung:** Repository herunterladen und mit Python 3.14 samt Tk starten. Zusätzliche pip-Pakete sind für die App nicht nötig.
 
 ```bash
 python3 07_Python-Versionen/Schnellstart.pyw
 ```
 
-Unter Windows: `python 07_Python-Versionen\Schnellstart.pyw`. Weitere Startwege (aus dem Quellstand, macOS-Entwicklungsbundle) stehen in der [README des Quellbaums](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand).
+Unter Windows: `python 07_Python-Versionen\Schnellstart.pyw`.
 
-**Hinweis für bestehende Daten:** 3.44.0 stellt den Bestand beim ersten Start auf Aufgabenformat 26 um (vorher 25); die eigenständigen Pakete 3.42.0 lesen ihn danach nur schreibgeschützt. Nach einem Formatwechsel keine ältere Fassung mit dem umgestellten Bestand starten. Seit 3.30 öffnen ältere Fassungen einen neueren Bestand nur schreibgeschützt; Glide 3.29 und älter überschreiben ihn bei der ersten Eingabe. Vor jeder Umstellung entsteht eine Vorsicherung `liste_vor_format<N>_*.json`.
+Ein [Showcase mit künstlichen Beispielen](05_Probelisten_Testdaten/Showcase/README.md) zeigt die Funktionen in einem getrennten Datenordner. [Startwege und Voraussetzungen](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand).
 
-## Was Glide kann
+## Entwicklung und Qualität
 
-- **Planen:** Aufgaben mit Unterpunkten, Checklisten, Fälligkeit und Bearbeitungstag, Wiederholungen mit eigenen Rhythmen (mehrere Wochentage, n-ter Wochentag, Monatsende, ab Erledigung, Pause, Anzahl; auch Termin überspringen), Erinnerungen, Wichtigkeit, Labels, Aufwand und Zeiterfassung; „Heute“ und „Demnächst“ mit Tagesvorschlag, Routinen, Fokus, Stundenraster, eingebetteter Wochen-/Monatsplanung, Kapazität, Tagesbeginn, Tagesabschluss und Wochenrückblick; Schnelleingabe in Alltagssprache mit Feldchips.
-- **Ansichten:** Liste, Tabelle, Kalender, Karten, Spaltenboard und Pinnwand auf demselben Bestand; gespeicherte Ansichten mit Alle-/Oder-Bedingungen, eigener Darstellung, Gruppierung, Sortierung und Spalten; Gruppieren nach Feld einschließlich Eisenhower; Pinnwand mit Bereichen, Verbindungen, Seiten-/Notizkarten und Präsentation; Startseite „Ruhig“ zum Anpassen.
-- **Wissen:** Seiten mit Markdown, Bildern (auch in Druck/PDF und Markdown), Titelbildern, echten Aufgaben und eingebetteten Live-Listen; Notizen, Notizbücher, Bücher und Galerien; lokale Verweise und Rückverweise sowie unverknüpfte Erwähnungen; gemeinsame Suche und Befehlspalette (Strg/Cmd+O) mit markierten Fundstellen; gespeicherte Filter, die erklären, warum etwas erscheint.
-- **Pixel-Werkstatt:** Zeichnungen mit 16–128 Zellen, Formen, Symmetrie, Mustern, Paletten mit Umfärben und Vorschau, PNG- und ICO-Export mit Symbolvorschau, Pixelsymbole.
-- **Daten:** atomares Speichern, Sicherungen nur bei Änderung, Vorsicherung je Formatstufe, Tagesstände, Sicherungsübersicht mit Suche, Inhaltsprüfung und Vergleich; Voll-, Teil- und App-Backup, Notion-Import mit Quellenvergleich, einzelne Seiten aus Sicherungen wiederherstellen, Vorlagen, CSV, Markdown (auch der ganze Bestand als Markdown-Ordner), ICS, Austauschformat für KI mit fünf fertigen Aufträgen, vollständiger Vorschau und geprüften Änderungsvorschlägen; Rückgängig und Wiederholen für alles.
-- **Gestaltung:** zehn Designs mit Kontrast nach WCAG AA, automatisch hell/dunkel nach System, Akzentfarben und Hintergrundverläufe, schmale Seitenleiste, abschaltbare Bedienhinweise; Mindestgröße 860 × 700. Regeln in den [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md).
+Stand 02.11.2026 · Glide 3.50.0 · Aufgabenformat 26
 
-Verhalten im Einzelnen: [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md). Entwicklung je Version: [Änderungsverlauf](01_Repository/Glide/CHANGELOG.md).
+<!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt. Technische Stände stehen im QA-Bericht. -->
 
-## Ablage
+[![Glide-Prüfung](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml/badge.svg?branch=main)](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml)
 
-| Ordner | Zweck |
-|---|---|
-| [01_Repository/Glide](01_Repository/Glide/README.md) | Kanonischer Quellcode, Tests, Prüfwerkzeuge und technische Dokumentation |
-| [07_Python-Versionen](07_Python-Versionen/README.md) | Startbare, bytegleich gehaltene Python-Fassung; im Archiv die Hauptdateien der sieben neuesten Versionen |
-| [05_Probelisten_Testdaten](05_Probelisten_Testdaten/README.md) | Showcase mit eigenem Starter (bytegleiche Lieferkopie der Fixture) |
-| [00_Arbeitsvorbereitung](00_Arbeitsvorbereitung/README.md) | Übergabe, Entwicklungsplan, Markt und Vorbilder, manuelle Prüfliste |
-| [20_Grafik_Master](20_Grafik_Master/README.md) | Logo, App-Symbol und Fav-Icon als SVG und PNG, Affinity-Quelle, Inspiration, Beispielbilder |
-| `.github` | Prüf-Workflow (Glide-Prüfung), Dependabot; CodeQL-Workflow deaktiviert |
+3.50.0 heißt öffentlich **„Erster öffentlicher Stand“**, intern **„öffentliche erste Beta“**. Automatisierte Prüfungen und Paketprüfungen sind im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) nachvollziehbar. Die abschließende menschliche Prüfung erfolgt durch den Inhaber. Eine Screenreader-Abnahme ist bis zu einem konkreten Bedarf zurückgestellt.
 
-## Arbeitsweise mit dem Repository
-
-- **Struktur:** Uploads und Commits immer in diese Struktur, nie in einen Unterordner; sonst brechen die Querverweise. Lokale Arbeitskopie: `Github/glide-to-do`.
-- **Prüfung:** Jeder Push und Pull Request auf `main` startet die [Glide-Prüfung](01_Repository/Glide/tests/README.md). Sie umfasst Syntax, Versionen, Dokumentationslinks, Unit-Tests, Analysen, Startprobe, Lieferstand, Herkunft des Fremdcodes, Datenschutz und Ablagegröße. Pull Requests erst mergen, wenn sie grün ist.
-- **Schlanke Ablage (03.10.2026):** Archive und Prüfnachweise nur der sieben neuesten Versionen, Fensterbilder nur der drei neuesten, keine Archivkopien – frühere Fassungen hält Git vor. `scripts/pflege/ablage_kuerzen.py` kürzt beim Versionswechsel automatisch.
-- **Öffentliches Repository:** Rohprotokolle (`*.log`) bleiben lokal. Veröffentlicht werden Zusammenfassungen ohne Benutzerpfade; vor dem Hochladen neuer Prüfergebnisse `python3 -B scripts/pflege/pfade_bereinigen.py <Ordner>` im Quellbaum ausführen. Was `.gitignore` abfängt und was nicht, steht in ihrem Kopf.
-- **Regeln:** [Arbeitsregeln für Claude Code](CLAUDE.md) und [AGENTS.md](01_Repository/Glide/AGENTS.md).
-- **Dokumente:** Ein Thema, ein Dokument; zusammenführen und löschen statt archivieren, Erledigtes im Entwicklungsplan markieren ([Dokumentenpflege](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md)).
-
-## Qualität und Sicherheit
-
-- **Glide-Prüfung** (`.github/workflows/python-app.yml`): verpflichtende Grundstufe sowie vollständige Linux-/Windows-Prüfmatrix. Jede Lieferung erhält zusätzlich ihre eingefrorene Mac-Vollprüfung. Gezielte Diagnoseläufe ersetzen keine Vollmatrix; menschliche Bedien- und Readerabnahmen bleiben getrennt.
-- **CodeQL:** `.github/workflows/codeql.yml` liegt bereit, ist aber seit 01.10.2026 vom Inhaber deaktiviert. Wieder einschalten unter *Actions → CodeQL → Enable workflow*, nie zusammen mit der CodeQL-Standardeinrichtung. Solange er aus ist, läuft nur die Standardeinrichtung; sie liest keine `.pyw`-Dateien und damit voraussichtlich nicht die Hauptdatei ([Entwicklungsplan I12](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber)).
-- **Dependabot:** schlägt wöchentlich Aktualisierungen der verwendeten GitHub Actions vor; diese sind noch über Versionstags statt Commit-SHA eingebunden (WA-43).
-- **Secret Scanning:** aktiv; Schlüssel, Zertifikate und Signing-Secrets gehören nie ins Repository.
-- **Schwachstellen melden:** vertraulich über *Security → Report a vulnerability*, nicht über öffentliche Issues ([Sicherheitsrichtlinie](SECURITY.md)). Technische Regeln der Anwendung: [SECURITY.md](01_Repository/Glide/SECURITY.md).
-
-## Weitere Unterlagen
-
-- **Einstieg:** [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) · [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) · [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) · [Dokumentationsindex](01_Repository/Glide/docs/00_INDEX.md)
-- **Fachlich:** [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md) · [Architektur](01_Repository/Glide/docs/02_ARCHITECTURE.md) · [Daten und Migration](01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md) · [Vorlagen](01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md) · [Systemmitteilungen](01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md)
-- **Prüfung und Veröffentlichung:** [Prüfplan](01_Repository/Glide/docs/05_QA_TESTPLAN.md) · [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) · [Manuelle Prüfung](00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md) · [Veröffentlichung](01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md)
+- [Quellcode und Entwicklung](01_Repository/Glide/README.md) · [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) · [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md)
+- [Architektur](01_Repository/Glide/docs/02_ARCHITECTURE.md) · [Daten und Backups](01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md) · [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md)
+- [Sicherheitsrichtlinie](SECURITY.md) · [Technische Sicherheitsgrenzen](01_Repository/Glide/SECURITY.md) · [Prüfplan](01_Repository/Glide/docs/05_QA_TESTPLAN.md)
 
 ## Lizenz
 
-Das Repository ist öffentlich sichtbar, für Glide ist aber noch keine öffentliche Softwarelizenz festgelegt. Der Quelltext räumt derzeit keine allgemeinen Nutzungs-, Änderungs- oder Weiterverteilungsrechte ein; maßgeblich ist der [Lizenzstatus](01_Repository/Glide/LICENSE.md).
+Das Repository ist öffentlich sichtbar. Eine allgemeine Softwarelizenz für Glide ist noch nicht festgelegt; Nutzungs-, Änderungs- und Weiterverteilungsrechte richten sich nach dem [Lizenzstatus](01_Repository/Glide/LICENSE.md). Mitgelieferte Drittkomponenten behalten ihre jeweiligen Lizenzen.

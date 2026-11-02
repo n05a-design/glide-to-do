@@ -1,8 +1,8 @@
 # Aktuelle startbare Python-Fassung
 
-Stand 31.10.2026 · Glide 3.50.0 (Quelle) · Python-Lieferfassung 3.49.0 · Aufgabenformat 26 · Vorlagenformat 2
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand · Aufgabenformat 26 · Vorlagenformat 2
 
-Die startbare Python-Fassung `Glide-Aufgaben-und-Listen_v3.49.0.pyw` und alle Begleitmodule/Ressourcen tragen den eingefrorenen Quellstand 3.49.0. Tagesplanung, Verweise, Wiederanlaufschutz sowie die Mutations-/Importkorrekturen sind enthalten. Eigenständiges macOS-arm64-Paket 3.49.0 mit eigener Tk-9.1-Laufzeit geliefert; Windows-Paket weiterhin 3.45.0. Aktuelle Windows-/Linux-Matrix, tatsächliche Readerketten, WA-41 und menschliche Abnahmen bleiben eigene offene Tore. Keine öffentliche Releasefreigabe.
+Die startbare Python-Fassung `Glide-Aufgaben-und-Listen_v3.50.0.pyw` und alle Begleitmodule/Ressourcen entsprechen dem Quellstand 3.50.0 (öffentliche erste Beta). Hintergrundfarben, volle Seitenleiste, Blockziehen, Nebenansicht und Fokusfunktionen sind enthalten. Der [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) nennt die tatsächlichen Prüfungen und Paketlieferungen. Die menschliche Prüfung folgt nach der technischen Fertigstellung; Screenreader-Abnahme ist bis Bedarf zurückgestellt.
 
 [Prüfung, SHA-256 und Liefergrenzen](../01_Repository/Glide/tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md). Ältere Absätze unten bewahren ihre datierten Prüfstände. In denselben Ordner gehören:
 

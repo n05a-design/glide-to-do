@@ -1,8 +1,11 @@
 # Glide – Entwicklungsplan und Aufgabenstand
 
-Stand 01.11.2026 · Glide 3.50.0 · Aufgabenformat 26
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Aktueller Stand 01.11.2026:** Quelle 3.50.0 / Format 26 ([§21.39](#2139-featurepaket-3500-nachschlagen-in-der-nebenansicht-und-fokusdauer), [§21.40](#2140-wa-36-seitenleisteerinnerungen-und-featurenachtrag-3500)), über PR #46/#47 in `main`, nicht geliefert; Python/Showcase und macOS-arm64-Paket 3.49.0 ([§21.37](#2137-abschlussfortsetzung-mutationen-prüfablauf-tk-91-und-lieferung)), Windows-Paket 3.45.0. Offene Tore: §21.37 „Offene Tore“ und §21.40 „Offen“; der Gesamtauftrag §21.30 bleibt offen. Gesamtprüfung von Dokumentation, Roadmap, Markt und Gestaltung in [Analyse §13.22](Glide_Analyse.md#1322-gesamtprüfung-vom-01112026).
+**Aktueller Auftrag 02.11.2026:** Erster öffentlicher Stand 3.50.0 / öffentliche erste Beta; maßgeblicher Arbeits-, Prüf- und Lieferstatus in [§21.43](#2143-erster-öffentlicher-stand-3500). Screenreader ist bis Bedarf zurückgestellt; frühere datierte Restlisten sind historische Eingangsstände.
+
+
+**Datierter Stand 01.11.2026:** Quelle 3.50.0 / Format 26 ([§21.39](#2139-featurepaket-3500-nachschlagen-in-der-nebenansicht-und-fokusdauer), [§21.40](#2140-wa-36-seitenleisteerinnerungen-und-featurenachtrag-3500)), über PR #46/#47 in `main`, nicht geliefert; Python/Showcase und macOS-arm64-Paket 3.49.0 ([§21.37](#2137-abschlussfortsetzung-mutationen-prüfablauf-tk-91-und-lieferung)), Windows-Paket 3.45.0. Offene Tore: §21.37 „Offene Tore“ und §21.40 „Offen“; der Gesamtauftrag §21.30 bleibt offen. Gesamtprüfung von Dokumentation, Roadmap, Markt und Gestaltung in [Analyse §13.22](Glide_Analyse.md#1322-gesamtprüfung-vom-01112026).
 
 **Abschlussabgleich 31.10.2026 (Eingangsstand vor §21.37):** Nicht alle begonnenen Arbeiten waren abgeschlossen; Rest und Abschlusskriterien damals in [§21.35](#2135-abschlussabgleich-von-roadmap-featurelisten-und-dokumentation). Damals Quelle 3.49.0, Python/Showcase 3.47.0, native Pakete 3.45.0. Die datierten Umsetzungsabschnitte bewahren ihre damaligen Prüfstände; spätere Nachweise haben für den heutigen Status Vorrang. [Inhaltliche Befunde](Glide_Analyse.md#1321-abschlussabgleich-von-roadmap-featurelisten-und-dokumentation), [datierter Nachweis](../01_Repository/Glide/tests/qa-3.49.0/abschlussaudit_2026-10-31/README.md).
 
@@ -1947,3 +1950,24 @@ Verbindliche Vertiefung: [Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.
 **Erledigt:** Eigene Tcl/Tk-9.1-Laufzeit auf PC-01 mit den Windows-Bedienungshilfe-Patches gebaut (Build Tools per winget; CPython-Header des Installers mit CRLF, Quellkopie entsprechend eingestellt, Baumeister und Pins unverändert). Eingefrorener Volllauf mit `--zugang-nativ` auf frischem Klon: **127 von 128 Schritten grün**, nur die menschliche Sichtprüfung offen; erster vollständig grüner Windows-Volllauf mit eigener Tk 9.1. Windows-Paket 3.50.0 aus derselben Kopie nach PR #49 (`a3506f3`, nur `setuptools` 84.1.0) gebaut, PE-/Lizenzprüfung und Startprobe grün, `Glide.exe` `4d818e4e…`, unsignierter Entwicklungsbau auf PC-01. [Nachweis](../01_Repository/Glide/tests/qa-3.50.0/windows_abnahme_2026-11-02/README.md).
 
 **Offen:** Menschliche Abnahme (vom Inhaber auf nach weiteren Änderungen verschoben; danach Volllauf und Paket erneut mit `windows_abnahme.ps1 -AusGitHub`), NVDA-Readerkette (NVDA auf PC-01 nicht installiert), Lieferung nach `build/windows`, Signatur/Installer. Windows-Lieferstand bleibt 3.45.0.
+
+
+### 21.43 Erster öffentlicher Stand 3.50.0
+
+**Auftrag 02.11.2026, maßgeblicher aktueller Umfang (D58):** 3.50.0 auf Quellcode, Python/Showcase, nativen Paketen und aktueller Dokumentation; öffentlich „Erster öffentlicher Stand“, intern „öffentliche erste Beta“. README für Interessenten, vollständige gepflegte Featureübersicht, keine Altbestandswarnung im Einstieg, neutrale Sicherheitsdarstellung. Drei neue UI-Funktionen ausdrücklich gewählt. Commit und Push sind autorisiert; menschliche Prüfung erfolgt danach.
+
+| Auftrag | Umsetzung und Prüfung | Lieferung / Rest |
+|---|---|---|
+| Hintergrundfarbe | `appearance.with_background`, feste Palette, Fensterfläche ohne Materialschatten, gespeichert und in Einstellungen/Ansicht erreichbar; Fachtests und native Bedienprobe über zehn Designs grün | In 3.50-Quellcode und Python-Fassung; abschließende Paket-/Vollmatrix im Nachweis |
+| Kopf/Seitenleiste | Kopf auf Inhaltsflucht; volle Höhe der breiten/schmalen Seitenleiste, Ausblenden und Kompaktmodus erhalten | Drei Fenstergrößen und 1.084 appweite Knopfprüfungen grün; Menschenprüfung anschließend |
+| Blockziehen | Tk-freie Block-/Span-Neuzuordnung, Griff mit Zielmarke/Randscrollen, Escape/außerhalb abbrechen; Format, Links, Bilder, Aufgaben-IDs erhalten, Tabellen/Code/Aufklappkinder zusammen | Echte Ziehereignisse, Speicherung, Undo/Redo, No-op, Abbruch und Schreibschutz geprüft; gesamte Bereichssuite 39 Fälle grün |
+| Öffentlicher Einstieg / Features | README neu für Erstbesucher, Featureliste gegen Handbuch bis 3.50 abgeglichen; keine Altbestandswarnung und kein wertender CodeQL-Absatz | Pflegepflicht je Feature-Runde in Dokumentenpflege verankern |
+| Sicherheits-/GitHub-Konfiguration | SECURITY-Dateien inhaltlich abgeglichen; Actions-SHA (WA-43), Bau-Pins mit erzwungenen PyPI-Hashes (WA-45), Git-Regeln und Dependabot aktualisiert | Statische Analyse bleibt von ihrer tatsächlich aktiven Einrichtung abhängig; keine unerlaubte Änderung einer Inhaberentscheidung |
+| Datenvertrag | Keine neue Aufgabenstruktur nötig: Reihenfolge bleibt Text-/Spanstruktur, Hintergrund ist Einstellung. Aufgabenformat 26 und Einstellungen 2 bleiben; Plan für nächste Formatstufe im Datenvertrag | Keine erfundene Migration ohne neue Datenstruktur; vorhandene Schutz-/Lesbarkeitswege bewahren |
+| Alle bisherigen Funktionen | Eingefrorene Vollprüfung mit allen 108 Integrationssuiten, Fach-/Werkzeugtests, Showcase, Reproduktions- und Lieferprüfungen beauftragt | Nur tatsächlich ausgeführte Endläufe zählen; [aktueller Nachweis](../01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md) |
+
+**Warum die native Matrix zuvor offen war:** Die README vermischte überholte Paketstände und datierte Prüflücken. Mac-Tk-9.1-Vollprüfungen waren vorhanden, aber auf älteren eingefrorenen Appbytes. Die Windows-Abnahme vom 02.11. belegt den Stand vor den drei neuen UI-Funktionen und war noch keine Lieferung nach `build/windows`. Linux muss den geänderten Endstand ebenfalls vollständig prüfen. Neue Ergebnisse werden ihren tatsächlichen Hashes zugeordnet.
+
+**Screenreader:** P8/N12/U23/S26-16 einschließlich VoiceOver/NVDA/Orca-Gesamtabnahme ist auf ausdrücklichen Nutzerwunsch bis zu einem konkreten Bedarf zurückgestellt und kein aktiver offener 3.50-Punkt. Vorhandener Tastatur-/Accessibility-Kern und native Laufzeit bleiben erhalten. Historische rote Readerbelege werden nicht gelöscht oder als grün ausgegeben.
+
+**Technische Abgrenzung:** Registrierte, noch ungewählte Zukunftsoptionen sind keine begonnenen 3.50-Funktionen. WA-41A (systemweite Instabilität auf PC-02) und WA-41B (historische Save/Reload-Differenz ohne gespeicherte Felddiagnose) bleiben nachvollziehbare Untersuchungsgrenzen; grüne Gegenläufe beweisen ihre Ursache nicht. WA-32/39 und WA-36 sind appweite technische Vorhaben mit konkret belegten Teilabschlüssen, keine pauschal fertiggestellten Großrefaktorierungen. Aktuelle Bewertung und verbleibende ausführbare Schritte stehen im Nachweis. Menschliche Sicht-/Bedien-, DPI-/Mehrmonitorprüfung folgt nach der technischen Fertigstellung. Lizenz, öffentliche Signatur/Notarisierung und Marke werden nicht durch eine Versionsbezeichnung entschieden.

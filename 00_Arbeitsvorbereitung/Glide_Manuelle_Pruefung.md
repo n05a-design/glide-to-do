@@ -1,6 +1,13 @@
 # Manuelle Prüfung – Glide
 
-Stand 01.11.2026 · Glide 3.50.0 · Aufgabenformat 26 · manuelle Sitzungen offen; B1 automatisch geprüft
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+
+## Menschliche Prüfung des ersten öffentlichen Stands 3.50
+
+Nach dem technischen Abschluss mit den tatsächlich gelieferten Paketen prüfen: Hintergrundfarben und Fensterfläche in Hell/Dunkel, Schatten aus, Kopf-/Inhaltsflucht, volle/schmale/ausgeblendete Seitenleiste, Mindestgröße und große Schrift; Blöcke einschließlich Bild, Aufgabe, Tabelle, Code und Aufklappkindern ziehen, abbrechen, rückgängig machen und nach Neustart vergleichen. Danach bisherige Kernabläufe, DPI und mehrere Monitore prüfen. Ergebnisse mit Paket-/Apphash und Plattform festhalten.
+
+**Bis Bedarf zurückgestellt:** Screenreader-Abnahme einschließlich VoiceOver, NVDA und Orca ist kein aktiver offener 3.50-Punkt. Die unten erhaltenen Readeranleitungen sind optionale spätere Prüfhilfe; reine Tastaturbedienung bleibt Teil der normalen menschlichen Prüfung.
+
 
 ## Abschlussrunde 31.10.2026 – noch menschlich zu bestätigen
 
@@ -380,7 +387,7 @@ Ergebnis und tatsächlich verwendete Python-/Tk-Version dokumentieren; kein Wind
   - Komplettbackup in einer zweiten Testablage einlesen: Der Anhang ist da und
     öffnet sich.
 
-## C. Bildschirmleser und Tastatur (VoiceOver, NVDA, Linux/Orca)
+## C. Optionale spätere Bildschirmleserprüfung (bis Bedarf zurückgestellt)
 
 Verfügbarkeit am 13.10.2026: Zusätzlich zu Mac/VoiceOver stehen dem Inhaber keine Windows-/NVDA- oder Linux-/Orca-Prüfplätze zur Verfügung (Antwort: „Keiner der beiden Prüfplätze“). Automatisierte native Plattformprüfungen können weiterlaufen; die tatsächlichen Reader- und Menschenabnahmen bleiben getrennt offen.
 
@@ -453,7 +460,7 @@ Historischer D55-Nachweis: `test_arbeitsmodi.py` mit 13 echten Tk-Fällen und Kn
 - [ ] Seite ohne Symbol/Titelbild: Titel überfahren oder mit Tab fokussieren → „+ Symbol“/„+ Titelbild“ rechts in der Titelzeile, nichts verschiebt sich; bei langem Titel oder offener Nebenansicht erscheinen sie nicht, Mehr › Titelbild/Pixelsymbol … wirken. Symbol setzen → steht vor dem Titel, Klick darauf ändert es. **Windows 25.10.2026: abgenommen** (Mac offen).
 - [ ] Nebenansicht: Rechtsklick auf eine Liste › „In Nebenansicht öffnen“ neben einer Seite; der Rechtsklick selbst lässt den Hauptinhalt stehen. Kästchen abhaken, Strg/Cmd+Z/Umschalt+Z wirken nebenan; Breite am Trenner ziehen, Neustart behält die Breite (nicht die Nebenansicht). Suche: Umschalt+Enter auf einer Seite. Aufgabe im Hauptbereich per Rechtsklick › „Bearbeiten“ öffnen (Inspektor; Doppelklick hakt ab) → Nebenansicht tritt zurück und kommt danach wieder. Fenster unter 980 px: Nebenansicht und Inspektor liegen über der Inhaltsfläche, Ansichtsumschalter und „☰“ bleiben frei. **Windows 25.10.2026: abgenommen, einschließlich der Gegenprobe zur lokalen Rechtsklick-Korrektur: Rechtsklick zeigt nur das Kontextmenü, „In Nebenansicht öffnen“ erhält den Hauptinhalt, anschließender Linksklick öffnet weiterhin.** Mac offen.
 - [ ] „Kompaktmodus“ steht als erster direkter Eintrag im Menü „Ansicht“, ohne Untergruppe und ohne „ein/aus“. Per Menü oder Strg/Cmd+Umschalt+K (drücken und loslassen) neben einer anderen Anwendung öffnen: Kopf in einer Zeile, Titel gekürzt, Seitenleiste weg; auf 480 × 560 verkleinern und Liste, Heute, Seite und Startseite bedienen; Menüknopf findet jeden Menübefehl. „Normalansicht“ stellt die vorige Fensterlage her; nach erneutem Eintritt die gemerkte Kompaktlage; im Kompaktmodus beenden → Neustart normal und an der normalen Lage. **Windows 25.10.2026: ursprünglicher Menüweg vom Inhaber bestätigt; Kürzel-Ausfall gemeldet und lokal korrigiert. Gegenprobe des Kürzels und der neuen Menüposition sowie die übrigen Teilprüfungen von Punkt 5 offen.**
-- [ ] Screenreader (VoiceOver/NVDA/Orca): Auswahlfeld „Aktionen durchsuchen“, Trefferliste, Nebenansicht und Kompaktkopf werden mit Namen angesagt; Fokus ist nach Esc/Schließen wieder im Ausgangsfeld.
+- Zurückgestellt bis Bedarf: Screenreader (VoiceOver/NVDA/Orca): Auswahlfeld „Aktionen durchsuchen“, Trefferliste, Nebenansicht und Kompaktkopf werden mit Namen angesagt; Fokus ist nach Esc/Schließen wieder im Ausgangsfeld.
 - [ ] Windows mit zwei Bildschirmen: Glide auf den zweiten Bildschirm legen (rechts und, falls möglich, links vom Hauptbildschirm), beenden und neu starten → dieselbe Lage; dort den Kompaktmodus ein- und ausschalten → das Fenster bleibt auf diesem Bildschirm. Zweiten Bildschirm abziehen und starten → Glide erscheint sichtbar auf dem Hauptbildschirm.
 
 ## Speicherstatus und Sicherungsreserve (WA-40/WA-47, seit 3.45.0 geliefert)

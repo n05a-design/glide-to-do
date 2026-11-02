@@ -1,6 +1,9 @@
 # Arbeitsregeln für Claude Code – Glide
 
-Stand 01.11.2026 · Glide 3.50.0 · Aufgabenformat 26 · Quelle 3.50.0; Python/Showcase und macOS 3.49.0; Windows-Paket 3.45.0 · keine Gesamtabnahme
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+
+**3.50-Fertigstellung, 02.11.2026:** Erster öffentlicher Stand (intern öffentliche erste Beta). Neue UI-Funktionen, Python-Abgleich und tatsächliche Paket-/Prüfergebnisse im [aktuellen Nachweis](01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Frühere datierte Absätze beschreiben ihren damaligen Stand. Screenreader-Abnahme ist bis Bedarf zurückgestellt; menschliche Prüfung folgt anschließend.
+
 
 Featurepaket 3.50.0 (31.10.2026, [Plan §21.39](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2139-featurepaket-3500-nachschlagen-in-der-nebenansicht-und-fokusdauer)): Trefferübersicht und Markierung nachschlagen in der Nebenansicht, Fokusdauer 15/25/50 Minuten; Nachtrag 01.11. ([§21.40](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2140-wa-36-seitenleisteerinnerungen-und-featurenachtrag-3500)): „+5 Minuten“, „Wechseln zu …“, „Als Nächstes“, Fokusbefehle im Menü, Fokushinweis in der Startseitenkachel, „Letzte Suchen …“ (Pfeiltasten, Liste leeren) und WA-36-Seitenleiste/Erinnerungsstatus; danach Abschnittssprung Alt+Pfeil, Fokus-Restzahl und Markdown-Exportkorrektur; Gesamtprüfung 01.11. abends (Plan §21.41, Analyse §13.22): veraltete Standangaben berichtigt, Standregel R15, Häkchenspalte und Kürzelhilfe; Endstand App `1582c600…`, eingefrorener Tk-9.1-Volllauf 126 von 126 grün (`t1101-225816`); Version 3.50.0 ohne Git, nicht geliefert (Python/Showcase/macOS 3.49.0). Weitere Features nur innerhalb D57 oder nach neuer Auswahl.
 

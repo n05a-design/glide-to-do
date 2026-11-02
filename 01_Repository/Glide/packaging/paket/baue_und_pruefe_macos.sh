@@ -5,7 +5,7 @@ umask 077
 
 usage() {
     cat <<'USAGE'
-Aufruf: sh packaging/paket/baue_und_pruefe_macos.sh [--python /Pfad/python3] [--ziel /neuer/Bauordner]
+Aufruf: sh packaging/paket/baue_und_pruefe_macos.sh [--python /Pfad/python3] [--ziel /neuer/Bauordner] [--basis /Lizenzbasis] [--runtime-bau /runtime-bau.json]
 
 Benötigt einen macOS-arm64-Pythonprozess passend zu den vorhandenen
 Original-Lizenzbelegen (derzeit Python 3.14.5 / Tcl 9.0.3 / Tk 9.0).
@@ -19,17 +19,24 @@ USAGE
 
 PYTHON_GLIDE=python3
 DESTINATION_GLIDE=
+BASIS_GLIDE=
+RUNTIME_GLIDE=
 while [ "$#" -gt 0 ]; do
     case "$1" in
         --help|-h) usage; exit 0 ;;
-        --python|--ziel)
+        --python|--ziel|--basis|--runtime-bau)
             option=$1
             if [ "$#" -lt 2 ] || [ -z "$2" ]; then
                 printf '%s benötigt einen Wert.\n' "$option" >&2
                 exit 2
             fi
             case "$2" in --*) printf '%s benötigt einen Wert.\n' "$option" >&2; exit 2 ;; esac
-            if [ "$option" = --python ]; then PYTHON_GLIDE=$2; else DESTINATION_GLIDE=$2; fi
+            case "$option" in
+                --python) PYTHON_GLIDE=$2 ;;
+                --ziel) DESTINATION_GLIDE=$2 ;;
+                --basis) BASIS_GLIDE=$2 ;;
+                --runtime-bau) RUNTIME_GLIDE=$2 ;;
+            esac
             shift 2 ;;
         *) printf 'Unbekanntes Argument: %s\n' "$1" >&2; usage >&2; exit 2 ;;
     esac
@@ -43,12 +50,10 @@ PYTHON_GLIDE=$(command -v "$PYTHON_GLIDE") || {
 }
 export PYTHONDONTWRITEBYTECODE=1 PYTHONUTF8=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 
-if [ -n "$DESTINATION_GLIDE" ]; then
-    BAU_GLIDE=$("$PYTHON_GLIDE" -B "$SCRIPT_GLIDE/macos_build_run.py" prepare \
-        --repo "$REPO_GLIDE" --ziel "$DESTINATION_GLIDE")
-else
-    BAU_GLIDE=$("$PYTHON_GLIDE" -B "$SCRIPT_GLIDE/macos_build_run.py" prepare --repo "$REPO_GLIDE")
-fi
+set -- "$PYTHON_GLIDE" -B "$SCRIPT_GLIDE/macos_build_run.py" prepare --repo "$REPO_GLIDE"
+if [ -n "$DESTINATION_GLIDE" ]; then set -- "$@" --ziel "$DESTINATION_GLIDE"; fi
+if [ -n "$BASIS_GLIDE" ]; then set -- "$@" --basis "$BASIS_GLIDE"; fi
+BAU_GLIDE=$("$@")
 printf 'Nativer Bauordner: %s\n' "$BAU_GLIDE"
 trap 'status=$?; if [ "$status" -ne 0 ]; then printf "Bau abgebrochen; Diagnoseordner bleibt erhalten: %s\n" "$BAU_GLIDE" >&2; fi' EXIT
 
@@ -68,20 +73,26 @@ run_step 01-venv "$PYTHON_GLIDE" -B -m venv "$BAU_GLIDE/venv"
 VENV_GLIDE="$BAU_GLIDE/venv/bin/python3"
 run_step 02-bauabhaengigkeiten "$VENV_GLIDE" -B -m pip install \
     -r "$REPO_GLIDE/requirements/build-macos.txt"
-run_step 03-lizenzen "$VENV_GLIDE" -B "$SCRIPT_GLIDE/lizenzen_vorbereiten_macos.py" \
+set -- "$VENV_GLIDE" -B "$SCRIPT_GLIDE/lizenzen_vorbereiten_macos.py" \
     --quelle "$REPO_GLIDE/src/glide" --repo "$REPO_GLIDE" --ziel "$BAU_GLIDE/lizenzen"
+if [ -n "$BASIS_GLIDE" ]; then set -- "$@" --basis "$BASIS_GLIDE"; fi
+run_step 03-lizenzen "$@"
 VERSION_GLIDE=$("$VENV_GLIDE" -B -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' "$BAU_GLIDE/eingang.json")
-run_step 04-paketbau "$VENV_GLIDE" -B "$SCRIPT_GLIDE/baue_paket.py" \
+set -- "$VENV_GLIDE" -B "$SCRIPT_GLIDE/baue_paket.py" \
     --quelle "$REPO_GLIDE/src/glide" --version "$VERSION_GLIDE" --ziel "$BAU_GLIDE/bau" \
     --plattform macos-arm64 --lizenzen "$BAU_GLIDE/lizenzen"
+if [ -n "$RUNTIME_GLIDE" ]; then set -- "$@" --runtime-bau "$RUNTIME_GLIDE"; fi
+run_step 04-paketbau "$@"
 
 # Bestehender Schutz gilt nur im Prüf-Kindprozess. Keine Installation wird
 # umbenannt, verschoben, umberechtigt oder vorübergehend verändert.
 PYTHON_BASE_GLIDE=$("$VENV_GLIDE" -B -c 'import sys; print(sys.base_prefix)')
-run_step 05-isolierter-start "$VENV_GLIDE" -B "$SCRIPT_GLIDE/pruefe_start_macos.py" \
+set -- "$VENV_GLIDE" -B "$SCRIPT_GLIDE/pruefe_start_macos.py" \
     --paket "$BAU_GLIDE/bau/dist/Glide.app" --bericht "$BAU_GLIDE/startprobe.json" \
     --sperren "$PYTHON_BASE_GLIDE" --sperren "$BAU_GLIDE/venv" \
     --sperren "$BAU_GLIDE/bau/quelle" --sperren "$REPO_GLIDE"
+if [ -n "$RUNTIME_GLIDE" ]; then set -- "$@" --sperren "$(dirname -- "$RUNTIME_GLIDE")"; fi
+run_step 05-isolierter-start "$@"
 
 ARCHIV_GLIDE="$BAU_GLIDE/Glide-$VERSION_GLIDE-macos-arm64.tar.gz"
 # bsdtar erzeugt sonst AppleDouble-Dateien für copyfile-/xattr-Metadaten.

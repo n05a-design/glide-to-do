@@ -1,6 +1,6 @@
 # Architektur – Glide
 
-Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 **Mutations-/Importabschluss 31.10.2026:** Neue/angefasste direkte Anlege-, Feld-, Label-, Sortier- und Zwischenablagewege nutzen die bestehenden Änderungsrahmen und bestimmen Dialogziele frisch. Tk-freie Ziel-/Feld-/Label-/Sortierplanung in `task_editing.py`. Mehrteilige Importe behalten einen vollständigen Rücksetzpunkt samt Undo-Stapel und Dirty-Zustand bis zur bestätigten Hauptspeicherung; UI-Folgefehler danach werden getrennt protokolliert. [Nachweise und Grenzen](../tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md).
 

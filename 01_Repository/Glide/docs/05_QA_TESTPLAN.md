@@ -1,6 +1,6 @@
 # Prüfplan – Glide
 
-Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26 · alle App-Tests mit isoliertem `GLIDE_DATA_DIR`
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 **Prüfvertrag Abschlussfortsetzung 31.10.2026:** Schreibfehlerinjektionen unterscheiden Sperrdatei und Hauptdatendatei; voller Undo-Stapel und Dirty-Zustand gehören zum Fehlervertrag. Gruppendialoge gegen aktuelle Originale und unberührte Zwischenänderungen prüfen. Neue Mutationssuite 56 Fälle. Seitenkarten-Tempo im eigenen Prozess über den bestehenden Einzelfallschalter messen, um die unter macOS nach mehreren Tk-Interpretern belegte CoreText-Verlangsamung nicht mit normalem Appbetrieb zu vermischen; +10-%-Grenze unverändert. Grundstufe und Vollstarter stoppen nach erstem Fehler/Integritätsbefund. Ausgeführte Prüfungen: [Prüf- und Liefernachweis](../tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md).
 
