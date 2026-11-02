@@ -14,6 +14,8 @@ Arbeitsnachweis der laufenden Fertigstellung. Endmatrix und Artefakthashes werde
 - Erster eingefrorener Mac-Volllauf stoppte korrekt an der überholten Erwartung `sidebar_shell.master is main_area`; Test auf neue volle Seitenleistenhöhe aktualisiert, Rotbeleg lokal erhalten.
 - Eigenständiges Mac-arm64-Paket mit Python 3.14.5 / Tcl/Tk 9.1.0 gebaut; Quell-/Lizenzvergleich und isolierter Start mit gesperrtem externen Python grün. Tatsächliche Lieferung und abschließende Matrix folgen.
 
+- Vollmatrix auf Quelle `557331e`: Mac (108 Integrationssuiten) und Linux/Xvfb grün; Windows-Nachlauf zugeordnet. Ergänzende Fokusprüfung war gegen diesen Stand rot: Ziehen aus fremdem Fokus erreichte Escape nicht. Griff setzt nun den Editorfokus; echte Escape-Gegenprobe und bestehende Blockaktionen grün. Der korrigierte Appstand erhält eine eigene Endmatrix und eigene Pakete.
+
 ## Prüfgrenzen
 
 Menschliche Prüfung durch den Inhaber folgt anschließend. Screenreader ist bis Bedarf zurückgestellt. Der datierte Windows-Nachweis nebenan gilt für den vorherigen Apphash; der neue Endstand wird separat geprüft. Historische WA-41A/B-Befunde bleiben erhalten und werden nicht durch grüne Gegenläufe als ursächlich behoben bezeichnet.

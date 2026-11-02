@@ -10224,16 +10224,19 @@ class PageEditor(RichNoteEditor):
             self.hide_block_handle()
         return None
 
-    def block_handle_click(self, event=None):
-        zeile = getattr(self, '_block_handle_line', None)
-        if zeile is None:
-            return 'break'
+    def focus_block_line(self, zeile):
         try:
             if int(self.text.index('insert').split('.')[0]) != zeile:
                 self.text.tag_remove('sel', '1.0', 'end')
                 self.text.mark_set('insert', f'{zeile}.0 lineend')
             self.text.focus_set()
         except tk.TclError:
+            return False
+        return True
+
+    def block_handle_click(self, event=None):
+        zeile = getattr(self, '_block_handle_line', None)
+        if zeile is None or not self.focus_block_line(zeile):
             return 'break'
         return self.show_block_actions(anchor_widget=self._block_handle)
 
@@ -10245,6 +10248,8 @@ class PageEditor(RichNoteEditor):
         self.hide_format_bar()
         self._block_drag = dict(line=line, x=event.x_root, y=event.y_root,
                                 document=self.document(), active=False, target=None)
+        if not self.focus_block_line(line):
+            self.cancel_block_drag()
         return 'break'
 
     def block_drag_motion(self, event):
@@ -10313,6 +10318,7 @@ class PageEditor(RichNoteEditor):
             self._block_drag_job = self.app._register_after(self.app.root.after(60, scroll))
 
     def cancel_block_drag(self, event=None):
+        active = getattr(self, '_block_drag', None) is not None
         self._block_drag = None
         job = self.__dict__.pop('_block_drag_job', None)
         if job:
@@ -10328,6 +10334,7 @@ class PageEditor(RichNoteEditor):
             self._block_drop_marker.place_forget()
         except (AttributeError, tk.TclError):
             pass
+        return 'break' if active else None
 
     def block_drag_release(self, event):
         drag = getattr(self, '_block_drag', None)

@@ -2866,12 +2866,18 @@ def fall_beta350(lauf):
     idle(lauf)
     assert editor.document()['text'].index('Absatz 😀') > editor.document()['text'].index('Ende')
     # Abbruch und Schreibschutz dürfen weder Text noch gespeicherte Bytes ändern.
+    app.sidebar_listbox.focus_force()
+    idle(lauf)
     editor.show_block_handle('1.0', 'pointer')
+    idle(lauf)
     before = editor.document()
     saved = Path(mod.SAVE_FILE).read_bytes()
     handle.event_generate('<ButtonPress-1>', x=3, y=3)
     handle.event_generate('<B1-Motion>', x=px-handle.winfo_rootx(), y=py-handle.winfo_rooty(), rootx=px, rooty=py)
-    editor.cancel_block_drag()
+    assert lauf.root.focus_get() is editor.text, 'Ein Griffzug übernimmt den Textfokus für Escape'
+    editor.text.event_generate('<Escape>')
+    idle(lauf)
+    assert editor._block_drag is None
     handle.event_generate('<ButtonRelease-1>', x=3, y=3)
     assert editor.document() == before and Path(mod.SAVE_FILE).read_bytes() == saved
     app._data_read_only = True
