@@ -1,13 +1,21 @@
 {
   "exitcode": 0,
-  "source_commit": "fbd83e78d434e0c8fd03fc948ccf4f0e54971456",
+  "source_commit": "b0fd56ac96",
+  "workflow_run": 41426907797,
   "version": "3.50.0",
-  "app_sha256": "8b11c8cb70f83affefcb1f7819bbe02d552ba6c682360dccbcf01bead4eaa64f",
+  "app_sha256": "2fb07ca2f6d8d119639df56511e3313e0ac94564af66ad81a2c8284899a0403b",
+  "source_files_checked": 208,
+  "source_mismatches_against_commit_checkout": [],
+  "local_onedrive_copy_line_endings_only": 10,
+  "archive_sha256": "eca6548e82e0a47578df58892948d6439af35ef12a3f863b4bd62dda5262e200",
+  "archive_validation": {
+    "files": 463,
+    "symlinks": 30,
+    "modes_preserved": true
+  },
   "canonical": "build/macos/Glide.app",
   "resolved_target": "~/Applications/Glide.app",
-  "package_files_checked": 463,
-  "archive_sha256": "0dd5a39d1631d0fce610c8e6e6c01a3e5b9e12ea285ed85cc17fe1ecf992d0bb",
-  "archive_modes_and_symlinks_verified": true,
-  "signature": "Ad-hoc; strikte Prüfung auf dem aufgelösten nativen Bundlepfad",
+  "signature": "Ad-hoc; codesign --verify --deep --strict auf dem installierten Bundle grün; Developer-ID offen",
+  "isolated_start": "mac_start_lieferung.json, Exit 0, externes Python blockiert",
   "previous_release_preserved": "build/macos/Archiv/Glide-3.49.0.app"
 }

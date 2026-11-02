@@ -45,7 +45,7 @@
         }
       ],
       "dateien": 1749,
-      "manifest_sha256": "a4c0bc9d9c0e5e9641dac677cf7f6ec7cd7571bf662c0f58be313ead6d83dc0b"
+      "manifest_sha256": "96fedb0db97ef8fdf3cc014c01b3324e6db8630d81f4281e77a43a4d55fb342b"
     },
     "runtime": {
       "python": "3.14.5",
@@ -62,7 +62,7 @@
       "action_menu.py": "020e7ddedaa7592e1f4c7fbf3984c0afb4b034f4148a1aeda5beaca4f467dae8",
       "animation.py": "a7f4fb2849da4dcc6831c28811a52de9e739a9d251e2a123fc5b2c09202c3006",
       "animation_export.py": "a3f47a4e0e91462de11f4458c99dc1cb2d8580b02b7baa824817dd8d9be918bb",
-      "app.pyw": "8b11c8cb70f83affefcb1f7819bbe02d552ba6c682360dccbcf01bead4eaa64f",
+      "app.pyw": "2fb07ca2f6d8d119639df56511e3313e0ac94564af66ad81a2c8284899a0403b",
       "appearance.py": "e5236145c67e9ac6ab2b415a3e9ddb54a4d375fc44d7eba34f6ada1e3b3bf92b",
       "attachment_paths.py": "7c506fd2da19ec74513c4d64779e5add5129b91a5cbcd5afdf90b28ba5c329cc",
       "attachment_policy.py": "94576db88247bebe05d57468b9d0729a4912df1df7fd58f2b43c0c28fe507018",
@@ -544,7 +544,7 @@
     "runtime_paths": "85e913601942e1dcf7011029c48e0c05cfbf5705447d5af7e2d8d46c548231f3",
     "image_preview": "7e266418b278cb4d3e7033861da36bb9f753eb325916f3bf1706f6cfb451ad18",
     "planning": "59b78be6d91da4adf31c2c401b0bdf1c10b6c97490a122f7f3420c20059ba0ad",
-    "glide_app": "8b11c8cb70f83affefcb1f7819bbe02d552ba6c682360dccbcf01bead4eaa64f",
+    "glide_app": "2fb07ca2f6d8d119639df56511e3313e0ac94564af66ad81a2c8284899a0403b",
     "item_index": "a1c0297b8d77d2dd6b69e7be9287b5fdbc7f125658dea6a0626c55262c92128e",
     "settings_compat": "54d2139ab0d68134dfa91438c402ac99fe69c1dcd00abb892aa5bb331602241f",
     "glyph_metrics": "69c7baa7911e3de1d3b2576dff5998f5e58f35184163010e1dca09029f026d2c",
@@ -621,7 +621,7 @@
     "Contents/Frameworks/python3__dot__14/lib-dynload/zlib.cpython-314-darwin.so": "96881c4e737595f26bd4c78668fc259d0beb8a6f0da248a659649e9439f29d5b",
     "Contents/Frameworks/tkinterdnd2/tkdnd/osx-arm64-tcl9/libtcl9tkdnd2.10.2.dylib": "ba5c00d2da60aaa514bff38b11b97491cfef61b27eb07ee53643f4a3d207d027",
     "Contents/Info.plist": "91eb63385058a6bb75f91243c108791f5cf51f6c3cbd7cdfe1db7911d2c54f59",
-    "Contents/MacOS/Glide": "52cec2b2bd82ed0127faa08db5bea077cab26f6ca4e4ea69bbcb59029688bfb1",
+    "Contents/MacOS/Glide": "a1ad6e45d3fe971f3bba2792d6de7983bacc2fe2e7756848fdb14808c7bbf0e9",
     "Contents/Resources/Glide.icns": "411c5616d0c01a0817d49ef761bc9acb8c44ab79cce04faefe3866225d260a67",
     "Contents/Resources/_tcl_data/auto.tcl": "1953e3830f90106aa322cfc66644cc36ae39f8350bf214f07fa4d75afd80da02",
     "Contents/Resources/_tcl_data/autoexecok.tcl": "92c9f7d88e023844fd51d400c41144ad8d71f99099c896044d5693b190e3e3fa",
@@ -951,8 +951,8 @@
     "Contents/Resources/_tk_data/ttk/wideSpinbox.tcl": "54149693c7a1b74001133dea5243d41d08aa7b6ed72ae6c8374516e0bd0ab5dd",
     "Contents/Resources/_tk_data/ttk/winTheme.tcl": "5bdf0f3d698711ca0d5398fd46e1124ee9695642938ff765f2a50372bf30b20b",
     "Contents/Resources/_tk_data/xmfbox.tcl": "8051bca4e346a27eb1d0e361bbfa10ff5aff9a4c8c7ef14f283a050656da1624",
-    "Contents/Resources/base_library.zip": "a4466e84478e72655d106dfe79fbe9c9a97c65023f1232b9210235aafd26694b",
-    "Contents/Resources/glide-input.json": "f0e0a0998d77f1949e0c3cac9584b82cddace533d9f74685c6980ef8a5c9bb2b",
+    "Contents/Resources/base_library.zip": "701c60967f36db145be0ffbfd59c17773b7f2b455f43c1402ea98059d4aae86b",
+    "Contents/Resources/glide-input.json": "df7b1c8cc095fd4fc3861481d5542512f888162db5bbabcb7bfd2c80330de80b",
     "Contents/Resources/licenses/CLDR-LICENSE.txt": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b",
     "Contents/Resources/licenses/DejaVu-LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
     "Contents/Resources/licenses/Glide-Lizenzstatus.md": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e",
@@ -1028,7 +1028,7 @@
     "Contents/Resources/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_unix.tcl": "a314a90863eef53db04203eaf637dff9324f0178d63c680b5bff7c4467a125f9",
     "Contents/Resources/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_utils.tcl": "fff7b046dfa50992dd3151c74291558c13a675efcaa758ce53d4d4a6ebebbb43",
     "Contents/Resources/tkinterdnd2/tkdnd/osx-arm64-tcl9/tkdnd_windows.tcl": "991f878a7a45c83cb5403ad82a768211b12640bf2b8b0cbceb8385b293d10809",
-    "Contents/_CodeSignature/CodeResources": "b6aef1d7b7a9f7b39f48da654d1d0fc1d5f3f7f8a8d4c8a4f6954ffd8051c797"
+    "Contents/_CodeSignature/CodeResources": "1f5499f994092ed85933c2814817787960030f8a98833288e56e21a45b402c50"
   },
   "native": {
     "exitcode": 0,
@@ -2581,13 +2581,13 @@
       "accessibility": [
         "Glide"
       ],
-      "_py_abc": [
-        "Python"
-      ],
       "_py_warnings": [
         "Python"
       ],
       "tracemalloc": [
+        "Python"
+      ],
+      "_py_abc": [
         "Python"
       ],
       "stringprep": [
@@ -2673,37 +2673,10 @@
       ]
     },
     "base": {
-      "locale": [
+      "warnings": [
         "Python"
       ],
-      "collections": [
-        "Python"
-      ],
-      "copyreg": [
-        "Python"
-      ],
-      "_collections_abc": [
-        "Python"
-      ],
-      "linecache": [
-        "Python"
-      ],
-      "keyword": [
-        "Python"
-      ],
-      "codecs": [
-        "Python"
-      ],
-      "operator": [
-        "Python"
-      ],
-      "sre_compile": [
-        "Python"
-      ],
-      "types": [
-        "Python"
-      ],
-      "heapq": [
+      "weakref": [
         "Python"
       ],
       "re._parser": [
@@ -2721,34 +2694,34 @@
       "re": [
         "Python"
       ],
-      "ntpath": [
+      "operator": [
         "Python"
       ],
-      "weakref": [
+      "reprlib": [
+        "Python"
+      ],
+      "_collections_abc": [
+        "Python"
+      ],
+      "locale": [
+        "Python"
+      ],
+      "codecs": [
+        "Python"
+      ],
+      "io": [
         "Python"
       ],
       "abc": [
         "Python"
       ],
-      "sre_constants": [
+      "_weakrefset": [
         "Python"
       ],
       "genericpath": [
         "Python"
       ],
-      "posixpath": [
-        "Python"
-      ],
-      "warnings": [
-        "Python"
-      ],
-      "sre_parse": [
-        "Python"
-      ],
-      "_weakrefset": [
-        "Python"
-      ],
-      "stat": [
+      "sre_constants": [
         "Python"
       ],
       "encodings.zlib_codec": [
@@ -3120,16 +3093,43 @@
       "encodings": [
         "Python"
       ],
-      "reprlib": [
+      "types": [
         "Python"
       ],
-      "io": [
+      "functools": [
+        "Python"
+      ],
+      "sre_compile": [
+        "Python"
+      ],
+      "linecache": [
+        "Python"
+      ],
+      "copyreg": [
+        "Python"
+      ],
+      "stat": [
+        "Python"
+      ],
+      "collections": [
+        "Python"
+      ],
+      "sre_parse": [
+        "Python"
+      ],
+      "keyword": [
         "Python"
       ],
       "enum": [
         "Python"
       ],
-      "functools": [
+      "ntpath": [
+        "Python"
+      ],
+      "heapq": [
+        "Python"
+      ],
+      "posixpath": [
         "Python"
       ],
       "traceback": [
