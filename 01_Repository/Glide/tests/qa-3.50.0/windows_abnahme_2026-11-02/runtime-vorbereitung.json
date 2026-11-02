@@ -1,0 +1,31 @@
+{
+    "start":  "2026-11-01T23:55:50.6452541+01:00",
+    "ergebnis":  "fertig",
+    "schritte":  [
+                     "Python 3.14 mit Entwicklungsdateien pruefen",
+                     "Visual Studio Build Tools (C++) pruefen bzw. installieren",
+                     "Tcl-/Tk-/CPython-Quellen an den Pins holen",
+                     "CPython-Header mit Installation abgleichen",
+                     "Tcl/Tk 9.1 und _tkinter bauen",
+                     "Probe Tk 9.1"
+                 ],
+    "python":  "3.14.7",
+    "pins":  {
+                 "tcl":  "0c6bad08d91fa2ad51f05a50a41f8c1ea82ce985",
+                 "tk":  "3f45110c0a568b70f2ebd5412f215e87d199bc7d",
+                 "python":  "823f0323ee6ec1402088b73bce1a38473cac36dc",
+                 "version":  "3.14.7"
+             },
+    "visual_studio":  "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools",
+    "header":  {
+                   "installiert":  "9BF051C8185E50A16D1C15E6BA3D85260CC3C1C5C64C276ACA06215EF0E07C57",
+                   "export":  "9BF051C8185E50A16D1C15E6BA3D85260CC3C1C5C64C276ACA06215EF0E07C57",
+                   "crlf":  true
+               },
+    "probe":  {
+                  "tk":  "9.1.0",
+                  "extension":  "C:\\gq\\runtime91\\python-extension\\_tkinter.cp314-win_amd64.pyd"
+              },
+    "runtime_bau":  "C:\\gq\\runtime91\\runtime-bau.json",
+    "ende":  "2026-11-01T23:57:13.6612244+01:00"
+}

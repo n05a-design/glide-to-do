@@ -1939,3 +1939,11 @@ Verbindliche Vertiefung: [Prüfplan](../01_Repository/Glide/docs/05_QA_TESTPLAN.
 | Hilfe › Tastenkürzel | Nebenansicht: Suche, Treffer, letzte Suchen, Zurück/Vorwärts, Abschnitt | Kürzelhilfe aus Bindungen ableiten (WA-32/39) |
 
 **Prüfung:** Unit-Fälle `check_label` und R15; `side_suchverlauf` und `side_abschnitte` rot gegen `5f64030`, grün neu; 1.105 Fachtests, Regression 36 Suiten (Vorlauf mit roter Testerwartung `side_suchverlauf` erhalten, danach korrigiert), betroffene Suiten (Arbeitsmodi 38/38, UI/UX 17/17) und CI-Grundstufe erneut grün; **eingefrorener Tk-9.1-Volllauf 126 von 126 grün** auf App `1582c600…` (lokal `t1101-225816`). Kein Datenformat-, Einstellungs- oder Lieferwechsel; Lieferung bei Codex.
+
+### 21.42 Windows-Abnahme auf PC-01: Tk 9.1, Volllauf und Paket 3.50.0
+
+**Auftrag 01.11.2026 (Inhaber):** Windows-Pakete und -Komponenten, Windows-Komplettprüfung und menschliche Prüfung nachholen. Prüfstand ist der neueste Mac-Stand nach Übernahme (`main` `c24d2d42`, App `1582c600…`), Paket mit eigener Tk 9.1 wie macOS. Kein Versions- oder Lieferwechsel.
+
+**Erledigt:** Eigene Tcl/Tk-9.1-Laufzeit auf PC-01 mit den Windows-Bedienungshilfe-Patches gebaut (Build Tools per winget; CPython-Header des Installers mit CRLF, Quellkopie entsprechend eingestellt, Baumeister und Pins unverändert). Eingefrorener Volllauf mit `--zugang-nativ` auf frischem Klon: **127 von 128 Schritten grün**, nur die menschliche Sichtprüfung offen; erster vollständig grüner Windows-Volllauf mit eigener Tk 9.1. Windows-Paket 3.50.0 aus derselben Kopie nach PR #49 (`a3506f3`, nur `setuptools` 84.1.0) gebaut, PE-/Lizenzprüfung und Startprobe grün, `Glide.exe` `4d818e4e…`, unsignierter Entwicklungsbau auf PC-01. [Nachweis](../01_Repository/Glide/tests/qa-3.50.0/windows_abnahme_2026-11-02/README.md).
+
+**Offen:** Menschliche Abnahme (vom Inhaber auf nach weiteren Änderungen verschoben; danach Volllauf und Paket erneut mit `windows_abnahme.ps1 -AusGitHub`), NVDA-Readerkette (NVDA auf PC-01 nicht installiert), Lieferung nach `build/windows`, Signatur/Installer. Windows-Lieferstand bleibt 3.45.0.
