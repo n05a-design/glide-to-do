@@ -2,6 +2,16 @@
 
 Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
+**Labels in der Kartenecke 02.11.2026:** Labelchips von Seite/Liste/Ordner oben rechts in der Inhaltskarte, ohne Überdeckung; Kopf ohne frühere Chipreserve, B05 und 15-%-Regel wieder grün. [Plan §21.48](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2148-labels-in-der-kartenecke), [Nachweis](01_Repository/Glide/tests/qa-3.50.0/eckenlabels_2026-11-02/README.md).
+
+**Oberflächenkorrekturen 02.11.2026:** Große Titel 24 → 22; Block-Einfügemarke auf Text-/Zielkante; Ansichtsbuttons als benannte Symbole; vollständig sichtbare Zeilenaktionen. Hintergrundwechsel meldet aktiven Schreibschutz. Die ungeklärte Sitzung von 16:04 ist belegt, ihre Abbruchursache weiterhin offen; echte Daten und Wiederanlaufsperre blieben unverändert. [Aktuelle Prüfung und Liefergrenzen](01_Repository/Glide/tests/qa-3.50.0/oberflaeche_2026-11-02/README.md). Frühere UI-Nachweise gelten ihren damaligen Quellständen.
+
+**Pixelsymbole 02.11.2026:** Eigene Symbole in Seitenleistenbäumen mit 8 px Abstand; Seitentitel bleiben bündig zum Fließtext, Symbol separat links im Leserand. Aktuelle Prüfung, Python-Fassung und native Mac-Lieferung im [Nachweis](01_Repository/Glide/tests/qa-3.50.0/pixelsymbole_2026-11-02/README.md); Windows-EXE bleibt beim ursprünglichen Release.
+
+**Abstandsnachlauf 02.11.2026:** Oben mehr Raum, seitlich/unten weniger Rand; Quelle, Python-Fassung und lokale eigenständige Mac-App aktualisiert. Windows-EXE weiterhin ursprünglicher 3.50-Release; neue Python-Fassung plattformübergreifend nutzbar. [Maße, Prüfungen und Liefergrenzen](01_Repository/Glide/tests/qa-3.50.0/aussenabstaende_2026-11-02/README.md). Kein neuer öffentlicher Release.
+
+**Abschlussabgleich 02.11.2026:** Quelle, Python/Showcase sowie native Windows-/macOS-Pakete tragen 3.50.0. Aktive Status-/Entscheidungsangaben sind berichtigt; technischer Rest und aktueller Test-/CI-Nachlauf ausschließlich in [Plan §21.44](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2144-abschlussabgleich-von-features-optimierungen-und-dokumentation), [neuer Prüf-/Lieferabgleich](01_Repository/Glide/tests/qa-3.50.0/abschlussabgleich_2026-11-02/README.md). Die frühere Vollmatrix gehört ihren ursprünglichen Eingaben; `55d2caf` ändert nur die Testfehlerinjektion. Neue Produktentscheidungen ab D59.
+
 **3.50-Fertigstellung, 02.11.2026:** Erster öffentlicher Stand (intern öffentliche erste Beta). Neue UI-Funktionen, Python-Abgleich und tatsächliche Paket-/Prüfergebnisse im [aktuellen Nachweis](01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Frühere datierte Absätze beschreiben ihren damaligen Stand. Screenreader-Abnahme ist bis Bedarf zurückgestellt; menschliche Prüfung folgt anschließend.
 
 

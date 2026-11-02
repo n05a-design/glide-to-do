@@ -1,6 +1,6 @@
 # Entscheidung: tkinterdnd2 für das Ziehen aus Finder und Explorer
 
-Stand 31.10.2026 · Glide 3.50.0 · entschieden vom Inhaber am 27.09.2026
+Stand 02.11.2026 · Glide 3.50.0 · entschieden vom Inhaber am 27.09.2026
 
 AGENTS.md, Regel 4: keine neue Laufzeitabhängigkeit ohne dokumentierte
 Entscheidung. Dies ist sie.
@@ -55,3 +55,5 @@ Eine neue Fassung wird wie diese geholt: Wheel von PyPI laden, Prüfsumme
 notieren, den Ordner `tkinterdnd2` samt `LICENSE` ersetzen,
 `provenance.json` fortschreiben, `test_bilder330` und
 `test_paketierung330` laufen lassen.
+
+**Aktualitätsprüfung 02.11.2026 (WA-44):** PyPI führt inzwischen [tkinterdnd2 0.7.0](https://pypi.org/project/tkinterdnd2/0.7.0/) vom 25.10.2026. Die geprüfte Lieferung enthält weiterhin 0.6.3. Vor einer Übernahme Wheel-/Bibliotheksinventar, geänderte Lade-/PyInstaller-Hookwege und Zielplattformen vergleichen, Herkunft/Hashes nachführen und beide nativen Pakete samt echter DnD-Probe prüfen. Eine grüne Integritätsprüfung der alten Fassung ersetzt diesen Upgrade-Nachweis nicht. [Abhängigkeitsabgleich](../../tests/qa-3.50.0/abschlussabgleich_2026-11-02/abhaengigkeiten.json).

@@ -144,12 +144,14 @@ with tempfile.TemporaryDirectory(prefix="glide-features322-") as folder:
         # Das Fenster ist zurückgezogen; gepackt ist die verlässliche Auskunft.
         # Seit dem 27.09.2026 ein fester Umschalter; die aktive Ansicht ist
         # hervorgehoben statt ausgeblendet.
-        assert app.view_switch.winfo_manager() == "pack" and app.list_view_button.text == "Liste"
+        assert app.view_switch.winfo_manager() == "pack" and app.list_view_button.text == app.ICONS['list']
+        assert app.list_view_button._accessible_name == "Liste"
         assert app.table_button.active_fill == app.theme["active"]  # U15: neutral statt Lila
         assert app.list_view_button.active_fill is None and app.board_button.active_fill is None
         app.toggle_table_view()
         root.update()
-        assert app.view_mode == "list" and app.table_button.text == "Tabelle"
+        assert app.view_mode == "list" and app.table_button.text == app.ICONS['table']
+        assert app.table_button._accessible_name == "Tabelle"
         assert app.table_button.winfo_manager() == "pack"
         app.set_table_view()
         root.update()

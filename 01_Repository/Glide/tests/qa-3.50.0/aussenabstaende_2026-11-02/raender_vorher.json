@@ -1,0 +1,34 @@
+[
+  {
+    "modus": "normal",
+    "aussenraender_links_oben_rechts_unten": [
+      28,
+      4,
+      28,
+      14
+    ],
+    "kopf_inhaltsflucht": 0,
+    "screenshot_exitcode": 0
+  },
+  {
+    "modus": "kompakt",
+    "aussenraender_links_oben_rechts_unten": [
+      14,
+      4,
+      14,
+      14
+    ],
+    "kopf_inhaltsflucht": null,
+    "screenshot_exitcode": 0
+  },
+  {
+    "modus": "normal_zurueck",
+    "aussenraender_links_oben_rechts_unten": [
+      28,
+      4,
+      28,
+      14
+    ],
+    "kopf_inhaltsflucht": 0
+  }
+]

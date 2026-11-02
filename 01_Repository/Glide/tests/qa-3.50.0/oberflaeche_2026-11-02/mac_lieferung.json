@@ -1,0 +1,9 @@
+{
+  "installed": "~/Applications/Glide.app",
+  "previous": "~/Applications/Glide-vor-Oberflaeche-20261102.app",
+  "workspace_app": "build/macos/Glide.app; bestehender Symlink auf installierte App",
+  "package_files_verified": 463,
+  "signature": "Ad-hoc: --verify --deep --strict grün",
+  "source_app_sha256": "f0e8054c15760ce703ba6fbbf20afd319e48b29bac6a936229363ae7ec33a435",
+  "running_app_replaced": false
+}

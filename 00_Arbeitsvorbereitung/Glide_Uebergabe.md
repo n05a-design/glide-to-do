@@ -2,6 +2,16 @@
 
 Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
+**Labels in der Kartenecke 02.11.2026:** Nutzerwunsch umgesetzt: Labels von Seite, Liste und Ordner stehen oben rechts in der Inhaltskarte statt unter den Kopfknöpfen; Inhalt wird nicht überdeckt. [Plan §21.48](Glide_Entwicklungsplan.md#2148-labels-in-der-kartenecke), [Nachweis](../01_Repository/Glide/tests/qa-3.50.0/eckenlabels_2026-11-02/README.md).
+
+**Oberflächenkorrekturen 02.11.2026:** Große Titel 24 → 22; Block-Einfügemarke auf Text-/Zielkante; Ansichtsbuttons als benannte Symbole; vollständig sichtbare Zeilenaktionen. Hintergrundwechsel meldet aktiven Schreibschutz. Die ungeklärte Sitzung von 16:04 ist belegt, ihre Abbruchursache weiterhin offen; echte Daten und Wiederanlaufsperre blieben unverändert. [Aktuelle Prüfung und Liefergrenzen](../01_Repository/Glide/tests/qa-3.50.0/oberflaeche_2026-11-02/README.md). Frühere UI-Nachweise gelten ihren damaligen Quellständen.
+
+**Pixelsymbole 02.11.2026:** Beide Nutzerwünsche umgesetzt: Seitenleistensymbole mit 8 px Abstand; Seitentitel auf der Fließtextkante, eigenes Symbol separat links davor. Aktueller Quell-/Prüf-/Lieferstand in [Plan §21.46](Glide_Entwicklungsplan.md#2146-pixelsymbole-seitenleistenabstand-und-feste-titelkante), [Nachweise](../01_Repository/Glide/tests/qa-3.50.0/pixelsymbole_2026-11-02/README.md). Der Außenabstandsnachlauf bleibt erhalten; frühere Hashes sind historische Eingaben.
+
+**Außenabstände 02.11.2026 (nach dem Abschlussaudit):** Nutzerwunsch nach mehr Platz oben und weniger Rand links/rechts/unten umgesetzt; Normalmodus 22/12/22/10 px, Kompaktmodus 10/12/10/10 px (links/oben/rechts/unten). Aktueller Umfang und tatsächliche Lieferung in [Plan §21.45](Glide_Entwicklungsplan.md#2145-außenabstände-des-hauptfensters). Frühere Hashabgleiche gelten ihren ursprünglichen Appbytes.
+
+**Abschlussabgleich 02.11.2026:** Aktive Status-/Liefer-/Entscheidungsangaben berichtigt; aktueller Prüfauftrag und verbleibende Technikarbeiten in [Plan §21.44](Glide_Entwicklungsplan.md#2144-abschlussabgleich-von-features-optimierungen-und-dokumentation). Quelle und Lieferpakete bleiben 3.50.0. [Neuer Hash-/Prüfnachweis](../01_Repository/Glide/tests/qa-3.50.0/abschlussabgleich_2026-11-02/README.md). Die während des Audits eingetroffene Testkorrektur `55d2caf` und ihr laufender CI-Nachlauf werden von der älteren grünen Vollmatrix getrennt.
+
 **3.50-Fertigstellung, 02.11.2026:** Erster öffentlicher Stand (intern öffentliche erste Beta). Neue UI-Funktionen, Python-Abgleich und tatsächliche Paket-/Prüfergebnisse im [aktuellen Nachweis](../01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Frühere datierte Absätze beschreiben ihren damaligen Stand. Screenreader-Abnahme ist bis Bedarf zurückgestellt; menschliche Prüfung folgt anschließend.
 
 
@@ -53,11 +63,11 @@ Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentl
 
 ### Arbeitsgrenze und nächste Priorität
 
-- **Implementierter Robustheitsschnitt, gezielter Nachweis oben:** [Vorbeugung und Wiederanlauf, Plan §21.27](Glide_Entwicklungsplan.md#2127-vorbeugung-absturzdiagnose-und-abgesicherter-wiederanlauf). Drei nächste Schutzpakete sind in 3.49.0 umgesetzt; breite/native Abnahme und Lieferung bleiben offen. Referenzschutz und Sperren bewahren, implementierte Wiederanlaufprüfung mit Originalvorsicherung und lesendem Fehlerzustand bewahren, Diagnose lokal begrenzen. Verbleibende Intel-Ursache und WA-41B nicht allein wegen grüner AMD-Proben schließen.
+- **Implementierter Robustheitsschnitt, gezielter Nachweis oben:** [Vorbeugung und Wiederanlauf, Plan §21.27](Glide_Entwicklungsplan.md#2127-vorbeugung-absturzdiagnose-und-abgesicherter-wiederanlauf). Die drei Schutzpakete sind seit 3.49.0 umgesetzt und heute in 3.50.0 geliefert; Vollmatrix/Lieferung §21.43, technischer Rest §21.44. Menschliche Abnahme bleibt offen. Referenzschutz und Sperren bewahren, implementierte Wiederanlaufprüfung mit Originalvorsicherung und lesendem Fehlerzustand bewahren, Diagnose lokal begrenzen. Verbleibende Intel-Ursache und WA-41B nicht allein wegen grüner AMD-Proben schließen.
 - **BIOS und CPU-Einstellungen vorerst nicht ändern.** Die frühere Herstellerempfehlung ist Hintergrundinformation und derzeit kein Ausführungsauftrag. Auf dem Intel-PC keine unnötigen weiteren Stresstests. Nur die damaligen eigenen Prüfprozesse wurden kurz an einen logischen Prozessor gebunden; diese Prozesse sind beendet.
 - Der ausdrücklich beauftragte **AMD-Vergleich ist ausgeführt**, zehn ausgewertete Prozesse grün: [Bilanz](../01_Repository/Glide/tests/qa-3.48.0/amd_vergleich_2026-10-27/auswertung.json). Keine Reproduktion von WA-41A/B unter der geprüften Last. Originalbytes für die beiden zusätzlichen Daten-/Importproben bestätigt; Vollsuiten erzeugen ihre UUIDs/Zeitstempel selbst. Vorhandene Minidumps können später ohne neue Absturzprovokation ausgewertet werden; CPU-/Firmwareursache bleibt unbewiesen.
 - `repeat_rules.py` bleibt für die Ursachenanalyse unverändert; neue Schutzfunktionen stehen getrennt davon im 3.49.0-Nachweis. Keine spekulative Mengenschranke, kein Chunking, keine `gc.collect()`-Korrektur und kein schwächeres Testkriterium als angeblicher Fix. Absturzort und Ursache trennen.
-- **Quelle 3.49.0 einschließlich der 3.48.0-Funktionen ist nicht aktuell geliefert oder freigegeben.** Startbare Python-/Showcase-Lieferung bleibt 3.47.0, eigenständige Pakete 3.45.0. Auch ein stabiler AMD-Lauf oder das Ausbleiben eines nativen Absturzes wäre keine Releasefreigabe.
+- **Der damalige Lieferabstand ist geschlossen:** Die 3.48-/3.49-Funktionen gehören zur aktuellen Python-/Showcase-/Windows-/macOS-Lieferung 3.50.0 (§21.43). WA-41A/B-Ursachen bleiben unabhängig davon unbewiesen; grüne Gegenläufe ersetzen keine Ursachenklärung oder menschliche Abnahme.
 
 ### Zwei getrennte Fehlerbilder unter WA-41
 
@@ -184,7 +194,7 @@ Die Quellen ergänzen sich nach Gegenstand. Ein Auftrag oder Beschluss bestimmt 
 | Thema / Lesefolge | Verbindliche Quelle |
 |---|---|
 | Arbeitsregeln und Produktgrenzen | [AGENTS.md](../01_Repository/Glide/AGENTS.md), [Produktgrenzen](../01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md) |
-| Bestätigte Richtung D01–D57, konkrete Aufträge und Prüfablauf | [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md); D49 bleibt Auslegung mit Korrekturvorbehalt, neue Entscheidungen ab D58 |
+| Bestätigte Richtung D01–D58, konkrete Aufträge und Prüfablauf | [Arbeitsrichtung](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md); D49 bleibt Auslegung mit Korrekturvorbehalt, neue Entscheidungen ab D59 |
 | Aktueller Aufgabenstand und Reihenfolge | [Plan §21](Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026); vollständiges Inventar §18, Paketgrenzen §19, offene Auswahl §20 |
 | Technische und methodische Befunde | [Analyse §13](Glide_Analyse.md#13-neuuntersuchung-vom-21102026), aktueller [Dokumentabgleich §13.7](Glide_Analyse.md#137-konsolidierte-bestandsaufnahme-und-dokumentabgleich) |
 | Wettbewerbs- und Integrationsquellen | [Markt und Vorbilder §12](Glide_Markt_und_Vorbilder.md#12-erweiterte-recherche-vom-21102026); Herstellerrecherche mit eigenem Belegdatum, Empfehlungen bleiben Empfehlungen |

@@ -11,7 +11,7 @@ werden muss, rottet zwangsläufig. Der Prüfstand hat das bis 3.21.2 nicht
 bemerkt, weil er Dokumente nur auf Indexeintrag und erreichbare Links prüft,
 nie auf Aktualität ihrer Aussage.
 
-Geprüft wird mit vierzehn Regeln. Grundlage ist die Unterscheidung zwischen
+Geprüft wird mit fünfzehn Regeln. Grundlage ist die Unterscheidung zwischen
 **fortgeschriebenen** und **festgeschriebenen** Dokumenten:
 
 * Festgeschrieben ist ein Dokument, dessen Dateiname eine Version oder ein

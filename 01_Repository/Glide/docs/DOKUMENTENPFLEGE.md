@@ -51,14 +51,14 @@ Neue Dokumente unter `docs/` nur, wenn kein bestehendes das Thema trägt; sie ge
 
 ## Pflege bei jeder Runde
 
-- Standzeile („Stand TT.MM.JJJJ · Glide X.Y.Z …“) und Inhalt zusammen nachführen; `versionswechsel.py` hebt die Standzeilen, ersetzt aber keinen inhaltlichen Abgleich von Status, Entscheidungen und Prüfgrenzen.
+- Standzeile („Stand TT.MM.JJJJ · Glide X.Y.Z …“) und Inhalt zusammen nachführen; `versionswechsel.py` hebt die Standzeilen, ersetzt aber keinen inhaltlichen Abgleich von Status, Entscheidungen und Prüfgrenzen. Aktive Tabellen, Einstieg und Entscheidungsregister auf dieselbe aktuelle Statusquelle ausrichten; ein neuer Banner allein berichtigt keine alte Lieferzeile. Datierte Belege unverändert lassen.
 - Neue Funktion: Abschnitt in [Funktionen](20_FUNKTIONEN.md), Marke im Entwicklungsplan, Zeile im QA-Bericht, Eintrag im CHANGELOG. Keine eigene Vertragsdatei je Version.
 - Vor dem Commit `python3 -B tests/tools/ci_grundstufe.py` (Stand, Links, Index, Datenschutz, Ablagegröße, Synchronisation).
 - Produktionskommentare erklären Invarianten, technische Gründe und Plattformbesonderheiten; Auftragsnummern und Entwicklungserzählungen gehören ins CHANGELOG. Eine reine Kommentarbereinigung lässt den Syntaxbaum unverändert.
 
 ## Was die Standprüfung erzwingt
 
-`tests/tools/standpruefung.py` (Regeln R1–R14) prüft alle aktiven Markdown-Dokumente: Standzeile mit der aktuellen Version, Formatstufen gegen den Code, bekannte überholte Aussagen, vollständige Modullisten, erreichbare relative Links, aktuelle Titel und erste Vollprüfungsaufrufe, Suitezahl in Standzeilen. Erzeugte Pakete unter `build/` sind Kopien, keine aktiven Dokumente. Dokumente mit Version oder Datum im Namen sowie der gehashte Mac-Paketlizenzbeleg gelten als festgeschrieben; seit 03.10.2026 gibt es unter den gepflegten Dokumenten keine mehr.
+`tests/tools/standpruefung.py` (Regeln R1–R15) prüft alle aktiven Markdown-Dokumente: Standzeile mit der aktuellen Version, Formatstufen gegen den Code, bekannte überholte Aussagen, vollständige Modullisten, erreichbare relative Links, aktuelle Titel und erste Vollprüfungsaufrufe, Suitezahl in Standzeilen. Erzeugte Pakete unter `build/` sind Kopien, keine aktiven Dokumente. Dokumente mit Version oder Datum im Namen sowie der gehashte Mac-Paketlizenzbeleg gelten als festgeschrieben; seit 03.10.2026 gibt es unter den gepflegten Dokumenten keine mehr.
 
 ## Ablageprüfung vom 18.10.2026
 
@@ -80,7 +80,7 @@ Der erneute Auftrag prüft das Dokumentregister gegen Quelle 3.47.0 / Format 26,
 
 Auftrag vom 27.10.2026: alle Dateien nach Inhalt, Stand und Version prüfen. Aktuelle Korrekturen in [Analyse §13.17](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1317-datei--und-dokumentationsaudit-vom-27102026); Inventar/Hashes, Register und Grenzen im [Audit](../tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md). Historische Rohbelege behalten ihre damaligen Angaben; spätere Korrekturen stehen als Nachtrag davor. Die 470-Dateien-Referenz des Featurelaufs bleibt erhalten, obwohl eine enthaltene README anschließend berichtigt wurde. Den neuen Dokumentabschluss mit dessen Auditnachweis beurteilen, den alten Hashabschluss nicht umetikettieren.
 
-595 lokale QA-Dateien liegen außerhalb der aktuellen Aufbewahrung: zehn Rohlogs 3.42.0 und 585 Fensterbilder 3.43.1–3.45.0. Einzelpfad/Hash/Grund sind erfasst, Status **offene Bereinigungskandidaten**; aus dem Prüfauftrag keine Sammellöschung vorgenommen. Die 28 Original-Nutzerbilder bleiben unabhängig davon geschützt. Zusätzliche WA-41-Sicherung mit Dumps/Anfangsbestand explizit Git-ausgeschlossen; kein öffentliches Uploadpaket.
+Beim Audit vom 27.10.2026 lagen 595 lokale QA-Dateien außerhalb der Aufbewahrung: zehn Rohlogs 3.42.0 und 585 Fensterbilder 3.43.1–3.45.0. Einzelpfad/Hash/Grund sind erfasst, damaliger Status **offene Bereinigungskandidaten** (am 31.10. geschlossen, siehe Abschlussstatus unten); aus dem Prüfauftrag keine Sammellöschung vorgenommen. Die 28 Original-Nutzerbilder bleiben unabhängig davon geschützt. Zusätzliche WA-41-Sicherung mit Dumps/Anfangsbestand explizit Git-ausgeschlossen; kein öffentliches Uploadpaket.
 
 
 ## Abschlussstatus nach Dokumentationsaudits

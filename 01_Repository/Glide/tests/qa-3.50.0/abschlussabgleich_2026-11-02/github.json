@@ -1,0 +1,59 @@
+{
+  "retrieved_at": "2026-11-02",
+  "initial_remote_main": {
+    "sha": "f8315e14e68a86a2d519c119c869024e3df90e46",
+    "title": "Merge pull request #53 from n05a-design/claude/glide-3.50-abschluss\n\nGlide 3.50: Windows-Matrix grün machen und Lieferabschluss",
+    "tree_equal_initial_local": true
+  },
+  "historical_green": {
+    "run_id": 41438822957,
+    "source_commit": "b2b54e7",
+    "basic": "success",
+    "linux_full": "success",
+    "windows_full": "success",
+    "windows_package": "success",
+    "url": "https://github.com/n05a-design/glide-to-do/actions/runs/41438822957"
+  },
+  "later_main_failure": {
+    "run_id": 41454826947,
+    "source_commit": "f8315e1",
+    "linux_full": "success",
+    "windows_full": "failure",
+    "windows_package": "skipped",
+    "fix_commit": "55d2caff0293220bfe7de55cd9f903425194c109",
+    "production_app_changed": false,
+    "url": "https://github.com/n05a-design/glide-to-do/actions/runs/41454826947"
+  },
+  "current_rerun": {
+    "run_id": 41465033321,
+    "source_commit": "55d2caf",
+    "retrieved_at_utc": "2026-11-02T14:57:51.085Z",
+    "jobs": [
+      {
+        "name": "Grundstufe (Linux, Python 3.14, Tk 8.6)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "UI-Diagnose (Windows x64, Python 3.14)",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Tk 9.1 und NVDA (Windows x64)",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Tk 9.1, AT-SPI und Orca (Linux x64)",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Vollprüfung (Linux/Xvfb, eigene Tk 9.1)",
+        "status": "in_progress",
+        "conclusion": null
+      }
+    ]
+  }
+}

@@ -15,7 +15,7 @@ TEXT_FALLBACKS = {
     "overdue": "Vs", "trash": "Pk", "theme_to_dark": "Du", "theme_to_light": "He",
     "labels": "La", "calendar": "Ka", "attachment": "An", "repeat": "W",
     "group": ">", "back": "<", "next": ">", "board": "Pi", "folder": "Or",
-    "list": "Li", "drawing": "Ze", "gallery": "Ga", "undo": "Zu", "redo": "No",
+    "list": "Li", "table": "Tb", "drawing": "Ze", "gallery": "Ga", "undo": "Zu", "redo": "No",
     "swap": "<>", "link": "Ve", "blocked": "Wa", "timer": "Zt", "archive": "Ar",
     "pinned": "Fa", "symmetry_x": "X" , "symmetry_y": "Y", "edit": "Be",
     "dropdown_closed": "v", "dropdown_open": "^", "moon_new": "N", "moon_first": ")",

@@ -4,6 +4,16 @@
 
 Intern: öffentliche erste Beta. Die Änderungen vom 31.10. und 01.11. sind in diesem Stand enthalten.
 
+- Labels in der Kartenecke 02.11.: Die Labels einer geöffneten Seite, Liste oder eines Ordners stehen oben rechts in der Ecke der Inhaltskarte statt unter den Kopfknöpfen. Listen, Ordner, Tabelle, Pinnwand und Notizen halten dafür oben Platz frei, nur wenn Labels zugewiesen sind; auf Seiten weicht der Titel rechts aus. Nebenbei behoben: In voller Lesebreite und in schmalen Fenstern folgte der Umbruch des Seitentitels einer Größenänderung nicht, weil er nur bei geändertem Rand neu gesetzt wurde. [Prüfung](tests/qa-3.50.0/eckenlabels_2026-11-02/README.md).
+
+- Oberflächenkorrekturen 02.11.: Große Titel 24 → 22, Block-Einfügemarke ohne doppelte Tk-9-Innenabstände, ☷/⊞/▨ als zugänglich benannte Ansichtsbuttons, Zeilenaktionen in passenden Symbolflächen einschließlich lesbarem Schrift-Rückfall. Gesperrte Einstellungsänderungen melden den Grund; Hintergrundwerte werden zurückgesetzt. Wiederanlaufschutz und Originalvorsicherung bleiben erhalten. [Prüfung und Lieferung](tests/qa-3.50.0/oberflaeche_2026-11-02/README.md).
+
+- Pixelsymbole 02.11.: Eigene Symbole in den Seitenleistenbäumen erhalten 8 px Abstand zum Text; ihre Breite wird beim Kürzen berücksichtigt. Der Seitentitel bleibt mit und ohne Symbol bündig zum Fließtext; das Symbol steht separat links im Leserand und bleibt per Klick/Return/Leertaste bearbeitbar. [Nachweis](tests/qa-3.50.0/pixelsymbole_2026-11-02/README.md).
+
+- Außenabstände 02.11.: Oben mehr Raum (4 → 12 px), links/rechts schmaler (28 → 22 px), unten kleiner (14 → 10 px). Kompaktmodus seitlich 14 → 10 px; Rückwechsel stellt den gemeinsamen Normalrand wieder her. Innenabstände und Dialoge bleiben erhalten. [Prüfstand](tests/qa-3.50.0/aussenabstaende_2026-11-02/README.md).
+
+- Abschlussabgleich 02.11.: Aktive Roadmap-/Index-/Lieferangaben und Entscheidungsnummern berichtigt; gewählte Funktionen gegen Handbuch, Neuerungen und tatsächliche 3.50-Lieferungen abgeglichen. Offene appweite Optimierungs-/Architekturarbeiten, neuere Abhängigkeiten, SBOM und menschliche Abnahme getrennt erfasst. App und Pakete unverändert; unabhängigen Test-/CI-Nachlauf nicht zur alten Vollmatrix zählen. [Nachweis](tests/qa-3.50.0/abschlussabgleich_2026-11-02/README.md).
+
 - Hintergrundfarbe unabhängig von Design und Verlauf: feste Palette sowie „Wie die Fensterfläche“. Diese Option nutzt im hellen Design Weiß und im dunklen Design die Kartenfläche, ohne Materialschatten. Die Wahl wird gespeichert und über Einstellungen, Ansichtsmenü und Aktionssuche erreicht.
 - Logo, Titel und Untertitel fluchten mit dem Inhaltsbereich; die Seitenleiste nutzt die volle Höhe einschließlich des bisherigen Kopfbereichs. Breite, schmale und ausgeblendete Seitenleiste sowie Kompaktmodus bleiben erhalten.
 - Seitenblöcke lassen sich am Sechspunktgriff ziehen. Einfügelinie, Randscrollen und Escape-Abbruch; Formatierungen, Links, Bilder und Aufgabenbezüge bleiben erhalten. Tabellen, mehrzeiliger Code und Elternblöcke mit eingerückten Kindzeilen bleiben zusammen. Ein Verschieben ist ein Rückgängig-Schritt; Rechtsklick und Tastatur-Blockaktionen bleiben verfügbar. Der Griff übernimmt beim Ziehen den Editorfokus, sodass Escape auch nach einer Seitenleistenauswahl zuverlässig abbricht.

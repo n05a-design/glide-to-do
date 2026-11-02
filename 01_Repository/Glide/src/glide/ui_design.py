@@ -8,8 +8,18 @@ from types import MappingProxyType
 SPACING = MappingProxyType({value: value for value in
                            (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 18, 22, 24, 28, 30)})
 RADII = MappingProxyType({"card": 18, "field": 16})
-FONT_SIZES = MappingProxyType({"caption": 9, "source": 9, "body": 12, "section": 16, "title": 24})
+FONT_SIZES = MappingProxyType({"caption": 9, "source": 9, "body": 12, "section": 16, "title": 22})
 ROW_HEIGHTS = MappingProxyType({"task": 36})
+
+
+def page_icon_layout(left_padding, line_height, preferred_scale, cell_size=16, gap=8):
+    """Symbol im linken Leserand halten; die Textkante bleibt bei x=0."""
+    scale = min(max(1, int(preferred_scale)), int((left_padding - gap) // cell_size),
+                int(line_height // cell_size))
+    if scale < 1:
+        return None
+    size = cell_size * scale
+    return scale, -size - gap, (int(line_height) - size) // 2
 
 
 def fit_text(text, measure, width):

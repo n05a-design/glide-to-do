@@ -1,0 +1,122 @@
+[
+  {
+    "window_width": 1280,
+    "font": "mittel",
+    "design": "light",
+    "full_width": false,
+    "own_icon": false,
+    "title_x": 423,
+    "body_x": 421,
+    "delta": 2
+  },
+  {
+    "window_width": 1280,
+    "font": "mittel",
+    "design": "light",
+    "full_width": false,
+    "own_icon": true,
+    "title_x": 469,
+    "body_x": 421,
+    "delta": 48
+  },
+  {
+    "window_width": 1280,
+    "font": "mittel",
+    "design": "light",
+    "full_width": false,
+    "own_icon": false,
+    "title_x": 423,
+    "body_x": 421,
+    "delta": 2
+  },
+  {
+    "window_width": 1280,
+    "font": "mittel",
+    "design": "light",
+    "full_width": true,
+    "own_icon": false,
+    "title_x": 370,
+    "body_x": 368,
+    "delta": 2
+  },
+  {
+    "window_width": 1280,
+    "font": "mittel",
+    "design": "light",
+    "full_width": true,
+    "own_icon": true,
+    "title_x": 416,
+    "body_x": 368,
+    "delta": 48
+  },
+  {
+    "window_width": 1280,
+    "font": "mittel",
+    "design": "light",
+    "full_width": true,
+    "own_icon": false,
+    "title_x": 370,
+    "body_x": 368,
+    "delta": 2
+  },
+  {
+    "window_width": 860,
+    "font": "gross",
+    "design": "dark",
+    "full_width": false,
+    "own_icon": false,
+    "title_x": 370,
+    "body_x": 368,
+    "delta": 2
+  },
+  {
+    "window_width": 860,
+    "font": "gross",
+    "design": "dark",
+    "full_width": false,
+    "own_icon": true,
+    "title_x": 416,
+    "body_x": 368,
+    "delta": 48
+  },
+  {
+    "window_width": 860,
+    "font": "gross",
+    "design": "dark",
+    "full_width": false,
+    "own_icon": false,
+    "title_x": 370,
+    "body_x": 368,
+    "delta": 2
+  },
+  {
+    "window_width": 860,
+    "font": "gross",
+    "design": "dark",
+    "full_width": true,
+    "own_icon": false,
+    "title_x": 370,
+    "body_x": 368,
+    "delta": 2
+  },
+  {
+    "window_width": 860,
+    "font": "gross",
+    "design": "dark",
+    "full_width": true,
+    "own_icon": true,
+    "title_x": 416,
+    "body_x": 368,
+    "delta": 48
+  },
+  {
+    "window_width": 860,
+    "font": "gross",
+    "design": "dark",
+    "full_width": true,
+    "own_icon": false,
+    "title_x": 370,
+    "body_x": 368,
+    "delta": 2
+  }
+]

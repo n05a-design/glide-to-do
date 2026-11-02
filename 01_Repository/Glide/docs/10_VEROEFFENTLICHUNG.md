@@ -17,6 +17,8 @@ Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierun
 
 Der aktuelle Auftrag umfasst Commit und Push. Eine Veröffentlichung in weiteren Vertriebskanälen, rechtliche Festlegungen oder Eingriffe in die Git-Historie werden daraus nicht abgeleitet. Erinnerungen werden nur bei laufender App verarbeitet.
 
+**Noch offene technische Releasevorbereitung (WA-46):** Lizenz-/Bauinventare und SHA-256-Dateilisten sind vorhanden; ein CycloneDX-/SPDX-Inventar samt automatisiertem Erzeugungs-/Prüfweg ist noch nicht umgesetzt. Vor einem entsprechend freigegebenen Release aus den vorhandenen Manifesten erzeugen und mit den tatsächlichen Artefakten abgleichen. Nicht als erfülltes Tor ausweisen. Neuere Fassungen von Bauwerkzeugen sind im [Abhängigkeitsabgleich](../tests/qa-3.50.0/abschlussabgleich_2026-11-02/README.md) dokumentiert; ein Upgrade verlangt neue native Bau-/Startbelege.
+
 ## Signierung und Notarisierung
 
 Zertifikate, Zugangsdaten und Kennungen werden nicht erfunden und **nie im Repository gespeichert**.
