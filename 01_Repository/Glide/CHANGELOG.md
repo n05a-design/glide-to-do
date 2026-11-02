@@ -4,6 +4,8 @@
 
 Intern: öffentliche erste Beta. Die Änderungen vom 31.10. und 01.11. sind in diesem Stand enthalten.
 
+- Hinweise bei schmaler Breite 02.11.: Sobald das Glide-Logo im Kopf der Fensterbreite weicht, und im Kompaktmodus erscheinen keine Bedienhinweise mehr – in Liste, Tabelle, Pinnwand, Seite, Nebenansicht, Heute und Startseite. Der Inhalt bekommt den Platz; die Auswahlzahl der Pinnwand bleibt. Der Schalter in den Einstellungen bleibt unverändert und gilt bei breitem Fenster wie bisher. [Prüfung](tests/qa-3.50.0/hinweisplatz_2026-11-02/README.md).
+
 - Labels in der Kartenecke 02.11.: Die Labels einer geöffneten Seite, Liste oder eines Ordners stehen oben rechts in der Ecke der Inhaltskarte statt unter den Kopfknöpfen. Listen, Ordner, Tabelle, Pinnwand und Notizen halten dafür oben Platz frei, nur wenn Labels zugewiesen sind; auf Seiten weicht der Titel rechts aus. Nebenbei behoben: In voller Lesebreite und in schmalen Fenstern folgte der Umbruch des Seitentitels einer Größenänderung nicht, weil er nur bei geändertem Rand neu gesetzt wurde. [Prüfung](tests/qa-3.50.0/eckenlabels_2026-11-02/README.md).
 
 - Oberflächenkorrekturen 02.11.: Große Titel 24 → 22, Block-Einfügemarke ohne doppelte Tk-9-Innenabstände, ☷/⊞/▨ als zugänglich benannte Ansichtsbuttons, Zeilenaktionen in passenden Symbolflächen einschließlich lesbarem Schrift-Rückfall. Gesperrte Einstellungsänderungen melden den Grund; Hintergrundwerte werden zurückgesetzt. Wiederanlaufschutz und Originalvorsicherung bleiben erhalten. [Prüfung und Lieferung](tests/qa-3.50.0/oberflaeche_2026-11-02/README.md).

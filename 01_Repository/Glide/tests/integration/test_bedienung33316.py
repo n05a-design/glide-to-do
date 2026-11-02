@@ -93,6 +93,8 @@ with tempfile.TemporaryDirectory(prefix='glide-bedienung-') as data:
                             args.capture.mkdir(parents=True, exist_ok=True)
                             save_windows_screenshot(root, args.capture / f'{view}_{width}_{design}.png')
         if not args.observe:
+            # Hinweise erscheinen nur, solange das Logo im Kopf Platz hat (02.11.2026).
+            root.geometry('1280x800+20+20'); idle()
             app.set_active_list(entry['id']); idle()
             undo_count = len(app.undo_stack)
             # B06 (15.10.2026): ein gespeicherter Schalter statt „?“ je Ansicht.

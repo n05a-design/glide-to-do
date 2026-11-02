@@ -2,6 +2,8 @@
 
 Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
+**Hinweise bei schmaler Breite 02.11.2026:** Neuer Fall `hinweisplatz` (Liste, Tabelle, Pinnwand, Seite bei 1280/860 px und im Kompaktmodus) grün, gegen die vorherige Fassung gezielt rot; Unit-Test der Hinweisregel. [Belege](../tests/qa-3.50.0/hinweisplatz_2026-11-02/README.md).
+
 **Labels in der Kartenecke 02.11.2026:** Labelchips von Seite, Liste und Ordner oben rechts in der Inhaltskarte; neuer Fall `eckenlabels` (Liste, Tabelle, Pinnwand, Ordner, Seite bei 1280/860 px, schmale und volle Lesebreite) ohne Überdeckung grün. Die schlankere Kopfhöhe stellt B05 (Logo-Grundlinie) und die 15-%-Regel bei 1280 × 800 wieder her, die nach dem Abstandsnachlauf rot waren. [Belege und Grenzen](../tests/qa-3.50.0/eckenlabels_2026-11-02/README.md).
 
 **Oberflächenkorrekturen 02.11.2026:** Große Titel 24 → 22; Block-Einfügemarke auf Text-/Zielkante; Ansichtsbuttons als benannte Symbole; vollständig sichtbare Zeilenaktionen. Hintergrundwechsel meldet aktiven Schreibschutz. Die ungeklärte Sitzung von 16:04 ist belegt, ihre Abbruchursache weiterhin offen; echte Daten und Wiederanlaufsperre blieben unverändert. [Aktuelle Prüfung und Liefergrenzen](../tests/qa-3.50.0/oberflaeche_2026-11-02/README.md). Frühere UI-Nachweise gelten ihren damaligen Quellständen.

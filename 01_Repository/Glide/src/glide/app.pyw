@@ -5574,7 +5574,7 @@ class ItemWorkspace:
             return
         # Beim Neuzeichnen Fokus und Scrollposition erhalten, Filtereingaben nicht zerstören.
         signature = (scope, self.mode, app.theme_name, app.settings.get("ui_font_size"),
-                     glide_interaction.hints_visible(app.settings),
+                     app.hints_shown(),
                      json.dumps(app.theme, sort_keys=True), json.dumps(self.board(scope), sort_keys=True),
                      json.dumps(self.eligible_lists(), sort_keys=True),
                      json.dumps(app.labels, sort_keys=True))
@@ -5851,9 +5851,11 @@ class ItemWorkspace:
                 # Bei niedrigem Fenster eine Zeile statt drei; die vollständige
                 # Liste steht in der Hilfe und hinter „Aktionen“.
                 hinweis = "Pfeiltasten: Auswahl · Enter: bearbeiten · Entf: von Pinnwand nehmen"
+        # Die Tastenzeile ist ein Bedienhinweis: Bei schmaler Breite und im
+        # Kompaktmodus weicht sie (02.11.2026); die Auswahlzahl bleibt.
         self._board_notice_text = hinweis
         self.notice = self.label(self.bar, hinweis, size=8, color="muted")
-        self.update_selection_notice()
+        self.sync_notice()
         if focused:
             self.focus_active_tab()
 
@@ -6503,7 +6505,7 @@ class ItemWorkspace:
             zeile.add(knopf)
         self.group_choice = gruppe
         # Bedienweg als Textzeile: folgt dem Hinweisschalter (B06).
-        if glide_interaction.hints_visible(app.settings):
+        if app.hints_shown():
             zeile.add(tk.Label(zeile, text="Ziehen setzt das Feld · Alt+Pfeil links/rechts verschiebt die Karte",
                                bg=app.theme["card"], fg=app.theme["muted"], font=app_font(9), anchor="w"))
 
@@ -9014,17 +9016,33 @@ class ItemWorkspace:
         return True
 
     def update_selection_notice(self):
-        """Sagt in der Hinweiszeile, wie viele Karten gerade ausgewählt sind."""
+        """Sagt in der Hinweiszeile, wie viele Karten gerade ausgewählt sind.
+
+        Die Tastenwege dahinter sind ein ergänzender Hinweis und weichen bei
+        schmaler Breite und im Kompaktmodus; ohne Text nimmt die Zeile keinen
+        Platz ein.
+        """
         hinweis = getattr(self, "notice", None)
         if hinweis is None or not hinweis.winfo_exists():
             return
-        anzahl = len(self.selection())
-        grundtext = getattr(self, "_board_notice_text", "")
+        anzahl = len(self.selection()) if hasattr(self, "selection") else 0
+        grundtext = getattr(self, "_board_notice_text", "") if self.app.hints_room() else ""
+        teile = [f"{anzahl} Karten ausgewählt"] if anzahl > 1 else []
+        if grundtext:
+            teile.append(grundtext)
+        text = " \u00b7 ".join(teile)
         try:
-            hinweis.configure(text=f"{anzahl} Karten ausgewählt \u00b7 {grundtext}"
-                              if anzahl > 1 else grundtext)
+            hinweis.configure(text=text)
+            if text and not hinweis.winfo_manager():
+                hinweis.pack(fill="x", pady=(0, 10))
+            elif not text and hinweis.winfo_manager():
+                hinweis.pack_forget()
         except tk.TclError:
             pass
+
+    def sync_notice(self):
+        """Hinweiszeile der Leiste nach Breite, Kompaktmodus und Auswahl abgleichen."""
+        self.update_selection_notice()
 
     def checklist_hit(self, x, y):
         for box, identity, index in reversed(getattr(self, "_checklist_hits", [])):
@@ -9362,7 +9380,7 @@ class SavedViewWorkspace(ItemWorkspace):
             if definition[key]:
                 button.set_active(app.theme['active'], app.theme['active_text'])
             flow.add(button)
-        if glide_interaction.hints_visible(app.settings):
+        if app.hints_shown():
             flow.add(tk.Label(flow, text='Gruppierung · Ziehen setzt das Feld · Alt+Links/Rechts verschiebt',
                              bg=app.theme['card'], fg=app.theme['muted'], font=app_font(9), anchor='w'))
 
@@ -23903,7 +23921,7 @@ class ListApp:
                              for value in projection_tasks)
             signature = glide_side_view.signature(entry, done, (
                 state, tuple(sorted(self.theme.items())), self.settings.get("ui_font_size"),
-                glide_interaction.hints_visible(self.settings), bool(getattr(self, "_data_read_only", False)),
+                self.hints_shown(), bool(getattr(self, "_data_read_only", False)),
                 getattr(self, "_side_narrow", False)))
             if not force and signature == getattr(self, "_side_view_signature", None):
                 return
@@ -23985,7 +24003,7 @@ class ListApp:
         if getattr(self, "_data_read_only", False):
             status.configure(text="Schreibgeschützter Bestand · nur ansehen.")
         status.pack(side="bottom", fill="x", pady=(6, 0))
-        if glide_interaction.hints_visible(self.settings):
+        if self.hints_shown():
             hinweis = ("Klick auf das Kästchen oder Leertaste hakt ab · Doppelklick öffnet im Hauptbereich"
                        if art == "tasks" else "Klick auf das Kästchen hakt ab · „Öffnen“ zum Bearbeiten")
             tk.Label(inhalt, text=hinweis, bg=theme["card"], fg=theme["muted"],
@@ -26437,9 +26455,10 @@ class ListApp:
                                  height=34).pack(side="right")
         self._make_dialog_button(kopf, "Weitere Einstellungen …", self.show_home_tiles_dialog, "muted", width=200,
                                  height=34).pack(side="right", padx=(0, 8))
-        CanvasLabel(self.home_content, text="Am Griff ziehen oder mit Alt+Pfeiltasten verschieben. „Ganze Breite“ "
-                                            "stellt eine Kachel über das Raster.", bg=theme["bg"], fg=theme["muted"],
-                    font=app_font(10), anchor="w").pack(fill="x", pady=(0, 8))
+        if self.hints_room():
+            CanvasLabel(self.home_content, text="Am Griff ziehen oder mit Alt+Pfeiltasten verschieben. „Ganze Breite“ "
+                                                "stellt eine Kachel über das Raster.", bg=theme["bg"], fg=theme["muted"],
+                        font=app_font(10), anchor="w").pack(fill="x", pady=(0, 8))
         liste = tk.Frame(self.home_content, bg=theme["bg"])
         liste.pack(fill="x")
         visible = [key for key in self.home_tile_order() if self.home_tile_visible(key)]
@@ -42974,6 +42993,8 @@ class ListApp:
         self.sync_header_logo()
         self.sync_action_density()
         self.update_header_title()
+        # Weicht das Logo, weichen auch alle Bedienhinweise (02.11.2026).
+        self.sync_hint_space()
 
     def pack_header_controls(self):
         """Packt die Kopfzeilenknöpfe in fester Reihenfolge von rechts nach links.
@@ -44099,10 +44120,14 @@ class ListApp:
     def header_note_text(self):
         """Der Beschreibungs- oder Untertiteltext der Kennzahlenzeile."""
         note, editable = getattr(self, "_chip_note", None) or ("", False)
+        if not editable and not self.hints_room():
+            # Erklärende Untertitel der Ansichten weichen bei schmaler Breite
+            # und im Kompaktmodus; eigene Beschreibungen bleiben (02.11.2026).
+            return ""
         if not editable and self.view_mode in (self.HOME_VIEW, self.HISTORY_VIEW, self.PAGES_VIEW,
                 self.NOTES_VIEW, self.DRAWINGS_VIEW, self.TEMPLATE_VIEW, self.LIBRARY_VIEW,
                 self.PLAN_DAY_VIEW, self.LABELS_VIEW, "in_progress", "overdue", "trash", "saved_filter"):
-            return note if glide_interaction.hints_visible(self.settings, self.view_mode) else ""
+            return note if self.hints_shown() else ""
         return note
 
     @staticmethod
@@ -51680,6 +51705,36 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self._hint_shown_text = self.fit_label_lines(
             hinweis, getattr(self, "_hint_full_text", aktuell), self.HINT_MAX_LINES)
 
+    def hints_narrow(self):
+        """Ob das Fenster so schmal ist, dass das Logo im Kopf weicht (Stufe „minimal“).
+
+        Dieselbe zwischengespeicherte Stufe, nach der `sync_header_logo` das
+        Logo ausblendet; vor dem ersten Abgleich die gemessene Breite.
+        """
+        stufe = getattr(self, "_header_density", None) or self.header_density()
+        return stufe == "minimal"
+
+    def hints_room(self):
+        """Ob überhaupt Platz für Bedienhinweise ist: nicht schmal, nicht kompakt."""
+        return not self.hints_narrow() and not getattr(self, "_compact", None)
+
+    def hints_shown(self):
+        """Ob ergänzende Bedienhinweise jetzt erscheinen (B06 plus Breite/Kompaktmodus).
+
+        Seit dem 02.11.2026 weichen sie bei schmaler Breite und im Kompaktmodus
+        ganz; der gespeicherte Schalter bleibt dabei unverändert.
+        """
+        return glide_interaction.hints_visible(
+            self.settings, narrow=self.hints_narrow(), compact=bool(getattr(self, "_compact", None)))
+
+    def sync_hint_space(self):
+        """Hinweise neu abgleichen, wenn sich Breitenstufe oder Kompaktmodus ändern."""
+        zustand = (self.hints_shown(), self.hints_room())
+        if zustand == getattr(self, "_hints_shown_state", None):
+            return
+        self._hints_shown_state = zustand
+        self.apply_hint_setting()
+
     def toggle_view_hints(self, event=None):
         """Schaltet die ergänzenden Bedienhinweise aller Ansichten (B06)."""
         before = self.settings.get(glide_interaction.HINTS_SETTING, glide_interaction.HINTS_DEFAULT)
@@ -51691,12 +51746,42 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def apply_hint_setting(self):
         """Zeigt oder verbirgt die ergänzenden Hinweise in der offenen Ansicht."""
+        self._hints_shown_state = (self.hints_shown(), self.hints_room())
         self._tool_hint_key = None
         self.sync_tool_band_hint()
         self.sync_card_foot()
         self.update_page_chips()
         if self.view_mode == "trash":
             self.refresh_trash_overview()
+        elif self.view_mode == self.PLAN_DAY_VIEW:
+            # Die Verweiszeile „Demnächst …“ trägt den Bedienweg im Zeilentext.
+            # Nur diese Zeile anpassen: Ein Neuaufbau des Baums packte unter
+            # 900 px die Liste über das Tagesraster.
+            self.sync_upcoming_link_hint()
+        werk = getattr(self, "workspace", None)
+        if werk is not None and getattr(werk, "visible", False):
+            # Pinnwand und Tabelle tragen ihre Hinweiszeilen in der eigenen Leiste.
+            werk.refresh()
+        elif werk is not None and getattr(werk, "notice", None) is not None:
+            werk.sync_notice()
+        if getattr(self, "_side_view", None):
+            self.sync_side_view(force=True)
+
+    UPCOMING_LINK_HINT = " – Doppelklick öffnet"
+
+    def sync_upcoming_link_hint(self):
+        """Bedienweg der Verweiszeile „Demnächst …“ nach `hints_shown` setzen oder entfernen."""
+        baum = getattr(self, "tree", None)
+        try:
+            if baum is None or not baum.exists(self.UPCOMING_LINK_ROW_ID):
+                return
+            text = str(baum.item(self.UPCOMING_LINK_ROW_ID, "text"))
+            grund = text[:-len(self.UPCOMING_LINK_HINT)] if text.endswith(self.UPCOMING_LINK_HINT) else text
+            neu = grund + (self.UPCOMING_LINK_HINT if self.hints_shown() else "")
+            if neu != text:
+                baum.item(self.UPCOMING_LINK_ROW_ID, text=neu)
+        except tk.TclError:
+            return
 
     def item_date_text(self, item):
         return glide_interaction.date_text(
@@ -51730,7 +51815,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 return None
         except tk.TclError:
             return None
-        return "bar" if self.selection_bar_ids() else ("hint" if glide_interaction.hints_visible(self.settings, self.view_mode) else None)
+        return "bar" if self.selection_bar_ids() else ("hint" if self.hints_shown() else None)
 
     def sync_card_foot(self):
         """Hält den Kartenfuß: feste Höhe, darin Hinweis oder Auswahlleiste.
@@ -51818,7 +51903,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if hinweis is None or band is None:
             return
         try:
-            text = self.surface_hint_text() if band.winfo_manager() == "pack" and glide_interaction.hints_visible(self.settings, self.view_mode) else ""
+            text = self.surface_hint_text() if band.winfo_manager() == "pack" and self.hints_shown() else ""
             breite = max(80, min(220, band.winfo_width() // 3))
             schluessel = (text, breite)
             if schluessel == getattr(self, "_tool_hint_key", None) and hinweis.cget("text") == getattr(
@@ -52521,7 +52606,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                                  text=f"{self.ICONS['in_progress']}  Demnächst · {anzahl} weitere "
                                       + ("Fälligkeit" if anzahl == 1 else "Fälligkeiten")
                                       # B06: Der Bedienweg ist ein ergänzender Hinweis.
-                                      + (" – Doppelklick öffnet" if glide_interaction.hints_visible(self.settings)
+                                      + (self.UPCOMING_LINK_HINT if self.hints_shown()
                                          else ""))
             eingang = teile.eingang
         elif self.view_mode == 'saved_filter' and self.saved_filters.layout()['group'] != 'none':
@@ -52851,7 +52936,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             empty_text = (
                 "Kein Eintrag im Papierkorb passt zur aktuellen Suche."
                 if query
-                else glide_interaction.trash_empty_text(glide_interaction.hints_visible(self.settings))
+                else glide_interaction.trash_empty_text(self.hints_shown())
             )
             self.tree.insert("", "end", iid=self.EMPTY_ROW_ID, text=empty_text, tags=("empty",))
             self.finish_tree_refresh()
@@ -64593,6 +64678,8 @@ Labels, Termine und Metadaten."""
         self.root.geometry(glide_compact.compact_geometry(normal, self.settings.get(glide_compact.SETTING),
                                                           breite, hoehe, origin=(links, oben)))
         self.update_compact_title()
+        # Im Kompaktmodus gehört der Platz dem Inhalt: keine Bedienhinweise.
+        self.sync_hint_space()
         return "break"
 
     def desktop_bounds(self):
@@ -64630,6 +64717,7 @@ Labels, Termine und Metadaten."""
             pass
         self.update_header_title()
         self.sync_side_view(force=True)
+        self.sync_hint_space()
         return "break"
 
     def remember_compact_geometry(self):
@@ -65159,7 +65247,7 @@ Labels, Termine und Metadaten."""
             kopftext = "Nebenansicht · Liste, Seite oder Notiz wählen"
         else:
             kopftext = "Suchen und Aktionen · > zeigt nur Aktionen"
-            if glide_interaction.hints_visible(self.settings):
+            if self.hints_shown():
                 kopftext += " · Umschalt+Enter: Nebenansicht"
         tk.Label(panel, text=kopftext, bg=flaeche, fg=theme["muted"],
                  font=app_font(9), anchor="w").pack(fill="x", padx=4, pady=(2, 6))

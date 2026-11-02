@@ -2,6 +2,8 @@
 
 Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
+**Hinweise bei schmaler Breite 02.11.2026:** Unterhalb der Logo-Stufe und im Kompaktmodus keine Bedienhinweise (`hints_shown`/`hints_room`). [Plan §21.49](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2149-hinweise-bei-schmaler-breite-und-im-kompaktmodus), [Nachweis](01_Repository/Glide/tests/qa-3.50.0/hinweisplatz_2026-11-02/README.md).
+
 **Labels in der Kartenecke 02.11.2026:** Labelchips von Seite/Liste/Ordner oben rechts in der Inhaltskarte, ohne Überdeckung; Kopf ohne frühere Chipreserve, B05 und 15-%-Regel wieder grün. [Plan §21.48](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2148-labels-in-der-kartenecke), [Nachweis](01_Repository/Glide/tests/qa-3.50.0/eckenlabels_2026-11-02/README.md).
 
 **Oberflächenkorrekturen 02.11.2026:** Große Titel 24 → 22; Block-Einfügemarke auf Text-/Zielkante; Ansichtsbuttons als benannte Symbole; vollständig sichtbare Zeilenaktionen. Hintergrundwechsel meldet aktiven Schreibschutz. Die ungeklärte Sitzung von 16:04 ist belegt, ihre Abbruchursache weiterhin offen; echte Daten und Wiederanlaufsperre blieben unverändert. [Aktuelle Prüfung und Liefergrenzen](01_Repository/Glide/tests/qa-3.50.0/oberflaeche_2026-11-02/README.md). Frühere UI-Nachweise gelten ihren damaligen Quellständen.

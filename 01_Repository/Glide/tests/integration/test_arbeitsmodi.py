@@ -2894,6 +2894,99 @@ def fall_eckenlabels(lauf):
     return "Liste, Tabelle, Pinnwand, Ordner und Seite bei 1280/860 px: Chips in der Kartenecke, ohne Überdeckung"
 
 
+def fall_hinweisplatz(lauf):
+    """Weicht das Logo (schmale Breite) oder ist der Kompaktmodus an, weichen alle Bedienhinweise."""
+    app = lauf.app
+    app.settings["show_hints"] = True
+    punkte = [app.new_item("Unterlagen prüfen"), app.new_item("Angebot")]
+    liste = app.new_list_object("Projekt", punkte)
+    app.lists.append(liste)
+    app.save_items()
+    seite, _editor = seite_anlegen(lauf)
+
+    def oeffnen(name):
+        app.open_list_view()
+        if name == "seite":
+            app.set_active_list(seite["id"])
+        else:
+            app.set_active_list(liste["id"])
+            app.open_list_view()
+            if name == "tabelle":
+                app.set_table_view()
+            elif name == "pinnwand":
+                app.open_board_view()
+        idle(lauf)
+
+    def hinweise(name):
+        """Sichtbare Hinweistexte der Ansicht `name` (leer, wenn alle weichen)."""
+        texte = []
+        if name == "liste":
+            if app.card_foot_mode() == "hint" and app.card_foot.winfo_manager():
+                texte.append(app.hint_label.cget("text"))
+        elif name == "seite":
+            texte.append(app.tool_band_hint.cget("text"))
+        else:
+            notiz = app.header_note_text()
+            if notiz:
+                texte.append(notiz)
+            hinweis = getattr(app.workspace, "notice", None)
+            if hinweis is not None and hinweis.winfo_exists() and hinweis.winfo_manager():
+                texte.append(hinweis.cget("text"))
+        return [t for t in texte if t]
+
+    ansichten = ("liste", "tabelle", "pinnwand", "seite")
+    lauf.root.geometry("1280x800+20+20")
+    idle(lauf, 6)
+    assert app.header_logo.winfo_manager(), "Logo bei voller Breite sichtbar"
+    for name in ansichten:
+        oeffnen(name)
+        assert hinweise(name), (name, "Hinweise bei voller Breite und eingeschaltetem Schalter")
+    # Schmal: Das Logo weicht, mit ihm jeder Hinweis – in jeder Ansicht.
+    lauf.root.geometry("860x700+20+20")
+    idle(lauf, 6)
+    assert app.header_density() == "minimal" and not app.header_logo.winfo_manager()
+    for name in ansichten:
+        oeffnen(name)
+        assert not hinweise(name), (name, hinweise(name))
+    # Die Liste nutzt den frei gewordenen Kartenfuß.
+    oeffnen("liste")
+    assert app.card_foot.winfo_manager() == ""
+    # Die Auswahlzahl der Pinnwand ist ein Zustand und bleibt auch schmal sichtbar.
+    oeffnen("pinnwand")
+    app.workspace.pin([p["id"] for p in punkte])
+    idle(lauf)
+    werk = app.workspace
+    werk.selected_ids = [p["id"] for p in punkte]
+    werk.selected_id = punkte[-1]["id"]
+    assert len(werk.selection()) == 2, (werk.selection(), list(werk.card_boxes))
+    werk.update_selection_notice()
+    assert werk.notice.winfo_manager() and werk.notice.cget("text") == "2 Karten ausgewählt", werk.notice.cget("text")
+    werk.selected_ids, werk.selected_id = [], None
+    werk.update_selection_notice()
+    assert not werk.notice.winfo_manager(), "ohne Auswahl und ohne Hinweis keine leere Zeile"
+    # Breit wieder: Hinweise kehren zurück, der Schalter blieb unverändert.
+    lauf.root.geometry("1280x800+20+20")
+    idle(lauf, 6)
+    for name in ansichten:
+        oeffnen(name)
+        assert hinweise(name), (name, "nach Rückkehr zur vollen Breite")
+    assert app.settings["show_hints"] is True
+    # Kompaktmodus: keine Hinweise, danach wieder da.
+    oeffnen("liste")
+    app.enter_compact_mode()
+    idle(lauf, 6)
+    for name in ("liste", "seite"):
+        oeffnen(name)
+        assert not hinweise(name), ("kompakt", name, hinweise(name))
+    app.leave_compact_mode()
+    lauf.root.geometry("1280x800+20+20")
+    idle(lauf, 6)
+    for name in ("liste", "seite"):
+        oeffnen(name)
+        assert hinweise(name), ("nach Kompaktmodus", name)
+    return "Liste, Tabelle, Pinnwand, Seite: Hinweise bei 1280 px, keine bei 860 px und im Kompaktmodus; Schalter unverändert"
+
+
 def fall_beta350(lauf):
     """3.50: gespeicherte Hintergrundfarbe, Fluchten und echter Griff-Ziehweg."""
     app, mod = lauf.app, lauf.mod
@@ -3118,7 +3211,7 @@ FAELLE = ("seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "n
           "home_tagesnavigation", "home_mehrfachfelder", "side_verweisnavigation", "dreierpaket_gestaltung",
           "home_wochenwahl", "home_faelligkeit_aufwand", "side_verweisaktionen", "side_trefferuebersicht", "side_nachschlagen", "home_fokusdauer",
           "fokus_wechseln", "side_suchverlauf", "fokus_als_naechstes",
-          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "beta350")
+          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "hinweisplatz", "beta350")
 
 
 def main():
