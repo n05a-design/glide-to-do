@@ -16901,7 +16901,6 @@ class ListApp:
     FIELD_PAD_X = glide_design.SPACING[12]
     FIELD_PAD_Y = glide_design.SPACING[9]
     FIELD_LABEL_GAP = glide_design.SPACING[5]
-    HEADER_TITLE_MIN_WIDTH = 140
     # Schriftfamilie der Hauptüberschrift. None bedeutet: Systemschrift der
     # Oberfläche verwenden. Für eine eigene Hausschrift genügt es, hier den
     # Familiennamen einzutragen – der Rest der Logik bleibt unverändert.
@@ -42765,6 +42764,10 @@ class ListApp:
     # Stufe nebeneinanderpassen muss.
     HEADER_DENSITY_FULL = 1120      # alle Knöpfe
     HEADER_DENSITY_COMPACT = 900    # seit 27.09.2026 wie „full“: alle Knöpfe sind Symbole
+    # Seit 3.50 steht die Kopfzeile neben der durchgehenden Seitenleiste. Ist
+    # sie schmaler, weicht zusätzlich die Schnellerfassung ins Überlaufmenü,
+    # damit der Titel lesbar bleibt (Fenster unter etwa 910 px).
+    HEADER_CAPTURE_MIN_WIDTH = 640
     # Darunter: Drucken und Einstellungen wandern ins Überlaufmenü.
     # Gemessen wird die Breite der Aktionsreihe selbst, nicht die des
     # Fensters: Sie steht rechts neben der Seitenleiste und ist deshalb je
@@ -42840,10 +42843,16 @@ class ListApp:
         """Blendet sekundäre Bedienelemente nach der verfügbaren Breite aus."""
         if not hasattr(self, "header_controls"):
             return
-        stufe = self.header_density(event.width if event is not None else None)
-        if stufe == getattr(self, "_header_density", None):
+        breite = event.width if event is not None else None
+        stufe = self.header_density(breite)
+        if breite is None:
+            kopf = getattr(self, "header_frame", None)
+            breite = kopf.winfo_width() if kopf is not None else 0
+        eng = 1 < breite < self.HEADER_CAPTURE_MIN_WIDTH
+        if stufe == getattr(self, "_header_density", None) and eng == getattr(self, "_header_tight", False):
             return
         self._header_density = stufe
+        self._header_tight = eng
         self.update_stats_label()
         # Die Zahl offener Hinweise ist die eigentliche Information; das Wort
         # „Benachrichtigungen“ ist nur ihre Überschrift.
@@ -42877,7 +42886,9 @@ class ListApp:
             ("header_overflow_button", minimal and not pending, (0, 0)),
             ("settings_button", not minimal and not pending, (0, 0)),
             ("notifications_button", pending, (0, 0)),
-            ("capture_button", True, (0, 8)),
+            # Unter HEADER_CAPTURE_MIN_WIDTH weicht die Schnellerfassung ins
+            # Überlaufmenü (Kürzel bleiben), damit der Titel lesbar bleibt.
+            ("capture_button", not (minimal and getattr(self, "_header_tight", False)), (0, 8)),
             ("search_button", True, (0, 8)),
             ("sidebar_toggle_button", True, (0, 8)),
             ("timer_button", bool(getattr(self, "_timer_indicator_visible", False)), (0, 8)),
@@ -42927,6 +42938,8 @@ class ListApp:
     def show_header_overflow_menu(self, event=None):
         """Die bei schmalem Fenster ausgeblendeten Aktionen als Menü."""
         menu = self._new_themed_popup_menu()
+        if not self.capture_button.winfo_manager():
+            menu.add_command(label="Schnellerfassung …", command=self.show_quick_capture)
         menu.add_command(label="Drucken und PDF …", command=self.show_print_dialog)
         menu.add_command(label="Änderungsverlauf", command=self.open_history_view)
         menu.add_command(label="Einstellungen …", command=self.show_settings_dialog)
@@ -43293,7 +43306,12 @@ class ListApp:
                     # einem Größenwechsel kürzte der Titel sonst mit der
                     # alten Breite der Kennzahlen.
                     available -= self.packed_width(widget) + gap
-            available = max(self.HEADER_TITLE_MIN_WIDTH, available)
+            # Gekürzt wird auf den tatsächlich freien Platz. Neben der
+            # durchgehenden Seitenleiste (3.50) blieben dem Titel unter Windows
+            # bei 860 × 700 weniger als die frühere Untergrenze von 140 px; der
+            # darauf gekürzte Titel wurde dann von pack abgeschnitten statt
+            # sauber mit „…“ gekürzt (Windows-Vollprüfung 02.11.2026).
+            available = max(0, available)
             # Die Messschrift folgt der Schrift des Titels. Vorher blieb sie
             # nach einem Wechsel der Schriftgröße auf dem alten Stand, und der
             # große Titel wurde mit der kleinen Breite gekürzt – er ragte dann
