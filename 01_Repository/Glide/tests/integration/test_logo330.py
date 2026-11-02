@@ -11,6 +11,7 @@
 import importlib.machinery
 import importlib.util
 import os
+import subprocess
 import sys
 import tempfile
 import zipfile
@@ -18,6 +19,11 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 sys.dont_write_bytecode = True
+
+cold = subprocess.run([sys.executable, "-B", str(Path(__file__).with_name("start_font_probe.py")),
+                       str(REPO / "src/glide/app.pyw")], capture_output=True, text=True, timeout=180)
+assert cold.returncode == 0, cold.stdout + cold.stderr
+print("Frischer Appstart:", cold.stdout.strip())
 
 with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
     os.environ["GLIDE_DATA_DIR"] = ordner

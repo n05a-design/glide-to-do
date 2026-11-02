@@ -16,6 +16,8 @@ Arbeitsnachweis der laufenden Fertigstellung. Endmatrix und Artefakthashes werde
 
 - Vollmatrix auf Quelle `557331e`: Mac (108 Integrationssuiten) und Linux/Xvfb grün; Windows-Nachlauf zugeordnet. Ergänzende Fokusprüfung war gegen diesen Stand rot: Ziehen aus fremdem Fokus erreichte Escape nicht. Griff setzt nun den Editorfokus; echte Escape-Gegenprobe und bestehende Blockaktionen grün. Der korrigierte Appstand erhält eine eigene Endmatrix und eigene Pakete.
 
+- Quelle `6e4cff5`: 125 ausgeführte Mac-Schritte und alle 108 Integrationssuiten grün; separate native Kern-/Getter-/Paketstartproben grün, Linux-Vollmatrix grün. Sichtkontrolle des echten Pakets fand danach den Kaltstart-Schriftcache und überbreite System-Zählerspalten. Frischer `main()`-Gegenfall vorher rot, mit vorgezogener Schriftregistrierung und begrenzter Titelspalte grün. Diese Korrektur erhält erneut eigene Endmatrix und Pakete; die vorherigen Belege werden nicht umetikettiert.
+
 ## Prüfgrenzen
 
 Menschliche Prüfung durch den Inhaber folgt anschließend. Screenreader ist bis Bedarf zurückgestellt. Der datierte Windows-Nachweis nebenan gilt für den vorherigen Apphash; der neue Endstand wird separat geprüft. Historische WA-41A/B-Befunde bleiben erhalten und werden nicht durch grüne Gegenläufe als ursächlich behoben bezeichnet.

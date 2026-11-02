@@ -37264,6 +37264,9 @@ class ListApp:
             tree.column("count", width=width, minwidth=width)
             if tree.winfo_width() > 1:
                 tree.column("#0", width=max(50, tree.winfo_width() - width), minwidth=50)
+                if tree is self.system_listbox:
+                    tree.column("title", width=max(30, tree.winfo_width() - width
+                                                   - int(tree.column("icon", "width")) - 2))
 
     def sidebar_row_icon(self, row):
         """Symbol einer Seitenleistenzeile.
@@ -66956,6 +66959,8 @@ def main():
     glide_diagnostics.start_session(APP_VERSION)
     try:
         set_windows_app_user_model_id()
+        # Aqua legt seinen Schriftbestand beim ersten Tk-Interpreter fest.
+        register_private_fonts()
         root = tk.Tk()
         # Mindestversion vor dem Öffnen eines Bestands bewahren.
         stufe, meldung = glide_runtime.tk_status(tk.TkVersion)
