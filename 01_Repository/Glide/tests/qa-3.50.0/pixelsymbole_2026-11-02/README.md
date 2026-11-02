@@ -1,6 +1,6 @@
 # Pixelsymbole – Glide 3.50.0, 02.11.2026
 
-Zwei Nutzeraufträge: Abstand eigener Symbole zum Seitenleistentext korrigieren; Seitentitel bündig zum Fließtext halten und ein Symbol links davor anzeigen, ohne den Titel zu verschieben. Aktueller Aufgabenstand im [Plan §21.46](../../../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2146-pixelsymbole-seitenleistenabstand-und-feste-titelkante).
+Zwei Nutzeraufträge: Abstand eigener Symbole zum Seitenleistentext korrigieren; Seitentitel bündig zum Fließtext halten und ein Symbol links davor anzeigen, ohne den Titel zu verschieben. Aufgabe und Abgrenzung im [Plan §21.46](../../../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2146-pixelsymbole-seitenleistenabstand-und-feste-titelkante).
 
 ## Umsetzung
 
