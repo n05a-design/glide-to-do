@@ -61,7 +61,16 @@ with tempfile.TemporaryDirectory(prefix="glide-fortsetzung-") as directory:
         point["text"] = "Retry"
         written = Path(mod.SAVE_FILE).read_bytes()
         activity = copy.deepcopy(app._activity_item_signatures)
-        with patch.object(app, "write_json_atomic", side_effect=OSError("Test: gesperrt")):
+        # Nur der Bestand scheitert. Fällt der Aufruf auf einen Sekundenwechsel,
+        # erneuert `refresh_data_lock` vorher glide.lock über dieselbe Funktion;
+        # ein pauschaler Fehler träfe dann die Sperre statt des Schreibwegs.
+        write_json_atomic = app.write_json_atomic
+
+        def gesperrt(path, payload):
+            if path == mod.SAVE_FILE:
+                raise OSError("Test: gesperrt")
+            return write_json_atomic(path, payload)
+        with patch.object(app, "write_json_atomic", side_effect=gesperrt):
             assert not app.save_items(show_error=False, changed_list_ids={first["id"]})
         assert Path(mod.SAVE_FILE).read_bytes() == written
         assert app._saved_comparison_parts is None and app.dirty
