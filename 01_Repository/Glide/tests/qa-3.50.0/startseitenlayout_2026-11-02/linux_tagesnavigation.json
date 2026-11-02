@@ -1,0 +1,17 @@
+{
+  "app_sha256": "067e683bd37ac7a1974a9991f82e37195a90f62b501342626404bd9c629d9267",
+  "faelle": {
+    "home_tagesnavigation": {
+      "ok": true,
+      "befund": "Tag vor/zurück/Datum/Heute, separate Plan-/Fälligkeitsbilanz, Auswahlgrenze, Abbruch, readonly und Bestandswechsel ohne Aufgaben-/Undo-Wirkung",
+      "runtime": {
+        "python": "3.14.8",
+        "platform": "linux",
+        "tk": "9.1.0"
+      },
+      "dauer_s": 2.503
+    }
+  },
+  "fehler": [],
+  "laufender_fall": null
+}

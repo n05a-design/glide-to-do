@@ -2,20 +2,9 @@
 
 Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Oberflächenkorrekturen 02.11.2026:** Große Titel 24 → 22; Block-Einfügemarke auf Text-/Zielkante; Ansichtsbuttons als benannte Symbole; vollständig sichtbare Zeilenaktionen. Hintergrundwechsel meldet aktiven Schreibschutz. Die ungeklärte Sitzung von 16:04 ist belegt, ihre Abbruchursache weiterhin offen; echte Daten und Wiederanlaufsperre blieben unverändert. [Aktuelle Prüfung und Liefergrenzen](tests/qa-3.50.0/oberflaeche_2026-11-02/README.md). Frühere UI-Nachweise gelten ihren damaligen Quellständen.
-
-**Pixelsymbole 02.11.2026:** Eigene Symbole in Seitenleistenbäumen mit 8 px Abstand; Seitentitel bleiben bündig zum Fließtext, Symbol separat links im Leserand. Aktuelle Prüfung, Python-Fassung und native Mac-Lieferung im [Nachweis](tests/qa-3.50.0/pixelsymbole_2026-11-02/README.md); Windows-EXE bleibt beim ursprünglichen Release.
-
-**Abstandsnachlauf 02.11.2026:** Oben mehr Raum, seitlich/unten weniger Rand; Quelle, Python-Fassung und lokale eigenständige Mac-App aktualisiert. Windows-EXE weiterhin ursprünglicher 3.50-Release; neue Python-Fassung plattformübergreifend nutzbar. [Maße, Prüfungen und Liefergrenzen](tests/qa-3.50.0/aussenabstaende_2026-11-02/README.md). Kein neuer öffentlicher Release.
-
-**3.50-Fertigstellung, 02.11.2026:** Erster öffentlicher Stand (intern öffentliche erste Beta). Neue UI-Funktionen, Python-Abgleich und tatsächliche Paket-/Prüfergebnisse im [aktuellen Nachweis](tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Frühere datierte Absätze beschreiben ihren damaligen Stand. Screenreader-Abnahme ist bis Bedarf zurückgestellt; menschliche Prüfung folgt anschließend.
-
-
-**Abschlussabgleich 02.11.2026:** Quelle, Python/Showcase und eigenständige Windows-/macOS-Pakete tragen 3.50.0; Hashabgleich und Mac-Ad-hoc-Signatur erneut geprüft. Veraltete Liefer-/Entscheidungsangaben in Roadmap und Index korrigiert. Appweite Architektur-/Performancearbeiten, Abhängigkeitsaktualisierungen und menschliche Abnahme sind weiterhin getrennte Restvorhaben. [Prüfung und tatsächliche Grenzen](tests/qa-3.50.0/abschlussabgleich_2026-11-02/README.md).
-
 Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Sie läuft lokal mit Python 3.14 und Tk 9 (Tk 8.6 eingeschränkt), braucht weder Konto noch Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
-> **Projektstatus:** Glide **3.50.0**, Aufgabenformat 26, Erster öffentlicher Stand (öffentliche erste Beta). Hintergrundfarben, volle Seitenleiste und Blockziehen ergänzen die bisherigen Funktionen. Tatsächliche Lieferungen, Tests und verbleibende technische Grenzen stehen im aktuellen QA-Nachweis. Screenreader ist bis Bedarf zurückgestellt; menschliche Prüfung folgt nach der technischen Fertigstellung.
+> **Projektstatus:** Glide **3.50.0**, Aufgabenformat 26, Erster öffentlicher Stand (öffentliche erste Beta). Die aktuellen UI-Nachläufe umfassen kleinere Titel, passende Symbolabstände, Blockziehen, Labels in der Kartenecke, adaptive Hinweise und eine aufgeräumte Werkzeugzeile. [Geprüfter Stand, Lieferungen und verbleibende Arbeiten](tests/qa-3.50.0/gesamtvalidierung_2026-11-02/README.md). Menschliche Bedien-/DPI-Abnahme bleibt getrennt; Reader nach D58 bis Bedarf zurückgestellt.
 
 Funktionsumfang im Überblick: [Projekt-README](../../README.md#was-glide-kann); Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md); Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 
@@ -27,7 +16,7 @@ Voraussetzung ist Python mit Tk; zusätzliche Laufzeitpakete sind nicht nötig.
 python3 src/glide/app.pyw          # Windows: python src\glide\app.pyw
 ```
 
-Eigenständige 3.50-Pakete: Windows unter `build/windows/Glide-3.50.0/Glide.exe`, macOS unter `build/macos/Glide.app` bzw. im Archiv `Glide-3.50.0-macos-arm64.tar.gz`. Das TAR nativ entpacken, damit POSIX-Links und Dateimodi erhalten bleiben. Tatsächliche Bereitstellung und SHA-256 im [aktuellen QA-Nachweis](docs/07_QA_BERICHT.md). Die [Paketierung](packaging/README.md#eigenständige-entwicklungspakete-paket-7) beschreibt den reproduzierbaren Bau.
+Eigenständige 3.50-Pakete: Windows unter `build/windows/Glide-3.50.0/Glide.exe`, macOS unter `build/macos/Glide.app`. Die ursprünglichen öffentlichen Archive desselben Versionsnamens tragen den damaligen Stand; aktuelle UI-Nachläufe liegen getrennt unter `build/<Plattform>/Kandidaten`. Das Mac-TAR nativ entpacken, damit POSIX-Links und Dateimodi erhalten bleiben. Tatsächliche Bereitstellung und SHA-256 im [aktuellen QA-Nachweis](docs/07_QA_BERICHT.md). Die [Paketierung](packaging/README.md#eigenständige-entwicklungspakete-paket-7) beschreibt den reproduzierbaren Bau.
 
 Die Ressourcen unter `src/glide/resources` müssen neben der Anwendung liegen. Startbare Lieferfassung: `07_Python-Versionen/Schnellstart.pyw`. Unter macOS lässt sich ein Entwicklungsbundle bauen (nutzt das installierte Python, nicht zur Weitergabe):
 

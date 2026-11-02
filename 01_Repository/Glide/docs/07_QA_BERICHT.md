@@ -2,6 +2,12 @@
 
 Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
+**Aktueller Prüfstand nach Claudes UI-Runde:** Die gewählten Funktionen und jüngsten Oberflächenänderungen sind im Code vorhanden. Die [Gesamtvalidierung](../tests/qa-3.50.0/gesamtvalidierung_2026-11-02/README.md) führt den eingefrorenen nativen Volllauf, die aktuelle Grundstufe, Handbuch-/Roadmapabgleich und konkrete Lieferhashes zusammen. Maßgeblicher Restumfang in [Plan §21.51](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2151-gesamtvalidierung-nach-claudes-ui-runde). Die weiter unten datierten QA-Nachweise beziehen sich auf ihre ursprünglichen Quell- und Testbytes; sie sind keine zusätzliche aktuelle Gesamtabnahme.
+
+## Datierte Nachweise vor der Gesamtvalidierung
+
+**Werkzeugzeile, Pinnwandgrund und Ansichtssymbole 02.11.2026:** Neuer Fall `werkzeugzeile` (Hell/Dunkel × 1280/860 px über Liste, Tabelle, Pinnwand, Seite) grün; Abstand 1 → 11 px, Umschalter ganz rechts, Pinnwand auf Kartenfarbe. Inhaltskante 128 px bei 1280 × 800, 15-%-Prüfung um den verlangten Abstand erweitert. [Belege](../tests/qa-3.50.0/werkzeugzeile_2026-11-02/README.md).
+
 **Hinweise bei schmaler Breite 02.11.2026:** Neuer Fall `hinweisplatz` (Liste, Tabelle, Pinnwand, Seite bei 1280/860 px und im Kompaktmodus) grün, gegen die vorherige Fassung gezielt rot; Unit-Test der Hinweisregel. [Belege](../tests/qa-3.50.0/hinweisplatz_2026-11-02/README.md).
 
 **Labels in der Kartenecke 02.11.2026:** Labelchips von Seite, Liste und Ordner oben rechts in der Inhaltskarte; neuer Fall `eckenlabels` (Liste, Tabelle, Pinnwand, Ordner, Seite bei 1280/860 px, schmale und volle Lesebreite) ohne Überdeckung grün. Die schlankere Kopfhöhe stellt B05 (Logo-Grundlinie) und die 15-%-Regel bei 1280 × 800 wieder her, die nach dem Abstandsnachlauf rot waren. [Belege und Grenzen](../tests/qa-3.50.0/eckenlabels_2026-11-02/README.md).

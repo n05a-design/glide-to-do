@@ -374,6 +374,15 @@ class Prueflauf:
                                         text=True, encoding="utf-8", errors="replace",
                                         timeout=self.timeout)
         except (OSError, subprocess.TimeoutExpired) as exc:
+            if isinstance(exc, subprocess.TimeoutExpired):
+                # Der Wächter hält das Protokoll lokal. Auch die hochgeladene
+                # Logablage braucht den letzten Fall und seine Stackausgabe.
+                output = "".join(part.decode("utf-8", errors="replace") if isinstance(part, bytes)
+                                 else (part or "") for part in (exc.output, exc.stderr))
+                if self.logdir:
+                    (self.logdir / f"{name}.log").write_text(output, encoding="utf-8")
+                if output:
+                    print(output[-8000:], flush=True)
             self.meldung(name, "fehlgeschlagen", str(exc))
             return False
         output = result.stdout + result.stderr

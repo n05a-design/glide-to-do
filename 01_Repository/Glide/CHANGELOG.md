@@ -4,6 +4,14 @@
 
 Intern: öffentliche erste Beta. Die Änderungen vom 31.10. und 01.11. sind in diesem Stand enthalten.
 
+- Linux-Startseite: Endlosschleife beim Tageswechsel in schreibgeschütztem Bestand korrigiert. Umbruchtexte beeinflussen die Kartenhöhe, ohne die Rasterbreite wiederholt zu verändern. [Reproduktion und Prüfung](tests/qa-3.50.0/startseitenlayout_2026-11-02/README.md).
+
+- Prüfdiagnose: Suite-Timeouts verlieren ihre Teilprotokolle nicht mehr; Arbeitsmodi schreiben Einzelfall/Phase/Dauer fortlaufend und sichern Stacktraces, ohne Grenzen oder Assertions zu ändern. Der dabei lokalisierte Linux-Layoutfehler ist im Startseiten-Nachlauf unten korrigiert. [Nachweis](tests/qa-3.50.0/timeoutdiagnose_2026-11-02/README.md).
+
+- Bestandsvalidierung nach Claudes UI-Runde: aktuelles Handbuch und Einstiege auf Ecklabels, Hinweisplatz, Werkzeugzeile/Pinnwandgrund und Seitenfuß abgeglichen; gestartete technische Restvorhaben, neuere Pins und echte Lieferstände getrennt erfasst. Eingefrorene Code-/Vollprüfung und Gittransport im [Nachweis](tests/qa-3.50.0/gesamtvalidierung_2026-11-02/README.md). Keine neue Produktversion.
+
+- Werkzeugzeile, Pinnwand und Ansichtssymbole 02.11.: 10 px Abstand zwischen Eingabe-/Suchzeile bzw. Seitenwerkzeugen und der Inhaltskarte in allen Ansichten (vorher 0–1 px). Die Pinnwand liegt wie Liste und Tabelle auf der Kartenfarbe statt auf dem Fensterhintergrund. Die drei Ansichtssymbole stehen immer ganz rechts, weitere Knöpfe wie „Anzeige“ oder „Spalten“ links davon. Im Seitenfuß stehen „Erwähnt ohne Verweis …“ und die Statusmeldung (etwa „Schreibgeschützter Bestand“) in einer Zeile. [Prüfung](tests/qa-3.50.0/werkzeugzeile_2026-11-02/README.md).
+
 - Hinweise bei schmaler Breite 02.11.: Sobald das Glide-Logo im Kopf der Fensterbreite weicht, und im Kompaktmodus erscheinen keine Bedienhinweise mehr – in Liste, Tabelle, Pinnwand, Seite, Nebenansicht, Heute und Startseite. Der Inhalt bekommt den Platz; die Auswahlzahl der Pinnwand bleibt. Der Schalter in den Einstellungen bleibt unverändert und gilt bei breitem Fenster wie bisher. [Prüfung](tests/qa-3.50.0/hinweisplatz_2026-11-02/README.md).
 
 - Labels in der Kartenecke 02.11.: Die Labels einer geöffneten Seite, Liste oder eines Ordners stehen oben rechts in der Ecke der Inhaltskarte statt unter den Kopfknöpfen. Listen, Ordner, Tabelle, Pinnwand und Notizen halten dafür oben Platz frei, nur wenn Labels zugewiesen sind; auf Seiten weicht der Titel rechts aus. Nebenbei behoben: In voller Lesebreite und in schmalen Fenstern folgte der Umbruch des Seitentitels einer Größenänderung nicht, weil er nur bei geändertem Rand neu gesetzt wurde. [Prüfung](tests/qa-3.50.0/eckenlabels_2026-11-02/README.md).

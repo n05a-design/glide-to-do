@@ -1,0 +1,22 @@
+{
+  "lauf": 41525034740,
+  "url": "https://github.com/n05a-design/glide-to-do/actions/runs/41525034740",
+  "commit": "47bfced",
+  "app_sha256": "067e683bd37ac7a1974a9991f82e37195a90f62b501342626404bd9c629d9267",
+  "ergebnis": "success",
+  "jobs": {
+    "Grundstufe (Linux, Python 3.14, Tk 8.6)": "success",
+    "Vollprüfung (Linux/Xvfb, eigene Tk 9.1)": "success",
+    "Vollprüfung (Windows x64, eigene Tk 9.1)": "success",
+    "Eigenständiges Paket (Windows x64, PyInstaller 6.22.3)": "success"
+  },
+  "uebersprungen": [
+    "UI-Diagnose (Windows)",
+    "Tk 9.1 und NVDA (Windows)",
+    "Tk 9.1, AT-SPI und Orca (Linux)"
+  ],
+  "vorlaeufe": {
+    "41498060642 (PR #55, 6acb117)": "Linux Timeout test_arbeitsmodi, Windows test_logo330 – beide hier behoben",
+    "41509666691 (c81a769)": "Linux Timeout – Ursache Startseitenumbruch, behoben in eda9278"
+  }
+}

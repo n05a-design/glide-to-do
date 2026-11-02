@@ -842,7 +842,9 @@ def flaeche(app_path, report, *, gross=False, tempo=False):
                              standardfont=root.tk.call("font", "actual", "TkDefaultFont")),
                         ensure_ascii=False, sort_keys=True), flush=True)
                     if width == 1280 and (not args.gross):
-                        assert content_y <= 120, (name, content_y, '15 Prozent überschritten')
+                        # 15 % Bedienfläche plus der ausdrücklich verlangte Abstand
+                        # zwischen Werkzeugzeile und Inhaltskarte (Inhaber 02.11.2026).
+                        assert content_y <= 120 + app.CONTENT_TOOLBAR_GAP, (name, content_y, '15 Prozent überschritten')
                     out.append(record)
             assert not errors, errors
         finally:

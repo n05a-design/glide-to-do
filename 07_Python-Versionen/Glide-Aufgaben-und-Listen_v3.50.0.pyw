@@ -5549,6 +5549,7 @@ class ItemWorkspace:
                 app.pack_relative(app.plan_day_grid_button, app.plan_day_next_button, side="right", padx=(8, 0))
                 if getattr(app, "plan_day_mode_button", None) is not None:
                     app.pack_relative(app.plan_day_mode_button, app.plan_day_grid_button, side="right", padx=(8, 0))
+        app.pin_view_switch_right()
         app.sync_view_switch_buttons()
         app.sync_detail_button()
         if self.visible:
@@ -6070,8 +6071,10 @@ class ItemWorkspace:
             self.render_column_options()
         frame = tk.Frame(self.body, bg=app.theme["card"])
         frame.pack(fill="both", expand=True)
-        self.canvas = tk.Canvas(frame, bg=app.theme["bg"], highlightthickness=1,
-                                highlightbackground=app.theme["line"], highlightcolor=app.theme["selection"],
+        # Die Fläche liegt wie Liste und Tabelle auf der Kartenfarbe, nicht auf
+        # dem Fensterhintergrund (02.11.2026); ein Rand erscheint nur mit Fokus.
+        self.canvas = tk.Canvas(frame, bg=app.theme["card"], highlightthickness=1,
+                                highlightbackground=app.theme["card"], highlightcolor=app.theme["selection"],
                                 takefocus=True, xscrollincrement=12, yscrollincrement=12)
         vertical = app._attach_field_scrollbar(frame, self.canvas)
         # dieselbe gezeichnete Leiste wie überall sonst.
@@ -6879,10 +6882,10 @@ class ItemWorkspace:
             farbe = app.theme.get(area["color"], app.theme["clear"])
             x, y, w, h = area["x"], area["y"], area["w"], area["h"]
             tags = ("area", "area:" + area["id"])
-            canvas.create_rectangle(x, y, x + w, y + h, fill=mix_hex_colors(app.theme["bg"], farbe, 0.08),
+            canvas.create_rectangle(x, y, x + w, y + h, fill=mix_hex_colors(app.theme["card"], farbe, 0.08),
                                     outline=farbe, width=3 if area["id"] == ausgewaehlt else 2, tags=tags)
             canvas.create_rectangle(x, y, x + w, y + self.AREA_HEADER,
-                                    fill=mix_hex_colors(app.theme["bg"], farbe, 0.22), outline="", tags=tags)
+                                    fill=mix_hex_colors(app.theme["card"], farbe, 0.22), outline="", tags=tags)
             canvas.create_text(x + 12, y + self.AREA_HEADER / 2, anchor="w", font=app_font(10, "bold"),
                                fill=app.theme["text"], tags=tags,
                                text=self.truncate_lines(area["name"], tkfont.Font(font=app_font(10, "bold")),
@@ -7422,7 +7425,7 @@ class ItemWorkspace:
             return (math.floor((breite + a) / a) + 2) * (math.floor((hoehe + a) / a) + 2)
         while art == "dots" and reihen(abstand) > self.BACKGROUND_MAX_MARKS:
             abstand *= 2
-        farbe = mix_hex_colors(self.app.theme["bg"], self.app.theme["muted"], 0.35)
+        farbe = mix_hex_colors(self.app.theme["card"], self.app.theme["muted"], 0.35)
         start_x = math.floor(links / abstand) * abstand
         start_y = math.floor(oben / abstand) * abstand
         rechts, unten = links + breite + abstand, oben + hoehe + abstand
@@ -9981,8 +9984,13 @@ class PageEditor(RichNoteEditor):
             self._toolbar_buttons[label] = knopf
             toolbar.add(knopf)
         app.add_tooltip(self._toolbar_buttons['Mehr'], 'Weitere Aktionen dieser Seite, durchsuchbar')
-        self.status = tk.Label(self, text='', bg=theme['card'], fg=theme['muted'], font=app_font(9), anchor='w')
-        self.status.pack(side='bottom', fill='x')
+        # Fußzeile (02.11.2026): „Erwähnt ohne Verweis …“ und die Statusmeldung
+        # (Speicherstand, Schreibschutz, Fundstellen) stehen in einer Zeile;
+        # vorher lag der Status als eigene Zeile darunter.
+        self._foot_row = tk.Frame(self, bg=theme['card'])
+        self._foot_row.pack(side='bottom', fill='x', padx=28)
+        self.status = tk.Label(self._foot_row, text='', bg=theme['card'], fg=theme['muted'], font=app_font(9),
+                               anchor='w', justify='left')
         self._cover_host = tk.Frame(self, bg=theme['card'])
         self._cover_host.pack(fill='x')
         # Der Titel ist der Listentitel (kein neues Datenfeld); ein Klick oder
@@ -10000,12 +10008,14 @@ class PageEditor(RichNoteEditor):
             self.create_page_head()
         self._live_host = tk.Frame(self, bg=theme['card'])
         self._live_host.pack(side='bottom', fill='x')
+        # Die aufgeklappten Fundstellen öffnen sich über der Fußzeile.
         self._mentions_host = tk.Frame(self, bg=theme['card'])
-        self._mentions_host.pack(side='bottom', fill='x', padx=28)
+        self._mentions_host.pack(side='bottom', fill='x', padx=28, before=self._live_host)
         self._mentions_open = False
         self._mentions_button = app._make_dialog_button(
-            self._mentions_host, 'Erwähnt ohne Verweis …', self.toggle_mentions, 'muted', width=250, height=28)
-        self._mentions_button.pack(anchor='w')
+            self._foot_row, 'Erwähnt ohne Verweis …', self.toggle_mentions, 'muted', width=250, height=28)
+        self._mentions_button.pack(side='left', anchor='w')
+        self.status.pack(side='left', fill='x', expand=True, padx=(12, 0))
         self._mentions_rows = tk.Frame(self._mentions_host, bg=theme['card'])
         self._features_signature = None
         self.live_tree = None
@@ -16902,6 +16912,9 @@ class ListApp:
     # zwischen Seitenleiste und Inhaltsbereich, damit die Kacheln auf allen
     # Seiten gleich viel Rand haben.
     HOME_EDGE_GAP = glide_design.SPACING[18]
+    # Luft zwischen der Zeile mit Eingabe, Suche und Ansichtssymbolen (bzw. der
+    # Werkzeugleiste einer Seite) und der Inhaltskarte darunter (02.11.2026).
+    CONTENT_TOOLBAR_GAP = glide_design.SPACING[10]
     # Unterer Rand von Seitenleiste und Inhaltsbereich. Der Inhaltsbereich
     # trägt ihn selbst; so enden beide Spalten in jeder Ansicht auf derselben
     # Linie – auch dort, wo Pinnwand, Zeichenfläche oder Verlauf die untere
@@ -28389,9 +28402,11 @@ class ListApp:
 
         def label(parent, text, size=11, bold=False, color="text", surface="card",
                   pady=(0, 6), anchor="w", wrap=True):
+            # Der Umbruch bestimmt nur die Höhe. Seine gemessene Textbreite
+            # darf die Rasterspalte nicht erneut verbreitern (X11: 1-px-Zyklus).
             widget = _ui.make(tk.Label, parent, text=text, bg=theme[surface], fg=theme[color],
                               font=app_font(size, "bold" if bold else "normal"),
-                              justify="left", anchor=anchor)
+                              justify="left", anchor=anchor, width=1 if wrap else 0)
             initial_width = getattr(parent, "_home_build_width", 0)
             if wrap and initial_width > 1 and not hasattr(widget, "_wrap_seen"):
                 widget._wrap_seen = max(100, initial_width - 4)
@@ -42607,7 +42622,9 @@ class ListApp:
             radius=18,
             padding=glide_design.SPACING[6],
         )
-        self.list_frame_outer.pack(fill="both", expand=True)
+        # Abstand zwischen Eingabe-/Suchzeile und Inhaltskarte (Inhaberauftrag
+        # 02.11.2026): Vorher stieß das Suchfeld fast an die Karte (1 px).
+        self.list_frame_outer.pack(fill="both", expand=True, pady=(self.CONTENT_TOOLBAR_GAP, 0))
 
         # Labels der geöffneten Seite, Liste oder des Ordners (02.11.2026):
         # oben rechts in der Ecke der Karte, über `place` und damit unabhängig
@@ -48086,6 +48103,28 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         except tk.TclError:
             pass
         widget.pack(**optionen)
+
+    def pin_view_switch_right(self):
+        """Liste · Tabelle · Pinnwand stehen immer ganz rechts in der Suchzeile.
+
+        Inhaberauftrag 02.11.2026: weitere Knöpfe (Anzeige, Spalten,
+        Tagebuchfilter …) erscheinen links davon. Bei `side="right"` steht das
+        zuerst gepackte Element am weitesten rechts; der Umschalter kommt
+        deshalb an die erste Packstelle der Zeile. Rechts kein Abstand, damit
+        er auf der Flucht der Kopfknöpfe endet.
+        """
+        umschalter = getattr(self, "view_switch", None)
+        zeile = getattr(self, "search_frame", None)
+        if umschalter is None or zeile is None:
+            return
+        try:
+            if umschalter.winfo_manager() != "pack":
+                return
+            reihe = zeile.pack_slaves()
+            if reihe and reihe[0] is not umschalter:
+                umschalter.pack_configure(before=reihe[0])
+        except tk.TclError:
+            return
 
     def search_row_anchor(self):
         """Wovor die rechten Knöpfe der Suchzeile gepackt werden.
