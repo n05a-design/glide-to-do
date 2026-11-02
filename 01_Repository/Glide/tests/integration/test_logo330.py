@@ -121,14 +121,25 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
         assert klein.width() == 16 and klein.height() == 16
 
         # --- Kopfzeile bei breitem Fenster ------------------------------------
-        app.set_home_view()
+        normal = max((eintrag for eintrag in app.lists if eintrag.get("list_kind", "tasks") == "tasks"
+                      and not app.is_inbox_list(eintrag)), key=lambda eintrag: len(eintrag.get("items", [])))
+        app.set_active_list(normal["id"])
         ruhe(14)
         assert app.header_density() != "minimal"
         zeichen, titel = lage(app.header_logo), lage(app.title_label)
         assert zeichen and titel, (zeichen, titel)
         assert zeichen[0] == lage(app.content_frame)[0], "Logo auf der Flucht des Inhalts"
         assert zeichen[0] + zeichen[2] + app.HEADER_LOGO_GAP <= titel[0], "Titel rückt nach rechts"
-        assert zeichen[3] == app.header_logo_height() and zeichen[3] >= 40, zeichen
+        # B05 folgt Titel und Unterzeilen-Grundlinie. Nach den ausdrücklich
+        # verkleinerten Titeln ist die frühere feste 40-px-Grenze überholt.
+        assert zeichen[3] == app.header_logo_height(), zeichen
+        chips = [w for w in app.page_chip_row.winfo_children() if w.winfo_ismapped()]
+        assert chips, "Unterzeile ohne Kennzahlen"
+        font = mod.tkfont.Font(root=root, font=mod.app_font(mod.glide_design.FONT_SIZES["caption"], "bold"))
+        baseline = chips[0].winfo_rooty() + font.metrics("ascent")
+        bottom = app.header_logo.winfo_rooty() + zeichen[3]
+        assert abs(bottom - baseline) <= 2, ("Logo-Grundlinie", bottom, baseline)
+        assert abs(zeichen[2] / zeichen[3] - logo.aspect()) < 0.06, zeichen
         assert zeichen[1] + zeichen[3] <= lage(app.header_frame)[1] + app.header_frame.winfo_height(), \
             "Logo bleibt in der Kopfzeile"
         assert nahe(logo_farbe(app.header_logo), app.header_logo_color()), (logo_farbe(app.header_logo),
@@ -136,13 +147,11 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
         assert mod.contrast_ratio(app.header_logo_color(), app.theme["bg"]) >= 3.0
 
         # Fest in jeder Ansicht.
-        normal = max((eintrag for eintrag in app.lists if eintrag.get("list_kind", "tasks") == "tasks"
-                      and not app.is_inbox_list(eintrag)), key=lambda eintrag: len(eintrag.get("items", [])))
         seite = app.new_page_from_markdown("# Bericht\n\nText")
         zeichnung = app.new_list_object("Zeichnung", [], list_kind="drawing")
         app.lists.append(zeichnung)
         app.save_items()
-        for oeffnen in (lambda: app.set_active_list(normal["id"]), app.open_board_view, app.open_list_view,
+        for oeffnen in (app.set_home_view, lambda: app.set_active_list(normal["id"]), app.open_board_view, app.open_list_view,
                         lambda: app.set_active_list(seite["id"]), lambda: app.set_active_list(zeichnung["id"]),
                         app.set_today_view, app.set_trash_view, app.set_home_view):
             oeffnen()
@@ -260,5 +269,5 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
             pass
 
 print("test_logo330: OK; Logo-Master einfarbig und einfärbbar, Logo links neben Titel ab der ersten "
-      "Breitenstufe, fest in acht Ansichten, Akzentfarbe in fünf Designs, Rückfall ohne SVG, "
+      "Breitenstufe, fest in allen geprüften Ansichten, Akzentfarbe in fünf Designs, Rückfall ohne SVG, "
       "„Über Glide“, Programmsymbol und Lupe.")

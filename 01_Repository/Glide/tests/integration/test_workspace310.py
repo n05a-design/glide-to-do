@@ -197,7 +197,8 @@ with tempfile.TemporaryDirectory(prefix="glide-workspace310-") as folder:
                 root.geometry(size); root.update()
                 assert w.canvas.winfo_height() >= 100, (size, w.canvas.winfo_height())
                 assert w.canvas.winfo_width() >= 350
-                assert w.canvas.cget("bg") == app.theme["bg"]
+                # Seit 02.11.2026 wie Liste und Tabelle auf der Kartenfarbe.
+                assert w.canvas.cget("bg") == app.theme["card"]
                 w.open_tab(target["id"]); root.update()
                 assert w.detail_title.winfo_width() <= app.list_frame_outer.winfo_width()
                 w.set_mode("board"); root.update()

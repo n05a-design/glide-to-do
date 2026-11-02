@@ -2987,6 +2987,76 @@ def fall_hinweisplatz(lauf):
     return "Liste, Tabelle, Pinnwand, Seite: Hinweise bei 1280 px, keine bei 860 px und im Kompaktmodus; Schalter unverändert"
 
 
+def fall_werkzeugzeile(lauf):
+    """Abstand Werkzeugzeile ↔ Karte, Pinnwand auf Kartenfarbe, Ansichtssymbole ganz rechts."""
+    app = lauf.app
+    punkte = [app.new_item("Unterlagen prüfen"), app.new_item("Angebot")]
+    liste = app.new_list_object("Projekt", punkte)
+    app.lists.append(liste)
+    app.save_items()
+    seite, _editor = seite_anlegen(lauf)
+    karte = app.list_frame_outer
+    befunde = []
+    for design in ("light", "dark"):
+        app.set_design(design)
+        for breite in (1280, 860):
+            lauf.root.geometry(f"{breite}x800+20+20")
+            idle(lauf, 6)
+            for name, oeffnen in (("liste", lambda: (app.set_active_list(liste["id"]), app.open_list_view())),
+                                  ("tabelle", app.set_table_view), ("pinnwand", app.open_board_view)):
+                oeffnen()
+                idle(lauf)
+                feld = app.search_border
+                abstand = karte.winfo_rooty() - (feld.winfo_rooty() + feld.winfo_height())
+                assert abstand >= app.CONTENT_TOOLBAR_GAP, (design, breite, name, abstand)
+                umschalter = app.view_switch
+                assert umschalter.winfo_ismapped(), (name, "Umschalter fehlt")
+                rechts = umschalter.winfo_rootx() + umschalter.winfo_width()
+                zeile = app.search_frame.winfo_rootx() + app.search_frame.winfo_width()
+                assert rechts == zeile, (design, breite, name, "Umschalter nicht ganz rechts", rechts, zeile)
+                andere = [w for w in app.search_frame.pack_slaves()
+                          if w is not umschalter and w.winfo_ismapped() and w.winfo_rootx() >= umschalter.winfo_rootx()]
+                assert not andere, (design, breite, name, [str(w) for w in andere])
+                if name == "pinnwand":
+                    flaeche = app.workspace.canvas
+                    assert flaeche.cget("bg") == app.theme["card"], (design, flaeche.cget("bg"), app.theme["card"])
+                    assert flaeche.cget("highlightbackground") == app.theme["card"]
+                befunde.append(f"{design}/{breite}/{name}:{abstand}")
+            app.open_list_view()
+            app.set_active_list(seite["id"])
+            idle(lauf)
+            band = app.tool_band
+            if band.winfo_ismapped():
+                abstand = karte.winfo_rooty() - (band.winfo_rooty() + band.winfo_height())
+                assert abstand >= app.CONTENT_TOOLBAR_GAP, (design, breite, "seite", abstand)
+    # Spaltenknopf der Tabelle steht links vom Umschalter.
+    lauf.root.geometry("1280x800+20+20")
+    app.set_active_list(liste["id"])
+    app.set_table_view()
+    idle(lauf, 6)
+    spalten = app.table_columns_button
+    if spalten.winfo_ismapped():
+        assert spalten.winfo_rootx() + spalten.winfo_width() <= app.view_switch.winfo_rootx()
+    # Seitenfuß: „Erwähnt ohne Verweis …“ und Statusmeldung in einer Zeile (02.11.2026).
+    app.open_list_view()
+    app.set_active_list(seite["id"])
+    idle(lauf)
+    editor = app.rich_note_editor
+    editor.status.configure(text="Schreibgeschützter Bestand")
+    idle(lauf)
+    knopf, status = editor._mentions_button, editor.status
+    assert knopf.master is status.master is editor._foot_row
+    mitte = lambda w: w.winfo_rooty() + w.winfo_height() / 2
+    assert abs(mitte(knopf) - mitte(status)) <= 2, (mitte(knopf), mitte(status))
+    assert status.winfo_rootx() >= knopf.winfo_rootx() + knopf.winfo_width()
+    # Aufgeklappte Fundstellen liegen über der Fußzeile.
+    editor._mentions_button.command()
+    idle(lauf)
+    assert editor._mentions_rows.winfo_rooty() + editor._mentions_rows.winfo_height() <= editor._foot_row.winfo_rooty()
+    editor._mentions_button.command()
+    return f"{len(befunde)} Messungen: Abstand ≥ {app.CONTENT_TOOLBAR_GAP} px, Umschalter rechts, Pinnwand auf Kartenfarbe; Seitenfuß einzeilig"
+
+
 def fall_beta350(lauf):
     """3.50: gespeicherte Hintergrundfarbe, Fluchten und echter Griff-Ziehweg."""
     app, mod = lauf.app, lauf.mod
@@ -3211,7 +3281,7 @@ FAELLE = ("seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "n
           "home_tagesnavigation", "home_mehrfachfelder", "side_verweisnavigation", "dreierpaket_gestaltung",
           "home_wochenwahl", "home_faelligkeit_aufwand", "side_verweisaktionen", "side_trefferuebersicht", "side_nachschlagen", "home_fokusdauer",
           "fokus_wechseln", "side_suchverlauf", "fokus_als_naechstes",
-          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "hinweisplatz", "beta350")
+          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "hinweisplatz", "werkzeugzeile", "beta350")
 
 
 def main():
