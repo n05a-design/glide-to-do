@@ -154,6 +154,8 @@ Am 25.10.2026 zusammengeführt und gekürzt: aktuelle Standmatrix anstelle mehre
 
 ## 1. Tatsächlicher Stand
 
+**Aktuell 02.11.2026:** Quelle, Python-Fassung `07_Python-Versionen` und Showcase 3.50.0 / Format 26 bytegleich; eigenständige Pakete 3.50.0 für macOS arm64 (`~/Applications/Glide.app`, Verweis `build/macos/Glide.app`, TAR) und Windows x64 (`build/windows/Glide-3.50.0`, ZIP) geliefert und isoliert gestartet. Endstand `b2b54e7`: Mac-Tk-9.1-Vollprüfung 125/127, GitHub-Grundstufe sowie Linux-/Windows-Vollprüfung mit eigener Tk 9.1 grün. Offen ist die menschliche Prüfung durch den Inhaber. Einzelheiten im [Nachweis](../01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md) und in [Plan §21.43](Glide_Entwicklungsplan.md#2143-erster-öffentlicher-stand-3500). Die folgende Tabelle ist der datierte Stand vom 27.10.2026.
+
 **Vorheriger Lieferauftrag 26.10.2026:** „eigenständige Pakete sollen nicht weiterhin 3.42.0 sein, alles aktualisieren und prüfen.“ Danach ausdrücklich GitHub Actions mit macOS-Runner und „weiter“ beauftragt. Native Bauten und Lieferabgleich sind abgeschlossen; strenge CI-Abschlusswerte stehen im Paketnachweis. Quell-/Workflowtransport auf `codex/glide-paketabschluss-3.45.0`, kein Merge oder öffentliche Veröffentlichung.
 
 | Ebene | Tatsächlicher Stand am 27.10.2026 |

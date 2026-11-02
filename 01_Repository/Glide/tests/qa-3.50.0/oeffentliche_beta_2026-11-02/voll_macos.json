@@ -1,5 +1,5 @@
 {
-  "zeitpunkt": "2026-11-02T09:13:32",
+  "zeitpunkt": "2026-11-02T13:13:47",
   "modus": "voll",
   "python": "3.14.5 (v3.14.5:5607950ef23, May 10 2026, 07:38:09) [Clang 21.0.0 (clang-2100.0.123.102)]",
   "plattform": "darwin",
@@ -13,10 +13,10 @@
     "logische_prozessoren": 8,
     "macos_version": "27.2",
     "rosetta": false,
-    "app_sha256": "8b11c8cb70f83affefcb1f7819bbe02d552ba6c682360dccbcf01bead4eaa64f"
+    "app_sha256": "2fb07ca2f6d8d119639df56511e3313e0ac94564af66ad81a2c8284899a0403b"
   },
   "exitcode": 0,
-  "pruefablauf": "~/gq/beta350/voll-final7/lauf-jrntev80/pruefablauf.json",
+  "pruefablauf": "~/gq/v350e/ab/lauf-tkax5rda/pruefablauf.json",
   "schritte": [
     {
       "schritt": "Syntax",
