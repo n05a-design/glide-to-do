@@ -1,0 +1,26 @@
+{
+    "lauf":  "w1102-0128",
+    "start":  "2026-11-02T01:28:46.4648011+01:00",
+    "ergebnis":  "gruen",
+    "schritte":  [
+                     "Frischer Klon von GitHub main",
+                     "Voraussetzungen und App-Stand pruefen",
+                     "Projektdateien aus OneDrive laden",
+                     "Nur Paket: Einfrieren ohne Volllauf",
+                     "Bauumgebung (venv, gepinnte Bauabhaengigkeiten)",
+                     "Lizenzbestand vorbereiten",
+                     "Paket bauen",
+                     "Startprobe des gebauten Pakets"
+                 ],
+    "quelle":  "github main",
+    "git_commit":  "a3506f3505c991a9bda764a8d736a569ce8ddd5a",
+    "projekt":  "C:\\gq\\q1102-0128",
+    "app_sha256":  "1582c600b83e531bdc4f8beb5587dc6e6a0b4e444cc3fcbc9bebfd041fd5042b",
+    "version":  "3.50.0",
+    "tk":  "9.1.0",
+    "eingefroren":  "C:\\gq\\w1102-0128\\pruefkopie-4_xi740i\\projekt\\01_Repository\\Glide",
+    "startprobe_exitcode":  0,
+    "paket":  "C:\\gq\\w1102-0128\\paket\\bau\\dist\\Glide\\Glide.exe",
+    "exe_sha256":  "4d818e4e1cec3fe4935b60fa7dd8bb8499601611873ac8aa734a716d6998c835",
+    "ende":  "2026-11-02T01:31:00.2593076+01:00"
+}
