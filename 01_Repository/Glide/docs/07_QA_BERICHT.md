@@ -5,6 +5,8 @@ Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentl
 **3.50-Fertigstellung, 02.11.2026:** Erster öffentlicher Stand (intern öffentliche erste Beta). Neue UI-Funktionen, Python-Abgleich und tatsächliche Paket-/Prüfergebnisse im [aktuellen Nachweis](../tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Frühere datierte Absätze beschreiben ihren damaligen Stand. Screenreader-Abnahme ist bis Bedarf zurückgestellt; menschliche Prüfung folgt anschließend.
 
 
+**Datierte Vorgeschichte:** Die folgenden früheren Sitzungsstände und Restangaben werden durch den aktuellen 3.50-Nachweis und Plan §21.43 fortgeschrieben. Sie sind keine zusätzliche aktive Aufgabenliste.
+
 **Windows-Abnahme PC-01, 02.11.2026:** Eingefrorener Volllauf mit eigener Tk 9.1 und `--zugang-nativ` auf App `1582c600…` (Windows 11, Python 3.14.7): 127 von 128 Schritten grün, nur Sichtprüfung offen. Windows-Paket 3.50.0 mit Tk 9.1 gebaut, PE-/Lizenzprüfung und Startprobe grün (Entwicklungsbau, nicht geliefert). Menschliche Abnahme und NVDA offen. [Nachweis](../tests/qa-3.50.0/windows_abnahme_2026-11-02/README.md).
 
 **Datierter technischer Abschluss 31.10.2026:** Python/Showcase und eigenständiges macOS-arm64-Paket 3.49.0 geliefert, Windows-Paket weiterhin 3.45.0. Native Tk-9.1-Matrix: 126 Schritte einschließlich aller 108 Integrationssuiten grün; Programm-, Test-, Fixture- und Ressourcenstand entsprechen dem eingefrorenen Nachweis; anschließende Anleitungspflege separat geprüft. Neue Grundstufe mit 235 Werkzeugtests und zweimal 1.082 Fachtests grün. 56 Mutationsfälle und zwölf native Accessibility-Proben grün. WA-41A/B, Windows-/Linux-Endmatrix, echte Readerketten, übrige appweite Architektur-/Performanceumfänge und Menschenabnahme bleiben offen. Native Matrix aus `t1031-164116` nach vollständigem Eingabeabgleich übernommen; eigener redundanter Nachlauf nach Ende des Speicher-Kindprozesses beendet. Kein zusätzlicher vollständiger Erfolg behauptet. [Prüf- und Liefernachweis](../tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md).
@@ -247,10 +249,12 @@ Nur das Ergebnis; Berichte und Protokolle stehen in der Git-Historie.
 Einzelpunkte: [Manuelle Prüfung](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md).
 
 - Bedienung mit echter Maus, Trackpad und Tastatur, vor allem Ziehen (Board, Seitenleiste, Stundenraster), Zeichnen, Chips der Schnelleingabe, „Heute“ und „Tag …“;
-- Migration eines echten Bestands (mit Kopie automatisch geprüft; offen bleibt die Sichtkontrolle). **3.29 nach der Umstellung nicht mehr starten**;
-- Windows-Sichtprüfung nach grünem automatischem Volllauf 3.36.0 (deckt die früheren Lieferungen mit ab); Sichtprüfung der Windows-Aufnahmen (W01, W06–W08); Linux-Desktop einschließlich JPEG-Vorschau (N08), Pixelschrift unter Windows und Linux;
-- Bildschirmleser (NVDA, VoiceOver); DPI 100/150/200 % und zwei Monitore;
+- Import und Wiederherstellung mit getrennten Testdaten; es gibt noch keinen aktiven Altbestand, daher kein eigenes Altbestands-Abnahmetor;
+- Sichtprüfung der tatsächlich gelieferten 3.50-Pakete sowie Linux-Desktop einschließlich JPEG-Vorschau und Pixelschrift;
+- DPI 100/150/200 % und zwei Monitore;
 - Druck und PDF mit und ohne Pinnwandhintergrund; flüssige Bedienung mit 500 Karten; Anhänge unter Windows (Prüfliste B13).
+
+Screenreader (VoiceOver/NVDA/Orca) ist bis Bedarf zurückgestellt und gehört nicht zur aktiven Restliste.
 
 **Gesonderte Veröffentlichungstore:** öffentliche Signatur/Notarisierung und Installer, Markenprüfung und Store-Freigabe. Die lokale Ad-hoc-Signatur ist automatisch geprüft.
 

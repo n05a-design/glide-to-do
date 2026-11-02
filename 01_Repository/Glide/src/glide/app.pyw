@@ -65818,10 +65818,20 @@ Labels, Termine und Metadaten."""
                 # posten. Unsere Menüs gehören aus Kompatibilitätsgründen zum
                 # zentralen Menübaum; ein normaler Button mit tk_popup ist hier
                 # deshalb unter Windows robuster.
-                width = tkfont.Font(font=app_font(9)).measure(label) + 24
+                width = tkfont.Font(font=app_font(9)).measure(label) + 16
                 button = self.make_button(self.custom_menubar, label, None, "muted", width=width,
                                           height=self.HEADER_CONTROL_HEIGHT, radius=10, font=app_font(9),
                                           outline=False)
+                # Seit 3.50 teilt die Kopfzeile ihre Breite mit der durchgehenden
+                # Seitenleiste. Mit dem allgemeinen Textrand von 30 px wurde
+                # „Hilfe“ bei 860 × 700 und großer Schrift gestaucht
+                # (Windows-Vollprüfung 02.11.2026). Die Menüknöpfe zeigen ihre
+                # Fläche erst beim Überfahren; 16 px Rand genügen, und mit der
+                # Schriftgröße wachsen sie weiterhin mit.
+                button.TEXT_INSET = 16
+                button.min_width = width
+                button.configure(width=width)
+                button._fit_width()
                 button.command = lambda b=button, m=menu: self._post_custom_menu(b, m)
                 button.pack(side="left", fill="y", padx=(0, 4))
                 self.custom_menu_buttons.append(button)

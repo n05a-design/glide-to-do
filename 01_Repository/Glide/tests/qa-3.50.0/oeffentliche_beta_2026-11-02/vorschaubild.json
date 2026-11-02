@@ -1,0 +1,15 @@
+{
+  "app_sha256": "8b11c8cb70f83affefcb1f7819bbe02d552ba6c682360dccbcf01bead4eaa64f",
+  "source_commit": "fbd83e78d434e0c8fd03fc948ccf4f0e54971456",
+  "file": "assets/marketing/glide-3.50-seite.png",
+  "sha256": "a9b540f3c05f755738b182615e114b362a6111ade5d2bbca1ac38da79799d818",
+  "origin": "Native Screenshot des tatsächlich gelieferten Mac-Pakets, ausschließlich künstliche separate Beispieldaten; keine simulierte Produktansicht.",
+  "checks": [
+    "Standardsymbole sichtbar",
+    "Systemzähler vollständig",
+    "Kopf auf Inhaltsflucht",
+    "Seitenleiste volle Höhe",
+    "Hintergrund und Kartenfläche weiß ohne Materialschatten"
+  ],
+  "human_acceptance": false
+}

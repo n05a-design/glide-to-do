@@ -1,0 +1,13 @@
+{
+  "exitcode": 0,
+  "source_commit": "fbd83e78d434e0c8fd03fc948ccf4f0e54971456",
+  "version": "3.50.0",
+  "app_sha256": "8b11c8cb70f83affefcb1f7819bbe02d552ba6c682360dccbcf01bead4eaa64f",
+  "canonical": "build/macos/Glide.app",
+  "resolved_target": "~/Applications/Glide.app",
+  "package_files_checked": 463,
+  "archive_sha256": "0dd5a39d1631d0fce610c8e6e6c01a3e5b9e12ea285ed85cc17fe1ecf992d0bb",
+  "archive_modes_and_symlinks_verified": true,
+  "signature": "Ad-hoc; strikte Prüfung auf dem aufgelösten nativen Bundlepfad",
+  "previous_release_preserved": "build/macos/Archiv/Glide-3.49.0.app"
+}

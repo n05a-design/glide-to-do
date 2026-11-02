@@ -8,6 +8,10 @@ Aufgaben planen, Wissen sammeln, Ideen verbinden und den Alltag festhalten: Glid
 
 [Loslegen](#loslegen) · [Was Glide kann](#was-glide-kann) · [Handbuch](01_Repository/Glide/docs/20_FUNKTIONEN.md) · [Änderungen](01_Repository/Glide/CHANGELOG.md)
 
+![Glide 3.50: Seiteneditor mit durchgehender Seitenleiste und ebener Fensterfläche](01_Repository/Glide/assets/marketing/glide-3.50-seite.png)
+
+*Echte Ansicht der Mac-App mit künstlichen Beispieldaten: dein Arbeitsplatz für Aufgaben und Gedanken.*
+
 ## Was Glide kann
 
 ### Den Tag planen und Aufgaben erledigen
@@ -58,7 +62,7 @@ Die [Funktionsübersicht](01_Repository/Glide/docs/20_FUNKTIONEN.md) beschreibt 
 
 Glide ist für **Windows, macOS und Linux** vorgesehen. Eigenständige Pakete enthalten Python und Tcl/Tk; die Python-Fassung lässt sich auf allen drei Plattformen verwenden.
 
-- **Pakete und Downloads:** [geprüfte Bauartefakte](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml). Verfügbare Artefakte und ihr tatsächlicher Prüfstand stehen im [Liefernachweis](01_Repository/Glide/docs/07_QA_BERICHT.md).
+- **Pakete und Downloads:** [Windows x64](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml) · [macOS Apple Silicon](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml). Im erfolgreichen Lauf unter „Artifacts“ das jeweilige Glide-Paket herunterladen (GitHub-Anmeldung erforderlich). Dateien, Prüfsummen und Prüfstand stehen im [Liefernachweis](01_Repository/Glide/docs/07_QA_BERICHT.md).
 - **Python-Fassung:** Repository herunterladen und mit Python 3.14 samt Tk starten. Zusätzliche pip-Pakete sind für die App nicht nötig.
 
 ```bash

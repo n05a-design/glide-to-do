@@ -110,20 +110,23 @@ Technischer Entwurf zur gelieferten Basis 3.42.0, keine Veröffentlichungsfreiga
 15. Einzelne Seiten aus Sicherungen mit Vorschau, Bildern und Aufgabenverweisen wiederherstellen.
 16. Pixel-Bildfolgen und Animationsvorschau innerhalb der Pixel-Werkstatt.
 
-**Daten und Grenzen für Store-Texte:** Datenordner frei wählbar, auch synchronisiert; Glide synchronisiert nicht selbst, Fremdbelegung führt zum Schreibschutz. Ein Bestand aus einer neueren Version öffnet schreibgeschützt; **Glide 3.29 und älter nach der Umstellung nicht mehr starten**. Erinnerungen und Systemmitteilungen nur bei laufender App. Schriften DejaVu Sans und Pixelify Sans (SIL OFL 1.1) mit Lizenztexten.
+**Daten und Grenzen für Store-Texte:** Datenordner frei wählbar, auch synchronisiert; Glide synchronisiert nicht selbst, Fremdbelegung führt zum Schreibschutz. Ein Bestand aus einer neueren Formatversion öffnet schreibgeschützt. Erinnerungen und Systemmitteilungen nur bei laufender App. Schriften DejaVu Sans und Pixelify Sans (SIL OFL 1.1) mit Lizenztexten.
 
-## Windows-Entwicklungsbau auf eigenem Gerät (3.49.0)
+<a id="windows-entwicklungsbau-auf-eigenem-gerät-3490"></a>
+
+## Windows-Entwicklungsbau auf eigenem Gerät (3.50.0)
 
 Nach grüner Windows-Matrix und mit der [eigenen geprüften Tcl/Tk-9.1-Runtime](../packaging/runtime/README.md#eigene-prüfgeräte--bau-und-auswahl-der-runtime) aus `01_Repository/Glide`. Die Konsole verwendet dieselbe reguläre x64-Python-Patchversion wie beim Runtimebau. Neue Zielordner, keine vorhandene Lieferung überschreiben:
 
 ```powershell
-python -B -m venv C:\gq\bau349-venv
-$PythonGlideBau = 'C:\gq\bau349-venv\Scripts\python.exe'
+python -B -m venv C:\gq\bau350-venv
+$PythonGlideBau = 'C:\gq\bau350-venv\Scripts\python.exe'
 $env:PYTHONPATH = 'C:\gq\runtime91\python-extension'
+$VersionGlideBau = (Get-Content VERSION -Raw).Trim()
 & $PythonGlideBau -B -m pip install -r requirements/build-windows.txt
-& $PythonGlideBau -B packaging/paket/lizenzen_vorbereiten_windows.py --quelle src/glide --repo . --ziel C:/gq/p349/lizenzen --runtime-bau C:/gq/runtime91/runtime-bau.json
-& $PythonGlideBau -B packaging/paket/baue_paket.py --quelle src/glide --version 3.49.0 --ziel C:/gq/p349/bau --plattform windows-x64 --lizenzen C:/gq/p349/lizenzen --runtime-bau C:/gq/runtime91/runtime-bau.json
-& 'C:\gq\p349\bau\dist\Glide\Glide.exe' --paket-pruefen C:/gq/p349/start.json
+& $PythonGlideBau -B packaging/paket/lizenzen_vorbereiten_windows.py --quelle src/glide --repo . --ziel C:/gq/p350/lizenzen --runtime-bau C:/gq/runtime91/runtime-bau.json
+& $PythonGlideBau -B packaging/paket/baue_paket.py --quelle src/glide --version $VersionGlideBau --ziel C:/gq/p350/bau --plattform windows-x64 --lizenzen C:/gq/p350/lizenzen --runtime-bau C:/gq/runtime91/runtime-bau.json
+& 'C:\gq\p350\bau\dist\Glide\Glide.exe' --paket-pruefen C:/gq/p350/start.json
 ```
 
 Jeden Aufruf nur nach Exitcode 0 des vorherigen ausführen. Die Paketprobe isoliert ihre synthetischen Nutzdaten. `runtime-bau.json`, `bau-ergebnis.json`, PE-/Lizenzinventar, `start.json` und alle Bau-/Startlogs mitgeben. Das Artefakt bleibt bis zur Auswertung Entwicklungsbau, keine öffentliche Windows-Signatur oder Menschenfreigabe.
