@@ -1,0 +1,22 @@
+{
+  "app_sha256": "672ffadd1bf2ba0d630c4b999158935c261aecd808c49816a890f21edc02f72c",
+  "version": "3.50.0",
+  "tools_vorher": {
+    "tests": 18,
+    "errors": 2,
+    "expected": "fehlende Teilprotokolle"
+  },
+  "tools_nachher": {
+    "tests": 18,
+    "errors": 0
+  },
+  "ui_werkzeugzeile": {
+    "ok": true,
+    "laufender_fall": null,
+    "dauer_s": 5.578
+  },
+  "linux_timeout_ursache": "noch offen; Instrumentierung für kontrollierten Nachlauf",
+  "timeout_s": 900,
+  "stacktrace_nach_s": 120,
+  "app_geaendert": false
+}

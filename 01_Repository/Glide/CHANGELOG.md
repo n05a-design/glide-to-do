@@ -4,6 +4,8 @@
 
 Intern: öffentliche erste Beta. Die Änderungen vom 31.10. und 01.11. sind in diesem Stand enthalten.
 
+- Prüfdiagnose: Suite-Timeouts verlieren ihre Teilprotokolle nicht mehr; Arbeitsmodi schreiben Einzelfall/Phase/Dauer fortlaufend und sichern Stacktraces, ohne Grenzen oder Assertions zu ändern. Linux-Hänger noch in Diagnose. [Nachweis](tests/qa-3.50.0/timeoutdiagnose_2026-11-02/README.md).
+
 - Bestandsvalidierung nach Claudes UI-Runde: aktuelles Handbuch und Einstiege auf Ecklabels, Hinweisplatz, Werkzeugzeile/Pinnwandgrund und Seitenfuß abgeglichen; gestartete technische Restvorhaben, neuere Pins und echte Lieferstände getrennt erfasst. Eingefrorene Code-/Vollprüfung und Gittransport im [Nachweis](tests/qa-3.50.0/gesamtvalidierung_2026-11-02/README.md). Keine neue Produktversion.
 
 - Werkzeugzeile, Pinnwand und Ansichtssymbole 02.11.: 10 px Abstand zwischen Eingabe-/Suchzeile bzw. Seitenwerkzeugen und der Inhaltskarte in allen Ansichten (vorher 0–1 px). Die Pinnwand liegt wie Liste und Tabelle auf der Kartenfarbe statt auf dem Fensterhintergrund. Die drei Ansichtssymbole stehen immer ganz rechts, weitere Knöpfe wie „Anzeige“ oder „Spalten“ links davon. Im Seitenfuß stehen „Erwähnt ohne Verweis …“ und die Statusmeldung (etwa „Schreibgeschützter Bestand“) in einer Zeile. [Prüfung](tests/qa-3.50.0/werkzeugzeile_2026-11-02/README.md).

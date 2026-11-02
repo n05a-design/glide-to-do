@@ -9,12 +9,14 @@ das nicht.
 """
 import argparse
 import copy
+import faulthandler
 import hashlib
 import json
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import time
 import traceback
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -3292,7 +3294,21 @@ def main():
     parser.add_argument("--capture", type=Path)
     args = parser.parse_args()
     ergebnis = {"app_sha256": hashlib.sha256(args.app.read_bytes()).hexdigest(), "faelle": {}, "fehler": []}
+
+    def bericht_sichern():
+        if args.report:
+            args.report.parent.mkdir(parents=True, exist_ok=True)
+            temporary = args.report.with_name(args.report.name + ".tmp")
+            temporary.write_text(json.dumps(ergebnis, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            temporary.replace(args.report)
+
     for name in (FAELLE if args.fall == "alle" else (args.fall,)):
+        started = time.monotonic()
+        ergebnis["laufender_fall"] = {"name": name, "phase": "setup"}
+        bericht_sichern()
+        print(f"START {name}", flush=True)
+        # Diagnose ohne geändertes Zeitlimit oder abgefangene Testfehler.
+        faulthandler.dump_traceback_later(120, repeat=True)
         with tempfile.TemporaryDirectory(prefix=f"glide-arbeitsmodi-{name}-") as daten:
             lauf = None
             try:
@@ -3300,6 +3316,8 @@ def main():
                 lauf.runtime = {'python': sys.version.split()[0], 'platform': sys.platform,
                                 'tk': str(lauf.root.tk.call('package', 'provide', 'Tk'))}
                 lauf.capture = args.capture
+                ergebnis["laufender_fall"]["phase"] = "test"
+                bericht_sichern()
                 text = globals()["fall_" + name](lauf)
                 if lauf.errors:
                     raise AssertionError(("Rückruffehler", lauf.errors[:2]))
@@ -3311,13 +3329,17 @@ def main():
                 ergebnis["fehler"].append(name)
                 print(f"ROT {name}: {fehler}", flush=True)
             finally:
+                ergebnis["laufender_fall"]["phase"] = "teardown"
+                bericht_sichern()
                 if lauf is not None:
                     ergebnis['faelle'][name]['runtime'] = getattr(lauf, 'runtime', {})
                     if hasattr(lauf, 'compact_trace'):
                         ergebnis['faelle'][name]['event_trace'] = lauf.compact_trace[-256:]
                     abbauen(lauf)
-    if args.report:
-        args.report.write_text(json.dumps(ergebnis, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        faulthandler.cancel_dump_traceback_later()
+        ergebnis["faelle"][name]["dauer_s"] = round(time.monotonic() - started, 3)
+        ergebnis["laufender_fall"] = None
+        bericht_sichern()
     print(json.dumps({"gruen": len(ergebnis["faelle"]) - len(ergebnis["fehler"]), "rot": ergebnis["fehler"]},
                      ensure_ascii=False))
     return 1 if ergebnis["fehler"] else 0

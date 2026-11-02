@@ -1,0 +1,17 @@
+{
+  "app_sha256": "672ffadd1bf2ba0d630c4b999158935c261aecd808c49816a890f21edc02f72c",
+  "faelle": {
+    "werkzeugzeile": {
+      "ok": true,
+      "befund": "12 Messungen: Abstand ≥ 10 px, Umschalter rechts, Pinnwand auf Kartenfarbe; Seitenfuß einzeilig",
+      "runtime": {
+        "python": "3.14.5",
+        "platform": "darwin",
+        "tk": "9.1.0"
+      },
+      "dauer_s": 5.578
+    }
+  },
+  "fehler": [],
+  "laufender_fall": null
+}

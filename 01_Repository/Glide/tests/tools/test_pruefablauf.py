@@ -95,6 +95,47 @@ class PruefablaufTests(unittest.TestCase):
         self.assertEqual(self.guard.rows[-1]["error"], "TimeoutExpired")
         self.assertIsNone(self.command("pass", "folge"))
 
+    def test_timeout_exports_partial_output_stack_and_case_progress(self):
+        logdir = self.root / "ausgabe"
+        report = self.root / "arbeitsmodi.json"
+        integration = Path(__file__).resolve().parents[1] / "integration"
+        code = f"""import sys,time,faulthandler
+from types import SimpleNamespace
+sys.path.insert(0, {str(integration)!r})
+import test_arbeitsmodi as suite
+class FakeLauf:
+    def __init__(self, *args):
+        self.errors=[]
+        self.root=SimpleNamespace(tk=SimpleNamespace(call=lambda *args: 'test'))
+suite.Lauf=FakeLauf
+suite.fall_werkzeugzeile=lambda run: time.sleep(30)
+dump=faulthandler.dump_traceback_later
+faulthandler.dump_traceback_later=lambda seconds,repeat=False: dump(.1,repeat=repeat)
+sys.argv=['test_arbeitsmodi.py','--fall','werkzeugzeile','--report',{str(report)!r}]
+suite.main()
+"""
+        run = pruefen.Prueflauf(logdir, 1, waechter=self.guard)
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertFalse(run.prozess("arbeitsmodi", [sys.executable, "-B", "-c", code]))
+            self.assertFalse(run.prozess("folge", [sys.executable, "-B", "-c", "pass"]))
+        output = (logdir / "arbeitsmodi.log").read_text(encoding="utf-8")
+        self.assertIn("START werkzeugzeile", output)
+        self.assertIn("test_arbeitsmodi.py", output)
+        self.assertIn("Timeout (", output)
+        progress = json.loads(report.read_text(encoding="utf-8"))
+        self.assertEqual(progress["laufender_fall"], {"name": "werkzeugzeile", "phase": "test"})
+        self.assertEqual(progress["faelle"], {})
+        self.assertTrue(self.guard.stopped)
+        self.assertEqual(len(self.guard.rows), 1)
+
+    def test_timeout_exports_byte_output_without_guard(self):
+        logdir = self.root / "ausgabe"
+        run = pruefen.Prueflauf(logdir, 1)
+        error = subprocess.TimeoutExpired(["probe"], 1, output="Anfang ä\n".encode(), stderr=b"Stack\n")
+        with patch.object(pruefen.subprocess, "run", side_effect=error), contextlib.redirect_stdout(io.StringIO()):
+            self.assertFalse(run.prozess("probe", ["probe"]))
+        self.assertEqual((logdir / "probe.log").read_text(encoding="utf-8"), "Anfang ä\nStack\n")
+
     def test_lesefehler_stoppt(self):
         self.guard.inventory = lambda repo: (_ for _ in ()).throw(PermissionError())
         self.assertIsNone(self.command("pass"))
