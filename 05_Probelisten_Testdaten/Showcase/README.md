@@ -1,6 +1,6 @@
 # Glide · aktiver Showcase
 
-Stand 31.10.2026 · Glide 3.50.0 · Quellfixtures in Speicherstufe 26; Showcase-Lieferung separat 3.49.0
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand · Quellfixtures und Lieferung in Speicherstufe 26
 
 Das fiktive Projekt **Parkquartier** zeigt fertige, bearbeitbare Arbeitsdokumente: Briefing, Abstimmungsnotiz, Aufgabenliste, Bildgalerie, Pixelskizze, Routinen und Projekttagebuch. Die sechs Originalmotive liegen unverändert unter `tests/fixtures/showcase/bilder`; Herkunft und Prüfsummen stehen in `quellen.json`. Seit 03.10.2026 liegen sie ausschließlich in dieser Fixture-Ablage, zuvor zusätzlich im Grafikmaster. Sie illustrieren Themen; sie zeigen kein reales Verkaufsobjekt. Personen und Projektangaben sind fiktiv.
 
@@ -40,7 +40,7 @@ Alle fünf Dokumentarten, alle drei Ordnertypen, alle vier Punktarten, alle sieb
 
 Ein Showcase kann nicht jede Bedienhandlung als gespeicherten Inhalt darstellen. Automatisierte Prüfungen kontrollieren zusätzlich Import/Export, ID-Zuordnung, Bilder, Klappblock, Undo, Vorlagen und Neustart. Klappmechanismen, Drag-and-drop, Datumsaktionen, Pixel-/Palettenexport und Performance werden durch die vorhandenen Pflichtsuiten geprüft. OS-Druckdialog, physische Maus/Trackpad, Windows/Linux und Screenreader bleiben manuelle Abnahme.
 
-Backups behalten ihre konkreten Termine beim Import. Der Bearbeitungstag dieses Bestands ist gemäß `manifest.json` **22.10.2026**; später erscheinen alte Aufgaben überfällig. Zum Auffrischen aus `01_Repository/Glide`:
+Backups behalten ihre konkreten Termine beim Import. Der Bearbeitungstag dieses Bestands ist gemäß `manifest.json` **02.11.2026**; später erscheinen alte Aufgaben überfällig. Zum Auffrischen aus `01_Repository/Glide`:
 
 ```sh
 GLIDE_QA_HINTERGRUND=1 PYTHONPATH=tests/tools/hintergrund python3 -B tests/tools/showcase.py
@@ -49,4 +49,4 @@ python3 -B scripts/pflege/showcase_abgleich.py
 
 Der Abgleich prüft die Demo vor der Auslieferung und ersetzt die Basisdateien; frühere Fassungen hält Git vor. Dein bearbeiteter `Arbeitsstand` bleibt erhalten. Für eine neue Demo den bisherigen Arbeitsstand bei geschlossener App umbenennen und den Starter erneut öffnen.
 
-Mobile Nutzung, GIF-Animationsexport und allgemeine Typkonvertierung gehören nicht zur aktuellen App. Maßgeblich sind die aktuelle Arbeitsrichtung mit D01–D57 (D49 mit Korrekturvorbehalt) und der Entwicklungsplan; Menschen-/Readerabnahmen bleiben getrennt offen.
+Mobile Nutzung, GIF-Animationsexport und allgemeine Typkonvertierung gehören nicht zur aktuellen App. Maßgeblich sind die aktuelle Arbeitsrichtung mit D01–D58 (D49 mit Korrekturvorbehalt) und der Entwicklungsplan; Die menschliche Prüfung folgt anschließend; Screenreader ist bis Bedarf zurückgestellt.

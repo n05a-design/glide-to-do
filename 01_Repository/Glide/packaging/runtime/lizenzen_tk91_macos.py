@@ -31,6 +31,8 @@ def prepare(basis, sources, destination):
     directories = {}
     for name, pin in PINS.items():
         path = sources/(name+'-9.1.0')
+        if not path.exists():
+            path = sources/name
         assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=path, text=True).strip() == pin
         assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=path, text=True)
         directories[name] = path

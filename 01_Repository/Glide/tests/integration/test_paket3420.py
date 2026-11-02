@@ -46,10 +46,12 @@ def run(repo, report=None, native=None):
             assert resource in files, resource
         requirements = repo / ('requirements/build-macos.txt' if target == 'macos-arm64'
                                else 'requirements/build-windows.txt')
-        pins = [line.strip() for line in requirements.read_text(encoding='utf-8').splitlines()
-                if line.strip() and not line.lstrip().startswith('#')]
-        assert 'pyinstaller==6.22.3' in pins, 'Das gewählte Bauwerkzeug muss fest gepinnt bleiben.'
-        assert all('==' in pin for pin in pins), 'Alle Bauabhängigkeiten brauchen eine feste Version.'
+        content = requirements.read_text(encoding='utf-8')
+        assert '--require-hashes' in content, 'Bauabhängigkeiten müssen per Hash geprüft werden.'
+        pins = [line.strip() for line in content.replace('\\\n', '').splitlines()
+                if line.strip() and not line.lstrip().startswith(('#', '--'))]
+        assert any(pin.startswith('pyinstaller==6.22.3 ') for pin in pins), 'Bauwerkzeug bleibt fest gepinnt.'
+        assert all('==' in pin and '--hash=sha256:' in pin for pin in pins), 'Version und Originalhash je Bauabhängigkeit.'
         selected[target] = len(files)
     result = dict(version=version, product=product, quellmodule=len(local_modules) + 1,
                   paketdateien=selected, exitcode=0,

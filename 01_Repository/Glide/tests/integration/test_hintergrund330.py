@@ -172,10 +172,18 @@ with tempfile.TemporaryDirectory(prefix="glide-hintergrund-") as ordner:
         assert mod.contrast_ratio(app.theme["text"], app.theme["bg"]) >= 4.5
         assert not hasattr(app, "frost_window")
 
-        # Menü: sechs Einträge, gewählter mit Häkchen, in der Aktionssuche richtig eingeordnet.
-        eintraege = [app.backdrop_menu.entrycget(i, "label") for i in range(app.backdrop_menu.index("end") + 1)]
-        assert len(eintraege) == 6 and eintraege[0] == "Hintergrund: aus", eintraege
-        assert app.backdrop_menu.entrycget(eintraege.index("Hintergrund: 8-Bit-Abend"), "accelerator") == "✓"
+        # Sechs Verläufe plus getrennte Farbwahl, Häkchen und Aktionsgruppen.
+        eintraege = [app.backdrop_menu.entrycget(i, "label")
+                     for i in range(app.backdrop_menu.index("end") + 1)
+                     if app.backdrop_menu.type(i) != "separator"]
+        verlaeufe = [label for label in eintraege if label.startswith("Hintergrund: ")]
+        assert len(verlaeufe) == 6 and verlaeufe[0] == "Hintergrund: aus", eintraege
+        assert {label for label in eintraege if label.startswith("Hintergrundfarbe: ")} == {
+            "Hintergrundfarbe: " + label for label, _key in mod.glide_appearance.BACKGROUND_CHOICES}
+        gewaehlt = next(i for i in range(app.backdrop_menu.index("end") + 1)
+                        if app.backdrop_menu.type(i) != "separator"
+                        and app.backdrop_menu.entrycget(i, "label") == "Hintergrund: 8-Bit-Abend")
+        assert app.backdrop_menu.entrycget(gewaehlt, "accelerator") == "✓"
         aktionen = [a for a in app.app_action_entries() if a["label"].startswith("Hintergrund: ")]
         assert len(aktionen) == 6 and all(a["group"] == "Ansichtseinstellungen" for a in aktionen)
         # Wieder aufgebaut kommt das Bild aus dem Zwischenspeicher – ohne Rechnen.

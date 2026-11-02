@@ -278,7 +278,7 @@ def method_id(callback):
 
 
 def group_for(action_id):
-    if action_id.startswith(("backdrop.", "grouping.")):
+    if action_id.startswith(("backdrop.", "background_color.", "grouping.")):
         return "Ansichtseinstellungen"
     return GROUPS.get(action_id, "Weitere Aktionen")
 
@@ -286,7 +286,7 @@ def group_for(action_id):
 def legacy_group(label):
     if label.startswith("Über "):
         return "Programm und Hilfe"
-    if label.startswith("Hintergrund: "):
+    if label.startswith(("Hintergrund: ", "Hintergrundfarbe: ")):
         return "Ansichtseinstellungen"
     return LEGACY_GROUPS.get(label, "Weitere Aktionen")
 

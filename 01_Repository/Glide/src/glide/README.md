@@ -1,12 +1,8 @@
 # Anwendungskern
 
-Stand 01.11.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (öffentliche erste Beta) · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Quellstand 3.50.0:** Nebenansicht und Fokus ausgebaut (`side_view.py`, `focus_timer.py`, `action_menu.py`), keine neue Moduldatei; nicht geliefert. [Prüfung](../../tests/qa-3.50.0/featurepaket_2026-10-31/README.md).
-
-**Quellkandidat 3.49.0 (inzwischen geliefert):** lokale Sitzungsprüfung/Originalvorsicherung und begrenzte Prozessdiagnose; die drei 3.48.0-Bedienpakete bleiben enthalten. [Prüfung und unveränderte Liefergrenzen](../../tests/qa-3.49.0/robustheit_2026-10-28/README.md).
-
-Bestandsumfang aus 3.48.0: Tagesnavigation, gemeinsame Wichtigkeit/Labels und Verweisnavigation; 3.49.0 ergänzt Wochenwahl, Fälligkeit/Aufwand, Verweisaktionen und Schutzmodule. Aktuell 91 Laufzeitdateien plus separater Zeichenprototyp, Format 26 unverändert. Python/Showcase 3.47.0, native Pakete 3.45.0; FP-01-Prüfadapter und gestoppte Folge gezielt abgeschlossen; WA-41 und aktueller Liefer-/Abnahmeabschluss offen. [Abnahmebericht](../../tests/qa-3.49.0/abnahme_2026-10-28/README.md).
+3.50 bündelt Aufgaben, Seiten, Notizen, Pinnwände, Tagebuch und Pixel-Werkstatt. Neue Hintergrundauswahl in `appearance.py`, Tk-freies Blockverschieben in `page_features.py`, UI-Anbindung in `app.pyw`; bestehende Nebenansichts-, Fokus-, Speicher- und Schutzmodule bleiben enthalten. Aktueller Prüf-/Lieferstand im [QA-Bericht](../../docs/07_QA_BERICHT.md); Verhalten im [Handbuch](../../docs/20_FUNKTIONEN.md). Historische Teilstände stehen im CHANGELOG und Entwicklungsplan. Intro am 02.11.2026 gekürzt und zusammengeführt.
 
 `app.pyw` ist die kanonische Anwendung (Klasse `ListApp`). Daneben liegen Module, die beim Start aus demselben Ordner geladen werden und beim Kopieren oder Paketieren immer mitgehen:
 

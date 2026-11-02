@@ -15,11 +15,11 @@ bleiben ohne Eintrag, nachträglich wird nichts erfunden.
 # Eintrag zeigt keine Karte.
 CATALOG = {
     "3.50.0": (
-        "Nebenansicht: alle Treffer mit Abschnitt sehen, letzte Suchen erneut aufrufen, mit Alt+Pfeil von Abschnitt zu Abschnitt springen.",
-        "Markierten Text aus einer Seite oder Notiz direkt in der Nebenansicht nachschlagen.",
-        "Fokus für 15, 25, 50 Minuten oder den geschätzten Aufwand starten; die Vorgabe gilt auch für „Fokus starten“.",
-        "Anlegen, Löschen und Verschieben speichern bei großen Beständen deutlich schneller.",
-        "Im Fokusfeld verlängert „+5 Minuten“ das Intervall; „Wechseln zu …“ fokussiert direkt eine andere Tagesaufgabe.",
+        "Erster öffentlicher Stand: Aufgaben, Seiten, Notizen, Pinnwände, Tagebuch und Pixel-Werkstatt lokal nutzen.",
+        "Hintergrundfarbe unabhängig vom Design wählen; „Wie die Fensterfläche“ verbindet die Flächen ohne Materialschatten.",
+        "Volle Seitenleiste, Kopf auf Inhaltsflucht; Seitenblöcke am Sechspunktgriff ziehen und per Rechtsklick formatieren.",
+        "Nebenansicht: Treffer und Abschnitte ansteuern, letzte Suchen aufrufen und markierten Text nachschlagen.",
+        "Fokusintervalle wählen, um fünf Minuten verlängern und zur nächsten Aufgabe wechseln; große Bestände schneller speichern.",
     ),
     "3.49.0": (
         "Startseite: über Woche direkt einen Tag der betrachteten, vorherigen oder nächsten Woche wählen.",

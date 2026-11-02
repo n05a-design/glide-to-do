@@ -1,46 +1,33 @@
 # Sicherheitsrichtlinie
 
-Glide ist eine lokale Desktop-Anwendung für Aufgaben, Notizen und Pinnwände. Sie überträgt keine Nutzerdaten und öffnet keine Netzwerkverbindungen. Technische Sicherheitsregeln (Import, Anhänge, Datenordner, mitgelieferter Fremdcode) stehen in [`01_Repository/Glide/SECURITY.md`](01_Repository/Glide/SECURITY.md).
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (öffentliche erste Beta)
+
+Glide verarbeitet Aufgaben, Notizen, Seiten, Pinnwände und Anhänge lokal. Die Kernanwendung benötigt weder Konto noch Netzwerkzugriff. Bewusst angeklickte Weblinks und Anhänge werden an das jeweilige Standardprogramm übergeben; die dortige Verarbeitung liegt außerhalb von Glide. Die verbindlichen [technischen Sicherheitsgrenzen](01_Repository/Glide/SECURITY.md) ergänzen diese Richtlinie.
 
 ## Unterstützte Fassungen
 
-Es gibt noch keine veröffentlichte Releasefassung. Korrekturen gehen in den laufenden Entwicklungsstand auf `main` (Version in [`01_Repository/Glide/VERSION`](01_Repository/Glide/VERSION)) und von dort in den Lieferordner `07_Python-Versionen`.
+Sicherheitskorrekturen gehen in den aktuellen 3.50-Stand auf `main` und anschließend in die Python-Fassung und die nativen Pakete. Der tatsächliche Paket- und Prüfstand ist im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) dokumentiert. Frühere Entwicklungsfassungen erhalten keine eigene Wartungszusage.
 
 ## Schwachstelle melden
 
-- **Vertraulich über GitHub:** Reiter **Security** → **Report a vulnerability**. Die Meldung ist nur für die Verantwortlichen sichtbar.
-- **Keine öffentlichen Issues** für Sicherheitsfunde.
-- **Keine echten Daten:** Keine echten Nutzerdaten, Sicherungen (`.glidebackup`) oder Anhänge mitschicken; ein künstliches Beispiel genügt.
-- **Hilfreich sind:**
-  - betroffene Version,
-  - Betriebssystem mit Python- und Tk-Version,
-  - Schritte zum Nachstellen,
-  - erwartetes und tatsächliches Verhalten.
+Bitte vertraulich über [Security → Report a vulnerability](https://github.com/n05a-design/glide-to-do/security/advisories/new) melden. Sicherheitsfunde gehören nicht in öffentliche Issues.
 
-**Ablauf nach einer Meldung:**
-1. Eingangsbestätigung.
-2. Bewertung und Nachstellen mit künstlichen Daten.
-3. Korrektur mit Prüfung.
-4. Bei Bedarf ein Security Advisory im Repository.
+Hilfreich sind die betroffene App- und Paketversion, Betriebssystem, gegebenenfalls Python-/Tk-Version, reproduzierbare Schritte sowie erwartetes und tatsächliches Verhalten. Verwende künstliche Beispieldaten und entferne Zugangsdaten, echte Inhalte, Benutzerpfade und private Anhänge aus Belegen.
 
-## Im Umfang
+Nach Eingang wird der Befund bewertet, mit künstlichen Daten nachvollzogen und bei Bestätigung mit einer geprüften Korrektur bearbeitet. Bei Bedarf folgt ein Security Advisory. Feste Reaktionsfristen werden derzeit nicht zugesagt.
 
-- **Anwendung:** Code unter `01_Repository/Glide/src/glide` und dessen Lieferkopie in `07_Python-Versionen`.
-- **Dateneingang:** Import von Sicherungen, Vorlagen, CSV- und Kalenderdateien sowie Anhängen.
-- **Fremdcode:** mitgelieferte Erweiterung unter `src/glide/vendor` (tkDnD).
-- **Werkzeuge:** Prüf- und Pflegewerkzeuge sowie die GitHub-Workflows.
+## Umfang und Vertrauensgrenzen
 
-Nicht im Umfang: Schwachstellen in Python, Tk oder im Betriebssystem selbst; diese bitte beim jeweiligen Hersteller melden.
+- Anwendung unter `01_Repository/Glide/src/glide` und ihre Lieferkopie in `07_Python-Versionen`.
+- Unvertrauenswürdige Eingaben: Sicherungen, Vorlagen, Austauschdateien, Notion-Archive, CSV, ICS, Markdown und Anhänge. Auch lokale Dateien können manipuliert sein.
+- Datenhaltung: Originalbestand, Sicherungen, Einstellungen, Sperrbesitz und Wiederherstellung; Schutz vor unbemerktem Überschreiben oder Datenverlust.
+- Mitgelieferter nativer Code, Systemdecoder, Paketierung, Bauabhängigkeiten, Prüf-/Pflegewerkzeuge und GitHub-Workflows.
+- Berichtenswert sind erreichbare Verletzungen dieser Grenzen mit nachvollziehbarem Einfluss auf Vertraulichkeit, Integrität oder Verfügbarkeit. Die lokale Ausführung allein macht einen Befund nicht unerheblich.
 
-## Schutzmaßnahmen im Repository
+Reine Fehler in unverändertem Python, Tcl/Tk oder dem Betriebssystem bitte zusätzlich dem jeweiligen Hersteller melden. Fehler in Glides Nutzung oder Paketierung dieser Komponenten bleiben im Umfang. Diese Richtlinie führt keine weiteren Befundausnahmen oder akzeptierten Risiken ein.
 
-| Maßnahme | Wo |
-|---|---|
-| CI-Grundstufe bei jedem Push und Pull Request: Prüfungen, Startprobe, Lieferstand, **Herkunft des Fremdcodes** gegen das Originalpaket, **keine Benutzerpfade** in versionierten Dateien | `.github/workflows/python-app.yml`, `01_Repository/Glide/tests/tools/ci_grundstufe.py` |
-| Wöchentliche Aktualisierung der verwendeten GitHub Actions; noch über Versionstags statt Commit-SHA eingebunden (WA-43) | `.github/dependabot.yml` |
-| Statische Analyse: CodeQL-Standardeinrichtung; der eigene Workflow mit Spiegelung der `.pyw`-Hauptdatei ist seit 01.10.2026 deaktiviert, die Hauptdatei wird deshalb voraussichtlich nicht analysiert (Einrichtung offen, I12) | `.github/workflows/codeql.yml` |
-| Keine Schlüssel, Zertifikate, Zugangsdaten oder Signing-Secrets im Repository; Secret Scanning ist aktiv | `.gitignore` (Abschnitt Sicherheit) |
-| Keine echten Nutzerbestände, Sicherungen oder Archivkopien; Archive und Nachweise nur der sieben neuesten Versionen | `.gitignore`, CI-Schritt „Ablagegröße“ |
-| Rohprotokolle (`*.log`) bleiben lokal; veröffentlichte Prüfergebnisse enthalten keine Benutzerpfade (vor dem Hochladen `python3 -B scripts/pflege/pfade_bereinigen.py <Ordner>`) | `.gitignore`, CI-Schritt „Datenschutz“ |
+## Schutz der Projektablage
 
-`.gitignore` verhindert nur das versehentliche Hinzufügen neuer Dateien; bereits versionierte Dateien, `git add -f` und Uploads über die Weboberfläche umgehen es. Deshalb setzen CI und Secret Scanning die Regeln zusätzlich durch.
+GitHub Actions verwendet begrenzte Berechtigungen, Checkout ohne gespeicherte Zugangsdaten und unveränderliche Action-Commits. Bauabhängigkeiten sind mit Version und Original-SHA-256 festgelegt; pip erzwingt ihre Hashprüfung. Die CI prüft unter anderem Tests, Lieferabgleich, Fremdcodeherkunft, Benutzerpfade und Ablagegrenzen. Laufberichte belegen jeweils nur ihren tatsächlichen Quellstand.
+
+Schlüssel, Zertifikate, Tokens, echte Nutzerbestände, Rohlogs und lokale Arbeitskopien gehören nicht in die öffentliche Ablage. `.gitignore` schützt vor versehentlichem Hinzufügen neuer Dateien; bereits versionierte Dateien, `git add -f` und Webuploads erfordern weiterhin Prüfung. Paketprüfungen und Signaturen sind im [Liefernachweis](01_Repository/Glide/docs/07_QA_BERICHT.md) getrennt ausgewiesen.

@@ -1,6 +1,9 @@
 # Arbeitsvorbereitung
 
-Stand 01.11.2026 · Glide 3.50.0 · Aufgabenformat 26
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+
+**3.50-Fertigstellung, 02.11.2026:** Erster öffentlicher Stand (intern öffentliche erste Beta). Neue UI-Funktionen, Python-Abgleich und tatsächliche Paket-/Prüfergebnisse im [aktuellen Nachweis](../01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Frühere datierte Absätze beschreiben ihren damaligen Stand. Screenreader-Abnahme ist bis Bedarf zurückgestellt; menschliche Prüfung folgt anschließend.
+
 
 **Abschlussfortsetzung 31.10.2026:** Python/Showcase und eigenständiges macOS-arm64-Paket 3.49.0 geliefert, Windows-Paket weiterhin 3.45.0. Native Tk-9.1-Matrix: 126 Schritte einschließlich aller 108 Integrationssuiten grün; Programm-, Test-, Fixture- und Ressourcenstand entsprechen dem eingefrorenen Nachweis; anschließende Anleitungspflege separat geprüft. Neue Grundstufe mit 235 Werkzeugtests und zweimal 1.082 Fachtests grün. 56 Mutationsfälle und zwölf native Accessibility-Proben grün. WA-41A/B, Windows-/Linux-Endmatrix, echte Readerketten, übrige appweite Architektur-/Performanceumfänge und Menschenabnahme bleiben offen. [Prüf- und Liefernachweis](../01_Repository/Glide/tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md), [aktueller Rest in §21.37](Glide_Entwicklungsplan.md#2137-abschlussfortsetzung-mutationen-prüfablauf-tk-91-und-lieferung). Frühere datierte Absätze bewahren ihren damaligen Stand.
 

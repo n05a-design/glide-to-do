@@ -1,40 +1,21 @@
 # Veröffentlichung – Glide
 
-Stand 01.11.2026 · Glide 3.50.0 · Quelle 3.50.0; Python/macOS 3.49.0, Windows-Paket 3.45.0 · keine öffentliche Veröffentlichung · Aufgabenformat 26
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
-**Lieferstand 3.49.0 (31.10.2026; Quelle inzwischen 3.50.0, nicht geliefert):** Python/Showcase und eigenständiges Mac-arm64-Paket geliefert. Der Mac-Bau verwendet die eigene Tcl/Tk-9.1-Laufzeit. Modul-, Datei- und Lizenzinventar, Ad-hoc-Signatur sowie isolierter Start direkt aus der Lieferung sind geprüft. Windows-Paket bleibt 3.45.0. Native Mac-Matrix mit allen 108 Suiten grün, neue Windows-/Linux-Endmatrix und Reader-/Menschenfreigaben fehlen. WA-41 und übrige dokumentierte Tore bleiben offen, keine öffentliche Veröffentlichung oder neuer Gittransport. [Prüf- und Liefernachweis](../tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md).
+3.50.0 heißt öffentlich **Erster öffentlicher Stand**, intern **öffentliche erste Beta**. Quellcode, Python/Showcase, macOS-arm64- und Windows-x64-Paket tragen dieselbe Appversion. Der [aktuelle QA-/Liefernachweis](07_QA_BERICHT.md) nennt die tatsächlich erzeugten Artefakte, Quellhashes und Prüfungen; eine Versionsbezeichnung ersetzt keine Abnahme.
 
-**Vorheriger vollständiger Paketlieferstand 3.45.0 (26.10.2026):** Python-Fassung bytegleich, Windows-Paket und natives Mac-arm64-Paket neu gebaut und startgeprüft; Windows-Vollprüfung mit allen 104 Suiten grün. Mac-Ad-hoc-Signatur und isolierter Macstart grün. [Liefernachweis](../tests/qa-3.45.0/paketabschluss_2026-10-26/README.md). Mac-/Linux-Vollmatrix und menschliche Releaseabnahme bleiben getrennt offen; die folgenden Haken bezeichnen den historischen Vollabschluss 3.42.0.
+- VERSION, `APP_VERSION`, Neuerungen, CHANGELOG, Handbuch und README auf denselben Nutzerstand bringen.
+- Fach-/Werkzeugtests sowie vollständige eingefrorene Integrationsmatrix auf Mac, Linux und Windows ausführen. Nur unveränderte App-/Test-/Fixture-/Ressourcenbytes einem Ergebnis zuordnen.
+- Python-Fassung bytegleich abgleichen, Showcase reproduzieren und getrennt prüfen; native Pakete mit Original-Lizenzbelegen bauen, kompilierten Quell-/Ressourcenabgleich und echte isolierte Startprobe durchführen.
+- Actions auf Commit-SHA und Bauabhängigkeiten auf Version/Originalhash festlegen (WA-43/45). Herkunft von Runtime, tkDnD, Schriften und Zeitzonen beilegen; Paketprüfsummen dokumentieren.
+- Die menschliche Prüfung erfolgt anschließend durch den Inhaber: Bedienung, Tastatur, Mindestgröße/große Schrift, DPI, mehrere Monitore und konkrete Plattformabläufe. **Screenreader ist bis Bedarf zurückgestellt und kein aktiver offener 3.50-Punkt.**
+- Für einen allgemeinen signierten Vertrieb bleiben öffentliche Signatur/Notarisierung, freigegebene Lizenz, Kanalunterlagen und Markenprüfung gesonderte Voraussetzungen. Die neue Versionsbezeichnung erteilt keine Lizenz und ersetzt keine Zertifikate.
 
-Die Haken dokumentieren den historischen vollständigen Plattformabschluss 3.42.0. Die native Paketlieferung 3.45.0 übernimmt keine ungetesteten Mac-/Linux-/Menschenfreigaben daraus; Python/Showcase- und macOS-Lieferung 3.49.0 und Quellstand 3.50.0 sind getrennt. Aktuelle Belege stehen oben und im [QA-Bericht](07_QA_BERICHT.md); der [Abnahmebericht](../tests/qa-3.49.0/abnahme_2026-10-28/README.md) stellt die Gesamtabnahme zurück.
-
-- [x] VERSION, `APP_VERSION`, Hauptsuite und CHANGELOG gleich; Datenformat geprüft.
-- [x] Eingefrorene Vollprüfung auf dem Referenz-Mac; seit D42 zusätzlich native Windows-Vollprüfung je Lieferung und seit D35 gesamte ausführbare Linux-Matrix, einschließlich passender Defektgegenproben. Ergebnisse getrennt im [QA-Bericht](07_QA_BERICHT.md).
-- [x] `07_Python-Versionen` und macOS-Entwicklungsbundle per SHA-256 gleich `src/glide`, Bundle `de.shaye.glide`, Ad-hoc-Signatur gültig; Showcase ausgeliefert.
-- [x] macOS-Paket enthält alle Module neben `app.pyw`, `resources` (Schriften mit Lizenztexten und `provenance.json`, Vorlagen, Logo) und `vendor/tkinterdnd2` mit Lizenz und nur den Bibliotheken der Zielplattform.
-- [x] Kennungen `de.shaye.glide` und `Shaye.Glide` festgelegt (26.09.2026); echtes Programmsymbol aus dem Logo-Master (`assets/icons`).
-- [x] Rückfallschutz: neuere Bestände schreibgeschützt, unlesbare gesichert, `data_format_written` warnt.
-- [ ] **Neuerungen je Version (seit B18, 15.10.2026):** Für jede Version mit sichtbarer Änderung höchstens fünf kurze, nutzerverständliche Sätze in `src/glide/release_notes.py` (`CATALOG`, Schlüssel = neue Versionsnummer) eintragen – im selben Schritt wie CHANGELOG und `versionswechsel.py`. Daraus lesen die einmalige Startseitenkarte „Neu in …“ und Hilfe › Über Glide › „Neuerungen …“; es gibt keine zweite Kopie. Der Katalog ist kein technisches CHANGELOG: Prüfwerkzeuge, Nachweise und interne Umbauten gehören nicht hinein. Versionen ohne sichtbare Änderung bleiben ohne Eintrag; fehlende ältere Einträge (3.37.0–3.42.0) werden nicht nachträglich erfunden. Unit-Test `test_release_notes.py` prüft Länge und Form.
-
-**Vor der ersten Veröffentlichung (offen):**
-
-- [ ] Manuelle Prüfung auf macOS und Windows nach der [Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md), einschließlich Windows-Vollprüfung mit `tests/tools/windows_vollpruefung.cmd`.
-- [x] Eigenständige Entwicklungspakete 3.45.0 mit Python 3.14/Tk 9 für macOS arm64 und Windows x64. Natives Mac-Paket mit Prozesssandbox und Ad-hoc-Signatur, Windows-Paket mit lokaler Startprobe und Hash-/PE-Abgleich geprüft. Windows-ACL-Sperrprobe bleibt dem vergänglichen Hosted-CI-Runner vorbehalten. Öffentliche Signaturen/Installer und Menschenabnahme bleiben offen. [Aktuelle Nachweise](../tests/qa-3.45.0/paketabschluss_2026-10-26/README.md).
-- [ ] Developer-ID-Signatur und Notarisierung (macOS), Code-Signing und Installer (Windows, Inno Setup); tkDnD-Bibliothek mit signieren ([Entscheidung](decisions/ABHAENGIGKEIT_TKDND.md)).
-- [ ] Windows-Verknüpfung mit AppUserModelID prüfen (`packaging/windows/verknuepfung_anlegen.ps1`); Hintergrundverläufe unter Windows ohne Bildreste.
-- [ ] Clean-Machine-Test, Gatekeeper/SmartScreen, Update über eine vorhandene Installation, Datenordner in einem Cloudordner.
-- [ ] DPI/Mehrmonitor, Hochkontrast/RDP, Screenreader, nur Tastatur, Ruhezustand, Dauerlauf.
-- [ ] Inhaberangaben bestätigt (unten), Lizenz veröffentlicht, Markenprüfung abgeschlossen.
-- [ ] Lieferkette ([Plan §21.12](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2112-technische-folge-aus-dem-sicherheits--und-architekturgutachten)): GitHub Actions per vollständiger Commit-SHA (WA-43), Bauabhängigkeiten mit Hashes und `--require-hashes` (WA-45), Fremdcode auf neue Fassungen und Hinweise geprüft (WA-44), Release-Inventar (SBOM) mit SHA-256 aller Artefakte (WA-46), CodeQL-Analyse einschließlich der Hauptdatei ohne ungeklärte hohe oder kritische Funde (I12).
-- [ ] Nativer Windows-Absturz unter Last (WA-41) geklärt oder unter definierter Last wiederholt ausgeschlossen.
-- [ ] Umgang mit der Git-Historie entschieden (I10, unten).
-- [ ] Store-Texte und Screenshots vom realen Build; Hinweis „nach dem Update keine ältere Version starten“ in Neuerungen und Hilfe.
-
-Automatisch grüne Tests ersetzen keine Plattformabnahme. Erinnerungen werden nur bei laufender App verarbeitet.
+Der aktuelle Auftrag umfasst Commit und Push. Eine Veröffentlichung in weiteren Vertriebskanälen, rechtliche Festlegungen oder Eingriffe in die Git-Historie werden daraus nicht abgeleitet. Erinnerungen werden nur bei laufender App verarbeitet.
 
 ## Signierung und Notarisierung
 
@@ -56,32 +37,13 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 
 ## GitHub-Auftritt
 
-Lesender Neuabgleich am 18.10.2026: Repository öffentlich, Standardzweig `main`, Beschreibung weiterhin wie in der historischen Tabelle, keine Homepage/Topics, Issues/Wiki/Projects an, Pages/Discussions aus; keine Releases oder Tags. CodeQL-Standardeinrichtung hat für `9ec474b` einen erfolgreichen dynamischen Lauf erzeugt; der seit 01.10.2026 deaktivierte eigene Workflow und die frühere Aussage zur KI-Prüfung sind davon zu trennen. Folge laut [Analyse §13.12](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1312-sicherheits--und-architekturgutachten-vom-25102026): Nur der eigene Workflow spiegelt `.pyw` für den Python-Extraktor; die Standardeinrichtung analysiert die Hauptdatei `app.pyw` voraussichtlich nicht (Inhaberpunkt I12). Die Glide-Gesamtprüfung für diesen neueren FP-01-Kandidaten war beim ersten Abruf noch im Lauf; der Abschlussabruf bestätigt Lauf 39075284901 grün (Grundstufe, Linux-/Windows-Vollprüfung, Windows-Paketjob; spezielle Readerjobs ausgelassen). [Bereinigter API-Snapshot](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/standanalyse_2026-10-18/github_auftritt.json), [laufende Prüfung](https://github.com/n05a-design/glide-to-do/actions/runs/39075284901). Einstellungen wurden nicht verändert. Die nachstehende Tabelle bleibt ein datierter älterer Befund; I11 enthält Vorschläge, keine Zustimmung.
+Am 02.11.2026 für den ersten öffentlichen Stand gekürzt und zusammengeführt. README beginnt mit Nutzen, Funktionsübersicht und Startwegen. Versions-/Lieferdetails, historische Prüfberichte und technische Restlisten stehen im QA-Bericht bzw. Entwicklungsplan. Die Featureübersicht wird bei jeder Funktionsänderung zusammen mit Handbuch, Neuerungen und CHANGELOG gepflegt.
 
-Stand am 06.10.2026, über die GitHub-Schnittstelle abgerufen:
+Das Repository ist öffentlich; `main` bleibt die maßgebliche Projektablage. GitHub Actions liefert Grundprüfung, vollständige Linux-/Windows-Matrix und eigenständige Pakete. Der Mac-Workflow baut auf macOS arm64 mit eigener Tcl/Tk 9.1. Action-Commits sind festgelegt; Dependabot berücksichtigt Actions und Bauabhängigkeiten. Der Aktivierungsstatus einer statischen Analyse ist separat von ihrer Workflowdatei zu prüfen; es darf nur eine passende CodeQL-Einrichtung aktiv sein. Sicherheitsmeldungen laufen vertraulich über die [Sicherheitsrichtlinie](../../../SECURITY.md).
 
-| Merkmal | Stand |
-|---|---|
-| Repository | [`n05a-design/glide-to-do`](https://github.com/n05a-design/glide-to-do), angelegt am 24.09.2026, öffentlich, Standardzweig `main`, maßgebliche Ablage (D09) |
-| Beschreibung | englisch: „Glide is an offline desktop app for tasks, lists, notes, and journals, featuring daily planning, a calendar, pinboards, and local backups. No account or cloud service required. Built with Python and Tkinter.“ Sie nennt weder Seiten noch Pixel-Werkstatt; „journals“ heißen seit 3.30 Notizbücher. Keine Homepage |
-| Tags, Releases | keine; D09 sieht Tags für Zwischenstände vor |
-| Lizenz | keine; `LICENSE.md` räumt keine Nutzungs-, Änderungs- oder Weiterverteilungsrechte ein |
-| Prüfungen | „Glide-Prüfung“ (CI-Grundstufe), Dependabot; CodeQL-Workflow deaktiviert; die KI-Codeprüfung „github-advanced-security“ scheiterte am 03.10.2026 am aufgebrauchten Monatskontingent |
-| Funktionen | Issues (keine offen), Wiki und Projects eingeschaltet; Discussions und Pages aus |
-| Größe | rund 510 MB laut GitHub, überwiegend Git-Historie |
+Ein öffentlicher GitHub-Release mit allgemeinem Vertriebsversprechen ist von einem geprüften Entwicklungsartefakt zu unterscheiden; Lizenz und öffentliche Signaturen bleiben erforderlich. Weitere Kanäle und Repository-Einstellungen werden nur im konkret beauftragten Umfang verändert.
 
-Der datierte GitHub-Abruf oben bleibt ein historischer Befund. Eigener Prüfstand am 12.10.2026: verpflichtende Linux-/Windows-Vollmatrix ist eingerichtet, Einzelstände im QA-Bericht. Der öffentliche Auftritt und die übrigen Veröffentlichungstore bleiben nach D43 gesondert offen.
-
-**Empfehlungen** (nicht entschieden, I11):
-
-1. Beschreibung aktualisieren, etwa: „Calm, local desktop workspace for your day – tasks, pages, notebooks, pinboards and a pixel workshop. No account, no cloud, German UI. Python 3.14 + Tk 9.“
-2. Tags je ausgelieferter Version, wie D09 es vorsieht; eine GitHub-Release erst mit signiertem Paket und Lizenz.
-3. Wiki ausschalten: Die Dokumentation liegt im Repository, ein Wiki wäre ein zweiter Ort (P3).
-4. Issues bis zur Lizenz ausschalten oder nur für Fehlermeldungen öffnen; Sicherheitsmeldungen laufen vertraulich über *Security → Report a vulnerability* (`SECURITY.md`).
-5. KI-Codeprüfung abschalten oder ihr Kontingent anpassen, damit kein dauerhaft roter Haken am PR steht.
-6. Den Lizenzentwurf (I2) rechtlich prüfen und veröffentlichen, bevor das Repository beworben wird.
-
-**Git-Historie (I10, eigener Auftrag):** Sie enthält gelöschte Protokolldateien mit Benutzerpfaden und frühere Archivkopien. Umschreiben verkleinert das Repository deutlich, ändert aber alle Commit-Kennungen und verlangt neue Klone auf allen Geräten. Empfehlung: bereinigen, solange es keine fremden Kopien gibt, und dabei die Entscheidung zu den Bildrechten (I9) mit umsetzen.
+**Git-Historie (I10):** Frühere gelöschte Protokolle mit Benutzerpfaden und Archivkopien bleiben ein historischer Befund. Ein Umschreiben würde Commit-Kennungen und Klone ändern und ist nicht Teil des 3.50-Abschlusses. Neue Dateien werden vor dem Upload auf Benutzerpfade, echte Inhalte und Geheimnisse geprüft.
 
 ## Lizenzentwurf
 

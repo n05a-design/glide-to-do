@@ -11,6 +11,7 @@
 import importlib.machinery
 import importlib.util
 import os
+import subprocess
 import sys
 import tempfile
 import zipfile
@@ -18,6 +19,11 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 sys.dont_write_bytecode = True
+
+cold = subprocess.run([sys.executable, "-B", str(Path(__file__).with_name("start_font_probe.py")),
+                       str(REPO / "src/glide/app.pyw")], capture_output=True, text=True, timeout=180)
+assert cold.returncode == 0, cold.stdout + cold.stderr
+print("Frischer Appstart:", cold.stdout.strip())
 
 with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
     os.environ["GLIDE_DATA_DIR"] = ordner
@@ -120,7 +126,7 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
         assert app.header_density() != "minimal"
         zeichen, titel = lage(app.header_logo), lage(app.title_label)
         assert zeichen and titel, (zeichen, titel)
-        assert zeichen[0] == lage(app.sidebar_shell)[0], "Logo auf der Flucht der Seitenleiste"
+        assert zeichen[0] == lage(app.content_frame)[0], "Logo auf der Flucht des Inhalts"
         assert zeichen[0] + zeichen[2] + app.HEADER_LOGO_GAP <= titel[0], "Titel rückt nach rechts"
         assert zeichen[3] == app.header_logo_height() and zeichen[3] >= 40, zeichen
         assert zeichen[1] + zeichen[3] <= lage(app.header_frame)[1] + app.header_frame.winfo_height(), \
@@ -170,7 +176,7 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
         ruhe(16)
         assert app.header_density() == "minimal"
         assert not app.header_logo.winfo_ismapped()
-        assert lage(app.title_label)[0] == lage(app.sidebar_shell)[0], "Titel wieder am Rand"
+        assert lage(app.title_label)[0] == lage(app.content_frame)[0], "Titel auf der Inhaltsflucht"
         assert app.search_button.winfo_ismapped(), "Die Lupe bleibt auch schmal"
         root.geometry("860x700+0+30")
         ruhe(16)

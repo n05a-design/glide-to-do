@@ -1,6 +1,9 @@
 # Dokumentationsindex
 
-Stand 01.11.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagenformat 2
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+
+**3.50-Fertigstellung, 02.11.2026:** Erster öffentlicher Stand (intern öffentliche erste Beta). Neue UI-Funktionen, Python-Abgleich und tatsächliche Paket-/Prüfergebnisse im [aktuellen Nachweis](../tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Frühere datierte Absätze beschreiben ihren damaligen Stand. Screenreader-Abnahme ist bis Bedarf zurückgestellt; menschliche Prüfung folgt anschließend.
+
 
 **Abschlussfortsetzung 31.10.2026:** Python/Showcase und eigenständiges macOS-arm64-Paket 3.49.0 geliefert, Windows-Paket weiterhin 3.45.0. Native Tk-9.1-Matrix: 126 Schritte einschließlich aller 108 Integrationssuiten grün; Programm-, Test-, Fixture- und Ressourcenstand entsprechen dem eingefrorenen Nachweis; anschließende Anleitungspflege separat geprüft. Neue Grundstufe mit 235 Werkzeugtests und zweimal 1.082 Fachtests grün. 56 Mutationsfälle und zwölf native Accessibility-Proben grün. WA-41A/B, Windows-/Linux-Endmatrix, echte Readerketten, übrige appweite Architektur-/Performanceumfänge und Menschenabnahme bleiben offen. [Prüf- und Liefernachweis](../tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md), [aktueller Rest in §21.37](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2137-abschlussfortsetzung-mutationen-prüfablauf-tk-91-und-lieferung). Frühere datierte Absätze bewahren ihren damaligen Stand.
 
@@ -30,7 +33,7 @@ Seit 03.10.2026 zwölf zentrale Dokumente und fünf Einzelentscheidungen statt d
 | [02 Architektur](02_ARCHITECTURE.md) | Module, Speicherweg, Bausteine der Oberfläche, Performance-Regeln, Tk-Fallstricke |
 | [05 Prüfplan](05_QA_TESTPLAN.md) | Prüfstufen, Regeln, Schritte, Integrationssuiten nach Bereich, manuelle Kontrollmatrix |
 | [06 Daten, Backups und Migration](06_DATA_BACKUP_MIGRATION.md) | Format 26, ältere Formatstufen, Startprüfung, Sicherungen, Einstellungen, Austauschformat |
-| [07 QA-Bericht](07_QA_BERICHT.md) | Quellstand 3.50.0 und Lieferung 3.49.0, A01-Fortsetzung, WA-09, ursprüngliches Abnahmeaudit, WA-41-Diagnose, Liefergrenzen und Datei-/Dokumentabgleich; historische Ergebnisse und offene Abnahmen |
+| [07 QA-Bericht](07_QA_BERICHT.md) | Quell- und Lieferstand 3.50.0, A01-Fortsetzung, WA-09, ursprüngliches Abnahmeaudit, WA-41-Diagnose, Liefergrenzen und Datei-/Dokumentabgleich; historische Ergebnisse und offene Abnahmen |
 | [10 Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben, Produktdatenblatt |
 | [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |

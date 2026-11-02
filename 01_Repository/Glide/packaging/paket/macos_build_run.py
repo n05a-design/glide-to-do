@@ -83,10 +83,11 @@ def native_tools():
         raise RuntimeError("Apple Command Line Tools sind nicht eingerichtet; kein automatischer Installationsversuch.")
 
 
-def prepare(repo, destination=None):
+def prepare(repo, destination=None, license_basis=None):
     repo = Path(repo).resolve()
     runtime = native_runtime()
-    basis = json.loads((repo / "packaging/paket/lizenzen/macos/manifest.json").read_text(encoding="utf-8"))
+    basis_path = Path(license_basis) if license_basis else repo / "packaging/paket/lizenzen/macos"
+    basis = json.loads((basis_path / "manifest.json").read_text(encoding="utf-8"))
     validate_runtime(basis["runtime"], runtime)
     native_tools()
     version = (repo / "VERSION").read_text(encoding="utf-8").strip()
@@ -221,9 +222,10 @@ def main():
     parser.add_argument("--repo", type=Path, required=True)
     parser.add_argument("--ziel", type=Path)
     parser.add_argument("--archiv", type=Path)
+    parser.add_argument("--basis", type=Path, help="Original-Lizenzbasis passend zur gewählten Runtime")
     args = parser.parse_args()
     if args.mode == "prepare":
-        print(prepare(args.repo, args.ziel))
+        print(prepare(args.repo, args.ziel, args.basis))
     elif args.ziel is None or args.archiv is None:
         parser.error("finish benötigt --ziel und --archiv")
     else:

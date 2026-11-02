@@ -230,6 +230,7 @@ APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
 APP_VERSION = "3.50.0"
+APP_RELEASE_NAME = "Erster öffentlicher Stand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
 # Einstellungen des Betriebssystems hängen daran.
@@ -10101,7 +10102,7 @@ class PageEditor(RichNoteEditor):
 
     # --- Blockgriff (E-U3 A, D55, 23.10.2026) -------------------------------
     # Ein dezenter Griff links der Zeile öffnet dieselben Blockaktionen wie
-    # Strg/Cmd+/ und das Kontextmenü. Kein Ziehen (Stufe 2 nicht gewählt).
+    # Strg/Cmd+/ und das Kontextmenü. Ziehen verschiebt den ganzen Block.
     BLOCK_HANDLE_GAP = 6
     BLOCK_HANDLE_KEYS = frozenset({'Up', 'Down', 'Prior', 'Next', 'Home', 'End', 'Left', 'Right',
                                    'Return', 'KP_Enter'})
@@ -10111,14 +10112,23 @@ class PageEditor(RichNoteEditor):
         griff = tk.Label(self.text, name='block_handle', text=self.app.ICONS['block_handle'], bg=theme['card'],
                          fg=theme['muted'], font=app_font(12), cursor='hand2', bd=0, padx=3, pady=0, takefocus=0)
         griff._accessible_name = 'Blockaktionen'
-        self.app.add_tooltip(griff, 'Blockaktionen · ' + self.app.accel('/'))
-        griff.bind('<Button-1>', self.block_handle_click)
+        self.app.add_tooltip(griff, 'Block verschieben · Rechtsklick: Blockaktionen · ' + self.app.accel('/'))
         griff.bind('<Enter>', lambda _event: griff.configure(bg=self.app.theme['hover'], fg=self.app.theme['text']))
         griff.bind('<Leave>', lambda _event: (griff.configure(bg=self.app.theme['card'], fg=self.app.theme['muted']),
                                               self.idle_check('handle', self.block_handle_pointer_check)))
         self._block_handle = griff
         self._block_handle_line = None
         self._block_handle_source = None
+        self._block_drag = None
+        self._block_drop_marker = tk.Frame(self.text, bg=theme['ui_accent'], height=2, bd=0)
+        griff.bind('<ButtonPress-1>', self.block_drag_start)
+        griff.bind('<B1-Motion>', self.block_drag_motion)
+        griff.bind('<ButtonRelease-1>', self.block_drag_release)
+        griff.bind('<Button-3>', self.block_handle_click)
+        if IS_MACOS:
+            griff.bind('<Button-2>', self.block_handle_click)
+        self.text.bind('<Escape>', self.cancel_block_drag, add='+')
+        self.bind('<Destroy>', lambda event: self.cancel_block_drag() if event.widget is self else None, add='+')
 
     def block_handle_visible(self):
         griff = getattr(self, '_block_handle', None)
@@ -10136,9 +10146,8 @@ class PageEditor(RichNoteEditor):
                 return
             zeile = int(self.text.index(index).split('.')[0])
             start = f'{zeile}.0'
-            inhalt = self.text.get(start, f'{start} lineend')
-            if self.IMAGE_ANCHOR in inhalt or 'folded' in self.text.tag_names(start):
-                # Bilder haben ihr eigenes Menü; zugeklappte Zeilen sind unsichtbar.
+            if 'folded' in self.text.tag_names(start):
+                # Zugeklappte Zeilen sind unsichtbar; Bilder können mitgezogen werden.
                 self.hide_block_handle()
                 return
             box = self.text.bbox(start) or self.text.dlineinfo(start)
@@ -10172,6 +10181,8 @@ class PageEditor(RichNoteEditor):
             self.show_block_handle(f'{zeile}.0', self._block_handle_source or 'focus')
 
     def block_handle_hover(self, event):
+        if getattr(self, '_block_drag', None):
+            return None
         try:
             zeile = int(self.text.index(f'@{event.x},{event.y}').split('.')[0])
         except tk.TclError:
@@ -10182,6 +10193,8 @@ class PageEditor(RichNoteEditor):
 
     def block_handle_pointer_check(self):
         """Griff bleibt unter dem Mauszeiger oder an der Schreibmarke, sonst verschwindet er."""
+        if getattr(self, '_block_drag', None):
+            return
         try:
             if not self.winfo_exists():
                 return
@@ -10211,18 +10224,152 @@ class PageEditor(RichNoteEditor):
             self.hide_block_handle()
         return None
 
-    def block_handle_click(self, event=None):
-        zeile = getattr(self, '_block_handle_line', None)
-        if zeile is None:
-            return 'break'
+    def focus_block_line(self, zeile):
         try:
             if int(self.text.index('insert').split('.')[0]) != zeile:
                 self.text.tag_remove('sel', '1.0', 'end')
                 self.text.mark_set('insert', f'{zeile}.0 lineend')
             self.text.focus_set()
         except tk.TclError:
+            return False
+        return True
+
+    def block_handle_click(self, event=None):
+        zeile = getattr(self, '_block_handle_line', None)
+        if zeile is None or not self.focus_block_line(zeile):
             return 'break'
         return self.show_block_actions(anchor_widget=self._block_handle)
+
+    def block_drag_start(self, event):
+        self.cancel_block_drag()
+        line = getattr(self, '_block_handle_line', None)
+        if line is None or getattr(self.app, '_data_read_only', False) or not self.flush():
+            return 'break'
+        self.hide_format_bar()
+        self._block_drag = dict(line=line, x=event.x_root, y=event.y_root,
+                                document=self.document(), active=False, target=None)
+        if not self.focus_block_line(line):
+            self.cancel_block_drag()
+        return 'break'
+
+    def block_drag_motion(self, event):
+        drag = getattr(self, '_block_drag', None)
+        if drag is None:
+            return 'break'
+        drag['pointer'] = (event.x_root, event.y_root)
+        if not drag['active']:
+            if max(abs(event.x_root - drag['x']), abs(event.y_root - drag['y'])) < 6:
+                return 'break'
+            drag['active'] = True
+            self._block_handle.grab_set()
+            self._block_handle.configure(cursor='fleur')
+        self.block_drag_target()
+        return 'break'
+
+    def block_drag_target(self):
+        drag = getattr(self, '_block_drag', None)
+        if not drag or not drag['active']:
+            return
+        px, py = drag['pointer']
+        x, y = px - self.text.winfo_rootx(), py - self.text.winfo_rooty()
+        width, height = self.text.winfo_width(), self.text.winfo_height()
+        if not (0 <= x <= width and 0 <= y <= height):
+            drag['target'] = None
+            self._block_drop_marker.place_forget()
+            return
+        index = self.text.index(f'@{x},{y}')
+        image_box = None
+        # Bildanker sind unsichtbar und nur eine Pixelzeile hoch. Für die
+        # Ablage zählt die sichtbare Bildfläche, nicht diese technische Zeile.
+        for key, view in self._image_views.items():
+            if not view.winfo_ismapped():
+                continue
+            vx = view.winfo_rootx() - self.text.winfo_rootx()
+            vy = view.winfo_rooty() - self.text.winfo_rooty()
+            ranges = self.text.tag_ranges(key)
+            if ranges and vx <= x <= vx + view.winfo_width() and vy - 4 <= y <= vy + view.winfo_height():
+                index = str(ranges[0])
+                image_box = (vx, vy, view.winfo_width(), view.winfo_height())
+                break
+        row = int(index.split('.')[0]) - 1
+        first_box = self.text.dlineinfo('1.0')
+        if first_box and y <= first_box[1] + 2:
+            row = 0
+        first, last = glide_pages.block_lines(drag['document'], row)
+        box = image_box or self.text.dlineinfo(f'{row + 1}.0')
+        after = bool(box and y >= box[1] + box[3] / 2)
+        if row == 0 and box and y <= box[1] + 2:
+            after = False
+        drag['target'] = last if after else first
+        line = last + 1 if after else first + 1
+        destination = self.text.dlineinfo(f'{line}.0')
+        top = destination[1] if destination else min(height - 2, (box[1] + box[3]) if box else y)
+        self._block_drop_marker.place(x=max(0, self._read_pad or 0), y=top,
+                                      width=max(20, width - 2 * (self._read_pad or 0)), height=2)
+        self._block_drop_marker.lift()
+        if (y < 28 or y > height - 28) and not getattr(self, '_block_drag_job', None):
+            direction = -1 if y < 28 else 1
+            def scroll():
+                job = self.__dict__.pop('_block_drag_job', None)
+                self.app._after_ids.discard(job)
+                if getattr(self, '_block_drag', None):
+                    self.text.yview_scroll(direction, 'units')
+                    self.block_drag_target()
+            self._block_drag_job = self.app._register_after(self.app.root.after(60, scroll))
+
+    def cancel_block_drag(self, event=None):
+        active = getattr(self, '_block_drag', None) is not None
+        self._block_drag = None
+        job = self.__dict__.pop('_block_drag_job', None)
+        if job:
+            self.app._after_ids.discard(job)
+            try:
+                self.app.root.after_cancel(job)
+            except tk.TclError:
+                pass
+        try:
+            if self._block_handle.grab_current() is self._block_handle:
+                self._block_handle.grab_release()
+            self._block_handle.configure(cursor='hand2')
+            self._block_drop_marker.place_forget()
+        except (AttributeError, tk.TclError):
+            pass
+        return 'break' if active else None
+
+    def block_drag_release(self, event):
+        drag = getattr(self, '_block_drag', None)
+        if drag is None:
+            return 'break'
+        if drag['active']:
+            drag['pointer'] = (event.x_root, event.y_root)
+            self.block_drag_target()
+        self.cancel_block_drag()
+        if not drag['active']:
+            return self.block_handle_click()
+        if (drag['target'] is None or getattr(self.app, '_data_read_only', False)
+                or self.app.page_entry(self.entry_id) is None):
+            return 'break'
+        try:
+            if self.document() != drag['document']:
+                return 'break'
+            first, last = glide_pages.block_lines(drag['document'], drag['line'] - 1)
+            document, position = glide_pages.move_document_block(
+                drag['document'], first, last, drag['target'])
+            document = self.normalize(document)
+        except ValueError as exc:
+            self.status.configure(text=str(exc))
+            return 'break'
+        if document != drag['document']:
+            self.load(document)
+            prefix = document['text'][:position]
+            line = prefix.count('\n') + 1
+            column = int(self.text.tk.call('string', 'length', prefix.rsplit('\n', 1)[-1]))
+            self.text.mark_set('insert', f'{line}.{column}')
+            self.text.see('insert')
+            self.text.focus_set()
+            self.flush()
+            self.show_block_handle('insert', 'focus')
+        return 'break'
 
     # --- Ruhiger Seitenkopf (E-U3 A, Rang 3) ---------------------------------
     # „+ Symbol“ und „+ Titelbild“ (Symbol bzw. Titelbild hinzufügen) stehen
@@ -17225,11 +17372,16 @@ class ListApp:
     BACKDROP_CACHE_FILES = 6
 
     def backdrop_choice(self, design=None):
+        if glide_appearance.background_choice(self.settings.get("background_color")) != "default":
+            return glide_backdrop.NONE_KEY
         design = design or self.design_name()
         wert = (self.settings.get("backdrops") or {}).get(design)
         return wert if glide_backdrop.find_preset(design, wert) else glide_backdrop.NONE_KEY
 
     def set_backdrop_choice(self, key, design=None):
+        previous_color = self.settings.get("background_color", "default")
+        previous_backdrops = dict(self.settings.get("backdrops") or {})
+        self.settings["background_color"] = "default"
         design = design or self.design_name()
         werte = dict(self.settings.get("backdrops") or {})
         if key and glide_backdrop.find_preset(design, key):
@@ -17237,9 +17389,20 @@ class ListApp:
         else:
             werte.pop(design, None)
         self.settings["backdrops"] = werte
-        self.save_settings()
-        self.refresh_backdrop()
-        self.rebuild_backdrop_menu()
+        if not self.save_settings(show_error=True):
+            self.settings["background_color"] = previous_color
+            self.settings["backdrops"] = previous_backdrops
+            return "break"
+        self.apply_theme()
+        return "break"
+
+    def set_background_color(self, key):
+        previous = self.settings.get("background_color", "default")
+        self.settings["background_color"] = glide_appearance.background_choice(key)
+        if not self.save_settings(show_error=True):
+            self.settings["background_color"] = previous
+            return "break"
+        self.apply_theme()
         return "break"
 
     @staticmethod
@@ -17995,6 +18158,12 @@ class ListApp:
             menu.add_command(label=f"Hintergrund: {preset.name}", accelerator="✓" if gewaehlt == preset.key else "",
                              command=lambda key=preset.key: self.set_backdrop_choice(key))
             menu._glide_action_ids[menu.index("end")] = "backdrop." + preset.key
+        menu.add_separator()
+        for label, key in glide_appearance.BACKGROUND_CHOICES:
+            menu.add_command(label=f"Hintergrundfarbe: {label}",
+                             accelerator="✓" if key == self.settings.get("background_color", "default") else "",
+                             command=lambda value=key: self.set_background_color(value))
+            menu._glide_action_ids[menu.index("end")] = "background_color." + key
 
     # Rollen, die als Schrift auf den Grundflächen stehen. Sie müssen dort
     # WCAG AA erreichen (4,5:1); `legible_text_roles` zieht sie im eigenen
@@ -18021,7 +18190,9 @@ class ListApp:
 
     def active_theme(self):
         """Liefert die aktuell gewählte Oberfläche – mit lesbaren Schriftrollen."""
-        return self.legible_text_roles(self.glass_backdrop_tint(self._compose_theme()))
+        theme = self.glass_backdrop_tint(self._compose_theme())
+        return self.legible_text_roles(glide_appearance.with_background(
+            theme, self.settings.get("background_color"), self.THEMES[self.theme_name]))
 
     # Mit Verlauf passt das ganze Design zu ihm: Grund und Karten nehmen seine
     # mittlere Farbe auf. Im Hauptfenster liegt über dem Grund ohnehin der
@@ -18035,7 +18206,8 @@ class ListApp:
 
     def glass_backdrop_tint(self, theme):
         verlauf = getattr(self, "_backdrop", None)
-        if (not verlauf or verlauf.get("design") != self.design_name()
+        if (self.settings.get("background_color", "default") != "default"
+                or not verlauf or verlauf.get("design") != self.design_name()
                 or self.design_info()["layer"] == "contrast"):
             return theme
         mittel = verlauf["avg"]
@@ -18106,7 +18278,7 @@ class ListApp:
         # Sie mischt Flächen ineinander und nähme damit genau den Kontrast
         # weg, für den der Kontrastmodus da ist, und verwüsche die gesättigten
         # Töne des Dopamin-Designs. Beide Designs führen sie deshalb gar nicht.
-        if not info["glass"]:
+        if not info["glass"] or self.settings.get("background_color") == "surface":
             base["glass_highlight"] = base["line"]
             base["glass_shadow"] = base["bg"]
             base["glass_gradient"] = ""
@@ -18251,7 +18423,7 @@ class ListApp:
 
     def glass_enabled(self):
         """Ob das aktive Design die Materialoptik verwendet."""
-        return bool(self.design_info()["glass"])
+        return bool(self.design_info()["glass"] and self.settings.get("background_color") != "surface")
 
     def animations_enabled(self):
         """Ob bewegte Rückmeldungen gezeigt werden.
@@ -19874,6 +20046,7 @@ class ListApp:
                                      and not isinstance(breite, bool) else 360)
         # Hintergrundverlauf je Design (26.09.2026): nur bekannte Entwürfe.
         verlaeufe = result.get("backdrops")
+        result["background_color"] = glide_appearance.background_choice(result.get("background_color"))
         result["backdrops"] = {
             design: wert for design, wert in (verlaeufe.items() if isinstance(verlaeufe, dict) else [])
             if isinstance(design, str) and isinstance(wert, str) and glide_backdrop.find_preset(design, wert)
@@ -30691,6 +30864,19 @@ class ListApp:
 
         design_hinweis.bind("<Destroy>", design_spur_loesen, add="+")
 
+        self._make_field_label(appearance, "Hintergrundfarbe").pack(
+            anchor="w", pady=(glide_design.SPACING[8], self.FIELD_LABEL_GAP))
+        background_labels = dict((key, label) for label, key in glide_appearance.BACKGROUND_CHOICES)
+        background_var = tk.StringVar(value=background_labels[
+            glide_appearance.background_choice(self.settings.get("background_color"))])
+        background_frame, _background_button = self._make_option_menu(
+            appearance, background_var, list(background_labels.values()))
+        background_frame.pack(fill="x", pady=(0, glide_design.SPACING[7]))
+        tk.Label(appearance, text="Färbt nur den Hintergrund. Die Fensterfläche verbindet beide Ebenen "
+                 "ohne Schatten. Eine Farbe blendet Verläufe aus.", bg=self.theme["bg"],
+                 fg=self.theme["muted"], font=app_font(9), wraplength=360, justify="left",
+                 anchor="w").pack(fill="x", pady=(0, glide_design.SPACING[7]))
+
         # Hintergrund je Design (26.09.2026): „Aus“ und fünf Verläufe mit Vorschau.
         self._make_field_label(appearance, "Hintergrund").pack(anchor="w", pady=(glide_design.SPACING[8], glide_design.SPACING[5]))
         hintergrund_auswahl = dict(self.settings.get("backdrops") or {})
@@ -30736,6 +30922,7 @@ class ListApp:
                          anchor="w").pack(anchor="w")
 
                 def waehlen(_event=None, s=schluessel, d=design):
+                    background_var.set(background_labels["default"])
                     if s == glide_backdrop.NONE_KEY:
                         hintergrund_auswahl.pop(d, None)
                     else:
@@ -30865,6 +31052,8 @@ class ListApp:
                                  action_feedback=rueckmeldung_schluessel.get(
                                      rueckmeldung.get(), self.ACTION_FEEDBACK_DEFAULT),
                                  accent_color=next((key for label, key in self.ACCENT_COLOR_CHOICES if label == accent.get()), "accent"),
+                                 background_color=next((key for label, key in glide_appearance.BACKGROUND_CHOICES
+                                                        if label == background_var.get()), "default"),
                                  show_moon_phase=moon.get(), show_yearly_stats=yearly.get(),
                                  show_seconds=seconds.get(), reminder_attention=attention.get(),
                                  system_notifications=systemhinweis.get(),
@@ -30950,7 +31139,7 @@ class ListApp:
             panel.bind("<Configure>", lambda event, ziel=panel: umbrechen(event, ziel), add="+")
         variables = (name, logo, start, startup, startliste, stats, moon, yearly, seconds,
                      attention, systemhinweis, verlauf, animationen, hinweise, rueckmeldung, week_start,
-                     design_var, font_size, font_family, accent, ziel, kapazitaet, hell_dunkel,
+                     design_var, font_size, font_family, accent, background_var, ziel, kapazitaet, hell_dunkel,
                      *sidebar_visibility.values(), *wochenwerte)
         initial_values = tuple(variable.get() for variable in variables)
         initial_backdrops = dict(hintergrund_auswahl)
@@ -37075,6 +37264,9 @@ class ListApp:
             tree.column("count", width=width, minwidth=width)
             if tree.winfo_width() > 1:
                 tree.column("#0", width=max(50, tree.winfo_width() - width), minwidth=50)
+                if tree is self.system_listbox:
+                    tree.column("title", width=max(30, tree.winfo_width() - width
+                                                   - int(tree.column("icon", "width")) - 2))
 
     def sidebar_row_icon(self, row):
         """Symbol einer Seitenleistenzeile.
@@ -41832,7 +42024,7 @@ class ListApp:
                                               "muted", height=32, font=app_font(9), bg_key="bg")
         self.refresh_storage_sizes()
 
-        # Kopfbereich über die volle Fensterbreite: Titel wieder ganz links.
+        # Der Kopf fluchtet mit dem Inhalt; die Seitenleiste belegt links die volle Höhe.
         top_frame = self.register_theme_widget(tk.Frame(self.shell, bg=self.theme["bg"]), "bg")
         top_frame.pack(fill="x")
         self.header_frame = top_frame
@@ -42018,7 +42210,7 @@ class ListApp:
         self.main_area.pack(fill="both", expand=True, pady=(2, 0))
 
         self.sidebar_shell = self.make_rounded_container(
-            self.main_area,
+            self.shell,
             fill_key="card",
             outline_key="line",
             radius=18,
@@ -42026,7 +42218,9 @@ class ListApp:
             width=250,
         )
         # Oben bündig mit der Suchzeile des rechten Bereichs.
-        self.sidebar_shell.pack(side="left", fill="y", padx=(glide_design.SPACING[0], glide_design.SPACING[18]), pady=(glide_design.SPACING[0], self.PAGE_BOTTOM_GAP))
+        self.sidebar_shell.pack(side="left", fill="y", before=top_frame,
+                                padx=(glide_design.SPACING[0], glide_design.SPACING[18]),
+                                pady=(glide_design.SPACING[0], self.PAGE_BOTTOM_GAP))
         self.sidebar_shell.pack_propagate(False)
         self.sidebar_frame = self.register_theme_widget(tk.Frame(self.sidebar_shell.inner, bg=self.theme["card"]), "card")
         self.sidebar_frame.pack(fill="both", expand=True)
@@ -42034,7 +42228,7 @@ class ListApp:
         # OB05 (3.33.21): schmale Seitenleiste als dritter Zustand. Gepackt
         # wird sie nur in `_apply_sidebar_visibility`.
         self.sidebar_rail = self.make_rounded_container(
-            self.main_area, fill_key="card", outline_key="line", radius=18,
+            self.shell, fill_key="card", outline_key="line", radius=18,
             padding=glide_design.SPACING[6], width=self.SIDEBAR_RAIL_WIDTH)
         self.sidebar_rail.pack_propagate(False)
         self.sidebar_rail_frame = self.register_theme_widget(
@@ -64040,13 +64234,13 @@ Labels, Termine und Metadaten."""
             if rail is not None:
                 rail.pack_forget()
             self.sidebar_shell.pack(side="left", fill="y", padx=(0, 18), pady=(0, self.PAGE_BOTTOM_GAP),
-                                    before=self.content_frame)
+                                    before=self.header_frame)
         else:
             self.sidebar_shell.pack_forget()
             if rail is not None:
                 if schmal:
                     rail.pack(side="left", fill="y", padx=(0, 12), pady=(0, self.PAGE_BOTTOM_GAP),
-                              before=self.content_frame)
+                              before=self.header_frame)
                     self.refresh_sidebar_rail()
                 else:
                     rail.pack_forget()
@@ -65811,7 +66005,7 @@ Labels, Termine und Metadaten."""
     def about_text(self):
         """Der Text von „Über Glide“ – eine Stelle für Fenster und Prüfung."""
         return (
-            f"{APP_PRODUCT_NAME}\nVersion {APP_VERSION}\n\n"
+            f"{APP_PRODUCT_NAME}\nVersion {APP_VERSION} · {APP_RELEASE_NAME}\n\n"
             "Danke, dass du meine App benutzt.\n"
             "Ich hoffe, Glide schenkt dir ein bisschen mehr Überblick und Ruhe. "
             "Schön, dass es einen Platz in deinem Alltag gefunden hat.\n\n"
@@ -66765,6 +66959,8 @@ def main():
     glide_diagnostics.start_session(APP_VERSION)
     try:
         set_windows_app_user_model_id()
+        # Aqua legt seinen Schriftbestand beim ersten Tk-Interpreter fest.
+        register_private_fonts()
         root = tk.Tk()
         # Mindestversion vor dem Öffnen eines Bestands bewahren.
         stufe, meldung = glide_runtime.tk_status(tk.TkVersion)

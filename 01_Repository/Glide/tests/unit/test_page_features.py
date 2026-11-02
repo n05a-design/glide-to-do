@@ -10,6 +10,60 @@ import page_features as pages
 
 
 class PageFeaturesTests(unittest.TestCase):
+    def test_block_move_preserves_formats_references_images_and_unicode(self):
+        doc = {'text': '😀 Erst\nBild\nAufgabe', 'links': {'link:1': 'glide://list/a'},
+               'images': {'img:1': {'attachment': 'a', 'width': 320, 'mode': 'center'}},
+               'spans': [{'tag': 'bold', 'start': 0, 'end': 11},
+                         {'tag': 'link:1', 'start': 2, 'end': 6},
+                         {'tag': 'img:1', 'start': 7, 'end': 11},
+                         {'tag': 'item:task1', 'start': 12, 'end': 19}]}
+        prior = copy.deepcopy(doc)
+        result, caret = pages.move_document_block(doc, 2, 3, 0)
+        self.assertEqual(result['text'], 'Aufgabe\n😀 Erst\nBild')
+        self.assertEqual(caret, 0)
+        self.assertEqual(doc, prior)
+        self.assertEqual(result['images'], doc['images'])
+        self.assertEqual(result['links'], doc['links'])
+        task = next(s for s in result['spans'] if s['tag'] == 'item:task1')
+        self.assertEqual(result['text'][task['start']:task['end']], 'Aufgabe')
+        link = next(s for s in result['spans'] if s['tag'] == 'link:1')
+        self.assertEqual(result['text'][link['start']:link['end']], 'Erst')
+
+    def test_block_move_boundaries_empty_lines_and_no_op(self):
+        for text in ('A\nB\nC', 'A\nB\n', 'A\n\nB', '😀\nö\n三'):
+            doc = {'text': text, 'spans': [], 'links': {}}
+            rows = text.split('\n')
+            result, _ = pages.move_document_block(doc, 0, 1, len(rows))
+            self.assertEqual(result['text'], '\n'.join(rows[1:] + rows[:1]))
+            self.assertEqual(pages.move_document_block(doc, 0, 1, 1)[0], doc)
+        with self.assertRaises(ValueError):
+            pages.move_document_block({'text': 'A'}, 1, 2, 0)
+
+    def test_whole_code_table_and_toggle_blocks(self):
+        doc = {'text': 'Kopf\nKind\nCode\nMehr\nEnde', 'spans': [
+            {'tag': 'toggle', 'start': 0, 'end': 5},
+            {'tag': 'indent1', 'start': 5, 'end': 10},
+            {'tag': 'codeblock', 'start': 10, 'end': 20}]}
+        self.assertEqual(pages.block_lines(doc, 0), (0, 2))
+        self.assertEqual(pages.block_lines(doc, 3), (2, 4))
+        doc['spans'][-1]['tag'] = 'table'
+        self.assertEqual(pages.block_lines(doc, 2), (2, 4))
+
+    def test_indented_children_follow_a_plain_parent_block(self):
+        doc = {'text': 'Elternblock\nKind\nEnkel\nDanach', 'spans': [
+            {'tag': 'indent1', 'start': 12, 'end': 17},
+            {'tag': 'indent2', 'start': 17, 'end': 23}]}
+        self.assertEqual(pages.block_lines(doc, 0), (0, 3))
+        self.assertEqual(pages.block_lines(doc, 1), (1, 3))
+        moved, _ = pages.move_document_block(doc, *pages.block_lines(doc, 0), 4)
+        self.assertEqual(moved['text'], 'Danach\nElternblock\nKind\nEnkel')
+
+    def test_long_format_ranges_are_not_split_for_every_untouched_line(self):
+        text = '\n'.join('Zeile ' + str(i) for i in range(1000))
+        doc = {'text': text, 'spans': [{'tag': 'bold', 'start': 0, 'end': len(text)}], 'links': {}}
+        moved, _ = pages.move_document_block(doc, 10, 11, 800)
+        self.assertEqual(moved['spans'], [{'tag': 'bold', 'start': 0, 'end': len(text)}])
+
     def test_live_validation_and_real_home_states(self):
         self.assertEqual(pages.live_lists(['glide://list/a'] * 2), ['glide://list/a'])
         for value in (['glide://item/a'], ['glide://list/a?x'], ['glide://list/a'] * 21, {}):

@@ -8,7 +8,7 @@
 # versionierte Dateien, `git add -f` und Uploads über die GitHub-Weboberfläche
 # umgeht sie. Durchgesetzt werden die Regeln deshalb zusätzlich von der
 # CI-Grundstufe (Schritte Datenschutz und Ablagegröße) und vom Secret Scanning
-# auf GitHub. Stand der Regeln: 03.10.2026.
+# auf GitHub. Stand der Regeln: 02.11.2026 · Glide 3.50.0.
 
 # --- Sicherheit: Schlüssel, Zertifikate, Zugangsdaten ------------------------
 # Signierung und Notarisierung laufen nur lokal (docs/10_VEROEFFENTLICHUNG.md).
@@ -111,3 +111,24 @@ skills-main/
 13_TK-Test-Umgebung/
 # Neue QA-Fensterbilder bleiben nach D09 lokal; bestehende Git-Belege bleiben.
 01_Repository/Glide/tests/qa-*/**/screenshots*/
+
+# Lokale Agenten-Arbeitskopien und Sitzungsdateien sind keine Projektquelle.
+.claude/worktrees/
+.claude/fortsetzung_*.md
+*.dmp
+*.core
+*.prof
+
+# Portable Nutzerbestände; nur ausdrücklich künstliche Liefer-/Fixturedateien erlauben.
+*.glideapp
+*.glidepage
+*.glideexchange
+*.glidetemplates
+!01_Repository/Glide/tests/fixtures/**/*.glideapp
+!01_Repository/Glide/tests/fixtures/**/*.glidepage
+!01_Repository/Glide/tests/fixtures/**/*.glideexchange
+!01_Repository/Glide/tests/fixtures/**/*.glidetemplates
+!01_Repository/Glide/src/glide/resources/templates/*.glidetemplates
+!07_Python-Versionen/resources/templates/*.glidetemplates
+!05_Probelisten_Testdaten/Showcase/*.glideapp
+!05_Probelisten_Testdaten/Showcase/*.glidetemplates

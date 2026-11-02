@@ -1,8 +1,8 @@
 # Daten, Backups und Migration – Glide
 
-Stand 01.11.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2 · Austauschformat 2 (Erstellen 1 lesbar, Änderungsvorschläge 2)
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Historischer Formatwechsel 3.44.0 (22.10.2026):** Aufgabenformat 26 (FP-02), FP-01 und WA-27–WA-30 sowie die obersten Einstellungsnamespaces von FP-03/FP-04 wurden als Python-Fassung geliefert. [Datierter Schutznachweis](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/README.md). Damals konnten Pakete 3.42.0 Format 26 nur lesend öffnen. **Heute unterstützen das Windows-Paket 3.45.0, Python/Showcase und das macOS-Paket 3.49.0 Format 26; die nicht gelieferte Quelle 3.50.0 ändert das Format nicht.** Aktuelle native/Menschenabnahmen und FP-01-Prüfadapterbefund getrennt im [QA-Bericht](07_QA_BERICHT.md).
+**Historischer Formatwechsel 3.44.0 (22.10.2026):** Aufgabenformat 26 (FP-02), FP-01 und WA-27–WA-30 sowie die obersten Einstellungsnamespaces von FP-03/FP-04 wurden als Python-Fassung geliefert. [Datierter Schutznachweis](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/README.md). Damals konnten Pakete 3.42.0 Format 26 nur lesend öffnen. **Der erste öffentliche Stand 3.50.0 verwendet weiterhin Aufgabenformat 26. Tatsächliche Paketlieferungen und Prüfungen stehen im QA-Bericht.** Aktuelle native/Menschenabnahmen und FP-01-Prüfadapterbefund getrennt im [QA-Bericht](07_QA_BERICHT.md).
 
 Verbindlicher Datenvertrag. Am 03.10.2026 um das Austauschformat (bisher Vertrag 52) ergänzt und um die Verweise auf gelöschte Einzelverträge bereinigt; die Vorfassungen trägt Git. Formate 4–26 und Legacy 2 bleiben lesbar.
 
@@ -271,3 +271,26 @@ Eigene Aufträge liegen additiv im Einstellungsschlüssel `exchange_recipes` (Ei
 - **Übernahme:** erst eine Vorsicherung `backups/vor_vorschlag_<Zeitstempel>.glidebackup` (wie `vor_import_*`, nie rotiert), dann alle Änderungen als ein Rückgängig-Schritt über `item_change`. Unbekannte Labelnamen entstehen neu; ohne Fälligkeit bzw. Bearbeitungstag entfällt die zugehörige Uhrzeit. Kennungen, Anhänge, Wiederholungen und Erinnerungen bleiben unberührt.
 
 **Einplanen 3.33.13 (KO01/AU02):** kein Formatwechsel und kein neues Feld. Die gemeinsame Aktion schreibt ausschließlich `planned_date`; „Ohne Tag“ erhält `planned_time`. Fälligkeit/Uhrzeit, Aufwand, Wiederholung, Anhänge und Kennungen bleiben erhalten. Mehrere Quelllisten werden über `item_change` atomar im bisherigen Speicherweg geschrieben, ein Undo nimmt die gesamte Auswahl zurück. Die Kapazitätsvorschau verändert keine Daten. Feldverträge und Bedienung stehen in [Funktionen](20_FUNKTIONEN.md).
+
+
+## Hintergrundfarbe und Blockreihenfolge in 3.50.0
+
+`background_color` ist ein optionaler Einstellungsschlüssel (Einstellungen 2). Zulässig sind `default`, `surface`, `accent`, `clear`, `due_action`, `export`, `flag`, `delete`, `import`, `muted`; fehlende oder ungültige Werte werden `default`. `surface` bedeutet die tatsächliche Design-Kartenfarbe ohne Materialschatten. Die gespeicherten `backdrops` bleiben erhalten; eine neue Verlaufswahl setzt die Hintergrundfarbe auf `default`. App-Backup und Einstellungsnormalisierung führen den Schlüssel mit. Keine Änderung an Aufgabenformat 26.
+
+Das Ziehen eines Seitenblocks ordnet den bestehenden Text mit seinen Formatbereichen neu. Zeichenversätze, Bild-/Linkmetadaten und stabile Aufgaben-IDs werden neu zugeordnet, nicht neu erzeugt. Es entstehen keine zusätzlichen gespeicherten Blockobjekte. Tabellen, Codebereiche und eingerückte Kinder von Aufklappblöcken werden zusammen verschoben. Undo verwendet den vorhandenen Dokumentverlauf.
+
+## Vorbereitung der nächsten Aufgabenformatstufe
+
+Auftrag 02.11.2026: Es gibt noch keine produktiv genutzten Altbestände. Deshalb werden neue Datenanforderungen früh im Datenvertrag festgelegt, statt Nutzerhinweise zu hypothetischen Beständen in den Einstieg zu setzen. Schutzfunktionen und synthetische Migrationsfixtures bleiben trotzdem erhalten. **Format 27 ist noch nicht aktiviert**; die folgenden Anforderungen sind ein verbindlicher Entwurfsrahmen, keine Behauptung bereits vorhandener Felder.
+
+| Bereich | Vor einer Aktivierung festzulegen |
+|---|---|
+| Dokumente und Blöcke | Stabile IDs und Typkennung je tatsächlich eingeführtem Block, Reihenfolge unabhängig vom Titel, eindeutige Elternbezüge und klare Inline-/Blockformatgrenzen. Bestehende Aufgabenreferenzen bleiben dieselben Originalaufgaben; keine Kopien durch Verschieben oder Export |
+| Herkunft und Austausch | Quellsystem, stabile Quell-ID, Import-/Vergleichszeitpunkt und lokale Änderung getrennt; keine Kontokennungen, geheimen Tokens oder absoluten Benutzerpfade in portablen Daten. Bereits vorhandenes `notion_source` weiterverwenden statt duplizieren |
+| Zeit und Planung | Fälligkeit, Bearbeitungstag, Aufwand, gebuchte Zeit und Erinnerungszustellung getrennt. Lokales Datum, Zeitpunkt und Zeitzone ausdrücklich unterscheiden; UTC-Offset allein ersetzt keine IANA-Zone |
+| Anhänge | Stabile Anhangs-ID, relativer geprüfter Speichername, Originalname, Medientyp, Länge und SHA-256; niemals einen externen Dateipfad als portable Referenz schreiben. Metadaten sind keine Malwarefreigabe |
+| Wiederherstellung und Änderungen | Erstellungs-/Änderungszeit, Papierkorborsprung, Archivzustand, Quellbezüge und Wiederholungs-/Animationsmetadaten erhalten. Vollständiger Rundlauf einschließlich versteckter/archivierter/gelöschter Inhalte |
+| Erweiterungen | Eindeutige Namensräume und Versions-/Fähigkeitsangaben. Unbekannte schreibrelevante Felder kontrolliert ablehnen bzw. nur lesend öffnen; weder still verwerfen noch unvalidiert ausführen |
+| Persönlich und gerätebezogen | Portable inhaltliche Einstellungen von Fensterlage, lokalen Sperr-/Diagnosedaten, Gerätezeiger und Caches trennen; keine automatische Cloud-/Kontofunktion einführen |
+
+Aktivierung erst zusammen mit konkretem implementiertem Feature, normalisiertem Schema, begrenztem Lesen/Schreiben, Originalvorsicherung und Migration. Pflichtproben: fehlende/zusätzliche Felder, ungültige Typen und IDs, zyklische/verwaiste Bezüge, Unicode, Grenzen, Import/Export, alte Leser, Undo/Redo und Schreiben nach Neustart. Neue Daten erfordern tatsächliche Speicher-/Backup-/Austauschunterstützung; eine bloße Versionszahl genügt nicht.

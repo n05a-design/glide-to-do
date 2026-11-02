@@ -1,12 +1,15 @@
 # Glide – lokale Aufgaben, Notizen und Pinnwände
 
-Stand 01.11.2026 · Glide 3.50.0 · Aufgabenformat 26 · Quelle 3.50.0; Python/Showcase und macOS 3.49.0; Windows-Paket 3.45.0 · keine Gesamtabnahme
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+
+**3.50-Fertigstellung, 02.11.2026:** Erster öffentlicher Stand (intern öffentliche erste Beta). Neue UI-Funktionen, Python-Abgleich und tatsächliche Paket-/Prüfergebnisse im [aktuellen Nachweis](tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Frühere datierte Absätze beschreiben ihren damaligen Stand. Screenreader-Abnahme ist bis Bedarf zurückgestellt; menschliche Prüfung folgt anschließend.
+
 
 **Abschlussfortsetzung 31.10.2026:** Python/Showcase und eigenständiges macOS-arm64-Paket 3.49.0 geliefert, Windows-Paket weiterhin 3.45.0. Native Tk-9.1-Matrix: 126 Schritte einschließlich aller 108 Integrationssuiten grün; Programm-, Test-, Fixture- und Ressourcenstand entsprechen dem eingefrorenen Nachweis; anschließende Anleitungspflege separat geprüft. Neue Grundstufe mit 235 Werkzeugtests und zweimal 1.082 Fachtests grün. 56 Mutationsfälle und zwölf native Accessibility-Proben grün. WA-41A/B, Windows-/Linux-Endmatrix, echte Readerketten, übrige appweite Architektur-/Performanceumfänge und Menschenabnahme bleiben offen. [Prüf- und Liefernachweis](tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md), [aktueller Rest in §21.37](../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2137-abschlussfortsetzung-mutationen-prüfablauf-tk-91-und-lieferung). Frühere datierte Absätze bewahren ihren damaligen Stand.
 
 Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Sie läuft lokal mit Python 3.14 und Tk 9 (Tk 8.6 eingeschränkt), braucht weder Konto noch Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
-> **Projektstatus:** Quellstand **3.50.0**, Aufgabenformat 26: Nachschlagen in der Nebenansicht (Treffer, Markierung, letzte Suchen, Abschnittssprung), Fokusdauer und Fokusfeld, schnelleres Speichern. Geliefert sind Python/Showcase und das macOS-arm64-Paket 3.49.0 sowie das Windows-Paket 3.45.0; 3.50.0 ist nicht geliefert. WA-41 und native/menschliche Abnahme offen. [Prüfung 3.50.0](tests/qa-3.50.0/featurepaket_2026-10-31/README.md).
+> **Projektstatus:** Glide **3.50.0**, Aufgabenformat 26, Erster öffentlicher Stand (öffentliche erste Beta). Hintergrundfarben, volle Seitenleiste und Blockziehen ergänzen die bisherigen Funktionen. Tatsächliche Lieferungen, Tests und verbleibende technische Grenzen stehen im aktuellen QA-Nachweis. Screenreader ist bis Bedarf zurückgestellt; menschliche Prüfung folgt nach der technischen Fertigstellung.
 
 Funktionsumfang im Überblick: [Projekt-README](../../README.md#was-glide-kann); Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md); Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 
@@ -18,7 +21,7 @@ Voraussetzung ist Python mit Tk; zusätzliche Laufzeitpakete sind nicht nötig.
 python3 src/glide/app.pyw          # Windows: python src\glide\app.pyw
 ```
 
-Gelieferte eigenständige Entwicklungspakete 3.45.0: `build/windows/Glide-3.45.0/Glide.exe` und `build/macos/Glide-3.45.0-macos-arm64.tar.gz`. Das Mac-TAR nativ entpacken und die enthaltene `Glide.app` starten. `build/macos/Glide.app` ist auf diesem Windows-Rechner eine geprüfte Inspektionskopie mit NT-Linkzielen. Python/Tcl-Tk sind eingebettet; [Paketierung und Grenzen](packaging/README.md#eigenständige-entwicklungspakete-paket-7).
+Eigenständige 3.50-Pakete: Windows unter `build/windows/Glide-3.50.0/Glide.exe`, macOS unter `build/macos/Glide.app` bzw. im Archiv `Glide-3.50.0-macos-arm64.tar.gz`. Das TAR nativ entpacken, damit POSIX-Links und Dateimodi erhalten bleiben. Tatsächliche Bereitstellung und SHA-256 im [aktuellen QA-Nachweis](docs/07_QA_BERICHT.md). Die [Paketierung](packaging/README.md#eigenständige-entwicklungspakete-paket-7) beschreibt den reproduzierbaren Bau.
 
 Die Ressourcen unter `src/glide/resources` müssen neben der Anwendung liegen. Startbare Lieferfassung: `07_Python-Versionen/Schnellstart.pyw`. Unter macOS lässt sich ein Entwicklungsbundle bauen (nutzt das installierte Python, nicht zur Weitergabe):
 

@@ -1,6 +1,9 @@
 # Paketierung Glide
 
-Stand 01.11.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+
+**3.50-Fertigstellung, 02.11.2026:** Erster öffentlicher Stand (intern öffentliche erste Beta). Neue UI-Funktionen, Python-Abgleich und tatsächliche Paket-/Prüfergebnisse im [aktuellen Nachweis](../tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Frühere datierte Absätze beschreiben ihren damaligen Stand. Screenreader-Abnahme ist bis Bedarf zurückgestellt; menschliche Prüfung folgt anschließend.
+
 
 **Starter 3.49.0:** normaler Paketstart erhält Prozessbegleitung für lokale technische Diagnose und tatsächlichen Exitstatus; `--paket-pruefen` bleibt der direkte isolierte Prüfweg. Neue Module gehen mit jeder Lieferung mit. Änderungen am Bootstrap sind gezielt im Quellstand geprüft; vorhandene native Pakete bleiben 3.45.0 bis zu einem belegten Neubau. [Grenzen](../tests/qa-3.49.0/robustheit_2026-10-28/README.md).
 
@@ -12,9 +15,9 @@ Die eigenständigen Entwicklungspakete für Windows x64 und macOS arm64 sind auf
 
 ## Aktuelle Lieferartefakte
 
-- Windows: `build/windows/Glide-3.45.0/Glide.exe` und `build/windows/Glide-3.45.0-windows-x64.zip`.
-- Mac: `build/macos/Glide-3.45.0-macos-arm64.tar.gz` nativ entpacken. Die lokale `build/macos/Glide.app` ist eine Windows-Inspektionskopie mit NT-Linkzielen; native Weitergabe über das unveränderte TAR.
-- Wiederholbarer nativer Mac-Bau: `sh packaging/paket/baue_und_pruefe_macos.sh --python /Pfad/python3`; neuer Bauordner außerhalb OneDrive, exakte Originalruntime gemäß Lizenzmanifest. `.github/workflows/macos-paket.yml` führt denselben Weg auf einem nativen arm64-Runner aus. [Grüner nativer Lauf](https://github.com/n05a-design/glide-to-do/actions/runs/40328682255).
+Der erste öffentliche Stand heißt auf allen Ausgaben 3.50.0. Tatsächlich geprüfte Dateien, Laufzeiten und SHA-256 stehen im [QA-Bericht](../docs/07_QA_BERICHT.md) und im aktuellen Betanachweis. Unter `build/macos/Glide.app` liegt nur ein eigenständiges geprüftes Bundle; eine Vorstufe darf es niemals ersetzen. Mac-TAR-Dateien erhalten POSIX-Verknüpfungen und Dateimodi, Windows-ZIP-Dateien die native Windows-Lieferung.
+
+Wiederholbarer nativer Mac-Bau mit eigener 9.1-Runtime: `PYTHONPATH=/Pfad/runtime91/python-extension sh packaging/paket/baue_und_pruefe_macos.sh --python /Pfad/python3 --basis /Pfad/lizenzen91 --runtime-bau /Pfad/runtime91/runtime-bau.json --ziel /neuer/Bauordner`. Originalquellen und Lizenzbasis gemäß [Runtime-Anleitung](runtime/README.md) vorbereiten. Ohne optionale Runtime-/Basisargumente bleibt der geprüfte Originalruntime-Bau möglich. `.github/workflows/macos-paket.yml` baut auf macOS arm64 die eigene Tk-9.1-Runtime und das eigenständige Paket; der Windows-Bau folgt seiner vollständigen Matrix im Hauptworkflow. Beide installieren Bauabhängigkeiten ausschließlich mit Originalhashes.
 
 ## Inhalt eines Pakets
 

@@ -58,3 +58,6 @@ Erreichen synthetische Tastaturereignisse auf dem Mac im Hintergrund ihr Ziel ni
 Messmodus der Pflichtsuite `tests/integration/test_library_performance3323.py --app <Quelle> --items 1000 --rounds 8 --measure <JSON>`: erneute Bibliotheksaktualisierungen innerhalb derselben Ansicht und neue Karten-/Aktionscontainer; Aufwärmdurchlauf und Rohwerte im JSON. Dateischreiben und Ansichtswechsel sind andere Messgrößen.
 
 Für P08b misst `messung_speicherweg.py --lokale-punktmutation` den deklarierten lokalen `item_change`-Weg. Bei einer älteren App ohne dieses Argument verwendet die Probe den bisherigen Vollvergleich und kennzeichnet den tatsächlich gewählten Weg im JSON. `save_items` bleibt in dieser Probe als vollständiger Vergleich gemessen. Der Bestand verteilt 1.000/10.000 Aufgaben auf Listen mit je 200 Aufgaben; er ist nicht mit einer einzelnen Liste dieser Größe gleichzusetzen. Varianten seriell und in umgekehrter Reihenfolge messen, erste Speicherung und warme Werte getrennt auswerten.
+
+
+Bauabhängigkeiten ab Glide 3.50.0: `SSL_CERT_FILE=/Pfad/zum/Systemzertifikat python3 -B scripts/pflege/bauhashes.py` erneuert die Original-SHA-256 aus den versionsgenauen PyPI-Metadaten, ohne Versions-Pins zu ändern. Anschließend Lizenzbelege, Paketbau und isolierten Start für die gewählten Versionen prüfen. `--require-hashes` bleibt in beiden Bauanforderungsdateien aktiv.

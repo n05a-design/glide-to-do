@@ -40,7 +40,7 @@ class MacWorkflowTests(unittest.TestCase):
         self.source = WORKFLOW.read_text(encoding="utf-8")
 
     def test_native_runner_branch_and_minimum_permission_contract(self):
-        self.assertIn('branches: ["codex/glide-paketabschluss-3.45.0"]', self.source)
+        self.assertIn('branches: ["main", "codex/**"]', self.source)
         self.assertRegex(self.source, r"(?m)^  workflow_dispatch:$")
         self.assertIn("runs-on: macos-15", self.source)
         self.assertIn("cancel-in-progress: false", self.source)
@@ -73,7 +73,7 @@ class MacWorkflowTests(unittest.TestCase):
         if executable is None:
             self.skipTest("Keine lokale Bash für Shell-Syntaxprüfung verfügbar")
         blocks = list(run_blocks(self.source))
-        self.assertEqual(len(blocks), 4)
+        self.assertEqual(len(blocks), 5)
         with tempfile.TemporaryDirectory() as directory:
             for index, block in enumerate(blocks):
                 path = Path(directory) / f"step-{index}.sh"

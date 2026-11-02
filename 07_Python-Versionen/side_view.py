@@ -193,6 +193,157 @@ def match_index(current, count, step=1):
     return (current + step) % count
 
 
+OVERVIEW_LIMIT = 50
+
+
+def match_snippet(text, start, end, width=36):
+    """Fundstelle als einzeiliger Ausschnitt samt Zeilennummer (ab 1), lesend.
+
+    Zeilenumbrüche und Bild-/Kästchenplatzhalter werden zu Leerzeichen; ein
+    abgeschnittener Rand trägt „…“. Ungültige Versätze liefern (0, "").
+    """
+    if not isinstance(text, str) or not 0 <= start <= end <= len(text):
+        return 0, ''
+    line = text.count('\n', 0, start) + 1
+    left, right = max(0, start - width), min(len(text), end + width)
+    snippet = ' '.join(text[left:right].replace(IMAGE_ANCHOR, ' ').split())
+    return line, ('…' if left else '') + snippet + ('…' if right < len(text) else '')
+
+
+def section_at(sections_, position, order=None):
+    """Titel des Abschnitts, in dem eine Fundstelle steht; davor leer.
+
+    Seiten: `position` ist die Zeilennummer, Abschnittsschlüssel sind Zeilen.
+    Listen: `order` ist die Zeilen-ID-Folge der Anzeige; eine Fundstelle auf
+    einer Überschrift oder Gruppe gehört zu dieser selbst.
+    """
+    if order is None:
+        rang, schluessel = position, (lambda key: key)
+    else:
+        index = {identity: n for n, identity in enumerate(order)}
+        if position not in index:
+            return ''
+        rang, schluessel = index[position], (lambda key: index.get(key, -1))
+    title = ''
+    for section in sections_ or ():
+        stelle = schluessel(section.get('key'))
+        if isinstance(stelle, int) and 0 <= stelle <= rang:
+            title = section.get('title') or ''
+    return title
+
+
+LOOKUP_LIMIT = 80
+
+
+def lookup_query(text, limit=LOOKUP_LIMIT):
+    """Markierten Text als Suchbegriff für die Nebenansicht, sonst "".
+
+    Leerraum und Zeilenumbrüche werden zu einem Leerzeichen, Bild-/Kästchen-
+    platzhalter entfallen. Längere Markierungen werden an einer Wortgrenze
+    gekürzt; der Begriff bleibt wörtlich wie in der Suche.
+    """
+    if not isinstance(text, str):
+        return ''
+    query = ' '.join(text.replace(IMAGE_ANCHOR, ' ').split())
+    if len(query) > limit:
+        cut = query[:limit]
+        query = cut.rsplit(' ', 1)[0] if ' ' in cut else cut
+    return query
+
+
+# Letzte Suchen (D57, 01.11.2026): flüchtig je Sitzung und Datenordner.
+RECENT_LIMIT = 8
+RECENT_LABEL_LIMIT = 60
+
+
+def remember_query(history, query, limit=RECENT_LIMIT):
+    """Letzte Suchbegriffe mit dem genutzten vorn, ohne Doppelte.
+
+    Der Begriff bleibt wörtlich, weil die Suche wörtlich ist; reiner
+    Leerraum ändert nichts.
+    """
+    history = [value for value in (history or ()) if isinstance(value, str)]
+    if not isinstance(query, str) or not query.strip():
+        return history[:limit]
+    return ([query] + [value for value in history if value != query])[:limit]
+
+
+def recent_step(history, current, step):
+    """Begriff beim Blättern mit Pfeil hoch (`step` 1, älter) und runter (-1, neuer); None ändert nichts.
+
+    Steht der aktuelle Text nicht in der Liste, führt Pfeil hoch zum neuesten Begriff.
+    """
+    history = [value for value in (history or ()) if isinstance(value, str)]
+    if not history:
+        return None
+    if current in history:
+        index = history.index(current) + step
+    elif step > 0:
+        index = 0
+    else:
+        return None
+    return history[index] if 0 <= index < len(history) else None
+
+
+def recent_label(query, limit=RECENT_LABEL_LIMIT):
+    """Einzeiliger Menütitel eines Suchbegriffs; lange Begriffe enden mit „…“."""
+    clean = ' '.join(str(query or '').split())
+    return clean if len(clean) <= limit else clean[:limit - 1].rstrip() + '…'
+
+
+def section_counts(sections_, positions, order=None):
+    """Treffer je Abschnitt, in Abschnittsreihenfolge; Treffer davor zählen nicht.
+
+    Dieselbe Zuordnung wie `section_at`: Seiten über Zeilennummern, Listen
+    über die Zeilen-ID-Folge der Anzeige.
+    """
+    sections_ = list(sections_ or ())
+    if order is None:
+        stellen = [section.get('key') for section in sections_]
+        rang = lambda position: position
+    else:
+        index = {identity: n for n, identity in enumerate(order)}
+        stellen = [index.get(section.get('key'), -1) for section in sections_]
+        rang = lambda position: index.get(position, -1)
+    counts = [0] * len(sections_)
+    for position in positions or ():
+        ziel = rang(position)
+        treffer = [n for n, stelle in enumerate(stellen) if isinstance(stelle, int) and 0 <= stelle <= ziel]
+        if treffer and isinstance(ziel, int) and ziel >= 0:
+            counts[treffer[-1]] += 1
+    return counts
+
+
+def section_step(sections_, position, step, order=None):
+    """Nächster (`step` 1) oder vorheriger (-1) Abschnitt ab einer Stelle; None am Rand.
+
+    Seiten: `position` ist die aktuelle Zeile. Listen: `order` ist die
+    Zeilen-ID-Folge der Anzeige; ohne bekannte Stelle führt „weiter“ zum
+    ersten Abschnitt. Ein Abschnitt auf der Stelle selbst zählt in keine
+    Richtung, damit wiederholtes Drücken weiterspringt.
+    """
+    sections_ = list(sections_ or ())
+    if order is None:
+        rang = position if isinstance(position, int) else 0
+        stellen = [section.get('key') for section in sections_]
+    else:
+        index = {identity: n for n, identity in enumerate(order)}
+        rang = index.get(position, -1)
+        stellen = [index.get(section.get('key'), -1) for section in sections_]
+    gueltig = [(stelle, section) for stelle, section in zip(stellen, sections_)
+               if isinstance(stelle, int) and stelle >= 0]
+    if step > 0:
+        return next((section for stelle, section in gueltig if stelle > rang), None)
+    vorher = [section for stelle, section in gueltig if stelle < rang]
+    return vorher[-1] if vorher else None
+
+
+def overview_label(section, snippet, limit=90):
+    """Menüzeile der Trefferübersicht: „Abschnitt · Ausschnitt“, gekürzt."""
+    text = f'{section} · {snippet}' if section else (snippet or '')
+    return text if len(text) <= limit else text[:limit - 1].rstrip() + '…'
+
+
 def sections(entry, limit=200):
     """Überschriften bzw. Gruppen als lesende Sprungziele, ohne zweite Ablage."""
     if not isinstance(entry, dict):

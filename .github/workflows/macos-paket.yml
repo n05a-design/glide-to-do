@@ -1,4 +1,4 @@
-# Eigenständiges Mac-Entwicklungspaket; kein Release und keine Veröffentlichung.
+# Glide 3.50.0: nativer Mac-Bau mit eigener Tcl/Tk 9.1; Prüfung vor der Bereitstellung.
 # Verifiziert am 26.10.2026:
 # https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job
 # macos-15 ist der Standard-arm64-Runner; macos-15-intel wäre eine andere Architektur.
@@ -9,7 +9,12 @@ name: Glide-Paket macOS arm64
 on:
   workflow_dispatch:
   push:
-    branches: ["codex/glide-paketabschluss-3.45.0"]
+    branches: ["main", "codex/**"]
+    paths:
+      - "01_Repository/Glide/src/**"
+      - "01_Repository/Glide/packaging/**"
+      - "01_Repository/Glide/requirements/**"
+      - ".github/workflows/macos-paket.yml"
 
 permissions:
   contents: read
@@ -29,7 +34,7 @@ jobs:
   paket-macos:
     name: Nativer Bau und isolierter Start (macOS arm64)
     runs-on: macos-15
-    timeout-minutes: 60
+    timeout-minutes: 120
     defaults:
       run:
         shell: bash
@@ -82,10 +87,23 @@ jobs:
           print("Eingefroren:", commit, len(hashes), "Bauquellen;", runtime)
           PY
 
+      - name: Eigene Tcl/Tk 9.1 und Original-Lizenzbasis bauen
+        run: |
+          "$MAC_PYTHON" -B packaging/runtime/hole_runtimequellen.py --ziel "$RUNNER_TEMP/tk91-quellen"
+          "$MAC_PYTHON" -B packaging/runtime/baue_runtime.py \
+            --tcl-quelle "$RUNNER_TEMP/tk91-quellen/tcl" \
+            --tk-quelle "$RUNNER_TEMP/tk91-quellen/tk" \
+            --python-quelle "$RUNNER_TEMP/tk91-quellen/python" --ziel "$RUNNER_TEMP/tk91-runtime"
+          "$MAC_PYTHON" -B packaging/runtime/lizenzen_tk91_macos.py \
+            --basis packaging/paket/lizenzen/macos --quellen "$RUNNER_TEMP/tk91-quellen" \
+            --ziel "$RUNNER_TEMP/tk91-lizenzen"
+          printf 'PYTHONPATH=%s\n' "$RUNNER_TEMP/tk91-runtime/python-extension" >> "$GITHUB_ENV"
+
       - name: Nativen Paketbau und Prozesssandbox-Startprüfung ausführen
         run: |
           sh packaging/paket/baue_und_pruefe_macos.sh \
-            --python "$MAC_PYTHON" --ziel "$RUNNER_TEMP/glide-macos-bau"
+            --python "$MAC_PYTHON" --ziel "$RUNNER_TEMP/glide-macos-bau" \
+            --basis "$RUNNER_TEMP/tk91-lizenzen" --runtime-bau "$RUNNER_TEMP/tk91-runtime/runtime-bau.json"
 
       - name: Eingefrorenen Stand nach Archiv- und Startprüfung erneut abgleichen
         run: |
@@ -112,6 +130,7 @@ jobs:
         with:
           name: paket-macos-arm64-belege
           path: |
+            ${{ runner.temp }}/tk91-runtime/runtime-bau.json
             ${{ runner.temp }}/glide-macos-runtime/*.json
             ${{ runner.temp }}/glide-macos-runtime/*.sha256
             ${{ runner.temp }}/glide-macos-runtime/*.txt

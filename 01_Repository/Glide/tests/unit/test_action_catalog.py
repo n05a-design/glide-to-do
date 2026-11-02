@@ -38,7 +38,7 @@ class ActionCatalogTests(unittest.TestCase):
             self.assertEqual(actions.group_for(name), "Planen und einordnen", name)
 
     def test_dynamic_variants_are_grouped_by_id(self):
-        for name in ("backdrop.none", "backdrop.pixel-night", "grouping.eisenhower"):
+        for name in ("backdrop.none", "backdrop.pixel-night", "background_color.surface", "grouping.eisenhower"):
             self.assertEqual(actions.group_for(name), "Ansichtseinstellungen")
         self.assertEqual(actions.group_for("unknown"), "Weitere Aktionen")
 

@@ -270,6 +270,7 @@ def fall_blockaktionen(lauf):
     assert abs((griff.winfo_rooty() + griff.winfo_height() / 2) - (text.winfo_rooty() + erste[1] + erste[3] / 2)) <= 4
     # Klick auf den Griff: Schreibmarke auf die Zeile, Auswahl daneben.
     griff.event_generate("<Button-1>", x=3, y=3)
+    griff.event_generate("<ButtonRelease-1>", x=3, y=3)
     idle(lauf)
     assert app.action_chooser_open() and text.index("insert").split(".")[0] == str(lange)
     buehne = app._action_chooser["stage"]
@@ -2793,7 +2794,167 @@ def fall_side_abschnitte(lauf):
             'sichtbar angesteuert, ✓ am aktuellen Abschnitt, Ränder und fehlende Abschnitte gemeldet, lesend, in Hilfe › Tastenkürzel')
 
 
-FAELLE = ("seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
+def fall_beta350(lauf):
+    """3.50: gespeicherte Hintergrundfarbe, Fluchten und echter Griff-Ziehweg."""
+    app, mod = lauf.app, lauf.mod
+    for design in app.DESIGN_ORDER:
+        app.set_design(design)
+        for _label, key in mod.glide_appearance.BACKGROUND_CHOICES:
+            app.settings['background_color'] = key
+            palette = app.active_theme()
+            for role in app.TEXT_ROLE_KEYS:
+                for surface in ('bg', 'card', 'input'):
+                    assert mod.contrast_ratio(palette[role], palette[surface]) >= 4.49, (design, key, role, surface)
+        app.settings['background_color'] = 'surface'
+        app.set_design(design)
+        idle(lauf)
+        assert app.theme['bg'] == app.theme['card'], (design, app.theme)
+        assert not app.glass_enabled() and not app.theme['glass_gradient']
+        assert not app.backdrop_request()
+        assert all(not box.glass_mode for box in app.rounded_containers if box.winfo_exists())
+    app.set_design('minimal_light')
+    app.settings['background_color'] = 'clear'
+    blue = app.active_theme()['bg']
+    assert int(blue[5:7], 16) > int(blue[1:3], 16), blue
+    app.set_design('light')
+    app.set_background_color('clear')
+    idle(lauf)
+    assert app.theme['bg'] != app.theme['card']
+    assert app.theme['card'] == app.THEMES['light']['card']
+    assert app.normalize_personal_settings({'background_color': 'falsch'})['background_color'] == 'default'
+    lauf.neustart()
+    app = lauf.app
+    assert app.settings['background_color'] == 'clear'
+    for geometry in ('860x700+20+20', '1280x800+20+20', '1700x1000+20+20'):
+        lauf.root.geometry(geometry)
+        idle(lauf, 8)
+        assert app.sidebar_shell.winfo_rooty() == app.header_frame.winfo_rooty()
+        assert app.sidebar_shell.winfo_rootx() < app.header_frame.winfo_rootx()
+        assert abs(app.header_frame.winfo_rootx() - app.content_frame.winfo_rootx()) <= 1
+        assert abs(app.sidebar_shell.winfo_rooty() + app.sidebar_shell.winfo_height()
+                   - app.content_frame.winfo_rooty() - app.content_frame.winfo_height()) <= 2
+        count, issues = befunde_b15(lauf, 'beta350-' + geometry)
+        assert count and not issues, issues
+    app.set_backdrop_choice(mod.glide_backdrop.NONE_KEY)
+    idle(lauf)
+    assert app.settings['background_color'] == 'default'
+    assert app.theme['bg'] == app.THEMES['light']['bg']
+    page, editor = seite_anlegen(lauf, '# Erste\n\nAbsatz 😀\n\n## Zweite\n\nEnde')
+    prior = editor.document()
+    text = editor.text
+    source = zeile_mit(text, 'Absatz 😀')
+    destination = zeile_mit(text, 'Ende')
+    editor.show_block_handle(f'{source}.0', 'pointer')
+    idle(lauf)
+    handle = editor._block_handle
+    box = text.dlineinfo(f'{destination}.0')
+    px = text.winfo_rootx() + int(float(text.cget('padx'))) + 30
+    py = text.winfo_rooty() + box[1] + box[3] - 1
+    handle.event_generate('<ButtonPress-1>', x=3, y=3)
+    handle.event_generate('<B1-Motion>', x=px-handle.winfo_rootx(), y=py-handle.winfo_rooty(), rootx=px, rooty=py)
+    idle(lauf)
+    assert editor._block_drop_marker.winfo_ismapped()
+    handle.event_generate('<ButtonRelease-1>', x=px-handle.winfo_rootx(), y=py-handle.winfo_rooty(), rootx=px, rooty=py)
+    idle(lauf)
+    assert not app.action_chooser_open()
+    assert editor.document()['text'].index('Absatz 😀') > editor.document()['text'].index('Ende')
+    assert editor.document() == app.page_entry(page['id'])['rich_note']
+    editor.undo()
+    idle(lauf)
+    assert editor.document() == prior
+    editor.redo()
+    idle(lauf)
+    assert editor.document()['text'].index('Absatz 😀') > editor.document()['text'].index('Ende')
+    # Abbruch und Schreibschutz dürfen weder Text noch gespeicherte Bytes ändern.
+    app.sidebar_listbox.focus_force()
+    idle(lauf)
+    editor.show_block_handle('1.0', 'pointer')
+    idle(lauf)
+    before = editor.document()
+    saved = Path(mod.SAVE_FILE).read_bytes()
+    handle.event_generate('<ButtonPress-1>', x=3, y=3)
+    handle.event_generate('<B1-Motion>', x=px-handle.winfo_rootx(), y=py-handle.winfo_rooty(), rootx=px, rooty=py)
+    assert lauf.root.focus_get() is editor.text, 'Ein Griffzug übernimmt den Textfokus für Escape'
+    editor.text.event_generate('<Escape>')
+    idle(lauf)
+    assert editor._block_drag is None
+    handle.event_generate('<ButtonRelease-1>', x=3, y=3)
+    assert editor.document() == before and Path(mod.SAVE_FILE).read_bytes() == saved
+    app._data_read_only = True
+    handle.event_generate('<ButtonPress-1>', x=3, y=3)
+    assert editor._block_drag is None
+    app._data_read_only = False
+    # Echte Aufgaben und Bilder behalten beim Ziehen ihre Identität/Anhänge.
+    page, editor = seite_anlegen(lauf, '# Medien\n\n- [ ] Aufgabe behalten\n\nSchluss')
+    picture = mod.tk.PhotoImage(master=lauf.root, width=12, height=12)
+    picture.put('#2277AA', to=(0, 0, 12, 12))
+    image_path = Path(lauf.data) / 'blockbild.png'
+    picture.write(str(image_path), format='png')
+    editor.text.mark_set('insert', 'end-1c')
+    editor.insert_images([str(image_path)])
+    assert editor.flush()
+    idle(lauf, 8)
+    identities = set(editor.item_ids(owned=True))
+    assert identities
+    before = editor.document()
+    assert before.get('images')
+    image_line = next(int(editor.text.index(str(editor.text.tag_ranges(tag)[0])).split('.')[0])
+                      for tag in editor.images if editor.text.tag_ranges(tag))
+    def drag_to_top(row):
+        editor.text.see(f'{row}.0')
+        editor.text.mark_set('insert', f'{row}.0')
+        editor.text.focus_force()
+        idle(lauf)
+        editor.show_block_handle(f'{row}.0', 'focus')
+        idle(lauf)
+        assert editor._block_handle_line == row, (editor._block_handle_line, row)
+        grip = editor._block_handle
+        grip.event_generate('<ButtonPress-1>', x=3, y=3)
+        editor.text.yview_moveto(0)
+        idle(lauf)
+        box = editor.text.dlineinfo('1.0')
+        x = editor.text.winfo_rootx() + int(float(editor.text.cget('padx'))) + 30
+        y = editor.text.winfo_rooty() + box[1] + 1
+        if editor.text.get('1.0', '1.1') == editor.IMAGE_ANCHOR:
+            first_image = next(view for key, view in editor._image_views.items()
+                               if str(editor.text.tag_ranges(key)[0]).startswith('1.'))
+            x = first_image.winfo_rootx() + first_image.winfo_width() // 2
+            y = first_image.winfo_rooty() + 1
+        grip.event_generate('<B1-Motion>', x=x-grip.winfo_rootx(), y=y-grip.winfo_rooty(), rootx=x, rooty=y)
+        assert editor._block_drag and editor._block_drag['active'], editor._block_drag
+        assert editor._block_drag['target'] == 0, editor._block_drag
+        grip.event_generate('<ButtonRelease-1>', x=x-grip.winfo_rootx(), y=y-grip.winfo_rooty(), rootx=x, rooty=y)
+        idle(lauf, 6)
+    drag_to_top(image_line)
+    assert editor.document()['images'] == before['images']
+    assert set(editor.item_ids(owned=True)) == identities
+    task_line = zeile_mit(editor.text, 'Aufgabe behalten')
+    drag_to_top(task_line)
+    assert set(editor.item_ids(owned=True)) == identities
+    assert editor.document()['text'].lstrip().startswith('Aufgabe behalten'), repr(editor.document())
+    assert editor.document() == app.page_entry(page['id'])['rich_note']
+    page, editor = seite_anlegen(lauf, '# Struktur\n\nStart\n\n- Eltern\n  - Kind\n\nSchluss')
+    parent_line = zeile_mit(editor.text, app.ICONS['bullet'] + ' Eltern')
+    drag_to_top(parent_line)
+    assert editor.document()['text'].startswith(app.ICONS['bullet'] + ' Eltern\n' + app.ICONS['bullet'] + ' Kind')
+    assert any(span['tag'] == 'indent1' for span in editor.document()['spans'])
+    assert editor.document() == app.page_entry(page['id'])['rich_note']
+    before = editor.document()
+    saved = Path(mod.SAVE_FILE).read_bytes()
+    undo_depth = len(editor._undo)
+    normalize = editor.normalize
+    def limited(value):
+        if value.get('text') != before['text']:
+            raise ValueError('Zu viele Formatierungen.')
+        return normalize(value)
+    with patch.object(editor, 'normalize', side_effect=limited):
+        drag_to_top(zeile_mit(editor.text, 'Start'))
+    assert editor.document() == before and Path(mod.SAVE_FILE).read_bytes() == saved
+    assert len(editor._undo) == undo_depth and 'Zu viele Formatierungen' in editor.status.cget('text')
+    return 'Hintergrundfarben in zehn Designs, Speicherung/Neustart, drei Größen, volle Seitenleiste, Blockziehen/Undo/Redo/Abbruch/Schreibschutz'
+
+
+FAELLE = ("beta350", "seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
           "kompakt_ansichten", "kompakt_verlorenes_loslassen", "gestaltung", "tagessteuerung", "nebenansicht_navigation",

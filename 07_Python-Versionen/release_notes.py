@@ -14,6 +14,13 @@ bleiben ohne Eintrag, nachträglich wird nichts erfunden.
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.50.0": (
+        "Erster öffentlicher Stand: Aufgaben, Seiten, Notizen, Pinnwände, Tagebuch und Pixel-Werkstatt lokal nutzen.",
+        "Hintergrundfarbe unabhängig vom Design wählen; „Wie die Fensterfläche“ verbindet die Flächen ohne Materialschatten.",
+        "Volle Seitenleiste, Kopf auf Inhaltsflucht; Seitenblöcke am Sechspunktgriff ziehen und per Rechtsklick formatieren.",
+        "Nebenansicht: Treffer und Abschnitte ansteuern, letzte Suchen aufrufen und markierten Text nachschlagen.",
+        "Fokusintervalle wählen, um fünf Minuten verlängern und zur nächsten Aufgabe wechseln; große Bestände schneller speichern.",
+    ),
     "3.49.0": (
         "Startseite: über Woche direkt einen Tag der betrachteten, vorherigen oder nächsten Woche wählen.",
         "Ausgewählte Tagesaufgaben gemeinsam in Fälligkeit und Aufwand ändern, mit einem Rückgängig-Schritt.",

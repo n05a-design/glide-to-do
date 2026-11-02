@@ -1,6 +1,6 @@
 # Produktgrenzen und Produktprinzipien
 
-Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 03.10.2026 mit der Produktprinzipien- und UX-Prüfung vom 01.10.2026 zusammengeführt; deren Befunde U01–U24 stehen mit Status im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt, am 06.10.2026 um die Ausschlüsse der Wettbewerbsrecherche vom 25.09.2026 ergänzt. Die Vorfassungen trägt Git.
 
@@ -79,7 +79,7 @@ Vor der Umsetzung in den Abschnitt der Version (Funktionen, Entwicklungsplan) au
 | Bereich | Grenze |
 |---|---|
 | Zeichnung | 16–128 Zellen, eine bemalbare Ebene, höchstens 256 Farben, deckend weißer Grund; keine Vektorobjekte, Texte, Ebenen, Transparenz, Stiftdruck, Touchgesten, kein allgemeiner Fremd-SVG-Import. Mitgeliefert nur die eigene Palette. Formate und Sicherheitsgrenzen: [Funktionen](20_FUNKTIONEN.md#9-pixel-werkstatt) |
-| Seiten | ein Blatt ohne Unterseiten; Tabellen als ausgerichteter Text; Blöcke nicht einzeln mit der Maus ziehbar |
+| Seiten | ein Blatt ohne Unterseiten; Tabellen als ausgerichteter Text; Blöcke am Sechspunktgriff ziehbar; Tabellen/Code und Aufklappkinder bleiben zusammen |
 | Galerie und Vorschauen | Bilder sind lokale Anhänge; JPEG, HEIC, WebP, TIFF, BMP über das System (macOS `nsimage`/`sips`, Windows WIC, HEIC/WebP nur mit Store-Erweiterungen), unter Linux PNG, GIF, SVG und – nur mit vorhandenem Systemwerkzeug `gdk-pixbuf-thumbnailer` oder `djpeg` – JPEG und weitere Formate (3.34.0, N08); Glide bringt dafür keine Abhängigkeit mit |
 | Kalender (ICS) | Aufgabenimport/-ausgabe als Datei (Import höchstens 2.000 Termine/12 MB); zusätzliche ausdrücklich gewählte lokale Belegdatei mit Serien/Ausnahmen (höchstens 5.000 VEVENT/12 MiB). Keine Synchronisierung, kein Abonnement, keine Teilnehmer oder VTODO; Fehler bleiben sichtbar ([Datenvertrag](06_DATA_BACKUP_MIGRATION.md)) |
 | CSV | Import mit Spaltenzuordnung; kein XLSX, keine Anhänge, Wiederholungen oder Erinnerungen aus Spalten, kein Abgleich mit Vorhandenem; 5.000 Zeilen, 64 Spalten, 12 MB |

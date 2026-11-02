@@ -1,6 +1,9 @@
 # Arbeitsrichtung, Entscheidungen und Abnahme
 
-Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26
+Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+
+**D58 – Erster öffentlicher Stand, Auftrag 02.11.2026:** 3.50.0 bezeichnet überall den ersten öffentlichen Stand, intern die öffentliche erste Beta. Beauftragt sind die drei UI-Erweiterungen (Hintergrundfarbe/Fensterfläche, Inhaltsflucht/volle Seitenleiste, Blockziehen), Feature-/README-/Sicherheits-/Konfigurationspflege, tatsächlicher Lieferabgleich und Prüfungen auf verfügbaren Plattformen. Commit und Push sind ausdrücklich autorisiert; die bisher datierten Gitverbote gelten für diesen Auftrag nicht. Menschliche Prüfung anschließend durch den Inhaber. Screenreader-Abnahme aus aktiven offenen Punkten entfernen und nur bei konkretem Bedarf wieder aufnehmen. Keine Altbestände in produktiver Verwendung; technische Migrations- und Sicherungsschutzfunktionen bleiben bestehen. Prüfbelege nie umetikettieren oder fehlende Plattformabnahmen als erledigt erklären. Aktueller Arbeits-/Liefernachweis ausschließlich im [Plan §21.43](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2143-erster-öffentlicher-stand-3500).
+
 
 **Beauftragte Abschlussfortsetzung 31.10.2026:** Python/Showcase und eigenständiges macOS-arm64-Paket 3.49.0 geliefert, Windows-Paket weiterhin 3.45.0. Native Tk-9.1-Matrix: 126 Schritte einschließlich aller 108 Integrationssuiten grün; 707 relevante Eingaben aktuell bytegleich zum eingefrorenen Nachweis. Neue Grundstufe mit 235 Werkzeugtests und zweimal 1.082 Fachtests grün. 56 Mutationsfälle und zwölf native Accessibility-Proben grün. WA-41A/B, Windows-/Linux-Endmatrix, echte Readerketten, übrige appweite Architektur-/Performanceumfänge und Menschenabnahme bleiben offen. Maßgeblich ist [aktueller Rest in §21.37](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2137-abschlussfortsetzung-mutationen-prüfablauf-tk-91-und-lieferung). Inhaber übernimmt die manuelle Prüfung; keine Freigaben vorweggenommen. [Prüf- und Liefernachweis](../tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md).
 

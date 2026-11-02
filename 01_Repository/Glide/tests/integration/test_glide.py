@@ -3119,7 +3119,8 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     # Fensterbreite – dadurch beginnt die Seitenleiste eine Zeile weiter oben.
     assert app.search_frame.master is app.content_toolbar
     assert app.content_toolbar.master is app.content_frame
-    assert app.sidebar_shell.master is app.main_area
+    assert app.sidebar_shell.master is app.shell
+    assert app.sidebar_shell.winfo_rooty() == app.header_frame.winfo_rooty()
     assert app.content_frame.master is app.main_area
     assert app.hide_done_box_border.master is app.search_frame
     assert app.clear_search_button.master is app.search_frame

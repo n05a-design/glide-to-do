@@ -1,10 +1,96 @@
 """Live-Listen, Titelbilder und gefüllte Vorlagenvorschauen; ohne Tk (Format 23)."""
 import copy
+from bisect import bisect_left, bisect_right
 from datetime import date, timedelta
 import re
 
 import drawing
 import object_references as objects
+
+
+def block_lines(document, line):
+    """Halboffenes Zeilenintervall eines Blocks (nullbasiert), mit Kindzeilen.
+
+    Tabellen und mehrzeilige Codebereiche bleiben zusammen. Eingerückte
+    Kindblöcke folgen ihrem Elternblock, auch wenn sie gerade verborgen sind.
+    """
+    rows = document.get('text', '').split('\n')
+    starts, offset = [], 0
+    for row in rows:
+        starts.append(offset)
+        offset += len(row) + 1
+    line = max(0, min(len(rows) - 1, line))
+    first, last = line, line + 1
+    spans = document.get('spans', ())
+    for span in spans:
+        if span['tag'] in ('table', 'codeblock') and span['start'] < offset:
+            a = max(0, bisect_right(starts, span['start']) - 1)
+            b = bisect_right(starts, max(span['start'], span['end'] - 1))
+            if a <= line < b:
+                first, last = min(first, a), max(last, b)
+    if any(s['tag'].startswith('indent') for s in spans):
+        levels = [0] * len(rows)
+        for span in spans:
+            tag = span['tag']
+            if tag.startswith('indent') and tag[6:].isdigit():
+                for row in range(bisect_left(starts, span['start']), bisect_left(starts, span['end'])):
+                    levels[row] = max(levels[row], int(tag[6:]))
+        while last < len(rows) and levels[last] > levels[first]:
+            last += 1
+    return first, last
+
+
+def move_document_block(document, first, last, target):
+    """Verschiebt einen Block vor eine Zeilengrenze; Format/IDs bleiben erhalten.
+
+    Alle Versätze zählen Python-Zeichen, auch Emoji. Über mehrere Blöcke
+    laufende Formate werden an den Schnittkanten geteilt und neu zugeordnet.
+    Das Eingabedokument wird nie verändert. Ergebnis: (Dokument, Textversatz).
+    """
+    text = document.get('text', '')
+    rows = text.split('\n')
+    count = len(rows)
+    if not (0 <= first < last <= count and 0 <= target <= count):
+        raise ValueError('Ungültige Blockposition.')
+    if first <= target <= last:
+        return copy.deepcopy(document), sum(len(row) + 1 for row in rows[:first])
+    order = list(range(count))
+    selected = order[first:last]
+    del order[first:last]
+    insertion = target if target < first else target - (last - first)
+    order[insertion:insertion] = selected
+    starts, offset = [], 0
+    for row in rows:
+        starts.append(offset)
+        offset += len(row) + 1
+    result = copy.deepcopy(document)
+    result['text'] = '\n'.join(rows[i] for i in order)
+    mapped, position, segments = {}, 0, []
+    for index in order:
+        mapped[index] = position
+        end = starts[index] + len(rows[index]) + 1
+        if segments and segments[-1][1] == starts[index]:
+            segments[-1][1] = end
+        else:
+            segments.append([starts[index], end, position])
+        position += len(rows[index]) + 1
+    result['spans'] = []
+    for span in document.get('spans', ()):
+        for start, end, destination in segments:
+            low = max(span['start'], start)
+            high = min(span['end'], end)
+            a = destination + low - start
+            b = min(len(result['text']), destination + high - start)
+            if low < high and a < b:
+                result['spans'].append(dict(span, start=a, end=b))
+    merged = []
+    for span in sorted(result['spans'], key=lambda s: (s['tag'], s['start'], s['end'])):
+        if merged and merged[-1]['tag'] == span['tag'] and span['start'] <= merged[-1]['end']:
+            merged[-1]['end'] = max(merged[-1]['end'], span['end'])
+        else:
+            merged.append(span)
+    result['spans'] = sorted(merged, key=lambda s: (s['start'], s['end'], s['tag']))
+    return result, mapped[first]
 
 
 def card_summary(entry):

@@ -31,6 +31,10 @@ GROUPS = {
 'skip_missed_repeats_selected': 'Planen und einordnen',
 'start_day_proposal': 'Planen und einordnen',
 'start_focus_selected': 'Planen und einordnen',
+'focus_pause': 'Planen und einordnen',
+'focus_extend': 'Planen und einordnen',
+'focus_switch': 'Planen und einordnen',
+'focus_finish': 'Planen und einordnen',
 'choose_time_block': 'Planen und einordnen',
 'collapse_all': 'Struktur und Gliederung',
  'convert_selected_kind.group': 'Struktur und Gliederung',
@@ -274,7 +278,7 @@ def method_id(callback):
 
 
 def group_for(action_id):
-    if action_id.startswith(("backdrop.", "grouping.")):
+    if action_id.startswith(("backdrop.", "background_color.", "grouping.")):
         return "Ansichtseinstellungen"
     return GROUPS.get(action_id, "Weitere Aktionen")
 
@@ -282,7 +286,7 @@ def group_for(action_id):
 def legacy_group(label):
     if label.startswith("Über "):
         return "Programm und Hilfe"
-    if label.startswith("Hintergrund: "):
+    if label.startswith(("Hintergrund: ", "Hintergrundfarbe: ")):
         return "Ansichtseinstellungen"
     return LEGACY_GROUPS.get(label, "Weitere Aktionen")
 
