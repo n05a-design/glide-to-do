@@ -21,7 +21,7 @@ Voraussetzung ist Python mit Tk; zusätzliche Laufzeitpakete sind nicht nötig.
 python3 src/glide/app.pyw          # Windows: python src\glide\app.pyw
 ```
 
-Gelieferte eigenständige Entwicklungspakete 3.45.0: `build/windows/Glide-3.45.0/Glide.exe` und `build/macos/Glide-3.45.0-macos-arm64.tar.gz`. Das Mac-TAR nativ entpacken und die enthaltene `Glide.app` starten. `build/macos/Glide.app` ist auf diesem Windows-Rechner eine geprüfte Inspektionskopie mit NT-Linkzielen. Python/Tcl-Tk sind eingebettet; [Paketierung und Grenzen](packaging/README.md#eigenständige-entwicklungspakete-paket-7).
+Eigenständige 3.50-Pakete: Windows unter `build/windows/Glide-3.50.0/Glide.exe`, macOS unter `build/macos/Glide.app` bzw. im Archiv `Glide-3.50.0-macos-arm64.tar.gz`. Das TAR nativ entpacken, damit POSIX-Links und Dateimodi erhalten bleiben. Tatsächliche Bereitstellung und SHA-256 im [aktuellen QA-Nachweis](docs/07_QA_BERICHT.md). Die [Paketierung](packaging/README.md#eigenständige-entwicklungspakete-paket-7) beschreibt den reproduzierbaren Bau.
 
 Die Ressourcen unter `src/glide/resources` müssen neben der Anwendung liegen. Startbare Lieferfassung: `07_Python-Versionen/Schnellstart.pyw`. Unter macOS lässt sich ein Entwicklungsbundle bauen (nutzt das installierte Python, nicht zur Weitergabe):
 

@@ -8,7 +8,7 @@ Glide ist eine lokale Desktop-Anwendung. Kernfunktionen müssen ohne Internet, B
 
 - Einstieg für jede neue Sitzung: `../../00_Arbeitsvorbereitung/Glide_Uebergabe.md` (Stand, Regeln, nächste Schritte)
 - Aufgaben mit Status: `../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md`
-- Entscheidungen D01–D57 (D49 als Auslegung mit Korrekturvorbehalt, D50 UI-/UX-Vorrang, D51 phasenweise Prüfung, D52–D54 zentrale Roadmap/Designgeltung/Integrationsbewertung/Pflege, D55 Auswahl E-U1 A/E-U2 A/E-U3 A), Auftrag und Arbeitsablauf: `docs/ARBEITSRICHTUNG.md`; neue Produktentscheidungen ab D58
+- Entscheidungen D01–D58 (D49 als Auslegung mit Korrekturvorbehalt, D50 UI-/UX-Vorrang, D51 phasenweise Prüfung, D52–D54 zentrale Roadmap/Designgeltung/Integrationsbewertung/Pflege, D55 Auswahl E-U1 A/E-U2 A/E-U3 A), Auftrag und Arbeitsablauf: `docs/ARBEITSRICHTUNG.md`; neue Produktentscheidungen ab D59
 - Appweiter Gestaltungsvertrag für jede neue oder angefasste Oberfläche: `docs/DESIGN_RICHTLINIEN.md` einschließlich Kontext-/Komponentenmatrix und Paketnachweis; Originalauftrag: `../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md`
 - Produkt, Grenzen und Prinzipien: `docs/01_PRODUCT_CONSTRAINTS.md`
 - Architektur, Performance-Regeln, Tk-Fallstricke: `docs/02_ARCHITECTURE.md`
@@ -21,6 +21,8 @@ Glide ist eine lokale Desktop-Anwendung. Kernfunktionen müssen ohne Internet, B
 - Wann Gruppe, wann Ordner, wann Zwischenüberschrift: `docs/decisions/GRUPPE_ORDNER_UEBERSCHRIFT.md`
 - Betriebszustände und Grenzen der Erinnerungszustellung: `docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md`
 - Pflegewerkzeuge für Versionswechsel, Abgleich nach `07_Python-Versionen` und Kürzen der Ablage: `scripts/pflege/`
+
+D58 (02.11.2026): 3.50.0 heißt „Erster öffentlicher Stand“ (intern „öffentliche erste Beta“); Commit und Push für den Abschluss sind autorisiert. Screenreader-Abnahme bis Bedarf zurückgestellt, menschliche Prüfung nach dem technischen Abschluss. Aktuelle Statusachsen in Plan §21.43 und im Betanachweis.
 
 ## Entwicklungsregeln
 

@@ -16,7 +16,8 @@
 #
 # Native Prüfstände laufen nacheinander. Linux/Xvfb prüft jede sachlich
 # ausführbare Suite verpflichtend; Windows verwendet denselben Vollprüfstand.
-# Eine grüne Automatik ersetzt keine menschliche Sicht-/Screenreaderprüfung.
+# Eine grüne Automatik ersetzt keine menschliche Sichtprüfung.
+# Screenreader-Gesamtabnahme ist nach D58 bis Bedarf zurückgestellt.
 
 name: Glide-Prüfung
 

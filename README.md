@@ -45,7 +45,7 @@ Aufgaben planen, Wissen sammeln, Ideen verbinden und den Alltag festhalten: Glid
 
 ### Inhalte mitnehmen und sicher aufbewahren
 
-- **Anhänge und Zwischenablage:** Dateien aus Finder/Explorer hinzufügen, Bilder lokal vorsehen und Inhalte aus der Zwischenablage übernehmen; eigene Daten und Anhänge bleiben unter deiner Kontrolle.
+- **Anhänge und Zwischenablage:** Dateien aus Finder/Explorer hinzufügen, Bilder in der lokalen Vorschau ansehen und Inhalte aus der Zwischenablage übernehmen; eigene Daten und Anhänge bleiben unter deiner Kontrolle.
 - **Importieren und ausgeben:** CSV mit Spaltenzuordnung, Markdown, Kalenderdateien (ICS), Notion-Archive mit Quellenvergleich und vollständige Bestände als Markdown-Ordner. Druck und PDF über eine lokale Druckansicht.
 - **Vorlagen:** mitgelieferte und eigene Vorlagen, Vorschau vor dem Übernehmen, Aufgaben- und Ordnerstrukturen sowie passende Datumsverschiebung.
 - **Lokaler KI-Austausch:** fünf vorbereitete sowie eigene Textaufträge, vollständige Vorschau des Kontextpakets und geprüfte Änderungsvorschläge. Die Weitergabe erfolgt bewusst durch dich; Glide verbindet sich dabei mit keinem KI-Dienst.

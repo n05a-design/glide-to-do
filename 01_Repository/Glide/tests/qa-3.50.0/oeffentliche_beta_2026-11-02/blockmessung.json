@@ -1,0 +1,52 @@
+{
+  "version": "3.50.0",
+  "datum": "2026-11-02",
+  "python": "3.14.5",
+  "plattform": "darwin",
+  "maschine": "arm64",
+  "modul_sha256": "e7661b82b58c40228b0fb30d8de0c2337444e0a1fe877dfc57abc7f92946f0f8",
+  "kuenstliche_daten": true,
+  "messungen": [
+    {
+      "zeilen": 100,
+      "spans": 100,
+      "zeichen": 4399,
+      "proben": 9,
+      "median_ms": 0.172,
+      "p95_ms": 0.176,
+      "aufklappgruppe_ms": 0.028,
+      "format_link_text_erhalten": true
+    },
+    {
+      "zeilen": 1000,
+      "spans": 1000,
+      "zeichen": 43999,
+      "proben": 9,
+      "median_ms": 1.659,
+      "p95_ms": 1.736,
+      "aufklappgruppe_ms": 0.198,
+      "format_link_text_erhalten": true
+    },
+    {
+      "zeilen": 5000,
+      "spans": 5000,
+      "zeichen": 219999,
+      "proben": 9,
+      "median_ms": 9.222,
+      "p95_ms": 9.978,
+      "aufklappgruppe_ms": 1.049,
+      "format_link_text_erhalten": true
+    },
+    {
+      "zeilen": 10000,
+      "spans": 10000,
+      "zeichen": 439999,
+      "proben": 9,
+      "median_ms": 18.647,
+      "p95_ms": 22.229,
+      "aufklappgruppe_ms": 1.969,
+      "format_link_text_erhalten": true
+    }
+  ],
+  "exitcode": 0
+}
