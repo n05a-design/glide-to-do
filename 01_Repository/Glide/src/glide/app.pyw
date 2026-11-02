@@ -28402,9 +28402,11 @@ class ListApp:
 
         def label(parent, text, size=11, bold=False, color="text", surface="card",
                   pady=(0, 6), anchor="w", wrap=True):
+            # Der Umbruch bestimmt nur die Höhe. Seine gemessene Textbreite
+            # darf die Rasterspalte nicht erneut verbreitern (X11: 1-px-Zyklus).
             widget = _ui.make(tk.Label, parent, text=text, bg=theme[surface], fg=theme[color],
                               font=app_font(size, "bold" if bold else "normal"),
-                              justify="left", anchor=anchor)
+                              justify="left", anchor=anchor, width=1 if wrap else 0)
             initial_width = getattr(parent, "_home_build_width", 0)
             if wrap and initial_width > 1 and not hasattr(widget, "_wrap_seen"):
                 widget._wrap_seen = max(100, initial_width - 4)

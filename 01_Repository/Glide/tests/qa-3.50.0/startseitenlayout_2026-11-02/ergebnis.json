@@ -1,0 +1,12 @@
+{
+  "before_app_sha256": "672ffadd1bf2ba0d630c4b999158935c261aecd808c49816a890f21edc02f72c",
+  "app_sha256": "067e683bd37ac7a1974a9991f82e37195a90f62b501342626404bd9c629d9267",
+  "baseline_run": "https://github.com/n05a-design/glide-to-do/actions/runs/41522743003",
+  "baseline": "Frischer Einzelprozess; 10000 Configure-Ereignisse, Karte pendelt 322↔323 px; Diagnoseabbruch Exit88. Vorheriger uninstrumentierter Gesamtlauf Timeout900s.",
+  "change": "Umbrechende Startseitenlabels fordern eine feste minimale Breite an (width=1) und erhalten ihre wirkliche Breite weiter vom fill=x-Layout. wraplength folgt weiterhin der verfügbaren Breite; natürliche Texthöhe bleibt erhalten. Kein Daten-/Versionswechsel.",
+  "mac_target_exitcode": 0,
+  "linux_fix_status": "native Gegenprobe ausstehend",
+  "full_matrix_status": "neuer Stand, alte Paket-/Vollbelege nicht übernehmen",
+  "local_ci_exitcode": 0,
+  "local_ci_steps": 19
+}
