@@ -155,6 +155,20 @@ with tempfile.TemporaryDirectory(prefix="glide-kartenfuss-") as ordner:
             ruhe(14)
             liste()
             ruhe()
+            if groesse.startswith("860"):
+                # Seit 02.11.2026: Weicht das Logo, weicht auch der Hinweis im
+                # Kartenfuß; die Liste reicht bis unten, eine Auswahl blendet
+                # wie bei ausgeschalteten Hinweisen die Leiste ein.
+                assert app.hints_narrow() and app.card_foot_mode() is None
+                assert not app.card_foot.winfo_manager() and not app.hint_label.winfo_ismapped()
+                erster = next(iid for iid in app.tree.get_children("") if app.find_item(iid))
+                app.tree.selection_set(erster)
+                ruhe()
+                assert app.card_foot_mode() == "bar" and app.selection_bar.winfo_ismapped(), groesse
+                app.tree.selection_set(())
+                ruhe()
+                assert app.card_foot_mode() is None and not app.card_foot.winfo_manager()
+                continue
             karte, baum, fuss = lage(app.list_frame_outer), lage(app.tree), lage(app.card_foot)
             assert app.card_foot_mode() == "hint" and not app.selection_bar.winfo_ismapped()
             erster = next(iid for iid in app.tree.get_children("") if app.find_item(iid))

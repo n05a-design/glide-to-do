@@ -1,0 +1,71 @@
+{
+  "version": "3.50.0",
+  "aufgabenformat": 26,
+  "einstellungen": 2,
+  "source_sha256": {
+    "app.pyw": "f0e8054c15760ce703ba6fbbf20afd319e48b29bac6a936229363ae7ec33a435",
+    "ui_design.py": "fedec6422831eee6be6be73f5d102caa1a15ce6b62cfc4b67ae7b94be834607b",
+    "symbol_policy.py": "325a8cbff71ebef184bf0568355361dcf65f8e98391b9bfe431d0c8bb75ad7d0"
+  },
+  "baseline_app_sha256": "c68dd398b77557f516585e1eaf439c43056e3b866c67eb24f8edeb09b2d6b3db",
+  "gezielte_gegenproben": [
+    "Einfügemarke: X-Versatz unter Tk 9",
+    "Zeilenaktion: Rückfall Mehr abgeschnitten",
+    "Hintergrundwechsel im Wiederanlauf: keine Rückmeldung"
+  ],
+  "ci": {
+    "exitcode": 0,
+    "schritte": 19,
+    "fachtests": 1113,
+    "fachtests_ohne_systemzeitzonen": 1113,
+    "fachtest_skips_je": 1,
+    "werkzeugtests": 238,
+    "werkzeug_skips": 3,
+    "markdown_links": 444,
+    "vendor_originaldateien": 116
+  },
+  "native_geometrie": {
+    "kombinationen": 16,
+    "tk": "9.1.0",
+    "einfügemarke_versatz_x": 0,
+    "einfügemarke_versatz_y": 0,
+    "symbole": "Sechs Symbole tatsächlich DejaVu Sans; kein Emoji-/Schrift-Rückfall"
+  },
+  "bereichstests": {
+    "beta350": true,
+    "ansichtssymbole": true,
+    "aufgaben3380_klicks": true,
+    "features322": true,
+    "kopfverweise": true,
+    "kompakt": true,
+    "gestaltung": 211,
+    "b15_appweit": 1120,
+    "wiederanlauf_restore_faelle": 12
+  },
+  "python_lieferabgleich": {
+    "code": 91,
+    "ressourcen_vendor": 147,
+    "abweichungen": 0
+  },
+  "mac": {
+    "package_files": 463,
+    "compiled_modules": 92,
+    "signatur": "Ad-hoc-Signatur geprüft; Developer-ID bleibt offen",
+    "start_bau_exitcode": 0,
+    "start_installiert_exitcode": 0,
+    "installed": "~/Applications/Glide.app",
+    "workspace_app": "build/macos/Glide.app",
+    "previous": "~/Applications/Glide-vor-Oberflaeche-20261102.app",
+    "candidate": "build/macos/Kandidaten/Glide-3.50.0-oberflaeche-macos-arm64.tar.gz",
+    "candidate_sha256": "b9a853f5298e2e3bacb270daad7dcbaeb363c12aa616538f635e2cb97d3903b8",
+    "public_archive_unchanged_sha256": "eca6548e82e0a47578df58892948d6439af35ef12a3f863b4bd62dda5262e200"
+  },
+  "windows": "EXE unverändert: ursprünglicher öffentlicher 3.50-Stand; neue Python-Fassung plattformübergreifend",
+  "nutzdaten": "Nur technische Metadaten gelesen; Originaldaten/Einstellungen/Schutzmarker nicht verändert; keine automatische Freigabe",
+  "offen": [
+    "WA-41: Ursache des unbeendeten Starts um 16:04 nicht nachgewiesen",
+    "Nativer Windows-Nachlauf dieser UI-Änderungen am Phasenabschluss",
+    "Menschliche DPI-/Mehrmonitorabnahme; Reader bis Bedarf zurückgestellt",
+    "Kein erneuter vollständiger Matrixlauf"
+  ]
+}

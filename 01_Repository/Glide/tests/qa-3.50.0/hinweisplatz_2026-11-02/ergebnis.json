@@ -1,0 +1,48 @@
+{
+  "datum": "2026-11-02",
+  "version": "3.50.0",
+  "aufgabenformat": 26,
+  "app_sha256": "818bafcfc5d932a6ffb978767df63c0f2eb4719f5c0e92a9bc8ea012ee8404d1",
+  "python_fassung_bytegleich": true,
+  "integrationssuiten_endstand": {
+    "test_glide": 0,
+    "test_titel33312": 0,
+    "test_aufgaben3380": 0,
+    "test_uiux_paket": 0,
+    "test_arbeitsmodi": 0,
+    "test_features322": 0,
+    "test_oberflaeche33321": 0,
+    "test_seitenkarten": 0,
+    "test_ansichten": 0,
+    "test_seiten330": 0,
+    "test_seiten33318": 0,
+    "test_festlayout330": 0,
+    "test_kartenfuss330": 0,
+    "test_notizbereich330": 0,
+    "test_pixel3350": 0,
+    "test_wiederanlauf": 0,
+    "test_aufraeumen330": 0,
+    "test_bedienung33316": 0,
+    "test_features326": 0,
+    "test_features330": 0,
+    "test_rueckmeldung330": 0,
+    "test_ui39": 0,
+    "test_workspace310": 0,
+    "test_mindestgroesse330": 0
+  },
+  "gegenprobe_vorherige_fassung": "hinweisplatz rot: Kartenfußhinweis bei 860 px",
+  "zwischenbefunde_behoben": [
+    "test_features330: Baumneuaufbau packte Liste über Tagesraster",
+    "b06_b15/kartenfuss330/bedienung33316: Erwartungen an neue Regel angepasst"
+  ],
+  "mac_startprobe": {
+    "bauordner": "1 von 1 grün",
+    "installiert": "3 von 3 grün"
+  },
+  "mac_lieferung": {
+    "dateien": 463,
+    "abweichungen": 0,
+    "codesign": 0
+  },
+  "windows_exe_aktualisiert": false
+}

@@ -18,8 +18,16 @@ TRASH_EMPTY = 'Der Papierkorb ist leer.'
 TRASH_EMPTY_HINT = 'Gelöschte Punkte, Listen und Ordner landen hier und bleiben wiederherstellbar.'
 
 
-def hints_visible(settings, view=None):
-    """Ob ergänzende Hinweise erscheinen; `view` bleibt nur für ältere Aufrufer."""
+def hints_visible(settings, view=None, *, narrow=False, compact=False):
+    """Ob ergänzende Hinweise erscheinen; `view` bleibt nur für ältere Aufrufer.
+
+    Seit dem 02.11.2026 (Inhaberauftrag) weichen sie unabhängig vom Schalter
+    ganz, sobald das Fenster so schmal ist, dass das Logo im Kopf weicht
+    (`narrow`), und im Kompaktmodus (`compact`). Der Platz gehört dann dem
+    Inhalt; der gespeicherte Schalter bleibt unverändert.
+    """
+    if narrow or compact:
+        return False
     return (settings or {}).get(HINTS_SETTING) is True
 
 

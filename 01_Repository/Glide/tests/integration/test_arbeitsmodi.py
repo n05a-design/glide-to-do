@@ -398,17 +398,27 @@ def fall_kopfverweise(lauf):
     eintrag["icon"] = mod.glide_drawing.DrawingModel.blank(app.PAGE_ICON_SIZE).to_document()
     editor.refresh_page_head()
     idle(lauf)
-    assert editor._title_icon is not None and str(titel.cget("image"))
-    assert titel.cget("text").strip() == eintrag["title"]
+    body_x = editor.text.winfo_rootx() + int(float(editor.text.cget('padx')))
+    title_x = titel.winfo_rootx() + int(float(titel.cget('bd'))) + int(float(titel.cget('padx')))
+    if str(titel.cget('image')):
+        title_x += editor._title_icon.width() + mod.tkfont.Font(font=titel.cget('font')).measure('  ')
+    assert abs(title_x - body_x) <= 1, ('Seitentitel muss mit Symbol auf der Textkante bleiben', title_x, body_x)
+    assert editor._title_icon is not None and editor._title_icon_label.winfo_ismapped()
+    assert not str(titel.cget("image")) and titel.cget("text") == eintrag["title"]
+    icon = editor._title_icon_label
+    assert title_x - icon.winfo_rootx() - icon.winfo_width() == 8
     assert editor._head_signature == ("cover",)
     aufrufe = []
     editor.choose_page_icon = lambda: aufrufe.append("symbol") or "break"
-    titel.event_generate("<Button-1>", x=4, y=4)
+    icon.event_generate("<Button-1>", x=4, y=4)
     idle(lauf)
     assert aufrufe == ["symbol"], "Klick aufs Symbol ändert es"
+    taste(icon, '<Return>', lauf)
+    taste(icon, '<space>', lauf)
+    assert aufrufe == ["symbol"] * 3, "Pixelsymbol bleibt per Tastatur erreichbar"
     umbenennen = []
     editor.rename_page = lambda: umbenennen.append(True)
-    titel.event_generate("<Button-1>", x=editor._title_icon.width() + 40, y=4)
+    titel.event_generate("<Button-1>", x=4, y=4)
     idle(lauf)
     assert umbenennen, "Klick auf den Titel benennt um"
     # Mit Titelbild und Symbol: nichts reserviert, Titel nutzt die ganze Spalte.
@@ -2798,6 +2808,185 @@ def fall_side_abschnitte(lauf):
             'sichtbar angesteuert, ✓ am aktuellen Abschnitt, Ränder und fehlende Abschnitte gemeldet, lesend, in Hilfe › Tastenkürzel')
 
 
+def fall_eckenlabels(lauf):
+    """Labels oben rechts in der Kartenecke: Liste, Ordner, Tabelle, Pinnwand und Seite ohne Überdeckung."""
+    app = lauf.app
+    rechteck = lambda w: (w.winfo_rootx(), w.winfo_rooty(),
+                          w.winfo_rootx() + w.winfo_width(), w.winfo_rooty() + w.winfo_height())
+    schneidet = lambda a, b: not (a[2] <= b[0] or b[2] <= a[0] or a[3] <= b[1] or b[3] <= a[1])
+    text, kunde = app.new_label_object("Text", color="export"), app.new_label_object("Kunde", color="clear")
+    app.labels.extend([text, kunde])
+    punkt = app.new_item("Unterlagen prüfen")
+    punkt["due"], punkt["labels"] = "2026-11-05", [kunde["id"]]
+    ordner = app.new_folder_object("Kundenordner")
+    app.folders.append(ordner)
+    liste = app.new_list_object("Projekt", [punkt, app.new_item("Angebot")], folder_id=ordner["id"])
+    ohne = app.new_list_object("Ohne Labels", [app.new_item("Eins")])
+    app.lists.extend([liste, ohne])
+    app.save_items()
+    seite, _editor = seite_anlegen(lauf, SEITE_MD.replace(
+        "# Wochenplanung Parkquartier", "# Wochenplanung Parkquartier mit einem langen Titel bis in die Ecke", 1))
+    # Echter Zuweisungsweg wie im Kontextmenü der Seitenleiste.
+    for art, ziel, label in (("list", liste, text), ("list", liste, kunde), ("folder", ordner, text),
+                             ("list", seite, text), ("list", seite, kunde)):
+        app.toggle_page_label(art, ziel["id"], label["id"])
+    assert liste["labels"] == [text["id"], kunde["id"]] and ordner["labels"] == [text["id"]]
+    karte = app.list_frame_outer.inner
+    for breite in (1280, 860):
+        lauf.root.geometry(f"{breite}x800+20+20")
+        idle(lauf)
+        app.set_active_list(ohne["id"])
+        idle(lauf)
+        kopf = app.subtitle_row.winfo_height()
+        assert app.page_labels_frame.winfo_manager() == "" and app.page_labels_spacer.winfo_manager() == ""
+        for name, oeffnen in (("liste", lambda: (app.set_active_list(liste["id"]), app.open_list_view())),
+                              ("tabelle", app.set_table_view), ("pinnwand", app.open_board_view),
+                              ("ordner", lambda: (app.open_list_view(), app.set_active_folder(ordner["id"])))):
+            oeffnen()
+            idle(lauf)
+            chips = rechteck(app.page_labels_frame)
+            assert app.page_labels_frame.winfo_manager() == "place", (breite, name)
+            assert [c.chip_text for c in app.page_label_widgets] == (["Text"] if name == "ordner" else ["Text", "Kunde"])
+            # Rechts oben in der Karte, mit festem Abstand zur Innenkante.
+            assert chips[2] == karte.winfo_rootx() + karte.winfo_width() - app.CONTENT_LABEL_INSET_X, (name, chips)
+            assert chips[1] == karte.winfo_rooty() + app.CONTENT_LABEL_INSET_Y, (name, chips)
+            assert karte.pack_slaves()[0] is app.page_labels_spacer, name
+            if app.tree.winfo_ismapped() and app.tree.get_children():
+                zeile = app.tree.bbox(app.tree.get_children()[0])
+                if zeile:
+                    links, oben = app.tree.winfo_rootx(), app.tree.winfo_rooty()
+                    zeile = (links + zeile[0], oben + zeile[1], links + zeile[0] + zeile[2], oben + zeile[1] + zeile[3])
+                    assert not schneidet(chips, zeile), (breite, name, chips, zeile)
+            leiste = getattr(app.workspace, "bar", None)
+            if leiste is not None and leiste.winfo_ismapped():
+                assert not schneidet(chips, rechteck(leiste)), (breite, name)
+            # Der Kopf trägt keine Labels mehr und behält seine Höhe.
+            assert app.subtitle_row.winfo_height() == kopf, (breite, name)
+        app.open_list_view()
+        for voll in (False, True):
+            app.settings["page_full_width"] = voll
+            app.set_active_list(liste["id"])
+            app.set_active_list(seite["id"])
+            idle(lauf)
+            editor = app.rich_note_editor
+            titel, chips = rechteck(editor.title_label), rechteck(app.page_labels_frame)
+            # Seite: kein Freiraum über dem Titel, der Titel weicht rechts aus.
+            assert app.page_labels_spacer.winfo_manager() == ""
+            assert app.page_labels_frame.winfo_manager() == "place"
+            assert titel[2] + app.CONTENT_LABEL_GAP <= chips[0], (breite, voll, titel, chips)
+            assert not schneidet(titel, chips)
+            umbruch = int(float(editor.title_label.cget("wraplength")))
+            # Umbruch folgt der Titelbreite (bis auf die Bildlaufleiste des Texts),
+            # nicht einer vor dem Aufbau gesetzten Mindestbreite von 120 px.
+            assert 0 <= editor.title_label.winfo_width() - umbruch <= 24, (
+                breite, voll, umbruch, editor.title_label.winfo_width())
+            # Kopfverweise am Titelende bleiben links der Chips.
+            editor.title_label.event_generate("<Enter>")
+            idle(lauf)
+            if editor._head_row.winfo_ismapped():
+                assert not schneidet(rechteck(editor._head_row), chips)
+            editor.title_label.event_generate("<Leave>")
+    app.settings["page_full_width"] = False
+    # Labels lösen: Ecke und Titelreserve verschwinden sofort.
+    app.clear_page_labels("list", seite["id"])
+    idle(lauf)
+    assert app.page_labels_frame.winfo_manager() == "" and app.rich_note_editor._corner_reserve == 0
+    return "Liste, Tabelle, Pinnwand, Ordner und Seite bei 1280/860 px: Chips in der Kartenecke, ohne Überdeckung"
+
+
+def fall_hinweisplatz(lauf):
+    """Weicht das Logo (schmale Breite) oder ist der Kompaktmodus an, weichen alle Bedienhinweise."""
+    app = lauf.app
+    app.settings["show_hints"] = True
+    punkte = [app.new_item("Unterlagen prüfen"), app.new_item("Angebot")]
+    liste = app.new_list_object("Projekt", punkte)
+    app.lists.append(liste)
+    app.save_items()
+    seite, _editor = seite_anlegen(lauf)
+
+    def oeffnen(name):
+        app.open_list_view()
+        if name == "seite":
+            app.set_active_list(seite["id"])
+        else:
+            app.set_active_list(liste["id"])
+            app.open_list_view()
+            if name == "tabelle":
+                app.set_table_view()
+            elif name == "pinnwand":
+                app.open_board_view()
+        idle(lauf)
+
+    def hinweise(name):
+        """Sichtbare Hinweistexte der Ansicht `name` (leer, wenn alle weichen)."""
+        texte = []
+        if name == "liste":
+            if app.card_foot_mode() == "hint" and app.card_foot.winfo_manager():
+                texte.append(app.hint_label.cget("text"))
+        elif name == "seite":
+            texte.append(app.tool_band_hint.cget("text"))
+        else:
+            notiz = app.header_note_text()
+            if notiz:
+                texte.append(notiz)
+            hinweis = getattr(app.workspace, "notice", None)
+            if hinweis is not None and hinweis.winfo_exists() and hinweis.winfo_manager():
+                texte.append(hinweis.cget("text"))
+        return [t for t in texte if t]
+
+    ansichten = ("liste", "tabelle", "pinnwand", "seite")
+    lauf.root.geometry("1280x800+20+20")
+    idle(lauf, 6)
+    assert app.header_logo.winfo_manager(), "Logo bei voller Breite sichtbar"
+    for name in ansichten:
+        oeffnen(name)
+        assert hinweise(name), (name, "Hinweise bei voller Breite und eingeschaltetem Schalter")
+    # Schmal: Das Logo weicht, mit ihm jeder Hinweis – in jeder Ansicht.
+    lauf.root.geometry("860x700+20+20")
+    idle(lauf, 6)
+    assert app.header_density() == "minimal" and not app.header_logo.winfo_manager()
+    for name in ansichten:
+        oeffnen(name)
+        assert not hinweise(name), (name, hinweise(name))
+    # Die Liste nutzt den frei gewordenen Kartenfuß.
+    oeffnen("liste")
+    assert app.card_foot.winfo_manager() == ""
+    # Die Auswahlzahl der Pinnwand ist ein Zustand und bleibt auch schmal sichtbar.
+    oeffnen("pinnwand")
+    app.workspace.pin([p["id"] for p in punkte])
+    idle(lauf)
+    werk = app.workspace
+    werk.selected_ids = [p["id"] for p in punkte]
+    werk.selected_id = punkte[-1]["id"]
+    assert len(werk.selection()) == 2, (werk.selection(), list(werk.card_boxes))
+    werk.update_selection_notice()
+    assert werk.notice.winfo_manager() and werk.notice.cget("text") == "2 Karten ausgewählt", werk.notice.cget("text")
+    werk.selected_ids, werk.selected_id = [], None
+    werk.update_selection_notice()
+    assert not werk.notice.winfo_manager(), "ohne Auswahl und ohne Hinweis keine leere Zeile"
+    # Breit wieder: Hinweise kehren zurück, der Schalter blieb unverändert.
+    lauf.root.geometry("1280x800+20+20")
+    idle(lauf, 6)
+    for name in ansichten:
+        oeffnen(name)
+        assert hinweise(name), (name, "nach Rückkehr zur vollen Breite")
+    assert app.settings["show_hints"] is True
+    # Kompaktmodus: keine Hinweise, danach wieder da.
+    oeffnen("liste")
+    app.enter_compact_mode()
+    idle(lauf, 6)
+    for name in ("liste", "seite"):
+        oeffnen(name)
+        assert not hinweise(name), ("kompakt", name, hinweise(name))
+    app.leave_compact_mode()
+    lauf.root.geometry("1280x800+20+20")
+    idle(lauf, 6)
+    for name in ("liste", "seite"):
+        oeffnen(name)
+        assert hinweise(name), ("nach Kompaktmodus", name)
+    return "Liste, Tabelle, Pinnwand, Seite: Hinweise bei 1280 px, keine bei 860 px und im Kompaktmodus; Schalter unverändert"
+
+
 def fall_beta350(lauf):
     """3.50: gespeicherte Hintergrundfarbe, Fluchten und echter Griff-Ziehweg."""
     app, mod = lauf.app, lauf.mod
@@ -2858,6 +3047,12 @@ def fall_beta350(lauf):
     handle.event_generate('<B1-Motion>', x=px-handle.winfo_rootx(), y=py-handle.winfo_rooty(), rootx=px, rooty=py)
     idle(lauf)
     assert editor._block_drop_marker.winfo_ismapped()
+    marker = editor._block_drop_marker
+    target_line = editor._block_drag['target'] + 1
+    target_box = text.dlineinfo(f'{target_line}.0')
+    assert abs(marker.winfo_rootx() - (text.winfo_rootx() + box[0])) <= 1, 'Einfügemarke muss an der Textkante stehen'
+    target_y = target_box[1] if target_box else box[1] + box[3]
+    assert abs(marker.winfo_rooty() - (text.winfo_rooty() + target_y)) <= 1, 'Einfügemarke muss an der Zielzeile stehen'
     handle.event_generate('<ButtonRelease-1>', x=px-handle.winfo_rootx(), y=py-handle.winfo_rooty(), rootx=px, rooty=py)
     idle(lauf)
     assert not app.action_chooser_open()
@@ -2958,6 +3153,54 @@ def fall_beta350(lauf):
     return 'Hintergrundfarben in zehn Designs, Speicherung/Neustart, drei Größen, volle Seitenleiste, Blockziehen/Undo/Redo/Abbruch/Schreibschutz'
 
 
+def fall_ansichtssymbole(lauf):
+    app = lauf.app
+    task = app.new_item('Symbole und Tastatur prüfen')
+    listing = app.new_list_object('Ansichtssymbole', [task])
+    app.lists.append(listing)
+    app.save_items()
+    app.set_active_list(listing['id'])
+    idle(lauf)
+    checked = 0
+    for size in ('mittel', 'gross'):
+        app.settings['ui_font_size'] = size
+        app.apply_ui_font()
+        app.apply_theme()
+        for geometry in ('860x700+20+20', '1280x800+20+20'):
+            lauf.root.geometry(geometry)
+            idle(lauf)
+            for mode, name, caption in (('table', 'table_button', 'Tabelle'),
+                                        ('board', 'board_button', 'Pinnwand'),
+                                        ('list', 'list_view_button', 'Liste')):
+                button = getattr(app, name)
+                assert button.text == app.ICONS[mode] and button._accessible_name == caption
+                taste(button, '<Return>', lauf)
+                assert app._view_switch_active == mode and button.active_fill == app.theme['active']
+                assert button.winfo_ismapped() and button.winfo_width() >= 38
+                for part in button.find_all():
+                    if button.type(part) == 'text':
+                        left, top, right, bottom = button.bbox(part)
+                        assert 2 <= left < right <= button.winfo_width() - 2
+                        assert 2 <= top < bottom <= button.winfo_height() - 2
+                checked += 1
+    app.tree.selection_set(task['id'])
+    app.tree.focus(task['id'])
+    idle(lauf)
+    app.show_quick_plan_row()
+    idle(lauf)
+    assert app.row_action_target() and app.quick_plan_row_button.winfo_ismapped()
+    with patch.object(app, 'show_quick_plan_menu') as plan:
+        taste(app.quick_plan_row_button, '<space>', lauf)
+        assert plan.call_args.kwargs['item_ids'] == [task['id']]
+    with patch.object(app, 'edit_task_field') as due:
+        taste(app.row_due_button, '<Return>', lauf)
+        assert due.call_args.args[:2] == (task['id'], 'due')
+    with patch.object(app, 'show_item_context_menu') as more:
+        taste(app.row_overflow_button, '<space>', lauf)
+        assert app.tree.identify_row(more.call_args.args[0].y) == task['id']
+    return f'{checked} Ansichtswechsel mit Symbol, Klartextname und aktivem Zustand; drei Zeilenaktionen per Tastatur auf stabiler Aufgaben-ID'
+
+
 # beta350 zuletzt: Nach seinem Neustart erhält unter Windows das nächste frische
 # Fenster keinen Vordergrund, und `focus_set` der Aktionsauswahl griffe nicht.
 FAELLE = ("seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
@@ -2968,7 +3211,7 @@ FAELLE = ("seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "n
           "home_tagesnavigation", "home_mehrfachfelder", "side_verweisnavigation", "dreierpaket_gestaltung",
           "home_wochenwahl", "home_faelligkeit_aufwand", "side_verweisaktionen", "side_trefferuebersicht", "side_nachschlagen", "home_fokusdauer",
           "fokus_wechseln", "side_suchverlauf", "fokus_als_naechstes",
-          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "beta350")
+          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "hinweisplatz", "beta350")
 
 
 def main():

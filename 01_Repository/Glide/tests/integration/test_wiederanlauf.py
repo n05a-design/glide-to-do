@@ -102,6 +102,16 @@ def fall_freigabe(lauf):
     app, mod = lauf.app, lauf.mod
     assert app._data_read_only and app._read_only_reason == "recovery"
     assert app._recovery_assessment.needs_recovery
+    settings_before = copy.deepcopy(app.settings)
+    settings_path = Path(mod.SETTINGS_FILE)
+    settings_bytes = settings_path.read_bytes()
+    with patch.object(app, 'show_warning') as warning:
+        app.set_background_color('blue')
+        app.set_backdrop_choice(mod.glide_backdrop.NONE_KEY)
+    assert warning.call_count == 2, 'Gesperrter Hintergrundwechsel braucht eine verständliche Rückmeldung'
+    assert all('Speicherstatus' in call.args[1] for call in warning.call_args_list)
+    assert app.settings == settings_before and settings_path.read_bytes() == settings_bytes
+    assert source.read_bytes() == original and marker.read_bytes() == old_marker
     assert app.save_items(show_error=False) is False
     assert source.read_bytes() == original and marker.read_bytes() == old_marker
     with patch.object(app, "ask_yes_no", return_value=False):

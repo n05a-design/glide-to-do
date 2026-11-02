@@ -439,6 +439,12 @@ def klicks(app_path, report, *, gross=False, tempo=False):
                     button = getattr(app, key)
                     assert button.winfo_ismapped(), (name, key)
                     assert button.winfo_x() >= app.tree.winfo_x() + app.tree.winfo_width(), (name, 'Feld überdeckt')
+                    assert button.winfo_x() + button.winfo_width() <= app.list_frame.winfo_width(), (name, key, 'Knopf abgeschnitten')
+                    for part in button.find_all():
+                        if button.type(part) == 'text':
+                            left, top, right, bottom = button.bbox(part)
+                            assert 2 <= left < right <= button.winfo_width() - 2, (name, key, 'Symbol abgeschnitten', button.text)
+                            assert 2 <= top < bottom <= button.winfo_height() - 2, (name, key, 'Symbol vertikal abgeschnitten')
                 for col, field in [('importance', 'importance'), ('planned_date', 'planned'), ('due', 'due'), ('labels', 'labels')] if name == 'Tabelle' else [('due', 'due'), ('due', 'planned'), ('labels', 'labels'), ('#0', 'importance')]:
                     box = app.tree.bbox(row, col)
                     if name == 'Tabelle' and box and (box[0] >= app.tree.winfo_width()):

@@ -1,0 +1,17 @@
+{
+  "app_sha256": "c68dd398b77557f516585e1eaf439c43056e3b866c67eb24f8edeb09b2d6b3db",
+  "session_guard_sha256": "6515d08fdc32e5875f1953aeb39bd7202691cd8a69a126dffaee2e7e401251d0",
+  "test_sha256": "24959fe278ee5d4c7fe98ac0f50fb64ab13594f1358c7d5ffcff04797ff8a50d",
+  "faelle": {
+    "freigabe": {
+      "ok": false,
+      "befund": "Traceback (most recent call last):\n  File \"~/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_wiederanlauf.py\", line 495, in main\n    result = globals()[\"fall_\" + name](lauf)\n  File \"~/Library/CloudStorage/OneDrive-Persönlich/Github/glide-to-do/01_Repository/Glide/tests/integration/test_wiederanlauf.py\", line 111, in fall_freigabe\n    assert warning.call_count == 2, 'Gesperrter Hintergrundwechsel braucht eine verständliche Rückmeldung'\n           ^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Gesperrter Hintergrundwechsel braucht eine verständliche Rückmeldung\n"
+    }
+  },
+  "fehler": [
+    "freigabe"
+  ],
+  "limitations": [
+    "Hardware-Stromausfall, native Mac-/Linux-/DPI-/Reader- und Menschenabnahme ungeprüft."
+  ]
+}

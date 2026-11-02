@@ -25,6 +25,17 @@ class InteractionTests(unittest.TestCase):
         self.assertFalse(policy.hints_visible({'show_hints': 'ja'}))
         self.assertFalse(policy.hints_visible(None))
 
+    def test_hints_give_way_when_narrow_or_compact(self):
+        # 02.11.2026: Schmale Breite (Logo weicht) und Kompaktmodus blenden
+        # alle ergänzenden Hinweise aus, ohne den Schalter zu verändern.
+        an = {'show_hints': True}
+        self.assertTrue(policy.hints_visible(an, narrow=False, compact=False))
+        self.assertFalse(policy.hints_visible(an, narrow=True))
+        self.assertFalse(policy.hints_visible(an, compact=True))
+        self.assertFalse(policy.hints_visible(an, 'board', narrow=True, compact=True))
+        self.assertFalse(policy.hints_visible({}, narrow=False, compact=False))
+        self.assertIs(an['show_hints'], True)
+
     def test_former_choice_per_view_is_taken_over(self):
         alt = {'view_hints': {'list': True, 'table': False}}
         neu = policy.migrate_hint_setting(alt)

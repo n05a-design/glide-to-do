@@ -3078,26 +3078,35 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     assert full_due.calendar_button is None
     due_host.destroy()
 
-    # U10: Labels und Fortschritt stehen in der Unterzeile und halten
-    # ihre Hoehe, damit der Kopf beim Listenwechsel nicht springt.
+    # U10: Fortschritt steht in der Unterzeile. Die Labels der geöffneten
+    # Seite stehen seit dem 02.11.2026 oben rechts in der Ecke der
+    # Inhaltskarte; der Kopf bleibt beim Labelwechsel unverändert hoch.
     assert app.stats_label.master is app.header_meta
-    assert app.page_labels_frame.master is app.header_meta
+    assert app.page_labels_frame.master is app.list_frame_outer.inner
     header_list = app.current_list()
     saved_header_labels = list(header_list.get("labels") or [])
     header_list["labels"] = [picker_labels[0]["id"]]
     app.update_page_labels()
-    root.update_idletasks()
-    height_with_labels = app.page_labels_frame.winfo_reqheight()
+    root.update()
+    header_with_labels = app.subtitle_row.winfo_height()
+    assert app.page_labels_frame.winfo_manager() == "place"
+    assert app.page_labels_spacer.winfo_manager() == "pack"
+    assert app.list_frame_outer.inner.pack_slaves()[0] is app.page_labels_spacer
+    chip_rect = (app.page_labels_frame.winfo_rootx(), app.page_labels_frame.winfo_rooty(),
+                 app.page_labels_frame.winfo_rootx() + app.page_labels_frame.winfo_width(),
+                 app.page_labels_frame.winfo_rooty() + app.page_labels_frame.winfo_height())
+    inner = app.list_frame_outer.inner
+    # In der Karte, rechts oben, und über dem Inhalt statt auf ihm.
+    assert chip_rect[0] >= inner.winfo_rootx()
+    assert chip_rect[2] == inner.winfo_rootx() + inner.winfo_width() - app.CONTENT_LABEL_INSET_X
+    assert chip_rect[1] == inner.winfo_rooty() + app.CONTENT_LABEL_INSET_Y
+    assert chip_rect[3] <= app.list_frame.winfo_rooty(), (chip_rect, app.list_frame.winfo_rooty())
     header_list["labels"] = []
     app.update_page_labels()
-    root.update_idletasks()
-    height_without_labels = app.page_labels_frame.winfo_reqheight()
-    assert height_with_labels == height_without_labels, (height_with_labels, height_without_labels)
-    # Die Unterzeile liegt unter dem Titel; die Kennzahlen konkurrieren nicht
-    # mehr mit dessen Breite. Der Labelwechsel behält oben exakt seine Höhe.
-    header_list["labels"] = [picker_labels[0]["id"]]
-    app.update_page_labels()
-    root.update_idletasks()
+    root.update()
+    assert app.page_labels_frame.winfo_manager() == ""
+    assert app.page_labels_spacer.winfo_manager() == ""
+    assert app.subtitle_row.winfo_height() == header_with_labels
     assert app.header_meta.master is app.subtitle_row
     assert app.header_meta.winfo_height() <= app.subtitle_row.winfo_height()
     assert app.header_meta.winfo_rooty() >= app.title_row.winfo_rooty() + app.title_row.winfo_height()

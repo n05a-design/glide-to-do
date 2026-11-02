@@ -304,9 +304,14 @@ def fall_b06_b15(lauf):
                 app.set_trash_view()
                 lauf.idle(8)
                 text = app.tree.item(app.EMPTY_ROW_ID, "text")
+                # Seit 02.11.2026: Bei 860 px weicht das Logo und mit ihm jeder
+                # ergänzende Hinweis, auch bei eingeschaltetem Schalter.
+                schmal = geometrie.startswith("860")
+                assert app.hints_narrow() is schmal, (geometrie, app.header_density())
                 erwartet = "Der Papierkorb ist leer." + (
-                    " Gelöschte Punkte, Listen und Ordner landen hier und bleiben wiederherstellbar." if hinweise else "")
-                assert text == erwartet, (text, hinweise)
+                    " Gelöschte Punkte, Listen und Ordner landen hier und bleiben wiederherstellbar."
+                    if hinweise and not schmal else "")
+                assert text == erwartet, (text, hinweise, geometrie)
                 knopf, hinweis = app.empty_action_button, app.empty_text_label
                 assert knopf.winfo_ismapped() and hinweis.winfo_ismapped()
                 # Tatsächliche Höhe: Tk 9.1 meldet die angeforderte Höhe nach

@@ -8,9 +8,25 @@ import ui_design as design
 
 
 class DesignTest(unittest.TestCase):
+    def test_page_icon_stays_before_text_and_inside_reading_margin(self):
+        for padding in (0, 12, 24, 28, 40, 80, 240):
+            for height in (12, 16, 30, 38, 76):
+                for preferred in (1, 2, 4):
+                    layout = design.page_icon_layout(padding, height, preferred)
+                    if padding < 24 or height < 16:
+                        self.assertIsNone(layout)
+                        continue
+                    scale, x, y = layout
+                    self.assertGreaterEqual(scale, 1)
+                    self.assertLessEqual(scale, preferred)
+                    self.assertGreaterEqual(x, -padding)
+                    self.assertEqual(x + 16 * scale, -8)
+                    self.assertGreaterEqual(y, 0)
+                    self.assertLessEqual(y + 16 * scale, height)
+
     def test_scales_keep_existing_values_and_are_immutable(self):
         self.assertEqual(design.RADII["card"], 18)
-        self.assertEqual(design.FONT_SIZES["title"], 24)
+        self.assertEqual(design.FONT_SIZES["title"], 22)
         self.assertEqual(design.ROW_HEIGHTS["task"], 36)
         with self.assertRaises(TypeError):
             design.SPACING[12] = 14
