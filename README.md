@@ -13,10 +13,11 @@ Aufgaben planen, Wissen sammeln, Ideen verbinden und den Alltag festhalten: Glid
 ### Den Tag planen und Aufgaben erledigen
 
 - **Schnell erfassen:** Aufgaben in Alltagssprache eingeben, erkannte Termine und Eigenschaften vor dem Anlegen als Feldchips prüfen; Schnellerfassung auch per Tastenkürzel.
-- **Aufgaben strukturieren:** Listen, Ordner, Gruppen, Zwischenüberschriften, Unteraufgaben und Checklisten; Wichtigkeit, Labels, eigene Farben, Fälligkeit und Bearbeitungstag getrennt verwalten, Aufwand schätzen und Zeit erfassen.
+- **Aufgaben strukturieren:** Listen, Ordner, Gruppen, Zwischenüberschriften, Unteraufgaben und Checklisten; Wichtigkeit, Labels, eigene Farben, Fälligkeit und Bearbeitungstag getrennt verwalten, Aufwand schätzen und Zeit erfassen. Beziehungen und Abhängigkeiten zeigen, welche Aufgabe eine andere blockiert.
 - **Eigene Rhythmen:** täglich, wöchentlich, mehrere Wochentage, Monatsende, n-ter oder letzter Wochentag sowie Monats- und Jahresintervalle; Wiederholung ab Erledigung, Pause, begrenzte Anzahl, Vorschau und Termin überspringen.
 - **Heute und Demnächst:** Tagesvorschlag, nächste Aufgabe, Routinen, Tagesziel, Fortschritt, Stundenraster, Wochen- und Monatsplanung sowie Kapazität je Wochentag. Tagesbeginn, Tagesabschluss und Wochenrückblick helfen beim Einordnen.
 - **Fokus halten:** Fokusintervalle mit 15, 25 oder 50 Minuten und eigenem Aufwand; pausieren, fortsetzen, um fünf Minuten verlängern, zur nächsten Aufgabe wechseln und erfasste Zeit buchen.
+- **Belegte Zeiten berücksichtigen:** Eine bewusst gewählte lokale Kalenderdatei zeigt Termine einschließlich Serien, Ausnahmen und Zeitzonen in der Planung; Überschneidungen werden sichtbar, ohne Termine automatisch zu verschieben.
 - **Mehrere Aufgaben bearbeiten:** Auswahl planen, verschieben, einordnen, mit Labels versehen, Fälligkeit und Aufwand ändern; zusammenhängende Aktionen wieder rückgängig machen.
 - **Erinnerungen:** Hinweise in Glide, auf Wunsch Systemmitteilungen und Hervorhebung von Taskleiste bzw. Dock. Die App muss dafür laufen; [Zustellverhalten](01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md).
 
@@ -24,7 +25,7 @@ Aufgaben planen, Wissen sammeln, Ideen verbinden und den Alltag festhalten: Glid
 
 - **Liste, Tabelle, Kalender, Karten und Spaltenboard** arbeiten mit denselben Inhalten. Gruppieren, sortieren, Spalten anpassen und Wichtigkeit mit der Eisenhower-Darstellung einordnen.
 - **Eigene Ansichten speichern:** Filter mit Alle-/Oder-Bedingungen, Gruppierung, Sortierung, Darstellung und Spaltenbreiten. Glide erklärt, warum eine Aufgabe im Filter erscheint.
-- **Startseite einrichten:** Begrüßung, Uhr, Tagesübersicht, nächste sieben Tage, zuletzt bearbeitete Inhalte, angeheftete Einträge, Zeichnungen und Pinnwand; Kacheln nach Bedarf zusammenstellen.
+- **Startseite einrichten:** Begrüßung, Uhr, Tagesübersicht, nächste sieben Tage, zuletzt bearbeitete Inhalte, angeheftete Einträge, Zeichnungen und Pinnwand; Kacheln nach Bedarf zusammenstellen, Mondphase und Bestandsstatistik einblenden sowie den lokalen Begleiter Gismo nutzen.
 - **Nebenansicht und Kompaktmodus:** Inhalte parallel nachschlagen oder mit einer kleinen Arbeitsansicht fokussieren. Suchtreffer, Abschnitte, Zurück/Vorwärts, Sitzungsverlauf und letzte Suchen erleichtern die Navigation.
 
 ### Gedanken, Wissen und Erinnerungen festhalten
@@ -44,6 +45,7 @@ Aufgaben planen, Wissen sammeln, Ideen verbinden und den Alltag festhalten: Glid
 
 ### Inhalte mitnehmen und sicher aufbewahren
 
+- **Anhänge und Zwischenablage:** Dateien aus Finder/Explorer hinzufügen, Bilder lokal vorsehen und Inhalte aus der Zwischenablage übernehmen; eigene Daten und Anhänge bleiben unter deiner Kontrolle.
 - **Importieren und ausgeben:** CSV mit Spaltenzuordnung, Markdown, Kalenderdateien (ICS), Notion-Archive mit Quellenvergleich und vollständige Bestände als Markdown-Ordner. Druck und PDF über eine lokale Druckansicht.
 - **Vorlagen:** mitgelieferte und eigene Vorlagen, Vorschau vor dem Übernehmen, Aufgaben- und Ordnerstrukturen sowie passende Datumsverschiebung.
 - **Lokaler KI-Austausch:** fünf vorbereitete sowie eigene Textaufträge, vollständige Vorschau des Kontextpakets und geprüfte Änderungsvorschläge. Die Weitergabe erfolgt bewusst durch dich; Glide verbindet sich dabei mit keinem KI-Dienst.
@@ -56,7 +58,7 @@ Die [Funktionsübersicht](01_Repository/Glide/docs/20_FUNKTIONEN.md) beschreibt 
 
 Glide ist für **Windows, macOS und Linux** vorgesehen. Eigenständige Pakete enthalten Python und Tcl/Tk; die Python-Fassung lässt sich auf allen drei Plattformen verwenden.
 
-- **Pakete und Downloads:** [Veröffentlichungen](https://github.com/n05a-design/glide-to-do/releases). Verfügbare Artefakte und ihr tatsächlicher Prüfstand stehen im [Liefernachweis](01_Repository/Glide/docs/07_QA_BERICHT.md).
+- **Pakete und Downloads:** [geprüfte Bauartefakte](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml). Verfügbare Artefakte und ihr tatsächlicher Prüfstand stehen im [Liefernachweis](01_Repository/Glide/docs/07_QA_BERICHT.md).
 - **Python-Fassung:** Repository herunterladen und mit Python 3.14 samt Tk starten. Zusätzliche pip-Pakete sind für die App nicht nötig.
 
 ```bash
