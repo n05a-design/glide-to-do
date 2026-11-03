@@ -297,7 +297,7 @@ def app_font(size=11, *styles, root=None):
             family_delta = (named.actual("family"), max(-1, min(1, named.actual("size") - 11)))
             _APP_FONT_CACHE[root] = family_delta
         family, delta = family_delta
-        return (family, int(size) + delta, *styles)
+        return (glide_fonts.family_for_weight(family, "bold" in styles), int(size) + delta, *styles)
     except (tk.TclError, RuntimeError):
         return ("TkDefaultFont", size, *styles)
 
@@ -1309,6 +1309,8 @@ _SEPARATOR_SHIFTS = {}
 BUNDLED_METRIC_FONTS = {
     "dejavu sans": ("DejaVuSans.ttf", "DejaVuSans-Bold.ttf"),
     **{style.tk_family.casefold(): (style.regular, style.bold) for style in glide_fonts.STYLES},
+    **{style.body_family.casefold(): (style.body_regular, style.body_regular)
+       for style in glide_fonts.STYLES if style.body_family},
 }
 
 
@@ -1323,6 +1325,7 @@ def bundled_glyph_metrics(bold, family="DejaVu Sans", italic=False):
             filename = "DejaVuSans-BoldOblique.ttf" if bold else "DejaVuSans-Oblique.ttf"
         else:
             filename = filename.replace("-Bold.ttf", "-BoldItalic.ttf").replace("-Regular.ttf", "-Italic.ttf")
+            filename = filename.replace("-SemiBold.ttf", "-SemiBoldItalic.ttf")
     schluessel = (filename, bool(bold))
     if schluessel not in _BUNDLED_GLYPH_METRICS:
         datei = os.path.join(_GLIDE_SOURCE_DIR, "resources", "fonts", schluessel[0])
@@ -16170,7 +16173,7 @@ class ListApp:
     HOME_TEMPLATE_VISIBLE = 3
     # Der Katalog führt Textstile; der interne Symbolbegleiter ist keine
     # angebotene Textschrift. Systemschriften sind nur technische Rückfälle.
-    PREFERRED_UI_FONTS = tuple(style.tk_family for style in glide_fonts.STYLES) + ("Noto Sans", "Segoe UI", "TkDefaultFont")
+    PREFERRED_UI_FONTS = tuple(style.default_family for style in glide_fonts.STYLES) + ("Noto Sans", "Segoe UI", "TkDefaultFont")
     UI_FONT_SIZE_CHOICES = {"klein": 10, "mittel": 11, "gross": 12}
     TEMPLATE_FORMAT_VERSION = 2
     LOCK_MAX_AGE_HOURS = 8
@@ -25931,6 +25934,7 @@ class ListApp:
                 return
 
         row.bind("<Configure>", ausrichten, add="+")
+        text_label.bind("<Configure>", ausrichten, add="+")
         return ausrichten
 
     def sidebar_symbol_font(self):
@@ -31463,7 +31467,7 @@ class ListApp:
         family = getattr(self, "_ui_font_family", None)
         if family:
             return family
-        requested = glide_fonts.style_for(getattr(self, "settings", {}).get("ui_font_family", "")).tk_family
+        requested = glide_fonts.style_for(getattr(self, "settings", {}).get("ui_font_family", "")).default_family
         family = "TkDefaultFont"
         try:
             available = self.available_font_families()
@@ -31484,7 +31488,7 @@ class ListApp:
         return max(8, int(base) + int(adjustment))
 
     def sidebar_section_font(self):
-        return (self.ui_font_family(), self.ui_font_size(1), "bold")
+        return (glide_fonts.family_for_weight(self.ui_font_family(), True), self.ui_font_size(1), "bold")
 
     def tree_font(self):
         return (self.ui_font_family(), self.ui_font_size(1))
@@ -31498,14 +31502,15 @@ class ListApp:
         _APP_FONT_CACHE.pop(self.root, None)
         try:
             named = tkfont.nametofont("TkDefaultFont", root=self.root)
-            named.configure(family=self.ui_font_family(), size=self.ui_font_size())
+            named.configure(family=self.ui_font_family(), size=self.ui_font_size(), weight="normal")
         except (tk.TclError, RuntimeError):
             pass
         self.resolve_ui_symbols()
 
     def resolve_ui_symbols(self):
         family = self.ui_font_family()
-        fonts = [tkfont.Font(root=self.root, family=family, size=self.ui_font_size(1), weight=weight)
+        fonts = [tkfont.Font(root=self.root, family=glide_fonts.family_for_weight(family, weight == "bold"),
+                             size=self.ui_font_size(1), weight=weight)
                  for weight in ("normal", "bold")]
         def covers(text):
             return all(str(self.root.tk.call("font", "actual", font.name, "-family", char)).casefold()
@@ -31582,7 +31587,7 @@ class ListApp:
         gesetzt, damit Tk den Schnitt nicht künstlich verdoppelt. Andernfalls
         bleibt es beim regulären Fettschnitt.
         """
-        base = family or self.HEADER_FONT_FAMILY or self.ui_font_family()
+        base = glide_fonts.family_for_weight(family or self.HEADER_FONT_FAMILY or self.ui_font_family(), True)
         cache_key = (base, size)
         cache = getattr(self, "_heaviest_font_cache", None)
         if cache is None:
@@ -31666,7 +31671,7 @@ class ListApp:
 
     def group_row_font(self):
         """Gruppen im Aufgabenbaum heben sich durch den Fettschnitt ab."""
-        return (self.ui_font_family(), self.ui_font_size(1), "bold")
+        return self.sidebar_section_font()
 
     def heading_row_font(self):
         """Zwischenüberschriften tragen dasselbe Schriftbild wie „Eingang“ und „Listen“."""
@@ -54057,7 +54062,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
 
     def next_task_title_font(self):
         """Titel der nächsten Aufgabe in „Heute“: Zeilenschrift, nur fett (B13)."""
-        return (self.ui_font_family(), self.ui_font_size(1), "bold")
+        return self.sidebar_section_font()
 
     def mark_next_task_title(self, row_id):
         """Setzt allein die Titelzelle fett; Tk 8.6 ohne Zelltags setzt die ganze Zeile fett."""

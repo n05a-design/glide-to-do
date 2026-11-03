@@ -1,0 +1,200 @@
+{
+  "version": "3.50.1",
+  "datum": "2026-11-03",
+  "basis_commit": "2f09acba",
+  "app_sha256": "6c393261a05b2662c1517e361d6a333da56dd39068f9fbc0b980062a1e30bb12",
+  "plattform": "Windows x64",
+  "python": "3.14.7",
+  "tk": "9.1.0",
+  "reihenfolge": [
+    "Modern: Rubik",
+    "Technisch: Roboto Mono",
+    "Kreativ: Playfair Display",
+    "Klassisch: Fraunces"
+  ],
+  "serifenschriften": [
+    {
+      "familie": "Playfair Display",
+      "klassifikation": "Kreativ",
+      "normalgewicht": 600,
+      "hervorhebung": 700,
+      "dateien_sha256": {
+        "PlayfairDisplay-Regular.ttf": "861f838d481d28cbbd4793e45dc02f01d04c81e06ed98ab2779ca152ace9f27b",
+        "PlayfairDisplay-Bold.ttf": "4f3b87b5aa297eed5e5a48dbd9941356ca0313d4725b02c29a298cb042b7b31b",
+        "PlayfairDisplay-Italic.ttf": "40a6afa92220254c2c426ccef129d3615dd19e4c591fbfa997e5f28ebba8302c",
+        "PlayfairDisplay-BoldItalic.ttf": "db5737059ff617317aca97e9e35730f8933a2e187c75bbe2deaf45c4d72f5b1d",
+        "OFL-PlayfairDisplay.txt": "4e6be9d19455d7cb092412984ebf3c55d26b19dd8f8452962bf432ec0a9c9dcb",
+        "PlayfairDisplay-SemiBold.ttf": "0f8ae66ea018739838dac8fc0a70f9dd6fe8806bf4f63bb35b3c643480221d31",
+        "PlayfairDisplay-SemiBoldItalic.ttf": "20fc46693b21b25f042b8542d41a1e5a86bdfdeb363e1878be05fdd7c8ad8166"
+      }
+    },
+    {
+      "familie": "Fraunces",
+      "klassifikation": "Klassisch",
+      "normalgewicht": 600,
+      "hervorhebung": 700,
+      "dateien_sha256": {
+        "Fraunces_72pt-Regular.ttf": "a6152c9249698b121ddcd66116b94185e1631a331763e52b8840006885f30813",
+        "Fraunces_72pt-Bold.ttf": "6f6ec15b30f3d66e30084322e0f70fcbb0ab64116a81d3a0feb097154530cd87",
+        "Fraunces_72pt-Italic.ttf": "8764b6b5c734eda35361609720da2da0043918008dc8b7fac9a3d20ddf3b2ecb",
+        "Fraunces_72pt-BoldItalic.ttf": "c03f9dc34b35fdf58b59c6a56991c2ae8ceef5d1f42ee8433fbab6e837ad7064",
+        "OFL-Fraunces.txt": "720d772b526b33cc1bd2abb5c8735fea5b0fc5b742cb171b571d7ad62aae0496",
+        "Fraunces_72pt-SemiBold.ttf": "e70276daed1f9335e4d87e6cf76965339d105bd945f97ab900ffd0c9bdcdc204",
+        "Fraunces_72pt-SemiBoldItalic.ttf": "8bf4147db3c6b328ca13bb0bb311e6d716ecd1af00be6cd89940505515ba76d0"
+      }
+    }
+  ],
+  "schriftstile": {
+    "ok": true,
+    "befund": "Vier korrigierte Stilklassen gespeichert und nach Neustart erhalten; Playfair/Fraunces SemiBold normal, echtes Bold bei 8–11 pt, Metriken einschließlich Italic; Rubik Vorgabe, Symbole vollständig",
+    "runtime": {
+      "python": "3.14.7",
+      "platform": "win32",
+      "tk": "9.1.0"
+    },
+    "dauer_s": 15.751
+  },
+  "layout": [
+    {
+      "familie": "Playfair Display",
+      "fall": "b09",
+      "ok": true,
+      "befund": "Papierkorbsymbol +1 px, Pfeilabweichung -0.08 px, Pfadtrenner Startseite +0.01 px"
+    },
+    {
+      "familie": "Playfair Display",
+      "fall": "b11",
+      "ok": true,
+      "befund": "Datumsspalte Labels 149 px statt 232 px; Labels: Titel 531, Datum 149, Labels 124; Heute: Titel 398, Datum 226, Labels 0; Liste: Titel 655, Datum 149, Labels 0"
+    },
+    {
+      "familie": "Fraunces",
+      "fall": "b09",
+      "ok": true,
+      "befund": "Papierkorbsymbol +1 px, Pfeilabweichung -0.14 px, Pfadtrenner Startseite +0.01 px"
+    },
+    {
+      "familie": "Fraunces",
+      "fall": "b11",
+      "ok": true,
+      "befund": "Datumsspalte Labels 158 px statt 245 px; Labels: Titel 522, Datum 158, Labels 124; Heute: Titel 389, Datum 235, Labels 0; Liste: Titel 646, Datum 158, Labels 0"
+    }
+  ],
+  "fachtests_gezielt": {
+    "katalog": 4,
+    "glyphen": 10
+  },
+  "python_abgleich": {
+    "code_dateien": 92,
+    "ressourcen": 171,
+    "abweichungen": []
+  },
+  "vorlaeufe": [
+    "Tk meldet SemiBold unter Windows als actual bold; die Probe unterscheidet echte Familie und angeforderten Schnitt anhand der Originaldatei statt eine nicht vorhandene Tk-Semibold-Konstante vorauszusetzen.",
+    "Pfeilausrichtung bei kleiner Serifenschrift vor zusaetzlichem Configure-Binding etwa 2 px versetzt; danach B09 je Schrift gruen.",
+    "Ein Datenimport mit Einstellungen wuerde die Schriftwahl ueberschreiben; die B09/B11-Datenprobe erhaelt deshalb die zu pruefende Schriftwahl ausdruecklich."
+  ],
+  "sichtbelege": "Vier lokale Windows-Fensterbilder, beide Serifenschriften in klein und 860x700, Hell/Dunkel; vom Agenten angesehen",
+  "offen": [
+    "Menschliche Sicht- und DPI-Abnahme",
+    "Neue Remote-Vollmatrix",
+    "Neue eigenstaendige Windows- und Mac-Pakete"
+  ],
+  "ci_grundstufe_streng": {
+    "exitcode": 0,
+    "schritte_gruen": 19,
+    "schritte_gesamt": 19,
+    "werkzeugtests": 242,
+    "werkzeugtests_uebersprungen": 1,
+    "fachtests_je_durchlauf": 1124,
+    "durchlaeufe_fachtests": 2,
+    "schritte": [
+      {
+        "schritt": "Syntax",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Versionskonsistenz",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Dokumentation",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fixtures",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Werkzeugtests",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fachlogik-Unit-Tests",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fachlogik ohne Systemzeitzonen",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "analyse_statisch",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "analyse_erreichbarkeit",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "standpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "attributpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "dublettenpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Tk-Voraussetzung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Startprobe",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Lieferstand",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fremdcode",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Datenschutz",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Ablagegröße",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Synchronisation",
+        "status": "ausgeführt"
+      }
+    ]
+  },
+  "werkzeugzeile": {
+    "ok": true,
+    "befund": "12 Messungen: Abstand ≥ 10 px, Umschalter rechts, Pinnwand auf Kartenfarbe; Seitenfuß einzeilig",
+    "runtime": {
+      "python": "3.14.7",
+      "platform": "win32",
+      "tk": "9.1.0"
+    },
+    "dauer_s": 11.2
+  }
+}

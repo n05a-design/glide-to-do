@@ -1,6 +1,8 @@
 # Änderungsverlauf
 
-## 3.50.1 (03.11.2026) – Themenfarbe in den Karten
+## 3.50.1 (03.11.2026) – Themenflächen und lesbarere Schriftstile
+
+- Schriftzuordnung nach Inhaberkorrektur: Modern: Rubik, Technisch: Roboto Mono, Kreativ: Playfair Display, Klassisch: Fraunces; Reihenfolge wie die Originalordner. Playfair und Fraunces verwenden nun die originalen SemiBold-Schnitte (600) als Lesetext statt Regular (400); Hervorhebungen bleiben echtes Bold (700), beides mit Kursivschnitt. Glyphenmessung folgt den verwendeten Dateien; Bereichspfeile werden bei geänderter Titelgeometrie neu ausgerichtet. [Nachweis](tests/qa-3.50.1/schriftgewicht_2026-11-03/README.md).
 
 - Seitenleiste und Inhaltskarte behalten vollständig ihre helle bzw. dunkle Themenfarbe. Die eingestellte Hintergrundfarbe erscheint nur dahinter. Behoben ist ein stehengebliebener Baumstil, der nach dem Wechsel von „Wie die Fensterfläche“ zu einer Farbe auch die Karteninnenflächen färbte. Farb-/Designwechsel und Neustart sind durch eine echte UI-Gegenprobe abgesichert. [Nachweis](tests/qa-3.50.1/kartenflaechen_2026-11-03/README.md).
 

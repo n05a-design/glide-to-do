@@ -2,7 +2,7 @@
 
 Stand 03.11.2026 · Glide 3.50.1 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Kartenflächen 3.50.1, Auftrag 03.11.2026:** Seitenleiste und Inhaltskarte behalten beim Wechsel der Hintergrundfarbe ihre Themenfarbe (Hell weiß, Dunkel Kartengrau); die gewählte Farbe liegt dahinter. Reproduzierter Fehler durch einen abgeleiteten Baumstil beim Wechsel von Fensterfläche zu Braun behoben. 59 echte Farb-/Design-/Ansichtswechsel einschließlich Glasverlauf → feste Farbe und Neustart grün. [Plan §21.57](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2157-kartenflaechen-und-hintergrundfarbe-3501). Quelle/Python-Fassung 3.50.1; neue native Pakete, Remote-Matrix und menschliche Sicht-/DPI-Abnahme separat offen. Der vorherige Schriftkandidat ist als `1ba516a8` gepusht; dieser Nachlauf liegt auf `codex/glide-3.50.1-kartenflaechen`.
+**Schriftnachtrag 3.50.1, Auftrag 03.11.2026:** Kreativ: Playfair Display und Klassisch: Fraunces nach Inhaberkorrektur; Reihenfolge Rubik, Roboto Mono, Playfair Display, Fraunces. Beide Serifenschriften mit originalem SemiBold 600 als Lesetext, echtem Bold 700 als Hervorhebung, jeweils auch kursiv. Rubik bleibt Vorgabe, gespeicherte Familien bleiben erhalten. Die Themenflächenkorrektur aus `2f09acba` bleibt enthalten. [Plan §21.58](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2158-korrigierte-schriftklassen-und-semibold-3501). Quelle/Python-Fassung und lokale Prüfung im neuen Nachweis; native Pakete, Remote-Matrix und menschliche Sicht-/DPI-Abnahme bleiben separate Tore.
 
 ## Datierte Nachweise vor der Gesamtvalidierung
 

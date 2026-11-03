@@ -3283,7 +3283,7 @@ def fall_schriftstile(lauf):
     mod = lauf.mod
     assert lauf.app.ui_font_family() == "Rubik", lauf.app.ui_font_family()
     expected = ("Modern: Rubik", "Technisch: Roboto Mono",
-                "Klassisch: Playfair Display", "Kreativ: Fraunces")
+                "Kreativ: Playfair Display", "Klassisch: Fraunces")
     assert mod.glide_fonts.LABELS == expected
     for index in (1, 2, 3, 0):
         app = lauf.app
@@ -3297,6 +3297,9 @@ def fall_schriftstile(lauf):
             auswahl.menu.invoke(index)
             idle(lauf)
             assert auswahl.variable.get() == style.label, (index, auswahl.variable.get(), style.label)
+            groesse = next(feld for feld in felder if tuple(feld.options) == tuple(app.UI_FONT_SIZE_CHOICES))
+            groesse.menu.invoke(0 if style.body_family else 1)
+            idle(lauf)
             speichern = next(knopf for knopf in knoepfe(dialog, mod.RoundedButton) if knopf.text == "Speichern")
             speichern.command()
 
@@ -3304,18 +3307,62 @@ def fall_schriftstile(lauf):
             app.show_settings_dialog()
         idle(lauf)
         assert app.settings["ui_font_family"] == style.family
-        assert app.ui_font_family() == style.tk_family, (style.label, app.ui_font_family())
+        assert app.ui_font_family() == style.default_family, (style.label, app.ui_font_family())
         for gewicht in ("normal", "bold"):
             for neigung in ("roman", "italic"):
-                font = mod.tkfont.Font(root=lauf.root, family=style.tk_family, size=12,
+                familie = mod.glide_fonts.family_for_weight(style.default_family, gewicht == "bold")
+                font = mod.tkfont.Font(root=lauf.root, family=familie, size=12,
                                        weight=gewicht, slant=neigung)
-                assert font.actual("family") == style.tk_family, (style.label, font.actual())
+                assert font.actual("family") == familie, (style.label, font.actual())
                 assert font.measure("Glide ÄÖÜ äöü ß 0123456789") > 0
+                assert mod.bundled_glyph_metrics(gewicht == "bold", familie, neigung == "italic") is not None
+        if style.body_family:
+            for size in (8, 9, 10, 11):
+                for gewicht in ("normal", "bold"):
+                    specification = mod.app_font(size, *(() if gewicht == "normal" else ("bold",)), root=lauf.root)
+                    font = mod.tkfont.Font(root=lauf.root, font=specification)
+                    familie = style.default_family if gewicht == "normal" else style.tk_family
+                    assert font.actual("family") == familie, (style.label, size, font.actual())
+                    # Tk meldet den physischen 600er-Schnitt unter Windows als
+                    # bold, obwohl normal angefordert wird. Familie + Tupel
+                    # unterscheiden SemiBold und den echten 700er-Schnitt.
+                    assert ("bold" in specification[2:]) == (gewicht == "bold")
+            assert app.tree_font()[0] == style.default_family
+            assert app.sidebar_section_font()[0] == style.tk_family
+            assert app.header_title_font()[0] == style.tk_family
+            assert app.settings["ui_font_size"] == "klein"
+            lauf.root.geometry("860x700+20+20")
+            app.set_design("light")
+            liste = app.new_list_object(style.label, [app.new_item("ÄÖÜ äöü ß · kleine Schrift: g j p q y 0123456789")])
+            app.lists.append(liste)
+            app.save_items()
+            app.set_active_list(liste["id"])
+            app.open_list_view()
+            idle(lauf, 6)
+            assert app.task_row_font().actual("family") == style.default_family
+            assert app.tree.bbox(liste["items"][0]["id"]), style.label
         assert all(app.ICONS[key] == type(app).ICONS[key] for key in ("home", "today", "settings"))
         lauf.neustart()
         assert lauf.app.settings["ui_font_family"] == style.family
-        assert lauf.app.ui_font_family() == style.tk_family
-    return "Vier klassifizierte Schriften gespeichert, sofort angewendet und nach Neustart erhalten; Rubik Vorgabe, Symbole vollständig"
+        assert lauf.app.ui_font_family() == style.default_family
+        if style.body_family:
+            app = lauf.app
+            lauf.root.geometry("860x700+20+20")
+            heading = mod.tkfont.Font(root=lauf.root, font=app.sidebar_title.cget("font"))
+            assert heading.actual("family") == style.tk_family
+            app.set_active_list(liste["id"])
+            app.open_list_view()
+            idle(lauf, 6)
+            assert app.task_row_font().actual("family") == style.default_family
+            if getattr(lauf, "capture", None) is not None and sys.platform == "win32":
+                sys.path.insert(0, str(REPO / "tests/tools"))
+                from releasedaten import save_windows_screenshot
+                lauf.capture.mkdir(parents=True, exist_ok=True)
+                for design in ("light", "dark"):
+                    app.set_design(design)
+                    idle(lauf, 6)
+                    save_windows_screenshot(lauf.root, lauf.capture / f"{style.key}-klein-{design}.png")
+    return "Vier korrigierte Stilklassen gespeichert und nach Neustart erhalten; Playfair/Fraunces SemiBold normal, echtes Bold bei 8–11 pt, Metriken einschließlich Italic; Rubik Vorgabe, Symbole vollständig"
 
 
 def fall_kartenflaechen(lauf):

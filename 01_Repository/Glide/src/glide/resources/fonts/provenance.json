@@ -78,8 +78,8 @@
     },
     {
       "name": "Playfair Display",
-      "use": "Klassisch: Playfair Display",
-      "classification": "Klassisch",
+      "use": "Kreativ: Playfair Display; Lesetext SemiBold 600, Hervorhebung Bold 700",
+      "classification": "Kreativ",
       "license": "SIL Open Font License 1.1",
       "reserved_font_name": "Playfair Display",
       "source": "https://github.com/clauseggers/Playfair-Display",
@@ -91,20 +91,24 @@
         "PlayfairDisplay-Bold.ttf": "4f3b87b5aa297eed5e5a48dbd9941356ca0313d4725b02c29a298cb042b7b31b",
         "PlayfairDisplay-Italic.ttf": "40a6afa92220254c2c426ccef129d3615dd19e4c591fbfa997e5f28ebba8302c",
         "PlayfairDisplay-BoldItalic.ttf": "db5737059ff617317aca97e9e35730f8933a2e187c75bbe2deaf45c4d72f5b1d",
-        "OFL-PlayfairDisplay.txt": "4e6be9d19455d7cb092412984ebf3c55d26b19dd8f8452962bf432ec0a9c9dcb"
+        "OFL-PlayfairDisplay.txt": "4e6be9d19455d7cb092412984ebf3c55d26b19dd8f8452962bf432ec0a9c9dcb",
+        "PlayfairDisplay-SemiBold.ttf": "0f8ae66ea018739838dac8fc0a70f9dd6fe8806bf4f63bb35b3c643480221d31",
+        "PlayfairDisplay-SemiBoldItalic.ttf": "20fc46693b21b25f042b8542d41a1e5a86bdfdeb363e1878be05fdd7c8ad8166"
       },
       "upstream_paths": {
         "PlayfairDisplay-Regular.ttf": "static/PlayfairDisplay-Regular.ttf",
         "PlayfairDisplay-Bold.ttf": "static/PlayfairDisplay-Bold.ttf",
         "PlayfairDisplay-Italic.ttf": "static/PlayfairDisplay-Italic.ttf",
         "PlayfairDisplay-BoldItalic.ttf": "static/PlayfairDisplay-BoldItalic.ttf",
-        "OFL-PlayfairDisplay.txt": "OFL.txt"
+        "OFL-PlayfairDisplay.txt": "OFL.txt",
+        "PlayfairDisplay-SemiBold.ttf": "static/PlayfairDisplay-SemiBold.ttf",
+        "PlayfairDisplay-SemiBoldItalic.ttf": "static/PlayfairDisplay-SemiBoldItalic.ttf"
       }
     },
     {
       "name": "Fraunces",
-      "use": "Kreativ: Fraunces",
-      "classification": "Kreativ",
+      "use": "Klassisch: Fraunces; Lesetext SemiBold 600, Hervorhebung Bold 700",
+      "classification": "Klassisch",
       "license": "SIL Open Font License 1.1",
       "reserved_font_name": null,
       "source": "https://github.com/undercasetype/Fraunces",
@@ -116,14 +120,18 @@
         "Fraunces_72pt-Bold.ttf": "6f6ec15b30f3d66e30084322e0f70fcbb0ab64116a81d3a0feb097154530cd87",
         "Fraunces_72pt-Italic.ttf": "8764b6b5c734eda35361609720da2da0043918008dc8b7fac9a3d20ddf3b2ecb",
         "Fraunces_72pt-BoldItalic.ttf": "c03f9dc34b35fdf58b59c6a56991c2ae8ceef5d1f42ee8433fbab6e837ad7064",
-        "OFL-Fraunces.txt": "720d772b526b33cc1bd2abb5c8735fea5b0fc5b742cb171b571d7ad62aae0496"
+        "OFL-Fraunces.txt": "720d772b526b33cc1bd2abb5c8735fea5b0fc5b742cb171b571d7ad62aae0496",
+        "Fraunces_72pt-SemiBold.ttf": "e70276daed1f9335e4d87e6cf76965339d105bd945f97ab900ffd0c9bdcdc204",
+        "Fraunces_72pt-SemiBoldItalic.ttf": "8bf4147db3c6b328ca13bb0bb311e6d716ecd1af00be6cd89940505515ba76d0"
       },
       "upstream_paths": {
         "Fraunces_72pt-Regular.ttf": "static/Fraunces_72pt-Regular.ttf",
         "Fraunces_72pt-Bold.ttf": "static/Fraunces_72pt-Bold.ttf",
         "Fraunces_72pt-Italic.ttf": "static/Fraunces_72pt-Italic.ttf",
         "Fraunces_72pt-BoldItalic.ttf": "static/Fraunces_72pt-BoldItalic.ttf",
-        "OFL-Fraunces.txt": "OFL.txt"
+        "OFL-Fraunces.txt": "OFL.txt",
+        "Fraunces_72pt-SemiBold.ttf": "static/Fraunces_72pt-SemiBold.ttf",
+        "Fraunces_72pt-SemiBoldItalic.ttf": "static/Fraunces_72pt-SemiBoldItalic.ttf"
       }
     }
   ]

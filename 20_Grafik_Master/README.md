@@ -17,8 +17,8 @@ einen Master ändert, erneuert danach die Kopien.
 | `06_Beispielbilder` | Motive für Showcase und Arbeitsdokumente | siehe unten |
 | `07_Fonts/01_Rubik` | Originaldateien und SIL OFL 1.1 | Modern: Rubik, aktuelle Vorgabe |
 | `07_Fonts/02_Roboto_Mono` | Unverändert verschobenes Originalpaket und SIL OFL 1.1 | Technisch: Roboto Mono |
-| `07_Fonts/03_Playfair_Display` | Originaldateien und SIL OFL 1.1 mit reserviertem Schriftnamen | Klassisch: Playfair Display |
-| `07_Fonts/04_Fraunces` | Originaldateien, variable/statische Schnitte und SIL OFL 1.1 | Kreativ: Fraunces; Laufzeit verwendet vier unveränderte 72pt-Schnitte |
+| `07_Fonts/03_Playfair_Display` | Originaldateien und SIL OFL 1.1 mit reserviertem Schriftnamen | Kreativ: Playfair Display; SemiBold 600 als Lesetext, Bold 700 für Hervorhebung |
+| `07_Fonts/04_Fraunces` | Originaldateien, variable/statische Schnitte und SIL OFL 1.1 | Klassisch: Fraunces; Laufzeit verwendet sechs unveränderte 72pt-Schnitte einschließlich SemiBold/Italic |
 
 Glide-Blau ist `rgb(1,133,225)` = `#0185E1`. Ein Archivordner entfällt seit 03.10.2026: Vorfassungen trägt Git.
 
