@@ -44184,7 +44184,7 @@ class ListApp:
             return
         if self.view_mode == self.PLAN_DAY_VIEW:
             self.set_note_preview(
-                text="Was du an diesem Tag bearbeiten willst · „◀“ und „▶“ wechseln den Tag · Fälligkeiten bleiben unverändert"
+                text="Was du an diesem Tag bearbeiten willst · Mit den Pfeilen wechselst du den Tag · Fälligkeiten bleiben unverändert"
             )
             return
         if self.view_mode == self.TABLE_VIEW:
@@ -52106,8 +52106,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             pixels = -size if size < 0 else size * float(self.root.tk.call("tk", "scaling"))
             ink = glide_glyphs.label_ink_box(metrics, "ÄÖÜgj", pixels, schrift.metrics("ascent"))
             chipzeile = max(self.subtitle_row.winfo_reqheight(), ink[1] if ink else schrift.metrics("linespace"))
+            # Die Glyphenmessung schützt bereits beide Textkanten. Ein Pixel
+            # zusätzlicher Abschluss genügt; die Werkzeugzeile hält darunter
+            # ihren eigenen Abstand und darf nicht um eine zweite Reserve wachsen.
             noetig = max(self.title_row.winfo_reqheight() + chipzeile,
-                         self.header_controls.winfo_reqheight() + 4) + 2
+                         self.header_controls.winfo_reqheight() + 4) + 1
             schluessel = (self.settings.get("ui_font_size"), self.settings.get("ui_font_family"),
                           self.design_name() if hasattr(self, "design_name") else None)
             if getattr(self, "_header_height_key", None) != schluessel:

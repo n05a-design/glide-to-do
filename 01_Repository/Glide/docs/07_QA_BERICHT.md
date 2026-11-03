@@ -2,7 +2,7 @@
 
 Stand 03.11.2026 · Glide 3.50.1 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Schriftnachtrag 3.50.1, Auftrag 03.11.2026:** Kreativ: Playfair Display und Klassisch: Fraunces nach Inhaberkorrektur; Reihenfolge Rubik, Roboto Mono, Playfair Display, Fraunces. Beide Serifenschriften mit originalem SemiBold 600 als Lesetext, echtem Bold 700 als Hervorhebung, jeweils auch kursiv. Rubik bleibt Vorgabe, gespeicherte Familien bleiben erhalten. Die Themenflächenkorrektur aus `2f09acba` bleibt enthalten. [Plan §21.58](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2158-korrigierte-schriftklassen-und-semibold-3501). Quelle/Python-Fassung und lokale Prüfung im neuen Nachweis; native Pakete, Remote-Matrix und menschliche Sicht-/DPI-Abnahme bleiben separate Tore.
+**CI-Nachlauf #246, 03.11.2026:** Der letzte main-Lauf prüfte `893625c6`/3.50.0 nach Merge von PR #59, nicht die lokalen 3.50.1-Commits. Windows: Kopfzeile wächst bei „Mein Tag“ von 56 auf 59 px; Linux: Liste erreicht 131 statt höchstens 130 px Inhaltskante. Kalibrierung meldet deshalb fünf fehlende positive Basen; 13 Defekte wurden korrekt erkannt. Lokal reproduziert und durch Klartext im Tageshinweis sowie einen Pixel weniger zusätzliche Kopfreserve korrigiert; unveränderte Assertions. [Plan §21.59](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2159-github-246-kopfzeile-und-flächenbudget). Themenflächen und korrigierte Schriftstile aus `6fa00813` bleiben enthalten. Neue Remote-Vollmatrix/native Pakete und menschliche Abnahme separat offen.
 
 ## Datierte Nachweise vor der Gesamtvalidierung
 

@@ -2,6 +2,8 @@
 
 ## 3.50.1 (03.11.2026) – Themenflächen und lesbarere Schriftstile
 
+- Nach GitHub #246: Kopfzeile wächst beim Wechsel zu „Mein Tag“ nicht mehr durch Symbol-Ersatzschrift im kursiven Hinweis. Der Tageshinweis nennt die Pfeile als Klartext. Ein zusätzlicher Pixel Kopfreserve entfällt, damit der Inhalt bei der Linux-Skalierung innerhalb des unveränderten 130-px-Budgets beginnt. Kalibrierungstor bleibt streng; fehlende positive Basissuiten werden weiterhin als nicht belegt gemeldet. [Nachweis](tests/qa-3.50.1/ci246_2026-11-03/README.md).
+
 - Schriftzuordnung nach Inhaberkorrektur: Modern: Rubik, Technisch: Roboto Mono, Kreativ: Playfair Display, Klassisch: Fraunces; Reihenfolge wie die Originalordner. Playfair und Fraunces verwenden nun die originalen SemiBold-Schnitte (600) als Lesetext statt Regular (400); Hervorhebungen bleiben echtes Bold (700), beides mit Kursivschnitt. Glyphenmessung folgt den verwendeten Dateien; Bereichspfeile werden bei geänderter Titelgeometrie neu ausgerichtet. [Nachweis](tests/qa-3.50.1/schriftgewicht_2026-11-03/README.md).
 
 - Seitenleiste und Inhaltskarte behalten vollständig ihre helle bzw. dunkle Themenfarbe. Die eingestellte Hintergrundfarbe erscheint nur dahinter. Behoben ist ein stehengebliebener Baumstil, der nach dem Wechsel von „Wie die Fensterfläche“ zu einer Farbe auch die Karteninnenflächen färbte. Farb-/Designwechsel und Neustart sind durch eine echte UI-Gegenprobe abgesichert. [Nachweis](tests/qa-3.50.1/kartenflaechen_2026-11-03/README.md).
