@@ -1,6 +1,8 @@
 # Design Richtlinien
 
-Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 04.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+
+**CI #247/#248, Nachtrag 03.11.2026:** Titelblock am oberen Kopfrand verankern, damit kürzere Kennzahlen die Kopfknöpfe nicht um einen Pixel versetzen. Beim Speichern erneuerte Seiteneditoren erhalten; genau eine aktive Instanz mit einer Werkzeugreihe. Mac wählt die originalen SemiBold-/Italic-Schnitte über PostScript-Namen; die Tk-Schriftkopie muss diese erhalten, Messungen dürfen nicht auf den regulären 400er zurückfallen. B05/B07/B15 und ursprüngliche Flächengrenzen bleiben erhalten. [Nachweis](../tests/qa-3.50.2/ci247_2026-11-03/README.md).
 
 **Kopfzeile nach CI #246, 03.11.2026:** Kontexte feste Kopfzeile, Tageshinweis und Beginn der Inhaltskarte. Tageshinweis in Klartext („Mit den Pfeilen …“), damit fremde Symbolglyphen nicht einen höheren nativen Zeilenrahmen erzwingen. Ein Pixel zusätzliche Abschlussreserve statt zwei; die Schutzränder der Glyphenmessung und der verlangte Abstand zur Inhaltskarte bleiben. Keine kleinere Schrift oder gelockerte Flächengrenze. Fester Kopf über neun Ansichten und Windows-Probe mit Linux-Skalierung; native Linux-/DPI-Sichtprüfung separat. [Nachweis](../tests/qa-3.50.1/ci246_2026-11-03/README.md).
 

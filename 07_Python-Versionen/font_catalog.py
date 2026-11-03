@@ -4,6 +4,7 @@ Einstellungen und späteres Onboarding verwenden dieselben Kennungen.
 Symbol- und Pixelschriften sind keine auswählbaren Textstile.
 """
 from dataclasses import dataclass
+import sys
 
 
 @dataclass(frozen=True)
@@ -16,6 +17,7 @@ class FontStyle:
     bold: str
     body_family: str = ""
     body_regular: str = ""
+    body_postscript: str = ""
 
     @property
     def label(self):
@@ -23,6 +25,13 @@ class FontStyle:
 
     @property
     def default_family(self):
+        return self.family_for_platform()
+
+    def family_for_platform(self, platform=None):
+        # AppKit gruppiert SemiBold unter der typografischen Stammfamilie.
+        # Tk/macOS unterstützt dafür den eindeutigen PostScript-Schnittnamen.
+        if (platform or sys.platform) == "darwin" and self.body_postscript:
+            return self.body_postscript
         return self.body_family or self.tk_family
 
 
@@ -32,10 +41,10 @@ STYLES = (
               "RobotoMono-Regular.ttf", "RobotoMono-Bold.ttf"),
     FontStyle("playfair_display", "Kreativ", "Playfair Display", "Playfair Display",
               "PlayfairDisplay-Regular.ttf", "PlayfairDisplay-Bold.ttf",
-              "Playfair Display SemiBold", "PlayfairDisplay-SemiBold.ttf"),
+              "Playfair Display SemiBold", "PlayfairDisplay-SemiBold.ttf", "PlayfairDisplay-SemiBold"),
     FontStyle("fraunces", "Klassisch", "Fraunces", "Fraunces 72pt",
               "Fraunces_72pt-Regular.ttf", "Fraunces_72pt-Bold.ttf",
-              "Fraunces 72pt SemiBold", "Fraunces_72pt-SemiBold.ttf"),
+              "Fraunces 72pt SemiBold", "Fraunces_72pt-SemiBold.ttf", "Fraunces72pt-SemiBold"),
 )
 DEFAULT = STYLES[0]
 LABELS = tuple(style.label for style in STYLES)
@@ -50,18 +59,56 @@ def style_for(value):
     key = str(value or "").strip().casefold()
     return next((style for style in STYLES
                  if key in {style.key.casefold(), style.family.casefold(),
-                            style.tk_family.casefold(), style.default_family.casefold(),
+                            style.tk_family.casefold(), style.body_family.casefold(),
+                            style.body_postscript.casefold(), (style.body_postscript + "Italic").casefold(),
                             style.label.casefold()}), DEFAULT)
 
 
-def family_for_weight(family, bold=False):
+def family_for_weight(family, bold=False, italic=False, platform=None):
     """SemiBold für Lesetext, echte Bold-Familie für Hervorhebungen.
 
-    Tk unterscheidet nur normal/bold. SemiBold liegt deshalb als eigene
-    Familie vor; ein Bold-Auftrag darf daraus keinen künstlichen Fettschnitt
-    erzeugen. Fremde Familien und der Symbolbegleiter bleiben unverändert.
+    Tk unterscheidet nur normal/bold. Windows/Linux wählen die separate
+    SemiBold-Familie; macOS den konkreten PostScript-Schnitt einschließlich
+    Italic. Bold verwendet weiter die Stammfamilie mit ihrem echten 700er.
     """
     key = str(family or "").casefold()
     style = next((style for style in STYLES
-                  if key in (style.tk_family.casefold(), style.default_family.casefold())), None)
-    return (style.tk_family if bold else style.default_family) if style else family
+                  if key and key in (style.tk_family.casefold(), style.body_family.casefold(),
+                             style.body_postscript.casefold(),
+                             (style.body_postscript + "Italic").casefold())), None)
+    if style is None:
+        return family
+    chosen = style.tk_family if bold else style.family_for_platform(platform)
+    if not bold and italic and (platform or sys.platform) == "darwin" and style.body_postscript:
+        chosen += "Italic"
+    return chosen
+
+
+def actual_family(family, platform=None):
+    """Von Tk gemeldete Familie; ein Mac-Schnitt meldet seine Stammfamilie."""
+    if (platform or sys.platform) == "darwin":
+        key = str(family or "").casefold()
+        for style in STYLES:
+            if style.body_postscript and key in (style.body_postscript.casefold(),
+                                                (style.body_postscript + "Italic").casefold()):
+                return style.tk_family
+    return family
+
+
+def face_options(description, platform=None):
+    """Einen konkreten Mac-Schnitt beim Kopieren eines Tk-Tupels erhalten.
+
+    tkinter.Font löst Tupel über `font actual` auf. AppKit meldet dabei nur
+    die Stammfamilie; ein erneuter Aufbau würde den 600er-Schnitt verlieren.
+    Benannte und gewöhnliche Schriften bleiben auf dem normalen Tk-Weg.
+    """
+    if (platform or sys.platform) != "darwin" or len(description) < 2:
+        return None
+    family = description[0]
+    if actual_family(family, "darwin") == family:
+        return None
+    styles = " ".join(str(value) for value in description[2:]).split()
+    return {"family": family, "size": int(description[1]),
+            "weight": "bold" if "bold" in styles else "normal",
+            "slant": "italic" if "italic" in styles else "roman",
+            "underline": int("underline" in styles), "overstrike": int("overstrike" in styles)}
