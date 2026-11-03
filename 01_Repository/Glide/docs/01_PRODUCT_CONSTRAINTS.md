@@ -1,6 +1,6 @@
 # Produktgrenzen und Produktprinzipien
 
-Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 Was Glide ist, was es nicht wird und woran jede neue Funktion gemessen wird. Am 03.10.2026 mit der Produktprinzipien- und UX-Prüfung vom 01.10.2026 zusammengeführt; deren Befunde U01–U24 stehen mit Status im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Am 05.10.2026 mit einer gekürzten Fassung aus der Windows-Arbeitskopie zusammengeführt, am 06.10.2026 um die Ausschlüsse der Wettbewerbsrecherche vom 25.09.2026 ergänzt. Die Vorfassungen trägt Git.
 

@@ -1,6 +1,7 @@
 """Optische Symbolmitte aus den Glyphenrahmen der mitgelieferten Schrift (B09)."""
 from pathlib import Path
 import sys
+import struct
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src/glide"))
@@ -10,6 +11,22 @@ SCHRIFTEN = Path(__file__).resolve().parents[2] / "src/glide/resources/fonts"
 
 
 class GlyphMetrics(unittest.TestCase):
+    def test_serif_body_files_are_real_semibold_with_heavier_bold(self):
+        from font_catalog import STYLES
+        for style in STYLES:
+            if not style.body_regular:
+                continue
+            for filename, weight in ((style.body_regular, 600),
+                                     (style.body_regular.replace(".ttf", "Italic.ttf"), 600),
+                                     (style.bold, 700), (style.bold.replace(".ttf", "Italic.ttf"), 700)):
+                with self.subTest(style=style.label, file=filename):
+                    data = (SCHRIFTEN / filename).read_bytes()
+                    offset = gm.FontMetrics._tables(data)[b"OS/2"]
+                    self.assertEqual(struct.unpack_from(">H", data, offset + 4)[0], weight)
+                    font = gm.load(SCHRIFTEN / filename)
+                    self.assertTrue(all(font.covers(char) for char in "ÄÖÜäöüßgjpqy0123456789"))
+                    self.assertGreater(font.cap_height, 0)
+
     @classmethod
     def setUpClass(cls):
         cls.normal = gm.load(SCHRIFTEN / "DejaVuSans.ttf")

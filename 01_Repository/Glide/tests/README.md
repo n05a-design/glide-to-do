@@ -1,6 +1,6 @@
 # Prüfungen für Glide
 
-Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand · Aufgabenformat 26 · 108 Integrationssuiten und fünf Analysen
+Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand · Aufgabenformat 26 · 108 Integrationssuiten und fünf Analysen
 
 Die aktuelle vollständige Prüf- und Lieferbilanz steht im [QA-Bericht](../docs/07_QA_BERICHT.md) und im [Betanachweis](qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Historische Ergebnisse werden dort ihren tatsächlichen Quellständen zugeordnet, statt hier eine zweite Statusliste zu pflegen. Am 02.11.2026 gekürzt und zusammengeführt.
 
@@ -12,7 +12,7 @@ D58: Commit/Push und verfügbare Hosted-Plattformprüfungen sind für den Abschl
 
 | Zweck | Aufruf |
 |---|---|
-| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.50.0/<Name> --timeout 900` |
+| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.50.2/<Name> --timeout 900` |
 | Schnellprüfung | `python3 -B tests/tools/pruefen.py` |
 | CI-Grundstufe (wie GitHub) | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` |
 | Windows | `tests/tools/windows_vollpruefung.cmd` (Anleitung in der [manuellen Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md)) |
@@ -60,7 +60,7 @@ Ohne DISPLAY verwendet `pruefen.py` Xvfb. Danach aus genau der ausgegebenen eing
 env -u DISPLAY dbus-run-session -- python3 -B tests/tools/linux_gegenproben.py --protokoll "<PROTOKOLL>/defektgegenproben" --basis-ergebnis "<PROTOKOLL>/ergebnis.json"
 ```
 
-**Native P8-Matrix mit Tk 9.1:** Die eigene geprüfte Runtime vor der Prüfung über `PYTHONPATH=<Runtime>/python-extension` wählen. Ein Standardlauf mit Tk 8.6/9.0 ersetzt P8 nicht. Um bei Quelle 3.50.0 die native Tcl-/Kernprüfung im gesamten eingefrorenen Volllauf zu erzwingen, zuerst nur einfrieren (unter Windows `python`, unter Linux `python3`; Ablage gegebenenfalls `C:/gq`):
+**Native P8-Matrix mit Tk 9.1:** Die eigene geprüfte Runtime vor der Prüfung über `PYTHONPATH=<Runtime>/python-extension` wählen. Ein Standardlauf mit Tk 8.6/9.0 ersetzt P8 nicht. Um bei Quelle 3.50.2 die native Tcl-/Kernprüfung im gesamten eingefrorenen Volllauf zu erzwingen, zuerst nur einfrieren (unter Windows `python`, unter Linux `python3`; Ablage gegebenenfalls `C:/gq`):
 
 ```sh
 python3 -B -c "import sys; from pathlib import Path; sys.path.insert(0, 'tests/tools'); from pruefablauf import einfrieren; p,r=einfrieren(Path.cwd(), Path.home()/'gq'); print('Repository:',p); print('Nachweise:',r)"

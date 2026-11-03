@@ -4,13 +4,13 @@
 
 Aufgaben planen, Wissen sammeln, Ideen verbinden und den Alltag festhalten: Glide vereint Aufgabenmanagement, Seiten, Notizen, Pinnwände, Tagebuch und eine Pixel-Werkstatt in einer deutschsprachigen Desktop-App. Deine Inhalte bleiben bei dir – lokal, ohne Konto, ohne Cloudzwang und ohne Telemetrie.
 
-**3.50.0 · Erster öffentlicher Stand**
+**3.50.2 · Aktualisierter Stand der ersten öffentlichen Fassung**
 
 [Loslegen](#loslegen) · [Was Glide kann](#was-glide-kann) · [Handbuch](01_Repository/Glide/docs/20_FUNKTIONEN.md) · [Änderungen](01_Repository/Glide/CHANGELOG.md)
 
 ![Glide 3.50: Seiteneditor mit durchgehender Seitenleiste und ebener Fensterfläche](01_Repository/Glide/assets/marketing/glide-3.50-seite.png)
 
-*Echte Ansicht der Mac-App mit künstlichen Beispieldaten: dein Arbeitsplatz für Aufgaben und Gedanken.*
+*Aufnahme der Mac-Fassung 3.50.0 mit künstlichen Beispieldaten; die aktuelle Schrift- und Flächenpflege gehört zu 3.50.2.*
 
 ## Was Glide kann
 
@@ -30,6 +30,7 @@ Aufgaben planen, Wissen sammeln, Ideen verbinden und den Alltag festhalten: Glid
 - **Liste, Tabelle, Kalender, Karten und Spaltenboard** arbeiten mit denselben Inhalten. Gruppieren, sortieren, Spalten anpassen und Wichtigkeit mit der Eisenhower-Darstellung einordnen.
 - **Eigene Ansichten speichern:** Filter mit Alle-/Oder-Bedingungen, Gruppierung, Sortierung, Darstellung und Spaltenbreiten. Glide erklärt, warum eine Aufgabe im Filter erscheint.
 - **Startseite einrichten:** Begrüßung, Uhr, Tagesübersicht, nächste sieben Tage, zuletzt bearbeitete Inhalte, angeheftete Einträge, Zeichnungen und Pinnwand; Kacheln nach Bedarf zusammenstellen, Mondphase und Bestandsstatistik einblenden sowie den lokalen Begleiter Gismo nutzen.
+- **Schrift und Hintergrund wählen:** Modern: Rubik, Technisch: Roboto Mono, Kreativ: Playfair Display, Klassisch: Fraunces. Die beiden Serifenschriften verwenden eine kräftigere Grundschrift; Seitenleiste und Inhalt behalten ihre Themenfarbe vor dem gewählten Hintergrund.
 - **Nebenansicht und Kompaktmodus:** Inhalte parallel nachschlagen oder mit einer kleinen Arbeitsansicht fokussieren. Suchtreffer, Abschnitte, Zurück/Vorwärts, Sitzungsverlauf und letzte Suchen erleichtern die Navigation.
 
 ### Gedanken, Wissen und Erinnerungen festhalten
@@ -73,9 +74,11 @@ Unter Windows: `python 07_Python-Versionen\Schnellstart.pyw`.
 
 Ein [Showcase mit künstlichen Beispielen](05_Probelisten_Testdaten/Showcase/README.md) zeigt die Funktionen in einem getrennten Datenordner. [Startwege und Voraussetzungen](01_Repository/Glide/README.md#schnellstart-aus-dem-quellstand).
 
+<a id="qualität-und-sicherheit"></a>
+
 ## Entwicklung und Qualität
 
-Stand 02.11.2026 · Glide 3.50.0 · Aufgabenformat 26
+Stand 03.11.2026 · Glide 3.50.2 · Aufgabenformat 26
 
 <!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt. Technische Stände stehen im QA-Bericht. -->
 

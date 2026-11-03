@@ -217,7 +217,8 @@ def smoke(report_path):
                 assert hashlib.sha256(license_file.read_bytes()).hexdigest() == digest, name
             assert inputs["version"] == mod.APP_VERSION
             families = {str(value).casefold() for value in mod.tkfont.families(root=root)}
-            required_families = tuple(style.tk_family for style in mod.glide_fonts.STYLES) + ("DejaVu Sans", "Pixelify Sans")
+            required_families = tuple(dict.fromkeys(family for style in mod.glide_fonts.STYLES
+                                                   for family in (style.tk_family, style.default_family))) + ("DejaVu Sans", "Pixelify Sans")
             for family in required_families:
                 assert family.casefold() in families, "Gebündelte Schrift fehlt: " + family
                 font = mod.tkfont.Font(root=root, family=family, size=12)

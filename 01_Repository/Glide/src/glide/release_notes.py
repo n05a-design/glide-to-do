@@ -14,6 +14,12 @@ bleiben ohne Eintrag, nachträglich wird nichts erfunden.
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.50.2": (
+        "Seitenleiste und Inhalt behalten ihre helle oder dunkle Themenfarbe; die gewählte Hintergrundfarbe liegt dahinter.",
+        "Schriftstile: Modern: Rubik, Technisch: Roboto Mono, Kreativ: Playfair Display und Klassisch: Fraunces.",
+        "Playfair Display und Fraunces mit kräftigerer Grundschrift; fette und kursive Hervorhebungen bleiben verfügbar.",
+        "Die Kopfzeile bleibt beim Wechsel zu Heute stabil; die Inhaltsfläche erhält ihren vorgesehenen Platz.",
+    ),
     "3.50.0": (
         "Erster öffentlicher Stand: Aufgaben, Seiten, Notizen, Pinnwände und Pixel-Werkstatt lokal nutzen; vier Schriftstile mit Rubik als Vorgabe.",
         "Hintergrundfarbe unabhängig vom Design wählen; „Wie die Fensterfläche“ verbindet die Flächen ohne Materialschatten.",

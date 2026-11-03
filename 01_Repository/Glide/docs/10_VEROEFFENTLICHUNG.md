@@ -1,12 +1,12 @@
 # Veröffentlichung – Glide
 
-Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
-3.50.0 heißt öffentlich **Erster öffentlicher Stand**, intern **öffentliche erste Beta**. Quellcode, Python/Showcase, macOS-arm64- und Windows-x64-Paket tragen dieselbe Appversion. Der [aktuelle QA-/Liefernachweis](07_QA_BERICHT.md) nennt die tatsächlich erzeugten Artefakte, Quellhashes und Prüfungen; eine Versionsbezeichnung ersetzt keine Abnahme.
+3.50.0 heißt öffentlich **Erster öffentlicher Stand**, intern **öffentliche erste Beta**. Dieser datierte Erstlieferstand trug in allen Ausgaben 3.50.0. Quelle und Python/Showcase werden inzwischen als 3.50.2 gepflegt; die vorhandenen nativen Pakete bleiben bei ihrem separat geprüften 3.50.0-Quellstand. Ein neuer Paketbau darf daraus nicht abgeleitet werden. Der [aktuelle QA-/Liefernachweis](07_QA_BERICHT.md) nennt die tatsächlich erzeugten Artefakte, Quellhashes und Prüfungen; eine Versionsbezeichnung ersetzt keine Abnahme.
 
 - VERSION, `APP_VERSION`, Neuerungen, CHANGELOG, Handbuch und README auf denselben Nutzerstand bringen.
 - Fach-/Werkzeugtests sowie vollständige eingefrorene Integrationsmatrix auf Mac, Linux und Windows ausführen. Nur unveränderte App-/Test-/Fixture-/Ressourcenbytes einem Ergebnis zuordnen.
@@ -143,9 +143,9 @@ Geprüft am 03.11.2026: die vier abgelegten Original-OFL-Dateien und offiziellen
 |---|---|---|---|---|
 | Modern: Rubik | [SIL OFL 1.1](https://github.com/google/fonts/blob/main/ofl/rubik/OFL.txt) | erlaubt | erlaubt | erlaubt |
 | Technisch: Roboto Mono | [SIL OFL 1.1](https://github.com/google/fonts/blob/main/ofl/robotomono/OFL.txt) | erlaubt | erlaubt | erlaubt |
-| Klassisch: Playfair Display | [SIL OFL 1.1, reservierter Name „Playfair Display“](https://github.com/google/fonts/blob/main/ofl/playfairdisplay/OFL.txt) | erlaubt | erlaubt | erlaubt |
-| Kreativ: Fraunces | [SIL OFL 1.1](https://github.com/google/fonts/blob/main/ofl/fraunces/OFL.txt) | erlaubt | erlaubt | erlaubt |
+| Kreativ: Playfair Display | [SIL OFL 1.1, reservierter Name „Playfair Display“](https://github.com/google/fonts/blob/main/ofl/playfairdisplay/OFL.txt) | erlaubt | erlaubt | erlaubt |
+| Klassisch: Fraunces | [SIL OFL 1.1](https://github.com/google/fonts/blob/main/ofl/fraunces/OFL.txt) | erlaubt | erlaubt | erlaubt |
 
-Bedingungen bei jedem Schritt: Copyright-Hinweise und vollständige jeweilige OFL zugänglich mitliefern; in Git liegen sie bei den Schriften, im Paket zusätzlich im Lizenzbestand. Fontdateien behalten OFL, auch wenn Glides eigener Code einer anderen Lizenz unterliegt. Der Verkauf der Fontdateien allein ist nicht erlaubt. Bei Fontänderungen bleiben die Fontderivate OFL und dürfen reservierte Schriftnamen nicht ohne Erlaubnis verwenden; hier werden keine Fontdateien verändert. Die Auswahl „Klassisch: Playfair Display“ ist eine UI-Beschriftung des unveränderten Originals. Kommerziell erzeugte Texte, Bilder und PDF-Dokumente werden durch die Fontverwendung nicht selbst OFL-pflichtig. Quellen: [offizielle OFL-Nutzungshinweise](https://openfontlicense.org/how-to-use-the-ofl/) und [FAQ, insbesondere 1.2, 1.4, 1.10 und 1.15](https://openfontlicense.org/ofl-faq/).
+Bedingungen bei jedem Schritt: Copyright-Hinweise und vollständige jeweilige OFL zugänglich mitliefern; in Git liegen sie bei den Schriften, im Paket zusätzlich im Lizenzbestand. Fontdateien behalten OFL, auch wenn Glides eigener Code einer anderen Lizenz unterliegt. Der Verkauf der Fontdateien allein ist nicht erlaubt. Bei Fontänderungen bleiben die Fontderivate OFL und dürfen reservierte Schriftnamen nicht ohne Erlaubnis verwenden; hier werden keine Fontdateien verändert. Die Auswahl „Kreativ: Playfair Display“ ist eine UI-Beschriftung des unveränderten Originals. Kommerziell erzeugte Texte, Bilder und PDF-Dokumente werden durch die Fontverwendung nicht selbst OFL-pflichtig. Quellen: [offizielle OFL-Nutzungshinweise](https://openfontlicense.org/how-to-use-the-ofl/) und [FAQ, insbesondere 1.2, 1.4, 1.10 und 1.15](https://openfontlicense.org/ofl-faq/).
 
 Diese Rechte betreffen die Fontkomponenten. Glides eigene Nutzungs-/Vertriebslizenz und sonstige Komponenten bleiben getrennte Rechte. DejaVu Sans bleibt nach Inhabernachtrag intern für Symbole mit seinem unveränderten Original-Lizenztext; Pixelify bleibt für das Pixel-Design. Beide sind keine weiteren Textstil-Angebote.
