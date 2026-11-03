@@ -1,8 +1,8 @@
 # Dokumentationsindex
 
-Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 03.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Aktueller Stand:** Funktionen und UI-Nachläufe bis Plan §21.50 sind in der Quelle vorhanden. [Gesamtvalidierung nach Claudes UI-Runde](../tests/qa-3.50.0/gesamtvalidierung_2026-11-02/README.md) verbindet Code-/Handbuchabgleich, eingefrorene Vollprüfung und tatsächlich passende Python-/Mac-/Windows-Lieferungen. Maßgebliche Restfolge im [Plan §21.51](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2151-gesamtvalidierung-nach-claudes-ui-runde). Frühere datierte Berichte gelten ihren Eingangsbytes; offene technische Vorhaben und menschliche Abnahme bleiben getrennt.
+**Aktueller Stand 03.11.2026:** [Releaseaudit](../tests/qa-3.50.0/releaseaudit_2026-11-03/README.md) prüft Code, Dokumentation, Grafik-Master und tatsächliche lokale Lieferorte auf Quelle `067e683b…`. Reguläre Windows-/Mac-Archive aktualisiert; neue Roboto-Mono-Quelle vorhanden, deren Standardschriftintegration fehlt noch. Maßgeblicher Abschlussrest und zurückgestellte 3.51 im [Plan §21.52](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2152-releaseaudit-und-vereinheitlichung-3500). Frühere Voll-/Bauprüfungen behalten ihre Eingangsbytes; technische Vorhaben und menschliche Abnahme bleiben getrennt.
 
 ## Einstieg
 

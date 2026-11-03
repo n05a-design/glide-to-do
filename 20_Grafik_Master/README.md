@@ -1,6 +1,6 @@
 # Grafik-Master
 
-Stand 31.10.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 03.11.2026 · Glide 3.50.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 Hier liegen die Quellen des Glide-Logos und alle freigegebenen Exporte. Glide
 selbst und die Paketierung arbeiten mit **Kopien** daraus (siehe unten). Wer
@@ -15,6 +15,7 @@ einen Master ändert, erneuert danach die Kopien.
 | `04_Affinity` | überholte `Glide-Logo.af`, nicht auf D45 nachgeführt | zur Entfernung geprüft; lokale Ausführungsrichtlinie blockiert die Löschung, reguläre SVGs bleiben maßgeblich |
 | `05_Inspiration` | Stilvorlagen und Skizzen, darunter `Glide-Logo-Position.png` (Skizze der Logoposition vom 29.09.2026) und `Inspiration für Glide.png` | Belege, keine Programmdateien |
 | `06_Beispielbilder` | Motive für Showcase und Arbeitsdokumente | siehe unten |
+| `07_Fonts/01_Roboto_Mono` | Originalpaket Roboto Mono mit variablen/statischen Schnitten und SIL-OFL-Lizenz | neue Schriftquelle des Inhabers; noch nicht als App-Standardschrift eingebunden |
 
 Glide-Blau ist `rgb(1,133,225)` = `#0185E1`. Ein Archivordner entfällt seit 03.10.2026: Vorfassungen trägt Git.
 
@@ -22,7 +23,9 @@ Glide-Blau ist `rgb(1,133,225)` = `#0185E1`. Ein Archivordner entfällt seit 03.
 
 **Ausgewählte Oberflächenreferenz (10.10.2026, D21):** [Glide-Oberflaeche-Referenz.png](05_Inspiration/Glide-Oberflaeche-Referenz.png), Bild 1 aus drei unabhängig erzeugten Entwürfen. Mit dem integrierten Image-Gen-Werkzeug aus vier eigenen Glide-Fensteraufnahmen mit künstlichen Daten erzeugt. Herkunft, Promptvorgaben, bekannte Abweichungen und Bindung an die native Tk-Oberfläche stehen im [Entwicklungsplan §15.4](../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#154-referenzentwürfe-und-zweite-auswahlrunde-10102026). Gestaltungsgrundlage für die ausgewählten Funktionen, keine Programmressource oder bereits abgenommene Oberfläche.
 
-## Freigegebene Master und Laufzeit (3.37.0)
+## Freigegebene Master und Laufzeit (seit 3.37.0, aktuell 3.50.0)
+
+Am 03.11.2026 sind alle sechs unten genannten Master-/Laufzeitpaare bytegleich geprüft. Der ursprüngliche Freigabezeitpunkt bezeichnet die Herkunft der Gestaltung; aktuelle Quelle und Python-Lieferung sind 3.50.0. [Abgleich und Schriftstatus](../01_Repository/Glide/tests/qa-3.50.0/releaseaudit_2026-11-03/README.md).
 
 D45 vom 10.10.2026 gibt den geglätteten Normalmaster und eigene Kleinfassungen
 frei: Rundungsanschlüsse sind tangential, das bedeutungslose Kurzsegment
@@ -86,6 +89,8 @@ Glide bringt zwei privat registrierte Schriften mit, beide unter
 
 Eine systemweite Installation ist nicht nötig. Die Dateien müssen mit dem
 Programm verteilt werden.
+
+**Schriftauftrag 03.11.2026:** Roboto Mono liegt unter `07_Fonts/01_Roboto_Mono` als unveränderte neue Quelle samt OFL-Lizenz vor. Der frische Windows-Appstart verwendet weiterhin DejaVu Sans; Roboto fehlt sowohl in `PREFERRED_UI_FONTS` als auch in den Laufzeitressourcen. Die vom Inhaber angekündigte Claude-Integration ist deshalb noch nicht als abgeschlossen verifiziert. Masterdateien allein ändern keine App-Schrift. Vor dem Wechsel müssen Glyphen-/Symbolabdeckung, Metrik, Mindestgröße/große Schrift und die neu gebauten nativen Pakete geprüft werden; kein ungeprüfter Austausch während paralleler Arbeit. Status ausschließlich in [Plan §21.52](../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2152-releaseaudit-und-vereinheitlichung-3500).
 
 ## Beispielbilder für Arbeitsdokumente
 

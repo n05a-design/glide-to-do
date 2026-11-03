@@ -106,6 +106,19 @@ class Einstiegspruefung(unittest.TestCase):
                 file.write_text("# Lizenzoriginal\n")
             self.assertEqual(list(stand.dokumente(root)), [active])
 
+    def test_python_archive_overview_is_current_but_old_evidence_stays_excluded(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            overview = root / '07_Python-Versionen/Archiv/README.md'
+            old = overview.parent / '3.32.2/README.md'
+            for file in (overview, old):
+                file.parent.mkdir(parents=True, exist_ok=True)
+                file.write_text('# Archiv\n\nStand 30.09.2026 · Glide 3.32.2\n', encoding='utf-8')
+            self.assertEqual(list(stand.dokumente(root)), [overview])
+            self.assertEqual(list(stand.dokumente(root / '07_Python-Versionen')), [overview])
+            result = self.check(overview.relative_to(root).as_posix(), overview.read_text(encoding='utf-8'))
+            self.assertTrue(any('(R1)' in error for error in result.fehler))
+
     def test_git_inventory_includes_staged_project_docs_and_preserves_untracked_user_files(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

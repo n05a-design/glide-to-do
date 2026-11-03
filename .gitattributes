@@ -41,6 +41,8 @@
 # SHA-256 wird gegen src/glide, das Bundle und die Herkunftsangaben geprüft.
 **/vendor/** -text
 **/resources/fonts/** -text
+# Originale Schrift-Master samt Lizenz-/Liesmichtexten unverändert erhalten.
+20_Grafik_Master/07_Fonts/** -text whitespace=-blank-at-eol,cr-at-eol
 
 # Paketartefakte und native Bibliotheken bytegleich behandeln.
 *.tar.gz binary

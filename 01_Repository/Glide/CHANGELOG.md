@@ -4,6 +4,8 @@
 
 Intern: öffentliche erste Beta. Die Änderungen vom 31.10. und 01.11. sind in diesem Stand enthalten.
 
+- Releaseaudit 03.11.: veraltete aktuelle 3.49-Angabe und Dateiliste im Python-Archiv sowie Showcase-Liefertext korrigiert; die Standprüfung erfasst jetzt auch die gepflegte Archivübersicht (Gegenprobe rot/grün). Sechs Grafik-Masterpaare bytegleich; reguläre lokale Windows-/Mac-Lieferorte auf den vorhandenen geprüften 3.50-Code nachgeführt, Vorfassungen erhalten. Roboto Mono als unveränderte Schriftquelle mit Lizenz erfasst; Standardschriftintegration noch offen. [Nachweis und Abschlussgrenze](tests/qa-3.50.0/releaseaudit_2026-11-03/README.md).
+
 - Linux-Startseite: Endlosschleife beim Tageswechsel in schreibgeschütztem Bestand korrigiert. Umbruchtexte beeinflussen die Kartenhöhe, ohne die Rasterbreite wiederholt zu verändern. [Reproduktion und Prüfung](tests/qa-3.50.0/startseitenlayout_2026-11-02/README.md).
 
 - Prüfdiagnose: Suite-Timeouts verlieren ihre Teilprotokolle nicht mehr; Arbeitsmodi schreiben Einzelfall/Phase/Dauer fortlaufend und sichern Stacktraces, ohne Grenzen oder Assertions zu ändern. Der dabei lokalisierte Linux-Layoutfehler ist im Startseiten-Nachlauf unten korrigiert. [Nachweis](tests/qa-3.50.0/timeoutdiagnose_2026-11-02/README.md).
