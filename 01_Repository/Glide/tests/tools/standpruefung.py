@@ -326,7 +326,10 @@ def dokumente(wurzel: Path):
         if any((parent / ".git").exists() for parent in pfad.parents
                if parent != wurzel and parent.is_relative_to(wurzel)):
             continue
-        if any(t.lower().startswith("archiv") for t in teile):
+        # Diese Übersicht beschreibt die heutige Lieferung, auch wenn die
+        # historischen Hauptdateien im selben Ordner unverändert bleiben.
+        python_archivuebersicht = pfad.parts[-3:] == ("07_Python-Versionen", "Archiv", "README.md")
+        if any(t.lower().startswith("archiv") for t in teile) and not python_archivuebersicht:
             continue
         if any(ZWISCHENSTAND.fullmatch(t) for t in teile[:-1]):
             continue

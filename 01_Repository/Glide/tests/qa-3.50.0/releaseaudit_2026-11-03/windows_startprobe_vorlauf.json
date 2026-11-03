@@ -1,0 +1,6 @@
+{
+  "eigenstaendiger_pruefstart": true,
+  "exitcode": 1,
+  "fehler": "['Geladene Bibliothek liegt außerhalb des Pakets und Windows-Systemordners: icuuc78.dll', 'Geladene Bibliothek liegt außerhalb des Pakets und Windows-Systemordners: icudt78.dll']",
+  "traceback": "Traceback (most recent call last):\n  File \"start_glide.py\", line 253, in smoke\nAssertionError: ['Geladene Bibliothek liegt außerhalb des Pakets und Windows-Systemordners: icuuc78.dll', 'Geladene Bibliothek liegt außerhalb des Pakets und Windows-Systemordners: icudt78.dll']\n"
+}
