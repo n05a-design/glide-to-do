@@ -75,7 +75,7 @@ Ein [Showcase mit künstlichen Beispielen](05_Probelisten_Testdaten/Showcase/REA
 
 ## Entwicklung und Qualität
 
-Stand 02.11.2026 · Glide 3.50.0 · Aufgabenformat 26
+Stand 03.11.2026 · Glide 3.50.1 · Aufgabenformat 26
 
 <!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt. Technische Stände stehen im QA-Bericht. -->
 

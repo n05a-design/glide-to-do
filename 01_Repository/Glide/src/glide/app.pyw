@@ -230,7 +230,7 @@ _ensure_streams()
 APP_NAME = "Glide"
 APP_TAGLINE = "Aufgaben und Listen"
 APP_PRODUCT_NAME = f"{APP_NAME} \u2013 {APP_TAGLINE}"
-APP_VERSION = "3.50.0"
+APP_VERSION = "3.50.1"
 APP_RELEASE_NAME = "Erster öffentlicher Stand"
 # Feste Kennungen (entschieden am 26.09.2026, PRODUCT_IDENTITY). Sie ändern
 # sich nie mehr: Systembenachrichtigungen, Taskleistengruppe und
@@ -18080,7 +18080,16 @@ class ListApp:
                 if isinstance(kind, ttk.Treeview):
                     # Über der Liste liegen eigene Knöpfe (Zeilenaktionen); sie
                     # gehören zur selben Fläche.
-                    self._frost_tree(kind, zuordnung)
+                    if karten_mit:
+                        # Beim Themenwechsel gilt wieder die Rolle des Grundstils.
+                        # Eine zuvor gleiche Grund-/Kartenfarbe ist keine sichere
+                        # Zuordnung: Aus Weiß darf kein getönter Fenstergrund in
+                        # der Karte werden. Verlaufstönungen folgen separat.
+                        basis = getattr(kind, "_frost_base_style", None)
+                        if basis:
+                            kind.configure(style=basis)
+                    else:
+                        self._frost_tree(kind, zuordnung)
                     stapel.extend(kind.winfo_children())
                     continue
                 if isinstance(kind, ttk.Widget):

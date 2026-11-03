@@ -1,6 +1,6 @@
 # Paketierung Glide
 
-Stand 03.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 03.11.2026 · Glide 3.50.1 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 **Lieferabgleich 03.11.2026:** Regulärer lokaler Windows-Paketordner und ZIP sowie Mac-TAR auf den vorhandenen geprüften Quellstand `067e683b…` nachgeführt; Vorfassungen erhalten. [Aktuelle Hashes, Bau-/Startbelege und Grenzen](../tests/qa-3.50.0/releaseaudit_2026-11-03/README.md). Roboto Mono ist seit PR #58 in Quelle/Python integriert; der neue Reparaturkandidat ([Plan §21.54](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2154-validierung-nach-dem-schriftmerge)) braucht nach seiner Matrix neue native Pakete. Diese Runde baut oder ersetzt keine Pakete. Keine Releaseassets veröffentlicht. Frühere datierte Absätze beschreiben ihren damaligen Stand. Screenreader-Abnahme ist bis Bedarf zurückgestellt; menschliche Prüfung folgt anschließend.
 

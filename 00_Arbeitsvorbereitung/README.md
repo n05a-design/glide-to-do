@@ -1,6 +1,6 @@
 # Arbeitsvorbereitung
 
-Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 03.11.2026 · Glide 3.50.1 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 **Aktueller Einstieg nach Claudes UI-Runde, 02.11.2026:** Funktionen, Codebasis, Dokumentation und tatsächliche Lieferungen sind gemeinsam validiert; GitHub-Matrix 41525034740 vollständig grün. [Übergabe](Glide_Uebergabe.md), [Plan §21.51](Glide_Entwicklungsplan.md#2151-gesamtvalidierung-nach-claudes-ui-runde), [Gesamtvalidierung](../01_Repository/Glide/tests/qa-3.50.0/gesamtvalidierung_2026-11-02/README.md). Die folgenden datierten Absätze sind ältere Eingänge; Quell-/Python-/Paketstände anhand des neuesten Nachweises und seiner Hashes unterscheiden. Begonnene technische Teilvorhaben und menschliche Abnahme bleiben getrennt.
 

@@ -1,0 +1,162 @@
+{
+  "version": "3.50.1",
+  "datum": "2026-11-03",
+  "basis_commit": "1ba516a8",
+  "app_sha256": "7a18e8854023785d47aa8546087f9f8f01decc09b8d1e3892855cb0451e55381",
+  "plattform": "Windows x64",
+  "python": "3.14.7",
+  "tk": "9.1.0",
+  "vorher": {
+    "bestehender_fall_beta350": "gruen",
+    "neue_gegenprobe": "rot",
+    "schritt": "light / surface -> import",
+    "baum": "system_listbox",
+    "stil": "FrostEDE9E7.System.Treeview",
+    "ist": "#EDE9E7",
+    "soll": "#FFFFFF"
+  },
+  "pruefungen": {
+    "kartenflaechen": {
+      "ok": true,
+      "befund": "59 Farb-/Design-/Ansichtswechsel und Neustart: sechs Bäume und beide Karten auf Themenfarbe, Hintergrund dahinter",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.1.0"
+      },
+      "dauer_s": 17.587
+    },
+    "beta350": {
+      "ok": true,
+      "befund": "Hintergrundfarben in zehn Designs, Speicherung/Neustart, drei Größen, volle Seitenleiste, Blockziehen/Undo/Redo/Abbruch/Schreibschutz",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.1.0"
+      },
+      "dauer_s": 9.335
+    },
+    "werkzeugzeile": {
+      "ok": true,
+      "befund": "12 Messungen: Abstand ≥ 10 px, Umschalter rechts, Pinnwand auf Kartenfarbe; Seitenfuß einzeilig",
+      "runtime": {
+        "python": "3.14.7",
+        "platform": "win32",
+        "tk": "9.1.0"
+      },
+      "dauer_s": 10.545
+    }
+  },
+  "python_abgleich": {
+    "code_dateien": 92,
+    "ressourcen": 167,
+    "abweichungen": []
+  },
+  "sichtbelege": "Windows-Fensterbilder lokal aufgenommen und vom Agenten angesehen; keine menschliche Abnahme",
+  "aufbewahrung": {
+    "regel": "sieben neueste Versionen",
+    "alte_version": "3.44.0",
+    "dateien": 79,
+    "lokal_bytegleich_gesichert": true,
+    "unversionierte_belege": "unveraendert"
+  },
+  "offen": [
+    "Neue Remote-Vollmatrix",
+    "Neue eigenstaendige Windows- und Mac-Pakete",
+    "Menschliche Sicht- und DPI-Abnahme"
+  ],
+  "ci_grundstufe_streng": {
+    "exitcode": 0,
+    "schritte_gruen": 19,
+    "schritte_gesamt": 19,
+    "werkzeugtests": 242,
+    "werkzeugtests_uebersprungen": 1,
+    "fachtests_je_durchlauf": 1122,
+    "durchlaeufe_fachtests": 2,
+    "appstart": "gruen",
+    "lieferstand": "bytegleich",
+    "schritte": [
+      {
+        "schritt": "Syntax",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Versionskonsistenz",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Dokumentation",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fixtures",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Werkzeugtests",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fachlogik-Unit-Tests",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fachlogik ohne Systemzeitzonen",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "analyse_statisch",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "analyse_erreichbarkeit",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "standpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "attributpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "dublettenpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Tk-Voraussetzung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Startprobe",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Lieferstand",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fremdcode",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Datenschutz",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Ablagegröße",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Synchronisation",
+        "status": "ausgeführt"
+      }
+    ]
+  },
+  "ci_vorlauf": {
+    "status": "rot",
+    "grund": "Dokumentationslinks auf nach bestehender Aufbewahrungsregel entfernte 3.44-Belege; Verweise auf lokal verifizierte unveraenderliche Git-Fassung korrigiert",
+    "appfehler": false
+  }
+}

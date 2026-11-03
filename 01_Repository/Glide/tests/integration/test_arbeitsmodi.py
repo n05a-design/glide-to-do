@@ -3318,7 +3318,72 @@ def fall_schriftstile(lauf):
     return "Vier klassifizierte Schriften gespeichert, sofort angewendet und nach Neustart erhalten; Rubik Vorgabe, Symbole vollständig"
 
 
-FAELLE = ("schriftstile", "seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
+def fall_kartenflaechen(lauf):
+    """Hintergrundwechsel darf keine veralteten Farbstile in den Karten hinterlassen."""
+    app = lauf.app
+    liste = app.new_list_object("Kartenfläche", [app.new_item("Themenfarbe behalten")])
+    app.lists.append(liste)
+    app.save_items()
+    app.set_active_list(liste["id"])
+    app.open_list_view()
+    namen = ("system_listbox", "sidebar_listbox", "pages_listbox", "notes_listbox", "drawings_listbox", "tree")
+    geprueft = 0
+
+    def pruefen(kontext):
+        nonlocal geprueft
+        idle(lauf, 6)
+        card = app.theme["card"]
+        for name in namen:
+            baum = getattr(app, name)
+            stil = str(baum.cget("style"))
+            for option in ("background", "fieldbackground"):
+                farbe = app.style.lookup(stil, option)
+                assert farbe == card, (kontext, name, stil, option, farbe, card)
+            if hasattr(baum, "icon_canvas"):
+                assert baum.icon_canvas.cget("bg") == card, (kontext, name, "Symbolfläche")
+        for karte in (app.sidebar_shell, app.list_frame_outer):
+            assert karte.fill_color == card, (kontext, str(karte), karte.fill_color, card)
+            assert karte.inner.cget("bg") == card
+        assert lauf.root.cget("bg") == app.theme["bg"]
+        geprueft += 1
+
+    for design in ("light", "dark", "minimal_light", "minimal_dark", "glass_light", "glass_dark", "light"):
+        app.set_design(design)
+        for key in ("surface", "import", "clear", "default", "surface", "accent"):
+            app.set_background_color(key)
+            pruefen((design, key))
+        app.set_table_view()
+        pruefen((design, "Tabelle"))
+        app.open_board_view()
+        idle(lauf)
+        assert app.workspace.canvas.cget("bg") == app.theme["card"]
+        app.open_list_view()
+        pruefen((design, "Liste nach Pinnwand"))
+        if design in ("light", "dark") and getattr(lauf, "capture", None) is not None:
+            sys.path.insert(0, str(REPO / "tests/tools"))
+            if sys.platform == "win32":
+                from releasedaten import save_windows_screenshot
+                lauf.capture.mkdir(parents=True, exist_ok=True)
+                save_windows_screenshot(lauf.root, lauf.capture / f"kartenflaechen-{design}.png")
+    # Ein echter Verlauf darf abgeleitete Stile anlegen. Eine anschließende
+    # feste Farbe entfernt sie wieder, auch wenn vorher Milchglas aktiv war.
+    app.set_design("glass_light")
+    app.set_backdrop_choice(lauf.mod.glide_backdrop.presets_for("glass_light")[0].key)
+    app.wait_for_backdrop()
+    assert app.active_backdrop() is not None
+    app.sync_backdrop_surfaces()
+    app.set_background_color("accent")
+    pruefen("Feste Farbe nach Glasverlauf")
+    app.set_design("light")
+    pruefen("Hell nach Glasverlauf")
+    lauf.neustart()
+    app = lauf.app
+    pruefen("Neustart")
+    assert app.settings["background_color"] == "accent"
+    return f"{geprueft} Farb-/Design-/Ansichtswechsel und Neustart: sechs Bäume und beide Karten auf Themenfarbe, Hintergrund dahinter"
+
+
+FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
           "kompakt_ansichten", "kompakt_verlorenes_loslassen", "gestaltung", "tagessteuerung", "nebenansicht_navigation",

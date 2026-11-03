@@ -1,6 +1,8 @@
 # Design Richtlinien
 
-Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 03.11.2026 · Glide 3.50.1 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+
+**Kartenflächen 3.50.1, Inhaberauftrag 03.11.2026:** Kontexte Seitenleiste und große Inhaltskarte einschließlich Listen-/Ordnerbaum, Tabelle und Pinnwand. Die gewählte feste Hintergrundfarbe bleibt auf der äußeren Fläche; Karten und ihre Bäume/Symbolflächen verwenden durchgehend die Kartenrolle des Designs (Hell weiß, Dunkel Kartengrau), auch nach Fensterflächenmodus, Designwechsel und Neustart. Bestehende Auswahl-, Hover- und Objektfarben behalten ihre Rollen. Keine neuen Flächen, Abstände oder Bedienelemente. [Gegenprobe und Prüfung](../tests/qa-3.50.1/kartenflaechen_2026-11-03/README.md).
 
 **Schriftstile D60, 03.11.2026:** Einstellungen zeigen genau vier Stil-/Familienpaare: Modern: Rubik (Vorgabe), Technisch: Roboto Mono, Klassisch: Playfair Display, Kreativ: Fraunces. Keine Zusatzwerbung für den internen Symbolbegleiter. Bestehendes Auswahlfeld und getrennte Schriftgröße; Speichern wirkt sofort. Einzeilige Kopftexte bemessen sichtbare Glyphen inklusive Umlauten/Unterlängen, damit unterschiedlich große interne Zeilenrahmen den Inhalt nicht verdrängen; keine Buchstabenverkleinerung. [Nachweis](../tests/qa-3.50.0/schriftstile_2026-11-03/README.md). Der folgende D59-Absatz beschreibt die vorherige Schriftintegration und wird durch D60 hinsichtlich Standard/Auswahl fortgeschrieben.
 

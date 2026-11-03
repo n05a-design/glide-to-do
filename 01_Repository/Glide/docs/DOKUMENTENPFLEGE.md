@@ -1,6 +1,6 @@
 # Regeln für die Dokumentenpflege
 
-Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 03.11.2026 · Glide 3.50.1 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 **Aufbewahrung 31.10.2026:** Zusätzlich zu den neun überalterten Git-Dateien alle 751 im Audit inventarisierten ignorierten QA-Reste entfernt; 28 Original-Nutzerbilder erhalten. Einzelpfade und Hashes im [Prüf- und Liefernachweis](../tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md). Die beschädigte Zeichencodierung der datierten Robustheits-README wurde an 49 Zeichen rekonstruiert; Zahlenfolgen und Aussagen unverändert, Vorher-/Nachherhash dokumentiert. Historische Messergebnisse/JSON-Berichte bleiben datiert.
 
@@ -70,7 +70,7 @@ Git-Objektverdichtung erfolgt ohne History-, Ref- oder Reflogverlust und mit Obj
 
 ## Ablageprüfung vor Push und Merge vom 25.10.2026
 
-Der [Nachweis vom 25.10.2026](../tests/qa-3.44.0/ablagepruefung_2026-10-25/README.md) prüfte den gesamten tatsächlichen Bestand einschließlich ignorierter QA-Dateien, Git und separater Arbeitskopien. Die Aufbewahrungsgrenzen sind eingehalten; Originalbilder, Fixtures und Lizenz-/Lieferkopien bleiben erhalten. Identischer Inhalt ist bei Showcase-/Fixture-Spiegeln und eigenständigen Lieferressourcen beabsichtigt. Die geplante Cachebereinigung wurde von der automatischen Freigabeprüfung vor Ausführung blockiert; keine Einsparung behaupten. Git-Historie, Stashes und die fünf Worktrees bleiben erhalten. Gegenwärtige Mergegrenzen stehen im Entwicklungsplan, technische Einzelbefunde im datierten Nachweis.
+Der [Nachweis vom 25.10.2026](https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.44.0/ablagepruefung_2026-10-25/README.md) prüfte den gesamten tatsächlichen Bestand einschließlich ignorierter QA-Dateien, Git und separater Arbeitskopien. Die Aufbewahrungsgrenzen sind eingehalten; Originalbilder, Fixtures und Lizenz-/Lieferkopien bleiben erhalten. Identischer Inhalt ist bei Showcase-/Fixture-Spiegeln und eigenständigen Lieferressourcen beabsichtigt. Die geplante Cachebereinigung wurde von der automatischen Freigabeprüfung vor Ausführung blockiert; keine Einsparung behaupten. Git-Historie, Stashes und die fünf Worktrees bleiben erhalten. Gegenwärtige Mergegrenzen stehen im Entwicklungsplan, technische Einzelbefunde im datierten Nachweis.
 
 ## Dokumentabgleich vor Push vom 27.10.2026
 
