@@ -219,10 +219,13 @@ def main():
         raise SystemExit("tkdnd-Lizenzkommentar fehlt")
     b.add("tkdnd", "2.10.2", "https://pypi.org/project/tkinterdnd2/0.6.3/; unveränderter Kommentarblock aus tkdnd.tcl",
           [b.write("tkdnd-LICENSE.txt", tkdnd)])
-    b.add("Glide-Schriften", "DejaVu 2.37 / Pixelify Sans 39df74a / Roboto Mono 3.001", "resources/fonts/provenance.json",
+    b.add("Glide-Schriften", "Rubik 2.300 / Roboto Mono 3.001 / Playfair Display 1.203 / Fraunces 1.000 / DejaVu 2.37 (Symbole) / Pixelify Sans 39df74a", "resources/fonts/provenance.json",
           [b.copy(source / "resources/fonts/LICENSE", "DejaVu-LICENSE"),
            b.copy(source / "resources/fonts/OFL-PixelifySans.txt", "PixelifySans-OFL.txt"),
-           b.copy(source / "resources/fonts/OFL-RobotoMono.txt", "RobotoMono-OFL.txt")])
+           b.copy(source / "resources/fonts/OFL-RobotoMono.txt", "RobotoMono-OFL.txt"),
+           b.copy(source / "resources/fonts/OFL-Rubik.txt", "Rubik-OFL.txt"),
+           b.copy(source / "resources/fonts/OFL-PlayfairDisplay.txt", "PlayfairDisplay-OFL.txt"),
+           b.copy(source / "resources/fonts/OFL-Fraunces.txt", "Fraunces-OFL.txt")])
     b.add("IANA-Zeitzonen", "2026e", "resources/timezones/provenance.json",
           [b.copy(source / "resources/timezones/LICENSE-iana.txt", "IANA-LICENSE.txt")])
     b.add("Unicode-CLDR", "48.2", "resources/timezones/provenance.json",

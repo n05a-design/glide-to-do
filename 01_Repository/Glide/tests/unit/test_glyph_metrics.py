@@ -34,6 +34,34 @@ class GlyphMetrics(unittest.TestCase):
             self.assertIsNotNone(mono.ink_center("›"))
             self.assertEqual(gm.relative_shift(mono, "▣", "▣", 16), 0)
 
+    def test_all_selectable_styles_have_german_text_and_heading_metrics(self):
+        from font_catalog import STYLES
+        for style in STYLES:
+            for filename in (style.regular, style.bold):
+                with self.subTest(style=style.label, file=filename):
+                    font = gm.load(SCHRIFTEN / filename)
+                    self.assertGreater(font.cap_height, 0)
+                    self.assertTrue(all(font.covers(char) for char in "ÄÖÜäöüß0123456789›€"))
+                    self.assertIsNotNone(font.ink_center("Glide"))
+
+    def test_single_line_ink_box_keeps_accents_and_descenders(self):
+        from font_catalog import STYLES
+        text = "ÄÖÜgjpqß"
+        for style in STYLES:
+            for filename in (style.regular, style.bold):
+                with self.subTest(style=style.label, file=filename):
+                    metrics = gm.load(SCHRIFTEN / filename)
+                    top, height = gm.label_ink_box(metrics, text, 20, 27)
+                    for char in text:
+                        box = metrics.bbox(char)
+                        upper = 27 - box[3] * 20 / metrics.units_per_em
+                        lower = 27 - box[1] * 20 / metrics.units_per_em
+                        self.assertGreaterEqual(upper - top, 1)
+                        self.assertLessEqual(lower - top, height - 1)
+        self.assertIsNone(gm.label_ink_box(None, text, 20, 27))
+        self.assertIsNone(gm.label_ink_box(self.normal, "zwei\nZeilen", 20, 27))
+        self.assertIsNone(gm.label_ink_box(self.normal, chr(0x10ffff), 20, 27))
+
     def test_triangle_sits_below_and_recycling_sign_near_cap_center(self):
         kappe = self.normal.cap_center()
         self.assertLess(self.normal.ink_center("▽"), kappe - 0.08)

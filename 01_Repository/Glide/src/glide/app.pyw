@@ -177,6 +177,7 @@ import runtime_diagnostics as glide_diagnostics
 import backup_catalog as glide_backup_catalog
 import attachment_policy as glide_attachment_policy
 import ui_design as glide_design  # noqa: E402
+import font_catalog as glide_fonts  # noqa: E402
 import planning as glide_planning  # noqa: E402
 import day_proposal as glide_day_proposal  # noqa: E402
 import focus_timer as glide_focus  # noqa: E402
@@ -301,8 +302,8 @@ def app_font(size=11, *styles, root=None):
         return ("TkDefaultFont", size, *styles)
 
 
-# Seit D59 (03.11.2026) ist die Standardschrift Roboto Mono; sie enthält keine
-# ICONS-Zeichen. `apply_ui_font` trägt hier den Symbolbegleiter ein, wenn die
+# Die gewählte Textschrift muss nicht alle ICONS-Zeichen enthalten.
+# `apply_ui_font` trägt hier den internen Symbolbegleiter ein, wenn die
 # UI-Schrift die Zeichen nicht selbst hat (sonst None = UI-Schrift).
 _ICON_FAMILY = {"family": None}
 
@@ -1303,20 +1304,26 @@ class DeferredDrawCanvas(tk.Canvas):
 PATH_SEPARATOR = "›"
 _BUNDLED_GLYPH_METRICS = {}
 _SEPARATOR_SHIFTS = {}
-# Mitgelieferte Textschriften mit ihren Dateien (normal, fett). Seit D59
-# (03.11.2026) misst B09 auch in der Standardschrift Roboto Mono.
+# Mitgelieferte Textschriften mit ihren unveränderten statischen Dateien.
+# Der interne Symbolbegleiter besitzt dieselbe Metrikschnittstelle.
 BUNDLED_METRIC_FONTS = {
     "dejavu sans": ("DejaVuSans.ttf", "DejaVuSans-Bold.ttf"),
-    "roboto mono": ("RobotoMono-Regular.ttf", "RobotoMono-Bold.ttf"),
+    **{style.tk_family.casefold(): (style.regular, style.bold) for style in glide_fonts.STYLES},
 }
 
 
-def bundled_glyph_metrics(bold, family="DejaVu Sans"):
+def bundled_glyph_metrics(bold, family="DejaVu Sans", italic=False):
     """Glyphenrahmen einer mitgelieferten Textschrift (fett oder normal) – oder None."""
     dateien = BUNDLED_METRIC_FONTS.get(str(family or "").casefold())
     if dateien is None:
         return None
-    schluessel = (dateien[1 if bold else 0], bool(bold))
+    filename = dateien[1 if bold else 0]
+    if italic:
+        if str(family).casefold() == "dejavu sans":
+            filename = "DejaVuSans-BoldOblique.ttf" if bold else "DejaVuSans-Oblique.ttf"
+        else:
+            filename = filename.replace("-Bold.ttf", "-BoldItalic.ttf").replace("-Regular.ttf", "-Italic.ttf")
+    schluessel = (filename, bool(bold))
     if schluessel not in _BUNDLED_GLYPH_METRICS:
         datei = os.path.join(_GLIDE_SOURCE_DIR, "resources", "fonts", schluessel[0])
         try:
@@ -2382,7 +2389,8 @@ class CanvasLabel(tk.Canvas):
 
     def __init__(self, master, text="", font=None, fg=None, foreground=None, bg=None, background=None,
                  anchor="center", justify="left", wraplength=0, padx=1, pady=1, cursor="", takefocus=0,
-                 inset_y=None, **kwargs):
+                 inset_y=None, fit_ink=False, **kwargs):
+        self._fit_ink = bool(fit_ink)
         if inset_y is not None:
             self.LABEL_INSET_Y = max(0, int(inset_y))
         farbe = bg or background
@@ -2486,6 +2494,21 @@ class CanvasLabel(tk.Canvas):
         padx = int(float(o["padx"] or 0)) + self.LABEL_INSET_X
         pady = int(float(o["pady"] or 0)) + self.LABEL_INSET_Y
         self._text_w, self._text_h = box[2] - box[0], box[3] - box[1]
+        self._text_ink_top = 0
+        if self._fit_ink:
+            font = tkfont.Font(root=self, font=o["font"])
+            metrics = bundled_glyph_metrics(font.actual("weight") == "bold", font.actual("family"),
+                                            font.actual("slant") == "italic")
+            size = font.actual("size")
+            pixels = -size if size < 0 else size * float(self.tk.call("tk", "scaling"))
+            # Ein gemeinsamer Buchstabenrahmen hält Kopf/Logo beim Wechsel
+            # zwischen Titeln still; zusätzlicher tatsächlicher Inhalt darf
+            # den Rahmen nur erweitern, niemals eine Glyphe abschneiden.
+            ink = (glide_glyphs.label_ink_box(metrics, o["text"] + "ÄÖÜgjpqß", pixels, font.metrics("ascent"))
+                   if self._text_h <= font.metrics("linespace") else None)
+            if ink is not None:
+                self._text_ink_top, self._text_h = ink
+                self._text_ids = [(haupt, 0, -self._text_ink_top)]
         self._required = (self._text_w + 2 * padx, self._text_h + 2 * pady)
         super().configure(width=max(1, self._required[0]), height=max(1, self._required[1]))
         self._place_text()
@@ -16145,10 +16168,9 @@ class ListApp:
     # Gleichzeitig auf der Startseite angebotene Vorlagen. Weniger als alle,
     # damit die Kachel nicht zur Liste wird – welche es sind, wechselt.
     HOME_TEMPLATE_VISIBLE = 3
-    # Inhaberauftrag 03.11.2026 (D59): Roboto Mono ist die mitgelieferte
-    # Standardschrift. DejaVu Sans bleibt mitgeliefert – als wählbare
-    # Schrift und als Symbolbegleiter (`symbol_policy.BUNDLED_SYMBOL_FAMILY`).
-    PREFERRED_UI_FONTS = ("Roboto Mono", "Glide Sans", "DejaVu Sans", "Noto Sans", "Segoe UI", "TkDefaultFont")
+    # Der Katalog führt Textstile; der interne Symbolbegleiter ist keine
+    # angebotene Textschrift. Systemschriften sind nur technische Rückfälle.
+    PREFERRED_UI_FONTS = tuple(style.tk_family for style in glide_fonts.STYLES) + ("Noto Sans", "Segoe UI", "TkDefaultFont")
     UI_FONT_SIZE_CHOICES = {"klein": 10, "mittel": 11, "gross": 12}
     TEMPLATE_FORMAT_VERSION = 2
     LOCK_MAX_AGE_HOURS = 8
@@ -25854,7 +25876,7 @@ class ListApp:
             fett = str(font.actual("weight")) == "bold"
         except (tk.TclError, AttributeError, TypeError, ValueError):
             return None
-        return bundled_glyph_metrics(fett, familie)
+        return bundled_glyph_metrics(fett, familie, font.actual("slant") == "italic")
 
     def font_pixels(self, font):
         """Schriftgröße in Pixeln (Em) für eine tkfont.Font."""
@@ -30752,7 +30774,7 @@ class ListApp:
         design_schluessel = {name: key for key, name in design_namen.items()}
         design_var = tk.StringVar(value=design_namen[self.design_name()])
         font_size = tk.StringVar(value=self.settings.get("ui_font_size", "mittel"))
-        font_family = tk.StringVar(value=self.settings.get("ui_font_family", ""))
+        font_family = tk.StringVar(value=glide_fonts.style_for(self.settings.get("ui_font_family", "")).label)
         accent = tk.StringVar(value=dict((key, label) for label, key in self.ACCENT_COLOR_CHOICES).get(self.settings.get("accent_color", "accent"), "Lila"))
         ziel = tk.StringVar(value=str(self.daily_goal()))
         kapazitaet = tk.StringVar(value=str(self.daily_capacity_minutes()))
@@ -31144,15 +31166,10 @@ class ListApp:
         _font_frame, _font_button = self._make_option_menu(
             appearance, font_size, ["klein", "mittel", "gross"], option_colors={"klein": "muted", "mittel": "accent", "gross": "confirm"})
         _font_frame.pack(fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[7]))
-        tk.Label(appearance, text="Schriftfamilie (leer = Roboto Mono; mitgeliefert auch DejaVu Sans)",
+        tk.Label(appearance, text="Schriftstil",
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w").pack(fill="x", pady=(glide_design.SPACING[8], glide_design.SPACING[5]))
-        font_entry = tk.Entry(appearance, textvariable=font_family, width=24, bg=self.theme["input"],
-                              fg=self.theme["text"], insertbackground=self.theme["text"], relief="flat",
-                              highlightthickness=1, highlightbackground=self.theme["input_border"],
-                              highlightcolor=self.theme["ui_accent"], font=app_font(12))
-        font_entry.pack(fill="x", ipady=glide_design.SPACING[7], pady=(glide_design.SPACING[0], glide_design.SPACING[7]))
-        font_entry.configure(borderwidth=7)
-        fields.append(font_entry)
+        font_frame, font_button = self._make_option_menu(appearance, font_family, glide_fonts.LABELS)
+        font_frame.pack(fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[7]))
         self._make_dialog_button(appearance, "Startseite einrichten …", self.show_home_tiles_dialog,
                                  "accent", width=250).pack(fill="x", pady=(glide_design.SPACING[8], glide_design.SPACING[4]))
         self._make_dialog_button(appearance, "Datenordner wechseln …", self.show_data_folder_dialog,
@@ -31229,7 +31246,7 @@ class ListApp:
                                  history_enabled=verlauf.get(),
                                  **{glide_interaction.HINTS_SETTING: hinweise.get()},
                                  week_start=week_value,
-                                 ui_font_size=font_size.get(), ui_font_family=font_family.get().strip(),
+                                 ui_font_size=font_size.get(), ui_font_family=glide_fonts.style_for(font_family.get()).family,
                                  )
             gewaehlt = design_schluessel.get(design_var.get(), self.DESIGN_DEFAULT)
             if hell_dunkel.get():
@@ -31437,7 +31454,7 @@ class ListApp:
         family = getattr(self, "_ui_font_family", None)
         if family:
             return family
-        requested = str(getattr(self, "settings", {}).get("ui_font_family", "") or "").strip()
+        requested = glide_fonts.style_for(getattr(self, "settings", {}).get("ui_font_family", "")).tk_family
         family = "TkDefaultFont"
         try:
             available = self.available_font_families()
@@ -42261,7 +42278,7 @@ class ListApp:
             CanvasLabel(
                 title_row,
                 text=self.app_title,
-                font=self.header_title_font(), inset_y=0, pady=0,
+                font=self.header_title_font(), inset_y=0, pady=0, fit_ink=True,
                 bg=self.theme["bg"],
                 fg=self.theme["text"],
                 cursor="hand2",
@@ -42932,7 +42949,7 @@ class ListApp:
             CanvasLabel(
                 self.header_meta,
                 text="",
-                font=app_font(glide_design.FONT_SIZES["caption"]), inset_y=0, pady=0,
+                font=app_font(glide_design.FONT_SIZES["caption"]), inset_y=0, pady=0, fit_ink=True,
                 bg=self.theme["bg"],
                 fg=self.theme["muted"],
                 anchor="e",
@@ -43408,11 +43425,11 @@ class ListApp:
         # jede als eigenes Feld in der Eingabefarbe (Rückmeldung 26.09.2026).
         for index, text in enumerate(chips):
             CanvasLabel(zeile, text=("·  " if index else "") + text, bg=self.theme["bg"], fg=self.theme["muted"],
-                        font=app_font(glide_design.FONT_SIZES["caption"], "bold"), inset_y=0, padx=0, pady=0).pack(side="left", padx=(glide_design.SPACING[0], glide_design.SPACING[6]))
+                        font=app_font(glide_design.FONT_SIZES["caption"], "bold"), inset_y=0, padx=0, pady=0, fit_ink=True).pack(side="left", padx=(glide_design.SPACING[0], glide_design.SPACING[6]))
         if notiz:
             vorsatz = "·  " if chips else ""
             etikett = CanvasLabel(zeile, text=vorsatz + notiz, bg=self.theme["bg"], fg=self.theme["muted"],
-                                  font=app_font(glide_design.FONT_SIZES["caption"], "italic"), inset_y=0, padx=0, pady=0,
+                                  font=app_font(glide_design.FONT_SIZES["caption"], "italic"), inset_y=0, padx=0, pady=0, fit_ink=True,
                                   cursor="hand2" if bearbeitbar else "")
             etikett._header_note = (vorsatz, notiz)
             if bearbeitbar:
@@ -52070,7 +52087,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             # Seit dem 02.11.2026 stehen die Labelchips in der Kartenecke; die
             # Unterzeile trägt nur noch Kennzahlen als Text. Die frühere
             # Chipreserve von 4 px schob den Inhalt bei 1280 × 800 über 15 %.
-            chipzeile = max(self.subtitle_row.winfo_reqheight(), schrift.metrics("linespace"))
+            metrics = bundled_glyph_metrics(True, schrift.actual("family"))
+            size = schrift.actual("size")
+            pixels = -size if size < 0 else size * float(self.root.tk.call("tk", "scaling"))
+            ink = glide_glyphs.label_ink_box(metrics, "ÄÖÜgj", pixels, schrift.metrics("ascent"))
+            chipzeile = max(self.subtitle_row.winfo_reqheight(), ink[1] if ink else schrift.metrics("linespace"))
             noetig = max(self.title_row.winfo_reqheight() + chipzeile,
                          self.header_controls.winfo_reqheight() + 4) + 2
             schluessel = (self.settings.get("ui_font_size"), self.settings.get("ui_font_family"),
@@ -52111,6 +52132,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         """
         font = self.cached_font("_header_subtitle_font", app_font(glide_design.FONT_SIZES["caption"], "bold"))
         ascent = font.metrics("ascent") if font is not None else 11
+        ascent -= getattr(self.stats_label, "_text_ink_top", 0)
         zeile = font.metrics("linespace") if font is not None else 14
         # Die Kennzahlenzeile steht senkrecht mittig in der Unterzeile, die
         # wegen der Labelchips höher sein kann als eine Textzeile.
@@ -52126,7 +52148,8 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         # Der Titel steht senkrecht mittig in der Titelzeile, die seit B07
         # auch die Kopfknöpfe trägt; sein Abstand nach oben zählt mit.
         versatz = max(0, (self.title_row.winfo_reqheight() - self.title_label.winfo_reqheight()) // 2)
-        return versatz + max(2, round(font.metrics("ascent") - pixels * 0.72) + CanvasLabel.LABEL_INSET_Y + 1)
+        return versatz + max(2, round(font.metrics("ascent") - pixels * 0.72)
+                             - getattr(self.title_label, "_text_ink_top", 0) + CanvasLabel.LABEL_INSET_Y + 1)
 
     def sync_header_logo(self):
         """Zeigt das Logo ab der ersten Breitenstufe und zeichnet es in Akzentfarbe und Höhe neu."""

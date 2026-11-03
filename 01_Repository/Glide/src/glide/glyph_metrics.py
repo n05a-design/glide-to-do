@@ -12,6 +12,7 @@ Nur Standardbibliothek; keine Schriftbibliothek, kein Rendern.
 """
 
 import struct
+import math
 
 __all__ = ["FontMetrics", "load", "optical_shift"]
 
@@ -127,6 +128,24 @@ class FontMetrics:
     def cap_center(self):
         """Mitte der Großbuchstabenhöhe über der Grundlinie, in Em."""
         return self.cap_height / 2 / self.units_per_em
+
+
+def label_ink_box(metrics, text, pixels, ascent):
+    """Obere Leerzone und vollständige sichtbare Höhe einer einzelnen Zeile.
+
+    Ein Pixel Rand schützt die Rasterung. Nicht belegte Glyphen und mehrere
+    Zeilen behalten beim Aufrufer den vollständigen nativen Zeilenrahmen.
+    """
+    text = str(text)
+    if metrics is None or not text or "\n" in text or any(not metrics.covers(c) for c in text):
+        return None
+    boxes = [box for box in map(metrics.bbox, text) if box is not None]
+    if not boxes:
+        return None
+    scale = pixels / metrics.units_per_em
+    top = math.floor(ascent - max(box[3] for box in boxes) * scale) - 1
+    bottom = math.ceil(ascent - min(box[1] for box in boxes) * scale) + 1
+    return top, max(1, bottom - top)
 
 
 def load(path):

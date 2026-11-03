@@ -2,7 +2,7 @@
 
 Stand 03.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Aktueller Arbeitsstand 03.11.2026:** Roboto Mono ist seit PR #58 integriert. Reparatur-/Validierungsauftrag und lokaler Commit in [Plan §21.54](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2154-validierung-nach-dem-schriftmerge), [Nachweis](01_Repository/Glide/tests/qa-3.50.0/schriftvalidierung_2026-11-03/README.md). Kein neuer Push-/Merge-/Paketauftrag. Neue Linux-/GitHub-Matrix, native Schriftlieferungen und menschliche Abnahme offen; 3.51 bleibt zurückgestellt. Datierte Altbelege behalten ihren Stand.
+**Aktueller Arbeitsstand 03.11.2026:** Vier Textstile nach D60 mit Rubik als Vorgabe, DejaVu ausschließlich interner Symbolbegleiter. [Plan §21.55](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2155-vier-schriftstile-und-rubik-als-standard), [Prüf-/Lizenznachweis](01_Repository/Glide/tests/qa-3.50.0/schriftstile_2026-11-03/README.md). Katalog für späteres Onboarding, jetzt nur Einstellungen. Voriger Validierungscommit `2fd35ba0` bleibt Basis. Neue native Pakete und Linux-/Mac-/Menschenabnahme offen, kein Push-/Mergeauftrag; 3.51 zurückgestellt.
 
 Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf die verbindlichen Projektregeln und ergänzt, was für Claude-Code-Sitzungen im Repository gilt. Regeln nicht hier doppeln, sondern an der Quelle pflegen.
 
