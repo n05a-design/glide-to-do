@@ -1,0 +1,41 @@
+[
+  {
+    "pfad": "build/windows/Glide-3.50.0",
+    "version": "3.50.0",
+    "exe_sha256": "c0716a54039cf68e847f2074aa47bcbd51c48deeaccd2b8701efb57adb933858",
+    "quellabweichungen": [
+      "app.pyw",
+      "interaction_policy.py",
+      "symbol_policy.py",
+      "ui_design.py"
+    ],
+    "nur_zeilenenden": [
+      "resources/timezones/provenance.json"
+    ],
+    "ressourcenabweichungen": [
+      "resources/timezones/provenance.json"
+    ]
+  },
+  {
+    "pfad": "build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung",
+    "version": "3.50.0",
+    "exe_sha256": "f8420f6bab017f54f84d9059141cc368c65c57c0873391ab458ccade4137f40f",
+    "quellabweichungen": [],
+    "nur_zeilenenden": [
+      "resources/timezones/provenance.json"
+    ],
+    "ressourcenabweichungen": [
+      "resources/timezones/provenance.json"
+    ]
+  },
+  {
+    "pfad": "build/macos/Kandidaten/Glide-3.50.0-validierung-20261102-macos-arm64.tar.gz",
+    "version": "3.50.0",
+    "archiv_sha256": "cb347fac7b380b8034b43191136970ada72e5384b03e025f10d6965afc01ee21",
+    "quellabweichungen": [
+      "app.pyw"
+    ],
+    "nur_zeilenenden": [],
+    "native_pruefung": "Vorhandener Mac-Beleg vom 02.11.; heute unter Windows nicht neu ausgeführt"
+  }
+]

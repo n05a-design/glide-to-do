@@ -1,8 +1,8 @@
 # QA-Bericht – Glide 3.50.0
 
-Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 03.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Aktueller Prüfstand nach Claudes UI-Runde:** Die gewählten Funktionen und jüngsten Oberflächenänderungen sind im Code vorhanden. Die [Gesamtvalidierung](../tests/qa-3.50.0/gesamtvalidierung_2026-11-02/README.md) führt den eingefrorenen nativen Volllauf, die aktuelle Grundstufe, Handbuch-/Roadmapabgleich und konkrete Lieferhashes zusammen. Maßgeblicher Restumfang in [Plan §21.51](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2151-gesamtvalidierung-nach-claudes-ui-runde). Die weiter unten datierten QA-Nachweise beziehen sich auf ihre ursprünglichen Quell- und Testbytes; sie sind keine zusätzliche aktuelle Gesamtabnahme.
+**Aktueller Prüfstand 03.11.2026:** [Releaseaudit und Liefervereinheitlichung](../tests/qa-3.50.0/releaseaudit_2026-11-03/README.md) auf unveränderter Quelle `067e683b…`: Python/Grafik-Master abgeglichen, reguläre lokale Windows-/Mac-Archive aktualisiert und Vorfassungen erhalten. Standprüfung um die gepflegte Python-Archivübersicht ergänzt. Neue Roboto-Mono-Schriftquelle vorhanden, deren angekündigte Claude-Integration im App-/Ressourcenbestand noch nicht vorhanden; vollständiger 3.50-Abschluss und 3.51 bleiben offen. [Verbindlicher Rest §21.52](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2152-releaseaudit-und-vereinheitlichung-3500). Die [Gesamtvalidierung vom 02.11.](../tests/qa-3.50.0/gesamtvalidierung_2026-11-02/README.md) bleibt Beleg der bisherigen Codebytes. Datierte QA-Nachweise sind keine zusätzliche aktuelle Gesamtabnahme.
 
 ## Datierte Nachweise vor der Gesamtvalidierung
 
