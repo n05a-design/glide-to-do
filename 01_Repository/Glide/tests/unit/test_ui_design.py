@@ -63,6 +63,12 @@ class DesignTest(unittest.TestCase):
         self.assertEqual(design.today_columns(480, 132, 160)[1:3], (0, 0))
         self.assertEqual(design.today_columns(1200, 132, 160)[1:3], (132, 160))
 
+    def test_today_title_stays_widest_with_wide_due_column(self):
+        # B11/D59: Fälligkeit mit Bearbeitungstag in Roboto Mono, große Schrift.
+        for width in range(400, 1800):
+            title, due, labels, _source, _gap = design.today_columns(width, 343, 160)
+            self.assertGreater(title, max(due, labels), width)
+
 
 if __name__ == "__main__":
     unittest.main()

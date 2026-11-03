@@ -4,6 +4,12 @@
 
 Intern: öffentliche erste Beta. Die Änderungen vom 31.10. und 01.11. sind in diesem Stand enthalten.
 
+- Standardschrift Roboto Mono 03.11. (D59): Roboto Mono (OFL 1.1, Version 3.001, Regular/Bold/Italic/Bold Italic) wird mitgeliefert, beim Start privat registriert und ist ohne Einstellung die Oberflächenschrift. Die Schriftfamilie bleibt in den Einstellungen wählbar; DejaVu Sans bleibt mitgeliefert. Weil Roboto Mono keine geometrischen Symbole enthält, kommen ▣ ◉ ◈ ▦ ⚑ ⠿ und die übrigen ICONS aus DejaVu Sans als Symbolbegleiter statt aus Text-Rückfällen. Lizenztext in beiden Paketlizenzbeständen, Paketstartprobe verlangt die Schrift. [Nachweis](tests/qa-3.50.0/roboto_mono_2026-11-03/README.md).
+
+- Spaltenvorrang und Einstellungsdialog 03.11. (Designprüfung): In Liste, Heute, Labels und Tagesplan weichen Labels und danach Fälligkeit auch dann, wenn der Titel sonst nicht mehr die breiteste Spalte wäre oder unter 180 px fiele (große Schrift, Nebenansicht, breitere Roboto Mono). Im Einstellungsdialog konnten die umbrechenden Beschriftungen „Tagesziel“/„Tageskapazität“ mit Roboto Mono eine endlose Layoutschleife auslösen; Umbruch bestimmt jetzt nur die Höhe. [Designprüfung](tests/qa-3.50.0/designpruefung_2026-11-03/README.md).
+
+- Pixelsymbole ohne weißen Kasten 03.11.: Der unbemalte Grund einer Pixelzeichnung ist als Symbol in Seitenleiste, Angeheftet und Seitenkopf durchsichtig, wie bisher schon beim ICO-Export. Deckendes Weiß steht im Farbdialog als eigene Farbe „Weiß“ neben dem karierten Grund. Bestehende Zeichnungen und das Datenformat bleiben unverändert.
+
 - Linux-Startseite: Endlosschleife beim Tageswechsel in schreibgeschütztem Bestand korrigiert. Umbruchtexte beeinflussen die Kartenhöhe, ohne die Rasterbreite wiederholt zu verändern. [Reproduktion und Prüfung](tests/qa-3.50.0/startseitenlayout_2026-11-02/README.md).
 
 - Prüfdiagnose: Suite-Timeouts verlieren ihre Teilprotokolle nicht mehr; Arbeitsmodi schreiben Einzelfall/Phase/Dauer fortlaufend und sichern Stacktraces, ohne Grenzen oder Assertions zu ändern. Der dabei lokalisierte Linux-Layoutfehler ist im Startseiten-Nachlauf unten korrigiert. [Nachweis](tests/qa-3.50.0/timeoutdiagnose_2026-11-02/README.md).

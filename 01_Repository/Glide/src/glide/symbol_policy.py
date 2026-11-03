@@ -42,6 +42,15 @@ SYMBOL_FONT_FALLBACKS = {"search": ("Segoe UI Symbol", "Apple Symbols", "Noto Sa
                                     "Noto Sans Symbols2", "DejaVu Sans Mono")}
 SYMBOL_FONT_FAMILIES = frozenset(name for names in SYMBOL_FONT_FALLBACKS.values() for name in names)
 
+# Inhaberauftrag 03.11.2026 (D59): Standardschrift der Oberfläche ist die
+# mitgelieferte Roboto Mono. Sie enthält keine der geometrischen ICONS-Zeichen.
+# Fehlt ein Zeichen in der gewählten UI-Schrift, kommt es deshalb zuerst aus
+# der ebenfalls mitgelieferten DejaVu Sans (Symbolbegleiter) – auf allen
+# Plattformen dieselbe Glyphe, keine Systemschrift und kein Textrückfall.
+# Erst wenn auch sie das Zeichen nicht enthält (Lupe), greifen die
+# Systemschriften aus `SYMBOL_FONT_FALLBACKS` und danach der Text.
+BUNDLED_SYMBOL_FAMILY = "DejaVu Sans"
+
 
 def resolve(icons, covers):
     """Vollständige Tabelle und nachvollziehbare Änderungen zurückgeben.
@@ -71,7 +80,8 @@ def resolve_with_fonts(icons, covers, covers_in=None):
                 chosen = value
                 break
             if covers_in is not None and not value.isascii():
-                family = next((name for name in SYMBOL_FONT_FALLBACKS.get(key, ()) if covers_in(name, value)), None)
+                family = next((name for name in (BUNDLED_SYMBOL_FAMILY, *SYMBOL_FONT_FALLBACKS.get(key, ()))
+                               if covers_in(name, value)), None)
                 if family is not None:
                     chosen = value
                     break

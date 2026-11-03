@@ -406,6 +406,9 @@ def fall_kopfverweise(lauf):
         title_x += editor._title_icon.width() + mod.tkfont.Font(font=titel.cget('font')).measure('  ')
     assert abs(title_x - body_x) <= 1, ('Seitentitel muss mit Symbol auf der Textkante bleiben', title_x, body_x)
     assert editor._title_icon is not None and editor._title_icon_label.winfo_ismapped()
+    # Inhaberauftrag 03.11.2026: Der unbemalte Grund eines Pixelsymbols ist
+    # durchsichtig – kein weißer Kasten auf der Trägerfläche.
+    assert editor._title_icon.transparency_get(0, 0), "Pixelsymbol mit weißem Grund statt durchsichtig"
     assert not str(titel.cget("image")) and titel.cget("text") == eintrag["title"]
     icon = editor._title_icon_label
     assert title_x - icon.winfo_rootx() - icon.winfo_width() == 8

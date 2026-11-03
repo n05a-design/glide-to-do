@@ -79,6 +79,7 @@ def prepare(source, repo, destination, basis):
                'tkinterdnd2-LICENSE': source / 'vendor/tkinterdnd2/LICENSE',
                'DejaVu-LICENSE': source / 'resources/fonts/LICENSE',
                'PixelifySans-OFL.txt': source / 'resources/fonts/OFL-PixelifySans.txt',
+               'RobotoMono-OFL.txt': source / 'resources/fonts/OFL-RobotoMono.txt',
                'IANA-LICENSE.txt': source / 'resources/timezones/LICENSE-iana.txt',
                'CLDR-LICENSE.txt': source / 'resources/timezones/LICENSE-CLDR.txt'}
     for name, original in current.items():

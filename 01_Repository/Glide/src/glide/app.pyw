@@ -301,6 +301,24 @@ def app_font(size=11, *styles, root=None):
         return ("TkDefaultFont", size, *styles)
 
 
+# Seit D59 (03.11.2026) ist die Standardschrift Roboto Mono; sie enthält keine
+# ICONS-Zeichen. `apply_ui_font` trägt hier den Symbolbegleiter ein, wenn die
+# UI-Schrift die Zeichen nicht selbst hat (sonst None = UI-Schrift).
+_ICON_FAMILY = {"family": None}
+
+
+def icon_font(size=11, *styles, root=None):
+    """Schrift für Labels, die nur ein ICONS-Zeichen tragen (Pfeil, Haken, Griff).
+
+    Wie `app_font`, aber in der Familie des Symbolbegleiters, solange die
+    gewählte UI-Schrift die geometrischen Zeichen nicht enthält. So steht
+    dieselbe Glyphe auf allen Plattformen statt eines Systemersatzes.
+    """
+    font = app_font(size, *styles, root=root)
+    family = _ICON_FAMILY.get("family")
+    return (family, *font[1:]) if family else font
+
+
 def bind_theme_hover(widget, theme_getter, base_bg, fg_hover=None):
     """Datums- und Labelauswahl verwenden denselben Hover mit aktuellem Theme."""
     base_fg = widget.cget("fg")
@@ -1285,18 +1303,27 @@ class DeferredDrawCanvas(tk.Canvas):
 PATH_SEPARATOR = "›"
 _BUNDLED_GLYPH_METRICS = {}
 _SEPARATOR_SHIFTS = {}
+# Mitgelieferte Textschriften mit ihren Dateien (normal, fett). Seit D59
+# (03.11.2026) misst B09 auch in der Standardschrift Roboto Mono.
+BUNDLED_METRIC_FONTS = {
+    "dejavu sans": ("DejaVuSans.ttf", "DejaVuSans-Bold.ttf"),
+    "roboto mono": ("RobotoMono-Regular.ttf", "RobotoMono-Bold.ttf"),
+}
 
 
-def bundled_glyph_metrics(bold):
-    """Glyphenrahmen der mitgelieferten DejaVu Sans (fett oder normal) – oder None."""
-    if bold not in _BUNDLED_GLYPH_METRICS:
-        datei = os.path.join(_GLIDE_SOURCE_DIR, "resources", "fonts",
-                             "DejaVuSans-Bold.ttf" if bold else "DejaVuSans.ttf")
+def bundled_glyph_metrics(bold, family="DejaVu Sans"):
+    """Glyphenrahmen einer mitgelieferten Textschrift (fett oder normal) – oder None."""
+    dateien = BUNDLED_METRIC_FONTS.get(str(family or "").casefold())
+    if dateien is None:
+        return None
+    schluessel = (dateien[1 if bold else 0], bool(bold))
+    if schluessel not in _BUNDLED_GLYPH_METRICS:
+        datei = os.path.join(_GLIDE_SOURCE_DIR, "resources", "fonts", schluessel[0])
         try:
-            _BUNDLED_GLYPH_METRICS[bold] = glide_glyphs.load(datei)
+            _BUNDLED_GLYPH_METRICS[schluessel] = glide_glyphs.load(datei)
         except (OSError, ValueError):
-            _BUNDLED_GLYPH_METRICS[bold] = None
-    return _BUNDLED_GLYPH_METRICS[bold]
+            _BUNDLED_GLYPH_METRICS[schluessel] = None
+    return _BUNDLED_GLYPH_METRICS[schluessel]
 
 
 def separator_shift(widget, font):
@@ -1312,8 +1339,8 @@ def separator_shift(widget, font):
     except (tk.TclError, RuntimeError, TypeError, ValueError):
         return 0
     versatz = 0
-    if familie.casefold() == "dejavu sans":
-        metrics = bundled_glyph_metrics(fett)
+    metrics = bundled_glyph_metrics(fett, familie)
+    if metrics is not None:
         pixel = -groesse if groesse < 0 else groesse * skala
         versatz = glide_glyphs.optical_shift(metrics, PATH_SEPARATOR, pixel, metrics, pixel)
     _SEPARATOR_SHIFTS[schluessel] = versatz
@@ -1363,8 +1390,12 @@ class RoundedButton(DeferredDrawCanvas):
         self.radius = radius
         # Knöpfe zeichnen in der UI-Schrift. Ausnahme seit B10: ein Zeichen
         # aus einer der Systemsymbolschriften der Symbolregel (die Lupe)
-        # behält seine Familie, sonst erschiene ein Ersatzkästchen.
-        if isinstance(font, tuple) and font and font[0] in glide_symbols.SYMBOL_FONT_FAMILIES:
+        # behält seine Familie, sonst erschiene ein Ersatzkästchen. Seit D59
+        # (03.11.2026) gilt das auch für den Symbolbegleiter DejaVu Sans, wenn
+        # die UI-Schrift (Roboto Mono) das Zeichen nicht selbst enthält.
+        if isinstance(font, tuple) and font and (
+                font[0] in glide_symbols.SYMBOL_FONT_FAMILIES
+                or (font[0] == glide_symbols.BUNDLED_SYMBOL_FAMILY and font[0] != app_font(11)[0])):
             self.font = tuple(font)
         else:
             self.font = app_font(font[1], *font[2:])
@@ -3278,7 +3309,7 @@ class AppOptionMenu(tk.Label):
         for value in self.options:
             self.menu.add_command(label=value, command=lambda value=value: variable.set(value))
         self.arrow = tk.Label(self, text=app.ICONS["dropdown_closed"], bg=app.theme["input"], fg=app.theme["muted"],
-                              font=app_font(11), cursor="hand2", padx=5, pady=0)
+                              font=icon_font(11), cursor="hand2", padx=5, pady=0)
         # Genau so hoch wie das Feld: Mittig platziert war der Pfeil 4 Pixel
         # höher und stand oben und unten über den Feldrand hinaus.
         self.arrow.place(relx=1, rely=0, relheight=1, anchor="ne")
@@ -4568,7 +4599,7 @@ class SystemNavigation(ttk.Treeview):
             # B09: abweichende Glyphenformen (♲) auf die Mitte der Bezugsformen.
             canvas.create_text(width / 2, y + height / 2 - self.ICON_RISE + self.app.symbol_row_shift(symbol),
                                text=symbol, fill=foreground,
-                               font=self.app.sidebar_section_font())
+                               font=self.app.sidebar_symbol_font())
 
 
 class ItemWorkspace:
@@ -16111,7 +16142,10 @@ class ListApp:
     # Gleichzeitig auf der Startseite angebotene Vorlagen. Weniger als alle,
     # damit die Kachel nicht zur Liste wird – welche es sind, wechselt.
     HOME_TEMPLATE_VISIBLE = 3
-    PREFERRED_UI_FONTS = ("Glide Sans", "DejaVu Sans", "Noto Sans", "Segoe UI", "TkDefaultFont")
+    # Inhaberauftrag 03.11.2026 (D59): Roboto Mono ist die mitgelieferte
+    # Standardschrift. DejaVu Sans bleibt mitgeliefert – als wählbare
+    # Schrift und als Symbolbegleiter (`symbol_policy.BUNDLED_SYMBOL_FAMILY`).
+    PREFERRED_UI_FONTS = ("Roboto Mono", "Glide Sans", "DejaVu Sans", "Noto Sans", "Segoe UI", "TkDefaultFont")
     UI_FONT_SIZE_CHOICES = {"klein": 10, "mittel": 11, "gross": 12}
     TEMPLATE_FORMAT_VERSION = 2
     LOCK_MAX_AGE_HOURS = 8
@@ -24363,7 +24397,7 @@ class ListApp:
                 gefunden = self.find_item_in_lists(zeile["task"])
                 erledigt = bool(gefunden and gefunden[0].get("done"))
                 marke = tk.Label(text, text=self.ICONS["check" if erledigt else "task_open"], bg=theme["card"],
-                                 fg=theme["confirm" if erledigt else "muted"], font=app_font(groessen["body"]),
+                                 fg=theme["confirm" if erledigt else "muted"], font=icon_font(groessen["body"]),
                                  cursor="arrow" if nur_lesen or not gefunden else "hand2", padx=2, pady=0)
                 if gefunden and not nur_lesen:
                     marke.bind("<Button-1>", lambda _event, iid=zeile["task"]: self.toggle_side_view_task(iid))
@@ -25817,9 +25851,7 @@ class ListApp:
             fett = str(font.actual("weight")) == "bold"
         except (tk.TclError, AttributeError, TypeError, ValueError):
             return None
-        if familie.casefold() != "dejavu sans":
-            return None
-        return bundled_glyph_metrics(fett)
+        return bundled_glyph_metrics(fett, familie)
 
     def font_pixels(self, font):
         """Schriftgröße in Pixeln (Em) für eine tkfont.Font."""
@@ -25867,10 +25899,17 @@ class ListApp:
         row.bind("<Configure>", ausrichten, add="+")
         return ausrichten
 
+    def sidebar_symbol_font(self):
+        """Schrift der Systemsymbole (▣ ◉ ◈ ▤ ♲): Abschnittsschrift, bei fehlenden
+        Zeichen der UI-Schrift (Roboto Mono, D59) im Symbolbegleiter."""
+        font = self.sidebar_section_font()
+        family = _ICON_FAMILY.get("family")
+        return (family, *font[1:]) if family else font
+
     def symbol_row_shift(self, symbol):
         """Pixel nach unten, damit ein Zeilensymbol mittig steht wie die Bezugsformen."""
         speicher = getattr(self, "_symbol_row_shifts", None)
-        schluessel = (str(symbol), self.sidebar_section_font())
+        schluessel = (str(symbol), self.sidebar_symbol_font())
         if speicher is None or speicher.get("_font") != schluessel[1]:
             speicher = self._symbol_row_shifts = {"_font": schluessel[1]}
         if schluessel[0] not in speicher:
@@ -26159,7 +26198,7 @@ class ListApp:
         kopf = tk.Frame(frame, bg=theme["card"], cursor="hand2")
         kopf.pack(fill="x")
         pfeil = tk.Label(kopf, text=self.ICONS["dropdown_closed" if is_open else "group"], width=2,
-                         bg=theme["card"], fg=theme["muted"], font=app_font(9), cursor="hand2", takefocus=True)
+                         bg=theme["card"], fg=theme["muted"], font=icon_font(9), cursor="hand2", takefocus=True)
         pfeil.pack(side="left", padx=(6, 2))
         titel = tk.Label(kopf, text=f"Angeheftet ({len(pages)})", bg=theme["card"], fg=theme["muted"],
                          font=app_font(9, "bold"), anchor="w", cursor="hand2")
@@ -26515,7 +26554,7 @@ class ListApp:
             row = surface.inner
             row.configure(takefocus=1)
             griff = tk.Label(row, text=self.ICONS["details"], bg=theme["card"], fg=theme["muted"],
-                             font=app_font(14), cursor="fleur")
+                             font=icon_font(14), cursor="fleur")
             griff.pack(side="left", padx=(0, 10))
             tk.Label(row, text=titles.get(key, key), bg=theme["card"], fg=theme["text"], font=app_font(11),
                      anchor="w").pack(side="left", fill="x", expand=True)
@@ -28454,7 +28493,7 @@ class ListApp:
                 _ui.pack(head, fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[8]))
                 if symbol:
                     icon = _ui.make(tk.Label, head, retention_key="symbol", text=symbol,
-                                    bg=farbe, fg=readable_text_color(farbe), font=app_font(12, "bold"))
+                                    bg=farbe, fg=readable_text_color(farbe), font=icon_font(12, "bold"))
                     _ui.pack(icon, side="left", padx=(glide_design.SPACING[10], 0))
                     icon._glide_symbol = symbol
                     self._bind_home_wheel(icon)
@@ -29467,7 +29506,9 @@ class ListApp:
         if image is None:
             try:
                 model = glide_drawing.DrawingModel.from_document(icon)
-                image = glide_drawing_image.model_to_photo(model, scale=scale, master=self.root)
+                # Unbemalter Grund durchsichtig (03.11.2026): kein weißer
+                # Kasten um das Symbol in Seitenleiste, Angeheftet und Seitenkopf.
+                image = glide_drawing_image.model_to_photo(model, scale=scale, master=self.root, transparent=True)
                 if right_padding:
                     padded = tk.PhotoImage(master=self.root, width=image.width() + right_padding,
                                            height=image.height())
@@ -30787,11 +30828,18 @@ class ListApp:
                 ("Tagesziel · erledigte Aufgaben (0 = aus)", ziel, None),
                 ("Tageskapazität · Minuten (0 = aus)", kapazitaet, "daily_capacity"))):
             kopf, fuss = tageswerte.cell(spalte)
+            # width=1: Der Umbruch bestimmt nur die Höhe, nie die Spaltenbreite.
+            # Mit der breiteren Roboto Mono (D59) schaukelten Umbruch und
+            # gleichmäßige Spalten sich sonst endlos auf (wie Startseite eda9278).
             beschriftung = tk.Label(kopf, text=titel, bg=self.theme["bg"], fg=self.theme["muted"],
-                                    font=app_font(10), anchor="w", justify="left")
+                                    font=app_font(10), anchor="w", justify="left", width=1)
             beschriftung.pack(side="bottom", fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[5]))
-            beschriftung.bind("<Configure>", lambda event, target=beschriftung:
-                              target.configure(wraplength=max(120, event.width - 4)))
+
+            def umbruch(event, target=beschriftung):
+                ziel = max(120, event.width - 4)
+                if int(float(target.cget("wraplength") or 0)) != ziel:
+                    target.configure(wraplength=ziel)
+            beschriftung.bind("<Configure>", umbruch)
             zusatz = {"name": widgetname} if widgetname else {}
             feld = tk.Entry(fuss, textvariable=variable, width=10, bg=self.theme["input"],
                             fg=self.theme["text"], insertbackground=self.theme["text"],
@@ -31093,7 +31141,7 @@ class ListApp:
         _font_frame, _font_button = self._make_option_menu(
             appearance, font_size, ["klein", "mittel", "gross"], option_colors={"klein": "muted", "mittel": "accent", "gross": "confirm"})
         _font_frame.pack(fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[7]))
-        tk.Label(appearance, text="Schriftfamilie (leer = mitgelieferte Schrift)",
+        tk.Label(appearance, text="Schriftfamilie (leer = Roboto Mono; mitgeliefert auch DejaVu Sans)",
                  bg=self.theme["bg"], fg=self.theme["muted"], font=app_font(10), anchor="w").pack(fill="x", pady=(glide_design.SPACING[8], glide_design.SPACING[5]))
         font_entry = tk.Entry(appearance, textvariable=font_family, width=24, bg=self.theme["input"],
                               fg=self.theme["text"], insertbackground=self.theme["text"], relief="flat",
@@ -31446,6 +31494,11 @@ class ListApp:
                        == family.casefold() for char in text)
         self.ICONS, self._symbol_changes, self._symbol_fonts = glide_symbols.resolve_with_fonts(
             type(self).ICONS, covers, covers_in)
+        # Reine Symbol-Labels (`icon_font`) folgen dem Symbolbegleiter, sobald
+        # die UI-Schrift die Zeichen nicht selbst enthält (D59).
+        begleiter = glide_symbols.BUNDLED_SYMBOL_FAMILY
+        _ICON_FAMILY["family"] = (begleiter if begleiter in self._symbol_fonts.values()
+                                  and begleiter.casefold() != family.casefold() else None)
         for attribute, key, size in (("search_button", "search", self.SEARCH_SYMBOL_SIZE), ("settings_button", "settings", 16),
                                      ("notifications_button", "notifications", 16), ("print_button", "print", 15),
                                      ("capture_button", "capture", 16), ("history_button", "history", 15),
@@ -31474,8 +31527,10 @@ class ListApp:
         text = self.ICONS[key]
         familie = getattr(self, "_symbol_fonts", {}).get(key)
         if familie:
-            # B10: Die Lupe kommt aus einer Systemschrift; dieselbe Größe wie
-            # die übrigen Kopfsymbole, damit Reihe und Gewicht stimmen.
+            # B10: Die Lupe kommt aus einer Systemschrift, seit D59 die übrigen
+            # Zeichen bei Roboto Mono aus dem Symbolbegleiter DejaVu Sans;
+            # dieselbe Größe wie die übrigen Kopfsymbole, damit Reihe und
+            # Gewicht stimmen.
             return (familie, *app_font(size, "bold")[1:])
         return app_font(11 if len(text) > 1 and text.isascii() else size, "bold")
 
@@ -34847,7 +34902,7 @@ class ListApp:
                 tk.Frame(card, bg=theme['card'], height=18).pack(fill='x')
                 moon = moon_events.get(day)
                 if moon:
-                    marker = tk.Label(card, text=self.ICONS[moon['icon']], bg=theme['card'], fg=theme['muted'], font=app_font(10))
+                    marker = tk.Label(card, text=self.ICONS[moon['icon']], bg=theme['card'], fg=theme['muted'], font=icon_font(10))
                     marker.place(relx=1, rely=1, x=-5, y=-5, anchor='se')
                     marker.moon_day, marker.moon_name = day, moon['name']
                     self.add_tooltip(marker, moon['name'] + ' · berechneter lokaler Kalendertag')
@@ -36155,7 +36210,7 @@ class ListApp:
             rahmen = tk.Frame(flaeche, bg=theme["input"], cursor="hand2")
             rahmen.pack(fill="x")
             haken = tk.Label(rahmen, text=self.ICONS["check"] if schluessel == current else " ",
-                             bg=theme["input"], fg=theme["ui_accent"], font=app_font(11, "bold"),
+                             bg=theme["input"], fg=theme["ui_accent"], font=icon_font(11, "bold"),
                              width=2, anchor="center")
             haken.pack(side="left", padx=(10, 4), pady=8)
             text = tk.Frame(rahmen, bg=theme["input"])
@@ -37045,7 +37100,7 @@ class ListApp:
         # Seit dem 27.09.2026 ein Klapppfeil statt ☷: Er klappt den Listenbaum
         # ein und aus; die Überschrift selbst öffnet die Übersicht.
         self.sidebar_heading_icon = tk.Label(icon_slot, text=self.SIDEBAR_SECTION_ARROWS[True],
-            font=app_font(9), bg=self.theme["card"], fg=self.theme["text"], cursor="hand2", takefocus=True)
+            font=icon_font(9), bg=self.theme["card"], fg=self.theme["text"], cursor="hand2", takefocus=True)
         self.sidebar_heading_icon.pack(fill="both", expand=True, pady=(0, 0))
         self.sidebar_title = self.register_theme_widget(
             tk.Label(
@@ -37869,7 +37924,7 @@ class ListApp:
         platz = tk.Frame(kopf, width=28, bg=theme["card"])
         platz.pack(side="left", fill="y")
         platz.pack_propagate(False)
-        pfeil = tk.Label(platz, text=self.SIDEBAR_SECTION_ARROWS[True], font=app_font(9),
+        pfeil = tk.Label(platz, text=self.SIDEBAR_SECTION_ARROWS[True], font=icon_font(9),
                          bg=theme["card"], fg=theme["text"], cursor="hand2", takefocus=True)
         pfeil.pack(fill="both", expand=True, pady=(0, 0))
         beschriftung = tk.Label(kopf, text=titel, font=self.sidebar_section_font(), bg=theme["card"],
@@ -44700,6 +44755,18 @@ class ListApp:
         due_width = self.active_due_column_width()
         if measured and measured < self.DUE_COLUMN_MIN_TREE_WIDTH:
             due_width = 0
+        # B11 (Designprüfung 03.11.2026, Befund 1): Neben den festen Schwellen
+        # weichen Labels und danach Fälligkeit auch dann, wenn der Titel sonst
+        # nicht mehr die breiteste Spalte wäre oder unter 180 px fiele – mit
+        # großer Schrift, Nebenansicht oder der breiteren Roboto Mono.
+        if measured:
+            def rest(due, labels):
+                return (measured - due - labels - (self.TASK_METADATA_GAP if due or labels else 0)
+                        - self.DUE_RIGHT_PADDING_WIDTH - self.TASK_TREE_EDGE_PADDING)
+            if label_width and rest(due_width, label_width) < max(180, due_width + 1, label_width + 1):
+                label_width = 0
+            if due_width and rest(due_width, label_width) < max(180, due_width + 1):
+                due_width = 0
         text_width = max(
             180,
             tree_width
@@ -51621,17 +51688,25 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 pass
         color_entry.bind("<KeyRelease>", typed)
         message.pack(fill="x", pady=(4, 0))
-        used = [color for color in palette if color != glide_drawing.BACKGROUND][-24:]
-        if used:
-            tk.Label(body, text="Farben dieser Zeichnung", bg=self.theme["bg"], fg=self.theme["muted"],
-                     font=app_font(9), anchor="w").pack(anchor="w", pady=(8, 2))
-            flow = ButtonFlow(body, self.theme["bg"], gap=4)
-            flow.pack(fill="x")
-            for color in [glide_drawing.BACKGROUND] + used:
-                chip = tk.Canvas(flow, width=22, height=22, bg=color, highlightthickness=1,
-                                 highlightbackground=self.theme["line"], cursor="hand2")
-                chip.bind("<Button-1>", lambda _event, value=color: set_color(value))
-                flow.add(chip)
+        used = [color for color in palette
+                if color not in (glide_drawing.BACKGROUND, glide_drawing.OPAQUE_WHITE)][-24:]
+        # Grund und Deckweiß stehen immer vorn (03.11.2026): Der Grund ist im
+        # Symbol durchsichtig (Schachbrett), Deckweiß füllt sichtbar weiß.
+        tk.Label(body, text="Farben dieser Zeichnung" if used else "Grund und Weiß", bg=self.theme["bg"],
+                 fg=self.theme["muted"], font=app_font(9), anchor="w").pack(anchor="w", pady=(8, 2))
+        flow = ButtonFlow(body, self.theme["bg"], gap=4)
+        flow.pack(fill="x")
+        for color in [glide_drawing.BACKGROUND, glide_drawing.OPAQUE_WHITE] + used:
+            chip = tk.Canvas(flow, width=22, height=22, bg=color, highlightthickness=1,
+                             highlightbackground=self.theme["line"], cursor="hand2")
+            if color == glide_drawing.BACKGROUND:
+                for x, y in ((0, 0), (12, 12)):
+                    chip.create_rectangle(x, y, x + 12, y + 12, fill="#D9D9D9", outline="")
+                self.add_tooltip(chip, "Grund · im Symbol und beim Export durchsichtig")
+            elif color == glide_drawing.OPAQUE_WHITE:
+                self.add_tooltip(chip, "Weiß · deckend, auch im Symbol")
+            chip.bind("<Button-1>", lambda _event, value=color: set_color(value))
+            flow.add(chip)
 
         def apply(_event=None):
             try:
@@ -55321,7 +55396,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     # Hinweis ohne Wirkung (KO03: Vorlauf ohne Fälligkeit): nichts zurückzunehmen.
                     continue
                 weg = tk.Label(chip, text=self.ICONS["remove"], bg=theme["input"], fg=theme["muted"],
-                               font=app_font(10, "bold"), cursor="hand2", padx=4)
+                               font=icon_font(10, "bold"), cursor="hand2", padx=4)
                 weg.pack(side="left")
                 weg.bind("<Button-1>", lambda _event, key=teil.schluessel: zuruecknehmen(key))
                 self.add_tooltip(weg, "Erkennung zurücknehmen – der Text bleibt im Titel")

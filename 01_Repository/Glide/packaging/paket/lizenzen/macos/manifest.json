@@ -137,11 +137,12 @@
     },
     {
       "name": "Glide-Schriften",
-      "version": "DejaVu 2.37 / Pixelify Sans 39df74a",
+      "version": "DejaVu 2.37 / Pixelify Sans 39df74a / Roboto Mono 3.001",
       "source": "resources/fonts/provenance.json",
       "files": {
         "DejaVu-LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
-        "PixelifySans-OFL.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+        "PixelifySans-OFL.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+        "RobotoMono-OFL.txt": "ffd9f334604a352ad52ee0a7159c31bdafaf5f8465e5b9f9eb5c1f4924343183"
       }
     },
     {

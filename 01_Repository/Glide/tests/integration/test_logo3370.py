@@ -129,7 +129,9 @@ with tempfile.TemporaryDirectory(prefix="glide-logo3370-") as data:
                     eigene=getattr(app,"_symbol_fonts",{}).get(name)
                     if eigene:
                         probe=mod.tkfont.Font(root=root,family=eigene,size=app.ui_font_size(1),weight=weight)
-                        assert eigene in mod.glide_symbols.SYMBOL_FONT_FAMILIES,(name,eigene)
+                        # D59: Symbolbegleiter DejaVu Sans neben den Systemschriften der Lupe.
+                        assert (eigene in mod.glide_symbols.SYMBOL_FONT_FAMILIES
+                                or eigene==mod.glide_symbols.BUNDLED_SYMBOL_FAMILY),(name,eigene)
                         assert all(str(root.tk.call("font","actual",probe.name,"-family",char)).casefold()==eigene.casefold()
                                    for char in text),("Systemschrift ohne Zeichen",name,text)
                         continue

@@ -2,7 +2,7 @@
 
 Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Aktueller Arbeitsstand:** UI-Nachläufe einschließlich Labels in der Kartenecke, Hinweisplatz, Werkzeugabstand/Pinnwandgrund und einzeiligem Seitenfuß umgesetzt. Quelle/Python 3.50.0; native Lieferungen nach tatsächlichem Quellhash unterscheiden. Maßgeblich: [Plan §21.51](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2151-gesamtvalidierung-nach-claudes-ui-runde), [Gesamtvalidierung](01_Repository/Glide/tests/qa-3.50.0/gesamtvalidierung_2026-11-02/README.md). Commit und Push für diese Prüfung vom Inhaber ausdrücklich beauftragt; keine automatische Zusammenführung. Offene technische Teilvorhaben und menschliche Abnahmen bleiben erhalten. Historische Nachweise sind keine aktuellen Lieferzusagen.
+**Aktueller Arbeitsstand:** UI-Nachläufe einschließlich Labels in der Kartenecke, Hinweisplatz, Werkzeugabstand/Pinnwandgrund und einzeiligem Seitenfuß umgesetzt. Quelle/Python 3.50.0; native Lieferungen nach tatsächlichem Quellhash unterscheiden. Maßgeblich: [Plan §21.51](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2151-gesamtvalidierung-nach-claudes-ui-runde), [Gesamtvalidierung](01_Repository/Glide/tests/qa-3.50.0/gesamtvalidierung_2026-11-02/README.md). Commit und Push für diese Prüfung vom Inhaber ausdrücklich beauftragt; keine automatische Zusammenführung. Offene technische Teilvorhaben und menschliche Abnahmen bleiben erhalten. Historische Nachweise sind keine aktuellen Lieferzusagen. Nachtrag 03.11.2026 (D59): Roboto Mono ist mitgelieferte Standardschrift, Pixelsymbole mit durchsichtigem Grund, Designprüfung aller Ansichten – [Plan §21.52](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2152-standardschrift-roboto-mono-und-durchsichtiger-pixelgrund).
 
 Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf die verbindlichen Projektregeln und ergänzt, was für Claude-Code-Sitzungen im Repository gilt. Regeln nicht hier doppeln, sondern an der Quelle pflegen.
 
@@ -18,7 +18,7 @@ Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf 
 ## Lesereihenfolge
 
 1. [01_Repository/Glide/AGENTS.md](01_Repository/Glide/AGENTS.md) – verbindliche Arbeitsregeln und Abschlusskriterium
-2. [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) – Stand, Entscheidungen D01–D58 (D49 als Auslegung mit Korrekturvorbehalt), beauftragte Arbeit, Abnahme
+2. [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) und [Arbeitsrichtung](01_Repository/Glide/docs/ARBEITSRICHTUNG.md) – Stand, Entscheidungen D01–D59 (D49 als Auslegung mit Korrekturvorbehalt), beauftragte Arbeit, Abnahme
 3. [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) – Aufgaben mit Status, Stufen, Ziele; Verhalten der Funktionen in [Funktionen](01_Repository/Glide/docs/20_FUNKTIONEN.md)
 4. [Dokumentenpflege](01_Repository/Glide/docs/DOKUMENTENPFLEGE.md) vor jeder Dokumentänderung: ein Thema, ein Dokument; zusammenführen und löschen statt archivieren (Auftrag vom 03.10.2026)
 5. Erst dann die betroffene Codestelle **und ihre Aufrufer** (Funktionsnamen suchen, nicht Zeilennummern)

@@ -399,7 +399,7 @@ Vor dem Schreiben werden Schreibrecht, aktuelle IDs, Titel und der vollständige
 - **Rückgängig** je Aktion, höchstens 50 Schritte. Benannte Zwischenstände als Anhang (höchstens 10).
 - **Paletten:** „Glide 32“ mitgeliefert; eigene speichern; ein- und ausgeben als `.gpl`/`.hex`, einlesen auch Adobe Swatch Exchange und Aseprite (nur Palette, höchstens 256 Farben).
 - **Export:** PNG ganzzahlig vergrößert ohne Glättung (bis 2.048 px); ICO mit 16/32/48/256 px, Grund wahlweise durchsichtig (3.32.0); seit 3.35.0 (G-03) zeigt vor dem Speichern eine Vorschau 16, 32 und 48 px auf hellem und dunklem Grund in Originalgröße und doppelt – aus derselben Rechnung wie die Datei und deshalb pixelgleich zu ihr. Abbrechen schreibt nichts. Glide-SVG und JSON (`hex8-row-v1`) für den Rundlauf.
-- **Pixelsymbol:** eigene 16 × 16-Zeichnung im Listen- oder Ordnerobjekt (E-09), sichtbar in Seitenleiste, Übersicht und Suche.
+- **Pixelsymbol:** eigene 16 × 16-Zeichnung im Listen- oder Ordnerobjekt (E-09), sichtbar in Seitenleiste, Übersicht und Suche. Seit D59 (03.11.2026) ist der unbemalte Grund (Farbindex 0) dort durchsichtig wie beim ICO-Export; deckend weiß füllt die Farbe „Weiß“ (`#FEFEFE`) neben dem karierten Grund im Farbdialog.
 
 ### Bildfolgen seit 3.40.0
 

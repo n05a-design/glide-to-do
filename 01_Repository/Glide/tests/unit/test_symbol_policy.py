@@ -45,6 +45,23 @@ class SymbolPolicyTests(unittest.TestCase):
         self.assertEqual(set(SYMBOL_FONT_FALLBACKS),{"search"})
         self.assertFalse(any("emoji" in name.lower() for name in SYMBOL_FONT_FAMILIES))
 
+    def test_bundled_companion_supplies_symbols_missing_in_ui_font(self):
+        # D59 (03.11.2026): Roboto Mono enthält keine geometrischen Zeichen.
+        # Sie kommen aus der mitgelieferten DejaVu Sans, nicht aus dem Text.
+        from symbol_policy import resolve_with_fonts, BUNDLED_SYMBOL_FAMILY
+        icons={key:"■" for key in TEXT_FALLBACKS}
+        nur_ascii=lambda text: text.isascii()
+        begleiter=lambda family,text: family==BUNDLED_SYMBOL_FAMILY and "⌕" not in text
+        result,changes,fonts=resolve_with_fonts(icons,nur_ascii,begleiter)
+        self.assertEqual(result["home"],"■")
+        self.assertEqual(fonts["home"],BUNDLED_SYMBOL_FAMILY)
+        self.assertEqual(result["trash"],"♲")
+        # Die Lupe fehlt auch im Begleiter: lesbarer Text ohne Systemschrift.
+        self.assertEqual((result["search"],fonts.get("search")),("Su",None))
+        # Enthält die UI-Schrift das Zeichen selbst, bleibt sie maßgeblich.
+        result,_,fonts=resolve_with_fonts(icons,lambda text: True,begleiter)
+        self.assertEqual(fonts,{})
+
     def test_first_covered_candidate_and_table_contract(self):
         icons={key:"■" for key in TEXT_FALLBACKS}
         result,_=resolve(icons,lambda value: value!="♲")

@@ -26,6 +26,30 @@
         "PixelifySans-Bold.ttf": "fonts/ttf/PixelifySans-Bold.ttf",
         "OFL-PixelifySans.txt": "OFL.txt"
       }
+    },
+    {
+      "name": "Roboto Mono",
+      "use": "Standardschrift der Oberfläche (seit 03.11.2026, Inhaberauftrag); Symbole weiter aus DejaVu Sans",
+      "license": "SIL Open Font License 1.1 (ohne reservierten Schriftnamen)",
+      "copyright": "Copyright 2015 The Roboto Mono Project Authors",
+      "source": "https://github.com/googlefonts/robotomono",
+      "version": "3.001",
+      "retrieved": "2026-11-03",
+      "project_copy": "20_Grafik_Master/07_Fonts/01_Roboto_Mono (Google-Fonts-Paket des Inhabers, statische Schnitte)",
+      "files": {
+        "RobotoMono-Regular.ttf": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95",
+        "RobotoMono-Bold.ttf": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83",
+        "RobotoMono-Italic.ttf": "82629b0b8a721ce1a79942f68b39438512b406dad2a4a7476c94b72e7794b2f4",
+        "RobotoMono-BoldItalic.ttf": "5bc2918abfd7399aff52e0a7ee22c97d544601f7ae8ff3b49ad176497acff1ed",
+        "OFL-RobotoMono.txt": "ffd9f334604a352ad52ee0a7159c31bdafaf5f8465e5b9f9eb5c1f4924343183"
+      },
+      "upstream_paths": {
+        "RobotoMono-Regular.ttf": "static/RobotoMono-Regular.ttf",
+        "RobotoMono-Bold.ttf": "static/RobotoMono-Bold.ttf",
+        "RobotoMono-Italic.ttf": "static/RobotoMono-Italic.ttf",
+        "RobotoMono-BoldItalic.ttf": "static/RobotoMono-BoldItalic.ttf",
+        "OFL-RobotoMono.txt": "OFL.txt"
+      }
     }
   ]
 }
