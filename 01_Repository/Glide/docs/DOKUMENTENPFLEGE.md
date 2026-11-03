@@ -1,6 +1,6 @@
 # Regeln für die Dokumentenpflege
 
-Stand 03.11.2026 · Glide 3.50.1 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 **Aufbewahrung 31.10.2026:** Zusätzlich zu den neun überalterten Git-Dateien alle 751 im Audit inventarisierten ignorierten QA-Reste entfernt; 28 Original-Nutzerbilder erhalten. Einzelpfade und Hashes im [Prüf- und Liefernachweis](../tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md). Die beschädigte Zeichencodierung der datierten Robustheits-README wurde an 49 Zeichen rekonstruiert; Zahlenfolgen und Aussagen unverändert, Vorher-/Nachherhash dokumentiert. Historische Messergebnisse/JSON-Berichte bleiben datiert.
 

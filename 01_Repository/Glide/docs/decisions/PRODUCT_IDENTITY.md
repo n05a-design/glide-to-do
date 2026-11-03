@@ -1,6 +1,6 @@
 # Produkt- und Identitätsregister
 
-Stand 03.11.2026 · App-Version 3.50.1 · Datenformat 26
+Stand 03.11.2026 · App-Version 3.50.2 · Datenformat 26
 
 Der obere Block ist durch den Quellcode belegt und muss nicht mehr entschieden
 werden. Der untere Block enthält Geschäfts- und Rechtsentscheidungen. Offene
@@ -13,12 +13,12 @@ ersetzt werden.
 |---|---|---|
 | Produktname | Glide | `APP_NAME` |
 | Langname | Glide – Aufgaben und Listen | `APP_PRODUCT_NAME` |
-| App-Version | 3.50.1 | `APP_VERSION`, `VERSION` |
+| App-Version | 3.50.2 | `APP_VERSION`, `VERSION` |
 | Datenformat | 26 | `DATA_SCHEMA_VERSION` |
 | Unterstützte Backup-Formate | 4 bis 26 | `MIN_PORTABLE_BACKUP_SCHEMA_VERSION`, `DATA_SCHEMA_VERSION` |
 | Laufzeit | Python 3.14 mit Tk 9 als Grundlage (27.09.2026); Tk 8.6 bleibt lauffähig, ohne Systemmitteilung und SVG-Vorschau. Sonst nur Standardbibliothek | Importliste in `app.pyw` |
 | Mitgelieferte Bibliothek | tkinterdnd2 0.6.3 (MIT) mit tkDnD für das Ziehen aus Finder/Explorer; optional, lädt beim ersten Gebrauch | `src/glide/vendor`, [Entscheidung](ABHAENGIGKEIT_TKDND.md) |
-| Prüflaufzeit | Dokumentierter Lieferstand 3.42.0: Referenz-Mac Python 3.14.5/Tk 9.0.3, Windows x64 Python 3.14.7/Tk 9.0.4 und Linux/Xvfb Python 3.14/Tk 8.6; native automatische Liefernachweise grün. Aktuelle lokale Paketvollständigkeit und offene Menschenabnahme getrennt im QA-Bericht prüfen | [QA-Bericht](../07_QA_BERICHT.md) |
+| Prüflaufzeit | Lokale Prüfung: Windows x64/Python 3.14.7/eigene Tk 9.1.0; GitHub-main #246 auf 3.50.0 unter Linux/Windows rot. Frühere grüne native Pakete und neue lokale 3.50.2-Prüfung getrennt zuordnen | [Aktueller Audit-/QA-Bericht](../07_QA_BERICHT.md) |
 | Netzwerkzugriff | kein automatischer Datentransfer; bewusst angeklickte Links öffnen den Browser | lokale Datenhaltung, `webbrowser` |
 | Benutzerkonto | keines | keine Auth-Pfade |
 | Telemetrie | keine | keine Analytics-Aufrufe |

@@ -1,6 +1,6 @@
 # Anwendungskern
 
-Stand 03.11.2026 · Glide 3.50.1 · Erster öffentlicher Stand (öffentliche erste Beta) · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (öffentliche erste Beta) · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 3.50 bündelt Aufgaben, Seiten, Notizen, Pinnwände, Tagebuch und Pixel-Werkstatt. Neue Hintergrundauswahl in `appearance.py`, Tk-freies Blockverschieben in `page_features.py`, UI-Anbindung in `app.pyw`; bestehende Nebenansichts-, Fokus-, Speicher- und Schutzmodule bleiben enthalten. Aktueller Prüf-/Lieferstand im [QA-Bericht](../../docs/07_QA_BERICHT.md); Verhalten im [Handbuch](../../docs/20_FUNKTIONEN.md). Historische Teilstände stehen im CHANGELOG und Entwicklungsplan. Intro am 02.11.2026 gekürzt und zusammengeführt.
 

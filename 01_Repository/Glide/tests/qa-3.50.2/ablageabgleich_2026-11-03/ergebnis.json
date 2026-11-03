@@ -1,0 +1,120 @@
+{
+  "version": "3.50.2",
+  "datum": "2026-11-03",
+  "status": "Lokaler Versions- und Dokumentabschluss; keine Gesamtfreigabe",
+  "ausgangscommit": "25b282721c413d85e87ae9b9c3ddba1ab04d0f84",
+  "branch": "codex/glide-3.50.2-abgleich",
+  "dateiinventar": {
+    "zeitpunkt": "Nach Aufbewahrung und Lieferabgleich, vor Abschlussnachweis",
+    "dateien": 21329,
+    "ordner_einschliesslich_wurzel": 3975,
+    "lesefehler": [],
+    "symbolische_verbindungen": [],
+    "versionierte_json_geprueft": 539,
+    "json_fehler": [],
+    "grenze": "Vollstaendige Pfad-/Dateityp-/Groessenaufnahme ohne .git; keine erneute fachliche Einzelabnahme aller Dateien in separaten Checkouts, Binärpaketen oder Toolumgebungen."
+  },
+  "dokumente": {
+    "fortgeschrieben": 43,
+    "ohne_stand": 6,
+    "festgeschrieben": 46
+  },
+  "links": {
+    "lokal": 1535,
+    "ankerziele": 376,
+    "aktive_fehler": [],
+    "historischer_rest": [
+      {
+        "dokument": "01_Repository/Glide/tests/qa-3.49.0/abschlussaudit_2026-10-31/README.md",
+        "ziel": "01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/README.md",
+        "beurteilung": "Festgeschriebener Bericht verweist auf seinen damaligen lokalen QA-Bestand. Ziel im veroeffentlichten Git-Stand geprueft; Bericht unveraendert.",
+        "git_ziel": "https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/README.md"
+      }
+    ],
+    "webziele": 330,
+    "webstatus": {
+      "HTTP 200": 204,
+      "Git-Ziel lokal belegt": 122,
+      "Herstellerinhalt per Webabruf bestaetigt": 3,
+      "nicht bestaetigt (HTTP 403)": 1
+    },
+    "nicht_verifiziert": [
+      {
+        "url": "https://www.euipo.europa.eu/en/trade-marks/before-applying/availability",
+        "status": 403,
+        "nicht_verifizierbar": true
+      }
+    ],
+    "grenze": "Erreichbarkeit bestaetigt keine fortdauernde sachliche Richtigkeit aller Markt-/Rechtsaussagen. Abrufdaten bleiben erhalten; gezielt Apple-/Keep-Hilfe nachgefuehrt.",
+    "alternative_webabrufe": [
+      {
+        "url": "https://support.google.com/keep/answer/6320648?co=GENIE.Platform%3DDesktop&hl=en",
+        "inhalt": "Offizielle Computer-Anleitung zur Weitergabe/Kopie nach Google Docs gelesen."
+      },
+      {
+        "url": "https://www.gigabyte.com/Motherboard/B760M-DS3H-DDR4-rev-1x/support#support-dl-bios",
+        "inhalt": "Offizielle B760M DS3H DDR4 Rev. 1.x-Supportseite samt BIOS-Bereich gelesen; keine Firmwareänderung."
+      },
+      {
+        "url": "https://www.intel.com/content/www/us/en/support/articles/000102331/processors.html",
+        "inhalt": "Offizieller Vmin-Shift-Hinweis gelesen; vorhandene Aussage 0x12F oder neuer stimmt weiterhin. Keine Diagnose des konkreten PCs."
+      }
+    ]
+  },
+  "aufbewahrung": {
+    "entfernte_versionierte_dateien": 174,
+    "version": "3.45.0",
+    "regel": "Sieben neueste Versionen",
+    "bytegleiche_sicherung_vorher": true,
+    "unversionierte_qa_3431_unveraendert": true
+  },
+  "python": {
+    "code_dateien": 92,
+    "ressourcen": 171,
+    "bytegleich": true
+  },
+  "showcase": {
+    "import_editor_undo_vorlagen_export_neustart": "gruen",
+    "sechs_lieferdateien_bytegleich": true
+  },
+  "ressourcen": {
+    "logo_masterpaare_bytegleich": 6,
+    "font_lizenzdateien_bytegleich": 32,
+    "originalbilder_hashgleich": 34
+  },
+  "remote": {
+    "main": "893625c687a553f463a972b5af9b88f5c8c626b4",
+    "letzter_vollprueflauf": 246,
+    "url": "https://github.com/n05a-design/glide-to-do/actions/runs/41641237040",
+    "status": "rot auf 3.50.0; lokale Reparatur aus 25b28272 in 3.50.2 enthalten; neuer Fernlauf offen"
+  },
+  "git_integritaet": {
+    "globale_konnektivitaet": "rot",
+    "fehlendes_blob": "72f0833e5feb8b9be512d11748fcffcd68b005cc",
+    "betroffen": "genau eine lokale refs/codex/turn-diffs/checkpoints-Referenz",
+    "regulaere_branches_remotes_tags_stash": "keine fehlenden Objekte",
+    "reparatur": "Keine bytegleiche Kopie gefunden; keine Historien-/Ref-Bereinigung oder erfundener Ersatz. Gesonderter offener lokaler Metadatenbefund."
+  },
+  "grundstufe": {
+    "ergebnis": "19 von 19 ausgefuehrt, Exitcode 0",
+    "beleg": "grundstufe.json",
+    "werkzeugtests": 242,
+    "werkzeugtests_skips": 1,
+    "fachtests_je_durchlauf": 1124,
+    "fachtest_durchlaeufe": 2,
+    "syntaxdateien": 458
+  },
+  "native_remote_menschenabnahme": "offen; vorhandene native Pakete tragen 3.50.0",
+  "abschluss": "Lokaler Versions-/Dokument-/Lieferabgleich abgeschlossen; Git-Metadatenbefund sowie neue Remote-/Native-/Menschenabnahme offen.",
+  "nachweisabschluss": {
+    "pruefungen": [
+      "Dokumentation",
+      "Lieferstand",
+      "Datenschutz",
+      "Ablage",
+      "Synchronisation"
+    ],
+    "versionierte_json_dateien": 539,
+    "grenze": "Dokument-/Nachweisnachtrag nach unveraenderter gruen gepruefter App-Codebasis."
+  }
+}

@@ -1,5 +1,10 @@
 # Änderungsverlauf
 
+## 3.50.2 (03.11.2026) – Versions- und Ablageabgleich
+
+- Themenflächen, korrigierte Schriftklassen mit kräftigerem Serifentext sowie Kopf-/Flächenreparatur aus 3.50.1 als neuen Stand zusammengeführt. Neuerungenkarte ergänzt.
+- Dokumente, Dateiinventar, aktuelle Liefermatrizen, Verweise und Sprunganker abgeglichen; Python-/Showcase-Lieferung auf 3.50.2. Native Pakete bleiben 3.50.0, neue Remote-/Native-Abnahme offen. Historische Belege bewahren ihre ursprünglichen Werte. [Audit und Grenzen](tests/qa-3.50.2/ablageabgleich_2026-11-03/README.md).
+
 ## 3.50.1 (03.11.2026) – Themenflächen und lesbarere Schriftstile
 
 - Nach GitHub #246: Kopfzeile wächst beim Wechsel zu „Mein Tag“ nicht mehr durch Symbol-Ersatzschrift im kursiven Hinweis. Der Tageshinweis nennt die Pfeile als Klartext. Ein zusätzlicher Pixel Kopfreserve entfällt, damit der Inhalt bei der Linux-Skalierung innerhalb des unveränderten 130-px-Budgets beginnt. Kalibrierungstor bleibt streng; fehlende positive Basissuiten werden weiterhin als nicht belegt gemeldet. [Nachweis](tests/qa-3.50.1/ci246_2026-11-03/README.md).
@@ -136,20 +141,20 @@ Intern: öffentliche erste Beta. Die Änderungen vom 31.10. und 01.11. sind in d
 
 ## Ergänzungen und Lieferabschluss 3.45.0 (26.10.2026)
 
-- **Startseitenaktionen, lokaler Featurekandidat:** Eingeplante Aufgaben direkt in der Heute-Kachel erledigen; ein Rückgängig-Schritt, bestehende Serien-/Blockierlogik und Sofortspeicherung. Vorschau zeigt fünf offene Aufgaben statt erledigter Platzhalter. Heute-/Nächste-Aufgabe-Renderer über explizite Daten/Ports ausgelagert; stabile IDs, Retention und Schreibschutz erhalten. [Prüfung und noch offene Lieferung](tests/qa-3.45.0/startseitenaktionen_2026-10-26/README.md).
+- **Startseitenaktionen, lokaler Featurekandidat:** Eingeplante Aufgaben direkt in der Heute-Kachel erledigen; ein Rückgängig-Schritt, bestehende Serien-/Blockierlogik und Sofortspeicherung. Vorschau zeigt fünf offene Aufgaben statt erledigter Platzhalter. Heute-/Nächste-Aufgabe-Renderer über explizite Daten/Ports ausgelagert; stabile IDs, Retention und Schreibschutz erhalten. [Prüfung und noch offene Lieferung](https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.45.0/startseitenaktionen_2026-10-26/README.md).
 
-- **Späterer lokaler Technikkandidat, noch nicht geliefert:** Vertiefte Codebasisprüfung in Analyse/Architektur und vorhandene WA-Roadmap eingearbeitet. Tk-freier Speicherkoordinator erhält Bool-/SaveResult-, Undo- und Fehlerverträge; lesender Vergleich von Abschlusszeitübernahme getrennt. Fehlendes K-Loslassen blockiert nach Modifierende/Fensterfokusverlust nicht mehr das nächste Kompaktkürzel; Ereignisspuren für die offene Linux-Gegenprobe. Konverterdiagnose begrenzt und ohne private Fehlerinhalte im Hauptthread. [Gezielte Prüfungen und Liefergrenze](tests/qa-3.45.0/codebasis_2026-10-26/README.md).
+- **Späterer lokaler Technikkandidat, noch nicht geliefert:** Vertiefte Codebasisprüfung in Analyse/Architektur und vorhandene WA-Roadmap eingearbeitet. Tk-freier Speicherkoordinator erhält Bool-/SaveResult-, Undo- und Fehlerverträge; lesender Vergleich von Abschlusszeitübernahme getrennt. Fehlendes K-Loslassen blockiert nach Modifierende/Fensterfokusverlust nicht mehr das nächste Kompaktkürzel; Ereignisspuren für die offene Linux-Gegenprobe. Konverterdiagnose begrenzt und ohne private Fehlerinhalte im Hauptthread. [Gezielte Prüfungen und Liefergrenze](https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.45.0/codebasis_2026-10-26/README.md).
 
-- **Alle Lieferungen aktualisiert:** Python-Fassung sowie echte Windows-/Mac-Pakete 3.45.0 geliefert und hashgeprüft. 104 Windows-Suiten grün; nativer Macbau, Signatur und isolierter Start grün. Animations-/Undo-Überlagerung korrigiert; Altleser- und Stapelreihenfolgeprüfungen repariert. [Nachweis](tests/qa-3.45.0/paketabschluss_2026-10-26/README.md).
+- **Alle Lieferungen aktualisiert:** Python-Fassung sowie echte Windows-/Mac-Pakete 3.45.0 geliefert und hashgeprüft. 104 Windows-Suiten grün; nativer Macbau, Signatur und isolierter Start grün. Animations-/Undo-Überlagerung korrigiert; Altleser- und Stapelreihenfolgeprüfungen repariert. [Nachweis](https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/README.md).
 
-- **Startseite:** Heute-Zahlen, nächste Aufgabe, Woche, Labels und nächster Termin werden beim Kachelaufbau gemeinsam ausgewertet. Die bisherigen Einstiege bleiben frisch; das Modell endet vor Ereignisnachläufen und auch bei Fehlern. Erledigen/Undo, Archivgrenze, Datumsabfragen und Objektwechsel gezielt geprüft. [Nachweis und Messwerte](tests/qa-3.45.0/startseitenmodell_2026-10-26/README.md). Quellkandidat auf 3.45.0, Lieferung nach dem gemeinsamen Phasenabschluss.
+- **Startseite:** Heute-Zahlen, nächste Aufgabe, Woche, Labels und nächster Termin werden beim Kachelaufbau gemeinsam ausgewertet. Die bisherigen Einstiege bleiben frisch; das Modell endet vor Ereignisnachläufen und auch bei Fehlern. Erledigen/Undo, Archivgrenze, Datumsabfragen und Objektwechsel gezielt geprüft. [Nachweis und Messwerte](https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.45.0/startseitenmodell_2026-10-26/README.md). Quellkandidat auf 3.45.0, Lieferung nach dem gemeinsamen Phasenabschluss.
 
 - „Was passt heute?“ berücksichtigt Aufgaben, deren Abschluss andere Aufgaben freigibt, vor lediglich wichtigen Aufgaben. Die Zeile nennt die Zahl direkter Freigaben; weitere offene Voraussetzungen, erledigte und archivierte Folgen werden korrekt berücksichtigt.
-- Geänderte Freigaben verlangen eine neue Vorschau. Budget, ausdrückliche Übernahme und ein Undo/Redo bleiben; keine neue Formatstufe. Quellkandidat auf 3.45.0, die bisherige Python-Lieferung unverändert. [Paketnachweis](tests/qa-3.45.0/freigaben_2026-10-26/README.md).
+- Geänderte Freigaben verlangen eine neue Vorschau. Budget, ausdrückliche Übernahme und ein Undo/Redo bleiben; keine neue Formatstufe. Quellkandidat auf 3.45.0, die bisherige Python-Lieferung unverändert. [Paketnachweis](https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.45.0/freigaben_2026-10-26/README.md).
 
-- **Verweisvorschau:** lokale Verweise über Strg/Cmd+Umschalt+Klick, Textkontext und Verweis-/Rückverweismenü neben der Hauptarbeit öffnen. Aufgaben werden in ihrer aktuellen Heimat markiert; Haupteditor und offener Text bleiben erhalten. [Paketnachweis](tests/qa-3.45.0/verweisvorschau_2026-10-26/README.md).
+- **Verweisvorschau:** lokale Verweise über Strg/Cmd+Umschalt+Klick, Textkontext und Verweis-/Rückverweismenü neben der Hauptarbeit öffnen. Aufgaben werden in ihrer aktuellen Heimat markiert; Haupteditor und offener Text bleiben erhalten. [Paketnachweis](https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.45.0/verweisvorschau_2026-10-26/README.md).
 
-- **Git-Prüfung:** Der Push-Auftrag vom 26.10. umfasst den vorhandenen Kandidaten; die Glide-CI läuft jetzt auch für `codex/**`. Lokale Prüfungen und offene Liefer-/Native-Grenzen im [Push-Nachweis](tests/qa-3.45.0/push_2026-10-26/README.md).
+- **Git-Prüfung:** Der Push-Auftrag vom 26.10. umfasst den vorhandenen Kandidaten; die Glide-CI läuft jetzt auch für `codex/**`. Lokale Prüfungen und offene Liefer-/Native-Grenzen im [Push-Nachweis](https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.45.0/push_2026-10-26/README.md).
 
 ## 3.45.0 – Sicherungsübersicht, Arbeitsmodi und Speicherstatus (25.10.2026)
 
@@ -160,7 +165,7 @@ Intern: öffentliche erste Beta. Die Änderungen vom 31.10. und 01.11. sind in d
 - **Gebündelt:** D55-Arbeitsmodi einschließlich Rechtsklick-/Kompaktmoduskorrekturen und kurzen Umschaltbefehlen sowie Speicherstatus/Retry, Größenbudget und Sicherungsreserve aus dem bisherigen Kandidaten. Aufgabenformat bleibt 26.
 - **Versionspflege:** atomarer Schreibweg mit LF; Aufbewahrung kann ohne Änderung des Git-Index nachgeführt werden.
 - **Abschlusskorrekturen:** neutrale Speicherstatusrolle, Suchrückrufe beim Schließen der Sicherungsübersicht freigeben und kanonische Speicherstufe anzeigen. Die Schutzprüfung sperrt nur die beabsichtigte Hauptdatei und prüft die Sperrerneuerung unabhängig von der Sekundengrenze (GitHub #156).
-- Prüfung und Lieferung: [3.45.0-Paketnachweis](tests/qa-3.45.0/weiterentwicklung_2026-10-25/README.md).
+- Prüfung und Lieferung: [3.45.0-Paketnachweis](https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.45.0/weiterentwicklung_2026-10-25/README.md).
 
 ## 3.44.0 – Wiederholen, eigene Rhythmen, Ansichten, Seitenkarten, Erwähnungen, KI-Aufträge und Markdown-Export (22.10.2026)
 

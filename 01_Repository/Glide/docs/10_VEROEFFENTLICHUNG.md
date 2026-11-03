@@ -1,12 +1,12 @@
 # Veröffentlichung – Glide
 
-Stand 03.11.2026 · Glide 3.50.1 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
 ## Releasecheckliste
 
-3.50.0 heißt öffentlich **Erster öffentlicher Stand**, intern **öffentliche erste Beta**. Quellcode, Python/Showcase, macOS-arm64- und Windows-x64-Paket tragen dieselbe Appversion. Der [aktuelle QA-/Liefernachweis](07_QA_BERICHT.md) nennt die tatsächlich erzeugten Artefakte, Quellhashes und Prüfungen; eine Versionsbezeichnung ersetzt keine Abnahme.
+3.50.0 heißt öffentlich **Erster öffentlicher Stand**, intern **öffentliche erste Beta**. Dieser datierte Erstlieferstand trug in allen Ausgaben 3.50.0. Quelle und Python/Showcase werden inzwischen als 3.50.2 gepflegt; die vorhandenen nativen Pakete bleiben bei ihrem separat geprüften 3.50.0-Quellstand. Ein neuer Paketbau darf daraus nicht abgeleitet werden. Der [aktuelle QA-/Liefernachweis](07_QA_BERICHT.md) nennt die tatsächlich erzeugten Artefakte, Quellhashes und Prüfungen; eine Versionsbezeichnung ersetzt keine Abnahme.
 
 - VERSION, `APP_VERSION`, Neuerungen, CHANGELOG, Handbuch und README auf denselben Nutzerstand bringen.
 - Fach-/Werkzeugtests sowie vollständige eingefrorene Integrationsmatrix auf Mac, Linux und Windows ausführen. Nur unveränderte App-/Test-/Fixture-/Ressourcenbytes einem Ergebnis zuordnen.

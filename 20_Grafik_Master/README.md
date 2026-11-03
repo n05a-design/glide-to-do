@@ -1,6 +1,6 @@
 # Grafik-Master
 
-Stand 03.11.2026 · Glide 3.50.1 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 03.11.2026 · Glide 3.50.2 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 Hier liegen die Quellen des Glide-Logos und alle freigegebenen Exporte. Glide
 selbst und die Paketierung arbeiten mit **Kopien** daraus (siehe unten). Wer
@@ -26,9 +26,11 @@ Glide-Blau ist `rgb(1,133,225)` = `#0185E1`. Ein Archivordner entfällt seit 03.
 
 **Ausgewählte Oberflächenreferenz (10.10.2026, D21):** [Glide-Oberflaeche-Referenz.png](05_Inspiration/Glide-Oberflaeche-Referenz.png), Bild 1 aus drei unabhängig erzeugten Entwürfen. Mit dem integrierten Image-Gen-Werkzeug aus vier eigenen Glide-Fensteraufnahmen mit künstlichen Daten erzeugt. Herkunft, Promptvorgaben, bekannte Abweichungen und Bindung an die native Tk-Oberfläche stehen im [Entwicklungsplan §15.4](../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#154-referenzentwürfe-und-zweite-auswahlrunde-10102026). Gestaltungsgrundlage für die ausgewählten Funktionen, keine Programmressource oder bereits abgenommene Oberfläche.
 
-## Freigegebene Master und Laufzeit (seit 3.37.0, aktuell 3.50.0)
+<a id="freigegebene-master-und-laufzeit-3370"></a>
 
-Am 03.11.2026 sind alle sechs unten genannten Master-/Laufzeitpaare bytegleich geprüft. Der ursprüngliche Freigabezeitpunkt bezeichnet die Herkunft der Gestaltung; aktuelle Quelle und Python-Lieferung sind 3.50.0. [Abgleich und Schriftstatus](../01_Repository/Glide/tests/qa-3.50.0/releaseaudit_2026-11-03/README.md).
+## Freigegebene Master und Laufzeit (seit 3.37.0, aktuell 3.50.2)
+
+Am 03.11.2026 sind alle sechs unten genannten Master-/Laufzeitpaare bytegleich geprüft. Der ursprüngliche Freigabezeitpunkt bezeichnet die Herkunft der Gestaltung; aktuelle Quelle und Python-Lieferung sind 3.50.2. [Abgleich und Schriftstatus](../01_Repository/Glide/tests/qa-3.50.2/ablageabgleich_2026-11-03/README.md).
 
 D45 vom 10.10.2026 gibt den geglätteten Normalmaster und eigene Kleinfassungen
 frei: Rundungsanschlüsse sind tangential, das bedeutungslose Kurzsegment
@@ -93,7 +95,7 @@ Glide bringt zwei privat registrierte Schriften mit, beide unter
 Eine systemweite Installation ist nicht nötig. Die Dateien müssen mit dem
 Programm verteilt werden.
 
-**Schriftauftrag 03.11.2026:** Roboto Mono liegt unter `07_Fonts/01_Roboto_Mono` als unveränderte neue Quelle samt OFL-Lizenz vor. Der frische Windows-Appstart verwendet weiterhin DejaVu Sans; Roboto fehlt sowohl in `PREFERRED_UI_FONTS` als auch in den Laufzeitressourcen. Die vom Inhaber angekündigte Claude-Integration ist deshalb noch nicht als abgeschlossen verifiziert. Masterdateien allein ändern keine App-Schrift. Vor dem Wechsel müssen Glyphen-/Symbolabdeckung, Metrik, Mindestgröße/große Schrift und die neu gebauten nativen Pakete geprüft werden; kein ungeprüfter Austausch während paralleler Arbeit. Status ausschließlich in [Plan §21.52](../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2152-releaseaudit-und-vereinheitlichung-3500).
+**Schriftstand 3.50.2:** Originalordner `01_Rubik`, `02_Roboto_Mono`, `03_Playfair_Display`, `04_Fraunces` entsprechen Modern, Technisch, Kreativ, Klassisch. Rubik ist Vorgabe. Quelle und Python enthalten alle vier Familien, die Serifenschriften zusätzlich mit originalem SemiBold/SemiBold Italic als kräftigerem Lesetext; Hervorhebung bleibt echtes Bold. Alle 32 Font-/Lizenzdateien und vorhandenen Inhaberoriginale im Audit gehasht. DejaVu bleibt interner Symbolbegleiter. Native Pakete sind ein älterer Lieferstand. [Aktueller Audit](../01_Repository/Glide/tests/qa-3.50.2/ablageabgleich_2026-11-03/README.md).
 
 ## Beispielbilder für Arbeitsdokumente
 

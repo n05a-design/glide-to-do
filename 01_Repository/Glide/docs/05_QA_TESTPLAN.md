@@ -2,7 +2,7 @@
 
 **UI-Nachlauf 02.11.2026:** `test_arbeitsmodi.py --fall ansichtssymbole` prüft Symbolvertrag/Klartextnamen/aktive Ansicht/Tastatur in vier Größen-/Schriftkombinationen und alle drei Zeilenaktionen. `beta350` prüft zusätzlich reale X-/Y-Kanten der Block-Einfügemarke; `test_aufgaben3380.py --fall klicks` begrenzt die tatsächlichen Textboxen aller Zeilenknöpfe, auch im Schrift-Rückfall. `test_wiederanlauf.py --fall freigabe` prüft Rückmeldung und unveränderte Original-/Einstellungsbytes bei gesperrtem Hintergrundwechsel. [Nachweise](../tests/qa-3.50.0/oberflaeche_2026-11-02/README.md).
 
-Stand 03.11.2026 · Glide 3.50.1 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 **Schriftstile D60:** `test_arbeitsmodi --fall schriftstile` prüft vier exakt klassifizierte Auswahlwerte, Speichern, sofortige Anwendung und Neustart jeder Familie, normale/fette/kursive Schnitte und erhaltene UI-Symbole. `test_font_catalog` sichert Kennungen, Aliasauflösung und Rubik-Vorgabe; Glyphenprüfung sichert deutsche Zeichen sowie Kopfgeometrie mit Umlauten/Unterlängen. Flächen-/Logo-/Mindestgrößenregression bleibt erforderlich. Neue native Matrix und Menschenabnahme getrennt berichten.
 
