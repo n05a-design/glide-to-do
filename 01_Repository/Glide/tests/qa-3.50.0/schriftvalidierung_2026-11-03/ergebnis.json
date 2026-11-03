@@ -1,0 +1,604 @@
+{
+  "basis_commit": "c352d2c0",
+  "app_sha256": "f64cfbd7229e5b6c2c52a2efe443663dd7271413ab531f9839e67a2c7b7871e1",
+  "python": "3.14.7",
+  "tk": "9.1.0",
+  "plattform": "windows-x64",
+  "daten_isoliert": true,
+  "baseline": {
+    "test_features322_exitcode": 0,
+    "flaeche_exitcode": 1,
+    "beobachtung": [
+      "Seiten",
+      131,
+      "15 Prozent überschritten"
+    ],
+    "linux_hoehe_99": "Original-GitHub-Lauf 41554782333; lokal kein Linux/X11-Lauf"
+  },
+  "test_features322_exitcode": 0,
+  "flaeche_exitcode": 0,
+  "gezielte_pruefungen": [
+    {
+      "fall": "gegenprobe-karteninhalt",
+      "exitcode": 1,
+      "erwartet": 1,
+      "erwartung_erfuellt": true,
+      "dauer_s": 7.361
+    },
+    {
+      "fall": "aufgaben3380",
+      "exitcode": 0,
+      "erwartet": 0,
+      "erwartung_erfuellt": true,
+      "dauer_s": 67.721
+    },
+    {
+      "fall": "werkzeugzeile",
+      "exitcode": 0,
+      "erwartet": 0,
+      "erwartung_erfuellt": true,
+      "dauer_s": 12.743
+    },
+    {
+      "fall": "eckenlabels",
+      "exitcode": 0,
+      "erwartet": 0,
+      "erwartung_erfuellt": true,
+      "dauer_s": 13.137
+    },
+    {
+      "fall": "logo330",
+      "exitcode": 0,
+      "erwartet": 0,
+      "erwartung_erfuellt": true,
+      "dauer_s": 23.707
+    },
+    {
+      "fall": "logo3370",
+      "exitcode": 0,
+      "erwartet": 0,
+      "erwartung_erfuellt": true,
+      "dauer_s": 8.034
+    },
+    {
+      "fall": "gegenproben-werkzeug",
+      "exitcode": 0,
+      "erwartet": 0,
+      "erwartung_erfuellt": true,
+      "dauer_s": 0.484
+    }
+  ],
+  "geometrie": [
+    {
+      "ansicht": "Liste",
+      "fenster": [
+        1280,
+        800
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 130,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Tabelle",
+      "fenster": [
+        1280,
+        800
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 130,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Heute",
+      "fenster": [
+        1280,
+        800
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 130,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Demnaechst",
+      "fenster": [
+        1280,
+        800
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 130,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Seiten",
+      "fenster": [
+        1280,
+        800
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 129,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Pinnwand",
+      "fenster": [
+        1280,
+        800
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 126,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Liste",
+      "fenster": [
+        1280,
+        840
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 130,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Tabelle",
+      "fenster": [
+        1280,
+        840
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 130,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Heute",
+      "fenster": [
+        1280,
+        840
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 130,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Demnaechst",
+      "fenster": [
+        1280,
+        840
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 130,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Seiten",
+      "fenster": [
+        1280,
+        840
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 129,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Pinnwand",
+      "fenster": [
+        1280,
+        840
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 126,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Liste",
+      "fenster": [
+        860,
+        700
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 170,
+      "inhalt_oberkante": 160
+    },
+    {
+      "ansicht": "Tabelle",
+      "fenster": [
+        860,
+        700
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 170,
+      "inhalt_oberkante": 160
+    },
+    {
+      "ansicht": "Heute",
+      "fenster": [
+        860,
+        700
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 130,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Demnaechst",
+      "fenster": [
+        860,
+        700
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 130,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Seiten",
+      "fenster": [
+        860,
+        700
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 129,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Pinnwand",
+      "fenster": [
+        860,
+        700
+      ],
+      "schrift": "mittel",
+      "tatsaechlicher_inhalt": 126,
+      "inhalt_oberkante": 120
+    },
+    {
+      "ansicht": "Liste",
+      "fenster": [
+        1280,
+        800
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 132,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Tabelle",
+      "fenster": [
+        1280,
+        800
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 132,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Heute",
+      "fenster": [
+        1280,
+        800
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 132,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Demnaechst",
+      "fenster": [
+        1280,
+        800
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 132,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Seiten",
+      "fenster": [
+        1280,
+        800
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 131,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Pinnwand",
+      "fenster": [
+        1280,
+        800
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 128,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Liste",
+      "fenster": [
+        1280,
+        840
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 132,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Tabelle",
+      "fenster": [
+        1280,
+        840
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 132,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Heute",
+      "fenster": [
+        1280,
+        840
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 132,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Demnaechst",
+      "fenster": [
+        1280,
+        840
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 132,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Seiten",
+      "fenster": [
+        1280,
+        840
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 131,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Pinnwand",
+      "fenster": [
+        1280,
+        840
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 128,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Liste",
+      "fenster": [
+        860,
+        700
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 172,
+      "inhalt_oberkante": 162
+    },
+    {
+      "ansicht": "Tabelle",
+      "fenster": [
+        860,
+        700
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 172,
+      "inhalt_oberkante": 162
+    },
+    {
+      "ansicht": "Heute",
+      "fenster": [
+        860,
+        700
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 132,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Demnaechst",
+      "fenster": [
+        860,
+        700
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 132,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Seiten",
+      "fenster": [
+        860,
+        700
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 131,
+      "inhalt_oberkante": 122
+    },
+    {
+      "ansicht": "Pinnwand",
+      "fenster": [
+        860,
+        700
+      ],
+      "schrift": "gross",
+      "tatsaechlicher_inhalt": 128,
+      "inhalt_oberkante": 122
+    }
+  ],
+  "linux_github_endmatrix": "offen",
+  "native_pakete": "nicht neu gebaut",
+  "menschliche_abnahme": "offen",
+  "ci_vorlauf": {
+    "exitcode": 1,
+    "ausloeser": "Prüfsuchpfad ohne WindowsPowerShell-Systemordner; native Bildkonversion findet powershell.exe nicht",
+    "schritte": [
+      {
+        "schritt": "Syntax",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Versionskonsistenz",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Dokumentation",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fixtures",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Werkzeugtests",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fachlogik-Unit-Tests",
+        "status": "fehlgeschlagen"
+      },
+      {
+        "schritt": "Fachlogik ohne Systemzeitzonen",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "analyse_statisch",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "analyse_erreichbarkeit",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "standpruefung",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "attributpruefung",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "dublettenpruefung",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "Tk-Voraussetzung",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "Startprobe",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "Lieferstand",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "Fremdcode",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "Datenschutz",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "Ablagegröße",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "Synchronisation",
+        "status": "übersprungen"
+      }
+    ]
+  },
+  "ci_grundstufe": {
+    "exitcode": 0,
+    "lieferstand_streng": true,
+    "werkzeugtests": 242,
+    "werkzeugtests_skip": 1,
+    "fachtests_je_lauf": 1117,
+    "fachtestlaeufe": 2,
+    "schritte": [
+      {
+        "schritt": "Syntax",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Versionskonsistenz",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Dokumentation",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fixtures",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Werkzeugtests",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fachlogik-Unit-Tests",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fachlogik ohne Systemzeitzonen",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "analyse_statisch",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "analyse_erreichbarkeit",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "standpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "attributpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "dublettenpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Tk-Voraussetzung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Startprobe",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Lieferstand",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fremdcode",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Datenschutz",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Ablagegröße",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Synchronisation",
+        "status": "ausgeführt"
+      }
+    ]
+  }
+}

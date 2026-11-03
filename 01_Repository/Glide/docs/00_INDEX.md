@@ -2,7 +2,7 @@
 
 Stand 03.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Aktueller Stand 03.11.2026:** [Releaseaudit](../tests/qa-3.50.0/releaseaudit_2026-11-03/README.md) prüft Code, Dokumentation, Grafik-Master und tatsächliche lokale Lieferorte auf Quelle `067e683b…`. Reguläre Windows-/Mac-Archive aktualisiert; neue Roboto-Mono-Quelle vorhanden, deren Standardschriftintegration fehlt noch. Maßgeblicher Abschlussrest und zurückgestellte 3.51 im [Plan §21.52](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2152-releaseaudit-und-vereinheitlichung-3500). Frühere Voll-/Bauprüfungen behalten ihre Eingangsbytes; technische Vorhaben und menschliche Abnahme bleiben getrennt.
+**Aktueller Stand 03.11.2026:** Roboto Mono/Symbolbegleiter und durchsichtiger Pixelgrund sind seit PR #58 integriert (D59). Reparaturkandidat nach den roten Tk-9.1-Prüfungen aus GitHub #238: doppelte Seitenwerkzeugreserve entfernt, Pinnwand-Inhaltsprüfung schriftmetrisch abgesichert, fehlende Gegenproben-Basissuiten sichtbar. [Plan §21.54](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2154-validierung-nach-dem-schriftmerge), [Validierungsnachweis](../tests/qa-3.50.0/schriftvalidierung_2026-11-03/README.md). Lokaler Commit beauftragt, kein neuer Push-/Merge-/Paketauftrag. Neue Linux-/GitHub-Endmatrix und native Lieferungen sowie menschliche Abnahme offen; frühere Voll-/Lieferbelege bleiben an ihren Quellstand gebunden. 3.51 bleibt zurückgestellt.
 
 ## Einstieg
 

@@ -31,6 +31,8 @@ Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentl
 
 Dieses Dokument sammelt die belegten Gestaltungsvorgaben des Inhabers und ihre Konsequenzen für Glide. Es ist agentenunabhängig lesbar; der Claude-Code-Skill `design-richtlinien` (`.claude/skills/design-richtlinien/`) verweist nur hierher. Produktentscheidungen stehen weiterhin in [Arbeitsrichtung](ARBEITSRICHTUNG.md), Produktgrenzen in [Produktgrenzen](01_PRODUCT_CONSTRAINTS.md), technische Umsetzung in [Architektur](02_ARCHITECTURE.md), Funktionsverhalten in [Funktionen](20_FUNKTIONEN.md) und Aufgabenstatus im [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md). Diese Zuständigkeiten nicht durch Kopien ersetzen.
 
+**Schriftvalidierung 03.11.2026:** Kontexte Seiten-/Notizwerkzeugzeile und Pinnwandkarten. In der äußeren Werkzeugzeile entfällt nur die frühere zusätzliche untere 6-px-Reserve des Editors; die verlangten 10 px zwischen Werkzeugzeile und Karte bleiben. Eingebettete Werkzeugleisten behalten ihren Abstand zum Text. Kartenhöhe folgt den tatsächlichen Schriftmetriken; Mindesthöhe und vollständige Textdarstellung einschließlich Fußzeile werden getrennt geprüft. [Nachweis](../tests/qa-3.50.0/schriftvalidierung_2026-11-03/README.md). Native DPI-/Menschenabnahme und übrige Designbefunde bleiben offen.
+
 ## Quellen und Geltung
 
 | Quelle | Gegenstand | Geltung |

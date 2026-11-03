@@ -10004,7 +10004,10 @@ class PageEditor(RichNoteEditor):
         leiste_host = app.tool_band_host() if self.TOOLBAR_IN_BAND else None
         toolbar = ButtonFlow(leiste_host if leiste_host is not None else self,
                              bg=theme['bg' if leiste_host is not None else 'card'], gap=6)
-        toolbar.pack(fill='x', pady=(0, 6))
+        # In der äußeren Werkzeugzeile trennt CONTENT_TOOLBAR_GAP bereits
+        # Leiste und Karte. Der alte Innenabstand würde ihre Höhe zusätzlich
+        # vergrößern; eingebettete Werkzeuge behalten ihren Textabstand.
+        toolbar.pack(fill='x', pady=(0, 0 if leiste_host is not None else 6))
         self.bind('<Destroy>', lambda e, w=toolbar: w.destroy() if e.widget is self and w.winfo_exists() else None,
                   add='+')
         self._format_bar = None

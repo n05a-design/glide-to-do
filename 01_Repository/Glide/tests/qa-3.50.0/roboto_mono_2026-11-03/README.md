@@ -1,6 +1,8 @@
 # Standardschrift Roboto Mono und durchsichtiger Pixelgrund – Glide 3.50.0, 03.11.2026
 
-Inhaberauftrag 03.11.2026 (D59): Roboto Mono aus `20_Grafik_Master/07_Fonts/01_Roboto_Mono` als mitgelieferte, sofort wirksame und weiterhin wechselbare Standardschrift; Lizenz vom Inhaber geprüft (SIL OFL 1.1 ohne reservierten Schriftnamen, kostenloser und kostenpflichtiger Vertrieb erlaubt). Zusätzlich: neue Pixelzeichnungen ohne weißen Kasten, wenn sie als Symbol in Seiten und Seitenleiste stehen. Danach Prüfung aller Fenster und Ansichten nach den [Design Richtlinien](../../../docs/DESIGN_RICHTLINIEN.md), Commit und Push. [Plan §21.52](../../../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2152-standardschrift-roboto-mono-und-durchsichtiger-pixelgrund).
+Inhaberauftrag 03.11.2026 (D59): Roboto Mono aus `20_Grafik_Master/07_Fonts/01_Roboto_Mono` als mitgelieferte, sofort wirksame und weiterhin wechselbare Standardschrift; Lizenz vom Inhaber geprüft (SIL OFL 1.1 ohne reservierten Schriftnamen, kostenloser und kostenpflichtiger Vertrieb erlaubt). Zusätzlich: neue Pixelzeichnungen ohne weißen Kasten, wenn sie als Symbol in Seiten und Seitenleiste stehen. Danach Prüfung aller Fenster und Ansichten nach den [Design Richtlinien](../../../docs/DESIGN_RICHTLINIEN.md), Commit und Push. [Plan §21.53](../../../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2153-standardschrift-roboto-mono-und-durchsichtiger-pixelgrund).
+
+**Fortschreibung nach GitHub #238:** Die untenstehenden ursprünglichen Linux-/Tk-8.6-Messungen bleiben datiert. Der neue Tk-9.1-Lauf auf dem Schriftstand war unter Linux (`test_features322`, Kartenhöhe 99 statt 96) und Windows (`test_aufgaben3380`, Seiteninhalt 131 statt höchstens 130 px) rot. Frühere grüne GitHub-Belege gelten für den Code vor der Schriftumstellung. Reparatur und neue Prüfgrenzen im [Validierungsnachweis](../schriftvalidierung_2026-11-03/README.md).
 
 ## Umsetzung
 
