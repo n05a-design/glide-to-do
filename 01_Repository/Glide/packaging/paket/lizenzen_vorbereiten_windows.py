@@ -219,9 +219,10 @@ def main():
         raise SystemExit("tkdnd-Lizenzkommentar fehlt")
     b.add("tkdnd", "2.10.2", "https://pypi.org/project/tkinterdnd2/0.6.3/; unveränderter Kommentarblock aus tkdnd.tcl",
           [b.write("tkdnd-LICENSE.txt", tkdnd)])
-    b.add("Glide-Schriften", "DejaVu 2.37 / Pixelify Sans 39df74a", "resources/fonts/provenance.json",
+    b.add("Glide-Schriften", "DejaVu 2.37 / Pixelify Sans 39df74a / Roboto Mono 3.001", "resources/fonts/provenance.json",
           [b.copy(source / "resources/fonts/LICENSE", "DejaVu-LICENSE"),
-           b.copy(source / "resources/fonts/OFL-PixelifySans.txt", "PixelifySans-OFL.txt")])
+           b.copy(source / "resources/fonts/OFL-PixelifySans.txt", "PixelifySans-OFL.txt"),
+           b.copy(source / "resources/fonts/OFL-RobotoMono.txt", "RobotoMono-OFL.txt")])
     b.add("IANA-Zeitzonen", "2026e", "resources/timezones/provenance.json",
           [b.copy(source / "resources/timezones/LICENSE-iana.txt", "IANA-LICENSE.txt")])
     b.add("Unicode-CLDR", "48.2", "resources/timezones/provenance.json",

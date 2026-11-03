@@ -23,6 +23,17 @@ class GlyphMetrics(unittest.TestCase):
         self.assertFalse(self.normal.covers("\u2315"), "Die Lupe fehlt der UI-Schrift (Grund für B10)")
         self.assertIsNone(self.normal.bbox(" "))
 
+    def test_bundled_roboto_mono_reads_text_metrics_without_icon_glyphs(self):
+        # D59 (03.11.2026): Standardschrift ohne geometrische Zeichen; Text
+        # und Pfadtrenner messen, Symbole kommen aus DejaVu Sans.
+        for datei in ("RobotoMono-Regular.ttf", "RobotoMono-Bold.ttf"):
+            mono = gm.load(SCHRIFTEN / datei)
+            self.assertGreater(mono.cap_height, 0)
+            self.assertTrue(all(mono.covers(zeichen) for zeichen in "ÄÖÜäöüß„“…–·›€"))
+            self.assertFalse(any(mono.covers(zeichen) for zeichen in "▣◉◈▤☷⊞▨⚑▦≡✓"))
+            self.assertIsNotNone(mono.ink_center("›"))
+            self.assertEqual(gm.relative_shift(mono, "▣", "▣", 16), 0)
+
     def test_triangle_sits_below_and_recycling_sign_near_cap_center(self):
         kappe = self.normal.cap_center()
         self.assertLess(self.normal.ink_center("▽"), kappe - 0.08)

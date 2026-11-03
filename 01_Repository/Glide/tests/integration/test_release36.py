@@ -48,7 +48,9 @@ with tempfile.TemporaryDirectory(prefix='glide-release36-') as tmp, tempfile.Tem
                           if path.suffix.lower() in ('.ttf', '.otf')}
         registered_fonts = {Path(path).resolve() for path in app._registered_fonts}
         assert expected_fonts and registered_fonts == expected_fonts, (registered_fonts, expected_fonts)
-        assert app.ui_font_family() == 'DejaVu Sans', app.ui_font_family()
+        # D59 (03.11.2026): Roboto Mono ist die mitgelieferte Standardschrift.
+        assert app.ui_font_family() == 'Roboto Mono', app.ui_font_family()
+        assert 'DejaVu Sans' in app.available_font_families()
         assert 'Pixelify Sans' in app.available_font_families()
 
     def capture(widget, name):

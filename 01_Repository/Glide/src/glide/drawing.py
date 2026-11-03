@@ -39,6 +39,11 @@ CELL_COUNT = WIDTH * HEIGHT
 SIZES = (16, 32, 64, 128)
 MAX_COLORS = 256
 BACKGROUND = "#FFFFFF"
+# Deckendes Weiß (Inhaberauftrag 03.11.2026): Der Grund (Farbindex 0,
+# `BACKGROUND`) ist als Pixelsymbol und beim Export durchsichtig. Wer eine
+# weiße Fläche braucht, füllt mit diesem Weiß – sichtbar nicht von #FFFFFF zu
+# unterscheiden, aber eine eigene, deckende Palettenfarbe. Kein Formatwechsel.
+OPAQUE_WHITE = "#FEFEFE"
 DEFAULT_PALETTE_ID = "glide-drawing-default"
 DEFAULT_PALETTE_VERSION = 1
 BRUSH_SIZES = (1, 2, 4, 8)

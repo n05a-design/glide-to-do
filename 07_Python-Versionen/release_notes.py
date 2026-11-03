@@ -15,7 +15,7 @@ bleiben ohne Eintrag, nachträglich wird nichts erfunden.
 # Eintrag zeigt keine Karte.
 CATALOG = {
     "3.50.0": (
-        "Erster öffentlicher Stand: Aufgaben, Seiten, Notizen, Pinnwände, Tagebuch und Pixel-Werkstatt lokal nutzen.",
+        "Erster öffentlicher Stand in Roboto Mono: Aufgaben, Seiten, Notizen, Pinnwände und Pixel-Werkstatt lokal nutzen.",
         "Hintergrundfarbe unabhängig vom Design wählen; „Wie die Fensterfläche“ verbindet die Flächen ohne Materialschatten.",
         "Volle Seitenleiste, Kopf auf Inhaltsflucht; Seitenblöcke am Sechspunktgriff ziehen und per Rechtsklick formatieren.",
         "Nebenansicht: Treffer und Abschnitte ansteuern, letzte Suchen aufrufen und markierten Text nachschlagen.",

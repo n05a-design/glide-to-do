@@ -49,9 +49,12 @@ def today_columns(width, due, labels):
     """
     source = min(180, max(100, int(width * .25)))
     edge = 6
-    if width - source - due - labels - 24 - edge < 260:
+    # B11: Der Titel bleibt zusätzlich die breiteste Spalte. Seit der breiteren
+    # Standardschrift Roboto Mono (D59) war die Fälligkeit mit Bearbeitungstag
+    # sonst breiter als der Titel.
+    if width - source - due - labels - 24 - edge < max(260, due + 1, labels + 1):
         labels = 0
-    if width - source - due - 24 - edge < 260:
+    if width - source - due - 24 - edge < max(260, due + 1):
         due = 0
     gap = 24 if due or labels else 0
     return max(260, width - source - due - labels - gap - edge), due, labels, source, gap

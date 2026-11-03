@@ -11,7 +11,9 @@ from __future__ import annotations
 import re
 import tkinter as tk
 
-from drawing import BACKGROUND, SIZES, WIDTH, DrawingFormatError, DrawingModel
+import base64
+
+from drawing import BACKGROUND, SIZES, WIDTH, DrawingFormatError, DrawingModel, encode_rgba_png, icon_rgba
 
 # Referenzbilder werden vor dem Einlesen begrenzt. Tk hält ein PhotoImage
 # unkomprimiert im Speicher; 4096 × 4096 Pixel sind rund 64 MiB.
@@ -269,10 +271,23 @@ def grayscale(color: str) -> str:
 
 
 def model_to_photo(model: DrawingModel, scale: int = 1, gray: bool = False,
-                   master: tk.Misc | None = None) -> tk.PhotoImage:
-    """Zeichnung als scharf vergrößertes Bild; ``scale`` ist ganzzahlig."""
+                   master: tk.Misc | None = None, transparent: bool = False) -> tk.PhotoImage:
+    """Zeichnung als scharf vergrößertes Bild; ``scale`` ist ganzzahlig.
+
+    ``transparent`` (Inhaberauftrag 03.11.2026): Der unbemalte Grund
+    (Farbindex 0) bleibt durchsichtig – dieselbe Rechnung wie beim ICO-Export.
+    So steht ein Pixelsymbol in Seitenleiste und Seitenkopf ohne weißen Kasten
+    auf seiner Trägerfläche; bewusst gemalte Farben bleiben deckend.
+    """
     width, height = model.width, model.height
     palette = [grayscale(color) for color in model.palette] if gray else model.palette
+    if transparent:
+        pixel = icon_rgba(width, palette, model.cells, width, transparent_background=True)
+        options = {"data": base64.b64encode(encode_rgba_png(width, pixel)).decode("ascii"), "format": "png"}
+        if master is not None:
+            options["master"] = master
+        image = tk.PhotoImage(**options)
+        return image.zoom(scale, scale) if scale > 1 else image
     rows = []
     for y in range(height):
         start = y * width

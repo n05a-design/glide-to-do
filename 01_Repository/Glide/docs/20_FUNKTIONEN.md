@@ -6,6 +6,8 @@ Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentl
 
 Öffentliche Bezeichnung: **Erster öffentlicher Stand**; interner Status: **öffentliche erste Beta**. Der [QA-Bericht](07_QA_BERICHT.md) trennt die Prüfungen und tatsächlichen Lieferungen; die menschliche Prüfung folgt anschließend.
 
+**Schrift (D59, 03.11.2026):** Ohne Eintrag gilt die mitgelieferte Roboto Mono, sofort ab dem ersten Start und ohne Installation. Einstellungen › Darstellung und Bedienung › „Schriftfamilie“ wechselt wie bisher auf jede installierte Schrift, mitgeliefert ist auch DejaVu Sans; „Schriftgröße“ bleibt getrennt. Symbole (▣ ◉ ◈ ▦ ⚑ …) kommen bei Roboto Mono aus DejaVu Sans.
+
 **Hintergrundfarbe:** Einstellungen › Darstellung und Bedienung › Hintergrundfarbe sowie Ansicht › Hintergrund bieten Designvorgabe, die vorhandene feste Farbpalette und „Wie die Fensterfläche · ohne Schatten“. Die Wahl gilt unabhängig vom Design und wird als `background_color` gespeichert. Farbtöne betreffen ausschließlich den Hintergrund; Karten und Eingabeflächen bleiben erhalten. Eine Farbe blendet den Verlauf aus; die gespeicherte Verlaufsauswahl je Design bleibt erhalten und wird mit einer erneuten Verlaufswahl wieder aktiv. „Wie die Fensterfläche“ nutzt die Kartenfarbe (Hell: Weiß, Dunkel: das hellere Kartengrau) und deaktiviert Materialschatten und Glasverlauf auch im Glasdesign. Systembedingte Fensterschatten des Betriebssystems sind davon unabhängig.
 
 **Kartenecke, Hinweisflächen und Werkzeugzeile (02.11.2026):** Labels von Seite, Liste und Ordner stehen oben rechts in der Inhaltskarte, mit 12 px Abstand rechts und 8 px oben; eine Zeile bis 240 px, weitere Labels als „+n“. Listenartige Ansichten reservieren dafür Raum, der Seitentitel hält rechts Abstand ohne Textüberdeckung. Bedienhinweise weichen ab derselben schmalen Kopfstufe wie das Logo und im Kompaktmodus; der gespeicherte Hinweisschalter bleibt unverändert, eigene Beschreibungen und Auswahlzahl bleiben. Zwischen Werkzeugzeile und Inhaltskarte liegen 10 px. Die Ansichtsbuttons stehen rechts außen, zusätzliche Befehle links davon. Pinnwandgrund und Bereiche nutzen die Kartenfarbe. Im Seitenfuß stehen „Erwähnt ohne Verweis“ und Statusmeldung in einer Zeile, Fundstellen öffnen sich darüber.
@@ -399,7 +401,7 @@ Vor dem Schreiben werden Schreibrecht, aktuelle IDs, Titel und der vollständige
 - **Rückgängig** je Aktion, höchstens 50 Schritte. Benannte Zwischenstände als Anhang (höchstens 10).
 - **Paletten:** „Glide 32“ mitgeliefert; eigene speichern; ein- und ausgeben als `.gpl`/`.hex`, einlesen auch Adobe Swatch Exchange und Aseprite (nur Palette, höchstens 256 Farben).
 - **Export:** PNG ganzzahlig vergrößert ohne Glättung (bis 2.048 px); ICO mit 16/32/48/256 px, Grund wahlweise durchsichtig (3.32.0); seit 3.35.0 (G-03) zeigt vor dem Speichern eine Vorschau 16, 32 und 48 px auf hellem und dunklem Grund in Originalgröße und doppelt – aus derselben Rechnung wie die Datei und deshalb pixelgleich zu ihr. Abbrechen schreibt nichts. Glide-SVG und JSON (`hex8-row-v1`) für den Rundlauf.
-- **Pixelsymbol:** eigene 16 × 16-Zeichnung im Listen- oder Ordnerobjekt (E-09), sichtbar in Seitenleiste, Übersicht und Suche.
+- **Pixelsymbol:** eigene 16 × 16-Zeichnung im Listen- oder Ordnerobjekt (E-09), sichtbar in Seitenleiste, Übersicht und Suche. Seit D59 (03.11.2026) ist der unbemalte Grund (Farbindex 0) dort durchsichtig wie beim ICO-Export; deckend weiß füllt die Farbe „Weiß“ (`#FEFEFE`) neben dem karierten Grund im Farbdialog.
 
 ### Bildfolgen seit 3.40.0
 
