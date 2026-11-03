@@ -41,6 +41,9 @@
 # SHA-256 wird gegen src/glide, das Bundle und die Herkunftsangaben geprüft.
 **/vendor/** -text
 **/resources/fonts/** -text
+# Original-OFL-Dateien behalten Zeilenenden und Lizenz-Leerzeichen.
+**/resources/fonts/OFL-*.txt -text whitespace=-blank-at-eol,cr-at-eol
+01_Repository/Glide/packaging/paket/lizenzen/macos/*-OFL.txt -text whitespace=-blank-at-eol,cr-at-eol
 # Originale Schrift-Master samt Lizenz-/Liesmichtexten unverändert erhalten.
 20_Grafik_Master/07_Fonts/** -text whitespace=-blank-at-eol,cr-at-eol
 

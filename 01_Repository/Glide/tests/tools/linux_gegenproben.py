@@ -114,6 +114,7 @@ def main():
                                          for step in basis["schritte"]):
             results.append({"fall": name, "suite": suite, "gegenprobe_rot": False,
                             "grund": "Positive Basis dieser Suite nicht grün; keine Defekt-Gegenprobe behaupten"})
+            print(f"{name}: NICHT BELEGT (Basissuite {Path(suite).stem} nicht grün oder nicht ausgeführt)", flush=True)
             continue
         with tempfile.TemporaryDirectory(prefix="glide-linux-defekt-") as folder:
             clone = Path(folder) / "Glide"
@@ -145,6 +146,7 @@ def main():
                 if positive.returncode:
                     results.append({"fall": name, "suite": suite, "gegenprobe_rot": False,
                                     "grund": "Positive Basis dieser Suite nicht grün"})
+                    print(f"{name}: NICHT BELEGT (positive Basis dieser Suite nicht grün)", flush=True)
                     continue
             app.write_text(source, encoding="utf-8")
             run = subprocess.run(command, cwd=clone, env=env, capture_output=True,

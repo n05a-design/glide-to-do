@@ -2,7 +2,7 @@
 
 Stand 03.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Aktueller Stand 03.11.2026:** [Releaseaudit](../tests/qa-3.50.0/releaseaudit_2026-11-03/README.md) prüft Code, Dokumentation, Grafik-Master und tatsächliche lokale Lieferorte auf Quelle `067e683b…`. Reguläre Windows-/Mac-Archive aktualisiert; neue Roboto-Mono-Quelle vorhanden, deren Standardschriftintegration fehlt noch. Maßgeblicher Abschlussrest und zurückgestellte 3.51 im [Plan §21.52](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2152-releaseaudit-und-vereinheitlichung-3500). Frühere Voll-/Bauprüfungen behalten ihre Eingangsbytes; technische Vorhaben und menschliche Abnahme bleiben getrennt.
+**Aktueller Stand 03.11.2026:** Roter main-Lauf #243 auf `c352d2c0` wiederholt die bekannten Kartenhöhen-/Seitenflächenfehler aus #238. Reparaturen und vier D60-Schriftstile liegen im lokalen Kandidaten `3ceac5dd`; vorhandene lokale Prüfung/Quellhash passen weiterhin. Push mit verbesserter Prüfmechanik jetzt ausdrücklich autorisiert, kein automatischer main-Merge oder Release. [Plan §21.56](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2156-abgleich-der-roten-main-matrix-und-push-des-kandidaten), [Befund und Grenzen](../tests/qa-3.50.0/schriftstile_2026-11-03/README.md#roter-main-lauf-und-pushauftrag). Neue Remote-Matrix/native Lieferung/Menschenabnahme offen; 3.51 zurückgestellt.
 
 ## Einstieg
 

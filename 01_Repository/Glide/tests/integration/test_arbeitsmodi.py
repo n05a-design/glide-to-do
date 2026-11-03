@@ -3278,7 +3278,47 @@ def fall_ansichtssymbole(lauf):
 
 # beta350 zuletzt: Nach seinem Neustart erhält unter Windows das nächste frische
 # Fenster keinen Vordergrund, und `focus_set` der Aktionsauswahl griffe nicht.
-FAELLE = ("seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
+def fall_schriftstile(lauf):
+    """Vier Stilklassen über die echten Einstellungen speichern und neu laden."""
+    mod = lauf.mod
+    assert lauf.app.ui_font_family() == "Rubik", lauf.app.ui_font_family()
+    expected = ("Modern: Rubik", "Technisch: Roboto Mono",
+                "Klassisch: Playfair Display", "Kreativ: Fraunces")
+    assert mod.glide_fonts.LABELS == expected
+    for index in (1, 2, 3, 0):
+        app = lauf.app
+        style = mod.glide_fonts.STYLES[index]
+
+        def auswaehlen(dialog, parent=None):
+            dialog.update_idletasks()
+            felder = knoepfe(dialog, mod.AppOptionMenu)
+            auswahl = next(feld for feld in felder if tuple(feld.options) == expected)
+            assert auswahl.variable.get() == mod.glide_fonts.style_for(app.settings.get("ui_font_family")).label
+            auswahl.menu.invoke(index)
+            idle(lauf)
+            assert auswahl.variable.get() == style.label, (index, auswahl.variable.get(), style.label)
+            speichern = next(knopf for knopf in knoepfe(dialog, mod.RoundedButton) if knopf.text == "Speichern")
+            speichern.command()
+
+        with patch.object(app, "run_modal", auswaehlen):
+            app.show_settings_dialog()
+        idle(lauf)
+        assert app.settings["ui_font_family"] == style.family
+        assert app.ui_font_family() == style.tk_family, (style.label, app.ui_font_family())
+        for gewicht in ("normal", "bold"):
+            for neigung in ("roman", "italic"):
+                font = mod.tkfont.Font(root=lauf.root, family=style.tk_family, size=12,
+                                       weight=gewicht, slant=neigung)
+                assert font.actual("family") == style.tk_family, (style.label, font.actual())
+                assert font.measure("Glide ÄÖÜ äöü ß 0123456789") > 0
+        assert all(app.ICONS[key] == type(app).ICONS[key] for key in ("home", "today", "settings"))
+        lauf.neustart()
+        assert lauf.app.settings["ui_font_family"] == style.family
+        assert lauf.app.ui_font_family() == style.tk_family
+    return "Vier klassifizierte Schriften gespeichert, sofort angewendet und nach Neustart erhalten; Rubik Vorgabe, Symbole vollständig"
+
+
+FAELLE = ("schriftstile", "seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
           "kompakt_ansichten", "kompakt_verlorenes_loslassen", "gestaltung", "tagessteuerung", "nebenansicht_navigation",

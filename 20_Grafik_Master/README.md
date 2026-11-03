@@ -15,7 +15,10 @@ einen Master ändert, erneuert danach die Kopien.
 | `04_Affinity` | überholte `Glide-Logo.af`, nicht auf D45 nachgeführt | zur Entfernung geprüft; lokale Ausführungsrichtlinie blockiert die Löschung, reguläre SVGs bleiben maßgeblich |
 | `05_Inspiration` | Stilvorlagen und Skizzen, darunter `Glide-Logo-Position.png` (Skizze der Logoposition vom 29.09.2026) und `Inspiration für Glide.png` | Belege, keine Programmdateien |
 | `06_Beispielbilder` | Motive für Showcase und Arbeitsdokumente | siehe unten |
-| `07_Fonts/01_Roboto_Mono` | Originalpaket Roboto Mono mit variablen/statischen Schnitten und SIL-OFL-Lizenz | neue Schriftquelle des Inhabers; noch nicht als App-Standardschrift eingebunden |
+| `07_Fonts/01_Rubik` | Originaldateien und SIL OFL 1.1 | Modern: Rubik, aktuelle Vorgabe |
+| `07_Fonts/02_Roboto_Mono` | Unverändert verschobenes Originalpaket und SIL OFL 1.1 | Technisch: Roboto Mono |
+| `07_Fonts/03_Playfair_Display` | Originaldateien und SIL OFL 1.1 mit reserviertem Schriftnamen | Klassisch: Playfair Display |
+| `07_Fonts/04_Fraunces` | Originaldateien, variable/statische Schnitte und SIL OFL 1.1 | Kreativ: Fraunces; Laufzeit verwendet vier unveränderte 72pt-Schnitte |
 
 Glide-Blau ist `rgb(1,133,225)` = `#0185E1`. Ein Archivordner entfällt seit 03.10.2026: Vorfassungen trägt Git.
 

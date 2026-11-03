@@ -1,7 +1,12 @@
 """Werkzeugtests für die Linux-Defektgegenproben; keine App, keine Nutzerdaten."""
 
 from pathlib import Path
+import contextlib
+import io
+import json
+import tempfile
 import unittest
+from unittest import mock
 
 import linux_gegenproben
 
@@ -23,6 +28,21 @@ class MutationTests(unittest.TestCase):
         for name, suite, *_rest in linux_gegenproben.CASES:
             with self.subTest(name):
                 self.assertTrue((INTEGRATION / suite).is_file(), suite)
+
+    def test_missing_positive_basis_is_visible_and_keeps_failure(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            basis = root / "basis.json"
+            basis.write_text(json.dumps({"schritte": []}), encoding="utf-8")
+            output = io.StringIO()
+            argv = ["linux_gegenproben", "--protokoll", str(root / "logs"),
+                    "--fall", "dialogbildlauf", "--basis-ergebnis", str(basis)]
+            with mock.patch("sys.argv", argv), contextlib.redirect_stdout(output):
+                self.assertEqual(linux_gegenproben.main(), 1)
+            self.assertIn("dialogbildlauf: NICHT BELEGT", output.getvalue())
+            self.assertIn("test_glide nicht grün oder nicht ausgeführt", output.getvalue())
+            result = json.loads((root / "logs/ergebnis.json").read_text(encoding="utf-8"))
+            self.assertFalse(result["gegenproben"][0]["gegenprobe_rot"])
 
 
 if __name__ == "__main__":

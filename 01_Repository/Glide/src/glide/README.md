@@ -30,6 +30,7 @@ Stand 02.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (öffentliche ers
 | `persistence.py` | Koordiniert Vorbereitung, Sicherung, atomaren Schreibaufruf und Nachlauf mit bestehendem `SaveResult`; kein eigener Dateischreiber (Tk-frei, WA-38) |
 | `view_metrics.py` | Datumslesen, Fälligkeitsstatus, Fortschritt und Kennzahlen sowie Zeilenhöhenformel (Tk-frei, P09b) |
 | `action_catalog.py` | Stabile Aktionskennungen, Gruppen und virtuelle Editorbefehle (Tk-frei) |
+| `font_catalog.py` | Vier Textstile mit Klassifikationen, stabilen Kennungen, Anzeigenamen und nativen Familien (Tk-frei, D60); Vorgabe Rubik |
 | `ui_design.py` | Gemeinsame Abstände, Radien, Schriftgrößen und Zeilenhöhen; Titel-/Herkunftsbreiten (Tk-frei, OB01/U10/U19) |
 | `planning.py` | Bearbeitungstagsziele, Wochentagskapazität, Bilanz und Vorschau (Tk-frei, KO01/AU02) |
 | `day_proposal.py` | Erklärbare Tagesauswahl, Budget und Prüfung veralteter Vorschläge (Tk-frei, AU01) |

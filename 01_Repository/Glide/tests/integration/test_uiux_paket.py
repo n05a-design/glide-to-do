@@ -611,9 +611,17 @@ def fall_b09(lauf):
     assert pfade, "Probe braucht einen Startseitenknopf mit Pfad"
     knopf = pfade[0]
     trenner = [i for i in knopf.find_all() if knopf.type(i) == "text" and knopf.itemcget(i, "text") == "›"]
-    assert trenner, ("Pfadtrenner nicht optisch gesetzt", knopf.text)
     font = mod.tkfont.Font(root=lauf.root, font=knopf.font)
     metrik, pixel = app.glyph_metrics_for(knopf.font), app.font_pixels(font)
+    if not trenner:
+        # Rubik setzt den Trenner bereits auf die Großbuchstabenmitte. Ohne
+        # nötigen Versatz darf der Knopf die vollständige Zeile nativ zeichnen.
+        delta = (metrik.cap_center() - metrik.ink_center("›")) * pixel
+        assert abs(delta) <= 0.5, ("Pfadtrenner braucht Korrektur", knopf.text, delta)
+        texte = [knopf.itemcget(i, "text") for i in knopf.find_all() if knopf.type(i) == "text"]
+        assert knopf.text in texte, ("Beschriftung verändert", texte, knopf.text)
+        return (f"Papierkorbsymbol {app.symbol_row_shift(app.ICONS['trash']):+d} px, "
+                f"Pfeilabweichung {mitte - kappe:+.2f} px, nativer Pfadtrenner {delta:+.2f} px")
     abweichung = []
     for element in trenner:
         x, y = knopf.coords(element)

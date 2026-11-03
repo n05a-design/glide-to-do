@@ -137,12 +137,15 @@
     },
     {
       "name": "Glide-Schriften",
-      "version": "DejaVu 2.37 / Pixelify Sans 39df74a / Roboto Mono 3.001",
+      "version": "Rubik 2.300 / Roboto Mono 3.001 / Playfair Display 1.203 / Fraunces 1.000 / DejaVu 2.37 (Symbole) / Pixelify Sans 39df74a",
       "source": "resources/fonts/provenance.json",
       "files": {
         "DejaVu-LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
         "PixelifySans-OFL.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
-        "RobotoMono-OFL.txt": "ffd9f334604a352ad52ee0a7159c31bdafaf5f8465e5b9f9eb5c1f4924343183"
+        "RobotoMono-OFL.txt": "ffd9f334604a352ad52ee0a7159c31bdafaf5f8465e5b9f9eb5c1f4924343183",
+        "Rubik-OFL.txt": "fbf425c49bf998fb9cc1b52f8ca27d5f84dec079b60c40f654f242b52474d536",
+        "PlayfairDisplay-OFL.txt": "4e6be9d19455d7cb092412984ebf3c55d26b19dd8f8452962bf432ec0a9c9dcb",
+        "Fraunces-OFL.txt": "720d772b526b33cc1bd2abb5c8735fea5b0fc5b742cb171b571d7ad62aae0496"
       }
     },
     {

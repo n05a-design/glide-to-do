@@ -233,8 +233,28 @@ with tempfile.TemporaryDirectory(prefix="glide-features322-") as folder:
         voll = app.new_item("Ausführlich", due=heute, description="Eine Beschreibung mit Inhalt.",
                             checklist=[{"text": "A"}, {"text": "B", "done": True}])
         _blocks_voll, hoehe_voll = arbeitsflaeche.card_blocks(voll, quelle, 300, False)
-        assert hoehe_leer == arbeitsflaeche.CARD_MIN_HEIGHT, hoehe_leer
+        # Die Mindesthöhe ist keine feste Kartenhöhe: Schriftmetriken und DPI
+        # können auch eine kurze Karte höher machen (Roboto Mono unter X11).
+        assert hoehe_leer >= arbeitsflaeche.CARD_MIN_HEIGHT, hoehe_leer
         assert hoehe_voll > hoehe_leer + 30, (hoehe_leer, hoehe_voll)
+
+        # Tatsächlich gezeichnete Texte müssen einschließlich Fußzeile in die
+        # Karte passen. Das erkennt auch eine fälschlich feste Mindesthöhe.
+        for titel, faktor in (("Kurz", 1.0), ("Ein längerer Titel für mehrere gut lesbare Kartenzeilen", 2.0)):
+            probe = app.new_item(titel)
+            bloecke, hoehe = arbeitsflaeche.card_blocks(probe, quelle, 300, False, faktor=faktor)
+            tag = "card:" + probe["id"]
+            try:
+                arbeitsflaeche.draw_card(0, 0, 300, hoehe, bloecke, probe, False, faktor=faktor)
+                texte = [arbeitsflaeche.canvas.bbox(element)
+                         for element in arbeitsflaeche.canvas.find_withtag(tag)
+                         if arbeitsflaeche.canvas.type(element) == "text"]
+                assert len(texte) == len(bloecke), (titel, texte)
+                assert all(0 <= box[0] < box[2] <= 300
+                           and 0 <= box[1] < box[3] <= hoehe - arbeitsflaeche.CARD_PAD
+                           for box in texte), (titel, hoehe, texte)
+            finally:
+                arbeitsflaeche.canvas.delete(tag)
 
         # Punkt 12: Positionen werden gespeichert.
         arbeitsflaeche.store_position(mit["id"], 480, 336, reveal=False)

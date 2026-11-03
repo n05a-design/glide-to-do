@@ -112,7 +112,7 @@ Technischer Entwurf zur gelieferten Basis 3.42.0, keine Veröffentlichungsfreiga
 15. Einzelne Seiten aus Sicherungen mit Vorschau, Bildern und Aufgabenverweisen wiederherstellen.
 16. Pixel-Bildfolgen und Animationsvorschau innerhalb der Pixel-Werkstatt.
 
-**Daten und Grenzen für Store-Texte:** Datenordner frei wählbar, auch synchronisiert; Glide synchronisiert nicht selbst, Fremdbelegung führt zum Schreibschutz. Ein Bestand aus einer neueren Formatversion öffnet schreibgeschützt. Erinnerungen und Systemmitteilungen nur bei laufender App. Schriften DejaVu Sans und Pixelify Sans (SIL OFL 1.1) mit Lizenztexten.
+**Daten und Grenzen für Store-Texte:** Datenordner frei wählbar, auch synchronisiert; Glide synchronisiert nicht selbst, Fremdbelegung führt zum Schreibschutz. Ein Bestand aus einer neueren Formatversion öffnet schreibgeschützt. Erinnerungen und Systemmitteilungen nur bei laufender App. Textschriften Rubik, Roboto Mono, Playfair Display und Fraunces sowie Pixelify Sans unter SIL OFL 1.1; interner DejaVu-Symbolbegleiter unter eigener Bitstream-/Arev-Lizenz. Original-Lizenztexte gehen mit.
 
 <a id="windows-entwicklungsbau-auf-eigenem-gerät-3490"></a>
 
@@ -134,3 +134,18 @@ $VersionGlideBau = (Get-Content VERSION -Raw).Trim()
 Jeden Aufruf nur nach Exitcode 0 des vorherigen ausführen. Die Paketprobe isoliert ihre synthetischen Nutzdaten. `runtime-bau.json`, `bau-ergebnis.json`, PE-/Lizenzinventar, `start.json` und alle Bau-/Startlogs mitgeben. Das Artefakt bleibt bis zur Auswertung Entwicklungsbau, keine öffentliche Windows-Signatur oder Menschenfreigabe.
 
 Dieser normale Start auf dem eigenen Gerät ersetzt die ausdrücklich an Hosted-CI gebundene externe Python-/Quellen-ACL-Isolationsprobe **nicht**. `pruefe_start_windows.py` und `windows_isolation.plan` lassen persönliche Installationen dafür nicht zu. Diese Grenze bleibt bestehen; keine fremden oder eigenen Inhaberinstallationen für eine Prüfung sperren und keine Hosted-Marker vortäuschen. Die aktuelle bereits geprüfte Mac-Lieferung und die frühere Windows-Lieferung bleiben bis zum tatsächlichen Windows-Abgleich erhalten.
+
+## Schriftlizenzen und Stilklassifikationen (D60)
+
+Geprüft am 03.11.2026: die vier abgelegten Original-OFL-Dateien und offiziellen Google-Fonts-Lizenztexte. Unveränderte statische Schnitte mit Prüfsummen in `resources/fonts/provenance.json`; die Anzeigenamen in Glide ändern weder Fontmetadaten noch reservierte Namen.
+
+| Auswahl | Lizenz | GitHub mit Fontdateien | Kostenlose Glide-Weitergabe | Verkauf einer Glide-Anwendung |
+|---|---|---|---|---|
+| Modern: Rubik | [SIL OFL 1.1](https://github.com/google/fonts/blob/main/ofl/rubik/OFL.txt) | erlaubt | erlaubt | erlaubt |
+| Technisch: Roboto Mono | [SIL OFL 1.1](https://github.com/google/fonts/blob/main/ofl/robotomono/OFL.txt) | erlaubt | erlaubt | erlaubt |
+| Klassisch: Playfair Display | [SIL OFL 1.1, reservierter Name „Playfair Display“](https://github.com/google/fonts/blob/main/ofl/playfairdisplay/OFL.txt) | erlaubt | erlaubt | erlaubt |
+| Kreativ: Fraunces | [SIL OFL 1.1](https://github.com/google/fonts/blob/main/ofl/fraunces/OFL.txt) | erlaubt | erlaubt | erlaubt |
+
+Bedingungen bei jedem Schritt: Copyright-Hinweise und vollständige jeweilige OFL zugänglich mitliefern; in Git liegen sie bei den Schriften, im Paket zusätzlich im Lizenzbestand. Fontdateien behalten OFL, auch wenn Glides eigener Code einer anderen Lizenz unterliegt. Der Verkauf der Fontdateien allein ist nicht erlaubt. Bei Fontänderungen bleiben die Fontderivate OFL und dürfen reservierte Schriftnamen nicht ohne Erlaubnis verwenden; hier werden keine Fontdateien verändert. Die Auswahl „Klassisch: Playfair Display“ ist eine UI-Beschriftung des unveränderten Originals. Kommerziell erzeugte Texte, Bilder und PDF-Dokumente werden durch die Fontverwendung nicht selbst OFL-pflichtig. Quellen: [offizielle OFL-Nutzungshinweise](https://openfontlicense.org/how-to-use-the-ofl/) und [FAQ, insbesondere 1.2, 1.4, 1.10 und 1.15](https://openfontlicense.org/ofl-faq/).
+
+Diese Rechte betreffen die Fontkomponenten. Glides eigene Nutzungs-/Vertriebslizenz und sonstige Komponenten bleiben getrennte Rechte. DejaVu Sans bleibt nach Inhabernachtrag intern für Symbole mit seinem unveränderten Original-Lizenztext; Pixelify bleibt für das Pixel-Design. Beide sind keine weiteren Textstil-Angebote.

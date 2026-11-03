@@ -80,6 +80,9 @@ def prepare(source, repo, destination, basis):
                'DejaVu-LICENSE': source / 'resources/fonts/LICENSE',
                'PixelifySans-OFL.txt': source / 'resources/fonts/OFL-PixelifySans.txt',
                'RobotoMono-OFL.txt': source / 'resources/fonts/OFL-RobotoMono.txt',
+               'Rubik-OFL.txt': source / 'resources/fonts/OFL-Rubik.txt',
+               'PlayfairDisplay-OFL.txt': source / 'resources/fonts/OFL-PlayfairDisplay.txt',
+               'Fraunces-OFL.txt': source / 'resources/fonts/OFL-Fraunces.txt',
                'IANA-LICENSE.txt': source / 'resources/timezones/LICENSE-iana.txt',
                'CLDR-LICENSE.txt': source / 'resources/timezones/LICENSE-CLDR.txt'}
     for name, original in current.items():

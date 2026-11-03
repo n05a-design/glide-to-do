@@ -842,6 +842,14 @@ def flaeche(app_path, report, *, gross=False, tempo=False):
                              standardfont=root.tk.call("font", "actual", "TkDefaultFont")),
                         ensure_ascii=False, sort_keys=True), flush=True)
                     if width == 1280 and (not args.gross):
+                        if name == 'Seiten':
+                            # Die äußere Werkzeugzeile trennt bereits 10 px von
+                            # der Karte; kein zweiter Abstand aus dem Editor.
+                            for knopf in app.rich_note_editor._toolbar_buttons.values():
+                                assert knopf.winfo_ismapped(), ('Seitenwerkzeug verborgen', knopf.text)
+                                assert knopf.winfo_rooty() >= app.content_toolbar.winfo_rooty()
+                                assert (knopf.winfo_rooty() + knopf.winfo_height()
+                                        <= app.content_toolbar.winfo_rooty() + app.content_toolbar.winfo_height())
                         # 15 % Bedienfläche plus der ausdrücklich verlangte Abstand
                         # zwischen Werkzeugzeile und Inhaltskarte (Inhaber 02.11.2026).
                         assert content_y <= 120 + app.CONTENT_TOOLBAR_GAP, (name, content_y, '15 Prozent überschritten')

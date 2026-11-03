@@ -1,0 +1,405 @@
+{
+  "basis_commit": "2fd35ba0",
+  "app_sha256": "271379e7eb9700e7b72a8ebfc6c1722f96b487c73ac58a2b12e425ed4da7e6cc",
+  "python": "3.14.7",
+  "tk": "9.1.0",
+  "plattform": "windows-x64",
+  "default": "Rubik",
+  "stile": [
+    {
+      "kennung": "rubik",
+      "klassifikation": "Modern",
+      "familie": "Rubik",
+      "tk_familie": "Rubik",
+      "anzeige": "Modern: Rubik"
+    },
+    {
+      "kennung": "roboto_mono",
+      "klassifikation": "Technisch",
+      "familie": "Roboto Mono",
+      "tk_familie": "Roboto Mono",
+      "anzeige": "Technisch: Roboto Mono"
+    },
+    {
+      "kennung": "playfair_display",
+      "klassifikation": "Klassisch",
+      "familie": "Playfair Display",
+      "tk_familie": "Playfair Display",
+      "anzeige": "Klassisch: Playfair Display"
+    },
+    {
+      "kennung": "fraunces",
+      "klassifikation": "Kreativ",
+      "familie": "Fraunces",
+      "tk_familie": "Fraunces 72pt",
+      "anzeige": "Kreativ: Fraunces"
+    }
+  ],
+  "interner_symbolbegleiter": "DejaVu Sans, nicht auswählbar",
+  "fonts_original_bytegleich": [
+    {
+      "familie": "Roboto Mono",
+      "datei": "RobotoMono-Regular.ttf",
+      "sha256": "e4bf45837847d4abfa5a502b807a83393aa138727bdb9ea9c93fb17d53208d95",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Roboto Mono",
+      "datei": "RobotoMono-Bold.ttf",
+      "sha256": "92649d819cc4c20480b23a47aaa111769924eb31c66b6ecdcf6f573662558c83",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Roboto Mono",
+      "datei": "RobotoMono-Italic.ttf",
+      "sha256": "82629b0b8a721ce1a79942f68b39438512b406dad2a4a7476c94b72e7794b2f4",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Roboto Mono",
+      "datei": "RobotoMono-BoldItalic.ttf",
+      "sha256": "5bc2918abfd7399aff52e0a7ee22c97d544601f7ae8ff3b49ad176497acff1ed",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Roboto Mono",
+      "datei": "OFL-RobotoMono.txt",
+      "sha256": "ffd9f334604a352ad52ee0a7159c31bdafaf5f8465e5b9f9eb5c1f4924343183",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Rubik",
+      "datei": "Rubik-Regular.ttf",
+      "sha256": "6b94e23adedab4522e1b65d21158e83c75f377fc99f916c58f8ec40ecc7dd035",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Rubik",
+      "datei": "Rubik-Bold.ttf",
+      "sha256": "2fb105e3a66c3540e2308321e7c5bd786ce98a232930cd31c62e20d47747ad20",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Rubik",
+      "datei": "Rubik-Italic.ttf",
+      "sha256": "7285aaf13fc4af595d1175ecd6e6cb475725e3152589d921fdea21df3efba6de",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Rubik",
+      "datei": "Rubik-BoldItalic.ttf",
+      "sha256": "98422936ea4ebb427eacefa7f463c62832d5ec86f345538d02c00b4508f45bea",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Rubik",
+      "datei": "OFL-Rubik.txt",
+      "sha256": "fbf425c49bf998fb9cc1b52f8ca27d5f84dec079b60c40f654f242b52474d536",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Playfair Display",
+      "datei": "PlayfairDisplay-Regular.ttf",
+      "sha256": "861f838d481d28cbbd4793e45dc02f01d04c81e06ed98ab2779ca152ace9f27b",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Playfair Display",
+      "datei": "PlayfairDisplay-Bold.ttf",
+      "sha256": "4f3b87b5aa297eed5e5a48dbd9941356ca0313d4725b02c29a298cb042b7b31b",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Playfair Display",
+      "datei": "PlayfairDisplay-Italic.ttf",
+      "sha256": "40a6afa92220254c2c426ccef129d3615dd19e4c591fbfa997e5f28ebba8302c",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Playfair Display",
+      "datei": "PlayfairDisplay-BoldItalic.ttf",
+      "sha256": "db5737059ff617317aca97e9e35730f8933a2e187c75bbe2deaf45c4d72f5b1d",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Playfair Display",
+      "datei": "OFL-PlayfairDisplay.txt",
+      "sha256": "4e6be9d19455d7cb092412984ebf3c55d26b19dd8f8452962bf432ec0a9c9dcb",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Fraunces",
+      "datei": "Fraunces_72pt-Regular.ttf",
+      "sha256": "a6152c9249698b121ddcd66116b94185e1631a331763e52b8840006885f30813",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Fraunces",
+      "datei": "Fraunces_72pt-Bold.ttf",
+      "sha256": "6f6ec15b30f3d66e30084322e0f70fcbb0ab64116a81d3a0feb097154530cd87",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Fraunces",
+      "datei": "Fraunces_72pt-Italic.ttf",
+      "sha256": "8764b6b5c734eda35361609720da2da0043918008dc8b7fac9a3d20ddf3b2ecb",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Fraunces",
+      "datei": "Fraunces_72pt-BoldItalic.ttf",
+      "sha256": "c03f9dc34b35fdf58b59c6a56991c2ae8ceef5d1f42ee8433fbab6e837ad7064",
+      "original_bytegleich": true
+    },
+    {
+      "familie": "Fraunces",
+      "datei": "OFL-Fraunces.txt",
+      "sha256": "720d772b526b33cc1bd2abb5c8735fea5b0fc5b742cb171b571d7ad62aae0496",
+      "original_bytegleich": true
+    }
+  ],
+  "baseline_release36_exitcode": 0,
+  "gezielte_pruefungen": [
+    {
+      "fall": "katalog-glyphen",
+      "exitcode": 0,
+      "dauer_s": 0.35
+    },
+    {
+      "fall": "glyphen",
+      "exitcode": 0,
+      "dauer_s": 1.277
+    },
+    {
+      "fall": "schriftstile",
+      "exitcode": 0,
+      "dauer_s": 11.74
+    },
+    {
+      "fall": "release36",
+      "exitcode": 0,
+      "dauer_s": 13.653
+    },
+    {
+      "fall": "logo3370",
+      "exitcode": 0,
+      "dauer_s": 6.963
+    },
+    {
+      "fall": "logo330",
+      "exitcode": 0,
+      "dauer_s": 22.527
+    },
+    {
+      "fall": "b09",
+      "exitcode": 0,
+      "dauer_s": 8.203
+    },
+    {
+      "fall": "b11",
+      "exitcode": 0,
+      "dauer_s": 8.856
+    },
+    {
+      "fall": "features322",
+      "exitcode": 0,
+      "dauer_s": 18.703
+    },
+    {
+      "fall": "aufgaben-flaeche",
+      "exitcode": 0,
+      "dauer_s": 21.371
+    },
+    {
+      "fall": "mindestgroesse330",
+      "exitcode": 0,
+      "dauer_s": 103.362
+    }
+  ],
+  "geometrie_vorlauf": {
+    "exitcode": 1,
+    "beobachtung": [
+      "Liste",
+      140,
+      "15 Prozent überschritten"
+    ],
+    "ursache": "Großer nativer Zeilenrahmen von Rubik; nach sichtbarer Kopf-Glyphenmessung grün"
+  },
+  "sichtprobe": "Eigener nativer Einstellungsdialog und Auswahlfenster angesehen; vier Angebote vollständig, kein DejaVu-Eintrag",
+  "python_lieferung": {
+    "code_dateien": 92,
+    "ressourcen": 167,
+    "bytegleich": true
+  },
+  "ci_grundstufe": {
+    "exitcode": 0,
+    "lieferstand_streng": true,
+    "schritte": [
+      {
+        "schritt": "Syntax",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Versionskonsistenz",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Dokumentation",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fixtures",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Werkzeugtests",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fachlogik-Unit-Tests",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fachlogik ohne Systemzeitzonen",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "analyse_statisch",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "analyse_erreichbarkeit",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "standpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "attributpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "dublettenpruefung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Tk-Voraussetzung",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Startprobe",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Lieferstand",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fremdcode",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Datenschutz",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Ablagegröße",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Synchronisation",
+        "status": "ausgeführt"
+      }
+    ],
+    "werkzeugtests": 242,
+    "werkzeug_skip": 1,
+    "fachtests_je_lauf": 1122,
+    "fachtestlaeufe": 2
+  },
+  "native_pakete": "nicht neu gebaut",
+  "linux_macos_matrix": "offen",
+  "menschliche_abnahme": "offen",
+  "ci_vorlauf": {
+    "exitcode": 1,
+    "ursache": "R10: font_catalog.py fehlte in Paket-README, Python-README und Kopierliste der Mac-Vorstufe",
+    "schritte": [
+      {
+        "schritt": "Syntax",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Versionskonsistenz",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Dokumentation",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fixtures",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Werkzeugtests",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fachlogik-Unit-Tests",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "Fachlogik ohne Systemzeitzonen",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "analyse_statisch",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "analyse_erreichbarkeit",
+        "status": "ausgeführt"
+      },
+      {
+        "schritt": "standpruefung",
+        "status": "fehlgeschlagen"
+      },
+      {
+        "schritt": "attributpruefung",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "dublettenpruefung",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "Tk-Voraussetzung",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "Startprobe",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "Lieferstand",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "Fremdcode",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "Datenschutz",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "Ablagegröße",
+        "status": "übersprungen"
+      },
+      {
+        "schritt": "Synchronisation",
+        "status": "übersprungen"
+      }
+    ]
+  }
+}
