@@ -2,7 +2,7 @@
 
 Stand 03.11.2026 · Glide 3.50.0 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Aktueller Arbeitsstand 03.11.2026:** Vier Textstile nach D60 mit Rubik als Vorgabe, DejaVu ausschließlich interner Symbolbegleiter. [Plan §21.55](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2155-vier-schriftstile-und-rubik-als-standard), [Prüf-/Lizenznachweis](01_Repository/Glide/tests/qa-3.50.0/schriftstile_2026-11-03/README.md). Katalog für späteres Onboarding, jetzt nur Einstellungen. Voriger Validierungscommit `2fd35ba0` bleibt Basis. Neue native Pakete und Linux-/Mac-/Menschenabnahme offen, kein Push-/Mergeauftrag; 3.51 zurückgestellt.
+**Aktueller Arbeitsstand 03.11.2026:** Rote main-Matrix entspricht den bekannten Befunden; lokale Reparaturen und vier Schriftstile sind geprüft. Push des Validierungsbranches jetzt ausdrücklich beauftragt. [Plan §21.56](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2156-abgleich-der-roten-main-matrix-und-push-des-kandidaten), [Abgleich](01_Repository/Glide/tests/qa-3.50.0/schriftstile_2026-11-03/README.md#roter-main-lauf-und-pushauftrag). Kein automatischer main-Merge oder Release. Neue Remote-Matrix/native Pakete/Menschenabnahme separat; 3.51 zurückgestellt.
 
 Sprache: Deutsch (Antworten, Dokumente, UI-Texte). Diese Datei verweist nur auf die verbindlichen Projektregeln und ergänzt, was für Claude-Code-Sitzungen im Repository gilt. Regeln nicht hier doppeln, sondern an der Quelle pflegen.
 
