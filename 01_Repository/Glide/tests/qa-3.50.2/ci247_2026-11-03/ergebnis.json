@@ -1,0 +1,128 @@
+{
+  "version": "3.50.2",
+  "ausgangscommit": "3e09079c1ab99725eba2028405202dd2d851e070",
+  "status": "Reparatur, Bereichsabschluss, Python-Abgleich und strenge Grundstufe lokal gruen; nativer Remote-Nachlauf offen",
+  "plattform": "Windows / Python 3.14.7 / Tk 9.1.0",
+  "remote_eingaenge": [
+    {
+      "run": 247,
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/41713292315",
+      "status": "failure"
+    },
+    {
+      "run": 248,
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/41713568046",
+      "status": "failure",
+      "linux_erster_fehler": "test_festlayout330: Kopfknoepfe y12->13 bei Mein Tag",
+      "windows_erster_fehler": "test_arbeitsmodi/gestaltung: acht abgeschnittene Seitenwerkzeuge; 44 andere Faelle gruen"
+    },
+    {
+      "name": "Mac-Paket #29",
+      "url": "https://github.com/n05a-design/glide-to-do/actions/runs/41713292267",
+      "status": "failure",
+      "fehler": "Gebündelte Schrift fehlt: Playfair Display SemiBold",
+      "paket_gebaut": true,
+      "sandbox_positive_kontrolle_exitcode": 0,
+      "externes_python_geblockt_exitcode": 71,
+      "paket_start_exitcode": 1
+    }
+  ],
+  "reproduktion": {
+    "kopf_linux_skalierung_auf_windows": "vorher exakt rot, nachher gruen bei 1.387328 und beiden Groessen; keine native Linux-Abnahme",
+    "gestaltung": "vorher exakt acht abgeschnittene Knoepfe, nachher 206 Knoepfe in fuenf Konfigurationen ohne Befund",
+    "editorlebensdauer": "Verwaiste zweite Instanz nach synchronem flush()/Neuaufbau im Lebensdauermitschnitt bestaetigt; neuer Test verlangt eine aktive Instanz"
+  },
+  "bereichspruefungen": [
+    {
+      "pruefung": "fester_kopf",
+      "exitcode": 0,
+      "sekunden": 11.87
+    },
+    {
+      "pruefung": "logo",
+      "exitcode": 0,
+      "sekunden": 23.41
+    },
+    {
+      "pruefung": "seiten",
+      "exitcode": 0,
+      "sekunden": 7.42
+    },
+    {
+      "pruefung": "aufgaben3380",
+      "exitcode": 0,
+      "sekunden": 62.08
+    },
+    {
+      "pruefung": "gestaltung",
+      "exitcode": 0,
+      "sekunden": 23.32
+    },
+    {
+      "pruefung": "werkzeugzeile",
+      "exitcode": 0,
+      "sekunden": 13.5
+    },
+    {
+      "pruefung": "beta350",
+      "exitcode": 0,
+      "sekunden": 11.08
+    }
+  ],
+  "schriftstile_windows": {
+    "ok": true,
+    "befund": "Vier korrigierte Stilklassen gespeichert und nach Neustart erhalten; Playfair/Fraunces SemiBold normal, echtes Bold bei 8–11 pt, Metriken einschließlich Italic; Rubik Vorgabe, Symbole vollständig",
+    "runtime": {
+      "python": "3.14.7",
+      "platform": "win32",
+      "tk": "9.1.0"
+    },
+    "dauer_s": 13.645
+  },
+  "font_katalog_unit": {
+    "tests": 7,
+    "status": "gruen",
+    "umfang": "Plattformfamilien, PostScript-ID-6 aus allen vier SemiBold-Originalen, Italic/Bold und schnitterhaltende Tk-Beschreibung"
+  },
+  "quellen": [
+    {
+      "datei": "src/glide/app.pyw",
+      "sha256_windows_bytes": "e8871192408cbc8b099215b282e1c36b18f6d75f68712c919494bbe212a028e0",
+      "git_blob": "e359f08d1da9ea75a14982d26159f8f68316e809"
+    },
+    {
+      "datei": "src/glide/font_catalog.py",
+      "sha256_windows_bytes": "f634d8780e75e77c5877359c90e4df2fb303d1f365236529464ddb2b77ee677c",
+      "git_blob": "eee2dfe0a2d7397e23b533d6b940c242e6d72504"
+    },
+    {
+      "datei": "packaging/paket/start_glide.py",
+      "sha256_windows_bytes": "0d87d0f9eff30ee3a599ed3291497dfb1205a5bd594a0687df8754db5e1bc411",
+      "git_blob": "311e2befcb8ebdd0cc86fcbcea185b5d01529682"
+    }
+  ],
+  "python_lieferung": {
+    "code_dateien": 92,
+    "ressourcen": 171,
+    "bytegleich": true
+  },
+  "originalfonts_lizenzen": "unveraendert",
+  "native_grenzen": "Neue native Mac-Startprobe sowie komplette Linux-/Windows-Remote-Matrix offen; keine Testgrenzen gelockert. Kalibrierung ohne gruene positive Basissuiten bleibt rot. Lokaler Codex-Git-Metadatenbefund separat unveraendert.",
+  "grundstufe": {
+    "beleg": "grundstufe.json",
+    "schritte": 19,
+    "exitcode": 0,
+    "werkzeugtests": 242,
+    "werkzeug_skips": 1,
+    "fachtests": 1127,
+    "fachtest_durchlaeufe": 2
+  },
+  "git_basis": {
+    "main": "05922df6eb175687016f2d961eb58c18773a4f26",
+    "pr": 60,
+    "tree": "bd0be0243d6e9a40e006d24b4002aec31810cd9f",
+    "beurteilung": "main-Merge und Ausgang 3e09079c haben denselben Baum; frischer Reparaturzweig nach Loeschung des alten Zweigs",
+    "branch": "codex/glide-3.50.2-ci-korrekturen"
+  },
+  "lokaler_abschluss": "2026-11-04"
+}

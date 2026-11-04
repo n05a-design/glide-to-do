@@ -2,6 +2,10 @@
 
 ## 3.50.2 (03.11.2026) – Versions- und Ablageabgleich
 
+- Folgereparatur nach CI #250: Linux-Schriftalias und Symbolfläche, feste Kennzahlenzeile sowie Höhenabgleich nach Werkzeugumbruch. Separater nativer UI-Nachlauf über alle 45 Fälle; vollständige Pushprüfungen bleiben erhalten. Mac-Paket #31 mit isolierter Startprobe auf dem ersten Reparaturcommit grün.
+- Nach CI #247/#248: Kopfknöpfe bleiben bei geänderter Kennzahlenhöhe stehen; beim synchronen Speichern/Ansichtswechsel bleibt genau ein Seiteneditor mit seiner Werkzeugleiste aktiv.
+- Mac-Paket: originale SemiBold-/Italic-Schnitte per PostScript-Namen auswählen und beim Kopieren einer Tk-Schrift erhalten; tatsächliche Stammfamilie getrennt prüfen. [Fehler, Gegenproben und neue Laufgrenzen](tests/qa-3.50.2/ci247_2026-11-03/README.md).
+
 - Themenflächen, korrigierte Schriftklassen mit kräftigerem Serifentext sowie Kopf-/Flächenreparatur aus 3.50.1 als neuen Stand zusammengeführt. Neuerungenkarte ergänzt.
 - Dokumente, Dateiinventar, aktuelle Liefermatrizen, Verweise und Sprunganker abgeglichen; Python-/Showcase-Lieferung auf 3.50.2. Native Pakete bleiben 3.50.0, neue Remote-/Native-Abnahme offen. Historische Belege bewahren ihre ursprünglichen Werte. [Audit und Grenzen](tests/qa-3.50.2/ablageabgleich_2026-11-03/README.md).
 

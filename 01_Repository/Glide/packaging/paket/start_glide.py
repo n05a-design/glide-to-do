@@ -217,13 +217,27 @@ def smoke(report_path):
                 assert hashlib.sha256(license_file.read_bytes()).hexdigest() == digest, name
             assert inputs["version"] == mod.APP_VERSION
             families = {str(value).casefold() for value in mod.tkfont.families(root=root)}
-            required_families = tuple(dict.fromkeys(family for style in mod.glide_fonts.STYLES
+            required_families = tuple(dict.fromkeys(mod.glide_fonts.actual_family(family)
+                                                   for style in mod.glide_fonts.STYLES
                                                    for family in (style.tk_family, style.default_family))) + ("DejaVu Sans", "Pixelify Sans")
             for family in required_families:
                 assert family.casefold() in families, "Gebündelte Schrift fehlt: " + family
                 font = mod.tkfont.Font(root=root, family=family, size=12)
                 assert str(font.actual("family")).casefold() == family.casefold(), family
                 assert font.measure("Glide 123") > 0
+            # Mac führt SemiBold unter der Stammfamilie. Den tatsächlichen
+            # Schnitt separat per PostScript-Name anfordern, einschließlich
+            # Italic; ein stiller Systemfont-Rückfall bleibt ein Fehler.
+            for style in mod.glide_fonts.STYLES:
+                for bold in (False, True):
+                    for italic in (False, True):
+                        family = mod.glide_fonts.family_for_weight(style.default_family, bold, italic)
+                        font = mod.ui_font_object(root=root, font=(family, 12,
+                                                   "bold" if bold else "normal",
+                                                   "italic" if italic else "roman"))
+                        assert font.cget("family") == family, (family, font.cget("family"))
+                        assert font.actual("family") == mod.glide_fonts.actual_family(family), (family, font.actual())
+                        assert font.measure("Glide ÄÖÜ äöü ß 0123456789") > 0
             assert app.file_drop_support(), app._file_drop_error
             dnd_version = str(root.tk.call("package", "present", "tkdnd"))
             loaded = root.tk.splitlist(root.tk.call("info", "loaded"))

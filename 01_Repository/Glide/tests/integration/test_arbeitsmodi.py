@@ -1215,6 +1215,9 @@ def fall_gestaltung(lauf):
         app.set_active_list(seite["id"])
         idle(lauf, 8)
         editor = app.rich_note_editor
+        visible_editors = [child for child in app.list_frame_outer.inner.winfo_children()
+                           if isinstance(child, lauf.mod.PageEditor) and child.winfo_manager()]
+        assert visible_editors == [editor], (name, "mehrere aktive Seiteneditoren", visible_editors)
         editor.reveal_page_head(True)
         editor.text.focus_force()
         editor.text.mark_set("insert", "3.0")
@@ -2866,7 +2869,8 @@ def fall_eckenlabels(lauf):
             if leiste is not None and leiste.winfo_ismapped():
                 assert not schneidet(chips, rechteck(leiste)), (breite, name)
             # Der Kopf trägt keine Labels mehr und behält seine Höhe.
-            assert app.subtitle_row.winfo_height() == kopf, (breite, name)
+            assert app.subtitle_row.winfo_height() == kopf, (breite, name, kopf,
+                                                           app.subtitle_row.winfo_height())
         app.open_list_view()
         for voll in (False, True):
             app.settings["page_full_width"] = voll
@@ -3142,8 +3146,15 @@ def fall_beta350(lauf):
     # Abbruch und Schreibschutz dürfen weder Text noch gespeicherte Bytes ändern.
     app.sidebar_listbox.focus_force()
     idle(lauf)
+    # Fokusverlust darf speichern und die Darstellung erneuern. Der folgende
+    # echte Griffzug gehört zur weiterhin geöffneten Seite und ihrem aktuellen
+    # Editor, nicht zu einer zuvor festgehaltenen Widgetinstanz.
+    assert app.current_list()["id"] == page["id"]
+    editor = app.rich_note_editor
+    assert editor is not None and editor.entry_id == page["id"]
     editor.show_block_handle('1.0', 'pointer')
     idle(lauf)
+    handle = editor._block_handle
     before = editor.document()
     saved = Path(mod.SAVE_FILE).read_bytes()
     handle.event_generate('<ButtonPress-1>', x=3, y=3)
@@ -3307,22 +3318,26 @@ def fall_schriftstile(lauf):
             app.show_settings_dialog()
         idle(lauf)
         assert app.settings["ui_font_family"] == style.family
-        assert app.ui_font_family() == style.default_family, (style.label, app.ui_font_family())
+        assert app.ui_font_family() == style.default_family, (
+            style.label, app.ui_font_family(), style.default_family,
+            mod.tkfont.Font(root=lauf.root, family=style.default_family, size=12).actual(),
+            [name for name in app.available_font_families() if 'playfair' in name.lower() or 'fraunces' in name.lower()])
         for gewicht in ("normal", "bold"):
             for neigung in ("roman", "italic"):
-                familie = mod.glide_fonts.family_for_weight(style.default_family, gewicht == "bold")
+                familie = mod.glide_fonts.family_for_weight(style.default_family, gewicht == "bold", neigung == "italic")
                 font = mod.tkfont.Font(root=lauf.root, family=familie, size=12,
                                        weight=gewicht, slant=neigung)
-                assert font.actual("family") == familie, (style.label, font.actual())
+                assert font.actual("family") == mod.glide_fonts.actual_family(familie), (style.label, font.actual())
                 assert font.measure("Glide ÄÖÜ äöü ß 0123456789") > 0
                 assert mod.bundled_glyph_metrics(gewicht == "bold", familie, neigung == "italic") is not None
         if style.body_family:
             for size in (8, 9, 10, 11):
                 for gewicht in ("normal", "bold"):
                     specification = mod.app_font(size, *(() if gewicht == "normal" else ("bold",)), root=lauf.root)
-                    font = mod.tkfont.Font(root=lauf.root, font=specification)
+                    font = mod.ui_font_object(root=lauf.root, font=specification)
                     familie = style.default_family if gewicht == "normal" else style.tk_family
-                    assert font.actual("family") == familie, (style.label, size, font.actual())
+                    assert font.cget("family") == familie, (style.label, size, font.cget("family"))
+                    assert font.actual("family") == mod.glide_fonts.actual_family(familie), (style.label, size, font.actual())
                     # Tk meldet den physischen 600er-Schnitt unter Windows als
                     # bold, obwohl normal angefordert wird. Familie + Tupel
                     # unterscheiden SemiBold und den echten 700er-Schnitt.
@@ -3339,7 +3354,7 @@ def fall_schriftstile(lauf):
             app.set_active_list(liste["id"])
             app.open_list_view()
             idle(lauf, 6)
-            assert app.task_row_font().actual("family") == style.default_family
+            assert app.task_row_font().actual("family") == mod.glide_fonts.actual_family(style.default_family)
             assert app.tree.bbox(liste["items"][0]["id"]), style.label
         assert all(app.ICONS[key] == type(app).ICONS[key] for key in ("home", "today", "settings"))
         lauf.neustart()
@@ -3353,7 +3368,7 @@ def fall_schriftstile(lauf):
             app.set_active_list(liste["id"])
             app.open_list_view()
             idle(lauf, 6)
-            assert app.task_row_font().actual("family") == style.default_family
+            assert app.task_row_font().actual("family") == mod.glide_fonts.actual_family(style.default_family)
             if getattr(lauf, "capture", None) is not None and sys.platform == "win32":
                 sys.path.insert(0, str(REPO / "tests/tools"))
                 from releasedaten import save_windows_screenshot
@@ -3387,7 +3402,8 @@ def fall_kartenflaechen(lauf):
                 farbe = app.style.lookup(stil, option)
                 assert farbe == card, (kontext, name, stil, option, farbe, card)
             if hasattr(baum, "icon_canvas"):
-                assert baum.icon_canvas.cget("bg") == card, (kontext, name, "Symbolfläche")
+                assert baum.icon_canvas.cget("bg") == card, (kontext, name, "Symbolfläche",
+                                                           baum.icon_canvas.cget("bg"), card)
         for karte in (app.sidebar_shell, app.list_frame_outer):
             assert karte.fill_color == card, (kontext, str(karte), karte.fill_color, card)
             assert karte.inner.cget("bg") == card

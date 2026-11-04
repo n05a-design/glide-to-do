@@ -29,16 +29,16 @@ on:
   workflow_dispatch:
     inputs:
       bereich:
-        description: "Vollmatrix, Windows-Diagnose, Entwicklungspaket oder Zugangs-Vorprüfung"
+        description: "Vollmatrix, nativer UI-Nachlauf, Windows-Diagnose, Paket oder Zugangs-Vorprüfung"
         type: choice
         default: voll
-        options: [voll, aufgaben-layout, tagesdialoge, windows-paket, zugang400]
+        options: [voll, ui-nachlauf, aufgaben-layout, tagesdialoge, windows-paket, zugang400]
 
 permissions:
   contents: read
 
 concurrency:
-  group: glide-pruefung-${{ github.ref }}
+  group: glide-pruefung-${{ github.ref }}-${{ github.event.inputs.bereich || 'voll' }}
   cancel-in-progress: true
 
 env:
@@ -80,9 +80,9 @@ jobs:
           if-no-files-found: ignore
 
   integrationssuiten-linux:
-    name: Vollprüfung (Linux/Xvfb, eigene Tk 9.1)
+    name: ${{ github.event.inputs.bereich == 'ui-nachlauf' && 'UI-Nachlauf (Linux/Xvfb, eigene Tk 9.1)' || 'Vollprüfung (Linux/Xvfb, eigene Tk 9.1)' }}
     needs: grundstufe
-    if: always() && !cancelled() && (github.event.inputs.bereich == '' || github.event.inputs.bereich == 'voll')
+    if: always() && !cancelled() && (github.event.inputs.bereich == '' || github.event.inputs.bereich == 'voll' || github.event.inputs.bereich == 'ui-nachlauf')
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     defaults:
@@ -107,10 +107,15 @@ jobs:
           echo "PYTHONPATH=$RUNNER_TEMP/voll-runtime/python-extension" >> "$GITHUB_ENV"
 
       - name: Vollprüfstand Linux
+        if: github.event.inputs.bereich != 'ui-nachlauf'
         run: dbus-run-session -- python -B tests/tools/pruefen.py --zugang-nativ --modus voll --protokoll "$RUNNER_TEMP/integration" --timeout 900
 
+      - name: Arbeitsmodi vollständig nativ prüfen
+        if: github.event.inputs.bereich == 'ui-nachlauf'
+        run: dbus-run-session -- xvfb-run -a --server-args="-screen 0 1400x1100x24" python -B tests/integration/test_arbeitsmodi.py --fall alle --report "$RUNNER_TEMP/integration/arbeitsmodi.json"
+
       - name: Kalibrierte Erwartungen gegen Defekte prüfen
-        if: always() && !cancelled()
+        if: always() && !cancelled() && github.event.inputs.bereich != 'ui-nachlauf'
         run: dbus-run-session -- python -B tests/tools/linux_gegenproben.py --protokoll "$RUNNER_TEMP/integration/defektgegenproben" --basis-ergebnis "$RUNNER_TEMP/integration/ergebnis.json"
 
       - name: Protokolle sichern
@@ -126,9 +131,9 @@ jobs:
           if-no-files-found: ignore
 
   vollpruefung-windows:
-    name: Vollprüfung (Windows x64, eigene Tk 9.1)
+    name: ${{ github.event.inputs.bereich == 'ui-nachlauf' && 'UI-Nachlauf (Windows x64, eigene Tk 9.1)' || 'Vollprüfung (Windows x64, eigene Tk 9.1)' }}
     needs: integrationssuiten-linux
-    if: always() && !cancelled() && (github.event.inputs.bereich == '' || github.event.inputs.bereich == 'voll')
+    if: always() && !cancelled() && (github.event.inputs.bereich == '' || github.event.inputs.bereich == 'voll' || github.event.inputs.bereich == 'ui-nachlauf')
     runs-on: windows-2025
     timeout-minutes: 180
     defaults:
@@ -167,7 +172,11 @@ jobs:
       - name: Referenzdesktop für Geometrieprüfungen
         run: python -B tests/tools/windows_desktop.py --breite 1920 --hoehe 1080 --protokoll "$env:RUNNER_TEMP/integration/windows-desktop.json"
       - name: Vollprüfstand Windows
+        if: github.event.inputs.bereich != 'ui-nachlauf'
         run: python -B tests/tools/pruefen.py --zugang-nativ --modus voll --protokoll "$env:RUNNER_TEMP/integration" --timeout 900
+      - name: Arbeitsmodi vollständig nativ prüfen
+        if: github.event.inputs.bereich == 'ui-nachlauf'
+        run: python -B tests/integration/test_arbeitsmodi.py --fall alle --report "$env:RUNNER_TEMP/integration/arbeitsmodi.json"
       - name: Protokolle sichern
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
@@ -186,7 +195,7 @@ jobs:
     # windows-paket wiederholt nur den Bau-/Startnachweis. Es ersetzt keine Vollmatrix.
     name: Eigenständiges Paket (Windows x64, PyInstaller 6.22.3)
     needs: vollpruefung-windows
-    if: always() && !cancelled() && (needs.vollpruefung-windows.result == 'success' || (github.event_name == 'workflow_dispatch' && github.event.inputs.bereich == 'windows-paket'))
+    if: always() && !cancelled() && ((needs.vollpruefung-windows.result == 'success' && github.event.inputs.bereich != 'ui-nachlauf') || (github.event_name == 'workflow_dispatch' && github.event.inputs.bereich == 'windows-paket'))
     runs-on: windows-2025
     timeout-minutes: 60
     defaults:

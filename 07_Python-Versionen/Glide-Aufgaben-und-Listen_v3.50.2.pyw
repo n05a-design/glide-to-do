@@ -284,6 +284,17 @@ def root_after(root, delay, callback):
 _APP_FONT_CACHE = weakref.WeakKeyDictionary()
 
 
+def ui_font_object(root=None, font=None, **options):
+    """Mess-/Zeichenschrift aus einem Tupel ohne Verlust des konkreten Schnitts."""
+    root = root or getattr(tk, "_default_root", None)
+    if (IS_MACOS or IS_LINUX) and font is not None and root is not None:
+        description = root.tk.splitlist(str(font)) if not isinstance(font, (tuple, list)) else font
+        face = glide_fonts.face_options(description)
+        if face is not None:
+            return tkfont.Font(root=root, **(face | options))
+    return tkfont.Font(root=root, font=font, **options)
+
+
 def app_font(size=11, *styles, root=None):
     """Konkrete Familie statt des als Arial interpretierten Tupelnamens TkDefaultFont."""
     root = root or getattr(tk, "_default_root", None)
@@ -297,7 +308,8 @@ def app_font(size=11, *styles, root=None):
             family_delta = (named.actual("family"), max(-1, min(1, named.actual("size") - 11)))
             _APP_FONT_CACHE[root] = family_delta
         family, delta = family_delta
-        return (glide_fonts.family_for_weight(family, "bold" in styles), int(size) + delta, *styles)
+        return (glide_fonts.family_for_weight(family, "bold" in styles, "italic" in styles),
+                int(size) + delta, *styles)
     except (tk.TclError, RuntimeError):
         return ("TkDefaultFont", size, *styles)
 
@@ -786,7 +798,7 @@ class LabelChip(tk.Canvas):
     def measure(cls, text, font):
         """Breite und Höhe, die ein Chip mit diesem Text einnehmen würde."""
         try:
-            measure_font = tkfont.Font(font=font)
+            measure_font = ui_font_object(font=font)
             text_width = measure_font.measure(str(text or ""))
             text_height = measure_font.metrics("linespace")
         except tk.TclError:
@@ -1252,7 +1264,7 @@ class MonogramTile(tk.Canvas):
         familie, groesse, stil = self.tile_font
         passend = max(9, int(self.size * (0.46 if len(self.tile_text) <= 1 else
                                           0.34 if len(self.tile_text) == 2 else 0.26)))
-        metrics = tkfont.Font(self, font=(familie, min(groesse, passend), stil))
+        metrics = ui_font_object(self, font=(familie, min(groesse, passend), stil))
         width = self.winfo_width() if self.winfo_width() > 1 else self.size
         height = self.winfo_height() if self.winfo_height() > 1 else self.size
         self.create_text(width / 2, height / 2 - 2,
@@ -1311,6 +1323,11 @@ BUNDLED_METRIC_FONTS = {
     **{style.tk_family.casefold(): (style.regular, style.bold) for style in glide_fonts.STYLES},
     **{style.body_family.casefold(): (style.body_regular, style.body_regular)
        for style in glide_fonts.STYLES if style.body_family},
+    **{style.body_postscript.casefold(): (style.body_regular, style.body_regular)
+       for style in glide_fonts.STYLES if style.body_postscript},
+    **{(style.body_postscript + "Italic").casefold():
+       (style.body_regular.replace("-SemiBold.ttf", "-SemiBoldItalic.ttf"),) * 2
+       for style in glide_fonts.STYLES if style.body_postscript},
 }
 
 
@@ -1663,11 +1680,12 @@ class RoundedButton(DeferredDrawCanvas):
 class ButtonFlow(tk.Frame):
     """Behält lesbare Buttonbreiten und bricht bei Bedarf in neue Zeilen um."""
 
-    def __init__(self, master, bg, gap=8, align="w"):
+    def __init__(self, master, bg, gap=8, align="w", on_layout=None):
         super().__init__(master, bg=bg)
         self.gap = gap
         # „e“ setzt die Knopfreihe rechts wie in den übrigen Dialogen (W05).
         self.align = align
+        self.on_layout = on_layout
         self.columnconfigure(0, weight=1)
         self.entries = []
         self.compact_keys = None
@@ -1723,7 +1741,14 @@ class ButtonFlow(tk.Frame):
                 row, column, used = row + 1, 0, 0
             try:
                 while len(self._rows) <= row:
-                    self._rows.append(tk.Frame(self, bg=bg))
+                    frame = tk.Frame(self, bg=bg)
+                    if self.on_layout is not None:
+                        # Der Größenwunsch wandert erst nach reflow durch
+                        # Grid und Pack. Die festen Eltern bleiben dabei
+                        # eventuell gleich groß; die fertig angeordnete Reihe
+                        # meldet deshalb den anschließenden Höhenabgleich.
+                        frame.bind("<Configure>", lambda _event: self.on_layout(), add="+")
+                    self._rows.append(frame)
                 frame = self._rows[row]
                 if column == 0:
                     frame.configure(bg=bg)
@@ -1736,6 +1761,8 @@ class ButtonFlow(tk.Frame):
             column += 1
         for frame in self._rows[row + 1 if visible else 0:]:
             frame.grid_remove()
+        if self.on_layout is not None:
+            self.on_layout()
 
 
 class ResponsiveColumns(tk.Frame):
@@ -2499,16 +2526,17 @@ class CanvasLabel(tk.Canvas):
         self._text_w, self._text_h = box[2] - box[0], box[3] - box[1]
         self._text_ink_top = 0
         if self._fit_ink:
-            font = tkfont.Font(root=self, font=o["font"])
-            metrics = bundled_glyph_metrics(font.actual("weight") == "bold", font.actual("family"),
+            font = ui_font_object(root=self, font=o["font"])
+            metrics = bundled_glyph_metrics(font.actual("weight") == "bold", font.cget("family"),
                                             font.actual("slant") == "italic")
             size = font.actual("size")
             pixels = -size if size < 0 else size * float(self.tk.call("tk", "scaling"))
             # Ein gemeinsamer Buchstabenrahmen hält Kopf/Logo beim Wechsel
             # zwischen Titeln still; zusätzlicher tatsächlicher Inhalt darf
             # den Rahmen nur erweitern, niemals eine Glyphe abschneiden.
+            einzeilig = "\n" not in o["text"] and (breite <= 0 or font.measure(o["text"]) <= breite)
             ink = (glide_glyphs.label_ink_box(metrics, o["text"] + "ÄÖÜgjpqß", pixels, font.metrics("ascent"))
-                   if self._text_h <= font.metrics("linespace") else None)
+                   if einzeilig else None)
             if ink is not None:
                 self._text_ink_top, self._text_h = ink
                 self._text_ids = [(haupt, 0, -self._text_ink_top)]
@@ -3012,7 +3040,7 @@ class DueField(tk.Frame):
                                              "muted", width=34, height=32)
 
     def _text_button(self, parent, label, command):
-        width = tkfont.Font(font=app_font(10, "bold")).measure(label) + 26
+        width = ui_font_object(font=app_font(10, "bold")).measure(label) + 26
         return self.app._make_dialog_button(parent, label, command, "import", width=width, height=34)
 
     def _add_hover(self, widget, base_bg, fg_hover=None):
@@ -3265,7 +3293,7 @@ class OptionRows(tk.Canvas):
         self.itemconfigure(self.window, width=self.winfo_width())
         self.configure(scrollregion=super().bbox("all"))
         # Lange Namen bleiben vollständig lesbar, auch auf kleinen Dialogen.
-        measure = tkfont.Font(font=self.rows[0][1].chip_font) if self.rows else None
+        measure = ui_font_object(font=self.rows[0][1].chip_font) if self.rows else None
         for index, (row, chip, mark) in enumerate(self.rows):
             text = self.options[index]
             available = max(50, self.winfo_width() - 65)
@@ -3370,7 +3398,7 @@ class AppOptionMenu(tk.Label):
         popup = self._popup = DropdownPopup(self, self.app, self._close_popup)
         surface = tk.Frame(popup, bg=theme["input"])
         surface.pack(fill="both", expand=True, padx=1, pady=1)
-        font = tkfont.Font(font=self.cget("font"))
+        font = ui_font_object(font=self.cget("font"))
         row_height = font.metrics("linespace") + 16
         choices = self._choices = OptionRows(surface, self.app, self.options, self.menu,
                                              self.cget("font"), min(7, len(self.options)) * row_height)
@@ -4573,8 +4601,9 @@ class SystemNavigation(ttk.Treeview):
         super().__init__(master, **kwargs)
         self.app = app
         self._icon_job = None
-        self.icon_canvas = tk.Canvas(self, width=28, bd=0, highlightthickness=0,
-                                     bg=app.theme["card"], takefocus=0)
+        self.icon_canvas = app.register_theme_widget(
+            tk.Canvas(self, width=28, bd=0, highlightthickness=0,
+                      bg=app.theme["card"], takefocus=0), "card")
         self.icon_canvas.place(x=0, y=0, width=28, relheight=1)
         for sequence in ("<Configure>", "<Expose>", "<<TreeviewSelect>>", "<Motion>", "<Leave>"):
             self.bind(sequence, self.schedule_icons, add="+")
@@ -5686,10 +5715,10 @@ class ItemWorkspace:
         row = ButtonFlow(parent, bg=self.app.theme["card"], gap=8)
         row.pack(fill="x", pady=(4, 10))
         for text, command, color in specs:
-            width = tkfont.Font(font=app_font(10, "bold")).measure(text) + 26
+            width = ui_font_object(font=app_font(10, "bold")).measure(text) + 26
             button = self.app._make_dialog_button(row, text, command, color, width=min(360, width), height=36)
             if width > 360:
-                button.set_text(self.truncate_lines(text, tkfont.Font(font=app_font(10, "bold")), 334, 1))
+                button.set_text(self.truncate_lines(text, ui_font_object(font=app_font(10, "bold")), 334, 1))
                 self.app.add_tooltip(button, text)
             row.add(button)
         return row
@@ -5880,7 +5909,7 @@ class ItemWorkspace:
                 short = self.tab_label(title)
                 button = app._make_dialog_button(
                     frame, short, command, "accent" if identity == self.mode else "muted",
-                    width=min(self.TAB_MAX_WIDTH, tkfont.Font(font=app_font(10, "bold")).measure(short)
+                    width=min(self.TAB_MAX_WIDTH, ui_font_object(font=app_font(10, "bold")).measure(short)
                               + self.TAB_TEXT_INSET), height=34)
                 if identity == self.mode:
                     button.configure(bg=app.theme["active"])
@@ -6559,7 +6588,7 @@ class ItemWorkspace:
             aktiv = bool(board.get(key))
             knopf = app._make_dialog_button(zeile, text, lambda k=key: self.configure_board(k, not self.board().get(k)),
                                             "muted",
-                                            width=tkfont.Font(font=app_font(10, "bold")).measure(text) + 30, height=34)
+                                            width=ui_font_object(font=app_font(10, "bold")).measure(text) + 30, height=34)
             if aktiv:
                 knopf.set_active(app.theme["active"], app.theme["active_text"])
             zeile.add(knopf)
@@ -6601,7 +6630,7 @@ class ItemWorkspace:
         """Die Aktionen der Pinnwand für die gemeinsame Zeile mit den Schaltern."""
         app = self.app
         knoepfe = []
-        schrift = tkfont.Font(font=app_font(10, "bold"))
+        schrift = ui_font_object(font=app_font(10, "bold"))
         for text, befehl, farbe in (("Anheften", self.choose_cards, "confirm"),
                                     ("Neue Aufgabe", lambda: self.create_card_item(24, 24), "confirm"),
                                     ("Bearbeiten", self.edit, "muted"),
@@ -6945,7 +6974,7 @@ class ItemWorkspace:
                                     fill=mix_hex_colors(app.theme["card"], farbe, 0.22), outline="", tags=tags)
             canvas.create_text(x + 12, y + self.AREA_HEADER / 2, anchor="w", font=app_font(10, "bold"),
                                fill=app.theme["text"], tags=tags,
-                               text=self.truncate_lines(area["name"], tkfont.Font(font=app_font(10, "bold")),
+                               text=self.truncate_lines(area["name"], ui_font_object(font=app_font(10, "bold")),
                                                         max(40, w - 24), 1))
             canvas.create_rectangle(x + w - self.AREA_GRIP, y + h - self.AREA_GRIP, x + w - 3, y + h - 3,
                                     fill=farbe, outline="", tags=tags)
@@ -7766,7 +7795,7 @@ class ItemWorkspace:
             return
         canvas.create_text(x + 18, y + hoehe / 2, anchor="w", font=app_font(10, "bold"),
                            fill=app.theme["text"], tags=(tag, "columnhead"),
-                           text=self.truncate_lines(column["title"], tkfont.Font(font=app_font(10, "bold")),
+                           text=self.truncate_lines(column["title"], ui_font_object(font=app_font(10, "bold")),
                                                     max(40, width - 90), 1))
         canvas.create_text(x + width - 30, y + hoehe / 2, anchor="e", font=app_font(9),
                            fill=app.theme["muted"], text=str(count), tags=(tag, "columnhead"))
@@ -8140,8 +8169,8 @@ class ItemWorkspace:
     def page_card_blocks(self, entry, width, faktor=1.0):
         app = self.app
         inner = max(60, width - 2 * self.CARD_PAD)
-        titel_font = tkfont.Font(font=app_font(max(9, min(16, int(round(11 * faktor)))), "bold"))
-        klein = tkfont.Font(font=app_font(8))
+        titel_font = ui_font_object(font=app_font(max(9, min(16, int(round(11 * faktor)))), "bold"))
+        klein = ui_font_object(font=app_font(8))
         blocks = []
         if not app.is_drawing_list(entry):
             excerpt, open_count = app.render_cached(
@@ -8263,9 +8292,9 @@ class ItemWorkspace:
         # Fußzeile bleiben lesbar gleich groß, sonst würde eine große Karte
         # bloß grob statt wichtig.
         titelgroesse = max(9, min(16, int(round(11 * faktor))))
-        title_font = tkfont.Font(font=app_font(titelgroesse, "bold"))
-        small_font = tkfont.Font(font=app_font(9))
-        chip_font = tkfont.Font(font=app_font(8, "bold"))
+        title_font = ui_font_object(font=app_font(titelgroesse, "bold"))
+        small_font = ui_font_object(font=app_font(9))
+        chip_font = ui_font_object(font=app_font(8, "bold"))
         blocks = []
 
         def zeile(text, font, farbe, lines=1, abstand=4, field=None):
@@ -8319,7 +8348,7 @@ class ItemWorkspace:
         fuss = app.item_display_text(source) if isinstance(source, str) else str(source.get("title", ""))
         if item.get("attachments"):
             fuss = f"{fuss}  ·  {app.ICONS['attachment']} {len(item['attachments'])}"
-        zeile(fuss, tkfont.Font(font=app_font(8)), app.theme["muted"], abstand=0)
+        zeile(fuss, ui_font_object(font=app_font(8)), app.theme["muted"], abstand=0)
         band = self.CARD_HEADER_BAND if self.board().get("color_mode") == "header" else 0
         hoehe = 2 * self.CARD_PAD + 6 + band + sum(block["hoehe"] + block["abstand"] for block in blocks)
         return blocks, max(self.CARD_MIN_HEIGHT, int(hoehe))
@@ -8470,7 +8499,7 @@ class ItemWorkspace:
         for element in canvas.find_all():
             kind = canvas.type(element)
             if kind == "text":
-                font = tkfont.Font(root=canvas, font=canvas.itemcget(element, "font"))
+                font = ui_font_object(root=canvas, font=canvas.itemcget(element, "font"))
                 size = font.actual("size")
                 font.configure(size=(1 if size >= 0 else -1)*max(1, round(abs(size)*factor)))
                 self._zoom_fonts.append(font)
@@ -8737,7 +8766,7 @@ class ItemWorkspace:
                 # Die Beschriftung sitzt in der Linienmitte auf einer kleinen
                 # Kartenfläche, damit sie auch über dem Hintergrund lesbar bleibt.
                 mitte_x, mitte_y = (x1 + x2) / 2, (y1 + y2) / 2
-                schrift = tkfont.Font(font=app_font(max(6, int(round(8 * zoom)))))
+                schrift = ui_font_object(font=app_font(max(6, int(round(8 * zoom)))))
                 text_breite = schrift.measure(eintrag["label"]) + 12 * zoom
                 flaeche = canvas.create_rectangle(
                     mitte_x - text_breite / 2, mitte_y - 9 * zoom, mitte_x + text_breite / 2, mitte_y + 9 * zoom,
@@ -9428,7 +9457,7 @@ class SavedViewWorkspace(ItemWorkspace):
         current = next(name for name, key in names.items() if key == self.effective_group_field())
         variable = tk.StringVar(master=self.body, value=current)
         border, _ = app._make_option_menu(flow, variable, list(names))
-        border.configure(width=max(180, tkfont.Font(font=app_font(11)).measure(max(names, key=len))+54), height=40)
+        border.configure(width=max(180, ui_font_object(font=app_font(11)).measure(max(names, key=len))+54), height=40)
         border.pack_propagate(False)
         flow.add(border)
         variable.trace_add('write', lambda *_: self.set_board_group_field(names[variable.get()]))
@@ -9436,7 +9465,7 @@ class SavedViewWorkspace(ItemWorkspace):
         for key, text in (('hide_empty', 'Leere Spalten ausblenden'), ('only_open', 'Nur offene')):
             button = app._make_dialog_button(flow, text,
                 lambda k=key: self.configure_board(k, not self.board()[k]), 'muted',
-                width=tkfont.Font(font=app_font(10, 'bold')).measure(text)+32, height=34)
+                width=ui_font_object(font=app_font(10, 'bold')).measure(text)+32, height=34)
             if definition[key]:
                 button.set_active(app.theme['active'], app.theme['active_text'])
             flow.add(button)
@@ -9743,7 +9772,7 @@ class RichNoteEditor(tk.Frame):
             mono = bool(active & {'code','codeblock'})
             key = f'font:{size}:{int(bold)}:{int(italic)}:{int(mono)}'
             if key not in self._fonts:
-                font = tkfont.Font(font=app_font(size, 'bold' if bold else 'normal'))
+                font = ui_font_object(font=app_font(size, 'bold' if bold else 'normal'))
                 font.configure(slant='italic' if italic else 'roman')
                 if mono:
                     font.configure(family='Courier New')
@@ -10029,7 +10058,8 @@ class PageEditor(RichNoteEditor):
         # damit die Seite dort beginnt, wo jede Liste beginnt.
         leiste_host = app.tool_band_host() if self.TOOLBAR_IN_BAND else None
         toolbar = ButtonFlow(leiste_host if leiste_host is not None else self,
-                             bg=theme['bg' if leiste_host is not None else 'card'], gap=6)
+                             bg=theme['bg' if leiste_host is not None else 'card'], gap=6,
+                             on_layout=app.schedule_fixed_layout_sync if leiste_host is not None else None)
         # In der äußeren Werkzeugzeile trennt CONTENT_TOOLBAR_GAP bereits
         # Leiste und Karte. Der alte Innenabstand würde ihre Höhe zusätzlich
         # vergrößern; eingebettete Werkzeuge behalten ihren Textabstand.
@@ -10040,7 +10070,7 @@ class PageEditor(RichNoteEditor):
         self._toolbar_buttons = {}
         for label, command in self.toolbar_items():
             knopf = app._make_dialog_button(toolbar, label, command, 'muted', height=30,
-                                            width=tkfont.Font(font=app_font(10, 'bold')).measure(label) + 26)
+                                            width=ui_font_object(font=app_font(10, 'bold')).measure(label) + 26)
             self._toolbar_buttons[label] = knopf
             toolbar.add(knopf)
         app.add_tooltip(self._toolbar_buttons['Mehr'], 'Weitere Aktionen dieser Seite, durchsuchbar')
@@ -10537,7 +10567,7 @@ class PageEditor(RichNoteEditor):
         try:
             if sichtbar and self._head_buttons and titel.winfo_manager() and getattr(self, '_head_fits', False):
                 # Senkrecht auf der Mitte der ersten Titelzeile, rechtsbündig zur Lesespalte.
-                linie = tkfont.Font(font=titel.cget('font')).metrics('linespace')
+                linie = ui_font_object(font=titel.cget('font')).metrics('linespace')
                 if getattr(self, '_title_icon', None) is not None:
                     linie = max(linie, self._title_icon.height())
                 oben = max(0, (linie - self.HEAD_ACTION_HEIGHT) // 2)
@@ -10562,7 +10592,7 @@ class PageEditor(RichNoteEditor):
             if breite > 1 and reserve:
                 rand = self._read_pad or 28
                 spalte = breite - rand - (self._title_right_pad or rand)
-                bedarf = tkfont.Font(font=titel.cget('font')).measure(titel.cget('text'))
+                bedarf = ui_font_object(font=titel.cget('font')).measure(titel.cget('text'))
                 self._head_fits = bedarf + self.HEAD_ACTION_GAP + reserve <= spalte
         except tk.TclError:
             pass
@@ -10612,7 +10642,7 @@ class PageEditor(RichNoteEditor):
                     ('cover', '+ Titelbild', self.show_cover_choices, 'Titelbild hinzufügen')):
                 if schluessel not in wanted:
                     continue
-                breite = tkfont.Font(font=app_font(9)).measure(beschriftung) + 28
+                breite = ui_font_object(font=app_font(9)).measure(beschriftung) + 28
                 # Wie alle Editorknöpfe nicht in app.buttons: der Kopf wird mit dem Editor neu gebaut,
                 # ein zerstörter Knopf in der Themenliste bräche den Designwechsel ab.
                 farbe = self.app.dialog_color(self.app.button_color_key('muted', beschriftung))
@@ -10794,7 +10824,7 @@ class PageEditor(RichNoteEditor):
         table = tk.Frame(self._live_host, bg=theme['card'])
         table.pack(fill='x')
         live_style = 'PageLive.Dialog.Treeview'
-        self.app.style.configure(live_style, rowheight=max(26, tkfont.Font(root=self.app.root, font=app_font(11)).metrics('linespace') + 6))
+        self.app.style.configure(live_style, rowheight=max(26, ui_font_object(root=self.app.root, font=app_font(11)).metrics('linespace') + 6))
         self.live_tree = ttk.Treeview(table, columns=('due',), show='tree', height=4, selectmode='browse', style=live_style)
         self.live_tree.column('#0', stretch=True, width=220)
         self.live_tree.column('due', stretch=False, width=110, minwidth=80)
@@ -10805,7 +10835,7 @@ class PageEditor(RichNoteEditor):
         suffix = {'archived': ' · im Archiv', 'trash': ' · im Papierkorb', 'missing': ' · Ziel fehlt'}.get(state, '')
         full_title = 'Live-Liste · ' + caption + suffix
         title.configure(text=full_title)
-        title_font = tkfont.Font(root=self.app.root, font=app_font(10, 'bold'))
+        title_font = ui_font_object(root=self.app.root, font=app_font(10, 'bold'))
         title.bind('<Configure>', lambda event: title.configure(
             text=self.app.shorten_to_width(full_title, title_font, max(1, event.width-8))))
         self.app.add_tooltip(title, full_title)
@@ -10933,7 +10963,7 @@ class PageEditor(RichNoteEditor):
             italic = 'italic' in active
             key = f'font:{size}:{int(bold)}:{int(italic)}:{int(mono)}'
             if key not in self._fonts:
-                font = tkfont.Font(font=app_font(size, 'bold' if bold else 'normal'))
+                font = ui_font_object(font=app_font(size, 'bold' if bold else 'normal'))
                 font.configure(slant='italic' if italic else 'roman')
                 if mono:
                     font.configure(family='Menlo' if IS_MACOS else 'Consolas' if IS_WINDOWS else 'DejaVu Sans Mono')
@@ -11208,7 +11238,7 @@ class PageEditor(RichNoteEditor):
                 hint = 'Im Papierkorb' if state == 'trash' else 'Ziel fehlt'
                 self.app.add_tooltip(box, hint + ' · ' + str((item or {}).get('text') or item_id))
                 label_font = app_font(9)
-                box.configure(width=tkfont.Font(font=label_font).measure(hint) + 30)
+                box.configure(width=ui_font_object(font=label_font).measure(hint) + 30)
                 box.create_text(24, 9, text=hint, anchor='w', font=label_font, fill=self.app.theme['muted'])
                 self.status.configure(text=hint + ' – Aufgabenzeile bleibt erhalten')
                 continue
@@ -12039,7 +12069,7 @@ class PageEditor(RichNoteEditor):
                                                    width=70, height=28)
             textart.pack(side='left', padx=(4, 2), pady=3)
             for label, tag in self.FORMAT_BAR_ITEMS:
-                breite = tkfont.Font(font=app_font(10, 'bold')).measure(label) + 22
+                breite = ui_font_object(font=app_font(10, 'bold')).measure(label) + 22
                 knopf = self.app._make_dialog_button(leiste, label, lambda t=tag: self.format(t) or
                                                      self.schedule_format_bar(), 'muted', width=breite, height=28)
                 knopf.pack(side='left', padx=2, pady=3)
@@ -13116,7 +13146,7 @@ class GalleryView(tk.Frame):
         for text, befehl in (("◂ Zurück zur Galerie", self.close_detail), ("◀", lambda: self.step_detail(-1)),
                              ("▶", lambda: self.step_detail(1)), ("Im System öffnen", self.open_external)):
             knopf = app._make_dialog_button(kopf, text, befehl, "muted",
-                                            width=tkfont.Font(font=app_font(10, "bold")).measure(text) + 28, height=32)
+                                            width=ui_font_object(font=app_font(10, "bold")).measure(text) + 28, height=32)
             knopf.pack(side="left", padx=(0, 6))
         tk.Label(kopf, text=f"{self.detail_index + 1} von {len(bilder)}", bg=theme["card"], fg=theme["muted"],
                  font=app_font(9)).pack(side="right")
@@ -13404,7 +13434,8 @@ class DrawingEditor(tk.Frame):
         # Werkzeugreihe in der festen Leiste über der Fläche (27.09.2026);
         # Kontextreihe und Farben bleiben bei der Zeichnung.
         wirt = self.app.tool_band_host()
-        top = ButtonFlow(wirt if wirt is not None else self, theme["bg" if wirt is not None else "card"], gap=6)
+        top = ButtonFlow(wirt if wirt is not None else self, theme["bg" if wirt is not None else "card"], gap=6,
+                         on_layout=self.app.schedule_fixed_layout_sync if wirt is not None else None)
         top.pack(fill="x", pady=(0, 2))
         self.bind("<Destroy>", lambda e, w=top: w.destroy() if e.widget is self and w.winfo_exists() else None,
                   add="+")
@@ -23625,7 +23656,7 @@ class ListApp:
         commands.append(("Verweise …", self.show_side_references))
         for title, command in commands:
             button = self._make_dialog_button(row, title, command, "muted",
-                width=max(84, tkfont.Font(font=app_font(10, "bold")).measure(title) + 24), height=32)
+                width=max(84, ui_font_object(font=app_font(10, "bold")).measure(title) + 24), height=32)
             if command == self.show_side_matches:
                 button._accessible_name = "Trefferübersicht der Nebenansichtssuche"
                 glide_core_accessibility.refresh(button)
@@ -24141,7 +24172,7 @@ class ListApp:
         rahmen = tk.Frame(parent, bg=theme["card"])
         rahmen.pack(fill="both" if fill else "x", expand=fill, pady=(4, 0))
         stil = "SideView.Dialog.Treeview"
-        zeile = max(26, tkfont.Font(root=self.root, font=app_font(11)).metrics("linespace") + 8)
+        zeile = max(26, ui_font_object(root=self.root, font=app_font(11)).metrics("linespace") + 8)
         self.style.configure(stil, rowheight=zeile)
         baum = ttk.Treeview(rahmen, name="side_view_tree", columns=("due",), show="tree", selectmode="browse",
                             style=stil, height=height or 10)
@@ -24158,7 +24189,7 @@ class ListApp:
         leiste.set_command(baum.yview)
         baum.configure(yscrollcommand=leiste.set)
         baum.pack(side="left", fill="both", expand=True)
-        schrift = tkfont.Font(root=self.root, font=app_font(11))
+        schrift = ui_font_object(root=self.root, font=app_font(11))
         einrueckung = schrift.measure("    ")
         zeilen = {}
         for row in rows:
@@ -25884,7 +25915,7 @@ class ListApp:
         """Glyphenrahmen der mitgelieferten UI-Schrift für `font_spec` – oder None."""
         try:
             font = self.measurement_font(font_spec)
-            familie = str(font.actual("family"))
+            familie = str(font.cget("family"))
             fett = str(font.actual("weight")) == "bold"
         except (tk.TclError, AttributeError, TypeError, ValueError):
             return None
@@ -28549,7 +28580,7 @@ class ListApp:
             return container.inner
 
         def action(parent, text, command, color="accent", side=None, pady=3):
-            width = tkfont.Font(font=app_font(10, "bold")).measure(text) + 30
+            width = ui_font_object(font=app_font(10, "bold")).measure(text) + 30
             button = _ui.make(self._make_dialog_button, parent, text, command, theme[color],
                                                width=width, height=40)
             if isinstance(parent, ButtonFlow):
@@ -29453,7 +29484,7 @@ class ListApp:
         editing = bool(getattr(self, "_templates_editing", False))
         self.template_rows = []
         self.template_cards = []
-        title_font = tkfont.Font(root=self.root, font=app_font(11, "bold"))
+        title_font = ui_font_object(root=self.root, font=app_font(11, "bold"))
         # Gemeinsame Namensspalte nach Textmaß statt 40 % der Fensterbreite.
         title_width = min(230, max((title_font.measure(t.get("title", "Vorlage"))
                                    for t in self.templates), default=100) + 8)
@@ -29823,7 +29854,7 @@ class ListApp:
         self.library_open_buttons = {}
         self._library_images = []
         if created_grid:
-            cache["button_font"] = tkfont.Font(root=self.root, font=app_font(10, "bold"))
+            cache["button_font"] = ui_font_object(root=self.root, font=app_font(10, "bold"))
         button_font = cache["button_font"]
 
         def reveal_focused_button(event):
@@ -31471,9 +31502,11 @@ class ListApp:
         family = "TkDefaultFont"
         try:
             available = self.available_font_families()
-            if requested and requested in available:
-                family = requested
-            else:
+            if requested and glide_fonts.actual_family(requested) in available:
+                probe = tkfont.Font(root=self.root, family=requested, size=11)
+                if probe.actual("family") == glide_fonts.actual_family(requested):
+                    family = requested
+            if family == "TkDefaultFont":
                 preferred = next((candidate for candidate in self.PREFERRED_UI_FONTS if candidate in available), None)
                 actual = tkfont.nametofont("TkDefaultFont", root=self.root).actual("family")
                 family = preferred or actual or family
@@ -31700,7 +31733,7 @@ class ListApp:
         """
         messung = font or app_font(10, "bold")
         try:
-            schrift = tkfont.Font(font=messung)
+            schrift = ui_font_object(font=messung)
         except tk.TclError:
             schrift = None
         gedehnt = stretch or (spalten[0][0] if spalten else None)
@@ -36270,7 +36303,7 @@ class ListApp:
             popup.bind(sequenz, lambda _e: waehlen(stand["index"]))
         hervorheben(stand["index"])
         popup.update_idletasks()
-        messung = tkfont.Font(font=app_font(9))
+        messung = ui_font_object(font=app_font(9))
         breite = width or min(460, max(280, max(
             messung.measure(hinweis) for _k, _n, hinweis in options) + 70))
         popup.show(breite, popup.winfo_reqheight(), align=align)
@@ -37338,7 +37371,13 @@ class ListApp:
         parts = self.root.tk.splitlist(spec) if isinstance(spec, str) else tuple(spec)
         # Benannte Tk-Schriften können außerhalb der Einstellungen geändert werden.
         if len(parts) == 1:
-            parts = tuple(self.root.tk.splitlist(self.root.tk.call("font", "actual", parts[0])))
+            try:
+                # AppKit meldet für einen SemiBold-Schnitt die Stammfamilie;
+                # der Cache muss den angeforderten Schnitt unterscheiden.
+                operation = "configure" if IS_MACOS or IS_LINUX else "actual"
+                parts = tuple(self.root.tk.splitlist(self.root.tk.call("font", operation, parts[0])))
+            except tk.TclError:
+                parts = tuple(self.root.tk.splitlist(self.root.tk.call("font", "actual", parts[0])))
         return parts, float(self.root.tk.call("tk", "scaling"))
 
     def measurement_font(self, spec):
@@ -37350,7 +37389,7 @@ class ListApp:
             if len(cache) >= 128:
                 cache.clear()
                 self._measurement_linespaces = {}
-            cache[key] = tkfont.Font(root=self.root, font=spec)
+            cache[key] = ui_font_object(root=self.root, font=spec)
         return cache[key]
 
     def measurement_linespace(self, spec):
@@ -42273,7 +42312,9 @@ class ListApp:
 
         title_block = self.register_theme_widget(tk.Frame(top_frame, bg=self.theme["bg"]), "bg")
         self.title_block = title_block
-        title_block.pack(side="left", fill="x", expand=True)
+        # Kennzahlen verschiedener Ansichten dürfen den Titelblock nicht
+        # innerhalb der festen Kopfhöhe um einen Pixel neu zentrieren.
+        title_block.pack(side="left", fill="x", expand=True, anchor="n")
 
         # Bis 27.09.2026 stand hier über dem Titel der Ordnerpfad. Er schob die
         # Ansicht von Seiten in Ordnern nach unten; der Nutzer will feste
@@ -42978,7 +43019,7 @@ class ListApp:
         # Packreihenfolge; dadurch behalten Fortschrittszeile und Design-Schalter
         # ihre Breite auch dann, wenn ein Listentitel sehr lang ist.
         self.title_block.pack_forget()
-        self.title_block.pack(side="left", fill="x", expand=True)
+        self.title_block.pack(side="left", fill="x", expand=True, anchor="n")
         self.update_header_title()
         self.create_home_panel()
         self.workspace = SavedViewWorkspace(self)
@@ -43553,7 +43594,7 @@ class ListApp:
             schluessel = str(label.cget("font"))
             font = getattr(self, "_header_title_measure_font", None)
             if font is None or getattr(self, "_header_title_measure_key", None) != schluessel:
-                font = tkfont.Font(root=self.root, font=label.cget("font"))
+                font = ui_font_object(root=self.root, font=label.cget("font"))
                 self._header_title_measure_font = font
                 self._header_title_measure_key = schluessel
             # Der Titel ist ein CanvasLabel: Er braucht zur Schriftbreite noch
@@ -43885,6 +43926,9 @@ class ListApp:
             except tk.TclError:
                 pass
         self.refresh_tree()
+        navigation = getattr(self, "system_listbox", None)
+        if isinstance(navigation, SystemNavigation):
+            navigation.schedule_icons()
         self._schedule_windows_chrome_theme(self.root)
         self.rebuild_backdrop_menu()
         self.refresh_backdrop()
@@ -45738,7 +45782,7 @@ class ListApp:
                 baum, text, befehl, "accent", width=200, height=36, bg_key="card", font=app_font(10, "bold"))
         knopf.command = befehl
         knopf.set_text(text)
-        knopf.configure(width=tkfont.Font(font=app_font(10, "bold")).measure(text) + 40)
+        knopf.configure(width=ui_font_object(font=app_font(10, "bold")).measure(text) + 40)
         oben = self.empty_state_top(baum, hinweis)
         knopf.place(x=24, y=oben)
         # Canvas.lift hebt Zeichenelemente; das Widget selbst hebt „raise“.
@@ -47886,7 +47930,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 ("Verschieben …", snooze, "due_action"), ("Aufgabe erledigen", lambda: change("complete"), "confirm"),
                 ("Hinweis bestätigen", lambda: change("acknowledge"), "muted"),
                 ("Schließen", dialog.destroy, "muted")):
-            width = max(124, tkfont.Font(font=app_font(10, "bold")).measure(text) + 32)
+            width = max(124, ui_font_object(font=app_font(10, "bold")).measure(text) + 32)
             actions.add(self._make_dialog_button(actions, text, command, color, width=width))
         tree.bind("<<TreeviewSelect>>", details)
         tree.bind("<Double-Button-1>", open_task)
@@ -49674,6 +49718,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         signature = (identity, seite, tuple(sorted(self.theme.items())))
         if editor is not None and (not visible or getattr(self, "_rich_note_signature", None) != signature):
             editor.flush()
+            # Speichern kann synchron die Ansicht erneuern. Dann hat der
+            # innere Durchlauf bereits den neuen Editor samt Werkzeugleiste
+            # eingesetzt; dessen Referenz darf der äußere nicht verwerfen.
+            if getattr(self, "rich_note_editor", None) is not editor:
+                return
             editor.destroy()
             self.rich_note_editor = editor = None
         if not visible:
@@ -52097,25 +52146,41 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if kopf is None or not hasattr(self, "title_row"):
             return
         try:
-            schrift = tkfont.Font(root=self.root, font=app_font(9, "bold"))
+            skala = float(self.root.tk.call("tk", "scaling"))
+            schluessel = (self.settings.get("ui_font_size"), self.settings.get("ui_font_family"),
+                          self.design_name() if hasattr(self, "design_name") else None, skala)
+            if getattr(self, "_header_height_key", None) != schluessel:
+                self._header_height_key = schluessel
+                self._header_fixed_height = 0
+                self._subtitle_fixed_height = 0
+                self._subtitle_reference_height = 0
             # Seit dem 02.11.2026 stehen die Labelchips in der Kartenecke; die
             # Unterzeile trägt nur noch Kennzahlen als Text. Die frühere
             # Chipreserve von 4 px schob den Inhalt bei 1280 × 800 über 15 %.
-            metrics = bundled_glyph_metrics(True, schrift.actual("family"))
-            size = schrift.actual("size")
-            pixels = -size if size < 0 else size * float(self.root.tk.call("tk", "scaling"))
-            ink = glide_glyphs.label_ink_box(metrics, "ÄÖÜgj", pixels, schrift.metrics("ascent"))
-            chipzeile = max(self.subtitle_row.winfo_reqheight(), ink[1] if ink else schrift.metrics("linespace"))
+            # Normal, Bold und Italic unterscheiden sich auf manchen Rastern
+            # um einen Pixel. Alle drei Rollen belegen dieselbe feste Zeile.
+            if not self._subtitle_reference_height:
+                for auszeichnung in ((), ("bold",), ("italic",)):
+                    schrift = self.measurement_font(app_font(9, *auszeichnung))
+                    metrics = bundled_glyph_metrics("bold" in auszeichnung, schrift.cget("family"),
+                                                    "italic" in auszeichnung)
+                    size = schrift.actual("size")
+                    pixels = -size if size < 0 else size * skala
+                    ink = glide_glyphs.label_ink_box(metrics, "ÄÖÜgjpqß", pixels, schrift.metrics("ascent"))
+                    self._subtitle_reference_height = max(self._subtitle_reference_height,
+                        ink[1] if ink else schrift.metrics("linespace"))
+            kinderhoehe = max((kind.winfo_reqheight() for kind in self.subtitle_row.pack_slaves()), default=0)
+            chipzeile = max(self._subtitle_reference_height, kinderhoehe, self._subtitle_fixed_height)
+            self._subtitle_fixed_height = chipzeile
+            if self.subtitle_row.pack_propagate():
+                self.subtitle_row.pack_propagate(False)
+            if int(self.subtitle_row.cget("height")) != chipzeile:
+                self.subtitle_row.configure(height=chipzeile)
             # Die Glyphenmessung schützt bereits beide Textkanten. Ein Pixel
             # zusätzlicher Abschluss genügt; die Werkzeugzeile hält darunter
             # ihren eigenen Abstand und darf nicht um eine zweite Reserve wachsen.
             noetig = max(self.title_row.winfo_reqheight() + chipzeile,
                          self.header_controls.winfo_reqheight() + 4) + 1
-            schluessel = (self.settings.get("ui_font_size"), self.settings.get("ui_font_family"),
-                          self.design_name() if hasattr(self, "design_name") else None)
-            if getattr(self, "_header_height_key", None) != schluessel:
-                self._header_height_key = schluessel
-                self._header_fixed_height = 0
             hoehe = max(noetig, getattr(self, "_header_fixed_height", 0))
             self._header_fixed_height = hoehe
             if kopf.pack_propagate():
@@ -64903,7 +64968,7 @@ Labels, Termine und Metadaten."""
         beschriftung = "Normalansicht"
         self.compact_exit_button = self.make_button(
             rechts, beschriftung, self.leave_compact_mode, "muted",
-            width=tkfont.Font(font=app_font(9, "bold")).measure(beschriftung) + 30, height=hoehe,
+            width=ui_font_object(font=app_font(9, "bold")).measure(beschriftung) + 30, height=hoehe,
             font=app_font(9, "bold"))
         self.compact_menu_button = self.make_button(rechts, self.ICONS["overflow"], self.show_compact_menu, "muted",
                                                     width=42, height=hoehe, font=app_font(16))
@@ -64941,7 +65006,7 @@ Labels, Termine und Metadaten."""
             breite = label.winfo_width()
             text = voll
             if breite > 1:
-                text = self.shorten_to_width(voll, tkfont.Font(root=self.root, font=label.cget("font")), breite - 2)
+                text = self.shorten_to_width(voll, ui_font_object(root=self.root, font=label.cget("font")), breite - 2)
             if label.cget("text") != text:
                 label.configure(text=text)
         except tk.TclError:
@@ -65720,7 +65785,7 @@ Labels, Termine und Metadaten."""
         glide_core_accessibility.bind_entry(eingabe, title + ": Aktionen durchsuchen",
                                             help="Tippen filtert. Pfeil auf und ab wählt, Enter führt aus, Esc schließt.")
         stil = "ActionChooser.Treeview"
-        zeile = max(26, tkfont.Font(root=self.root, font=app_font(10)).metrics("linespace") + 10)
+        zeile = max(26, ui_font_object(root=self.root, font=app_font(10)).metrics("linespace") + 10)
         try:
             self.style.configure(stil, background=flaeche, fieldbackground=flaeche, foreground=theme["text"],
                                  borderwidth=0, relief="flat", font=app_font(10), rowheight=zeile)
@@ -65734,7 +65799,7 @@ Labels, Termine und Metadaten."""
         # Häkchen in eigener schmaler Spalte: Beschriftungen beginnen an derselben Kante.
         baum = ttk.Treeview(rahmen, name="action_chooser_tree", columns=("mark", "label", "where"), show=(),
                             selectmode="browse", style=stil, height=self.ACTION_CHOOSER_ROWS)
-        schrift = tkfont.Font(root=self.root, font=app_font(10))
+        schrift = ui_font_object(root=self.root, font=app_font(10))
         markenbreite = schrift.measure(self.ICONS["check"]) + 14
         nutzbar = breite - 2 * 10 - 8 - 6
         baum.column("mark", width=markenbreite, minwidth=markenbreite, stretch=False, anchor="center")
@@ -66257,7 +66322,7 @@ Labels, Termine und Metadaten."""
                 # posten. Unsere Menüs gehören aus Kompatibilitätsgründen zum
                 # zentralen Menübaum; ein normaler Button mit tk_popup ist hier
                 # deshalb unter Windows robuster.
-                width = tkfont.Font(font=app_font(9)).measure(label) + 16
+                width = ui_font_object(font=app_font(9)).measure(label) + 16
                 button = self.make_button(self.custom_menubar, label, None, "muted", width=width,
                                           height=self.HEADER_CONTROL_HEIGHT, radius=10, font=app_font(9),
                                           outline=False)
@@ -67029,7 +67094,7 @@ class TemplateDraft(ListApp):
         # Nur die Zeilenhöhe wird für die einfache Vorlagenzeile festgelegt.
         style = ttk.Style(dialog)
         style.configure("Template.App.Treeview", font=self.tree_font(),
-                        rowheight=max(36, tkfont.Font(font=self.tree_font()).metrics("linespace") + 12))
+                        rowheight=max(36, ui_font_object(font=self.tree_font()).metrics("linespace") + 12))
         self.editor_tree = ttk.Treeview(
             tree_area, columns=("kind", "labels", "due"), displaycolumns=("kind", "due", "labels"),
             show="tree", style="Template.App.Treeview", selectmode="browse", height=10, takefocus=True,
@@ -67137,7 +67202,7 @@ class TemplateDraft(ListApp):
         width = tree.winfo_width()
         if width < 100:
             return
-        font = tkfont.Font(font=self.tree_font())
+        font = ui_font_object(font=self.tree_font())
         due_values = [tree.set(key, "due") for key in getattr(self, "nodes", {})]
         due_width = max((font.measure(value) + 20 for value in due_values if value), default=0)
         has_labels = any(tree.set(key, "labels") for key in getattr(self, "nodes", {}))

@@ -1,10 +1,10 @@
 # Glide – lokale Aufgaben, Notizen und Pinnwände
 
-Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 04.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Sie läuft lokal mit Python 3.14 und Tk 9 (Tk 8.6 eingeschränkt), braucht weder Konto noch Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
-> **Projektstatus:** Lokaler Quell-/Python-/Showcase-Stand **3.50.2**, Aufgabenformat 26. Themenflächen und korrigierte Schriftstile einschließlich kräftigerer Serifenschriften sowie Kopf-/Flächenkorrektur sind enthalten. Die vorhandenen eigenständigen Pakete tragen 3.50.0; eine neue Remote-Vollmatrix für 3.50.2 liegt noch nicht vor. [Aktueller Audit- und Liefernachweis](tests/qa-3.50.2/ablageabgleich_2026-11-03/README.md). Menschliche Bedien-/DPI-Abnahme separat; Reader nach D58 bis Bedarf zurückgestellt.
+> **Projektstatus:** Lokaler Quell-/Python-/Showcase-Stand **3.50.2**, Aufgabenformat 26. Themenflächen, vier Schriftstile und UI-Reparaturen sind enthalten. Reguläre vorhandene Lieferpakete tragen 3.50.0. Der neue Mac-CI-Paketlauf #31 auf `5f99b8fa` besteht die isolierte Startprobe; die Vollmatrix #250 bleibt mit weiteren Linux-/Windows-UI-Befunden rot. Die Folgereparatur wird getrennt validiert. [Aktueller Prüf- und Liefernachweis](tests/qa-3.50.2/ci247_2026-11-03/README.md). Menschliche Bedien-/DPI-Abnahme separat; Reader nach D58 bis Bedarf zurückgestellt.
 
 Funktionsumfang im Überblick: [Projekt-README](../../README.md#was-glide-kann); Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md); Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 
