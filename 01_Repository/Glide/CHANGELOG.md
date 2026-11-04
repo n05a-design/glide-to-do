@@ -2,6 +2,7 @@
 
 ## 3.50.2 (03.11.2026) – Versions- und Ablageabgleich
 
+- Nach Merge-Lauf #254: Bildscrolltest wartet auf fertiges Layout und prüft alle echten Bildanker gegen die native Tk-Textklasse. Einheitensprünge und wirkungslose Handler erhalten eigene Defektgegenproben; UI-Nachlauf prüft zusätzlich alle 17 UI-/UX-Verträge. Anwendung unverändert.
 - Folgereparatur nach CI #250: Linux-Schriftalias und Symbolfläche, feste Kennzahlenzeile sowie Höhenabgleich nach Werkzeugumbruch. Separater nativer UI-Nachlauf über alle 45 Fälle; vollständige Pushprüfungen bleiben erhalten. Mac-Paket #31 mit isolierter Startprobe auf dem ersten Reparaturcommit grün.
 - Nach CI #247/#248: Kopfknöpfe bleiben bei geänderter Kennzahlenhöhe stehen; beim synchronen Speichern/Ansichtswechsel bleibt genau ein Seiteneditor mit seiner Werkzeugleiste aktiv.
 - Mac-Paket: originale SemiBold-/Italic-Schnitte per PostScript-Namen auswählen und beim Kopieren einer Tk-Schrift erhalten; tatsächliche Stammfamilie getrennt prüfen. [Fehler, Gegenproben und neue Laufgrenzen](tests/qa-3.50.2/ci247_2026-11-03/README.md).

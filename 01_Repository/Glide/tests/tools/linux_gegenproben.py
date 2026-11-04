@@ -74,6 +74,13 @@ CASES = (
      'def _on_mousewheel(self, event, widget, precise=False):\n        self.note_scrolling()',
      'def _on_mousewheel(self, event, widget, precise=False):\n        return "break"\n        self.note_scrolling()',
      'Scrollereignisse bewegen die lange Prüfansicht nicht'),
+    ("bildscrollen", "test_uiux_paket.py",
+     'if delta and self._scroll_text_like_class(widget, delta):',
+     'if False:', 'Sprung über Bild', ('--fall', 'b16')),
+    ("bildscrollen-ohne-wirkung", "test_uiux_paket.py",
+     'def _scroll_text_like_class(self, widget, delta, precise=False):\n        """',
+     'def _scroll_text_like_class(self, widget, delta, precise=False):\n        return True\n        """',
+     'Sprung über Bild', ('--fall', 'b16')),
     ("datum", "test_planen33313.py",
      # Kontext bis „if review:“: dieselbe Zeile steht seit 3.47.0 auch im Startseiten-Einplanen.
      'day = value[0]\n        else:\n            day = shown_day or glide_planning.target_day(choice, date.today(), '

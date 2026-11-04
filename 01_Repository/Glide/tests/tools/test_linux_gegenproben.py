@@ -44,6 +44,20 @@ class MutationTests(unittest.TestCase):
             result = json.loads((root / "logs/ergebnis.json").read_text(encoding="utf-8"))
             self.assertFalse(result["gegenproben"][0]["gegenprobe_rot"])
 
+    def test_image_scroll_faults_require_their_green_uiux_basis(self):
+        for name in ("bildscrollen", "bildscrollen-ohne-wirkung"):
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as folder:
+                root = Path(folder)
+                basis = root / "basis.json"
+                basis.write_text(json.dumps({"schritte": []}), encoding="utf-8")
+                argv = ["linux_gegenproben", "--protokoll", str(root / "logs"),
+                        "--fall", name, "--basis-ergebnis", str(basis)]
+                with mock.patch("sys.argv", argv), contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(linux_gegenproben.main(), 1)
+                result = json.loads((root / "logs/ergebnis.json").read_text(encoding="utf-8"))
+                self.assertEqual(result["gegenproben"][0]["suite"], "test_uiux_paket.py")
+                self.assertFalse(result["gegenproben"][0]["gegenprobe_rot"])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -24,7 +24,7 @@ D58: Commit/Push und verfügbare Hosted-Plattformprüfungen sind für den Abschl
 
 Unter Windows die geprüfte Python-3.14-/Tk-9-Laufzeit oder `windows_vollpruefung.ps1 -PythonExecutable <Pfad>` verwenden; `--timeout 900` ist dort mit Virenschutz und synchronisiertem Ordner realistischer als die Vorgabe von 300 Sekunden je Suite. Kein `pytest`: Die Suiten sind ausführbare Skripte, die beim Import ein Tk-Fenster öffnen.
 
-Für native UI-Fehlersuche in GitHub Actions „Glide-Prüfung“ manuell mit `bereich: ui-nachlauf` auf dem Reparaturzweig starten. Dieser Lauf prüft alle 45 Arbeitsmodi mit eigener Tk 9.1 unter Linux/Xvfb und Windows und sichert beide JSON-Berichte. Seine getrennte Laufgruppe unterbricht die normale Push-Vollmatrix nicht. Er ersetzt weder Vollprüfung und positive Kalibrierungsbasis noch Paketnachweis oder menschliche Abnahme; diese Tore bleiben im normalen Pushlauf erhalten.
+Für native UI-Fehlersuche in GitHub Actions „Glide-Prüfung“ manuell mit `bereich: ui-nachlauf` auf dem Reparaturzweig starten. Dieser Lauf prüft zuerst alle 17 UI-/UX-Verträge (einschließlich Bildscrollen B16), danach alle 45 Arbeitsmodi mit eigener Tk 9.1 unter Linux/Xvfb und Windows und sichert die JSON-Berichte. Seine getrennte Laufgruppe unterbricht die normale Push-Vollmatrix nicht. Er ersetzt weder Vollprüfung und positive Kalibrierungsbasis noch Paketnachweis oder menschliche Abnahme; diese Tore bleiben im normalen Pushlauf erhalten.
 
 ## Aufbau
 
