@@ -1,6 +1,6 @@
 # Glide – Analyse: Funktionen, Oberfläche, Entscheidungen, Nutzung
 
-**Aktueller Techniknachlauf 3.50.2:** Drei rote CI-Auslöser reproduziert/eingegrenzt und repariert, gezielter lokaler Abschluss grün. [Befunde §13.26](#1326-ci-247248-und-mac-paket-29), [Aufgaben und Grenzen §21.61](Glide_Entwicklungsplan.md#2161-ci-247248-kopfknöpfe-editorlebensdauer-und-mac-schriften).
+**Aktueller Techniknachlauf 3.50.2, 04.11.2026:** Erste Reparatur `5f99b8fa` bestätigt den Mac-Paketstart (#31 grün). Vollmatrix #250 bleibt mit drei Linux- und einem Windows-Befund in den Arbeitsmodi rot; weitere Reparatur und erneuter nativer Nachweis folgen. [Befunde §13.26](#1326-ci-247248-und-mac-paket-29), [Aufgaben und Grenzen §21.61](Glide_Entwicklungsplan.md#2161-ci-247248-kopfknöpfe-editorlebensdauer-und-mac-schriften).
 
 **Datierter Datei-/Dokumentabgleich vor CI #247/#248:** Quelle/Python/Showcase 3.50.2, vorhandene native Pakete 3.50.0. Befunde und Grenzen in [§13.25](#1325-versions--und-ablageabgleich-3502), Aufgabenstatus im [Plan §21.60](Glide_Entwicklungsplan.md#2160-versionswechsel-und-gesamtprüfung-3502). Frühere Untersuchungen und Messwerte bleiben datiert.
 

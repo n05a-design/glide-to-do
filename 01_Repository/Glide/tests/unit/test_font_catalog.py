@@ -49,7 +49,8 @@ class CatalogTests(unittest.TestCase):
             for platform in ("win32", "linux"):
                 self.assertEqual(style.family_for_platform(platform), style.body_family)
                 self.assertEqual(family_for_weight(style.tk_family, italic=True, platform=platform), style.body_family)
-                self.assertEqual(actual_family(style.body_family, platform), style.body_family)
+                self.assertEqual(actual_family(style.body_family, platform),
+                                 style.tk_family if platform == "linux" else style.body_family)
 
     def test_postscript_names_belong_to_bundled_original_faces(self):
         fonts = Path(__file__).resolve().parents[2] / "src/glide/resources/fonts"
@@ -79,6 +80,15 @@ class CatalogTests(unittest.TestCase):
         self.assertIsNone(face_options((face, 12), "win32"))
         self.assertIsNone(face_options(("Rubik", 12), "darwin"))
         self.assertIsNone(face_options(("TkDefaultFont",), "darwin"))
+
+    def test_fontconfig_alias_keeps_the_semibold_face_when_actual_reports_base(self):
+        for style in STYLES:
+            if not style.body_family:
+                continue
+            self.assertEqual(actual_family(style.body_family, "linux"), style.tk_family)
+            description = (style.body_family, 11, "italic")
+            self.assertEqual(face_options(description, "linux")["family"], style.body_family)
+            self.assertEqual(face_options(description, "linux")["slant"], "italic")
 
     def test_empty_legacy_and_invalid_choices_use_current_default(self):
         for value in ("", None, "DejaVu Sans", "Glide Sans", "Unbekannt"):

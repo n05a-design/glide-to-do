@@ -2869,7 +2869,8 @@ def fall_eckenlabels(lauf):
             if leiste is not None and leiste.winfo_ismapped():
                 assert not schneidet(chips, rechteck(leiste)), (breite, name)
             # Der Kopf trägt keine Labels mehr und behält seine Höhe.
-            assert app.subtitle_row.winfo_height() == kopf, (breite, name)
+            assert app.subtitle_row.winfo_height() == kopf, (breite, name, kopf,
+                                                           app.subtitle_row.winfo_height())
         app.open_list_view()
         for voll in (False, True):
             app.settings["page_full_width"] = voll
@@ -3145,8 +3146,15 @@ def fall_beta350(lauf):
     # Abbruch und Schreibschutz dürfen weder Text noch gespeicherte Bytes ändern.
     app.sidebar_listbox.focus_force()
     idle(lauf)
+    # Fokusverlust darf speichern und die Darstellung erneuern. Der folgende
+    # echte Griffzug gehört zur weiterhin geöffneten Seite und ihrem aktuellen
+    # Editor, nicht zu einer zuvor festgehaltenen Widgetinstanz.
+    assert app.current_list()["id"] == page["id"]
+    editor = app.rich_note_editor
+    assert editor is not None and editor.entry_id == page["id"]
     editor.show_block_handle('1.0', 'pointer')
     idle(lauf)
+    handle = editor._block_handle
     before = editor.document()
     saved = Path(mod.SAVE_FILE).read_bytes()
     handle.event_generate('<ButtonPress-1>', x=3, y=3)
@@ -3310,7 +3318,10 @@ def fall_schriftstile(lauf):
             app.show_settings_dialog()
         idle(lauf)
         assert app.settings["ui_font_family"] == style.family
-        assert app.ui_font_family() == style.default_family, (style.label, app.ui_font_family())
+        assert app.ui_font_family() == style.default_family, (
+            style.label, app.ui_font_family(), style.default_family,
+            mod.tkfont.Font(root=lauf.root, family=style.default_family, size=12).actual(),
+            [name for name in app.available_font_families() if 'playfair' in name.lower() or 'fraunces' in name.lower()])
         for gewicht in ("normal", "bold"):
             for neigung in ("roman", "italic"):
                 familie = mod.glide_fonts.family_for_weight(style.default_family, gewicht == "bold", neigung == "italic")
@@ -3391,7 +3402,8 @@ def fall_kartenflaechen(lauf):
                 farbe = app.style.lookup(stil, option)
                 assert farbe == card, (kontext, name, stil, option, farbe, card)
             if hasattr(baum, "icon_canvas"):
-                assert baum.icon_canvas.cget("bg") == card, (kontext, name, "Symbolfläche")
+                assert baum.icon_canvas.cget("bg") == card, (kontext, name, "Symbolfläche",
+                                                           baum.icon_canvas.cget("bg"), card)
         for karte in (app.sidebar_shell, app.list_frame_outer):
             assert karte.fill_color == card, (kontext, str(karte), karte.fill_color, card)
             assert karte.inner.cget("bg") == card

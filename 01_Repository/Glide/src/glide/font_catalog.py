@@ -85,27 +85,31 @@ def family_for_weight(family, bold=False, italic=False, platform=None):
 
 
 def actual_family(family, platform=None):
-    """Von Tk gemeldete Familie; ein Mac-Schnitt meldet seine Stammfamilie."""
-    if (platform or sys.platform) == "darwin":
+    """Native Stammfamilie für AppKit- und Fontconfig-Schnittnamen."""
+    native = platform or sys.platform
+    if native in ("darwin", "linux"):
         key = str(family or "").casefold()
         for style in STYLES:
-            if style.body_postscript and key in (style.body_postscript.casefold(),
-                                                (style.body_postscript + "Italic").casefold()):
+            names = ((style.body_postscript, style.body_postscript + "Italic") if native == "darwin"
+                     else (style.body_family,))
+            if style.body_family and key in {name.casefold() for name in names}:
                 return style.tk_family
     return family
 
 
 def face_options(description, platform=None):
-    """Einen konkreten Mac-Schnitt beim Kopieren eines Tk-Tupels erhalten.
+    """Einen konkreten Schnitt beim Kopieren eines Tk-Tupels erhalten.
 
     tkinter.Font löst Tupel über `font actual` auf. AppKit meldet dabei nur
-    die Stammfamilie; ein erneuter Aufbau würde den 600er-Schnitt verlieren.
+    die Stammfamilie, ebenso Fontconfig bei Familienaliasen; ein erneuter
+    Aufbau würde den 600er-Schnitt verlieren.
     Benannte und gewöhnliche Schriften bleiben auf dem normalen Tk-Weg.
     """
-    if (platform or sys.platform) != "darwin" or len(description) < 2:
+    native = platform or sys.platform
+    if native not in ("darwin", "linux") or len(description) < 2:
         return None
     family = description[0]
-    if actual_family(family, "darwin") == family:
+    if actual_family(family, native) == family:
         return None
     styles = " ".join(str(value) for value in description[2:]).split()
     return {"family": family, "size": int(description[1]),

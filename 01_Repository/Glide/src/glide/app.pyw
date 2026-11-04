@@ -285,9 +285,9 @@ _APP_FONT_CACHE = weakref.WeakKeyDictionary()
 
 
 def ui_font_object(root=None, font=None, **options):
-    """Mess-/Zeichenschrift aus einem Tupel ohne Verlust des Mac-Schnitts."""
+    """Mess-/Zeichenschrift aus einem Tupel ohne Verlust des konkreten Schnitts."""
     root = root or getattr(tk, "_default_root", None)
-    if IS_MACOS and font is not None and root is not None:
+    if (IS_MACOS or IS_LINUX) and font is not None and root is not None:
         description = root.tk.splitlist(str(font)) if not isinstance(font, (tuple, list)) else font
         face = glide_fonts.face_options(description)
         if face is not None:
@@ -1680,11 +1680,12 @@ class RoundedButton(DeferredDrawCanvas):
 class ButtonFlow(tk.Frame):
     """Behält lesbare Buttonbreiten und bricht bei Bedarf in neue Zeilen um."""
 
-    def __init__(self, master, bg, gap=8, align="w"):
+    def __init__(self, master, bg, gap=8, align="w", on_layout=None):
         super().__init__(master, bg=bg)
         self.gap = gap
         # „e“ setzt die Knopfreihe rechts wie in den übrigen Dialogen (W05).
         self.align = align
+        self.on_layout = on_layout
         self.columnconfigure(0, weight=1)
         self.entries = []
         self.compact_keys = None
@@ -1740,7 +1741,14 @@ class ButtonFlow(tk.Frame):
                 row, column, used = row + 1, 0, 0
             try:
                 while len(self._rows) <= row:
-                    self._rows.append(tk.Frame(self, bg=bg))
+                    frame = tk.Frame(self, bg=bg)
+                    if self.on_layout is not None:
+                        # Der Größenwunsch wandert erst nach reflow durch
+                        # Grid und Pack. Die festen Eltern bleiben dabei
+                        # eventuell gleich groß; die fertig angeordnete Reihe
+                        # meldet deshalb den anschließenden Höhenabgleich.
+                        frame.bind("<Configure>", lambda _event: self.on_layout(), add="+")
+                    self._rows.append(frame)
                 frame = self._rows[row]
                 if column == 0:
                     frame.configure(bg=bg)
@@ -1753,6 +1761,8 @@ class ButtonFlow(tk.Frame):
             column += 1
         for frame in self._rows[row + 1 if visible else 0:]:
             frame.grid_remove()
+        if self.on_layout is not None:
+            self.on_layout()
 
 
 class ResponsiveColumns(tk.Frame):
@@ -2524,8 +2534,9 @@ class CanvasLabel(tk.Canvas):
             # Ein gemeinsamer Buchstabenrahmen hält Kopf/Logo beim Wechsel
             # zwischen Titeln still; zusätzlicher tatsächlicher Inhalt darf
             # den Rahmen nur erweitern, niemals eine Glyphe abschneiden.
+            einzeilig = "\n" not in o["text"] and (breite <= 0 or font.measure(o["text"]) <= breite)
             ink = (glide_glyphs.label_ink_box(metrics, o["text"] + "ÄÖÜgjpqß", pixels, font.metrics("ascent"))
-                   if self._text_h <= font.metrics("linespace") else None)
+                   if einzeilig else None)
             if ink is not None:
                 self._text_ink_top, self._text_h = ink
                 self._text_ids = [(haupt, 0, -self._text_ink_top)]
@@ -4590,8 +4601,9 @@ class SystemNavigation(ttk.Treeview):
         super().__init__(master, **kwargs)
         self.app = app
         self._icon_job = None
-        self.icon_canvas = tk.Canvas(self, width=28, bd=0, highlightthickness=0,
-                                     bg=app.theme["card"], takefocus=0)
+        self.icon_canvas = app.register_theme_widget(
+            tk.Canvas(self, width=28, bd=0, highlightthickness=0,
+                      bg=app.theme["card"], takefocus=0), "card")
         self.icon_canvas.place(x=0, y=0, width=28, relheight=1)
         for sequence in ("<Configure>", "<Expose>", "<<TreeviewSelect>>", "<Motion>", "<Leave>"):
             self.bind(sequence, self.schedule_icons, add="+")
@@ -10046,7 +10058,8 @@ class PageEditor(RichNoteEditor):
         # damit die Seite dort beginnt, wo jede Liste beginnt.
         leiste_host = app.tool_band_host() if self.TOOLBAR_IN_BAND else None
         toolbar = ButtonFlow(leiste_host if leiste_host is not None else self,
-                             bg=theme['bg' if leiste_host is not None else 'card'], gap=6)
+                             bg=theme['bg' if leiste_host is not None else 'card'], gap=6,
+                             on_layout=app.schedule_fixed_layout_sync if leiste_host is not None else None)
         # In der äußeren Werkzeugzeile trennt CONTENT_TOOLBAR_GAP bereits
         # Leiste und Karte. Der alte Innenabstand würde ihre Höhe zusätzlich
         # vergrößern; eingebettete Werkzeuge behalten ihren Textabstand.
@@ -13421,7 +13434,8 @@ class DrawingEditor(tk.Frame):
         # Werkzeugreihe in der festen Leiste über der Fläche (27.09.2026);
         # Kontextreihe und Farben bleiben bei der Zeichnung.
         wirt = self.app.tool_band_host()
-        top = ButtonFlow(wirt if wirt is not None else self, theme["bg" if wirt is not None else "card"], gap=6)
+        top = ButtonFlow(wirt if wirt is not None else self, theme["bg" if wirt is not None else "card"], gap=6,
+                         on_layout=self.app.schedule_fixed_layout_sync if wirt is not None else None)
         top.pack(fill="x", pady=(0, 2))
         self.bind("<Destroy>", lambda e, w=top: w.destroy() if e.widget is self and w.winfo_exists() else None,
                   add="+")
@@ -37360,7 +37374,7 @@ class ListApp:
             try:
                 # AppKit meldet für einen SemiBold-Schnitt die Stammfamilie;
                 # der Cache muss den angeforderten Schnitt unterscheiden.
-                operation = "configure" if IS_MACOS else "actual"
+                operation = "configure" if IS_MACOS or IS_LINUX else "actual"
                 parts = tuple(self.root.tk.splitlist(self.root.tk.call("font", operation, parts[0])))
             except tk.TclError:
                 parts = tuple(self.root.tk.splitlist(self.root.tk.call("font", "actual", parts[0])))
@@ -43912,6 +43926,9 @@ class ListApp:
             except tk.TclError:
                 pass
         self.refresh_tree()
+        navigation = getattr(self, "system_listbox", None)
+        if isinstance(navigation, SystemNavigation):
+            navigation.schedule_icons()
         self._schedule_windows_chrome_theme(self.root)
         self.rebuild_backdrop_menu()
         self.refresh_backdrop()
@@ -52129,25 +52146,41 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         if kopf is None or not hasattr(self, "title_row"):
             return
         try:
-            schrift = ui_font_object(root=self.root, font=app_font(9, "bold"))
+            skala = float(self.root.tk.call("tk", "scaling"))
+            schluessel = (self.settings.get("ui_font_size"), self.settings.get("ui_font_family"),
+                          self.design_name() if hasattr(self, "design_name") else None, skala)
+            if getattr(self, "_header_height_key", None) != schluessel:
+                self._header_height_key = schluessel
+                self._header_fixed_height = 0
+                self._subtitle_fixed_height = 0
+                self._subtitle_reference_height = 0
             # Seit dem 02.11.2026 stehen die Labelchips in der Kartenecke; die
             # Unterzeile trägt nur noch Kennzahlen als Text. Die frühere
             # Chipreserve von 4 px schob den Inhalt bei 1280 × 800 über 15 %.
-            metrics = bundled_glyph_metrics(True, schrift.cget("family"))
-            size = schrift.actual("size")
-            pixels = -size if size < 0 else size * float(self.root.tk.call("tk", "scaling"))
-            ink = glide_glyphs.label_ink_box(metrics, "ÄÖÜgj", pixels, schrift.metrics("ascent"))
-            chipzeile = max(self.subtitle_row.winfo_reqheight(), ink[1] if ink else schrift.metrics("linespace"))
+            # Normal, Bold und Italic unterscheiden sich auf manchen Rastern
+            # um einen Pixel. Alle drei Rollen belegen dieselbe feste Zeile.
+            if not self._subtitle_reference_height:
+                for auszeichnung in ((), ("bold",), ("italic",)):
+                    schrift = self.measurement_font(app_font(9, *auszeichnung))
+                    metrics = bundled_glyph_metrics("bold" in auszeichnung, schrift.cget("family"),
+                                                    "italic" in auszeichnung)
+                    size = schrift.actual("size")
+                    pixels = -size if size < 0 else size * skala
+                    ink = glide_glyphs.label_ink_box(metrics, "ÄÖÜgjpqß", pixels, schrift.metrics("ascent"))
+                    self._subtitle_reference_height = max(self._subtitle_reference_height,
+                        ink[1] if ink else schrift.metrics("linespace"))
+            kinderhoehe = max((kind.winfo_reqheight() for kind in self.subtitle_row.pack_slaves()), default=0)
+            chipzeile = max(self._subtitle_reference_height, kinderhoehe, self._subtitle_fixed_height)
+            self._subtitle_fixed_height = chipzeile
+            if self.subtitle_row.pack_propagate():
+                self.subtitle_row.pack_propagate(False)
+            if int(self.subtitle_row.cget("height")) != chipzeile:
+                self.subtitle_row.configure(height=chipzeile)
             # Die Glyphenmessung schützt bereits beide Textkanten. Ein Pixel
             # zusätzlicher Abschluss genügt; die Werkzeugzeile hält darunter
             # ihren eigenen Abstand und darf nicht um eine zweite Reserve wachsen.
             noetig = max(self.title_row.winfo_reqheight() + chipzeile,
                          self.header_controls.winfo_reqheight() + 4) + 1
-            schluessel = (self.settings.get("ui_font_size"), self.settings.get("ui_font_family"),
-                          self.design_name() if hasattr(self, "design_name") else None)
-            if getattr(self, "_header_height_key", None) != schluessel:
-                self._header_height_key = schluessel
-                self._header_fixed_height = 0
             hoehe = max(noetig, getattr(self, "_header_fixed_height", 0))
             self._header_fixed_height = hoehe
             if kopf.pack_propagate():

@@ -1,0 +1,110 @@
+{
+  "version": "3.50.2",
+  "zeitpunkt": "2026-11-04T17:44:53",
+  "ausgangscommit": "5f99b8fad64e774f6d9c85a91efa76893f310e7a",
+  "status": "Zweite Reparatur lokal gezielt gruen; neue native Matrix beim Commit noch offen",
+  "app_sha256_windows_bytes": "6a51be0a2d2e318aabe7d025ef7bb8a64c54d9397de6b0059af74248c1346c26",
+  "app_git_blob": "672f1baae1d14fd1dfe4061f0a00049002f6606e",
+  "remote_eingang": {
+    "lauf": 250,
+    "url": "https://github.com/n05a-design/glide-to-do/actions/runs/41735745303",
+    "status": "failure",
+    "linux": {
+      "gruen": 42,
+      "rot": [
+        "kartenflaechen",
+        "schriftstile",
+        "eckenlabels"
+      ],
+      "kalibrierung": "success"
+    },
+    "windows": {
+      "gruen": 44,
+      "rot": [
+        "gestaltung"
+      ]
+    }
+  },
+  "mac_paket_auf_ausgang": {
+    "lauf": 31,
+    "url": "https://github.com/n05a-design/glide-to-do/actions/runs/41735745447",
+    "status": "success",
+    "paketprozess_exitcode": 0,
+    "sandbox_positiv": 0,
+    "externes_python_blockiert": 71,
+    "tk": "9.1.0",
+    "tar_sha256": "e081d2224caff036f74bfd395f3e58d7de5604bff71f0c42e9f950a3ed9ac9c1",
+    "developer_id_notarisierung": "offen",
+    "lokale_lieferung_ersetzt": false
+  },
+  "lokaler_roter_vorlauf": {
+    "gruen": 44,
+    "rot": [
+      "kompakt_ansichten"
+    ],
+    "befund": "Werkzeugrahmen 40 px, innerer Wunsch 72 px; nachtraeglicher Abgleich behebt Abschneiden"
+  },
+  "kompakt_nach_reparatur": {
+    "ok": true,
+    "befund": "132 Knopfprüfungen in vier Ansichten bei 480×560 und großer Schrift; Menü mit allen Befehlen",
+    "runtime": {
+      "python": "3.14.7",
+      "platform": "win32",
+      "tk": "9.1.0"
+    },
+    "dauer_s": 19.254
+  },
+  "bereichspruefungen": [
+    {
+      "pruefung": "fester_kopf",
+      "exitcode": 0,
+      "sekunden": 18.92
+    },
+    {
+      "pruefung": "logo",
+      "exitcode": 0,
+      "sekunden": 28.54
+    },
+    {
+      "pruefung": "seiten",
+      "exitcode": 0,
+      "sekunden": 8.6
+    },
+    {
+      "pruefung": "aufgaben3380",
+      "exitcode": 0,
+      "sekunden": 80.66
+    },
+    {
+      "pruefung": "gestaltung",
+      "exitcode": 0,
+      "sekunden": 34.11
+    },
+    {
+      "pruefung": "eckenlabels_linux_skala",
+      "exitcode": 0,
+      "sekunden": 12.73
+    }
+  ],
+  "font_katalogtests": 8,
+  "grundstufe": {
+    "beleg": "grundstufe250.json",
+    "schritte": 19,
+    "exitcode": 0,
+    "werkzeugtests": 244,
+    "werkzeug_skips": 1,
+    "fachtests": 1128,
+    "fachtest_durchlaeufe": 2
+  },
+  "python_abgleich": {
+    "code_dateien": 92,
+    "ressourcen": 171,
+    "bytegleich": true
+  },
+  "grenzen": [
+    "Gezielte gruene Reparatur ist keine vollstaendige lokale Vollmatrix.",
+    "Neue native Linux-/Windows-Nachweise folgen nach dem Push.",
+    "Der manuelle UI-Nachlauf ersetzt keine positive Kalibrierungsbasis und kein Pakettor.",
+    "Original-Rotbelege, lokale native Lieferungen und menschliche Abnahme unveraendert."
+  ]
+}
