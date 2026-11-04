@@ -1,0 +1,10 @@
+{
+  "app": "src/glide/app.pyw",
+  "faelle": {
+    "b16": {
+      "ok": true,
+      "befund": "3 Bildanker erreicht, 6 Raststücke wie über Text, größter Schritt 30 px"
+    }
+  },
+  "fehler": []
+}

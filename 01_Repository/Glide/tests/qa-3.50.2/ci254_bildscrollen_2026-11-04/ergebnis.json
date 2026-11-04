@@ -33,5 +33,13 @@
     "gegenproben": "2/2 korrekt rot",
     "gegenproben_beleg": "gegenproben.json",
     "python_lieferung": "92 Code-Dateien und 171 Ressourcen bytegleich"
+  },
+  "erster_nativer_nachlauf": {
+    "run": 256,
+    "linux_uiux": "17 Faelle einschliesslich B16 erfolgreich",
+    "job": "failure: Berichtsordner fehlte nach Abschluss der Faelle",
+    "korrektur": "CLI legt Berichts-Elternordner an",
+    "lokale_pfadgegenrechnung": "frischer verschachtelter Zielpfad erfolgreich",
+    "beleg": "berichtspfad.json"
   }
 }

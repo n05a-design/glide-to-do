@@ -899,6 +899,7 @@ def main():
                 if lauf is not None:
                     lauf.ende()
     if args.report:
+        args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(ergebnis, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"gruen": len(ergebnis["faelle"]) - len(ergebnis["fehler"]), "rot": ergebnis["fehler"]},
                      ensure_ascii=False))
