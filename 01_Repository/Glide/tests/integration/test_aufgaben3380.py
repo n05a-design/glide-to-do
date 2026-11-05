@@ -481,8 +481,10 @@ def klicks(app_path, report, *, gross=False, tempo=False):
                 click(app.tree, min(app.tree.winfo_width() - 5, box[0] + box[2] - 20), box[1] + box[3] // 2, state=8 if m.IS_MACOS else 4)
                 assert len(calls) == before
                 checks.append(name + ': Zusatztaste bleibt Auswahl')
+            # D63: neue Titel enden bei 40 Zeichen; der Kürzungsweg der
+            # Anzeige wird an einem bestehenden Langtext (Altdaten) geprüft.
             long_task = app.new_item('Ausführlicher Langtext mit mehreren sichtbaren Zeilen ' * 35,
-                kind=app.ITEM_KIND_LONG, importance=2)
+                kind=app.ITEM_KIND_LONG, importance=2, preserve_title=True)
             source['items'].append(long_task)
             app.save_items()
             app.set_active_list(sid)

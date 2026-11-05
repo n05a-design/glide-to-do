@@ -15173,19 +15173,6 @@ class DrawingEditor(tk.Frame):
         self.update_status(f"Bild {index + 1} von {len(self.animation.frames)}")
         return True
 
-    def animation_export_menu(self):
-        menu = tk.Menu(self, tearoff=False, bg=self.app.theme["card"], fg=self.app.theme["text"],
-                       activebackground=self.app.theme["selection"],
-                       activeforeground=self.app.theme["selection_text"])
-        menu.add_command(label="PNG-Spritesheet …", command=lambda: self.app.drawing_animation_export(self))
-        menu.add_command(label="PNG-Einzelbildfolge …",
-                         command=lambda: self.app.drawing_animation_export(self, sequence=True))
-        try:
-            anchor = self.more_button
-            menu.tk_popup(anchor.winfo_rootx(), anchor.winfo_rooty() + anchor.winfo_height())
-        finally:
-            menu.grab_release()
-
     def show_animation_preview(self):
         previous = getattr(self, "_animation_preview_dialog", None)
         if previous is not None and previous.winfo_exists():
@@ -51500,7 +51487,13 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 animation.add_command(label="Bilder …", command=lambda: self.drawing_animation_dialog(editor))
             if "play" in editor.animation_toolbar.hidden_keys:
                 animation.add_command(label="Abspielen …", command=editor.show_animation_preview)
-            animation.add_command(label="Bildfolge exportieren …", command=editor.animation_export_menu)
+            # Ein Untermenü statt eines zweiten Popups aus dem Menüeintrag:
+            # Einträge mit „…“ öffnen in Glide immer ein Fenster.
+            export = tk.Menu(animation, **menu_options)
+            export.add_command(label="PNG-Spritesheet …", command=lambda: self.drawing_animation_export(editor))
+            export.add_command(label="PNG-Einzelbildfolge …",
+                               command=lambda: self.drawing_animation_export(editor, sequence=True))
+            animation.add_cascade(label="Bildfolge exportieren", menu=export)
             menu.add_cascade(label="Bildfolge", menu=animation)
         menu.add_separator()
         png = tk.Menu(menu, **menu_options)

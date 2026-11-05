@@ -2336,4 +2336,6 @@ Bewusst weiterhin ungewählt bzw. ausgeschlossen: Team-/Mehrgerätesynchronisati
 
 **Paket:** Windows-Paket über den bestehenden Job „Eigenständiges Paket (Windows x64, PyInstaller 6.22.3)“ mit eigener Tk-9.1-Laufzeit und isolierter Startprobe; unsignierter Entwicklungsbau. Ergebnis: Lauf 42107799561 grün, `Glide.exe` `7b79b23d…`, nach `build/windows/Glide-3.50.5` geliefert; Mac-Paket Lauf 42107804373 grün (Artefakt). Details im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md).
 
+**Nacharbeit Vollmatrix:** Sieben Suiten an 3.50.3/D62/D63 angeglichen; Produktbefund Bildfolgenexport (Popup aus Menüeintrag) als Untermenü behoben, App jetzt `0f3297a5…`. Damit sind das gelieferte Windows-Paket (`a4bfe4ed…`) und die Paketbelege neu zu erzeugen. Details im QA-Bericht.
+
 **Rest:** Übernahme des Mac-Pakets nach `build/macos`, Bau am eigenen Bauplatz mit lokaler Abnahme, menschliche Abnahme (Punkt 6/Buchbreite und Folgeblöcke), DPI/Mehrmonitor. Vollprüfung des zusammengeführten Stands über den Pushlauf; offene lokale Vollmodusläufe auf `a4bfe4ed…` behalten ihre eigenen Belege. Die lokale Aufbewahrungssicherung `%USERPROFILE%/gq/final5/aufbewahrung` (67 nur dort liegende 3.48.0-Originale) liegt nur auf dem Prüfrechner und ist gesondert zu sichern.
