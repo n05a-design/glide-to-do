@@ -18,7 +18,7 @@
   },
   "local_validation": {
     "python": "3.14.7",
-    "python_executable": "C:/Users/Timvo/AppData/Local/Programs/Python/Python314/python.exe",
+    "python_executable": "%USERPROFILE%/AppData/Local/Programs/Python/Python314/python.exe",
     "tcl": "9.0.4",
     "tkinter_tk_constant": "9.0",
     "native_tk91_in_this_session": false,
