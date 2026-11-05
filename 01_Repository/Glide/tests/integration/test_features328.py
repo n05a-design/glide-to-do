@@ -96,7 +96,9 @@ with tempfile.TemporaryDirectory(prefix="glide-features328-") as folder:
         # Formatieren bleibt über Rechtsklick, Formatleiste und Kürzel.
         assert isinstance(editor, mod.NoteEditor)
         # B14 (15.10.2026): „Aufgabe“ ohne Kästchen, wie alle übrigen Knöpfe der Leiste.
-        assert labels == ["Überschrift", "Liste", "Nummeriert", "Aufgabe", "Zitat", "Code", "Bild", "Mehr"], labels
+        # 3.50.3 (Abnahmekorrektur): einzeilige, reduzierte Leiste ohne
+        # eigene Knöpfe für Überschrift und Code.
+        assert labels == ["Liste", "Nummeriert", "Aufgabe", "Zitat", "Bild", "Mehr"], labels
 
         # Gismo aktualisiert beim Füttern nur seinen Karteninhalt. Ein kompletter
         # Startseiten-Neuaufbau erzeugte besonders im Dopamin-Design einen

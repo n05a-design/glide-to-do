@@ -183,8 +183,18 @@ with tempfile.TemporaryDirectory(prefix="glide-features323-") as folder:
         app.search_var.set("Punkt")
         root.update()
         geschwister = list(app.search_frame.pack_slaves())
-        assert geschwister.index(app.plan_day_next_button) < geschwister.index(app.plan_day_prev_button)
-        assert geschwister.index(app.plan_day_prev_button) < geschwister.index(app.clear_search_button)
+
+        def links_von(a, b):
+            """Visuelle Reihenfolge aus Packliste und Seite (3.50.5: bei
+            ausgeblendetem Heute-Suchfeld stehen die Tagespfeile links)."""
+            seite_a, seite_b = a.pack_info()["side"], b.pack_info()["side"]
+            if seite_a != seite_b:
+                return seite_a == "left"
+            ia, ib = geschwister.index(a), geschwister.index(b)
+            return ia < ib if seite_a == "left" else ia > ib
+
+        assert links_von(app.plan_day_prev_button, app.plan_day_next_button), "◀ steht links von ▶"
+        assert links_von(app.plan_day_prev_button, app.clear_search_button)
         assert app.plan_day_prev_button.text == "◀" and app.plan_day_next_button.text == "▶"
         app.search_var.set("")
         root.update()

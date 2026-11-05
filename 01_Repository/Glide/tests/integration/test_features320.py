@@ -147,7 +147,7 @@ with tempfile.TemporaryDirectory(prefix="glide-features320-") as folder:
         assert "\\n" in beschreibung and "\\;" in beschreibung and "\\," in beschreibung
         assert "\n" not in beschreibung
         assert "Termine\\, Fristen\\; Prüfung" in text, "Auch der Kalendername wird escaped."
-        lang = app.new_item("Ü" * 300, due=heute)
+        lang = app.new_item("Ü" * 300, due=heute, preserve_title=True)  # Alttitel (D63 bewahrt bestehende Langtitel)
         liste["items"].append(lang)
         assert app.save_items()
         text_lang, _b = app.build_ics_document("list")

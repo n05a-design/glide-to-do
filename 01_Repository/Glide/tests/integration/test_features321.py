@@ -174,8 +174,12 @@ with tempfile.TemporaryDirectory(prefix="glide-features321-") as folder:
             "LOCATION:Raum 2\\, Haus B",
         ])
         punkte, bericht = punkte_aus(gefaltet)
-        assert punkte[0]["text"] == "Ein sehr langer Titel der über zwei Zeilen gefaltet wurde"
-        assert punkte[0]["description"] == "Erste Zeile\nZweite Zeile; mit Semikolon\nOrt: Raum 2, Haus B"
+        # D63: neue Titel höchstens 40 Zeichen; der vollständig entfaltete
+        # Originaltitel bleibt in der Beschreibung erhalten.
+        voll = "Ein sehr langer Titel der über zwei Zeilen gefaltet wurde"
+        assert punkte[0]["text"] == voll[:37].rstrip() + "...", punkte[0]["text"]
+        assert punkte[0]["description"] == ("Erste Zeile\nZweite Zeile; mit Semikolon\nOrt: Raum 2, Haus B"
+                                            "\n\nOriginaltitel:\n" + voll), punkte[0]["description"]
         mit_lf = kalender([
             "UID:fremd-1", "SUMMARY:Ein sehr langer Titel der", "  über zwei Zeilen gefaltet wurde",
             "DTSTART;VALUE=DATE:20261005",
