@@ -43345,9 +43345,11 @@ class ListApp:
                     target = self.overview_search_row
                 elif not overview and self.input_frame.winfo_manager() == "pack":
                     target = self.input_frame
-                elif not overview and any(isinstance(child, ButtonFlow) and child.winfo_manager()
-                                          for child in self.tool_band_inner.winfo_children()):
-                    target = self.tool_band_inner
+                elif not overview and self.tool_band.winfo_manager() == "pack":
+                    # Die äußere Werkzeugleiste, nicht ihr Innenteil: so steht
+                    # die Gruppe an derselben rechten Kante wie in der
+                    # Eingabezeile, auch neben dem (leeren) Flächenhinweis.
+                    target = self.tool_band
                 elif not overview and self.search_frame.winfo_manager() == "pack":
                     target = self.search_frame
                 else:
@@ -43369,6 +43371,11 @@ class ListApp:
                 self.header_controls.pack_forget()
                 others = target.pack_slaves()
                 options = {"in_": target, "side": "right", "padx": (8 if docked else 12, 0)}
+                if docked:
+                    # Feste Oberkante in jeder Trägerzeile (Entscheidung
+                    # 27.09.2026): Zeilen sind 40–43 px hoch, zentriert
+                    # sprängen die Kopfknöpfe beim Ansichtswechsel.
+                    options.update(anchor="n", pady=(1, 0))
                 if others:
                     options["before"] = others[0]
                 self.header_controls.pack(**options)

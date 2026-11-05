@@ -10,6 +10,7 @@
 - Abstand zwischen Seitenleistenüberschrift und Baum für Seiten, Listen, Notizen und Zeichnungen auf 2 px reduziert.
 - Suchfeld auf der Startseite mit Übergabe an die bestehende globale Suche; Vorlagensuche über Titel, Beschreibung und enthaltene Titel, eigener Suchzustand und Leerstandsanzeige.
 - Quelle, Python-Lieferung, Neuerungen, Beispieldaten und aktive Dokumentstände auf 3.50.5 abgleichen; Aufgabenformat bleibt 26. Native Neubauten und menschliche Freigabe separat.
+- Schmales Fenster unter Windows: Die in die Werkzeugzeile verlegten Kopfknöpfe stehen in Zeichnung, Seite und Galerie an derselben Stelle wie in Listen (vorher 14 px links bzw. 6 px tiefer).
 - Zeichnung › Mehr › Bildfolge: „Bildfolge exportieren“ ist jetzt ein Untermenü mit „PNG-Spritesheet …“ und „PNG-Einzelbildfolge …“ statt eines zweiten Popups aus dem Menüeintrag. Testerwartungen der Vollprüfung an 3.50.3/D62/D63 angeglichen.
 - Mit `main` zusammengeführt (PR #62: Bildscrolltest B16 synchronisiert auf fertige Bildanker, UI-/UX-Verträge im `ui-nachlauf`); Anwendung dadurch unverändert. Prüfreste `_verification_temp*` von Git ausgeschlossen, Versionsangaben aller Einstiegsdokumente auf 3.50.5. Windows-Paket 3.50.5 über GitHub Actions gebaut. [Nachweis](docs/07_QA_BERICHT.md).
 
