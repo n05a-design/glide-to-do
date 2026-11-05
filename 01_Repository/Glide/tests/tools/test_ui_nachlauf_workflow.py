@@ -14,6 +14,12 @@ class UINachlaufWorkflow(unittest.TestCase):
         self.assertEqual(text.count("- name: Arbeitsmodi vollständig nativ prüfen"), 2)
         self.assertEqual(text.count("tests/integration/test_arbeitsmodi.py --fall alle --report"), 2)
         self.assertIn('dbus-run-session -- xvfb-run -a --server-args="-screen 0 1400x1100x24" python -B tests/integration/test_arbeitsmodi.py', text)
+        self.assertEqual(text.count("- name: UI-/UX-Verträge vollständig nativ prüfen"), 2)
+        self.assertEqual(text.count("tests/integration/test_uiux_paket.py --fall alle --report"), 2)
+        for job in ("  integrationssuiten-linux:", "  vollpruefung-windows:"):
+            section = text.split(job, 1)[1].split("      - name: Kalibrierte", 1)[0]
+            self.assertLess(section.index("UI-/UX-Verträge vollständig nativ prüfen"),
+                            section.index("Arbeitsmodi vollständig nativ prüfen"))
 
     def test_full_modes_and_positive_calibration_gate_are_preserved(self):
         text = SOURCE.read_text(encoding="utf-8")

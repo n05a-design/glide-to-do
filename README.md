@@ -4,7 +4,7 @@
 
 Aufgaben planen, Wissen sammeln, Ideen verbinden und den Alltag festhalten: Glide vereint Aufgabenmanagement, Seiten, Notizen, Pinnwände, Tagebuch und eine Pixel-Werkstatt in einer deutschsprachigen Desktop-App. Deine Inhalte bleiben bei dir – lokal, ohne Konto, ohne Cloudzwang und ohne Telemetrie.
 
-**3.50.4 · Fortgesetzte menschliche Abnahme und Markenpflege**
+**3.50.5 · Abnahmekorrekturen und Suchfelder**
 
 [Loslegen](#loslegen) · [Was Glide kann](#was-glide-kann) · [Handbuch](01_Repository/Glide/docs/20_FUNKTIONEN.md) · [Änderungen](01_Repository/Glide/CHANGELOG.md)
 

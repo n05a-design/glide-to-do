@@ -4,7 +4,7 @@ Stand 05.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentl
 
 Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen, Seiten, Notizbücher, Pinnwände, Galerien und Pixelzeichnungen. Sie läuft lokal mit Python 3.14 und Tk 9 (Tk 8.6 eingeschränkt), braucht weder Konto noch Cloudservice und hält Nutzerdaten außerhalb des Programmordners.
 
-> **Projektstatus:** Quell-/Python-Stand **3.50.3**; Abnahmekorrekturen und Showcase-/Paketabschluss laufend, Aufgabenformat 26. Aktuelle Prüfungen, native Paketstände und offene menschliche Abnahmen stehen im [QA-Bericht](docs/07_QA_BERICHT.md). Der [Übergabeeinstieg](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) ordnet nächste Schritte und Grenzen ein.
+> **Projektstatus:** Quell-/Python-Stand **3.50.5**; Abnahmekorrekturen umgesetzt, native 3.50.5-Pakete und menschliche Abnahme laufend, Aufgabenformat 26. Aktuelle Prüfungen, native Paketstände und offene menschliche Abnahmen stehen im [QA-Bericht](docs/07_QA_BERICHT.md). Der [Übergabeeinstieg](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) ordnet nächste Schritte und Grenzen ein.
 
 Funktionsumfang im Überblick: [Projekt-README](../../README.md#was-glide-kann); Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md); Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 

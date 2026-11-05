@@ -10,6 +10,7 @@
 - Abstand zwischen Seitenleistenüberschrift und Baum für Seiten, Listen, Notizen und Zeichnungen auf 2 px reduziert.
 - Suchfeld auf der Startseite mit Übergabe an die bestehende globale Suche; Vorlagensuche über Titel, Beschreibung und enthaltene Titel, eigener Suchzustand und Leerstandsanzeige.
 - Quelle, Python-Lieferung, Neuerungen, Beispieldaten und aktive Dokumentstände auf 3.50.5 abgleichen; Aufgabenformat bleibt 26. Native Neubauten und menschliche Freigabe separat.
+- Mit `main` zusammengeführt (PR #62: Bildscrolltest B16 synchronisiert auf fertige Bildanker, UI-/UX-Verträge im `ui-nachlauf`); Anwendung dadurch unverändert. Prüfreste `_verification_temp*` von Git ausgeschlossen, Versionsangaben aller Einstiegsdokumente auf 3.50.5. Windows-Paket 3.50.5 über GitHub Actions gebaut. [Nachweis](docs/07_QA_BERICHT.md).
 
 ## 3.50.4 (05.11.2026) – Neuer Stand für die fortgesetzte menschliche Abnahme
 
@@ -38,6 +39,7 @@
 
 ## 3.50.2 (03.11.2026) – Versions- und Ablageabgleich
 
+- Nach Merge-Lauf #254: Bildscrolltest wartet auf fertiges Layout und prüft alle echten Bildanker gegen die native Tk-Textklasse. Einheitensprünge und wirkungslose Handler erhalten eigene Defektgegenproben; UI-Nachlauf prüft zusätzlich alle 17 UI-/UX-Verträge. Anwendung unverändert.
 - Folgereparatur nach CI #250: Linux-Schriftalias und Symbolfläche, feste Kennzahlenzeile sowie Höhenabgleich nach Werkzeugumbruch. Separater nativer UI-Nachlauf über alle 45 Fälle; vollständige Pushprüfungen bleiben erhalten. Mac-Paket #31 mit isolierter Startprobe auf dem ersten Reparaturcommit grün.
 - Nach CI #247/#248: Kopfknöpfe bleiben bei geänderter Kennzahlenhöhe stehen; beim synchronen Speichern/Ansichtswechsel bleibt genau ein Seiteneditor mit seiner Werkzeugleiste aktiv.
 - Mac-Paket: originale SemiBold-/Italic-Schnitte per PostScript-Namen auswählen und beim Kopieren einer Tk-Schrift erhalten; tatsächliche Stammfamilie getrennt prüfen. [Fehler, Gegenproben und neue Laufgrenzen](tests/qa-3.50.2/ci247_2026-11-03/README.md).

@@ -110,6 +110,10 @@ jobs:
         if: github.event.inputs.bereich != 'ui-nachlauf'
         run: dbus-run-session -- python -B tests/tools/pruefen.py --zugang-nativ --modus voll --protokoll "$RUNNER_TEMP/integration" --timeout 900
 
+      - name: UI-/UX-Verträge vollständig nativ prüfen
+        if: github.event.inputs.bereich == 'ui-nachlauf'
+        run: dbus-run-session -- xvfb-run -a --server-args="-screen 0 1400x1100x24" python -B tests/integration/test_uiux_paket.py --fall alle --report "$RUNNER_TEMP/integration/uiux.json"
+
       - name: Arbeitsmodi vollständig nativ prüfen
         if: github.event.inputs.bereich == 'ui-nachlauf'
         run: dbus-run-session -- xvfb-run -a --server-args="-screen 0 1400x1100x24" python -B tests/integration/test_arbeitsmodi.py --fall alle --report "$RUNNER_TEMP/integration/arbeitsmodi.json"
@@ -174,6 +178,9 @@ jobs:
       - name: Vollprüfstand Windows
         if: github.event.inputs.bereich != 'ui-nachlauf'
         run: python -B tests/tools/pruefen.py --zugang-nativ --modus voll --protokoll "$env:RUNNER_TEMP/integration" --timeout 900
+      - name: UI-/UX-Verträge vollständig nativ prüfen
+        if: github.event.inputs.bereich == 'ui-nachlauf'
+        run: python -B tests/integration/test_uiux_paket.py --fall alle --report "$env:RUNNER_TEMP/integration/uiux.json"
       - name: Arbeitsmodi vollständig nativ prüfen
         if: github.event.inputs.bereich == 'ui-nachlauf'
         run: python -B tests/integration/test_arbeitsmodi.py --fall alle --report "$env:RUNNER_TEMP/integration/arbeitsmodi.json"

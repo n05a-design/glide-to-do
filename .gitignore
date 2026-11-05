@@ -59,6 +59,11 @@ window.conf
 # lokal; ausgewertet wird im Nachweis (16.10.2026).
 .claude/Tests/
 
+# --- Prüfreste ---------------------------------------------------------------
+# Zwischenablagen von Logo-/Rasterprüfungen (05.11.2026: 206 MB im Grafikmaster).
+_verification_temp*
+**/_verification_temp*
+
 # --- Archive und Kopien ------------------------------------------------------
 # Vorfassungen trägt Git. Einziges Archiv ist 07_Python-Versionen/Archiv mit
 # den Hauptdateien der sieben neuesten Versionen (Regel „Archivalter“ der

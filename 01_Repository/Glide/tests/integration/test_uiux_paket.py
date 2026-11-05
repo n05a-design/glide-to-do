@@ -767,27 +767,70 @@ def fall_b16(lauf):
     lauf.showcase()
     seite = next(e for e in app.lists if app.is_page_list(e) and e.get("attachments"))
     app.set_active_list(seite["id"])
-    lauf.idle(10)
     ed = app.rich_note_editor
     text = ed.text
-    gesamt = text.count("1.0", "end", "ypixels")[0]
+    # Das Bildlayout läuft zeitversetzt. Eine feste Zahl update()-Aufrufe
+    # lässt auf schnellen Runnern keine 120 ms verstreichen. Erst mit den
+    # fertigen Bildflächen steht auch die tatsächliche Texthöhe fest.
+    frist = time.monotonic() + 10
+    while True:
+        lauf.idle(2)
+        keys = ed.image_keys()
+        bereit = keys and ed._image_job is None and all(
+            key in ed._image_views and hasattr(ed._image_views[key], "_size")
+            and not getattr(ed._image_views[key], "_conversion_pending", False) for key in keys)
+        if bereit:
+            break
+        assert time.monotonic() < frist, ("Bildlayout nicht bereit", keys,
+                                         list(ed._image_views), ed._image_job)
+        time.sleep(0.01)
+    assert app.rich_note_editor is ed, "Seiteneditor während Bildaufbau ersetzt"
+    dokument = ed.document()
     groesster = 0
     proben = 0
-    for start in range(0, min(900, gesamt), 10):
-        text.yview_moveto(start / gesamt)
+    for key in keys:
+        assert ed.image_path(key) and Path(ed.image_path(key)).is_file(), ("Bildquelle fehlt", key)
+        anker = text.tag_ranges(key)[0]
+        text.see(anker)
         lauf.idle(2)
-        bilder = [v for v in ed._image_views.values() if v.winfo_ismapped()
-                  and 0 <= v.winfo_rooty() - text.winfo_rooty() < text.winfo_height() - 20]
-        if not bilder:
-            continue
-        vorher = text.yview()[0]
-        bilder[0].event_generate("<MouseWheel>", delta=-120, x=10, y=10)
+        gesamt = ed.ypixels("1.0", "end")
+        y = ed.line_top(anker) + ed._image_push.get(key, 0) + (10 if ed.images[key]["mode"] == "center" else 2)
+        text.yview_moveto(max(0, text.yview()[0] + (y - 60) / gesamt))
         lauf.idle(2)
-        groesster = max(groesster, round((text.yview()[0] - vorher) * gesamt))
-        proben += 1
-    assert proben, "kein Bild erreicht"
-    assert groesster <= 60, ("Sprung über Bild", groesster)
-    return f"{proben} Raststücke über Bildern, größter Schritt {groesster} px"
+        view = ed._image_views[key]
+        y = view.winfo_rooty() - text.winfo_rooty()
+        assert view.winfo_ismapped() and 0 <= y < text.winfo_height() - 20, (
+            "Bildanker nicht sichtbar", key, str(anker), y, text.winfo_height(), text.yview())
+        lage = text.yview()
+        deltas = ([-120] if lage[1] < 0.995 else []) + ([120] if lage[0] > 0.005 else [])
+        assert deltas, ("Keine Scrollstrecke am Bild", key, lage)
+        for delta in deltas:
+            # Gleiche Ausgangslage: das echte Bildrad muss genau den nativen
+            # Textschritt liefern. Ein wirkungsloser Handler darf nicht grün sein.
+            schritte = []
+            for widget in (text, view):
+                text.yview_moveto(lage[0])
+                lauf.idle(2)
+                vorher = text.yview()[0]
+                tags = text.bindtags()
+                try:
+                    if widget is text:
+                        # Die Referenz ist ausschließlich Tks Textklasse;
+                        # ein gemeinsamer Fehler im App-Handler darf nicht
+                        # Bild und Vergleich gleich falsch bewegen.
+                        text.bindtags((text.winfo_class(),))
+                    widget.event_generate("<MouseWheel>", delta=delta, x=10, y=10)
+                finally:
+                    text.bindtags(tags)
+                lauf.idle(2)
+                schritte.append(round((text.yview()[0] - vorher) * gesamt))
+            nativ, bild = schritte
+            assert 0 < abs(nativ) <= 60, ("Nativer Textschritt", key, delta, nativ)
+            assert abs(bild - nativ) <= 1, ("Sprung über Bild", key, delta, bild, nativ)
+            groesster = max(groesster, abs(bild))
+            proben += 1
+    assert ed.document() == dokument, "Scrollen verändert Seiteninhalt"
+    return f"{len(keys)} Bildanker erreicht, {proben} Raststücke wie über Text, größter Schritt {groesster} px"
 
 
 def fall_b17_b19(lauf):
@@ -868,6 +911,7 @@ def main():
                 if lauf is not None:
                     lauf.ende()
     if args.report:
+        args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(ergebnis, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"gruen": len(ergebnis["faelle"]) - len(ergebnis["fehler"]), "rot": ergebnis["fehler"]},
                      ensure_ascii=False))
