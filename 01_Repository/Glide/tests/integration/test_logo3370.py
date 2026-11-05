@@ -17,7 +17,7 @@ import zlib
 
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--app",type=Path,default=Path(__file__).resolve().parents[2]/"src/glide/app.pyw")
-parser.add_argument("--fall",choices=("logo","icons","symbole","alle"),default="alle")
+parser.add_argument("--fall",choices=("logo","icons","symbole","marke","alle"),default="alle")
 args=parser.parse_args()
 sys.path.insert(0,str(args.app.resolve().parent))
 
@@ -66,6 +66,54 @@ with tempfile.TemporaryDirectory(prefix="glide-logo3370-") as data:
         for _ in range(3):root.update_idletasks();root.update()
     try:
         settle()
+        if args.fall in ("marke", "alle"):
+            master = Path(__file__).resolve().parents[4] / "20_Grafik_Master/01_Logo"
+            for original, copies in (
+                    ("2026-Glide-Logo-in-App.svg", (logo.LOGO_FILE, logo.LOGO_SMALL_FILE)),
+                    ("2026-Glide-Logo-App-und-Fav-Icon.svg", (logo.ICON_FILE, logo.ICON_SMALL_FILE))):
+                for name in copies:
+                    assert Path(logo.resource_dir(), name).read_bytes() == (master/original).read_bytes(), (
+                        "Laufzeit verwendet nicht exakt die neue freigegebene G-Kontur", name)
+            def check_brand_image(photo, size):
+                w, h, pixels = rgba(photo)
+                assert (w, h) == (size, size)
+                assert pixels[(size//2)*w + max(1, size//10)][:3] == (255, 220, 11), (
+                    "Gelber Hintergrund fehlt oder ist nach G-Kontur beschnitten", size)
+                assert any(max(abs(a-b) for a,b in zip(pixel[:3], (158, 74, 200))) <= 10
+                           and pixel[3] >= 240 for pixel in pixels), ("Neues lila G fehlt", size)
+                assert pixels[0][3] == 0, ("Abgerundete Ecke nicht transparent", size)
+            for size in (16, 32, 64, 256):
+                check_brand_image(logo.square_icon(root, logo.icon_svg(0), size), size)
+                check_brand_image(mod.tk.PhotoImage(master=root,
+                    file=str(Path(logo.resource_dir(), f"glide-app-icon-{size}.png"))), size)
+            # Explorer/EXE/Verknüpfung verwenden den ICO-Container, nicht
+            # die Tk-SVGs: jede tatsächliche eingebettete PNG-Größe prüfen.
+            ico = (Path(__file__).resolve().parents[2]/"assets/icons/glide.ico").read_bytes()
+            assert struct.unpack_from("<HHH", ico) == (0, 1, 7)
+            sizes = []
+            for index in range(7):
+                width, height, _colors, _reserved, _planes, _bits, count, offset = struct.unpack_from(
+                    "<BBBBHHII", ico, 6 + 16 * index)
+                size = width or 256
+                assert size == (height or 256)
+                sizes.append(size)
+                check_brand_image(mod.tk.PhotoImage(master=root, data=ico[offset:offset+count], format="png"), size)
+            assert sizes == [16, 24, 32, 48, 64, 128, 256], sizes
+            checked = []
+            for design, info in app.DESIGNS.items():
+                if info["base"] != "dark" or info["layer"] == "minimal":
+                    continue
+                app.set_design(design)
+                settle()
+                for role in ("flag", "priority_medium", "due_today"):
+                    assert app.theme[role].upper() == "#FFDC0B", (design, role, app.theme[role])
+                    assert mod.contrast_ratio(app.theme[role], app.theme["card"]) >= 4.5, design
+                checked.append(design)
+            app.set_design("light")
+            assert app.theme["flag"].upper() == "#A35F00", "Hellmodus-Gelb unbeauftragt geändert"
+            app.set_design("minimal_dark")
+            assert app.theme["flag"].upper() != "#FFDC0B", "Monochromes Design eingefärbt"
+            print("OK Marke: bytegleiche neue G-Master in allen Größen; Lila/Gelb und transparente Ecken; Darkmode-Gelb", checked)
         if args.fall in ("logo","alle"):
             native=logo.has_svg;logo.has_svg=lambda master:False
             try:

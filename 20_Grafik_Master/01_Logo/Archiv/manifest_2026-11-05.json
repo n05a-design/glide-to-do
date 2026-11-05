@@ -1,0 +1,175 @@
+{
+  "reason": "Expliziter Benutzerauftrag 05.11.2026: bisherige Logos archivieren; keine Laufzeitquelle",
+  "files": [
+    {
+      "original": "20_Grafik_Master/03_Fav-Icon/App-Icon-klein.svg",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/03_Fav-Icon/App-Icon-klein.svg",
+      "sha256": "9d031380f07b77b49cd5056685fffff85024a659f827dfc434d98eadc59db4da"
+    },
+    {
+      "original": "20_Grafik_Master/03_Fav-Icon/App-Icon-transparent-01.svg",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/03_Fav-Icon/App-Icon-transparent-01.svg",
+      "sha256": "6967e678fc7798f66d8651899b486a93315fe1033d338b8be8d5724887a4f4fc"
+    },
+    {
+      "original": "20_Grafik_Master/03_Fav-Icon/App-Icon-transparent-02.svg",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/03_Fav-Icon/App-Icon-transparent-02.svg",
+      "sha256": "1db74addc3d038a7691c133d84162a999022ffdd95443d8df0cce55661c35cb8"
+    },
+    {
+      "original": "20_Grafik_Master/03_Fav-Icon/App-Icon-transparent.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/03_Fav-Icon/App-Icon-transparent.png",
+      "sha256": "652e0bfab5500480bd523f31cc90254df3b0a111b24c21c57d8b7617b44d470a"
+    },
+    {
+      "original": "20_Grafik_Master/03_Fav-Icon/App-Icon-transparent.svg",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/03_Fav-Icon/App-Icon-transparent.svg",
+      "sha256": "809e4eaa180edd02340e3050e9b8b602ed3066f009827a31258acbb9535deb60"
+    },
+    {
+      "original": "20_Grafik_Master/03_Fav-Icon/Fav-Icon-transparent-01.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/03_Fav-Icon/Fav-Icon-transparent-01.png",
+      "sha256": "449183281cfb22f98b966eccd41758f191f2b28a5d4c59ba7d3fb3d33b03f746"
+    },
+    {
+      "original": "20_Grafik_Master/03_Fav-Icon/Fav-Icon-transparent-03.svg",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/03_Fav-Icon/Fav-Icon-transparent-03.svg",
+      "sha256": "a4db0ad1b662b077db6e06c90e5a32ee8f68349d5f910680f8f212d92991454b"
+    },
+    {
+      "original": "20_Grafik_Master/03_Fav-Icon/Icon-rund-01.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/03_Fav-Icon/Icon-rund-01.png",
+      "sha256": "2bbbf78dd58a0bd997487ddce2f16b36086bd2ca9a4bef799235e704886dd8d6"
+    },
+    {
+      "original": "20_Grafik_Master/03_Fav-Icon/Icon-rund-01.svg",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/03_Fav-Icon/Icon-rund-01.svg",
+      "sha256": "96cc56b14ee30ebc43b320bfd2975f61421a75b69d93cfc7fc293b206b896dfb"
+    },
+    {
+      "original": "20_Grafik_Master/03_Fav-Icon/Icon-rund.svg",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/03_Fav-Icon/Icon-rund.svg",
+      "sha256": "96f2745740523f45e0677af1106a36e2a7e844c68d22c40e8f0eaec3426070e8"
+    },
+    {
+      "original": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-16.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/resources_logo/glide-app-icon-16.png",
+      "sha256": "c94efbd749df756dc50932c464ee877f6c9f9ca2d04b08c581bae4af6c7f05c4"
+    },
+    {
+      "original": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-256.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/resources_logo/glide-app-icon-256.png",
+      "sha256": "b3d7e0378e6e28bb93699f0952286478f8b392382d5d96a0db23e96b259acb5b"
+    },
+    {
+      "original": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-32.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/resources_logo/glide-app-icon-32.png",
+      "sha256": "d6c7d6146c6ae6c604880e213321447febdc56ed1b998c153110649d1901345b"
+    },
+    {
+      "original": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-64.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/resources_logo/glide-app-icon-64.png",
+      "sha256": "75cb0c88f228139918f20148f2128edc48cb23ea5bba7e41c1500e3d06644457"
+    },
+    {
+      "original": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-klein.svg",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/resources_logo/glide-app-icon-klein.svg",
+      "sha256": "9d031380f07b77b49cd5056685fffff85024a659f827dfc434d98eadc59db4da"
+    },
+    {
+      "original": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-16.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/resources_logo/glide-app-icon-macos-16.png",
+      "sha256": "b98be87052da034db0c22dc414cb88a4cca16e1469f2dd884110fd70a73dade7"
+    },
+    {
+      "original": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-256.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/resources_logo/glide-app-icon-macos-256.png",
+      "sha256": "eb95fcbd1d5f827e29aedee1cece41f9c7580bae590543f56009f7570738679d"
+    },
+    {
+      "original": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-32.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/resources_logo/glide-app-icon-macos-32.png",
+      "sha256": "87158ff960dd36fbac7138823f6390e9012275702c2547380385eb816cb05a0a"
+    },
+    {
+      "original": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-64.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/resources_logo/glide-app-icon-macos-64.png",
+      "sha256": "24cf64621e10e6e3ce51b04c03e3a800d58bcf2b13f9048522cd3e152820f716"
+    },
+    {
+      "original": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/resources_logo/glide-app-icon.png",
+      "sha256": "652e0bfab5500480bd523f31cc90254df3b0a111b24c21c57d8b7617b44d470a"
+    },
+    {
+      "original": "01_Repository/Glide/src/glide/resources/logo/glide-app-icon.svg",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/resources_logo/glide-app-icon.svg",
+      "sha256": "1db74addc3d038a7691c133d84162a999022ffdd95443d8df0cce55661c35cb8"
+    },
+    {
+      "original": "01_Repository/Glide/src/glide/resources/logo/glide-logo-klein.svg",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/resources_logo/glide-logo-klein.svg",
+      "sha256": "92a8eb73a1b42f6650776e9613ec8eeecedf46452a5a97c86d2d6cfe3722b2b6"
+    },
+    {
+      "original": "01_Repository/Glide/src/glide/resources/logo/glide-logo.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/resources_logo/glide-logo.png",
+      "sha256": "08c845e095bb7bcef4c2c9e56a1327e17cff1e5d6c1c2ff89ba04a50736b9b64"
+    },
+    {
+      "original": "01_Repository/Glide/src/glide/resources/logo/glide-logo.svg",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/resources_logo/glide-logo.svg",
+      "sha256": "c734f1e43a39c7cce2ab81301784de0aee5a88943679e4266f002108658cba58"
+    },
+    {
+      "original": "01_Repository/Glide/assets/icons/glide.ico",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/icons/glide.ico",
+      "sha256": "328103a3d4bce40ea62998c612c1547478d91d3076a9e90f9bfa62d523825808"
+    },
+    {
+      "original": "01_Repository/Glide/assets/icons/glide_512.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/icons/glide_512.png",
+      "sha256": "350503cc8570a828cbe055ce70534a3acb28a64ceb3292889f0890107d3ea7c9"
+    },
+    {
+      "original": "01_Repository/Glide/assets/icons/glide_macos_1024.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/icons/glide_macos_1024.png",
+      "sha256": "e6ee8d5537e243cb8846ccc1788affed882e9c4f51d5f0d433bd2ed9d8f29a10"
+    },
+    {
+      "original": "20_Grafik_Master/04_Affinity/Glide-Logo.af",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/04_Affinity/Glide-Logo.af",
+      "sha256": "95abd0bc8e5ec38a19c980c7c394ead79c80ef50df8b4c1537304bc2c6c46abd"
+    },
+    {
+      "original": "01_Repository/Glide/assets/marketing/glide-3.50-seite.png",
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Logo_vor_2026-11-05/marketing/glide-3.50-seite.png",
+      "sha256": "a9b540f3c05f755738b182615e114b362a6111ade5d2bbca1ac38da79799d818"
+    },
+    {
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Glide-Logo-01.svg",
+      "sha256": "c734f1e43a39c7cce2ab81301784de0aee5a88943679e4266f002108658cba58",
+      "note": "Vom Benutzer bereits vor dem Auftrag archivierter Logo-Master"
+    },
+    {
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Glide-Logo-02.svg",
+      "sha256": "d1ce256055fe3fb089301a272d92137bedaf7e13c3c2a9694ffdd25735945737",
+      "note": "Vom Benutzer bereits vor dem Auftrag archivierter Logo-Master"
+    },
+    {
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Glide-Logo-klein.svg",
+      "sha256": "92a8eb73a1b42f6650776e9613ec8eeecedf46452a5a97c86d2d6cfe3722b2b6",
+      "note": "Vom Benutzer bereits vor dem Auftrag archivierter Logo-Master"
+    },
+    {
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Glide-Logo.png",
+      "sha256": "08c845e095bb7bcef4c2c9e56a1327e17cff1e5d6c1c2ff89ba04a50736b9b64",
+      "note": "Vom Benutzer bereits vor dem Auftrag archivierter Logo-Master"
+    },
+    {
+      "archive": "20_Grafik_Master/01_Logo/Archiv/Glide-Logo.svg",
+      "sha256": "0335b68f84b99cb7d7e135e46591cabd7daa14598be57d051926b513b55770a5",
+      "note": "Vom Benutzer bereits vor dem Auftrag archivierter Logo-Master"
+    }
+  ]
+}

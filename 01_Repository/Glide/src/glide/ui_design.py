@@ -10,6 +10,36 @@ SPACING = MappingProxyType({value: value for value in
 RADII = MappingProxyType({"card": 18, "field": 16})
 FONT_SIZES = MappingProxyType({"caption": 9, "source": 9, "body": 12, "section": 16, "title": 22})
 ROW_HEIGHTS = MappingProxyType({"task": 36})
+TITLE_MAX_CHARS = 40
+BUTTON_TEXT_MAX_CHARS = 24
+
+
+def clip_title(text, limit=TITLE_MAX_CHARS, ellipsis="..."):
+    """Zeichengrenze einschließlich Auslassung; keine Änderung am Quellobjekt."""
+    text = str(text or "")
+    if len(text) <= limit:
+        return text
+    if limit < len(ellipsis):
+        return ""
+    return text[:limit - len(ellipsis)].rstrip() + ellipsis
+
+
+def edited_title(text, previous):
+    """Alttitel bei reinen Metadatenänderungen bewahren, geänderte Titel begrenzen."""
+    return text if text == previous else clip_title(text)
+
+
+def task_title(text, description="", *, preserve=False):
+    """Neue Titel begrenzen und ihr Original sichern; Altdaten vollständig bewahren."""
+    clipped = text if preserve else clip_title(text)
+    if clipped != text:
+        description = (str(description or "").rstrip() + "\n\nOriginaltitel:\n" + text).lstrip()
+    return clipped, description
+
+
+def display_title(text, measure, width, limit=TITLE_MAX_CHARS):
+    """Zeichen- und Pixelgrenze gemeinsam; vollständiger Titel bleibt beim Aufrufer."""
+    return fit_text(clip_title(" ".join(str(text or "").split()), limit), measure, width, ellipsis="...")
 
 
 def page_icon_layout(left_padding, line_height, preferred_scale, cell_size=16, gap=8):
@@ -22,13 +52,12 @@ def page_icon_layout(left_padding, line_height, preferred_scale, cell_size=16, g
     return scale, -size - gap, (int(line_height) - size) // 2
 
 
-def fit_text(text, measure, width):
+def fit_text(text, measure, width, ellipsis="…"):
     """Einzeilig kürzen; vollständiger Text bleibt beim Aufrufer erhalten."""
     if not text or width <= 0:
         return ""
     if measure(text) <= width:
         return text
-    ellipsis = "…"
     if measure(ellipsis) > width:
         return ""
     low, high = 0, len(text)

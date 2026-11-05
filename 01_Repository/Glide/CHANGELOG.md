@@ -1,5 +1,41 @@
 # Änderungsverlauf
 
+## 3.50.5 (05.11.2026) – Abnahmekorrekturen und Suchfelder
+
+- Buttonbeschriftungen zentral auf 24 Anzeigezeichen einschließlich `...` und auf die tatsächliche Pixelbreite begrenzt; vollständige Beschriftung im Tooltip und für Bedienhilfen erhalten. Lange Aktionsnamen gekürzt.
+- Gemeinsame Titelgrenze 40 Zeichen: neue/geänderte Aufgaben einschließlich Gruppen und Zwischenüberschriften, zusätzliche benannte Ansichten/Bereiche sowie bestehende Seiten-/Notiz-/Listen-/Ordner-/Vorlagenfelder. Bestehende Aufgabentitel bleiben beim Laden und reinen Metadatenänderungen erhalten; Text-Undo darf Originaltitel wiederherstellen. Lange freie Inhalte gehören in Beschreibung/Absatz.
+- Vollprüfungsnachlauf: mehrzeilige TXT-Importe erst vollständig einlesen und anschließend auf 40 Titelzeichen begrenzen, vollständigen Originaltext in der Beschreibung bewahren. Titelgrenze zusätzlich am Speichereinstieg des Vorlageneditors sichern; unveränderte Alttitel bleiben erhalten.
+- Journal-Knopfzeilen vor Notizen und Zeichnungen entfernt; Favorit, Stimmung, Ort und Schreibimpuls im vorhandenen Mehr-Menü erhalten.
+- Heute blendet das Suchfeld bei schmaler Leiste vollständig aus; erster Tagespfeil beginnt bündig links. Breite Darstellung und Rückwechsel stellen das Feld wieder her.
+- Abstand zwischen Seitenleistenüberschrift und Baum für Seiten, Listen, Notizen und Zeichnungen auf 2 px reduziert.
+- Suchfeld auf der Startseite mit Übergabe an die bestehende globale Suche; Vorlagensuche über Titel, Beschreibung und enthaltene Titel, eigener Suchzustand und Leerstandsanzeige.
+- Quelle, Python-Lieferung, Neuerungen, Beispieldaten und aktive Dokumentstände auf 3.50.5 abgleichen; Aufgabenformat bleibt 26. Native Neubauten und menschliche Freigabe separat.
+
+## 3.50.4 (05.11.2026) – Neuer Stand für die fortgesetzte menschliche Abnahme
+
+- Suchfeld ohne rechte Folgeknöpfe bis zur Inhaltskartenkante verbreitert; 10 px Abstand nur zwischen Feld und echten Knöpfen. Suchanfrage/Löschen und Layout-/Ansichtswechsel werden nachgeführt, neue Breitenregression im Prüfsystem.
+
+- Oberen Abstand der ersten Seitenleistenzeile an die seitlichen 10 px angeglichen; zusätzliche Packreserve und leere Kopfzeile entfernt. Neue Hover-Geometrieprüfung mit 16 Varianten im Prüfsystem.
+
+- Nach erneutem menschlichem Befund zusätzliche 14-px-Buchabstände links/rechts entfernt. Die Regression misst jetzt die Karteninnenkanten statt nur die eigene Tabellenbreite.
+
+- Buchbreiten-Korrektur, neue G-Kontur und lila/gelbe Symbole sowie einheitliches Darkmode-Gelb als neuen Nachteststand zusammengeführt.
+- Quelle, Python-Lieferung, Neuerungenkarte, Beispieldaten, Vorlagen und Dokumentation auf 3.50.4 abgeglichen; Aufgabenformat 26 bleibt erhalten.
+- Bereits bestätigte menschliche Teilprüfungen bleiben ihren bisherigen Quell-/Pakethashes zugeordnet. Buch-Nachtest und weitere Blöcke werden auf 3.50.4 fortgesetzt; native Windows-/Mac-Neubauten weiterhin separat offen.
+
+## 3.50.3 (05.11.2026) – Korrekturen aus der menschlichen Abnahme
+
+- Neue Logo-Master einschließlich geänderter G-Kontur zentral übernommen; App-/Fenster-/Tray-/Favicons und Paket-Symbolquellen in Lila/Gelb erneuert. Farbige Darkmode-Designs verwenden `#FFDC0B` für gelbe Hinweise, mittlere Priorität und heutige Fälligkeit. Reproduzierbarer Logo-Abgleich, Raster-/Farb-/Masterprüfung und vollständige Verwendungscheckliste; alte Grafiken auf Benutzerauftrag archiviert. Native Pakete separat neu bauen.
+
+- Buchspalten nutzen die gesamte Innenbreite auch bei Mindestgröße sowie schmaler/ausgeblendeter Seitenleiste; pauschalen Rahmenabzug entfernt. Neuer Pflichtfall `buchbreite3503` mit 64 Breitenprüfungen und roter Gegenprobe auf der Vorfassung.
+
+- Bei schmaler Breite bleiben Titel und Windows-Menüs oben; globale Symbolaktionen teilen die Eingabe-/Werkzeugzeile und kehren bei mehr Breite in den Kopf zurück.
+
+- Einzeilige, reduzierte Seiten- und Zeichenwerkzeuge mit vorhandenen Menüs; einheitliche äußere Buttonrollen und 8 px Abstand zwischen gestapelter Eingabe und Suche.
+- Eine dauerhafte Aufgabenaktion je sichtbarer Zeile; ungenutzte Reserve in Labels und Büchern entfällt. Tabellenfristen passen vollständig oder weichen als ganze Spalte; Buchtitel erhalten nutzbare Breite.
+- Kompakter Seitenfuß „Erwähnt ohne Verweis“; Zellcursor der Zeichnung erscheint erst bei Tastaturbedienung und verschwindet bei Mausbedienung/Fokusverlust.
+- Ausgangsprüfung 3.50.2 unverändert erhalten; technischer Prüf-/Lieferstand und menschlicher Nachtest getrennt im QA-Nachweis.
+
 ## 3.50.2 (03.11.2026) – Versions- und Ablageabgleich
 
 - Folgereparatur nach CI #250: Linux-Schriftalias und Symbolfläche, feste Kennzahlenzeile sowie Höhenabgleich nach Werkzeugumbruch. Separater nativer UI-Nachlauf über alle 45 Fälle; vollständige Pushprüfungen bleiben erhalten. Mac-Paket #31 mit isolierter Startprobe auf dem ersten Reparaturcommit grün.
@@ -120,20 +156,20 @@ Intern: öffentliche erste Beta. Die Änderungen vom 31.10. und 01.11. sind in d
 
 ## 3.48.0 (27.10.2026) – Tagesnavigation, Mehrfachfelder und Verweise
 
-- **Prüfwerkzeugnachlauf 28.10.2026:** Gemeinsamer Prüfungsstarter sichert CPU-/BIOS-/Python-Kontext und ergänzt passende native/Interpreterabbrüche um eine mögliche Software-/Systemursache (WA-41A); konkrete Datenabweichungen bleiben WA-41B. Originalstatus, Exitcode, Lastumfang und Datenvergleich unverändert. Kein CPU-Defektnachweis, keine App-/Liefer-/Versionsänderung. [Prüfnachweis](tests/qa-3.48.0/prozessdiagnose_2026-10-28/README.md).
+- **Prüfwerkzeugnachlauf 28.10.2026:** Gemeinsamer Prüfungsstarter sichert CPU-/BIOS-/Python-Kontext und ergänzt passende native/Interpreterabbrüche um eine mögliche Software-/Systemursache (WA-41A); konkrete Datenabweichungen bleiben WA-41B. Originalstatus, Exitcode, Lastumfang und Datenvergleich unverändert. Kein CPU-Defektnachweis, keine App-/Liefer-/Versionsänderung. [Prüfnachweis](tests/qa-3.50.5/abnahme_2026-11-05/aufbewahrung.json).
 
 - **Dokumentationsnachlauf zur Vorbeugung:** AMD-Gegenlauf und vorhandene Datensicherungen von geplanten Prüfablauf-, Absturzdiagnose- und Wiederanlaufmaßnahmen getrennt; Reihenfolge und Abnahmekriterien in [Plan §21.27](../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2127-vorbeugung-absturzdiagnose-und-abgesicherter-wiederanlauf). Reine Dokumentation/Planung, keine neue Schutzfunktion oder Lieferung aus diesem Nachlauf.
 
 - **Tage auf der Startseite:** Voriger/nächster Tag, Datum wählen, zu Heute zurück und den angezeigten Tagesplan öffnen. Planung/Kapazität und Fälligkeiten beziehen sich auf denselben gewählten Tag, ohne Aufgaben zu verschieben. Ziel, nächste Aufgabe und Tagesvorschlag bleiben bei Heute. Auswahl endet bei Tages-/Bestandswechsel; Navigation ist flüchtig.
 - **Auswahl bearbeiten:** Wichtigkeit gemeinsam setzen, reguläre Labels ausdrücklich hinzufügen oder entfernen; auch über Vorschauseiten und Quelllisten. Vorhandene unterschiedliche Labels bleiben erhalten. No-op ohne Undo, eine gemeinsame Rücknahme, frische Ziele nach dem Snapshot, keine Teiländerung bei Labelgrenze und kein Erfolg nach Schreibfehler.
 - **Verknüpfte Nebenansicht:** Interne Textlinks folgen dem bisherigen Vorschauweg. Verweise/Rückverweise von Inhalt und ausgewählter Aufgabe sind durchsuchbar; der Sitzungsverlauf bleibt nutzbar. Entfernte Beziehungen und Ziele werden erneut geprüft. Haupteditor/offene Eingabe bleiben erhalten. Datumsmetadaten der Nebenansicht werden auf volle Textbreite bemessen und bei Enge ganz ausgeblendet.
-- **Prüfphase:** Alle drei Pakete gemäß Auftrag vor den Routinetests implementiert; Ergebnisse und Liefergrenzen im [Dreierpaketnachweis](tests/qa-3.48.0/dreierpaket_2026-10-27/README.md). Format bleibt 26, keine neue Abhängigkeit oder Integration.
+- **Prüfphase:** Alle drei Pakete gemäß Auftrag vor den Routinetests implementiert; Ergebnisse und Liefergrenzen im [Dreierpaketnachweis](https://github.com/n05a-design/glide-to-do/blob/40c20fd62db6ec31b4e3668dfc9e7f1550f67974/01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/README.md). Format bleibt 26, keine neue Abhängigkeit oder Integration.
 
 ## 3.47.0 (27.10.2026) – Mehrfachplanung und Nebenansichtsverlauf
 
 - **Tagessteuerung – Mehrfachplanung:** Auswahlmodus in der Heute-Kachel, zehn Vorschauzeilen je Seite, seitenübergreifende Auswahl, alle offenen Tagesaufgaben auswählen, leeren/beenden. Kästchen wählen in diesem Modus aus und erledigen keine Aufgabe. Gemeinsam planen oder entplanen über bestehende Kapazitäts-/Datumsvorschau; ein Undo/Redo, Fälligkeiten unverändert, frische IDs und Besitzprüfung vor/nach Dialogen. Erledigte, archivierte, entfernte oder inzwischen anders geplante Ziele werden nicht still übernommen.
 - **Nebenansicht – Verlauf:** Bis zu 30 Stationen je Sitzung, Zurück/Vorwärts und Alt+Pfeil mit Suchbegriff/aktivem Treffer, Zeilenauswahl und Leseposition. Vorwärtszweige werden beim neuen Navigieren ersetzt, gelöschte Ziele übersprungen, Titel aktuell aufgelöst. „Verlauf“ bietet auch den bestehenden Inhaltswähler. Keine Speicherung der Historie, Bestandsgrenze bei Ordnerwechsel.
-- **Prüfung und Lieferung:** Gezielte Paket-/Regressionsprüfung und Lieferstand im [Folgepaketnachweis](tests/qa-3.47.0/folgepakete_2026-10-27/README.md). Aufgabenformat bleibt 26; native Pakete, breite Endmatrix und Menschenabnahme getrennt.
+- **Prüfung und Lieferung:** Gezielte Paket-/Regressionsprüfung und Lieferstand im [Folgepaketnachweis](https://github.com/n05a-design/glide-to-do/blob/40c20fd62db6ec31b4e3668dfc9e7f1550f67974/01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/README.md). Aufgabenformat bleibt 26; native Pakete, breite Endmatrix und Menschenabnahme getrennt.
 
 ## 3.46.0 (27.10.2026) – Tagessteuerung und Nachschlagen
 
@@ -141,7 +177,7 @@ Intern: öffentliche erste Beta. Die Änderungen vom 31.10. und 01.11. sind in d
 - **Paket 2 – Nebenansicht:** wörtliche Unicode-Suche mit Trefferzahl, Hervorhebung und Vor-/Zurückwechsel, Strg/Cmd+F und Enter/Umschalt+Enter; Überschriften-/Gruppensprünge und abgestuftes Esc. Haupteditor und offene Eingaben bleiben erhalten. Suchzustand über Neuaufbau; Zeichenpositionen auch nach eingebetteten Kästchen/Bildern korrekt. Suchvariablenspur wird beim Hostabbau entfernt.
 - **Kleine Breite:** Nebenansichtskopf mit geschützten, bei Bedarf umbrechenden Öffnen-/Schließen-Aktionen; vier neue Größen-/Designkonfigurationen geprüft.
 - **Prüfdiagnostik:** Vollprüfung sichert Arbeitsmodi-JSON und aktiviert Faulthandler; Wiederholen-Testfenster melden vor Neustart alle Tk-after-Aufträge ab. Keine behauptete Behebung des historischen Linux-/Tk-9.1-Fehlers oder nativen Absturzes.
-- **Version und Format:** 3.46.0, Aufgabenformat weiterhin 26; keine neue Laufzeitabhängigkeit. Aktueller Prüf-/Lieferstand im [Zweierpaketnachweis](tests/qa-3.46.0/zweierpaket_2026-10-27/README.md).
+- **Version und Format:** 3.46.0, Aufgabenformat weiterhin 26; keine neue Laufzeitabhängigkeit. Aktueller Prüf-/Lieferstand im [Zweierpaketnachweis](https://github.com/n05a-design/glide-to-do/blob/40c20fd62db6ec31b4e3668dfc9e7f1550f67974/01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/README.md).
 
 ## Ergänzungen und Lieferabschluss 3.45.0 (26.10.2026)
 

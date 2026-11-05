@@ -3,7 +3,7 @@
 Tk 9 rastert SVG nativ. Tk 8.6 bekommt ein transparentes, mit der
 Standardbibliothek geglättetes PNG in exakter Zielgröße; vorberechnete
 App-Symbole vermeiden den großen PNG-Lade- und Verkleinerungsweg.
-Kleingrößenmaster gelten ausschließlich für 16 und 32 px.
+Alle Größen verwenden unverändert die neue G-Kontur vom 05.11.2026.
 """
 
 import functools
@@ -13,10 +13,12 @@ import sys
 import tkinter as tk
 import svg_geometry
 import logo_raster
+import brand
 
-# Füllfarbe der Master (Glide-Blau). Genau dieser Wert wird ersetzt.
-MASTER_FILL = "#0185e1"
-BRAND_BLUE = "#0185E1"
+# Primärfarbe des neuen Masters; individuelle Oberflächenakzente bleiben möglich.
+MASTER_FILL = brand.PURPLE.lower()
+BRAND_PURPLE = brand.PURPLE
+BRAND_YELLOW = brand.YELLOW
 LOGO_FILE = "glide-logo.svg"
 ICON_FILE = "glide-app-icon.svg"
 LOGO_SMALL_FILE = "glide-logo-klein.svg"
@@ -65,6 +67,10 @@ def outline(name=LOGO_FILE, schritte=10):
 
 def bounding_box(name=LOGO_FILE):
     """(x, y, Breite, Höhe) der gezeichneten Fläche – die Kurvenpunkte schließen sie ein."""
+    if name in (ICON_FILE, ICON_SMALL_FILE):
+        # Der gelbe Rechteckgrund gehört zur freigegebenen Gesamtgestaltung.
+        # Nicht allein nach den Pfadkonturen des lila G zuschneiden.
+        return svg_geometry.document_box(read_svg(name))
     punkte = [punkt for teil in outline(name) for punkt in teil]
     x0 = min(px for px, _py in punkte) - BOX_MARGIN
     y0 = min(py for _px, py in punkte) - BOX_MARGIN
@@ -106,7 +112,7 @@ def has_svg(master):
         return False
 
 
-def logo_photo(master, hoehe, farbe=BRAND_BLUE, name=LOGO_FILE):
+def logo_photo(master, hoehe, farbe=BRAND_PURPLE, name=LOGO_FILE):
     """Logo in exakter Höhe: natives SVG oder geglättetes transparentes PNG."""
     hoehe = max(1, int(hoehe))
     if name == LOGO_FILE and hoehe in (16, 32):

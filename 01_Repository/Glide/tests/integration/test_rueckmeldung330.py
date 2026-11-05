@@ -23,6 +23,7 @@ import importlib.util
 import os
 import sys
 import tempfile
+from unittest.mock import patch
 import zipfile
 from pathlib import Path
 
@@ -211,8 +212,17 @@ with tempfile.TemporaryDirectory(prefix="glide-rueckmeldung-") as ordner:
         editor._release()
         assert editor.selection is None, "Klick neben die Auswahl hebt sie auf"
         editor.select_all()
-        assert editor.option_buttons.get("deselect") is not None, "Knopf „Aufheben“"
-        editor.deselect()
+        # D61: Auswahlaktionen stehen im einzeiligen Optionsmenü statt
+        # dauerhaft als weitere Knopfreihe neben der Zeichenfläche.
+        opened = []
+        with patch.object(mod.tk.Menu, "tk_popup", lambda menu, *a, **k: opened.append(menu)):
+            editor.options_button.command()
+        assert opened, "Auswahloptionen fehlen"
+        menu = opened[-1]
+        index = next(i for i in range(menu.index("end") + 1)
+                     if menu.entrycget(i, "label") == "Auswahl aufheben")
+        menu.invoke(index)
+        ruhe()
         assert editor.selection is None
         assert not fehler, fehler[:1]
 

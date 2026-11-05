@@ -9,18 +9,18 @@ import svg_geometry as svg
 
 class SVGGeometryTests(unittest.TestCase):
     def test_css_tint_is_inline(self):
-        original = '<svg xmlns="http://www.w3.org/2000/svg"><style>.a {fill: #0185e1; fill-rule: evenodd;}</style><path class="a" d="M0 0H10V10H0Z"/></svg>'
+        original = '<svg xmlns="http://www.w3.org/2000/svg"><style>.a {fill: #9e4ac8; fill-rule: evenodd;}</style><path class="a" d="M0 0H10V10H0Z"/></svg>'
         result = svg.tinted(original, "#123456")
         node = ET.fromstring(result).find('{http://www.w3.org/2000/svg}path')
         self.assertIn('fill: #123456', node.get('style'))
         self.assertIn('fill-rule: evenodd', node.get('style'))
-        self.assertNotIn('#0185e1', result)
+        self.assertNotIn('#9e4ac8', result)
 
-    def test_legacy_tint_and_bad_color(self):
-        self.assertIn('#ABCDEF', svg.tinted('<svg fill="rgb(1,133,225)"/>', '#ABCDEF'))
+    def test_rgb_tint_and_bad_color(self):
+        self.assertIn('#ABCDEF', svg.tinted('<svg fill="rgb(158,74,200)"/>', '#ABCDEF'))
         for value in ('red', '#12345', None):
             with self.assertRaises(ValueError):
-                svg.tinted('<svg fill="#0185e1"/>', value)
+                svg.tinted('<svg fill="#9e4ac8"/>', value)
 
     def test_nonpainted_css_path_is_excluded(self):
         source = '<svg xmlns="http://www.w3.org/2000/svg"><style>.empty {fill: none;}</style><path class="empty" d="M0 0H100V100H0Z"/><path d="M10 10H20V20H10Z"/></svg>'
@@ -57,9 +57,16 @@ class SVGGeometryTests(unittest.TestCase):
 
     def test_entities_rejected(self):
         source = '<!DOCTYPE svg [<!ENTITY a "x">]><svg/>'
-        for method in (svg.outline, svg.inline_styles):
+        for method in (svg.outline, svg.inline_styles, svg.document_box):
             with self.assertRaises(ValueError):
                 method(source)
+
+    def test_icon_uses_full_document_box_including_background(self):
+        source = '<svg viewBox="0 0 841.89 841.89"><rect width="841.89" height="841.89"/><path d="M200 100H600V700H200Z"/></svg>'
+        self.assertEqual(svg.document_box(source), (0., 0., 841.89, 841.89))
+        for box in ("", "0 0 0 100", "0 0 100 -1", "0 0 nan 100", "0 0 100", "0 0 inf 100"):
+            with self.subTest(box=box), self.assertRaises(ValueError):
+                svg.document_box(f'<svg viewBox="{box}"/>')
 
 
 if __name__ == '__main__':

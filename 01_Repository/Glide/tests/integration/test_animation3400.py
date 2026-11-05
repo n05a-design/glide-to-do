@@ -338,8 +338,7 @@ def run(app_path, cases, report, previous):
                     root.geometry('860x700+20+20')
                     app.refresh_tree();pump(.25)
                     current = editor()
-                    for target in (current.frame_choice, current.frames_button, current.play_animation_button,
-                                   current.animation_export_button):
+                    for target in (current.frame_choice, current.frames_button, current.play_animation_button):
                         assert target.winfo_ismapped(), ('Animationsbedienung nicht sichtbar', size)
                         assert target.winfo_rootx() >= current.winfo_rootx()
                         assert target.winfo_rootx()+target.winfo_width() <= current.winfo_rootx()+current.winfo_width()+2

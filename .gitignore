@@ -65,6 +65,9 @@ window.conf
 # Ablageprüfung, Kürzung mit scripts/pflege/ablage_kuerzen.py).
 **/[Aa]rchiv/
 !07_Python-Versionen/Archiv/
+# Expliziter Benutzerauftrag 05.11.2026: bisherige Logo-Dateien aufbewahren.
+!20_Grafik_Master/01_Logo/Archiv/
+!20_Grafik_Master/01_Logo/Archiv/**
 *_Z/
 *.fetch
 *.orig

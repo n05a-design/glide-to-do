@@ -1,10 +1,10 @@
 # Prüfungen für Glide
 
-Stand 04.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand · Aufgabenformat 26 · 108 Integrationssuiten und fünf Analysen
+Stand 05.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand · Aufgabenformat 26 · 108 Integrationssuiten und fünf Analysen
 
 Die aktuelle vollständige Prüf- und Lieferbilanz steht im [QA-Bericht](../docs/07_QA_BERICHT.md) und im [Betanachweis](qa-3.50.0/oeffentliche_beta_2026-11-02/README.md). Historische Ergebnisse werden dort ihren tatsächlichen Quellständen zugeordnet, statt hier eine zweite Statusliste zu pflegen. Am 02.11.2026 gekürzt und zusammengeführt.
 
-3.50 ergänzt Hintergrundfarben, volle Seitenleiste und Blockziehen. `test_arbeitsmodi.py` prüft insgesamt 45 Fälle; der Betafall deckt zehn Designs, alle Hintergrundoptionen, drei Größen, echte Aufgaben und Bildanhänge, Speicherung/Neustart, Undo/Redo, Abbruch und Schreibschutz ab. Der Knopfschutz prüft zusätzlich sieben Ansichten und fünf Dialoge.
+3.50 ergänzt Hintergrundfarben, volle Seitenleiste und Blockziehen. `test_arbeitsmodi.py` prüft insgesamt 47 Fälle (einschließlich `buchbreite3503` mit 64 Breitenprüfungen für volle/schmale/ausgeblendete Seitenleiste); der Betafall deckt zehn Designs, alle Hintergrundoptionen, drei Größen, echte Aufgaben und Bildanhänge, Speicherung/Neustart, Undo/Redo, Abbruch und Schreibschutz ab. Der Knopfschutz prüft zusätzlich sieben Ansichten und fünf Dialoge.
 
 D58: Commit/Push und verfügbare Hosted-Plattformprüfungen sind für den Abschluss autorisiert. Menschliche Prüfung anschließend. Screenreader-Abnahme einschließlich VoiceOver/NVDA/Orca ist bis Bedarf zurückgestellt; die optionalen Anleitungen unten bleiben erhalten. Keine Tests mit echten Nutzerdaten, Hardwareänderungen oder Eingriffe in persönliche Installationen.
 
@@ -12,7 +12,7 @@ D58: Commit/Push und verfügbare Hosted-Plattformprüfungen sind für den Abschl
 
 | Zweck | Aufruf |
 |---|---|
-| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.50.2/<Name> --timeout 900` |
+| Vollprüfung (Referenz-Mac) | `python3 -B tests/tools/pruefen.py --modus voll --protokoll tests/qa-3.50.5/<Name> --timeout 900` |
 | Schnellprüfung | `python3 -B tests/tools/pruefen.py` |
 | CI-Grundstufe (wie GitHub) | `python3 -B tests/tools/ci_grundstufe.py --protokoll <Ordner>` |
 | Windows | `tests/tools/windows_vollpruefung.cmd` (Anleitung in der [manuellen Prüfliste](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md)) |
@@ -24,7 +24,7 @@ D58: Commit/Push und verfügbare Hosted-Plattformprüfungen sind für den Abschl
 
 Unter Windows die geprüfte Python-3.14-/Tk-9-Laufzeit oder `windows_vollpruefung.ps1 -PythonExecutable <Pfad>` verwenden; `--timeout 900` ist dort mit Virenschutz und synchronisiertem Ordner realistischer als die Vorgabe von 300 Sekunden je Suite. Kein `pytest`: Die Suiten sind ausführbare Skripte, die beim Import ein Tk-Fenster öffnen.
 
-Für native UI-Fehlersuche in GitHub Actions „Glide-Prüfung“ manuell mit `bereich: ui-nachlauf` auf dem Reparaturzweig starten. Dieser Lauf prüft alle 45 Arbeitsmodi mit eigener Tk 9.1 unter Linux/Xvfb und Windows und sichert beide JSON-Berichte. Seine getrennte Laufgruppe unterbricht die normale Push-Vollmatrix nicht. Er ersetzt weder Vollprüfung und positive Kalibrierungsbasis noch Paketnachweis oder menschliche Abnahme; diese Tore bleiben im normalen Pushlauf erhalten.
+Für native UI-Fehlersuche in GitHub Actions „Glide-Prüfung“ manuell mit `bereich: ui-nachlauf` auf dem Reparaturzweig starten. Dieser Lauf prüft alle 47 Arbeitsmodi mit eigener Tk 9.1 unter Linux/Xvfb und Windows und sichert beide JSON-Berichte. Seine getrennte Laufgruppe unterbricht die normale Push-Vollmatrix nicht. Er ersetzt weder Vollprüfung und positive Kalibrierungsbasis noch Paketnachweis oder menschliche Abnahme; diese Tore bleiben im normalen Pushlauf erhalten.
 
 ## Aufbau
 

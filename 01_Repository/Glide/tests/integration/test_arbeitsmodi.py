@@ -334,7 +334,15 @@ def fall_kopfverweise(lauf):
     zeile = editor._head_row
     assert editor._head_signature == ("icon", "cover")
     knoepfe_ = editor._head_buttons
-    assert not zeile.winfo_manager() and not any(k.winfo_ismapped() for k in knoepfe_.values()), "in Ruhe verborgen"
+    # Der echte Zeiger kann nach der Layoutänderung über dem Titel stehen.
+    # Ruhe ausdrücklich herstellen wie bei der Leave-Gegenprobe unten;
+    # den Benutzerzeiger dabei nicht bewegen.
+    with patch.object(editor, "winfo_pointerx", return_value=-10000), \
+            patch.object(editor, "winfo_pointery", return_value=-10000):
+        editor.text.focus_force()
+        editor.page_head_check()
+        idle(lauf)
+        assert not zeile.winfo_manager() and not any(k.winfo_ismapped() for k in knoepfe_.values()), "in Ruhe verborgen"
     # Keine zusätzliche Bedienzeile und kein früherer Umbruch: Der Titel bleibt, wie er ohne Verweise wäre.
     oben = titel.winfo_rooty()
     umbruch = int(float(titel.cget("wraplength")))
@@ -2387,7 +2395,8 @@ def fall_fokus_wechseln(lauf):
     blockiert = app.new_item('Noch blockiert', planned_date=today, blocked_by=[blocker['id']])
     erledigt = app.new_item('Schon erledigt', planned_date=today, done=True)
     morgen = app.new_item('Erst morgen', planned_date=(date.today() + timedelta(days=1)).isoformat())
-    lang = app.new_item('Sehr langer Aufgabentitel ' * 5, planned_date=today)
+    # Ungekürzter Altbestand bleibt lesbar; neue Titel sind seit D63 auf 40 begrenzt.
+    lang = app.new_item('Sehr langer Aufgabentitel ' * 5, planned_date=today, preserve_title=True)
     source['items'] = [aktuell, wichtig, normal, blocker, blockiert, erledigt, morgen, lang]
     app.lists, app.folders, app.labels, app.trash = [source], [], [], []
     app.items, app.active_list_id = source['items'], source['id']
@@ -3274,17 +3283,581 @@ def fall_ansichtssymbole(lauf):
     idle(lauf)
     app.show_quick_plan_row()
     idle(lauf)
-    assert app.row_action_target() and app.quick_plan_row_button.winfo_ismapped()
-    with patch.object(app, 'show_quick_plan_menu') as plan:
-        taste(app.quick_plan_row_button, '<space>', lauf)
-        assert plan.call_args.kwargs['item_ids'] == [task['id']]
-    with patch.object(app, 'edit_task_field') as due:
-        taste(app.row_due_button, '<Return>', lauf)
-        assert due.call_args.args[:2] == (task['id'], 'due')
+    assert app.row_action_target() and app.row_overflow_button.winfo_ismapped()
     with patch.object(app, 'show_item_context_menu') as more:
         taste(app.row_overflow_button, '<space>', lauf)
         assert app.tree.identify_row(more.call_args.args[0].y) == task['id']
-    return f'{checked} Ansichtswechsel mit Symbol, Klartextname und aktivem Zustand; drei Zeilenaktionen per Tastatur auf stabiler Aufgaben-ID'
+    return f'{checked} Ansichtswechsel mit Symbol, Klartextname und aktivem Zustand; eine dauerhafte Zeilenaktion per Tastatur auf stabiler Aufgaben-ID'
+
+
+def fall_abnahme3505(lauf):
+    app = lauf.app
+    lauf.showcase()
+    checks = 0
+    for design, size in (("light", "mittel"), ("dark", "mittel"), ("glass_light", "gross"), ("glass_dark", "gross")):
+        app.settings["ui_font_size"] = size
+        app.apply_ui_font()
+        app.set_design(design)
+        for geometry, visible in (("860x800", True), ("1280x800", True), ("1720x900", True),
+                                  ("860x800", False), ("860x800", True)):
+            app.settings.update(sidebar_visible=visible, sidebar_narrow=False)
+            app._apply_sidebar_visibility()
+            lauf.root.geometry(geometry + "+20+20")
+            app.set_today_view()
+            idle(lauf, 8)
+            assert lauf.root.winfo_width() == int(geometry.split("x")[0]), ("Prüfbreite nicht erreicht", geometry, lauf.root.geometry())
+            context = (design, size, geometry, visible)
+            field, row = app.search_border, app.search_frame
+            if app.header_density() == "minimal":
+                assert not field.winfo_ismapped(), ("Heute-Suche bei Enge gequetscht", context)
+            if not field.winfo_ismapped():
+                assert app.plan_day_prev_button.winfo_rootx() == row.winfo_rootx(), (
+                    "Lücke links vom Tagespfeil", context, app.plan_day_prev_button.winfo_rootx(), row.winfo_rootx())
+            else:
+                assert field.winfo_width() >= 160, ("Heute-Suchfeld zu schmal", context, field.winfo_width())
+            for widget in row.pack_slaves():
+                if widget.winfo_ismapped():
+                    assert widget.winfo_rootx() >= row.winfo_rootx()
+                    assert widget.winfo_rootx() + widget.winfo_width() <= row.winfo_rootx() + row.winfo_width()
+                    assert widget is field or widget.winfo_width() >= widget.winfo_reqwidth(), ("Heute-Knopf gequetscht", context)
+            app.clear_search_placeholder()
+            app.search_var.set("Briefing")
+            idle(lauf, 8)
+            assert app.clear_search_button.winfo_ismapped(), "Aktiver Filter muss löschbar bleiben"
+            assert all(w is field or w.winfo_width() >= w.winfo_reqwidth() for w in row.pack_slaves() if w.winfo_ismapped()), (
+                "Heute-Knopf bei aktivem Filter gequetscht", context)
+            assert not field.winfo_ismapped() or field.winfo_width() >= 160
+            if not app.detail_button.winfo_ismapped():
+                with patch.object(app, "show_option_panel") as options:
+                    app.show_detail_mode_menu()
+                    assert options.call_args.args[0] is app.plan_day_mode_button
+            with patch.object(app, "show_option_panel") as options:
+                app.show_plan_day_mode_menu()
+                assert {"grid", "display"} <= {value[0] for value in options.call_args.args[1]}
+            assert app.plan_day_prev_button.winfo_rootx() == row.winfo_rootx() if app._today_search_hidden else True
+            app.clear_search()
+            idle(lauf, 6)
+            if visible:
+                for key in ("pages", "lists", "notes", "drawings"):
+                    if not app.sidebar_section_open(key):
+                        app.toggle_sidebar_section(key)
+                idle(lauf, 5)
+                pairs = [(app.sidebar_listbox, app.sidebar_title_row)] + [
+                    (getattr(app, key + "_listbox"), getattr(app, key + "_title_row"))
+                    for key in ("pages", "notes", "drawings")]
+                for tree, heading in pairs:
+                    rows = [i for i in tree.get_children() if tree.bbox(i)]
+                    if tree.winfo_ismapped() and rows:
+                        gap = tree.winfo_rooty() + tree.bbox(rows[0])[1] - (heading.winfo_rooty() + heading.winfo_height())
+                        assert 0 <= gap <= 2, ("Abschnitt zu weit vom Inhalt", context, gap)
+            checks += 1
+        app.set_home_view()
+        idle(lauf, 8)
+        assert app.overview_search_entry.winfo_ismapped(), "Startseiten-Suche fehlt"
+        app.overview_search_var.set("Briefing")
+        taste(app.overview_search_entry, "<Return>", lauf)
+        assert app._quick_open["entry"].get() == "Briefing"
+        assert app._quick_open["results"], "Globale Suche ohne Bestandstreffer"
+        app.close_quick_open()
+        app.set_template_view()
+        idle(lauf, 8)
+        assert app.overview_search_entry.winfo_ismapped(), "Vorlagen-Suche fehlt"
+        assert app.overview_search_var.get() == "", "Startseiten-Anfrage filtert Vorlagen"
+        app.overview_search_var.set("Projektstart")
+        pending = app._template_search_after_id
+        idle(lauf, 8)
+        assert app._template_search_after_id is None and pending not in app._after_ids, "Erledigter Suchauftrag bleibt registriert"
+        assert len(app.template_cards) == len(lauf.mod.glide_search.matching_templates(app.templates, "Projektstart")) > 0
+        app.overview_search_var.set("kein-treffer-52af")
+        idle(lauf, 8)
+        assert not app.template_cards
+        taste(app.overview_search_entry, "<Escape>", lauf)
+        assert len(app.template_cards) == len(app.templates)
+        app.set_home_view()
+        idle(lauf, 6)
+        assert app.overview_search_var.get() == "Briefing"
+        app.overview_search_var.set("")
+    return f"{checks} Heute-/Abschnitts-Geometrien und vier Suchabläufe: globaler Bestandstreffer, Vorlagenfilter/Trefferleerstand/Escape, getrennte Suchzustände"
+
+
+def fall_titellaenge3504(lauf):
+    """Tatsächlich gezeichnete Beschriftungen statt ungekürzter Quelldaten messen."""
+    app, mod = lauf.app, lauf.mod
+    lauf.showcase()
+    page = app.new_page_from_markdown("# " + "W" * 40 + "\n\nPrüfseite")
+    legacy = ("Bestehender vollständiger Aufgabentitel " * 3).strip()
+    item = app.new_item("Alttitel", item_id="legacy-title-probe")
+    item["text"] = legacy
+    assert item["text"] == legacy
+    app.settings["page_recent"] = [page["id"]]
+    checks = 0
+    for design in ("light", "dark"):
+        app.set_design(design)
+        for style in mod.glide_fonts.STYLES:
+            app.settings["ui_font_family"] = style.family
+            for size in ("mittel", "gross"):
+                app.settings["ui_font_size"] = size
+                app.apply_ui_font()
+                for geometry in ("860x700", "1280x800"):
+                    lauf.root.geometry(geometry + "+20+20")
+                    app.set_pages_view()
+                    idle(lauf, 6)
+                    assert lauf.root.winfo_width() == int(geometry.split("x")[0])
+                    buttons = [w for w in knoepfe(app.home_content, mod.RoundedButton)
+                               if page["title"] in w.text and w.winfo_ismapped()]
+                    assert buttons, "Seitenübersicht braucht lange Titelknöpfe"
+                    for button in buttons:
+                        shown = "".join(button.itemcget(i, "text") for i in button.find_all()
+                                        if button.type(i) == "text")
+                        assert shown.endswith("..."), ("Langer Titel ohne Auslassung", shown)
+                        assert len(shown) <= 24
+                        for i in button.find_all():
+                            if button.type(i) == "text":
+                                box = button.bbox(i)
+                                assert box[0] >= 10 and box[2] <= button.winfo_width() - 10, (
+                                    "Titel außerhalb des Knopfinnenraums", box, button.winfo_width())
+                        assert page["title"] in button.text, "Volltext für Zugriff/Tooltip verloren"
+                        assert callable(button._glide_tooltip["source"])
+                        assert page["title"] in button._glide_tooltip["source"]()
+                    checks += 1
+                    if getattr(lauf, "capture", None) and style.key == "rubik" and geometry == "860x700":
+                        sys.path.insert(0, str(REPO / "tests/tools"))
+                        from releasedaten import save_windows_screenshot
+                        lauf.capture.mkdir(parents=True, exist_ok=True)
+                        save_windows_screenshot(lauf.root, lauf.capture / f"titellaenge-{design}-{size}.png")
+                    note = next(e for e in app.lists if e.get("list_kind") == "note")
+                    app.set_active_list(note["id"])
+                    idle(lauf, 6)
+                    editor = app.rich_note_editor
+                    assert app.active_list_id == note["id"], ("Notizwechsel gescheitert", note["title"], app.get_display_title())
+                    assert isinstance(editor, mod.NoteEditor) and editor.winfo_ismapped(), (
+                        "Notizeditor nicht sichtbar", note["title"], type(editor).__name__)
+                    assert not app.note_journal_actions.winfo_ismapped(), "Zusätzliche Journal-Knopfreihe vor dem Inhalt"
+                    assert len([r for r in editor.toolbar._rows if r.winfo_manager()]) == 1, "Notizwerkzeuge mehrzeilig"
+                    with patch.object(app, "toggle_journal_favorite") as favorite:
+                        menu = editor.build_page_menu()
+                        labels = {i: menu.entrycget(i, "label") for i in range(menu.index("end") + 1)
+                                  if menu.type(i) == "command"}
+                        assert sum(label == "Schreibimpuls" for label in labels.values()) == 1
+                        assert any(label.startswith("Stimmung:") for label in labels.values())
+                        assert any(label.startswith("Ort:") for label in labels.values())
+                        index = next(i for i, label in labels.items() if "Favorit" in label)
+                        menu.invoke(index)
+                        favorite.assert_called_once()
+                        menu.destroy()
+                    if getattr(lauf, "capture", None) and style.key == "rubik" and geometry == "860x700":
+                        save_windows_screenshot(lauf.root, lauf.capture / f"notiz-kompakt-{design}-{size}.png")
+    assert len(app.new_item("W" * 100)["text"]) == 40
+    assert app.new_item("W" * 100)["text"].endswith("...")
+    assert len(app.new_item("W" * 100, item_id="neue-feste-id")["text"]) == 40
+    assert app.normalize_items([item])[0]["text"] == legacy, "Alttitel beim Laden gekürzt"
+    target = next(e for e in app.lists if app.list_accepts_items(e))
+    target["items"].append(item)
+    app.set_active_list(target["id"])
+    app.save_items()
+    details = app.item_details_snapshot(item)
+    details["description"] = "Metadaten ändern, Alttitel bewahren"
+    app.apply_task_edit(item, details)
+    assert item["text"] == legacy
+    details["text"] = "Neuer Titel " * 10
+    app.apply_task_edit(item, details)
+    assert len(item["text"]) == 40 and item["text"].endswith("...")
+    app.tree.selection_set(item["id"])
+    app.begin_item_rename(item["id"])
+    entry = app._item_rename_entry
+    entry.delete(0, "end")
+    entry.insert(0, "X" * 41)
+    assert len(entry.get()) <= 40, "Inline-Eingabe erlaubt 41 Zeichen"
+    entry.insert(0, "X" * 40)
+    assert entry.get() == "X" * 40
+    taste(entry, "<Return>", lauf)
+    assert app.find_item_in_lists(item["id"])[0]["text"] == "X" * 40
+    # TXT-Fortsetzungen werden erst nach dem vollständigen Einlesen begrenzt:
+    # auch ein bereits langer erster Satz und vorhandene Beschreibungen bleiben erhalten.
+    for first in ("Kurz", "W" * 80):
+        original = first + "\n" + "Z" * 60 + "\nLetzte Zeile"
+        imported = app.parse_txt_items([
+            "1. " + first, "Text: " + "Z" * 60,
+            "Beschreibung: Vorhandene Beschreibung", "Text: Letzte Zeile", "1.1. Kind"])
+        assert len(imported[0]["text"]) == 40 and imported[0]["text"].endswith("...")
+        assert original in imported[0]["description"], "TXT-Fortsetzung oder Originaltitel verloren"
+        assert imported[0]["description"].startswith("Vorhandene Beschreibung")
+        assert imported[0]["description"].count("Originaltitel:") == 1
+        assert imported[0]["children"][0]["text"] == "Kind"
+    # Auch der Speichereinstieg des Vorlageneditors muss die Grenze sichern,
+    # unabhängig von der Eingabevalidierung. Unveränderte Alttitel bleiben erhalten.
+    for initial, changed, expected in (("Kurz", "V" * 41, mod.glide_design.clip_title("V" * 41)),
+                                       (("Alter Titel " * 6).strip(), None, ("Alter Titel " * 6).strip())):
+        template = copy.deepcopy(app.default_template_records()[0])
+        template["title"] = initial
+        with mod.TemplateDraft(app, template) as draft:
+            draft.title_var = mod.tk.StringVar(value=initial if changed is None else changed)
+            draft.relative_var = mod.tk.BooleanVar(value=False)
+            draft.dialog = mod.tk.Toplevel(lauf.root)
+            draft.submit()
+            assert draft.result["title"] == expected.strip()
+            assert draft.result["payload"]["lists"][0]["title"] == expected.strip()
+    return f"{checks} Seitenübersichts-Konfigurationen: vier Schriftstile, zwei Größen/Designs/Breiten, sichtbare Auslassung und echte Canvas-Innenkanten; 40-Zeichen-Neuanlage, TXT-Fortsetzungen, Vorlagenspeicherung und unveränderter Alttitel"
+
+
+def fall_suchbreite3504(lauf):
+    """Suchzeile endet an der Inhaltskante; Abstand nur vor echten Folgeknöpfen."""
+    app = lauf.app
+    lauf.showcase()
+    library = next(e for e in app.folders if e.get("folder_kind") == "library")
+    source = next(e for e in app.lists if "Wiedervorlagen" in e["title"])
+    checks = 0
+
+    def pruefen(context):
+        nonlocal checks
+        field, row, toolbar = app.search_border, app.search_frame, app.content_toolbar
+        assert field.winfo_ismapped(), ("Suchfeld fehlt", context)
+        card = app.list_frame_outer
+        right = card.winfo_rootx() + card.winfo_width()
+        assert toolbar.winfo_rootx() + toolbar.winfo_width() == right, (
+            "Werkzeugzeile endet vor äußerer Inhaltskarte", context)
+        assert row.winfo_rootx() + row.winfo_width() == right, ("Suchzeile endet vor Inhaltskante", context)
+        field_right = field.winfo_rootx() + field.winfo_width()
+        controls = [widget for widget in row.pack_slaves() if widget is not field and widget.winfo_ismapped()]
+        if not controls:
+            assert field_right == right, (
+                "Suchfeld lässt rechts ungenutzte Breite", context,
+                {"suchfeld_rechts": field_right, "inhaltskante": right, "luecke": right - field_right})
+        else:
+            first = min(widget.winfo_rootx() for widget in controls)
+            assert first - field_right >= 10, ("Suchfeld überdeckt Folgeknopf", context, field_right, first)
+            assert max(widget.winfo_rootx() + widget.winfo_width() for widget in controls) == right, (
+                "Suchzeilenknöpfe enden vor Inhaltskante", context)
+            assert all(widget.winfo_width() >= widget.winfo_reqwidth() for widget in controls), (
+                "Suchzeilenknopf gequetscht", context)
+        assert bool(app.current_search_query()) == bool(app.clear_search_button.winfo_ismapped()), (
+            "Suche-löschen-Zustand falsch", context)
+        checks += 1
+
+    for design, size in (("light", "mittel"), ("dark", "mittel"),
+                         ("glass_light", "gross"), ("glass_dark", "gross")):
+        app.settings["ui_font_size"] = size
+        app.apply_ui_font()
+        app.set_design(design)
+        for geometry, visible, narrow in (("860x700", True, False), ("1280x800", True, False),
+                                         ("860x700", True, True), ("860x700", False, False),
+                                         ("1280x800", False, False), ("860x700", True, False)):
+            app.settings.update(sidebar_visible=visible, sidebar_narrow=narrow)
+            app._apply_sidebar_visibility()
+            lauf.root.geometry(geometry + "+20+20")
+            idle(lauf, 6)
+            # Auch Größen-/Seitenleistenwechsel im bereits geöffneten Buch.
+            if app.is_library_view():
+                pruefen((design, size, geometry, visible, narrow, "direkter Layoutwechsel"))
+            for view in ("buch", "labels", "liste"):
+                app.clear_search()
+                if view == "buch":
+                    app.set_active_folder(library["id"])
+                elif view == "labels":
+                    app.set_labels_view()
+                else:
+                    app.set_active_list(source["id"])
+                    app.open_list_view()
+                idle(lauf, 6)
+                context = (design, size, geometry, visible, narrow, view)
+                pruefen((*context, "ohne Suchanfrage"))
+                app.clear_search_placeholder()
+                app.search_var.set("Parkquartier")
+                idle(lauf, 6)
+                pruefen((*context, "mit Suche löschen"))
+                app.clear_search()
+                idle(lauf, 6)
+                pruefen((*context, "nach Suche löschen"))
+            app.set_active_folder(library["id"])
+            idle(lauf, 6)
+        if getattr(lauf, "capture", None):
+            sys.path.insert(0, str(REPO / "tests/tools"))
+            from releasedaten import save_windows_screenshot
+            lauf.capture.mkdir(parents=True, exist_ok=True)
+            save_windows_screenshot(lauf.root, lauf.capture / f"suchbreite-{design}-{size}.png")
+    return f"{checks} Suchbreitenprüfungen: Inhaltskante statt Eigenbreite, Buch/Labels/Liste, leer/Suche/löschen, vier Design-/Schriftkombinationen, Mindestbreite/breit, volle/schmale/ausgeblendete Seitenleiste und Rückwechsel; Folgeknöpfe ohne Überdeckung"
+
+
+def fall_seitenleistenabstand3504(lauf):
+    """Die erste Hover-Zeile hat oben denselben Kartenabstand wie seitlich."""
+    app = lauf.app
+    lauf.showcase()
+    app.set_labels_view()
+    checks = 0
+
+    def pruefen(context):
+        nonlocal checks
+        tree, card = app.system_listbox, app.sidebar_shell
+        row = tree.get_children()[0]
+        x, y, width, height = tree.bbox(row)
+        tree.event_generate("<Motion>", x=x + width // 2, y=y + height // 2)
+        idle(lauf, 3)
+        assert "hover" in tree.item(row, "tags"), ("Hover fehlt", context)
+        assert row not in tree.selection(), ("Hoverprobe ist ausgewählt", context)
+        gaps = {
+            "oben": tree.winfo_rooty() + y - card.winfo_rooty(),
+            "links": tree.winfo_rootx() + x - card.winfo_rootx(),
+            "rechts": card.winfo_rootx() + card.winfo_width()
+                      - (tree.winfo_rootx() + x + width),
+        }
+        assert gaps["oben"] == gaps["links"] == gaps["rechts"], (
+            "Erste Hover-Zeile hat ungleiche Kartenabstände", context, gaps)
+        # Der separat gezeichnete Symbolhintergrund muss dieselbe Hover-Zeile nutzen.
+        canvas = tree.icon_canvas
+        rect = next(item for item in canvas.find_all()
+                    if canvas.type(item) == "rectangle" and canvas.coords(item)[1] == y)
+        assert canvas.itemcget(rect, "fill") == app.theme["hover"]
+        tree.event_generate("<Leave>")
+        idle(lauf, 2)
+        assert "hover" not in tree.item(row, "tags")
+        checks += 1
+
+    for design, size in (("light", "mittel"), ("dark", "mittel"),
+                         ("glass_light", "gross"), ("glass_dark", "gross")):
+        app.settings["ui_font_size"] = size
+        app.apply_ui_font()
+        app.set_design(design)
+        for geometry in ("860x700", "1280x800"):
+            app.settings.update(sidebar_visible=True, sidebar_narrow=False)
+            app._apply_sidebar_visibility()
+            lauf.root.geometry(geometry + "+20+20")
+            idle(lauf, 6)
+            pruefen((design, size, geometry, "volle Seitenleiste"))
+            for visible, narrow in ((True, True), (False, False), (True, False)):
+                app.settings.update(sidebar_visible=visible, sidebar_narrow=narrow)
+                app._apply_sidebar_visibility()
+                idle(lauf, 4)
+            pruefen((design, size, geometry, "nach Einklappen/Ausblenden"))
+            if getattr(lauf, "capture", None) and geometry == "860x700":
+                sys.path.insert(0, str(REPO / "tests/tools"))
+                from releasedaten import save_windows_screenshot
+                tree = app.system_listbox
+                x, y, width, height = tree.bbox(tree.get_children()[0])
+                tree.event_generate("<Motion>", x=x + width // 2, y=y + height // 2)
+                idle(lauf, 3)
+                lauf.capture.mkdir(parents=True, exist_ok=True)
+                save_windows_screenshot(lauf.root, lauf.capture / f"seitenleistenabstand-{design}-{size}.png")
+    return f"{checks} Hover-Geometrieprüfungen gegen die äußere Seitenleistenkarte: oben/links/rechts gleich, vier Design-/Schriftkombinationen, Mindestbreite/breit, Rückkehr aus schmal/ausgeblendet; Symbolhintergrund und Hover-Ende"
+
+
+def fall_buchbreite3503(lauf):
+    """Buchbaum und Spalten nutzen die Karteninnenbreite, nicht nur ihre eigene Breite."""
+    app = lauf.app
+    lauf.showcase()
+    library = next(e for e in app.folders if e.get("folder_kind") == "library")
+    app.set_active_folder(library["id"])
+    checks = 0
+
+    def full_width(context):
+        tree = app.tree
+        card = app.list_frame
+        assert tree.winfo_rootx() == card.winfo_rootx(), (
+            "Buchtabelle beginnt nicht an der linken Karteninnenkante", context,
+            tree.winfo_rootx(), card.winfo_rootx())
+        right = (app.scrollbar.winfo_rootx() if app.scrollbar.winfo_ismapped()
+                 else card.winfo_rootx() + card.winfo_width())
+        assert tree.winfo_rootx() + tree.winfo_width() == right, (
+            "Buchtabelle nutzt nicht die Karteninnenbreite", context,
+            tree.winfo_width(), card.winfo_width())
+        columns = ("#0", *tree.cget("displaycolumns"))
+        widths = {key: int(tree.column(key, "width")) for key in columns}
+        used = sum(widths.values())
+        assert used == tree.winfo_width(), (
+            "Buch nutzt nicht die volle Innenbreite", context,
+            {"used": used, "available": tree.winfo_width(), "columns": widths})
+        rows = [row for row in tree.get_children() if tree.bbox(row)]
+        assert rows, "Buchprobe braucht eine sichtbare Seite"
+        last = tree.bbox(rows[0], columns[-1])
+        assert last[0] + last[2] == tree.winfo_width(), (
+            "Buchzeile endet vor der rechten Innenkante", context, last, tree.winfo_width())
+        assert "note" not in columns, "Leere Beschreibung belegt eine Spalte"
+        assert not any(b.winfo_ismapped() for b in getattr(app, "_row_action_buttons", ()))
+
+    for design, size in (("light", "mittel"), ("dark", "mittel"),
+                         ("glass_light", "gross"), ("glass_dark", "gross")):
+        app.settings["ui_font_size"] = size
+        app.apply_ui_font()
+        app.set_design(design)
+        layouts = (("860x700", True, False), ("1280x800", True, False),
+                   ("860x700", True, False), ("860x700", True, True),
+                   ("1280x800", True, True), ("860x700", False, False),
+                   ("1280x800", False, False), ("860x700", True, False))
+        for geometry, sidebar_visible, sidebar_narrow in layouts:
+            app.settings.update(sidebar_visible=sidebar_visible, sidebar_narrow=sidebar_narrow)
+            app._apply_sidebar_visibility()
+            lauf.root.geometry(geometry + "+20+20")
+            idle(lauf, 8)
+            context = (design, size, geometry, sidebar_visible, sidebar_narrow)
+            # Größen-/Seitenleistenwechsel im bereits geöffneten Buch,
+            # nicht erst nach dessen erneutem Aufbau.
+            full_width(("direkter Layoutwechsel", *context))
+            app.set_labels_view()
+            idle(lauf, 4)
+            app.set_active_folder(library["id"])
+            idle(lauf, 8)
+            full_width(("Ansichtswechsel", *context))
+            checks += 2
+    return f"{checks} Buchbreitenprüfungen bis zu beiden Karteninnenkanten: Mindestbreite/breit, volle/schmale/ausgeblendete Seitenleiste und Rückwechsel, vier Design-/Schriftkombinationen, Wechsel aus Labels"
+
+
+def fall_menschen3503(lauf):
+    """Inhaberbefunde: nutzbare Breite, einzeilige Werkzeuge und bewusster Zeichencursor."""
+    app, tk = lauf.app, lauf.mod.tk
+    lauf.showcase()
+    page = next(e for e in app.lists if app.is_page_list(e) and "Briefing" in e["title"])
+    library = next(e for e in app.folders if e.get("folder_kind") == "library")
+    source = next(e for e in app.lists if "Wiedervorlagen" in e["title"])
+    drawing = next(e for e in app.lists if app.is_drawing_list(e))
+    checks = 0
+
+    def one_row(flow):
+        rows = [row for row in flow._rows if row.winfo_manager()]
+        assert len(rows) == 1, ("mehrzeilige Werkzeugleiste", len(rows))
+        for button, _key in flow.entries:
+            if button.winfo_ismapped():
+                assert button.winfo_rootx() >= flow.winfo_rootx()
+                assert button.winfo_rootx() + button.winfo_width() <= flow.winfo_rootx() + flow.winfo_width(), button
+
+    def right_padding(widget):
+        value = widget.pack_info()["padx"]
+        return int((value if isinstance(value, (tuple, list)) else lauf.root.tk.splitlist(str(value)))[-1])
+
+    def capture(name):
+        if getattr(lauf, "capture", None):
+            sys.path.insert(0, str(REPO / "tests/tools"))
+            from releasedaten import save_windows_screenshot
+            lauf.capture.mkdir(parents=True, exist_ok=True)
+            save_windows_screenshot(lauf.root, lauf.capture / f"menschen3503-{design}-{size}-{name}.png")
+
+    configurations = (("light", "1280x800", "mittel"), ("dark", "860x700", "mittel"),
+                      ("glass_light", "860x700", "gross"), ("glass_dark", "1280x800", "gross"))
+    for design, geometry, size in configurations:
+        app.settings["ui_font_size"] = size
+        app.settings["show_hints"] = size == "gross"
+        app.apply_ui_font()
+        app.set_design(design)
+        lauf.root.geometry(geometry + "+20+20")
+        idle(lauf, 8)
+        app.set_labels_view()
+        idle(lauf, 6)
+        # Abgeleitete Labelzeilen haben keine rechten Aktionsknöpfe.
+        right = right_padding(app.tree)
+        assert int(right) == 14, ("Labels reserviert ungenutzte Aktionsbreite", right)
+        assert not any(b.winfo_ismapped() for b in getattr(app, "_row_action_buttons", ()))
+        app.set_active_folder(library["id"])
+        idle(lauf, 6)
+        right = right_padding(app.tree)
+        assert int(right) == 0, ("Buch reserviert ungenutzte Karteninnenbreite", right)
+        if getattr(app, "_header_actions_docked", False):
+            assert str(app.header_controls.pack_info()["in"]) == str(app.input_frame)
+            assert app.add_button.winfo_ismapped(), "Hinzufügen bei Kopfumbau verdrängt"
+            assert app.add_button.winfo_rootx() + app.add_button.winfo_width() <= app.header_controls.winfo_rootx()
+            assert app.title_label.cget("text").startswith("Wissen"), app.title_label.cget("text")
+            assert all(button.winfo_rooty() < app.input_frame.winfo_rooty()
+                       for button in getattr(app, "custom_menu_buttons", ()))
+        assert int(app.tree.column("#0", "width")) >= min(220, app.tree.winfo_width() - 4)
+        assert sum(int(app.tree.column(key, "width")) for key in ("#0", *app.tree.cget("displaycolumns"))) <= app.tree.winfo_width(), "Buchspalten außerhalb der Fläche"
+        capture("buch")
+
+        app.set_active_list(source["id"])
+        app.set_table_view()
+        idle(lauf, 8)
+        columns = list(app.tree.cget("displaycolumns"))
+        total = sum(int(app.tree.column(key, "width")) for key in columns)
+        if "tree" in str(app.tree.cget("show")):
+            total += int(app.tree.column("#0", "width"))
+        assert total <= app.tree.winfo_width(), ("Tabelle ragt über Baumkante", total, app.tree.winfo_width())
+        if "due" in columns:
+            for row in app.tree.get_children():
+                if not app.tree.bbox(row):
+                    continue
+                text = app.tree.set(row, "due")
+                box = app.tree.bbox(row, "due")
+                assert app.tree_cell_font(row, "due").measure(text) + app.tree_cell_padding(app.task_row_font()) <= box[2], (text, box)
+                assert box[0] + box[2] <= app.tree.winfo_width(), ("Frist rechts abgeschnitten", box)
+        buttons = [b for b in app._row_action_buttons if b.winfo_ismapped()]
+        assert len(buttons) >= 2, "Aktionen erst bei Hover sichtbar"
+        positions = [(b.winfo_x(), b.winfo_y()) for b in buttons]
+        app.tree.event_generate("<Leave>", x=0, y=0)
+        idle(lauf)
+        assert positions == [(b.winfo_x(), b.winfo_y()) for b in buttons]
+        with patch.object(app, "show_item_context_menu") as menu:
+            buttons[0].command()
+            assert app.tree.identify_row(menu.call_args.args[0].y) == app.row_action_target()[1]
+        if app.input_frame.winfo_y() < app.search_frame.winfo_y():
+            assert app.search_frame.winfo_rooty() - (app.input_frame.winfo_rooty() + app.input_frame.winfo_height()) >= 8
+        capture("tabelle")
+
+        app.open_list_view()
+        app.set_active_list(page["id"])
+        idle(lauf, 8)
+        editor = app.rich_note_editor
+        one_row(editor.toolbar)
+        assert "Überschrift" not in editor._toolbar_buttons and "Code" not in editor._toolbar_buttons
+        assert editor._toolbar_buttons["Mehr"].winfo_ismapped()
+        for button in editor._toolbar_buttons.values():
+            assert button.height == app.add_button.height == 38
+            assert button.radius == app.add_button.radius
+            assert button.bg_color == app.theme["bg"]
+            assert button.border_color == app.theme[button.color_key]
+        assert int(editor._foot_row.pack_info()["padx"]) == 10
+        assert editor._mentions_button.winfo_reqwidth() < 250
+        capture("seite")
+
+        app.set_active_list(drawing["id"])
+        idle(lauf, 8)
+        editor = app.drawing_editor
+        one_row(editor.toolbar)
+        one_row(editor.context_row)
+        one_row(editor.animation_toolbar)
+        assert not hasattr(editor, "color_button"), "Doppelter Farbweg in derselben Leiste"
+        editor.canvas.focus_force()
+        idle(lauf)
+        assert editor.cursor_item is None, "Fokus allein erzeugt Zellmarkierung"
+        editor.move_cursor(1, 0)
+        idle(lauf)
+        assert editor.cursor_item is not None, "Tastaturcursor fehlt"
+        editor._motion(SimpleNamespace(x=20, y=20))
+        assert editor.cursor_item is None, "Mausbewegung lässt Tastaturcursor stehen"
+        for tool, _label, _key in editor.TOOLS:
+            editor.set_tool(tool)
+            idle(lauf)
+            one_row(editor.context_row)
+        capture("zeichnung")
+        checks += 1
+    # Teilweise sichtbare Randzeilen dürfen keine Aktion in den Kartenfuß
+    # schieben. Scrollen richtet die Knöpfe auf die tatsächlichen Zeilen aus.
+    many = app.new_list_object("Randzeilen", [app.new_item(f"Randaufgabe {i}") for i in range(50)])
+    app.lists.append(many)
+    app.save_items()
+    app.set_active_list(many["id"])
+    idle(lauf, 8)
+    # Tk 9 kann einzelne Zeilentypen schmaler zeichnen als die Basisrolle.
+    app.style.configure("Abnahme3503.App.Treeview", rowheight=26)
+    app.tree.configure(style="Abnahme3503.App.Treeview")
+    for position in (0, .37, 1):
+        app.tree.yview_moveto(position)
+        idle(lauf, 6)
+        visible = [button for button in app._row_action_buttons if button.winfo_ismapped()]
+        assert visible
+        for button in visible:
+            assert button.winfo_y() >= app.tree.winfo_y()
+            assert button.winfo_y() + button.winfo_height() <= app.tree.winfo_y() + app.tree.winfo_height(), "Randaktion überdeckt Kartenfuß"
+        ordered = sorted(visible, key=lambda button: button.winfo_y())
+        assert all(a.winfo_y() + a.winfo_height() <= b.winfo_y() for a, b in zip(ordered, ordered[1:])), "Zeilenaktionen überdecken sich"
+    # Eine inzwischen gelöschte Aufgabe darf über einen alten Knopfbefehl
+    # keine andere Zeile öffnen.
+    button = visible[0]
+    stale = button.command
+    y = button.winfo_y() - app.tree.winfo_y() + button.winfo_height() // 2
+    removed = app.tree.identify_row(y)
+    many["items"][:] = [item for item in many["items"] if item["id"] != removed]
+    app.refresh_tree()
+    idle(lauf)
+    with patch.object(app, "show_item_context_menu") as menu:
+        stale()
+        assert not menu.called, "Veraltete Zeilenaktion öffnet anderes Ziel"
+    return f"{checks} Konfigurationen: Tabelle/Buch/Labels, dauerhafte Zeilenaktion, Abstand, gemeinsame Außenknöpfe, einzeilige Seiten-/Zeichenwerkzeuge, Maus-/Tastaturcursor"
 
 
 # beta350 zuletzt: Nach seinem Neustart erhält unter Windows das nächste frische
@@ -3432,7 +4005,13 @@ def fall_kartenflaechen(lauf):
     # feste Farbe entfernt sie wieder, auch wenn vorher Milchglas aktiv war.
     app.set_design("glass_light")
     app.set_backdrop_choice(lauf.mod.glide_backdrop.presets_for("glass_light")[0].key)
-    app.wait_for_backdrop()
+    # Der Test wartet auf den aktuellen aktiven Verlauf, auch wenn ein
+    # Configure erst beim Pumpen der Ereignisse den nächsten Auftrag anlegt.
+    # Die bestehende Gesamtfrist bleibt 30 s; keine Prüfung wird übersprungen.
+    deadline = time.monotonic() + 30.0
+    while app.active_backdrop() is None and time.monotonic() < deadline:
+        app.wait_for_backdrop(timeout=max(0, deadline - time.monotonic()))
+        idle(lauf, 2)
     assert app.active_backdrop() is not None
     app.sync_backdrop_surfaces()
     app.set_background_color("accent")
@@ -3454,7 +4033,7 @@ FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "
           "home_tagesnavigation", "home_mehrfachfelder", "side_verweisnavigation", "dreierpaket_gestaltung",
           "home_wochenwahl", "home_faelligkeit_aufwand", "side_verweisaktionen", "side_trefferuebersicht", "side_nachschlagen", "home_fokusdauer",
           "fokus_wechseln", "side_suchverlauf", "fokus_als_naechstes",
-          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "hinweisplatz", "werkzeugzeile", "beta350")
+          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "hinweisplatz", "werkzeugzeile", "menschen3503", "buchbreite3503", "seitenleistenabstand3504", "suchbreite3504", "titellaenge3504", "abnahme3505", "beta350")
 
 
 def main():

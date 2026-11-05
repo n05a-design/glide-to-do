@@ -1,0 +1,133 @@
+{
+  "version": "3.50.3",
+  "data_schema_version": 26,
+  "app_sha256": "449f8aec1ae6d8d320d83d8fdad4f69126690ed5ecc2f1d9d896c4f2971e6223",
+  "previous_app_sha256": "ed3fd6dd2e97d80579720713c32c64f98af0d3ffdc5e3f8cf0232bde8675f56b",
+  "runtime": {
+    "os": "Windows",
+    "python": "3.14.7",
+    "tcl": "9.1.0",
+    "tk": "9.1.0"
+  },
+  "finding": {
+    "unused_width_px": 4,
+    "cause": "Pauschaler Rahmenabzug im rahmenlosen App.Treeview",
+    "original_image_sha256": "3bf6060c29b44c84665dd4775c1d6ea035c5641a00f278fbfdcc8d97db691a35"
+  },
+  "human_acceptance": {
+    "native_previous_candidate": {
+      "points_1_to_5": "passed by direct user feedback",
+      "point_6": "remaining width finding reported"
+    },
+    "corrected_python_candidate": "opened with own copy of closed synthetic acceptance data; human width retest pending"
+  },
+  "python_delivery": {
+    "code_files_equal": 92,
+    "resource_files_equal": 171,
+    "differences": []
+  },
+  "native_delivery": "previous Windows EXE unchanged; new native package build pending; Mac/Linux matrix not renewed",
+  "reports": {
+    "baseline": {
+      "app_sha256": "ed3fd6dd2e97d80579720713c32c64f98af0d3ffdc5e3f8cf0232bde8675f56b",
+      "faelle": {
+        "menschen3503": {
+          "ok": true,
+          "befund": "4 Konfigurationen: Tabelle/Buch/Labels, dauerhafte Zeilenaktion, Abstand, gemeinsame Außenknöpfe, einzeilige Seiten-/Zeichenwerkzeuge, Maus-/Tastaturcursor",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 9.893
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    },
+    "counterexample": {
+      "app_sha256": "ed3fd6dd2e97d80579720713c32c64f98af0d3ffdc5e3f8cf0232bde8675f56b",
+      "faelle": {
+        "buchbreite3503": {
+          "ok": false,
+          "befund": "Traceback (most recent call last):\n  File \"tests/integration/test_arbeitsmodi.py\", line 3705, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"tests/integration/test_arbeitsmodi.py\", line 3338, in fall_buchbreite3503\n    full_width((\"Ansichtswechsel\", *context))\n    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"tests/integration/test_arbeitsmodi.py\", line 3305, in full_width\n    assert used == tree.winfo_width(), (\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('Buch nutzt nicht die volle Innenbreite', ('Ansichtswechsel', 'light', 'mittel', '860x700', True, False), {'used': 504, 'available': 508, 'columns': {'#0': 293, 'tasks': 107, 'created': 104}})\n",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 5.459
+        }
+      },
+      "fehler": [
+        "buchbreite3503"
+      ],
+      "laufender_fall": null
+    },
+    "book_width": {
+      "app_sha256": "449f8aec1ae6d8d320d83d8fdad4f69126690ed5ecc2f1d9d896c4f2971e6223",
+      "faelle": {
+        "buchbreite3503": {
+          "ok": true,
+          "befund": "64 Buchbreitenprüfungen: Mindestbreite/breit, volle/schmale/ausgeblendete Seitenleiste und Rückwechsel, vier Design-/Schriftkombinationen, Wechsel aus Labels",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 25.249
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    },
+    "acceptance_regression": {
+      "app_sha256": "449f8aec1ae6d8d320d83d8fdad4f69126690ed5ecc2f1d9d896c4f2971e6223",
+      "faelle": {
+        "menschen3503": {
+          "ok": true,
+          "befund": "4 Konfigurationen: Tabelle/Buch/Labels, dauerhafte Zeilenaktion, Abstand, gemeinsame Außenknöpfe, einzeilige Seiten-/Zeichenwerkzeuge, Maus-/Tastaturcursor",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 12.074
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    },
+    "toolbar": {
+      "app_sha256": "449f8aec1ae6d8d320d83d8fdad4f69126690ed5ecc2f1d9d896c4f2971e6223",
+      "faelle": {
+        "werkzeugzeile": {
+          "ok": true,
+          "befund": "12 Messungen: Abstand ≥ 10 px, Umschalter rechts, Pinnwand auf Kartenfarbe; Seitenfuß einzeilig",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 7.47
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    },
+    "column_priority": {
+      "app": "C:\\Users\\vontrostorff\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app.pyw",
+      "faelle": {
+        "b11": {
+          "ok": true,
+          "befund": "Datumsspalte Labels 162 px statt 257 px; Labels: Titel 581, Datum 162, Labels 133; Heute: Titel 287, Datum 249, Labels 158; Liste: Titel 710, Datum 162, Labels 0"
+        }
+      },
+      "fehler": []
+    }
+  },
+  "ui_observed": "Corrected source opened on Wissen und Bildmaterial with Tk 9.1 and minimum-width window",
+  "full_cross_platform_matrix": false,
+  "strict_ci_renewed": false,
+  "git_transport": "none"
+}

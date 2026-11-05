@@ -126,7 +126,14 @@ with tempfile.TemporaryDirectory(prefix='glide-ui39-') as temp:
                 print('OK: echte Dropdown-Baseline')
                 raise SystemExit(0)
 
+            toplevel_init = mod.tk.Toplevel.__init__
             for screen_height in (720, 1400):
+                def simulated_screen(window, *args, **kwargs):
+                    toplevel_init(window, *args, **kwargs)
+                    # Auch Tk muss die simulierte Bildschirmhöhe zulassen.
+                    # Sonst bleibt trotz 1400-px-Mock das reale 749-px-Limit.
+                    window.maxsize(window.maxsize()[0], screen_height)
+
                 def container(dialog, parent=None):
                     dialog.update()
                     widgets = list(descendants(dialog))
@@ -135,14 +142,18 @@ with tempfile.TemporaryDirectory(prefix='glide-ui39-') as temp:
                         if isinstance(widget, (mod.tk.Entry, mod.tk.Text)):
                             assert int(widget.cget('highlightthickness')) == 0
                             assert int(widget.cget('bd')) == 0
-                            assert widget.winfo_rooty()+widget.winfo_height() < dialog.winfo_rooty()+dialog.winfo_height()-45
+                            assert widget.winfo_rooty()+widget.winfo_height() < dialog.winfo_rooty()+dialog.winfo_height()-45, (
+                                screen_height, dialog.geometry(), dialog.maxsize(), type(widget).__name__,
+                                widget.winfo_rooty() - dialog.winfo_rooty(), widget.winfo_height())
                     buttons = [w for w in widgets if isinstance(w, mod.RoundedButton)]
                     assert all(w.winfo_ismapped() for w in buttons)
                     assert dialog.winfo_height() <= int(screen_height*app.DIALOG_MAX_SCREEN_SHARE)
                     if screen_height == 720:
                         assert dialog.winfo_width() >= 860
                     dialog.destroy()
-                with patch.object(mod.tk.Toplevel, 'winfo_screenheight', return_value=screen_height), patch.object(app, 'run_modal', container):
+                with patch.object(mod.tk.Toplevel, '__init__', simulated_screen), \
+                        patch.object(mod.tk.Toplevel, 'winfo_screenheight', return_value=screen_height), \
+                        patch.object(app, 'run_modal', container):
                     app.create_container_dialog()
 
             # Punkt 3 (3.23.0): eine Designauswahl statt Hell/Dunkel plus

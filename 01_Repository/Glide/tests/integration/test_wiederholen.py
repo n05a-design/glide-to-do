@@ -521,7 +521,7 @@ def fall_verlauf(lauf):
     while stapel:
         widget = stapel.pop()
         stapel.extend(widget.winfo_children())
-        if isinstance(widget, mod.RoundedButton) and knopf_text(widget) == "Sicherungen vergleichen":
+        if isinstance(widget, mod.RoundedButton) and knopf_text(widget) == "Backups vergleichen":
             gefunden.append(widget)
     assert gefunden, "Kein Verweis auf „Sicherungen vergleichen“ im Verlauf"
     aufrufe = []

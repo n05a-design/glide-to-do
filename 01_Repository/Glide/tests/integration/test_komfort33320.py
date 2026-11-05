@@ -153,7 +153,7 @@ with tempfile.TemporaryDirectory(prefix="glide-komfort-") as ordner:
             root.update()
             app.sync_detail_pane(force=True)
             root.update()
-            return [w for w in descendants(app.detail_pane) if getattr(w, "text", None) == "Diesen Termin überspringen"]
+            return [w for w in descendants(app.detail_pane) if getattr(w, "text", None) == "Termin überspringen"]
         knopf = detailknopf(alle3)
         assert len(knopf) == 1 and knopf[0].winfo_ismapped(), knopf
         knopf[0].command()

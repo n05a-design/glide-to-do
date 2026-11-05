@@ -99,7 +99,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     app = mod.ListApp(root)
     root.update_idletasks()
 
-    assert mod.APP_VERSION == "3.50.2"
+    assert mod.APP_VERSION == "3.50.5"
     assert (REPOSITORY_ROOT / "VERSION").read_text(encoding="utf-8").strip() == mod.APP_VERSION
     assert len([entry for entry in app.lists if entry.get("system_role") == "inbox"]) == 1
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
@@ -645,7 +645,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     long_row_text = app.sidebar_listbox.item(long_iid, "text")
     assert app.sidebar_listbox.set(long_iid, "count") == "(0)"
     assert long_row_text.startswith("PROBELISTEN")
-    assert long_row_text.endswith("…")
+    assert long_row_text.endswith("...")
     sidebar_font = app.sidebar_row_font()
     sidebar_available = app.sidebar_available_text_width(app.sidebar_listbox, depth=1)
     assert sidebar_available is not None and sidebar_available > 0
@@ -1425,7 +1425,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     header_right = app.header_frame.winfo_rootx() + app.header_frame.winfo_width()
     theme_right = settings_access.winfo_rootx() + settings_access.winfo_width()
     assert theme_right <= header_right, (theme_right, header_right)
-    assert app.title_label.cget("text").endswith("\u2026")
+    assert app.title_label.cget("text").endswith("...")
 
     # Das echte Überlaufmenü muss die Einstellungen auch auslösen können.
     # Nur das native Popup wird unterdrückt, damit der Test nicht blockiert.

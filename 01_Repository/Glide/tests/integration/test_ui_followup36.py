@@ -30,6 +30,9 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-followup36-') as tmp:
     mod = importlib.util.module_from_spec(spec)
     loader.exec_module(mod)
     root = mod.tk.Tk()
+    # Die volle Aktionsleiste setzt die angeforderten 960 px Höhe voraus.
+    # Kleine QA-Desktops dürfen das eigene Prüffenster nicht still begrenzen.
+    root.maxsize(max(1920, root.winfo_screenwidth()), max(1200, root.winfo_screenheight()))
     root.withdraw()
     if os.name == 'nt':
         root.attributes('-alpha', 0.0)  # Eigene Testfenster stören die laufende Arbeit nicht.
@@ -66,7 +69,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-followup36-') as tmp:
             root.update()
             root.geometry(f'{width}x960+10+10')
             settle()
-            if (root.state() == 'normal' and root.winfo_width() == width
+            if (root.state() == 'normal' and root.winfo_width() == width and root.winfo_height() == 960
                     and app.home_content.winfo_width() == app.home_canvas.winfo_width()
                     and bool(app.home_scrollbar.winfo_manager()) == bool(app.home_scrollbar.winfo_ismapped())):
                 return

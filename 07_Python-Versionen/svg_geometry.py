@@ -5,7 +5,9 @@ Die Canvas-Ausgabe verbindet Innenkonturen mit einer retracierten Brücke,
 damit der ausgesparte Innenraum auch ohne SVG-Unterstützung transparent bleibt.
 """
 import re
+import math
 import xml.etree.ElementTree as ElementTree
+import brand
 
 _SVG_NS = "{http://www.w3.org/2000/svg}"
 
@@ -217,8 +219,21 @@ def inline_styles(svg):
     return ElementTree.tostring(root, encoding="unicode")
 
 
+def document_box(svg):
+    """Originale SVG-Zeichenfläche, auch für mehrfarbige Symbole mit Rechteckgrund."""
+    if "<!ENTITY" in svg:
+        raise ValueError("SVG enthält Entitätsdefinitionen")
+    root = ElementTree.fromstring(svg)
+    values = tuple(float(value) for value in re.split(r"[\s,]+", root.get("viewBox", "").strip()) if value)
+    if (len(values) != 4 or not all(math.isfinite(value) for value in values)
+            or values[2] <= 0 or values[3] <= 0):
+        raise ValueError("SVG braucht eine gültige viewBox")
+    return values
+
+
 def tinted(svg, color):
-    pattern = r"#0185e1\b|rgb\(\s*1\s*,\s*133\s*,\s*225\s*\)"
+    rgb = tuple(int(brand.PURPLE[i:i + 2], 16) for i in (1, 3, 5))
+    pattern = re.escape(brand.PURPLE) + r"\b|rgb\(\s*" + r"\s*,\s*".join(map(str, rgb)) + r"\s*\)"
     if not re.search(pattern, svg, re.IGNORECASE):
         raise ValueError("Der Logo-Master trägt nicht die freigegebene Füllfarbe")
     if not re.fullmatch(r"#[0-9A-Fa-f]{6}", str(color or "")):

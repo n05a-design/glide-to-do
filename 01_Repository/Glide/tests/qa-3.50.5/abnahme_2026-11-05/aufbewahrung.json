@@ -1,0 +1,505 @@
+{
+  "sicherung": "%USERPROFILE%/gq/final5/aufbewahrung",
+  "files": [
+    {
+      "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.48.0.glidebackup",
+      "sha256": "a40892f8df8867e78975bc50e71df147b3f640cf51dc1a7149ad9715fbfa5d1b",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/affinitaet_2026-10-27/ergebnis.json",
+      "sha256": "692437f4c29414b94156da31b5094b8935c560bce38ede128d380021ca83ff30",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/affinitaet_2026-10-27/pruefen.py",
+      "sha256": "937432f120dfb95a18d78a790cd9c4d05afd905c4f9fc455b1d56b9e61edc376",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/amd_vergleich_2026-10-27/README.md",
+      "sha256": "cb307c7e7e28768e8cb915a4826d7cd923200368e10642b804830914dbe7dbbe",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/amd_vergleich_2026-10-27/auswertung.json",
+      "sha256": "3ca69bba5657356a54061ea53b2a01a8e92902a6854cbc3ea4f376eac2cf1f82",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/amd_vergleich_2026-10-27/auswertung.py",
+      "sha256": "64d03dd6c2f9ed2935f86c08952330607d37d21cc60c144a542a678ea32cfa77",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/amd_vergleich_2026-10-27/ergebnis.json",
+      "sha256": "160648a28e19208c112a36aabd2da98954510b70b5886f42084874b988ce01d3",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/amd_vergleich_2026-10-27/fester_pruefordner/ergebnis.json",
+      "sha256": "8a46c8673868ae3b70fda02b0957b6a80b867bfce91076060b7747f8d8df9b5d",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/amd_vergleich_2026-10-27/originalbestand.py",
+      "sha256": "9674a9ffec6fc5b34dcca4e8967e818d026f28eddc525c2da7b67a195ba1b522",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/amd_vergleich_2026-10-27/originalbestand/ergebnis.json",
+      "sha256": "0aabddd7a5bf16e1b482eacdb1436c17299876cb4bee3058c442086110edbcc1",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/amd_vergleich_2026-10-27/pruefen.py",
+      "sha256": "1f23b98d6550eb20b4c7d1665f3527bfa58a29ac983c4318a37a521434cfe846",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md",
+      "sha256": "447247088fb02ad63f957a21a1f50bed9c388f09ab37d9ce6b14e97570578432",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/abschliessen.py",
+      "sha256": "66469110093cdf6335f8d5a5f5f7c85c2d3c6ea0a4c21aa26fd631fecffd1aca",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/abschluss.json",
+      "sha256": "29add55ccd06f156c58fc006ecce0c1f3e43ae7903505efe734f475adc3ca722",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/aufbewahrung_offen.json",
+      "sha256": "f47b22c49385b26be564ab29a83b45c983977a895bdb833d441475129fdd2467",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/beweissicherung_lokal.json",
+      "sha256": "2cb952554e116aa9d5bcd28651a3e75b79b0621b694917e3b73a82f877656f65",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/dokumente_pflegen.py",
+      "sha256": "1b6ce489d050a8f655292cf98a15a1223cbf5eb04bf8a52f7176161ff9595977",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/dokumentkorrekturen.json",
+      "sha256": "d0c0eec74bb785d5ca8662ccb731e41f0969be31a89d27d9133230f566d13c98",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/dokumentregister_nachher.json",
+      "sha256": "af0571076b682446e8369f0ff6906e387544a5c4dd256302d6c8c52aea00059a",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/dokumentregister_vorher.json",
+      "sha256": "ddae4c21a03ee1cabbd7c4b1a2de8a7d45642553899d51f8cf528c022574d9da",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/ergebnis_nachher.json",
+      "sha256": "a0fc607d98d97f73c3be54f26be962136d0698ef1a4b8f6545e12ca1242c3930",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/ergebnis_vorher.json",
+      "sha256": "e60bf26d6182e60841306cf3e1032c2d779579705abc1bf5e1b52b27def57967",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/gezielte_ersetzungen.json",
+      "sha256": "5763722c8e5a804468d1c16d8ffa3f77ed58d5d56db888225e09233306593bff",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/inhaltsgruppen_nachher.json",
+      "sha256": "05acc0ab939a63d67524392cd248dfd16c10dff179a8f1245d79049a24232070",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/inhaltsgruppen_vorher.json",
+      "sha256": "05acc0ab939a63d67524392cd248dfd16c10dff179a8f1245d79049a24232070",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/inventar_nachher.json",
+      "sha256": "ffdcf3a36fe3e3ce639a16d4c3fad5efe4ba02ffbd486af32eb01766b1b7cf7f",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/inventar_vorher.json",
+      "sha256": "dd7680c49345453dfeca8f6268cbb6cfe2f99d3be6cb202d486adf78ef5ccf63",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/pakete_pruefen.py",
+      "sha256": "6c037a5f08836f15b6feec75c4a9116650e0ef30325396d03a8b8e67f471a6a1",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/pakete_und_belege.json",
+      "sha256": "e48da4a952cfa7797a6868ba8567d23a8cca78d84749b6d69270a6fb70018434",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/pruefen.py",
+      "sha256": "55c1c0996e3d1775ca06f5c75ec01bee0884e2fbd20f32405abe6fc3ea77d52b",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/sichern.py",
+      "sha256": "577a5b3d2c77f6d6070a55ff975ee0fee62d246cafd8029822d7e79c362f412b",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/verweise_nachher.json",
+      "sha256": "50562729b59a5715a7e817fcfbf2d31ce1c237c791f1f398ea6157ec26bc734f",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/verweise_vorher.json",
+      "sha256": "0ad5551ad969e4870d0af90abd3b2ce00dac3e93f5aa2710dcf59377d2b0a487",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/README.md",
+      "sha256": "6bc2c0717f9ded923e24859be8463c636736c26db93778f4915cc64f52510eb6",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/abschluss.json",
+      "sha256": "a1d8d694aac9f87bfe2e6bb9dd87ee1b8bdb0104db4f32904b7e11816ccb6064",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/abschluss.py",
+      "sha256": "d4e87f7932fc8007a5d4452760e8bf7c66db05d5f5130eadb89773e81108ff68",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/arbeitsmodi_vorlauf.json",
+      "sha256": "04c3d9c9e15f22263c505276d7c7c3cc0ad5330c3ff06c21bd26429c9ba72b2c",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/ci_abschluss/ergebnis.json",
+      "sha256": "fa9445c00bfc3428c0122b22f3ea41dfad4da5f60263842d2f5b891f0057a339",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/dokumentnachlauf.json",
+      "sha256": "ec58913b501cc59657817b24aeb2436b0441bd8e290d03d21003e04e0ee33488",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/gestaltung_vorlauf.json",
+      "sha256": "22b3ab22584ae468d9f6aa55f7fb137c54550db99eeb4d87c6d1969ffec62492",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/lastdiagnose.py",
+      "sha256": "5d3a33c0f626eafb0104bb0fb72ecbd6d478a3f880aae7b1ac129e5c9a54b3c5",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/mehrfachfelder_vorlauf.json",
+      "sha256": "f5140a0736a9c8f3439f9ac8179d158c88bc893150f9d66d4176a2874b2c12e2",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/nachpruefung.json",
+      "sha256": "047c83b188a26053f90092e126dca6d455b4ee67d007ac17f855dded0029d634",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/quellstand.json",
+      "sha256": "d856b1b9178205932a460c0592456908a9402f806b2db6dc7e811940c26f5d7a",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/tagesnavigation_nachlauf.json",
+      "sha256": "5cfa81a60f2ba597d4d5a08d18eb22636fb0971660377c0790bb45a63f17ae18",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/tagesnavigation_vorlauf.json",
+      "sha256": "6ff72ce695f1f5b0804d0c187a696f408787a5cd53e22de704d107059878a3c6",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/verweise_vorlauf.json",
+      "sha256": "a8f5e5432b98bebd580ac04333c3ae820ccb57ed05c93690d4cdcc95b24f5a2f",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/arbeitsmodi.json",
+      "sha256": "ba9a42637c9e70f959b5a4feb1dbeb25835870e3a5faf5ecceb7d29feff68354",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/ergebnis.json",
+      "sha256": "21bc93141a374648aeddeedac084231e66f3e9768591177e8d453ecd9375a576",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/windows_vollpruefung/zugang-kern.json",
+      "sha256": "f02f75f6749678e99ed36d3460f1fd0a42bdb830706f20f7223f74a24ca2d04e",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/entwicklermodus_2026-10-27/315_dev_core.context.json",
+      "sha256": "738a581e3d62d419b75b590cd26358051e1ab50915d6b1f17d67554866ff6718",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/entwicklermodus_2026-10-27/315_dev_full.context.json",
+      "sha256": "738a581e3d62d419b75b590cd26358051e1ab50915d6b1f17d67554866ff6718",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/entwicklermodus_2026-10-27/ergebnis.json",
+      "sha256": "068564f119d16e395136527f0067adf84a4d76955c4e89d59778dacfc0396a35",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/entwicklermodus_2026-10-27/exception_context.json",
+      "sha256": "0244ee9e15db1c056de4544c2b325cad6c8870579b47b2f6fac83ac15a4f417b",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/entwicklermodus_2026-10-27/exception_probe.py",
+      "sha256": "fc6f6cfaf38c2d5220a121b7dfc54da406776ec2ea60a401988d2b8495546e57",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/entwicklermodus_2026-10-27/lauf.py",
+      "sha256": "b19dae20b79252203769f3bd074f3e9db4099a4eab43211082d1e8632ef84f6c",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/entwicklermodus_2026-10-27/pruefen.py",
+      "sha256": "bb909461a3b3aed284b50874eeb0dddbfc939cf6e3d9bed8a7900c3d14095305",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/README.md",
+      "sha256": "5f20243fc3aa749f967e2370e7395b865e6a124cfa36b476a74773653a9b1621",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/auswertung.json",
+      "sha256": "795d147400236c9bf3f2f39af9afd8d1476f57aeb7b21fcbae84785beae0d58f",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/auswertung.py",
+      "sha256": "bf3cd5d14aa2363c137ff47c977c6565abb340560c40e792c74ad4f61caee485",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/c_laufzeiten.json",
+      "sha256": "1dcc53654a7173bcf4cf8a7cad9018b12a5a1c1110e26227b535a4b3dec9a09f",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/cpu_update_revision.json",
+      "sha256": "0efd3ab787b807a8f146898075f6cdc822f0b708eda28e91d96c19d45c42d800",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/dump_bestand.json",
+      "sha256": "74093ef7eccd602c129d8976e2cd50220b33c861048d0db435ea7ec2b32feda0",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/ergebnis.json",
+      "sha256": "24426ff0523c9a246eb2204df5f5dcca16f9716bf35cdb609a70cce0ea6eae46",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/hardware.json",
+      "sha256": "3e7eebe5d3ad3058294e5e80d6aba804ac7ccf97b46d6a1f3bdcce8937add347",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/probe.py",
+      "sha256": "326e513dcdcbf4fcb0714e9d2a5c6ccc83887f6a9e3d95ee4ecd8af807a5b3fa",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/pruefen.py",
+      "sha256": "b4a24abb26d35cf3647c2decb2a3e55bb2355c79e2b340560027ae00d050aaab",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/ressourcen.py",
+      "sha256": "a9613709431a7473cf2329921c51546364564facc79b7ea19c22389a227a222d",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/uebergabe_abschluss.json",
+      "sha256": "8974ea32fa1a00e08d8cd43e6ad7bc12d0dab39f19476d6a262e311137e43fbd",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/whea.json",
+      "sha256": "1e56d790270345763887d94ffcf2a92af17976c639ad5fbf176fdf7bc72071e2",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/lokale_belege/.gitignore",
+      "sha256": "4bb38be6d6d9ef0d2f9bcc339850ff48d821eccfa739369402b354c9ba946ea2",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/prozessdiagnose_2026-10-28/README.md",
+      "sha256": "4bb029d5f6d7cd6d8f38db29d59b000c5c12b8c36685813560a871816ad3f302",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/prozessdiagnose_2026-10-28/ci/abbruch.json",
+      "sha256": "18b842a8bb2f2f17dff5d74c1108fc23793c3449628892996fb0b06a31fe6279",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/prozessdiagnose_2026-10-28/ci/systemkontext.json",
+      "sha256": "ff8e36ef8cb8f71cc408a8233a323e1c78332dfe9ec2f3384ea53cb367908990",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/prozessdiagnose_2026-10-28/ergebnis.json",
+      "sha256": "8a90ec59ea9764bfc17e9a11022643e81e64f886c8524c92f95a8141d2b527b0",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/prozessdiagnose_2026-10-28/signaturgegenprobe.json",
+      "sha256": "db0aefde7cd50666012fcc1f0e8e8f79c5fb8f3f7b56acb87ff777645efb7563",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/README.md",
+      "sha256": "ab4fd31b842f18b8ed8c54c6e614c3e398135038faa04cd394d17c4b527d7b32",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/WA-41-Python-Fehler-Analyse.md",
+      "sha256": "ab4fd31b842f18b8ed8c54c6e614c3e398135038faa04cd394d17c4b527d7b32",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/auswertung.json",
+      "sha256": "6416f88a5acb576843f4afc2a30f682661bc9554b11d40b66d4cbec454688960",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/auswertung.py",
+      "sha256": "db2d18b9daef454b95347e438558cbd174fe7a5239ca593943f34bc2c1e09844",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/dokumentpruefung.json",
+      "sha256": "b02a188e9ad17d58ac3e3e54dc22811b82897e031b08362ea74ebccd2ff2875e",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/ergebnis.json",
+      "sha256": "777ede152f91cff7e7e1dd895c343adc1ade953fcafbcfcc4e98682c46a988d9",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/native_events.json",
+      "sha256": "4958db4a5d0bb5e5695892e845a3178730151642c91ba9d005f08e4df311f9a6",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/pruefen.py",
+      "sha256": "2faa0b2c7786f978f40e3e658183962e001455deafe2de9778ba1b43391745e9",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/README.md",
+      "sha256": "e6e236a4449119476adb8cb399753840c1067c223f754c55f3b21e8ed813fe4e",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/auswertung.json",
+      "sha256": "bc0d65a1cbad5bf69419ef0f68c77df0dd9fb611b725f0f062e7b6f60ae1dab0",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/auswertung.py",
+      "sha256": "ace911bbaac7d61a19848bc86064f37b21253632951db4a0bcc464b8ea6a2e03",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/dokumentpruefung.json",
+      "sha256": "fd081a6b37151649d30129cab9f31a7fc63493fc491f24121dfbeacceb80090b",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/matrix.json",
+      "sha256": "7a0603cf96d8ea282fcf00196a041810bb3b86d91db0818d071efcc364beb1a5",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/matrix2.json",
+      "sha256": "8318ac1e1f32480c17ac5b3ab2ae77c3d13bc04cb5bec4d43d8af122a94c0852",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/matrix3.json",
+      "sha256": "3dcbba7353cc1a11b1d2cdbcac43a42e9961db9b0bead87ea0d0d1a48bb46d5b",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/matrix4.json",
+      "sha256": "d980bc3c6e61eddbea912784bd9c4b0e9d211fc6a96b780e32e349a14bca5a93",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/matrix5.json",
+      "sha256": "dc7377f4450b9da49d9a62f46f869bea9aa720a718372b9b76061841ad77dc99",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/matrix6.json",
+      "sha256": "e4f7d3ae6a48ba0bc9478ab3af36800c3a5bafd83becdf64f33caa196834e467",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/native_events.json",
+      "sha256": "f4cf55e37d268fad6ef96b516f523591edf50d0c663060dbf3cb795509844c19",
+      "head_bytegleich": false
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/probe.py",
+      "sha256": "ce4e5cee2451c499f007b2982c4e75ae520155d5ef00b07bad2f9b9aa7d8e492",
+      "head_bytegleich": true
+    },
+    {
+      "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/pure_probe.py",
+      "sha256": "6fc82b01692fcbdf18702cd2822083e8a6716e2ae828680e6cd6c15bd231d469",
+      "head_bytegleich": true
+    }
+  ],
+  "links_angepasst_in": [
+    "00_Arbeitsvorbereitung\\Glide_Analyse.md",
+    "00_Arbeitsvorbereitung\\Glide_Entwicklungsplan.md",
+    "00_Arbeitsvorbereitung\\Glide_Manuelle_Pruefung.md",
+    "00_Arbeitsvorbereitung\\Glide_Uebergabe.md",
+    "13_TK-Test-Umgebung\\PC-02-Intel\\README.md",
+    "01_Repository\\Glide\\CHANGELOG.md",
+    "01_Repository\\Glide\\docs\\02_ARCHITECTURE.md",
+    "01_Repository\\Glide\\docs\\05_QA_TESTPLAN.md",
+    "01_Repository\\Glide\\docs\\07_QA_BERICHT.md",
+    "01_Repository\\Glide\\docs\\27_VORLAGEN_PRAXISANLEITUNG.md",
+    "01_Repository\\Glide\\docs\\ARBEITSRICHTUNG.md",
+    "01_Repository\\Glide\\docs\\DESIGN_RICHTLINIEN.md"
+  ],
+  "hinweis": "Nicht in HEAD belegte Originale liegen nur in dieser lokalen Sicherung; Dokumentlinks zeigen auf dieses Pfad-/Hashmanifest."
+}

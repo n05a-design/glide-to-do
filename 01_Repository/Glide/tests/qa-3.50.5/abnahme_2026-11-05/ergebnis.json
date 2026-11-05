@@ -1,0 +1,1924 @@
+{
+  "version": "3.50.5",
+  "schema": 26,
+  "app_sha256": "e984ba99a515d5d6e31c22e34113e545ae3b77c74e9d18a8ebcfb3d3ff2bfb0d",
+  "lieferung": {
+    "python_bytegleich": true,
+    "code_dateien": 93,
+    "ressourcen": 171,
+    "eingefrorene_prueffassung_bytegleich": true,
+    "showcase_import_undo_export_neustart": "gruen",
+    "showcase_log_sha256": "04f14a3aa33616f92eac503ce4d50e32fa7e1a6169d9d37066f58f4775415aee"
+  },
+  "ci": {
+    "zeitpunkt": "2026-11-05T19:50:14",
+    "stufe": "CI-Grundstufe",
+    "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+    "plattform": "win32",
+    "exitcode": 0,
+    "pruefablauf": "%USERPROFILE%\\gq\\f5ci\\lauf-w2gi2xk6\\pruefablauf.json",
+    "schritte": [
+      {
+        "schritt": "Syntax",
+        "status": "ausgeführt",
+        "grund": "431 Python-Quelldateien gelesen; keine Bytecode-Dateien erzeugt"
+      },
+      {
+        "schritt": "Versionskonsistenz",
+        "status": "ausgeführt",
+        "grund": "VERSION, App, Hauptsuite und CHANGELOG: 3.50.5; Datenformat 26"
+      },
+      {
+        "schritt": "Dokumentation",
+        "status": "ausgeführt",
+        "grund": "Alle Dokumente einschließlich Archiv im Index; 378 lokale Markdown-Dateilinks aktueller Dokumente geprüft. Inhaltliche Prüfung bleibt manuell."
+      },
+      {
+        "schritt": "Fixtures",
+        "status": "ausgeführt",
+        "grund": "20 aktuelle bzw. explizit versionierte Backups und alle historischen Referenzformate vorhanden; echte Importprüfung folgt in der Hauptsuite"
+      },
+      {
+        "schritt": "Werkzeugtests",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0",
+        "exitcode": 0
+      },
+      {
+        "schritt": "Fachlogik-Unit-Tests",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0",
+        "exitcode": 0
+      },
+      {
+        "schritt": "Fachlogik ohne Systemzeitzonen",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0",
+        "exitcode": 0
+      },
+      {
+        "schritt": "analyse_statisch",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0",
+        "exitcode": 0
+      },
+      {
+        "schritt": "analyse_erreichbarkeit",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0",
+        "exitcode": 0
+      },
+      {
+        "schritt": "standpruefung",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0",
+        "exitcode": 0
+      },
+      {
+        "schritt": "attributpruefung",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0",
+        "exitcode": 0
+      },
+      {
+        "schritt": "dublettenpruefung",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0",
+        "exitcode": 0
+      },
+      {
+        "schritt": "Tk-Voraussetzung",
+        "status": "ausgeführt",
+        "grund": "Tk-Fenster im gewählten Python gestartet und geschlossen"
+      },
+      {
+        "schritt": "Startprobe",
+        "status": "ausgeführt",
+        "grund": "Exitcode 0",
+        "exitcode": 0
+      },
+      {
+        "schritt": "Lieferstand",
+        "status": "ausgeführt",
+        "grund": "07_Python-Versionen ist bytegleich zu src/glide"
+      },
+      {
+        "schritt": "Fremdcode",
+        "status": "ausgeführt",
+        "grund": "tkinterdnd2 0.6.3: 116 Dateien bytegleich zum Originalpaket (SHA-256 50c738630210…)"
+      },
+      {
+        "schritt": "Datenschutz",
+        "status": "ausgeführt",
+        "grund": "keine Benutzerpfade in versionierten Textdateien"
+      },
+      {
+        "schritt": "Ablagegröße",
+        "status": "ausgeführt",
+        "grund": "1650 versionierte Dateien, 287 MB; keine Archivkopien, Fehlreste, Dateien über 50 MB, Archive und Nachweise nur der 7 neuesten, Fensterbilder nur der 3 neuesten Versionen"
+      },
+      {
+        "schritt": "Synchronisation",
+        "status": "ausgeführt",
+        "grund": "keine Synchronisationskopien, kein Hauptdokument ohne Vermerk stark gekürzt"
+      }
+    ]
+  },
+  "uiux": {
+    "app": "%USERPROFILE%\\OneDrive\\Github\\glide-to-do\\01_Repository\\Glide\\src\\glide\\app.pyw",
+    "faelle": {
+      "b01": {
+        "ok": true,
+        "befund": "Gelesen → Seitenanfang; Aktualisierung behält Lage; Neustart ohne Karte"
+      },
+      "b02": {
+        "ok": true,
+        "befund": "linke Rasterkante bei 1280x800, 860x700, 1600x900"
+      },
+      "b03": {
+        "ok": true,
+        "befund": "Name fest, Altwerte entfernt, Pflege immer, Ausblenden über Kachel"
+      },
+      "b04": {
+        "ok": true,
+        "befund": "6 Vorschauen, 6 geladen, öffnet Detail, eigene Auswahl bleibt, fehlende Datei benannt"
+      },
+      "b05": {
+        "ok": true,
+        "befund": "Unterkante 113 ≈ Grundlinie 114, Seitenverhältnis 0.641"
+      },
+      "b06_b15": {
+        "ok": true,
+        "befund": "12 Kombinationen, nachträglich gewachsener Leertext und später Map ohne Überdeckung; Schalter gespeichert"
+      },
+      "b15_appweit": {
+        "ok": true,
+        "befund": "1354 Knopfprüfungen in 7 Ansichten und 5 Dialogen (2 Größen, 2 Schriftgrößen, Hinweise an/aus) ohne Befund"
+      },
+      "b07": {
+        "ok": true,
+        "befund": "4 Menüs auf der Mittellinie der 4 Kopfsymbole"
+      },
+      "b08": {
+        "ok": true,
+        "befund": "gemeinsame linke Textkante x=400"
+      },
+      "b09": {
+        "ok": true,
+        "befund": "Papierkorbsymbol +2 px, Pfeilabweichung -0.02 px, nativer Pfadtrenner +0.28 px"
+      },
+      "b10": {
+        "ok": true,
+        "befund": "Lupe aus Segoe UI Symbol"
+      },
+      "b11": {
+        "ok": true,
+        "befund": "Datumsspalte Labels 162 px statt 257 px; Labels: Titel 603, Datum 162, Labels 133; Heute: Titel 285, Datum 249, Labels 158; Liste: Titel 710, Datum 162, Labels 0"
+      },
+      "b12_b13": {
+        "ok": true,
+        "befund": "keine doppelten Dreiecke; nur Titelzelle fett in Zeilengröße, Datum/Label/Herkunft normal"
+      },
+      "b14": {
+        "ok": true,
+        "befund": "Liste · Nummeriert · Aufgabe · Zitat · Bild · Mehr"
+      },
+      "b16": {
+        "ok": true,
+        "befund": "78 Raststücke über Bildern, größter Schritt 37 px"
+      },
+      "b17_b19": {
+        "ok": true,
+        "befund": "Notizaktionen, Fälligkeitsfelder und Menüs ohne Fremdfläche (hell, Verlauf Morgenrot)"
+      },
+      "b18": {
+        "ok": true,
+        "befund": "Neuerungen nach „Gelesen“ und Neustart unter Über Glide"
+      }
+    },
+    "fehler": []
+  },
+  "arbeitsmodi": {
+    "vollauf": {
+      "app_sha256": "e984ba99a515d5d6e31c22e34113e545ae3b77c74e9d18a8ebcfb3d3ff2bfb0d",
+      "faelle": {
+        "kartenflaechen": {
+          "ok": false,
+          "befund": "Traceback (most recent call last):\n  File \"tests/integration/test_arbeitsmodi.py\", line 4040, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"tests/integration/test_arbeitsmodi.py\", line 3984, in fall_kartenflaechen\n    assert app.active_backdrop() is not None\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 37.801
+        },
+        "schriftstile": {
+          "ok": true,
+          "befund": "Vier korrigierte Stilklassen gespeichert und nach Neustart erhalten; Playfair/Fraunces SemiBold normal, echtes Bold bei 8–11 pt, Metriken einschließlich Italic; Rubik Vorgabe, Symbole vollständig",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 7.162
+        },
+        "seitenaktionen": {
+          "ok": true,
+          "befund": "21 aktive Seitenmenüeinträge auffindbar; Filter, Esc/Fokus, Ausführen, Gliederung, leere Treffer",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.012
+        },
+        "blockaktionen": {
+          "ok": true,
+          "befund": "Strg+/, Griff an Schreibmarke und Mauszeiger, Umwandeln mit einem Undo, Sperrgründe, Rechtsklick nennt den Weg",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 3.95
+        },
+        "schreibschutz": {
+          "ok": true,
+          "befund": "Lesbare Aktionen bleiben, Änderungen gesperrt mit Grund, keine Kopfverweise",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 3.728
+        },
+        "kopfverweise": {
+          "ok": true,
+          "befund": "keine Zusatzzeile, Verweise am Titelende nur bei freiem Platz, Überfahren/Fokus/Tab, langer Titel und schmale Spalte weichen ganz (Mehr), Symbol vor dem Titel, 21 Knöpfe ohne Befund",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 3.89
+        },
+        "notiz": {
+          "ok": true,
+          "befund": "Notizaktionen mit eigenen Abschnitten, Blockaktionen und Griff wie in Seiten",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 3.775
+        },
+        "nebenansicht_liste": {
+          "ok": true,
+          "befund": "Abhaken per Kästchen/Leertaste mit einem Undo/Redo, Text klickt nicht, Umbenennen, Papierkorb, Öffnen",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.513
+        },
+        "nebenansicht_seite": {
+          "ok": true,
+          "befund": "Blockarten, echtes Kästchen mit einem Undo, lesend gesperrt, Esc schließt",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.065
+        },
+        "nebenansicht_inspektor": {
+          "ok": true,
+          "befund": "Vorrang und Rückkehr gegenüber dem Inspektor, schmal als Überlagerung, 24 Knöpfe ohne Befund",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.604
+        },
+        "nebenansicht_einstiege": {
+          "ok": true,
+          "befund": "Kontextmenü, Zeichnung gesperrt, Umschalt+Enter, eigene Auswahl nur mit Listen/Seiten/Notizen",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 3.969
+        },
+        "verweisvorschau": {
+          "ok": true,
+          "befund": "Echter Strg+Umschalt-Klick, Kontext unter Auswahl, Verweis-/Rückverweismenü, frische IDs/Titel, Taskmarkierung in Liste/Seite, Haupteditor und offener Text erhalten; alter Strg-Klick bleibt",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.431
+        },
+        "verweisvorschau_grenzen": {
+          "ok": true,
+          "befund": "Notiz, kein externer Browser, Archiv/Schreibschutz, Undo/frische IDs, stale Menü/Papierkorb/fehlend/Zeichnung/Kompaktmodus; 224 Knopfprüfungen in acht Konfigurationen",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 7.236
+        },
+        "seitenleiste_kontext": {
+          "ok": true,
+          "befund": "Rechtsklick auf Liste/Seite/Notiz/Zeichnung/Ordner/Systemzeile ohne Öffnen; Nebenansicht, Linksklick, Pfeiltaste und Mehrfachauswahl erhalten",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.448
+        },
+        "kompakt": {
+          "ok": true,
+          "befund": "Kompaktmodus direkt als erster Menüeintrag; Kürzel mit Drücken/Loslassen und reinem Loslassen im Editor/Hauptfenster, keine Doppelwirkung; 480×560, getrennte Lagen über Neustart, Kopf B07, 20 Knöpfe ohne Befund",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "event_trace": [
+            {
+              "synthetic": "<Control-Shift-K>",
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "type": "2",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              },
+              "after": {
+                "compact": true,
+                "down": true,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-K>",
+              "after": {
+                "compact": true,
+                "down": true,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "type": "3",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": true,
+                "down": true,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              },
+              "after": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-K>",
+              "before": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "type": "2",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              },
+              "after": {
+                "compact": false,
+                "down": true,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-K>",
+              "after": {
+                "compact": false,
+                "down": true,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "type": "3",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": false,
+                "down": true,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              },
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-K>",
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "type": "3",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              },
+              "after": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-K>",
+              "after": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-K>",
+              "before": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "type": "3",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              },
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-K>",
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-k>",
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "type": "3",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              },
+              "after": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-k>",
+              "after": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-k>",
+              "before": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "type": "3",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              },
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-k>",
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-K>",
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "type": "3",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              },
+              "after": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-K>",
+              "after": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-K>",
+              "before": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "type": "3",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              },
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-K>",
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-k>",
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "type": "3",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              },
+              "after": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-k>",
+              "after": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-k>",
+              "before": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "type": "3",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              },
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-KeyRelease-k>",
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-K>",
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "type": "2",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              },
+              "after": {
+                "compact": true,
+                "down": true,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-K>",
+              "after": {
+                "compact": true,
+                "down": true,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "type": "3",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": true,
+                "down": true,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              },
+              "after": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-K>",
+              "before": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "type": "2",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              },
+              "after": {
+                "compact": false,
+                "down": true,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-K>",
+              "after": {
+                "compact": false,
+                "down": true,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "type": "3",
+              "state": 0,
+              "key": "k",
+              "time": 0,
+              "before": {
+                "compact": false,
+                "down": true,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              },
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<KeyRelease-k>",
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "type": "3",
+              "state": 0,
+              "key": "k",
+              "time": 0,
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              },
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<KeyRelease-k>",
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Shift-KeyRelease-K>",
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "type": "3",
+              "state": 1,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              },
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Shift-KeyRelease-K>",
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Control-KeyRelease-k>",
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "type": "3",
+              "state": 4,
+              "key": "k",
+              "time": 0,
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              },
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            },
+            {
+              "synthetic": "<Control-KeyRelease-k>",
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".!frame.!frame3.!frame.!roundedcontainer.!frame.!pageeditor.!frame5.page_text",
+                "focus_class": "Text"
+              }
+            }
+          ],
+          "dauer_s": 5.492
+        },
+        "kompakt_ansichten": {
+          "ok": true,
+          "befund": "138 Knopfprüfungen in vier Ansichten bei 480×560 und großer Schrift; Menü mit allen Befehlen",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 7.362
+        },
+        "kompakt_verlorenes_loslassen": {
+          "ok": true,
+          "befund": "Fehlendes K-Loslassen blockiert nach Modifierende/Fensterfokusverlust nicht das nächste Kürzel; interner Fokuswechsel erhält das Paar",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "event_trace": [
+            {
+              "synthetic": "<Control-Shift-K>",
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "type": "2",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              },
+              "after": {
+                "compact": true,
+                "down": true,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-K>",
+              "after": {
+                "compact": true,
+                "down": true,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<KeyRelease-Control_L>",
+              "before": {
+                "compact": true,
+                "down": true,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<KeyRelease-Control_L>",
+              "after": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-K>",
+              "before": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "type": "2",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              },
+              "after": {
+                "compact": false,
+                "down": true,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-K>",
+              "after": {
+                "compact": false,
+                "down": true,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "type": "3",
+              "state": 0,
+              "key": "k",
+              "time": 0,
+              "before": {
+                "compact": false,
+                "down": true,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              },
+              "after": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-K>",
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "type": "2",
+              "state": 5,
+              "key": "K",
+              "time": 0,
+              "before": {
+                "compact": false,
+                "down": false,
+                "minsize": [
+                  860,
+                  700
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              },
+              "after": {
+                "compact": true,
+                "down": true,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "synthetic": "<Control-Shift-K>",
+              "after": {
+                "compact": true,
+                "down": true,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            },
+            {
+              "type": "3",
+              "state": 0,
+              "key": "k",
+              "time": 0,
+              "before": {
+                "compact": true,
+                "down": true,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              },
+              "after": {
+                "compact": true,
+                "down": false,
+                "minsize": [
+                  480,
+                  560
+                ],
+                "focus": ".",
+                "focus_class": "Tk"
+              }
+            }
+          ],
+          "dauer_s": 3.787
+        },
+        "gestaltung": {
+          "ok": true,
+          "befund": "194 Knopfprüfungen in fünf Konfigurationen ohne Befund",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 11.151
+        },
+        "tagessteuerung": {
+          "ok": true,
+          "befund": "Mehr-Menü mit Kapazität, Morgen/Datum/Abbruch/ohne Tag, Fälligkeit erhalten, Undo, Sperre/Blockierung, Fokusfehler und echter gespeicherter Fokusstart",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.3
+        },
+        "nebenansicht_navigation": {
+          "ok": true,
+          "befund": "Wörtliche Unicode-Suche, Trefferwechsel/Tasten, kein Treffer, Neuaufbau, Überschriften/Gruppen, readonly und dreistufiges Esc; Haupteditor und offene Eingaben erhalten",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.188
+        },
+        "zweierpaket_gestaltung": {
+          "ok": true,
+          "befund": "470 Knopfprüfungen; Tagessteuerung in vier Größen-/Schrift-/Designkonfigurationen und drei Scrolllagen, Nebenansicht mit Suche an Mindestbreite in drei Konfigurationen",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 6.976
+        },
+        "home_mehrfachplanung": {
+          "ok": true,
+          "befund": "21 offene Aufgaben aus zwei Listen über drei Seiten; Auswahl ohne Schreiben/Erledigen, Morgen/ohne Tag mit einem Undo/Redo, Fälligkeit, Dialogabbruch/Alterung, Sperre, Tageswechsel und readonly grün",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 5.134
+        },
+        "side_history": {
+          "ok": true,
+          "befund": "Zurück/Vorwärts/Alt-Pfeile, Suchbegriff/aktiver Treffer, Leseposition und Zeilenauswahl, aktueller Verlauf/Inhaltswechsel, gelöschte Ziele, fehlender Inhalt, readonly und Bestandsgrenze; Hauptentwurf und Dateibytes erhalten",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.511
+        },
+        "folgepaket_gestaltung": {
+          "ok": true,
+          "befund": "685 Knopfprüfungen; Tagessteuerung in vier Größen-/Schrift-/Designkonfigurationen und drei Scrolllagen, Nebenansicht mit Suche an Mindestbreite in drei Konfigurationen",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 8.13
+        },
+        "home_tagesnavigation": {
+          "ok": true,
+          "befund": "Tag vor/zurück/Datum/Heute, separate Plan-/Fälligkeitsbilanz, Auswahlgrenze, Abbruch, readonly und Bestandswechsel ohne Aufgaben-/Undo-Wirkung",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.216
+        },
+        "home_mehrfachfelder": {
+          "ok": true,
+          "befund": "12 Aufgaben aus zwei Listen: Wichtigkeit/Labels, vorhandene Labels, No-op, ein Undo/Redo, stale Auswahl, Sperre/readonly und Schreibfehler ohne Erfolg",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.433
+        },
+        "side_verweisnavigation": {
+          "ok": true,
+          "befund": "Echter Textlink, Rückverweis, Suchauswahl, Verlauf, readonly und veralteter Link; Hauptentwurf/Datei/Undo unverändert",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.055
+        },
+        "dreierpaket_gestaltung": {
+          "ok": true,
+          "befund": "382 Knopfprüfungen; vier Größen-/Schrift-/Designkonfigurationen einschließlich Kompaktmodus, drei Scrolllagen, Nebenansicht 280 px und vollständige Datumswerte",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 7.362
+        },
+        "home_wochenwahl": {
+          "ok": true,
+          "befund": "Echter Wochenknopf/Suchauswahl und Datumsmenü, Auswahlreset, alte Menüs wirkungslos, readonly lesend ohne Schreib-/Undo-Effekt",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 3.974
+        },
+        "home_faelligkeit_aufwand": {
+          "ok": true,
+          "befund": "12 Aufgaben: echte Aufwandmenüaktion, ein Undo/Redo, Fälligkeit getrennt vom Bearbeitungstag, eigene Dauer, Abbruch/stale/Serien/readonly/Schreibfehler geschützt",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.354
+        },
+        "side_verweisaktionen": {
+          "ok": true,
+          "befund": "Echte Verweisaktionen: Kopieren ohne Mutation, Hauptbereich öffnen, gezielt verknüpfen mit einem Undo/Redo, readonly und Dialog-/Beziehungswechsel geschützt",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.007
+        },
+        "side_trefferuebersicht": {
+          "ok": true,
+          "befund": "Abschnitt/Ausschnitt je Treffer, Ansteuern über den Suchweg, veraltete Einträge und kein Treffer wirkungslos, 50er-Grenze, Listengruppen; Modell/Datei/Undo/Haupteditor unverändert; 85 Knopfprüfungen",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 5.988
+        },
+        "side_nachschlagen": {
+          "ok": true,
+          "befund": "Sperrgrund ohne Nebenansicht/Markierung, Suche mit erstem Treffer, readonly verfügbar, Blockaktionen, Aufgabentitel aus dem Kontextmenü; Modell/Datei/Undo/Haupteditor unverändert",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.223
+        },
+        "home_fokusdauer": {
+          "ok": true,
+          "befund": "Mehr-Menü „Fokus für“ mit Vorgabe-Häkchen, Start 15/50 min, Aufwand 30 min ohne Vorgabe, gespeicherte Vorgabe, Intervall/Fortsetzen, +5 Minuten, Sperre, Speicherfehler, Neustart, Aufgaben-Kontextmenü",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 5.535
+        },
+        "fokus_wechseln": {
+          "ok": true,
+          "befund": "Fokusfeld „Wechseln zu …“: Knopf öffnet Menü, bis zu fünf Tagesaufgaben in Rangfolge von „Nächste Aufgabe“ ohne Blockierte/Erledigte/andere Tage, gekürzte Titel, Wechsel bucht Zeit, veraltete Wahl mit Warnung, Speicherfehler, leere Wahl, Zahl der übrigen jenseits der Grenze",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.558
+        },
+        "side_suchverlauf": {
+          "ok": true,
+          "befund": "Nebenansicht „Letzte Suchen …“: leer gesperrt, Tippen merkt nichts, Weiter/Zurück/Nachschlagen merken nur Suchen mit Treffer, ✓ am aktuellen Begriff, Wahl sucht erneut, Grenze 8, Pfeiltasten, Liste leeren, Datenordnergrenze, lesend, Knopfprüfung",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 3.972
+        },
+        "fokus_als_naechstes": {
+          "ok": true,
+          "befund": "Fokusfeld „Als Nächstes: …“: Aufgabe von „Nächste Aufgabe“ mit Zahl der übrigen, folgt Erledigen/Wechsel/Undo, keine Neubestimmung im Sekundentakt, leerer Zustand, Knopfprüfung",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.092
+        },
+        "fokus_menue": {
+          "ok": true,
+          "befund": "Menü „Ansichten“/Aktionsauswahl: vier Fokusbefehle mit Gruppe „Planen und einordnen“, Hinweis ohne Sitzung, Pause/Fortsetzen, +5 Minuten, Wechseln zu …, Beenden und Buchen",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.053
+        },
+        "home_fokus_laeuft": {
+          "ok": true,
+          "befund": "Kachel „Nächste Aufgabe“: laufender Fokus benannt, „Fokus anzeigen“ öffnet Heute ohne Neustart, danach wieder „Fokus starten“",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.092
+        },
+        "side_abschnitte": {
+          "ok": true,
+          "befund": "Nebenansicht Alt+Pfeil runter/hoch: Seite über Einfügemarke und Liste über Gruppen in Anzeigereihenfolge, sichtbar angesteuert, ✓ am aktuellen Abschnitt, Ränder und fehlende Abschnitte gemeldet, lesend, in Hilfe › Tastenkürzel",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.193
+        },
+        "ansichtssymbole": {
+          "ok": true,
+          "befund": "12 Ansichtswechsel mit Symbol, Klartextname und aktivem Zustand; eine dauerhafte Zeilenaktion per Tastatur auf stabiler Aufgaben-ID",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 4.838
+        },
+        "eckenlabels": {
+          "ok": true,
+          "befund": "Liste, Tabelle, Pinnwand, Ordner und Seite bei 1280/860 px: Chips in der Kartenecke, ohne Überdeckung",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 5.216
+        },
+        "hinweisplatz": {
+          "ok": true,
+          "befund": "Liste, Tabelle, Pinnwand, Seite: Hinweise bei 1280 px, keine bei 860 px und im Kompaktmodus; Schalter unverändert",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 6.031
+        },
+        "werkzeugzeile": {
+          "ok": true,
+          "befund": "12 Messungen: Abstand ≥ 10 px, Umschalter rechts, Pinnwand auf Kartenfarbe; Seitenfuß einzeilig",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 5.703
+        },
+        "menschen3503": {
+          "ok": true,
+          "befund": "4 Konfigurationen: Tabelle/Buch/Labels, dauerhafte Zeilenaktion, Abstand, gemeinsame Außenknöpfe, einzeilige Seiten-/Zeichenwerkzeuge, Maus-/Tastaturcursor",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 8.627
+        },
+        "buchbreite3503": {
+          "ok": true,
+          "befund": "64 Buchbreitenprüfungen bis zu beiden Karteninnenkanten: Mindestbreite/breit, volle/schmale/ausgeblendete Seitenleiste und Rückwechsel, vier Design-/Schriftkombinationen, Wechsel aus Labels",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 14.68
+        },
+        "seitenleistenabstand3504": {
+          "ok": true,
+          "befund": "16 Hover-Geometrieprüfungen gegen die äußere Seitenleistenkarte: oben/links/rechts gleich, vier Design-/Schriftkombinationen, Mindestbreite/breit, Rückkehr aus schmal/ausgeblendet; Symbolhintergrund und Hover-Ende",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 6.919
+        },
+        "suchbreite3504": {
+          "ok": true,
+          "befund": "239 Suchbreitenprüfungen: Inhaltskante statt Eigenbreite, Buch/Labels/Liste, leer/Suche/löschen, vier Design-/Schriftkombinationen, Mindestbreite/breit, volle/schmale/ausgeblendete Seitenleiste und Rückwechsel; Folgeknöpfe ohne Überdeckung",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 19.313
+        },
+        "titellaenge3504": {
+          "ok": true,
+          "befund": "32 Seitenübersichts-Konfigurationen: vier Schriftstile, zwei Größen/Designs/Breiten, sichtbare Auslassung und echte Canvas-Innenkanten; 40-Zeichen-Neuanlage und unveränderter Alttitel",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 15.261
+        },
+        "abnahme3505": {
+          "ok": true,
+          "befund": "20 Heute-/Abschnitts-Geometrien und vier Suchabläufe: globaler Bestandstreffer, Vorlagenfilter/Trefferleerstand/Escape, getrennte Suchzustände",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 13.891
+        },
+        "beta350": {
+          "ok": true,
+          "befund": "Hintergrundfarben in zehn Designs, Speicherung/Neustart, drei Größen, volle Seitenleiste, Blockziehen/Undo/Redo/Abbruch/Schreibschutz",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 5.626
+        }
+      },
+      "fehler": [
+        "kartenflaechen"
+      ],
+      "laufender_fall": null
+    },
+    "karten_nachtest": {
+      "app_sha256": "e984ba99a515d5d6e31c22e34113e545ae3b77c74e9d18a8ebcfb3d3ff2bfb0d",
+      "faelle": {
+        "kartenflaechen": {
+          "ok": true,
+          "befund": "59 Farb-/Design-/Ansichtswechsel und Neustart: sechs Bäume und beide Karten auf Themenfarbe, Hintergrund dahinter",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 8.874
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    },
+    "kumulative_gruene_faelle": 51,
+    "kein_sauberer_monolithischer_gesamtabschluss": true,
+    "wiederholter_abbruch": {
+      "completed": 21,
+      "phase": {
+        "name": "home_mehrfachplanung",
+        "phase": "setup"
+      },
+      "exit_decimal": -1073741819,
+      "exit_hex": "0xC0000005",
+      "source_sha256": "e984ba99a515d5d6e31c22e34113e545ae3b77c74e9d18a8ebcfb3d3ff2bfb0d"
+    }
+  },
+  "units": {
+    "fachtests_je_lauf": 1134,
+    "laeufe": 2,
+    "werkzeugtests": 244,
+    "werkzeug_skip": 1
+  },
+  "sichtbilder": {
+    "heute-final.png": "b85cbe2b6574db5a242832ededbcbd9c6092184b9595ea1bb615cc1b249c4c1e",
+    "notiz-final.png": "0a62f1e0ba8a2d0d94b14394151833b8ef381d0eabce4a792131e0f0dd9c667f",
+    "seiten-final.png": "5b347528c2b35103a0768dcc0eb6289361276d8d6e312f054485b241b3566756",
+    "startseite-final.png": "c601a83acedfd652a8915ace2e254689e727508cbd91859033b5a0c345e1767b",
+    "vorlagen-final.png": "697d0daec030eff71e22df72c510b065718fd6207d59d7ee36f016baecaaa5a9"
+  },
+  "eingangsdateien": [
+    {
+      "name": "codex-clipboard-7042c439-2e44-4623-8b36-a91d774c280d.png",
+      "sha256": "530da18a4a25fe19d63e89c8073391a532d319415a83f973e0068ac51e9f5dd5"
+    },
+    {
+      "name": "codex-clipboard-78be02c0-ea4d-43ff-8e89-07262c22b7b8.png",
+      "sha256": "d56221afd1f3b330b9fc56102590a7cdc0f3e1c7c07845603869ac07c7fe83c4"
+    },
+    {
+      "name": "codex-clipboard-8637c080-a369-4575-8261-e724e192b136.png",
+      "sha256": "23617836068d90c0b3f0d7a22db4ce0422e44a0758cc0d34318619c48f68530b"
+    },
+    {
+      "name": "codex-clipboard-abe31d89-451f-4e3a-98c0-c9557cb33de4.png",
+      "sha256": "6cc415038fd5a4217a7c1c90b4f95c96b027b1f62cf98f6f5a5c71496d0586b8"
+    },
+    {
+      "name": "codex-clipboard-6141a642-e205-4df1-b59e-3f77a49083f6.png",
+      "sha256": "9430c0ebb2ce29dd473f1c4604fecf38cbe3fa9ecc70d73b73a9778b34991540"
+    },
+    {
+      "name": "codex-clipboard-7d7e42f9-e4dd-4a29-8871-e0f4f3938dc9.png",
+      "sha256": "e8af55bb4c9ac1a1d527241e64c4b4f5b855b2eb56c3a6c52fd7ef2b4bcb380a"
+    },
+    {
+      "name": "codex-clipboard-ddb31c3c-49d5-467b-b16f-aea72e510cb4.png",
+      "sha256": "a248767225f15731ff73c9bae716d9092d01781e38098e481b16153502dca34b"
+    }
+  ],
+  "native_neubauten": "Benutzer am vorhandenen Bauplatz; nicht hier geliefert",
+  "menschenabnahme": "Neue Punkte offen; alte Teilfreigaben behalten ihre Ursprungshashes",
+  "gitaktion": "keine",
+  "bereitgestellt": {
+    "starter": "%USERPROFILE%/gq/final5/Nachtest_starten.pyw",
+    "beobachtetes_fenster": "Startseite · Glide",
+    "menschenfreigabe": false
+  }
+}

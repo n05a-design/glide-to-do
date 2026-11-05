@@ -1,16 +1,14 @@
 # Regeln für die Dokumentenpflege
 
-Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 05.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Aufbewahrung 31.10.2026:** Zusätzlich zu den neun überalterten Git-Dateien alle 751 im Audit inventarisierten ignorierten QA-Reste entfernt; 28 Original-Nutzerbilder erhalten. Einzelpfade und Hashes im [Prüf- und Liefernachweis](../tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md). Die beschädigte Zeichencodierung der datierten Robustheits-README wurde an 49 Zeichen rekonstruiert; Zahlenfolgen und Aussagen unverändert, Vorher-/Nachherhash dokumentiert. Historische Messergebnisse/JSON-Berichte bleiben datiert.
-
-**Lokaler Abgleich 29.10.2026:** Abnahmebefunde in den zuständigen Quellen eingearbeitet; [Analyse §13.20](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1320-einarbeitung-des-abnahmeaudits-und-dateiabgleich-vom-29102026), [Dateiinventar/Dokumentregister/Schlusskontrollen](../tests/qa-3.49.0/dokumentabgleich_2026-10-29/README.md). Der Word-/PDF-Bericht bleibt ein unveränderter datierter Prüfbeleg. Historische QA-Rohdaten, Originalreferenzen und Lieferstände werden nicht umetikettiert oder aus diesem Abgleich gelöscht.
+Am 04.11.2026 zusammengeführt und gekürzt: chronologische Auditwiederholungen durch Provenienzverweise ersetzt; geltende Regeln und Zuständigkeiten erhalten.
 
 Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder gelöscht anstatt immer nur archiviert und `_Z` zu schreiben“) und ersetzt alle früheren Archivierungsregeln.
 
-Abgleich 18.10.2026: [Dokumentregister und konkrete Pflegeergebnisse](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#7-dokumentenpflege-und-zuständigkeit). Originalaufträge, D45-Tafeln, Migrationsfixtures und Paketlizenzkopien wurden von entbehrlichen Themendubletten unterschieden; ein erforderlicher Lieferbeleg ist kein zweites aktuelles Fachdokument. D51 bündelt mehrere Pakete in einer Prüfphase, ohne die Aufbewahrungsregeln zu verändern.
-
 ## Grundsätze
+
+**Explizite Grafikausnahme 05.11.2026 (D62):** Bisherige Logo-Dateien auf Benutzerauftrag unter `20_Grafik_Master/01_Logo/Archiv` mit Hashmanifest erhalten. Keine neue allgemeine Archivregel für Dokumente, Fixtures oder QA.
 
 - **Ein Thema, ein Dokument.** Beschreiben zwei Dokumente dasselbe, werden sie zusammengeführt; das überholte wird gelöscht, nicht archiviert. Git trägt jede Vorfassung (`git log --follow <Datei>`).
 - **Fortschreiben statt kopieren.** Keine Versionskopie, keine `archiv/`-Ordner, keine `_Z`-Vormerkung für Dokumente. Dateinamen tragen kein Datum und keine Version; der Stand steht in der Standzeile.
@@ -60,36 +58,20 @@ Neue Dokumente unter `docs/` nur, wenn kein bestehendes das Thema trägt; sie ge
 
 `tests/tools/standpruefung.py` (Regeln R1–R15) prüft alle aktiven Markdown-Dokumente: Standzeile mit der aktuellen Version, Formatstufen gegen den Code, bekannte überholte Aussagen, vollständige Modullisten, erreichbare relative Links, aktuelle Titel und erste Vollprüfungsaufrufe, Suitezahl in Standzeilen. Erzeugte Pakete unter `build/` sind Kopien, keine aktiven Dokumente. Dokumente mit Version oder Datum im Namen sowie der gehashte Mac-Paketlizenzbeleg gelten als festgeschrieben; seit 03.10.2026 gibt es unter den gepflegten Dokumenten keine mehr.
 
-## Ablageprüfung vom 18.10.2026
+## Pflegevertrag und frühere Audits
 
-**Pflegevertrag seit D52–D54 (21.10.2026):** Jede Entwicklungsrunde führt den bestehenden Entwicklungsplan fort, insbesondere seinen aktuellen Roadmap-Abgleich, und trennt Auftrag/Entscheidung von Implementierung, Prüfung, Lieferung und menschlicher Abnahme. Gestaltung bleibt allein in den appweit geltenden Design Richtlinien, externe Fakten im Marktbericht, technische Befunde in der Analyse und Resultate im QA-Bericht. Die zweiwöchentliche Recherche darf belegte Fakten und markierte Vorschläge lokal aktualisieren; sie entscheidet keine Features und führt keine Git-/Releaseaktion aus. Keine parallele Roadmap oder wiederholte chronologische Aufgabenliste anlegen.
+Seit D52–D54 führt jede Entwicklungsrunde den bestehenden Entwicklungsplan fort. Auftrag/Entscheidung, Implementierung, Prüfung, Lieferung und menschliche Abnahme getrennt ausweisen. Designvorgaben bleiben in den Design Richtlinien, externe Fakten im Marktbericht, technische Befunde in der Analyse und Ergebnisse im QA-Bericht. Keine parallele Roadmap und keine wiederholten Sitzungsberichte in Einstiegsdateien anlegen. Dort auf den aktuellen zuständigen Abschnitt verweisen, damit derselbe Status nicht an mehreren Stellen veraltet.
 
-Der [globale Nachweis](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/README.md) erfasst Dateien, Ordner, vollständige Hashes und Dokumentzuständigkeiten einschließlich Git und lokaler Arbeitskopien. Ignorierte Dateien sind nicht automatisch entbehrlich. Originalreferenzen, aktuelle QA-Bilder, Migrationsfixtures und bestehende Lieferstände werden unabhängig vom Git-Status geschützt. Historische Rohbelege bleiben historisch; doppelte Erzählungen werden in der aktuellen Quelle zusammengeführt.
+Die zweiwöchentliche Recherche darf belegte Fakten und markierte Vorschläge lokal aktualisieren; sie entscheidet keine Features und führt keine Git-/Releaseaktion aus. Ihr tatsächlicher Automationsstatus ist bei Bedarf gesondert zu prüfen.
 
-Git-Objektverdichtung erfolgt ohne History-, Ref- oder Reflogverlust und mit Objektmengenvergleich. Arbeitskopien entfallen erst nach Prüfung ihrer eigenen Änderungen und lokalen Belege, Sicherung außerhalb der Projektwurzel und Integration; Branches und Stashes bleiben erhalten. Ein abgelehnter Löschschritt bleibt mit seinem tatsächlichen Ergebnis im Journal.
+Frühere Datei-/Dokumentaudits stehen in [Analyse §13.17](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1317-datei--und-dokumentationsaudit-vom-27102026), [§13.20](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1320-einarbeitung-des-abnahmeaudits-und-dateiabgleich-vom-29102026) und [§13.21](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1321-abschlussabgleich-von-roadmap-featurelisten-und-dokumentation). Die datierten Nachweise bleiben innerhalb ihrer Aufbewahrung erhalten; frühere Fundzahlen sind keine heutigen Bestandszahlen. Der Word-/PDF-Abnahmebericht ist ein unveränderter Prüfbeleg. Historische Referenzen beim Kürzen auf eine belegte Git-Fassung umstellen; vorhandene Linkanker bei präziseren Überschriften als Alias erhalten.
 
-## Ablageprüfung vor Push und Merge vom 25.10.2026
+Separate Worktrees, Branches, Stashes und Git-Objekte gehören nicht zur Dokumentbereinigung. Arbeitskopien erst nach Prüfung ihrer eigenen Änderungen und lokalen Belege sowie gesicherter Integration auflösen. Ignorierte Dateien sind nicht automatisch entbehrlich. Crashdumps, Originaleingänge und Nutzerreferenzen nach ihrem Zweck prüfen; keine Sammellöschung aufgrund eines Ignore-Eintrags.
 
-Der [Nachweis vom 25.10.2026](https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.44.0/ablagepruefung_2026-10-25/README.md) prüfte den gesamten tatsächlichen Bestand einschließlich ignorierter QA-Dateien, Git und separater Arbeitskopien. Die Aufbewahrungsgrenzen sind eingehalten; Originalbilder, Fixtures und Lizenz-/Lieferkopien bleiben erhalten. Identischer Inhalt ist bei Showcase-/Fixture-Spiegeln und eigenständigen Lieferressourcen beabsichtigt. Die geplante Cachebereinigung wurde von der automatischen Freigabeprüfung vor Ausführung blockiert; keine Einsparung behaupten. Git-Historie, Stashes und die fünf Worktrees bleiben erhalten. Gegenwärtige Mergegrenzen stehen im Entwicklungsplan, technische Einzelbefunde im datierten Nachweis.
-
-## Dokumentabgleich vor Push vom 27.10.2026
-
-Der erneute Auftrag prüft das Dokumentregister gegen Quelle 3.47.0 / Format 26, die gezielten Paketfälle und tatsächliche Python-/Showcase-Lieferung. Inhaltliche Befunde und Korrekturen stehen allein in [Analyse §13.16](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1316-dokumentabgleich-vor-dem-push-am-27102026), Gitauftrag/Aufgaben im [Plan §21.25](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2125-dokumentabgleich-und-pushauftrag-vom-27102026); vollständiges Register/Links/Anker und CI im [Nachweis](../tests/qa-3.47.0/folgepakete_2026-10-27/README.md). Historische Ergebnisse bleiben unverändert. Präzise Ignore-Regeln halten neue QA-Screenshots und die lokale Tk-Prüfumgebung vom Gittransport fern; sie löschen keine lokalen Dateien.
-
-## Erneuter Datei- und Dokumentabgleich für 3.48.0
-
-Auftrag vom 27.10.2026: alle Dateien nach Inhalt, Stand und Version prüfen. Aktuelle Korrekturen in [Analyse §13.17](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1317-datei--und-dokumentationsaudit-vom-27102026); Inventar/Hashes, Register und Grenzen im [Audit](../tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md). Historische Rohbelege behalten ihre damaligen Angaben; spätere Korrekturen stehen als Nachtrag davor. Die 470-Dateien-Referenz des Featurelaufs bleibt erhalten, obwohl eine enthaltene README anschließend berichtigt wurde. Den neuen Dokumentabschluss mit dessen Auditnachweis beurteilen, den alten Hashabschluss nicht umetikettieren.
-
-Beim Audit vom 27.10.2026 lagen 595 lokale QA-Dateien außerhalb der Aufbewahrung: zehn Rohlogs 3.42.0 und 585 Fensterbilder 3.43.1–3.45.0. Einzelpfad/Hash/Grund sind erfasst, damaliger Status **offene Bereinigungskandidaten** (am 31.10. geschlossen, siehe Abschlussstatus unten); aus dem Prüfauftrag keine Sammellöschung vorgenommen. Die 28 Original-Nutzerbilder bleiben unabhängig davon geschützt. Zusätzliche WA-41-Sicherung mit Dumps/Anfangsbestand explizit Git-ausgeschlossen; kein öffentliches Uploadpaket.
-
-
-## Abschlussstatus nach Dokumentationsaudits
-
-Ablagebefund des Audits 31.10.2026: neun überalterte Git-Dateien regelkonform entfernt; darüber hinaus 751 lokale, ignorierte Reste (741 alte QA-Bilder und zehn alte Rohlogs) erfasst und noch am selben Tag entfernt (siehe Aufbewahrung oben, Plan §21.37). Ein grüner CI-Schritt „Ablagegröße“ bezieht sich auf den versionierten Bestand. [Metadateninventar](../tests/qa-3.49.0/abschlussaudit_2026-10-31/lokale_ablagereste.json). Die datierten 595 Kandidaten vom 27.10. oben sind der frühere Stand, keine heutige Bestandszahl.
-
-Der [Abschlussabgleich vom 31.10.2026](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1321-abschlussabgleich-von-roadmap-featurelisten-und-dokumentation) korrigiert Widersprüche zwischen aktuellen Tabellen und späteren Prüf-/Lieferbelegen. Der jeweils neueste Abschlussrest steht im bestehenden Entwicklungsplan; datierte Umsetzungsprotokolle und eingefrorene Nachweise werden nicht nachträglich umbewertet. Die aktuelle README im Python-Archiv ist trotz ihres Ablageorts eine gepflegte Übersicht; ihre Versionsliste gegen die tatsächlichen Dateien prüfen. Beim Kürzen belegte historische Referenzen auf die unveränderliche, lokal geprüfte Git-Fassung umstellen. Eine vorhandene Datei, registrierte Suite, grüne Grundprüfung oder ✅-Marke ersetzt keine vollständige Abnahme. Bereits erfüllte Einführungs-/Lieferteile nicht erneut als offen anbieten, appweite Reste und nicht ausgeführte native/Menschenprüfungen ausdrücklich offen lassen. Bei präziseren Überschriften bisherige Linkanker als Alias erhalten.
-
+Die [Bereinigung vom 04.11.2026](../tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md) enthält Dokumentregister, Einzeldatei-Löschmanifest und Abschlussprüfungen. Es entstehen keine neuen Dokumentarchive; Git trägt die Vorfassungen.
 
 ## Öffentliche Featurepflege ab 3.50.0
 
 Bei jeder erfolgreich umgesetzten oder geänderten Nutzerfunktion werden im selben Arbeitsgang README › „Was Glide kann“, `20_FUNKTIONEN.md`, `release_notes.CATALOG`, CHANGELOG und Entwicklungsplan inhaltlich abgeglichen. Marketing nennt verfügbare Fähigkeiten und keine ungeprüften Versprechen. Datierte Prüfbelege bleiben unverändert; aktuelle Lieferstände kommen ausschließlich aus dem neuesten QA-/Liefernachweis. Die Standprüfung bleibt Pflicht. Öffentliche Bezeichnung von 3.50.0: „Erster öffentlicher Stand“, interner Status: „öffentliche erste Beta“.
+
+**Versionspflege 05.11.2026, 3.50.4:** 19 überalterte 3.47.0-Dateien vorab bytegleich lokal gesichert und nach der vorhandenen Aufbewahrungsregel gekürzt; acht historische Links auf bytegleich verifizierte Git-Fassung umgestellt. Git-Index unverändert. Pfad-/Hashmanifest im 3.50.4-Abnahmenachweis.
