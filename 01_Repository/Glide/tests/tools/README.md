@@ -1,6 +1,6 @@
 # Prüfwerkzeuge für Glide
 
-Stand 05.11.2026 · Glide 3.50.5 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 06.11.2026 · Glide 3.50.5 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 **Intel-/AMD-Prüfplätze:** Jeder neue WA-42-Prüfablauf erfasst CPU-Modell/-Hersteller, logische Prozessorzahl, Board-/BIOS-Kontext und Laufzeit bereits am Anfang, auch bei grünen Läufen. `runtime.pruefplatz` führt die ermittelte CPU-Familie und einen Hardwareprofil-Hash ohne Rechner-/Benutzerkennung; er ist keine eindeutige physische Rechner-ID. Intel- und AMD-Ergebnisse getrennt zuordnen, zusätzlich App-/Suite-/Fixturehashes und Python/Tk vergleichen. Ein angekündigter AMD-Bericht bleibt bis zum tatsächlichen Eingang offen. Weder Hardwareprofil noch grüner Gegenlauf beweisen eine CPU-Ursache. Aktueller Intel-Eingang und Nachweise im [Abschlussnachlauf](../qa-3.49.0/abschlussreste_2026-10-29/README.md).
 
@@ -29,6 +29,7 @@ Alle Werkzeuge werden aus `01_Repository/Glide` gestartet. Werkzeuge, die echte 
 | `rundgang.py` | Probedaten „Rundgang“ (Liste, Notiz, Seite mit Bildern, Zeichnung) |
 | `vorlagendaten.py` | Vorlagenkatalog `resources/templates/glide_vorlagen.glidetemplates` |
 | `screenshots.py` | Linux/X11-Aufnahmen eigener Testfenster |
+| `projektseite_aufnahmen.py --out ORDNER name=design:art[:titel] …` | Windows: Aufnahmen für die GitHub-Projektseite aus dem Showcase in einem temporären Datenordner, Bedienhinweise aus, 1440 × 900 (06.11.2026); Ergebnis unter `assets/marketing/` |
 | `windows_vollpruefung.cmd` / `.ps1` | Windows: verlangt Python ≥ 3.14/Tk ≥ 9, prüft OneDrive-Platzhalter und startet `gesichert_pruefen.py --art voll`; lokale Prüfkopie/Logs standardmäßig unter `~/GlidePruefung`, optional `-Arbeitsablage PFAD`. Anleitung in der [manuellen Prüfliste](../../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md). |
 | `windows_sandbox.py [--bildschirm N] [--speicher MB] [--warten] [--schliessen] [--nur-dateien]` / `windows_sandbox.cmd` | Windows: Projekt außerhalb von OneDrive einfrieren (ohne `.git`, `__pycache__`, `build`, `.claude/worktrees`, mit `quellstand.json`), Windows-Sandbox mit eingebundener Prüflaufzeit (schreibgeschützt), ohne Netz und geteilte Zwischenablage starten und ihr Fenster ohne Aktivierung auf den zweiten Bildschirm legen; darin `pruefen.py --modus voll --timeout 900`, Exitcode in `FERTIG.txt`. Prüflaufzeit wie beim Starter oben (Python ≥ 3.14, Tk ≥ 9). Werkzeugtest `test_windows_sandbox.py` |
 | `kandidat_starten.pyw [--neu]` | Sicht-/Bedienabnahme eines noch nicht gelieferten Quellstands (25.10.2026): startet `src/glide/app.pyw` mit dem Showcase in `<Benutzerordner>/GlidePruefung/kandidat_showcase` (außerhalb von OneDrive, getrennt von den echten Daten); erster Start lädt das Showcase-App-Backup, `--neu` legt den alten Prüfordner umbenannt beiseite. Der Showcase-Starter in `05_Probelisten_Testdaten` nimmt dagegen die gelieferte Fassung aus `07` |
