@@ -1,5 +1,7 @@
 # Arbeitsrichtung, Entscheidungen und Abnahme
 
+**Commitauftrag 06.11.2026:** Benutzer bittet nach grünen Online-Prüfungen um Commit der letzten Änderungen dieses Chats und übernimmt den vorgelagerten Merge selbst. Nur eigene Titel-/Prüfkopieänderungen auf bereits gemergter Basis `5e63ea34` übernehmen; frühere lokale Fremdänderungen nicht pauschal mitnehmen. Commitfreigabe für diesen Nachtrag, kein selbstständiger Merge. Auftrag/Prüfung/Liefergrenzen in Plan §21.71 und QA-Nachweis.
+
 **Analyseauftrag 04.11.2026:** Stand, Roadmap und Konkurrenz auf neue Funktionen, Optimierungen, Eigenständigkeit und Mehrwert prüfen. [Ergebnis und vorgeschlagene Folge im Plan §21.62](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026). Fundorte, Tages-/Wochenausbau und Portabilität sind weiter ungewählte Vorschläge; D61 betrifft separat die spätere Abnahmekorrektur. Neue Herstellerrecherche von Umsetzung/Prüfung/Lieferung/Menschenabnahme getrennt.
 
 Stand 06.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26

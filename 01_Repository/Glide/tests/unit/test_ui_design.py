@@ -8,6 +8,20 @@ import ui_design as design
 
 
 class DesignTest(unittest.TestCase):
+    def test_edited_task_title_keeps_full_input_once_and_preserves_legacy(self):
+        legacy = "Ü" * 300
+        self.assertEqual(design.edited_task_title(legacy, legacy, "Notiz"), (legacy, "Notiz"))
+        for size in (39, 40, 41, 300):
+            original = "Ü" * size
+            title, note = design.edited_task_title(original, "Alt", "Notiz")
+            self.assertLessEqual(len(title), design.TITLE_MAX_CHARS)
+            if size > 40:
+                self.assertIn(original, note)
+                self.assertEqual(note.count("Originaltitel:"), 1)
+            else:
+                self.assertEqual((title, note), (original, "Notiz"))
+            self.assertEqual(design.edited_task_title(title, title, note), (title, note))
+
     def test_imported_title_keeps_original_in_description_without_changing_legacy(self):
         original = "Langer Originaltitel " * 5
         title, description = design.task_title(original, "Bestehende Beschreibung")

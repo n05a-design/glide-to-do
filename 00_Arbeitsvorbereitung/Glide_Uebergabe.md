@@ -1,5 +1,9 @@
 # Glide – Übergabe an eine neue Sitzung
 
+**Commitprüfung des Nachtrags 06.11.:** Auf der integrierten App `389cf046…` acht gezielte Gruppen und strenge Grundstufe 19/19 grün; zweimal 1.135 Fachtests, 245 Werkzeugtests/ein Skip. Vollmodus neu gestartet, nachfolgende Design-/Gestaltungs-/Leistungs-/Dauerläufe in serieller Warteschlange; kein schon abgeschlossener Vollnachweis. [Nachweis](../01_Repository/Glide/tests/qa-3.50.5/pc01_titel_nachtrag_2026-11-06/README.md).
+
+**Commitnachtrag 06.11.2026:** Eigene Änderungen dieses Chats isoliert auf `main` `5e63ea34` integriert, Branch `codex/glide-3.50.5-titel-nachtrag`. Neue App `389cf046…` / 3.50.5 / Format 26, Quelle/Python 93 Code-Dateien/171 Ressourcen bytegleich. Enthält Titelgrenzen, Originalerhalt, Vorlagen/Galerie/Duplikate/eigene Aufträge und E-Prüfkopie ohne Hardlinks. Erneute gezielte Prüfung und strenge Grundstufe vor dem autorisierten Commit; alte Online-/AMD-Nachweise bleiben ihren Hashes zugeordnet. Breite Folge anschließend auf dieser neuen Grundlage. [Einziger Nachweis](../01_Repository/Glide/tests/qa-3.50.5/pc01_titel_nachtrag_2026-11-06/README.md), Plan §21.75 (im Branch §21.71). Merge beim Benutzer, native Pakete und Menschenabnahme gesondert.
+
 Stand 06.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 Am 04.11.2026 zusammengeführt und gekürzt, zum Stand 05.11.2026 mit den Abnahmekorrekturen fortgeschrieben: wiederholte Sitzungsberichte und ersetzte Prioritäten entfernt. Datierte Ergebnisse bleiben im QA-Bericht, in der Analyse und im Entwicklungsplan; Originalbelege innerhalb der Aufbewahrung bleiben unverändert.

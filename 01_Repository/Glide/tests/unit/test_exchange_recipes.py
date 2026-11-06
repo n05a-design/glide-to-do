@@ -56,6 +56,15 @@ class RecipeTests(unittest.TestCase):
     def test_bounds_types_and_duplicate_identity(self):
         valid = dict(id='own-one', title=' Eigen  ', mode='patch', instruction=' Text ', fields=['description'])
         self.assertEqual(recipes.normalize(valid)['title'], 'Eigen')
+        for size in (39, 40):
+            self.assertEqual(recipes.normalize_update({**valid, 'title': 'Ü' * size})['title'], 'Ü' * size)
+        with self.assertRaisesRegex(ValueError, '40'):
+            recipes.normalize_update({**valid, 'title': 'Ü' * 41})
+        legacy = {**valid, 'title': 'Ü' * 80}
+        self.assertEqual(recipes.normalize_update(legacy, legacy)['title'], legacy['title'])
+        self.assertEqual(recipes.normalize_update({**legacy, 'instruction': 'Neue Anweisung'}, legacy)['title'], legacy['title'])
+        with self.assertRaisesRegex(ValueError, '40'):
+            recipes.normalize_update({**legacy, 'title': 'X' * 60}, legacy)
         for field, bad in [('id', '../path'), ('title', ' '), ('title', 'x' * 81), ('instruction', 'x' * 12001),
                            ('instruction', None), ('mode', 'network'), ('fields', ['unknown']), ('fields', [])]:
             with self.subTest(field=field, bad=str(bad)[:20]), self.assertRaises(ValueError):
@@ -77,7 +86,7 @@ class RecipeTests(unittest.TestCase):
         tree = ast.parse((REPO / 'src/glide/exchange_recipes.py').read_text(encoding='utf-8'))
         imports = {alias.name.split('.')[0] for node in ast.walk(tree) if isinstance(node, ast.Import) for alias in node.names}
         imports.update(node.module.split('.')[0] for node in ast.walk(tree) if isinstance(node, ast.ImportFrom))
-        self.assertEqual(imports, {'copy', 'json', 're', 'exchange_patch'})
+        self.assertEqual(imports, {'copy', 'json', 're', 'exchange_patch', 'ui_design'})
         self.assertFalse(any(isinstance(n, ast.Call) and isinstance(n.func, ast.Name)
                              and n.func.id in {'__import__', 'eval', 'exec'} for n in ast.walk(tree)))
 
