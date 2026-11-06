@@ -1,0 +1,137 @@
+{
+  "version": "3.50.4",
+  "app_sha256": "85a61f0ae14b12f93bef967ad291d5119a3da0e407729f1ac2f1e079a4ad1dfb",
+  "previous_app_sha256": "8b3076f92da04e1f2dc54c93fe530048085fb23db90220a7395b3273b3efe082",
+  "finding": "User point 6 still failed: tree packed with 14 px left and right inside card; previous tests checked only column sum against tree width",
+  "input_images_sha256": {
+    "eingang-01.png": "a700f71216a79fe0ea482ace02f581911787e6da5888bc37c26efba6e9bb201a",
+    "eingang-02.png": "88c35ac9a9e844583cae6d7275e550d1201ed7bf616e7d703fedc5bd6a32bf96",
+    "eingang-03.png": "1220823df90929279a5cbb7e7e5778b7816cffe44fe11a84b6efc8a0879bb003"
+  },
+  "change": "Library tree padx=(0,0); existing rounded card inset retained; label and task spacing unchanged",
+  "reports": {
+    "baseline": {
+      "app_sha256": "8b3076f92da04e1f2dc54c93fe530048085fb23db90220a7395b3273b3efe082",
+      "faelle": {
+        "menschen3503": {
+          "ok": true,
+          "befund": "4 Konfigurationen: Tabelle/Buch/Labels, dauerhafte Zeilenaktion, Abstand, gemeinsame Außenknöpfe, einzeilige Seiten-/Zeichenwerkzeuge, Maus-/Tastaturcursor",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 13.426
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    },
+    "counterexample": {
+      "app_sha256": "8b3076f92da04e1f2dc54c93fe530048085fb23db90220a7395b3273b3efe082",
+      "faelle": {
+        "buchbreite3503": {
+          "ok": false,
+          "befund": "Traceback (most recent call last):\n  File \"tests/integration/test_arbeitsmodi.py\", line 3714, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"tests/integration/test_arbeitsmodi.py\", line 3342, in fall_buchbreite3503\n    full_width((\"direkter Layoutwechsel\", *context))\n    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"tests/integration/test_arbeitsmodi.py\", line 3303, in full_width\n    assert tree.winfo_rootx() == card.winfo_rootx(), (\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('Buchtabelle beginnt nicht an der linken Karteninnenkante', ('direkter Layoutwechsel', 'light', 'mittel', '860x700', True, False), 338, 324)\n",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 5.03
+        }
+      },
+      "fehler": [
+        "buchbreite3503"
+      ],
+      "laufender_fall": null
+    },
+    "book_width": {
+      "app_sha256": "85a61f0ae14b12f93bef967ad291d5119a3da0e407729f1ac2f1e079a4ad1dfb",
+      "faelle": {
+        "buchbreite3503": {
+          "ok": true,
+          "befund": "64 Buchbreitenprüfungen bis zu beiden Karteninnenkanten: Mindestbreite/breit, volle/schmale/ausgeblendete Seitenleiste und Rückwechsel, vier Design-/Schriftkombinationen, Wechsel aus Labels",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 25.325
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    },
+    "acceptance_regression": {
+      "app_sha256": "85a61f0ae14b12f93bef967ad291d5119a3da0e407729f1ac2f1e079a4ad1dfb",
+      "faelle": {
+        "menschen3503": {
+          "ok": true,
+          "befund": "4 Konfigurationen: Tabelle/Buch/Labels, dauerhafte Zeilenaktion, Abstand, gemeinsame Außenknöpfe, einzeilige Seiten-/Zeichenwerkzeuge, Maus-/Tastaturcursor",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 10.415
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    },
+    "toolbar": {
+      "app_sha256": "85a61f0ae14b12f93bef967ad291d5119a3da0e407729f1ac2f1e079a4ad1dfb",
+      "faelle": {
+        "werkzeugzeile": {
+          "ok": true,
+          "befund": "12 Messungen: Abstand ≥ 10 px, Umschalter rechts, Pinnwand auf Kartenfarbe; Seitenfuß einzeilig",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 6.94
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    }
+  },
+  "visual_measurements": [
+    {
+      "case": "schmal-voll",
+      "tree_x": 324,
+      "card_inner_x": 324,
+      "tree_width": 536,
+      "card_inner_width": 536
+    },
+    {
+      "case": "schmal-ohne",
+      "tree_x": 56,
+      "card_inner_x": 56,
+      "tree_width": 804,
+      "card_inner_width": 804
+    },
+    {
+      "case": "breit-voll",
+      "tree_x": 324,
+      "card_inner_x": 324,
+      "tree_width": 1116,
+      "card_inner_width": 1116
+    }
+  ],
+  "python_delivery": {
+    "code_files_equal": 93,
+    "resource_files_equal": 171,
+    "differences": []
+  },
+  "syntax": "passed",
+  "human_retest": "open",
+  "full_matrix_renewed": false,
+  "strict_ci_renewed": false,
+  "native_delivery": "new Windows/Mac packages planned by user tonight; not built on this machine",
+  "git_transport": "none",
+  "starter": "%USERPROFILE%/gq/bcard4/Nachtest_starten.pyw",
+  "data_copy": "independent synthetic data copy; source JSON stable before/after; prior previews unchanged"
+}

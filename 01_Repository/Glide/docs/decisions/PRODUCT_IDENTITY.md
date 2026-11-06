@@ -1,6 +1,6 @@
 # Produkt- und Identitätsregister
 
-Stand 03.11.2026 · App-Version 3.50.2 · Datenformat 26
+Stand 05.11.2026 · App-Version 3.50.5 · Datenformat 26
 
 Der obere Block ist durch den Quellcode belegt und muss nicht mehr entschieden
 werden. Der untere Block enthält Geschäfts- und Rechtsentscheidungen. Offene
@@ -13,7 +13,7 @@ ersetzt werden.
 |---|---|---|
 | Produktname | Glide | `APP_NAME` |
 | Langname | Glide – Aufgaben und Listen | `APP_PRODUCT_NAME` |
-| App-Version | 3.50.2 | `APP_VERSION`, `VERSION` |
+| App-Version | 3.50.5 | `APP_VERSION`, `VERSION` |
 | Datenformat | 26 | `DATA_SCHEMA_VERSION` |
 | Unterstützte Backup-Formate | 4 bis 26 | `MIN_PORTABLE_BACKUP_SCHEMA_VERSION`, `DATA_SCHEMA_VERSION` |
 | Laufzeit | Python 3.14 mit Tk 9 als Grundlage (27.09.2026); Tk 8.6 bleibt lauffähig, ohne Systemmitteilung und SVG-Vorschau. Sonst nur Standardbibliothek | Importliste in `app.pyw` |
@@ -35,7 +35,7 @@ ersetzt werden.
 | Automatische Sicherungen | unter `backups/`, nur bei geändertem Inhalt: die zehn neuesten, jüngere als 30 Minuten, höchstens 40; dazu je Tag der letzte Stand für 14 Tage (29.09.2026) | `MIN_BACKUPS`, `BACKUP_MAX_AGE_MINUTES`, `MAX_BACKUPS`, `BACKUP_DAILY_DAYS`, `write_backup_copy` |
 | Oberflächensprache | Deutsch, einsprachig | Beschriftungen im Code |
 | Oberflächensymbole | zentrale Textzeichen-Tabelle; Legacy-Emoji nur beim Parsen alter Eingaben | `ICONS`, Symbolprüfung |
-| Logo und Programmsymbol | SVG-Master aus `20_Grafik_Master` (Glide-Blau `#0185E1`); in der Oberfläche in der Akzentfarbe, als Programmsymbol in Blau; Paketsymbole in `assets/icons` (29.09.2026) | `logo.py`, `resources/logo`, `packaging/baue_symbole.py` |
+| Logo und Programmsymbol | D62, 05.11.2026: unveränderte neue SVG-G-Kontur aus `20_Grafik_Master/01_Logo/2026-Glide-Logo-in-App.svg`; App-/Favicons aus `2026-Glide-Logo-App-und-Fav-Icon.svg`, Lila `#9E4AC8` auf Gelb `#FFDC0B`. Individuelle Oberflächenakzente bleiben erhalten; Darkmode-Gelb zentral `#FFDC0B` | `brand.py`, `logo.py`, `resources/logo`, `scripts/pflege/logo_abgleich.py`; vollständige Verwendungs-/Neubaucheckliste in `20_Grafik_Master/README.md` |
 | Übernahme aus Altordnern | keine – der Datenordner ist der Datenordner | `get_app_data_dir()` |
 | Rückgängig-Tiefe | 20 Schritte | `MAX_UNDO_STEPS` |
 | Max. Papierkorbeinträge | 200 | `MAX_TRASH_ENTRIES` |

@@ -1,12 +1,12 @@
 # Pflegewerkzeuge
 
-Stand 03.11.2026 · Glide 3.50.2 · Aufgabenformat 26
+Stand 05.11.2026 · Glide 3.50.5 · Aufgabenformat 26
 
 **Versionspflege 3.49.0:** `versionswechsel.py --ohne-ablagekuerzung` erhält ältere lokale Nachweise bei einem Versionswechsel; der Schalter ersetzt die gesonderte Ablageprüfung nicht. In dieser Featurephase bleiben alte WA-41-Referenzen und tatsächliche Lieferungen erhalten. Allgemeine eingefrorene Voll-/Lastläufe starten über `python -B tests/tools/gesichert_pruefen.py --art voll` bzw. `--art speicherlast`, siehe [Werkzeuge](../../tests/tools/README.md).
 
 Werkzeuge für jede Arbeitsrunde und für Messungen. Sie legen keine
 Archivkopien an: Vorfassungen von Fixtures, Showcase, Vorlagen und Dokumenten
-trägt Git. Einziges Archiv ist `07_Python-Versionen/Archiv` mit den
+trägt Git. Ausnahme auf Benutzerauftrag 05.11.2026: bisherige Logos unter `20_Grafik_Master/01_Logo/Archiv`. Reguläres Versionsarchiv ist `07_Python-Versionen/Archiv` mit den
 Hauptdateien der sieben neuesten Versionen; Nachweise unter `tests/qa-*` und
 Releaseplanungen gelten ebenfalls für sieben Versionen, Fensterbilder für drei
 (Entscheidung des Inhabers vom 03.10.2026). Die CI-Grundstufe prüft das
@@ -16,6 +16,7 @@ Releaseplanungen gelten ebenfalls für sieben Versionen, Fensterbilder für drei
 |---|---|---|
 | [versionswechsel.py](versionswechsel.py) | Hebt die Version: `VERSION`, `APP_VERSION`, Versionsprüfungen der Tests, Beispieldaten, Rundgang, Showcase, Vorlagenkatalog, neue Releaseplanung und die Standangaben aller fortgeschriebenen Dokumente; ohne Archivkopien; kürzt zum Schluss die Ablage | `python3 scripts/pflege/versionswechsel.py 3.33.0 01.10.2026` |
 | [showcase_abgleich.py](showcase_abgleich.py) | Prüft den aktiven Showcase über tatsächlichen Import/Neustart und kopiert Basis, Vorlagen, Anleitung und Starter nach `05_Probelisten_Testdaten/Showcase`; ohne Archivkopien, SHA-256, kein Eingriff in den bearbeiteten Arbeitsstand. `--vordergrund` erlaubt auf dem Mac echten Fensterfokus für die Tastaturprüfung | `python3 -B scripts/pflege/showcase_abgleich.py` |
+| [logo_abgleich.py](logo_abgleich.py) | Verteilt die aktuellen Logo-SVGs bytegleich und erneuert PNGs, ICO, Paketsymbole und Favicons; `--pruefen` meldet Abweichungen ohne Änderungen | `python3 -B scripts/pflege/logo_abgleich.py` |
 | [abgleich_07.py](abgleich_07.py) | Spielt den Stand aus `src/glide` nach `07_Python-Versionen` und prüft SHA-256 | `python3 scripts/pflege/abgleich_07.py` |
 | [ablage_kuerzen.py](ablage_kuerzen.py) | Entfernt Archive, Nachweise und Releaseplanungen außerhalb der sieben neuesten Versionen und Fensterbilder außerhalb der drei neuesten (`git rm`); läuft am Ende von `versionswechsel.py` | `python3 -B scripts/pflege/ablage_kuerzen.py`; `--anzeigen` listet nur |
 | [messung_ansichtswechsel.py](messung_ansichtswechsel.py) | Misst jeden Ansichtswechsel (Median in ms) und zeigt die teuersten Funktionen (cProfile) | siehe Kopf der Datei |

@@ -123,17 +123,35 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         entry = app.current_list()
         editor = app.current_drawing_editor()
         assert editor is not None and editor.model.width == 128
-        assert set(editor.tool_buttons) == {"brush", "fill", "eyedropper", "line", "rect", "ellipse", "select"}
-        # Die Kontextleiste zeigt nur, was das Werkzeug braucht.
+        # 3.50.3: Werkzeuge und ihre Optionen liegen in je einer Auswahl statt
+        # in mehreren Knopfreihen. Die Menüeinträge werden ohne echtes Popup
+        # mitgeschnitten.
+        def eintraege(oeffnen):
+            gefangen = []
+            original = editor._popup_drawing_choices
+            editor._popup_drawing_choices = lambda _anker, liste: gefangen.extend(liste) or "break"
+            try:
+                oeffnen()
+            finally:
+                editor._popup_drawing_choices = original
+            return [text for text, _befehl, _aktiv in gefangen if text]
+
+        assert {key for key, _label, _kurz in editor.TOOLS} == {"brush", "fill", "eyedropper", "line", "rect", "ellipse", "select"}
+        assert len(eintraege(editor.show_tool_menu)) == 7
+        groessen = {f"Größe {s}×{s}" for s in (1, 2, 4, 8)}
+        # Die Optionsauswahl zeigt nur, was das Werkzeug braucht.
         editor.set_tool("brush")
-        assert set(editor.size_buttons) == {1, 2, 4, 8}
-        assert {"pixel_perfect", "wrap", "symmetry_x"} <= set(editor.option_buttons)
+        optionen = set(eintraege(editor.show_tool_options))
+        assert groessen <= optionen
+        assert {"Pixelgenaue 1×1-Linie", "Über den Rand malen", "Symmetrie: Links/rechts"} <= optionen
         editor.set_tool("fill")
-        assert not editor.size_buttons and "pattern_checker" in editor.option_buttons
+        optionen = set(eintraege(editor.show_tool_options))
+        assert not groessen & optionen and "Muster: Schachbrett" in optionen
         editor.set_tool("select")
-        assert {"copy", "cut", "paste", "clear", "all"} <= set(editor.option_buttons)
+        assert {"Kopieren", "Ausschneiden", "Einfügen", "Leeren", "Alles auswählen"} <= set(eintraege(editor.show_tool_options))
         editor.set_tool("rect")
-        assert "filled" in editor.option_buttons and set(editor.size_buttons) == {1, 2, 4, 8}
+        optionen = set(eintraege(editor.show_tool_options))
+        assert "Gefüllt" in optionen and groessen <= optionen
         editor.set_tool("brush")
         editor.zoom = 5
         editor._auto_zoom = False
@@ -1674,7 +1692,8 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
                 wert = mod.contrast_ratio(tafel[flaeche], tafel[schrift])
                 assert wert >= schwelle, (flaeche, schrift, wert)
         assert mod.contrast_ratio(tafel["selection"], tafel["selection_text"]) >= 4.5
-        assert {tafel["clear"], tafel["flag"], tafel["accent"]} == {"#3D7BFF", "#FFD21F", "#FF3EA5"}
+        # D62 (05.11.2026): einheitliches Darkmode-Gelb #FFDC0B.
+        assert {tafel["clear"], tafel["flag"], tafel["accent"]} == {"#3D7BFF", "#FFDC0B", "#FF3EA5"}
         app.set_design("pixel")
         app.set_home_view()
         root.update()

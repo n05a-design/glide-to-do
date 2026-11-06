@@ -1,0 +1,82 @@
+{
+  "version": "3.50.3",
+  "data_schema_version": 26,
+  "app_sha256": "ce60fd8cab73d1196fcbb8dd9d9056cccf6cff550999f257f5cc1f54464529d9",
+  "decision": "D62; direct user logo and Darkmode-yellow requests on 2026-11-05",
+  "colors": {
+    "purple": "#9E4AC8",
+    "dark_yellow": "#FFDC0B"
+  },
+  "masters_sha256": {
+    "2026-Glide-Logo-App-und-Fav-Icon.svg": "7888b097de0e7a21897566365ffd58b4bf93ab85810cebc87b9d7556fc6d0ca8",
+    "2026-Glide-Logo-in-App.svg": "bebd877b855d73fc9360ecfaf4e608acad43b4d4dc2ae170aa4258b0a810447a",
+    "2026-Glide-Logo.ai": "09d6c1c567def7e819e0f456e43a1e4b13b5504387a64638d62db41374840359"
+  },
+  "assets_sha256": {
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-16.png": "a43ab0172381e1ec94d24a5534d77898029cebd47bcc2159a02eafbf86dfc778",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-256.png": "650818251e4f1222f649b7de377589e54b66a63bf5d476065b0b9627cad684c8",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-32.png": "1ade4a53b44cf79d0de68008f4d4c3d327bcd81c2d90bc62de89c46792540a86",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-64.png": "215a70ab7cecafb7503144bdb376403d6d8bb03de62906478a5e42ee9e5b7876",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-klein.svg": "7888b097de0e7a21897566365ffd58b4bf93ab85810cebc87b9d7556fc6d0ca8",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-16.png": "92931436b2161da60d19809f82f2fd9cd7b5f68bb86e238716013a260de679e6",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-256.png": "5b2a563d6cf906cd550749bb8c50be81a34ed9ea480d0ee1486396f8925030b1",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-32.png": "479d96c997422f8138d78305b31cb08d10f613642e203e672dd442d523eb6d32",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon-macos-64.png": "ddf377cda667ba8c872bf494a8d40c8a56d87561b1089ce65600a3d27c40015b",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon.png": "7206e07702d0939d7e7d07e429015ae2c8ea7bf5a7dbbfdefad2de76e87c69c4",
+    "01_Repository/Glide/src/glide/resources/logo/glide-app-icon.svg": "7888b097de0e7a21897566365ffd58b4bf93ab85810cebc87b9d7556fc6d0ca8",
+    "01_Repository/Glide/src/glide/resources/logo/glide-logo-klein.svg": "bebd877b855d73fc9360ecfaf4e608acad43b4d4dc2ae170aa4258b0a810447a",
+    "01_Repository/Glide/src/glide/resources/logo/glide-logo.png": "f42a5d153eb7619ca02f8298846026765ff32b8864a16e7e8e896c6ab968f67f",
+    "01_Repository/Glide/src/glide/resources/logo/glide-logo.svg": "bebd877b855d73fc9360ecfaf4e608acad43b4d4dc2ae170aa4258b0a810447a",
+    "01_Repository/Glide/assets/icons/glide.ico": "a71fb684e5eb64802d10278a592c01f1ee0ece39a7f01b92791c5f1271518abc",
+    "01_Repository/Glide/assets/icons/glide_512.png": "5cd6394ca9cf328e6c0d86a095ecd9e88623fdb0d87222b65730dbf946d47a0a",
+    "01_Repository/Glide/assets/icons/glide_macos_1024.png": "09e9d81c5e7c1c828932f83c05c7eb525b06edae2b2baaf06898474e558e76ca",
+    "20_Grafik_Master/03_Fav-Icon/favicon-16.png": "a43ab0172381e1ec94d24a5534d77898029cebd47bcc2159a02eafbf86dfc778",
+    "20_Grafik_Master/03_Fav-Icon/favicon-256.png": "650818251e4f1222f649b7de377589e54b66a63bf5d476065b0b9627cad684c8",
+    "20_Grafik_Master/03_Fav-Icon/favicon-32.png": "1ade4a53b44cf79d0de68008f4d4c3d327bcd81c2d90bc62de89c46792540a86",
+    "20_Grafik_Master/03_Fav-Icon/favicon-512.png": "5cd6394ca9cf328e6c0d86a095ecd9e88623fdb0d87222b65730dbf946d47a0a",
+    "20_Grafik_Master/03_Fav-Icon/favicon-64.png": "215a70ab7cecafb7503144bdb376403d6d8bb03de62906478a5e42ee9e5b7876",
+    "20_Grafik_Master/03_Fav-Icon/favicon.ico": "a71fb684e5eb64802d10278a592c01f1ee0ece39a7f01b92791c5f1271518abc",
+    "20_Grafik_Master/03_Fav-Icon/favicon.svg": "7888b097de0e7a21897566365ffd58b4bf93ab85810cebc87b9d7556fc6d0ca8",
+    "20_Grafik_Master/01_Logo/Exporte/2026-Glide-Logo-App-und-Fav-Icon.png": "7206e07702d0939d7e7d07e429015ae2c8ea7bf5a7dbbfdefad2de76e87c69c4",
+    "20_Grafik_Master/01_Logo/Exporte/2026-Glide-Logo-in-App.png": "f42a5d153eb7619ca02f8298846026765ff32b8864a16e7e8e896c6ab968f67f",
+    "01_Repository/Glide/src/glide/brand.py": "dbb1cf691ab7d17b79093397f4aa90bc5a38ce2dd8f7b83edabe2e72e3b01dcb",
+    "01_Repository/Glide/src/glide/logo.py": "0eaeeb9333c66543abdecacdb55fc86653780c6748d02f65369f025302b90292",
+    "01_Repository/Glide/src/glide/svg_geometry.py": "22f404aaa41509a5a49066a4680b100f9d3487b275af23d544d381489d84acab",
+    "01_Repository/Glide/assets/marketing/glide-3.50.3-seite.png": "68f54da2811eb089c2f6cdac27c81a21cfe5d927388da0158d9b7665381049da"
+  },
+  "archive": "20_Grafik_Master/01_Logo/Archiv/manifest_2026-11-05.json",
+  "python_delivery": {
+    "code_files_equal": 93,
+    "resource_files_equal": 171,
+    "differences": []
+  },
+  "checks": {
+    "logo330": "passed: cold start, geometry, five design accents, fallback, about, windows and search",
+    "logo3370": "passed: unchanged masters, SVG/PNG/ICO pixel colors, full background, transparent corners, all seven ICO sizes and five colored dark themes",
+    "counterexample": "old source fails at original master byte equality",
+    "svg_unit_tests": 9,
+    "raster_unit_tests": 6,
+    "dialog_themes": "passed",
+    "regeneration": "--pruefen: zero differences",
+    "strict_ci": {
+      "exitcode": 0,
+      "steps_passed": 19,
+      "steps_total": 19,
+      "unit_tests": 1129,
+      "unit_without_system_timezones": 1129,
+      "tool_tests": 244,
+      "tool_tests_skipped": 1,
+      "app_sha256": "ce60fd8cab73d1196fcbb8dd9d9056cccf6cff550999f257f5cc1f54464529d9",
+      "cross_platform_matrix": false
+    }
+  },
+  "native_delivery": {
+    "windows": "pending; user confirms no build runtime/compiler on this machine and will build this evening",
+    "macos": "native bundle/signature/Finder/Dock verification pending",
+    "linux": "new icon source ready; no new native matrix claimed"
+  },
+  "human_acceptance": "logo, shell previews and DPI not yet confirmed; earlier human points 1-5 remain assigned to old candidate",
+  "git_transport": "none",
+  "ui_observed": "Updated frozen Python preview started with isolated synthetic data; new purple G visible in wide header and yellow/purple app symbol visible in window title; not human acceptance",
+  "local_preview": "%USERPROFILE%/gq/logo1105/Nachtest_starten.pyw"
+}

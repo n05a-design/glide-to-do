@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Erzeugt die Programmsymbole aus dem SVG-Master – reproduzierbar, ohne neue Abhängigkeit.
 
-Quellen sind `src/glide/resources/logo/glide-app-icon.svg` und die ausdrücklich
-für 16/32 px freigegebene Kleinfassung. Der Normalmaster ist eine unveränderte
-Kopie von `20_Grafik_Master/03_Fav-Icon/App-Icon-transparent-02.svg`. Tk 9 rechnet das
+Quelle ist `src/glide/resources/logo/glide-app-icon.svg`, eine unveränderte
+Kopie von `20_Grafik_Master/01_Logo/2026-Glide-Logo-App-und-Fav-Icon.svg`.
+Auch 16/32 px verwenden exakt die neue freigegebene G-Kontur. Tk 9 rechnet das
 SVG in jeder Größe scharf (nanosvg); daraus entstehen unter `assets/icons/`:
 
 - `glide.ico` – Windows: 16, 24, 32, 48, 64, 128 und 256 px, randlos, jede

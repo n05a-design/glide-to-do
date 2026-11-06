@@ -1,0 +1,78 @@
+[
+  {
+    "path": "01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.47.0.glidebackup",
+    "sha256": "dbe58b3da868fadbf27d5fc329dbde0d2bde5b2acb9b2b6e02b3812fc613d854"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/README.md",
+    "sha256": "11a5658e952291efe8606fdddce4815b04b11cb4a773b3895f5a96dcaf2ff12f"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/abschluss.json",
+    "sha256": "4e551667822f9e82a76eae02b9ab84ce45aef59a41fe77c13e497dd6663a13db"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/abschluss.py",
+    "sha256": "223661f3ca4e875ebc4a1c50d24bf23b16f13243671d4bd3892422058035260a"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/arbeitsmodi_eingefroren.json",
+    "sha256": "bffad04ba0db0cd07554dc721f7f9ef46d1dac3b85116804d30099a7f1a6ca1d"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/ci_streng/ergebnis.json",
+    "sha256": "b353404fc0f43e844afd453517df055ae5b42ffc8ca7b515a8275b0962be87eb"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/gestaltung_vorlauf.json",
+    "sha256": "aab872bdbb7cbfac585ae2c02673714a1934e9d76fa264e5ae652af3e0cd2d4e"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/lieferprobe.py",
+    "sha256": "a5d2093993d334ae7f44c82682d44b9b3d1485e37725cb6696399ae294bb1e3a"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/mehrfach_vorlauf.json",
+    "sha256": "9f240c557bb3eacbcc1369331952ce200a96b5a013d51de8136c458fbaacbe86"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/nebenansicht_nachlauf.json",
+    "sha256": "7a59a86b8566a0b1ad4238c242c147086dfcddef6edd9f766636f61c4d43d5a1"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/python_lieferprobe.json",
+    "sha256": "385095a36165a20b84e70a58c6fcad5df4bd8c92bca261829e505c30a2c5a04a"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/quellstand.json",
+    "sha256": "a4f7709f90e985992b41d2460d75723d3e720af249bf14040f860170c4649b11"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/transportvorbereitung.json",
+    "sha256": "19ea931dfabe19de249bb2983012d71b62f8db576d48ea1113ceb9aff1650214"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/verlauf_vorlauf.json",
+    "sha256": "3ab60e02e3329d6618e79f13513cc0469b9c6985c6f311f07f64c9e2f6bbec17"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/verlauf_vorlauf2.json",
+    "sha256": "37b5235dd9c367af4e35ef7a50b76c306fb8a08fb068e9f7395a9d6bf1632e5a"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/verlauf_vorlauf3.json",
+    "sha256": "2afd9dd07300a6fb38968dd6bac437f7cd8ebc2f0f0a2ecdf6166255ecfb8bb3"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/versionspflege.json",
+    "sha256": "7cd3a9917d903eae6c65c668647604389ac604415bff90b8494eff650aa20e81"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/versionspflege_fortsetzen.py",
+    "sha256": "9cdb670d3fb7cde7331e161554a8b32eb5a1ab14a38ab52995b12dd464b7e1e7"
+  },
+  {
+    "path": "07_Python-Versionen/Archiv/Glide-Aufgaben-und-Listen_v3.47.0.pyw",
+    "sha256": "dd26a038f430860e41cfb2e703689ea0c4dd7bcacbc753277be89ade23c1f014"
+  }
+]

@@ -41,6 +41,10 @@ class Lauf:
 
     def start(self, geometry="1280x800+20+20"):
         self.root = self.mod.tk.Tk()
+        # Tk begrenzt sonst auf die physische QA-Arbeitsfläche (hier auch 1024x768).
+        # Breitenprüfungen brauchen die wirklich angeforderte Fenstergeometrie;
+        # das vergrößert nur dieses Testfenster, keine OS-/Anzeigeeinstellung.
+        self.root.maxsize(max(1920, self.root.winfo_screenwidth()), max(1200, self.root.winfo_screenheight()))
         self.root.geometry(geometry)
         self.root.report_callback_exception = lambda *e: self.errors.append(
             "".join(traceback.format_exception(*e))[-600:])
@@ -610,6 +614,14 @@ def fall_b09(lauf):
     pfade = [k for k in knoepfe(app.home_content, mod.RoundedButton) if "›" in k.text]
     assert pfade, "Probe braucht einen Startseitenknopf mit Pfad"
     knopf = pfade[0]
+    # D63 begrenzt die Anzeige langer Pfade. Die Glyphenlage zusätzlich an
+    # einem vollständig sichtbaren Pfad prüfen, damit der Trenner erhalten ist.
+    assert len(knopf.display_text) <= 24
+    if len(knopf.text) > 24:
+        assert knopf.display_text.endswith("...")
+        assert knopf.text.startswith(knopf.display_text[:-3])
+    knopf.set_text("Ordner › Liste")
+    lauf.idle(4)
     trenner = [i for i in knopf.find_all() if knopf.type(i) == "text" and knopf.itemcget(i, "text") == "›"]
     font = mod.tkfont.Font(root=lauf.root, font=knopf.font)
     metrik, pixel = app.glyph_metrics_for(knopf.font), app.font_pixels(font)

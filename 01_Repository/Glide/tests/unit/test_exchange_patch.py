@@ -19,6 +19,11 @@ def bestand():
 
 
 class Austausch(unittest.TestCase):
+    def test_new_title_limit_is_40_without_truncating_patch_preview(self):
+        self.assertEqual(ep.validate_value("title", "W" * 40), "W" * 40)
+        with self.assertRaisesRegex(ValueError, "40"):
+            ep.validate_value("title", "W" * 41)
+
     def test_context_has_refs_checksums_and_no_ids(self):
         liste, eltern, kind = bestand()
         paket = ep.build_context([(liste, eltern, None), (liste, kind, eltern)], LABELS, "2026-10-09T12:00")

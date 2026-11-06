@@ -8,6 +8,37 @@ import ui_design as design
 
 
 class DesignTest(unittest.TestCase):
+    def test_imported_title_keeps_original_in_description_without_changing_legacy(self):
+        original = "Langer Originaltitel " * 5
+        title, description = design.task_title(original, "Bestehende Beschreibung")
+        self.assertEqual(len(title), 40)
+        self.assertTrue(title.endswith("..."))
+        self.assertIn(original, description)
+        self.assertTrue(description.startswith("Bestehende Beschreibung"))
+        self.assertEqual(design.task_title(original, "unverändert", preserve=True), (original, "unverändert"))
+
+    def test_title_limits_preserve_legacy_until_title_changes(self):
+        legacy = "Änderung " * 20
+        self.assertEqual(design.TITLE_MAX_CHARS, 40)
+        self.assertEqual(design.BUTTON_TEXT_MAX_CHARS, 24)
+        self.assertEqual(design.edited_title(legacy, legacy), legacy)
+        for text in ("", "a" * 39, "a" * 40, "a" * 41, legacy):
+            shown = design.clip_title(text)
+            self.assertLessEqual(len(shown), 40)
+            self.assertEqual(design.edited_title(text, "alt"), shown)
+            if len(text) > 40:
+                self.assertTrue(shown.endswith("..."))
+
+    def test_title_display_fits_glyphs_and_character_limit(self):
+        measure = lambda text: sum(12 if char == "W" else 3 for char in text)
+        for text in ("Kurz", "W" * 40, "Titel " * 100, "ÄÖÜ ß Emoji 😀"):
+            for width in range(300):
+                shown = design.display_title(text, measure, width)
+                self.assertLessEqual(len(shown), 40)
+                self.assertLessEqual(measure(shown), width)
+                if shown and shown != text:
+                    self.assertTrue(shown.endswith("..."))
+
     def test_page_icon_stays_before_text_and_inside_reading_margin(self):
         for padding in (0, 12, 24, 28, 40, 80, 240):
             for height in (12, 16, 30, 38, 76):
