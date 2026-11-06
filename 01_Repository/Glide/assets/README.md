@@ -1,6 +1,6 @@
 # Assets
 
-Stand 03.11.2026 · Glide 3.50.2 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 05.11.2026 · Glide 3.50.5 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 Hier liegen Installer- und Paketierungs-Assets, die reproduzierbar aus den
 freigegebenen Mastern in `20_Grafik_Master` entstehen. Laufzeitgrafiken
@@ -13,7 +13,7 @@ liegen nicht hier, sondern bei der App unter `src/glide/resources/logo/`.
 | `icons/glide_512.png` | Linux (`.desktop`) und Store-Symbole, randlos | `packaging/baue_symbole.py` |
 
 Quelle aller drei ist `src/glide/resources/logo/glide-app-icon.svg`, eine
-unveränderte Kopie von `20_Grafik_Master/03_Fav-Icon/App-Icon-transparent-02.svg`.
+unveränderte Kopie von `20_Grafik_Master/01_Logo/2026-Glide-Logo-App-und-Fav-Icon.svg`.
 Nach einer Änderung am Master: kopieren, `python3 packaging/baue_symbole.py`
 ausführen (Tk 9 nötig) und die Dateien hier ersetzen.
 

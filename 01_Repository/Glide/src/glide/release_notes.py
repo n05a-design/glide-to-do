@@ -14,6 +14,24 @@ bleiben ohne Eintrag, nachträglich wird nichts erfunden.
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.50.5": (
+        "Buttons kürzen lange Beschriftungen mit drei Punkten; der vollständige Text bleibt im Tooltip.",
+        "Neue und geänderte Aufgabentitel sind wie Seiten-, Listen- und Ordnertitel auf 40 Zeichen begrenzt.",
+        "Notizen und Zeichnungen bündeln Journalaktionen im Mehr-Menü und geben mehr Platz an den Inhalt zurück.",
+        "Die Startseite bietet ein Feld für die globale Suche, Vorlagen einen eigenen Suchfilter.",
+        "Die schmale Heute-Leiste und die Abstände innerhalb der Seitenleistenabschnitte sind kompakter.",
+    ),
+    "3.50.4": (
+        "Bücher nutzen ihre ganze Breite auch mit schmaler oder ausgeblendeter Seitenleiste.",
+        "Glide verwendet die überarbeitete G-Form und neue lila/gelbe App-Symbole.",
+        "Gelbe Hinweise im Darkmode erscheinen einheitlich im neuen Markengelb.",
+    ),
+    "3.50.3": (
+        "Seiten- und Zeichenwerkzeuge bleiben einzeilig; weitere Aktionen sind im jeweiligen Menü erreichbar.",
+        "Aufgabenaktionen sind dauerhaft sichtbar; Labels und Bücher nutzen die verfügbare Breite ohne leere Aktionsreserve.",
+        "Fristen in Tabellen bleiben vollständig lesbar; Eingabe, Suche und Seitenfuß erhalten passende Abstände.",
+        "Die Zellmarkierung der Zeichnung erscheint bei Tastaturbedienung und verschwindet bei Mausbedienung.",
+    ),
     "3.50.2": (
         "Seitenleiste und Inhalt behalten ihre helle oder dunkle Themenfarbe; die gewählte Hintergrundfarbe liegt dahinter.",
         "Schriftstile: Modern: Rubik, Technisch: Roboto Mono, Kreativ: Playfair Display und Klassisch: Fraunces.",

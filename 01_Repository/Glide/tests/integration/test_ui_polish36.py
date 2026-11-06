@@ -30,6 +30,9 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-polish36-') as tmp:
     mod = importlib.util.module_from_spec(spec)
     loader.exec_module(mod)
     root = mod.tk.Tk()
+    # Geometriefälle brauchen die angeforderte Breite auch auf kleinen
+    # QA-Desktops; nur dieses Testfenster, keine OS-Anzeigeeinstellung.
+    root.maxsize(max(1920, root.winfo_screenwidth()), max(1200, root.winfo_screenheight()))
     root.withdraw()
     errors = []
     root.report_callback_exception = lambda *error: errors.append(error)
@@ -90,6 +93,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-polish36-') as tmp:
             for width in (860, 1280):
                 root.geometry(f'{width}x960+10+10')
                 root.update()
+                assert root.winfo_width() == width, (width, root.winfo_width())
                 app.home_canvas.yview_moveto(0)
                 button_text_fits(app.template_actions)
                 assert app.template_actions.winfo_ismapped()
@@ -121,6 +125,7 @@ with tempfile.TemporaryDirectory(prefix='glide-ui-polish36-') as tmp:
             for width in (860, 1280):
                 root.geometry(f'{width}x960+10+10')
                 root.update()
+                assert root.winfo_width() == width, (width, root.winfo_width())
                 app.home_canvas.yview_moveto(0)
                 visible = [key for button, key in app.home_quick_actions.entries if button.winfo_ismapped()]
                 # Seit 3.22 führt eine Zeile zum Tag; dafür kam „Startseite

@@ -1,0 +1,165 @@
+{
+  "version": "3.50.4",
+  "app_sha256": "1c48a0956b4570e0d463177da721e837ac483bf66453f8bb87f2c26d1d9b1aa7",
+  "test_sha256": "eca0d55fe45cb85041b368e7054ca37ab1c9c8aafdaa23c789efc9f2165341c6",
+  "eingangsbild": {
+    "name": "codex-clipboard-e7c3d32c-7818-4116-8d80-fdf92816035d.png",
+    "sha256": "d841e1932af54fcf24dea2825dfe5d6ecb9e010dc0da3cabfa432ea10a13a947"
+  },
+  "luecke_vorher_px": 10,
+  "luecke_nachher_px": 0,
+  "tests": {
+    "baseline": {
+      "app_sha256": "a536c8d4da2864a4e758f5bcdc4c5732b3cc31648e9b79de3e37e114aee7e693",
+      "faelle": {
+        "werkzeugzeile": {
+          "ok": true,
+          "befund": "12 Messungen: Abstand ≥ 10 px, Umschalter rechts, Pinnwand auf Kartenfarbe; Seitenfuß einzeilig",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 7.953
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    },
+    "gegenprobe": {
+      "app_sha256": "a536c8d4da2864a4e758f5bcdc4c5732b3cc31648e9b79de3e37e114aee7e693",
+      "faelle": {
+        "suchbreite3504": {
+          "ok": false,
+          "befund": "Traceback (most recent call last):\n  File \"tests/integration/test_arbeitsmodi.py\", line 3854, in main\n    text = globals()[\"fall_\" + name](lauf)\n  File \"tests/integration/test_arbeitsmodi.py\", line 3352, in fall_suchbreite3504\n    pruefen((*context, \"ohne Suchanfrage\"))\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"tests/integration/test_arbeitsmodi.py\", line 3312, in pruefen\n    assert field_right == right, (\n           ^^^^^^^^^^^^^^^^^^^^\nAssertionError: ('Suchfeld lässt rechts ungenutzte Breite', ('light', 'mittel', '860x700', True, False, 'buch', 'ohne Suchanfrage'), {'suchfeld_rechts': 856, 'inhaltskante': 866, 'luecke': 10})\n",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 6.17
+        }
+      },
+      "fehler": [
+        "suchbreite3504"
+      ],
+      "laufender_fall": null
+    },
+    "gruen": {
+      "app_sha256": "1c48a0956b4570e0d463177da721e837ac483bf66453f8bb87f2c26d1d9b1aa7",
+      "faelle": {
+        "suchbreite3504": {
+          "ok": true,
+          "befund": "239 Suchbreitenprüfungen: Inhaltskante statt Eigenbreite, Buch/Labels/Liste, leer/Suche/löschen, vier Design-/Schriftkombinationen, Mindestbreite/breit, volle/schmale/ausgeblendete Seitenleiste und Rückwechsel; Folgeknöpfe ohne Überdeckung",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 28.31
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    },
+    "buchbreite3503": {
+      "app_sha256": "1c48a0956b4570e0d463177da721e837ac483bf66453f8bb87f2c26d1d9b1aa7",
+      "faelle": {
+        "buchbreite3503": {
+          "ok": true,
+          "befund": "64 Buchbreitenprüfungen bis zu beiden Karteninnenkanten: Mindestbreite/breit, volle/schmale/ausgeblendete Seitenleiste und Rückwechsel, vier Design-/Schriftkombinationen, Wechsel aus Labels",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 21.49
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    },
+    "seitenleistenabstand3504": {
+      "app_sha256": "1c48a0956b4570e0d463177da721e837ac483bf66453f8bb87f2c26d1d9b1aa7",
+      "faelle": {
+        "seitenleistenabstand3504": {
+          "ok": true,
+          "befund": "16 Hover-Geometrieprüfungen gegen die äußere Seitenleistenkarte: oben/links/rechts gleich, vier Design-/Schriftkombinationen, Mindestbreite/breit, Rückkehr aus schmal/ausgeblendet; Symbolhintergrund und Hover-Ende",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 9.01
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    },
+    "menschen3503": {
+      "app_sha256": "1c48a0956b4570e0d463177da721e837ac483bf66453f8bb87f2c26d1d9b1aa7",
+      "faelle": {
+        "menschen3503": {
+          "ok": true,
+          "befund": "4 Konfigurationen: Tabelle/Buch/Labels, dauerhafte Zeilenaktion, Abstand, gemeinsame Außenknöpfe, einzeilige Seiten-/Zeichenwerkzeuge, Maus-/Tastaturcursor",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 10.087
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    },
+    "werkzeugzeile": {
+      "app_sha256": "1c48a0956b4570e0d463177da721e837ac483bf66453f8bb87f2c26d1d9b1aa7",
+      "faelle": {
+        "werkzeugzeile": {
+          "ok": true,
+          "befund": "12 Messungen: Abstand ≥ 10 px, Umschalter rechts, Pinnwand auf Kartenfarbe; Seitenfuß einzeilig",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 6.692
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    },
+    "ansichtssymbole": {
+      "app_sha256": "1c48a0956b4570e0d463177da721e837ac483bf66453f8bb87f2c26d1d9b1aa7",
+      "faelle": {
+        "ansichtssymbole": {
+          "ok": true,
+          "befund": "12 Ansichtswechsel mit Symbol, Klartextname und aktivem Zustand; eine dauerhafte Zeilenaktion per Tastatur auf stabiler Aufgaben-ID",
+          "runtime": {
+            "python": "3.14.7",
+            "platform": "win32",
+            "tk": "9.1.0"
+          },
+          "dauer_s": 5.725
+        }
+      },
+      "fehler": [],
+      "laufender_fall": null
+    }
+  },
+  "sichtaufnahmen": {
+    "suchbreite-dark-mittel.png": "839b3971caf017c66a59b384c746f60886302dae755400bbc09f5dbbf5040503",
+    "suchbreite-glass_dark-gross.png": "f74779c58f86ac73ebd52d5963feea0b0c80bc9ef487a51f026da43aa3bb8c42",
+    "suchbreite-glass_light-gross.png": "b6c79721d3791a7b28309ec9e18c00b9598df5d94c018d1f22344463eca3ec41",
+    "suchbreite-light-mittel.png": "1c088bc897d90aad9191c96dae18a6ed515b19794448628004812aa5b7a1bc51"
+  },
+  "lieferung": {
+    "code_dateien": 93,
+    "ressourcen": 171,
+    "abweichungen": []
+  },
+  "menschenabnahme": "offen",
+  "neue_strenge_grundstufe": false,
+  "native_neubauten": "Benutzer heute Abend"
+}

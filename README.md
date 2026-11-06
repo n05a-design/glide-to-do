@@ -4,13 +4,13 @@
 
 Aufgaben planen, Wissen sammeln, Ideen verbinden und den Alltag festhalten: Glide vereint Aufgabenmanagement, Seiten, Notizen, Pinnwände, Tagebuch und eine Pixel-Werkstatt in einer deutschsprachigen Desktop-App. Deine Inhalte bleiben bei dir – lokal, ohne Konto, ohne Cloudzwang und ohne Telemetrie.
 
-**3.50.2 · Aktualisierter Stand der ersten öffentlichen Fassung**
+**3.50.5 · Fortgesetzte menschliche Abnahme und Markenpflege**
 
 [Loslegen](#loslegen) · [Was Glide kann](#was-glide-kann) · [Handbuch](01_Repository/Glide/docs/20_FUNKTIONEN.md) · [Änderungen](01_Repository/Glide/CHANGELOG.md)
 
-![Glide 3.50: Seiteneditor mit durchgehender Seitenleiste und ebener Fensterfläche](01_Repository/Glide/assets/marketing/glide-3.50-seite.png)
+![Glide 3.50: Seiteneditor mit durchgehender Seitenleiste und ebener Fensterfläche](01_Repository/Glide/assets/marketing/glide-3.50.3-seite.png)
 
-*Aufnahme der Mac-Fassung 3.50.0 mit künstlichen Beispieldaten; die aktuelle Schrift- und Flächenpflege gehört zu 3.50.2.*
+*Windows-Quellfassung 3.50.3 mit neuen Logos, aufgenommen am 05.11.2026 mit künstlichen Showcase-Daten. Native Pakete werden separat neu gebaut.*
 
 ## Was Glide kann
 
@@ -78,7 +78,7 @@ Ein [Showcase mit künstlichen Beispielen](05_Probelisten_Testdaten/Showcase/REA
 
 ## Entwicklung und Qualität
 
-Stand 03.11.2026 · Glide 3.50.2 · Aufgabenformat 26
+Stand 05.11.2026 · Glide 3.50.5 · Aufgabenformat 26
 
 <!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt. Technische Stände stehen im QA-Bericht. -->
 

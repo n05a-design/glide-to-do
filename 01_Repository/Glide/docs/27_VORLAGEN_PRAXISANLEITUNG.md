@@ -1,6 +1,6 @@
 # Vorlagen im Unternehmensalltag
 
-Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 05.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 3.28 ergänzt vier integrierte Tagebuchvorlagen: Tagesnotiz, Dankbarkeit,
 Wochenrückblick und Jahresordner mit Quartalen. Sie verwenden Notizseiten und
@@ -18,7 +18,7 @@ Projektseite und eigene Seiten) im „+“ neben „Seiten“.
   Katalog. Bei gleichem Vorlagen-ID wird eine unabhängige Kopie ergänzt.
 - **[glide_beispieldaten.glidebackup](../tests/fixtures/beispiele/glide_beispieldaten.glidebackup)**: künstlicher Aufgabenbestand zum
   Ausprobieren von Ansichten, Wiederholungen, Labels und Anhängen. Die Liste „Kalender, Erinnerungen und Tagesplanung“ deckt zusätzlich Erinnerungen, Tagesplanung und den Kalenderrundlauf ab.
-- **[glide_releaseplanung_3.42.0.glidebackup](../tests/fixtures/beispiele/glide_releaseplanung_3.48.0.glidebackup)**: interne Aufgaben zur Veröffentlichung
+- **[glide_releaseplanung_3.42.0.glidebackup](https://github.com/n05a-design/glide-to-do/blob/40c20fd62db6ec31b4e3668dfc9e7f1550f67974/01_Repository/Glide/tests/fixtures/beispiele/glide_releaseplanung_3.48.0.glidebackup)**: interne Aufgaben zur Veröffentlichung
   von Glide. Dies ist keine allgemeine Unternehmensvorlage und keine Releasefreigabe.
 
 Die beiden `.glidebackup`-Dateien über **Listen/Ordner hinzufügen …** ergänzen.

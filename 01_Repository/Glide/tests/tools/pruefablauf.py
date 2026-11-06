@@ -91,7 +91,8 @@ def einfrieren(repo, ablage=None):
              "git_history": "Lokaler Klon mit eigenen Metadaten; keine Netzwerkübertragung"}
     proof_path = root / "quellstand.json"
     proof_path.write_text(json.dumps(proof, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    subprocess.run(["git", "clone", "--local", "--no-checkout", str(project), str(frozen)],
+    # Eigene Objektkopien erlauben auch eine Prüfablage auf einem anderen Laufwerk.
+    subprocess.run(["git", "clone", "--local", "--no-hardlinks", "--no-checkout", str(project), str(frozen)],
                    capture_output=True, timeout=90, check=True)
     subprocess.run(["git", "-C", str(frozen), "read-tree", "HEAD"],
                    capture_output=True, timeout=30, check=True)

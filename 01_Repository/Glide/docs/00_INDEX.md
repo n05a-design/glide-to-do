@@ -1,21 +1,16 @@
 # Dokumentationsindex
 
-Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 05.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
-**Versions- und Ablageabgleich 3.50.2, 03.11.2026:** Quelle, startbare Python-Fassung und Showcase sind auf 3.50.2 abgeglichen. Enthalten sind Themenflächenkorrektur, die vier korrigierten Schriftstile mit Rubik als Vorgabe und SemiBold für Playfair/Fraunces sowie die Kopf-/Flächenkorrektur aus `25b28272`. main bleibt bei `893625c6`/3.50.0, letzter Vollprüflauf #246 rot; lokale Reparaturprüfungen sind gesondert belegt. Reguläre native Pakete bleiben 3.50.0 auf älteren Quellbytes. Neue Remote-/Native-Matrix und Menschenabnahme offen. [Plan §21.60](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2160-versionswechsel-und-gesamtprüfung-3502).
+Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und historische Prioritäten aus dem Einstieg entfernt. Dieser Index beschreibt Zuständigkeiten; datierte Prüfungsergebnisse stehen im QA-Bericht.
 
-## Einstieg
+## Einstieg nach Aufgabe
 
-- **Neue Sitzung:** [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md), dann [Arbeitsregeln](../AGENTS.md).
-- **Was als Nächstes ansteht:** [Entwicklungsplan](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md).
-- **Vorheriger Quellkandidat 3.49.0 (inzwischen geliefert):** [Funktionsausbau §21.28](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2128-funktionaler-ausbau-der-ursprünglichen-drei-pakete), [Schutzpakete §21.27](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2127-vorbeugung-absturzdiagnose-und-abgesicherter-wiederanlauf), [Abnahmebericht](../tests/qa-3.49.0/abnahme_2026-10-28/README.md). A01-Pflichtfolge in 13 Bereichssuiten/136 Fällen grün; WA-09 lokal umgesetzt und gezielt geprüft. Abschließender CI-Nachlauf siehe QA-Bericht. WA-41 und native/Menschenabnahmen offen.
-- **Aktuelle Fehlerübergabe und Dateiablage:** [Übergabe Abschnitt 0](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md#0-sofortübergabe-wa-41--zuerst-lesen), [Datei-/Dokumentaudit](../tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md), [abgeschlossener AMD-Gegenlauf](../tests/qa-3.48.0/amd_vergleich_2026-10-27/README.md). Zehn AMD-Prozesse grün, WA-41-Ursache offen; BIOS-/CPU-Verzicht bleibt bestehen.
-- **Vorbeugung und Wiederanlauf, implementiert mit offenen Abnahmetoren:** [Plan §21.27](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2127-vorbeugung-absturzdiagnose-und-abgesicherter-wiederanlauf), [Datenvertrag](06_DATA_BACKUP_MIGRATION.md#abgesicherter-wiederanlauf-nach-absturz-lokaler-kandidat-3490), [Prüfziele](05_QA_TESTPLAN.md#vorbeugung-und-wiederanlauf-geplante-abnahme). Gezielte Prüfungen liegen vor; Ursachenklärung, vollständige Matrix und aktuelle Lieferung sind offen.
-- **Vorherige Folgepakete auf 3.47.0:** [Mehrfachplanung und Nebenansichtsverlauf, Plan §21.24](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2124-folgepakete-mehrfachplanung-und-nebenansichtsverlauf-3470), [Prüf-/Liefernachweis](../tests/qa-3.47.0/folgepakete_2026-10-27/README.md).
-- **Vorherige zwei Featurepakete auf 3.46.0:** [Tagessteuerung und Nebenansicht, Plan §21.23](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2123-zwei-featurepakete-und-versionsfortschritt-3460), [Prüf-/Liefernachweis](../tests/qa-3.46.0/zweierpaket_2026-10-27/README.md).
-- **Vertiefte Codebasisprüfung und lokaler Techniknachlauf:** [Einordnung Analyse §13.15](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1315-vertiefte-codebasisprüfung-vom-26102026), [Umsetzung und Restumfang Plan §21.21](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2121-vertiefte-codebasisprüfung-und-technikpaket), [gezielter Nachweis](https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.45.0/codebasis_2026-10-26/README.md); frühere Liefer-/Vollprüfungen bleiben an ihre Bytes gebunden.
-- **Aktuelle Roadmap und Pflege:** [Plan §21](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026), technische Härtung aus dem Sicherheits- und Architekturgutachten in [Plan §21.12](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2112-technische-folge-aus-dem-sicherheits--und-architekturgutachten) mit Einordnung in [Analyse §13.12](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1312-sicherheits--und-architekturgutachten-vom-25102026); neue Belege in [Analyse §13](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#13-neuuntersuchung-vom-21102026) und [Markt §12](../../../00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md#12-erweiterte-recherche-vom-21102026); appweiter Entwicklungsvertrag in [Design Richtlinien](DESIGN_RICHTLINIEN.md).
-- **Was entschieden ist:** [Arbeitsrichtung](ARBEITSRICHTUNG.md).
+- **Neue Sitzung und aktueller Stand:** [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md), danach [Arbeitsregeln](../AGENTS.md).
+- **Aufgaben und nächste Auswahl:** [einzige Roadmap, Plan §21.62](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026).
+- **Prüfung und Lieferung:** [QA-Bericht](07_QA_BERICHT.md); Versionsnummer, gezielte Prüfung, Vollmatrix, Paketlieferung und menschliche Abnahme getrennt beurteilen.
+- **Produktentscheidungen und Gestaltung:** [Arbeitsrichtung](ARBEITSRICHTUNG.md), [Design Richtlinien](DESIGN_RICHTLINIEN.md).
+- **Dokumente ändern oder löschen:** [Dokumentenpflege](DOKUMENTENPFLEGE.md).
 
 ## Dokumente
 
@@ -25,13 +20,13 @@ Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (intern: öffentl
 | [02 Architektur](02_ARCHITECTURE.md) | Module, Speicherweg, Bausteine der Oberfläche, Performance-Regeln, Tk-Fallstricke |
 | [05 Prüfplan](05_QA_TESTPLAN.md) | Prüfstufen, Regeln, Schritte, Integrationssuiten nach Bereich, manuelle Kontrollmatrix |
 | [06 Daten, Backups und Migration](06_DATA_BACKUP_MIGRATION.md) | Format 26, ältere Formatstufen, Startprüfung, Sicherungen, Einstellungen, Austauschformat |
-| [07 QA-Bericht](07_QA_BERICHT.md) | Quelle/Python/Showcase 3.50.2, native Lieferstände getrennt, A01-Fortsetzung, WA-09, ursprüngliches Abnahmeaudit, WA-41-Diagnose, Liefergrenzen und Datei-/Dokumentabgleich; historische Ergebnisse und offene Abnahmen |
+| [07 QA-Bericht](07_QA_BERICHT.md) | Quelle/Python 3.50.3, Abnahmekorrekturen und native Lieferstände getrennt, A01-Fortsetzung, WA-09, ursprüngliches Abnahmeaudit, WA-41-Diagnose, Liefergrenzen und Datei-/Dokumentabgleich; historische Ergebnisse und offene Abnahmen |
 | [10 Veröffentlichung](10_VEROEFFENTLICHUNG.md) | Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben, Produktdatenblatt |
 | [20 Funktionen](20_FUNKTIONEN.md) | Gültiges Verhalten je Bereich mit Pflichtsuiten und Herkunft (frühere Verträge 45–79) |
 | [27 Vorlagen im Unternehmensalltag](27_VORLAGEN_PRAXISANLEITUNG.md) | Praxisanleitung zum Vorlagenkatalog |
-| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D57 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
+| [Arbeitsrichtung](ARBEITSRICHTUNG.md) | Auftrag, Leitgedanken, Entscheidungen D01–D60 (D49 mit Korrekturvorbehalt), frühere gültige Antworten und Arbeitsablauf |
 | [Dokumentenpflege](DOKUMENTENPFLEGE.md) | Ein Thema, ein Dokument; Aufbewahrung; Zuständigkeiten |
-| [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; B01–B20 und D55 in der Lieferung enthalten, 3.48.0 ergänzt; offene Menschenabnahmen gesondert |
+| [Design Richtlinien](DESIGN_RICHTLINIEN.md) | Belegte UI-/UX-Vorgaben, Buttonschutz, Informationshierarchie, Fluchten, Symbole und Pflege; appweiter Gestaltungsvertrag, Kontext-/Komponentenmatrix und getrennte menschliche Abnahme |
 
 ## Einzelentscheidungen
 
@@ -61,3 +56,5 @@ Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (intern: öffentl
 - Showcase: [tests/fixtures/showcase/README.md](../tests/fixtures/showcase/README.md)
 - Planung, Markt und Vorbilder, manuelle Prüfung: [00_Arbeitsvorbereitung](../../../00_Arbeitsvorbereitung/README.md)
 - Neuer UI-/UX-Auftrag: [Ausführungsprompt mit Originalauftrag und 28 Bildreferenzen](../../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md); Aufgabenstatus im Entwicklungsplan §17. Originalbilder nur in der lokalen Ablage.
+
+**Logo-Wechsel (D62):** [Zentrale Fundorte, Symbole und Aktualisierungsschritte](../../../20_Grafik_Master/README.md); [aktueller Logo-/Darkmode-Nachweis](../tests/qa-3.50.3/logo_2026-11-05/README.md).

@@ -1,102 +1,74 @@
-# Grafik-Master
+# Grafik-Master und zentrale Logo-Übersicht
 
-Stand 03.11.2026 · Glide 3.50.2 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 05.11.2026 · Glide 3.50.5 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-Hier liegen die Quellen des Glide-Logos und alle freigegebenen Exporte. Glide
-selbst und die Paketierung arbeiten mit **Kopien** daraus (siehe unten). Wer
-einen Master ändert, erneuert danach die Kopien.
+Am 05.11.2026 zusammengeführt und gekürzt: alle aktiven Logo-Quellen, Verwendungen und künftigen Aktualisierungsschritte stehen hier. Frühere Logo-Dateien sind auf ausdrücklichen Benutzerauftrag im Grafikarchiv erhalten; diese Ausnahme betrifft Grafiken, keine zusätzlichen Dokumentarchive.
 
-## Struktur
+## Verbindliche Quellen und Farben (D62)
 
-| Ordner | Inhalt | Verwendung |
-|---|---|---|
-| `01_Logo` | `Glide-Logo-01.svg` und `Glide-Logo.png`: das Zeichen allein, eine Fläche in Glide-Blau | Kopfzeile, „Über Glide“ und Startfenster, dort in der Akzentfarbe der Oberfläche |
-| `03_Fav-Icon` | `App-Icon-transparent-02.svg` und `App-Icon-transparent.png`: blaue Fläche mit ausgespartem Zeichen | aktuelles Programmsymbol, Basis für Dock, Taskleiste, Installer und Website |
-| `04_Affinity` | überholte `Glide-Logo.af`, nicht auf D45 nachgeführt | zur Entfernung geprüft; lokale Ausführungsrichtlinie blockiert die Löschung, reguläre SVGs bleiben maßgeblich |
-| `05_Inspiration` | Stilvorlagen und Skizzen, darunter `Glide-Logo-Position.png` (Skizze der Logoposition vom 29.09.2026) und `Inspiration für Glide.png` | Belege, keine Programmdateien |
-| `06_Beispielbilder` | Motive für Showcase und Arbeitsdokumente | siehe unten |
-| `07_Fonts/01_Rubik` | Originaldateien und SIL OFL 1.1 | Modern: Rubik, aktuelle Vorgabe |
-| `07_Fonts/02_Roboto_Mono` | Unverändert verschobenes Originalpaket und SIL OFL 1.1 | Technisch: Roboto Mono |
-| `07_Fonts/03_Playfair_Display` | Originaldateien und SIL OFL 1.1 mit reserviertem Schriftnamen | Kreativ: Playfair Display; SemiBold 600 als Lesetext, Bold 700 für Hervorhebung |
-| `07_Fonts/04_Fraunces` | Originaldateien, variable/statische Schnitte und SIL OFL 1.1 | Klassisch: Fraunces; Laufzeit verwendet sechs unveränderte 72pt-Schnitte einschließlich SemiBold/Italic |
-
-Glide-Blau ist `rgb(1,133,225)` = `#0185E1`. Ein Archivordner entfällt seit 03.10.2026: Vorfassungen trägt Git.
-
-**Rechte (öffentliches Repository):** `05_Inspiration` und `06_Beispielbilder` enthalten auch Fremdbilder aus Bildagenturen und Webquellen. Vor einer Veröffentlichung klären, ob sie öffentlich liegen dürfen; sonst entfernen (offen beim Inhaber als I9, siehe [Entwicklungsplan](../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#11-nur-durch-den-inhaber)).
-
-**Ausgewählte Oberflächenreferenz (10.10.2026, D21):** [Glide-Oberflaeche-Referenz.png](05_Inspiration/Glide-Oberflaeche-Referenz.png), Bild 1 aus drei unabhängig erzeugten Entwürfen. Mit dem integrierten Image-Gen-Werkzeug aus vier eigenen Glide-Fensteraufnahmen mit künstlichen Daten erzeugt. Herkunft, Promptvorgaben, bekannte Abweichungen und Bindung an die native Tk-Oberfläche stehen im [Entwicklungsplan §15.4](../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#154-referenzentwürfe-und-zweite-auswahlrunde-10102026). Gestaltungsgrundlage für die ausgewählten Funktionen, keine Programmressource oder bereits abgenommene Oberfläche.
-
-<a id="freigegebene-master-und-laufzeit-3370"></a>
-
-## Freigegebene Master und Laufzeit (seit 3.37.0, aktuell 3.50.2)
-
-Am 03.11.2026 sind alle sechs unten genannten Master-/Laufzeitpaare bytegleich geprüft. Der ursprüngliche Freigabezeitpunkt bezeichnet die Herkunft der Gestaltung; aktuelle Quelle und Python-Lieferung sind 3.50.2. [Abgleich und Schriftstatus](../01_Repository/Glide/tests/qa-3.50.2/ablageabgleich_2026-11-03/README.md).
-
-D45 vom 10.10.2026 gibt den geglätteten Normalmaster und eigene Kleinfassungen
-frei: Rundungsanschlüsse sind tangential, das bedeutungslose Kurzsegment
-entfällt. Ausschließlich 16/32 px verwenden den breiteren Innenraum.
-Grundform und Glide-Blau bleiben erhalten. Die [Logo-Vergleichstafel](05_Inspiration/Glide-Logo-Vergleich-2026-10-10.png)
-und die [App-Symbol-Vergleichstafel](05_Inspiration/Glide-App-Symbol-Vergleich-2026-10-10.png)
-bleiben der Abnahmebeleg; die übernommenen Entwurfs-SVGs entfallen.
-
-| Reguläre Quelle | Unveränderte Laufzeitkopie in `src/glide/resources/logo` |
+| Datei unter `01_Logo` | Freigegebene Verwendung |
 |---|---|
-| `01_Logo/Glide-Logo-01.svg` | `glide-logo.svg` |
-| `01_Logo/Glide-Logo-klein.svg` | `glide-logo-klein.svg` |
-| `03_Fav-Icon/App-Icon-transparent-02.svg` | `glide-app-icon.svg` |
-| `03_Fav-Icon/App-Icon-klein.svg` | `glide-app-icon-klein.svg` |
-| `01_Logo/Glide-Logo.png` | `glide-logo.png` |
-| `03_Fav-Icon/App-Icon-transparent.png` | `glide-app-icon.png` |
+| `2026-Glide-Logo.ai` | Bearbeitbarer Originalentwurf; unverändert erhalten |
+| `2026-Glide-Logo-in-App.svg` | Zeichen mit neuer G-Kontur, Lila `#9E4AC8`, transparenter Grund |
+| `2026-Glide-Logo-App-und-Fav-Icon.svg` | Neue G-Kontur in Lila auf gelbem, abgerundetem Grund `#FFDC0B` |
+| `Exporte/2026-Glide-Logo-in-App.png` | Abgeleiteter transparenter PNG-Export, 1024 px hoch, proportional |
+| `Exporte/2026-Glide-Logo-App-und-Fav-Icon.png` | Abgeleiteter App-PNG-Export, 1024 × 1024 px |
+| `Archiv/` | Bisherige Master, Affinity-Datei, Laufzeit-/Paketsymbole und frühere Dokumentationsaufnahme; keine aktive Quelle |
 
-Für den freigegebenen Stand sind die vier regulären SVGs maßgeblich. Die doppelte alte SVG-Kopie im Affinity-Ordner wurde am 15.10.2026 entfernt. Der nicht auf D45 nachgeführte binäre Affinity-Stand ist als überholt geprüft; seine Löschung wurde von der lokalen Ausführungsrichtlinie blockiert und bleibt offen. Git hält seine Vorfassung vor. Andere vorhandene Varianten sind keine aktuelle Laufzeitquelle; `01_Logo/Glide-Logo.svg` bleibt zusätzlich als Sentinel der Synchronisationsprüfung erforderlich.
+Die SVGs werden **bytegleich** übernommen, einschließlich der kleinen Änderungen am G. Auch 16/32 px verwenden diese Kontur. Die Namen mit `-klein.svg` sind kompatible Kopien desselben neuen Masters, keine Fortsetzung der alten Kleinform. Der App-Symbolzuschnitt folgt der gesamten originalen viewBox einschließlich gelbem Rechteckgrund, nicht nur der G-Kontur.
 
-- **Tk 9:** natives SVG, im Logo mit der aktuellen Akzentfarbe. Die Farbe
-  `#0185e1` wird vor dem Rendern ersetzt; keine zusätzliche Bildbibliothek.
-- **Tk 8.6:** Logo als transparentes RGBA-PNG in genauer Höhe und Akzentfarbe,
-  mit Flächenabdeckung und Gerade-Ungerade-Füllregel aus `logo_raster.py`.
-  Der alte ungeglättete Canvas-Weg ist nicht mehr der Anzeige-Rückfall.
-- **App-Symbole:** passende PNGs in exakt 16/32/64/256 px, jeweils randlos
-  für Windows/Linux und mit macOS-Rand. Tk 8.6 lädt diese Dateien direkt;
-  das große PNG und ungefiltertes `subsample` entfallen im Startweg.
-- **Paketierung:** `packaging/baue_symbole.py` schreibt `assets/icons/glide.ico`
-  (16/24/32/48/64/128/256), `glide_macos_1024.png` und `glide_512.png`.
-  ICO und ICNS verwenden bei 16/32 px den freigegebenen Kleinmaster.
-  Allgemeine PNG-Exporte bleiben für Dateiverwendung verfügbar; das Logo
-  ist dabei auf seinen Zeichenrahmen zugeschnitten, das App-Symbol quadratisch.
+Zentrale Farbkonstanten: `01_Repository/Glide/src/glide/brand.py`. Der Darkmode verwendet `#FFDC0B` für Hinweise, mittlere Priorität und heutige Fälligkeit in Standard-Dunkel, Glas-Dunkel, Kontrast-Dunkel, Pixel und Dopamin. Der Hellmodus behält sein Ocker; Minimal bleibt bewusst monochrom. Das Logo in der Oberfläche behält die bestehende Anpassung an individuelle Akzentfarben und lesbaren Kontrast. Statische Markenexporte und App-Symbole bleiben original lila/gelb.
 
-## Master und Exporte nachführen
+## Wo das Logo vorkommt und was bei Änderungen zu erneuern ist
 
-1. Den richtigen regulären SVG-Master bearbeiten. Das Logo bleibt eine
-   einfarbige Fläche in `#0185E1`; Kleinmaster ausschließlich für 16/32 px.
-2. SVGs unverändert in die oben genannten Laufzeitpfade kopieren.
-3. Unter Python 3.14/Tk 9 im Ordner `01_Repository/Glide` erzeugen:
+App-Pfade ohne Projektpräfix beziehen sich auf `01_Repository/Glide`; die Grafik-/07-Pfade beziehen sich auf die Repository-Wurzel. **Dies ist die zentrale Änderungscheckliste für künftige Logo-Wechsel.**
 
-   ```sh
-   python3 -B packaging/baue_symbole.py --ressourcen-ziel src/glide/resources/logo
-   ```
+| Anzeige / Verwendung | Besitzende Quelle / Ziel | Nötiger Schritt |
+|---|---|---|
+| Kopfzeile aller App-Ansichten | `src/glide/app.pyw`: `header_logo_color`, `sync_header_logo`, `draw_logo`; zentral `logo.py` | In-App-SVG und Größen-/Kontrastprüfung erneuern |
+| Startfenster / Ladeanzeige | `app.pyw`: `show_start_window` | Kaltstart mit neuem Logo prüfen |
+| „Über Glide“, Menüaufruf zur Produktinfo | `app.pyw`: `show_about_dialog` / `draw_logo` | Dialog öffnen; neues G und unverzerrte Proportionen prüfen |
+| Fenster-Titelleiste, Alt-Tab / Fenstervorschau und geerbte Dialogsymbole | `apply_window_icon`, `logo.icon_photos` | Native SVG-Symbole und vorberechnete Größen 16/32/64/256 erneuern |
+| Taskleiste / Dock / Systemmenü-Anzeige | Windows: EXE-Ressource plus AppUserModelID/Verknüpfung; macOS: Bundle-Icon und Bundle-ID | Eigenständige Pakete neu bauen; vorhandene Identitäten erhalten; echte Anzeige nach Neustart prüfen |
+| Tray / Menüleisten-Symbol und Systemmitteilungen | `app_icon_photo(16)`, `system_notification_backend`, Windows-AppUserModelID und vorhandene Verknüpfung | 16-px-Symbol sowie tatsächliche native Zustellung/Anzeige prüfen |
+| Aktive Laufzeit-SVGs | `01_Repository/Glide/src/glide/resources/logo/glide-{logo,app-icon}{,-klein}.svg` | Vier Kopien aus den zwei freigegebenen Mastern, keine Handkorrekturen |
+| PNG-Rückfall und allgemeine Bilddateien | derselbe Ressourcenordner: `glide-logo.png`, `glide-app-icon.png`, `glide-app-icon[-macos]-{16,32,64,256}.png` | Aus den SVGs neu rasterisieren; Transparenz und beide Farben prüfen |
+| Windows EXE, Datei-Explorer, Desktop-/Startmenü-Verknüpfung und deren Vorschauen | `01_Repository/Glide/assets/icons/glide.ico`; `packaging/windows/verknuepfung_anlegen.ps1`; Paketbau | ICO mit 16/24/32/48/64/128/256 px neu erzeugen, EXE neu bauen, bestehende Verknüpfung auf neues Icon prüfen |
+| Dateitypsymbole für `.glideapp`, `.glidebackup` usw. im Explorer/Finder | Betriebssystem-Zuordnung beziehungsweise künftiger Installer/Bundle-Dateitypvertrag | Vorhandene Zuordnung gesondert prüfen. Ein SVG-/PNG-Tausch registriert keinen Dateityp. Aktuell kein fertiger Dateizuordnungs-/Installervertrag; nicht als umgesetzt ausgeben |
+| Finder-Vorschau, Dock und macOS-App-Menü / „Informationen“ | `assets/icons/glide_macos_1024.png` → `Glide.app/Contents/Resources/Glide.icns` und `Info.plist` | PNG mit bestehendem Apple-Rand, natives ICNS/Bundle neu bauen und signieren; Finder/Dock nativ prüfen |
+| Linux-Programmstarter / Paket | `assets/icons/glide_512.png`, `packaging/paket` | Symbol neu erzeugen; beim nächsten nativen Paketbau übernehmen |
+| Website-/Browser-Favicon und SVG-/PNG-Vorschauen | `20_Grafik_Master/03_Fav-Icon/favicon.svg`, `.ico`, `favicon-{16,32,64,256,512}.png` | Generator ausführen; bei tatsächlicher Webnutzung Deployment und Browsercache gesondert aktualisieren |
+| Startbare Python-Lieferfassung | `07_Python-Versionen/logo.py`, `brand.py`, `svg_geometry.py`, Appdatei und `resources/logo` | `scripts/pflege/abgleich_07.py` ausführen und Hashgleichheit prüfen |
+| Dokumentation / GitHub-README / Produktidentität | Root-README, `01_Repository/Glide/README.md`, `assets/marketing`, `docs/decisions/PRODUCT_IDENTITY.md`, Assets-/Paket-README | Aktuelle Bild-/Quellenverweise ersetzen; echte neue Aufnahme erstellen, keine alten Screenshots retuschieren |
+| Bestehende native Lieferpakete und installierte Kopien | `build/windows`, `build/macos`, Downloads/Installationsziele | Nur durch neuen geprüften nativen Bau und bewusste Lieferung ersetzen; Ressourcen nicht nachträglich in signierte Pakete kopieren |
+| Historische QA-Bilder, Originalreferenzen und alte Pakete | datierte Nachweise / Grafikarchiv | Als historische Belege unverändert lassen; nicht als aktuellen Logo-Stand verwenden |
 
-4. Die allgemeinen Logo-/App-PNGs bytegleich in die regulären Masterpfade
-   zurückkopieren. `baue_app.py` erzeugt daraus die ICNS-Fassungen; für den
-   Kleinmaster benötigt es weiterhin Tk 9.
-5. `test_logo330.py` und `test_logo3370.py` sowie Raster-/Symbol-Unit-Tests
-   ausführen; 16/32/54/512 px, beide Akzente, Tk-8.6-Rückfall und Tk 9 prüfen.
-   Native Menschen-/DPI-Sichtprüfung gesondert nachweisen.
-6. Produktionsversion und eingefrorene Vollprüfung, 07-/Showcase-Abgleich,
-   Bundle und Signatur nach dem verbindlichen Lieferweg durchführen.
+Ein neues Icon kann trotz korrekter Dateien zeitweise aus Windows-/Finder-/Browsercaches angezeigt werden. Zuerst neuen Paket-/Dateihash und tatsächlichen Verknüpfungspfad prüfen; anschließend neu öffnen beziehungsweise neu anheften. Keine pauschale Cache-Löschung oder Explorer-Neustarts im laufenden Arbeitsbetrieb.
 
-## Hinweis zur Typografie
+## Wiederverwendbarer Aktualisierungsablauf
 
-Glide bringt zwei privat registrierte Schriften mit, beide unter
-`src/glide/resources/fonts/` samt Lizenztexten:
+Aus `01_Repository/Glide`, mit der geprüften Python-/Tk-9-Laufzeit:
 
-- DejaVu Sans in vier Schnitten;
-- Pixelify Sans (SIL OFL 1.1) für die Überschriften im Design „Pixel“.
+```sh
+python -B scripts/pflege/logo_abgleich.py
+python -B scripts/pflege/logo_abgleich.py --pruefen
+python -B scripts/pflege/abgleich_07.py
+python -B tests/integration/test_logo330.py
+python -B tests/integration/test_logo3370.py
+```
 
-Eine systemweite Installation ist nicht nötig. Die Dateien müssen mit dem
-Programm verteilt werden.
+`logo_abgleich.py` verteilt die Master unverändert, ruft `packaging/baue_symbole.py` auf und erneuert alle Laufzeit-PNGs, Paketsymbole, allgemeine PNG-Exporte und Favicons. `--pruefen` erzeugt Vergleichsdateien nur temporär und schlägt bei Abweichungen fehl. Zusätzliche PNGs müssen nicht manuell geliefert werden. Ändern sich die freigegebenen Farben, SVG-Stile oder Formen, auch `brand.py`, SVG-Leser und die echten Render-/Kontrasttests anpassen; keine Konturen aus Altdateien zurückholen.
 
-**Schriftstand 3.50.2:** Originalordner `01_Rubik`, `02_Roboto_Mono`, `03_Playfair_Display`, `04_Fraunces` entsprechen Modern, Technisch, Kreativ, Klassisch. Rubik ist Vorgabe. Quelle und Python enthalten alle vier Familien, die Serifenschriften zusätzlich mit originalem SemiBold/SemiBold Italic als kräftigerem Lesetext; Hervorhebung bleibt echtes Bold. Alle 32 Font-/Lizenzdateien und vorhandenen Inhaberoriginale im Audit gehasht. DejaVu bleibt interner Symbolbegleiter. Native Pakete sind ein älterer Lieferstand. [Aktueller Audit](../01_Repository/Glide/tests/qa-3.50.2/ablageabgleich_2026-11-03/README.md).
+Anschließend aktuelle Dokumentationsaufnahme/Verweise, Änderungsverlauf, Entwicklungsplan und QA-Nachweis fortschreiben. Windows und macOS mit `packaging/paket/baue_paket.py` beziehungsweise dem nativen Mac-Workflow neu bauen, Paketressourcen/PE beziehungsweise ICNS, Signatur und isolierten Start prüfen und erst danach die tatsächlichen Lieferziele ersetzen. Physische DPI-/Taskleisten-/Finderprüfung getrennt vom automatischen Rendernachweis bestätigen. Das Beispielarchiv bleibt erhalten; individuelle Nutzerbilder und Dokumentensymbole werden durch einen Markenwechsel nicht verändert.
 
-## Beispielbilder für Arbeitsdokumente
+**Übertragung nativer Pakete:** Einige Übertragungswerkzeuge ergänzen SVG-Metadaten (am 06.11. bei vier entpackten Paketdateien beobachtet). Deshalb native Pakete als vollständiges Originalarchiv übertragen und nach dem Entpacken gegen dessen Hashmanifest prüfen. Zusätzliche Metadaten dürfen nicht still in geprüfte Ressourcen gelangen; abweichende Dateien sichern und nur die nachweislich ursprünglichen Archivbytes wiederherstellen. Ein nachträglicher Ressourcentausch ist kein neuer Paketbau oder Signaturnachweis.
 
-`06_Beispielbilder` enthält eigene aktuelle Referenzmotive für Arbeitsdokumente. Die sechs Originaldateien des [aktiven Showcase](../05_Probelisten_Testdaten/Showcase/README.md) lagen früher ebenfalls hier, sind seit 03.10.2026 aber ausschließlich in `01_Repository/Glide/tests/fixtures/showcase/bilder` abgelegt. Galerie, Seitenbilder und Aufgabenanhänge demonstrieren ihre Integration. Dateinamen, ursprüngliche Quelle und SHA-256 stehen im [Quellennachweis](../01_Repository/Glide/tests/fixtures/showcase/quellen.json). Die heutigen Motive in `06_Beispielbilder` sind andere Dateien und keine fehlenden Showcase-Originale.
+## Weitere Grafikquellen
+
+`05_Inspiration` enthält historische Stilvorlagen und Entwurfsbelege. Sie sind keine aktuelle Logo-Quelle. Fremdbilder vor öffentlicher Veröffentlichung nach ihrer jeweiligen Lizenz prüfen.
+
+`07_Fonts` enthält die unveränderten Originale und Lizenztexte für Rubik, Roboto Mono, Playfair Display und Fraunces. Die Runtime führt zusätzlich DejaVu Sans als internen Symbolbegleiter und Pixelify Sans für Pixel-Überschriften; Details im Schriftkatalog und Veröffentlichungsdokument.
+
+Die sechs Originalbilder des [Showcase](../05_Probelisten_Testdaten/Showcase/README.md) liegen ausschließlich in `01_Repository/Glide/tests/fixtures/showcase/bilder`. `06_Beispielbilder` enthält andere Referenzmotive. [Herkunft der Showcase-Bilder](../01_Repository/Glide/tests/fixtures/showcase/quellen.json).
+
+Aktueller Umsetzungs-/Prüf-/Lieferstand: [Logo-Nachweis 3.50.3](../01_Repository/Glide/tests/qa-3.50.3/logo_2026-11-05/README.md). Die Übersicht ist keine Bestätigung aller nativen Anzeigen oder einer erfolgten Veröffentlichung.

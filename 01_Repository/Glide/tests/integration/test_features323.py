@@ -183,8 +183,16 @@ with tempfile.TemporaryDirectory(prefix="glide-features323-") as folder:
         app.search_var.set("Punkt")
         root.update()
         geschwister = list(app.search_frame.pack_slaves())
-        assert geschwister.index(app.plan_day_next_button) < geschwister.index(app.plan_day_prev_button)
-        assert geschwister.index(app.plan_day_prev_button) < geschwister.index(app.clear_search_button)
+        seite = app.plan_day_prev_button.pack_info()["side"]
+        assert app.plan_day_next_button.pack_info()["side"] == seite
+        assert seite in ("left", "right")
+        vorher_index = geschwister.index(app.plan_day_prev_button)
+        nachher_index = geschwister.index(app.plan_day_next_button)
+        assert (nachher_index < vorher_index) if seite == "right" else (vorher_index < nachher_index)
+        # D63 hängt die Tagesschalter je nach Suchplatz links oder rechts um.
+        # Suche löschen bleibt bei aktiver Anfrage unabhängig davon erreichbar.
+        assert app.clear_search_button in geschwister
+        assert app.clear_search_button.pack_info()["side"] == "right"
         assert app.plan_day_prev_button.text == "◀" and app.plan_day_next_button.text == "▶"
         app.search_var.set("")
         root.update()

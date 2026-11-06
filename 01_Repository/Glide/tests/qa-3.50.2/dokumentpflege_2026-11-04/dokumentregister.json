@@ -1,0 +1,2022 @@
+[
+  {
+    "path": "CLAUDE.md",
+    "bytes": 6757,
+    "sha256": "5f341b210e36ed263f0c4cc3f8c94092f7891c10cb666b5bea15278f2a4d08fe"
+  },
+  {
+    "path": "README.md",
+    "bytes": 10261,
+    "sha256": "5b27f1371ec2bf9c76bb3d5c4339b0f3af2f0abda1694ceb580dbbdbf1ba07fa"
+  },
+  {
+    "path": "SECURITY.md",
+    "bytes": 3537,
+    "sha256": "b7c179102f8a382ca8869fc4f2db67a365917a77c588efd9299fa853f55be122"
+  },
+  {
+    "path": ".claude/fortsetzung_3.50.md",
+    "bytes": 967,
+    "sha256": "82059c9d5f5c00f1a3c0b650407b89e2baf45a98e5336c1e59b2c3e78db0fcc6"
+  },
+  {
+    "path": ".claude/skills/design-richtlinien/SKILL.md",
+    "bytes": 1482,
+    "sha256": "2a0ae9f873ccc5b13536bbedaaf892f1654afa2b3820cf9ae1e4efb9686833ae"
+  },
+  {
+    "path": ".claude/skills/design-richtlinien/referenzen/bewegung-material-typografie.md",
+    "bytes": 22946,
+    "sha256": "5fd9e3da4f6339756834d81a021c54d8e48499dd6300e5db8780a86728e70671"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Analyse.md",
+    "bytes": 209442,
+    "sha256": "80727d52957fd68db178518bbc07dc8be2b20ec7cae18f0695a432d39d3070ff"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md",
+    "bytes": 491639,
+    "sha256": "92911e20174b22b0519964d81eb173371f66639ad704e5486d2e073d2d905223"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md",
+    "bytes": 63417,
+    "sha256": "97fab5ba39fbe52486e5c6eb317d51b452702e5d9d3ef64792751295eb2fdc30"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md",
+    "bytes": 131466,
+    "sha256": "1af7b0b36aa6d5454379b158bcaba7559c3cf69c94876970102255c03c70ae69"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Glide_Uebergabe.md",
+    "bytes": 58432,
+    "sha256": "69b2cf7d4ce04c8e3054e92ed015ec011eac40c90530429c3a7d8035bd46b757"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/README.md",
+    "bytes": 10100,
+    "sha256": "d44baf3f7a76626108f3da4a30fd6375ffc78bd7451637c7583fc1c948a499dc"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/AUFTRAG.md",
+    "bytes": 8066,
+    "sha256": "358eb33b61312271762b738a90e93638e14edad6ed38288a97923f523ba0f910"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/BILDREFERENZEN.md",
+    "bytes": 6789,
+    "sha256": "f6a77daff27b1c94e5704f811470bfba3c629173b5214aab8a87130a08aae75e"
+  },
+  {
+    "path": "00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md",
+    "bytes": 28353,
+    "sha256": "e12b3b1899b6e2ed91c5f25325e1acd80b63050cb867931f5a6f4d8581172fe7"
+  },
+  {
+    "path": "01_Repository/Glide/AGENTS.md",
+    "bytes": 6826,
+    "sha256": "16341d5a17b67e985eab4ee62f7dfab8d3d442671d72fc421a8602163439b1c2"
+  },
+  {
+    "path": "01_Repository/Glide/CHANGELOG.md",
+    "bytes": 94403,
+    "sha256": "5dc670d1c3737e8e3e5bebdc5640dcc55e202b1414a3f4bd1a84bccaaddadb2e"
+  },
+  {
+    "path": "01_Repository/Glide/LICENSE.md",
+    "bytes": 266,
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e"
+  },
+  {
+    "path": "01_Repository/Glide/README.md",
+    "bytes": 5299,
+    "sha256": "03eddc89e7cd19fbf88468b406385f36d5e2e0efb63c6f946a1da8fd250218fe"
+  },
+  {
+    "path": "01_Repository/Glide/SECURITY.md",
+    "bytes": 7024,
+    "sha256": "06e2ee3e9f1c0af42b3b80475fd4a36bd373cd4d415cb19eb6f307ada135b715"
+  },
+  {
+    "path": "01_Repository/Glide/assets/README.md",
+    "bytes": 1160,
+    "sha256": "8ef15c17450f67b03deadd23f8b979ee50f72f15424f2d512311b314b0b101da"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/CLDR-LICENSE.txt",
+    "bytes": 2033,
+    "sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/Glide-Lizenzstatus.md",
+    "bytes": 266,
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/Henry-Spencer-Regex-LICENSE.txt",
+    "bytes": 1455,
+    "sha256": "8efb2d7215828acd974545d4177cadc7239d676c9a2c1a9834cab33efe9967fe"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/IANA-LICENSE.txt",
+    "bytes": 252,
+    "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/libtommath-LICENSE.txt",
+    "bytes": 1257,
+    "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/nanosvg.h-LICENSE.txt",
+    "bytes": 1268,
+    "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/nanosvgrast.h-LICENSE.txt",
+    "bytes": 1037,
+    "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/OpenSSL-LICENSE.txt",
+    "bytes": 10175,
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/PixelifySans-OFL.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/pyinstaller-COPYING.txt",
+    "bytes": 32604,
+    "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/Python-LICENSE.txt",
+    "bytes": 13804,
+    "sha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/Python-THIRD-PARTY-NOTICES.rst",
+    "bytes": 57595,
+    "sha256": "c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/setuptools-LICENSE.txt",
+    "bytes": 1107,
+    "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/Tcl-LICENSE.txt",
+    "bytes": 2255,
+    "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/Tk-LICENSE.txt",
+    "bytes": 2267,
+    "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/tkdnd-LICENSE.txt",
+    "bytes": 1711,
+    "sha256": "3e752e3d3d249387b477e79e2566dfd076b706175129a1edee395ff66dad2641"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/XZ-COPYING.txt",
+    "bytes": 2774,
+    "sha256": "c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/licenses/Zstandard-LICENSE.txt",
+    "bytes": 1549,
+    "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/resources/fonts/OFL-PixelifySans.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/resources/timezones/LICENSE-CLDR.txt",
+    "bytes": 2033,
+    "sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.42.0.app/Contents/Resources/resources/timezones/LICENSE-iana.txt",
+    "bytes": 252,
+    "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/CLDR-LICENSE.txt",
+    "bytes": 2033,
+    "sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/Glide-Lizenzstatus.md",
+    "bytes": 266,
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/Henry-Spencer-Regex-LICENSE.txt",
+    "bytes": 1455,
+    "sha256": "8efb2d7215828acd974545d4177cadc7239d676c9a2c1a9834cab33efe9967fe"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/IANA-LICENSE.txt",
+    "bytes": 252,
+    "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/libtommath-LICENSE.txt",
+    "bytes": 1257,
+    "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/nanosvg.h-LICENSE.txt",
+    "bytes": 1268,
+    "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/nanosvgrast.h-LICENSE.txt",
+    "bytes": 1037,
+    "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/OpenSSL-LICENSE.txt",
+    "bytes": 10175,
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/PixelifySans-OFL.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/pyinstaller-COPYING.txt",
+    "bytes": 32604,
+    "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/Python-LICENSE.txt",
+    "bytes": 13804,
+    "sha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/Python-THIRD-PARTY-NOTICES.rst",
+    "bytes": 57595,
+    "sha256": "c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/setuptools-LICENSE.txt",
+    "bytes": 1107,
+    "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/Tcl-LICENSE.txt",
+    "bytes": 2255,
+    "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/Tk-LICENSE.txt",
+    "bytes": 2267,
+    "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/tkdnd-LICENSE.txt",
+    "bytes": 1711,
+    "sha256": "3e752e3d3d249387b477e79e2566dfd076b706175129a1edee395ff66dad2641"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/XZ-COPYING.txt",
+    "bytes": 2774,
+    "sha256": "c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/licenses/Zstandard-LICENSE.txt",
+    "bytes": 1549,
+    "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/resources/fonts/OFL-PixelifySans.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/resources/timezones/LICENSE-CLDR.txt",
+    "bytes": 2033,
+    "sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.45.0.app/Contents/Resources/resources/timezones/LICENSE-iana.txt",
+    "bytes": 252,
+    "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/CLDR-LICENSE.txt",
+    "bytes": 2074,
+    "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/Glide-Lizenzstatus.md",
+    "bytes": 266,
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/Henry-Spencer-Regex-LICENSE.txt",
+    "bytes": 1454,
+    "sha256": "7f5de5c41af220787ce29c79917af6a590a24b80d93a4ed3d6dbf7d8094af49a"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/IANA-LICENSE.txt",
+    "bytes": 257,
+    "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/libtommath-LICENSE.txt",
+    "bytes": 1257,
+    "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/nanosvg.h-LICENSE.txt",
+    "bytes": 1268,
+    "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/nanosvgrast.h-LICENSE.txt",
+    "bytes": 1037,
+    "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/OpenSSL-LICENSE.txt",
+    "bytes": 10175,
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/PixelifySans-OFL.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/pyinstaller-COPYING.txt",
+    "bytes": 32604,
+    "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/Python-LICENSE.txt",
+    "bytes": 13804,
+    "sha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/Python-THIRD-PARTY-NOTICES.rst",
+    "bytes": 57595,
+    "sha256": "c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/setuptools-LICENSE.txt",
+    "bytes": 1107,
+    "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/Tcl-LICENSE.txt",
+    "bytes": 2255,
+    "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/Tk-LICENSE.txt",
+    "bytes": 2267,
+    "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/tkdnd-LICENSE.txt",
+    "bytes": 1711,
+    "sha256": "3e752e3d3d249387b477e79e2566dfd076b706175129a1edee395ff66dad2641"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/utf8proc-LICENSE.txt",
+    "bytes": 5125,
+    "sha256": "3b510150d34f248a221bb88e1d811238d6c6c18b51231822c42974c39bb07256"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/XZ-COPYING.txt",
+    "bytes": 2774,
+    "sha256": "c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/licenses/Zstandard-LICENSE.txt",
+    "bytes": 1549,
+    "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/resources/fonts/OFL-PixelifySans.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/resources/timezones/LICENSE-CLDR.txt",
+    "bytes": 2074,
+    "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+  },
+  {
+    "path": "01_Repository/Glide/build/macos/Archiv/Glide-3.49.0.app/Contents/Resources/resources/timezones/LICENSE-iana.txt",
+    "bytes": 257,
+    "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/CLDR-LICENSE.txt",
+    "bytes": 2074,
+    "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/Glide-Lizenzstatus.md",
+    "bytes": 266,
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/Henry-Spencer-Regex-LICENSE.txt",
+    "bytes": 1455,
+    "sha256": "8efb2d7215828acd974545d4177cadc7239d676c9a2c1a9834cab33efe9967fe"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/IANA-LICENSE.txt",
+    "bytes": 257,
+    "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/libmpdec-COPYRIGHT.txt",
+    "bytes": 1285,
+    "sha256": "2713324211652ce4a60e6e21e54f9dc3004299e591b0933a352f1a89c5fb53c2"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/libtommath-LICENSE.txt",
+    "bytes": 1257,
+    "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/nanosvg.h-LICENSE.txt",
+    "bytes": 1268,
+    "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/nanosvgrast.h-LICENSE.txt",
+    "bytes": 1037,
+    "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/OpenSSL-LICENSE.txt",
+    "bytes": 10175,
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/PixelifySans-OFL.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/pyinstaller-COPYING.txt",
+    "bytes": 32604,
+    "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/Python-LICENSE.txt",
+    "bytes": 35407,
+    "sha256": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/pywin32-ctypes-LICENSE.txt",
+    "bytes": 1644,
+    "sha256": "dfa83b3e2709adfcdb838d9ad55823ca674abb780e60563d9dd9544ccbf785e9"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/setuptools-LICENSE.txt",
+    "bytes": 1107,
+    "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/Tcl-LICENSE.txt",
+    "bytes": 2255,
+    "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/Tk-LICENSE.txt",
+    "bytes": 2267,
+    "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/tkdnd-LICENSE.txt",
+    "bytes": 1749,
+    "sha256": "d4764f73ef60ec2f61a1bd677cbbf0a945ce69377903c1366b0c18a9ef60f268"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/XZ-COPYING.txt",
+    "bytes": 2775,
+    "sha256": "bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/zlib-LICENSE.txt",
+    "bytes": 1002,
+    "sha256": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/zlib-ng-LICENSE.md",
+    "bytes": 867,
+    "sha256": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/licenses/Zstandard-LICENSE.txt",
+    "bytes": 1549,
+    "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/resources/fonts/OFL-PixelifySans.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/resources/timezones/LICENSE-CLDR.txt",
+    "bytes": 2074,
+    "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.42.0/_internal/resources/timezones/LICENSE-iana.txt",
+    "bytes": 257,
+    "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/CLDR-LICENSE.txt",
+    "bytes": 2074,
+    "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/Glide-Lizenzstatus.md",
+    "bytes": 266,
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/Henry-Spencer-Regex-LICENSE.txt",
+    "bytes": 1455,
+    "sha256": "8efb2d7215828acd974545d4177cadc7239d676c9a2c1a9834cab33efe9967fe"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/IANA-LICENSE.txt",
+    "bytes": 257,
+    "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/libmpdec-COPYRIGHT.txt",
+    "bytes": 1285,
+    "sha256": "2713324211652ce4a60e6e21e54f9dc3004299e591b0933a352f1a89c5fb53c2"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/libtommath-LICENSE.txt",
+    "bytes": 1257,
+    "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/nanosvg.h-LICENSE.txt",
+    "bytes": 1268,
+    "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/nanosvgrast.h-LICENSE.txt",
+    "bytes": 1037,
+    "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/OpenSSL-LICENSE.txt",
+    "bytes": 10175,
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/PixelifySans-OFL.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/pyinstaller-COPYING.txt",
+    "bytes": 32604,
+    "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/Python-LICENSE.txt",
+    "bytes": 35407,
+    "sha256": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/pywin32-ctypes-LICENSE.txt",
+    "bytes": 1644,
+    "sha256": "dfa83b3e2709adfcdb838d9ad55823ca674abb780e60563d9dd9544ccbf785e9"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/setuptools-LICENSE.txt",
+    "bytes": 1107,
+    "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/Tcl-LICENSE.txt",
+    "bytes": 2255,
+    "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/Tk-LICENSE.txt",
+    "bytes": 2267,
+    "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/tkdnd-LICENSE.txt",
+    "bytes": 1749,
+    "sha256": "d4764f73ef60ec2f61a1bd677cbbf0a945ce69377903c1366b0c18a9ef60f268"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/XZ-COPYING.txt",
+    "bytes": 2775,
+    "sha256": "bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/zlib-LICENSE.txt",
+    "bytes": 1002,
+    "sha256": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/zlib-ng-LICENSE.md",
+    "bytes": 867,
+    "sha256": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/licenses/Zstandard-LICENSE.txt",
+    "bytes": 1549,
+    "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/resources/fonts/OFL-PixelifySans.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/resources/timezones/LICENSE-CLDR.txt",
+    "bytes": 2074,
+    "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.45.0/_internal/resources/timezones/LICENSE-iana.txt",
+    "bytes": 257,
+    "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/CLDR-LICENSE.txt",
+    "bytes": 2074,
+    "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/Glide-Lizenzstatus 2.md",
+    "bytes": 266,
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/Henry-Spencer-Regex-LICENSE.txt",
+    "bytes": 1454,
+    "sha256": "7f5de5c41af220787ce29c79917af6a590a24b80d93a4ed3d6dbf7d8094af49a"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/IANA-LICENSE.txt",
+    "bytes": 257,
+    "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/libmpdec-COPYRIGHT 2.txt",
+    "bytes": 1285,
+    "sha256": "2713324211652ce4a60e6e21e54f9dc3004299e591b0933a352f1a89c5fb53c2"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/libtommath-LICENSE.txt",
+    "bytes": 1257,
+    "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/nanosvg.h-LICENSE 2.txt",
+    "bytes": 1268,
+    "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/nanosvgrast.h-LICENSE 2.txt",
+    "bytes": 1037,
+    "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/OpenSSL-LICENSE.txt",
+    "bytes": 10175,
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/PixelifySans-OFL.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/pyinstaller-COPYING.txt",
+    "bytes": 32604,
+    "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/Python-LICENSE.txt",
+    "bytes": 35407,
+    "sha256": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/pywin32-ctypes-LICENSE.txt",
+    "bytes": 1644,
+    "sha256": "dfa83b3e2709adfcdb838d9ad55823ca674abb780e60563d9dd9544ccbf785e9"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/setuptools-LICENSE.txt",
+    "bytes": 1107,
+    "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/Tcl-LICENSE 2.txt",
+    "bytes": 2255,
+    "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/Tk-LICENSE.txt",
+    "bytes": 2267,
+    "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/tkdnd-LICENSE.txt",
+    "bytes": 1749,
+    "sha256": "d4764f73ef60ec2f61a1bd677cbbf0a945ce69377903c1366b0c18a9ef60f268"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/utf8proc-LICENSE 2.txt",
+    "bytes": 5125,
+    "sha256": "3b510150d34f248a221bb88e1d811238d6c6c18b51231822c42974c39bb07256"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/XZ-COPYING 2.txt",
+    "bytes": 2775,
+    "sha256": "bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/zlib-LICENSE.txt",
+    "bytes": 1002,
+    "sha256": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/zlib-ng-LICENSE.md",
+    "bytes": 867,
+    "sha256": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/licenses/Zstandard-LICENSE 2.txt",
+    "bytes": 1549,
+    "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/resources/fonts/OFL-PixelifySans.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/resources/timezones/LICENSE-CLDR.txt",
+    "bytes": 2074,
+    "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Archiv/Glide-3.50.0-vor-audit-20261103/_internal/resources/timezones/LICENSE-iana.txt",
+    "bytes": 257,
+    "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/CLDR-LICENSE.txt",
+    "bytes": 2074,
+    "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/Glide-Lizenzstatus.md",
+    "bytes": 266,
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/Henry-Spencer-Regex-LICENSE.txt",
+    "bytes": 1454,
+    "sha256": "7f5de5c41af220787ce29c79917af6a590a24b80d93a4ed3d6dbf7d8094af49a"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/IANA-LICENSE.txt",
+    "bytes": 257,
+    "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/libmpdec-COPYRIGHT.txt",
+    "bytes": 1285,
+    "sha256": "2713324211652ce4a60e6e21e54f9dc3004299e591b0933a352f1a89c5fb53c2"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/libtommath-LICENSE.txt",
+    "bytes": 1257,
+    "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/nanosvg.h-LICENSE.txt",
+    "bytes": 1268,
+    "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/nanosvgrast.h-LICENSE.txt",
+    "bytes": 1037,
+    "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/OpenSSL-LICENSE.txt",
+    "bytes": 10175,
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/PixelifySans-OFL.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/pyinstaller-COPYING.txt",
+    "bytes": 32604,
+    "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/Python-LICENSE.txt",
+    "bytes": 35407,
+    "sha256": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/pywin32-ctypes-LICENSE.txt",
+    "bytes": 1644,
+    "sha256": "dfa83b3e2709adfcdb838d9ad55823ca674abb780e60563d9dd9544ccbf785e9"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/setuptools-LICENSE.txt",
+    "bytes": 1107,
+    "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/Tcl-LICENSE.txt",
+    "bytes": 2255,
+    "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/Tk-LICENSE.txt",
+    "bytes": 2267,
+    "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/tkdnd-LICENSE.txt",
+    "bytes": 1749,
+    "sha256": "d4764f73ef60ec2f61a1bd677cbbf0a945ce69377903c1366b0c18a9ef60f268"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/utf8proc-LICENSE.txt",
+    "bytes": 5125,
+    "sha256": "3b510150d34f248a221bb88e1d811238d6c6c18b51231822c42974c39bb07256"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/XZ-COPYING.txt",
+    "bytes": 2775,
+    "sha256": "bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/zlib-LICENSE.txt",
+    "bytes": 1002,
+    "sha256": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/zlib-ng-LICENSE.md",
+    "bytes": 867,
+    "sha256": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/licenses/Zstandard-LICENSE.txt",
+    "bytes": 1549,
+    "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/resources/fonts/OFL-PixelifySans.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/resources/timezones/LICENSE-CLDR.txt",
+    "bytes": 2074,
+    "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Glide-3.50.0/_internal/resources/timezones/LICENSE-iana.txt",
+    "bytes": 257,
+    "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/CLDR-LICENSE.txt",
+    "bytes": 2074,
+    "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/Glide-Lizenzstatus.md",
+    "bytes": 266,
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/Henry-Spencer-Regex-LICENSE.txt",
+    "bytes": 1454,
+    "sha256": "7f5de5c41af220787ce29c79917af6a590a24b80d93a4ed3d6dbf7d8094af49a"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/IANA-LICENSE.txt",
+    "bytes": 257,
+    "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/libmpdec-COPYRIGHT.txt",
+    "bytes": 1285,
+    "sha256": "2713324211652ce4a60e6e21e54f9dc3004299e591b0933a352f1a89c5fb53c2"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/libtommath-LICENSE.txt",
+    "bytes": 1257,
+    "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/nanosvg.h-LICENSE.txt",
+    "bytes": 1268,
+    "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/nanosvgrast.h-LICENSE.txt",
+    "bytes": 1037,
+    "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/OpenSSL-LICENSE.txt",
+    "bytes": 10175,
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/PixelifySans-OFL.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/pyinstaller-COPYING.txt",
+    "bytes": 32604,
+    "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/Python-LICENSE.txt",
+    "bytes": 35407,
+    "sha256": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/pywin32-ctypes-LICENSE.txt",
+    "bytes": 1644,
+    "sha256": "dfa83b3e2709adfcdb838d9ad55823ca674abb780e60563d9dd9544ccbf785e9"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/setuptools-LICENSE.txt",
+    "bytes": 1107,
+    "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/Tcl-LICENSE.txt",
+    "bytes": 2255,
+    "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/Tk-LICENSE.txt",
+    "bytes": 2267,
+    "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/tkdnd-LICENSE.txt",
+    "bytes": 1749,
+    "sha256": "d4764f73ef60ec2f61a1bd677cbbf0a945ce69377903c1366b0c18a9ef60f268"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/utf8proc-LICENSE.txt",
+    "bytes": 5125,
+    "sha256": "3b510150d34f248a221bb88e1d811238d6c6c18b51231822c42974c39bb07256"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/XZ-COPYING.txt",
+    "bytes": 2775,
+    "sha256": "bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/zlib-LICENSE.txt",
+    "bytes": 1002,
+    "sha256": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/zlib-ng-LICENSE.md",
+    "bytes": 867,
+    "sha256": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/licenses/Zstandard-LICENSE.txt",
+    "bytes": 1549,
+    "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/resources/fonts/OFL-PixelifySans.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/resources/timezones/LICENSE-CLDR.txt",
+    "bytes": 2074,
+    "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+  },
+  {
+    "path": "01_Repository/Glide/build/windows/Kandidaten/Glide-3.50.0-gesamtvalidierung/_internal/resources/timezones/LICENSE-iana.txt",
+    "bytes": 257,
+    "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+  },
+  {
+    "path": "01_Repository/Glide/docs/00_INDEX.md",
+    "bytes": 9355,
+    "sha256": "126e339a62cce181a4a36f20813184216655588f29553b5816af0281ffcce295"
+  },
+  {
+    "path": "01_Repository/Glide/docs/01_PRODUCT_CONSTRAINTS.md",
+    "bytes": 12040,
+    "sha256": "f8115edbfdee6cfe0ab98befff42272b75973b4c894c6f6bf68144b1d97575b8"
+  },
+  {
+    "path": "01_Repository/Glide/docs/02_ARCHITECTURE.md",
+    "bytes": 76438,
+    "sha256": "d33dc19a98d63a1b0555b4b5cfcec270dae80eecacea26e29fbc6b0f0138f7ac"
+  },
+  {
+    "path": "01_Repository/Glide/docs/05_QA_TESTPLAN.md",
+    "bytes": 62814,
+    "sha256": "6648c5cd999bf3265e07035721f8c5491bb607d22a9d48ab3d333851e92d1860"
+  },
+  {
+    "path": "01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md",
+    "bytes": 52031,
+    "sha256": "6a745a38754b25ed9bf7f38cd9f0fae469efc996bedbd8bfce1440b4cadef9d9"
+  },
+  {
+    "path": "01_Repository/Glide/docs/07_QA_BERICHT.md",
+    "bytes": 107937,
+    "sha256": "d4ac5057bab8715db12d8805206190ef77cd32c52e00f3884ae5f59a1b012c59"
+  },
+  {
+    "path": "01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md",
+    "bytes": 19472,
+    "sha256": "b6aeb6a345695e3e2a9eb834d371b2e28ab89701ecae4d451ee5654efc736e15"
+  },
+  {
+    "path": "01_Repository/Glide/docs/20_FUNKTIONEN.md",
+    "bytes": 156680,
+    "sha256": "132f7d86e46e6f1f0be53c240b57b02f76c570e8de6b0f345e20296937c72b03"
+  },
+  {
+    "path": "01_Repository/Glide/docs/27_VORLAGEN_PRAXISANLEITUNG.md",
+    "bytes": 8364,
+    "sha256": "fc7a93a7a73778b59b5703e67dfffebef3c823db926927684577a06622954080"
+  },
+  {
+    "path": "01_Repository/Glide/docs/ARBEITSRICHTUNG.md",
+    "bytes": 83721,
+    "sha256": "8508f11ea08ef93b21d6f1cc9922a208fb6352ec3b9586cede87e42819d69815"
+  },
+  {
+    "path": "01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md",
+    "bytes": 51943,
+    "sha256": "e0b606d6ce34a311d1b894aa773bbbb4e75704c521d55f5076f57fcd0f0c9a7f"
+  },
+  {
+    "path": "01_Repository/Glide/docs/DOKUMENTENPFLEGE.md",
+    "bytes": 16022,
+    "sha256": "920ba00417a9695072553a1da915a13ae34d4df1555f0b03ea7409abc0dfeed3"
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/ABHAENGIGKEIT_TKDND.md",
+    "bytes": 3373,
+    "sha256": "821cb5073f4c02804541eeed4f262eb7a7d4360305de0d588bee8ff4d431ba98"
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/ARBEITSBEGLEITER.md",
+    "bytes": 5844,
+    "sha256": "96266f314e30b3fa43c4f7f1cb2e28142fb75aaa0d2df40aa662cd2ee3ea9112"
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/GRUPPE_ORDNER_UEBERSCHRIFT.md",
+    "bytes": 5636,
+    "sha256": "735c837663121ecc54191923fba13807f944dd40b01841fdf4e3c10f9c10e491"
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/PRODUCT_IDENTITY.md",
+    "bytes": 7373,
+    "sha256": "a2e43caa676f21dd32b38d77700deec973aefa414628ddb10645ee243a7099f3"
+  },
+  {
+    "path": "01_Repository/Glide/docs/decisions/SYSTEMBENACHRICHTIGUNGEN.md",
+    "bytes": 11588,
+    "sha256": "82918a3430f3bcfa883cbbac1beb0ed9b94def5f5b8c411a241275f4b7ad98a4"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/README.md",
+    "bytes": 11282,
+    "sha256": "80d71a3075044cdb029ca88cdc6e67a3add59715eb88628fc6a6071f0cfe16bc"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/CLDR-LICENSE.txt",
+    "bytes": 2033,
+    "sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Fraunces-OFL.txt",
+    "bytes": 4485,
+    "sha256": "720d772b526b33cc1bd2abb5c8735fea5b0fc5b742cb171b571d7ad62aae0496"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Glide-Lizenzstatus.md",
+    "bytes": 266,
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Henry-Spencer-Regex-LICENSE.txt",
+    "bytes": 1455,
+    "sha256": "8efb2d7215828acd974545d4177cadc7239d676c9a2c1a9834cab33efe9967fe"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/IANA-LICENSE.txt",
+    "bytes": 252,
+    "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/libtommath-LICENSE.txt",
+    "bytes": 1257,
+    "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/nanosvg.h-LICENSE.txt",
+    "bytes": 1268,
+    "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/nanosvgrast.h-LICENSE.txt",
+    "bytes": 1037,
+    "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/OpenSSL-LICENSE.txt",
+    "bytes": 10175,
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/PixelifySans-OFL.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/PlayfairDisplay-OFL.txt",
+    "bytes": 4543,
+    "sha256": "4e6be9d19455d7cb092412984ebf3c55d26b19dd8f8452962bf432ec0a9c9dcb"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/pyinstaller-COPYING.txt",
+    "bytes": 32604,
+    "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Python-LICENSE.txt",
+    "bytes": 13804,
+    "sha256": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Python-THIRD-PARTY-NOTICES.rst",
+    "bytes": 57595,
+    "sha256": "c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/RobotoMono-OFL.txt",
+    "bytes": 4488,
+    "sha256": "ffd9f334604a352ad52ee0a7159c31bdafaf5f8465e5b9f9eb5c1f4924343183"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Rubik-OFL.txt",
+    "bytes": 4477,
+    "sha256": "fbf425c49bf998fb9cc1b52f8ca27d5f84dec079b60c40f654f242b52474d536"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/setuptools-LICENSE.txt",
+    "bytes": 1107,
+    "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Tcl-LICENSE.txt",
+    "bytes": 2255,
+    "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Tk-LICENSE.txt",
+    "bytes": 2267,
+    "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/tkdnd-LICENSE.txt",
+    "bytes": 1711,
+    "sha256": "3e752e3d3d249387b477e79e2566dfd076b706175129a1edee395ff66dad2641"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/XZ-COPYING.txt",
+    "bytes": 2774,
+    "sha256": "c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/paket/lizenzen/macos/Zstandard-LICENSE.txt",
+    "bytes": 1549,
+    "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+  },
+  {
+    "path": "01_Repository/Glide/packaging/runtime/README.md",
+    "bytes": 9466,
+    "sha256": "0843aa679175cfb9ad8f60fdc4c68cdad97fb67f3ba1f79452a30555eff088fa"
+  },
+  {
+    "path": "01_Repository/Glide/requirements/build-macos.txt",
+    "bytes": 2179,
+    "sha256": "d4bcc57961cf2ce7f2dea98175ab5541bb212ce1b08aa9570eb0e14996e15c64"
+  },
+  {
+    "path": "01_Repository/Glide/requirements/build-windows.txt",
+    "bytes": 2375,
+    "sha256": "7190c02f9e20ecd2d32fd404b3470e95ba0d647bf2221d8b8b326901d1766894"
+  },
+  {
+    "path": "01_Repository/Glide/requirements/dev.txt",
+    "bytes": 58,
+    "sha256": "443ca2055b3f23908c9fce87a9488cfddd65cc03835dcce861bcae1f4a769c51"
+  },
+  {
+    "path": "01_Repository/Glide/requirements/runtime.txt",
+    "bytes": 234,
+    "sha256": "c0a86c2100aac3df66e34b5d64f176ba5f98bda4f46b46d09c6e148ff952b8cc"
+  },
+  {
+    "path": "01_Repository/Glide/scripts/pflege/README.md",
+    "bytes": 10105,
+    "sha256": "f60019f01901a31bde252d1e35451980c76b72ba97c9b2be4dfa8acbdcd286f8"
+  },
+  {
+    "path": "01_Repository/Glide/src/glide/README.md",
+    "bytes": 13101,
+    "sha256": "d79dea49f4fcb5a716996777cdd162406807ca068efe689396e7daa56e8202c9"
+  },
+  {
+    "path": "01_Repository/Glide/src/glide/resources/fonts/OFL-Fraunces.txt",
+    "bytes": 4485,
+    "sha256": "720d772b526b33cc1bd2abb5c8735fea5b0fc5b742cb171b571d7ad62aae0496"
+  },
+  {
+    "path": "01_Repository/Glide/src/glide/resources/fonts/OFL-PixelifySans.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "01_Repository/Glide/src/glide/resources/fonts/OFL-PlayfairDisplay.txt",
+    "bytes": 4543,
+    "sha256": "4e6be9d19455d7cb092412984ebf3c55d26b19dd8f8452962bf432ec0a9c9dcb"
+  },
+  {
+    "path": "01_Repository/Glide/src/glide/resources/fonts/OFL-RobotoMono.txt",
+    "bytes": 4488,
+    "sha256": "ffd9f334604a352ad52ee0a7159c31bdafaf5f8465e5b9f9eb5c1f4924343183"
+  },
+  {
+    "path": "01_Repository/Glide/src/glide/resources/fonts/OFL-Rubik.txt",
+    "bytes": 4477,
+    "sha256": "fbf425c49bf998fb9cc1b52f8ca27d5f84dec079b60c40f654f242b52474d536"
+  },
+  {
+    "path": "01_Repository/Glide/src/glide/resources/timezones/LICENSE-CLDR.txt",
+    "bytes": 2074,
+    "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+  },
+  {
+    "path": "01_Repository/Glide/src/glide/resources/timezones/LICENSE-iana.txt",
+    "bytes": 257,
+    "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+  },
+  {
+    "path": "01_Repository/Glide/tests/README.md",
+    "bytes": 8696,
+    "sha256": "fafa5718216e23b2b18b607c24b6a982fe4a5b3d5321bd700a4f7ef31255c0f4"
+  },
+  {
+    "path": "01_Repository/Glide/tests/fixtures/README.md",
+    "bytes": 4206,
+    "sha256": "a315ce6ff9008ebcd2971d8f45d00faf5d365f2896eafdeff9397a9ee3c0c239"
+  },
+  {
+    "path": "01_Repository/Glide/tests/fixtures/showcase/README.md",
+    "bytes": 6370,
+    "sha256": "c19ea71d5cd30ec59f6c80090ac5a23faddf1dc42d7d00a1e0a166dd5bd15999"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.46.0/zweierpaket_2026-10-27/README.md",
+    "bytes": 8526,
+    "sha256": "7b01bf93bdbe85f3c891a5d81739f523f5acf6b0ef46939b4e7248f92342daac"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.47.0/folgepakete_2026-10-27/README.md",
+    "bytes": 7769,
+    "sha256": "11a5658e952291efe8606fdddce4815b04b11cb4a773b3895f5a96dcaf2ff12f"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/amd_vergleich_2026-10-27/README.md",
+    "bytes": 9163,
+    "sha256": "cb307c7e7e28768e8cb915a4826d7cd923200368e10642b804830914dbe7dbbe"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/dokumentationsaudit_2026-10-27/README.md",
+    "bytes": 6445,
+    "sha256": "447247088fb02ad63f957a21a1f50bed9c388f09ab37d9ce6b14e97570578432"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/dreierpaket_2026-10-27/README.md",
+    "bytes": 10895,
+    "sha256": "6bc2c0717f9ded923e24859be8463c636736c26db93778f4915cc64f52510eb6"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/last_fenster_2026-10-27/README.md",
+    "bytes": 14741,
+    "sha256": "5f20243fc3aa749f967e2370e7395b865e6a124cfa36b476a74773653a9b1621"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/prozessdiagnose_2026-10-28/README.md",
+    "bytes": 3897,
+    "sha256": "4bb029d5f6d7cd6d8f38db29d59b000c5c12b8c36685813560a871816ad3f302"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/README.md",
+    "bytes": 7064,
+    "sha256": "ab4fd31b842f18b8ed8c54c6e614c3e398135038faa04cd394d17c4b527d7b32"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/python315_vergleich_2026-10-27/WA-41-Python-Fehler-Analyse.md",
+    "bytes": 7064,
+    "sha256": "ab4fd31b842f18b8ed8c54c6e614c3e398135038faa04cd394d17c4b527d7b32"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.48.0/wa41_2026-10-27/README.md",
+    "bytes": 13632,
+    "sha256": "e6e236a4449119476adb8cb399753840c1067c223f754c55f3b21e8ed813fe4e"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/abnahme_2026-10-28/Glide_Abnahmebericht_3.49.0_2026-10-28.docx",
+    "bytes": 52993,
+    "sha256": "cbcbe6c75c46f984269298a4332538c1b5188d0147728e2567e66afc466880c9"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/abnahme_2026-10-28/Glide_Abnahmebericht_3.49.0_2026-10-28.pdf",
+    "bytes": 381910,
+    "sha256": "a116f1555c67d3bb484c0c67006f4d4b99efd2ceb1c592e16204bc4410893039"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/abnahme_2026-10-28/README.md",
+    "bytes": 3208,
+    "sha256": "ace346f565b1e963c04d5eb275780d3f2297bcc14a16dff76a1a2c1eafcdaccd"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/abnahme_2026-10-28/render/einzelseite4.pdf",
+    "bytes": 226614,
+    "sha256": "9ec1462153f08c6e0e2747cca2ce59e54803ca9cc220bfff4692d6c88181c244"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/abschlussaudit_2026-10-31/README.md",
+    "bytes": 8105,
+    "sha256": "bbebfe5e45d2d54a2035abc0b8772109b07d2a9782d13603795408a09911d446"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/abschlussreste_2026-10-29/README.md",
+    "bytes": 18732,
+    "sha256": "62d6a3ae0180d8f5f5eefa3254e1f072235abc406c6871e84e71585fb2071924"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/amd_voll_2026-10-29/README.md",
+    "bytes": 6070,
+    "sha256": "5f4979714161f15b63dd35dab89777d693b6e494bd2599348dbf9347320d04e8"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/dokumentabgleich_2026-10-29/README.md",
+    "bytes": 5959,
+    "sha256": "bbbbe187e6bcec990900d7f03e2bb28f8856ac64c99979bd55ff26acd3af1ced"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/funktionspakete_2026-10-28/README.md",
+    "bytes": 3051,
+    "sha256": "b5d73d23b144254a07d685d8bb4b589f268ab907075d217722f973ed9f620e53"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/geraetevergleich_2026-10-29/README.md",
+    "bytes": 5597,
+    "sha256": "a7123fc625104138d913e530084d9ba91c146ae11e9911bb6584e7d49e88009a"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md",
+    "bytes": 12266,
+    "sha256": "d196d2a9b251d2d8922555806899004b293e5dbdf18121378b341cef590b3a68"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/leistung_wege_2026-10-31/README.md",
+    "bytes": 8401,
+    "sha256": "1e909b6e238b79d38fca229efbba4d08c4fc96181693e6c293b37ade19f51dcb"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/mac_gegenlauf_2026-10-31/README.md",
+    "bytes": 12751,
+    "sha256": "2f00798d30de3bfa853367076f6b928ce429eec75f08b1bd9419276346254c98"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.49.0/robustheit_2026-10-28/README.md",
+    "bytes": 3648,
+    "sha256": "e8297ad6404554ecb1ed7041ee10435ee64accd61a693edff112b76eec09aa93"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/abschlussabgleich_2026-11-02/README.md",
+    "bytes": 6054,
+    "sha256": "47fb7445554de752f75700fd7d3e6aeb5a99445e6e8e8c214165314875b20796"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/aussenabstaende_2026-11-02/README.md",
+    "bytes": 4378,
+    "sha256": "dea75055af8e5cb5a8bb1b726bf4c4495808ed8f3c99baed52de45e1cbabb3e4"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/designpruefung_2026-11-03/README.md",
+    "bytes": 11013,
+    "sha256": "85b33be01aedc2ff82656a43c40834d2b03fd89e3a897bf541766f0437cb6311"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/eckenlabels_2026-11-02/README.md",
+    "bytes": 4625,
+    "sha256": "c3c658d9855b1bc4b9b1b2d7cefe90eaf55a7c3a75280bd980c3320d3cb9a235"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/featurepaket_2026-10-31/README.md",
+    "bytes": 14174,
+    "sha256": "0d546717ddc4ed484a215d8b59c5039d331ff41d1ab80ba56a17ab92e03e140d"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/gesamtvalidierung_2026-11-02/README.md",
+    "bytes": 7666,
+    "sha256": "2fb4ba607ff238b83839016703d03a0574ac2fd9e49f148abbaef3e2691eb614"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/hinweisplatz_2026-11-02/README.md",
+    "bytes": 3580,
+    "sha256": "84ea8d5f24b46e1f375245ea54fed8ed6fb5b88131447363702d88276a7f0e95"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/leistung_seitenleiste_2026-11-01/README.md",
+    "bytes": 6864,
+    "sha256": "445555f7ed9dcc3a3c9e3b0840dc36bf982ca314ef775be2632e21bba9d7d435"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/oberflaeche_2026-11-02/README.md",
+    "bytes": 5289,
+    "sha256": "1b78710a47cd957c106edf10e7ef40759cada8e80c2c288ed776ebd560131f51"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/oeffentliche_beta_2026-11-02/README.md",
+    "bytes": 11065,
+    "sha256": "167f8041222586133964e577ccb1642e0526eb5aad9036859c7ff61397168b1b"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/pixelsymbole_2026-11-02/README.md",
+    "bytes": 4717,
+    "sha256": "03e1404690957e594181da55976f60e59b30d5275561e095ddcda20bedbf890f"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/releaseaudit_2026-11-03/README.md",
+    "bytes": 7749,
+    "sha256": "eb0ea3a43dce3ac2d52dbcf7370390627a40a53329ed67a8d9c9b314325e2ec8"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/roboto_mono_2026-11-03/README.md",
+    "bytes": 5742,
+    "sha256": "f46a55b17b7146b8de3f3add25af067f89600dcb03ed0ebb47c5614019093a6e"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/schriftstile_2026-11-03/README.md",
+    "bytes": 6694,
+    "sha256": "efdbd9a4e782d7f6936a65b2f2647a1773b02ed60c14bf09436fde867bb0f2de"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/schriftvalidierung_2026-11-03/README.md",
+    "bytes": 4756,
+    "sha256": "526d3e799c3f39a6a9ffdbd5db9da7779cd51636b3141e1fb6282965751aed53"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/startseitenlayout_2026-11-02/README.md",
+    "bytes": 1914,
+    "sha256": "6a21b89e74f3a22e1c2d996d951b8c9d9737ec3ed4da3d9d8f52ad0b1e3e5e4f"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/timeoutdiagnose_2026-11-02/README.md",
+    "bytes": 2251,
+    "sha256": "069a5385f1a5ec14f917b23557b5606b9c493a61ac9b558b9be1b0d295eaa671"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/werkzeugzeile_2026-11-02/README.md",
+    "bytes": 3281,
+    "sha256": "ce4f1eaf790f575ea1a5ce454cfe7023d7b1b57190123b11205a791e8c7e4d23"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.0/windows_abnahme_2026-11-02/README.md",
+    "bytes": 4997,
+    "sha256": "4f8a59245f5d893414d2ceb14509174b63822eb98bdce4e31c2f9f81bdffc551"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.1/ci246_2026-11-03/README.md",
+    "bytes": 3688,
+    "sha256": "56cd2d1c8a215cc2d57e8e349e63e5b1ce89af73ee040f06859c1b446ebb2976"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.1/kartenflaechen_2026-11-03/README.md",
+    "bytes": 2938,
+    "sha256": "62d5f34a2f83da27d178f44a76e8ab1c0ea2277046b11436c8d7d1668b9762dc"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.1/schriftgewicht_2026-11-03/README.md",
+    "bytes": 2636,
+    "sha256": "a2890da9d10ace31ac160194803c765b6a92a7df0c9a3cc5a799e801031b09ba"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.2/ablageabgleich_2026-11-03/README.md",
+    "bytes": 5149,
+    "sha256": "302b07e5a65f18a8e8f5c337e9083855a6baa18d42132a52ec3cae81aa160d3d"
+  },
+  {
+    "path": "01_Repository/Glide/tests/qa-3.50.2/ci247_2026-11-03/README.md",
+    "bytes": 7118,
+    "sha256": "c250e432374d69e648291776ceaa013201b8e0d138c9b863418afbe567a54820"
+  },
+  {
+    "path": "01_Repository/Glide/tests/tools/README.md",
+    "bytes": 9197,
+    "sha256": "78d156db74fa3130133baeb03ee6851b50418ebef676a0f288c29a2e62f96089"
+  },
+  {
+    "path": "05_Probelisten_Testdaten/README.md",
+    "bytes": 2628,
+    "sha256": "8e7fe14e33dba70552ec355ea8fb5fed17dd93d90bc894819c8d116bdf6180a8"
+  },
+  {
+    "path": "05_Probelisten_Testdaten/Showcase/README.md",
+    "bytes": 6370,
+    "sha256": "c19ea71d5cd30ec59f6c80090ac5a23faddf1dc42d7d00a1e0a166dd5bd15999"
+  },
+  {
+    "path": "07_Python-Versionen/README.md",
+    "bytes": 6485,
+    "sha256": "18c074ff2c66f41cae1459535892ad7963b56c479f6a29ef854c8c1d5b35947d"
+  },
+  {
+    "path": "07_Python-Versionen/Archiv/README.md",
+    "bytes": 1339,
+    "sha256": "939cbdc4ccd0e85f7970db116f33495831438f7d309f716ef9df3b835b99e73f"
+  },
+  {
+    "path": "07_Python-Versionen/resources/fonts/OFL-Fraunces.txt",
+    "bytes": 4485,
+    "sha256": "720d772b526b33cc1bd2abb5c8735fea5b0fc5b742cb171b571d7ad62aae0496"
+  },
+  {
+    "path": "07_Python-Versionen/resources/fonts/OFL-PixelifySans.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "07_Python-Versionen/resources/fonts/OFL-PlayfairDisplay.txt",
+    "bytes": 4543,
+    "sha256": "4e6be9d19455d7cb092412984ebf3c55d26b19dd8f8452962bf432ec0a9c9dcb"
+  },
+  {
+    "path": "07_Python-Versionen/resources/fonts/OFL-RobotoMono.txt",
+    "bytes": 4488,
+    "sha256": "ffd9f334604a352ad52ee0a7159c31bdafaf5f8465e5b9f9eb5c1f4924343183"
+  },
+  {
+    "path": "07_Python-Versionen/resources/fonts/OFL-Rubik.txt",
+    "bytes": 4477,
+    "sha256": "fbf425c49bf998fb9cc1b52f8ca27d5f84dec079b60c40f654f242b52474d536"
+  },
+  {
+    "path": "07_Python-Versionen/resources/timezones/LICENSE-CLDR.txt",
+    "bytes": 2074,
+    "sha256": "ef18e9efc5cf59a48699eedf179924c2ba157d87fa88e38465d6aaa3a5f0a6c6"
+  },
+  {
+    "path": "07_Python-Versionen/resources/timezones/LICENSE-iana.txt",
+    "bytes": 257,
+    "sha256": "025a35028a91f66b8cb1708b01df3f31cd6d3320d00ef2aaf835393270841551"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/VERGLEICH_2026-10-29.md",
+    "bytes": 13611,
+    "sha256": "9814601d9f337fbbd8f8bd0213a6150ca9ff389c03eacdb3a24eea981c34d8dd"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/Macbook-M2/README.md",
+    "bytes": 5547,
+    "sha256": "3b3eebfb0f9610e6a17706ea104b4b4a75818515878c72e164c3e6a421e30af1"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/Macbook-M2/g1031-zoomkorrektur/zoomprobe_vorher.txt",
+    "bytes": 378,
+    "sha256": "e0d353bccfcf33810825444c07e3678a9650ff7438cb1a5ffb001cbb010b8263"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/VERGLEICH_2026-10-29.md",
+    "bytes": 5070,
+    "sha256": "0ca5f6ba198f3ec2596171596785d313833af00dfb93982e0676a7e04e09bbb2"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/diagnose_ui_neustart_2026-10-29/README.md",
+    "bytes": 3448,
+    "sha256": "ae7510c95fc9682cc3a742869a3885430a5fe4047b9aec6ed64f5a35aaee909d"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/historisch_3.48.0/README.md",
+    "bytes": 9163,
+    "sha256": "cb307c7e7e28768e8cb915a4826d7cd923200368e10642b804830914dbe7dbbe"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/lauf-polrkoaw/009-test_datenintegritaet/temp/glide-integritaet-1n94aa7n/Glide/fehlerprotokoll.txt",
+    "bytes": 136,
+    "sha256": "2ec34c9859f988cdf742b65ef0234d7c96c9bb70eb727740794158a94f01a58e"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/lauf-polrkoaw/012-audit_app/temp/glide-audit-jdf_6_2w/roundtrip.txt",
+    "bytes": 174,
+    "sha256": "c59dcf3b000e56a73a43a8f2f96401be1ae0b1c45f58cf77ea8ba98b9828bdea"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/pc1-amd-voll-2026-10-29_090909/git_status_vorher.txt",
+    "bytes": 15854,
+    "sha256": "f2a23a797642579e2de6a4ca6a489a75b1f978aebb7847a2c66712cce73a5929"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/pc1-amd-voll-2026-10-29_090909/README.md",
+    "bytes": 2083,
+    "sha256": "aa835e74ed89534f621c3900f32f2b920ff1cd118d54dc9bc18507f91279e12f"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/v1029-1947/README.md",
+    "bytes": 2543,
+    "sha256": "f8d658d8e8a572be684ae7590dcdddce41d002c2bb346ac5f4066b54fa813df0"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/windows-version.txt",
+    "bytes": 517,
+    "sha256": "9df77e450fd33c507197475a57edd051c9dfac4543b400c89f65f35e4adf4578"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/CLDR-LICENSE.txt",
+    "bytes": 2033,
+    "sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/Glide-Lizenzstatus.md",
+    "bytes": 266,
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/Henry-Spencer-Regex-LICENSE.txt",
+    "bytes": 1454,
+    "sha256": "7f5de5c41af220787ce29c79917af6a590a24b80d93a4ed3d6dbf7d8094af49a"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/IANA-LICENSE.txt",
+    "bytes": 252,
+    "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/libmpdec-COPYRIGHT.txt",
+    "bytes": 1285,
+    "sha256": "2713324211652ce4a60e6e21e54f9dc3004299e591b0933a352f1a89c5fb53c2"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/libtommath-LICENSE.txt",
+    "bytes": 1257,
+    "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/nanosvg.h-LICENSE.txt",
+    "bytes": 1268,
+    "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/nanosvgrast.h-LICENSE.txt",
+    "bytes": 1037,
+    "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/OpenSSL-LICENSE.txt",
+    "bytes": 10175,
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/PixelifySans-OFL.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/pyinstaller-COPYING.txt",
+    "bytes": 32604,
+    "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/Python-LICENSE.txt",
+    "bytes": 35407,
+    "sha256": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/pywin32-ctypes-LICENSE.txt",
+    "bytes": 1644,
+    "sha256": "dfa83b3e2709adfcdb838d9ad55823ca674abb780e60563d9dd9544ccbf785e9"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/setuptools-LICENSE.txt",
+    "bytes": 1107,
+    "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/Tcl-LICENSE.txt",
+    "bytes": 2255,
+    "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/Tk-LICENSE.txt",
+    "bytes": 2267,
+    "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/tkdnd-LICENSE.txt",
+    "bytes": 1749,
+    "sha256": "d4764f73ef60ec2f61a1bd677cbbf0a945ce69377903c1366b0c18a9ef60f268"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/utf8proc-LICENSE.txt",
+    "bytes": 5125,
+    "sha256": "3b510150d34f248a221bb88e1d811238d6c6c18b51231822c42974c39bb07256"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/XZ-COPYING.txt",
+    "bytes": 2775,
+    "sha256": "bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/zlib-LICENSE.txt",
+    "bytes": 1002,
+    "sha256": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/zlib-ng-LICENSE.md",
+    "bytes": 867,
+    "sha256": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/licenses/Zstandard-LICENSE.txt",
+    "bytes": 1549,
+    "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/resources/fonts/OFL-PixelifySans.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/resources/timezones/LICENSE-CLDR.txt",
+    "bytes": 2033,
+    "sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0012/paket/bau/quelle/resources/timezones/LICENSE-iana.txt",
+    "bytes": 252,
+    "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/windows-version.txt",
+    "bytes": 517,
+    "sha256": "9df77e450fd33c507197475a57edd051c9dfac4543b400c89f65f35e4adf4578"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/CLDR-LICENSE.txt",
+    "bytes": 2033,
+    "sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/Glide-Lizenzstatus.md",
+    "bytes": 266,
+    "sha256": "4539a18261bea17f31fa4722cea253870ee98e2c9f212094195028523bd2d33e"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/Henry-Spencer-Regex-LICENSE.txt",
+    "bytes": 1454,
+    "sha256": "7f5de5c41af220787ce29c79917af6a590a24b80d93a4ed3d6dbf7d8094af49a"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/IANA-LICENSE.txt",
+    "bytes": 252,
+    "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/libmpdec-COPYRIGHT.txt",
+    "bytes": 1285,
+    "sha256": "2713324211652ce4a60e6e21e54f9dc3004299e591b0933a352f1a89c5fb53c2"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/libtommath-LICENSE.txt",
+    "bytes": 1257,
+    "sha256": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/nanosvg.h-LICENSE.txt",
+    "bytes": 1268,
+    "sha256": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/nanosvgrast.h-LICENSE.txt",
+    "bytes": 1037,
+    "sha256": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/OpenSSL-LICENSE.txt",
+    "bytes": 10175,
+    "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/PixelifySans-OFL.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/pyinstaller-COPYING.txt",
+    "bytes": 32604,
+    "sha256": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/Python-LICENSE.txt",
+    "bytes": 35407,
+    "sha256": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/pywin32-ctypes-LICENSE.txt",
+    "bytes": 1644,
+    "sha256": "dfa83b3e2709adfcdb838d9ad55823ca674abb780e60563d9dd9544ccbf785e9"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/setuptools-LICENSE.txt",
+    "bytes": 1107,
+    "sha256": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/Tcl-LICENSE.txt",
+    "bytes": 2255,
+    "sha256": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/Tk-LICENSE.txt",
+    "bytes": 2267,
+    "sha256": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/tkdnd-LICENSE.txt",
+    "bytes": 1749,
+    "sha256": "d4764f73ef60ec2f61a1bd677cbbf0a945ce69377903c1366b0c18a9ef60f268"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/utf8proc-LICENSE.txt",
+    "bytes": 5125,
+    "sha256": "3b510150d34f248a221bb88e1d811238d6c6c18b51231822c42974c39bb07256"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/XZ-COPYING.txt",
+    "bytes": 2775,
+    "sha256": "bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/zlib-LICENSE.txt",
+    "bytes": 1002,
+    "sha256": "e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/zlib-ng-LICENSE.md",
+    "bytes": 867,
+    "sha256": "6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/licenses/Zstandard-LICENSE.txt",
+    "bytes": 1549,
+    "sha256": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/resources/fonts/OFL-PixelifySans.txt",
+    "bytes": 4488,
+    "sha256": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/resources/timezones/LICENSE-CLDR.txt",
+    "bytes": 2033,
+    "sha256": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-01-AMD/w1102-0128/paket/bau/quelle/resources/timezones/LICENSE-iana.txt",
+    "bytes": 252,
+    "sha256": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-02-Intel/README.md",
+    "bytes": 2481,
+    "sha256": "47349304f1f13bee4e2cef64ce11aa09e2dda2ffe24f56d713714b2ba3069d3d"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-02-Intel/diagnose_3.48.0/README.md",
+    "bytes": 13632,
+    "sha256": "e6e236a4449119476adb8cb399753840c1067c223f754c55f3b21e8ed813fe4e"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-02-Intel/last_fenster_3.48.0/README.md",
+    "bytes": 14741,
+    "sha256": "5f20243fc3aa749f967e2370e7395b865e6a124cfa36b476a74773653a9b1621"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-02-Intel/nachlauf_3.49.0/README.md",
+    "bytes": 12735,
+    "sha256": "84cee1cbf6dc8b92678bf27eb5421ea263e90ab3631eaf9cf4c19df14b1c8bda"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-02-Intel/nachlauf_3.49.0_neue_eingaenge/README.md",
+    "bytes": 18732,
+    "sha256": "62d6a3ae0180d8f5f5eefa3254e1f072235abc406c6871e84e71585fb2071924"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-02-Intel/python315_3.48.0/README.md",
+    "bytes": 7064,
+    "sha256": "ab4fd31b842f18b8ed8c54c6e614c3e398135038faa04cd394d17c4b527d7b32"
+  },
+  {
+    "path": "13_TK-Test-Umgebung/PC-02-Intel/python315_3.48.0/WA-41-Python-Fehler-Analyse.md",
+    "bytes": 7064,
+    "sha256": "ab4fd31b842f18b8ed8c54c6e614c3e398135038faa04cd394d17c4b527d7b32"
+  },
+  {
+    "path": "20_Grafik_Master/README.md",
+    "bytes": 8481,
+    "sha256": "96614fc4a7c8bfe0cbb6f03307c0d3562b9191452836d9b45587cab3ec6ba8fe"
+  },
+  {
+    "path": "20_Grafik_Master/07_Fonts/01_Rubik/OFL.txt",
+    "bytes": 4477,
+    "sha256": "fbf425c49bf998fb9cc1b52f8ca27d5f84dec079b60c40f654f242b52474d536"
+  },
+  {
+    "path": "20_Grafik_Master/07_Fonts/01_Rubik/README.txt",
+    "bytes": 2536,
+    "sha256": "2d8a2460c83d7f90378a3e811522e2b3e4d8027d5a71ae20530fa674c3bb2d23"
+  },
+  {
+    "path": "20_Grafik_Master/07_Fonts/02_Roboto_Mono/OFL.txt",
+    "bytes": 4488,
+    "sha256": "ffd9f334604a352ad52ee0a7159c31bdafaf5f8465e5b9f9eb5c1f4924343183"
+  },
+  {
+    "path": "20_Grafik_Master/07_Fonts/02_Roboto_Mono/README.txt",
+    "bytes": 2550,
+    "sha256": "d59c69b3e89f8080110267bc795874a776f72c567a8a9c0e9dc60b0b1cd3f2bc"
+  },
+  {
+    "path": "20_Grafik_Master/07_Fonts/03_Playfair_Display/OFL.txt",
+    "bytes": 4543,
+    "sha256": "4e6be9d19455d7cb092412984ebf3c55d26b19dd8f8452962bf432ec0a9c9dcb"
+  },
+  {
+    "path": "20_Grafik_Master/07_Fonts/03_Playfair_Display/README.txt",
+    "bytes": 2817,
+    "sha256": "08fb6c6fc98e923e31b36fd5dc5a38648cbf8e55f62f175fb8c0b8a2684a4561"
+  },
+  {
+    "path": "20_Grafik_Master/07_Fonts/04_Fraunces/OFL.txt",
+    "bytes": 4485,
+    "sha256": "720d772b526b33cc1bd2abb5c8735fea5b0fc5b742cb171b571d7ad62aae0496"
+  },
+  {
+    "path": "20_Grafik_Master/07_Fonts/04_Fraunces/README.txt",
+    "bytes": 3925,
+    "sha256": "d3fb5b387283a2674bc9cdb5f9cfabb334837c55de4c001bce0000fd557df506"
+  }
+]

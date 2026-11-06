@@ -65,11 +65,19 @@ window.conf
 # Ablageprüfung, Kürzung mit scripts/pflege/ablage_kuerzen.py).
 **/[Aa]rchiv/
 !07_Python-Versionen/Archiv/
+# Expliziter Benutzerauftrag 05.11.2026: bisherige Logo-Dateien aufbewahren.
+!20_Grafik_Master/01_Logo/Archiv/
+!20_Grafik_Master/01_Logo/Archiv/**
 *_Z/
 *.fetch
 *.orig
 *.bak
 *~
+# Zwischenablagen von Grafikprogrammen (z. B. 206 MB `_verification_temp`, 06.11.2026)
+_verification_temp
+# OneDrive-Konfliktkopien des Mac (Gerätename im Dateinamen) nie einchecken;
+# Inhalte zuerst in die Hauptdatei zusammenführen.
+*-MacBook Pro Max Ultra.*
 
 # --- Werkzeuge, Builds, Betriebssystem ---------------------------------------
 __pycache__/

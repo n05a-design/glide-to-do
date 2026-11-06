@@ -96,7 +96,23 @@ with tempfile.TemporaryDirectory(prefix="glide-features328-") as folder:
         # Formatieren bleibt über Rechtsklick, Formatleiste und Kürzel.
         assert isinstance(editor, mod.NoteEditor)
         # B14 (15.10.2026): „Aufgabe“ ohne Kästchen, wie alle übrigen Knöpfe der Leiste.
-        assert labels == ["Überschrift", "Liste", "Nummeriert", "Aufgabe", "Zitat", "Code", "Bild", "Mehr"], labels
+        assert labels == ["Liste", "Nummeriert", "Aufgabe", "Zitat", "Bild", "Mehr"], labels
+        # Die reduzierte Leiste bewahrt Überschriften und Code in den Blockaktionen.
+        block_menu = editor.build_context_menu()
+        try:
+            convert_index = next(i for i in range(block_menu.index("end") + 1)
+                                 if block_menu.type(i) == "cascade"
+                                 and block_menu.entrycget(i, "label") == "Umwandeln in")
+            convert_menu = block_menu.nametowidget(str(block_menu.entrycget(convert_index, "menu")))
+            choices = {str(convert_menu.entrycget(i, "label")).strip(" ✓"): i
+                       for i in range(convert_menu.index("end") + 1)}
+            for label in ("Überschrift 1", "Überschrift 2", "Überschrift 3", "Überschrift 4", "Code"):
+                index = choices[label]
+                assert convert_menu.type(index) == "command"
+                assert convert_menu.entrycget(index, "state") == "normal"
+                assert convert_menu.entrycget(index, "command")
+        finally:
+            block_menu.destroy()
 
         # Gismo aktualisiert beim Füttern nur seinen Karteninhalt. Ein kompletter
         # Startseiten-Neuaufbau erzeugte besonders im Dopamin-Design einen

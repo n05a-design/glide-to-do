@@ -4,10 +4,19 @@ import sys
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'src/glide'))
-from content_search import content_excerpt, list_content, match_content, search_key, title_rank
+from content_search import content_excerpt, list_content, match_content, search_key, title_rank, matching_templates
 
 
 class ContentSearchTests(unittest.TestCase):
+    def test_template_search_title_description_nested_tasks_and_clear(self):
+        values = [{"id": "a", "title": "Tagesplanung", "note": "Straße prüfen", "items": [{"text": "Änderung freigeben"}]},
+                  {"id": "b", "title": "Projektstart", "lists": [{"items": ["Kosten klären"]}]}]
+        self.assertEqual(matching_templates(values, "STRASSE aenderung"), [values[0]])
+        self.assertEqual(matching_templates(values, "kosten"), [values[1]])
+        self.assertEqual(matching_templates(values, "keine Treffer"), [])
+        self.assertEqual(matching_templates(values, "  "), values)
+        self.assertEqual(values[0]["title"], "Tagesplanung")
+
     def test_existing_normalization(self):
         self.assertEqual(search_key('  ÄÖÜ\nStraße  '), 'aeoeue strasse')
         self.assertEqual(search_key(None), '')

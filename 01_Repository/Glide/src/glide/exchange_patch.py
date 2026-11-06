@@ -13,6 +13,7 @@ Dieses Modul liest und schreibt keine Dateien und ändert keine Daten.
 import hashlib
 import json
 import re
+from ui_design import TITLE_MAX_CHARS
 
 FORMAT = "glide.exchange"
 CONTEXT_FORMAT = "glide.context"
@@ -106,8 +107,8 @@ def parse_patch(data):
 def validate_value(feld, wert):
     """Normalisierter Wert oder ValueError mit einer verständlichen Meldung."""
     if feld == "title":
-        if not isinstance(wert, str) or not wert.strip() or len(wert) > 500:
-            raise ValueError("Titel muss Text mit 1 bis 500 Zeichen sein")
+        if not isinstance(wert, str) or not wert.strip() or len(wert) > TITLE_MAX_CHARS:
+            raise ValueError(f"Titel muss Text mit 1 bis {TITLE_MAX_CHARS} Zeichen sein")
         return " ".join(wert.split())
     if feld == "description":
         if not isinstance(wert, str) or len(wert) > 20000:

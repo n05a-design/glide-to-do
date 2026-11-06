@@ -59,7 +59,7 @@ def fall_dateien(run):
                 while not isinstance(host, run.mod.tk.Canvas):
                     host = host.master
                 assert field.arrow.winfo_rootx() + field.arrow.winfo_width() <= host.winfo_rootx() + host.winfo_width(), 'Auswahlpfeil außerhalb des sichtbaren Bereichs'
-            for label in ('Abbrechen', 'In Zwischenablage kopieren', 'Speichern'):
+            for label in ('Abbrechen', 'Kopieren', 'Speichern'):
                 w = button(dialog, label)
                 assert w.winfo_rooty() + w.winfo_height() <= dialog.winfo_rooty() + dialog.winfo_height()
             if recipe['id'] == 'summarize' and getattr(run, 'capture', None):
@@ -90,12 +90,12 @@ def fall_kopieren_ohne_auftrag(run):
     def modal(dialog, *args, **kwargs):
         menu = choice(run, dialog, 'Mitgeliefert')
         assert menu.variable.get() == 'Ohne Auftrag'
-        button(dialog, 'In Zwischenablage kopieren').command()
+        button(dialog, 'Kopieren').command()
         plain = json.loads(captured[-1])
         expected = app.build_exchange_payload(lists=[app.current_list()], folders=[])
         assert plain == expected
         menu.variable.set(next(v for v in menu.options if v.endswith(' · Beschreibung zusammenfassen')))
-        button(dialog, 'In Zwischenablage kopieren').command()
+        button(dialog, 'Kopieren').command()
         packaged = json.loads(captured[-1]); expected = app.build_exchange_context([app.current_list()])
         assert packaged['items'] == expected['items']
         assert packaged['instructions'].startswith(expected['instructions'])
@@ -114,6 +114,9 @@ def fall_eigener_neustart_backup(run):
     def modal(dialog, *args, **kwargs):
         if dialog.title() == 'Eigener Auftrag':
             entry = next(w for w in widgets(dialog) if isinstance(w, run.mod.tk.Entry))
+            entry.insert(0, 'Ü' * 41)
+            assert len(entry.get()) <= app.CONTAINER_TITLE_MAX
+            entry.delete(0, 'end')
             entry.insert(0, 'Meine Zusammenfassung')
             text = next(w for w in widgets(dialog) if isinstance(w, run.mod.tk.Text))
             text.insert('1.0', 'Kürze nur die Zusammenfassung und erhalte den Originaltext.')
@@ -122,7 +125,7 @@ def fall_eigener_neustart_backup(run):
                 'Eigener Auftrag nicht gespeichert', getattr(app, '_data_read_only', None),
                 [w.cget('text') for w in widgets(dialog) if isinstance(w, run.mod.tk.Label)] if dialog.winfo_exists() else 'geschlossen')
         else:
-            button(dialog, 'Eigenen Auftrag bearbeiten').command()
+            button(dialog, 'Auftrag bearbeiten').command()
             menu = choice(run, dialog, 'Mitgeliefert')
             assert 'Eigener · Meine Zusammenfassung' == menu.variable.get(), (menu.variable.get(), app.settings.get('exchange_recipes'), run.meldungen)
             dialog.destroy()
@@ -194,6 +197,12 @@ def fall_fehler_scope(run):
     own = {**recipe, 'id': 'own-test', 'title': 'Mein Auftrag'}
     before = copy.deepcopy(app.settings)
     disk = Path(run.mod.SETTINGS_FILE).read_bytes()
+    try:
+        app.save_exchange_recipe({**own, 'title': 'Ü' * 41})
+        raise AssertionError('41 Zeichen am Speichereinstieg angenommen')
+    except ValueError as exc:
+        assert '40' in str(exc)
+    assert app.settings == before and Path(run.mod.SETTINGS_FILE).read_bytes() == disk
     with patch.object(app, 'write_json_atomic', side_effect=OSError('Prüffehler')):
         assert not app.save_exchange_recipe(own)
     assert app.settings == before and Path(run.mod.SETTINGS_FILE).read_bytes() == disk

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Zeigt, aus welcher Schrift Tk jedes Oberflächensymbol tatsächlich zeichnet.
+"""Prüft die freigegebene Schriftzuordnung jedes tatsächlich gezeichneten Symbols.
 
 Warum das nötig ist: Tk misst und setzt mit der eingestellten Schrift. Fehlt
 darin ein Zeichen, springt das Betriebssystem still auf eine Ersatzschrift um.
@@ -59,22 +59,27 @@ def main():
         print(f"Angepasste Zeichen: {len(app._symbol_changes)}")
         fazit = []
         for weight in ("normal", "bold"):
-            schrift = tkfont.Font(root=root, family=family, size=12, weight=weight)
-            eingestellt = str(schrift.actual("family"))
-            print(f"\nSchnitt {weight} – eingestellt: {eingestellt}")
+            print(f"\nSchnitt {weight} – UI-Schrift: {family}")
             for name, zeichen in symbole.items():
+                erwartet = getattr(app, "_symbol_fonts", {}).get(name, family)
+                erlaubt = {family, mod.glide_symbols.BUNDLED_SYMBOL_FAMILY,
+                           *mod.glide_symbols.SYMBOL_FONT_FALLBACKS.get(name, ())}
+                schrift = tkfont.Font(root=root, font=app.symbol_font(name, 12))
+                schrift.configure(weight=weight)
+                eingestellt = str(schrift.actual("family"))
                 familien = list(dict.fromkeys(str(root.tk.call("font", "actual", schrift.name,
                                                                "-family", char)) for char in zeichen))
-                ersatz = any(f.casefold() != eingestellt.casefold() for f in familien)
+                ersatz = (erwartet not in erlaubt or eingestellt.casefold() != erwartet.casefold()
+                          or any(f.casefold() != erwartet.casefold() for f in familien))
                 print(f"  {name:<18} {zeichen:<8} {schrift.measure(zeichen):>5} px · "
                       f"{schrift.metrics('linespace'):>3} px hoch · {' + '.join(familien)}"
                       + (" ← Ersatzschrift" if ersatz else ""))
                 if ersatz:
                     fazit.append((weight, name, zeichen, familien))
         if fazit:
-            print(f"FEHLER: {len(fazit)} Zeichen benötigen eine Ersatzschrift.")
+            print(f"FEHLER: {len(fazit)} Zeichen verwenden eine nicht freigegebene oder unerwartete Schrift.")
             return 1
-        print("Alle aufgelösten Zeichen kommen aus der tatsächlichen UI-Schrift.")
+        print("Alle Zeichen kommen aus ihrer freigegebenen UI-, Begleit- oder gezielten Systemschrift.")
         print("Größe, Ausrichtung und DPI weiterhin auf jeder Plattform sichtbar prüfen.")
         return 0
     finally:

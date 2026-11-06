@@ -330,7 +330,7 @@ with tempfile.TemporaryDirectory(prefix="glide-reminders-") as tmp:
                     "Aufgabe öffnen", "Verschieben", "Aufgabe erledigen",
                     "Hinweis bestätigen", "Schließen",
                     f"Tageshinweise ({getattr(app, '_daily_hint_count', 0)})",
-                    "Tageshinweise einstellen",
+                    "Tageshinweise",
                 }
                 assert len(buttons) == len(expected)
                 assert {button.text for button in buttons} == expected
@@ -339,7 +339,7 @@ with tempfile.TemporaryDirectory(prefix="glide-reminders-") as tmp:
                     assert button.winfo_rooty() + button.winfo_height() <= dialog.winfo_rooty() + dialog.winfo_height()
                     assert mod.tkfont.Font(font=button.font).measure(button.text) + 24 <= button.winfo_width()
                 next(button for button in buttons if button.text.startswith("Tageshinweise (")).command()
-                next(button for button in buttons if button.text == "Tageshinweise einstellen").command()
+                next(button for button in buttons if button.text == "Tageshinweise").command()
                 assert daily_calls == ["anzeigen", "einstellen"]
                 target_id = tree.selection()[0]
                 app.search_placeholder_active = False

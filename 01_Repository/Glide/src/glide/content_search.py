@@ -18,6 +18,26 @@ def title_rank(text, key):
     return 2 if key in value else None
 
 
+def matching_templates(templates, query):
+    """Titel, Beschreibung und enthaltene Titel durchsuchen; Bestandsreihenfolge bewahren."""
+    words = search_key(query).split()
+    def texts(value):
+        if isinstance(value, dict):
+            for key, child in value.items():
+                if key in ("title", "text", "note", "description") and isinstance(child, str):
+                    yield child
+                elif isinstance(child, (dict, list)):
+                    yield from texts(child)
+        elif isinstance(value, list):
+            for child in value:
+                if isinstance(child, str):
+                    yield child
+                else:
+                    yield from texts(child)
+    return [template for template in templates
+            if all(word in search_key(" ".join(texts(template))) for word in words)]
+
+
 def list_content(entry):
     """Nur sichtbarer Text; keine IDs, Formatmarken, URLs oder Bildbytes."""
     document = entry.get('rich_note')

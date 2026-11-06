@@ -123,17 +123,39 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
         entry = app.current_list()
         editor = app.current_drawing_editor()
         assert editor is not None and editor.model.width == 128
-        assert set(editor.tool_buttons) == {"brush", "fill", "eyedropper", "line", "rect", "ellipse", "select"}
-        # Die Kontextleiste zeigt nur, was das Werkzeug braucht.
-        editor.set_tool("brush")
-        assert set(editor.size_buttons) == {1, 2, 4, 8}
-        assert {"pixel_perfect", "wrap", "symmetry_x"} <= set(editor.option_buttons)
-        editor.set_tool("fill")
-        assert not editor.size_buttons and "pattern_checker" in editor.option_buttons
-        editor.set_tool("select")
-        assert {"copy", "cut", "paste", "clear", "all"} <= set(editor.option_buttons)
-        editor.set_tool("rect")
-        assert "filled" in editor.option_buttons and set(editor.size_buttons) == {1, 2, 4, 8}
+        # D63: ein Werkzeugmenü statt sieben Knöpfen; alle Werkzeuge bleiben
+        # über das Menü und ihre Tastenkürzel erreichbar.
+        assert {key for key, _, _ in editor.TOOLS} == {"brush", "fill", "eyedropper", "line", "rect", "ellipse", "select"}
+        assert editor.tool_choice.winfo_exists() and not editor.tool_buttons
+        # D63: Die Kontextleiste ist ein Optionsmenü je Werkzeug; es bietet
+        # nur, was das Werkzeug braucht.
+        angeboten = []
+        editor._popup_drawing_choices = lambda anchor, entries: angeboten.append(
+            (anchor, [caption for caption, _command, _active in entries if caption])) or "break"
+        def optionen(tool):
+            editor.set_tool(tool)
+            angeboten.clear()
+            editor.show_tool_options()
+            assert angeboten and angeboten[-1][0] is editor.options_button
+            return angeboten[-1][1]
+        try:
+            editor.show_tool_menu()
+            assert angeboten[-1][0] is editor.tool_choice
+            assert [caption.split(" (")[0] for caption in angeboten[-1][1]] == [label for _, label, _ in editor.TOOLS]
+            groessen = {"Größe 1×1", "Größe 2×2", "Größe 4×4", "Größe 8×8"}
+            brush = optionen("brush")
+            assert groessen <= set(brush) and {"Pixelgenaue 1×1-Linie", "Über den Rand malen",
+                                               "Symmetrie: Links/rechts"} <= set(brush)
+            fill = optionen("fill")
+            assert not groessen & set(fill) and "Muster: " + dict(editor.PATTERN_CHOICES)["checker"] in fill
+            assert {"Kopieren", "Ausschneiden", "Einfügen", "Leeren", "Alles auswählen"} <= set(optionen("select"))
+            rect = optionen("rect")
+            assert "Gefüllt" in rect and groessen <= set(rect)
+            editor.set_tool("eyedropper")
+            assert editor.options_button is None
+            assert editor.tool_choice.text == "Pipette ▾"
+        finally:
+            del editor._popup_drawing_choices
         editor.set_tool("brush")
         editor.zoom = 5
         editor._auto_zoom = False
@@ -1674,7 +1696,9 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
                 wert = mod.contrast_ratio(tafel[flaeche], tafel[schrift])
                 assert wert >= schwelle, (flaeche, schrift, wert)
         assert mod.contrast_ratio(tafel["selection"], tafel["selection_text"]) >= 4.5
-        assert {tafel["clear"], tafel["flag"], tafel["accent"]} == {"#3D7BFF", "#FFD21F", "#FF3EA5"}
+        # D62: Darkmode-Gelb kommt zentral aus der Markenpflege (#FFDC0B).
+        assert mod.glide_logo.BRAND_YELLOW == "#FFDC0B"
+        assert {tafel["clear"], tafel["flag"], tafel["accent"]} == {"#3D7BFF", mod.glide_logo.BRAND_YELLOW, "#FF3EA5"}
         app.set_design("pixel")
         app.set_home_view()
         root.update()

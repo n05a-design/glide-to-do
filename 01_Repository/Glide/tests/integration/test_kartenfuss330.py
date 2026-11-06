@@ -103,7 +103,7 @@ with tempfile.TemporaryDirectory(prefix="glide-kartenfuss-") as ordner:
         reihe = ["content_toolbar", "list_frame_outer"]
 
         def zeilen():
-            namen = {str(getattr(app, name)): name for name in reihe + ["home_frame", "template_actions"]
+            namen = {str(getattr(app, name)): name for name in reihe + ["home_frame", "template_actions", "overview_search_row"]
                      if getattr(app, name, None) is not None}
             koerper = getattr(app.workspace, "body", None)
             if koerper is not None:
@@ -119,10 +119,12 @@ with tempfile.TemporaryDirectory(prefix="glide-kartenfuss-") as ordner:
                 assert children.index(app.input_frame) < children.index(app.search_frame)
                 assert app.input_frame.winfo_ismapped() and app.search_frame.winfo_ismapped()
             if erwartet == "seite":
-                rest = [name for name in stand if name not in ("home_frame", "template_actions")]
+                # D63: globale Startseitensuche als eigene Zeile über der Startseite.
+                rest = [name for name in stand if name not in ("home_frame", "template_actions", "overview_search_row")]
                 assert not rest, f"{von} → {nach}: Listenzeilen in einer Seitenansicht {stand}"
                 return
             assert "home_frame" not in stand, f"{von} → {nach}: Startseite steht noch {stand}"
+            assert "overview_search_row" not in stand, f"{von} → {nach}: Startseitensuche steht noch {stand}"
             folge = [reihe.index(name) for name in stand if name in reihe]
             assert folge == sorted(folge), f"{von} → {nach}: Zeilenfolge {stand}"
             assert not [name for name in stand if name not in reihe + ["workspace_body"]], (von, nach, stand)

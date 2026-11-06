@@ -178,6 +178,7 @@ def main():
                 "runde": runde,
                 "sekunden": round(time.perf_counter() - (ende - args.minuten * 60), 1),
                 "after_callbacks": len(getattr(app, "_after_ids", ())),
+                "tk_pending_callbacks": len(root.tk.splitlist(root.tk.call("after", "info"))),
                 "undo_staende": len(app.undo_stack),
                 "offene_erinnerungen": sum(r["state"] == "Offen / verpasst" for r in app.reminder_rows()),
                 "python_speicher_mb": round(aktuell / 1048576, 2),
@@ -214,7 +215,7 @@ def main():
         eingeschwungen = runden[max(1, len(runden) // 5):]
         erste, letzte = eingeschwungen[0], eingeschwungen[-1]
         if letzte["after_callbacks"] > erste["after_callbacks"] + 2:
-            befunde.append(f"Offene Tk-Callbacks wachsen: {erste['after_callbacks']} → {letzte['after_callbacks']}")
+            befunde.append(f"Verwaltete Tk-Callbacks wachsen: {erste['after_callbacks']} → {letzte['after_callbacks']}")
         if letzte["undo_staende"] > erste["undo_staende"] + 5:
             befunde.append(f"Undo-Stände wachsen: {erste['undo_staende']} → {letzte['undo_staende']}")
         grund = max(erste["python_speicher_mb"], 1.0)

@@ -1,0 +1,92 @@
+{
+  "version": "3.50.3",
+  "data_schema_version": 26,
+  "base_commit": "40c20fd62db6ec31b4e3668dfc9e7f1550f67974",
+  "app_sha256": "ed3fd6dd2e97d80579720713c32c64f98af0d3ffdc5e3f8cf0232bde8675f56b",
+  "runtime": {
+    "os": "Windows 11",
+    "python": "3.14.7",
+    "tcl": "9.1.0",
+    "tk": "9.1.0"
+  },
+  "python_delivery": {
+    "code_files_equal": 92,
+    "resource_files_equal": 171,
+    "differences": []
+  },
+  "showcase": "actual import, IDs, attachments, Undo, export, restart and delivery passed",
+  "tests": {
+    "uiux": {
+      "passed": 17,
+      "failed": 0
+    },
+    "current_app_targeted": [
+      "werkzeugzeile",
+      "menschen3503",
+      "kompakt_ansichten",
+      "aufgaben3380",
+      "planen33313",
+      "pixel3350",
+      "animation3400",
+      "editor3338",
+      "drag_performance3322",
+      "rueckmeldung330"
+    ],
+    "prior_full_work_modes": {
+      "app_sha256": "52b47d77452e6f97c96d2d768a7c088ee0faecd01aaad2b69a27af1e6967b9e1",
+      "passed": 45,
+      "failed": [
+        "werkzeugzeile"
+      ],
+      "followup": "Single pack-order correction; unchanged werkzeugzeile passes on current app. This is not a new full-matrix run on the current app hash."
+    },
+    "strict_ci": {
+      "exitcode": 0,
+      "steps_passed": 19,
+      "steps_total": 19,
+      "app_sha256": "ed3fd6dd2e97d80579720713c32c64f98af0d3ffdc5e3f8cf0232bde8675f56b",
+      "unit_tests": 1128,
+      "unit_without_system_timezones": 1128,
+      "tool_tests": 244,
+      "tool_tests_skipped": 1,
+      "source": "local Windows/Tk 9.1 strict CI ground stage",
+      "full_cross_platform_matrix": false
+    }
+  },
+  "windows_candidate": {
+    "relative_path": "build/windows/Kandidaten/Glide-3.50.3-abnahme-20261105",
+    "files_byte_equal": 132,
+    "exe_sha256": "e05aaa4fb377114e41ddf366e520325b6ed12b3537a67a03cabd51967ae31593",
+    "pe_audit_exitcode": 0,
+    "isolated_start_exitcode": 0,
+    "version": "3.50.3",
+    "tk": "9.1.0",
+    "data_isolated": true,
+    "environment": "Windows system PATH; no external Python or test variables",
+    "gui_observed": true
+  },
+  "acceptance": {
+    "original_3502": "briefing, navigation, light/dark switch confirmed; layout findings recorded",
+    "3503_retest": "Human points 1-5 passed on original native candidate; point 6 book width finding corrected in subsequent Python source 449f8aec; human width retest pending",
+    "3503_human_feedback": {
+      "date": "2026-11-05",
+      "source": "direct user chat reply: 1. passt / 2. passt / 3. passt",
+      "exe_sha256": "e05aaa4fb377114e41ddf366e520325b6ed12b3537a67a03cabd51967ae31593",
+      "data_basis": "fresh isolated synthetic showcase on current Windows machine; earlier E drive acceptance data unavailable",
+      "passed": [
+        "responsive_header",
+        "input_search_plus_reachability_and_spacing",
+        "persistent_task_actions_scrolling_and_subtrees",
+        "table_width_and_due_visibility",
+        "labels_width"
+      ],
+      "overall_acceptance": "open",
+      "remaining_finding": "Book leaves unused width; also with narrow or hidden sidebar"
+    },
+    "other_manual_blocks": "open",
+    "screenreader": "deferred by D58",
+    "native_mac_linux_matrix": "not renewed"
+  },
+  "git_transport": "none",
+  "followup": "../buchbreite_2026-11-05/ergebnis.json; original hashes and native test results above remain historical"
+}

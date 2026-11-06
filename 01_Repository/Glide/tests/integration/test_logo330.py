@@ -15,6 +15,7 @@ import subprocess
 import sys
 import tempfile
 import zipfile
+from collections import Counter
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
@@ -40,7 +41,7 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
     for name in (logo.LOGO_FILE, logo.ICON_FILE, logo.LOGO_PNG, logo.ICON_PNG):
         assert Path(logo.resource_dir(), name).is_file(), name
     svg = logo.read_svg()
-    assert logo.MASTER_FILL in svg, "Der Logo-Master ist einfarbig in Glide-Blau"
+    assert logo.MASTER_FILL in svg, "Der Logo-Master ist einfarbig in Glide-Lila"
     tinted_svg = logo.tinted(svg, "#123456")
     assert logo.MASTER_FILL not in tinted_svg and ('fill="#123456"' in tinted_svg or "fill: #123456" in tinted_svg)
     for falsch in ("rot", "#12345", "", None):
@@ -51,7 +52,7 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
         else:
             raise AssertionError(f"ungültige Farbe angenommen: {falsch!r}")
     x, y, breite, hoehe = logo.bounding_box()
-    assert 220 < x < 240 and 100 < y < 120 and 390 < breite < 420 and 600 < hoehe < 630, (x, y, breite, hoehe)
+    assert 220 < x < 225 and 90 < y < 95 and 400 < breite < 410 and 650 < hoehe < 655, (x, y, breite, hoehe)
     assert 0.6 < logo.aspect() < 0.7
     assert 'viewBox="' in logo.cropped_svg(svg, (x, y, breite, hoehe))
     assert logo.icon_margin("darwin") > 0 and logo.icon_margin("win32") == 0 and logo.icon_margin("linux") == 0
@@ -94,11 +95,14 @@ with tempfile.TemporaryDirectory(prefix="glide-logo-") as ordner:
         """Farbe eines deckenden Pixels mitten im Zeichen – aus dem Bild oder dem Polygon."""
         bild = getattr(leinwand, "_logo_image", None)
         if bild is not None:
-            for yy in range(bild.height() // 4, bild.height() // 2):
-                xx = bild.width() // 2
-                if not bild.transparency_get(xx, yy):
-                    return "#%02X%02X%02X" % bild.get(xx, yy)
-            raise AssertionError("kein deckendes Pixel im Logo")
+            # transparency_get unterscheidet nur ganz transparent/übrige.
+            # Die neue G-Kontur trifft am bisherigen ersten Probenpixel
+            # eine geglättete Kante. Die häufigste Farbe misst die Fläche,
+            # ohne eine Kantenfarbe als Vollton fehlzuinterpretieren.
+            colors = Counter(bild.get(xx, yy) for yy in range(bild.height())
+                             for xx in range(bild.width()) if not bild.transparency_get(xx, yy))
+            assert colors, "kein deckendes Pixel im Logo"
+            return "#%02X%02X%02X" % colors.most_common(1)[0][0]
         return leinwand.itemcget(leinwand.find_withtag("logo")[0], "fill").upper()
 
     def nahe(farbe, soll, toleranz=3):

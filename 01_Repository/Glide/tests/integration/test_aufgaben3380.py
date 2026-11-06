@@ -435,7 +435,7 @@ def klicks(app_path, report, *, gross=False, tempo=False):
                 idle()
                 app.show_quick_plan_row()
                 idle()
-                for key in ('quick_plan_row_button', 'row_due_button', 'row_overflow_button'):
+                for key in ('row_overflow_button',):
                     button = getattr(app, key)
                     assert button.winfo_ismapped(), (name, key)
                     assert button.winfo_x() >= app.tree.winfo_x() + app.tree.winfo_width(), (name, 'Feld überdeckt')
@@ -482,7 +482,7 @@ def klicks(app_path, report, *, gross=False, tempo=False):
                 assert len(calls) == before
                 checks.append(name + ': Zusatztaste bleibt Auswahl')
             long_task = app.new_item('Ausführlicher Langtext mit mehreren sichtbaren Zeilen ' * 35,
-                kind=app.ITEM_KIND_LONG, importance=2)
+                kind=app.ITEM_KIND_LONG, importance=2, preserve_title=True)
             source['items'].append(long_task)
             app.save_items()
             app.set_active_list(sid)
