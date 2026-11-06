@@ -20,8 +20,8 @@ Werkzeuge: nur `iconutil`, `sips` und `codesign`, die macOS mitbringt.
 
 Aufruf (aus dem Repository):
 
-    python3 packaging/macos/baue_app.py --ziel build/macos
-    python3 packaging/macos/baue_app.py --ziel build/macos --symbol anderes_1024.png
+    python3 packaging/macos/baue_app.py --ziel build/macos-vorstufe
+    python3 packaging/macos/baue_app.py --ziel build/macos-vorstufe --symbol anderes_1024.png
 
 Das Programmsymbol kommt seit dem 29.09.2026 aus dem Logo-Master:
 `assets/icons/glide_macos_1024.png`, erzeugt von `packaging/baue_symbole.py`

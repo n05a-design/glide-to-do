@@ -195,6 +195,10 @@ with tempfile.TemporaryDirectory(prefix="glide-features323-") as folder:
 
         assert links_von(app.plan_day_prev_button, app.plan_day_next_button), "◀ steht links von ▶"
         assert links_von(app.plan_day_prev_button, app.clear_search_button)
+        # D63 hängt die Tagesschalter je nach Suchplatz links oder rechts um.
+        # Suche löschen bleibt bei aktiver Anfrage unabhängig davon erreichbar.
+        assert app.clear_search_button in geschwister
+        assert app.clear_search_button.pack_info()["side"] == "right"
         assert app.plan_day_prev_button.text == "◀" and app.plan_day_next_button.text == "▶"
         app.search_var.set("")
         root.update()

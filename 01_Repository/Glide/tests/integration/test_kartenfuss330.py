@@ -119,11 +119,12 @@ with tempfile.TemporaryDirectory(prefix="glide-kartenfuss-") as ordner:
                 assert children.index(app.input_frame) < children.index(app.search_frame)
                 assert app.input_frame.winfo_ismapped() and app.search_frame.winfo_ismapped()
             if erwartet == "seite":
-                # 3.50.5: Startseite und Vorlagen tragen eine eigene Suchzeile.
+                # D63: globale Startseitensuche als eigene Zeile über der Startseite.
                 rest = [name for name in stand if name not in ("home_frame", "template_actions", "overview_search_row")]
                 assert not rest, f"{von} → {nach}: Listenzeilen in einer Seitenansicht {stand}"
                 return
-            assert "home_frame" not in stand and "overview_search_row" not in stand, f"{von} → {nach}: Startseite steht noch {stand}"
+            assert "home_frame" not in stand, f"{von} → {nach}: Startseite steht noch {stand}"
+            assert "overview_search_row" not in stand, f"{von} → {nach}: Startseitensuche steht noch {stand}"
             folge = [reihe.index(name) for name in stand if name in reihe]
             assert folge == sorted(folge), f"{von} → {nach}: Zeilenfolge {stand}"
             assert not [name for name in stand if name not in reihe + ["workspace_body"]], (von, nach, stand)

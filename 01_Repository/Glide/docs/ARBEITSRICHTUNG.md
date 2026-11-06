@@ -121,7 +121,7 @@ Wortlaute stehen in Anführungszeichen, alles andere ist Zusammenfassung. Was da
 
 ## Verbindliche Entscheidungen
 
-Neue Entscheidungen werden fortlaufend mit Datum und belegter Antwort eingetragen; nächste freie Nummer D64. D59 legte Roboto Mono als mitgelieferte Standardschrift und den durchsichtigen Pixelgrund fest; D60 führt die Schriftvorgabe als Rubik und vier klassifizierte Stile fort. D58 bezeichnet den ersten öffentlichen Stand einschließlich Blockziehen und Reader-Zurückstellung. D52–D54 stammen aus dem neuen Analyse-/Roadmapauftrag, keine Auslegung einer Featurefreigabe; D55 ist die erste Auswahl aus den E-U-Vorlagen.
+Neue Entscheidungen werden fortlaufend mit Datum und belegter Antwort eingetragen; nächste freie Nummer D66. D59 legte Roboto Mono als mitgelieferte Standardschrift und den durchsichtigen Pixelgrund fest; D60 führt die Schriftvorgabe als Rubik und vier klassifizierte Stile fort. D58 bezeichnet den ersten öffentlichen Stand einschließlich Blockziehen und Reader-Zurückstellung. D52–D54 stammen aus dem neuen Analyse-/Roadmapauftrag, keine Auslegung einer Featurefreigabe; D55 ist die erste Auswahl aus den E-U-Vorlagen.
 
 | Nr. | Entscheidung | Stand |
 |---|---|---|
@@ -214,6 +214,8 @@ Die Tabelle fasst die Anweisungen und Auswahlantworten dieses Chats zusammen; si
 | 03.10.2026 | Archive auf die sieben neuesten Versionen, Fensterbilder auf die drei neuesten; Dokumente gleichen Inhalts zusammenführen, ungenutzte Ordner auflösen |
 
 ## Beauftragt
+
+**Native Mac-Arbeiten und gesamte Prüfung, 06.11.2026:** Direkter Auftrag, alle am Mac notwendigen Arbeiten für aktuelle Glide-Version 3.50.5 zu erledigen; anschließend ausdrücklich „Volllauf, Designlauf udn allgemein alle Prüfungen starten!“ und „weiter“. Umfasst native Voll-/Design-/Grund-/Leistungs-/Dauerprüfungen, Symbole, eigenständigen arm64-Paketbau, isolierten Start und tatsächliche geprüfte Lieferung. Anwendungsversion und Format 26 erhalten; keine neue Funktionsauswahl, kein Git-/Releaseauftrag. Ergebnisse und Reststatus ausschließlich in [Plan §21.73](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2173-native-mac-arbeiten-für-3505-06112026) und im dort verlinkten Mac-Nachweis; keine neue Produktentscheidung.
 
 **Weitere Featurefortsetzung nach Zusatz-Audit (21.10.2026, Wortlaut):** „ich hatte diese Einordnung noch gefunden, verändert diese etwas bei der Umsetzung?“ und „Nach der Einschätzung weitermachen mit der Umsetzung weiterer Features.“ Die Einordnung wird gegen den lokalen Kandidaten abgeglichen; danach FP-03 Stufe 2 als zusammenhängendes Folgepaket mit gespeicherter Darstellung, Gruppierung, Sortierung, Spalten und Übernahme der aktuellen Sicht. Die Kalender-Wartezeit bleibt ein begrenzter WA-36-Prüfpunkt. Kein neuer Anbieter-/Git-/Lieferauftrag; D51 und angemessene gebündelte Prüfung gelten weiter. Details in Plan §21.8.
 

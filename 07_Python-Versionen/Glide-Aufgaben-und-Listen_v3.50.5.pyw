@@ -45006,6 +45006,9 @@ class ListApp:
 
     def _register_after(self, after_id):
         if after_id is not None:
+            # Nur lebende Aufträge behalten; ausgeführte IDs besitzen keinen Tk-Callback mehr.
+            pending = self.root.tk.splitlist(self.root.tk.call("after", "info"))
+            self._after_ids.intersection_update(pending)
             self._after_ids.add(after_id)
         return after_id
 
@@ -52577,9 +52580,11 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         ascent -= getattr(self.stats_label, "_text_ink_top", 0)
         zeile = font.metrics("linespace") if font is not None else 14
         # Die Kennzahlenzeile steht senkrecht mittig in der Unterzeile, die
-        # wegen der Labelchips höher sein kann als eine Textzeile.
-        chips = self.page_chip_row.winfo_reqheight() if self.page_chip_row.winfo_children() else zeile
-        versatz = max(0, (self.subtitle_row.winfo_reqheight() - max(1, chips)) // 2)
+        # wegen der Labelchips höher sein kann als eine Textzeile. Bezug ist
+        # immer die Textzeile: Hing die Höhe davon ab, ob gerade Chips
+        # angezeigt werden, sprang das Logo beim Wechsel zwischen Startseite
+        # und Liste um ein Pixel (Mac/Tk 9.1, 06.11.2026).
+        versatz = max(0, (self.subtitle_row.winfo_reqheight() - max(1, zeile)) // 2)
         return max(24, self.title_row.winfo_reqheight() + versatz + ascent - self.header_logo_top_inset())
 
     def header_logo_top_inset(self):
