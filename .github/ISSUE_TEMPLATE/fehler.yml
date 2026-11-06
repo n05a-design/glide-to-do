@@ -1,0 +1,59 @@
+name: Fehler melden
+description: Etwas in Glide funktioniert nicht wie beschrieben.
+title: "Fehler: "
+labels: ["Fehler"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke für die Meldung! Bitte keine echten Inhalte, Namen oder Pfade anhängen – nur künstliche Beispieldaten oder den Showcase.
+        Sicherheitslücken bitte nicht hier, sondern vertraulich nach der Sicherheitsrichtlinie (SECURITY.md) melden.
+  - type: input
+    id: version
+    attributes:
+      label: Glide-Version
+      description: Hilfe › Über Glide
+      placeholder: "3.50.5"
+    validations:
+      required: true
+  - type: dropdown
+    id: system
+    attributes:
+      label: System
+      options:
+        - Windows
+        - macOS
+        - Linux
+    validations:
+      required: true
+  - type: dropdown
+    id: fassung
+    attributes:
+      label: Fassung
+      options:
+        - Eigenständiges Paket
+        - Python-Fassung
+    validations:
+      required: true
+  - type: textarea
+    id: schritte
+    attributes:
+      label: Was hast du gemacht?
+      description: Schritte, mit denen sich der Fehler wiederholen lässt.
+      placeholder: |
+        1. Heute öffnen
+        2. …
+    validations:
+      required: true
+  - type: textarea
+    id: erwartet
+    attributes:
+      label: Was hast du erwartet, und was ist passiert?
+    validations:
+      required: true
+  - type: textarea
+    id: protokoll
+    attributes:
+      label: Fehlerprotokoll (optional)
+      description: Hilfe › Fehlerprotokoll öffnen – bitte vor dem Einfügen auf persönliche Angaben prüfen.
+      render: text

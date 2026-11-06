@@ -1,0 +1,27 @@
+name: Wunsch oder Idee
+description: Eine Verbesserung für Glide vorschlagen.
+title: "Wunsch: "
+labels: ["Wunsch"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Glide bleibt bewusst lokal und persönlich: keine Teamfunktionen, keine eigene Synchronisierung, keine Mobil-App und keine eingebaute KI.
+        Wünsche in diese Richtungen lassen sich deshalb nicht umsetzen – alles andere gern!
+  - type: textarea
+    id: situation
+    attributes:
+      label: In welcher Situation fehlt dir etwas?
+      description: Beschreibe den Alltag, nicht gleich die Lösung.
+    validations:
+      required: true
+  - type: textarea
+    id: vorschlag
+    attributes:
+      label: Was würde dir helfen?
+    validations:
+      required: true
+  - type: textarea
+    id: vorbild
+    attributes:
+      label: Kennst du das aus einer anderen App? (optional)

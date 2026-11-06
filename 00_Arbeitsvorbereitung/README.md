@@ -17,6 +17,6 @@ Am 04.11.2026 zusammengeführt und gekürzt: historische Sitzungs- und Lieferzus
 
 ## Verbindliche Fachquellen
 
-[Arbeitsregeln](../01_Repository/Glide/AGENTS.md), [Arbeitsrichtung und Entscheidungen D01–D60](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), [Design Richtlinien](../01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) und [vollständiger Dokumentationsindex](../01_Repository/Glide/docs/00_INDEX.md) ergänzen diese Planung nach Gegenstand. Neue Produktentscheidungen beginnen bei D61; Vorschläge sind keine Beauftragung.
+[Arbeitsregeln](../01_Repository/Glide/AGENTS.md), [Arbeitsrichtung und Entscheidungen D01–D63](../01_Repository/Glide/docs/ARBEITSRICHTUNG.md), [Design Richtlinien](../01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md), [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md) und [vollständiger Dokumentationsindex](../01_Repository/Glide/docs/00_INDEX.md) ergänzen diese Planung nach Gegenstand. Neue Produktentscheidungen beginnen bei D64; Vorschläge sind keine Beauftragung.
 
 Die 28 Originalbilder im UI-/UX-Paket enthalten teilweise Kontoangaben und bleiben lokal; bei Rechner-/Agentenwechsel ausdrücklich mitgeben. Originalauftrag, Ausführungsprompt und Bildzuordnung haben unterschiedliche Funktionen und bleiben gemeinsam erhalten. Vorfassungen anderer Dokumente trägt Git. Pflege und Aufbewahrung regelt [Dokumentenpflege](../01_Repository/Glide/docs/DOKUMENTENPFLEGE.md).
