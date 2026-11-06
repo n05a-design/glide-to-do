@@ -59,7 +59,7 @@ Untersucht wurden rund 20 Aufgaben-, Notiz- und Produktivitäts-Apps auf GitHub 
 |---|---|
 | README-Kopf mit Symbol, Nutzen, Badges, Linkzeile „Herunterladen“, Bild hell/dunkel | erledigt |
 | „Warum Glide?“, Bildraster, „Was Glide bewusst nicht ist“, „Deine Daten“, Häufige Fragen, englische Kurzfassung | erledigt |
-| Download-Tabelle mit ehrlichem Hinweis zu Anmeldung und unsignierten Paketen | erledigt; Prüfsummen stehen im QA-Bericht |
+| Download-Tabelle mit ehrlichem Hinweis zu Anmeldung und unsignierten Paketen | erledigt; zeigt seit D64 auf Releases, Prüfsummen als `.sha256` je Anhang und im QA-Bericht |
 | Issue-Formulare „Fehler melden“ und „Wunsch oder Idee“, leere Issues aus | erledigt |
 | Beschreibung zweisprachig, 20 Topics ohne Dubletten, mit `task-management-app` und `productivity-app` | erledigt (Kontoaktion auf ausdrücklichen Auftrag) |
 | Aufnahmen reproduzierbar aus dem Showcase (`tests/tools/projektseite_aufnahmen.py`) | erledigt |
@@ -68,8 +68,8 @@ Untersucht wurden rund 20 Aufgaben-, Notiz- und Produktivitäts-Apps auf GitHub 
 | CONTRIBUTING.md und SUPPORT.md (Rückmeldungen willkommen, Code nur nach Absprache, keine echten Daten) | offen; Code-Beiträge hängen an der Lizenz |
 | Social-Preview-Bild gegen 1280 × 640 / 1 MB prüfen, ggf. neu exportieren (nur Weboberfläche) | offen |
 | Seitenleiste: Packages/Deployments ausblenden, Wiki aus | offen, Kontoaktion |
-| Release-Weg technisch vorbereiten (Asset-Namen, `SHA256SUMS.txt`, `.github/release.yml`), ohne zu veröffentlichen | offen |
-| **Inhaberentscheidungen:** Lizenz (I2), GitHub-Release statt Artefakt, Signierung (I3), Englisch als Hauptsprache, Discussions, Homepage/GitHub Pages (Website-Direktvertrieb seit 27.09.2026 vorgesehen), Inhaberangaben/Marke (I1/I4), Reichweite | offen |
+| Release-Weg technisch vorbereiten, ohne zu veröffentlichen | erledigt mit D64: `.github/workflows/release.yml` erzeugt aus Tag `v<VERSION>` einen Entwurf mit Windows-ZIP, DMG, TAR und je einer `.sha256`-Datei (statt `SHA256SUMS.txt`); siehe [GitHub-Auftritt](#github-auftritt). Eine Release-Notes-Vorlage `.github/release.yml` ist nicht nötig, die Hinweise erzeugt der Workflow |
+| **Inhaberentscheidungen:** Lizenz (I2), Veröffentlichen eines Release-Entwurfs (Weg mit D64 beschlossen, Freigabe von Hand), Signierung (I3), Englisch als Hauptsprache, Discussions, Homepage/GitHub Pages (Website-Direktvertrieb seit 27.09.2026 vorgesehen), Inhaberangaben/Marke (I1/I4), Reichweite | offen |
 
 Ein öffentlicher Release bleibt nach der Regel oben an Lizenz und Signatur gebunden. Ohne Open-Source-Lizenz sind das Topic `open-source`, kostenlose OSS-Signierprogramme und die Lesart „Open-Source-App“ ausgeschlossen; Glide positioniert sich deshalb ausdrücklich als lokale, öffentlich einsehbare Desktop-App [A].
 
