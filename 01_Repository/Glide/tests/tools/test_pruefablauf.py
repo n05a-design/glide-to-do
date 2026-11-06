@@ -230,6 +230,11 @@ suite.main()
         self.assertEqual((frozen / "src/glide/neu.py").read_bytes(), new.read_bytes())
         self.assertEqual(git("status", "--porcelain").stdout, before)
         self.assertTrue((frozen.parents[1] / ".git").is_dir())
+        objects = self.project / ".git/objects"
+        for original_object in objects.glob("??/*"):
+            copied_object = frozen.parents[1] / ".git/objects" / original_object.relative_to(objects)
+            self.assertEqual(copied_object.read_bytes(), original_object.read_bytes())
+            self.assertFalse(os.path.samefile(original_object, copied_object))
         proof = json.loads((root / "quellstand.json").read_text(encoding="utf-8"))
         self.assertTrue(proof["source_unchanged"] and proof["copy_equal"])
 

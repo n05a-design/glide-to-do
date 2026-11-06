@@ -3450,6 +3450,14 @@ def fall_titellaenge3504(lauf):
     assert len(app.new_item("W" * 100)["text"]) == 40
     assert app.new_item("W" * 100)["text"].endswith("...")
     assert len(app.new_item("W" * 100, item_id="neue-feste-id")["text"]) == 40
+    old = app.new_item(legacy, preserve_title=True)
+    old["children"] = [app.new_item(legacy, preserve_title=True)]
+    restored = app.copy_items_with_new_ids([old])[0]
+    copied = app.copy_items_with_new_ids([old], preserve_titles=False)[0]
+    assert restored["text"] == legacy and restored["children"][0]["text"] == legacy
+    assert old["text"] == legacy and old["children"][0]["text"] == legacy
+    for fresh in app.walk_items([copied]):
+        assert len(fresh["text"]) <= 40 and legacy in fresh["description"]
     assert app.normalize_items([item])[0]["text"] == legacy, "Alttitel beim Laden gekürzt"
     target = next(e for e in app.lists if app.list_accepts_items(e))
     target["items"].append(item)
@@ -3459,9 +3467,10 @@ def fall_titellaenge3504(lauf):
     details["description"] = "Metadaten ändern, Alttitel bewahren"
     app.apply_task_edit(item, details)
     assert item["text"] == legacy
-    details["text"] = "Neuer Titel " * 10
+    details["text"] = ("Neuer Titel " * 10).strip()
     app.apply_task_edit(item, details)
     assert len(item["text"]) == 40 and item["text"].endswith("...")
+    assert details["text"] in item["description"], "Original der Titeländerung fehlt"
     app.tree.selection_set(item["id"])
     app.begin_item_rename(item["id"])
     entry = app._item_rename_entry

@@ -1,5 +1,7 @@
 # Änderungsverlauf
 
+**Nachtrag 06.11.2026 zu 3.50.5:** Zentrale 40-Zeichen-Regel für neue/geänderte Titel auch bei vollständigen Vorlagen, neuen Duplikaten samt Unteraufgaben, Vorlagenimport, Galeriebildtiteln und eigenen Austauschaufträgen. Vollständigen Originaltitel in Beschreibung/Notiz sichern; auch lange Notizen über Speichern/Laden erhalten. Unveränderte Alttitel, Wiederherstellung und Kalenderexport bewahren. Fach-/Kalender-/Vorlagen-/Galerie-/Dialogprüfungen erweitert. Prüfkopien verwenden `--no-hardlinks` für unabhängige Git-Objekte auch auf Laufwerk E. Version und Datenformat unverändert.
+
 ## 3.50.5 (05.11.2026) – Abnahmekorrekturen und Suchfelder
 
 - Buttonbeschriftungen zentral auf 24 Anzeigezeichen einschließlich `...` und auf die tatsächliche Pixelbreite begrenzt; vollständige Beschriftung im Tooltip und für Bedienhilfen erhalten. Lange Aktionsnamen gekürzt.

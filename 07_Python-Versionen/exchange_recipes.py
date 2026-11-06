@@ -4,6 +4,7 @@ import json
 import re
 
 from exchange_patch import FIELDS
+from ui_design import TITLE_MAX_CHARS
 
 MAX_RECIPES = 50
 MAX_INSTRUCTION = 12000
@@ -36,6 +37,15 @@ def normalize(value):
         raise ValueError('Ungültige erlaubte Auftragsfelder.')
     return dict(id=identity, title=' '.join(title.split()), mode=mode,
                 instruction=instruction.strip(), fields=list(dict.fromkeys(fields)))
+
+
+def normalize_update(value, previous=None):
+    """Neue/geänderte Titel begrenzen; unveränderte gespeicherte Aufträge erhalten."""
+    result = normalize(value)
+    previous_title = normalize(previous)['title'] if previous is not None else None
+    if result['title'] != previous_title and len(result['title']) > TITLE_MAX_CHARS:
+        raise ValueError(f'Ein neuer oder geänderter Auftragstitel darf höchstens {TITLE_MAX_CHARS} Zeichen enthalten.')
+    return result
 
 
 def records(values):

@@ -1,5 +1,7 @@
 # Funktionen – Glide
 
+**Titelabgleich 06.11.2026:** Neue Titel und tatsächliches Umbenennen bleiben auf 40 Zeichen begrenzt. Das gilt auch für vollständige Vorlagenpayloads, ausdrücklich neue Duplikate einschließlich Unteraufgaben, Vorlagenimport, manuell vergebene Galeriebildtitel und eigene Austauschaufträge. Automatisch gekürzte Aufgaben-/Vorlagen-/Galerietitel sichern das vollständige Original in Beschreibung bzw. Notiz, auch über erneutes Speichern/Laden. Bestehende unveränderte Titel, reine Metadatenänderungen, Sicherungswiederherstellung und Export erhalten ihre Originale. Eingabefelder und Speichereinstiege sichern dieselbe Regel; geänderte zu lange Auftragstitel werden mit Hinweis abgelehnt.
+
 ## Abnahmekorrekturen und Suchfelder 3.50.5 (05.11.2026)
 
 Buttons zeigen höchstens 24 Zeichen einschließlich `...` und werden bei weniger Platz pixelgenau weiter gekürzt; Tooltip und Bedienhilfen behalten die vollständige Beschriftung. Titel von Seiten, Notizen, Zeichnungen, Listen, Ordnern und Vorlagen sowie neue/geänderte Aufgaben und benannte Ansichten/Bereiche sind auf 40 Zeichen begrenzt. Bestehende längere Aufgabentitel bleiben beim Laden und bei reinen Metadatenänderungen erhalten. Bei automatischer Neuanlage sichert die Beschreibung den vollständigen Originaltitel; längere freie Inhalte bleiben als Absatz/Beschreibung möglich. Text-Undo darf Originaltitel wiederherstellen.

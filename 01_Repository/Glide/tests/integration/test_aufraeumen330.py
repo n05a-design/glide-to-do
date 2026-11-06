@@ -345,6 +345,22 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
         assert ansicht.detail_index == 0
         erstes = galerie["attachments"][0]["id"]
         assert app.set_gallery_caption(galerie["id"], erstes, "Rotes Bild", "Notiz")
+        for size in (39, 40, 41):
+            original = "Ü" * size
+            app.set_gallery_caption(galerie["id"], erstes, original, "Notiz")
+            caption = galerie["attachments"][0]
+            assert len(caption["title"]) <= app.CONTAINER_TITLE_MAX
+            if size > app.CONTAINER_TITLE_MAX:
+                assert original in caption["note"]
+        caption["title"] = ("Altes Bild " * 8).strip()
+        legacy_title = caption["title"]
+        assert app.set_gallery_caption(galerie["id"], erstes, legacy_title, "Neue Notiz")
+        assert caption["title"] == legacy_title
+        long_note = "N" * 4000
+        app.set_gallery_caption(galerie["id"], erstes, "W" * 41, long_note)
+        assert long_note in caption["note"] and "W" * 41 in caption["note"]
+        assert app.normalize_attachments([caption])[0]["note"] == caption["note"]
+        app.set_gallery_caption(galerie["id"], erstes, "Rotes Bild", "Notiz")
         ansicht.close_detail()
         app.remove_gallery_image(galerie["id"], galerie["attachments"][1]["id"])
         ruhe()

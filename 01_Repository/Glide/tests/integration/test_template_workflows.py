@@ -273,6 +273,32 @@ with tempfile.TemporaryDirectory(prefix='glide-template-qa-') as tmp:
         assert Path(app.resolve_attachment_path(created['attachments'][1])).read_bytes() == source.read_bytes()
         assert app.validate_template_payload(updated)
 
+        # Vollständige Vorlagen erzeugen neue Titel; der alte Quellbestand bleibt erhalten.
+        original_title = 'Ü' * 300
+        source_item = app.new_item(original_title, description='Vorlagenbeschreibung', preserve_title=True)
+        source_entry = app.new_list_object('Titelgrenzen-Vorlage', [source_item])
+        app.lists.append(source_entry)
+        assert app.save_items()
+        title_template = app.capture_template(list_id=source_entry['id'])
+        title_created = app.create_list_from_template(title_template['id'])
+        assert title_created is not None
+        title_item = title_created['items'][0]
+        assert len(title_item['text']) <= app.CONTAINER_TITLE_MAX
+        assert original_title in title_item['description']
+        assert title_item['description'].count('Originaltitel:') == 1
+        assert source_item['text'] == original_title
+        for importing in (False, True):
+            imported = app.normalize_template_records([{'title': original_title, 'note': 'Notiz'}], importing=importing)[0]
+            assert len(imported['title']) <= (40 if importing else 120)
+            if importing:
+                assert original_title in imported['note']
+                assert app.normalize_template_records([imported])[0]['note'] == imported['note']
+        long_note = 'N' * 4000
+        imported = app.normalize_template_records(
+            [{'title': original_title, 'note': long_note}], importing=True)[0]
+        assert long_note in imported['note'] and original_title in imported['note']
+        assert app.normalize_template_records([imported])[0]['note'] == imported['note']
+
         # Synthetische Mac-Trackpad-Ereignisse direkt über Diagramm, Beschriftung
         # und Schaltflächen, inklusive kleinem Delta und rein horizontaler Geste.
         # Punkt 32 (3.23.0): Bei 1000 Pixeln Fensterbreite steht die Startseite

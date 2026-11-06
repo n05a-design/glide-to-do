@@ -1,0 +1,39 @@
+{
+  "kind": "precommit_validation_not_full_matrix_completion",
+  "version": "3.50.5",
+  "data_schema": 26,
+  "base_commit": "5e63ea346ae970d49269389011ed3f793aafc0ba",
+  "branch": "codex/glide-3.50.5-titel-nachtrag",
+  "pc": "PC-01-AMD",
+  "python": "3.14.7",
+  "tcl": "9.0.4",
+  "tk": "9.0.4",
+  "app_sha256_tested_worktree": "389cf0465d9b588bec734c917e3484d033353cfaab025081b04ecee5a6341e7f",
+  "app_sha256_git_blob": "530d55d5f84a99a2ae306da604c43ab2b9b90875fe7ee435f7c806b5b8842871",
+  "line_endings": "Git normalisiert Textdateien laut .gitattributes auf LF; Prüfkopiehash bezieht sich auf die tatsächlich ausgeführten Arbeitskopiebytes.",
+  "source_python_git_blobs_equal": true,
+  "source_unchanged_at_freeze": true,
+  "frozen_copy_equal": true,
+  "frozen_files": 1740,
+  "targeted_groups": 8,
+  "targeted_passed": true,
+  "title_configurations": 32,
+  "strict_ci": {
+    "exitcode": 0,
+    "steps": 19,
+    "unit_runs": 2,
+    "unit_tests_each": 1135,
+    "tool_tests": 245,
+    "tool_skips": 1
+  },
+  "matrix_state_at_commit_preparation": "voll",
+  "remaining_stages": [
+    "voll",
+    "design",
+    "gestaltung",
+    "leistung",
+    "dauerlauf"
+  ],
+  "local_run": "E:/gq/m1106-094317",
+  "release_ready": false
+}

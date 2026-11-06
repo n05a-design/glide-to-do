@@ -2339,3 +2339,17 @@ Bewusst weiterhin ungewählt bzw. ausgeschlossen: Team-/Mehrgerätesynchronisati
 **Nacharbeit Vollmatrix:** Sieben Suiten an 3.50.3/D62/D63 angeglichen; Produktbefunde Bildfolgenexport (Popup aus Menüeintrag) und springende Kopfknöpfe bei Enge unter Windows (`test_festlayout330`) behoben, App jetzt `cb4a7aad…`. Damit sind das gelieferte Windows-Paket (`a4bfe4ed…`) und die Paketbelege neu zu erzeugen. Details im QA-Bericht.
 
 **Rest:** Übernahme des Mac-Pakets nach `build/macos`, Bau am eigenen Bauplatz mit lokaler Abnahme, menschliche Abnahme (Punkt 6/Buchbreite und Folgeblöcke), DPI/Mehrmonitor. Vollprüfung des zusammengeführten Stands über den Pushlauf; offene lokale Vollmodusläufe auf `a4bfe4ed…` behalten ihre eigenen Belege. Die lokale Aufbewahrungssicherung `%USERPROFILE%/gq/final5/aufbewahrung` (67 nur dort liegende 3.48.0-Originale) liegt nur auf dem Prüfrechner und ist gesondert zu sichern.
+
+
+### 21.71 Eigene Titel- und Prüfkopienachträge committen (06.11.2026)
+
+**Auftrag:** Titelbegrenzung überall in Implementierung, Tests und Dokumentation abgleichen; Voll-, Design-, Gestaltungs- und alle verfügbaren automatisierten Prüfungen starten. Anschließend eigener Commit der letzten Änderungen; Benutzer übernimmt vorgelagerten Merge. PR #63 und #64 sind auf `main` `5e63ea34` eingegangen.
+
+**Umsetzung:** Nur eigene Änderungen auf die gemergte Basis übertragen; Kopf-/Bildfolgenkorrekturen erhalten. Titelgrenze auch bei vollständigen Vorlagen, neuen Duplikaten/Unteraufgaben, Vorlagenimport, Galerie und eigenen Austauschaufträgen. Originale in Beschreibung/Notiz sichern; Bestandstitel, Quelle und Restore bewahren. `--no-hardlinks` für unabhängige E-Prüfkopien. App `389cf046…`, Version 3.50.5 / Format 26; 93 Code-Dateien/171 Ressourcen nach `07` abgeglichen.
+
+**Prüfung:** Drei rote Gegenproben vor der Titelkorrektur, danach acht gezielte Gruppen und strenge Grundstufe 19/19 auf `246c6c3b…` grün; Vorbelege erhalten. Neuer kombinierter Stand bekommt eigene gezielte Prüfung und strenge Grundstufe vor Commit. Breite Folge mit Vollmodus, Design/UI-UX, Gestaltung/Arbeitsmodi, Leistung und zehn Minuten Dauerlauf getrennt nachweisen. [Nachweis](../01_Repository/Glide/tests/qa-3.50.5/pc01_titel_nachtrag_2026-11-06/README.md).
+
+**Rest:** Neue Gesamt-/native Tk-9.1-/Paket- und Menschenabnahme separat. Kein eigener Merge; Commitauftrag erfasst keine fremden uncommitteten Änderungen des ursprünglichen OneDrive-Arbeitsbaums.
+
+
+**Prüfabschluss vor Commit §21.71:** Integrierter Nachtrag: acht gezielte Gruppen und strenge Grundstufe 19/19 grün, zweimal 1.135 Fachtests, 245 Werkzeugtests/ein Skip. Neue Vollmatrix unter `E:/gq/m1106-094317` aktiv; Design/Gestaltung/Leistung/Dauerlauf folgen seriell. Neue Gesamt-/Paket-/native-/Menschenabnahme bleibt offen. Commit der eigenen Änderungen auf Benutzerauftrag, Merge weiterhin beim Benutzer.

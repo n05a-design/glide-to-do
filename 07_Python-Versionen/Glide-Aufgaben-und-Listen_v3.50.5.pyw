@@ -13189,6 +13189,7 @@ class GalleryView(tk.Frame):
                          fg=theme["text"], insertbackground=theme["text"], relief="flat", highlightthickness=1,
                          highlightbackground=theme["input_border"], highlightcolor=theme["selection"])
         titel.pack(fill="x", ipady=4)
+        app.limit_title_entry(titel)
         notiz = tk.Text(unten, height=3, wrap="word", font=app_font(10), bg=theme["input"], fg=theme["text"],
                         insertbackground=theme["text"], relief="flat", highlightthickness=1,
                         highlightbackground=theme["input_border"], highlightcolor=theme["selection"])
@@ -19105,7 +19106,7 @@ class ListApp:
         return records
 
     @classmethod
-    def normalize_template_records(cls, data):
+    def normalize_template_records(cls, data, *, importing=False):
         if isinstance(data, dict) and data.get("format_version", 1) not in (1, cls.TEMPLATE_FORMAT_VERSION):
             raise ValueError("Diese Vorlagendatei verwendet eine unbekannte Formatversion.")
         source = data.get("templates") if isinstance(data, dict) else data
@@ -19119,8 +19120,11 @@ class ListApp:
             if template_id in seen:
                 template_id = uuid.uuid4().hex
             kind = raw.get("kind") if raw.get("kind") in ("list", "folder") else "list"
-            title = " ".join(str(raw.get("title") or "Vorlage").split())[:120] or "Vorlage"
-            note = str(raw.get("note") or "")[:4000]
+            original_title = " ".join(str(raw.get("title") or "Vorlage").split()) or "Vorlage"
+            title = original_title[:120]
+            note = str(raw.get("note") or "")
+            if importing:
+                title, note = glide_design.task_title(original_title, note)
             color = raw.get("color") if raw.get("color") in cls.LIST_COLOR_KEYS else None
             labels = [value for value in (raw.get("labels") or []) if isinstance(value, str)][:cls.MAX_LABELS_PER_ITEM]
             items = [str(value).strip() for value in (raw.get("items") or []) if isinstance(value, str) and value.strip()][:200]
@@ -30529,7 +30533,7 @@ class ListApp:
             if os.path.getsize(path) > self.MAX_BACKUP_TOTAL_BYTES * 2:
                 raise ValueError("Die Vorlagendatei ist zu groß.")
             with open(path, "r", encoding="utf-8-sig") as file:
-                incoming = self.normalize_template_records(glide_storage.read_stream(file))
+                incoming = self.normalize_template_records(glide_storage.read_stream(file), importing=True)
             for record in incoming:
                 if "payload" in record:
                     self.validate_template_payload(record)
@@ -30797,6 +30801,8 @@ class ListApp:
                 offset = (reference_date - date.fromisoformat(anchor)).days if anchor else 0
                 for entry in payload["lists"]:
                     for item in self.walk_items(entry.get("items", [])):
+                        item["text"], item["description"] = glide_design.task_title(
+                            item.get("text", ""), item.get("description", ""))
                         item["done"] = False
                         if offset and item.get("planned_date"):
                             item["planned_date"] = (date.fromisoformat(item["planned_date"]) + timedelta(days=offset)).isoformat()
@@ -34400,12 +34406,14 @@ class ListApp:
         changed = False
         if details.get("kind") and details["kind"] != self.item_kind(item):
             changed = self.set_item_kind(item, details["kind"]) or changed
+        title, description = glide_design.edited_task_title(
+            self.normalize_item_text(details.get("text", ""), self.item_kind(item)),
+            previous_title, details.get("description", ""))
         schedulable = self.is_schedulable_item(item)
         planned = {
             **(planning if schedulable else self.normalize_planning()),
-            "text": glide_design.edited_title(
-                self.normalize_item_text(details.get("text", ""), self.item_kind(item)), previous_title),
-            "description": details.get("description", ""),
+            "text": title,
+            "description": description,
             "attachments": details.get("attachments", []),
             "labels": self.normalize_item_labels(details.get("labels")),
             "color": details.get("color") if details.get("color") in self.ITEM_COLOR_KEYS else None,
@@ -40061,7 +40069,8 @@ class ListApp:
             with self.sidebar_change(refresh_tree=False) as change:
                 self.sync_current_list_reference()
                 zuordnung = {}
-                copy_items = self.copy_items_with_new_ids(entry.get("items", []), mapping=zuordnung)
+                copy_items = self.copy_items_with_new_ids(entry.get("items", []), mapping=zuordnung,
+                                                         preserve_titles=False)
                 new_entry = self.new_list_object(
                     f"{str(entry.get('title') or 'Liste').strip()} (Kopie)",
                     copy_items,
@@ -45582,7 +45591,7 @@ class ListApp:
                 }
             )
             # Titel und Notiz eines Galeriebilds (27.09.2026, additiv).
-            for feld, grenze in (("title", 200), ("note", 4000)):
+            for feld, grenze in (("title", 200), ("note", None)):
                 wert = entry.get(feld)
                 if isinstance(wert, str) and wert.strip():
                     normalized[-1][feld] = wert.strip()[:grenze]
@@ -51380,7 +51389,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                        if value.get("id") == attachment_id), None)
         if anhang is None:
             return False
-        titel, notiz = " ".join(str(title or "").split())[:200], str(note or "").strip()[:4000]
+        titel, notiz = glide_design.edited_task_title(
+            " ".join(str(title or "").split()), str(anhang.get("title") or ""),
+            str(note or "").strip())
         if (anhang.get("title") or "") == titel and (anhang.get("note") or "") == notiz:
             return False
         with self.sidebar_change(refresh_tree=False) as change:
@@ -56599,7 +56610,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 change.mark(children[0]["id"] if children else None)
         return "break"
 
-    def copy_items_with_new_ids(self, items, mapping=None, remap_typed=True):
+    def copy_items_with_new_ids(self, items, mapping=None, remap_typed=True, *, preserve_titles=True):
         """Tiefe Kopie mit frischen IDs für jeden Punkt und Anhang.
 
         Ohne neue IDs entstünden Dubletten: der Aufgabenbaum verweigert
@@ -56614,6 +56625,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             item = stack.pop()
             if not isinstance(item, dict):
                 continue
+            if not preserve_titles:
+                item["text"], item["description"] = glide_design.task_title(
+                    item.get("text", ""), item.get("description", ""))
             # Wer die neue Kennung kennt, kann mitgebrachte
             # Verweise – etwa Pinnwandkarten und Verbindungen – nachziehen.
             # Ohne diese Zuordnung wäre eine importierte Anordnung verloren,
@@ -56720,7 +56734,7 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                 if not found:
                     continue
                 item, siblings, index, _parent = found
-                copy_item = self.copy_items_with_new_ids([item])
+                copy_item = self.copy_items_with_new_ids([item], preserve_titles=False)
                 if not copy_item:
                     continue
                 siblings.insert(index + 1, copy_item[0])
@@ -60494,6 +60508,9 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return False
         recipe = glide_recipes.normalize(recipe)
         own = glide_recipes.records(self.settings.get('exchange_recipes', []))
+        if not remove:
+            previous = next((entry for entry in own if entry['id'] == recipe['id']), None)
+            recipe = glide_recipes.normalize_update(recipe, previous)
         existing = self.exchange_recipe_catalog()
         if any(r['id'] == recipe['id'] for r in existing if r['id'] not in {v['id'] for v in own}):
             raise ValueError('Mitgelieferte Aufträge bleiben unverändert. Eine eigene Kopie anlegen.')
@@ -60543,8 +60560,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
         self._make_field_label(body, 'Titel').pack(anchor='w', pady=(8, 4))
         title = tk.StringVar(master=dialog, value=initial.get('title', '') if editing else '')
         border, field = self._make_field(body); border.pack(fill='x'); field.pack(fill='x', padx=1, pady=1)
-        tk.Entry(field, textvariable=title, bg=self.theme['input'], fg=self.theme['text'],
-                 insertbackground=self.theme['text'], font=app_font(11), relief='flat').pack(fill='x', padx=10, pady=8)
+        title_entry = tk.Entry(field, textvariable=title, bg=self.theme['input'], fg=self.theme['text'],
+                               insertbackground=self.theme['text'], font=app_font(11), relief='flat')
+        title_entry.pack(fill='x', padx=10, pady=8)
+        self.limit_title_entry(title_entry)
         purpose = tk.StringVar(master=dialog, value='Neues anlegen' if initial.get('mode', mode) == 'create' else 'Vorhandenes überarbeiten')
         self._make_field_label(body, 'Zweck').pack(anchor='w', pady=(8, 4))
         options, _ = self._make_option_menu(body, purpose, ['Neues anlegen', 'Vorhandenes überarbeiten'])
