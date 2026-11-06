@@ -41,9 +41,19 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 
 Am 02.11.2026 für den ersten öffentlichen Stand gekürzt und zusammengeführt. README beginnt mit Nutzen, Funktionsübersicht und Startwegen. Versions-/Lieferdetails, historische Prüfberichte und technische Restlisten stehen im QA-Bericht bzw. Entwicklungsplan. Die Featureübersicht wird bei jeder Funktionsänderung zusammen mit Handbuch, Neuerungen und CHANGELOG gepflegt.
 
-Das Repository ist öffentlich; `main` bleibt die maßgebliche Projektablage. GitHub Actions liefert Grundprüfung, vollständige Linux-/Windows-Matrix und eigenständige Pakete. Der Mac-Workflow baut auf macOS arm64 mit eigener Tcl/Tk 9.1. Action-Commits sind festgelegt; Dependabot berücksichtigt Actions und Bauabhängigkeiten. Der Aktivierungsstatus einer statischen Analyse ist separat von ihrer Workflowdatei zu prüfen; es darf nur eine passende CodeQL-Einrichtung aktiv sein. Sicherheitsmeldungen laufen vertraulich über die [Sicherheitsrichtlinie](../../../SECURITY.md).
+Das Repository ist öffentlich; `main` bleibt die maßgebliche Projektablage. GitHub Actions liefert Grundprüfung, vollständige Linux-/Windows-Matrix, eigenständige Pakete und Release-Entwürfe. Der Mac-Workflow baut auf macOS arm64 mit eigener Tcl/Tk 9.1. Action-Commits sind festgelegt; Dependabot berücksichtigt Actions und Bauabhängigkeiten. Der Aktivierungsstatus einer statischen Analyse ist separat von ihrer Workflowdatei zu prüfen; es darf nur eine passende CodeQL-Einrichtung aktiv sein. Sicherheitsmeldungen laufen vertraulich über die [Sicherheitsrichtlinie](../../../SECURITY.md).
 
 Ein öffentlicher GitHub-Release mit allgemeinem Vertriebsversprechen ist von einem geprüften Entwicklungsartefakt zu unterscheiden; Lizenz und öffentliche Signaturen bleiben erforderlich. Weitere Kanäle und Repository-Einstellungen werden nur im konkret beauftragten Umfang verändert.
+
+**Release-Entwurf (Auftrag 06.11.2026 „Ja, als Entwurf“):** Damit neue Testerinnen und Tester ohne Anmeldung und Suche herunterladen können, baut `.github/workflows/release.yml` aus einem Tag `v<VERSION>` einen GitHub-Release-**Entwurf** als Vorabversion. Ablauf:
+
+1. Vollmatrix „Glide-Prüfung“ auf dem `main`-Commit grün, eigene Abnahme nach [Releasecheckliste](#releasecheckliste).
+2. Tag setzen und pushen: `git tag v<VERSION> <commit>` und `git push origin v<VERSION>`. Der Workflow verweigert Tags, die nicht zu `VERSION` passen, Commits außerhalb von `main` und Versionen ohne CHANGELOG-Abschnitt.
+3. Windows- und Mac-Paket werden mit denselben Workflows wie in der Prüfung neu gebaut und isoliert gestartet (`windows-paket.yml`, `macos-paket.yml`; die DMG entsteht aus dem geprüften TAR). Anhänge: `Glide-<v>-windows-x64.zip`, `Glide-<v>-macos-arm64.dmg`, `Glide-<v>-macos-arm64.tar.gz`, je mit `.sha256`.
+4. Die Versionshinweise enthalten den CHANGELOG-Abschnitt, Startanleitung für SmartScreen/Gatekeeper und oben einen Prüfstandskasten (Vollmatrix für denselben Commit grün, rot oder nicht gefunden). Den Kasten vor dem Veröffentlichen entfernen.
+5. **Veröffentlichen nur von Hand** in GitHub unter „Releases“. Ein erneuter Lauf auf demselben Tag ersetzt nur einen noch unveröffentlichten Entwurf, nie einen veröffentlichten Release.
+
+Ob und wann ein Entwurf öffentlich wird, entscheidet der Inhaber; das berührt I11 (öffentlicher Auftritt) und, solange unsigniert, I3. Für einen reibungslosen Erststart braucht es Developer-ID-Signatur mit Notarisierung (Mac) und ein Windows-Codesigning-Zertifikat; der Workflow hat dafür noch keine Schritte und keine Geheimnisse.
 
 **Git-Historie (I10):** Frühere gelöschte Protokolle mit Benutzerpfaden und Archivkopien bleiben ein historischer Befund. Ein Umschreiben würde Commit-Kennungen und Klone ändern und ist nicht Teil des 3.50-Abschlusses. Neue Dateien werden vor dem Upload auf Benutzerpfade, echte Inhalte und Geheimnisse geprüft.
 

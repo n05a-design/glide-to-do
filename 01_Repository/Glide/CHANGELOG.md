@@ -13,6 +13,7 @@
 - Schmales Fenster unter Windows: Die in die Werkzeugzeile verlegten Kopfknöpfe stehen in Zeichnung, Seite und Galerie an derselben Stelle wie in Listen (vorher 14 px links bzw. 6 px tiefer).
 - Zeichnung › Mehr › Bildfolge: „Bildfolge exportieren“ ist jetzt ein Untermenü mit „PNG-Spritesheet …“ und „PNG-Einzelbildfolge …“ statt eines zweiten Popups aus dem Menüeintrag. Testerwartungen der Vollprüfung an 3.50.3/D62/D63 angeglichen.
 - Mit `main` zusammengeführt (PR #62: Bildscrolltest B16 synchronisiert auf fertige Bildanker, UI-/UX-Verträge im `ui-nachlauf`); Anwendung dadurch unverändert. Prüfreste `_verification_temp*` von Git ausgeschlossen, Versionsangaben aller Einstiegsdokumente auf 3.50.5. Windows-Paket 3.50.5 über GitHub Actions gebaut. [Nachweis](docs/07_QA_BERICHT.md).
+- Downloads: Ein Tag `v<VERSION>` erzeugt über `release.yml` einen GitHub-Release-Entwurf (Vorabversion) mit Windows-ZIP, macOS-DMG, TAR und Prüfsummen; der Mac-Workflow baut die DMG aus dem geprüften TAR, der Windows-Paketbau liegt wiederverwendbar in `windows-paket.yml`. Veröffentlichung nur von Hand; Anwendung unverändert.
 
 ## 3.50.4 (05.11.2026) – Neuer Stand für die fortgesetzte menschliche Abnahme
 

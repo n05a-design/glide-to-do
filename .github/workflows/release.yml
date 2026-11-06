@@ -1,0 +1,177 @@
+# Glide-Release-Entwurf (06.11.2026, Auftrag „Ja, als Entwurf“)
+#
+# Ein Tag v<VERSION> auf einem Commit von main baut beide eigenständigen Pakete
+# mit denselben Workflows wie die Prüfung (windows-paket.yml, macos-paket.yml)
+# und legt daraus einen GitHub-Release-ENTWURF als Vorabversion an:
+#   Glide-<v>-windows-x64.zip, Glide-<v>-macos-arm64.dmg, Glide-<v>-macos-arm64.tar.gz
+#   samt .sha256-Dateien und Versionshinweisen aus CHANGELOG.md.
+#
+# Veröffentlicht wird nichts automatisch: Den Entwurf gibt der Inhaber nach
+# grüner Vollmatrix und eigener Abnahme von Hand frei (D43, Tore I2/I3/I11).
+# Beide Pakete bleiben unsignierte Entwicklungsbauten (Mac nur Ad-hoc-Signatur).
+#
+# Auslösen:  git tag v3.50.5 <commit-auf-main> && git push origin v3.50.5
+# Erneut:    Actions › Glide-Release-Entwurf › Run workflow, Tag als Ref wählen.
+#            Ein vorhandener Entwurf wird ersetzt, ein veröffentlichter Release nie.
+name: Glide-Release-Entwurf
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: glide-release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+  PYTHONUTF8: "1"
+
+jobs:
+  vorpruefung:
+    name: Tag, Version und Prüfstand
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      version: ${{ steps.stand.outputs.version }}
+      matrix: ${{ steps.matrix.outputs.matrix }}
+      matrix_url: ${{ steps.matrix.outputs.url }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Tag gleich VERSION und Commit auf main
+        id: stand
+        run: |
+          set -eu
+          case "$GITHUB_REF" in
+            refs/tags/v*) ;;
+            *) echo "::error::Nur von einem Tag v<VERSION> aus starten (Ref: $GITHUB_REF)"; exit 1 ;;
+          esac
+          tag="${GITHUB_REF#refs/tags/}"
+          version=$(tr -d '[:space:]' < 01_Repository/Glide/VERSION)
+          if [ "$tag" != "v$version" ]; then
+            echo "::error::Tag $tag passt nicht zu VERSION $version"; exit 1
+          fi
+          git fetch --no-tags origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::Commit $GITHUB_SHA liegt nicht auf main"; exit 1
+          fi
+          grep -q "^## $version " 01_Repository/Glide/CHANGELOG.md || {
+            echo "::error::CHANGELOG.md hat keinen Abschnitt für $version"; exit 1; }
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - name: Vollmatrix für denselben Commit nachschlagen (nur Anzeige)
+        id: matrix
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          runs=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/python-app.yml/runs?head_sha=$GITHUB_SHA&event=push&status=completed&per_page=20")
+          url=$(printf '%s' "$runs" | jq -r '[.workflow_runs[] | select(.conclusion == "success")][0].html_url // empty')
+          if [ -n "$url" ]; then
+            matrix=gruen
+          else
+            url=$(printf '%s' "$runs" | jq -r '.workflow_runs[0].html_url // empty')
+            if [ -n "$url" ]; then matrix=rot; else matrix=fehlt; fi
+          fi
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Vollmatrix „Glide-Prüfung“ für $GITHUB_SHA: $matrix ${url}" >> "$GITHUB_STEP_SUMMARY"
+
+  paket-windows:
+    name: Windows-Paket
+    needs: vorpruefung
+    uses: ./.github/workflows/windows-paket.yml
+
+  paket-macos:
+    name: Mac-Paket
+    needs: vorpruefung
+    uses: ./.github/workflows/macos-paket.yml
+
+  entwurf:
+    name: Release-Entwurf anlegen
+    needs: [vorpruefung, paket-windows, paket-macos]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    env:
+      VERSION: ${{ needs.vorpruefung.outputs.version }}
+      MATRIX: ${{ needs.vorpruefung.outputs.matrix }}
+      MATRIX_URL: ${{ needs.vorpruefung.outputs.matrix_url }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: paket-windows-glide
+          path: ${{ runner.temp }}/win/Glide
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: paket-macos-arm64-glide
+          path: ${{ runner.temp }}/mac
+      - name: Dateien zusammenstellen und Prüfsummen bilden
+        run: |
+          set -eu
+          aus="$RUNNER_TEMP/release"
+          mkdir "$aus"
+          test -f "$RUNNER_TEMP/win/Glide/Glide.exe"
+          mac_version=$(jq -r .version "$RUNNER_TEMP/mac/abschluss.json")
+          if [ "$mac_version" != "$VERSION" ]; then
+            echo "::error::Mac-Paket meldet $mac_version statt $VERSION"; exit 1
+          fi
+          (cd "$RUNNER_TEMP/mac" && shasum -a 256 -c "Glide-$VERSION-macos-arm64.tar.gz.sha256" "Glide-$VERSION-macos-arm64.dmg.sha256")
+          cp "$RUNNER_TEMP/mac/Glide-$VERSION-macos-arm64.dmg" "$RUNNER_TEMP/mac/Glide-$VERSION-macos-arm64.tar.gz" "$aus/"
+          (cd "$RUNNER_TEMP/win" && zip -q -r -X -9 "$aus/Glide-$VERSION-windows-x64.zip" Glide)
+          (cd "$aus" && for datei in Glide-*; do sha256sum "$datei" > "$datei.sha256"; done)
+          exe=$(sha256sum "$RUNNER_TEMP/win/Glide/Glide.exe" | cut -d' ' -f1)
+          echo "EXE_SHA256=$exe" >> "$GITHUB_ENV"
+          ls -l "$aus"
+      - name: Versionshinweise schreiben
+        run: |
+          set -eu
+          notes="$RUNNER_TEMP/notes.md"
+          case "$MATRIX" in
+            gruen) stand="✅ Vollmatrix „Glide-Prüfung“ für diesen Commit grün: $MATRIX_URL" ;;
+            rot) stand="⚠️ Vollmatrix „Glide-Prüfung“ für diesen Commit NICHT grün: $MATRIX_URL – Entwurf nicht veröffentlichen." ;;
+            *) stand="⚠️ Für diesen Commit wurde keine abgeschlossene Vollmatrix „Glide-Prüfung“ gefunden – vor dem Veröffentlichen prüfen." ;;
+          esac
+          {
+            printf '> **Entwurf – Prüfstand:** %s\n> Commit `%s`. Diesen Kasten vor dem Veröffentlichen entfernen.\n\n' "$stand" "$GITHUB_SHA"
+            printf '**Beta zum Testen.** Beide Pakete sind unsignierte Entwicklungsbauten und brauchen kein installiertes Python.\n\n'
+            printf '## Herunterladen und starten\n\n'
+            printf '| System | Datei | Start |\n|---|---|---|\n'
+            printf '| Windows 10/11 (x64) | `Glide-%s-windows-x64.zip` | Entpacken, `Glide\\Glide.exe` starten. SmartScreen warnt, weil das Paket nicht signiert ist: „Weitere Informationen“ › „Trotzdem ausführen“. |\n' "$VERSION"
+            printf '| macOS (Apple Silicon) | `Glide-%s-macos-arm64.dmg` | Öffnen, Glide in „Programme“ ziehen. Beim ersten Start blockiert macOS die nicht notarisierte App: „Systemeinstellungen“ › „Datenschutz & Sicherheit“ › „Dennoch öffnen“. |\n\n' "$VERSION"
+            printf 'Das TAR-Archiv ist dasselbe Mac-Bundle für Prüfzwecke. Jede Datei hat eine `.sha256`-Prüfsumme; `Glide.exe`: `%s`.\n\n' "$EXE_SHA256"
+            printf 'Glide speichert alles lokal, ohne Konto. Prüfstand und Grenzen: [QA-Bericht](https://github.com/%s/blob/%s/01_Repository/Glide/docs/07_QA_BERICHT.md).\n\n' "$GITHUB_REPOSITORY" "$GITHUB_SHA"
+            printf '## Neu in %s\n\n' "$VERSION"
+            awk -v kopf="## $VERSION " 'index($0, kopf) == 1 { an = 1; next } an && /^## / { exit } an' 01_Repository/Glide/CHANGELOG.md
+          } > "$notes"
+          cat "$notes" >> "$GITHUB_STEP_SUMMARY"
+      - name: Entwurf anlegen oder ersetzen (nie veröffentlichen)
+        run: |
+          set -eu
+          tag="v$VERSION"
+          titel="Glide $VERSION – Beta zum Testen (unsigniert)"
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json isDraft > "$RUNNER_TEMP/vorhanden.json" 2>/dev/null; then
+            if [ "$(jq -r .isDraft "$RUNNER_TEMP/vorhanden.json")" != "true" ]; then
+              echo "::error::Release $tag ist bereits veröffentlicht und wird nicht verändert"; exit 1
+            fi
+            gh release edit "$tag" --repo "$GITHUB_REPOSITORY" --draft --prerelease --title "$titel" --notes-file "$RUNNER_TEMP/notes.md"
+            gh release upload "$tag" --repo "$GITHUB_REPOSITORY" --clobber "$RUNNER_TEMP"/release/*
+          else
+            gh release create "$tag" --repo "$GITHUB_REPOSITORY" --verify-tag --draft --prerelease \
+              --title "$titel" --notes-file "$RUNNER_TEMP/notes.md" "$RUNNER_TEMP"/release/*
+          fi
+          echo "Entwurf $tag bereit: https://github.com/$GITHUB_REPOSITORY/releases" >> "$GITHUB_STEP_SUMMARY"

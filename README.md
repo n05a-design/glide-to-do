@@ -63,7 +63,7 @@ Die [Funktionsübersicht](01_Repository/Glide/docs/20_FUNKTIONEN.md) beschreibt 
 
 Glide ist für **Windows, macOS und Linux** vorgesehen. Eigenständige Pakete enthalten Python und Tcl/Tk; die Python-Fassung lässt sich auf allen drei Plattformen verwenden.
 
-- **Pakete und Downloads:** [Windows x64](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml) · [macOS Apple Silicon](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml). Im erfolgreichen Lauf unter „Artifacts“ das jeweilige Glide-Paket herunterladen (GitHub-Anmeldung erforderlich). Dateien, Prüfsummen und Prüfstand stehen im [Liefernachweis](01_Repository/Glide/docs/07_QA_BERICHT.md).
+- **Pakete und Downloads:** Freigegebene Testfassungen liegen unter [Releases](https://github.com/n05a-design/glide-to-do/releases) – `Glide-<Version>-windows-x64.zip` und `Glide-<Version>-macos-arm64.dmg`, ohne Anmeldung, jeweils mit Prüfsumme. Beide sind unsignierte Betas: Windows SmartScreen und macOS Gatekeeper fragen beim ersten Start nach; die Versionshinweise erklären die Freigabe. Entwicklungsstände zwischen zwei Releases: [Windows x64](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml) · [macOS Apple Silicon](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml), im erfolgreichen Lauf unter „Artifacts“ (GitHub-Anmeldung erforderlich). Dateien, Prüfsummen und Prüfstand stehen im [Liefernachweis](01_Repository/Glide/docs/07_QA_BERICHT.md).
 - **Python-Fassung:** Repository herunterladen und mit Python 3.14 samt Tk starten. Zusätzliche pip-Pakete sind für die App nicht nötig.
 
 ```bash

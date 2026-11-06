@@ -2339,3 +2339,11 @@ Bewusst weiterhin ungewählt bzw. ausgeschlossen: Team-/Mehrgerätesynchronisati
 **Nacharbeit Vollmatrix:** Sieben Suiten an 3.50.3/D62/D63 angeglichen; Produktbefunde Bildfolgenexport (Popup aus Menüeintrag) und springende Kopfknöpfe bei Enge unter Windows (`test_festlayout330`) behoben, App jetzt `cb4a7aad…`. Damit sind das gelieferte Windows-Paket (`a4bfe4ed…`) und die Paketbelege neu zu erzeugen. Details im QA-Bericht.
 
 **Rest:** Übernahme des Mac-Pakets nach `build/macos`, Bau am eigenen Bauplatz mit lokaler Abnahme, menschliche Abnahme (Punkt 6/Buchbreite und Folgeblöcke), DPI/Mehrmonitor. Vollprüfung des zusammengeführten Stands über den Pushlauf; offene lokale Vollmodusläufe auf `a4bfe4ed…` behalten ihre eigenen Belege. Die lokale Aufbewahrungssicherung `%USERPROFILE%/gq/final5/aufbewahrung` (67 nur dort liegende 3.48.0-Originale) liegt nur auf dem Prüfrechner und ist gesondert zu sichern.
+
+### 21.70 Downloads über GitHub-Release-Entwurf (06.11.2026)
+
+**Auftrag 06.11.2026:** Frage „Kann ich zukünftig die erstellten .exe und .dmg / Apple-App-Dateien zentraler in Github einbauen, dass neue Benutzer … sich diese direkt herunterladen und testen können?“; auf den Vorschlag, aus einem Tag einen Release-Entwurf zu erzeugen, Antwort „Ja, als Entwurf“. Keine Veröffentlichung, kein Tag und kein Push beauftragt.
+
+**Umsetzung:** `release.yml` (Tag `v<VERSION>` auf `main` → Entwurf als Vorabversion mit Windows-ZIP, DMG, TAR und Prüfsummen; Vollmatrixstand desselben Commits im Prüfstandskasten; veröffentlichte Releases werden nie verändert). Windows-Paketjob unverändert nach `windows-paket.yml` ausgelagert und von `Glide-Prüfung` wie vom Release aufgerufen; Mac-Workflow mit `workflow_call` und DMG aus dem geprüften TAR samt Einhänge-/Bestandsvergleich. Werkzeugtests `test_release_workflow.py` und erweitertes `test_macos_paket_workflow.py`; Ablauf in [Veröffentlichung](../01_Repository/Glide/docs/10_VEROEFFENTLICHUNG.md#github-auftritt), README verweist auf „Releases“.
+
+**Status:** ◐ Workflow lokal nur statisch geprüft (YAML, Shell-Syntax, Werkzeugtests unter Windows). Erster echter Lauf (DMG-Bau auf `macos-15`, Entwurf) offen und erst nach Push und Tag möglich. Veröffentlichung eines Entwurfs bleibt Inhaberentscheidung (D43: I11, unsigniert I3).
