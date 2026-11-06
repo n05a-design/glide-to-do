@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Sicherheitslücke vertraulich melden
+    url: https://github.com/n05a-design/glide-to-do/blob/main/SECURITY.md
+    about: Bitte Sicherheitsprobleme nicht öffentlich als Issue melden.
+  - name: Handbuch und Funktionsübersicht
+    url: https://github.com/n05a-design/glide-to-do/blob/main/01_Repository/Glide/docs/20_FUNKTIONEN.md
+    about: Bedienung, Grenzen und bekannte Einschränkungen nachlesen.

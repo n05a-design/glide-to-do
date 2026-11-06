@@ -4,6 +4,8 @@
 
 **Datierter Abnahmenachtrag 05.11.2026 / 3.50.5:** Titel-/Button-/Leisten-/Abstands- und Suchkorrekturen dieses Chats umgesetzt (D63, Plan §21.68). Grundstufe und allgemeine UI-Suite grün; ein wiederholter Arbeitsmodi-Gesamtlauf brach nativ mit 0xC0000005 ab. Ursache nicht isoliert, keine Hardware- oder native Gesamtfreigabe ableiten. Einziger ausführlicher [Paketnachweis](../01_Repository/Glide/tests/qa-3.50.5/abnahme_2026-11-05/README.md).
 
+**Dokumentations- und Featureabgleich 06.11.2026:** [§13.28](#1328-dokumentations--und-featureabgleich-vom-06112026) prüft README, Handbuch und Markt gegen den Code von 3.50.5 und hält die nachgeführten Aussagen fest; Marktbefunde in [Markt §14](Glide_Markt_und_Vorbilder.md#14-systematische-konkurrenzanalyse-vom-06112026).
+
 **Neue Stand-/Mehrwertanalyse 04.11.2026:** [§13.27](#1327-stand--und-entwicklungschancenanalyse-vom-04112026) prüft 3.50.2 auf `40c20fd6`, aktuelle native GitHub-Läufe und konkrete Ausbaulücken; [Markt §13](Glide_Markt_und_Vorbilder.md#13-neue-konkurrenzanalyse-vom-04112026) und [Plan §21.62](Glide_Entwicklungsplan.md#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026) enthalten die neue Konkurrenzbewertung und vorgeschlagene Reihenfolge. #252 UI und #32 Mac erfolgreich; #251 Windows zum genannten Abfragezeitpunkt laufend.
 
 **Aktueller Techniknachlauf 3.50.2, 04.11.2026:** Erste Reparatur `5f99b8fa` bestätigt den Mac-Paketstart (#31 grün). Vollmatrix #250 bleibt mit drei Linux- und einem Windows-Befund in den Arbeitsmodi rot; weitere Reparatur und erneuter nativer Nachweis folgen. [Befunde §13.26](#1326-ci-247248-und-mac-paket-29), [Aufgaben und Grenzen §21.61](Glide_Entwicklungsplan.md#2161-ci-247248-kopfknöpfe-editorlebensdauer-und-mac-schriften).
@@ -12,7 +14,7 @@
 
 **Einordnung 25.10.2026:** Jeder Abschnitt bleibt an seinen genannten Quellstand gebunden und ist keine heutige Standbehauptung: §§1–12 bewahren den untersuchten Vorzustand vom 18.10.2026 (`c0252ba` / App `ed2b7eb…`, samt damaliger Upstream-Probe und [Ablagenachprüfung](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/ablageaudit_2026-10-18/README.md)), §13.1–§13.8 die Neuuntersuchung und Codevalidierung vom 21.10. (`916c777…` bzw. `3b93a24a…`), §13.9–§13.11 die anschließenden Umsetzungspakete (`45354b63…`, `559c738d…`, `604014f9…`). Dieser Kandidat ist inzwischen als **3.44.0** versioniert, eingefroren geprüft und als Python-Fassung geliefert (App `d0bf4142…`, [Plan §21.10](Glide_Entwicklungsplan.md#2110-phasenabschluss-3440)). Der am 25.10.2026 betrachtete lokale Quellstand mit dem D55-Kandidaten (`bd21317e…`) ist Gegenstand des eingereichten Gutachtens in [§13.12](#1312-sicherheits--und-architekturgutachten-vom-25102026). „Kandidat“ bezeichnet jeweils den damaligen unveröffentlichten Stand. Aktuelle Quell-, Prüf- und Lieferstände stehen im [QA-Bericht](../01_Repository/Glide/docs/07_QA_BERICHT.md), Aufgaben und Vorschläge ausschließlich im [Entwicklungsplan §21](Glide_Entwicklungsplan.md#21-roadmap-abgleich-vom-21102026). Historische Befunde und Messergebnisse werden nicht umgedeutet.
 
-Stand 05.11.2026 · Glide 3.50.5 · Aufgabenformat 26 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde
+Stand 06.11.2026 · Glide 3.50.5 · Aufgabenformat 26 · datierte Untersuchungsquellen je Abschnitt getrennt · Analyse und Dokumentation, keine Produktionsrunde
 
 **Gesamtprüfung 01.11.2026:** Dokumentation, Roadmap, Stand, Features, Markt und Gestaltung gegen Quellstand 3.50.0 geprüft; Befunde, Korrekturen und Ausbau in [§13.22](#1322-gesamtprüfung-vom-01112026).
 
@@ -948,3 +950,26 @@ Veröffentlichungsreife benötigt zusätzlich eine nachvollziehbare aktuelle Pak
 ### Ergebnis
 
 Glide hat einen **breiten funktionalen Kern und eine deutlich verbesserte technische Basis**, jedoch keinen pauschal abgeschlossenen aktuellen Liefer-/Abnahmestand. Der höchste zusätzliche Nutzwert ist voraussichtlich an den Übergängen zu gewinnen: Kontext finden, realistisch auswählen, fokussiert arbeiten, später wieder einsteigen und Inhalte kontrolliert mitnehmen. Dies ist eine begründete Entwicklungshypothese. Marktüberlegenheit, Zahlungsbereitschaft und tatsächliche Zeitersparnis sind erst zu prüfen. Die zentrale Roadmap ordnet diese Hypothesen bestehenden IDs zu und hält sie von laufenden Abschlussarbeiten getrennt.
+
+## 13.28 Dokumentations- und Featureabgleich vom 06.11.2026
+
+### Untersuchungsbasis
+
+Lesender Abgleich von Code und Dokumentation auf `main` `5e63ea34` (Merge #64), `app.pyw` 67.905 Zeilen, App `cb4a7aad…`, Version 3.50.5 / Format 26. Funktionsinventar aus Menüleiste, Kontextmenüs, Startseitenkacheln, Einstellungsdialog, Aktionskatalog, KI-Aufträgen und Neuerungskatalog; verglichen mit README „Was Glide kann“, Handbuch, CHANGELOG, Produktgrenzen, Übergabe, Plan und Markt. Keine App-Ausführung, keine native oder menschliche Prüfung. Marktbefunde derselben Runde in [Markt §14](Glide_Markt_und_Vorbilder.md#14-systematische-konkurrenzanalyse-vom-06112026), Roadmapfolgen im [Plan §21.70](Glide_Entwicklungsplan.md#2170-systematische-konkurrenzanalyse-und-dokumentabgleich-vom-06112026).
+
+### Befunde
+
+- **Version und Richtung konsistent:** VERSION, `APP_VERSION`, `DATA_SCHEMA_VERSION`, CHANGELOG, Neuerungskatalog, README-Kopf und fast alle Standzeilen nennen 3.50.5 / Format 26; die Python-Lieferkopie ist bytegleich. README, Produktgrenzen, Übergabe, Plan, Arbeitsrichtung und Markt beschreiben dieselbe Richtung (lokal, persönlich, ruhig, feste Begriffe; kein Team, Sync oder KI-Dienst) und dieselbe nächste Empfehlung (Paket A / WA-21).
+- **Keine Übertreibung in der Übersicht:** Jede geprüfte README-Aussage hat einen Codebeleg, einschließlich „ohne Telemetrie“ (kein Netzwerkcode außer Browserlinks). Missverständlich waren „Tagebuch“ (Oberfläche: „Notizbuch“ seit 27.09.2026), „Karten“ für die Pinnwand, „Gemeinsam suchen“ in einem Einzelplatzprodukt und „Schnellerfassung per Tastenkürzel“ (Alt+N nur innerhalb von Glide; systemweiter Hotkey G07 ausgeschlossen).
+- **Implementiert, aber nicht in der Übersicht:** Startseiten-Suchfeld und Vorlagenfilter (3.50.5), Tag entlasten, Tageshinweise, Reiter (bis zwölf), Handbuch (F1), Tastenkürzelübersicht, Fehlerprotokoll, TXT-/Glide-Seiten-/CSV-Ausgabe, Pixel-SVG/JSON, Referenzbild/Nachzeichnen, Zwischenstände, Galeriebilder-Kachel, Tastatur und Kontrastdesigns. Im Handbuch fehlten Reiter, Handbuchdialog, Fehlerprotokoll, Graustufenvorschau, Nachzeichnen, Textlogo/Begrüßungsname und Mondphase im Startseitenkopf; der Notizbuchkopf widersprach dem 3.50.5-Abschnitt.
+- **Veraltete aktive Aussagen:** beide `SECURITY.md` (3.50.2), Index (Quelle 3.50.3, D01–D60), Arbeitsvorbereitung-README und Claude-Einstieg (D-Bereich), Handbuch §13 („Paket mit eigenem Python bleibt geplant“, Plattformstand 3.36.0 als aktuelle Aussage), Plan §18.2 („heute 3.50.2“), Übergabe („erst nach grüner Vollmatrix mergen“ trotz Merge #63/#64, „heute Abend bauen“), Quell-README (Windows-Paket 3.50.5 ohne Hinweis auf den Vorstand `a4bfe4ed…`). Markt §4 führte Glide als 3.50.0 ohne Reiter, Blockziehen, Startseitensuche und persönliche Gestaltung.
+- **Fehlende Abgrenzung:** Die Übersicht sagte nirgends, was Glide nicht ist (kein Team, kein Sync, keine Mobil-App, kein KI-Dienst), obwohl Markt §13.3 genau diese Präzision verlangt.
+
+### Umsetzung in dieser Runde
+
+Alle oben genannten aktiven Aussagen nachgeführt; README um die fehlenden Funktionen, präzise Begriffe und einen Abgrenzungssatz ergänzt, Schrift-/Hintergrundpunkt mit „Dein Arbeitsstil“ zusammengeführt. Handbuch um Reiter, Hilfe in der App, Fehlerprotokoll und Kopfeinstellungen ergänzt. Markt §4 auf 3.50.5 und um eine Zeile „Persönliche Gestaltung“ erweitert. Datierte Abschnitte (Markt §13, Analyse §13.27, versionierte Handbuchabschnitte, QA-Nachweise) bleiben Belege und wurden nicht umgeschrieben; beim Plan- und Analysebanner vom 04.11. nur „aktuellen“ durch „damaligen“ ersetzt. Der Neuerungskatalog bleibt unverändert, weil keine neue Funktion entstand.
+
+### Grenzen
+
+Kein Lauf der App; Funktionsaussagen beruhen auf Codezeilen. Nach der Pflege bestand die CI-Grundstufe am 06.11.2026 unter Windows mit Python 3.15.2 (Syntax, Version, Standprüfung, 381 Dokumentlinks, Lieferstand bytegleich, Datenschutz, Ablagegröße, Synchronisation). Die Standprüfung nimmt `SECURITY.md` aus; deren Standzeile wurde deshalb von Hand nachgeführt. Weiter offen und nicht Gegenstand dieser Dokumentpflege: Neubau der nativen Pakete auf `cb4a7aad…`, menschliche Abnahme, DPI/Mehrmonitor, Screenreader nach D58.
+

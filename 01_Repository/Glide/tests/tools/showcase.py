@@ -123,6 +123,29 @@ def letzter_werktag(anchor):
         jahr, monat = jahr + monat // 12, monat % 12 + 1
 
 
+def zweiter_dienstag(anchor):
+    """Zweiter Dienstag des Monats von `anchor`, sonst des Folgemonats."""
+    jahr, monat = anchor.year, anchor.month
+    while True:
+        erster = date(jahr, monat, 1)
+        tag = erster + timedelta(days=(1 - erster.weekday()) % 7 + 7)
+        if tag >= anchor:
+            return tag
+        jahr, monat = (jahr + 1, 1) if monat == 12 else (jahr, monat + 1)
+
+
+def bildfolge(mod, start):
+    """Vier Bilder: eine Wolke zieht über den Himmel der Pixelskizze (Bildfolgen seit 3.40.0)."""
+    frames = []
+    for index, versatz in enumerate((1, 5, 9, 13)):
+        bild = mod.glide_drawing.DrawingModel.from_document(copy.deepcopy(start))
+        for x, y in [(versatz + dx, 4) for dx in range(1, 5)] + [(versatz + dx, 5) for dx in range(6)]:
+            bild.set_cell(x, y, "#FFFFFF")
+        frames.append({"id": f"frame-{index + 1}", "drawing": bild.to_document(), "duration_ms": None})
+    return {"format": mod.glide_animation.FORMAT, "format_version": mod.glide_animation.FORMAT_VERSION,
+            "width": 32, "height": 32, "duration_ms": 250, "frames": frames}
+
+
 def build(app, mod, root, anchor):
     """Zusammenhängende Dokumente; zurückgegeben wird die portable Projektwahl."""
     tag = lambda offset: (anchor + timedelta(days=offset)).isoformat()
@@ -209,10 +232,14 @@ def build(app, mod, root, anchor):
     gallery = app.new_list_object("Bildwelt · Auswahl mit Kommentaren", [], folder_id=project["id"],
         list_kind="gallery", attachments=[copy.deepcopy(stored[name]) for name, _, _ in PHOTOS],
         note="Sechs Motive aus der Beispielablage: Originale, Bildunterschriften und Kontext.")
+    skizze = zeichnung(mod)
+    animation = bildfolge(mod, skizze)
     drawing = app.new_list_object("Quartier · Pixelskizze", [], folder_id=None, list_kind="drawing",
-        drawing=zeichnung(mod), icon=icon_doc, attachments=generated_attachments[:2],
+        drawing=copy.deepcopy(animation["frames"][0]["drawing"]), animation=animation, icon=icon_doc,
+        attachments=generated_attachments[:2],
         drawing_reference={"attachment_id":generated_attachments[0]["id"], "mode":"fit", "zoom_percent":100},
-        note="Bearbeitbare 32 × 32 Zeichnung mit passendem 16 × 16 Symbol, PNG-Referenz und ICO-Export.")
+        note="Bearbeitbare 32 × 32 Zeichnung mit Bildfolge (vier Bilder, eine ziehende Wolke), "
+             "passendem 16 × 16 Symbol, PNG-Referenz und ICO-Export.")
     app.lists.extend([main, note, gallery, drawing])
     for name, title, caption in PHOTOS:
         app.set_gallery_caption(gallery["id"], stored[name]["id"], title, caption)
@@ -229,18 +256,26 @@ def build(app, mod, root, anchor):
         ("Jahresrückblick vorbereiten", {"art":"jaehrlich"}, 7),
         # Serie aus FP-02 (3.44.0): erster Termin ist der nächste letzte Werktag.
         ("Monatsabschluss an den Vertrieb", {"art":"serie", "rrule":"FREQ=MONTHLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-1"},
-         (letzter_werktag(anchor) - anchor).days)]:
+         (letzter_werktag(anchor) - anchor).days),
+        # Erweiterte Rhythmen FP-02 Stufe 2 (3.44.0): n-ter Wochentag, Bezug auf
+        # Erledigung, begrenzte Anzahl und Pause.
+        ("Bildredaktion am zweiten Dienstag", {"art":"serie", "rrule":"FREQ=MONTHLY;INTERVAL=1;BYDAY=2TU"},
+         (zweiter_dienstag(anchor) - anchor).days),
+        ("Atelierpflanzen gießen", {"art":"tage", "abstand":3, "bezug":"erledigt"}, 1),
+        ("Fototermin bestätigen", {"art":"woechentlich", "rest":3}, 4),
+        ("Newsletter-Entwurf", {"art":"monatlich", "pausiert":True}, 10)]:
         repeats.append(task(title, due=tag(offset), repeat=rule, reminder={"mode":"relative", "minutes":30},
                             due_time="09:00", estimated_minutes=15))
     rhythm = app.new_list_object("Wiedervorlagen · Projektrhythmus", repeats, folder_id=project["id"],
-                                 note="Alle sieben Wiederholungsarten einschließlich einer Serie am letzten Werktag; "
+                                 note="Alle sieben Wiederholungsarten, Serien am letzten Werktag und am zweiten "
+                                      "Dienstag, Abstand nach Erledigung, begrenzte Anzahl und eine pausierte Reihe; "
                                       "Systembenachrichtigungen sind im Showcase ausgeschaltet.")
     app.lists.extend([routines, rhythm])
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
     inbox["items"] = [task("Neue Bildidee für die nächste Abstimmung sichten", labels=[labels["Gestaltung"]]),
                        task("Rückfrage aus dem Vertrieb einordnen", description="Noch ohne Termin: erst klären, dann einplanen.")]
     for offset, mood, title, text in [
-        (-1, "grateful", "Rückblick · Briefing freigegeben", "Das Briefing ist klar. Ein gemeinsamer Rückmeldestand spart Abstimmungsaufwand.\n\nMorgen: Bildauswahl bestätigen und den Kontaktbereich ausarbeiten."),
+        (-1, "grateful", "Rückblick · Briefing freigegeben", "Das Briefing ist klar. Ein gemeinsamer Rückmeldestand spart Abstimmungsaufwand.\n\nMorgen: Bildauswahl bestätigen und den Kontaktbereich ausarbeiten. Die offenen Punkte stehen in Vermarktung · Umsetzung."),
         (0, "thoughtful", "Tagesnotiz · Gestaltung und Freigabe", "Heute stehen Steckbrief und Bildauswahl im Mittelpunkt.\n\n**Fortschritt:** Hero-Struktur ist vorbereitet.\n\n**Offen:** Ausstattung braucht die bestätigte Quelle.\n\n**Lernpunkt:** Abhängigkeiten vor dem Entwurf sichtbar machen.")]:
         app.lists.append(app.new_list_object(title, [], folder_id=journal["id"], list_kind="note",
             rich_note=mod.glide_page_markdown.markdown_to_page("# "+title+"\n\n"+text),
@@ -279,6 +314,15 @@ def build(app, mod, root, anchor):
     editor.set_toggle_open(f"{line}.0", False)
     editor.flush()
     ruhe(root)
+    # Live-Liste und lokale Verweise (G29/G08): Die Seite zeigt den aktuellen
+    # Stand der Umsetzungsliste, die Abstimmungsnotiz verweist auf Seite und
+    # Liste; Rückverweise entstehen daraus ohne zweiten Bestand.
+    briefing = next(entry for entry in app.lists if entry["id"] == briefing["id"])
+    briefing["live_lists"] = mod.glide_pages.live_lists([mod.glide_objects.uri("list", main["id"])])
+    note["references"] = mod.glide_objects.normalize([mod.glide_objects.uri("list", briefing["id"]),
+                                                      mod.glide_objects.uri("list", main["id"])])
+    app.save_items()
+    ruhe(root)
     # Zwei kleine, portable Vorlagen ergänzen den vorhandenen Katalog.
     meeting_template = app.capture_template(list_id=note["id"])
     meeting_template = next(t for t in app.templates if t["id"] == meeting_template["id"])
@@ -304,7 +348,24 @@ def build(app, mod, root, anchor):
         page_favorites=[briefing["id"]], gallery_tile_size={gallery["id"]:"medium"},
         list_group_by={main["id"]:"importance"},
         saved_filters=[{"id":"showcase-freigabe", "name":"Parkquartier · Freigabe", "query":"",
-                        "label_ids":[labels["Freigabe"]], "list_ids":[main["id"]], "status":"open"}],
+                        "label_ids":[labels["Freigabe"]], "list_ids":[main["id"]], "status":"open"},
+                       {"id":"showcase-woche", "name":"Diese Woche · Eisenhower", "query":"",
+                        "label_ids":[], "list_ids":[], "status":"open"}],
+        # FP-03 (3.44.0): gespeicherte Bedingungen und Darstellung je Ansicht.
+        saved_view_conditions_v1={"showcase-woche":{"mode":"any", "planned":"this_week", "effort":"at_least",
+                                                    "minutes":30}},
+        saved_view_layouts_v1={"showcase-woche":{"display":"table", "group":"eisenhower", "sort":"due",
+                                                 "columns":["title", "source", "due", "planned_date",
+                                                            "estimated_minutes", "importance"]}},
+        # Realistischer Tag (D57/WA-12): Kapazität je Wochentag und Tagesziel.
+        daily_capacity_by_weekday=[360, 360, 300, 360, 240, None, None], daily_goal=4,
+        # Reiter (bis zwölf) und ein eigener KI-Auftrag für den Dateiaustausch (FP-06).
+        open_tabs=[{"list_id":main["id"], "item_id":specification["id"], "used":1},
+                   {"list_id":main["id"], "item_id":design["id"], "used":2}],
+        exchange_recipes=[{"id":"showcase-rueckmeldung", "title":"Rückmeldungen zu Aufgaben bündeln",
+                           "mode":"patch", "instruction":"Fasse die Rückmeldungen in den Beschreibungen "
+                           "der ausgewählten Aufgaben knapp zusammen und schlage höchstens eine "
+                           "Checkliste je Aufgabe vor. Ändere keine Termine."}],
         active_tab={folder_scope:"board", list_scope:"board"},
         pinboards={folder_scope:{"cards":board_cards, "layout":"free", "background":"dots", "width":260,
             "areas":[{"id":"showcase-inhalt", "name":"Inhalt und Freigabe", "color":"accent", "x":8,"y":16,"w":940,"h":940}],
@@ -313,7 +374,18 @@ def build(app, mod, root, anchor):
             "show_description":True, "show_checklist":True, "color_mode":"header"},
             list_scope:{"cards":board_cards[:-1], "layout":"columns", "group_by":"planned", "background":"grid",
                         "show_checklist":True, "color_mode":"stripe"},
-            mod.ItemWorkspace.GLOBAL_SCOPE:{"cards":board_cards[:2], "layout":"grid", "width":260}})
+            # Seiten- und Notizkarten mit Originaltitel (FP-04, 3.44.0) neben echten Aufgaben.
+            mod.ItemWorkspace.GLOBAL_SCOPE:{"cards":board_cards[:2] + [
+                {"list_id":briefing["id"], "item_id":mod.ItemWorkspace.PAGE_CARD_PREFIX+briefing["id"],
+                 "x":620, "y":40, "scale":"normal"},
+                {"list_id":note["id"], "item_id":mod.ItemWorkspace.PAGE_CARD_PREFIX+note["id"],
+                 "x":620, "y":420, "scale":"normal"}],
+                "layout":"free", "width":260, "background":"dots",
+                # Beide Kanten führen zur benachbarten Karte und kreuzen keine dritte.
+                "connections":[{"from":mod.ItemWorkspace.PAGE_CARD_PREFIX+briefing["id"],
+                                "to":images["id"], "label":"Grundlage"},
+                               {"from":mod.ItemWorkspace.PAGE_CARD_PREFIX+note["id"],
+                                "to":images["id"], "label":"Rückmeldung"}]}})
     app.settings = app.normalize_personal_settings(settings)
     app.save_settings()
     app.save_templates()

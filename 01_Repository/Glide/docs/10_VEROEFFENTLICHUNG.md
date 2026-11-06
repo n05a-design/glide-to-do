@@ -1,6 +1,6 @@
 # Veröffentlichung – Glide
 
-Stand 05.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 06.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
@@ -38,6 +38,10 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 - **Gismo** wird selbst produziert; die gezeichnete Tk-Figur bleibt, bis freigegebene Dateien vorliegen ([Arbeitsbegleiter](decisions/ARBEITSBEGLEITER.md)). Aus Inspirationsbildern wird keine Marken- oder Lizenzfreigabe abgeleitet.
 
 ## GitHub-Auftritt
+
+**Projektseite 06.11.2026 (Auftrag des Inhabers, Plan §21.71):** Die README ist nach dem Vorbild erfolgreicher Repositorys neu gegliedert: zentriertes App-Symbol, Leitsatz und Ein-Satz-Nutzen, fünf Badges, Linkzeile mit „Herunterladen“ zuerst, großes Bild hell/dunkel per `<picture>`, „Warum Glide?“, Bildraster mit sechs echten Aufnahmen (künstlicher Showcase, Windows, 1440 × 900, Bedienhinweise aus), Funktionsliste, „Was Glide bewusst nicht ist“ mit passenden Alternativen, Download-Tabelle je System mit ehrlichem Hinweis zu Artefakten und unsignierten Paketen, „Deine Daten“, Häufige Fragen, Rückmeldung, Entwicklung, Lizenz und eine englische Kurzfassung. Issue-Formulare für Fehler und Wünsche liegen unter `.github/ISSUE_TEMPLATE/`; leere Issues sind abgeschaltet, Sicherheitsmeldungen verweisen auf die Richtlinie. Beschreibung und Topics der GitHub-Seite wurden auf Nutzen und Suchbegriffe ausgerichtet (höchstens 20 Topics, keine Varianten desselben Worts, kein „open-source“ und kein „local-first“, weil beides für Glide nicht zutrifft). Aufnahmen entstehen reproduzierbar aus dem Showcase in einem eigenen Prüfordner; sie liegen unter `assets/marketing/` und werden bei sichtbaren Oberflächenänderungen ersetzt, nicht gesammelt.
+
+Belegter Befund der Recherche vom 06.11.2026: Keine der rund 20 untersuchten Aufgaben-, Notiz- und Produktivitäts-Apps auf GitHub verweist Endnutzer auf Actions-Artefakte; alle verteilen über Releases (`/releases/latest`) oder Stores, Artefakte verfallen nach höchstens 90 Tagen und verlangen eine Anmeldung. Alle erfolgreichen Repos haben eine klar benannte Lizenz und ein englisches Haupt-README. Daraus folgen **Inhaberentscheidungen**, die diese Pflege nicht trifft: GitHub-Release statt Artefakt (nach dieser Regel erst mit Lizenz und Signatur), Lizenzwahl, Englisch als Hauptsprache, Discussions, Homepage/GitHub Pages und Signierung. Ohne Entscheidung umsetzbar und erledigt: README, Bilder, Issue-Formulare, Beschreibung, Topics.
 
 Am 02.11.2026 für den ersten öffentlichen Stand gekürzt und zusammengeführt. README beginnt mit Nutzen, Funktionsübersicht und Startwegen. Versions-/Lieferdetails, historische Prüfberichte und technische Restlisten stehen im QA-Bericht bzw. Entwicklungsplan. Die Featureübersicht wird bei jeder Funktionsänderung zusammen mit Handbuch, Neuerungen und CHANGELOG gepflegt.
 

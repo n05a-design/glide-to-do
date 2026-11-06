@@ -1,6 +1,6 @@
 # Sicherheit
 
-Stand 03.11.2026 · Glide 3.50.2 · Erster öffentlicher Stand (öffentliche erste Beta)
+Stand 06.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (öffentliche erste Beta); 3.50.3–3.50.5 ändern nur Oberfläche und Titelgrenzen, die hier beschriebenen Vertrauensgrenzen bleiben unverändert
 
 Glide verarbeitet lokale Nutzerdaten und lokale Anhänge. Die Anwendung überträgt diese Daten nicht selbstständig an externe Dienste und öffnet keine Netzwerkverbindungen. Links in Notizen (nur `http(s)://` und `mailto:`) gibt sie ausschließlich auf Klick an den Standardbrowser weiter.
 
