@@ -73,6 +73,8 @@ class ReleaseWorkflowTests(unittest.TestCase):
         self.assertIn("Trotzdem ausführen", draft)
         self.assertIn("Dennoch öffnen", draft)
         self.assertIn("unsigniert", draft)
+        self.assertIn("01_Repository/Glide/LICENSE.md", draft)
+        self.assertIn("Glide-Lizenzstatus.md", draft)
 
     def test_all_shell_steps_have_valid_syntax_without_running_commands(self):
         executable = shell()

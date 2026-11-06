@@ -1,6 +1,6 @@
 # Veröffentlichung – Glide
 
-Stand 05.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 06.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 Alles für eine spätere Auslieferung an einem Ort: Releasecheckliste, Signierung, Vertrieb und Marke, GitHub-Auftritt, Lizenzentwurf, Inhaberangaben und Store-Material. Zusammengeführt am 03.10.2026 aus der Releasecheckliste, drei Entscheidungsdokumenten vom 21.09.2026 und dem Ordner `40_Store_Material` (aufgelöst); die Vorfassungen trägt Git. Kennungen und technisch belegte Werte stehen weiter im [Produktregister](decisions/PRODUCT_IDENTITY.md).
 
@@ -32,6 +32,7 @@ Bisher wurde nichts signiert oder notarisiert außer der Ad-hoc-Signatur des Ent
 ## Vertrieb und Marke
 
 - **Entschieden 27.09.2026 (E-10):** zuerst Direktvertrieb über die eigene Website; Stores später. macOS: Developer-ID-Signatur, Notarisierung, `.app` als Ordnerbundle, DMG, arm64 (Universal 2 nur, wenn Intel-Macs gebraucht werden). Windows: Installer mit Code-Signing, x64. Laufzeit Python 3.14 mit Tk 9.
+- **Ergänzt 06.11.2026 (D64):** GitHub-Releases sind ein vorgeschalteter **Testkanal** für neue Testerinnen und Tester (Windows-ZIP und DMG, unsigniert, Vorabversion); die eigene Website bleibt erster Vertriebskanal. Der Windows-Installer aus E-10 ist noch nicht gebaut, der Testkanal liefert den Paketordner als ZIP.
 - **Kanäle laut Auftrag:** GitHub, eigene Website, Social Media, Product Hunt, itch.io, Heise Software-Verzeichnis, winget; Microsoft Store gesondert prüfen. Keine Konten angelegt, nichts hochgeladen.
 - Jeder Kanal braucht dasselbe geprüfte Artefakt, SHA-256-Prüfsumme, Versionshinweise, Systemvoraussetzungen, Kontakt und die freigegebene Lizenz.
 - **Marke:** „Glide“ wird von mehreren Softwareanbietern genutzt. Vor einer Veröffentlichung professionelle Marken- und Namensrecherche durch einen Fachanwalt (I4). Ausgangspunkte: [DPMA-Recherche](https://www.dpma.de/marken/markenrecherche/index.html) (nur übereinstimmende Wortelemente, keine Ähnlichkeitsprüfung), [EUIPO/TMview](https://www.euipo.europa.eu/en/trade-marks/before-applying/availability). Eine Rechercheakte nennt Datum, Suchausdruck mit Varianten, Register, Waren-/Dienstleistungsklassen, Treffer, Inhaber, Status und Links.
@@ -53,7 +54,7 @@ Ein öffentlicher GitHub-Release mit allgemeinem Vertriebsversprechen ist von ei
 4. Die Versionshinweise enthalten den CHANGELOG-Abschnitt, Startanleitung für SmartScreen/Gatekeeper und oben einen Prüfstandskasten (Vollmatrix für denselben Commit grün, rot oder nicht gefunden). Den Kasten vor dem Veröffentlichen entfernen.
 5. **Veröffentlichen nur von Hand** in GitHub unter „Releases“. Ein erneuter Lauf auf demselben Tag ersetzt nur einen noch unveröffentlichten Entwurf, nie einen veröffentlichten Release.
 
-Ob und wann ein Entwurf öffentlich wird, entscheidet der Inhaber; das berührt I11 (öffentlicher Auftritt) und, solange unsigniert, I3. Für einen reibungslosen Erststart braucht es Developer-ID-Signatur mit Notarisierung (Mac) und ein Windows-Codesigning-Zertifikat; der Workflow hat dafür noch keine Schritte und keine Geheimnisse.
+Ob und wann ein Entwurf öffentlich wird, entscheidet der Inhaber (D64); das berührt I11 (öffentlicher Auftritt), I2 (bis zur Lizenzentscheidung räumt [LICENSE.md](../LICENSE.md) keine Nutzungsrechte ein; die Versionshinweise verweisen darauf) und, solange unsigniert, I3. Prüfschritte vor dem Veröffentlichen: Block „Release-Entwurf prüfen“ der [manuellen Prüfung](../../../00_Arbeitsvorbereitung/Glide_Manuelle_Pruefung.md#e-nur-durch-den-inhaber). Für einen reibungslosen Erststart braucht es Developer-ID-Signatur mit Notarisierung (Mac) und ein Windows-Codesigning-Zertifikat; der Workflow hat dafür noch keine Schritte und keine Geheimnisse.
 
 **Git-Historie (I10):** Frühere gelöschte Protokolle mit Benutzerpfaden und Archivkopien bleiben ein historischer Befund. Ein Umschreiben würde Commit-Kennungen und Klone ändern und ist nicht Teil des 3.50-Abschlusses. Neue Dateien werden vor dem Upload auf Benutzerpfade, echte Inhalte und Geheimnisse geprüft.
 
