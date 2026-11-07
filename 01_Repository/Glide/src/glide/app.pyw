@@ -8,6 +8,7 @@ import ctypes
 import functools
 import hashlib
 import io
+import filecmp
 import json
 import math
 import mimetypes
@@ -25518,15 +25519,23 @@ class ListApp:
         # Abgelegt wird eine Kopie mit eigenem Pfad und seit D67 womöglich
         # gekürztem Namen; dieselbe Datei erkennt man deshalb an Größe und
         # Inhalt. Dubletten fallen vor der Umbenennungsfrage weg (Prüfbefund H4).
-        bekannt = {self.attachment_fingerprint(self.resolve_attachment_path(anhang))
-                   for anhang in state["fields"].get("attachments") or []}
-        bekannt.discard(None)
+        # Der Fingerabdruck (Größe, erstes MiB) findet nur Kandidaten; erst ein
+        # vollständiger Inhaltsvergleich macht eine Datei zur Dublette (Prüfbefund PR #69).
+        bekannt = {}
+        for anhang in state["fields"].get("attachments") or []:
+            vorhanden = self.resolve_attachment_path(anhang)
+            kennzeichen = self.attachment_fingerprint(vorhanden)
+            if kennzeichen is not None:
+                bekannt.setdefault(kennzeichen, []).append(vorhanden)
         offen = []
         for pfad in pfade:
             kennzeichen = self.attachment_fingerprint(pfad)
-            if kennzeichen is None or kennzeichen not in bekannt:
-                bekannt.add(kennzeichen)
-                offen.append(pfad)
+            if kennzeichen is not None and any(self.same_file_content(pfad, anderer)
+                                               for anderer in bekannt.get(kennzeichen, [])):
+                continue
+            if kennzeichen is not None:
+                bekannt.setdefault(kennzeichen, []).append(pfad)
+            offen.append(pfad)
         neu = [{"name": name, "pending_path": pfad} for pfad, name in self.confirm_attachment_names(offen)]
         gespeichert = self._store_pending_attachments(neu) if neu else []
         if gespeichert is None:
@@ -46118,6 +46127,40 @@ class ListApp:
         except (OSError, TypeError):
             return None
 
+    @staticmethod
+    def same_file_content(erster, zweiter):
+        """Vollständiger Bytevergleich zweier Dateien; Fehler gelten als verschieden."""
+        try:
+            return filecmp.cmp(erster, zweiter, shallow=False)
+        except (OSError, TypeError):
+            return False
+
+    def attachment_rename_file(self):
+        return os.path.join(os.path.dirname(os.path.abspath(SAVE_FILE)), "anhang_umbenennungen.json")
+
+    def attachment_renames(self):
+        """Gespeicherte Umbenennungen alt → neu (für ältere Sicherungen)."""
+        try:
+            with open(self.attachment_rename_file(), "r", encoding="utf-8") as datei:
+                daten = json.load(datei)
+            return daten if isinstance(daten, dict) else {}
+        except (OSError, ValueError, TypeError):
+            return {}
+
+    def remember_attachment_renames(self, umbenannt):
+        """Umbenennungen dauerhaft ablegen, bevor die alten Dateien gehen (Prüfbefund PR #69)."""
+        daten = glide_attachment_names.merge_renames(self.attachment_renames(), umbenannt)
+        ziel = self.attachment_rename_file()
+        try:
+            with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=os.path.dirname(ziel),
+                                             prefix=".anhang_umbenennungen-", suffix=".tmp", delete=False) as datei:
+                json.dump(daten, datei, ensure_ascii=False, indent=2)
+                temp = datei.name
+            os.replace(temp, ziel)
+            return True
+        except (OSError, TypeError):
+            return False
+
     def ask_attachment_name(self, original, parent=None):
         """Fragt einen zulässigen Namen ab; None bei Abbruch. Die Endung bleibt erhalten."""
         vorschlag = glide_attachment_names.shortened_name(original)
@@ -47712,11 +47755,15 @@ bleibt unverändert. Glide 3.28 und älter können Format 19 nicht lesen."""
                     if isinstance(anhang, dict) and anhang.get("storage") in zurueck:
                         anhang["storage"] = zurueck[anhang["storage"]]
             return
-        for alt in offen["storage"]:
-            try:
-                os.remove(self.resolve_attachment_path({"storage": alt}))
-            except (OSError, TypeError):
-                pass
+        # Ältere JSON-Sicherungen verweisen weiter auf die alten Namen; die
+        # Zuordnung wird vorher dauerhaft gespeichert. Gelingt das nicht, bleiben
+        # die Originale liegen (Prüfbefund PR #69).
+        if self.remember_attachment_renames(offen["storage"]):
+            for alt in offen["storage"]:
+                try:
+                    os.remove(self.resolve_attachment_path({"storage": alt}))
+                except (OSError, TypeError):
+                    pass
         self.show_attachment_name_notice(offen["names"], offen["backup"], files=len(offen["storage"]))
 
     def show_title_clip_notice(self):
@@ -62391,8 +62438,12 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
                     [(entry['id'], entry.get('title') or 'Seite') for entry in pages])
             if page_id is None:
                 return False
-            local_paths = {storage: self.resolve_attachment_path({'storage': storage})
-                           for storage in snapshot.referenced} if not snapshot.portable else {}
+            # Gekürzte Anhangsnamen: alte Sicherungen über die Umbenennungsliste auflösen.
+            umbenannt = self.attachment_renames()
+            vorhanden = lambda name: os.path.isfile(self.resolve_attachment_path({'storage': name}) or '')
+            local_paths = {storage: self.resolve_attachment_path(
+                {'storage': glide_attachment_names.resolve_renamed(storage, umbenannt, vorhanden)})
+                for storage in snapshot.referenced} if not snapshot.portable else {}
             plan = glide_page_restore.prepare(
                 copy.deepcopy(self.data_payload()), snapshot.data, page_id,
                 snapshot.available(local_paths), max_trash=self.MAX_TRASH_ENTRIES,

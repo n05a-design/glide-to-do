@@ -128,3 +128,31 @@ def restore_names(attachments, records):
             anhang["name"] = eintrag[0]
             zurueck += 1
     return zurueck
+
+
+def merge_renames(existing, new):
+    """Umbenennungen alt → neu fortschreiben; Ketten zeigen auf den jüngsten Namen."""
+    merged = {str(k): str(v) for k, v in (existing or {}).items() if k and v}
+    for old, short in (new or {}).items():
+        if not old or not short or old == short:
+            continue
+        for key, value in list(merged.items()):
+            if value == old:
+                merged[key] = short
+        merged[str(old)] = str(short)
+    return merged
+
+
+def resolve_renamed(storage, renames, exists, limit=16):
+    """Speichernamen alter Sicherungen über die Umbenennungsliste auflösen.
+
+    Prüfbefund PR #69: Nach dem Kürzen zu langer Anhangsnamen verwiesen ältere
+    JSON-Sicherungen noch auf die entfernten Originalnamen. `exists(name)`
+    prüft den Bestand; gefunden wird der vorhandene Name oder `storage`.
+    """
+    current, seen = storage, set()
+    while current and not exists(current) and current in (renames or {}) and current not in seen and len(seen) < limit:
+        seen.add(current)
+        current = renames[current]
+    return current if current and exists(current) else storage
+

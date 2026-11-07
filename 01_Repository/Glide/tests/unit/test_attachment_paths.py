@@ -1,5 +1,6 @@
 import unittest
 from attachment_paths import validate_storage, storage_key
+import attachment_paths as paths
 
 class PathTests(unittest.TestCase):
     def test_flat_portable_names_and_normalized_collision_keys(self):
@@ -13,6 +14,22 @@ class PathTests(unittest.TestCase):
                       "attachments/a.", "attachments/a:stream", "attachments/x\x00y",
                       "attachments/a\ny", "attachments/CON.txt", "attachments/com9", "attachments/LPT1.png"):
             with self.subTest(value=value), self.assertRaises(ValueError):validate_storage(value)
+
+
+class UmbenennungslisteTest(unittest.TestCase):
+    """Prüfbefund PR #69: alte Sicherungen nach dem Kürzen von Anhangsnamen."""
+
+    def test_ketten_zeigen_auf_juengsten_namen(self):
+        stufe1 = paths.merge_renames({}, {"a/lang": "a/mittel"})
+        stufe2 = paths.merge_renames(stufe1, {"a/mittel": "a/kurz"})
+        self.assertEqual(stufe2, {"a/lang": "a/kurz", "a/mittel": "a/kurz"})
+
+    def test_aufloesen_nur_wenn_vorhanden(self):
+        umbenannt = {"a/lang": "a/kurz"}
+        self.assertEqual(paths.resolve_renamed("a/lang", umbenannt, {"a/kurz"}.__contains__), "a/kurz")
+        self.assertEqual(paths.resolve_renamed("a/lang", umbenannt, {"a/lang", "a/kurz"}.__contains__), "a/lang")
+        self.assertEqual(paths.resolve_renamed("a/fehlt", umbenannt, set().__contains__), "a/fehlt")
+        self.assertEqual(paths.resolve_renamed("x", {"x": "y", "y": "x"}, set().__contains__), "x")
 
 if __name__=="__main__":unittest.main()
 
@@ -72,4 +89,3 @@ class NameLimitTests(unittest.TestCase):
         a1["name"] = "Neu.jpg"
         self.assertEqual(ap.restore_names([a1], [("1", "Original eins.jpg", "x" * 40)]), 0)
         self.assertEqual(a1["name"], "Neu.jpg")
-

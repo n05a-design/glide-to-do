@@ -4363,6 +4363,10 @@ def fall_anhangsnamen(lauf):
     neu_pfad = Path(app.resolve_attachment_path(alt))
     assert neu_pfad.read_bytes() == datei.read_bytes(), "Inhalt nach Umbenennen verändert"
     assert not ziel.exists(), "alte Datei mit langem Namen bleibt liegen"
+    # Prüfbefund PR #69: ältere JSON-Sicherungen finden den Anhang über die Umbenennungsliste.
+    if hasattr(app, "attachment_renames"):
+        umbenannt = app.attachment_renames()
+        assert umbenannt.get(alt_speicher) == alt["storage"], umbenannt
     sicherungen = list((Path(lauf.data) / "backups").glob("liste_vor_anhangkuerzung_*.zip"))
     assert sicherungen, "keine Vorsicherung"
     import zipfile
@@ -4410,6 +4414,27 @@ def fall_anhangsnamen(lauf):
         app.save_items = original_speichern
     assert anhang2["storage"] == alt2 and pfad2.exists(), "Rücknahme zeigt nicht auf die alte Datei"
     assert Path(app.resolve_attachment_path({"storage": neu2})).exists(), "Kopie bei Rücknahme gelöscht"
+    # Prüfbefund PR #69: gleicher Anfang (1 MiB), anderes Ende – beide Dateien sind verschieden.
+    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
+    app.set_active_list(liste["id"])
+    warte(lauf, 0.3)
+    punkt = next(i for i in app.iter_tree_ids() if app.find_item_in_lists(i))
+    app.open_task_inspector(punkt)
+    warte(lauf, 0.3)
+    kopf = b"x" * (1024 * 1024)
+    eins, zwei, drei = quelle / "anfang_a.bin", quelle / "anfang_b.bin", quelle / "anfang_a_kopie.bin"
+    eins.write_bytes(kopf + b"1"); zwei.write_bytes(kopf + b"2"); drei.write_bytes(kopf + b"1")
+    vorher_anh = len(app._detail_state["fields"].get("attachments") or [])
+    echt_dialog = mod.filedialog.askopenfilenames
+    mod.filedialog.askopenfilenames = lambda **k: (str(eins), str(zwei), str(drei))
+    try:
+        app.add_detail_pane_attachments()
+    finally:
+        mod.filedialog.askopenfilenames = echt_dialog
+    warte(lauf, 0.2)
+    nachher_anh = len(app._detail_state["fields"].get("attachments") or [])
+    assert nachher_anh - vorher_anh == 2, ("gleicher Anfang galt als Dublette", vorher_anh, nachher_anh)
+    app.close_task_inspector(discard=True)
     return ("Umbenennen erzwungen (Abbruch übernimmt nichts, Endung bleibt), Speichername ≤ 73, automatische Kürzung "
             "gemeldet, Bestand nach ZIP-Vorsicherung (Datendatei und Originalbytes) gekürzt, alte Datei entfernt; "
             "Schreibschutz nimmt per Kennung zurück, Speicherfehler lässt Kopien liegen")
