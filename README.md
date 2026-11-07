@@ -125,8 +125,8 @@ Glide läuft unter **Windows, macOS und Linux**. Eigenständige Pakete bringen P
 
 | System | So startest du | Hinweis |
 |---|---|---|
-| **Windows x64** | Im letzten erfolgreichen Lauf von [„Glide-Prüfung“](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml) unter „Artifacts“ das Windows-Paket laden, entpacken und `Glide.exe` starten. | unsignierter Entwicklungsbau |
-| **macOS Apple Silicon** | Im letzten erfolgreichen Lauf von [„macOS-Paket“](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml) das Paket laden und auf dem Mac entpacken. | unsignierter Entwicklungsbau |
+| **Windows x64** | Unter [Releases](https://github.com/n05a-design/glide-to-do/releases) `Glide-<Version>-windows-x64.zip` laden (Prüfsumme daneben), entpacken und `Glide.exe` starten; SmartScreen: „Weitere Informationen › Trotzdem ausführen“. Entwicklungsstände weiter im Lauf [„Glide-Prüfung“](https://github.com/n05a-design/glide-to-do/actions/workflows/python-app.yml) unter „Artifacts“. | unsignierte Beta |
+| **macOS Apple Silicon** | Unter [Releases](https://github.com/n05a-design/glide-to-do/releases) `Glide-<Version>-macos-arm64.dmg` laden (Prüfsumme daneben), Glide in „Programme“ ziehen; Gatekeeper: „Dennoch öffnen“. Entwicklungsstände im Lauf [„macOS-Paket“](https://github.com/n05a-design/glide-to-do/actions/workflows/macos-paket.yml). | unsignierte Beta |
 | **Linux und alle Systeme** | Repository herunterladen und mit Python 3.14 samt Tk starten: `python3 07_Python-Versionen/Schnellstart.pyw` | keine zusätzlichen pip-Pakete |
 
 > [!NOTE]

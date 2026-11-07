@@ -1,6 +1,6 @@
 # Manuelle Prüfung – Glide
 
-Stand 05.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 06.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 ## Menschliche Prüfung des ersten öffentlichen Stands 3.50
 
@@ -459,6 +459,15 @@ Verfügbarkeit am 13.10.2026: Zusätzlich zu Mac/VoiceOver stehen dem Inhaber ke
 - Signatur, Notarisierung und Installer.
 - Markenprüfung.
 - Store-Freigabe.
+
+**Release-Entwurf prüfen (D64), vor jedem Veröffentlichen:**
+
+- [ ] Prüfstandskasten oben in den Versionshinweisen: Vollmatrix für denselben Commit grün. Bei „rot“ oder „nicht gefunden“ nicht veröffentlichen.
+- [ ] Lizenzentscheidung I2 getroffen oder bewusst mit dem Hinweis „noch keine öffentliche Lizenz“ veröffentlicht.
+- [ ] Windows: `Glide-<v>-windows-x64.zip` aus dem Entwurf laden, Prüfsumme mit der `.sha256`-Datei vergleichen (`certutil -hashfile <Datei> SHA256`), entpacken, `Glide\Glide.exe` starten. SmartScreen-Weg „Weitere Informationen“ › „Trotzdem ausführen“ wie in den Versionshinweisen beschrieben.
+- [ ] Mac: `Glide-<v>-macos-arm64.dmg` laden, Prüfsumme vergleichen (`shasum -a 256 <Datei>`), öffnen, Glide nach „Programme“ ziehen, starten. Gatekeeper-Weg über „Systemeinstellungen“ › „Datenschutz & Sicherheit“ › „Dennoch öffnen“ bestätigen.
+- [ ] Beide Pakete starten mit leeren synthetischen Daten; die angezeigte Version stimmt mit dem Tag überein.
+- [ ] Prüfstandskasten aus den Versionshinweisen entfernen, „Set as a pre-release“ eingeschaltet lassen, dann „Publish release“.
 
 ## Sprintnachlauf Tagesplanung 3.39.0
 
