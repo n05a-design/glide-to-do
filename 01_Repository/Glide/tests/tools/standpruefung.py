@@ -221,12 +221,13 @@ UEBERHOLT: tuple[tuple[str, str], ...] = (
      "maßgeblich ist Python 3.14 mit Tk 9"),
 )
 
-# R10: Wer die Module neben `app.pyw` aufzählt, nennt alle. Die Moduldateien
+# R10: Technische Bau-/Lieferquellen zählen alle Module; die fachliche Liste
+# steht ausschließlich im Glide-System und wird von test_glide_system.py geprüft.
+# Die Moduldateien
 # ergeben sich aus `src/glide/*.py` (ohne die isolierte Bedienprobe).
 MODULLISTEN = (
-    "docs/02_ARCHITECTURE.md",
-    "src/glide/README.md",
-    "packaging/README.md",
+    # Das fachliche Vollregister wird separat durch test_glide_system.py geprüft.
+    # R10 bleibt für die technischen Bau- und Lieferquellen zuständig.
     "packaging/macos/baue_app.py",
     "scripts/pflege/abgleich_07.py",
 )
