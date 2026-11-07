@@ -26302,8 +26302,14 @@ class ListApp:
             speicher[schluessel[0]] = (glide_glyphs.relative_shift(metrics, schluessel[0], self.SYMBOL_REFERENCE_GLYPH,
                                                                    pixel) if schluessel[0] and pixel else 0)
         return speicher[schluessel[0]]
-    # Abstand zwischen Seiten- und Listenbereich – enger als zum Systembereich.
-    SIDEBAR_LISTS_GAP = 10
+    # Abstand zwischen den Abteilungen (Seiten, Listen, Notizen, Zeichnungen) –
+    # enger als zum Systembereich. Inhaberwunsch 07.11.2026: von 10 auf 18 px
+    # vergrößert, dafür unter der Abteilungsüberschrift kein Zusatzabstand.
+    SIDEBAR_LISTS_GAP = 18
+    SIDEBAR_HEADER_BOTTOM_GAP = 0
+    # Zeilenhöhe der Seitenleistenbäume (vorher 34 px für beide).
+    SIDEBAR_ROW_HEIGHT = 30
+    SYSTEM_ROW_HEIGHT = 28
 
     def sidebar_section_open(self, key):
         if key not in self.SIDEBAR_SECTIONS:
@@ -38474,7 +38480,8 @@ class ListApp:
                     and getattr(self, f"{later}_title_row").winfo_manager()), None)
                 if key == "pages":
                     before = self.sidebar_title_row
-                row.pack(fill="x", pady=(self.SIDEBAR_SECTION_GAP if key == "pages" else self.SIDEBAR_LISTS_GAP, 2),
+                row.pack(fill="x", pady=(self.SIDEBAR_SECTION_GAP if key == "pages" else self.SIDEBAR_LISTS_GAP,
+                                         self.SIDEBAR_HEADER_BOTTOM_GAP),
                          **({"before": before} if before else {}))
 
     def show_drawings_add_menu(self, event=None):
@@ -38667,7 +38674,7 @@ class ListApp:
                          ("drawings", getattr(self, "drawings_title_row", None))):
             if row is not None and row.winfo_manager():
                 gap = self.SIDEBAR_SECTION_GAP if key == "pages" else self.SIDEBAR_LISTS_GAP
-                padding = (4, 2) if minimal else (gap, 2)
+                padding = (4, 2) if minimal else (gap, self.SIDEBAR_HEADER_BOTTOM_GAP)
                 current = row.pack_info().get("pady", 0)
                 current = tuple(int(value) for value in (current if isinstance(current, (tuple, list)) else str(current).split()))
                 if current != padding:
@@ -44305,6 +44312,14 @@ class ListApp:
                 active_thumb_color=self.theme["muted"],
             )
         if hasattr(self, "sidebar_listbox"):
+            # Inhaberwunsch 07.11.2026: Zeilen etwas enger, Systemzeilen (Startseite
+            # bis Papierkorb) noch etwas enger; bei großer Schrift wachsen sie mit.
+            try:
+                zeile_schrift = self.measurement_font(self.sidebar_row_font()).metrics("linespace")
+            except (tk.TclError, AttributeError, TypeError):
+                zeile_schrift = 20
+            zeilenhoehen = {"Sidebar.Treeview": max(self.SIDEBAR_ROW_HEIGHT, zeile_schrift + 10),
+                            "System.Treeview": max(self.SYSTEM_ROW_HEIGHT, zeile_schrift + 8)}
             for style_name, surface_key in (("Sidebar.Treeview", "card"), ("System.Treeview", "card")):
                 self.style.configure(
                     style_name,
@@ -44313,7 +44328,7 @@ class ListApp:
                     foreground=self.theme["text"],
                     borderwidth=0,
                     relief="flat",
-                    rowheight=34,
+                    rowheight=zeilenhoehen[style_name],
                     font=self.sidebar_row_font(),
                 )
                 try:

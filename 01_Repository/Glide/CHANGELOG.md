@@ -2,6 +2,7 @@
 
 ## 3.50.6 (07.11.2026) – Menschliche Abnahme am Mac (D66–D71)
 
+- Seitenleiste dichter: engere Zeilen, „Startseite“ bis „Papierkorb“ noch etwas enger; mehr Abstand zwischen den Abteilungen, weniger unter ihrer Überschrift.
 - Erledigte und offene Punkte beginnen an derselben Textkante: „✓“ und „□“ sind unterschiedlich breit; das schmalere Zeichen wird mit hauchdünnen Leerzeichen ausgeglichen (Live-Liste, Checklistenzeilen im Baum, Checklisten in Dialogen und Kartenansicht).
 - Live-Liste einer Seite ohne Lücke über den Zeilen: Die gezeichnete Glide-Leiste (Ersatz der Systemleiste, D66) beanspruchte als Canvas 265 px Standardhöhe; an den drei ersetzten Stellen (Live-Liste, Speicherstatus, Sicherungsübersicht) hat sie keine eigene Länge mehr.
 - Keine leeren Flächen mehr nach dem Schließen: „Erwähnt ohne Verweis“ zuklappen, eine Live-Liste lösen oder ein Titelbild entfernen gibt den Platz vollständig an den Seitentext zurück; leere Bereiche schrumpfen appweit auf ihre Ruhegröße.

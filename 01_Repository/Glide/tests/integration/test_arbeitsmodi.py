@@ -3599,6 +3599,17 @@ def fall_seitenleistenabstand3504(lauf):
                 idle(lauf, 3)
                 lauf.capture.mkdir(parents=True, exist_ok=True)
                 save_windows_screenshot(lauf.root, lauf.capture / f"seitenleistenabstand-{design}-{size}.png")
+    # Inhaberwunsch 07.11.2026: engere Zeilen (Systemzeilen enger), größerer Abstand zwischen
+    # den Abteilungen, kein Zusatzabstand unter der Abteilungsüberschrift.
+    app = lauf.app
+    hoehe = lambda stil: int(app.style.lookup(stil, "rowheight"))
+    assert hoehe("System.Treeview") < hoehe("Sidebar.Treeview") < 34, (hoehe("System.Treeview"), hoehe("Sidebar.Treeview"))
+    assert getattr(app, "SIDEBAR_LISTS_GAP", 0) >= 18 and getattr(app, "SIDEBAR_HEADER_BOTTOM_GAP", 2) == 0
+    for name in ("lists_title_row", "notes_title_row", "drawings_title_row"):
+        zeile = getattr(app, name, None)
+        if zeile is not None and zeile.winfo_manager() == "pack":
+            oben, unten = zeile.pack_info()["pady"] if isinstance(zeile.pack_info()["pady"], tuple) else (zeile.pack_info()["pady"],) * 2
+            assert int(oben) >= 18 and int(unten) == 0, (name, zeile.pack_info()["pady"])
     return f"{checks} Hover-Geometrieprüfungen gegen die äußere Seitenleistenkarte: oben/links/rechts gleich, vier Design-/Schriftkombinationen, Mindestbreite/breit, Rückkehr aus schmal/ausgeblendet; Symbolhintergrund und Hover-Ende"
 
 
