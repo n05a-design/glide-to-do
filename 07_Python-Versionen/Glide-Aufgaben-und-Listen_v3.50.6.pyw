@@ -45598,7 +45598,9 @@ class ListApp:
             schluessel = (tuple(sorted(schrift.actual().items())), done_icon)
         except (tk.TclError, TypeError, ValueError):
             return fertig if done else offen
-        cache = self.__dict__.setdefault("_task_marker_cache", {})
+        cache = getattr(self, "_task_marker_cache", None)
+        if cache is None:
+            cache = self._task_marker_cache = {}
         paar = cache.get(schluessel)
         if paar is None:
             paar = cache[schluessel] = glide_design.aligned_markers((fertig, offen), schrift.measure)
