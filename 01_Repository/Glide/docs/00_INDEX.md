@@ -8,6 +8,7 @@ Am 04.11.2026 zusammengeführt und gekürzt: ersetzte Sitzungsstände und histor
 
 - **Neue Sitzung und aktueller Stand:** [Übergabe](../../../00_Arbeitsvorbereitung/Glide_Uebergabe.md), danach [Arbeitsregeln](../AGENTS.md).
 - **Aufgaben und nächste Auswahl:** [einzige Roadmap, Plan §21.62](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2162-stand-roadmap-und-mehrwertanalyse-vom-04112026).
+- **System-und-Modulpflege:** [Glide-System](../src/glide/README.md) – verbindliches vollständiges Modul-, Feature-, Baustein-, QA- und Testinventar; Änderungen werden im selben Commit gepflegt.
 - **Prüfung und Lieferung:** [QA-Bericht](07_QA_BERICHT.md); Versionsnummer, gezielte Prüfung, Vollmatrix, Paketlieferung und menschliche Abnahme getrennt beurteilen.
 - **Produktentscheidungen und Gestaltung:** [Arbeitsrichtung](ARBEITSRICHTUNG.md), [Design Richtlinien](DESIGN_RICHTLINIEN.md).
 - **Dokumente ändern oder löschen:** [Dokumentenpflege](DOKUMENTENPFLEGE.md).
