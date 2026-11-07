@@ -6,6 +6,8 @@ Glide ist eine deutschsprachige Desktop-Anwendung für Aufgaben, Listen, Notizen
 
 > **Projektstatus:** Quell-/Python-Stand **3.50.5**; Abnahmekorrekturen umgesetzt, native 3.50.5-Pakete und menschliche Abnahme laufend, Aufgabenformat 26. Aktuelle Prüfungen, native Paketstände und offene menschliche Abnahmen stehen im [QA-Bericht](docs/07_QA_BERICHT.md). Der [Übergabeeinstieg](../../00_Arbeitsvorbereitung/Glide_Uebergabe.md) ordnet nächste Schritte und Grenzen ein.
 
+**Verbindliche technische Gesamtliste:** [Glide-System](src/glide/README.md) – Module, Features, Wiederverwendung, Bausteine, Tests und System-und-Modulpflege.
+
 Funktionsumfang im Überblick: [Projekt-README](../../README.md#was-glide-kann); Verhalten im Einzelnen: [Funktionen](docs/20_FUNKTIONEN.md); Entwicklung je Version: [Änderungsverlauf](CHANGELOG.md).
 
 ## Schnellstart aus dem Quellstand
