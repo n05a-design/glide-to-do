@@ -47696,6 +47696,10 @@ bleibt unverändert. Glide 3.28 und älter können Format 19 nicht lesen."""
                     os.remove(temporaer)
                 except OSError:
                     pass
+        # Notion-Quellseiten: Zustand vor dem Umzug, um saubere Zuordnungen danach
+        # neu zu verankern (Prüfbefund Codex, PR #69).
+        quellseiten_vorher = (copy.deepcopy((self.lists, self.trash))
+                              if glide_source_metadata.source_pages((self.lists, self.trash)) else None)
         kopiert = {}
         for alt, gruppe in lang.items():
             quelle = quellen.get(alt)
@@ -47731,11 +47735,45 @@ bleibt unverändert. Glide 3.28 und älter können Format 19 nicht lesen."""
                 anhang["storage"] = neu
         if not aufgezeichnet and not kopiert:
             return False
+        quellen_vorher = self.reanchor_sources_after_attachment_move(quellseiten_vorher) if kopiert else []
         self._attachment_rename_pending = {"names": [(original, kurz) for _kennung, original, kurz in aufgezeichnet],
-                                           "storage": kopiert, "backup": ziel, "owners": halter}
+                                           "storage": kopiert, "backup": ziel, "owners": halter,
+                                           "sources": quellen_vorher}
         self.dirty = True
         self.root.after(650, self.finish_attachment_renaming)
         return True
+
+    def reanchor_sources_after_attachment_move(self, vorher):
+        """Saubere Notion-Zuordnungen nach dem reinen Anhangsumzug neu verankern.
+
+        Die Kürzung ändert nur Speichernamen, nicht Inhalt oder Bytes; ohne
+        Neuverankerung hielte der nächste Notion-Import eine unveränderte Seite
+        für lokal bearbeitet. Echte lokale Änderungen bleiben verschieden
+        (`source_metadata.relocated_collections`). Gibt die alten Zuordnungen
+        für die Rücknahme zurück.
+        """
+        if vorher is None:
+            return []
+        app = self
+
+        class Pfade(dict):
+            def get(self, storage, default=None):
+                return app.resolve_attachment_path({"storage": storage}) or default
+
+        jetzt = (self.lists, self.trash)
+        try:
+            grenze = 8 * 1024 * 1024 * 1024
+            hashes_vorher = glide_source_metadata.staged_source_hashes(vorher, Pfade(), max_bytes=grenze)
+            hashes_nachher = glide_source_metadata.staged_source_hashes(jetzt, Pfade(), max_bytes=grenze)
+            ergebnis = glide_source_metadata.relocated_collections(vorher, jetzt, hashes_vorher, hashes_nachher)
+        except (ValueError, OSError, KeyError, TypeError):
+            return []
+        alte = []
+        for seite, neu in zip(glide_source_metadata.source_pages(jetzt), glide_source_metadata.source_pages(ergebnis)):
+            if neu.get("notion_source") != seite.get("notion_source"):
+                alte.append((seite, copy.deepcopy(seite.get("notion_source"))))
+                seite["notion_source"] = neu.get("notion_source")
+        return alte
 
     def finish_attachment_renaming(self):
         """Gekürzte Anhänge speichern, alte Dateien erst danach entfernen, klar melden.
@@ -47754,6 +47792,8 @@ bleibt unverändert. Glide 3.28 und älter können Format 19 nicht lesen."""
                 for anhang in besitzer.get("attachments", []) or []:
                     if isinstance(anhang, dict) and anhang.get("storage") in zurueck:
                         anhang["storage"] = zurueck[anhang["storage"]]
+            for seite, quelle in offen.get("sources") or []:
+                seite["notion_source"] = quelle
             return
         # Ältere JSON-Sicherungen verweisen weiter auf die alten Namen; die
         # Zuordnung wird vorher dauerhaft gespeichert. Gelingt das nicht, bleiben

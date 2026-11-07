@@ -4350,6 +4350,22 @@ def fall_anhangsnamen(lauf):
     galerie["attachments"].append({"id": "a" * 32, "name": "Sehr langer historischer Anhangsname aus einem alten Bestand.jpg",
                                    "storage": alt_speicher, "size": ziel.stat().st_size, "mime": "image/jpeg",
                                    "added_at": "2026-11-01T10:00:00"})
+    # Prüfbefund Codex (PR #69): Notion-Quellseite mit langem Speichernamen und sauberer Zuordnung.
+    import hashlib
+    sys.path.insert(0, str(REPO / "src/glide"))
+    from notion_reimport import SourceRecord, content_fingerprint
+    notion_speicher = "attachments/" + "b" * 32 + "_" + "Historischer Notion-Anhang mit sehr langem Dateinamen.png"
+    notion_datei = Path(app.resolve_attachment_path({"storage": notion_speicher}))
+    notion_datei.write_bytes(datei.read_bytes())
+    notion_hash = hashlib.sha256(notion_datei.read_bytes()).hexdigest()
+    notion_seite = app.new_list_object("Notion-Quellseite", [], list_kind=app.LIST_KIND_PAGE)
+    notion_seite["attachments"] = [{"id": "b" * 32, "name": "Foto.png", "storage": notion_speicher,
+                                    "size": notion_datei.stat().st_size, "mime": "image/png",
+                                    "added_at": "2026-11-01T10:00:00"}]
+    notion_seite["notion_source"] = SourceRecord("notion:" + "c" * 32, notion_seite["id"], "d" * 64,
+                                                 content_fingerprint(notion_seite, {"b" * 32: notion_hash}),
+                                                 "Quellseite.md").to_document()
+    app.lists.append(notion_seite)
     assert app.save_items()
     lauf.neustart()
     app, mod = lauf.app, lauf.mod
@@ -4357,6 +4373,10 @@ def fall_anhangsnamen(lauf):
     app.show_info = lambda titel, text, **k: meldungen.append((titel, text))
     warte(lauf, 1.2)
     galerie = next(e for e in app.lists if e["id"] == galerie["id"])
+    notion_neu = next(e for e in app.lists if e["id"] == notion_seite["id"])
+    assert notion_neu["attachments"][0]["storage"] != notion_speicher, "Notion-Anhang nicht gekürzt"
+    assert content_fingerprint(notion_neu, {"b" * 32: notion_hash}) == notion_neu["notion_source"]["local_hash"], \
+        "saubere Notion-Zuordnung nach dem Anhangsumzug nicht neu verankert"
     alt = next(a for a in galerie["attachments"] if a["id"] == "a" * 32)
     assert len(alt["name"]) <= grenze and alt["name"].endswith(".jpg"), alt["name"]
     assert len(alt["storage"].rsplit("/", 1)[-1]) <= speichergrenze, alt["storage"]
@@ -4375,7 +4395,7 @@ def fall_anhangsnamen(lauf):
         assert "liste_speicher.json" in inhalt and alt_speicher in inhalt, inhalt
         assert archiv.read(alt_speicher) == datei.read_bytes(), "Vorsicherung ohne Originalbytes"
         assert "Sehr langer historischer Anhangsname" in archiv.read("liste_speicher.json").decode("utf-8")
-    assert meldungen and meldungen[-1][0] == "Anhangsnamen gekürzt" and "1 Datei(en)" in meldungen[-1][1], meldungen
+    assert meldungen and meldungen[-1][0] == "Anhangsnamen gekürzt" and "2 Datei(en)" in meldungen[-1][1], meldungen
     # Gespeichert: ein weiterer Neustart meldet nichts mehr.
     lauf.neustart()
     app = lauf.app

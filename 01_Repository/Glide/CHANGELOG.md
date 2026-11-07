@@ -2,7 +2,7 @@
 
 ## 3.50.6 (07.11.2026) – Menschliche Abnahme am Mac (D66–D71)
 
-- Anhänge: Zwei verschiedene Dateien mit gleichem Anfang werden nicht mehr als Dublette verworfen (vollständiger Inhaltsvergleich). Nach dem Kürzen langer Anhangsnamen merkt sich Glide alt → neu in `anhang_umbenennungen.json`; ältere Sicherungen finden ihre Anhänge darüber, und ohne gespeicherte Zuordnung bleiben die Originale liegen.
+- Anhänge: Zwei verschiedene Dateien mit gleichem Anfang werden nicht mehr als Dublette verworfen (vollständiger Inhaltsvergleich). Nach dem Kürzen langer Anhangsnamen merkt sich Glide alt → neu in `anhang_umbenennungen.json`; ältere Sicherungen finden ihre Anhänge darüber, und ohne gespeicherte Zuordnung bleiben die Originale liegen. Bei Notion-Quellseiten wird eine saubere Zuordnung nach dem Umzug neu verankert, damit der nächste Import die Seite nicht für lokal geändert hält.
 - Seitenleiste dichter: engere Zeilen, „Startseite“ bis „Papierkorb“ noch etwas enger; mehr Abstand zwischen den Abteilungen, weniger unter ihrer Überschrift.
 - Erledigte und offene Punkte beginnen an derselben Textkante: „✓“ und „□“ sind unterschiedlich breit; das schmalere Zeichen wird mit hauchdünnen Leerzeichen ausgeglichen (Live-Liste, Checklistenzeilen im Baum, Checklisten in Dialogen und Kartenansicht).
 - Live-Liste einer Seite ohne Lücke über den Zeilen: Die gezeichnete Glide-Leiste (Ersatz der Systemleiste, D66) beanspruchte als Canvas 265 px Standardhöhe; an den drei ersetzten Stellen (Live-Liste, Speicherstatus, Sicherungsübersicht) hat sie keine eigene Länge mehr.
