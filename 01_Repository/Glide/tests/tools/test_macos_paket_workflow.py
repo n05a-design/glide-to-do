@@ -42,6 +42,7 @@ class MacWorkflowTests(unittest.TestCase):
     def test_native_runner_branch_and_minimum_permission_contract(self):
         self.assertIn('branches: ["main", "codex/**"]', self.source)
         self.assertRegex(self.source, r"(?m)^  workflow_dispatch:$")
+        self.assertRegex(self.source, r"(?m)^  workflow_call:$")
         self.assertIn("runs-on: macos-15", self.source)
         self.assertIn("cancel-in-progress: false", self.source)
         self.assertRegex(self.source, r"(?m)^permissions:\n  contents: read\n")
@@ -73,13 +74,29 @@ class MacWorkflowTests(unittest.TestCase):
         if executable is None:
             self.skipTest("Keine lokale Bash für Shell-Syntaxprüfung verfügbar")
         blocks = list(run_blocks(self.source))
-        self.assertEqual(len(blocks), 5)
+        self.assertEqual(len(blocks), 6)
         with tempfile.TemporaryDirectory() as directory:
             for index, block in enumerate(blocks):
                 path = Path(directory) / f"step-{index}.sh"
                 path.write_text(block, encoding="utf-8")
                 result = subprocess.run([executable, "-n", str(path)], capture_output=True, text=True, timeout=15)
                 self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_dmg_is_built_from_checked_archive_and_compared_after_mount(self):
+        step = self.source.split("- name: Geprüftes Archiv als DMG verpacken und Inhalt gegenprüfen", 1)[1].split("      - name:", 1)[0]
+        self.assertIn('/usr/bin/tar -xzf "$archiv" -C "$inhalt"', step)
+        self.assertNotIn("bau/dist", step)
+        self.assertIn("hdiutil create", step)
+        self.assertIn("hdiutil verify", step)
+        self.assertIn("hdiutil attach -readonly", step)
+        self.assertIn('cmp "$bau/dmg-soll.txt" "$bau/dmg-ist.txt"', step)
+        self.assertIn('codesign --verify --deep --strict "$mnt/Glide.app"', step)
+        self.assertIn("Glide-*-macos-arm64.dmg.sha256", self.source)
+        order = [self.source.index(name) for name in (
+            "- name: Eingefrorenen Stand nach Archiv- und Startprüfung erneut abgleichen",
+            "- name: Geprüftes Archiv als DMG verpacken und Inhalt gegenprüfen",
+            "- name: Geprüftes Mac-Archiv mit erhaltenen Dateimodi und Symlinks sichern")]
+        self.assertEqual(order, sorted(order))
 
 
 if __name__ == "__main__":

@@ -4,10 +4,14 @@
 # macos-15 ist der Standard-arm64-Runner; macos-15-intel wäre eine andere Architektur.
 # https://www.python.org/downloads/release/python-3145/
 # Originalinstaller samt veröffentlichter SHA-256; enthält Tcl/Tk 9.0.3.
+# 06.11.2026: zusätzlich DMG aus dem geprüften TAR (Inhalt gegen das Archiv
+# abgeglichen) und Aufruf durch release.yml (workflow_call). Weiterhin nur
+# Ad-hoc-Signatur; Developer-ID/Notarisierung bleiben Tor I3 (D43).
 name: Glide-Paket macOS arm64
 
 on:
   workflow_dispatch:
+  workflow_call:
   push:
     branches: ["main", "codex/**"]
     paths:
@@ -124,6 +128,42 @@ jobs:
           print("Paket, Archiv und eingefrorene Quellen bestätigt:", completion["version"], proof["commit"])
           PY
 
+      - name: Geprüftes Archiv als DMG verpacken und Inhalt gegenprüfen
+        run: |
+          set -eu
+          bau="$RUNNER_TEMP/glide-macos-bau"
+          version=$("$MAC_PYTHON" -B -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' "$bau/abschluss.json")
+          archiv="$bau/Glide-$version-macos-arm64.tar.gz"
+          dmg="$bau/Glide-$version-macos-arm64.dmg"
+          inhalt="$RUNNER_TEMP/glide-dmg-inhalt"
+          mnt="$RUNNER_TEMP/glide-dmg-mount"
+          mkdir "$inhalt" "$mnt"
+          # Inhalt ausschließlich aus dem geprüften TAR, nicht aus dem Bauordner.
+          /usr/bin/tar -xzf "$archiv" -C "$inhalt"
+          ln -s /Applications "$inhalt/Applications"
+          # hdiutil meldet auf Runnern gelegentlich „Resource busy“; begrenzt wiederholen.
+          versuch=1
+          until hdiutil create -volname "Glide $version" -srcfolder "$inhalt" -fs HFS+ -format UDZO -ov "$dmg" > "$bau/08-dmg.log" 2>&1; do
+            cat "$bau/08-dmg.log" >&2
+            if [ "$versuch" -ge 3 ]; then exit 1; fi
+            versuch=$((versuch + 1))
+            sleep 10
+          done
+          hdiutil verify "$dmg" >> "$bau/08-dmg.log" 2>&1
+          hdiutil attach -readonly -nobrowse -noautoopen -mountpoint "$mnt" "$dmg" >> "$bau/08-dmg.log" 2>&1
+          trap 'hdiutil detach "$mnt" -force > /dev/null 2>&1 || true' EXIT
+          bestand() {
+            (cd "$1" && find . -type f | LC_ALL=C sort | while IFS= read -r datei; do shasum -a 256 "$datei"; done
+             find . -type l | LC_ALL=C sort | while IFS= read -r link; do printf '%s -> %s\n' "$link" "$(readlink "$link")"; done)
+          }
+          bestand "$inhalt/Glide.app" > "$bau/dmg-soll.txt"
+          bestand "$mnt/Glide.app" > "$bau/dmg-ist.txt"
+          cmp "$bau/dmg-soll.txt" "$bau/dmg-ist.txt"
+          test "$(readlink "$mnt/Applications")" = /Applications
+          codesign --verify --deep --strict "$mnt/Glide.app"
+          (cd "$bau" && shasum -a 256 "$(basename "$dmg")" > "$(basename "$dmg").sha256")
+          printf 'DMG geprüft: %s Dateien/Links gleich dem Archiv; %s\n' "$(wc -l < "$bau/dmg-soll.txt" | tr -d ' ')" "$(cat "$dmg.sha256")"
+
       - name: Bau- und Startbelege sichern
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -138,6 +178,7 @@ jobs:
             ${{ runner.temp }}/glide-macos-bau/*.json
             ${{ runner.temp }}/glide-macos-bau/*.log
             ${{ runner.temp }}/glide-macos-bau/*.sha256
+            ${{ runner.temp }}/glide-macos-bau/dmg-*.txt
             ${{ runner.temp }}/glide-macos-bau/lizenzen/manifest.json
             ${{ runner.temp }}/glide-macos-bau/bau/*.json
             ${{ runner.temp }}/glide-macos-bau/bau/bau.log
@@ -152,6 +193,8 @@ jobs:
           path: |
             ${{ runner.temp }}/glide-macos-bau/Glide-*-macos-arm64.tar.gz
             ${{ runner.temp }}/glide-macos-bau/Glide-*-macos-arm64.tar.gz.sha256
+            ${{ runner.temp }}/glide-macos-bau/Glide-*-macos-arm64.dmg
+            ${{ runner.temp }}/glide-macos-bau/Glide-*-macos-arm64.dmg.sha256
             ${{ runner.temp }}/glide-macos-bau/abschluss.json
           compression-level: 0
           retention-days: 14

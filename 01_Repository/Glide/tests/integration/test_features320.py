@@ -147,6 +147,14 @@ with tempfile.TemporaryDirectory(prefix="glide-features320-") as folder:
         assert "\\n" in beschreibung and "\\;" in beschreibung and "\\," in beschreibung
         assert "\n" not in beschreibung
         assert "Termine\\, Fristen\\; Prüfung" in text, "Auch der Kalendername wird escaped."
+        for size in (39, 40, 41, 300):
+            original = "Ü" * size
+            neu = app.new_item(original, due=heute, description="Kalenderbeschreibung")
+            assert len(neu["text"]) <= app.CONTAINER_TITLE_MAX
+            if size > app.CONTAINER_TITLE_MAX:
+                assert original in neu["description"] and neu["description"].count("Originaltitel:") == 1
+            else:
+                assert neu["text"] == original and neu["description"] == "Kalenderbeschreibung"
         lang = app.new_item("Ü" * 300, due=heute, preserve_title=True)  # Alttitel (D63 bewahrt bestehende Langtitel)
         liste["items"].append(lang)
         assert app.save_items()

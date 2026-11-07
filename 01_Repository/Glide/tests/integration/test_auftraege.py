@@ -114,6 +114,9 @@ def fall_eigener_neustart_backup(run):
     def modal(dialog, *args, **kwargs):
         if dialog.title() == 'Eigener Auftrag':
             entry = next(w for w in widgets(dialog) if isinstance(w, run.mod.tk.Entry))
+            entry.insert(0, 'Ü' * 41)
+            assert len(entry.get()) <= app.CONTAINER_TITLE_MAX
+            entry.delete(0, 'end')
             entry.insert(0, 'Meine Zusammenfassung')
             text = next(w for w in widgets(dialog) if isinstance(w, run.mod.tk.Text))
             text.insert('1.0', 'Kürze nur die Zusammenfassung und erhalte den Originaltext.')
@@ -194,6 +197,12 @@ def fall_fehler_scope(run):
     own = {**recipe, 'id': 'own-test', 'title': 'Mein Auftrag'}
     before = copy.deepcopy(app.settings)
     disk = Path(run.mod.SETTINGS_FILE).read_bytes()
+    try:
+        app.save_exchange_recipe({**own, 'title': 'Ü' * 41})
+        raise AssertionError('41 Zeichen am Speichereinstieg angenommen')
+    except ValueError as exc:
+        assert '40' in str(exc)
+    assert app.settings == before and Path(run.mod.SETTINGS_FILE).read_bytes() == disk
     with patch.object(app, 'write_json_atomic', side_effect=OSError('Prüffehler')):
         assert not app.save_exchange_recipe(own)
     assert app.settings == before and Path(run.mod.SETTINGS_FILE).read_bytes() == disk

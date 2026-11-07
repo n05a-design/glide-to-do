@@ -55,6 +55,11 @@ def task_title(text, description="", *, preserve=False):
     return clipped, description
 
 
+def edited_task_title(text, previous, description=""):
+    """Unveränderte Alttitel bewahren; neue lange Eingaben vollständig sichern."""
+    return task_title(text, description, preserve=text == previous)
+
+
 def display_title(text, measure, width, limit=TITLE_MAX_CHARS):
     """Zeichen- und Pixelgrenze gemeinsam; vollständiger Titel bleibt beim Aufrufer."""
     return fit_text(clip_title(" ".join(str(text or "").split()), limit), measure, width, ellipsis="...")

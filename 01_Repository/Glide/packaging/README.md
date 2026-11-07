@@ -82,8 +82,8 @@ Originalbelege; der Generator verweigert eine bloße Umbenennung. Aktuelle
 Projektlizenzhinweise werden aus genau dem anschließend gebauten Quellstand
 übernommen.
 
-Der native Windows-Bau läuft im Workflow `Glide-Prüfung` nach der vollständigen
-Linux-/Windows-Matrix: eigene Bauumgebung, Lizenzbelege aus der tatsächlich
+Der native Windows-Bau steht in `.github/workflows/windows-paket.yml` und läuft im
+Workflow `Glide-Prüfung` nach der vollständigen Linux-/Windows-Matrix: eigene Bauumgebung, Lizenzbelege aus der tatsächlich
 installierten Laufzeit, `baue_paket.py --plattform windows-x64` und anschließend
 `pruefe_start_windows.py`. Dessen ACL-Sperre ist ausschließlich für den
 vergänglichen GitHub-Hosted-Runner zugelassen. Originale Zugriffsregeln werden im
@@ -91,6 +91,16 @@ vergänglichen GitHub-Hosted-Runner zugelassen. Originale Zugriffsregeln werden 
 darf im vergänglichen Runner abweichen, der Rohvergleich bleibt separat sichtbar.
 Das externe Python wird danach erneut gestartet.
 Der Workflow sichert Paket und Belege als getrennte Artefakte.
+
+Der Mac-Workflow (`macos-paket.yml`) erzeugt nach Archiv- und Startprüfung zusätzlich
+`Glide-<Version>-macos-arm64.dmg`: Inhalt ausschließlich aus dem geprüften TAR,
+`/Applications`-Verknüpfung zum Hineinziehen, nach `hdiutil verify` schreibgeschützt
+eingehängt, Datei- und Linkbestand gegen das Archiv verglichen und Ad-hoc-Signatur
+erneut geprüft. Ein Tag `v<VERSION>` auf einem `main`-Commit startet `release.yml`:
+beide Paketworkflows bauen neu, danach entsteht ein GitHub-Release-**Entwurf** als
+Vorabversion mit Windows-ZIP, DMG, TAR und `.sha256`-Dateien. Den Stand der Vollmatrix
+für denselben Commit schreibt der Workflow in die Versionshinweise; veröffentlicht wird
+nur von Hand ([Veröffentlichung](../docs/10_VEROEFFENTLICHUNG.md#github-auftritt)).
 
 Die native Startprobe legt ausschließlich künstliche Daten an und prüft sechs
 Ansichten, Speichern und erneutes Dateilesen, Abhaken und Undo, den App-Sicherungs-
