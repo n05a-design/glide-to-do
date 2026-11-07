@@ -52,7 +52,11 @@ def actual_test_paths() -> set[str]:
 class SystemUndModulpflegeTests(unittest.TestCase):
     def test_bereiche_und_eindeutige_ids(self):
         document, sections_by_name = registry()
-        self.assertTrue(document.startswith("# Glide-System\n"))
+        version = (ROOT / "GLIDE_SYSTEM_VERSION").read_text(encoding="utf-8").strip()
+        self.assertRegex(version, r"^\\d+\\.\\d+(?:\\.\\d+)?$")
+        self.assertTrue(document.startswith("# Glide-System V" + version + "\\n"))
+        self.assertRegex(document.splitlines()[2], r"^Stand \\d{2}\\.\\d{2}\\.\\d{4} · Glide \\d+\\.\\d+\\.\\d+ · Glide-System V" + re.escape(version) + r"\\b")
+        self.assertIn("| **V" + version + "** |", document, "Versionsverlauf pflegen")
         self.assertIn("## 7. System-und-Modulpflege", document)
         expected = {"MODULES": ("M", 94), "FEATURES": ("F", 127),
                     "PACKAGES": ("B", 22), "RISKS": ("Q", 25)}
