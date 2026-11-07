@@ -1,11 +1,20 @@
+# Glide-System V1.0
 
-# Glide-System
+Stand 08.11.2026 · Glide 3.50.6 · Glide-System V1.0 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-Stand 07.11.2026 · Glide 3.50.6 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+**Eigenständige Katalogversion:** `V1.0` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
 > **Prüfgrenze:** Das Erstinventar stammt aus dem Audit vom 07.11.2026 auf Commit `74717a85`. Quell- und Testdateien wurden mit `main` `37750811` abgeglichen. *Vorhanden* ≠ *getestet* ≠ *übertragbar*: Ein hohes Potenzial ist nur eine architektonische Ersteinschätzung. Gültige Abnahme stets mit aktuellem Commit, Plattform, konkretem Lauf und dem [QA-Bericht](../../docs/07_QA_BERICHT.md) nachweisen.
+
+## Versionsverlauf des Glide-Systems
+
+| Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
+|---|---|---|---|
+| **V1.0** | 08.11.2026 | Erstes konsolidiertes Systemregister: 94 Python-Quelldateien, 127 Features, 22 Bausteinpakete, 25 datierte Risiken, 305 Test-/Werkzeugdateien und 16 Leitlinien; Übernahme der technischen Details aus der bisherigen Architekturtabelle; zentrale System-und-Modulpflege | Unabhängig von Glide-App-Version `3.50.6` |
+
+**Versionsschema (nur für Glide-System):** `VMAJOR.MINOR[.PATCH]`. `V1.0` ist der eingefrorene Ausgangsstand der Dokumentation, keine eigenständige Paket- oder QA-Freigabe. `V1.0.1` bezeichnet reine Korrekturen/Links/Präzisierungen ohne Änderung des Bestands; `V1.1` bezeichnet eine neue, entfallene oder inhaltlich geänderte Modul-, Feature-, Baustein- oder Prüfdefinition; `V2.0` wird für einen inkompatiblen Neuaufbau des Katalogschemas oder der Wiederverwendungsverträge verwendet. Bei jeder inhaltlichen Anpassung **Version in `GLIDE_SYSTEM_VERSION` erhöhen, diese Überschrift und Standzeile anpassen und eine Zeile im Versionsverlauf ergänzen**. Reine App-Releases ohne Änderung des Systemkatalogs erhöhen die Systemversion nicht.
 
 ## Übersicht
 
@@ -822,6 +831,9 @@ Leitlinien ergänzen, aber ersetzen nicht die verbindlichen [Architekturregeln](
 | G16 | Redaktion | Öffentliche Produktbeschreibung versionslos; technische Version in VERSION/Releases | Kein blindes replace 3.50 / beta in Testnamen |
 
 ## 7. System-und-Modulpflege
+
+**Versionspflicht:** Der führende Wert liegt in [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION). Alle fünf automatisch kontrollierten Register (Module, Features, Bausteinpakete, Risiken, Testkatalog) und die Leitlinien gehören zur gemeinsamen Katalogversion. Jede relevante Katalogänderung erhält zusammen mit ihrem Code-/Dokumentationscommit einen Eintrag im Versionsverlauf und die passende Erhöhung: PATCH (nur Korrektur), MINOR (Bestands-/Funktionsänderung), MAJOR (inkompatibler Register-/Schnittstellenumbau). **Die App-Version `VERSION` wird dadurch nicht geändert.** Historische Auditzeilen behalten ihren tatsächlichen ursprünglichen Quellstand.
+
 
 Dieses Register wird **bei jeder relevanten Code-, Feature-, Test- oder Paketänderung im selben Commit** aktualisiert, nicht als zweite Kopie in anderen Dokumenten nachgeschrieben.
 
