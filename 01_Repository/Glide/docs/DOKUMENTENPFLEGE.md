@@ -34,6 +34,7 @@ Gilt seit dem Auftrag des Inhabers vom 03.10.2026 („jetzt wird auch mal wieder
 | Entscheidungen, Leitgedanken des Inhabers, Arbeitsablauf | [ARBEITSRICHTUNG.md](ARBEITSRICHTUNG.md) |
 | Produktgrenzen und Prinzipien | [01_PRODUCT_CONSTRAINTS.md](01_PRODUCT_CONSTRAINTS.md) |
 | Architektur, Performance-Regeln, Tk-Fallstricke | [02_ARCHITECTURE.md](02_ARCHITECTURE.md) |
+| Verbindliches Modul-, Feature- und Bausteininventar, Wiederverwendung, Testkatalog und Systempflege | [Glide-System](../src/glide/README.md) (einzige vollständige aktuelle Tabelle) |
 | Prüfplan | [05_QA_TESTPLAN.md](05_QA_TESTPLAN.md) |
 | Datenformat, Backups, Austauschformat | [06_DATA_BACKUP_MIGRATION.md](06_DATA_BACKUP_MIGRATION.md) |
 | Geprüfter Stand | [07_QA_BERICHT.md](07_QA_BERICHT.md) |
@@ -50,7 +51,7 @@ Neue Dokumente unter `docs/` nur, wenn kein bestehendes das Thema trägt; sie ge
 ## Pflege bei jeder Runde
 
 - Standzeile („Stand TT.MM.JJJJ · Glide X.Y.Z …“) und Inhalt zusammen nachführen; `versionswechsel.py` hebt die Standzeilen, ersetzt aber keinen inhaltlichen Abgleich von Status, Entscheidungen und Prüfgrenzen. Aktive Tabellen, Einstieg und Entscheidungsregister auf dieselbe aktuelle Statusquelle ausrichten; ein neuer Banner allein berichtigt keine alte Lieferzeile. Datierte Belege unverändert lassen.
-- Neue Funktion: Abschnitt in [Funktionen](20_FUNKTIONEN.md), Marke im Entwicklungsplan, Zeile im QA-Bericht, Eintrag im CHANGELOG. Keine eigene Vertragsdatei je Version.
+- Neue Funktion: Abschnitt in [Funktionen](20_FUNKTIONEN.md), Zeile im [Glide-System](../src/glide/README.md), Marke im Entwicklungsplan, Zeile im QA-Bericht, Eintrag im CHANGELOG. Neue/umbenannte/gelöschte Module und Tests erfordern ebenfalls im selben Commit System-und-Modulpflege; die CI prüft Dateivollständigkeit. Keine eigene Vertragsdatei je Version.
 - Vor dem Commit `python3 -B tests/tools/ci_grundstufe.py` (Stand, Links, Index, Datenschutz, Ablagegröße, Synchronisation).
 - Produktionskommentare erklären Invarianten, technische Gründe und Plattformbesonderheiten; Auftragsnummern und Entwicklungserzählungen gehören ins CHANGELOG. Eine reine Kommentarbereinigung lässt den Syntaxbaum unverändert.
 
