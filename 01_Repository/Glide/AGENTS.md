@@ -12,6 +12,7 @@ Glide ist eine lokale Desktop-Anwendung. Kernfunktionen müssen ohne Internet, B
 - Appweiter Gestaltungsvertrag für jede neue oder angefasste Oberfläche: `docs/DESIGN_RICHTLINIEN.md` einschließlich Kontext-/Komponentenmatrix und Paketnachweis; Originalauftrag: `../../00_Arbeitsvorbereitung/Featurepaket_UI_UX/PROMPT.md`
 - Produkt, Grenzen und Prinzipien: `docs/01_PRODUCT_CONSTRAINTS.md`
 - Architektur, Performance-Regeln, Tk-Fallstricke: `docs/02_ARCHITECTURE.md`
+- **System-und-Modulpflege:** `src/glide/README.md` (Glide-System) ist das einzige aktuelle vollständige Inventar von Modulen, Funktionen, Wiederverwendung, Testdateien und datierten QA-Risiken. Bei Modul-/Feature-/Teständerungen im selben Commit pflegen; `tests/tools/test_glide_system.py` läuft über die CI-Grundstufe. Architektur-/Paketierungsdokumente dürfen keine zweite vollständige Modulbestandsliste führen.
 - Verhalten der Funktionen: `docs/20_FUNKTIONEN.md`
 - QA: `docs/05_QA_TESTPLAN.md`, geprüfter Stand und was ungeprüft blieb: `docs/07_QA_BERICHT.md`
 - Daten und Backups: `docs/06_DATA_BACKUP_MIGRATION.md`
