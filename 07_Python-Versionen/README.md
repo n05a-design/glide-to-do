@@ -10,7 +10,7 @@ Die startbare Python-Fassung `Glide-Aufgaben-und-Listen_v3.50.6.pyw` und alle Be
 - `Schnellstart.pyw` (im Repository `glide_start.py`);
 - die Ordner `resources` (Schriften, Vorlagen, Logo, IANA-/CLDR-Zeitzonen samt Lizenzbelegen) und `vendor` (tkinterdnd2 für das Ziehen aus Finder und Explorer; fehlt er, startet Glide ohne diese Funktion), beide samt Lizenz- und Herkunftsnachweisen.
 
-Verbindliche Modultabelle: [Architektur](../01_Repository/Glide/docs/02_ARCHITECTURE.md).
+Verbindliches, vollständiges Modul-, Feature- und Testregister: [Glide-System](../01_Repository/Glide/src/glide/README.md). Die [Architektur](../01_Repository/Glide/docs/02_ARCHITECTURE.md) beschreibt ergänzend die technischen Regeln..
 
 Abgleich und Prüfsummen: `scripts/pflege/abgleich_07.py` (SHA-256). Änderungen hier nur im Rahmen einer Produktionsrunde.
 
