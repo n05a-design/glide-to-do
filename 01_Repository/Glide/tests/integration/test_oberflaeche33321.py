@@ -215,7 +215,9 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
         pruefungen.append(f"U09: Pinnwand mit einer Werkzeugzeile ({oben} px bis zur Fläche), seltene Einstellungen "
                           "im Menü „…“, aktiver Labelfilter markiert")
 
-        # --- U18: Seitentitel im Dokument, Schreibhinweis in leerer Seite ------
+        # --- U18/D71: Seitentitel nur im Kopf, Schreibhinweis in leerer Seite ---
+        # Bis 07.11.2026 stand der Titel zusätzlich über der Lesespalte; der Inhaber
+        # befand das als doppelt (D71). Umbenennen geht über den Kopftitel.
         seite = app.new_list_object("Wochenbericht", [], list_kind=app.LIST_KIND_PAGE)
         app.lists.append(seite)
         app.save_items()
@@ -223,9 +225,10 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
         ruhe(0.3)
         editor = app.rich_note_editor
         assert isinstance(editor, mod.PageEditor) and not isinstance(editor, mod.NoteEditor)
-        assert editor.title_label.cget("text") == "Wochenbericht"
-        assert editor.title_label.winfo_ismapped() and editor._placeholder.winfo_manager() == "place"
-        assert editor.title_label.winfo_rooty() < editor.text.winfo_rooty(), "Titel steht nicht über dem Text"
+        assert not editor.TITLE_IN_CONTENT
+        assert not editor.title_label.winfo_manager(), "Seitentitel steht doppelt im Inhalt"
+        assert app.title_label.cget("text").startswith("Wochenbericht"), app.title_label.cget("text")
+        assert editor._placeholder.winfo_manager() == "place"
         editor.text.focus_set()
         editor.text.insert("1.0", "Erster Satz")
         editor.text.event_generate("<<Modified>>")
@@ -236,24 +239,23 @@ with tempfile.TemporaryDirectory(prefix="glide-oberflaeche-") as ordner:
         gespeichert = app.page_entry(seite["id"]).get("rich_note") or {}
         assert gespeichert.get("text") == "Erster Satz", gespeichert  # Hinweis und Titel nicht im Text
 
-        # Der echte Umbenennen-Weg; nur der Dialog liefert die neue Eingabe.
+        # Der echte Umbenennen-Weg über den Kopftitel; nur der Dialog liefert die neue Eingabe.
         with patch.object(app, "themed_page_details_dialog",
                           side_effect=lambda *a, **k: {"title": "Monatsbericht"}) as dialog:
-            # Klick auf den Titel; Return und Leertaste sind an dieselbe Stelle gebunden.
-            editor.title_label.event_generate("<Button-1>", x=4, y=4)
+            # Tk erlaubt kein event_generate mit Double; der gebundene Weg ist edit_title.
+            assert app.title_label.bind("<Double-Button-1>")
+            app.edit_title()
             ruhe(0.2)
         assert dialog.call_count == 1, dialog.call_count
-        aktuell = app.rich_note_editor
-        assert aktuell.title_label.cget("text") == "Monatsbericht", aktuell.title_label.cget("text")
-        assert "<Key-Return>" in aktuell.title_label.bind(), aktuell.title_label.bind()
         assert app.get_display_title().startswith("Monatsbericht"), app.get_display_title()
+        assert app.title_label.cget("text").startswith("Monatsbericht"), app.title_label.cget("text")
         notiz = app.new_list_object("Notiz", [], list_kind=app.LIST_KIND_NOTE)
         app.lists.append(notiz)
         app.save_items()
         app.set_active_list(notiz["id"])
         ruhe(0.2)
         assert app.rich_note_editor.title_label is None, "Notizen zeigen keinen zweiten Titel"
-        pruefungen.append("U18: Seitentitel über der Lesespalte, Klick/Return benennt über den bestehenden Weg um, "
+        pruefungen.append("U18/D71: Seitentitel nur im Kopf, Doppelklick dort benennt über den bestehenden Weg um, "
                           "Schreibhinweis nur leer und nie gespeichert; Notizen unverändert")
 
         # --- OB05: schmale Seitenleiste ------------------------------------------

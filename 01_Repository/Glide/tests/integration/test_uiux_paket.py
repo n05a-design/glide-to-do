@@ -12,6 +12,7 @@ import importlib.machinery
 import importlib.util
 import json
 import os
+import re
 import sys
 import tempfile
 import threading
@@ -296,7 +297,11 @@ def fall_b06_b15(lauf):
     assert getattr(app, "hints_button", None) is None, "„?“ noch im Kopf"
     app.set_home_view()
     lauf.idle(6)
-    assert app.stats_label.cget("text") == "", ("Datum im Kopf", app.stats_label.cget("text"))
+    # Seit D66 (07.11.2026) steht eine Unterzeile mit Zahlen für heute – weiterhin ohne Datum.
+    kopf = app.stats_label.cget("text")
+    assert kopf and not re.search(r"\d{1,2}\.\d{1,2}\.|\b(Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag)\b|"
+                                  r"\b(Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)\b",
+                                  kopf), ("Datum im Kopf", kopf)
     assert app.settings.get("show_hints") is False, "Vorgabe nicht aus"
     befunde = []
     for groesse in ("mittel", "gross"):

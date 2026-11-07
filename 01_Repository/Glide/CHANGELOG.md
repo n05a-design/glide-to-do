@@ -1,5 +1,25 @@
 # Änderungsverlauf
 
+## 3.50.6 (07.11.2026) – Menschliche Abnahme am Mac (D66–D71)
+
+- Erledigte und offene Punkte beginnen an derselben Textkante: „✓“ und „□“ sind unterschiedlich breit; das schmalere Zeichen wird mit hauchdünnen Leerzeichen ausgeglichen (Live-Liste, Checklistenzeilen im Baum, Checklisten in Dialogen und Kartenansicht).
+- Live-Liste einer Seite ohne Lücke über den Zeilen: Die gezeichnete Glide-Leiste (Ersatz der Systemleiste, D66) beanspruchte als Canvas 265 px Standardhöhe; an den drei ersetzten Stellen (Live-Liste, Speicherstatus, Sicherungsübersicht) hat sie keine eigene Länge mehr.
+- Keine leeren Flächen mehr nach dem Schließen: „Erwähnt ohne Verweis“ zuklappen, eine Live-Liste lösen oder ein Titelbild entfernen gibt den Platz vollständig an den Seitentext zurück; leere Bereiche schrumpfen appweit auf ihre Ruhegröße.
+- Seiten zeigen ihren Titel nur noch im Kopf statt zusätzlich groß über dem Text; der Text rückt nach oben. Umbenennen per Doppelklick auf den Kopftitel, Symbol und Titelbild über „Mehr“. Ein eigenes Pixelsymbol steht fest oben im linken Rand vor dem Griff ⋮⋮ und bleibt beim Scrollen stehen.
+- Mac: Rücktaste/Entf in einem Eingabefeld (z. B. Titel in der Seitenansicht) löscht nicht mehr zusätzlich den markierten Punkt; ein durch offene Bearbeitung gesperrter Ansichtswechsel nennt den Grund.
+- Pinnwand mit einer Leistenzeile: „Gruppieren ▾“ neben „Spalten ▾“, Spaltenschalter im Mehr-Menü, geöffnete Reiter als „Reiter (n)“.
+- Anhangsumbenennung im Bestand: Vorsicherung als ZIP mit Datendatei und Originaldateien; sichere Rücknahme; Restzähler auch in der Schnellerfassung.
+- Titelbegrenzer: Nachläufe hängen am Hauptfenster statt am Feld; nach dem Schließen eines Felds konnte ein geplanter Aufruf sonst einen fremden Rückruf ohne Argument treffen (gefunden im Gesamtlauf, `test_kompression330`).
+- Unter macOS/Tk 9.1 sprang das Kopflogo zwischen Listen und Systemansichten um 1 px in der Höhe; die Höhe folgt jetzt dem sichtbaren Unterzeilenelement.
+- Pinnwand: Die Anordnung ist ein Leistenknopf wie seine Nachbarn („Frei anordnen ▾“) und wird nicht mehr abgeschnitten. Der Pfeil aller Auswahlfelder steht neben dem Text statt darüber.
+- Der Titel der aktuellen Ansicht steht in der gewählten Themenfarbe (lesbar abgesichert, „Kontrastgrau“ neutral), auch im Kompaktmodus.
+- Begrenzte Titelfelder zeigen einen Restzähler („noch 23“) und melden die Grenze bzw. gekürztes Einfügen in Warnfarbe; die Eingabezeile zählt den erkannten Titel und legt über 40 Zeichen nichts an. Ordnerlisten und mehrzeiliges Einfügen kürzen nicht mehr still.
+- Anhangsnamen höchstens 40 Zeichen einschließlich Endung: Beim Anhängen muss eine Datei mit längerem Namen umbenannt werden; automatische Wege kürzen und melden. Vorhandene zu lange Anhänge werden beim Laden nach Vorsicherung umbenannt (Speichername höchstens 73 Zeichen).
+- Live-Liste in Seiten, Speicherstatus und Sicherungsübersicht nutzen die gezeichnete Glide-Scrollleiste statt der nativen `ttk.Scrollbar` im Systemaltstil.
+- Neue Prüfung `tests/tools/altbestandteile.py` (statisch in der CI-Grundstufe) und Integrationsfall `altbestandteile`: verbotene Systemelemente werden gemeldet; klassische Kontrollkästchen, Optionsknöpfe, Listenfelder und Regler stehen unter einer Sperrklinke.
+- Karte „Neu in Glide“ zeigt höchstens die drei neuesten Versionen; Hilfe › Über Glide › „Neuerungen …“ behält den vollständigen Verlauf.
+- Kennzahlen stehen direkt unter dem Titel neben dem Logo statt rechts unter den Kopfknöpfen; jede Ansicht hat eine Unterzeile. Startseite „N Aufgaben heute · davon M verspätet · K mit Fälligkeit“ (ohne Datum, B06); Seiten, Notizen und Zeichnungen mit „zuletzt bearbeitet …“; Vorlagen nach Listen/Ordnern.
+
 ## 3.50.5 (05.11.2026) – Abnahmekorrekturen und Suchfelder
 
 - Buttonbeschriftungen zentral auf 24 Anzeigezeichen einschließlich `...` und auf die tatsächliche Pixelbreite begrenzt; vollständige Beschriftung im Tooltip und für Bedienhilfen erhalten. Lange Aktionsnamen gekürzt.

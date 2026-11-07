@@ -166,7 +166,7 @@ Fehler und Wünsche nimmt der [Issue-Bereich](https://github.com/n05a-design/gli
 
 ## Entwicklung und Qualität
 
-Stand 06.11.2026 · Glide 3.50.5 · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.6 · Aufgabenformat 26
 
 <!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt, am 06.11.2026 als Projektseite nach dem Vorbild erfolgreicher Repositorys neu gegliedert. Technische Stände stehen im QA-Bericht. -->
 

@@ -23,7 +23,7 @@ from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO / "tests/integration"))
-from test_uiux_paket import Lauf, knopf_befunde, knoepfe  # noqa: E402
+from test_uiux_paket import Lauf, knopf_befunde, knoepfe, sichtbarer_ausschnitt  # noqa: E402
 
 SEITE_MD = ("# Wochenplanung Parkquartier\n\nKurzer Überblick über die offenen Punkte der Woche.\n\n"
             "## Freigaben\n\n- Grundriss Haus B prüfen\n- Fassadenmuster bestellen\n\n"
@@ -325,123 +325,88 @@ def fall_schreibschutz(lauf):
 
 
 def fall_kopfverweise(lauf):
-    """Ruhiger Seitenkopf: reservierter Platz am Ende der Titelzeile, Überfahren/Fokus, Symbol vor dem Titel."""
+    """D71 (Abnahme 07.11.2026): Seitentitel nur im Kopf; Symbol und Titelbild über „Mehr“, Text beginnt oben."""
     app, mod = lauf.app, lauf.mod
-    # Der tatsächliche Fenstermanager kann 1280 px auf einem kleineren
-    # Prüfmonitor begrenzen. Dieser Teil braucht ausdrücklich einen kurzen Titel.
     seite, editor = seite_anlegen(lauf, SEITE_MD.replace("# Wochenplanung Parkquartier", "# Notiz", 1))
     titel = editor.title_label
-    zeile = editor._head_row
-    assert editor._head_signature == ("icon", "cover")
-    knoepfe_ = editor._head_buttons
-    # Der echte Zeiger kann nach der Layoutänderung über dem Titel stehen.
-    # Ruhe ausdrücklich herstellen wie bei der Leave-Gegenprobe unten;
-    # den Benutzerzeiger dabei nicht bewegen.
-    with patch.object(editor, "winfo_pointerx", return_value=-10000), \
-            patch.object(editor, "winfo_pointery", return_value=-10000):
-        editor.text.focus_force()
-        editor.page_head_check()
+    assert not editor.TITLE_IN_CONTENT
+    for geometrie in ("1280x800", "860x700"):
+        lauf.root.geometry(geometrie + "+20+20")
+        idle(lauf, 8)
+        editor.fit_title()
         idle(lauf)
-        assert not zeile.winfo_manager() and not any(k.winfo_ismapped() for k in knoepfe_.values()), "in Ruhe verborgen"
-    # Keine zusätzliche Bedienzeile und kein früherer Umbruch: Der Titel bleibt, wie er ohne Verweise wäre.
-    oben = titel.winfo_rooty()
-    umbruch = int(float(titel.cget("wraplength")))
-    assert editor._head_fits, "kurzer Titel lässt Platz für die Verweise"
-    titel.event_generate("<Enter>")
-    idle(lauf)
-    assert all(k.winfo_ismapped() for k in knoepfe_.values())
-    assert titel.winfo_rooty() == oben, "Der Titel verschiebt sich nicht"
-    # Rechtsbündig zur Lesespalte, auf der Mitte der ersten Titelzeile (B02/B07).
-    letzter = knoepfe_["cover"]
-    assert abs(letzter.winfo_rootx() + letzter.winfo_width() - (titel.winfo_rootx() + titel.winfo_width())) <= 2
-    linie = mod.tkfont.Font(font=titel.cget("font")).metrics("linespace")
-    for knopf in knoepfe_.values():
-        mitte = knopf.winfo_rooty() + knopf.winfo_height() / 2
-        assert abs(mitte - (titel.winfo_rooty() + linie / 2)) <= 3, (mitte, titel.winfo_rooty(), linie)
-    assert knoepfe_["icon"].winfo_rootx() + knoepfe_["icon"].winfo_width() < letzter.winfo_rootx()
-    anzahl, befunde = befunde_b15(lauf, "Seitenkopf 1280x800")
-    assert not befunde, befunde[:4]
-    titel.event_generate("<Leave>")
-    idle(lauf)
-    # Mauszeiger außerhalb des Kopfes, ohne den echten Zeiger zu bewegen (kein `warp`):
-    # Unter Windows liefe die Prüfung sonst dem Benutzer über den Bildschirm.
-    editor.winfo_pointerx = editor.winfo_pointery = lambda: -10000
-    editor.page_head_check()
-    del editor.winfo_pointerx, editor.winfo_pointery
-    idle(lauf)
-    assert not any(k.winfo_ismapped() for k in knoepfe_.values())
-    # Tastatur: Fokus auf dem Titel zeigt die Verweise; Tab erreicht sie.
-    titel.focus_force()
-    idle(lauf)
-    assert all(k.winfo_ismapped() for k in knoepfe_.values())
-    assert titel.tk_focusNext() is knoepfe_["icon"], titel.tk_focusNext()
-    # Langer Titel: Die Verweise weichen ganz (kein früherer Umbruch) und bleiben über „Mehr“ erreichbar.
-    eintrag = app.page_entry(seite["id"])
-    eintrag["title"] = "Sehr lange Seitenüberschrift für die Abstimmung der Fassadenmuster im Parkquartier Haus B"
-    editor.refresh_page_head()
-    idle(lauf)
-    assert not editor._head_fits and not zeile.winfo_manager()
-    assert int(float(titel.cget("wraplength"))) == umbruch, "der Titel bricht nicht wegen der Verweise um"
-    titel.event_generate("<Enter>")
-    idle(lauf)
-    assert not any(k.winfo_ismapped() for k in knoepfe_.values())
+        assert not titel.winfo_manager(), ("Seitentitel steht doppelt im Inhalt", geometrie)
+        assert not editor._head_row.winfo_ismapped(), ("Kopfverweise ohne Titelzeile sichtbar", geometrie)
+        assert app.title_label.cget("text").startswith(app.page_entry(seite["id"])["title"][:4]), app.title_label.cget("text")
+        # Der Text beginnt unmittelbar unter Titelbild/Rand, nicht unter einer zweiten Titelzeile.
+        abstand = editor.text.winfo_rooty() - editor.winfo_rooty()
+        assert abstand <= 60, ("Text beginnt zu tief", geometrie, abstand)
     nativ = editor.build_page_menu()
     eintraege = native_blaetter(lauf, nativ) | {((), l) for _k, l, p, a, _g, art in app.menu_rows(nativ) if not p}
     nativ.destroy()
     assert ((), "Pixelsymbol …") in eintraege, sorted(eintraege)[:8]
     assert any(pfad[:1] == ("Titelbild",) for pfad, _l in eintraege), "Titelbild über Mehr"
-    titel.event_generate("<Leave>")
-    idle(lauf)
-    # Schmale Spalte (860 × 700): ebenfalls kein Platz, nichts verschoben.
-    eintrag["title"] = "Wochenplanung Parkquartier"
-    editor.refresh_page_head()
-    lauf.root.geometry("860x700+20+20")
-    idle(lauf, 8)
-    if titel.winfo_manager():
-        breite_spalte = editor.text.winfo_width() - 2 * (editor._read_pad or 28)
-        bedarf = mod.tkfont.Font(font=titel.cget("font")).measure(titel.cget("text"))
-        assert editor._head_fits == (bedarf + editor.HEAD_ACTION_GAP + editor.page_head_width() <= breite_spalte)
+    anzahl, befunde = befunde_b15(lauf, "Seite ohne Inhaltstitel 860x700")
+    assert not befunde, befunde[:4]
+    # Pixelsymbol (Inhaberwunsch 07.11.2026): fest oben im Leserand links neben der Griffspalte ⋮⋮,
+    # scrollt nicht mit; der Griff überdeckt es nie.
+    rechteck = lambda w: (w.winfo_rootx(), w.winfo_rooty(),
+                          w.winfo_rootx() + w.winfo_width(), w.winfo_rooty() + w.winfo_height())
+    schneidet = lambda a, b: not (a[2] <= b[0] or b[2] <= a[0] or a[3] <= b[1] or b[3] <= a[1])
     lauf.root.geometry("1280x800+20+20")
     idle(lauf, 8)
-    # Pixelsymbol gesetzt: steht vor dem Titel, nur noch „Titelbild hinzufügen“.
-    eintrag["title"] = "Wochenplanung Parkquartier"
+    eintrag = app.page_entry(seite["id"])
     eintrag["icon"] = mod.glide_drawing.DrawingModel.blank(app.PAGE_ICON_SIZE).to_document()
-    editor.refresh_page_head()
-    idle(lauf)
-    body_x = editor.text.winfo_rootx() + int(float(editor.text.cget('padx')))
-    title_x = titel.winfo_rootx() + int(float(titel.cget('bd'))) + int(float(titel.cget('padx')))
-    if str(titel.cget('image')):
-        title_x += editor._title_icon.width() + mod.tkfont.Font(font=titel.cget('font')).measure('  ')
-    assert abs(title_x - body_x) <= 1, ('Seitentitel muss mit Symbol auf der Textkante bleiben', title_x, body_x)
-    assert editor._title_icon is not None and editor._title_icon_label.winfo_ismapped()
-    # Inhaberauftrag 03.11.2026: Der unbemalte Grund eines Pixelsymbols ist
-    # durchsichtig – kein weißer Kasten auf der Trägerfläche.
-    assert editor._title_icon.transparency_get(0, 0), "Pixelsymbol mit weißem Grund statt durchsichtig"
-    assert not str(titel.cget("image")) and titel.cget("text") == eintrag["title"]
+    editor.refresh_page_head()  # derselbe Weg wie nach „Pixelsymbol …“
+    editor.text.insert("end", "\n" + "\n".join(f"Zeile {n}" for n in range(120)))
+    editor.text.yview_moveto(0.0)
+    idle(lauf, 6)
     icon = editor._title_icon_label
-    assert title_x - icon.winfo_rootx() - icon.winfo_width() == 8
-    assert editor._head_signature == ("cover",)
+    griff = editor._block_handle
+    assert icon.master is editor.text, "Symbol ist kein Kind des Textfelds"
+    assert editor._title_icon is not None and icon.winfo_ismapped(), "Pixelsymbol fehlt in der Seite"
+    assert editor._title_icon.transparency_get(0, 0), "Pixelsymbol mit weißem Grund statt durchsichtig"
+    editor.show_block_handle("1.0", "focus")
+    idle(lauf)
+    assert griff.winfo_ismapped() and icon.winfo_ismapped()
+    assert icon.winfo_rootx() + icon.winfo_width() + 8 <= griff.winfo_rootx() + 1, (
+        "Symbol nicht links der Griffspalte", rechteck(icon), rechteck(griff))
+    assert icon.winfo_rootx() >= editor.text.winfo_rootx(), "Symbol ragt aus dem Leserand"
+    zeile = editor.text.dlineinfo("1.0")
+    oben = icon.winfo_rooty() - editor.text.winfo_rooty()
+    assert zeile[1] <= oben <= zeile[1] + zeile[3], (zeile, oben)
+    editor.hide_block_handle()
     aufrufe = []
     editor.choose_page_icon = lambda: aufrufe.append("symbol") or "break"
     icon.event_generate("<Button-1>", x=4, y=4)
     idle(lauf)
-    assert aufrufe == ["symbol"], "Klick aufs Symbol ändert es"
-    taste(icon, '<Return>', lauf)
-    taste(icon, '<space>', lauf)
-    assert aufrufe == ["symbol"] * 3, "Pixelsymbol bleibt per Tastatur erreichbar"
-    umbenennen = []
-    editor.rename_page = lambda: umbenennen.append(True)
-    titel.event_generate("<Button-1>", x=4, y=4)
-    idle(lauf)
-    assert umbenennen, "Klick auf den Titel benennt um"
-    # Mit Titelbild und Symbol: nichts reserviert, Titel nutzt die ganze Spalte.
-    eintrag["cover"] = {"kind": "drawing", "document": eintrag["icon"]}
-    editor.refresh_page_head()
-    idle(lauf)
-    assert editor._head_signature == () and editor.page_head_width() == 0 and not zeile.winfo_manager()
-    return (f"keine Zusatzzeile, Verweise am Titelende nur bei freiem Platz, Überfahren/Fokus/Tab, langer Titel "
-            f"und schmale Spalte weichen ganz (Mehr), Symbol vor dem Titel, {anzahl} Knöpfe ohne Befund")
-
+    taste(icon, "<Return>", lauf)
+    taste(icon, "<space>", lauf)
+    assert aufrufe == ["symbol"] * 3, "Pixelsymbol per Maus und Tastatur erreichbar"
+    # Fest: weder Pixel-Scrollen, Mausrad noch Sprung ans Ende bewegen es.
+    start = rechteck(icon)
+    editor.text.yview_scroll(12, "pixels")
+    idle(lauf, 4)
+    for _runde in range(4):
+        editor.text.event_generate("<MouseWheel>", delta=-1, x=40, y=40)
+        idle(lauf, 4)
+    editor.text.yview_moveto(0.6)
+    idle(lauf, 4)
+    assert icon.winfo_manager() == "place" and rechteck(icon) == start, ("Symbol scrollt mit", start, rechteck(icon))
+    # Griff an Zeilen unter dem Symbol: keine Überdeckung, bei beiden Breiten.
+    for geometrie in ("1280x800", "860x700"):
+        lauf.root.geometry(geometrie + "+20+20")
+        idle(lauf, 8)
+        oberste = editor.text.index("@0,0")
+        editor.show_block_handle(oberste, "pointer")
+        idle(lauf)
+        if icon.winfo_ismapped():
+            assert not schneidet(rechteck(griff), rechteck(icon)), (geometrie, rechteck(griff), rechteck(icon))
+        editor.hide_block_handle()
+        idle(lauf)
+        assert icon.winfo_ismapped(), ("Symbol kehrt nach dem Griff nicht zurück", geometrie)
+    return (f"Titel nur im Kopf (1280/860 px), Text beginnt oben, Symbol/Titelbild über Mehr, "
+            f"Pixelsymbol fest links der Griffspalte (Klick/Return/Leertaste, scrollt nicht mit), {anzahl} Knopfprüfungen")
 
 def fall_notiz(lauf):
     """Notizen: eigene Notizaktionen, derselbe Griff und dieselben Blockaktionen."""
@@ -2887,23 +2852,11 @@ def fall_eckenlabels(lauf):
             app.set_active_list(seite["id"])
             idle(lauf)
             editor = app.rich_note_editor
-            titel, chips = rechteck(editor.title_label), rechteck(app.page_labels_frame)
-            # Seite: kein Freiraum über dem Titel, der Titel weicht rechts aus.
-            assert app.page_labels_spacer.winfo_manager() == ""
+            chips = rechteck(app.page_labels_frame)
+            # Seit D71 (07.11.2026) ohne Titel im Inhalt: Freiraum in Chiphöhe wie bei Listen.
+            assert app.page_labels_spacer.winfo_manager() == "pack", (breite, voll)
             assert app.page_labels_frame.winfo_manager() == "place"
-            assert titel[2] + app.CONTENT_LABEL_GAP <= chips[0], (breite, voll, titel, chips)
-            assert not schneidet(titel, chips)
-            umbruch = int(float(editor.title_label.cget("wraplength")))
-            # Umbruch folgt der Titelbreite (bis auf die Bildlaufleiste des Texts),
-            # nicht einer vor dem Aufbau gesetzten Mindestbreite von 120 px.
-            assert 0 <= editor.title_label.winfo_width() - umbruch <= 24, (
-                breite, voll, umbruch, editor.title_label.winfo_width())
-            # Kopfverweise am Titelende bleiben links der Chips.
-            editor.title_label.event_generate("<Enter>")
-            idle(lauf)
-            if editor._head_row.winfo_ismapped():
-                assert not schneidet(rechteck(editor._head_row), chips)
-            editor.title_label.event_generate("<Leave>")
+            assert rechteck(editor.text)[1] >= chips[3] - 1, (breite, voll, chips, rechteck(editor.text))
     app.settings["page_full_width"] = False
     # Labels lösen: Ecke und Titelreserve verschwinden sofort.
     app.clear_page_labels("list", seite["id"])
@@ -4025,6 +3978,840 @@ def fall_kartenflaechen(lauf):
     return f"{geprueft} Farb-/Design-/Ansichtswechsel und Neustart: sechs Bäume und beide Karten auf Themenfarbe, Hintergrund dahinter"
 
 
+def abnahme3505_ansichten(app, lauf):
+    """Hauptansichten und typische Dokumente des Showcase (D66-Prüfungen, 07.11.2026)."""
+    seite = next(e for e in app.lists if e["title"].startswith("Parkquartier · Briefing"))
+    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
+    zeichnung = next(e for e in app.lists if app.is_drawing_list(e))
+    buch = next(f for f in app.folders if f.get("folder_kind") == "library")
+    return (("Startseite", app.set_home_view), ("Heute", app.set_today_view), ("Labels", app.set_labels_view),
+            ("Vorlagen", app.set_template_view), ("Papierkorb", app.set_trash_view),
+            ("Liste", lambda: app.set_active_list(liste["id"])), ("Seite", lambda: app.set_active_list(seite["id"])),
+            ("Zeichnung", lambda: app.set_active_list(zeichnung["id"])),
+            ("Buch", lambda: app.set_active_folder(buch["id"])), ("Seiten", app.set_pages_view),
+            ("Notizen", app.set_notes_view), ("Zeichnungen", app.set_drawings_view),
+            ("Listen und Ordner", app.set_library_view), ("Pinnwand", app.open_global_board),
+            ("Verspätet", app.set_overdue_view), ("Demnächst", app.set_in_progress_view))
+
+
+def fall_altbestandteile(lauf):
+    """D66: keine Systemelemente im Altstil (Scrollleisten u. a.) in Ansichten, Live-Liste und Dialogen."""
+    sys.path.insert(0, str(REPO / "tests/tools"))
+    import altbestandteile as alt
+    app, mod = lauf.app, lauf.mod
+    lauf.showcase()
+    app.settings["release_notes_seen"] = mod.APP_VERSION
+    funde, gesehen = [], []
+    for design in ("light", "dark"):
+        app.set_design(design)
+        for name, oeffnen in abnahme3505_ansichten(app, lauf):
+            oeffnen()
+            idle(lauf, 8)
+            funde.extend((design, name, pfad, klasse) for pfad, klasse in alt.fremdklassen(lauf.root))
+            funde.extend(auswahlfeld_befunde(lauf.root, mod, (design, name)))
+            gesehen.append(name)
+    assert not funde, ("Systemelemente im Altstil oder verdeckte Auswahl", funde[:8])
+    # Die gemeldete Stelle: Live-Liste einer Seite mit gezeichneter Leiste.
+    seite = next(e for e in app.lists if e["title"].startswith("Parkquartier · Briefing"))
+    app.set_active_list(seite["id"])
+    idle(lauf, 8)
+    editor = app.rich_note_editor
+    baum = getattr(editor, "live_tree", None)
+    assert baum is not None and baum.winfo_exists(), "Showcase-Seite ohne Live-Liste"
+    leisten = [w for w in knoepfe(baum.master, mod.ThemedAutoScrollbar)]
+    assert leisten, "Live-Liste ohne Glide-Leiste"
+    dialoge = []
+
+    def einsammeln(dialog):
+        idle(lauf, 4)
+        if not dialog.winfo_exists():
+            return
+        try:
+            funde.extend((dialog.title(), "", pfad, klasse) for pfad, klasse in alt.fremdklassen(dialog))
+            funde.extend(auswahlfeld_befunde(dialog, mod, dialog.title()))
+            dialoge.append(dialog.title())
+            dialog.destroy()
+        except mod.tk.TclError:
+            pass  # beim Prüfen von einer inneren Rückfrage geschlossen
+
+    app.run_modal = lambda dialog, parent=None: einsammeln(dialog)
+    app.__dict__.pop("show_info", None)
+    seite = next(e for e in app.lists if e["title"].startswith("Parkquartier · Briefing"))
+    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
+    dialoge_auf = [getattr(app, name) for name in (
+        "show_settings_dialog", "show_about_dialog", "show_release_notes_dialog", "open_error_log",
+        "show_shortcuts_dialog", "show_storage_status", "show_backup_catalog", "show_quick_capture")]
+    # Unabhängige Prüfung 07.11.2026 (R3): auch Formulare mit vielen Auswahlfeldern.
+    dialoge_auf += [lambda: (app.set_active_list(liste["id"]), app.add_item_advanced()),
+                    lambda: app.create_container_dialog("list"),
+                    lambda: app.edit_list_details(seite["id"])]
+    for oeffnen_dialog in dialoge_auf:
+        vorher = {str(w) for w in lauf.root.winfo_children()}
+        oeffnen_dialog()
+        idle(lauf, 6)
+        for neu in [w for w in lauf.root.winfo_children()
+                    if str(w) not in vorher and isinstance(w, mod.tk.Toplevel) and w.winfo_exists()]:
+            einsammeln(neu)
+    app.show_info = lambda *a, **k: None
+    assert not funde, funde[:8]
+    assert {"Speicherstatus", "Sicherungsübersicht", "Schnellerfassung"} <= set(dialoge), dialoge
+    assert len(dialoge) >= 10, dialoge
+    bestand = alt.bestandsklassen(lauf.root)
+    return (f"{len(gesehen)} Ansichten (hell/dunkel) und {len(dialoge)} Dialoge ohne Systemleisten/-elemente; "
+            f"Live-Liste mit Glide-Leiste; Restbestand zur Laufzeit {bestand or 'keiner'}")
+
+
+def unterzeile_teile(app):
+    """Sichtbare Texte der Unterzeile unter dem Titel, von links nach rechts."""
+    teile = []
+    for widget in [app.stats_label] + list(app.page_chip_row.winfo_children()):
+        if widget.winfo_ismapped() and str(widget.cget("text")).strip():
+            teile.append((widget.winfo_rootx(), widget))
+    return [widget for _x, widget in sorted(teile, key=lambda eintrag: eintrag[0])]
+
+
+def fall_unterzeile(lauf):
+    """D66: Steht das Logo, steht direkt unter dem Titel eine Unterzeile – in jeder Ansicht."""
+    app, mod = lauf.app, lauf.mod
+    geprueft = 0
+    # Leerer Erststart: auch ohne Bestand nie eine leere Zeile neben dem Logo.
+    for name, oeffnen in (("Startseite", app.set_home_view), ("Heute", app.set_today_view),
+                          ("Vorlagen", app.set_template_view), ("Papierkorb", app.set_trash_view),
+                          ("Seiten", app.set_pages_view), ("Notizen", app.set_notes_view),
+                          ("Zeichnungen", app.set_drawings_view), ("Labels", app.set_labels_view)):
+        lauf.root.geometry("1440x900+20+20")
+        oeffnen()
+        idle(lauf, 8)
+        assert app.header_logo.winfo_ismapped(), ("Logo fehlt bei 1440 px", name)
+        assert unterzeile_teile(app), ("leere Unterzeile im leeren Bestand", name)
+        geprueft += 1
+    lauf.showcase()
+    app.settings["release_notes_seen"] = mod.APP_VERSION
+    for groesse, design in (("mittel", "light"), ("gross", "dark")):
+        app.settings["ui_font_size"] = groesse
+        app.apply_ui_font()
+        app.set_design(design)
+        for hinweise in (False, True):
+            app.settings["show_hints"] = hinweise
+            for geometrie in ("1280x800", "1720x900"):
+                lauf.root.geometry(geometrie + "+20+20")
+                for name, oeffnen in abnahme3505_ansichten(app, lauf):
+                    oeffnen()
+                    idle(lauf, 8)
+                    kontext = (name, groesse, design, hinweise, geometrie)
+                    if not app.header_logo.winfo_ismapped():
+                        continue
+                    teile = unterzeile_teile(app)
+                    assert teile, ("Unterzeile neben dem Logo leer", kontext)
+                    titel = app.title_label
+                    assert abs(teile[0].winfo_rootx() - titel.winfo_rootx()) <= 1, (
+                        "Unterzeile nicht bündig unter dem Titel", kontext, teile[0].winfo_rootx(), titel.winfo_rootx())
+                    for teil in teile:
+                        assert teil.winfo_rooty() >= titel.winfo_rooty() + titel.winfo_height() - 1, ("über dem Titel", kontext)
+                        assert teil.winfo_rootx() + teil.winfo_width() <= app.subtitle_row.winfo_rootx() + app.subtitle_row.winfo_width() + 1, (
+                            "Unterzeile ragt hinaus", kontext)
+                    if name == "Startseite":
+                        assert "heute" in teile[0].cget("text").lower(), kontext
+                    geprueft += 1
+    assert geprueft >= 100, geprueft
+    return f"{geprueft} Ansichtsprüfungen: Unterzeile vorhanden, bündig unter dem Titel, auch leer, groß/dunkel und mit Hinweisen"
+
+
+def fall_neuerungen3(lauf):
+    """D66: Die Karte „Neu in …“ zeigt höchstens drei Versionen; „Gelesen“ ohne Scrollen erreichbar."""
+    app, mod = lauf.app, lauf.mod
+    lauf.showcase()
+    rn = mod.glide_release
+    befund = []
+    for groesse in ("mittel", "gross"):
+        app.settings["ui_font_size"] = groesse
+        app.apply_ui_font()
+        lauf.root.geometry("1280x800+20+20")
+        app.settings["release_notes_seen"] = rn.BEFORE_CATALOG
+        app._settings_existed = True
+        app._home_signature = None
+        app.set_home_view()
+        idle(lauf, 10)
+        texte = [str(w.cget("text")) for w in knoepfe(app.home_content, mod.tk.Label)]
+        versionen = [text for text in texte if text.startswith("Version ")]
+        # Entscheidung D66: höchstens drei; der Katalog hat mehr, also genau drei.
+        assert len(rn.history(mod.APP_VERSION)) > 3
+        assert len(versionen) == 3, ("Karte zeigt nicht genau drei Versionen", len(versionen), versionen[:6])
+        assert versionen[0] == f"Version {mod.APP_VERSION}", versionen
+        gelesen = [k for k in knoepfe(app.home_content, mod.RoundedButton) if k.text == "Gelesen"]
+        assert gelesen, "„Gelesen“ fehlt"
+        unten = gelesen[0].winfo_rooty() + gelesen[0].winfo_height()
+        sicht = app.home_canvas.winfo_rooty() + app.home_canvas.winfo_height()
+        befund.append(f"{groesse}: {len(versionen)} Versionen, Gelesen {'sichtbar' if unten <= sicht else f'{unten - sicht} px tiefer'}")
+        assert unten <= sicht, ("„Gelesen“ erst nach Scrollen", groesse, unten, sicht)
+        gelesen[0].command()
+        idle(lauf, 6)
+        assert app.settings["release_notes_seen"] == mod.APP_VERSION
+    return "; ".join(befund)
+
+
+def warte(lauf, sekunden):
+    ende = time.monotonic() + sekunden
+    while time.monotonic() < ende:
+        idle(lauf, 2)
+        time.sleep(0.02)
+
+
+def fall_titelzaehler(lauf):
+    """D67: Restzähler „noch N“, klare Meldung an der Grenze, keine stille Kürzung."""
+    app, mod = lauf.app, lauf.mod
+    tk = mod.tk
+    grenze = app.CONTAINER_TITLE_MAX
+    befund = []
+    # 1) Feld im Feldrahmen (wie Eingabedialoge): Zähler rechts im Rahmen.
+    fenster = tk.Toplevel(lauf.root)
+    rahmen, feld = app._make_field(fenster)
+    rahmen.pack(fill="x", padx=20, pady=20)
+    feld.pack(fill="x", padx=1, pady=1)
+    eingabe = tk.Entry(feld, font=mod.app_font(12))
+    eingabe.pack(fill="x", padx=8, pady=6)
+    zaehler = app.limit_title_entry(eingabe)
+    warte(lauf, 0.2)
+    assert zaehler.winfo_ismapped() and zaehler.master is feld, "Zähler nicht im Feldrahmen"
+    assert zaehler.cget("text") == f"noch {grenze}", zaehler.cget("text")
+    eingabe.insert(0, "x" * 37)
+    warte(lauf, 0.1)
+    assert zaehler.cget("text") == "noch 3", zaehler.cget("text")
+    eingabe.insert("end", "yyyy")
+    warte(lauf, 0.1)
+    assert len(eingabe.get()) == 37, "Eingabe über die Grenze angenommen"
+    assert zaehler.cget("text") == "max. 40" and str(zaehler.cget("fg")).lower() == app.theme["delete"].lower(), (
+        "keine klare Meldung an der Grenze", zaehler.cget("text"), zaehler.cget("fg"))
+    assert zaehler.winfo_rootx() >= eingabe.winfo_rootx() + eingabe.winfo_width(), "Zähler überdeckt den Text"
+    eingabe.delete(0, "end")
+    lauf.root.clipboard_clear()
+    lauf.root.clipboard_append("z" * 57)
+    eingabe.event_generate("<<Paste>>")
+    warte(lauf, 0.1)
+    assert len(eingabe.get()) == grenze and zaehler.cget("text") == "17 gekürzt", (len(eingabe.get()), zaehler.cget("text"))
+    befund.append("Feldrahmen: noch 40 → noch 3 → max. 40 → 17 gekürzt")
+    # 2) Formularspalte (Feld mit Geschwistern): Zähler als Zeile darunter.
+    spalte = tk.Frame(fenster)
+    spalte.pack(fill="x", padx=20)
+    tk.Label(spalte, text="Titel").pack(anchor="w")
+    zweite = tk.Entry(spalte)
+    zweite.pack(fill="x")
+    tk.Label(spalte, text="Weiter").pack(anchor="w")
+    unter = app.limit_title_entry(zweite)
+    warte(lauf, 0.2)
+    assert unter.winfo_ismapped() and unter.winfo_rooty() >= zweite.winfo_rooty() + zweite.winfo_height(), "Zähler nicht unter dem Feld"
+    fenster.destroy()
+    # 3) Inline-Umbenennen in der Seitenleiste: Zähler rechts daneben, keine Überdeckung.
+    lauf.showcase()
+    app.settings["release_notes_seen"] = mod.APP_VERSION
+    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
+    app.set_active_list(liste["id"])
+    warte(lauf, 0.3)
+    app.begin_sidebar_rename()
+    warte(lauf, 0.3)
+    editor = getattr(app, "_sidebar_rename_entry", None) or next(
+        (w for w in knoepfe(lauf.root, tk.Entry) if getattr(w, "_glide_limit_counter", None) is not None
+         and w.winfo_manager() == "place"), None)
+    assert editor is not None, "Umbenennen ohne Editor"
+    leiste = editor._glide_limit_counter
+    assert leiste.winfo_ismapped() and leiste.winfo_rootx() >= editor.winfo_rootx() + editor.winfo_width() - 1, "Zähler überdeckt den Inline-Editor"
+    assert leiste.cget("text").startswith("noch"), leiste.cget("text")
+    editor.event_generate("<Escape>")
+    warte(lauf, 0.2)
+    befund.append("Inline-Umbenennen mit Zähler rechts")
+    # 4) Haupteingabe: Zähler nach erkanntem Titel, Ablehnung mit Zeichenzahl.
+    meldungen = []
+    app.show_warning = lambda titel, text, **k: meldungen.append(text)
+    app.set_active_list(liste["id"])
+    warte(lauf, 0.3)
+    app.clear_entry_placeholder()
+    app.entry.insert(0, "Kurzer Titel morgen")
+    app.update_entry_limit()
+    warte(lauf, 0.1)
+    assert app.entry_limit_label.winfo_ismapped() and app.entry_limit_label.cget("text") == f"noch {grenze - len('Kurzer Titel')}", app.entry_limit_label.cget("text")
+    app.clear_entry_text()
+    app.entry.insert(0, "L" * 45)
+    app.update_entry_limit()
+    assert app.entry_limit_label.cget("text") == "5 zu viel", app.entry_limit_label.cget("text")
+    vorher = len(liste["items"])
+    app.add_item()
+    assert len(liste["items"]) == vorher and meldungen and "45 Zeichen" in meldungen[-1], meldungen[-1:]
+    app.clear_entry_text()
+    warte(lauf, 0.1)
+    assert not app.entry_limit_label.winfo_ismapped(), "Zähler bleibt bei leerer Eingabe"
+    # 5) Ordneransicht: kein stilles Kürzen eines Listentitels.
+    ordner = next(f for f in app.folders if f.get("folder_kind") != "library")
+    app.set_active_folder(ordner["id"])
+    warte(lauf, 0.3)
+    listen_vorher = len(app.lists)
+    app.clear_entry_placeholder()
+    app.entry.insert(0, "O" * 44)
+    app.add_item()
+    assert len(app.lists) == listen_vorher and "44 Zeichen" in meldungen[-1], meldungen[-1:]
+    app.clear_entry_text()
+    # 6) Mehrzeiliges Einfügen: Rückfrage statt stiller Kürzung.
+    app.set_active_list(liste["id"])
+    warte(lauf, 0.3)
+    lauf.root.clipboard_clear()
+    lauf.root.clipboard_append("Kurz eins\n" + "W" * 55 + "\nKurz zwei")
+    fragen = []
+    app.themed_choice_dialog = lambda *a, **k: "einzeln"
+    app.ask_yes_no = lambda titel, text, **k: (fragen.append(text), False)[1]
+    vorher = len(liste["items"])
+    app.paste_into_entry()
+    assert len(liste["items"]) == vorher and fragen and "1 von 3 Zeilen" in fragen[-1], fragen[-1:]
+    app.ask_yes_no = lambda titel, text, **k: True
+    app.paste_into_entry()
+    neue = liste["items"][vorher:]
+    assert len(neue) == 3 and all(len(i["text"]) <= grenze for i in neue), [i["text"] for i in neue]
+    assert any("W" * 55 in str(i.get("description") or "") for i in neue), "Volltext nicht in der Beschreibung"
+    befund.append("Haupteingabe/Ordner/Einfügen: Zähler, Ablehnung mit Zeichenzahl, Rückfrage")
+    # 7) Schnellerfassung: Zähler über den erkannten Titel (Prüfbefund F5).
+    gesehen = {}
+
+    def schnell(dialog, parent=None):
+        idle(lauf, 4)
+        zaehler = app._quick_capture_counter
+        feld = next(w for w in knoepfe(dialog, tk.Entry) if w.master is zaehler.master)
+        gesehen["leer"] = zaehler.cget("text")
+        feld.insert(0, "Q" * 45 + " morgen")
+        idle(lauf, 3)
+        gesehen["lang"] = (zaehler.cget("text"), str(zaehler.cget("fg")).lower())
+        gesehen["rechts"] = zaehler.winfo_rootx() >= feld.winfo_rootx() + feld.winfo_width() - 1
+        dialog.destroy()
+
+    app.run_modal = schnell
+    app.show_quick_capture()
+    idle(lauf, 3)
+    assert gesehen.get("leer") == f"noch {grenze}", gesehen
+    assert gesehen["lang"] == ("5 zu viel", app.theme["delete"].lower()), gesehen
+    assert gesehen["rechts"], "Zähler überdeckt das Feld"
+    befund.append("Schnellerfassung: Zähler über den erkannten Titel")
+    return "; ".join(befund)
+
+
+def fall_anhangsnamen(lauf):
+    """D67: Anhangsnamen höchstens 40 Zeichen – Umbenennen erzwingen, Bestand kürzen und melden."""
+    import os
+    app, mod = lauf.app, lauf.mod
+    grenze, speichergrenze = 40, 73  # D67: Name und Speichername
+    lauf.showcase()
+    app.settings["release_notes_seen"] = mod.APP_VERSION
+    galerie = next(e for e in app.lists if app.is_gallery_list(e))
+    quelle = Path(lauf.data) / "quelle"
+    quelle.mkdir(exist_ok=True)
+    langer_name = "Parkquartier Fassadenstudie Haus B Variante mit Abendlicht final.jpg"
+    datei = quelle / langer_name
+    datei.write_bytes(Path(app.resolve_attachment_path(galerie["attachments"][0])).read_bytes())
+    vorher = len(galerie["attachments"])
+    # Abbrechen: Datei wird nicht übernommen.
+    fragen = []
+    app.themed_input_dialog = lambda titel, prompt="", initial="", **k: (fragen.append((titel, initial)), None)[1]
+    assert app.add_gallery_images(galerie["id"], [str(datei)]) == [] and len(galerie["attachments"]) == vorher
+    assert fragen and fragen[0][0] == "Anhang umbenennen" and len(fragen[0][1]) <= grenze and fragen[0][1].endswith(".jpg"), fragen
+    # Umbenennen ohne Endung: Endung bleibt erhalten.
+    app.themed_input_dialog = lambda titel, prompt="", initial="", **k: "Fassade Abendlicht"
+    neu = app.add_gallery_images(galerie["id"], [str(datei)])
+    assert len(neu) == 1 and neu[0]["name"] == "Fassade Abendlicht.jpg", neu
+    speicher = neu[0]["storage"].rsplit("/", 1)[-1]
+    assert len(speicher) <= speichergrenze, speicher
+    # Automatischer Weg (ohne Rückfrage): kürzen und klar melden.
+    meldungen = []
+    app.show_info = lambda titel, text, **k: meldungen.append((titel, text))
+    automatisch = app.store_attachment(str(datei))
+    assert len(automatisch["name"]) <= grenze and automatisch["name"].endswith(".jpg"), automatisch["name"]
+    warte(lauf, 0.8)
+    assert meldungen and meldungen[-1][0] == "Anhangsnamen gekürzt", meldungen
+    os.remove(app.resolve_attachment_path(automatisch))
+    # Bestand: alter langer Name und langer Speichername werden beim Laden gekürzt.
+    alt_speicher = "attachments/" + "a" * 32 + "_" + "Sehr langer historischer Anhangsname aus einem alten Bestand.jpg"
+    ziel = Path(app.resolve_attachment_path({"storage": alt_speicher}))
+    ziel.write_bytes(datei.read_bytes())
+    galerie["attachments"].append({"id": "a" * 32, "name": "Sehr langer historischer Anhangsname aus einem alten Bestand.jpg",
+                                   "storage": alt_speicher, "size": ziel.stat().st_size, "mime": "image/jpeg",
+                                   "added_at": "2026-11-01T10:00:00"})
+    assert app.save_items()
+    lauf.neustart()
+    app, mod = lauf.app, lauf.mod
+    meldungen = []
+    app.show_info = lambda titel, text, **k: meldungen.append((titel, text))
+    warte(lauf, 1.2)
+    galerie = next(e for e in app.lists if e["id"] == galerie["id"])
+    alt = next(a for a in galerie["attachments"] if a["id"] == "a" * 32)
+    assert len(alt["name"]) <= grenze and alt["name"].endswith(".jpg"), alt["name"]
+    assert len(alt["storage"].rsplit("/", 1)[-1]) <= speichergrenze, alt["storage"]
+    neu_pfad = Path(app.resolve_attachment_path(alt))
+    assert neu_pfad.read_bytes() == datei.read_bytes(), "Inhalt nach Umbenennen verändert"
+    assert not ziel.exists(), "alte Datei mit langem Namen bleibt liegen"
+    sicherungen = list((Path(lauf.data) / "backups").glob("liste_vor_anhangkuerzung_*.zip"))
+    assert sicherungen, "keine Vorsicherung"
+    import zipfile
+    with zipfile.ZipFile(sicherungen[0]) as archiv:
+        inhalt = set(archiv.namelist())
+        assert "liste_speicher.json" in inhalt and alt_speicher in inhalt, inhalt
+        assert archiv.read(alt_speicher) == datei.read_bytes(), "Vorsicherung ohne Originalbytes"
+        assert "Sehr langer historischer Anhangsname" in archiv.read("liste_speicher.json").decode("utf-8")
+    assert meldungen and meldungen[-1][0] == "Anhangsnamen gekürzt" and "1 Datei(en)" in meldungen[-1][1], meldungen
+    # Gespeichert: ein weiterer Neustart meldet nichts mehr.
+    lauf.neustart()
+    app = lauf.app
+    meldungen = []
+    app.show_info = lambda titel, text, **k: meldungen.append((titel, text))
+    warte(lauf, 1.0)
+    assert not meldungen, meldungen
+    # Schreibschutz: Kürzung im Speicher vollständig zurück, über die Kennung (R2/H1).
+    galerie = next(e for e in app.lists if app.is_gallery_list(e))
+    probe = {"id": "c" * 32, "name": "x" * 40, "storage": "attachments/" + "c" * 32 + "_x.jpg"}
+    zweite = {"id": "d" * 32, "name": "x" * 40, "storage": "attachments/" + "d" * 32 + "_x.jpg"}
+    galerie["attachments"] += [probe, zweite]
+    app._clipped_attachment_names = [("d" * 32, "Original mit sehr langem Namen für die Probe.jpg", "x" * 40)]
+    app._data_read_only = True
+    assert app.back_up_before_attachment_renaming() is False
+    app._data_read_only = False
+    assert probe["name"] == "x" * 40 and zweite["name"].startswith("Original"), (probe["name"], zweite["name"])
+    galerie["attachments"] = [a for a in galerie["attachments"] if a not in (probe, zweite)]
+    # Speicherfehler nach dem Kopieren: Datensätze zurück auf die alten Dateien, Kopien bleiben liegen (R1).
+    alt2 = "attachments/" + "e" * 32 + "_" + "Noch ein sehr langer historischer Anhangsname im Bestand.jpg"
+    pfad2 = Path(app.resolve_attachment_path({"storage": alt2}))
+    pfad2.write_bytes(datei.read_bytes())
+    anhang2 = {"id": "e" * 32, "name": "Bild.jpg", "storage": alt2, "size": pfad2.stat().st_size, "mime": "image/jpeg",
+               "added_at": "2026-11-01T10:00:00"}
+    galerie["attachments"].append(anhang2)
+    app._clipped_attachment_names = []
+    assert app.back_up_before_attachment_renaming() is True
+    neu2 = anhang2["storage"]
+    assert neu2 != alt2
+    assert app._attachment_rename_pending is not None, "kein Umbenennungsplan"
+    original_speichern = app.save_items
+    app.save_items = lambda *a, **k: False
+    try:
+        app.finish_attachment_renaming()
+    finally:
+        app.save_items = original_speichern
+    assert anhang2["storage"] == alt2 and pfad2.exists(), "Rücknahme zeigt nicht auf die alte Datei"
+    assert Path(app.resolve_attachment_path({"storage": neu2})).exists(), "Kopie bei Rücknahme gelöscht"
+    return ("Umbenennen erzwungen (Abbruch übernimmt nichts, Endung bleibt), Speichername ≤ 73, automatische Kürzung "
+            "gemeldet, Bestand nach ZIP-Vorsicherung (Datendatei und Originalbytes) gekürzt, alte Datei entfernt; "
+            "Schreibschutz nimmt per Kennung zurück, Speicherfehler lässt Kopien liegen")
+
+
+def fall_themenfarbe(lauf):
+    """D68: Der Titel der aktuellen Ansicht trägt die Themenfarbe – lesbar in jedem Design."""
+    app, mod = lauf.app, lauf.mod
+    lauf.showcase()
+    app.settings["release_notes_seen"] = mod.APP_VERSION
+    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
+    seite = next(e for e in app.lists if e["title"].startswith("Parkquartier · Briefing"))
+    buch = next(f for f in app.folders if f.get("folder_kind") == "library")
+    ansichten = (("Liste", lambda: app.set_active_list(liste["id"])), ("Seite", lambda: app.set_active_list(seite["id"])),
+                 ("Buch", lambda: app.set_active_folder(buch["id"])), ("Heute", app.set_today_view),
+                 ("Startseite", app.set_home_view), ("Vorlagen", app.set_template_view))
+    lauf.root.geometry("1440x900+20+20")
+    akzente = [key for _label, key in app.ACCENT_COLOR_CHOICES]
+    geprueft = 0
+    for design in app.DESIGN_ORDER:
+        for akzent in ("accent", "export", "flag", "clear", "muted"):
+            if akzent not in akzente:
+                continue
+            app.settings["accent_color"] = akzent
+            app.set_design(design)
+            idle(lauf, 4)
+            # Erwartung unabhängig von der neuen Rolle: Themenfarbe, bei Kontrastgrau normale Schrift.
+            erwartet = app.theme["text"] if akzent == "muted" else app.theme.get("view_title", app.theme["ui_accent"])
+            if akzent == "muted":
+                assert erwartet == app.theme["text"], (design, "Kontrastgrau dämpft den Titel")
+            for name, oeffnen in ansichten:
+                oeffnen()
+                idle(lauf, 5)
+                farbe = str(app.title_label.cget("fg")).upper()
+                kontext = (design, akzent, name)
+                assert farbe == erwartet.upper(), ("Titel nicht in der Themenfarbe", kontext, farbe, erwartet)
+                assert mod.contrast_ratio(farbe, app.theme["bg"]) >= 4.49, ("Titel schlecht lesbar", kontext)
+                geprueft += 1
+            # Mit farbiger Themenfarbe ist der Titel sichtbar farbig, nicht die neutrale Schrift.
+            if akzent != "muted":
+                assert erwartet.upper() != app.theme["text"].upper(), (design, akzent, "Titel bleibt neutral")
+    # Kompaktmodus: derselbe Titel, dieselbe Rolle.
+    app.settings["accent_color"] = "export"
+    app.set_design("light")
+    app.set_active_list(liste["id"])
+    idle(lauf, 4)
+    if hasattr(app, "toggle_compact_mode"):
+        app.toggle_compact_mode()
+        idle(lauf, 6)
+        kompakt = getattr(app, "compact_title", None)
+        if kompakt is not None and kompakt.winfo_exists():
+            assert str(kompakt.cget("fg")).upper() == app.theme.get("view_title", app.theme["ui_accent"]).upper(), "Kompakttitel ohne Themenfarbe"
+        app.toggle_compact_mode()
+        idle(lauf, 4)
+    return f"{geprueft} Titelprüfungen in {len(app.DESIGN_ORDER)} Designs × 5 Themenfarben, Kontrast ≥ 4,5:1, Kontrastgrau neutral"
+
+
+def auswahlfeld_befunde(wurzel, mod, kontext):
+    """D69: Jedes sichtbare Auswahlfeld zeigt seinen Text vollständig; der Pfeil berührt ihn nicht."""
+    funde = []
+    for feld in knoepfe(wurzel, mod.AppOptionMenu):
+        if not feld.winfo_viewable() or feld.winfo_width() <= 1:
+            continue
+        text = str(feld.cget("text"))
+        if not text:
+            continue
+        if sichtbarer_ausschnitt(feld, mod) is None:
+            continue  # aus einer scrollbaren Fläche hinausgescrollt
+        schrift = mod.ui_font_object(font=feld.cget("font"))
+        rand = int(float(feld.cget("padx") or 0)) + int(float(feld.cget("bd") or 0))
+        textende = feld.winfo_rootx() + rand + schrift.measure(text)
+        if feld.winfo_width() < rand + schrift.measure(text):
+            funde.append((kontext, "Auswahltext abgeschnitten", text, feld.winfo_width(), rand + schrift.measure(text)))
+            continue
+        pfeil = getattr(feld, "arrow", None)
+        if pfeil is not None and pfeil.winfo_viewable() and pfeil.winfo_rootx() < textende:
+            funde.append((kontext, "Pfeil verdeckt den Auswahltext", text))
+    return funde
+
+
+def gruppe_zeilen_pruefen(app, mod):
+    """Zeilen (y-Lagen) der sichtbaren Leistenknöpfe der Pinnwand; leer bei einer Zeile."""
+    lagen = sorted({knopf.winfo_rooty() for knopf in knoepfe(app.workspace.bar, mod.RoundedButton)
+                    if knopf.winfo_ismapped()})
+    return lagen if len(lagen) > 1 else []
+
+
+def fall_pinnwandleiste(lauf):
+    """D69: Pinnwand-Leiste – Anordnung als vollständiger Leistenknopf, nichts abgeschnitten oder überdeckt."""
+    app, mod = lauf.app, lauf.mod
+    lauf.showcase()
+    app.settings["release_notes_seen"] = mod.APP_VERSION
+    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
+    ordner = next(f for f in app.folders if f.get("title", "").startswith("Showcase"))
+    schrift = mod.ui_font_object(font=mod.app_font(10, "bold"))
+    feldschrift = mod.ui_font_object(font=mod.app_font(11))
+    geprueft, befunde = 0, []
+    for groesse, design, hinweise, oeffnen in (
+            ("mittel", "light", True, lambda: app.set_active_folder(ordner["id"])),
+            ("mittel", "light", False, lambda: app.set_active_list(liste["id"])),
+            ("gross", "dark", True, lambda: app.set_active_list(liste["id"])),
+            ("gross", "dark", False, lambda: app.set_active_folder(ordner["id"]))):
+        app.settings["show_hints"] = hinweise
+        app.settings["ui_font_size"] = groesse
+        app.apply_ui_font()
+        app.set_design(design)
+        # 1000 px entspricht dem Inhaberbild (MacBook, 2000 px Retina-Aufnahme).
+        for geometrie in ("1000x760", "1100x800", "1280x800", "1720x900"):
+            lauf.root.geometry(geometrie + "+20+20")
+            for layout, name in (("free", "Frei anordnen"), ("grid", "Geordnete Karten"), ("columns", "Spalten")):
+                oeffnen()
+                idle(lauf, 4)
+                app.workspace.set_mode("board")
+                app.workspace.configure_board("layout", layout)
+                warte(lauf, 0.4)
+                kontext = (groesse, design, geometrie, layout, app.view_mode, hinweise)
+                knopf = app.workspace.layout_choice
+                def sichtbare_breite(widget):
+                    rechteck = sichtbarer_ausschnitt(widget, mod)
+                    return rechteck[2] - rechteck[0] if rechteck else 0
+                if isinstance(knopf, mod.RoundedButton):
+                    sichtbar, text = knopf.winfo_ismapped(), knopf.text
+                    breite, noetig = sichtbare_breite(knopf), schrift.measure(text) + 16
+                else:  # Vorfassung: Auswahlfeld in der Leiste
+                    feld = next((w for w in knoepfe(app.workspace.bar, mod.AppOptionMenu)
+                                 if w.winfo_ismapped() and name in str(w.cget("text"))), None)
+                    sichtbar = feld is not None
+                    text = str(feld.cget("text")) if feld else ""
+                    breite = sichtbare_breite(feld) if feld else 0
+                    noetig = feldschrift.measure(text)
+                if sichtbar:
+                    assert text.startswith(name), ("Anordnung nicht vollständig", kontext, text)
+                    assert breite >= noetig, ("Anordnung abgeschnitten", kontext, breite, noetig)
+                elif geometrie == "1720x900":
+                    befunde.append(("Anordnung bei breitem Fenster ausgeblendet", kontext))
+                if layout == "columns":
+                    gruppe = getattr(app.workspace, "group_button", None)
+                    if gruppe is not None:  # seit 07.11.2026 Leistenknopf in derselben Zeile
+                        assert gruppe.winfo_ismapped() or geometrie != "1720x900", ("Gruppieren fehlt", kontext)
+                        if gruppe.winfo_ismapped():
+                            assert sichtbare_breite(gruppe) >= schrift.measure(gruppe.text) + 16, ("Gruppieren abgeschnitten", kontext)
+                    felder = [w for w in knoepfe(app.workspace.body, mod.AppOptionMenu) if w.winfo_ismapped()]
+                    for feld in felder:  # Vorfassung: eigene Optionszeile
+                        text = str(feld.cget("text"))
+                        rand = feld.master.master
+                        assert rand.winfo_width() >= feldschrift.measure(text) + 30, ("Gruppieren abgeschnitten", kontext, text)
+                # Höchstens eine Leistenzeile (Abnahme 07.11.2026): alle sichtbaren Leistenknöpfe auf einer Höhe.
+                if geometrie == "1720x900" and gruppe_zeilen_pruefen(app, mod):
+                    befunde.append(("Pinnwandleiste mehrzeilig", kontext, gruppe_zeilen_pruefen(app, mod)))
+                anzahl, funde = befunde_b15(lauf, f"Pinnwand {kontext}")
+                befunde.extend(funde)
+                befunde.extend(auswahlfeld_befunde(lauf.root, mod, kontext))
+                geprueft += anzahl
+    assert not befunde, befunde[:6]
+    # Die Wahl über den Knopf wirkt wie bisher und bleibt gespeichert.
+    lauf.root.geometry("1720x900+20+20")
+    app.set_active_list(liste["id"])
+    app.workspace.set_mode("board")
+    app.workspace.configure_board("layout", "free")
+    warte(lauf, 0.4)
+    menue = app.workspace.layout_choice.choices_menu()
+    eintraege = [menue.entrycget(i, "label") for i in range(menue.index("end") + 1)]
+    assert any(e.startswith("✓") and "Frei anordnen" in e for e in eintraege), eintraege
+    menue.invoke(next(i for i, e in enumerate(eintraege) if "Spalten" in e))
+    warte(lauf, 0.4)
+    assert app.workspace.board()["layout"] == "columns"
+    assert app.workspace.layout_choice.text.startswith("Spalten")
+    return f"{geprueft} Knopfprüfungen in 3 Anordnungen, 4 Breiten (1000–1720 px), Liste und Ordner, Hinweise an/aus, 2 Schriften, hell/dunkel; Wahl über das Menü wirkt"
+
+
+def fall_ruecktaste(lauf):
+    """Abnahmebefund 07.11.2026: Rücktaste/Entf in einem Textfeld löscht nie den markierten Punkt."""
+    app, mod = lauf.app, lauf.mod
+    lauf.showcase()
+    app.settings["release_notes_seen"] = mod.APP_VERSION
+    meldungen = []
+    app.show_info = app.show_warning = lambda *a, **k: meldungen.append(a[:2])
+    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
+    andere = next(e for e in app.lists if e["title"].startswith("Abstimmung"))
+    papierkorb = len(app.trash)
+    # 1) Pinnwand: Karte markiert, Seitenansicht offen, Rücktaste im Titelfeld (Inhaberablauf).
+    app.set_active_list(liste["id"])
+    warte(lauf, 0.3)
+    w = app.workspace
+    w.set_mode("board")
+    w.configure_board("layout", "columns")
+    warte(lauf, 0.6)
+    karte = next(iter(w.card_boxes))
+    w.select_card(karte)
+    w.edit()
+    warte(lauf, 0.6)
+    feld = app._detail_state["fields"]["text"]
+    vorher = feld.get()
+    feld.focus_force()
+    warte(lauf, 0.2)
+    feld.icursor("end")
+    feld.selection_clear()
+    for taste in ("<BackSpace>", "<BackSpace>", "<Delete>"):
+        feld.event_generate(taste)
+        warte(lauf, 0.05)
+    assert len(app.trash) == papierkorb, "Rücktaste im Titelfeld hat einen Punkt gelöscht"
+    assert feld.get() == vorher[:-2], (vorher, feld.get())
+    assert not [m for m in meldungen if "Punkt auswählen" in str(m)], meldungen
+    app.set_active_list(andere["id"])
+    warte(lauf, 0.5)
+    assert app.current_list()["id"] == andere["id"], "Wechsel nach Bearbeiten blockiert"
+    # 2) Liste: markierter Punkt, Fokus im Titelfeld der Seitenansicht.
+    app.set_active_list(liste["id"])
+    w = app.workspace
+    w.set_mode("list")
+    warte(lauf, 0.4)
+    # Die Liste ist gruppiert; Punkte stehen unter Gruppenzeilen.
+    erster = next(i for i in app.iter_tree_ids() if app.find_item_in_lists(i))
+    app.tree.see(erster)
+    app.tree.selection_set(erster)
+    app.tree.focus(erster)
+    app.open_task_inspector(erster) if hasattr(app, "open_task_inspector") else None
+    warte(lauf, 0.4)
+    feld = app._detail_state["fields"].get("text")
+    # Prüfhinweis R5: der Inspektorteil darf nicht still entfallen.
+    assert feld is not None and feld.winfo_exists(), "Inspektor mit Titelfeld nicht geöffnet"
+    feld.focus_force()
+    warte(lauf, 0.2)
+    feld.event_generate("<BackSpace>")
+    warte(lauf, 0.1)
+    assert len(app.trash) == papierkorb, "Rücktaste im Inspektor hat den markierten Punkt gelöscht"
+    # Gesperrter Wechsel meldet den Grund bei jedem neuen Versuch, schnelle Wiederholung nur einmal.
+    echt_commit = app.commit_detail_pane
+    app.commit_detail_pane = lambda *a, **k: None
+    app._detail_commit_error = "Der Titel darf nicht leer sein."
+    try:
+        zahl = lambda: sum(1 for m in meldungen if m and m[0] == "Bearbeitung offen")
+        assert app.prepare_inspector_switch() is False and zahl() == 1, meldungen[-2:]
+        assert app.prepare_inspector_switch() is False and zahl() == 1, "Doppelklick meldet doppelt"
+        fehler, zeit = app._detail_commit_error_shown
+        app._detail_commit_error_shown = (fehler, zeit - 3)
+        assert app.prepare_inspector_switch() is False and zahl() == 2, "späterer Versuch bleibt stumm"
+    finally:
+        app._detail_commit_error = None
+        app.commit_detail_pane = echt_commit
+    # 3) Bisheriges Verhalten bleibt: Rücktaste mit Fokus in der Liste löscht den markierten Punkt.
+    app.close_task_inspector(discard=True) if hasattr(app, "close_task_inspector") else None
+    warte(lauf, 0.3)
+    app.tree.selection_set(erster)
+    app.tree.focus_force()
+    warte(lauf, 0.2)
+    # Echte Taste am Baum (Prüfhinweis R5), nicht nur der Rückgriff auf den Fokus.
+    app.tree.event_generate("<Delete>")
+    warte(lauf, 0.3)
+    assert len(app.trash) == papierkorb + 1, "Entf mit Listenfokus wirkt nicht mehr"
+    return ("Rücktaste/Entf im Titelfeld (Pinnwand und Liste) löscht keinen Punkt, Wechsel möglich, gesperrter Wechsel "
+            "meldet jeden neuen Versuch; Entf am Baum löscht wie bisher")
+
+
+
+def restflaechen_befunde(wurzel):
+    """Leere Rahmen, die die Größe entfernter Kinder behalten (Tk setzt sie nicht zurück).
+
+    Bewusst ohne App-Hilfsfunktion, damit die Gegenprobe auf älteren Ständen läuft.
+    """
+    funde, stapel = [], [wurzel]
+    while stapel:
+        w = stapel.pop()
+        for k in w.winfo_children():
+            stapel.append(k)
+            if k.winfo_class() != "Frame" or not k.winfo_ismapped():
+                continue
+            if k.pack_slaves() or k.grid_slaves() or k.place_slaves():
+                continue
+            try:
+                if int(float(k.cget("height"))) or int(float(k.cget("width"))):
+                    continue
+            except Exception:
+                continue
+            if k.winfo_reqheight() > 1 or k.winfo_reqwidth() > 1:
+                funde.append(f"{str(k)[-48:]} {k.winfo_reqwidth()}×{k.winfo_reqheight()} px")
+    return funde
+
+
+def fall_restflaechen(lauf):
+    """Mac-Abnahme 07.11.2026: Nach Öffnen/Schließen bleibt keine leere Fläche stehen (appweite Aktionsprüfung)."""
+    app, mod = lauf.app, lauf.mod
+    lauf.showcase()
+    app.settings["release_notes_seen"] = mod.APP_VERSION
+    app.show_info = app.show_warning = lambda *a, **k: None
+    seite = next(e for e in app.lists if e["title"].startswith("Parkquartier · Briefing"))
+    liste = next(e for e in app.lists if e["title"].startswith("Vermarktung"))
+    zeichnung = next(e for e in app.lists if app.is_drawing_list(e))
+    befunde, schritte = [], []
+
+    def pruefe(schritt):
+        warte(lauf, 0.15)
+        idle(lauf, 4)
+        funde = restflaechen_befunde(lauf.root)
+        schritte.append(schritt)
+        befunde.extend(f"{schritt}: {f}" for f in funde)
+
+    def gleich(schritt, vorher, nachher, toleranz=1):
+        if abs(vorher - nachher) > toleranz:
+            befunde.append(f"{schritt}: Höhe {vorher} → {nachher} px")
+
+    lauf.root.geometry("1280x800+20+20")
+    for design in ("light", "dark"):
+        app.set_design(design)
+        idle(lauf, 4)
+        for name, oeffnen in abnahme3505_ansichten(app, lauf):
+            oeffnen()
+            pruefe(f"{design} {name}")
+    app.set_design("light")
+    # 1) Seite: „Erwähnt ohne Verweis“ auf und zu (Inhaberbefund).
+    app.set_active_list(seite["id"])
+    warte(lauf, 0.3)
+    ed = app.rich_note_editor
+    # Live-Liste ohne Lücke: Ihr Rahmen ist nicht höher als die Liste (Befund 07.11.2026,
+    # die Glide-Leiste beanspruchte als Canvas 265 px Standardhöhe).
+    tabelle = ed.live_tree.master
+    if tabelle.winfo_height() > ed.live_tree.winfo_height() + 2:
+        befunde.append(f"Live-Liste: Rahmen {tabelle.winfo_height()} px, Liste {ed.live_tree.winfo_height()} px")
+    hoehe = ed.text.winfo_height()
+    for runde in range(2):
+        ed.toggle_mentions()
+        pruefe(f"Erwähnt auf {runde + 1}")
+        ed.toggle_mentions()
+        pruefe(f"Erwähnt zu {runde + 1}")
+        gleich(f"Erwähnt zu {runde + 1}: Seitentext", hoehe, ed.text.winfo_height())
+    # 2) Titelbild setzen und entfernen.
+    app.change_page_feature(seite["id"], "cover", {"kind": "drawing", "document": zeichnung["drawing"]})
+    pruefe("Titelbild gesetzt")
+    app.change_page_feature(seite["id"], "cover", None)
+    pruefe("Titelbild entfernt")
+    ed = app.rich_note_editor
+    gleich("Titelbild entfernt: Seitentext", hoehe, ed.text.winfo_height())
+    # 3) Live-Liste lösen (Inhaberbefund „Verknüpfung“): der Text bekommt den Platz.
+    ziele = list(app.page_entry(seite["id"]).get("live_lists", []))
+    assert ziele, "Showcase-Seite ohne Live-Liste"
+    for ziel in ziele:
+        app.remove_live_list(seite["id"], ziel)
+    pruefe("Live-Liste gelöst")
+    ed = app.rich_note_editor
+    if ed._live_host.winfo_reqheight() > 1:
+        befunde.append(f"Live-Liste gelöst: Bereich {ed._live_host.winfo_reqheight()} px hoch")
+    ohne = ed.text.winfo_height()
+    app.change_page_feature(seite["id"], "live_lists", ziele)
+    pruefe("Live-Liste wieder verknüpft")
+    app.change_page_feature(seite["id"], "live_lists", [])
+    pruefe("Live-Liste erneut gelöst")
+    gleich("Live-Liste erneut gelöst: Seitentext", ohne, app.rich_note_editor.text.winfo_height())
+    # 4) Liste: Inspektor und Nebenansicht auf und zu.
+    app.set_active_list(liste["id"])
+    warte(lauf, 0.3)
+    flaeche = app.list_frame_outer
+    masse = (flaeche.winfo_width(), flaeche.winfo_height())
+    erster = next(i for i in app.iter_tree_ids() if app.find_item_in_lists(i))
+    app.open_task_inspector(erster)
+    pruefe("Inspektor offen")
+    app.close_task_inspector(discard=True)
+    pruefe("Inspektor zu")
+    app.open_side_view(seite["id"])
+    pruefe("Nebenansicht offen")
+    app.close_side_view()
+    pruefe("Nebenansicht zu")
+    nachher = (flaeche.winfo_width(), flaeche.winfo_height())
+    gleich("Inspektor/Nebenansicht zu: Breite", masse[0], nachher[0])
+    gleich("Inspektor/Nebenansicht zu: Höhe", masse[1], nachher[1])
+    # 5) Pinnwand: Vollbild an/aus; Seitenleiste und Kompaktmodus hin und zurück.
+    w = app.workspace
+    w.set_mode("board")
+    warte(lauf, 0.4)
+    w.toggle_board_focus()
+    pruefe("Vollbild an")
+    app.workspace.toggle_board_focus()
+    pruefe("Vollbild aus")
+    app.workspace.set_mode("list")
+    for umschalten, name in ((app.toggle_sidebar, "Seitenleiste"), (app.toggle_compact_mode, "Kompaktmodus")):
+        umschalten()
+        pruefe(f"{name} um")
+        umschalten()
+        pruefe(f"{name} zurück")
+    assert not befunde, befunde[:6]
+    return f"{len(schritte)} Ansichten und Aktionsschritte ohne Restfläche; Seitentext und Liste nach dem Schließen wieder gleich groß"
+
+
+def fall_markenkante(lauf):
+    """Mac-Abnahme 07.11.2026: Erledigte und offene Zeilen beginnen an derselben Textkante (✓/□ gleich breit)."""
+    app, mod = lauf.app, lauf.mod
+    lauf.showcase()
+    app.settings["release_notes_seen"] = mod.APP_VERSION
+    befunde, geprueft = [], 0
+
+    def kanten(name, texte, schrift):
+        nonlocal geprueft
+        mass = mod.tkfont.Font(root=lauf.root, font=schrift)
+        stufen = {}
+        for text in texte:
+            eingerueckt = len(text) - len(text.lstrip(" "))
+            rest = text.lstrip(" ")
+            if "  " not in rest:
+                continue
+            vorsatz = rest[:rest.index("  ") + 2].rstrip(" ") + "  "
+            stufen.setdefault(eingerueckt, set()).add(mass.measure(vorsatz))
+            geprueft += 1
+        for stufe, breiten in stufen.items():
+            if max(breiten) - min(breiten) > 1:
+                befunde.append(f"{name} Stufe {stufe}: Textkante {sorted(breiten)} px")
+
+    for groesse in ("mittel", "gross"):
+        app.settings["ui_font_size"] = groesse
+        lauf.neustart() if hasattr(lauf, "neustart") else None
+        app = lauf.app
+        app.settings["release_notes_seen"] = mod.APP_VERSION
+        seite = next(e for e in app.lists if e["title"].startswith("Parkquartier · Briefing"))
+        app.set_active_list(seite["id"])
+        warte(lauf, 0.4)
+        ed = app.rich_note_editor
+        baum = ed.live_tree
+        texte = [baum.item(i, "text") for i in baum.get_children("")]
+        assert any(app.ICONS["check"] in x for x in texte) and any(app.ICONS["task_open"] in x for x in texte), texte
+        kanten(f"Live-Liste {groesse}", texte, app.style.lookup(baum.cget("style"), "font") or "TkDefaultFont")
+    assert geprueft >= 8, geprueft
+    assert not befunde, befunde
+    return f"{geprueft} Zeilen in der Live-Liste (mittlere/große Schrift): erledigt und offen an derselben Textkante"
+
 FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "schreibschutz", "kopfverweise", "notiz", "nebenansicht_liste",
           "nebenansicht_seite", "nebenansicht_inspektor", "nebenansicht_einstiege", "verweisvorschau",
           "verweisvorschau_grenzen", "seitenleiste_kontext", "kompakt",
@@ -4033,7 +4820,7 @@ FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "
           "home_tagesnavigation", "home_mehrfachfelder", "side_verweisnavigation", "dreierpaket_gestaltung",
           "home_wochenwahl", "home_faelligkeit_aufwand", "side_verweisaktionen", "side_trefferuebersicht", "side_nachschlagen", "home_fokusdauer",
           "fokus_wechseln", "side_suchverlauf", "fokus_als_naechstes",
-          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "hinweisplatz", "werkzeugzeile", "menschen3503", "buchbreite3503", "seitenleistenabstand3504", "suchbreite3504", "titellaenge3504", "abnahme3505", "beta350")
+          "fokus_menue", "home_fokus_laeuft", "side_abschnitte", "ansichtssymbole", "eckenlabels", "hinweisplatz", "werkzeugzeile", "menschen3503", "buchbreite3503", "seitenleistenabstand3504", "suchbreite3504", "titellaenge3504", "abnahme3505", "altbestandteile", "unterzeile", "neuerungen3", "titelzaehler", "anhangsnamen", "themenfarbe", "pinnwandleiste", "ruecktaste", "restflaechen", "markenkante", "beta350")
 
 
 def main():

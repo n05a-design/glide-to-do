@@ -1,6 +1,6 @@
 # Paketierung Glide
 
-Stand 05.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.6 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 **Windows-Abnahmekandidat 3.50.3, 05.11.2026:** `build/windows/Kandidaten/Glide-3.50.3-abnahme-20261105` enthält den lokal gebauten und isoliert gestarteten 3.50.3-Stand mit eigener Tcl/Tk 9.1.0. 132 Lieferdateien bytegleich zum Bau; Quell-/PE-/Lizenzprüfung grün. [Nachweis und genaue Matrix-/Menschen-/Mac-Grenzen](../tests/qa-3.50.3/abnahmekorrekturen_2026-11-05/README.md). Die regulären 3.50.0-Pakete unten bleiben datierte andere Lieferstände. Kein öffentlicher Release aus dem Kandidaten abgeleitet.
 

@@ -1,6 +1,6 @@
 # Prüfwerkzeuge für Glide
 
-Stand 05.11.2026 · Glide 3.50.5 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 07.11.2026 · Glide 3.50.6 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
 **Intel-/AMD-Prüfplätze:** Jeder neue WA-42-Prüfablauf erfasst CPU-Modell/-Hersteller, logische Prozessorzahl, Board-/BIOS-Kontext und Laufzeit bereits am Anfang, auch bei grünen Läufen. `runtime.pruefplatz` führt die ermittelte CPU-Familie und einen Hardwareprofil-Hash ohne Rechner-/Benutzerkennung; er ist keine eindeutige physische Rechner-ID. Intel- und AMD-Ergebnisse getrennt zuordnen, zusätzlich App-/Suite-/Fixturehashes und Python/Tk vergleichen. Ein angekündigter AMD-Bericht bleibt bis zum tatsächlichen Eingang offen. Weder Hardwareprofil noch grüner Gegenlauf beweisen eine CPU-Ursache. Aktueller Intel-Eingang und Nachweise im [Abschlussnachlauf](../qa-3.49.0/abschlussreste_2026-10-29/README.md).
 
@@ -18,6 +18,7 @@ Alle Werkzeuge werden aus `01_Repository/Glide` gestartet. Werkzeuge, die echte 
 | `ablagegroesse.py` | Keine Archivkopien von Glide-Daten, keine `*.fetch`-Reste, Archive, Nachweise und Releaseplanungen nur der sieben neuesten Versionen (je Datenformat bleibt ein Beleg), Fensterbilder nur der drei neuesten, keine Datei über 50 MB. Kürzen: `scripts/pflege/ablage_kuerzen.py` |
 | `standpruefung.py` | Standangaben, Formatstufen, überholte Aussagen, Modullisten, relative Links, Titel, erster Vollprüfungsaufruf und Suitezahl aller aktiven Dokumente (R1–R14); ohne Tk, Sekunden |
 | `analyse_statisch.py`, `analyse_erreichbarkeit.py` | Quelltextbefunde und Referenzen, keine Laufzeitgarantie |
+| `altbestandteile.py` | Bedienelemente im Systemaltstil (D66, 07.11.2026): verbotene `tk`/`ttk`-Konstruktoren wie Scrollleisten, Combobox, Spinbox in den ausgelieferten Modulen; Sperrklinke für klassische Kontrollkästchen, Optionsknöpfe, Listenfelder und Regler; Laufzeitklassen für `test_arbeitsmodi --fall altbestandteile`. Ohne Tk; Werkzeugtest `test_altbestandteile.py` |
 | `attributpruefung.py` | Aufrufe über `self` ohne Ziel in ihrer Klasse, auch über geerbte Tk-Basen |
 | `dublettenpruefung.py [--laenge N]` | Wiederholte Codeblöcke; meldet, bewertet nicht |
 | `prozessdiagnose.py` / `test_prozessdiagnose.py` | Ergänzt den gemeinsamen Prüfungsstarter um lesenden Systemkontext und signaturbezogene WA-41A-/WA-41B-Hinweise; keine Fehlerunterdrückung, CPU-Skips oder automatischen Wiederholungen. [Vertrag und Grenzen](../../docs/05_QA_TESTPLAN.md#prozessabstürze-und-möglicher-prüfplatzfehler-wa-41) |

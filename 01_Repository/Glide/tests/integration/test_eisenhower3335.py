@@ -57,9 +57,10 @@ with tempfile.TemporaryDirectory(prefix='glide-eisenhower-') as directory:
         ws.set_mode('board')
         ws.configure_board('layout', 'columns')
         idle()
-        menue = next(w for w in descendants(ws.body) if isinstance(w, mod.AppOptionMenu)
-                     and any('Dringlichkeit' in str(option) for option in w.options))
-        menue.variable.set('Gruppieren: Dringlichkeit × Wichtigkeit')
+        # Seit 07.11.2026 ein Leistenknopf „Gruppieren ▾“ mit Menü in der Pinnwandzeile.
+        menue = ws.group_button.choices_menu()
+        eintraege = [menue.entrycget(i, 'label') for i in range(menue.index('end') + 1)]
+        menue.invoke(next(i for i, e in enumerate(eintraege) if 'Dringlichkeit' in e))
         idle()
         assert ws.board()['group_by'] == 'eisenhower'
         assert [spalte['key'] for spalte in ws.column_order] == ['q1', 'q2', 'q3', 'q4']

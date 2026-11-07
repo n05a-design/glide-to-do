@@ -8,6 +8,20 @@ import ui_design as design
 
 
 class DesignTest(unittest.TestCase):
+    def test_remaining_counter_and_limit_message(self):
+        # D67 (07.11.2026): von 40 herunterzählen, Überschreitung klar benennen.
+        self.assertEqual(design.remaining_text(0), "noch 40 Zeichen")
+        self.assertEqual(design.remaining_text(39), "noch 1 Zeichen")
+        self.assertEqual(design.remaining_text(40), "keine Zeichen mehr frei")
+        self.assertEqual(design.remaining_text(43), "3 Zeichen zu viel")
+        self.assertEqual(design.remaining_text(17, short=True), "noch 23")
+        self.assertEqual(design.remaining_text(40, short=True), "0 übrig")
+        self.assertEqual(design.remaining_text(41, short=True), "1 zu viel")
+        self.assertEqual(design.limit_message(), "Höchstens 40 Zeichen")
+        self.assertEqual(design.limit_message(40, 17), "Höchstens 40 Zeichen · 17 nicht übernommen")
+        self.assertEqual(design.limit_message(40, short=True), "max. 40")
+        self.assertEqual(design.limit_message(40, 5, short=True), "5 gekürzt")
+
     def test_imported_title_keeps_original_in_description_without_changing_legacy(self):
         original = "Langer Originaltitel " * 5
         title, description = design.task_title(original, "Bestehende Beschreibung")
@@ -100,6 +114,65 @@ class DesignTest(unittest.TestCase):
             title, due, labels, _source, _gap = design.today_columns(width, 343, 160)
             self.assertGreater(title, max(due, labels), width)
 
+
+
+class LoeschtasteTest(unittest.TestCase):
+    """Mac-Abnahme 07.11.2026: Rücktaste im Feld löschte den markierten Punkt."""
+
+    def test_pfad_mit_trenner(self):
+        self.assertTrue(design.widget_within(".!frame7", ".!frame7"))
+        self.assertTrue(design.widget_within(".!frame7.!entry", ".!frame7"))
+        self.assertFalse(design.widget_within(".!frame70.!entry", ".!frame7"))
+        self.assertFalse(design.widget_within(".!frame7", None))
+        self.assertFalse(design.widget_within("", ".!frame7"))
+
+    def test_textfelder_bearbeiten_text(self):
+        for klasse in ("Entry", "Text", "TEntry"):
+            self.assertTrue(design.delete_key_edits_text(klasse, ".!x.!feld"))
+        self.assertTrue(design.delete_key_edits_text("Canvas", ".!suche", [".!suche"]))
+        self.assertTrue(design.delete_key_edits_text("Canvas", ".!inspektor.!knopf", (), ".!inspektor"))
+
+    def test_baum_und_fenster_loeschen_punkte(self):
+        self.assertFalse(design.delete_key_edits_text("Treeview", ".!liste.!baum", [".!suche"], ".!inspektor"))
+        self.assertFalse(design.delete_key_edits_text("Tk", ".", [".!suche"], ".!inspektor"))
+        self.assertFalse(design.delete_key_edits_text("Canvas", ".!inspektor70", (), ".!inspektor"))
+
+
+class RestflaechenTest(unittest.TestCase):
+    """Mac-Abnahme 07.11.2026: leere Rahmen behielten die Höhe entfernter Kinder."""
+
+    def test_leerer_rahmen_mit_alter_hoehe(self):
+        self.assertTrue(design.stale_empty_frame(False, 0, 0, 406, 168))
+        self.assertTrue(design.stale_empty_frame(False, 0, 0, 1, 2))
+
+    def test_ruhegroesse_kinder_oder_eigene_groesse(self):
+        self.assertFalse(design.stale_empty_frame(False, 0, 0, 1, 1))
+        self.assertFalse(design.stale_empty_frame(True, 0, 0, 406, 168))
+        self.assertFalse(design.stale_empty_frame(False, 0, 24, 1, 24))
+        self.assertFalse(design.stale_empty_frame(False, 200, 0, 200, 1))
+
+
+class GleicheMarkenbreiteTest(unittest.TestCase):
+    """Mac-Abnahme 07.11.2026: erledigte Punkte waren weiter eingerückt."""
+
+    @staticmethod
+    def messen(text):
+        breiten = {"✓": 9, "□": 12, design.HAIR_SPACE: 1, "☑": 13}
+        return sum(breiten.get(z, 7) for z in text)
+
+    def test_schmaleres_zeichen_wird_aufgefuellt(self):
+        paar = design.aligned_markers(("✓", "□"), self.messen)
+        self.assertEqual(self.messen(paar["✓"]), self.messen(paar["□"]))
+        self.assertEqual(paar["□"], "□")
+        self.assertTrue(paar["✓"].startswith("✓"))
+
+    def test_naechste_breite_ohne_ueberschuss(self):
+        grob = lambda text: sum(10 if z == "□" else 4 if z == design.HAIR_SPACE else 7 for z in text)
+        self.assertEqual(grob(design.pad_to_width("✓", 10, grob)), 11)
+        self.assertEqual(design.pad_to_width("□", 10, grob), "□")
+
+    def test_gleiche_zeichen(self):
+        self.assertEqual(design.aligned_markers(("□", "□"), self.messen), {"□": "□"})
 
 if __name__ == "__main__":
     unittest.main()

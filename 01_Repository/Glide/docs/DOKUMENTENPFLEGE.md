@@ -1,6 +1,6 @@
 # Regeln für die Dokumentenpflege
 
-Stand 05.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.6 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 Am 04.11.2026 zusammengeführt und gekürzt: chronologische Auditwiederholungen durch Provenienzverweise ersetzt; geltende Regeln und Zuständigkeiten erhalten.
 

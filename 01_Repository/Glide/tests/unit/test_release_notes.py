@@ -22,6 +22,19 @@ class Neuerungen(unittest.TestCase):
         self.assertEqual([version for version, _ in neu], ["1.1.0", "1.0.2"])  # 1.0.3 ohne Eintrag
         self.assertEqual(len(neu[0][1]), 5)  # höchstens fünf Punkte je Version
 
+    def test_card_shows_at_most_three_newest_versions(self):
+        # D66 (menschliche Abnahme 07.11.2026): „Gelesen“ ohne langes Scrollen.
+        katalog = {f"2.0.{n}": (f"p{n}",) for n in range(1, 9)}
+        karte = rn.notes_since("1.0.0", "2.0.8", katalog)
+        self.assertEqual([version for version, _ in karte], ["2.0.8", "2.0.7", "2.0.6"])
+        self.assertEqual(rn.CARD_VERSIONS, 3)
+        self.assertLessEqual(len(rn.notes_since(rn.BEFORE_CATALOG, "3.50.5")), 3)
+        # Der Verlauf bleibt vollständig.
+        self.assertEqual(len(rn.history("2.0.8", katalog)), 8)
+        # Leere Versionen zählen nicht mit.
+        katalog["2.0.7"] = ()
+        self.assertEqual([v for v, _ in rn.notes_since("1.0.0", "2.0.8", katalog)], ["2.0.8", "2.0.6", "2.0.5"])
+
     def test_nothing_on_first_start_same_or_older_version(self):
         self.assertEqual(rn.notes_since(None, "1.0.2", KATALOG), [])
         self.assertEqual(rn.notes_since("1.0.2", "1.0.2", KATALOG), [])

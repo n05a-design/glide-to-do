@@ -1,4 +1,6 @@
-# QA-Bericht – Glide 3.50.5
+# QA-Bericht – Glide 3.50.6
+
+**Menschliche Abnahme am Mac 07.11.2026 (D66–D71, Plan §21.76):** Auf Inhaberbefunde hin Systemscrollleisten ersetzt und Prüfung `altbestandteile` eingeführt, Neuerungenkarte auf drei Versionen begrenzt, Unterzeile neben dem Logo, Restzähler und strikte Maximallängen, Anhangsnamen höchstens 40 Zeichen samt Bestandsumbenennung, Ansichtstitel in Themenfarbe, Pinnwand-Anordnung als Leistenknopf und Auswahlpfeil neben dem Text (alle Auswahlfelder), Pinnwand mit einer Leistenzeile, Rücktaste im Feld ohne Löschen des markierten Punkts, Seitentitel nur im Kopf (D71), keine Restflächen nach Öffnen/Schließen (appweites Sicherheitsnetz, Pflichtfall `restflaechen`), Pixelsymbol fest links vom Griff. Endstand `90297f9f…`: 104/107 Integrationssuiten (rot nur drei bestehende Mac-Befunde), Arbeitsmodi 60/60. Seit 07.11.2026 als **3.50.6** versioniert (D70); Prüfungen der Version im [Nachweis 3.50.6](../tests/qa-3.50.6/README.md), Abnahmeverlauf im [Nachweis](../tests/qa-3.50.5/mac_abnahme_2026-11-07/README.md).
 
 **Gittransport und Windows-Paket 05.11., abends (Plan §21.69):** Lokaler 3.50.5-Stand (App `a4bfe4ed…`) mit `main` `759e4c9` (PR #62, B16/ci254) auf `claude/glide-3.50.5-abschluss` zusammengeführt; Anwendung und Lieferdateien unverändert, `abgleich_07.py` 93 Code-Dateien/171 Ressourcen ohne Abweichung, Showcase-Hashes gleich Manifest. Linux-Grundstufe (Linux/Tk 8.6, künstliche Daten), Pushlauf und Windows-Paket: Ergebnisse im folgenden Absatz „Windows-Paket 3.50.5“.
 
@@ -32,7 +34,7 @@
 
 **Live-Abgleich 04.11.2026, 19:02 MEZ:** Aktueller Commit `40c20fd6`: [#252](https://github.com/n05a-design/glide-to-do/actions/runs/41870620356) UI-Nachlauf nativ auf Linux und Windows erfolgreich (Vollprüfung/Kalibrierung/Pakettor dort übersprungen); [Mac-Paket #32](https://github.com/n05a-design/glide-to-do/actions/runs/41870600043) Bau/isolierter Start erfolgreich. Im regulären [#251](https://github.com/n05a-design/glide-to-do/actions/runs/41870600372) sind Grundstufe und Linux-Vollprüfung samt Kalibrierung grün, Windows noch laufend. Jobstatus ist kein lokaler Lieferhash oder Menschenabnahme. Neue lokale Standanalyse: 1.128 Fachtests grün, 92 Code-Dateien/171 Ressourcen zur Python-Fassung bytegleich; [Metadaten und genaue Prüfgrenzen](../tests/qa-3.50.2/standanalyse_2026-11-04/ergebnis.json), [Einordnung](../../../00_Arbeitsvorbereitung/Glide_Analyse.md#1327-stand--und-entwicklungschancenanalyse-vom-04112026). Frühere Rotläufe unten bleiben datiert.
 
-Stand 05.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.6 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 **Dokumentpflege 04.11.2026:** Übergabe/Index/Ablageeinstieg strukturiert, überholte Statuswiederholungen entfernt. 1.558 alte QA-Dateien und ein abgeschlossenes Sitzungsmemo gelöscht; Einzelpfade und Hashes im [Pflegenachweis](../tests/qa-3.50.2/dokumentpflege_2026-11-04/README.md). Strukturelle Dokument-, Link-, Aufbewahrungs- und Lieferkontrollen separat dokumentiert; keine neue Funktions-/Vollprüfung oder Paketlieferung. Bestehende Stand-/Marktanalyse erhalten, darin einen persönlichen lokalen Pfad neutralisiert. Produktrest im Plan §21.61/§21.62 bleibt offen.
 

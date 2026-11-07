@@ -1,6 +1,6 @@
 # Architektur – Glide
 
-Stand 05.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.6 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 **Abschlussstand 02.11.2026:** Die unten datierten Modell-/Koordinator-/Renderer-/Mutationsschnitte sind Bestandteil der Python-/Windows-/macOS-Lieferung 3.50.0. Der [Abschlussabgleich](../tests/qa-3.50.0/abschlussabgleich_2026-11-02/README.md) prüft die tatsächlich gelieferten Dateien; aktuelle technische Restvorhaben stehen im [Plan §21.44](../../../00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md#2144-abschlussabgleich-von-features-optimierungen-und-dokumentation). WA-32/36/37/38/39/40 sind dadurch keine vollständig abgeschlossenen appweiten Umbauten. Historische Größen-/Zeitmessungen behalten ihren ursprünglichen Quellstand.
 

@@ -833,7 +833,10 @@ def flaeche(app_path, report, *, gross=False, tempo=False):
                         w = getattr(app, key, None)
                         if w is not None and w.winfo_exists():
                             widgets[key] = {'sichtbar': bool(w.winfo_ismapped()), 'manager': w.winfo_manager(), 'x': w.winfo_rootx() - root.winfo_rootx(), 'y': w.winfo_rooty() - root.winfo_rooty(), 'breite': w.winfo_width(), 'hoehe': w.winfo_height(), 'wunschbreite': w.winfo_reqwidth(), 'wunschhoehe': w.winfo_reqheight()}
-                    surface = app.rich_note_editor.title_label if name == 'Seiten' else app.workspace.canvas if name == 'Pinnwand' else app.tree
+                    # Seit D71 (07.11.2026) steht der Seitentitel nur im Kopf; der Inhalt beginnt mit dem Text.
+                    seite_ed = getattr(app, 'rich_note_editor', None) if name == 'Seiten' else None
+                    seitenflaeche = (seite_ed.title_label if getattr(seite_ed, 'TITLE_IN_CONTENT', True) else seite_ed.text) if seite_ed is not None else None
+                    surface = seitenflaeche if name == 'Seiten' else app.workspace.canvas if name == 'Pinnwand' else app.tree
                     content_y = surface.winfo_rooty() - root.winfo_rooty()
                     assert surface.winfo_ismapped(), (name, 'Inhalt unsichtbar')
                     if name in ('Liste', 'Tabelle'):
