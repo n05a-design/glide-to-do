@@ -271,6 +271,8 @@ Alle 67 eigenen Laufzeitdateien direkt unter `src/glide` wurden strukturell erfa
 
 ### 11.2 Abdeckungsregister aller eigenen Laufzeitmodule
 
+**Historische Messbasis (67 Laufzeitdateien):** Die folgende Tabelle ist ein unveränderter, datierter Analysebefund und **keine aktuelle, vollständig zu pflegende Modulliste**. Das verbindliche aktuelle Inventar mit allen Modulen, Features und Tests steht allein im [Glide-System](../01_Repository/Glide/src/glide/README.md). Einzelne historische Zeilenzahlen und Tk-Importbefunde bleiben als Herkunftsbelege erhalten.
+
 Alle nachfolgenden Dateien liegen unter [src/glide](../01_Repository/Glide/src/glide); Unit-Prüfquellen unter [tests/unit](../01_Repository/Glide/tests/unit). Zeilenzahlen stammen aus dem selben AST-Inventar.
 
 | Modul | Rolle | Zeilen | Eigener Tk-Import | Tiefe |
