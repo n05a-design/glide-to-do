@@ -1,6 +1,6 @@
 # Sicherheitsrichtlinie
 
-Stand 06.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (öffentliche erste Beta); 3.50.3–3.50.5 ändern nur Oberfläche und Titelgrenzen, die hier beschriebenen Vertrauensgrenzen bleiben unverändert
+Stand 07.11.2026 · Glide 3.50.6 · Erster öffentlicher Stand (öffentliche erste Beta); 3.50.3–3.50.6 ändern nur Oberfläche sowie Titel- und Anhangsnamengrenzen, die hier beschriebenen Vertrauensgrenzen bleiben unverändert
 
 Glide verarbeitet Aufgaben, Notizen, Seiten, Pinnwände und Anhänge lokal. Die Kernanwendung benötigt weder Konto noch Netzwerkzugriff. Bewusst angeklickte Weblinks und Anhänge werden an das jeweilige Standardprogramm übergeben; die dortige Verarbeitung liegt außerhalb von Glide. Die verbindlichen [technischen Sicherheitsgrenzen](01_Repository/Glide/SECURITY.md) ergänzen diese Richtlinie.
 

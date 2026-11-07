@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version 3.50.5" src="https://img.shields.io/badge/Version-3.50.5-9E4AC8">
+  <img alt="Version 3.50.6" src="https://img.shields.io/badge/Version-3.50.6-9E4AC8">
   <img alt="Windows, macOS, Linux" src="https://img.shields.io/badge/Windows%20%C2%B7%20macOS%20%C2%B7%20Linux-Desktop-555">
   <img alt="Ohne Konto, ohne Telemetrie" src="https://img.shields.io/badge/ohne%20Konto-ohne%20Telemetrie-2E7D32">
   <img alt="Sprache Deutsch" src="https://img.shields.io/badge/Sprache-Deutsch-FFDC0B">
@@ -170,7 +170,7 @@ Stand 07.11.2026 · Glide 3.50.6 · Aufgabenformat 26
 
 <!-- Am 02.11.2026 für Erstbesucher gekürzt und zusammengeführt, am 06.11.2026 als Projektseite nach dem Vorbild erfolgreicher Repositorys neu gegliedert. Technische Stände stehen im QA-Bericht. -->
 
-3.50.0 heißt öffentlich **„Erster öffentlicher Stand“**, intern **„öffentliche erste Beta“**; aktuell ist 3.50.5 mit Abnahmekorrekturen und Suchfeldern. Automatisierte Prüfungen und Paketprüfungen sind im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) nachvollziehbar. Die abschließende menschliche Prüfung erfolgt durch den Inhaber. Eine Screenreader-Abnahme ist bis zu einem konkreten Bedarf zurückgestellt.
+3.50.0 heißt öffentlich **„Erster öffentlicher Stand“**, intern **„öffentliche erste Beta“**; aktuell ist 3.50.6 mit den Korrekturen der menschlichen Abnahme am Mac vom 07.11.2026 (Bilder oben zeigen 3.50.5). Automatisierte Prüfungen und Paketprüfungen sind im [QA-Bericht](01_Repository/Glide/docs/07_QA_BERICHT.md) nachvollziehbar. Die abschließende menschliche Prüfung erfolgt durch den Inhaber. Eine Screenreader-Abnahme ist bis zu einem konkreten Bedarf zurückgestellt.
 
 - [Quellcode und Entwicklung](01_Repository/Glide/README.md) · [Entwicklungsplan](00_Arbeitsvorbereitung/Glide_Entwicklungsplan.md) · [Übergabe](00_Arbeitsvorbereitung/Glide_Uebergabe.md) · [Markt und Vorbilder](00_Arbeitsvorbereitung/Glide_Markt_und_Vorbilder.md)
 - [Architektur](01_Repository/Glide/docs/02_ARCHITECTURE.md) · [Daten und Backups](01_Repository/Glide/docs/06_DATA_BACKUP_MIGRATION.md) · [Design Richtlinien](01_Repository/Glide/docs/DESIGN_RICHTLINIEN.md)
