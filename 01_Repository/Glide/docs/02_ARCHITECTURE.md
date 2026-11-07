@@ -34,102 +34,11 @@ Technischer Einstieg in den Code: Aufbau, Datenwege, Bausteine der Oberfläche, 
 
 **Lokaler Nachlauf zur vertieften Codebasisprüfung (26.10.2026):** 87 eigene Laufzeitdateien einschließlich `persistence.py`; sechs Laufzeitunterschiede zur abgeschlossenen Lieferung. Die vorstehende Strukturzählung beschreibt deren eingefrorene Basis. Der neue Kandidat umfasst 65.373 Hauptdateizeilen und 1.744 direkte `ListApp`-Methoden; die Zunahme um zwei Methoden gehört zu den Kürzelrücksetzungen. Eine Verringerung der Klassengröße wird durch den kleinen Speicherkoordinator nicht behauptet. [Frisches AST-Inventar und Prüfstand](https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.45.0/codebasis_2026-10-26/README.md).
 
-| Datei | Aufgabe | Seit |
-|---|---|---|
-| `glide_start.py` | Startet `app.pyw` als Modul mit Bytecode-Cache im Systemcache (`sys.pycache_prefix`) | 3.30 |
-| `drawing.py` | Zellmodell der Pixel-Werkstatt: Größen 16–128, Aktionspuffer (`begin_action`/`end_action`), Formen, Symmetrie, Muster, JSON `hex8-row-v1`, Glide-SVG, PNG/ICO-Kodierung, Paletten (GPL, HEX, ASE, Aseprite) | 3.29 |
-| `drawing_image.py` | Tk-Bildfunktionen und Miniaturen der Zeichnung | 3.29 |
-| `backdrop.py` | Hintergrundverläufe: Entwürfe, Lesezone, PNG schreiben/lesen | 3.30 |
-| `page_markdown.py` | Markdown ↔ Seitendokument | 3.30 |
-| `image_preview.py` | `PreviewCache`: Vorschauen über Tk 9 `nsimage`, SVG, Windows WIC, `sips` (macOS) | 3.30 |
-| `image_conversion.py` | Gemeinsamer Tk-freier Konversionsdienst: ein Worker, begrenzte Queue, atomarer Cache, Zeitlimit/Abbruch und negative Ergebnisse (WA-26) | 3.44.0 (WA-26) |
-| `logo.py`, `brand.py` | Logo aus den SVG-Mastern mit Akzentfarbe; seit 3.37.0 geglätteter RGBA-Rückfall über `logo_raster.py` unter Tk 8.6 | 3.30 |
-| `schema_backups.py` | Formatsicherung vor Migrationen mit Dateistandprüfung (T2) | 3.33.0 |
-| `sidebar_policy.py` | Zuordnung, Inhaltsgrenzen, Vorlagenprüfung und Reihenfolge der vier Seitenleistenbereiche; `CONTAINED` lässt datierte Zeichnungen im Notizbuch zu | 3.33.1 |
-| `svg_geometry.py` | SVG-Pfade einschließlich verkürzter kubischer Kurven, CSS-/Attributfarben, transparente Innenkonturen | 3.33.1 |
-| `home_tiles.py` | Startseitenkacheln: Bestand, Standard (D12), Normalisierung, eigene Auswahl, zusammengeführte Kachel „Heute“ | 3.33.2 |
-| `home_dashboard.py` | Tk-freie gemeinsame Bestandsprojektion für Startseitenzähler, Fokus, Woche, Labels und nächsten Termin; angeforderte Projektionen, Originalobjekte, kein dauerhafter Cache | Quellkandidat 3.45.0 |
-| `home_task_tiles.py` | Heute-/Nächste-Aufgabe-Renderer über explizite Anzeigemodelle, UI-Ports und bestehende Aktionen; keine App-/Tk-Imports, nur IDs in Callbacks | Lokaler Startseitenaktionskandidat 3.45.0 |
-| `capture_parser.py` | Deutsche Schnelleingabe (G01): Bearbeitungstag, Fälligkeit, Uhrzeit, Aufwand, Wichtigkeit, Labels, „/“-Befehle, Wiederholungen; jede Erkennung mit Textstelle zum Zurücknehmen | 3.33.3 |
-| `eisenhower.py` | Quadranten „Dringlichkeit × Wichtigkeit“ und Änderung beim Ablegen (`DRINGEND_TAGE`, `WICHTIG_AB`) | 3.33.5 |
-| `today_view.py` | Aufteilung von „Heute“ ohne Dubletten, nächste Aufgabe, Zählung | 3.33.6 |
-| `content_search.py` | Inhaltssuche, Titelrang und Ausschnitt ohne Tk, I/O oder Index | 3.33.7 |
-| `save_comparison.py` | Lesender Speichervergleich; Teilbaumprüfsummen von unten nach oben, explizite Abschlusszeitübernahme in `prepare_save_comparison` vor dem Vergleich | 3.33.9; Trennung im lokalen Nachlauf 3.45.0 |
-| `persistence.py` | Tk-freier Speicherkoordinator mit expliziten Operationen: Vorbereitung, Sicherung, vorhandener atomarer Schreiber, Übernahme und unabhängige Folgeaktionen; `SaveResult` bleibt verbindlich | Lokaler Nachlauf 3.45.0 |
-| `view_metrics.py` | Kennzahlen in einem Durchlauf, begrenztes Datumslesen, frischer Fälligkeitsstatus und Zeilenhöhenformel (P09b) | 3.33.10 |
-| `action_catalog.py` | Stabile Aktionskennungen, Gruppen und virtuelle Editorbefehle (Tk-frei) | 3.33.11 |
-| `ui_design.py` | Gemeinsame Abstände, Radien, Schriftgrößen und Zeilenhöhen; Titel-/Herkunftsbreiten (Tk-frei, OB01/U10/U19) | 3.33.12 |
-| `planning.py` | Bearbeitungstagsziele, Wochentagskapazität, gemeinsame Bilanz und Vorschau ohne Mutation (Tk-frei, KO01/AU02) | 3.33.13 |
-| `day_proposal.py` | Erklärbare Tagesauswahl, Auswahlbudget und Prüfung veralteter Vorschläge (Tk-frei, AU01) | 3.33.14 |
-| `focus_timer.py` | Pausierbarer Fokus, Intervallzeit und wiederholbare Buchung nach Schreibfehler/Neustart (Tk-frei, G05/AU05) | 3.33.14 |
-| `task_references.py` | Heimat und Textverweise, Quellenindex, Zielzustand, ID-Neuvergabe und bearbeitete Zeilentitel ohne Tk | 3.33.15 |
-| `interaction_policy.py` | Palettensuche, gemerkte Hinweise, getrennte Datumsanzeige und X11-/macOS-Emacs-Auslöser in Listen (Tk-frei; Tastenwege seit 3.43.1) | 3.33.16 |
-| `object_references.py` | Typisierte lokale Verweise, abgeleitete Rückverweise, unverknüpfte Titelerwähnungen (FP-05) und Import-/Kopierregeln (Tk-frei) | 3.33.17 |
-| `week_planning.py` | Gemeinsame Wochenbilanz und Zeitfenster aus vorhandenen Glide-Blöcken (Tk-frei) | 3.33.17 |
-| `page_features.py` | Live-Listen, Titelbildvertrag und gefüllte Vorlagenvorschau ohne Bestandsmutation (Tk-frei) | 3.33.18 |
-| `repeat_rules.py` | Wiederholungsregeln (bis 3.33.19 Klassenmethoden von `ListApp`, die weiter delegieren), Termin überspringen, verpasste Termine überspringen (Tk-frei, KO02) | 3.33.20 |
-| `routines.py` | Routinen in „Heute“: Auswahl, Fortschritt, heute vollständig (Tk-frei, AU06) | 3.33.20 |
-| `runtime_check.py` | Mindestversion Python/Tk, bewusst in einfacher Syntax (AB08); der Schnellstart prüft vor dem App-Import, der direkte Start von `app.pyw` nicht (Abschnitt Laufzeit oben, WA-49) | 3.33.20 |
-| `release_notes.py` | Katalog und Regeln der einmaligen Karte „Neu in …“ (Tk-frei, N07) | 3.33.20 |
-| `appearance.py` | Designpaar und Erkennung des Systemmodus für „Automatisch hell/dunkel“ (Tk-frei, N01) | 3.33.21 |
-| `preview_tools.py` | Systemwerkzeuge für Bildvorschauen unter Linux, JPEG-Größe (Tk-frei, N08) | 3.34.0 |
-| `filter_explain.py` | Bedingungen gespeicherter Filter prüfen und erklären (Tk-frei, D-03) | 3.34.0 |
-| `exchange_patch.py` | KI-Austausch Stufe 2: Kontextpaket, Änderungsvorschlag prüfen, Konflikte (Tk-frei, G24) | 3.35.0 |
-| `exchange_recipes.py` | Lokale Auftragsvorlagen und Anweisungen für den bestehenden Datei-/Kontextaustausch, ohne Tk/Netz (FP-06) | 3.44.0 (FP-06) |
-| `markdown_tree.py` | Vollständiger Markdownbaum, relative Verweise, Anhangskopien, Inventar, Prüfsummen und atomarer Abschluss ohne Tk (FP-07/1) | 3.44.0 (FP-07/FP-04) |
-| `settings_compat.py` | Additive unbekannte Filter-/Pinnwandfelder und fremde Kartentypen bewahren; geprüfte bekannte Werte und Grenzen bleiben maßgeblich, keine neue Auswertung | lokaler 3.49.0-Fortsetzungsstand (WA-09) |
-| `pinboard_pages.py` | Getrennte Plattenablage für Seitenkarten und Kanten; Altleser-Rundlauf und begrenzte Druckbilder ohne Tk (FP-04) | 3.44.0 (FP-07/FP-04) |
-| `view_definition.py` | Ansichtsbedingungen, Validierung, Alle-/Oder-Erklärung sowie Darstellungsprüfung, stabile Sortierung und Gruppierungsprojektion ohne Tk; getrennte oberste Namespaces | 3.44.0 (FP-03) |
-| `action_menu.py` | Durchsuchbare Seiten-, Block- und Menüaktionen: liest Beschriftung, Pfad und Zustand der bestehenden Menüs, filtert mit der Suchsemantik der Palette, nennt Sperrgründe; Kopfverweise der Seite. Ausgeführt wird immer der Menüeintrag selbst (Tk-frei, E-U3 A) | 3.45.0 |
-| `side_view.py` | Lesende Nebenansicht im Inspektorbereich: Ziel über stabile Listen-ID, Lesbarkeit (Papierkorb, Archiv, Zeichnung/Galerie), Listenzeilen, Seitenprojektion mit Blockarten/Einzügen/Aufgaben und Abgleichsignatur (Tk-frei, E-U2 A) | 3.45.0 |
-| `compact_mode.py` | Kompaktmodus: Mindestmaße beider Modi, Ableitung und Klemmung der Fensterlage, getrennte Merklage in den Einstellungen (Tk-frei, E-U1 A) | 3.45.0 |
-| `storage_health.py` | Speicherstatus je Bereich, gezählte Fehler, 32-MiB-JSON-Budget, begrenztes Einlesen und Sicherungsreserve (Tk-frei) | 3.45.0 |
-| `session_guard.py` | Lokaler Sitzungsabschluss, lesende Bestandsprüfung, bewusste Freigabe und Originalvorsicherung (Tk-frei) | 3.49.0 |
-| `runtime_diagnostics.py` | Begrenzte lokale Metadaten-/Phasenprotokolle und begleiteter Prozess-Exitstatus (Tk-frei) | 3.49.0 |
-| `backup_catalog.py` | Metadateninventar, Suche, eindeutige Dateiauswahl und lesende Inhaltszusammenfassung von Sicherungen (Tk-frei) | 3.45.0 |
-| `attachment_policy.py` | Aktive Dateitypen und tatsächlicher Ablageort für die Rückfrage vor dem Öffnen (Tk-frei) | 3.45.0 |
-| `backup_diff.py` | Zwei Datenstände vergleichen, nur lesend (Tk-frei, F-03) | 3.35.0 |
-| `render_retention.py` | Lebensdauer, Inhaltsabgleich und stabile Bindungen wiederverwendbarer Ansichtsbausteine (Tk-frei) | 3.36.0 |
-| `logo_raster.py` | Geglättete transparente Logo-Raster und PNG-Ausgabe ohne Zusatzbibliothek (Tk-frei) | 3.37.0 |
-| `symbol_policy.py` | Vollständige Symbolauswahl nach tatsächlicher UI-Schriftabdeckung und lesbare Text-Rückfälle (Tk-frei) | 3.37.0 |
-| `glyph_metrics.py` | Optische Symbolmitte aus den Glyphenrahmen der mitgelieferten TrueType-Schrift; eine Regel statt Pixelversätzen (Tk-frei, B09) | 3.43.0 |
-| `undo_history.py` | Wiederholen nach Rückgängig: Stapel neben dem Rückgängig-Stapel, Gültigkeit über Tiefe, oberstes Objekt und Schreibzähler statt Eingriffen an jeder Rücknahmestelle (Tk-frei, FP-01) | 3.44.0 (FP-01) |
-| `structural_guard.py` | Transaktion des Bestandswächters: Stapelmarke, vollständige Punktprojektion einschließlich Listenpapierkorb, Schreibprüfung, Rückwegergebnis und ehrliche Abbruchmeldung (Tk-frei, WA-27) | 3.44.0 (WA-27–WA-30) |
-| `load_phases.py` | Ladeweg in zwei Phasen: Lesefehler gegen Darstellungsfehler, aktive Liste nach dem Laden (Tk-frei, WA-28) | 3.44.0 (WA-27–WA-30) |
-| `editor_flush.py` | Ergebnisvertrag der Editorübernahme vor Navigation, Export und Ende (Tk-frei, WA-29) | 3.44.0 (WA-27–WA-30) |
-| `data_lock.py` | Datensperre `glide.lock`: Lesen ohne Fail-open, Einordnung, exklusive Anlage (Tk-frei, WA-30) | 3.44.0 (WA-27–WA-30) |
-| `item_index.py` | Kurzlebige Original-/Eltern-/Geschwister-/Listenprojektion für Mehrfachaktionen, nach Dialog-/Modellgrenzen frisch aufgelöst (Tk-frei, WA-36) | 3.44.0 (Roadmap-Paket 1) |
-| `save_result.py` | Unveränderlicher Speicherausgang: Hauptdatei, Besitzprüfung, Sicherung, Folgefehler und aufgeschobene Einstellungen; kompatible Bool-Fassade (Tk-frei, WA-38) | 3.44.0 (Roadmap-Paket 1) |
-| `motion.py` | Unterbrechbare zeitgesteuerte Übergänge mit vollständigem Abbau (Tk-frei) | 3.38.0 |
-| `task_editing.py` | Feldvertrag/Dreiwegevergleich, Mehrfachänderungen, Labelprüfung und reiner Entnahme-/Retentionsplan für erledigte Aufgaben (Tk-frei) | 3.38.0 |
-| `daily_hints.py` | Optionale Tageshinweise, verpasste Tage, Später/Überspringen und persistente Zustellbelege ohne Tk | 3.39.0 |
-| `ics_recurrence.py` | Begrenzte tägliche/wöchentliche/monatliche/jährliche Serien ohne Tk | 3.39.0 |
-| `occupied_time.py` | Vereinigung belegter Zeit und lokale Tages-/Rasterprojektion ohne Tk | 3.39.0 |
-| `ics_busy.py` | Rein lesende lokale ICS-Belegzeiten, Ausnahmen und sichtbare Verlustmeldungen ohne Tk | 3.39.0 |
-| `ics_timezone.py` | Eingebettete ICS-Zeitzonen einschließlich Sommerzeit ohne Tk | 3.39.0 |
-| `timezones.py` | Gebündelte IANA-Zeitzonen und CLDR-Windows-Zuordnung ohne Systemänderung und Tk | 3.39.0 |
-| `day_relief.py` | Explizite Mehrfach-Umplanung mit gemeinsamem Kapazitätsvergleich und Konfliktschutz ohne Tk | 3.39.0 |
-| `busy_calendar.py` | Gemeinsamer Belegzeitenvertrag, Dateigrenzen, unbekannte Zustände und Quellenkonfiguration ohne Tk | 3.39.0 |
-| `calendar_service.py` | Begrenzter asynchroner Kalenderleser mit Generationsschutz und Lebensdauer ohne Tk | 3.39.0 |
-| `repeat_ics.py` | Glide-Wiederholung ↔ iCalendar-RRULE: Monats-/Jahresreihen ab dem 29. als BYSETPOS-Klemmform wie in Glide, Rückweg nur bei gleicher Terminfolge (Tk-frei, A28) | 3.39.1 |
-| `animation.py` | Bildfolge einer Zeichnung: stabile Frame-IDs, gemeinsame und eigene Dauer, Vorschau-Zeitachse, pixelgenaue PNG-Ausgabe (Tk-frei, D18) | 3.40.0 |
-| `animation_export.py` | Zusammengehörige PNG-/Zeitachsendateien mit rückrollbarem Austausch (Tk-frei) | 3.40.0 |
-| `notion_archive.py` | Notion-Export „Markdown & CSV“ als ZIP begrenzt lesen: Seiten, Unterseiten, Bilder/Anhänge, Verluste; ohne Entpacken (Tk-frei, D26/D37/D39) | 3.41.0 |
-| `notion_import.py` | Ausdrücklich gewählte Notion-Seiten planen: Texte, Listen, Aufgaben-Kästchen, interne Verweise, Verlustbericht (Tk-frei, D26/D37/D39) | 3.41.0 |
-| `notion_reimport.py` | Erneuter Export: unverändert/neu/geändert/lokal geändert über Quellenschlüssel und Inhaltsfingerabdruck (Tk-frei, D26/D37/D39) | 3.41.0 |
-| `notion_hierarchy.py` | Unterseiten in bestehende Glide-Ordner und Seiten einordnen (Tk-frei, D26/D37/D39) | 3.41.0 |
-| `source_metadata.py` | Notion-Quellenzuordnungen beim Lesen, Kopieren, Wiederherstellen und Verlegen von Anhängen erhalten (Tk-frei, D26/D37/D39) | 3.41.0 |
-| `accessibility.py` | Namen, Rollen, Werte und Zustände für den gewählten Aufgaben-Kernablauf, Tk-frei | Vorbereitung 4.0.0 |
-| `accessibility_bindings.py` | Native Semantik mit Widget-Lebensdauer, zusammengefassten Meldungen und Aktionsguards, Tk-frei | Vorbereitung 4.0.0 |
-| `core_accessibility.py` | Adapter für Navigation, Aufgabeninspektor, Checkboxen, Anhänge und Schreibschutz, Tk-frei | Vorbereitung 4.0.0 |
-| `page_restore.py` | Einzelne Seite aus einer Sicherung vergleichen und die Wiederherstellung planen; fehlende Ziele vorab (Tk-frei, D26/D37/D39) | 3.41.0 |
-| `restore_assets.py` | Anhänge einer Seitenwiederherstellung neu ablegen, ohne Bestandsmutation (Tk-frei, D26/D37/D39) | 3.41.0 |
-| `backup_snapshot.py` | Unveränderliche Sicherungsquelle zwischen Vorschau und Übernahme (Tk-frei, D26/D37/D39) | 3.41.0 |
-| `attachment_paths.py` | Portable flache Anhangspfade prüfen (Tk-frei, D26/D37/D39) | 3.41.0 |
+**Verbindliches vollständiges Systemregister:** [Glide-System](../src/glide/README.md) mit allen 94 Python-Quelldateien, Featureübersicht, Bausteinpaketen, Testkatalog, Wiederverwendungspotenzial und Pflegeregeln. Die frühere zweite Modultabelle ist darin mit ihren technischen Details und datierten Einführungsständen aufgegangen. Dieses Architekturdokument bleibt zuständig für Architekturprinzipien, Speicher-, Rendering-, Performance- und Tk-Regeln; es führt keine zweite vollständige Modulliste.
 
 Die bereits additiv enthaltene P8-Vorbereitung bindet den sichtbaren Inspektorfokus an die Lebensdauer seiner Leinwand (`InspectorFocus`); schnelle Wechsel werden gebündelt, entfernte/versteckte Ziele verworfen. Explizites Strg+Tab erhält bestehende Tab-Einrück-/Texteingaben. Keine verschachtelten Updates im Fokusauftrag.
 
-`drawing_prototype.pyw` ist die isolierte Bedienprobe der Zeichenfläche von 2026-09-24; sie gehört nicht zur App und nicht zu den Lieferwegen. Ein neues Modul muss in `packaging/macos/baue_app.py`, `scripts/pflege/abgleich_07.py`, `src/glide/README.md`, `packaging/README.md`, `07_Python-Versionen/README.md` und hier stehen; die Standprüfung (R10) meldet Lücken.
+`drawing_prototype.pyw` ist die isolierte Bedienprobe der Zeichenfläche von 2026-09-24; sie gehört nicht zur App und nicht zu den Lieferwegen. Neue Module müssen im [Glide-System](../src/glide/README.md), in den tatsächlichen Paket-/Quellmanifesten und in den zugehörigen Tests berücksichtigt werden. Die **System-und-Modulpflege** prüft das Quell- und Testinventar; die Standprüfung R10 kontrolliert zusätzlich die technischen Bau-/Lieferlisten. Die Architektur wird bei neuen Regeln fortgeschrieben, nicht als zweite Modultabelle.
 
 ### Eigenständige Pakete
 
