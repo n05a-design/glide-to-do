@@ -1,5 +1,7 @@
 # Daten, Backups und Migration – Glide
 
+**Aufgabentitel seit 3.50.5, Nachtrag 06.11.:** Neuanlage und tatsächliches Umbenennen begrenzen auf 40; automatische Übernahmen und explizite neue Duplikate sichern den Originaltitel in Beschreibung/Notiz. Vorlagenquellen und Bestandstitel bei Laden, Metadatenänderung, Sicherungswiederherstellung und Export erhalten. Lange Vorlagen-/Galerienotizen beim Normalisieren nicht abschneiden, damit Originale erhalten bleiben. Die historische vorgesicherte Container-Titelkürzung bleibt gesondert. Datenformat bleibt 26.
+
 Stand 05.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 **Historischer Formatwechsel 3.44.0 (22.10.2026):** Aufgabenformat 26 (FP-02), FP-01 und WA-27–WA-30 sowie die obersten Einstellungsnamespaces von FP-03/FP-04 wurden als Python-Fassung geliefert. [Datierter Schutznachweis](https://github.com/n05a-design/glide-to-do/blob/2b1ee0fedc32acb3ae1feff26d8848c26a457be6/01_Repository/Glide/tests/qa-3.43.1/schutzrunde_2026-10-18/README.md). Damals konnten Pakete 3.42.0 Format 26 nur lesend öffnen. **Der erste öffentliche Stand 3.50.0 verwendet weiterhin Aufgabenformat 26. Tatsächliche Paketlieferungen und Prüfungen stehen im QA-Bericht.** Aktuelle native/Menschenabnahmen und FP-01-Prüfadapterbefund getrennt im [QA-Bericht](07_QA_BERICHT.md).
@@ -144,6 +146,7 @@ Referenz-Fixture: `tests/fixtures/current_v20/reference_v20.json`.
 
 ## Migration und Startprüfung
 
+- **Aufgabentitel seit 3.50.5:** Bestehende lange Titel beim Laden, Wiederherstellen, Metadatenändern und Exportieren erhalten. Nur Neuanlage oder tatsächliches Umbenennen begrenzen auf 40; automatische Übernahmen und neue Duplikate sichern den vollständigen Originaltitel in Beschreibung/Notiz. Neue Vorlagenaufgaben werden vor ihrer Erzeugung begrenzt, die Vorlagenquelle bleibt unverändert. Die historische Container-Titelkürzung unten ist ein eigener, vorgesicherter Pfad. Keine Änderung an Format 26.
 - **Windows-Dateistand:** Gleich große Überschreibungen können dieselben Dateizeiten behalten. Der Formatcache berücksichtigt daher den vollständigen SHA-256-Inhalt; ein geänderter Formatwert wird auch ohne Metadatenänderung neu gelesen. Unveränderter Inhalt braucht keinen erneuten JSON-Parse.
 - **Älteres Format:** wird beim Start umgestellt (`migrate_on_start`), vorher bytegenau und unrotiert gesichert als `backups/liste_vor_format<N>_<Zeitstempel>.json` (`schema_backups.py`). Scheitert die Sicherung, bleibt die Originaldatei unverändert und es wird nicht gespeichert; der nächste Versuch sichert erneut.
 - **Neueres Format oder unbekannte Listenart** (`NewerDataError`): öffnet schreibgeschützt mit leerem Bestand und Grund; nichts wird gespeichert.

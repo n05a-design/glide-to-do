@@ -1,0 +1,7 @@
+{
+  "status": "ausgeführt",
+  "grund": "tkinterdnd2 0.6.3: 116 Dateien bytegleich zum Originalpaket (SHA-256 50c738630210…)",
+  "certificate_source": "151 native macOS-Systemwurzelzertifikate, nur für diesen Prüfprozess",
+  "certificate_file_sha256": "367b835d35bc36183ddc5d1e4e85170c8a0da0b2abcb50498df791fa1f614750",
+  "verification_disabled": false
+}

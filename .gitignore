@@ -78,6 +78,9 @@ _verification_temp*
 *.orig
 *.bak
 *~
+# OneDrive-Konfliktkopien des Mac (Gerätename im Dateinamen) nie einchecken;
+# Inhalte zuerst in die Hauptdatei zusammenführen.
+*-MacBook Pro Max Ultra.*
 
 # --- Werkzeuge, Builds, Betriebssystem ---------------------------------------
 __pycache__/

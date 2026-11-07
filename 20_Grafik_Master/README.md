@@ -61,6 +61,8 @@ python -B tests/integration/test_logo3370.py
 
 Anschließend aktuelle Dokumentationsaufnahme/Verweise, Änderungsverlauf, Entwicklungsplan und QA-Nachweis fortschreiben. Windows und macOS mit `packaging/paket/baue_paket.py` beziehungsweise dem nativen Mac-Workflow neu bauen, Paketressourcen/PE beziehungsweise ICNS, Signatur und isolierten Start prüfen und erst danach die tatsächlichen Lieferziele ersetzen. Physische DPI-/Taskleisten-/Finderprüfung getrennt vom automatischen Rendernachweis bestätigen. Das Beispielarchiv bleibt erhalten; individuelle Nutzerbilder und Dokumentensymbole werden durch einen Markenwechsel nicht verändert.
 
+**Übertragung nativer Pakete:** Einige Übertragungswerkzeuge ergänzen SVG-Metadaten (am 06.11. bei vier entpackten Paketdateien beobachtet). Deshalb native Pakete als vollständiges Originalarchiv übertragen und nach dem Entpacken gegen dessen Hashmanifest prüfen. Zusätzliche Metadaten dürfen nicht still in geprüfte Ressourcen gelangen; abweichende Dateien sichern und nur die nachweislich ursprünglichen Archivbytes wiederherstellen. Ein nachträglicher Ressourcentausch ist kein neuer Paketbau oder Signaturnachweis.
+
 ## Weitere Grafikquellen
 
 `05_Inspiration` enthält historische Stilvorlagen und Entwurfsbelege. Sie sind keine aktuelle Logo-Quelle. Fremdbilder vor öffentlicher Veröffentlichung nach ihrer jeweiligen Lizenz prüfen.

@@ -29,6 +29,37 @@ from types import SimpleNamespace
 REPO = Path(__file__).resolve().parents[2]
 sys.dont_write_bytecode = True
 
+
+def pruefe_callback_register(app, root):
+    executed = []
+    owned = []
+    external = root.after(60000, lambda: executed.append("external"))
+    try:
+        expired = app._register_after(root.after_idle(lambda: executed.append("expired")))
+        owned.append(expired)
+        root.update_idletasks()
+        assert executed == ["expired"]
+        pending = app._register_after(root.after(60000, lambda: executed.append("pending")))
+        owned.append(pending)
+        assert expired not in app._after_ids, "Ausgeführter Auftrag bleibt im Register"
+        assert pending in app._after_ids
+        assert pending in root.tk.splitlist(root.tk.call("after", "info"))
+        cancelled = app._register_after(root.after(60000, lambda: executed.append("cancelled")))
+        owned.append(cancelled)
+        root.after_cancel(cancelled)
+        marker = app._register_after(root.after(60000, lambda: executed.append("marker")))
+        owned.append(marker)
+        assert cancelled not in app._after_ids, "Abgebrochener Auftrag bleibt im Register"
+        assert {pending, marker} <= app._after_ids
+        assert external not in app._after_ids
+        assert external in root.tk.splitlist(root.tk.call("after", "info"))
+    finally:
+        for identity in owned:
+            root.after_cancel(identity)
+            app._after_ids.discard(identity)
+        root.after_cancel(external)
+
+
 with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
     os.environ["GLIDE_DATA_DIR"] = ordner
     os.environ["GLIDE_TEST_MODE"] = "1"
@@ -111,6 +142,10 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
         ruhe()
 
     try:
+        pruefe_callback_register(app, root)
+        if "--callback-register" in sys.argv:
+            print("test_aufraeumen330: OK; ausgeführte/abgebrochene Aufträge bereinigt, aktive/fremde erhalten")
+            raise SystemExit(0)
         normal = next(entry for entry in app.lists
                       if entry.get("list_kind") in (None, "", "list", "tasks") and len(entry.get("items", [])) > 5)
         zeichnung = next(entry for entry in app.lists if entry.get("list_kind") == "drawing")
@@ -345,6 +380,22 @@ with tempfile.TemporaryDirectory(prefix="glide-aufraeumen-") as ordner:
         assert ansicht.detail_index == 0
         erstes = galerie["attachments"][0]["id"]
         assert app.set_gallery_caption(galerie["id"], erstes, "Rotes Bild", "Notiz")
+        for size in (39, 40, 41):
+            original = "Ü" * size
+            app.set_gallery_caption(galerie["id"], erstes, original, "Notiz")
+            caption = galerie["attachments"][0]
+            assert len(caption["title"]) <= app.CONTAINER_TITLE_MAX
+            if size > app.CONTAINER_TITLE_MAX:
+                assert original in caption["note"]
+        caption["title"] = ("Altes Bild " * 8).strip()
+        legacy_title = caption["title"]
+        assert app.set_gallery_caption(galerie["id"], erstes, legacy_title, "Neue Notiz")
+        assert caption["title"] == legacy_title
+        long_note = "N" * 4000
+        app.set_gallery_caption(galerie["id"], erstes, "W" * 41, long_note)
+        assert long_note in caption["note"] and "W" * 41 in caption["note"]
+        assert app.normalize_attachments([caption])[0]["note"] == caption["note"]
+        app.set_gallery_caption(galerie["id"], erstes, "Rotes Bild", "Notiz")
         ansicht.close_detail()
         app.remove_gallery_image(galerie["id"], galerie["attachments"][1]["id"])
         ruhe()

@@ -1692,8 +1692,9 @@ with tempfile.TemporaryDirectory(prefix="glide-features330-") as folder:
                 wert = mod.contrast_ratio(tafel[flaeche], tafel[schrift])
                 assert wert >= schwelle, (flaeche, schrift, wert)
         assert mod.contrast_ratio(tafel["selection"], tafel["selection_text"]) >= 4.5
-        # D62 (05.11.2026): einheitliches Darkmode-Gelb #FFDC0B.
-        assert {tafel["clear"], tafel["flag"], tafel["accent"]} == {"#3D7BFF", "#FFDC0B", "#FF3EA5"}
+        # D62: Darkmode-Gelb kommt zentral aus der Markenpflege (#FFDC0B).
+        assert mod.glide_logo.BRAND_YELLOW == "#FFDC0B"
+        assert {tafel["clear"], tafel["flag"], tafel["accent"]} == {"#3D7BFF", mod.glide_logo.BRAND_YELLOW, "#FF3EA5"}
         app.set_design("pixel")
         app.set_home_view()
         root.update()
