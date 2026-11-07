@@ -6759,6 +6759,8 @@ class ItemWorkspace:
             [(name, key) for key, name in self.BOARD_LAYOUTS], lambda: self.board().get("layout", "free"),
             lambda wert: self.configure_board("layout", wert), "Anordnung der Karten wählen")
         self.layout_choice = layout_knopf
+        # Die Anordnung weicht bei Enge nie (CI Linux, große Schrift, PR #69).
+        layout_knopf.board_essential = True
         buttons.append(layout_knopf)
         self.group_button = None
         if board.get("layout") == "columns":
@@ -49614,6 +49616,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return
         try:
             text = getattr(self, "_stats_full_text", "")
+            # D68: Verschwinden die Seitenchips nach dem Setzen der Kennzahlen
+            # (Labels entfernt), greift der Ersatztext auch hier (CI Windows, PR #69).
+            if not str(text or "").strip() and not self.page_chips():
+                text = self._stats_full_text = glide_metrics.ensure_subtitle(text, self.view_mode)
             width = int(getattr(event, "width", 0) or row.winfo_width())
             font = self.measurement_font(label.cget("font"))
             inset = max(0, label.text_size()[0] - font.measure(label.cget("text")))
