@@ -1,13 +1,13 @@
 # Paketierung Glide
 
-Stand 05.11.2026 · Glide 3.50.5 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
+Stand 07.11.2026 · Glide 3.50.6 · Erster öffentlicher Stand (intern: öffentliche erste Beta) · Aufgabenformat 26
 
 **Windows-Abnahmekandidat 3.50.3, 05.11.2026:** `build/windows/Kandidaten/Glide-3.50.3-abnahme-20261105` enthält den lokal gebauten und isoliert gestarteten 3.50.3-Stand mit eigener Tcl/Tk 9.1.0. 132 Lieferdateien bytegleich zum Bau; Quell-/PE-/Lizenzprüfung grün. [Nachweis und genaue Matrix-/Menschen-/Mac-Grenzen](../tests/qa-3.50.3/abnahmekorrekturen_2026-11-05/README.md). Die regulären 3.50.0-Pakete unten bleiben datierte andere Lieferstände. Kein öffentlicher Release aus dem Kandidaten abgeleitet.
 
 **Lieferabgleich 03.11.2026:** Quelle/Python 3.50.2 mit vier korrigierten Schriftklassen und SemiBold-Schnitten; reguläre lokale Windows-/Mac-Pakete weiterhin 3.50.0 auf Apphash `067e683b…`. Windows-Paket: 104 Dateien bytegleich zu seinem ZIP; Mac-TAR unverändert zum datierten Lieferhash. Auf diesem Windows-Checkout liegt kein aktuelles `build/macos/Glide.app`. [Aktueller Abgleich und Grenzen](../tests/qa-3.50.2/ablageabgleich_2026-11-03/README.md). Kein nativer Neubau oder Release aus der Versionsnummer abgeleitet.
 
 
-Der Paketstarter begleitet den Appprozess für lokale technische Diagnose und den tatsächlichen Exitstatus; `--paket-pruefen` bleibt der direkte isolierte Prüfweg. Alle 92 Laufzeitdateien einschließlich Sitzungs-/Diagnoseschutz und Ressourcen gehören zum Paket. Die aktuelle Lieferung wird ausschließlich dem unten verlinkten 3.50-Nachweis zugeordnet. Frühere Bauwerte bleiben in den datierten [3.45-Paketbelegen](https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/README.md) und dem [3.49-Abschluss](../tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md) erhalten.
+Der Paketstarter begleitet den Appprozess für lokale technische Diagnose und den tatsächlichen Exitstatus; `--paket-pruefen` bleibt der direkte isolierte Prüfweg. Alle 92 Laufzeitdateien einschließlich Sitzungs-/Diagnoseschutz und Ressourcen gehören zum Paket. Die aktuelle Lieferung wird ausschließlich dem unten verlinkten 3.50-Nachweis zugeordnet. Frühere Bauwerte bleiben in den datierten [3.45-Paketbelegen](https://github.com/n05a-design/glide-to-do/blob/1ba516a8acfb6ef73b807131f8365bfae8f64816/01_Repository/Glide/tests/qa-3.45.0/paketabschluss_2026-10-26/README.md) und dem [3.49-Abschluss](https://github.com/n05a-design/glide-to-do/blob/f1a5b5b6e0f97f2b5eab1ac552999c33c6416e69/01_Repository/Glide/tests/qa-3.49.0/gesamtabschluss_2026-10-31/README.md) erhalten.
 
 **Schriftstile D60:** Quelle/Python enthalten Rubik als Vorgabe, Roboto Mono, Playfair Display und Fraunces; DejaVu bleibt interner Symbolbegleiter, Pixelify für das Pixel-Design. Lizenzbestand, beide Lizenzvorbereiter und Paketstartprobe erfassen die neuen Originalschriften. Diese Quelländerung ist noch kein Neubau des vorhandenen Windows-/Mac-Pakets. [Prüfung und Grenzen](../tests/qa-3.50.0/schriftstile_2026-11-03/README.md).
 

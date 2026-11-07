@@ -270,7 +270,10 @@ with tempfile.TemporaryDirectory(prefix="glide-features325-") as folder:
             tafel = app.active_theme()
             bunt = sorted(name for name, wert in tafel.items()
                           if isinstance(wert, str) and wert.startswith("#") and not neutral(wert))
-            assert set(bunt) <= {"ui_accent", "selection", "selection_text"}, (schluessel, bunt)
+            # D68 (07.11.2026): `view_title` ist die Themenfarbe des Ansichtstitels – dieselbe
+            # Farbe wie `ui_accent`, keine zusätzliche Farbe im farblosen Design.
+            assert set(bunt) <= {"ui_accent", "view_title", "selection", "selection_text"}, (schluessel, bunt)
+            assert "view_title" not in bunt or tafel["view_title"] == tafel["ui_accent"], (schluessel, tafel["view_title"])
             for flaeche in ("bg", "card", "input", "hover"):
                 for schrift, schwelle in (("text", 4.5), ("muted", 4.5), ("placeholder", 3.0)):
                     wert = mod.contrast_ratio(tafel[flaeche], tafel[schrift])

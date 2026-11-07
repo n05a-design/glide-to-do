@@ -117,3 +117,55 @@ class MetricsTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Unterzeile(unittest.TestCase):
+    """D66 (menschliche Abnahme 07.11.2026): Neben dem Logo steht immer eine Unterzeile."""
+
+    def test_home_subtitle_counts_without_date(self):
+        # B06 bleibt: kein Datum im Kopf, nur Zahlen. „Heute“ enthält Verspätetes (H7).
+        self.assertEqual(metrics.home_subtitle(9, 4, 11), "9 Aufgaben heute · davon 4 verspätet · 11 mit Fälligkeit")
+        self.assertEqual(metrics.home_subtitle(1), "1 Aufgabe heute")
+        self.assertEqual(metrics.home_subtitle(0, 2), "Heute nichts offen · 2 verspätet")
+        self.assertNotRegex(metrics.home_subtitle(3, 1, 2), r"\d{1,2}\.\d{1,2}\.|Montag|Samstag|November")
+
+    def test_templates_subtitle_and_latest_edit(self):
+        vorlagen = [{"kind": "list"}] * 3 + [{"kind": "folder"}] * 2
+        self.assertEqual(metrics.templates_subtitle(vorlagen), "5 Vorlagen · 3 für Listen · 2 für Ordner")
+        self.assertEqual(metrics.templates_subtitle(vorlagen, shown=1), "1 von 5 Vorlagen · 3 für Listen · 2 für Ordner")
+        self.assertEqual(metrics.templates_subtitle([]), "0 Vorlagen")
+        self.assertEqual(metrics.latest_edit([{"updated_at": "2026-11-06T15:32:36+01:00"},
+                                              {"created_at": "2026-11-07T01:00:00+01:00"}, {"updated_at": "kaputt"}]),
+                         "2026-11-07")
+        self.assertIsNone(metrics.latest_edit([{}, None]))
+        self.assertEqual(metrics.join_facts("a", "", None, " b "), "a · b")
+
+    def test_ensure_subtitle_never_returns_empty_text(self):
+        self.assertEqual(metrics.ensure_subtitle("  3 Seiten  ", "pages"), "3 Seiten")
+        for leer in ("", "   ", None):
+            self.assertEqual(metrics.ensure_subtitle(leer, "home"), metrics.VIEW_SUBTITLES["home"])
+        self.assertEqual(metrics.ensure_subtitle("", "unbekannt"), metrics.DEFAULT_SUBTITLE)
+        self.assertTrue(all(text.strip() for text in metrics.VIEW_SUBTITLES.values()))
+
+    def test_every_view_of_the_app_has_a_subtitle(self):
+        """Neue Ansichten brauchen einen Ersatztext; sonst bleibt der Kopf neben dem Logo leer."""
+        import ast
+        app = Path(__file__).resolve().parents[2] / "src/glide/app.pyw"
+        baum = ast.parse(app.read_text(encoding="utf-8-sig"))
+        klasse = next(n for n in baum.body if isinstance(n, ast.ClassDef) and n.name == "ListApp")
+        ansichten = {n.value.value for n in klasse.body if isinstance(n, ast.Assign)
+                     and any(isinstance(z, ast.Name) and z.id.endswith("_VIEW") for z in n.targets)
+                     and isinstance(n.value, ast.Constant) and isinstance(n.value.value, str)}
+        for knoten in ast.walk(klasse):
+            ziel = None
+            if isinstance(knoten, ast.Assign) and any(isinstance(z, ast.Attribute) and z.attr == "view_mode"
+                                                      for z in knoten.targets):
+                ziel = [knoten.value]
+            elif isinstance(knoten, ast.Compare) and isinstance(knoten.left, ast.Attribute) \
+                    and knoten.left.attr == "view_mode":
+                ziel = knoten.comparators
+            for wert in ziel or ():
+                werte = wert.elts if isinstance(wert, (ast.Tuple, ast.List, ast.Set)) else [wert]
+                ansichten.update(w.value for w in werte if isinstance(w, ast.Constant) and isinstance(w.value, str))
+        self.assertGreaterEqual(len(ansichten), 15, sorted(ansichten))
+        self.assertEqual(sorted(ansichten - set(metrics.VIEW_SUBTITLES)), [])

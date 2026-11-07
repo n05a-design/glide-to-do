@@ -9,11 +9,23 @@ Katalog: Was auf der Startseite weggeklickt wurde, bleibt dort nachlesbar.
 Pflege je Version: siehe docs/10_VEROEFFENTLICHUNG.md („Neuerungen“). Der
 Katalog ist keine Kopie des technischen CHANGELOG; Versionen ohne Eintrag
 bleiben ohne Eintrag, nachträglich wird nichts erfunden.
+
+Seit der menschlichen Abnahme vom 07.11.2026 (D66) zeigt die Karte höchstens
+die drei neuesten Versionen mit Eintrag (`CARD_VERSIONS`); „Gelesen“ bleibt so
+ohne langes Scrollen erreichbar. Ältere Einträge stehen weiter vollständig in
+„Hilfe › Über Glide › Neuerungen“.
 """
 
 # Je Version höchstens fünf Sätze; neueste Version oben. Eine Version ohne
 # Eintrag zeigt keine Karte.
 CATALOG = {
+    "3.50.6": (
+        "Seiten zeigen ihren Titel nur noch im Kopf in der Themenfarbe; darunter steht jede Ansicht mit einer Unterzeile.",
+        "Titelfelder zählen die freien Zeichen herunter, zu lange Anhangsnamen werden vor dem Speichern gekürzt.",
+        "Die Pinnwand hat eine einzige Leistenzeile, Auswahlfelder zeigen ihren Text vollständig.",
+        "Rücktaste im Textfeld löscht keinen markierten Punkt mehr, und Bereiche hinterlassen beim Schließen keine Lücke.",
+        "Erledigte und offene Punkte beginnen an derselben Kante; die Neuerungen zeigen höchstens drei Versionen.",
+    ),
     "3.50.5": (
         "Buttons kürzen lange Beschriftungen mit drei Punkten; der vollständige Text bleibt im Tooltip.",
         "Neue und geänderte Aufgabentitel sind wie Seiten-, Listen- und Ordnertitel auf 40 Zeichen begrenzt.",
@@ -131,6 +143,8 @@ CATALOG = {
 }
 # Bestand ohne gemerkte Version stammt aus der Zeit vor dieser Karte.
 BEFORE_CATALOG = "3.33.18"
+# Die Karte „Neu in …“ zeigt höchstens so viele Versionen (D66, 07.11.2026).
+CARD_VERSIONS = 3
 
 
 def version_tuple(text):
@@ -146,7 +160,8 @@ def notes_since(last_seen, current, catalog=None):
 
     Ohne gemerkte Version (erster Start) oder bei gleicher bzw. neuerer
     gemerkter Version: leer. Neueste Version zuerst, höchstens fünf Punkte je
-    Version.
+    Version und höchstens `CARD_VERSIONS` Versionen; ältere Einträge bleiben
+    über `history` nachlesbar.
     """
     katalog = CATALOG if catalog is None else catalog
     alt, neu = version_tuple(last_seen), version_tuple(current)
@@ -157,7 +172,8 @@ def notes_since(last_seen, current, catalog=None):
         stand = version_tuple(version)
         if stand is not None and alt < stand <= neu and punkte:
             treffer.append((stand, version, list(punkte)[:5]))
-    return [(version, punkte) for _stand, version, punkte in sorted(treffer, reverse=True)]
+    neueste = sorted(treffer, reverse=True)[:CARD_VERSIONS]
+    return [(version, punkte) for _stand, version, punkte in neueste]
 
 
 def normalize_seen(value):

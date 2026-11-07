@@ -150,12 +150,13 @@ with tempfile.TemporaryDirectory(prefix="glide-workspace310-") as folder:
             for child in widget.winfo_children():
                 yield child
                 yield from descendants(child)
-        # Seit 3.33.21 (U09) steht „Anordnung“ in der Schalterzeile über der Fläche.
-        field = next(widget for widget in list(descendants(w.bar)) + list(descendants(w.body))
-                     if isinstance(widget, mod.AppOptionMenu) and "Frei anordnen" in widget.options)
-        field._open_popup(); root.update()
-        field._choices.event_generate("<End>")
-        field._choices.event_generate("<Return>"); root.update()
+        # Seit 3.33.21 (U09) steht „Anordnung“ in der Schalterzeile über der Fläche; seit D69
+        # (07.11.2026) als Leistenknopf mit Menü statt als Auswahlfeld.
+        knopf = w.layout_choice
+        assert isinstance(knopf, mod.RoundedButton) and knopf.text.startswith(dict(w.BOARD_LAYOUTS)[w.board()["layout"]])
+        menue = knopf.choices_menu(); root.update()
+        eintraege = [menue.entrycget(i, "label") for i in range(menue.index("end") + 1)]
+        menue.invoke(len(eintraege) - 1); root.update()
         assert w.board()["layout"] == "free"
         assert not getattr(app, "_active_dropdown", None)
         assert root.grab_current() is None

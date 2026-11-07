@@ -1,0 +1,156 @@
+{
+  "stand": "2026-11-07",
+  "version": "3.50.5",
+  "format": 26,
+  "entscheidungen": [
+    "D66",
+    "D67",
+    "D68",
+    "D69",
+    "D70",
+    "D71"
+  ],
+  "plattform": "macOS 27 arm64, Python 3.14.5, Tk 9.1.0 (eigene Laufzeit), künstliche Daten, Hintergrundmodus",
+  "app_sha256_start": "cb4a7aadb6d62133dcff7a155cb2864a48abba3074898fccd08ea29c1f14547f",
+  "app_sha256_ende": "90297f9f269df0d924547d7195c6f5b884448a032e436a7976825093567fea8d",
+  "lieferabgleich": "93 Code-Dateien/171 Ressourcen bytegleich mit 07_Python-Versionen",
+  "unit": {
+    "tests": 1149,
+    "skip": 1,
+    "ok": true
+  },
+  "werkzeugtests": {
+    "tests": 250,
+    "skip": 3,
+    "ok": true
+  },
+  "ci_grundstufe": {
+    "ok": true,
+    "hinweis": "Fremdcode-Herkunft: Original wegen SSL-Zertifikatsfehler nicht abrufbar"
+  },
+  "arbeitsmodi_alle": {
+    "faelle": 60,
+    "gruen": 60,
+    "rot": []
+  },
+  "neue_pflichtfaelle": {
+    "altbestandteile": "grün",
+    "unterzeile": "grün",
+    "neuerungen3": "grün",
+    "titelzaehler": "grün",
+    "anhangsnamen": "grün",
+    "themenfarbe": "grün",
+    "pinnwandleiste": "grün",
+    "ruecktaste": "grün",
+    "kopfverweise_d69": "grün",
+    "restflaechen": "grün"
+  },
+  "gegenproben_cb4a7aad": {
+    "altbestandteile_statisch": "4 Funde (Zeilen 10865, 19846, 61649, 61651)",
+    "altbestandteile": "zwei TScrollbar in der Seite",
+    "neuerungen3": "18 Versionen in der Karte",
+    "unterzeile": "leere Startseiten-Unterzeile",
+    "titelzaehler": "kein Zähler",
+    "anhangsnamen": "Datei mit 68-Zeichen-Namen ohne Rückfrage übernommen",
+    "themenfarbe": "Titel weiß statt Themenfarbe",
+    "pinnwandleiste": "Gruppieren abgeschnitten",
+    "altbestandteile_auswahlfelder": "Pfeil verdeckt „Frei anordnen“, „Spalten“, „Gruppieren: Bearbeitungstag“",
+    "ruecktaste": "markierter Punkt im Papierkorb",
+    "restflaechen": "Seitentext 406 → 239 px, 168 px Restfläche; Titelbild entfernt 116 px"
+  },
+  "bestandsbefund_behoben": "test_logo330 auf cb4a7aad… rot (Logo-Höhe 39/40 px), behoben",
+  "wechselhaft": "test_release36: zwei Fehlschläge bei paralleler Bedienung, je 3/3 grün alt/neu",
+  "nicht_geprueft": [
+    "Linux-/Windows-Matrix",
+    "native Pakete",
+    "Windows-Sicht der Leisten und Zähler",
+    "menschliche Bestätigung D66–D69 (sieben Prüfpunkte)"
+  ],
+  "integration_gesamt": {
+    "suiten": 107,
+    "gruen": 101,
+    "arbeitsmodi_alle": "58/58",
+    "bestehend_rot_mac": [
+      "test_seiten33318",
+      "test_bedienung33316",
+      "test_tempo330 (grenzwertig, alt gleich)"
+    ],
+    "angepasst": [
+      "test_features325",
+      "test_workspace310"
+    ],
+    "behoben": "test_kompression330: Nachläufe des Titelbegrenzers am Feld"
+  },
+  "app_sha256_runde1": "ad8b95ef110025af2131808393b996276b9885e3389eac991409077307995614",
+  "runde2": {
+    "befunde": [
+      "drei Leistenzeilen Pinnwand",
+      "Seitentitel doppelt (D71)",
+      "Rücktaste im Feld löscht markierten Punkt, Wechsel blockiert"
+    ],
+    "bestaetigt_vom_inhaber": [
+      "Anordnungsknopf",
+      "Titel in Themenfarbe",
+      "Unterzeile"
+    ],
+    "integration_gesamt": {
+      "suiten": 107,
+      "gruen": 103,
+      "rot": [
+        "test_seiten33318",
+        "test_bedienung33316",
+        "test_eingabe3333 (Abbruch, allein grün)",
+        "test_uiux_paket b15_appweit (Mauszeiger)"
+      ]
+    },
+    "nachlauf_endstand": {
+      "suiten": 20,
+      "gruen": 18,
+      "rot": [
+        "test_bedienung33316 (bekannt)",
+        "test_arbeitsmodi 57/59 (Mauszeiger)"
+      ]
+    },
+    "ci_grundstufe": {
+      "ok": true,
+      "hinweis": "Fremdcode-Herkunft: SSL-Fehler"
+    },
+    "lieferabgleich": "93 Code-Dateien/171 Ressourcen bytegleich"
+  },
+  "app_sha256_runde2": "58e8ab91f1c3681d6b2e6290ab22d4a6843d50f9ff7a74ce2c3294ca2ca36224",
+  "runde3_4": {
+    "befunde": [
+      "Restfläche nach Erwähnt ohne Verweis",
+      "Restfläche nach Verknüpfung lösen",
+      "Pixelsymbol scrollt nicht mit",
+      "Wunsch: Symbol fest links vom Griff"
+    ],
+    "bestaetigt_vom_inhaber": [
+      "Pinnwand einzeilig",
+      "Rücktaste im Feld"
+    ],
+    "integration_gesamt": {
+      "suiten": 107,
+      "gruen": 104,
+      "rot": [
+        "test_seiten33318 (bekannt)",
+        "test_bedienung33316 (bekannt)",
+        "test_tempo330 (bekannt, A/B gleich)"
+      ]
+    },
+    "tempo_ab_ms": {
+      "neu": [
+        49.8,
+        50.1
+      ],
+      "cb4a7aad": [
+        49.8,
+        49.9
+      ]
+    },
+    "ci_grundstufe": {
+      "ok": true,
+      "hinweis": "Fremdcode-Herkunft: SSL-Fehler"
+    }
+  }
+}

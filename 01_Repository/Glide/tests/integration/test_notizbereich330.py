@@ -167,7 +167,8 @@ with tempfile.TemporaryDirectory(prefix="glide-notizbereich-") as ordner:
         assert app.view_mode == app.NOTES_VIEW and app.get_display_title() == "Notizen"
         assert app.notes_heading_frame.cget("bg") == app.theme["selection"]
         assert app.pages_heading_frame.cget("bg") != app.theme["selection"]
-        assert app._stats_full_text == "3 Notizen", app._stats_full_text
+        # Seit D66 (07.11.2026) folgen Notizbücher und letzte Bearbeitung.
+        assert app._stats_full_text.startswith("3 Notizen"), app._stats_full_text
         def uebersicht():
             texte, stapel = [], [app.home_content]
             while stapel:

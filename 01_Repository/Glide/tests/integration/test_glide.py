@@ -99,7 +99,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     app = mod.ListApp(root)
     root.update_idletasks()
 
-    assert mod.APP_VERSION == "3.50.5"
+    assert mod.APP_VERSION == "3.50.6"
     assert (REPOSITORY_ROOT / "VERSION").read_text(encoding="utf-8").strip() == mod.APP_VERSION
     assert len([entry for entry in app.lists if entry.get("system_role") == "inbox"]) == 1
     inbox = next(entry for entry in app.lists if entry.get("system_role") == "inbox")
@@ -1421,7 +1421,10 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     assert bool(app.settings_button.winfo_ismapped()) == (not minimal_header)
     assert bool(app.header_overflow_button.winfo_ismapped()) == minimal_header
     settings_access = app.header_overflow_button if minimal_header else app.settings_button
-    assert app.stats_label.winfo_ismapped()
+    # Seit D66 (07.11.2026) steht der Fortschritt einer Liste als Chips unter dem Titel;
+    # Systemansichten nutzen die Kennzahlenzeile. Eine der beiden bleibt sichtbar.
+    assert app.stats_label.winfo_ismapped() or any(
+        chip.winfo_ismapped() for chip in app.page_chip_row.winfo_children())
     header_right = app.header_frame.winfo_rootx() + app.header_frame.winfo_width()
     theme_right = settings_access.winfo_rootx() + settings_access.winfo_width()
     assert theme_right <= header_right, (theme_right, header_right)
