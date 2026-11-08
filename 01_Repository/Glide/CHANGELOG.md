@@ -1,5 +1,9 @@
 # Änderungsverlauf
 
+## Nativer Mac-Kompaktfokus-Nachtest 08.11.2026
+
+- Externen Fokusverlust unter Cocoa durch echten App-Wechsel prüfen; ein zweiter Tk-Interpreter übernimmt dort den Fokus nicht zuverlässig. Tatsächlicher Fokusverlust, echtes FocusOut und Kürzelrücksetzung bleiben verpflichtend. Gezielter nativer Nachtest unabhängig vom langen Vollmodus auswählbar.
+
 ## Startseiten-Prüfsynchronisation 08.11.2026
 
 - Größen-/Scrollprüfung der ruhenden Startseite wartet auf das natürliche Ende der Aktionsfahnen statt pauschal 1,1 Sekunden. Reale Animation mit dreifach verzögerten Bildern als dauerhafte Regression; sämtliche Überdeckungsassertions bleiben erhalten.

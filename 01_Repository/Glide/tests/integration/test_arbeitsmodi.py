@@ -1086,20 +1086,39 @@ def fall_kompakt_verlorenes_loslassen(lauf):
     app.entry.event_generate('<FocusOut>')
     idle(lauf)
     assert app._compact_shortcut_down, 'Interner Fokuswechsel verliert das Ereignispaar'
-    # Tatsächlicher externer Fokusverlust statt einer Meldung bei weiterhin
-    # fokussiertem Hauptfenster: ein unabhängiger Tk-Interpreter übernimmt.
-    ausserhalb = lauf.mod.tk.Tk()
+    # Ein zweiter Tk-Interpreter ist unter Cocoa keine andere Anwendung.
+    # Dort die eingebaute Finder-App aktivieren; Fokusverlust weiterhin messen,
+    # nicht durch ein gefälschtes FocusOut oder einen Mock ersetzen.
+    ausserhalb = None
+    focus_out = []
+    binding = lauf.root.bind('<FocusOut>', lambda event: focus_out.append(str(event.widget)), add='+')
     try:
-        ausserhalb.geometry('180x100+30+30')
-        ausserhalb.update()
-        ausserhalb.focus_force()
+        if sys.platform == 'darwin':
+            subprocess.run(['/usr/bin/open', '-a', 'Finder'], check=True, timeout=10,
+                           capture_output=True, text=True)
+        else:
+            ausserhalb = lauf.mod.tk.Tk()
+            ausserhalb.geometry('180x100+30+30')
+            ausserhalb.update()
+            ausserhalb.focus_force()
+        deadline = time.monotonic() + 5
+        while lauf.root.focus_get() is not None and time.monotonic() < deadline:
+            idle(lauf, 2)
+            time.sleep(.02)
         idle(lauf, 6)
-        assert lauf.root.focus_get() is None
-        lauf.root.event_generate('<FocusOut>')
+        lauf.compact_trace.append({'external_focus': 'Finder' if sys.platform == 'darwin' else 'Tk',
+                                   'focus_out': focus_out, 'after': compact_snapshot(lauf)})
+        assert lauf.root.focus_get() is None, compact_snapshot(lauf)
+        if sys.platform == 'darwin':
+            assert str(lauf.root) in focus_out, 'Kein echter Hauptfenster-FocusOut beim App-Wechsel'
+        else:
+            lauf.root.event_generate('<FocusOut>')
         idle(lauf, 4)
         assert not app._compact_shortcut_down, compact_snapshot(lauf)
     finally:
-        ausserhalb.destroy()
+        lauf.root.unbind('<FocusOut>', binding)
+        if ausserhalb is not None:
+            ausserhalb.destroy()
     taste(lauf.root, '<Control-Shift-K>', lauf)
     assert app.compact_mode_active(), compact_snapshot(lauf)
     lauf.root.event_generate('<KeyRelease-k>')

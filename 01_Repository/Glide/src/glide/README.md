@@ -1,8 +1,8 @@
-# Glide-System V1.9
+# Glide-System V1.10
 
-Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.9 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.10 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.9` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.10` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.9 · Aufgabenformat 26 · Ei
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.10** | 08.11.2026 | Kompaktfokus unter Cocoa mit echtem Wechsel zur Finder-App nachprüfen; tatsächlichen Fokusverlust und echtes Hauptfenster-FocusOut belegen. Einzeln auswählbarer nativer Nachtest vor Paketbau; Vollmodus behält sämtliche Prüfungen. | App 3.50.7, Format 26 |
 | **V1.9** | 08.11.2026 | Ruhende Startseitengeometrie wartet begrenzt auf das tatsächliche Ende der Aktionsfahnen; verzögerte reale Animation als Regression. Native Mac-Nachtests für Bedienung, Startseite und Altimport vor dem unverändert vollständigen Prüflauf. | App 3.50.7, Format 26 |
 | **V1.8** | 08.11.2026 | Vollständige Git-Historie und frühe Prüfung gepinnter Altlieferungen für die native Mac-Vollprüfung; vorhandene Migrationsprüfungen bleiben vollständig. | App 3.50.7, Format 26 |
 | **V1.7** | 08.11.2026 | Windows-Fensterfarb-Retry gehört zum Hauptinterpreter; früher Dialogschluss hinterlässt keinen gelöschten Tcl-Befehl. Deterministische Dialogschluss-/Root-/Fremdinterpreterregression ergänzt. | App 3.50.7, Format 26 |
@@ -646,7 +647,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T115 | [`start_font_probe.py`](../../tests/integration/start_font_probe.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T116 | [`test_animation3400.py`](../../tests/integration/test_animation3400.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T117 | [`test_ansichten.py`](../../tests/integration/test_ansichten.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
-| T118 | [`test_arbeitsmodi.py`](../../tests/integration/test_arbeitsmodi.py) | Bekannter aktueller/ausstehender nativer Befund siehe QA-Risiken |
+| T118 | [`test_arbeitsmodi.py`](../../tests/integration/test_arbeitsmodi.py) | 63 verpflichtende Fälle in fünf vollständigen Gruppen; Cocoa-Fokusfixture mit tatsächlichem App-Wechsel und echtem FocusOut. Native Grenzen im QA-Bericht |
 | T119 | [`test_aufgaben3380.py`](../../tests/integration/test_aufgaben3380.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T120 | [`test_aufraeumen330.py`](../../tests/integration/test_aufraeumen330.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T121 | [`test_auftraege.py`](../../tests/integration/test_auftraege.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |

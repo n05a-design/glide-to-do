@@ -4268,5 +4268,29 @@
     },
     "workflow_tests": 6,
     "native_confirmation_pending": true
+  },
+  "mac_followup_62e_2026_11_08": {
+    "commit": "62e84ef1c3c9cfe909f3d0728e588bd19fdc5c44",
+    "run": 42507520055,
+    "job": 128813264890,
+    "targeted": [
+      "bedienung33316",
+      "startseite3332",
+      "import3410"
+    ],
+    "targeted_result": "success",
+    "full_result": "failure: kompakt_verlorenes_loslassen focus prerequisite",
+    "artifact": 13629676192,
+    "artifact_sha256": "0400348b8740adaac3d16d8ba7f3eca4838a552e6397c49ee73ed2c22cfc8e07",
+    "correction": "Cocoa actual external Finder activation, observed focus and FocusOut; native pending"
+  },
+  "mandatory_matrix_f340_2026_11_08": {
+    "commit": "f3408de4ddc8a13f08147049b5c727d11fc9b983",
+    "pr_run": 42504256498,
+    "push_run": 42504251091,
+    "windows": "success",
+    "linux": "success",
+    "windows_package": "success",
+    "main_merged": false
   }
 }

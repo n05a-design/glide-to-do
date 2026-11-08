@@ -77,7 +77,7 @@ class MacWorkflowTests(unittest.TestCase):
         if executable is None:
             self.skipTest("Keine lokale Bash für Shell-Syntaxprüfung verfügbar")
         blocks = list(run_blocks(self.source))
-        self.assertEqual(len(blocks), 8)
+        self.assertEqual(len(blocks), 9)
         with tempfile.TemporaryDirectory() as directory:
             for index, block in enumerate(blocks):
                 path = Path(directory) / f"step-{index}.sh"
@@ -102,6 +102,11 @@ class MacWorkflowTests(unittest.TestCase):
         for name in ('startseite3332', 'import3410'):
             self.assertIn(f'tests/integration/test_{name}.py', focused)
         self.assertIn("steps.gezielte_pruefung.outcome == 'success'", step)
+        self.assertIn("steps.kompakt_pruefung.outcome == 'success'", step)
+        compact = self.source.split('- name: Externen Kompaktfokus gezielt nachprüfen',1)[1].split('      - name:',1)[0]
+        self.assertIn('(inputs.vollpruefung || inputs.kompakt_nachtest)', compact)
+        self.assertIn('--fall kompakt_verlorenes_loslassen', compact)
+        self.assertIn('${{ runner.temp }}/glide-macos-kompakt.json', self.source)
         self.assertNotIn('always()', step)
         for name in ('startseite', 'import'):
             self.assertIn(f'${{{{ runner.temp }}}}/glide-macos-{name}.log', self.source)

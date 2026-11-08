@@ -16,6 +16,10 @@ on:
         description: 'Vor dem Paketbau die vollständige native QA ausführen'
         type: boolean
         default: false
+      kompakt_nachtest:
+        description: 'Nur den Kompaktfokus vor dem Paketbau nachprüfen; keine Vollabnahme'
+        type: boolean
+        default: false
   workflow_call:
   push:
     branches: ["main", "codex/**"]
@@ -119,6 +123,15 @@ jobs:
             --ziel "$RUNNER_TEMP/tk91-lizenzen"
           printf 'PYTHONPATH=%s\n' "$RUNNER_TEMP/tk91-runtime/python-extension" >> "$GITHUB_ENV"
 
+      - name: Externen Kompaktfokus gezielt nachprüfen
+        id: kompakt_pruefung
+        if: github.event_name == 'workflow_dispatch' && (inputs.vollpruefung || inputs.kompakt_nachtest)
+        run: |
+          "$MAC_PYTHON" -B tests/tools/macos_desktop.py --breite 1920 --hoehe 1080 \
+            --protokoll "$RUNNER_TEMP/glide-macos-kompakt-desktop.json" -- \
+            "$MAC_PYTHON" -B tests/integration/test_arbeitsmodi.py --fall kompakt_verlorenes_loslassen \
+            --report "$RUNNER_TEMP/glide-macos-kompakt.json" > "$RUNNER_TEMP/glide-macos-kompakt.log" 2>&1
+
       - name: Bekannten Mac-Bedienbefund gezielt nachprüfen
         id: gezielte_pruefung
         if: github.event_name == 'workflow_dispatch' && inputs.vollpruefung
@@ -134,7 +147,7 @@ jobs:
             "$MAC_PYTHON" -B tests/integration/test_import3410.py > "$RUNNER_TEMP/glide-macos-import.log" 2>&1
 
       - name: Vollständige native macOS-Prüfung
-        if: success() && steps.runtime_bau.outcome == 'success' && steps.gezielte_pruefung.outcome == 'success' && github.event_name == 'workflow_dispatch' && inputs.vollpruefung
+        if: success() && steps.runtime_bau.outcome == 'success' && steps.kompakt_pruefung.outcome == 'success' && steps.gezielte_pruefung.outcome == 'success' && github.event_name == 'workflow_dispatch' && inputs.vollpruefung
         run: |
           "$MAC_PYTHON" -B tests/tools/macos_desktop.py --breite 1920 --hoehe 1080 \
             --protokoll "$RUNNER_TEMP/glide-macos-desktop.json" -- \
@@ -212,6 +225,9 @@ jobs:
             ${{ runner.temp }}/glide-macos-desktop.json
             ${{ runner.temp }}/glide-macos-bedienung-desktop.json
             ${{ runner.temp }}/glide-macos-bedienung.log
+            ${{ runner.temp }}/glide-macos-kompakt-desktop.json
+            ${{ runner.temp }}/glide-macos-kompakt.json
+            ${{ runner.temp }}/glide-macos-kompakt.log
             ${{ runner.temp }}/glide-macos-startseite-desktop.json
             ${{ runner.temp }}/glide-macos-startseite.log
             ${{ runner.temp }}/glide-macos-import-desktop.json
