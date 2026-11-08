@@ -29,7 +29,7 @@ Stand 07.11.2026 · Glide 3.50.7 · Erster öffentlicher Stand (intern: öffentl
 
 **Prüfnachtrag WA-41, 27.10.2026:** Ausdrücklich beauftragter AMD-Gegenlauf abgeschlossen, zehn von zehn ausgewerteten Prozessen grün auf Ryzen 7 5800X3D. Hauptvergleich Python 3.14.7, eine zusätzliche Vollsuite mit 3.15.1; vier Originalvollsuiten, zwei Kernproben und vier Daten-/Importproben, davon zwei mit bytegleichem Intel-Anfangsbestand. WA-41A/B unter der geprüften Last nicht reproduziert; Ursache und Freigabetore bleiben offen. [Nachweis, Vorlauf und Integritätsgrenzen](https://github.com/n05a-design/glide-to-do/blob/40c20fd62db6ec31b4e3668dfc9e7f1550f67974/01_Repository/Glide/tests/qa-3.48.0/amd_vergleich_2026-10-27/README.md). Keine Produktions-/BIOS-/CPU-/Liefer-/Gitaktion.
 
-Einziges Planungsdokument für Aufgaben, Pakete, Reihenfolge und Entscheidungen. **Aktueller Abgleich: §21.77, Zielversion 3.50.7 / Format 26.** PR #69 enthält 3.50.6 und ist noch offen; eigene Korrekturen bauen auf dessen aktualisiertem Stand auf. Prüfungen und Lieferungen stehen getrennt im QA-Bericht.
+Einziges Planungsdokument für Aufgaben, Pakete, Reihenfolge und Entscheidungen. **Aktueller Abgleich: §21.77, Zielversion 3.50.7 / Format 26.** PR #69 ist über `37750811` gemergt; aktuelle neue Basis ist Main `d7e017f` einschließlich Systemkatalog aus #70. Die CI-Gesamtabnahme bleibt rot; Fortsetzung §21.78. Prüfungen und Lieferungen stehen getrennt im QA-Bericht.
 
 **Lesefolge:** aktueller Auftrag und Statusachsen hier → konsolidiertes [Funktionsinventar §18](#18-konsolidiertes-funktions--und-aufgabeninventar) → [Paketvertiefung §19](#19-paketgrenzen-ausbaustufen-und-aufwand) → [Entscheidungsregister §20](#20-vollständiges-entscheidungsregister). §§3–8 ordnen bestehende Kennungen fachlich; §§14–15 erhalten die ausgewählten Sprints als Vorgeschichte; §16 trägt weiterhin die FP-/WA-Aufgaben. Es entsteht kein zweiter Backlog.
 
@@ -2540,3 +2540,16 @@ Auftrag: vollständiger Abgleich der vorhandenen Dokumentation und von PR #69, b
 | P1 · D73, Menschenabnahme | Schrift-/Zeilenhöhen auf physischen Displays, großen Skalierungen und mehreren Monitoren nachtesten; anschließend Bedienung des ganzen Kandidaten bestätigen. | Konkrete Plattform/Skalierung und bestätigte beziehungsweise rote Punkte im vorhandenen Prüfprotokoll. | Inhaber; keine automatische Bestätigung. |
 | P1 · I1/I3/I4/I11 | Inhaber-/Kontaktangaben, öffentlicher Signatur-/Notarisierungsweg, fachliche Namensprüfung und Veröffentlichungskanal/Freigabe klären. | Dokumentierte Angaben/Entscheidungen; Signatur- und Gatekeeperbelege für den gewählten Vertrieb. | Inhaber und gegebenenfalls Fachprüfung; MPL-Entscheidung nicht erneut öffnen. |
 | P2 · WA-21/32/36–41/46/49/50 und Marktoptionen | Bestehende begrenzte Restvorhaben nach §21.44 auswählen; Ursachenfälle WA-41 getrennt erhalten. Keine ungefragte neue Integration oder Architekturphase. | Pro gewähltem Auftrag enger Umfang, Testvertrag und Lieferkriterium. | Inhaber wählt Reihenfolge; technische Vorschläge sind keine Featurefreigabe. |
+
+
+### 21.78 CI-Abschlussauftrag 3.50.7 auf Main (08.11.2026)
+
+Der neue Gesamtauftrag hat technische Priorität. Basis `d7e017f001e5c069eeb98a0f5302577966ac4098`, nach #69 und #70. Bisherige Codex-Arbeit ist als `f0c4442` gesichert und auf `codex/glide-3.50.7-main-validierung` übernommen (`1b58d1e`). Lizenz-/Marketingarbeit und frühere erfolgreiche Bereichsprüfungen werden weiterverwendet, nicht als aktuelle Vollabnahme ausgegeben.
+
+| Gegenstand | Status / nächster Schritt | Abschluss |
+|---|---|---|
+| Sichere Basis und Übernahme | Main geprüft, ursprüngliche OneDrive-Arbeitsdateien nicht verändert; neuer Branch direkt von Main; Systemregister aus #70 erhalten | abgeschlossen, spätere Main-Drift vor PR prüfen |
+| Windows Kopfzeile / Lock-Cleanup | D66-Vertrag sichtbarer Titel weiter prüfen; Exception-sichere Testbereinigung über ExitStack vorbereitet | Gezielte Gegenprobe sowie Vollmodus Exitcode 0 auf finalem Commit |
+| Linux Pinnwandleiste / Kompakt | Aktuelle Originalfehler aus Lauf 42427354033 bestätigt, Ursachenreparatur offen | Native Gegenprobe und vollständige Pflichtmatrix Exitcode 0, keine Abschwächung |
+| Lizenz, Marketing, Dokument-/Lieferabgleich | Vorbereitete Änderungen aus §21.77 übernommen; neue Main-Basis und Systemregister nachführen | Nach finalen Reparaturen strenge Grundstufe und echte Lieferprüfungen erneuern |
+| GitHub-Abschluss | Eigener PR gegen Main, kein Merge/Release | Pflichtchecks des tatsächlichen letzten Commits auswerten und Abschlussbericht |

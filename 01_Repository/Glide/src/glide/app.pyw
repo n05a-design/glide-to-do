@@ -6703,7 +6703,7 @@ class ItemWorkspace:
                                     ("Verbinden", self.start_connect_mode, "muted"),
                                     ("Aktionen", self.show_board_actions_menu, "muted")):
             knoepfe.append(app._make_dialog_button(parent, text, befehl, farbe,
-                                                   width=schrift.measure(text) + 26, height=34))
+                                                   width=schrift.measure(text) + 16, height=34))
         return knoepfe
 
     def board_choice_button(self, parent, text, optionen, aktuell, setzen, hinweis, tooltip=None, name=None):
@@ -6733,7 +6733,7 @@ class ItemWorkspace:
             return menu
 
         knopf = app._make_dialog_button(parent, beschriftung, oeffnen, "muted",
-                                        width=schrift.measure(beschriftung) + 30, height=34)
+                                        width=schrift.measure(beschriftung) + 16, height=34)
         knopf.open_choices = oeffnen
         knopf.choices_menu = menue
         if name:
@@ -66260,9 +66260,14 @@ Labels, Termine und Metadaten."""
         self._compact_shortcut_down = False
 
     def reset_compact_shortcut_on_focus_out(self, event):
-        # Interner Fokuswechsel darf das laufende Ereignispaar nicht auftrennen.
+        # Eine Geometrieänderung kann unter X11 kurz FocusOut auslösen und
+        # den Fokus noch im selben Ereignisdurchgang zurückgeben. Erst danach
+        # zwischen externem Fokusverlust und Fensterumbau unterscheiden.
         if event.widget is self.root:
-            self.reset_compact_shortcut()
+            def nach_fokuswechsel():
+                if self.current_focus_widget() is None:
+                    self.reset_compact_shortcut()
+            self._register_after(self.root.after_idle(nach_fokuswechsel))
 
     def toggle_compact_mode(self, event=None):
         if getattr(self, "_compact", None):

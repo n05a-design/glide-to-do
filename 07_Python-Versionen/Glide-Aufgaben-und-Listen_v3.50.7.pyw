@@ -6703,7 +6703,7 @@ class ItemWorkspace:
                                     ("Verbinden", self.start_connect_mode, "muted"),
                                     ("Aktionen", self.show_board_actions_menu, "muted")):
             knoepfe.append(app._make_dialog_button(parent, text, befehl, farbe,
-                                                   width=schrift.measure(text) + 26, height=34))
+                                                   width=schrift.measure(text) + 16, height=34))
         return knoepfe
 
     def board_choice_button(self, parent, text, optionen, aktuell, setzen, hinweis, tooltip=None, name=None):
@@ -6733,7 +6733,7 @@ class ItemWorkspace:
             return menu
 
         knopf = app._make_dialog_button(parent, beschriftung, oeffnen, "muted",
-                                        width=schrift.measure(beschriftung) + 30, height=34)
+                                        width=schrift.measure(beschriftung) + 16, height=34)
         knopf.open_choices = oeffnen
         knopf.choices_menu = menue
         if name:
@@ -6760,6 +6760,8 @@ class ItemWorkspace:
             [(name, key) for key, name in self.BOARD_LAYOUTS], lambda: self.board().get("layout", "free"),
             lambda wert: self.configure_board("layout", wert), "Anordnung der Karten wählen")
         self.layout_choice = layout_knopf
+        # Die Anordnung weicht bei Enge nie (CI Linux, große Schrift, PR #69).
+        layout_knopf.board_essential = True
         buttons.append(layout_knopf)
         self.group_button = None
         if board.get("layout") == "columns":
@@ -49620,6 +49622,10 @@ bleibt unverändert. Glide 3.29 und älter können Format 20 nicht lesen."""
             return
         try:
             text = getattr(self, "_stats_full_text", "")
+            # D68: Verschwinden die Seitenchips nach dem Setzen der Kennzahlen
+            # (Labels entfernt), greift der Ersatztext auch hier (CI Windows, PR #69).
+            if not str(text or "").strip() and not self.page_chips():
+                text = self._stats_full_text = glide_metrics.ensure_subtitle(text, self.view_mode)
             width = int(getattr(event, "width", 0) or row.winfo_width())
             font = self.measurement_font(label.cget("font"))
             inset = max(0, label.text_size()[0] - font.measure(label.cget("text")))
@@ -66254,9 +66260,14 @@ Labels, Termine und Metadaten."""
         self._compact_shortcut_down = False
 
     def reset_compact_shortcut_on_focus_out(self, event):
-        # Interner Fokuswechsel darf das laufende Ereignispaar nicht auftrennen.
+        # Eine Geometrieänderung kann unter X11 kurz FocusOut auslösen und
+        # den Fokus noch im selben Ereignisdurchgang zurückgeben. Erst danach
+        # zwischen externem Fokusverlust und Fensterumbau unterscheiden.
         if event.widget is self.root:
-            self.reset_compact_shortcut()
+            def nach_fokuswechsel():
+                if self.current_focus_widget() is None:
+                    self.reset_compact_shortcut()
+            self._register_after(self.root.after_idle(nach_fokuswechsel))
 
     def toggle_compact_mode(self, event=None):
         if getattr(self, "_compact", None):

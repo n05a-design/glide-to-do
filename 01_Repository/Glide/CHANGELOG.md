@@ -1,10 +1,11 @@
 # Änderungsverlauf
 
-## 3.50.7 (07.11.2026) – Produktkommunikation, MPL-2.0 und Validierung
+## 3.50.7 (08.11.2026) – Produktkommunikation, MPL-2.0 und Validierung
 
 - Öffentliche Beschreibung als Desktop-Planer für Aufgaben, Tagesplanung, Pinnwände und Pixel-Zeichnungen; positive Nutzen- und Speichertexte, aktualisierter Über-Glide-Text. Technische Kennungen unverändert.
 - Vorhandene MPL-2.0-Lizenz in Dokumentation, Python-Lieferung, Paket- und Release-Erzeugern integriert; neue native Pakete erhalten vollständigen Lizenztext und einen festen Quellbezug. Drittanbieterbelege bleiben erhalten.
 - Quell-, Dokumentations-, Aufgaben-, QA- und Lieferabgleich von PR #69 mit seinen späteren Anhangskorrekturen. Keine neue Produktfunktion und kein geändertes Datenformat (26).
+- CI-Nachlauf auf Main nach #69/#70: Ausnahmefeste Bereinigung der isolierten Kernprüfung; Kompakt-Kürzel beurteilt externen Fokusverlust nach dem Fensterumbau, damit Drücken/Loslassen einmal schaltet. Pinnwandknöpfe erhalten gemessene Textbreite mit beidseitig 8 px Reserve. Native Gesamtprüfung noch separat nachweisen.
 - Seitenleiste: tatsächliche Schriftzeilenhöhe statt abgefangener Fehlmessung verwenden; Stile an das Hauptfenster binden, damit sie auch nach einem Neustart im selben Prozess gelten. Angeheftete Einträge übernehmen beim Designwechsel wieder Schrift- und Hoverfarben.
 - Seitenleisten-Zeilenhöhen des 3.50.6-Nachtrags: gezielte Geometrieprüfung für vier Schriftstile, drei Größen, Hell/Dunkel, schmale/breite Fenster und Neustart ergänzt. Mindesthöhen 30 px (Inhalte), 28 px (Systemeinträge), Bereichsabstand 18 px, unter der Bereichsüberschrift 0 px; größere Schrift darf die Zeilen erhöhen.
 

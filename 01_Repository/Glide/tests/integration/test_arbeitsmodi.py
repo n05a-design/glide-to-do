@@ -1083,9 +1083,20 @@ def fall_kompakt_verlorenes_loslassen(lauf):
     app.entry.event_generate('<FocusOut>')
     idle(lauf)
     assert app._compact_shortcut_down, 'Interner Fokuswechsel verliert das Ereignispaar'
-    lauf.root.event_generate('<FocusOut>')
-    idle(lauf)
-    assert not app._compact_shortcut_down, compact_snapshot(lauf)
+    # Tatsächlicher externer Fokusverlust statt einer Meldung bei weiterhin
+    # fokussiertem Hauptfenster: ein unabhängiger Tk-Interpreter übernimmt.
+    ausserhalb = lauf.mod.tk.Tk()
+    try:
+        ausserhalb.geometry('180x100+30+30')
+        ausserhalb.update()
+        ausserhalb.focus_force()
+        idle(lauf, 6)
+        assert lauf.root.focus_get() is None
+        lauf.root.event_generate('<FocusOut>')
+        idle(lauf, 4)
+        assert not app._compact_shortcut_down, compact_snapshot(lauf)
+    finally:
+        ausserhalb.destroy()
     taste(lauf.root, '<Control-Shift-K>', lauf)
     assert app.compact_mode_active(), compact_snapshot(lauf)
     lauf.root.event_generate('<KeyRelease-k>')
@@ -4683,7 +4694,12 @@ def fall_pinnwandleiste(lauf):
                         assert rand.winfo_width() >= feldschrift.measure(text) + 30, ("Gruppieren abgeschnitten", kontext, text)
                 # Höchstens eine Leistenzeile (Abnahme 07.11.2026): alle sichtbaren Leistenknöpfe auf einer Höhe.
                 if geometrie == "1720x900" and gruppe_zeilen_pruefen(app, mod):
-                    befunde.append(("Pinnwandleiste mehrzeilig", kontext, gruppe_zeilen_pruefen(app, mod)))
+                    breiten = [(knopf.text, knopf.winfo_reqwidth())
+                               for knopf in knoepfe(app.workspace.bar, mod.RoundedButton)
+                               if knopf.winfo_ismapped()]
+                    befunde.append(("Pinnwandleiste mehrzeilig", kontext,
+                                    gruppe_zeilen_pruefen(app, mod),
+                                    app.workspace.bar.winfo_width(), breiten))
                 anzahl, funde = befunde_b15(lauf, f"Pinnwand {kontext}")
                 befunde.extend(funde)
                 befunde.extend(auswahlfeld_befunde(lauf.root, mod, kontext))

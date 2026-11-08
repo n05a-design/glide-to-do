@@ -1,3 +1,4 @@
+from contextlib import ExitStack
 import ctypes
 import importlib.machinery
 import importlib.util
@@ -65,6 +66,11 @@ def close_test_app(app):
     """Löst Timer des isolierten Interpreters vor einem Tk-Neustart."""
     # Dieses Testende zerstört den Interpreter direkt. Seine globalen
     # Layoutbeobachter dürfen dabei keine neuen Leerlaufjobs mehr anlegen.
+    try:
+        if not app.root.winfo_exists():
+            return
+    except mod.tk.TclError:
+        return
     app.root.unbind_all("<Destroy>")
     app.root.unbind_all("<Unmap>")
     app.cancel_pending_callbacks()
@@ -74,7 +80,7 @@ def close_test_app(app):
     app.root.destroy()
 
 
-with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
+with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root, ExitStack() as cleanup:
     # GLIDE_DATA_DIR isoliert den Nutzerdatenordner auf allen Plattformen.
     # APPDATA allein wirkt nur unter Windows; unter macOS und Linux würde der
     # Test sonst die echten Daten in ~/Library/Application Support/Glide bzw.
@@ -101,6 +107,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     root = mod.tk.Tk()
     root.withdraw()
     app = mod.ListApp(root)
+    cleanup.callback(close_test_app, app)
     root.update_idletasks()
 
     assert mod.APP_VERSION == "3.50.7"
@@ -3578,6 +3585,7 @@ with tempfile.TemporaryDirectory(prefix="glide-test-") as temp_root:
     legacy_root = mod.tk.Tk()
     legacy_root.withdraw()
     legacy_app = mod.ListApp(legacy_root)
+    cleanup.callback(close_test_app, legacy_app)
     legacy_root.update_idletasks()
     assert legacy_app.get_filter_mode() == "all", legacy_app.get_filter_mode()
     assert legacy_app.hide_done_var.get() is False

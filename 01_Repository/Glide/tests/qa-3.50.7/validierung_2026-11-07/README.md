@@ -74,3 +74,23 @@ Die vorhandene Sieben-Versionen-/Drei-Bildversionen-Regel verschiebt mit 3.50.7 
 Sechs editierbare Folien aus dem vorhandenen Market-Trends-Template, dessen Original unverändert blieb. Inhalte aus Markt §15 und aktuellen Primärquellen; tatsächliche ältere Produktaufnahme klar zugeordnet. Bilder/Quellen/Schriften und alle Folien gerendert kontrolliert, finale PPTX erneut importiert und auf Paket-/Layoutbefunde geprüft: null Befunde. SHA-256 `1e6646af5c466564bc24404cedbc2c6d81e4aee8ccec53e0df0450ef93b99218`. Keine native PowerPoint-Ausführung behauptet. Präsentation ist eine Zusammenfassung, keine zusätzliche Roadmap.
 
 Offene Arbeit und Entscheidungen mit Priorität, nächstem Schritt und Fertigkriterium stehen ausschließlich im Entwicklungsplan §21.77.
+
+## Fortsetzung 08.11.2026 auf aktuellem Main
+
+Main `d7e017f001e5c069eeb98a0f5302577966ac4098` enthält den genannten Merge #69 `37750811` sowie #70 (Systemregister). Neuer Arbeitsbranch direkt von Main: `codex/glide-3.50.7-main-validierung`; vorherige Arbeit gesichert als `f0c4442`, übernommen als `1b58d1e`. Die frühere strenge Grundstufe auf der 13b-Basis ist inzwischen 19/19 erfolgreich; ihre Zahlen sind kein neuer Main-Volltest.
+
+Aktuelle Originalbasis: Actions 42427354033, Linux-Artifact 13597026351 (ZIP SHA-256 `46cd8557080e2f0fc40ee8e82dd4b37e49d8c8125ea0c7f37a37cbd6194100a3`), Windows 13597052182 (`fc78d0235ee52b8886523bf12bb4052e794d778d53b39afb8987f27ee44ceb99`), beide heruntergeladen und gegen die GitHub-Hashes geprüft. Windows scheitert weiter am ursprünglichen Rahmenvergleich und danach an der offenen Erwerbssperre. Linux: 59/61 Arbeitsmodi, Kompakt und Pinnwandleiste rot; kein grüner Gesamtabschluss.
+
+Die Kompakt-Ereignisspur belegt beim Rückwechsel: Press schaltet aus, der kurzfristige Fokusverlust setzt `down=False`, Release schaltet erneut ein. Der Reparaturkandidat prüft externen Fokusverlust erst im nächsten Leerlauf. Gezielter Windows-Kompaktfall und echte externe Fokusverlustprobe sind grün; native Linux-Bestätigung offen. Die externe Fokusprobe erzeugt den FocusOut-Hinweis erst bei tatsächlich an einen unabhängigen Interpreter abgegebenem Fokus, statt eine Nachricht bei weiterhin fokussierter App als äußeren Fokusverlust zu deuten.
+
+Die Kernprüfung registriert ihre isolierten App-Instanzen in einem ExitStack innerhalb des Temp-Verzeichnisses: Auch bei Assertion-Abbruch werden Timer und Datensperre vor dem Verzeichnisabbau freigegeben. Regulärer Kernlauf grün; gezielte erzwungene Abbruchprobe grün: Assertion unmittelbar nach App-Konstruktion, Datensperre gelöst und alle erfassten isolierten Testverzeichnisse vollständig entfernt, kein WinError 32. Der D66-Vertrag bleibt über sichtbare Texte und die vorhandene 136-Fälle-Prüfung erhalten.
+
+Pinnwand-Kandidat: Textbreite plus beidseitig 8 px statt zusätzlicher 26/30 px Breitenreserve für die Aktions-/Auswahlknöpfe. Keine Beschriftung oder Aktion entfernt; unveränderte Prüfung kontrolliert vollständige Textdarstellung, Erreichbarkeit und eine Leistenzeile. Native Linux-Validierung bleibt bis zum tatsächlichen Nachlauf offen.
+
+Das neue Glide-Systemregister bleibt erhalten; eigenständige Systemversion 1.1 mit Änderungsverlauf und zusätzlichem MPL-Werkzeugtest, vier Registerprüfungen grün. Appversion 3.50.7 und Datenformat 26 sind davon unabhängig.
+
+Gezielter Windows-Pinnwandnachlauf: 1.248 Knopfprüfungen erfolgreich; Kompakt und externer Fokusverlust ebenfalls erfolgreich. Native Linux-Bestätigung und finale Gesamtmatrix weiterhin offen.
+
+Weiterer Grundstufenvorlauf auf Main-Kandidat rot: Timeout-Werkzeuggegenprobe erreichte unter gemessener CPU-Auslastung 100 % innerhalb 1 s nicht ihren eigentlichen Blockierfall. Der Prüfaufbau wartet jetzt auf ein vom Kind geschriebenes Bereitschaftsmerkmal (Startlimit 30 s); die eigentliche Timeout-Grenze bleibt 1 s, der absichtlich blockierte Fall 30 s, Stack-/Teiloutput-/Fortschritts-/Folgestopp-Assertions bleiben vollständig erhalten. Eigenständiges Merkmal statt parallelem Lesen der atomar ersetzten JSON-Datei vermeidet eine Windows-Dateisperre im Prüfaufbau. Alle 18 Prüfablauffälle danach grün. Produkt- und Vollprüfungszeitlimits unverändert.
+
+Main-Reparaturkandidat: strenge Grundstufe im zweiten Nachlauf vollständig 19/19 erfolgreich (263 Werkzeugtests, 1 Skip; zweimal 1.155 Fachtests), Python 3.14.7 / Tcl-Tk 9.1.0. Quelle/Python bytegleich, 335 Dokumentlinks, Original-Fremdcodevergleich und Datenschutz erfolgreich. Details/Quellhashes in `main_fortsetzung.json`. Die erste rote Timeout-Probe bleibt separat erhalten. Native Gesamtmatrix weiterhin ausstehend.
