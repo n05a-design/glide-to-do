@@ -4329,5 +4329,122 @@
       },
       "scope": "Per complete draw; profiling times are not unprofiled speedup evidence"
     }
+  },
+  "targeted_preclosure_0e_2026_11_08": {
+    "commit": "0e704f30751d1996d02e93f7f970043def9700cc",
+    "app_sha256": "d3cd55a067a9eefbcb9b9d01ec07cd9b4039a066d71bfb92e2f3fd4ab5d3bd18",
+    "local_strict_ci": {
+      "exitcode": 0,
+      "steps": 19,
+      "tools": 285,
+      "tool_platform_skips": 1,
+      "unit_tests": 1156,
+      "unit_tests_without_system_timezones": 1156,
+      "log_sha256": "771c64ed0b1826a915c9e62ac7b2659613c08e89fab03d0fe7b3e050c527d911"
+    },
+    "mac": {
+      "run": 42527665270,
+      "job": 128874765645,
+      "result": "success: targeted only, not full",
+      "groups": [
+        17,
+        13,
+        14,
+        9,
+        10
+      ],
+      "total_cases": 63,
+      "focused_suites": [
+        "kompakt_verlorenes_loslassen",
+        "druck_tempo",
+        "bedienung33316",
+        "startseite3332",
+        "import3410"
+      ],
+      "paired_timing_ratio": 0.803118780111497,
+      "package_native_start": true,
+      "package_proof": {
+        "commit": "0e704f30751d1996d02e93f7f970043def9700cc",
+        "package_digests": {
+          "Glide-3.50.7-macos-arm64.dmg": "ad7cc01e5e2b55428ebc92b50eb9c0ee94eb92c04f595d3e0800e7b0b80e20ea",
+          "Glide-3.50.7-macos-arm64.tar.gz": "e06dce11c9f38f15551e4533b573340126a98d4cf01f0909ca4d4e7006e5618d"
+        },
+        "completion": {
+          "exitcode": 0,
+          "version": "3.50.7",
+          "target": "macos-arm64",
+          "archive": "Glide-3.50.7-macos-arm64.tar.gz",
+          "sha256": "e06dce11c9f38f15551e4533b573340126a98d4cf01f0909ca4d4e7006e5618d",
+          "archive_validation": {
+            "files": 494,
+            "symlinks": 30,
+            "modes_preserved": true
+          },
+          "source_files": 241,
+          "sources_unchanged": true,
+          "signature": "Ad-hoc-Signatur geprüft; Developer-ID bleibt offen",
+          "native_start_verified": true,
+          "developer_id_and_notarization": "offen; Entwicklungsartefakt"
+        },
+        "project_component": {
+          "name": "Glide",
+          "version": "3.50.7",
+          "license": "MPL-2.0",
+          "source": "https://github.com/n05a-design/glide-to-do/tree/0e704f30751d1996d02e93f7f970043def9700cc",
+          "files": {
+            "Glide-MPL-2.0.txt": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+            "Glide-Lizenzstatus.md": "0b511d7c5346cb7c02dcbc52964ff3fd17d28d83463d8724a716ab92b168197d",
+            "Glide-Quellcode.txt": "7a7b57367e2e799b664a0bbfa316bd13eed03a3612444f473302325ead4097b1"
+          }
+        },
+        "checked_license_files": {
+          "pyinstaller-COPYING.txt": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64",
+          "pyinstaller-hooks-contrib-LICENSE": "91d0baaff00773038e72c0a1fc9d5d2d38706b7a2b9c04f34296608f931b9cd0",
+          "altgraph-LICENSE": "6c194d6db0c64d45535d10c95142b9b0cda7b7dcc7f1ddee302b3d536f3dbe46",
+          "macholib-LICENSE": "47082ab2bc0184123ec9f10fdf80c70723ee68f07d44382e17615c2a6ba70b09",
+          "packaging-LICENSE": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+          "packaging-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+          "packaging-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+          "setuptools-LICENSE": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741",
+          "setuptools-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+          "setuptools-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+          "setuptools-LICENSE.txt": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654",
+          "Python-LICENSE.txt": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+          "Python-THIRD-PARTY-NOTICES.rst": "c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd",
+          "Tcl-LICENSE.txt": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16",
+          "Tk-LICENSE.txt": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198",
+          "libtommath-LICENSE.txt": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a",
+          "Henry-Spencer-Regex-LICENSE.txt": "7f5de5c41af220787ce29c79917af6a590a24b80d93a4ed3d6dbf7d8094af49a",
+          "nanosvg.h-LICENSE.txt": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818",
+          "nanosvgrast.h-LICENSE.txt": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9",
+          "tkinterdnd2-LICENSE": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+          "tkdnd-LICENSE.txt": "3e752e3d3d249387b477e79e2566dfd076b706175129a1edee395ff66dad2641",
+          "DejaVu-LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+          "PixelifySans-OFL.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+          "RobotoMono-OFL.txt": "ffd9f334604a352ad52ee0a7159c31bdafaf5f8465e5b9f9eb5c1f4924343183",
+          "Rubik-OFL.txt": "fbf425c49bf998fb9cc1b52f8ca27d5f84dec079b60c40f654f242b52474d536",
+          "PlayfairDisplay-OFL.txt": "4e6be9d19455d7cb092412984ebf3c55d26b19dd8f8452962bf432ec0a9c9dcb",
+          "Fraunces-OFL.txt": "720d772b526b33cc1bd2abb5c8735fea5b0fc5b742cb171b571d7ad62aae0496",
+          "OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+          "Zstandard-LICENSE.txt": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8",
+          "XZ-COPYING.txt": "c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8",
+          "SQLite-Copyright.html": "44ca9f793055c8e32fc65f65a4f5bcf813a33f5bdaaa084067dd617a4ed3cc70",
+          "IANA-LICENSE.txt": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf",
+          "CLDR-LICENSE.txt": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b",
+          "utf8proc-LICENSE.txt": "3b510150d34f248a221bb88e1d811238d6c6c18b51231822c42974c39bb07256",
+          "Glide-MPL-2.0.txt": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+          "Glide-Lizenzstatus.md": "0b511d7c5346cb7c02dcbc52964ff3fd17d28d83463d8724a716ab92b168197d",
+          "Glide-Quellcode.txt": "7a7b57367e2e799b664a0bbfa316bd13eed03a3612444f473302325ead4097b1"
+        },
+        "bom_path": "Glide.app/Contents/Resources/licenses/Glide.cdx.json",
+        "bom_sha256": "a2c6613aaf688c9f4f60dffdf50579734b77211d7c9be91dd5fcb33d94873851",
+        "bom_components": 24,
+        "schema_errors": 0,
+        "git_mpl_bytes_equal": true,
+        "scope": "Tatsächlich gebautes natives Mac-Paket, Bau-/Lizenzinventar pre-build/incomplete; keine Voll-QA oder öffentliche Signatur abgeleitet"
+      }
+    },
+    "common_final_commit_full_matrix": "pending; see PR71/checks with exact commit",
+    "human_and_hardware_acceptance": "pending"
   }
 }

@@ -1,5 +1,9 @@
 # Änderungsverlauf
 
+## Prüfbeleg-Konsolidierung 08.11.2026
+
+- Strenge Grundstufe und nativen Mac-Seitenkarten-/63-Arbeitsmodinachlauf mit ihren tatsächlichen Commits dokumentiert; gemeinsamen Schlusslauf und lebende CI-Nachweise davon getrennt. Appcode und Pythonlieferung bleiben zum gezielt geprüften 0e704f3 bytegleich. Systemkatalog 1.11.1, App 3.50.7 / Format 26.
+
 ## Kartenmessung und Tempoauswertung 08.11.2026
 
 - Identische Texte beim Kartenumbruch je Aufruf nur einmal mit Tk vermessen; Umbruch und Endkürzung bleiben gleich. Keine alten Messwerte nach Schrift-, Skalierungs- oder Interpreterwechsel.
