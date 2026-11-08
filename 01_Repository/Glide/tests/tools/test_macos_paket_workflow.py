@@ -50,6 +50,8 @@ class MacWorkflowTests(unittest.TestCase):
         self.assertEqual(len(re.findall(r"(?m)^\s*permissions:", self.source)), 1)
         self.assertNotIn("secrets.", self.source)
         self.assertIn("persist-credentials: false", self.source)
+        checkout = self.source.split('- name: Unveränderten Commit auschecken',1)[1].split('      - name:',1)[0]
+        self.assertIn('fetch-depth: 0',checkout)
 
     def test_only_verified_actions_and_original_installer_are_used(self):
         actions = re.findall(r"uses:\s*([^\s]+)", self.source)
@@ -97,6 +99,11 @@ class MacWorkflowTests(unittest.TestCase):
         self.assertIn('tests/tools/macos_desktop.py --breite 1920 --hoehe 1080', focused)
         self.assertIn('glide-macos-bedienung-desktop.json', focused)
         self.assertIn("steps.runtime_bau.outcome == 'success'", step)
+        freeze = self.source.split('- name: Originalruntime und konkrete Bauquellen einfrieren',1)[1].split('      - name:',1)[0]
+        self.assertIn('GLIDE_VOLLPRUEFUNG',freeze)
+        self.assertIn('from historical_runtime import SNAPSHOTS, DELIVERY',freeze)
+        self.assertIn('"cat-file", "-e"',freeze)
+        self.assertIn('cwd=outer, check=True',freeze)
         self.assertIn("${{ runner.temp }}/glide-macos-voll", self.source)
         self.assertLess(self.source.index("PYTHONPATH=%s"), self.source.index("- name: Vollständige native macOS-Prüfung"))
 

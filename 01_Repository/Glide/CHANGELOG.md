@@ -1,5 +1,9 @@
 # Änderungsverlauf
 
+## Native Mac-Prüfhistorie 08.11.2026
+
+- Für Altleser-/Migrationstests vollständige Git-Historie bereitstellen und die gepinnten Lieferdateien vor dem langen Vollmodus prüfen. Kein Altleser oder Migrationstest übersprungen.
+
 ## Windows-Fensterfarb-Retry 08.11.2026
 
 - Farbauftrag am Hauptinterpreter registrieren, damit früher Dialogschluss keinen gelöschten Tcl-Rückruf hinterlässt. Zielprüfung und Retryzeiten bleiben erhalten; dauerhafte Dialogschluss-/Root-Lebensdauerregression ergänzt.

@@ -4217,5 +4217,28 @@
       "app_sha256": "29835afad8413b9627cb740c8e3282b9228b79eec64d2156db5a4710caeabf9f",
       "python_delivery_identical": true
     }
+  },
+  "targeted_native_closure_2026_11_08": {
+    "linux_ui": {
+      "commit": "61d496270d777a16c0cc745c77253acd31727e8c",
+      "run": 42502724327,
+      "job": 128798771446,
+      "uiux_green": 17,
+      "arbeitsmodi_green": 63
+    },
+    "mac": {
+      "commit": "ca864151f82a30268f413ad7edf3618e2af9444b",
+      "run": 42501505341,
+      "job": 128795052815,
+      "workarea_and_focused_bedienung": "success",
+      "full_result": "failure: historical delivery missing in checkout",
+      "correction": "fetch-depth0 plus early pinned-history prerequisite",
+      "workflow_tests": 6,
+      "local_pinned_deliveries": [
+        "3.43.1",
+        "3.40.0"
+      ]
+    },
+    "final_native_matrix_pending": true
   }
 }

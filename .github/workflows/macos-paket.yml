@@ -53,6 +53,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
 
       - name: Offiziellen Python-Installer prüfen und im vergänglichen Runner installieren
         run: |
@@ -69,12 +70,21 @@ jobs:
           "$MAC_PYTHON" -B -c 'import platform,sys; assert sys.version_info[:3] == (3,14,5); assert platform.machine() == "arm64"'
 
       - name: Originalruntime und konkrete Bauquellen einfrieren
+        env:
+          GLIDE_VOLLPRUEFUNG: ${{ github.event_name == 'workflow_dispatch' && inputs.vollpruefung }}
         run: |
           "$MAC_PYTHON" -B - <<'PY'
           import json, os, subprocess, sys
           from pathlib import Path
           repo = Path.cwd()
           outer = repo.parents[1]
+          if os.environ.get("GLIDE_VOLLPRUEFUNG") == "true":
+              sys.path.insert(0, str(repo / "tests/integration"))
+              from historical_runtime import SNAPSHOTS, DELIVERY
+              for version, historical_commit in SNAPSHOTS.items():
+                  filename = f"Glide-Aufgaben-und-Listen_v{version}.pyw"
+                  subprocess.run(["git", "cat-file", "-e", f"{historical_commit}:{DELIVERY}/{filename}"],
+                                 cwd=outer, check=True)
           sys.path.insert(0, str(repo / "packaging/paket"))
           import macos_build_run as runner
           runtime = runner.native_runtime()
