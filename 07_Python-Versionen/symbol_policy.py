@@ -8,21 +8,21 @@ Beschriftungen, Aktionskennungen und Tastaturwege bleiben beim Aufrufer.
 # Kurze deutsche Beschriftungen sind der letzte Rückfall. Kein Symbolfont,
 # keine Emoji und keine unlesbaren Ersatzkästchen.
 TEXT_FALLBACKS = {
-    "move_up": "^", "move_down": "v", "history": "V", "bullet": "*",
+    "move_up": "Au", "move_down": "Ab", "history": "V", "bullet": "*",
     "actions": "Ak", "search": "Su", "details": "Dt", "home": "St",
     "today": "H", "pages": "Se", "planday": "Pl", "settings": "Ei",
     "capture": "+", "notifications": "!", "sidebar": "Sl", "check": "OK",
     "task_open": "[]", "templates": "Vo", "inbox": "E", "in_progress": "De",
     "overdue": "Vs", "trash": "Pk", "theme_to_dark": "Du", "theme_to_light": "He",
     "labels": "La", "calendar": "Ka", "attachment": "An", "repeat": "W",
-    "group": ">", "back": "<", "next": ">", "board": "Pi", "folder": "Or",
+    "group": "Gr", "back": "<", "next": ">", "board": "Pi", "folder": "Or",
     "list": "Li", "table": "Tb", "drawing": "Ze", "gallery": "Ga", "undo": "Zu", "redo": "No",
     "swap": "<>", "link": "Ve", "blocked": "Wa", "timer": "Zt", "archive": "Ar",
     "pinned": "Fa", "symmetry_x": "X" , "symmetry_y": "Y", "edit": "Be",
     "dropdown_closed": "v", "dropdown_open": "^", "moon_new": "N", "moon_first": ")",
     "moon_full": "O", "moon_last": "(", "description": "Bs", "priority_low": "1",
     "priority_medium": "2", "priority_high": "3", "checklist": "[x]",
-    "sort_ascending": "^", "sort_descending": "v", "print": "Dr", "overflow": "...",
+    "sort_ascending": "Au", "sort_descending": "Ab", "print": "Dr", "overflow": "...",
     "remove": "x", "block_handle": "::",
 }
 

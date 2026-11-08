@@ -27,6 +27,7 @@ import zipfile
 from zugang_pruefvertrag import native_zugangspruefung
 from pruefablauf import Pruefablauf
 from prozessdiagnose import prozessdiagnose, systemkontext
+from arbeitsmodi_gruppen import GRUPPEN, fallbestand, gruppen
 
 REPO = Path(__file__).resolve().parents[2]
 APP = REPO / "src/glide/app.pyw"
@@ -587,8 +588,17 @@ def main():
                 command.append("--nativ")
             if logdir:
                 command.extend(["--report", str(logdir / "zugang-kern.json")])
-        if name == "test_arbeitsmodi.py" and logdir:
-            command.extend(["--report", str(logdir / "arbeitsmodi.json")])
+        if name == "test_arbeitsmodi.py":
+            # 967f84f: 62 Fälle verbrauchten schon 895,28 der 900 s, bevor der
+            # letzte Fall beginnen konnte. Alle Fälle bleiben verpflichtend;
+            # jede serielle Gruppe hat denselben Fehler-/Timeout-/Hashwächter.
+            gruppen(fallbestand(REPO / "tests/integration" / name))
+            for group in GRUPPEN:
+                grouped_command = command + ["--gruppe", group]
+                if logdir:
+                    grouped_command.extend(["--report", str(logdir / f"arbeitsmodi-{group}.json")])
+                run.prozess(f"test_arbeitsmodi_{group}", grouped_command, gui=True)
+            continue
         run.prozess(Path(name).stem, command, gui=True)
     run.prozess("Showcase", [sys.executable, str(REPO / "tests/tools/pruefe_showcase.py")], gui=True)
     for name in ANALYSEN:

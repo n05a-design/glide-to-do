@@ -1,5 +1,13 @@
 # Änderungsverlauf
 
+## CI- und Ablagenachtrag 08.11.2026
+
+- Windows-Befund auf `967f84f`: „Gelesen“ bei großer Schrift 3 px unter dem sichtbaren Bereich; Abschluss jetzt am Kopf der Neuerungskarte, ohne Texte oder Versionseinträge zu entfernen. 48 Konfigurationen aus vier Schriften, zwei Größen, drei Designs und zwei Fenstergrößen lokal grün.
+- 62 Arbeitsmodifälle belegten bereits 895,28 von 900 Sekunden; der letzte Fall war erst im Setup. Fünf vollständige verpflichtende serielle Gruppen mit unverändertem Zeitlimit und Fehler-/Integritätswächter ersetzen den einzigen überfüllten Prozess. Fallbestand, Reihenfolge und Abdeckung automatisch gesichert; Startzeiten und Einzellaufzeiten im Bericht.
+- Lesbare ASCII-Ersatztexte unterscheiden Gruppenöffnung und Auswahlpfeile von Verschieben/Sortieren; vollständige Rollenprüfung mit roter Gegenprobe. Der historische Mac-Bedienbefund bleibt bis zum nativen Nachlauf offen.
+- Mac-CI prüft die tatsächliche Tk-Arbeitsfläche und setzt die vorübergehende Dock-Einstellung auch bei Testfehlern zurück. Auch der gezielte Bediennachtest nutzt denselben Prüfdesktop. Persönliche Macs bleiben ausgeschlossen.
+- Glide-System auf 1.4 gepflegt. Lokaler Altbestand vor Ablösung dateigenau auf E: gesichert; Steps/Grafik/Inspirationen bleiben erhalten. Nur ein ausdrücklich temporärer 206-MB-Logo-Prüfrest entfernt. Neue C:-Ablage erst nach grüner Pflichtmatrix und Merge von PR #71; kein Merge oder Release erfolgt.
+
 ## System-, Lizenz- und Übergabenachtrag 08.11.2026
 
 - Glide-System eigenständig auf 1.3 erweitert: technische Systemfähigkeiten direkt in der Featureübersicht, 25 Bestandspakete, Schritte zur Übernahme für Steps und konkrete Kopplungs-/Prüfgrenzen. Bestehende Fach- und UI-Funktionen bleiben erhalten.

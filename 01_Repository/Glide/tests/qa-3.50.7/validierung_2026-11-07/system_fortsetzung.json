@@ -3667,5 +3667,360 @@
       "change": "M",
       "reason": "Kanonischer Produkt-/Funktions-/Aufgaben-/Lizenz-/System-/Übergabeabgleich"
     }
-  ]
+  ],
+  "followup_2026_11_08_round4": {
+    "date": "2026-11-08",
+    "base_commit": "967f84f44860456b885067b8aef5a6e76f641122",
+    "system_version": "1.4",
+    "data_schema": 26,
+    "source_files": 94,
+    "features": 147,
+    "packages": 25,
+    "test_tool_files": 311,
+    "inputs": {
+      "src/glide/app.pyw": "b7428a42584aee8188ff1964263188824d517135d2677a9906820cd315ff279d",
+      "src/glide/symbol_policy.py": "6d08d40e0880ea2e2ae5f716fc5870b4c337fe0ea661bb718deb455b76c7b63b",
+      "GLIDE_SYSTEM_VERSION": "2e8516fe8eade72d519ce204c2c296bf838589585c14d28170e1621bd10e4dc4",
+      "tests/integration/test_arbeitsmodi.py": "6c1c10e2976650413690ea70589b86ba890165125661824e071f71dac844cdb3",
+      "tests/tools/arbeitsmodi_gruppen.py": "a0411ab7387dcd5cc0efded15e7a528ce6de59185704cb3465b12345c230e572",
+      "tests/tools/test_arbeitsmodi_gruppen.py": "f073deeeeddddc2e067d8a5a85df91add337a37efcc21193ede8391088374785",
+      "tests/tools/macos_desktop.py": "3d9d14e93a741fba1c6e8b0002e25e045f8e81532cb53272b1c155b9e3344850",
+      "tests/tools/test_macos_desktop.py": "018e263883f07c8a61112e0f78839f896c4d82b0c87afac2e89034a3603a92bb",
+      "tests/tools/test_macos_paket_workflow.py": "d3d5dcb1aaa35cb6f4258d15cc92def302ae2e90324f03c6f39f27c36357a248",
+      "tests/tools/pruefen.py": "3dc59484f1915ab15d2e98c327d5e73ca99c18af4f46f09f2915c9ef640f3385",
+      "tests/tools/test_pruefablauf.py": "e122dacdd97e987944e7d42016548a2448ad50ab1b680b81a79fc36cb2585308",
+      "tests/unit/test_symbol_policy.py": "66491e6f50855b03b9a1b9a0e95ae5db6548b5047ef779fcefbd476187316749"
+    },
+    "windows_failure": {
+      "run": 42478170734,
+      "job": 128733783184,
+      "artifact": 13619971774,
+      "artifact_sha256": "f921425bf89e299fdf9d27e6beb7f528f42422fbc1fbc34bcb164fba89ebbb8b",
+      "button_bottom": 830,
+      "visible_bottom": 827,
+      "completed_cases": 62,
+      "green_cases": 61,
+      "red": [
+        "neuerungen3"
+      ],
+      "completed_seconds": 895.28,
+      "timeout_seconds": 900,
+      "last_case": "fensterende3507",
+      "last_phase": "setup",
+      "deadlock_proven": false
+    },
+    "linux_baseline": {
+      "commit": "967f84f44860456b885067b8aef5a6e76f641122",
+      "run": 42478170734,
+      "job": 128724517027,
+      "conclusion": "success"
+    },
+    "local_targeted": {
+      "neuerungen": {
+        "app_sha256": "b7428a42584aee8188ff1964263188824d517135d2677a9906820cd315ff279d",
+        "faelle": {
+          "neuerungen3": {
+            "ok": true,
+            "befund": "48 Konfigurationen: vier Schriften, mittel/groß, hell/dunkel/Pixel, Mindestgröße/breit; drei Versionen ohne Textkürzung, Gelesen ohne Scrollen erreichbar und wirksam",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 113.762,
+            "gestartet_unix": 1794153739.85419
+          }
+        },
+        "fehler": [],
+        "gruppe": null,
+        "vorgesehene_faelle": [
+          "neuerungen3"
+        ],
+        "laufender_fall": null
+      },
+      "isolated_root_end": {
+        "app_sha256": "8aa5adcbf81d5a32bb7fe17120d3f12073917339f653d87931179e1b70bdc1ea",
+        "faelle": {
+          "fensterende3507": {
+            "ok": true,
+            "befund": "Kindfenster erhält Root-Aufträge; Root-Ende ohne Tcl-Reste; fremder Interpreter unverändert",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 8.926
+          }
+        },
+        "fehler": [],
+        "laufender_fall": null
+      },
+      "symbol_tests": 8,
+      "ascii_counterprobe_red": true,
+      "mac_desktop_tests": 6,
+      "mac_workflow_tests": 6,
+      "system_tests": 5,
+      "group_contract_tests": 2,
+      "subprocess_runs": [
+        {
+          "name": "uiux",
+          "exitcode": 0,
+          "dauer_s": 150.35
+        },
+        {
+          "name": "bedienung",
+          "exitcode": 0,
+          "dauer_s": 13.133
+        },
+        {
+          "name": "abschluss",
+          "exitcode": 0,
+          "dauer_s": 402.227
+        }
+      ],
+      "uiux_cases": 17,
+      "abschluss_group": {
+        "app_sha256": "b7428a42584aee8188ff1964263188824d517135d2677a9906820cd315ff279d",
+        "faelle": {
+          "neuerungen3": {
+            "ok": true,
+            "befund": "48 Konfigurationen: vier Schriften, mittel/groß, hell/dunkel/Pixel, Mindestgröße/breit; drei Versionen ohne Textkürzung, Gelesen ohne Scrollen erreichbar und wirksam",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 76.621,
+            "gestartet_unix": 1794154184.8138628
+          },
+          "titelzaehler": {
+            "ok": true,
+            "befund": "Feldrahmen: noch 40 → noch 3 → max. 40 → 17 gekürzt; Inline-Umbenennen mit Zähler rechts; Haupteingabe/Ordner/Einfügen: Zähler, Ablehnung mit Zeichenzahl, Rückfrage; Schnellerfassung: Zähler über den erkannten Titel",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 11.554,
+            "gestartet_unix": 1794154261.4354498
+          },
+          "anhangsnamen": {
+            "ok": true,
+            "befund": "Umbenennen erzwungen (Abbruch übernimmt nichts, Endung bleibt), Speichername ≤ 73, automatische Kürzung gemeldet, Bestand nach ZIP-Vorsicherung (Datendatei und Originalbytes) gekürzt, alte Datei entfernt; Schreibschutz nimmt per Kennung zurück, Speicherfehler lässt Kopien liegen",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 14.897,
+            "gestartet_unix": 1794154272.9901533
+          },
+          "themenfarbe": {
+            "ok": true,
+            "befund": "300 Titelprüfungen in 10 Designs × 5 Themenfarben, Kontrast ≥ 4,5:1, Kontrastgrau neutral",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 168.0,
+            "gestartet_unix": 1794154287.8882565
+          },
+          "pinnwandleiste": {
+            "ok": true,
+            "befund": "1250 Knopfprüfungen in 3 Anordnungen, 4 Breiten (1000–1720 px), Liste und Ordner, Hinweise an/aus, 2 Schriften, hell/dunkel; Wahl über das Menü wirkt",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 58.571,
+            "gestartet_unix": 1794154455.888997
+          },
+          "ruecktaste": {
+            "ok": true,
+            "befund": "Rücktaste/Entf im Titelfeld (Pinnwand und Liste) löscht keinen Punkt, Wechsel möglich, gesperrter Wechsel meldet jeden neuen Versuch; Entf am Baum löscht wie bisher",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 18.786,
+            "gestartet_unix": 1794154514.4610791
+          },
+          "restflaechen": {
+            "ok": true,
+            "befund": "51 Ansichten und Aktionsschritte ohne Restfläche; Seitentext und Liste nach dem Schließen wieder gleich groß",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 29.248,
+            "gestartet_unix": 1794154533.2484548
+          },
+          "markenkante": {
+            "ok": true,
+            "befund": "16 Zeilen in der Live-Liste (mittlere/große Schrift): erledigt und offen an derselben Textkante",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 9.737,
+            "gestartet_unix": 1794154562.4969602
+          },
+          "beta350": {
+            "ok": true,
+            "befund": "Hintergrundfarben in zehn Designs, Speicherung/Neustart, drei Größen, volle Seitenleiste, Blockziehen/Undo/Redo/Abbruch/Schreibschutz",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 8.671,
+            "gestartet_unix": 1794154572.2345397
+          },
+          "fensterende3507": {
+            "ok": true,
+            "befund": "Kindfenster erhält Root-Aufträge; Root-Ende ohne Tcl-Reste; fremder Interpreter unverändert",
+            "runtime": {
+              "python": "3.14.7",
+              "platform": "win32",
+              "tk": "9.1.0"
+            },
+            "dauer_s": 5.378,
+            "gestartet_unix": 1794154580.9064755
+          }
+        },
+        "fehler": [],
+        "gruppe": "abschluss",
+        "vorgesehene_faelle": [
+          "neuerungen3",
+          "titelzaehler",
+          "anhangsnamen",
+          "themenfarbe",
+          "pinnwandleiste",
+          "ruecktaste",
+          "restflaechen",
+          "markenkante",
+          "beta350",
+          "fensterende3507"
+        ],
+        "laufender_fall": null
+      },
+      "timeout_counterprobe_tests": 19
+    },
+    "mac_actual_package": {
+      "commit": "967f84f44860456b885067b8aef5a6e76f641122",
+      "package_digests": {
+        "Glide-3.50.7-macos-arm64.dmg": "6c1557eb6f5b77727d2ed8f1f0219e90813aa45ff85b6371101a6c0f73894d3e",
+        "Glide-3.50.7-macos-arm64.tar.gz": "da31d71b28836bc11c28dcb19c88a5139d7f3a55e7dbce6ceffb43251b4daf43"
+      },
+      "completion": {
+        "exitcode": 0,
+        "version": "3.50.7",
+        "target": "macos-arm64",
+        "archive": "Glide-3.50.7-macos-arm64.tar.gz",
+        "sha256": "da31d71b28836bc11c28dcb19c88a5139d7f3a55e7dbce6ceffb43251b4daf43",
+        "archive_validation": {
+          "files": 494,
+          "symlinks": 30,
+          "modes_preserved": true
+        },
+        "source_files": 241,
+        "sources_unchanged": true,
+        "signature": "Ad-hoc-Signatur geprüft; Developer-ID bleibt offen",
+        "native_start_verified": true,
+        "developer_id_and_notarization": "offen; Entwicklungsartefakt"
+      },
+      "project_component": {
+        "name": "Glide",
+        "version": "3.50.7",
+        "license": "MPL-2.0",
+        "source": "https://github.com/n05a-design/glide-to-do/tree/967f84f44860456b885067b8aef5a6e76f641122",
+        "files": {
+          "Glide-MPL-2.0.txt": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+          "Glide-Lizenzstatus.md": "0b511d7c5346cb7c02dcbc52964ff3fd17d28d83463d8724a716ab92b168197d",
+          "Glide-Quellcode.txt": "58ec3b37ed36ec24b9051a35e314696a1a37d0e19499f1bfa72550ee88a82ae5"
+        }
+      },
+      "checked_license_files": {
+        "pyinstaller-COPYING.txt": "0598064c7d2718e38d7914a7d08343b2fa008e3bea9ebba2aa7a6ffa5900dd64",
+        "pyinstaller-hooks-contrib-LICENSE": "91d0baaff00773038e72c0a1fc9d5d2d38706b7a2b9c04f34296608f931b9cd0",
+        "altgraph-LICENSE": "6c194d6db0c64d45535d10c95142b9b0cda7b7dcc7f1ddee302b3d536f3dbe46",
+        "macholib-LICENSE": "47082ab2bc0184123ec9f10fdf80c70723ee68f07d44382e17615c2a6ba70b09",
+        "packaging-LICENSE": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48",
+        "packaging-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "packaging-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+        "setuptools-LICENSE": "86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741",
+        "setuptools-LICENSE.APACHE": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+        "setuptools-LICENSE.BSD": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5",
+        "setuptools-LICENSE.txt": "30c23618679108f3e8ea1d2a658c7ca417bdfc891c98ef1a89fa4ff0c9828654",
+        "Python-LICENSE.txt": "b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231",
+        "Python-THIRD-PARTY-NOTICES.rst": "c695d550b135e53e38807e76496d1db17d22c40e461d1f3f354c86188d3305dd",
+        "Tcl-LICENSE.txt": "c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16",
+        "Tk-LICENSE.txt": "2cde822b93ca16ae535c954b7dfe658b4ad10df2a193628d1b358f1765e8b198",
+        "libtommath-LICENSE.txt": "2fa64b163659f41965c9815882a8296d3d03ff546b76153e11445f9bdecf955a",
+        "Henry-Spencer-Regex-LICENSE.txt": "7f5de5c41af220787ce29c79917af6a590a24b80d93a4ed3d6dbf7d8094af49a",
+        "nanosvg.h-LICENSE.txt": "ec446c7df5e6d260d9a145630898787fdd72d5b7a2c336137aacb08abd012818",
+        "nanosvgrast.h-LICENSE.txt": "68b0214b2416d5f7ee7be7b21035959bbb24aedfee89ee4e9bf3f5107c80c3e9",
+        "tkinterdnd2-LICENSE": "cb0b1019296ff5303a64a1611ed9da5fa738127119f7a4f92fedf3e61f572f05",
+        "tkdnd-LICENSE.txt": "3e752e3d3d249387b477e79e2566dfd076b706175129a1edee395ff66dad2641",
+        "DejaVu-LICENSE": "7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93",
+        "PixelifySans-OFL.txt": "b66ba46f511a851ab09998b5a5a9fdbb102545a3864cb993095e1745996873a7",
+        "RobotoMono-OFL.txt": "ffd9f334604a352ad52ee0a7159c31bdafaf5f8465e5b9f9eb5c1f4924343183",
+        "Rubik-OFL.txt": "fbf425c49bf998fb9cc1b52f8ca27d5f84dec079b60c40f654f242b52474d536",
+        "PlayfairDisplay-OFL.txt": "4e6be9d19455d7cb092412984ebf3c55d26b19dd8f8452962bf432ec0a9c9dcb",
+        "Fraunces-OFL.txt": "720d772b526b33cc1bd2abb5c8735fea5b0fc5b742cb171b571d7ad62aae0496",
+        "OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+        "Zstandard-LICENSE.txt": "7055266497633c9025b777c78eb7235af13922117480ed5c674677adc381c9d8",
+        "XZ-COPYING.txt": "c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8",
+        "SQLite-Copyright.html": "44ca9f793055c8e32fc65f65a4f5bcf813a33f5bdaaa084067dd617a4ed3cc70",
+        "IANA-LICENSE.txt": "0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf",
+        "CLDR-LICENSE.txt": "b49d0e9f8ead51ca8b7df6fec89cc3ae6809198b4b9d43c74216da0118f23f5b",
+        "utf8proc-LICENSE.txt": "3b510150d34f248a221bb88e1d811238d6c6c18b51231822c42974c39bb07256",
+        "Glide-MPL-2.0.txt": "3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04",
+        "Glide-Lizenzstatus.md": "0b511d7c5346cb7c02dcbc52964ff3fd17d28d83463d8724a716ab92b168197d",
+        "Glide-Quellcode.txt": "58ec3b37ed36ec24b9051a35e314696a1a37d0e19499f1bfa72550ee88a82ae5"
+      },
+      "bom_path": "Glide.app/Contents/Resources/licenses/Glide.cdx.json",
+      "bom_sha256": "c0b5840b4bafd0105204b413ffb06c40b31ae555650fea8f278c6fcdf49ca3df",
+      "bom_components": 24,
+      "schema_errors": 0,
+      "git_mpl_bytes_equal": true,
+      "scope": "Tatsächlich gebautes natives Mac-Paket, Bau-/Lizenzinventar pre-build/incomplete; keine Voll-QA oder öffentliche Signatur abgeleitet"
+    },
+    "archive": {
+      "files": 35380,
+      "bytes": 8284103358,
+      "copy_verified": true,
+      "errors": 0,
+      "archive_accepted": false,
+      "active_text_candidates": 117,
+      "historical_exact": 99,
+      "other_candidates": "18 generated historical package metadata files; no newly found unmatched active application code",
+      "deleted_temporary_bytes": 206581655,
+      "stashes_exported": 4,
+      "original_git_object_damaged": true,
+      "clean_c_checkout_created": false,
+      "required_gate": "PR71 fully green and merged into verified new Main; archive reconciliation accepted"
+    },
+    "pending": [
+      "Native Pflicht-Endmatrix Windows/Linux auf neuem Commit",
+      "Native Mac-Arbeitsflächen-/Bedien-/Vollprüfung",
+      "Neue Pakete nach Quellkorrektur",
+      "Archivabnahme und neue C-Kopie erst nach Grün und genehmigtem Merge",
+      "Menschliche/physische DPI-Abnahme, Signierung/Notarisierung/Veröffentlichung getrennt"
+    ],
+    "ci_grundstufe": {
+      "exitcode": 0,
+      "steps": 19,
+      "tool_tests": 284,
+      "tool_skips": 1,
+      "domain_tests_each_run": 1156,
+      "strict_python_delivery": true,
+      "documentation_links": 343
+    }
+  }
 }

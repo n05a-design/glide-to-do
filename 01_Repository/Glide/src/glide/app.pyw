@@ -28937,7 +28937,7 @@ class ListApp:
             self._bind_home_wheel(widget)
             return widget
 
-        def card(parent, title=None, pad_y=None):
+        def card(parent, title=None, pad_y=None, heading_action=None):
             container = _ui.make(self.make_rounded_container,
                 parent,
                 fill_key="card",
@@ -28957,13 +28957,22 @@ class ListApp:
                 if isinstance(container, RoundedContainer):
                     container.itemconfigure(container._window_id, width=container.inner._home_build_width)
             _ui.pack(container, fill="x", pady=(glide_design.SPACING[0], self.HOME_CARD_GAP))
+            heading_parent = container.inner
+            if title and heading_action:
+                # D66: Abschluss am Kartenkopf bleibt auch bei drei längeren
+                # Versionsberichten und großer Schrift ohne Scrollen erreichbar.
+                heading_parent = _ui.make(tk.Frame, container.inner, bg=theme["card"])
+                _ui.pack(heading_parent, fill="x", pady=(0, glide_design.SPACING[6]))
+                caption, command, color = heading_action
+                action(heading_parent, caption, command, color, side="right", pady=0)
+                self._bind_home_wheel(heading_parent)
             if title and self.is_pixel_design():
                 # Pixel-Design: Der Kachelkopf ist eine Farbfläche; die Farben
                 # wechseln Blau, Gelb, Pink wie Bausteine.
                 farbe = theme[self.PIXEL_BLOCK_KEYS[pixel_block["n"] % len(self.PIXEL_BLOCK_KEYS)]]
                 pixel_block["n"] += 1
                 symbol, caption = glide_symbols.split_heading(title, self.ICONS)
-                head = _ui.make(tk.Frame, container.inner, bg=farbe)
+                head = _ui.make(tk.Frame, heading_parent, bg=farbe)
                 _ui.pack(head, fill="x", pady=(glide_design.SPACING[0], glide_design.SPACING[8]))
                 if symbol:
                     icon = _ui.make(tk.Label, head, retention_key="symbol", text=symbol,
@@ -28979,7 +28988,7 @@ class ListApp:
                 self._bind_home_wheel(head)
                 self._bind_home_wheel(kopf)
             elif title:
-                label(container.inner, title, 13, True)
+                label(heading_parent, title, 13, True)
             self._bind_home_wheel(container)
             self._bind_home_wheel(container.inner)
             return container.inner
@@ -29821,19 +29830,19 @@ class ListApp:
             self.save_settings()
             signatur = self.home_signature()
         if neuerungen:
-            neu_karte = card(kopfbereich, f"{self.ICONS['check']}  Neu in Glide {APP_VERSION}")
+            def gelesen():
+                self.settings.update(glide_release.remember_seen(self.settings, APP_VERSION))
+                self.save_settings()
+                self._home_scroll_to_top = True
+                self.refresh_home()
+            neu_karte = card(kopfbereich, f"{self.ICONS['check']}  Neu in Glide {APP_VERSION}",
+                             heading_action=("Gelesen", gelesen, "confirm"))
             for version, punkte in neuerungen:
                 if len(neuerungen) > 1:
                     label(neu_karte, f"Version {version}", 10, True, color="muted", pady=(glide_design.SPACING[4], glide_design.SPACING[2]))
                 for punkt in punkte:
                     label(neu_karte, f"• {punkt}", 10, pady=(glide_design.SPACING[0], glide_design.SPACING[2]))
 
-            def gelesen():
-                self.settings.update(glide_release.remember_seen(self.settings, APP_VERSION))
-                self.save_settings()
-                self._home_scroll_to_top = True
-                self.refresh_home()
-            action(neu_karte, "Gelesen", gelesen, "confirm", pady=(glide_design.SPACING[8], glide_design.SPACING[0]))
         for key in [k for k in sichtbar if k in breite_kacheln]:
             bauer[key](kopfbereich)
 

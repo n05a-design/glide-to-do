@@ -2573,3 +2573,21 @@ Der Inhaber möchte die bestehende Arbeit für ein Folgeprojekt Steps wiederverw
 | Gesamtabschluss | ▶ PR #71, strenge Grundstufe auf `a4c34b8` 19/19; Linux-/Windows-Endmatrix weiter offen | Finale Pflichtmatrix, Lieferstand und tatsächliche Restentscheidungen auf letztem Commit; kein Merge/Release |
 
 WA-41A/B bleiben getrennte ungeklärte Ursachenfragen. **WA-46 jetzt ◐:** Der gemeinsame Paketbauer erzeugt ein CycloneDX-1.6-Inventar aus dem geprüften Lizenz-/Baubestand und prüft es gegen seine Eingänge; vier Fehler-/Drift-/Bestandsproben grün. Vollständige offizielle JSON-Schemaprobe für Modellfixture und historische Mac-Basis (23 Komponenten) grün. Finaler nativer Bestand und vollständige transitive Beziehungen bleiben offen; `pre-build`/`incomplete` vermeidet eine unbewiesene Vollständigkeitsbehauptung. Physische DPI-/Mehrmonitor- und menschliche Gesamtprüfung sowie I1/I3/I4/I11 behalten ihre eigenen Tore. Bestehende ungewählte Produktideen werden durch die Systemaufbereitung nicht zu Steps- oder Glide-Funktionen erklärt.
+
+### 21.80 CI-Nachlauf nach 967f84f und sichere Neuablage (08.11.2026)
+
+Verbindlicher zusätzlicher Nutzerauftrag: lokalen Altbestand prüfen, entbehrliche Prüfdateien bereinigen, auf E: archivieren und anschließend eine neue GitHub-Kopie am bisherigen C:-Pfad erzeugen. **Neue Kopie erst nach vollständig grünen Pflichtprüfungen und Merge von PR #71 in Main.** Daraus folgt keine eigenständige Merge-/Releasefreigabe.
+
+| Bereich | Belegter Stand | Noch notwendiger Abschluss |
+|---|---|---|
+| Pflichtmatrix 967f84f | Linux vollständig grün; Windows rot: Gelesen 830/827 px und 895,28 s für 62 abgeschlossene Fälle vor dem 900-s-Abbruch beim letzten Setup | Neuer Commit, vollständige Windows-/Linux-Matrix und nachgelagerte Suiten grün |
+| Neuerungskarte | ✓ Lokal reproduziert und Abschluss am Kartenkopf korrigiert; 48 Konfigurationen, alle Texte/drei Versionen erhalten, sichtbare Wirkung geprüft | Native Endmatrix; menschliche Abnahme getrennt |
+| Arbeitsmodibudget | ◐ Fünf vollständige serielle Pflichtgruppen, unveränderte 900 s und Fehler-/Integritätswächter; Abdeckung/Reihenfolge automatisiert geprüft | Alle Gruppen und gesamte Folgekette im finalen Workflow; kein alter Green als neuer Nachweis |
+| Symbole | ✓ Vollständiger ASCII-Fallbackvertrag mit roter Gegenprobe und 8 grünen Unit-Tests | Historischer nativer Mac-Bedienbefund separat nachprüfen |
+| Mac-Prüfplatz | ◐ Echter Befund 954/960 px trotz 1920×1080; neue Arbeitsflächenprobe, Dock-Rücksetzung und gleicher Desktop für Bediennachtest; 6 Werkzeug-/6 Workflowtests grün | Native Ausführung; keine abgeschwächten Assertions |
+| Mac-Paket / WA-46 | ✓ Auf 967f84f nativer Bau/isolierter Start, reale MPL-/Quellzuordnung, 37 Lizenzdateien und 24 BOM-Komponenten gegen offizielles Schema geprüft | Neubau nach Quellkorrekturen; transitiver Graph, Signierung/Notarisierung und Release weiter offen |
+| Altbestand / Archiv | ◐ 35.380 Dateien und 8.284.103.358 Bytes nach E: kopiert/gehasht, 286 geschützte Grafik-/Steps-/Vorbereitungsdateien; 99 aktive lokale Textdeltas exakt in öffentlicher Historie gefunden; 18 weitere Texte alte Paketmetadaten | Stashes/Arbeitsbäume, post-copy Abgleich und Archivabnahme; keine Behauptung, Rohmaterial liege schon in Main |
+| Lokale Bereinigung | ✓ Nur der ausdrücklich temporäre Logo-Prüfrest mit 206.581.655 Bytes entfernt und mit Hash protokolliert | Weitere Kandidaten nur anhand konkreter Entbehrlichkeit; keine pauschale Löschung historischer QA/Assets |
+| Neue C:-Ablage | Offen, noch nicht erzeugt; bisherige Ablage erhalten | Grün + genehmigter Merge, endgültiger Main-SHA, geprüfter Archivbestand; frischer Checkout mit Versions-/Lizenz-/System-/Gitprüfung |
+
+Systemregister 1.4 führt die beiden neuen Gruppenwerkzeuge und die geänderten Prüfverträge. Performance bleibt mit identischen synthetischen Daten zu messen; dieser Nachlauf behebt ein belegtes Prüfprozessbudget und beansprucht keinen allgemeinen App-Geschwindigkeitsgewinn. WA-32/36/39/41/49/50 und menschliche/native Freigabetore bleiben gemäß ihren jeweiligen Abschlusskriterien bestehen. Kein Steps-Repository, Merge, Release oder veröffentlichter Download erzeugt.

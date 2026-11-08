@@ -161,6 +161,8 @@ Kleine Scrollbewegungen dürfen nicht Bild und erste Textzeile unkontrolliert ü
 
 Gismo heißt fest Gismo und behält seine spielerischen Funktionen (Füttern, Spielen, Ruhen, Reaktionen), solange seine Kachel sichtbar ist. Wer ihn nicht möchte, blendet die Kachel unter „Startseite anpassen“ aus; dann erscheint er auch nicht neben Leerzuständen. Umbenennen und „Spielereien aus“ entfallen; frühere Werte werden beim Laden entfernt. Bewegungsreduktion nimmt nur die Bewegung, nicht die Funktionen. Die Zeichnungsvorschau bleibt; Galeriebilder haben eine eigene Kachel „Galeriebilder“. Neuerungen bleiben unter Hilfe › Über Glide › „Neuerungen …“ nachlesbar.
 
+**D66-Ausführung, 08.11.2026:** Die Neuerungskarte zeigt weiterhin die drei neuesten Versionen ohne Textkürzung. „Gelesen“ steht rechts am Kartenkopf und ist schon im ersten sichtbaren Ausschnitt erreichbar; längere Berichte dürfen den Abschluss nicht unter die Scrollkante drücken. Karten-/Pixelkopf, Schriften, Knopfschutz und die gespeicherte Lesebestätigung bleiben dieselben Rollen. Prüfung: vier Schriften, mittel/groß, Hell/Dunkel/Pixel, 860×700 und 1280×800; Sicht-/Textumfang und Wirkung prüfen.
+
 ### Arbeitsmodi und Seitenbedienung (D55, 23.10.2026)
 
 Gilt für die Auswahl E-U1 A, E-U2 A und E-U3 A und für jede künftige Fläche derselben Art.

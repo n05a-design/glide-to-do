@@ -7,10 +7,12 @@ ausgeschlossen. Quelle: developer.apple.com/documentation/coregraphics/
 cgdisplaysetdisplaymode(_:_:_:). Keine Änderung an Glides Fenstervertrag.
 """
 import argparse
+from contextlib import contextmanager
 import ctypes
 import ctypes.util
 import json
 import os
+import plistlib
 from pathlib import Path
 import subprocess
 import sys
@@ -21,6 +23,63 @@ def select_mode(modes, width, height):
     if not available:
         raise RuntimeError(f"Kein nativer Bildschirmmodus für {width}x{height}: {modes}")
     return min(available, key=lambda m: (m["width"] * m["height"], m["pixel_width"] * m["pixel_height"]))
+
+
+@contextmanager
+def dock_workarea(evidence):
+    """Nur den Dock-Autohide-Wert im vergänglichen CI-Desktop ändern/zurücksetzen.
+
+    1920x1080 allein ergab nativ nur 954 px Fensterhöhe. Die Prüfungen
+    brauchen unverändert 960 px. Menüleiste und App-Fenster bleiben normal.
+    Apple: support.apple.com/guide/mac-help/mchlp1119/mac.
+    """
+    exported = subprocess.run(["defaults", "export", "com.apple.dock", "-"],
+                              check=True, capture_output=True).stdout
+    preferences = plistlib.loads(exported)
+    original = preferences.get("autohide")
+    if original is not None and not isinstance(original, bool):
+        raise RuntimeError("Unerwarteter Typ der Dock-Autohide-Einstellung")
+    evidence["dock_autohide_original"] = original
+    changed = original is not True
+    try:
+        if changed:
+            subprocess.run(["defaults", "write", "com.apple.dock", "autohide", "-bool", "true"], check=True)
+            subprocess.run(["killall", "Dock"], check=True)
+        yield
+    finally:
+        if changed:
+            restore = (["defaults", "delete", "com.apple.dock", "autohide"] if original is None else
+                       ["defaults", "write", "com.apple.dock", "autohide", "-bool", "false"])
+            subprocess.run(restore, check=True)
+            subprocess.run(["killall", "Dock"], check=True)
+        evidence["dock_autohide_restored"] = True
+
+
+def verify_workarea():
+    """Echte unveränderte Testfenstergröße prüfen, nicht aus dem Display ableiten."""
+    script = """
+import json, time, tkinter as tk
+root = tk.Tk()
+try:
+    root.geometry('1720x960+0+0')
+    deadline = time.monotonic() + 10
+    while True:
+        root.update_idletasks(); root.update()
+        actual = [root.winfo_width(), root.winfo_height()]
+        if actual == [1720, 960] or time.monotonic() >= deadline:
+            break
+        time.sleep(.05)
+    print(json.dumps(dict(requested=[1720,960], actual=actual,
+                         tk=root.tk.call('info', 'patchlevel'))))
+finally:
+    root.destroy()
+"""
+    result = subprocess.run([sys.executable, "-B", "-c", script], check=True,
+                            capture_output=True, text=True, timeout=20)
+    proof = json.loads(result.stdout)
+    if result.stderr:
+        raise RuntimeError("Tk-Arbeitsflächenprobe meldet Fehler: " + result.stderr)
+    return proof
 
 
 def run(command, width, height, report):
@@ -74,7 +133,12 @@ def run(command, width, height, report):
         evidence["selected"] = selected
         save()
         print("Nativer Mac-Prüfdesktop:", selected, flush=True)
-        evidence["exitcode"] = subprocess.run(command, check=False).returncode
+        with dock_workarea(evidence):
+            evidence["workarea"] = verify_workarea()
+            save()
+            if evidence["workarea"]["actual"] != [1720, 960]:
+                raise RuntimeError(f"Native QA-Arbeitsfläche zu klein: {evidence['workarea']}")
+            evidence["exitcode"] = subprocess.run(command, check=False).returncode
         return evidence["exitcode"]
     except Exception as error:
         evidence["error"] = str(error)

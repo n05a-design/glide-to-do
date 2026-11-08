@@ -1,8 +1,8 @@
-# Glide-System V1.3
+# Glide-System V1.4
 
-Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.3 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.4 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.3` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.4` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.3 · Aufgabenformat 26 · Ei
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.4** | 08.11.2026 | Neuerungskarte mit erreichbarem Abschluss am Kopf und erweiterter Geometriematrix; eindeutige ASCII-Ersatzrollen; vollständige serielle Arbeitsmodigruppen statt eines ausgeschöpften Gesamtbudgets; Mac-Arbeitsflächenprobe und ausnahmefeste Dock-Rücksetzung. Keine neue Produktfunktion; native Endmatrix erneut erforderlich. | App 3.50.7, Format 26 |
 | **V1.3** | 08.11.2026 | Steps-Übernahmevertrag und Übergabefolge; 20 technische Systemfähigkeiten direkt in der Featureübersicht, drei ergänzte Bestandspakete für Prozesse, Start/Konfiguration und OS-Integration; SPDX-Dateihinweise, Paket-BOM und native Mac-Prüfplatzvorbereitung samt Tests; aktuelle Kopplungs-/Prüfgrenzen. Keine neuen App-Funktionen. | App 3.50.7, Format 26 |
 | **V1.2** | 08.11.2026 | Root-Lebensdauer mit eigener/fremder Tcl-Auftragsprüfung; sichtbare D66-Unterzeile statt leerem Metadatenlabel geprüft; Pinnwandleistenabstände nach tatsächlicher Linux-Breite; Prüffolge stoppt auch bei unbehandelten Tk-/Tcl-Fehlern trotz Exitcode 0; native Mac-Vollprüfung manuell auslösbar. Pflichtmatrix weiterhin offen. | App 3.50.7, Format 26 |
 | **V1.1** | 08.11.2026 | MPL-Paketnachweise und neue Seitenleisten-/Neustart-/Farbprüfung für 3.50.7; Testkatalog um `test_project_license.py` ergänzt. Native Gesamtfreigabe weiterhin offen. | App 3.50.7, Format 26 |
@@ -27,7 +28,7 @@ Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.3 · Aufgabenformat 26 · Ei
 | Features | 147 | 127 Produkt-/Oberflächeneinträge und 20 technische Systemfähigkeiten; Modulzuordnung vor Übernahme prüfen |
 | Bausteinpakete | 25 | Kandidaten für Entkopplung und neue Projekte, **keine** freigegebenen Pakete |
 | QA-/Architekturrisiken | 25 | Datierter Audit-Snapshot; aktuelle Statusquelle ist QA |
-| Test-/Werkzeugdateien | 309 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
+| Test-/Werkzeugdateien | 311 | Einschließlich Katalog-/Lizenz-/SBOM-Prüfung, Arbeitsmodigruppen und Mac-CI-Desktopwerkzeug samt Tests; Dateibestand, keine Anzahl bestandener Testfälle |
 
 **Navigation:** [Module](#1-python-module) · [Features](#2-features) · [Bausteine](#3-wiederverwendbare-bausteine) · [QA](#4-risiken-und-prüfgrenzen) · [Testkatalog](#5-test--und-werkzeugkatalog) · [Leitlinien](#6-leitlinien) · [Pflegeregeln](#7-system-und-modulpflege) · [Steps-Übernahme](#9-grundlage-für-steps-und-weitere-projekte).
 
@@ -59,7 +60,7 @@ Die **einzige vollständige, aktuelle fachliche Modulliste**. `app.pyw` enthält
 | M011 | [`logo_raster.py`](logo_raster.py) | Geglättete Rasterlogos und PNG-Ausgabe | Geglättete transparente Logo-Raster und PNG-Ausgabe ohne Zusatzbibliothek (Tk-frei); Stand: 3.37.0 | hoch | Isolationstest erforderlich; SVG-Master und Ein-/Ausgabe konfigurierbar machen; Kein aktueller modulspezifischer Isolationsnachweis | test_logo_raster.py |
 | M012 | [`svg_geometry.py`](svg_geometry.py) | SVG-Pfadgeometrie und Farbverarbeitung | SVG-Pfade einschließlich verkürzter kubischer Kurven, CSS-/Attributfarben, transparente Innenkonturen; Stand: 3.33.1 | hoch | Isolationstest erforderlich; Projektname/Farbtoken/Font-Lizenzen parametrisieren; globale Tk-Widgetanwendung trennen; Kein aktueller modulspezifischer Isolationsnachweis | test_svg_geometry.py |
 | M013 | [`glyph_metrics.py`](glyph_metrics.py) | Optische Symbolzentrierung mit Glyphenmetriken | Optische Symbolmitte aus den Glyphenrahmen der mitgelieferten TrueType-Schrift; eine Regel statt Pixelversätzen (Tk-frei, B09); Stand: 3.43.0 | hoch | Isolationstest erforderlich; Projektname/Farbtoken/Font-Lizenzen parametrisieren; globale Tk-Widgetanwendung trennen; Kein aktueller modulspezifischer Isolationsnachweis | test_glyph_metrics.py |
-| M014 | [`symbol_policy.py`](symbol_policy.py) | Symbolabdeckung, Font-Auswahl und Text-Fallbacks | Vollständige Symbolauswahl nach tatsächlicher UI-Schriftabdeckung und lesbare Text-Rückfälle (Tk-frei); Stand: 3.37.0 | hoch | Isolationstest erforderlich; Projektname/Farbtoken/Font-Lizenzen parametrisieren; globale Tk-Widgetanwendung trennen; Kein aktueller modulspezifischer Isolationsnachweis | test_symbol_policy.py |
+| M014 | [`symbol_policy.py`](symbol_policy.py) | Symbolabdeckung, Font-Auswahl und Text-Fallbacks | Vollständige Symbolauswahl nach tatsächlicher UI-Schriftabdeckung; eindeutige ASCII-Rollen außer den absichtlichen Verschieben-/Sortierpaaren (Tk-frei); Stand: Reparaturnachtrag 08.11.2026 | hoch | Isolationstest erforderlich; Projektname/Farbtoken/Font-Lizenzen parametrisieren; globale Tk-Widgetanwendung trennen; Kein aktueller modulspezifischer Isolationsnachweis | test_symbol_policy.py |
 | M015 | [`backdrop.py`](backdrop.py) | Darstellung von Hintergrundverläufen | Hintergrundverläufe: Entwürfe, Lesezone, PNG schreiben/lesen; Stand: 3.30 | mittel | Adapter + Isolationstest; Projektname/Farbtoken/Font-Lizenzen parametrisieren; globale Tk-Widgetanwendung trennen; Kein aktueller modulspezifischer Isolationsnachweis | Testfälle indirekt / zu ermitteln |
 | M016 | [`motion.py`](motion.py) | Abbrechbare zeitgesteuerte UI-Übergänge | Unterbrechbare zeitgesteuerte Übergänge mit vollständigem Abbau (Tk-frei); Stand: 3.38.0 | hoch | Isolationstest erforderlich; Projektname/Farbtoken/Font-Lizenzen parametrisieren; globale Tk-Widgetanwendung trennen; Kein aktueller modulspezifischer Isolationsnachweis | test_motion.py |
 
@@ -841,9 +842,11 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 
 | T306 | [`test_project_license.py`](../../tests/tools/test_project_license.py) | MPL-Originalbytes, fester Quellcommit und Ablehnung veränderter/fremder Paketquellen |
 
-| T307 | [`macos_desktop.py`](../../tests/tools/macos_desktop.py) | Nativen CI-Bildschirmmodus für die Lebensdauer der Kindprüfung halten; tatsächlicher Mac-Lauf separat nachweisen |
-| T308 | [`test_macos_desktop.py`](../../tests/tools/test_macos_desktop.py) | Modusauswahl, fehlende Höhe und Schutz persönlicher Rechner ohne OS-Änderung prüfen |
+| T307 | [`macos_desktop.py`](../../tests/tools/macos_desktop.py) | Nativen CI-Bildschirmmodus halten, Dock-Einstellung zurücksetzen und tatsächliche 1720×960-Tk-Arbeitsfläche vor der Kindprüfung nachweisen; persönliche Macs ausgeschlossen |
+| T308 | [`test_macos_desktop.py`](../../tests/tools/test_macos_desktop.py) | Modusauswahl, fehlende Höhe, Schutz persönlicher Rechner und Wiederherstellung der Dock-Einstellung auch nach Testfehlern ohne echte OS-Änderung prüfen |
 | T309 | [`test_sbom.py`](../../tests/tools/test_sbom.py) | CycloneDX-Lizenz-/Bauinventar, fehlende/mehrdeutige Belege und nachträgliche Abweichung prüfen; kein vollständiger transitiver Laufzeitgraph |
+| T310 | [`arbeitsmodi_gruppen.py`](../../tests/tools/arbeitsmodi_gruppen.py) | Fünf verpflichtende serielle Gruppen aus demselben vollständigen Fallbestand; kein Tk-Import, keine zweite Fallliste, unveränderte 900-s-Wächter |
+| T311 | [`test_arbeitsmodi_gruppen.py`](../../tests/tools/test_arbeitsmodi_gruppen.py) | Alle implementierten Arbeitsmodifälle genau einmal und in Originalreihenfolge; fehlende/doppelte/verschobene Grenzen als Fehler |
 
 <!-- GLIDE-SYSTEM:TESTS-END -->
 

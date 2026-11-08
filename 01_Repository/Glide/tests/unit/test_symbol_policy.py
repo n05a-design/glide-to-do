@@ -24,6 +24,20 @@ class SymbolPolicyTests(unittest.TestCase):
                     ("notifications","priority_low"),("check","remove")):
             self.assertNotEqual(TEXT_FALLBACKS[a],TEXT_FALLBACKS[b])
 
+    def test_complete_ascii_fallback_preserves_action_roles(self):
+        # D29: Nur Verschieben/Sortieren derselben Richtung sind gemeinsame
+        # Rollen. Gruppenöffnung und Auswahlpfeile sind andere Aktionen.
+        from collections import defaultdict
+        resolved, _ = resolve({key: "■" for key in TEXT_FALLBACKS}, str.isascii)
+        roles = defaultdict(set)
+        for key, text in resolved.items():
+            roles[text].add(key)
+        duplicates = {frozenset(keys) for keys in roles.values() if len(keys) > 1}
+        self.assertEqual(duplicates, {
+            frozenset(("move_up", "sort_ascending")),
+            frozenset(("move_down", "sort_descending")),
+        })
+
     def test_caption_keeps_pixel_font_without_icon_font_fallback(self):
         icons = {"calendar": "▦", "search": "Su"}
         self.assertEqual(split_heading("▦  Kalender", icons), ("▦", "Kalender"))

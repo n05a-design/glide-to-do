@@ -23,6 +23,8 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 REPO = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO / "tests/tools"))
+from arbeitsmodi_gruppen import GRUPPEN, gruppen  # noqa: E402
 sys.path.insert(0, str(REPO / "tests/integration"))
 from test_uiux_paket import Lauf, knopf_befunde, knoepfe, sichtbarer_ausschnitt  # noqa: E402
 
@@ -4226,10 +4228,17 @@ def fall_neuerungen3(lauf):
     lauf.showcase()
     rn = mod.glide_release
     befund = []
-    for groesse in ("mittel", "gross"):
+    from itertools import product
+    for schrift, groesse, design, geometry in product(
+            mod.glide_fonts.STYLES, ("mittel", "gross"),
+            ("light", "dark", "pixel"), ("860x700", "1280x800")):
+        app.settings["ui_font_family"] = schrift.key
+        app._ui_font_family = None
+        assert app.ui_font_family() == schrift.default_family, (schrift.key, app.ui_font_family())
         app.settings["ui_font_size"] = groesse
         app.apply_ui_font()
-        lauf.root.geometry("1280x800+20+20")
+        app.set_design(design)
+        lauf.root.geometry(geometry + "+20+20")
         app.settings["release_notes_seen"] = rn.BEFORE_CATALOG
         app._settings_existed = True
         app._home_signature = None
@@ -4245,12 +4254,22 @@ def fall_neuerungen3(lauf):
         assert gelesen, "„Gelesen“ fehlt"
         unten = gelesen[0].winfo_rooty() + gelesen[0].winfo_height()
         sicht = app.home_canvas.winfo_rooty() + app.home_canvas.winfo_height()
-        befund.append(f"{groesse}: {len(versionen)} Versionen, Gelesen {'sichtbar' if unten <= sicht else f'{unten - sicht} px tiefer'}")
+        kontext = (schrift.key, groesse, design, geometry)
+        befund.append(kontext)
         assert unten <= sicht, ("„Gelesen“ erst nach Scrollen", groesse, unten, sicht)
+        assert gelesen[0].winfo_rooty() >= app.home_canvas.winfo_rooty(), kontext
+        assert gelesen[0].winfo_rootx() >= app.home_canvas.winfo_rootx(), kontext
+        assert gelesen[0].winfo_rootx() + gelesen[0].winfo_width() <= app.home_canvas.winfo_rootx() + app.home_canvas.winfo_width(), kontext
+        assert len([text for text in texte if text.startswith("• ")]) == sum(
+            len(points) for _, points in rn.notes_since(rn.BEFORE_CATALOG, mod.APP_VERSION)), ("Neuerungstext fehlt", kontext)
+        if lauf.capture and sys.platform == 'win32' and schrift.key == 'roboto_mono' and groesse == 'gross':
+            from releasedaten import save_windows_screenshot
+            lauf.capture.mkdir(parents=True, exist_ok=True)
+            save_windows_screenshot(lauf.root, lauf.capture / f'neuerungen_{design}_{geometry}.png')
         gelesen[0].command()
         idle(lauf, 6)
         assert app.settings["release_notes_seen"] == mod.APP_VERSION
-    return "; ".join(befund)
+    return f"{len(befund)} Konfigurationen: vier Schriften, mittel/groß, hell/dunkel/Pixel, Mindestgröße/breit; drei Versionen ohne Textkürzung, Gelesen ohne Scrollen erreichbar und wirksam"
 
 
 def warte(lauf, sekunden):
@@ -5017,11 +5036,15 @@ FAELLE = ("kartenflaechen", "schriftstile", "seitenaktionen", "blockaktionen", "
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--app", type=Path, default=REPO / "src/glide/app.pyw")
-    parser.add_argument("--fall", choices=FAELLE + ("alle",), default="alle")
+    selection = parser.add_mutually_exclusive_group()
+    selection.add_argument("--fall", choices=FAELLE + ("alle",))
+    selection.add_argument("--gruppe", choices=GRUPPEN)
     parser.add_argument("--report", type=Path)
     parser.add_argument("--capture", type=Path)
     args = parser.parse_args()
-    ergebnis = {"app_sha256": hashlib.sha256(args.app.read_bytes()).hexdigest(), "faelle": {}, "fehler": []}
+    selected = gruppen(FAELLE)[args.gruppe] if args.gruppe else (FAELLE if args.fall in (None, "alle") else (args.fall,))
+    ergebnis = {"app_sha256": hashlib.sha256(args.app.read_bytes()).hexdigest(), "faelle": {}, "fehler": [],
+                "gruppe": args.gruppe, "vorgesehene_faelle": selected}
 
     def bericht_sichern():
         if args.report:
@@ -5030,9 +5053,10 @@ def main():
             temporary.write_text(json.dumps(ergebnis, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             temporary.replace(args.report)
 
-    for name in (FAELLE if args.fall == "alle" else (args.fall,)):
+    for name in selected:
         started = time.monotonic()
-        ergebnis["laufender_fall"] = {"name": name, "phase": "setup"}
+        wall_started = time.time()
+        ergebnis["laufender_fall"] = {"name": name, "phase": "setup", "gestartet_unix": wall_started}
         bericht_sichern()
         print(f"START {name}", flush=True)
         # Diagnose ohne geändertes Zeitlimit oder abgefangene Testfehler.
@@ -5066,6 +5090,8 @@ def main():
                     abbauen(lauf)
         faulthandler.cancel_dump_traceback_later()
         ergebnis["faelle"][name]["dauer_s"] = round(time.monotonic() - started, 3)
+        ergebnis["faelle"][name]["gestartet_unix"] = wall_started
+        print(f"ENDE {name}: {ergebnis['faelle'][name]['dauer_s']:.3f} s", flush=True)
         ergebnis["laufender_fall"] = None
         bericht_sichern()
     print(json.dumps({"gruen": len(ergebnis["faelle"]) - len(ergebnis["fehler"]), "rot": ergebnis["fehler"]},
