@@ -1,8 +1,8 @@
-# Glide-System V1.10
+# Glide-System V1.11
 
-Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.10 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
+Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.11 · Aufgabenformat 26 · Einstellungen 2 · Vorlagen 2
 
-**Eigenständige Katalogversion:** `V1.10` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
+**Eigenständige Katalogversion:** `V1.11` (maschinell maßgeblich: [`GLIDE_SYSTEM_VERSION`](../../GLIDE_SYSTEM_VERSION)). Sie versioniert ausschließlich den dokumentierten Systembestand – **nicht** die Glide-App, das Datenformat oder die Tests selbst. Die Version gilt für alle unten aufgeführten Module, Features, Bausteine, Prüfregister und Leitlinien als gemeinsame **Bestands-Baseline**. Neue/überarbeitete Einträge werden durch die nächste Katalogversion und das Änderungsregister nachvollziehbar; einzelne Modulversionen werden erst eingeführt, falls daraus tatsächlich getrennt veröffentlichte Bibliotheken entstehen.
 
 **Verbindliches, fortlaufend gepflegtes Systemregister für Glides Module, Features, wiederverwendbare Bausteine und Prüfungen.** Diese Gesamtdokumentation ersetzt die frühere Kurzliste „Anwendungskern“ sowie die zweite Modulbestandsliste im Architekturtext. Für Folgeprojekte (z. B. Steps) ist sie Ausgangspunkt, **kein** Freigabebeleg für unabhängige Libraries.
 
@@ -12,6 +12,7 @@ Stand 08.11.2026 · Glide 3.50.7 · Glide-System V1.10 · Aufgabenformat 26 · E
 
 | Systemversion | Datum | Umfang / Änderung | Verhältnis zur App |
 |---|---|---|---|
+| **V1.11** | 08.11.2026 | Kartenumbruch misst identische Texte je Aufruf nur einmal, ohne Cache über Schrift-/Interpreterwechsel. Gepaarte Tempoauswertung mit gleicher +10-%-Grenze und positiven/negativen Gegenproben; gezielter nativer Seitenkarten-/Arbeitsmodinachlauf vor Gesamtlauf. | App 3.50.7, Format 26 |
 | **V1.10** | 08.11.2026 | Kompaktfokus unter Cocoa mit echtem Wechsel zur Finder-App nachprüfen; tatsächlichen Fokusverlust und echtes Hauptfenster-FocusOut belegen. Einzeln auswählbarer nativer Nachtest vor Paketbau; Vollmodus behält sämtliche Prüfungen. | App 3.50.7, Format 26 |
 | **V1.9** | 08.11.2026 | Ruhende Startseitengeometrie wartet begrenzt auf das tatsächliche Ende der Aktionsfahnen; verzögerte reale Animation als Regression. Native Mac-Nachtests für Bedienung, Startseite und Altimport vor dem unverändert vollständigen Prüflauf. | App 3.50.7, Format 26 |
 | **V1.8** | 08.11.2026 | Vollständige Git-Historie und frühe Prüfung gepinnter Altlieferungen für die native Mac-Vollprüfung; vorhandene Migrationsprüfungen bleiben vollständig. | App 3.50.7, Format 26 |
@@ -723,7 +724,7 @@ Vorhandene Grundlagen, keine neu implementierten App-Funktionen. Die Prüfquelle
 | T191 | [`test_schutzrunde.py`](../../tests/integration/test_schutzrunde.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T192 | [`test_seiten330.py`](../../tests/integration/test_seiten330.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T193 | [`test_seiten33318.py`](../../tests/integration/test_seiten33318.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
-| T194 | [`test_seitenkarten.py`](../../tests/integration/test_seitenkarten.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
+| T194 | [`test_seitenkarten.py`](../../tests/integration/test_seitenkarten.py) | Seiten-/Notizkarten, Undo/Backup/Altleser/Druck; unveränderter Textumbruch ohne Mehrfachmessung, Fontwechsel und gepaarte +10-%-Temposchranke mit echten Verlangsamungsgegenproben |
 | T195 | [`test_sicherungszentrale.py`](../../tests/integration/test_sicherungszentrale.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T196 | [`test_speicherlast330.py`](../../tests/integration/test_speicherlast330.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |
 | T197 | [`test_speicherstatus.py`](../../tests/integration/test_speicherstatus.py) | Testdatei vorhanden; Einzelresultat nicht auf aktuellen SHA rückverifiziert |

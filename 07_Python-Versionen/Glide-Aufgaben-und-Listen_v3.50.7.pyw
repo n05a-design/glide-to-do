@@ -9006,10 +9006,20 @@ class ItemWorkspace:
 
     @staticmethod
     def truncate_lines(text, font, width, lines):
+        # Nur innerhalb dieses Aufrufs: keine alten Messwerte nach Schrift-,
+        # Skalierungs- oder Interpreterwechsel. Tk-Messungen für identische
+        # Zeilentexte bei Aufbau und Endkürzung nicht mehrfach ausführen.
+        measurements = {}
+
+        def measure(value):
+            if value not in measurements:
+                measurements[value] = font.measure(value)
+            return measurements[value]
+
         words, output, current = str(text).split(), [], ""
         for word in words:
             trial = (current + " " + word).strip()
-            if font.measure(trial) > width and current:
+            if measure(trial) > width and current:
                 output.append(current)
                 current = word
             else:
@@ -9020,8 +9030,8 @@ class ItemWorkspace:
         if not result:
             return ""
         for index, line in enumerate(result):
-            truncated = font.measure(line) > width or (index == lines-1 and len(output) > lines)
-            while line and font.measure(line + ("…" if truncated else "")) > width:
+            truncated = measure(line) > width or (index == lines-1 and len(output) > lines)
+            while line and measure(line + ("…" if truncated else "")) > width:
                 line = line[:-1]
             result[index] = line + ("…" if truncated else "")
         return "\n".join(result)

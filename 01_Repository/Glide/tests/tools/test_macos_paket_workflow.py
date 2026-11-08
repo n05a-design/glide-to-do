@@ -77,7 +77,7 @@ class MacWorkflowTests(unittest.TestCase):
         if executable is None:
             self.skipTest("Keine lokale Bash für Shell-Syntaxprüfung verfügbar")
         blocks = list(run_blocks(self.source))
-        self.assertEqual(len(blocks), 9)
+        self.assertEqual(len(blocks), 10)
         with tempfile.TemporaryDirectory() as directory:
             for index, block in enumerate(blocks):
                 path = Path(directory) / f"step-{index}.sh"
@@ -104,9 +104,17 @@ class MacWorkflowTests(unittest.TestCase):
         self.assertIn("steps.gezielte_pruefung.outcome == 'success'", step)
         self.assertIn("steps.kompakt_pruefung.outcome == 'success'", step)
         compact = self.source.split('- name: Externen Kompaktfokus gezielt nachprüfen',1)[1].split('      - name:',1)[0]
-        self.assertIn('(inputs.vollpruefung || inputs.kompakt_nachtest)', compact)
+        self.assertIn("(inputs.vollpruefung || inputs.nachtest != 'keiner')", compact)
         self.assertIn('--fall kompakt_verlorenes_loslassen', compact)
         self.assertIn('${{ runner.temp }}/glide-macos-kompakt.json', self.source)
+        self.assertIn("steps.ui_nachlauf.outcome == 'success'", step)
+        followup = self.source.split('- name: Seitenkarten und verbleibende Mac-Arbeitsmodi gezielt nachprüfen',1)[1].split('      - name:',1)[0]
+        self.assertIn('--fall druck_tempo', followup)
+        self.assertIn('for gruppe in bedienung planung navigation geometrie abschluss', followup)
+        self.assertIn('--gruppe "$gruppe"', followup)
+        self.assertIn('glide-macos-arbeitsmodi-$gruppe.log', followup)
+        self.assertNotIn('glide-macos-$gruppe.log', followup)
+        self.assertIn('if [ "$GLIDE_MAC_VOLLMODUS" != "true" ]', followup)
         self.assertNotIn('always()', step)
         for name in ('startseite', 'import'):
             self.assertIn(f'${{{{ runner.temp }}}}/glide-macos-{name}.log', self.source)

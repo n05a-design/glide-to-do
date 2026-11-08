@@ -4292,5 +4292,42 @@
     "linux": "success",
     "windows_package": "success",
     "main_merged": false
+  },
+  "card_measurement_2026_11_08": {
+    "baseline_commit": "6d362ea5a603bf1af058ef470a4af92c1cd33fb7",
+    "mac_full_run": 42523626586,
+    "mac_full_job": 128862283082,
+    "mac_full_result": "failure: druck_tempo separate median aggregation",
+    "repeated_measurement_before": [
+      "ab",
+      "ab cd",
+      "ab cd",
+      "ab cd"
+    ],
+    "local_all_page_cases": 6,
+    "page_suite_log_sha256": "a62b4287c1eb7bfbbca156deb1fc70e8fadde3ec269aac156ff48c8e9cb74ee8",
+    "threshold": 1.1,
+    "aggregation": "median paired current/baseline ratios; all raw times retained",
+    "false_alarm_and_hidden_20_percent_regression_controls": true,
+    "cache_lifetime": "one truncate_lines invocation only",
+    "native_confirmation_pending": true,
+    "wrap_equivalence": {
+      "baseline_commit": "6d362ea5a603bf1af058ef470a4af92c1cd33fb7",
+      "new_source_sha256": "d3cd55a067a9eefbcb9b9d01ec07cd9b4039a066d71bfb92e2f3fd4ab5d3bd18",
+      "cases": 2120,
+      "all_outputs_equal": true,
+      "scope": "Frozen original AST vs optimized function; deterministic proportional Unicode/kerning metric, widths and line limits"
+    },
+    "profile_font_measure_calls": {
+      "baseline_board": {
+        "before": 2000,
+        "after": 800
+      },
+      "mixed_board": {
+        "before": 1950,
+        "after": 850
+      },
+      "scope": "Per complete draw; profiling times are not unprofiled speedup evidence"
+    }
   }
 }

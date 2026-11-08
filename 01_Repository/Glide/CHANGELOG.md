@@ -1,5 +1,11 @@
 # Änderungsverlauf
 
+## Kartenmessung und Tempoauswertung 08.11.2026
+
+- Identische Texte beim Kartenumbruch je Aufruf nur einmal mit Tk vermessen; Umbruch und Endkürzung bleiben gleich. Keine alten Messwerte nach Schrift-, Skalierungs- oder Interpreterwechsel.
+- Bereits abwechselnd erhobene Renderzeiten als Messpaare auswerten, +10-%-Grenze erhalten, Einzelwerte und bisherige getrennte Mediane weiter protokollieren. Gegenproben sichern sowohl falsche Alarme als auch zuvor verdeckte echte Verlangsamungen.
+- Gezielter nativer Mac-Nachlauf prüft Seitenkartentempo und alle fünf Arbeitsmodigruppen, bevor der lange Gesamtlauf neu angefordert wird. Im Vollmodus bleiben alle Gruppen verpflichtend im regulären Prüfstarter.
+
 ## Nativer Mac-Kompaktfokus-Nachtest 08.11.2026
 
 - Externen Fokusverlust unter Cocoa durch echten App-Wechsel prüfen; ein zweiter Tk-Interpreter übernimmt dort den Fokus nicht zuverlässig. Tatsächlicher Fokusverlust, echtes FocusOut und Kürzelrücksetzung bleiben verpflichtend. Gezielter nativer Nachtest unabhängig vom langen Vollmodus auswählbar.

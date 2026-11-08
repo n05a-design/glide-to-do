@@ -178,7 +178,68 @@ def fall_titelbild_praesentation_sicherung(run):
     return {'titelbild':True,'praesentation':True,'app_sicherung':True,'tastatur':True}
 
 
+def check_text_measurement_contract(view):
+    """Umbruch/Endkürzung erhalten; denselben Text je Aufruf nur einmal messen."""
+    class Font:
+        scale = 1
+
+        def __init__(self):
+            self.calls = []
+
+        def measure(self, text):
+            self.calls.append(text)
+            return len(text) * self.scale
+
+    for text, width, lines, expected in (
+            ('ab cd', 5, 1, 'ab cd'),
+            ('alpha beta gamma', 7, 2, 'alpha\nbeta…'),
+            ('abcdefghijk', 5, 1, 'abcd…'),
+            (' \n alpha\t beta ', 20, 2, 'alpha beta'),
+            ('', 10, 2, '')):
+        font = Font()
+        assert view.truncate_lines(text, font, width, lines) == expected
+        assert len(font.calls) == len(set(font.calls)), ('Doppelte Schriftmessung', font.calls)
+    font = Font()
+    assert view.truncate_lines('ab cd', font, 5, 1) == 'ab cd'
+    font.scale = 2
+    assert view.truncate_lines('ab cd', font, 5, 1) == 'a…', 'Messwerte überleben einen Schriftwechsel'
+
+
+def paired_timing_ratio(baseline, current):
+    """Die bereits abwechselnd erhobenen Paare gemeinsam auswerten."""
+    assert len(baseline) == len(current) and baseline
+    return statistics.median(after / before for before, after in zip(baseline, current))
+
+
+def require_paired_timing(baseline, current):
+    ratio = paired_timing_ratio(baseline, current)
+    assert ratio <= 1.10, (baseline, current, 'gepaarter Medianquotient', ratio)
+    return ratio
+
+
+def check_paired_timing_contract():
+    # Vier von fünf Paaren liegen innerhalb +5 %, trotz wechselnder Grundlast.
+    # Getrennte Mediane würden hier fälschlich +20 % behaupten.
+    before = [100, 100, 100, 200, 300]
+    after = [104, 105, 120, 205, 305]
+    assert statistics.median(after) / statistics.median(before) > 1.10
+    assert require_paired_timing(before, after) < 1.10
+    # Umgekehrte Gegenprobe: Mehrheit der Paare wirklich +20 % langsamer.
+    # Getrennte Mediane würden den Defekt verbergen; gepaart bleibt er rot.
+    before, after = [1, 2, 100, 101, 102], [1.2, 2.4, 120, 1, 1]
+    assert statistics.median(after) / statistics.median(before) < 1.10
+    for baseline, current in ((before, after), ([100] * 5, [120] * 5)):
+        try:
+            require_paired_timing(baseline, current)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError('Echte +20-%-Verlangsamung wurde nicht erkannt')
+
+
 def fall_druck_tempo(run):
+    check_text_measurement_contract(run.app.workspace)
+    check_paired_timing_contract()
     app=run.app;entry,page,note,item=seed(run);view=app.workspace
     # Derselbe Aufbau mit 200 Aufgabenkarten, dann 150 Aufgaben/50 Seiten.
     entry['items'][:]=[app.new_item('Karte '+str(i)) for i in range(200)]
@@ -206,10 +267,12 @@ def fall_druck_tempo(run):
             baseline.append(measure(baseline_board));current.append(measure(mixed_board))
     app.settings['pinboards'][scope]=mixed_board;app.save_settings();view.draw_board()
     assert len(view.card_ids)==200 and sum(v.startswith('page:') for v in view.card_ids)==50,(len(view.card_ids),len(view.board()['cards']))
-    assert statistics.median(current)<=statistics.median(baseline)*1.10,(baseline,current)
+    ratio = require_paired_timing(baseline, current)
     html=view.build_board_print_html()
     assert 'Kurzer Kontext' in html and 'offene Aufgaben' in html and 'Seite 49' in html
-    return {'aufgaben_ms':baseline,'gemischt_ms':current,'verhaeltnis':statistics.median(current)/statistics.median(baseline)}
+    return {'aufgaben_ms':baseline,'gemischt_ms':current,'verhaeltnis':ratio,
+            'getrennte_mediane_diagnose':statistics.median(current)/statistics.median(baseline),
+            'paarquotienten':[after/before for before,after in zip(baseline,current)]}
 
 
 CASES=('inhalt_undo','archiv_loeschen','auswahl_ziehen','altleser_backup','titelbild_praesentation_sicherung','druck_tempo')
